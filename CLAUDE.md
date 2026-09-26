@@ -20,6 +20,13 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 - Die Entscheidungsfragen wurden in Phase 0 gebündelt gestellt (höchstens fünf). Danach arbeitest du selbstständig und fragst nur noch bei echten Blockern.
 - **Nie still überspringen:** Was sich in der Cloud-Umgebung nicht installieren oder ausführen lässt, offen sagen und den nächstbesten Weg vorschlagen.
 - Keine Geheimnisse und **keine echten persönlichen Daten** im Repository. Testdaten sind erfunden (`seed/sample-data.json`).
+- **Keine Schleifen (Emrahs Vorgabe, 26.09.2026).** Gründlich heißt nicht endlos:
+  - **Einmal planen je Phase:** ein Entwurfsdurchgang mit Synthese nach `docs/phaseN-plan.md`. Neu geplant wird nur bei einem echten Blocker.
+  - **Prüfrunden sind begrenzt:** je Prüfer (data-guard, ux-reviewer, learning-scientist, platform-guard) eine Prüfung und nach den Korrekturen **eine** gezielte Nachprüfung, nur der betroffenen Stellen.
+  - **Nach der zweiten Runde entscheidet Emrah:** Besteht ein Befund dann noch, wird nicht weiter iteriert. Emrah bekommt den Befund in einfachen Worten mit Vorschlag.
+  - **Roter Test:** höchstens zwei Behebungsversuche je Ursache, dann Befund und Ursache offen melden.
+  - **Keine Wiederholung ohne Änderung:** Kein Testlauf und keine Prüfung wird wiederholt, wenn sich seit dem letzten Lauf nichts geändert hat.
+  - **Jeder Schritt hat ein sichtbares Ergebnis** (Datei, Commit, Testergebnis) und steht in der Aufgabenliste der Sitzung.
 
 ## A3. Auslieferung am Ende jeder Phase
 1. Alle Tests grün (Subagent `qa-runner`). `platform-guard` und `data-guard` ohne Befund. **Keine Auslieferung, solange ein Test rot ist.**
