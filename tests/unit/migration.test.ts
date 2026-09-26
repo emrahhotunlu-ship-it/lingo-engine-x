@@ -93,7 +93,7 @@ describe('Umstellung auf Datenversion 1 (Kap. 9)', () => {
     expect(first.h.writes().length).toBe(writes);
   });
 
-  it('ergänzt noch nicht übertragene lokale Kopien der alten App – überschreibt nie Neueres', async () => {
+  it('ergänzt noch nicht übertragene lokale Kopien der alten App sicher – überschreibt nie etwas', async () => {
     const seed = loadSeed();
     const profile = seed['app/profile'] as Doc & { days: Record<string, number>; xpDays: Record<string, number> };
     const day1 = addDays(SEED_ANCHOR, 1);
@@ -121,11 +121,11 @@ describe('Umstellung auf Datenversion 1 (Kap. 9)', () => {
       ['vocab/nur-lokal', 'create'],
     ]);
     expect(plan.rescueSkipped).toEqual([
-      { path: 'app/course', reason: 'unchanged' },
-      { path: 'daily/2026-09-20', reason: 'read_only' },
-      { path: 'fremd/x', reason: 'unknown_path' },
-      { path: 'vocab/a/b', reason: 'unknown_path' },
-      { path: 'vocab/reliable', reason: 'db_newer' },
+      { path: 'app/course', markedAt: 1, reason: 'unchanged' },
+      { path: 'daily/2026-09-20', markedAt: 1, reason: 'read_only' },
+      { path: 'fremd/x', markedAt: 1, reason: 'unknown_path' },
+      { path: 'vocab/a/b', markedAt: 1, reason: 'unknown_path' },
+      { path: 'vocab/reliable', markedAt: 1, reason: 'not_merged' },
     ]);
     const p = after['app/profile'] as Doc & { days: Record<string, number> };
     expect(p.days[day1]).toBe(12); // Lerntag ergänzt

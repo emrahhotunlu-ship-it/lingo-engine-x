@@ -125,3 +125,24 @@ test('ein ungültiger Versionsvermerk zählt nicht als umgestellt', async ({ pag
   await screen(page, 'migration');
   await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toBeVisible();
 });
+
+test('zweiter Browser: Abweichende Kopien werden gemeldet statt still übernommen oder verworfen', async ({ page }) => {
+  const { errors } = await boot(page, {
+    migrated: true,
+    localStorage: {
+      'sw2:__dirty': JSON.stringify({ 'vocab/reliable': 1_789_950_000_000 }),
+      'sw2:vocab/reliable': JSON.stringify({ word: 'reliable', de: 'verlässlich (Handy)', state: 'review', S: 40, last: 9_999_999_999_999 }),
+    },
+  });
+  await screen(page, 'overview');
+  const notes = page.getByTestId('late-notes');
+  await expect(notes).toContainText('vocab/reliable – weicht ab – wird nicht automatisch zusammengeführt');
+  await expect(notes).toContainText('bleiben in diesem Browser und in jeder Sicherung erhalten');
+  const before = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump()['vocab/reliable']);
+  await page.getByRole('button', { name: 'Zur Kenntnis genommen' }).click();
+  await expect(page.getByTestId('late-rescue')).toHaveCount(0);
+  expect(await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump()['vocab/reliable'])).toEqual(before);
+  await page.getByTestId('open-settings').click();
+  await expect(page.getByTestId('diag-log')).toContainText('rescue:not-merged');
+  expect(errors).toEqual([]);
+});

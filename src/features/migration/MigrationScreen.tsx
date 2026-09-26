@@ -46,7 +46,7 @@ const orderOf = (name: string) => {
 
 type ShownSkip = Exclude<RescueSkipReason, 'unchanged'>;
 const SKIP_LABEL: Record<ShownSkip, MessageKey> = {
-  db_newer: 'skipDbNewer',
+  not_merged: 'skipNotMerged',
   read_only: 'skipReadOnly',
   invalid: 'skipInvalid',
   unknown_path: 'skipUnknown',
@@ -129,7 +129,10 @@ function Report({ plan }: { plan: MigrationPlan }) {
   const found = [...plan.found].sort((a, b) => orderOf(a.name) - orderOf(b.name));
   const tagesauftrag = plan.untouched.daily + plan.untouched.feed;
   const activeVocab = plan.totals.vocab - plan.totals.vocabHidden;
-  const skipped = plan.rescueSkipped.filter((s): s is { path: string; reason: ShownSkip } => s.reason !== 'unchanged');
+  const skipped: Array<{ path: string; label: MessageKey }> = [
+    ...plan.rescue.filter((r) => r.rest).map((r) => ({ path: r.path, label: 'skipPartial' as const })),
+    ...plan.rescueSkipped.filter((s): s is { path: string; markedAt: number; reason: ShownSkip } => s.reason !== 'unchanged').map((s) => ({ path: s.path, label: SKIP_LABEL[s.reason] })),
+  ];
   const streakChanged = plan.streak.after !== plan.streak.before;
 
   return (
@@ -214,7 +217,7 @@ function Report({ plan }: { plan: MigrationPlan }) {
           <ul className="mt-3 flex flex-col gap-1 text-sm text-muted">
             {skipped.map((s) => (
               <li key={s.path} className="break-all">
-                <span className="text-fg">{s.path}</span> – {t(SKIP_LABEL[s.reason])}
+                <span className="text-fg">{s.path}</span> – {t(s.label)}
               </li>
             ))}
           </ul>

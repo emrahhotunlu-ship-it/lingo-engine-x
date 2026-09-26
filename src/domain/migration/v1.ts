@@ -45,7 +45,7 @@ export type MigrationPlan = {
   defaults: { seedVocabNotInDb: number; topicsNotInDb: number };
   /** Kopien der alten App, die ergänzt werden (`local` = die Kopie; beim Ausführen frisch abgeglichen). */
   rescue: RescueItem[];
-  rescueSkipped: Array<{ path: string; reason: RescueSkipReason }>;
+  rescueSkipped: Array<{ path: string; markedAt: number; reason: RescueSkipReason }>;
   fsrs: Array<{ path: string; value: FsrsStored }>;
   untouched: { daily: number; feed: number };
   streak: { before: number; after: number };
@@ -74,7 +74,7 @@ export function planMigrationV1(input: { snapshot: DataSnapshot; local: LegacyLo
   const effective = new Map<string, Doc>(snapshot.valid);
   for (const [path, markedAt] of Object.entries(local.dirty).sort(([a], [b]) => (a < b ? -1 : 1))) {
     const c = classifyLegacyPath(path, markedAt, Object.hasOwn(local.docs, path) ? local.docs[path] : undefined, snapshot.raw.get(path));
-    if ('skip' in c) rescueSkipped.push({ path, reason: c.skip });
+    if ('skip' in c) rescueSkipped.push({ path, markedAt, reason: c.skip });
     else {
       rescue.push(c.item);
       effective.set(path, c.merged);
