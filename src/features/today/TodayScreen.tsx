@@ -16,7 +16,7 @@ import { computeStreak, pflichtDays } from '../../domain/streak';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { flush, usePending } from '../vocab/persist';
 import { startSession, type Round } from '../vocab/session';
-import { useTodayPlan } from './store';
+import { retryPlan, useTodayPlan } from './store';
 
 // „Heute": beim Öffnen ist sofort klar, was dran ist (Kap. 2.1). Eine Statuszeile, EIN großer
 // Knopf; Erledigtes ist Zustand, kein Knopf (Kap. 2.2). Freiwilliges steht klar getrennt als Extra.
@@ -90,7 +90,14 @@ export function TodayScreen() {
             {tn('tdStreak', streak.count)}
           </span>
         </p>
-        {ready && dayLoaded ? (
+        {planStatus === 'error' ? (
+          <div role="alert" className="flex flex-col items-start gap-3" data-testid="plan-error">
+            <p className="text-base text-muted">{t('tdPlanError')}</p>
+            <Button onClick={() => retryPlan(Date.now())} icon="refresh">
+              {t('tdPlanRetry')}
+            </Button>
+          </div>
+        ) : ready && dayLoaded ? (
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl" data-testid="today-status" data-status={state.status}>
             {state.status === 'allDone'
               ? t('tdStatusDone')
@@ -154,7 +161,7 @@ export function TodayScreen() {
 
       {dayLoaded && (state.balance.answers > 0 || state.extra > 0) && (
         <motion.p variants={item} className="lx-tnum text-sm text-muted" data-testid="balance">
-          {state.balance.answers > 0 && t('tdBalance', { answers: state.balance.answers, pct, min: state.balance.minutes })}
+          {state.balance.answers > 0 && tn('tdBalance', state.balance.answers, { answers: state.balance.answers, pct, min: state.balance.minutes })}
           {state.balance.answers > 0 && state.extra > 0 && ' · '}
           {state.extra > 0 && tn('tdExtraCount', state.extra)}
         </motion.p>

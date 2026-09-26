@@ -101,6 +101,7 @@ export function startLive(db: Db): () => void {
         const data = snap.exists ? snap.data() : undefined;
         const value = data ? checked(path, data).value : null;
         useLive.setState((s) => ({ docs: { ...s.docs, [path]: value } }));
+        retried.delete(path); // Verbindung steht wieder: ein späterer Abriss darf erneut einmal neu abonnieren.
         markLoaded();
       }, onError),
     );
@@ -117,6 +118,7 @@ export function startLive(db: Db): () => void {
           if (res.ok) map.set(d.id, res.value);
         }
         useLive.setState((s) => ({ collections: { ...s.collections, [name]: map } }));
+        retried.delete(name);
         markLoaded();
       }, onError),
     );
@@ -148,6 +150,7 @@ export function startDayLive(db: Db, day: string): () => void {
         const res = data ? validateDoc(path, data) : null;
         if (res && !res.ok) logError('data:validate', { code: 'invalid_document', message: res.issues.join('; ') }, path);
         useLive.setState({ day: { key: day, doc: data ?? null, invalid: !!res && !res.ok } });
+        retried = false;
       },
       (err) => {
         if (stopped) return;

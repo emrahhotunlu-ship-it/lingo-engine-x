@@ -115,7 +115,8 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     hist: [...hist, { t: a.t, m: def.mode, g: a.grade }].slice(-HIST_MAX),
     ...skillPatch(cur, def.mode, a.grade, a.colIndex, col.length),
   };
-  if (wasNew) patch.intro = a.day;
+  // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
+  if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
   return patch;
 }
 

@@ -49,9 +49,12 @@ export function locate(sentence: string, target: string): { start: number; end: 
     const flex = i === 0 || i === words.length - 1;
     return flex ? `(?:${formsOf(w).map(escape).join('|')})` : escape(w);
   });
-  const re = new RegExp(`(?<![A-Za-z'])${parts.join('\\s+')}(?![A-Za-z'])`, 'i');
+  // Ohne Lookbehind: Safari vor 16.4 kann `(?<!…)` nicht lesen. Die Wortgrenze davor steht in Gruppe 1.
+  const re = new RegExp(`(^|[^A-Za-z'])(${parts.join('\\s+')})(?![A-Za-z'])`, 'i');
   const m = re.exec(sentence);
-  return m ? { start: m.index, end: m.index + m[0].length } : null;
+  if (!m) return null;
+  const start = m.index + (m[1]?.length ?? 0);
+  return { start, end: start + (m[2]?.length ?? 0) };
 }
 
 export function findContext(ex: unknown, word: string): ContextSpan | null {

@@ -77,6 +77,10 @@ describe('FSRS-Planung und Spiegelung der alten Felder', () => {
     expect(w2.kind === 'update' && w2.patch.lapses).toBe(0);
     expect(w2.kind === 'update' && w2.patch.intro).toBe('2026-09-20');
     expect(w2.kind === 'update' && w2.patch.stage).toBe(1);
+    // Echte Altdaten: neue Karten mit bereits gesetztem Einführungsdatum behalten es.
+    const introduced = { ...fresh, word: 'z', intro: '2026-09-18' };
+    const w3 = reviewWrite('vocab/z', introduced, answer('z', 'mc_en', 3), null);
+    expect(w3.kind === 'update' && 'intro' in w3.patch).toBe(false);
   });
 
   it('Startvokabel ohne Dokument wird vollständig angelegt, fehlende andere Karte nie', () => {
