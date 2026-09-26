@@ -1,5 +1,6 @@
 import seedRaw from '../../../seed/sample-data.json?raw';
 import { createFakeClaude, type FakeControl, type FakeOptions } from './fakeRuntime';
+import { installFakeSpeech } from './fakeSpeech';
 
 // Spielt die nachgebildete Laufzeit ein – aber nur, wenn es keine echte gibt.
 
@@ -7,6 +8,8 @@ export type InstallOptions = Omit<FakeOptions, 'seed'> & {
   seed?: 'sample' | 'empty' | FakeOptions['seed'];
   /** Einzelne Dokumente des Anfangsbestands ersetzen (Objekt) oder entfernen (null) – für Tests. */
   patch?: Record<string, Record<string, unknown> | null>;
+  /** Sprachausgabe nachbilden (Headless-Chromium hat keine Stimmen); Standard: ja. */
+  speech?: boolean;
 };
 
 declare global {
@@ -22,7 +25,7 @@ export function sampleSeed(): Record<string, Record<string, unknown>> {
 
 export function installFakeRuntime(opts: InstallOptions = {}): FakeControl | null {
   if ((window as { claude?: unknown }).claude) return null;
-  const { seed, patch, ...rest } = opts;
+  const { seed, patch, speech, ...rest } = opts;
   const resolved: FakeOptions = { ...rest };
   let base: Record<string, Record<string, unknown>> = {};
   if (seed === 'sample' || seed === undefined) base = sampleSeed();
@@ -34,6 +37,7 @@ export function installFakeRuntime(opts: InstallOptions = {}): FakeControl | nul
   resolved.seed = base;
   const fake = createFakeClaude(resolved);
   Object.defineProperty(window, 'claude', { value: fake.claude, configurable: true, writable: false });
+  if (speech !== false) installFakeSpeech(window, { spoken: fake.control.spoken });
   window.__LINGO_FAKE__ = fake.control;
   return fake.control;
 }

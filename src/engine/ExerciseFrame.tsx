@@ -1,52 +1,67 @@
-import type { ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
+import { Icon } from '../ui/Icon';
 
-// Rahmen mit den vier Pflichtfragen an fester Stelle (Kap. 2.4, Architektur-Entwurf §6.5):
-// Was soll ich tun? · Wozu dient das? · Was hatte ich, was ist richtig? · Warum ist das so?
+// Rahmen einer Übung (Kap. 2.4 in der Fassung von CLAUDE.md A7 „Emrahs Rückmeldung"):
+// oben der Status (Sicherheit, Abfrageart), dann die Aufgabe in einer kurzen Zeile –
+// „Wozu?" nur hinter dem Info-Symbol –, die Aufgabe selbst, nach dem Prüfen Ergebnis
+// (Was hatte ich, was ist richtig?) und Hilfe (Bedeutung, Form, Beispiele) und „Weiter".
 
 type Props = {
-  ladder: ReactNode;
+  status: ReactNode;
   task: ReactNode;
-  purposeLabel: string;
+  infoLabel: string;
   purpose: ReactNode;
   body: ReactNode;
   actions?: ReactNode;
   resultLabel: string;
   result?: ReactNode;
-  whyLabel: string;
-  why?: ReactNode;
-  rating?: ReactNode;
-  footer?: ReactNode;
-  /** Kennzeichen für Tests und Diagnose (Übungsart, Karte, Kollokation). */
-  meta?: { ex: string; card: string; col?: number | undefined };
+  /** Meta für Tests und Diagnose (Übungsart, Karte, Kollokation, Stufe). */
+  meta?: { ex: string; card: string; col?: number | undefined; stage?: number | undefined };
 };
 
-export function ExerciseFrame({ ladder, task, purposeLabel, purpose, body, actions, resultLabel, result, whyLabel, why, rating, footer, meta }: Props) {
+export function ExerciseFrame({ status, task, infoLabel, purpose, body, actions, resultLabel, result, meta }: Props) {
+  const [info, setInfo] = useState(false);
+  const infoId = useId();
   return (
-    <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="exercise" data-ex={meta?.ex} data-card={meta?.card} data-col={meta?.col}>
-      <header className="flex flex-col gap-3">
-        {ladder}
-        <h2 className="text-lg font-semibold tracking-tight sm:text-xl" data-testid="task">
-          {task}
-        </h2>
-        <p className="text-sm text-muted" data-testid="purpose">
-          <span className="font-medium text-fg">{purposeLabel}</span> {purpose}
-        </p>
+    <article
+      className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7"
+      data-testid="exercise"
+      data-ex={meta?.ex}
+      data-card={meta?.card}
+      data-col={meta?.col}
+      data-stage={meta?.stage}
+    >
+      <header className="flex flex-col gap-2">
+        {status}
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="text-lg font-semibold tracking-tight sm:text-xl" data-testid="task">
+            {task}
+          </h2>
+          <button
+            type="button"
+            className="-m-2 inline-flex size-11 flex-none items-center justify-center rounded-full text-subtle transition-colors hover:text-fg"
+            aria-label={infoLabel}
+            aria-expanded={info}
+            aria-controls={infoId}
+            onClick={() => setInfo((v) => !v)}
+            data-testid="purpose-info"
+          >
+            <Icon name="info" size={18} />
+          </button>
+        </div>
+        {info && (
+          <p id={infoId} className="text-sm text-muted" data-testid="purpose">
+            {purpose}
+          </p>
+        )}
       </header>
       <div className="flex flex-col gap-4">{body}</div>
       {actions}
       {result && (
-        <section aria-label={resultLabel} className="flex flex-col gap-2 border-t border-line pt-4" data-testid="result">
+        <section aria-label={resultLabel} className="flex flex-col gap-3 border-t border-line pt-4" data-testid="result">
           {result}
         </section>
       )}
-      {why && (
-        <section aria-label={whyLabel} className="flex flex-col gap-1.5" data-testid="why">
-          <p className="lx-eyebrow">{whyLabel}</p>
-          {why}
-        </section>
-      )}
-      {rating}
-      {footer && <footer className="text-xs text-subtle">{footer}</footer>}
     </article>
   );
 }

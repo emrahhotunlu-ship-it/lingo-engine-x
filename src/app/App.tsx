@@ -16,10 +16,12 @@ import { useNav, type Route } from './nav';
 import { MigrationScreen } from '../features/migration/MigrationScreen';
 import { OverviewScreen } from '../features/progress/OverviewScreen';
 import { SettingsSheet } from '../features/settings/SettingsSheet';
+import { LookupLayer } from '../features/lookup/LookupPopover';
 import { HomeSkeleton } from '../features/system/HomeSkeleton';
 import { ConnectionLost, NoDbNotice } from '../features/system/NoDbNotice';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
+import { initSpeech } from '../platform/speech';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
 // den Bildschirm. Der Rahmen rendert sofort; Funktionen kommen dazu, sobald die
@@ -62,6 +64,13 @@ function useBoot(): void {
     const theme = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { m?: unknown }).m : undefined;
     if (isThemeMode(theme) && theme !== s.theme) s.setThemeLocal(theme);
   }, [profile]);
+
+  // Sprachausgabe (en-US): Stimmen laden, Stimme und Tempo aus dem Profil (nur Lesen).
+  const voice = typeof profile?.voice === 'string' ? profile.voice : null;
+  const rate = typeof profile?.rate === 'number' ? profile.rate : null;
+  useEffect(() => {
+    initSpeech({ voice, rate });
+  }, [voice, rate]);
 
   // Sprache und Modus auf <html> anwenden; „Automatisch" folgt dem System.
   const lang = useSettings((s) => s.lang);
@@ -190,6 +199,7 @@ export function App() {
       </div>
       <SettingsSheet open={settingsOpen} onClose={closeSettings} />
       <Toaster />
+      <LookupLayer />
       </HiddenInputProvider>
     </MotionConfig>
   );

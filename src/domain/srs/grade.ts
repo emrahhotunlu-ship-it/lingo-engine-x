@@ -1,7 +1,7 @@
-import type { ExerciseId, Grade, Verdict } from './types';
+import type { CheckResult, ExerciseId, Grade, Verdict } from './types';
 
-// Bewertungsvorschlag aus Richtigkeit und Zeit (Lern-Entwurf §2.3). Der Vorschlag ist
-// vorausgewählt; der Nutzer kann ändern – aber nie im Widerspruch zum angezeigten Ergebnis.
+// Note aus Richtigkeit, Zeit und genutzter Hilfe (Lern-Entwurf §2.3, CLAUDE.md A7
+// „Emrahs Rückmeldung zum Trainer"): Die App stuft allein ein, es gibt keine Bewertungsknöpfe.
 
 /** Auswahl: bis zu dieser Zeit (ms bis zur Wahl) „Gut", darüber „Schwer". Nie „Leicht" (Ratechance 25 %). */
 const CHOICE_GOOD: Partial<Record<ExerciseId, number>> = { mc_en: 8000, mc_de: 9000, colloc: 11000 };
@@ -21,6 +21,11 @@ export type Timing = {
   chars?: number;
   /** Gelöschte Zeichen (Rücktaste) – drei und mehr: höchstens „Gut". */
   deletions?: number;
+  /**
+   * Genutzte Hilfe in freien Stufen („Tipp"): 1 = Platzhalter aufgedeckt (Länge sichtbar) →
+   * höchstens „Gut"; 2 = auch der erste Buchstabe → höchstens „Schwer".
+   */
+  hintLevel?: 0 | 1 | 2;
 };
 
 export function suggestGrade(ex: ExerciseId, verdict: Verdict, timing: Timing): Grade {
@@ -36,9 +41,17 @@ export function suggestGrade(ex: ExerciseId, verdict: Verdict, timing: Timing): 
   return g;
 }
 
-/** Wählbare Noten: falsch → Nochmal/Schwer; fast richtig → bis Gut; richtig → alle. */
-export function allowedGrades(verdict: Verdict): Grade[] {
-  if (verdict === 'wrong') return [1, 2];
-  if (verdict === 'near') return [1, 2, 3];
-  return [1, 2, 3, 4];
+/**
+ * Endgültige Note einer Antwort:
+ * - falsch → Nochmal (1),
+ * - Tippfehler oder falsche Form (fast richtig) → Schwer (2),
+ * - richtig → nach Zeit Schwer/Gut/Leicht (`suggestGrade`), gedeckelt durch genutzte Hilfe.
+ */
+export function autoGrade(ex: ExerciseId, result: Pick<CheckResult, 'verdict'>, timing: Timing): Grade {
+  if (result.verdict !== 'correct') return suggestGrade(ex, result.verdict, timing);
+  const g = suggestGrade(ex, 'correct', timing);
+  const hint = timing.hintLevel ?? 0;
+  if (hint >= 2) return Math.min(g, 2) as Grade;
+  if (hint === 1) return Math.min(g, 3) as Grade;
+  return g;
 }

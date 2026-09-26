@@ -181,10 +181,26 @@ export function produceCheckReply(input: string): string {
   return JSON.stringify({ verdict, usesTarget: uses, fixed, why: WHY[verdict][lang], better: '' });
 }
 
+// ---------------------------------------------------------------- card-examples@1
+
+/** Drei Sätze mit dem Wort (Grundform, ohne „to "). `zzjson` im Wort → kein JSON. */
+export function cardExamplesReply(input: string): string {
+  const word = line(input, 'Word').replace(/^to\s+/i, '').trim() || 'word';
+  if (/zzjson/i.test(word)) return NOT_JSON;
+  return JSON.stringify({
+    examples: [
+      `Our team tried to ${word} the new plan before the deadline.`,
+      `It is not always easy to ${word} people in a short meeting.`,
+      `She had to ${word} her manager with clear numbers and examples.`,
+    ],
+  });
+}
+
 /** Meldet die festen Antworten beim Entwicklungs-Adapter an. */
 export function registerCannedReplies(): void {
   registerCannedReply('word-lookup', wordLookupReply);
   registerCannedReply('produce-check', produceCheckReply);
+  registerCannedReply('card-examples', cardExamplesReply);
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

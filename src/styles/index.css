@@ -51,6 +51,7 @@
   --lx-danger-text: #f87171;
   --lx-danger-soft: rgba(248, 113, 113, 0.14);
   --lx-gold-soft: rgba(251, 191, 36, 0.14);
+  --lx-cyan-soft: rgba(34, 211, 238, 0.12);
   --lx-focus: #67e8f9;
   --lx-track: rgba(255, 255, 255, 0.08);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -20px rgba(0, 0, 0, 0.7);
@@ -89,6 +90,7 @@
   --lx-danger-text: #fca5a5;
   --lx-danger-soft: rgba(252, 165, 165, 0.14);
   --lx-gold-soft: rgba(252, 211, 77, 0.14);
+  --lx-cyan-soft: rgba(126, 233, 247, 0.12);
   --lx-focus: #7ee9f7;
   --lx-track: rgba(255, 255, 255, 0.1);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -22px rgba(0, 0, 0, 0.55);
@@ -127,6 +129,7 @@
   --lx-danger-text: #b91c1c;
   --lx-danger-soft: rgba(185, 28, 28, 0.08);
   --lx-gold-soft: rgba(180, 83, 9, 0.1);
+  --lx-cyan-soft: rgba(8, 145, 178, 0.1);
   --lx-focus: #0e7490;
   --lx-track: rgba(15, 23, 42, 0.08);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 12px 32px -18px rgba(15, 23, 42, 0.25);
@@ -333,6 +336,32 @@ h3 {
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
   }
+  /* Buchstaben-Platzhalter (CLAUDE.md A7): ein Platz je Buchstabe, Trennzeichen sichtbar. */
+  .lx-gap[data-masked] {
+    box-shadow: none;
+    padding: 0 0.2em;
+  }
+  .lx-slot {
+    display: inline-flex;
+    justify-content: center;
+    width: 0.68em;
+    margin: 0 0.03em;
+    box-shadow: inset 0 -2px 0 0 var(--lx-fg-subtle);
+  }
+  .lx-slot[data-filled] {
+    box-shadow: inset 0 -2px 0 0 var(--lx-border);
+  }
+  .lx-gap[data-focused] .lx-slot:not([data-filled]):not(.lx-slot-fixed) {
+    box-shadow: inset 0 -2px 0 0 var(--lx-cyan);
+  }
+  .lx-slot-fixed {
+    width: 0.42em;
+    box-shadow: none;
+    color: var(--lx-fg-subtle);
+  }
+  .lx-slot-hint {
+    color: var(--lx-fg-subtle);
+  }
   .lx-flyer-layer {
     position: fixed;
     inset: 0;
@@ -362,6 +391,56 @@ h3 {
     padding: 0 0.15em;
     background: var(--lx-accent-soft);
     box-shadow: inset 0 -2px 0 0 var(--lx-accent);
+  }
+  /* Antippbare Wörter (Kap. 6.11): keine Layoutänderung, Trefferfläche per Padding. */
+  .lx-word {
+    display: inline;
+    padding: 0.1em 0.04em;
+    margin: -0.1em -0.04em;
+    border: 0;
+    border-radius: 0.25em;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    cursor: pointer;
+    text-decoration: underline dotted transparent;
+    text-underline-offset: 0.22em;
+    transition: background-color 0.15s, text-decoration-color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lx-word:hover,
+  .lx-word[data-active] {
+    background: var(--lx-cyan-soft);
+    text-decoration-color: var(--lx-cyan);
+  }
+  .lx-dots {
+    display: inline-flex;
+    gap: 0.25rem;
+  }
+  .lx-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--lx-track);
+  }
+  .lx-dot[data-on] {
+    background: var(--lx-accent);
+  }
+  .lx-popover {
+    position: fixed;
+    z-index: 50;
+    background: var(--lx-surface-solid);
+    border: 1px solid var(--lx-border);
+    box-shadow: var(--lx-shadow), 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+    outline: none;
+  }
+  .lx-diff-off {
+    color: var(--lx-danger-text);
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
   }
   .lx-sentence {
     font-size: var(--text-xl);
@@ -413,33 +492,6 @@ h3 {
     font-size: var(--text-xs);
     font-weight: 600;
   }
-  .lx-rate {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.125rem;
-    min-height: 3.5rem;
-    padding: 0.5rem;
-    border-radius: var(--radius-control);
-    border: 1px solid var(--lx-border);
-    background: var(--lx-surface);
-    color: var(--lx-fg);
-    transition: background-color 0.15s, border-color 0.15s;
-  }
-  .lx-rate:not(:disabled):hover {
-    background: var(--lx-surface-strong);
-  }
-  .lx-rate:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
-  .lx-rate-suggested {
-    border-color: var(--lx-accent);
-    box-shadow: inset 0 0 0 1px var(--lx-accent);
-    background: var(--lx-accent-soft);
-  }
-
   .lx-skeleton {
     position: relative;
     overflow: hidden;

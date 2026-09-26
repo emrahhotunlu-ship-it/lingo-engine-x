@@ -16,6 +16,7 @@ import { computeStreak, pflichtDays } from '../../domain/streak';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { flush, usePending } from '../vocab/persist';
 import { startSession, type Round } from '../vocab/session';
+import { unlockSpeech } from '../../platform/speech';
 import { retryPlan, useTodayPlan } from './store';
 
 // „Heute": beim Öffnen ist sofort klar, was dran ist (Kap. 2.1). Eine Statuszeile, EIN großer
@@ -69,6 +70,8 @@ export function TodayScreen() {
   }, [profile, schema, today, now]);
 
   const start = (round: Round) => {
+    // iPhone: Sprachausgabe nur in einer Nutzergeste freischalten.
+    unlockSpeech();
     const first = startSession(round);
     // iPhone: die Tastatur öffnet nur synchron in der Nutzergeste.
     if (first === 'typed') api.focusNow();

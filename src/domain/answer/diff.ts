@@ -46,3 +46,56 @@ export function markDiff(given: string, expected: string): boolean[] {
   }
   return marks;
 }
+
+export type DiffPart = { text: string; ok: boolean };
+
+const normWord = (w: string) => w.toLowerCase().replace(/[’‘]/g, "'").replace(/[.,!?;:]+$/, '');
+
+/**
+ * Deine Antwort, markiert gegen die Lösung: bei einem Wort Buchstabe für Buchstabe, bei
+ * mehreren Wörtern Wort für Wort (längste gemeinsame Folge). Aufeinanderfolgende gleiche
+ * Zustände werden zusammengefasst.
+ */
+export function answerDiff(givenRaw: string, expectedRaw: string): DiffPart[] {
+  const given = givenRaw.trim().replace(/\s+/g, ' ');
+  const expected = expectedRaw.trim().replace(/\s+/g, ' ');
+  if (!given) return [];
+  const parts: DiffPart[] = [];
+  const push = (text: string, ok: boolean) => {
+    const last = parts[parts.length - 1];
+    if (last && last.ok === ok) last.text += text;
+    else parts.push({ text, ok });
+  };
+  if (!given.includes(' ') && !expected.includes(' ')) {
+    const marks = markDiff(given.toLowerCase(), expected.toLowerCase());
+    Array.from(given).forEach((ch, i) => push(ch, !marks[i]));
+    return parts;
+  }
+  const g = given.split(' ');
+  const e = expected.split(' ');
+  const n = g.length;
+  const m = e.length;
+  const L: number[][] = Array.from({ length: n + 1 }, () => new Array<number>(m + 1).fill(0));
+  for (let i = n - 1; i >= 0; i--) {
+    for (let j = m - 1; j >= 0; j--) {
+      const row = L[i] as number[];
+      row[j] = normWord(g[i] ?? '') === normWord(e[j] ?? '') ? ((L[i + 1] as number[])[j + 1] ?? 0) + 1 : Math.max((L[i + 1] as number[])[j] ?? 0, row[j + 1] ?? 0);
+    }
+  }
+  const ok = new Array<boolean>(n).fill(false);
+  let i = 0;
+  let j = 0;
+  while (i < n && j < m) {
+    if (normWord(g[i] ?? '') === normWord(e[j] ?? '')) {
+      ok[i] = true;
+      i++;
+      j++;
+    } else if (((L[i + 1] as number[])[j] ?? 0) >= ((L[i] as number[])[j + 1] ?? 0)) i++;
+    else j++;
+  }
+  g.forEach((w, k) => {
+    if (k > 0) push(' ', ok[k - 1] === true && ok[k] === true);
+    push(w, ok[k] === true);
+  });
+  return parts;
+}

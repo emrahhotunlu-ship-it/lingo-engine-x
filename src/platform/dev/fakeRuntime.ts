@@ -1,6 +1,7 @@
 import type { CapabilityName, ClaudeHost, DbErrCode, Downloads, Permissions } from '../types';
 import { createMemoryDb, type MemoryDbHandle } from './memoryDb';
 import { createFakeSample, type FakeSampleMode } from './fakeSample';
+import { registerCannedReplies, withCallLog, type SampleCall } from './cannedReplies';
 
 // Nachbildung von `window.claude` für Dev-Server und E2E-Tests (Kap. 3.3).
 
@@ -18,12 +19,18 @@ export type FakeOptions = {
   /** Jedes Datenbank-Abonnement endet sofort mit diesem Code. */
   failSubscriptions?: DbErrCode;
   failSubscriptionsTimes?: number;
+  /** Jeder `sample`-Aufruf wartet so lange (z. B. für den Langsam-Hinweis). */
+  sampleDelayMs?: number;
 };
 
 export type FakeControl = {
   db: MemoryDbHandle;
   saved: Array<{ filename: string; size: number; data: string }>;
   setSampleMode(mode: FakeSampleMode): void;
+  /** Jeder `sample`-Aufruf mit Vorlage, Stufe und Eingabe. */
+  sampleCalls: SampleCall[];
+  /** Gesprochene Texte der nachgebildeten Sprachausgabe (siehe install.ts). */
+  spoken: string[];
 };
 
 const PERSIST_KEY = 'lx:fake-db';
@@ -68,7 +75,9 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
   if (opts.persist) writePersisted(dbHandle.dump());
 
   let sampleMode: FakeSampleMode = opts.sampleMode ?? 'ok';
-  const sample = createFakeSample(() => sampleMode);
+  registerCannedReplies();
+  const sampleCalls: SampleCall[] = [];
+  const sample = withCallLog(createFakeSample(() => sampleMode), sampleCalls, opts.sampleDelayMs ?? 0);
   const saved: FakeControl['saved'] = [];
 
   const downloads: Downloads = Object.freeze({
@@ -124,6 +133,8 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
     control: {
       db: dbHandle,
       saved,
+      sampleCalls,
+      spoken: [],
       setSampleMode: (m) => {
         sampleMode = m;
       },

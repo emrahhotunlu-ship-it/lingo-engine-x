@@ -1,0 +1,368 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useAiAvailable } from '../../ai/scope';
+import { useAsk } from '../../ai/useAsk';
+import { invalidIdsOf, useLive } from '../../data/live';
+import { slug } from '../../domain/content';
+import { dayKey } from '../../domain/date';
+import { resolveWord, posHint, type CardInfo } from '../../domain/lookup/resolve';
+import { mergedVocab } from '../../domain/overview';
+import { lemmaOf } from '../../domain/srs/context';
+import { posKey } from '../../domain/srs/explain';
+import { stageOf } from '../../domain/srs/ladder';
+import { bracketExample } from '../../domain/srs/newCard';
+import { normalizeWord } from '../../domain/text/tokenize';
+import { closeLookup, useLookup, type WordTapRequest } from '../../engine/wordTap';
+import { useSettings } from '../../app/settings';
+import { useT, type MessageKey } from '../../i18n';
+import { speak, unlockSpeech, useSpeech } from '../../platform/speech';
+import { wordLookup, type WordLookupOut } from '../../prompts/wordLookup';
+import { Button, IconButton } from '../../ui/Button';
+import { toast } from '../../ui/Toast';
+import { DURATION, EASE_OUT } from '../../ui/motion';
+import { ensureLookupLoaded, saveLookupCard, storeLookup, useLookupData } from './store';
+
+// Nachschlage-Fenster (Kap. 6.11, Plan §5.6): am Desktop verankert unter dem Wort, am Handy
+// als Blatt von unten. Bedeutung aus eigener Karte, Zwischenspeicher oder eingebautem
+// Wörterbuch; fehlt das Wort überall, fragt es Claude (Antippen ist die Handlung).
+// US-Lautschrift, Aussprache (en-US), „Als Karte speichern", „Claude fragen". Esc/außerhalb schließt.
+
+type Doc = Readonly<Record<string, unknown>>;
+const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() ? v.trim() : null);
+
+function useCardIndex(): ReadonlyMap<string, CardInfo> {
+  const vocab = useLive((s) => s.collections.vocab);
+  const invalid = useLive((s) => s.invalid);
+  return useMemo(() => {
+    const out = new Map<string, CardInfo>();
+    const all = mergedVocab(vocab ?? new Map<string, Doc>(), invalidIdsOf(invalid, 'vocab'));
+    for (const [id, doc] of all) {
+      const word = str(doc.word);
+      if (!word) continue;
+      const info: CardInfo = { id, word, de: str(doc.de), def: str(doc.def), pos: str(doc.pos), stage: stageOf(doc), hidden: doc.hidden === true };
+      const k = normalizeWord(lemmaOf(word));
+      if (!out.has(k)) out.set(k, info);
+    }
+    return out;
+  }, [vocab, invalid]);
+}
+
+function useSheetMode(): boolean {
+  const [sheet] = useState(() => window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 640);
+  return sheet;
+}
+
+export function LookupLayer() {
+  const req = useLookup((s) => s.req);
+  return <AnimatePresence>{req && <LookupPopover key={`${req.text}|${req.start}`} req={req} />}</AnimatePresence>;
+}
+
+function LookupPopover({ req }: { req: WordTapRequest }) {
+  const { t, lang } = useT();
+  const sheet = useSheetMode();
+  const panel = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<CSSProperties>({ visibility: 'hidden' });
+  const ai = useAiAvailable();
+  const speech = useSpeech((s) => s.status);
+  const cards = useCardIndex();
+  const cache = useLookupData((s) => s.doc);
+  const savedIds = useLookupData((s) => s.saved);
+  const auto = useAsk(wordLookup);
+  const asked = useAsk(wordLookup);
+  const [saveState, setSaveState] = useState<'idle' | 'busy' | 'failed'>('idle');
+
+  useEffect(() => {
+    ensureLookupLoaded();
+  }, []);
+
+  const hint = posHint(req.tokens, req.index);
+  const resolved = useMemo(() => resolveWord(req.surface, hint, { cards, cache, uiLang: lang }), [req.surface, hint, cards, cache, lang]);
+  const aiData: WordLookupOut | null = asked.data ?? auto.data;
+
+  // Nichts gefunden: gleich Claude fragen (einmal je Öffnen; das Antippen ist die Handlung).
+  const autoRun = auto.run;
+  const needAi = resolved.source === 'none' && ai;
+  useEffect(() => {
+    if (!needAi) return;
+    void autoRun({ word: req.surface, sentence: req.text, uiLang: useSettings.getState().lang }).then((out) => {
+      if (out) void storeLookup(req.surface, out, useSettings.getState().lang);
+    });
+  }, [needAi, autoRun, req.surface, req.text]);
+
+  // Esc schließt und gibt den Fokus an das Wort zurück; Klick außerhalb schließt.
+  useEffect(() => {
+    const anchor = req.anchor;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      e.preventDefault();
+      e.stopPropagation();
+      closeLookup();
+      anchor?.focus({ preventScroll: true });
+    };
+    const onDown = (e: PointerEvent) => {
+      const target = e.target as Node | null;
+      if (!target || panel.current?.contains(target)) return;
+      if (target instanceof Element && target.closest('button.lx-word')) return;
+      closeLookup();
+    };
+    window.addEventListener('keydown', onKey, true);
+    document.addEventListener('pointerdown', onDown, true);
+    const focusTimer = window.setTimeout(() => panel.current?.focus({ preventScroll: true }), 20);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener('keydown', onKey, true);
+      document.removeEventListener('pointerdown', onDown, true);
+    };
+  }, [req.anchor]);
+
+  // Position am Desktop: unter dem Wort, sonst darüber; waagerecht im Bild gehalten.
+  useLayoutEffect(() => {
+    if (sheet) return;
+    const place = () => {
+      const a = req.anchor?.getBoundingClientRect();
+      const el = panel.current;
+      if (!a || !el) return;
+      const w = Math.min(352, window.innerWidth - 32);
+      const left = Math.min(Math.max(16, a.left + a.width / 2 - w / 2), window.innerWidth - 16 - w);
+      const h = el.offsetHeight;
+      const below = a.bottom + 8;
+      const style: CSSProperties = { left, width: w };
+      if (below + h <= window.innerHeight - 8 || a.top - 8 - h < 8) {
+        style.top = Math.min(below, Math.max(8, window.innerHeight - 8 - h));
+      } else {
+        style.top = a.top - 8 - h;
+      }
+      setPos(style);
+    };
+    place();
+    const ro = new ResizeObserver(place);
+    if (panel.current) ro.observe(panel.current);
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, true);
+    };
+  }, [sheet, req.anchor]);
+
+  const headword = resolved.source === 'none' && aiData ? aiData.lemma : resolved.headword;
+  const posLabel = (() => {
+    const p = resolved.pos ?? aiData?.pos ?? null;
+    const k = posKey(p);
+    return k ? t(k as MessageKey) : null;
+  })();
+  const ipa = resolved.ipa ?? (aiData?.ipa || null);
+  const de = resolved.de ?? aiData?.de ?? null;
+  const def = resolved.def ?? aiData?.def ?? null;
+  const note = asked.data?.note || auto.data?.note || resolved.note;
+  const sense = asked.data?.sense ?? auto.data?.sense ?? null;
+  const formDiffers = normalizeWord(req.surface) !== normalizeWord(headword);
+  const card = resolved.card;
+  const exists = !!card || !!savedIds[slug(headword)];
+
+  // „Als Karte speichern": nur mit Bedeutung und Ursprungssatz (Kap. 15).
+  const exSentence = bracketExample(req.text, req.surface, headword) ? req.text : aiData?.ex && bracketExample(aiData.ex, req.surface, headword) ? aiData.ex : null;
+  const canSave = !exists && !!de && !!exSentence;
+
+  const save = async () => {
+    if (!de || !exSentence) return;
+    setSaveState('busy');
+    const r = await saveLookupCard({
+      word: headword,
+      de,
+      pos: resolved.pos ?? aiData?.pos ?? null,
+      def,
+      level: aiData?.level ?? resolved.level ?? null,
+      ex: exSentence,
+      surface: req.surface,
+      src: 'lookup',
+      origin: { v: 1, kind: req.area, t: Date.now(), ...(req.source ? { ref: req.source } : {}), ...(req.title ? { title: req.title } : {}) },
+      today: dayKey(Date.now()),
+    });
+    if (r === 'saved' || r === 'exists') {
+      setSaveState('idle');
+      toast(t('lkSavedToast'));
+    } else setSaveState('failed');
+  };
+
+  const ask = () => {
+    void asked.run({ word: req.surface, sentence: req.text, uiLang: lang }).then((out) => {
+      if (out) void storeLookup(req.surface, out, lang);
+    });
+  };
+
+  const phaseOf = (a: { phase: string }) => a.phase === 'queued' || a.phase === 'thinking' || a.phase === 'streaming' || a.phase === 'slow';
+  const busy = phaseOf(auto) ? auto : phaseOf(asked) ? asked : null;
+  const error = auto.error ?? asked.error;
+
+  const content = (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+            <span className="text-xl font-semibold tracking-tight" lang="en" data-testid="lk-headword">
+              {headword}
+            </span>
+            {posLabel && (
+              <span className="text-sm text-muted" data-testid="lk-pos">
+                {posLabel}
+              </span>
+            )}
+          </p>
+          {ipa && (
+            <p className="lx-ipa text-sm text-muted" data-testid="lk-ipa">
+              /{ipa}/
+            </p>
+          )}
+        </div>
+        <div className="flex flex-none items-center">
+          {speech === 'ready' && (
+            <IconButton
+              icon="speaker"
+              label={t('lkListen')}
+              data-testid="lk-listen"
+              onClick={() => {
+                unlockSpeech();
+                void speak(headword);
+              }}
+            />
+          )}
+          <IconButton icon="close" label={t('lkClose')} data-testid="lk-close" onClick={() => closeLookup()} />
+        </div>
+      </div>
+      {formDiffers && (
+        <p className="text-xs text-subtle" data-testid="lk-form">
+          {t('lkForm', { form: req.surface })}
+        </p>
+      )}
+      {(de || def) && (
+        <div className="flex flex-col gap-0.5">
+          {lang === 'de' && de && (
+            <p className="text-base" lang="de" data-testid="lk-meaning">
+              {de}
+            </p>
+          )}
+          {def && (
+            <p className={lang === 'de' ? 'text-sm text-muted' : 'text-base'} lang="en" data-testid={lang === 'de' ? 'lk-def' : 'lk-meaning'}>
+              {def}
+            </p>
+          )}
+        </div>
+      )}
+      {!de && !def && !busy && !needAi && (
+        <p className="text-sm text-muted" data-testid="lk-notfound">
+          {t('lkNotFound')}
+        </p>
+      )}
+      {sense && (
+        <div className="flex flex-col gap-1 rounded-xl bg-surface px-3 py-2" data-testid="lk-sense">
+          <p className="lx-eyebrow">{t('lkInContext')}</p>
+          <p className="text-sm" lang={lang}>
+            {sense}
+          </p>
+        </div>
+      )}
+      {note && (
+        <p className="text-sm text-muted" lang={lang} data-testid="lk-note">
+          {note}
+        </p>
+      )}
+      {busy && (
+        <div className="flex items-center justify-between gap-2 text-sm text-muted" data-testid="ai-phase" data-ai-phase={busy.phase}>
+          <span>{busy.phase === 'slow' ? t('aiSlow') : busy.phase === 'queued' ? t('aiQueued') : t('aiThinking')}</span>
+          {busy.phase === 'slow' && (
+            <Button variant="ghost" onClick={busy.stop} data-testid="ai-stop">
+              {t('aiStop')}
+            </Button>
+          )}
+        </div>
+      )}
+      {error && !busy && (
+        <p className="text-sm text-danger-text" role="status" data-testid="ai-error">
+          {t(error)}
+        </p>
+      )}
+      <div className="flex flex-wrap gap-2">
+        {exists ? (
+          <p className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-accent-text" data-testid="lk-saved">
+            {t('lkSaved')}
+            {card && !card.hidden && card.stage > 0 ? ` · ${t('lkStage', { n: card.stage })}` : ''}
+          </p>
+        ) : (
+          canSave && (
+            <Button variant="secondary" icon="bookmarkPlus" onClick={() => void save()} busy={saveState === 'busy'} data-testid="lk-save">
+              {t('lkSave')}
+            </Button>
+          )
+        )}
+        {ai && !sense && (
+          <Button variant="ghost" icon="sparkle" onClick={ask} disabled={!!busy} data-testid="lk-ask" data-ai="">
+            {error && asked.error ? t('aiRetry') : t('lkAsk')}
+          </Button>
+        )}
+      </div>
+      {saveState === 'failed' && (
+        <p className="text-sm text-danger-text" role="status">
+          {t('lkSaveFailed')}
+        </p>
+      )}
+    </div>
+  );
+
+  const label = t('lkDialog', { word: req.surface });
+  if (sheet) {
+    return (
+      <div className="fixed inset-0 z-50">
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: 'var(--lx-scrim)' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: DURATION.fast }}
+          aria-hidden="true"
+        />
+        <motion.div
+          ref={panel}
+          role="dialog"
+          aria-modal="true"
+          aria-label={label}
+          tabIndex={-1}
+          data-testid="lookup"
+          className="lx-popover inset-x-0 bottom-0 max-h-[60svh] overflow-y-auto overscroll-contain rounded-t-[1.5rem] px-5 pt-4 pb-[max(env(safe-area-inset-bottom),1.25rem)]"
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 40, opacity: 0 }}
+          transition={{ duration: DURATION.base, ease: EASE_OUT }}
+          drag="y"
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={{ top: 0, bottom: 0.6 }}
+          onDragEnd={(_, info) => {
+            if (info.offset.y > 80 || info.velocity.y > 500) closeLookup();
+          }}
+        >
+          {content}
+        </motion.div>
+      </div>
+    );
+  }
+  return (
+    <motion.div
+      ref={panel}
+      role="dialog"
+      aria-modal="false"
+      aria-label={label}
+      tabIndex={-1}
+      data-testid="lookup"
+      className="lx-popover rounded-2xl p-4"
+      style={pos}
+      initial={{ opacity: 0, y: -4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -4 }}
+      transition={{ duration: DURATION.fast, ease: EASE_OUT }}
+    >
+      {content}
+    </motion.div>
+  );
+}

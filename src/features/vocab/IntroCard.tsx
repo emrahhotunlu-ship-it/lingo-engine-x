@@ -1,5 +1,6 @@
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
+import { EnglishText } from '../../engine/EnglishText';
 import { Ladder } from '../../engine/Ladder';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -46,11 +47,16 @@ export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: Fi
           </p>
         )}
         {card.context && (
-          <p className="lx-sentence mt-2" lang="en">
-            {card.context.sentence.slice(0, card.context.start)}
-            <mark className="lx-mark text-fg">{card.context.gap}</mark>
-            {card.context.sentence.slice(card.context.end)}
-          </p>
+          <EnglishText
+            as="p"
+            className="lx-sentence mt-2"
+            testId="origin-sentence"
+            text={card.context.sentence}
+            area="intro"
+            source={card.path}
+            title={card.word}
+            highlight={[card.context.start, card.context.end]}
+          />
         )}
         {col && <p className="text-sm text-muted">{lang === 'de' && col.de ? t('whyCollocDe', { p: col.p, de: col.de }) : t('whyColloc', { p: col.p })}</p>}
       </div>

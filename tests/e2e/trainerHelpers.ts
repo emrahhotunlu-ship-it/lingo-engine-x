@@ -65,7 +65,7 @@ export function expected(ex: string, id: string, col: number | null): string {
   }
 }
 
-/** Beantwortet die aktuelle Übung richtig (Tastatur) und übernimmt den Vorschlag. Rückgabe: Übungsart. */
+/** Beantwortet die aktuelle Übung (Tastatur); die App stuft selbst ein, Enter geht weiter. Rückgabe: Übungsart. */
 export async function answerCurrent(page: Page, opts: { wrong?: boolean } = {}): Promise<string> {
   // Erst antworten, wenn genau eine Übung steht (kein Übergang mehr läuft).
   await expect(page.locator('[data-step]')).toHaveCount(1);
@@ -87,8 +87,10 @@ export async function answerCurrent(page: Page, opts: { wrong?: boolean } = {}):
     await page.keyboard.type(opts.wrong ? 'zzzz' : answer, { delay: 30 });
     await page.keyboard.press('Enter');
   }
-  await expect(page.getByTestId('why')).toBeVisible();
-  await expect(page.getByTestId('rating')).toBeVisible();
+  await expect(page.getByTestId('verdict')).toBeVisible();
+  await expect(page.getByTestId('next')).toBeVisible();
+  // Keine Bewertungsknöpfe mehr (CLAUDE.md A7): die Note steht schon fest.
+  await expect(page.locator('button[data-grade]')).toHaveCount(0);
   await page.keyboard.press('Enter');
   await expect(page.locator(`[data-step="${step ?? ''}"]`)).toHaveCount(0);
   return ex;

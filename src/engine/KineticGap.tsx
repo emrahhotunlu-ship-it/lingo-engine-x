@@ -2,11 +2,14 @@ import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } fr
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useHiddenInput } from './HiddenInput';
+import type { MaskCell } from '../domain/answer/mask';
 
 // Kinetische Lücke (Kap. 4.1, Architektur-Entwurf §6.1/6.3): getippt wird direkt in die Lücke.
 // Jeder Buchstabe fliegt vom Eingabepunkt in die Lücke und rastet ein; die Lücke wächst mit,
-// erbt Schrift und Grundlinie, ihre Anfangsbreite verrät die Lösung nicht. Bei reduzierter
-// Bewegung erscheinen die Buchstaben ohne Flug (schlichte Überblendung).
+// erbt Schrift und Grundlinie. Ohne Maske verrät die Anfangsbreite die Lösung nicht; mit Maske
+// (Stufen mit Hilfe oder nach „Tipp", CLAUDE.md A7) zeigt die Lücke je Buchstabe einen
+// Platzhalter, Leerzeichen und Bindestriche sind sichtbar, und jeder getippte Buchstabe fliegt
+// auf seinen Platz. Bei reduzierter Bewegung erscheinen die Buchstaben ohne Flug.
 
 export type GapState = 'input' | 'correct' | 'near' | 'wrong';
 
@@ -16,6 +19,8 @@ type Props = {
   state: GapState;
   /** Nach der Prüfung: je Zeichen, ob es abweicht (goldene Markierung). */
   marks?: boolean[] | undefined;
+  /** Buchstaben-Platzhalter (nur Länge und Trennzeichen, nie die Lösung). */
+  mask?: readonly MaskCell[] | null | undefined;
   onChange: (value: string, info: { firstKey: boolean; deleted: number }) => void;
   onEnter: () => void;
   onKey?: (key: string) => boolean;
@@ -41,7 +46,7 @@ function textWidth(text: string, font: string): number {
   return ctx.measureText(text).width;
 }
 
-export function KineticGap({ label, maxLength, state, marks, onChange, onEnter, onKey }: Props) {
+export function KineticGap({ label, maxLength, state, marks, mask, onChange, onEnter, onKey }: Props) {
   const api = useHiddenInput();
   const reduce = useReducedMotion();
   const gap = useRef<HTMLSpanElement>(null);
@@ -86,9 +91,16 @@ export function KineticGap({ label, maxLength, state, marks, onChange, onEnter, 
       const ir = i.getBoundingClientRect();
       const fromX = Math.min(window.innerWidth - 24, gr.right + 8);
       const fromY = Math.min(window.innerHeight - 24, gr.bottom + 56);
+      const slots = i.querySelectorAll<HTMLElement>('[data-slot]');
       for (let k = p; k < next.length; k++) {
-        const x = ir.left + textWidth(next.slice(0, k), font);
-        const y = ir.top;
+        const slot = slots[k];
+        let x = ir.left + textWidth(next.slice(0, k), font);
+        let y = ir.top;
+        if (slot) {
+          const r = slot.getBoundingClientRect();
+          x = r.left + Math.max(0, (r.width - textWidth(next[k] ?? '', font)) / 2);
+          y = r.top;
+        }
         spawned.push({ id: flyerSeq++, index: k, ch: next[k] ?? '', x, y, dx: fromX - x, dy: fromY - y, font });
       }
     }
@@ -141,21 +153,37 @@ export function KineticGap({ label, maxLength, state, marks, onChange, onEnter, 
 
   return (
     <>
-      <motion.span ref={gap} className="lx-gap" data-testid="gap" data-state={state} data-focused={focused || undefined} style={{ width }} lang="en">
+      <motion.span ref={gap} className="lx-gap" data-testid="gap" data-state={state} data-focused={focused || undefined} data-masked={mask ? '' : undefined} style={{ width }} lang="en">
         <span ref={inner} className="lx-gap-inner">
-          <AnimatePresence initial={false}>
-            {[...value].map((ch, i) => (
-              <motion.span
-                key={`${i}-${ch}`}
-                data-letter=""
-                data-landed={landed[i] ? 'true' : 'false'}
-                className={`lx-letter${marks?.[i] ? ' lx-letter-off' : ''}`}
-                exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, transition: { duration: 0.12 } }}
-              >
-                {ch === ' ' ? ' ' : ch}
-              </motion.span>
-            ))}
-          </AnimatePresence>
+          {mask ? (
+            <>
+              {mask.map((cell, i) => {
+                const ch = value[i];
+                return (
+                  <span key={`s${i}`} className={cell.kind === 'fixed' ? 'lx-slot lx-slot-fixed' : 'lx-slot'} data-slot={cell.kind === 'fixed' ? 'fixed' : 'letter'} data-filled={ch !== undefined || undefined}>
+                    {ch !== undefined ? (
+                      <Letter ch={ch} i={i} landed={!!landed[i]} off={!!marks?.[i]} reduce={!!reduce} />
+                    ) : cell.kind === 'fixed' ? (
+                      <span aria-hidden="true">{cell.ch === ' ' ? ' ' : cell.ch}</span>
+                    ) : cell.hint ? (
+                      <span className="lx-slot-hint" aria-hidden="true">
+                        {cell.hint}
+                      </span>
+                    ) : null}
+                  </span>
+                );
+              })}
+              {[...value].slice(mask.length).map((ch, k) => (
+                <Letter key={`o${k}`} ch={ch} i={mask.length + k} landed={!!landed[mask.length + k]} off={!!marks?.[mask.length + k]} reduce={!!reduce} />
+              ))}
+            </>
+          ) : (
+            <AnimatePresence initial={false}>
+              {[...value].map((ch, i) => (
+                <Letter key={`${i}-${ch}`} ch={ch} i={i} landed={!!landed[i]} off={!!marks?.[i]} reduce={!!reduce} />
+              ))}
+            </AnimatePresence>
+          )}
         </span>
       </motion.span>
       {flyers.length > 0 &&
@@ -178,5 +206,19 @@ export function KineticGap({ label, maxLength, state, marks, onChange, onEnter, 
           document.body,
         )}
     </>
+  );
+}
+
+function Letter({ ch, i, landed, off, reduce }: { ch: string; i: number; landed: boolean; off: boolean; reduce: boolean }) {
+  return (
+    <motion.span
+      key={`${i}-${ch}`}
+      data-letter=""
+      data-landed={landed ? 'true' : 'false'}
+      className={`lx-letter${off ? ' lx-letter-off' : ''}`}
+      exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, transition: { duration: 0.12 } }}
+    >
+      {ch === ' ' ? '\u00a0' : ch}
+    </motion.span>
   );
 }

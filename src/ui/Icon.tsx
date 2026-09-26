@@ -18,6 +18,11 @@ const paths = {
   plus: 'M12 5v14M5 12h14',
   refresh: 'M20 11a8 8 0 10-2.3 5.7M20 5v6h-6',
   copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
+  speaker: 'M4 9.5h3.5L12 5.5v13l-4.5-4H4zM15.5 9a4 4 0 010 6M18 6.5a7.5 7.5 0 010 11',
+  info: 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 11v5.5M12 7.8v.01',
+  sparkle: 'M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z',
+  bookmarkPlus: 'M6 4h12v16l-6-4-6 4zM12 7.5v5M9.5 10h5',
+  lightbulb: 'M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z',
 } as const;
 
 export type IconName = keyof typeof paths;

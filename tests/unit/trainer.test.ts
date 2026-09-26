@@ -9,7 +9,7 @@ import { applyUpdate } from '../../src/domain/srs/applyReview';
 import { buildTrainCards, toTrainCard } from '../../src/domain/srs/cards';
 import { findContext, parseCollocs } from '../../src/domain/srs/context';
 import { buildExercise } from '../../src/domain/srs/exercise';
-import { allowedGrades, suggestGrade } from '../../src/domain/srs/grade';
+import { autoGrade, suggestGrade } from '../../src/domain/srs/grade';
 import { availableExercises, chooseExercise } from '../../src/domain/srs/modes';
 import { buildQueue, normalizeNewPerDay, planRound } from '../../src/domain/srs/queue';
 import type { AnswerEvent, TrainCard } from '../../src/domain/srs/types';
@@ -128,7 +128,7 @@ describe('Antwortprüfung', () => {
   });
 });
 
-describe('Bewertungsvorschlag', () => {
+describe('Notenberechnung aus der Zeit', () => {
   it('Auswahl nie „Leicht", Tippen nach Zeit, fast richtig „Schwer", falsch „Nochmal"', () => {
     expect(suggestGrade('mc_en', 'correct', { submitMs: 3000 })).toBe(3);
     expect(suggestGrade('mc_en', 'correct', { submitMs: 9000 })).toBe(2);
@@ -139,8 +139,8 @@ describe('Bewertungsvorschlag', () => {
     expect(suggestGrade('type', 'correct', { submitMs: 2500, firstKeyMs: 1000, chars: 8, deletions: 3 })).toBe(3);
     expect(suggestGrade('cloze', 'near', { submitMs: 1000 })).toBe(2);
     expect(suggestGrade('cloze', 'wrong', { submitMs: 1000 })).toBe(1);
-    expect(allowedGrades('wrong')).toEqual([1, 2]);
-    expect(allowedGrades('near')).toEqual([1, 2, 3]);
+    expect(autoGrade('cloze', { verdict: 'wrong' }, { submitMs: 1000 })).toBe(1);
+    expect(autoGrade('cloze', { verdict: 'near' }, { submitMs: 1000 })).toBe(2);
   });
 });
 

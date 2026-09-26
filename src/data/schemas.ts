@@ -131,7 +131,11 @@ export const chatSchema = z.looseObject({
 
 export const lookupSchema = z.looseObject({
   items: z
-    .record(z.string(), z.looseObject({ lemma: str, pos: str, de: str, def: str, note_de: str, level: str }).nullish())
+    .record(
+      z.string(),
+      // Neu, nur ergänzend (Plan §3.10): note_en, ipa, ex, pv, t.
+      z.looseObject({ lemma: str, pos: str, de: str, def: str, note_de: str, level: str, note_en: str, ipa: str, ex: str, pv: str, t: num }).nullish(),
+    )
     .nullish(),
 });
 
@@ -197,6 +201,10 @@ export const vocabSchema = z.looseObject({
   ac: num,
   co: num,
   col: z.array(z.unknown()).nullish(),
+  /** Neu: Herkunft einer per Wort-Antippen gespeicherten Karte (Plan §3.4). */
+  origin: z.looseObject({ v: num, kind: str, ref: str, title: str, t: num }).nullish(),
+  /** Neu: von Claude ergänzte Beispielsätze `[{en, t}]` (nur Englisch, ≤ 3), tolerant gelesen; nur ergänzt, nie ersetzt. */
+  xEx: z.array(z.unknown()).nullish(),
   ...schedulingFields,
 });
 

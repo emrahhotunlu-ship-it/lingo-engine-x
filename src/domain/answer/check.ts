@@ -2,6 +2,7 @@ import type { CheckResult } from '../srs/types';
 import { editDistance, markDiff } from './diff';
 import { normalize, withoutTo } from './normalize';
 import { toUS } from './spelling';
+import { lemmaCandidates } from '../text/lemma';
 
 // Prüfung getippter Antworten (Lern-Entwurf §2.2). Reihenfolge, die erste passende Regel gilt:
 // gleich → britische Variante (richtig) → andere Form desselben Worts (fast richtig) →
@@ -28,7 +29,8 @@ export function checkTyped(givenRaw: string, accepted: readonly string[], deps: 
   if (targets.some((t) => toUS(t) === us)) return us !== g ? { verdict: 'correct', variant: 'uk', us } : { verdict: 'correct' };
 
   const lemma = withoutTo(normalize(deps.lemma));
-  if (lemma && g === lemma) return { verdict: 'near', kind: 'form' };
+  // Dasselbe Wort in einer anderen Form (persuade statt persuaded, went statt gone).
+  if (lemma && (g === lemma || (!g.includes(' ') && lemmaCandidates(g).includes(lemma)))) return { verdict: 'near', kind: 'form' };
 
   if (deps.knownWords?.has(g) && !targets.includes(g)) return { verdict: 'wrong', kind: 'confusable', otherWord: g };
 

@@ -116,8 +116,8 @@ test('die fliegenden Buchstaben landen in der Lücke; falsche Antwort zeigt die 
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('gap')).toHaveAttribute('data-state', 'near');
   await expect(page.getByTestId('solution')).toContainText('avoid');
-  await expect(page.getByTestId('why')).toContainText('Tippfehler');
-  await expect(page.locator('[data-grade="4"]')).toBeDisabled();
+  await expect(page.getByTestId('verdict')).toHaveText('Fast richtig – Tippfehler');
+  await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '2');
   expect(errors).toEqual([]);
 });
 

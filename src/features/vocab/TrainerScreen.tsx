@@ -10,6 +10,7 @@ import { normalize } from '../../domain/answer/normalize';
 import { ExerciseView } from './ExerciseView';
 import { IntroCard } from './IntroCard';
 import { Summary } from './Summary';
+import { abortExamples } from './examples';
 import { flush } from './persist';
 import { leaveSession, pauseActivity, touch, useSession } from './session';
 
@@ -47,6 +48,9 @@ export function TrainerScreen() {
   useEffect(() => {
     if (!active) go({ name: 'today' });
   }, [active, go]);
+
+  // Bildschirmwechsel: laufende KI-Anfragen für Beispielsätze abbrechen (A6.2).
+  useEffect(() => () => abortExamples(), []);
 
   useEffect(() => {
     const onVis = () => pauseActivity(document.visibilityState === 'hidden');
