@@ -39,6 +39,7 @@ export async function ensureDay(nowMs: number): Promise<void> {
       nowMs,
       newPerDay: typeof profile?.newPerDay === 'number' ? profile.newPerDay : 5,
       introducedToday: cards.filter((c) => c.intro === today).length,
+      introducedLessonToday: cards.filter((c) => c.intro === today && c.src === 'lesson').length,
       lang: useSettings.getState().lang,
     });
     built = buildPlan({ today, existing: profile?.plan, round, nowMs });

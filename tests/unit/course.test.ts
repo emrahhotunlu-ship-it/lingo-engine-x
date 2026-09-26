@@ -3,7 +3,7 @@ import { LESSONS } from '../../src/domain/content';
 import { baseLesson } from '../../src/domain/course/baseLesson';
 import { catalog, lessonMeta } from '../../src/domain/course/catalog';
 import { courseDone, isLessonDone, lessonDoneOn } from '../../src/domain/course/courseDone';
-import { lessonWrite, readLesson } from '../../src/domain/course/lessonDoc';
+import { lessonWordCard, lessonWrite, readLesson } from '../../src/domain/course/lessonDoc';
 import { assessFocusTopic, pickLesson } from '../../src/domain/course/next';
 import { localProductionCheck } from '../../src/domain/course/production';
 import { applyUpdate } from '../../src/domain/srs/applyReview';
@@ -131,5 +131,16 @@ describe('lokale Prüfung der Produktion', () => {
     expect(localProductionCheck(text, must)).toMatchObject({ ok: true, used: ['agenda', 'to chair a meeting', 'to recap'] });
     expect(localProductionCheck('The agenda is short.', must)).toMatchObject({ ok: false, tooShort: true });
     expect(localProductionCheck(text, must, text).tooSimilar).toBe(true);
+  });
+});
+
+describe('K-05: Lektionskarte mit Dialogsatz', () => {
+  const lines = [{ en: "Good morning, everyone. I'll chair the meeting today." }, { en: "Let's look at the agenda first." }];
+  it('jede Lektionskarte hat den Dialogsatz als ex, src lesson, Ursprung lesson', () => {
+    const agenda = lessonWordCard({ en: 'agenda', de: 'Tagesordnung', pos: 'noun', def: '', ex: '' }, { lid: 'l01', lines, today: '2026-09-28', nowMs: 5 })!;
+    expect(agenda.doc).toMatchObject({ id: 'agenda', ex: "Let's look at the [agenda] first.", src: 'lesson', lesson: 'l01', origin: { kind: 'lesson', ref: 'lesson/l01' } });
+    const chair = lessonWordCard({ en: 'to chair a meeting', de: 'ein Meeting leiten', pos: 'phrase', def: '', ex: '' }, { lid: 'l01', lines, today: '2026-09-28', nowMs: 5 })!;
+    expect(chair.doc.ex).toBe("Good morning, everyone. I'll [chair] the meeting today.");
+    expect(lessonWordCard({ en: 'attendee', de: 'Teilnehmer', pos: 'noun', def: '', ex: '' }, { lid: 'l01', lines, today: '2026-09-28', nowMs: 5 })).toBeNull();
   });
 });

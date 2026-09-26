@@ -8,7 +8,7 @@ import { applyUpdate, cardPatch } from '../../domain/srs/applyReview';
 import { buildTrainCards, toTrainCard } from '../../domain/srs/cards';
 import { buildExercise } from '../../domain/srs/exercise';
 import { chooseExercise } from '../../domain/srs/modes';
-import { buildQueue, normalizeNewPerDay } from '../../domain/srs/queue';
+import { buildQueue, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { useTodayPlan } from '../today/store';
@@ -123,7 +123,9 @@ export function startSession(round: Round): FirstKind {
   const target = round === 'pflicht' ? Math.max(0, goal - reviewed.size) : EXTRA_TARGET;
   const profile = live.docs['app/profile'] ?? {};
   const introducedToday = cards.filter((c) => c.intro === day).length;
-  const newQuotaLeft = Math.max(0, normalizeNewPerDay(profile.newPerDay) - introducedToday);
+  // D17: Lektionswörter zählen mit, verdrängen aber nie alle eigenen neuen Karten.
+  const introducedLessonToday = cards.filter((c) => c.intro === day && c.src === 'lesson').length;
+  const newQuotaLeft = newQuotaLeftFor(profile.newPerDay, introducedToday, introducedLessonToday);
   const queue = buildQueue({ cards, nowMs: now, target, newQuotaLeft, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
   const base: SessionState = {
     active: true,

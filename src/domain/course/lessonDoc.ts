@@ -3,6 +3,9 @@ import { normalizeTask } from '../grammar/tasks';
 import type { GrammarTask, LessonContent, LessonMeta } from '../learn/types';
 import type { Lang } from '../srs/types';
 import { asText } from '../text/str';
+import { newVocabDoc } from '../srs/newCard';
+import { coreWord } from './baseLesson';
+import { containsTarget } from './production';
 
 // Lektionsinhalt `lesson/<lid>` im Format der alten App (phase2-plan §4.8, Daten-Entwurf §6.2).
 // - Lesen: gespeicherte Fragen kennen beide Sprachen (`q`/`q_alt`); alte Fragen ohne `lang`
@@ -58,7 +61,40 @@ export function readLesson(doc: Readonly<Doc> | null | undefined, lang: Lang, me
   return { words, dialogue: { title: str(dlg.title) || meta.en, lines }, questions, tasks, output, source: 'db' };
 }
 
-export type LessonWriteOp = { set: Doc } | { update: Doc } | null;
+/**
+ * Karte eines Lektionsworts (D17, K-05): `vocab/<slug>` mit `src:'lesson'`, `lesson:<lid>`,
+ * Ursprung `lesson` und dem Dialogsatz als Beispiel (`[wort]` markiert). Ohne Satz, in dem das
+ * Wort vorkommt, gibt es keine Karte (Kap. 15: keine Karten ohne Ursprungssatz).
+ */
+export function lessonWordCard(
+  w: LessonContent['words'][number],
+  i: { lid: string; lines: ReadonlyArray<{ en: string }>; today: string; nowMs: number; title?: string },
+): { id: string; doc: Doc } | null {
+  const inLine = i.lines.map((l) => l.en).find((l) => containsTarget(l, w.en)) ?? null;
+  const exSource = inLine ?? (w.ex ? w.ex.replace(/[[\]]/g, '') : null);
+  if (!exSource) return null;
+  const core = coreWord(w.en);
+  const make = (surface: string | null) =>
+    newVocabDoc({
+      word: w.en,
+      de: w.de,
+      pos: w.pos === 'phrase' ? null : w.pos,
+      def: w.def || null,
+      ex: exSource,
+      surface,
+      src: 'lesson',
+      lesson: i.lid,
+      origin: { v: 1, kind: 'lesson', ref: `lesson/${i.lid}`, t: i.nowMs, ...(i.title ? { title: i.title } : {}) },
+      today: i.today,
+    });
+  // Markiert wird die Fundstelle im Satz: Klammer aus dem KI-Beispiel, sonst die Wendung, sonst ihr Kopfwort
+  // („chair the meeting" steht im Satz, gesucht war „to chair a meeting").
+  return make(bracketed(w.ex) ?? core) ?? make(core.split(' ')[0] ?? null);
+}
+
+const bracketed = (ex: string): string | null => /\[([^\]]+)\]/.exec(ex)?.[1] ?? null;
+
+export type LessonWriteOp ={ set: Doc } | { update: Doc } | null;
 
 /** Schreibweg `lesson/<lid>` für einen erfolgreich erzeugten Inhalt (`out` = Speicherform). */
 export function lessonWrite(cur: Readonly<Doc> | undefined, out: Readonly<Doc>, lid: string): LessonWriteOp {
