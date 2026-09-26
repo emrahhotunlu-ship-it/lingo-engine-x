@@ -61,3 +61,19 @@ Stand: Phase 0. Grundlage sind die bestehende Datenbank (`docs/datenstruktur.jso
   - bestehende Deckel: Log 300 je Tag, Radar 400, Lookup 400, Chat 40
   - neue Ströme: werden zusammengefasst statt ein Dokument je Eintrag
 - Die Diagnose-Ansicht zeigt die aktuelle Dokumentzahl.
+
+## Ergänzungen Phase 3 – Sprechen und Business
+
+Nur neue Felder und Sammlungen; alte Felder bleiben unverändert, gelöscht wird nie.
+
+| Pfad | Neu | Schreibweg |
+|---|---|---|
+| `talk/<JJJJ-MM>` | `{v, month, runs[]}` – je Gespräch `{id, t, day, scene, title, src, turns, ms, end, goal, clean, errs, taken, lines ≤ 16, report, lang, tier, v}`; ≤ 200 KiB (Verdichtung: zuerst `lines`, dann `report.focus/strengths` der ältesten) | `transform`, idempotent über `run.id` (Gesprächsende; KI-Bericht wird nachgetragen) |
+| `biz/<JJJJ-MM>` | `{v, month, items[]}` – `mail` / `pitch` / `play`; ≤ 200 KiB (Verdichtung: zuerst die Texte der ältesten) | `transform`, idempotent über `item.id` |
+| `chunk/c-<slug>` | zusätzlich `def`, `whyLang`, `origin {v, kind, ref, title, t}`, `src.kind` (`scene`/`mail`/`pitch`/`biz`), `src.ts`; `also` wird nie geschrieben | nur anlegen, wenn die Wendung fehlt; „Wieder aufnehmen“ = `update({hidden:false})` |
+| `scene/<id>` | Lauf-Vermerk `runs`, `lastRun`, `done:true` (nur wenn fehlend/false); KI-Szenen `scene/sc-ai<ms36>` mit `src:'ai'`, `pv`, `gram`, `words` | `transform` bzw. `createIfMissing` |
+| `app/radar.events` | Quellen `k` (Sprechen) und `b` (Business), nur Grammatik-Kategorien, ≤ 400 | `transform` |
+| `log/<tag>` | Einträge `{t, ok, lang, type:'speak'|'biz', id, m, q, n, ms, ctx:'spk'|'biz'}` – nie `k:'v'`, nie `ctx:'rev'|'xtra'` | gemeinsamer Puffer (`recordActivity`) |
+| `app/profile` | `act[tag].speak` / `speak~` / `biz`; `days`/`answers` + eigene Züge (`countAs`); `voice`, `rate` (Felder der alten App) | gemeinsamer Puffer bzw. `patch` |
+
+Browser-Speicher (nur Bequemlichkeit): `lx:roleplay:<szene>` (Fortsetzen, ≤ 40 KB), `lx:draft:speak:<szene>`, `lx:draft:mail`, `lx:draft:pitch`, `lx:speak-autoplay`, `lx:stt-blocked`.

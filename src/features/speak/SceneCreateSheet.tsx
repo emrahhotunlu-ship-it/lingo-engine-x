@@ -6,6 +6,7 @@ import { aiSceneId } from '../../domain/speak/sceneDoc';
 import type { SceneView } from '../../domain/speak/types';
 import { sceneGen, SG_WISH_MAX } from '../../prompts/sceneGen';
 import { Button } from '../../ui/Button';
+import { Switch } from '../../ui/Switch';
 import { Sheet } from '../../ui/Sheet';
 import { Skeleton } from '../../ui/Skeleton';
 import { createSceneDoc } from './persist';
@@ -57,14 +58,8 @@ export function SceneCreateSheet({ open, onClose, scenes, onCreated }: { open: b
             className="resize-none rounded-xl border border-line bg-surface px-3 py-2.5 text-base text-fg outline-none focus:border-[var(--lx-accent)]"
           />
         </label>
-        <label className="flex min-h-11 items-center gap-3 text-sm">
-          <input type="checkbox" checked={useFocus} onChange={(e) => setUseFocus(e.target.checked)} disabled={running} className="size-5 accent-[var(--lx-accent)]" />
-          {t('spCreateFocus')}
-        </label>
-        <label className="flex min-h-11 items-center gap-3 text-sm">
-          <input type="checkbox" checked={useWords} onChange={(e) => setUseWords(e.target.checked)} disabled={running} className="size-5 accent-[var(--lx-accent)]" />
-          {t('spCreateWords')}
-        </label>
+        <Switch checked={useFocus} onChange={setUseFocus} disabled={running} label={t('spCreateFocus')} />
+        <Switch checked={useWords} onChange={setUseWords} disabled={running} label={t('spCreateWords')} />
         {running && (
           <div role="status" className="flex flex-col gap-2" data-testid="scene-create-running">
             <p className="text-sm text-muted">{ask.phase === 'slow' ? t('aiSlow') : t('aiThinking')}</p>

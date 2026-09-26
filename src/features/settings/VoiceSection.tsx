@@ -6,6 +6,7 @@ import { logError } from '../../platform/diagnostics';
 import { clampRate, previewVoice, RATE_MAX, RATE_MIN, setSpeechPrefs, useSpeech } from '../../platform/speech';
 import { local } from '../../platform/storage';
 import { Button } from '../../ui/Button';
+import { Switch } from '../../ui/Switch';
 import { toast } from '../../ui/Toast';
 import { AUTOPLAY_KEY, autoplayOn } from '../speak/autoplay';
 
@@ -108,25 +109,20 @@ export function VoiceSection() {
               onPointerUp={commitRate}
               onKeyUp={commitRate}
               onBlur={commitRate}
-              className="accent-[var(--lx-accent)]"
+              className="h-11 accent-[var(--lx-accent)]"
             />
           </label>
         </>
       )}
-      <label className="flex min-h-11 items-center justify-between gap-3 text-sm">
-        <span>{t('voiceAutoplay')}</span>
-        <input
-          type="checkbox"
-          role="switch"
-          checked={autoplay}
-          data-testid="voice-autoplay"
-          onChange={(e) => {
-            setAutoplay(e.target.checked);
-            local.set(AUTOPLAY_KEY, e.target.checked ? '1' : '0');
-          }}
-          className="size-5 accent-[var(--lx-accent)]"
-        />
-      </label>
+      <Switch
+        checked={autoplay}
+        label={t('voiceAutoplay')}
+        testId="voice-autoplay"
+        onChange={(v) => {
+          setAutoplay(v);
+          local.set(AUTOPLAY_KEY, v ? '1' : '0');
+        }}
+      />
     </section>
   );
 }

@@ -106,7 +106,7 @@ export function Composer({ sceneId, useful, busy, restore, onSend }: Props) {
       data-testid="composer"
     >
       {useful.length > 0 && (
-        <div className="-mx-1 mb-2 flex gap-2 overflow-x-auto px-1 pb-1" role="group" aria-label={t('spUseful')}>
+        <div className="-mx-1 mb-2 flex gap-2 overflow-x-auto px-1 pb-1" role="group" aria-label={t('spUseful')} data-hscroll="">
           {useful.map((u) => (
             <button
               key={u.en}

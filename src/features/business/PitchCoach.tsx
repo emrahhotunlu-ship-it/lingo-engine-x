@@ -145,7 +145,7 @@ export function PitchCoach() {
           </div>
           <label className="flex flex-col gap-2 text-sm">
             <span className="font-medium">{t('pitchMinutes', { min: minutes })}</span>
-            <input type="range" min={1} max={5} step={1} value={minutes} onChange={(e) => setMinutes(Number(e.target.value))} data-testid="pitch-minutes" className="accent-[var(--lx-accent)]" />
+            <input type="range" min={1} max={5} step={1} value={minutes} onChange={(e) => setMinutes(Number(e.target.value))} data-testid="pitch-minutes" className="h-11 accent-[var(--lx-accent)]" />
           </label>
           {!ai && <p className="text-sm text-muted">{t('bizNoAi')}</p>}
           {c.error && state === 'input' && (

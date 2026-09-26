@@ -127,10 +127,10 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
 
   return (
     <div data-testid="roleplay" data-state={state} className="flex flex-col gap-4 py-4 sm:py-6">
-      <header className="flex flex-wrap items-center gap-x-3 gap-y-2">
+      <header className="flex items-center gap-x-2 sm:gap-x-3">
         <IconButton icon="arrowLeft" label={t('spBack')} onClick={() => go({ name: 'speak' })} />
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-lg font-semibold tracking-tight">{scene.title}</h1>
+          <h1 className="line-clamp-2 text-base font-semibold tracking-tight sm:text-lg">{scene.title}</h1>
           <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted">
             <span data-testid="rp-turn-count">{t('spTurn', { n: myTurns + 1 })}</span>
             <span aria-hidden="true">·</span>
