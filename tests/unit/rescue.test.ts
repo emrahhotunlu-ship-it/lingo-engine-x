@@ -89,7 +89,7 @@ describe('Datenbank-Dokument mit unerwartetem Aufbau wird nie überschrieben (Re
 describe('Nur plausible Lerntage werden ergänzt', () => {
   it('künftige Tage, Schlüssel ohne Datum und negative Werte bleiben draußen – als Rest gemeldet', () => {
     const remote = { days: { [D1]: 1 } };
-    const local = { days: { [D1]: 1, [D2]: 2, '2099-01-01': 5, foo: 3, '2026-9-5': 1 }, xp: -4, minutes: { [D2]: -10 } };
+    const local = { days: { [D1]: 1, [D2]: 2, '2099-01-01': 5, foo: 3, '2026-9-5': 1, '2026-02-31': 1, '2026-00-00': 1 }, xp: -4, minutes: { [D2]: -10 } };
     const d = mergeLegacyLocal('app/profile', remote, local, NOW);
     expect(d).toMatchObject({ kind: 'merge', rest: true });
     expect(after('app/profile', remote, local)).toEqual({ days: { [D1]: 1, [D2]: 2 } });

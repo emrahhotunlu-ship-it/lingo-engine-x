@@ -1,7 +1,7 @@
 import { isDocPath, isReadOnlyPath, schemaForPath } from '../../data/paths';
 import { validateDoc } from '../../data/validate';
 import { jsonEqual } from '../equal';
-import { isDayKey, legacyDayKey } from '../date';
+import { addDays, isDayKey, legacyDayKey } from '../date';
 
 // Noch nicht übertragene Kopien der alten App (sw2:__dirty) – bewusst SCHLICHT und sicher
 // (Kap. 9, Regel 1 und 6). Automatisch geschieht nur, was nie etwas verlieren kann:
@@ -53,7 +53,7 @@ function maxMap(remote: unknown, local: unknown, keyOk: KeyOk): Doc | null {
 function mergeProfile(remote: Doc, local: Doc, nowMs: number): Doc {
   // Nur echte Kalendertage bis heute: ein künftiger Tag würde später ohne Übung als gelernt zählen.
   const today = legacyDayKey(nowMs);
-  const pastDay: KeyOk = (k) => isDayKey(k) && k <= today;
+  const pastDay: KeyOk = (k) => isDayKey(k) && addDays(k, 0) === k && k <= today; // echtes Datum, nicht 2026-02-31
   const patch: Doc = {};
   for (const key of PROFILE_DAY_MAPS) {
     const add = maxMap(remote[key], local[key], pastDay);
