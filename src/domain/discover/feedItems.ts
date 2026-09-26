@@ -55,7 +55,7 @@ export function feedItem(feedId: string, feedDoc: Doc, raw: unknown, uiLang: 'de
   const gist = str(it.gist);
   if (!itemId || !KINDS.has(kindRaw) || !title || !gist) return null;
   const kind = kindRaw as FeedItem['kind'];
-  const d = str(feedDoc.d) || (DAY_RE.exec(feedId)?.[0] ?? '');
+  const d = DAY_RE.exec(str(feedDoc.d))?.[0] ?? DAY_RE.exec(feedId)?.[0] ?? '';
   const questions: Question[] =
     kind === 'article' && Array.isArray(it.questions)
       ? it.questions.map((q, i) => normalizeFeedQuestion(q, `${itemId}#${i}`, uiLang)).filter((q): q is Question => q !== null)
@@ -93,9 +93,10 @@ export function feedItem(feedId: string, feedDoc: Doc, raw: unknown, uiLang: 'de
 export function flattenFeed(docs: ReadonlyArray<{ id: string; doc: Doc }>, uiLang: 'de' | 'en'): FeedItem[] {
   const out: FeedItem[] = [];
   const seen = new Set<string>();
+  const dateOf = (x: { id: string; doc: Doc }) => DAY_RE.exec(str(x.doc.d))?.[0] ?? DAY_RE.exec(x.id)?.[0] ?? '';
   const sorted = [...docs].sort((a, b) => {
-    const da = str(a.doc.d) || a.id;
-    const db = str(b.doc.d) || b.id;
+    const da = dateOf(a);
+    const db = dateOf(b);
     return da < db ? 1 : da > db ? -1 : a.id < b.id ? 1 : -1;
   });
   for (const { id, doc } of sorted) {

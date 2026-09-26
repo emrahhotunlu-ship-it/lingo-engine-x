@@ -28,7 +28,6 @@ export const inputDe = {
   inLangName_de: 'Deutsch',
   inLangName_en: 'Englisch',
   inLeave: 'Einheit verlassen',
-  inLeaveConfirm: 'Dein Entwurf bleibt gespeichert. Trotzdem verlassen?',
   inInfo: 'Wozu dient das?',
   inLoadFailed: 'Die Inhalte konnten gerade nicht geladen werden.',
   inReload: 'Neu laden',
@@ -229,6 +228,7 @@ export const inputDe = {
   dcSteps_other: '{n} Schritte erledigt',
   dcBackToList: 'Zur Liste',
   dcNone: 'Keine offenen Beiträge.',
+  diagDisc: 'Entdecken-Einträge',
 };
 
 export type InputMessageKey = keyof typeof inputDe;

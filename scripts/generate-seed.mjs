@@ -682,6 +682,154 @@ put(`lpool/ai${now - 7 * DAY}`, { ...lp, src: 'ai' });
 const wp = passages.write[1];
 put(`wprompt/${addDays(ANCHOR, -2)}`, { p: { ...wp, src: 'seed' } });
 
+// ------------------------------------------------------------------ Phase 4: Lesen, Hören, Entdecken (Plan §8.4)
+// Ohne Zufallsaufrufe, damit alle bisherigen Dokumente unverändert bleiben.
+{
+  // Ungelesener Artikel MIT Fragen (Altformat: `answer` ist der Optionstext) – die Tageswahl am Stichtag.
+  const a3 = passages.articles.find((a) => a.id === 'a3');
+  const id = `ai${now - 2 * DAY}`;
+  put(`articles/${id}`, {
+    ...a3,
+    id,
+    topic_en: 'AI in the workplace',
+    domain: 'work',
+    src: 'ai',
+    t: now - 2 * DAY,
+    pv: 'reading-text@1',
+    questions: [
+      {
+        q: 'What is the main idea of the text?',
+        options: ['AI will soon replace most office jobs.', 'AI is becoming a useful colleague that still needs human checks.', 'Companies should ban AI tools at work.', 'AI is only useful for translating documents.'],
+        answer: 'AI is becoming a useful colleague that still needs human checks.',
+        type: 'gist',
+        explain_de: 'Der Text beschreibt KI als „new kind of colleague“, dessen Arbeit Menschen prüfen müssen.',
+        explain_en: 'The text calls AI a "new kind of colleague" whose work humans still need to check.',
+      },
+      {
+        q: 'What do experts call confident but wrong AI output?',
+        options: ['Hallucination', 'Supervision', 'Briefing', 'Guidelines'],
+        answer: 'Hallucination',
+        type: 'detail',
+        explain_de: 'Laut Text nennen Fachleute das „hallucination“.',
+        explain_en: 'According to the text, experts call this "hallucination".',
+      },
+      {
+        q: 'Why do some companies prefer AI features built into their existing software?',
+        options: ['Sensitive data stays in a controlled environment.', 'These features are always free.', 'They never make mistakes.', 'Employees do not need any training.'],
+        answer: 'Sensitive data stays in a controlled environment.',
+        type: 'detail',
+        explain_de: 'So bleiben sensible Daten in einer kontrollierten Umgebung – wichtig wegen des Datenschutzes.',
+        explain_en: 'That way sensitive data stays in a controlled environment, which matters for data protection.',
+      },
+      {
+        q: 'What can we infer about writing good prompts?',
+        options: ['It is a skill similar to briefing a new intern.', 'Only programmers can do it well.', 'It makes critical thinking unnecessary.', 'It is no longer needed with modern tools.'],
+        answer: 'It is a skill similar to briefing a new intern.',
+        type: 'inference',
+        explain_de: 'Der Text vergleicht einen guten Prompt mit dem Einweisen eines neuen Praktikanten.',
+        explain_en: 'The text compares writing a good prompt to briefing a new intern.',
+      },
+    ],
+  });
+  // Eigener Text ohne Fragen (M16, `src: own`), ein Leseziel für „Mit Fragen aufbereiten".
+  put(`articles/ai${now - 9 * DAY}`, {
+    id: `ai${now - 9 * DAY}`,
+    level: 'B2',
+    topic: 'own',
+    topic_de: 'Eigener Text',
+    topic_en: 'Your own text',
+    title: 'Notes from the partner meeting',
+    teaser: '',
+    text: 'The partner meeting in Hamburg was shorter than planned. Most resellers asked about the new cloud edition and how licensing will work for existing customers.\n\nTwo partners want a joint webinar in November. We agreed to send them a short proposal with dates and topics by the end of next week.',
+    keypoints: [],
+    glossary: [],
+    questions: [],
+    domain: 'work',
+    src: 'own',
+    t: now - 9 * DAY,
+    pv: 'reading-text@1',
+  });
+  // Zweiter Hörtext (mit englischen Erklärungen), noch nicht gehört.
+  const l5 = passages.listen.find((l) => l.id === 'l5');
+  put(`lpool/ai${now - 3 * DAY}`, {
+    ...l5,
+    topic_en: 'Customer onboarding and data migration',
+    questions: l5.questions.map((q) => ({ ...q, explain_en: `The recording answers this directly: "${q.answer}".` })),
+    vocab: l5.vocab.map((v) => ({ ...v, def: `useful phrase from the recording: ${v.w}` })),
+    domain: 'work',
+    src: 'ai',
+    t: now - 3 * DAY,
+    pv: 'listening-text@1',
+  });
+  // Dritter Beitrag des Tagesauftrags (Podcast) und ein selbst hinzugefügter Beitrag der alten App
+  // (`-own-`) mit einem gültigen und einem ungültigen Link (nur http(s) wird angezeigt).
+  const k3 = addDays(ANCHOR, -2);
+  put(`feed/${k3}`, { id: k3, d: k3, items: feedSeed[2].items });
+  const own = `${addDays(ANCHOR, -1)}-own-k2x9`;
+  put(`feed/${own}`, {
+    id: own,
+    d: addDays(ANCHOR, -1),
+    items: [
+      {
+        id: 'own-sales-2609',
+        kind: 'article',
+        cat: 'work',
+        mins: 6,
+        level: 'B2+',
+        title: 'How to follow up without being pushy',
+        source: 'Own note',
+        url: 'https://www.example.com/follow-up',
+        topic_de: 'Nachfassen im Vertrieb',
+        topic_en: 'Following up in sales',
+        why_de: 'Nachfassen gehört zu deinem Alltag – mit den richtigen Wendungen klingt es freundlich statt drängend.',
+        why_en: 'Following up is part of your daily work – the right phrases make it sound friendly, not pushy.',
+        excerpt: 'Most deals are won in the follow-up, not in the first call.',
+        excerptBy: 'Sales coach, quoted in the note',
+        gist: 'Most deals are not won in the first meeting but in the follow-up. A good follow-up adds something new, such as a short case study or an answer to an open question. It also makes the next step easy: suggest a date, keep the message short and check in again after a week if there is no reply.',
+        chunks: [
+          { en: 'to check in', de: 'kurz nachfragen', note_de: 'Freundlich und unverbindlich.', note_en: 'Friendly and low-pressure.' },
+          { en: 'the next step', de: 'der nächste Schritt', note_de: 'Macht die Mail konkret.', note_en: 'Makes the email concrete.' },
+        ],
+        questions: [
+          {
+            q_de: 'Was macht ein gutes Nachfassen aus?',
+            q_en: 'What makes a good follow-up?',
+            opts_de: ['Es bringt etwas Neues und macht den nächsten Schritt leicht', 'Es wiederholt das erste Angebot wörtlich', 'Es kommt jeden Tag', 'Es ist möglichst lang'],
+            opts_en: ['It adds something new and makes the next step easy', 'It repeats the first offer word for word', 'It comes every day', 'It is as long as possible'],
+            a: 0,
+            why_de: 'Der Text nennt zwei Punkte: etwas Neues bringen und den nächsten Schritt leicht machen.',
+            why_en: 'The text names two points: add something new and make the next step easy.',
+          },
+        ],
+        task_de: 'Schreib eine kurze Nachfass-Mail an einen Kunden, der seit einer Woche nicht geantwortet hat.',
+        task_en: 'Write a short follow-up email to a customer who has not replied for a week.',
+        taskChunks: ['to check in', 'the next step'],
+      },
+      {
+        id: 'own-bad-link',
+        kind: 'watch',
+        cat: 'culture',
+        mins: 12,
+        level: 'B2',
+        title: 'A talk about small talk',
+        source: 'Unknown',
+        url: 'javascript:alert(1)',
+        topic_de: 'Small Talk',
+        topic_en: 'Small talk',
+        why_de: 'Small Talk öffnet Gespräche.',
+        why_en: 'Small talk opens conversations.',
+        gist: 'The speaker explains why short, friendly questions at the start of a meeting build trust and make difficult topics easier later.',
+        guide_de: ['Achte auf die ersten drei Fragen des Sprechers.'],
+        guide_en: ['Listen for the speaker’s first three questions.'],
+        chunks: [{ en: 'build trust', de: 'Vertrauen aufbauen', note_de: 'Feste Verbindung.', note_en: 'A fixed pairing.' }],
+        task_de: 'Schreib drei Fragen, mit denen du ein Kundengespräch eröffnen würdest.',
+        task_en: 'Write three questions you would use to open a customer call.',
+        taskChunks: ['build trust'],
+      },
+    ],
+  });
+}
+
 // ------------------------------------------------------------------ Ausgabe
 const sorted = Object.fromEntries(Object.keys(docs).sort().map((k) => [k, docs[k]]));
 mkdirSync(new URL('../seed/', import.meta.url), { recursive: true });

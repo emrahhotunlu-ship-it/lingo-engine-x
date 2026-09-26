@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useSettings } from '../../app/settings';
 import type { InputRoute } from '../../app/nav';
-import { locateAll } from '../../domain/input/errorSpans';
+import { processErrors } from '../../domain/input/review';
 import { feedbackFits } from '../../domain/input/feedbackLang';
 import { wordCount } from '../../domain/input/textStats';
-import type { ArticleItem, TextError } from '../../domain/input/types';
+import type { ArticleItem } from '../../domain/input/types';
 import { EnglishText } from '../../engine/EnglishText';
 import { MarkedText } from '../../engine/MarkedText';
 import { useT } from '../../i18n';
@@ -55,10 +55,8 @@ export function SummaryStep({ readingId, item, route, onSkip, onSaved }: Props) 
       vars: { title: item.title, text: item.text, keypoints: item.keypoints, summary, uiLang },
       save: async (data) => {
         await saveReadingSummary(readingId, summary, wordCount(summary), { ...data, lang: uiLang, pv: 'reading-check@1' });
-        const origs = data.language.errors.map((e) => e.orig);
-        const spans = locateAll(origs, summary);
-        const errs: TextError[] = data.language.errors.map((e, i) => ({ orig: e.orig, fix: e.fix, cat: e.cat as TextError['cat'], topic: null, sev: 'minor', why: e.why, span: spans[i] ?? null }));
-        await addRadar(errs, summary, 'r');
+        // Britische Formen sind nie ein Fehler (F11) und kommen nie ins Radar.
+        await addRadar(processErrors(data.language.errors, summary).errors, summary, 'r');
       },
     });
   };
@@ -153,15 +151,18 @@ function ReviewedSummary({ summary, res, total, item, onRecheck, uiLang }: { sum
   const [active, setActive] = useState<number | null>(null);
   const covered = strList(res.covered);
   const language = obj(res.language);
-  const errors = useMemo(
+  const { errors, usHints } = useMemo(
     () =>
-      (Array.isArray(language.errors) ? language.errors : []).map((e) => {
-        const o = obj(e);
-        return { orig: str(o.orig), fix: str(o.fix), why: str(o.why), cat: str(o.cat) };
-      }),
-    [language.errors],
+      processErrors(
+        (Array.isArray(language.errors) ? language.errors : []).map((e) => {
+          const o = obj(e);
+          return { orig: str(o.orig), fix: str(o.fix), why: str(o.why), cat: str(o.cat) };
+        }),
+        summary,
+      ),
+    [language.errors, summary],
   );
-  const spans = useMemo(() => locateAll(errors.map((e) => e.orig), summary), [errors, summary]);
+  const spans = errors.map((e) => e.span);
   const tips = strList(language.tips);
   const feedback = str(res.feedback);
   const fits = feedbackFits(res.lang, [feedback, ...tips, ...errors.map((e) => e.why)], uiLang);
@@ -204,6 +205,11 @@ function ReviewedSummary({ summary, res, total, item, onRecheck, uiLang }: { sum
               {activeErr.why && <p className="text-muted">{activeErr.why}</p>}
             </div>
           )}
+          {usHints.map((h) => (
+            <p key={h.orig} className="text-sm text-muted" data-testid="us-hint">
+              <span lang="en">{h.orig}</span> → {t('wrUsHint', { us: h.us })}
+            </p>
+          ))}
           {feedback && <p className="text-sm">{feedback}</p>}
           {tips.length > 0 && (
             <div>

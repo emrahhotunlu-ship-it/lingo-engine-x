@@ -12,6 +12,7 @@ import { useSettings, type Lang, type ThemeMode } from '../../app/settings';
 import { changeLang, changeTheme } from '../../app/actions';
 import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll } from './exportData';
+import { discCount } from '../../domain/discover/steps';
 
 // Einstellungen (Kap. 6.14): Sprache, Darstellung, Datenexport, Diagnose.
 
@@ -91,6 +92,7 @@ function Diagnostics({ open }: { open: boolean }) {
   const caps = useCapabilities();
   const time = (ms: number) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { timeStyle: 'medium' }).format(ms);
   const schema = useLive((s) => s.docs['app/schema']);
+  const disc = useLive((s) => s.docs['app/profile']?.disc);
   const log = useSyncExternalStore(subscribeLog, getLog);
   const [docCount, setDocCount] = useState<number | null>(null);
 
@@ -135,6 +137,7 @@ function Diagnostics({ open }: { open: boolean }) {
         ? `${num(schema.version)}${typeof schema.migratedAt === 'number' ? ` · ${date(schema.migratedAt)}` : ''}`
         : t('diagSchemaNone'),
     ],
+    [t('diagDisc'), num(discCount(disc))],
   ];
 
   return (

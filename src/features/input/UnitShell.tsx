@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useId, useState, type ReactNode } from 'react';
+import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
@@ -30,6 +31,9 @@ export function UnitShell({ kind, ctx, state, title, onClose, progress, status, 
   const [info, setInfo] = useState(false);
   const infoId = useId();
   const channel: Channel = kind;
+  // Esc verlässt die Einheit (Entwürfe bleiben lokal gesichert); bei offenem Nachschlagen
+  // schließt Esc zuerst das Fenster (useHotkeys lässt Dialoge in Ruhe).
+  useHotkeys({ escape: onClose }, () => false);
   return (
     <motion.section
       className="flex flex-col gap-5 py-4 sm:py-8"

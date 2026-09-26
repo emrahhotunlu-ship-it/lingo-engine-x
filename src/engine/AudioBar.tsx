@@ -68,6 +68,24 @@ export function AudioBar({ text, rate, onRate, labels, onPlayFromStart, onOutcom
     else setI(target);
   };
 
+  // Leertaste spielt ab bzw. hält an, solange kein Feld und kein Knopf den Fokus hat (Plan §4.5).
+  const toggle = useRef<() => void>(() => undefined);
+  useEffect(() => {
+    toggle.current = () => (playing ? stop() : play(i));
+  });
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== ' ' || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'BUTTON' || t.isContentEditable)) return;
+      if (document.querySelector('[role="dialog"]')) return;
+      e.preventDefault();
+      toggle.current();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   const pct = Math.round(((playing ? i + 1 : i) / n) * 100);
 
   return (

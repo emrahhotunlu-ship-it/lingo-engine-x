@@ -29,7 +29,6 @@ export const inputEn: Record<InputMessageKey, string> = {
   inLangName_de: 'German',
   inLangName_en: 'English',
   inLeave: 'Leave this unit',
-  inLeaveConfirm: 'Your draft stays saved. Leave anyway?',
   inInfo: 'Why this helps',
   inLoadFailed: "Couldn't load the content right now.",
   inReload: 'Reload',
@@ -230,4 +229,5 @@ export const inputEn: Record<InputMessageKey, string> = {
   dcSteps_other: '{n} steps done',
   dcBackToList: 'Back to the list',
   dcNone: 'No open pieces.',
+  diagDisc: 'Discover entries',
 };

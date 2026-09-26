@@ -1586,6 +1586,23 @@
    }
   ]
  },
+ "articles/ai1789149600000": {
+  "id": "ai1789149600000",
+  "level": "B2",
+  "topic": "own",
+  "topic_de": "Eigener Text",
+  "topic_en": "Your own text",
+  "title": "Notes from the partner meeting",
+  "teaser": "",
+  "text": "The partner meeting in Hamburg was shorter than planned. Most resellers asked about the new cloud edition and how licensing will work for existing customers.\n\nTwo partners want a joint webinar in November. We agreed to send them a short proposal with dates and topics by the end of next week.",
+  "keypoints": [],
+  "glossary": [],
+  "questions": [],
+  "domain": "work",
+  "src": "own",
+  "t": 1789149600000,
+  "pv": "reading-text@1"
+ },
  "articles/ai1789495200000": {
   "id": "ai1789495200000",
   "level": "B2+",
@@ -1649,6 +1666,128 @@
    }
   ],
   "src": "ai"
+ },
+ "articles/ai1789754400000": {
+  "id": "ai1789754400000",
+  "level": "B2",
+  "topic": "tech",
+  "topic_de": "KI am Arbeitsplatz",
+  "title": "Your New Colleague Is an Algorithm",
+  "teaser": "AI assistants are arriving in offices everywhere, but using them well is a skill people still need to learn.",
+  "text": "Only a few years ago, artificial intelligence at work sounded like science fiction. Today, many office workers use AI tools every day, often without thinking much about it. They ask a chatbot to write the first draft of an email, summarise a long report or translate a document. For many people, AI has quietly become a new kind of colleague. But what does this colleague do well, and where does it still need supervision?\n\nThe biggest benefit is speed. Tasks that used to take an hour, such as turning meeting notes into a clear summary, can now take a few minutes. AI is especially good at repetitive work with text: sorting incoming documents, pulling key information out of invoices or suggesting answers to common customer questions. This gives employees more time for work that needs human judgement, like building relationships with customers or making difficult decisions.\n\nHowever, AI tools also make mistakes, and they often make them with great confidence. A chatbot can produce a sentence that sounds perfectly professional but contains wrong facts, invented sources or numbers that do not add up. Experts call this \"hallucination\". For this reason, many companies tell their staff to treat AI output as a starting point, not a finished product. A human should always check the result before it is sent to a customer or used for an important decision.\n\nThere are also questions about data protection. When employees paste confidential information into a public AI tool, they may not know where that data ends up. In Europe, where privacy rules are strict, this is a serious concern. As a result, many organisations now create clear guidelines: which tools are allowed, what kind of information can be shared and who is responsible for the final result. Some companies prefer AI features built directly into the software they already use, so that sensitive data stays in a controlled environment.\n\nPerhaps the most interesting change is in the skills people need. Writing a good instruction for an AI – often called a \"prompt\" – is a bit like briefing a new intern. You have to explain the context, describe the goal and say what the result should look like. People who can do this clearly tend to get much better results. At the same time, classic skills like critical thinking and good writing become more important, not less, because someone has to judge whether the AI's work is actually good.\n\nIn the end, AI is unlikely to replace most office jobs completely, at least not soon. But it is changing them. The workers who benefit most will probably be those who learn to work alongside the technology: using it for the boring parts, checking its work carefully and keeping the important decisions in human hands.",
+  "keypoints": [
+   "Many office workers already use AI tools daily for tasks like drafting, summarising and translating.",
+   "The main benefit is speed on repetitive text tasks, which frees time for work needing human judgement.",
+   "AI can make confident mistakes (hallucinations), so humans must check its output.",
+   "Data protection is a concern, so companies create guidelines about which tools and data are allowed.",
+   "New skills like writing good prompts matter, and critical thinking becomes more important, not less."
+  ],
+  "glossary": [
+   {
+    "w": "first draft",
+    "de": "erster Entwurf",
+    "def": "the first version of a text, which will be improved later"
+   },
+   {
+    "w": "supervision",
+    "de": "Aufsicht, Kontrolle",
+    "def": "watching and checking someone's work"
+   },
+   {
+    "w": "human judgement",
+    "de": "menschliches Urteilsvermögen",
+    "def": "the ability of a person to make good decisions"
+   },
+   {
+    "w": "do not add up",
+    "de": "nicht stimmen, nicht aufgehen",
+    "def": "are not correct or logical when checked"
+   },
+   {
+    "w": "a starting point",
+    "de": "ein Ausgangspunkt",
+    "def": "something you begin with and then improve"
+   },
+   {
+    "w": "confidential information",
+    "de": "vertrauliche Informationen",
+    "def": "private information that should not be shared"
+   },
+   {
+    "w": "guidelines",
+    "de": "Richtlinien",
+    "def": "rules or advice about how to do something"
+   },
+   {
+    "w": "briefing",
+    "de": "einweisen, instruieren",
+    "def": "giving someone the information they need for a task"
+   },
+   {
+    "w": "work alongside",
+    "de": "zusammenarbeiten mit",
+    "def": "to work together with someone or something"
+   }
+  ],
+  "topic_en": "AI in the workplace",
+  "domain": "work",
+  "src": "ai",
+  "t": 1789754400000,
+  "pv": "reading-text@1",
+  "questions": [
+   {
+    "q": "What is the main idea of the text?",
+    "options": [
+     "AI will soon replace most office jobs.",
+     "AI is becoming a useful colleague that still needs human checks.",
+     "Companies should ban AI tools at work.",
+     "AI is only useful for translating documents."
+    ],
+    "answer": "AI is becoming a useful colleague that still needs human checks.",
+    "type": "gist",
+    "explain_de": "Der Text beschreibt KI als „new kind of colleague“, dessen Arbeit Menschen prüfen müssen.",
+    "explain_en": "The text calls AI a \"new kind of colleague\" whose work humans still need to check."
+   },
+   {
+    "q": "What do experts call confident but wrong AI output?",
+    "options": [
+     "Hallucination",
+     "Supervision",
+     "Briefing",
+     "Guidelines"
+    ],
+    "answer": "Hallucination",
+    "type": "detail",
+    "explain_de": "Laut Text nennen Fachleute das „hallucination“.",
+    "explain_en": "According to the text, experts call this \"hallucination\"."
+   },
+   {
+    "q": "Why do some companies prefer AI features built into their existing software?",
+    "options": [
+     "Sensitive data stays in a controlled environment.",
+     "These features are always free.",
+     "They never make mistakes.",
+     "Employees do not need any training."
+    ],
+    "answer": "Sensitive data stays in a controlled environment.",
+    "type": "detail",
+    "explain_de": "So bleiben sensible Daten in einer kontrollierten Umgebung – wichtig wegen des Datenschutzes.",
+    "explain_en": "That way sensitive data stays in a controlled environment, which matters for data protection."
+   },
+   {
+    "q": "What can we infer about writing good prompts?",
+    "options": [
+     "It is a skill similar to briefing a new intern.",
+     "Only programmers can do it well.",
+     "It makes critical thinking unnecessary.",
+     "It is no longer needed with modern tools."
+    ],
+    "answer": "It is a skill similar to briefing a new intern.",
+    "type": "inference",
+    "explain_de": "Der Text vergleicht einen guten Prompt mit dem Einweisen eines neuen Praktikanten.",
+    "explain_en": "The text compares writing a good prompt to briefing a new intern."
+   }
+  ]
  },
  "chunk/c-i-take-your-point-but": {
   "id": "c-i-take-your-point-but",
@@ -1956,6 +2095,74 @@
    }
   ]
  },
+ "feed/2026-09-18": {
+  "id": "2026-09-18",
+  "d": "2026-09-18",
+  "items": [
+   {
+    "id": "intelligence-pod",
+    "kind": "listen",
+    "cat": "politics",
+    "mins": 20,
+    "level": "C1",
+    "title": "The Intelligence – The Economist's daily news podcast",
+    "source": "The Economist",
+    "url": "https://www.economist.com/podcasts",
+    "topic_de": "Weltpolitik und Wirtschaft in 20 Minuten",
+    "topic_en": "World affairs and economics in 20 minutes",
+    "why_de": "Jeden Werktag drei Geschichten aus Politik, Wirtschaft und Gesellschaft, in klarem britischem Englisch und gut gebautem Satzbau – genau das Register, das C1 verlangt.",
+    "why_en": "Every weekday three stories from politics, economics and society, in clear British English with well-built sentences – exactly the register C1 requires.",
+    "gist": "Each episode has a short introduction followed by three reports, usually an interview with a correspondent. Pick the newest episode and listen to one story at a time. The speakers use cautious, precise language: they separate facts from interpretation and often end a point with a balanced assessment.",
+    "guide_de": [
+     "Hör nur die erste Geschichte. Worum geht es in einem Satz?",
+     "Achte darauf, wie der Korrespondent Fakten und eigene Einschätzung trennt („what we know is …“, „my sense is …“).",
+     "Notier eine Wendung, mit der jemand vorsichtig widerspricht oder einschränkt.",
+     "Hör eine Minute ein zweites Mal und sprich leise mit (Shadowing).",
+     "Danach: Erzähl die Geschichte in drei Sätzen nach – schriftlich oder laut."
+    ],
+    "guide_en": [
+     "Listen to the first story only. What is it about, in one sentence?",
+     "Notice how the correspondent separates facts from opinion (“what we know is …”, “my sense is …”).",
+     "Note one phrase someone uses to disagree carefully or add a qualification.",
+     "Listen to one minute a second time and speak along quietly (shadowing).",
+     "Afterwards: retell the story in three sentences – in writing or out loud."
+    ],
+    "chunks": [
+     {
+      "en": "what we know so far is",
+      "de": "was wir bisher wissen, ist",
+      "note_de": "Trennt gesicherte Fakten von Vermutungen.",
+      "note_en": "Separates confirmed facts from guesses."
+     },
+     {
+      "en": "my sense is that",
+      "de": "mein Eindruck ist, dass",
+      "note_de": "Weiche, aber selbstbewusste Einschätzung – sehr britisch.",
+      "note_en": "A soft but confident judgement – very British."
+     },
+     {
+      "en": "the bigger picture",
+      "de": "der größere Zusammenhang",
+      "note_de": "„Zoom out to the bigger picture.“",
+      "note_en": "“Zoom out to the bigger picture.”"
+     },
+     {
+      "en": "it remains to be seen whether",
+      "de": "es bleibt abzuwarten, ob",
+      "note_de": "Klassischer Schlusssatz in Nachrichten.",
+      "note_en": "A classic closing line in news."
+     }
+    ],
+    "task_de": "Fass eine Geschichte aus der Folge in drei Sätzen zusammen. Benutze „what we know so far is“, „the bigger picture“ und „it remains to be seen whether“.",
+    "task_en": "Summarise one story from the episode in three sentences. Use “what we know so far is”, “the bigger picture” and “it remains to be seen whether”.",
+    "taskChunks": [
+     "what we know so far",
+     "bigger picture",
+     "remains to be seen"
+    ]
+   }
+  ]
+ },
  "feed/2026-09-19": {
   "id": "2026-09-19",
   "d": "2026-09-19",
@@ -2260,6 +2467,104 @@
      "that buys us"
     ],
     "cat": "work"
+   }
+  ]
+ },
+ "feed/2026-09-19-own-k2x9": {
+  "id": "2026-09-19-own-k2x9",
+  "d": "2026-09-19",
+  "items": [
+   {
+    "id": "own-sales-2609",
+    "kind": "article",
+    "cat": "work",
+    "mins": 6,
+    "level": "B2+",
+    "title": "How to follow up without being pushy",
+    "source": "Own note",
+    "url": "https://www.example.com/follow-up",
+    "topic_de": "Nachfassen im Vertrieb",
+    "topic_en": "Following up in sales",
+    "why_de": "Nachfassen gehört zu deinem Alltag – mit den richtigen Wendungen klingt es freundlich statt drängend.",
+    "why_en": "Following up is part of your daily work – the right phrases make it sound friendly, not pushy.",
+    "excerpt": "Most deals are won in the follow-up, not in the first call.",
+    "excerptBy": "Sales coach, quoted in the note",
+    "gist": "Most deals are not won in the first meeting but in the follow-up. A good follow-up adds something new, such as a short case study or an answer to an open question. It also makes the next step easy: suggest a date, keep the message short and check in again after a week if there is no reply.",
+    "chunks": [
+     {
+      "en": "to check in",
+      "de": "kurz nachfragen",
+      "note_de": "Freundlich und unverbindlich.",
+      "note_en": "Friendly and low-pressure."
+     },
+     {
+      "en": "the next step",
+      "de": "der nächste Schritt",
+      "note_de": "Macht die Mail konkret.",
+      "note_en": "Makes the email concrete."
+     }
+    ],
+    "questions": [
+     {
+      "q_de": "Was macht ein gutes Nachfassen aus?",
+      "q_en": "What makes a good follow-up?",
+      "opts_de": [
+       "Es bringt etwas Neues und macht den nächsten Schritt leicht",
+       "Es wiederholt das erste Angebot wörtlich",
+       "Es kommt jeden Tag",
+       "Es ist möglichst lang"
+      ],
+      "opts_en": [
+       "It adds something new and makes the next step easy",
+       "It repeats the first offer word for word",
+       "It comes every day",
+       "It is as long as possible"
+      ],
+      "a": 0,
+      "why_de": "Der Text nennt zwei Punkte: etwas Neues bringen und den nächsten Schritt leicht machen.",
+      "why_en": "The text names two points: add something new and make the next step easy."
+     }
+    ],
+    "task_de": "Schreib eine kurze Nachfass-Mail an einen Kunden, der seit einer Woche nicht geantwortet hat.",
+    "task_en": "Write a short follow-up email to a customer who has not replied for a week.",
+    "taskChunks": [
+     "to check in",
+     "the next step"
+    ]
+   },
+   {
+    "id": "own-bad-link",
+    "kind": "watch",
+    "cat": "culture",
+    "mins": 12,
+    "level": "B2",
+    "title": "A talk about small talk",
+    "source": "Unknown",
+    "url": "javascript:alert(1)",
+    "topic_de": "Small Talk",
+    "topic_en": "Small talk",
+    "why_de": "Small Talk öffnet Gespräche.",
+    "why_en": "Small talk opens conversations.",
+    "gist": "The speaker explains why short, friendly questions at the start of a meeting build trust and make difficult topics easier later.",
+    "guide_de": [
+     "Achte auf die ersten drei Fragen des Sprechers."
+    ],
+    "guide_en": [
+     "Listen for the speaker’s first three questions."
+    ],
+    "chunks": [
+     {
+      "en": "build trust",
+      "de": "Vertrauen aufbauen",
+      "note_de": "Feste Verbindung.",
+      "note_en": "A fixed pairing."
+     }
+    ],
+    "task_de": "Schreib drei Fragen, mit denen du ein Kundengespräch eröffnen würdest.",
+    "task_en": "Write three questions you would use to open a customer call.",
+    "taskChunks": [
+     "build trust"
+    ]
    }
   ]
  },
@@ -8129,6 +8434,105 @@
    }
   ],
   "src": "ai"
+ },
+ "lpool/ai1789668000000": {
+  "id": "l5",
+  "level": "B2+",
+  "topic_de": "Kunden-Onboarding und Datenmigration",
+  "title": "Onboarding a New Customer",
+  "genre": "briefing",
+  "text": "Right, quick briefing on Fairfield Logistics before tomorrow's kick-off call. They're a mid-sized company, about a hundred and forty employees, and they've been storing everything on an old file server plus, well, a lot of paper. They've signed up for our cloud plan, starting with the finance and HR departments. Now, a couple of things to watch out for. First, their IT manager, Tom, is quite sceptical. He wasn't the one who chose us, the managing director was, so expect a lot of questions about data security and where the servers are located. Make sure you mention that everything's hosted in Frankfurt. Second, they want the HR files migrated first, which is the more sensitive data, so we'll need to agree access rights before we move a single document. My suggestion is that we don't overload them. Let's aim for a pilot with around twenty users in the first month, get some quick wins, and only then roll it out to the whole finance team. Any questions before we wrap up?",
+  "questions": [
+   {
+    "q": "What is the purpose of this briefing?",
+    "options": [
+     "To prepare the team for a first meeting with a new customer",
+     "To explain why a customer cancelled their contract",
+     "To train the customer's IT manager",
+     "To present the results of a pilot project"
+    ],
+    "answer": "To prepare the team for a first meeting with a new customer",
+    "type": "gist",
+    "explain_de": "Es ist ein kurzes Briefing vor dem Kick-off-Call am nächsten Tag.",
+    "explain_en": "The recording answers this directly: \"To prepare the team for a first meeting with a new customer\"."
+   },
+   {
+    "q": "Which department's files will be migrated first?",
+    "options": [
+     "Finance",
+     "HR",
+     "IT",
+     "Logistics"
+    ],
+    "answer": "HR",
+    "type": "detail",
+    "explain_de": "„they want the HR files migrated first“.",
+    "explain_en": "The recording answers this directly: \"HR\"."
+   },
+   {
+    "q": "How many users should take part in the pilot?",
+    "options": [
+     "About fourteen",
+     "About twenty",
+     "About forty",
+     "About a hundred and forty"
+    ],
+    "answer": "About twenty",
+    "type": "detail",
+    "explain_de": "„a pilot with around twenty users in the first month“.",
+    "explain_en": "The recording answers this directly: \"About twenty\"."
+   },
+   {
+    "q": "Why is Tom probably sceptical?",
+    "options": [
+     "He had a bad experience with cloud software before",
+     "He was not involved in choosing the supplier",
+     "He thinks the product is too expensive",
+     "He wants to keep using paper files"
+    ],
+    "answer": "He was not involved in choosing the supplier",
+    "type": "inference",
+    "explain_de": "Der Geschäftsführer hat entschieden, nicht Tom – daher wohl seine Skepsis.",
+    "explain_en": "The recording answers this directly: \"He was not involved in choosing the supplier\"."
+   }
+  ],
+  "vocab": [
+   {
+    "w": "a kick-off call",
+    "de": "ein Auftaktgespräch",
+    "def": "useful phrase from the recording: a kick-off call"
+   },
+   {
+    "w": "to sign up for",
+    "de": "sich anmelden für, abschließen",
+    "def": "useful phrase from the recording: to sign up for"
+   },
+   {
+    "w": "access rights",
+    "de": "Zugriffsrechte",
+    "def": "useful phrase from the recording: access rights"
+   },
+   {
+    "w": "quick wins",
+    "de": "schnelle Erfolge",
+    "def": "useful phrase from the recording: quick wins"
+   },
+   {
+    "w": "to roll something out",
+    "de": "etwas ausrollen, einführen",
+    "def": "useful phrase from the recording: to roll something out"
+   },
+   {
+    "w": "to wrap up",
+    "de": "abschließen, zum Ende kommen",
+    "def": "useful phrase from the recording: to wrap up"
+   }
+  ],
+  "topic_en": "Customer onboarding and data migration",
+  "domain": "work",
+  "src": "ai",
+  "t": 1789668000000,
+  "pv": "listening-text@1"
  },
  "preply/pi1789668000000": {
   "kind": "import",

@@ -92,9 +92,15 @@ export function QuestionCard({ question, index, total, source, area, sourceRef, 
       <p className="lx-tnum text-xs font-medium text-muted" data-testid="question-status">
         {t('inQuestionOf', { i: index + 1, n: total, type: t(`qType_${question.type}`) })}
       </p>
-      <h2 className="text-lg font-semibold tracking-tight" lang={question.qLang}>
-        {question.q}
-      </h2>
+      {question.qLang === 'en' ? (
+        <h2 className="text-lg font-semibold tracking-tight">
+          <EnglishText text={question.q} area={area} source={sourceRef} title={sourceTitle} as="span" />
+        </h2>
+      ) : (
+        <h2 className="text-lg font-semibold tracking-tight" lang={question.qLang}>
+          {question.q}
+        </h2>
+      )}
       <p className="sr-only">{t('inTaskChoose')}</p>
       <div role="group" aria-label={t('inTaskChoose')} className="grid gap-2">
         {question.options.map((o, i) => {

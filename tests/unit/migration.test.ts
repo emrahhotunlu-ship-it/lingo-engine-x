@@ -76,7 +76,7 @@ describe('Umstellung auf Datenversion 1 (Kap. 9)', () => {
     expect(plan.totals.grammar).toBe(16);
     expect(plan.totals.lessonsDone).toBe(6);
     expect(plan.totals.logs).toBe(count(seed, 'log/'));
-    expect(plan.untouched).toEqual({ daily: 3, feed: 2 });
+    expect(plan.untouched).toEqual({ daily: count(seed, 'daily/'), feed: count(seed, 'feed/') });
   });
 
   it('ist wiederholbar: ein zweiter Lauf erkennt die Version und ändert nichts', async () => {
