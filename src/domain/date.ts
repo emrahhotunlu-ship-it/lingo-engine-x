@@ -4,14 +4,16 @@
 // berechnet – nie nur einmal beim Laden (Fehler der alten App).
 
 export const DAY_START_HOUR = 4;
-const HOUR = 3_600_000;
 const DAY_KEY_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
 /** Lerntag zum Zeitpunkt `nowMs` (Ortszeit, Tageswechsel um `boundaryHour` Uhr). */
 export function dayKey(nowMs: number, boundaryHour: number = DAY_START_HOUR): string {
-  const d = new Date(nowMs - boundaryHour * HOUR);
+  // Nach der Uhrzeit vor Ort entscheiden (nicht „jetzt minus 4 Stunden"): so liegt die Grenze
+  // auch an den Tagen der Zeitumstellung genau bei 04:00 Uhr.
+  const d = new Date(nowMs);
+  if (d.getHours() < boundaryHour) d.setDate(d.getDate() - 1);
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 

@@ -15,7 +15,7 @@ const paths = {
   cards: 'M4 7h12v13H4zM8 4h12v13',
   book: 'M4 5c2.5-1 5-1 8 1 3-2 5.5-2 8-1v14c-2.5-1-5-1-8 1-3-2-5.5-2-8-1V5zM12 6v14',
   grammar: 'M5 19L10 5h1l5 14M7 14h7M17 9h3M18.5 7.5v3',
-  spark: 'M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6',
+  plus: 'M12 5v14M5 12h14',
   refresh: 'M20 11a8 8 0 10-2.3 5.7M20 5v6h-6',
   copy: 'M9 9h11v11H9zM5 15H4V4h11v1',
 } as const;

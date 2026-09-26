@@ -1,6 +1,6 @@
 import { LESSONS, SEED_VOCAB, TOPICS, UNITS, seedCard, type Lesson } from './content';
-import { DAY_START_HOUR, dayKey } from './date';
-import { computeStreak, type Streak } from './streak';
+import { DAY_START_HOUR, dayKey, legacyDayKey } from './date';
+import { computeStreak, pflichtDays, type Streak } from './streak';
 
 // „Dein Stand": reine Berechnung aus den gelesenen Dokumenten (keine Seiteneffekte).
 
@@ -13,7 +13,8 @@ export type Overview = {
   today: string;
   streak: Streak;
   course: { done: number; total: number; next: Lesson | null; units: Array<{ id: string; de: string; en: string; done: number; total: number }> };
-  vocab: { total: number; byStage: [number, number, number, number, number, number]; due: number };
+  /** `total` = aktive Karten; `hidden` = ausgeblendete (in der alten App „gelöscht", aber erhalten). */
+  vocab: { total: number; hidden: number; byStage: [number, number, number, number, number, number]; due: number };
   grammar: { topics: TopicState[]; weakest: TopicState[] };
   /** `lang` = Sprache, in der die Texte gespeichert sind (fehlt = Deutsch, wie in der alten App). */
   assess: { level: string; cefr: string; why: string; lang: 'de' | 'en' } | null;
@@ -26,9 +27,8 @@ const obj = (v: unknown): Doc => (typeof v === 'object' && v !== null && !Array.
 
 /** Beginn des nächsten Lerntags (04:00 Uhr) in ms – bis dahin gilt eine Karte als „heute fällig". */
 export function learningDayEnd(nowMs: number): number {
-  const d = new Date(nowMs - DAY_START_HOUR * 3_600_000);
-  d.setHours(0, 0, 0, 0);
-  d.setDate(d.getDate() + 1);
+  const d = new Date(nowMs);
+  if (d.getHours() >= DAY_START_HOUR) d.setDate(d.getDate() + 1);
   d.setHours(DAY_START_HOUR, 0, 0, 0);
   return d.getTime();
 }
@@ -52,19 +52,19 @@ export function buildOverview(input: {
   schema: Doc | null | undefined;
   vocab: ReadonlyMap<string, Doc>;
   grammar: ReadonlyMap<string, Doc>;
-  pflichtDone?: ReadonlySet<string>;
 }): Overview {
   const today = dayKey(input.nowMs);
   const profile = obj(input.profile);
   const schemaDoc = input.schema ? obj(input.schema) : null;
-  const cutover = schemaDoc && typeof schemaDoc.cutover === 'string' ? schemaDoc.cutover : null;
+  const pflichtSince = schemaDoc && typeof schemaDoc.pflichtSince === 'string' ? schemaDoc.pflichtSince : null;
 
   const streak = computeStreak({
     days: obj(profile.days) as Record<string, number>,
     xpDays: obj(profile.xpDays) as Record<string, number>,
-    cutover,
-    pflichtDone: input.pflichtDone ?? new Set<string>(),
+    pflichtSince,
+    pflichtDone: pflichtDays(profile.pflicht),
     today,
+    legacyToday: legacyDayKey(input.nowMs),
   });
 
   const doneMap = obj(obj(input.course).done);
@@ -78,9 +78,13 @@ export function buildOverview(input: {
   const end = learningDayEnd(input.nowMs);
   const byStage: Overview['vocab']['byStage'] = [0, 0, 0, 0, 0, 0];
   let total = 0;
+  let hidden = 0;
   let due = 0;
   for (const card of mergedVocab(input.vocab).values()) {
-    if (card.hidden === true) continue;
+    if (card.hidden === true) {
+      hidden++;
+      continue;
+    }
     total++;
     const stage = Math.min(5, Math.max(0, Math.round(num(card.stage))));
     byStage[stage as 0 | 1 | 2 | 3 | 4 | 5]++;
@@ -111,7 +115,7 @@ export function buildOverview(input: {
     today,
     streak,
     course: { done: doneIds.size, total: LESSONS.length, next, units },
-    vocab: { total, byStage, due },
+    vocab: { total, hidden, byStage, due },
     grammar: { topics, weakest },
     assess,
     schema,

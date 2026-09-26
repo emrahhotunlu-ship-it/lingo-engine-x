@@ -87,8 +87,9 @@ function DataSection() {
 const CAP_LABEL: Record<CapStatus, MessageKey> = { ready: 'capReady', pending: 'capPending', absent: 'capAbsent' };
 
 function Diagnostics({ open }: { open: boolean }) {
-  const { t, num, date } = useT();
+  const { t, num, date, lang } = useT();
   const caps = useCapabilities();
+  const time = (ms: number) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { timeStyle: 'medium' }).format(ms);
   const schema = useLive((s) => s.docs['app/schema']);
   const log = useSyncExternalStore(subscribeLog, getLog);
   const [docCount, setDocCount] = useState<number | null>(null);
@@ -115,7 +116,7 @@ function Diagnostics({ open }: { open: boolean }) {
   const copy = async () => {
     const text = log.map((e) => `${new Date(e.t).toISOString()} ${e.level} ${e.scope} ${e.code ?? ''} ${e.message} ${e.detail ?? ''}`).join('\n');
     try {
-      await navigator.clipboard.writeText(text || '—');
+      await navigator.clipboard.writeText(text);
       toast(t('diagLogCopied'));
     } catch (err) {
       logWarn('diagnostics:copy', err);
@@ -153,7 +154,7 @@ function Diagnostics({ open }: { open: boolean }) {
         <ol className="flex max-h-72 flex-col gap-2 overflow-y-auto rounded-xl bg-surface p-3 text-xs" data-testid="diag-log">
           {[...log].reverse().map((e) => (
             <li key={e.id} className="break-words">
-              <span className="lx-tnum text-subtle">{new Date(e.t).toLocaleTimeString()}</span>{' '}
+              <span className="lx-tnum text-subtle">{time(e.t)}</span>{' '}
               <span className={e.level === 'error' ? 'text-danger-text' : e.level === 'warn' ? 'text-gold-text' : 'text-muted'}>{e.scope}</span>{' '}
               {e.code && <span className="text-muted">[{e.code}]</span>} <span className="text-fg">{e.message}</span>
               {e.detail && <span className="text-subtle"> · {e.detail}</span>}
@@ -161,16 +162,16 @@ function Diagnostics({ open }: { open: boolean }) {
           ))}
         </ol>
       )}
-      <div className="flex flex-wrap gap-2">
-        <Button icon="copy" onClick={() => void copy()}>
-          {t('diagLogCopy')}
-        </Button>
-        {log.length > 0 && (
+      {log.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          <Button icon="copy" onClick={() => void copy()}>
+            {t('diagLogCopy')}
+          </Button>
           <Button variant="ghost" onClick={clearLog}>
             {t('diagLogClear')}
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </Section>
   );
 }

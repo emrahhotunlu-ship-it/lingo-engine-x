@@ -18,6 +18,14 @@ describe('Datumsschlüssel mit Tageswechsel um 04:00', () => {
     expect(dayKey(berlin(day, hour))).toBe(expected);
   });
 
+  it('auch an den Tagen der Zeitumstellung wechselt der Lerntag genau um 04:00', () => {
+    // Sommerzeit beginnt am 28.03.2027 (02:00 → 03:00), endet am 25.10.2026 (03:00 → 02:00).
+    expect(dayKey(Date.parse('2027-03-28T03:30:00+02:00'))).toBe('2027-03-27');
+    expect(dayKey(Date.parse('2027-03-28T04:30:00+02:00'))).toBe('2027-03-28');
+    expect(dayKey(Date.parse('2026-10-25T03:30:00+01:00'))).toBe('2026-10-24');
+    expect(dayKey(Date.parse('2026-10-25T04:10:00+01:00'))).toBe('2026-10-25');
+  });
+
   it('die alte Regel wechselt um Mitternacht', () => {
     expect(legacyDayKey(berlin('2026-09-21', 0, 30))).toBe('2026-09-21');
   });

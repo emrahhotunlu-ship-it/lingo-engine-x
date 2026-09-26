@@ -29,7 +29,12 @@ export function Segmented<T extends string>({ label, value, options, onChange }:
   };
 
   return (
-    <div role="radiogroup" aria-label={label} onKeyDown={onKey} className="flex w-full flex-wrap gap-1 rounded-[var(--radius-control)] bg-surface p-1">
+    <div
+      role="radiogroup"
+      aria-label={label}
+      onKeyDown={onKey}
+      className={`grid w-full gap-1 rounded-[var(--radius-control)] bg-track p-1 ${options.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}
+    >
       {options.map((o, i) => {
         const active = o.value === value;
         return (
@@ -43,10 +48,17 @@ export function Segmented<T extends string>({ label, value, options, onChange }:
             aria-checked={active}
             tabIndex={active ? 0 : -1}
             onClick={() => onChange(o.value)}
-            className={`relative min-h-11 flex-1 basis-24 rounded-[calc(var(--radius-control)-4px)] px-3 text-sm font-medium transition-colors ${active ? 'text-fg' : 'text-muted hover:text-fg'}`}
+            className={`relative min-h-11 rounded-[calc(var(--radius-control)-4px)] px-3 text-sm transition-colors ${active ? 'font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
             {active && (
-              <motion.span layoutId={`seg-${id}`} transition={spring} className="lx-glass absolute inset-0 rounded-[inherit] bg-surface-strong" aria-hidden="true" />
+              // Gewählte Fläche: fest, mit Kante in Text-Grau (≥ 3:1 in allen Modi, WCAG 1.4.11).
+              <motion.span
+                layoutId={`seg-${id}`}
+                transition={spring}
+                className="absolute inset-0 rounded-[inherit] bg-surface-solid shadow-sm"
+                style={{ boxShadow: 'inset 0 0 0 1px var(--lx-fg-subtle)' }}
+                aria-hidden="true"
+              />
             )}
             <span className="relative">{o.label}</span>
           </button>

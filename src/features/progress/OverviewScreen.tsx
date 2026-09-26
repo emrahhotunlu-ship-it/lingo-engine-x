@@ -4,7 +4,7 @@ import { useT, type MessageKey } from '../../i18n';
 import { Card, ChannelIcon } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';
 import { Icon } from '../../ui/Icon';
-import { Bar, ProgressRing } from '../../ui/ProgressRing';
+import { Bar } from '../../ui/ProgressRing';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useLive } from '../../data/live';
 import { buildOverview } from '../../domain/overview';
@@ -23,6 +23,18 @@ function useNow(): number {
     return () => window.clearInterval(id);
   }, []);
   return now;
+}
+
+/** Eine große Zahl pro Karte, die Einheit direkt daneben – nichts doppelt (Kap. 8, Kap. 15). */
+function BigNumber({ value, unit, testId }: { value: string; unit: string; testId: string }) {
+  return (
+    <p className="mt-3 flex flex-wrap items-baseline gap-x-2">
+      <span className="lx-tnum text-4xl font-semibold tracking-tight" data-testid={testId}>
+        {value}
+      </span>
+      <span className="text-base text-muted">{unit}</span>
+    </p>
+  );
 }
 
 const item = {
@@ -71,11 +83,8 @@ export function OverviewScreen() {
             <p id="ov-streak" className="lx-eyebrow">
               {t('streakLabel')}
             </p>
-            <p className="lx-tnum mt-3 text-4xl font-semibold tracking-tight" data-testid="streak-count">
-              {num(ov.streak.count)}
-            </p>
-            <p className="mt-1 text-sm text-muted">{tn('streakDays', ov.streak.count)}</p>
-            <p className={`mt-4 inline-flex items-center gap-2 text-sm ${ov.streak.todayDone ? 'text-accent-text' : 'text-muted'}`}>
+            <BigNumber value={num(ov.streak.count)} unit={t(ov.streak.count === 1 ? 'streakUnit_one' : 'streakUnit_other')} testId="streak-count" />
+            <p className={`mt-3 inline-flex items-center gap-2 text-sm ${ov.streak.todayDone ? 'text-accent-text' : 'text-muted'}`}>
               {ov.streak.todayDone && <Icon name="check" size={18} />}
               {t(ov.streak.todayDone ? 'streakTodayDone' : 'streakTodayOpen')}
             </p>
@@ -84,19 +93,11 @@ export function OverviewScreen() {
 
         <motion.div variants={item} className="xl:col-span-4">
           <Card className="h-full" aria-labelledby="ov-course">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p id="ov-course" className="lx-eyebrow">
-                  {t('courseLabel')}
-                </p>
-                <p className="lx-tnum mt-3 text-4xl font-semibold tracking-tight" data-testid="course-done">
-                  {num(ov.course.done)}
-                </p>
-                <p className="mt-1 text-sm text-muted">{t('courseProgress', { done: ov.course.done, total: ov.course.total })}</p>
-              </div>
-              <ProgressRing value={ov.course.done / ov.course.total} label={t('courseProgress', { done: ov.course.done, total: ov.course.total })} />
-            </div>
-            <p className="mt-4 text-sm text-muted">
+            <p id="ov-course" className="lx-eyebrow">
+              {t('courseLabel')}
+            </p>
+            <BigNumber value={num(ov.course.done)} unit={t('courseUnit', { total: ov.course.total })} testId="course-done" />
+            <p className="mt-3 text-sm text-muted">
               {next ? t('courseNext', { title: lang === 'de' ? next.de : next.en }) : t('courseComplete')}
             </p>
           </Card>
@@ -109,16 +110,16 @@ export function OverviewScreen() {
                 <p id="ov-vocab" className="lx-eyebrow">
                   {t('vocabLabel')}
                 </p>
-                <p className="lx-tnum mt-3 text-4xl font-semibold tracking-tight" data-testid="vocab-total">
-                  {num(ov.vocab.total)}
-                </p>
-                <p className="mt-1 text-sm text-muted">{tn('vocabCards', ov.vocab.total)}</p>
+                <BigNumber value={num(ov.vocab.total)} unit={t(ov.vocab.total === 1 ? 'vocabUnit_one' : 'vocabUnit_other')} testId="vocab-total" />
               </div>
               <ChannelIcon channel="cards">
                 <Icon name="cards" />
               </ChannelIcon>
             </div>
-            <p className="lx-tnum mt-4 text-sm font-medium text-fg">{tn('vocabDue', ov.vocab.due)}</p>
+            <p className="lx-tnum mt-3 text-sm font-medium text-fg">
+              {tn('vocabDue', ov.vocab.due)}
+              {ov.vocab.hidden > 0 && <span className="font-normal text-muted"> · {tn('vocabHidden', ov.vocab.hidden)}</span>}
+            </p>
             <ol className="mt-4 flex flex-col gap-2" aria-label={t('vocabLabel')}>
               {ov.vocab.byStage.map((n, i) => (
                 <li key={STAGES[i]} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1">
@@ -133,7 +134,7 @@ export function OverviewScreen() {
           </Card>
         </motion.div>
 
-        <motion.div variants={item} className="xl:col-span-5">
+        <motion.div variants={item} className="xl:col-span-4">
           <Card className="h-full" channel="grammar" aria-labelledby="ov-grammar">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -150,7 +151,7 @@ export function OverviewScreen() {
               {ov.grammar.weakest.map((g) => (
                 <li key={g.id} className="flex flex-col gap-2">
                   <span className="text-sm font-medium">{lang === 'en' ? g.nameEn : g.name}</span>
-                  <Bar value={g.p} label={lang === 'en' ? g.nameEn : g.name} />
+                  <Bar value={g.p} label={lang === 'en' ? g.nameEn : g.name} tone="muted" />
                 </li>
               ))}
             </ul>
@@ -184,7 +185,7 @@ export function OverviewScreen() {
           </Card>
         </motion.div>
 
-        <motion.div variants={item} className="xl:col-span-3">
+        <motion.div variants={item} className="xl:col-span-4">
           <Card className="h-full" aria-labelledby="ov-assess">
             <p id="ov-assess" className="lx-eyebrow">
               {t('assessLabel')}
@@ -206,7 +207,7 @@ export function OverviewScreen() {
 
       {ov.schema && ov.schema.migratedAt > 0 && (
         <motion.p variants={item} className="text-xs text-subtle">
-          {t('migratedOn', { v: ov.schema.version, date: date(ov.schema.migratedAt) })}
+          {t('migratedOn', { date: date(ov.schema.migratedAt) })}
         </motion.p>
       )}
     </motion.div>

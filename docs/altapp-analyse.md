@@ -190,6 +190,6 @@ Die alte App bewertet alle Kanäle nach Bedarf und nimmt die drei besten. Der er
 3. **Keine Schema-Versionierung** außer `lesson.v = 1`. Es wird nie hart gelöscht (`hidden: true`).
 4. **Zweite Speicherschicht im Browser:**
    - Jeder Pfad liegt zusätzlich in `localStorage` unter `sw2:<pfad>`.
-   - Über `sw2:__dirty` gewinnt beim nächsten Laden die lokale Kopie.
+   - `sw2:__dirty` ist ein Objekt `{pfad: Zeitpunkt in ms}` (belegt in `core/sync.js`: `Dirty.mark(p, Date.now())`). Beim nächsten Laden gewinnt dort die lokale Kopie.
    - **Lokale Kopien können neuer sein als die Datenbank.** Beim Umzug auf dieselbe Adresse (gleicher Ursprung, gleicher `localStorage`) muss die Umstellung noch nicht übertragene `sw2:`-Kopien erkennen, im Trockenlauf-Bericht zeigen und nach Bestätigung übernehmen.
 5. **Größengrenzen im Code:** log 300 Einträge je Tag, radar 400, lookup 400, pool 90, chat 40, Grammatikfehler 10, Kartenverlauf 12. Bei `quota_exceeded` verwirft die alte App den Schreibvorgang mit einer Meldung.

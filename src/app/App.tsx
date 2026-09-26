@@ -82,7 +82,8 @@ export function App() {
       >
         {t('skipToContent')}
       </a>
-      <div className="mx-auto flex min-h-dvh w-full max-w-[76rem] flex-col px-4 sm:px-6 lg:px-10">
+      {/* Bei offenem Blatt ist der Hintergrund inert: kein Fokus, kein VoiceOver-Wischen dorthin. */}
+      <div className="mx-auto flex min-h-dvh w-full max-w-[76rem] flex-col px-4 sm:px-6 lg:px-10" inert={settingsOpen}>
         <header className="flex items-center justify-between gap-4 pt-3 sm:pt-5">
           <p className="flex items-center gap-2 text-base font-semibold tracking-tight">
             <span className="inline-block size-2.5 rounded-full bg-accent shadow-[0_0_12px_var(--lx-accent)]" aria-hidden="true" />

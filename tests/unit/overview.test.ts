@@ -25,6 +25,7 @@ describe('Übersicht „Dein Stand"', () => {
     expect(ov.course.next?.id).toBe('l07');
     expect(ov.course.units.map((u) => u.done)).toEqual([4, 2, 0, 0, 0, 0]);
     expect(ov.vocab.total).toBe(148 - 2); // 138 Dokumente + 10 Voreinstellungen, 2 ausgeblendet
+    expect(ov.vocab.hidden).toBe(2);
     expect(ov.vocab.byStage.reduce((a, b) => a + b, 0)).toBe(ov.vocab.total);
     expect(ov.vocab.byStage.every((n) => n > 0)).toBe(true);
     expect(ov.vocab.due).toBeGreaterThan(0);
@@ -43,11 +44,26 @@ describe('Übersicht „Dein Stand"', () => {
     expect(ov.streak.count).toBe(0);
   });
 
-  it('mit Umstellung überbrückt ein Ruhetag der Woche genau einen Tag', () => {
+  it('nach der Umstellung ohne Pflicht-Erfassung zählt die alte Regel weiter (kein Abriss)', () => {
     const seed = loadSeed();
     const schema = { version: 1, cutover: SEED_ANCHOR, migratedAt: berlin(SEED_ANCHOR, 21) };
-    expect(fromSeed(seed, berlin(addDays(SEED_ANCHOR, 2), 9), schema).streak.count).toBe(12);
-    expect(fromSeed(seed, berlin(addDays(SEED_ANCHOR, 3), 9), schema).streak.count).toBe(0);
+    const profile = seed['app/profile'] as Doc & { days: Record<string, number> };
+    const days = { ...profile.days };
+    for (let i = 1; i <= 5; i++) days[addDays(SEED_ANCHOR, i)] = 30;
+    const withActivity = { ...seed, 'app/profile': { ...profile, days } };
+    expect(fromSeed(withActivity, berlin(addDays(SEED_ANCHOR, 5), 21), schema).streak.count).toBe(17);
+  });
+
+  it('ab pflichtSince zählt Pflicht, ein Ruhetag der Woche überbrückt genau einen Tag', () => {
+    const seed = loadSeed();
+    const since = addDays(SEED_ANCHOR, 1); // Montag
+    const schema = { version: 1, cutover: SEED_ANCHOR, migratedAt: 0, pflichtSince: since };
+    const profile = seed['app/profile'] as Doc;
+    const pflicht = { [since]: 1, [addDays(since, 1)]: 1 };
+    const s = { ...seed, 'app/profile': { ...profile, pflicht } };
+    expect(fromSeed(s, berlin(addDays(since, 1), 21), schema).streak.count).toBe(14);
+    expect(fromSeed(s, berlin(addDays(since, 3), 9), schema).streak.count).toBe(14); // Ruhetag
+    expect(fromSeed(s, berlin(addDays(since, 4), 9), schema).streak.count).toBe(0);
   });
 
   it('Voreinstellungen werden von Datenbank-Dokumenten überlagert', () => {

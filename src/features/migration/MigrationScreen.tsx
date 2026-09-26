@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
+import { Disclosure } from '../../ui/Disclosure';
 import { Icon } from '../../ui/Icon';
 import { Bar } from '../../ui/ProgressRing';
 import { Skeleton } from '../../ui/Skeleton';
@@ -10,12 +11,13 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { toast } from '../../ui/Toast';
 import { useCapabilities } from '../../platform/capabilities';
 import type { SaveOutcome } from '../../platform/downloads';
-import type { MigrationPlan } from '../../domain/migration/v1';
+import type { MigrationPlan, RescueSkipReason } from '../../domain/migration/v1';
 import { exportAll } from '../settings/exportData';
 import { useMigration } from './store';
 
 // Einmalige Umstellung mit Trockenlauf-Bericht (Kap. 9, Regel 3): erst zeigen, dann nach
-// Bestätigung schreiben. Ein großer Knopf, klare Trennung „ergänzt" / „bleibt".
+// Bestätigung schreiben. Oben das Wichtigste, unten fest der eine Knopf (Kap. 2.1),
+// Einzelheiten eingeklappt. Nach dem Ausführen ist die Umstellung Zustand, kein Knopf.
 
 const COLLECTION_LABEL: Record<string, MessageKey> = {
   vocab: 'colVocab',
@@ -42,6 +44,15 @@ const orderOf = (name: string) => {
   return i === -1 ? COLLECTION_ORDER.length : i;
 };
 
+type ShownSkip = Exclude<RescueSkipReason, 'unchanged'>;
+const SKIP_LABEL: Record<ShownSkip, MessageKey> = {
+  db_newer: 'skipDbNewer',
+  read_only: 'skipReadOnly',
+  invalid: 'skipInvalid',
+  unknown_path: 'skipUnknown',
+  missing_local: 'skipMissing',
+};
+
 export const exportMessage: Record<SaveOutcome, MessageKey> = {
   saved: 'exportSaved',
   declined: 'exportDeclined',
@@ -59,12 +70,14 @@ export function MigrationScreen() {
     if (useMigration.getState().phase === 'idle') void dryRun();
   }, [dryRun]);
 
+  const hasPlan = state.phase === 'review' || state.phase === 'running' || state.phase === 'busy' || state.phase === 'failed';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: DURATION.slow, ease: EASE_OUT }}
-      className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-6 sm:py-10"
+      className="flex w-full max-w-3xl flex-col gap-6 pt-6 sm:pt-10"
     >
       <header className="flex flex-col gap-3">
         <p className="lx-eyebrow">{t('migEyebrow')}</p>
@@ -72,7 +85,17 @@ export function MigrationScreen() {
         <p className="max-w-2xl text-base text-muted">{t('migLead')}</p>
       </header>
 
-      {(state.phase === 'idle' || state.phase === 'reading' || state.phase === 'done') && <ReadingSkeleton label={t('migReading')} />}
+      {(state.phase === 'idle' || state.phase === 'reading') && <ReadingSkeleton label={t('migReading')} />}
+
+      {state.phase === 'done' && (
+        <Card role="status" data-testid="mig-done">
+          <p className="flex items-center gap-2 text-lg font-semibold text-accent-text">
+            <Icon name="check" size={22} />
+            {t('migDoneTitle')}
+          </p>
+          <p className="mt-2 text-sm text-muted">{t('migDoneBody')}</p>
+        </Card>
+      )}
 
       {state.phase === 'readFailed' && (
         <Card role="alert">
@@ -85,13 +108,8 @@ export function MigrationScreen() {
         </Card>
       )}
 
-      {(state.phase === 'review' || state.phase === 'running' || state.phase === 'busy' || state.phase === 'failed') && (
-        <Report plan={state.plan} />
-      )}
-
-      {(state.phase === 'review' || state.phase === 'running' || state.phase === 'busy' || state.phase === 'failed') && (
-        <Actions />
-      )}
+      {hasPlan && <Report plan={state.plan} />}
+      {hasPlan && <ActionBar />}
     </motion.div>
   );
 }
@@ -110,68 +128,101 @@ function Report({ plan }: { plan: MigrationPlan }) {
   const { t, tn, num } = useT();
   const found = [...plan.found].sort((a, b) => orderOf(a.name) - orderOf(b.name));
   const tagesauftrag = plan.untouched.daily + plan.untouched.feed;
+  const activeVocab = plan.totals.vocab - plan.totals.vocabHidden;
+  const skipped = plan.rescueSkipped.filter((s): s is { path: string; reason: ShownSkip } => s.reason !== 'unchanged');
+  const streakChanged = plan.streak.after !== plan.streak.before;
+
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-      <Card className="md:col-span-2" aria-labelledby="mig-found">
-        <h2 id="mig-found" className="text-lg font-semibold">
-          {t('migFoundTitle')}
+    <div className="flex flex-col gap-4">
+      <Card aria-labelledby="mig-summary" data-testid="mig-summary">
+        <h2 id="mig-summary" className="lx-eyebrow">
+          {t('migSummaryTitle')}
         </h2>
-        <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
-          {found.map((f) => (
-            <div key={f.name} className="flex items-baseline justify-between gap-4 border-b border-line py-2">
-              <dt className="text-sm text-muted">{t(COLLECTION_LABEL[f.name] ?? 'colApp')}</dt>
-              <dd className="lx-tnum text-base font-semibold">{num(f.total)}</dd>
-            </div>
-          ))}
-        </dl>
-        {plan.defaults.seedVocabNotInDb > 0 && <p className="mt-4 text-sm text-muted">{tn('migDefaultVocab', plan.defaults.seedVocabNotInDb)}</p>}
-        {plan.defaults.topicsNotInDb > 0 && <p className="mt-1 text-sm text-muted">{tn('migDefaultTopics', plan.defaults.topicsNotInDb)}</p>}
-      </Card>
-
-      <Card aria-labelledby="mig-add">
-        <h2 id="mig-add" className="flex items-center gap-2 text-lg font-semibold">
-          <span className="text-accent-text">
-            <Icon name="spark" />
-          </span>
-          {t('migAddTitle')}
-        </h2>
-        <ul className="mt-3 flex flex-col gap-2 text-sm text-muted">
-          {plan.fsrs.length > 0 && <li>{tn('migAddFsrs', plan.fsrs.length)}</li>}
-          {plan.rescue.length > 0 && <li>{tn('migRescue', plan.rescue.length)}</li>}
-          <li>{t('migAddSchema')}</li>
-        </ul>
-      </Card>
-
-      <Card aria-labelledby="mig-keep">
-        <h2 id="mig-keep" className="flex items-center gap-2 text-lg font-semibold">
-          <span className="text-cyan-text">
-            <Icon name="shield" />
-          </span>
-          {t('migKeepTitle')}
-        </h2>
-        <ul className="mt-3 flex flex-col gap-2 text-sm text-muted">
-          <li>{t('migKeepBody')}</li>
-          {tagesauftrag > 0 && <li>{tn('migKeepDaily', tagesauftrag)}</li>}
-        </ul>
-      </Card>
-
-      <Card className="md:col-span-2" aria-labelledby="mig-streak">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h2 id="mig-streak" className="text-lg font-semibold">
-            {t('migStreakLabel')}
-          </h2>
-          <p className="lx-tnum flex items-center gap-3 text-2xl font-semibold" data-testid="mig-streak">
-            <span>{tn('streakDays', plan.streak.before)}</span>
-            <Icon name="arrowRight" className="text-subtle" />
-            <span className={plan.streak.after >= plan.streak.before ? 'text-accent-text' : 'text-gold-text'}>
-              {tn('streakDays', plan.streak.after)}
-            </span>
+        <div className="mt-4 flex flex-col gap-1">
+          <p className="text-sm text-muted">{t('migStreakKeeps')}</p>
+          <p className="lx-tnum flex flex-wrap items-baseline gap-x-3 text-3xl font-semibold tracking-tight" data-testid="mig-streak">
+            {streakChanged && (
+              <>
+                <span className="text-muted">{num(plan.streak.before)}</span>
+                <Icon name="arrowRight" className="self-center text-subtle" />
+              </>
+            )}
+            <span>{tn('streakDays', plan.streak.after)}</span>
           </p>
         </div>
+        <p className="lx-tnum mt-4 text-base text-fg">
+          {t('migCounts', { vocab: activeVocab, topics: plan.totals.grammar, done: plan.totals.lessonsDone, total: plan.totals.lessonsTotal })}
+          {plan.totals.vocabHidden > 0 && <span className="text-muted"> · {tn('migHidden', plan.totals.vocabHidden)}</span>}
+        </p>
+        <p className="mt-4 flex items-center gap-2 text-sm font-medium text-cyan-text">
+          <Icon name="shield" size={18} />
+          {t('migNothingDeleted')}
+        </p>
       </Card>
 
+      {plan.blocked.length > 0 && (
+        <Card role="alert" aria-labelledby="mig-blocked" data-testid="mig-blocked">
+          <h2 id="mig-blocked" className="flex items-center gap-2 text-lg font-semibold">
+            <span className="text-gold-text">
+              <Icon name="alert" />
+            </span>
+            {t('migBlockedTitle')}
+          </h2>
+          <ul className="mt-3 flex flex-col gap-2 text-sm text-muted">
+            {plan.blocked.includes('profile_invalid') && <li>{t('migBlockedProfile')}</li>}
+            {plan.blocked.includes('possibly_truncated') && <li>{t('migBlockedTruncated')}</li>}
+            <li className="text-fg">{t('migBlockedNext')}</li>
+          </ul>
+        </Card>
+      )}
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card aria-labelledby="mig-add">
+          <h2 id="mig-add" className="flex items-center gap-2 text-lg font-semibold">
+            <span className="text-accent-text">
+              <Icon name="plus" />
+            </span>
+            {t('migAddTitle')}
+          </h2>
+          <ul className="mt-3 flex flex-col gap-2 text-sm text-muted">
+            {plan.fsrs.length > 0 && <li>{t('migAddPlan')}</li>}
+            {plan.rescue.length > 0 && <li>{tn('migRescue', plan.rescue.length)}</li>}
+            <li>{t('migAddMark')}</li>
+          </ul>
+        </Card>
+
+        <Card aria-labelledby="mig-keep">
+          <h2 id="mig-keep" className="flex items-center gap-2 text-lg font-semibold">
+            <span className="text-cyan-text">
+              <Icon name="shield" />
+            </span>
+            {t('migKeepTitle')}
+          </h2>
+          <ul className="mt-3 flex flex-col gap-2 text-sm text-muted">
+            <li>{t('migKeepBody')}</li>
+            {plan.rescue.length > 0 && <li>{t('migRescueSafe')}</li>}
+            {tagesauftrag > 0 && <li>{t('migKeepDaily', { n: tagesauftrag })}</li>}
+          </ul>
+        </Card>
+      </div>
+
+      {skipped.length > 0 && (
+        <Card aria-labelledby="mig-skipped">
+          <h2 id="mig-skipped" className="text-lg font-semibold">
+            {t('migSkippedTitle')}
+          </h2>
+          <ul className="mt-3 flex flex-col gap-1 text-sm text-muted">
+            {skipped.map((s) => (
+              <li key={s.path} className="break-all">
+                <span className="text-fg">{s.path}</span> – {t(SKIP_LABEL[s.reason])}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
       {plan.invalid.length > 0 && (
-        <Card className="md:col-span-2" aria-labelledby="mig-invalid">
+        <Card aria-labelledby="mig-invalid">
           <h2 id="mig-invalid" className="flex items-center gap-2 text-lg font-semibold">
             <span className="text-gold-text">
               <Icon name="alert" />
@@ -188,18 +239,33 @@ function Report({ plan }: { plan: MigrationPlan }) {
           </ul>
         </Card>
       )}
+
+      <Disclosure label={t('migDetails')}>
+        <dl className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
+          {found.map((f) => (
+            <div key={f.name} className="flex items-baseline justify-between gap-4 border-b border-line py-2">
+              <dt className="text-sm text-muted">{t(COLLECTION_LABEL[f.name] ?? 'colApp')}</dt>
+              <dd className="lx-tnum text-sm font-semibold">{num(f.total)}</dd>
+            </div>
+          ))}
+        </dl>
+        {plan.defaults.seedVocabNotInDb > 0 && <p className="mt-3 text-sm text-muted">{tn('migDefaultVocab', plan.defaults.seedVocabNotInDb)}</p>}
+        {plan.defaults.topicsNotInDb > 0 && <p className="mt-1 text-sm text-muted">{tn('migDefaultTopics', plan.defaults.topicsNotInDb)}</p>}
+      </Disclosure>
     </div>
   );
 }
 
-function Actions() {
-  const { t, tn } = useT();
+/** Unten fest: der eine Knopf (Kap. 2.1). Im Code steht er zuerst – wie auf dem Bildschirm (Kap. 4.5). */
+function ActionBar() {
+  const { t } = useT();
   const state = useMigration();
   const downloads = useCapabilities((s) => s.downloads);
   const [exporting, setExporting] = useState(false);
 
   if (state.phase !== 'review' && state.phase !== 'running' && state.phase !== 'busy' && state.phase !== 'failed') return null;
   const running = state.phase === 'running';
+  const blocked = state.plan.blocked.length > 0;
 
   const backup = async () => {
     setExporting(true);
@@ -209,7 +275,11 @@ function Actions() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className="sticky bottom-0 z-10 -mx-4 flex flex-col gap-3 px-4 pt-6 pb-[max(env(safe-area-inset-bottom),1rem)] sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10"
+      style={{ background: 'linear-gradient(to top, var(--lx-bg) 72%, transparent)' }}
+      data-testid="mig-actions"
+    >
       {state.phase === 'busy' && (
         <p role="status" className="text-sm text-gold-text">
           {t('migBusy')}
@@ -220,29 +290,37 @@ function Actions() {
           {t('migFailed', { msg: state.message })}
         </p>
       )}
-      {running && (
-        <div className="flex flex-col gap-2" role="status">
-          <Bar value={state.total ? state.done / state.total : 0} label={t('migProgress', { done: state.done, total: state.total })} />
+      {running ? (
+        <div className="flex max-w-3xl flex-col gap-2" role="status">
+          <Bar value={state.total ? state.done / state.total : 0} label={t('migProgress', { done: state.done, total: state.total })} duration={0.15} />
           <p className="lx-tnum text-sm text-muted">{t('migProgress', { done: state.done, total: state.total })}</p>
         </div>
+      ) : (
+        <div className="flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center">
+          {!blocked &&
+            (state.phase === 'failed' ? (
+              <Button variant="primary" size="lg" icon="refresh" onClick={() => void state.dryRun()}>
+                {t('migRetry')}
+              </Button>
+            ) : (
+              <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => void state.run()}>
+                {t('migRun')}
+              </Button>
+            ))}
+          {downloads === 'ready' && (
+            <Button
+              variant={blocked ? 'primary' : 'secondary'}
+              size={blocked ? 'lg' : 'md'}
+              icon="download"
+              onClick={() => void backup()}
+              busy={exporting}
+              busyLabel={t('exportRunning')}
+            >
+              {t('migBackup')}
+            </Button>
+          )}
+        </div>
       )}
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
-        {downloads === 'ready' && (
-          <Button icon="download" onClick={() => void backup()} busy={exporting} busyLabel={t('exportRunning')} disabled={running}>
-            {t('migBackup')}
-          </Button>
-        )}
-        {state.phase === 'failed' ? (
-          <Button variant="primary" size="lg" icon="refresh" onClick={() => void state.dryRun()}>
-            {t('migRetry')}
-          </Button>
-        ) : (
-          <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => void state.run()} busy={running} busyLabel={t('migRunning')}>
-            {t('migRun')}
-          </Button>
-        )}
-      </div>
-      <p className="text-xs text-subtle">{tn('migWrites', state.plan.writes)}</p>
     </div>
   );
 }

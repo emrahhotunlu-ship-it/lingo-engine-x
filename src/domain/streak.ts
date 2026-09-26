@@ -1,23 +1,30 @@
 import { addDays, isoWeek, legacyDayKey } from './date';
 
 // Serie (Kap. 7, CLAUDE.md A6.13 und A7):
-// - Tage VOR der Umstellung zählen nach der alten Regel: `days[k] > 0` oder `xpDays[k] > 0`.
-//   So läuft die bisherige Serie nachweislich ununterbrochen weiter.
-// - Der Umstellungstag zählt nach alter ODER neuer Regel.
-// - Tage NACH der Umstellung zählen, wenn die Pflicht erledigt ist. Ein Ruhetag je
-//   ISO-Kalenderwoche (Mo–So) bricht die Serie nicht; er wird nicht angespart.
+// - Bis die App die Pflicht erfasst, zählt die alte Regel: `days[k] > 0` oder `xpDays[k] > 0`.
+//   So läuft die bisherige Serie nachweislich ununterbrochen weiter – auch über die Umstellung.
+// - Ab `pflichtSince` (erster Lerntag, an dem die App die Pflicht erfasst; setzt Phase 1 in
+//   `app/schema`) zählt ein Tag, wenn die Pflicht erledigt ist; an genau diesem Tag zählt
+//   auch noch die alte Regel. Ein Ruhetag je ISO-Kalenderwoche (Mo–So) bricht die Serie
+//   nicht; er wird nicht angespart.
 // - Ist heute noch nicht erledigt, beginnt die Zählung bei gestern (der Tag läuft noch).
+// - Zwischen 0 und 4 Uhr liegt der Kalendertag der alten App schon einen Tag weiter als der
+//   Lerntag. Hat die alte App dort Aktivität verbucht, beginnt die Zählung dort – so geht bei
+//   einer nächtlichen Umstellung kein Tag verloren.
 
 type NumMap = Record<string, number | null | undefined> | null | undefined;
 
 export type StreakInput = {
   days?: NumMap;
   xpDays?: NumMap;
-  /** Lerntage (nach der Umstellung), an denen die Pflicht erledigt war. */
+  /** Lerntage, an denen die Pflicht erledigt war (`app/profile.pflicht`). */
   pflichtDone?: ReadonlySet<string>;
-  /** Erster Tag nach neuer Regel (`app/schema.cutover`); ohne Umstellung gilt überall die alte Regel. */
-  cutover?: string | null;
+  /** Ab diesem Lerntag gilt die Pflicht-Regel; fehlt er, gilt überall die alte Regel. */
+  pflichtSince?: string | null;
+  /** Heutiger Lerntag (Wechsel um 04:00). */
   today: string;
+  /** Heutiger Kalendertag der alten App (Wechsel um Mitternacht). */
+  legacyToday?: string;
 };
 
 export type Streak = { count: number; todayDone: boolean; restDays: string[] };
@@ -27,16 +34,26 @@ export function legacyActive(days: NumMap, xpDays: NumMap, key: string): boolean
 }
 
 function active(input: StreakInput, key: string): boolean {
-  const { cutover } = input;
+  const { pflichtSince } = input;
   const legacy = legacyActive(input.days, input.xpDays, key);
-  if (!cutover || key < cutover) return legacy;
+  if (!pflichtSince || key < pflichtSince) return legacy;
   const done = input.pflichtDone?.has(key) ?? false;
-  return key === cutover ? legacy || done : done;
+  return key === pflichtSince ? legacy || done : done;
 }
 
 export function computeStreak(input: StreakInput): Streak {
-  const todayDone = active(input, input.today);
-  let d = todayDone ? input.today : addDays(input.today, -1);
+  const { legacyToday, pflichtSince } = input;
+  let start = input.today;
+  if (
+    legacyToday &&
+    legacyToday > input.today &&
+    (!pflichtSince || legacyToday <= pflichtSince) &&
+    legacyActive(input.days, input.xpDays, legacyToday)
+  ) {
+    start = legacyToday;
+  }
+  const todayDone = active(input, start);
+  let d = todayDone ? start : addDays(input.today, -1);
   let count = 0;
   const usedWeeks = new Set<string>();
   const restDays: string[] = [];
@@ -50,7 +67,7 @@ export function computeStreak(input: StreakInput): Streak {
       continue;
     }
     const week = isoWeek(d);
-    if (input.cutover && d > input.cutover && !usedWeeks.has(week)) {
+    if (pflichtSince && d > pflichtSince && !usedWeeks.has(week)) {
       usedWeeks.add(week);
       pendingRest.push(d);
       d = addDays(d, -1);
@@ -71,4 +88,13 @@ export function legacyStreak(days: NumMap, xpDays: NumMap, nowMs: number): numbe
     d = addDays(d, -1);
   }
   return s;
+}
+
+/** Lerntage mit erledigter Pflicht aus `app/profile.pflicht` (Datum → Wert, wahr = erledigt). */
+export function pflichtDays(pflicht: unknown): Set<string> {
+  const out = new Set<string>();
+  if (pflicht && typeof pflicht === 'object' && !Array.isArray(pflicht)) {
+    for (const [k, v] of Object.entries(pflicht as Record<string, unknown>)) if (v) out.add(k);
+  }
+  return out;
 }

@@ -12,7 +12,6 @@ const vocabLegacy = read('src/content/legacy/vocab.json');
 const feedSeed = read('src/content/legacy/feed-seed.json');
 const passages = read('src/content/legacy/passages.json');
 const scenes = read('src/content/legacy/scenes.json');
-const context = read('src/content/legacy/context.json');
 
 // ------------------------------------------------------------------ Hilfen
 let state = 20260920;
@@ -427,7 +426,7 @@ discItems.forEach((it, i) => {
 put('app/profile', {
   name: 'Alex Muster',
   created: addDays(ANCHOR, -270),
-  ctx: context.defaultCtx,
+  ctx: 'Sales manager at a mid-sized software company that sells document management to small businesses',
   ctxChecked: true,
   lang: 'de',
   voice: '',

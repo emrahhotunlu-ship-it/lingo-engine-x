@@ -23,6 +23,7 @@ describe('Umstellung auf Datenversion 1 (Kap. 9)', () => {
   // Nicht nur „heute": mehrere Zeitpunkte relativ zum Stichtag der Testdaten (Kap. 15).
   const moments: Array<[string, number]> = [
     [SEED_ANCHOR, 21],
+    [addDays(SEED_ANCHOR, 1), 2], // nachts: Lerntag noch der 20., Kalendertag schon der 21.
     [addDays(SEED_ANCHOR, 1), 8],
     [addDays(SEED_ANCHOR, 1), 22],
     [addDays(SEED_ANCHOR, 3), 12],
@@ -92,34 +93,84 @@ describe('Umstellung auf Datenversion 1 (Kap. 9)', () => {
     expect(first.h.writes().length).toBe(writes);
   });
 
-  it('übernimmt noch nicht übertragene lokale Änderungen der alten App nach Bestätigung', async () => {
+  it('ergänzt noch nicht übertragene lokale Kopien der alten App – überschreibt nie Neueres', async () => {
     const seed = loadSeed();
-    const profile = seed['app/profile'] as Doc & { days: Record<string, number> };
-    const newer = { ...profile, days: { ...profile.days, [addDays(SEED_ANCHOR, 1)]: 12 } };
+    const profile = seed['app/profile'] as Doc & { days: Record<string, number>; xpDays: Record<string, number> };
+    const day1 = addDays(SEED_ANCHOR, 1);
+    // Lokale Profil-Kopie: ein zusätzlicher Lerntag, aber ältere Sprache und weniger XP als die Datenbank.
+    const localProfile = { ...profile, lang: 'de', xp: 5, days: { ...profile.days, [day1]: 12 } };
+    const dbProfile = { ...profile, lang: 'en' };
+    const card = seed['vocab/reliable'] as Doc & { last: number };
     const local = {
-      dirty: { 'app/profile': 1, 'daily/2026-09-20': 1, 'vocab/nur-lokal': 1, 'app/course': 1, 'vocab/a/b': 1, 'fremd/x': 1 },
+      dirty: { 'app/profile': 1, 'daily/2026-09-20': 1, 'vocab/nur-lokal': 1, 'app/course': 1, 'vocab/a/b': 1, 'fremd/x': 1, 'vocab/reliable': 1 },
       docs: {
-        'app/profile': newer,
+        'app/profile': localProfile,
         'daily/2026-09-20': { newWords: [] },
         'vocab/nur-lokal': { word: 'only local', de: 'nur lokal', state: 'new', S: 0 },
         'app/course': seed['app/course'] as Doc,
         'vocab/a/b': { word: 'kaputter Pfad' },
         'fremd/x': { a: 1 },
+        // Ältere lokale Kopie einer Karte: darf den neueren Stand der Datenbank nicht ersetzen.
+        'vocab/reliable': { ...card, stage: 0, last: card.last - 86_400_000 },
       },
     };
-    const now = berlin(addDays(SEED_ANCHOR, 1), 21);
-    const { plan, after } = await migrate(seed, now, local);
-    expect(plan.rescue.map((r) => r.path)).toEqual(['app/profile', 'vocab/nur-lokal']);
+    const now = berlin(day1, 21);
+    const { plan, after } = await migrate({ ...seed, 'app/profile': dbProfile }, now, local);
+    expect(plan.rescue.map((r) => [r.path, r.action])).toEqual([
+      ['app/profile', 'merge'],
+      ['vocab/nur-lokal', 'create'],
+    ]);
     expect(plan.rescueSkipped).toEqual([
       { path: 'app/course', reason: 'unchanged' },
       { path: 'daily/2026-09-20', reason: 'read_only' },
       { path: 'fremd/x', reason: 'unknown_path' },
       { path: 'vocab/a/b', reason: 'unknown_path' },
+      { path: 'vocab/reliable', reason: 'db_newer' },
     ]);
-    expect((after['app/profile'] as { days: Record<string, number> }).days[addDays(SEED_ANCHOR, 1)]).toBe(12);
+    const p = after['app/profile'] as Doc & { days: Record<string, number> };
+    expect(p.days[day1]).toBe(12); // Lerntag ergänzt
+    expect(p.lang).toBe('en'); // neuere Einstellung der Datenbank bleibt
+    expect(p.xp).toBe(profile.xp); // Zähler nur nach oben
+    expect(Object.keys(p).sort()).toEqual(Object.keys(dbProfile).sort()); // kein Feld verloren
     expect(after['vocab/nur-lokal']).toMatchObject({ word: 'only local', fsrs: { state: 0 } });
+    expect(after['vocab/reliable']).toMatchObject({ stage: card.stage as number, last: card.last });
     expect(after['daily/2026-09-20']).toEqual(seed['daily/2026-09-20']);
     expect(plan.streak.after).toBe(13); // der lokal nachgereichte Tag verlängert die Serie
+  });
+
+  it('gleicht beim Ausführen frisch ab: Änderungen nach dem Trockenlauf bleiben erhalten', async () => {
+    const seed = loadSeed();
+    const profile = seed['app/profile'] as Doc & { days: Record<string, number> };
+    const day1 = addDays(SEED_ANCHOR, 1);
+    const h = createMemoryDb({ seed });
+    const now = berlin(day1, 21);
+    const local = { dirty: { 'app/profile': 1 }, docs: { 'app/profile': { ...profile, days: { ...profile.days, [day1]: 12 } } } };
+    const plan = planMigrationV1({ snapshot: await loadSnapshot(h.db), local, nowMs: now });
+    // Zwischen Trockenlauf und Ausführen ändert jemand die Sprache und lernt auf einem anderen Gerät.
+    await h.db.doc('app/profile').update({ lang: 'en', days: { [day1]: 30 } });
+    const res = await applyMigrationV1(plan, { db: h.db, writer: createWriter(h.db), holder: 't', nowMs: () => now });
+    expect(res.status).toBe('done');
+    const p = h.dump()['app/profile'] as Doc & { days: Record<string, number> };
+    expect(p.lang).toBe('en');
+    expect(p.days[day1]).toBe(30); // der höhere Wert gewinnt
+  });
+
+  it('sperrt die Umstellung bei ungültigem Profil – die Serie wird aus den Rohdaten gezeigt', async () => {
+    const seed = loadSeed();
+    const bad = { ...seed, 'app/profile': { ...(seed['app/profile'] as Doc), rate: 'schnell' } };
+    const h = createMemoryDb({ seed: bad });
+    const plan = planMigrationV1({ snapshot: await loadSnapshot(h.db), local: NO_LOCAL, nowMs: berlin(SEED_ANCHOR, 21) });
+    expect(plan.blocked).toEqual(['profile_invalid']);
+    expect(plan.streak.before).toBe(12);
+    const res = await applyMigrationV1(plan, { db: h.db, writer: createWriter(h.db), holder: 't', nowMs: () => 0 });
+    expect(res).toMatchObject({ status: 'failed', code: 'blocked' });
+    expect(h.writes()).toEqual([]);
+  });
+
+  it('sperrt die Umstellung, wenn eine Abfrage vielleicht gekappt wurde', () => {
+    const snapshot = snapshotFromRecord(loadSeed(), ['vocab']);
+    const plan = planMigrationV1({ snapshot, local: NO_LOCAL, nowMs: berlin(SEED_ANCHOR, 21) });
+    expect(plan.blocked).toEqual(['possibly_truncated']);
   });
 
   it('meldet ungültige Dokumente und lässt sie unangetastet', async () => {

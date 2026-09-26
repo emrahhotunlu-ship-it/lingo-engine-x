@@ -12,9 +12,12 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   await screen(page, 'migration');
 
   // Bericht: Serie vorher/nachher gleich, Anzahlen sichtbar, noch nichts geschrieben.
-  await expect(page.getByTestId('mig-streak')).toContainText('12 Tage');
-  await expect(page.getByText('Vokabeln', { exact: true })).toBeVisible();
-  await expect(page.getByText(/Wiederholungsplan nach FSRS für 142 Karten/)).toBeVisible();
+  await expect(page.getByTestId('mig-streak')).toHaveText('12 Tage');
+  await expect(page.getByTestId('mig-summary')).toContainText('146 Vokabeln · 16 Grammatikthemen · 6 von 24 Lektionen · dazu 2 ausgeblendete');
+  await expect(page.getByTestId('mig-summary')).toContainText('Nichts wird gelöscht.');
+  await expect(page.getByText(/Jede bisher geübte Karte bekommt einen neuen Wiederholungsplan/)).toBeVisible();
+  // Der eine Knopf ist ohne Scrollen sichtbar (Kap. 2.1).
+  await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toBeInViewport();
   expect(await page.evaluate(() => Object.keys((window as FakeWindow).__LINGO_FAKE__?.db.dump() ?? {}).includes('app/schema'))).toBe(false);
 
   // Sicherung vorher: eine JSON-Datei mit allen Dokumenten.
@@ -30,7 +33,7 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   await expect(page.getByTestId('streak-count')).toHaveText('12');
   await expect(page.getByTestId('course-done')).toHaveText('6');
   await expect(page.getByTestId('vocab-total')).toHaveText('146');
-  await expect(page.getByText(/Datenversion 1 · umgestellt am 20\. September 2026/)).toBeVisible();
+  await expect(page.getByText('Umgestellt am 20. September 2026')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toHaveCount(0);
 
   const dump = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump() ?? {});
@@ -57,7 +60,7 @@ test('noch nicht übertragene Änderungen der alten App werden erkannt und über
     },
   });
   await screen(page, 'migration');
-  await expect(page.getByText('1 Änderung aus diesem Browser war noch nicht in der Datenbank und wird übernommen.')).toBeVisible();
+  await expect(page.getByText('1 Änderung aus diesem Browser war noch nicht gespeichert und wird ergänzt.')).toBeVisible();
   await page.getByRole('button', { name: 'Umstellung ausführen' }).click();
   await screen(page, 'overview');
   const doc = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump()['vocab/nur-im-browser']);
@@ -79,4 +82,14 @@ test('scheitert ein Schreibvorgang, erscheint eine klare Meldung und ein erneute
   expect(errors.some((e) => e.includes('data:write'))).toBe(true);
   await page.getByTestId('open-settings').click();
   await expect(page.getByTestId('diag-log')).toContainText('migration:apply');
+});
+
+test('bei unerwartetem Profil ist die Umstellung gesperrt: kein Knopf, nur die Sicherung', async ({ page }) => {
+  const { errors } = await boot(page, { fake: { patch: { 'app/profile': { rate: 'schnell' } } } });
+  await screen(page, 'migration');
+  await expect(page.getByTestId('mig-blocked')).toContainText('Dein Profil hat einen unerwarteten Aufbau');
+  await expect(page.getByTestId('mig-streak')).toHaveText('12 Tage');
+  await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Vorher Sicherung herunterladen' })).toBeInViewport();
+  expect(errors.every((e) => e.includes('data:validate'))).toBe(true);
 });

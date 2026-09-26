@@ -16,6 +16,8 @@ const bool = z.boolean().nullish();
 const strArr = z.array(z.string()).nullish();
 const numMap = z.record(z.string(), z.number().nullish()).nullish();
 const looseArr = z.array(z.looseObject({})).nullish();
+/** Beliebiger Wert oder fehlend. Achtung zod 4: `z.unknown()` allein macht das Feld zur Pflicht. */
+const loose = z.unknown().optional();
 
 // ---------------------------------------------------------------- app/*
 
@@ -38,8 +40,9 @@ export const assessSchema = assessDataSchema.extend({
   d: str,
   t: num,
   lang: str,
-  answers: num,
-  writings: num,
+  // Typ in Anhang B und in der Analyse nicht belegt – tolerant lesen.
+  answers: loose,
+  writings: loose,
   data: assessDataSchema.nullish(),
 });
 
@@ -85,7 +88,9 @@ export const profileSchema = z.looseObject({
   listen: looseArr,
   sprints: looseArr,
   vtests: looseArr,
-  checks: looseArr,
+  checks: loose,
+  /** Neu ab Phase 1: Lerntag → Pflicht erledigt (wahr/1). */
+  pflicht: z.record(z.string(), z.unknown()).nullish(),
 });
 
 export const courseSchema = z.looseObject({
@@ -128,6 +133,8 @@ export const schemaDocSchema = z.looseObject({
   cutover: z.string(),
   migratedAt: z.number(),
   app: str,
+  /** Ab diesem Lerntag gilt die Pflicht-Regel der Serie (setzt Phase 1). */
+  pflichtSince: str,
   counts: z.record(z.string(), z.number()).nullish(),
 });
 
@@ -227,7 +234,8 @@ export const lessonSchema = z.looseObject({
 
 export const logSchema = z.looseObject({
   date: str,
-  entries: z.array(z.looseObject({ t: num, ok: bool, k: str, id: str, m: str, given: str, ans: str })).nullish(),
+  // `given`/`ans` sind je nach Übungsart Text oder Liste (z. B. Satzbau) – tolerant lesen.
+  entries: z.array(z.looseObject({ t: num, ok: bool, k: str, id: str, m: str, given: loose, ans: loose })).nullish(),
 });
 
 /** Vom Claude-Tagesauftrag geschrieben – Format bleibt exakt erhalten, die App liest nur. */
@@ -294,7 +302,7 @@ export const writingSchema = z.looseObject({
     .nullish(),
 });
 
-export const sceneSchema = z.looseObject({ id: str, title: str, level: str, ts: num, done: bool });
+export const sceneSchema = z.looseObject({ id: str, title: str, level: str, ts: num, done: loose });
 export const preplySchema = z.looseObject({ t: num, kind: str, title: str, done: bool, applied: bool });
 export const articleSchema = z.looseObject({ id: str, level: str, title: str, text: str });
 export const readingSchema = z.looseObject({ t: num, date: str, articleId: str, title: str, level: str });
