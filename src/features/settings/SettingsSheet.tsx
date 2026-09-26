@@ -12,6 +12,7 @@ import { useSettings, type Lang, type ThemeMode } from '../../app/settings';
 import { changeAutoNext, changeLang, changeTheme } from '../../app/actions';
 import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll } from './exportData';
+import { VoiceSection } from './VoiceSection';
 
 // Einstellungen (Kap. 6.14): Sprache, Darstellung, Datenexport, Diagnose.
 
@@ -22,6 +23,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
       <div className="flex flex-col gap-8 pt-2">
         <Appearance />
         <Practice />
+        <VoiceSection />
         <DataSection />
         <Diagnostics open={open} />
       </div>

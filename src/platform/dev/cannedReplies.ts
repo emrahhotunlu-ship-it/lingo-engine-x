@@ -1,6 +1,8 @@
 import type { SampleFn, SampleOptions, SampleResult } from '../types';
 import { coreWord } from '../../domain/course/baseLesson';
 import { registerCannedReply } from './fakeSample';
+import { roleplayReportReply, roleplayTurnReply, sceneGenReply, turnAnalysisReply } from './cannedSpeak';
+import { mailRefineReply, phraseAdaptReply, pitchFeedbackReply, pitchScriptReply } from './cannedBiz';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@1,
 // produce-check@1, card-examples@1, lesson-content@1 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -275,6 +277,15 @@ export function registerCannedReplies(): void {
   registerCannedReply('card-examples', cardExamplesReply);
   registerCannedReply('lesson-content', lessonContentReply);
   registerCannedReply('grammar-judge', grammarJudgeReply);
+  // Phase 3 – Sprechen und Business
+  registerCannedReply('roleplay-turn', roleplayTurnReply);
+  registerCannedReply('turn-analysis', turnAnalysisReply);
+  registerCannedReply('roleplay-report', roleplayReportReply);
+  registerCannedReply('scene-gen', sceneGenReply);
+  registerCannedReply('mail-refine', mailRefineReply);
+  registerCannedReply('phrase-adapt', phraseAdaptReply);
+  registerCannedReply('pitch-script', pitchScriptReply);
+  registerCannedReply('pitch-feedback', pitchFeedbackReply);
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll
@@ -291,15 +302,16 @@ export function templateIdOf(input: Claude.sample.SampleInput): string | null {
  * Hülle um das nachgebildete `sample`: protokolliert jeden Aufruf (`control.sampleCalls`) und
  * verzögert ihn auf Wunsch (`sampleDelayMs`, z. B. für den Langsam-Hinweis im E2E-Test).
  */
-export function withCallLog(inner: SampleFn, calls: SampleCall[], delayMs = 0): SampleFn {
+export function withCallLog(inner: SampleFn, calls: SampleCall[], delayMs: number | (() => number) = 0): SampleFn {
+  const delayOf = () => (typeof delayMs === 'function' ? delayMs() : delayMs);
   const wait = (signal: AbortSignal | undefined): Promise<void> =>
-    delayMs <= 0
+    delayOf() <= 0
       ? Promise.resolve()
       : new Promise<void>((resolve, reject) => {
           const timer = setTimeout(() => {
             signal?.removeEventListener('abort', onAbort);
             resolve();
-          }, delayMs);
+          }, delayOf());
           const onAbort = () => {
             clearTimeout(timer);
             reject({ code: 'cancelled', message: 'aborted while delayed' });

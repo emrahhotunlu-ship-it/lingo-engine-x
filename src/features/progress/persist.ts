@@ -5,7 +5,7 @@ import { courseDone } from '../../domain/course/courseDone';
 import { mergeRadar, radarEvent, topicCat } from '../../domain/grammar/radar';
 import { grammarWrite } from '../../domain/grammar/write';
 import type { DrillAnswer, GrammarAnswer, LearnRecorder, LearnRoundEnd, LessonDone, RadarEvent, SprintEntry } from '../../domain/learn/types';
-import { drillLogEntry, grammarLogEntry, logEntry, mergeLogEntries, type AnyLogEntry } from '../../domain/progress/logPatch';
+import { activityEntry, drillLogEntry, grammarLogEntry, logEntry, mergeLogEntries, type ActivityLogEntry, type AnyLogEntry } from '../../domain/progress/logPatch';
 import { minimalProfile, profilePatch, roundMinutes, SEQ_KEEP_MS, type CountEvent, type RoundEnd } from '../../domain/progress/profilePatch';
 import { applyUpdate } from '../../domain/srs/applyReview';
 import type { AnswerEvent } from '../../domain/srs/types';
@@ -144,6 +144,18 @@ function addRound(r: RoundEnd, sprint?: SprintEntry): void {
 /** Rundenende vormerken und sofort speichern. */
 export function recordRoundEnd(r: RoundEnd): Promise<boolean> {
   addRound(r);
+  return flush();
+}
+
+/**
+ * Phase 3 (Plan §3.6): beendetes Gespräch bzw. Business-Einheit – ein Log-Eintrag, ein
+ * Rundenende (`act: speak|biz`, `countAs`) und die Radar-Ereignisse im SELBEN Puffer, sofort
+ * gespeichert. So bleiben Profil, Log, Radar und `lxSeq` eine Quelle (D5, B6). `day` = Lerntag des Beginns.
+ */
+export function recordActivity(e: ActivityLogEntry, round: RoundEnd & { day: string }, radar: readonly RadarEvent[] = []): Promise<boolean> {
+  pushEntry(activityEntry(e), round.day);
+  if (radar.length) radarQueue.push(...radar);
+  addRound(round);
   return flush();
 }
 

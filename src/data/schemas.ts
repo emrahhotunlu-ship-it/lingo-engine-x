@@ -238,6 +238,11 @@ export const chunkSchema = z.looseObject({
   created: z.union([z.string(), z.number()]).nullish(),
   src: z.union([z.string(), z.looseObject({})]).nullish(),
   also: z.array(z.unknown()).nullish(),
+  /** Neu ab Phase 3 (Plan §3.1): Erklärung, Sprache von `why`, Herkunft, gesehen. */
+  def: str,
+  whyLang: str,
+  origin: z.looseObject({ v: num, kind: str, ref: str, title: str, t: num }).nullish(),
+  seen: loose,
   ...schedulingFields,
 });
 
@@ -395,12 +400,71 @@ export const writingSchema = z.looseObject({
     .nullish(),
 });
 
-export const sceneSchema = z.looseObject({ id: str, title: str, level: str, ts: num, done: loose });
+/** Szenen der alten App plus Ergänzungen ab Phase 3 (Plan §3.1); alles tolerant. */
+export const sceneSchema = z.looseObject({
+  id: str,
+  title: str,
+  title_de: str,
+  situation: str,
+  situation_de: str,
+  goal: str,
+  goal_de: str,
+  persona: z.looseObject({ name: str, role: str, org: str, traits: str }).nullish(),
+  stake: str,
+  objection: str,
+  opening: str,
+  useful: z.array(z.looseObject({ en: str, de: str })).nullish(),
+  level: str,
+  ts: num,
+  done: loose,
+  band: loose,
+  runs: num,
+  lastRun: num,
+  src: str,
+  pv: str,
+  /** Neu: Fokus einer KI-Szene (Grammatikthema-ID, Wörter). */
+  gram: str,
+  words: strArr,
+});
 export const preplySchema = z.looseObject({ t: num, kind: str, title: str, done: bool, applied: bool });
 export const articleSchema = z.looseObject({ id: str, level: str, title: str, text: str });
 export const readingSchema = z.looseObject({ t: num, date: str, articleId: str, title: str, level: str });
 export const lpoolSchema = z.looseObject({ level: str, title: str, text: str, questions: looseArr });
 export const wpromptSchema = z.looseObject({ p: z.looseObject({ id: str, title_de: str, title_en: str }).nullish() });
+
+/** Neu ab Phase 3: Gesprächsläufe eines Monats (`talk/<JJJJ-MM>`, Plan §3.4). */
+export const talkSchema = z.looseObject({
+  v: num,
+  month: str,
+  runs: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        t: num,
+        day: str,
+        scene: str,
+        title: str,
+        turns: num,
+        ms: num,
+        goal: str,
+        clean: num,
+        errs: z.record(z.string(), z.number().nullish()).nullish(),
+        taken: strArr,
+        lines: looseArr,
+        report: z.looseObject({}).nullish(),
+        lang: str,
+        tier: str,
+      }),
+    )
+    .nullish(),
+});
+
+/** Neu ab Phase 3: Business-Einheiten eines Monats (`biz/<JJJJ-MM>`, Plan §3.5). */
+export const bizSchema = z.looseObject({
+  v: num,
+  month: str,
+  items: z.array(z.looseObject({ id: z.string(), t: num, day: str, kind: str })).nullish(),
+});
 
 export type Profile = z.infer<typeof profileSchema>;
 export type Course = z.infer<typeof courseSchema>;

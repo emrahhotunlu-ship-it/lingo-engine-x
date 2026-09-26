@@ -30,6 +30,7 @@ import { dutyLabel } from '../learn/ui';
 import { unlockSpeech, useSpeech } from '../../platform/speech';
 import { firstOpenDuty, useToday } from './state';
 import { feasibleData, healToday, retryPlan, useTodayPlan } from './store';
+import { TodayOffers } from '../speak/TodayOffers';
 
 // „Heute": beim Öffnen ist sofort klar, was dran ist (Kap. 2.1). Eine Statuszeile, EIN großer
 // Knopf (erster offener Pflichtpunkt); Erledigtes ist Zustand, kein Knopf (Kap. 2.2). Angebote
@@ -282,6 +283,9 @@ export function TodayScreen() {
           </div>
         </motion.section>
       )}
+
+      {/* Sprechen und Business (Phase 3) sind Angebote: erst nach der Pflicht (Kap. 2.1, 2.6). */}
+      {ready && dayLoaded && (state.status === 'allDone' || state.status === 'nothing') && <TodayOffers />}
 
       {dayLoaded && (state.balance.answers > 0 || state.extra > 0) && (
         <motion.p variants={item} className="lx-tnum text-sm text-muted" data-testid="balance">

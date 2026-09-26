@@ -28,5 +28,6 @@ export type TodayState = {
   duties: { done: number; total: number; missing: DutyId[]; items: DutyState[] };
   review: { done: number; total: number };
   extra: number;
-  balance: { answers: number; correct: number; minutes: number };
+  /** `talks`/`biz`: Gespräche und Business-Einheiten (Phase 3), nicht in `answers` enthalten. */
+  balance: { answers: number; correct: number; minutes: number; talks: number; biz: number };
 };

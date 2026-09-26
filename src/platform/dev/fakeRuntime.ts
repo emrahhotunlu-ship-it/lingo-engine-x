@@ -1,6 +1,7 @@
 import type { CapabilityName, ClaudeHost, DbErrCode, Downloads, Permissions } from '../types';
 import { createMemoryDb, type MemoryDbHandle } from './memoryDb';
-import { createFakeSample, type FakeSampleMode } from './fakeSample';
+import { createFakeSample, type FakeSampleMode, type SampleFailMap } from './fakeSample';
+import type { SampleErrorCode } from '../types';
 import { registerCannedReplies, withCallLog, type SampleCall } from './cannedReplies';
 
 // Nachbildung von `window.claude` für Dev-Server und E2E-Tests (Kap. 3.3).
@@ -21,6 +22,8 @@ export type FakeOptions = {
   failSubscriptionsTimes?: number;
   /** Jeder `sample`-Aufruf wartet so lange (z. B. für den Langsam-Hinweis). */
   sampleDelayMs?: number;
+  /** Phase 3: Fehler je Vorlage, z. B. `{ 'turn-analysis': 'upstream_error' }`. */
+  sampleFail?: Record<string, SampleErrorCode>;
 };
 
 export type FakeControl = {
@@ -31,6 +34,12 @@ export type FakeControl = {
   sampleCalls: SampleCall[];
   /** Gesprochene Texte der nachgebildeten Sprachausgabe (siehe install.ts). */
   spoken: string[];
+  /** Phase 3: Fehler je Vorlage setzen (`null` entfernt ihn). */
+  setSampleFail(templateId: string, code: SampleErrorCode | null): void;
+  /** Phase 3: nachgebildete Spracheingabe „hört“ diesen Text (siehe fakeStt.ts). */
+  sttSay(text: string): void;
+  /** Phase 3: Wartezeit jedes `sample`-Aufrufs ändern. */
+  setSampleDelay(ms: number): void;
 };
 
 const PERSIST_KEY = 'lx:fake-db';
@@ -77,7 +86,16 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
   let sampleMode: FakeSampleMode = opts.sampleMode ?? 'ok';
   registerCannedReplies();
   const sampleCalls: SampleCall[] = [];
-  const sample = withCallLog(createFakeSample(() => sampleMode), sampleCalls, opts.sampleDelayMs ?? 0);
+  let sampleFail: SampleFailMap = { ...(opts.sampleFail ?? {}) };
+  const delay = { ms: opts.sampleDelayMs ?? 0 };
+  const sample = withCallLog(
+    createFakeSample(
+      () => sampleMode,
+      () => sampleFail,
+    ),
+    sampleCalls,
+    () => delay.ms,
+  );
   const saved: FakeControl['saved'] = [];
 
   const downloads: Downloads = Object.freeze({
@@ -137,6 +155,16 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
       spoken: [],
       setSampleMode: (m) => {
         sampleMode = m;
+      },
+      setSampleFail: (id, code) => {
+        const next: Record<string, SampleErrorCode> = { ...sampleFail };
+        if (code) next[id] = code;
+        else delete next[id];
+        sampleFail = next;
+      },
+      sttSay: () => undefined,
+      setSampleDelay: (ms) => {
+        delay.ms = ms;
       },
     },
   };

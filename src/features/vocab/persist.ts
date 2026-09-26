@@ -9,7 +9,7 @@ import { flush, usePending } from '../progress/persist';
 // EINE Sammel-Warteschlange in features/progress/persist.ts (phase2-plan D5) – hier nur
 // wieder ausgeführt, damit der Trainer unverändert bleibt.
 
-export { flush, installFlushOnHide, nextT, recordAnswer, recordRoundEnd, usePending, type PendingEntry } from '../progress/persist';
+export { flush, installFlushOnHide, nextT, recordActivity, recordAnswer, recordRoundEnd, usePending, type PendingEntry } from '../progress/persist';
 
 type Doc = Record<string, unknown>;
 

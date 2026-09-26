@@ -63,7 +63,7 @@ export type DrillLogEntry = {
   override?: true;
 };
 
-export type AnyLogEntry = LogEntry | GrammarLogEntry | DrillLogEntry;
+export type AnyLogEntry = LogEntry | GrammarLogEntry | DrillLogEntry | ActivityLogEntry;
 
 export const DONT_KNOW = "(don't know)";
 
@@ -104,6 +104,30 @@ export function drillLogEntry(a: DrillAnswer): DrillLogEntry {
     ...(a.lesson ? { lesson: a.lesson } : {}),
     ...(a.override ? { override: true as const } : {}),
   };
+}
+
+/**
+ * Phase 3 (Plan §3.6): Eintrag für ein beendetes Gespräch bzw. eine Business-Einheit.
+ * Nie `k:'v'`, nie `ctx:'rev'|'xtra'` – so verfälscht er weder „Wiederholen" noch die Trefferquote.
+ */
+export type ActivityLogEntry = {
+  t: number;
+  ok: boolean;
+  lang: string;
+  type: 'speak' | 'biz';
+  /** Szene bzw. Einheit (`sc-vida`, `mail`, `pb-decline` …). */
+  id: string;
+  m: 'speak' | 'biz-mail' | 'biz-pitch' | 'biz-play';
+  q: string;
+  /** Eigene Züge (Sprechen) bzw. Fragen (Drill); 1 bei Mail und Pitch. */
+  n: number;
+  ms: number;
+  ctx: 'spk' | 'biz';
+};
+
+/** Aktivitätseintrag mit gekürztem Titel und gerundeter Dauer. */
+export function activityEntry(e: ActivityLogEntry): ActivityLogEntry {
+  return { ...e, q: clip(e.q), n: Math.max(0, Math.round(e.n)), ms: Math.max(0, Math.round(e.ms)) };
 }
 
 export function logEntry(a: AnswerEvent): LogEntry {

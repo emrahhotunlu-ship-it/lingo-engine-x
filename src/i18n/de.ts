@@ -3,10 +3,17 @@
 
 import { aiDe } from './parts/ai.de';
 import { learnDe } from './parts/learn.de';
+import { speakDe } from './parts/speak.de';
+import { bizDe } from './parts/biz.de';
+import { voiceDe } from './parts/voice.de';
 
 export const de = {
   ...aiDe,
   ...learnDe,
+  // Phase 3 – Sprechen, Business, Stimme
+  ...speakDe,
+  ...bizDe,
+  ...voiceDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

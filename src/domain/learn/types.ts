@@ -61,7 +61,8 @@ export type GrammarAnswer = {
   override?: boolean;
 };
 
-export type RadarEvent = { c: string; s: 'g' | 's' | 'w' | 'v'; t: number; q: string; g: string; a: string };
+/** Quellen: g Grammatik, s Sprint, w Schreiben, v Vokabeln (alte App); k Sprechen, b Business (Phase 3). */
+export type RadarEvent = { c: string; s: 'g' | 's' | 'w' | 'v' | 'k' | 'b'; t: number; q: string; g: string; a: string };
 
 export type DrillAnswer = {
   kind: 'x';

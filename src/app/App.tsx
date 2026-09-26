@@ -32,6 +32,12 @@ import { WissenScreen } from '../features/grammar/WissenScreen';
 import { DrillScreen } from '../features/drills/DrillScreen';
 import { VocabScreen } from '../features/vocab/list/VocabScreen';
 import { useToday } from '../features/today/state';
+import { SpeakHub } from '../features/speak/SpeakHub';
+import { RoleplayScreen } from '../features/speak/RoleplayScreen';
+import { BusinessHub } from '../features/business/BusinessHub';
+import { MailRefiner } from '../features/business/MailRefiner';
+import { PlaybookScreen } from '../features/business/PlaybookScreen';
+import { PitchCoach } from '../features/business/PitchCoach';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
 // den Bildschirm. Der Rahmen rendert sofort; Funktionen kommen dazu, sobald die
@@ -134,10 +140,11 @@ function TabBar({ tab }: { tab: TabName }) {
   const { t } = useT();
   const go = useNav((s) => s.go);
   const open = useOpenDuties();
-  // Reiter Sprechen und Entdecken erscheinen erst mit ihren Bildschirmen (keine toten Reiter).
+  // Reiter Entdecken erscheint erst mit seinem Bildschirm (keine toten Reiter).
   const tabs = [
     { name: 'today' as const, label: t('navToday'), badge: open },
     { name: 'learn' as const, label: t('tabLearn'), badge: 0 },
+    { name: 'speak' as const, label: t('tabSpeak'), badge: 0 },
     { name: 'overview' as const, label: t('navOverview'), badge: 0 },
   ];
   return (
@@ -232,6 +239,12 @@ export function App() {
               {screen === 'wissen' && <WissenScreen />}
               {screen === 'drill' && <DrillScreen />}
               {screen === 'vocab' && <VocabScreen />}
+              {screen === 'speak' && <SpeakHub />}
+              {screen === 'roleplay' && <RoleplayScreen />}
+              {screen === 'business' && <BusinessHub />}
+              {screen === 'mail' && <MailRefiner />}
+              {screen === 'playbook' && <PlaybookScreen />}
+              {screen === 'pitch' && <PitchCoach />}
             </motion.div>
           </AnimatePresence>
         </main>

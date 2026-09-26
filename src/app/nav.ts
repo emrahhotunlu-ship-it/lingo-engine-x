@@ -16,12 +16,19 @@ export type Route =
   | { name: 'drill'; kind: 'dictate' | 'cloze' | 'order' | 'sprint'; ctx: 'duty' | 'xtra' }
   // Funktionsabgleich M1 (Wortschatz) und M8 (Nachschlagewerk „Wissen").
   | { name: 'vocab' }
-  | { name: 'wissen' };
+  | { name: 'wissen' }
+  // Phase 3 – Sprechen und Business (Plan §2)
+  | { name: 'speak' }
+  | { name: 'roleplay'; sceneId: string; resume?: boolean; n?: number }
+  | { name: 'business' }
+  | { name: 'mail' }
+  | { name: 'playbook'; id?: string }
+  | { name: 'pitch' };
 
 export type RouteName = Route['name'];
 
-/** Reiter der Navigation (M13). Sprechen und Entdecken kommen erst mit ihren Bildschirmen dazu. */
-export type TabName = 'today' | 'learn' | 'overview';
+/** Reiter der Navigation (M13). Entdecken kommt erst mit seinem Bildschirm dazu. */
+export type TabName = 'today' | 'learn' | 'speak' | 'overview';
 
 /** Zu welchem Reiter gehört ein Bildschirm? Übungen und Trainer zählen zu keinem Reiter (Vollbild). */
 export function tabOf(name: RouteName): TabName | null {
@@ -36,13 +43,19 @@ export function tabOf(name: RouteName): TabName | null {
     case 'vocab':
     case 'wissen':
       return 'learn';
+    case 'speak':
+    case 'business':
+    case 'mail':
+    case 'playbook':
+    case 'pitch':
+      return 'speak';
     default:
       return null;
   }
 }
 
 /** Listen, deren Bildlaufposition gemerkt wird (M13). */
-const SCROLL_KEEP: ReadonlySet<RouteName> = new Set(['learn', 'course', 'grammar', 'vocab', 'wissen', 'overview']);
+const SCROLL_KEEP: ReadonlySet<RouteName> = new Set(['learn', 'course', 'grammar', 'vocab', 'wissen', 'speak', 'business', 'overview']);
 
 type NavState = {
   route: Route;

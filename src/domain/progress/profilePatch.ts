@@ -14,7 +14,7 @@ type Doc = Record<string, unknown>;
 
 export type RoundEnd = {
   day: string;
-  act: 'review' | 'cards' | LearnAct;
+  act: 'review' | 'cards' | LearnAct | 'speak' | 'biz';
   partial: boolean;
   n: number;
   right: number;
@@ -23,6 +23,11 @@ export type RoundEnd = {
   lessonAi?: boolean;
   /** Sprint: Punktzahl (XP 10 + score/5). */
   sprintScore?: number;
+  /**
+   * Phase 3 (Plan §3.6): zählt zusätzlich als so viele Antworten in `days[day]` und `answers`
+   * (Sprechen: eigene Züge, Business: 1). Trefferquoten (`ema`, `n`) bleiben unberührt.
+   */
+  countAs?: number;
 };
 
 /** Eine gezählte Antwort außerhalb des Vokabeltrainers (Grammatik, Übungen), Kanalzuordnung §4.5. */
@@ -72,6 +77,10 @@ export function roundBonus(r: RoundEnd): number {
     case 'cloze':
     case 'order':
       return r.right * 12 + (r.n > 0 && r.right === r.n ? 20 : 0);
+    case 'speak':
+      return Math.min(150, 10 * r.n);
+    case 'biz':
+      return r.n >= 1 ? 15 : 0;
   }
 }
 
@@ -115,6 +124,7 @@ export function profilePatch(cur: Doc, answers: readonly AnswerEvent[], rounds: 
     };
     let vAnswers = 0;
     let gAnswers = 0;
+    let extraAnswers = 0;
     const count = (day: string, kind: 'v' | 'g', channel: string | null, ok: boolean) => {
       days[day] = num(days[day] ?? curDays[day]) + 1;
       addXp(day, ok ? 10 : 3);
@@ -135,12 +145,17 @@ export function profilePatch(cur: Doc, answers: readonly AnswerEvent[], rounds: 
       act[r.day] = { ...obj(act[r.day]), [key]: num(dayAct[key]) + 1 };
       minutes[r.day] = num(minutes[r.day] ?? curMinutes[r.day]) + roundMinutes(r);
       addXp(r.day, roundBonus(r));
+      const extra = Math.max(0, Math.round(num(r.countAs)));
+      if (extra) {
+        days[r.day] = num(days[r.day] ?? curDays[r.day]) + extra;
+        extraAnswers += extra;
+      }
     }
     if (Object.keys(days).length) patch.days = days;
     if (Object.keys(xpDays).length) patch.xpDays = xpDays;
     if (xp) patch.xp = num(cur.xp) + xp;
+    if (vAnswers + gAnswers + extraAnswers) patch.answers = num(cur.answers) + vAnswers + gAnswers + extraAnswers;
     if (vAnswers + gAnswers) {
-      patch.answers = num(cur.answers) + vAnswers + gAnswers;
       if (vAnswers) patch.vAnswers = num(cur.vAnswers) + vAnswers;
       if (gAnswers) patch.gAnswers = num(cur.gAnswers) + gAnswers;
       patch.ema = ema;

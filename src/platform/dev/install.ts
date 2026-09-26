@@ -1,6 +1,11 @@
 import seedRaw from '../../../seed/sample-data.json?raw';
 import { createFakeClaude, type FakeControl, type FakeOptions } from './fakeRuntime';
-import { installFakeSpeech } from './fakeSpeech';
+import { FAKE_VOICES, installFakeSpeech } from './fakeSpeech';
+import type { SpeechVoiceLike } from '../speech';
+
+import { installFakeStt, type FakeSttMode } from './fakeStt';
+
+const FAKE_DE_VOICE: SpeechVoiceLike = Object.freeze({ name: 'Anna', lang: 'de-DE', localService: true, default: false, voiceURI: 'com.apple.voice.compact.de-DE.Anna' });
 
 // Spielt die nachgebildete Laufzeit ein – aber nur, wenn es keine echte gibt.
 
@@ -10,6 +15,8 @@ export type InstallOptions = Omit<FakeOptions, 'seed'> & {
   patch?: Record<string, Record<string, unknown> | null>;
   /** Sprachausgabe nachbilden (Headless-Chromium hat keine Stimmen); Standard: ja. */
   speech?: boolean;
+  /** Phase 3: Spracheingabe nachbilden; Standard 'absent' (kein Mikrofon-Knopf). */
+  stt?: FakeSttMode;
 };
 
 declare global {
@@ -25,7 +32,7 @@ export function sampleSeed(): Record<string, Record<string, unknown>> {
 
 export function installFakeRuntime(opts: InstallOptions = {}): FakeControl | null {
   if ((window as { claude?: unknown }).claude) return null;
-  const { seed, patch, speech, ...rest } = opts;
+  const { seed, patch, speech, stt, ...rest } = opts;
   const resolved: FakeOptions = { ...rest };
   let base: Record<string, Record<string, unknown>> = {};
   if (seed === 'sample' || seed === undefined) base = sampleSeed();
@@ -37,7 +44,10 @@ export function installFakeRuntime(opts: InstallOptions = {}): FakeControl | nul
   resolved.seed = base;
   const fake = createFakeClaude(resolved);
   Object.defineProperty(window, 'claude', { value: fake.claude, configurable: true, writable: false });
-  if (speech !== false) installFakeSpeech(window, { spoken: fake.control.spoken });
+  // Phase 3 (Plan §9.5): zusätzlich eine deutsche Stimme – die Stimmenwahl zeigt nur englische.
+  if (speech !== false) installFakeSpeech(window, { spoken: fake.control.spoken, voices: [...FAKE_VOICES, FAKE_DE_VOICE] });
+  const sttHandle = installFakeStt(window, stt ?? 'absent');
+  fake.control.sttSay = (text: string) => sttHandle.say(text);
   window.__LINGO_FAKE__ = fake.control;
   return fake.control;
 }
