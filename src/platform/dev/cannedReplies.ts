@@ -1,5 +1,6 @@
 import type { SampleFn, SampleOptions, SampleResult } from '../types';
 import { registerCannedReply } from './fakeSample';
+import { registerInputReplies } from './cannedReplies.input';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@1 und
 // produce-check@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -201,6 +202,7 @@ export function registerCannedReplies(): void {
   registerCannedReply('word-lookup', wordLookupReply);
   registerCannedReply('produce-check', produceCheckReply);
   registerCannedReply('card-examples', cardExamplesReply);
+  registerInputReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

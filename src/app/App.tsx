@@ -22,6 +22,9 @@ import { ConnectionLost, NoDbNotice } from '../features/system/NoDbNotice';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
 import { initSpeech } from '../platform/speech';
+import { InputRoutes } from '../features/input/InputRoutes';
+import { AiTaskNotice } from '../features/input/AiTaskNotice';
+import { isInputScreen } from './modules';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
 // den Bildschirm. Der Rahmen rendert sofort; Funktionen kommen dazu, sobald die
@@ -150,7 +153,7 @@ export function App() {
   useBoot();
   const { t } = useT();
   const screen = useScreen();
-  const migratedScreen = screen === 'today' || screen === 'overview' || screen === 'trainer';
+  const migratedScreen = screen === 'today' || screen === 'overview' || screen === 'trainer' || isInputScreen(screen);
   useEnsureDay(migratedScreen);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const closeSettings = useCallback(() => setSettingsOpen(false), []);
@@ -193,12 +196,14 @@ export function App() {
               {screen === 'today' && <TodayScreen />}
               {screen === 'overview' && <OverviewScreen />}
               {screen === 'trainer' && <TrainerScreen />}
+              {isInputScreen(screen) && <InputRoutes />}
             </motion.div>
           </AnimatePresence>
         </main>
       </div>
       <SettingsSheet open={settingsOpen} onClose={closeSettings} />
       <Toaster />
+      <AiTaskNotice />
       <LookupLayer />
       </HiddenInputProvider>
     </MotionConfig>

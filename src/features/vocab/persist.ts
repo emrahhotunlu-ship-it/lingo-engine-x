@@ -4,6 +4,8 @@ import { validateDoc } from '../../data/validate';
 import { applyUpdate, reviewWrite, type SkipReason } from '../../domain/srs/applyReview';
 import { logEntry, mergeLogEntries, type LogEntry } from '../../domain/progress/logPatch';
 import { minimalProfile, profilePatch, roundMinutes, type RoundEnd } from '../../domain/progress/profilePatch';
+import { unitsPatch, unitMinutes, type UnitEnd } from '../../domain/progress/unitPatch';
+import type { ChannelLogEntry } from '../../domain/progress/channelLog';
 import type { AnswerEvent } from '../../domain/srs/types';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
@@ -15,20 +17,22 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 // Der Puffer liegt nur im Speicher; „Heute" zeigt ihn sofort mit an (live ⊕ Puffer).
 
 type Doc = Record<string, unknown>;
-export type PendingEntry = LogEntry & { day: string };
+export type PendingEntry = (LogEntry | ChannelLogEntry) & { day: string };
 
 type PendingState = {
   /** Protokolleinträge, die noch nicht bestätigt gespeichert sind. */
   entries: PendingEntry[];
   /** Minuten beendeter Runden, deren Zähler noch nicht gespeichert sind (Lerntag → Minuten). */
   minutes: Record<string, number>;
+  /** Abgeschlossene Einheiten (Phase 4), deren Zähler noch nicht gespeichert sind: Lerntag → act-Schlüssel → Anzahl. */
+  units: Record<string, Record<string, number>>;
   /** Karten, deren Speichern gescheitert ist (erneut anwendbar, ohne Schaden). */
   failedCards: AnswerEvent[];
   /** Letzter Sammel-Schreibvorgang gescheitert – Hinweis und „Erneut speichern". */
   failed: boolean;
 };
 
-export const usePending = create<PendingState>(() => ({ entries: [], minutes: {}, failedCards: [], failed: false }));
+export const usePending = create<PendingState>(() => ({ entries: [], minutes: {}, units: {}, failedCards: [], failed: false }));
 
 const FLUSH_EVERY = 4;
 const FLUSH_IDLE_MS = 8000;
@@ -38,6 +42,7 @@ const DEVICE_KEY = `${KEY_PREFIX}device`;
 let lastT = 0;
 let answersToSend: AnswerEvent[] = [];
 let roundsToSend: RoundEnd[] = [];
+let unitsToSend: UnitEnd[] = [];
 let idle: number | null = null;
 let running: Promise<boolean> | null = null;
 let again = false;
@@ -112,6 +117,26 @@ export function recordRoundEnd(r: RoundEnd): Promise<boolean> {
   return flush();
 }
 
+/** Protokolleinträge von Lesen, Hören, Entdecken vormerken (derselbe Sammelweg, Plan §3.2). */
+export function recordChannelEntries(entries: ReadonlyArray<ChannelLogEntry & { day: string }>): void {
+  if (!entries.length) return;
+  usePending.setState((s) => ({ entries: [...s.entries, ...entries] }));
+  schedule();
+}
+
+const addUnit = (units: PendingState['units'], u: UnitEnd, sign: 1 | -1): PendingState['units'] => {
+  const day = { ...(units[u.day] ?? {}) };
+  day[u.act] = Math.max(0, (day[u.act] ?? 0) + sign);
+  return { ...units, [u.day]: day };
+};
+
+/** Abschluss einer Einheit vormerken und sofort speichern (optimistisch sichtbar, Plan F5). */
+export function recordUnitEnd(u: UnitEnd): Promise<boolean> {
+  unitsToSend.push(u);
+  usePending.setState((s) => ({ units: addUnit(s.units, u, 1), minutes: { ...s.minutes, [u.day]: (s.minutes[u.day] ?? 0) + unitMinutes(u) } }));
+  return flush();
+}
+
 async function flushOnce(): Promise<boolean> {
   const writer = getWriter();
   if (!writer) return false;
@@ -120,32 +145,40 @@ async function flushOnce(): Promise<boolean> {
   // 1. app/profile (serienrelevant) – ein Schreibvorgang mit Folgenummer gegen Doppelzählung.
   const answers = answersToSend;
   const rounds = roundsToSend;
+  const units = unitsToSend;
   answersToSend = [];
   roundsToSend = [];
-  if (answers.length || rounds.length) {
+  unitsToSend = [];
+  if (answers.length || rounds.length || units.length) {
     const seq = nextT();
     const dev = deviceId();
-    const day = answers[0]?.day ?? rounds[0]?.day ?? '';
+    const day = answers[0]?.day ?? rounds[0]?.day ?? units[0]?.day ?? '';
     try {
       await writer.transform('app/profile', (cur) => {
         if (!cur) {
           const base = minimalProfile(day);
-          const patch = profilePatch(base, answers, rounds, { deviceId: dev, seq });
+          const patch = unitsPatch(base, profilePatch(base, answers, rounds, { deviceId: dev, seq }), units, { deviceId: dev, seq });
           return patch ? { set: applyUpdate(base, patch) } : null;
         }
-        const patch = profilePatch(cur, answers, rounds, { deviceId: dev, seq });
+        const patch = unitsPatch(cur, profilePatch(cur, answers, rounds, { deviceId: dev, seq }), units, { deviceId: dev, seq });
         if (!patch && !validateDoc('app/profile', cur).ok) logWarn('trainer:profile', { code: 'invalid_document', message: 'Profil ungültig – Zähler nicht geschrieben' }, 'app/profile');
         return patch ? { update: patch } : null;
       });
       usePending.setState((s) => {
         const minutes = { ...s.minutes };
         for (const r of rounds) minutes[r.day] = Math.max(0, (minutes[r.day] ?? 0) - roundMinutes(r));
-        return { minutes };
+        let pendingUnits = s.units;
+        for (const u of units) {
+          minutes[u.day] = Math.max(0, (minutes[u.day] ?? 0) - unitMinutes(u));
+          pendingUnits = addUnit(pendingUnits, u, -1);
+        }
+        return { minutes, units: pendingUnits };
       });
     } catch (err) {
       logError('trainer:profile', err, 'app/profile');
       answersToSend = [...answers, ...answersToSend];
       roundsToSend = [...rounds, ...roundsToSend];
+      unitsToSend = [...units, ...unitsToSend];
       ok = false;
     }
   }

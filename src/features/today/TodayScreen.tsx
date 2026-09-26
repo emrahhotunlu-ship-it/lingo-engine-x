@@ -18,6 +18,7 @@ import { flush, usePending } from '../vocab/persist';
 import { startSession, type Round } from '../vocab/session';
 import { unlockSpeech } from '../../platform/speech';
 import { retryPlan, useTodayPlan } from './store';
+import { InputOffers } from '../input/InputOffers';
 
 // „Heute": beim Öffnen ist sofort klar, was dran ist (Kap. 2.1). Eine Statuszeile, EIN großer
 // Knopf; Erledigtes ist Zustand, kein Knopf (Kap. 2.2). Freiwilliges steht klar getrennt als Extra.
@@ -160,6 +161,12 @@ export function TodayScreen() {
             </Button>
           </div>
         </motion.section>
+      )}
+
+      {ready && dayLoaded && (state.status === 'allDone' || state.status === 'nothing') && (
+        <motion.div variants={item}>
+          <InputOffers />
+        </motion.div>
       )}
 
       {dayLoaded && (state.balance.answers > 0 || state.extra > 0) && (

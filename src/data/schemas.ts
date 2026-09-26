@@ -287,6 +287,11 @@ export const feedSchema = z.looseObject({
         task_de: str,
         task_en: str,
         taskChunks: strArr,
+        // Ergänzt ab Phase 4 (Plan §3.9), nur lesen: Kategorie, englischer Titel, Hörhilfe.
+        cat: str,
+        title_en: str,
+        guide_de: strArr,
+        guide_en: strArr,
         chunks: z.array(z.looseObject({ en: str, de: str, note_de: str, note_en: str })).nullish(),
         questions: z
           .array(
@@ -313,21 +318,102 @@ export const writingSchema = z.looseObject({
   text: str,
   words: num,
   t: num,
+  // Ergänzt ab Phase 4 (Plan §3.7/§3.9), tolerant: Altfelder der Schreibaufgabe und neue Felder.
+  promptId: str,
+  title: str,
+  task: str,
+  genre: str,
+  rev: num,
+  lang: str,
+  domain: str,
   res: z
     .looseObject({
       cefr: str,
       scores: z.record(z.string(), z.number().nullish()).nullish(),
       errors: looseArr,
+      summary: loose,
+      strengths: loose,
+      improved: loose,
+      upgrades: loose,
+      phrases: loose,
+      next: loose,
+      usHints: looseArr,
+      lang: str,
+      pv: str,
     })
     .nullish(),
 });
 
 export const sceneSchema = z.looseObject({ id: str, title: str, level: str, ts: num, done: loose });
 export const preplySchema = z.looseObject({ t: num, kind: str, title: str, done: bool, applied: bool });
-export const articleSchema = z.looseObject({ id: str, level: str, title: str, text: str });
-export const readingSchema = z.looseObject({ t: num, date: str, articleId: str, title: str, level: str });
-export const lpoolSchema = z.looseObject({ level: str, title: str, text: str, questions: looseArr });
-export const wpromptSchema = z.looseObject({ p: z.looseObject({ id: str, title_de: str, title_en: str }).nullish() });
+// Lesen, Hören, Schreibaufgaben: Altformat plus additive Felder ab Phase 4 (Plan §3.3–3.6, §3.9).
+export const articleSchema = z.looseObject({
+  id: str,
+  level: str,
+  title: str,
+  text: str,
+  topic: str,
+  topic_de: str,
+  topic_en: str,
+  teaser: str,
+  keypoints: strArr,
+  glossary: looseArr,
+  questions: looseArr,
+  domain: str,
+  src: str,
+  t: num,
+  pv: str,
+});
+export const readingSchema = z.looseObject({
+  t: num,
+  date: str,
+  articleId: str,
+  title: str,
+  level: str,
+  summary: str,
+  words: num,
+  readSec: num,
+  res: z
+    .looseObject({ score: loose, covered: loose, misunderstood: loose, language: loose, feedback: loose, model_summary: loose, lang: str, pv: str })
+    .nullish(),
+  quiz: z.looseObject({ n: num, ok: num }).nullish(),
+  domain: str,
+  ref: str,
+});
+export const lpoolSchema = z.looseObject({
+  level: str,
+  title: str,
+  text: str,
+  questions: looseArr,
+  topic_de: str,
+  topic_en: str,
+  genre: str,
+  vocab: looseArr,
+  domain: str,
+  src: str,
+  t: num,
+  pv: str,
+});
+export const wpromptSchema = z.looseObject({
+  p: z
+    .looseObject({
+      id: str,
+      title_de: str,
+      title_en: str,
+      genre: str,
+      level: str,
+      task_en: str,
+      task_de: str,
+      words: z.array(z.number()).nullish(),
+      focus_de: str,
+      focus_en: str,
+      useful: strArr,
+      src: str,
+      domain: str,
+    })
+    .nullish(),
+  t: num,
+});
 
 export type Profile = z.infer<typeof profileSchema>;
 export type Course = z.infer<typeof courseSchema>;

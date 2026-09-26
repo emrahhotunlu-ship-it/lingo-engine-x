@@ -6,6 +6,7 @@ import { invalidIdsOf, useLive } from '../../data/live';
 import { slug } from '../../domain/content';
 import { dayKey } from '../../domain/date';
 import { resolveWord, posHint, type CardInfo } from '../../domain/lookup/resolve';
+import { cardSrcFor } from '../../domain/input/cardSrc';
 import { mergedVocab } from '../../domain/overview';
 import { lemmaOf } from '../../domain/srs/context';
 import { posKey } from '../../domain/srs/explain';
@@ -176,7 +177,7 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       level: aiData?.level ?? resolved.level ?? null,
       ex: exSentence,
       surface: req.surface,
-      src: 'lookup',
+      src: cardSrcFor(req.area),
       origin: { v: 1, kind: req.area, t: Date.now(), ...(req.source ? { ref: req.source } : {}), ...(req.title ? { title: req.title } : {}) },
       today: dayKey(Date.now()),
     });
