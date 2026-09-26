@@ -18,6 +18,8 @@ export type MemoryDbOptions = {
   failWrites?: DbErrCode;
   /** Jedes Abonnement endet sofort mit diesem Code (abgebrochene Verbindung testen). */
   failSubscriptions?: DbErrCode;
+  /** Nur die ersten N Abonnements scheitern lassen (Neu-Abonnieren testen). */
+  failSubscriptionsTimes?: number;
   /** Bestand bei jeder Änderung hierhin melden (z. B. sessionStorage). */
   onChange?: (all: Record<string, Json>) => void;
 };
@@ -143,6 +145,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
   const queryListeners = new Set<{ spec: QuerySpec; fire: () => void }>();
   let failWrites = opts.failWrites;
   let subscriptionCount = 0;
+  let failedSubscriptions = 0;
   let version = 0;
   const meta: SnapshotMetadata = Object.freeze({ fromCache: false, hasPendingWrites: false });
 
@@ -242,7 +245,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
 
   function subscribeGuard(error?: (e: DbError) => void): boolean {
     const failCode = opts.failSubscriptions;
-    if (failCode) {
+    if (failCode && (opts.failSubscriptionsTimes === undefined || failedSubscriptions++ < opts.failSubscriptionsTimes)) {
       setTimeout(() => error?.({ code: failCode, message: `simulated ${failCode}` }), 0);
       return false;
     }

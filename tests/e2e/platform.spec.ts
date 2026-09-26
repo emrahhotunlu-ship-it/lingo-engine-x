@@ -48,6 +48,13 @@ test('bricht ein Datenbank-Abonnement ab, erscheint eine klare Meldung mit Neu l
   expect(errors.some((e) => e.includes('data:live'))).toBe(true);
 });
 
+test('reißt die Brücke einmal ab (unavailable), wird neu abonniert und die App läuft normal', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { failSubscriptions: 'unavailable', failSubscriptionsTimes: 6 } });
+  await screen(page, 'overview');
+  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  expect(errors).toEqual([]);
+});
+
 test('antwortet die Laufzeit spät, erscheint sofort ein Lade-Skelett statt eines leeren Bildschirms', async ({ page }) => {
   const { errors } = await boot(page, { fake: { useDelayMs: 1500 }, migrated: true });
   await expect(page.locator('[data-screen="loading"]')).toBeVisible();

@@ -26,9 +26,18 @@ export async function saveFile(filename: string, data: string): Promise<SaveOutc
       case 'capability_removed':
         logWarn('downloads:save', err, filename);
         return 'unavailable';
-      default:
+      case 'bad_request':
+      case 'transform_error':
+      case 'too_large':
+      case 'rejected_extension':
+      case 'extension_not_enabled':
+      case 'request_unknown':
         logError('downloads:save', err, filename);
         return 'error';
+      default:
+        // Unbekannte Codes gelten laut Vertrag als `unavailable`.
+        logWarn('downloads:save', err, filename);
+        return 'unavailable';
     }
   }
 }

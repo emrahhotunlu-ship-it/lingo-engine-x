@@ -14,6 +14,15 @@ describe('Der eine Schreibpfad', () => {
     expect((await h.db.doc('app/profile').get()).data()).toEqual({ lang: 'de', theme: { m: 'light', p: 'ocean' } });
   });
 
+  it('ersetzt nie ein bestehendes Dokument – auch nicht bei falschem Hinweis „fehlt"', async () => {
+    const profile = { lang: 'de', rate: 'schnell', days: { '2026-09-20': 40 }, xpDays: { '2026-09-20': 120 } };
+    const h = createMemoryDb({ seed: { 'app/profile': profile } });
+    const w = createWriter(h.db);
+    expect(await w.patch('app/profile', { lang: 'en' }, null)).toBe('written');
+    expect((await h.db.doc('app/profile').get()).data()).toEqual({ ...profile, lang: 'en' });
+    expect(h.writes()).toEqual([{ op: 'update', path: 'app/profile' }]);
+  });
+
   it('legt ein fehlendes Dokument per patch an, update verlangt ein bestehendes', async () => {
     const h = createMemoryDb();
     const w = createWriter(h.db);

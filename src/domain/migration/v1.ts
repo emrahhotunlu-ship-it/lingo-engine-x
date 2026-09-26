@@ -3,7 +3,7 @@ import type { FsrsStored, SchemaDoc } from '../../data/schemas';
 import { schemaDocSchema } from '../../data/schemas';
 import type { DataSnapshot } from '../../data/snapshot';
 import { collectionDocs } from '../../data/snapshot';
-import { isReadOnlyPath } from '../../data/paths';
+import { isDocPath, isReadOnlyPath, schemaForPath } from '../../data/paths';
 import { validateDoc } from '../../data/validate';
 import type { Writer } from '../../data/writer';
 import { describeError } from '../../platform/diagnostics';
@@ -36,7 +36,7 @@ export type MigrationPlan = {
   invalid: Array<{ path: string; issues: string[] }>;
   defaults: { seedVocabNotInDb: number; topicsNotInDb: number };
   rescue: Array<{ path: string; markedAt: number; exists: boolean; data: Doc }>;
-  rescueSkipped: Array<{ path: string; reason: 'read_only' | 'invalid' | 'unchanged' | 'missing_local' }>;
+  rescueSkipped: Array<{ path: string; reason: 'read_only' | 'invalid' | 'unchanged' | 'missing_local' | 'unknown_path' }>;
   fsrs: Array<{ path: string; value: FsrsStored }>;
   untouched: { daily: number; feed: number };
   streak: { before: number; after: number };
@@ -65,7 +65,8 @@ export function planMigrationV1(input: { snapshot: DataSnapshot; local: LegacyLo
   const rescueSkipped: MigrationPlan['rescueSkipped'] = [];
   for (const [path, markedAt] of Object.entries(local.dirty).sort(([a], [b]) => (a < b ? -1 : 1))) {
     const data = local.docs[path];
-    if (!data) rescueSkipped.push({ path, reason: 'missing_local' });
+    if (!isDocPath(path) || !schemaForPath(path)) rescueSkipped.push({ path, reason: 'unknown_path' });
+    else if (!data) rescueSkipped.push({ path, reason: 'missing_local' });
     else if (isReadOnlyPath(path)) rescueSkipped.push({ path, reason: 'read_only' });
     else if (!validateDoc(path, data).ok) rescueSkipped.push({ path, reason: 'invalid' });
     else if (jsonEqual(snapshot.raw.get(path), data)) rescueSkipped.push({ path, reason: 'unchanged' });

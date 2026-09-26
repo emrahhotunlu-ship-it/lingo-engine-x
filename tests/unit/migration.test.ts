@@ -97,12 +97,14 @@ describe('Umstellung auf Datenversion 1 (Kap. 9)', () => {
     const profile = seed['app/profile'] as Doc & { days: Record<string, number> };
     const newer = { ...profile, days: { ...profile.days, [addDays(SEED_ANCHOR, 1)]: 12 } };
     const local = {
-      dirty: { 'app/profile': 1, 'daily/2026-09-20': 1, 'vocab/nur-lokal': 1, 'app/course': 1 },
+      dirty: { 'app/profile': 1, 'daily/2026-09-20': 1, 'vocab/nur-lokal': 1, 'app/course': 1, 'vocab/a/b': 1, 'fremd/x': 1 },
       docs: {
         'app/profile': newer,
         'daily/2026-09-20': { newWords: [] },
         'vocab/nur-lokal': { word: 'only local', de: 'nur lokal', state: 'new', S: 0 },
         'app/course': seed['app/course'] as Doc,
+        'vocab/a/b': { word: 'kaputter Pfad' },
+        'fremd/x': { a: 1 },
       },
     };
     const now = berlin(addDays(SEED_ANCHOR, 1), 21);
@@ -111,6 +113,8 @@ describe('Umstellung auf Datenversion 1 (Kap. 9)', () => {
     expect(plan.rescueSkipped).toEqual([
       { path: 'app/course', reason: 'unchanged' },
       { path: 'daily/2026-09-20', reason: 'read_only' },
+      { path: 'fremd/x', reason: 'unknown_path' },
+      { path: 'vocab/a/b', reason: 'unknown_path' },
     ]);
     expect((after['app/profile'] as { days: Record<string, number> }).days[addDays(SEED_ANCHOR, 1)]).toBe(12);
     expect(after['vocab/nur-lokal']).toMatchObject({ word: 'only local', fsrs: { state: 0 } });

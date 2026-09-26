@@ -28,7 +28,8 @@ export type Writer = {
   set(path: string, data: Record<string, unknown>, prev?: Record<string, unknown> | null): Promise<WriteOutcome>;
   /**
    * Felder einmischen (verschachtelte Objekte werden verschmolzen); legt das Dokument an, falls es fehlt.
-   * `current` = bekannter Stand (`null` = bekannt, dass es fehlt); ohne Angabe wird vorher gelesen.
+   * `current` = bekannter Stand, nur als Hinweis für „ändert sich nichts". Ob das Dokument fehlt,
+   * prüft patch immer selbst – ein bestehendes Dokument wird nie ersetzt, nur ergänzt.
    */
   patch(path: string, patch: Record<string, unknown>, current?: Record<string, unknown> | null): Promise<WriteOutcome>;
   /** Felder in ein BESTEHENDES Dokument einmischen; schlägt fehl, wenn es fehlt (db `update`). */
@@ -97,13 +98,18 @@ export function createWriter(db: Db): Writer {
     patch(path, patchData, current) {
       guard(path);
       return enqueue(path, async (): Promise<WriteOutcome> => {
-        let cur = current;
-        if (cur === undefined) {
+        // `current` ist nur ein Hinweis für „ändert sich nichts". Ob das Dokument fehlt,
+        // entscheidet immer ein frisches get(): `set` ersetzt das ganze Dokument und darf
+        // deshalb nie auf ein bestehendes treffen (Kap. 9 – nie Daten verlieren).
+        if (current && patchIsNoop(current, patchData)) return 'unchanged';
+        let exists = !!current;
+        if (!exists) {
           const snap = await db.doc(path).get();
-          cur = snap.exists ? (snap.data() ?? null) : null;
+          const data = snap.exists ? snap.data() : undefined;
+          if (data && patchIsNoop(data, patchData)) return 'unchanged';
+          exists = snap.exists;
         }
-        if (cur && patchIsNoop(cur, patchData)) return 'unchanged';
-        if (cur) await withRetry(path, () => db.doc(path).update(patchData));
+        if (exists) await withRetry(path, () => db.doc(path).update(patchData));
         else await withRetry(path, () => db.doc(path).set(patchData));
         return 'written';
       });

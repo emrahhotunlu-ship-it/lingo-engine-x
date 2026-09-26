@@ -17,6 +17,7 @@ export type FakeOptions = {
   sampleMode?: FakeSampleMode;
   /** Jedes Datenbank-Abonnement endet sofort mit diesem Code. */
   failSubscriptions?: DbErrCode;
+  failSubscriptionsTimes?: number;
 };
 
 export type FakeControl = {
@@ -51,6 +52,7 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
   const dbOpts: Parameters<typeof createMemoryDb>[0] = { seed };
   if (opts.latencyMs !== undefined) dbOpts.latencyMs = opts.latencyMs;
   if (opts.failSubscriptions) dbOpts.failSubscriptions = opts.failSubscriptions;
+  if (opts.failSubscriptionsTimes !== undefined) dbOpts.failSubscriptionsTimes = opts.failSubscriptionsTimes;
   if (opts.persist) {
     // Viele Änderungen hintereinander (z. B. die Umstellung) nur einmal je Takt sichern.
     let pending: Record<string, Record<string, unknown>> | null = null;

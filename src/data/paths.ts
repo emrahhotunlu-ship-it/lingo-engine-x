@@ -66,6 +66,19 @@ export const APP_DOC_PATHS = Object.keys(APP_DOCS) as AppDocPath[];
  */
 export const READ_ONLY_COLLECTIONS: readonly CollectionName[] = ['daily', 'feed'];
 
+const SEGMENT_RE = /^[A-Za-z0-9_\-.~:@+]+$/;
+
+/** Dokumentpfad nach der Grammatik aus contract/db.d.ts (gerade Segmentzahl, erlaubte Zeichen). */
+export function isDocPath(path: string): boolean {
+  const segs = path.split('/');
+  return (
+    segs.length % 2 === 0 &&
+    segs.length <= 16 &&
+    new TextEncoder().encode(path).length <= 1000 &&
+    segs.every((s) => s !== '.' && s !== '..' && SEGMENT_RE.test(s) && new TextEncoder().encode(s).length <= 200)
+  );
+}
+
 export function collectionOf(path: string): string {
   const i = path.indexOf('/');
   return i === -1 ? path : path.slice(0, i);

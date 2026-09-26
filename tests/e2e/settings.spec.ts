@@ -71,6 +71,21 @@ test('scheitert das Speichern, wird die Änderung zurückgenommen und gemeldet',
   expect(errors.some((e) => e.includes('settings:save'))).toBe(true);
 });
 
+test('ein ungültiges Profil wird gemeldet, angezeigt und beim Speichern nie ersetzt', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { rate: 'schnell' } } } });
+  await screen(page, 'overview');
+  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  await page.getByTestId('open-settings').click();
+  await page.getByRole('radio', { name: 'English' }).click();
+  await expect.poll(async () => (await dump(page))['app/profile']?.lang).toBe('en');
+  const profile = (await dump(page))['app/profile'] ?? {};
+  expect(Object.keys(profile).length).toBeGreaterThan(30);
+  expect(profile.rate).toBe('schnell');
+  expect(Object.keys(profile.days ?? {}).length).toBeGreaterThan(20);
+  await expect(page.getByTestId('diag-log')).toContainText('app/profile');
+  expect(errors.some((e) => e.includes('data:validate'))).toBe(true);
+});
+
 test('Datenexport über downloads liefert alle Dokumente als JSON', async ({ page }) => {
   await boot(page, { migrated: true });
   await screen(page, 'overview');
