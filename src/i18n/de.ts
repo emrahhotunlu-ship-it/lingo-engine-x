@@ -2,9 +2,11 @@
 // Einfache Sprache, keine Fachwörter (CLAUDE.md A2).
 
 import { aiDe } from './parts/ai.de';
+import { learnDe } from './parts/learn.de';
 
 export const de = {
   ...aiDe,
+  ...learnDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

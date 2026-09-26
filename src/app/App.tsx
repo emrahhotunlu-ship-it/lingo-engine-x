@@ -12,7 +12,7 @@ import { ensureDay } from '../features/today/store';
 import { TrainerScreen } from '../features/vocab/TrainerScreen';
 import { installFlushOnHide } from '../features/vocab/persist';
 import { useClock, useClockTicker } from './clock';
-import { useNav, type Route } from './nav';
+import { savedScroll, tabOf, useNav, type Route, type TabName } from './nav';
 import { MigrationScreen } from '../features/migration/MigrationScreen';
 import { OverviewScreen } from '../features/progress/OverviewScreen';
 import { SettingsSheet } from '../features/settings/SettingsSheet';
@@ -22,6 +22,16 @@ import { ConnectionLost, NoDbNotice } from '../features/system/NoDbNotice';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
 import { initSpeech } from '../platform/speech';
+// Phase 2: Lernen (docs/phase2-plan.md), Wortschatz (M1) und Wissen (M8).
+import { LearnHub } from '../features/learn/LearnHub';
+import { CourseScreen } from '../features/course/CourseScreen';
+import { LessonScreen } from '../features/course/LessonScreen';
+import { GrammarScreen } from '../features/grammar/GrammarScreen';
+import { GrammarSessionScreen } from '../features/grammar/SessionScreen';
+import { WissenScreen } from '../features/grammar/WissenScreen';
+import { DrillScreen } from '../features/drills/DrillScreen';
+import { VocabScreen } from '../features/vocab/list/VocabScreen';
+import { useToday } from '../features/today/state';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
 // den Bildschirm. Der Rahmen rendert sofort; Funktionen kommen dazu, sobald die
@@ -114,12 +124,21 @@ function useEnsureDay(active: boolean): void {
   }, [active, today]);
 }
 
-function TabBar({ route }: { route: Screen }) {
+/** Zahl offener Pflichtpunkte am Reiter „Heute" (M13). */
+function useOpenDuties(): number {
+  const st = useToday();
+  return st.ready && st.dayLoaded && st.status === 'open' ? st.duties.total - st.duties.done : 0;
+}
+
+function TabBar({ tab }: { tab: TabName }) {
   const { t } = useT();
   const go = useNav((s) => s.go);
+  const open = useOpenDuties();
+  // Reiter Sprechen und Entdecken erscheinen erst mit ihren Bildschirmen (keine toten Reiter).
   const tabs = [
-    { name: 'today' as const, label: t('navToday') },
-    { name: 'overview' as const, label: t('navOverview') },
+    { name: 'today' as const, label: t('navToday'), badge: open },
+    { name: 'learn' as const, label: t('tabLearn'), badge: 0 },
+    { name: 'overview' as const, label: t('navOverview'), badge: 0 },
   ];
   return (
     <nav
@@ -127,18 +146,23 @@ function TabBar({ route }: { route: Screen }) {
       className="lx-glass fixed inset-x-0 bottom-0 z-40 flex justify-center gap-1 px-4 pt-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] md:static md:z-auto md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none"
       data-testid="tabbar"
     >
-      {tabs.map((tab) => {
-        const active = route === tab.name;
+      {tabs.map((t2) => {
+        const active = tab === t2.name;
         return (
           <button
-            key={tab.name}
+            key={t2.name}
             type="button"
             aria-current={active ? 'page' : undefined}
-            onClick={() => go({ name: tab.name })}
-            data-testid={`tab-${tab.name}`}
-            className={`min-h-11 flex-1 rounded-[var(--radius-control)] px-4 text-sm transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
+            onClick={() => go({ name: t2.name })}
+            data-testid={`tab-${t2.name}`}
+            className={`relative inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] px-4 text-sm transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
-            {tab.label}
+            {t2.label}
+            {t2.badge > 0 && (
+              <span className="lx-tnum inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-2xs font-semibold text-accent-fg" data-testid="tab-badge" aria-label={t('tabOpen', { n: t2.badge })}>
+                {t2.badge}
+              </span>
+            )}
           </button>
         );
       })}
@@ -150,8 +174,11 @@ export function App() {
   useBoot();
   const { t } = useT();
   const screen = useScreen();
-  const migratedScreen = screen === 'today' || screen === 'overview' || screen === 'trainer';
+  const migratedScreen = screen !== 'loading' && screen !== 'nodb' && screen !== 'offline' && screen !== 'migration';
   useEnsureDay(migratedScreen);
+  const route = useNav((s) => s.route);
+  const tab = migratedScreen ? tabOf(route.name) : null;
+
   const [settingsOpen, setSettingsOpen] = useState(false);
   const closeSettings = useCallback(() => setSettingsOpen(false), []);
 
@@ -172,7 +199,7 @@ export function App() {
             {t('appName')}
           </p>
           <div className="flex items-center gap-2">
-            {(screen === 'today' || screen === 'overview') && <TabBar route={screen} />}
+            {tab && <TabBar tab={tab} />}
             <IconButton icon="sliders" label={t('openSettings')} onClick={() => setSettingsOpen(true)} data-testid="open-settings" />
           </div>
         </header>
@@ -185,6 +212,10 @@ export function App() {
               exit={{ opacity: 0 }}
               transition={{ duration: DURATION.base }}
               data-screen={screen}
+              onAnimationStart={(def) => {
+                // Bildlaufposition je Liste (M13): beim Zurückkehren wiederherstellen, sonst oben beginnen.
+                if (def && typeof def === 'object' && 'opacity' in def && def.opacity === 1) window.scrollTo({ top: savedScroll(screen as Route['name']) });
+              }}
             >
               {screen === 'loading' && <HomeSkeleton />}
               {screen === 'nodb' && <NoDbNotice />}
@@ -193,6 +224,14 @@ export function App() {
               {screen === 'today' && <TodayScreen />}
               {screen === 'overview' && <OverviewScreen />}
               {screen === 'trainer' && <TrainerScreen />}
+              {screen === 'learn' && <LearnHub />}
+              {screen === 'course' && <CourseScreen />}
+              {screen === 'lesson' && route.name === 'lesson' && <LessonScreen id={route.id} />}
+              {screen === 'grammar' && <GrammarScreen />}
+              {screen === 'grammarSession' && <GrammarSessionScreen />}
+              {screen === 'wissen' && <WissenScreen />}
+              {screen === 'drill' && <DrillScreen />}
+              {screen === 'vocab' && <VocabScreen />}
             </motion.div>
           </AnimatePresence>
         </main>

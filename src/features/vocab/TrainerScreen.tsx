@@ -46,7 +46,7 @@ export function TrainerScreen() {
   useHotkeys({ escape: leave }, api.isInput);
 
   useEffect(() => {
-    if (!active) go({ name: 'today' });
+    if (!active && useNav.getState().route.name === 'trainer') go({ name: 'today' });
   }, [active, go]);
 
   // Bildschirmwechsel: laufende KI-Anfragen für Beispielsätze abbrechen (A6.2).

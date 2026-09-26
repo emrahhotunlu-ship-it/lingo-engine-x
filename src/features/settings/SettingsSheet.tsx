@@ -9,7 +9,7 @@ import { clearLog, getLog, logWarn, subscribeLog } from '../../platform/diagnost
 import { useLive } from '../../data/live';
 import { loadSnapshot } from '../../data/snapshot';
 import { useSettings, type Lang, type ThemeMode } from '../../app/settings';
-import { changeLang, changeTheme } from '../../app/actions';
+import { changeAutoNext, changeLang, changeTheme } from '../../app/actions';
 import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll } from './exportData';
 
@@ -21,6 +21,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
     <Sheet open={open} onClose={onClose} title={t('settings')} closeLabel={t('close')}>
       <div className="flex flex-col gap-8 pt-2">
         <Appearance />
+        <Practice />
         <DataSection />
         <Diagnostics open={open} />
       </div>
@@ -60,6 +61,28 @@ function Appearance() {
         <Segmented label={t('settingsAppearance')} value={theme} options={themes} onChange={(v) => void changeTheme(v)} />
       </Section>
     </>
+  );
+}
+
+/** Üben (M6): nach richtiger Antwort ohne Hilfe automatisch weiter (Standard an, wie in der alten App). */
+function Practice() {
+  const { t } = useT();
+  const auto = useLive((s) => s.docs['app/profile']?.autoNext) !== false;
+  const db = useCapabilities((s) => s.db);
+  if (db !== 'ready') return null;
+  return (
+    <Section title={t('settingsPractice')}>
+      <Segmented
+        label={t('settingsAutoNext')}
+        value={auto ? 'on' : 'off'}
+        options={[
+          { value: 'on', label: t('settingsOn') },
+          { value: 'off', label: t('settingsOff') },
+        ]}
+        onChange={(v) => void changeAutoNext(v === 'on')}
+      />
+      <p className="text-sm text-muted">{t('settingsAutoNextHint')}</p>
+    </Section>
   );
 }
 
