@@ -74,3 +74,13 @@ describe('Der eine Schreibpfad', () => {
     expect(await w.set('app/chat', { n: 1 })).toBe('written');
   });
 });
+
+describe('replace nur für Zwischenspeicher', () => {
+  it('ersetzt app/lookup, verweigert Lernstände', async () => {
+    const h = createMemoryDb({ seed: { 'app/lookup': { items: { a: null } }, 'vocab/x': { word: 'x' } } });
+    const w = createWriter(h.db);
+    await expect(w.transform('app/lookup', () => ({ replace: { items: {} } }))).resolves.toBe('updated');
+    await expect(w.transform('vocab/x', () => ({ replace: { word: 'y' } }))).rejects.toMatchObject({ code: 'invalid_argument' });
+    expect(h.dump()['vocab/x']).toEqual({ word: 'x' });
+  });
+});

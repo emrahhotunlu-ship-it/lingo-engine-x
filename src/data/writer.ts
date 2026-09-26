@@ -67,6 +67,9 @@ const KNOWN_CODES = new Set([
   'read_only',
 ]);
 
+/** Dokumente, die `transform` per `replace` ganz ersetzen darf: nur Zwischenspeicher. */
+const REPLACEABLE = new Set(['app/lookup']);
+
 export function createWriter(db: Db): Writer {
   const queues = new Map<string, Promise<unknown>>();
 
@@ -152,6 +155,8 @@ export function createWriter(db: Db): Writer {
         const op = compute(current);
         if (!op) return 'unchanged';
         if ('replace' in op) {
+          // Nur Zwischenspeicher dürfen ganz ersetzt werden – nie Lernstände (Kap. 9, Regel 1).
+          if (!REPLACEABLE.has(path)) throw new WriteError('invalid_argument', `replace ist für ${path} nicht erlaubt`, path);
           if (current && jsonEqual(current, op.replace)) return 'unchanged';
           await withRetry(path, () => db.doc(path).set(op.replace));
           return current ? 'updated' : 'created';
