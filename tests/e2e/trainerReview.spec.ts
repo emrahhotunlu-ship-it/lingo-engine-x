@@ -141,6 +141,15 @@ test.describe('Desktop', () => {
     await page.mouse.click(5, 5);
     await expect(page.getByTestId('lookup')).toHaveCount(0);
     await expect.poll(active).toBe('gap-input');
+    // Auch langes Drücken auf eine leere Stelle (> 1 s) gibt den Fokus zurück (keine Zeitgrenze).
+    await page.getByTestId('sentence').locator('button.lx-word[data-word="rush"]').click();
+    await expect(page.getByTestId('lookup')).toBeVisible();
+    await page.mouse.move(5, 5);
+    await page.mouse.down();
+    await page.waitForTimeout(1300);
+    await page.mouse.up();
+    await expect(page.getByTestId('lookup')).toHaveCount(0);
+    await expect.poll(active).toBe('gap-input');
     // Getippt wird direkt weiter.
     await page.keyboard.type('avoid', { delay: 20 });
     await expect(page.locator('[data-slot="letter"][data-filled]')).toHaveCount(5);

@@ -107,12 +107,19 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       closeLookup({ restoreFocus: false });
       // Tippen auf eine leere Stelle nimmt dem Element beim Loslassen den Fokus. Deshalb erst
       // danach zurückgeben – noch im selben Tippen (click), damit iOS die Tastatur wieder öffnet.
+      // Ohne Zeitgrenze: auch ein langes Drücken endet mit diesem click. Kommt keiner (Finger
+      // verschoben), räumt das nächste Tippen den Horcher weg.
+      const stop = () => {
+        document.removeEventListener('click', onClick, true);
+        document.removeEventListener('pointerdown', stop, true);
+      };
       const onClick = () => {
+        stop();
         const a = document.activeElement;
         if (!a || a === document.body) back?.focus({ preventScroll: true });
       };
-      document.addEventListener('click', onClick, { capture: true, once: true });
-      window.setTimeout(() => document.removeEventListener('click', onClick, true), 1000);
+      document.addEventListener('click', onClick, true);
+      window.setTimeout(() => document.addEventListener('pointerdown', stop, true), 0);
     };
     window.addEventListener('keydown', onKey, true);
     document.addEventListener('pointerdown', onDown, true);

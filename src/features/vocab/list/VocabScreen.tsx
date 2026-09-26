@@ -183,7 +183,7 @@ function WordRow({ card, nowMs, lang, onOpen }: { card: TrainCard; nowMs: number
           {card.word}
         </span>
         {meaning && (
-          <span className="truncate text-sm text-muted" lang={lang}>
+          <span className="text-sm text-muted" lang={lang}>
             {meaning}
           </span>
         )}

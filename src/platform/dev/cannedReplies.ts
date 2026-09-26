@@ -1,8 +1,9 @@
 import type { SampleFn, SampleOptions, SampleResult } from '../types';
+import { coreWord } from '../../domain/course/baseLesson';
 import { registerCannedReply } from './fakeSample';
 
-// Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@1 und
-// produce-check@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
+// Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@1,
+// produce-check@1, card-examples@1, lesson-content@1 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
 // Sonderwörter für Fehlerpfade:
 // - `zzqx`: erste Antwort verletzt das Schema, der Neuversuch („did not match") ist gültig,
 // - `zzjson`: gar kein JSON (→ `invalid_json`).
@@ -196,11 +197,84 @@ export function cardExamplesReply(input: string): string {
   });
 }
 
+// ---------------------------------------------------------------- lesson-content@1
+
+/**
+ * Eine vollständige Lektion aus den Zeilen des Prompts: die Zielwörter genau wie vorgegeben,
+ * jedes Wort in einer Dialogzeile, Fragen in beiden Sprachen, vier Aufgaben (mc, gap,
+ * transform, correct) zum angegebenen Thema. `zzjson` im Thema → kein JSON.
+ */
+export function lessonContentReply(input: string): string {
+  const topic = line(input, 'Grammar topic id');
+  if (/zzjson/i.test(topic)) return NOT_JSON;
+  const ui: Lang = /^en\b/.test(line(input, 'UI language')) ? 'en' : 'de';
+  const pairs = line(input, 'Target words \\(keep exactly, in this order\\)')
+    .split('; ')
+    .map((p) => {
+      const i = p.indexOf(' = ');
+      return i < 0 ? { en: p.trim(), de: p.trim() } : { en: p.slice(0, i).trim(), de: p.slice(i + 3).trim() };
+    })
+    .filter((w) => w.en);
+  const bare = coreWord;
+  const speakers = ['Mia', 'Tom'];
+  const wordLines = pairs.map((w, i) => ({ sp: speakers[i % 2] ?? 'Mia', en: `For this project we have to talk about ${bare(w.en)} today.`, de: `Für dieses Projekt müssen wir heute über „${w.de}“ sprechen.` }));
+  const extra = [
+    { sp: 'Mia', en: 'I am going to send the summary tomorrow morning.', de: 'Ich werde die Zusammenfassung morgen früh schicken.' },
+    { sp: 'Tom', en: 'Great, and I will call the customer after lunch.', de: 'Super, und ich rufe den Kunden nach dem Mittagessen an.' },
+    { sp: 'Mia', en: 'The meeting starts at ten, so we are meeting at the office.', de: 'Das Meeting beginnt um zehn, also treffen wir uns im Büro.' },
+    { sp: 'Tom', en: 'Perfect. I think everything will be ready by Friday.', de: 'Perfekt. Ich glaube, bis Freitag ist alles fertig.' },
+  ];
+  const lines = [...wordLines, ...extra].slice(0, 14);
+  while (lines.length < 8) lines.push({ ...extra[lines.length % extra.length]! });
+  const qDe = { q: 'Wann schickt Mia die Zusammenfassung?', options: ['Morgen früh', 'Heute Abend', 'Am Freitag', 'Nach dem Mittagessen'], answer: 'Morgen früh' };
+  const qEn = { q: 'When is Mia going to send the summary?', options: ['Tomorrow morning', 'This evening', 'On Friday', 'After lunch'], answer: 'Tomorrow morning' };
+  const q2De = { q: 'Was macht Tom nach dem Mittagessen?', options: ['Er ruft den Kunden an', 'Er schreibt einen Bericht', 'Er fährt nach Hause', 'Er bucht eine Reise'], answer: 'Er ruft den Kunden an' };
+  const q2En = { q: 'What will Tom do after lunch?', options: ['He will call the customer', 'He will write a report', 'He will go home', 'He will book a trip'], answer: 'He will call the customer' };
+  const question = (a: typeof qDe, b: typeof qEn) => {
+    const [cur, alt] = ui === 'de' ? [a, b] : [b, a];
+    return { ...cur, lang: ui, q_alt: alt.q, options_alt: alt.options, answer_alt: alt.answer };
+  };
+  const tasks = [
+    { topic, type: 'mc', prompt: 'The new system ___ ready next week, the plan is fixed.', answer: 'is going to be', accepted: [], options: ['is going to be', 'be', 'being', 'been'], hint: '', expl: 'Ein fester Plan für die Zukunft wird mit going to ausgedrückt.', expl_en: 'A fixed plan for the future is expressed with going to.' },
+    { topic, type: 'gap', prompt: 'Look at those clouds. I think it ___ this afternoon.', answer: 'will rain', accepted: ["'ll rain"], options: null, hint: '(rain)', expl: 'Eine Vermutung über die Zukunft wird mit will ausgedrückt.', expl_en: 'A guess about the future is expressed with will.' },
+    { topic, type: 'transform', prompt: 'We plan to visit the fair in May. → We ___ the fair in May.', answer: 'are going to visit', accepted: ["'re going to visit"], options: null, hint: '', expl: 'Eine Absicht wird mit be going to und der Grundform gebildet.', expl_en: 'An intention is formed with be going to and the base form.' },
+    { topic, type: 'correct', prompt: 'I will meet the client tomorrow at ten, it is already in my calendar.', answer: 'I am meeting the client tomorrow at ten, it is already in my calendar.', accepted: [], options: null, hint: '', expl: 'Eine feste Verabredung steht im Present Continuous, nicht mit will.', expl_en: 'A fixed arrangement uses the present continuous, not will.' },
+  ];
+  const must = pairs.slice(0, 3).map((w) => w.en);
+  return JSON.stringify({
+    words: pairs.map((w) => ({ en: w.en, de: w.de, pos: 'phrase', def: `a useful expression for work: ${bare(w.en)}`, ex: `For this project we have to talk about [${bare(w.en)}] today.` })),
+    dialogue: { title: 'Planning the next steps', lines },
+    questions: [question(qDe, qEn), question(q2De, q2En)],
+    tasks,
+    output: {
+      de: 'Schreibe einer Kollegin, was ihr nächste Woche geplant habt und was du vermutest.',
+      en: 'Write to a colleague about what you have planned for next week and what you expect.',
+      mustUse: must,
+    },
+  });
+}
+
+// ---------------------------------------------------------------- grammar-judge@1
+
+const JUDGE_WHY: Record<Lang, string> = {
+  de: 'Deine Antwort ist grammatisch richtig und passt zur Aufgabe, auch wenn sie anders gebaut ist.',
+  en: 'Your answer is grammatical and fits the task, even though it is built differently.',
+};
+
+/** Urteil „richtig, auch akzeptabel" über jede frei formulierte Antwort. `zzjson` in der Antwort → kein JSON. */
+export function grammarJudgeReply(input: string): string {
+  const given = line(input, 'Learner answer');
+  if (/\bzzjson\b/i.test(given)) return NOT_JSON;
+  return JSON.stringify({ verdict: 'correct', acceptable: true, corrected: given || '—', why: JUDGE_WHY[explanationLang(input)] });
+}
+
 /** Meldet die festen Antworten beim Entwicklungs-Adapter an. */
 export function registerCannedReplies(): void {
   registerCannedReply('word-lookup', wordLookupReply);
   registerCannedReply('produce-check', produceCheckReply);
   registerCannedReply('card-examples', cardExamplesReply);
+  registerCannedReply('lesson-content', lessonContentReply);
+  registerCannedReply('grammar-judge', grammarJudgeReply);
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

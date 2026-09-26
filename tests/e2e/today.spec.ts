@@ -1,9 +1,9 @@
 import { mkdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, layoutProblems, screen, type Lang, type Theme } from './fixtures';
+import { boot, layoutProblems, screen, SEED_EVENING, type Lang, type Theme } from './fixtures';
 import { DAY, dump, planPatch, writes } from './trainerHelpers';
 
-// „Heute" (Phase 1, MVP): eine Statuszeile, EIN großer Knopf, Plan einmal je Lerntag,
+// „Heute": eine Statuszeile, EIN großer Knopf, Plan einmal je Lerntag (Tagesplan v2, phase2-plan §6),
 // erledigt ist Zustand. Stichproben über Breiten, Modi und Sprachen (keine volle Matrix).
 
 const SHOTS = 'test-results/screens';
@@ -46,18 +46,33 @@ test('Plan wird einmal je Lerntag gespeichert und nach dem Neuladen nicht neu ge
   const { errors } = await boot(page, { migrated: true, fake: { persist: true } });
   await screen(page, 'today');
   const status = page.getByTestId('today-status');
-  await expect(status).toHaveText(/^Noch \d+ Karten?$/);
+  // Tagesplan v2 (phase2-plan §6.1): Wiederholen + Lektion + Pflichtkanal, zwei Angebote.
+  await expect(status).toHaveText(/^Noch nicht fertig · 0 von 3 · es fehlt: /);
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as { v?: number } | undefined)?.v).toBe(1);
-  const plan = (await dump(page))['app/profile']?.plan as { d: string; ids: string[]; duty: string[]; goal: { review: number } };
-  expect(plan).toMatchObject({ d: DAY, ids: [], duty: ['review'], lesson: null });
+  type Plan = { d: string; v: number; ids: string[]; why: unknown[][]; duty: string[]; goal: { review: number; due: number; new: number; ahead: number; ch: number }; lesson: string | null; at: number };
+  const plan = (await dump(page))['app/profile']?.plan as Plan;
+  expect(plan.d).toBe(DAY);
+  expect(plan.duty).toHaveLength(3);
+  expect(plan.duty.slice(0, 2)).toEqual(['review', 'lesson']);
+  expect(plan.duty[2]).toBe(`ch:${plan.ids[0]}`);
+  expect(['gram', 'cloze', 'order']).toContain(plan.ids[0]);
+  expect(plan.ids).toHaveLength(3);
+  expect(new Set(plan.ids).size).toBe(3);
+  expect(plan.why).toHaveLength(3);
+  expect(plan.lesson).toMatch(/^l\d{2}$/);
   expect(plan.goal.review).toBeGreaterThanOrEqual(10);
-  await expect(status).toHaveText(`Noch ${plan.goal.review} Karten`);
+  expect(plan.goal.due + plan.goal.new + plan.goal.ahead).toBe(plan.goal.review);
+  expect(plan.goal.ch).toBe({ gram: 6, cloze: 8, order: 6 }[plan.ids[0] as 'gram' | 'cloze' | 'order']);
+  expect(plan.at).toBe(Date.parse(SEED_EVENING));
+  const text = await status.innerText();
+  await expect(page.getByTestId('duty')).toHaveCount(3);
   expect((await writes(page)).filter((w) => w.path === 'app/profile')).toHaveLength(1);
   await page.reload();
   await screen(page, 'today');
-  await expect(status).toHaveText(`Noch ${plan.goal.review} Karten`);
+  await expect(status).toHaveText(text);
   await page.waitForTimeout(300);
   expect((await writes(page)).filter((w) => w.path === 'app/profile')).toHaveLength(0);
+  expect((await dump(page))['app/profile']?.plan).toEqual(plan);
   expect(errors).toEqual([]);
 });
 

@@ -94,7 +94,7 @@ function LessonRun({ id }: { id: string }) {
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <IconButton icon="close" label={t('lsClose')} onClick={leave} data-testid="round-close" />
-          <p className="truncate text-sm text-muted">{title}</p>
+          <p className="min-w-0 text-sm text-muted">{title}</p>
         </div>
         <DutyBar ctx={run.ctx} />
       </div>

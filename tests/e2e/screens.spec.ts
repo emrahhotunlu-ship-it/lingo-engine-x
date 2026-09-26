@@ -1,6 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import { boot, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
+import { learnTour } from './learnHelpers';
 
 // Jeder Bildschirm rendert auf 390, 1440 und 2560 px, in allen drei Modi und beiden
 // Sprachen: keine JS-Fehler, kein undefined/NaN/{0}, kein Querscrollen, nichts
@@ -55,6 +56,40 @@ for (const vp of VIEWPORTS) {
           await context.close();
         });
       }
+    }
+  }
+}
+
+// Phase 2 (phase2-plan §9.3): jeder Lernen-Bildschirm in allen Breiten, Modi und Sprachen.
+for (const vp of VIEWPORTS) {
+  for (const theme of THEMES) {
+    for (const lang of LANGS) {
+      test(`lernen-${vp.name}-${theme}-${lang}`, async ({ browser }) => {
+        const context = await browser.newContext({
+          viewport: { width: vp.width, height: vp.height },
+          isMobile: vp.mobile,
+          hasTouch: vp.mobile,
+          deviceScaleFactor: vp.mobile ? 2 : 1,
+          timezoneId: 'Europe/Berlin',
+          locale: lang === 'de' ? 'de-DE' : 'en-US',
+          reducedMotion: 'reduce',
+        });
+        const page = await context.newPage();
+        const { errors, external } = await boot(page, { theme, lang, migrated: true });
+        await screen(page, 'today');
+        await learnTour(page, async (name) => {
+          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
+          expect(await layoutProblems(page), name).toEqual([]);
+          // Zitierte Wörter („würde") gehören zur Erklärung, nicht zur Oberfläche.
+          const text = (await page.locator('body').innerText()).replace(/„[^“”]*[“”]|“[^”]*”|"[^"]*"/g, ' ');
+          if (lang === 'en') expect(GERMAN_IN_EN.exec(text)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
+          else expect(ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
+          await page.screenshot({ path: `${SHOTS}/${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
+        });
+        expect(errors).toEqual([]);
+        expect(external).toEqual([]);
+        await context.close();
+      });
     }
   }
 }
