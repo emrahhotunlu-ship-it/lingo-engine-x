@@ -11,7 +11,8 @@ import { chooseExercise } from '../../domain/srs/modes';
 import { buildQueue, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
-import { useTodayPlan } from '../today/store';
+import { markExhausted, useTodayPlan } from '../today/store';
+import { inDeck, type Deck } from '../../domain/srs/vocabList';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './persist';
 
 // Eine Runde im Vokabeltrainer. Die Warteschlange wird synchron im Klick-Handler von „Starten"
@@ -105,7 +106,10 @@ function settle(s: SessionState, from: number): Partial<SessionState> {
 export type FirstKind = 'typed' | 'choice' | 'intro' | null;
 
 /** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
-export function startSession(round: Round): FirstKind {
+/** Freie Runde (M9): Stapel und Größe; `only` = genau diese Karten („Jetzt üben" am Wortblatt). */
+export type SessionOpts = { deck?: Deck; size?: number; only?: readonly string[] };
+
+export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const live = useLive.getState();
   const now = useClock.getState().now;
   const day = dayKey(Date.now());
@@ -120,13 +124,19 @@ export function startSession(round: Round): FirstKind {
   const plan = useTodayPlan.getState().plan;
   const goal = plan?.goal.review ?? 0;
   const doneBefore = round === 'pflicht' ? Math.min(goal, reviewed.size) : 0;
-  const target = round === 'pflicht' ? Math.max(0, goal - reviewed.size) : EXTRA_TARGET;
+  const target = round === 'pflicht' ? Math.max(0, goal - reviewed.size) : opts.only ? opts.only.length : (opts.size ?? EXTRA_TARGET);
   const profile = live.docs['app/profile'] ?? {};
   const introducedToday = cards.filter((c) => c.intro === day).length;
   // D17: Lektionswörter zählen mit, verdrängen aber nie alle eigenen neuen Karten.
   const introducedLessonToday = cards.filter((c) => c.intro === day && c.src === 'lesson').length;
   const newQuotaLeft = newQuotaLeftFor(profile.newPerDay, introducedToday, introducedLessonToday);
-  const queue = buildQueue({ cards, nowMs: now, target, newQuotaLeft, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
+  const deck = opts.deck ?? 'all';
+  const queue = opts.only
+    ? opts.only
+        .map((k) => byKey.get(k))
+        .filter((c): c is TrainCard => !!c && !c.hidden)
+        .map((c): QueueItem => ({ key: c.key, reason: c.isNew ? 'new' : 'due', phase: c.stage === 0 ? 'intro' : 'quiz' }))
+    : buildQueue({ cards: round === 'extra' && deck !== 'all' ? cards.filter((c) => inDeck(c, deck)) : cards, nowMs: now, target, newQuotaLeft: round === 'extra' && deck !== 'all' ? 0 : newQuotaLeft, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
   const base: SessionState = {
     active: true,
     status: 'running',
@@ -179,6 +189,8 @@ export function pauseActivity(hidden: boolean): void {
 
 function finish(s: SessionState, aborted: boolean): void {
   const n = s.results.length;
+  // Regel 1b: Die Pflichtrunde hatte nichts mehr abzufragen, obwohl das Ziel nicht erreicht ist.
+  if (!aborted && s.round === 'pflicht' && s.doneBefore + new Set(s.answered).size < s.doneBefore + s.target) markExhausted(s.day);
   const rest = s.queue.length - s.pos;
   void recordRoundEnd({
     day: s.day,
@@ -213,7 +225,7 @@ function advanceFrom(s: SessionState): FirstKind {
   return item.phase === 'intro' ? 'intro' : (next.exercise?.input ?? null);
 }
 
-export type Answer = { grade: Grade; given: string; ms: number; ok: boolean };
+export type Answer = { grade: Grade; given: string; ms: number; ok: boolean; override?: boolean };
 
 /** Bewertete Antwort übernehmen: Karte sofort speichern, Protokoll und Zähler vormerken, weiter. */
 export function commitAnswer(ans: Answer): FirstKind {
@@ -237,6 +249,7 @@ export function commitAnswer(ans: Answer): FirstKind {
     ctx: s.round === 'pflicht' ? 'rev' : 'xtra',
   };
   if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
+  if (ans.override) a.override = true;
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));

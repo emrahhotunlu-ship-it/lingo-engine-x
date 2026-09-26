@@ -24,6 +24,7 @@ export type LogEntry = {
   ms: number;
   ctx: 'rev' | 'duty' | 'xtra';
   lesson?: string;
+  override?: true;
 };
 
 /** Grammatik-Eintrag (Form der alten App, `session.js:437`, plus `ms`/`ctx`). */
@@ -43,6 +44,7 @@ export type GrammarLogEntry = {
   ms: number;
   ctx: 'rev' | 'duty' | 'xtra';
   lesson?: string;
+  override?: true;
 };
 
 /** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
@@ -58,6 +60,7 @@ export type DrillLogEntry = {
   ms: number;
   ctx: 'rev' | 'duty' | 'xtra';
   lesson?: string;
+  override?: true;
 };
 
 export type AnyLogEntry = LogEntry | GrammarLogEntry | DrillLogEntry;
@@ -82,6 +85,7 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
     ms: Math.max(0, Math.round(a.ms)),
     ctx: a.ctx,
     ...(lesson ? { lesson } : {}),
+    ...(a.override ? { override: true as const } : {}),
   };
 }
 
@@ -98,11 +102,12 @@ export function drillLogEntry(a: DrillAnswer): DrillLogEntry {
     ms: Math.max(0, Math.round(a.ms)),
     ctx: a.ctx,
     ...(a.lesson ? { lesson: a.lesson } : {}),
+    ...(a.override ? { override: true as const } : {}),
   };
 }
 
 export function logEntry(a: AnswerEvent): LogEntry {
-  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}) };
+  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}), ...(a.override ? { override: true as const } : {}) };
 }
 
 const keyOf = (e: unknown): string => {

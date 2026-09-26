@@ -5,7 +5,7 @@ import { locate, lemmaOf } from './context';
 // Der Ursprungssatz ist Pflicht (Kap. 15: keine Karten ohne Ursprungssatz). Kein `fsrs`:
 // `readFsrs` leitet es aus den alten Feldern ab, genau wie bei jeder Karte der alten App.
 
-export type CardOrigin = { v: 1; kind: 'trainer' | 'intro' | 'summary' | 'lookup' | 'daily' | 'lesson'; ref?: string; title?: string; t: number };
+export type CardOrigin = { v: 1; kind: 'trainer' | 'intro' | 'summary' | 'lookup' | 'daily' | 'lesson' | 'user' | 'ai'; ref?: string; title?: string; t: number };
 
 export type NewVocabInput = {
   word: string;
@@ -15,7 +15,8 @@ export type NewVocabInput = {
   level?: string | null;
   ex?: string | null;
   surface?: string | null;
-  src: 'lookup' | 'coach' | 'lesson';
+  /** Phase 2 (M2): `user` eigenes Wort, `ai` bzw. `job` von Claude vorgeschlagen. */
+  src: 'lookup' | 'coach' | 'lesson' | 'user' | 'ai' | 'job';
   /** Lektion, aus der die Karte stammt (`src:'lesson'`, Phase 2 D17). */
   lesson?: string | null;
   origin: CardOrigin;

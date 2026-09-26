@@ -57,6 +57,8 @@ export type GrammarAnswer = {
   ms: number;
   help: Help;
   judged: 'local' | 'ai' | 'noai';
+  /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */
+  override?: boolean;
 };
 
 export type RadarEvent = { c: string; s: 'g' | 's' | 'w' | 'v'; t: number; q: string; g: string; a: string };
@@ -76,6 +78,8 @@ export type DrillAnswer = {
   ms: number;
   lesson?: string;
   radar?: RadarEvent;
+  /** Einspruch „Ich lag richtig" (M4). */
+  override?: boolean;
 };
 
 export type SprintEntry = { t: number; score: number; ok: number; n: number; avgMs: number; combo: number };

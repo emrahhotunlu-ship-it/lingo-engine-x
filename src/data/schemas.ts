@@ -222,6 +222,8 @@ export const vocabSchema = z.looseObject({
   origin: z.looseObject({ v: num, kind: str, ref: str, title: str, t: num }).nullish(),
   /** Neu: von Claude ergänzte Beispielsätze `[{en, t}]` (nur Englisch, ≤ 3), tolerant gelesen; nur ergänzt, nie ersetzt. */
   xEx: z.array(z.unknown()).nullish(),
+  /** Neu (Phase 2, M3): Merkhilfe von Claude für hartnäckige Wörter `{text, lang, t}`, einmal erzeugt. */
+  mnemo: z.looseObject({ text: str, lang: str, t: num }).nullish(),
   ...schedulingFields,
 });
 
@@ -319,6 +321,8 @@ export const logSchema = z.looseObject({
         topic: str,
         src: str,
         lesson: str,
+        // Neu (Phase 2, M4): Einspruch „Ich lag richtig".
+        override: bool,
       }),
     )
     .nullish(),

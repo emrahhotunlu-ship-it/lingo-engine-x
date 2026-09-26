@@ -1,0 +1,142 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import type { Tile } from '../domain/drills/order';
+
+// Bausteine (Kap. 4.3): Tippen legt einen Baustein ans Ende der Satzzeile bzw. nimmt ihn zurück;
+// Ziehen legt ihn an eine bestimmte Stelle (auch innerhalb der Zeile umsortieren). Beides mit
+// Maus, Finger und Tastatur (Bausteine sind Knöpfe). Layout-Animation beim Umordnen.
+
+type Mark = 'ok' | 'off' | 'near';
+
+type Props = {
+  tiles: readonly Tile[];
+  placed: readonly number[];
+  onChange: (placed: number[]) => void;
+  locked: boolean;
+  marks?: Readonly<Record<number, Mark>>;
+  labels: { line: string; pool: string };
+};
+
+type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: number; dy: number; moved: boolean; pointer: number };
+
+const THRESHOLD = 6;
+
+export function Tiles({ tiles, placed, onChange, locked, marks, labels }: Props) {
+  const reduce = useReducedMotion();
+  const line = useRef<HTMLDivElement>(null);
+  const refs = useRef(new Map<number, HTMLButtonElement>());
+  const [drag, setDrag] = useState<Drag | null>(null);
+  const [over, setOver] = useState(false);
+  const justDragged = useRef(false);
+  const byId = new Map(tiles.map((t) => [t.id, t]));
+  const pool = tiles.filter((t) => !placed.includes(t.id));
+
+  const toggle = (id: number) => {
+    if (locked) return;
+    onChange(placed.includes(id) ? placed.filter((x) => x !== id) : [...placed, id]);
+  };
+
+  const inLine = (x: number, y: number): boolean => {
+    const r = line.current?.getBoundingClientRect();
+    return !!r && x >= r.left - 8 && x <= r.right + 8 && y >= r.top - 12 && y <= r.bottom + 12;
+  };
+
+  /** Einfügestelle in der Satzzeile nach Zeigerposition (ohne den gezogenen Baustein). */
+  const dropIndex = (x: number, y: number, id: number): number => {
+    const rest = placed.filter((p) => p !== id);
+    for (let i = 0; i < rest.length; i++) {
+      const el = refs.current.get(rest[i] as number);
+      if (!el) continue;
+      const r = el.getBoundingClientRect();
+      const sameRow = y >= r.top - 6 && y <= r.bottom + 6;
+      if ((sameRow && x < r.left + r.width / 2) || y < r.top - 6) return i;
+    }
+    return rest.length;
+  };
+
+  const onPointerDown = (e: ReactPointerEvent<HTMLButtonElement>, id: number, from: 'pool' | 'line') => {
+    if (locked || e.button !== 0) return;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setDrag({ id, from, x0: e.clientX, y0: e.clientY, dx: 0, dy: 0, moved: false, pointer: e.pointerId });
+  };
+
+  const onPointerMove = (e: ReactPointerEvent<HTMLButtonElement>) => {
+    if (!drag || e.pointerId !== drag.pointer) return;
+    const dx = e.clientX - drag.x0;
+    const dy = e.clientY - drag.y0;
+    const moved = drag.moved || Math.hypot(dx, dy) > THRESHOLD;
+    setDrag({ ...drag, dx, dy, moved });
+    setOver(moved && inLine(e.clientX, e.clientY));
+  };
+
+  const onPointerUp = (e: ReactPointerEvent<HTMLButtonElement>) => {
+    if (!drag || e.pointerId !== drag.pointer) return;
+    const d = drag;
+    setDrag(null);
+    setOver(false);
+    if (!d.moved) return; // Tippen: erledigt `onClick`.
+    justDragged.current = true;
+    window.setTimeout(() => {
+      justDragged.current = false;
+    }, 0);
+    if (inLine(e.clientX, e.clientY)) {
+      const idx = dropIndex(e.clientX, e.clientY, d.id);
+      const rest = placed.filter((p) => p !== d.id);
+      onChange([...rest.slice(0, idx), d.id, ...rest.slice(idx)]);
+    } else if (d.from === 'line') onChange(placed.filter((p) => p !== d.id));
+  };
+
+  const tileButton = (id: number, where: 'pool' | 'line') => {
+    const t = byId.get(id);
+    if (!t) return null;
+    const dragging = drag?.id === id && drag.moved;
+    return (
+      <motion.button
+        key={id}
+        layout={!reduce && !dragging}
+        ref={(el: HTMLButtonElement | null) => {
+          if (el) refs.current.set(id, el);
+          else refs.current.delete(id);
+        }}
+        type="button"
+        className="lx-tile"
+        lang="en"
+        data-testid="tile"
+        data-tile={t.text}
+        data-where={where}
+        data-state={marks?.[id]}
+        data-dragging={dragging || undefined}
+        disabled={locked}
+        style={dragging ? { transform: `translate(${drag.dx}px, ${drag.dy}px)`, position: 'relative' } : undefined}
+        onPointerDown={(e) => onPointerDown(e, id, where)}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={() => {
+          setDrag(null);
+          setOver(false);
+        }}
+        onClick={(e) => {
+          // Nach einem Ziehen kein zusätzliches Tippen auslösen.
+          if (justDragged.current) {
+            justDragged.current = false;
+            if (e.detail > 0) return;
+          }
+          toggle(id);
+        }}
+      >
+        {t.text}
+      </motion.button>
+    );
+  };
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div ref={line} className="lx-tile-line" role="group" aria-label={labels.line} data-testid="tile-line" data-over={over || undefined}>
+        {placed.map((id) => tileButton(id, 'line'))}
+      </div>
+      <div className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool">
+        {pool.map((t) => tileButton(t.id, 'pool'))}
+      </div>
+    </div>
+  );
+}

@@ -44,3 +44,10 @@ export async function changeTheme(theme: ThemeMode): Promise<void> {
   s.setThemeLocal(theme);
   await persist({ theme: { m: theme } }, () => useSettings.getState().setThemeLocal(prev));
 }
+
+/** „Automatisch weiter" nach richtiger Antwort (Funktionsabgleich M6), gespeichert in `app/profile.autoNext`. */
+export async function changeAutoNext(on: boolean): Promise<void> {
+  const current = useLive.getState().docs['app/profile'];
+  if (current && current.autoNext === on) return;
+  await persist({ autoNext: on }, () => undefined);
+}
