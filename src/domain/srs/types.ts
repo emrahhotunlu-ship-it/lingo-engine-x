@@ -92,8 +92,10 @@ export type AnswerEvent = {
   ans: string;
   ms: number;
   lang: Lang;
-  /** Pflichtrunde oder freiwillige Extra-Runde. */
-  ctx: 'rev' | 'xtra';
+  /** Pflichtrunde „Wiederholen", Pflicht der Lektion (Phase 2) oder freiwillige Extra-Runde. */
+  ctx: 'rev' | 'duty' | 'xtra';
+  /** Lektion, aus deren Wörter-Schritt die Antwort stammt (Phase 2, D17). */
+  lesson?: string;
   colIndex?: number;
 };
 

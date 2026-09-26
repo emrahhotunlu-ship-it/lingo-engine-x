@@ -1,4 +1,4 @@
-import type { Db } from '../platform/types';
+import type { Db, DbAcquireResult } from '../platform/types';
 import { describeError, logError, logWarn } from '../platform/diagnostics';
 import { jsonEqual, patchIsNoop } from '../domain/equal';
 import { isReadOnlyPath } from './paths';
@@ -45,7 +45,14 @@ export type Writer = {
   createIfMissing(path: string, data: Record<string, unknown>): Promise<'created' | 'exists'>;
   /** Felder in ein BESTEHENDES Dokument einmischen; schlägt fehl, wenn es fehlt (db `update`). */
   update(path: string, patch: Record<string, unknown>): Promise<WriteOutcome>;
+  /**
+   * Kurze, kooperative Sperre auf ein Dokument (db `acquire`, ohne `data`). `{acquired:false}` ist ein
+   * normales Ergebnis: Der Aufrufer versucht es erst beim nächsten Anlass wieder, nie in einer Schleife.
+   */
+  acquire(path: string, opts: { holder: string; ttlMs?: number }): Promise<AcquireOutcome>;
 };
+
+export type AcquireOutcome = { acquired: boolean; expiresAt?: string };
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
@@ -172,6 +179,16 @@ export function createWriter(db: Db): Writer {
         await withRetry(path, () => db.doc(path).update(patchData));
         return 'written';
       });
+    },
+    async acquire(path, opts) {
+      guard(path);
+      let res: DbAcquireResult | null = null;
+      // Mit derselben Kennung ist ein zweiter Versuch nur eine Verlängerung – also unschädlich.
+      await withRetry(path, async () => {
+        res = await db.doc(path).acquire({ holder: opts.holder, ttlMs: opts.ttlMs });
+      });
+      const r = res as DbAcquireResult | null;
+      return { acquired: !!r?.acquired, ...(r?.expiresAt ? { expiresAt: r.expiresAt } : {}) };
     },
   };
 }

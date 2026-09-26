@@ -21,11 +21,12 @@ export type LogEntry = {
   ans: string;
   g: number;
   ms: number;
-  ctx: 'rev' | 'xtra';
+  ctx: 'rev' | 'duty' | 'xtra';
+  lesson?: string;
 };
 
 export function logEntry(a: AnswerEvent): LogEntry {
-  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx };
+  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}) };
 }
 
 const keyOf = (e: unknown): string => {
