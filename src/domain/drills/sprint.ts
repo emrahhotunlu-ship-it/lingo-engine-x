@@ -47,13 +47,13 @@ export function buildSprintDeck(i: {
   const rng = mulberry32(hash32(i.seed));
   const cards = i.cards.filter(sprintCard);
   const byFamily: Record<'card' | 'gram' | 'colloc', SprintItem[]> = { card: [], gram: [], colloc: [] };
-  const meanings = cards.map((c) => meaningOf(c, i.lang)).filter((m): m is string => !!m).map(shortMeaning);
+  const meanings = cards.map((c) => meaningOf(c, i.lang)).filter((m): m is string => !!m).map((m) => shortMeaning(m, i.lang));
   for (const c of cards) {
     const m = meaningOf(c, i.lang);
     if (m) {
-      const others = shuffle(meanings.filter((x) => x !== shortMeaning(m)), rng).slice(0, 3);
-      if (others.length === 3) byFamily.card.push({ id: `mc:${c.id}`, k: 'card-mc', prompt: c.word, answer: shortMeaning(m), opts: shuffle([shortMeaning(m), ...others], rng), cardId: c.id });
-      byFamily.card.push({ id: `type:${c.id}`, k: 'card-type', prompt: shortMeaning(m), answer: c.word, opts: null, cardId: c.id, lemma: c.lemma });
+      const others = shuffle(meanings.filter((x) => x !== shortMeaning(m, i.lang)), rng).slice(0, 3);
+      if (others.length === 3) byFamily.card.push({ id: `mc:${c.id}`, k: 'card-mc', prompt: c.word, answer: shortMeaning(m, i.lang), opts: shuffle([shortMeaning(m, i.lang), ...others], rng), cardId: c.id });
+      byFamily.card.push({ id: `type:${c.id}`, k: 'card-type', prompt: shortMeaning(m, i.lang), answer: c.word, opts: null, cardId: c.id, lemma: c.lemma });
     }
     for (const col of c.col) {
       if (!col.p || !col.gap || col.opts.length < 2) continue;
