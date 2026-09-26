@@ -1,0 +1,536 @@
+{
+ "app/assess": {
+  "blockers": [
+   {
+    "action": "string",
+    "fix": "string",
+    "title": "string",
+    "why": "string"
+   }
+  ],
+  "c1gap": [
+   "string"
+  ],
+  "cefr": "string",
+  "dims": [
+   {
+    "confidence": "string",
+    "id": "string",
+    "level": "string",
+    "why": "string"
+   }
+  ],
+  "focus": {
+   "action": "string",
+   "days": "number",
+   "title": "string",
+   "why": "string"
+  },
+  "level": "string",
+  "levelWhy": "string",
+  "strengths": [
+   {
+    "title": "string",
+    "why": "string"
+   }
+  ],
+  "today": "string",
+  "trend": "string",
+  "trendWhy": "string"
+ },
+ "app/chat": {
+  "msgs": [
+   {
+    "content": "string",
+    "role": "string"
+   }
+  ]
+ },
+ "app/course": {
+  "done": {
+   "l01": {
+    "d": "string",
+    "n": "number",
+    "ok": "number",
+    "t": "number"
+   },
+   "l02": {
+    "d": "string",
+    "n": "number",
+    "ok": "number",
+    "t": "number"
+   },
+   "l03": {
+    "d": "string",
+    "n": "number",
+    "ok": "number",
+    "t": "number"
+   },
+   "l04": {
+    "d": "string",
+    "n": "number",
+    "ok": "number",
+    "t": "number"
+   },
+   "l05": {
+    "d": "string",
+    "n": "number",
+    "ok": "number",
+    "t": "number"
+   },
+   "l06": {
+    "d": "string",
+    "n": "number",
+    "ok": "number",
+    "t": "number"
+   }
+  },
+  "res": {}
+ },
+ "app/lookup": {
+  "items": {
+   "<schlüssel>": {
+    "de": "string",
+    "def": "string",
+    "lemma": "string",
+    "level": "string",
+    "note_de": "string",
+    "pos": "string"
+   }
+  }
+ },
+ "app/pool": {
+  "items": [
+   {
+    "accepted": [],
+    "answer": "string",
+    "explanation_de": "string",
+    "explanation_en": "string",
+    "hint_de": "string",
+    "options": "null",
+    "prompt": "string",
+    "src": "string",
+    "topic": "string",
+    "type": "string"
+   }
+  ],
+  "t": "number"
+ },
+ "app/profile": {
+  "act": {
+   "<datum>": {
+    "listen": "number",
+    "session": "number",
+    "sprint": "number",
+    "vtest": "number",
+    "write": "number"
+   }
+  },
+  "answers": "number",
+  "autoNext": "boolean",
+  "canDo": {},
+  "created": "string",
+  "ctx": "string",
+  "ctxChecked": "boolean",
+  "days": {
+   "<datum>": "number"
+  },
+  "disc": {
+   "fed-hike-2609": {
+    "check": "string",
+    "prep": "string",
+    "take": "string",
+    "use": "string"
+   },
+   "oecd-growth": {
+    "check": "string",
+    "prep": "string",
+    "take": "string",
+    "use": "string"
+   },
+   "un-world-turmoil": {
+    "prep": "string",
+    "take": "string"
+   }
+  },
+  "ema": {
+   "all": "number",
+   "colloc": "number",
+   "listen": "number",
+   "recog": "number",
+   "write": "number"
+  },
+  "feed": [
+   {
+    "act": "string",
+    "d": {
+     "gr": "number",
+     "lv": "number",
+     "vp": "number",
+     "xp": "number"
+    },
+    "t": "number"
+   }
+  ],
+  "gAnswers": "number",
+  "gen": {
+   "lp": "string",
+   "wp": "string"
+  },
+  "goal": "number",
+  "history": [
+   {
+    "co": "number",
+    "d": "string",
+    "fl": "number",
+    "gr": "number",
+    "li": "number",
+    "o": "number",
+    "vo": "number",
+    "vs": "number",
+    "wr": "number"
+   }
+  ],
+  "lang": "string",
+  "listen": [
+   {
+    "id": "string",
+    "level": "string",
+    "n": "number",
+    "ok": "number",
+    "plays": "number",
+    "rate": "number",
+    "t": "number"
+   }
+  ],
+  "minutes": {
+   "<datum>": "number"
+  },
+  "mix": {
+   "life": "number",
+   "work": "number"
+  },
+  "n": {
+   "colloc": "number",
+   "listen": "number",
+   "recog": "number",
+   "write": "number"
+  },
+  "name": "string",
+  "newPerDay": "number",
+  "plan": {
+   "d": "string",
+   "ids": [
+    "string"
+   ],
+   "why": [
+    [
+     [
+      "string"
+     ]
+    ]
+   ]
+  },
+  "rate": "number",
+  "seen15": "boolean",
+  "sprints": [
+   {
+    "avgMs": "number",
+    "combo": "number",
+    "n": "number",
+    "ok": "number",
+    "score": "number",
+    "t": "number"
+   }
+  ],
+  "theme": {
+   "m": "string",
+   "p": "string"
+  },
+  "tour11": "boolean",
+  "vAnswers": "number",
+  "voice": "string",
+  "vtests": [
+   {
+    "aAcc": "number",
+    "aHi": "number",
+    "aLo": "number",
+    "active": "number",
+    "bands": [
+     "number"
+    ],
+    "d": "string",
+    "dur": "number",
+    "fa": "number",
+    "faN": "number",
+    "mAcc": "number",
+    "pHi": "number",
+    "pLo": "number",
+    "passive": "number",
+    "pseudoN": "number",
+    "t": "number"
+   }
+  ],
+  "xp": "number",
+  "xpDays": {
+   "<datum>": "number"
+  }
+ },
+ "app/radar": {
+  "events": [
+   {
+    "a": "string",
+    "c": "string",
+    "g": "string",
+    "q": "string",
+    "s": "string",
+    "t": "number"
+   }
+  ]
+ },
+ "daily/<id>": {
+  "grammarItems": [
+   {
+    "accepted": [
+     "string"
+    ],
+    "answer": "string",
+    "explanation_de": "string",
+    "explanation_en": "string",
+    "hint_de": "string",
+    "prompt": "string",
+    "topic": "string",
+    "type": "string"
+   }
+  ],
+  "newWords": [
+   {
+    "de": "string",
+    "def": "string",
+    "ex": "string",
+    "level": "string",
+    "pos": "string",
+    "word": "string"
+   }
+  ]
+ },
+ "feed/<id>": {
+  "d": "string",
+  "id": "string",
+  "items": [
+   {
+    "chunks": [
+     {
+      "de": "string",
+      "en": "string",
+      "note_de": "string",
+      "note_en": "string"
+     }
+    ],
+    "excerpt": "string",
+    "excerptBy": "string",
+    "gist": "string",
+    "id": "string",
+    "kind": "string",
+    "level": "string",
+    "mins": "number",
+    "questions": [
+     {
+      "a": "number",
+      "opts_de": [
+       "…"
+      ],
+      "opts_en": [
+       "…"
+      ],
+      "q_de": "string",
+      "q_en": "string",
+      "why_de": "string",
+      "why_en": "string"
+     }
+    ],
+    "source": "string",
+    "taskChunks": [
+     "string"
+    ],
+    "task_de": "string",
+    "task_en": "string",
+    "title": "string",
+    "topic_de": "string",
+    "topic_en": "string",
+    "url": "string",
+    "why_de": "string",
+    "why_en": "string"
+   }
+  ]
+ },
+ "grammar/<id>": {
+  "anchor": "number",
+  "anchorD": "string",
+  "c": "number",
+  "due": "number",
+  "errors": [
+   {
+    "ans": "string",
+    "box": "number",
+    "done": "boolean",
+    "due": "number",
+    "given": "string",
+    "last": "number",
+    "q": "string",
+    "t": "number"
+   }
+  ],
+  "hist": [
+   {
+    "d": "string",
+    "p": "number"
+   }
+  ],
+  "id": "string",
+  "last": "number",
+  "n": "number",
+  "p": "number",
+  "recent": [
+   "number"
+  ],
+  "seen": [
+   "string"
+  ],
+  "seenText": [
+   "string"
+  ]
+ },
+ "lesson/<id>": {
+  "dialogue": {
+   "lines": [
+    {
+     "de": "string",
+     "en": "string",
+     "sp": "string"
+    }
+   ],
+   "title": "string"
+  },
+  "output": {
+   "de": "string",
+   "en": "string",
+   "mustUse": [
+    "string"
+   ]
+  },
+  "questions": [
+   {
+    "answer": "string",
+    "options": [
+     "string"
+    ],
+    "q": "string"
+   }
+  ],
+  "t": "number",
+  "tasks": [
+   {
+    "accepted": [],
+    "answer": "string",
+    "expl": "string",
+    "expl_en": "string",
+    "hint": "string",
+    "options": [
+     "string"
+    ],
+    "prompt": "string",
+    "src": "string",
+    "topic": "string",
+    "type": "string"
+   }
+  ],
+  "v": "number",
+  "words": [
+   {
+    "de": "string",
+    "def": "string",
+    "en": "string",
+    "ex": "string",
+    "pos": "string"
+   }
+  ]
+ },
+ "log/<id>": {
+  "date": "string",
+  "entries": [
+   {
+    "ans": "string",
+    "given": "string",
+    "id": "string",
+    "k": "string",
+    "m": "string",
+    "ok": "boolean",
+    "t": "number"
+   }
+  ]
+ },
+ "vocab/<id>": {
+  "D": "number",
+  "S": "number",
+  "added": "string",
+  "col": [],
+  "de": "string",
+  "def": "string",
+  "due": "number",
+  "ex": "string",
+  "hist": [
+   {
+    "g": "number",
+    "m": "string",
+    "t": "number"
+   }
+  ],
+  "id": "string",
+  "intro": "string",
+  "lapses": "number",
+  "last": "number",
+  "lesson": "string",
+  "level": "string",
+  "modes": {
+   "recog": {
+    "c": "number",
+    "w": "number"
+   }
+  },
+  "order": "number",
+  "pa": "number",
+  "pos": "string",
+  "reps": "number",
+  "src": "string",
+  "stage": "number",
+  "state": "string",
+  "word": "string"
+ },
+ "writing/<id>": {
+  "id": "string",
+  "lesson": "string",
+  "res": {
+   "cefr": "string",
+   "errors": [
+    {
+     "cat": "string",
+     "right": "string",
+     "sev": "string",
+     "why": "string",
+     "wrong": "string"
+    }
+   ],
+   "scores": {
+    "coherence": "number",
+    "grammar": "number",
+    "register": "number",
+    "task": "number",
+    "vocabulary": "number"
+   }
+  },
+  "t": "number",
+  "text": "string",
+  "words": "number"
+ }
+}
