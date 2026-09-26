@@ -1,0 +1,811 @@
+[
+ {
+  "d": "2026-09-23",
+  "items": [
+   {
+    "id": "fed-hike-2609",
+    "kind": "article",
+    "cat": "econ",
+    "mins": 10,
+    "level": "B2+",
+    "title": "The Fed raises rates for the first time since 2023",
+    "source": "Kiplinger",
+    "url": "https://www.kiplinger.com/investing/live/fed-meeting-updates-and-commentary-september-2026",
+    "topic_de": "US-Notenbank, Zinsen und Inflation",
+    "topic_en": "US central bank, interest rates and inflation",
+    "why_de": "Zinsentscheidungen tauchen in jeder Wirtschaftsnachricht auf. Wer die Sprache der Notenbanken versteht – hawkish, forward guidance, price stability –, versteht die halbe Finanzpresse.",
+    "why_en": "Rate decisions appear in every piece of economic news. If you understand central-bank language – hawkish, forward guidance, price stability – you understand half of the financial press.",
+    "excerpt": "Inflation is too high and has been for too long.",
+    "excerptBy": "Fed Chair Kevin Warsh, quoted via Kiplinger",
+    "gist": "On 16 September the US Federal Reserve raised its key interest rate by a quarter of a percentage point, to a range of 3.75 to 4 percent. It was the first increase since 2023, and the vote was unanimous. The reason is simple: the labour market is strong, but inflation has stayed well above the two percent target for years, pushed up partly by high energy prices linked to the conflict in the Middle East. Chair Kevin Warsh refused to say whether more increases will follow. He prefers to look at underlying trends rather than single data points, and he gives markets very little forward guidance. The committee's own projections point to one more hike this year. Markets reacted nervously: long-term bond yields had already climbed to around five percent, their highest level in years.",
+    "chunks": [
+     {
+      "en": "to raise interest rates",
+      "de": "die Zinsen erhöhen",
+      "note_de": "Das Gegenteil ist „to cut rates“. „Increase rates“ geht auch, klingt aber weniger nach Zeitung.",
+      "note_en": "The opposite is “to cut rates”. “Increase rates” works too but sounds less like the press."
+     },
+     {
+      "en": "a quarter of a percentage point",
+      "de": "ein Viertelprozentpunkt",
+      "note_de": "Im Fachjargon auch „25 basis points“. Nicht „25 percent“ – das wäre ein riesiger Fehler.",
+      "note_en": "In jargon also “25 basis points”. Never “25 percent” – that would be a huge mistake."
+     },
+     {
+      "en": "price stability",
+      "de": "Preisstabilität",
+      "note_de": "Das offizielle Ziel jeder Notenbank. Wird oft mit „deliver“ verbunden: „deliver price stability“.",
+      "note_en": "Every central bank's official goal. Often paired with “deliver”: “deliver price stability”."
+     },
+     {
+      "en": "forward guidance",
+      "de": "Ausblick auf die künftige Geldpolitik",
+      "note_de": "Wenn eine Notenbank ankündigt, was sie vorhat. Warsh gibt bewusst wenig davon.",
+      "note_en": "When a central bank signals what it plans to do. Warsh deliberately gives little of it."
+     },
+     {
+      "en": "to decline to commit to",
+      "de": "sich nicht festlegen wollen auf",
+      "note_de": "Diplomatischer als „refused to say“. Typisch für Politik und Wirtschaft.",
+      "note_en": "More diplomatic than “refused to say”. Typical in politics and business."
+     },
+     {
+      "en": "well above the target",
+      "de": "deutlich über dem Ziel",
+      "note_de": "„Well“ verstärkt hier – wie „deutlich“. Ebenso: „well below“, „well ahead of“.",
+      "note_en": "“Well” intensifies here – like “deutlich”. Same with “well below”, “well ahead of”."
+     }
+    ],
+    "questions": [
+     {
+      "q_de": "Warum hat die Fed die Zinsen erhöht?",
+      "q_en": "Why did the Fed raise rates?",
+      "opts_de": [
+       "Die Inflation liegt seit Jahren über dem Ziel",
+       "Die Arbeitslosigkeit ist stark gestiegen",
+       "Die Regierung hat es verlangt",
+       "Die Börse war zu schwach"
+      ],
+      "opts_en": [
+       "Inflation has been above target for years",
+       "Unemployment rose sharply",
+       "The government demanded it",
+       "The stock market was too weak"
+      ],
+      "a": 0,
+      "why_de": "Der Text nennt den starken Arbeitsmarkt und die hartnäckige Inflation über dem Zwei-Prozent-Ziel. Die Arbeitslosigkeit ist gerade NICHT gestiegen.",
+      "why_en": "The text names the strong labour market and persistent inflation above the two percent target. Unemployment did NOT rise."
+     },
+     {
+      "q_de": "Was bedeutet es, dass Warsh wenig „forward guidance“ gibt?",
+      "q_en": "What does it mean that Warsh gives little “forward guidance”?",
+      "opts_de": [
+       "Er kündigt kaum an, was als Nächstes kommt",
+       "Er spricht nicht mit der Presse",
+       "Er lehnt Zinserhöhungen ab",
+       "Er veröffentlicht keine Zahlen"
+      ],
+      "opts_en": [
+       "He hardly signals what comes next",
+       "He does not talk to the press",
+       "He opposes rate hikes",
+       "He publishes no figures"
+      ],
+      "a": 0,
+      "why_de": "Forward guidance ist der Ausblick auf künftige Entscheidungen. Warsh gibt eine Pressekonferenz – er legt sich nur nicht fest.",
+      "why_en": "Forward guidance is the outlook on future decisions. Warsh does hold a press conference – he just does not commit."
+     },
+     {
+      "q_de": "Wie hoch ist die Erhöhung?",
+      "q_en": "How big is the increase?",
+      "opts_de": [
+       "0,25 Prozentpunkte",
+       "25 Prozent",
+       "2,5 Prozentpunkte",
+       "4 Prozent"
+      ],
+      "opts_en": [
+       "0.25 percentage points",
+       "25 percent",
+       "2.5 percentage points",
+       "4 percent"
+      ],
+      "a": 0,
+      "why_de": "„A quarter of a percentage point“ = 0,25 Prozentpunkte = 25 Basispunkte. „25 Prozent“ ist die klassische Verwechslung.",
+      "why_en": "“A quarter of a percentage point” = 0.25 points = 25 basis points. “25 percent” is the classic mix-up."
+     }
+    ],
+    "task_de": "Erklär in drei bis vier Sätzen einem Kollegen, warum die Fed die Zinsen erhöht hat und was das für Unternehmen bedeutet, die Kredite brauchen. Benutze „to raise interest rates“, „well above the target“ und „to decline to commit to“.",
+    "task_en": "In three to four sentences, explain to a colleague why the Fed raised rates and what it means for companies that need loans. Use “to raise interest rates”, “well above the target” and “to decline to commit to”.",
+    "taskChunks": [
+     "raise interest rates",
+     "well above the target",
+     "decline to commit to"
+    ]
+   },
+   {
+    "id": "xi-visit-2609",
+    "kind": "article",
+    "cat": "politics",
+    "mins": 9,
+    "level": "B2+",
+    "title": "Xi Jinping's state visit to Washington",
+    "source": "South China Morning Post",
+    "url": "https://www.scmp.com/news/china/diplomacy/article/3368223/chinese-president-xi-jinping-will-pay-state-visit-us-week-beijing-confirms",
+    "topic_de": "USA und China: Handel, Technologie, Sicherheit",
+    "topic_en": "US and China: trade, technology, security",
+    "why_de": "Das wichtigste Verhältnis der Weltwirtschaft – und ein Paradebeispiel für diplomatische Sprache: Man sagt „Differenzen managen“, wenn man „Streit“ meint.",
+    "why_en": "The most important relationship in the world economy – and a textbook case of diplomatic language: people say “manage differences” when they mean “conflict”.",
+    "excerpt": "the world's top two economies seek to stabilise a relationship",
+    "excerptBy": "South China Morning Post",
+    "gist": "From 23 to 25 September, Chinese President Xi Jinping is on a state visit to the United States – his first to Washington since 2015 and his second meeting with President Trump this year, after Trump travelled to Beijing in May. The timing matters: a one-year trade truce between the two countries is coming to an end. Beijing says both sides want to manage their differences, which covers trade, technology and national security. The programme includes a welcome at the White House, a formal summit and a state dinner that heads of large US technology companies are expected to attend. Xi is travelling with a large business delegation, which shows that the visit is as much about deals as about diplomacy.",
+    "chunks": [
+     {
+      "en": "a state visit",
+      "de": "ein Staatsbesuch",
+      "note_de": "Die höchste Form des Besuchs, mit Zeremonie und Staatsbankett – mehr als ein „official visit“.",
+      "note_en": "The highest form of visit, with ceremony and state dinner – more than an “official visit”."
+     },
+     {
+      "en": "a trade truce",
+      "de": "ein Handelswaffenstillstand",
+      "note_de": "„Truce“ = vorübergehende Waffenruhe. In der Wirtschaftspresse für eine Pause im Zollstreit.",
+      "note_en": "“Truce” = temporary ceasefire. In business news: a pause in a tariff dispute."
+     },
+     {
+      "en": "to manage differences",
+      "de": "Meinungsverschiedenheiten handhaben",
+      "note_de": "Diplomatensprache für echte Konflikte. Klingt ruhig, meint Ernstes.",
+      "note_en": "Diplomatic language for real conflicts. Sounds calm, means serious."
+     },
+     {
+      "en": "is coming to an end",
+      "de": "läuft aus",
+      "note_de": "Neutraler als „expires“; betont, dass etwas bald vorbei ist.",
+      "note_en": "More neutral than “expires”; stresses that something will soon be over."
+     },
+     {
+      "en": "as much about … as about …",
+      "de": "genauso sehr um … wie um …",
+      "note_de": "Nützliche Struktur für Einschätzungen: „The deal is as much about trust as about price.“",
+      "note_en": "Useful structure for assessments: “The deal is as much about trust as about price.”"
+     },
+     {
+      "en": "a business delegation",
+      "de": "eine Wirtschaftsdelegation",
+      "note_de": "Die Firmenchefs, die einen Politiker begleiten.",
+      "note_en": "The company heads who travel with a politician."
+     }
+    ],
+    "questions": [
+     {
+      "q_de": "Warum ist der Zeitpunkt des Besuchs wichtig?",
+      "q_en": "Why does the timing of the visit matter?",
+      "opts_de": [
+       "Ein einjähriger Handelsfrieden läuft aus",
+       "In den USA ist Wahltag",
+       "China hat einen neuen Präsidenten",
+       "Ein neuer Vertrag tritt in Kraft"
+      ],
+      "opts_en": [
+       "A one-year trade truce is ending",
+       "It is election day in the US",
+       "China has a new president",
+       "A new treaty takes effect"
+      ],
+      "a": 0,
+      "why_de": "Der Text sagt ausdrücklich, dass der einjährige Handelswaffenstillstand ausläuft – deshalb steht viel auf dem Spiel.",
+      "why_en": "The text says explicitly that the one-year trade truce is ending – that is why a lot is at stake."
+     },
+     {
+      "q_de": "Was zeigt die große Wirtschaftsdelegation?",
+      "q_en": "What does the large business delegation show?",
+      "opts_de": [
+       "Es geht auch um Geschäfte",
+       "Xi hat Angst vor der Presse",
+       "Die Firmen zahlen die Reise",
+       "Es gibt kein Gipfeltreffen"
+      ],
+      "opts_en": [
+       "It is also about deals",
+       "Xi is afraid of the press",
+       "The companies pay for the trip",
+       "There is no summit"
+      ],
+      "a": 0,
+      "why_de": "Die Zusammenfassung schließt mit: Der Besuch dreht sich genauso um Geschäfte wie um Diplomatie.",
+      "why_en": "The summary ends: the visit is as much about deals as about diplomacy."
+     },
+     {
+      "q_de": "Was meint „to manage differences“?",
+      "q_en": "What does “to manage differences” mean?",
+      "opts_de": [
+       "Mit echten Konflikten umgehen, ohne zu eskalieren",
+       "Unterschiede vollständig beseitigen",
+       "Verschiedene Termine koordinieren",
+       "Die Unterschiede verschweigen"
+      ],
+      "opts_en": [
+       "Handle real conflicts without escalating",
+       "Remove differences completely",
+       "Coordinate different dates",
+       "Keep the differences quiet"
+      ],
+      "a": 0,
+      "why_de": "Diplomatensprache: Die Konflikte bleiben, man will sie nur kontrollieren. Beseitigen ist gerade nicht gemeint.",
+      "why_en": "Diplomatic language: the conflicts remain, the aim is to keep them under control. Removing them is not what it means."
+     }
+    ],
+    "task_de": "Schreib drei bis vier Sätze wie in einem Nachrichten-Briefing: Worum geht es beim Besuch, und was steht auf dem Spiel? Benutze „a trade truce“, „to manage differences“ und „as much about … as about …“.",
+    "task_en": "Write three to four sentences like a news briefing: what is the visit about, and what is at stake? Use “a trade truce”, “to manage differences” and “as much about … as about …”.",
+    "taskChunks": [
+     "trade truce",
+     "manage",
+     "as much about"
+    ]
+   },
+   {
+    "id": "ai-safety-2609",
+    "kind": "article",
+    "cat": "tech",
+    "mins": 10,
+    "level": "C1",
+    "title": "Markets shrug off calls to slow down AI",
+    "source": "NBC News",
+    "url": "https://www.nbcnews.com/business/markets/stocks-tumble-ai-leaders-warning-slowdown-ipos-amodei-altman-rcna597643",
+    "topic_de": "Künstliche Intelligenz, Sicherheit und Börse",
+    "topic_en": "Artificial intelligence, safety and markets",
+    "why_de": "KI ist das Technologiethema der Jahre – und hier treffen sich drei Sprachwelten: Technik, Ethik und Finanzmarkt. Ideal, um Argumente abzuwägen.",
+    "why_en": "AI is the technology story of these years – and here three kinds of language meet: tech, ethics and finance. Ideal for weighing arguments.",
+    "excerpt": "right now would be an ill-advised moment to go public",
+    "excerptBy": "Sam Altman, quoted by NBC News",
+    "gist": "In mid-September, the heads of two leading AI labs called for the development of more powerful AI models to slow down for safety reasons. One published a long essay over the weekend; the other agreed publicly and said his company would postpone its stock-market listing. Investors reacted at first: chip stocks fell and the Nasdaq dropped by more than one percent in early trading. By the end of the day, however, most of the losses had disappeared, helped by a rally in software and cybersecurity shares. Analysts doubted that the industry would really slow down. Their argument: the race between companies and between countries is so intense that no firm will voluntarily step back while its rivals keep pushing ahead.",
+    "chunks": [
+     {
+      "en": "to shrug off",
+      "de": "abschütteln, wegstecken",
+      "note_de": "Wenn Märkte oder Menschen eine schlechte Nachricht kaum beachten. Sehr häufig in der Finanzpresse.",
+      "note_en": "When markets or people barely react to bad news. Very common in financial journalism."
+     },
+     {
+      "en": "to call for",
+      "de": "fordern",
+      "note_de": "„Call for a slowdown / for action / for change“. Stärker als „suggest“.",
+      "note_en": "“Call for a slowdown / for action / for change”. Stronger than “suggest”."
+     },
+     {
+      "en": "to go public",
+      "de": "an die Börse gehen",
+      "note_de": "Synonym: „to list“, „an IPO“ (initial public offering).",
+      "note_en": "Synonyms: “to list”, “an IPO” (initial public offering)."
+     },
+     {
+      "en": "ill-advised",
+      "de": "unklug, nicht ratsam",
+      "note_de": "Gehobene Alternative zu „not a good idea“ – perfekt für C1.",
+      "note_en": "A more formal alternative to “not a good idea” – perfect for C1."
+     },
+     {
+      "en": "to step back",
+      "de": "sich zurücknehmen, zurücktreten",
+      "note_de": "Bildlich: bewusst weniger tun, während andere weitermachen.",
+      "note_en": "Figurative: deliberately doing less while others carry on."
+     },
+     {
+      "en": "to push ahead",
+      "de": "vorpreschen, weitermachen",
+      "note_de": "Das Gegenstück zu „step back“. „Push ahead with a plan“.",
+      "note_en": "The counterpart of “step back”. “Push ahead with a plan”."
+     }
+    ],
+    "questions": [
+     {
+      "q_de": "Wie reagierte die Börse am Ende des Tages?",
+      "q_en": "How did the market react by the end of the day?",
+      "opts_de": [
+       "Die meisten Verluste waren wieder weg",
+       "Der Nasdaq fiel um zehn Prozent",
+       "Alle KI-Aktien stiegen stark",
+       "Der Handel wurde ausgesetzt"
+      ],
+      "opts_en": [
+       "Most losses had disappeared",
+       "The Nasdaq fell ten percent",
+       "All AI stocks rose sharply",
+       "Trading was halted"
+      ],
+      "a": 0,
+      "why_de": "Früh fiel der Markt, bis zum Abend war das meiste wieder aufgeholt – genau das meint „shrug off“ in der Überschrift.",
+      "why_en": "The market fell early and recovered most of it by the evening – exactly what “shrug off” in the headline means."
+     },
+     {
+      "q_de": "Warum glauben Analysten nicht an eine echte Verlangsamung?",
+      "q_en": "Why do analysts doubt a real slowdown?",
+      "opts_de": [
+       "Der Wettbewerb ist zu stark",
+       "KI ist schon fertig entwickelt",
+       "Die Regierung verbietet es",
+       "Die Chips sind zu teuer"
+      ],
+      "opts_en": [
+       "Competition is too intense",
+       "AI is already fully developed",
+       "The government forbids it",
+       "Chips are too expensive"
+      ],
+      "a": 0,
+      "why_de": "Das Argument im Text: Keine Firma tritt freiwillig zurück, solange die Konkurrenz weitermacht.",
+      "why_en": "The text's argument: no firm steps back voluntarily while rivals keep going."
+     },
+     {
+      "q_de": "Was bedeutet „ill-advised“?",
+      "q_en": "What does “ill-advised” mean?",
+      "opts_de": [
+       "unklug",
+       "krank",
+       "schlecht informiert",
+       "verboten"
+      ],
+      "opts_en": [
+       "unwise",
+       "sick",
+       "badly informed",
+       "forbidden"
+      ],
+      "a": 0,
+      "why_de": "„Ill-“ heißt hier „schlecht“, nicht „krank“: ein schlecht beratener, also unkluger Schritt.",
+      "why_en": "“Ill-” means “badly” here, not “sick”: a badly advised, therefore unwise step."
+     }
+    ],
+    "task_de": "Nimm Stellung in drei bis vier Sätzen: Sollten KI-Firmen langsamer machen? Wäge beide Seiten ab. Benutze „to call for“, „to step back“ und „to push ahead“.",
+    "task_en": "Take a position in three to four sentences: should AI companies slow down? Weigh both sides. Use “to call for”, “to step back” and “to push ahead”.",
+    "taskChunks": [
+     "call for",
+     "step back",
+     "push ahead"
+    ]
+   },
+   {
+    "id": "fed-presser-2609",
+    "kind": "watch",
+    "cat": "econ",
+    "mins": 25,
+    "level": "C1",
+    "title": "Watch: the Fed chair's press conference",
+    "source": "Federal Reserve",
+    "url": "https://www.federalreserve.gov/live-broadcast.htm",
+    "topic_de": "Echte Notenbank-Sprache, live",
+    "topic_en": "Real central-bank language, live",
+    "why_de": "Nichts trainiert das Hörverstehen für Wirtschaftsenglisch so wie eine echte Pressekonferenz: vorsichtige Formulierungen, schnelle Fragen, Antworten, die bewusst nichts festlegen.",
+    "why_en": "Nothing trains listening for business English like a real press conference: careful wording, fast questions, answers that deliberately commit to nothing.",
+    "gist": "After every rate decision, the chair of the US Federal Reserve answers journalists' questions for about 45 minutes. The recording of the September conference is on the Fed's website and its YouTube channel. You do not need to watch all of it: the opening statement (about five minutes) and two or three questions are enough. Listen for how the chair avoids promises about the future while still sounding firm.",
+    "guide_de": [
+     "Schau zuerst nur das Eingangsstatement (etwa 5 Minuten). Welche drei Themen nennt er zuerst?",
+     "Achte auf Formulierungen, mit denen er sich nicht festlegt, z. B. „we won't prejudge“ oder „data-dependent“.",
+     "Hör dir eine Journalistenfrage an: Wie beginnt die Antwort? Mit Ja/Nein – oder mit einer Einordnung?",
+     "Notier zwei Wendungen, die du vorher nicht kanntest, und nimm sie hier als Karte mit.",
+     "Danach: Fass in zwei Sätzen zusammen, was er über die nächsten Monate gesagt hat – und was nicht."
+    ],
+    "guide_en": [
+     "First watch only the opening statement (about 5 minutes). Which three topics does he mention first?",
+     "Listen for phrases he uses to avoid committing, e.g. “we won't prejudge” or “data-dependent”.",
+     "Listen to one journalist's question: how does the answer start – with yes/no, or with context?",
+     "Note two phrases you did not know and save them here as cards.",
+     "Afterwards: sum up in two sentences what he said about the coming months – and what he did not."
+    ],
+    "chunks": [
+     {
+      "en": "we won't prejudge",
+      "de": "wir greifen nicht vor",
+      "note_de": "Standardformel, um keine Zusage zu machen.",
+      "note_en": "The standard formula for making no promise."
+     },
+     {
+      "en": "data-dependent",
+      "de": "datenabhängig",
+      "note_de": "Die Entscheidung hängt von neuen Zahlen ab – also: noch offen.",
+      "note_en": "The decision depends on new figures – in other words: still open."
+     },
+     {
+      "en": "a dose of accommodation",
+      "de": "ein Teil der geldpolitischen Lockerung",
+      "note_de": "Notenbank-Jargon: „remove a dose of accommodation“ = etwas straffen.",
+      "note_en": "Central-bank jargon: “remove a dose of accommodation” = tighten a little."
+     },
+     {
+      "en": "underlying trends",
+      "de": "zugrunde liegende Entwicklungen",
+      "note_de": "Im Gegensatz zu einzelnen Monatswerten.",
+      "note_en": "As opposed to single monthly figures."
+     },
+     {
+      "en": "to be hard-pressed to",
+      "de": "sich schwertun, etwas zu …",
+      "note_de": "„I'd be hard-pressed to say …“ = ich könnte kaum behaupten, dass …",
+      "note_en": "“I'd be hard-pressed to say …” = I could hardly claim that …"
+     }
+    ],
+    "task_de": "Schreib nach dem Anschauen drei Sätze: Was hat der Fed-Chef gesagt, und wo ist er bewusst vage geblieben? Benutze „data-dependent“, „underlying trends“ und „we won't prejudge“.",
+    "task_en": "After watching, write three sentences: what did the Fed chair say, and where did he stay deliberately vague? Use “data-dependent”, “underlying trends” and “we won't prejudge”.",
+    "taskChunks": [
+     "data-dependent",
+     "underlying trends",
+     "prejudge"
+    ]
+   }
+  ]
+ },
+ {
+  "d": "seed-1",
+  "items": [
+   {
+    "id": "vida-ey",
+    "kind": "article",
+    "mins": 12,
+    "level": "C1",
+    "title": "What ViDA means for the rise of global e-invoicing",
+    "source": "EY Global",
+    "url": "https://www.ey.com/en_gl/insights/tax/what-vida-means-for-the-rise-of-global-e-invoicing",
+    "topic_de": "EU-Mehrwertsteuerreform und E-Rechnung",
+    "topic_en": "EU VAT reform and e-invoicing",
+    "why_de": "Das ist wörtlich dein Verkaufsgespräch: Wenn ein CFO fragt, warum der Rollout nicht ins nächste Quartal kann, brauchst du genau diese Begriffe – und zwar so, wie Berater sie benutzen, nicht wie ein Lehrbuch sie erklärt.",
+    "why_en": "This is literally your sales conversation: when a CFO asks why the rollout cannot slip a quarter, you need exactly this vocabulary — the way consultants use it, not the way a textbook explains it.",
+    "excerpt": "ViDA represents a fundamental shift in how VAT is administered across the EU.",
+    "excerptBy": "EY Global",
+    "gist": "The EU's VAT in the Digital Age package is not another reporting form. It changes who holds the data and when. Member states move from periodic returns to near real-time digital reporting, with transaction data submitted within ten days. The stated driver is the VAT gap, which the Commission puts at roughly 93 billion euros. For a vendor, the interesting part is not the deadline but the leverage: finance teams that have postponed ERP work for years suddenly have a regulatory reason to fund it. The argument that lands in a boardroom is therefore rarely about compliance alone. It is about using a mandate nobody chose as the business case for an integration nobody would otherwise approve.",
+    "chunks": [
+     {
+      "en": "a fundamental shift in",
+      "de": "eine grundlegende Verschiebung bei",
+      "note_de": "Standardformel, wenn etwas nicht nur größer, sondern anders wird.",
+      "note_en": "The standard frame when something is not merely bigger but different in kind."
+     },
+     {
+      "en": "near real-time reporting",
+      "de": "Meldung nahezu in Echtzeit",
+      "note_de": "Fachbegriff. \"near\" ist Teil des Begriffs – ohne wirkt es naiv.",
+      "note_en": "A term of art. The \"near\" belongs to it; dropping it sounds naive."
+     },
+     {
+      "en": "to reduce administrative burdens",
+      "de": "den Verwaltungsaufwand senken",
+      "note_de": "\"burden\" statt \"work\" – der Ausdruck, den Regulierer selbst benutzen.",
+      "note_en": "\"burden\" rather than \"work\" — the word regulators use themselves."
+     },
+     {
+      "en": "to streamline cross-border trade",
+      "de": "den grenzüberschreitenden Handel verschlanken",
+      "note_de": "\"streamline\" ist das Verb für \"einfacher machen, ohne wegzulassen\".",
+      "note_en": "\"streamline\" is the verb for making something simpler without cutting it."
+     },
+     {
+      "en": "leverage for investment",
+      "de": "Hebel für Investitionen",
+      "note_de": "Genau dein Verkaufsargument in zwei Wörtern.",
+      "note_en": "Your commercial argument in two words."
+     },
+     {
+      "en": "to completely overhaul",
+      "de": "von Grund auf umbauen",
+      "note_de": "Stärker als \"change\", ohne \"revolutionise\" zu sagen.",
+      "note_en": "Stronger than \"change\", without reaching for \"revolutionise\"."
+     },
+     {
+      "en": "data quality is critical",
+      "de": "Datenqualität ist entscheidend",
+      "note_de": "\"critical\" im Sinne von unverzichtbar, nicht kritisch-ablehnend.",
+      "note_en": "\"critical\" meaning indispensable, not disapproving."
+     },
+     {
+      "en": "to take a leading role in",
+      "de": "eine führende Rolle übernehmen bei",
+      "note_de": "Was du willst, dass der Kunde über sich sagt.",
+      "note_en": "What you want the client to say about themselves."
+     }
+    ],
+    "questions": [
+     {
+      "q_de": "Was ändert ViDA im Kern?",
+      "q_en": "What does ViDA change at its core?",
+      "opts_de": [
+       "Wer die Daten hat und wann",
+       "Den Mehrwertsteuersatz",
+       "Die Rechnungsgestaltung",
+       "Die Aufbewahrungsfrist"
+      ],
+      "opts_en": [
+       "Who holds the data and when",
+       "The VAT rate",
+       "Invoice layout",
+       "The retention period"
+      ],
+      "a": 0,
+      "why_de": "Der Text betont die Verschiebung von periodischen Meldungen zu Daten nahezu in Echtzeit – nicht die Höhe der Steuer.",
+      "why_en": "The text stresses the move from periodic returns to near real-time data — not the level of the tax."
+     },
+     {
+      "q_de": "Innerhalb welcher Frist sind Transaktionsdaten zu übermitteln?",
+      "q_en": "Within what deadline must transaction data be submitted?",
+      "opts_de": [
+       "10 Tage",
+       "30 Tage",
+       "24 Stunden",
+       "Ein Quartal"
+      ],
+      "opts_en": [
+       "10 days",
+       "30 days",
+       "24 hours",
+       "A quarter"
+      ],
+      "a": 0,
+      "why_de": "Zehn Tage – kurz genug, dass manuelle Nacharbeit ausscheidet. Genau das ist dein Argument für Integration.",
+      "why_en": "Ten days — short enough that manual rework is out. That is precisely your argument for integration."
+     },
+     {
+      "q_de": "Welche Zahl nennt die Kommission als Antrieb der Reform?",
+      "q_en": "Which figure does the Commission cite as the driver?",
+      "opts_de": [
+       "rund 93 Milliarden Euro Mehrwertsteuerlücke",
+       "93 Millionen Unternehmen",
+       "9,3 Prozent Wachstum",
+       "930 Millionen Rechnungen"
+      ],
+      "opts_en": [
+       "roughly 93 billion euros of VAT gap",
+       "93 million businesses",
+       "9.3 percent growth",
+       "930 million invoices"
+      ],
+      "a": 0,
+      "why_de": "Die Mehrwertsteuerlücke ist die politische Begründung. Zahlen dieser Art gehören in deine erste Minute beim CFO.",
+      "why_en": "The VAT gap is the political justification. Numbers like this belong in your first minute with a CFO."
+     },
+     {
+      "q_de": "Welches Argument wirkt laut Zusammenfassung im Vorstand am besten?",
+      "q_en": "Which argument lands best in a boardroom, per the summary?",
+      "opts_de": [
+       "Die Pflicht als Geschäftsgrundlage für eine ohnehin nötige Integration",
+       "Die Höhe der Strafen",
+       "Dass alle es tun",
+       "Dass es billig ist"
+      ],
+      "opts_en": [
+       "The mandate as the business case for an integration you needed anyway",
+       "The size of the penalties",
+       "That everyone is doing it",
+       "That it is cheap"
+      ],
+      "a": 0,
+      "why_de": "Angst verkauft einmal. Ein Budgetargument verkauft das Projekt.",
+      "why_en": "Fear sells once. A budget argument sells the project."
+     }
+    ],
+    "task_de": "Schreibe drei Sätze an einen CFO, der den Rollout um ein Quartal schieben will. Benutze „leverage for investment\", „near real-time reporting\" und „a fundamental shift in\". Kein Drohen – argumentiere mit dem Budget.",
+    "task_en": "Write three sentences to a CFO who wants to push the rollout by a quarter. Use \"leverage for investment\", \"near real-time reporting\" and \"a fundamental shift in\". No threats — argue with the budget.",
+    "taskChunks": [
+     "leverage for investment",
+     "near real-time reporting",
+     "a fundamental shift in"
+    ],
+    "cat": "work"
+   },
+   {
+    "id": "cio-live",
+    "kind": "listen",
+    "mins": 30,
+    "level": "C1",
+    "title": "CIO Leadership Live",
+    "source": "CIO.com",
+    "url": "https://www.cio.com/podcasts/cio-leadership-live/",
+    "topic_de": "Wie IT-Chefs über Altsysteme und Prioritäten sprechen",
+    "topic_en": "How IT leaders talk about legacy systems and priorities",
+    "why_de": "Du sprichst mit genau diesen Leuten. Hier hörst du, wie sie untereinander reden, wenn kein Anbieter im Raum ist – Tempo, Auslassungen, Ironie inklusive.",
+    "why_en": "These are the people you sell to. Here you hear how they speak among themselves with no vendor in the room — pace, ellipsis and irony included.",
+    "gist": "Pick any recent episode. You are not listening for information — you already know the subject better than most guests. You are listening for the shape of the language: how a CIO softens a refusal, how they signal that a decision is already made, how they buy time without saying so. Listen once without stopping. Then listen again to the first five minutes only, and write down every phrase that you understood but would never have produced yourself. That second list is your actual homework.",
+    "guide_de": [
+     "Wie eröffnet der Gast? Nennt er zuerst ein Problem oder eine Zahl?",
+     "Welche Formel benutzt er, um zu widersprechen, ohne unhöflich zu werden?",
+     "Wo hörst du „that said\", „to be fair\", „having said that\"? Was kommt danach?",
+     "Wie kündigt jemand eine Entscheidung an, die längst gefallen ist?",
+     "Welcher Satz hätte dir gestern im Kundengespräch gefehlt?"
+    ],
+    "guide_en": [
+     "How does the guest open? With a problem or with a number?",
+     "Which formula do they use to disagree without being rude?",
+     "Where do you hear \"that said\", \"to be fair\", \"having said that\"? What follows?",
+     "How does someone announce a decision that was taken long ago?",
+     "Which sentence would you have needed in yesterday's client call?"
+    ],
+    "chunks": [
+     {
+      "en": "to be fair to them",
+      "de": "um ihnen gerecht zu werden",
+      "note_de": "Leitet einen Einwand ein, der höflich bleibt.",
+      "note_en": "Opens an objection while staying courteous."
+     },
+     {
+      "en": "that said",
+      "de": "allerdings / gleichwohl",
+      "note_de": "Der meistgebrauchte Wendepunkt im englischen Geschäftsgespräch.",
+      "note_en": "The most-used pivot in English business talk."
+     },
+     {
+      "en": "we are not there yet",
+      "de": "so weit sind wir noch nicht",
+      "note_de": "Nein sagen, ohne nein zu sagen.",
+      "note_en": "Saying no without saying no."
+     },
+     {
+      "en": "to park that for now",
+      "de": "das vorerst zurückstellen",
+      "note_de": "Höflich vertagen statt ablehnen.",
+      "note_en": "Politely defer instead of refusing."
+     },
+     {
+      "en": "where I would push back",
+      "de": "wo ich widersprechen würde",
+      "note_de": "Widerspruch ankündigen, bevor man ihn ausspricht – wirkt souverän.",
+      "note_en": "Flagging disagreement before voicing it — it reads as composure."
+     },
+     {
+      "en": "it comes down to",
+      "de": "es läuft hinaus auf",
+      "note_de": "Zusammenfassen, ohne \"in summary\" zu sagen.",
+      "note_en": "Summing up without saying \"in summary\"."
+     }
+    ],
+    "task_de": "Hör fünf Minuten. Notiere drei Wendungen, die du verstanden, aber selbst nie gesagt hättest. Schreibe dann für jede einen Satz aus deinem eigenen Arbeitsalltag.",
+    "task_en": "Listen for five minutes. Note three phrases you understood but would never have produced. Then write one sentence from your own working life for each.",
+    "taskChunks": [
+     "that said",
+     "where I would push back",
+     "to park that for now"
+    ],
+    "cat": "work"
+   },
+   {
+    "id": "infoq-arch",
+    "kind": "watch",
+    "mins": 25,
+    "level": "C1",
+    "title": "Enterprise Architecture – Vorträge und Gespräche",
+    "title_en": "Enterprise Architecture – talks and interviews",
+    "source": "InfoQ",
+    "url": "https://www.infoq.com/enterprise-architecture/podcasts/",
+    "topic_de": "Architekturentscheidungen begründen",
+    "topic_en": "Justifying architecture decisions",
+    "why_de": "Der Architekt beim Kunden argumentiert genau so. Wenn du seine Formeln kennst, kannst du sie aufgreifen statt dagegen zu reden – das ist der Unterschied zwischen Verkäufer und Gesprächspartner.",
+    "why_en": "The architect on the client side argues exactly like this. Knowing their formulas lets you take them up instead of arguing against them — that is the difference between a vendor and a peer.",
+    "gist": "Choose one talk and watch it with subtitles off. Architects speak in trade-offs, and the grammar of a trade-off is worth more to you than the content: \"we gained X at the cost of Y\", \"that buys us Z but only if\", \"the honest answer is it depends on\". Notice how rarely a good speaker says a thing is simply better. They say what it is better at, and what they gave up. Copy that structure into your next client conversation and you stop sounding like marketing.",
+    "guide_de": [
+     "Wie formuliert der Sprecher eine Abwägung? Welche Satzmuster wiederholen sich?",
+     "Wann sagt er „it depends\" – und was folgt darauf?",
+     "Wie gibt er einen Nachteil zu, ohne sein Vorgehen schlechtzureden?",
+     "Welches Wort benutzt er statt „problem\"?",
+     "Welchen Satz kannst du wörtlich übernehmen?"
+    ],
+    "guide_en": [
+     "How does the speaker phrase a trade-off? Which patterns repeat?",
+     "When do they say \"it depends\" — and what follows?",
+     "How do they concede a drawback without talking down their own approach?",
+     "Which word do they use instead of \"problem\"?",
+     "Which sentence can you take over word for word?"
+    ],
+    "chunks": [
+     {
+      "en": "at the cost of",
+      "de": "auf Kosten von",
+      "note_de": "Das Grundmuster jeder Abwägung.",
+      "note_en": "The base pattern of every trade-off."
+     },
+     {
+      "en": "that buys us",
+      "de": "das verschafft uns",
+      "note_de": "Nutzen benennen, ohne zu übertreiben.",
+      "note_en": "Naming a benefit without overclaiming."
+     },
+     {
+      "en": "the honest answer is",
+      "de": "die ehrliche Antwort lautet",
+      "note_de": "Verschafft dir Glaubwürdigkeit vor einer unbequemen Aussage.",
+      "note_en": "Buys credibility right before an uncomfortable statement."
+     },
+     {
+      "en": "it depends on whether",
+      "de": "es hängt davon ab, ob",
+      "note_de": "Mit \"whether\", nicht mit \"if\" – im formellen Register.",
+      "note_en": "With \"whether\", not \"if\", in formal register."
+     },
+     {
+      "en": "we traded that off against",
+      "de": "das haben wir abgewogen gegen",
+      "note_de": "Das Verb, das Architekten erwarten.",
+      "note_en": "The verb architects expect to hear."
+     },
+     {
+      "en": "a known limitation",
+      "de": "eine bekannte Einschränkung",
+      "note_de": "Viel stärker als \"a problem\" – es klingt beherrscht.",
+      "note_en": "Far stronger than \"a problem\" — it sounds in control."
+     }
+    ],
+    "task_de": "Beschreibe eine Architekturentscheidung aus deinem Produkt in vier Sätzen: was ihr gewonnen habt, auf Kosten wovon, wofür das gut ist und wo die bekannte Einschränkung liegt.",
+    "task_en": "Describe one architecture decision in your product in four sentences: what you gained, at the cost of what, what that is good for, and where the known limitation lies.",
+    "taskChunks": [
+     "at the cost of",
+     "a known limitation",
+     "that buys us"
+    ],
+    "cat": "work"
+   }
+  ]
+ },
+ {
+  "d": "seed-2",
+  "items": [
+   {
+    "id": "intelligence-pod",
+    "kind": "listen",
+    "cat": "politics",
+    "mins": 20,
+    "level": "C1",
+    "title": "The Intelligence – The Economist's daily news podcast",
+    "source": "The Economist",
+    "url": "https://www.economist.com/podcasts",
+    "topic_de": "Weltpolitik und Wirtschaft in 20 Minuten",
+    "topic_en": "World affairs and economics in 20 minutes",
+    "why_de": "Jeden Werktag drei Geschichten aus Politik, Wirtschaft und Gesellschaft, in klarem britischem Englisch und gut gebautem Satzbau – genau das Register, das C1 verlangt.",
+    "why_en": "Every weekday three stories from politics, economics and society, in clear British English with well-built sentences – exactly the register C1 requires.",
+    "gist": "Each episode has a short introduction followed by three reports, usually an interview with a correspondent. Pick the newest episode and listen to one story at a time. The speakers use cautious, precise language: they separate facts from interpretation and often end a point with a balanced assessment.",
+    "guide_de": [
+     "Hör nur die erste Geschichte. Worum geht es in einem Satz?",
+     "Achte darauf, wie der Korrespondent Fakten und eigene Einschätzung trennt („what we know is …“, „my sense is …“).",
+     "Notier eine Wendung, mit der jemand vorsichtig widerspricht oder einschränkt.",
+     "Hör eine Minute ein zweites Mal und sprich leise mit (Shadowing).",
+     "Danach: Erzähl die Geschichte in drei Sätzen nach – schriftlich oder laut."
+    ],
+    "guide_en": [
+     "Listen to the first story only. What is it about, in one sentence?",
+     "Notice how the correspondent separates facts from opinion (“what we know is …”, “my sense is …”).",
+     "Note one phrase someone uses to disagree carefully or add a qualification.",
+     "Listen to one minute a second time and speak along quietly (shadowing).",
+     "Afterwards: retell the story in three sentences – in writing or out loud."
+    ],
+    "chunks": [
+     {
+      "en": "what we know so far is",
+      "de": "was wir bisher wissen, ist",
+      "note_de": "Trennt gesicherte Fakten von Vermutungen.",
+      "note_en": "Separates confirmed facts from guesses."
+     },
+     {
+      "en": "my sense is that",
+      "de": "mein Eindruck ist, dass",
+      "note_de": "Weiche, aber selbstbewusste Einschätzung – sehr britisch.",
+      "note_en": "A soft but confident judgement – very British."
+     },
+     {
+      "en": "the bigger picture",
+      "de": "der größere Zusammenhang",
+      "note_de": "„Zoom out to the bigger picture.“",
+      "note_en": "“Zoom out to the bigger picture.”"
+     },
+     {
+      "en": "it remains to be seen whether",
+      "de": "es bleibt abzuwarten, ob",
+      "note_de": "Klassischer Schlusssatz in Nachrichten.",
+      "note_en": "A classic closing line in news."
+     }
+    ],
+    "task_de": "Fass eine Geschichte aus der Folge in drei Sätzen zusammen. Benutze „what we know so far is“, „the bigger picture“ und „it remains to be seen whether“.",
+    "task_en": "Summarise one story from the episode in three sentences. Use “what we know so far is”, “the bigger picture” and “it remains to be seen whether”.",
+    "taskChunks": [
+     "what we know so far",
+     "bigger picture",
+     "remains to be seen"
+    ]
+   }
+  ]
+ }
+]

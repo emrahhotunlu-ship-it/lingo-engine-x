@@ -1,0 +1,1519 @@
+{
+ "seedVocab": [
+  {
+   "w": "reliable",
+   "p": "adj",
+   "de": "zuverlässig",
+   "def": "can be trusted to work well or behave well",
+   "ex": "Our old car is still very [reliable].",
+   "l": "B1"
+  },
+  {
+   "w": "to rely on",
+   "p": "verb",
+   "de": "sich verlassen auf",
+   "def": "to trust someone or something to help you",
+   "ex": "You can always [rely on] her in an emergency.",
+   "l": "B2"
+  },
+  {
+   "w": "to achieve",
+   "p": "verb",
+   "de": "erreichen, schaffen",
+   "def": "to succeed in doing something after a lot of effort",
+   "ex": "She [achieved] her goal of running a marathon.",
+   "l": "B1"
+  },
+  {
+   "w": "approach",
+   "p": "noun",
+   "de": "Ansatz, Herangehensweise",
+   "def": "a way of dealing with something",
+   "ex": "We need a different [approach] to this problem.",
+   "l": "B2"
+  },
+  {
+   "w": "to struggle",
+   "p": "verb",
+   "de": "sich abmühen, kämpfen",
+   "def": "to find something very difficult to do",
+   "ex": "Many learners [struggle] with phrasal verbs.",
+   "l": "B2"
+  },
+  {
+   "w": "to postpone",
+   "p": "verb",
+   "de": "verschieben",
+   "def": "to move an event to a later time",
+   "ex": "They [postponed] the meeting until Friday.",
+   "l": "B2"
+  },
+  {
+   "w": "to require",
+   "p": "verb",
+   "de": "erfordern, benötigen",
+   "def": "to need something",
+   "ex": "This job [requires] a lot of patience.",
+   "l": "B2"
+  },
+  {
+   "w": "to convince",
+   "p": "verb",
+   "de": "überzeugen",
+   "def": "to make someone believe that something is true",
+   "ex": "He [convinced] me that the plan would work.",
+   "l": "B2"
+  },
+  {
+   "w": "despite",
+   "p": "prep",
+   "de": "trotz",
+   "def": "without being stopped by something",
+   "ex": "[Despite] the rain, we went for a walk.",
+   "l": "B2"
+  },
+  {
+   "w": "whereas",
+   "p": "conj",
+   "de": "wohingegen, während",
+   "def": "used to compare two different facts",
+   "ex": "I love coffee, [whereas] my wife prefers tea.",
+   "l": "B2"
+  },
+  {
+   "w": "consequence",
+   "p": "noun",
+   "de": "Folge, Konsequenz",
+   "def": "a result of an action or situation",
+   "ex": "Every decision has [consequences].",
+   "l": "B2"
+  },
+  {
+   "w": "significant",
+   "p": "adj",
+   "de": "bedeutend, erheblich",
+   "def": "important or big enough to notice",
+   "ex": "There was a [significant] increase in prices.",
+   "l": "B2"
+  },
+  {
+   "w": "to assume",
+   "p": "verb",
+   "de": "annehmen, vermuten",
+   "def": "to think something is true without proof",
+   "ex": "I [assumed] you already knew about it.",
+   "l": "B2"
+  },
+  {
+   "w": "to avoid",
+   "p": "verb",
+   "de": "vermeiden",
+   "def": "to stay away from something or not do it",
+   "ex": "Try to [avoid] driving in rush hour.",
+   "l": "B1"
+  },
+  {
+   "w": "to encourage",
+   "p": "verb",
+   "de": "ermutigen",
+   "def": "to give someone confidence to do something",
+   "ex": "My teacher [encouraged] me to speak more.",
+   "l": "B1"
+  },
+  {
+   "w": "eventually",
+   "p": "adv",
+   "de": "schließlich, letztendlich",
+   "def": "in the end, after a long time",
+   "ex": "We [eventually] found the hotel.",
+   "l": "B2"
+  },
+  {
+   "w": "to be aware of",
+   "p": "verb",
+   "de": "sich bewusst sein",
+   "def": "to know about something",
+   "ex": "Are you [aware of] the risks?",
+   "l": "B2"
+  },
+  {
+   "w": "to take advantage of",
+   "p": "verb",
+   "de": "ausnutzen, nutzen",
+   "def": "to use a situation to get a benefit",
+   "ex": "You should [take advantage of] the good weather.",
+   "l": "B2"
+  },
+  {
+   "w": "to point out",
+   "p": "verb",
+   "de": "hinweisen auf",
+   "def": "to tell someone about a fact they had not noticed",
+   "ex": "She [pointed out] a mistake in my email.",
+   "l": "B2"
+  },
+  {
+   "w": "to figure out",
+   "p": "verb",
+   "de": "herausfinden, verstehen",
+   "def": "to understand or solve something",
+   "ex": "I can't [figure out] how this app works.",
+   "l": "B2"
+  },
+  {
+   "w": "to get used to",
+   "p": "verb",
+   "de": "sich gewöhnen an",
+   "def": "to become familiar with something new",
+   "ex": "I'm slowly [getting used to] my new job.",
+   "l": "B2"
+  },
+  {
+   "w": "to cope with",
+   "p": "verb",
+   "de": "bewältigen, zurechtkommen mit",
+   "def": "to deal successfully with a difficult situation",
+   "ex": "How do you [cope with] stress at work?",
+   "l": "B2"
+  },
+  {
+   "w": "reluctant",
+   "p": "adj",
+   "de": "widerwillig, zögerlich",
+   "def": "not wanting to do something",
+   "ex": "He was [reluctant] to ask for help.",
+   "l": "B2"
+  },
+  {
+   "w": "to overcome",
+   "p": "verb",
+   "de": "überwinden",
+   "def": "to successfully deal with a problem or fear",
+   "ex": "She [overcame] her fear of flying.",
+   "l": "B2"
+  },
+  {
+   "w": "gradually",
+   "p": "adv",
+   "de": "allmählich",
+   "def": "slowly, over a period of time",
+   "ex": "My English is [gradually] improving.",
+   "l": "B2"
+  },
+  {
+   "w": "to afford",
+   "p": "verb",
+   "de": "sich leisten",
+   "def": "to have enough money or time for something",
+   "ex": "We can't [afford] a new car right now.",
+   "l": "B1"
+  },
+  {
+   "w": "to persuade",
+   "p": "verb",
+   "de": "überreden",
+   "def": "to make someone agree to do something",
+   "ex": "I [persuaded] him to join the gym.",
+   "l": "B2"
+  },
+  {
+   "w": "to affect",
+   "p": "verb",
+   "de": "beeinflussen, betreffen",
+   "def": "to have an influence on someone or something",
+   "ex": "Bad weather [affects] my mood.",
+   "l": "B2"
+  },
+  {
+   "w": "to deserve",
+   "p": "verb",
+   "de": "verdienen",
+   "def": "to earn something because of what you did",
+   "ex": "You worked hard – you [deserve] a break.",
+   "l": "B2"
+  },
+  {
+   "w": "to handle",
+   "p": "verb",
+   "de": "umgehen mit, erledigen",
+   "def": "to deal with a situation or task",
+   "ex": "She [handled] the complaint very well.",
+   "l": "B2"
+  },
+  {
+   "w": "to maintain",
+   "p": "verb",
+   "de": "aufrechterhalten, pflegen",
+   "def": "to keep something at the same level or in good condition",
+   "ex": "It's hard to [maintain] a good work-life balance.",
+   "l": "B2"
+  },
+  {
+   "w": "to hesitate",
+   "p": "verb",
+   "de": "zögern",
+   "def": "to pause before you do or say something",
+   "ex": "Don't [hesitate] to contact me.",
+   "l": "B2"
+  },
+  {
+   "w": "apparently",
+   "p": "adv",
+   "de": "anscheinend",
+   "def": "based on what you have heard or read",
+   "ex": "[Apparently], the shop is closed today.",
+   "l": "B2"
+  },
+  {
+   "w": "commitment",
+   "p": "noun",
+   "de": "Engagement, Verpflichtung",
+   "def": "a promise or strong dedication to something",
+   "ex": "Learning a language takes real [commitment].",
+   "l": "B2"
+  },
+  {
+   "w": "to lack",
+   "p": "verb",
+   "de": "fehlen an, nicht haben",
+   "def": "to not have enough of something",
+   "ex": "The team [lacks] experience.",
+   "l": "B2"
+  },
+  {
+   "w": "to replace",
+   "p": "verb",
+   "de": "ersetzen",
+   "def": "to put something new in the place of something old",
+   "ex": "We need to [replace] the old printer.",
+   "l": "B1"
+  },
+  {
+   "w": "to predict",
+   "p": "verb",
+   "de": "vorhersagen",
+   "def": "to say what will happen in the future",
+   "ex": "Nobody can [predict] the future.",
+   "l": "B2"
+  },
+  {
+   "w": "to complain",
+   "p": "verb",
+   "de": "sich beschweren",
+   "def": "to say that you are unhappy about something",
+   "ex": "The guests [complained] about the noise.",
+   "l": "B1"
+  },
+  {
+   "w": "challenge",
+   "p": "noun",
+   "de": "Herausforderung",
+   "def": "something difficult that tests your ability",
+   "ex": "Moving abroad was a big [challenge].",
+   "l": "B1"
+  },
+  {
+   "w": "to be responsible for",
+   "p": "verb",
+   "de": "verantwortlich sein für",
+   "def": "to have the job of taking care of something",
+   "ex": "Who is [responsible for] this project?",
+   "l": "B2"
+  }
+ ],
+ "colloc": {
+  "reliable": [
+   {
+    "p": "highly reliable",
+    "de": "äußerst zuverlässig",
+    "gap": "highly",
+    "opts": [
+     "strongly",
+     "heavily",
+     "deeply"
+    ],
+    "ex": "Our new archive system has proven [highly reliable]."
+   },
+   {
+    "p": "prove reliable",
+    "de": "sich als zuverlässig erweisen",
+    "gap": "prove",
+    "opts": [
+     "show",
+     "make",
+     "give"
+    ],
+    "ex": "The supplier [proved reliable] during the whole project."
+   }
+  ],
+  "rely-on": [
+   {
+    "p": "rely heavily on",
+    "de": "stark angewiesen sein auf",
+    "gap": "heavily",
+    "opts": [
+     "highly",
+     "thickly",
+     "weightily"
+    ],
+    "ex": "Many companies [rely heavily on] paper-based processes."
+   },
+   {
+    "p": "rely on each other",
+    "de": "sich aufeinander verlassen",
+    "gap": "on",
+    "opts": [
+     "of",
+     "from",
+     "at"
+    ],
+    "ex": "In a small team, we have to [rely on each other]."
+   }
+  ],
+  "achieve": [
+   {
+    "p": "achieve a goal",
+    "de": "ein Ziel erreichen",
+    "gap": "goal",
+    "opts": [
+     "task",
+     "promise",
+     "duty"
+    ],
+    "ex": "We [achieved our goal] of fifty new customers this year."
+   },
+   {
+    "p": "hard to achieve",
+    "de": "schwer zu erreichen",
+    "gap": "hard",
+    "opts": [
+     "heavy",
+     "thick",
+     "strong"
+    ],
+    "ex": "Full digitalisation is [hard to achieve] in one year."
+   }
+  ],
+  "approach": [
+   {
+    "p": "take an approach",
+    "de": "einen Ansatz verfolgen",
+    "gap": "take",
+    "opts": [
+     "make",
+     "do",
+     "go"
+    ],
+    "ex": "We [took a different approach] with this client."
+   },
+   {
+    "p": "a new approach to",
+    "de": "ein neuer Ansatz für",
+    "gap": "to",
+    "opts": [
+     "at",
+     "against",
+     "into"
+    ],
+    "ex": "We need [a new approach to] lead generation."
+   }
+  ],
+  "struggle": [
+   {
+    "p": "struggle with",
+    "de": "zu kämpfen haben mit",
+    "gap": "with",
+    "opts": [
+     "about",
+     "at",
+     "by"
+    ],
+    "ex": "Many teams [struggle with] too much paperwork."
+   },
+   {
+    "p": "struggle to keep up",
+    "de": "kaum mithalten können",
+    "gap": "keep",
+    "opts": [
+     "hold",
+     "hang",
+     "take"
+    ],
+    "ex": "Small firms often [struggle to keep up] with new regulations."
+   },
+   {
+    "p": "an uphill struggle",
+    "de": "ein mühsamer Kampf",
+    "gap": "uphill",
+    "opts": [
+     "upward",
+     "upstairs",
+     "steep"
+    ],
+    "ex": "Changing old habits can be [an uphill struggle]."
+   }
+  ],
+  "postpone": [
+   {
+    "p": "postpone until",
+    "de": "verschieben auf",
+    "gap": "until",
+    "opts": [
+     "since",
+     "during",
+     "by"
+    ],
+    "ex": "Let's [postpone the call until] next Tuesday."
+   },
+   {
+    "p": "postpone indefinitely",
+    "de": "auf unbestimmte Zeit verschieben",
+    "gap": "indefinitely",
+    "opts": [
+     "endlessly",
+     "unlimitedly",
+     "infinitely"
+    ],
+    "ex": "The project was [postponed indefinitely] due to budget cuts."
+   }
+  ],
+  "require": [
+   {
+    "p": "as required",
+    "de": "nach Bedarf, wie erforderlich",
+    "gap": "as",
+    "opts": [
+     "like",
+     "so",
+     "than"
+    ],
+    "ex": "We can add more user licences [as required]."
+   },
+   {
+    "p": "required by law",
+    "de": "gesetzlich vorgeschrieben",
+    "gap": "by",
+    "opts": [
+     "from",
+     "through",
+     "of"
+    ],
+    "ex": "Keeping invoices for ten years is [required by law]."
+   },
+   {
+    "p": "require further information",
+    "de": "weitere Informationen benötigen",
+    "gap": "further",
+    "opts": [
+     "wider",
+     "upper",
+     "longer"
+    ],
+    "ex": "Please call me if you [require further information]."
+   }
+  ],
+  "convince": [
+   {
+    "p": "firmly convinced",
+    "de": "fest überzeugt",
+    "gap": "firmly",
+    "opts": [
+     "solidly",
+     "heavily",
+     "tightly"
+    ],
+    "ex": "I am [firmly convinced] that this solution will save time."
+   },
+   {
+    "p": "convince them of",
+    "de": "sie von etwas überzeugen",
+    "gap": "of",
+    "opts": [
+     "from",
+     "for",
+     "over"
+    ],
+    "ex": "We need to [convince them of] the benefits of automation."
+   }
+  ],
+  "despite": [
+   {
+    "p": "despite the fact that",
+    "de": "trotz der Tatsache, dass",
+    "gap": "fact",
+    "opts": [
+     "truth",
+     "case",
+     "matter"
+    ],
+    "ex": "We won the deal [despite the fact that] we were more expensive."
+   },
+   {
+    "p": "despite being",
+    "de": "obwohl man ... ist",
+    "gap": "being",
+    "opts": [
+     "be",
+     "been",
+     "is"
+    ],
+    "ex": "[Despite being] tired, she finished the presentation."
+   }
+  ],
+  "whereas": [
+   {
+    "p": "whereas others prefer",
+    "de": "wohingegen andere ... bevorzugen",
+    "gap": "others",
+    "opts": [
+     "other",
+     "another",
+     "else"
+    ],
+    "ex": "Some clients want the cloud, [whereas others prefer] on-premise solutions."
+   },
+   {
+    "p": "whereas in the past",
+    "de": "wohingegen früher",
+    "gap": "past",
+    "opts": [
+     "last",
+     "before",
+     "ago"
+    ],
+    "ex": "Now everything is digital, [whereas in the past] we used folders."
+   }
+  ],
+  "consequence": [
+   {
+    "p": "as a consequence",
+    "de": "infolgedessen",
+    "gap": "as",
+    "opts": [
+     "in",
+     "by",
+     "for"
+    ],
+    "ex": "Sales dropped and, [as a consequence], we cut costs."
+   },
+   {
+    "p": "face the consequences",
+    "de": "die Folgen tragen",
+    "gap": "face",
+    "opts": [
+     "carry",
+     "wear",
+     "hold"
+    ],
+    "ex": "If we miss the deadline, we will [face the consequences]."
+   },
+   {
+    "p": "serious consequences",
+    "de": "ernste Folgen",
+    "gap": "serious",
+    "opts": [
+     "strong",
+     "deep",
+     "thick"
+    ],
+    "ex": "A data breach can have [serious consequences] for a company."
+   }
+  ],
+  "significant": [
+   {
+    "p": "play a significant role",
+    "de": "eine bedeutende Rolle spielen",
+    "gap": "play",
+    "opts": [
+     "take",
+     "make",
+     "do"
+    ],
+    "ex": "Personal relationships [play a significant role] in B2B sales."
+   },
+   {
+    "p": "a significant amount of",
+    "de": "eine beträchtliche Menge an",
+    "gap": "amount",
+    "opts": [
+     "size",
+     "deal",
+     "mass"
+    ],
+    "ex": "Scanning old files takes [a significant amount of] time."
+   }
+  ],
+  "assume": [
+   {
+    "p": "it is safe to assume",
+    "de": "man kann davon ausgehen",
+    "gap": "safe",
+    "opts": [
+     "sure",
+     "secure",
+     "certain"
+    ],
+    "ex": "[It is safe to assume] that prices will rise next year."
+   },
+   {
+    "p": "assume responsibility for",
+    "de": "Verantwortung übernehmen für",
+    "gap": "for",
+    "opts": [
+     "of",
+     "about",
+     "on"
+    ],
+    "ex": "She [assumed responsibility for] the whole partner programme."
+   }
+  ],
+  "avoid": [
+   {
+    "p": "avoid making mistakes",
+    "de": "Fehler vermeiden",
+    "gap": "making",
+    "opts": [
+     "doing",
+     "make",
+     "made"
+    ],
+    "ex": "Checklists help us [avoid making mistakes] in contracts."
+   },
+   {
+    "p": "avoid at all costs",
+    "de": "um jeden Preis vermeiden",
+    "gap": "costs",
+    "opts": [
+     "prices",
+     "expenses",
+     "charges"
+    ],
+    "ex": "Data loss is something we must [avoid at all costs]."
+   },
+   {
+    "p": "narrowly avoid",
+    "de": "knapp vermeiden",
+    "gap": "narrowly",
+    "opts": [
+     "tightly",
+     "thinly",
+     "closely"
+    ],
+    "ex": "We [narrowly avoided] losing our biggest customer."
+   }
+  ],
+  "encourage": [
+   {
+    "p": "strongly encourage",
+    "de": "nachdrücklich ermutigen",
+    "gap": "strongly",
+    "opts": [
+     "heavily",
+     "deeply",
+     "firmly"
+    ],
+    "ex": "I [strongly encourage] you to test the demo version."
+   },
+   {
+    "p": "encourage them to apply",
+    "de": "sie ermutigen, sich zu bewerben",
+    "gap": "to",
+    "opts": [
+     "for",
+     "that",
+     "in"
+    ],
+    "ex": "We [encourage them to apply] for the new role."
+   },
+   {
+    "p": "encouraged by the results",
+    "de": "ermutigt durch die Ergebnisse",
+    "gap": "by",
+    "opts": [
+     "from",
+     "of",
+     "over"
+    ],
+    "ex": "The team was [encouraged by the results] of the pilot."
+   }
+  ],
+  "eventually": [
+   {
+    "p": "eventually led to",
+    "de": "führte schließlich zu",
+    "gap": "led",
+    "opts": [
+     "brought",
+     "guided",
+     "caused"
+    ],
+    "ex": "The long negotiations [eventually led to] a three-year contract."
+   },
+   {
+    "p": "eventually managed to",
+    "de": "schaffte es schließlich",
+    "gap": "managed",
+    "opts": [
+     "succeeded",
+     "reached",
+     "achieved"
+    ],
+    "ex": "We [eventually managed to] fix the integration problem."
+   }
+  ],
+  "be-aware-of": [
+   {
+    "p": "well aware of",
+    "de": "sich sehr wohl bewusst",
+    "gap": "well",
+    "opts": [
+     "good",
+     "high",
+     "strong"
+    ],
+    "ex": "I am [well aware of] the risks involved."
+   },
+   {
+    "p": "fully aware of",
+    "de": "sich voll bewusst",
+    "gap": "fully",
+    "opts": [
+     "full",
+     "whole",
+     "total"
+    ],
+    "ex": "The client is [fully aware of] the additional costs."
+   },
+   {
+    "p": "aware of the risks",
+    "de": "sich der Risiken bewusst",
+    "gap": "of",
+    "opts": [
+     "from",
+     "for",
+     "at"
+    ],
+    "ex": "Management must be [aware of the risks] before signing."
+   }
+  ],
+  "take-advantage-of": [
+   {
+    "p": "take full advantage of",
+    "de": "voll ausnutzen",
+    "gap": "full",
+    "opts": [
+     "whole",
+     "entire",
+     "wide"
+    ],
+    "ex": "We should [take full advantage of] the trade fair."
+   },
+   {
+    "p": "take unfair advantage of",
+    "de": "unfair ausnutzen",
+    "gap": "unfair",
+    "opts": [
+     "unright",
+     "unfaithful",
+     "unequal"
+    ],
+    "ex": "Don't let suppliers [take unfair advantage of] your situation."
+   }
+  ],
+  "point-out": [
+   {
+    "p": "point out that",
+    "de": "darauf hinweisen, dass",
+    "gap": "that",
+    "opts": [
+     "which",
+     "as",
+     "if"
+    ],
+    "ex": "I'd like to [point out that] the offer expires on Friday."
+   },
+   {
+    "p": "as I pointed out",
+    "de": "wie ich bereits erwähnte",
+    "gap": "as",
+    "opts": [
+     "so",
+     "than",
+     "such"
+    ],
+    "ex": "[As I pointed out] earlier, the budget is limited."
+   },
+   {
+    "p": "rightly point out",
+    "de": "zu Recht darauf hinweisen",
+    "gap": "rightly",
+    "opts": [
+     "correct",
+     "righteously",
+     "exactly"
+    ],
+    "ex": "Our partner [rightly pointed out] a gap in the contract."
+   }
+  ],
+  "figure-out": [
+   {
+    "p": "figure out how to",
+    "de": "herausfinden, wie man",
+    "gap": "how",
+    "opts": [
+     "which",
+     "like",
+     "as"
+    ],
+    "ex": "I can't [figure out how to] export this report."
+   },
+   {
+    "p": "try to figure out",
+    "de": "versuchen herauszufinden",
+    "gap": "try",
+    "opts": [
+     "test",
+     "search",
+     "probe"
+    ],
+    "ex": "We [tried to figure out] why the deal fell through."
+   }
+  ],
+  "get-used-to": [
+   {
+    "p": "get used to working",
+    "de": "sich daran gewöhnen zu arbeiten",
+    "gap": "working",
+    "opts": [
+     "work",
+     "worked",
+     "works"
+    ],
+    "ex": "It took me months to [get used to working] from home."
+   },
+   {
+    "p": "it takes time to get used to",
+    "de": "es braucht Zeit, sich zu gewöhnen an",
+    "gap": "takes",
+    "opts": [
+     "does",
+     "gives",
+     "makes"
+    ],
+    "ex": "[It takes time to get used to] a new software."
+   }
+  ],
+  "cope-with": [
+   {
+    "p": "cope well with",
+    "de": "gut zurechtkommen mit",
+    "gap": "well",
+    "opts": [
+     "good",
+     "nice",
+     "right"
+    ],
+    "ex": "She [copes well with] pressure before big meetings."
+   },
+   {
+    "p": "learn to cope with",
+    "de": "lernen, mit etwas umzugehen",
+    "gap": "learn",
+    "opts": [
+     "teach",
+     "study",
+     "know"
+    ],
+    "ex": "New managers must [learn to cope with] criticism."
+   },
+   {
+    "p": "able to cope with",
+    "de": "in der Lage, zu bewältigen",
+    "gap": "able",
+    "opts": [
+     "capable",
+     "possible",
+     "enabled"
+    ],
+    "ex": "Is the server [able to cope with] so many users?"
+   }
+  ],
+  "reluctant": [
+   {
+    "p": "reluctant to change",
+    "de": "nicht bereit, sich zu ändern",
+    "gap": "to",
+    "opts": [
+     "for",
+     "of",
+     "at"
+    ],
+    "ex": "Many customers are [reluctant to change] their old systems."
+   },
+   {
+    "p": "somewhat reluctant",
+    "de": "etwas zögerlich",
+    "gap": "somewhat",
+    "opts": [
+     "somewhere",
+     "somehow",
+     "anyway"
+    ],
+    "ex": "The CFO seemed [somewhat reluctant] to approve the budget."
+   }
+  ],
+  "overcome": [
+   {
+    "p": "overcome obstacles",
+    "de": "Hindernisse überwinden",
+    "gap": "obstacles",
+    "opts": [
+     "goals",
+     "successes",
+     "advantages"
+    ],
+    "ex": "Every project team has to [overcome obstacles]."
+   },
+   {
+    "p": "overcome objections",
+    "de": "Einwände ausräumen",
+    "gap": "objections",
+    "opts": [
+     "opinions",
+     "agreements",
+     "proposals"
+    ],
+    "ex": "Good salespeople know how to [overcome objections] calmly."
+   }
+  ],
+  "gradually": [
+   {
+    "p": "gradually get used to",
+    "de": "sich allmählich gewöhnen an",
+    "gap": "used",
+    "opts": [
+     "use",
+     "using",
+     "usual"
+    ],
+    "ex": "Users [gradually got used to] the new interface."
+   },
+   {
+    "p": "gradually over time",
+    "de": "nach und nach",
+    "gap": "over",
+    "opts": [
+     "about",
+     "during",
+     "by"
+    ],
+    "ex": "My English has improved [gradually over time]."
+   }
+  ],
+  "afford": [
+   {
+    "p": "afford to lose",
+    "de": "es sich leisten können zu verlieren",
+    "gap": "lose",
+    "opts": [
+     "loose",
+     "lost",
+     "losing"
+    ],
+    "ex": "We can't [afford to lose] this customer."
+   },
+   {
+    "p": "can hardly afford",
+    "de": "sich kaum leisten können",
+    "gap": "hardly",
+    "opts": [
+     "hard",
+     "nearly",
+     "merely"
+    ],
+    "ex": "Small firms [can hardly afford] expensive consultants."
+   }
+  ],
+  "persuade": [
+   {
+    "p": "persuade him to stay",
+    "de": "ihn überreden zu bleiben",
+    "gap": "to",
+    "opts": [
+     "that",
+     "for",
+     "of"
+    ],
+    "ex": "We tried to [persuade him to stay] with the company."
+   },
+   {
+    "p": "easily persuaded",
+    "de": "leicht zu überreden",
+    "gap": "easily",
+    "opts": [
+     "lightly",
+     "softly",
+     "lowly"
+    ],
+    "ex": "Experienced buyers are not [easily persuaded]."
+   }
+  ],
+  "affect": [
+   {
+    "p": "badly affected",
+    "de": "stark betroffen",
+    "gap": "badly",
+    "opts": [
+     "bad",
+     "evil",
+     "poor"
+    ],
+    "ex": "Our sales were [badly affected] by the crisis."
+   },
+   {
+    "p": "adversely affect",
+    "de": "sich nachteilig auswirken auf",
+    "gap": "adversely",
+    "opts": [
+     "adverse",
+     "averse",
+     "reversely"
+    ],
+    "ex": "The delay could [adversely affect] our relationship with the client."
+   }
+  ],
+  "deserve": [
+   {
+    "p": "deserve a break",
+    "de": "eine Pause verdienen",
+    "gap": "break",
+    "opts": [
+     "pause",
+     "stop",
+     "free"
+    ],
+    "ex": "After this busy quarter, you [deserve a break]."
+   },
+   {
+    "p": "deserve a second chance",
+    "de": "eine zweite Chance verdienen",
+    "gap": "second",
+    "opts": [
+     "two",
+     "double",
+     "twice"
+    ],
+    "ex": "I think the new supplier [deserves a second chance]."
+   }
+  ],
+  "handle": [
+   {
+    "p": "handle with care",
+    "de": "mit Vorsicht behandeln",
+    "gap": "care",
+    "opts": [
+     "carefulness",
+     "attention",
+     "worry"
+    ],
+    "ex": "Customer data must be [handled with care]."
+   },
+   {
+    "p": "handle it well",
+    "de": "gut damit umgehen",
+    "gap": "well",
+    "opts": [
+     "good",
+     "nice",
+     "right"
+    ],
+    "ex": "The client was angry, but you [handled it well]."
+   }
+  ],
+  "maintain": [
+   {
+    "p": "maintain a balance",
+    "de": "ein Gleichgewicht halten",
+    "gap": "balance",
+    "opts": [
+     "weight",
+     "scale",
+     "equality"
+    ],
+    "ex": "It's hard to [maintain a balance] between work and family."
+   },
+   {
+    "p": "maintain close contact with",
+    "de": "engen Kontakt halten mit",
+    "gap": "close",
+    "opts": [
+     "near",
+     "tight",
+     "narrow"
+    ],
+    "ex": "We [maintain close contact with] our key partners."
+   }
+  ],
+  "hesitate": [
+   {
+    "p": "hesitate to contact",
+    "de": "zögern, Kontakt aufzunehmen",
+    "gap": "contact",
+    "opts": [
+     "contacting",
+     "contacted",
+     "contacts"
+    ],
+    "ex": "Please don't [hesitate to contact] me if you have questions."
+   },
+   {
+    "p": "without hesitating",
+    "de": "ohne zu zögern",
+    "gap": "without",
+    "opts": [
+     "unless",
+     "except",
+     "out"
+    ],
+    "ex": "She accepted the offer [without hesitating]."
+   }
+  ],
+  "apparently": [
+   {
+    "p": "apparently not",
+    "de": "anscheinend nicht",
+    "gap": "not",
+    "opts": [
+     "no",
+     "none",
+     "nothing"
+    ],
+    "ex": "Did they sign the contract? [Apparently not]."
+   },
+   {
+    "p": "apparently so",
+    "de": "anscheinend schon",
+    "gap": "so",
+    "opts": [
+     "such",
+     "thus",
+     "that"
+    ],
+    "ex": "Is the meeting cancelled? [Apparently so]."
+   }
+  ],
+  "commitment": [
+   {
+    "p": "make a commitment",
+    "de": "eine Verpflichtung eingehen",
+    "gap": "make",
+    "opts": [
+     "do",
+     "put",
+     "set"
+    ],
+    "ex": "The client is not ready to [make a commitment] yet."
+   },
+   {
+    "p": "commitment to quality",
+    "de": "Engagement für Qualität",
+    "gap": "to",
+    "opts": [
+     "for",
+     "at",
+     "on"
+    ],
+    "ex": "Our [commitment to quality] is why customers stay with us."
+   },
+   {
+    "p": "show commitment",
+    "de": "Engagement zeigen",
+    "gap": "show",
+    "opts": [
+     "do",
+     "hold",
+     "set"
+    ],
+    "ex": "Your team [showed great commitment] during the launch."
+   }
+  ],
+  "lack": [
+   {
+    "p": "lack of time",
+    "de": "Zeitmangel",
+    "gap": "of",
+    "opts": [
+     "in",
+     "at",
+     "from"
+    ],
+    "ex": "The project failed because of a [lack of time]."
+   },
+   {
+    "p": "lacking in experience",
+    "de": "es fehlt an Erfahrung",
+    "gap": "in",
+    "opts": [
+     "of",
+     "at",
+     "on"
+    ],
+    "ex": "The new hire is motivated but [lacking in experience]."
+   }
+  ],
+  "replace": [
+   {
+    "p": "replace the old system with",
+    "de": "das alte System ersetzen durch",
+    "gap": "with",
+    "opts": [
+     "through",
+     "against",
+     "over"
+    ],
+    "ex": "We want to [replace the old system with] a cloud solution."
+   },
+   {
+    "p": "replaced by",
+    "de": "ersetzt durch",
+    "gap": "by",
+    "opts": [
+     "through",
+     "from",
+     "of"
+    ],
+    "ex": "Paper files are increasingly [replaced by] digital archives."
+   }
+  ],
+  "predict": [
+   {
+    "p": "accurately predict",
+    "de": "genau vorhersagen",
+    "gap": "accurately",
+    "opts": [
+     "accurate",
+     "correct",
+     "precise"
+    ],
+    "ex": "Nobody can [accurately predict] next year's sales."
+   },
+   {
+    "p": "predict the future",
+    "de": "die Zukunft vorhersagen",
+    "gap": "future",
+    "opts": [
+     "coming",
+     "next",
+     "forward"
+    ],
+    "ex": "It's impossible to [predict the future] of the market."
+   }
+  ],
+  "complain": [
+   {
+    "p": "complain about",
+    "de": "sich beschweren über",
+    "gap": "about",
+    "opts": [
+     "for",
+     "at",
+     "with"
+    ],
+    "ex": "Customers often [complain about] slow support."
+   },
+   {
+    "p": "complain to the manager",
+    "de": "sich beim Vorgesetzten beschweren",
+    "gap": "to",
+    "opts": [
+     "at",
+     "by",
+     "against"
+    ],
+    "ex": "He [complained to the manager] about the delay."
+   }
+  ],
+  "challenge": [
+   {
+    "p": "face a challenge",
+    "de": "vor einer Herausforderung stehen",
+    "gap": "face",
+    "opts": [
+     "make",
+     "do",
+     "hold"
+    ],
+    "ex": "We [face a big challenge] with the new regulations."
+   },
+   {
+    "p": "rise to the challenge",
+    "de": "der Herausforderung gewachsen sein",
+    "gap": "rise",
+    "opts": [
+     "raise",
+     "grow",
+     "stand"
+    ],
+    "ex": "The whole team [rose to the challenge]."
+   },
+   {
+    "p": "a major challenge",
+    "de": "eine große Herausforderung",
+    "gap": "major",
+    "opts": [
+     "mayor",
+     "heavy",
+     "wide"
+    ],
+    "ex": "Data security is [a major challenge] for our customers."
+   }
+  ],
+  "be-responsible-for": [
+   {
+    "p": "directly responsible for",
+    "de": "direkt verantwortlich für",
+    "gap": "directly",
+    "opts": [
+     "straight",
+     "direct",
+     "right"
+    ],
+    "ex": "I am [directly responsible for] partner sales."
+   },
+   {
+    "p": "hold someone responsible for",
+    "de": "jemanden verantwortlich machen für",
+    "gap": "hold",
+    "opts": [
+     "keep",
+     "take",
+     "put"
+    ],
+    "ex": "You can't [hold someone responsible for] a system error."
+   },
+   {
+    "p": "responsible for managing",
+    "de": "verantwortlich für die Leitung",
+    "gap": "managing",
+    "opts": [
+     "manage",
+     "managed",
+     "manages"
+    ],
+    "ex": "She is [responsible for managing] key accounts."
+   }
+  ],
+  "outcome": [
+   {
+    "p": "the desired outcome",
+    "de": "das gewünschte Ergebnis",
+    "gap": "desired",
+    "opts": [
+     "wished",
+     "longed",
+     "desirous"
+    ],
+    "ex": "The workshop didn't deliver [the desired outcome]."
+   },
+   {
+    "p": "regardless of the outcome",
+    "de": "unabhängig vom Ergebnis",
+    "gap": "regardless",
+    "opts": [
+     "despite",
+     "although",
+     "nevertheless"
+    ],
+    "ex": "[Regardless of the outcome], we learned a lot from the pitch."
+   }
+  ],
+  "tackle": [
+   {
+    "p": "tackle a problem",
+    "de": "ein Problem angehen",
+    "gap": "problem",
+    "opts": [
+     "mistake",
+     "solution",
+     "success"
+    ],
+    "ex": "Let's [tackle this problem] together."
+   },
+   {
+    "p": "tackle the root cause",
+    "de": "die Ursache angehen",
+    "gap": "root",
+    "opts": [
+     "ground",
+     "base",
+     "origin"
+    ],
+    "ex": "We need to [tackle the root cause], not just the symptoms."
+   }
+  ],
+  "consistent": [
+   {
+    "p": "consistent with",
+    "de": "vereinbar mit, übereinstimmend mit",
+    "gap": "with",
+    "opts": [
+     "to",
+     "for",
+     "about"
+    ],
+    "ex": "These numbers are not [consistent with] last month's report."
+   },
+   {
+    "p": "remain consistent",
+    "de": "beständig bleiben",
+    "gap": "remain",
+    "opts": [
+     "hold",
+     "last",
+     "rest"
+    ],
+    "ex": "Our message must [remain consistent] across all channels."
+   }
+  ],
+  "acknowledge": [
+   {
+    "p": "acknowledge receipt",
+    "de": "den Empfang bestätigen",
+    "gap": "receipt",
+    "opts": [
+     "reception",
+     "arrival",
+     "recipe"
+    ],
+    "ex": "Please [acknowledge receipt] of this email."
+   },
+   {
+    "p": "widely acknowledged",
+    "de": "weithin anerkannt",
+    "gap": "widely",
+    "opts": [
+     "wide",
+     "far",
+     "vastly"
+    ],
+    "ex": "It is [widely acknowledged] that digital workflows save money."
+   }
+  ]
+ },
+ "modeName": {
+  "recog": "Lesen",
+  "cloze": "Kontext",
+  "listen": "Hören",
+  "type": "Schreiben",
+  "produce": "Eigener Satz",
+  "colloc": "Kollokation"
+ },
+ "modeNameEn": {
+  "recog": "Reading",
+  "cloze": "Context",
+  "listen": "Listening",
+  "type": "Writing",
+  "produce": "Own sentence",
+  "colloc": "Collocation"
+ }
+}

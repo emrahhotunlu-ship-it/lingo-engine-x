@@ -1,0 +1,1503 @@
+{
+ "rules": {
+  "pres-simple-cont": {
+   "core": [
+    "Present Simple = wie es immer ist. Present Continuous = was gerade läuft.",
+    "Present Simple = how things generally are. Present Continuous = what is going on right now."
+   ],
+   "why": [
+    "Englisch trennt streng zwischen Gewohnheit und laufender Handlung. Das Deutsche macht das nicht – deshalb musst du dich bei jedem Satz aktiv entscheiden: dauerhaft oder momentan?",
+    "English strictly separates habit from action in progress. German does not, so you have to decide consciously in every sentence: permanent or momentary?"
+   ],
+   "contrast": [
+    "„Ich arbeite gerade“ und „Ich arbeite bei Siemens“ heißen im Deutschen beide „arbeite“. Im Englischen sind das zwei verschiedene Zeiten: I'm working / I work.",
+    "German uses one form for both “right now” and “in general”. English needs two: I'm working / I work."
+   ],
+   "steps": [
+    [
+     "Passiert es genau jetzt oder nur vorübergehend? → am/is/are + -ing",
+     "Ist es eine Gewohnheit, ein Fakt, ein Dauerzustand? → Present Simple",
+     "Ist es ein Zustandsverb (know, like, want, need, understand, believe, own)? → immer Simple, auch wenn es gerade gilt"
+    ],
+    [
+     "Is it happening right now or temporarily? → am/is/are + -ing",
+     "Is it a habit, a fact, a permanent state? → Present Simple",
+     "Is it a state verb (know, like, want, need, understand, believe, own)? → always Simple, even about now"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Present Simple",
+      "Present Simple"
+     ],
+     "I work / he works",
+     "I work in sales."
+    ],
+    [
+     [
+      "Present Continuous",
+      "Present Continuous"
+     ],
+     "am/is/are + -ing",
+     "I'm working on the offer."
+    ]
+   ],
+   "signals": [
+    [
+     "right now, at the moment, today, this week",
+     [
+      "läuft gerade → Continuous",
+      "in progress → Continuous"
+     ]
+    ],
+    [
+     "usually, always, every day, never, often",
+     [
+      "Gewohnheit → Simple",
+      "habit → Simple"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "I am knowing the answer.",
+     "good": "I know the answer.",
+     "why": [
+      "know ist ein Zustandsverb – Zustände stehen nie in der -ing-Form.",
+      "know is a state verb – states never take the -ing form."
+     ]
+    },
+    {
+     "bad": "Look! It snows.",
+     "good": "Look! It's snowing.",
+     "why": [
+      "„Look!“ zeigt auf diesen Moment → Continuous.",
+      "“Look!” points at this very moment → Continuous."
+     ]
+    }
+   ],
+   "alts": []
+  },
+  "past-simple-perfect": {
+   "core": [
+    "Past Simple = abgeschlossene Zeit mit Zeitpunkt. Present Perfect = Zeitraum reicht bis jetzt oder das Ergebnis zählt jetzt.",
+    "Past Simple = finished time with a point in the past. Present Perfect = the period reaches up to now, or the result matters now."
+   ],
+   "why": [
+    "Das Present Perfect ist im Englischen keine Vergangenheitsform, sondern eine Gegenwartsform: Es sagt etwas über JETZT aus („Ich kenne Japan nicht – ich war noch nie dort“). Sobald du einen abgeschlossenen Zeitpunkt nennst, ist das Jetzt nicht mehr gemeint und du brauchst Past Simple.",
+    "The Present Perfect is not a past tense in English – it says something about NOW (“I don't know Japan – I've never been”). The moment you name a finished point in time, you are no longer talking about now and you need the Past Simple."
+   ],
+   "contrast": [
+    "Das ist die häufigste deutsche Falle: „Ich habe ihn gestern gesehen“ klingt nach Perfekt, heißt aber I saw him yesterday. Deutsches Perfekt ≠ englisches Present Perfect.",
+    "This is the classic German trap: the German perfect form is used for everyday past events, English is not. “Ich habe ihn gestern gesehen” = I saw him yesterday."
+   ],
+   "steps": [
+    [
+     "Steht ein abgeschlossener Zeitpunkt im Satz (yesterday, last week, in 2020, ago, when I was …)? → Past Simple",
+     "Reicht der Zeitraum bis jetzt (today, this week, so far, since, for) oder zählt das Ergebnis jetzt? → Present Perfect",
+     "Frage „Wann genau?“ beantwortbar? → Past Simple. Unwichtig wann? → Present Perfect"
+    ],
+    [
+     "Is there a finished time in the sentence (yesterday, last week, in 2020, ago)? → Past Simple",
+     "Does the period reach up to now (today, this week, so far, since, for), or does the result matter now? → Present Perfect",
+     "Can you answer “when exactly?” → Past Simple. Doesn't matter when? → Present Perfect"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Past Simple",
+      "Past Simple"
+     ],
+     "2. Form (worked, saw)",
+     "I saw her yesterday."
+    ],
+    [
+     [
+      "Present Perfect",
+      "Present Perfect"
+     ],
+     "have/has + 3. Form",
+     "I have never seen that film."
+    ]
+   ],
+   "signals": [
+    [
+     "yesterday, last …, in 2020, ago, then",
+     [
+      "→ Past Simple",
+      "→ Past Simple"
+     ]
+    ],
+    [
+     "ever, never, already, yet, just, so far, since, for, today",
+     [
+      "→ Present Perfect",
+      "→ Present Perfect"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "I have seen him yesterday.",
+     "good": "I saw him yesterday.",
+     "why": [
+      "„yesterday“ ist abgeschlossene Zeit – damit ist Present Perfect unmöglich.",
+      "“yesterday” is finished time – Present Perfect is impossible with it."
+     ]
+    },
+    {
+     "bad": "When have you arrived?",
+     "good": "When did you arrive?",
+     "why": [
+      "„When?“ fragt nach einem Zeitpunkt → Past Simple.",
+      "“When?” asks for a point in time → Past Simple."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Ohne Zeitangabe sind oft beide Formen denkbar – dann entscheidet das Signalwort im Satz.",
+      "Without a time expression both forms are often possible – the signal word in the sentence decides."
+     ]
+    }
+   ]
+  },
+  "pres-perf-cont": {
+   "core": [
+    "have/has been + -ing: Die Handlung läuft seit einem Startpunkt bis jetzt – die Dauer ist der Punkt.",
+    "have/has been + -ing: the action has been running from a starting point until now – the duration is the point."
+   ],
+   "why": [
+    "Diese Form beantwortet „Seit wann?“ oder „Wie lange schon?“. Sie betont nicht das Ergebnis, sondern dass es die ganze Zeit lief – oder dass man die Spuren jetzt sieht („Sie ist außer Atem, sie ist gerannt“).",
+    "This form answers “since when?” or “how long?”. It does not stress the result but the fact that it went on all that time – or that you can see the traces now (“She's out of breath, she's been running”)."
+   ],
+   "contrast": [
+    "Deutsch nutzt einfach Präsens plus „seit“: „Ich lerne seit zwei Jahren Englisch.“ Englisch braucht dafür zwingend have been + -ing: I have been learning English for two years. „I learn English since two years“ ist doppelt falsch.",
+    "German uses the present tense with “seit”. English must use have been + -ing: I have been learning English for two years."
+   ],
+   "steps": [
+    [
+     "Frage: Läuft es seit einem Startpunkt bis jetzt? → have/has been + -ing",
+     "Subjekt prüfen: he/she/it → has been. I/you/we/they → have been",
+     "Zustandsverb (know, be, own)? → kein -ing, dann Present Perfect Simple: I have known her for years."
+    ],
+    [
+     "Ask: has it been running from a starting point until now? → have/has been + -ing",
+     "Check the subject: he/she/it → has been. I/you/we/they → have been",
+     "State verb (know, be, own)? → no -ing, use the simple form: I have known her for years."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Bildung",
+      "Form"
+     ],
+     "have/has + been + -ing",
+     "I have been waiting for 20 minutes."
+    ],
+    [
+     [
+      "3. Person",
+      "3rd person"
+     ],
+     "has been + -ing",
+     "He has been feeling tired lately."
+    ]
+   ],
+   "signals": [
+    [
+     "for two weeks, since Monday, how long, all day, lately",
+     [
+      "→ Present Perfect Continuous",
+      "→ Present Perfect Continuous"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "He have been feeling tired.",
+     "good": "He has been feeling tired.",
+     "why": [
+      "he/she/it verlangt has, nicht have – auch mitten in einer langen Form.",
+      "he/she/it takes has, not have – even inside a long verb form."
+     ]
+    },
+    {
+     "bad": "I am waiting since 20 minutes.",
+     "good": "I have been waiting for 20 minutes.",
+     "why": [
+      "Deutsches „seit“ + Präsens wird zu have been + -ing; „seit“ + Zeitraum = for.",
+      "German “seit” + present becomes have been + -ing; a period takes for, not since."
+     ]
+    },
+    {
+     "bad": "I have been studied all afternoon.",
+     "good": "I have been studying all afternoon.",
+     "why": [
+      "Nach „been“ kommt die -ing-Form, nicht das Partizip.",
+      "After “been” comes the -ing form, not the past participle."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Bei Verben wie work, live, study sind Simple und Continuous oft beide richtig: I have worked / I have been working here for five years. Der Unterschied ist nur die Betonung der Dauer.",
+      "With verbs like work, live, study both forms are usually fine: I have worked / I have been working here for five years. The continuous just stresses the duration."
+     ]
+    }
+   ]
+  },
+  "past-perfect": {
+   "core": [
+    "had + 3. Form: das FRÜHERE von zwei Ereignissen in der Vergangenheit.",
+    "had + past participle: the EARLIER of two past events."
+   ],
+   "why": [
+    "Wenn du in der Vergangenheit erzählst und noch weiter zurückspringst, braucht Englisch eine eigene Stufe. Das Past Perfect markiert: Das war schon vorher passiert. Ohne diese Stufe klingt die Reihenfolge unklar.",
+    "When you tell a past story and step even further back, English marks that with its own level. The Past Perfect says: this had already happened before. Without it the order is unclear."
+   ],
+   "contrast": [
+    "Deutsch nutzt dafür das Plusquamperfekt („war schon abgefahren“) – die Logik ist gleich, aber im Englischen wird es viel konsequenter verlangt.",
+    "German has the same structure, but English uses it far more consistently."
+   ],
+   "steps": [
+    [
+     "Gibt es zwei Ereignisse in der Vergangenheit? Welches war zuerst?",
+     "Das frühere → had + 3. Form. Das spätere → Past Simple.",
+     "Betonst du die Dauer davor? → had been + -ing"
+    ],
+    [
+     "Are there two past events? Which one came first?",
+     "The earlier one → had + past participle. The later one → Past Simple.",
+     "Stressing how long it went on before? → had been + -ing"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Past Perfect",
+      "Past Perfect"
+     ],
+     "had + 3. Form",
+     "When I arrived, the train had already left."
+    ],
+    [
+     [
+      "Continuous",
+      "Continuous"
+     ],
+     "had been + -ing",
+     "He was tired because he had been working all day."
+    ]
+   ],
+   "signals": [
+    [
+     "by the time, before, after, already, when I arrived",
+     [
+      "→ Past Perfect für das Frühere",
+      "→ Past Perfect for the earlier event"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "By the time we arrived, the film have already started.",
+     "good": "… the film had already started.",
+     "why": [
+      "In der Vergangenheit heißt es had, nie have – have zieht den Satz in die Gegenwart.",
+      "In a past context it is had, never have – have pulls the sentence into the present."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Nach „after“ und „before“ ist die Reihenfolge schon klar, deshalb ist dort auch Past Simple erlaubt: After he left / After he had left.",
+      "After “after” and “before” the order is already clear, so the Past Simple is also fine: After he left / After he had left."
+     ]
+    }
+   ]
+  },
+  "future-forms": {
+   "core": [
+    "will = spontan, Versprechen, Vermutung. going to = Plan oder sichtbarer Beweis. Present Continuous = fester Termin.",
+    "will = spontaneous decision, promise, prediction. going to = plan or visible evidence. Present Continuous = fixed arrangement."
+   ],
+   "why": [
+    "Englisch unterscheidet nicht die Zeit, sondern die Herkunft der Zukunft: Entscheide ich gerade jetzt (will), habe ich es vorher beschlossen (going to), oder steht es schon im Kalender (Present Continuous)?",
+    "English does not distinguish the time but where the future comes from: am I deciding right now (will), did I decide earlier (going to), or is it already in the diary (present continuous)?"
+   ],
+   "contrast": [
+    "Deutsch hat nur „werde“ und oft einfach Präsens. Deshalb greifen Deutsche fast immer zu will – das klingt für Muttersprachler bei Plänen falsch.",
+    "German has one future form, so German speakers overuse will – which sounds wrong to native speakers when talking about plans."
+   ],
+   "steps": [
+    [
+     "Ist es gerade eben entschieden, ein Versprechen oder eine Vermutung? → will",
+     "War es vorher geplant, oder sieht man es kommen? → going to",
+     "Ist es ein fester Termin mit Uhrzeit/Person? → Present Continuous"
+    ],
+    [
+     "Just decided, a promise or a prediction? → will",
+     "Planned before, or visible evidence? → going to",
+     "A fixed appointment with a time and people? → present continuous"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "will",
+      "will"
+     ],
+     "will + Grundform",
+     "I'll help you with that."
+    ],
+    [
+     [
+      "going to",
+      "going to"
+     ],
+     "am/is/are going to + Grundform",
+     "It's going to rain."
+    ],
+    [
+     [
+      "Termin",
+      "Arrangement"
+     ],
+     "am/is/are + -ing",
+     "I'm meeting Tom at six."
+    ]
+   ],
+   "signals": [
+    [
+     "Look! / The clouds …",
+     [
+      "sichtbarer Beweis → going to",
+      "visible evidence → going to"
+     ]
+    ],
+    [
+     "I think, probably, maybe",
+     [
+      "Vermutung → will",
+      "prediction → will"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "I will meet Tom at six – it's in my calendar.",
+     "good": "I'm meeting Tom at six.",
+     "why": [
+      "Fester Termin → Present Continuous, nicht will.",
+      "A fixed arrangement takes the present continuous, not will."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Bei reinen Vorhersagen sind will und going to oft beide richtig: It will rain / It's going to rain.",
+      "For plain predictions both are usually fine: It will rain / It's going to rain."
+     ]
+    }
+   ]
+  },
+  "future-perf-cont": {
+   "core": [
+    "will have + 3. Form: bis zu einem Zeitpunkt in der Zukunft fertig. will be + -ing: zu diesem Zeitpunkt gerade im Gange.",
+    "will have + past participle: finished by a point in the future. will be + -ing: in progress at that point."
+   ],
+   "why": [
+    "Du stellst dich gedanklich in die Zukunft und schaust von dort zurück („Bis Freitag ist es erledigt“) oder um dich („Um 18 Uhr sitze ich gerade im Zug“). Deshalb brauchst du immer zwei Bausteine: will + den passenden zweiten Teil (have oder be).",
+    "You place yourself at a future point and look back from there (“by Friday it will be done”) or around you (“at six I'll be sitting on the train”). That is why you always need two parts: will + the right second element (have or be)."
+   ],
+   "contrast": [
+    "Im Deutschen sagt man meist einfach „Bis Freitag bin ich fertig“ (Präsens). Englisch verlangt die volle Form: By Friday I will have finished. Das „have“ wird von Deutschen fast immer vergessen.",
+    "German usually just uses the present tense here. English needs the full form: By Friday I will have finished. German speakers almost always drop the “have”."
+   ],
+   "steps": [
+    [
+     "Frage: fertig BIS dahin oder gerade im Gange DANN? Fertig → will have. Im Gange → will be.",
+     "Zweiter Baustein: nach have kommt die 3. Form (finished, worked, written) – nach be kommt -ing (working, lying).",
+     "Dauer bis dahin betont? → will have been + -ing (By June I'll have been working here for five years.)",
+     "Gegenprobe: Steht nach „will“ nur ein gebeugtes Verb (will worked, will finished)? Dann fehlt ein Baustein."
+    ],
+    [
+     "Ask: finished BY then, or in progress AT that time? Finished → will have. In progress → will be.",
+     "Second part: after have comes the past participle – after be comes the -ing form.",
+     "Stressing the duration up to then? → will have been + -ing.",
+     "Check: is there only an inflected verb after “will” (will worked)? Then a building block is missing."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Future Perfect",
+      "Future Perfect"
+     ],
+     "will have + 3. Form",
+     "By Friday I will have finished the report."
+    ],
+    [
+     [
+      "Future Continuous",
+      "Future Continuous"
+     ],
+     "will be + -ing",
+     "This time tomorrow I'll be flying to Rome."
+    ],
+    [
+     [
+      "Future Perfect Cont.",
+      "Future Perfect Cont."
+     ],
+     "will have been + -ing",
+     "By June I'll have been working here for five years."
+    ]
+   ],
+   "signals": [
+    [
+     "by Friday, by then, by the time you arrive",
+     [
+      "fertig bis dahin → will have + 3. Form",
+      "finished by then → will have + participle"
+     ]
+    ],
+    [
+     "this time tomorrow, at 6 p.m. tonight",
+     [
+      "gerade im Gange → will be + -ing",
+      "in progress → will be + -ing"
+     ]
+    ],
+    [
+     "by … for five years",
+     [
+      "Dauer → will have been + -ing",
+      "duration → will have been + -ing"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "By the end of the year, she will worked here for five years.",
+     "good": "… she will have worked here for five years.",
+     "why": [
+      "Nach will steht nie eine gebeugte Form. Es fehlt das „have“: will + have + 3. Form.",
+      "Never use an inflected verb after will. The “have” is missing: will + have + participle."
+     ]
+    },
+    {
+     "bad": "By next month, he will have living here for ten years.",
+     "good": "… he will have lived here for ten years.",
+     "why": [
+      "Nach „have“ kommt die 3. Form (lived), nicht -ing. -ing kommt nur nach „be“ oder „been“.",
+      "After “have” comes the participle (lived), not -ing. The -ing form only follows “be” or “been”."
+     ]
+    },
+    {
+     "bad": "She will has completed her training.",
+     "good": "She will have completed her training.",
+     "why": [
+      "Nach will bleibt jedes Verb in der Grundform – also have, nie has.",
+      "After will every verb stays in the base form – have, never has."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Bei Verben, die eine Dauer ausdrücken (work, live, study, wait), sind will have worked und will have been working beide richtig – die zweite Form betont die Dauer stärker.",
+      "With durative verbs (work, live, study, wait) both will have worked and will have been working are correct – the second stresses the duration more."
+     ]
+    }
+   ]
+  },
+  "used-to": {
+   "core": [
+    "used to + Grundform = früher, heute nicht mehr. be used to + -ing = daran gewöhnt sein. get used to + -ing = sich gewöhnen.",
+    "used to + base form = a past habit that stopped. be used to + -ing = to be accustomed to. get used to + -ing = to become accustomed to."
+   ],
+   "why": [
+    "Die drei Ausdrücke sehen fast gleich aus, haben aber nichts miteinander zu tun: Beim ersten ist „used to“ eine Vergangenheitsform, bei den anderen beiden ist „used“ ein Adjektiv („gewöhnt“) und „to“ eine Präposition – und nach einer Präposition steht im Englischen immer -ing.",
+    "The three look almost identical but are unrelated: in the first, “used to” is a past form; in the other two “used” is an adjective and “to” is a preposition – and a preposition is always followed by -ing."
+   ],
+   "contrast": [
+    "Deutsch: „Ich wohnte früher in München“ vs. „Ich bin es gewohnt, früh aufzustehen“. Im Englischen unterscheidet nur das kleine be/get und die Verbform.",
+    "In English only the little be/get and the verb form tell the two apart."
+   ],
+   "steps": [
+    [
+     "Geht es um eine frühere Gewohnheit? → used to + Grundform (I used to live in Munich.)",
+     "Geht es um Gewöhnung? → be/get used to + -ing (I'm used to getting up early.)",
+     "Merksatz: Steht be oder get davor, kommt hinten -ing."
+    ],
+    [
+     "A past habit? → used to + base form (I used to live in Munich.)",
+     "Being accustomed? → be/get used to + -ing (I'm used to getting up early.)",
+     "Rule of thumb: if be or get comes before, -ing comes after."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "frühere Gewohnheit",
+      "past habit"
+     ],
+     "used to + Grundform",
+     "I used to smoke."
+    ],
+    [
+     [
+      "gewöhnt sein",
+      "be accustomed"
+     ],
+     "be used to + -ing",
+     "I'm used to working late."
+    ]
+   ],
+   "signals": [
+    [
+     "früher, damals / not any more",
+     [
+      "→ used to",
+      "→ used to"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "I'm used to get up early.",
+     "good": "I'm used to getting up early.",
+     "why": [
+      "Nach be used TO steht -ing, weil „to“ hier eine Präposition ist.",
+      "After be used TO comes -ing, because “to” is a preposition here."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Für wiederholte Handlungen früher ist auch „would“ möglich: We used to go / We would go to the lake every summer.",
+      "For repeated past actions “would” also works: We used to go / We would go to the lake every summer."
+     ]
+    }
+   ]
+  },
+  "conditionals": {
+   "core": [
+    "First: if + Present, will + Grundform. Second: if + Past, would + Grundform. Third: if + Past Perfect, would have + 3. Form. Im if-Teil nie will/would.",
+    "First: if + present, will + base. Second: if + past, would + base. Third: if + past perfect, would have + participle. Never will/would in the if-clause."
+   ],
+   "why": [
+    "Englisch zeigt mit der Zeitform, wie realistisch etwas ist: Präsens = realistisch, Vergangenheitsform = hypothetisch, Past Perfect = vorbei und nicht mehr änderbar. Deshalb ist die Vergangenheitsform im if-Satz kein Zeitsignal, sondern ein Distanzsignal.",
+    "English uses the tense to show how realistic something is: present = real, past = hypothetical, past perfect = over and unchangeable. So the past form in the if-clause is not about time but about distance from reality."
+   ],
+   "contrast": [
+    "Deutsch nutzt „würde“ in beiden Satzhälften („Wenn ich mehr Zeit hätte, würde ich …“ / umgangssprachlich „Wenn ich mehr Zeit haben würde“). Im Englischen ist genau das verboten: If I had more time, I would …",
+    "German colloquially allows “würde” in both halves. English forbids exactly that: If I had more time, I would …"
+   ],
+   "steps": [
+    [
+     "Wie realistisch ist es? Realistisch → First. Unwahrscheinlich/hypothetisch → Second. Vorbei → Third.",
+     "if-Teil zuerst bauen – dort nie will oder would.",
+     "Hauptsatz: will (First), would (Second), would have + 3. Form (Third).",
+     "Naturgesetz/immer wahr? → beide Teile Present (Zero: If you heat ice, it melts.)"
+    ],
+    [
+     "How real is it? Real → First. Unlikely → Second. Over → Third.",
+     "Build the if-clause first – never will or would in it.",
+     "Main clause: will (first), would (second), would have + participle (third).",
+     "A general truth? → present in both halves (If you heat ice, it melts.)"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Zero",
+      "Zero"
+     ],
+     "if + Present, Present",
+     "If you heat ice, it melts."
+    ],
+    [
+     [
+      "First",
+      "First"
+     ],
+     "if + Present, will + Grundform",
+     "If it rains, we'll stay in."
+    ],
+    [
+     [
+      "Second",
+      "Second"
+     ],
+     "if + Past, would + Grundform",
+     "If I had more time, I would travel."
+    ],
+    [
+     [
+      "Third",
+      "Third"
+     ],
+     "if + Past Perfect, would have + 3. Form",
+     "If we had left earlier, we wouldn't have missed the train."
+    ]
+   ],
+   "signals": [
+    [
+     "if + Present … , will",
+     [
+      "realistische Zukunft",
+      "real future"
+     ]
+    ],
+    [
+     "if + had + 3. Form",
+     [
+      "Vergangenheit, nicht mehr änderbar",
+      "past, unchangeable"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "If I would have more money, I would buy a car.",
+     "good": "If I had more money, I would buy a car.",
+     "why": [
+      "Das deutsche „würde“ im wenn-Satz gibt es im Englischen nicht: im if-Teil steht die Past-Form.",
+      "The German “würde” in the if-clause does not exist in English: the if-clause takes the past form."
+     ]
+    },
+    {
+     "bad": "If she will call me tomorrow, I'll tell her.",
+     "good": "If she calls me tomorrow, I'll tell her.",
+     "why": [
+      "Nach if steht bei realistischer Zukunft das Present – das „will“ steht nur im Hauptsatz.",
+      "After if, real future takes the present – “will” only appears in the main clause."
+     ]
+    },
+    {
+     "bad": "If they had left earlier, they wouldn't missed the train.",
+     "good": "… they wouldn't have missed the train.",
+     "why": [
+      "Third Conditional braucht would have + 3. Form – das „have“ fehlt.",
+      "The third conditional needs would have + participle – the “have” is missing."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "„If I were“ und „If I was“ sind beide möglich; were gilt als formeller und ist in Prüfungen die sichere Wahl.",
+      "“If I were” and “If I was” are both possible; were is more formal and the safer choice in exams."
+     ]
+    }
+   ]
+  },
+  "mixed-cond": {
+   "core": [
+    "Mixed Conditional: if + Past Perfect, would + Grundform (Ursache damals → Folge heute). wish + Past = Wunsch über jetzt; wish + Past Perfect = Bedauern über früher.",
+    "Mixed conditional: if + past perfect, would + base form (past cause → present result). wish + past = a wish about now; wish + past perfect = regret about the past."
+   ],
+   "why": [
+    "Hier treffen zwei Zeiten in einem Satz aufeinander: Die Bedingung liegt in der Vergangenheit, die Folge liegt in der Gegenwart. Jede Satzhälfte behält ihre eigene Zeit – deshalb „had studied“ vorne und „would be“ hinten. Bei wish gilt dieselbe Logik: Eine Stufe zurück = Wunsch über die Gegenwart, zwei Stufen zurück = Bedauern über die Vergangenheit.",
+    "Two times meet in one sentence: the condition is in the past, the result is in the present. Each half keeps its own time – “had studied” in front, “would be” behind. With wish the same logic applies: one step back = a wish about now, two steps back = regret about the past."
+   ],
+   "contrast": [
+    "Deutsch sagt „Wenn ich Medizin studiert hätte, wäre ich jetzt Arzt“ – ein „hätte/wäre“ für beides. Englisch trennt sauber: If I had studied medicine, I would be a doctor now.",
+    "German uses one subjunctive for both halves. English separates them clearly: If I had studied medicine, I would be a doctor now."
+   ],
+   "steps": [
+    [
+     "Wo liegt die Ursache? In der Vergangenheit → if + had + 3. Form.",
+     "Wo liegt die Folge? Jetzt → would + Grundform. Damals → would have + 3. Form.",
+     "Bei wish: Wunsch über jetzt → wish + Past (I wish I had more time). Ärger über eine Gewohnheit anderer → wish + wouldn't (I wish you wouldn't interrupt me).",
+     "Bedauern über früher → wish + had + 3. Form (I wish I hadn't said that)."
+    ],
+    [
+     "Where is the cause? In the past → if + had + participle.",
+     "Where is the result? Now → would + base form. Back then → would have + participle.",
+     "With wish: a wish about now → wish + past (I wish I had more time). Annoyance about someone's habit → wish + wouldn't.",
+     "Regret about the past → wish + had + participle (I wish I hadn't said that)."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Mixed",
+      "Mixed"
+     ],
+     "if + had + 3. Form, would + Grundform",
+     "If I had taken that job, I would live in Berlin now."
+    ],
+    [
+     [
+      "wish jetzt",
+      "wish now"
+     ],
+     "wish + Past",
+     "I wish I had more free time."
+    ],
+    [
+     [
+      "wish früher",
+      "wish past"
+     ],
+     "wish + had + 3. Form",
+     "I wish I hadn't said that."
+    ],
+    [
+     [
+      "wish Ärger",
+      "wish annoyance"
+     ],
+     "wish + wouldn't",
+     "I wish you wouldn't interrupt me."
+    ]
+   ],
+   "signals": [
+    [
+     "… now, today (in der Folge)",
+     [
+      "Folge in der Gegenwart → would + Grundform",
+      "present result → would + base form"
+     ]
+    ],
+    [
+     "I wish + Past",
+     [
+      "Wunsch über die Gegenwart",
+      "wish about the present"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "If I would have studied harder, I would have a better job now.",
+     "good": "If I had studied harder, I would have a better job now.",
+     "why": [
+      "Im if-Teil steht had + 3. Form. „would have“ gehört nur in den Hauptsatz.",
+      "The if-clause takes had + participle. “would have” only belongs in the main clause."
+     ]
+    },
+    {
+     "bad": "I wish I have more free time.",
+     "good": "I wish I had more free time.",
+     "why": [
+      "Nach wish geht die Zeit eine Stufe zurück: have → had.",
+      "After wish the tense moves one step back: have → had."
+     ]
+    },
+    {
+     "bad": "I wish you didn't interrupt me all the time.",
+     "good": "I wish you wouldn't interrupt me all the time.",
+     "why": [
+      "Bei Ärger über das Verhalten anderer nimmt man wish + wouldn't.",
+      "For annoyance about someone else's behaviour use wish + wouldn't."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "„I wish I could …“ ist immer erlaubt, wenn es um eine Fähigkeit geht.",
+      "“I wish I could …” is always fine when ability is involved."
+     ]
+    }
+   ]
+  },
+  "passive": {
+   "core": [
+    "be (in der passenden Zeit) + 3. Form. Das Objekt wird zum Subjekt.",
+    "be (in the right tense) + past participle. The object becomes the subject."
+   ],
+   "why": [
+    "Passiv nutzt man, wenn die Handlung wichtiger ist als der Handelnde – oder wenn niemand weiß, wer es war. Entscheidend ist: Die Zeit steckt immer im „be“, nie im Hauptverb. Das Hauptverb bleibt für immer in der 3. Form.",
+    "The passive is used when the action matters more than the doer – or when nobody knows who did it. Crucially, the tense always sits in “be”, never in the main verb. The main verb stays in the participle form forever."
+   ],
+   "contrast": [
+    "Deutsch bildet das Passiv mit „werden“ („Das Fenster wurde zerbrochen“). Weil Englisch dafür „be“ nimmt, bauen Deutsche oft versehentlich ein Perfekt: „has broken“ statt „was broken“ – das heißt aber „er hat zerbrochen“, also aktiv.",
+    "German forms the passive with “werden”. Because English uses “be”, German speakers often build a perfect by accident: “has broken” instead of “was broken” – but that is active."
+   ],
+   "steps": [
+    [
+     "Wer oder was erleidet die Handlung? Das wird das Subjekt.",
+     "Welche Zeit? Die kommt ins be: is/are (jetzt), was/were (Vergangenheit), has been (Present Perfect), will be (Zukunft).",
+     "Hauptverb in die 3. Form setzen – immer, egal welche Zeit.",
+     "Gegenprobe: Steht da have/has/had + 3. Form ohne „been“? Dann ist es Aktiv, kein Passiv."
+    ],
+    [
+     "Who or what undergoes the action? That becomes the subject.",
+     "Which tense? It goes into be: is/are, was/were, has been, will be.",
+     "Put the main verb into the participle – always, in every tense.",
+     "Check: have/has/had + participle without “been”? Then it is active, not passive."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Present",
+      "Present"
+     ],
+     "is/are + 3. Form",
+     "The road is repaired every year."
+    ],
+    [
+     [
+      "Past",
+      "Past"
+     ],
+     "was/were + 3. Form",
+     "The window was broken during the storm."
+    ],
+    [
+     [
+      "Present Perfect",
+      "Present Perfect"
+     ],
+     "has/have been + 3. Form",
+     "The contract has been signed."
+    ],
+    [
+     [
+      "Verlauf",
+      "Continuous"
+     ],
+     "is/are being + 3. Form",
+     "The road is being repaired."
+    ]
+   ],
+   "signals": [
+    [
+     "by + Person",
+     [
+      "nennt den Handelnden – oft weggelassen",
+      "names the doer – often left out"
+     ]
+    ],
+    [
+     "Someone stole … → My bike …",
+     [
+      "Umformung ins Passiv",
+      "transformation into the passive"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "The window had broken during the storm.",
+     "good": "The window was broken during the storm.",
+     "why": [
+      "„had broken“ ist Aktiv (es hat selbst etwas zerbrochen). Passiv braucht be + 3. Form: was broken.",
+      "“had broken” is active. The passive needs be + participle: was broken."
+     ]
+    },
+    {
+     "bad": "My bike was stoled yesterday.",
+     "good": "My bike was stolen yesterday.",
+     "why": [
+      "steal ist unregelmäßig: steal – stole – stolen. Im Passiv steht immer die 3. Form (stolen).",
+      "steal is irregular: steal – stole – stolen. The passive always takes the third form."
+     ]
+    },
+    {
+     "bad": "Our house was broken last week.",
+     "good": "Our house was broken into last week.",
+     "why": [
+      "Bei Verben mit Präposition bleibt die Präposition auch im Passiv stehen: break into → was broken into.",
+      "With phrasal verbs the preposition stays in the passive: break into → was broken into."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "„by + Handelnder“ darf stehen oder wegfallen, wenn er unwichtig ist: The roof was repaired (by someone) last month.",
+      "“by + doer” may be included or left out when it is unimportant."
+     ]
+    }
+   ]
+  },
+  "reported": {
+   "core": [
+    "Die Zeit geht eine Stufe zurück: am → was, will → would, have done → had done. Zeit- und Ortsangaben verschieben sich mit: tomorrow → the next day.",
+    "Tenses move one step back: am → was, will → would, have done → had done. Time and place expressions shift too: tomorrow → the next day."
+   ],
+   "why": [
+    "Du berichtest später von etwas, das früher gesagt wurde. Weil der Sprechzeitpunkt jetzt weiter weg ist, rückt alles eine Stufe in die Vergangenheit – sonst klänge es, als würde es gerade gesagt.",
+    "You are reporting later on something said earlier. Because the moment of speaking is now further away, everything moves one step into the past – otherwise it would sound as if it were being said right now."
+   ],
+   "contrast": [
+    "Deutsch nutzt den Konjunktiv („Er sagte, er werde kommen“) und lässt die Zeit oft stehen. Englisch verschiebt sie zwingend – das vergessen Deutsche besonders bei will → would und bei have done → had done.",
+    "German uses the subjunctive and often keeps the tense. English must shift it – German speakers especially forget will → would and have done → had done."
+   ],
+   "steps": [
+    [
+     "Welche Zeit steht in der direkten Rede? Eine Stufe zurückschieben.",
+     "will → would · am/is/are → was/were · do/does → did · have/has done → had done · did → had done",
+     "Nach „would“, „had“ usw. steht immer die Grundform bzw. die 3. Form – nie eine gebeugte Form (would finish, nicht would finished).",
+     "Zeitwörter anpassen: tomorrow → the next day, yesterday → the day before, now → then, today → that day.",
+     "Fragen: normale Wortstellung, kein do/did (He asked where I lived.)"
+    ],
+    [
+     "Which tense is in the direct speech? Move it one step back.",
+     "will → would · am/is/are → was/were · do/does → did · have/has done → had done",
+     "After “would” or “had” always use the base form or the participle – never an inflected form.",
+     "Shift time words: tomorrow → the next day, yesterday → the day before, now → then.",
+     "Questions: normal word order, no do/did (He asked where I lived.)"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Aussage",
+      "Statement"
+     ],
+     "said (that) + verschobene Zeit",
+     "She said (that) she was tired."
+    ],
+    [
+     [
+      "will",
+      "will"
+     ],
+     "will → would + Grundform",
+     "She said she would call me the next day."
+    ],
+    [
+     [
+      "Present Perfect",
+      "Present Perfect"
+     ],
+     "have done → had done",
+     "He told me he had already sent the contract."
+    ],
+    [
+     [
+      "Frage",
+      "Question"
+     ],
+     "asked + Fragewort + normale Wortstellung",
+     "He asked me where I lived."
+    ]
+   ],
+   "signals": [
+    [
+     "tomorrow → the next day",
+     [
+      "Zeitangabe verschiebt sich mit",
+      "the time expression shifts too"
+     ]
+    ],
+    [
+     "told me / said",
+     [
+      "told braucht ein Objekt, said nicht",
+      "told needs an object, said does not"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "She said she would finished the report.",
+     "good": "She said she would finish the report.",
+     "why": [
+      "Nach would steht immer die Grundform – finish, nicht finished.",
+      "After would always use the base form – finish, not finished."
+     ]
+    },
+    {
+     "bad": "He told me that he already sent the contract.",
+     "good": "He told me that he had already sent the contract.",
+     "why": [
+      "„have sent“ wird in der indirekten Rede zu „had sent“ – die Rückverschiebung fehlt.",
+      "“have sent” becomes “had sent” in reported speech – the backshift is missing."
+     ]
+    },
+    {
+     "bad": "She told me that she will finish it next week.",
+     "good": "She told me that she would finish it next week.",
+     "why": [
+      "will wird nach einem Verb in der Vergangenheit immer zu would.",
+      "will always becomes would after a past reporting verb."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "„that“ darf immer wegfallen: She said (that) she was tired. Bei Dingen, die noch gelten, ist die Rückverschiebung optional: He said the earth is/was round.",
+      "“that” may always be omitted. For things still true the backshift is optional: He said the earth is/was round."
+     ]
+    }
+   ]
+  },
+  "relative": {
+   "core": [
+    "who = Personen, which = Dinge, whose = Besitz, where = Orte. that nur ohne Kommas.",
+    "who = people, which = things, whose = possession, where = places. that only without commas."
+   ],
+   "why": [
+    "Das Komma entscheidet über die Bedeutung: Ohne Komma grenzt der Relativsatz ein (welcher von mehreren?), mit Komma ist er nur eine Zusatzinfo, die man streichen könnte. Deshalb darf „that“ – das reine Eingrenzungswort – nie nach einem Komma stehen.",
+    "The comma decides the meaning: without a comma the clause narrows down which one you mean; with a comma it is extra information you could delete. That is why “that” – the pure defining word – can never follow a comma."
+   ],
+   "contrast": [
+    "Deutsch hat für alles „der/die/das“ und setzt immer ein Komma. Genau deshalb setzen Deutsche im Englischen zu viele Kommas – und ändern damit unbemerkt die Bedeutung.",
+    "German uses one relative pronoun and always a comma. That is why German speakers use too many commas in English – silently changing the meaning."
+   ],
+   "steps": [
+    [
+     "Brauche ich den Satz, um zu wissen, welche Person/Sache gemeint ist? → kein Komma, who/which/that erlaubt.",
+     "Ist es nur eine Zusatzinfo? → Kommas, und nur who/which (nie that).",
+     "Objekt-Relativpronomen darf ohne Komma wegfallen: The book (that) I read."
+    ],
+    [
+     "Do I need the clause to know which person/thing is meant? → no comma, who/which/that all fine.",
+     "Is it just extra information? → commas, and only who/which (never that).",
+     "An object relative pronoun can be dropped without a comma: The book (that) I read."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "eingrenzend",
+      "defining"
+     ],
+     "ohne Komma, who/which/that",
+     "The woman who lives next door is a doctor."
+    ],
+    [
+     [
+      "Zusatzinfo",
+      "non-defining"
+     ],
+     "mit Kommas, who/which",
+     "My car, which is ten years old, still runs well."
+    ]
+   ],
+   "signals": [
+    [
+     "Komma vor dem Relativsatz",
+     [
+      "→ nie that",
+      "→ never that"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "My car, that is ten years old, still runs.",
+     "good": "My car, which is ten years old, still runs.",
+     "why": [
+      "Nach einem Komma steht nie that, sondern which.",
+      "Never use that after a comma – use which."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Ohne Komma sind who/that (Personen) und which/that (Dinge) beide richtig.",
+      "Without a comma, who/that (people) and which/that (things) are both correct."
+     ]
+    }
+   ]
+  },
+  "modals-deduction": {
+   "core": [
+    "must = fast sicher ja. might/could = vielleicht. can't = fast sicher nein. Für Vergangenes: must/might/can't have + 3. Form.",
+    "must = almost certainly yes. might/could = possibly. can't = almost certainly not. For the past: must/might/can't have + participle."
+   ],
+   "why": [
+    "Hier geht es nicht um Erlaubnis oder Zwang, sondern darum, wie sicher du dir bist. Die Modalverben sind eine Skala der Sicherheit – must ganz oben, can't ganz unten.",
+    "This is not about permission or obligation but about how certain you are. The modals form a scale of certainty – must at the top, can't at the bottom."
+   ],
+   "contrast": [
+    "Deutsch sagt „Er muss zu Hause sein“ im selben Sinn – aber für die Verneinung nimmt Deutsch „kann nicht“ und Englisch ebenfalls can't, nicht mustn't. mustn't heißt „darf nicht“!",
+    "Note the negative: English uses can't for “certainly not”, never mustn't – mustn't means “not allowed”."
+   ],
+   "steps": [
+    [
+     "Wie sicher bist du? Sicher ja → must. Vielleicht → might/could. Sicher nein → can't.",
+     "Geht es um jetzt? → Modal + Grundform (She must be at home.)",
+     "Geht es um früher? → Modal + have + 3. Form (He can't have seen us.)"
+    ],
+    [
+     "How sure are you? Sure yes → must. Maybe → might/could. Sure no → can't.",
+     "About now? → modal + base form (She must be at home.)",
+     "About the past? → modal + have + participle (He can't have seen us.)"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Gegenwart",
+      "Present"
+     ],
+     "must / might / can't + Grundform",
+     "She must be in a meeting."
+    ],
+    [
+     [
+      "Vergangenheit",
+      "Past"
+     ],
+     "must / might / can't + have + 3. Form",
+     "He must have forgotten the appointment."
+    ]
+   ],
+   "signals": [
+    [
+     "the lights are on, he never forgets",
+     [
+      "Beweis → must / can't",
+      "evidence → must / can't"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "He mustn't have seen us.",
+     "good": "He can't have seen us.",
+     "why": [
+      "Für „sicher nicht“ nimmt man can't have, nicht mustn't (das heißt „darf nicht“).",
+      "For “certainly not” use can't have, not mustn't (which means “not allowed”)."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "might und could sind für „vielleicht“ austauschbar: He might/could be at home.",
+      "might and could are interchangeable for “maybe”."
+     ]
+    }
+   ]
+  },
+  "gerund-inf": {
+   "core": [
+    "Nach enjoy, avoid, finish, mind, suggest, look forward to: -ing. Nach decide, want, hope, agree, plan, promise: to + Grundform.",
+    "After enjoy, avoid, finish, mind, suggest, look forward to: -ing. After decide, want, hope, agree, plan, promise: to + base form."
+   ],
+   "why": [
+    "Es gibt keine Logik zum Herleiten – es hängt am Verb davor und muss als Paar gelernt werden. Eine Hilfe gibt es aber: Nach JEDER Präposition (on, of, about, in, to als Präposition) steht immer -ing.",
+    "There is no rule to derive it – it depends on the verb before and has to be learned in pairs. One reliable help: after EVERY preposition (on, of, about, in, and to when it is a preposition) the -ing form is used."
+   ],
+   "contrast": [
+    "Deutsch nutzt fast immer den Infinitiv mit „zu“ („Er schlug vor, sich zu treffen“). Deshalb greifen Deutsche automatisch zu „to“ – bei suggest, enjoy, avoid ist das aber falsch.",
+    "German nearly always uses the infinitive, so German speakers automatically reach for “to” – which is wrong after suggest, enjoy, avoid."
+   ],
+   "steps": [
+    [
+     "Welches Verb steht davor? In der -ing-Liste (enjoy, avoid, finish, mind, suggest, keep, practise) → -ing.",
+     "In der to-Liste (decide, want, hope, agree, plan, promise, offer, refuse) → to + Grundform.",
+     "Steht eine Präposition davor (look forward to, interested in, good at, instead of)? → immer -ing.",
+     "stop / remember / try: beide möglich, aber mit anderer Bedeutung (stop smoking = aufhören zu rauchen; stop to smoke = anhalten, um zu rauchen)."
+    ],
+    [
+     "Which verb comes before? In the -ing list (enjoy, avoid, finish, mind, suggest, keep, practise) → -ing.",
+     "In the to list (decide, want, hope, agree, plan, promise, offer, refuse) → to + base form.",
+     "Is there a preposition before (look forward to, interested in, good at)? → always -ing.",
+     "stop / remember / try: both possible, but the meaning changes."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "-ing",
+      "-ing"
+     ],
+     "enjoy / avoid / suggest + -ing",
+     "He suggested meeting at the office."
+    ],
+    [
+     [
+      "to",
+      "to"
+     ],
+     "decide / want / plan + to + Grundform",
+     "We decided to take the train."
+    ],
+    [
+     [
+      "Präposition",
+      "Preposition"
+     ],
+     "Präposition + -ing",
+     "I look forward to seeing you."
+    ]
+   ],
+   "signals": [
+    [
+     "look forward to, instead of, good at",
+     [
+      "„to“ ist hier Präposition → -ing",
+      "“to” is a preposition here → -ing"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "He suggested to meet at the office.",
+     "good": "He suggested meeting at the office.",
+     "why": [
+      "Nach suggest steht immer -ing, nie to + Grundform.",
+      "suggest is always followed by -ing, never by to + base form."
+     ]
+    },
+    {
+     "bad": "I look forward to see you.",
+     "good": "I look forward to seeing you.",
+     "why": [
+      "Das „to“ in look forward to ist eine Präposition – danach steht -ing.",
+      "The “to” in look forward to is a preposition – it takes -ing."
+     ]
+    },
+    {
+     "bad": "She enjoys to work in a team.",
+     "good": "She enjoys working in a team.",
+     "why": [
+      "enjoy gehört zur -ing-Liste.",
+      "enjoy belongs to the -ing list."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Nach start, begin, continue, like, love, hate, prefer sind beide Formen richtig: I like cooking / I like to cook.",
+      "After start, begin, continue, like, love, hate, prefer both forms are correct: I like cooking / I like to cook."
+     ]
+    }
+   ]
+  },
+  "prepositions": {
+   "core": [
+    "Viele Verben und Adjektive haben eine feste Präposition. Sie folgt keiner Logik und wird als Einheit gelernt: depend on, interested in, good at, afraid of, responsible for.",
+    "Many verbs and adjectives take a fixed preposition. It follows no logic and is learned as one chunk: depend on, interested in, good at, afraid of, responsible for."
+   ],
+   "why": [
+    "Präpositionen sind das, was im Kopf zuletzt automatisch wird – sie tragen kaum Bedeutung, entscheiden aber, ob ein Satz muttersprachlich klingt. Deshalb lernt man nie die Präposition allein, sondern immer das ganze Paar.",
+    "Prepositions are the last thing to become automatic – they carry little meaning but decide whether a sentence sounds native. So never learn the preposition alone, always the whole pair."
+   ],
+   "contrast": [
+    "Die deutsche Präposition ist fast nie dieselbe: „abhängen von“ → depend ON, „sich interessieren für“ → interested IN, „warten auf“ → wait FOR, „denken an“ → think OF/ABOUT.",
+    "The German preposition is almost never the same one, so translating it directly nearly always fails."
+   ],
+   "steps": [
+    [
+     "Verb oder Adjektiv als Ganzes abrufen: nicht „depend“ + Präposition suchen, sondern „depend on“ als ein Wort denken.",
+     "Nach jeder Präposition steht -ing: good at explaining, instead of waiting.",
+     "Im Zweifel: Kollokation nachschlagen und als Beispielsatz merken, nicht als Regel."
+    ],
+    [
+     "Recall the verb or adjective as a whole: think of “depend on” as one word.",
+     "After every preposition comes -ing: good at explaining, instead of waiting.",
+     "When in doubt, look up the collocation and remember it as an example sentence, not as a rule."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Verb + Präp.",
+      "Verb + prep."
+     ],
+     "depend on, wait for, apply for, deal with",
+     "It depends on the weather."
+    ],
+    [
+     [
+      "Adjektiv + Präp.",
+      "Adjective + prep."
+     ],
+     "interested in, good at, afraid of",
+     "She's good at explaining things."
+    ]
+   ],
+   "signals": [
+    [
+     "Präposition + Verb",
+     [
+      "→ immer -ing",
+      "→ always -ing"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "It depends of the weather.",
+     "good": "It depends on the weather.",
+     "why": [
+      "depend hat immer on – das deutsche „von“ führt hier in die Irre.",
+      "depend always takes on."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "Manche Verben erlauben mehrere Präpositionen mit anderer Bedeutung: think of (sich vorstellen) / think about (nachdenken über).",
+      "Some verbs allow several prepositions with different meanings: think of / think about."
+     ]
+    }
+   ]
+  },
+  "articles": {
+   "core": [
+    "a/an = eines von vielen (und bei Berufen). the = bekannt oder einzigartig. kein Artikel = allgemein und abstrakt.",
+    "a/an = one of many (and with jobs). the = known or unique. no article = general and abstract."
+   ],
+   "why": [
+    "Der Artikel beantwortet die Frage: Weiß mein Gegenüber schon, welches Exemplar ich meine? Beim ersten Mal a/an, ab dem zweiten Mal the. Und wenn es gar nicht um ein Exemplar geht, sondern um die Sache an sich (music, life, work), steht gar nichts.",
+    "The article answers: does my listener already know which one I mean? First mention a/an, from the second mention the. And if you do not mean a specific item but the thing in general (music, life, work), use no article at all."
+   ],
+   "contrast": [
+    "Deutsch setzt viel öfter einen Artikel: „Das Leben ist kurz“ → Life is short. „Ich mag die Musik“ (allgemein) → I like music.",
+    "German uses articles far more often: “Das Leben ist kurz” → Life is short; “Ich mag die Musik” → I like music."
+   ],
+   "steps": [
+    [
+     "Meinst du die Sache allgemein (Musik, Leben, Geld)? → kein Artikel.",
+     "Nennst du es zum ersten Mal, eines von vielen? → a/an.",
+     "Weiß der Zuhörer genau, welches? Oder gibt es nur eins? → the."
+    ],
+    [
+     "Do you mean the thing in general (music, life, money)? → no article.",
+     "First mention, one of many? → a/an.",
+     "Does the listener know exactly which one, or is there only one? → the."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "a/an",
+      "a/an"
+     ],
+     "eines von vielen, Beruf",
+     "My brother is an engineer."
+    ],
+    [
+     [
+      "the",
+      "the"
+     ],
+     "bekannt, einzigartig",
+     "The report you sent is excellent."
+    ],
+    [
+     [
+      "kein Artikel",
+      "no article"
+     ],
+     "allgemein, abstrakt",
+     "Life is too short. I love music."
+    ]
+   ],
+   "signals": [
+    [
+     "allgemeine Begriffe: life, music, love, work",
+     [
+      "→ kein Artikel",
+      "→ no article"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "I love the music, especially the jazz.",
+     "good": "I love music, especially jazz.",
+     "why": [
+      "Allgemeine, abstrakte Begriffe stehen ohne Artikel.",
+      "General, abstract nouns take no article."
+     ]
+    }
+   ],
+   "alts": []
+  }
+ },
+ "altFamilies": [
+  {
+   "id": "perfCont",
+   "topics": [
+    "pres-perf-cont",
+    "past-perfect",
+    "future-perf-cont"
+   ],
+   "note": [
+    "Beide Formen sind hier korrekt – die Verlaufsform betont die Dauer stärker.",
+    "Both forms are correct here – the continuous stresses the duration more."
+   ]
+  },
+  {
+   "id": "gerInf",
+   "topics": [
+    "gerund-inf"
+   ],
+   "note": [
+    "Nach diesem Verb sind -ing und to + Grundform beide richtig.",
+    "After this verb both -ing and to + base form are correct."
+   ]
+  },
+  {
+   "id": "thatOpt",
+   "topics": [
+    "reported",
+    "relative"
+   ],
+   "note": [
+    "„that“ darf stehen oder wegfallen – beides ist korrekt.",
+    "“that” may be used or omitted – both are correct."
+   ]
+  },
+  {
+   "id": "willGoing",
+   "topics": [
+    "future-forms"
+   ],
+   "note": [
+    "Bei Vorhersagen sind will und going to beide richtig.",
+    "For predictions both will and going to are correct."
+   ]
+  },
+  {
+   "id": "wereWas",
+   "topics": [
+    "conditionals",
+    "mixed-cond"
+   ],
+   "note": [
+    "„If I were“ und „If I was“ sind beide erlaubt; were ist die formellere Variante.",
+    "“If I were” and “If I was” are both allowed; were is the more formal variant."
+   ]
+  },
+  {
+   "id": "byAgent",
+   "topics": [
+    "passive"
+   ],
+   "note": [
+    "Der Handelnde mit „by …“ darf stehen oder wegfallen.",
+    "The agent with “by …” may be included or left out."
+   ]
+  },
+  {
+   "id": "whichThat",
+   "topics": [
+    "relative"
+   ],
+   "note": [
+    "Ohne Komma sind that und which/who beide richtig.",
+    "Without a comma, that and which/who are both correct."
+   ]
+  }
+ ]
+}

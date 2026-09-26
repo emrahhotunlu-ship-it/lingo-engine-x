@@ -1,0 +1,119 @@
+import { LESSONS, SEED_VOCAB, TOPICS, UNITS, seedCard, type Lesson } from './content';
+import { DAY_START_HOUR, dayKey } from './date';
+import { computeStreak, type Streak } from './streak';
+
+// „Dein Stand": reine Berechnung aus den gelesenen Dokumenten (keine Seiteneffekte).
+
+type Doc = Record<string, unknown>;
+
+/** `name` deutsch, `nameEn` englisch – angezeigt wird je nach Oberflächensprache. */
+export type TopicState = { id: string; name: string; nameEn: string; p: number; n: number };
+
+export type Overview = {
+  today: string;
+  streak: Streak;
+  course: { done: number; total: number; next: Lesson | null; units: Array<{ id: string; de: string; en: string; done: number; total: number }> };
+  vocab: { total: number; byStage: [number, number, number, number, number, number]; due: number };
+  grammar: { topics: TopicState[]; weakest: TopicState[] };
+  /** `lang` = Sprache, in der die Texte gespeichert sind (fehlt = Deutsch, wie in der alten App). */
+  assess: { level: string; cefr: string; why: string; lang: 'de' | 'en' } | null;
+  schema: { version: number; migratedAt: number } | null;
+};
+
+const num = (v: unknown, fallback = 0): number => (typeof v === 'number' && Number.isFinite(v) ? v : fallback);
+const str = (v: unknown): string => (typeof v === 'string' ? v : '');
+const obj = (v: unknown): Doc => (typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as Doc) : {});
+
+/** Beginn des nächsten Lerntags (04:00 Uhr) in ms – bis dahin gilt eine Karte als „heute fällig". */
+export function learningDayEnd(nowMs: number): number {
+  const d = new Date(nowMs - DAY_START_HOUR * 3_600_000);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + 1);
+  d.setHours(DAY_START_HOUR, 0, 0, 0);
+  return d.getTime();
+}
+
+/** Alle Vokabelkarten: Voreinstellungen, überlagert von den Dokumenten der Datenbank. */
+export function mergedVocab(dbVocab: ReadonlyMap<string, Doc>): Map<string, Doc> {
+  const out = new Map<string, Doc>();
+  SEED_VOCAB.forEach((s, i) => {
+    const c = seedCard(s, i);
+    out.set(c.id, c);
+  });
+  for (const [id, d] of dbVocab) out.set(id, d);
+  return out;
+}
+
+export function buildOverview(input: {
+  nowMs: number;
+  profile: Doc | null | undefined;
+  course: Doc | null | undefined;
+  assess: Doc | null | undefined;
+  schema: Doc | null | undefined;
+  vocab: ReadonlyMap<string, Doc>;
+  grammar: ReadonlyMap<string, Doc>;
+  pflichtDone?: ReadonlySet<string>;
+}): Overview {
+  const today = dayKey(input.nowMs);
+  const profile = obj(input.profile);
+  const schemaDoc = input.schema ? obj(input.schema) : null;
+  const cutover = schemaDoc && typeof schemaDoc.cutover === 'string' ? schemaDoc.cutover : null;
+
+  const streak = computeStreak({
+    days: obj(profile.days) as Record<string, number>,
+    xpDays: obj(profile.xpDays) as Record<string, number>,
+    cutover,
+    pflichtDone: input.pflichtDone ?? new Set<string>(),
+    today,
+  });
+
+  const doneMap = obj(obj(input.course).done);
+  const doneIds = new Set(LESSONS.filter((l) => l.id in doneMap).map((l) => l.id));
+  const next = LESSONS.find((l) => !doneIds.has(l.id)) ?? null;
+  const units = UNITS.map((u) => {
+    const ls = LESSONS.filter((l) => l.unit === u.id);
+    return { id: u.id, de: u.de, en: u.en, done: ls.filter((l) => doneIds.has(l.id)).length, total: ls.length };
+  });
+
+  const end = learningDayEnd(input.nowMs);
+  const byStage: Overview['vocab']['byStage'] = [0, 0, 0, 0, 0, 0];
+  let total = 0;
+  let due = 0;
+  for (const card of mergedVocab(input.vocab).values()) {
+    if (card.hidden === true) continue;
+    total++;
+    const stage = Math.min(5, Math.max(0, Math.round(num(card.stage))));
+    byStage[stage as 0 | 1 | 2 | 3 | 4 | 5]++;
+    const fsrs = obj(card.fsrs);
+    const isNew = str(card.state) === 'new' || (typeof fsrs.state === 'number' && fsrs.state === 0);
+    const dueAt = num(fsrs.due, num(card.due));
+    if (!isNew && dueAt > 0 && dueAt < end) due++;
+  }
+
+  const topics = TOPICS.map((t) => {
+    const d = input.grammar.get(t.id);
+    return { id: t.id, name: t.name, nameEn: t.name_en ?? t.name, p: Math.min(1, Math.max(0, num(d?.p, t.p0))), n: num(d?.n) };
+  });
+  const weakest = [...topics].sort((a, b) => a.p - b.p || b.n - a.n).slice(0, 3);
+
+  let assess: Overview['assess'] = null;
+  if (input.assess) {
+    const a = obj(input.assess);
+    const data = a.data && typeof a.data === 'object' ? obj(a.data) : a;
+    const level = str(data.level);
+    const cefr = str(data.cefr);
+    if (level || cefr) assess = { level, cefr, why: str(data.levelWhy), lang: str(a.lang) === 'en' ? 'en' : 'de' };
+  }
+
+  const schema = schemaDoc ? { version: num(schemaDoc.version), migratedAt: num(schemaDoc.migratedAt) } : null;
+
+  return {
+    today,
+    streak,
+    course: { done: doneIds.size, total: LESSONS.length, next, units },
+    vocab: { total, byStage, due },
+    grammar: { topics, weakest },
+    assess,
+    schema,
+  };
+}

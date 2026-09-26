@@ -1,0 +1,166 @@
+[
+ {
+  "id": "sc-vida",
+  "level": "C1",
+  "title": "Holding the Q2 e-invoicing deadline",
+  "title_de": "Den E-Rechnungs-Termin im Q2 halten",
+  "situation": "Your biggest manufacturing client must be able to receive structured e-invoices before the national mandate takes effect. Two weeks ago their CFO asked to push the rollout to Q3 because their ERP upgrade is running late. You are in his office to keep the original date.",
+  "situation_de": "Dein größter Industriekunde muss strukturierte E-Rechnungen empfangen können, bevor die gesetzliche Pflicht greift. Vor zwei Wochen wollte der CFO den Rollout auf Q3 schieben, weil das ERP-Upgrade hängt. Du sitzt bei ihm, um den Termin zu halten.",
+  "goal": "Keep the Q2 date without making the delay sound like their fault.",
+  "goal_de": "Den Q2-Termin halten, ohne die Verzögerung wie ihre Schuld klingen zu lassen.",
+  "persona": {
+   "name": "Reinhard Vogt",
+   "role": "CFO",
+   "org": "a mid-sized industrial manufacturer",
+   "traits": "Blunt, numbers-first, interrupts when an answer gets vague. Respects people who name risks before he has to."
+  },
+  "stake": "He wants the rollout in Q3 so this year's IT budget stays intact.",
+  "objection": "He believes the penalty risk is theoretical and that you are protecting your own delivery schedule.",
+  "opening": "Let me be direct. My people tell me a quarter makes no difference here, and my budget says it makes a very large one. Convince me otherwise.",
+  "useful": [
+   {
+    "en": "the exposure here is",
+    "de": "das Risiko liegt hier bei"
+   },
+   {
+    "en": "my concern would be",
+    "de": "mein Bedenken wäre"
+   },
+   {
+    "en": "that hinges on",
+    "de": "das hängt ab von"
+   },
+   {
+    "en": "if we slip that far",
+    "de": "wenn wir so weit rutschen"
+   },
+   {
+    "en": "I would rather we",
+    "de": "mir wäre lieber, wir"
+   }
+  ]
+ },
+ {
+  "id": "sc-arch",
+  "level": "C1",
+  "title": "Defending the cloud DMS against on-premise",
+  "title_de": "Cloud-DMS gegen On-Premise verteidigen",
+  "situation": "A prospect's enterprise architect has built their document stack on-premise for eleven years. He has just told procurement that your cloud archive is 'a compliance problem waiting to happen'. You have twenty minutes with him before the evaluation closes.",
+  "situation_de": "Der Enterprise-Architekt eines Interessenten hat seine Dokumenten-Landschaft seit elf Jahren on-premise gebaut. Er hat dem Einkauf gerade gesagt, euer Cloud-Archiv sei „ein Compliance-Problem mit Anlauf\". Du hast zwanzig Minuten mit ihm, bevor die Bewertung schließt.",
+  "goal": "Get him from blocking to neutral. You will not win him today.",
+  "goal_de": "Ihn vom Blockierer zum Neutralen bringen. Gewinnen wirst du ihn heute nicht.",
+  "persona": {
+   "name": "Dr. Martin Kessler",
+   "role": "Enterprise Architect",
+   "org": "a family-owned logistics group",
+   "traits": "Precise, quietly territorial, asks one hard question and then waits. Dismisses marketing language instantly."
+  },
+  "stake": "He wants to keep control of the platform he designed.",
+  "objection": "He suspects the real driver is your licence model, not their architecture.",
+  "opening": "I have read your architecture paper. What I did not find in it is where our retention obligations actually sit when the data leaves our building. Walk me through that.",
+  "useful": [
+   {
+    "en": "to put that in context",
+    "de": "um das einzuordnen"
+   },
+   {
+    "en": "where I would push back",
+    "de": "wo ich widersprechen würde"
+   },
+   {
+    "en": "that is a fair point, but",
+    "de": "das ist ein berechtigter Punkt, aber"
+   },
+   {
+    "en": "it comes down to",
+    "de": "es läuft hinaus auf"
+   },
+   {
+    "en": "we would take that on",
+    "de": "das würden wir übernehmen"
+   }
+  ]
+ },
+ {
+  "id": "sc-scope",
+  "level": "B2+",
+  "title": "Saying no to a scope request",
+  "title_de": "Eine Erweiterung ablehnen",
+  "situation": "Three weeks before go-live, the project sponsor asks you to add an approval workflow that was never in scope. She is friendly, senior, and used to getting a yes. Your delivery team has no capacity.",
+  "situation_de": "Drei Wochen vor Go-live bittet dich die Projektsponsorin um einen Freigabe-Workflow, der nie im Umfang war. Sie ist freundlich, ranghoch und gewohnt, ein Ja zu bekommen. Dein Team hat keine Kapazität.",
+  "goal": "Decline without damaging the relationship or the go-live date.",
+  "goal_de": "Absagen, ohne die Beziehung oder den Go-live-Termin zu beschädigen.",
+  "persona": {
+   "name": "Claudia Renner",
+   "role": "Head of Shared Services",
+   "org": "an insurance group",
+   "traits": "Warm, persistent, reframes a no as a misunderstanding. Will test the same request three different ways."
+  },
+  "stake": "She has promised the workflow to her own board.",
+  "objection": "She will suggest it is 'just a small configuration' and that your team is being rigid.",
+  "opening": "Before we go through the status — one small thing. The approval step we discussed informally, can your team still slot that in? It cannot be more than a day's work.",
+  "useful": [
+   {
+    "en": "what I can offer instead",
+    "de": "was ich stattdessen anbieten kann"
+   },
+   {
+    "en": "that would put at risk",
+    "de": "das würde gefährden"
+   },
+   {
+    "en": "I want to be straight with you",
+    "de": "ich will ehrlich mit dir sein"
+   },
+   {
+    "en": "on the current timeline",
+    "de": "im jetzigen Zeitplan"
+   },
+   {
+    "en": "let us park that until",
+    "de": "lass uns das zurückstellen bis"
+   }
+  ]
+ },
+ {
+  "id": "sc-escal",
+  "level": "C1",
+  "title": "An escalation after a failed migration",
+  "title_de": "Eskalation nach einer misslungenen Migration",
+  "situation": "A weekend migration left 40,000 documents without their metadata. The client's COO has called an unscheduled meeting. Your team has a fix but it needs another maintenance window.",
+  "situation_de": "Eine Wochenend-Migration hat 40.000 Dokumente ohne Metadaten hinterlassen. Der COO des Kunden hat ein außerplanmäßiges Treffen einberufen. Dein Team hat eine Lösung, braucht aber ein weiteres Wartungsfenster.",
+  "goal": "Get the second window approved and keep the contract renewal alive.",
+  "goal_de": "Das zweite Wartungsfenster bekommen und die Vertragsverlängerung am Leben halten.",
+  "persona": {
+   "name": "Ingrid Hallström",
+   "role": "COO",
+   "org": "a European retail chain",
+   "traits": "Controlled, cold, asks for facts in order. Reads hedging as evasion and says so."
+  },
+  "stake": "She has to report the incident to her own board on Friday.",
+  "objection": "She wants to know why this was not caught in testing, and whether it will happen again.",
+  "opening": "I have forty thousand documents my staff cannot find, and a board meeting on Friday. Start with what went wrong, not with what you are going to do about it.",
+  "useful": [
+   {
+    "en": "what went wrong was",
+    "de": "schiefgegangen ist"
+   },
+   {
+    "en": "we take responsibility for",
+    "de": "wir übernehmen die Verantwortung für"
+   },
+   {
+    "en": "to make sure it does not recur",
+    "de": "damit es nicht wieder vorkommt"
+   },
+   {
+    "en": "I would not want to promise",
+    "de": "ich möchte nichts versprechen"
+   },
+   {
+    "en": "the window we would need",
+    "de": "das Fenster, das wir bräuchten"
+   }
+  ]
+ }
+]

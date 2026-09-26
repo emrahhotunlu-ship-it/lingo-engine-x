@@ -1,0 +1,958 @@
+{
+ "groups": [
+  "Zeiten",
+  "Satzstrukturen",
+  "Verbformen",
+  "Präpositionen & Artikel"
+ ],
+ "groupEn": {
+  "Zeiten": "Tenses",
+  "Satzstrukturen": "Sentence structures",
+  "Verbformen": "Verb patterns",
+  "Präpositionen & Artikel": "Prepositions & articles"
+ },
+ "topics": [
+  {
+   "id": "pres-simple-cont",
+   "group": "Zeiten",
+   "level": "B1",
+   "p0": 0.6,
+   "name": "Present Simple vs. Continuous",
+   "rule": "Present Simple für Gewohnheiten, Fakten und Zustandsverben (know, like, understand, want). Present Continuous für Handlungen, die gerade jetzt oder vorübergehend passieren.",
+   "ex": [
+    "I usually work from home.",
+    "Right now I'm working in the office."
+   ],
+   "name_en": "Present Simple vs. Continuous",
+   "rule_en": "Present Simple for habits, facts and state verbs (know, like, understand, want). Present Continuous for actions happening right now or temporarily."
+  },
+  {
+   "id": "past-simple-perfect",
+   "group": "Zeiten",
+   "level": "B1",
+   "p0": 0.6,
+   "name": "Past Simple vs. Present Perfect",
+   "rule": "Past Simple bei abgeschlossener Zeit (yesterday, last year, in 2020, ago). Present Perfect, wenn der Zeitraum bis jetzt reicht oder das Ergebnis jetzt wichtig ist (ever, never, already, yet, so far). Achtung: Deutsch „Ich habe gestern … gesehen“ = I saw … yesterday.",
+   "ex": [
+    "I saw her yesterday.",
+    "I have never been to Japan."
+   ],
+   "name_en": "Past Simple vs. Present Perfect",
+   "rule_en": "Past Simple for finished time (yesterday, last year, in 2020, ago). Present Perfect when the time period continues until now or the result matters now (ever, never, already, yet, so far)."
+  },
+  {
+   "id": "pres-perf-cont",
+   "group": "Zeiten",
+   "level": "B2",
+   "p0": 0.4,
+   "name": "Present Perfect Continuous",
+   "rule": "have/has been + -ing: Eine Handlung begann in der Vergangenheit und dauert bis jetzt an oder hat ein sichtbares Ergebnis. Typisch mit how long, for, since. Deutsch „Ich lerne seit zwei Jahren“ = I have been learning for two years.",
+   "ex": [
+    "I have been waiting for 20 minutes.",
+    "She's tired because she has been running."
+   ],
+   "name_en": "Present Perfect Continuous",
+   "rule_en": "have/has been + -ing: an action started in the past and is still going on, or has a visible result now. Typical with how long, for, since."
+  },
+  {
+   "id": "past-perfect",
+   "group": "Zeiten",
+   "level": "B2",
+   "p0": 0.4,
+   "name": "Past Perfect (Simple & Continuous)",
+   "rule": "had + Partizip für das frühere von zwei Ereignissen in der Vergangenheit. had been + -ing betont die Dauer vor einem Zeitpunkt in der Vergangenheit.",
+   "ex": [
+    "When I arrived, the train had already left.",
+    "He was tired because he had been working all day."
+   ],
+   "name_en": "Past Perfect (Simple & Continuous)",
+   "rule_en": "had + past participle for the earlier of two past events. had been + -ing stresses the duration before a point in the past."
+  },
+  {
+   "id": "future-forms",
+   "group": "Zeiten",
+   "level": "B1",
+   "p0": 0.6,
+   "name": "Zukunft: will, going to, Present Continuous",
+   "rule": "will: spontane Entscheidung, Versprechen, Vermutung. going to: Plan oder Vorhersage mit sichtbarem Beweis. Present Continuous: feste Verabredung.",
+   "ex": [
+    "I'll help you with that.",
+    "Look at the clouds – it's going to rain.",
+    "I'm meeting Tom at six."
+   ],
+   "name_en": "Future: will, going to, Present Continuous",
+   "rule_en": "will: spontaneous decisions, promises, predictions. going to: plans, or predictions with visible evidence. Present Continuous: fixed arrangements."
+  },
+  {
+   "id": "future-perf-cont",
+   "group": "Zeiten",
+   "level": "B2",
+   "p0": 0.35,
+   "name": "Future Continuous & Future Perfect",
+   "rule": "will be + -ing: Die Handlung ist zu einem Zeitpunkt in der Zukunft gerade im Gange. will have + Partizip: bis zu einem Zeitpunkt in der Zukunft abgeschlossen (by Friday, by then).",
+   "ex": [
+    "This time tomorrow I'll be flying to Rome.",
+    "By Friday I'll have finished the report."
+   ],
+   "name_en": "Future Continuous & Future Perfect",
+   "rule_en": "will be + -ing: an action in progress at a point in the future. will have + past participle: finished before a point in the future (by Friday, by then)."
+  },
+  {
+   "id": "used-to",
+   "group": "Zeiten",
+   "level": "B2",
+   "p0": 0.4,
+   "name": "used to / would / be used to",
+   "rule": "used to + Infinitiv: früher regelmäßig, heute nicht mehr. be used to + -ing: an etwas gewöhnt sein. get used to + -ing: sich an etwas gewöhnen.",
+   "ex": [
+    "I used to live in Munich.",
+    "I'm used to getting up early."
+   ],
+   "name_en": "used to / would / be used to",
+   "rule_en": "used to + infinitive: a past habit that has stopped. be used to + -ing: to be accustomed to something. get used to + -ing: to become accustomed to it."
+  },
+  {
+   "id": "conditionals",
+   "group": "Satzstrukturen",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Conditionals (0–3)",
+   "rule": "First: If + Present, will + Infinitiv (realistisch). Second: If + Past, would + Infinitiv (hypothetisch). Third: If + Past Perfect, would have + Partizip (Vergangenheit). Nie „will“ oder „would“ im if-Teil.",
+   "ex": [
+    "If it rains, we'll stay in.",
+    "If I had more time, I would travel more.",
+    "If we had left earlier, we wouldn't have missed the train."
+   ],
+   "name_en": "Conditionals (0–3)",
+   "rule_en": "First: if + present, will + infinitive (real). Second: if + past, would + infinitive (hypothetical). Third: if + past perfect, would have + past participle (past). Never will or would in the if-clause."
+  },
+  {
+   "id": "mixed-cond",
+   "group": "Satzstrukturen",
+   "level": "B2+",
+   "p0": 0.3,
+   "name": "Mixed Conditionals & wish",
+   "rule": "wish + Past: Wunsch über die Gegenwart. wish + Past Perfect: Bedauern über die Vergangenheit. Mixed Conditional: If + Past Perfect, would + Infinitiv (Folge jetzt).",
+   "ex": [
+    "I wish I could speak Spanish.",
+    "I wish I hadn't said that.",
+    "If I had taken that job, I would live in Berlin now."
+   ],
+   "name_en": "Mixed Conditionals & wish",
+   "rule_en": "wish + past: a wish about the present. wish + past perfect: regret about the past. Mixed conditional: if + past perfect, would + infinitive (result now)."
+  },
+  {
+   "id": "passive",
+   "group": "Satzstrukturen",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Passiv",
+   "rule": "be (in der passenden Zeit) + Partizip. Man nutzt es, wenn die Handlung wichtiger ist als die Person. Present Continuous Passiv: is/are being + Partizip.",
+   "ex": [
+    "The bridge was built in 1890.",
+    "The road is being repaired."
+   ],
+   "name_en": "Passive voice",
+   "rule_en": "be (in the right tense) + past participle. Use it when the action matters more than who does it. Present continuous passive: is/are being + past participle."
+  },
+  {
+   "id": "reported",
+   "group": "Satzstrukturen",
+   "level": "B2",
+   "p0": 0.4,
+   "name": "Indirekte Rede",
+   "rule": "Die Zeit geht meist einen Schritt zurück (am → was, will → would, have done → had done). Indirekte Fragen haben normale Wortstellung und kein do/did.",
+   "ex": [
+    "She said (that) she was tired.",
+    "He asked me where I lived."
+   ],
+   "name_en": "Reported speech",
+   "rule_en": "Tenses usually move one step back (am → was, will → would, have done → had done). Reported questions use normal word order and no do/did."
+  },
+  {
+   "id": "relative",
+   "group": "Satzstrukturen",
+   "level": "B1",
+   "p0": 0.55,
+   "name": "Relativsätze",
+   "rule": "who für Personen, which für Dinge, whose für Besitz, where für Orte. that nur ohne Kommas. Bei Zusatzinformationen mit Kommas nur who/which.",
+   "ex": [
+    "The woman who lives next door is a doctor.",
+    "My car, which is ten years old, still runs well."
+   ],
+   "name_en": "Relative clauses",
+   "rule_en": "who for people, which for things, whose for possession, where for places. that only without commas. With commas (extra information) only who/which."
+  },
+  {
+   "id": "modals-deduction",
+   "group": "Verbformen",
+   "level": "B2",
+   "p0": 0.35,
+   "name": "Modalverben der Vermutung",
+   "rule": "must = fast sicher, might/could = vielleicht, can't = unmöglich. Für die Vergangenheit: must / might / can't have + Partizip.",
+   "ex": [
+    "She must be at home – the lights are on.",
+    "He can't have seen us – it was too dark."
+   ],
+   "name_en": "Modals of deduction",
+   "rule_en": "must = almost certain, might/could = possible, can't = impossible. For the past: must / might / can't have + past participle."
+  },
+  {
+   "id": "gerund-inf",
+   "group": "Verbformen",
+   "level": "B2",
+   "p0": 0.4,
+   "name": "Gerund vs. Infinitiv",
+   "rule": "Nach enjoy, avoid, finish, mind, look forward to: -ing. Nach decide, want, hope, agree, plan: to + Infinitiv. stop, remember und try ändern je nach Form die Bedeutung.",
+   "ex": [
+    "I enjoy cooking.",
+    "We decided to take the train."
+   ],
+   "name_en": "Gerund vs. infinitive",
+   "rule_en": "After enjoy, avoid, finish, mind, look forward to: -ing. After decide, want, hope, agree, plan: to + infinitive. stop, remember and try change their meaning."
+  },
+  {
+   "id": "prepositions",
+   "group": "Präpositionen & Artikel",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Präpositionen & feste Verbindungen",
+   "rule": "Viele Verben und Adjektive haben feste Präpositionen, die sich oft vom Deutschen unterscheiden. Am besten als Einheit lernen: depend on, interested in, good at, afraid of, responsible for.",
+   "ex": [
+    "It depends on the weather.",
+    "She's good at explaining things."
+   ],
+   "name_en": "Prepositions & collocations",
+   "rule_en": "Many verbs and adjectives take fixed prepositions that often differ from German. Learn them as one chunk: depend on, interested in, good at, afraid of, responsible for."
+  },
+  {
+   "id": "articles",
+   "group": "Präpositionen & Artikel",
+   "level": "B1",
+   "p0": 0.55,
+   "name": "Artikel (a / the / –)",
+   "rule": "a/an bei „einem von vielen“ und bei Berufen. the bei Bekanntem, Einzigartigem und Musikinstrumenten. Kein Artikel bei allgemeinen, abstrakten Begriffen (life, nature, love).",
+   "ex": [
+    "My brother is an engineer.",
+    "Life is too short."
+   ],
+   "name_en": "Articles (a / the / –)",
+   "rule_en": "a/an for one of many and for jobs. the for something known or unique, and for musical instruments. No article for general, abstract ideas (life, nature, love)."
+  }
+ ],
+ "topicEn": {
+  "pres-simple-cont": {
+   "name": "Present Simple vs. Continuous",
+   "rule": "Present Simple for habits, facts and state verbs (know, like, understand, want). Present Continuous for actions happening right now or temporarily."
+  },
+  "past-simple-perfect": {
+   "name": "Past Simple vs. Present Perfect",
+   "rule": "Past Simple for finished time (yesterday, last year, in 2020, ago). Present Perfect when the time period continues until now or the result matters now (ever, never, already, yet, so far)."
+  },
+  "pres-perf-cont": {
+   "name": "Present Perfect Continuous",
+   "rule": "have/has been + -ing: an action started in the past and is still going on, or has a visible result now. Typical with how long, for, since."
+  },
+  "past-perfect": {
+   "name": "Past Perfect (Simple & Continuous)",
+   "rule": "had + past participle for the earlier of two past events. had been + -ing stresses the duration before a point in the past."
+  },
+  "future-forms": {
+   "name": "Future: will, going to, Present Continuous",
+   "rule": "will: spontaneous decisions, promises, predictions. going to: plans, or predictions with visible evidence. Present Continuous: fixed arrangements."
+  },
+  "future-perf-cont": {
+   "name": "Future Continuous & Future Perfect",
+   "rule": "will be + -ing: an action in progress at a point in the future. will have + past participle: finished before a point in the future (by Friday, by then)."
+  },
+  "used-to": {
+   "name": "used to / would / be used to",
+   "rule": "used to + infinitive: a past habit that has stopped. be used to + -ing: to be accustomed to something. get used to + -ing: to become accustomed to it."
+  },
+  "conditionals": {
+   "name": "Conditionals (0–3)",
+   "rule": "First: if + present, will + infinitive (real). Second: if + past, would + infinitive (hypothetical). Third: if + past perfect, would have + past participle (past). Never will or would in the if-clause."
+  },
+  "mixed-cond": {
+   "name": "Mixed Conditionals & wish",
+   "rule": "wish + past: a wish about the present. wish + past perfect: regret about the past. Mixed conditional: if + past perfect, would + infinitive (result now)."
+  },
+  "passive": {
+   "name": "Passive voice",
+   "rule": "be (in the right tense) + past participle. Use it when the action matters more than who does it. Present continuous passive: is/are being + past participle."
+  },
+  "reported": {
+   "name": "Reported speech",
+   "rule": "Tenses usually move one step back (am → was, will → would, have done → had done). Reported questions use normal word order and no do/did."
+  },
+  "relative": {
+   "name": "Relative clauses",
+   "rule": "who for people, which for things, whose for possession, where for places. that only without commas. With commas (extra information) only who/which."
+  },
+  "modals-deduction": {
+   "name": "Modals of deduction",
+   "rule": "must = almost certain, might/could = possible, can't = impossible. For the past: must / might / can't have + past participle."
+  },
+  "gerund-inf": {
+   "name": "Gerund vs. infinitive",
+   "rule": "After enjoy, avoid, finish, mind, look forward to: -ing. After decide, want, hope, agree, plan: to + infinitive. stop, remember and try change their meaning."
+  },
+  "prepositions": {
+   "name": "Prepositions & collocations",
+   "rule": "Many verbs and adjectives take fixed prepositions that often differ from German. Learn them as one chunk: depend on, interested in, good at, afraid of, responsible for."
+  },
+  "articles": {
+   "name": "Articles (a / the / –)",
+   "rule": "a/an for one of many and for jobs. the for something known or unique, and for musical instruments. No article for general, abstract ideas (life, nature, love)."
+  }
+ },
+ "seedGrammar": [
+  {
+   "topic": "pres-simple-cont",
+   "type": "mc",
+   "prompt": "Look! It ___ outside.",
+   "options": [
+    "snows",
+    "is snowing",
+    "snowed",
+    "has snowed"
+   ],
+   "answer": "is snowing",
+   "expl": "„Look!“ zeigt: Es passiert genau jetzt → Present Continuous (am/is/are + -ing).",
+   "expl_en": "\"Look!\" shows it is happening right now → Present Continuous (am/is/are + -ing)."
+  },
+  {
+   "topic": "pres-simple-cont",
+   "type": "gap",
+   "prompt": "I usually ___ from home on Fridays.",
+   "hint": "(work)",
+   "answer": "work",
+   "expl": "„usually“ ist ein Signalwort für Gewohnheiten → Present Simple.",
+   "expl_en": "\"usually\" signals a habit → Present Simple."
+  },
+  {
+   "topic": "pres-simple-cont",
+   "type": "mc",
+   "prompt": "Now I ___ what you mean.",
+   "options": [
+    "understand",
+    "am understanding",
+    "understood",
+    "have understood"
+   ],
+   "answer": "understand",
+   "expl": "„understand“ ist ein Zustandsverb (state verb). Diese stehen normalerweise nicht in der -ing-Form, auch wenn es um jetzt geht.",
+   "expl_en": "\"understand\" is a state verb. State verbs are normally not used in the -ing form, even about now."
+  },
+  {
+   "topic": "past-simple-perfect",
+   "type": "mc",
+   "prompt": "I ___ to London three times so far.",
+   "options": [
+    "was",
+    "have been",
+    "went",
+    "had been"
+   ],
+   "answer": "have been",
+   "expl": "„so far“ = bis jetzt. Der Zeitraum reicht bis in die Gegenwart → Present Perfect.",
+   "expl_en": "\"so far\" = until now. The time period reaches the present → Present Perfect."
+  },
+  {
+   "topic": "past-simple-perfect",
+   "type": "gap",
+   "prompt": "We ___ last Tuesday.",
+   "hint": "(meet)",
+   "answer": "met",
+   "expl": "„last Tuesday“ ist ein abgeschlossener Zeitpunkt → Past Simple. Mit konkreten Zeitangaben in der Vergangenheit nie Present Perfect.",
+   "expl_en": "\"last Tuesday\" is a finished point in time → Past Simple. Never use the Present Perfect with a finished past time."
+  },
+  {
+   "topic": "past-simple-perfect",
+   "type": "correct",
+   "prompt": "I have seen that film yesterday.",
+   "answer": "I saw that film yesterday.",
+   "expl": "„yesterday“ = abgeschlossene Zeit → Past Simple (saw). Typischer Fehler, weil man im Deutschen „Ich habe … gesehen“ sagt.",
+   "expl_en": "\"yesterday\" = finished time → Past Simple (saw), not Present Perfect. A typical mistake because German says \"Ich habe … gesehen\"."
+  },
+  {
+   "topic": "pres-perf-cont",
+   "type": "gap",
+   "prompt": "I'm tired because I ___ all afternoon.",
+   "hint": "(study)",
+   "answer": "have been studying",
+   "accepted": [
+    "'ve been studying"
+   ],
+   "expl": "Eine Tätigkeit über einen Zeitraum bis jetzt mit sichtbarem Ergebnis (müde) → have/has been + -ing.",
+   "expl_en": "An activity over a period until now with a visible result (tired) → have/has been + -ing."
+  },
+  {
+   "topic": "pres-perf-cont",
+   "type": "mc",
+   "prompt": "How long ___ English?",
+   "options": [
+    "do you learn",
+    "are you learning",
+    "have you been learning",
+    "did you learn"
+   ],
+   "answer": "have you been learning",
+   "expl": "„How long …?“ für etwas, das früher begann und noch andauert → Present Perfect Continuous. Deutsch „Wie lange lernst du schon?“ – im Englischen nicht Present Simple!",
+   "expl_en": "\"How long …?\" for something that started in the past and is still going on → Present Perfect Continuous, not Present Simple."
+  },
+  {
+   "topic": "pres-perf-cont",
+   "type": "gap",
+   "prompt": "She ___ here since 2019.",
+   "hint": "(live)",
+   "answer": "has been living",
+   "accepted": [
+    "has lived",
+    "'s been living",
+    "'s lived"
+   ],
+   "expl": "„since 2019“ + Dauer bis heute → Present Perfect (Continuous). Beide Formen sind hier richtig.",
+   "expl_en": "\"since 2019\" + duration until today → Present Perfect (Continuous). Both forms are correct here."
+  },
+  {
+   "topic": "past-perfect",
+   "type": "gap",
+   "prompt": "When we arrived at the cinema, the film ___.",
+   "hint": "(already / start)",
+   "answer": "had already started",
+   "expl": "Zwei Ereignisse in der Vergangenheit: Das frühere (der Film beginnt) steht im Past Perfect: had + Partizip.",
+   "expl_en": "Two past events: the earlier one (the film starts) goes in the Past Perfect: had + past participle."
+  },
+  {
+   "topic": "past-perfect",
+   "type": "mc",
+   "prompt": "She was exhausted because she ___ for hours.",
+   "options": [
+    "has worked",
+    "had been working",
+    "was working",
+    "works"
+   ],
+   "answer": "had been working",
+   "expl": "Dauer VOR einem Zeitpunkt in der Vergangenheit (sie war erschöpft) → had been + -ing.",
+   "expl_en": "Duration BEFORE a point in the past (she was exhausted) → had been + -ing."
+  },
+  {
+   "topic": "past-perfect",
+   "type": "transform",
+   "prompt": "I finished my homework. Then I went out. → After I ___, I went out.",
+   "answer": "had finished my homework",
+   "expl": "Nach „after“ zeigt das Past Perfect, welche Handlung zuerst passiert ist.",
+   "expl_en": "After \"after\", the Past Perfect shows which action happened first."
+  },
+  {
+   "topic": "future-forms",
+   "type": "mc",
+   "prompt": "Look at those dark clouds! It ___ rain.",
+   "options": [
+    "will",
+    "is going to",
+    "rains",
+    "is raining"
+   ],
+   "answer": "is going to",
+   "expl": "Vorhersage mit sichtbarem Beweis (die Wolken) → going to.",
+   "expl_en": "A prediction with visible evidence (the clouds) → going to."
+  },
+  {
+   "topic": "future-forms",
+   "type": "mc",
+   "prompt": "A: The phone is ringing. B: OK, I ___ it.",
+   "options": [
+    "answer",
+    "'m going to answer",
+    "'ll answer",
+    "am answering"
+   ],
+   "answer": "'ll answer",
+   "expl": "Spontane Entscheidung im Moment des Sprechens → will („I'll“).",
+   "expl_en": "A spontaneous decision at the moment of speaking → will (\"I'll\")."
+  },
+  {
+   "topic": "future-forms",
+   "type": "gap",
+   "prompt": "I ___ my teacher at 5 pm tomorrow – it's in my calendar.",
+   "hint": "(meet)",
+   "answer": "am meeting",
+   "accepted": [
+    "'m meeting",
+    "am going to meet",
+    "'m going to meet"
+   ],
+   "expl": "Feste Verabredung mit Uhrzeit → Present Continuous (going to ist auch möglich).",
+   "expl_en": "A fixed arrangement with a time → Present Continuous (going to is also possible)."
+  },
+  {
+   "topic": "future-perf-cont",
+   "type": "gap",
+   "prompt": "By next June, I ___ my course.",
+   "hint": "(finish)",
+   "answer": "will have finished",
+   "accepted": [
+    "'ll have finished"
+   ],
+   "expl": "„by + Zeitpunkt in der Zukunft“ = bis dahin abgeschlossen → will have + Partizip.",
+   "expl_en": "\"by + a point in the future\" = finished by then → will have + past participle."
+  },
+  {
+   "topic": "future-perf-cont",
+   "type": "mc",
+   "prompt": "This time tomorrow, I ___ on the beach.",
+   "options": [
+    "will lie",
+    "will be lying",
+    "will have lain",
+    "lie"
+   ],
+   "answer": "will be lying",
+   "expl": "Die Handlung ist zu einem bestimmten Zeitpunkt in der Zukunft gerade im Gange → will be + -ing.",
+   "expl_en": "The action is in progress at a specific time in the future → will be + -ing."
+  },
+  {
+   "topic": "future-perf-cont",
+   "type": "mc",
+   "prompt": "Don't call at 8 – we ___ dinner then.",
+   "options": [
+    "will have",
+    "will be having",
+    "have had",
+    "had"
+   ],
+   "answer": "will be having",
+   "expl": "Um 8 Uhr sind wir mitten im Abendessen → Future Continuous.",
+   "expl_en": "At 8 o'clock we will be in the middle of dinner → Future Continuous."
+  },
+  {
+   "topic": "used-to",
+   "type": "mc",
+   "prompt": "When I was a child, I ___ play football every day.",
+   "options": [
+    "used to",
+    "am used to",
+    "get used to",
+    "was used to"
+   ],
+   "answer": "used to",
+   "expl": "„used to + Infinitiv“ = früher regelmäßig, heute nicht mehr.",
+   "expl_en": "\"used to + infinitive\" = a regular past habit that no longer happens."
+  },
+  {
+   "topic": "used-to",
+   "type": "gap",
+   "prompt": "I've lived in England for years, so I ___ driving on the left.",
+   "hint": "(be used to)",
+   "answer": "am used to",
+   "accepted": [
+    "'m used to"
+   ],
+   "expl": "„be used to + -ing“ = an etwas gewöhnt sein.",
+   "expl_en": "\"be used to + -ing\" = to be accustomed to something."
+  },
+  {
+   "topic": "used-to",
+   "type": "correct",
+   "prompt": "I am used to get up early.",
+   "answer": "I am used to getting up early.",
+   "accepted": [
+    "I'm used to getting up early."
+   ],
+   "expl": "Nach „be used to“ steht die -ing-Form (getting), nicht der Infinitiv – hier ist „to“ eine Präposition.",
+   "expl_en": "After \"be used to\" we need the -ing form (getting), not the infinitive – here \"to\" is a preposition."
+  },
+  {
+   "topic": "conditionals",
+   "type": "gap",
+   "prompt": "If it ___ tomorrow, we will stay at home.",
+   "hint": "(rain)",
+   "answer": "rains",
+   "expl": "First Conditional: If + Present Simple, will + Infinitiv. Kein „will“ im if-Teil!",
+   "expl_en": "First conditional: if + Present Simple, will + infinitive. No \"will\" in the if-clause!"
+  },
+  {
+   "topic": "conditionals",
+   "type": "mc",
+   "prompt": "If I ___ more time, I would travel more.",
+   "options": [
+    "have",
+    "had",
+    "would have",
+    "will have"
+   ],
+   "answer": "had",
+   "expl": "Second Conditional (hypothetisch): If + Past Simple, would + Infinitiv.",
+   "expl_en": "Second conditional (hypothetical): if + Past Simple, would + infinitive."
+  },
+  {
+   "topic": "conditionals",
+   "type": "gap",
+   "prompt": "If we had left earlier, we ___ the train.",
+   "hint": "(not / miss)",
+   "answer": "would not have missed",
+   "accepted": [
+    "wouldn't have missed"
+   ],
+   "expl": "Third Conditional (Vergangenheit, nicht mehr änderbar): If + Past Perfect, would have + Partizip.",
+   "expl_en": "Third conditional (past, can't be changed): if + Past Perfect, would have + past participle."
+  },
+  {
+   "topic": "mixed-cond",
+   "type": "mc",
+   "prompt": "I wish I ___ speak Spanish.",
+   "options": [
+    "can",
+    "could",
+    "would",
+    "will"
+   ],
+   "answer": "could",
+   "expl": "„I wish“ + Vergangenheitsform (could) für einen Wunsch über die Gegenwart.",
+   "expl_en": "\"I wish\" + a past form (could) for a wish about the present."
+  },
+  {
+   "topic": "mixed-cond",
+   "type": "gap",
+   "prompt": "I wish I ___ that yesterday.",
+   "hint": "(not / say)",
+   "answer": "had not said",
+   "accepted": [
+    "hadn't said"
+   ],
+   "expl": "Bedauern über die Vergangenheit: wish + Past Perfect.",
+   "expl_en": "Regret about the past: wish + Past Perfect."
+  },
+  {
+   "topic": "mixed-cond",
+   "type": "mc",
+   "prompt": "If I had taken that job, I ___ in Berlin now.",
+   "options": [
+    "would live",
+    "would have lived",
+    "will live",
+    "lived"
+   ],
+   "answer": "would live",
+   "expl": "Mixed Conditional: Bedingung in der Vergangenheit (had taken), Folge in der Gegenwart (now) → would + Infinitiv.",
+   "expl_en": "Mixed conditional: condition in the past (had taken), result in the present (now) → would + infinitive."
+  },
+  {
+   "topic": "passive",
+   "type": "gap",
+   "prompt": "This bridge ___ in 1890.",
+   "hint": "(build)",
+   "answer": "was built",
+   "expl": "Passiv im Past Simple: was/were + Partizip (build – built – built).",
+   "expl_en": "Past simple passive: was/were + past participle (build – built – built)."
+  },
+  {
+   "topic": "passive",
+   "type": "transform",
+   "prompt": "They are repairing the road. → The road ___.",
+   "answer": "is being repaired",
+   "expl": "Passiv im Present Continuous: is/are being + Partizip.",
+   "expl_en": "Present continuous passive: is/are being + past participle."
+  },
+  {
+   "topic": "passive",
+   "type": "mc",
+   "prompt": "The results ___ next week.",
+   "options": [
+    "will announce",
+    "will be announced",
+    "are announcing",
+    "announce"
+   ],
+   "answer": "will be announced",
+   "expl": "Die Ergebnisse tun nichts selbst – sie werden bekannt gegeben → will be + Partizip.",
+   "expl_en": "The results don't do anything themselves – someone announces them → will be + past participle."
+  },
+  {
+   "topic": "reported",
+   "type": "transform",
+   "prompt": "She said: \"I am tired.\" → She said that she ___.",
+   "answer": "was tired",
+   "expl": "In der indirekten Rede geht die Zeit meist einen Schritt zurück: am → was.",
+   "expl_en": "In reported speech the tense usually moves one step back: am → was."
+  },
+  {
+   "topic": "reported",
+   "type": "mc",
+   "prompt": "He asked me where I ___.",
+   "options": [
+    "live",
+    "lived",
+    "do I live",
+    "did I live"
+   ],
+   "answer": "lived",
+   "expl": "Indirekte Fragen: normale Wortstellung (Subjekt vor Verb), kein do/did, und Backshift: live → lived.",
+   "expl_en": "Reported questions: normal word order (subject before verb), no do/did, and backshift: live → lived."
+  },
+  {
+   "topic": "reported",
+   "type": "transform",
+   "prompt": "\"I will call you,\" he said. → He said he ___ me.",
+   "answer": "would call",
+   "expl": "will → would in der indirekten Rede.",
+   "expl_en": "will → would in reported speech."
+  },
+  {
+   "topic": "relative",
+   "type": "mc",
+   "prompt": "The woman ___ lives next door is a doctor.",
+   "options": [
+    "which",
+    "who",
+    "whose",
+    "where"
+   ],
+   "answer": "who",
+   "expl": "Für Personen: who (oder that).",
+   "expl_en": "For people: who (or that)."
+  },
+  {
+   "topic": "relative",
+   "type": "mc",
+   "prompt": "That's the man ___ car was stolen.",
+   "options": [
+    "who",
+    "which",
+    "whose",
+    "that"
+   ],
+   "answer": "whose",
+   "expl": "„whose“ = dessen/deren – zeigt Besitz.",
+   "expl_en": "\"whose\" shows possession."
+  },
+  {
+   "topic": "relative",
+   "type": "correct",
+   "prompt": "My car, that is ten years old, still runs well.",
+   "answer": "My car, which is ten years old, still runs well.",
+   "expl": "Bei Relativsätzen mit Kommas (Zusatzinformation) darf man „that“ nicht benutzen – nur which oder who.",
+   "expl_en": "In relative clauses with commas (extra information) you can't use \"that\" – only which or who."
+  },
+  {
+   "topic": "modals-deduction",
+   "type": "mc",
+   "prompt": "She isn't answering her phone. She ___ be asleep.",
+   "options": [
+    "must",
+    "can't",
+    "should",
+    "has to"
+   ],
+   "answer": "must",
+   "expl": "must = ich bin mir fast sicher (logische Schlussfolgerung).",
+   "expl_en": "must = I'm almost sure (a logical conclusion)."
+  },
+  {
+   "topic": "modals-deduction",
+   "type": "gap",
+   "prompt": "He ___ us – it was far too dark.",
+   "hint": "(can't / see)",
+   "answer": "can't have seen",
+   "accepted": [
+    "cannot have seen",
+    "couldn't have seen",
+    "could not have seen"
+   ],
+   "expl": "Vermutung über die Vergangenheit: can't have + Partizip = es ist unmöglich, dass …",
+   "expl_en": "Deduction about the past: can't have + past participle = it's impossible that …"
+  },
+  {
+   "topic": "modals-deduction",
+   "type": "mc",
+   "prompt": "I'm not sure where my keys are. I ___ left them at work.",
+   "options": [
+    "must have",
+    "might have",
+    "should have",
+    "can have"
+   ],
+   "answer": "might have",
+   "expl": "might have + Partizip = vielleicht (unsicher) in der Vergangenheit. „must have“ wäre zu sicher.",
+   "expl_en": "might have + past participle = maybe, not sure, in the past. \"must have\" would be too certain."
+  },
+  {
+   "topic": "gerund-inf",
+   "type": "mc",
+   "prompt": "I'm looking forward to ___ you.",
+   "options": [
+    "see",
+    "seeing",
+    "to see",
+    "seen"
+   ],
+   "answer": "seeing",
+   "expl": "In „look forward to“ ist „to“ eine Präposition – danach kommt die -ing-Form.",
+   "expl_en": "In \"look forward to\", \"to\" is a preposition – so it's followed by the -ing form."
+  },
+  {
+   "topic": "gerund-inf",
+   "type": "gap",
+   "prompt": "We decided ___ the train.",
+   "hint": "(take)",
+   "answer": "to take",
+   "expl": "decide + to-Infinitiv.",
+   "expl_en": "decide + to-infinitive."
+  },
+  {
+   "topic": "gerund-inf",
+   "type": "mc",
+   "prompt": "I stopped ___ because it's bad for my health.",
+   "options": [
+    "to smoke",
+    "smoking",
+    "smoke",
+    "smoked"
+   ],
+   "answer": "smoking",
+   "expl": "stop + -ing = mit etwas aufhören. stop + to = anhalten, um etwas zu tun.",
+   "expl_en": "stop + -ing = to quit doing something. stop + to = to stop in order to do something."
+  },
+  {
+   "topic": "prepositions",
+   "type": "mc",
+   "prompt": "It depends ___ the weather.",
+   "options": [
+    "of",
+    "from",
+    "on",
+    "at"
+   ],
+   "answer": "on",
+   "expl": "depend on – nicht „from“, auch wenn es im Deutschen „abhängen von“ heißt.",
+   "expl_en": "depend on – not \"from\", even though German says \"abhängen von\"."
+  },
+  {
+   "topic": "prepositions",
+   "type": "mc",
+   "prompt": "I'm interested ___ learning Italian.",
+   "options": [
+    "for",
+    "in",
+    "on",
+    "about"
+   ],
+   "answer": "in",
+   "expl": "interested in – feste Verbindung (nicht „for“ wie im Deutschen „interessiert an/für“).",
+   "expl_en": "interested in – a fixed combination."
+  },
+  {
+   "topic": "prepositions",
+   "type": "gap",
+   "prompt": "She's very good ___ explaining things.",
+   "answer": "at",
+   "expl": "good at + Nomen oder -ing.",
+   "expl_en": "good at + noun or -ing."
+  },
+  {
+   "topic": "articles",
+   "type": "mc",
+   "prompt": "She plays ___ piano beautifully.",
+   "options": [
+    "a",
+    "the",
+    "–"
+   ],
+   "answer": "the",
+   "expl": "Bei Musikinstrumenten: play the piano / the guitar.",
+   "expl_en": "With musical instruments: play the piano / the guitar."
+  },
+  {
+   "topic": "articles",
+   "type": "mc",
+   "prompt": "___ life is too short to be unhappy.",
+   "options": [
+    "The",
+    "A",
+    "–"
+   ],
+   "answer": "–",
+   "expl": "Allgemeine, abstrakte Begriffe stehen ohne Artikel (life, love, nature). Deutsch „Das Leben“ – Englisch ohne „the“.",
+   "expl_en": "General, abstract ideas take no article (life, love, nature)."
+  },
+  {
+   "topic": "articles",
+   "type": "mc",
+   "prompt": "My brother is ___ engineer.",
+   "options": [
+    "a",
+    "an",
+    "the",
+    "–"
+   ],
+   "answer": "an",
+   "expl": "Berufe mit a/an. „an“ vor einem Vokal-Laut (engineer).",
+   "expl_en": "Jobs take a/an. Use \"an\" before a vowel sound (engineer)."
+  }
+ ],
+ "explEn": [
+  "\"Look!\" shows it is happening right now → Present Continuous (am/is/are + -ing).",
+  "\"usually\" signals a habit → Present Simple.",
+  "\"understand\" is a state verb. State verbs are normally not used in the -ing form, even about now.",
+  "\"so far\" = until now. The time period reaches the present → Present Perfect.",
+  "\"last Tuesday\" is a finished point in time → Past Simple. Never use the Present Perfect with a finished past time.",
+  "\"yesterday\" = finished time → Past Simple (saw), not Present Perfect. A typical mistake because German says \"Ich habe … gesehen\".",
+  "An activity over a period until now with a visible result (tired) → have/has been + -ing.",
+  "\"How long …?\" for something that started in the past and is still going on → Present Perfect Continuous, not Present Simple.",
+  "\"since 2019\" + duration until today → Present Perfect (Continuous). Both forms are correct here.",
+  "Two past events: the earlier one (the film starts) goes in the Past Perfect: had + past participle.",
+  "Duration BEFORE a point in the past (she was exhausted) → had been + -ing.",
+  "After \"after\", the Past Perfect shows which action happened first.",
+  "A prediction with visible evidence (the clouds) → going to.",
+  "A spontaneous decision at the moment of speaking → will (\"I'll\").",
+  "A fixed arrangement with a time → Present Continuous (going to is also possible).",
+  "\"by + a point in the future\" = finished by then → will have + past participle.",
+  "The action is in progress at a specific time in the future → will be + -ing.",
+  "At 8 o'clock we will be in the middle of dinner → Future Continuous.",
+  "\"used to + infinitive\" = a regular past habit that no longer happens.",
+  "\"be used to + -ing\" = to be accustomed to something.",
+  "After \"be used to\" we need the -ing form (getting), not the infinitive – here \"to\" is a preposition.",
+  "First conditional: if + Present Simple, will + infinitive. No \"will\" in the if-clause!",
+  "Second conditional (hypothetical): if + Past Simple, would + infinitive.",
+  "Third conditional (past, can't be changed): if + Past Perfect, would have + past participle.",
+  "\"I wish\" + a past form (could) for a wish about the present.",
+  "Regret about the past: wish + Past Perfect.",
+  "Mixed conditional: condition in the past (had taken), result in the present (now) → would + infinitive.",
+  "Past simple passive: was/were + past participle (build – built – built).",
+  "Present continuous passive: is/are being + past participle.",
+  "The results don't do anything themselves – someone announces them → will be + past participle.",
+  "In reported speech the tense usually moves one step back: am → was.",
+  "Reported questions: normal word order (subject before verb), no do/did, and backshift: live → lived.",
+  "will → would in reported speech.",
+  "For people: who (or that).",
+  "\"whose\" shows possession.",
+  "In relative clauses with commas (extra information) you can't use \"that\" – only which or who.",
+  "must = I'm almost sure (a logical conclusion).",
+  "Deduction about the past: can't have + past participle = it's impossible that …",
+  "might have + past participle = maybe, not sure, in the past. \"must have\" would be too certain.",
+  "In \"look forward to\", \"to\" is a preposition – so it's followed by the -ing form.",
+  "decide + to-infinitive.",
+  "stop + -ing = to quit doing something. stop + to = to stop in order to do something.",
+  "depend on – not \"from\", even though German says \"abhängen von\".",
+  "interested in – a fixed combination.",
+  "good at + noun or -ing.",
+  "With musical instruments: play the piano / the guitar.",
+  "General, abstract ideas take no article (life, love, nature).",
+  "Jobs take a/an. Use \"an\" before a vowel sound (engineer)."
+ ],
+ "typeInstr": {
+  "mc": "Wähle die richtige Antwort.",
+  "gap": "Setze die richtige Form ein.",
+  "transform": "Ergänze den umgeformten Satz.",
+  "correct": "Der Satz enthält einen Fehler. Schreib den korrigierten Satz."
+ },
+ "typeInstrEn": {
+  "mc": "Choose the correct answer.",
+  "gap": "Fill in the correct form.",
+  "transform": "Complete the rewritten sentence.",
+  "correct": "This sentence has one mistake. Write the corrected sentence."
+ }
+}

@@ -32,16 +32,16 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 ## A4. Phasenplan und Stand
 Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 
-- [ ] **Phase 0 – Fundament**
+- [x] **Phase 0 – Fundament** (ausgeliefert 26.09.2026)
   - [x] Anhänge zerlegt (`contract/`, `docs/datenstruktur.json`), Auftrag nach `docs/auftrag.md`
   - [x] CLAUDE.md, Subagents in `.claude/agents/`
   - [x] Vorgänger-App analysiert (nur Quelltext gelesen): `docs/altapp-analyse.md`
-  - [x] Entscheidungsfragen gestellt (Antworten in A7 eintragen)
-  - [ ] Projekt (Vite + React + TS strict + Tailwind + Tests), SessionStart-Hook für Cloud-Sitzungen
-  - [ ] Plattform-Adapter `/src/platform` (Produktion + Entwicklung), Produktions-Build ohne Entwicklungs-Adapter (mit Test)
-  - [ ] Design-System (Tokens, drei Modi, Schrift eingebettet)
-  - [ ] Datenmodell (zod-Schemas aller Pfade aus Anhang B, unbekannte Felder bleiben erhalten), `seed/sample-data.json`
-  - [ ] Umstellung (`app/schema`) mit Trockenlauf-Bericht und Test
+  - [x] Entscheidungsfragen gestellt, Antworten in A7
+  - [x] Projekt (Vite 8 + React 19 + TS strict + Tailwind 4 + Vitest + Playwright/axe), SessionStart-Hook `.claude/hooks/session-start.sh`
+  - [x] Plattform-Adapter `/src/platform` (Produktion + Entwicklungs-Adapter `src/platform/dev`), Build ohne Adapter (Test + `check:platform`)
+  - [x] Design-System (Tokens Dunkel/Gedämpft/Hell in `src/styles/index.css`, Inter eingebettet, Kontrasttest)
+  - [x] Datenmodell (zod-Schemas aller Pfade, `docs/datenmodell.md`), Voreinstellungen als Daten (`src/content/legacy`), `seed/sample-data.json`
+  - [x] Umstellung v1 (`app/schema`) mit Trockenlauf-Bericht, FSRS-Startwerten (`docs/fsrs-umrechnung.md`) und Tests
 - [ ] Phase 1 – Kern-Erlebnis: Heute, Interaktions-Engine, Vokabel-/Chunk-Trainer mit FSRS, Wort-Antippen
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
@@ -79,6 +79,52 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
+
+**26.09.2026 – Antworten auf die Phase-0-Fragen**
+1. **Datenquelle:** Nur die per Link geteilte „Sprachwerkstatt" (Vertrag 0.2.49) enthält echte Lernstände. Der private Neubau-Versuch vom 26.09. mit eigener Datenbank bleibt unberührt, es wird nichts daraus übernommen.
+2. **Serie für neue Tage:** Ein Tag zählt, wenn die **Pflicht erledigt** ist. **Ein Ruhetag pro Kalenderwoche** (Mo–So) bricht die Serie nicht. Er wird nicht angespart. Für alle Tage vor der Umstellung gilt die alte Regel (A6.13).
+3. **Englisch-Variante:** **Amerikanisch** ist Standard für Schreibweise, Lautschrift, Beispielsätze, KI-Texte und die Standardstimme (en-US). Britische Schreibweisen und Wörter gelten bei Antworten **immer auch als richtig**. Die Rückmeldung nennt dann die US-Form als Hinweis, nie als Fehler.
+4. **Hauptgerät:** **iPhone mit Safari** (claude.ai im Browser). Daraus folgt:
+   - Safari-Eigenheiten zuerst: `-webkit-backdrop-filter`, `visualViewport` für die Bildschirmtastatur, `env(safe-area-inset-*)`.
+   - Sprachausgabe: Stimmen kommen verzögert (`voiceschanged`), Stücke ≤ 150 Zeichen, 60 ms Pause nach `cancel()`, Wecker gegen Pausieren.
+   - `navigator.vibrate` gibt es auf dem iPhone nicht. Die Rückmeldung ist dort rein visuell, per Merkmalserkennung und nie als kaputter Aufruf.
+   - Spracheingabe nur, wenn sie im eingebetteten Artefakt wirklich startet, sonst wird der Knopf ausgeblendet.
+   - **Grenze der Cloud-Umgebung:** Hier gibt es nur Chromium, keine Safari-Engine (WebKit). Automatische Tests laufen mit Chromium in iPhone-Größe mit Touch. Safari-spezifisches Verhalten prüft Emrah am Gerät.
+
+**26.09.2026 – eigene Festlegungen**
+- **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
+- **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
+
+## A8. Befehle und Projektstruktur
+Alles läuft in der Cloud-Umgebung. Chromium liegt unter `/opt/pw-browsers`, **nie `playwright install`** ausführen. `@playwright/test` und `playwright-core` sind auf 1.56.1 festgelegt, passend zum vorinstallierten Browser.
+
+| Befehl | Zweck |
+|---|---|
+| `npm run dev` | Dev-Server mit Entwicklungs-Adapter; `?fake=nodb,nosample,empty,persist` steuert ihn |
+| `npm run build` | Produktions-Build → genau eine `dist/index.html` |
+| `npm run typecheck` · `npm run lint` | TypeScript strict (App ohne Node-Typen und gesamt) · ESLint mit Typinformationen |
+| `npm test` | Unit-Tests (Vitest, `TZ=Europe/Berlin`) |
+| `npm run test:e2e` | baut App und Test-Laufzeit, dann Playwright gegen `dist/index.html` |
+| `npm run check:platform` | eine Datei, < 16 MB, keine Ladeziele, kein Entwicklungs-Adapter |
+| `npm run verify` | alles zusammen: vor jeder Auslieferung |
+| `npm run seed` | erzeugt `seed/sample-data.json` neu (deterministisch, Stichtag 20.09.2026) |
+
+**Struktur:**
+- `src/platform`: einziger Zugang zu `claude.use`, Browser-Speicher (`storage.ts`) und Diagnose-Protokoll (`diagnostics.ts`).
+- `src/platform/dev`: Entwicklungs-Adapter. E2E-Tests spielen ihn als `tests/.runtime/fake-claude.js` von außen ein.
+- `src/data`: Schemas, Pfade, der eine Schreibpfad (`writer.ts`), Voll-Lesen (`snapshot.ts`) und Live-Abos (`live.ts`, je Abfrage genau ein `onSnapshot`).
+- `src/domain`: reine Logik, nämlich Datum, Serie, FSRS-Umrechnung, Umstellung und Übersicht.
+- `src/content/legacy`: übernommene Inhalte der alten App.
+- `src/ui`: Bausteine.
+- `src/features`: Bildschirme.
+- `src/i18n`: Texte DE und EN.
+
+**Konventionen:**
+- ESLint verbietet `claude.use` und `localStorage` außerhalb von `src/platform`, leere `catch`-Blöcke und `any`.
+- Jeder Fehler geht über `logError`/`logWarn`.
+- Jeder Text steht in `src/i18n`, auf Englisch in amerikanischer Schreibweise.
+- Übernommene Inhalte gibt es zweisprachig (`name`/`name_en`, `de`/`en`). Angezeigt wird immer die Variante der Oberflächensprache (Kap. 10, Sprachtreue).
+- Vorhandene Subagents unter `.claude/agents/` lädt Claude Code beim Sitzungsstart. Sind sie in einer Sitzung nicht als Agententyp verfügbar, einen allgemeinen Agenten mit der jeweiligen Datei als Anweisung starten.
 
 ---
 

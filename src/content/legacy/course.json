@@ -1,0 +1,974 @@
+{
+ "units": [
+  {
+   "id": "u1",
+   "n": 1,
+   "de": "Im Meeting bestehen",
+   "en": "Holding your own in meetings",
+   "kind": "job",
+   "goal_de": "Ein Meeting führen, unterbrechen, nachhaken und zusammenfassen – ohne nach Worten zu suchen.",
+   "goal_en": "Run a meeting, interrupt, follow up and sum up – without groping for words."
+  },
+  {
+   "id": "u2",
+   "n": 2,
+   "de": "Kunden & Verhandlung",
+   "en": "Customers & negotiation",
+   "kind": "job",
+   "goal_de": "Angebote begründen, Einwände entkräften und Bedingungen aushandeln.",
+   "goal_en": "Justify offers, handle objections and negotiate terms."
+  },
+  {
+   "id": "u3",
+   "n": 3,
+   "de": "Reisen & Small Talk",
+   "en": "Travel & small talk",
+   "kind": "life",
+   "goal_de": "Auf Reisen und vor dem Meeting locker ins Gespräch kommen und Geschichten erzählen.",
+   "goal_en": "Get into conversation easily when travelling and before meetings, and tell stories."
+  },
+  {
+   "id": "u4",
+   "n": 4,
+   "de": "Software erklären",
+   "en": "Explaining software",
+   "kind": "job",
+   "goal_de": "Dein Produkt, Prozesse und technische Zusammenhänge verständlich auf Englisch erklären.",
+   "goal_en": "Explain your product, processes and technical context clearly in English."
+  },
+  {
+   "id": "u5",
+   "n": 5,
+   "de": "Meinung & Diskussion",
+   "en": "Opinion & discussion",
+   "kind": "life",
+   "goal_de": "Position beziehen, abwägen, widersprechen – höflich, aber bestimmt.",
+   "goal_en": "Take a position, weigh things up, disagree – politely but firmly."
+  },
+  {
+   "id": "u6",
+   "n": 6,
+   "de": "Auf C1-Niveau verhandeln",
+   "en": "Negotiating at C1 level",
+   "kind": "job",
+   "goal_de": "Nuancen setzen: Hypothesen, Bedauern, diplomatische Distanz und präzise Zusagen.",
+   "goal_en": "Add nuance: hypotheses, regret, diplomatic distance and precise commitments."
+  }
+ ],
+ "lessons": [
+  {
+   "id": "l01",
+   "unit": "u1",
+   "grammar": "pres-perf-cont",
+   "level": "B2",
+   "de": "Ein Meeting eröffnen und führen",
+   "en": "Opening and running a meeting",
+   "cando_de": "Ich kann ein Meeting eröffnen, die Tagesordnung vorstellen und sagen, woran wir gerade arbeiten.",
+   "cando_en": "I can open a meeting, present the agenda and say what we have been working on.",
+   "situation": "A weekly project meeting at a German document-management software company. The head of business development opens the meeting, presents the agenda and asks the team what they have been working on since the last meeting.",
+   "words": [
+    [
+     "agenda",
+     "Tagesordnung"
+    ],
+    [
+     "to chair a meeting",
+     "ein Meeting leiten"
+    ],
+    [
+     "attendee",
+     "Teilnehmer"
+    ],
+    [
+     "to go over something",
+     "etwas durchgehen"
+    ],
+    [
+     "action item",
+     "offener Punkt, To-do"
+    ],
+    [
+     "to recap",
+     "kurz zusammenfassen"
+    ]
+   ]
+  },
+  {
+   "id": "l02",
+   "unit": "u1",
+   "grammar": "past-simple-perfect",
+   "level": "B2",
+   "de": "Über den Projektstand berichten",
+   "en": "Reporting on project status",
+   "cando_de": "Ich kann berichten, was letzte Woche passiert ist und was sich bis jetzt verändert hat.",
+   "cando_en": "I can report what happened last week and what has changed so far.",
+   "situation": "A status update: the project lead reports what the team completed last quarter and what has changed since then. Contrast finished time (last week, in March) with time up to now (so far, this month, already).",
+   "words": [
+    [
+     "milestone",
+     "Meilenstein"
+    ],
+    [
+     "to fall behind",
+     "in Verzug geraten"
+    ],
+    [
+     "on track",
+     "im Plan"
+    ],
+    [
+     "setback",
+     "Rückschlag"
+    ],
+    [
+     "to catch up",
+     "aufholen"
+    ],
+    [
+     "progress report",
+     "Fortschrittsbericht"
+    ]
+   ]
+  },
+  {
+   "id": "l03",
+   "unit": "u1",
+   "grammar": "modals-deduction",
+   "level": "B2",
+   "de": "Höflich unterbrechen und nachhaken",
+   "en": "Interrupting and probing politely",
+   "cando_de": "Ich kann höflich unterbrechen, Vermutungen äußern und nachfragen, ohne unhöflich zu wirken.",
+   "cando_en": "I can interrupt politely, express assumptions and probe without sounding rude.",
+   "situation": "A meeting where a colleague's numbers do not add up. Someone interrupts politely, speculates about the reason (must be, might have been, can't have) and asks follow-up questions.",
+   "words": [
+    [
+     "to jump in",
+     "kurz einhaken"
+    ],
+    [
+     "to be mistaken",
+     "sich irren"
+    ],
+    [
+     "to clarify",
+     "klarstellen"
+    ],
+    [
+     "assumption",
+     "Annahme"
+    ],
+    [
+     "to bring up",
+     "ansprechen"
+    ],
+    [
+     "fair point",
+     "berechtigter Einwand"
+    ]
+   ]
+  },
+  {
+   "id": "l04",
+   "unit": "u1",
+   "grammar": "reported",
+   "level": "B2",
+   "de": "Ergebnisse weitergeben",
+   "en": "Passing on results",
+   "cando_de": "Ich kann weitergeben, was jemand gesagt, versprochen oder gefragt hat.",
+   "cando_en": "I can pass on what someone said, promised or asked.",
+   "situation": "After the meeting: someone summarises for an absent colleague what the client said, what the developer promised and what the manager asked – all in reported speech with backshift.",
+   "words": [
+    [
+     "to pass on",
+     "weitergeben"
+    ],
+    [
+     "to confirm",
+     "bestätigen"
+    ],
+    [
+     "to be reluctant to",
+     "zögern zu"
+    ],
+    [
+     "as far as I know",
+     "soweit ich weiß"
+    ],
+    [
+     "to put something in writing",
+     "schriftlich festhalten"
+    ],
+    [
+     "takeaway",
+     "Erkenntnis, Fazit"
+    ]
+   ]
+  },
+  {
+   "id": "l05",
+   "unit": "u2",
+   "grammar": "conditionals",
+   "level": "B2",
+   "de": "Ein Angebot begründen",
+   "en": "Justifying an offer",
+   "cando_de": "Ich kann ein Angebot erklären und sagen, was passiert, wenn der Kunde sich so oder so entscheidet.",
+   "cando_en": "I can explain an offer and say what happens if the customer decides one way or the other.",
+   "situation": "A sales call about a cloud document-management offer for a mid-sized company: explaining the price, what happens if they sign this quarter, and what would happen if they chose the smaller package.",
+   "words": [
+    [
+     "quote",
+     "Angebot, Kostenvoranschlag"
+    ],
+    [
+     "discount",
+     "Rabatt"
+    ],
+    [
+     "to break even",
+     "die Kosten decken"
+    ],
+    [
+     "upfront cost",
+     "Anfangskosten"
+    ],
+    [
+     "to be worth it",
+     "sich lohnen"
+    ],
+    [
+     "terms and conditions",
+     "Vertragsbedingungen"
+    ]
+   ]
+  },
+  {
+   "id": "l06",
+   "unit": "u2",
+   "grammar": "gerund-inf",
+   "level": "B2",
+   "de": "Einwände entkräften",
+   "en": "Handling objections",
+   "cando_de": "Ich kann auf Bedenken eingehen, Vorschläge machen und Alternativen anbieten.",
+   "cando_en": "I can address concerns, make suggestions and offer alternatives.",
+   "situation": "A customer hesitates: too expensive, staff resist change, migration seems risky. The salesperson suggests a pilot, offers to run a workshop and avoids promising too much.",
+   "words": [
+    [
+     "objection",
+     "Einwand"
+    ],
+    [
+     "to look into something",
+     "sich etwas ansehen"
+    ],
+    [
+     "concern",
+     "Bedenken"
+    ],
+    [
+     "pilot project",
+     "Pilotprojekt"
+    ],
+    [
+     "to reassure someone",
+     "jemanden beruhigen"
+    ],
+    [
+     "to roll something out",
+     "etwas einführen"
+    ]
+   ]
+  },
+  {
+   "id": "l07",
+   "unit": "u2",
+   "grammar": "passive",
+   "level": "B2",
+   "de": "Prozesse und Zuständigkeiten",
+   "en": "Processes and responsibilities",
+   "cando_de": "Ich kann beschreiben, was gemacht wird, wenn nicht wichtig ist, wer es macht.",
+   "cando_en": "I can describe what is done when it does not matter who does it.",
+   "situation": "Explaining to a customer how invoices are processed, where documents are stored, when the data is backed up and how the system was set up – all passive, because the actor is irrelevant.",
+   "words": [
+    [
+     "to process",
+     "bearbeiten, verarbeiten"
+    ],
+    [
+     "invoice",
+     "Rechnung"
+    ],
+    [
+     "to store",
+     "speichern, ablegen"
+    ],
+    [
+     "to be handled",
+     "bearbeitet werden"
+    ],
+    [
+     "approval",
+     "Freigabe"
+    ],
+    [
+     "audit trail",
+     "Prüfpfad, Nachweiskette"
+    ]
+   ]
+  },
+  {
+   "id": "l08",
+   "unit": "u2",
+   "grammar": "mixed-cond",
+   "level": "B2+",
+   "de": "Nachverhandeln und bedauern",
+   "en": "Renegotiating and regretting",
+   "cando_de": "Ich kann sagen, was heute anders wäre, wenn wir damals anders entschieden hätten.",
+   "cando_en": "I can say what would be different today if we had decided differently back then.",
+   "situation": "A follow-up with a customer whose rollout went badly: what would be running smoothly now if they had trained the staff, what the salesperson wishes had been agreed, and what they would do differently.",
+   "words": [
+    [
+     "to hold something up",
+     "etwas aufhalten"
+    ],
+    [
+     "in hindsight",
+     "im Nachhinein"
+    ],
+    [
+     "to underestimate",
+     "unterschätzen"
+    ],
+    [
+     "bottleneck",
+     "Engpass"
+    ],
+    [
+     "to sort something out",
+     "etwas klären, in Ordnung bringen"
+    ],
+    [
+     "lesson learned",
+     "gelernte Lektion"
+    ]
+   ]
+  },
+  {
+   "id": "l09",
+   "unit": "u3",
+   "grammar": "future-forms",
+   "level": "B1+",
+   "de": "Reise und Termine planen",
+   "en": "Planning travel and appointments",
+   "cando_de": "Ich kann Pläne, Termine und spontane Entscheidungen auseinanderhalten.",
+   "cando_en": "I can tell plans, arrangements and spontaneous decisions apart.",
+   "situation": "Two colleagues plan a business trip to a trade fair in London: fixed appointments, plans they have made, predictions about the weather and spontaneous offers to help.",
+   "words": [
+    [
+     "to book",
+     "buchen"
+    ],
+    [
+     "layover",
+     "Zwischenstopp"
+    ],
+    [
+     "to be due to",
+     "vorgesehen sein zu"
+    ],
+    [
+     "venue",
+     "Veranstaltungsort"
+    ],
+    [
+     "to make it",
+     "es schaffen, rechtzeitig da sein"
+    ],
+    [
+     "itinerary",
+     "Reiseplan"
+    ]
+   ]
+  },
+  {
+   "id": "l10",
+   "unit": "u3",
+   "grammar": "past-simple-perfect",
+   "level": "B2",
+   "de": "Eine Anekdote erzählen",
+   "en": "Telling an anecdote",
+   "cando_de": "Ich kann eine kleine Geschichte erzählen und dabei Zeiten sauber trennen.",
+   "cando_en": "I can tell a short story and keep the tenses apart.",
+   "situation": "Small talk before a meeting: someone tells a short story about a flight that was cancelled, what they had already done before it happened, and how often this has happened to them.",
+   "words": [
+    [
+     "to end up",
+     "letztlich landen bei"
+    ],
+    [
+     "by chance",
+     "zufällig"
+    ],
+    [
+     "to turn out",
+     "sich herausstellen"
+    ],
+    [
+     "nightmare",
+     "Albtraum"
+    ],
+    [
+     "to be stuck",
+     "festsitzen"
+    ],
+    [
+     "it was worth the trouble",
+     "es war die Mühe wert"
+    ]
+   ]
+  },
+  {
+   "id": "l11",
+   "unit": "u3",
+   "grammar": "relative",
+   "level": "B1+",
+   "de": "Menschen und Orte beschreiben",
+   "en": "Describing people and places",
+   "cando_de": "Ich kann Personen, Orte und Dinge in einem Satz genauer beschreiben.",
+   "cando_en": "I can describe people, places and things more precisely in one sentence.",
+   "situation": "Dinner small talk: describing a colleague who used to work in Istanbul, a hotel which was fully booked, and the restaurant where they met the client.",
+   "words": [
+    [
+     "colleague of mine",
+     "ein Kollege von mir"
+    ],
+    [
+     "neighbourhood",
+     "Viertel, Gegend"
+    ],
+    [
+     "to be based in",
+     "ansässig sein in"
+    ],
+    [
+     "to get along with",
+     "gut auskommen mit"
+    ],
+    [
+     "down-to-earth",
+     "bodenständig"
+    ],
+    [
+     "to come across as",
+     "wirken wie"
+    ]
+   ]
+  },
+  {
+   "id": "l12",
+   "unit": "u3",
+   "grammar": "articles",
+   "level": "B1+",
+   "de": "Über Gewohnheiten sprechen",
+   "en": "Talking about habits",
+   "cando_de": "Ich kann über Allgemeines und Gewohnheiten sprechen, ohne Artikel falsch zu setzen.",
+   "cando_en": "I can talk about general things and habits without getting articles wrong.",
+   "situation": "Talking about work-life balance: life in general, the work they do, music they listen to on the commute, and breakfast before an early flight.",
+   "words": [
+    [
+     "commute",
+     "Arbeitsweg"
+    ],
+    [
+     "routine",
+     "Routine, Ablauf"
+    ],
+    [
+     "to unwind",
+     "abschalten"
+    ],
+    [
+     "work-life balance",
+     "Ausgleich zwischen Arbeit und Leben"
+    ],
+    [
+     "to skip",
+     "auslassen"
+    ],
+    [
+     "on a daily basis",
+     "täglich"
+    ]
+   ]
+  },
+  {
+   "id": "l13",
+   "unit": "u4",
+   "grammar": "passive",
+   "level": "B2",
+   "de": "Wie das System funktioniert",
+   "en": "How the system works",
+   "cando_de": "Ich kann technische Abläufe erklären, ohne ständig „we“ zu sagen.",
+   "cando_en": "I can explain technical processes without saying “we” all the time.",
+   "situation": "A demo: how documents are scanned, indexed and archived, how access is controlled and how the data is encrypted.",
+   "words": [
+    [
+     "to index",
+     "indexieren, verschlagworten"
+    ],
+    [
+     "retention period",
+     "Aufbewahrungsfrist"
+    ],
+    [
+     "to grant access",
+     "Zugriff gewähren"
+    ],
+    [
+     "encryption",
+     "Verschlüsselung"
+    ],
+    [
+     "to retrieve",
+     "abrufen, wiederfinden"
+    ],
+    [
+     "seamlessly",
+     "nahtlos"
+    ]
+   ]
+  },
+  {
+   "id": "l14",
+   "unit": "u4",
+   "grammar": "relative",
+   "level": "B2",
+   "de": "Funktionen präzise beschreiben",
+   "en": "Describing features precisely",
+   "cando_de": "Ich kann Funktionen und Vorteile in präzisen Sätzen verbinden.",
+   "cando_en": "I can connect features and benefits in precise sentences.",
+   "situation": "Explaining which features matter for a mid-sized customer: the module that handles invoices, the dashboard which shows open tasks, the department where most paper is produced.",
+   "words": [
+    [
+     "feature",
+     "Funktion"
+    ],
+    [
+     "tailored to",
+     "zugeschnitten auf"
+    ],
+    [
+     "to keep track of",
+     "den Überblick behalten über"
+    ],
+    [
+     "hassle",
+     "Aufwand, Ärger"
+    ],
+    [
+     "out of the box",
+     "sofort einsatzbereit"
+    ],
+    [
+     "to scale",
+     "skalieren, mitwachsen"
+    ]
+   ]
+  },
+  {
+   "id": "l15",
+   "unit": "u4",
+   "grammar": "prepositions",
+   "level": "B2",
+   "de": "Zahlen und Entwicklungen",
+   "en": "Numbers and trends",
+   "cando_de": "Ich kann Zahlen, Anstiege und Rückgänge mit den richtigen Präpositionen beschreiben.",
+   "cando_en": "I can describe figures, rises and falls with the right prepositions.",
+   "situation": "Presenting quarterly figures: sales rose by 12 % to 4 million, the churn rate fell from 9 % to 6 %, results depend on the pipeline and are in line with the forecast.",
+   "words": [
+    [
+     "to rise by",
+     "steigen um"
+    ],
+    [
+     "to account for",
+     "ausmachen, erklären"
+    ],
+    [
+     "in line with",
+     "im Einklang mit"
+    ],
+    [
+     "compared to",
+     "im Vergleich zu"
+    ],
+    [
+     "forecast",
+     "Prognose"
+    ],
+    [
+     "churn rate",
+     "Abwanderungsrate"
+    ]
+   ]
+  },
+  {
+   "id": "l16",
+   "unit": "u4",
+   "grammar": "future-perf-cont",
+   "level": "B2",
+   "de": "Zeitpläne und Zusagen",
+   "en": "Timelines and commitments",
+   "cando_de": "Ich kann verbindlich sagen, was bis wann fertig sein wird.",
+   "cando_en": "I can say reliably what will have been finished by when.",
+   "situation": "Agreeing a rollout plan: by the end of the quarter the migration will have been completed, this time next month the team will be testing, by June the system will have been running for a year.",
+   "words": [
+    [
+     "rollout",
+     "Einführung"
+    ],
+    [
+     "to go live",
+     "in Betrieb gehen"
+    ],
+    [
+     "by the end of",
+     "bis zum Ende von"
+    ],
+    [
+     "to hand over",
+     "übergeben"
+    ],
+    [
+     "downtime",
+     "Ausfallzeit"
+    ],
+    [
+     "contingency",
+     "Puffer, Notfallplan"
+    ]
+   ]
+  },
+  {
+   "id": "l17",
+   "unit": "u5",
+   "grammar": "modals-deduction",
+   "level": "B2",
+   "de": "Vermuten und einschätzen",
+   "en": "Speculating and assessing",
+   "cando_de": "Ich kann einschätzen, wie wahrscheinlich etwas ist, statt nur „maybe“ zu sagen.",
+   "cando_en": "I can assess how likely something is instead of just saying “maybe”.",
+   "situation": "Discussing a news story about remote work: what must be behind the trend, what might have caused it, what can't be true.",
+   "words": [
+    [
+     "to be bound to",
+     "zwangsläufig ... werden"
+    ],
+    [
+     "unlikely",
+     "unwahrscheinlich"
+    ],
+    [
+     "to point to",
+     "hindeuten auf"
+    ],
+    [
+     "evidence",
+     "Beleg, Hinweis"
+    ],
+    [
+     "it strikes me that",
+     "mir fällt auf, dass"
+    ],
+    [
+     "arguably",
+     "wohl, man könnte sagen"
+    ]
+   ]
+  },
+  {
+   "id": "l18",
+   "unit": "u5",
+   "grammar": "conditionals",
+   "level": "B2",
+   "de": "Widersprechen, ohne anzuecken",
+   "en": "Disagreeing without friction",
+   "cando_de": "Ich kann höflich widersprechen und Bedingungen für Zustimmung formulieren.",
+   "cando_en": "I can disagree politely and state conditions for agreement.",
+   "situation": "A team disagrees about switching tools: if we moved everything now, we would lose two weeks; unless we plan it properly, it will fail.",
+   "words": [
+    [
+     "to have a point",
+     "recht haben, ein Argument haben"
+    ],
+    [
+     "to be on the fence",
+     "unentschlossen sein"
+    ],
+    [
+     "drawback",
+     "Nachteil"
+    ],
+    [
+     "to weigh up",
+     "abwägen"
+    ],
+    [
+     "provided that",
+     "vorausgesetzt, dass"
+    ],
+    [
+     "to settle on",
+     "sich einigen auf"
+    ]
+   ]
+  },
+  {
+   "id": "l19",
+   "unit": "u5",
+   "grammar": "pres-perf-cont",
+   "level": "B2",
+   "de": "Entwicklungen beschreiben",
+   "en": "Describing developments",
+   "cando_de": "Ich kann sagen, was sich über die Zeit entwickelt hat und noch andauert.",
+   "cando_en": "I can say what has been developing over time and is still going on.",
+   "situation": "Talking about a trend: prices have been rising for months, the team has been working on the problem since spring, people have been complaining about it lately.",
+   "words": [
+    [
+     "steadily",
+     "stetig"
+    ],
+    [
+     "to keep up with",
+     "Schritt halten mit"
+    ],
+    [
+     "shortage",
+     "Mangel, Engpass"
+    ],
+    [
+     "to complain about",
+     "sich beschweren über"
+    ],
+    [
+     "ongoing",
+     "laufend, andauernd"
+    ],
+    [
+     "for the time being",
+     "vorerst"
+    ]
+   ]
+  },
+  {
+   "id": "l20",
+   "unit": "u5",
+   "grammar": "reported",
+   "level": "B2+",
+   "de": "Kritik weitergeben",
+   "en": "Passing on criticism",
+   "cando_de": "Ich kann Kritik und Rückmeldungen sachlich weitergeben.",
+   "cando_en": "I can pass on criticism and feedback objectively.",
+   "situation": "Relaying customer feedback to the developers: what the customer complained about, what they had expected, what they asked for and what they warned would happen.",
+   "words": [
+    [
+     "feedback",
+     "Rückmeldung"
+    ],
+    [
+     "to admit",
+     "zugeben"
+    ],
+    [
+     "to blame someone for",
+     "jemandem etwas vorwerfen"
+    ],
+    [
+     "constructive",
+     "konstruktiv"
+    ],
+    [
+     "to take it on board",
+     "es annehmen, berücksichtigen"
+    ],
+    [
+     "to play something down",
+     "etwas herunterspielen"
+    ]
+   ]
+  },
+  {
+   "id": "l21",
+   "unit": "u6",
+   "grammar": "mixed-cond",
+   "level": "B2+",
+   "de": "Hypothesen und Bedauern",
+   "en": "Hypotheses and regret",
+   "cando_de": "Ich kann Szenarien durchspielen und Bedauern ausdrücken, ohne in der Zeit zu verrutschen.",
+   "cando_en": "I can run through scenarios and express regret without slipping between tenses.",
+   "situation": "A post-mortem on a lost deal: if we had answered faster, we would be signing today; I wish we had involved the IT department earlier.",
+   "words": [
+    [
+     "to miss out on",
+     "sich entgehen lassen"
+    ],
+    [
+     "to follow up on",
+     "nachfassen bei"
+    ],
+    [
+     "decisive",
+     "entscheidend"
+    ],
+    [
+     "to be up against",
+     "zu kämpfen haben mit"
+    ],
+    [
+     "in retrospect",
+     "rückblickend"
+    ],
+    [
+     "to make up for",
+     "wettmachen"
+    ]
+   ]
+  },
+  {
+   "id": "l22",
+   "unit": "u6",
+   "grammar": "passive",
+   "level": "B2+",
+   "de": "Diplomatische Distanz",
+   "en": "Diplomatic distance",
+   "cando_de": "Ich kann unangenehme Dinge sagen, ohne jemanden direkt anzugreifen.",
+   "cando_en": "I can say uncomfortable things without attacking anyone directly.",
+   "situation": "A difficult email turned into speech: mistakes were made, the deadline was missed, it has been agreed that, it is expected that – passive as a politeness strategy.",
+   "words": [
+    [
+     "to be expected to",
+     "erwartet werden zu"
+    ],
+    [
+     "oversight",
+     "Versehen"
+    ],
+    [
+     "to address an issue",
+     "ein Problem angehen"
+    ],
+    [
+     "going forward",
+     "künftig"
+    ],
+    [
+     "to be looked into",
+     "geprüft werden"
+    ],
+    [
+     "with all due respect",
+     "bei allem Respekt"
+    ]
+   ]
+  },
+  {
+   "id": "l23",
+   "unit": "u6",
+   "grammar": "future-perf-cont",
+   "level": "B2+",
+   "de": "Verbindlich zusagen",
+   "en": "Making firm commitments",
+   "cando_de": "Ich kann präzise Zusagen machen und Zwischenstände ankündigen.",
+   "cando_en": "I can make precise commitments and announce interim results.",
+   "situation": "Closing a negotiation: by Friday we will have sent the revised contract, by then the legal team will have reviewed it, next week we will be finalising the details.",
+   "words": [
+    [
+     "to finalise",
+     "abschließen, finalisieren"
+    ],
+    [
+     "revised",
+     "überarbeitet"
+    ],
+    [
+     "to sign off on",
+     "freigeben, abzeichnen"
+    ],
+    [
+     "interim",
+     "Zwischen-, vorläufig"
+    ],
+    [
+     "binding",
+     "verbindlich"
+    ],
+    [
+     "to keep someone posted",
+     "jemanden auf dem Laufenden halten"
+    ]
+   ]
+  },
+  {
+   "id": "l24",
+   "unit": "u6",
+   "grammar": "gerund-inf",
+   "level": "B2+",
+   "de": "Den Abschluss machen",
+   "en": "Closing the deal",
+   "cando_de": "Ich kann ein Gespräch zum Abschluss führen und nächste Schritte vereinbaren.",
+   "cando_en": "I can steer a conversation to a close and agree next steps.",
+   "situation": "The closing conversation: they agreed to start in October, suggested running a workshop first, look forward to working together and managed to avoid a last-minute discount.",
+   "words": [
+    [
+     "to go ahead with",
+     "loslegen mit, durchziehen"
+    ],
+    [
+     "to look forward to doing",
+     "sich darauf freuen, zu tun"
+    ],
+    [
+     "to commit to",
+     "sich verpflichten zu"
+    ],
+    [
+     "mutually beneficial",
+     "für beide Seiten vorteilhaft"
+    ],
+    [
+     "to wrap up",
+     "abschließen"
+    ],
+    [
+     "next steps",
+     "nächste Schritte"
+    ]
+   ]
+  }
+ ],
+ "lessonSteps": [
+  {
+   "id": "words",
+   "k": "lsWords",
+   "icon": "vocab",
+   "min": 4
+  },
+  {
+   "id": "dialog",
+   "k": "lsDialog",
+   "icon": "listen",
+   "min": 4
+  },
+  {
+   "id": "grammar",
+   "k": "lsGrammar",
+   "icon": "gram",
+   "min": 5
+  },
+  {
+   "id": "output",
+   "k": "lsOutput",
+   "icon": "write",
+   "min": 4
+  }
+ ]
+}
