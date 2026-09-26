@@ -4,6 +4,7 @@ import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useAiAvailable } from '../../ai/scope';
 import { useLive } from '../../data/live';
+import { logWarn } from '../../platform/diagnostics';
 import { TOPICS, topicById, GROUP_EN } from '../../domain/content';
 import { certainty, topicP } from '../../domain/grammar/bkt';
 import { dueErrors, errorsOf } from '../../domain/grammar/errors';
@@ -165,7 +166,8 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
       setExtraTasks(tasks);
       setGen({ phase: 'idle', ctl: null });
       toast(tn('grGenerated', tasks.length));
-    } catch {
+    } catch (err) {
+      if (!ctl.signal.aborted) logWarn('grammar:generate', err, topic);
       setGen({ phase: ctl.signal.aborted ? 'idle' : 'error', ctl: null });
     }
   };
