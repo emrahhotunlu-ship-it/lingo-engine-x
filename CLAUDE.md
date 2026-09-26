@@ -186,6 +186,17 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - Die Phasen 6+7 baut ein Helfer.
 - Berichte an Emrah nur an Meilensteinen, kurz.
 
+**26.09.2026, ca. 23 Uhr – neue Zusammenarbeit (Emrahs Vorgabe, gilt ab sofort)**
+- **Immer nur ein kleines Problem zur Zeit.** Funktionierender Code wird nicht nebenbei mit angefasst.
+- **Vor jeder neuen Funktion oder größeren Änderung** wird der Ansatz in ein bis zwei Sätzen skizziert. Umgesetzt wird erst nach Emrahs „Go".
+- **Stand der Arbeitszweige** (lokal, noch nicht zusammengeführt):
+  - Phase 2 Domäne `worktree-agent-a1fcb727b01f42d07` (fertig)
+  - Phase 2 Bildschirme `worktree-agent-aaed2392f8db972dd` (Zwischenstand `07be1e7`, ungetestet)
+  - Phase 3 `worktree-agent-aca0f22367f924b04` (fertig)
+  - Phase 4 `worktree-agent-ac729d3fd574a67cf` (Zwischenstand `74a13e6`, ungetestet)
+  - Phase 5 `worktree-agent-ae7b0211db2f2df80` (fertig)
+- Zusammengeführt wird einzeln nacheinander, jeweils mit vollem Testlauf.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
