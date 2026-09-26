@@ -53,7 +53,8 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] Plan `docs/phase1-plan.md` (fünf Fachentwürfe + Synthese)
   - [x] MVP (Heute + Vokabeltrainer mit FSRS und kinetischer Lücke) – produktiv seit 26.09.2026
   - [x] Vorarbeiten fertig, noch nicht gemergt: WP1 KI-Tor/Sprachausgabe (`1651f78`), WP3 Wörterbuch/Lautschrift (`779bdd0`)
-  - [ ] Rest laut Plan: Wort-Antippen, weitere Abfragearten, Bausteine, Wendungen, Pflicht/`pflichtSince`, Hinweise aus den Prüfungen
+  - [x] Trainer-Umbau nach Emrahs Rückmeldung, Wort-Antippen, Lautschrift, Aussprache, KI-Tor – produktiv (c29b3dd)
+  - [ ] Pflicht/`pflichtSince` und Wendungen im Trainer kommen mit Phase 2
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
 - [ ] Phase 4 – Input und Output: Lesen, Hören, Schreiben, Entdecken
@@ -170,6 +171,12 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - Die Phasen 2–5 werden gleichzeitig in getrennten Worktrees gebaut.
   - Gemeinsame Dateien werden nur additiv geändert, Texte stehen in `src/i18n/parts/*`.
   - Die Helfer lassen nur Unit-Tests und die eigenen E2E-Specs laufen. Die volle Suite und die Prüfer laufen gebündelt beim Zusammenführen.
+
+**26.09.2026, nachts – Phase 1 produktiv (Emrahs Freigabe „Ja, veröffentlichen")**
+- `dist/index.html` aus `c29b3dd` liegt auf `JLL8…` (Version `1790444355-d812`) und auf dem Test-Link (`1790443340-1144`).
+- Enthalten sind: automatische Einstufung, Status, Platzhalter, Beispiele, Wort-Antippen mit Lautschrift und Aussprache, „Claude fragen".
+- Geprüft von data-guard, platform-guard und ux-reviewer (je eine Runde plus Nachprüfung).
+- Der Sicherheitsfilter der Sitzung verlangt vor jeder Veröffentlichung auf `JLL8…` Emrahs ausdrückliche Freigabe.
 
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
