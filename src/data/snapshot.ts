@@ -1,5 +1,5 @@
 import type { Db } from '../platform/types';
-import { logError } from '../platform/diagnostics';
+import { logError, logWarn } from '../platform/diagnostics';
 import { APP_DOC_PATHS, COLLECTION_NAMES, collectionOf } from './paths';
 import { validateDoc } from './validate';
 
@@ -43,6 +43,21 @@ export function snapshotFromRecord(all: Record<string, Doc>, possiblyTruncated: 
   return { raw, valid, invalid, counts, possiblyTruncated };
 }
 
+const KNOWN_TERMINAL = new Set(['invalid_argument', 'resource_exhausted', 'quota_exceeded', 'revoked', 'not_granted', 'capability_disabled', 'capability_removed', 'transform_error']);
+
+/** Lesen: bei `unavailable` oder unbekanntem Code genau einmal nach kurzer Pause wiederholen (db.d.ts). */
+async function readOnce<T>(what: string, op: () => Promise<T>): Promise<T> {
+  try {
+    return await op();
+  } catch (err) {
+    const code = err && typeof err === 'object' ? (err as { code?: unknown }).code : undefined;
+    if (typeof code === 'string' && KNOWN_TERMINAL.has(code)) throw err;
+    logWarn('data:read', err, `${what} – einmal wiederholt`);
+    await new Promise((r) => setTimeout(r, 300 + Math.random() * 500));
+    return op();
+  }
+}
+
 async function inBatches<T>(items: readonly T[], size: number, fn: (item: T) => Promise<void>): Promise<void> {
   for (let i = 0; i < items.length; i += size) {
     await Promise.all(items.slice(i, i + size).map(fn));
@@ -53,13 +68,14 @@ export async function loadSnapshot(db: Db): Promise<DataSnapshot> {
   const all: Record<string, Doc> = {};
   const truncated: string[] = [];
   await inBatches(APP_DOC_PATHS, 4, async (path) => {
-    const snap = await db.doc(path).get();
+    const snap = await readOnce(path, () => db.doc(path).get());
     const data = snap.exists ? snap.data() : undefined;
     if (data) all[path] = data;
   });
   await inBatches(COLLECTION_NAMES, 3, async (name) => {
-    const q = await db.collection(name).get();
-    if (q.size >= 1000) {
+    const q = await readOnce(name, () => db.collection(name).get());
+    // Genau 1.000 Treffer sehen nach einer Kappung aus; mehr oder weniger sind vollständig.
+    if (q.size === 1000) {
       truncated.push(name);
       logError('data:snapshot', { code: 'possibly_truncated', message: `${name}: ${q.size} Dokumente` }, name);
     }

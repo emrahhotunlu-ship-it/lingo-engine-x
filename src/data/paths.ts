@@ -90,9 +90,9 @@ export function isReadOnlyPath(path: string): boolean {
 }
 
 export function schemaForPath(path: string): ZodType | null {
-  if (path in APP_DOCS) return APP_DOCS[path as AppDocPath];
+  if (Object.hasOwn(APP_DOCS, path)) return APP_DOCS[path as AppDocPath];
   const segs = path.split('/');
   if (segs.length !== 2) return null;
   const c = segs[0] as CollectionName;
-  return c in COLLECTIONS ? COLLECTIONS[c] : null;
+  return Object.hasOwn(COLLECTIONS, c) ? COLLECTIONS[c] : null;
 }

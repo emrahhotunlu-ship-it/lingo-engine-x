@@ -62,6 +62,12 @@ export const de = {
   migRetry: 'Erneut prüfen',
   migDoneTitle: 'Umstellung abgeschlossen',
   migDoneBody: 'Deine Daten sind übernommen. Die Übersicht wird geladen.',
+  lateTitle: 'Aus diesem Browser nachtragen',
+  lateBody_one: 'In diesem Browser liegt noch {n} Änderung der alten App, die nie gespeichert wurde. Sie wird ergänzt – was in der Datenbank neuer ist, bleibt.',
+  lateBody_other: 'In diesem Browser liegen noch {n} Änderungen der alten App, die nie gespeichert wurden. Sie werden ergänzt – was in der Datenbank neuer ist, bleibt.',
+  lateRun: 'Nachtragen',
+  lateRunning: 'Wird nachgetragen',
+  lateFailed: 'Nachtragen unterbrochen ({msg}). Du kannst es erneut versuchen.',
 
   colVocab: 'Vokabeln',
   colGrammar: 'Grammatikthemen',

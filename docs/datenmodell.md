@@ -39,7 +39,8 @@ Stand: Phase 0. Grundlage sind die bestehende Datenbank (`docs/datenstruktur.jso
      - Karten und Themen: nur wenn `last` neuer ist,
      - sonst nur fehlende Felder.
 
-     Beim Ausführen wird frisch abgeglichen. `daily/*`, `feed/*` und unbekannte Pfade bleiben aus.
+     Listen werden vereinigt (Fehlersätze über `q`, Tageswerte über `d`), nichts wird gekappt. Lesen, Rechnen und Schreiben laufen in einem Schritt der Warteschlange (`writer.transform`). `daily/*`, `feed/*` und unbekannte Pfade bleiben aus.
+  - **Weitere Browser:** Hat ein anderer Browser noch Kopien, zeigt „Dein Stand“ dort „Aus diesem Browser nachtragen“. Es gelten dieselben Regeln (`lateRescue.ts`), behandelte Einträge merkt sich `lx:legacy-rescue` im Browser.
   3. `fsrs` je Karte ergänzen.
   4. `app/schema` schreiben.
 - **Gesperrt:** Die Umstellung läuft nicht bei ungültigem `app/profile` oder bei möglicherweise gekappten Abfragen. Dann gibt es nur Sicherung und Hinweis.

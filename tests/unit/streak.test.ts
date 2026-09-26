@@ -83,6 +83,13 @@ describe('Serie – Pflicht-Regel ab pflichtSince (Phase 1)', () => {
     expect(s.count).toBe(10 + 7);
   });
 
+  it('auch der erste Pflicht-Tag selbst kann der Ruhetag der Woche sein', () => {
+    // alt aktiv 1.–6.9., pflichtSince = 7.9. (Montag) nur geöffnet, 8.9. Pflicht erledigt.
+    const s = computeStreak({ days: map(range('2026-09-01', 6)), pflichtSince, pflichtDone: new Set(['2026-09-08']), today: '2026-09-08' });
+    expect(s.count).toBe(7);
+    expect(s.restDays).toEqual(['2026-09-07']);
+  });
+
   it('vor pflichtSince gibt es keine Ruhetage', () => {
     const days = map(['2026-09-01', '2026-09-02', '2026-09-04', '2026-09-05']);
     expect(computeStreak({ days, pflichtSince: '2026-09-05', today: '2026-09-05' }).count).toBe(2);

@@ -93,3 +93,35 @@ test('bei unerwartetem Profil ist die Umstellung gesperrt: kein Knopf, nur die S
   await expect(page.getByRole('button', { name: 'Vorher Sicherung herunterladen' })).toBeInViewport();
   expect(errors.every((e) => e.includes('data:validate'))).toBe(true);
 });
+
+test('zweiter Browser: noch nicht übertragene Kopien der alten App werden nach der Umstellung nachgetragen', async ({ page }) => {
+  const { errors } = await boot(page, {
+    migrated: true,
+    fake: { persist: true },
+    localStorage: {
+      'sw2:__dirty': JSON.stringify({ 'vocab/vom-handy': 1_789_950_000_000, 'app/course': 1_789_950_000_000 }),
+      'sw2:vocab/vom-handy': JSON.stringify({ word: 'from the phone', de: 'vom Handy', state: 'new', S: 0 }),
+      'sw2:app/course': JSON.stringify({ done: { l07: { d: '2026-09-20', n: 14, ok: 12, t: 1_789_950_000_000 } }, res: {} }),
+    },
+  });
+  await screen(page, 'overview');
+  const card = page.getByTestId('late-rescue');
+  await expect(card).toContainText('In diesem Browser liegen noch 2 Änderungen der alten App');
+  await card.getByRole('button', { name: 'Nachtragen' }).click();
+  await expect(card).toHaveCount(0);
+  await expect(page.getByTestId('course-done')).toHaveText('7');
+  const dump = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump() ?? {});
+  expect(dump['vocab/vom-handy']).toMatchObject({ word: 'from the phone' });
+  expect(Object.keys((dump['app/course'] as { done: object }).done)).toEqual(['l01', 'l02', 'l03', 'l04', 'l05', 'l06', 'l07']);
+  // Nach dem Neuladen wird nichts erneut angeboten.
+  await page.reload();
+  await screen(page, 'overview');
+  await expect(page.getByTestId('late-rescue')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('ein ungültiger Versionsvermerk zählt nicht als umgestellt', async ({ page }) => {
+  await boot(page, { fake: { patch: { 'app/schema': { version: 'eins' } } } });
+  await screen(page, 'migration');
+  await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toBeVisible();
+});

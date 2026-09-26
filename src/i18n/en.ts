@@ -63,6 +63,12 @@ export const en: Record<MessageKey, string> = {
   migRetry: 'Check again',
   migDoneTitle: 'Upgrade complete',
   migDoneBody: 'Your data has been carried over. Loading the overview.',
+  lateTitle: 'Add changes from this browser',
+  lateBody_one: 'This browser still holds {n} change from the old app that was never saved. It will be added – anything newer in the database stays.',
+  lateBody_other: 'This browser still holds {n} changes from the old app that were never saved. They will be added – anything newer in the database stays.',
+  lateRun: 'Add now',
+  lateRunning: 'Adding',
+  lateFailed: 'Adding was interrupted ({msg}). You can try again.',
 
   colVocab: 'Vocabulary',
   colGrammar: 'Grammar topics',

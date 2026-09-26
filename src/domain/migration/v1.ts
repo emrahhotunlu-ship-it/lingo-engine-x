@@ -3,16 +3,17 @@ import type { FsrsStored, SchemaDoc } from '../../data/schemas';
 import { schemaDocSchema } from '../../data/schemas';
 import type { DataSnapshot } from '../../data/snapshot';
 import { collectionDocs } from '../../data/snapshot';
-import { isDocPath, isReadOnlyPath, schemaForPath } from '../../data/paths';
 import { validateDoc } from '../../data/validate';
 import type { Writer } from '../../data/writer';
 import { describeError } from '../../platform/diagnostics';
-import { applyPatch } from '../equal';
 import { dayKey, legacyDayKey } from '../date';
 import { computeStreak, legacyStreak } from '../streak';
 import { legacyToFsrs } from '../srs/legacyFsrs';
 import { LESSONS, SEED_VOCAB, TOPICS, slug } from '../content';
-import { mergeLegacyLocal } from './rescue';
+import { classifyLegacyPath, type RescueItem, type RescueSkipReason } from './rescue';
+import { applyRescueItem } from './applyRescue';
+
+export type { RescueSkipReason };
 
 // Umstellung auf Datenversion 1 (Kap. 9, Regel 3): einmalig, versioniert, mit Trockenlauf.
 // planMigrationV1 schreibt nichts – es beschreibt genau, was applyMigrationV1 tun würde.
@@ -30,8 +31,6 @@ type Doc = Record<string, unknown>;
 
 export type LegacyLocalInput = { dirty: Record<string, number>; docs: Record<string, Doc> };
 
-export type RescueSkipReason = 'read_only' | 'invalid' | 'unchanged' | 'missing_local' | 'unknown_path' | 'db_newer';
-
 /** Warum die Umstellung gesperrt ist (dann gibt es keinen Knopf, nur die Sicherung). */
 export type BlockReason = 'profile_invalid' | 'possibly_truncated';
 
@@ -45,7 +44,7 @@ export type MigrationPlan = {
   possiblyTruncated: string[];
   defaults: { seedVocabNotInDb: number; topicsNotInDb: number };
   /** Kopien der alten App, die ergänzt werden (`local` = die Kopie; beim Ausführen frisch abgeglichen). */
-  rescue: Array<{ path: string; markedAt: number; local: Doc; action: 'create' | 'merge'; changes: number }>;
+  rescue: RescueItem[];
   rescueSkipped: Array<{ path: string; reason: RescueSkipReason }>;
   fsrs: Array<{ path: string; value: FsrsStored }>;
   untouched: { daily: number; feed: number };
@@ -74,22 +73,11 @@ export function planMigrationV1(input: { snapshot: DataSnapshot; local: LegacyLo
   const rescueSkipped: MigrationPlan['rescueSkipped'] = [];
   const effective = new Map<string, Doc>(snapshot.valid);
   for (const [path, markedAt] of Object.entries(local.dirty).sort(([a], [b]) => (a < b ? -1 : 1))) {
-    const data = local.docs[path];
-    if (!isDocPath(path) || !schemaForPath(path)) rescueSkipped.push({ path, reason: 'unknown_path' });
-    else if (!data) rescueSkipped.push({ path, reason: 'missing_local' });
-    else if (isReadOnlyPath(path)) rescueSkipped.push({ path, reason: 'read_only' });
-    else if (!validateDoc(path, data).ok) rescueSkipped.push({ path, reason: 'invalid' });
+    const c = classifyLegacyPath(path, markedAt, Object.hasOwn(local.docs, path) ? local.docs[path] : undefined, snapshot.raw.get(path));
+    if ('skip' in c) rescueSkipped.push({ path, reason: c.skip });
     else {
-      const remote = snapshot.raw.get(path);
-      const d = mergeLegacyLocal(path, remote, data);
-      if (d.kind === 'skip') rescueSkipped.push({ path, reason: d.reason });
-      else if (d.kind === 'create') {
-        rescue.push({ path, markedAt, local: data, action: 'create', changes: 1 });
-        effective.set(path, data);
-      } else {
-        rescue.push({ path, markedAt, local: data, action: 'merge', changes: d.changes });
-        effective.set(path, applyPatch(remote ?? {}, d.patch));
-      }
+      rescue.push(c.item);
+      effective.set(path, c.merged);
     }
   }
 
@@ -111,7 +99,7 @@ export function planMigrationV1(input: { snapshot: DataSnapshot; local: LegacyLo
   const grammarTotal = new Set([...grammarIds, ...TOPICS.map((t) => t.id)]).size;
   const course = effective.get('app/course');
   const doneMap = course && typeof course.done === 'object' && course.done !== null ? (course.done as Doc) : {};
-  const lessonsDone = LESSONS.filter((l) => l.id in doneMap).length;
+  const lessonsDone = LESSONS.filter((l) => Object.hasOwn(doneMap, l.id)).length;
 
   // Serie vorher (Rechenweg der alten App, aus den Rohdaten) und nachher (mit ergänzten Kopien).
   // Die Pflicht-Regel beginnt erst mit Phase 1 (`pflichtSince`); bis dahin gilt die alte Regel.
@@ -208,15 +196,7 @@ export async function applyMigrationV1(
   };
 
   try {
-    for (const r of plan.rescue) {
-      await step(async () => {
-        const snap = await db.doc(r.path).get();
-        const remote = snap.exists ? snap.data() : undefined;
-        const d = mergeLegacyLocal(r.path, remote, r.local);
-        if (d.kind === 'create') await writer.set(r.path, d.data, null);
-        else if (d.kind === 'merge') await writer.update(r.path, d.patch);
-      });
-    }
+    for (const r of plan.rescue) await step(() => applyRescueItem(r, writer));
     // FSRS aus dem frischen Stand jeder Karte berechnen (sie kann sich seit dem Trockenlauf geändert haben).
     for (const f of plan.fsrs) {
       await step(async () => {

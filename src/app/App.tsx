@@ -61,10 +61,12 @@ function useScreen(): Screen {
   const db = useCapabilities((s) => s.db);
   const status = useLive((s) => s.status);
   const schema = useLive((s) => s.docs['app/schema']);
+  const schemaInvalid = useLive((s) => 'app/schema' in s.invalid);
   if (db === 'absent') return 'nodb';
   if (status === 'error') return 'offline';
   if (db === 'pending' || status !== 'ready') return 'loading';
-  return schema ? 'overview' : 'migration';
+  const migrated = !!schema && !schemaInvalid && typeof schema.version === 'number' && schema.version >= 1;
+  return migrated ? 'overview' : 'migration';
 }
 
 export function App() {

@@ -23,6 +23,17 @@ describe('Der eine Schreibpfad', () => {
     expect(h.writes()).toEqual([{ op: 'update', path: 'app/profile' }]);
   });
 
+  it('transform liest, rechnet und schreibt in einem Schritt – und legt nie über Bestehendes an', async () => {
+    const h = createMemoryDb({ seed: { 'app/course': { done: { l01: {} } } } });
+    const w = createWriter(h.db);
+    await expect(w.transform('app/course', () => ({ set: { done: {} } }))).rejects.toMatchObject({ code: 'exists' });
+    expect(await w.transform('app/course', (cur) => ({ update: { done: { ...(cur?.done as object), l02: {} } } }))).toBe('updated');
+    expect(await w.transform('app/course', () => ({ update: { done: { l01: {} } } }))).toBe('unchanged');
+    expect(await w.transform('app/chat', (cur) => (cur ? null : { set: { msgs: [] } }))).toBe('created');
+    expect(await w.createIfMissing('app/chat', { msgs: [1] })).toBe('exists');
+    expect((await h.db.doc('app/chat').get()).data()).toEqual({ msgs: [] });
+  });
+
   it('legt ein fehlendes Dokument per patch an, update verlangt ein bestehendes', async () => {
     const h = createMemoryDb();
     const w = createWriter(h.db);
@@ -41,7 +52,7 @@ describe('Der eine Schreibpfad', () => {
   it('kennt kein Löschen', () => {
     const w = createWriter(createMemoryDb().db) as unknown as Record<string, unknown>;
     expect(w.delete).toBeUndefined();
-    expect(Object.keys(w).sort()).toEqual(['patch', 'set', 'update']);
+    expect(Object.keys(w).sort()).toEqual(['createIfMissing', 'patch', 'set', 'transform', 'update']);
   });
 
   it('schreibt je Dokument nacheinander, in Aufruf-Reihenfolge', async () => {

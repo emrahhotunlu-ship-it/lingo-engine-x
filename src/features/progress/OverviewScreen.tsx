@@ -8,6 +8,7 @@ import { Bar } from '../../ui/ProgressRing';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useLive } from '../../data/live';
 import { buildOverview } from '../../domain/overview';
+import { LateRescueCard } from '../migration/LateRescueCard';
 
 // „Dein Stand" (Fundament-Version): zeigt, dass alle bisherigen Daten angekommen sind.
 // Eine große Zahl pro Karte, Messwerte nur eingeklappt (Kap. 5, Kap. 8).
@@ -76,6 +77,8 @@ export function OverviewScreen() {
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('ovTitle')}</h1>
         <p className="max-w-2xl text-base text-muted">{t('ovLead')}</p>
       </motion.header>
+
+      <LateRescueCard />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-12">
         <motion.div variants={item} className="xl:col-span-4">

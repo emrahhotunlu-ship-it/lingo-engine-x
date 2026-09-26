@@ -32,12 +32,3 @@ export function clone<T>(v: T): T {
   return JSON.parse(JSON.stringify(v)) as T;
 }
 
-/** Wirkung von db `update(patch)` auf `base`: Objekte verschmelzen rekursiv, alles andere ersetzt. */
-export function applyPatch(base: Record<string, unknown>, patch: Record<string, unknown>): Record<string, unknown> {
-  const out: Record<string, unknown> = { ...base };
-  for (const [k, v] of Object.entries(patch)) {
-    const cur = out[k];
-    out[k] = isPlainObject(v) && isPlainObject(cur) ? applyPatch(cur, v) : v;
-  }
-  return out;
-}

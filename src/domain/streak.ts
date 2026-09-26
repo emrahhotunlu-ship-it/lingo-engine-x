@@ -67,7 +67,7 @@ export function computeStreak(input: StreakInput): Streak {
       continue;
     }
     const week = isoWeek(d);
-    if (pflichtSince && d > pflichtSince && !usedWeeks.has(week)) {
+    if (pflichtSince && d >= pflichtSince && !usedWeeks.has(week)) {
       usedWeeks.add(week);
       pendingRest.push(d);
       d = addDays(d, -1);

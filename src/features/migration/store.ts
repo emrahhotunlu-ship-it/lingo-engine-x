@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { getDb } from '../../platform/capabilities';
 import { describeError, logError, logInfo } from '../../platform/diagnostics';
-import { readLegacyLocal } from '../../platform/legacyLocal';
+import { markHandled, readLegacyLocal } from '../../platform/legacyLocal';
 import { loadSnapshot, type DataSnapshot } from '../../data/snapshot';
 import { getWriter } from '../../data';
 import { applyMigrationV1, planMigrationV1, type MigrationPlan } from '../../domain/migration/v1';
@@ -52,6 +52,7 @@ export const useMigration = create<MigrationState>((set, get) => ({
       nowMs: () => Date.now(),
       onProgress: (done, total) => set({ phase: 'running', plan, snapshot, done, total }),
     });
+    if (res.status === 'done') markHandled(readLegacyLocal().dirty);
     if (res.status === 'done' || res.status === 'already') {
       logInfo('migration:done', `Datenversion ${plan.version}`, `${res.written} Schreibschritte`);
       set({ phase: 'done' });

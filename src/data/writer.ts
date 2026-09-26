@@ -32,11 +32,35 @@ export type Writer = {
    * prüft patch immer selbst – ein bestehendes Dokument wird nie ersetzt, nur ergänzt.
    */
   patch(path: string, patch: Record<string, unknown>, current?: Record<string, unknown> | null): Promise<WriteOutcome>;
+  /**
+   * Lesen, berechnen, schreiben in EINEM Schritt der Warteschlange dieses Dokuments: `compute`
+   * bekommt den frischen Stand (`undefined` = fehlt) und liefert, was zu tun ist. `set` ist nur
+   * erlaubt, wenn das Dokument fehlt – ein bestehendes wird nie ersetzt.
+   */
+  transform(
+    path: string,
+    compute: (current: Record<string, unknown> | undefined) => { set: Record<string, unknown> } | { update: Record<string, unknown> } | null,
+  ): Promise<'created' | 'updated' | 'unchanged'>;
+  /** Dokument nur anlegen, wenn es fehlt (Prüfen und Anlegen in derselben Warteschlange). */
+  createIfMissing(path: string, data: Record<string, unknown>): Promise<'created' | 'exists'>;
   /** Felder in ein BESTEHENDES Dokument einmischen; schlägt fehl, wenn es fehlt (db `update`). */
   update(path: string, patch: Record<string, unknown>): Promise<WriteOutcome>;
 };
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+const KNOWN_CODES = new Set([
+  'invalid_argument',
+  'resource_exhausted',
+  'quota_exceeded',
+  'unavailable',
+  'revoked',
+  'not_granted',
+  'capability_disabled',
+  'capability_removed',
+  'transform_error',
+  'read_only',
+]);
 
 export function createWriter(db: Db): Writer {
   const queues = new Map<string, Promise<unknown>>();
@@ -61,7 +85,8 @@ export function createWriter(db: Db): Writer {
       await op();
     } catch (err) {
       const { code, message } = describeError(err);
-      if (code === 'unavailable') {
+      // `unavailable` und unbekannte Codes: genau einmal nach kurzer Zufallspause (db.d.ts).
+      if (code === undefined || code === 'unavailable' || !KNOWN_CODES.has(code)) {
         logWarn('data:write', err, `${path} – einmal wiederholt`);
         await sleep(300 + Math.random() * 500);
         try {
@@ -112,6 +137,33 @@ export function createWriter(db: Db): Writer {
         if (exists) await withRetry(path, () => db.doc(path).update(patchData));
         else await withRetry(path, () => db.doc(path).set(patchData));
         return 'written';
+      });
+    },
+    transform(path, compute) {
+      guard(path);
+      return enqueue(path, async (): Promise<'created' | 'updated' | 'unchanged'> => {
+        const snap = await db.doc(path).get();
+        const current = snap.exists ? snap.data() : undefined;
+        const op = compute(current);
+        if (!op) return 'unchanged';
+        if ('set' in op) {
+          if (current) throw new WriteError('exists', `${path} existiert – anlegen verweigert`, path);
+          await withRetry(path, () => db.doc(path).set(op.set));
+          return 'created';
+        }
+        if (!current) throw new WriteError('missing', `${path} fehlt – ergänzen nicht möglich`, path);
+        if (patchIsNoop(current, op.update)) return 'unchanged';
+        await withRetry(path, () => db.doc(path).update(op.update));
+        return 'updated';
+      });
+    },
+    createIfMissing(path, data) {
+      guard(path);
+      return enqueue(path, async (): Promise<'created' | 'exists'> => {
+        const snap = await db.doc(path).get();
+        if (snap.exists) return 'exists';
+        await withRetry(path, () => db.doc(path).set(data));
+        return 'created';
       });
     },
     update(path, patchData) {

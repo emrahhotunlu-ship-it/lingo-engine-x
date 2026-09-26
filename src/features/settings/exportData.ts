@@ -1,6 +1,7 @@
 import { getDb } from '../../platform/capabilities';
 import { saveFile, type SaveOutcome } from '../../platform/downloads';
 import { logError } from '../../platform/diagnostics';
+import { readLegacyLocal } from '../../platform/legacyLocal';
 import { loadSnapshot, type DataSnapshot } from '../../data/snapshot';
 import { dayKey } from '../../domain/date';
 
@@ -26,5 +27,8 @@ export async function exportAll(snapshot?: DataSnapshot): Promise<SaveOutcome> {
     documentCount: snap.raw.size,
     documents: Object.fromEntries(snap.raw),
   };
+  // Noch nicht übertragene Kopien der alten App in diesem Browser gehören mit in die Sicherung.
+  const browserCopies = readLegacyLocal();
+  if (Object.keys(browserCopies.dirty).length) Object.assign(payload, { browserCopies });
   return saveFile(`lingo-engine-x-sicherung-${dayKey(Date.now())}.json`, JSON.stringify(payload, null, 1));
 }
