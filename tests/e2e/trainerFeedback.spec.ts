@@ -117,17 +117,18 @@ test('Wort antippen: Wörterbuch-Bedeutung und Lautschrift, „Claude fragen" mi
   await expect(page.getByTestId('lk-listen')).toBeVisible();
   await page.getByTestId('lk-listen').click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { spoken: string[] } }).__LINGO_FAKE__.spoken)).toContain('drive');
-  // Claude fragen: eine Anfrage (quick) mit dem Satz, Antwort in der Oberflächensprache.
+  // „Claude fragen" (Phase 5, E5-09 ersetzt E16): Der Begleiter öffnet mit Wort und Satz und fragt
+  // sofort; vor dem Prüfen bleibt die Lösung auch im mitgeschickten Satz geschwärzt (E5-05).
   await page.getByTestId('lk-ask').click();
-  await expect(page.getByTestId('lk-sense')).toBeVisible();
-  await expect(page.getByTestId('lk-sense')).toContainText('Hier');
-  const calls = (await sampleCalls(page)).filter((c) => c.id === 'word-lookup');
-  expect(calls).toHaveLength(1);
-  expect(calls[0]?.tier).toBe('quick');
-  expect(calls[0]?.input).toContain('Sentence: Try to avoid driving in rush hour.');
-  await expect.poll(async () => ((await dump(page))['app/lookup']?.items as Record<string, unknown> | undefined)?.driving ?? null).not.toBeNull();
-  await page.keyboard.press('Escape');
   await expect(lk).toHaveCount(0);
+  await expect(page.getByTestId('chat-attach')).toContainText('drive');
+  await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');
+  const calls = (await sampleCalls(page)).filter((c) => c.id === 'companion-chat');
+  expect(calls).toHaveLength(1);
+  expect(calls[0]?.input).toContain('in the sentence: "Try to ___ driving in rush hour."');
+  expect(calls[0]?.input).not.toMatch(/\bavoid\b/i);
+  await page.getByTestId('companion-close').click();
+  await expect(page.getByTestId('companion')).toHaveCount(0);
   await expect(page.getByTestId('trainer')).toBeVisible();
   // Als Karte speichern (mit Ursprungssatz).
   await page.getByTestId('sentence').locator('button.lx-word[data-word="rush"]').click();

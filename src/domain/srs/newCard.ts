@@ -7,7 +7,8 @@ import { locate, lemmaOf } from './context';
 
 export type CardOrigin = {
   v: 1;
-  kind: 'trainer' | 'intro' | 'summary' | 'lookup' | 'daily' | 'lesson' | 'user' | 'ai' | 'speak' | 'business';
+  // Phase 5: 'preply' (Lehrer-Import), 'translate' (Übersetzer), 'companion' (Begleiter)
+  kind: 'trainer' | 'intro' | 'summary' | 'lookup' | 'daily' | 'lesson' | 'user' | 'ai' | 'speak' | 'business' | 'preply' | 'translate' | 'companion';
   ref?: string;
   title?: string;
   t: number;
@@ -22,7 +23,7 @@ export type NewVocabInput = {
   ex?: string | null;
   surface?: string | null;
   /** Phase 2 (M2): `user` eigenes Wort, `ai` bzw. `job` von Claude vorgeschlagen. */
-  src: 'lookup' | 'coach' | 'lesson' | 'user' | 'ai' | 'job';
+  src: 'lookup' | 'coach' | 'lesson' | 'user' | 'ai' | 'job' | 'preply' | 'translate' | 'claude';
   /** Lektion, aus der die Karte stammt (`src:'lesson'`, Phase 2 D17). */
   lesson?: string | null;
   origin: CardOrigin;

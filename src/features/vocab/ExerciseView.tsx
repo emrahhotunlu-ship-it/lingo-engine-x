@@ -31,6 +31,8 @@ import { requestExamples, useExamples } from './examples';
 import { commitAnswer, type Answer, type FirstKind } from './session';
 import { CopyOnce, NextButton, OverrideButton } from '../learn/ui';
 import { MnemonicBlock } from './mnemonic';
+import { useCompanionSee } from '../companion/seeing';
+import { companionOpenedSince, companionOpenMs } from '../companion/store';
 
 // Eine Übung (CLAUDE.md A7 „Emrahs Rückmeldung zum Trainer"): Status oben, Aufgabe in einer
 // Zeile, Antwort → Prüfen → Ergebnis mit Markierung, Bedeutung, Formhinweis, Beispielsätzen.
@@ -85,10 +87,12 @@ export function ExerciseView({
   const deletions = useRef(0);
   const shownAt = useRef(0);
   const lookupAtStart = useRef(0);
+  const companionAtStart = useRef(0);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     shownAt.current = performance.now();
     lookupAtStart.current = lookupOpenMs();
+    companionAtStart.current = companionOpenMs();
     // Tastatur am Desktop (F7): liegt der Fokus nirgends, beginnt er bei der Übung.
     const a = document.activeElement;
     if (!a || a === document.body) root.current?.querySelector<HTMLElement>('[data-testid="exercise"]')?.focus({ preventScroll: true });
@@ -101,7 +105,10 @@ export function ExerciseView({
   const check = (chosen: Option | null) => {
     if (fb) return;
     const nowPerf = performance.now();
-    const paused = lookupOpenMs() - lookupAtStart.current;
+    // Offene Zeit von Nachschlagen und Begleiter zählt nicht zur Antwortzeit (Phase 5, E5-05).
+    const paused = lookupOpenMs() - lookupAtStart.current + (companionOpenMs() - companionAtStart.current);
+    // Den Begleiter vor dem Prüfen zu öffnen zählt als Hilfe: höchstens „Schwer" (E5-05, A7).
+    const companionHelp = companionOpenedSince(shownAt.current);
     const ms = Math.max(0, Math.round(nowPerf - shownAt.current - paused));
     let result: CheckResult;
     let given: string;
@@ -121,7 +128,7 @@ export function ExerciseView({
       firstKeyMs: firstKey,
       chars: solution.length,
       deletions: deletions.current,
-      hintLevel: FREE_TYPED.has(e.ex) ? tip : 0,
+      hintLevel: companionHelp ? 2 : FREE_TYPED.has(e.ex) ? tip : 0,
     });
     const t0 = Date.now();
     const after = reviewFsrs(card.fsrs, grade, t0);
@@ -177,6 +184,20 @@ export function ExerciseView({
   const helped = e.ex === 'cloze_hint';
   const mask = helped ? maskOf(solution, { firstLetter: true }) : FREE_TYPED.has(e.ex) && tip > 0 ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
+
+  // Was der Begleiter sieht (Phase 5 §8.4): vor dem Prüfen Aufgabe und Satz mit ___, nie die Lösung.
+  const blanked = e.sentence ? `${e.sentence.sentence.slice(0, e.sentence.start)}___${e.sentence.sentence.slice(e.sentence.end)}` : '';
+  const seeDetail =
+    e.ex === 'mc_en'
+      ? `${t(`task_${e.ex}` as MessageKey)}\n${e.sentence?.sentence ?? card.word}`
+      : `${t(`task_${e.ex}` as MessageKey)}\n${blanked || e.meaning || ''}${e.meaning && blanked ? `\n(${e.meaning})` : ''}`;
+  useCompanionSee({
+    area: 'trainer',
+    label: `${t('cmpSeeTrainer')} · ${t(`exName_${e.ex}` as MessageKey)}`,
+    phase: fb ? 'feedback' : 'question',
+    detail: seeDetail,
+    ...(fb ? { reveal: `Solution: ${solution}. Learner: ${fb.given || '(empty)'}` } : { mask: [solution, card.word, card.lemma, ...e.accepted] }),
+  });
 
   const sentence = (span: ContextSpan, slot: ReactNode | null, opts: { mark?: boolean } = {}) => (
     <EnglishText

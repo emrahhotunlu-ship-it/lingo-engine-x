@@ -24,6 +24,10 @@ export type FakeOptions = {
   sampleDelayMs?: number;
   /** Phase 3: Fehler je Vorlage, z. B. `{ 'turn-analysis': 'upstream_error' }`. */
   sampleFail?: Record<string, SampleErrorCode>;
+  /** Phase 5: Abstand der Streaming-Stücke in ms (Standard 15; langsam z. B. 150 für Scroll-Tests). */
+  sampleTickMs?: number;
+  /** Phase 5: `sample` scheitert für diese Vorlagen mit dem Code (einmal je Eintrag, dann normal). */
+  sampleFailOnce?: Record<string, Claude.sample.SampleErrorCode>;
 };
 
 export type FakeControl = {
@@ -92,9 +96,11 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
     createFakeSample(
       () => sampleMode,
       () => sampleFail,
+      opts.sampleTickMs ?? 15,
     ),
     sampleCalls,
     () => delay.ms,
+    { ...(opts.sampleFailOnce ?? {}) },
   );
   const saved: FakeControl['saved'] = [];
 

@@ -4,6 +4,7 @@ import { learnEn } from './parts/learn.en';
 import { speakEn } from './parts/speak.en';
 import { bizEn } from './parts/biz.en';
 import { voiceEn } from './parts/voice.en';
+import { companionEn } from './parts/companion.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -14,6 +15,8 @@ export const en: Record<MessageKey, string> = {
   ...speakEn,
   ...bizEn,
   ...voiceEn,
+  // Phase 5 – Begleiter, Übersetzer, Preply
+  ...companionEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

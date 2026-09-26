@@ -49,11 +49,11 @@ describe('Verzeichnis', () => {
 
 describe('roleplay-turn@1', () => {
   it('Zugliste beginnt und endet mit user, erster Zug mit Kopfzeile, Stufe quick (D1), nie zwischengespeichert', () => {
-    const t = roleplayTurn.build(rpVars());
+    const t = roleplayTurn.buildTurns(rpVars());
     expect(t[0]!.role).toBe('user');
     expect(t[t.length - 1]!.role).toBe('user');
     expect(t[0]!.content.split('\n')[0]).toBe('[roleplay-turn@1]');
-    expect(templateIdOf(t)).toBe('roleplay-turn');
+    expect(templateIdOf([...t])).toBe('roleplay-turn');
     expect(roleplayTurn.tier).toBe('quick');
     expect(FIGURE_TIER).toBe('quick');
     expect(roleplayTurn.cache).toBe(false);
@@ -61,19 +61,19 @@ describe('roleplay-turn@1', () => {
   });
 
   it('„never correct“ und Englisch-Bitte stehen in den Regeln', () => {
-    const rules = roleplayTurn.build(rpVars())[0]!.content;
+    const rules = roleplayTurn.buildTurns(rpVars())[0]!.content;
     expect(rules).toMatch(/Never correct/);
     expect(rules).toMatch(/continue in English/);
     expect(rules).toMatch(/American English/);
   });
 
   it('40 Züge werden auf ≤ 16 gekürzt (plus Anweisung), Größe unter der Grenze', () => {
-    const t = roleplayTurn.build(rpVars(40));
+    const t = roleplayTurn.buildTurns(rpVars(40));
     expect(t.length).toBeLessThanOrEqual(RP_HISTORY_MAX + 1);
     expect(t[t.length - 1]!.content).toBe('The exposure here is the penalty.');
     const huge = rpVars(40);
     huge.turns = huge.turns.map((x) => ({ ...x, text: 'long '.repeat(400) }));
-    expect(turnsBytes(roleplayTurn.build(huge))).toBeLessThan(PROMPT_MAX_BYTES);
+    expect(turnsBytes(roleplayTurn.buildTurns(huge))).toBeLessThan(PROMPT_MAX_BYTES);
   });
 
   it('clean: Namenspräfix, Regieanweisungen, Markdown, Anführungszeichen – idempotent', () => {
@@ -87,7 +87,7 @@ describe('roleplay-turn@1', () => {
   });
 
   it('feste Antwort des Adapters ist Text und bittet bei Deutsch um Englisch', () => {
-    const t = roleplayTurn.build(rpVars(1));
+    const t = roleplayTurn.buildTurns(rpVars(1));
     const joined = t.map((x) => x.content).join('\n\n');
     expect(roleplayTurnReply(joined)).toMatch(/\?$/);
     const de = [...t.slice(0, -1), { role: 'user' as const, content: 'Ich denke das ist nicht so wichtig und wir sind flexibel.' }];

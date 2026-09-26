@@ -9,6 +9,7 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useLive } from '../../data/live';
 import { buildOverview } from '../../domain/overview';
 import { LateRescueCard } from '../migration/LateRescueCard';
+import { PreplyEntry } from '../preply/PreplyEntry';
 
 // „Dein Stand" (Fundament-Version): zeigt, dass alle bisherigen Daten angekommen sind.
 // Eine große Zahl pro Karte, Messwerte nur eingeklappt (Kap. 5, Kap. 8).
@@ -207,6 +208,10 @@ export function OverviewScreen() {
           </Card>
         </motion.div>
       </div>
+
+      <motion.div variants={item}>
+        <PreplyEntry />
+      </motion.div>
 
       {ov.schema && ov.schema.migratedAt > 0 && (
         <motion.p variants={item} className="text-xs text-subtle">

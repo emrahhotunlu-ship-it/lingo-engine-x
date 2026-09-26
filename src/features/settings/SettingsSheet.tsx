@@ -6,6 +6,7 @@ import { Sheet } from '../../ui/Sheet';
 import { toast } from '../../ui/Toast';
 import { useCapabilities, getDb, type CapStatus } from '../../platform/capabilities';
 import { clearLog, getLog, logWarn, subscribeLog } from '../../platform/diagnostics';
+import { phase5Diag } from '../companion/diag';
 import { useLive } from '../../data/live';
 import { loadSnapshot } from '../../data/snapshot';
 import { useSettings, type Lang, type ThemeMode } from '../../app/settings';
@@ -118,6 +119,7 @@ function Diagnostics({ open }: { open: boolean }) {
   const schema = useLive((s) => s.docs['app/schema']);
   const log = useSyncExternalStore(subscribeLog, getLog);
   const [docCount, setDocCount] = useState<number | null>(null);
+  const [p5, setP5] = useState<ReturnType<typeof phase5Diag> | null>(null);
 
   useEffect(() => {
     if (!open || caps.db !== 'ready') return;
@@ -126,7 +128,9 @@ function Diagnostics({ open }: { open: boolean }) {
     let alive = true;
     loadSnapshot(db).then(
       (s) => {
-        if (alive) setDocCount(s.raw.size);
+        if (!alive) return;
+        setDocCount(s.raw.size);
+        setP5(phase5Diag(s.raw));
       },
       (err: unknown) => {
         logWarn('diagnostics:count', err);
@@ -154,6 +158,8 @@ function Diagnostics({ open }: { open: boolean }) {
     [t('capSample'), t(CAP_LABEL[caps.sampleRevoked ? 'absent' : caps.sample])],
     [t('capDownloads'), t(CAP_LABEL[caps.downloads])],
     [t('diagDocuments'), docCount === null ? t('diagDocumentsUnknown') : t('diagDocumentsValue', { n: docCount })],
+    // Phase 5 (§5.8): Größe des Chat-Verlaufs und Preply-Dokumente.
+    ...(p5 ? ([[t('diagChat'), t('diagChatValue', { n: p5.chatMsgs, kb: p5.chatKb })], [t('diagPreply'), t('diagDocumentsValue', { n: p5.preply })]] as Array<[string, string]>) : []),
     [
       t('diagSchema'),
       schema && typeof schema.version === 'number'

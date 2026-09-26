@@ -59,7 +59,7 @@ export const roleplayTurn: ChatTemplate<RoleplayTurnVars> = {
   version: VERSION,
   tier: FIGURE_TIER,
   cache: false,
-  build(v) {
+  buildTurns(v) {
     const p = v.persona;
     const rules = [
       header({ id: ID, version: VERSION }),

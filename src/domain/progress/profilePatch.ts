@@ -14,7 +14,7 @@ type Doc = Record<string, unknown>;
 
 export type RoundEnd = {
   day: string;
-  act: 'review' | 'cards' | LearnAct | 'speak' | 'biz';
+  act: 'review' | 'cards' | LearnAct | 'speak' | 'biz' | 'preply';
   partial: boolean;
   n: number;
   right: number;
@@ -58,8 +58,9 @@ export function emaChannel(a: AnswerEvent): 'recog' | 'colloc' | 'listen' | 'wri
   return mode === 'recog' ? 'recog' : mode === 'colloc' ? 'colloc' : mode === 'listen' ? 'listen' : 'write';
 }
 
-/** Minuten einer Runde: nur mit mindestens einer Antwort, 1–30. */
-export const roundMinutes = (r: Pick<RoundEnd, 'n' | 'activeMs'>): number => (r.n >= 1 ? Math.min(30, Math.max(1, Math.round(r.activeMs / 60_000))) : 0);
+/** Minuten einer Runde: nur mit mindestens einer Antwort, 1–30 (gehaltene Preply-Stunde: 1–120). */
+export const roundMinutes = (r: Pick<RoundEnd, 'n' | 'activeMs'> & { act?: RoundEnd['act'] }): number =>
+  r.n >= 1 ? Math.min(r.act === 'preply' ? 120 : 30, Math.max(1, Math.round(r.activeMs / 60_000))) : 0;
 
 /** XP-Bonus je Runde (Werte der alten App). */
 export function roundBonus(r: RoundEnd): number {
@@ -81,6 +82,8 @@ export function roundBonus(r: RoundEnd): number {
       return Math.min(150, 10 * r.n);
     case 'biz':
       return r.n >= 1 ? 15 : 0;
+    case 'preply':
+      return 0;
   }
 }
 
@@ -144,7 +147,8 @@ export function profilePatch(cur: Doc, answers: readonly AnswerEvent[], rounds: 
       const dayAct = { ...obj(curAct[r.day]), ...obj(act[r.day]) };
       act[r.day] = { ...obj(act[r.day]), [key]: num(dayAct[key]) + 1 };
       minutes[r.day] = num(minutes[r.day] ?? curMinutes[r.day]) + roundMinutes(r);
-      addXp(r.day, roundBonus(r));
+      // Gehaltene Preply-Stunde (Phase 5, A7 27.09.): nur Aktivität und Minuten, nie XP/Serie.
+      if (r.act !== 'preply') addXp(r.day, roundBonus(r));
       const extra = Math.max(0, Math.round(num(r.countAs)));
       if (extra) {
         days[r.day] = num(days[r.day] ?? curDays[r.day]) + extra;

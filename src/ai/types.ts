@@ -38,8 +38,9 @@ export type AiRequest<V, O> = {
   priority?: AiPriority;
   onPhase?: (phase: AiPhase) => void;
   /**
-   * Nur auf den Knopf „Erneut versuchen": den gespeicherten `sample`-Zwischenstand einmal
-   * überspringen und überschreiben (`cache: {gcTime, refresh: true}`, contract/sample.d.ts).
+   * Nur beim Knopf „Erneut versuchen" nach einer ungültigen Antwort (Phase 5, E5-21): Der
+   * Zwischenspeicher von `sample` wird einmal übergangen (`cache: {gcTime, refresh: true}`),
+   * sonst käme dieselbe schemawidrige Antwort bis zu 24 h zurück.
    */
   refresh?: boolean;
 };

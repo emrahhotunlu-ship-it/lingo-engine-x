@@ -72,8 +72,26 @@ Nur neue Felder und Sammlungen; alte Felder bleiben unverändert, gelöscht wird
 | `biz/<JJJJ-MM>` | `{v, month, items[]}` – `mail` / `pitch` / `play`; ≤ 200 KiB (Verdichtung: zuerst die Texte der ältesten) | `transform`, idempotent über `item.id` |
 | `chunk/c-<slug>` | zusätzlich `def`, `whyLang`, `origin {v, kind, ref, title, t}`, `src.kind` (`scene`/`mail`/`pitch`/`biz`), `src.ts`; `also` wird nie geschrieben | nur anlegen, wenn die Wendung fehlt; „Wieder aufnehmen“ = `update({hidden:false})` |
 | `scene/<id>` | Lauf-Vermerk `runs`, `lastRun`, `done:true` (nur wenn fehlend/false); KI-Szenen `scene/sc-ai<ms36>` mit `src:'ai'`, `pv`, `gram`, `words` | `transform` bzw. `createIfMissing` |
-| `app/radar.events` | Quellen `k` (Sprechen) und `b` (Business), nur Grammatik-Kategorien, ≤ 400 | `transform` |
+| `app/radar.events` | Quellen `k` (Sprechen) und `b` (Business), nur Fehler zu Grammatikthemen, Kategorie der alten App (`topicCat`), ≤ 400 | gemeinsamer Puffer (`recordActivity`) |
 | `log/<tag>` | Einträge `{t, ok, lang, type:'speak'|'biz', id, m, q, n, ms, ctx:'spk'|'biz'}` – nie `k:'v'`, nie `ctx:'rev'|'xtra'` | gemeinsamer Puffer (`recordActivity`) |
 | `app/profile` | `act[tag].speak` / `speak~` / `biz`; `days`/`answers` + eigene Züge (`countAs`); `voice`, `rate` (Felder der alten App) | gemeinsamer Puffer bzw. `patch` |
 
 Browser-Speicher (nur Bequemlichkeit): `lx:roleplay:<szene>` (Fortsetzen, ≤ 40 KB), `lx:draft:speak:<szene>`, `lx:draft:mail`, `lx:draft:pitch`, `lx:speak-autoplay`, `lx:stt-blocked`.
+
+## Phase 5: Begleiter und Preply-Brücke (nur neue, optionale Felder)
+
+Plan: `docs/phase5-plan.md` §5, E5-22. Alte Felder und Formen bleiben unverändert, es wird nichts gelöscht.
+
+| Dokument | Neu | Schreibweg |
+|---|---|---|
+| `app/chat` | `since` (Beginn des laufenden Gesprächs); je Nachricht `t`, `lang`, `ctx`, `stopped` | `features/companion/persistChat.ts` (`transform`, ≤ 40 Nachrichten, ≤ 180 KB) |
+| `preply/pp<ms>` | `pv`, `heldDay`, `heldMin`; `ctx.kind: 'held'` für „Stunde ohne Plan" | `features/preply/actions.ts` (`createIfMissing`, gehalten per `transform`) |
+| `preply/pi<ms>` | `t`, `lang`, `pv`, `items` (Übungen, `tasks` bleibt Liste von Texten), `sel`, `res`, `hwDone` | `features/preply/actions.ts` (`applied:false` vor der Übernahme) |
+| `app/pool.items[]` | `id` (`pi<ms>-t<i>`) | Übernahme, kein Verdrängen bei 90 |
+| `vocab/<id>` | `src: 'preply' \| 'translate'`, `origin.kind: 'preply' \| 'translate' \| 'companion'` | über `saveCardOp` (nur anlegen oder Satz ergänzen) |
+| `grammar/<topic>.errors[]` | Einträge mit `src: 'preply'` (Box 0, fällig +1 Tag) | Deckel 10: erst erledigte, dann älteste |
+| `app/radar.events[]` | Einträge mit `s: 'g'` aus Lehrer-Korrekturen, Kategorie der alten App | Sammel-Warteschlange (`learnRecorder.radar`), Deckel 400, nach Zeit |
+| `app/profile` | `act[tag].preply`, `minutes[tag]` (keine `days`/`xpDays`/Pflicht), `lxSeq` gegen Doppelzählung | Sammel-Warteschlange (`recordRoundEnd`, `act:'preply'`) |
+
+Browser-Speicher (nur Bequemlichkeit): `lx:draft:chat`, `lx:draft:preply-import`, `lx:translate-history` (≤ 20), `lx:companion-tab`, `lx:companion-tier`.
+Abos: `app/chat` nur bei offenem Begleiter, `preply` nur bei offenem Preply-Bildschirm (`src/data/watch.ts`).

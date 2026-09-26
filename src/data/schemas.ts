@@ -133,6 +133,8 @@ const exerciseItem = z.looseObject({
   src: str,
   /** Neu (Phase 2): Herkunft einer Pool-Aufgabe, z. B. `daily/2026-09-27`. */
   ref: str,
+  /** Neu ab Phase 5: feste Kennung einer Aufgabe aus dem Preply-Import (`pi<ms>-t<i>`). */
+  id: str,
 });
 
 export const poolSchema = z.looseObject({
@@ -143,7 +145,9 @@ export const poolSchema = z.looseObject({
 });
 
 export const chatSchema = z.looseObject({
-  msgs: z.array(z.looseObject({ role: str, content: str })).nullish(),
+  // Neu ab Phase 5 (§5.2): je Nachricht t, lang, ctx, stopped; `since` = Beginn des laufenden Gesprächs.
+  msgs: z.array(z.looseObject({ role: str, content: str, t: num, lang: str, ctx: str, stopped: bool })).nullish(),
+  since: num,
 });
 
 export const lookupSchema = z.looseObject({
@@ -426,7 +430,34 @@ export const sceneSchema = z.looseObject({
   gram: str,
   words: strArr,
 });
-export const preplySchema = z.looseObject({ t: num, kind: str, title: str, done: bool, applied: bool });
+export const preplySchema = z.looseObject({
+  t: num,
+  kind: str,
+  title: str,
+  done: bool,
+  applied: bool,
+  // Altfelder und neue Felder ab Phase 5 (§5.9), alle tolerant: Strings oder Altformen.
+  lang: str,
+  pv: str,
+  minutes: num,
+  doneT: num,
+  appliedT: num,
+  heldDay: str,
+  heldMin: num,
+  corrections: looseArr,
+  words: looseArr,
+  items: looseArr,
+  watch: looseArr,
+  tasks: z.array(z.unknown()).nullish(),
+  homework: z.array(z.unknown()).nullish(),
+  warmup: z.array(z.unknown()).nullish(),
+  talk: z.array(z.unknown()).nullish(),
+  say: z.array(z.unknown()).nullish(),
+  hwDone: z.record(z.string(), z.string().nullish()).nullish(),
+  sel: z.looseObject({}).nullish(),
+  res: z.looseObject({}).nullish(),
+  ctx: z.looseObject({}).nullish(),
+});
 export const articleSchema = z.looseObject({ id: str, level: str, title: str, text: str });
 export const readingSchema = z.looseObject({ t: num, date: str, articleId: str, title: str, level: str });
 export const lpoolSchema = z.looseObject({ level: str, title: str, text: str, questions: looseArr });

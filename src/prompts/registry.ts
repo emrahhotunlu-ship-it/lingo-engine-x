@@ -6,6 +6,10 @@ import { lessonProduction } from './lessonProduction';
 import { mnemonic } from './mnemonic';
 import { produceCheck } from './produceCheck';
 import { wordGen } from './wordGen';
+import { companionChat } from './companionChat';
+import { preplyImport } from './preplyImport';
+import { preplyPrep } from './preplyPrep';
+import { translate } from './translate';
 import type { ChatTemplate, PromptTemplate } from './types';
 import { wordLookup } from './wordLookup';
 import { turnAnalysis } from './turnAnalysis';
@@ -39,9 +43,13 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   phraseAdapt,
   pitchScript,
   pitchFeedback,
+  // Phase 5 – Übersetzer, Preply-Brücke
+  translate,
+  preplyPrep,
+  preplyImport,
 ];
 
-/** Gesprächsvorlagen (Streaming, Zugliste statt Prompt-Text). */
-export const CHAT_TEMPLATES: ReadonlyArray<ChatTemplate<never>> = [roleplayTurn];
+/** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */
+export const CHAT_TEMPLATES: ReadonlyArray<ChatTemplate<never>> = [roleplayTurn, companionChat];
 
 export const TEMPLATE_ID = /^[a-z0-9-]+$/;

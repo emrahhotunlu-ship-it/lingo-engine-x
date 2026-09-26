@@ -36,7 +36,7 @@ const tpl: ChatTemplate<V> = {
   version: 1,
   tier: 'quick',
   cache: false,
-  build: (v) => [{ role: 'user', content: `[chat-test@1]\nRules${v.big ? 'x'.repeat(61_000) : ''}` }, ...v.turns.map((c, i) => ({ role: i % 2 === 0 ? ('user' as const) : ('assistant' as const), content: c }))],
+  buildTurns: (v) => [{ role: 'user', content: `[chat-test@1]\nRules${v.big ? 'x'.repeat(61_000) : ''}` }, ...v.turns.map((c, i) => ({ role: i % 2 === 0 ? ('user' as const) : ('assistant' as const), content: c }))],
   clean: (t) => t.replace(/^Reinhard Vogt:\s*/, '').replace(/\*[^*]+\*/g, '').replace(/\s+/g, ' ').trim(),
 };
 
@@ -80,7 +80,7 @@ describe('askStream', () => {
 
   it('Budget > 60.000 Bytes: kein Aufruf, Fehler too_large', async () => {
     const vars = { turns: ['Hi'], big: true };
-    expect(turnsBytes(tpl.build(vars))).toBeGreaterThan(60_000);
+    expect(turnsBytes(tpl.buildTurns(vars))).toBeGreaterThan(60_000);
     await expect(askStream({ template: tpl, vars, signal: new AbortController().signal })).rejects.toMatchObject({ kind: 'too_large' });
     expect(calls).toHaveLength(0);
   });

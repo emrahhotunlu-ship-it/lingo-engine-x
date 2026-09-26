@@ -2,6 +2,7 @@ import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { useT } from '../i18n';
 import { IconButton } from '../ui/Button';
+import { Icon } from '../ui/Icon';
 import { Toaster } from '../ui/Toast';
 import { DURATION } from '../ui/motion';
 import { getDb, initCapabilities, useCapabilities } from '../platform/capabilities';
@@ -38,6 +39,12 @@ import { BusinessHub } from '../features/business/BusinessHub';
 import { MailRefiner } from '../features/business/MailRefiner';
 import { PlaybookScreen } from '../features/business/PlaybookScreen';
 import { PitchCoach } from '../features/business/PitchCoach';
+// Phase 5: Begleiter, Übersetzer, Preply-Brücke
+import { useAiAvailable } from '../ai/scope';
+import { CompanionLayer } from '../features/companion/CompanionOverlay';
+import { installCompanionHotkeys } from '../features/companion/hotkeys';
+import { openCompanion, useCompanion } from '../features/companion/store';
+import { PreplyScreen } from '../features/preply/PreplyScreen';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
 // den Bildschirm. Der Rahmen rendert sofort; Funktionen kommen dazu, sobald die
@@ -69,6 +76,7 @@ function useBoot(): void {
 
   useEffect(() => {
     installFlushOnHide();
+    installCompanionHotkeys();
   }, []);
 
   // Gespeicherte Einstellungen aus app/profile übernehmen (maßgeblich gegenüber localStorage).
@@ -182,6 +190,8 @@ export function App() {
   const { t } = useT();
   const screen = useScreen();
   const migratedScreen = screen !== 'loading' && screen !== 'nodb' && screen !== 'offline' && screen !== 'migration';
+  const ai = useAiAvailable();
+  const companionOpen = useCompanion((s) => s.open);
   useEnsureDay(migratedScreen);
   const route = useNav((s) => s.route);
   const tab = migratedScreen ? tabOf(route.name) : null;
@@ -199,7 +209,7 @@ export function App() {
         {t('skipToContent')}
       </a>
       {/* Bei offenem Blatt ist der Hintergrund inert: kein Fokus, kein VoiceOver-Wischen dorthin. */}
-      <div className="mx-auto flex min-h-dvh w-full max-w-[76rem] flex-col px-4 sm:px-6 lg:px-10" inert={settingsOpen}>
+      <div className="mx-auto flex min-h-dvh w-full max-w-[76rem] flex-col px-4 sm:px-6 lg:px-10" inert={settingsOpen || companionOpen}>
         <header className="flex items-center justify-between gap-4 pt-3 sm:pt-5">
           <p className="flex items-center gap-2 text-base font-semibold tracking-tight">
             <span className="inline-block size-2.5 rounded-full bg-accent shadow-[0_0_12px_var(--lx-accent)]" aria-hidden="true" />
@@ -207,6 +217,19 @@ export function App() {
           </p>
           <div className="flex items-center gap-2">
             {tab && <TabBar tab={tab} />}
+            {ai && migratedScreen && (
+              <button
+                type="button"
+                onClick={() => openCompanion()}
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-accent-text transition-colors hover:bg-surface"
+                aria-label={t('openCompanion')}
+                data-testid="open-companion"
+                data-ai=""
+              >
+                <Icon name="sparkle" size={20} />
+                <span className="hidden sm:inline">{t('openCompanion')}</span>
+              </button>
+            )}
             <IconButton icon="sliders" label={t('openSettings')} onClick={() => setSettingsOpen(true)} data-testid="open-settings" />
           </div>
         </header>
@@ -245,12 +268,14 @@ export function App() {
               {screen === 'mail' && <MailRefiner />}
               {screen === 'playbook' && <PlaybookScreen />}
               {screen === 'pitch' && <PitchCoach />}
+              {screen === 'preply' && <PreplyScreen />}
             </motion.div>
           </AnimatePresence>
         </main>
       </div>
       <SettingsSheet open={settingsOpen} onClose={closeSettings} />
       <Toaster />
+      <CompanionLayer />
       <LookupLayer />
       </HiddenInputProvider>
     </MotionConfig>

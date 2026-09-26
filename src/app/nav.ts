@@ -23,7 +23,9 @@ export type Route =
   | { name: 'business' }
   | { name: 'mail' }
   | { name: 'playbook'; id?: string }
-  | { name: 'pitch' };
+  | { name: 'pitch' }
+  // Phase 5: Preply-Brücke
+  | { name: 'preply' };
 
 export type RouteName = Route['name'];
 

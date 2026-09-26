@@ -42,6 +42,8 @@ for (const [re, label] of loaders) if (re.test(html)) problems.push(`Ladeziel ge
 const devMarkers = ['__LINGO_FAKE__', '__LINGO_FAKE_OPTIONS__', 'lx:fake-db', 'Feste Beispielantwort', 'installFakeRuntime', 'createMemoryDb', 'Alex Muster', 'zzjson', 'com.apple.voice.compact',
   // Phase 3: nachgebildete Sprech-/Business-Antworten und Spracheingabe
   'zzde', 'I wanted to let you know that', 'InvalidStateError: already started'];
+// Phase 5: Testmarker der festen Antworten (Begleiter, Übersetzer, Preply).
+devMarkers.push('zzlong', 'zzen', 'zzsame', 'zzempty', '[no-solution]', 'registerCompanionReplies');
 for (const m of devMarkers) if (html.includes(m)) problems.push(`Entwicklungs-Adapter oder Testdaten im Build: "${m}"`);
 
 // Kopf
