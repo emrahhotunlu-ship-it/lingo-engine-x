@@ -61,7 +61,10 @@ export const VOICE_RETRY_MS = [250, 500, 1000, 2000] as const;
 export const RATE_MIN = 0.8;
 export const RATE_MAX = 1.1;
 
-type SpeechState = { status: SpeechStatus; voiceName: string | null; speaking: boolean };
+/** Phase 3 (Plan §7): Stimme für die Auswahl in den Einstellungen. */
+export type VoiceInfo = { name: string; lang: string; local: boolean; us: boolean };
+
+type SpeechState = { status: SpeechStatus; voiceName: string | null; speaking: boolean; voices?: VoiceInfo[] };
 
 export const useSpeech = create<SpeechState>(() => ({ status: 'loading', voiceName: null, speaking: false }));
 
@@ -166,12 +169,31 @@ let wakeTimer: ReturnType<typeof setInterval> | null = null;
 let startTimer: ReturnType<typeof setTimeout> | null = null;
 const voiceTimers: Array<ReturnType<typeof setTimeout>> = [];
 
+/** Englische Stimmen, en-US zuerst, dann nach Region und Name (Plan §7). */
+export function listVoices(list: readonly SpeechVoiceLike[] = voices): VoiceInfo[] {
+  const seen = new Set<string>();
+  return list
+    .filter(isEnglish)
+    .filter((v) => (seen.has(v.name) ? false : (seen.add(v.name), true)))
+    .map((v) => ({ name: v.name, lang: v.lang.replace('_', '-'), local: v.localService, us: isUS(v) }))
+    .sort((a, b) => Number(b.us) - Number(a.us) || a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name));
+}
+
+/** Überschreibt die Stimme für eine einzelne Ausgabe (Probehören), ohne `prefs` zu ändern. */
+let voiceOverride: string | null = null;
+
 function chosenVoice(): SpeechVoiceLike | null {
+  if (voiceOverride) {
+    const o = voices.find((v) => v.name === voiceOverride && isEnglish(v));
+    if (o) return o;
+  }
   const i = pickVoice(voices, prefs.voice);
   return i >= 0 ? (voices[i] ?? null) : null;
 }
 
 function applyVoice(): void {
+  const list = listVoices();
+  if (list.length || useSpeech.getState().voices) useSpeech.setState({ voices: list });
   const v = chosenVoice();
   if (v) useSpeech.setState({ status: 'ready', voiceName: v.name });
   else if (voices.length > 0) useSpeech.setState({ status: 'novoice', voiceName: null });
@@ -247,6 +269,7 @@ function startWake(e: Env): void {
 function finishCurrent(outcome: SpeakOutcome): void {
   const c = current;
   current = null;
+  voiceOverride = null;
   if (startTimer !== null) clearTimeout(startTimer);
   startTimer = null;
   stopWake();
@@ -299,7 +322,7 @@ function speakChunk(e: Env, chunks: readonly string[], i: number, id: number, ra
  * Spricht englischen Text. Eine laufende Ausgabe wird ersetzt (ihr Promise meldet `stopped`).
  * Löst mit `done` auf, wenn alles gesprochen ist.
  */
-export function speak(text: string, opts: { rate?: number } = {}): Promise<SpeakOutcome> {
+export function speak(text: string, opts: { rate?: number; voice?: string } = {}): Promise<SpeakOutcome> {
   const e = env();
   const status = useSpeech.getState().status;
   if (!e || status === 'unsupported' || status === 'novoice') return Promise.resolve('unavailable');
@@ -308,6 +331,7 @@ export function speak(text: string, opts: { rate?: number } = {}): Promise<Speak
 
   const busy = current !== null || e.synth.speaking || e.synth.pending;
   finishCurrent('stopped');
+  voiceOverride = opts.voice ?? null;
   const id = ++session;
   const rate = clampRate(opts.rate ?? prefs.rate);
   return new Promise<SpeakOutcome>((resolve) => {
@@ -335,6 +359,18 @@ export function speak(text: string, opts: { rate?: number } = {}): Promise<Speak
     if (wait > 0) startTimer = setTimeout(start, wait);
     else start();
   });
+}
+
+export const PREVIEW_TEXT = 'This is how I sound.';
+
+/** Spricht den Probesatz mit genau dieser Stimme; die gespeicherte Wahl bleibt unverändert. */
+export function previewVoice(name: string): Promise<SpeakOutcome> {
+  return speak(PREVIEW_TEXT, { voice: name });
+}
+
+/** Aktuelle Einstellungen (nur lesen, für Tests und die Stimmenwahl). */
+export function speechPrefs(): Readonly<SpeechPrefs> {
+  return prefs;
 }
 
 /** Hält die Ausgabe sofort an (Bildschirmwechsel, Stopp-Knopf). */
@@ -387,5 +423,6 @@ export function resetSpeech(): void {
   lastCancelAt = -Infinity;
   current = null;
   startTimer = null;
-  useSpeech.setState({ status: 'loading', voiceName: null, speaking: false });
+  voiceOverride = null;
+  useSpeech.setState({ status: 'loading', voiceName: null, speaking: false, voices: [] });
 }

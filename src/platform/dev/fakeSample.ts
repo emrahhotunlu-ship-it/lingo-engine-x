@@ -46,7 +46,12 @@ function answerFor(text: string): string {
   return 'Feste Beispielantwort des Entwicklungs-Adapters.';
 }
 
-export function createFakeSample(getMode: () => FakeSampleMode): SampleFn {
+/** Fehler je Vorlage (Plan §9.5): `{[vorlagenId]: code}` – z. B. Analyse fällt aus, Gespräch läuft weiter. */
+export type SampleFailMap = Readonly<Record<string, SampleErrorCode>>;
+
+const templateOf = (text: string): string | null => /^\[([a-z0-9-]+)@\d+\]/m.exec(text)?.[1] ?? null;
+
+export function createFakeSample(getMode: () => FakeSampleMode, getFail: () => SampleFailMap = () => ({})): SampleFn {
   const run = (input: unknown, options: SampleOptions | undefined): Promise<SampleResult> =>
     new Promise<SampleResult>((resolve, reject) => {
       let text: string;
@@ -68,6 +73,14 @@ export function createFakeSample(getMode: () => FakeSampleMode): SampleFn {
       const signal = options?.signal;
       if (signal?.aborted) {
         queueMicrotask(() => reject(fail('cancelled', 'signal already aborted')));
+        return;
+      }
+      const failCode = (() => {
+        const id = templateOf(text);
+        return id ? getFail()[id] : undefined;
+      })();
+      if (failCode) {
+        setTimeout(() => reject(fail(failCode, `simulated ${failCode}`)), 20);
         return;
       }
       const mode = getMode();

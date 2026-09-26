@@ -1,5 +1,5 @@
 import type { AiMessageKey } from '../i18n/parts/ai.de';
-import type { CacheOpt, ModelTier, PromptTemplate } from '../prompts/types';
+import type { CacheOpt, ChatTemplate, ModelTier, PromptTemplate } from '../prompts/types';
 
 // Typen des KI-Tors (Kap. 10, Architektur-Entwurf §3.1).
 
@@ -68,3 +68,19 @@ export class AiFailure extends Error {
 }
 
 export const isAiFailure = (err: unknown): err is AiFailure => err instanceof AiFailure;
+
+// ---------------------------------------------------------------- Streaming (Phase 3, Plan §6.1)
+
+export type { ChatTemplate };
+
+export type StreamRequest<V> = {
+  template: ChatTemplate<V>;
+  vars: V;
+  signal: AbortSignal;
+  priority?: AiPriority;
+  onPhase?: (phase: AiPhase) => void;
+  /** Bereinigter Text bis hierher (der ganze Text, nicht nur der Zuwachs). */
+  onText?: (cleaned: string) => void;
+};
+
+export type StreamResult = { text: string; truncated: boolean; tierApplied: ModelTier };

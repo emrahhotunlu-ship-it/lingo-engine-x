@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { getWriter } from '../../data';
 import { validateDoc } from '../../data/validate';
 import { applyUpdate, reviewWrite, type SkipReason } from '../../domain/srs/applyReview';
-import { logEntry, mergeLogEntries, type LogEntry } from '../../domain/progress/logPatch';
+import { activityEntry, logEntry, mergeLogEntries, type ActivityLogEntry, type LogEntry } from '../../domain/progress/logPatch';
 import { minimalProfile, profilePatch, roundMinutes, type RoundEnd } from '../../domain/progress/profilePatch';
 import type { AnswerEvent } from '../../domain/srs/types';
 import { logError, logWarn } from '../../platform/diagnostics';
@@ -15,7 +15,7 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 // Der Puffer liegt nur im Speicher; „Heute" zeigt ihn sofort mit an (live ⊕ Puffer).
 
 type Doc = Record<string, unknown>;
-export type PendingEntry = LogEntry & { day: string };
+export type PendingEntry = (LogEntry | ActivityLogEntry) & { day: string };
 
 type PendingState = {
   /** Protokolleinträge, die noch nicht bestätigt gespeichert sind. */
@@ -103,6 +103,17 @@ export function recordAnswer(a: AnswerEvent, immediate: boolean): void {
   else schedule();
 }
 
+/**
+ * Phase 3 (Plan §3.6): beendetes Gespräch bzw. Business-Einheit – ein Log-Eintrag und ein
+ * Rundenende (`act: speak|biz`, `countAs`) im SELBEN Puffer, sofort gespeichert. So bleiben
+ * Profil, Log, `lxSeq` und `nextT` eine Quelle (B6). `day` = Lerntag des Beginns.
+ */
+export function recordActivity(e: ActivityLogEntry, round: RoundEnd & { day: string }): Promise<boolean> {
+  const entry = activityEntry(e);
+  usePending.setState((s) => ({ entries: [...s.entries, { ...entry, day: round.day }] }));
+  return recordRoundEnd(round);
+}
+
 /** Rundenende vormerken und sofort speichern. */
 export function recordRoundEnd(r: RoundEnd): Promise<boolean> {
   if (r.n >= 1) {
@@ -156,10 +167,10 @@ async function flushOnce(): Promise<boolean> {
   for (const e of pending) byDay.set(e.day, [...(byDay.get(e.day) ?? []), e]);
   for (const [day, list] of byDay) {
     const path = `log/${day}`;
-    const entries: LogEntry[] = list.map((e) => {
+    const entries: Array<LogEntry | ActivityLogEntry> = list.map((e) => {
       const out: Partial<PendingEntry> = { ...e };
       delete out.day;
-      return out as LogEntry;
+      return out as LogEntry | ActivityLogEntry;
     });
     try {
       let invalid = false;

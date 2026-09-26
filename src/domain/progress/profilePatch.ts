@@ -8,7 +8,19 @@ import type { AnswerEvent } from '../srs/types';
 
 type Doc = Record<string, unknown>;
 
-export type RoundEnd = { day: string; act: 'review' | 'cards'; partial: boolean; n: number; right: number; activeMs: number };
+export type RoundEnd = {
+  day: string;
+  act: 'review' | 'cards' | 'speak' | 'biz';
+  partial: boolean;
+  n: number;
+  right: number;
+  activeMs: number;
+  /**
+   * Phase 3 (Plan §3.6): zählt zusätzlich als so viele Antworten in `days[day]` und `answers`
+   * (Sprechen: eigene Züge, Business: 1). Trefferquoten (`ema`, `n`) bleiben unberührt.
+   */
+  countAs?: number;
+};
 
 export const EMA_ALPHA = 0.12;
 const EMA_START: Record<string, number> = { recog: 0.6, write: 0.5, listen: 0.5, colloc: 0.6, all: 0.55 };
@@ -26,7 +38,12 @@ export function emaChannel(a: AnswerEvent): 'recog' | 'colloc' | 'listen' | 'wri
 /** Minuten einer Runde: nur mit mindestens einer Antwort, 1–30. */
 export const roundMinutes = (r: RoundEnd): number => (r.n >= 1 ? Math.min(30, Math.max(1, Math.round(r.activeMs / 60_000))) : 0);
 
-export const ROUND_BONUS = { review: (n: number) => (n >= 8 ? 20 : 5), cards: (n: number) => (n >= 10 ? 15 : 5) };
+export const ROUND_BONUS = {
+  review: (n: number) => (n >= 8 ? 20 : 5),
+  cards: (n: number) => (n >= 10 ? 15 : 5),
+  speak: (n: number) => Math.min(150, 10 * n),
+  biz: (n: number) => (n >= 1 ? 15 : 0),
+};
 
 /** Mindestdokument, falls app/profile ganz fehlt (leere Datenbank). */
 export function minimalProfile(day: string): Doc {
@@ -56,6 +73,7 @@ export function profilePatch(cur: Doc, answers: readonly AnswerEvent[], rounds: 
     xp += v;
   };
 
+  let extraAnswers = 0;
   const ema: Doc = { ...obj(cur.ema) };
   const n: Doc = { ...obj(cur.n) };
   for (const a of answers) {
@@ -76,14 +94,19 @@ export function profilePatch(cur: Doc, answers: readonly AnswerEvent[], rounds: 
     act[r.day] = { ...obj(act[r.day]), [key]: num(dayAct[key]) + 1 };
     minutes[r.day] = num(minutes[r.day] ?? curMinutes[r.day]) + roundMinutes(r);
     addXp(r.day, ROUND_BONUS[r.act](r.n));
+    const extra = Math.max(0, Math.round(num(r.countAs)));
+    if (extra) {
+      days[r.day] = num(days[r.day] ?? curDays[r.day]) + extra;
+      extraAnswers += extra;
+    }
   }
 
   const patch: Doc = {};
   if (Object.keys(days).length) patch.days = days;
   if (Object.keys(xpDays).length) patch.xpDays = xpDays;
   if (xp) patch.xp = num(cur.xp) + xp;
+  if (answers.length || extraAnswers) patch.answers = num(cur.answers) + answers.length + extraAnswers;
   if (answers.length) {
-    patch.answers = num(cur.answers) + answers.length;
     patch.vAnswers = num(cur.vAnswers) + answers.length;
     patch.ema = ema;
     patch.n = n;

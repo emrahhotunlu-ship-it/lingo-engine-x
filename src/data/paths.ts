@@ -19,6 +19,8 @@ import {
   readingSchema,
   sceneSchema,
   schemaDocSchema,
+  talkSchema,
+  bizSchema,
   vocabSchema,
   wpromptSchema,
   writingSchema,
@@ -52,6 +54,9 @@ export const COLLECTIONS = {
   reading: readingSchema,
   lpool: lpoolSchema,
   wprompt: wpromptSchema,
+  // Neu ab Phase 3 (Plan §3.1): Monatsdokumente für Gespräche und Business-Einheiten.
+  talk: talkSchema,
+  biz: bizSchema,
 } as const satisfies Record<string, ZodType>;
 
 export type AppDocPath = keyof typeof APP_DOCS;

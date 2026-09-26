@@ -115,7 +115,8 @@ export function startSession(round: Round): FirstKind {
   const byKey = new Map(cards.map((c) => [c.key, c]));
   const pool = cards.filter((c) => !c.hidden);
   const entries = todayEntries(day);
-  const reviewed = new Set(entries.filter((e) => e.ctx === 'rev' && typeof e.id === 'string').map((e) => `vocab/${String(e.id)}`));
+  // B3 (Phase-3-Plan): nur Vokabel-Einträge zählen als „Wiederholen“, nie Sprech- oder Business-Einträge.
+  const reviewed = new Set(entries.filter((e) => e.ctx === 'rev' && e.k === 'v' && typeof e.id === 'string').map((e) => `vocab/${String(e.id)}`));
   const answeredToday = new Set(entries.filter((e) => e.k === 'v' && typeof e.id === 'string').map((e) => `vocab/${String(e.id)}`));
   const plan = useTodayPlan.getState().plan;
   const goal = plan?.goal.review ?? 0;

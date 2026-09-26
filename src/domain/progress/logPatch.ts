@@ -24,6 +24,30 @@ export type LogEntry = {
   ctx: 'rev' | 'xtra';
 };
 
+/**
+ * Phase 3 (Plan §3.6): Eintrag für ein beendetes Gespräch bzw. eine Business-Einheit.
+ * Nie `k:'v'`, nie `ctx:'rev'|'xtra'` – so verfälscht er weder „Wiederholen" noch die Trefferquote.
+ */
+export type ActivityLogEntry = {
+  t: number;
+  ok: boolean;
+  lang: string;
+  type: 'speak' | 'biz';
+  /** Szene bzw. Einheit (`sc-vida`, `mail`, `pb-decline` …). */
+  id: string;
+  m: 'speak' | 'biz-mail' | 'biz-pitch' | 'biz-play';
+  q: string;
+  /** Eigene Züge (Sprechen) bzw. Fragen (Drill); 1 bei Mail und Pitch. */
+  n: number;
+  ms: number;
+  ctx: 'spk' | 'biz';
+};
+
+/** Aktivitätseintrag mit gekürztem Titel und gerundeter Dauer. */
+export function activityEntry(e: ActivityLogEntry): ActivityLogEntry {
+  return { ...e, q: clip(e.q), n: Math.max(0, Math.round(e.n)), ms: Math.max(0, Math.round(e.ms)) };
+}
+
 export function logEntry(a: AnswerEvent): LogEntry {
   return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx };
 }
@@ -38,7 +62,7 @@ const tOf = (e: unknown): number => {
 };
 
 /** Neue Liste: vorhandene + neue Einträge, ohne Doppelte, nach Zeit, gekappt auf Anzahl und Größe. */
-export function mergeLogEntries(current: readonly unknown[], added: readonly LogEntry[]): unknown[] {
+export function mergeLogEntries(current: readonly unknown[], added: readonly (LogEntry | ActivityLogEntry)[]): unknown[] {
   const seen = new Set<string>();
   const all: unknown[] = [];
   for (const e of [...current, ...added]) {

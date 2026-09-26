@@ -22,6 +22,12 @@ import { ConnectionLost, NoDbNotice } from '../features/system/NoDbNotice';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
 import { initSpeech } from '../platform/speech';
+import { SpeakHub } from '../features/speak/SpeakHub';
+import { RoleplayScreen } from '../features/speak/RoleplayScreen';
+import { BusinessHub } from '../features/business/BusinessHub';
+import { MailRefiner } from '../features/business/MailRefiner';
+import { PlaybookScreen } from '../features/business/PlaybookScreen';
+import { PitchCoach } from '../features/business/PitchCoach';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
 // den Bildschirm. Der Rahmen rendert sofort; Funktionen kommen dazu, sobald die
@@ -87,6 +93,9 @@ function useBoot(): void {
 
 type Screen = 'loading' | 'nodb' | 'offline' | 'migration' | Route['name'];
 
+/** Phase 3: Sprechen und Business (Plan §2). */
+const PHASE3_SCREENS: ReadonlySet<string> = new Set(['speak', 'roleplay', 'business', 'mail', 'playbook', 'pitch']);
+
 function useScreen(): Screen {
   const route = useNav((s) => s.route);
   const db = useCapabilities((s) => s.db);
@@ -150,7 +159,7 @@ export function App() {
   useBoot();
   const { t } = useT();
   const screen = useScreen();
-  const migratedScreen = screen === 'today' || screen === 'overview' || screen === 'trainer';
+  const migratedScreen = screen === 'today' || screen === 'overview' || screen === 'trainer' || PHASE3_SCREENS.has(screen);
   useEnsureDay(migratedScreen);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const closeSettings = useCallback(() => setSettingsOpen(false), []);
@@ -193,6 +202,12 @@ export function App() {
               {screen === 'today' && <TodayScreen />}
               {screen === 'overview' && <OverviewScreen />}
               {screen === 'trainer' && <TrainerScreen />}
+              {screen === 'speak' && <SpeakHub />}
+              {screen === 'roleplay' && <RoleplayScreen />}
+              {screen === 'business' && <BusinessHub />}
+              {screen === 'mail' && <MailRefiner />}
+              {screen === 'playbook' && <PlaybookScreen />}
+              {screen === 'pitch' && <PitchCoach />}
             </motion.div>
           </AnimatePresence>
         </main>

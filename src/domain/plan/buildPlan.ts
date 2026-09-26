@@ -47,7 +47,7 @@ export function buildPlan(i: { today: string; existing: unknown; round: RoundPla
   return { plan: { d: i.today, ids: [], why: [], ...base }, changed: true };
 }
 
-export type DayEntry = { t?: unknown; id?: unknown; k?: unknown; ok?: unknown; ctx?: unknown };
+export type DayEntry = { t?: unknown; id?: unknown; k?: unknown; ok?: unknown; ctx?: unknown; type?: unknown; n?: unknown };
 
 /** Einträge von Datenbank und Puffer zusammenführen, doppelte (gleiches t|id) nur einmal. */
 export function mergeEntries(live: readonly DayEntry[], pending: readonly DayEntry[]): DayEntry[] {
@@ -63,12 +63,25 @@ export function deriveToday(i: { day: string; plan: StoredPlan | null; entries: 
   const reviewed = new Set<string>();
   let extra = 0;
   let correct = 0;
+  let answers = 0;
+  let talks = 0;
+  let biz = 0;
   for (const e of i.entries) {
+    // Phase 3 (Plan §3.7): Gespräche und Business-Einheiten sind keine Antworten der Trefferquote.
+    if (e.type === 'speak') {
+      talks++;
+      continue;
+    }
+    if (e.type === 'biz') {
+      biz++;
+      continue;
+    }
+    answers++;
     if (e.ok === true) correct++;
     if (e.ctx === 'rev' && e.k === 'v' && typeof e.id === 'string') reviewed.add(e.id);
     if (e.ctx === 'xtra') extra++;
   }
-  const balance = { answers: i.entries.length, correct, minutes: Math.max(0, Math.round(i.minutes)) };
+  const balance = { answers, correct, minutes: Math.max(0, Math.round(i.minutes)), talks, biz };
   if (!i.plan) return { day: i.day, status: 'noPlan', review: { done: 0, total: 0 }, extra, balance };
   const total = i.plan.duty.includes('review') ? i.plan.goal.review : 0;
   const done = Math.min(total, reviewed.size);

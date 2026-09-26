@@ -21,3 +21,18 @@ export type PromptTemplate<V, O> = {
   /** Prüft die Antwort; hängt von den Variablen ab (z. B. Sprache der Erklärung). */
   schema(vars: V): z.ZodType<O>;
 };
+
+/**
+ * Gesprächsvorlage (Phase 3, Plan §6.1): liefert eine Liste von Zügen für `sample(turns)` mit
+ * Streaming als Text statt JSON. Die Liste beginnt und endet mit `user`; der erste Zug beginnt
+ * mit `[${id}@${version}]`. Gesprächszüge werden nie zwischengespeichert (`cache: false`).
+ */
+export type ChatTemplate<V> = {
+  id: string;
+  version: number;
+  tier: ModelTier;
+  cache: false;
+  build(vars: V): Claude.sample.SampleMessage[];
+  /** Bereinigt Teil- und Endtext (Namenspräfix, Anführungszeichen, Regieanweisungen); '' = leer. Rein und idempotent. */
+  clean(text: string): string;
+};
