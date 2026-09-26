@@ -3,6 +3,8 @@ import { getDb } from '../../platform/capabilities';
 import { describeError, logError, logInfo, logWarn } from '../../platform/diagnostics';
 import { markHandled, pendingLegacyLocal } from '../../platform/legacyLocal';
 import { getWriter } from '../../data';
+import { isDocPath, schemaForPath } from '../../data/paths';
+import { readOnce } from '../../data/snapshot';
 import { classifyLegacyPath, type RescueItem, type RescueSkipReason } from '../../domain/migration/rescue';
 import { applyRescueItem } from '../../domain/migration/applyRescue';
 
@@ -12,7 +14,10 @@ import { applyRescueItem } from '../../domain/migration/applyRescue';
 // - `items`: werden nach Bestätigung ergänzt (dieselben sicheren Regeln wie bei der Umstellung);
 // - `notes`: werden NICHT automatisch übernommen – mit Grund gezeigt und protokolliert; sie
 //   bleiben in diesem Browser und in der Sicherung. Erst „Zur Kenntnis genommen" markiert sie.
-// Nichts wird still als erledigt markiert (Kap. 9, Regel 6).
+// Nichts wird still als erledigt markiert (Kap. 9, Regel 6): Erledigt ist eine Kopie erst, wenn
+// der frische Abgleich beim Ergänzen sie vollständig übernommen hat (applyRescue.ts).
+// Kann ein Dokument nicht gelesen werden (auch nicht beim zweiten Versuch), bleibt die Kopie
+// offen und wird beim nächsten Öffnen erneut geprüft – ein Lesefehler ist kein Befund.
 
 export type RescueNote = { path: string; markedAt: number; reason: Exclude<RescueSkipReason, 'unchanged'> | 'partial' };
 
@@ -41,19 +46,22 @@ export const useLateRescue = create<State>((set, get) => ({
     const items: RescueItem[] = [];
     const notes: RescueNote[] = [];
     const unchanged: Record<string, number> = {};
+    const nowMs = Date.now();
     for (const path of paths) {
       const markedAt = pending.dirty[path] ?? 0;
-      let remote: Record<string, unknown> | undefined;
-      try {
-        const snap = await db.doc(path).get();
-        remote = snap.exists ? snap.data() : undefined;
-      } catch (err) {
-        // Ungültiger Pfad (TypeError) oder Lesefehler: melden, nicht markieren.
-        logWarn('rescue:read', err, path);
+      if (!isDocPath(path) || !schemaForPath(path)) {
         notes.push({ path, markedAt, reason: 'unknown_path' });
         continue;
       }
-      const c = classifyLegacyPath(path, markedAt, pending.docs[path], remote);
+      let remote: Record<string, unknown> | undefined;
+      try {
+        const snap = await readOnce(path, () => db.doc(path).get());
+        remote = snap.exists ? snap.data() : undefined;
+      } catch (err) {
+        logWarn('rescue:read', err, `${path} – beim nächsten Öffnen erneut geprüft`);
+        continue;
+      }
+      const c = classifyLegacyPath(path, markedAt, pending.docs[path], remote, nowMs);
       if ('item' in c) items.push(c.item);
       else if (c.skip === 'unchanged') unchanged[path] = markedAt;
       else {
@@ -74,10 +82,13 @@ export const useLateRescue = create<State>((set, get) => ({
     set({ phase: 'running', items, notes });
     try {
       for (const item of s.items) {
-        await applyRescueItem(item, writer);
+        const out = await applyRescueItem(item, writer, Date.now());
         items = items.filter((i) => i !== item);
-        if (item.rest) notes.push({ path: item.path, markedAt: item.markedAt, reason: 'partial' });
-        else markHandled({ [item.path]: item.markedAt });
+        if (out.handled) markHandled({ [item.path]: item.markedAt });
+        else {
+          notes.push({ path: item.path, markedAt: item.markedAt, reason: out.reason });
+          logWarn('rescue:not-merged', { code: out.reason, message: 'beim Ergänzen nicht vollständig übernommen' }, item.path);
+        }
         set({ phase: 'running', items, notes });
       }
       logInfo('rescue:done', `${s.items.length} Kopien aus diesem Browser ergänzt`);

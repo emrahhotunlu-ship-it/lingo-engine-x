@@ -13,6 +13,7 @@ const NOTE_LABEL: Record<RescueNote['reason'], MessageKey> = {
   partial: 'skipPartial',
   read_only: 'skipReadOnly',
   invalid: 'skipInvalid',
+  db_invalid: 'skipDbInvalid',
   unknown_path: 'skipUnknown',
   missing_local: 'skipMissing',
 };

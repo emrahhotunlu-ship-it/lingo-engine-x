@@ -33,13 +33,12 @@ Stand: Phase 0. Grundlage sind die bestehende Datenbank (`docs/datenstruktur.jso
   1. `acquire`-Schloss auf `app/schema`, damit zwei Fenster nicht gleichzeitig umstellen.
   2. Noch nicht übertragene lokale Kopien der alten App (`sw2:__dirty`) **ergänzen** (`rescue.ts`):
      - fehlende Dokumente anlegen,
-     - Profil: `days`/`xpDays`/`minutes`/`act` je Tag mit dem Maximum, Zähler nur nach oben,
+     - Profil: `days`/`xpDays`/`minutes`/`act` je Tag mit dem Maximum (nur echte Kalendertage bis heute, keine negativen Werte), Zähler nur nach oben,
      - Kurs: nur fehlende Lektionen,
-     - Log: Einträge vereinigen,
-     - Karten und Themen: nur wenn `last` neuer ist,
-     - sonst nur fehlende Felder.
+     - alles andere, was abweicht (Listen wie Log, Radar, Chat; Karten; Themen; Einstellungen), wird **nicht** zusammengeführt, sondern gemeldet und bleibt im Browser (`sw2:`) und in der Sicherung (`browserCopies`),
+     - ein Datenbank-Dokument mit unerwartetem Aufbau wird nie angefasst (`db_invalid`).
 
-     Listen werden vereinigt (Fehlersätze über `q`, Tageswerte über `d`), nichts wird gekappt. Lesen, Rechnen und Schreiben laufen in einem Schritt der Warteschlange (`writer.transform`). `daily/*`, `feed/*` und unbekannte Pfade bleiben aus.
+     Lesen, Rechnen und Schreiben laufen in einem Schritt der Warteschlange (`writer.transform`). Erledigt ist eine Kopie nur, wenn dieser frische Abgleich sie vollständig übernommen hat (`applyRescue.ts`); sonst bleibt sie offen und erscheint auf „Dein Stand“. `daily/*`, `feed/*` und unbekannte Pfade bleiben aus.
   - **Weitere Browser:** Hat ein anderer Browser noch Kopien, zeigt „Dein Stand“ dort „Aus diesem Browser nachtragen“. Es gelten dieselben Regeln (`lateRescue.ts`), behandelte Einträge merkt sich `lx:legacy-rescue` im Browser.
   3. `fsrs` je Karte ergänzen.
   4. `app/schema` schreiben.
