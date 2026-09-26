@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, openOverview, screen } from './fixtures';
 
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
@@ -29,7 +29,7 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
 
   // Ausführen → Übersicht mit denselben Werten.
   await page.getByRole('button', { name: 'Umstellung ausführen' }).click();
-  await screen(page, 'overview');
+  await openOverview(page);
   await expect(page.getByTestId('streak-count')).toHaveText('12');
   await expect(page.getByTestId('course-done')).toHaveText('6');
   await expect(page.getByTestId('vocab-total')).toHaveText('146');
@@ -43,8 +43,8 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
 
   // Nach dem Neuladen bleibt der Zustand (Daten liegen in db, nicht im Browser-Speicher).
   await page.reload();
-  await screen(page, 'overview');
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  await screen(page, 'today');
+  await expect(page.getByTestId('today-streak')).toHaveText('Serie: 12 Tage');
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
@@ -62,7 +62,7 @@ test('noch nicht übertragene Änderungen der alten App werden erkannt und über
   await screen(page, 'migration');
   await expect(page.getByText('1 Änderung aus diesem Browser war noch nicht gespeichert und wird ergänzt.')).toBeVisible();
   await page.getByRole('button', { name: 'Umstellung ausführen' }).click();
-  await screen(page, 'overview');
+  await openOverview(page);
   const doc = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump()['vocab/nur-im-browser']);
   expect(doc).toMatchObject({ word: 'only in the browser', fsrs: { state: 0 } });
   expect(errors).toEqual([]);
@@ -77,7 +77,7 @@ test('scheitert ein Schreibvorgang, erscheint eine klare Meldung und ein erneute
   await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { setFailWrites(c?: string): void } } }).__LINGO_FAKE__.db.setFailWrites(undefined));
   await page.getByRole('button', { name: 'Erneut prüfen' }).click();
   await page.getByRole('button', { name: 'Umstellung ausführen' }).click();
-  await screen(page, 'overview');
+  await openOverview(page);
   // Der Fehler wurde protokolliert (sichtbar in der Diagnose), nicht still verschluckt.
   expect(errors.some((e) => e.includes('data:write'))).toBe(true);
   await page.getByTestId('open-settings').click();
@@ -104,7 +104,7 @@ test('zweiter Browser: noch nicht übertragene Kopien der alten App werden nach 
       'sw2:app/course': JSON.stringify({ done: { l07: { d: '2026-09-20', n: 14, ok: 12, t: 1_789_950_000_000 } }, res: {} }),
     },
   });
-  await screen(page, 'overview');
+  await openOverview(page);
   const card = page.getByTestId('late-rescue');
   await expect(card).toContainText('In diesem Browser liegen noch 2 Änderungen der alten App');
   await card.getByRole('button', { name: 'Nachtragen' }).click();
@@ -115,7 +115,7 @@ test('zweiter Browser: noch nicht übertragene Kopien der alten App werden nach 
   expect(Object.keys((dump['app/course'] as { done: object }).done)).toEqual(['l01', 'l02', 'l03', 'l04', 'l05', 'l06', 'l07']);
   // Nach dem Neuladen wird nichts erneut angeboten.
   await page.reload();
-  await screen(page, 'overview');
+  await openOverview(page);
   await expect(page.getByTestId('late-rescue')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
@@ -134,7 +134,7 @@ test('zweiter Browser: Abweichende Kopien werden gemeldet statt still übernomme
       'sw2:vocab/reliable': JSON.stringify({ word: 'reliable', de: 'verlässlich (Handy)', state: 'review', S: 40, last: 9_999_999_999_999 }),
     },
   });
-  await screen(page, 'overview');
+  await openOverview(page);
   const notes = page.getByTestId('late-notes');
   await expect(notes).toContainText('vocab/reliable – weicht ab – wird nicht automatisch zusammengeführt');
   await expect(notes).toContainText('bleiben in diesem Browser und in jeder Sicherung erhalten');

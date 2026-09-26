@@ -71,12 +71,19 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
 }
 
 /** Wartet, bis ein Bildschirm fertig eingeblendet ist. */
-export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview'): Promise<void> {
+export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer'): Promise<void> {
   await page.locator(`[data-screen="${name}"]`).waitFor({ state: 'visible' });
   await page.waitForFunction((n) => {
     const el = document.querySelector(`[data-screen="${n}"]`);
     return !!el && getComputedStyle(el).opacity === '1';
   }, name);
+}
+
+/** Start ist „Heute"; „Dein Stand" liegt eine Navigation weiter. */
+export async function openOverview(page: Page): Promise<void> {
+  await screen(page, 'today');
+  await page.getByTestId('tab-overview').click();
+  await screen(page, 'overview');
 }
 
 /** Prüfungen, die auf jedem Bildschirm gelten (Kap. 12). */

@@ -79,8 +79,16 @@ export const profileSchema = z.looseObject({
       d: str,
       ids: strArr,
       why: z.array(z.array(z.unknown())).nullish(),
+      // Neu ab Phase 1 (Plan dieser App, Daten-Entwurf §3.4)
+      v: num,
+      duty: strArr,
+      goal: z.looseObject({ review: num }).nullish(),
+      lesson: str,
+      at: num,
     })
     .nullish(),
+  /** Neu: Folgenummer des letzten Sammel-Schreibvorgangs je Gerät (gegen Doppelzählung). */
+  lxSeq: numMap,
   history: z
     .array(z.looseObject({ d: str, o: num, vo: num, gr: num, co: num, re: num, li: num, wr: num, fl: num, vs: num }))
     .nullish(),
@@ -169,6 +177,8 @@ const schedulingFields = {
   intro: str,
   hidden: bool,
   fsrs: fsrsSchema.nullish(),
+  /** Neu: Trefferbilanz je Übungsart der neuen App. */
+  xs: z.record(z.string(), z.looseObject({ c: num, w: num }).nullish()).nullish(),
 };
 
 export const vocabSchema = z.looseObject({
@@ -235,7 +245,9 @@ export const lessonSchema = z.looseObject({
 export const logSchema = z.looseObject({
   date: str,
   // `given`/`ans` sind je nach Übungsart Text oder Liste (z. B. Satzbau) – tolerant lesen.
-  entries: z.array(z.looseObject({ t: num, ok: bool, k: str, id: str, m: str, given: loose, ans: loose })).nullish(),
+  entries: z
+    .array(z.looseObject({ t: num, ok: bool, k: str, id: str, m: str, given: loose, ans: loose, g: num, ms: num, lang: str, type: str, q: str, ctx: str }))
+    .nullish(),
 });
 
 /** Vom Claude-Tagesauftrag geschrieben – Format bleibt exakt erhalten, die App liest nur. */

@@ -1,5 +1,5 @@
 import { LESSONS, SEED_VOCAB, TOPICS, UNITS, seedCard, type Lesson } from './content';
-import { DAY_START_HOUR, dayKey, legacyDayKey } from './date';
+import { dayKey, learningDayEnd, legacyDayKey } from './date';
 import { computeStreak, pflichtDays, type Streak } from './streak';
 
 // „Dein Stand": reine Berechnung aus den gelesenen Dokumenten (keine Seiteneffekte).
@@ -25,19 +25,15 @@ const num = (v: unknown, fallback = 0): number => (typeof v === 'number' && Numb
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 const obj = (v: unknown): Doc => (typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as Doc) : {});
 
-/** Beginn des nächsten Lerntags (04:00 Uhr) in ms – bis dahin gilt eine Karte als „heute fällig". */
-export function learningDayEnd(nowMs: number): number {
-  const d = new Date(nowMs);
-  if (d.getHours() >= DAY_START_HOUR) d.setDate(d.getDate() + 1);
-  d.setHours(DAY_START_HOUR, 0, 0, 0);
-  return d.getTime();
-}
+export { learningDayEnd };
 
 /** Alle Vokabelkarten: Voreinstellungen, überlagert von den Dokumenten der Datenbank. */
-export function mergedVocab(dbVocab: ReadonlyMap<string, Doc>): Map<string, Doc> {
+export function mergedVocab(dbVocab: ReadonlyMap<string, Doc>, invalidIds?: ReadonlySet<string>): Map<string, Doc> {
   const out = new Map<string, Doc>();
   SEED_VOCAB.forEach((s, i) => {
     const c = seedCard(s, i);
+    // Ein vorhandenes, aber ungültiges Dokument verdeckt die Voreinstellung (Regel 6): nie als neue Karte zeigen.
+    if (invalidIds?.has(c.id)) return;
     out.set(c.id, c);
   });
   for (const [id, d] of dbVocab) out.set(id, d);

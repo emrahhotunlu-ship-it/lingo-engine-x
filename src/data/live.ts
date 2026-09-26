@@ -31,9 +31,11 @@ type LiveState = {
   collections: Partial<Record<LiveCollection, ReadonlyMap<string, Doc>>>;
   /** Pfad → Befunde der Schemaprüfung (vorhanden, aber ungültig). */
   invalid: Readonly<Record<string, string[]>>;
+  /** Tagesprotokoll `log/<heute>`: `doc` undefined = noch nicht geladen, null = fehlt. */
+  day: { key: string; doc: Doc | null | undefined; invalid: boolean } | null;
 };
 
-const initial = (): LiveState => ({ status: 'waiting', docs: {}, collections: {}, invalid: {} });
+const initial = (): LiveState => ({ status: 'waiting', docs: {}, collections: {}, invalid: {}, day: null });
 export const useLive = create<LiveState>(initial);
 
 const RESUBSCRIBE_CODES = new Set(['unavailable']);
@@ -126,4 +128,56 @@ export function startLive(db: Db): () => void {
     unsubs.clear();
     useLive.setState(initial());
   };
+}
+
+/**
+ * Abo auf das Tagesprotokoll `log/<day>` (Tagesbilanz und Fortschritt „Wiederholen").
+ * Genau ein Abo je Lerntag; beim Wechsel um 04:00 wird es einmal neu abonniert.
+ */
+export function startDayLive(db: Db, day: string): () => void {
+  let stopped = false;
+  let retried = false;
+  let unsub: Unsub | null = null;
+  const path = `log/${day}`;
+  useLive.setState({ day: { key: day, doc: undefined, invalid: false } });
+  const open = () => {
+    unsub = db.doc(path).onSnapshot(
+      (snap) => {
+        if (stopped) return;
+        const data = snap.exists ? snap.data() : undefined;
+        const res = data ? validateDoc(path, data) : null;
+        if (res && !res.ok) logError('data:validate', { code: 'invalid_document', message: res.issues.join('; ') }, path);
+        useLive.setState({ day: { key: day, doc: data ?? null, invalid: !!res && !res.ok } });
+      },
+      (err) => {
+        if (stopped) return;
+        const { code = 'unavailable' } = describeError(err);
+        if (!retried && (RESUBSCRIBE_CODES.has(code) || !KNOWN_TERMINAL.has(code))) {
+          retried = true;
+          logWarn('data:live', err, `${path} – neu abonniert`);
+          unsub?.();
+          setTimeout(() => {
+            if (!stopped) open();
+          }, 250 + Math.random() * 500);
+          return;
+        }
+        // Ohne Tagesprotokoll läuft die App weiter; die Bilanz bleibt dann leer.
+        logError('data:live', err, path);
+        useLive.setState({ day: { key: day, doc: null, invalid: false } });
+      },
+    );
+  };
+  open();
+  return () => {
+    stopped = true;
+    unsub?.();
+  };
+}
+
+/** Kennungen der Vokabeln mit ungültigem Dokument (nie als Voreinstellung abfragen). */
+export function invalidIdsOf(invalid: Readonly<Record<string, string[]>>, collection: string): Set<string> {
+  const out = new Set<string>();
+  const prefix = `${collection}/`;
+  for (const p of Object.keys(invalid)) if (p.startsWith(prefix)) out.add(p.slice(prefix.length));
+  return out;
 }

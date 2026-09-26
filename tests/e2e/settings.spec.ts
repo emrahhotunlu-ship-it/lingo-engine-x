@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, openOverview } from './fixtures';
 
 type Dump = Record<string, Record<string, unknown>>;
 const dump = (page: Page) =>
@@ -9,7 +9,7 @@ test.use({ viewport: { width: 1440, height: 900 } });
 
 test('Sprache und Darstellung werden sofort angewendet und in app/profile gespeichert', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
-  await screen(page, 'overview');
+  await openOverview(page);
   await page.getByTestId('open-settings').click();
   const dialog = page.getByRole('dialog', { name: 'Einstellungen' });
   await expect(dialog).toBeVisible();
@@ -36,7 +36,7 @@ test('Sprache und Darstellung werden sofort angewendet und in app/profile gespei
 
 test('Tab bleibt im geöffneten Dialog (Tastaturbedienung)', async ({ page }) => {
   await boot(page, { migrated: true });
-  await screen(page, 'overview');
+  await openOverview(page);
   await page.getByTestId('open-settings').click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
@@ -50,7 +50,7 @@ test('Tab bleibt im geöffneten Dialog (Tastaturbedienung)', async ({ page }) =>
 
 test('Diagnose zeigt Fähigkeiten, Dokumentzahl und Datenversion', async ({ page }) => {
   await boot(page, { migrated: true });
-  await screen(page, 'overview');
+  await openOverview(page);
   await page.getByTestId('open-settings').click();
   const dialog = page.getByRole('dialog');
   await expect(dialog.getByText('Datenbank', { exact: true })).toBeVisible();
@@ -61,7 +61,7 @@ test('Diagnose zeigt Fähigkeiten, Dokumentzahl und Datenversion', async ({ page
 
 test('scheitert das Speichern, wird die Änderung zurückgenommen und gemeldet', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
-  await screen(page, 'overview');
+  await openOverview(page);
   await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { setFailWrites(c: string): void } } }).__LINGO_FAKE__.db.setFailWrites('invalid_argument'));
   await page.getByTestId('open-settings').click();
   await page.getByRole('radio', { name: 'Hell' }).click();
@@ -73,7 +73,7 @@ test('scheitert das Speichern, wird die Änderung zurückgenommen und gemeldet',
 
 test('ein ungültiges Profil wird gemeldet, angezeigt und beim Speichern nie ersetzt', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { rate: 'schnell' } } } });
-  await screen(page, 'overview');
+  await openOverview(page);
   await expect(page.getByTestId('streak-count')).toHaveText('12');
   await page.getByTestId('open-settings').click();
   await page.getByRole('radio', { name: 'English' }).click();
@@ -88,7 +88,7 @@ test('ein ungültiges Profil wird gemeldet, angezeigt und beim Speichern nie ers
 
 test('Datenexport über downloads liefert alle Dokumente als JSON', async ({ page }) => {
   await boot(page, { migrated: true });
-  await screen(page, 'overview');
+  await openOverview(page);
   await page.getByTestId('open-settings').click();
   await page.getByRole('button', { name: 'Alle Daten als JSON sichern' }).click();
   await expect(page.getByText('Sicherung gespeichert.')).toBeVisible();

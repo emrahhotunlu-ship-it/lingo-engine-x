@@ -49,6 +49,8 @@
   --lx-cyan-text: #67e8f9;
   --lx-gold-text: #fbbf24;
   --lx-danger-text: #f87171;
+  --lx-danger-soft: rgba(248, 113, 113, 0.14);
+  --lx-gold-soft: rgba(251, 191, 36, 0.14);
   --lx-focus: #67e8f9;
   --lx-track: rgba(255, 255, 255, 0.08);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -20px rgba(0, 0, 0, 0.7);
@@ -85,6 +87,8 @@
   --lx-cyan-text: #7ee9f7;
   --lx-gold-text: #fcd34d;
   --lx-danger-text: #fca5a5;
+  --lx-danger-soft: rgba(252, 165, 165, 0.14);
+  --lx-gold-soft: rgba(252, 211, 77, 0.14);
   --lx-focus: #7ee9f7;
   --lx-track: rgba(255, 255, 255, 0.1);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -22px rgba(0, 0, 0, 0.55);
@@ -121,6 +125,8 @@
   --lx-cyan-text: #0e7490;
   --lx-gold-text: #b45309;
   --lx-danger-text: #b91c1c;
+  --lx-danger-soft: rgba(185, 28, 28, 0.08);
+  --lx-gold-soft: rgba(180, 83, 9, 0.1);
   --lx-focus: #0e7490;
   --lx-track: rgba(15, 23, 42, 0.08);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 12px 32px -18px rgba(15, 23, 42, 0.25);
@@ -156,6 +162,8 @@
   --color-cyan-text: var(--lx-cyan-text);
   --color-gold-text: var(--lx-gold-text);
   --color-danger-text: var(--lx-danger-text);
+  --color-danger-soft: var(--lx-danger-soft);
+  --color-gold-soft: var(--lx-gold-soft);
   --color-track: var(--lx-track);
   --color-ch-cards: var(--lx-ch-cards);
   --color-ch-grammar: var(--lx-ch-grammar);
@@ -272,6 +280,166 @@ h3 {
     color: var(--lx-fg-muted);
   }
 
+
+  /* ---------------------------------------------------------- Kinetische Lücke (Kap. 4.1) */
+  .lx-gap {
+    position: relative;
+    display: inline-block;
+    vertical-align: baseline;
+    min-width: 3.5em;
+    min-height: 1.35em;
+    padding: 0 0.25em;
+    margin: 0 0.1em;
+    border-radius: 0.35em;
+    font: inherit;
+    line-height: inherit;
+    white-space: nowrap;
+    box-shadow: inset 0 -2px 0 0 var(--lx-fg-subtle);
+    background: var(--lx-surface);
+    transition: background-color 0.22s, box-shadow 0.22s;
+    cursor: text;
+  }
+  .lx-gap[data-focused] {
+    box-shadow: inset 0 -2px 0 0 var(--lx-cyan);
+  }
+  .lx-gap[data-state='correct'] {
+    background: var(--lx-accent-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-accent);
+    animation: lx-pulse 0.3s ease-out;
+  }
+  .lx-gap[data-state='near'] {
+    background: var(--lx-gold-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-gold-text);
+  }
+  .lx-gap[data-state='wrong'] {
+    background: var(--lx-danger-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-danger-text);
+  }
+  .lx-gap-inner {
+    display: inline-flex;
+    width: max-content;
+  }
+  .lx-letter {
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .lx-letter[data-landed='true'] {
+    opacity: 1;
+  }
+  .lx-letter-off {
+    color: var(--lx-gold-text);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+  .lx-flyer-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    overflow: hidden;
+  }
+  .lx-flyer {
+    position: absolute;
+    color: var(--lx-cyan-text);
+    will-change: transform, opacity;
+  }
+  .lx-hidden-input {
+    position: absolute;
+    z-index: 5;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    font-size: 16px;
+    color: transparent;
+    caret-color: transparent;
+    background: transparent;
+  }
+  .lx-mark {
+    border-radius: 0.3em;
+    padding: 0 0.15em;
+    background: var(--lx-accent-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-accent);
+  }
+  .lx-sentence {
+    font-size: var(--text-xl);
+    line-height: 1.7;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    contain: layout paint;
+  }
+
+  /* ---------------------------------------------------------- Auswahl und Bewertung */
+  .lx-choice {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: var(--radius-control);
+    border: 1px solid var(--lx-border);
+    background: var(--lx-surface);
+    color: var(--lx-fg);
+    font-size: var(--text-base);
+    text-align: left;
+    transition: background-color 0.15s, border-color 0.15s, opacity 0.15s;
+  }
+  .lx-choice:not(:disabled):hover {
+    background: var(--lx-surface-strong);
+  }
+  .lx-choice[data-state='correct'] {
+    background: var(--lx-accent-soft);
+    border-color: var(--lx-accent);
+  }
+  .lx-choice[data-state='wrong'] {
+    background: var(--lx-danger-soft);
+    border-color: var(--lx-danger-text);
+  }
+  .lx-choice[data-state='dim'] {
+    opacity: 0.55;
+  }
+  .lx-choice-key {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.5rem;
+    background: var(--lx-track);
+    color: var(--lx-fg-muted);
+    font-size: var(--text-xs);
+    font-weight: 600;
+  }
+  .lx-rate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+    min-height: 3.5rem;
+    padding: 0.5rem;
+    border-radius: var(--radius-control);
+    border: 1px solid var(--lx-border);
+    background: var(--lx-surface);
+    color: var(--lx-fg);
+    transition: background-color 0.15s, border-color 0.15s;
+  }
+  .lx-rate:not(:disabled):hover {
+    background: var(--lx-surface-strong);
+  }
+  .lx-rate:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .lx-rate-suggested {
+    border-color: var(--lx-accent);
+    box-shadow: inset 0 0 0 1px var(--lx-accent);
+    background: var(--lx-accent-soft);
+  }
+
   .lx-skeleton {
     position: relative;
     overflow: hidden;
@@ -286,6 +454,18 @@ h3 {
     transform: translateX(-100%);
     background: linear-gradient(90deg, transparent, var(--lx-surface-strong), transparent);
     animation: lx-shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes lx-pulse {
+  0% {
+    box-shadow: inset 0 -2px 0 0 var(--lx-accent), 0 0 0 0 var(--lx-accent-soft);
+  }
+  50% {
+    box-shadow: inset 0 -2px 0 0 var(--lx-accent), 0 0 0 12px var(--lx-accent-soft);
+  }
+  100% {
+    box-shadow: inset 0 -2px 0 0 var(--lx-accent), 0 0 0 0 transparent;
   }
 }
 

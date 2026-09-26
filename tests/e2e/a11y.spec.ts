@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { boot, screen, type Theme } from './fixtures';
+import { boot, openOverview, screen, type Theme } from './fixtures';
 
 // Barrierefreiheit (Kap. 8, Kap. 12): axe in allen drei Modi, Touch-Ziele ≥ 44 px.
 
@@ -13,7 +13,8 @@ for (const theme of THEMES) {
         await page.setViewportSize({ width, height: 900 });
         await page.emulateMedia({ reducedMotion: 'reduce' });
         await boot(page, { theme, migrated });
-        await screen(page, migrated ? 'overview' : 'migration');
+        if (migrated) await openOverview(page);
+        else await screen(page, 'migration');
         const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
         expect(res.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
       });
@@ -21,23 +22,25 @@ for (const theme of THEMES) {
   }
 }
 
-test('axe · Einstellungen offen (alle Modi)', async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
+test('axe · Einstellungen offen (alle Modi)', async ({ browser }) => {
   for (const theme of THEMES) {
+    // Je Modus eine frische Seite: keine gehäuften Init-Skripte und Uhren aus dem vorigen Durchlauf.
+    const context = await browser.newContext({ reducedMotion: 'reduce', timezoneId: 'Europe/Berlin', locale: 'de-DE' });
+    const page = await context.newPage();
     await boot(page, { theme, migrated: true });
-    await screen(page, 'overview');
+    await openOverview(page);
     await page.getByTestId('open-settings').click();
     await expect(page.getByRole('dialog')).toBeVisible();
     const res = await new AxeBuilder({ page }).include('[role="dialog"]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     expect(res.violations.map((v) => `${theme} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
-    await page.unrouteAll({ behavior: 'ignoreErrors' });
+    await context.close();
   }
 });
 
 test('Touch-Ziele am Handy mindestens 44 × 44 px', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await boot(page, { migrated: true });
-  await screen(page, 'overview');
+  await openOverview(page);
   await page.getByTestId('open-settings').click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.waitForTimeout(400);

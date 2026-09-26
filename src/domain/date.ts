@@ -56,3 +56,19 @@ export function isoWeek(key: string): string {
   const week = 1 + Math.round(((d.getTime() - jan4.getTime()) / 86_400_000 - 3 + ((jan4.getUTCDay() + 6) % 7)) / 7);
   return `${year}-W${pad(week)}`;
 }
+
+/** Beginn des nächsten Lerntags (04:00 Uhr) in ms – bis dahin gilt eine Karte als „heute fällig". */
+export function learningDayEnd(nowMs: number): number {
+  const d = new Date(nowMs);
+  if (d.getHours() >= DAY_START_HOUR) d.setDate(d.getDate() + 1);
+  d.setHours(DAY_START_HOUR, 0, 0, 0);
+  return d.getTime();
+}
+
+/** Beginn des laufenden Lerntags (letztes 04:00 Uhr) in ms. */
+export function learningDayStart(nowMs: number): number {
+  const d = new Date(nowMs);
+  if (d.getHours() < DAY_START_HOUR) d.setDate(d.getDate() - 1);
+  d.setHours(DAY_START_HOUR, 0, 0, 0);
+  return d.getTime();
+}

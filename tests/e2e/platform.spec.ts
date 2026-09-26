@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, openOverview, screen } from './fixtures';
 
 // Plattform-Test (Kap. 12): nichts von fremden Hosts, kein Absturz ohne Fähigkeiten,
 // kein Entwicklungs-Adapter im Produktions-Build.
@@ -50,7 +50,7 @@ test('bricht ein Datenbank-Abonnement ab, erscheint eine klare Meldung mit Neu l
 
 test('reißt die Brücke einmal ab (unavailable), wird neu abonniert und die App läuft normal', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { failSubscriptions: 'unavailable', failSubscriptionsTimes: 6 } });
-  await screen(page, 'overview');
+  await openOverview(page);
   await expect(page.getByTestId('streak-count')).toHaveText('12');
   expect(errors).toEqual([]);
 });
@@ -59,6 +59,6 @@ test('antwortet die Laufzeit spät, erscheint sofort ein Lade-Skelett statt eine
   const { errors } = await boot(page, { fake: { useDelayMs: 1500 }, migrated: true });
   await expect(page.locator('[data-screen="loading"]')).toBeVisible();
   await expect(page.getByRole('status', { name: 'Deine Daten werden geladen' })).toBeVisible();
-  await screen(page, 'overview');
+  await openOverview(page);
   expect(errors).toEqual([]);
 });

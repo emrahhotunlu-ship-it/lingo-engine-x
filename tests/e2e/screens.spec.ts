@@ -1,6 +1,6 @@
 import { mkdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, layoutProblems, screen, type Lang, type Theme } from './fixtures';
+import { boot, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
 
 // Jeder Bildschirm rendert auf 390, 1440 und 2560 px, in allen drei Modi und beiden
 // Sprachen: keine JS-Fehler, kein undefined/NaN/{0}, kein Querscrollen, nichts
@@ -36,7 +36,8 @@ for (const vp of VIEWPORTS) {
           });
           const page = await context.newPage();
           const { errors, external } = await boot(page, { theme, lang, migrated });
-          await screen(page, migrated ? 'overview' : 'migration');
+          if (migrated) await openOverview(page);
+        else await screen(page, 'migration');
           if (!migrated) await expect(page.getByTestId('mig-streak')).toBeVisible();
 
           await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
@@ -62,7 +63,7 @@ test('reduzierte Bewegung: alles erscheint ohne Animation vollständig', async (
   const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 }, timezoneId: 'Europe/Berlin' });
   const page = await context.newPage();
   const { errors } = await boot(page, { migrated: true });
-  await screen(page, 'overview');
+  await openOverview(page);
   await expect(page.getByTestId('streak-count')).toHaveText('12');
   expect(errors).toEqual([]);
   await context.close();
