@@ -8,6 +8,7 @@ export type QuerySnap = QuerySnapshot;
 export type DbErr = DbError;
 export type DbErrCode = DbErrorCode;
 export type Unsub = Unsubscribe;
+export type DbAcquireResult = AcquireResult;
 
 export type SampleFn = ClaudeCapabilityMap['sample'];
 export type SampleOptions = Claude.sample.SampleOptions;

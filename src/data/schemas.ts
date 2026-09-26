@@ -82,18 +82,22 @@ export const profileSchema = z.looseObject({
       // Neu ab Phase 1 (Plan dieser App, Daten-Entwurf §3.4)
       v: num,
       duty: strArr,
-      goal: z.looseObject({ review: num }).nullish(),
+      goal: z.looseObject({ review: num, due: num, new: num, ahead: num, ch: num }).nullish(),
       lesson: str,
       at: num,
     })
     .nullish(),
-  /** Neu: Folgenummer des letzten Sammel-Schreibvorgangs je Gerät (gegen Doppelzählung). */
+  /** Neu: Folgenummer des letzten Sammel-Schreibvorgangs je Tab (gegen Doppelzählung); `null` = gekappt (Phase 2 D7). */
   lxSeq: numMap,
   history: z
     .array(z.looseObject({ d: str, o: num, vo: num, gr: num, co: num, re: num, li: num, wr: num, fl: num, vs: num }))
     .nullish(),
   feed: z.array(z.looseObject({ act: str, t: num, d: z.looseObject({}).nullish() })).nullish(),
   listen: looseArr,
+  /**
+   * Sprint-Ergebnisse `{t, score, ok, n, avgMs, combo}` (alte App; Phase 2 hängt dieselbe Form an, ≤ 60).
+   * Bewusst tolerant gelesen: ein einzelner fremder Eintrag darf nie das ganze Profil ungültig machen.
+   */
   sprints: looseArr,
   vtests: looseArr,
   checks: loose,
@@ -102,7 +106,13 @@ export const profileSchema = z.looseObject({
 });
 
 export const courseSchema = z.looseObject({
-  done: z.record(z.string(), z.looseObject({ d: str, n: num, ok: num, t: num }).nullish()).nullish(),
+  done: z
+    .record(
+      z.string(),
+      // `last`: letzte Wiederholung einer schon erledigten Lektion (Phase 2 §4.7), der erste Abschluss bleibt stehen.
+      z.looseObject({ d: str, n: num, ok: num, t: num, last: z.looseObject({ d: str, n: num, ok: num, t: num }).nullish() }).nullish(),
+    )
+    .nullish(),
   res: z.record(z.string(), z.unknown()).nullish(),
 });
 
@@ -121,9 +131,16 @@ const exerciseItem = z.looseObject({
   explanation_de: str,
   explanation_en: str,
   src: str,
+  /** Neu (Phase 2): Herkunft einer Pool-Aufgabe, z. B. `daily/2026-09-27`. */
+  ref: str,
 });
 
-export const poolSchema = z.looseObject({ items: z.array(exerciseItem).nullish(), t: num });
+export const poolSchema = z.looseObject({
+  items: z.array(exerciseItem).nullish(),
+  t: num,
+  /** Neu (Phase 2 §4.10): verarbeitete Tagesaufträge `daily/<k>` → Hash, Zeit, Wörter, Aufgaben, offen, ungültig. */
+  lxDaily: z.record(z.string(), z.looseObject({ h: num, t: num, w: num, g: num, open: num, bad: num }).nullish()).nullish(),
+});
 
 export const chatSchema = z.looseObject({
   msgs: z.array(z.looseObject({ role: str, content: str })).nullish(),
@@ -236,7 +253,21 @@ export const grammarSchema = z.looseObject({
   seenText: strArr,
   hist: z.array(z.looseObject({ d: str, p: num })).nullish(),
   errors: z
-    .array(z.looseObject({ q: str, given: str, ans: str, t: num, box: num, due: num, done: bool, last: num }))
+    .array(
+      z.looseObject({
+        q: str,
+        given: str,
+        ans: str,
+        t: num,
+        box: num,
+        due: num,
+        done: bool,
+        last: num,
+        /** Neu (Phase 2): Quelle der Aufgabe und FSRS-Schatten (steuert nichts, D1). */
+        src: str,
+        fsrs: loose,
+      }),
+    )
     .nullish(),
 });
 
@@ -245,16 +276,51 @@ export const lessonSchema = z.looseObject({
   t: num,
   words: z.array(z.looseObject({ en: str, de: str, def: str, ex: str, pos: str })).nullish(),
   dialogue: z.looseObject({ title: str, lines: z.array(z.looseObject({ sp: str, en: str, de: str })).nullish() }).nullish(),
-  questions: z.array(z.looseObject({ q: str, answer: str, options: z.array(z.unknown()).nullish() })).nullish(),
+  questions: z
+    .array(
+      z.looseObject({
+        q: str,
+        answer: str,
+        options: z.array(z.unknown()).nullish(),
+        // Sprache der Frage (fehlt bei alten Lektionen = de) und die andere Fassung.
+        lang: str,
+        q_alt: str,
+        answer_alt: str,
+        options_alt: z.array(z.unknown()).nullish(),
+      }),
+    )
+    .nullish(),
   tasks: z.array(exerciseItem.extend({ hint: str, expl: str, expl_en: str })).nullish(),
   output: z.looseObject({ de: str, en: str, mustUse: strArr }).nullish(),
+  /** Neu (Phase 2): Herkunft des Inhalts (`pv`, Sprache, Nachbesserung). */
+  lx: loose,
 });
 
 export const logSchema = z.looseObject({
   date: str,
   // `given`/`ans` sind je nach Übungsart Text oder Liste (z. B. Satzbau) – tolerant lesen.
   entries: z
-    .array(z.looseObject({ t: num, ok: bool, k: str, id: str, m: str, given: loose, ans: loose, g: num, ms: num, lang: str, type: str, q: str, ctx: str }))
+    .array(
+      z.looseObject({
+        t: num,
+        ok: bool,
+        k: str,
+        id: str,
+        m: str,
+        given: loose,
+        ans: loose,
+        g: num,
+        ms: num,
+        lang: str,
+        type: str,
+        q: str,
+        ctx: str,
+        // Neu bzw. aus der alten App belegt (Phase 2 §4.4).
+        topic: str,
+        src: str,
+        lesson: str,
+      }),
+    )
     .nullish(),
 });
 
@@ -318,6 +384,9 @@ export const writingSchema = z.looseObject({
       cefr: str,
       scores: z.record(z.string(), z.number().nullish()).nullish(),
       errors: looseArr,
+      /** Neu (Phase 2 §4.9): Urteil zum Can-Do-Ziel und Vorlage. */
+      cando: str,
+      pv: str,
     })
     .nullish(),
 });

@@ -73,11 +73,22 @@ function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {
 
 export type RoundPlan = { target: number; due: number; new: number; ahead: number };
 
+/**
+ * Restliches Kontingent neuer Karten heute (phase2-plan D17): Lektionswörter zählen zu
+ * `newPerDay`, aber das Wiederholen behält mindestens `min(2, newPerDay)` andere neue Karten –
+ * so verdrängt eine Lektion nie die eigenen neuen Wörter (Kap. 15).
+ */
+export function newQuotaLeft(newPerDay: unknown, introducedToday: number, introducedLessonToday = 0): number {
+  const n = normalizeNewPerDay(newPerDay);
+  const other = Math.max(0, introducedToday - introducedLessonToday);
+  return Math.max(0, n - introducedToday, Math.min(2, n) - other);
+}
+
 /** Umfang der heutigen Pflichtrunde: etwa 10 Minuten, mindestens 10, höchstens 60 Karten. */
-export function planRound(i: { cards: readonly TrainCard[]; nowMs: number; newPerDay: number; introducedToday: number; lang: Lang }): RoundPlan {
+export function planRound(i: { cards: readonly TrainCard[]; nowMs: number; newPerDay: number; introducedToday: number; introducedLessonToday?: number; lang: Lang }): RoundPlan {
   const act = active(i.cards, i.lang);
   if (!act.length) return { target: 0, due: 0, new: 0, ahead: 0 };
-  const quotaLeft = Math.max(0, normalizeNewPerDay(i.newPerDay) - i.introducedToday);
+  const quotaLeft = newQuotaLeft(i.newPerDay, i.introducedToday, i.introducedLessonToday ?? 0);
   const nNew = Math.min(quotaLeft, newCards(act).length);
   let budget = ROUND_SECONDS - nNew * NEW_COST;
   let nDue = 0;

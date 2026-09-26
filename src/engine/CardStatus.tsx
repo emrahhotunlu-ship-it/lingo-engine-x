@@ -1,11 +1,30 @@
 // Statuszeile einer Karte (CLAUDE.md A7): Sicherheit als fünf Punkte mit Wort und die
 // Abfrageart als kurzer Name. Ersetzt Stufen-Leiter, Quelle und Erklärtexte.
 
-type Props = { dots: number; word: string; label: string; kind: string; kindLabel: string; level: number; again?: string | null };
+// Phase 2 nutzt sie für Grammatik und Übungen wieder: `p` (Anzeige-Beherrschung) und `kindId`
+// (Übungsart) landen als `data-p`/`data-kind` am Element (DOM-Vertrag, phase2-plan §9.4).
+type Props = {
+  dots: number;
+  word: string;
+  label: string;
+  kind: string;
+  kindLabel: string;
+  level: number;
+  again?: string | null;
+  p?: number;
+  kindId?: string;
+  testId?: string;
+};
 
-export function CardStatus({ dots, word, label, kind, kindLabel, level, again = null }: Props) {
+export function CardStatus({ dots, word, label, kind, kindLabel, level, again = null, p, kindId, testId = 'status' }: Props) {
   return (
-    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-muted" data-testid="status" data-confidence={level}>
+    <p
+      className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-muted"
+      data-testid={testId}
+      data-confidence={level}
+      data-p={p === undefined ? undefined : p.toFixed(2)}
+      data-kind={kindId}
+    >
       <span className="inline-flex items-center gap-2" role="img" aria-label={label}>
         <span className="lx-dots" aria-hidden="true">
           {[0, 1, 2, 3, 4].map((i) => (
