@@ -2,10 +2,9 @@ import { create } from 'zustand';
 import { getDb } from '../../platform/capabilities';
 import { describeError, logError, logInfo } from '../../platform/diagnostics';
 import { markHandled, readLegacyLocal } from '../../platform/legacyLocal';
-import type { MigrationPlan as Plan } from '../../domain/migration/v1';
 import { loadSnapshot, type DataSnapshot } from '../../data/snapshot';
 import { getWriter } from '../../data';
-import { applyMigrationV1, planMigrationV1, type MigrationPlan } from '../../domain/migration/v1';
+import { applyMigrationV1, handledAfterMigration, planMigrationV1, type MigrationPlan } from '../../domain/migration/v1';
 
 // Ablauf der Umstellung: lesen → Trockenlauf zeigen → (Bestätigung) → ausführen.
 
@@ -20,18 +19,6 @@ type Phase =
   | { phase: 'done' };
 
 type MigrationState = Phase & { dryRun: () => Promise<void>; run: () => Promise<void> };
-
-/**
- * Nach erfolgreicher Umstellung als behandelt merken: nur, was der Plan vollständig erledigt hat
- * (ergänzt ohne Rest, oder unverändert). Alles andere bleibt offen und wird auf „Dein Stand"
- * mit Grund gezeigt, bis Emrah es zur Kenntnis nimmt (lateRescue.ts).
- */
-function handledByPlan(plan: Plan): Record<string, number> {
-  const out: Record<string, number> = {};
-  for (const r of plan.rescue) if (!r.rest) out[r.path] = r.markedAt;
-  for (const s of plan.rescueSkipped) if (s.reason === 'unchanged') out[s.path] = s.markedAt;
-  return out;
-}
 
 const holder = `tab-${Math.random().toString(36).slice(2)}-${Date.now().toString(36)}`;
 
@@ -65,7 +52,7 @@ export const useMigration = create<MigrationState>((set, get) => ({
       nowMs: () => Date.now(),
       onProgress: (done, total) => set({ phase: 'running', plan, snapshot, done, total }),
     });
-    if (res.status === 'done') markHandled(handledByPlan(plan));
+    if (res.status === 'done') markHandled(handledAfterMigration(plan, res.rescued));
     if (res.status === 'done' || res.status === 'already') {
       logInfo('migration:done', `Datenversion ${plan.version}`, `${res.written} Schreibschritte`);
       set({ phase: 'done' });

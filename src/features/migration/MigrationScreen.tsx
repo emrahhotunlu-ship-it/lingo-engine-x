@@ -49,6 +49,7 @@ const SKIP_LABEL: Record<ShownSkip, MessageKey> = {
   not_merged: 'skipNotMerged',
   read_only: 'skipReadOnly',
   invalid: 'skipInvalid',
+  db_invalid: 'skipDbInvalid',
   unknown_path: 'skipUnknown',
   missing_local: 'skipMissing',
 };

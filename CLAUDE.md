@@ -74,12 +74,13 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 10. **Anhang B zeigt `app/assess` flach, die alte App schreibt es mit Hülle** (`{d, t, lang, answers, writings, data: {…}}`). Das Schema liest beide Formen, geschrieben wird in der Hüllen-Form.
 11. **Voreinstellungen der alten App sind Daten, kein Code:** der Lehrplan (24 Lektionen in 6 Einheiten), 16 Grammatikthemen mit p0 und 40 Startvokabeln. Sie werden als Daten übernommen und wie bisher mit der Datenbank überlagert (Datenbank gewinnt). Sonst sinken Anzahlen und Kursstand.
 12. **Die alte App spiegelt jeden Pfad in `localStorage` (`sw2:<pfad>`, `sw2:__dirty` = `{pfad: ms}`).** Beim Umzug auf dieselbe Adresse kann dort Neueres liegen als in der Datenbank, aber auch Älteres. Übernommen wird **nur ergänzend** (`src/domain/migration/rescue.ts`):
-    - fehlende Dokumente und Felder anlegen,
-    - Listen vereinigen (nichts kappen),
-    - Zähler und Tageswerte mit dem Maximum,
-    - Einzelwerte nur bei nachweislich neueren Karten und Themen.
+    - fehlende Dokumente anlegen,
+    - Profil: `days`/`xpDays`/`minutes`/`act` je Tag mit dem Maximum (nur echte Tage bis heute, keine negativen Werte), Zähler nur nach oben,
+    - Kurs: nur fehlende Lektionen,
+    - alles andere, was abweicht (Listen, Karten, Themen, Einstellungen), wird **nicht** zusammengeführt, sondern mit Grund gemeldet,
+    - ein Datenbank-Dokument mit unerwartetem Aufbau wird nie angefasst (`db_invalid`).
 
-    Lesen, Rechnen und Schreiben laufen in einem Schritt (`writer.transform`), es wird nie Neueres überschrieben. Die Umstellung zeigt alles im Trockenlauf, auch was nicht übernommen wird. **Jeder weitere Browser** zeigt nach der Umstellung auf „Dein Stand“ den Hinweis „Aus diesem Browser nachtragen“ (`features/migration/lateRescue.ts`). Behandelte Einträge merkt sich `lx:legacy-rescue`. Die Sicherung enthält die Kopien des Browsers (`browserCopies`).
+    Lesen, Rechnen und Schreiben laufen in einem Schritt (`writer.transform`), es wird nie Neueres überschrieben. Als erledigt gilt eine Kopie nur, wenn dieser frische Abgleich sie vollständig übernommen hat; ein Lesefehler lässt sie offen. Die Umstellung zeigt alles im Trockenlauf, auch was nicht übernommen wird. **Jeder weitere Browser** zeigt nach der Umstellung auf „Dein Stand“ den Hinweis „Aus diesem Browser nachtragen“ (`features/migration/lateRescue.ts`). Behandelte Einträge merkt sich `lx:legacy-rescue`. Die Sicherung enthält die Kopien des Browsers (`browserCopies`).
 13. **Serie:** Die alte Regel (`days[k] > 0` oder `xpDays[k] > 0`) gilt, bis die App die Pflicht tatsächlich erfasst. Ab `app/schema.pflichtSince` gilt die neue Regel aus A7. Phase 1 setzt `pflichtSince` mit dem ersten gespeicherten Tagesplan und schreibt `app/profile.pflicht[datum]` sowie weiterhin `days`, `minutes` und `act`. Die Umstellung selbst ändert an der Serienregel nichts, deshalb reißt die Serie nie an einer Lücke zwischen den Phasen. Zwischen 0 und 4 Uhr zählt auch der Kalendertag der alten App. Der Datumsschlüssel wird immer aktuell berechnet, nie nur einmal beim Laden.
 14. **Alte Vokabelwerte sind FSRS-ähnlich** (`S` in Tagen, `D` von 1 bis 10, `due` in ms). Die FSRS-Startwerte werden daraus dokumentiert abgeleitet und **zusätzlich** gespeichert. `S`, `D`, `due` und `stage` bleiben stehen (Kap. 9, Regel 2 und 5).
 15. **Sperren statt raten:** Ist `app/profile` ungültig oder wurde eine Abfrage vielleicht gekappt, ist die Umstellung gesperrt. Dann gibt es nur die Sicherung und den Hinweis, in claude.ai Bescheid zu geben.

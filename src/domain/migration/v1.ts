@@ -11,7 +11,7 @@ import { computeStreak, legacyStreak } from '../streak';
 import { legacyToFsrs } from '../srs/legacyFsrs';
 import { LESSONS, SEED_VOCAB, TOPICS, slug } from '../content';
 import { classifyLegacyPath, type RescueItem, type RescueSkipReason } from './rescue';
-import { applyRescueItem } from './applyRescue';
+import { applyRescueItem, type RescueOutcome } from './applyRescue';
 
 export type { RescueSkipReason };
 
@@ -73,7 +73,7 @@ export function planMigrationV1(input: { snapshot: DataSnapshot; local: LegacyLo
   const rescueSkipped: MigrationPlan['rescueSkipped'] = [];
   const effective = new Map<string, Doc>(snapshot.valid);
   for (const [path, markedAt] of Object.entries(local.dirty).sort(([a], [b]) => (a < b ? -1 : 1))) {
-    const c = classifyLegacyPath(path, markedAt, Object.hasOwn(local.docs, path) ? local.docs[path] : undefined, snapshot.raw.get(path));
+    const c = classifyLegacyPath(path, markedAt, Object.hasOwn(local.docs, path) ? local.docs[path] : undefined, snapshot.raw.get(path), nowMs);
     if ('skip' in c) rescueSkipped.push({ path, markedAt, reason: c.skip });
     else {
       rescue.push(c.item);
@@ -149,8 +149,11 @@ export function planMigrationV1(input: { snapshot: DataSnapshot; local: LegacyLo
   };
 }
 
+/** Ergebnis des frischen Abgleichs je Kopie der alten App (applyRescue.ts). */
+export type RescueResult = { path: string; markedAt: number; outcome: RescueOutcome };
+
 export type ApplyResult =
-  | { status: 'done'; written: number }
+  | { status: 'done'; written: number; rescued: RescueResult[] }
   | { status: 'already'; written: 0 }
   | { status: 'busy'; written: 0; expiresAt?: string }
   | { status: 'failed'; written: number; code: string; message: string };
@@ -195,8 +198,13 @@ export async function applyMigrationV1(
     if (written % 50 === 0) await db.doc('app/schema').acquire({ holder, ttlMs: 120_000 });
   };
 
+  const rescued: RescueResult[] = [];
   try {
-    for (const r of plan.rescue) await step(() => applyRescueItem(r, writer));
+    for (const r of plan.rescue) {
+      await step(async () => {
+        rescued.push({ path: r.path, markedAt: r.markedAt, outcome: await applyRescueItem(r, writer, deps.nowMs()) });
+      });
+    }
     // FSRS aus dem frischen Stand jeder Karte berechnen (sie kann sich seit dem Trockenlauf geändert haben).
     for (const f of plan.fsrs) {
       await step(async () => {
@@ -222,10 +230,22 @@ export async function applyMigrationV1(
       },
     };
     await step(() => writer.set('app/schema', schemaDoc, null));
-    return { status: 'done', written };
+    return { status: 'done', written, rescued };
   } catch (err) {
     const d = describeError(err);
     return { status: 'failed', written, code: d.code ?? 'unknown', message: d.message };
   }
 }
 
+
+/**
+ * Nach erfolgreicher Umstellung als erledigt merken – nur, was der frische Abgleich beim
+ * Ausführen vollständig übernommen hat, oder was schon beim Trockenlauf unverändert enthalten war.
+ * Alles andere bleibt offen und wird auf „Dein Stand" mit Grund gezeigt (lateRescue.ts).
+ */
+export function handledAfterMigration(plan: MigrationPlan, rescued: readonly RescueResult[]): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const s of plan.rescueSkipped) if (s.reason === 'unchanged') out[s.path] = s.markedAt;
+  for (const r of rescued) if (r.outcome.handled) out[r.path] = r.markedAt;
+  return out;
+}

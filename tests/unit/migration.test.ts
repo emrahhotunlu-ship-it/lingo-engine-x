@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createMemoryDb } from '../../src/platform/dev/memoryDb';
 import { createWriter } from '../../src/data/writer';
 import { loadSnapshot, snapshotFromRecord } from '../../src/data/snapshot';
-import { applyMigrationV1, planMigrationV1, SCHEMA_VERSION } from '../../src/domain/migration/v1';
+import { applyMigrationV1, handledAfterMigration, planMigrationV1, SCHEMA_VERSION } from '../../src/domain/migration/v1';
 import { addDays } from '../../src/domain/date';
 import { legacyStreak } from '../../src/domain/streak';
 import { berlin, loadSeed, SEED_ANCHOR, type Doc } from './helpers';
@@ -153,6 +153,36 @@ describe('Umstellung auf Datenversion 1 (Kap. 9)', () => {
     const p = h.dump()['app/profile'] as Doc & { days: Record<string, number> };
     expect(p.lang).toBe('en');
     expect(p.days[day1]).toBe(30); // der höhere Wert gewinnt
+  });
+
+  it('merkt als erledigt nur, was beim Ausführen wirklich vollständig übernommen wurde', async () => {
+    const seed = loadSeed();
+    const now = berlin(SEED_ANCHOR, 21);
+    const h = createMemoryDb({ seed });
+    const local = {
+      dirty: { 'log/2026-09-08': 5, 'vocab/nur-lokal': 6, 'app/course': 7 },
+      docs: {
+        'log/2026-09-08': { entries: [{ id: 'a' }, { id: 'b' }] },
+        'vocab/nur-lokal': { word: 'only local', de: 'nur lokal', state: 'new', S: 0 },
+        'app/course': seed['app/course'] as Doc,
+      },
+    };
+    const plan = planMigrationV1({ snapshot: await loadSnapshot(h.db), local, nowMs: now });
+    expect(plan.rescue.map((r) => [r.path, r.action])).toEqual([
+      ['log/2026-09-08', 'create'],
+      ['vocab/nur-lokal', 'create'],
+    ]);
+    // Zwischen Trockenlauf und Ausführen legt ein anderes Gerät denselben Log-Tag an.
+    await h.db.doc('log/2026-09-08').set({ entries: [{ id: 'c' }] });
+    const res = await applyMigrationV1(plan, { db: h.db, writer: createWriter(h.db), holder: 't', nowMs: () => now });
+    if (res.status !== 'done') throw new Error(res.status);
+    expect(h.dump()['log/2026-09-08']).toEqual({ entries: [{ id: 'c' }] }); // nichts überschrieben
+    expect(res.rescued.map((r) => [r.path, r.outcome])).toEqual([
+      ['log/2026-09-08', { handled: false, reason: 'not_merged' }],
+      ['vocab/nur-lokal', { handled: true, result: 'created' }],
+    ]);
+    // Der Log-Tag bleibt offen und erscheint danach auf „Dein Stand".
+    expect(handledAfterMigration(plan, res.rescued)).toEqual({ 'app/course': 7, 'vocab/nur-lokal': 6 });
   });
 
   it('sperrt die Umstellung bei ungültigem Profil – die Serie wird aus den Rohdaten gezeigt', async () => {

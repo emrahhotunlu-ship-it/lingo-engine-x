@@ -46,7 +46,7 @@ export function snapshotFromRecord(all: Record<string, Doc>, possiblyTruncated: 
 const KNOWN_TERMINAL = new Set(['invalid_argument', 'resource_exhausted', 'quota_exceeded', 'revoked', 'not_granted', 'capability_disabled', 'capability_removed', 'transform_error']);
 
 /** Lesen: bei `unavailable` oder unbekanntem Code genau einmal nach kurzer Pause wiederholen (db.d.ts). */
-async function readOnce<T>(what: string, op: () => Promise<T>): Promise<T> {
+export async function readOnce<T>(what: string, op: () => Promise<T>): Promise<T> {
   try {
     return await op();
   } catch (err) {

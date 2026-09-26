@@ -43,6 +43,7 @@ export const en: Record<MessageKey, string> = {
   skipPartial: 'practice days and lessons added, other differences not carried over',
   skipReadOnly: 'belongs to the Claude daily task',
   skipInvalid: 'unexpected structure',
+  skipDbInvalid: 'database entry has an unexpected structure – nothing overwritten',
   skipUnknown: 'unknown area',
   skipMissing: 'the copy is missing',
   migInvalidTitle: 'Unreadable',

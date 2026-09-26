@@ -42,6 +42,7 @@ export const de = {
   skipPartial: 'Lerntage und Lektionen ergänzt, weitere Abweichungen nicht übernommen',
   skipReadOnly: 'gehört zum Claude-Tagesauftrag',
   skipInvalid: 'unerwarteter Aufbau',
+  skipDbInvalid: 'Eintrag in der Datenbank hat einen unerwarteten Aufbau – nichts überschrieben',
   skipUnknown: 'unbekannter Bereich',
   skipMissing: 'die Kopie fehlt',
   migInvalidTitle: 'Nicht lesbar',
