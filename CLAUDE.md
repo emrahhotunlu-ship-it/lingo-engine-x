@@ -207,7 +207,8 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   6. Phasen 6+7.
 - Effizient, keine Schleifen, kein endloses Nachbessern (A2 gilt streng).
 - Ziel: Ergebnis in etwa 12 Stunden.
-- Veröffentlichen auf `JLL8…` weiterhin nur mit Emrahs ausdrücklicher Freigabe.
+- Bis zum Go-Live keine Rückfragen. Nach einer Limit-Pause automatisch weitermachen (stündlicher Check-in per `send_later`).
+- Veröffentlichen auf `JLL8…` (Go-Live) weiterhin nur mit Emrahs ausdrücklicher Freigabe.
 
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
