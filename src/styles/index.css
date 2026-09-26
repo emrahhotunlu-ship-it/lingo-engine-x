@@ -1,0 +1,308 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Lingo-Engine X · Design-System (Kap. 8)
+   Alle Farben kommen aus Tokens je Modus ([data-theme] auf <html>). Bausteine
+   verwenden ausschließlich diese Tokens – keine festen Farben in Komponenten,
+   damit alle drei Modi vollwertig sind (Kap. 15: Dunkelmodus-Spezifität).
+   tests/unit/contrast.test.ts prüft die Kontraste (WCAG AA) aus dieser Datei.
+   ========================================================================== */
+
+/* Inter Variable (Gewicht + optische Größe), eingebettet per Build. */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-standard-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-ext-standard-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------------------------------------------------------------- Tokens */
+
+:root,
+:root[data-theme='dark'] {
+  --lx-bg: #0b0f19;
+  --lx-bg-glow-1: rgba(16, 185, 129, 0.1);
+  --lx-bg-glow-2: rgba(34, 211, 238, 0.07);
+  --lx-surface: rgba(255, 255, 255, 0.045);
+  --lx-surface-strong: rgba(255, 255, 255, 0.08);
+  --lx-surface-solid: #121827;
+  --lx-border: rgba(255, 255, 255, 0.09);
+  --lx-edge: rgba(255, 255, 255, 0.1);
+  --lx-fg: #e9edf5;
+  --lx-fg-muted: #a3acbd;
+  --lx-fg-subtle: #8a93a6;
+  --lx-accent: #10b981;
+  --lx-accent-fg: #03140d;
+  --lx-accent-text: #34d399;
+  --lx-accent-soft: rgba(16, 185, 129, 0.14);
+  --lx-cyan: #22d3ee;
+  --lx-cyan-text: #67e8f9;
+  --lx-gold-text: #fbbf24;
+  --lx-danger-text: #f87171;
+  --lx-focus: #67e8f9;
+  --lx-track: rgba(255, 255, 255, 0.08);
+  --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -20px rgba(0, 0, 0, 0.7);
+  --lx-scrim: rgba(3, 6, 12, 0.62);
+
+  --lx-ch-cards: #a78bfa;
+  --lx-ch-grammar: #60a5fa;
+  --lx-ch-read: #38bdf8;
+  --lx-ch-listen: #e879f9;
+  --lx-ch-write: #fb923c;
+  --lx-ch-speak: #fb7185;
+  --lx-ch-business: #fbbf24;
+  --lx-ch-discover: #a3e635;
+  color-scheme: dark;
+}
+
+:root[data-theme='dim'] {
+  --lx-bg: #1a2030;
+  --lx-bg-glow-1: rgba(16, 185, 129, 0.07);
+  --lx-bg-glow-2: rgba(34, 211, 238, 0.05);
+  --lx-surface: rgba(255, 255, 255, 0.05);
+  --lx-surface-strong: rgba(255, 255, 255, 0.09);
+  --lx-surface-solid: #222a3c;
+  --lx-border: rgba(255, 255, 255, 0.1);
+  --lx-edge: rgba(255, 255, 255, 0.09);
+  --lx-fg: #e4e8f0;
+  --lx-fg-muted: #aab3c4;
+  --lx-fg-subtle: #959eb2;
+  --lx-accent: #10b981;
+  --lx-accent-fg: #03140d;
+  --lx-accent-text: #4ade9f;
+  --lx-accent-soft: rgba(16, 185, 129, 0.16);
+  --lx-cyan: #22d3ee;
+  --lx-cyan-text: #7ee9f7;
+  --lx-gold-text: #fcd34d;
+  --lx-danger-text: #fca5a5;
+  --lx-focus: #7ee9f7;
+  --lx-track: rgba(255, 255, 255, 0.1);
+  --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -22px rgba(0, 0, 0, 0.55);
+  --lx-scrim: rgba(8, 11, 18, 0.55);
+
+  --lx-ch-cards: #b4a0fb;
+  --lx-ch-grammar: #7cb5fb;
+  --lx-ch-read: #5cc8f9;
+  --lx-ch-listen: #ec96fa;
+  --lx-ch-write: #fca66a;
+  --lx-ch-speak: #fc8a9b;
+  --lx-ch-business: #fcca4a;
+  --lx-ch-discover: #b3ec5e;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --lx-bg: #f5f6fa;
+  --lx-bg-glow-1: rgba(16, 185, 129, 0.08);
+  --lx-bg-glow-2: rgba(34, 211, 238, 0.07);
+  --lx-surface: rgba(255, 255, 255, 0.72);
+  --lx-surface-strong: rgba(255, 255, 255, 0.92);
+  --lx-surface-solid: #ffffff;
+  --lx-border: rgba(15, 23, 42, 0.09);
+  --lx-edge: rgba(255, 255, 255, 0.9);
+  --lx-fg: #0e1320;
+  --lx-fg-muted: #4b5467;
+  --lx-fg-subtle: #5b6477;
+  --lx-accent: #047857;
+  --lx-accent-fg: #ffffff;
+  --lx-accent-text: #047857;
+  --lx-accent-soft: rgba(4, 120, 87, 0.1);
+  --lx-cyan: #0891b2;
+  --lx-cyan-text: #0e7490;
+  --lx-gold-text: #b45309;
+  --lx-danger-text: #b91c1c;
+  --lx-focus: #0e7490;
+  --lx-track: rgba(15, 23, 42, 0.08);
+  --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 12px 32px -18px rgba(15, 23, 42, 0.25);
+  --lx-scrim: rgba(15, 23, 42, 0.32);
+
+  --lx-ch-cards: #7c3aed;
+  --lx-ch-grammar: #2563eb;
+  --lx-ch-read: #0284c7;
+  --lx-ch-listen: #c026d3;
+  --lx-ch-write: #ea580c;
+  --lx-ch-speak: #e11d48;
+  --lx-ch-business: #b45309;
+  --lx-ch-discover: #4d7c0f;
+  color-scheme: light;
+}
+
+/* Tailwind-Hilfsklassen auf die Tokens abbilden (bg-surface, text-muted, …). */
+@theme inline {
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --color-bg: var(--lx-bg);
+  --color-surface: var(--lx-surface);
+  --color-surface-strong: var(--lx-surface-strong);
+  --color-surface-solid: var(--lx-surface-solid);
+  --color-line: var(--lx-border);
+  --color-fg: var(--lx-fg);
+  --color-muted: var(--lx-fg-muted);
+  --color-subtle: var(--lx-fg-subtle);
+  --color-accent: var(--lx-accent);
+  --color-accent-fg: var(--lx-accent-fg);
+  --color-accent-text: var(--lx-accent-text);
+  --color-accent-soft: var(--lx-accent-soft);
+  --color-cyan: var(--lx-cyan);
+  --color-cyan-text: var(--lx-cyan-text);
+  --color-gold-text: var(--lx-gold-text);
+  --color-danger-text: var(--lx-danger-text);
+  --color-track: var(--lx-track);
+  --color-ch-cards: var(--lx-ch-cards);
+  --color-ch-grammar: var(--lx-ch-grammar);
+  --color-ch-read: var(--lx-ch-read);
+  --color-ch-listen: var(--lx-ch-listen);
+  --color-ch-write: var(--lx-ch-write);
+  --color-ch-speak: var(--lx-ch-speak);
+  --color-ch-business: var(--lx-ch-business);
+  --color-ch-discover: var(--lx-ch-discover);
+
+  /* Typografie-Skala (px): 12 · 13 · 15 · 17 · 20 · 24 · 32 · 44 · 64 */
+  --text-2xs: 0.75rem;
+  --text-2xs--line-height: 1.1rem;
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.2rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.4rem;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.6rem;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
+  --text-2xl: 2rem;
+  --text-2xl--line-height: 2.4rem;
+  --text-3xl: 2.75rem;
+  --text-3xl--line-height: 1.1;
+  --text-4xl: 4rem;
+  --text-4xl--line-height: 1;
+
+  --radius-card: 1.25rem;
+  --radius-control: 0.875rem;
+  --shadow-glass: var(--lx-shadow);
+}
+
+/* ---------------------------------------------------------------- Grundlagen */
+
+html {
+  /* 16 px am Handy und Laptop, bis 20 px auf 2560-px-Monitoren: alles skaliert mit (Kap. 8). */
+  font-size: clamp(100%, 0.45vw + 0.6rem, 125%);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--lx-bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background:
+    radial-gradient(1200px 520px at 12% -10%, var(--lx-bg-glow-1), transparent 60%),
+    radial-gradient(900px 460px at 100% 0%, var(--lx-bg-glow-2), transparent 55%),
+    var(--lx-bg);
+  background-attachment: fixed;
+  color: var(--lx-fg);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+}
+
+#root {
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 2px solid var(--lx-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--lx-accent-soft);
+}
+
+/* ---------------------------------------------------------------- Bausteine */
+
+@layer components {
+  .lx-glass {
+    background: var(--lx-surface);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid var(--lx-border);
+    box-shadow: var(--lx-shadow);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .lx-glass {
+      background: var(--lx-surface-solid);
+    }
+  }
+
+  .lx-tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  .lx-eyebrow {
+    font-size: var(--text-2xs);
+    line-height: var(--text-2xs--line-height);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lx-fg-muted);
+  }
+
+  .lx-skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--lx-track);
+    border-radius: 0.75rem;
+  }
+
+  .lx-skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, var(--lx-surface-strong), transparent);
+    animation: lx-shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes lx-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Kap. 4.6: reduzierte Bewegung → schlichte Überblendungen. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
