@@ -2,9 +2,11 @@
 // Einfache Sprache, keine Fachwörter (CLAUDE.md A2).
 
 import { aiDe } from './parts/ai.de';
+import { companionDe } from './parts/companion.de';
 
 export const de = {
   ...aiDe,
+  ...companionDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

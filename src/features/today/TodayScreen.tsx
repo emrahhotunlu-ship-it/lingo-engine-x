@@ -18,6 +18,7 @@ import { flush, usePending } from '../vocab/persist';
 import { startSession, type Round } from '../vocab/session';
 import { unlockSpeech } from '../../platform/speech';
 import { retryPlan, useTodayPlan } from './store';
+import { PreplyTodayLine } from '../preply/TodayLine';
 
 // „Heute": beim Öffnen ist sofort klar, was dran ist (Kap. 2.1). Eine Statuszeile, EIN großer
 // Knopf; Erledigtes ist Zustand, kein Knopf (Kap. 2.2). Freiwilliges steht klar getrennt als Extra.
@@ -169,6 +170,9 @@ export function TodayScreen() {
           {state.extra > 0 && tn('tdExtraCount', state.extra)}
         </motion.p>
       )}
+
+      {/* Phase 5: gehaltene Preply-Stunde als Extra (Zustand, zählt nicht zu „x von y"). */}
+      {dayLoaded && <PreplyTodayLine />}
 
       {saveFailed && (
         <motion.div variants={item} className="flex flex-wrap items-center gap-3 text-sm text-danger-text" role="alert">

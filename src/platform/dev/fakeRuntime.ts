@@ -21,6 +21,10 @@ export type FakeOptions = {
   failSubscriptionsTimes?: number;
   /** Jeder `sample`-Aufruf wartet so lange (z. B. für den Langsam-Hinweis). */
   sampleDelayMs?: number;
+  /** Phase 5: Abstand der Streaming-Stücke in ms (Standard 15; langsam z. B. 150 für Scroll-Tests). */
+  sampleTickMs?: number;
+  /** Phase 5: `sample` scheitert für diese Vorlagen mit dem Code (einmal je Eintrag, dann normal). */
+  sampleFailOnce?: Record<string, Claude.sample.SampleErrorCode>;
 };
 
 export type FakeControl = {
@@ -77,7 +81,7 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
   let sampleMode: FakeSampleMode = opts.sampleMode ?? 'ok';
   registerCannedReplies();
   const sampleCalls: SampleCall[] = [];
-  const sample = withCallLog(createFakeSample(() => sampleMode), sampleCalls, opts.sampleDelayMs ?? 0);
+  const sample = withCallLog(createFakeSample(() => sampleMode, opts.sampleTickMs ?? 15), sampleCalls, opts.sampleDelayMs ?? 0, { ...(opts.sampleFailOnce ?? {}) });
   const saved: FakeControl['saved'] = [];
 
   const downloads: Downloads = Object.freeze({

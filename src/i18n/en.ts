@@ -1,10 +1,12 @@
 import type { MessageKey } from './de';
 import { aiEn } from './parts/ai.en';
+import { companionEn } from './parts/companion.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
 export const en: Record<MessageKey, string> = {
   ...aiEn,
+  ...companionEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

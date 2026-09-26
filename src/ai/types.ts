@@ -37,6 +37,12 @@ export type AiRequest<V, O> = {
   /** Phase 1: immer 'user'. */
   priority?: AiPriority;
   onPhase?: (phase: AiPhase) => void;
+  /**
+   * Nur beim Knopf „Erneut versuchen" nach einer ungültigen Antwort (Phase 5, E5-21): Der
+   * Zwischenspeicher von `sample` wird einmal übergangen (`cache: {gcTime, refresh: true}`),
+   * sonst käme dieselbe schemawidrige Antwort bis zu 24 h zurück.
+   */
+  refresh?: boolean;
 };
 
 export type AiResult<O> = {

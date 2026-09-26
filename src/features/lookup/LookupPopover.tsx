@@ -21,6 +21,7 @@ import { Button, IconButton } from '../../ui/Button';
 import { toast } from '../../ui/Toast';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ensureLookupLoaded, saveLookupCard, storeLookup, useLookupData } from './store';
+import { openCompanion } from '../companion/store';
 
 // Nachschlage-Fenster (Kap. 6.11, Plan §5.6): am Desktop verankert unter dem Wort, am Handy
 // als Blatt von unten. Bedeutung aus eigener Karte, Zwischenspeicher oder eingebautem
@@ -68,7 +69,6 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   const cache = useLookupData((s) => s.doc);
   const savedIds = useLookupData((s) => s.saved);
   const auto = useAsk(wordLookup);
-  const asked = useAsk(wordLookup);
   const [saveState, setSaveState] = useState<'idle' | 'busy' | 'failed'>('idle');
 
   useEffect(() => {
@@ -77,7 +77,7 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
 
   const hint = posHint(req.tokens, req.index);
   const resolved = useMemo(() => resolveWord(req.surface, hint, { cards, cache, uiLang: lang }), [req.surface, hint, cards, cache, lang]);
-  const aiData: WordLookupOut | null = asked.data ?? auto.data;
+  const aiData: WordLookupOut | null = auto.data;
 
   // Nichts gefunden: gleich Claude fragen (einmal je Öffnen; das Antippen ist die Handlung).
   const autoRun = auto.run;
@@ -155,14 +155,16 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   const ipa = resolved.ipa ?? (aiData?.ipa || null);
   const de = resolved.de ?? aiData?.de ?? null;
   const def = resolved.def ?? aiData?.def ?? null;
-  const note = asked.data?.note || auto.data?.note || resolved.note;
-  const sense = asked.data?.sense ?? auto.data?.sense ?? null;
+  const note = auto.data?.note || resolved.note;
+  const sense = auto.data?.sense ?? null;
   const formDiffers = normalizeWord(req.surface) !== normalizeWord(headword);
   const card = resolved.card;
   const exists = !!card || !!savedIds[slug(headword)];
 
   // „Als Karte speichern": nur mit Bedeutung und Ursprungssatz (Kap. 15).
-  const exSentence = bracketExample(req.text, req.surface, headword) ? req.text : aiData?.ex && bracketExample(aiData.ex, req.surface, headword) ? aiData.ex : null;
+  // Ein Bruchstück (z. B. ein fettes Wort in einer Claude-Antwort) ist kein Ursprungssatz: mindestens drei Wörter.
+  const sentenceOk = req.text.trim().split(/\s+/).length >= 3;
+  const exSentence = sentenceOk && bracketExample(req.text, req.surface, headword) ? req.text : aiData?.ex && bracketExample(aiData.ex, req.surface, headword) ? aiData.ex : null;
   const canSave = !exists && !!de && !!exSentence;
 
   const save = async () => {
@@ -176,7 +178,7 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       level: aiData?.level ?? resolved.level ?? null,
       ex: exSentence,
       surface: req.surface,
-      src: 'lookup',
+      src: req.area === 'translate' ? 'translate' : 'lookup',
       origin: { v: 1, kind: req.area, t: Date.now(), ...(req.source ? { ref: req.source } : {}), ...(req.title ? { title: req.title } : {}) },
       today: dayKey(Date.now()),
     });
@@ -186,15 +188,17 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
     } else setSaveState('failed');
   };
 
+  // „Claude fragen" (Phase 5, E5-09): Nachschlagen schließen und den Begleiter mit Wort und Satz
+  // öffnen; die Frage geht sofort hinaus (der Klick ist die ausdrückliche Handlung).
   const ask = () => {
-    void asked.run({ word: req.surface, sentence: req.text, uiLang: lang }).then((out) => {
-      if (out) void storeLookup(req.surface, out, lang);
-    });
+    closeLookup();
+    const word = aiData?.lemma || resolved.headword || req.surface;
+    openCompanion({ attach: { kind: 'word', word, sentence: req.text, source: req.source }, send: t('askWordAuto', { word }) });
   };
 
   const phaseOf = (a: { phase: string }) => a.phase === 'queued' || a.phase === 'thinking' || a.phase === 'streaming' || a.phase === 'slow';
-  const busy = phaseOf(auto) ? auto : phaseOf(asked) ? asked : null;
-  const error = auto.error ?? asked.error;
+  const busy = phaseOf(auto) ? auto : null;
+  const error = auto.error;
 
   const content = (
     <div className="flex flex-col gap-3">
@@ -296,9 +300,9 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
             </Button>
           )
         )}
-        {ai && !sense && (
-          <Button variant="ghost" icon="sparkle" onClick={ask} disabled={!!busy} data-testid="lk-ask" data-ai="">
-            {error && asked.error ? t('aiRetry') : t('lkAsk')}
+        {ai && (
+          <Button variant="ghost" icon="sparkle" onClick={ask} data-testid="lk-ask" data-ai="">
+            {t('lkAsk')}
           </Button>
         )}
       </div>

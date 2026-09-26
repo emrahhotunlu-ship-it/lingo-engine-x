@@ -4,7 +4,8 @@ import type { Token } from '../domain/text/types';
 // Wort-Antippen (Plan §5.6): Anfrage eines angetippten Worts und der offene Zustand des
 // Nachschlage-Fensters. Die Zeit, in der das Fenster offen ist, zählt nicht zur Antwortzeit.
 
-export type WordTapArea = 'trainer' | 'intro' | 'summary' | 'lookup';
+// Phase 5: 'companion' (Antwort im Begleiter), 'translate' (Übersetzer), 'preply' (Plan, Import)
+export type WordTapArea = 'trainer' | 'intro' | 'summary' | 'lookup' | 'companion' | 'translate' | 'preply';
 
 export type WordTapRequest = {
   surface: string;

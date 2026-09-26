@@ -30,6 +30,8 @@ export type MemoryDbHandle = {
   load(all: Record<string, Json>): void;
   writes(): ReadonlyArray<{ op: 'set' | 'update' | 'delete'; path: string }>;
   setFailWrites(code: DbErrCode | undefined): void;
+  /** Phase 5: Die nächsten `times` Schreibvorgänge auf `path` scheitern mit `code`. */
+  failWritesTo(path: string, code: DbErrCode, times?: number): void;
   activeSubscriptions(): number;
 };
 
@@ -185,8 +187,15 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
     if (opts.onChange) opts.onChange(dump());
   }
 
-  function guardWrite(): void {
+  const failPaths = new Map<string, { code: DbErrCode; times: number }>();
+  function guardWrite(path?: string): void {
     if (failWrites) throw new DbFailure(failWrites, `simulated ${failWrites}`);
+    const f = path ? failPaths.get(path) : undefined;
+    if (f && path) {
+      if (f.times <= 1) failPaths.delete(path);
+      else failPaths.set(path, { code: f.code, times: f.times - 1 });
+      throw new DbFailure(f.code, `simulated ${f.code} for ${path}`);
+    }
   }
 
   function dump(): Record<string, Json> {
@@ -323,7 +332,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
       get: () => delay(() => snapshotOf(path)),
       set: (data) =>
         delay(() => {
-          guardWrite();
+          guardWrite(path);
           const body = checkBody(data);
           if (!docs.has(path) && docs.size >= MAX_DOCS) throw new DbFailure('quota_exceeded', 'artifact database holds 5,000 documents');
           store(path, body);
@@ -332,7 +341,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
         }),
       update: (data) =>
         delay(() => {
-          guardWrite();
+          guardWrite(path);
           const patch = checkBody(data);
           const cur = docs.get(path);
           if (!cur) throw new DbFailure('invalid_argument', 'update requires an existing document');
@@ -418,6 +427,9 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
     writes: () => writeLog,
     setFailWrites: (code) => {
       failWrites = code;
+    },
+    failWritesTo: (path, code, times = 1) => {
+      failPaths.set(path, { code, times });
     },
     activeSubscriptions: () => subscriptionCount,
   };

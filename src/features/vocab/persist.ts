@@ -51,7 +51,8 @@ export function nextT(): number {
 }
 
 let device: string | null | undefined;
-function deviceId(): string | null {
+/** Kennung dieses Geräts für `lxSeq` (auch Phase 5: „Stunde gehalten"). */
+export function deviceId(): string | null {
   if (device !== undefined) return device;
   const saved = local.get(DEVICE_KEY);
   if (saved && /^[a-z0-9]{4,16}$/.test(saved)) return (device = saved);

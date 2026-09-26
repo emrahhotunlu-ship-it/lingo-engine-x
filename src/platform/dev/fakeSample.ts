@@ -4,7 +4,8 @@ import type { SampleErrorCode, SampleFn, SampleOptions, SampleResult } from '../
 // Vorlagen melden ihre Beispielantwort mit registerCannedReply an (erkannt an der
 // Kopfzeile `[vorlage@version]`, mit der jede Prompt-Vorlage beginnt).
 
-type Reply = string | ((input: string) => string);
+/** `raw` = die ursprüngliche Eingabe (Prompt oder Schrittliste), z. B. für die letzte Nachricht eines Gesprächs. */
+type Reply = string | ((input: string, raw?: unknown) => string);
 const replies = new Map<string, Reply>();
 
 export function registerCannedReply(templateId: string, reply: Reply): void {
@@ -39,14 +40,15 @@ function flatten(input: unknown): string {
   throw fail('invalid_request', 'input must be a string or a list of turns');
 }
 
-function answerFor(text: string): string {
+function answerFor(text: string, raw?: unknown): string {
   const m = /^\[([a-z0-9-]+)@\d+\]/m.exec(text);
   const reply = m?.[1] ? replies.get(m[1]) : undefined;
-  if (reply !== undefined) return typeof reply === 'function' ? reply(text) : reply;
+  if (reply !== undefined) return typeof reply === 'function' ? reply(text, raw) : reply;
   return 'Feste Beispielantwort des Entwicklungs-Adapters.';
 }
 
-export function createFakeSample(getMode: () => FakeSampleMode): SampleFn {
+/** `tickMs`: Abstand der Streaming-Stücke (40 Zeichen); langsam für Scroll-Tests (Phase 5). */
+export function createFakeSample(getMode: () => FakeSampleMode, tickMs = 15): SampleFn {
   const run = (input: unknown, options: SampleOptions | undefined): Promise<SampleResult> =>
     new Promise<SampleResult>((resolve, reject) => {
       let text: string;
@@ -75,7 +77,7 @@ export function createFakeSample(getMode: () => FakeSampleMode): SampleFn {
         setTimeout(() => reject(fail(mode, `simulated ${mode}`)), 20);
         return;
       }
-      const answer = answerFor(text);
+      const answer = answerFor(text, input);
       const parts = answer.match(/[\s\S]{1,40}/g) ?? [answer];
       let sent = '';
       let i = 0;
@@ -86,7 +88,7 @@ export function createFakeSample(getMode: () => FakeSampleMode): SampleFn {
         const delta = parts[i++] ?? '';
         sent += delta;
         options?.onText?.({ text: sent, delta });
-        if (i < parts.length) setTimeout(tick, 15);
+        if (i < parts.length) setTimeout(tick, tickMs);
         else {
           signal?.removeEventListener('abort', onAbort);
           resolve({ text: sent, truncated: false, modelTierApplied: options?.modelTier ?? 'default' });

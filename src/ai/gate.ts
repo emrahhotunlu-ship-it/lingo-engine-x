@@ -5,7 +5,7 @@ import { linkAbort } from './abort';
 import { cancelledFailure, failure, failureFromSample } from './errors';
 import { aiQueue } from './queue';
 import { recordCall, resetAiStatus, throttleReason } from './status';
-import { AiFailure, type AiPhase, type AiRequest, type AiResult, type ModelTier, type PromptTemplate } from './types';
+import { AiFailure, type AiPhase, type AiRequest, type AiResult, type CacheOpt, type ModelTier, type PromptTemplate } from './types';
 
 // Das eine KI-Tor (Kap. 10, Architektur-Entwurf §3.2). Jede Anfrage an `sample` läuft hier durch:
 // Verfügbarkeit → Drosselung → Warteschlange (≤ 2) → Aufruf mit eigenem AbortController →
@@ -64,9 +64,23 @@ export function retryPrompt(prompt: string, issues: readonly IssueLike[], reply:
   );
 }
 
+/** Standardfenster von `sample`, wenn eine Vorlage nur `cache: true` sagt (sample.d.ts). */
+const DEFAULT_GC_MS = 300_000;
+
+/**
+ * Zwischenspeicher für einen Nutzer-Neuversuch (E5-21): einmal frisch fragen und den
+ * gespeicherten Eintrag überschreiben. `false` bleibt `false`.
+ */
+export function refreshCache(cache: CacheOpt): CacheOpt {
+  if (cache === false) return false;
+  const gcTime = cache === true ? DEFAULT_GC_MS : cache.gcTime;
+  return { gcTime, refresh: true };
+}
+
 async function callOnce(
   prompt: string,
   template: PromptTemplate<unknown, unknown>,
+  cache: CacheOpt,
   signal: AbortSignal,
   phase: Phase,
   scope: string,
@@ -94,7 +108,7 @@ async function callOnce(
   try {
     return await sample.json<unknown>(prompt, {
       modelTier: template.tier,
-      cache: template.cache,
+      cache,
       signal: ctl.signal,
       onText: () => {
         if (streaming) return;
@@ -131,14 +145,15 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
   const release = await aiQueue.acquire(signal, req.priority ?? 'user', () => phase('queued'));
   try {
     const t = template as PromptTemplate<unknown, unknown>;
-    const first = await callOnce(prompt, t, signal, phase, scope);
+    const cache = req.refresh ? refreshCache(template.cache) : template.cache;
+    const first = await callOnce(prompt, t, cache, signal, phase, scope);
     const r1 = schema.safeParse(first);
     if (r1.success) return { data: r1.data, tierApplied: template.tier, retried: false };
 
     logWarn(scope, { code: 'schema', message: describeIssues(r1.error.issues) }, 'first reply');
     const prompt2 = retryPrompt(prompt, r1.error.issues, first);
     budget(prompt2, SAMPLE_LIMIT_BYTES, scope);
-    const second = await callOnce(prompt2, t, signal, phase, scope);
+    const second = await callOnce(prompt2, t, cache, signal, phase, scope);
     const r2 = schema.safeParse(second);
     if (r2.success) return { data: r2.data, tierApplied: template.tier, retried: true };
 

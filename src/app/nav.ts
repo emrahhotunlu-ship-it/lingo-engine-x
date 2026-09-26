@@ -3,7 +3,12 @@ import { create } from 'zustand';
 // Navigation ohne Router und ohne History-API (im iframe teilt sich der Verlauf mit claude.ai).
 // Start ist immer „Heute" (Kap. 2.1).
 
-export type Route = { name: 'today' } | { name: 'overview' } | { name: 'trainer'; round: 'pflicht' | 'extra' };
+export type Route =
+  | { name: 'today' }
+  | { name: 'overview' }
+  | { name: 'trainer'; round: 'pflicht' | 'extra' }
+  // Phase 5: Preply-Brücke
+  | { name: 'preply' };
 
 type NavState = { route: Route; go: (route: Route) => void };
 

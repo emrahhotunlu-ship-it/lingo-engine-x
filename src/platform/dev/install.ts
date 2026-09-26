@@ -49,5 +49,7 @@ export function optionsFromUrl(search: string): InstallOptions {
     capabilities: { db: !flags.has('nodb'), sample: !flags.has('nosample'), downloads: !flags.has('nodownloads') },
     seed: flags.has('empty') ? 'empty' : 'sample',
     persist: flags.has('persist'),
+    // Phase 5: langsames Streaming für den Scroll-Test (`?fake=slowsample`).
+    ...(flags.has('slowsample') ? { sampleTickMs: 150 } : {}),
   };
 }
