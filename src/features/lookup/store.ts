@@ -42,6 +42,7 @@ export async function storeLookup(word: string, out: WordLookupOut, uiLang: 'de'
       const op = cachePatch(cur, key, entry);
       if (!op) return null;
       if ('set' in op) next = op.set;
+      else if ('replace' in op) next = op.replace;
       else {
         const items = { ...((cur?.items as Doc | undefined) ?? {}) };
         for (const [k, v] of Object.entries(op.update.items as Doc)) items[k] = v && typeof v === 'object' && items[k] && typeof items[k] === 'object' ? { ...(items[k] as Doc), ...(v as Doc) } : v;
@@ -55,7 +56,8 @@ export async function storeLookup(word: string, out: WordLookupOut, uiLang: 'de'
   }
 }
 
-export type SaveResult = 'saved' | 'exists' | 'invalid' | 'failed';
+/** saved = neu angelegt · added = Satz an bestehender Karte ergänzt · exists = nichts geändert. */
+export type SaveResult = 'saved' | 'added' | 'exists' | 'invalid' | 'failed';
 
 /** „Als Karte speichern": anlegen, falls es die Karte nicht gibt; sonst höchstens Satz ergänzen. */
 export async function saveLookupCard(input: NewVocabInput): Promise<SaveResult> {
@@ -66,7 +68,7 @@ export async function saveLookupCard(input: NewVocabInput): Promise<SaveResult> 
   try {
     const r = await writer.transform(`vocab/${made.id}`, (cur) => saveCardOp(cur, made));
     useLookupData.setState((s) => ({ saved: { ...s.saved, [made.id]: true } }));
-    return r === 'created' ? 'saved' : 'exists';
+    return r === 'created' ? 'saved' : r === 'updated' ? 'added' : 'exists';
   } catch (err) {
     logError('lookup:save', err, made.id);
     return 'failed';

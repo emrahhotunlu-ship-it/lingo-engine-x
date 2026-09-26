@@ -12,7 +12,7 @@ import { posKey } from '../../domain/srs/explain';
 import { stageOf } from '../../domain/srs/ladder';
 import { bracketExample } from '../../domain/srs/newCard';
 import { normalizeWord } from '../../domain/text/tokenize';
-import { closeLookup, useLookup, type WordTapRequest } from '../../engine/wordTap';
+import { closeLookup, focusTargetOf, useLookup, type WordTapRequest } from '../../engine/wordTap';
 import { useSettings } from '../../app/settings';
 import { useT, type MessageKey } from '../../i18n';
 import { speak, unlockSpeech, useSpeech } from '../../platform/speech';
@@ -70,6 +70,7 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   const auto = useAsk(wordLookup);
   const asked = useAsk(wordLookup);
   const [saveState, setSaveState] = useState<'idle' | 'busy' | 'failed'>('idle');
+  const [saveNote, setSaveNote] = useState<'added' | 'exists' | null>(null);
 
   useEffect(() => {
     ensureLookupLoaded();
@@ -89,21 +90,29 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
     });
   }, [needAi, autoRun, req.surface, req.text]);
 
-  // Esc schließt und gibt den Fokus an das Wort zurück; Klick außerhalb schließt.
+  // Esc, Schließen-Knopf und Klick außerhalb schließen; der Fokus geht dabei synchron zurück
+  // (vorheriger Fokus, sonst das Wort – closeLookup).
   useEffect(() => {
-    const anchor = req.anchor;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       e.preventDefault();
       e.stopPropagation();
       closeLookup();
-      anchor?.focus({ preventScroll: true });
     };
     const onDown = (e: PointerEvent) => {
       const target = e.target as Node | null;
       if (!target || panel.current?.contains(target)) return;
       if (target instanceof Element && target.closest('button.lx-word')) return;
-      closeLookup();
+      const back = focusTargetOf(req);
+      closeLookup({ restoreFocus: false });
+      // Tippen auf eine leere Stelle nimmt dem Element beim Loslassen den Fokus. Deshalb erst
+      // danach zurückgeben – noch im selben Tippen (click), damit iOS die Tastatur wieder öffnet.
+      const onClick = () => {
+        const a = document.activeElement;
+        if (!a || a === document.body) back?.focus({ preventScroll: true });
+      };
+      document.addEventListener('click', onClick, { capture: true, once: true });
+      window.setTimeout(() => document.removeEventListener('click', onClick, true), 1000);
     };
     window.addEventListener('keydown', onKey, true);
     document.addEventListener('pointerdown', onDown, true);
@@ -113,7 +122,7 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       window.removeEventListener('keydown', onKey, true);
       document.removeEventListener('pointerdown', onDown, true);
     };
-  }, [req.anchor]);
+  }, [req]);
 
   // Position am Desktop: unter dem Wort, sonst darüber; waagerecht im Bild gehalten.
   useLayoutEffect(() => {
@@ -180,14 +189,22 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       origin: { v: 1, kind: req.area, t: Date.now(), ...(req.source ? { ref: req.source } : {}), ...(req.title ? { title: req.title } : {}) },
       today: dayKey(Date.now()),
     });
-    if (r === 'saved' || r === 'exists') {
+    // Nur eine neu angelegte Karte heißt „gespeichert"; sonst ehrlich sagen, was passiert ist.
+    if (r === 'saved') {
       setSaveState('idle');
       toast(t('lkSavedToast'));
+    } else if (r === 'added' || r === 'exists') {
+      setSaveState('idle');
+      setSaveNote(r);
+      toast(t(r === 'added' ? 'lkAddedToast' : 'lkExistsToast'));
     } else setSaveState('failed');
   };
 
   const ask = () => {
-    void asked.run({ word: req.surface, sentence: req.text, uiLang: lang }).then((out) => {
+    // „Erneut versuchen" fragt Claude wirklich neu (sonst spielte `sample` 24 h dieselbe
+    // ungültige Antwort ab, contract/sample.d.ts `refresh`).
+    const retry = !!(auto.error ?? asked.error);
+    void asked.run({ word: req.surface, sentence: req.text, uiLang: lang }, { refresh: retry }).then((out) => {
       if (out) void storeLookup(req.surface, out, lang);
     });
   };
@@ -250,6 +267,11 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
           )}
         </div>
       )}
+      {resolved.source === 'dict' && !sense && (de || def) && (
+        <p className="text-xs text-subtle" data-testid="lk-dict-note">
+          {t('lkDictNote')}
+        </p>
+      )}
       {!de && !def && !busy && !needAi && (
         <p className="text-sm text-muted" data-testid="lk-notfound">
           {t('lkNotFound')}
@@ -285,8 +307,8 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       )}
       <div className="flex flex-wrap gap-2">
         {exists ? (
-          <p className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-accent-text" data-testid="lk-saved">
-            {t('lkSaved')}
+          <p className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-accent-text" data-testid="lk-saved" data-note={saveNote ?? undefined}>
+            {saveNote === 'exists' ? t('lkExists') : t('lkSaved')}
             {card && !card.hidden && card.stage > 0 ? ` · ${t('lkStage', { n: card.stage })}` : ''}
           </p>
         ) : (
@@ -330,18 +352,14 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
           aria-label={label}
           tabIndex={-1}
           data-testid="lookup"
-          className="lx-popover inset-x-0 bottom-0 max-h-[60svh] overflow-y-auto overscroll-contain rounded-t-[1.5rem] px-5 pt-4 pb-[max(env(safe-area-inset-bottom),1.25rem)]"
+          className="lx-popover lx-sheet inset-x-0 bottom-0 max-h-[60svh] overflow-y-auto overscroll-contain rounded-t-[1.5rem] px-5 pt-4 pb-[max(env(safe-area-inset-bottom),1.25rem)]"
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 40, opacity: 0 }}
           transition={{ duration: DURATION.base, ease: EASE_OUT }}
-          drag="y"
-          dragConstraints={{ top: 0, bottom: 0 }}
-          dragElastic={{ top: 0, bottom: 0.6 }}
-          onDragEnd={(_, info) => {
-            if (info.offset.y > 80 || info.velocity.y > 500) closeLookup();
-          }}
         >
+          {/* Kein Ziehen am Blatt: `drag` setzte `touch-action: pan-x` und sperrte das Scrollen
+              am Handy. Geschlossen wird per Knopf, Esc oder Tippen außerhalb. */}
           {content}
         </motion.div>
       </div>

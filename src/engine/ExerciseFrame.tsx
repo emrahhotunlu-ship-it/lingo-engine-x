@@ -24,7 +24,8 @@ export function ExerciseFrame({ status, task, infoLabel, purpose, body, actions,
   const infoId = useId();
   return (
     <article
-      className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7"
+      className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 outline-none sm:p-7"
+      tabIndex={-1}
       data-testid="exercise"
       data-ex={meta?.ex}
       data-card={meta?.card}

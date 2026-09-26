@@ -41,6 +41,14 @@ const VERB_BEFORE = new Set(['to', 'can', 'could', 'will', 'would', 'shall', 'sh
 export function posHint(tokens: readonly Token[], index: number): string | null {
   const w = tokens[index];
   if (w && /ly$/i.test(w.text)) return 'adv';
+  const before = hintFromBefore(tokens, index);
+  if (before) return before;
+  // „avoid driving", „we finished": Endung -ing/-ed ohne Artikel davor → zuerst das Verb (H5).
+  if (w && /[a-z]{2,}(ing|ed)$/i.test(w.text)) return 'verb';
+  return null;
+}
+
+function hintFromBefore(tokens: readonly Token[], index: number): string | null {
   for (let i = index - 1; i >= 0; i--) {
     const t = tokens[i];
     if (!t || t.kind === 'space') continue;

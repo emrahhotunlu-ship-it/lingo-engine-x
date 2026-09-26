@@ -37,6 +37,11 @@ export type AiRequest<V, O> = {
   /** Phase 1: immer 'user'. */
   priority?: AiPriority;
   onPhase?: (phase: AiPhase) => void;
+  /**
+   * Nur auf den Knopf „Erneut versuchen": den gespeicherten `sample`-Zwischenstand einmal
+   * überspringen und überschreiben (`cache: {gcTime, refresh: true}`, contract/sample.d.ts).
+   */
+  refresh?: boolean;
 };
 
 export type AiResult<O> = {

@@ -7,7 +7,25 @@ import { boot, openOverview, screen } from './fixtures';
 
 test('der Produktions-Build enthält keinen Entwicklungs-Adapter und keine Testdaten', () => {
   const html = readFileSync(new URL('../../dist/index.html', import.meta.url), 'utf8');
-  for (const marker of ['__LINGO_FAKE__', 'lx:fake-db', 'installFakeRuntime', 'createMemoryDb', 'Feste Beispielantwort', 'Alex Muster']) {
+  const markers = [
+    '__LINGO_FAKE__',
+    'lx:fake-db',
+    'installFakeRuntime',
+    'createMemoryDb',
+    'createFakeClaude',
+    'withCallLog',
+    'registerCannedReply',
+    'Feste Beispielantwort',
+    'Alex Muster',
+    // Kennungen des Adapters für KI und Sprachausgabe (platform-guard H-G).
+    'zzjson',
+    'zzqx',
+    'FakeUtterance',
+    'FAKE_VOICES',
+    'com.apple.voice.compact',
+    'Our onboarding takes two weeks',
+  ];
+  for (const marker of markers) {
     expect(html.includes(marker), marker).toBe(false);
   }
 });

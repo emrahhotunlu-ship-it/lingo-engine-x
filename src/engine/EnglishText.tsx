@@ -23,12 +23,17 @@ export type EnglishTextProps = {
   testId?: string;
 };
 
-type Piece = { kind: 'tokens'; from: number; to: number; plain?: boolean; mark?: boolean } | { kind: 'slot'; node: ReactNode };
+type Piece = ({ kind: 'tokens'; from: number; to: number; plain?: boolean; mark?: boolean } | { kind: 'slot'; node: ReactNode }) & { tail?: string };
+
+/** Satzzeichen direkt hinter einer Stelle („.", „)," …) – sie bleiben mit dem Wort in einer Zeile (H6). */
+const TAIL = /^[^\s\p{L}\p{N}]+/u;
 
 export function EnglishText({ text, area, source = null, title = null, exclude = null, highlight = null, slot = null, as = 'p', className, testId }: EnglishTextProps) {
   const tokens = useMemo(() => tokenize(text), [text]);
   const active = useLookup((s) => s.req);
   const root = useRef<HTMLElement>(null);
+  // Fokus VOR dem Antippen (pointerdown kommt vor dem Fokuswechsel auf den Knopf).
+  const focusBefore = useRef<HTMLElement | null>(null);
 
   const pieces: Piece[] = [];
   const cuts: Array<{ start: number; end: number; piece: Piece }> = [];
@@ -40,8 +45,9 @@ export function EnglishText({ text, area, source = null, title = null, exclude =
   for (const c of cuts) {
     if (c.start < pos) continue;
     if (c.start > pos) pieces.push({ kind: 'tokens', from: pos, to: c.start });
-    pieces.push(c.piece);
-    pos = c.end;
+    const tail = TAIL.exec(text.slice(c.end))?.[0] ?? '';
+    pieces.push(tail ? { ...c.piece, tail } : c.piece);
+    pos = c.end + tail.length;
   }
   if (pos < text.length) pieces.push({ kind: 'tokens', from: pos, to: text.length });
 
@@ -49,7 +55,7 @@ export function EnglishText({ text, area, source = null, title = null, exclude =
   const renderTokens = (from: number, to: number, plain: boolean): ReactNode[] => {
     const seg = text.slice(from, to);
     // Eigene Zerlegung je Teilstück: Lücke oder Ausschluss mitten im Wort bleibt korrekt.
-    return tokenize(seg).map((t: Token, i) => {
+    const nodes = tokenize(seg).map((t: Token, i) => {
       const start = from + t.start;
       const end = from + t.end;
       if (plain || t.kind !== 'word') return <span key={`${start}-${i}`}>{t.text}</span>;
@@ -66,14 +72,48 @@ export function EnglishText({ text, area, source = null, title = null, exclude =
           data-lookup={t.text.toLowerCase()}
           data-active={isActive || undefined}
           tabIndex={tab}
+          onPointerDown={() => {
+            const a = document.activeElement;
+            focusBefore.current = a instanceof HTMLElement && a !== document.body ? a : null;
+          }}
           onClick={(e) => {
-            openLookup({ surface: t.text, text, start, end, tokens, index: index < 0 ? 0 : index, area, source, title, anchor: e.currentTarget });
+            const before = focusBefore.current;
+            focusBefore.current = null;
+            const returnFocus = before && before !== e.currentTarget && !before.classList.contains('lx-word') ? before : null;
+            openLookup({ surface: t.text, text, start, end, tokens, index: index < 0 ? 0 : index, area, source, title, anchor: e.currentTarget, returnFocus });
           }}
         >
           {t.text}
         </button>
       );
     });
+    // Wort und angrenzende Satzzeichen ohne Leerraum dazwischen bilden eine untrennbare Gruppe:
+    // sonst bricht die Zeile vor dem Punkt (der Knopf erlaubt einen Umbruch hinter sich).
+    const toks = tokenize(seg);
+    const out: ReactNode[] = [];
+    let group: ReactNode[] = [];
+    let gk = '';
+    const close = () => {
+      if (group.length > 1)
+        out.push(
+          <span key={`g${gk}`} className="whitespace-nowrap">
+            {group}
+          </span>,
+        );
+      else out.push(...group);
+      group = [];
+    };
+    toks.forEach((t, i) => {
+      if (t.kind === 'space') {
+        close();
+        out.push(nodes[i]);
+        return;
+      }
+      if (!group.length) gk = `${from + t.start}`;
+      group.push(nodes[i]);
+    });
+    close();
+    return out;
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
@@ -92,17 +132,33 @@ export function EnglishText({ text, area, source = null, title = null, exclude =
     all[next]?.focus();
   };
 
-  const children = pieces.map((p, k) =>
-    p.kind === 'slot' ? (
-      <span key={`slot-${k}`}>{p.node}</span>
-    ) : p.mark ? (
-      <mark key={`m-${k}`} className="lx-mark text-fg">
-        {renderTokens(p.from, p.to, !!p.plain)}
-      </mark>
-    ) : (
-      <span key={`t-${k}`}>{renderTokens(p.from, p.to, !!p.plain)}</span>
-    ),
-  );
+  const children = pieces.map((p, k) => {
+    const node =
+      p.kind === 'slot' ? (
+        <span key={`slot-${k}`}>{p.node}</span>
+      ) : p.mark ? (
+        <mark key={`m-${k}`} className="lx-mark text-fg">
+          {renderTokens(p.from, p.to, !!p.plain)}
+        </mark>
+      ) : (
+        <span key={`t-${k}`}>{renderTokens(p.from, p.to, !!p.plain)}</span>
+      );
+    if (!p.tail) return node;
+    // Mehrwortige Stellen dürfen weiter umbrechen; nur Einzelwort bzw. Lücke plus Satzzeichen bleiben zusammen.
+    if (p.kind === 'tokens' && /\s/.test(text.slice(p.from, p.to)))
+      return (
+        <span key={`w-${k}`}>
+          {node}
+          {p.tail}
+        </span>
+      );
+    return (
+      <span key={`w-${k}`} className="whitespace-nowrap">
+        {node}
+        {p.tail}
+      </span>
+    );
+  });
   const Tag = as;
   return (
     <Tag ref={root as never} lang="en" className={className} data-testid={testId} onKeyDown={onKeyDown}>

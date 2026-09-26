@@ -22,7 +22,7 @@ export function useAsk<V, O>(template: PromptTemplate<V, O>) {
   }, []);
 
   const run = useCallback(
-    async (vars: V): Promise<O | null> => {
+    async (vars: V, opts: { refresh?: boolean } = {}): Promise<O | null> => {
       ctl.current?.abort();
       const c = scope.controller();
       ctl.current = c;
@@ -32,6 +32,7 @@ export function useAsk<V, O>(template: PromptTemplate<V, O>) {
           template,
           vars,
           signal: c.signal,
+          refresh: opts.refresh === true,
           onPhase: (p) => {
             if (alive.current && ctl.current === c) setState((s) => ({ ...s, phase: p }));
           },

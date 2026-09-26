@@ -38,3 +38,20 @@ export function checkTyped(givenRaw: string, accepted: readonly string[], deps: 
   if (best && best.d > 0 && best.d <= typoBudget(best.t.length)) return { verdict: 'near', kind: 'typo', marks: markDiff(g, best.t) };
   return { verdict: 'wrong', marks: best ? markDiff(g, best.t) : [] };
 }
+
+const RANK: Record<CheckResult['verdict'], number> = { correct: 2, near: 1, wrong: 0 };
+
+/**
+ * Prüfung mit vorgegebenem Anfangsbuchstaben (Lücke mit Hilfe, „Tipp" Stufe 2): Wer dem
+ * gezeigten Buchstaben vertraut und nur den Rest tippt („void" bei „a____"), hat genauso recht
+ * wie mit dem ganzen Wort. Gewertet wird die bessere der beiden Lesarten; `effective` ist die
+ * gewertete Eingabe (auf sie beziehen sich die Markierungen).
+ */
+export function checkWithHint(givenRaw: string, accepted: readonly string[], deps: CheckDeps, hint: string | null): { result: CheckResult; effective: string } {
+  const plain = checkTyped(givenRaw, accepted, deps);
+  const given = givenRaw.trim();
+  if (!hint || !given || plain.verdict === 'correct') return { result: plain, effective: given };
+  const withHint = hint + given;
+  const alt = checkTyped(withHint, accepted, deps);
+  return RANK[alt.verdict] > RANK[plain.verdict] ? { result: alt, effective: withHint } : { result: plain, effective: given };
+}

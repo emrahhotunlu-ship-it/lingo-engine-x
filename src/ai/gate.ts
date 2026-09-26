@@ -64,12 +64,20 @@ export function retryPrompt(prompt: string, issues: readonly IssueLike[], reply:
   );
 }
 
+/** `cache` des Aufrufs: bei „Erneut versuchen" mit `refresh`, sonst wie in der Vorlage. */
+export function cacheFor(cache: PromptTemplate<unknown, unknown>['cache'], refresh: boolean): PromptTemplate<unknown, unknown>['cache'] {
+  if (!refresh || cache === false) return cache;
+  const gcTime = typeof cache === 'object' ? cache.gcTime : 300_000;
+  return { gcTime, refresh: true };
+}
+
 async function callOnce(
   prompt: string,
   template: PromptTemplate<unknown, unknown>,
   signal: AbortSignal,
   phase: Phase,
   scope: string,
+  refresh = false,
 ): Promise<unknown> {
   if (signal.aborted) throw cancelledFailure();
   const sample = getSample();
@@ -94,7 +102,7 @@ async function callOnce(
   try {
     return await sample.json<unknown>(prompt, {
       modelTier: template.tier,
-      cache: template.cache,
+      cache: cacheFor(template.cache, refresh),
       signal: ctl.signal,
       onText: () => {
         if (streaming) return;
@@ -131,7 +139,7 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
   const release = await aiQueue.acquire(signal, req.priority ?? 'user', () => phase('queued'));
   try {
     const t = template as PromptTemplate<unknown, unknown>;
-    const first = await callOnce(prompt, t, signal, phase, scope);
+    const first = await callOnce(prompt, t, signal, phase, scope, req.refresh === true);
     const r1 = schema.safeParse(first);
     if (r1.success) return { data: r1.data, tierApplied: template.tier, retried: false };
 

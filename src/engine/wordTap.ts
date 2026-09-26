@@ -20,6 +20,11 @@ export type WordTapRequest = {
   /** Titel der Quelle (Wort der Karte). */
   title?: string | null;
   anchor: HTMLElement | null;
+  /**
+   * Was vor dem Antippen den Fokus hatte (z. B. die Lücke). Nach dem Schließen geht der Fokus
+   * dorthin zurück, sonst auf das Wort – so kommt am iPhone auch die Tastatur wieder.
+   */
+  returnFocus?: HTMLElement | null;
 };
 
 type LookupState = { req: WordTapRequest | null; openedAt: number; openMsTotal: number };
@@ -33,10 +38,28 @@ export function openLookup(req: WordTapRequest): void {
   useLookup.setState({ req, openedAt: now, openMsTotal: s.openMsTotal + add });
 }
 
-export function closeLookup(): void {
+/** Wohin der Fokus nach dem Schließen geht: vorheriger Fokus, sonst das Wort. */
+export function focusTargetOf(req: Pick<WordTapRequest, 'anchor' | 'returnFocus'>): HTMLElement | null {
+  const back = req.returnFocus;
+  if (back && back.isConnected && back !== document.body) return back;
+  return req.anchor && req.anchor.isConnected ? req.anchor : null;
+}
+
+/**
+ * Schließt das Fenster. Der Fokus geht SYNCHRON zurück (im selben Tippen/Klick), denn nur
+ * dann öffnet iOS die Tastatur wieder (A7.4). Liegt der Fokus schon woanders außerhalb des
+ * Fensters, bleibt er dort.
+ */
+export function closeLookup(opts: { restoreFocus?: boolean } = {}): void {
   const s = useLookup.getState();
-  if (!s.req) return;
+  const req = s.req;
+  if (!req) return;
   useLookup.setState({ req: null, openedAt: 0, openMsTotal: s.openMsTotal + (performance.now() - s.openedAt) });
+  if (opts.restoreFocus === false) return;
+  const active = document.activeElement;
+  const inDialog = active instanceof Element && !!active.closest('[data-testid="lookup"]');
+  if (active && active !== document.body && !inDialog) return;
+  focusTargetOf(req)?.focus({ preventScroll: true });
 }
 
 /** Gesamtzeit mit offenem Nachschlage-Fenster (ms, steigt nur) – für die Antwortzeit. */

@@ -95,6 +95,7 @@ export function newVocabDoc(i: NewVocabInput): { id: string; doc: Record<string,
  */
 export function saveCardOp(cur: Readonly<Record<string, unknown>> | undefined, made: { doc: Record<string, unknown> }): { set: Record<string, unknown> } | { update: Record<string, unknown> } | null {
   if (!cur) return { set: made.doc };
+  if (cur.hidden === true) return null;
   const ex = typeof cur.ex === 'string' ? cur.ex.trim() : '';
   if (!ex && cur.origin === undefined) return { update: { ex: made.doc.ex, origin: made.doc.origin } };
   if (!ex) return { update: { ex: made.doc.ex } };

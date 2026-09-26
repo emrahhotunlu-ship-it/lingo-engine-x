@@ -6,7 +6,7 @@ import globals from 'globals';
 
 export default defineConfig(
   {
-    ignores: ['dist/**', 'tests/.runtime/**', 'node_modules/**', 'contract/**', 'test-results/**', 'playwright-report/**'],
+    ignores: ['dist/**', 'tests/.runtime/**', 'node_modules/**', 'contract/**', 'test-results/**', 'playwright-report/**', '.claude/worktrees/**'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,

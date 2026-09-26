@@ -69,8 +69,17 @@ export function meaningOf(card: Pick<TrainCard, 'de' | 'def'>, lang: Lang): stri
   return lang === 'de' ? card.de : card.def;
 }
 
-/** Erste Bedeutung, kurz (Optionen verraten die Lösung nicht über ihre Länge). */
-export function shortMeaning(m: string): string {
-  const first = (m.split(/[;,]/)[0] ?? m).trim();
-  return first.length > 42 ? `${first.slice(0, 41).trimEnd()}…` : first;
+/**
+ * Erste Bedeutung als Antwortoption. Deutsch: die erste von mehreren Übersetzungen (Komma
+ * oder Semikolon). Englisch: die ganze erste Definition bis zum Semikolon – Kommas gehören dort
+ * zum Satz, und nichts wird mitten im Wort abgeschnitten (B6). Sehr lange Texte werden nur an
+ * einer Wortgrenze gekürzt.
+ */
+export function shortMeaning(m: string, lang: Lang = 'de'): string {
+  const first = (m.split(lang === 'en' ? /;/ : /[;,]/)[0] ?? m).trim();
+  const max = lang === 'en' ? 120 : 60;
+  if (first.length <= max) return first;
+  const cut = first.slice(0, max);
+  const space = cut.lastIndexOf(' ');
+  return `${(space > max / 2 ? cut.slice(0, space) : cut).trimEnd()}…`;
 }

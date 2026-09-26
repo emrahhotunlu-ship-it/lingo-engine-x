@@ -13,18 +13,20 @@ import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, type GapState } from '../../engine/KineticGap';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
-import { checkTyped } from '../../domain/answer/check';
-import { answerDiff } from '../../domain/answer/diff';
+import { checkWithHint } from '../../domain/answer/check';
+import { answerDiff, charDiff } from '../../domain/answer/diff';
 import { formKind } from '../../domain/answer/form';
 import { maskOf } from '../../domain/answer/mask';
 import { normalize } from '../../domain/answer/normalize';
-import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../domain/srs/confidence';
+import { CONFIDENCE_KEYS, confidenceDots, confidenceOf, type Confidence } from '../../domain/srs/confidence';
 import { cardExamples, EXAMPLES_MIN, storedExamples } from '../../domain/srs/examples';
 import { posKey } from '../../domain/srs/explain';
 import { autoGrade } from '../../domain/srs/grade';
 import { exerciseDef } from '../../domain/srs/modes';
 import { reviewFsrs } from '../../domain/srs/scheduler';
-import type { CheckResult, ContextSpan, Exercise, Grade, Option } from '../../domain/srs/types';
+import { locate } from '../../domain/srs/context';
+import { choiceVerdict } from '../../domain/srs/exercise';
+import type { CheckResult, ContextSpan, Exercise, Grade, Option, TrainCard } from '../../domain/srs/types';
 import { requestExamples, useExamples } from './examples';
 import { commitAnswer, type FirstKind } from './session';
 
@@ -34,18 +36,32 @@ import { commitAnswer, type FirstKind } from './session';
 
 type Feedback = {
   result: CheckResult;
+  /** Gewertete Eingabe (mit vorgegebenem Anfangsbuchstaben, falls nicht mitgetippt). */
   given: string;
   chosen: Option | null;
   grade: Grade;
   /** Abstand bis zur nächsten Fälligkeit (ms) bei dieser Note. */
   dueInMs: number;
+  /** Sicherheit nach dieser Antwort (Status passt zu Ergebnis und Abstand, F5). */
+  confidence: Confidence;
   ms: number;
 };
 
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose4' };
 const FREE_TYPED = new Set(['cloze', 'type']);
 
-export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exercise; knownWords: ReadonlySet<string>; onDone: (kind: FirstKind) => void }) {
+export function ExerciseView({
+  exercise,
+  knownWords,
+  again = false,
+  onDone,
+}: {
+  exercise: Exercise;
+  knownWords: ReadonlySet<string>;
+  /** Kommt die Karte nach einem Fehler in dieser Runde noch einmal (F10)? */
+  again?: boolean;
+  onDone: (kind: FirstKind) => void;
+}) {
   const { t, tn, lang } = useT();
   const api = useHiddenInput();
   const ai = useAiAvailable();
@@ -54,7 +70,7 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
   const card = e.card;
   const [fb, setFb] = useState<Feedback | null>(null);
   const [tip, setTip] = useState<0 | 1 | 2>(0);
-  const [confidence] = useState(() => confidenceOf(card, now));
+  const [confidenceBefore] = useState(() => confidenceOf(card, now));
   const extra = useExamples((s) => s.byCard[card.id]);
   const typed = useRef('');
   const firstKeyAt = useRef<number | null>(null);
@@ -62,13 +78,18 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
   const deletions = useRef(0);
   const shownAt = useRef(0);
   const lookupAtStart = useRef(0);
+  const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     shownAt.current = performance.now();
     lookupAtStart.current = lookupOpenMs();
+    // Tastatur am Desktop (F7): liegt der Fokus nirgends, beginnt er bei der Übung.
+    const a = document.activeElement;
+    if (!a || a === document.body) root.current?.querySelector<HTMLElement>('[data-testid="exercise"]')?.focus({ preventScroll: true });
   }, []);
 
   const shownSentence = e.input === 'typed' || e.ex === 'colloc' || e.ex === 'mc_en' ? (e.sentence?.sentence ?? null) : null;
   const solution = e.accepted[0] ?? card.word;
+  const hintShown = e.ex === 'cloze_hint' || (FREE_TYPED.has(e.ex) && tip >= 2);
 
   const check = (chosen: Option | null) => {
     if (fb) return;
@@ -80,10 +101,12 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
     if (e.input === 'choice') {
       if (!chosen) return;
       given = chosen.label;
-      result = { verdict: chosen.correct ? 'correct' : 'wrong' };
+      result = choiceVerdict(e, chosen);
     } else {
-      given = typed.current;
-      result = checkTyped(given, e.accepted, { lemma: card.lemma, knownWords });
+      const hint = hintShown ? (maskOf(solution, { firstLetter: true }).find((c) => c.kind === 'slot')?.hint ?? null) : null;
+      const r = checkWithHint(typed.current, e.accepted, { lemma: card.lemma, knownWords }, hint);
+      given = r.effective;
+      result = r.result;
     }
     const firstKey = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current - firstKeyLookup.current));
     const grade = autoGrade(e.ex, result, {
@@ -94,8 +117,10 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
       hintLevel: FREE_TYPED.has(e.ex) ? tip : 0,
     });
     const t0 = Date.now();
-    const dueInMs = Math.max(0, reviewFsrs(card.fsrs, grade, t0).due - t0);
-    setFb({ result, given, chosen, grade, dueInMs, ms });
+    const after = reviewFsrs(card.fsrs, grade, t0);
+    const dueInMs = Math.max(0, after.due - t0);
+    const confidence = confidenceOf({ isNew: false, stage: Math.max(1, card.stage) as TrainCard['stage'], fsrs: after }, t0);
+    setFb({ result, given, chosen, grade, dueInMs, ms, confidence });
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen").
     if (ai && storedExamples(card.doc).length === 0 && cardExamples(card, shownSentence).length < EXAMPLES_MIN) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
@@ -166,8 +191,9 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
         label={e.sentence ? t('trGapLabel', { sentence: `${e.sentence.sentence.slice(0, e.sentence.start)}…${e.sentence.sentence.slice(e.sentence.end)}` }) : t('trTypeLabel', { meaning: e.meaning ?? '' })}
         maxLength={Math.max(40, solution.length + 10)}
         state={gapState}
-        marks={fb?.result.marks}
+        marks={fb?.result.verdict === 'near' ? fb.result.marks : undefined}
         mask={mask}
+        shown={fb ? fb.given : null}
         onChange={(v, info) => {
           typed.current = v;
           if (info.firstKey && firstKeyAt.current === null) {
@@ -221,7 +247,7 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
           e.sentence &&
           sentence(
             e.sentence,
-            <span className="lx-gap" data-testid="gap" data-state={gapState} style={{ width: 'auto' }}>
+            <span className="lx-gap" data-testid="gap" data-state={!fb ? 'input' : fb.result.verdict === 'correct' ? 'correct' : 'reveal'} style={{ width: 'auto' }}>
               {filled || ' '}
             </span>,
           )}
@@ -235,27 +261,59 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
   if (fb) {
     const v = fb.result;
     const verdictKey: MessageKey =
-      v.verdict === 'correct' ? (v.variant === 'uk' ? 'trVerdictUk' : 'trVerdictCorrect') : v.verdict === 'near' ? (v.kind === 'form' ? 'trVerdictForm' : v.kind === 'typo' ? 'trVerdictTypo' : 'trVerdictNear') : 'trVerdictWrong';
+      v.verdict === 'correct'
+        ? v.variant === 'uk'
+          ? 'trVerdictUk'
+          : 'trVerdictCorrect'
+        : v.verdict === 'near'
+          ? v.kind === 'form'
+            ? 'trVerdictForm'
+            : v.kind === 'typo'
+              ? 'trVerdictTypo'
+              : v.kind === 'synonym'
+                ? 'trVerdictSynonym'
+                : 'trVerdictNear'
+          : 'trVerdictWrong';
     const tone = v.verdict === 'correct' ? 'text-accent-text' : v.verdict === 'near' ? 'text-gold-text' : 'text-danger-text';
     const answerLang = e.ex === 'mc_en' ? lang : 'en';
-    const diff = e.input === 'typed' ? answerDiff(fb.given, solution) : [];
-    const meaning = e.ex === 'mc_en' ? null : (lang === 'de' ? card.de : card.def);
+    // „fast richtig": Buchstaben gold, fehlende eingefügt; falsch: ganze Wörter rot (H2).
+    // „to" vor Verben ist beim Tippen freiwillig: für den Vergleich weglassen.
+    const bare = (x: string) => x.trim().replace(/^to\s+/i, '');
+    const nearChars = e.input === 'typed' && v.verdict === 'near' && !bare(fb.given).includes(' ') && !bare(solution).includes(' ');
+    const chars = nearChars ? charDiff(bare(fb.given), bare(solution)) : [];
+    const diff = e.input === 'typed' && !nearChars ? answerDiff(bare(fb.given), bare(solution)) : [];
+    // Bedeutung nur, wo sie nicht schon die Frage war (H3): nicht bei „Wort schreiben", „Wort
+    // wählen" (Frage = Bedeutung) und „Bedeutung wählen" (Bedeutung = markierte Option).
+    const meaning = e.ex === 'mc_en' || e.ex === 'mc_de' || e.ex === 'type' ? null : lang === 'de' ? card.de : card.def;
     const pk = posKey(card.pos);
     const fk = e.input === 'typed' && v.verdict !== 'correct' ? formKind(solution, card.lemma, card.pos) : null;
+    const col = e.ex === 'colloc' && e.colloc ? e.colloc : null;
     const examples = cardExamples(card, shownSentence, extra?.items ?? []);
+    const target = (x: string): readonly [number, number] | null => {
+      const hit = locate(x, card.lemma) ?? (card.context ? locate(x, card.context.gap) : null);
+      return hit ? [hit.start, hit.end] : null;
+    };
     const loadingExamples = extra?.status === 'loading' && examples.length < EXAMPLES_MIN;
     result = (
       <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <p className={`text-base font-semibold ${tone}`} data-testid="verdict" data-verdict={v.verdict}>
-            {t(verdictKey)}
+            {t(verdictKey, { solution })}
           </p>
-          {v.verdict !== 'correct' && (
+          {v.verdict !== 'correct' && e.input === 'typed' && (
             <p className="text-sm leading-relaxed">
               <span className="text-muted">{t('trYour')}: </span>
               <span lang={answerLang} data-testid="given">
                 {!normalize(fb.given) ? (
                   <span className="text-muted">{t('trEmpty')}</span>
+                ) : chars.length ? (
+                  <span data-testid="char-diff">
+                    {chars.map((p, i) => (
+                      <span key={i} className={p.kind === 'ok' ? undefined : p.kind === 'off' ? 'lx-diff-near' : 'lx-diff-missing'} data-diff={p.kind}>
+                        {p.text}
+                      </span>
+                    ))}
+                  </span>
                 ) : diff.length ? (
                   <span data-testid="word-diff">
                     {diff.map((p, i) => (
@@ -280,16 +338,33 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
             </p>
           )}
         </div>
-        {(meaning || pk) && (
+        {col ? (
           <p className="text-sm" data-testid="meaning">
             <span className="font-semibold" lang="en">
-              {card.word}
+              {col.p}
             </span>
-            <span className="text-muted"> – </span>
-            {meaning && <span lang={lang}>{meaning}</span>}
-            {meaning && pk && <span className="text-muted"> · </span>}
-            {pk && <span className="text-muted">{t(pk as MessageKey)}</span>}
+            {lang === 'de' && col.de && (
+              <>
+                <span className="text-muted"> – </span>
+                <span lang="de">{col.de}</span>
+              </>
+            )}
           </p>
+        ) : (
+          (meaning || pk) && (
+            <p className="text-sm" data-testid="meaning">
+              <span className="font-semibold" lang="en">
+                {card.word}
+              </span>
+              {meaning && (
+                <>
+                  <span className="text-muted"> – </span>
+                  <span lang={lang}>{meaning}</span>
+                </>
+              )}
+              {pk && <span className="text-muted"> · {t(pk as MessageKey)}</span>}
+            </p>
+          )
         )}
         {fk && (
           <p className="text-sm" data-testid="form-hint">
@@ -303,7 +378,7 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
             <ul className="flex flex-col gap-1.5">
               {examples.map((x) => (
                 <li key={x.en} className="text-[0.95rem] leading-relaxed" data-testid="example" data-src={x.src}>
-                  <EnglishText as="span" text={x.en} {...src} />
+                  <EnglishText as="span" text={x.en} {...src} highlight={target(x.en)} />
                 </li>
               ))}
             </ul>
@@ -327,7 +402,9 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
   }
 
   const def = exerciseDef(e.ex);
+  const confidence: Confidence = fb ? fb.confidence : confidenceBefore;
   return (
+    <div ref={root}>
     <ExerciseFrame
       status={
         <CardStatus
@@ -335,6 +412,7 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
           level={confidence}
           word={t(CONFIDENCE_KEYS[confidence])}
           label={t('confLabel', { level: t(CONFIDENCE_KEYS[confidence]) })}
+          again={again ? t('trAgainBadge') : null}
           kind={t(`exName_${e.ex}` as MessageKey)}
           kindLabel={t('exKindLabel', { name: '' }).trim()}
         />
@@ -361,5 +439,6 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
       result={result}
       meta={{ ex: e.ex, card: card.id, col: e.colloc?.index, stage: e.stage }}
     />
+    </div>
   );
 }

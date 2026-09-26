@@ -5,6 +5,16 @@ import type { WordLookupOut } from '../../prompts/wordLookup';
 // höchstens 400 gefüllte Einträge (Plan §3.9). Neu und nur ergänzend: note_en, ipa, ex, t, pv.
 
 export const LOOKUP_MAX = 400;
+/** Alle Schlüssel zusammen (gefüllte und verdrängte `null`) – darüber wird verdichtet. */
+export const LOOKUP_MAX_KEYS = 600;
+/** Größe von `app/lookup` in UTF-8-Bytes, darüber wird verdichtet (Grenze laut db.d.ts: 256 KiB). */
+export const LOOKUP_MAX_BYTES = 200_000;
+/** Ziel beim Verdichten: so viele neueste Einträge bzw. höchstens so viele Bytes. */
+export const LOOKUP_COMPACT_KEEP = 300;
+export const LOOKUP_COMPACT_BYTES = 150_000;
+
+const encoder = new TextEncoder();
+export const jsonBytes = (v: unknown): number => encoder.encode(JSON.stringify(v) ?? '').length;
 export const LOOKUP_PV = 'word-lookup@1';
 
 export type LookupEntry = {
@@ -62,7 +72,11 @@ export function readEntry(cur: Doc | undefined, key: string): Partial<LookupEntr
  * - neu → Eintrag plus `null` für die ältesten, sobald es mehr als 400 gefüllte wären.
  * `null` = nichts zu tun.
  */
-export function cachePatch(cur: Doc | undefined, key: string, entry: LookupEntry): { set: Record<string, unknown> } | { update: Record<string, unknown> } | null {
+export function cachePatch(
+  cur: Doc | undefined,
+  key: string,
+  entry: LookupEntry,
+): { set: Record<string, unknown> } | { update: Record<string, unknown> } | { replace: Record<string, unknown> } | null {
   if (!cur) return { set: { items: { [key]: { ...entry } } } };
   const items = itemsOf(cur);
   const existing = items[key];
@@ -84,5 +98,35 @@ export function cachePatch(cur: Doc | undefined, key: string, entry: LookupEntry
     filled.sort((a, b) => a.t - b.t || a.order - b.order);
     for (const x of filled.slice(0, over)) patch[x.k] = null;
   }
+  // Größe NACH dem Schreiben: alle Schlüssel (auch `null`) und Bytes zählen mit. Zu groß →
+  // einmal verdichten: nur gefüllte Einträge, die neuesten zuerst, alles andere am Dokument bleibt.
+  const keysAfter = Object.keys(items).length + (key in items ? 0 : 1);
+  const bytesAfter = jsonBytes(cur) + jsonBytes({ [key]: entry }) + 8;
+  if (keysAfter > LOOKUP_MAX_KEYS || bytesAfter > LOOKUP_MAX_BYTES) return { replace: compactLookup(cur, key, entry) };
   return { update: { items: patch } };
+}
+
+/**
+ * Verdichtete Fassung von `app/lookup`: ohne `null`-Schlüssel, höchstens LOOKUP_COMPACT_KEEP
+ * gefüllte Einträge und LOOKUP_COMPACT_BYTES (die neuesten bleiben, der neue Eintrag immer).
+ * Andere Felder des Dokuments bleiben unverändert.
+ */
+export function compactLookup(cur: Doc, key: string, entry: LookupEntry): Record<string, unknown> {
+  const items = itemsOf(cur);
+  const filled = Object.entries(items)
+    .map(([k, v], order) => ({ k, order, v, t: v && typeof v === 'object' && typeof (v as Record<string, unknown>).t === 'number' ? ((v as Record<string, unknown>).t as number) : 0 }))
+    .filter((x) => x.v !== null && x.v !== undefined && typeof x.v === 'object' && x.k !== key)
+    .sort((a, b) => b.t - a.t || b.order - a.order);
+  const kept: Record<string, unknown> = { [key]: { ...entry } };
+  let bytes = jsonBytes(kept);
+  let n = 1;
+  for (const x of filled) {
+    if (n >= LOOKUP_COMPACT_KEEP) break;
+    const add = jsonBytes({ [x.k]: x.v });
+    if (bytes + add > LOOKUP_COMPACT_BYTES) break;
+    kept[x.k] = x.v;
+    bytes += add;
+    n++;
+  }
+  return { ...cur, items: kept };
 }

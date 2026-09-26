@@ -98,7 +98,7 @@ export function TrainerScreen() {
           ) : introCard ? (
             <IntroCard card={introCard} onDone={onDone} />
           ) : exercise ? (
-            <ExerciseView exercise={exercise} knownWords={knownWords} onDone={onDone} />
+            <ExerciseView exercise={exercise} knownWords={knownWords} again={item?.reason === 'again'} onDone={onDone} />
           ) : null}
         </motion.div>
       </AnimatePresence>

@@ -16,7 +16,7 @@ const has = (list: readonly string[] | undefined, w: string) => !!list && list.i
  * (dann gibt es keinen Formhinweis). Mehrwortig: verglichen wird das erste abweichende Wort.
  */
 export function formKind(solution: string, lemma: string, pos: string | null): FormKind | null {
-  const sw = normalize(solution).split(' ');
+  const sw = withoutTo(normalize(solution)).split(' ');
   const lw = withoutTo(normalize(lemma)).split(' ');
   if (sw.join(' ') === lw.join(' ')) return null;
   const i = sw.findIndex((w, k) => w !== lw[k]);

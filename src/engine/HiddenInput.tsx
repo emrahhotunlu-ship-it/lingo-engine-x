@@ -46,7 +46,10 @@ export function HiddenInputProvider({ children }: { children: ReactNode }) {
     const t = target.current;
     if (!t) return;
     const r = t.el.getBoundingClientRect();
-    setBox({ top: r.top + window.scrollY, left: r.left + window.scrollX, width: Math.max(24, r.width), height: Math.max(24, r.height) });
+    // Trefferfläche mindestens 44 × 44 px (Kap. 4, F6), mittig über der Lücke.
+    const width = Math.max(44, r.width);
+    const height = Math.max(44, r.height);
+    setBox({ top: r.top + window.scrollY - (height - r.height) / 2, left: r.left + window.scrollX - (width - r.width) / 2, width, height });
   }, []);
 
   const api = useMemo<Api>(

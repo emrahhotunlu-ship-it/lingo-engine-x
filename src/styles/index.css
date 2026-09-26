@@ -318,6 +318,11 @@ h3 {
     background: var(--lx-danger-soft);
     box-shadow: inset 0 -2px 0 0 var(--lx-danger-text);
   }
+  /* Auswahl falsch: die Lücke zeigt die Lösung – nie rot (H1). */
+  .lx-gap[data-state='reveal'] {
+    background: var(--lx-surface-strong);
+    box-shadow: inset 0 -2px 0 0 var(--lx-accent);
+  }
   .lx-gap-inner {
     display: inline-flex;
     width: max-content;
@@ -336,17 +341,47 @@ h3 {
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
   }
+  /* Gold heißt Tippfehler; in einer falschen Antwort gibt es kein Gold (H2). */
+  .lx-gap[data-state='wrong'] .lx-letter-off {
+    color: inherit;
+    text-decoration: none;
+  }
   /* Buchstaben-Platzhalter (CLAUDE.md A7): ein Platz je Buchstabe, Trennzeichen sichtbar. */
   .lx-gap[data-masked] {
+    display: inline-flex;
+    align-items: flex-end;
+    width: auto;
     box-shadow: none;
     padding: 0 0.2em;
   }
+  .lx-gap[data-masked] .lx-gap-inner {
+    align-items: flex-end;
+  }
+  /* Leere Plätze haben dieselbe Höhe wie gefüllte, der Strich sitzt immer unten in der Box (B2, B3). */
   .lx-slot {
     display: inline-flex;
+    align-items: flex-end;
     justify-content: center;
     width: 0.68em;
+    min-height: 1.35em;
+    line-height: 1.35;
     margin: 0 0.03em;
     box-shadow: inset 0 -2px 0 0 var(--lx-fg-subtle);
+  }
+  /* Mehr getippt als Plätze: jeder weitere Buchstabe bekommt einen eigenen Platz. */
+  .lx-slot-extra {
+    width: auto;
+    min-width: 0.68em;
+  }
+  /* Nach dem Prüfen: Buchstaben rücken wieder zum Wort zusammen (F4). */
+  .lx-gap-inner[data-settled] .lx-slot {
+    width: auto;
+    min-width: 0;
+    margin: 0;
+    box-shadow: none;
+  }
+  .lx-gap-inner[data-settled] .lx-slot-fixed {
+    min-width: 0.28em;
   }
   .lx-slot[data-filled] {
     box-shadow: inset 0 -2px 0 0 var(--lx-border);
@@ -411,6 +446,15 @@ h3 {
     transition: background-color 0.15s, text-decoration-color 0.15s;
     -webkit-tap-highlight-color: transparent;
   }
+  /* Größere Trefferfläche ohne Layoutänderung (F6: ≥ 36 px hoch). */
+  .lx-word {
+    position: relative;
+  }
+  .lx-word::after {
+    content: '';
+    position: absolute;
+    inset: -0.3em 0;
+  }
   .lx-word:hover,
   .lx-word[data-active] {
     background: var(--lx-cyan-soft);
@@ -436,6 +480,30 @@ h3 {
     border: 1px solid var(--lx-border);
     box-shadow: var(--lx-shadow), 0 24px 60px -24px rgba(0, 0, 0, 0.55);
     outline: none;
+  }
+  /* Aktiver Reiter: auch im Hell-Modus deutlich (Rand und Akzentstrich, F9). */
+  .lx-tab-active {
+    box-shadow:
+      inset 0 0 0 1px var(--lx-border),
+      inset 0 -2px 0 0 var(--lx-accent);
+  }
+  /* Blatt am Handy: senkrechtes Scrollen per Finger ausdrücklich erlauben. */
+  .lx-sheet {
+    touch-action: pan-y;
+  }
+  .lx-diff-near {
+    color: var(--lx-gold-text);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+  /* Fehlender Buchstabe, eingefügt (gold hinterlegt). */
+  .lx-diff-missing {
+    color: var(--lx-gold-text);
+    background: var(--lx-gold-soft);
+    border-radius: 0.2em;
+    padding: 0 0.05em;
+    font-weight: 700;
   }
   .lx-diff-off {
     color: var(--lx-danger-text);
@@ -478,6 +546,11 @@ h3 {
   }
   .lx-choice[data-state='dim'] {
     opacity: 0.55;
+  }
+  @media (pointer: coarse) {
+    .lx-choice-key {
+      display: none !important;
+    }
   }
   .lx-choice-key {
     display: inline-flex;

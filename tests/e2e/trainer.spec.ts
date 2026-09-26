@@ -11,7 +11,7 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   test.setTimeout(90_000);
   const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(6), ...forcedPatch() } } });
   await screen(page, 'today');
-  await expect(page.getByTestId('today-status')).toHaveText('Noch nicht fertig · Wiederholen 0 von 6');
+  await expect(page.getByTestId('today-status')).toHaveText('Noch 6 Karten');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
 

@@ -50,7 +50,11 @@ const schemaFor = (uiLang: UiLang): z.ZodType<WordLookupOut> =>
       sense: z.string().trim().min(1).max(240),
       note: z.string().trim().max(200),
     })
-    .superRefine(langOf(['sense', 'note'], uiLang));
+    .superRefine((v, ctx) => {
+      langOf(['sense', 'note'], uiLang)(v, ctx);
+      // `ex` und `def` werden gespeichert (`ex` kann zum Kartensatz werden): nur Englisch (Kap. 15).
+      langOf(['ex', 'def'], 'en')(v, ctx);
+    });
 
 export const wordLookup: PromptTemplate<WordLookupVars, WordLookupOut> = {
   id: ID,

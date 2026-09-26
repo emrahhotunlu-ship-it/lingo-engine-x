@@ -23,6 +23,8 @@ export class WriteError extends Error {
   }
 }
 
+export type TransformOp = { set: Record<string, unknown> } | { update: Record<string, unknown> } | { replace: Record<string, unknown> };
+
 export type Writer = {
   /** Ganzes Dokument schreiben. `prev` = bekannter Stand; ist er gleich, wird nicht geschrieben. */
   set(path: string, data: Record<string, unknown>, prev?: Record<string, unknown> | null): Promise<WriteOutcome>;
@@ -36,10 +38,13 @@ export type Writer = {
    * Lesen, berechnen, schreiben in EINEM Schritt der Warteschlange dieses Dokuments: `compute`
    * bekommt den frischen Stand (`undefined` = fehlt) und liefert, was zu tun ist. `set` ist nur
    * erlaubt, wenn das Dokument fehlt – ein bestehendes wird nie ersetzt.
+   * Einzige Ausnahme: `replace` ersetzt ein bestehendes Dokument durch eine aus GENAU diesem
+   * frischen Stand berechnete Fassung (Verdichten eines Zwischenspeichers, z. B. `app/lookup`,
+   * dessen verdrängte `null`-Schlüssel `update` nie entfernen kann). Für Lernstände nie benutzen.
    */
   transform(
     path: string,
-    compute: (current: Record<string, unknown> | undefined) => { set: Record<string, unknown> } | { update: Record<string, unknown> } | null,
+    compute: (current: Record<string, unknown> | undefined) => TransformOp | null,
   ): Promise<'created' | 'updated' | 'unchanged'>;
   /** Dokument nur anlegen, wenn es fehlt (Prüfen und Anlegen in derselben Warteschlange). */
   createIfMissing(path: string, data: Record<string, unknown>): Promise<'created' | 'exists'>;
@@ -146,6 +151,11 @@ export function createWriter(db: Db): Writer {
         const current = snap.exists ? snap.data() : undefined;
         const op = compute(current);
         if (!op) return 'unchanged';
+        if ('replace' in op) {
+          if (current && jsonEqual(current, op.replace)) return 'unchanged';
+          await withRetry(path, () => db.doc(path).set(op.replace));
+          return current ? 'updated' : 'created';
+        }
         if ('set' in op) {
           if (current) throw new WriteError('exists', `${path} existiert – anlegen verweigert`, path);
           await withRetry(path, () => db.doc(path).set(op.set));

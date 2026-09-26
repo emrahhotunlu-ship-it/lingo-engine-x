@@ -136,7 +136,7 @@ function TabBar({ route }: { route: Screen }) {
             aria-current={active ? 'page' : undefined}
             onClick={() => go({ name: tab.name })}
             data-testid={`tab-${tab.name}`}
-            className={`min-h-11 flex-1 rounded-[var(--radius-control)] px-4 text-sm transition-colors md:flex-none ${active ? 'bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
+            className={`min-h-11 flex-1 rounded-[var(--radius-control)] px-4 text-sm transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
             {tab.label}
           </button>

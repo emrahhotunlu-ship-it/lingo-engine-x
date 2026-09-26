@@ -72,7 +72,8 @@ export type CheckResult = {
   /** Britische Schreibweise oder britisches Wort: zählt als richtig (A7.3). */
   variant?: 'uk';
   us?: string;
-  kind?: 'typo' | 'form' | 'confusable';
+  /** synonym: gewählte Option bedeutet dasselbe (auch möglich, gesucht war die Lösung). */
+  kind?: 'typo' | 'form' | 'confusable' | 'synonym';
   /** Für die goldene Markierung: je Zeichen der Eingabe, ob es abweicht. */
   marks?: boolean[];
   otherWord?: string;

@@ -85,7 +85,7 @@ export function TodayScreen() {
   const pct = state.balance.answers ? Math.round((state.balance.correct / state.balance.answers) * 100) : 0;
 
   return (
-    <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
       <motion.header variants={item} className="flex flex-col gap-2">
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
           <span>{dateLabel}</span>
@@ -106,7 +106,7 @@ export function TodayScreen() {
               ? t('tdStatusDone')
               : state.status === 'nothing'
                 ? t('tdStatusNothing')
-                : t('tdStatusOpen', { done, total })}
+                : tn('tdStatusOpen', left)}
           </h1>
         ) : (
           <div role="status" aria-label={t('tdLoading')}>
@@ -124,13 +124,15 @@ export function TodayScreen() {
                 <h2 id="td-review" className="text-xl font-semibold tracking-tight">
                   {t('tdReviewTitle')}
                 </h2>
-                <p className="text-sm text-muted">{tn('tdReviewWhy', total, { min: Math.max(1, Math.ceil(left * 0.45)) })}</p>
+                <p className="text-sm text-muted" data-testid="hero-sub">
+                  {done > 0 ? t('tdReviewProgress', { done, total, min: Math.max(1, Math.ceil(left * 0.45)) }) : t('tdReviewEta', { min: Math.max(1, Math.ceil(left * 0.45)) })}
+                </p>
               </div>
               <ProgressRing value={total ? done / total : 0} size={56} label={t('tdProgressLabel', { done, total })} />
             </div>
             <div className="mt-5">
               <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => start('pflicht')} data-testid="start">
-                {done > 0 ? t('tdContinue', { n: left }) : t('tdStart')}
+                {done > 0 ? t('tdContinue') : t('tdStart')}
               </Button>
             </div>
           </Card>

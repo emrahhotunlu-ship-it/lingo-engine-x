@@ -99,3 +99,50 @@ export function answerDiff(givenRaw: string, expectedRaw: string): DiffPart[] {
   });
   return parts;
 }
+
+export type CharPart = { text: string; kind: 'ok' | 'off' | 'missing' };
+
+/**
+ * Buchstabenvergleich für „fast richtig" (Kap. 4: gold markiert): abweichende oder überzählige
+ * Zeichen der Eingabe `off`, fehlende Zeichen der Lösung als eingefügtes `missing`
+ * („strugle" → strug·g·le). Vertauschungen erscheinen als zwei abweichende Zeichen.
+ */
+export function charDiff(givenRaw: string, expectedRaw: string): CharPart[] {
+  const given = Array.from(givenRaw.trim());
+  const expected = Array.from(expectedRaw.trim());
+  const a = given.map((c) => c.toLowerCase());
+  const b = expected.map((c) => c.toLowerCase());
+  const n = a.length;
+  const m = b.length;
+  const d: number[][] = Array.from({ length: n + 1 }, (_, i) => Array.from({ length: m + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)));
+  for (let i = 1; i <= n; i++) {
+    for (let j = 1; j <= m; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      (d[i] as number[])[j] = Math.min(((d[i - 1] as number[])[j] ?? 0) + 1, ((d[i] as number[])[j - 1] ?? 0) + 1, ((d[i - 1] as number[])[j - 1] ?? 0) + cost);
+    }
+  }
+  const rev: CharPart[] = [];
+  let i = n;
+  let j = m;
+  while (i > 0 || j > 0) {
+    const cur = (d[i] as number[])[j] ?? 0;
+    if (i > 0 && j > 0 && cur === ((d[i - 1] as number[])[j - 1] ?? 0) + (a[i - 1] === b[j - 1] ? 0 : 1)) {
+      rev.push({ text: given[i - 1] ?? '', kind: a[i - 1] === b[j - 1] ? 'ok' : 'off' });
+      i--;
+      j--;
+    } else if (i > 0 && cur === ((d[i - 1] as number[])[j] ?? 0) + 1) {
+      rev.push({ text: given[i - 1] ?? '', kind: 'off' });
+      i--;
+    } else {
+      rev.push({ text: expected[j - 1] ?? '', kind: 'missing' });
+      j--;
+    }
+  }
+  const out: CharPart[] = [];
+  for (const p of rev.reverse()) {
+    const last = out[out.length - 1];
+    if (last && last.kind === p.kind) last.text += p.text;
+    else out.push({ ...p });
+  }
+  return out;
+}
