@@ -1,3 +1,4 @@
+import type { DrillAnswer, GrammarAnswer } from '../learn/types';
 import type { AnswerEvent } from '../srs/types';
 
 // Tagesprotokoll `log/<tag>` im Format der alten App (Daten-Entwurf §4): ein Dokument je
@@ -21,11 +22,87 @@ export type LogEntry = {
   ans: string;
   g: number;
   ms: number;
-  ctx: 'rev' | 'xtra';
+  ctx: 'rev' | 'duty' | 'xtra';
+  lesson?: string;
 };
 
+/** Grammatik-Eintrag (Form der alten App, `session.js:437`, plus `ms`/`ctx`). */
+export type GrammarLogEntry = {
+  t: number;
+  ok: boolean;
+  lang: string;
+  k: 'g';
+  topic: string;
+  type: string;
+  q: string;
+  given: string;
+  ans: string;
+  src: string;
+  m: string;
+  g: number;
+  ms: number;
+  ctx: 'rev' | 'duty' | 'xtra';
+  lesson?: string;
+};
+
+/** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
+export type DrillLogEntry = {
+  t: number;
+  ok: boolean;
+  lang: string;
+  type: DrillAnswer['type'];
+  q: string;
+  given: string;
+  ans: string;
+  g: number;
+  ms: number;
+  ctx: 'rev' | 'duty' | 'xtra';
+  lesson?: string;
+};
+
+export type AnyLogEntry = LogEntry | GrammarLogEntry | DrillLogEntry;
+
+export const DONT_KNOW = "(don't know)";
+
+export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
+  const lesson = a.task.src === 'lesson' && a.task.ref?.startsWith('lesson/') ? a.task.ref.slice(7) : undefined;
+  return {
+    t: a.t,
+    ok: !a.dontKnow && a.verdict !== 'wrong',
+    lang: a.lang,
+    k: 'g',
+    topic: a.task.topic,
+    type: a.task.type,
+    q: clip(a.task.prompt),
+    given: a.dontKnow ? DONT_KNOW : clip(a.given),
+    ans: clip(a.task.answer),
+    src: a.task.src,
+    m: `gr-${a.task.type}`,
+    g: a.grade,
+    ms: Math.max(0, Math.round(a.ms)),
+    ctx: a.ctx,
+    ...(lesson ? { lesson } : {}),
+  };
+}
+
+export function drillLogEntry(a: DrillAnswer): DrillLogEntry {
+  return {
+    t: a.t,
+    ok: a.verdict !== 'wrong',
+    lang: a.lang,
+    type: a.type,
+    q: clip(a.q),
+    given: clip(a.given),
+    ans: clip(a.ans),
+    g: a.grade,
+    ms: Math.max(0, Math.round(a.ms)),
+    ctx: a.ctx,
+    ...(a.lesson ? { lesson: a.lesson } : {}),
+  };
+}
+
 export function logEntry(a: AnswerEvent): LogEntry {
-  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx };
+  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}) };
 }
 
 const keyOf = (e: unknown): string => {
@@ -38,7 +115,7 @@ const tOf = (e: unknown): number => {
 };
 
 /** Neue Liste: vorhandene + neue Einträge, ohne Doppelte, nach Zeit, gekappt auf Anzahl und Größe. */
-export function mergeLogEntries(current: readonly unknown[], added: readonly LogEntry[]): unknown[] {
+export function mergeLogEntries(current: readonly unknown[], added: readonly AnyLogEntry[]): unknown[] {
   const seen = new Set<string>();
   const all: unknown[] = [];
   for (const e of [...current, ...added]) {
