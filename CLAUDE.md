@@ -197,6 +197,18 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - Phase 5 `worktree-agent-ae7b0211db2f2df80` (fertig)
 - Zusammengeführt wird einzeln nacheinander, jeweils mit vollem Testlauf.
 
+**26.09.2026, ca. 22:30 Uhr – ohne „Go" durchbauen (Emrahs Vorgabe, ersetzt das Vorab-Abstimmen)**
+- Kein „Go" mehr vor jedem Schritt. Die restlichen Schritte laufen ohne Rückfrage nacheinander:
+  1. Phase 2 grün,
+  2. Phase 3 + 5 zusammenführen (Streaming vereinheitlichen),
+  3. Phase 4 fertig,
+  4. ein kombinierter Prüfer,
+  5. Test-Link,
+  6. Phasen 6+7.
+- Effizient, keine Schleifen, kein endloses Nachbessern (A2 gilt streng).
+- Ziel: Ergebnis in etwa 12 Stunden.
+- Veröffentlichen auf `JLL8…` weiterhin nur mit Emrahs ausdrücklicher Freigabe.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
