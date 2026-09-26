@@ -191,7 +191,7 @@ test.describe('Desktop 1440', () => {
     expect((await chatDoc(page)).msgs.at(-1)?.stopped).toBeUndefined();
   });
 
-  test('Fehler: rate_limited → Hinweis, kein automatischer Aufruf; upstream_error → „unterbrochen" + Erneut senden', async ({ page }) => {
+  test('Fehler: upstream_error → „unterbrochen" mit Teiltext + Erneut senden (ein Aufruf je Klick)', async ({ page }) => {
     await start(page, { sampleFailOnce: { 'companion-chat': 'upstream_error' } });
     await openAndSend(page, 'Hallo');
     await expect(page.getByTestId('chat-error')).toBeVisible();
@@ -199,6 +199,17 @@ test.describe('Desktop 1440', () => {
     await page.getByTestId('chat-retry').click();
     await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');
     expect(await chatCalls(page)).toHaveLength(2);
+  });
+
+  test('rate_limited → Hinweis „ausgelastet", Senden gesperrt, kein automatischer Aufruf', async ({ page }) => {
+    await start(page, { sampleFailOnce: { 'companion-chat': 'rate_limited' } });
+    await openAndSend(page, 'Hallo');
+    await expect(page.getByTestId('chat-error')).toContainText('ausgelastet');
+    await expect(page.getByTestId('chat-paused')).toBeVisible();
+    await page.getByTestId('chat-input').fill('Noch einmal');
+    await expect(page.getByTestId('chat-send')).toBeDisabled();
+    await page.waitForTimeout(500);
+    expect(await chatCalls(page)).toHaveLength(1);
   });
 
   test('not_granted → Begleiter-Knopf verschwindet', async ({ page }) => {

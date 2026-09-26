@@ -139,9 +139,9 @@ function CompanionOverlay() {
         className="absolute inset-x-0 top-0 bottom-0 flex flex-col overflow-hidden bg-surface-solid pt-[env(safe-area-inset-top)] shadow-2xl outline-none md:inset-auto md:top-1/2 md:left-1/2 md:h-[min(88vh,60rem)] md:w-[min(56rem,92vw)] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-[1.5rem] md:border md:border-line md:pt-0"
       >
         <header className="flex items-center gap-2 px-3 pt-2 pb-1 sm:px-4">
-          <h2 id={titleId} className="flex items-center gap-2 px-2 text-lg font-semibold tracking-tight">
+          <h2 id={titleId} className="flex flex-none items-center gap-2 px-2 text-lg font-semibold tracking-tight">
             <Icon name="sparkle" size={20} />
-            {t('cmpTitle')}
+            <span className="sr-only sm:not-sr-only">{t('cmpTitle')}</span>
           </h2>
           <div role="tablist" aria-label={t('cmpTabsLabel')} className="mx-auto flex rounded-[var(--radius-control)] bg-track p-1">
             {tabs.map((x) => (
@@ -158,13 +158,13 @@ function CompanionOverlay() {
               </button>
             ))}
           </div>
-          {tab === 'chat' && <IconButton icon="plus" label={t('cmpNew')} onClick={() => void newConversation()} disabled={isTurnRunning()} data-testid="chat-new" />}
-          <IconButton icon="close" label={t('close')} onClick={closeCompanion} data-testid="companion-close" />
+          {tab === 'chat' && <IconButton icon="plus" label={t('cmpNew')} onClick={() => void newConversation()} disabled={isTurnRunning()} className="flex-none" data-testid="chat-new" />}
+          <IconButton icon="close" label={t('close')} onClick={closeCompanion} className="flex-none" data-testid="companion-close" />
         </header>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-line px-5 pb-2.5 sm:px-6">
           <p className="flex min-w-0 flex-1 items-center gap-2 text-xs text-muted" data-testid="seeing" data-area={seeing?.area ?? route}>
             <span className="inline-block size-1.5 flex-none rounded-full bg-accent" aria-hidden="true" />
-            <span className="truncate">{t('cmpSeeing', { label: areaLabel })}</span>
+            <span className="min-w-0 break-words">{t('cmpSeeing', { label: areaLabel })}</span>
           </p>
           {tab === 'chat' && ai && (
             <div role="radiogroup" aria-label={t('cmpTierLabel')} className="flex rounded-full bg-track p-0.5 text-xs">
@@ -184,13 +184,13 @@ function CompanionOverlay() {
             </div>
           )}
           {tab === 'chat' && attach && (
-            <p className="flex w-full min-w-0 items-center gap-1 rounded-full bg-accent-soft py-0.5 pr-0.5 pl-3 text-sm text-accent-text" data-testid="chat-attach">
-              <span className="truncate">
+            <p className="flex w-full min-w-0 items-center gap-1 rounded-2xl bg-accent-soft py-0.5 pr-0.5 pl-3 text-sm text-accent-text" data-testid="chat-attach">
+              <span className="min-w-0 flex-1 break-words">
                 {t('cmpAbout', { word: attach.word })}
                 <span className="text-muted" lang="en">
                   {' '}
-                  · „{attach.sentence.slice(0, 60)}
-                  {attach.sentence.length > 60 ? '…' : ''}“
+                  · „{attach.sentence.slice(0, 48)}
+                  {attach.sentence.length > 48 ? '…' : ''}“
                 </span>
               </span>
               <button

@@ -28,6 +28,12 @@ export type Seeing = {
   phase?: 'question' | 'feedback' | 'idle';
   /** ≤ 600 Zeichen: Lösung und eigene Antwort; wird NUR bei `phase: 'feedback'` gesendet. */
   reveal?: string;
+  /**
+   * Nur für `question`: Wörter, die vor dem Prüfen nirgends an Claude gehen dürfen (Lösung und
+   * ihre Formen). Wird selbst nie gesendet; `maskText` schwärzt sie in mitgeschickten Texten,
+   * z. B. im Satz eines angetippten Worts („Claude fragen").
+   */
+  mask?: string[];
 };
 
 export const LABEL_MAX = 60;
@@ -49,6 +55,17 @@ export function redact(s: Seeing | null): Seeing | null {
   if (s.phase) out.phase = s.phase;
   if (s.detail?.trim()) out.detail = cut(s.detail, DETAIL_MAX);
   if (s.phase === 'feedback' && s.reveal?.trim()) out.reveal = cut(s.reveal, REVEAL_MAX);
+  return out;
+}
+
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Schwärzt vor dem Prüfen die Lösungswörter (`mask`) in einem mitgeschickten Text. */
+export function maskText(text: string, s: Seeing | null): string {
+  if (s?.phase !== 'question' || !s.mask?.length) return text;
+  let out = text;
+  const words = [...new Set(s.mask.map((m) => m.trim().replace(/^to\s+/i, '')).filter((m) => m.length >= 2))].sort((a, b) => b.length - a.length);
+  for (const w of words) out = out.replace(new RegExp(`(^|[^A-Za-z])${escapeRe(w)}(?![A-Za-z])`, 'gi'), '$1___');
   return out;
 }
 

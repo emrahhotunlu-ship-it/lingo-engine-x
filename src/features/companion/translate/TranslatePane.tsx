@@ -17,6 +17,8 @@ import { fillFromHistory, fromOf, isTranslating, runTranslate, setRegister, setT
 
 const REG_KEY: Record<Register, MessageKey> = { formal: 'tlRegFormal', neutral: 'tlRegNeutral', casual: 'tlRegCasual' };
 
+const short = (s: string, max = 70): string => (Array.from(s).length <= max ? s : `${Array.from(s).slice(0, max - 1).join('')}…`);
+
 export function TranslatePane({ focusSeq }: { focusSeq: number }) {
   const { t, lang } = useT();
   const s = useTranslate();
@@ -214,10 +216,9 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
             <ul className="flex flex-col">
               {s.history.slice(0, 5).map((h) => (
                 <li key={`${h.t}`}>
-                  <button type="button" onClick={() => fillFromHistory(h)} className="flex min-h-11 w-full min-w-0 items-center gap-2 rounded-lg px-2 text-left text-sm hover:bg-surface">
-                    <span className="truncate text-fg">{h.text}</span>
-                    <span className="flex-none text-subtle">→</span>
-                    <span className="truncate text-muted">{h.main}</span>
+                  <button type="button" onClick={() => fillFromHistory(h)} className="flex min-h-11 w-full min-w-0 flex-col justify-center rounded-lg px-2 py-1.5 text-left text-sm break-words hover:bg-surface">
+                    <span className="text-fg">{short(h.text)}</span>
+                    <span className="text-muted">→ {short(h.main)}</span>
                   </button>
                 </li>
               ))}

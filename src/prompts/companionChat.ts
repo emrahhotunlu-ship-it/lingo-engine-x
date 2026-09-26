@@ -1,5 +1,5 @@
 import { buildChatInput } from '../domain/companion/turns';
-import { redact, type Seeing } from '../domain/companion/seeing';
+import { maskText, redact, type Seeing } from '../domain/companion/seeing';
 import { block, clip, header, langName } from './common';
 import type { ChatTemplate, TurnInput, UiLang } from './types';
 
@@ -55,7 +55,10 @@ export function buildLead(vars: CompanionVars): string {
     if (seeing.phase === 'feedback' && seeing.reveal) lines.push(`Checked result: ${block(seeing.reveal, 600)}`);
   }
   if (vars.attach) {
-    lines.push('', `Question is about: "${clip(vars.attach.word, 60)}" in the sentence: "${clip(vars.attach.sentence, 400)}"`);
+    // Vor dem Prüfen bleibt die Lösung auch im Satz des angetippten Worts geschwärzt (E5-05).
+    const word = maskText(vars.attach.word, vars.seeing);
+    const sentence = maskText(vars.attach.sentence, vars.seeing);
+    lines.push('', `Question is about: "${clip(word, 60)}" in the sentence: "${clip(sentence, 400)}"`);
   }
   lines.push('', "The learner's messages follow. Answer the last one.");
   return lines.join('\n');

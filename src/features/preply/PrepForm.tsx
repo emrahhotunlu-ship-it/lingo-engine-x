@@ -118,10 +118,10 @@ export function PrepForm({ last, onCreated }: { last: ImportView | null; onCreat
               role="radio"
               aria-checked={choice === o.id}
               onClick={() => setChoice(o.id)}
-              className={`inline-flex min-h-11 max-w-full items-center rounded-full border px-4 text-left text-sm ${choice === o.id ? 'border-transparent bg-accent-soft font-semibold text-accent-text' : 'border-line text-fg hover:bg-surface'}`}
+              className={`inline-flex min-h-11 max-w-full items-center rounded-2xl border px-4 py-2 text-left text-sm break-words ${choice === o.id ? 'border-transparent bg-accent-soft font-semibold text-accent-text' : 'border-line text-fg hover:bg-surface'}`}
               data-value={o.id}
             >
-              <span className="truncate">{o.label}</span>
+              <span className="min-w-0">{o.label}</span>
             </button>
           ))}
         </div>

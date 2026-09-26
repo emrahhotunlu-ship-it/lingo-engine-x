@@ -181,7 +181,7 @@ describe('Ablauf Import (importMachine)', () => {
     expect(applyCalls).toBe(2);
   });
 
-  it('STOP während der Analyse → editing, Text bleibt, Signal abgebrochen', async () => {
+  it('STOP während der Analyse → editing, Text bleibt, Signal abgebrochen', () => {
     let aborted = false;
     const m = importMachine.provide({
       actors: {

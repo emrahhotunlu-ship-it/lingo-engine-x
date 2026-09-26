@@ -165,6 +165,15 @@ export function openPlan(list: readonly PreplyView[]): PlanView | null {
   return null;
 }
 
+/** Plan für den Reiter „Vorbereiten": offen, oder am Lerntag `today` gehalten. */
+export function currentPlan(list: readonly PreplyView[], today: string): PlanView | null {
+  for (const v of list) {
+    if (v.kind !== 'plan' || !(v.goal_en || v.say.length || v.talk.length)) continue;
+    return !v.done || v.heldDay === today ? v : null;
+  }
+  return null;
+}
+
 /** Jüngster Import (für „Nach letztem Import" und die Stundenvorbereitung). */
 export function lastImport(list: readonly PreplyView[]): ImportView | null {
   for (const v of list) if (v.kind === 'import') return v;

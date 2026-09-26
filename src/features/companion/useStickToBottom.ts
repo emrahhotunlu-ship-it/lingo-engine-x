@@ -47,8 +47,10 @@ export function useStickToBottom() {
       if (atBottom.current) setJump(false);
     };
     el.addEventListener('scroll', onScroll, { passive: true });
+    // Wächst der Inhalt ODER schrumpft der sichtbare Bereich (Vorschläge, Tastatur), gilt dieselbe Regel.
     const ro = new ResizeObserver(() => apply('grow'));
     ro.observe(inner);
+    ro.observe(el);
     return () => {
       el.removeEventListener('scroll', onScroll);
       ro.disconnect();

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { validateDoc } from '../../src/data/validate';
 import { BRIEF_MAX, learnerBrief, openGrammarErrors, weakestTopics } from '../../src/domain/companion/brief';
 import { appendChat, ASSISTANT_MAX, CHAT_MAX, CHAT_MAX_BYTES, currentMsgs, msgLang, readChat, replyLang, USER_MAX, type ChatMsg } from '../../src/domain/companion/chatDoc';
-import { redact, type Seeing } from '../../src/domain/companion/seeing';
+import { maskText, redact, type Seeing } from '../../src/domain/companion/seeing';
 import { suggestions } from '../../src/domain/companion/suggest';
 import { buildChatInput, HISTORY_MAX, TURNS_MAX_BYTES } from '../../src/domain/companion/turns';
 import { inlineText, parseMarkdown } from '../../src/domain/text/markdown';
@@ -72,7 +72,7 @@ describe('Eingabe des Gesprächs (turns)', () => {
   });
 
   it('älteste Verlaufsnachrichten fallen zuerst weg: ≤ 56.000 B und ≤ 20', () => {
-    const hist = Array.from({ length: 60 }, (_, i) => ({ role: (i % 2 ? 'assistant' : 'user') as 'user' | 'assistant', content: `${i} ${'ü'.repeat(2900)}` }));
+    const hist = Array.from({ length: 60 }, (_, i): ChatMsg => ({ role: i % 2 ? 'assistant' : 'user', content: `${i} ${'ü'.repeat(2900)}` }));
     const t = buildChatInput('L'.repeat(5000), hist, 'Frage');
     const total = t.reduce((n, x) => n + new TextEncoder().encode(x.content).length, 0);
     expect(total).toBeLessThanOrEqual(TURNS_MAX_BYTES);
@@ -93,6 +93,16 @@ describe('Schwärzen (seeing) und Schutzregel', () => {
     expect(all).toContain(NO_SOLUTION_RULE);
     expect(all).not.toContain('approve');
     expect(all).toContain('___');
+  });
+
+  it('question: Lösung auch im Satz eines angetippten Worts geschwärzt (mask), nach dem Prüfen nicht', () => {
+    const s: Seeing = { ...q, mask: ['avoid', 'to avoid'] };
+    expect(maskText('Try to avoid driving. Avoidance is fine.', s)).toBe('Try to ___ driving. Avoidance is fine.');
+    const v = { ...vars(s), attach: { kind: 'word' as const, word: 'driving', sentence: 'Try to avoid driving in rush hour.', source: null } };
+    const all = companionChat.buildTurns(v).map((t) => t.content).join('\n');
+    expect(all).toContain('"Try to ___ driving in rush hour."');
+    expect(all).not.toMatch(/\bavoid\b/);
+    expect(maskText('Try to avoid it.', { ...s, phase: 'feedback' })).toBe('Try to avoid it.');
   });
 
   it('feedback: reveal wird gesendet, keine Schutzregel', () => {

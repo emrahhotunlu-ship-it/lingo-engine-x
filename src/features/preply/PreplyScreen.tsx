@@ -6,7 +6,8 @@ import { watchCollection } from '../../data/watch';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { mergedVocab } from '../../domain/overview';
 import { wordState, type ApplySel } from '../../domain/preply/apply';
-import { lastImport, openPlan, preplyList, type ImportView } from '../../domain/preply/docs';
+import { currentPlan, lastImport, preplyList, type ImportView } from '../../domain/preply/docs';
+import { useClock } from '../../app/clock';
 import { useT } from '../../i18n';
 import { getDb, useCapabilities } from '../../platform/capabilities';
 import { local } from '../../platform/storage';
@@ -62,7 +63,9 @@ export function PreplyScreen() {
   }, [db]);
 
   const list = useMemo(() => preplyList(docs), [docs]);
-  const plan = openPlan(list);
+  const today = useClock((s) => s.today);
+  // Oben steht der offene Plan – oder der heute gehaltene, damit „Gehalten" als Zustand sichtbar bleibt.
+  const plan = currentPlan(list, today);
   const last = lastImport(list);
   const tab: PreplyTab = tabState ?? 'prep';
 

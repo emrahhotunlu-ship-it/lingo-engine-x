@@ -45,7 +45,7 @@ export function HistoryList({ list, openId, onReview }: { list: PreplyView[]; op
               <button type="button" onClick={() => openPreplyEntry(v.id)} className="lx-glass flex min-h-14 w-full items-center gap-3 rounded-2xl px-4 py-3 text-left hover:bg-surface-strong">
                 <Icon name={v.kind === 'plan' ? 'book' : 'download'} size={20} className="flex-none text-muted" />
                 <span className="flex min-w-0 flex-1 flex-col">
-                  <span className="truncate text-[0.95rem] font-medium">{v.title || (v.kind === 'plan' ? t('ppTitle') : t('ppImportUntitled'))}</span>
+                  <span className="text-[0.95rem] font-medium break-words">{v.title || (v.kind === 'plan' ? t('ppTitle') : t('ppImportUntitled'))}</span>
                   <span className="text-xs text-muted">
                     {v.kind === 'plan' ? t('pvPlan') : t('pvImport')} · {date(v.t)}
                   </span>
@@ -145,7 +145,7 @@ function ImportDetail({ pi, onReview }: { pi: ImportView; onReview: (pi: ImportV
                     </span>
                   ) : (
                     <label className="flex min-h-11 cursor-pointer items-center gap-3 text-[0.95rem]">
-                      <input type="checkbox" checked={false} disabled={busy === i} onChange={() => void check(i)} className="size-5 flex-none accent-[var(--lx-accent)]" />
+                      <input type="checkbox" checked={busy === i} disabled={busy === i} onChange={() => void check(i)} className="size-5 flex-none accent-[var(--lx-accent)]" />
                       <span>{h}</span>
                     </label>
                   )}

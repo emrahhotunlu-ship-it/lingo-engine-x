@@ -31,6 +31,7 @@ export type OpenError = { wrong: string; right: string; topic: string };
 /** Offene Grammatikfehler (nicht erledigt), neueste zuerst. */
 export function openGrammarErrors(grammar: ReadonlyMap<string, Doc> | undefined, max: number): OpenError[] {
   const out: Array<OpenError & { t: number }> = [];
+  const seen = new Set<string>();
   for (const [id, g] of grammar ?? []) {
     const errs = Array.isArray(g.errors) ? (g.errors as unknown[]) : [];
     for (const e of errs) {
@@ -38,7 +39,8 @@ export function openGrammarErrors(grammar: ReadonlyMap<string, Doc> | undefined,
       if (o.done === true) continue;
       const wrong = str(o.given) || str(o.q);
       const right = str(o.ans);
-      if (!wrong || !right || wrong === right) continue;
+      if (!wrong || !right || wrong === right || seen.has(wrong.toLowerCase())) continue;
+      seen.add(wrong.toLowerCase());
       out.push({ wrong: oneLine(wrong, 200), right: oneLine(right, 200), topic: id, t: num(o.t) ?? 0 });
     }
   }

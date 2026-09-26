@@ -39,7 +39,7 @@ describe('Verzeichnis Phase 5', () => {
     expect([preplyPrep.tier, preplyPrep.cache]).toEqual(['default', false]);
     expect(preplyImport.build(impVars).split('\n')[0]).toBe('[preply-import@1]');
     expect([preplyImport.tier, preplyImport.cache]).toEqual(['complex', false]);
-    expect(templateIdOf(companionChat.buildTurns({ uiLang: 'de', learner: '', work: '', seeing: null, attach: null, history: [], message: 'x' }))).toBe('companion-chat');
+    expect(templateIdOf([...companionChat.buildTurns({ uiLang: 'de', learner: '', work: '', seeing: null, attach: null, history: [], message: 'x' })])).toBe('companion-chat');
   });
 });
 

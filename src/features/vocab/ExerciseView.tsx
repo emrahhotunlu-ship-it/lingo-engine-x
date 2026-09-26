@@ -163,7 +163,7 @@ export function ExerciseView({ exercise, knownWords, onDone }: { exercise: Exerc
     label: `${t('cmpSeeTrainer')} · ${t(`exName_${e.ex}` as MessageKey)}`,
     phase: fb ? 'feedback' : 'question',
     detail: seeDetail,
-    ...(fb ? { reveal: `Solution: ${solution}. Learner: ${fb.given || '(empty)'}` } : {}),
+    ...(fb ? { reveal: `Solution: ${solution}. Learner: ${fb.given || '(empty)'}` } : { mask: [solution, card.word, card.lemma, ...e.accepted] }),
   });
 
   const sentence = (span: ContextSpan, slot: ReactNode | null, opts: { mark?: boolean } = {}) => (
