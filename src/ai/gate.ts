@@ -1,0 +1,181 @@
+import type { z } from 'zod';
+import { getSample } from '../platform/capabilities';
+import { logError, logWarn } from '../platform/diagnostics';
+import { linkAbort } from './abort';
+import { cancelledFailure, failure, failureFromSample } from './errors';
+import { aiQueue } from './queue';
+import { recordCall, resetAiStatus, throttleReason } from './status';
+import { AiFailure, type AiPhase, type AiRequest, type AiResult, type ModelTier, type PromptTemplate } from './types';
+
+// Das eine KI-Tor (Kap. 10, Architektur-Entwurf §3.2). Jede Anfrage an `sample` läuft hier durch:
+// Verfügbarkeit → Drosselung → Warteschlange (≤ 2) → Aufruf mit eigenem AbortController →
+// Prüfung mit zod → höchstens EIN Neuversuch, und nur bei Schemafehler (A6.3).
+// Es gibt keinen Timer-Abbruch (A6.2): Nach SLOW_AFTER_MS kommt nur der Hinweis `slow`.
+
+/**
+ * Obergrenze je Prompt (UTF-8-Bytes), vor dem Aufruf geprüft. Gleich `PROMPT_MAX_BYTES` in
+ * prompts/common.ts (Test); hier eigen, weil das KI-Tor aus `prompts` nur Typen importiert.
+ */
+export const PROMPT_BUDGET_BYTES = 60_000;
+/** Harte Grenze aus contract/sample.d.ts; gilt für den Neuversuch mit angehängten Mängeln. */
+export const SAMPLE_LIMIT_BYTES = 65_536;
+
+const encoder = new TextEncoder();
+
+/** Ab wann „dauert länger als üblich" erscheint (ms bis zum ersten Text). */
+export const SLOW_AFTER_MS: Readonly<Record<ModelTier, number>> = { quick: 8_000, default: 45_000, complex: 90_000 };
+
+type Phase = (p: AiPhase) => void;
+type IssueLike = { readonly path: readonly PropertyKey[]; readonly message: string };
+
+function budget(prompt: string, max: number, scope: string): void {
+  const bytes = encoder.encode(prompt).length;
+  if (bytes > max) {
+    // Programmfehler: Vorlagen kürzen ihre Eingaben selbst.
+    logError(scope, { code: 'prompt_too_large', message: `${bytes} bytes > ${max}` });
+    throw failure('too_large', 'prompt_too_large');
+  }
+}
+
+function guardThrottle(scope: string): void {
+  const reason = throttleReason();
+  if (reason === null) return;
+  if (reason === 'local_limit') logWarn(scope, { code: 'local_limit', message: 'more than 20 AI calls within 60 s' });
+  throw failure('busy', reason);
+}
+
+function describeIssues(issues: readonly IssueLike[]): string {
+  return issues
+    .slice(0, 5)
+    .map((i) => `- ${i.path.map(String).join('.') || '(root)'}: ${i.message}`)
+    .join('\n');
+}
+
+/** Eingabe des einen Neuversuchs: anders als die erste, trifft also nicht den Zwischenspeicher. */
+export function retryPrompt(prompt: string, issues: readonly IssueLike[], reply: unknown): string {
+  const previous = (JSON.stringify(reply) ?? 'null').slice(0, 1500);
+  return (
+    prompt +
+    '\n\nYour previous reply did not match the required format:\n' +
+    describeIssues(issues) +
+    '\nPrevious reply: ' +
+    previous +
+    '\nReply again with only the corrected JSON object.'
+  );
+}
+
+async function callOnce(
+  prompt: string,
+  template: PromptTemplate<unknown, unknown>,
+  signal: AbortSignal,
+  phase: Phase,
+  scope: string,
+): Promise<unknown> {
+  if (signal.aborted) throw cancelledFailure();
+  const sample = getSample();
+  if (!sample) throw failure('unavailable', 'absent');
+  guardThrottle(scope);
+
+  // Je Aufruf ein eigener Controller (contract/sample.d.ts: „a NEW controller per call").
+  const ctl = new AbortController();
+  const unlink = linkAbort(signal, ctl);
+  let slowTimer: ReturnType<typeof setTimeout> | null = null;
+  const stopSlow = () => {
+    if (slowTimer !== null) clearTimeout(slowTimer);
+    slowTimer = null;
+  };
+  let streaming = false;
+  phase('thinking');
+  slowTimer = setTimeout(() => {
+    slowTimer = null;
+    phase('slow');
+  }, SLOW_AFTER_MS[template.tier]);
+  recordCall();
+  try {
+    return await sample.json<unknown>(prompt, {
+      modelTier: template.tier,
+      cache: template.cache,
+      signal: ctl.signal,
+      onText: () => {
+        if (streaming) return;
+        streaming = true;
+        stopSlow();
+        phase('streaming');
+      },
+    });
+  } catch (err) {
+    throw failureFromSample(err, scope);
+  } finally {
+    stopSlow();
+    unlink();
+  }
+}
+
+async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Promise<AiResult<O>> {
+  const { template, vars, signal } = req;
+  if (signal.aborted) throw cancelledFailure();
+  if (!getSample()) throw failure('unavailable', 'absent');
+
+  let prompt: string;
+  let schema: z.ZodType<O>;
+  try {
+    prompt = template.build(vars);
+    schema = template.schema(vars);
+  } catch (err) {
+    logError(scope, err, 'build');
+    throw failure('bug', 'build');
+  }
+  budget(prompt, PROMPT_BUDGET_BYTES, scope);
+  guardThrottle(scope);
+
+  const release = await aiQueue.acquire(signal, req.priority ?? 'user', () => phase('queued'));
+  try {
+    const t = template as PromptTemplate<unknown, unknown>;
+    const first = await callOnce(prompt, t, signal, phase, scope);
+    const r1 = schema.safeParse(first);
+    if (r1.success) return { data: r1.data, tierApplied: template.tier, retried: false };
+
+    logWarn(scope, { code: 'schema', message: describeIssues(r1.error.issues) }, 'first reply');
+    const prompt2 = retryPrompt(prompt, r1.error.issues, first);
+    budget(prompt2, SAMPLE_LIMIT_BYTES, scope);
+    const second = await callOnce(prompt2, t, signal, phase, scope);
+    const r2 = schema.safeParse(second);
+    if (r2.success) return { data: r2.data, tierApplied: template.tier, retried: true };
+
+    logWarn(scope, { code: 'schema', message: describeIssues(r2.error.issues) }, 'retry');
+    throw failure('invalid', 'schema');
+  } finally {
+    release();
+  }
+}
+
+/**
+ * Fragt Claude nach JSON gemäß Vorlage. Löst mit geprüften Daten auf oder lehnt mit genau
+ * einem `AiFailure` ab. Nur auf eine ausdrückliche Handlung hin aufrufen, nie aus Schleifen
+ * oder Timern (contract/sample.d.ts).
+ */
+export async function askJson<V, O>(req: AiRequest<V, O>): Promise<AiResult<O>> {
+  const scope = `ai:${req.template.id}@${req.template.version}`;
+  const phase: Phase = (p) => {
+    try {
+      req.onPhase?.(p);
+    } catch (err) {
+      logError('ai:onPhase', err, scope);
+    }
+  };
+  try {
+    const result = await run(req, scope, phase);
+    phase('done');
+    return result;
+  } catch (err) {
+    const f = err instanceof AiFailure ? err : failureFromSample(err, scope);
+    if (f.kind !== 'cancelled') phase('error');
+    throw f;
+  }
+}
+
+/** Nur für Tests: Warteschlange und Drosselung zurücksetzen. */
+export function resetAiGate(): void {
+  aiQueue.reset();
+  resetAiStatus();
+}
