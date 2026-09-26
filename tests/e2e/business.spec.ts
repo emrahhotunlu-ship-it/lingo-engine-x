@@ -13,7 +13,9 @@ type Doc = Record<string, unknown>;
 
 async function openHub(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('today-business').click();
+  await page.getByTestId('tab-speak').click();
+  await screen(page, 'speak');
+  await page.getByTestId('speak-business').click();
   await screen(page, 'business');
   await expect(page.getByTestId('biz-hub')).toBeVisible();
 }

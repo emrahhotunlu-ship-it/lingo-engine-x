@@ -9,7 +9,7 @@ const spoken = (page: Page): Promise<string[]> => page.evaluate(() => [...(windo
 
 async function startRoleplay(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('today-speak').click();
+  await page.getByTestId('tab-speak').click();
   await screen(page, 'speak');
   await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
   await page.getByTestId('briefing-start').click();

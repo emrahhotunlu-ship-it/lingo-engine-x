@@ -15,7 +15,7 @@ type Doc = Record<string, unknown>;
 
 async function openHub(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('today-speak').click();
+  await page.getByTestId('tab-speak').click();
   await screen(page, 'speak');
   await expect(page.getByTestId('scene-card').first()).toBeVisible();
 }
@@ -125,12 +125,15 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   const radar = (d['app/radar'] as { events: Doc[] }).events;
   expect(radar.some((r) => r.s === 'k' && r.c === 'modals' && String(r.q).includes('must delay'))).toBe(true);
 
-  // Heute: Sprechen erledigt – Zustand, kein Knopf.
+  // Heute: Das Gespräch zählt nicht als „Wiederholen“; Angebote erst nach der Pflicht (Kap. 2.1).
   await page.getByTestId('report-home').click();
   await screen(page, 'today');
-  await expect(page.getByTestId('today-speak')).toHaveAttribute('data-state', 'done');
-  await expect(page.locator('button[data-testid="today-speak"]')).toHaveCount(0);
-  await expect(page.getByTestId('today-status')).toHaveText(/Wiederholen 0 von/);
+  await expect(page.getByTestId('today-status')).toHaveText(/0 von 3 · es fehlt: Wiederholen/);
+  await expect(page.getByTestId('today-offers')).toHaveCount(0);
+  // Reiter „Sprechen“: erledigt ist Zustand, kein Knopf (Kap. 2.2).
+  await page.getByTestId('tab-speak').click();
+  await screen(page, 'speak');
+  await expect(page.getByTestId('speak-status')).toHaveAttribute('data-done', 'true');
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

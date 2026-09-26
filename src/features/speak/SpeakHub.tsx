@@ -5,6 +5,7 @@ import { useT } from '../../i18n';
 import { useAiAvailable } from '../../ai/scope';
 import { AI_SCENE_HINT_AT } from '../../domain/speak/sceneDoc';
 import { Button, IconButton } from '../../ui/Button';
+import { ChannelIcon } from '../../ui/Card';
 import { Icon } from '../../ui/Icon';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
@@ -101,6 +102,23 @@ export function SpeakHub() {
           )}
         </>
       )}
+
+      {/* Reiter „Sprechen“: auch die Business-Suite ist hier jederzeit erreichbar (auf „Heute“ erst nach der Pflicht). */}
+      <motion.section variants={item} aria-labelledby="sp-biz" className="flex flex-col gap-2 border-t border-line pt-5">
+        <h2 id="sp-biz" className="lx-eyebrow">
+          {t('bizTitle')}
+        </h2>
+        <button type="button" onClick={() => go({ name: 'business' })} data-testid="speak-business" className="lx-glass flex min-h-16 w-full items-center gap-3 rounded-[var(--radius-card)] px-4 py-3 text-left hover:bg-surface-strong md:max-w-md">
+          <ChannelIcon channel="business">
+            <Icon name="briefcase" />
+          </ChannelIcon>
+          <span className="flex min-w-0 flex-1 flex-col">
+            <span className="text-sm font-semibold">{t('bizTitle')}</span>
+            <span className="text-xs text-muted">{t('tdBizHint')}</span>
+          </span>
+          <Icon name="arrowRight" size={18} />
+        </button>
+      </motion.section>
 
       <SceneBriefing scene={open} onClose={() => setOpenId(null)} />
       {scenes && (
