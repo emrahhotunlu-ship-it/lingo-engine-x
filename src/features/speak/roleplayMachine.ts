@@ -81,6 +81,7 @@ export const roleplayMachine = setup({
     skipPending: assign({
       analyses: ({ context }) => Object.fromEntries(Object.entries(context.analyses).map(([k, a]) => [k, a.state === 'pending' ? { state: 'skipped' as const } : a])),
     }),
+    setPartial: assign({ partial: ({ context, event }) => (event.type === 'TEXT' ? event.text : context.partial) }),
     addTaken: assign({
       taken: ({ context, event }) => (event.type === 'TAKEN' && !context.taken.includes(event.en) ? [...context.taken, event.en] : context.taken),
     }),
@@ -134,12 +135,12 @@ export const roleplayMachine = setup({
     sending: {
       initial: 'thinking',
       states: {
-        thinking: { on: { TEXT: 'streaming', SLOW: 'slow' } },
-        slow: { on: { TEXT: 'streaming' } },
+        thinking: { on: { TEXT: { target: 'streaming', actions: 'setPartial' }, SLOW: 'slow' } },
+        slow: { on: { TEXT: { target: 'streaming', actions: 'setPartial' } } },
         streaming: {},
       },
       on: {
-        TEXT: { actions: assign({ partial: ({ event }) => (event.type === 'TEXT' ? event.text : '') }) },
+        TEXT: { actions: 'setPartial' },
         REPLY: {
           target: 'composing',
           actions: assign({

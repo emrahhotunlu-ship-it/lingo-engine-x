@@ -11,7 +11,7 @@ export const MAIL_MAX = 2500;
 export const SEGMENTS_MAX = 25;
 
 // Getrennt wird nur, wo nach dem Satzzeichen Leerraum folgt (3.5, U.S. und 1,000 bleiben ganz).
-const SENTENCE_RE = /[^.!?]*?[.!?]+["'’”)\]]*(?=\s|$)|[^.!?]+$/g;
+const SENTENCE_RE = /.*?[.!?]+["'’”)\]]*(?=\s|$)|.+$/g;
 
 export function segmentMail(text: string): MailSegment[] {
   const src = text.replace(/\r\n?/g, '\n').replace(/[ \t]+\n/g, '\n').trim();

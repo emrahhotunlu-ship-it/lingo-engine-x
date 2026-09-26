@@ -598,6 +598,14 @@ put(`writing/lesson-l05-${now - 10 * DAY}`, {
     errors: [{ wrong: 'save costs for servers', right: 'save on server costs', why: 'Feste Verbindung: save on something.', cat: 'collocation', sev: 'minor' }],
   },
 });
+// Phase 3 (B4): stimmige Ursprungssätze – eigener Satz im Gespräch und aufgewertete Fassung,
+// die die Wendung wörtlich enthält.
+const CHUNK_CONTEXT = [
+  ['We must delay the start.', 'If we push back the go-live, the exposure is yours, not ours.'],
+  ['I understand you, but the risk is high.', 'I take your point, but the penalty risk is real.'],
+  ['This date we cannot change.', 'For us, the Q2 date is non-negotiable.'],
+  ['We must be ready in time.', 'It is still possible to meet a deadline this tight if testing starts in April.'],
+];
 [
   ['push back the go-live', 'den Produktivstart verschieben', 'collocation', 'neutral'],
   ['I take your point, but …', 'Ich verstehe Ihren Einwand, aber …', 'frame', 'formal'],
@@ -613,7 +621,7 @@ put(`writing/lesson-l05-${now - 10 * DAY}`, {
     kind,
     register,
     why: 'Klingt in Verhandlungen souveräner als die wörtliche Übersetzung.',
-    src: { scene: scenes[0].id, sceneTitle: scenes[0].title, utterance: 'We must delay the start.', upgraded: `We need to ${en}.`, turn: i + 1, ts: created },
+    src: { scene: scenes[0].id, sceneTitle: scenes[0].title, utterance: CHUNK_CONTEXT[i][0], upgraded: CHUNK_CONTEXT[i][1], turn: i + 1, ts: created },
     level: 'C1',
     created,
     also: [],
@@ -681,6 +689,155 @@ const lp = passages.listen[1];
 put(`lpool/ai${now - 7 * DAY}`, { ...lp, src: 'ai' });
 const wp = passages.write[1];
 put(`wprompt/${addDays(ANCHOR, -2)}`, { p: { ...wp, src: 'seed' } });
+
+
+// ------------------------------------------------------------------ Phase 3: Sprechen und Business
+// Wendungen aus Business-Quellen und eine ausgeblendete, eine KI-Szene, eine unvollständige Szene,
+// Gesprächsläufe (talk/2026-09), Business-Einheiten (biz/2026-09), Sprech-Einträge im Log.
+[
+  {
+    en: 'behind schedule', de: 'im Verzug', def: 'later than planned', kind: 'collocation', register: 'neutral',
+    src: { kind: 'mail', ref: 'biz/2026-09#mail-1', title: 'Email Refiner', utterance: 'The scanners come two weeks later.', upgraded: 'The scanners are running two weeks behind schedule.' },
+  },
+  {
+    en: 'in return for', de: 'im Gegenzug für', def: 'as an exchange for something', kind: 'frame', register: 'neutral',
+    src: { kind: 'biz', ref: 'playbook/agree#a-price', title: 'Agreeing with conditions', utterance: '', upgraded: 'We can lower the fee in return for a two-year contract.' },
+  },
+  {
+    en: 'that hinges on', de: 'das hängt ab von', def: 'depends mainly on', kind: 'frame', register: 'neutral', hidden: true,
+    src: { kind: 'scene', scene: scenes[0].id, sceneTitle: scenes[0].title, utterance: 'It depends from your test team.', upgraded: 'That hinges on how quickly your team can sign off on the test plan.', turn: 2 },
+  },
+].forEach((c, i) => {
+  const id = `c-${slug(c.en)}`;
+  const created = now - (i + 1) * DAY;
+  const { hidden, ...rest } = c;
+  put(`chunk/${id}`, {
+    id,
+    ...rest,
+    why: 'Klingt natürlicher als die wörtliche Übersetzung.',
+    whyLang: 'de',
+    src: { ...c.src, ts: created },
+    level: 'C1',
+    created,
+    also: [],
+    state: 'new',
+    S: 0,
+    D: 5,
+    due: 0,
+    last: 0,
+    reps: 0,
+    lapses: 0,
+    stage: 0,
+    modes: {},
+    origin: c.src.kind === 'scene' ? { v: 1, kind: 'scene', ref: `scene/${c.src.scene}`, title: c.src.sceneTitle, t: created } : { v: 1, kind: c.src.kind, ref: c.src.ref, title: c.src.title, t: created },
+    ...(hidden ? { hidden: true } : {}),
+  });
+});
+
+const aiSceneT = now - 2 * DAY;
+const AI_SCENE_ID = `sc-ai${aiSceneT.toString(36)}`;
+put(`scene/${AI_SCENE_ID}`, {
+  id: AI_SCENE_ID,
+  title: 'Renegotiating the support contract',
+  title_de: 'Den Supportvertrag neu verhandeln',
+  situation: 'Your largest reseller wants to cut the support fee by a third after two slow ticket responses last quarter. Their head of operations has asked for a call before the renewal deadline on Friday.',
+  situation_de: 'Euer größter Vertriebspartner will die Supportgebühr um ein Drittel senken, weil im letzten Quartal zwei Tickets langsam bearbeitet wurden. Sein Leiter Operations hat vor der Verlängerungsfrist am Freitag um ein Gespräch gebeten.',
+  goal: 'Keep the fee and offer a concrete service improvement instead.',
+  goal_de: 'Die Gebühr halten und stattdessen eine konkrete Verbesserung anbieten.',
+  persona: { name: 'Sandra Whitfield', role: 'Head of Operations', org: 'a regional IT reseller', traits: 'Friendly but tough, keeps a list of every missed deadline and quotes it.' },
+  stake: 'She needs a visible saving to show her management.',
+  objection: 'She thinks your support team is understaffed and the fee pays for nothing.',
+  opening: 'Thanks for making time. I will be honest with you: my team is asking why we pay premium rates for standard response times.',
+  useful: [
+    { en: 'I hear you', de: 'Ich verstehe Sie' },
+    { en: 'what I can offer is', de: 'was ich anbieten kann, ist' },
+    { en: 'in return for', de: 'im Gegenzug für' },
+    { en: 'let me put that in context', de: 'lassen Sie mich das einordnen' },
+  ],
+  level: 'C1',
+  ts: aiSceneT,
+  src: 'ai',
+  pv: 'scene-gen@1',
+  gram: 'conditionals',
+  words: ['leverage', 'retention'],
+});
+// Unvollständig (ohne Gegenüber): gültig gelesen, aber nicht startbar.
+put('scene/sc-broken', { id: 'sc-broken', title: 'Draft scene without a counterpart', level: 'B2', ts: now - 9 * DAY });
+
+// Sprech-Einträge im Log und im Profil (an drei Tagen, nicht am Stichtag).
+const TALK_DAYS = [-1, -3, -6].map((o) => addDays(ANCHOR, o));
+TALK_DAYS.forEach((k, i) => {
+  const t = at(k, 20, 30 + i);
+  const n = [6, 4, 3][i];
+  const entry = { t, ok: true, lang: 'de', type: 'speak', id: scenes[i % scenes.length].id, m: 'speak', q: scenes[i % scenes.length].title, n, ms: n * 110_000, ctx: 'spk' };
+  const log = docs[`log/${k}`] ?? { date: k, entries: [] };
+  log.entries = [...log.entries, entry].sort((a, b) => a.t - b.t);
+  put(`log/${k}`, log);
+  const profile = docs['app/profile'];
+  profile.act[k] = { ...(profile.act[k] ?? {}), [n >= 4 ? 'speak' : 'speak~']: 1 };
+});
+
+const runOf = (i, extra) => {
+  const k = TALK_DAYS[i];
+  const t = at(k, 20, 18 + i);
+  return {
+    id: `r${t.toString(36)}`, t, day: k, scene: scenes[i % scenes.length].id, title: scenes[i % scenes.length].title, src: 'legacy',
+    turns: [6, 4, 3][i], ms: [6, 4, 3][i] * 110_000, end: 'user', goal: null, clean: [3, 2, 1][i],
+    errs: { 'modals-deduction': 1, register: 1 }, taken: i === 0 ? ['push back the go-live'] : [],
+    lines: [
+      { u: 'We must delay the start.', up: 'If we push back the go-live, the exposure is yours, not ours.', v: 'errors', c: ['modals-deduction'] },
+      { u: 'I think the budget is not the problem.', up: 'In my view, my concern would be the timeline, not the budget.', v: 'minor', c: ['register'] },
+    ],
+    report: null, lang: 'de', tier: 'quick', v: 1, ...extra,
+  };
+};
+put('talk/2026-09', {
+  v: 1,
+  month: '2026-09',
+  runs: [
+    runOf(2, {}),
+    runOf(1, {
+      goal: 'partly',
+      lang: 'en',
+      report: {
+        lang: 'en', t: at(TALK_DAYS[1], 20, 40),
+        goal: { state: 'partly', why: 'You named the risk but did not agree on a firm date.' },
+        summary: 'You stayed calm and gave reasons. You still gave in too quickly when he objected.',
+        strengths: [{ quote: 'the exposure here is', why: 'A clear statement of the risk without blame.' }],
+        focus: [{ title: 'Softening proposals', said: 'We must delay the start', better: 'I would rather we kept the Q2 date.', why: 'It sounds like a proposal, not an order.', cat: 'register' }],
+        phrases: [{ en: 'that hinges on', de: 'das hängt ab von', def: 'depends mainly on', ex: 'That hinges on how fast your team can test.' }],
+      },
+    }),
+    runOf(0, {
+      goal: 'reached',
+      report: {
+        lang: 'de', t: at(TALK_DAYS[0], 20, 45),
+        goal: { state: 'reached', why: 'Du hast den Termin gehalten, ohne Schuld zuzuweisen.' },
+        summary: 'Klare Argumente und ein ruhiger Ton. Bei Zahlen warst du noch vage.',
+        strengths: [{ quote: 'If we push back the go-live', why: 'Die Bedingung macht das Risiko greifbar.' }],
+        focus: [{ title: 'Konkrete Zahlen nennen', said: 'We must delay the start', better: 'Two weeks of delay would affect about 4,000 invoices.', why: 'Zahlen überzeugen einen CFO schneller als Adjektive.', cat: 'vocab' }],
+        phrases: [{ en: 'the exposure here is', de: 'das Risiko liegt hier bei', def: 'the risk in this case is', ex: 'The exposure here is the penalty, not the budget.' }],
+      },
+    }),
+  ],
+});
+
+const bizT = (o, h) => at(addDays(ANCHOR, o), h, 10);
+put('biz/2026-09', {
+  v: 1,
+  month: '2026-09',
+  items: [
+    { id: `mail-${bizT(-4, 18).toString(36)}`, t: bizT(-4, 18), day: addDays(ANCHOR, -4), kind: 'mail', recipient: 'client', intent: 'inform', orig: 'Dear Mr Walker,\n\nThe scanners come two weeks later.\n\nBest regards', final: 'Dear Mr Walker,\n\nThe scanners are running two weeks behind schedule.\n\nBest regards', picks: [[1, 0]], changes: 1, taken: ['behind schedule'], lang: 'de' },
+    { id: `play-${bizT(-3, 19).toString(36)}`, t: bizT(-3, 19), day: addDays(ANCHOR, -3), kind: 'play', playbook: 'agree', drill: { n: 6, right: 5 } },
+    { id: `pitch-${bizT(-2, 17).toString(36)}`, t: bizT(-2, 17), day: addDays(ANCHOR, -2), kind: 'pitch', points: ['Cloud archive for small businesses', 'Setup in one day', 'Retention rules built in'], attempt: 'Our archive is in one day installed and small companies can start.', verdict: 'minor', covered: 2, total: 3, lang: 'de', summary: 'Der Nutzen kommt direkt nach der Tatsache.' },
+  ],
+});
+
+// Fehler-Radar: zwei Belege aus dem Sprechen (Quelle k).
+docs['app/radar'].events.push(
+  { c: 'modals-deduction', s: 'k', t: at(TALK_DAYS[0], 20, 44), q: 'We must delay the start.', g: 'must delay', a: 'need to push back' },
+  { c: 'conditionals', s: 'k', t: at(TALK_DAYS[1], 20, 39), q: 'If we would start later, the risk is higher.', g: 'If we would start', a: 'If we started' },
+);
 
 // ------------------------------------------------------------------ Ausgabe
 const sorted = Object.fromEntries(Object.keys(docs).sort().map((k) => [k, docs[k]]));

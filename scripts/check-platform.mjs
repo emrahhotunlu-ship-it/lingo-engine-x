@@ -39,7 +39,9 @@ const loaders = [
 for (const [re, label] of loaders) if (re.test(html)) problems.push(`Ladeziel gefunden: ${label}`);
 
 // Spuren des Entwicklungs-Adapters und der Testdaten (Kap. 3.3).
-const devMarkers = ['__LINGO_FAKE__', '__LINGO_FAKE_OPTIONS__', 'lx:fake-db', 'Feste Beispielantwort', 'installFakeRuntime', 'createMemoryDb', 'Alex Muster', 'zzjson', 'com.apple.voice.compact'];
+const devMarkers = ['__LINGO_FAKE__', '__LINGO_FAKE_OPTIONS__', 'lx:fake-db', 'Feste Beispielantwort', 'installFakeRuntime', 'createMemoryDb', 'Alex Muster', 'zzjson', 'com.apple.voice.compact',
+  // Phase 3: nachgebildete Sprech-/Business-Antworten und Spracheingabe
+  'zzde', 'I wanted to let you know that', 'InvalidStateError: already started'];
 for (const m of devMarkers) if (html.includes(m)) problems.push(`Entwicklungs-Adapter oder Testdaten im Build: "${m}"`);
 
 // Kopf

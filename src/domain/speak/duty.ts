@@ -3,7 +3,7 @@
 
 export const SPEAK_DUTY_TURNS = 4;
 
-type Entry = { type?: unknown; n?: unknown };
+type Entry = Readonly<Record<string, unknown>>;
 
 const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
 

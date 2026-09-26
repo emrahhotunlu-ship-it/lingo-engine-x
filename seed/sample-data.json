@@ -679,7 +679,8 @@
     "cards": 32,
     "gram": 7,
     "listen": 1,
-    "sprint": 1
+    "sprint": 1,
+    "speak": 1
    },
    "2026-09-18": {
     "review": 1,
@@ -692,7 +693,8 @@
     "review": 1,
     "cards": 21,
     "gram": 11,
-    "listen": 1
+    "listen": 1,
+    "speak": 1
    },
    "2026-09-20": {
     "review": 1,
@@ -1583,6 +1585,22 @@
     "q": "I finished the report yesterday.",
     "g": "I have finished the report yesterday.",
     "a": "I finished the report yesterday."
+   },
+   {
+    "c": "modals-deduction",
+    "s": "k",
+    "t": 1789843440000,
+    "q": "We must delay the start.",
+    "g": "must delay",
+    "a": "need to push back"
+   },
+   {
+    "c": "conditionals",
+    "s": "k",
+    "t": 1789670340000,
+    "q": "If we would start later, the risk is higher.",
+    "g": "If we would start",
+    "a": "If we started"
    }
   ]
  },
@@ -1650,6 +1668,98 @@
   ],
   "src": "ai"
  },
+ "biz/2026-09": {
+  "v": 1,
+  "month": "2026-09",
+  "items": [
+   {
+    "id": "mail-mu4aqzeo",
+    "t": 1789575000000,
+    "day": "2026-09-16",
+    "kind": "mail",
+    "recipient": "client",
+    "intent": "inform",
+    "orig": "Dear Mr Walker,\n\nThe scanners come two weeks later.\n\nBest regards",
+    "final": "Dear Mr Walker,\n\nThe scanners are running two weeks behind schedule.\n\nBest regards",
+    "picks": [
+     [
+      1,
+      0
+     ]
+    ],
+    "changes": 1,
+    "taken": [
+     "behind schedule"
+    ],
+    "lang": "de"
+   },
+   {
+    "id": "play-mu5sbzuo",
+    "t": 1789665000000,
+    "day": "2026-09-17",
+    "kind": "play",
+    "playbook": "agree",
+    "drill": {
+     "n": 6,
+     "right": 5
+    }
+   },
+   {
+    "id": "pitch-mu73hiyo",
+    "t": 1789744200000,
+    "day": "2026-09-18",
+    "kind": "pitch",
+    "points": [
+     "Cloud archive for small businesses",
+     "Setup in one day",
+     "Retention rules built in"
+    ],
+    "attempt": "Our archive is in one day installed and small companies can start.",
+    "verdict": "minor",
+    "covered": 2,
+    "total": 3,
+    "lang": "de",
+    "summary": "Der Nutzen kommt direkt nach der Tatsache."
+   }
+  ]
+ },
+ "chunk/c-behind-schedule": {
+  "id": "c-behind-schedule",
+  "en": "behind schedule",
+  "de": "im Verzug",
+  "def": "later than planned",
+  "kind": "collocation",
+  "register": "neutral",
+  "src": {
+   "kind": "mail",
+   "ref": "biz/2026-09#mail-1",
+   "title": "Email Refiner",
+   "utterance": "The scanners come two weeks later.",
+   "upgraded": "The scanners are running two weeks behind schedule.",
+   "ts": 1789840800000
+  },
+  "why": "Klingt natürlicher als die wörtliche Übersetzung.",
+  "whyLang": "de",
+  "level": "C1",
+  "created": 1789840800000,
+  "also": [],
+  "state": "new",
+  "S": 0,
+  "D": 5,
+  "due": 0,
+  "last": 0,
+  "reps": 0,
+  "lapses": 0,
+  "stage": 0,
+  "modes": {},
+  "origin": {
+   "v": 1,
+   "kind": "mail",
+   "ref": "biz/2026-09#mail-1",
+   "title": "Email Refiner",
+   "t": 1789840800000
+  }
+ },
  "chunk/c-i-take-your-point-but": {
   "id": "c-i-take-your-point-but",
   "en": "I take your point, but …",
@@ -1660,8 +1770,8 @@
   "src": {
    "scene": "sc-vida",
    "sceneTitle": "Holding the Q2 e-invoicing deadline",
-   "utterance": "We must delay the start.",
-   "upgraded": "We need to I take your point, but ….",
+   "utterance": "I understand you, but the risk is high.",
+   "upgraded": "I take your point, but the penalty risk is real.",
    "turn": 2,
    "ts": 1789668000000
   },
@@ -1677,6 +1787,43 @@
   "lapses": 0,
   "stage": 1
  },
+ "chunk/c-in-return-for": {
+  "id": "c-in-return-for",
+  "en": "in return for",
+  "de": "im Gegenzug für",
+  "def": "as an exchange for something",
+  "kind": "frame",
+  "register": "neutral",
+  "src": {
+   "kind": "biz",
+   "ref": "playbook/agree#a-price",
+   "title": "Agreeing with conditions",
+   "utterance": "",
+   "upgraded": "We can lower the fee in return for a two-year contract.",
+   "ts": 1789754400000
+  },
+  "why": "Klingt natürlicher als die wörtliche Übersetzung.",
+  "whyLang": "de",
+  "level": "C1",
+  "created": 1789754400000,
+  "also": [],
+  "state": "new",
+  "S": 0,
+  "D": 5,
+  "due": 0,
+  "last": 0,
+  "reps": 0,
+  "lapses": 0,
+  "stage": 0,
+  "modes": {},
+  "origin": {
+   "v": 1,
+   "kind": "biz",
+   "ref": "playbook/agree#a-price",
+   "title": "Agreeing with conditions",
+   "t": 1789754400000
+  }
+ },
  "chunk/c-meet-a-deadline": {
   "id": "c-meet-a-deadline",
   "en": "to meet a deadline",
@@ -1687,8 +1834,8 @@
   "src": {
    "scene": "sc-vida",
    "sceneTitle": "Holding the Q2 e-invoicing deadline",
-   "utterance": "We must delay the start.",
-   "upgraded": "We need to to meet a deadline.",
+   "utterance": "We must be ready in time.",
+   "upgraded": "It is still possible to meet a deadline this tight if testing starts in April.",
    "turn": 4,
    "ts": 1789495200000
   },
@@ -1714,8 +1861,8 @@
   "src": {
    "scene": "sc-vida",
    "sceneTitle": "Holding the Q2 e-invoicing deadline",
-   "utterance": "We must delay the start.",
-   "upgraded": "We need to non-negotiable.",
+   "utterance": "This date we cannot change.",
+   "upgraded": "For us, the Q2 date is non-negotiable.",
    "turn": 3,
    "ts": 1789581600000
   },
@@ -1742,7 +1889,7 @@
    "scene": "sc-vida",
    "sceneTitle": "Holding the Q2 e-invoicing deadline",
    "utterance": "We must delay the start.",
-   "upgraded": "We need to push back the go-live.",
+   "upgraded": "If we push back the go-live, the exposure is yours, not ours.",
    "turn": 1,
    "ts": 1789754400000
   },
@@ -1757,6 +1904,45 @@
   "reps": 0,
   "lapses": 0,
   "stage": 0
+ },
+ "chunk/c-that-hinges-on": {
+  "id": "c-that-hinges-on",
+  "en": "that hinges on",
+  "de": "das hängt ab von",
+  "def": "depends mainly on",
+  "kind": "frame",
+  "register": "neutral",
+  "src": {
+   "kind": "scene",
+   "scene": "sc-vida",
+   "sceneTitle": "Holding the Q2 e-invoicing deadline",
+   "utterance": "It depends from your test team.",
+   "upgraded": "That hinges on how quickly your team can sign off on the test plan.",
+   "turn": 2,
+   "ts": 1789668000000
+  },
+  "why": "Klingt natürlicher als die wörtliche Übersetzung.",
+  "whyLang": "de",
+  "level": "C1",
+  "created": 1789668000000,
+  "also": [],
+  "state": "new",
+  "S": 0,
+  "D": 5,
+  "due": 0,
+  "last": 0,
+  "reps": 0,
+  "lapses": 0,
+  "stage": 0,
+  "modes": {},
+  "origin": {
+   "v": 1,
+   "kind": "scene",
+   "ref": "scene/sc-vida",
+   "title": "Holding the Q2 e-invoicing deadline",
+   "t": 1789668000000
+  },
+  "hidden": true
  },
  "daily/2026-09-18": {
   "grammarItems": [
@@ -6522,6 +6708,18 @@
     "m": "listen",
     "given": "to break eve",
     "ans": "to break even"
+   },
+   {
+    "t": 1789410720000,
+    "ok": true,
+    "lang": "de",
+    "type": "speak",
+    "id": "sc-scope",
+    "m": "speak",
+    "q": "Saying no to a scope request",
+    "n": 3,
+    "ms": 330000,
+    "ctx": "spk"
    }
   ]
  },
@@ -7311,6 +7509,18 @@
     "given": "would not have missed",
     "ans": "would not have missed",
     "src": "pool"
+   },
+   {
+    "t": 1789669860000,
+    "ok": true,
+    "lang": "de",
+    "type": "speak",
+    "id": "sc-arch",
+    "m": "speak",
+    "q": "Defending the cloud DMS against on-premise",
+    "n": 4,
+    "ms": 440000,
+    "ctx": "spk"
    }
   ]
  },
@@ -7793,6 +8003,18 @@
     "m": "produce",
     "given": "to affect",
     "ans": "to affect"
+   },
+   {
+    "t": 1789842600000,
+    "ok": true,
+    "lang": "de",
+    "type": "speak",
+    "id": "sc-vida",
+    "m": "speak",
+    "q": "Holding the Q2 e-invoicing deadline",
+    "n": 6,
+    "ms": 660000,
+    "ctx": "spk"
    }
   ]
  },
@@ -8220,6 +8442,51 @@
    "model_summary": "Retaining customers costs less than acquiring new ones, which is why SaaS firms focus on onboarding and support."
   }
  },
+ "scene/sc-aimu79k5c0": {
+  "id": "sc-aimu79k5c0",
+  "title": "Renegotiating the support contract",
+  "title_de": "Den Supportvertrag neu verhandeln",
+  "situation": "Your largest reseller wants to cut the support fee by a third after two slow ticket responses last quarter. Their head of operations has asked for a call before the renewal deadline on Friday.",
+  "situation_de": "Euer größter Vertriebspartner will die Supportgebühr um ein Drittel senken, weil im letzten Quartal zwei Tickets langsam bearbeitet wurden. Sein Leiter Operations hat vor der Verlängerungsfrist am Freitag um ein Gespräch gebeten.",
+  "goal": "Keep the fee and offer a concrete service improvement instead.",
+  "goal_de": "Die Gebühr halten und stattdessen eine konkrete Verbesserung anbieten.",
+  "persona": {
+   "name": "Sandra Whitfield",
+   "role": "Head of Operations",
+   "org": "a regional IT reseller",
+   "traits": "Friendly but tough, keeps a list of every missed deadline and quotes it."
+  },
+  "stake": "She needs a visible saving to show her management.",
+  "objection": "She thinks your support team is understaffed and the fee pays for nothing.",
+  "opening": "Thanks for making time. I will be honest with you: my team is asking why we pay premium rates for standard response times.",
+  "useful": [
+   {
+    "en": "I hear you",
+    "de": "Ich verstehe Sie"
+   },
+   {
+    "en": "what I can offer is",
+    "de": "was ich anbieten kann, ist"
+   },
+   {
+    "en": "in return for",
+    "de": "im Gegenzug für"
+   },
+   {
+    "en": "let me put that in context",
+    "de": "lassen Sie mich das einordnen"
+   }
+  ],
+  "level": "C1",
+  "ts": 1789754400000,
+  "src": "ai",
+  "pv": "scene-gen@1",
+  "gram": "conditionals",
+  "words": [
+   "leverage",
+   "retention"
+  ]
+ },
  "scene/sc-arch": {
   "id": "sc-arch",
   "level": "C1",
@@ -8262,6 +8529,12 @@
   ],
   "ts": 1789581600000,
   "done": false
+ },
+ "scene/sc-broken": {
+  "id": "sc-broken",
+  "title": "Draft scene without a counterpart",
+  "level": "B2",
+  "ts": 1789149600000
  },
  "scene/sc-vida": {
   "id": "sc-vida",
@@ -8306,6 +8579,196 @@
   "ts": 1789668000000,
   "done": true,
   "band": "B2+"
+ },
+ "talk/2026-09": {
+  "v": 1,
+  "month": "2026-09",
+  "runs": [
+   {
+    "id": "rmu1kiglc",
+    "t": 1789410000000,
+    "day": "2026-09-14",
+    "scene": "sc-scope",
+    "title": "Saying no to a scope request",
+    "src": "legacy",
+    "turns": 3,
+    "ms": 330000,
+    "end": "user",
+    "goal": null,
+    "clean": 1,
+    "errs": {
+     "modals-deduction": 1,
+     "register": 1
+    },
+    "taken": [],
+    "lines": [
+     {
+      "u": "We must delay the start.",
+      "up": "If we push back the go-live, the exposure is yours, not ours.",
+      "v": "errors",
+      "c": [
+       "modals-deduction"
+      ]
+     },
+     {
+      "u": "I think the budget is not the problem.",
+      "up": "In my view, my concern would be the timeline, not the budget.",
+      "v": "minor",
+      "c": [
+       "register"
+      ]
+     }
+    ],
+    "report": null,
+    "lang": "de",
+    "tier": "quick",
+    "v": 1
+   },
+   {
+    "id": "rmu5usqao",
+    "t": 1789669140000,
+    "day": "2026-09-17",
+    "scene": "sc-arch",
+    "title": "Defending the cloud DMS against on-premise",
+    "src": "legacy",
+    "turns": 4,
+    "ms": 440000,
+    "end": "user",
+    "goal": "partly",
+    "clean": 2,
+    "errs": {
+     "modals-deduction": 1,
+     "register": 1
+    },
+    "taken": [],
+    "lines": [
+     {
+      "u": "We must delay the start.",
+      "up": "If we push back the go-live, the exposure is yours, not ours.",
+      "v": "errors",
+      "c": [
+       "modals-deduction"
+      ]
+     },
+     {
+      "u": "I think the budget is not the problem.",
+      "up": "In my view, my concern would be the timeline, not the budget.",
+      "v": "minor",
+      "c": [
+       "register"
+      ]
+     }
+    ],
+    "report": {
+     "lang": "en",
+     "t": 1789670400000,
+     "goal": {
+      "state": "partly",
+      "why": "You named the risk but did not agree on a firm date."
+     },
+     "summary": "You stayed calm and gave reasons. You still gave in too quickly when he objected.",
+     "strengths": [
+      {
+       "quote": "the exposure here is",
+       "why": "A clear statement of the risk without blame."
+      }
+     ],
+     "focus": [
+      {
+       "title": "Softening proposals",
+       "said": "We must delay the start",
+       "better": "I would rather we kept the Q2 date.",
+       "why": "It sounds like a proposal, not an order.",
+       "cat": "register"
+      }
+     ],
+     "phrases": [
+      {
+       "en": "that hinges on",
+       "de": "das hängt ab von",
+       "def": "depends mainly on",
+       "ex": "That hinges on how fast your team can test."
+      }
+     ]
+    },
+    "lang": "en",
+    "tier": "quick",
+    "v": 1
+   },
+   {
+    "id": "rmu8pn5c0",
+    "t": 1789841880000,
+    "day": "2026-09-19",
+    "scene": "sc-vida",
+    "title": "Holding the Q2 e-invoicing deadline",
+    "src": "legacy",
+    "turns": 6,
+    "ms": 660000,
+    "end": "user",
+    "goal": "reached",
+    "clean": 3,
+    "errs": {
+     "modals-deduction": 1,
+     "register": 1
+    },
+    "taken": [
+     "push back the go-live"
+    ],
+    "lines": [
+     {
+      "u": "We must delay the start.",
+      "up": "If we push back the go-live, the exposure is yours, not ours.",
+      "v": "errors",
+      "c": [
+       "modals-deduction"
+      ]
+     },
+     {
+      "u": "I think the budget is not the problem.",
+      "up": "In my view, my concern would be the timeline, not the budget.",
+      "v": "minor",
+      "c": [
+       "register"
+      ]
+     }
+    ],
+    "report": {
+     "lang": "de",
+     "t": 1789843500000,
+     "goal": {
+      "state": "reached",
+      "why": "Du hast den Termin gehalten, ohne Schuld zuzuweisen."
+     },
+     "summary": "Klare Argumente und ein ruhiger Ton. Bei Zahlen warst du noch vage.",
+     "strengths": [
+      {
+       "quote": "If we push back the go-live",
+       "why": "Die Bedingung macht das Risiko greifbar."
+      }
+     ],
+     "focus": [
+      {
+       "title": "Konkrete Zahlen nennen",
+       "said": "We must delay the start",
+       "better": "Two weeks of delay would affect about 4,000 invoices.",
+       "why": "Zahlen überzeugen einen CFO schneller als Adjektive.",
+       "cat": "vocab"
+      }
+     ],
+     "phrases": [
+      {
+       "en": "the exposure here is",
+       "de": "das Risiko liegt hier bei",
+       "def": "the risk in this case is",
+       "ex": "The exposure here is the penalty, not the budget."
+      }
+     ]
+    },
+    "lang": "de",
+    "tier": "quick",
+    "v": 1
+   }
+  ]
  },
  "vocab/access-rights": {
   "id": "access-rights",
