@@ -43,6 +43,7 @@ test('db und sample liefern null: klarer Hinweis statt Absturz', async ({ page }
   const { errors, external } = await boot(page, { fake: { capabilities: { db: false, sample: false, downloads: false } } });
   await screen(page, 'nodb');
   await openSettings(page);
+  await page.getByTestId('diag-toggle').click();
   await expect(page.getByRole('dialog')).toContainText('nicht verfügbar');
   await expect(page.getByRole('button', { name: 'Alle Daten als JSON sichern' })).toHaveCount(0);
   expect(errors).toEqual([]);

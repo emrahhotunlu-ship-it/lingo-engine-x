@@ -60,7 +60,8 @@ async function vocabRetryCorrect(page: Page) {
   await page.keyboard.type(answer, { delay: 20 });
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
-  await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '2');
+  // Hinweis „beginnt mit …" hieß: das Wort war nicht bekannt → trotz Treffer „Nochmal" (Lernwissenschaft 27.09.).
+  await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '1');
   await expect(page.getByTestId('retry-hint')).toHaveCount(0);
   // Erklärung und Beispiele auch nach richtigem zweitem Versuch; kein automatisches Weiter.
   await expect(page.getByTestId('examples')).toBeVisible();
@@ -69,14 +70,14 @@ async function vocabRetryCorrect(page: Page) {
   await page.getByTestId('next').click();
   await expect.poll(async () => (await entriesFor(page, 'overcome')).length).toBe(before + 1);
   const last = (await entriesFor(page, 'overcome')).at(-1);
-  expect(last).toMatchObject({ ok: true, ans: answer });
+  expect(last).toMatchObject({ ok: false, ans: answer });
   expect(errors).toEqual([]);
 }
 
 test.describe('Desktop', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  test('Vokabel: falsch → Hinweis unter der Lücke, Eingabe bleibt, Fokus bleibt; zweiter Versuch richtig → „Schwer", ein Eintrag', async ({ page }) => {
+  test('Vokabel: falsch → Hinweis unter der Lücke, Eingabe bleibt, Fokus bleibt; zweiter Versuch richtig → „Nochmal" (Anfang verraten), ein Eintrag', async ({ page }) => {
     await vocabRetryCorrect(page);
   });
 
@@ -159,7 +160,7 @@ test.describe('Desktop', () => {
   });
 });
 
-test('Handy 390: Vokabel-Hinweis, Eingabe bleibt in der Lücke, zweiter Versuch richtig → „Schwer"', async ({ browser }) => {
+test('Handy 390: Vokabel-Hinweis, Eingabe bleibt in der Lücke, zweiter Versuch richtig → „Nochmal" (Anfang verraten)', async ({ browser }) => {
   const { page, close } = await phone(browser);
   await vocabRetryCorrect(page);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
