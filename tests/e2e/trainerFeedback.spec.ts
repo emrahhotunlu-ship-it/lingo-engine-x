@@ -121,8 +121,9 @@ test('Wort antippen: Wörterbuch-Bedeutung und Lautschrift, „Claude fragen" mi
   // sofort; vor dem Prüfen bleibt die Lösung auch im mitgeschickten Satz geschwärzt (E5-05).
   await page.getByTestId('lk-ask').click();
   await expect(lk).toHaveCount(0);
-  await expect(page.getByTestId('chat-attach')).toContainText('drive');
   await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');
+  // Das Wort gilt nur für diese Frage (Befund 27.09.), der Bezug steckt im Aufruf.
+  await expect(page.getByTestId('chat-attach')).toHaveCount(0);
   const calls = (await sampleCalls(page)).filter((c) => c.id === 'companion-chat');
   expect(calls).toHaveLength(1);
   expect(calls[0]?.input).toContain('in the sentence: "Try to ___ driving in rush hour."');
