@@ -57,6 +57,13 @@ export const assessSchema = assessDataSchema.extend({
 });
 
 /** Neu ab Phase 6 (Plan §6.2): Wochenberichte `{items: [{w, lang, t, pv, facts, text}]}`, höchstens 26. */
+/** Neu (Lernberatung 27.09., V2): Reparatur-Sätze – eigene falsche Sätze aus freiem Formulieren. */
+export const repairSchema = z.looseObject({
+  items: z
+    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num }))
+    .nullish(),
+});
+
 export const weeklySchema = z.looseObject({
   items: z.array(z.looseObject({ w: str, lang: str, t: num, pv: str, facts: loose, text: z.looseObject({}).nullish() })).nullish(),
 });

@@ -16,6 +16,7 @@ import {
   preplySchema,
   profileSchema,
   radarSchema,
+  repairSchema,
   readingSchema,
   sceneSchema,
   schemaDocSchema,
@@ -41,6 +42,8 @@ export const APP_DOCS = {
   'app/schema': schemaDocSchema,
   // Neu ab Phase 6: Wochenberichte (Plan §6.2).
   'app/weekly': weeklySchema,
+  // Neu (Lernberatung 27.09., V2): Reparatur-Sätze aus Sag es, Gespräch, Schreiben.
+  'app/repair': repairSchema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {
