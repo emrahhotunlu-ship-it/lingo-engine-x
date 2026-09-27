@@ -164,6 +164,9 @@ test('Weg nach C1: Status je Punkt, „Kann ich" wird in profile.canDo gespeiche
   await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openOverview(page);
   await tab(page, 'path');
+  // Kurz gehalten (UX-Beratung Nr. 6): je Stufe höchstens 4 offene Punkte sichtbar, der Rest zugeklappt.
+  for (const level of await page.getByTestId('cando-level').all()) expect(await level.locator('[data-testid="cando"]:not([data-status="reached"])').count()).toBeLessThanOrEqual(4);
+  for (const toggle of await page.locator('[data-testid="cando-more"], [data-testid="cando-reached"]').all()) await toggle.click();
   await expect(page.getByTestId('cando')).toHaveCount(40);
   await expect(page.getByTestId('vocab-goal')).toContainText('8.000');
   const item = page.locator('[data-testid="cando"][data-status="open"]').first();
@@ -184,6 +187,10 @@ test('Verlauf: Wochenbericht mit Fakten und gespeichertem KI-Text, Diagramm, Akt
   await expect(page.getByTestId('weekly-text')).toBeVisible();
   await expect.poll(async () => ((await dump(page))['app/weekly']?.items as unknown[] | undefined)?.length).toBe(1);
   expect(await calls(page, 'weekly-report')).toHaveLength(1);
+  // Diagramm und Aktivität liegen zugeklappt darunter (UX-Beratung Nr. 6).
+  await expect(page.getByTestId('history-chart')).toHaveCount(0);
+  await page.getByTestId('history-toggle').click();
+  await page.getByTestId('heat-toggle').click();
   await expect(page.getByTestId('history-chart')).toBeVisible();
   await expect(page.getByTestId('heatmap')).toBeVisible();
   await page.getByTestId('measures').getByRole('button').click();

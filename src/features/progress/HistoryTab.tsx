@@ -15,18 +15,19 @@ import { detectLang } from '../../domain/lang/detect';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
-import { Disclosure } from '../../ui/Disclosure';
+import { Fold, FoldGroup } from '../../ui/Fold';
 import { Heatmap } from '../../ui/charts/Heatmap';
 import { LineChart } from '../../ui/charts/LineChart';
 import { Skeleton } from '../../ui/Skeleton';
 import { aiUsable } from './assessRun';
 import { useCollectionsOnce, useDocsOnce } from './useOnce';
 import { ensureWeeklyText, storedWeekly, WEEKLY_MIN_FACTS } from './weeklyRun';
-import { ChecksCard, LegacyFeedCard } from './ChecksCard';
+import { ChecksRow, LegacyFeedFold } from './ChecksCard';
 import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 
-// Reiter „Verlauf" (Plan §7.3–7.5): Wortschatztest, Wochenbericht, Verlauf der letzten 120 Tage,
-// Aktivität, bisherige Einschätzungen, Meilensteine je Einheit und die eingeklappten Messwerte.
+// Reiter „Verlauf" (Plan §7.3–7.5, UX-Beratung Nr. 6): oben Wochen-Check und Wortschatztest als zwei
+// Zeilen, dann der Wochenbericht; Verlauf der letzten 120 Tage, Aktivität, Einschätzungen und
+// Meilensteine, alte Fortschritte und Messwerte als zugeklappte Zeilen.
 
 type Doc = Record<string, unknown>;
 const EMPTY = new Map<string, Doc>();
@@ -282,25 +283,26 @@ export function HistoryTab() {
 
   return (
     <div className="flex flex-col gap-4" data-testid="history">
-      <Card channel="cards" className="flex flex-col gap-3">
-        {vt && <p className="lx-tnum text-sm text-muted">{t('vtestLast', { date: date(vt.t || dayMs(vt.d)), p: vt.passive })}</p>}
-        {vtestDue && <p className="text-sm">{t('vtestDue')}</p>}
-        <div>
-          <Button variant={vtestDue ? 'primary' : 'secondary'} icon="target" onClick={() => go({ name: 'vtest' })} data-testid="vtest-start">
-            {t('vtestStart')}
+      {/* UX-Beratung Nr. 6: oben Wochen-Check und Wortschatztest als zwei Zeilen. */}
+      <FoldGroup label={t('ckTitle')}>
+        <ChecksRow />
+        <div className="flex flex-wrap items-center justify-between gap-3 py-4" data-testid="vtest-row">
+          <div className="flex min-w-0 flex-1 basis-60 flex-col gap-0.5">
+            <h2 className="text-base font-medium">{t('vtestTitle')}</h2>
+            <p className="lx-tnum text-sm text-muted">{vt ? t('vtestLast', { date: date(vt.t || dayMs(vt.d)), p: vt.passive }) : t('vtestNever')}</p>
+            {vt && vtestDue && <p className="text-sm text-muted">{t('vtestDue')}</p>}
+          </div>
+          <Button variant="secondary" icon="target" onClick={() => go({ name: 'vtest' })} data-testid="vtest-start">
+            {t('vtestGo')}
           </Button>
         </div>
-      </Card>
-
-      <ChecksCard />
+      </FoldGroup>
 
       <Weekly />
 
-      <Card aria-labelledby="hist-title">
-        <h2 id="hist-title" className="text-lg font-semibold">
-          {t('historyTitle')}
-        </h2>
-        <div className="mt-3">
+      {/* Der Rest zugeklappt – nichts geht verloren, alles bleibt per Aufklappen erreichbar. */}
+      <FoldGroup label={t('progHistory')}>
+        <Fold title={t('historyTitle')} testId="history-fold" toggleTestId="history-toggle">
           {hasLines ? (
             <LineChart
               series={SERIES.map((s) => ({ key: s.key, label: t(s.label), color: s.color, points: series[s.key] }))}
@@ -318,52 +320,47 @@ export function HistoryTab() {
               {t('historyEmpty')}
             </p>
           )}
-        </div>
-      </Card>
+        </Fold>
 
-      <Card aria-labelledby="heat-title">
-        <h2 id="heat-title" className="lx-eyebrow">
-          {t('heatTitle')}
-        </h2>
-        <div className="mt-3">
+        <Fold title={t('heatTitle')} toggleTestId="heat-toggle">
           <Heatmap weeks={cells} label={t('heatLabel')} cellLabel={(c) => t('heatCell', { date: fmt(c.d), min: c.minutes })} less={t('heatLess')} more={t('heatMore')} testId="heatmap" />
-        </div>
-      </Card>
+        </Fold>
 
-      {(hist.length > 0 || milestones.length > 0) && (
-        <Card className="grid gap-6 sm:grid-cols-2">
-          <div>
-            <h2 className="lx-eyebrow">{t('assessTrace')}</h2>
-            <ol className="mt-2 flex flex-wrap gap-2" data-testid="assess-trace">
-              {hist.slice(-12).map((h) => (
-                <li key={h.d} className="lx-tnum rounded-full border border-line px-3 py-1 text-xs">
-                  <span className="text-subtle">{fmt(h.d)}</span> <span className="font-semibold">{h.cefr ?? '–'}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <div>
-            <h2 className="lx-eyebrow">{t('milestones')}</h2>
-            {milestones.length === 0 ? (
-              <p className="mt-2 text-sm text-muted">{t('milestonesNone')}</p>
-            ) : (
-              <ul className="mt-2 flex flex-col gap-1 text-sm text-muted">
-                {milestones.map((m) => (
-                  <li key={m.id}>{t('milestoneUnit', { unit: lang === 'en' ? m.en : m.de, date: date(dayMs(m.d)) })}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </Card>
-      )}
+        {(hist.length > 0 || milestones.length > 0) && (
+          <Fold title={t('histTraceTitle')} meta={hist.length > 0 ? hist.map((h) => h.cefr ?? '–').slice(-4).join(' → ') : undefined} toggleTestId="trace-toggle">
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div>
+                <h3 className="text-sm font-semibold">{t('assessTrace')}</h3>
+                <ol className="mt-2 flex flex-wrap gap-x-4 gap-y-1" data-testid="assess-trace">
+                  {hist.slice(-12).map((h) => (
+                    <li key={h.d} className="lx-tnum text-sm">
+                      <span className="text-subtle">{fmt(h.d)}</span> <span className="font-semibold">{h.cefr ?? '–'}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold">{t('milestones')}</h3>
+                {milestones.length === 0 ? (
+                  <p className="mt-2 text-sm text-muted">{t('milestonesNone')}</p>
+                ) : (
+                  <ul className="mt-2 flex flex-col gap-1 text-sm text-muted">
+                    {milestones.map((m) => (
+                      <li key={m.id}>{t('milestoneUnit', { unit: lang === 'en' ? m.en : m.de, date: date(dayMs(m.d)) })}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </Fold>
+        )}
 
-      <LegacyFeedCard />
+        <LegacyFeedFold />
 
-      <Card data-testid="measures">
-        <Disclosure label={t('measuresToggle')}>
+        <Fold title={t('measuresToggle')} testId="measures" toggleTestId="measures-toggle">
           <MeasuresBody />
-        </Disclosure>
-      </Card>
+        </Fold>
+      </FoldGroup>
     </div>
   );
 }

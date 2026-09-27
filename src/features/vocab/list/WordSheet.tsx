@@ -161,7 +161,8 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
           <span>{t(CONFIDENCE_KEYS[conf])}</span>
           <span className="text-subtle">·</span>
           <span>{t('lkStage', { n: card.stage })}</span>
-          <span className="text-subtle">· {t(STAGE_KEYS[card.stage] ?? 'stage0')}</span>
+          {/* Stufe 0 heißt schon „neu“ – den Namen nicht doppelt zeigen (UX-Beratung Nr. 12). */}
+          {card.stage > 0 && <span className="text-subtle">· {t(STAGE_KEYS[card.stage] ?? 'stage0')}</span>}
         </p>
         {(meaning || pk || register) && (
           <p className="text-base">

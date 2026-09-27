@@ -121,7 +121,7 @@ export function JudgeTab() {
                 {d.cefr ?? '–'}
               </span>
               {d.trend && (
-                <span className="rounded-full bg-surface px-3 py-1 text-sm text-muted" data-testid="assess-trend" data-trend={d.trend}>
+                <span className="text-sm text-muted" data-testid="assess-trend" data-trend={d.trend}>
                   {t(TREND_KEY[d.trend])}
                 </span>
               )}
@@ -167,11 +167,11 @@ export function JudgeTab() {
         <h2 id="judge-dims" className="lx-eyebrow">
           {t('assessDims')}
         </h2>
-        <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+        <ul className="mt-2 grid sm:grid-cols-2 sm:gap-x-6">
           {DIMS.map((id) => {
             const x = d.dims.find((y) => y.id === id) ?? { id, level: null, confidence: 'thin' as Confidence, why: null };
             return (
-              <li key={id} className="flex flex-col gap-1 rounded-xl border border-line p-3" data-testid="dim" data-id={id} data-level={x.level ?? ''} data-confidence={x.confidence}>
+              <li key={id} className="flex flex-col gap-1 border-t border-line py-3" data-testid="dim" data-id={id} data-level={x.level ?? ''} data-confidence={x.confidence}>
                 <span className="flex items-baseline justify-between gap-3">
                   <span className="text-sm font-medium">{t(`dim_${id}` as MessageKey)}</span>
                   <span className={`text-lg font-semibold ${x.level ? '' : 'text-muted'}`}>{x.level ?? '–'}</span>

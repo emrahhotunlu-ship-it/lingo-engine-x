@@ -4,7 +4,7 @@ import { Icon } from './Icon';
 import { DURATION, EASE_OUT } from './motion';
 
 /** Eingeklappter Bereich, z. B. „Messwerte dahinter" (Kap. 5). */
-export function Disclosure({ label, children }: { label: string; children: ReactNode }) {
+export function Disclosure({ label, children, testId }: { label: string; children: ReactNode; testId?: string }) {
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
@@ -14,6 +14,7 @@ export function Disclosure({ label, children }: { label: string; children: React
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen((o) => !o)}
+        data-testid={testId}
         className="inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-medium text-muted transition-colors hover:text-fg"
       >
         <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: DURATION.base }} className="inline-flex">

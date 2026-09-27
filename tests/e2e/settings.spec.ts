@@ -53,6 +53,10 @@ test('Diagnose zeigt Fähigkeiten, Dokumentzahl und Datenversion', async ({ page
   await openOverview(page);
   await page.getByTestId('open-settings').click();
   const dialog = page.getByRole('dialog');
+  // Zugeklappt (UX-Beratung Nr. 11), die App-Version steht schon in der Zeile.
+  await expect(dialog.getByTestId('diag-toggle')).toContainText('Version ');
+  await expect(dialog.getByText('Datenbank', { exact: true })).toHaveCount(0);
+  await dialog.getByTestId('diag-toggle').click();
   await expect(dialog.getByText('Datenbank', { exact: true })).toBeVisible();
   await expect(dialog.getByText('209 von 5.000')).toBeVisible();
   await expect(dialog.getByText(/^1 · 20\. September 2026$/)).toBeVisible();
@@ -67,6 +71,7 @@ test('scheitert das Speichern, wird die Änderung zurückgenommen und gemeldet',
   await page.getByRole('radio', { name: 'Hell' }).click();
   await expect(page.getByRole('alert')).toContainText('Konnte nicht gespeichert werden');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.getByTestId('diag-toggle').click();
   await expect(page.getByTestId('diag-log')).toContainText('settings:save');
   expect(errors.some((e) => e.includes('settings:save'))).toBe(true);
 });
@@ -82,6 +87,7 @@ test('ein ungültiges Profil wird gemeldet, angezeigt und beim Speichern nie ers
   expect(Object.keys(profile).length).toBeGreaterThan(30);
   expect(profile.rate).toBe('schnell');
   expect(Object.keys(profile.days ?? {}).length).toBeGreaterThan(20);
+  await page.getByTestId('diag-toggle').click();
   await expect(page.getByTestId('diag-log')).toContainText('app/profile');
   expect(errors.some((e) => e.includes('data:validate'))).toBe(true);
 });
@@ -109,6 +115,7 @@ test('Englisch: Sicherung heißt „backup", Diagnose-Meldungen auf Englisch', a
   await page.getByTestId('open-settings').click();
   await page.getByRole('button', { name: 'Back up all data as JSON' }).click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ filename: string }> } }).__LINGO_FAKE__.saved[0]?.filename ?? '')).toBe('lingo-engine-x-backup-2026-09-20.json');
+  await page.getByTestId('diag-toggle').click();
   const log = page.getByTestId('diag-log');
   await expect(log).toContainText('Pool invalid – not overwritten');
   await expect(log).not.toContainText('ungültig');

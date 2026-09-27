@@ -13,7 +13,6 @@ import type { TrainCard } from '../../../domain/srs/types';
 import { useT, type MessageKey } from '../../../i18n';
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
-import { Segmented } from '../../../ui/Segmented';
 import { DURATION, EASE_OUT } from '../../../ui/motion';
 import { Dots } from '../../grammar/GrammarScreen';
 import { ScreenHeader } from '../../learn/ui';
@@ -75,18 +74,18 @@ export function VocabScreen() {
   // Kap. 4.4: Das Wort der Zeile gleitet in den Titel des Wortblatts (gemeinsames Element).
   const ep = useSharedEpoch();
 
+  const sortLabel = t(sort === 'stage' ? 'vcSortStage' : 'vcSortAz');
   const newLine = stats.stockEmpty ? t('vcStockEmpty') : t('vcNewToday', { n: Math.min(stats.newToday, stats.quota), total: stats.quota });
   return (
-    <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="vocab">
+    <motion.div className="flex flex-col gap-4 py-6 sm:gap-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="vocab">
       <motion.div variants={item}>
         <ScreenHeader
-          eyebrow={t('lhVocab')}
           title={t('vcTitle')}
           back={() => go({ name: 'learn' })}
           lead={
-            <span className="lx-tnum" data-testid="vocab-status">
+            <span className="lx-tnum block truncate text-sm" data-testid="vocab-status">
               {tn('vcTotal', stats.total - chunkCount)}
-              {chunkCount > 0 && <> · {tn('vcChunks', chunkCount)}</>} · {tn('vocabDue', stats.due)} · {newLine}
+              {chunkCount > 0 && <> · {tn('vcChunks', chunkCount)}</>} · {tn('vocabDue', stats.due)}
             </span>
           }
           right={
@@ -97,29 +96,43 @@ export function VocabScreen() {
         />
       </motion.div>
       <motion.div variants={item} className="flex flex-col gap-3">
-        <label className="relative block">
-          <span className="sr-only">{t('vcSearch')}</span>
-          <Icon name="search" size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-subtle" />
-          <input
-            type="search"
-            className="lx-field pl-10"
-            value={query}
-            placeholder={t('vcSearch')}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setLimit(PAGE);
-            }}
-            data-testid="vocab-search"
-            autoComplete="off"
-            spellCheck={false}
-          />
-        </label>
-        <div className="flex flex-wrap gap-2" role="group" aria-label={t('vcFilters')}>
+        {/* UX-Beratung Nr. 10: Suche und Sortierung in einer Zeile, Filter als EINE wischbare Reihe. */}
+        <div className="flex items-center gap-2">
+          <label className="relative block min-w-0 flex-1">
+            <span className="sr-only">{t('vcSearch')}</span>
+            <Icon name="search" size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-subtle" />
+            <input
+              type="search"
+              className="lx-field pl-10"
+              value={query}
+              placeholder={t('vcSearch')}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setLimit(PAGE);
+              }}
+              data-testid="vocab-search"
+              autoComplete="off"
+              spellCheck={false}
+            />
+          </label>
+          <button
+            type="button"
+            className="lx-chip flex-none"
+            onClick={() => setSort((v) => (v === 'stage' ? 'az' : 'stage'))}
+            aria-label={t('vcSortToggle', { sort: sortLabel })}
+            data-testid="vocab-sort"
+            data-sort={sort}
+          >
+            <Icon name="sort" size={16} />
+            <span aria-hidden="true">{sortLabel}</span>
+          </button>
+        </div>
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label={t('vcFilters')} data-hscroll="">
           {VOCAB_FILTERS.map((f) => (
             <button
               key={f}
               type="button"
-              className="lx-chip"
+              className="lx-chip flex-none whitespace-nowrap"
               aria-pressed={filter === f}
               onClick={() => {
                 setFilter(f);
@@ -132,21 +145,10 @@ export function VocabScreen() {
             </button>
           ))}
         </div>
-        <div className="max-w-xs">
-          <Segmented
-            label={t('vcSort')}
-            value={sort}
-            options={[
-              { value: 'stage', label: t('vcSortStage') },
-              { value: 'az', label: t('vcSortAz') },
-            ]}
-            onChange={setSort}
-          />
-        </div>
       </motion.div>
       <motion.div variants={item} className="flex flex-col gap-2">
         <p className="lx-tnum text-sm text-muted" data-testid="vocab-count">
-          {tn('vcShown', list.length)}
+          {tn('vcShown', list.length)} · {newLine}
         </p>
         {list.length === 0 ? (
           <p className="text-base text-muted" data-testid="vocab-empty">

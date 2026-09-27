@@ -20,7 +20,8 @@ import { PathTab } from './PathTab';
 import { LevelScale, WeekStrip } from './StandHeader';
 import { RepairStandLine } from '../repair/StandLine';
 
-// „Dein Stand" (Kap. 6.13, Plan E18): Kopfzeile mit Serie · Kurs · Karten und vier Reiter
+// „Dein Stand" (Kap. 6.13, Plan E18, UX-Beratung Nr. 6): eine Kopfkarte mit Serie · Kurs · Karten,
+// Woche und Niveau, darunter vier Reiter in einer Zeile
 // Urteil · Fehler · Weg nach C1 · Verlauf – kein endloses Scrollen am Handy, nichts doppelt.
 // Der zuletzt offene Reiter steht in localStorage (Bequemlichkeit). Das Öffnen ist einer der
 // beiden Auslöser der Einschätzung (Plan W1).
@@ -43,9 +44,9 @@ const item = {
 
 function Stat({ label, value, unit, testId }: { label: string; value: string; unit: string; testId: string }) {
   return (
-    <div className="lx-glass flex min-w-0 flex-col gap-1 rounded-[var(--radius-card)] px-3 py-3 sm:px-4">
-      {/* Nie mitten im Wort umbrechen (Befund H8): auf schmalen Bildschirmen enger gesetzt. */}
-      <span className="lx-eyebrow whitespace-nowrap tracking-[0.02em] sm:tracking-[0.08em]">{label}</span>
+    <div className="flex min-w-0 flex-col gap-0.5">
+      <span className="truncate text-xs text-muted">{label}</span>
+      {/* Nie mitten im Wort umbrechen (Befund H8): Zahl und Einheit dürfen untereinander stehen. */}
       <span className="flex flex-wrap items-baseline gap-x-1.5">
         <span className="lx-tnum text-2xl font-semibold tracking-tight" data-testid={testId}>
           {value}
@@ -97,23 +98,22 @@ export function ProgressScreen() {
 
   return (
     <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
-      <motion.header variants={item} className="flex flex-col gap-3">
-        <p className="lx-eyebrow">{t('ovEyebrow')}</p>
+      <motion.header variants={item}>
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('ovTitle')}</h1>
-        <p className="max-w-2xl text-base text-muted">{t('progLead')}</p>
       </motion.header>
 
-      <motion.div variants={item} className="grid grid-cols-3 gap-2 sm:gap-4">
-        <Stat label={t('streakLabel')} value={num(ov.streak.count)} unit={t(ov.streak.count === 1 ? 'streakUnit_one' : 'streakUnit_other')} testId="streak-count" />
-        <Stat label={t('courseLabel')} value={num(ov.course.done)} unit={t('courseUnit', { total: ov.course.total })} testId="course-done" />
-        <Stat label={t('vocabLabel')} value={num(ov.vocab.total)} unit={t(ov.vocab.total === 1 ? 'vocabUnit_one' : 'vocabUnit_other')} testId="vocab-total" />
-      </motion.div>
-
-      {/* M7: Wochenstreifen (gleiche Regel wie die Serie) und Niveau-Leiste in der Kopfzeile. */}
-      <motion.div variants={item} className="lx-glass grid gap-5 rounded-[var(--radius-card)] p-4 sm:grid-cols-2 sm:gap-8 sm:p-5" data-testid="stand-head">
-        <WeekStrip week={ov.week} />
-        {assess?.data.cefr ? <LevelScale data={assess.data} /> : <p className="self-center text-sm text-muted">{t('lvNone')}</p>}
-      </motion.div>
+      {/* UX-Beratung Nr. 6: EINE Kopfkarte – Serie · Kurs · Wörter, darunter Woche und Niveau. */}
+      <motion.section variants={item} aria-label={t('ovTitle')} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
+        <div className="grid grid-cols-3 gap-3 sm:gap-6">
+          <Stat label={t('streakLabel')} value={num(ov.streak.count)} unit={t(ov.streak.count === 1 ? 'streakUnit_one' : 'streakUnit_other')} testId="streak-count" />
+          <Stat label={t('courseLabel')} value={num(ov.course.done)} unit={t('courseUnit', { total: ov.course.total })} testId="course-done" />
+          <Stat label={t('vocabLabel')} value={num(ov.vocab.total)} unit={t(ov.vocab.total === 1 ? 'vocabUnit_one' : 'vocabUnit_other')} testId="vocab-total" />
+        </div>
+        <div className="grid gap-5 border-t border-line pt-4 sm:grid-cols-2 sm:gap-8">
+          <WeekStrip week={ov.week} />
+          {assess?.data.cefr ? <LevelScale data={assess.data} /> : <p className="self-center text-sm text-muted">{t('lvNone')}</p>}
+        </div>
+      </motion.section>
       <RepairStandLine />
 
       <LateRescueCard />

@@ -81,6 +81,7 @@ test('scheitert ein Schreibvorgang, erscheint eine klare Meldung und ein erneute
   // Der Fehler wurde protokolliert (sichtbar in der Diagnose), nicht still verschluckt.
   expect(errors.some((e) => e.includes('data:write'))).toBe(true);
   await page.getByTestId('open-settings').click();
+  await page.getByTestId('diag-toggle').click();
   await expect(page.getByTestId('diag-log')).toContainText('migration:apply');
 });
 
@@ -143,6 +144,7 @@ test('zweiter Browser: Abweichende Kopien werden gemeldet statt still übernomme
   await expect(page.getByTestId('late-rescue')).toHaveCount(0);
   expect(await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump()['vocab/reliable'])).toEqual(before);
   await page.getByTestId('open-settings').click();
+  await page.getByTestId('diag-toggle').click();
   await expect(page.getByTestId('diag-log')).toContainText('rescue:not-merged');
   expect(errors).toEqual([]);
 });

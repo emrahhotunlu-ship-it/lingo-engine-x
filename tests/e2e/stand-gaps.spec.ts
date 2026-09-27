@@ -27,12 +27,14 @@ test('Kap. 9/14: alte Wochen-Checks und „Letzte Fortschritte" sind im Verlauf 
   const { errors, external } = await boot(page, { migrated: true });
   await openHistory(page);
   const card = page.getByTestId('checks-card');
+  await card.getByTestId('checks-toggle').click();
   await expect(card.getByTestId('check-row')).toHaveCount(2);
   await expect(card.getByTestId('check-row').first()).toContainText('75 %');
   await expect(card.getByTestId('check-row').first()).toContainText('4/5');
   await expect(card.getByTestId('check-last')).toContainText('75 %');
   await expect(card.getByTestId('check-last')).toContainText('67 %');
   const feed = page.getByTestId('legacy-feed');
+  await feed.getByTestId('feed-toggle').click();
   await expect(feed.getByTestId('feed-row')).toHaveCount(6);
   await feed.getByRole('button', { name: /ältere Zeilen/ }).click();
   await expect(feed.getByTestId('feed-row')).toHaveCount(8);
@@ -93,6 +95,7 @@ test('M10: Wochen-Check – 12 Aufgaben ohne Tipps, Ergebnis im alten Format, Ve
   await page.getByTestId('summary-back').click();
   await expect(page.getByTestId('check-week-done')).toBeVisible();
   await expect(page.getByTestId('check-start')).toHaveCount(0);
+  await page.getByTestId('checks-toggle').click();
   await expect(page.getByTestId('check-row')).toHaveCount(3);
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');

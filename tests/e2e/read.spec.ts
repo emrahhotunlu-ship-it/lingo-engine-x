@@ -16,7 +16,7 @@ test('Lesen: kompletter Durchlauf mit Karte, Fragen, Zusammenfassung und Schreib
   await expect(unit).toHaveAttribute('data-state', 'reading');
   await expect(page.getByTestId('article')).toHaveAttribute('data-id', ARTICLE_Q);
   await expect(page.getByTestId('article')).toHaveAttribute('lang', 'en');
-  await expect(page.getByTestId('unit-status')).toContainText('Lesen · B2 · Beruf');
+  await expect(page.getByTestId('unit-status')).toHaveText(/^B2 · Beruf/);
   expect(await layoutProblems(page)).toEqual([]);
 
   // Wort antippen → als Karte speichern (Herkunft Lesen, Ursprungssatz aus dem Text).
