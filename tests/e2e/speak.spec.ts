@@ -213,6 +213,9 @@ test('Langsam: Hinweis mit Stopp, eigener Satz zurück im Feld', async ({ page }
 });
 
 test('Neu laden mitten im Gespräch: „Fortsetzen“ stellt die Züge wieder her', async ({ page }) => {
+  // Neuladen unter der festen Testuhr braucht ~8 s bis zum ersten Bild (nur Testumgebung,
+  // perf.spec misst ohne Testuhr); zwei Gesprächszüge davor – daher mehr Zeitbudget.
+  test.slow();
   await boot(page, { migrated: true });
   await openHub(page);
   await startScene(page);
