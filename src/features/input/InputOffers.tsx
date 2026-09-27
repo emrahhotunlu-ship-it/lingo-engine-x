@@ -76,7 +76,7 @@ export function InputOffers() {
               <button
                 type="button"
                 onClick={() => go(m.route)}
-                data-testid="offer"
+                data-testid="input-offer"
                 data-channel={m.id}
                 className="lx-glass flex min-h-14 w-full items-center gap-3 rounded-[var(--radius-card)] px-4 py-3 text-left transition-colors hover:bg-surface-strong"
               >

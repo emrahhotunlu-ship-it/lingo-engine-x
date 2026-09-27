@@ -72,7 +72,8 @@ test('Entdecken: Artikel in vier Schritten, Schreibwege, Feed unverändert, Abo 
   // Verlassen: das Feed-Abo ist beendet.
   await page.getByTestId('unit-close').click();
   await page.locator('[data-screen="discover"]').waitFor();
-  await page.getByTestId('unit-close').click();
+  await expect(page.getByTestId('unit-close')).toHaveCount(0);
+  await page.getByTestId('tab-today').click();
   await page.locator('[data-screen="today"]').waitFor();
   await expect.poll(() => activeSubscriptions(page)).toBe(baseSubs);
   expect(errors).toEqual([]);
@@ -112,4 +113,32 @@ test('Entdecken: Wiedereinstieg im ersten offenen Schritt, erledigte Schritte si
   await expect(page.locator('[data-testid="step"][data-step="prep"]')).toHaveAttribute('data-state', 'done');
   await expect(page.locator('[data-testid="step"][data-step="take"]')).toHaveAttribute('data-state', 'done');
   await expect(page.locator('[data-testid="step"][data-step="check"]')).toHaveAttribute('data-state', 'current');
+});
+
+test('Entdecken ohne KI (?fake=nosample): keine KI-Knöpfe, kein Notenknopf, Anwenden abschließbar', async ({ page }) => {
+  test.setTimeout(60_000);
+  const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openModule(page, 'discover');
+  await expect(page.getByTestId('feed-list')).toBeVisible();
+  await expect(page.locator('[data-ai]')).toHaveCount(0);
+  await page.locator('[data-testid="feed-item"][data-id="vida-ey"]').click();
+  const unit = page.getByTestId('unit');
+  await expect(unit).toHaveAttribute('data-state', 'prep');
+  await page.getByTestId('next').click();
+  await expect(unit).toHaveAttribute('data-state', 'take');
+  await page.getByTestId('next').click();
+  await expect(unit).toHaveAttribute('data-state', 'check');
+  await answerAll(page, 4);
+  await expect(unit).toHaveAttribute('data-state', 'use');
+  await page
+    .getByTestId('draft')
+    .fill('For our company, e-invoicing is not only a legal duty but also leverage for investment in better processes and near real-time reporting.');
+  await page.getByTestId('submit').click();
+  await expect(unit).toHaveAttribute('data-state', 'done');
+  await expect(page.locator('[data-ai]')).toHaveCount(0);
+  await expect(page.locator('button[data-grade]')).toHaveCount(0);
+  const profile = (await dump(page))['app/profile'] as { disc: Record<string, Record<string, string>> };
+  expect(profile.disc['vida-ey']).toMatchObject({ use: DAY });
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
 });

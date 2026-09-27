@@ -9,7 +9,7 @@ import { Icon } from '../../ui/Icon';
 import { InputIcon, type InputIconName } from '../../ui/InputIcon';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
-import { Button, IconButton } from '../../ui/Button';
+import { Button } from '../../ui/Button';
 import { useFeedItems, useFeedSubscription } from './feedStore';
 
 // Entdecken (Kap. 6.9, Plan §4.4 Nr. 1): Beiträge der letzten 21 Feed-Dokumente, getrennt in
@@ -32,8 +32,8 @@ export function DiscoverScreen() {
 
   return (
     <section className="flex flex-col gap-6 py-6 sm:py-10" data-testid="discover">
+      {/* Eigener Reiter (M13): Navigation über die Reiter, kein ✕. */}
       <header className="flex items-center gap-2">
-        <IconButton icon="close" label={t('inBack')} onClick={() => go({ name: 'today' })} data-testid="unit-close" className="-ml-2" />
         <h1 className="flex-1 text-2xl font-semibold tracking-tight">{t('dcTitle')}</h1>
         <Button variant="ghost" onClick={() => go({ name: 'history', kind: 'discover' })} data-testid="open-history">
           {t('inHistory')}

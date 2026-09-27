@@ -123,3 +123,45 @@ describe('Sammel-Warteschlange', () => {
     expect(persist.usePending.getState()).toMatchObject({ entries: [], lessonDays: [], rounds: [] });
   });
 });
+
+describe('Phase 4 in derselben Warteschlange', () => {
+  const unit = { day, act: 'read' as const, answers: 4, right: 3, activeMs: 360_000, domain: 'work' as const };
+
+  it('recordUnitEnd: act, Zähler, Puffer; derselbe Stapel wirkt nur einmal', async () => {
+    const p = persist.recordUnitEnd(unit);
+    expect(persist.usePending.getState().units[day]).toEqual({ read: 1 });
+    expect(await p).toBe(true);
+    const pr = profile() as { act: Record<string, Record<string, number>>; answers: number; days: Record<string, number>; mix: Record<string, number>; lxSeq: Record<string, number> };
+    expect(pr.act[day]).toEqual({ read: 1 });
+    expect(pr.answers).toBe(4);
+    expect(pr.days[day]).toBe(4);
+    expect(pr.mix.work).toBe(1);
+    expect(Object.keys(pr.lxSeq)).toHaveLength(1);
+    expect(persist.usePending.getState().units[day]).toEqual({ read: 0 });
+    await persist.flush();
+    expect((profile() as { answers: number }).answers).toBe(4);
+  });
+
+  it('recordChannelEntries und recordRadar: Protokoll ohne id/k, Radar über mergeRadar', async () => {
+    persist.recordChannelEntries([{ t: 5, ok: true, lang: 'de', type: 'read', ref: 'articles/a1', q: 'Q?', given: 'A', ans: 'A', ms: 900, ctx: 'xtra', day }]);
+    const ev = { c: 'tense', s: 'w' as const, t: 7, q: 'We are here since May.', g: 'are', a: 'have been' };
+    expect(await persist.recordRadar([ev, ev])).toBe(true);
+    const d = h.dump();
+    const entries = d[`log/${day}`]?.entries as Array<Record<string, unknown>>;
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).not.toHaveProperty('id');
+    expect(entries[0]).not.toHaveProperty('day');
+    expect((d['app/radar'] as { events: unknown[] }).events).toEqual([ev]);
+  });
+
+  it('recordProfileFields: nur echte Änderung, frischer Stand; ohne Datenbank sofort false', async () => {
+    const compute = (cur: Readonly<Record<string, unknown>>) => ((cur.disc as Record<string, unknown> | undefined)?.x ? null : { disc: { x: { prep: day } } });
+    expect(await persist.recordProfileFields('discover:step', compute)).toBe(true);
+    expect((profile() as { disc: unknown }).disc).toEqual({ x: { prep: day } });
+    const writes = h.writes().length;
+    expect(await persist.recordProfileFields('discover:step', compute)).toBe(true);
+    expect(h.writes().length).toBe(writes);
+    holder.writer = null;
+    expect(await persist.recordProfileFields('discover:step', compute)).toBe(false);
+  });
+});

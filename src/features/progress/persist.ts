@@ -206,6 +206,7 @@ export function recordRadar(events: readonly RadarEvent[]): Promise<boolean> {
  * gelungen ist; bei einem Fehler bleibt der Eintrag für den nächsten Durchlauf vorgemerkt.
  */
 export function recordProfileFields(scope: string, compute: (cur: Readonly<Doc>) => Doc | null): Promise<boolean> {
+  if (!getWriter()) return Promise.resolve(false);
   return new Promise<boolean>((resolve) => {
     fieldQueue.push({ scope, compute, done: resolve });
     void flush();

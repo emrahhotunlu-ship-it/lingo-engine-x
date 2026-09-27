@@ -96,3 +96,21 @@ test('Hören: „Text zeigen" zählt als Hilfe', async ({ page }) => {
   const profile = (await dump(page))['app/profile'] as { listen: Array<Record<string, unknown>> };
   expect(profile.listen.at(-1)).toMatchObject({ help: true });
 });
+
+test('Hören ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, kein Notenknopf, abschließbar', async ({ page }) => {
+  test.setTimeout(60_000);
+  const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: PATCH } });
+  await openModule(page, 'listen');
+  await expect(page.locator('[data-ai]')).toHaveCount(0);
+  await page.getByTestId('listen-start').click();
+  await page.getByTestId('skip-listen').click();
+  await answerAll(page, 4);
+  await expect(page.getByTestId('transcript')).toBeVisible();
+  await expect(page.locator('[data-ai]')).toHaveCount(0);
+  await expect(page.locator('button[data-grade]')).toHaveCount(0);
+  const db = await dump(page);
+  expect((db['app/profile'] as { act: Record<string, Record<string, number>> }).act[DAY]?.listen).toBeGreaterThanOrEqual(1);
+  expect(entriesOf(db).filter((e) => e.type === 'listen' && e.ref === `lpool/${LPOOL_NEW}`)).toHaveLength(4);
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
+});

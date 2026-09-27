@@ -55,7 +55,8 @@ test('Schreiben: Aufgabe des Tages, Abgeben, Korrektur mit Stellen, Überarbeite
   const radar = db['app/radar'] as { events: Array<Record<string, unknown>> };
   expect(radar.events.filter((e) => e.s === 'w' && e.g === 'depends of')).toHaveLength(1);
   expect(radar.events.some((e) => e.g === 'summarise')).toBe(false);
-  expect(radar.events.find((e) => e.g === 'look forward to hear')).toMatchObject({ c: 'gerund-inf' });
+  // Kategorie der alten App (topicCat): gerund-inf → pattern.
+  expect(radar.events.find((e) => e.g === 'look forward to hear')).toMatchObject({ c: 'pattern', s: 'w' });
 
   // Überarbeiten: rev + 1, kein zweiter Einheitsabschluss.
   await page.getByTestId('revise').click();
@@ -129,4 +130,26 @@ test('Schreiben: Korrektur läuft beim Bildschirmwechsel weiter und meldet sich 
   await page.getByTestId('ai-task-view').click();
   await expect(page.getByTestId('review')).toBeVisible();
   await expect(page.getByTestId('ai-task-notice')).toHaveCount(0);
+});
+
+test('Schreiben ohne KI (?fake=nosample): keine KI-Knöpfe, kein Notenknopf, gespeichert ohne Urteil', async ({ page }) => {
+  test.setTimeout(60_000);
+  const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openModule(page, 'write');
+  await expect(page.getByTestId('prompt-card')).toBeVisible();
+  await expect(page.locator('[data-ai]')).toHaveCount(0);
+  await typeText(page, TEXT);
+  await page.getByTestId('submit').click();
+  await expect(page.getByTestId('unit-done')).toBeVisible();
+  await expect(page.getByTestId('review')).toHaveCount(0);
+  await expect(page.locator('[data-ai]')).toHaveCount(0);
+  await expect(page.locator('button[data-grade]')).toHaveCount(0);
+  const db = await dump(page);
+  const doc = Object.entries(db).find(([p, d]) => p.startsWith('writing/w') && d.date === DAY)?.[1];
+  expect(doc).toMatchObject({ rev: 0, lang: 'de' });
+  expect(doc?.res).toBeUndefined();
+  expect((db['app/profile'] as { act: Record<string, Record<string, number>> }).act[DAY]?.write).toBe(1);
+  expect(await sampleCalls(page)).toEqual([]);
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
 });

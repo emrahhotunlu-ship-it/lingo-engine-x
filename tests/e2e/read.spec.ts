@@ -91,6 +91,7 @@ test('Lesen ohne KI: Startbestand-Fragen, keine KI-Knöpfe, abschließbar, Zusam
   await answerAll(page, 4);
   await expect(page.getByTestId('unit-done')).toBeVisible();
   await expect(page.locator('[data-ai]')).toHaveCount(0);
+  await expect(page.locator('button[data-grade]')).toHaveCount(0);
   await page.getByTestId('summary-draft').fill('Many office workers now use AI tools every day, but humans still need to check the results before sending them.');
   await page.getByTestId('summary-save').click();
   await expect(page.getByTestId('summary-result')).toBeVisible();
