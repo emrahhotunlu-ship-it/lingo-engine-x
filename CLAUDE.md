@@ -258,6 +258,15 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - iPhone-Prüfpunkte (Tastatur, Hören, Wischen, Übersetzer).
 - Emrah testet jetzt komplett und schickt gesammeltes Feedback.
 
+**27.09.2026, abends – KI-Antworten lesbar (Emrahs Freigabe „Ja“)**
+- `dist/index.html` (Code `e65f839`) auf `JLL8…`, Version `1790521986-3347` (Artefakt-Version 51).
+- Ursache „unvollständig“ laut Emrahs Diagnose: Claude schrieb in deutschen Texten „…" mit geradem Schlusszeichen, `sample.json` verwarf die Antwort.
+- Jetzt:
+  - alle Vorlagen über `sample()` mit reparierendem Lesen (`repairJson` in `src/ai/gate.ts`),
+  - Anführungszeichen-Regel `QUOTE_RULE` an jedem Prompt,
+  - die Lücke bricht lange Antworten zwischen Wörtern um.
+- Rückweg: Version `1790518396-3735`.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
