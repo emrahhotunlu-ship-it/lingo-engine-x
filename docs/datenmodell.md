@@ -138,3 +138,15 @@ Alle Formate bleiben Altformat; neue Felder sind nur zusätzlich und tolerant ge
 | `lesson/l25…` | Kurs-Erweiterung (Kap. 6.2): `plan {pv: 'course-extend@1', unit {id: 'u7', n, en, de, goal_en, goal_de, kind}, en, de, cando_en, cando_de, situation, grammar, level, words[[en, de]]}`, `lx {pv, lang, ext: true}`, zunächst ohne Inhalt; „Lektion vorbereiten“ ergänzt nur leere Felder (ohne `lx.regen`) | `saveExtension` → `writer.createIfMissing` je Lektion (nie überschrieben), Kennungen nach frischem Lesen aller `lesson/*` |
 | `app/profile.haptic` | Vibration beim Prüfen (Kap. 4.3), Standard an; nur `false` schaltet ab | `changeHaptic` über `app/actions` (optimistisch) |
 | `scene/sc-price`, `scene/sc-pitch` | feste Szenen als Inhalt (`content/speak/scenes.json`); das Dokument entsteht wie bei den alten Szenen erst mit dem ersten Lauf | `saveRun` → `sceneRunOp` |
+
+## Ergänzungen Neubau (docs/neubau/plan.md §4.10, additiv, nichts gelöscht)
+
+Deklariert in WP0a (`src/data/{paths,schemas}.ts`, tolerant/`looseObject`); geschrieben wird nur über `writer.transform`, feldweise. Beide `app/*`-Dokumente sind **keine** Live-Abos: Sie werden nur in ihrem Bereich per `useDocWatch` gelesen. Sicherung und Export enthalten sie automatisch (`APP_DOC_PATHS`, `COLLECTION_NAMES`).
+
+| Pfad | Neu | Grenze | Schreibweg |
+|---|---|---|---|
+| `app/decks` | `{v: 1, decks: {<id>: {name, order, created, mode?: 'type'\|'flip', size?, hidden?, filter {kinds?, src?, stage {min?, max?}?, due?, hard?, query?, ids? (≤ 500)}}}, builtin?: {<id>: {mode?, size?}}, prefs?: {dir?: 'de-en'\|'en-de'\|'mix', grades?: 4\|2, mode?}, flagged?: string[]}` – eigene Stapel als gespeicherte Filter; Karten bekommen **kein** neues Feld, die Zugehörigkeit ergibt `matchDeck(card, filter)` | ≤ 40 Stapel, ≤ 500 IDs je Stapel, < 64 KiB | P3 → `writer.transform` |
+| `app/week` | `{v: 1, cur?: {wk: 'JJJJ-Www', theme: 't01'…'t16', by: 'auto'\|'user', at}, hist?: [{wk, theme, by}], preplyNext?: string, targets?: {wk, traps: string[], tool: string, preply?: string}}` – Wochenthema und Wochenziele | ≤ 26 Wochen in `hist`, < 8 KiB | P1 → `writer.transform`; `preplyNext` P5 (feldweise) |
+| `out/<JJJJ-MM>` | `{v: 1, items: [{id, k, d, theme?, ok?, text?, fb?, ms?}]}` – Ergebnisse der neuen Übungen (Kollokationen, Einwände, Posteingang, Nachsprechen …) als Monatsdokument (A6.6) | ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB | P7 → `writer.transform`, idempotent über `item.id`; Antworten zusätzlich ins Tagesprotokoll über `recordChannelEntries` |
+
+**Lokal** (`platform/storage`, nur Bequemlichkeit): `lx:plan:<tag>` (P1), `lx:resume` und `lx:resume:<id>` (Hülle `{v, id, day, savedAt, tabId, route, data}`, ≤ 50 KB; `src/app/resume.ts`).

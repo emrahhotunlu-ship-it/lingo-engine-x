@@ -116,9 +116,8 @@ export async function openTab(page: Page, id: TabId): Promise<void> {
 
 /**
  * Einstieg per Test-ID öffnen (`hub-course`, `hub-grammar`, `hub-drill-*` …): probiert die Reiter
- * aus der Reiterleiste der Reihe nach, bis der Einstieg sichtbar ist – unabhängig davon, ob es vier
- * oder fünf Reiter gibt. WP0a: Einstiege der bisherigen Seite „Üben“ (`learn`) liegen hinter
- * „Alle Übungen“ (`open-learn`) auf Heute.
+ * aus der Reiterleiste der Reihe nach, bis der Einstieg sichtbar ist – unabhängig von der Zahl der
+ * Reiter. Einstiege, die erst nach dem Laden erscheinen, wartet der letzte Reiter ab.
  */
 export async function openEntry(page: Page, testId: string): Promise<void> {
   await page.getByTestId('tabbar').waitFor();
@@ -130,17 +129,14 @@ export async function openEntry(page: Page, testId: string): Promise<void> {
       return;
     }
   }
-  await openTab(page, 'today');
-  await page.getByTestId('open-learn').click();
-  await screen(page, 'learn');
+  // Nichts gefunden: Einstiege, die auf Daten warten (z. B. Kurzübungen), erscheinen auf „Üben“.
+  await openTab(page, 'learn');
   await page.getByTestId(testId).first().click();
 }
 
-/** Bisherige Seite „Üben“ (Kurs, Kurzübungen, freie Runde, Lesen/Hören/Schreiben, Entdecken). */
+/** Reiter „Üben“ (Kurs, Grammatik, Kurzübungen, freie Runde …; Test-ID `learn-hub`). */
 export async function openLearnPage(page: Page): Promise<void> {
-  await openTab(page, 'today');
-  await page.getByTestId('open-learn').click();
-  await screen(page, 'learn');
+  await openTab(page, 'learn');
 }
 
 /** Profil öffnen (WP0a: der Profil-Knopf oben links führt zu „Dein Stand“; WP0b/P6: Profil-Blatt). */
@@ -167,11 +163,26 @@ export async function openSettings(page: Page): Promise<void> {
   await gear.click();
 }
 
-/** Reiter „Sprechen" mit einem Bereich öffnen: Szenen · Business · Preply (UX-Beratung Nr. 7). */
-export async function openSpeak(page: Page, seg: 'scenes' | 'business' | 'preply' = 'scenes'): Promise<void> {
+/**
+ * Reiter „Sprechen“ mit einem Bereich öffnen. Neubau (plan.md §1.3): Gespräche · Schreiben · Preply
+ * (`talk`/`write`/`preply`); bis P5 umbaut, heißen die Bereiche Szenen · Business · Preply. Der
+ * Helfer nimmt beide Namen und wählt, was die App gerade anbietet.
+ */
+export async function openSpeak(page: Page, seg: 'talk' | 'write' | 'preply' | 'scenes' | 'business' = 'talk'): Promise<void> {
   await openTab(page, 'speak');
-  if (seg !== 'scenes' || (await page.getByTestId('speak-hub').getAttribute('data-seg')) !== 'scenes') await page.getByTestId(`speak-seg-${seg}`).click();
-  await page.locator(`[data-testid="speak-hub"][data-seg="${seg}"]`).waitFor();
+  const hub = page.getByTestId('speak-hub');
+  await hub.waitFor();
+  const alias: Record<string, string[]> = { talk: ['talk', 'scenes'], scenes: ['scenes', 'talk'], write: ['write', 'business'], business: ['business', 'write'], preply: ['preply'] };
+  const names = alias[seg] ?? [seg];
+  let target = names[0] ?? seg;
+  for (const n of names) {
+    if (await page.getByTestId(`speak-seg-${n}`).count()) {
+      target = n;
+      break;
+    }
+  }
+  if ((await hub.getAttribute('data-seg')) !== target) await page.getByTestId(`speak-seg-${target}`).click();
+  await page.locator(`[data-testid="speak-hub"][data-seg="${target}"]`).waitFor();
 }
 
 /** Prüfungen, die auf jedem Bildschirm gelten (Kap. 12). */

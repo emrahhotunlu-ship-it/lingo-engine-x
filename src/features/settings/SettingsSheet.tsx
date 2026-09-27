@@ -1,4 +1,4 @@
-import { settingsSections } from '../../app/registry';
+import { settingsSections, type SettingsGroup } from '../../app/registry';
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
@@ -29,6 +29,17 @@ import { diagText } from './diagText';
 // Arbeitskontext, Üben) · Aussehen und Ton (Sprache, Darstellung, Farbthema, Stimme, Töne, Vibration)
 // · Daten und Technik (Sicherung; Quellen und Diagnose zugeklappt).
 
+/** Einstellungs-Abschnitte, die Bereiche angemeldet haben (je Gruppe in `order`-Reihenfolge). */
+function Registered({ groups }: { groups: SettingsGroup[] }) {
+  return (
+    <>
+      {groups.flatMap((g) => settingsSections(g)).map((sec) => (
+        <sec.component key={sec.id} />
+      ))}
+    </>
+  );
+}
+
 export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t } = useT();
   return (
@@ -39,16 +50,15 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           <LearningSection />
           <WorkContextSection />
           <Practice />
-          {/* Registrierte Abschnitte der Bereiche (docs/neubau/architektur.md §2.6, z. B. „Wiederholen“). */}
-          {settingsSections().map((sec) => (
-            <sec.component key={sec.id} />
-          ))}
+          {/* Registrierte Abschnitte der Bereiche (architektur.md §2.6, plan.md §1.2), bis P6 umbaut. */}
+          <Registered groups={['learn', 'vocab', 'context']} />
         </Group>
         <Group title={t('setGroupLook')} testId="set-group-look">
           <Appearance />
           <VoiceSection />
           <SoundSection />
           <HapticSection />
+          <Registered groups={['voice', 'look']} />
         </Group>
         <Group title={t('setGroupData')} testId="set-group-data">
           <DataSection />
@@ -58,6 +68,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
             </Fold>
             <Diagnostics open={open} />
           </div>
+          <Registered groups={['data']} />
         </Group>
       </div>
     </Sheet>

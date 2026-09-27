@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { TABS } from '../../src/app/shell/tabs';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen, openTab, openLearnPage } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, screen, openTab } from './fixtures';
 
 // Abschlussprüfung (P7-4, docs/abnahme.md): Kap. 14 und 15 als durchlaufende Prüfungen gegen den
 // Produktions-Build. Weitere Kriterien belegen die dort genannten Specs und Unit-Tests.
@@ -31,12 +31,8 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
   test.setTimeout(90_000);
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  // Neubau (§5.5): alle Reiter aus `TABS`, dazu die Seiten „Üben“ und „Dein Stand“.
-  const stops: Array<[string, () => Promise<void>]> = [
-    ...TABS.map((t): [string, () => Promise<void>] => [t.id, () => openTab(page, t.id)]),
-    ['learn', () => openLearnPage(page)],
-    ['overview', () => openOverview(page)],
-  ];
+  // Neubau (§5.5): alle Reiter aus `TABS`, dazu die Seite „Dein Stand“.
+  const stops: Array<[string, () => Promise<void>]> = [...TABS.map((t): [string, () => Promise<void>] => [t.id, () => openTab(page, t.id)]), ['overview', () => openOverview(page)]];
   for (const [name, open] of stops) {
     await open();
     await page.waitForTimeout(300);

@@ -18,7 +18,8 @@ const AREAS: AreaDef[] = [
       vocab: { kind: 'tab', component: Empty },
       library: { kind: 'tab', component: Empty },
       speak: { kind: 'tab', component: Empty, params: z.object({ seg: z.enum(['scenes', 'business', 'preply']).optional() }) },
-      learn: { kind: 'page', component: Empty },
+      learn: { kind: 'tab', component: Empty },
+      grammar: { kind: 'page', component: Empty },
       course: { kind: 'page', component: Empty },
       overview: { kind: 'page', component: Empty, params: z.object({ tab: z.enum(['judge', 'errors', 'path', 'history']).optional() }) },
       lesson: { kind: 'exercise', component: Empty, params: z.object({ id: z.string().min(1) }) },
@@ -30,12 +31,16 @@ const AREAS: AreaDef[] = [
 ];
 
 type Core = Parameters<typeof navigate>[0];
-const start = (): Core => ({ tab: 'today', stacks: Object.fromEntries(TABS.map((t) => [t.id, [t.root]])) as Core['stacks'], overlay: null });
+const start = (): Core => ({ tab: 'today', stacks: Object.fromEntries(TABS.map((t) => [t.id, [t.root]])) as unknown as Core['stacks'], overlay: null });
 const top = (c: Core): Route => c.overlay?.route ?? (c.stacks[c.tab].at(-1) as Route);
 
 beforeAll(() => installAreas(AREAS));
 
 describe('Register', () => {
+  it('fünf Reiter mit Wurzeln; `learn` bleibt die Test-ID von „Üben“', () => {
+    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'read', 'speak']);
+  });
+
   it('kennt Ebenen und wirft bei doppelten Bildschirmen', () => {
     expect(kindOf('today')).toBe('tab');
     expect(kindOf('lesson')).toBe('exercise');
@@ -51,19 +56,19 @@ describe('Register', () => {
 
 describe('Router: Reiter-Stapel und Übungsebene', () => {
   it('Seite legt sich auf den aktiven Reiter, back() führt zur Herkunft', () => {
-    let c = navigate(start(), { name: 'learn' });
+    let c = navigate(start(), { name: 'grammar' });
     c = navigate(c, { name: 'course' });
-    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'learn', 'course']);
+    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'grammar', 'course']);
     c = goBack(c);
-    expect(top(c).name).toBe('learn');
+    expect(top(c).name).toBe('grammar');
     c = goBack(goBack(c));
     expect(top(c).name).toBe('today');
   });
 
   it('Ziel gleich dem Eintrag darunter wirkt wie back()', () => {
-    let c = navigate(navigate(start(), { name: 'learn' }), { name: 'course' });
-    c = navigate(c, { name: 'learn' });
-    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'learn']);
+    let c = navigate(navigate(start(), { name: 'grammar' }), { name: 'course' });
+    c = navigate(c, { name: 'grammar' });
+    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'grammar']);
   });
 
   it('Übung öffnet über der Herkunft; Übung → Übung ersetzt; back() schließt zur Herkunft', () => {

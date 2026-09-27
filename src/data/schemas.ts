@@ -762,3 +762,66 @@ export type Chunk = z.infer<typeof chunkSchema>;
 export type Grammar = z.infer<typeof grammarSchema>;
 export type SchemaDoc = z.infer<typeof schemaDocSchema>;
 export type FsrsStored = z.infer<typeof fsrsSchema>;
+
+// ---------------------------------------------------------------- Neubau (docs/neubau/plan.md §4.10)
+// Tolerant (A6.6, A6.16): Die Pakete schreiben nur über `writer.transform`, feldweise.
+
+const deckFilterSchema = z.looseObject({
+  kinds: strArr,
+  src: strArr,
+  stage: z.looseObject({ min: num, max: num }).nullish(),
+  due: bool,
+  hard: bool,
+  query: str,
+  ids: strArr,
+});
+
+/** Stapel = gespeicherte Filter (`app/decks`, architektur.md §4.4; ≤ 40 Stapel, ≤ 500 IDs, < 64 KiB). Schreibt P3. */
+export const decksSchema = z.looseObject({
+  v: num,
+  decks: z
+    .record(
+      z.string(),
+      z.looseObject({
+        name: str,
+        order: num,
+        created: str,
+        mode: str,
+        size: num,
+        hidden: bool,
+        filter: deckFilterSchema.nullish(),
+      }),
+    )
+    .nullish(),
+  builtin: z.record(z.string(), z.looseObject({ mode: str, size: num })).nullish(),
+  prefs: z.looseObject({ dir: str, grades: num, mode: str }).nullish(),
+  flagged: strArr,
+});
+
+/** Wochenthema und Wochenziele (`app/week`; ≤ 26 Wochen in `hist`, < 8 KiB). Schreibt P1, `preplyNext` P5. */
+export const weekSchema = z.looseObject({
+  v: num,
+  cur: z.looseObject({ wk: str, theme: str, by: str, at: num }).nullish(),
+  hist: z.array(z.looseObject({ wk: str, theme: str, by: str })).nullish(),
+  preplyNext: str,
+  targets: z.looseObject({ wk: str, traps: strArr, tool: str, preply: str }).nullish(),
+});
+
+/** Ergebnisse der neuen Übungen je Monat (`out/<JJJJ-MM>`; ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB). Schreibt P7. */
+export const outSchema = z.looseObject({
+  v: num,
+  items: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        k: z.string(),
+        d: z.string(),
+        theme: str,
+        ok: bool,
+        text: str,
+        fb: loose,
+        ms: num,
+      }),
+    )
+    .nullish(),
+});

@@ -36,7 +36,7 @@ describe('i18n-Teile', () => {
     it(`Neubau-Teile tragen nur Schlüssel mit eigenem Präfix (${lang})`, async () => {
       const all = await parts(lang);
       const nb = all.filter((p) => p.file.startsWith('nb'));
-      expect(nb.map((p) => p.file.split('.')[0]).sort()).toEqual(['nbHeute', 'nbLernen', 'nbLesen', 'nbProfil', 'nbSh', 'nbSprechen', 'nbWs']);
+      expect(nb.map((p) => p.file.split('.')[0]).sort()).toEqual(['nbHeute', 'nbLernen', 'nbLesen', 'nbProfil', 'nbSh', 'nbSprechen', 'nbTraining', 'nbWs']);
       for (const p of nb) {
         const prefix = p.file.split('.')[0] ?? '';
         for (const k of p.keys) expect(k.startsWith(prefix), `${p.file}: ${k}`).toBe(true);

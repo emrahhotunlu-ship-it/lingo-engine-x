@@ -2,15 +2,18 @@ import type { MessageKey } from '../../i18n';
 import type { IconName } from '../../ui/Icon';
 import type { Route } from '../router/types';
 
-// Reiterleiste als Daten (docs/neubau/architektur.md §2.4) – die EINZIGE Stelle, an der Reiter
-// festgelegt werden. Hub-Inhalte hängen an Plätzen, nicht an Reitern: Ob es vier oder fünf Reiter
-// gibt, entscheidet eine Zeile.
+// Reiterleiste als Daten (docs/neubau/architektur.md §2.4, plan.md §1.1) – die EINZIGE Stelle, an
+// der Reiter festgelegt werden. Hub-Inhalte hängen an Plätzen, nicht an Reitern: Ein Reiter mehr
+// oder weniger ist eine Zeile.
 //
 // Tab-IDs dürfen nicht mit den inneren Reitern von „Dein Stand“ kollidieren (`judge`, `errors`,
 // `path`, `history`), denn beide nutzen die Test-ID `tab-<id>`.
 
-/** Plätze, an die Bereiche ihre Hub-Abschnitte und Einstiege hängen. */
-export type Place = 'today' | 'learn' | 'vocab' | 'read' | 'speak' | 'write' | 'profile';
+/**
+ * Plätze, an die Bereiche ihre Hub-Abschnitte und Einstiege hängen. Außerhalb der Leiste:
+ * `profile` (Profil-Blatt) und `stand` (Seite „Dein Stand“, Reiter Statistik).
+ */
+export type Place = 'today' | 'learn' | 'vocab' | 'read' | 'speak' | 'write' | 'profile' | 'stand';
 
 /** Name eines Reiter-Abzeichens; die Zahl liefert ein Bereich über `badge` in `defineArea`. */
 export type BadgeId = 'openDuties';
@@ -24,13 +27,14 @@ export type TabDef = {
   readonly badge?: BadgeId;
 };
 
+// Fünf Reiter (docs/neubau/plan.md §1.1): Heute · Wortschatz · Üben · Lesen · Sprechen.
+// Die Test-IDs `tab-learn`, `learn-hub` und `hub-*` bleiben.
 export const TABS = [
-  { id: 'today', label: 'nbShTabToday', icon: 'sun', root: { name: 'today' }, places: ['today', 'learn'], badge: 'openDuties' },
+  { id: 'today', label: 'nbShTabToday', icon: 'sun', root: { name: 'today' }, places: ['today'], badge: 'openDuties' },
   { id: 'vocab', label: 'nbShTabVocab', icon: 'cards', root: { name: 'vocab' }, places: ['vocab'] },
+  { id: 'learn', label: 'nbShTabLearn', icon: 'layers', root: { name: 'learn' }, places: ['learn'] },
   { id: 'read', label: 'nbShTabRead', icon: 'book', root: { name: 'library' }, places: ['read'] },
   { id: 'speak', label: 'nbShTabSpeak', icon: 'chat', root: { name: 'speak' }, places: ['speak', 'write'] },
-  // Fünfter Reiter „Üben“ = diese Zeile einkommentieren und 'learn' oben bei „today“ streichen:
-  // { id: 'learn', label: 'nbShTabLearn', icon: 'layers', root: { name: 'learn' }, places: ['learn'] },
 ] as const satisfies readonly TabDef[];
 
 export type TabId = (typeof TABS)[number]['id'];

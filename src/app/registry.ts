@@ -3,6 +3,7 @@ import type { ZodType } from 'zod';
 import type { MessageKey } from '../i18n';
 import type { IconName } from '../ui/Icon';
 import type { Resumable } from './resume';
+import type { UnitBlockKind, UnitBlockProvider } from './unit/types';
 import type { Route, RouteName, RouteOf, ScreenKind } from './router/types';
 import type { SheetId } from './sheets';
 import type { BadgeId, Place } from './shell/tabs';
@@ -65,8 +66,21 @@ export type EntryDef = {
 export type SheetProps = { params?: unknown; onClose: () => void };
 export type SheetDef = { id: SheetId; component: ComponentType<SheetProps> };
 
-/** Abschnitt im Einstellungsblatt (z. B. „Wiederholen: Standard-Modus“). */
-export type SettingsDef = { id: string; order: number; component: ComponentType };
+/**
+ * Gruppen des Einstellungsblatts (plan.md §1.2): Lernen · Wortschatz · Stimme & Ton · Mein Kontext ·
+ * Darstellung · Daten. Bis P6 das Blatt umbaut, erscheinen `vocab` und `context` unter „Lernen“,
+ * `voice` unter „Aussehen & Ton“.
+ */
+export type SettingsGroup = 'learn' | 'vocab' | 'voice' | 'context' | 'look' | 'data';
+
+/** Abschnitt im Einstellungsblatt (z. B. „Wortschatz: Standard-Modus“ von P3). */
+export type SettingsDef = { id: string; group: SettingsGroup; order: number; component: ComponentType };
+
+/**
+ * Kleines Wort unter dem Balken der Übungsleiste (§2.7): „Tageseinheit · Block 2 von 5“. Ein Hook,
+ * den der Player (WP0b) je Übung aufruft; `null` = kein Beitrag (dann „Pflicht“/„Extra“ wie bisher).
+ */
+export type PlayerNoteDef = { use: (route: Route) => string | null };
 
 /** Zahl am Reiter (Hook, wird in fester Reihenfolge je Reiter aufgerufen). */
 export type BadgeDef = { id: BadgeId; use: () => number };
@@ -82,6 +96,10 @@ export type AreaDef = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resumables?: readonly Resumable<any>[];
   badge?: BadgeDef;
+  /** Blöcke der Tageseinheit, die dieser Bereich anbietet (plan.md §1.5, §4.10). */
+  unitBlocks?: readonly UnitBlockProvider[];
+  /** Beitrag zur Zeile unter dem Balken (P1: Tageseinheit). */
+  playerNote?: PlayerNoteDef;
   /** Einmalige Installation beim Start (z. B. `installFlushOnHide`). */
   boot?: () => void;
 };
@@ -112,6 +130,13 @@ export function installAreas(areas: readonly AreaDef[]): void {
       screens.set(name, { area: a.id, def });
     }
   }
+  const kinds = new Map<string, string>();
+  for (const a of areas)
+    for (const b of a.unitBlocks ?? []) {
+      const prev = kinds.get(b.kind);
+      if (prev) throw new Error(`Block „${b.kind}“ doppelt: ${prev} und ${a.id}`);
+      kinds.set(b.kind, a.id);
+    }
   installed = { areas, screens };
 }
 
@@ -160,8 +185,27 @@ export function sheetOf(id: SheetId): SheetDef | null {
   return null;
 }
 
-export function settingsSections(): SettingsDef[] {
-  return installed.areas.flatMap((a) => a.settings ?? []).sort(byOrder);
+/** Registrierte Einstellungs-Abschnitte, optional nur einer Gruppe. */
+export function settingsSections(group?: SettingsGroup): SettingsDef[] {
+  return installed.areas
+    .flatMap((a) => a.settings ?? [])
+    .filter((s) => group === undefined || s.group === group)
+    .sort(byOrder);
+}
+
+/** Alle Block-Anbieter der Tageseinheit. */
+export function unitBlocks(): UnitBlockProvider[] {
+  return installed.areas.flatMap((a) => a.unitBlocks ?? []);
+}
+
+/** Anbieter eines Blocks (der erste angemeldete gewinnt; doppelte Arten meldet der Register-Test). */
+export function unitBlockFor(kind: UnitBlockKind): UnitBlockProvider | null {
+  return unitBlocks().find((b) => b.kind === kind) ?? null;
+}
+
+/** Angemeldete Beiträge zur Zeile unter dem Balken, in Bereichs-Reihenfolge. */
+export function playerNotes(): PlayerNoteDef[] {
+  return installed.areas.flatMap((a) => (a.playerNote ? [a.playerNote] : []));
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

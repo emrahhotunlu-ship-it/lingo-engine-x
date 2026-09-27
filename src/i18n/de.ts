@@ -28,6 +28,7 @@ import { nbWsDe } from './parts/nbWs.de';
 import { nbLesenDe } from './parts/nbLesen.de';
 import { nbSprechenDe } from './parts/nbSprechen.de';
 import { nbProfilDe } from './parts/nbProfil.de';
+import { nbTrainingDe } from './parts/nbTraining.de';
 
 export const de = {
   ...aiDe,
@@ -72,6 +73,7 @@ export const de = {
   ...nbLesenDe,
   ...nbSprechenDe,
   ...nbProfilDe,
+  ...nbTrainingDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

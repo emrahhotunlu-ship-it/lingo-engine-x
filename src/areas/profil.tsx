@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { defineArea } from '../app/registry';
+import { HubSections } from '../app/shell/Hub';
 import { installCompanionHotkeys } from '../features/companion/hotkeys';
 import { ProgressScreen } from '../features/progress/ProgressScreen';
 import { VtestScreen } from '../features/vtest/VtestScreen';
@@ -16,12 +17,22 @@ declare module '../app/router/types' {
   }
 }
 
+/** „Dein Stand“ mit den Abschnitten der Plätze `stand` (Statistik) und – bis zum Profil-Blatt – `profile`. */
+function OverviewPage() {
+  return (
+    <>
+      <ProgressScreen />
+      <HubSections places={['stand', 'profile']} />
+    </>
+  );
+}
+
 export const profil = defineArea({
   id: 'profil',
   screens: {
     overview: {
       kind: 'page',
-      component: ProgressScreen,
+      component: OverviewPage,
       title: 'ovTitle',
       keepScroll: true,
       chrome: 'shell',

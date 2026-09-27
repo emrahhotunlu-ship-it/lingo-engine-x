@@ -26,6 +26,7 @@ import { nbWsEn } from './parts/nbWs.en';
 import { nbLesenEn } from './parts/nbLesen.en';
 import { nbSprechenEn } from './parts/nbSprechen.en';
 import { nbProfilEn } from './parts/nbProfil.en';
+import { nbTrainingEn } from './parts/nbTraining.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -71,6 +72,7 @@ export const en: Record<MessageKey, string> = {
   ...nbLesenEn,
   ...nbSprechenEn,
   ...nbProfilEn,
+  ...nbTrainingEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',
