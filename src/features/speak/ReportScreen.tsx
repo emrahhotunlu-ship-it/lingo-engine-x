@@ -14,6 +14,8 @@ import { useCatLabel } from './AnalysisCard';
 import { TakeChunkButton } from './TakeChunkButton';
 import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import type { RoleplayApi } from './useRoleplay';
+import { repairsFromTalk } from '../../domain/repair/sources';
+import { RepairStep } from '../repair/RepairStep';
 
 // Abschlussbericht (Plan §5.4): fester Teil sofort und ohne KI (Tatsachen, kein Punktestand),
 // dazu der KI-Bericht in Worten. Gespeichert wird beim Anzeigen des festen Teils; der KI-Bericht
@@ -34,6 +36,8 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
   const foreign = rep.data && rep.data.lang !== lang;
   const aiState = saving ? 'waiting' : foreign ? 'foreign' : rep.state;
   const n = route.name === 'roleplay' ? (route.n ?? 0) : 0;
+  // Lernberatung V2: „Nochmal, aber besser" – eigene Sätze mit Korrektur neu formulieren.
+  const repairs = useMemo(() => repairsFromTalk(c.turns, c.analyses, scene.titleEn), [c.turns, c.analyses, scene.titleEn]);
 
   return (
     <motion.div
@@ -184,6 +188,8 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
           </>
         )}
       </section>
+
+      {!saving && repairs.length > 0 && <RepairStep candidates={repairs} area="speak" source={`scene/${scene.id}`} />}
 
       <div className="flex flex-wrap gap-3">
         <Button variant="primary" icon="refresh" disabled={saving} onClick={() => go({ name: 'roleplay', sceneId: scene.id, n: n + 1 })} data-testid="report-again">

@@ -10,6 +10,7 @@ import { progressEn } from './parts/progress.en';
 import { trainerEn } from './parts/trainer.en';
 import { standEn } from './parts/stand.en';
 import { engineEn } from './parts/engine.en';
+import { repairEn } from './parts/repair.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -31,6 +32,8 @@ export const en: Record<MessageKey, string> = {
   ...standEn,
   // Kurs-Erweiterung, Wischgesten, Vibration
   ...engineEn,
+  // Lernberatung 27.09., V2 – Reparatur-Sätze
+  ...repairEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

@@ -22,6 +22,9 @@ import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCa
 import { markExhausted, useTodayPlan } from '../today/store';
 import { inDeck, type Deck } from '../../domain/srs/vocabList';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './persist';
+import { pickDailyRepairs, repairsDoneToday } from '../../domain/repair/daily';
+import type { RepairItem } from '../../domain/repair/repair';
+import { commitRepairAnswer } from '../repair/review';
 
 // Eine Runde im Vokabeltrainer. Die Warteschlange wird synchron im Klick-Handler von „Starten"
 // gebaut – so kann derselbe Handler die Tastatur öffnen (iPhone). Die Karten sind für die Runde
@@ -54,6 +57,9 @@ type SessionState = {
   doneBefore: number;
   activeMs: number;
   lastInteract: number;
+  /** Lernberatung V2: fällige Reparatur-Sätze vor den Karten (höchstens 4 je Tag). */
+  repairs: RepairItem[];
+  repairPos: number;
 };
 
 const EXTRA_TARGET = 10;
@@ -83,6 +89,8 @@ export const useSession = create<SessionState>(() => ({
   doneBefore: 0,
   activeMs: 0,
   lastInteract: 0,
+  repairs: [],
+  repairPos: 0,
 }));
 
 /** Heutige Einträge: Datenbank und noch nicht gespeicherter Puffer. */
@@ -174,12 +182,15 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const plannedNew = plan?.goal.new;
   const newQuotaLeft = round === 'pflicht' && plannedNew !== undefined ? Math.min(quota, Math.max(0, plannedNew - Math.max(0, introducedToday - introducedLessonToday))) : quota;
   const deck = opts.deck ?? 'all';
+  // Lernberatung V2: fällige Reparatur-Sätze zählen zur Runde (Pflicht bzw. freie Runde „alle“).
+  const repairs = !opts.only && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), target) : [];
+  const cardTarget = Math.max(0, target - repairs.length);
   const queue = opts.only
     ? opts.only
         .map((k) => byKey.get(k))
         .filter((c): c is TrainCard => !!c && !c.hidden)
         .map((c): QueueItem => ({ key: c.key, reason: c.isNew ? 'new' : 'due', phase: c.stage === 0 ? 'intro' : 'quiz' }))
-    : buildQueue({ cards: round === 'extra' && deck !== 'all' ? cards.filter((c) => inDeck(c, deck)) : cards, nowMs: now, target, newQuotaLeft: round === 'extra' && deck !== 'all' ? 0 : newQuotaLeft, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
+    : buildQueue({ cards: round === 'extra' && deck !== 'all' ? cards.filter((c) => inDeck(c, deck)) : cards, nowMs: now, target: cardTarget, newQuotaLeft: round === 'extra' && deck !== 'all' ? 0 : newQuotaLeft, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
   const base: SessionState = {
     active: true,
     status: 'running',
@@ -201,16 +212,54 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     doneBefore,
     activeMs: 0,
     lastInteract: performance.now(),
+    repairs,
+    repairPos: 0,
   };
   const next = { ...base, ...settle(base, 0) };
-  if (next.pos >= next.queue.length) next.status = 'summary';
+  if (next.pos >= next.queue.length && !repairs.length) next.status = 'summary';
   // H1: Pflichtrunde ohne abfragbare Karte (z. B. nach dem Neuladen) – „Wiederholen" ist erschöpft.
   if (round === 'pflicht' && target > 0 && next.status === 'summary') markExhausted(day);
   useSession.setState(next);
+  if (repairs.length) return 'choice';
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
   if (item.phase === 'intro') return 'intro';
   return firstKindOf(next.exercise);
+}
+
+/** Aktueller Reparatur-Satz der Runde (vor den Karten), sonst `null`. */
+export const currentRepair = (s: Pick<SessionState, 'status' | 'repairs' | 'repairPos'>): RepairItem | null => (s.status === 'running' ? (s.repairs[s.repairPos] ?? null) : null);
+
+/** Ergebnis eines Reparatur-Satzes übernehmen (Protokoll, `app/repair`); weiter geht es mit `nextRepair`. */
+export function answerRepair(ok: boolean, given: string, ms: number): void {
+  touch();
+  const s = useSession.getState();
+  const r = currentRepair(s);
+  if (!r) return;
+  const key = `repair/${r.id}`;
+  if (s.answered.includes(key)) return;
+  commitRepairAnswer({ item: r, ok, given, ms, day: s.day, lang: s.lang, ctx: s.round === 'pflicht' ? 'rev' : 'xtra', first: s.results.length === 0 });
+  useSession.setState({ answered: [...s.answered, key], results: [...s.results, { key, word: r.right.split(/\s+/).slice(0, 4).join(' ') + (r.right.split(/\s+/).length > 4 ? ' …' : ''), grade: ok ? 3 : 1, ok }] });
+}
+
+/** Zum nächsten Reparatur-Satz bzw. zu den Karten (oder zur Zusammenfassung). */
+export function nextRepair(): FirstKind {
+  touch();
+  const s = useSession.getState();
+  const repairPos = s.repairPos + 1;
+  if (repairPos < s.repairs.length) {
+    useSession.setState({ repairPos, step: s.step + 1 });
+    return 'choice';
+  }
+  const next: SessionState = { ...s, repairPos, step: s.step + 1 };
+  if (next.pos >= next.queue.length) {
+    next.status = 'summary';
+    finish(next, false);
+  }
+  useSession.setState(next);
+  const item = next.queue[next.pos];
+  if (!item || next.status === 'summary') return null;
+  return item.phase === 'intro' ? 'intro' : firstKindOf(next.exercise);
 }
 
 /** Aktivität für die aktiven Minuten (Hintergrundzeit zählt nie, Ruhe über 60 s wird gekappt). */

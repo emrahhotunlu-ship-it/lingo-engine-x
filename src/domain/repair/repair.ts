@@ -34,13 +34,23 @@ export type RepairItem = {
   done?: boolean;
   /** Zeitpunkt der zuletzt angewendeten Wiederholung (Doppelanwendung verhindern). */
   last?: number;
+  /** Die korrigierten Stellen (Teilstücke von `right`), für die lokale Prüfung. */
+  fix?: string[];
 };
 
-export type NewRepair = { wrong: string; right: string; why?: string | null; src: RepairSrc; ctx?: string | null };
+export type NewRepair = { wrong: string; right: string; why?: string | null; src: RepairSrc; ctx?: string | null; fix?: readonly string[] | null };
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 const clip = (s: string, max: number) => (s.length <= max ? s : `${s.slice(0, max - 1).trimEnd()}…`);
+
+/** Korrigierte Stellen: nur nicht leere Stücke, die in `right` vorkommen (höchstens 6). */
+function fixOf(fix: readonly string[] | null | undefined, right: string): string[] | null {
+  if (!fix?.length) return null;
+  const r = repairNorm(right);
+  const out = [...new Set(fix.map((f) => clip(f.trim(), 80)).filter((f) => f && r.includes(repairNorm(f))))].slice(0, 6);
+  return out.length ? out : null;
+}
 
 /** Vergleichsform: klein, ohne Satzzeichen und doppelte Leerzeichen. */
 export function repairNorm(s: string): string {
@@ -104,6 +114,7 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
     const right = clip(a.right.trim(), REPAIR_TEXT_MAX);
     if (!wrong || !right || repairNorm(wrong) === repairNorm(right)) continue;
     const id = repairId(wrong);
+    const fix = fixOf(a.fix, right);
     const i = out.findIndex((e) => e.id === id);
     const fresh: RepairItem = {
       id,
@@ -112,6 +123,7 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
       ...(a.why?.trim() ? { why: clip(a.why.trim(), REPAIR_WHY_MAX) } : {}),
       src: a.src,
       ...(a.ctx?.trim() ? { ctx: clip(a.ctx.trim(), 120) } : {}),
+      ...(fix ? { fix } : {}),
       t: nowMs,
       box: 0,
       due: nowMs + DAY,

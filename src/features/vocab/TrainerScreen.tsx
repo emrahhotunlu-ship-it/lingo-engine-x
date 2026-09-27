@@ -12,7 +12,8 @@ import { IntroCard } from './IntroCard';
 import { Summary } from './Summary';
 import { abortExamples } from './examples';
 import { flush } from './persist';
-import { leaveSession, pauseActivity, touch, useSession } from './session';
+import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, touch, useSession } from './session';
+import { RepairItem } from '../repair/RepairItem';
 
 // Vokabeltrainer: eine Karte zur Zeit, Kartenwechsel als kurze Seitwärts-Überblendung.
 // Esc verlässt die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
@@ -33,6 +34,7 @@ export function TrainerScreen() {
   const answered = useSession((s) => s.answered.length);
   const target = useSession((s) => s.target);
   const doneBefore = useSession((s) => s.doneBefore);
+  const repair = useSession(currentRepair);
 
   const knownWords = useMemo(() => new Set(pool.map((c) => normalize(c.lemma))), [pool]);
 
@@ -95,6 +97,20 @@ export function TrainerScreen() {
         >
           {status === 'summary' ? (
             <Summary onBack={leave} />
+          ) : repair ? (
+            <RepairItem
+              key={repair.id}
+              item={repair}
+              mode="review"
+              area="trainer"
+              source={null}
+              onResult={({ ok, given, ms }) => answerRepair(ok, given, ms)}
+              onNext={() => {
+                // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
+                if (nextRepair() === 'typed') api.focusNow();
+                else api.blur();
+              }}
+            />
           ) : introCard ? (
             <IntroCard card={introCard} onDone={onDone} />
           ) : exercise ? (

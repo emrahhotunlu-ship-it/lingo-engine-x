@@ -24,6 +24,7 @@ import { roleplayTurn } from './roleplayTurn';
 import { assess } from './assess';
 import { weeklyReport } from './weeklyReport';
 import { courseExtend } from './courseExtend';
+import { repairCheck } from './repairCheck';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -58,6 +59,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   weeklyReport,
   // Kurs-Erweiterung (Kap. 6.2)
   courseExtend,
+  // Lernberatung 27.09., V2 – Reparatur-Sätze
+  repairCheck,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

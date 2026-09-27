@@ -26,6 +26,9 @@ import { UnitShell } from '../input/UnitShell';
 import { writeMachine } from './machine';
 import { PromptCard } from './PromptCard';
 import { ReviewView } from './ReviewView';
+import { repairsFromWriting } from '../../domain/repair/sources';
+import { RepairStep } from '../repair/RepairStep';
+import { saveRepairs } from '../repair/store';
 
 // Eine Schreib-Einheit (Plan §4.3): Aufgabe → eigener Text (Wendungs-Chips haken sich ab und
 // fügen sich per Tipp ein, M12) → Abgeben (erledigt, F6) → Korrektur als App-Aufgabe (M14) →
@@ -62,7 +65,13 @@ function startReview(id: string, text: string, rev: number, prompt: WritingPromp
       uiLang,
       topics: TOPIC_IDS,
     },
-    save: (data) => saveWritingReview(id, processReview(data, text), uiLang, rev, text),
+    save: async (data) => {
+      const res = processReview(data, text);
+      await saveWritingReview(id, res, uiLang, rev, text);
+      // Lernberatung V2: echte Fehler aus dem eigenen Text werden Reparatur-Sätze.
+      const repairs = repairsFromWriting(text, res.errors, prompt.title.en);
+      if (repairs.length) await saveRepairs(repairs);
+    },
   });
 }
 
@@ -210,6 +219,9 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
         {task?.status === 'error' && view && <AiRunPanel phase="error" error={task.error} onRetry={() => startReview(view.id, view.text, view.rev, prompt, ctx)} />}
         {res && view && (
           <ReviewView res={res} text={view.text} area="write" sourceRef={`writing/${view.id}`} title={prompt.title.en} stale={stale} onRecheck={ai ? () => startReview(view.id, view.text, view.rev, prompt, ctx) : null} />
+        )}
+        {res && view && !stale && !running && (
+          <RepairStep key={`${view.id}-${view.rev}`} candidates={repairsFromWriting(view.text, res.errors, prompt.title.en)} area="write" source={`writing/${view.id}`} />
         )}
         {!res && !running && view && (
           <div className="flex flex-col gap-3" data-testid="no-review">
