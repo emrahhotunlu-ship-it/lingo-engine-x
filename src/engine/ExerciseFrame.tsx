@@ -16,7 +16,7 @@ type Props = {
   resultLabel: string;
   result?: ReactNode;
   /** Meta für Tests und Diagnose (Übungsart, Karte, Kollokation, Stufe). */
-  meta?: { ex: string; card: string; col?: number | undefined; stage?: number | undefined };
+  meta?: { ex: string; card: string; col?: number | undefined; stage?: number | undefined; kind?: string | undefined };
 };
 
 export function ExerciseFrame({ status, task, infoLabel, purpose, body, actions, resultLabel, result, meta }: Props) {
@@ -31,6 +31,7 @@ export function ExerciseFrame({ status, task, infoLabel, purpose, body, actions,
       data-card={meta?.card}
       data-col={meta?.col}
       data-stage={meta?.stage}
+      data-kind={meta?.kind}
     >
       <header className="flex flex-col gap-2">
         {status}

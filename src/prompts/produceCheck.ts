@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { clip, header, langName, langOf } from './common';
+import { clipped } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
 // produce-check@1: Prüft einen eigenen Satz mit dem Zielwort (Abfrageart „produce").
@@ -33,14 +34,38 @@ export const PRODUCE_CHECK_EXAMPLE = '{"verdict":"correct","usesTarget":true,"fi
 const ID = 'produce-check';
 const VERSION = 1;
 
+const VERDICT_ALIASES: ReadonlyArray<[RegExp, ProduceVerdict]> = [
+  [/^(correct|right|good|ok|okay|natural|perfect)$/, 'correct'],
+  [/^(minor|small|almost|mostly[\s_-]?correct|minor[\s_-]?(error|issue|mistake)s?|partly[\s_-]?correct)$/, 'minor'],
+  [/^(wrong|incorrect|error|false|missing|misused|major)$/, 'wrong'],
+];
+
+/** Tolerant: „Correct", „minor error", „incorrect" → die drei Werte; Unbekanntes bleibt (Neuversuch). */
+export function produceVerdict(v: unknown): unknown {
+  if (typeof v !== 'string') return v;
+  const s = v.trim().toLowerCase();
+  for (const [re, out] of VERDICT_ALIASES) if (re.test(s)) return out;
+  return v;
+}
+
+/** Tolerant: `"true"`/`"yes"` bzw. `"false"`/`"no"` als Wahrheitswert. */
+export function looseBool(v: unknown): unknown {
+  if (typeof v !== 'string') return v;
+  const s = v.trim().toLowerCase();
+  if (s === 'true' || s === 'yes') return true;
+  if (s === 'false' || s === 'no') return false;
+  return v;
+}
+
 const schemaFor = (uiLang: UiLang): z.ZodType<ProduceCheckOut> =>
   z
     .object({
-      verdict: z.enum(['correct', 'minor', 'wrong']),
-      usesTarget: z.boolean(),
-      fixed: z.string().trim().min(1).max(400),
-      why: z.string().trim().min(1).max(400),
-      better: z.string().trim().max(400),
+      verdict: z.preprocess(produceVerdict, z.enum(['correct', 'minor', 'wrong'])),
+      usesTarget: z.preprocess(looseBool, z.boolean()),
+      fixed: clipped(1, 400),
+      why: clipped(1, 400),
+      // Fehlt „better" oder ist es null, gibt es keine natürlichere Fassung.
+      better: z.preprocess((v) => (v === undefined || v === null ? '' : v), clipped(0, 400)),
     })
     .superRefine((v, ctx) => {
       // Keine Widersprüche (Kap. 2): „richtig" setzt voraus, dass das Zielwort vorkommt.

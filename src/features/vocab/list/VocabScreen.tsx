@@ -4,6 +4,7 @@ import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
 import { invalidIdsOf, useLive } from '../../../data/live';
 import { buildTrainCards, meaningOf } from '../../../domain/srs/cards';
+import { buildChunkCards } from '../../../domain/srs/chunkCards';
 import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../../domain/srs/confidence';
 import { filterCards, VOCAB_FILTERS, vocabStats, type VocabFilter, type VocabSort } from '../../../domain/srs/vocabList';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
@@ -48,6 +49,7 @@ export function VocabScreen() {
   const now = useClock((s) => s.now);
   const today = useClock((s) => s.today);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
+  const chunks = useLive((s) => s.collections.chunk) ?? EMPTY;
   const invalid = useLive((s) => s.invalid);
   const newPerDay = useLive((s) => s.docs['app/profile']?.newPerDay);
   const [filter, setFilter] = useState<VocabFilter>('all');
@@ -60,8 +62,13 @@ export function VocabScreen() {
   const closeWord = useCallback(() => setOpen(null), []);
   const closeAdd = useCallback(() => setAdding(false), []);
 
-  const cards = useMemo(() => buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), [vocab, now, invalid]);
+  // Wendungen (`chunk/*`) stehen mit in der Liste (Filter „Wendungen“, M1).
+  const cards = useMemo(
+    () => [...buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), ...buildChunkCards(chunks, now, invalidIdsOf(invalid, 'chunk'))],
+    [vocab, chunks, now, invalid],
+  );
   const stats = useMemo(() => vocabStats(cards, now, today, normalizeNewPerDay(newPerDay)), [cards, now, today, newPerDay]);
+  const chunkCount = useMemo(() => cards.filter((c) => c.kind === 'chunk' && !c.hidden).length, [cards]);
   const list = useMemo(() => filterCards(cards, { filter, query: q, sort, nowMs: now }), [cards, filter, q, sort, now]);
   const current = open ? (cards.find((c) => c.key === open) ?? null) : null;
 
@@ -75,7 +82,8 @@ export function VocabScreen() {
           back={() => go({ name: 'learn' })}
           lead={
             <span className="lx-tnum" data-testid="vocab-status">
-              {tn('vcTotal', stats.total)} · {tn('vocabDue', stats.due)} · {newLine}
+              {tn('vcTotal', stats.total - chunkCount)}
+              {chunkCount > 0 && <> · {tn('vcChunks', chunkCount)}</>} · {tn('vocabDue', stats.due)} · {newLine}
             </span>
           }
           right={
@@ -175,12 +183,16 @@ function WordRow({ card, nowMs, lang, onOpen }: { card: TrainCard; nowMs: number
       onClick={onOpen}
       data-testid="vocab-row"
       data-word={card.id}
+      data-kind={card.kind}
       data-stage={card.stage}
       data-hidden={card.hidden || undefined}
     >
       <span className="flex min-w-0 flex-col">
-        <span className="truncate font-medium" lang="en">
-          {card.word}
+        <span className="flex min-w-0 items-center gap-2">
+          <span className="truncate font-medium" lang="en">
+            {card.word}
+          </span>
+          {card.kind === 'chunk' && <span className="flex-none rounded-full border border-line px-2 py-0.5 text-[0.7rem] font-medium text-muted">{t('vcChunkBadge')}</span>}
         </span>
         {meaning && (
           <span className="text-sm text-muted" lang={lang}>

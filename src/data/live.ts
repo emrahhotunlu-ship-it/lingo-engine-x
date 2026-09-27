@@ -20,7 +20,8 @@ type Doc = Record<string, unknown>;
 
 export const LIVE_DOCS = ['app/profile', 'app/course', 'app/assess', 'app/schema'] as const;
 // `archive`: ausgelagerte Profiljahre (Phase 7, Plan §12.3) – Serie und Verlauf lesen sie mit.
-export const LIVE_COLLECTIONS = ['vocab', 'grammar', 'archive'] as const;
+// `chunk`: Wendungen gehören zur täglichen Wiederholung (Plan und Trainer brauchen sie sofort).
+export const LIVE_COLLECTIONS = ['vocab', 'grammar', 'archive', 'chunk'] as const;
 export type LiveDocPath = (typeof LIVE_DOCS)[number];
 export type LiveCollection = (typeof LIVE_COLLECTIONS)[number];
 

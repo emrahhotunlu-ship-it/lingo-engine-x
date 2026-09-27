@@ -7,7 +7,7 @@ Stand 27.09.2026, Branch `claude/affectionate-cerf-pe6ej2`. „E2E" = Playwright
 | Kriterium | Beleg |
 |---|---|
 | Alle Module aus Kap. 6 vorhanden und bedienbar | `acceptance.spec` (alle Reiter, Dein Stand mit vier Reitern, Wortschatztest, Einstellungen); je Modul die Specs `today`, `trainer`, `course`, `grammar`, `drills`, `speak`, `business`, `read`, `listen`, `write`, `discover`, `companion`, `preply`, `progress`, `vtest`, `settings` |
-| Alle bisherigen Daten sichtbar und weitergeführt | `acceptance.spec` (Serie 12, Kurs 6, Karten 146 wie im Seed), `migration.spec`, Unit `migration`/`rescue` |
+| Alle bisherigen Daten sichtbar und weitergeführt | `acceptance.spec` (Serie 12, Kurs 6, Karten 146 wie im Seed), `migration.spec`, Unit `migration`/`rescue`; Wendungen `chunk/*` (alte und neu mitgenommene) in der Wortschatzliste mit Filter „Wendungen“, eigenem Blatt (Ursprung, eigener Satz, Ursprungssatz) und Verstecken/Zurückholen (`trainerModes.spec` › Wortschatzliste) und in der täglichen Wiederholung mit FSRS aus den alten Planungsfeldern (Unit `chunkTrainer`, `trainerModes.spec` › Wendungen) |
 | Serie läuft weiter | Unit `streak` (Zeitmatrix), `capacity` (Serie vor/nach dem Auslagern an drei Zeitpunkten gleich), `migration` (`legacyStreak` = neue Serie) |
 | Tagesauftrag funktioniert unverändert | `acceptance.spec` (`daily/*`, `feed/*` bytegleich, `newWords` werden Karten), Unit `dailyIntake`, Writer verweigert `daily/*`/`feed/*` (Unit `writer`) |
 | Beim Öffnen in < 2 s klar, was heute dran ist | `perf.spec`: < 2 s ohne Drossel (Großdatensatz). **Befund:** mit 4-facher CPU-Drossel ≈ 3 s (Parsen des 2,5-MB-Bundles ≈ 1,1 s, Planaufbau über 1.500 Karten). Geprüft wird dort eine Regressionsgrenze von 4 s. **iPhone:** Emrah misst gefühlt beim Öffnen. |
@@ -23,14 +23,14 @@ Stand 27.09.2026, Branch `claude/affectionate-cerf-pe6ej2`. „E2E" = Playwright
 | Erledigte Aufgaben anklickbar | `today-duties.spec`, `acceptance.spec` |
 | Zähler zählt Freiwilliges als Pflicht | `today-duties.spec`, Unit `phase6Plan` (Zähler 0→3 nur mit Pflichtpunkten), `acceptance.spec` |
 | Dasselbe dreimal auf einem Bildschirm | `acceptance.spec` (Duplikat-Wächter je Hauptbildschirm und Reiter; Ausnahmen: Tabellen, Optionen, Can-Do-Liste) |
-| Neue Wörter fehlen an Tagen mit Wiederholungen | Unit `review`/`trainer` (Mischung neu + fällig) |
-| Jede Lernstufe nur eine Abfrageart | `trainer.spec` (alle Abfragearten), Unit `trainer` |
+| Neue Wörter fehlen an Tagen mit Wiederholungen | Unit `review`/`trainer` (Mischung neu + fällig); Wendungen laufen durch dieselbe Budget-Regel (Unit `chunkTrainer` › Planung) |
+| Jede Lernstufe nur eine Abfrageart | Katalog mit 14 Arten (phase1-plan §4.2 + „Aus der Situation“): Unit `chunkTrainer` (je Stufe 1–5 mindestens zwei eigene Arten; Stufe 0–5 mindestens zwei auch ohne Sprachausgabe und ohne KI, für Vokabeln und Wendungen, DE und EN; Stufe 5 mit `produce`, ohne KI Rückfall), `trainerModes.spec` (spot, listen_mc, match, tiles, dictation, speed, produce je einmal am Handy 390 mit Touch; Tempo-Ablauf; `produce` mit KI-Fehler → „Ohne Claude prüfen“; nosample), `trainer.spec`, Unit `trainer` |
 | Eingabe unter statt in der Lücke | `trainer.spec`, `drills.spec`, `vtest.spec` (Teil 3 tippt in die Lücke) |
 | Gemischte Sprache in gespeicherten KI-Texten | Unit `langSweep` (alle Datensätze inkl. `app/assess`, `app/weekly`, `app/lookup`, `xEx`), Schemas prüfen Sprache (`langOf`), `progress.spec` (EN-Oberfläche + DE-Einschätzung → genau ein neuer Lauf) |
 | Dunkelmodus nie gestaltet | Unit `contrast`, `screens.spec` (Hintergrund je Modus), `a11y.spec` in allen Modi |
 | Chat als schmale Seitenleiste, springt beim Lesen | `companion.spec` |
-| Wörter in neuen Übungen nicht antippbar | Specs je Modul; Phase 6: Blocker-„So geht es richtig" und Radar-Beispiele über `EnglishText` |
-| Karten ohne Ursprungssatz | Unit `lookupStore`, `speak.spec`/`read.spec` (Karte mit Satz) |
+| Wörter in neuen Übungen nicht antippbar | Specs je Modul; Phase 6: Blocker-„So geht es richtig" und Radar-Beispiele über `EnglishText`; neue Abfragearten: `trainerModes.spec` (antippbare Wörter im Ergebnis je Art) |
+| Karten ohne Ursprungssatz | Unit `lookupStore`, `speak.spec`/`read.spec` (Karte mit Satz); Wendungen: Kontext = Stelle in der aufgewerteten Fassung (Unit `chunkTrainer`, alle Seed-Wendungen) |
 | Tests nur mit heutigem Datensatz | Zeitmatrix in Unit `date`, `streak`, `progress6` (04:00, Sommerzeit-Ende, 2026-W53), `capacity` |
 | Stille Fehler durch leere `catch` | ESLint `no-empty` (in `npm run verify`) |
 | Sprachausgabe am Handy abgehackt | Unit `speechChunks` (≤ 150 Zeichen, 60 ms nach `cancel`). **iPhone:** Vorlesen im Rollenspiel |
@@ -52,3 +52,15 @@ Stand 27.09.2026, Branch `claude/affectionate-cerf-pe6ej2`. „E2E" = Playwright
 | W7 | nicht belegt, offen |
 | W8 alle angesammelten `daily/*` | erledigt (`runDailyIntake`, Unit `dailyIntake`) |
 | W9 `pflichtSince` nie rückwirkend | erledigt (Unit `pflicht`) |
+
+## Wendungs-Wiederholung und Abfragearten (27.09.2026)
+
+| Punkt | Stand |
+|---|---|
+| `chunk/*` mit FSRS wie Vokabeln | umgesetzt: `domain/srs/chunkCards.ts` liest S/D/due/last/state/stage der alten App, `fsrs` kommt beim ersten Schreiben zusätzlich (`chunkPatch`, strenges `chunkPatchSchema`, nie angelegt, keine `pa`/`ac`/`co`); Protokoll im Format der alten App (`type:'chunk'`, `q`), zählt zu „Wiederholen“ (`entryCardKey`) |
+| Pflicht- und Extra-Runde, Tagesplan | Wendungen stehen in `planRound`/`buildQueue` (Heute-Plan und Trainer); Stapel „Wendungen“ der freien Runde nimmt `chunk/*` mit |
+| Aus der Situation (M15) | als Abfrageart `situation` (Stufe 4, nur Wendungen mit Szene) im Trainer, mit „Damals hattest du gesagt“; die Übungsrunde in Sprechen bleibt |
+| Wendungen aus Mail/Pitch/Baukasten | Karten wie Szenen-Wendungen (Ursprung „E-Mail“, „Präsentation“, „Baukasten“), ohne Situationsübung |
+| **iPhone-Prüfpunkt** | Hören (`listen_mc`, `dictation`) spielt beim Einblenden automatisch; blockiert Safari das ohne Tippen, hilft „Nochmal hören“. Bitte am Gerät prüfen. |
+| offen (Plan §4.5 „neu“) | Blutegel-Grenze (≤ 3 Karten mit `lapses ≥ 4` je Pflichtrunde) und Verschachtelung nach `topicKey` sind nicht umgesetzt; Heute gewichtet die Kanäle weiter nur mit Vokabeln (`dueCards` im Ranking) |
+| offen | „Eigener Satz“ ohne Claude erkennt unregelmäßige Formen von Wendungen nicht immer (z. B. „met … halfway“); mit Claude kein Problem |

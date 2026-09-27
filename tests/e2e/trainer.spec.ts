@@ -7,6 +7,8 @@ import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpe
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
+const CATALOG_IDS = ['mc_en', 'spot', 'listen_mc', 'mc_de', 'match', 'cloze_hint', 'tiles', 'type', 'cloze', 'colloc', 'situation', 'dictation', 'speed', 'produce'];
+
 test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach „Fertig für heute"', async ({ page }) => {
   test.setTimeout(90_000);
   const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(6), ...forcedPatch() } } });
@@ -23,7 +25,9 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
     seen.add(await answerCurrent(page));
   }
   await expect(page.getByTestId('summary')).toBeVisible();
-  expect([...seen].sort()).toEqual(['cloze', 'cloze_hint', 'colloc', 'mc_de', 'mc_en', 'type']);
+  // Jede der sechs erzwungenen Arten kommt vor; Wiedervorlagen dürfen weitere Arten des Katalogs zeigen.
+  expect([...seen]).toEqual(expect.arrayContaining(['cloze', 'cloze_hint', 'colloc', 'mc_de', 'mc_en', 'type']));
+  for (const ex of seen) expect(CATALOG_IDS).toContain(ex);
   // Je Wort genau ein Chip, auch wenn eine Karte in der Runde wiederkam.
   const chipWords = await page.getByTestId('summary-chip').allInnerTexts();
   expect(chipWords.length).toBeGreaterThan(0);

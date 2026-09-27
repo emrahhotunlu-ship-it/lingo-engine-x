@@ -19,7 +19,7 @@ const IGNORABLE: ReadonlySet<SkipReason> = new Set(['already_applied']);
 export async function saveCard(a: AnswerEvent, seedDefault: Doc | null): Promise<boolean> {
   const writer = getWriter();
   if (!writer) return false;
-  const path = `vocab/${a.id}`;
+  const path = a.kind === 'chunk' ? `chunk/${a.id}` : `vocab/${a.id}`;
   let skipped: SkipReason | null = null;
   try {
     await writer.transform(path, (cur) => {
@@ -42,6 +42,6 @@ export async function saveCard(a: AnswerEvent, seedDefault: Doc | null): Promise
 
 /** Gescheiterte Karten erneut anwenden (derselbe Zeitstempel: nie doppelt). */
 export async function retryFailed(seedDefaults: ReadonlyMap<string, Doc>): Promise<void> {
-  for (const a of usePending.getState().failedCards) await saveCard(a, seedDefaults.get(a.id) ?? null);
+  for (const a of usePending.getState().failedCards) await saveCard(a, a.kind === 'chunk' ? null : (seedDefaults.get(a.id) ?? null));
   await flush();
 }

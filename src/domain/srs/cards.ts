@@ -10,7 +10,7 @@ type Doc = Readonly<Record<string, unknown>>;
 const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() ? v.trim() : null);
 const num = (v: unknown, d = 0): number => (typeof v === 'number' && Number.isFinite(v) ? v : d);
 
-function counts(v: unknown): Record<string, Counts> {
+export function counts(v: unknown): Record<string, Counts> {
   const out: Record<string, Counts> = {};
   if (!v || typeof v !== 'object' || Array.isArray(v)) return out;
   for (const [k, raw] of Object.entries(v as Record<string, unknown>)) {
@@ -28,6 +28,7 @@ export function toTrainCard(id: string, doc: Doc, inDb: boolean, nowMs: number):
   const hist = Array.isArray(doc.hist) ? doc.hist : [];
   const last = hist[hist.length - 1] as Record<string, unknown> | undefined;
   return {
+    kind: 'vocab',
     key: `vocab/${id}`,
     id,
     path: `vocab/${id}`,
@@ -47,6 +48,8 @@ export function toTrainCard(id: string, doc: Doc, inDb: boolean, nowMs: number):
     xs: counts(doc.xs),
     modes: counts(doc.modes),
     lastMode: last && typeof last.m === 'string' ? last.m : null,
+    lastEx: last && typeof last.x === 'string' ? last.x : null,
+    chunk: null,
     intro: str(doc.intro),
     order: num(doc.order, 900),
     added: str(doc.added) ?? '',

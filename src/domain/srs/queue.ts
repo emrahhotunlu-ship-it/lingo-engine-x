@@ -32,7 +32,8 @@ export function normalizeNewPerDay(v: unknown): NewPerDay {
 const reviewCost = (c: TrainCard) => (c.stage <= 2 ? 12 : c.stage <= 4 ? 20 : 35);
 
 /** Quellen mit Emrahs eigenem Kontext zuerst, Startwortschatz zuletzt. */
-const SRC_RANK = ['lookup', 'read', 'translate', 'lesson', 'coach', 'preply', 'claude', 'ai', 'user', 'listen', 'write', 'job', 'seed'];
+// Mitgenommene Wendungen (Gespräch, Mail, Pitch, Baukasten) sind eigener Kontext wie „coach“.
+const SRC_RANK = ['lookup', 'read', 'translate', 'lesson', 'coach', 'scene', 'mail', 'pitch', 'biz', 'preply', 'claude', 'ai', 'user', 'listen', 'write', 'job', 'seed'];
 const srcRank = (s: string | null) => {
   const i = SRC_RANK.indexOf(s ?? '');
   return i === -1 ? SRC_RANK.length - 1 : i;

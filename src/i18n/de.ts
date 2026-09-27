@@ -9,6 +9,7 @@ import { voiceDe } from './parts/voice.de';
 import { companionDe } from './parts/companion.de';
 import { inputDe } from './parts/input.de';
 import { progressDe } from './parts/progress.de';
+import { trainerDe } from './parts/trainer.de';
 
 export const de = {
   ...aiDe,
@@ -23,6 +24,8 @@ export const de = {
   ...inputDe,
   // Phase 6 – Urteil, Fortschritt, Wortschatztest, Einstellungen
   ...progressDe,
+  // Trainer: neue Abfragearten und Wendungen
+  ...trainerDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

@@ -1,4 +1,5 @@
 import { lessonDoneOn } from '../course/courseDone';
+import { entryCardKey } from '../progress/logPatch';
 import type { DutyChannel, ExecChannel } from '../learn/types';
 import type { RoundPlan } from '../srs/queue';
 import { DUTY_MINUTES, DUTY_ROUND, isDutyChannel, PHASE2_EXECUTABLE, type RankedChannel } from './channels';
@@ -168,7 +169,7 @@ export type DeriveInput = {
 
 /**
  * Die EINE Ableitung für Statuszeile, Zähler, Häkchen, Heldenkarte und Knopf (Kap. 2.2):
- * - review: verschiedene Karten mit `k:'v'`, `ctx:'rev'` im Tagesprotokoll, gedeckelt;
+ * - review: verschiedene Karten (Vokabeln `k:'v'`, Wendungen `type:'chunk'`) mit `ctx:'rev'` im Tagesprotokoll, gedeckelt;
  * - lesson: irgendeine Lektion heute abgeschlossen (D10), live ⊕ Puffer;
  * - ch:<id>: `act[tag][id] ≥ 1` ohne `~` (D9), live ⊕ Puffer.
  * Freiwillige Extra-Antworten und Einträge ohne `ctx` zählen nie zur Pflicht (Kap. 15).
@@ -192,7 +193,8 @@ export function deriveToday(i: DeriveInput): TodayState {
     }
     answers++;
     if (e.ok === true) correct++;
-    if (e.ctx === 'rev' && e.k === 'v' && typeof e.id === 'string') reviewed.add(e.id);
+    const cardKey = entryCardKey(e);
+    if (e.ctx === 'rev' && cardKey) reviewed.add(cardKey);
     if (e.ctx === 'xtra') extra++;
   }
   const balance = { answers, correct, minutes: Math.max(0, Math.round(i.minutes)), talks, biz };

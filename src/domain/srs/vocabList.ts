@@ -26,7 +26,9 @@ const DAY = 86_400_000;
 const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
 const low = (s: string | null | undefined) => (s ?? '').toLowerCase();
 
-export const isPhraseCard = (c: Pick<TrainCard, 'word' | 'pos'>): boolean => /\s/.test(c.word.replace(/^to\s+/i, '').trim()) || /phras/i.test(c.pos ?? '');
+/** Wendung: eigene Wendungskarte (`chunk/*`) oder Mehrwort-Vokabel („take over“, Wortart „phrase“). */
+export const isPhraseCard = (c: Pick<TrainCard, 'word' | 'pos'> & Partial<Pick<TrainCard, 'kind'>>): boolean =>
+  c.kind === 'chunk' || /\s/.test(c.word.replace(/^to\s+/i, '').trim()) || /phras/i.test(c.pos ?? '');
 export const isJobCard = (c: Pick<TrainCard, 'src'>): boolean => c.src === 'job';
 /** Schwierig: oft vergessen oder noch unsicher (Stufe 1–2). */
 export const isHardCard = (c: TrainCard): boolean => !c.isNew && (num(c.doc.lapses) >= 2 || c.stage <= 2);

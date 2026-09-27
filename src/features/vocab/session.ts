@@ -6,8 +6,16 @@ import { dayKey } from '../../domain/date';
 import { mergeEntries, type DayEntry } from '../../domain/plan/buildPlan';
 import { applyUpdate, cardPatch } from '../../domain/srs/applyReview';
 import { buildTrainCards, toTrainCard } from '../../domain/srs/cards';
-import { buildExercise } from '../../domain/srs/exercise';
-import { chooseExercise } from '../../domain/srs/modes';
+import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
+import { buildExercise, type SceneLookup } from '../../domain/srs/exercise';
+import { chooseExercise, type ExerciseEnv } from '../../domain/srs/modes';
+import { entryCardKey } from '../../domain/progress/logPatch';
+import { sceneView } from '../../domain/speak/library';
+import { selectAiAvailable } from '../../ai/scope';
+import { useCapabilities } from '../../platform/capabilities';
+import { useSpeech } from '../../platform/speech';
+import { useWatched } from '../../data/watch';
+import { legacySceneDoc } from '../speak/useSceneLibrary';
 import { buildQueue, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
@@ -29,6 +37,8 @@ type SessionState = {
   round: Round;
   day: string;
   lang: Lang;
+  /** Sprachausgabe und KI beim Start der Runde (listen_mc, dictation, produce). */
+  env: ExerciseEnv;
   cards: Map<string, TrainCard>;
   pool: TrainCard[];
   queue: QueueItem[];
@@ -58,6 +68,7 @@ export const useSession = create<SessionState>(() => ({
   round: 'pflicht',
   day: '',
   lang: 'de',
+  env: { tts: false, ai: false },
   cards: new Map(),
   pool: [],
   queue: [],
@@ -84,12 +95,36 @@ export function todayEntries(day: string): DayEntry[] {
   );
 }
 
-function exerciseFor(s: Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx'>, item: QueueItem): Exercise | null {
+/** Umgebung jetzt: Sprachausgabe bereit, KI nutzbar (not_granted/nosample → ohne produce). */
+export function currentEnv(): ExerciseEnv {
+  return { tts: useSpeech.getState().status === 'ready', ai: selectAiAvailable(useCapabilities.getState()) };
+}
+
+/** Szene einer Wendung (Inhalt ⊕ geladene `scene/*`) für die Situationsübung (M15). */
+function sceneLookup(lang: Lang): SceneLookup {
+  return (id) => {
+    const db = useWatched.getState().docs.scene?.get(id);
+    const doc = db ?? legacySceneDoc(id);
+    if (!doc) return null;
+    const v = sceneView(id, doc, db ? 'db' : 'legacy', lang);
+    return { title: v.title, situation: v.situation, counterpart: v.persona ? `${v.persona.name}, ${v.persona.role}` : '' };
+  };
+}
+
+function exerciseFor(s: Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env'>, item: QueueItem): Exercise | null {
   const card = s.cards.get(item.key);
   if (!card || item.phase !== 'quiz') return null;
-  const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx);
+  const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;
-  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[item.key] ?? 0}`);
+  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[item.key] ?? 0}`, { sceneOf: sceneLookup(s.lang) });
+}
+
+/** Alle Karten der Runde: Vokabeln und Wendungen (`chunk/*`) mit derselben Planung. */
+export function allTrainCards(nowMs: number): TrainCard[] {
+  const live = useLive.getState();
+  const vocab = buildTrainCards(live.collections.vocab ?? new Map<string, Doc>(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
+  const chunks = buildChunkCards(live.collections.chunk ?? new Map<string, Doc>(), nowMs, invalidIdsOf(live.invalid, 'chunk'));
+  return [...vocab, ...chunks];
 }
 
 /** Nächste zeigbare Stelle ab `from` (Karten ohne mögliche Übung werden übersprungen). */
@@ -105,6 +140,9 @@ function settle(s: SessionState, from: number): Partial<SessionState> {
 
 export type FirstKind = 'typed' | 'choice' | 'intro' | null;
 
+/** Tastatur nur für die Lücke (getippt); alles andere schließt sie (iPhone: im selben Handler). */
+export const firstKindOf = (e: Exercise | null): FirstKind => (!e ? null : e.input === 'typed' ? 'typed' : 'choice');
+
 /** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
 /** Freie Runde (M9): Stapel und Größe; `only` = genau diese Karten („Jetzt üben" am Wortblatt). */
 export type SessionOpts = { deck?: Deck; size?: number; only?: readonly string[] };
@@ -114,14 +152,14 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const now = useClock.getState().now;
   const day = dayKey(Date.now());
   const lang = useSettings.getState().lang;
-  const vocab = live.collections.vocab ?? new Map<string, Doc>();
-  const cards = buildTrainCards(vocab, now, invalidIdsOf(live.invalid, 'vocab'));
+  const cards = allTrainCards(now);
   const byKey = new Map(cards.map((c) => [c.key, c]));
   const pool = cards.filter((c) => !c.hidden);
   const entries = todayEntries(day);
   // B3 (Phase-3-Plan): nur Vokabel-Einträge zählen als „Wiederholen“, nie Sprech- oder Business-Einträge.
-  const reviewed = new Set(entries.filter((e) => e.ctx === 'rev' && e.k === 'v' && typeof e.id === 'string').map((e) => `vocab/${String(e.id)}`));
-  const answeredToday = new Set(entries.filter((e) => e.k === 'v' && typeof e.id === 'string').map((e) => `vocab/${String(e.id)}`));
+  // Wendungen zählen wie Vokabeln (Schlüssel `chunk/<id>`).
+  const reviewed = new Set(entries.filter((e) => e.ctx === 'rev').map(entryCardKey).filter((k): k is string => !!k));
+  const answeredToday = new Set(entries.map(entryCardKey).filter((k): k is string => !!k));
   const plan = useTodayPlan.getState().plan;
   const goal = plan?.goal.review ?? 0;
   const doneBefore = round === 'pflicht' ? Math.min(goal, reviewed.size) : 0;
@@ -131,6 +169,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   // D17: Lektionswörter zählen mit, verdrängen aber nie alle eigenen neuen Karten.
   const introducedLessonToday = cards.filter((c) => c.intro === day && c.src === 'lesson').length;
   const quota = newQuotaLeftFor(profile.newPerDay, introducedToday, introducedLessonToday);
+  const env = currentEnv();
   // W2: Die Pflichtrunde hält sich an die geplante Zahl neuer Karten (Wiederholungen haben Vorrang).
   const plannedNew = plan?.goal.new;
   const newQuotaLeft = round === 'pflicht' && plannedNew !== undefined ? Math.min(quota, Math.max(0, plannedNew - Math.max(0, introducedToday - introducedLessonToday))) : quota;
@@ -147,6 +186,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     round,
     day,
     lang,
+    env,
     cards: byKey,
     pool,
     queue,
@@ -170,7 +210,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
   if (item.phase === 'intro') return 'intro';
-  return next.exercise?.input ?? null;
+  return firstKindOf(next.exercise);
 }
 
 /** Aktivität für die aktiven Minuten (Hintergrundzeit zählt nie, Ruhe über 60 s wird gekappt). */
@@ -228,7 +268,7 @@ function advanceFrom(s: SessionState): FirstKind {
   useSession.setState(next);
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
-  return item.phase === 'intro' ? 'intro' : (next.exercise?.input ?? null);
+  return item.phase === 'intro' ? 'intro' : firstKindOf(next.exercise);
 }
 
 export type Answer = { grade: Grade; given: string; ms: number; ok: boolean; override?: boolean };
@@ -244,7 +284,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   const a: AnswerEvent = {
     t: nextT(),
     day: s.day,
-    kind: 'v',
+    kind: card.kind === 'chunk' ? 'chunk' : 'v',
     id: card.id,
     ex: e.ex,
     grade: ans.grade,
@@ -255,14 +295,15 @@ export function commitAnswer(ans: Answer): FirstKind {
     ctx: s.round === 'pflicht' ? 'rev' : 'xtra',
   };
   if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
+  if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
-  const updated = toTrainCard(card.id, nextDoc, true, a.t) ?? card;
+  const updated = (card.kind === 'chunk' ? toChunkCard(card.id, nextDoc, a.t) : toTrainCard(card.id, nextDoc, true, a.t)) ?? card;
   const cards = new Map(s.cards);
   cards.set(card.key, updated);
-  void saveCard(a, card.inDb ? null : { ...card.doc });
+  void saveCard(a, card.inDb || card.kind === 'chunk' ? null : { ...card.doc });
   recordAnswer(a, s.results.length === 0);
 
   const shown = { ...s.shown, [card.key]: (s.shown[card.key] ?? 0) + 1 };

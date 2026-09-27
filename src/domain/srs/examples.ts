@@ -1,4 +1,5 @@
 import { stripGapMarks } from '../text/tokenize';
+import { containsPhrase } from '../chunks/newChunk';
 import { locate, lemmaOf } from './context';
 import type { TrainCard } from './types';
 
@@ -70,7 +71,8 @@ export function acceptExamples(word: string, list: readonly string[], nowMs: num
     const en = clean(raw);
     const k = key(en);
     if (en.length < 12 || en.length > 220 || seen.has(k)) continue;
-    if (!locate(en, lemma)) continue;
+    // Wendungen: Wortfolge mit Platzhaltern („meet sb halfway“), sonst das Wort in einer Form.
+    if (!locate(en, lemma) && !containsPhrase(en, word)) continue;
     seen.add(k);
     out.push({ en, t: nowMs });
     if (out.length >= X_EX_MAX) break;

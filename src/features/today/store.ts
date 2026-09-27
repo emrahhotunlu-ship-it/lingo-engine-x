@@ -14,6 +14,7 @@ import { rankChannels, type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
 import { buildTrainCards } from '../../domain/srs/cards';
+import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { dueCards, planRound, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
 import { getDb } from '../../platform/capabilities';
@@ -189,8 +190,9 @@ export async function ensureDay(nowMs: number): Promise<void> {
     }
     const lang = useSettings.getState().lang;
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
+    // Wendungen (`chunk/*`) gehören zur täglichen Wiederholung (Kap. 5, M15): gleiche Planung.
     const round = planRound({
-      cards,
+      cards: [...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'chunk'))],
       nowMs,
       newPerDay: typeof profile?.newPerDay === 'number' ? profile.newPerDay : 5,
       introducedToday: cards.filter((c) => c.intro === today).length,
