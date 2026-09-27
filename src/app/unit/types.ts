@@ -1,29 +1,13 @@
+import type { UnitBlockKind, WeekTargets, WeekTheme } from '../../domain/week/types';
 import type { Fix } from '../../ui/feedback/types';
 import type { Route } from '../router/types';
-import type { WeekTargets, WeekTheme } from './week';
 
 // Vertrag der Tageseinheit (docs/neubau/plan.md §1.5, §4.10, WP0a). Jede Übung, die ein Block der
 // Einheit sein kann, meldet sich als `UnitBlockProvider` im Register an (`defineArea({ unitBlocks })`).
 // P1 setzt die Kette zusammen und zählt den Abschluss (`unitDone`).
 
-export type { WeekTargets, WeekTheme, UnitPlan } from './week';
-
-export type UnitBlockKind =
-  | 'review'
-  | 'input.read'
-  | 'input.listen'
-  | 'pron.shadow'
-  | 'task.say'
-  | 'task.fluency'
-  | 'task.tones'
-  | 'task.inbox'
-  | 'task.objection'
-  | 'task.meeting'
-  | 'task.roleplay'
-  | 'task.check'
-  | 'focus'
-  | 'focus.colloc'
-  | 'again';
+// Die Wochen-Typen kommen aus der Domäne (P7a, `src/domain/week/types.ts`), nie doppelt.
+export type { UnitBlockKind, UnitEnv, UnitPlan, WeekTargets, WeekTheme } from '../../domain/week/types';
 
 export type UnitBlockNo = 1 | 2 | 3 | 4 | 5;
 
@@ -58,6 +42,7 @@ export type UnitCtx = {
 
 export type UnitBlockProvider = {
   kind: UnitBlockKind;
+  /** Rückfälle entscheidet P1 beim Blockstart mit `resolveBlock(block, env)` (domain/week, M5). */
   feasible(env: { ai: boolean; tts: boolean }): boolean;
   /** SYNCHRON im Klick (iPhone-Tastatur): Sitzung bauen und Ziel liefern; `false` = nicht startbar. */
   start(ctx: UnitCtx): Route | false;

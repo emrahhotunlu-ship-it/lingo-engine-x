@@ -280,7 +280,11 @@ function corpus(extra: readonly Doc[] = []): string[] {
       const target = o.type === 'transform' ? (o.prompt.split('→')[1] ?? '') : o.prompt;
       if (/_{3,}/.test(target)) out.add(plain(target.replace(/_{3,}/, o.answer.trim()).replace(/\s*\([^)]*\)/g, '')));
     }
-    Object.values(o).forEach(walk);
+    // Der Fehlersatz einer Satzkorrektur („Rarely we have seen …“) ist nie eine Lösung für Satzbau.
+    const skip = o.type === 'correct' ? 'prompt' : null;
+    Object.entries(o).forEach(([k, x]) => {
+      if (k !== skip) walk(x);
+    });
   };
   for (const f of ['grammar', 'rules', 'vocab', 'context', 'course', 'passages', 'scenes', 'feed-seed']) walk(json(`../../src/content/legacy/${f}.json`));
   walk(json('../../src/content/grammar-extra.json'));
