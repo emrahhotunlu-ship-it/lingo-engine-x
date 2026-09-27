@@ -71,6 +71,26 @@ function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {
     .map((x) => x.c);
 }
 
+/** W2: Anteil neuer Karten am Zeitbudget, wenn Wiederholungen fällig sind. */
+const NEW_SHARE = 0.4;
+/** W2: So viele fällige Karten passen mindestens in die Runde (wenn so viele fällig sind). */
+const DUE_MIN = 10;
+
+/**
+ * W2: Wiederholungen haben Vorrang. Neue Karten bekommen höchstens etwa 40 % des Zeitbudgets und
+ * lassen Platz für mindestens 10 fällige Karten; die Untergrenze `min(2, Kontingent)` bleibt
+ * (Kap. 15: neue Wörter auch an Tagen mit vielen Wiederholungen). Ohne Fällige: volles Kontingent.
+ */
+function newShare(wanted: number, due: readonly TrainCard[]): number {
+  if (!due.length || wanted <= 0) return Math.max(0, wanted);
+  const floor = Math.min(2, wanted);
+  const dueAll = due.reduce((a, c) => a + reviewCost(c), 0);
+  const reserve = due.slice(0, DUE_MIN).reduce((a, c) => a + reviewCost(c), 0);
+  const byShare = Math.round((ROUND_SECONDS - Math.min(dueAll, ROUND_SECONDS * (1 - NEW_SHARE))) / NEW_COST);
+  const byReserve = Math.floor(Math.max(0, ROUND_SECONDS - reserve) / NEW_COST);
+  return Math.max(floor, Math.min(wanted, byShare, byReserve));
+}
+
 export type RoundPlan = { target: number; due: number; new: number; ahead: number };
 
 /**
@@ -89,11 +109,12 @@ export function planRound(i: { cards: readonly TrainCard[]; nowMs: number; newPe
   const act = active(i.cards, i.lang);
   if (!act.length) return { target: 0, due: 0, new: 0, ahead: 0 };
   const quotaLeft = newQuotaLeft(i.newPerDay, i.introducedToday, i.introducedLessonToday ?? 0);
-  const nNew = Math.min(quotaLeft, newCards(act).length);
+  const due = dueCards(act, i.nowMs);
+  const nNew = newShare(Math.min(quotaLeft, newCards(act).length), due);
   let budget = ROUND_SECONDS - nNew * NEW_COST;
   let nDue = 0;
   let learning = 0;
-  for (const c of dueCards(act, i.nowMs)) {
+  for (const c of due) {
     const cost = reviewCost(c);
     if (isLearningState(c.fsrs) && learning < LEARNING_MAX) {
       learning++;

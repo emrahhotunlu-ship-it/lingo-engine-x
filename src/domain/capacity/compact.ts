@@ -1,6 +1,7 @@
 import { jsonEqual } from '../equal';
 import { isDayKey } from '../date';
 import { DAY_MAPS, jsonBytes } from './profileSize';
+import { compactSeq } from '../progress/profilePatch';
 
 // Auslagern alter Profiljahre (Plan §12.3, W5): rein. Kalenderjahre ≤ laufendes Jahr − 2 wandern
 // aus den Tageskarten nach `archive/profile-<JJJJ>`. Nichts geht verloren: Profil ⊕ Archive =
@@ -47,6 +48,9 @@ export function profileWithout(profile: Doc, plan: CompactPlan): Doc {
     for (const d of plan.removeKeys[k]) delete m[d];
     out[k] = m;
   }
+  // H2: stillgelegte Folgenummern (`null`) fallen beim Verdichten weg.
+  const seq = compactSeq(profile.lxSeq);
+  if (seq) out.lxSeq = seq;
   return out;
 }
 

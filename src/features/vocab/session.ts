@@ -130,7 +130,10 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const introducedToday = cards.filter((c) => c.intro === day).length;
   // D17: Lektionswörter zählen mit, verdrängen aber nie alle eigenen neuen Karten.
   const introducedLessonToday = cards.filter((c) => c.intro === day && c.src === 'lesson').length;
-  const newQuotaLeft = newQuotaLeftFor(profile.newPerDay, introducedToday, introducedLessonToday);
+  const quota = newQuotaLeftFor(profile.newPerDay, introducedToday, introducedLessonToday);
+  // W2: Die Pflichtrunde hält sich an die geplante Zahl neuer Karten (Wiederholungen haben Vorrang).
+  const plannedNew = plan?.goal.new;
+  const newQuotaLeft = round === 'pflicht' && plannedNew !== undefined ? Math.min(quota, Math.max(0, plannedNew - Math.max(0, introducedToday - introducedLessonToday))) : quota;
   const deck = opts.deck ?? 'all';
   const queue = opts.only
     ? opts.only
@@ -161,6 +164,8 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   };
   const next = { ...base, ...settle(base, 0) };
   if (next.pos >= next.queue.length) next.status = 'summary';
+  // H1: Pflichtrunde ohne abfragbare Karte (z. B. nach dem Neuladen) – „Wiederholen" ist erschöpft.
+  if (round === 'pflicht' && target > 0 && next.status === 'summary') markExhausted(day);
   useSession.setState(next);
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;

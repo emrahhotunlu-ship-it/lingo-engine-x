@@ -65,6 +65,25 @@ export function computeToday(day: string): TodayState {
   });
 }
 
+/**
+ * B1: Stand eines Lerntags mit ausdrücklich gegebenem Plan – auch für den Vortag, wenn der
+ * Sammel-Stapel erst nach 04:00 ankommt. `entries` = zuletzt bekannte Live-Einträge dieses Tages
+ * (das Live-Abo zeigt nach dem Tageswechsel schon den neuen Tag).
+ */
+export function computeDayWith(i: { day: string; plan: ReturnType<typeof useTodayPlan.getState>['plan']; exhausted: boolean; entries?: readonly DayEntry[] }): TodayState {
+  const live = useLive.getState();
+  const current = liveEntriesOf(i.day);
+  return derive({
+    day: i.day,
+    plan: i.plan,
+    exhausted: i.exhausted,
+    profile: live.docs['app/profile'],
+    course: live.docs['app/course'],
+    liveEntries: live.day?.key === i.day ? current : (i.entries ?? EMPTY),
+    pending: usePending.getState(),
+  });
+}
+
 /** Stand von „Heute" als Hook. */
 export function useToday(): TodayState & { ready: boolean; dayLoaded: boolean } {
   const today = useClock((s) => s.today);

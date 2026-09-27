@@ -288,3 +288,12 @@ export function unseenCount(topic: string, doc: Readonly<Doc> | undefined, lists
   return keys.size;
 }
 
+
+/**
+ * H3: Ist eine beendete Grammatikrunde nur „teilweise"? Abgebrochen mit offenen Aufgaben – oder als
+ * Pflichtrunde mit weniger als `dutyMin` Antworten (z. B. zu wenige Aufgaben verfügbar). Eine
+ * teilweise Runde zählt nie als erledigte Pflicht.
+ */
+export function gramRoundPartial(i: { aborted: boolean; pos: number; tasks: number; ctx: string; answers: number; dutyMin: number }): boolean {
+  return (i.aborted && i.pos < i.tasks) || (i.ctx === 'duty' && i.answers < i.dutyMin);
+}
