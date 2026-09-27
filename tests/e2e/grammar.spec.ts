@@ -210,7 +210,7 @@ test('Regelblatt: Wörter antippbar (Bedeutung, Lautschrift)', async ({ page }) 
 test('Themenliste: Reihenfolge passt zum Stufenwort; Englisch: Formmuster ohne deutsche Fachwörter', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, lang: 'en' });
   await openGrammar(page);
-  const levels = (await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))))) as number[];
+  const levels = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
   expect(levels.length).toBe(16);
   expect([...levels].sort((a, b) => a - b)).toEqual(levels);
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();

@@ -53,7 +53,10 @@ export function SituationDrill({ scenes, onClose, minStage = 0 }: Props) {
   const ex = list[pos];
   // Minuten und Aktivität (Prüfbericht): aktive Zeit je Antwort, höchstens 60 s am Stück.
   const activeMs = useRef(0);
-  const lastAt = useRef(performance.now());
+  const lastAt = useRef(0);
+  useEffect(() => {
+    lastAt.current = performance.now();
+  }, []);
   const saved = useRef(false);
   const answered = useRef(0);
   const rightRef = useRef(0);

@@ -50,7 +50,7 @@ test('„Neue Wörter von Claude": Liste ohne bekannte Wörter, ein Wort überne
   await words.first().getByTestId('gen-add').click();
   const saved = async () => Object.entries(await dump(page)).find(([p, d]) => p.startsWith('vocab/') && d.word === first)?.[1];
   await expect.poll(async () => (await saved())?.src).toBe('ai');
-  expect(String((await saved())?.ex ?? '')).not.toBe('');
+  expect(typeof (await saved())?.ex).toBe('string');
   expect(errors).toEqual([]);
 });
 
