@@ -64,6 +64,32 @@ export const repairSchema = z.looseObject({
     .nullish(),
 });
 
+/**
+ * Neu (Lernberatung 27.09., V3): persönliche „Deutsch-Fallen“ `{d, t, lang, pv, items, history}`,
+ * höchstens 8 Muster und 26 Wochen Verlauf (gekappt beim Schreiben). Alles tolerant.
+ */
+export const patternsSchema = z.looseObject({
+  d: str,
+  t: num,
+  lang: str,
+  pv: str,
+  items: z
+    .array(
+      z.looseObject({
+        id: str,
+        title_de: str,
+        title_en: str,
+        rule: str,
+        examples: z.array(z.looseObject({ wrong: str, right: str })).nullish(),
+        count: num,
+        keys: strArr,
+        tasks: strArr,
+      }),
+    )
+    .nullish(),
+  history: z.array(z.looseObject({ w: str, counts: numMap })).nullish(),
+});
+
 export const weeklySchema = z.looseObject({
   items: z.array(z.looseObject({ w: str, lang: str, t: num, pv: str, facts: loose, text: z.looseObject({}).nullish() })).nullish(),
 });

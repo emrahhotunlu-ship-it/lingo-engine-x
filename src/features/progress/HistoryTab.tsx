@@ -24,6 +24,7 @@ import { useCollectionsOnce, useDocsOnce } from './useOnce';
 import { ensureWeeklyText, storedWeekly, WEEKLY_MIN_FACTS } from './weeklyRun';
 import { ChecksRow, LegacyFeedFold } from './ChecksCard';
 import { AsPreplyLesson } from '../preply/AsPreplyLesson';
+import { PatternsWeekly } from '../patterns/WeeklyTrend';
 
 // Reiter „Verlauf" (Plan §7.3–7.5, UX-Beratung Nr. 6): oben Wochen-Check und Wortschatztest als zwei
 // Zeilen, dann der Wochenbericht; Verlauf der letzten 120 Tage, Aktivität, Einschätzungen und
@@ -172,6 +173,8 @@ function Weekly() {
                 ))}
             </ul>
           )}
+          {/* Lernberatung V8: Deutsch-Fallen der Woche – seltener, gleich oder häufiger. */}
+          <PatternsWeekly firstDay={first} />
           {/* M18: aus dem Wochenbericht eine Preply-Stunde machen. */}
           {facts.length > 0 && (
             <div className="mt-3">

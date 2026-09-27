@@ -18,6 +18,7 @@ import { fluencyDe } from './parts/fluency.de';
 import { meetingDe } from './parts/meeting.de';
 import { repairDe } from './parts/repair.de';
 import { navDe } from './parts/nav.de';
+import { patternsDe } from './parts/patterns.de';
 
 export const de = {
   ...aiDe,
@@ -49,6 +50,8 @@ export const de = {
   ...repairDe,
   // UX-Beratung 27.09.: neue Grundstruktur
   ...navDe,
+  // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
+  ...patternsDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

@@ -22,6 +22,7 @@ import { roleplayMachine, stateName, type RoleplayContext } from './roleplayMach
 import { legacySceneDoc, workContext } from './useSceneLibrary';
 import { repairsFromTalk } from '../../domain/repair/sources';
 import { saveRepairs } from '../repair/store';
+import { patternHints } from '../patterns/store';
 
 // Steuerung eines Rollenspiels: verbindet die reine Maschine mit KI-Tor, Analysespur,
 // Speichern und Sprachausgabe. Jeder KI-Aufruf entsteht aus einer Handlung (Senden, Beenden,
@@ -171,9 +172,11 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
         const unlink = () => ctl.abort();
         laneSignal.addEventListener('abort', unlink, { once: true });
         try {
+          // Lernberatung V3: die Top-3-Deutsch-Fallen als Hinweis („achte besonders auf …“).
+          const watch = await patternHints();
           const r = await askJson({
             template: turnAnalysis,
-            vars: { goal: scene.goalEn, role: `${scene.persona?.name ?? ''}, ${scene.persona?.role ?? ''} (${scene.persona?.org ?? ''})`, personaLine, history, sentence: t.text, focusWords: scene.words, uiLang },
+            vars: { goal: scene.goalEn, role: `${scene.persona?.name ?? ''}, ${scene.persona?.role ?? ''} (${scene.persona?.org ?? ''})`, personaLine, history, sentence: t.text, focusWords: scene.words, uiLang, watch },
             signal: ctl.signal,
             priority: 'background',
             refresh,

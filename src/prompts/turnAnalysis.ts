@@ -1,8 +1,8 @@
-import { clip, header } from './common';
+import { clip, header, watchLine } from './common';
 import { threeLayersExample, threeLayersRules, threeLayersSchema, type ThreeLayersOut } from './threeLayers';
 import type { PromptTemplate, UiLang } from './types';
 
-// turn-analysis@1 (Plan §6.2): analysiert EINEN eigenen Satz im Rollenspiel in drei Schichten.
+// turn-analysis@2 (Plan §6.2; @2: Hinweis auf die Top-3-Muster, Lernberatung V3): analysiert EINEN eigenen Satz im Rollenspiel in drei Schichten.
 // `complex` (Kap. 10), im Hintergrund (Analysespur), zwischengespeichert (gleicher Satz im
 // gleichen Zusammenhang kostet nichts doppelt). Stört den Gesprächsfluss nie.
 
@@ -16,6 +16,8 @@ export type TurnAnalysisVars = {
   sentence: string;
   focusWords: readonly string[];
   uiLang: UiLang;
+  /** Top-3 persönliche Fehlermuster (Englisch, Lernberatung V3); leer = keine. */
+  watch?: readonly string[];
 };
 
 export const TA_LINE_MAX = 400;
@@ -23,7 +25,7 @@ export const TA_HISTORY_MAX = 1200;
 export const TA_SENTENCE_MAX = 600;
 
 const ID = 'turn-analysis';
-const VERSION = 1;
+const VERSION = 2;
 
 export const turnAnalysis: PromptTemplate<TurnAnalysisVars, ThreeLayersOut> = {
   id: ID,
@@ -48,6 +50,7 @@ export const turnAnalysis: PromptTemplate<TurnAnalysisVars, ThreeLayersOut> = {
       `Other speaker just said: ${clip(v.personaLine, TA_LINE_MAX)}`,
       `Learner sentence: ${clip(v.sentence, TA_SENTENCE_MAX)}`,
       `Focus words: ${v.focusWords.slice(0, 8).map((w) => clip(w, 40)).join(', ') || '(none)'}`,
+      `Known recurring mistakes of this learner (pay special attention to these): ${watchLine(v.watch)}`,
       'Reply with only one JSON object, no other text, exactly this shape:',
       threeLayersExample(v.uiLang),
       'Rules:',

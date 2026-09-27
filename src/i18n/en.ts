@@ -16,6 +16,7 @@ import { fluencyEn } from './parts/fluency.en';
 import { meetingEn } from './parts/meeting.en';
 import { repairEn } from './parts/repair.en';
 import { navEn } from './parts/nav.en';
+import { patternsEn } from './parts/patterns.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -48,6 +49,8 @@ export const en: Record<MessageKey, string> = {
   ...repairEn,
   // UX review 09/27: new structure
   ...navEn,
+  // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
+  ...patternsEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

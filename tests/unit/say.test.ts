@@ -211,7 +211,7 @@ describe('Situationen und Reparatur-Sätze', () => {
   });
 });
 
-describe('say-check@1', () => {
+describe('say-check@2', () => {
   const sample = createFakeSample(() => 'ok', () => ({}), 0);
   beforeAll(() => registerCannedReplies());
   const text = 'Thank you for the feedback. I understand your concern about the price. We are working with them since 2019 and they save a lot of time. Can we discuss about the numbers next week? Please send me your current costs.';
@@ -219,7 +219,7 @@ describe('say-check@1', () => {
   it('Kopfzeile, Situation, Text im Rahmen, Erklärungssprache', () => {
     const v: SayCheckVars = { situation: 'The CFO says: "Too expensive."', kind: 'job', text, uiLang: 'en' };
     const p = sayCheck.build(v);
-    expect(p.startsWith('[say-check@1]')).toBe(true);
+    expect(p.startsWith('[say-check@2]')).toBe(true);
     expect(p).toContain('Explanation language: English');
     expect(p).toContain('<<<TEXT');
     expect(p).toContain('British spelling and British words are ALWAYS correct');

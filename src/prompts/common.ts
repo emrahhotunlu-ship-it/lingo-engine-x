@@ -144,3 +144,9 @@ export function normalizeTaskRaw(raw: unknown): unknown {
   }
   return t;
 }
+
+/** Top-3 persönliche Fehlermuster als eine Zeile (Lernberatung V3); leer = „(none)“. */
+export function watchLine(watch: readonly string[] | undefined): string {
+  const list = (watch ?? []).map((w) => clip(w, 80)).filter(Boolean).slice(0, 3);
+  return list.length ? list.join('; ') : '(none)';
+}

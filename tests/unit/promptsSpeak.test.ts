@@ -158,12 +158,12 @@ describe('drei Schichten (Verfeinerungen 1–8)', () => {
   });
 });
 
-describe('turn-analysis@1', () => {
+describe('turn-analysis@2', () => {
   const vars = (sentence: string, uiLang: 'de' | 'en' = 'de'): TurnAnalysisVars => ({ goal: 'Keep Q2.', role: 'Reinhard Vogt, CFO', personaLine: 'Convince me otherwise.', history: [], sentence, focusWords: ['exposure'], uiLang });
 
   it('Kopfzeile, complex, zwischengespeichert, Größe unter der Grenze', () => {
     const p = turnAnalysis.build(vars('We must delay the start.'));
-    expect(p.split('\n')[0]).toBe('[turn-analysis@1]');
+    expect(p.split('\n')[0]).toBe('[turn-analysis@2]');
     expect(turnAnalysis.tier).toBe('complex');
     expect(turnAnalysis.cache).toBe(true);
     const big = turnAnalysis.build({ ...vars('x '.repeat(5000)), history: [{ persona: 'p '.repeat(3000), me: 'm '.repeat(3000) }], personaLine: 'l '.repeat(3000) });

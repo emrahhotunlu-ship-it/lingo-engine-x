@@ -36,6 +36,8 @@ export type Route =
   // Lernberatung 27.09. (V6/V4): Flüssigkeit 90 – 60 – 45 und „Mein nächster Termin“ (Vollbild, freiwillig)
   | { name: 'fluency' }
   | { name: 'meeting'; id?: string }
+  // Lernberatung 27.09. (V3): persönliche Deutsch-Fallen (Vollbild, aus „Dein Stand“)
+  | { name: 'patterns'; id?: string }
   // Phase 4 – Input und Output (Plan §2.3). `ctx` bestimmt nur `log.ctx`, nie die Zählung.
   | InputRoute;
 

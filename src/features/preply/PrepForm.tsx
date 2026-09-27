@@ -12,6 +12,8 @@ import { Card } from '../../ui/Card';
 import { Skeleton } from '../../ui/Skeleton';
 import { createPlan } from './actions';
 import { usePreply } from './store';
+import { FocusList } from '../patterns/parts';
+import { usePatternData } from '../patterns/usePatternData';
 
 // „Stunde vorbereiten" (Phase 5 §8.3): Anlass wählen (freies Gespräch, aktuelle Lektion, eigenes
 // Thema, letzter Import, „Zu: …" von überall – M18), Dauer, dann „Plan erstellen" (ein Aufruf).
@@ -31,6 +33,8 @@ export function PrepForm({ last, onCreated }: { last: ImportView | null; onCreat
   const [phase, setPhase] = useState<AiPhase | 'idle'>('idle');
   const [error, setError] = useState<AiMessageKey | null>(null);
   const [ctl, setCtl] = useState<AbortController | null>(null);
+  // Lernberatung V8: Wochenfokus aus Deutsch-Fallen und letztem Import – geht an den Lehrer.
+  const focus = usePatternData().focus;
 
   // Neuer Anlass „Zu: …" (M18) wählt sich selbst vor (abgeleiteter Zustand, einmal je `seq`).
   const [seenSeq, setSeenSeq] = useState(pending?.seq ?? 0);
@@ -69,7 +73,7 @@ export function PrepForm({ last, onCreated }: { last: ImportView | null; onCreat
     setError(null);
     setPhase('queued');
     try {
-      const id = await createPlan({ ctx: ctxOf(), minutes, signal: c.signal, onPhase: (p) => setPhase(p) });
+      const id = await createPlan({ ctx: ctxOf(), minutes, signal: c.signal, onPhase: (p) => setPhase(p), focus });
       setPhase('idle');
       usePreply.setState({ pendingTopic: null });
       onCreated(id);
@@ -158,6 +162,13 @@ export function PrepForm({ last, onCreated }: { last: ImportView | null; onCreat
           ))}
         </div>
       </div>
+      {focus.length > 0 && (
+        <div className="flex flex-col gap-2" data-testid="pp-focus">
+          <p className="text-sm font-semibold">{t('ptFocusTitle')}</p>
+          <FocusList points={focus} />
+          <p className="text-xs text-subtle">{t('ptFocusPreply')}</p>
+        </div>
+      )}
       {error && (
         <p className="text-sm text-danger-text" role="alert" data-testid="ai-error">
           {t(error)}
