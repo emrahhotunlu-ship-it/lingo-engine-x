@@ -35,6 +35,8 @@ function collectTasks(extra: readonly Doc[]): Known[] {
   walk(json('../../src/content/legacy/grammar.json'));
   walk(json('../../src/content/grammar-extra.json'));
   walk(json('../../src/content/legacy/rules.json'));
+  // C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): Aufgaben und Fallen der Regelblätter.
+  walk(json('../../src/content/c1/toolkit.json'));
   walk(SEED);
   walk(extra);
   return out;

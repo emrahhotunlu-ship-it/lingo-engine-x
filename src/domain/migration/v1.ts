@@ -9,7 +9,7 @@ import { describeError } from '../../platform/diagnostics';
 import { dayKey, legacyDayKey } from '../date';
 import { computeStreak, legacyStreak } from '../streak';
 import { legacyToFsrs } from '../srs/legacyFsrs';
-import { LESSONS, SEED_VOCAB, TOPICS, slug } from '../content';
+import { LESSONS, SEED_VOCAB, LEGACY_TOPICS, slug } from '../content';
 import { classifyLegacyPath, type RescueItem, type RescueSkipReason } from './rescue';
 import { applyRescueItem, type RescueOutcome } from './applyRescue';
 
@@ -95,8 +95,9 @@ export function planMigrationV1(input: { snapshot: DataSnapshot; local: LegacyLo
   const vocabHidden = vocabDocs.filter(([, d]) => d.hidden === true).length;
   const seedVocabNotInDb = SEED_VOCAB.filter((s) => !vocabIds.has(slug(s.w))).length;
   const grammarIds = new Set(collectionDocs(snapshot, 'grammar').keys());
-  const topicsNotInDb = TOPICS.filter((t) => !grammarIds.has(t.id)).length;
-  const grammarTotal = new Set([...grammarIds, ...TOPICS.map((t) => t.id)]).size;
+  // Nur die 16 Themen der alten App (der C1-Werkzeugkasten ist neu und lebte nie dort).
+  const topicsNotInDb = LEGACY_TOPICS.filter((t) => !grammarIds.has(t.id)).length;
+  const grammarTotal = new Set([...grammarIds, ...LEGACY_TOPICS.map((t) => t.id)]).size;
   const course = effective.get('app/course');
   const doneMap = course && typeof course.done === 'object' && course.done !== null ? (course.done as Doc) : {};
   const lessonsDone = LESSONS.filter((l) => Object.hasOwn(doneMap, l.id)).length;

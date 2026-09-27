@@ -157,6 +157,24 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
                 </Card>
               )}
             </div>
+            {/* roleplay-report@3 (C1-Werkzeugkasten): abgeschwächt, strukturiert, betont? */}
+            {(rep.data.toolkit?.length ?? 0) > 0 && (
+              <Card as="div" data-testid="report-toolkit">
+                <p className="lx-eyebrow">{t('c1RepToolkit')}</p>
+                <ul className="mt-2 flex flex-col gap-3">
+                  {rep.data.toolkit?.map((k) => (
+                    <li key={k.skill} className="flex flex-col gap-1 text-sm" data-testid="toolkit-note" data-skill={k.skill} data-used={k.used ? 'yes' : 'no'}>
+                      <p className="flex flex-wrap items-center gap-2 font-semibold">
+                        <Icon name={k.used ? 'check' : 'target'} size={16} className={k.used ? 'text-accent-text' : 'text-gold-text'} />
+                        {t(`c1Skill_${k.skill}`)}
+                        <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-normal text-muted">{k.used ? t('c1SkillUsed') : t('c1SkillMissing')}</span>
+                      </p>
+                      <p className="text-muted">{k.note}</p>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            )}
             {rep.data.phrases.length > 0 && (
               <Card as="div">
                 <p className="lx-eyebrow">{t('repPhrases')}</p>

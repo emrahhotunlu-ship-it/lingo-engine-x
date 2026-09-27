@@ -22,6 +22,14 @@ const TOPIC_CAT: Record<string, RadarCat> = {
   relative: 'relative',
   articles: 'articles',
   prepositions: 'prep',
+  // C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): Ton, Satzbau, Wortwahl – keine Zeiten.
+  'c1-hedging': 'register',
+  'c1-diplomacy': 'register',
+  'c1-emphasis': 'order',
+  'c1-discourse': 'wordchoice',
+  'c1-nominal': 'register',
+  'c1-participle': 'verbform',
+  'c1-precision': 'wordchoice',
 };
 
 /** Kategorie eines Grammatikthemas (alle Zeiten → tense). */

@@ -1,6 +1,7 @@
 import grammarJson from '../../content/legacy/grammar.json';
 import extraJson from '../../content/grammar-extra.json';
 import rulesJson from '../../content/legacy/rules.json';
+import c1Json from '../../content/c1/toolkit.json';
 import { TOPICS, topicById } from '../content';
 import type { GrammarTask, GrammarTaskType, TaskSrc } from '../learn/types';
 import { hash32, mulberry32, shuffle } from '../random';
@@ -94,12 +95,16 @@ export function toPoolItem(t: GrammarTask): Doc {
 }
 
 type RuleTrap = { bad?: unknown; good?: unknown; why?: unknown };
-const RULES = (rulesJson as { rules: Record<string, { traps?: RuleTrap[] }> }).rules;
+const RULES: Record<string, { traps?: RuleTrap[] }> = {
+  ...(c1Json.rules as unknown as Record<string, { traps?: RuleTrap[] }>),
+  ...(rulesJson as { rules: Record<string, { traps?: RuleTrap[] }> }).rules,
+};
 
 let seedCache: GrammarTask[] | null = null;
 /**
  * Startaufgaben ohne KI: die 48 Aufgaben der alten App plus je Falle aus dem Regelwerk eine
- * Satzkorrektur (`bad` → `good`) und wenige ergänzte Aufgaben (content/grammar-extra.json). So hat
+ * Satzkorrektur (`bad` → `good`), wenige ergänzte Aufgaben (content/grammar-extra.json) und die
+ * Aufgaben des C1-Werkzeugkastens (content/c1/toolkit.json). So hat
  * jedes Thema mindestens vier Aufgaben (Grundfassung, D11).
  */
 export function seedTasks(): readonly GrammarTask[] {
@@ -114,6 +119,8 @@ export function seedTasks(): readonly GrammarTask[] {
   };
   for (const g of grammarJson.seedGrammar as unknown[]) push(normalizeTask(g, 'seed'));
   for (const g of extraJson.tasks as unknown[]) push(normalizeTask(g, 'seed', 'content/grammar-extra'));
+  // C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): je Thema mindestens 12 Startaufgaben.
+  for (const g of c1Json.tasks as unknown[]) push(normalizeTask(g, 'seed', 'content/c1'));
   for (const tp of TOPICS) {
     for (const trap of RULES[tp.id]?.traps ?? []) {
       const why = Array.isArray(trap.why) ? trap.why.map(s) : [];

@@ -119,7 +119,7 @@ export function turnAnalysisReply(input: string): string {
   return JSON.stringify(analysis(sentence, explLang(input), focus));
 }
 
-// ---------------------------------------------------------------- roleplay-report@1
+// ---------------------------------------------------------------- roleplay-report@3 (seit @1)
 
 export function roleplayReportReply(input: string): string {
   const de = explLang(input) === 'de';
@@ -142,6 +142,11 @@ export function roleplayReportReply(input: string): string {
       },
     ],
     phrases: [{ en: 'that hinges on', de: 'das hängt ab von', def: 'depends mainly on', ex: 'That hinges on how fast your team can test.' }],
+    // roleplay-report@3: C1-Werkzeugkasten
+    toolkit: [
+      { skill: 'hedge', used: false, note: de ? 'Deine Einwände kamen sehr direkt; „That might be tricky for us“ wirkt weicher.' : 'Your objections were very direct; “That might be tricky for us” sounds softer.' },
+      { skill: 'structure', used: true, note: de ? 'Du hast deine Punkte klar nacheinander eingeleitet.' : 'You introduced your points clearly, one after the other.' },
+    ],
   });
 }
 

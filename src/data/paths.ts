@@ -22,6 +22,7 @@ import {
   schemaDocSchema,
   talkSchema,
   saySchema,
+  tonesSchema,
   bizSchema,
   vocabSchema,
   weeklySchema,
@@ -67,6 +68,8 @@ export const COLLECTIONS = {
   biz: bizSchema,
   // Neu (Lernberatung 27.09., V1/V2): „Sag es“ als Monatsdokumente.
   say: saySchema,
+  // Neu (Lernberatung 27.09., Vorschlag 8): „Eine Botschaft, drei Tonlagen“ als Monatsdokumente.
+  tones: tonesSchema,
   // Neu ab Phase 7 (Plan §12.3): ausgelagerte Profiljahre.
   archive: archiveSchema,
 } as const satisfies Record<string, ZodType>;

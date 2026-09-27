@@ -32,6 +32,8 @@ export type Route =
   | { name: 'preply' }
   // Lernberatung 27.09. (V1/V2): „Sag es“ (Vollbild, Pflichtkanal)
   | { name: 'say' }
+  // Lernberatung 27.09. (Vorschlag 8): „Eine Botschaft, drei Tonlagen“ (Vollbild, freiwillig)
+  | { name: 'tones' }
   // Phase 4 – Input und Output (Plan §2.3). `ctx` bestimmt nur `log.ctx`, nie die Zählung.
   | InputRoute;
 

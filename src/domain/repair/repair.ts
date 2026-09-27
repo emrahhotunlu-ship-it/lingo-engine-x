@@ -14,7 +14,8 @@ export const REPAIR_MAX = 150;
 export const REPAIR_TEXT_MAX = 300;
 export const REPAIR_WHY_MAX = 200;
 
-export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'lesson';
+/** `tone` = „Eine Botschaft, drei Tonlagen“ (Lernberatung, Vorschlag 8). */
+export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'lesson' | 'tone';
 
 export type RepairItem = {
   id: string;

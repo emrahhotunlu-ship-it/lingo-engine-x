@@ -12,6 +12,8 @@ import { standEn } from './parts/stand.en';
 import { engineEn } from './parts/engine.en';
 import { hintEn } from './parts/hint.en';
 import { sayEn } from './parts/say.en';
+import { c1En } from './parts/c1.en';
+import { tonesEn } from './parts/tones.en';
 import { repairEn } from './parts/repair.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
@@ -38,6 +40,9 @@ export const en: Record<MessageKey, string> = {
   ...hintEn,
   // Learning review 09/27: "Say it"
   ...sayEn,
+  // Learning review 09/27: C1 toolkit, one message – three tones
+  ...c1En,
+  ...tonesEn,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   ...repairEn,
   appName: 'Lingo-Engine X',

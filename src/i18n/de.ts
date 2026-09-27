@@ -14,6 +14,8 @@ import { standDe } from './parts/stand.de';
 import { engineDe } from './parts/engine.de';
 import { hintDe } from './parts/hint.de';
 import { sayDe } from './parts/say.de';
+import { c1De } from './parts/c1.de';
+import { tonesDe } from './parts/tones.de';
 import { repairDe } from './parts/repair.de';
 
 export const de = {
@@ -39,6 +41,9 @@ export const de = {
   ...hintDe,
   // Lernberatung 27.09.: „Sag es“
   ...sayDe,
+  // Lernberatung 27.09.: C1-Werkzeugkasten, Eine Botschaft – drei Tonlagen
+  ...c1De,
+  ...tonesDe,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   ...repairDe,
   appName: 'Lingo-Engine X',

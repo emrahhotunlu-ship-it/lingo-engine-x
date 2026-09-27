@@ -4,11 +4,14 @@ import { isWrongLang } from '../domain/lang/detect';
 import { clip, header, langName, langOf } from './common';
 import { ERROR_CATS } from './threeLayers';
 import { phraseIn, sliced, topicCat } from './tolerant';
+import type { ToolkitNote, ToolkitSkill } from '../domain/speak/types';
 import type { PromptTemplate, UiLang } from './types';
 
-// roleplay-report@2 (Plan §5.4, §6.2): Urteil in Worten nach einem Gespräch – Ziel, Stärken
+// roleplay-report@3 (Plan §5.4, §6.2): Urteil in Worten nach einem Gespräch – Ziel, Stärken
 // mit Zitat, Fokuspunkte, beste Wendungen. Kein Punktestand (Kap. 2.3). `complex`, zwischen-
 // gespeichert. Zitate müssen wörtlich aus den eigenen Zügen stammen.
+// @3 (Lernberatung 27.09., Vorschlag 7 „C1-Werkzeugkasten“): zusätzlich `toolkit` – hat er
+// abgeschwächt, strukturiert, betont? Tolerant gelesen: Ungültiges fällt weg, nie ein Neuversuch.
 
 export type ReportTurnInfo = { me: string; persona: string; v: string; c: readonly string[] };
 
@@ -27,14 +30,46 @@ export type RoleplayReportOut = {
   strengths: Array<{ quote: string; why: string }>;
   focus: Array<{ title: string; said: string; better: string; why: string; cat: string }>;
   phrases: Array<{ en: string; de: string; def: string; ex: string }>;
+  /** @3: C1-Werkzeugkasten – abgeschwächt, strukturiert, betont? (fehlt in älteren Berichten) */
+  toolkit?: ToolkitNote[];
 };
+
+export const TOOLKIT_SKILLS: readonly ToolkitSkill[] = ['hedge', 'structure', 'emphasis'];
+export const TOOLKIT_NOTE_MAX = 200;
+
+const SKILL_ALIASES: ReadonlyArray<[RegExp, ToolkitSkill]> = [
+  [/^(hedg|soft|diplom|polite)/, 'hedge'],
+  [/^(struct|discourse|signpost|organi[sz])/, 'structure'],
+  [/^(emphas|stress|cleft|invers)/, 'emphasis'],
+];
+
+/**
+ * `toolkit` tolerant lesen: je Fähigkeit höchstens ein Eintrag, Synonyme („hedging“,
+ * „discourse markers“) werden zugeordnet; ohne Hinweis oder mit Hinweis in der falschen Sprache
+ * fällt der Eintrag weg. Kein Eintrag ist nie ein Fehler (additiv, alte Antworten bleiben gültig).
+ */
+export function readToolkit(v: unknown, uiLang: UiLang): ToolkitNote[] {
+  if (!Array.isArray(v)) return [];
+  const out: ToolkitNote[] = [];
+  for (const raw of v) {
+    if (!raw || typeof raw !== 'object') continue;
+    const r = raw as Record<string, unknown>;
+    const key = typeof r.skill === 'string' ? r.skill.trim().toLowerCase() : '';
+    const skill = (TOOLKIT_SKILLS as readonly string[]).includes(key) ? (key as ToolkitSkill) : SKILL_ALIASES.find(([re]) => re.test(key))?.[1];
+    const used = typeof r.used === 'boolean' ? r.used : typeof r.used === 'string' ? /^(yes|true|used)$/i.test(r.used.trim()) : null;
+    const note = typeof r.note === 'string' ? r.note.trim() : '';
+    if (!skill || used === null || !note || isWrongLang(note, uiLang) || out.some((o) => o.skill === skill)) continue;
+    out.push({ skill, used, note: Array.from(note).length > TOOLKIT_NOTE_MAX ? `${Array.from(note).slice(0, TOOLKIT_NOTE_MAX - 1).join('').trimEnd()}…` : note });
+  }
+  return out;
+}
 
 export const REP_ME_MAX = 300;
 export const REP_PERSONA_MAX = 200;
 export const REP_TURNS_MAX = 16;
 
 const ID = 'roleplay-report';
-const VERSION = 2;
+const VERSION = 3;
 
 const en = (max: number) =>
   z
@@ -71,6 +106,7 @@ export function reportSchema(v: Pick<RoleplayReportVars, 'turns' | 'uiLang'>): z
         3,
       ),
       phrases: sliced(z.object({ en: en(80), de: z.string().trim().min(1).max(120), def: en(160), ex: en(240) }), 0, 3),
+      toolkit: z.preprocess((t) => readToolkit(t, v.uiLang), z.array(z.object({ skill: z.enum(['hedge', 'structure', 'emphasis']), used: z.boolean(), note: z.string() }))),
     })
     .superRefine((o, ctx) => {
       o.strengths.forEach((s, i) => {
@@ -103,6 +139,10 @@ export function reportExample(uiLang: UiLang): string {
       },
     ],
     phrases: [{ en: 'that hinges on', de: 'das hängt ab von', def: 'depends mainly on', ex: 'That hinges on how fast your team can test.' }],
+    toolkit: [
+      { skill: 'hedge', used: false, note: de ? 'Deine Einwände kamen sehr direkt; „That might be tricky for us“ wirkt weicher.' : 'Your objections were very direct; “That might be tricky for us” sounds softer.' },
+      { skill: 'structure', used: true, note: de ? 'Mit „That hinges on …“ hast du deinen Punkt klar eingeleitet.' : 'With “That hinges on …” you introduced your point clearly.' },
+    ],
   });
 }
 
@@ -126,7 +166,7 @@ export const roleplayReport: PromptTemplate<RoleplayReportVars, RoleplayReportOu
       'Turns (with a short verdict per learner turn):',
       ...lines,
       `Phrases the learner already saved: ${v.taken.slice(0, 12).map((p) => clip(p, 60)).join(', ') || '(none)'}`,
-      `Explanation language: ${langName(v.uiLang)} (goal.why, summary, strengths.why, focus.title, focus.why). All English fields in American English.`,
+      `Explanation language: ${langName(v.uiLang)} (goal.why, summary, strengths.why, focus.title, focus.why, toolkit.note). All English fields in American English.`,
       'Reply with only one JSON object, no other text, exactly this shape:',
       reportExample(v.uiLang),
       'Rules:',
@@ -136,6 +176,8 @@ export const roleplayReport: PromptTemplate<RoleplayReportVars, RoleplayReportOu
       '- focus: 0–3 items (none if there is nothing to improve); said copied word for word from a learner turn; better = how a C1 speaker would say it;',
       `  cat one of ${ERROR_CATS.join(', ')}.`,
       '- phrases: up to 3 useful phrases for this situation that the learner has not saved yet; ex contains en word for word.',
+      '- toolkit (C1 toolkit): 0–3 items, at most one per skill: "hedge" (softening, hedging, diplomatic distance), "structure" (discourse markers such as That said, To build on that, Coming back to), "emphasis" (cleft sentences, inversion).',
+      '  used = true if the learner did it well at least once, false if it was missing where it would have helped; note = one short sentence in the explanation language, quoting or suggesting an English phrase.',
       '- British spelling is never a mistake.',
     ].join('\n');
   },

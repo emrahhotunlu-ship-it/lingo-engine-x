@@ -1,4 +1,5 @@
 import rulesJson from '../../content/legacy/rules.json';
+import c1Json from '../../content/c1/toolkit.json';
 import { topicById } from '../content';
 import { detectLang } from '../lang/detect';
 import type { GrammarTask } from '../learn/types';
@@ -22,7 +23,12 @@ type RawRule = {
 };
 type AltFamily = { id: string; topics: string[]; note: Pair };
 
-const RAW = rulesJson as unknown as { rules: Record<string, RawRule>; altFamilies: AltFamily[] };
+const LEGACY = rulesJson as unknown as { rules: Record<string, RawRule>; altFamilies: AltFamily[] };
+// Regelblätter des C1-Werkzeugkastens (content/c1/toolkit.json) im selben Format, nur ergänzt.
+const RAW: { rules: Record<string, RawRule>; altFamilies: AltFamily[] } = {
+  rules: { ...(c1Json.rules as unknown as Record<string, RawRule>), ...LEGACY.rules },
+  altFamilies: LEGACY.altFamilies,
+};
 export const ALT_FAMILIES: readonly AltFamily[] = RAW.altFamilies;
 
 export type Rule = {

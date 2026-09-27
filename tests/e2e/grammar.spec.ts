@@ -211,7 +211,8 @@ test('Themenliste: Reihenfolge passt zum Stufenwort; Englisch: Formmuster ohne d
   const { errors } = await boot(page, { migrated: true, lang: 'en' });
   await openGrammar(page);
   const levels = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
-  expect(levels.length).toBe(16);
+  // 16 Themen der alten App + 7 des C1-Werkzeugkastens (Lernberatung, Vorschlag 7).
+  expect(levels.length).toBe(23);
   expect([...levels].sort((a, b) => a - b)).toEqual(levels);
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();
   const patterns = page.getByTestId('rule-sheet').getByTestId('rule-pattern');
