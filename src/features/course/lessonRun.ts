@@ -7,6 +7,7 @@ import { useLive } from '../../data/live';
 import { readDoc } from '../../data/reads';
 import { baseLesson } from '../../domain/course/baseLesson';
 import { lessonMeta } from '../../domain/course/catalog';
+import { isExtLessonId } from '../../domain/course/extension';
 import { lessonWrite, readLesson } from '../../domain/course/lessonDoc';
 import { topicById } from '../../domain/content';
 import { ruleOf } from '../../domain/grammar/rules';
@@ -17,7 +18,7 @@ import { logError, logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
 import { lessonContent, toLessonDoc } from '../../prompts/lessonContent';
 import { learnRecorder, nextT } from '../progress/persist';
-import { rememberLesson, useLearnInputs } from '../learn/inputs';
+import { loadLearnInputs, rememberLesson, useLearnInputs } from '../learn/inputs';
 import { roundCtx } from '../today/state';
 
 // Lauf einer Lektion (phase2-plan §5.1): Inhalt aus `lesson/<id>`; fehlt er, auf Knopfdruck
@@ -25,6 +26,7 @@ import { roundCtx } from '../today/state';
 // hängt nie von der KI ab. Zähler der Runde und der Abschluss laufen über den `LearnRecorder`.
 
 type Doc = Record<string, unknown>;
+const asObj = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Doc) : {});
 
 export const STEPS = ['intro', 'words', 'dialog', 'grammar', 'output', 'summary'] as const;
 export type Step = (typeof STEPS)[number];
@@ -63,7 +65,12 @@ export function saveStep(lid: string, step: Step): void {
 
 /** Lektion öffnen: gespeicherten Inhalt lesen (Cache, sonst `get`). */
 export async function openLesson(lid: string): Promise<void> {
-  const meta = lessonMeta(lid);
+  let meta = lessonMeta(lid);
+  // Erweiterte Lektion (l25+) vor dem ersten Lesen von `lesson/*`: erst lesen, dann erneut suchen.
+  if (!meta && isExtLessonId(lid)) {
+    await loadLearnInputs();
+    meta = lessonMeta(lid);
+  }
   const day = useClock.getState().today;
   const lang = useSettings.getState().lang;
   if (!meta) {
@@ -114,12 +121,18 @@ export async function prepareLesson(signal: AbortSignal): Promise<void> {
   const doc = toLessonDoc(r.data, { uiLang: s.lang }, Date.now());
   const writer = getWriter();
   let stored: Doc = doc;
+  let fresh = true;
   if (writer) {
     try {
       await writer.transform(`lesson/${lid}`, (cur) => {
         const op = lessonWrite(cur, doc, lid);
         // Schon ein Inhalt mit Wörtern da (anderes Fenster): der gespeicherte gilt.
-        if (!op && cur && Array.isArray(cur.words) && cur.words.length) stored = cur;
+        if (!op && cur && Array.isArray(cur.words) && cur.words.length) {
+          stored = cur;
+          fresh = false;
+        }
+        // Ergänzt (z. B. erweiterte Lektion mit Lehrplan `plan`): lokal wie gespeichert zusammenführen.
+        if (op && 'update' in op && cur) stored = { ...cur, ...op.update, lx: { ...asObj(cur.lx), ...asObj(op.update.lx) } };
         return op;
       });
     } catch (err) {
@@ -129,7 +142,7 @@ export async function prepareLesson(signal: AbortSignal): Promise<void> {
   rememberLesson(lid, stored);
   const content = readLesson(stored, s.lang, meta);
   if (useLessonRun.getState().lid !== lid) return;
-  useLessonRun.setState(content ? { status: 'ready', content: { ...content, source: stored === doc ? 'ai' : 'db' } } : { status: 'choose' });
+  useLessonRun.setState(content ? { status: 'ready', content: { ...content, source: fresh ? 'ai' : 'db' } } : { status: 'choose' });
 }
 
 export function touchLesson(): void {

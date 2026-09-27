@@ -3,10 +3,9 @@ import { useEffect, useMemo } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
-import { lessonMeta } from '../../domain/course/catalog';
+import { lessonMeta, lessonOrder } from '../../domain/course/catalog';
 import { doneLessons } from '../../domain/course/courseDone';
 import { pickLesson } from '../../domain/course/next';
-import { LESSONS } from '../../domain/content';
 import { dueErrors } from '../../domain/grammar/errors';
 import { dueCards } from '../../domain/srs/queue';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -69,9 +68,19 @@ export function LearnHub() {
     if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
   }, []);
 
-  const next = useMemo(() => pickLesson({ course, assess, lang }), [course, assess, lang]);
+  const lessons = useLearnInputs((s) => s.lessons);
+  // `lessons`: erweiterte Lektionen (l25+, Kap. 6.2) kommen nach dem Lesen von `lesson/*` dazu.
+  const next = useMemo(() => {
+    void lessons;
+    return pickLesson({ course, assess, lang });
+  }, [course, assess, lang, lessons]);
   const meta = next ? lessonMeta(next.lid) : null;
-  const doneN = useMemo(() => doneLessons(course).size, [course]);
+  const { doneN, totalN } = useMemo(() => {
+    const done = doneLessons(course);
+    void lessons;
+    const order = lessonOrder();
+    return { doneN: order.filter((id) => done.has(id)).length, totalN: order.length };
+  }, [course, lessons]);
   const nErr = useMemo(() => dueErrors(grammar ?? new Map(), now).length, [grammar, now]);
   const { data, nDue } = useMemo(() => {
     const cards = drillCards(now);
@@ -101,7 +110,7 @@ export function LearnHub() {
           {t('lhCourse')}
         </h2>
         <Card channel="read" className="flex flex-col gap-3">
-          <p className="text-sm text-muted">{t('csProgress', { done: doneN, total: LESSONS.length })}</p>
+          <p className="text-sm text-muted">{t('csProgress', { done: doneN, total: totalN })}</p>
           <p className="text-lg font-semibold tracking-tight">{meta ? (lang === 'de' ? meta.de : meta.en) : t('courseComplete')}</p>
           <div className="flex flex-wrap gap-2">
             {meta && (

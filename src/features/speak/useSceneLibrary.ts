@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useSettings } from '../../app/settings';
 import legacyScenes from '../../content/legacy/scenes.json';
+import fixedScenes from '../../content/speak/scenes.json';
 import contextJson from '../../content/legacy/context.json';
 import { useLive } from '../../data/live';
 import { useCollection, useWatched } from '../../data/watch';
@@ -13,7 +14,10 @@ import type { SceneView } from '../../domain/speak/types';
 
 type Doc = Record<string, unknown>;
 
-export const LEGACY_SCENES = legacyScenes as unknown as Doc[];
+// Feste Szenen = die vier der alten App plus „Preisverhandlung“ und „Partner-Pitch“ (Kap. 6.5,
+// `content/speak/scenes.json`). Beide sind Inhalt (Quelle `legacy`) und werden von `scene/<id>`
+// überlagert; ein Lauf legt `scene/<id>` wie bei den alten Szenen erst beim Speichern an.
+export const LEGACY_SCENES = [...(legacyScenes as unknown as Doc[]), ...(fixedScenes as unknown as Doc[])];
 const EMPTY = new Set<string>();
 
 export function useSceneLibrary(): { scenes: SceneView[] | null } {

@@ -2,16 +2,18 @@ import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
-import { catalog } from '../../domain/course/catalog';
 import { doneLessons } from '../../domain/course/courseDone';
 import { pickLesson } from '../../domain/course/next';
 import { topicById } from '../../domain/content';
+import { EXT_UNIT_FIRST } from '../../domain/course/extension';
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
 import { Bar } from '../../ui/ProgressRing';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ScreenHeader } from '../learn/ui';
 import { useCompanionSee } from '../companion/seeing';
+import { CourseExtendCard } from './CourseExtendCard';
+import { useCourseCatalog } from './extendCourse';
 
 // Kurs (Kap. 6.2): 24 Lektionen in 6 Einheiten, weitergeführt mit dem vorhandenen Kursstand.
 // Die nächste Lektion ist hervorgehoben; eine abgeschlossene Einheit wird zum Meilenstein
@@ -29,8 +31,12 @@ export function CourseScreen() {
   useCompanionSee({ area: 'course', label: t('csTitle'), phase: 'idle' });
   const assess = useLive((s) => s.docs['app/assess']);
   const done = useMemo(() => doneLessons(course), [course]);
-  const next = useMemo(() => pickLesson({ course, assess, lang }), [course, assess, lang]);
-  const units = catalog();
+  const units = useCourseCatalog();
+  // `units` als Abhängigkeit: erweiterte Lektionen (l25+) kommen nach dem Lesen von `lesson/*` dazu.
+  const next = useMemo(() => {
+    void units;
+    return pickLesson({ course, assess, lang });
+  }, [course, assess, lang, units]);
   const total = units.reduce((a, u) => a + u.lessons.length, 0);
   const doneN = units.reduce((a, u) => a + u.lessons.filter((l) => done.has(l.id)).length, 0);
 
@@ -50,6 +56,12 @@ export function CourseScreen() {
             <div className="flex items-baseline justify-between gap-3">
               <h2 id={`unit-${u.id}`} className="text-lg font-semibold tracking-tight">
                 {t('csUnit', { n: u.n, title: lang === 'de' ? u.de : u.en })}
+                {u.n >= EXT_UNIT_FIRST && (
+                  <span className="ml-2 inline-flex translate-y-[-1px] items-center gap-1 align-middle text-xs font-medium text-accent-text" data-testid="unit-ext">
+                    <Icon name="sparkle" size={14} />
+                    {t('ceBadge')}
+                  </span>
+                )}
               </h2>
               <span className="lx-tnum flex-none whitespace-nowrap text-sm text-muted">{t('csUnitCount', { done: uDone, total: u.lessons.length })}</span>
             </div>
@@ -97,6 +109,9 @@ export function CourseScreen() {
           </motion.section>
         );
       })}
+      <motion.div variants={item}>
+        <CourseExtendCard />
+      </motion.div>
     </motion.div>
   );
 }

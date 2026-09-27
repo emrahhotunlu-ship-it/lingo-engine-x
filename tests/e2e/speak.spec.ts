@@ -42,9 +42,12 @@ test('Übersicht: Szenen aus Inhalt und Datenbank, KI-Szene, unvollständige Sze
   const { errors, external } = await boot(page, { migrated: true });
   await openHub(page);
   await expect(page.getByTestId('speak-status')).toHaveAttribute('data-done', 'false');
-  await expect(page.getByTestId('scene-card')).toHaveCount(6);
+  await expect(page.getByTestId('scene-card')).toHaveCount(8);
   await expect(page.locator('[data-testid="scene-card"][data-src="ai"]')).toHaveCount(1);
-  await expect(page.locator('[data-testid="scene-card"][data-src="legacy"]')).toHaveCount(4);
+  // Vier Szenen der alten App plus die festen „Preisverhandlung“ und „Partner-Pitch“ (Kap. 6.5).
+  await expect(page.locator('[data-testid="scene-card"][data-src="legacy"]')).toHaveCount(6);
+  await expect(page.locator('[data-testid="scene-card"][data-scene="sc-price"]')).toContainText('Preis');
+  await expect(page.locator('[data-testid="scene-card"][data-scene="sc-pitch"]')).toContainText('Vertriebspartnerschaft');
   await page.locator('[data-testid="scene-card"][data-scene="sc-broken"]').click();
   await expect(page.getByTestId('briefing')).toBeVisible();
   await expect(page.getByTestId('briefing-start')).toHaveCount(0);
@@ -134,6 +137,25 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   await page.getByTestId('tab-speak').click();
   await screen(page, 'speak');
   await expect(page.getByTestId('speak-status')).toHaveAttribute('data-done', 'true');
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
+});
+
+test('Feste Szene „Preisverhandlung“: Einweisung, Gespräch, Bericht legt scene/sc-price aus dem Inhalt an', async ({ page }) => {
+  const { errors, external } = await boot(page, { migrated: true, lang: 'en' });
+  await openHub(page);
+  await page.locator('[data-testid="scene-card"][data-scene="sc-pitch"]').click();
+  await expect(page.getByRole('dialog')).toContainText('Pitching a reseller partnership');
+  await expect(page.getByTestId('useful-phrase')).toHaveCount(5);
+  await page.keyboard.press('Escape');
+  await startScene(page, 'sc-price');
+  await expect(page.getByTestId('rp-turn').first()).toContainText('twenty-five percent cheaper');
+  await say(page, SENTENCES[0]!);
+  await page.getByTestId('rp-end').click();
+  await expect(page.getByTestId('report')).toBeVisible();
+  await expect.poll(async () => ((await dump(page))['scene/sc-price'])?.runs).toBe(1);
+  const doc = (await dump(page))['scene/sc-price'] as Doc;
+  expect(doc).toMatchObject({ id: 'sc-price', title_de: 'Den Preis für das Cloud-DMS verhandeln', done: true });
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

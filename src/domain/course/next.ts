@@ -1,5 +1,5 @@
-import { LESSONS } from '../content';
 import type { Lang } from '../srs/types';
+import { allLessons } from './catalog';
 import { isLessonDone } from './courseDone';
 
 // Nächste Lektion (phase2-plan D18): die nächste offene in Kursreihenfolge. Nennt die
@@ -26,7 +26,8 @@ export function assessFocusTopic(assess: Readonly<Doc> | null | undefined, lang:
 }
 
 export function pickLesson(i: { course: Readonly<Doc> | null | undefined; assess?: Readonly<Doc> | null; lang: Lang }): LessonPick | null {
-  const open = LESSONS.filter((l) => !isLessonDone(i.course, l.id));
+  // Lehrplan l01–l24, danach die von Claude erweiterten Lektionen (Kap. 6.2).
+  const open = allLessons().filter((l) => !isLessonDone(i.course, l.id));
   const first = open[0];
   if (!first) return null;
   const topic = assessFocusTopic(i.assess, i.lang);

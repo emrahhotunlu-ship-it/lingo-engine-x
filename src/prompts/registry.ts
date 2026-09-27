@@ -23,6 +23,7 @@ import { pitchFeedback } from './pitchFeedback';
 import { roleplayTurn } from './roleplayTurn';
 import { assess } from './assess';
 import { weeklyReport } from './weeklyReport';
+import { courseExtend } from './courseExtend';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -55,6 +56,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Phase 6 – Urteil
   assess,
   weeklyReport,
+  // Kurs-Erweiterung (Kap. 6.2)
+  courseExtend,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

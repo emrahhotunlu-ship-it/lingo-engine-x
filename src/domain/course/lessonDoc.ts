@@ -109,7 +109,8 @@ export function lessonWrite(cur: Readonly<Doc> | undefined, out: Readonly<Doc>, 
     const empty = c === undefined || c === null || (Array.isArray(c) && !c.length) || (typeof c === 'object' && !Array.isArray(c) && !Object.keys(c).length);
     if (empty) update[k] = v;
   }
-  update.lx = { ...obj(out.lx), regen: true };
+  // Erweiterte Lektion (Lehrplan `plan`, noch ohne Inhalt): erstes Befüllen, keine Nachbesserung.
+  update.lx = cur.plan ? { ...obj(out.lx) } : { ...obj(out.lx), regen: true };
   return { update };
 }
 
