@@ -8,6 +8,7 @@ import { bizDe } from './parts/biz.de';
 import { voiceDe } from './parts/voice.de';
 import { companionDe } from './parts/companion.de';
 import { inputDe } from './parts/input.de';
+import { progressDe } from './parts/progress.de';
 
 export const de = {
   ...aiDe,
@@ -20,6 +21,8 @@ export const de = {
   ...companionDe,
   // Phase 4 – Lesen, Hören, Schreiben, Entdecken
   ...inputDe,
+  // Phase 6 – Urteil, Fortschritt, Wortschatztest, Einstellungen
+  ...progressDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

@@ -61,5 +61,7 @@ export function optionsFromUrl(search: string): InstallOptions {
     persist: flags.has('persist'),
     // Phase 5: langsames Streaming für den Scroll-Test (`?fake=slowsample`).
     ...(flags.has('slowsample') ? { sampleTickMs: 150 } : {}),
+    // Phase 6: erste Einschätzung schemawidrig (`?fake=assessbad`).
+    ...(flags.has('assessbad') ? { assessBad: true } : {}),
   };
 }

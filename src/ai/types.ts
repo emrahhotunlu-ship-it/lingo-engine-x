@@ -48,8 +48,8 @@ export type AiRequest<V, O> = {
 export type AiResult<O> = {
   data: O;
   /**
-   * Die angefragte Stufe. `sample.json` meldet die tatsächlich antwortende Stufe nicht
-   * (contract/sample.d.ts: nur `sample()` liefert `modelTierApplied`).
+   * Die antwortende Stufe: bei `verb: 'text-json'` die von `sample()` gemeldete
+   * (`modelTierApplied`), sonst die angefragte – `sample.json` meldet sie nicht (contract/sample.d.ts).
    */
   tierApplied: ModelTier;
   /** true, wenn erst der eine erlaubte Neuversuch nach einem Schemafehler gültig war (A6.3). */

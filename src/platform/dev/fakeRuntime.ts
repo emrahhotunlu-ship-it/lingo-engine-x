@@ -3,6 +3,7 @@ import { createMemoryDb, type MemoryDbHandle } from './memoryDb';
 import { createFakeSample, type FakeSampleMode, type SampleFailMap } from './fakeSample';
 import type { SampleErrorCode } from '../types';
 import { registerCannedReplies, withCallLog, type SampleCall } from './cannedReplies';
+import { setAssessBad } from './canned/assess';
 
 // Nachbildung von `window.claude` für Dev-Server und E2E-Tests (Kap. 3.3).
 
@@ -28,6 +29,10 @@ export type FakeOptions = {
   sampleTickMs?: number;
   /** Phase 5: `sample` scheitert für diese Vorlagen mit dem Code (einmal je Eintrag, dann normal). */
   sampleFailOnce?: Record<string, Claude.sample.SampleErrorCode>;
+  /** Phase 6: erste Antwort von assess@1 verletzt das Schema (`?fake=assessbad`). */
+  assessBad?: boolean;
+  /** Phase 6: `sample()` meldet diese Stufe als `modelTierApplied` (einfacheres Modell nachbilden). */
+  tierApplied?: Claude.sample.ModelTier;
 };
 
 export type FakeControl = {
@@ -89,6 +94,7 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
 
   let sampleMode: FakeSampleMode = opts.sampleMode ?? 'ok';
   registerCannedReplies();
+  setAssessBad(opts.assessBad === true);
   const sampleCalls: SampleCall[] = [];
   let sampleFail: SampleFailMap = { ...(opts.sampleFail ?? {}) };
   const delay = { ms: opts.sampleDelayMs ?? 0 };
@@ -97,6 +103,7 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
       () => sampleMode,
       () => sampleFail,
       opts.sampleTickMs ?? 15,
+      opts.tierApplied,
     ),
     sampleCalls,
     () => delay.ms,

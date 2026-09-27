@@ -82,6 +82,38 @@ export function refreshCache(cache: CacheOpt): CacheOpt {
   return { gcTime, refresh: true };
 }
 
+/**
+ * Liest eine Textantwort tolerant als JSON – dieselben drei Regeln wie `sample.json`
+ * (contract/sample.d.ts): ganzer Text; sonst Inhalt EINES Markdown-Codeblocks; sonst vom ersten
+ * `{`/`[` bis zum letzten `}`/`]`. `undefined`, wenn nichts davon lesbar ist.
+ */
+export function parseJsonText(text: string): unknown {
+  const tryParse = (s: string): unknown => {
+    try {
+      return JSON.parse(s) as unknown;
+    } catch (err) {
+      // Kein JSON: die nächste Regel versucht es (Fehler ist hier erwartet, kein Programmfehler).
+      void err;
+      return undefined;
+    }
+  };
+  const whole = tryParse(text.trim());
+  if (whole !== undefined) return whole;
+  const fences = [...text.matchAll(/```[a-zA-Z]*\n([\s\S]*?)```/g)];
+  if (fences.length === 1) {
+    const inner = tryParse((fences[0]?.[1] ?? '').trim());
+    if (inner !== undefined) return inner;
+  }
+  const starts = [text.indexOf('{'), text.indexOf('[')].filter((i) => i >= 0);
+  const ends = [text.lastIndexOf('}'), text.lastIndexOf(']')].filter((i) => i >= 0);
+  if (!starts.length || !ends.length) return undefined;
+  const from = Math.min(...starts);
+  const to = Math.max(...ends);
+  return to > from ? tryParse(text.slice(from, to + 1)) : undefined;
+}
+
+type CallOut = { value: unknown; tier: ModelTier };
+
 async function callOnce(
   prompt: string,
   template: PromptTemplate<unknown, unknown>,
@@ -89,7 +121,7 @@ async function callOnce(
   signal: AbortSignal,
   phase: Phase,
   scope: string,
-): Promise<unknown> {
+): Promise<CallOut> {
   if (signal.aborted) throw cancelledFailure();
   const sample = getSample();
   if (!sample) throw failure('unavailable', 'absent');
@@ -110,18 +142,24 @@ async function callOnce(
     phase('slow');
   }, SLOW_AFTER_MS[template.tier]);
   recordCall();
+  const onText = () => {
+    if (streaming) return;
+    streaming = true;
+    stopSlow();
+    phase('streaming');
+  };
   try {
-    return await sample.json<unknown>(prompt, {
-      modelTier: template.tier,
-      cache,
-      signal: ctl.signal,
-      onText: () => {
-        if (streaming) return;
-        streaming = true;
-        stopSlow();
-        phase('streaming');
-      },
-    });
+    if (template.verb === 'text-json') {
+      const res = await sample(prompt, { modelTier: template.tier, cache, signal: ctl.signal, onText });
+      const tier = res.modelTierApplied ?? template.tier;
+      if (tier !== template.tier) logWarn(scope, { code: 'tier_substituted', message: `${template.tier} → ${tier}` });
+      const value = res.truncated ? undefined : parseJsonText(res.text);
+      // Wie `sample.json`: nichts lesbar oder abgeschnitten → `invalid_json`, nie automatisch wiederholt (A6.3).
+      if (value === undefined) throw failureFromSample({ code: 'invalid_json', message: res.truncated ? 'reply truncated' : 'no JSON value', text: res.text }, scope);
+      return { value, tier };
+    }
+    const value = await sample.json<unknown>(prompt, { modelTier: template.tier, cache, signal: ctl.signal, onText });
+    return { value, tier: template.tier };
   } catch (err) {
     throw failureFromSample(err, scope);
   } finally {
@@ -152,15 +190,15 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
     const t = template as PromptTemplate<unknown, unknown>;
     const cache = cacheFor(template.cache, req.refresh === true);
     const first = await callOnce(prompt, t, cache, signal, phase, scope);
-    const r1 = schema.safeParse(first);
-    if (r1.success) return { data: r1.data, tierApplied: template.tier, retried: false };
+    const r1 = schema.safeParse(first.value);
+    if (r1.success) return { data: r1.data, tierApplied: first.tier, retried: false };
 
     logWarn(scope, { code: 'schema', message: describeIssues(r1.error.issues) }, 'first reply');
-    const prompt2 = retryPrompt(prompt, r1.error.issues, first);
+    const prompt2 = retryPrompt(prompt, r1.error.issues, first.value);
     budget(prompt2, SAMPLE_LIMIT_BYTES, scope);
     const second = await callOnce(prompt2, t, cache, signal, phase, scope);
-    const r2 = schema.safeParse(second);
-    if (r2.success) return { data: r2.data, tierApplied: template.tier, retried: true };
+    const r2 = schema.safeParse(second.value);
+    if (r2.success) return { data: r2.data, tierApplied: second.tier, retried: true };
 
     logWarn(scope, { code: 'schema', message: describeIssues(r2.error.issues) }, 'retry');
     throw failure('invalid', 'schema');

@@ -22,8 +22,10 @@ import {
   talkSchema,
   bizSchema,
   vocabSchema,
+  weeklySchema,
   wpromptSchema,
   writingSchema,
+  archiveSchema,
 } from './schemas';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
@@ -37,6 +39,8 @@ export const APP_DOCS = {
   'app/chat': chatSchema,
   'app/lookup': lookupSchema,
   'app/schema': schemaDocSchema,
+  // Neu ab Phase 6: Wochenberichte (Plan §6.2).
+  'app/weekly': weeklySchema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {
@@ -57,6 +61,8 @@ export const COLLECTIONS = {
   // Neu ab Phase 3 (Plan §3.1): Monatsdokumente für Gespräche und Business-Einheiten.
   talk: talkSchema,
   biz: bizSchema,
+  // Neu ab Phase 7 (Plan §12.3): ausgelagerte Profiljahre.
+  archive: archiveSchema,
 } as const satisfies Record<string, ZodType>;
 
 export type AppDocPath = keyof typeof APP_DOCS;

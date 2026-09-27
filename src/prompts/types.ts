@@ -16,6 +16,12 @@ export type PromptTemplate<V, O> = {
   version: number;
   tier: ModelTier;
   cache: CacheOpt;
+  /**
+   * Aufrufart (Phase 6, Plan W4): `json` (Standard) ruft `sample.json`. `text-json` ruft `sample()`
+   * und liest die Antwort selbst nach denselben drei Regeln – nur so meldet die Laufzeit die
+   * tatsächlich antwortende Stufe (`modelTierApplied`), z. B. für die Einschätzung (`complex`).
+   */
+  verb?: 'json' | 'text-json';
   /** Der ganze Prompt. Erste Zeile: `[${id}@${version}]`. */
   build(vars: V): string;
   /** Prüft die Antwort; hängt von den Variablen ab (z. B. Sprache der Erklärung). */

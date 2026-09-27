@@ -53,7 +53,7 @@ export type SampleFailMap = Readonly<Record<string, SampleErrorCode>>;
 const templateOf = (text: string): string | null => /^\[([a-z0-9-]+)@\d+\]/m.exec(text)?.[1] ?? null;
 
 /** `tickMs`: Abstand der Streaming-Stücke (40 Zeichen); langsam für Scroll-Tests (Phase 5). */
-export function createFakeSample(getMode: () => FakeSampleMode, getFail: () => SampleFailMap = () => ({}), tickMs = 15): SampleFn {
+export function createFakeSample(getMode: () => FakeSampleMode, getFail: () => SampleFailMap = () => ({}), tickMs = 15, tierApplied?: Claude.sample.ModelTier): SampleFn {
   const run = (input: unknown, options: SampleOptions | undefined): Promise<SampleResult> =>
     new Promise<SampleResult>((resolve, reject) => {
       let text: string;
@@ -104,7 +104,7 @@ export function createFakeSample(getMode: () => FakeSampleMode, getFail: () => S
         if (i < parts.length) setTimeout(tick, tickMs);
         else {
           signal?.removeEventListener('abort', onAbort);
-          resolve({ text: sent, truncated: false, modelTierApplied: options?.modelTier ?? 'default' });
+          resolve({ text: sent, truncated: false, modelTierApplied: tierApplied ?? options?.modelTier ?? 'default' });
         }
       };
       setTimeout(tick, 30);

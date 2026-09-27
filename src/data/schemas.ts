@@ -29,10 +29,12 @@ export const assessDataSchema = z.looseObject({
   trendWhy: str,
   today: str,
   c1gap: strArr,
-  strengths: z.array(z.looseObject({ title: str, why: str })).nullish(),
-  blockers: z.array(z.looseObject({ title: str, why: str, fix: str, action: str })).nullish(),
+  // `ev`: Beleg-Kennungen (neu ab Phase 6, Plan E3); die alte App schreibt sie nicht.
+  strengths: z.array(z.looseObject({ title: str, why: str, ev: strArr })).nullish(),
+  blockers: z.array(z.looseObject({ title: str, why: str, fix: str, action: str, ev: strArr })).nullish(),
   dims: z.array(z.looseObject({ id: str, level: str, confidence: str, why: str })).nullish(),
-  focus: z.looseObject({ title: str, why: str, action: str, days: num }).nullish(),
+  // `channels`: Kanäle des Tagesplans, auf die der Fokus wirkt (Phase 6, Plan §4.6).
+  focus: z.looseObject({ title: str, why: str, action: str, days: num, channels: strArr }).nullish(),
 });
 
 /** Die alte App schreibt eine Hülle `{d, t, lang, answers, writings, data}`, Anhang B zeigt den Inhalt flach. */
@@ -44,6 +46,32 @@ export const assessSchema = assessDataSchema.extend({
   answers: loose,
   writings: loose,
   data: assessDataSchema.nullish(),
+  // Neu ab Phase 6 (Plan §4.1), alles tolerant: Version, Vorlage, antwortende Stufe, Belegzählung,
+  // Verlauf (≤ 60) und die Tagessperre des automatischen Laufs `run {d, t, by}`.
+  v: num,
+  pv: str,
+  tier: str,
+  basis: z.looseObject({}).nullish(),
+  hist: looseArr,
+  run: z.looseObject({ d: str, t: num, by: str }).nullish(),
+});
+
+/** Neu ab Phase 6 (Plan §6.2): Wochenberichte `{items: [{w, lang, t, pv, facts, text}]}`, höchstens 26. */
+export const weeklySchema = z.looseObject({
+  items: z.array(z.looseObject({ w: str, lang: str, t: num, pv: str, facts: loose, text: z.looseObject({}).nullish() })).nullish(),
+});
+
+/** Neu ab Phase 7 (Plan §12.3): ausgelagerte Kalenderjahre des Profils `archive/profile-<JJJJ>`. */
+export const archiveSchema = z.looseObject({
+  v: num,
+  year: num,
+  from: str,
+  t: num,
+  days: numMap,
+  xpDays: numMap,
+  minutes: numMap,
+  act: z.record(z.string(), z.record(z.string(), z.number().nullish()).nullish()).nullish(),
+  pflicht: z.record(z.string(), z.unknown()).nullish(),
 });
 
 export const profileSchema = z.looseObject({
@@ -55,6 +83,10 @@ export const profileSchema = z.looseObject({
   voice: str,
   rate: num,
   goal: num,
+  /** Neu ab Phase 6 (Plan E11): Tagesziel in Minuten (10/15/20/25/30/40, Standard 25). `goal` (XP) bleibt. */
+  goalMin: num,
+  /** Neu ab Phase 6 (Plan E12): Töne an/aus, Standard aus (Kap. 4.7). */
+  sound: bool,
   newPerDay: num,
   xp: num,
   answers: num,
@@ -89,8 +121,9 @@ export const profileSchema = z.looseObject({
     .nullish(),
   /** Neu: Folgenummer des letzten Sammel-Schreibvorgangs je Tab (gegen Doppelzählung); `null` = gekappt (Phase 2 D7). */
   lxSeq: numMap,
+  // `lx`: Tagesbild dieser App (Phase 6, Plan §7.4), Definition in domain/progress/history.ts.
   history: z
-    .array(z.looseObject({ d: str, o: num, vo: num, gr: num, co: num, re: num, li: num, wr: num, fl: num, vs: num }))
+    .array(z.looseObject({ d: str, o: num, vo: num, gr: num, co: num, re: num, li: num, wr: num, fl: num, vs: num, lx: num }))
     .nullish(),
   feed: z.array(z.looseObject({ act: str, t: num, d: z.looseObject({}).nullish() })).nullish(),
   listen: looseArr,
@@ -585,6 +618,7 @@ export const bizSchema = z.looseObject({
 export type Profile = z.infer<typeof profileSchema>;
 export type Course = z.infer<typeof courseSchema>;
 export type Assess = z.infer<typeof assessSchema>;
+export type Weekly = z.infer<typeof weeklySchema>;
 export type AssessData = z.infer<typeof assessDataSchema>;
 export type Vocab = z.infer<typeof vocabSchema>;
 export type Chunk = z.infer<typeof chunkSchema>;
