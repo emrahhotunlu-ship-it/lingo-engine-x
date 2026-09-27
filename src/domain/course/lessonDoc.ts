@@ -6,7 +6,7 @@ import type { Lang } from '../srs/types';
 import { asText } from '../text/str';
 import { newVocabDoc } from '../srs/newCard';
 import { coreWord } from './baseLesson';
-import { containsTarget } from './production';
+import { containsTarget, usesWord } from './production';
 
 // Lektionsinhalt `lesson/<lid>` im Format der alten App (phase2-plan §4.8, Daten-Entwurf §6.2).
 // - Lesen: gespeicherte Fragen kennen beide Sprachen (`q`/`q_alt`); alte Fragen ohne `lang`
@@ -120,4 +120,33 @@ export function lessonWrite(cur: Readonly<Doc> | undefined, out: Readonly<Doc>, 
  */
 export function questionOptions(lid: string, q: { q: string; options: readonly string[] }): string[] {
   return shuffle(q.options, mulberry32(hash32(`${lid}|${q.q}`)));
+}
+
+/**
+ * Mustertext für „Anwenden": höchstens drei Zeilen EINES Sprechers aus dem Dialog – der mit den
+ * meisten Pflichtwörtern (sonst mit den meisten Zeilen). Zeilen verschiedener Sprecher ergäben
+ * keinen zusammenhängenden Text.
+ */
+export function modelText(lines: ReadonlyArray<{ sp: string; en: string }>, mustUse: readonly string[]): string {
+  const bySp = new Map<string, Array<{ en: string; hit: boolean }>>();
+  for (const l of lines) {
+    if (!l.en) continue;
+    const list = bySp.get(l.sp) ?? [];
+    list.push({ en: l.en, hit: mustUse.some((w) => usesWord(l.en, w)) });
+    bySp.set(l.sp, list);
+  }
+  let best: Array<{ en: string; hit: boolean }> = [];
+  let bestHits = -1;
+  for (const list of bySp.values()) {
+    const hits = list.filter((x) => x.hit).length;
+    if (hits > bestHits || (hits === bestHits && list.length > best.length)) {
+      best = list;
+      bestHits = hits;
+    }
+  }
+  const pick = bestHits > 0 ? best.filter((x) => x.hit) : best;
+  return pick
+    .slice(0, 3)
+    .map((x) => x.en)
+    .join(' ');
 }

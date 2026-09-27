@@ -58,7 +58,8 @@ export function scoreDictation(given: string, target: string, opts: { helpLevel?
   const total = Math.max(1, t.length);
   const raw = 1 - (c.del + c.ins + c.sub + 0.5 * c.typo) / total;
   const score = Math.max(0, Math.round(raw * 100) / 100);
-  const verdict: Verdict = raw >= 0.95 && !(opts.helpLevel ?? 0) ? 'correct' : raw >= 0.8 ? 'near' : 'wrong';
+  // Wortgenau richtig ist richtig – auch nach „Langsamer" (die Hilfe senkt nur die Note).
+  const verdict: Verdict = raw >= 1 || (raw >= 0.95 && !(opts.helpLevel ?? 0)) ? 'correct' : raw >= 0.8 ? 'near' : 'wrong';
   return { ops, missing: c.del, extra: c.ins, wrong: c.sub, typo: c.typo, total: t.length, score, verdict };
 }
 

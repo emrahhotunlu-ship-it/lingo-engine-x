@@ -71,6 +71,9 @@ test('Schreiben: Aufgabe des Tages, Abgeben, Korrektur mit Stellen, Überarbeite
 
   // Überarbeiten: rev + 1, kein zweiter Einheitsabschluss.
   await page.getByTestId('revise').click();
+  // Die Aufgabenstellung bleibt beim Überarbeiten sichtbar, aber nicht wechselbar.
+  await expect(page.getByTestId('prompt-card')).toBeVisible();
+  await expect(page.getByTestId('prompt-other')).toHaveCount(0);
   await page.getByTestId('draft').fill(TEXT.replace('depends of', 'depends on').replace('to hear', 'to hearing'));
   await page.getByTestId('resubmit').click();
   await expect(page.getByTestId('review')).toBeVisible({ timeout: 15_000 });

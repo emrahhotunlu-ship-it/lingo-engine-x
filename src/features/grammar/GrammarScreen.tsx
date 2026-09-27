@@ -8,11 +8,11 @@ import { logWarn } from '../../platform/diagnostics';
 import { TOPICS, topicById, GROUP_EN } from '../../domain/content';
 import { certainty, topicP } from '../../domain/grammar/bkt';
 import { dueErrors, errorsOf } from '../../domain/grammar/errors';
-import { ruleOf } from '../../domain/grammar/rules';
+import { localizePattern, ruleOf } from '../../domain/grammar/rules';
 import { unseenCount } from '../../domain/grammar/tasks';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { useT } from '../../i18n';
+import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
 import { Sheet } from '../../ui/Sheet';
@@ -69,7 +69,9 @@ export function GrammarScreen() {
         const p = topicP(tp.id, doc, now);
         const c = certainty(p, { n: typeof doc?.n === 'number' ? doc.n : 0, recent: Array.isArray(doc?.recent) ? (doc.recent as number[]) : null });
         return { id: tp.id, group: tp.group, p, c };
-      }).sort((a, b) => a.p - b.p || (a.id < b.id ? -1 : 1)),
+      // Sortiert nach der angezeigten Sicherheit (Punkte und Wort), dann nach p – so passt die
+      // Reihenfolge immer zum Stufenwort.
+      }).sort((a, b) => a.c.word - b.c.word || a.p - b.p || (a.id < b.id ? -1 : 1)),
     [docs, now],
   );
   const due = useMemo(() => dueErrors(docs, now), [docs, now]);
@@ -110,6 +112,7 @@ export function GrammarScreen() {
                 data-testid="topic"
                 data-topic={tp.id}
                 data-p={tp.p.toFixed(2)}
+                data-c={tp.c.word}
               >
                 <span className="flex min-w-0 flex-col gap-1">
                   <span className="font-medium">{topicName(tp.id, lang)}</span>
@@ -212,7 +215,7 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
                 {rule.forms.map((f) => (
                   <li key={f.name + f.pattern} className="flex flex-col gap-0.5">
                     <span className="text-sm font-medium" lang={lang}>
-                      {f.name} · <span lang="en">{f.pattern}</span>
+                      {f.name} · <span data-testid="rule-pattern">{localizePattern(f.pattern, (id) => t(`grTerm_${id}` as MessageKey))}</span>
                     </span>
                     <EnglishText as="span" className="text-sm text-muted" text={f.ex} {...src} />
                   </li>

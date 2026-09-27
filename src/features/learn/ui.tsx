@@ -27,7 +27,8 @@ export const CERTAINTY_KEYS = ['certainty0', 'certainty1', 'certainty2', 'certai
 export function LearnStatus({ p, n, recent, kind, kindId, extra }: { p: number | null; n?: number | null; recent?: readonly number[] | null; kind: string; kindId: string; extra?: string | null }) {
   const { t } = useT();
   const c = p === null ? null : certainty(p, { n: n ?? null, recent: recent ?? null });
-  const word = c ? t(CERTAINTY_KEYS[c.word]) : '';
+  // Ohne Beherrschungswert (Übungen ohne eigene Karte): 0 Punkte mit dem Wort „neu", nie leer.
+  const word = t(CERTAINTY_KEYS[c?.word ?? 0]);
   return (
     <CardStatus
       testId="status-line"

@@ -63,8 +63,12 @@ describe('Diktat', () => {
     expect(scoreDictation('We waited for twenty minutes.', 'We waited for 20 minutes.').verdict).toBe('correct');
   });
 
-  it('mit Hilfe höchstens fast richtig', () => {
-    expect(scoreDictation('We have finished the report.', 'We have finished the report.', { helpLevel: 1 }).verdict).toBe('near');
+  it('mit Hilfe: wortgenau richtig bleibt richtig (Note senkt die Hilfe), knapp daneben nur fast richtig', () => {
+    expect(scoreDictation('We have finished the report.', 'We have finished the report.', { helpLevel: 1 }).verdict).toBe('correct');
+    const target = 'We have finished the report and sent it to the whole team.';
+    const typo = 'We have finsihed the report and sent it to the whole team.';
+    expect(scoreDictation(typo, target).verdict).toBe('correct');
+    expect(scoreDictation(typo, target, { helpLevel: 1 }).verdict).toBe('near');
   });
 });
 
@@ -111,6 +115,12 @@ describe('Lückenjagd', () => {
 });
 
 describe('Satzbau', () => {
+  it('nie zwei Sätze in einer Aufgabe', () => {
+    expect(buildOrder('We met the client. Then we signed the new contract today.', { seed: 'a' })).toBeNull();
+    expect(buildOrder('Is it ready? We need the final numbers by Friday.', { seed: 'a' })).toBeNull();
+    expect(buildOrder('We met the new client yesterday at the office.', { seed: 'a' })).not.toBeNull();
+  });
+
   it('S-01: zwei gültige Reihenfolgen', () => {
     const it0 = buildOrder('I met the new client yesterday at the office.', { seed: 'a', accepted: ['Yesterday I met the new client at the office.'] })!;
     const ids = (texts: string[]) => texts.map((t) => it0.tiles.find((x) => x.text.toLowerCase() === t.toLowerCase() && !x.distractor)!.id);

@@ -5,7 +5,7 @@ import { useAsk } from '../../ai/useAsk';
 import { getWriter } from '../../data';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { coreWord } from '../../domain/course/baseLesson';
-import { lessonWordCard, questionOptions } from '../../domain/course/lessonDoc';
+import { lessonWordCard, modelText, questionOptions } from '../../domain/course/lessonDoc';
 import { localProductionCheck, usesWord, type ProductionCheck } from '../../domain/course/production';
 import { normCat, radarEvent } from '../../domain/grammar/radar';
 import { ruleOf } from '../../domain/grammar/rules';
@@ -403,10 +403,7 @@ export function OutputStep({ meta, content, onComplete }: StepProps) {
   const [aiRes, setAiRes] = useState<AiRes | null>(null);
   const output = content.output ?? { de: meta.cando_de, en: meta.cando_en, mustUse: meta.words.slice(0, 3).map(([en]) => coreWord(en)) };
   const mustUse = output.mustUse.length ? output.mustUse : meta.words.slice(0, 3).map(([en]) => coreWord(en));
-  const model = useMemo(() => {
-    const hits = content.dialogue.lines.map((l) => l.en).filter((l) => mustUse.some((w) => usesWord(l, w)));
-    return (hits.length ? hits : content.dialogue.lines.map((l) => l.en)).slice(0, 3).join(' ');
-  }, [content, mustUse]);
+  const model = useMemo(() => modelText(content.dialogue.lines, mustUse), [content, mustUse]);
   const busy = ask.phase === 'queued' || ask.phase === 'thinking' || ask.phase === 'streaming' || ask.phase === 'slow';
   const ok = !!aiRes || !!localRes?.ok;
 
@@ -493,8 +490,9 @@ export function OutputStep({ meta, content, onComplete }: StepProps) {
           {ask.phase === 'slow' ? t('aiSlow') : t('aiThinking')}
         </p>
       )}
-      {ask.error && (
-        <p className="text-sm text-danger-text" role="alert">
+      {/* Ein KI-Fehler gilt nur, bis selbst geprüft oder erfolgreich geprüft wurde. */}
+      {ask.error && !localRes && !aiRes && (
+        <p className="text-sm text-danger-text" role="alert" data-testid="output-ai-error">
           {t(ask.error)}
         </p>
       )}

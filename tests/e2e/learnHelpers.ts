@@ -182,7 +182,7 @@ async function answerLessonWord(page: Page, words: ReadonlyArray<{ en: string; d
  * Eine geöffnete Lektion vom Start bis zur Zusammenfassung durchspielen (ohne KI).
  * `words`: Zielwörter (für die Wortübungen), `solve`: Lösungen der Grammatikaufgaben.
  */
-export async function playLesson(page: Page, o: { words: ReadonlyArray<{ en: string; de: string }>; solve: (shown: string) => string | null; answers?: Record<string, string>; output: string; onGrammar?: (phase: 'before' | 'after') => Promise<void> }): Promise<void> {
+export async function playLesson(page: Page, o: { words: ReadonlyArray<{ en: string; de: string }>; solve: (shown: string) => string | null; answers?: Record<string, string>; output: string; onGrammar?: (phase: 'before' | 'after') => Promise<void>; aiCheck?: boolean }): Promise<void> {
   const lesson = page.getByTestId('lesson');
   await expect(page.getByTestId('lesson-start')).toBeVisible();
   await page.getByTestId('lesson-start').click();
@@ -238,7 +238,11 @@ export async function playLesson(page: Page, o: { words: ReadonlyArray<{ en: str
   await expect(lesson).toHaveAttribute('data-step', 'output');
   await page.getByTestId('output-input').fill(o.output);
   await expect(page.getByTestId('must-use').first()).toHaveAttribute('data-used', '');
-  await page.getByTestId('output-self').click();
+  if (o.aiCheck) {
+    // Rückmeldung von Claude (lesson-production@1).
+    await page.getByTestId('output-check').click();
+    await expect(page.getByTestId('output-ai')).toBeVisible();
+  } else await page.getByTestId('output-self').click();
   await expect(page.getByTestId('model-text')).toBeVisible();
   await stepNext('output').click();
   await expect(lesson).toHaveAttribute('data-step', 'summary');

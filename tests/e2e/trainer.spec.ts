@@ -24,6 +24,10 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   }
   await expect(page.getByTestId('summary')).toBeVisible();
   expect([...seen].sort()).toEqual(['cloze', 'cloze_hint', 'colloc', 'mc_de', 'mc_en', 'type']);
+  // Je Wort genau ein Chip, auch wenn eine Karte in der Runde wiederkam.
+  const chipWords = await page.getByTestId('summary-chip').allInnerTexts();
+  expect(chipWords.length).toBeGreaterThan(0);
+  expect(new Set(chipWords).size).toBe(chipWords.length);
 
   // Schreibwege: Karte mit FSRS und gespiegelten Altfeldern, Protokoll, Zähler.
   await expect.poll(async () => ((await dump(page))[`log/${DAY}`]?.entries as unknown[] | undefined)?.filter((e) => (e as { ctx?: string }).ctx === 'rev').length ?? 0).toBeGreaterThanOrEqual(6);
