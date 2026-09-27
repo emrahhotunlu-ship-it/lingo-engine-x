@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen, type Lang, openSpeak } from './fixtures';
+import { boot, layoutProblems, screen, type Lang, openSpeak, openEntry } from './fixtures';
 import { answerGrammar, grammarKey, nextItem } from './learnHelpers';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
@@ -140,8 +140,7 @@ test.describe('Eine Botschaft, drei Tonlagen', () => {
 
 async function openGrammar(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await page.getByTestId('hub-grammar').click();
+  await openEntry(page, 'hub-grammar');
   await expect(page.getByTestId('grammar')).toBeVisible();
 }
 

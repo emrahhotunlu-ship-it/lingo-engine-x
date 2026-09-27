@@ -28,7 +28,7 @@ test('jede offene Pflichtzeile nennt ihren Grund; neu geladen ergibt der gespeic
   }
   // Neuzeichnen: Reiter wechseln und zurück – der Plan bleibt.
   for (let k = 0; k < 3; k++) {
-    await page.getByTestId('tab-learn').click();
+    await page.getByTestId('tab-vocab').click();
     await page.getByTestId('tab-today').click();
     await screen(page, 'today');
     expect(await planOf(page)).toEqual(first);

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen, SEED_EVENING } from './fixtures';
+import { boot, screen, SEED_EVENING, openEntry } from './fixtures';
 import { answerGrammar, grammarKey, nextItem, shownPrompt } from './learnHelpers';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
@@ -13,9 +13,7 @@ const solve = grammarKey();
 
 async function openGrammar(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await expect(page.getByTestId('learn-hub')).toBeVisible();
-  await page.getByTestId('hub-grammar').click();
+  await openEntry(page, 'hub-grammar');
   await expect(page.getByTestId('grammar')).toBeVisible();
 }
 

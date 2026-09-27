@@ -53,7 +53,7 @@ test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher
   // Tagessperre: Reiterwechsel und Rückkehr lösen keinen zweiten Lauf aus.
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
-  await page.getByTestId('tab-overview').click();
+  await openOverview(page);
   await screen(page, 'overview');
   await page.waitForTimeout(500);
   expect(await calls(page, 'assess')).toHaveLength(1);
@@ -225,7 +225,7 @@ test('der zuletzt offene Reiter bleibt beim nächsten Öffnen', async ({ page })
   await tab(page, 'path');
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
-  await page.getByTestId('tab-overview').click();
+  await openOverview(page);
   await expect(page.getByTestId('tab-path')).toHaveAttribute('aria-selected', 'true');
 });
 

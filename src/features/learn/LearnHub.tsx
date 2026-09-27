@@ -99,7 +99,6 @@ export function LearnHub() {
   const vocab = useLive((s) => s.collections.vocab);
   const tts = useSpeech((s) => s.status === 'ready');
   const inputs = useLearnInputs((s) => s.status);
-  const { rows } = useChannelState();
   const [freeRound, setFreeRound] = useState(false);
 
   useEffect(() => {
@@ -136,31 +135,6 @@ export function LearnHub() {
   };
 
   const drills = DRILLS.filter((d) => feasible(d.kind, data, { tts }));
-  const done = (id: string) => rows.find((r) => r.module.id === id)?.done ?? false;
-  const practiced = (id: string) =>
-    done(id) ? (
-      // Freiwilliges Angebot (Kap. 2.6): Hinweis „heute geübt", kein „Erledigt"-Häkchen am Knopf.
-      <span className="flex-none whitespace-nowrap text-xs text-muted" data-testid="module-done">
-        {t('inPracticedToday')}
-      </span>
-    ) : null;
-  const moduleRow = (id: 'read' | 'listen' | 'write' | 'discover') => {
-    const m = INPUT_MODULES.find((x) => x.id === id);
-    if (!m) return null;
-    return (
-      <Row
-        key={m.id}
-        icon={<ModuleIcon name={m.icon} channel={m.channel} />}
-        title={t(m.label)}
-        sub={t(INPUT_SUB[m.id] ?? 'lhReadSub')}
-        onClick={() => go(m.route)}
-        testId="module"
-        module={m.id}
-        note={practiced(m.id)}
-      />
-    );
-  };
-
   return (
     <motion.div className="flex flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
       <motion.div variants={item}>
@@ -234,6 +208,48 @@ export function LearnHub() {
         </Section>
       )}
 
+      <InputSections />
+
+      <FreeRoundSheet open={freeRound} onClose={() => setFreeRound(false)} />
+    </motion.div>
+  );
+}
+
+/**
+ * Lesen, Hören, Schreiben (mit „Sag es“) und Entdecken – auch Wurzel des Reiters „Lesen“ im
+ * Neubau-Rahmen (WP0a: `areas/lesen.tsx`, bis P4 die Bibliothek baut).
+ */
+export function InputSections() {
+  const { t } = useT();
+  const go = useNav((s) => s.go);
+  const { rows } = useChannelState();
+  const done = (id: string) => rows.find((r) => r.module.id === id)?.done ?? false;
+  const practiced = (id: string) =>
+    done(id) ? (
+      // Freiwilliges Angebot (Kap. 2.6): Hinweis „heute geübt", kein „Erledigt"-Häkchen am Knopf.
+      <span className="flex-none whitespace-nowrap text-xs text-muted" data-testid="module-done">
+        {t('inPracticedToday')}
+      </span>
+    ) : null;
+  const moduleRow = (id: 'read' | 'listen' | 'write' | 'discover') => {
+    const m = INPUT_MODULES.find((x) => x.id === id);
+    if (!m) return null;
+    return (
+      <Row
+        key={m.id}
+        icon={<ModuleIcon name={m.icon} channel={m.channel} />}
+        title={t(m.label)}
+        sub={t(INPUT_SUB[m.id] ?? 'lhReadSub')}
+        onClick={() => go(m.route)}
+        testId="module"
+        module={m.id}
+        note={practiced(m.id)}
+      />
+    );
+  };
+
+  return (
+    <>
       <Section id="lh-input" title={t('lhInput')}>
         <List label={t('lhInput')} testId="input-modules">
           {moduleRow('read')}
@@ -248,7 +264,6 @@ export function LearnHub() {
         <List label={t('ch_discover')}>{moduleRow('discover')}</List>
       </Section>
 
-      <FreeRoundSheet open={freeRound} onClose={() => setFreeRound(false)} />
-    </motion.div>
+    </>
   );
 }

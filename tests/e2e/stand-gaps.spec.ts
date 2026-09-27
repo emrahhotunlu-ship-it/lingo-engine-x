@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, screen, openEntry } from './fixtures';
 import { typeInGap } from './learnHelpers';
 import { openModule } from './inputHelpers';
 import { answerCheckItem, playCheck } from './progressHelpers';
@@ -56,7 +56,7 @@ test('M10: Wochen-Check – 12 Aufgaben ohne Tipps, Ergebnis im alten Format, Ve
   const seedProfile = await profileOf(page);
   const gramBefore = ((seedProfile.act as Record<string, Doc>)['2026-09-20'] ?? {}).gram;
 
-  await page.getByTestId('tab-overview').click();
+  await openOverview(page);
   await screen(page, 'overview');
   await page.getByTestId('tab-history').click();
   await page.getByTestId('check-start').click();
@@ -196,7 +196,7 @@ test('M18: „Als Preply-Stunde" im Text, an der Szene und im Wochenbericht', as
   await openModule(page, 'read');
   await expect(page.getByTestId('as-preply')).toBeVisible();
   await page.getByTestId('unit-close').click();
-  await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
+  await page.locator('[data-screen="library"]').waitFor({ state: 'visible' });
   // Szene (Einweisung)
   await page.getByTestId('tab-speak').click();
   await page.getByTestId('scene-card').first().click();
@@ -204,7 +204,7 @@ test('M18: „Als Preply-Stunde" im Text, an der Szene und im Wochenbericht', as
   await page.keyboard.press('Escape');
   await expect(page.getByTestId('briefing')).toHaveCount(0);
   // Wochenbericht
-  await page.getByTestId('tab-overview').click();
+  await openOverview(page);
   await screen(page, 'overview');
   await page.getByTestId('tab-history').click();
   await page.getByTestId('weekly').getByTestId('as-preply').click();
@@ -216,8 +216,7 @@ test('M18: „Als Preply-Stunde" im Text, an der Szene und im Wochenbericht', as
 test('M18: vom Regelblatt zu „Vorbereiten" mit Anlass „Zu: Passiv"', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await page.getByTestId('hub-grammar').click();
+  await openEntry(page, 'hub-grammar');
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();
   const sheet = page.getByTestId('rule-sheet');
   await expect(sheet).toBeVisible();
@@ -269,9 +268,9 @@ test('M13: Ladepunkt am Reiter, solange eine KI-Korrektur im Hintergrund läuft'
   await page.getByTestId('submit').click();
   await expect(page.getByTestId('ai-phase')).toBeVisible();
   await page.getByTestId('unit-close').click();
-  const dot = page.getByTestId('tab-learn').getByTestId('tab-busy');
+  const dot = page.getByTestId('tab-read').getByTestId('tab-busy');
   await expect(dot).toBeVisible();
-  await expect(page.getByTestId('tab-learn')).toContainText('Claude korrigiert gerade im Hintergrund');
+  await expect(page.getByTestId('tab-read')).toContainText('Claude korrigiert gerade im Hintergrund');
   await expect(page.getByTestId('ai-task-notice')).toHaveAttribute('data-status', 'done', { timeout: 15_000 });
   await expect(page.getByTestId('tab-busy')).toHaveCount(0);
 });

@@ -1,3 +1,4 @@
+import { openLearnPage } from './fixtures';
 import { readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 
@@ -369,7 +370,7 @@ export type LearnScreen = 'lernen' | 'kurs' | 'lektion' | 'grammatik' | 'regelbl
 export async function learnTour(page: Page, visit: (name: LearnScreen) => Promise<void>): Promise<void> {
   const settle = () => page.waitForTimeout(450);
   const hub = async () => {
-    await page.getByTestId('tab-learn').click();
+    await openLearnPage(page);
     await expect(page.getByTestId('learn-hub')).toBeVisible();
     await settle();
   };

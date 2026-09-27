@@ -1,3 +1,4 @@
+import { settingsSections } from '../../app/registry';
 import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
@@ -38,6 +39,10 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           <LearningSection />
           <WorkContextSection />
           <Practice />
+          {/* Registrierte Abschnitte der Bereiche (docs/neubau/architektur.md §2.6, z. B. „Wiederholen“). */}
+          {settingsSections().map((sec) => (
+            <sec.component key={sec.id} />
+          ))}
         </Group>
         <Group title={t('setGroupLook')} testId="set-group-look">
           <Appearance />

@@ -1,3 +1,4 @@
+import { openTab } from './fixtures';
 import { readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 
@@ -268,8 +269,7 @@ export async function trainerTour(page: Page, scan: (name: string) => Promise<vo
   }
   expect(visited.size).toBe(TOUR.length);
   await page.getByTestId('trainer-close').click();
-  await page.getByTestId('tab-learn').click();
-  await page.getByTestId('hub-vocab').click();
+  await openTab(page, 'vocab');
   await expect(page.getByTestId('vocab')).toBeVisible();
   await page.locator('[data-testid="vocab-filter"][data-filter="phrases"]').click();
   await page.locator('[data-testid="vocab-row"][data-word="c-i-take-your-point-but"]').click();

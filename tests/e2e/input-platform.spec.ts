@@ -40,12 +40,12 @@ test('Widerspruchstest: Modul-Hinweis „heute geübt“ und Klickziel folgen ch
   await expect(page.locator('[data-module="listen"]')).not.toContainText('Erledigt');
   await expect(page.locator('[data-module="read"] [data-testid="module-done"]')).toHaveCount(0);
 
-  // Lesen abschließen (Klickziel der Modulzeile) → ✕ führt zurück zu „Üben“, das Modul zeigt „heute geübt“.
+  // Lesen abschließen (Klickziel der Modulzeile) → ✕ führt zurück zu „Lesen“, das Modul zeigt „heute geübt“.
   await page.locator('[data-testid="module"][data-module="read"]').click();
   await page.getByTestId('read-done').click();
   await answerAll(page, 4);
   await expect(page.getByTestId('unit-done')).toBeVisible();
   await page.getByTestId('unit-close').click();
-  await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
+  await page.locator('[data-screen="library"]').waitFor({ state: 'visible' });
   await expect(page.locator('[data-module="read"] [data-testid="module-done"]')).toHaveCount(1);
 });

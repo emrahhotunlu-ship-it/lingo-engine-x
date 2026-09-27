@@ -2,6 +2,9 @@ import { readFileSync } from 'node:fs';
 import type { Page } from '@playwright/test';
 import type { InstallOptions } from '../../src/platform/dev/install';
 import { WHATS_NEW_KEY, WHATS_NEW_VERSION } from '../../src/features/system/whatsNew';
+import { routeToString } from '../../src/app/router/deeplink';
+import type { Route } from '../../src/app/router/types';
+import { TABS, type TabId } from '../../src/app/shell/tabs';
 
 // Lädt den Produktions-Build dist/index.html unter einer https-Adresse und spielt den
 // Entwicklungs-Adapter von außen ein (CLAUDE.md A7). Jede andere Anfrage wird
@@ -30,6 +33,8 @@ export type BootOptions = {
   localStorage?: Record<string, string>;
   /** `true` = der Hinweis „Was ist neu" (M20) erscheint wie nach einem Update. */
   whatsNew?: boolean;
+  /** Adress-Anker beim Start (ohne `#`), z. B. `go=trainer%3Fround%3Dextra` (siehe `bootAt`). */
+  hash?: string;
 };
 
 export type Booted = { external: string[]; errors: string[] };
@@ -73,12 +78,20 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
     }, fake);
     await page.addInitScript({ content: RUNTIME });
   }
-  await page.goto(`${ORIGIN}/`);
+  await page.goto(`${ORIGIN}/${opts.hash ? `#${opts.hash}` : ''}`);
   return { external, errors };
 }
 
-/** Wartet, bis ein Bildschirm fertig eingeblendet ist. */
-export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer' | 'speak' | 'roleplay' | 'mail' | 'playbook' | 'pitch' | 'grammarSession' | 'vtest' | 'learn'): Promise<void> {
+/**
+ * Start direkt an einer Route (Neubau §2.3): `#go=<route>` wird einmal beim Start gelesen, nie
+ * geschrieben. Übungen mit im Klick gebauter Sitzung kehren ohne Sitzung zur Herkunft zurück.
+ */
+export async function bootAt(page: Page, route: Route, opts: BootOptions = {}): Promise<Booted> {
+  return boot(page, { migrated: true, ...opts, hash: `go=${encodeURIComponent(routeToString(route))}` });
+}
+
+/** Wartet, bis ein Bildschirm fertig eingeblendet ist (Routenname oder Systemzustand). */
+export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | Route['name']): Promise<void> {
   await page.locator(`[data-screen="${name}"]`).waitFor({ state: 'visible' });
   await page.waitForFunction((n) => {
     const el = document.querySelector(`[data-screen="${n}"]`);
@@ -86,30 +99,77 @@ export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 
   }, name);
 }
 
-/** Start ist „Heute"; „Dein Stand" liegt eine Navigation weiter. */
+/** Wurzel-Bildschirm eines Reiters (aus `src/app/shell/tabs.ts`). */
+export const tabRoot = (id: TabId): Route['name'] => (TABS.find((t) => t.id === id) ?? TABS[0]).root.name;
+
+/**
+ * Reiter öffnen und auf seiner Wurzel stehen (Neubau §2.4). Ein fremder Reiter zeigt seinen
+ * Stapel; ein zweiter Tipp auf den nun aktiven Reiter führt zur Wurzel.
+ */
+export async function openTab(page: Page, id: TabId): Promise<void> {
+  const root = tabRoot(id);
+  const btn = page.getByTestId(`tab-${id}`);
+  await btn.click();
+  if ((await btn.getAttribute('aria-current')) === 'page' && !(await page.locator(`[data-screen="${root}"]`).isVisible())) await btn.click();
+  await screen(page, root);
+}
+
+/**
+ * Einstieg per Test-ID öffnen (`hub-course`, `hub-grammar`, `hub-drill-*` …): probiert die Reiter
+ * aus der Reiterleiste der Reihe nach, bis der Einstieg sichtbar ist – unabhängig davon, ob es vier
+ * oder fünf Reiter gibt. WP0a: Einstiege der bisherigen Seite „Üben“ (`learn`) liegen hinter
+ * „Alle Übungen“ (`open-learn`) auf Heute.
+ */
+export async function openEntry(page: Page, testId: string): Promise<void> {
+  await page.getByTestId('tabbar').waitFor();
+  for (const t of TABS) {
+    await openTab(page, t.id);
+    const el = page.getByTestId(testId).first();
+    if (await el.isVisible()) {
+      await el.click();
+      return;
+    }
+  }
+  await openTab(page, 'today');
+  await page.getByTestId('open-learn').click();
+  await screen(page, 'learn');
+  await page.getByTestId(testId).first().click();
+}
+
+/** Bisherige Seite „Üben“ (Kurs, Kurzübungen, freie Runde, Lesen/Hören/Schreiben, Entdecken). */
+export async function openLearnPage(page: Page): Promise<void> {
+  await openTab(page, 'today');
+  await page.getByTestId('open-learn').click();
+  await screen(page, 'learn');
+}
+
+/** Profil öffnen (WP0a: der Profil-Knopf oben links führt zu „Dein Stand“; WP0b/P6: Profil-Blatt). */
+export async function openProfile(page: Page): Promise<void> {
+  const btn = page.getByTestId('open-profile');
+  await page.getByTestId('tabbar').waitFor();
+  for (let i = 0; i < 2 && !(await btn.isVisible()); i++) await page.getByTestId('tab-today').click();
+  await btn.click();
+}
+
+/** „Dein Stand“: über den Profil-Knopf (war ein Reiter). */
 export async function openOverview(page: Page): Promise<void> {
-  await screen(page, 'today');
-  await page.getByTestId('tab-overview').click();
+  await openProfile(page);
   await screen(page, 'overview');
 }
 
 /**
- * Einstellungen öffnen (UX-Beratung 27.09.): das Zahnrad sitzt auf „Stand" (und auf den
- * System-Bildschirmen ohne Reiter). Steht es nicht im Bild, erst zum Reiter „Stand".
+ * Einstellungen öffnen: Das Zahnrad steht auf jeder Seite und in jeder Übung (und auf den
+ * System-Bildschirmen ohne Reiter). Steht es nicht im Bild, erst zu „Dein Stand“.
  */
 export async function openSettings(page: Page): Promise<void> {
-  const gear = page.getByTestId('open-settings');
-  if (!(await gear.isVisible())) {
-    await page.getByTestId('tab-overview').click();
-    await screen(page, 'overview');
-  }
+  const gear = page.getByTestId('open-settings').first();
+  if (!(await gear.isVisible())) await openOverview(page);
   await gear.click();
 }
 
 /** Reiter „Sprechen" mit einem Bereich öffnen: Szenen · Business · Preply (UX-Beratung Nr. 7). */
 export async function openSpeak(page: Page, seg: 'scenes' | 'business' | 'preply' = 'scenes'): Promise<void> {
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
+  await openTab(page, 'speak');
   if (seg !== 'scenes' || (await page.getByTestId('speak-hub').getAttribute('data-seg')) !== 'scenes') await page.getByTestId(`speak-seg-${seg}`).click();
   await page.locator(`[data-testid="speak-hub"][data-seg="${seg}"]`).waitFor();
 }
