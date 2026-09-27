@@ -1,7 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen } from './fixtures';
+import { boot, openSpeak, layoutProblems, screen } from './fixtures';
 import { DAY, dump } from './trainerHelpers';
 
 // Business-Suite (Phase 3, Plan §9.2): Refiner mit Bausteinen (Tipp und Ziffern), Kopieren mit
@@ -13,10 +13,8 @@ type Doc = Record<string, unknown>;
 
 async function openHub(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
-  await page.getByTestId('speak-business').click();
-  await screen(page, 'business');
+  // Business ist ein Bereich von „Sprechen“ (UX-Beratung Nr. 7), kein eigener Hub mehr.
+  await openSpeak(page, 'business');
   await expect(page.getByTestId('biz-hub')).toBeVisible();
 }
 

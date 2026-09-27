@@ -13,6 +13,7 @@ import { engineEn } from './parts/engine.en';
 import { hintEn } from './parts/hint.en';
 import { sayEn } from './parts/say.en';
 import { repairEn } from './parts/repair.en';
+import { navEn } from './parts/nav.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -40,6 +41,8 @@ export const en: Record<MessageKey, string> = {
   ...sayEn,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   ...repairEn,
+  // UX review 09/27: new structure
+  ...navEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

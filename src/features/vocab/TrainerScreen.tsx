@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
-import { IconButton } from '../../ui/Button';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
@@ -14,6 +13,7 @@ import { abortExamples } from './examples';
 import { flush } from './persist';
 import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, touch, useSession } from './session';
 import { RepairItem } from '../repair/RepairItem';
+import { ExerciseTop } from '../learn/ui';
 
 // Vokabeltrainer: eine Karte zur Zeit, Kartenwechsel als kurze Seitwärts-Überblendung.
 // Esc verlässt die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
@@ -21,7 +21,7 @@ import { RepairItem } from '../repair/RepairItem';
 export function TrainerScreen() {
   const { t } = useT();
   const api = useHiddenInput();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const active = useSession((s) => s.active);
   const status = useSession((s) => s.status);
   const round = useSession((s) => s.round);
@@ -42,14 +42,14 @@ export function TrainerScreen() {
     api.blur();
     leaveSession();
     void flush();
-    go({ name: 'today' });
+    back();
   };
 
   useHotkeys({ escape: leave }, api.isInput);
 
   useEffect(() => {
-    if (!active && useNav.getState().route.name === 'trainer') go({ name: 'today' });
-  }, [active, go]);
+    if (!active && useNav.getState().route.name === 'trainer') back();
+  }, [active, back]);
 
   // Bildschirmwechsel: laufende KI-Anfragen für Beispielsätze abbrechen (A6.2).
   useEffect(() => () => abortExamples(), []);
@@ -75,17 +75,15 @@ export function TrainerScreen() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="trainer">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <IconButton icon="close" label={t('trClose')} onClick={leave} data-testid="trainer-close" />
-          {status === 'running' && total > 0 && (
-            <p className="lx-tnum text-sm text-muted" data-testid="trainer-progress">
-              {t('trProgress', { n: Math.max(1, current), total })}
-            </p>
-          )}
-        </div>
-        {round === 'extra' && <span className="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted">{t('trExtraBadge')}</span>}
-      </div>
+      <ExerciseTop
+        onClose={leave}
+        closeLabel={t('trClose')}
+        closeTestId="trainer-close"
+        progress={status === 'running' && total > 0 ? { n: current, total } : null}
+        progressTestId="trainer-progress"
+        ctx={round === 'extra' ? 'extra' : 'duty'}
+        duty="review"
+      />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={status === 'summary' ? 'summary' : `step-${step}`}

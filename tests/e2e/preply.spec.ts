@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen, type BootOptions } from './fixtures';
+import { boot, openSpeak, layoutProblems, screen, type BootOptions } from './fixtures';
 import { dump, writes } from './trainerHelpers';
 
 // Phase 5: Preply-Brücke (Plan §8.3, §10.2 preply.spec.ts, P-01 … P-07).
@@ -10,9 +10,9 @@ const RAW = 'Teacher: "It depends of the budget" -> depends on.\nHW: write 5 sen
 
 async function openPreply(page: Page, opts: BootOptions = {}) {
   const booted = await boot(page, { migrated: true, ...opts });
-  await openOverview(page);
-  await page.getByTestId('open-preply').click();
-  await page.locator('[data-screen="preply"]').waitFor({ state: 'visible' });
+  // Preply liegt seit der UX-Beratung 27.09. unter „Sprechen → Preply“.
+  await screen(page, 'today');
+  await openSpeak(page, 'preply');
   return booted;
 }
 
@@ -75,7 +75,7 @@ test.describe('Desktop 1440 DE', () => {
     expect(min(d['app/profile']!)).toBe(min(before) + 50);
     expect(d['app/profile']!.days).toEqual(before.days);
     expect(d['app/profile']!.xpDays).toEqual(before.xpDays);
-    await page.getByTestId('pp-back').click();
+    await page.getByTestId('tab-today').click();
     await screen(page, 'today');
     await expect(page.getByTestId('td-extra-preply')).toContainText('Preply-Stunde · 50 Min.');
     await expect(page.getByTestId('td-extra-preply').locator('button')).toHaveCount(0);

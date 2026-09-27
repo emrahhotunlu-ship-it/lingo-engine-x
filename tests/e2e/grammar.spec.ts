@@ -137,9 +137,9 @@ test('Auswahl, Lücke, Umformen, Satzkorrektur: alle vier Typen über zwei Runde
   await openGrammar(page);
   await page.getByTestId('gr-start').click();
   const a = await playRound(page);
-  // „Zurück" führt nach Heute; von dort wieder zur Grammatik.
+  // „Zurück" führt dorthin, woher die Runde kam: zur Grammatik (UX-Beratung Nr. 3).
   await page.getByTestId('summary-back').click();
-  await openGrammar(page);
+  await expect(page.getByTestId('grammar')).toBeVisible();
   await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
   await page.getByTestId('topic-start').click();
   const b = await playRound(page);

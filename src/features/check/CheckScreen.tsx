@@ -34,7 +34,7 @@ function AreaStat({ label, pair, testId }: { label: string; pair: Pair; testId: 
 export function CheckScreen() {
   const { t, lang, date } = useT();
   const api = useHiddenInput();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const s = useCheck();
   const item = s.items[s.pos];
   // Die Aufgabe merkt sich ihren Schritt: eine ausgeblendete Aufgabe kann nichts mehr eintragen.
@@ -45,13 +45,13 @@ export function CheckScreen() {
     api.blur();
     leaveCheck();
     void flush();
-    go({ name: 'overview', tab: 'history' });
+    back();
   };
   useHotkeys({ escape: leave }, api.isInput);
 
   useEffect(() => {
-    if (!s.active && useNav.getState().route.name === 'check') go({ name: 'overview', tab: 'history' });
-  }, [s.active, go]);
+    if (!s.active && useNav.getState().route.name === 'check') back();
+  }, [s.active, back]);
 
   const knownWords = useMemo(() => new Set(s.pool.map((c) => normalize(c.lemma))), [s.pool]);
   const rec = s.record;
@@ -63,7 +63,7 @@ export function CheckScreen() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 overflow-x-clip py-4 sm:py-8" data-testid="check-screen" data-status={s.status}>
-      <RoundTop onClose={leave} closeLabel={t('ckClose')} progress={s.status === 'running' ? { n: s.pos + 1, total: s.items.length } : null} ctx="xtra" />
+      <RoundTop onClose={leave} closeLabel={t('ckClose')} progress={s.status === 'running' ? { n: s.pos + 1, total: s.items.length } : null} ctx="extra" />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={s.status === 'summary' ? 'summary' : `c-${s.step}`}

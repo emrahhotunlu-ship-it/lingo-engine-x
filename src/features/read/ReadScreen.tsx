@@ -41,7 +41,7 @@ type Chosen = { id: string; fresh: true } | null;
 
 export function ReadScreen({ ctx }: { ctx: UnitCtx }) {
   const { t } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const input = useInputContext();
   const status = useInputLibrary((s) => s.status);
   const articles = useInputLibrary((s) => s.docs.articles);
@@ -74,7 +74,7 @@ export function ReadScreen({ ctx }: { ctx: UnitCtx }) {
   if (status === 'idle' || status === 'loading') return <ReadSkeleton />;
   if (status === 'error') {
     return (
-      <UnitShell kind="read" ctx={ctx} state="error" title={t('ch_read')} onClose={() => go({ name: 'today' })}>
+      <UnitShell kind="read" ctx={ctx} state="error" title={t('ch_read')} onClose={back}>
         <div className="flex flex-wrap items-center gap-3" role="alert">
           <p className="text-sm text-danger-text">{t('inLoadFailed')}</p>
           <Button icon="refresh" onClick={() => void ensureLibrary(true)}>
@@ -171,7 +171,7 @@ export function ReadScreen({ ctx }: { ctx: UnitCtx }) {
 
   // 4. Nichts mehr ungelesen: Claude erzeugt auf Klick (mit Themenwahl), sonst ein klarer Hinweis.
   return (
-    <UnitShell kind="read" ctx={ctx} state="empty" title={t('ch_read')} onClose={() => go({ name: 'today' })}>
+    <UnitShell kind="read" ctx={ctx} state="empty" title={t('ch_read')} onClose={back}>
       <Generator onCreated={(id) => setChosen({ id, fresh: true })} onOwn={() => setOwn(true)} />
     </UnitShell>
   );

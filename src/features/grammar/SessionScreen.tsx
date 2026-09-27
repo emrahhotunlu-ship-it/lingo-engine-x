@@ -18,7 +18,7 @@ import { commitGrammar, leaveGrammar, touchGrammar, useGrammarSession } from './
 export function GrammarSessionScreen() {
   const { t, lang } = useT();
   const api = useHiddenInput();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const s = useGrammarSession();
   const task = s.tasks[s.pos];
 
@@ -26,13 +26,13 @@ export function GrammarSessionScreen() {
     api.blur();
     leaveGrammar();
     void flush();
-    go({ name: 'grammar' });
+    back();
   };
   useHotkeys({ escape: leave }, api.isInput);
 
   useEffect(() => {
-    if (!s.active && useNav.getState().route.name === 'grammarSession') go({ name: 'grammar' });
-  }, [s.active, go]);
+    if (!s.active && useNav.getState().route.name === 'grammarSession') back();
+  }, [s.active, back]);
 
   useEffect(() => {
     const onAny = () => touchGrammar();

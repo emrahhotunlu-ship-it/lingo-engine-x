@@ -39,7 +39,7 @@ for (const size of SIZES) {
     await expect(item).toContainText('Damals hast du gesagt:');
     await expect(page.getByTestId('repair-wrong')).toContainText(A.wrong);
     await expect(page.getByTestId('repair-right')).toHaveCount(0);
-    await expect(page.getByTestId('trainer-progress')).toHaveText('Karte 1 von 3');
+    await expect(page.getByTestId('trainer-progress')).toHaveText('1 / 3');
     expect(await layoutProblems(page)).toEqual([]);
     const axe = await new AxeBuilder({ page }).include('[data-testid="repair-item"]').analyze();
     expect(axe.violations.map((v) => v.id)).toEqual([]);

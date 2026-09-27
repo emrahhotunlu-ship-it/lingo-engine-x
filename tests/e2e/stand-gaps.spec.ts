@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
 import { typeInGap } from './learnHelpers';
 import { openModule } from './inputHelpers';
 import { answerCheckItem, playCheck } from './progressHelpers';
@@ -115,9 +115,10 @@ test('M10: Angebot auf Heute erst nach der Pflicht; Abbruch vor 6 Antworten spei
   await expect(page.locator('[data-screen="check"]')).toBeVisible();
   await answerCheckItem(page, 1, 12);
   await answerCheckItem(page, 2, 12);
+  // ✕ führt dorthin zurück, woher der Check kam: nach Heute (UX-Beratung Nr. 3); in „Stand → Verlauf“ bleibt er erreichbar.
   await page.getByTestId('round-close').click();
-  await screen(page, 'overview');
-  await expect(page.getByTestId('tab-history')).toHaveAttribute('aria-selected', 'true');
+  await screen(page, 'today');
+  await openHistory(page);
   await expect(page.getByTestId('check-start')).toBeVisible();
   expect(((await profileOf(page)).checks as unknown[]).length).toBe(2);
   expect(errors).toEqual([]);
@@ -170,7 +171,7 @@ test('M21 + M22: Farbthema aus theme.p, umschaltbar; beruflicher Kontext wird in
   // Seed: theme {m: dark, p: ocean} – die App übernimmt das Farbthema der alten App.
   await expect(page.locator('html')).toHaveAttribute('data-palette', 'ocean');
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--lx-accent').trim())).toBe('#60a5fa');
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   const dialog = page.getByRole('dialog');
   await dialog.getByRole('radio', { name: 'Pflaume' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-palette', 'plum');
@@ -196,7 +197,7 @@ test('M18: „Als Preply-Stunde" im Text, an der Szene und im Wochenbericht', as
   await openModule(page, 'read');
   await expect(page.getByTestId('as-preply')).toBeVisible();
   await page.getByTestId('unit-close').click();
-  await screen(page, 'today');
+  await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
   // Szene (Einweisung)
   await page.getByTestId('tab-speak').click();
   await page.getByTestId('scene-card').first().click();
@@ -208,7 +209,7 @@ test('M18: „Als Preply-Stunde" im Text, an der Szene und im Wochenbericht', as
   await screen(page, 'overview');
   await page.getByTestId('tab-history').click();
   await page.getByTestId('weekly').getByTestId('as-preply').click();
-  await expect(page.locator('[data-screen="preply"]')).toBeVisible();
+  await expect(page.getByTestId('preply')).toBeVisible();
   await expect(page.locator('[data-testid="pp-ctx"] [data-value="about"]')).toHaveAttribute('aria-checked', 'true');
   expect(errors).toEqual([]);
 });
@@ -222,7 +223,7 @@ test('M18: vom Regelblatt zu „Vorbereiten" mit Anlass „Zu: Passiv"', async (
   const sheet = page.getByTestId('rule-sheet');
   await expect(sheet).toBeVisible();
   await sheet.getByTestId('as-preply').click();
-  await expect(page.locator('[data-screen="preply"]')).toBeVisible();
+  await expect(page.getByTestId('preply')).toBeVisible();
   await expect(page.getByTestId('rule-sheet')).toHaveCount(0);
   const about = page.locator('[data-testid="pp-ctx"] [data-value="about"]');
   await expect(about).toHaveAttribute('aria-checked', 'true');

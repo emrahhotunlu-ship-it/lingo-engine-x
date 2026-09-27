@@ -28,6 +28,7 @@ const item = {
 export function CourseScreen() {
   const { t, lang } = useT();
   const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const course = useLive((s) => s.docs['app/course']);
   useCompanionSee({ area: 'course', label: t('csTitle'), phase: 'idle' });
   const assess = useLive((s) => s.docs['app/assess']);
@@ -44,7 +45,7 @@ export function CourseScreen() {
   return (
     <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="course">
       <motion.div variants={item}>
-        <ScreenHeader eyebrow={t('lhCourse')} title={t('csTitle')} lead={t('csProgress', { done: doneN, total })} back={() => go({ name: 'learn' })} />
+        <ScreenHeader eyebrow={t('lhCourse')} title={t('csTitle')} lead={t('csProgress', { done: doneN, total })} back={back} />
       </motion.div>
       <motion.div variants={item}>
         <Bar value={total ? doneN / total : 0} label={t('csProgress', { done: doneN, total })} />

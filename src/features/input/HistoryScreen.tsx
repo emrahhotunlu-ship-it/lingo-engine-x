@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNav, type InputRoute } from '../../app/nav';
+import { TitleActions } from '../system/Chrome';
 import { useLive } from '../../data/live';
 import { feedbackFits } from '../../domain/input/feedbackLang';
 import { normalizeWriting } from '../../domain/input/writingRecord';
@@ -24,7 +25,7 @@ const obj = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v
 
 export function HistoryScreen({ kind }: { kind: Extract<InputRoute, { name: 'history' }>['kind'] }) {
   const { t, date, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const status = useInputLibrary((s) => s.status);
   const docs = useInputLibrary((s) => s.docs);
   const profile = useLive((s) => s.docs['app/profile']);
@@ -110,13 +111,13 @@ export function HistoryScreen({ kind }: { kind: Extract<InputRoute, { name: 'his
       }));
   })();
 
-  const back = () => go(kind === 'discover' ? { name: 'discover' } : { name: kind, ctx: 'extra' });
 
   return (
     <section className="flex flex-col gap-5 py-6 sm:py-10" data-testid="history-screen" data-kind={kind}>
       <header className="flex items-center gap-2">
-        <IconButton icon="close" label={t('inBack')} onClick={back} data-testid="unit-close" />
-        <h1 className="text-2xl font-semibold tracking-tight">{t('inHistoryOf', { channel: t(`ch_${kind}`) })}</h1>
+        <IconButton icon="arrowLeft" label={t('inBack')} onClick={back} data-testid="unit-close" className="-ml-2" />
+        <h1 className="min-w-0 flex-1 text-2xl font-semibold tracking-tight">{t('inHistoryOf', { channel: t(`ch_${kind}`) })}</h1>
+        <TitleActions />
       </header>
       {status !== 'ready' && kind !== 'listen' && kind !== 'discover' ? (
         <div className="flex flex-col gap-2" role="status" aria-label={t('inSkeleton')}>

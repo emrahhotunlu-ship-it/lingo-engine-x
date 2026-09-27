@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen, type Theme } from './fixtures';
+import { boot, openSpeak, layoutProblems, screen, type Theme } from './fixtures';
 
 // Phase 5: Barrierefreiheit und Gestalt (Plan §10.2 screens-phase5 / a11y-phase5, verkleinert):
 // je Modus und Breite Begleiter mit Antwort, Übersetzer-Ergebnis, Preply-Plan und Import-Vorschau.
@@ -53,9 +53,7 @@ for (const theme of THEMES) {
       await page.getByTestId('companion-close').click();
 
       // Preply: Plan und Import-Vorschau
-      await openOverview(page);
-      await page.getByTestId('open-preply').click();
-      await page.locator('[data-screen="preply"]').waitFor({ state: 'visible' });
+      await openSpeak(page, 'preply');
       await page.getByTestId('pp-create').click();
       await expect(page.getByTestId('pp-plan')).toBeVisible();
       expect(await axe(page, 'main')).toEqual([]);

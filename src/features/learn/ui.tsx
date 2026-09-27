@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { useNav, type Route } from '../../app/nav';
+import { leaveBack, useNav, type Route } from '../../app/nav';
 import { useLive } from '../../data/live';
 import { certainty } from '../../domain/grammar/bkt';
 import type { Ctx, Verdict } from '../../domain/learn/types';
@@ -15,6 +15,8 @@ import type { WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { Button, IconButton } from '../../ui/Button';
 import { DURATION, EASE_OUT } from '../../ui/motion';
+import { ExerciseBar } from '../../ui/ExerciseBar';
+import { ClaudeButton, TitleActions } from '../system/Chrome';
 import { firstOpenDuty, useToday } from '../today/state';
 import { startDuty } from './flow';
 
@@ -47,17 +49,21 @@ export function LearnStatus({ p, n, recent, kind, kindId, extra }: { p: number |
   );
 }
 
-/** Kopf eines Bereichs (Kurs, Grammatik, Wortschatz …) mit Zurück. */
+/**
+ * Kopf eines Unterbildschirms (Kurs, Grammatik, Wortschatz …): Zurück zur Herkunft links,
+ * rechts eigene Knöpfe und das Claude-Symbol (UX-Beratung Nr. 3/7). Reiter-Startseiten nutzen
+ * `TabTitle` ohne Zurück-Pfeil.
+ */
 export function ScreenHeader({ eyebrow, title, lead, back, right }: { eyebrow?: string; title: string; lead?: ReactNode; back?: () => void; right?: ReactNode }) {
   const { t } = useT();
   return (
     <header className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
-          {back && <IconButton icon="arrowLeft" label={t('lrBack')} onClick={back} data-testid="back" />}
+          {back && <IconButton icon="arrowLeft" label={t('lrBack')} onClick={back} data-testid="back" className="-ml-2" />}
           {eyebrow && <p className="lx-eyebrow">{eyebrow}</p>}
         </div>
-        {right}
+        <TitleActions>{right}</TitleActions>
       </div>
       <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
       {lead && <div className="max-w-2xl text-base text-muted">{lead}</div>}
@@ -65,39 +71,61 @@ export function ScreenHeader({ eyebrow, title, lead, back, right }: { eyebrow?: 
   );
 }
 
-/** Planleiste in Pflichtrunden: „Pflicht 2 von 3" (M11), Schritt laut `dutyStep`. */
-export function DutyBar({ ctx, duty = null }: { ctx: Ctx; duty?: DutyId | null }) {
+/** Kleines Wort unter dem Balken: „Pflicht · 2 von 3" (M11, Schritt laut `dutyStep`), sonst „Pflicht". */
+export function DutyBar({ ctx, duty = null }: { ctx: Ctx | 'extra'; duty?: DutyId | null }) {
   const { t } = useT();
   const st = useToday();
-  if (ctx !== 'duty' || st.duties.total < 2) return null;
+  if (ctx !== 'duty') return null;
+  if (st.duties.total < 2) return <span>{t('nvDuty')}</span>;
   const n = dutyStep(st.duties, duty);
   return (
-    <span className="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted" data-testid="duty-bar" data-n={n} data-total={st.duties.total}>
-      {t('lrDutyBar', { n, total: st.duties.total })}
+    <span data-testid="duty-bar" data-n={n} data-total={st.duties.total}>
+      {t('nvDutyStep', { n, total: st.duties.total })}
     </span>
   );
 }
 
-/** Kopf einer Runde: Schließen, Fortschritt, Pflicht- bzw. Extra-Kennzeichen. */
-export function RoundTop({ onClose, progress, ctx, closeLabel, duty = null }: { onClose: () => void; progress: { n: number; total: number } | null; ctx: Ctx; closeLabel?: string; duty?: DutyId | null }) {
+/**
+ * Die eine Übungsleiste (UX-Beratung Nr. 4): ✕ · Fortschrittsbalken „3 / 8" · Claude-Symbol,
+ * darunter „Pflicht" bzw. „Extra" als kleines Wort. Gilt für jede Vollbild-Übung.
+ */
+export function ExerciseTop({
+  onClose,
+  closeLabel,
+  closeTestId,
+  progress = null,
+  progressTestId,
+  ctx = null,
+  duty = null,
+}: {
+  onClose: () => void;
+  closeLabel?: string;
+  closeTestId?: string;
+  progress?: { n: number; total: number } | null;
+  progressTestId?: string;
+  ctx?: Ctx | 'extra' | null;
+  duty?: DutyId | null;
+}) {
   const { t } = useT();
+  const note = ctx === 'duty' ? <DutyBar ctx="duty" duty={duty} /> : ctx ? t('trExtraBadge') : null;
+  const has = !!progress && progress.total > 0;
   return (
-    <div className="flex items-center justify-between gap-3">
-      <div className="flex items-center gap-3">
-        <IconButton icon="close" label={closeLabel ?? t('trClose')} onClick={onClose} data-testid="round-close" />
-        {progress && progress.total > 0 && (
-          <p className="lx-tnum text-sm text-muted" data-testid="round-progress">
-            {t('lrProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total })}
-          </p>
-        )}
-      </div>
-      {ctx === 'duty' ? (
-        <DutyBar ctx={ctx} duty={duty} />
-      ) : (
-        <span className="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted">{t('trExtraBadge')}</span>
-      )}
-    </div>
+    <ExerciseBar
+      onClose={onClose}
+      closeLabel={closeLabel ?? t('trClose')}
+      closeTestId={closeTestId ?? 'round-close'}
+      progress={progress}
+      progressLabel={has ? t('nvProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total }) : undefined}
+      progressTestId={progressTestId ?? 'round-progress'}
+      note={note}
+      end={<ClaudeButton />}
+    />
   );
+}
+
+/** Kopf einer Runde (Grammatik, Übungen, Wochen-Check): die gemeinsame Übungsleiste. */
+export function RoundTop({ onClose, progress, ctx, closeLabel, duty = null }: { onClose: () => void; progress: { n: number; total: number } | null; ctx: Ctx | 'extra'; closeLabel?: string; duty?: DutyId | null }) {
+  return <ExerciseTop onClose={onClose} progress={progress} ctx={ctx} duty={duty} {...(closeLabel ? { closeLabel } : {})} />;
 }
 
 /** Soll nach grün ohne Hilfe automatisch weitergehen? (`app/profile.autoNext`, Standard an wie in der alten App.) */
@@ -318,6 +346,9 @@ export function dutyLabel(id: DutyId, t: (k: MessageKey) => string): string {
   return k ? t(k) : id;
 }
 
+/** Beschriftung des Rückwegs nach der Herkunft („Zurück zu Heute", „Zum Kurs" …). */
+const ORIGIN_LABEL: Partial<Record<Route['name'], MessageKey>> = { today: 'sumBack', learn: 'lrBackToLearn', course: 'lsBackToCourse', overview: 'ckBack' };
+
 /**
  * Primärknopf jeder Pflicht-Zusammenfassung (M11): „Weiter: {nächster offener Pflichtpunkt}",
  * sonst „Zurück zu Heute". Ein zweiter, ruhiger Knopf führt zurück.
@@ -327,16 +358,24 @@ export function SummaryActions({ onBack, backLabel, backTo }: { onBack: () => vo
   const api = useHiddenInput();
   const st = useToday();
   const go = useNav((s) => s.go);
+  const origin = useNav((s) => s.stack[s.stack.length - 1] ?? null);
   const next = st.ready ? firstOpenDuty(st) : null;
+  const label = origin ? t(ORIGIN_LABEL[origin.name] ?? 'lrBack') : (backLabel ?? t('sumBack'));
+  // UX-Beratung Nr. 3: zurück dorthin, woher man kam (`backTo` nur, wenn es keine Herkunft gibt).
   const back = () => {
-    onBack();
-    go(backTo ?? { name: 'today' });
+    const hasOrigin = useNav.getState().stack.length > 0;
+    if (!hasOrigin && backTo) {
+      onBack();
+      go(backTo);
+      return;
+    }
+    leaveBack(onBack);
   };
   if (!next)
     return (
       <div>
         <Button variant="primary" size="lg" onClick={back} data-testid="summary-back">
-          {backLabel ?? t('sumBack')}
+          {label}
         </Button>
       </div>
     );
@@ -356,7 +395,7 @@ export function SummaryActions({ onBack, backLabel, backTo }: { onBack: () => vo
         {t('lrNextDuty', { step: dutyLabel(next, t) })}
       </Button>
       <Button variant="ghost" onClick={back} data-testid="summary-back">
-        {backLabel ?? t('sumBack')}
+        {label}
       </Button>
     </div>
   );

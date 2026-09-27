@@ -28,7 +28,15 @@ export const useWatched = create<WatchState>(() => ({ docs: {}, invalid: {}, fai
 const RESUB = new Set(['unavailable']);
 const TERMINAL = new Set(['invalid_argument', 'resource_exhausted', 'quota_exceeded', 'revoked', 'not_granted', 'capability_disabled', 'capability_removed', 'transform_error']);
 
-const active = new Map<WatchedName, { count: number; stop: () => void }>();
+const active = new Map<WatchedName, { count: number; stop: () => void; release: ReturnType<typeof setTimeout> | null }>();
+
+/**
+ * Kurze Nachfrist, bevor das letzte Abmelden ein Abo wirklich beendet: Beim Bildschirmwechsel
+ * hängt der alte Bildschirm aus, bevor der neue (z. B. Sprechen → Rollenspiel) dieselbe Sammlung
+ * anmeldet. Ohne Frist würde das Abo kurz enden, die Daten verschwinden und der neue Bildschirm
+ * sich neu aufbauen (UX-Beratung 27.09.: Wechsel ohne Ausblend-Wartezeit).
+ */
+const RELEASE_MS = 400;
 
 function open(name: WatchedName): () => void {
   const db = getDb();
@@ -86,8 +94,13 @@ function open(name: WatchedName): () => void {
 /** Abo anmelden; die zurückgegebene Funktion meldet ab (das letzte Abmelden beendet das Abo). */
 export function watchCollection(name: WatchedName): () => void {
   const cur = active.get(name);
-  if (cur) cur.count++;
-  else active.set(name, { count: 1, stop: open(name) });
+  if (cur) {
+    cur.count++;
+    if (cur.release) {
+      clearTimeout(cur.release);
+      cur.release = null;
+    }
+  } else active.set(name, { count: 1, stop: open(name), release: null });
   let done = false;
   return () => {
     if (done) return;
@@ -95,7 +108,10 @@ export function watchCollection(name: WatchedName): () => void {
     const a = active.get(name);
     if (!a) return;
     a.count--;
-    if (a.count <= 0) {
+    if (a.count > 0 || a.release) return;
+    a.release = setTimeout(() => {
+      a.release = null;
+      if (a.count > 0 || active.get(name) !== a) return;
       a.stop();
       active.delete(name);
       useWatched.setState((s) => {
@@ -103,7 +119,7 @@ export function watchCollection(name: WatchedName): () => void {
         delete docs[name];
         return { docs };
       });
-    }
+    }, RELEASE_MS);
   };
 }
 
@@ -124,7 +140,10 @@ export function useCollection(name: WatchedName, enabled = true): ReadonlyMap<st
 
 /** Nur für Tests. */
 export function resetWatched(): void {
-  active.forEach((a) => a.stop());
+  active.forEach((a) => {
+    if (a.release) clearTimeout(a.release);
+    a.stop();
+  });
   active.clear();
   useWatched.setState({ docs: {}, invalid: {}, failed: {} });
 }

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, openSettings, screen } from './fixtures';
 import { answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
 
 // Kap. 4.3 / A7.4: leichte Vibration beim Prüfen in Lücke und Auswahl – nur nach
@@ -52,7 +52,10 @@ test('Einstellung „Vibration“ aus: keine Vibration; wieder an wird gespeiche
   const { errors } = await startTrainer(page, { haptic: false });
   await answerCurrent(page);
   expect(await vibs(page)).toEqual([]);
-  await page.getByTestId('open-settings').click();
+  // In Übungen gibt es kein Zahnrad (UX-Beratung Nr. 4): Runde schließen, dann über „Stand“.
+  await page.getByTestId('trainer-close').click();
+  await screen(page, 'today');
+  await openSettings(page);
   const sw = page.getByTestId('set-haptic');
   await expect(sw).toBeVisible();
   await expect(sw).toHaveAttribute('aria-checked', 'false');
@@ -66,7 +69,9 @@ test('iPhone ohne navigator.vibrate: Hinweis statt Schalter, Prüfen ohne Fehler
   const { errors } = await startTrainer(page);
   await answerCurrent(page);
   await answerCurrent(page, { wrong: true });
-  await page.getByTestId('open-settings').click();
+  await page.getByTestId('trainer-close').click();
+  await screen(page, 'today');
+  await openSettings(page);
   await expect(page.getByTestId('haptic-none')).toBeVisible();
   await expect(page.getByTestId('set-haptic')).toHaveCount(0);
   expect(errors).toEqual([]);

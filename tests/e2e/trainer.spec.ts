@@ -61,7 +61,8 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   await expect(page.getByTestId('done-item')).toBeVisible();
   await expect(page.getByTestId('done-item').locator('button')).toHaveCount(0);
   await expect(page.getByTestId('start')).toHaveCount(0);
-  await expect(page.getByTestId('start-extra')).toBeVisible();
+  await expect(page.getByTestId('offer')).toHaveCount(1);
+  await expect(page.getByTestId('more-practice')).toBeVisible();
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

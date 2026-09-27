@@ -5,7 +5,7 @@ import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
 import { useAiStatus } from '../../ai/status';
 import type { ChunkSuggestion, SceneView } from '../../domain/speak/types';
-import { Button, IconButton } from '../../ui/Button';
+import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Icon } from '../../ui/Icon';
 import { Sheet } from '../../ui/Sheet';
@@ -20,6 +20,7 @@ import { useRoleplay } from './useRoleplay';
 import type { TakeInput } from './TakeChunkButton';
 import { useSceneLibrary } from './useSceneLibrary';
 import { useCompanionSee } from '../companion/seeing';
+import { ExerciseTop } from '../learn/ui';
 
 // Rollenspiel (Plan §5.2): Chat mit Streaming und Stopp, Analysepanel (Desktop rechts, Handy
 // inline unter dem Satz), Beenden → Bericht. Kopf: Status statt Text (Szene · Zug n · Ziel-Chip).
@@ -40,7 +41,7 @@ export function useIsDesktop(): boolean {
 export function RoleplayScreen() {
   const { t } = useT();
   const route = useNav((s) => s.route);
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const sceneId = route.name === 'roleplay' ? route.sceneId : '';
   const wantResume = route.name === 'roleplay' && !!route.resume;
   const { scenes } = useSceneLibrary();
@@ -59,7 +60,7 @@ export function RoleplayScreen() {
     return (
       <div className="flex flex-col items-start gap-4 py-6" data-testid="roleplay" data-state="missing">
         <p className="text-base text-muted">{t('spSceneMissing')}</p>
-        <Button icon="arrowLeft" onClick={() => go({ name: 'speak' })}>
+        <Button icon="arrowLeft" onClick={back}>
           {t('spBack')}
         </Button>
       </div>
@@ -71,7 +72,7 @@ export function RoleplayScreen() {
 
 function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | null }) {
   const { t, tn, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const rp = useRoleplay(scene, resume);
   const { snap, state } = rp;
   const c = snap.context;
@@ -129,8 +130,8 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
 
   return (
     <div data-testid="roleplay" data-state={state} className="flex flex-col gap-4 py-4 sm:py-6">
+      <ExerciseTop onClose={back} closeLabel={t('spBack')} closeTestId="rp-close" ctx="extra" />
       <header className="flex items-center gap-x-2 sm:gap-x-3">
-        <IconButton icon="arrowLeft" label={t('spBack')} onClick={() => go({ name: 'speak' })} />
         <div className="min-w-0 flex-1">
           <h1 className="line-clamp-2 text-base font-semibold tracking-tight sm:text-lg">{scene.title}</h1>
           <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted">

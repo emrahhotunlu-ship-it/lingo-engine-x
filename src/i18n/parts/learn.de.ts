@@ -3,10 +3,10 @@
 
 export const learnDe = {
   // Navigation und Rahmen
-  tabLearn: 'Lernen',
+  tabLearn: 'Üben',
   tabOpen: '{n} offen',
   lrBack: 'Zurück',
-  lrBackToLearn: 'Zurück zu Lernen',
+  lrBackToLearn: 'Zurück zu Üben',
   lrProgress: 'Aufgabe {n} von {total}',
   lrDutyBar: 'Pflicht {n} von {total}',
   lrDutyLesson: 'Lektion',
@@ -25,11 +25,11 @@ export const learnDe = {
   certainty5: 'gefestigt',
 
   // Lernen-Übersicht
-  lhTitle: 'Lernen',
+  lhTitle: 'Üben',
   lhLead: 'Kurs, Wortschatz, Grammatik und Übungen. Was heute Pflicht ist, steht auf „Heute“.',
   lhCourse: 'Kurs',
   lhGrammar: 'Grammatik',
-  lhDrills: 'Übungen',
+  lhDrills: 'Kurzübungen',
   lhVocab: 'Wortschatz',
   lhWissen: 'Wissen',
   lhLibrary: 'Nachschlagen und üben',

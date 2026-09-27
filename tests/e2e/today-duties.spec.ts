@@ -56,14 +56,17 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
     await expect(status).toHaveText('Fertig für heute');
     await expect(status).toHaveAttribute('data-status', 'allDone');
   } else {
-    await expect(status).toHaveText(`Noch nicht fertig · ${n} von 3 · es fehlt: ${open.map((d) => LABEL[d]).join(', ')}`);
+    await expect(status).toHaveText(`Heute · ${n} von 3`);
     await expect(status).toHaveAttribute('data-status', 'open');
   }
   // Häkchen: genau die erledigten Punkte, in Plan-Reihenfolge; keiner hat ein bedienbares Kind.
   const items = page.getByTestId('duty');
   await expect(items).toHaveCount(3);
   expect(await items.evaluateAll((els) => els.map((e) => [e.getAttribute('data-duty'), e.getAttribute('data-state')]))).toEqual(DUTIES.map((d) => [d, done.has(d) ? 'done' : 'open']));
-  await expect(page.locator('[data-testid="duty"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(0);
+  // Erledigt ist Zustand (Kap. 2.2): kein erledigter Punkt hat ein bedienbares Kind; bedienbar ist nur der eine Startknopf.
+  await expect(page.locator('[data-testid="duty"][data-state="done"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(0);
+  await expect(page.locator('[data-testid="duty"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(open.length ? 1 : 0);
+  for (const d of open) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText(LABEL[d] ?? d);
   for (const d of DUTIES) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText(done.has(d) ? 'erledigt' : 'offen');
   // Heldenkarte = erster offener Punkt, genau ein Primärknopf; alles erledigt → kein Knopf, Extra sichtbar.
   if (open.length) {

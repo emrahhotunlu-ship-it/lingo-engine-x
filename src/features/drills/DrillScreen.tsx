@@ -23,7 +23,7 @@ const DRILL_NAME: Record<string, MessageKey> = { dictate: 'drDictate', cloze: 'd
 export function DrillScreen() {
   const { t } = useT();
   const api = useHiddenInput();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const s = useDrill();
   const items = itemsOf(s);
   useCompanionSee({ area: 'drills', label: t(DRILL_NAME[s.kind] ?? 'drDictate'), phase: 'idle' });
@@ -33,13 +33,13 @@ export function DrillScreen() {
     stopSpeech();
     leaveDrill();
     void flush();
-    go({ name: 'learn' });
+    back();
   };
   useHotkeys({ escape: leave }, api.isInput);
 
   useEffect(() => {
-    if (!s.active && useNav.getState().route.name === 'drill') go({ name: 'learn' });
-  }, [s.active, go]);
+    if (!s.active && useNav.getState().route.name === 'drill') back();
+  }, [s.active, back]);
 
   useEffect(() => {
     const onAny = () => touchDrill();

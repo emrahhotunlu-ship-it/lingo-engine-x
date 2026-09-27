@@ -41,7 +41,7 @@ const nearestRate = (r: unknown): number => {
 
 export function ListenUnit({ item, ctx, day, start, record, onAnother }: Props) {
   const { t, tn, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const clock = useActiveClock();
   const speech = useSpeech((s) => s.status);
   const profileRate = useLive((s) => s.docs['app/profile']?.rate);
@@ -81,7 +81,7 @@ export function ListenUnit({ item, ctx, day, start, record, onAnother }: Props) 
 
   const close = () => {
     stopSpeech();
-    go({ name: 'today' });
+    back();
   };
   const status = <StatusLine channel="listen" level={item.level} domain={item.domain} extra={state.context.plays > 0 ? tn('lsPlays', state.context.plays) : null} />;
   const vocab = item.vocab.slice(0, 5).map((v) => ({ en: v.w, de: v.de, note: lang === 'en' ? v.def : undefined }));
@@ -222,9 +222,6 @@ export function ListenUnit({ item, ctx, day, start, record, onAnother }: Props) 
               {t('inAnother')}
             </Button>
           )}
-          <Button variant="ghost" onClick={() => go({ name: 'history', kind: 'listen' })} data-testid="open-history">
-            {t('inHistory')}
-          </Button>
         </div>
       </div>
     );

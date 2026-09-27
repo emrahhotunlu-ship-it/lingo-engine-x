@@ -52,16 +52,15 @@ function removeTask(key: string): void {
 export const isRunning = (t: AiTask | undefined): boolean => !!t && t.status === 'running';
 
 /**
- * Reiter mit laufender KI-Korrektur (M13, Ladepunkt): Entdecken-Beiträge am Reiter „Entdecken",
- * Pflicht-Einheiten an „Heute", freiwillige Lesen/Schreiben-Einheiten an „Lernen".
+ * Reiter mit laufender KI-Korrektur (M13, Ladepunkt): Pflicht-Einheiten an „Heute", freiwillige
+ * Lesen/Schreiben-Einheiten und Entdecken-Beiträge an „Üben" (UX-Beratung 27.09.: Entdecken liegt in Üben).
  */
 export function runningTabs(tasks: Readonly<Record<string, AiTask>>): Set<TabName> {
   const out = new Set<TabName>();
   for (const t of Object.values(tasks)) {
     if (t.status !== 'running') continue;
     const r = t.route;
-    if (r.name === 'discover' || r.name === 'discoverItem' || t.kind === 'discover') out.add('discover');
-    else if ('ctx' in r && r.ctx === 'duty') out.add('today');
+    if ('ctx' in r && r.ctx === 'duty') out.add('today');
     else out.add('learn');
   }
   return out;

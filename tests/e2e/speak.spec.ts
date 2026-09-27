@@ -48,6 +48,9 @@ test('Übersicht: Szenen aus Inhalt und Datenbank, KI-Szene, unvollständige Sze
   await expect(page.locator('[data-testid="scene-card"][data-src="legacy"]')).toHaveCount(6);
   await expect(page.locator('[data-testid="scene-card"][data-scene="sc-price"]')).toContainText('Preis');
   await expect(page.locator('[data-testid="scene-card"][data-scene="sc-pitch"]')).toContainText('Vertriebspartnerschaft');
+  // Unvollständige Szenen stehen nicht in der Liste, sondern zugeklappt darunter (UX-Beratung Nr. 7).
+  await expect(page.locator('[data-testid="scene-card"][data-scene="sc-broken"]')).toBeHidden();
+  await page.getByTestId('scenes-incomplete').locator('summary').click();
   await page.locator('[data-testid="scene-card"][data-scene="sc-broken"]').click();
   await expect(page.getByTestId('briefing')).toBeVisible();
   await expect(page.getByTestId('briefing-start')).toHaveCount(0);
@@ -131,8 +134,9 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   // Heute: Das Gespräch zählt nicht als „Wiederholen“; Angebote erst nach der Pflicht (Kap. 2.1).
   await page.getByTestId('report-home').click();
   await screen(page, 'today');
-  await expect(page.getByTestId('today-status')).toHaveText(/0 von 3 · es fehlt: Wiederholen/);
-  await expect(page.getByTestId('today-offers')).toHaveCount(0);
+  await expect(page.getByTestId('today-status')).toHaveText('Heute · 0 von 3');
+  await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
+  await expect(page.getByTestId('extra')).toHaveCount(0);
   // Reiter „Sprechen“: erledigt ist Zustand, kein Knopf (Kap. 2.2).
   await page.getByTestId('tab-speak').click();
   await screen(page, 'speak');

@@ -34,7 +34,7 @@ export function openPreplyEntry(id: string | null): void {
 /** „Als Preply-Stunde" (M18): öffnet Vorbereiten, optional mit Anlass-Chip „Zu: {Titel}". */
 export function openPreplyPrep(topic: { title: string } | null): void {
   usePreply.setState({ tab: 'prep', openId: null, pendingTopic: topic?.title.trim() ? { title: topic.title.trim().slice(0, 120), seq: ++seq } : null });
-  useNav.getState().go({ name: 'preply' });
+  useNav.getState().go({ name: 'speak', seg: 'preply' });
 }
 
 export function receivePreply(docs: ReadonlyMap<string, Doc>): void {

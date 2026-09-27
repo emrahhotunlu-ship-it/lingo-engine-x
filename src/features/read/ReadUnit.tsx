@@ -39,7 +39,7 @@ type Props = {
 
 export function ReadUnit({ item, pool, ctx, day, start, readingId, quiz, badge, extra, onAnother }: Props) {
   const { t, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const clock = useActiveClock();
   const questions = useMemo(() => articleQuestions(item, pool).map((q) => shuffleOptions(q, `${day}|${item.id}`)), [item, pool, day]);
   const live = useRef({ item, questions, day, ctx });
@@ -58,7 +58,7 @@ export function ReadUnit({ item, pool, ctx, day, start, readingId, quiz, badge, 
   const n = quiz ? quiz.n : results.length;
   const route = { name: 'read' as const, ctx };
 
-  const close = () => go({ name: 'today' });
+  const close = () => back();
   const status = <StatusLine channel="read" level={item.level} domain={item.domain} minutes={readingMinutes(item.text)} />;
   const glossary = item.glossary.slice(0, 6).map((g) => ({ en: g.w, de: g.de, note: lang === 'en' ? g.def : undefined }));
 
@@ -150,9 +150,6 @@ export function ReadUnit({ item, pool, ctx, day, start, readingId, quiz, badge, 
               {t('inAnother')}
             </Button>
           )}
-          <Button variant="ghost" onClick={() => go({ name: 'history', kind: 'read' })} data-testid="open-history">
-            {t('inHistory')}
-          </Button>
         </div>
       </div>
     );

@@ -25,7 +25,6 @@ export function SceneCard({ scene, onOpen }: { scene: SceneView; onOpen: () => v
       transition={{ duration: DURATION.fast }}
       onClick={onOpen}
       className={`lx-glass flex w-full flex-col gap-2 rounded-[var(--radius-card)] p-5 text-left ${scene.valid ? '' : 'opacity-60'}`}
-      style={{ boxShadow: 'inset 3px 0 0 0 var(--lx-ch-speak), var(--lx-shadow)' }}
     >
       <span className="flex items-start justify-between gap-3">
         <span className="text-base font-semibold leading-snug">{scene.title}</span>

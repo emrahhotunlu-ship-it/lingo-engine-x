@@ -15,6 +15,7 @@ import { engineDe } from './parts/engine.de';
 import { hintDe } from './parts/hint.de';
 import { sayDe } from './parts/say.de';
 import { repairDe } from './parts/repair.de';
+import { navDe } from './parts/nav.de';
 
 export const de = {
   ...aiDe,
@@ -41,6 +42,8 @@ export const de = {
   ...sayDe,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   ...repairDe,
+  // UX-Beratung 27.09.: neue Grundstruktur
+  ...navDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { TitleActions } from '../system/Chrome';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
 import { useAiAvailable } from '../../ai/scope';
@@ -26,6 +27,7 @@ export function PlaybookScreen() {
   const { t, lang } = useT();
   const route = useNav((s) => s.route);
   const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const id = route.name === 'playbook' ? route.id : undefined;
   const pb = id ? playbookById(id) : undefined;
   useCompanionSee({ area: 'business', label: pb ? `${t('bizPlay')} · ${pb.title[lang]}` : `${t('bizTitle')} · ${t('bizPlay')}`, phase: 'idle' });
@@ -34,11 +36,12 @@ export function PlaybookScreen() {
     return (
       <div className="flex flex-col gap-6 py-6" data-testid="playbooks">
         <header className="flex items-start gap-2">
-          <IconButton icon="arrowLeft" label={t('spBack')} onClick={() => go({ name: 'business' })} />
-          <div className="flex flex-col gap-1">
+          <IconButton icon="arrowLeft" label={t('spBack')} onClick={back} className="-ml-2 flex-none" data-testid="back" />
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
             <h1 className="text-2xl font-semibold tracking-tight">{t('bizPlay')}</h1>
             <p className="text-sm text-muted">{t('pbLead')}</p>
           </div>
+          <TitleActions />
         </header>
         <div className="grid gap-3 md:grid-cols-2">
           {PLAYBOOKS.map((p) => (
@@ -83,8 +86,8 @@ function Tree({ pb }: { pb: Playbook }) {
   return (
     <div className="flex flex-col gap-5 py-6" data-testid="playbook" data-id={pb.id}>
       <header className="flex items-start gap-2">
-        <IconButton icon="arrowLeft" label={t('spBack')} onClick={() => (path.length > 1 ? setPath(path.slice(0, -1)) : go({ name: 'playbook' }))} />
-        <div className="flex min-w-0 flex-col gap-1">
+        <IconButton icon="arrowLeft" label={t('spBack')} onClick={() => (path.length > 1 ? setPath(path.slice(0, -1)) : go({ name: 'playbook' }))} className="-ml-2 flex-none" data-testid="back" />
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
           <h1 className="text-2xl font-semibold tracking-tight">{pb.title[lang]}</h1>
           <nav aria-label={t('pbPath')} className="flex flex-wrap items-center gap-1 text-xs text-muted" data-testid="pb-crumbs">
             {path.map((nid, i) => {
@@ -107,6 +110,7 @@ function Tree({ pb }: { pb: Playbook }) {
             })}
           </nav>
         </div>
+        <TitleActions />
       </header>
 
       <AnimatePresence mode="wait" initial={false}>

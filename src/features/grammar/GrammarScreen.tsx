@@ -13,6 +13,7 @@ import { unseenCount } from '../../domain/grammar/tasks';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
+import { Icon } from '../../ui/Icon';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
 import { Sheet } from '../../ui/Sheet';
@@ -21,6 +22,7 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { toast } from '../../ui/Toast';
 import { useLearnInputs } from '../learn/inputs';
 import { CERTAINTY_KEYS, ScreenHeader } from '../learn/ui';
+import { RuleSearch } from './WissenScreen';
 import { generateTopicTasks } from './generate';
 import { setExtraTasks, startGrammar } from './session';
 import { useCompanionSee } from '../companion/seeing';
@@ -57,6 +59,7 @@ export function GrammarScreen() {
   const { t, tn, lang } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const now = useClock((s) => s.now);
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   const [open, setOpen] = useState<string | null>(null);
@@ -86,7 +89,7 @@ export function GrammarScreen() {
   return (
     <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="grammar">
       <motion.div variants={item}>
-        <ScreenHeader eyebrow={t('lhGrammar')} title={t('grTitle')} lead={t('grLead')} back={() => go({ name: 'learn' })} />
+        <ScreenHeader eyebrow={t('lhGrammar')} title={t('grTitle')} lead={t('grLead')} back={back} />
       </motion.div>
       <motion.div variants={item} className="flex flex-wrap gap-3">
         <Button variant="primary" iconAfter="arrowRight" onClick={() => start('xtra')} data-testid="gr-start">
@@ -97,9 +100,15 @@ export function GrammarScreen() {
             {t('grErrors', { n: due.length })}
           </Button>
         )}
-        <Button variant="ghost" icon="book" onClick={() => go({ name: 'wissen' })} data-testid="open-wissen">
-          {t('lhWissen')}
-        </Button>
+      </motion.div>
+      {/* UX-Beratung Nr. 9: „Wissen" geht in Grammatik auf – Suche oben, typische Fallen als Zeile. */}
+      <motion.div variants={item} className="flex flex-col gap-1">
+        <RuleSearch onOpen={setOpen} />
+        <button type="button" onClick={() => go({ name: 'wissen' })} data-testid="open-wissen" className="flex min-h-12 w-full items-center gap-3 text-left text-sm font-medium text-muted transition-colors hover:text-fg">
+          <Icon name="book" size={18} className="flex-none" />
+          <span className="flex-1">{t('grTrapsLink')}</span>
+          <Icon name="arrowRight" size={16} className="flex-none text-subtle" />
+        </button>
       </motion.div>
       <motion.ul variants={item} className="grid gap-2 sm:grid-cols-2" aria-label={t('grTopics')}>
         {topics.map((tp) => {

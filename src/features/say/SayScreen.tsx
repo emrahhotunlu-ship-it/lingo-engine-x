@@ -12,7 +12,7 @@ import { EnglishText } from '../../engine/EnglishText';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
 import { sayCheck, type SayCheckOut } from '../../prompts/sayCheck';
-import { Button, IconButton } from '../../ui/Button';
+import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
@@ -20,7 +20,8 @@ import { useCompanionSee } from '../companion/seeing';
 import { AiRunPanel, isBusy } from '../input/AiRunPanel';
 import { clearDraft, loadDraft } from '../input/draft';
 import { DraftArea } from '../input/DraftArea';
-import { SummaryActions } from '../learn/ui';
+import { ExerciseTop, SummaryActions } from '../learn/ui';
+import { useToday } from '../today/state';
 import { flush } from '../progress/persist';
 import { saveRepairs } from '../repair/store';
 import { TakeChunkButton } from '../speak/TakeChunkButton';
@@ -35,6 +36,9 @@ import { recordSayDone, saveSayItem } from './persist';
 // nie: die Antwort wird dann ohne Prüfung gespeichert. Keine Selbstbewertung (A7).
 
 type Phase = 'write1' | 'feedback' | 'write2' | 'final';
+
+/** Schritt in der Übungsleiste: 1 Schreiben · 2 Rückmeldung und zweiter Versuch · 3 Vergleich. */
+const STEP_OF: Record<Phase, number> = { write1: 1, feedback: 2, write2: 2, final: 3 };
 
 const MAX_WORDS = 120;
 const TEXT_MAX = 1500;
@@ -69,7 +73,8 @@ function SoftTimer({ start, total }: { start: number; total: number }) {
 
 export function SayScreen() {
   const { t, tn, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
+  const dutyToday = useToday().duties.items.some((d) => d.id === 'ch:say');
   const ai = useAiAvailable();
   const [day] = useState(() => useClock.getState().today);
   const [shift, setShift] = useState(0);
@@ -95,7 +100,7 @@ export function SayScreen() {
   const itemId = useMemo(() => (sit ? sayId(sit.id, t0) : ''), [sit, t0]);
 
   useCompanionSee({ area: 'write', label: t('sayTitle'), phase: phase === 'feedback' || phase === 'final' ? 'feedback' : 'idle', ...(situation ? { detail: situation } : {}) });
-  useHotkeys({ escape: () => go({ name: 'today' }) }, () => false);
+  useHotkeys({ escape: back }, () => false);
 
   const words1 = wordCount(text1);
   const words2 = wordCount(text2);
@@ -186,13 +191,10 @@ export function SayScreen() {
       aria-labelledby={`${infoId}-title`}
     >
       <header className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <IconButton icon="close" label={t('inLeave')} onClick={() => go({ name: 'today' })} data-testid="say-close" className="-ml-2" />
-          <span className="inline-block h-4 w-0.5 rounded-full" style={{ background: 'var(--lx-ch-speak)' }} aria-hidden="true" />
-          <h1 id={`${infoId}-title`} className="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight">
-            {t('sayTitle')}
-          </h1>
-        </div>
+        <ExerciseTop onClose={back} closeLabel={t('inLeave')} closeTestId="say-close" progress={{ n: STEP_OF[phase], total: 3 }} ctx={dutyToday ? 'duty' : 'extra'} duty="ch:say" />
+        <h1 id={`${infoId}-title`} className="text-lg font-semibold tracking-tight">
+          {t('sayTitle')}
+        </h1>
         <p className="lx-tnum text-xs font-medium text-muted" data-testid="say-status">
           {statusParts.join(' · ')}
         </p>

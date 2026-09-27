@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openOverview } from './fixtures';
+import { boot, openSettings, openOverview } from './fixtures';
 
 type Dump = Record<string, Record<string, unknown>>;
 const dump = (page: Page) =>
@@ -10,7 +10,7 @@ test.use({ viewport: { width: 1440, height: 900 } });
 test('Sprache und Darstellung werden sofort angewendet und in app/profile gespeichert', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   const dialog = page.getByRole('dialog', { name: 'Einstellungen' });
   await expect(dialog).toBeVisible();
 
@@ -37,7 +37,7 @@ test('Sprache und Darstellung werden sofort angewendet und in app/profile gespei
 test('Tab bleibt im geöffneten Dialog (Tastaturbedienung)', async ({ page }) => {
   await boot(page, { migrated: true });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   for (let i = 0; i < 20; i++) {
@@ -51,7 +51,7 @@ test('Tab bleibt im geöffneten Dialog (Tastaturbedienung)', async ({ page }) =>
 test('Diagnose zeigt Fähigkeiten, Dokumentzahl und Datenversion', async ({ page }) => {
   await boot(page, { migrated: true });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   const dialog = page.getByRole('dialog');
   // Zugeklappt (UX-Beratung Nr. 11), die App-Version steht schon in der Zeile.
   await expect(dialog.getByTestId('diag-toggle')).toContainText('Version ');
@@ -67,7 +67,7 @@ test('scheitert das Speichern, wird die Änderung zurückgenommen und gemeldet',
   const { errors } = await boot(page, { migrated: true });
   await openOverview(page);
   await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { setFailWrites(c: string): void } } }).__LINGO_FAKE__.db.setFailWrites('invalid_argument'));
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await page.getByRole('radio', { name: 'Hell' }).click();
   await expect(page.getByRole('alert')).toContainText('Konnte nicht gespeichert werden');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
@@ -80,7 +80,7 @@ test('ein ungültiges Profil wird gemeldet, angezeigt und beim Speichern nie ers
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { rate: 'schnell' } } } });
   await openOverview(page);
   await expect(page.getByTestId('streak-count')).toHaveText('12');
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await page.getByRole('radio', { name: 'English' }).click();
   await expect.poll(async () => (await dump(page))['app/profile']?.lang).toBe('en');
   const profile = (await dump(page))['app/profile'] ?? {};
@@ -95,7 +95,7 @@ test('ein ungültiges Profil wird gemeldet, angezeigt und beim Speichern nie ers
 test('Datenexport über downloads liefert alle Dokumente als JSON', async ({ page }) => {
   await boot(page, { migrated: true });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await page.getByRole('button', { name: 'Alle Daten als JSON sichern' }).click();
   await expect(page.getByText('Sicherung gespeichert.')).toBeVisible();
   const saved = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ data: string }> } }).__LINGO_FAKE__.saved[0]?.data ?? '{}');
@@ -112,7 +112,7 @@ test('Englisch: Sicherung heißt „backup", Diagnose-Meldungen auf Englisch', a
     localStorage: { 'lx:diag': JSON.stringify([{ id: 1, t: Date.parse('2026-09-20T20:00:00+02:00'), level: 'warn', scope: 'grammar:generate', code: 'invalid_document', message: 'Pool ungültig – nicht überschrieben' }]) },
   });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await page.getByRole('button', { name: 'Back up all data as JSON' }).click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ filename: string }> } }).__LINGO_FAKE__.saved[0]?.filename ?? '')).toBe('lingo-engine-x-backup-2026-09-20.json');
   await page.getByTestId('diag-toggle').click();
@@ -127,7 +127,7 @@ test('Englisch: Sicherung heißt „backup", Diagnose-Meldungen auf Englisch', a
 test('Tagesziel, neue Wörter pro Tag und Ton bleiben nach dem Neuladen', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { persist: true, capabilities: { sample: false } } });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await page.getByTestId('set-goalmin').getByRole('radio', { name: '15' }).click();
   await page.getByTestId('set-newperday').getByRole('radio', { name: '10' }).click();
   await expect.poll(async () => (await dump(page))['app/profile']?.goalMin).toBe(15);
@@ -135,7 +135,7 @@ test('Tagesziel, neue Wörter pro Tag und Ton bleiben nach dem Neuladen', async 
   await expect(page.getByTestId('sound-section')).toBeVisible();
   await page.reload();
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await expect(page.getByTestId('set-goalmin').getByRole('radio', { name: '15' })).toHaveAttribute('aria-checked', 'true');
   await expect(page.getByTestId('set-newperday').getByRole('radio', { name: '10' })).toHaveAttribute('aria-checked', 'true');
   expect(errors).toEqual([]);
@@ -178,7 +178,7 @@ test('Ton an/aus wird in app/profile.sound gespeichert (WebAudio nachgebildet)',
   });
   await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   const sw = page.getByTestId('set-sound');
   await expect(sw).toHaveAttribute('aria-checked', 'false');
   await sw.click();
@@ -192,7 +192,7 @@ test('scheitert das Speichern des Tagesziels, springt die Auswahl zurück und es
   await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openOverview(page);
   await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { setFailWrites(c: string): void } } }).__LINGO_FAKE__.db.setFailWrites('invalid_argument'));
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await page.getByTestId('set-goalmin').getByRole('radio', { name: '40' }).click();
   await expect(page.getByRole('alert').filter({ hasText: 'Konnte nicht gespeichert werden' })).toBeVisible();
   await expect(page.getByTestId('set-goalmin').getByRole('radio', { name: '25' })).toHaveAttribute('aria-checked', 'true');
@@ -202,7 +202,7 @@ test('scheitert das Speichern des Tagesziels, springt die Auswahl zurück und es
 test('gespeicherte Stimme fehlt auf dem Gerät: Hinweis, Probe hören spricht mit der besten US-Stimme', async ({ page }) => {
   await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/profile': { voice: 'Stimme-die-es-nicht-gibt' } } } });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await expect(page.getByTestId('voice-missing')).toBeVisible();
   await page.getByTestId('voice-preview').first().click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { spoken: string[] } }).__LINGO_FAKE__.spoken.length)).toBeGreaterThan(0);

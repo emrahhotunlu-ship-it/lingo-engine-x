@@ -26,7 +26,7 @@ const LIFE_GENRES: readonly ListenGenre[] = ['podcast', 'news', 'announcement'];
 
 export function ListenScreen({ ctx }: { ctx: UnitCtx }) {
   const { t } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const input = useInputContext();
   const status = useInputLibrary((s) => s.status);
   const lpool = useInputLibrary((s) => s.docs.lpool);
@@ -65,7 +65,7 @@ export function ListenScreen({ ctx }: { ctx: UnitCtx }) {
   }
   if (status === 'error') {
     return (
-      <UnitShell kind="listen" ctx={ctx} state="error" title={t('ch_listen')} onClose={() => go({ name: 'today' })}>
+      <UnitShell kind="listen" ctx={ctx} state="error" title={t('ch_listen')} onClose={back}>
         <div className="flex flex-wrap items-center gap-3" role="alert">
           <p className="text-sm text-danger-text">{t('inLoadFailed')}</p>
           <Button icon="refresh" onClick={() => void ensureLibrary(true)}>
@@ -97,7 +97,7 @@ export function ListenScreen({ ctx }: { ctx: UnitCtx }) {
   }
 
   return (
-    <UnitShell kind="listen" ctx={ctx} state="empty" title={t('ch_listen')} onClose={() => go({ name: 'today' })}>
+    <UnitShell kind="listen" ctx={ctx} state="empty" title={t('ch_listen')} onClose={back}>
       <ListenGenerator onCreated={setFresh} />
     </UnitShell>
   );

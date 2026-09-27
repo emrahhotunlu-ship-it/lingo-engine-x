@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useId, useRef, type KeyboardEvent } from 'react';
 import { spring } from './motion';
 
-type Option<T extends string> = { value: T; label: string };
+type Option<T extends string> = { value: T; label: string; testId?: string };
 
 type Props<T extends string> = {
   label: string;
@@ -54,6 +54,7 @@ export function Segmented<T extends string>({ label, value, options, onChange, c
             aria-checked={active}
             tabIndex={active ? 0 : -1}
             onClick={() => onChange(o.value)}
+            data-testid={o.testId}
             className={`relative min-h-11 min-w-0 rounded-[calc(var(--radius-control)-4px)] px-2 text-sm leading-tight transition-colors ${active ? 'font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
             {active && (
