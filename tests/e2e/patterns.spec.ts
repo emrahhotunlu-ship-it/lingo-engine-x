@@ -101,7 +101,8 @@ for (const size of SIZES) {
     const since = page.locator('[data-testid="pattern"][data-id="since-present"]');
     await expect(since).toContainText('„since“ mit Gegenwart');
     await expect(since.getByTestId('pattern-rule')).toContainText('Present Perfect');
-    await expect(since.getByTestId('pattern-example')).toContainText('→');
+    // Nur der falsche Satz; die richtige Fassung kommt erst nach dem Prüfen im Drill.
+    await expect(since.getByTestId('pattern-example')).not.toContainText('→');
     // Verlauf lokal gezählt: letzte Woche (KW 37) → diese Woche (KW 38).
     const trend = since.getByTestId('pattern-trend');
     await expect(trend).toContainText('letzte Woche');

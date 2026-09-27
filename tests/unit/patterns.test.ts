@@ -62,6 +62,17 @@ const ACTUAL: Pattern = {
 const doc = (items: Pattern[], history: PatternsDoc['history'] = [], d = TODAY): PatternsDoc => ({ d, t: NOW, lang: 'de', pv: 'patterns@1', items, history });
 
 describe('Fehlerquellen', () => {
+  it('Rollenspiel: nur echte Fehlertypen, nicht register/Stil', () => {
+    const focus = [
+      { said: 'we must delay the start', better: "I'm afraid we may need to push back the start.", cat: 'register' },
+      { said: 'I make my homework.', better: 'I do my homework.', cat: 'collocation' },
+      { said: 'We work here since 2019.', better: 'We have worked here since 2019.', cat: 'pres-perf-cont' },
+      { said: 'no category', better: 'No category.' },
+    ];
+    const list = collectMistakes({ talk: new Map([['2026-09', { runs: [{ t: NOW, report: { focus } }] }]]) });
+    expect(list.map((m) => m.wrong).sort()).toEqual(['I make my homework.', 'We work here since 2019.']);
+  });
+
   it('liest alle Quellen tolerant, Lücke gefüllt, Radar mit Satz, gleicher Satz am selben Tag einmal', () => {
     const grammar = new Map([['present_perfect', { errors: [{ q: 'I ___ here since 2020.', given: 'work', ans: 'have worked', t: NOW }, { q: 'kaputt', given: '', ans: 'x' }] }]]);
     const talk = new Map([['2026-09', { runs: [{ t: NOW - DAY, report: { focus: [{ said: 'I make my homework in the evening.', better: 'I do my homework in the evening.', cat: 'collocation' }] } }] }]]);

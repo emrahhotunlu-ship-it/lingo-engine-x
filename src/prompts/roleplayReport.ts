@@ -133,8 +133,8 @@ export function reportExample(uiLang: UiLang): string {
       {
         title: de ? 'Vorschläge abschwächen' : 'Softening proposals',
         said: 'we must delay the start',
-        better: 'I would rather we kept the Q2 date.',
-        why: de ? '„I would rather we …“ klingt nach Vorschlag statt nach Befehl.' : '"I would rather we …" sounds like a proposal, not an order.',
+        better: "I'm afraid we may need to push back the start.",
+        why: de ? '„I\'m afraid we may need to …“ klingt nach Vorschlag statt nach Befehl.' : '"I\'m afraid we may need to …" sounds like a proposal, not an order.',
         cat: 'register',
       },
     ],

@@ -712,7 +712,7 @@
   {
    "topic": "c1-hedging",
    "type": "mc",
-   "prompt": "Your price ___ a bit above our budget.",
+   "prompt": "Soften this for a client: Your price ___ a bit above our budget.",
    "options": [
     "is",
     "might be",
@@ -1594,8 +1594,8 @@
     "Around",
     "Approximately"
    ],
-   "expl": "„Roughly“ klingt präziser und geschäftsmäßiger als „about“.",
-   "expl_en": "“Roughly” sounds more precise and businesslike than “about”."
+   "expl": "„Roughly“ ist im Geschäftsenglisch üblicher als „about“ und kündigt eine gerundete Zahl an.",
+   "expl_en": "“Roughly” is more common than “about” in business English and signals a rounded figure."
   },
   {
    "topic": "c1-precision",

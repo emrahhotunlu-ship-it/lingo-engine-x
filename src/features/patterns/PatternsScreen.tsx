@@ -135,8 +135,6 @@ export function PatternsScreen() {
                           <p className="text-sm leading-relaxed" lang="en" data-testid="pattern-example">
                             <span className="text-muted">{t('ptExample')}: </span>
                             <span className="lx-diff-off">{ex.wrong}</span>
-                            <span className="text-muted"> → </span>
-                            <strong className="font-semibold">{ex.right}</strong>
                           </p>
                         )}
                         <div>

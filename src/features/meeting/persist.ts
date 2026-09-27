@@ -1,5 +1,5 @@
 import { getWriter } from '../../data';
-import { meetingPath, patchMeetingItem, upsertMeetingItem, withDebrief, type DebriefEntry, type MeetingItem } from '../../domain/meeting/meetingDoc';
+import { meetingPath, patchMeetingItem, upsertMeetingItem, withDebrief, type DebriefEntry, type MeetingItem, type MeetingPrep } from '../../domain/meeting/meetingDoc';
 import { logError } from '../../platform/diagnostics';
 
 // Schreibwege von „Mein nächster Termin“ (Lernberatung 27.09., V4): nur über den einen Writer,
@@ -14,6 +14,19 @@ export async function saveMeeting(item: MeetingItem): Promise<boolean> {
     return true;
   } catch (err) {
     logError('meeting:save', err, item.id);
+    return false;
+  }
+}
+
+/** Vorbereitung am vorhandenen Termin nachtragen (nur dieses Feld, aus dem frischen Stand). */
+export async function setMeetingPrep(day: string, id: string, prep: MeetingPrep): Promise<boolean> {
+  const writer = getWriter();
+  if (!writer) return false;
+  try {
+    await writer.transform(meetingPath(day), (cur) => patchMeetingItem(cur, id, (it) => ({ ...it, prep })));
+    return true;
+  } catch (err) {
+    logError('meeting:prep', err, id);
     return false;
   }
 }

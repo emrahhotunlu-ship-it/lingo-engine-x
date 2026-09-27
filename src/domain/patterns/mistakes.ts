@@ -1,3 +1,4 @@
+import { TOPICS } from '../content';
 import { dayKey } from '../date';
 import { repairNorm } from '../repair/repair';
 
@@ -66,10 +67,13 @@ function grammarMistakes(grammar: ReadonlyMap<string, Doc>, out: Mistake[]): voi
   }
 }
 
+/** Echte Fehlertypen der Rollenspiel-Analyse: Grammatikthemen und Wort-/Form-Fehler – nicht `register`/Stil. */
+const TALK_ERROR_CATS: ReadonlySet<string> = new Set([...TOPICS.map((t) => t.id), 'grammar', 'vocab', 'collocation', 'word-order', 'spelling']);
+
 function talkMistakes(talk: ReadonlyMap<string, Doc>, out: Mistake[]): void {
   for (const d of talk.values()) {
     for (const r of arr(d.runs)) {
-      for (const f of arr(obj(r.report).focus)) push(out, 'talk', str(f.said), str(f.better), num(r.t));
+      for (const f of arr(obj(r.report).focus)) if (TALK_ERROR_CATS.has(str(f.cat))) push(out, 'talk', str(f.said), str(f.better), num(r.t));
     }
   }
 }

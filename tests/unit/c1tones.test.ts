@@ -99,6 +99,14 @@ describe('C1-Werkzeugkasten: Themen', () => {
 });
 
 describe('C1-Werkzeugkasten: Aufgaben', () => {
+  it('Prüfbefunde Paket 2: Abschwächen mit Auftrag, „Roughly“ ehrlich begründet', () => {
+    const tasks = (c1Json as { tasks: Array<{ prompt: string; expl?: string; expl_en?: string; answer?: string }> }).tasks;
+    expect(tasks.some((x) => x.prompt === 'Soften this for a client: Your price ___ a bit above our budget.')).toBe(true);
+    const rough = tasks.find((x) => x.answer === 'Roughly');
+    expect(rough?.expl).toContain('gerundete Zahl');
+    expect(rough?.expl_en).toContain('rounded figure');
+  });
+
   it('je Thema mindestens 12 eigene Aufgaben, alle vier Aufgabentypen', () => {
     for (const id of C1_IDS) {
       const own = c1Seed().filter((t) => t.topic === id && t.ref === 'content/c1');
@@ -300,6 +308,7 @@ describe('Tonlagen: Reparatur-Sätze und Monatsdokument', () => {
     const again = upsertToneItem(doc, item(now, { ai: true }));
     expect((again as { update: { items: unknown[] } }).update.items).toHaveLength(1);
     expect(upsertToneItem({ items: 'kaputt' }, item(now))).toBeNull();
+    expect(upsertToneItem({ v: 1, month: '2026-09', items: [{ id: 5 }] }, item(now))).toBeNull();
   });
 
   it('verdichtet unter 200 KiB: zuerst Rückmeldungen, dann Texte der ältesten', () => {

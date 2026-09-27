@@ -1,3 +1,4 @@
+import { logWarn } from '../../platform/diagnostics';
 import type { TalkRun } from './types';
 
 // Gesprächsläufe als Monatsdokument `talk/<JJJJ-MM>` (Plan §3.4, A6.6: wachsende Ströme
@@ -45,8 +46,13 @@ export function compactList(list: readonly unknown[], steps: ReadonlyArray<(item
       i++;
     }
   }
-  // Letzte Rettung: älteste Einträge entfernen (ohne sie wäre das Dokument nicht schreibbar).
+  // Letzte Rettung: älteste Einträge entfernen (ohne sie wäre das Dokument nicht schreibbar) – nie still.
+  const before = items.length;
   while (items.length > 1 && jsonBytes(wrap(items)) > maxBytes) items = items.slice(1);
+  if (items.length < before) {
+    const month = obj(wrap([])).month;
+    logWarn('compact:drop', new Error(`${before - items.length} oldest entries removed to stay under ${maxBytes} bytes`), typeof month === 'string' ? month : undefined);
+  }
   return items;
 }
 

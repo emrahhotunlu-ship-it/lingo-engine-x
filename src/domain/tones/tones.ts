@@ -1,3 +1,4 @@
+import { validateDoc } from '../../data/validate';
 import { TONE_REGISTERS, type ToneKind, type ToneMessage, type ToneRegister } from '../../content/tones/messages';
 import { hash32 } from '../random';
 import { repairsFromText } from '../repair/sources';
@@ -83,6 +84,7 @@ export function compactTones(items: readonly unknown[], month = '0000-00'): unkn
 export function upsertToneItem(cur: Doc | undefined, item: ToneItem): { set: Doc } | { update: Doc } | null {
   const month = monthOf(item.day);
   if (!cur) return { set: { v: 1, month, items: compactTones([item], month) } };
+  if (!validateDoc(tonesPath(item.day), cur).ok) return null;
   if (cur.items != null && !Array.isArray(cur.items)) return null;
   const list = Array.isArray(cur.items) ? cur.items : [];
   return { update: { items: compactTones(upsertById(list, item), month) } };

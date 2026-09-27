@@ -5,7 +5,7 @@ import { useNav } from '../../app/nav';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { useCollection } from '../../data/watch';
-import { cleanMeetingInput, listMeetings, MEETING_FIELD_MAX, MEETING_WANT_MAX, meetingId, meetingPath, readMeeting, type DebriefEntry, type MeetingInput, type MeetingItem } from '../../domain/meeting/meetingDoc';
+import { cleanMeetingInput, listMeetings, MEETING_FIELD_MAX, MEETING_WANT_MAX, meetingId, meetingPath, readMeeting, type DebriefEntry, type MeetingInput, type MeetingItem, type MeetingPrep } from '../../domain/meeting/meetingDoc';
 import { aiSceneId } from '../../domain/speak/sceneDoc';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHotkeys } from '../../engine/useHotkeys';
@@ -22,7 +22,7 @@ import { AiRunPanel, isBusy } from '../input/AiRunPanel';
 import { createSceneDoc, takeChunk } from '../speak/persist';
 import { TakeChunkButton, type TakeInput } from '../speak/TakeChunkButton';
 import { workContext } from '../speak/useSceneLibrary';
-import { addMeetingDebrief, saveMeeting, setMeetingScene } from './persist';
+import { addMeetingDebrief, saveMeeting, setMeetingPrep, setMeetingScene } from './persist';
 
 // „Mein nächster Termin“ (Lernberatung 27.09., V4 / Vorschlag 6): Emrah beschreibt in zwei
 // Minuten einen echten Termin (mit wem, worum, was heikel ist, Freitext). meeting-prep@1 baut
@@ -288,8 +288,10 @@ function MeetingDetail({ item, lang, onUpdated }: { item: MeetingItem; lang: 'de
     setSaveFailed(false);
     const prep = await ask.run({ ctx: workContext(), who: item.who, topic: item.topic, tricky: item.tricky, notes: item.notes, uiLang: lang });
     if (!prep) return;
-    const next: MeetingItem = { ...item, prep: { phrases: prep.phrases, objections: prep.objections, scene: { ...prep.scene } } };
-    const ok = await saveMeeting(next);
+    const p: MeetingPrep = { phrases: prep.phrases, objections: prep.objections, scene: { ...prep.scene } };
+    const next: MeetingItem = { ...item, prep: p };
+    // Nur die Vorbereitung nachtragen – Szene und Nachbesprechung aus anderen Tabs bleiben stehen.
+    const ok = await setMeetingPrep(item.day, item.id, p);
     if (!ok) setSaveFailed(true);
     else onUpdated(next);
   };
@@ -331,15 +333,7 @@ function MeetingDetail({ item, lang, onUpdated }: { item: MeetingItem; lang: 'de
               <li key={`${o.q}-${i}`} className="flex flex-col gap-2" data-testid="meeting-objection">
                 <EnglishText text={o.q} area="business" title={title} className="text-base font-medium" />
                 <p className="text-sm text-muted">{o.why}</p>
-                <p className="lx-eyebrow mt-1">{t('mtAnswers')}</p>
-                <ul className="flex flex-col gap-1.5">
-                  {o.answers.map((a, k) => (
-                    <li key={`${a}-${k}`} className="flex gap-2">
-                      <span className="mt-2 inline-block size-1.5 flex-none rounded-full bg-accent" aria-hidden="true" />
-                      <EnglishText text={a} area="business" title={title} className="text-base" />
-                    </li>
-                  ))}
-                </ul>
+                <ObjectionAnswers answers={o.answers} title={title} />
               </li>
             ))}
           </ol>
@@ -347,6 +341,56 @@ function MeetingDetail({ item, lang, onUpdated }: { item: MeetingItem; lang: 'de
       )}
       {item.prep?.scene && <Rehearsal item={item} lang={lang} />}
       <Debrief item={item} title={title} sourceRef={ref} lang={lang} />
+    </div>
+  );
+}
+
+/** Antwortbausteine erst nach eigenem Versuch zeigen (Erst selbst antworten, dann zeigen). */
+function ObjectionAnswers({ answers, title }: { answers: readonly string[]; title: string }) {
+  const { t } = useT();
+  const inputId = useId();
+  const [own, setOwn] = useState('');
+  const [shown, setShown] = useState(false);
+  if (!shown) {
+    return (
+      <div className="mt-1 flex flex-col gap-2" data-testid="meeting-own">
+        <label htmlFor={inputId} className="text-sm text-muted">
+          {t('mtOwnFirst')}
+        </label>
+        <textarea
+          id={inputId}
+          lang="en"
+          rows={2}
+          value={own}
+          onChange={(e) => setOwn(e.target.value)}
+          onFocus={(e) => keepVisible(e.currentTarget)}
+          placeholder={t('mtOwnPlaceholder')}
+          className={fieldClass}
+          data-testid="meeting-own-input"
+        />
+        <div>
+          <Button variant="secondary" disabled={!own.trim()} onClick={() => setShown(true)} data-testid="meeting-show-answers">
+            {t('mtShowAnswers')}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-2" data-testid="meeting-answers">
+      <p className="text-sm text-muted" lang="en" data-testid="meeting-own-answer">
+        <span className="text-subtle">{t('mtOwnYours')}: </span>
+        {own.trim()}
+      </p>
+      <p className="lx-eyebrow mt-1">{t('mtAnswers')}</p>
+      <ul className="flex flex-col gap-1.5">
+        {answers.map((a, k) => (
+          <li key={`${a}-${k}`} className="flex gap-2">
+            <span className="mt-2 inline-block size-1.5 flex-none rounded-full bg-accent" aria-hidden="true" />
+            <EnglishText text={a} area="business" title={title} className="text-base" />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

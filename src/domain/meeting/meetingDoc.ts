@@ -1,3 +1,4 @@
+import { validateDoc } from '../../data/validate';
 import { compactList, monthOf, upsertById } from '../speak/talkDoc';
 
 // „Mein nächster Termin“ (Lernberatung 27.09., V4 / Vorschlag 6) als Monatsdokument
@@ -43,6 +44,8 @@ const STEPS: ReadonlyArray<(i: Doc) => Doc | null> = [
   (i) => (obj(i.prep).scene ? { ...i, prep: { ...obj(i.prep), scene: null } } : null),
   (i) => (Array.isArray(obj(i.prep).objections) && (obj(i.prep).objections as unknown[]).length ? { ...i, prep: { ...obj(i.prep), objections: [] } } : null),
   (i) => (i.prep ? { ...i, prep: null } : null),
+  // Vor dem Entfernen ganzer Termine: Nachbesprechungen bis auf die jüngste kürzen.
+  (i) => (Array.isArray(i.debrief) && i.debrief.length > 1 ? { ...i, debrief: (i.debrief as unknown[]).slice(-1) } : null),
 ];
 
 export function compactMeetings(items: readonly unknown[], month = '0000-00'): unknown[] {
@@ -63,6 +66,7 @@ export function cleanMeetingInput(i: MeetingInput): MeetingInput | null {
 export function upsertMeetingItem(cur: Doc | undefined, item: MeetingItem): { set: Doc } | { update: Doc } | null {
   const month = monthOf(item.day);
   if (!cur) return { set: { v: 1, month, items: compactMeetings([item], month) } };
+  if (!validateDoc(meetingPath(item.day), cur).ok) return null;
   if (cur.items != null && !Array.isArray(cur.items)) return null;
   const list = Array.isArray(cur.items) ? cur.items : [];
   return { update: { items: compactMeetings(upsertById(list, item), month) } };
@@ -74,6 +78,7 @@ export function upsertMeetingItem(cur: Doc | undefined, item: MeetingItem): { se
  */
 export function patchMeetingItem(cur: Doc | undefined, id: string, patch: (item: Doc) => Doc | null): { update: Doc } | null {
   if (!cur || !Array.isArray(cur.items)) return null;
+  if (!validateDoc(`meeting/${typeof cur.month === 'string' ? cur.month : '0000-00'}`, cur).ok) return null;
   const list = cur.items as unknown[];
   const at = list.findIndex((x) => obj(x).id === id);
   if (at < 0) return null;

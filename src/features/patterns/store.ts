@@ -5,13 +5,14 @@ import { useSettings } from '../../app/settings';
 import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
 import { readCollection, readDoc } from '../../data/reads';
+import { validateDoc } from '../../data/validate';
 import { dayKey } from '../../domain/date';
 import { collectMistakes, uniqueMistakes, type Mistake } from '../../domain/patterns/mistakes';
 import { capPatterns, countWeeks, mergeHistory, patternHintsOf, patternsDue, readPatterns, recentWeeks, type Pattern, type PatternsDoc } from '../../domain/patterns/patterns';
 import { jsonEqual } from '../../domain/equal';
 import { patterns as patternsTemplate } from '../../prompts/patterns';
 import { getDb } from '../../platform/capabilities';
-import { logWarn } from '../../platform/diagnostics';
+import { logError, logWarn } from '../../platform/diagnostics';
 import type { Db } from '../../platform/types';
 import { aiUsable } from '../progress/assessRun';
 
@@ -120,6 +121,11 @@ async function savePatterns(items: readonly Pattern[], mistakes: readonly Mistak
   const fresh = countWeeks(mistakes, capped, recentWeeks(today, COUNT_WEEKS));
   const box: { saved: PatternsDoc | null } = { saved: null };
   await writer.transform(PATTERNS_PATH, (cur) => {
+    // Unerwarteter Aufbau: nie überschreiben (Kap. 9).
+    if (cur && !validateDoc(PATTERNS_PATH, cur).ok) {
+      logError('patterns:save', new Error('app/patterns invalid, not overwritten'));
+      return null;
+    }
     const old = readPatterns(cur);
     const history = mergeHistory(old?.history ?? [], fresh);
     const next = { d: today, t: nowMs, lang, pv: `${patternsTemplate.id}@${patternsTemplate.version}`, items: capped, history };

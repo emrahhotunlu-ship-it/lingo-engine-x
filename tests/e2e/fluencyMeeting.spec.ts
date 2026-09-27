@@ -174,6 +174,14 @@ test('Termin (Handy, DE, Claude): Vorbereitung, alle Wendungen merken, Generalpr
   await expect(detail).toBeVisible();
   await expect(page.getByTestId('meeting-phrase')).toHaveCount(7);
   await expect(page.getByTestId('meeting-objection')).toHaveCount(3);
+  // Erst selbst antworten, dann die Antwortbausteine zeigen.
+  const obj0 = page.getByTestId('meeting-objection').first();
+  await expect(obj0.getByTestId('meeting-answers')).toHaveCount(0);
+  await expect(obj0.getByTestId('meeting-show-answers')).toBeDisabled();
+  await obj0.getByTestId('meeting-own-input').fill('I see your point, but a longer term lowers your risk.');
+  await obj0.getByTestId('meeting-show-answers').click();
+  await expect(obj0.getByTestId('meeting-answers')).toBeVisible();
+  await expect(obj0.getByTestId('meeting-own-answer')).toContainText('longer term');
   await page.getByTestId('meeting-phrase').first().locator('button.lx-word').first().click();
   await expect(page.getByTestId('lookup')).toBeVisible();
   await page.keyboard.press('Escape');

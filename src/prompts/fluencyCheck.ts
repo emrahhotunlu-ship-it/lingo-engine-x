@@ -43,7 +43,7 @@ export function fluencyCheckExample(uiLang: UiLang): string {
 /** Wendung, die nicht wörtlich im Beispielsatz steht oder ohne Bedeutung kommt, fällt weg (kein Neuversuch dafür). */
 const usable = (p: FluencyPhraseOut): boolean => !!(p.phrase && p.de && p.def && p.example && containsPhrase(p.example, p.phrase) && !isWrongLang(p.def, 'en'));
 
-export function fluencyCheckSchema(vars: Pick<FluencyCheckVars, 'uiLang'>): z.ZodType<FluencyCheckOut> {
+export function fluencyCheckSchema(vars: Pick<FluencyCheckVars, 'uiLang' | 'rounds'>): z.ZodType<FluencyCheckOut> {
   const msg = `must be written in ${langName(vars.uiLang)}`;
   return z
     .object({
@@ -61,7 +61,9 @@ export function fluencyCheckSchema(vars: Pick<FluencyCheckVars, 'uiLang'>): z.Zo
       v.corrections.forEach((c, i) => {
         if (isWrongLang(c.why, vars.uiLang)) ctx.addIssue({ code: 'custom', path: ['corrections', i, 'why'], message: msg });
       });
-    });
+    })
+    // Nur Fehler, die wörtlich in einer der Runden stehen (nie raten, wie tone-check); kein Neuversuch dafür.
+    .transform((v): FluencyCheckOut => ({ ...v, corrections: v.corrections.filter((c) => vars.rounds.some((r) => containsPhrase(r.text, c.wrong))) }));
 }
 
 export const fluencyCheck: PromptTemplate<FluencyCheckVars, FluencyCheckOut> = {

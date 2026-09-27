@@ -8,7 +8,8 @@ import { cleanMeetingInput, compactMeetings, listMeetings, MEETING_DEBRIEF_MAX, 
 import { roundBonus } from '../../src/domain/progress/profilePatch';
 import { addRepairs } from '../../src/domain/repair/repair';
 import { repairsFromCorrections } from '../../src/domain/say/say';
-import { jsonBytes } from '../../src/domain/speak/talkDoc';
+import { compactList, jsonBytes } from '../../src/domain/speak/talkDoc';
+import { clearLog, getLog } from '../../src/platform/diagnostics';
 import { registerCannedReplies } from '../../src/platform/dev/cannedReplies';
 import { createFakeSample } from '../../src/platform/dev/fakeSample';
 import { fluencyCheck, fluencyCheckSchema, type FluencyCheckVars } from '../../src/prompts/fluencyCheck';
@@ -114,6 +115,10 @@ describe('Monatsdokument fluency/<JJJJ-MM>', () => {
     expect(validateDoc('fluency/2026-09', { items: [{ id: 'x', rounds: 'nope' }] }).ok).toBe(false);
   });
 
+  it('Dokument mit unerwartetem Aufbau (Schema verletzt) wird nie überschrieben', () => {
+    expect(upsertFluencyItem({ v: 1, month: '2026-09', items: [{ id: 5 }] }, fItem(2))).toBeNull();
+  });
+
   it('gekappt auf ≤ 200 KiB: zuerst Rückmeldungen, dann Texte der ältesten', () => {
     const many = Array.from({ length: 80 }, (_, i) => fItem(i));
     const out = compactFluency(many, '2026-09') as FluencyItem[];
@@ -166,6 +171,33 @@ describe('Monatsdokument meeting/<JJJJ-MM>', () => {
     expect(read?.sceneId).toBe('sc-ai1');
     expect(read?.prep?.phrases[0]?.def).toBe('as an exchange');
     expect(readMeeting({ id: 'x', day: '2026-09-27' })).toBeNull();
+  });
+
+  it('ungültiges Dokument: weder Upsert noch Nachtrag; Vorbereitung als Feld lässt Szene und Nachbesprechung stehen', () => {
+    const bad = { v: 1, month: '2026-09', items: [{ id: 5, who: 'x' }, { id: mItem(1).id, day: '2026-09-27' }] };
+    expect(upsertMeetingItem(bad, mItem(2))).toBeNull();
+    expect(patchMeetingItem(bad, mItem(1).id, (it) => ({ ...it, sceneId: 'sc' }))).toBeNull();
+    const deb = [{ t: 1, want: 'w', en: 'We are on the same page.', phrase: 'on the same page', de: 'einig', def: 'agreeing', why: 'x' }];
+    const doc = (upsertMeetingItem(undefined, mItem(1, { prep: null, sceneId: 'sc-ai1', debrief: deb })) as { set: Record<string, unknown> }).set;
+    const prep = mItem(1).prep;
+    const r = patchMeetingItem(doc, mItem(1).id, (it) => ({ ...it, prep }));
+    const it0 = (r as { update: { items: Array<Record<string, unknown>> } }).update.items[0];
+    expect(it0?.sceneId).toBe('sc-ai1');
+    expect(it0?.debrief).toEqual(deb);
+    expect(it0?.prep).toEqual(prep);
+  });
+
+  it('gekappt: Nachbesprechungen werden vor dem Entfernen ganzer Termine gekürzt; Entfernen wird gemeldet', () => {
+    const e = (t: number) => ({ t, want: 'w'.repeat(300), en: 'e'.repeat(300), phrase: 'p', de: 'd', def: 'f', why: 'y'.repeat(200) });
+    const many = Array.from({ length: 40 }, (_, i) => mItem(i, { prep: null, debrief: Array.from({ length: 24 }, (_, k) => e(k)) }));
+    clearLog();
+    const out = compactMeetings(many, '2026-09') as MeetingItem[];
+    expect(out).toHaveLength(40);
+    expect(out[0]?.debrief).toHaveLength(1);
+    expect(getLog().some((l) => l.scope === 'compact:drop')).toBe(false);
+    const dropped = compactList([{ x: 'a'.repeat(100) }, { x: 'b'.repeat(100) }], [], 150, (items) => ({ month: '2026-09', items }));
+    expect(dropped).toHaveLength(1);
+    expect(getLog().find((l) => l.scope === 'compact:drop')?.level).toBe('warn');
   });
 
   it('Nachbesprechung: angehängt, höchstens 24 je Termin, leer → nichts', () => {
@@ -221,7 +253,7 @@ describe('Vorlagen und feste Antworten', () => {
   });
 
   it('fluency-check@1 tolerant: Wendung ohne Beispielsatz fällt weg, zu viele Fehler gekürzt, falsche Sprache abgelehnt', () => {
-    const v = { uiLang: 'de' as const };
+    const v = { uiLang: 'de' as const, rounds: [{ sec: 90, text: 'w0 w1 w2 w3 w4' }] };
     const bad = { phrase: 'the bottom line is', de: 'unterm Strich', def: 'the main point', example: 'This sentence does not have it.' };
     const good = { phrase: 'pay for itself', de: 'sich rechnen', def: 'to save as much as it costs', example: 'It will pay for itself.' };
     const four = Array.from({ length: 5 }, (_, i) => ({ wrong: `w${i}`, right: `r${i}`, why: 'Hier fehlt das Hilfsverb im Satz.' }));
@@ -229,6 +261,19 @@ describe('Vorlagen und feste Antworten', () => {
     expect(r.missing).toEqual([good]);
     expect(r.corrections).toHaveLength(3);
     expect(fluencyCheckSchema(v).safeParse({ progress: 'In round three you got to the point much faster.', missing: [], corrections: [] }).success).toBe(false);
+  });
+
+  it('fluency-check: nur Korrekturen, deren „wrong“ wörtlich in einer Runde steht', () => {
+    const v = { uiLang: 'de' as const, rounds };
+    const r = fluencyCheckSchema(v).parse({
+      progress: 'Runde 3 ist deutlich knapper und klarer.',
+      missing: [],
+      corrections: [
+        { wrong: 'more cheaper', right: 'cheaper', why: 'Doppelte Steigerung ist falsch.' },
+        { wrong: 'we was very happy', right: 'we were very happy', why: 'Das steht in keiner Runde.' },
+      ],
+    });
+    expect(r.corrections.map((c) => c.wrong)).toEqual(['more cheaper']);
   });
 
   it('Reparatur-Sätze mit Quelle fluency (ganzer eigener Satz)', () => {

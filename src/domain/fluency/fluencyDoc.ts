@@ -1,3 +1,4 @@
+import { validateDoc } from '../../data/validate';
 import { compactList, monthOf, upsertById } from '../speak/talkDoc';
 
 // Flüssigkeit 90 – 60 – 45 (Lernberatung 27.09., V6 / Vorschlag 5) als Monatsdokument
@@ -61,6 +62,7 @@ export function compactFluency(items: readonly unknown[], month = '0000-00'): un
 export function upsertFluencyItem(cur: Doc | undefined, item: FluencyItem): { set: Doc } | { update: Doc } | null {
   const month = monthOf(item.day);
   if (!cur) return { set: { v: 1, month, items: compactFluency([item], month) } };
+  if (!validateDoc(fluencyPath(item.day), cur).ok) return null;
   if (cur.items != null && !Array.isArray(cur.items)) return null;
   const list = Array.isArray(cur.items) ? cur.items : [];
   return { update: { items: compactFluency(upsertById(list, item), month) } };
