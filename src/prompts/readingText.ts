@@ -3,7 +3,7 @@ import { block, clip, fenced, header } from './common';
 import { britishCount, englishText, germanText, glossInText, glossSchema, paras, QUESTION_RULES, questionsSchema, words, type CefrValue } from './inputCommon';
 import type { PromptTemplate } from './types';
 
-// reading-text@1 (Plan §5, Kap. 6.8): ein Lesetext knapp über Emrahs Niveau (i+1) mit
+// reading-text@2 (Plan §5, Kap. 6.8): ein Lesetext knapp über Emrahs Niveau (i+1) mit
 // Kernaussagen, Glossar und vier Verständnisfragen. Zwei Arten (M16):
 // - „erzeugen": Claude schreibt den Text selbst (Thema aus den Themen-Chips, M12),
 // - „aus Text": Emrah hat einen eigenen Text eingefügt; Claude liefert nur Titel, Kernaussagen,
@@ -42,7 +42,29 @@ export const SOURCE_TEXT_MAX = 8000;
 export const TEXT_WORDS = { min: 300, max: 800 } as const;
 
 const ID = 'reading-text';
-const VERSION = 1;
+const VERSION = 2;
+
+/** Thema als Kennung (Prüfhinweis): „remote work" → „remote-work", höchstens 30 Zeichen. */
+export function topicSlug(v: unknown): unknown {
+  if (typeof v !== 'string') return v;
+  return v
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 30)
+    .replace(/-+$/, '');
+}
+
+/** Absätze nur mit einfachem Zeilenumbruch getrennt: als echte Absätze (Leerzeile) lesen. */
+export function blankLineParas(v: unknown): unknown {
+  if (typeof v !== 'string' || paras(v).length >= 3 || !v.includes('\n')) return v;
+  return v
+    .split(/\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .join('\n\n');
+}
 
 /** Aufbau-Beispiel im Prompt (lange Felder als Platzhalter; der Test prüft es gegen `readingTextShape`). */
 export const READING_TEXT_EXAMPLE = JSON.stringify({
@@ -74,11 +96,14 @@ export const readingTextShape = z.object({
 
 const base = {
   title: englishText(3, 90),
-  topic: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .regex(/^[a-z][a-z-]{1,29}$/),
+  topic: z.preprocess(
+    topicSlug,
+    z
+      .string()
+      .trim()
+      .toLowerCase()
+      .regex(/^[a-z][a-z-]{1,29}$/),
+  ),
   topic_de: germanText(2, 80),
   topic_en: englishText(2, 80),
   teaser: englishText(10, 200),
@@ -94,7 +119,7 @@ function schemaFor(vars: ReadingTextVars): z.ZodType<ReadingTextOut> {
     return z.object(base).superRefine((v, ctx) => glossInText(v.glossary, source, ctx, 'glossary'));
   }
   return z
-    .object({ ...base, text: englishText(200, 7000) })
+    .object({ ...base, text: z.preprocess(blankLineParas, englishText(200, 7000)) })
     .superRefine((v, ctx) => {
       const n = words(v.text);
       if (n < TEXT_WORDS.min || n > TEXT_WORDS.max) ctx.addIssue({ code: 'custom', path: ['text'], message: `must have 380–650 words (has ${n})` });

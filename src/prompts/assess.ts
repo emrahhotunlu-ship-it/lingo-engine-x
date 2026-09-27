@@ -2,9 +2,10 @@ import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { DIMS, LEVELS, TRENDS } from '../domain/assessment/types';
 import { header, langName, langOf } from './common';
+import { clipped, firstCefr, intIn, sliced } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// assess@1 (Plan §4.6): Claude urteilt wie eine Prüferin über das Niveau – nur aus den
+// assess@2 (Plan §4.6): Claude urteilt wie eine Prüferin über das Niveau – nur aus den
 // nummerierten Belegen. `complex`, nie zwischengespeichert, per `sample()` mit eigenem Lesen
 // (`verb: 'text-json'`), damit die tatsächlich antwortende Stufe bekannt ist (Plan W4).
 
@@ -28,48 +29,127 @@ export type AssessOut = {
   c1gap: string[];
   strengths: Array<{ title: string; why: string; ev: string[] }>;
   blockers: Array<{ title: string; why: string; fix: string; action: string; ev: string[] }>;
-  dims: Array<{ id: (typeof DIMS)[number]; level: (typeof LEVELS)[number] | null; confidence: 'thin' | 'fair' | 'good'; why: string }>;
+  dims: Array<{ id: (typeof DIMS)[number]; level: (typeof LEVELS)[number] | null; confidence: 'thin' | 'fair' | 'good'; why: string | null }>;
   focus: { title: string; why: string; action: string; days: number };
 };
 
 const ID = 'assess';
 /** Höchstzahl der Beleg-Kennungen je Stärke/Blocker – Anweisung und Schema gleich (Befund H7). */
 export const EV_MAX = 3;
-const VERSION = 1;
+const VERSION = 2;
 
-const t = (max: number) => z.string().trim().min(1).max(max);
+// Tolerant gelesen (Prüfbefund W6): Texte werden gekürzt statt abgelehnt, Listen gekappt,
+// Beleg-Kennungen bereinigt und gefiltert, Stufen („B2-", „B2/C1"), Trend und Belastbarkeit
+// abgebildet, fehlende Fertigkeiten wie in `finalizeAssess` mit „thin"/null aufgefüllt.
+const t = (max: number) => clipped(1, max);
 const enText = (max: number) =>
   t(max).refine((s) => !isWrongLang(s, 'en'), { message: 'must be written in American English' });
+
+const TREND_ALIASES: Record<string, (typeof TRENDS)[number]> = {
+  up: 'up',
+  rising: 'up',
+  improving: 'up',
+  upward: 'up',
+  flat: 'flat',
+  stable: 'flat',
+  steady: 'flat',
+  unchanged: 'flat',
+  down: 'down',
+  falling: 'down',
+  declining: 'down',
+  downward: 'down',
+};
+const CONF_ALIASES: Record<string, 'thin' | 'fair' | 'good'> = {
+  thin: 'thin',
+  low: 'thin',
+  weak: 'thin',
+  limited: 'thin',
+  fair: 'fair',
+  medium: 'fair',
+  moderate: 'fair',
+  some: 'fair',
+  good: 'good',
+  high: 'good',
+  strong: 'good',
+};
+const alias = <T extends string>(map: Record<string, T>) => (v: unknown): unknown => (typeof v === 'string' ? (map[v.trim().toLowerCase()] ?? v) : v);
+
+/** Beleg-Kennungen: „[p:14d]" → „p:14d", auch als Komma-Liste; unbekannte fallen weg, höchstens EV_MAX. Mindestens eine muss bleiben (Urteil nur aus Belegen). */
+export function cleanEv(v: unknown, ids: ReadonlySet<string>): unknown {
+  const raw = typeof v === 'string' ? v.split(/[,;]/) : v;
+  if (!Array.isArray(raw)) return v;
+  const out: string[] = [];
+  for (const x of raw) {
+    if (typeof x !== 'string') continue;
+    const id = x.trim().replace(/^\[+|\]+$/g, '').trim();
+    if (ids.has(id) && !out.includes(id)) out.push(id);
+  }
+  return out.slice(0, EV_MAX);
+}
+
+/** Aktion tolerant: „grammar: mixed-cond" → „grammar:mixed-cond"; nur das Thema „mixed-cond" → die erste erlaubte Aktion dazu. */
+export function cleanAction(v: unknown, allowed: readonly string[]): unknown {
+  if (typeof v !== 'string') return v;
+  const a = v.trim().replace(/\s*:\s*/g, ':');
+  if (allowed.includes(a)) return a;
+  const lower = a.toLowerCase();
+  const exact = allowed.find((x) => x.toLowerCase() === lower);
+  if (exact) return exact;
+  return allowed.find((x) => x.includes(':') && x.slice(x.indexOf(':') + 1) === lower) ?? v;
+}
+
+/** Fertigkeiten: unbekannte und doppelte fallen weg, fehlende kommen als „thin" ohne Stufe dazu. */
+function fillDims(v: unknown): unknown {
+  if (!Array.isArray(v)) return v;
+  const seen = new Map<string, unknown>();
+  for (const x of v) {
+    const id = x && typeof x === 'object' ? (x as { id?: unknown }).id : undefined;
+    const key = typeof id === 'string' ? id.trim().toLowerCase() : '';
+    if ((DIMS as readonly string[]).includes(key) && !seen.has(key)) seen.set(key, { ...(x as object), id: key });
+  }
+  return DIMS.map((id) => seen.get(id) ?? { id, level: null, confidence: 'thin', why: null });
+}
 
 export function assessSchema(v: Pick<AssessVars, 'lang' | 'ids' | 'allowed'>): z.ZodType<AssessOut> {
   const ids = new Set(v.ids);
   const allowed = v.allowed as [string, ...string[]];
-  const ev = z
-    .array(z.string())
-    .min(1)
-    .max(EV_MAX)
-    .superRefine((xs, ctx) => {
-      xs.forEach((x, i) => {
-        if (!ids.has(x)) ctx.addIssue({ code: 'custom', path: [i], message: `unknown evidence id "${x}" – use only ids in [brackets]` });
-      });
-    });
-  const action = z.string().refine((a) => (allowed as readonly string[]).includes(a), { message: 'action must be one of the allowed actions' });
+  const ev = z.preprocess((x) => cleanEv(x, ids), z.array(z.string()).min(1, { message: 'cite at least one known evidence id from the [brackets]' }).max(EV_MAX));
+  const action = z.preprocess(
+    (a) => cleanAction(a, allowed),
+    z.string().refine((a) => (allowed as readonly string[]).includes(a), { message: 'action must be one of the allowed actions' }),
+  );
+  const level = z.preprocess((x) => firstCefr(x, LEVELS), z.enum(LEVELS));
+  const dimLevel = z.preprocess((x) => {
+    const l = firstCefr(x, LEVELS);
+    return typeof l === 'string' && (LEVELS as readonly string[]).includes(l) ? l : null;
+  }, z.enum(LEVELS).nullable());
   return z
     .object({
-      level: z.string().trim().min(20).max(220),
-      cefr: z.enum(LEVELS),
+      level: clipped(4, 220),
+      cefr: level,
       levelWhy: t(400),
-      trend: z.enum(TRENDS),
+      trend: z.preprocess(alias(TREND_ALIASES), z.enum(TRENDS)),
       trendWhy: t(300),
       today: t(160),
-      c1gap: z.array(t(90)).min(2).max(4),
-      strengths: z.array(z.object({ title: t(60), why: t(240), ev }).superRefine(langOf(['title', 'why'], v.lang))).length(2),
-      blockers: z.array(z.object({ title: t(60), why: t(240), fix: enText(200), action, ev }).superRefine(langOf(['title', 'why'], v.lang))).min(2).max(3),
-      dims: z
-        .array(z.object({ id: z.enum(DIMS), level: z.enum(LEVELS).nullable(), confidence: z.enum(['thin', 'fair', 'good']), why: z.string().trim().max(200) }).superRefine(langOf(['why'], v.lang)))
-        .length(6)
-        .refine((ds) => new Set(ds.map((d) => d.id)).size === 6, { message: 'dims must contain each of the six skills exactly once' }),
-      focus: z.object({ title: t(60), why: t(240), action, days: z.number().int().min(1).max(7) }).superRefine(langOf(['title', 'why'], v.lang)),
+      c1gap: sliced(t(90), 1, 4),
+      strengths: sliced(z.object({ title: t(60), why: t(240), ev }).superRefine(langOf(['title', 'why'], v.lang)), 1, 2),
+      blockers: sliced(z.object({ title: t(60), why: t(240), fix: enText(200), action, ev }).superRefine(langOf(['title', 'why'], v.lang)), 1, 3),
+      dims: z.preprocess(
+        fillDims,
+        z
+          .array(
+            z
+              .object({
+                id: z.enum(DIMS),
+                level: dimLevel,
+                confidence: z.preprocess(alias(CONF_ALIASES), z.enum(['thin', 'fair', 'good'])),
+                why: z.preprocess((w) => (typeof w === 'string' && w.trim() ? w : null), clipped(1, 200).nullable()),
+              })
+              .superRefine(langOf(['why'], v.lang)),
+          )
+          .length(6),
+      ),
+      focus: z.object({ title: t(60), why: t(240), action, days: intIn(1, 7) }).superRefine(langOf(['title', 'why'], v.lang)),
     })
     .superRefine(langOf(['level', 'levelWhy', 'trendWhy', 'today'], v.lang))
     .superRefine((o, ctx) => {

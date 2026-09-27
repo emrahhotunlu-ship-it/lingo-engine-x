@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAiAvailable, useAiScope } from '../../ai/scope';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -83,11 +83,32 @@ function Weekly() {
   const stored = weekly.status === 'ready' ? storedWeekly(weekly.data, week.w, lang) : null;
   const wants = ai && weekly.status === 'ready' && once.status === 'ready' && !stored && citableFacts(facts).length >= WEEKLY_MIN_FACTS;
 
-  // Einmal je Woche und Sprache beim Öffnen des Reiters (Plan E15); nie wiederholt.
+  // Einmal je Woche und Sprache beim Öffnen des Reiters (Plan E15); nie automatisch wiederholt.
+  // Ändern sich die Fakten (Live-Daten), startet KEIN neuer Aufruf: `tried` merkt sich Woche und
+  // Sprache. Nach einem Fehler gibt es „Erneut versuchen" (Prüfbefund W8), der mit `refresh` fragt.
+  const [run, setRun] = useState<{ key: string; state: 'running' | 'error' } | null>(null);
+  const tried = useRef<string | null>(null);
+  const factsRef = useRef(facts);
   useEffect(() => {
-    if (!wants || !aiUsable()) return;
-    void ensureWeeklyText({ w: week.w, lang, facts, stored: null, signal: scope.signal });
-  }, [wants, week.w, lang, facts, scope]);
+    factsRef.current = facts;
+  }, [facts]);
+  const runKey = `${week.w}|${lang}`;
+  const start = useCallback(
+    (refresh: boolean) => {
+      const key = runKey;
+      tried.current = key;
+      setRun({ key, state: 'running' });
+      void ensureWeeklyText({ w: week.w, lang, facts: factsRef.current, stored: null, signal: scope.signal, refresh }).then((r) => {
+        setRun((cur) => (cur?.key !== key ? cur : r === 'error' ? { key, state: 'error' } : null));
+      });
+    },
+    [runKey, week.w, lang, scope],
+  );
+  useEffect(() => {
+    if (!wants || !aiUsable() || tried.current === runKey) return;
+    start(false);
+  }, [wants, runKey, start]);
+  const failed = !stored && run?.key === runKey && run.state === 'error';
 
   const first = week.days[0] ?? today;
   const last = week.days[6] ?? today;
@@ -115,7 +136,15 @@ function Weekly() {
               </p>
             </div>
           )}
-          {!stored && wants && <p className="mt-3 text-sm text-muted" role="status">{t('weeklyWriting')}</p>}
+          {!stored && wants && !failed && <p className="mt-3 text-sm text-muted" role="status">{t('weeklyWriting')}</p>}
+          {failed && (
+            <div role="alert" className="mt-3 flex flex-wrap items-center gap-3" data-testid="weekly-error">
+              <p className="text-sm text-muted">{t('weeklyFailed')}</p>
+              <Button variant="secondary" icon="refresh" data-ai="" data-testid="weekly-retry" onClick={() => start(true)}>
+                {t('aiRetry')}
+              </Button>
+            </div>
+          )}
           {facts.length === 0 ? (
             <p className="mt-3 text-sm text-muted">{t('weeklyEmpty')}</p>
           ) : (

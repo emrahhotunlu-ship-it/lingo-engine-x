@@ -57,7 +57,7 @@ test('Schreiben: Aufgabe des Tages, Abgeben, Korrektur mit Stellen, Überarbeite
   let db = await dump(page);
   const [path, doc] = Object.entries(db).find(([p, d]) => p.startsWith('writing/w') && d.date === DAY) ?? [];
   expect(path).toBeTruthy();
-  expect(doc).toMatchObject({ promptId, rev: 0, lang: 'de', res: { lang: 'de', pv: 'writing-review@1', rev: 0 } });
+  expect(doc).toMatchObject({ promptId, rev: 0, lang: 'de', res: { lang: 'de', pv: 'writing-review@2', rev: 0 } });
   const res = (doc as { res: { errors: Array<{ orig: string }>; usHints: Array<{ orig: string; us: string }> } }).res;
   expect(res.errors.map((e) => e.orig)).not.toContain('summarise');
   expect(res.usHints).toEqual([{ orig: 'summarise', us: 'summarize' }]);

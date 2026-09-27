@@ -94,7 +94,7 @@ describe('app/assess: beide Formen lesen, Hülle schreiben (A6.10)', () => {
     for (const k of ['level', 'cefr', 'levelWhy', 'trend', 'trendWhy', 'today', 'c1gap', 'strengths', 'blockers', 'dims', 'focus']) expect(k in d).toBe(true);
     expect(d.trend).toBeNull();
     expect(d.focus).toBeNull();
-    expect(upd.pv).toBe('assess@1');
+    expect(upd.pv).toBe('assess@2');
     expect(upd.v).toBe(2);
   });
 
@@ -257,14 +257,14 @@ describe('Belegpaket (Plan §4.2)', () => {
   });
 });
 
-describe('assess@1: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")', () => {
+describe('assess@2: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")', () => {
   const pack = evidenceFromSeed();
   const allowed = allowedActions({ errorTopics: ['passive'], nextLesson: 'l07' });
   const vars = { lang: 'de' as const, evidence: evidenceText(pack), ids: pack.ids, allowed, prev: null, today };
   const ok = () => structuredClone(assessExample(vars));
 
   it('Kopfzeile, complex, kein Zwischenspeicher, text-json', () => {
-    expect(assess.build(vars).split('\n')[0]).toBe('[assess@1]');
+    expect(assess.build(vars).split('\n')[0]).toBe('[assess@2]');
     expect(assess.tier).toBe('complex');
     expect(assess.cache).toBe(false);
     expect(assess.verb).toBe('text-json');
@@ -291,12 +291,12 @@ describe('assess@1: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")'
     expect(s.safeParse(ev).success).toBe(false);
   });
 
-  it('Befund H7: höchstens so viele Belege wie angewiesen, Titel in der Oberflächensprache', () => {
+  it('Befund H7/W6: höchstens so viele Belege wie angewiesen (überzählige fallen weg), Titel in der Oberflächensprache', () => {
     const s = assessSchema(vars);
     const many = ok();
     many.strengths[0]!.ev = pack.ids.slice(0, 4);
     expect(pack.ids.length).toBeGreaterThanOrEqual(4);
-    expect(s.safeParse(many).success).toBe(false);
+    expect(s.parse(many).strengths[0]!.ev).toEqual(pack.ids.slice(0, 3));
     expect(assess.build(vars)).toContain('cites 1–3 evidence ids');
     const title = ok();
     title.strengths[0]!.title = 'Your emails are clear and well structured';
@@ -304,13 +304,56 @@ describe('assess@1: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")'
     expect(ok().blockers.every((b) => !/^(Mixed|Present)/.test(b.title))).toBe(true);
   });
 
-  it('genau 6 eindeutige Fertigkeiten', () => {
+  it('genau 6 eindeutige Fertigkeiten: doppelte fallen weg, fehlende kommen als „thin" ohne Stufe dazu (W6)', () => {
     const dup = ok();
     dup.dims[5] = { ...dup.dims[0]! };
-    expect(assessSchema(vars).safeParse(dup).success).toBe(false);
+    const d1 = assessSchema(vars).parse(dup).dims;
+    expect(d1.map((d) => d.id)).toEqual(['grammar', 'vocabulary', 'reading', 'listening', 'writing', 'speaking']);
+    expect(d1[5]).toEqual({ id: 'speaking', level: null, confidence: 'thin', why: null });
     const five = ok();
-    five.dims.pop();
-    expect(assessSchema(vars).safeParse(five).success).toBe(false);
+    five.dims.shift();
+    const d2 = assessSchema(vars).parse(five).dims;
+    expect(d2).toHaveLength(6);
+    expect(d2[0]).toEqual({ id: 'grammar', level: null, confidence: 'thin', why: null });
+  });
+
+  it('W6: realistische Antworten werden normalisiert statt abgelehnt', () => {
+    const s = assessSchema(vars);
+    const id0 = pack.ids[0]!;
+    // Freie Werte, wie Claude sie liefert – am Typ vorbei gesetzt.
+    const set = (o: object, k: string, v: unknown) => {
+      (o as Record<string, unknown>)[k] = v;
+    };
+    const r = ok();
+    set(r, 'level', 'Solides B2');
+    set(r, 'cefr', 'B2/C1');
+    set(r, 'trend', 'stable');
+    r.today = 'Heute: 10 Minuten Mixed Conditionals mit eigenen Beispielen aus deinem Vertriebsalltag üben, danach eine kurze E-Mail an einen Kunden schreiben, in der du zwei Bedingungssätze verwendest.';
+    r.c1gap = ['Gemischte Bedingungssätze (Mixed Conditionals) spontan und fehlerfrei in Verhandlungen anwenden', 'Kritik diplomatisch äußern'];
+    r.strengths[0]!.ev = [`[${id0}]`];
+    r.strengths[0]!.why = 'Deine Wortschatzarbeit ist sehr konstant: Du hast in den letzten 14 Tagen jeden Tag geübt, die Trefferquote liegt bei gut 80 Prozent, und selbst schwierige Kollokationen sitzen inzwischen deutlich sicherer als noch vor einem Monat.';
+    r.blockers[0]!.title = 'Present Perfect Continuous bei laufenden Projekten und Entwicklungen';
+    r.blockers.push(structuredClone(r.blockers[0]!), structuredClone(r.blockers[0]!));
+    r.blockers[0]!.action = 'mixed-cond';
+    r.focus.action = 'grammar: passive';
+    set(r.focus, 'days', '3');
+    set(r.dims[0]!, 'level', 'B2-');
+    set(r.dims[0]!, 'confidence', 'medium');
+    set(r.dims[5]!, 'why', null);
+    const res = s.safeParse(r);
+    expect(res.error?.issues ?? []).toEqual([]);
+    const o = res.data!;
+    expect(o.cefr).toBe('B2');
+    expect(o.trend).toBe('flat');
+    expect(Array.from(o.today).length).toBeLessThanOrEqual(160);
+    expect(o.today.endsWith('…')).toBe(true);
+    expect(o.c1gap[0]!.length).toBeLessThanOrEqual(90);
+    expect(o.strengths[0]!.ev).toEqual([id0]);
+    expect(o.blockers).toHaveLength(3);
+    expect(o.blockers[0]!.action).toBe('grammar:mixed-cond');
+    expect(o.focus).toMatchObject({ action: 'grammar:passive', days: 3 });
+    expect(o.dims[0]).toMatchObject({ level: 'B2', confidence: 'fair' });
+    expect(o.dims[5]!.why).toBeNull();
   });
 
   it('feste Antwort des Adapters besteht das Schema; im Fehlermodus erst beim Neuversuch', () => {
@@ -376,7 +419,7 @@ describe('Ablauf der Einschätzung (Plan §4.5)', () => {
     expect(m.fake.control.sampleCalls[0]?.tier).toBe('complex');
     expect(m.fake.control.sampleCalls[0]?.cache).toBe(false);
     const doc = m.fake.control.db.dump()['app/assess']!;
-    expect(doc).toMatchObject({ v: 2, pv: 'assess@1', tier: 'complex', lang: 'de', d: today });
+    expect(doc).toMatchObject({ v: 2, pv: 'assess@2', tier: 'complex', lang: 'de', d: today });
     expect((doc.data as Doc).dims).toHaveLength(6);
     expect((doc.hist as Doc[]).length).toBeGreaterThanOrEqual(1);
     const read = readAssess(doc)!;

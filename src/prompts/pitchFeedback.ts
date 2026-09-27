@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { clip, header, langName, langOf } from './common';
-import { threeLayersRules, threeLayersSchema, type ThreeLayersOut } from './threeLayers';
+import { ERROR_CATS, threeLayersRules, threeLayersSchema, type ThreeLayersOut } from './threeLayers';
+import { loose, topicCat } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// pitch-feedback@1 (Plan §5.5, §6.2): Rückmeldung auf den eigenen Präsentationsversuch –
+// pitch-feedback@2 (Plan §5.5, §6.2): Rückmeldung auf den eigenen Präsentationsversuch –
 // Abdeckung der Folienpunkte plus die drei Schichten (Korrektheit, C1-Fassung, „landet besser“).
 // `default`, zwischengespeichert.
 
@@ -15,23 +16,72 @@ export const PF_ATTEMPT_MAX = 2000;
 export const PF_UPGRADED_MAX = 1500;
 
 const ID = 'pitch-feedback';
-const VERSION = 1;
+const VERSION = 2;
+
+const rec = (v: unknown): Record<string, unknown> | null => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : null);
+
+/** Punkt mit den meisten gemeinsamen Wörtern (mindestens 60 % seiner Wörter), sonst -1. */
+function bestOverlap(k: string, keys: readonly string[]): number {
+  const got = new Set(k.split(' '));
+  let best = -1;
+  let score = 0.6;
+  keys.forEach((p, i) => {
+    const words = p.split(' ').filter(Boolean);
+    const r = words.length ? words.filter((w) => got.has(w)).length / words.length : 0;
+    if (r >= score) {
+      best = i;
+      score = r + 1e-9;
+    }
+  });
+  return best;
+}
+
+/**
+ * Abdeckung tolerant (Prüfhinweis): Der Punkt wird ohne Satzzeichen und Groß/klein zugeordnet
+ * („Cloud archive for small businesses."), dann über gemeinsame Wörter („GDPR-compliant data
+ * retention"), sonst über die Stelle in der Liste (umformuliert).
+ * Ausgegeben wird immer der gegebene Punkt.
+ */
+export function matchCoverage(raw: unknown, points: readonly string[]): unknown {
+  if (!Array.isArray(raw)) return raw;
+  const keys = points.map(loose);
+  return (raw as unknown[]).map((x, i) => {
+    const o = rec(x);
+    if (!o || typeof o.point !== 'string') return x;
+    const k = loose(o.point);
+    let hit = keys.indexOf(k);
+    if (hit < 0) hit = keys.findIndex((p) => p.length > 3 && k.length > 3 && (p.includes(k) || k.includes(p)));
+    if (hit < 0) hit = bestOverlap(k, keys);
+    if (hit < 0 && raw.length === points.length) hit = i;
+    return hit >= 0 ? { ...o, point: points[hit] } : o;
+  });
+}
+
+/** Kategorien der drei Schichten tolerant („grammar" → other, „preposition" → prepositions). */
+function normalizeCats(raw: unknown): unknown {
+  const o = rec(raw);
+  if (!o || !Array.isArray(o.errors)) return raw;
+  return { ...o, errors: (o.errors as unknown[]).map((e) => (rec(e) ? { ...(e as object), cat: topicCat((e as { cat?: unknown }).cat, ERROR_CATS) } : e)) };
+}
 
 export function pitchFeedbackSchema(v: PitchFeedbackVars): z.ZodType<PitchFeedbackOut> {
   const layers = threeLayersSchema({ sentence: clip(v.attempt, PF_ATTEMPT_MAX), focusWords: [], uiLang: v.uiLang, upgradedMax: PF_UPGRADED_MAX });
   const points = v.points.map((p) => p.trim().toLowerCase());
-  const coverage = z
-    .array(z.object({ point: z.string().trim().min(1), covered: z.boolean(), note: z.string().trim().max(200) }).superRefine(langOf(['note'], v.uiLang)))
-    .superRefine((list, ctx) => {
-      list.forEach((c, i) => {
-        if (!points.includes(c.point.trim().toLowerCase())) ctx.addIssue({ code: 'custom', path: [i, 'point'], message: 'point must be copied from the given points' });
-      });
-    });
+  const coverage = z.preprocess(
+    (c) => matchCoverage(c, v.points.map((p) => p.trim())),
+    z
+      .array(z.object({ point: z.string().trim().min(1), covered: z.boolean(), note: z.string().trim().max(200) }).superRefine(langOf(['note'], v.uiLang)))
+      .superRefine((list, ctx) => {
+        list.forEach((c, i) => {
+          if (!points.includes(c.point.trim().toLowerCase())) ctx.addIssue({ code: 'custom', path: [i, 'point'], message: 'point must be copied from the given points' });
+        });
+      }),
+  );
   const cov = z.object({ coverage });
   // Zwei Schemas auf demselben Objekt: Abdeckung plus drei Schichten, alle Mängel gesammelt.
   return z.unknown().transform((raw, ctx): PitchFeedbackOut => {
     const a = cov.safeParse(raw);
-    const b = layers.safeParse(raw);
+    const b = layers.safeParse(normalizeCats(raw));
     for (const res of [a, b]) {
       if (!res.success) for (const i of res.error.issues) ctx.addIssue({ code: 'custom', path: i.path, message: i.message });
     }

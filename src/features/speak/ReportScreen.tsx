@@ -90,7 +90,7 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
         {aiState === 'failed' && (
           <div role="alert" className="flex flex-wrap items-center gap-3">
             <p className="text-sm text-muted">{t(rep.error ?? 'aiFailed')}</p>
-            <Button icon="refresh" data-ai="" data-testid="report-retry" onClick={() => void rp.requestReport()}>
+            <Button icon="refresh" data-ai="" data-testid="report-retry" onClick={() => void rp.requestReport({ refresh: true })}>
               {t('aiRetry')}
             </Button>
           </div>
@@ -124,28 +124,31 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
                   ))}
                 </ul>
               </Card>
-              <Card as="div">
-                <p className="lx-eyebrow">{t('repFocus')}</p>
-                <ul className="mt-2 flex flex-col gap-3">
-                  {rep.data.focus.map((f, k) => (
-                    <li key={k} className="flex flex-col gap-1 text-sm">
-                      <p className="flex flex-wrap items-center gap-2 font-semibold">
-                        {f.title}
-                        <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-normal text-muted">{cat(f.cat)}</span>
-                      </p>
-                      <p>
-                        <span className="text-muted">{t('repYouSaid')} </span>
-                        <span lang="en">„{f.said}“</span>
-                      </p>
-                      <p className="flex flex-wrap gap-1">
-                        <span className="text-muted">{t('repBetter')}</span>
-                        <EnglishText as="span" text={f.better} area="speak" source={`scene/${scene.id}`} title={scene.titleEn} className="font-medium" />
-                      </p>
-                      <p className="text-muted">{f.why}</p>
-                    </li>
-                  ))}
-                </ul>
-              </Card>
+              {/* Ein gutes Gespräch darf ohne Fokuspunkt sein (roleplay-report@2). */}
+              {rep.data.focus.length > 0 && (
+                <Card as="div">
+                  <p className="lx-eyebrow">{t('repFocus')}</p>
+                  <ul className="mt-2 flex flex-col gap-3">
+                    {rep.data.focus.map((f, k) => (
+                      <li key={k} className="flex flex-col gap-1 text-sm">
+                        <p className="flex flex-wrap items-center gap-2 font-semibold">
+                          {f.title}
+                          <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-normal text-muted">{cat(f.cat)}</span>
+                        </p>
+                        <p>
+                          <span className="text-muted">{t('repYouSaid')} </span>
+                          <span lang="en">„{f.said}“</span>
+                        </p>
+                        <p className="flex flex-wrap gap-1">
+                          <span className="text-muted">{t('repBetter')}</span>
+                          <EnglishText as="span" text={f.better} area="speak" source={`scene/${scene.id}`} title={scene.titleEn} className="font-medium" />
+                        </p>
+                        <p className="text-muted">{f.why}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              )}
             </div>
             {rep.data.phrases.length > 0 && (
               <Card as="div">

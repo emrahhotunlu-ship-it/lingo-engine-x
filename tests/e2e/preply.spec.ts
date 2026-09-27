@@ -34,7 +34,7 @@ test.describe('Desktop 1440 DE', () => {
     expect(pps).toHaveLength(1);
     const [path, pp] = pps[0]!;
     expect(await countWrites(page, path)).toBe(1);
-    expect(pp).toMatchObject({ lang: 'de', pv: 'preply-prep@1', done: false, minutes: 50 });
+    expect(pp).toMatchObject({ lang: 'de', pv: 'preply-prep@2', done: false, minutes: 50 });
     // `watch` nur aus echten Fehlern (Grammatik offen).
     const givens = Object.entries(await dump(page))
       .filter(([k]) => k.startsWith('grammar/'))
@@ -90,7 +90,7 @@ test.describe('Desktop 1440 DE', () => {
     const pis = (await docsOf(page, 'preply/pi')).filter(([k]) => k !== 'preply/pi1789668000000');
     expect(pis).toHaveLength(1);
     const [piPath, pi] = pis[0]!;
-    expect(pi).toMatchObject({ kind: 'import', applied: false, pv: 'preply-import@1' });
+    expect(pi).toMatchObject({ kind: 'import', applied: false, pv: 'preply-import@2' });
     expect(pi.tasks).toEqual(['It depends ___ the budget.', 'I ___ with your proposal.']);
     const words = page.locator('[data-testid="pi-item"][data-group="w"]');
     expect(await words.evaluateAll((els) => els.map((e) => e.getAttribute('data-state')))).toEqual(['selected', 'exists', 'invalid']);

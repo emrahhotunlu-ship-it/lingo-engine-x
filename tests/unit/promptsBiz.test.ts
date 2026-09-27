@@ -17,7 +17,7 @@ describe('mail-refine@1', () => {
 
   it('Kopfzeile, nummerierte Bausteine, default, zwischengespeichert', () => {
     const p = mailRefine.build(vars('de'));
-    expect(p.split('\n')[0]).toBe('[mail-refine@1]');
+    expect(p.split('\n')[0]).toBe('[mail-refine@2]');
     expect(p).toContain('[0] Dear Mr Walker,');
     expect(mailRefine.tier).toBe('default');
     const big = mailRefine.build({ ...vars('de'), segments: Array.from({ length: 25 }, (_, i) => ({ i, text: 'word '.repeat(200) })) });
@@ -71,10 +71,10 @@ describe('phrase-adapt@1', () => {
   });
 });
 
-describe('pitch-script@1 und pitch-feedback@1', () => {
+describe('pitch-script@2 und pitch-feedback@2', () => {
   it('Skript: Kopfzeile, Beispiel und feste Antwort bestehen das Schema, keyPhrases.ex ⊃ en', () => {
     const p = pitchScript.build({ slide: 'Cloud archive for small businesses. Setup in one day.', audience: 'clients', minutes: 2, uiLang: 'de' });
-    expect(p.split('\n')[0]).toBe('[pitch-script@1]');
+    expect(p.split('\n')[0]).toBe('[pitch-script@2]');
     expect(pitchScriptSchema.safeParse(JSON.parse(PITCH_SCRIPT_EXAMPLE)).success).toBe(true);
     expect(pitchScriptSchema.safeParse(JSON.parse(pitchScriptReply(p))).success).toBe(true);
     const bad = JSON.parse(PITCH_SCRIPT_EXAMPLE) as { keyPhrases: Array<Record<string, string>> };

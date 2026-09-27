@@ -191,7 +191,7 @@ describe('turn-analysis@1', () => {
   });
 });
 
-describe('roleplay-report@1', () => {
+describe('roleplay-report@2', () => {
   const vars = (uiLang: 'de' | 'en'): RoleplayReportVars => ({
     title: 'Holding the Q2 date',
     goal: 'Keep Q2.',
@@ -209,7 +209,7 @@ describe('roleplay-report@1', () => {
   it('Kopfzeile, default, Beispiel und feste Antwort bestehen das Schema (DE und EN)', () => {
     for (const uiLang of ['de', 'en'] as const) {
       const p = roleplayReport.build(vars(uiLang));
-      expect(p.split('\n')[0]).toBe('[roleplay-report@1]');
+      expect(p.split('\n')[0]).toBe('[roleplay-report@2]');
       const r = reportSchema(vars(uiLang)).safeParse(JSON.parse(roleplayReportReply(p)));
       expect(r.success, JSON.stringify(r.error?.issues)).toBe(true);
       const withQuotes = { ...vars(uiLang), turns: [...vars(uiLang).turns, { me: 'the exposure here is the penalty', persona: '', v: 'clean', c: [] }, { me: 'we must delay the start', persona: '', v: 'errors', c: [] }] };
@@ -227,10 +227,10 @@ describe('roleplay-report@1', () => {
   });
 });
 
-describe('scene-gen@1', () => {
+describe('scene-gen@2', () => {
   it('Kopfzeile, default, nie zwischengespeichert; Beispiel und feste Antwort bestehen das Schema', () => {
     const p = sceneGen.build({ ctx: 'DMS sales', level: 'C1', wish: 'budget talk', grammar: 'Conditionals', words: ['leverage'], existingTitles: ['A'] });
-    expect(p.split('\n')[0]).toBe('[scene-gen@1]');
+    expect(p.split('\n')[0]).toBe('[scene-gen@2]');
     expect(sceneGen.cache).toBe(false);
     expect(sceneGenSchema.safeParse(JSON.parse(SCENE_GEN_EXAMPLE)).success).toBe(true);
     expect(sceneGenSchema.safeParse(JSON.parse(sceneGenReply(p))).success).toBe(true);

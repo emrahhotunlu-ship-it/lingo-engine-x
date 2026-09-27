@@ -54,7 +54,7 @@ export function SummaryStep({ readingId, item, route, onSkip, onSaved }: Props) 
       template: readingCheck,
       vars: { title: item.title, text: item.text, keypoints: item.keypoints, summary, uiLang },
       save: async (data) => {
-        await saveReadingSummary(readingId, summary, wordCount(summary), { ...data, lang: uiLang, pv: 'reading-check@1' });
+        await saveReadingSummary(readingId, summary, wordCount(summary), { ...data, lang: uiLang, pv: `${readingCheck.id}@${readingCheck.version}` });
         // Britische Formen sind nie ein Fehler (F11) und kommen nie ins Radar.
         await addRadar(processErrors(data.language.errors, summary).errors, summary, 'r');
       },

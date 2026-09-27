@@ -74,6 +74,8 @@ export function MailRefiner() {
     if (!segments.length) return;
     started.current = Date.now();
     saved.current = null;
+    // Neuversuch nach einem Fehler: Zwischenspeicher von `sample` einmal übergehen.
+    const refresh = !!c.error;
     send({ type: 'REFINE', segments });
     const x = scope.controller();
     ctl.current = x;
@@ -82,6 +84,7 @@ export function MailRefiner() {
         template: mailRefine,
         vars: { segments: segments.map((s) => ({ i: s.i, text: s.text })), recipient, intent, uiLang: lang },
         signal: x.signal,
+        refresh,
         onPhase: (p) => {
           if (p === 'slow') send({ type: 'SLOW' });
         },

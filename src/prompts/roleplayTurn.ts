@@ -34,13 +34,19 @@ const ID = 'roleplay-turn';
 const VERSION = 1;
 
 /** Regieanweisungen, Namenspräfix, Markdown und umschließende Anführungszeichen entfernen. */
+/** Wörter, die mit Doppelpunkt einen Satz einleiten und kein Sprechername sind. */
+const LEAD_WORDS = new Set(['look', 'listen', 'honestly', 'frankly', 'okay', 'ok', 'well', 'fine', 'sure', 'right', 'yes', 'no', 'so', 'now', 'first', 'second', 'third', 'finally', 'again', 'seriously', 'note', 'fact', 'truth', 'point', 'problem', 'question', 'answer', 'reality', 'option', 'result', 'basically', 'remember', 'here', 'thing', 'bottom', 'summary', 'update', 'agreed', 'correct', 'exactly', 'please', 'wait', 'careful', 'warning', 'important']);
+
 export function cleanFigureText(text: string): string {
   let s = text.replace(/\r/g, '');
   // Regieanweisungen: *leans back*, _pauses_, [sighs], (smiles) – nur kurze, eigenständige Klammern.
   s = s.replace(/\*[^*\n]{1,80}\*(?!\*)/g, (m) => (/^\*\*/.test(m) ? m : ' '));
   s = s.replace(/(^|\s)_[^_\n]{1,80}_(?=\s|$)/g, ' ');
   s = s.replace(/\[[^\]\n]{1,80}\]/g, ' ');
-  s = s.replace(/(^|[\s.!?])\((?:[a-z][^)\n]{0,78})\)(?=\s|$)/g, '$1 ');
+  // Runde Klammern nur am Anfang, nach Satzende oder ganz am Ende – mitten im Satz ist die
+  // Klammer Inhalt („40k a year (about a third of our budget) for this").
+  s = s.replace(/(^|[.!?])(\s*)\((?:[a-z][^)\n]{0,78})\)(?=\s|$)/g, '$1 ');
+  s = s.replace(/\s\((?:[a-z][^)\n]{0,78})\)\s*$/, ' ');
   // Markdown-Reste.
   s = s.replace(/\*\*/g, '').replace(/^#+\s*/gm, '');
   s = s.replace(/\s+/g, ' ').trim();
@@ -48,6 +54,9 @@ export function cleanFigureText(text: string): string {
   s = s.replace(/^((?:Dr\.|Mr\.|Ms\.|Mrs\.|Prof\.)\s+)?[A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){1,3}(?:\s*\([^)]{1,40}\))?\s*:\s+/, (m, title: string | undefined) =>
     title || /\s/.test(m.replace(/\s*:\s+$/, '').trim()) ? '' : m,
   );
+  // Einteiliges Namenspräfix „Sandra: Look, …“ – nur vor einem neuen Satz (Großbuchstabe oder
+  // Anführungszeichen) und nicht bei Einleitungswörtern wie „Look: This …“.
+  s = s.replace(/^([A-Z][a-z'’-]{1,20}):\s+(?=["“„'‘]?[A-Z])/, (m, word: string) => (LEAD_WORDS.has(word.toLowerCase()) ? m : ''));
   // Umschließende Anführungszeichen.
   const q = /^["“„'‘](.*)["”“'’]$/.exec(s);
   if (q?.[1] && !/["“”„]/.test(q[1])) s = q[1].trim();

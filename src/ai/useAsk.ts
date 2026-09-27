@@ -5,7 +5,9 @@ import { isAiFailure, type AiMessageKey, type AiPhase, type PromptTemplate } fro
 import { logWarn } from '../platform/diagnostics';
 
 // Eine KI-Anfrage aus der Oberfläche: Phase, Ergebnis, Fehlertext, Stopp.
-// Ein Aufruf je `run()` (nur auf eine Handlung hin), nie automatisch wiederholt.
+// Ein Aufruf je `run()` (nur auf eine Handlung hin), nie automatisch wiederholt. Folgt ein
+// `run()` auf einen Fehler, ist es der Neuversuch des Nutzers: Er übergeht den Zwischenspeicher
+// von `sample` einmal (`refresh`), sonst käme dieselbe ungültige Antwort zurück.
 
 export type AskState<O> = { phase: AiPhase | 'idle'; data: O | null; error: AiMessageKey | null };
 
@@ -13,6 +15,7 @@ export function useAsk<V, O>(template: PromptTemplate<V, O>) {
   const scope = useAiScope();
   const [state, setState] = useState<AskState<O>>({ phase: 'idle', data: null, error: null });
   const ctl = useRef<AbortController | null>(null);
+  const failed = useRef(false);
   const alive = useRef(true);
   useEffect(() => {
     alive.current = true;
@@ -26,13 +29,15 @@ export function useAsk<V, O>(template: PromptTemplate<V, O>) {
       ctl.current?.abort();
       const c = scope.controller();
       ctl.current = c;
+      const refresh = opts.refresh ?? failed.current;
+      failed.current = false;
       setState({ phase: 'queued', data: null, error: null });
       try {
         const r = await askJson({
           template,
           vars,
           signal: c.signal,
-          refresh: opts.refresh === true,
+          refresh,
           onPhase: (p) => {
             if (alive.current && ctl.current === c) setState((s) => ({ ...s, phase: p }));
           },
@@ -47,6 +52,7 @@ export function useAsk<V, O>(template: PromptTemplate<V, O>) {
         }
         const key = isAiFailure(err) ? err.messageKey : 'aiFailed';
         if (!isAiFailure(err)) logWarn('ai:ask', err, template.id);
+        failed.current = true;
         setState({ phase: 'error', data: null, error: key ?? 'aiFailed' });
         return null;
       }

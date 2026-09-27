@@ -53,7 +53,7 @@ test('Lesen: kompletter Durchlauf mit Karte, Fragen, Zusammenfassung und Schreib
   expect(r).toMatchObject({ date: DAY, level: 'B2', domain: 'work', ref: `articles/${ARTICLE_Q}` });
   expect(r.quiz.n).toBe(4);
   expect(String(r.summary)).toContain('summarise');
-  expect(r.res).toMatchObject({ lang: 'de', pv: 'reading-check@1' });
+  expect(r.res).toMatchObject({ lang: 'de', pv: 'reading-check@2' });
   const radar = db['app/radar'] as { events: Array<Record<string, unknown>> };
   expect(radar.events.filter((e) => e.s === 'r').length).toBeGreaterThanOrEqual(1);
   // UK-Schreibweise ist nie ein Fehler im Radar.
@@ -120,7 +120,7 @@ test('Lesen: neuer Text mit Themenwahl (M12) – genau ein Aufruf, gespeichert u
   await page.getByTestId('gen-new').click();
   await expect(page.getByTestId('article')).toBeVisible({ timeout: 15_000 });
   const db = await dump(page);
-  const gen = Object.entries(db).find(([p, d]) => p.startsWith('articles/') && p !== `articles/${ARTICLE_Q}` && d.pv === 'reading-text@1' && d.src === 'ai' && Array.isArray(d.questions) && (d.questions as unknown[]).length === 4);
+  const gen = Object.entries(db).find(([p, d]) => p.startsWith('articles/') && p !== `articles/${ARTICLE_Q}` && d.pv === 'reading-text@2' && d.src === 'ai' && Array.isArray(d.questions) && (d.questions as unknown[]).length === 4);
   expect(gen?.[1]).toMatchObject({ domain: 'work', level: 'B2+' });
   expect((db['app/profile'] as { gen: { ar: string } }).gen.ar).toBe(DAY);
   expect(await sampleCalls(page)).toEqual([{ id: 'reading-text', tier: 'default' }]);

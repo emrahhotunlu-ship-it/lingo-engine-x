@@ -1,4 +1,5 @@
 import { DIMS, isConfidence, type Confidence, isLevel, TRENDS, type AssessData, type AssessDim, type AssessHist, type AssessRead, type Dim, type Trend } from './types';
+import { assess } from '../../prompts/assess';
 
 // `app/assess` lesen und schreiben (Plan §4.1, A6.10). Gelesen werden beide Formen: die Hülle
 // der alten App `{d, t, lang, answers, writings, data:{…}}` und die flache Form aus Anhang B.
@@ -15,7 +16,8 @@ const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v)
 const strs = (v: unknown): string[] => arr(v).filter((x): x is string => typeof x === 'string' && !!x.trim());
 
 export const HIST_MAX = 60;
-export const ASSESS_PV = 'assess@1';
+/** Vorlage und Version der gespeicherten Einschätzung (folgt der Vorlage, nie von Hand). */
+export const ASSESS_PV = `${assess.id}@${assess.version}`;
 
 // Kennungen der alten App (echte Daten): `dims[].id` gr/vo/re/li/wr/fl und `confidence`
 // low/mid/high. `fl` (Flüssigkeit, im alten Tagesplan vom Sprint gespeist) ist die Fertigkeit

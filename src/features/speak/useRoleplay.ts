@@ -97,7 +97,8 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
 
   // ------------------------------------------------------------ Bericht
 
-  const requestReport = useCallback(async () => {
+  // `refresh`: Neuversuch nach einem Fehler – den Zwischenspeicher von `sample` einmal übergehen.
+  const requestReport = useCallback(async (opts: { refresh?: boolean } = {}) => {
     const run = runRef.current;
     if (!run) return;
     const c = ctx();
@@ -108,6 +109,7 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
         template: roleplayReport,
         vars: { title: scene.titleEn, goal: scene.goalEn, role: `${scene.persona?.name ?? ''}, ${scene.persona?.role ?? ''}`, turns: reportTurns(c.turns, c.analyses), taken: c.taken, uiLang },
         signal: scope.signal,
+        refresh: opts.refresh === true,
         onPhase: (p) => {
           if (p === 'slow' && alive.current) send({ type: 'REPORT_PHASE', state: 'slow' });
         },
@@ -147,7 +149,7 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
   // ------------------------------------------------------------ Analyse
 
   const analyze = useCallback(
-    (i: number) => {
+    (i: number, refresh = false) => {
       const c = ctx();
       const t = c.turns[i];
       if (!t || t.role !== 'me') return;
@@ -168,6 +170,7 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
             vars: { goal: scene.goalEn, role: `${scene.persona?.name ?? ''}, ${scene.persona?.role ?? ''} (${scene.persona?.org ?? ''})`, personaLine, history, sentence: t.text, focusWords: scene.words, uiLang },
             signal: ctl.signal,
             priority: 'background',
+            refresh,
           });
           if (!alive.current) return;
           send({ type: 'ANALYSIS', idx: i, slot: { state: 'done', data: r.data, lang: uiLang } });
@@ -246,7 +249,7 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
     void maybeFinish();
   }, [send, maybeFinish]);
 
-  const retryAnalysis = useCallback((i: number) => analyze(i), [analyze]);
+  const retryAnalysis = useCallback((i: number) => analyze(i, true), [analyze]);
   const setDraft = useCallback((text: string) => send({ type: 'DRAFT', text }), [send]);
   const markTaken = useCallback(
     (en: string) => {

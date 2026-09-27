@@ -93,7 +93,7 @@ describe('Schreibziele eines Durchlaufs aller vier Module (Plan §3.1, §8.2)', 
     expect(writes.filter((w) => w.path === `wprompt/${DAY}`).map((w) => w.op)).toEqual(['set', 'update']);
     const db = fake.db.dump() as Record<string, Doc>;
     expect(Object.keys(db).filter((k) => k.startsWith('feed/'))).toEqual(Object.keys(before).filter((k) => k.startsWith('feed/')));
-    expect(db[`articles/${genId}`]).toMatchObject({ src: 'ai', pv: 'reading-text@1', domain: 'work' });
+    expect(db[`articles/${genId}`]).toMatchObject({ src: 'ai', pv: 'reading-text@2', domain: 'work' });
     expect(db[`articles/${ownId}`]).toMatchObject({ src: 'own', keypoints: ['k'] });
     const w = db[`writing/${wid}`] as Doc & { res: { usHints: unknown[]; errors: Array<{ orig: string }> } };
     expect(w).toMatchObject({ rev: 1, text: 'I will summarize it. It depends on you.' });

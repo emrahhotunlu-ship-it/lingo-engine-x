@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { clip, header } from './common';
+import { countSentences, firstCefr, sliced } from './tolerant';
 import type { PromptTemplate } from './types';
 
-// scene-gen@1 (Plan §6.2, Kap. 2.5): neue Rollenspiel-Szene im Format der alten App, passend
+// scene-gen@2 (Plan §6.2, Kap. 2.5): neue Rollenspiel-Szene im Format der alten App, passend
 // zu Emrahs Berufswelt, optional mit Wunsch, Grammatik-Fokus und fälligen Wörtern
 // (kombinierte Aufgaben). `default`, nie zwischengespeichert (jedes „Erstellen“ ist neu).
 
@@ -35,7 +36,7 @@ export const SG_CTX_MAX = 300;
 export const SG_WISH_MAX = 200;
 
 const ID = 'scene-gen';
-const VERSION = 1;
+const VERSION = 2;
 
 const en = (min: number, max: number) =>
   z
@@ -52,7 +53,7 @@ const de = (min: number, max: number) =>
     .max(max)
     .refine((s) => !isWrongLang(s, 'de'), { message: 'must be written in German' });
 
-const sentences = (s: string) => (s.match(/[^.!?]+[.!?]+/g) ?? [s]).filter((x) => x.trim()).length;
+const SCENE_LEVELS = ['B2', 'B2+', 'C1'] as const;
 
 export const sceneGenSchema: z.ZodType<SceneGenOut> = z.object({
   title: en(4, 90),
@@ -64,9 +65,11 @@ export const sceneGenSchema: z.ZodType<SceneGenOut> = z.object({
   persona: z.object({ name: z.string().trim().min(2).max(60), role: z.string().trim().min(2).max(80), org: en(3, 120), traits: en(10, 300) }),
   stake: en(10, 300),
   objection: en(10, 300),
-  opening: en(10, 400).refine((s) => sentences(s) <= 3, { message: 'opening: 1–3 sentences' }),
-  useful: z.array(z.object({ en: en(2, 60), de: z.string().trim().min(2).max(80) })).min(4).max(6),
-  level: z.enum(['B2', 'B2+', 'C1']),
+  // Tolerant (Prüfhinweis): „Mr." und „2.5" beenden keinen Satz (Zählung wie beim E-Mail-Zerlegen).
+  // Mehr als sechs Wendungen: die ersten sechs. „C1+" → C1.
+  opening: en(10, 400).refine((s) => countSentences(s) <= 3, { message: 'opening: 1–3 sentences' }),
+  useful: sliced(z.object({ en: en(2, 60), de: z.string().trim().min(2).max(80) }), 4, 6),
+  level: z.preprocess((l) => firstCefr(l, SCENE_LEVELS), z.enum(SCENE_LEVELS)),
 });
 
 export const SCENE_GEN_EXAMPLE = JSON.stringify({

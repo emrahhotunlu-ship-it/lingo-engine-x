@@ -1,10 +1,12 @@
 import { z } from 'zod';
+import { MAIL_MAX } from '../domain/business/mailCompose';
 import { containsPhrase } from '../domain/chunks/newChunk';
 import { isWrongLang } from '../domain/lang/detect';
 import { clip, header, langName, langOf } from './common';
+import { intIn, phraseIn } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// mail-refine@1 (Plan §5.5, §6.2): bewertet eine selbst geschriebene E-Mail Satz für Satz und
+// mail-refine@2 (Plan §5.5, §6.2): bewertet eine selbst geschriebene E-Mail Satz für Satz und
 // schlägt je schwachem Satz 2–3 Fassungen vor. Die Mail wird lokal zerlegt und nummeriert
 // (domain/business/mailCompose.ts); die Antwort nennt jeden Baustein genau einmal – so ergibt
 // das Zusammensetzen immer den Eingabetext (Abdeckungsregel per Aufbau). `default`, zwischengespeichert.
@@ -20,10 +22,16 @@ export type MailOption = { text: string; register: 'formal' | 'neutral' | 'infor
 export type MailSegmentOut = { i: number; status: 'ok' | 'stiff' | 'unclear' | 'wrong'; options: MailOption[] };
 export type MailRefineOut = { segments: MailSegmentOut[]; tone: string };
 
-export const MAIL_SEG_MAX = 400;
+/**
+ * Höchstlänge eines Bausteins im Prompt. So lang wie die ganze Mail (MAIL_MAX): Bei mehr als 25 Sätzen
+ * fasst mailCompose den Rest zu EINEM Baustein zusammen – gekürzt würde seine Fassung den Schluss verlieren.
+ */
+export const MAIL_SEG_MAX = MAIL_MAX;
 
 const ID = 'mail-refine';
-const VERSION = 1;
+const VERSION = 2;
+/** Obergrenze einer Fassung; ein zusammengefasster Schluss-Baustein (> 25 Sätze, mailCompose) darf länger sein. */
+export const MAIL_OPTION_MAX = 500;
 
 const en = (max: number) =>
   z
@@ -35,25 +43,30 @@ const en = (max: number) =>
 
 export function mailRefineSchema(v: Pick<MailRefineVars, 'segments' | 'uiLang'>): z.ZodType<MailRefineOut> {
   const ids = v.segments.map((s) => s.i);
+  // Längster Baustein (im Prompt auf MAIL_SEG_MAX gekürzt) → Fassungen dürfen etwas länger sein.
+  const longest = Math.max(0, ...v.segments.map((s) => Math.min(Array.from(s.text).length, MAIL_SEG_MAX)));
+  const optionMax = Math.max(MAIL_OPTION_MAX, Math.round(longest * 1.5) + 100);
+  // Tolerant (Prüfhinweis): Nummer auch als Text, fehlendes phrase/de/def = "", Wendung beugungstolerant.
+  const str = (max: number) => z.string().trim().max(max).default('');
   return z
     .object({
       segments: z.array(
         z
           .object({
-            i: z.number().int(),
+            i: intIn(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER),
             status: z.enum(['ok', 'stiff', 'unclear', 'wrong']),
             options: z.array(
               z
                 .object({
-                  text: en(500),
+                  text: en(optionMax),
                   register: z.enum(['formal', 'neutral', 'informal']),
                   why: z.string().trim().min(1).max(200),
-                  phrase: z.string().trim().max(80),
-                  de: z.string().trim().max(120),
-                  def: z.string().trim().max(160),
+                  phrase: str(80),
+                  de: str(120),
+                  def: str(160),
                 })
                 .superRefine((o, ctx) => {
-                  if (o.phrase && !containsPhrase(o.text, o.phrase)) ctx.addIssue({ code: 'custom', path: ['phrase'], message: 'phrase must appear word for word in text' });
+                  if (o.phrase && !containsPhrase(o.text, o.phrase) && !phraseIn(o.text, o.phrase)) ctx.addIssue({ code: 'custom', path: ['phrase'], message: 'phrase must appear word for word in text' });
                   if (o.phrase && (!o.de || !o.def)) ctx.addIssue({ code: 'custom', path: ['de'], message: 'give de and def for every phrase' });
                   if (o.def && isWrongLang(o.def, 'en')) ctx.addIssue({ code: 'custom', path: ['def'], message: 'must be written in English' });
                 })
