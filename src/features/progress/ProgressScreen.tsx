@@ -19,6 +19,7 @@ import { JudgeTab } from './JudgeTab';
 import { PathTab } from './PathTab';
 import { LevelScale, WeekStrip } from './StandHeader';
 import { RepairStandLine } from '../repair/StandLine';
+import { PatternsStandCard } from '../patterns/StandCard';
 
 // „Dein Stand" (Kap. 6.13, Plan E18, UX-Beratung Nr. 6): eine Kopfkarte mit Serie · Kurs · Karten,
 // Woche und Niveau, darunter vier Reiter in einer Zeile
@@ -115,6 +116,8 @@ export function ProgressScreen() {
         </div>
       </motion.section>
       <RepairStandLine />
+      {/* Lernberatung V3/V8: Deutsch-Fallen mit Verlauf und Wochenfokus. */}
+      <PatternsStandCard />
 
       <LateRescueCard />
 

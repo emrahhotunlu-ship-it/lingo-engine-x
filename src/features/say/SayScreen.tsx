@@ -12,6 +12,7 @@ import { EnglishText } from '../../engine/EnglishText';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
 import { sayCheck, type SayCheckOut } from '../../prompts/sayCheck';
+import { patternHints } from '../patterns/store';
 import { Button, IconButton } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Icon } from '../../ui/Icon';
@@ -107,7 +108,7 @@ export function SayScreen() {
 
   const check1 = async () => {
     if (!sit || words1 < SAY_MIN_WORDS || busy1) return;
-    const r = await ask1.run({ situation: sit.en, kind: sit.kind, text: text1.trim(), uiLang: lang });
+    const r = await ask1.run({ situation: sit.en, kind: sit.kind, text: text1.trim(), uiLang: lang, watch: await patternHints() });
     if (!r) return;
     setFb1(r);
     setPhase('feedback');
@@ -145,7 +146,7 @@ export function SayScreen() {
 
   const check2 = async () => {
     if (!sit || words2 < SAY_MIN_WORDS || busy2) return;
-    const r = await ask2.run({ situation: sit.en, kind: sit.kind, text: text2.trim(), uiLang: lang });
+    const r = await ask2.run({ situation: sit.en, kind: sit.kind, text: text2.trim(), uiLang: lang, watch: await patternHints() });
     if (!r) return;
     setFb2(r);
     await finish(text2, r);

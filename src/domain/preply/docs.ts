@@ -32,6 +32,8 @@ export type PlanView = {
   say: string[];
   watch: Watch[];
   message: string;
+  /** Wochenfokus zur Zeit der Vorbereitung (Lernberatung V8, neu; Altpläne: leer). */
+  focus: Array<{ de: string; en: string }>;
   done: boolean;
   doneT: number;
   heldDay: string;
@@ -96,6 +98,10 @@ export function readPlan(id: string, d: Doc): PlanView {
       .map((w) => ({ mistake: str(obj(w).mistake), fix: str(obj(w).fix), note: str(obj(w).note) }))
       .filter((w) => w.mistake || w.fix),
     message: str(d.message),
+    focus: arr(d.focus)
+      .map((f) => ({ de: str(obj(f).de), en: str(obj(f).en) }))
+      .filter((f) => f.de || f.en)
+      .slice(0, 3),
     done: d.done === true,
     doneT: num(d.doneT),
     heldDay: str(d.heldDay),

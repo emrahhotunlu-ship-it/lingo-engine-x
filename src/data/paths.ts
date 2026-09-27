@@ -17,6 +17,7 @@ import {
   profileSchema,
   radarSchema,
   repairSchema,
+  patternsSchema,
   readingSchema,
   sceneSchema,
   schemaDocSchema,
@@ -45,6 +46,8 @@ export const APP_DOCS = {
   'app/weekly': weeklySchema,
   // Neu (Lernberatung 27.09., V2): Reparatur-Sätze aus Sag es, Gespräch, Schreiben.
   'app/repair': repairSchema,
+  // Neu (Lernberatung 27.09., V3): persönliche Deutsch-Fallen (Fehlermuster).
+  'app/patterns': patternsSchema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {

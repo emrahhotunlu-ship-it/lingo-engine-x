@@ -108,6 +108,14 @@ export function PlanView({ plan }: { plan: Plan }) {
           </ul>
         </Section>
       )}
+      {plan.focus.length > 0 && (
+        <Section title={t('ptFocusTitle')} testId="pp-plan-focus">
+          {list(
+            plan.focus.map((f) => (lang === 'en' ? f.en || f.de : f.de || f.en)),
+            false,
+          )}
+        </Section>
+      )}
       {plan.message && (
         <Section title={t('ppMessage')} testId="pp-message">
           <CopyBox text={plan.message} label={t('ppMessage')} />

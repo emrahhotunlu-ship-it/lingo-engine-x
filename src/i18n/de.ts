@@ -15,6 +15,7 @@ import { engineDe } from './parts/engine.de';
 import { hintDe } from './parts/hint.de';
 import { sayDe } from './parts/say.de';
 import { repairDe } from './parts/repair.de';
+import { patternsDe } from './parts/patterns.de';
 
 export const de = {
   ...aiDe,
@@ -41,6 +42,8 @@ export const de = {
   ...sayDe,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   ...repairDe,
+  // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
+  ...patternsDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

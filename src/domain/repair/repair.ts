@@ -14,7 +14,7 @@ export const REPAIR_MAX = 150;
 export const REPAIR_TEXT_MAX = 300;
 export const REPAIR_WHY_MAX = 200;
 
-export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'lesson';
+export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'lesson' | 'pattern';
 
 export type RepairItem = {
   id: string;

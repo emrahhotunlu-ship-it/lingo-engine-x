@@ -26,6 +26,8 @@ import { weeklyReport } from './weeklyReport';
 import { courseExtend } from './courseExtend';
 import { sayCheck } from './sayCheck';
 import { repairCheck } from './repairCheck';
+import { patterns } from './patterns';
+import { patternCheck } from './patternCheck';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -64,6 +66,9 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   sayCheck,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   repairCheck,
+  // Lernberatung 27.09., V3 – Deutsch-Fallen
+  patterns,
+  patternCheck,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

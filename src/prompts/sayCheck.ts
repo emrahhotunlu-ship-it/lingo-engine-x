@@ -1,12 +1,12 @@
 import { z } from 'zod';
 import { containsPhrase } from '../domain/chunks/newChunk';
 import { isWrongLang } from '../domain/lang/detect';
-import { block, clip, fenced, header, langName, langOf } from './common';
+import { block, clip, fenced, header, langName, langOf, watchLine } from './common';
 import { englishText } from './inputCommon';
 import { clipped, phraseIn, sliced } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// say-check@1 (Lernberatung 27.09., V1/V2 „Sag es“): prüft eine frei formulierte Antwort von
+// say-check@2 (@2: Hinweis auf die Top-3-Muster, V3) (Lernberatung 27.09., V1/V2 „Sag es“): prüft eine frei formulierte Antwort von
 // 3–6 Sätzen auf eine Situation. Drei Schichten: Korrekturen (Emrahs Ausschnitt → richtig, Grund),
 // höchstens zwei C1-Aufwertungen (Ton, Abschwächung, Präzision) und die ganze Antwort in
 // natürlichem US-Englisch auf C1. Dieselbe Vorlage prüft auch den zweiten Durchgang.
@@ -19,6 +19,8 @@ export type SayCheckVars = {
   kind: 'job' | 'life';
   text: string;
   uiLang: UiLang;
+  /** Top-3 persönliche Fehlermuster (Englisch, Lernberatung V3); leer = keine. */
+  watch?: readonly string[];
 };
 
 export type SayCorrectionOut = { wrong: string; right: string; why: string };
@@ -29,7 +31,7 @@ export const SAY_CHECK_TEXT_MAX = 1500;
 export const SAY_SITUATION_MAX = 300;
 
 const ID = 'say-check';
-const VERSION = 1;
+const VERSION = 2;
 
 export function sayCheckExample(uiLang: UiLang): string {
   const de = uiLang === 'de';
@@ -96,6 +98,7 @@ export const sayCheck: PromptTemplate<SayCheckVars, SayCheckOut> = {
       'American English is the standard. British spelling and British words are ALWAYS correct: never list them as corrections.',
       `Situation (${vars.kind === 'job' ? 'work' : 'everyday life'}): ${clip(vars.situation, SAY_SITUATION_MAX)}`,
       `Explanation language: ${langName(vars.uiLang)}`,
+      `Known recurring mistakes of this learner (pay special attention to these): ${watchLine(vars.watch)}`,
       'Learner answer:',
       fenced(block(vars.text, SAY_CHECK_TEXT_MAX)),
       'Reply with only one JSON object, no other text, exactly this shape:',

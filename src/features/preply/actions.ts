@@ -20,6 +20,7 @@ import { flush, learnRecorder, recordRoundEnd } from '../progress/persist';
 import { usePreply } from './store';
 import { repairsFromPreply } from '../../domain/repair/sources';
 import { saveRepairs } from '../repair/store';
+import { withFocusLine, type FocusPoint } from '../../domain/patterns/patterns';
 
 // Schreibwege der Preply-Brücke (Phase 5 §5.1), nur über den einen Writer. Jede KI-Anfrage geht
 // auf eine ausdrückliche Handlung zurück („Plan erstellen", „Analysieren"). Geschrieben wird:
@@ -79,7 +80,15 @@ async function readRadar(): Promise<Doc | null> {
 
 // ------------------------------------------------------------------ Stunde vorbereiten
 
-export async function createPlan(o: { ctx: PrepCtx; minutes: 25 | 50 | 60; signal: AbortSignal; onPhase?: Parameters<typeof askJson>[0]['onPhase']; refresh?: boolean }): Promise<string> {
+export async function createPlan(o: {
+  ctx: PrepCtx;
+  minutes: 25 | 50 | 60;
+  signal: AbortSignal;
+  onPhase?: Parameters<typeof askJson>[0]['onPhase'];
+  refresh?: boolean;
+  /** Wochenfokus (Lernberatung V8): landet als „Please pay attention to: …“ in der Nachricht. */
+  focus?: readonly FocusPoint[];
+}): Promise<string> {
   const uiLang = useSettings.getState().lang;
   const mat = prepMaterial(await readRadar());
   const imp = lastImport(preplyList(usePreply.getState().docs));
@@ -99,16 +108,22 @@ export async function createPlan(o: { ctx: PrepCtx; minutes: 25 | 50 | 60; signa
     signal: o.signal,
     ...(o.onPhase ? { onPhase: o.onPhase } : {}),
   });
-  return savePlan(r.data, { ctx: o.ctx, minutes: o.minutes, uiLang });
+  return savePlan(r.data, { ctx: o.ctx, minutes: o.minutes, uiLang, ...(o.focus?.length ? { focus: o.focus } : {}) });
 }
 
-export async function savePlan(out: PrepOut, meta: { ctx: PrepCtx; minutes: number; uiLang: string }): Promise<string> {
+export async function savePlan(out: PrepOut, meta: { ctx: PrepCtx; minutes: number; uiLang: string; focus?: readonly FocusPoint[] }): Promise<string> {
   const writer = getWriter();
   const ms = Date.now();
   const ctx: Doc = { kind: meta.ctx.kind };
   if (meta.ctx.title) ctx.title = meta.ctx.title;
   if (meta.ctx.topic) ctx.topic = meta.ctx.topic;
   const doc: Doc = { t: ms, lang: meta.uiLang, pv: `${preplyPrep.id}@${preplyPrep.version}`, ctx, minutes: meta.minutes, ...out, done: false, doneT: 0 };
+  // Wochenfokus (Lernberatung V8): gespeichert und als englische Zeile in der Nachricht an den Lehrer.
+  const focus = (meta.focus ?? []).slice(0, 3);
+  if (focus.length) {
+    doc.focus = focus.map((f) => ({ de: f.de, en: f.en }));
+    doc.message = withFocusLine(out.message, focus);
+  }
   const id = `pp${ms}`;
   if (!writer) throw new Error('db unavailable');
   let r = await writer.createIfMissing(`preply/${id}`, doc);
