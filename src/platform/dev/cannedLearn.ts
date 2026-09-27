@@ -59,7 +59,7 @@ const FILL: Readonly<Record<string, Omit<Gen, 'word'>>> = {
 function wordGenReply(input: string): string {
   const mode = line(input, 'Mode');
   if (mode === 'fill') {
-    const m = /^Complete the card for the word: (.+?) \(exactly this word, 1 item\)\.$/m.exec(input);
+    const m = /^Complete the card for the word: (.+?) \(exactly this word, 1 item[^)]*\)\.$/m.exec(input);
     const word = (m?.[1] ?? '').trim();
     const known = FILL[core(word)];
     const w: Gen = known
