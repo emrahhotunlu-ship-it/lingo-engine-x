@@ -42,7 +42,7 @@ const item = {
 function Stat({ label, value, unit, testId }: { label: string; value: string; unit: string; testId: string }) {
   return (
     <div className="lx-glass flex min-w-0 flex-col gap-1 rounded-[var(--radius-card)] px-4 py-3">
-      <span className="lx-eyebrow">{label}</span>
+      <span className="lx-eyebrow hyphens-auto break-words">{label}</span>
       <span className="flex flex-wrap items-baseline gap-x-1.5">
         <span className="lx-tnum text-2xl font-semibold tracking-tight" data-testid={testId}>
           {value}
@@ -60,6 +60,7 @@ export function ProgressScreen() {
   const docs = useLive((s) => s.docs);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
+  const archive = useLive((s) => s.collections.archive) ?? EMPTY;
   const [tab, setTab] = useState<ProgressTab>(() => {
     const fromRoute = route.name === 'overview' ? route.tab : undefined;
     if (fromRoute) return fromRoute;
@@ -77,8 +78,8 @@ export function ProgressScreen() {
   }, []);
 
   const ov = useMemo(
-    () => buildOverview({ nowMs: now, profile: docs['app/profile'], course: docs['app/course'], assess: docs['app/assess'], schema: docs['app/schema'], vocab, grammar }),
-    [now, docs, vocab, grammar],
+    () => buildOverview({ nowMs: now, profile: docs['app/profile'], course: docs['app/course'], assess: docs['app/assess'], schema: docs['app/schema'], vocab, grammar, archives: archive.values() }),
+    [now, docs, vocab, grammar, archive],
   );
   const assess = useMemo(() => readAssess(docs['app/assess']), [docs]);
   const tabLabel = t(TABS.find((x) => x.id === tab)?.label ?? 'progJudge');

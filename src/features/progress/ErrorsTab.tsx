@@ -54,7 +54,7 @@ export function ErrorsTab() {
                     <h3 className="text-base font-semibold">{radarName(r, t, lang)}</h3>
                     <p className="text-sm text-muted">{t(`radarTrend_${r.trend}`, { n: r.nPrev30 })}</p>
                     {r.sources.length > 0 && (
-                      <p className="text-xs text-subtle">
+                      <p className="text-xs text-subtle" data-label="">
                         {t('radarSources')}: {r.sources.map((s) => t(`src_${s}` as MessageKey)).join(' · ')}
                       </p>
                     )}

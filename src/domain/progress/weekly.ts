@@ -31,7 +31,7 @@ export type WeekFact =
   | { id: string; kind: 'word'; word: string; stable: boolean }
   | { id: string; kind: 'topic'; topic: string; from: number; to: number }
   | { id: string; kind: 'fixed'; topic: string; n: number }
-  | { id: string; kind: 'text'; title: string }
+  | { id: string; kind: 'text'; title: string; lesson: string | null }
   | { id: string; kind: 'talk'; title: string }
   | { id: string; kind: 'time'; minutes: number; activeDays: number; pflichtDays: number };
 
@@ -83,7 +83,7 @@ export function weekFacts(i: {
   // Texte und Gespräche.
   for (const [id, d] of i.writing) {
     const day = str(d.date) || dayOf(num(d.t));
-    if (set.has(day)) facts.push({ id: `wt:${id}`, kind: 'text', title: str(d.title) || str(d.task).slice(0, 60) || str(d.lesson) });
+    if (set.has(day)) facts.push({ id: `wt:${id}`, kind: 'text', title: str(d.title) || str(d.task).slice(0, 60), lesson: str(d.lesson) || null });
   }
   for (const d of i.talk.values()) {
     for (const r of arr(d.runs)) if (set.has(str(r.day))) facts.push({ id: `rp:${str(r.id)}`, kind: 'talk', title: str(r.title) });

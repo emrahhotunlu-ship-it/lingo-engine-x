@@ -55,6 +55,13 @@ export type Writer = {
    * normales Ergebnis: Der Aufrufer versucht es erst beim nächsten Anlass wieder, nie in einer Schleife.
    */
   acquire(path: string, opts: { holder: string; ttlMs?: number }): Promise<AcquireOutcome>;
+  /**
+   * Phase 7 (Plan §12.3, W5): ein bestehendes Dokument durch eine aus dem FRISCHEN Stand berechnete
+   * Fassung ersetzen (`set`) und danach neu lesen und prüfen. Nur für `app/profile` (Auslagern alter
+   * Jahre nach vorheriger Archivierung). `build` liefert `null`, wenn nichts zu tun ist, und wirft,
+   * wenn die Vorbedingung (Archiv inhaltsgleich) nicht erfüllt ist – dann wird nichts geschrieben.
+   */
+  compact(path: string, build: (fresh: Record<string, unknown>) => Record<string, unknown> | null): Promise<'compacted' | 'unchanged'>;
 };
 
 export type AcquireOutcome = { acquired: boolean; expiresAt?: string };
@@ -76,6 +83,8 @@ const KNOWN_CODES = new Set([
 
 /** Dokumente, die `transform` per `replace` ganz ersetzen darf: nur Zwischenspeicher. */
 const REPLACEABLE = new Set(['app/lookup']);
+/** Dokumente, die `compact` ersetzen darf (Plan §12.3). */
+const COMPACTABLE = new Set(['app/profile']);
 
 export function createWriter(db: Db): Writer {
   const queues = new Map<string, Promise<unknown>>();
@@ -193,6 +202,25 @@ export function createWriter(db: Db): Writer {
       return enqueue(path, async (): Promise<WriteOutcome> => {
         await withRetry(path, () => db.doc(path).update(patchData));
         return 'written';
+      });
+    },
+    compact(path, build) {
+      guard(path);
+      return enqueue(path, async (): Promise<'compacted' | 'unchanged'> => {
+        if (!COMPACTABLE.has(path)) throw new WriteError('invalid_argument', `compact ist für ${path} nicht erlaubt`, path);
+        const snap = await db.doc(path).get();
+        const fresh = snap.exists ? snap.data() : undefined;
+        if (!fresh) throw new WriteError('missing', `${path} fehlt – nichts zu verdichten`, path);
+        const next = build(fresh);
+        if (!next || jsonEqual(fresh, next)) return 'unchanged';
+        await withRetry(path, () => db.doc(path).set(next));
+        const after = await db.doc(path).get();
+        if (!after.exists || !jsonEqual(after.data(), next)) {
+          const err = new WriteError('verify_failed', `${path} nach dem Verdichten nicht wie erwartet`, path);
+          logError('data:compact', err, path);
+          throw err;
+        }
+        return 'compacted';
       });
     },
     async acquire(path, opts) {

@@ -70,3 +70,26 @@ describe('Sprachtreue der Testdaten', () => {
     }
   });
 });
+
+// Phase 6/7 (Plan §13 „langStored"): Einschätzung, Wochenberichte, Nachschlage-Speicher und
+// ergänzte Beispielsätze – jeder gespeicherte KI-Text in seiner Sprache.
+describe('Sprachtreue: Einschätzung, Wochenbericht, Nachschlagen, Beispielsätze', () => {
+  it('app/assess: Prosa in ihrer Sprache, fix englisch', () => {
+    const a = seed['app/assess'] as Doc;
+    const L = lang(a.lang);
+    const d = (a.data ?? a) as Doc;
+    const prose = [S(d.level), S(d.levelWhy), S(d.trendWhy), S(d.today), ...((d.c1gap as unknown[]) ?? []).map(S), ...((d.strengths as Doc[]) ?? []).map((s) => S(s.why)), ...((d.blockers as Doc[]) ?? []).map((b) => S(b.why))];
+    for (const t of prose) expect(isWrongLang(t, L), t).toBe(false);
+    for (const b of (d.blockers as Doc[]) ?? []) expect(isWrongLang(S(b.fix), 'en'), S(b.fix)).toBe(false);
+  });
+  it('app/weekly (falls vorhanden): Texte in der Sprache des Eintrags', () => {
+    for (const it2 of ((seed['app/weekly'])?.items as Doc[] | undefined) ?? []) {
+      const tx = it2.text as Doc;
+      for (const t of [S(tx.headline), S(tx.next), ...((tx.learned as Doc[]) ?? []).map((l) => S(l.text))]) expect(isWrongLang(t, lang(it2.lang)), t).toBe(false);
+    }
+  });
+  it('app/lookup: Definitionen englisch; vocab.xEx: Beispielsätze englisch', () => {
+    for (const e of Object.values(((seed['app/lookup'] as Doc).items as Record<string, Doc>) ?? {})) if (e?.def) expect(isWrongLang(S(e.def), 'en'), S(e.def)).toBe(false);
+    for (const [p, v] of entries('vocab/')) for (const x of (v.xEx as Doc[] | undefined) ?? []) expect(isWrongLang(S(x.en), 'en'), `${p}: ${S(x.en)}`).toBe(false);
+  });
+});

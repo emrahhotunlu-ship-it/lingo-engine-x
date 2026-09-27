@@ -89,6 +89,15 @@ async function intake(today: string, nowMs: number): Promise<void> {
   if (res.status === 'done') intakeDay = today;
 }
 
+/**
+ * P7-1: Folgearbeiten (Tagesbild, pflichtSince, Selbstheilung) erst nach dem Zeichnen der
+ * Statuszeile – sie rechnen über alle Karten und würden sonst das erste Bild verzögern.
+ */
+function afterPaint(fn: () => void): void {
+  if (typeof window === 'undefined') fn();
+  else window.setTimeout(fn, 60);
+}
+
 export async function ensureDay(nowMs: number): Promise<void> {
   const today = dayKey(nowMs);
   const cur = useTodayPlan.getState();
@@ -98,6 +107,11 @@ export async function ensureDay(nowMs: number): Promise<void> {
     return;
   }
   useTodayPlan.setState({ day: today, plan: null, status: 'building', exhausted: cur.exhausted === today ? today : null });
+
+  // P7-1 (a): Gibt es schon einen Plan dieser App von heute, zeigt Heute ihn sofort; Abgleich des
+  // Tagesauftrags und Lerninhalte laufen danach (sie ändern einen Plan von heute nie).
+  const early = readPlan(useLive.getState().docs['app/profile']?.plan, today);
+  if (early) useTodayPlan.setState({ day: today, plan: early, status: 'ready' });
 
   try {
     await intake(today, nowMs);
@@ -113,7 +127,7 @@ export async function ensureDay(nowMs: number): Promise<void> {
     const kept = readPlan(profile?.plan, today);
     if (kept) {
       useTodayPlan.setState({ day: today, plan: kept, status: 'ready' });
-      void afterPlan(today, nowMs);
+      afterPaint(() => void afterPlan(today, nowMs));
       return;
     }
     const lang = useSettings.getState().lang;
@@ -174,7 +188,7 @@ export async function ensureDay(nowMs: number): Promise<void> {
   }
   if (useTodayPlan.getState().day === today) {
     useTodayPlan.setState({ day: today, plan: final, status });
-    void afterPlan(today, nowMs);
+    afterPaint(() => void afterPlan(today, nowMs));
   }
 }
 

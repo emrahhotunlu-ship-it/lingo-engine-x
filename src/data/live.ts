@@ -19,7 +19,8 @@ import { validateDoc } from './validate';
 type Doc = Record<string, unknown>;
 
 export const LIVE_DOCS = ['app/profile', 'app/course', 'app/assess', 'app/schema'] as const;
-export const LIVE_COLLECTIONS = ['vocab', 'grammar'] as const;
+// `archive`: ausgelagerte Profiljahre (Phase 7, Plan §12.3) – Serie und Verlauf lesen sie mit.
+export const LIVE_COLLECTIONS = ['vocab', 'grammar', 'archive'] as const;
 export type LiveDocPath = (typeof LIVE_DOCS)[number];
 export type LiveCollection = (typeof LIVE_COLLECTIONS)[number];
 

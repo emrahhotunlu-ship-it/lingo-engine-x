@@ -1,5 +1,6 @@
 import type { Db } from '../platform/types';
 import { logError } from '../platform/diagnostics';
+import { APP_DOC_PATHS, COLLECTION_NAMES } from './paths';
 import { readOnce } from './snapshot';
 import { validateDoc } from './validate';
 
@@ -60,4 +61,31 @@ export async function readCollection(db: Db, name: string, opts: ReadCollectionO
   const possiblyTruncated = q.size === 1000;
   if (possiblyTruncated) logError('data:read', { code: 'possibly_truncated', message: `${name}: ${q.size} Dokumente` }, name);
   return { valid, invalid, possiblyTruncated };
+}
+
+// ---------------------------------------------------------------- Diagnose: Dokumente zählen (P7-1 d)
+// Statt eines Voll-Schnappschusses mit Prüfung jedes Dokuments: je Sammlung ein `get()` und nur die
+// Anzahl (db.d.ts kennt keine reine Zählung). Höchstens 4 Abfragen gleichzeitig, einmal je Öffnen.
+
+export type DocCounts = { byCollection: Record<string, number>; chat: Doc | null; preply: number; possiblyTruncated: string[] };
+
+export async function countDocuments(db: Db): Promise<DocCounts> {
+  const byCollection: Record<string, number> = { app: 0 };
+  const possiblyTruncated: string[] = [];
+  let chat: Doc | null = null;
+  const jobs: Array<() => Promise<void>> = [
+    ...APP_DOC_PATHS.map((path) => async () => {
+      const snap = await readOnce(path, () => db.doc(path).get());
+      if (!snap.exists) return;
+      byCollection.app = (byCollection.app ?? 0) + 1;
+      if (path === 'app/chat') chat = snap.data() ?? null;
+    }),
+    ...COLLECTION_NAMES.map((name) => async () => {
+      const q = await readOnce(name, () => db.collection(name).get());
+      byCollection[name] = q.size;
+      if (q.size === 1000) possiblyTruncated.push(name);
+    }),
+  ];
+  for (let i = 0; i < jobs.length; i += 4) await Promise.all(jobs.slice(i, i + 4).map((j) => j()));
+  return { byCollection, chat, preply: byCollection.preply ?? 0, possiblyTruncated };
 }

@@ -116,3 +116,13 @@ Alle Formate bleiben Altformat; neue Felder sind nur zusätzlich und tolerant ge
 - **Hören** schreibt kein eigenes Dokument (`profile.listen[]`), **Entdecken** nur `profile.disc` – der Text beim Anwenden bleibt im Browser.
 - **Abos:** zusätzlich genau eines auf `feed` (sortiert nach `d`, 21 Dokumente), nur solange Entdecken offen ist; alles andere per `get()`.
 - **Kapazität:** höchstens 6 neue Dokumente je Tag bei Vollnutzung aller vier Module, im Mittel ≤ 4 (Test `tests/unit/inputData.test.ts`). Die Diagnose zeigt zusätzlich die Zahl der Entdecken-Einträge.
+
+## Ergänzungen Phase 6/7 (additiv, nichts gelöscht)
+
+| Pfad | Neu | Schreibweg |
+|---|---|---|
+| `app/assess` | Hülle `{d, t, lang, answers, writings, data}` wie die alte App, dazu `v: 2`, `pv: 'assess@1'`, `tier` (antwortende Stufe), `basis`, `hist[]` (≤ 60), `run {d, t, by}` (Tagessperre); `data.strengths[].ev`, `data.blockers[].ev`, `data.focus.channels`. `data` immer vollständig (fehlend = `null`). Flache Form wird weiter gelesen. | `assessRun` → `writer.transform` (`assessWrite`), vorher `acquire` (240 s) |
+| `app/weekly` | `{items: [{w, lang, t, pv, facts[], text {headline, learned[{text, ref}], next}}]}` (≤ 26) | `weeklyRun` → `writer.transform` |
+| `app/profile` | `goalMin` (10–40, Standard 25), `sound` (Standard aus), `canDo[<cefrId>] = Lerntag \| null`, `history[].lx = 1` (Tagesbild dieser App), `vtests[].v = 'lx1'`, `act[tag].vtest` | Einstellungen über `app/actions` (optimistisch mit Rückrollen); Tagesbild und Test über die Sammel-Warteschlange |
+| `app/profile.plan.why` | `[key, n, ref]` additiv, z. B. `['whyFocus', 0, 'grammar:mixed-cond']`, `['whyDue', 4, 'gram']` | Tagesplan (einmal je Lerntag) |
+| `archive/profile-<JJJJ>` | ausgelagerte Tageskarten `days, xpDays, minutes, act, pflicht` eines Jahres (`v: 1, year, from, t`) | `runCompact` (erst nach Abnahme freigeschaltet, `COMPACT_ENABLED`) |

@@ -21,9 +21,11 @@ import type { Lang } from '../../app/settings';
 import { actionLabel } from '../progress/actionRoute';
 import { normGoalMin } from '../../domain/progress/settings';
 import { maybeAutoAssess } from '../progress/assessRun';
+import { logWarn } from '../../platform/diagnostics';
 import type { ExecChannel } from '../../domain/learn/types';
 import { DECKS, DECK_SIZES, type Deck } from '../../domain/srs/vocabList';
 import { computeStreak, pflichtDays } from '../../domain/streak';
+import { mergeArchives } from '../../domain/capacity/compact';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { flush, usePending } from '../progress/persist';
 import { startSession } from '../vocab/session';
@@ -42,6 +44,8 @@ import { InputOffers } from '../input/InputOffers';
 // Knopf (erster offener Pflichtpunkt); Erledigtes ist Zustand, kein Knopf (Kap. 2.2). Angebote
 // erscheinen erst, wenn die Pflicht erledigt ist – mit Grund, klar als Extra (Kap. 2.6).
 
+const EMPTY_ARCHIVE = new Map<string, Record<string, unknown>>();
+let statusMarked = false;
 const obj = (v: unknown): Record<string, unknown> => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 
 const item = {
@@ -90,6 +94,7 @@ export function TodayScreen() {
   const plan = useTodayPlan((s) => (s.day === today ? s.plan : null));
   const profile = useLive((s) => s.docs['app/profile']);
   const schema = useLive((s) => s.docs['app/schema']);
+  const archive = useLive((s) => s.collections.archive) ?? EMPTY_ARCHIVE;
   const saveFailed = usePending((s) => s.failed);
   const tts = useSpeech((s) => s.status === 'ready');
   const state = useToday();
@@ -98,7 +103,8 @@ export function TodayScreen() {
   const [size, setSize] = useState<(typeof DECK_SIZES)[number]>(10);
 
   const streak = useMemo(() => {
-    const p = obj(profile);
+    // Phase 7 (Plan §12.3): ausgelagerte Jahre zählen mit.
+    const p = obj(mergeArchives(profile ? obj(profile) : null, archive.values()));
     const pflichtSince = typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null;
     return computeStreak({
       days: obj(p.days) as Record<string, number>,
@@ -108,7 +114,7 @@ export function TodayScreen() {
       today,
       legacyToday: legacyDayKey(now),
     });
-  }, [profile, schema, today, now]);
+  }, [profile, schema, today, now, archive]);
 
   // Selbstheilung (Regel 1): alles erledigt, aber `pflicht[heute]` fehlt noch.
   const marked = pflichtMarked(profile, today);
@@ -118,6 +124,17 @@ export function TodayScreen() {
 
   // Auslöser der Einschätzung (Plan W1): der Übergang zu „Pflicht erledigt" – einmal je Tab und
   // Lerntag, nur mit Grund (`assessDue`). Die Einschätzung selbst erscheint nie auf Heute (Kap. 2.1).
+  // P7-1: Messpunkt „Statuszeile zeigt echte Daten" (Kap. 14: < 2 s), einmal je Laden der Seite.
+  useEffect(() => {
+    if (!ready || !dayLoaded || statusMarked) return;
+    statusMarked = true;
+    try {
+      performance.mark('lx:status');
+    } catch (err) {
+      logWarn('perf:mark', err);
+    }
+  }, [ready, dayLoaded]);
+
   const seenOpen = useRef(false);
   useEffect(() => {
     if (!ready || !dayLoaded) return;

@@ -226,12 +226,16 @@ export function JudgeTab() {
               <li key={i} className="flex flex-col gap-2" data-testid="blocker">
                 <p className="text-base font-semibold">{b.title}</p>
                 <div>
-                  <p className="text-xs text-subtle">{t('blockerWhyC1')}</p>
+                  <p className="text-xs text-subtle" data-label="">
+                    {t('blockerWhyC1')}
+                  </p>
                   <p className="text-sm text-muted">{b.why}</p>
                 </div>
                 {b.fix && (
                   <div>
-                    <p className="text-xs text-subtle">{t('blockerFix')}</p>
+                    <p className="text-xs text-subtle" data-label="">
+                      {t('blockerFix')}
+                    </p>
                     <EnglishText text={b.fix} area="lookup" source="assess" className="text-sm text-fg" />
                   </div>
                 )}

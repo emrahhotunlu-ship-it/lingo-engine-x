@@ -52,7 +52,8 @@ describe('Der eine Schreibpfad', () => {
   it('kennt kein Löschen', () => {
     const w = createWriter(createMemoryDb().db) as unknown as Record<string, unknown>;
     expect(w.delete).toBeUndefined();
-    expect(Object.keys(w).sort()).toEqual(['acquire', 'createIfMissing', 'patch', 'set', 'transform', 'update']);
+    // Phase 7 (Plan §12.3): `compact` ersetzt nur app/profile nach Archivierung, löscht nie ein Dokument.
+    expect(Object.keys(w).sort()).toEqual(['acquire', 'compact', 'createIfMissing', 'patch', 'set', 'transform', 'update']);
   });
 
   it('acquire: kurze Sperre ohne data; belegt ist ein normales Ergebnis; daily/* verweigert', async () => {

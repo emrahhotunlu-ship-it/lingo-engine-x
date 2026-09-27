@@ -45,8 +45,10 @@ function factText(f: WeekFact, t: (k: MessageKey, v?: Record<string, string | nu
       return t('wf_topic', { topic: topicName(f.topic, lang), from: Math.round(f.from * 100), to: Math.round(f.to * 100) });
     case 'fixed':
       return tn('wf_fixed', f.n, { topic: topicName(f.topic, lang) });
-    case 'text':
-      return t('wf_text', { title: f.title || '–' });
+    case 'text': {
+      const l = f.lesson ? LESSONS.find((x) => x.id === f.lesson) : undefined;
+      return t('wf_text', { title: f.title || (l ? (lang === 'en' ? l.en : l.de) : '–') });
+    }
     case 'talk':
       return t('wf_talk', { title: f.title || '–' });
     case 'time':
@@ -109,11 +111,24 @@ function Weekly() {
             <p className="mt-3 text-sm text-muted">{t('weeklyEmpty')}</p>
           ) : (
             <ul className="mt-3 flex flex-col gap-1.5 text-sm">
-              {facts.map((f) => (
-                <li key={f.id} data-testid="weekly-fact" data-kind={f.kind} className="lx-tnum">
-                  {factText(f, t, tn, lang)}
+              {/* Wörter in einer Zeile (nichts wiederholt sich zwölfmal, Kap. 15). */}
+              {facts.some((f) => f.kind === 'word') && (
+                <li data-testid="weekly-fact" data-kind="word">
+                  {t('wf_words', {
+                    words: facts
+                      .filter((f): f is Extract<WeekFact, { kind: 'word' }> => f.kind === 'word')
+                      .map((f) => f.word)
+                      .join(', '),
+                  })}
                 </li>
-              ))}
+              )}
+              {facts
+                .filter((f) => f.kind !== 'word')
+                .map((f) => (
+                  <li key={f.id} data-testid="weekly-fact" data-kind={f.kind} className="lx-tnum">
+                    {factText(f, t, tn, lang)}
+                  </li>
+                ))}
             </ul>
           )}
         </>

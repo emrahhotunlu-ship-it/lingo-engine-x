@@ -1,9 +1,7 @@
-import { motion } from 'framer-motion';
 import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
-import { spring } from './motion';
 
 // Reiter nach WAI-ARIA (tablist/tab/tabpanel): Pfeiltasten wechseln, Pos1/Ende springen,
-// die Hervorhebung gleitet mit (gemeinsames Layout-Element, Kap. 4.4).
+// die Hervorhebung liegt direkt am aktiven Reiter (kein hängenbleibendes Layout-Element).
 
 export type TabItem<T extends string> = { id: T; label: string; testId?: string };
 
@@ -54,10 +52,9 @@ export function Tabs<T extends string>({ label, items, value, onChange, testId, 
               tabIndex={active ? 0 : -1}
               data-testid={it.testId}
               onClick={() => onChange(it.id)}
-              className={`relative min-h-11 rounded-[calc(var(--radius-control)-4px)] px-3 text-sm transition-colors ${active ? 'font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
+              className={`relative min-h-11 rounded-[calc(var(--radius-control)-4px)] px-3 text-sm transition-colors ${active ? 'bg-surface-strong font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
             >
-              {active && <motion.span layoutId={`${base}-pill`} className="absolute inset-0 rounded-[inherit] bg-surface-strong shadow-sm" transition={spring} aria-hidden="true" />}
-              <span className="relative">{it.label}</span>
+              {it.label}
             </button>
           );
         })}

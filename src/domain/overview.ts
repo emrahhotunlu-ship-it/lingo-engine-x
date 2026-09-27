@@ -1,6 +1,7 @@
 import { LESSONS, SEED_VOCAB, TOPICS, UNITS, seedCard, type Lesson } from './content';
 import { dayKey, learningDayEnd, legacyDayKey } from './date';
 import { computeStreak, pflichtDays, type Streak } from './streak';
+import { mergeArchives } from './capacity/compact';
 
 // „Dein Stand": reine Berechnung aus den gelesenen Dokumenten (keine Seiteneffekte).
 
@@ -48,9 +49,11 @@ export function buildOverview(input: {
   schema: Doc | null | undefined;
   vocab: ReadonlyMap<string, Doc>;
   grammar: ReadonlyMap<string, Doc>;
+  /** Phase 7 (Plan §12.3): ausgelagerte Profiljahre; Serie liest Profil und Archiv zusammen. */
+  archives?: Iterable<Doc>;
 }): Overview {
   const today = dayKey(input.nowMs);
-  const profile = obj(input.profile);
+  const profile = obj(mergeArchives(input.profile ? obj(input.profile) : null, input.archives ?? []));
   const schemaDoc = input.schema ? obj(input.schema) : null;
   const pflichtSince = schemaDoc && typeof schemaDoc.pflichtSince === 'string' ? schemaDoc.pflichtSince : null;
 

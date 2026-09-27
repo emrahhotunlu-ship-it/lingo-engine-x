@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Segmented } from '../../ui/Segmented';
@@ -8,7 +8,10 @@ import { useCapabilities, getDb, type CapStatus } from '../../platform/capabilit
 import { clearLog, getLog, logWarn, subscribeLog } from '../../platform/diagnostics';
 import { phase5Diag } from '../companion/diag';
 import { useLive } from '../../data/live';
-import { loadSnapshot } from '../../data/snapshot';
+import { countDocuments } from '../../data/reads';
+import { docCount as docCountOf, DOC_COUNT_WARN, profileSize } from '../../domain/capacity/profileSize';
+import { useClock } from '../../app/clock';
+import { COMPACT_ENABLED, compactPreview, runCompact } from './compactRun';
 import { useSettings, type Lang, type ThemeMode } from '../../app/settings';
 import { changeAutoNext, changeLang, changeTheme } from '../../app/actions';
 import { exportMessage } from '../migration/MigrationScreen';
@@ -124,6 +127,9 @@ function Diagnostics({ open }: { open: boolean }) {
   const time = (ms: number) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { timeStyle: 'medium' }).format(ms);
   const schema = useLive((s) => s.docs['app/schema']);
   const disc = useLive((s) => s.docs['app/profile']?.disc);
+  const profile = useLive((s) => s.docs['app/profile']);
+  const today = useClock((s) => s.today);
+  const size = useMemo(() => profileSize(profile, today), [profile, today]);
   const log = useSyncExternalStore(subscribeLog, getLog);
   const [docCount, setDocCount] = useState<number | null>(null);
   const [p5, setP5] = useState<ReturnType<typeof phase5Diag> | null>(null);
@@ -133,11 +139,15 @@ function Diagnostics({ open }: { open: boolean }) {
     const db = getDb();
     if (!db) return;
     let alive = true;
-    loadSnapshot(db).then(
-      (s) => {
+    // P7-1 (d): je Sammlung nur zählen, statt die ganze Datenbank zu prüfen – einmal je Öffnen.
+    countDocuments(db).then(
+      (c) => {
         if (!alive) return;
-        setDocCount(s.raw.size);
-        setP5(phase5Diag(s.raw));
+        setDocCount(docCountOf(c.byCollection).total);
+        const raw = new Map<string, Record<string, unknown>>();
+        if (c.chat) raw.set('app/chat', c.chat);
+        for (let i = 0; i < c.preply; i++) raw.set(`preply/${i}`, {});
+        setP5(phase5Diag(raw));
       },
       (err: unknown) => {
         logWarn('diagnostics:count', err);
@@ -165,6 +175,8 @@ function Diagnostics({ open }: { open: boolean }) {
     [t('capSample'), t(CAP_LABEL[caps.sampleRevoked ? 'absent' : caps.sample])],
     [t('capDownloads'), t(CAP_LABEL[caps.downloads])],
     [t('diagDocuments'), docCount === null ? t('diagDocumentsUnknown') : t('diagDocumentsValue', { n: docCount })],
+    // Phase 7 (Plan §12.3): Profilgröße gegen 256 KiB und Prognose.
+    [t('diagProfileSize'), `${t('diagProfileSizeValue', { kb: Math.round(size.bytes / 1024) })}${size.yearsLeft !== null ? ` · ${t('diagProfileYears', { years: size.yearsLeft })}` : ''}`],
     // Phase 5 (§5.8): Größe des Chat-Verlaufs und Preply-Dokumente.
     ...(p5 ? ([[t('diagChat'), t('diagChatValue', { n: p5.chatMsgs, kb: p5.chatKb })], [t('diagPreply'), t('diagDocumentsValue', { n: p5.preply })]] as Array<[string, string]>) : []),
     [
@@ -178,9 +190,20 @@ function Diagnostics({ open }: { open: boolean }) {
 
   return (
     <Section title={t('settingsDiagnostics')}>
+      {docCount !== null && docCount >= DOC_COUNT_WARN && (
+        <p className="text-sm text-gold-text" role="status" data-testid="diag-capacity-warn">
+          {t('diagCapacityWarn', { n: docCount })}
+        </p>
+      )}
+      {size.warn && (
+        <p className="text-sm text-gold-text" role="status">
+          {t('diagProfileWarn')}
+        </p>
+      )}
+      {COMPACT_ENABLED && size.compactable && <CompactOffer />}
       <dl className="flex flex-col">
         {rows.map(([k, v]) => (
-          <div key={k} className="flex items-baseline justify-between gap-4 border-b border-line py-2.5">
+          <div key={k} className="flex items-baseline justify-between gap-4 border-b border-line py-2.5" data-testid={k === t('diagDocuments') ? 'diag-capacity' : k === t('diagProfileSize') ? 'diag-profile-size' : undefined}>
             <dt className="text-sm text-muted">{k}</dt>
             <dd className="lx-tnum text-right text-sm font-medium">{v}</dd>
           </div>
@@ -212,5 +235,39 @@ function Diagnostics({ open }: { open: boolean }) {
         </div>
       )}
     </Section>
+  );
+}
+
+/** Auslagern alter Jahre (Plan §12.3): Trockenlauf zuerst, Ausführen nur per Tipp. */
+function CompactOffer() {
+  const { t } = useT();
+  const profile = useLive((s) => s.docs['app/profile']);
+  const today = useClock((s) => s.today);
+  const plan = useMemo(() => compactPreview(profile, today), [profile, today]);
+  const [dry, setDry] = useState(false);
+  const [busy, setBusy] = useState(false);
+  if (!plan) return <p className="text-sm text-muted">{t('compactNothing')}</p>;
+  const run = async () => {
+    setBusy(true);
+    const r = await runCompact(today);
+    setBusy(false);
+    setDry(false);
+    if (r.status === 'done') toast(t('compactDone', { kb: r.kb }));
+    else if (r.status === 'nothing') toast(t('compactNothing'));
+    else toast(t('compactFailed'), 'error');
+  };
+  return (
+    <div className="flex flex-col gap-2" data-testid="compact-offer">
+      {!dry ? (
+        <Button onClick={() => setDry(true)}>{t('compactOffer')}</Button>
+      ) : (
+        <>
+          <p className="text-sm text-muted">{t('compactDry', { years: plan.years.join(', '), kb: Math.round(plan.bytesMoved / 1024) })}</p>
+          <Button variant="primary" busy={busy} onClick={() => void run()} data-testid="compact-run">
+            {t('compactRun')}
+          </Button>
+        </>
+      )}
+    </div>
   );
 }

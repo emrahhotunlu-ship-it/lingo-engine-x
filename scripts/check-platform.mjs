@@ -46,6 +46,8 @@ const devMarkers = ['__LINGO_FAKE__', '__LINGO_FAKE_OPTIONS__', 'lx:fake-db', 'F
 devMarkers.push('zzlong', 'zzen', 'zzsame', 'zzempty', '[no-solution]', 'registerCompanionReplies');
 // Phase 4: Titel der festen Lese-/Hörtexte des Entwicklungs-Adapters.
 devMarkers.push('Heads-Up Before the Client Call', 'Four-Day Week Really Work');
+// Phase 6/7: Fehlerpfade und Messhilfen des Adapters.
+devMarkers.push('assessBad', 'peakSubscriptions', 'setAssessBad');
 for (const m of devMarkers) if (html.includes(m)) problems.push(`Entwicklungs-Adapter oder Testdaten im Build: "${m}"`);
 
 // Kopf
