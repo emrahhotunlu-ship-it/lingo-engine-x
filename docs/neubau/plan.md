@@ -1228,6 +1228,7 @@ Alles Weitere steht in `docs/backlog.md`.
 | Zeit (UTC) | Änderung | Wer |
 |---|---|---|
 | 23:00 | Erstfassung (mit `leistung.md` und `anki-regeln.md`) | PO |
+| 23:40 | Prüfung §1.5/§1.3 durch learning-scientist angenommen: `docs/neubau/pruefung-tageseinheit.md` ist verbindlich (M1–M10 Muss, S1–S5 + Ü1 Soll). Zuständig: `domain/week`/`unitPlanFor` (P7a→P1) für M1–M3, M5, M7, M10, S1, S2, S5; WP0a für M8 (`UnitCtx.phrases`); P2 für M4b/c, M6, M9 (Block 4), S4; P7a für S3; P4 für M7 (Block-2-Quellen) und M9 (Block 2); P1 für M4a/d. | Integrator |
 
 ---
 
