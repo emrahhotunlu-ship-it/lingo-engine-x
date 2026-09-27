@@ -24,6 +24,8 @@ type State = {
   error: AiMessageKey | null;
   errorKind: string | null;
   history: HistoryEntry[];
+  /** Übersetzung, soweit sie beim Streamen schon da ist (nur Anzeige). */
+  partial: string;
 };
 
 export const useTranslate = create<State>(() => ({
@@ -35,7 +37,47 @@ export const useTranslate = create<State>(() => ({
   error: null,
   errorKind: null,
   history: readHistory(),
+  partial: '',
 }));
+
+/** Pure: Wert von `"translation"` aus einer unfertigen JSON-Antwort (beim Streamen). */
+export function partialTranslation(raw: string): string {
+  const m = /"translation"\s*:\s*"/.exec(raw);
+  if (!m) return '';
+  let out = '';
+  for (let i = m.index + m[0].length; i < raw.length; i++) {
+    const ch = raw[i]!;
+    if (ch === '\\') {
+      const nx = raw[i + 1];
+      if (nx === undefined) break;
+      out += nx === 'n' ? '\n' : nx === 't' ? ' ' : nx;
+      i++;
+      continue;
+    }
+    if (ch === '"') break;
+    out += ch;
+  }
+  return out.trim();
+}
+
+export type TranslateCard = { word: string; de: string; ex: string };
+
+/**
+ * Pure: Karte aus einem Übersetzungsergebnis (Funktion der alten App „in den Vokabeltrainer“) –
+ * nur bei einem Wort oder einer kurzen Wendung (≤ 4 Wörter) und mit englischem Beispielsatz.
+ */
+export function cardFromResult(r: Pick<TranslateOut, 'translation' | 'example'> & { from: TransLang; text: string }): TranslateCard | null {
+  const clean = (x: string) => x.trim().replace(/^["'„“”‚‘’]+|["'„“”‚‘’.!?;:,]+$/g, '').trim();
+  const en = clean(r.from === 'en' ? r.text : r.translation);
+  const de = clean(r.from === 'en' ? r.translation : r.text);
+  const words = (x: string) => x.split(/\s+/).filter(Boolean).length;
+  const ex = r.example?.trim() ?? '';
+  if (!en || !de || !ex || words(r.text) > 4 || words(en) > 5 || /\n/.test(en)) return null;
+  // „Keep up“ → „keep up“; Eigennamen (im Beispielsatz nur großgeschrieben) bleiben.
+  const lower = en[0]!.toLowerCase() + en.slice(1);
+  const word = /^[A-Z][a-z]/.test(en) && (ex.includes(lower) || !ex.includes(en)) ? lower : en;
+  return { word, de, ex };
+}
 
 let ctl: AbortController | null = null;
 
@@ -95,13 +137,18 @@ export async function runTranslate(opts: { refresh?: boolean } = {}): Promise<vo
   ctl?.abort();
   const c = new AbortController();
   ctl = c;
-  useTranslate.setState({ phase: 'queued', error: null, errorKind: null, result: null });
+  useTranslate.setState({ phase: 'queued', error: null, errorKind: null, result: null, partial: '' });
   try {
     const r = await askJson({
       template: translate,
       vars: { text, from, register: s.register, uiLang },
       signal: c.signal,
       ...(opts.refresh ? { refresh: true } : {}),
+      onPartial: (raw) => {
+        if (ctl !== c) return;
+        const p = partialTranslation(raw);
+        if (p !== useTranslate.getState().partial) useTranslate.setState({ partial: p });
+      },
       onPhase: (p) => {
         if (ctl === c && p !== 'done' && p !== 'error') useTranslate.setState({ phase: p });
       },
@@ -110,16 +157,17 @@ export async function runTranslate(opts: { refresh?: boolean } = {}): Promise<vo
     // W1: Claudes Angabe gilt auch bei fester Richtung (Englisch bei „DE → EN“ getippt).
     const src: TransLang = r.data.source ?? (from === 'auto' ? fromOf(s) : from);
     const history = pushHistory({ t: Date.now(), text, dir: src, reg: s.register, main: r.data.translation });
-    useTranslate.setState({ phase: 'done', result: { ...r.data, from: src, text }, history });
+    useTranslate.setState({ phase: 'done', result: { ...r.data, from: src, text }, history, partial: '' });
   } catch (err) {
     if (ctl !== c) return;
     if (isAiFailure(err) && err.kind === 'cancelled') {
-      useTranslate.setState({ phase: 'idle' });
+      useTranslate.setState({ phase: 'idle', partial: '' });
       return;
     }
     if (!isAiFailure(err)) logWarn('translate:run', err);
     useTranslate.setState({
       phase: 'error',
+      partial: '',
       error: isAiFailure(err) ? (err.messageKey ?? 'aiFailed') : 'aiFailed',
       errorKind: isAiFailure(err) ? err.kind : 'failed',
     });

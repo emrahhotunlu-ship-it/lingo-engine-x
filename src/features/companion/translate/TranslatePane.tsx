@@ -1,13 +1,16 @@
-import { useEffect, useRef, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useAiAvailable } from '../../../ai/scope';
 import { EnglishText } from '../../../engine/EnglishText';
 import { useT, type MessageKey } from '../../../i18n';
 import { speak, unlockSpeech, useSpeech } from '../../../platform/speech';
 import { TRANSLATE_MAX, type Register } from '../../../prompts/translate';
 import { IconButton } from '../../../ui/Button';
+import { dayKey } from '../../../domain/date';
+import { toast } from '../../../ui/Toast';
+import { saveLookupCard } from '../../lookup/store';
 import { CopyButton } from '../../preply/CopyBox';
 import { useCompanion } from '../store';
-import { fillFromHistory, fromOf, isTranslating, requestFrom, runTranslate, setRegister, setTranslateText, stopTranslate, setDirection, useTranslate } from './store';
+import { cardFromResult, fillFromHistory, fromOf, isTranslating, requestFrom, runTranslate, setRegister, setTranslateText, stopTranslate, setDirection, useTranslate } from './store';
 
 // Übersetzer im Begleiter (Phase 5 §8.2, Kap. 6.12): Eingabe, Richtung ⇄, Ton (Formell/Neutral/
 // Locker), „Übersetzen". Ergebnis: Hauptfassung (englisch antippbar, 🔊, Kopieren), Alternativen mit
@@ -32,6 +35,7 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
   const to = from === 'de' ? 'en' : 'de';
   const dirKnown = requestFrom(s) !== 'auto';
   const busy = isTranslating();
+  const [saved, setSaved] = useState<{ key: string; state: 'busy' | 'done' | 'failed' } | null>(null);
 
   useEffect(() => {
     if (focusSeq > 0) input.current?.focus({ preventScroll: true });
@@ -51,6 +55,20 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
   };
 
   const r = s.result;
+  const card = r ? cardFromResult(r) : null;
+  const cardKey = card ? `${card.word}|${card.de}` : '';
+  const saveState = saved && saved.key === cardKey ? saved.state : null;
+  const saveCard = async () => {
+    if (!card || saveState === 'busy' || saveState === 'done') return;
+    setSaved({ key: cardKey, state: 'busy' });
+    const out = await saveLookupCard({ word: card.word, de: card.de, ex: card.ex, surface: null, src: 'translate', origin: { v: 1, kind: 'translate', t: Date.now() }, today: dayKey(Date.now()) });
+    if (out === 'invalid' || out === 'failed') {
+      setSaved({ key: cardKey, state: 'failed' });
+      return;
+    }
+    setSaved({ key: cardKey, state: 'done' });
+    toast(t(out === 'saved' ? 'lkSavedToast' : out === 'added' ? 'lkAddedToast' : 'lkExistsToast'));
+  };
   const resultIsEn = r ? r.from === 'de' : false;
   const langName = (l: 'de' | 'en') => (l === 'en' ? t('cmpLangEn') : t('cmpLangDe'));
   const english = (text: string, testId?: string) => <EnglishText as="span" text={text} area="translate" source={null} title={null} {...(testId ? { testId } : {})} />;
@@ -141,7 +159,12 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
           </div>
         </div>
 
-        {busy && (
+        {busy && s.partial && (
+          <div className="rounded-2xl bg-surface px-4 py-3 text-lg leading-relaxed font-medium whitespace-pre-line text-muted" data-testid="tr-partial" aria-hidden="true">
+            {s.partial}
+          </div>
+        )}
+        {busy && !s.partial && (
           <p className="text-sm text-muted" role="status" data-testid="ai-phase" data-ai-phase={s.phase}>
             {s.phase === 'slow' ? t('aiSlow') : s.phase === 'queued' ? t('aiQueued') : t('aiThinking')}
           </p>
@@ -178,6 +201,33 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
                 )}
                 <CopyButton text={r.translation} target={() => mainRef.current} testId="tr-copy" />
               </div>
+              {card && (
+                <div className="flex flex-wrap items-center gap-3 border-t border-line pt-2">
+                  {saveState === 'done' ? (
+                    <span className="inline-flex min-h-11 items-center text-sm font-semibold text-accent-text" data-testid="tr-card-done">
+                      ✓ {t('tlInTrainer')}
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => void saveCard()}
+                      disabled={saveState === 'busy'}
+                      className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-surface-strong px-4 text-sm font-semibold disabled:opacity-50"
+                      data-testid="tr-card"
+                    >
+                      + {t('tlToTrainer')}
+                    </button>
+                  )}
+                  <span className="text-sm text-muted" lang="en">
+                    {card.word} – <span lang="de">{card.de}</span>
+                  </span>
+                  {saveState === 'failed' && (
+                    <p className="w-full text-sm text-danger-text" role="alert">
+                      {t('tlSaveFailed')}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
             {r.alternatives.length > 0 && (
               <div className="flex flex-col gap-2">

@@ -85,6 +85,9 @@ export const companionDe = {
   tlNotes: 'Hinweise',
   tlTerms: 'Begriffe',
   tlHistory: 'Zuletzt übersetzt',
+  tlToTrainer: 'In den Vokabeltrainer',
+  tlInTrainer: 'Im Vokabeltrainer',
+  tlSaveFailed: 'Speichern hat nicht geklappt. Versuch es noch einmal.',
   tlListen: 'Anhören',
 
   // ---------------------------------------------------------------- Preply-Brücke

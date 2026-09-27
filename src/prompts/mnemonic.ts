@@ -22,15 +22,33 @@ const VERSION = 1;
 
 const core = (w: string) => w.replace(/^to\s+/i, '').trim().toLowerCase();
 
+/** Zu lange Merkhilfe am letzten Satzende kürzen statt verwerfen (Befund 27.09.). */
+export function clipMnemo(v: unknown): unknown {
+  if (typeof v !== 'string') return v;
+  const s = v.trim();
+  if (s.length <= MNEMO_TEXT_MAX) return s;
+  const cut = s.slice(0, MNEMO_TEXT_MAX);
+  const end = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('! '), cut.lastIndexOf('? '), cut.lastIndexOf('.“'));
+  return end >= 40 ? cut.slice(0, end + 1).trim() : `${cut.slice(0, MNEMO_TEXT_MAX - 1).trimEnd()}…`;
+}
+
+/** Wortanfang (≤ 5 Zeichen): auch gebeugte Formen („eventual…“, „stuck“ bei „stick“ nicht) zählen. */
+const stem = (w: string): string => {
+  const first = core(w).split(/\s+/)[0] ?? '';
+  return first.slice(0, Math.min(first.length, 5));
+};
+
 const schemaFor = (v: MnemonicVars): z.ZodType<MnemonicOut> =>
   z
     .object({
-      text: z
-        .string()
-        .trim()
-        .min(12)
-        .max(MNEMO_TEXT_MAX)
-        .refine((s) => s.toLowerCase().includes(core(v.word).split(' ')[0] ?? ''), { message: 'must mention the word' }),
+      text: z.preprocess(
+        clipMnemo,
+        z
+          .string()
+          .min(12)
+          .max(MNEMO_TEXT_MAX)
+          .refine((s) => s.toLowerCase().includes(stem(v.word)), { message: 'must mention the word' }),
+      ),
     })
     .superRefine(langOf(['text'], v.uiLang));
 

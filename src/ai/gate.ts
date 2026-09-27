@@ -225,6 +225,7 @@ async function callOnce(
   signal: AbortSignal,
   phase: Phase,
   scope: string,
+  onPartial?: (text: string) => void,
 ): Promise<CallOut> {
   if (signal.aborted) throw cancelledFailure();
   const sample = getSample();
@@ -246,7 +247,8 @@ async function callOnce(
     phase('slow');
   }, SLOW_AFTER_MS[template.tier]);
   recordCall();
-  const onText = () => {
+  const onText = (ev: { text: string }) => {
+    if (onPartial) onPartial(ev.text);
     if (streaming) return;
     streaming = true;
     stopSlow();
@@ -296,7 +298,7 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
     const cache = cacheFor(template.cache, req.refresh === true || staleKeys.has(key));
     let first: CallOut;
     try {
-      first = await callOnce(prompt, t, cache, signal, phase, scope);
+      first = await callOnce(prompt, t, cache, signal, phase, scope, req.onPartial);
     } catch (err) {
       // `text-json`: auch eine unlesbare Textantwort kann im Zwischenspeicher liegen.
       if (err instanceof AiFailure && err.kind === 'invalid') markStale(key);
@@ -313,7 +315,7 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
     const prompt2 = retryPrompt(prompt, r1.error.issues, first.value);
     budget(prompt2, SAMPLE_LIMIT_BYTES, scope);
     // Der eine Neuversuch (A6.3) fragt immer frisch, damit er keine gespeicherte Antwort trifft.
-    const second = await callOnce(prompt2, t, refreshCache(template.cache), signal, phase, scope);
+    const second = await callOnce(prompt2, t, refreshCache(template.cache), signal, phase, scope, req.onPartial);
     const r2 = schema.safeParse(second.value);
     if (r2.success) return { data: r2.data, tierApplied: second.tier, retried: true };
 

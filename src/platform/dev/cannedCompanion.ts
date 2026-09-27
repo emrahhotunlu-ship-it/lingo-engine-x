@@ -1,7 +1,7 @@
 import { registerCannedReply } from './fakeSample';
 
 // Feste Antworten des Entwicklungs-Adapters für Phase 5 (Plan §6.5): companion-chat@1,
-// translate@2, preply-prep@1, preply-import@1. Nur Entwicklung und Tests – nie im Build
+// translate@3, preply-prep@1, preply-import@1. Nur Entwicklung und Tests – nie im Build
 // (check-platform.mjs sperrt die Marker). Testmarker:
 // - Begleiter: `zzlong` (≈ 3.000 Zeichen, Scroll-Test), `zzen` (englische Antwort, Sprachtreue).
 //   Enthält die Einleitung die Schutzregel („has NOT checked"), endet die Antwort mit
@@ -60,7 +60,7 @@ export function companionChatReply(flat: string, raw?: unknown): string {
   return `**leverage** heißt hier *nutzen* oder *einsetzen*, um einen Vorteil zu erzielen.\n\n- „We can **leverage** our network to enter new markets.“\n- „She leveraged her experience in the negotiation.“\n\nIm Business-Englisch steht meist ein direktes Objekt dahinter. ${end}`;
 }
 
-// ---------------------------------------------------------------- translate@2
+// ---------------------------------------------------------------- translate@3
 
 function blockText(input: string): string {
   const m = /<<<\n([\s\S]*?)\n>>>/.exec(input);
@@ -75,6 +75,19 @@ export function translateReply(input: string): string {
   const notesLang = langOf(line(input, 'Notes language'));
   const same = /zzsame/i.test(text) && !isRetry(input);
   const note = (de: string, en: string) => (notesLang === 'de' ? de : en);
+  // Kurze Eingabe (Wort/Wendung): mit Beispielsatz für „In den Vokabeltrainer“.
+  if (text.split(/\s+/).length <= 4 && !/budget|zzsame/i.test(text)) {
+    const de = from === 'de';
+    return JSON.stringify({
+      source: from,
+      translation: de ? 'to keep up' : 'mithalten',
+      register,
+      alternatives: [],
+      notes: [],
+      terms: [],
+      example: 'It is hard to keep up with all the new emails.',
+    });
+  }
   if (from === 'de') {
     const main = /budget/i.test(text) ? 'We need to approve the budget.' : 'Here is the translation of your text in natural American English.';
     return JSON.stringify({

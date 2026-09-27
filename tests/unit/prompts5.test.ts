@@ -32,7 +32,7 @@ describe('Verzeichnis Phase 5', () => {
   });
 
   it('Kopfzeile, Stufe und Zwischenspeicher je Vorlage', () => {
-    expect(translate.build(trVars).split('\n')[0]).toBe('[translate@2]');
+    expect(translate.build(trVars).split('\n')[0]).toBe('[translate@3]');
     expect(translate.tier).toBe('quick');
     expect(translate.cache).toEqual({ gcTime: 86_400_000 });
     expect(preplyPrep.build(prepVars).split('\n')[0]).toBe('[preply-prep@2]');

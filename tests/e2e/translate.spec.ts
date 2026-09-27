@@ -40,6 +40,8 @@ test.describe('Desktop 1440 DE', () => {
     expect(c).toHaveLength(1);
     expect(c[0]).toMatchObject({ tier: 'quick', cache: { gcTime: 86_400_000 } });
     await expect(page.getByTestId('tr-history')).toBeVisible();
+    // Ganzer Satz: kein Knopf „In den Vokabeltrainer“ (nur Wort-Antippen).
+    await expect(page.getByTestId('tr-card')).toHaveCount(0);
     expect(await layoutProblems(page)).toEqual([]);
 
     // Englisches Wort der Übersetzung antippen und als Karte speichern.
@@ -108,6 +110,12 @@ test.describe('Handy 390 DE: Richtung', () => {
     const second = await calls(page, 'translate');
     expect(second.at(-1)?.input).toContain('From: English');
     expect(await layoutProblems(page)).toEqual([]);
+
+    // Wie in der alten App: kurzes Wort direkt in den Vokabeltrainer (mit Beispielsatz als Ursprung).
+    await page.getByTestId('tr-card').tap();
+    await expect(page.getByTestId('tr-card-done')).toBeVisible();
+    await expect.poll(async () => (await dump(page))['vocab/keep-up']?.src).toBe('translate');
+    expect((await dump(page))['vocab/keep-up']).toMatchObject({ word: 'keep up', de: 'mithalten', ex: 'It is hard to [keep up] with all the new emails.', origin: { kind: 'translate' } });
     expect(errors).toEqual([]);
   });
 });

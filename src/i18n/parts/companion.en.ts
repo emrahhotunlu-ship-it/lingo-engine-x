@@ -86,6 +86,9 @@ export const companionEn: Record<CompanionMessageKey, string> = {
   tlNotes: 'Notes',
   tlTerms: 'Key terms',
   tlHistory: 'Recently translated',
+  tlToTrainer: 'Add to vocabulary trainer',
+  tlInTrainer: 'In your vocabulary trainer',
+  tlSaveFailed: 'Saving didn’t work. Please try again.',
   tlListen: 'Listen',
 
   // ---------------------------------------------------------------- Preply bridge

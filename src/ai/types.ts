@@ -43,6 +43,8 @@ export type AiRequest<V, O> = {
    * sonst käme dieselbe schemawidrige Antwort bis zu 24 h zurück.
    */
   refresh?: boolean;
+  /** Bisheriger Antworttext beim Streamen (z. B. Teilübersetzung anzeigen); nur Anzeige, nie geprüft. */
+  onPartial?: (text: string) => void;
 };
 
 export type AiResult<O> = {
