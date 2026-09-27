@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { useNav } from '../../app/nav';
+import { ScreenHeader } from '../learn/ui';
 import { useLive } from '../../data/live';
 import { stepsFor, stepState, isItemDone } from '../../domain/discover/steps';
 import type { FeedItem } from '../../domain/input/types';
@@ -21,6 +22,7 @@ export const KIND_ICON: Record<FeedItem['kind'], InputIconName> = { article: 'ar
 export function DiscoverScreen() {
   const { t } = useT();
   const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   useFeedSubscription();
   useCompanionSee({ area: 'discover', label: t('dcTitle'), phase: 'idle' });
   const { status, items } = useFeedItems();
@@ -34,13 +36,16 @@ export function DiscoverScreen() {
 
   return (
     <section className="flex flex-col gap-6 py-6 sm:py-10" data-testid="discover">
-      {/* Eigener Reiter (M13): Navigation über die Reiter, kein ✕. */}
-      <header className="flex items-center gap-2">
-        <h1 className="flex-1 text-2xl font-semibold tracking-tight">{t('dcTitle')}</h1>
-        <Button variant="ghost" onClick={() => go({ name: 'history', kind: 'discover' })} data-testid="open-history">
-          {t('inHistory')}
-        </Button>
-      </header>
+      {/* UX-Beratung 27.09.: Entdecken liegt in „Üben" – Zurück zur Herkunft, Verlauf oben rechts. */}
+      <ScreenHeader
+        title={t('dcTitle')}
+        back={back}
+        right={
+          <Button variant="ghost" onClick={() => go({ name: 'history', kind: 'discover' })} data-testid="open-history">
+            {t('inHistory')}
+          </Button>
+        }
+      />
       {status === 'idle' || status === 'loading' ? (
         <div className="flex flex-col gap-3" role="status" aria-label={t('inSkeleton')}>
           {[0, 1, 2].map((i) => (

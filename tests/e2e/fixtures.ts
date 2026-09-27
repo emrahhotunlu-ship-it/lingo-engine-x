@@ -78,7 +78,7 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
 }
 
 /** Wartet, bis ein Bildschirm fertig eingeblendet ist. */
-export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer' | 'speak' | 'roleplay' | 'business' | 'mail' | 'playbook' | 'pitch' | 'grammarSession' | 'vtest'): Promise<void> {
+export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer' | 'speak' | 'roleplay' | 'mail' | 'playbook' | 'pitch' | 'grammarSession' | 'vtest' | 'learn'): Promise<void> {
   await page.locator(`[data-screen="${name}"]`).waitFor({ state: 'visible' });
   await page.waitForFunction((n) => {
     const el = document.querySelector(`[data-screen="${n}"]`);
@@ -91,6 +91,27 @@ export async function openOverview(page: Page): Promise<void> {
   await screen(page, 'today');
   await page.getByTestId('tab-overview').click();
   await screen(page, 'overview');
+}
+
+/**
+ * Einstellungen öffnen (UX-Beratung 27.09.): das Zahnrad sitzt auf „Stand" (und auf den
+ * System-Bildschirmen ohne Reiter). Steht es nicht im Bild, erst zum Reiter „Stand".
+ */
+export async function openSettings(page: Page): Promise<void> {
+  const gear = page.getByTestId('open-settings');
+  if (!(await gear.isVisible())) {
+    await page.getByTestId('tab-overview').click();
+    await screen(page, 'overview');
+  }
+  await gear.click();
+}
+
+/** Reiter „Sprechen" mit einem Bereich öffnen: Szenen · Business · Preply (UX-Beratung Nr. 7). */
+export async function openSpeak(page: Page, seg: 'scenes' | 'business' | 'preply' = 'scenes'): Promise<void> {
+  await page.getByTestId('tab-speak').click();
+  await screen(page, 'speak');
+  if (seg !== 'scenes' || (await page.getByTestId('speak-hub').getAttribute('data-seg')) !== 'scenes') await page.getByTestId(`speak-seg-${seg}`).click();
+  await page.locator(`[data-testid="speak-hub"][data-seg="${seg}"]`).waitFor();
 }
 
 /** Prüfungen, die auf jedem Bildschirm gelten (Kap. 12). */

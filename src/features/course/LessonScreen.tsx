@@ -10,12 +10,12 @@ import { useSharedTarget } from '../../engine/shared';
 import { useT, type MessageKey } from '../../i18n';
 import { logWarn } from '../../platform/diagnostics';
 import { stopSpeech } from '../../platform/speech';
-import { Button, IconButton } from '../../ui/Button';
+import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { flush } from '../progress/persist';
-import { DutyBar, SummaryActions } from '../learn/ui';
+import { ExerciseTop, SummaryActions } from '../learn/ui';
 import { makeLessonMachine } from './lessonMachine';
 import { finishLesson, leaveLesson, openLesson, prepareLesson, saveStep, savedStep, startBaseLesson, touchLesson, useLessonRun, type Step } from './lessonRun';
 import { DialogStep, GrammarStep, OutputStep, WordsStep } from './LessonSteps';
@@ -49,7 +49,7 @@ function LessonSkeleton() {
 function LessonRun({ id }: { id: string }) {
   const { t, tn, lang } = useT();
   const api = useHiddenInput();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const run = useLessonRun();
   const machine = useMemo(() => makeLessonMachine(savedStep(id) ?? 'intro'), [id]);
   const [snap, send] = useMachine(machine);
@@ -77,7 +77,7 @@ function LessonRun({ id }: { id: string }) {
     stopSpeech();
     leaveLesson();
     void flush();
-    go({ name: 'course' });
+    back();
   };
   useHotkeys({ escape: leave }, api.isInput);
 
@@ -96,25 +96,17 @@ function LessonRun({ id }: { id: string }) {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="lesson" data-lesson={id} data-step={step} data-source={run.content?.source ?? ''}>
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-3">
-          <IconButton icon="close" label={t('lsClose')} onClick={leave} data-testid="round-close" />
-          <p ref={sharedRef} data-shared={shared ? '' : undefined} className="min-w-0 text-sm text-muted" data-testid="lesson-title">
-            {title}
+      <ExerciseTop onClose={leave} closeLabel={t('lsClose')} progress={idx >= 0 ? { n: idx + 1, total: ORDER.length } : null} ctx={run.ctx} duty="lesson" />
+      <div className="flex items-baseline justify-between gap-3">
+        <p ref={sharedRef} data-shared={shared ? '' : undefined} className="min-w-0 text-sm text-muted" data-testid="lesson-title">
+          {title}
+        </p>
+        {idx >= 0 && (
+          <p className="flex-none text-xs text-subtle" data-testid="lesson-step-name">
+            {t(STEP_KEYS[ORDER[idx] as keyof typeof STEP_KEYS])}
           </p>
-        </div>
-        <DutyBar ctx={run.ctx} duty="lesson" />
+        )}
       </div>
-      {idx >= 0 && (
-        <ol className="grid grid-cols-4 gap-1.5" aria-label={t('lsSteps')}>
-          {ORDER.map((s, i) => (
-            <li key={s} className="flex flex-col gap-1" aria-current={i === idx ? 'step' : undefined}>
-              <span className={`h-1.5 rounded-full ${i < idx ? 'bg-accent' : i === idx ? 'bg-accent-text' : 'bg-track'}`} />
-              <span className={`text-2xs ${i === idx ? 'font-semibold text-fg' : 'text-subtle'}`}>{t(STEP_KEYS[s as keyof typeof STEP_KEYS])}</span>
-            </li>
-          ))}
-        </ol>
-      )}
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={step} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
           {step === 'intro' && <LessonIntro cando={cando} onStart={next} />}

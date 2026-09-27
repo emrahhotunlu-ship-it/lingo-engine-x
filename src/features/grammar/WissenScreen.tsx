@@ -5,6 +5,7 @@ import { TOPICS } from '../../domain/content';
 import { ruleOf } from '../../domain/grammar/rules';
 import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
+import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ScreenHeader } from '../learn/ui';
@@ -40,16 +41,17 @@ export function searchRules(query: string, index = searchIndex()): string[] {
   return index.filter((x) => words.every((w) => x.text.includes(w))).map((x) => x.topic);
 }
 
+/**
+ * „Typische Fallen" (UX-Beratung Nr. 9): Die Suche über alle Regelblätter steht jetzt oben in
+ * Grammatik (`RuleSearch`); hier bleibt die Übersicht „Deutsch → Englisch: typische Fallen" als
+ * Unterseite von Grammatik.
+ */
 export function WissenScreen() {
   const { t, lang } = useT();
-  const go = useNav((s) => s.go);
-  const [query, setQuery] = useState('');
-  useCompanionSee({ area: 'grammar', label: t('wsTitle'), phase: 'idle' });
-  const q = useDeferredValue(query);
+  const back = useNav((s) => s.back);
+  useCompanionSee({ area: 'grammar', label: t('wsTraps'), phase: 'idle' });
   const [open, setOpen] = useState<string | null>(null);
   const close = useCallback(() => setOpen(null), []);
-  const index = useMemo(() => searchIndex(), []);
-  const hits = useMemo(() => searchRules(q, index), [q, index]);
   const traps = useMemo(
     () =>
       TOPICS.map((tp) => ({ id: tp.id, rule: ruleOf(tp.id, lang) }))
@@ -61,24 +63,61 @@ export function WissenScreen() {
   return (
     <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="wissen">
       <motion.div variants={item}>
-        <ScreenHeader eyebrow={t('lhWissen')} title={t('wsTitle')} lead={t('wsLead')} back={() => go({ name: 'learn' })} />
+        <ScreenHeader eyebrow={t('lhGrammar')} title={t('wsTraps')} back={back} />
       </motion.div>
-      <motion.div variants={item}>
-        <label className="relative block">
-          <span className="sr-only">{t('wsSearch')}</span>
-          <Icon name="search" size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-subtle" />
-          <input type="search" className="lx-field pl-10" value={query} placeholder={t('wsSearch')} onChange={(e) => setQuery(e.target.value)} data-testid="wissen-search" autoComplete="off" spellCheck={false} />
-        </label>
-      </motion.div>
+      <motion.ul variants={item} className="flex flex-col divide-y divide-line" data-testid="wissen-traps" aria-label={t('wsTraps')}>
+        {traps.map((x) => (
+          <li key={x.id} className="flex flex-col gap-2 py-4" data-testid="wissen-trap" data-topic={x.id}>
+            <p className="font-medium">{topicName(x.id, lang)}</p>
+            {x.contrast && (
+              <p className="text-sm text-muted" lang={lang}>
+                {x.contrast}
+              </p>
+            )}
+            {x.trap && (
+              <p className="flex flex-col text-sm">
+                <span className="lx-diff-off" lang="en">
+                  {x.trap.bad}
+                </span>
+                <EnglishText as="span" className="font-medium" text={x.trap.good} area="trainer" source={`grammar/${x.id}`} />
+              </p>
+            )}
+            <div>
+              <Button variant="ghost" iconAfter="arrowRight" className="-ml-4" onClick={() => setOpen(x.id)} data-testid="wissen-open">
+                {t('wsToTopic')}
+              </Button>
+            </div>
+          </li>
+        ))}
+      </motion.ul>
+      <TopicSheet topic={open} onClose={close} />
+    </motion.div>
+  );
+}
+
+/** Suche „Regel oder Falle suchen" oben in Grammatik (bisher im eigenen Bereich „Wissen"). */
+export function RuleSearch({ onOpen }: { onOpen: (topic: string) => void }) {
+  const { t, lang } = useT();
+  const [query, setQuery] = useState('');
+  const q = useDeferredValue(query);
+  const index = useMemo(() => searchIndex(), []);
+  const hits = useMemo(() => searchRules(q, index), [q, index]);
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="relative block">
+        <span className="sr-only">{t('grLookup')}</span>
+        <Icon name="search" size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-subtle" />
+        <input type="search" className="lx-field pl-10" value={query} placeholder={t('grLookup')} onChange={(e) => setQuery(e.target.value)} data-testid="wissen-search" autoComplete="off" spellCheck={false} />
+      </label>
       {q.trim() && (
-        <motion.section variants={item} className="flex flex-col gap-2" aria-live="polite" data-testid="wissen-results">
+        <section className="flex flex-col" aria-live="polite" data-testid="wissen-results">
           {hits.length === 0 ? (
-            <p className="text-base text-muted">{t('wsNothing')}</p>
+            <p className="py-2 text-base text-muted">{t('wsNothing')}</p>
           ) : (
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col divide-y divide-line">
               {hits.map((id) => (
                 <li key={id}>
-                  <button type="button" className="lx-glass flex w-full items-center justify-between gap-3 rounded-[var(--radius-card)] px-4 py-3 text-left hover:bg-surface-strong" onClick={() => setOpen(id)} data-testid="wissen-hit" data-topic={id}>
+                  <button type="button" className="flex min-h-14 w-full items-center justify-between gap-3 py-2 text-left" onClick={() => onOpen(id)} data-testid="wissen-hit" data-topic={id}>
                     <span className="flex min-w-0 flex-col">
                       <span className="font-medium">{topicName(id, lang)}</span>
                       <span className="truncate text-sm text-muted" lang={lang}>
@@ -91,39 +130,8 @@ export function WissenScreen() {
               ))}
             </ul>
           )}
-        </motion.section>
+        </section>
       )}
-      <motion.section variants={item} className="flex flex-col gap-3" aria-labelledby="ws-traps" data-testid="wissen-traps">
-        <h2 id="ws-traps" className="text-lg font-semibold tracking-tight">
-          {t('wsTraps')}
-        </h2>
-        <ul className="grid gap-3 sm:grid-cols-2">
-          {traps.map((x) => (
-            <li key={x.id} className="lx-glass flex flex-col gap-2 rounded-[var(--radius-card)] p-4" data-testid="wissen-trap" data-topic={x.id}>
-              <p className="font-medium">{topicName(x.id, lang)}</p>
-              {x.contrast && (
-                <p className="text-sm text-muted" lang={lang}>
-                  {x.contrast}
-                </p>
-              )}
-              {x.trap && (
-                <p className="flex flex-col text-sm">
-                  <span className="lx-diff-off" lang="en">
-                    {x.trap.bad}
-                  </span>
-                  <EnglishText as="span" className="font-medium" text={x.trap.good} area="trainer" source={`grammar/${x.id}`} />
-                </p>
-              )}
-              <div>
-                <button type="button" className="lx-chip" onClick={() => setOpen(x.id)} data-testid="wissen-open">
-                  {t('wsToTopic')}
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </motion.section>
-      <TopicSheet topic={open} onClose={close} />
-    </motion.div>
+    </div>
   );
 }

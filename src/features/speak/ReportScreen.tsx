@@ -15,6 +15,7 @@ import { TakeChunkButton } from './TakeChunkButton';
 import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import type { RoleplayApi } from './useRoleplay';
 import { repairsFromTalk } from '../../domain/repair/sources';
+import { ExerciseTop } from '../learn/ui';
 import { RepairStep } from '../repair/RepairStep';
 
 // Abschlussbericht (Plan §5.4): fester Teil sofort und ohne KI (Tatsachen, kein Punktestand),
@@ -27,6 +28,7 @@ const GOAL_KEY = { reached: 'repGoalReached', partly: 'repGoalPartly', missed: '
 export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi }) {
   const { t, lang } = useT();
   const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const route = useNav((s) => s.route);
   const cat = useCatLabel();
   const c = rp.snap.context;
@@ -48,6 +50,7 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
       transition={{ duration: DURATION.slow, ease: EASE_OUT }}
       className="flex flex-col gap-6 py-6"
     >
+      <ExerciseTop onClose={back} closeLabel={t('spBack')} closeTestId="rp-close" ctx="extra" />
       <header className="flex flex-col gap-1">
         <p className="lx-eyebrow">{t('repTitle')}</p>
         <h1 className="text-2xl font-semibold tracking-tight">{scene.title}</h1>

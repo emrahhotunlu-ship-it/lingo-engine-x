@@ -11,7 +11,6 @@ import { Tabs } from '../../ui/Tabs';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCompanionSee } from '../companion/seeing';
 import { LateRescueCard } from '../migration/LateRescueCard';
-import { PreplyEntry } from '../preply/PreplyEntry';
 import { maybeAutoAssess } from './assessRun';
 import { ErrorsTab } from './ErrorsTab';
 import { HistoryTab } from './HistoryTab';
@@ -125,10 +124,6 @@ export function ProgressScreen() {
           {tab === 'path' && <PathTab />}
           {tab === 'history' && <HistoryTab />}
         </Tabs>
-      </motion.div>
-
-      <motion.div variants={item}>
-        <PreplyEntry />
       </motion.div>
 
       {ov.schema && ov.schema.migratedAt > 0 && (

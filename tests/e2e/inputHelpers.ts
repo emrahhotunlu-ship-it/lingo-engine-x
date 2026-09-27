@@ -25,22 +25,17 @@ export const sampleCalls = (page: Page): Promise<Array<{ id: string | null; tier
 export const activeSubscriptions = (page: Page): Promise<number> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { activeSubscriptions(): number } } }).__LINGO_FAKE__.db.activeSubscriptions());
 
-/** Reiter „Lernen" öffnen (Lesen, Hören, Schreiben, M13). */
+/** Reiter „Üben" öffnen (Lesen, Hören, Schreiben, Entdecken; UX-Beratung 27.09.). */
 export async function openLearn(page: Page): Promise<void> {
   await screen(page, 'today');
   await page.getByTestId('tab-learn').click();
   await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
 }
 
-/** Ein Modul öffnen: Lesen, Hören, Schreiben über den Reiter „Lernen", Entdecken über seinen Reiter. */
+/** Ein Modul öffnen: Lesen, Hören, Schreiben und Entdecken über den Reiter „Üben". */
 export async function openModule(page: Page, id: 'read' | 'listen' | 'write' | 'discover'): Promise<void> {
-  if (id === 'discover') {
-    await screen(page, 'today');
-    await page.getByTestId('tab-discover').click();
-  } else {
-    await openLearn(page);
-    await page.locator(`[data-testid="module"][data-module="${id}"]`).click();
-  }
+  await openLearn(page);
+  await page.locator(`[data-testid="module"][data-module="${id}"]`).click();
   await page.locator(`[data-screen="${id}"]`).waitFor({ state: 'visible' });
 }
 
@@ -59,7 +54,7 @@ export async function answerAll(page: Page, n: number, from = 0): Promise<void> 
 
 export const entriesOf = (db: Dump, day = DAY): Array<Record<string, unknown>> => ((db[`log/${day}`]?.entries as Array<Record<string, unknown>> | undefined) ?? []);
 
-/** Zurück zu „Heute": Einheiten schließen (✕), sonst über den Reiter – je Schritt warten, bis der Wechsel fertig ist. */
+/** Zurück zu „Heute": Einheiten schließen (✕, zurück zur Herkunft), sonst über den Reiter – je Schritt warten, bis der Wechsel fertig ist. */
 export async function backToToday(page: Page): Promise<void> {
   const screens = () => page.locator('main [data-screen]').evaluateAll((els) => els.map((e) => e.getAttribute('data-screen') ?? ''));
   for (let i = 0; i < 4; i++) {
@@ -98,8 +93,9 @@ export async function inputTour(page: Page, visit: (name: InputScreen) => Promis
     [
       'verlauf',
       async () => {
-        await openLearn(page);
-        await page.locator('[data-testid="module-history"]').nth(2).click();
+        // Verlauf steht oben rechts im Bildschirm selbst (UX-Beratung Nr. 8).
+        await openModule(page, 'write');
+        await page.getByTestId('open-history').click();
         await page.getByTestId('history').waitFor();
       },
     ],

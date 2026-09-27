@@ -1,6 +1,7 @@
 import { useMachine } from '@xstate/react';
 import { useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
+import { TitleActions } from '../system/Chrome';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
 import { askJson } from '../../ai/gate';
@@ -33,7 +34,7 @@ const STATUS_KEY = { ok: 'mailSt_ok', stiff: 'mailSt_stiff', unclear: 'mailSt_un
 
 export function MailRefiner() {
   const { t, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const ai = useAiAvailable();
   const scope = useAiScope();
   const [snap, send] = useMachine(mailMachine);
@@ -144,11 +145,12 @@ export function MailRefiner() {
   return (
     <div className="flex flex-col gap-6 py-6" data-testid="mail-refiner" data-state={state}>
       <header className="flex items-start gap-2">
-        <IconButton icon="arrowLeft" label={t('spBack')} onClick={() => go({ name: 'business' })} />
-        <div className="flex min-w-0 flex-col gap-1">
+        <IconButton icon="arrowLeft" label={t('spBack')} onClick={back} className="-ml-2 flex-none" data-testid="back" />
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
           <h1 className="text-2xl font-semibold tracking-tight">{t('bizMail')}</h1>
           <p className="text-sm text-muted">{state === 'choosing' ? t('mailTask') : state === 'done' ? t('mailDone') : t('mailLead')}</p>
         </div>
+        <TitleActions />
       </header>
 
       {(state === 'input' || state === 'refining') && (

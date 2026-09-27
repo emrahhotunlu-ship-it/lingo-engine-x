@@ -271,7 +271,7 @@ describe('Ladepunkt am Reiter (M13)', () => {
     expect([...runningTabs({})]).toEqual([]);
     expect([...runningTabs({ a: task({}) })]).toEqual(['learn']);
     expect([...runningTabs({ a: task({ route: { name: 'write', ctx: 'duty' } }) })]).toEqual(['today']);
-    expect([...runningTabs({ a: task({ kind: 'discover', route: { name: 'discoverItem', feedId: 'f', itemId: 'i', ctx: 'extra' } }) })]).toEqual(['discover']);
+    expect([...runningTabs({ a: task({ kind: 'discover', route: { name: 'discoverItem', feedId: 'f', itemId: 'i', ctx: 'extra' } }) })]).toEqual(['learn']);
     expect([...runningTabs({ a: task({ status: 'done' }), b: task({ key: 'b', status: 'error' }) })]).toEqual([]);
   });
 });

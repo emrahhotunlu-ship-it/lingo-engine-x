@@ -18,6 +18,7 @@ import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { useCompanionSee } from '../companion/seeing';
 import { InfoToggle } from '../progress/JudgeTab';
+import { ExerciseTop } from '../learn/ui';
 import { recordProfileFields } from '../progress/persist';
 import { vtestMachine } from './machine';
 
@@ -33,6 +34,7 @@ async function saveResult(r: VtestResult, day: string): Promise<void> {
 export function VtestScreen() {
   const { t, num, lang } = useT();
   const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const api = useHiddenInput();
   const day = useClock((s) => s.today);
   const input = useMemo(() => ({ seed: day, lang: useSettings.getState().lang, day, now: () => Date.now(), save: (r: VtestResult) => saveResult(r, day) }), [day]);
@@ -58,6 +60,7 @@ export function VtestScreen() {
   }, [state, send]);
 
   const activeItem = state === 'active' ? c.active[c.i] : undefined;
+  const running = state === 'yesno' || state === 'meaning' || state === 'active';
   const meaningItem = state === 'meaning' ? c.meaning[c.i] : undefined;
 
   const checkActive = () => {
@@ -99,10 +102,11 @@ export function VtestScreen() {
     api.isInput,
   );
 
+  // Fortschritt steht in der Übungsleiste; hier nur der Teil (UX-Beratung Nr. 4).
   const header = (step: string, n: number, total: number) => (
     <div className="flex items-center justify-between gap-3">
       <p className="lx-eyebrow">{step}</p>
-      <p className="lx-tnum text-sm text-muted" data-testid="vt-progress">
+      <p className="sr-only" data-testid="vt-progress">
         {t('vtProgress', { n: n + 1, total })}
       </p>
     </div>
@@ -116,6 +120,14 @@ export function VtestScreen() {
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 py-6 sm:py-10" data-testid="vtest" data-state={state}>
+      <ExerciseTop
+        onClose={() => (running ? send({ type: 'CANCEL' }) : back())}
+        closeLabel={t('vtCancel')}
+        closeTestId="vt-close"
+        progress={running ? { n: c.i + 1, total: state === 'yesno' ? c.yesno.length : state === 'meaning' ? c.meaning.length : c.active.length } : null}
+        progressTestId="vt-bar"
+        ctx="extra"
+      />
       <header className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-semibold tracking-tight">{t('vtTitle')}</h1>
@@ -130,7 +142,7 @@ export function VtestScreen() {
             <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => send({ type: 'START' })} data-testid="vt-start">
               {t('vtStart')}
             </Button>
-            <Button variant="ghost" onClick={() => go({ name: 'overview', tab: 'history' })}>
+            <Button variant="ghost" onClick={back}>
               {t('vtBack')}
             </Button>
           </div>
@@ -284,7 +296,7 @@ export function VtestScreen() {
         <Card className="flex flex-col gap-3">
           <p className="text-sm text-muted">{t('vtCancelled')}</p>
           <div>
-            <Button onClick={() => go({ name: 'overview', tab: 'history' })} data-testid="vt-back">
+            <Button onClick={back} data-testid="vt-back">
               {t('vtBack')}
             </Button>
           </div>

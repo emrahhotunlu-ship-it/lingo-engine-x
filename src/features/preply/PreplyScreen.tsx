@@ -1,7 +1,6 @@
 import { useMachine } from '@xstate/react';
 import { useEffect, useMemo, useState } from 'react';
 import { fromPromise } from 'xstate';
-import { useNav } from '../../app/nav';
 import { watchCollectionDocs } from '../../data/watch';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { mergedVocab } from '../../domain/overview';
@@ -39,14 +38,14 @@ function currentVocabIds(): Set<string> {
   return new Set(mergedVocab(s.collections.vocab ?? new Map<string, Doc>(), invalidIdsOf(s.invalid, 'vocab')).keys());
 }
 
-export function PreplyScreen() {
+/** Preply-Brücke als Abschnitt von „Sprechen“ (UX-Beratung Nr. 7), ohne eigenen Kopf. */
+export function PreplySection() {
   const { t } = useT();
   const db = useCapabilities((s) => s.db);
   const docs = usePreply((s) => s.docs);
   const loaded = usePreply((s) => s.loaded);
   const tabState = usePreply((s) => s.tab);
   const openId = usePreply((s) => s.openId);
-  const go = useNav((s) => s.go);
   const [newPlan, setNewPlan] = useState(false);
 
   // E5-19: ein Abo auf die Sammlung, nur solange der Bildschirm offen ist.
@@ -99,14 +98,8 @@ export function PreplyScreen() {
   };
 
   return (
-    <div className="flex flex-col gap-5 py-6 sm:py-10">
+    <div className="flex flex-col gap-5" data-testid="preply">
       <header className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" icon="arrowRight" className="-ml-2 [&>svg]:rotate-180" onClick={() => go({ name: 'today' })} data-testid="pp-back">
-            {t('navToday')}
-          </Button>
-        </div>
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('ppTitle')}</h1>
         <div role="tablist" aria-label={t('ppTitle')} className="flex w-full max-w-md rounded-[var(--radius-control)] bg-track p-1">
           {tabs.map((x) => (
             <button

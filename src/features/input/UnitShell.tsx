@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion';
 import { useId, useState, type ReactNode } from 'react';
+import { useNav } from '../../app/nav';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
-import type { Channel } from '../../ui/Card';
 import { useCompanionSee } from '../companion/seeing';
+import { ExerciseTop } from '../learn/ui';
 
-// Rahmen einer Einheit (Plan §6.1): Kopfleiste mit ✕ (44 px), Titel und Schritt bzw. Frage,
+// Rahmen einer Einheit (Plan §6.1): die gemeinsame Übungsleiste (✕ · Balken · Claude), Titel mit
+// Verlauf-Symbol und Schritt bzw. Frage,
 // darunter die Statuszeile. Aufgabe in einer Zeile, „Wozu?" nur hinter dem Info-Symbol (A7).
 
 type Props = {
@@ -35,7 +37,7 @@ export function UnitShell({ kind, ctx, state, title, onClose, progress, status, 
   useCompanionSee({ area: kind, label: title, phase: 'idle', ...(seeDetail || taskText ? { detail: [seeDetail, taskText].filter(Boolean).join('\n') } : {}) });
   const [info, setInfo] = useState(false);
   const infoId = useId();
-  const channel: Channel = kind;
+  const go = useNav((s) => s.go);
   // Esc verlässt die Einheit (Entwürfe bleiben lokal gesichert); bei offenem Nachschlagen
   // schließt Esc zuerst das Fenster (useHotkeys lässt Dialoge in Ruhe).
   useHotkeys({ escape: onClose }, () => false);
@@ -52,12 +54,13 @@ export function UnitShell({ kind, ctx, state, title, onClose, progress, status, 
       aria-labelledby={`${infoId}-title`}
     >
       <header className="flex flex-col gap-3">
+        <ExerciseTop onClose={onClose} closeLabel={t('inLeave')} closeTestId="unit-close" ctx={ctx} />
         <div className="flex items-center gap-2">
-          <IconButton icon="close" label={t('inLeave')} onClick={onClose} data-testid="unit-close" className="-ml-2" />
-          <span className="inline-block h-4 w-0.5 rounded-full" style={{ background: `var(--lx-ch-${channel})` }} aria-hidden="true" />
           <h1 id={`${infoId}-title`} className="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight">
             {title}
           </h1>
+          {/* Verlauf im Bildschirm selbst (UX-Beratung Nr. 8), nicht mehr als zweiter Knopf in „Üben". */}
+          <IconButton icon="history" label={t('inHistoryOf', { channel: t(`ch_${kind}`) })} onClick={() => go({ name: 'history', kind })} data-testid="open-history" className="-mr-2 flex-none" />
         </div>
         {progress}
         {status}

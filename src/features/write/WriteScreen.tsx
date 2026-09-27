@@ -28,7 +28,7 @@ const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v)
 
 export function WriteScreen({ ctx }: { ctx: UnitCtx }) {
   const { t } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const input = useInputContext();
   const status = useInputLibrary((s) => s.status);
   const writing = useInputLibrary((s) => s.docs.writing);
@@ -72,7 +72,7 @@ export function WriteScreen({ ctx }: { ctx: UnitCtx }) {
   }
   if (status === 'error') {
     return (
-      <UnitShell kind="write" ctx={ctx} state="error" title={t('ch_write')} onClose={() => go({ name: 'today' })}>
+      <UnitShell kind="write" ctx={ctx} state="error" title={t('ch_write')} onClose={back}>
         <div className="flex flex-wrap items-center gap-3" role="alert">
           <p className="text-sm text-danger-text">{t('inLoadFailed')}</p>
           <Button icon="refresh" onClick={() => void ensureLibrary(true)}>

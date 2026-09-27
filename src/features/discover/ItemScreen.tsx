@@ -28,7 +28,7 @@ import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 
 export function ItemScreen({ feedId, itemId, ctx }: { feedId: string; itemId: string; ctx: UnitCtx }) {
   const { t } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   useFeedSubscription();
   const { status, items } = useFeedItems();
   const item = useMemo(() => items.find((i) => i.itemId === itemId && i.feedId === feedId) ?? items.find((i) => i.itemId === itemId) ?? null, [items, itemId, feedId]);
@@ -36,11 +36,11 @@ export function ItemScreen({ feedId, itemId, ctx }: { feedId: string; itemId: st
 
   if (!item) {
     return (
-      <UnitShell kind="discover" ctx={ctx} state={status === 'ready' ? 'missing' : 'loading'} title={t('dcTitle')} onClose={() => go({ name: 'discover' })}>
+      <UnitShell kind="discover" ctx={ctx} state={status === 'ready' ? 'missing' : 'loading'} title={t('dcTitle')} onClose={back}>
         {status === 'ready' || status === 'error' ? (
           <div className="flex flex-col items-start gap-3">
             <p className="text-sm text-muted">{status === 'error' ? t('inLoadFailed') : t('dcNone')}</p>
-            <Button onClick={() => go({ name: 'discover' })}>{t('dcBackToList')}</Button>
+            <Button onClick={() => back()}>{t('dcBackToList')}</Button>
           </div>
         ) : (
           <div className="flex flex-col gap-3" role="status" aria-label={t('inSkeleton')}>
@@ -58,7 +58,7 @@ export function ItemScreen({ feedId, itemId, ctx }: { feedId: string; itemId: st
 
 function ItemUnit({ item, ctx, steps, startAt, savedDone }: { item: FeedItem; ctx: UnitCtx; steps: DiscStep[]; startAt: DiscStep | 'done'; savedDone: ReadonlySet<DiscStep> }) {
   const { t, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const day = useClock((s) => s.today);
   const clock = useActiveClock();
   const questions = useMemo(() => item.questions.map((q) => shuffleOptions(q, `${item.itemId}`)), [item]);
@@ -137,7 +137,7 @@ function ItemUnit({ item, ctx, steps, startAt, savedDone }: { item: FeedItem; ct
       state={stateName}
       title={t('dcTitle')}
       seeDetail={item.title}
-      onClose={() => go({ name: 'discover' })}
+      onClose={back}
       progress={<Stepper steps={stepItems} label={t('inSteps')} />}
       status={
         <div className="flex flex-col gap-1">

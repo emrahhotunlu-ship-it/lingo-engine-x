@@ -77,7 +77,7 @@ function startReview(id: string, text: string, rev: number, prompt: WritingPromp
 
 export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Props) {
   const { t, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const ai = useAiAvailable();
   const clock = useActiveClock();
   const draftKey = `write:${prompt.id}`;
@@ -122,7 +122,7 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
   const n = wordCount(stateName === 'revising' ? revText : text);
   const minSubmit = Math.ceil(min * 0.6);
   const used = usedChunks(stateName === 'revising' ? revText : text, prompt.useful);
-  const close = () => go({ name: 'today' });
+  const close = () => back();
   const status = <StatusLine channel="write" level={prompt.level} domain={prompt.domain} minutes={15} />;
 
   const chips = (
@@ -258,9 +258,6 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
               {t('wrRevise')}
             </Button>
           )}
-          <Button variant="ghost" onClick={() => go({ name: 'history', kind: 'write' })} data-testid="open-history">
-            {t('inHistory')}
-          </Button>
         </div>
       </div>
     );

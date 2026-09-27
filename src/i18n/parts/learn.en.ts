@@ -4,10 +4,10 @@
 import type { learnDe } from './learn.de';
 
 export const learnEn: Record<keyof typeof learnDe, string> = {
-  tabLearn: 'Learn',
+  tabLearn: 'Practice',
   tabOpen: '{n} open',
   lrBack: 'Back',
-  lrBackToLearn: 'Back to Learn',
+  lrBackToLearn: 'Back to Practice',
   lrProgress: 'Item {n} of {total}',
   lrDutyBar: 'Required {n} of {total}',
   lrDutyLesson: 'Lesson',
@@ -25,11 +25,11 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   certainty4: 'confident',
   certainty5: 'mastered',
 
-  lhTitle: 'Learn',
+  lhTitle: 'Practice',
   lhLead: 'Course, vocabulary, grammar and practice. What is required today is on "Today".',
   lhCourse: 'Course',
   lhGrammar: 'Grammar',
-  lhDrills: 'Practice',
+  lhDrills: 'Quick drills',
   lhVocab: 'Vocabulary',
   lhWissen: 'Reference',
   lhLibrary: 'Look up and practice',

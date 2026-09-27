@@ -41,6 +41,12 @@ const paths = {
   briefcase: 'M4 8h16v11H4zM9 8V5h6v3M4 13h16',
   arrowDown: 'M12 5v14M6 13l6 6 6-6',
   target: 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 16a4 4 0 100-8 4 4 0 000 8zM12 12.01V12',
+  // UX-Beratung 27.09.: Reiter mit Symbol (Heute · Üben · Sprechen · Stand) und Zahnrad
+  sun: 'M12 16a4 4 0 100-8 4 4 0 000 8zM12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4',
+  layers: 'M12 3l9 5-9 5-9-5zM3 12.5l9 5 9-5M3 16.5l9 5 9-5',
+  chart: 'M4 20h16M6 16v-5M10 16V7M14 16v-8M18 16V4',
+  history: 'M4 12a8 8 0 102.3-5.7M4 5v4h4M12 8v4l3 2',
+  gear: 'M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 13.5a7.6 7.6 0 000-3l2-1.6-2-3.4-2.4 1a7.5 7.5 0 00-2.6-1.5L14 2.5h-4l-.4 2.5A7.5 7.5 0 007 6.5l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 000 3l-2 1.6 2 3.4 2.4-1a7.5 7.5 0 002.6 1.5l.4 2.5h4l.4-2.5a7.5 7.5 0 002.6-1.5l2.4 1 2-3.4z',
 } as const;
 
 export type IconName = keyof typeof paths;
