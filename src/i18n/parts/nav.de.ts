@@ -29,4 +29,8 @@ export const navDe = {
   grLookup: 'Regel oder Falle suchen',
   grTrapsLink: 'Typische Fallen Deutsch → Englisch',
   frTitle: 'Freie Vokabelrunde',
+  spTraining: 'Training',
+  spTrMeetingLead: 'Echten Termin vorbereiten, Generalprobe, Nachbesprechung',
+  spTrFluencyLead: 'Dieselbe Antwort in 90, 60 und 45 Sekunden',
+  spTrTonesLead: 'Slack, Mail an den CFO, Satz im Meeting',
 } as const;

@@ -18,7 +18,6 @@ import { Icon } from '../../ui/Icon';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCompanionSee } from '../companion/seeing';
-import { installTestEntry } from '../fluency/testEntry';
 import { AiRunPanel, isBusy } from '../input/AiRunPanel';
 import { createSceneDoc, takeChunk } from '../speak/persist';
 import { TakeChunkButton, type TakeInput } from '../speak/TakeChunkButton';
@@ -34,7 +33,6 @@ import { addMeetingDebrief, saveMeeting, setMeetingScene } from './persist';
 // konntest es nicht?“ → meeting-debrief@1 → beste Formulierung, sofort als Wendungen gemerkt.
 // Gespeichert in `meeting/<Monat>`; nur echte Eingaben, nie Beispiel-Termine. Freiwillig.
 
-installTestEntry();
 
 type View = { kind: 'list' } | { kind: 'form' } | { kind: 'detail'; id: string };
 

@@ -9,6 +9,7 @@ import { assessReply } from './canned/assess';
 import { weeklyReply } from './canned/weekly';
 import { registerLearnReplies } from './cannedLearn';
 import { registerSayReplies } from './cannedSay';
+import { registerToneReplies } from './cannedTones';
 import { courseExtendReply } from './canned/courseExtend';
 import { repairCheckReply } from './canned/repairCheck';
 import { registerFluencyMeetingReplies } from './canned/fluencyMeeting';
@@ -316,6 +317,8 @@ export function registerCannedReplies(): void {
   registerLearnReplies();
   // Lernberatung 27.09.: say-check („Sag es“)
   registerSayReplies();
+  // Lernberatung 27.09., Vorschlag 8: tone-check („Eine Botschaft, drei Tonlagen“)
+  registerToneReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

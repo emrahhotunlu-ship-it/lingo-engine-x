@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen, type BootOptions } from './fixtures';
+import { boot, layoutProblems, openOverview, screen, type BootOptions, openSpeak } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Persönliche „Deutsch-Fallen“ (Lernberatung 27.09., V3) und Wochenfokus Preply ↔ App (V8/Nr. 9):
@@ -222,8 +222,8 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     // Preply: Wochenfokus in der Vorbereitung und in der Nachricht an den Lehrer.
     await page.getByTestId('patterns-close').click();
     await screen(page, 'overview');
-    await page.getByTestId('open-preply').click();
-    await page.locator('[data-screen="preply"]').waitFor({ state: 'visible' });
+    // Preply liegt seit der neuen Struktur unter Sprechen → Preply.
+    await openSpeak(page, 'preply');
     await expect(page.getByTestId('pp-focus')).toContainText('“since” with the present tense');
     await page.getByTestId('pp-create').click();
     await expect(page.getByTestId('pp-plan')).toBeVisible();

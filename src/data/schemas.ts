@@ -720,6 +720,31 @@ export const meetingSchema = z.looseObject({
     .nullish(),
 });
 
+/**
+ * Neu (Lernberatung 27.09., Vorschlag 8): „Eine Botschaft, drei Tonlagen“ – Einträge eines Monats
+ * (`tones/<JJJJ-MM>`), je Eintrag Sachverhalt, drei Fassungen und die Rückmeldung. Tolerant gelesen.
+ */
+export const tonesSchema = z.looseObject({
+  v: num,
+  month: str,
+  items: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        t: num,
+        day: str,
+        msg: str,
+        kind: str,
+        texts: z.looseObject({}).nullish(),
+        fb: z.looseObject({}).nullish(),
+        ms: num,
+        lang: str,
+        ai: bool,
+      }),
+    )
+    .nullish(),
+});
+
 /** Neu ab Phase 3: Business-Einheiten eines Monats (`biz/<JJJJ-MM>`, Plan §3.5). */
 export const bizSchema = z.looseObject({
   v: num,

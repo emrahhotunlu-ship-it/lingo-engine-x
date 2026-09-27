@@ -1,0 +1,41 @@
+import type { tonesDe } from './tones.de';
+
+// UI texts for "One message, three tones" (learning review 09/27, proposal 8), English – American spelling.
+
+export const tonesEn: Record<keyof typeof tonesDe, string> = {
+  tnTitle: 'One message, three tones',
+  tnTask: 'Write the message three times in English – right for each audience.',
+  tnTaskResult: 'Compare your tone with the model versions.',
+  tnPurpose:
+    'German speakers often sound too direct or too formal in English. Here you practice saying the same thing in the right tone on purpose – casual with colleagues, diplomatic with a CFO, clear in a meeting. Real mistakes go into your review as repair sentences.',
+  tnKind_job: 'Work',
+  tnKind_life: 'Team life',
+  tnStatusWrite: 'Three versions',
+  tnStatusDone: 'Checked',
+  tnMessage: 'Message',
+  tnOther: 'Another message',
+  tnReg_slack: 'Slack to a colleague',
+  tnReg_cfo: "Email to the client's CFO",
+  tnReg_meeting: 'Said in a meeting',
+  tnRegHint_slack: 'Casual and short, one or two sentences.',
+  tnRegHint_cfo: 'Formal but friendly – greeting, key point, next step.',
+  tnRegHint_meeting: 'The way you would say it out loud.',
+  tnNoAi: "Claude isn't available right now. Your versions will be saved without a check.",
+  tnCheck: 'Check tone',
+  tnSaveNoAi: 'Save without a check',
+  tnMinHint: 'Fill in all three fields (email at least 15 words).',
+  tnRepairsSaved_one: '{n} sentence goes into your review.',
+  tnRepairsSaved_other: '{n} sentences go into your review.',
+  tnRepairsFailed: "The sentences for your review couldn't be saved.",
+  tnSaveFailed: 'Not saved.',
+  tnRetrySave: 'Save again',
+  tnDone: 'Done – counts as extra',
+  tnYours: 'Your version',
+  tnModel: 'Model version',
+  tnVerdict_too_direct: 'Too direct',
+  tnVerdict_too_stiff: 'Too stiff',
+  tnVerdict_fits: 'Just right',
+  tnCorrections: 'Real mistakes',
+  tnNoCorrections: 'No mistakes found.',
+  rxSrc_tone: 'from “Three tones”',
+};

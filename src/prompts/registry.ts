@@ -31,6 +31,7 @@ import { meetingPrep } from './meetingPrep';
 import { meetingDebrief } from './meetingDebrief';
 import { patterns } from './patterns';
 import { patternCheck } from './patternCheck';
+import { toneCheck } from './toneCheck';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -76,6 +77,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Lernberatung 27.09., V3 – Deutsch-Fallen
   patterns,
   patternCheck,
+  // Lernberatung 27.09., Vorschlag 8 – Eine Botschaft, drei Tonlagen
+  toneCheck,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

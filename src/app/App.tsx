@@ -52,6 +52,7 @@ import { SayScreen } from '../features/say/SayScreen';
 import { FluencyScreen } from '../features/fluency/FluencyScreen';
 import { MeetingScreen } from '../features/meeting/MeetingScreen';
 import { PatternsScreen } from '../features/patterns/PatternsScreen';
+import { TonesScreen } from '../features/tones/TonesScreen';
 // Phase 4: Lesen, Hören, Schreiben, Entdecken
 import { InputRoutes } from '../features/input/InputRoutes';
 import { AiTaskNotice } from '../features/input/AiTaskNotice';
@@ -307,6 +308,7 @@ export function App() {
               {screen === 'fluency' && <FluencyScreen />}
               {screen === 'meeting' && <MeetingScreen />}
               {screen === 'patterns' && <PatternsScreen />}
+              {screen === 'tones' && <TonesScreen />}
               {isInputScreen(screen) && <InputRoutes route={route} />}
             </motion.div>
         </main>

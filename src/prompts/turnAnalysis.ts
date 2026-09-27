@@ -1,3 +1,4 @@
+import { C1_TOPICS } from '../domain/content';
 import { clip, header, watchLine } from './common';
 import { threeLayersExample, threeLayersRules, threeLayersSchema, type ThreeLayersOut } from './threeLayers';
 import type { PromptTemplate, UiLang } from './types';
@@ -5,6 +6,8 @@ import type { PromptTemplate, UiLang } from './types';
 // turn-analysis@2 (Plan §6.2; @2: Hinweis auf die Top-3-Muster, Lernberatung V3): analysiert EINEN eigenen Satz im Rollenspiel in drei Schichten.
 // `complex` (Kap. 10), im Hintergrund (Analysespur), zwischengespeichert (gleicher Satz im
 // gleichen Zusammenhang kostet nichts doppelt). Stört den Gesprächsfluss nie.
+// @2 (Lernberatung 27.09., Vorschlag 7): achtet zusätzlich auf den C1-Werkzeugkasten – hat er
+// abgeschwächt, strukturiert, betont? Nur Hinweise im Prompt, das Antwortschema bleibt gleich.
 
 export type TurnAnalysisVars = {
   goal: string;
@@ -56,6 +59,8 @@ export const turnAnalysis: PromptTemplate<TurnAnalysisVars, ThreeLayersOut> = {
       'Rules:',
       ...threeLayersRules(v.uiLang),
       '- Judge the sentence as spoken business English in this situation (register and tone count).',
+      '- C1 toolkit: also check whether the learner softened (hedging, diplomatic distance), structured (discourse markers) or emphasized (cleft sentences, inversion) where it would help with this listener.',
+      `  If it was missing, show it in "upgraded" and "changes" and name it in "lands". A real mistake with one of these belongs to its topic id as cat (${C1_TOPICS.map((t) => t.id).join(', ')}).`,
       '- Never invent facts about the learner\'s company.',
     ].join('\n');
   },

@@ -14,6 +14,8 @@ import { hintEn } from './parts/hint.en';
 import { sayEn } from './parts/say.en';
 import { fluencyEn } from './parts/fluency.en';
 import { meetingEn } from './parts/meeting.en';
+import { c1En } from './parts/c1.en';
+import { tonesEn } from './parts/tones.en';
 import { repairEn } from './parts/repair.en';
 import { navEn } from './parts/nav.en';
 import { patternsEn } from './parts/patterns.en';
@@ -45,6 +47,9 @@ export const en: Record<MessageKey, string> = {
   // Learning review 09/27: Fluency 90 – 60 – 45, "My next meeting"
   ...fluencyEn,
   ...meetingEn,
+  // Learning review 09/27: C1 toolkit, one message – three tones
+  ...c1En,
+  ...tonesEn,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   ...repairEn,
   // UX review 09/27: new structure

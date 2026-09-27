@@ -118,8 +118,9 @@ describe('drei Schichten (Verfeinerungen 1–8)', () => {
     expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('should postpone', 'need to push back')] }).success).toBe(false);
   });
 
-  it('3: Kategorie aus den 16 Themen oder der Zusatzliste', () => {
-    expect(ERROR_CATS).toHaveLength(22);
+  it('3: Kategorie aus den 16 Themen, dem C1-Werkzeugkasten (7) oder der Zusatzliste', () => {
+    expect(ERROR_CATS).toHaveLength(29);
+    expect(ERROR_CATS).toContain('c1-hedging');
     expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('must delay', 'need to push back', 'modals-deduction')] }).success).toBe(true);
     // Unbekannte Kategorie → nächste bekannte oder „other“ (statt abgelehnt).
     expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('must delay', 'need to push back', 'tenses')] }).data?.errors[0]?.cat).toBe('other');
@@ -164,6 +165,9 @@ describe('turn-analysis@2', () => {
   it('Kopfzeile, complex, zwischengespeichert, Größe unter der Grenze', () => {
     const p = turnAnalysis.build(vars('We must delay the start.'));
     expect(p.split('\n')[0]).toBe('[turn-analysis@2]');
+    // @2: achtet zusätzlich auf den C1-Werkzeugkasten (abgeschwächt, strukturiert, betont).
+    expect(p).toContain('C1 toolkit');
+    expect(p).toContain('c1-hedging');
     expect(turnAnalysis.tier).toBe('complex');
     expect(turnAnalysis.cache).toBe(true);
     const big = turnAnalysis.build({ ...vars('x '.repeat(5000)), history: [{ persona: 'p '.repeat(3000), me: 'm '.repeat(3000) }], personaLine: 'l '.repeat(3000) });
@@ -194,7 +198,7 @@ describe('turn-analysis@2', () => {
   });
 });
 
-describe('roleplay-report@2', () => {
+describe('roleplay-report@3', () => {
   const vars = (uiLang: 'de' | 'en'): RoleplayReportVars => ({
     title: 'Holding the Q2 date',
     goal: 'Keep Q2.',
@@ -212,7 +216,7 @@ describe('roleplay-report@2', () => {
   it('Kopfzeile, default, Beispiel und feste Antwort bestehen das Schema (DE und EN)', () => {
     for (const uiLang of ['de', 'en'] as const) {
       const p = roleplayReport.build(vars(uiLang));
-      expect(p.split('\n')[0]).toBe('[roleplay-report@2]');
+      expect(p.split('\n')[0]).toBe('[roleplay-report@3]');
       const r = reportSchema(vars(uiLang)).safeParse(JSON.parse(roleplayReportReply(p)));
       expect(r.success, JSON.stringify(r.error?.issues)).toBe(true);
       const withQuotes = { ...vars(uiLang), turns: [...vars(uiLang).turns, { me: 'the exposure here is the penalty', persona: '', v: 'clean', c: [] }, { me: 'we must delay the start', persona: '', v: 'errors', c: [] }] };
@@ -227,6 +231,34 @@ describe('roleplay-report@2', () => {
     expect(s.safeParse({ ...ok, strengths: [{ quote: 'something I never said', why: 'Gut gemacht, klarer Einstieg.' }] }).success).toBe(false);
     expect(s.safeParse({ ...ok, phrases: [{ en: 'that hinges on', de: 'x', def: 'depends on', ex: 'It depends on the plan.' }] }).success).toBe(false);
     expect(s.safeParse({ ...ok, summary: 'You stayed calm and gave good reasons for the date.' }).success).toBe(false);
+  });
+
+  it('@3 C1-Werkzeugkasten: toolkit tolerant (Synonyme, Doppelte, falsche Sprache fallen weg), alte Antworten bleiben gültig', () => {
+    const s = reportSchema(vars('de'));
+    const ok = JSON.parse(roleplayReportReply(roleplayReport.build(vars('de')))) as Record<string, unknown>;
+    const parsed = s.safeParse(ok);
+    expect(parsed.success).toBe(true);
+    expect(parsed.data?.toolkit?.map((k) => k.skill)).toEqual(['hedge', 'structure']);
+    // Ohne `toolkit` (Antwort im Format @2) → leere Liste, kein Fehler.
+    const { toolkit: _drop, ...old } = ok;
+    void _drop;
+    expect(s.safeParse(old).data?.toolkit).toEqual([]);
+    const messy = s.safeParse({
+      ...ok,
+      toolkit: [
+        { skill: 'Hedging', used: 'no', note: 'Deine Einwände waren sehr direkt.' },
+        { skill: 'hedge', used: true, note: 'Doppelt – fällt weg.' },
+        { skill: 'discourse markers', used: true, note: 'You structured your points very clearly with good signposting.' },
+        { skill: 'cleft sentences', used: 'yes', note: 'Mit „What we need is …“ hast du betont.' },
+        { skill: 'grammar', used: true, note: 'Unbekannt.' },
+      ],
+    });
+    expect(messy.success).toBe(true);
+    expect(messy.data?.toolkit).toEqual([
+      { skill: 'hedge', used: false, note: 'Deine Einwände waren sehr direkt.' },
+      { skill: 'emphasis', used: true, note: 'Mit „What we need is …“ hast du betont.' },
+    ]);
+    expect(roleplayReport.build(vars('en'))).toContain('toolkit (C1 toolkit)');
   });
 });
 

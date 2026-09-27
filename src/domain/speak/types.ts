@@ -79,8 +79,13 @@ export type StoredReport = {
   strengths: Array<{ quote: string; why: string }>;
   focus: Array<{ title: string; said: string; better: string; why: string; cat: string }>;
   phrases: Array<{ en: string; de: string; def: string; ex: string }>;
+  /** roleplay-report@3 (C1-Werkzeugkasten): abgeschwächt, strukturiert, betont? Fehlt in älteren Berichten. */
+  toolkit?: ToolkitNote[];
   t: number;
 };
+
+export type ToolkitSkill = 'hedge' | 'structure' | 'emphasis';
+export type ToolkitNote = { skill: ToolkitSkill; used: boolean; note: string };
 
 export type TalkRun = {
   id: string;

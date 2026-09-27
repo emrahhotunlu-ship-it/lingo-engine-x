@@ -28,4 +28,8 @@ export const navEn = {
   grLookup: 'Search a rule or trap',
   grTrapsLink: 'Typical traps German → English',
   frTitle: 'Free vocabulary round',
+  spTraining: 'Training',
+  spTrMeetingLead: 'Prepare a real meeting, dress rehearsal, debrief',
+  spTrFluencyLead: 'The same answer in 90, 60 and 45 seconds',
+  spTrTonesLead: 'Slack, email to the CFO, a line in the meeting',
 } as const;

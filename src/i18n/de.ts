@@ -16,6 +16,8 @@ import { hintDe } from './parts/hint.de';
 import { sayDe } from './parts/say.de';
 import { fluencyDe } from './parts/fluency.de';
 import { meetingDe } from './parts/meeting.de';
+import { c1De } from './parts/c1.de';
+import { tonesDe } from './parts/tones.de';
 import { repairDe } from './parts/repair.de';
 import { navDe } from './parts/nav.de';
 import { patternsDe } from './parts/patterns.de';
@@ -46,6 +48,9 @@ export const de = {
   // Lernberatung 27.09.: Flüssigkeit 90 – 60 – 45, „Mein nächster Termin“
   ...fluencyDe,
   ...meetingDe,
+  // Lernberatung 27.09.: C1-Werkzeugkasten, Eine Botschaft – drei Tonlagen
+  ...c1De,
+  ...tonesDe,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   ...repairDe,
   // UX-Beratung 27.09.: neue Grundstruktur

@@ -18,6 +18,9 @@ import { SceneCreateSheet } from './SceneCreateSheet';
 import { SituationDrill, useSituationPool } from './SituationDrill';
 import { useSceneLibrary } from './useSceneLibrary';
 import { useSpeakToday } from './useTodayEntries';
+import { ChannelIcon } from '../../ui/Card';
+import type { IconName } from '../../ui/Icon';
+import type { MessageKey } from '../../i18n';
 import { useCompanionSee } from '../companion/seeing';
 
 // Reiter „Sprechen" (UX-Beratung Nr. 7): ein Ort für alle Gespräche mit dem Umschalter
@@ -69,7 +72,12 @@ export function SpeakHub() {
         />
       </motion.div>
       <motion.div key={seg} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
-        {seg === 'scenes' && <ScenesSection />}
+        {seg === 'scenes' && (
+          <div className="flex flex-col gap-6">
+            <ScenesSection />
+            <TrainingSection />
+          </div>
+        )}
         {seg === 'business' && <BusinessSection />}
         {seg === 'preply' && <PreplySection />}
       </motion.div>
@@ -171,5 +179,40 @@ function ScenesSection() {
         />
       )}
     </div>
+  );
+}
+
+// Lernberatung 27.09.: freiwillige Sprech- und Formulierübungen an einem Ort (kein Zwischen-Hub).
+const TRAINING: ReadonlyArray<{ id: 'fluency' | 'meeting' | 'tones'; title: MessageKey; lead: MessageKey; icon: IconName }> = [
+  { id: 'meeting', title: 'mtTitle', lead: 'spTrMeetingLead', icon: 'briefcase' },
+  { id: 'fluency', title: 'fluTitle', lead: 'spTrFluencyLead', icon: 'bolt' },
+  { id: 'tones', title: 'tnTitle', lead: 'spTrTonesLead', icon: 'chat' },
+];
+
+function TrainingSection() {
+  const { t } = useT();
+  const go = useNav((s) => s.go);
+  return (
+    <section className="flex flex-col gap-2 border-t border-line pt-5" aria-labelledby="sp-training">
+      <h2 id="sp-training" className="lx-eyebrow">
+        {t('spTraining')}
+      </h2>
+      <ul className="flex flex-col divide-y divide-line" data-testid="speak-training">
+        {TRAINING.map((e) => (
+          <li key={e.id}>
+            <button type="button" data-testid={`training-${e.id}`} onClick={() => go({ name: e.id })} className="flex min-h-16 w-full items-center gap-3 py-3 text-left transition-colors hover:text-fg">
+              <ChannelIcon channel="speak">
+                <Icon name={e.icon} />
+              </ChannelIcon>
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="text-base font-semibold">{t(e.title)}</span>
+                <span className="text-sm text-muted">{t(e.lead)}</span>
+              </span>
+              <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

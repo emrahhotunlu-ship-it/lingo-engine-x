@@ -25,6 +25,7 @@ import {
   saySchema,
   fluencySchema,
   meetingSchema,
+  tonesSchema,
   bizSchema,
   vocabSchema,
   weeklySchema,
@@ -75,6 +76,8 @@ export const COLLECTIONS = {
   // Neu (Lernberatung 27.09., V6/V4): Flüssigkeit 90 – 60 – 45 und „Mein nächster Termin“ als Monatsdokumente.
   fluency: fluencySchema,
   meeting: meetingSchema,
+  // Neu (Lernberatung 27.09., Vorschlag 8): „Eine Botschaft, drei Tonlagen“ als Monatsdokumente.
+  tones: tonesSchema,
   // Neu ab Phase 7 (Plan §12.3): ausgelagerte Profiljahre.
   archive: archiveSchema,
 } as const satisfies Record<string, ZodType>;

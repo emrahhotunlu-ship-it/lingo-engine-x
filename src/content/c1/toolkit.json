@@ -1,0 +1,1631 @@
+{
+ "_note": "C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7 / V5): 7 zusätzliche Themen im Format der 16 Themen der alten App (grammar.json), Regelblätter im Format von rules.json und Startaufgaben im Format von seedGrammar. Kennungen mit Präfix c1-, nie ändern: sie stehen in grammar/<id>. Der Claude-Tagesauftrag nutzt weiter nur die 16 alten Kennungen.",
+ "groups": [
+  "C1-Werkzeugkasten"
+ ],
+ "groupEn": {
+  "C1-Werkzeugkasten": "C1 toolkit"
+ },
+ "topics": [
+  {
+   "id": "c1-hedging",
+   "group": "C1-Werkzeugkasten",
+   "level": "C1",
+   "p0": 0.5,
+   "name": "Hedging – abschwächen und absichern",
+   "name_en": "Hedging and softening",
+   "rule": "Aussagen vorsichtig formulieren: Modalverben („might“, „could“, „may“), Einleitungen („It might be worth …“, „I'd be inclined to …“, „It seems that …“) und Weichmacher („a bit“, „slightly“, „somewhat“). So bleiben Bewertungen offen und glaubwürdig.",
+   "rule_en": "Make statements tentative: modal verbs (might, could, may), lead-ins (It might be worth …, I'd be inclined to …, It seems that …) and softeners (a bit, slightly, somewhat). This keeps judgments open and credible.",
+   "ex": [
+    "It might be worth considering a phased rollout.",
+    "I'd be inclined to start with the finance team."
+   ]
+  },
+  {
+   "id": "c1-diplomacy",
+   "group": "C1-Werkzeugkasten",
+   "level": "C1",
+   "p0": 0.5,
+   "name": "Diplomatische Distanz",
+   "name_en": "Diplomatic distance",
+   "rule": "Bitten und Einwände mit Abstand formulieren: Vergangenheit und Verlaufsform („I was wondering whether …“, „We were hoping …“), Fragen statt Aufforderungen („Would it be possible to …?“) und Untertreibung („That could be tricky for us.“). Die Vergangenheit meint hier keine Zeit, sie macht die Bitte höflicher.",
+   "rule_en": "Phrase requests and objections with distance: past and continuous forms (“I was wondering whether …”, “We were hoping …”), questions instead of orders (“Would it be possible to …?”) and understatement (“That could be tricky for us.”). The past tense here is not about time, it makes the request more polite.",
+   "ex": [
+    "I was wondering whether you could share the requirements by Friday.",
+    "That could be a bit tricky for us."
+   ]
+  },
+  {
+   "id": "c1-emphasis",
+   "group": "C1-Werkzeugkasten",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Betonung durch Satzbau (Cleft, Inversion)",
+   "name_en": "Emphasis through structure (cleft, inversion)",
+   "rule": "Cleft-Sätze heben einen Teil hervor: „What we really need is …“, „It was the CFO who …“. Inversion nach einschränkenden Wörtern am Satzanfang (Not only, Never, Rarely, Only after) stellt das Hilfsverb vor das Subjekt: „Not only did we cut costs, but we also …“.",
+   "rule_en": "Cleft sentences put one part in the spotlight: “What we really need is …”, “It was the CFO who …”. Inversion after limiting words at the start (Not only, Never, Rarely, Only after) puts the auxiliary before the subject: “Not only did we cut costs, but we also …”.",
+   "ex": [
+    "What we really need is a clear timeline.",
+    "Not only did we cut costs, but we also improved compliance."
+   ]
+  },
+  {
+   "id": "c1-discourse",
+   "group": "C1-Werkzeugkasten",
+   "level": "C1",
+   "p0": 0.55,
+   "name": "Diskursmarker",
+   "name_en": "Discourse markers",
+   "rule": "Diskursmarker führen den Zuhörer: einschränken (That said, Having said that), anknüpfen (To build on that), zurückkommen (Coming back to …), gegenüberstellen (On the other hand), zusammenfassen (In short, All in all). Sie stehen meist am Satzanfang, gefolgt von einem Komma.",
+   "rule_en": "Discourse markers guide the listener: qualify (That said, Having said that), build on (To build on that), return (Coming back to …), contrast (On the other hand), sum up (In short, All in all). They usually start the sentence, followed by a comma.",
+   "ex": [
+    "That said, the timeline is still tight.",
+    "To build on that, we could add e-invoicing in phase two."
+   ]
+  },
+  {
+   "id": "c1-nominal",
+   "group": "C1-Werkzeugkasten",
+   "level": "C1",
+   "p0": 0.5,
+   "name": "Nominalstil in Mails",
+   "name_en": "Nominal style in emails",
+   "rule": "Nominalstil verdichtet Mails: statt vieler Nebensätze ein Nomen mit „of“ („the implementation of the new archive“). Typische Paare: implement → implementation, approve → approval, migrate → migration, decide → decision, deliver → delivery, receive → receipt. Sparsam einsetzen – zu viele Nomen machen Mails steif.",
+   "rule_en": "Nominal style condenses emails: instead of several clauses, one noun with “of” (“the implementation of the new archive”). Typical pairs: implement → implementation, approve → approval, migrate → migration, decide → decision, deliver → delivery, receive → receipt. Use it sparingly – too many nouns make emails stiff.",
+   "ex": [
+    "The implementation of the archive starts in May.",
+    "Following the approval of the budget, we will order the licenses."
+   ]
+  },
+  {
+   "id": "c1-participle",
+   "group": "C1-Werkzeugkasten",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Partizipialsätze",
+   "name_en": "Participle clauses",
+   "rule": "Partizipialsätze verkürzen Nebensätze mit demselben Subjekt: Having + 3. Form für etwas vorher Abgeschlossenes („Having reviewed the contract, we …“), -ing für Gleichzeitiges („Using OCR, the system …“), 3. Form für Passiv („Stored in Germany, the data …“). Das Subjekt des Hauptsatzes muss zum Partizip passen.",
+   "rule_en": "Participle clauses shorten clauses with the same subject: Having + past participle for something completed before (“Having reviewed the contract, we …”), -ing for something at the same time (“Using OCR, the system …”), past participle for passive (“Stored in Germany, the data …”). The subject of the main clause must match the participle.",
+   "ex": [
+    "Having reviewed the contract, we signed it.",
+    "Stored in Germany, the data stays GDPR-compliant."
+   ]
+  },
+  {
+   "id": "c1-precision",
+   "group": "C1-Werkzeugkasten",
+   "level": "C1",
+   "p0": 0.55,
+   "name": "Präzise Mengen- und Zeitangaben",
+   "name_en": "Precise quantities and time references",
+   "rule": "Präzise statt vage: Mengen mit roughly, just under, well over, a fraction of, twice as … as; Zeiten mit by the end of Q3, within two weeks, as of June 1, no later than Friday. by = spätestens bis, until = durchgehend bis, within = innerhalb von.",
+   "rule_en": "Precise instead of vague: quantities with roughly, just under, well over, a fraction of, twice as … as; time with by the end of Q3, within two weeks, as of June 1, no later than Friday. by = at the latest, until = all the way up to, within = inside a period.",
+   "ex": [
+    "Roughly 40% of the invoices arrive as PDFs.",
+    "We need your decision by the end of Q3."
+   ]
+  }
+ ],
+ "rules": {
+  "c1-hedging": {
+   "core": [
+    "might/could/may, „It might be worth + -ing“, „I'd be inclined to …“ und Weichmacher wie „a bit“ machen Aussagen vorsichtig.",
+    "might/could/may, “It might be worth + -ing”, “I'd be inclined to …” and softeners like “a bit” make statements tentative."
+   ],
+   "why": [
+    "Absolute Aussagen wirken im Englischen schnell arrogant oder angreifbar. Wer abschwächt, lässt dem Gegenüber Raum – und bleibt glaubwürdig, wenn sich Zahlen später ändern.",
+    "Absolute statements quickly sound arrogant or easy to attack in English. Hedging leaves the other person room – and keeps you credible if the numbers change later."
+   ],
+   "contrast": [
+    "Auf Deutsch gilt Direktheit als ehrlich („Das ist zu teuer.“). Auf Englisch klingt derselbe Satz schroff; üblich ist „That might be a bit above our budget.“",
+    "In German, directness sounds honest (“Das ist zu teuer.”). In English the same sentence sounds blunt; people say “That might be a bit above our budget.”"
+   ],
+   "steps": [
+    [
+     "Ist es eine Vermutung oder Bewertung? Dann abschwächen.",
+     "Modalverb wählen: might, could oder may statt will oder is.",
+     "Bei Bedarf einen Weichmacher ergänzen: a bit, slightly, somewhat.",
+     "Nicht übertreiben: Eine Abschwächung pro Satz reicht."
+    ],
+    [
+     "Is it a guess or a judgment? Then soften it.",
+     "Choose a modal: might, could or may instead of will or is.",
+     "Add a softener if needed: a bit, slightly, somewhat.",
+     "Don't overdo it: one hedge per sentence is enough."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Modalverb",
+      "Modal verb"
+     ],
+     "might / could / may + base form",
+     "This could delay the go-live."
+    ],
+    [
+     [
+      "Einleitung",
+      "Lead-in"
+     ],
+     "It might be worth + -ing",
+     "It might be worth revisiting the timeline."
+    ],
+    [
+     [
+      "Neigung",
+      "Inclination"
+     ],
+     "I'd be inclined to + base form",
+     "I'd be inclined to start with a pilot."
+    ],
+    [
+     [
+      "Anschein",
+      "Appearance"
+     ],
+     "It seems / It appears that …",
+     "It seems that the budget is tighter than expected."
+    ]
+   ],
+   "signals": [
+    [
+     "might / could / may",
+     [
+      "Möglichkeit statt Gewissheit",
+      "possibility instead of certainty"
+     ]
+    ],
+    [
+     "a bit / slightly / somewhat",
+     [
+      "macht Kritik weicher",
+      "softens criticism"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "It might be worth to wait until Q3.",
+     "good": "It might be worth waiting until Q3.",
+     "why": [
+      "Nach „worth“ steht immer die -ing-Form.",
+      "“Worth” is always followed by the -ing form."
+     ]
+    }
+   ]
+  },
+  "c1-diplomacy": {
+   "core": [
+    "„I was wondering whether …“, „We were hoping …“, „Would it be possible to …?“ und Untertreibung schaffen höflichen Abstand.",
+    "“I was wondering whether …”, “We were hoping …”, “Would it be possible to …?” and understatement create polite distance."
+   ],
+   "why": [
+    "Je weiter eine Bitte grammatisch von „jetzt“ und „du musst“ entfernt ist, desto höflicher klingt sie. So kann das Gegenüber ablehnen, ohne das Gesicht zu verlieren – im Vertrieb Gold wert.",
+    "The further a request moves away from “now” and “you must”, the more polite it sounds. The other person can say no without losing face – invaluable in sales."
+   ],
+   "contrast": [
+    "Auf Deutsch ist „Können Sie mir bis Freitag die Daten schicken?“ völlig höflich. Wörtlich übersetzt („Can you send me the data by Friday?“) wirkt es auf Englisch fast wie eine Anweisung.",
+    "In German, “Können Sie mir bis Freitag die Daten schicken?” is perfectly polite. Translated word for word, it can sound almost like an order in English."
+   ],
+   "steps": [
+    [
+     "Anweisung oder Einwand? Dann Abstand schaffen.",
+     "Vergangenheit wählen: I was wondering, We were hoping.",
+     "Im Rest des Satzes bleibt der Abstand: could statt can.",
+     "Einwände untertreiben: tricky, a challenge, not ideal."
+    ],
+    [
+     "An order or an objection? Then create distance.",
+     "Use the past: I was wondering, We were hoping.",
+     "Keep the distance in the rest of the sentence: could instead of can.",
+     "Understate objections: tricky, a challenge, not ideal."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Distanz durch Vergangenheit",
+      "Distancing past"
+     ],
+     "I was wondering whether / if …",
+     "I was wondering whether we could move the call."
+    ],
+    [
+     [
+      "Hoffnung",
+      "Hope"
+     ],
+     "We were hoping to + base form",
+     "We were hoping to sign before the end of Q3."
+    ],
+    [
+     [
+      "Höfliche Frage",
+      "Polite question"
+     ],
+     "Would it be possible to + base form?",
+     "Would it be possible to extend the trial?"
+    ],
+    [
+     [
+      "Untertreibung",
+      "Understatement"
+     ],
+     "That could be tricky / a challenge for us.",
+     "That could be a challenge for us."
+    ]
+   ],
+   "signals": [
+    [
+     "I was wondering …",
+     [
+      "höfliche Bitte, keine Vergangenheit",
+      "polite request, not past time"
+     ]
+    ],
+    [
+     "tricky / not ideal",
+     [
+      "untertriebenes Nein",
+      "an understated no"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Would it be possible that you send the offer again?",
+     "good": "Would it be possible to send the offer again?",
+     "why": [
+      "Nach „Would it be possible“ folgt to + Grundform, kein „that“-Satz.",
+      "“Would it be possible” is followed by to + base form, not a that-clause."
+     ]
+    }
+   ]
+  },
+  "c1-emphasis": {
+   "core": [
+    "What-Cleft („What we need is …“), It-Cleft („It was X who …“) und Inversion („Not only did we …“) lenken den Fokus.",
+    "What-clefts (“What we need is …”), it-clefts (“It was X who …”) and inversion (“Not only did we …”) steer the focus."
+   ],
+   "why": [
+    "Im Englischen kann man kaum mit der Stimme allein betonen, ohne dramatisch zu wirken. Der Satzbau übernimmt das: Was vorne im Cleft steht, wird zur Hauptsache. Inversion klingt souverän und präsentationsreif.",
+    "In English you can hardly stress words with your voice alone without sounding dramatic. Sentence structure does the job: whatever you put in the cleft becomes the main point. Inversion sounds confident and ready for a presentation."
+   ],
+   "contrast": [
+    "Deutsch betont oft durch Umstellen („Genau das brauchen wir.“). Englisch hat eine feste Wortstellung und braucht dafür eigene Bauformen. Nach „Not only“ am Satzanfang muss wie in einer Frage das Hilfsverb vor das Subjekt – das vergessen Deutsche oft.",
+    "German often stresses by moving words around. English has a fixed word order and needs special structures for that. After “Not only” at the start, the auxiliary must come before the subject, as in a question – German speakers often forget this."
+   ],
+   "steps": [
+    [
+     "Was soll betont werden? Das kommt in den Fokus.",
+     "Sache betonen: What + Subjekt + Verb + is …",
+     "Person oder Ding betonen: It was X who/that …",
+     "Einschränkendes Wort am Anfang? Dann Hilfsverb vor das Subjekt (do/did, have, can …)."
+    ],
+    [
+     "What should be stressed? That goes into focus.",
+     "Stress a thing: What + subject + verb + is …",
+     "Stress a person or item: It was X who/that …",
+     "Limiting word at the start? Then put the auxiliary before the subject (do/did, have, can …)."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "What-Cleft",
+      "What-cleft"
+     ],
+     "What + S + V + is / was …",
+     "What we really need is a clear timeline."
+    ],
+    [
+     [
+      "It-Cleft",
+      "It-cleft"
+     ],
+     "It is / was + X + who / that …",
+     "It was the CFO who approved the budget."
+    ],
+    [
+     [
+      "Inversion mit Not only",
+      "Inversion with not only"
+     ],
+     "Not only + aux + S + V …, but S also …",
+     "Not only did we cut costs, but we also improved compliance."
+    ],
+    [
+     [
+      "Inversion mit Never/Rarely",
+      "Inversion with never/rarely"
+     ],
+     "Never / Rarely + aux + S + V …",
+     "Rarely have we seen such a fast rollout."
+    ]
+   ],
+   "signals": [
+    [
+     "Not only / Never / Rarely / Only after …",
+     [
+      "am Satzanfang: Inversion",
+      "at the start: inversion"
+     ]
+    ],
+    [
+     "What … is …",
+     [
+      "hebt die Sache hervor",
+      "puts the thing in the spotlight"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Not only we reduced the costs, but we also sped up approvals.",
+     "good": "Not only did we reduce the costs, but we also sped up approvals.",
+     "why": [
+      "Nach „Not only“ am Satzanfang steht das Hilfsverb vor dem Subjekt: did we reduce.",
+      "After “Not only” at the start, the auxiliary comes before the subject: did we reduce."
+     ]
+    }
+   ]
+  },
+  "c1-discourse": {
+   "core": [
+    "That said · To build on that · Coming back to … · On the other hand · In short: Signalwörter für Einschränkung, Anknüpfung, Rückkehr, Gegensatz und Fazit.",
+    "That said · To build on that · Coming back to … · On the other hand · In short: signals for qualifying, building on, returning, contrasting and summing up."
+   ],
+   "why": [
+    "In Meetings und Mails zeigen Diskursmarker, wohin der Gedanke geht. Das wirkt strukturiert und gibt dir Zeit zum Nachdenken, ohne „ähm“.",
+    "In meetings and emails, discourse markers show where your thought is going. You sound structured and buy time to think without saying “um”."
+   ],
+   "contrast": [
+    "Deutsche nehmen oft „but“ oder „and“ für alles. „That said“ entspricht „Allerdings“, „To build on that“ etwa „Daran anknüpfend“. Achtung: „on the other side“ ist ein Ort, der Gegensatz heißt „on the other hand“.",
+    "German speakers often use “but” or “and” for everything. “That said” is close to “Allerdings”, “To build on that” to “Daran anknüpfend”. Careful: “on the other side” is a place; the contrast is “on the other hand”."
+   ],
+   "steps": [
+    [
+     "Was will ich tun: einschränken, anknüpfen, zurückkommen, gegenüberstellen oder zusammenfassen?",
+     "Passenden Marker wählen.",
+     "An den Satzanfang stellen, danach ein Komma.",
+     "Präposition prüfen: coming back to, build on."
+    ],
+    [
+     "What do I want to do: qualify, build on, return, contrast or sum up?",
+     "Choose the matching marker.",
+     "Put it at the start, followed by a comma.",
+     "Check the preposition: coming back to, build on."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Einschränken",
+      "Qualifying"
+     ],
+     "That said, … / Having said that, …",
+     "That said, the timeline is still tight."
+    ],
+    [
+     [
+      "Anknüpfen",
+      "Building on"
+     ],
+     "To build on that, …",
+     "To build on that, we could add e-invoicing in phase two."
+    ],
+    [
+     [
+      "Zurückkommen",
+      "Returning"
+     ],
+     "Coming back to + noun, …",
+     "Coming back to your question about pricing, the licenses are per user."
+    ],
+    [
+     [
+      "Zusammenfassen",
+      "Summing up"
+     ],
+     "In short, … / All in all, …",
+     "In short, the pilot paid off."
+    ]
+   ],
+   "signals": [
+    [
+     "That said / Having said that",
+     [
+      "schränkt das Vorige ein",
+      "qualifies what came before"
+     ]
+    ],
+    [
+     "On the other hand",
+     [
+      "Gegensatz, nie „on the other side“",
+      "contrast, never “on the other side”"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Coming back on your question, the price includes support.",
+     "good": "Coming back to your question, the price includes support.",
+     "why": [
+      "Es heißt „coming back to“.",
+      "The phrase is “coming back to”."
+     ]
+    }
+   ]
+  },
+  "c1-nominal": {
+   "core": [
+    "Verb wird Nomen: the + Nomen + of + Objekt („the migration of the data“). Nach „following“ oder „upon“ steht ein Nomen.",
+    "The verb becomes a noun: the + noun + of + object (“the migration of the data”). After “following” or “upon”, use a noun."
+   ],
+   "why": [
+    "Nomen bündeln Information und klingen sachlich – ideal für Betreffzeilen, Zusammenfassungen und Mails an Entscheider. Richtig dosiert wirkt das professionell, zu viel davon bürokratisch.",
+    "Nouns pack information and sound factual – ideal for subject lines, summaries and emails to decision makers. In the right dose it sounds professional; too much of it sounds bureaucratic."
+   ],
+   "contrast": [
+    "Deutsch liebt Nominalstil ohnehin („nach Freigabe des Budgets“). Die Falle ist die Wortform: Deutsche nehmen oft das Verb statt des Nomens („the approve of“). Das englische Nomen hat eigene Endungen: -tion, -al, -ment, -ery.",
+    "German loves nominal style anyway. The trap is the word form: German speakers often use the verb instead of the noun (“the approve of”). English nouns have their own endings: -tion, -al, -ment, -ery."
+   ],
+   "steps": [
+    [
+     "Welche Handlung steckt im Satz? implement, approve, migrate …",
+     "Nomen bilden: implementation, approval, migration …",
+     "Mit „of“ anschließen: the approval of the budget.",
+     "Gegenprobe: Liest sich die Mail noch leicht? Sonst ein Verb zurückholen."
+    ],
+    [
+     "Which action is in the sentence? implement, approve, migrate …",
+     "Form the noun: implementation, approval, migration …",
+     "Connect with “of”: the approval of the budget.",
+     "Check: does the email still read easily? If not, bring back a verb."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Nomen als Subjekt",
+      "Noun as subject"
+     ],
+     "the + noun + of + object",
+     "The migration of the legacy data took two weeks."
+    ],
+    [
+     [
+      "Nach following/upon",
+      "After following/upon"
+     ],
+     "following / upon + the + noun",
+     "Following the approval of the budget, we will order the licenses."
+    ],
+    [
+     [
+      "Mit Adjektiv",
+      "With an adjective"
+     ],
+     "a + adjective + noun",
+     "We expect a significant reduction in storage costs."
+    ]
+   ],
+   "signals": [
+    [
+     "-tion / -al / -ment / -ery",
+     [
+      "typische Nomen-Endungen",
+      "typical noun endings"
+     ]
+    ],
+    [
+     "following / upon",
+     [
+      "danach folgt ein Nomen",
+      "followed by a noun"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Following the approve of the budget, we will order the licenses.",
+     "good": "Following the approval of the budget, we will order the licenses.",
+     "why": [
+      "Nach „the“ steht das Nomen: approval.",
+      "After “the”, use the noun: approval."
+     ]
+    }
+   ]
+  },
+  "c1-participle": {
+   "core": [
+    "Having + 3. Form = vorher erledigt · -ing = gleichzeitig · 3. Form = passiv. Das Subjekt des Hauptsatzes führt die Handlung aus.",
+    "Having + past participle = done before · -ing = at the same time · past participle = passive. The subject of the main clause does the action."
+   ],
+   "why": [
+    "Partizipialsätze sparen „After we had …“ und „Because it is …“ und klingen geschliffen – typisch für Berichte, Mails und Präsentationen auf C1-Niveau.",
+    "Participle clauses save “After we had …” and “Because it is …” and sound polished – typical of reports, emails and presentations at C1 level."
+   ],
+   "contrast": [
+    "Im Deutschen sind solche Konstruktionen selten („Nachdem wir den Vertrag geprüft hatten …“). Die häufigste Falle: Das Subjekt passt nicht. „Having reviewed the offer, the price was too high“ heißt, der Preis hätte das Angebot geprüft.",
+    "German rarely uses these structures. The most common trap: the subject doesn't match. “Having reviewed the offer, the price was too high” means the price reviewed the offer."
+   ],
+   "steps": [
+    [
+     "Haben Neben- und Hauptsatz dasselbe Subjekt? Nur dann verkürzen.",
+     "Vorher erledigt? Having + 3. Form.",
+     "Gleichzeitig oder Mittel? -ing-Form.",
+     "Passiv? Nur die 3. Form."
+    ],
+    [
+     "Do both clauses have the same subject? Only then shorten.",
+     "Done before? Having + past participle.",
+     "At the same time or a means? The -ing form.",
+     "Passive? Just the past participle."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Vorzeitig",
+      "Completed before"
+     ],
+     "Having + 3. Form …, S + V",
+     "Having reviewed the contract, we signed it."
+    ],
+    [
+     [
+      "Gleichzeitig",
+      "At the same time"
+     ],
+     "V-ing …, S + V",
+     "Using OCR, the system reads every invoice."
+    ],
+    [
+     [
+      "Passiv",
+      "Passive"
+     ],
+     "3. Form …, S + V",
+     "Stored in Germany, the data stays GDPR-compliant."
+    ]
+   ],
+   "signals": [
+    [
+     "Having …,",
+     [
+      "erst das, dann der Hauptsatz",
+      "first this, then the main clause"
+     ]
+    ],
+    [
+     "Stored / Approved …,",
+     [
+      "passive Bedeutung",
+      "passive meaning"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Having review the offer, the CFO asked for a discount.",
+     "good": "Having reviewed the offer, the CFO asked for a discount.",
+     "why": [
+      "Nach „Having“ steht die 3. Form: reviewed.",
+      "After “Having”, use the past participle: reviewed."
+     ]
+    }
+   ]
+  },
+  "c1-precision": {
+   "core": [
+    "by = Frist (spätestens), until = Dauer bis, within = innerhalb; roughly, just under, well over, a fraction of, twice as … as für Mengen.",
+    "by = deadline (at the latest), until = duration up to, within = inside a period; roughly, just under, well over, a fraction of, twice as … as for quantities."
+   ],
+   "why": [
+    "Entscheider wollen Zahlen und Termine, auf die sie sich verlassen können. „Just under 40,000“ oder „by the end of Q3“ klingt kompetent; „some“ und „soon“ klingen nach Ausweichen.",
+    "Decision makers want numbers and dates they can rely on. “Just under 40,000” or “by the end of Q3” sounds competent; “some” and “soon” sound evasive."
+   ],
+   "contrast": [
+    "Deutsch „bis Freitag“ deckt Frist und Dauer ab. Englisch trennt: „by Friday“ (spätestens Freitag erledigt) und „until Friday“ (läuft bis Freitag). „Zweimal so schnell“ heißt „twice as fast as“, nicht „two times faster as“.",
+    "German “bis Freitag” covers both deadline and duration. English separates them: “by Friday” (done by Friday at the latest) and “until Friday” (lasts until Friday). “Twice as fast as”, not “two times faster as”."
+   ],
+   "steps": [
+    [
+     "Frist oder Dauer? Frist → by, Dauer → until.",
+     "Zeitraum ab jetzt? within + Dauer.",
+     "Zahl nicht exakt? roughly, just under oder well over.",
+     "Vergleich? Dann „twice as … as“ oder „a fraction of“."
+    ],
+    [
+     "Deadline or duration? Deadline → by, duration → until.",
+     "A period from now? within + length of time.",
+     "Number not exact? roughly, just under or well over.",
+     "Comparison? twice as + adjective + as, a fraction of."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Annäherung",
+      "Approximation"
+     ],
+     "roughly / just under / well over + number",
+     "Roughly 40% of the invoices arrive as PDFs."
+    ],
+    [
+     [
+      "Verhältnis",
+      "Proportion"
+     ],
+     "a fraction of / twice as + adjective + as",
+     "The cloud version costs a fraction of the old license."
+    ],
+    [
+     [
+      "Frist",
+      "Deadline"
+     ],
+     "by + point in time",
+     "We need your decision by the end of Q3."
+    ],
+    [
+     [
+      "Zeitraum",
+      "Time span"
+     ],
+     "within + period",
+     "We can deliver within two weeks."
+    ]
+   ],
+   "signals": [
+    [
+     "at the latest / no later than",
+     [
+      "Frist → by",
+      "deadline → by"
+     ]
+    ],
+    [
+     "the whole time up to",
+     [
+      "Dauer → until",
+      "duration → until"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "We need your feedback until Friday.",
+     "good": "We need your feedback by Friday.",
+     "why": [
+      "Frist (spätestens) heißt „by“; „until“ beschreibt eine Dauer.",
+      "A deadline (at the latest) is “by”; “until” describes a duration."
+     ]
+    }
+   ]
+  }
+ },
+ "tasks": [
+  {
+   "topic": "c1-hedging",
+   "type": "mc",
+   "prompt": "Your price ___ a bit above our budget.",
+   "options": [
+    "is",
+    "might be",
+    "must be",
+    "will be"
+   ],
+   "answer": "might be",
+   "expl": "„might be“ plus „a bit“ macht aus einem Vorwurf eine vorsichtige Einschätzung.",
+   "expl_en": "“Might be” plus “a bit” turns a complaint into a careful assessment."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "mc",
+   "prompt": "___ worth considering a phased rollout.",
+   "options": [
+    "It might be",
+    "It might",
+    "Maybe it is",
+    "It is maybe"
+   ],
+   "answer": "It might be",
+   "expl": "Feste Einleitung: It might be worth + -ing. „Maybe“ ersetzt kein Modalverb.",
+   "expl_en": "Fixed lead-in: It might be worth + -ing. “Maybe” does not replace a modal verb."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "mc",
+   "prompt": "Choose the softest way to disagree with a client: ___",
+   "options": [
+    "That's wrong.",
+    "I'm not sure that's quite right.",
+    "You are wrong about that.",
+    "That is not correct."
+   ],
+   "answer": "I'm not sure that's quite right.",
+   "expl": "„I'm not sure … quite …“ widerspricht, ohne das Gegenüber bloßzustellen.",
+   "expl_en": "“I'm not sure … quite …” disagrees without putting the other person on the spot."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "gap",
+   "prompt": "It ___ worth revisiting the timeline before we sign.",
+   "answer": "might be",
+   "accepted": [
+    "could be",
+    "may be"
+   ],
+   "hint": "(might / be)",
+   "expl": "Vorsichtiger Vorschlag: „might be worth“ + -ing-Form.",
+   "expl_en": "A careful suggestion: might be worth + -ing."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "gap",
+   "prompt": "I'd be inclined ___ with the finance team.",
+   "answer": "to start",
+   "hint": "(start)",
+   "expl": "„be inclined“ steht mit to + Grundform.",
+   "expl_en": "“Be inclined” takes to + base form."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "gap",
+   "prompt": "It ___ that the budget is tighter than we expected.",
+   "answer": "seems",
+   "hint": "(seem)",
+   "expl": "„It seems that …“ stellt die Aussage als Eindruck dar, nicht als Tatsache.",
+   "expl_en": "“It seems that …” presents the statement as an impression, not a fact."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "gap",
+   "prompt": "The migration could take ___ longer than planned.",
+   "answer": "slightly",
+   "accepted": [
+    "a bit",
+    "somewhat",
+    "a little"
+   ],
+   "hint": "(slightly / hugely)",
+   "expl": "„slightly“ schwächt die schlechte Nachricht ab; „hugely“ würde sie verstärken.",
+   "expl_en": "“Slightly” softens the bad news; “hugely” would make it stronger."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "transform",
+   "prompt": "The rollout will fail without training. → Without training, the rollout ___ into difficulties.",
+   "answer": "might run",
+   "accepted": [
+    "could run",
+    "may run"
+   ],
+   "expl": "Statt einer sicheren Vorhersage (will fail) eine Möglichkeit mit might.",
+   "expl_en": "Instead of a certain prediction (will fail), a possibility with might."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "transform",
+   "prompt": "Start with a pilot. → I'd be inclined ___ with a pilot.",
+   "answer": "to start",
+   "expl": "Aus der Anweisung wird eine persönliche Neigung: I'd be inclined to + Grundform.",
+   "expl_en": "The instruction becomes a personal preference: I'd be inclined to + base form."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "transform",
+   "prompt": "Your team is not ready. → I'm not sure your team is ___ ready yet.",
+   "answer": "quite",
+   "accepted": [
+    "fully",
+    "entirely"
+   ],
+   "expl": "„not quite“ macht aus einem harten Urteil eine milde Einschätzung.",
+   "expl_en": "“Not quite” turns a hard judgment into a mild one."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "correct",
+   "prompt": "It might be worth to check the retention periods first.",
+   "answer": "It might be worth checking the retention periods first.",
+   "expl": "Nach „worth“ steht die -ing-Form, nie to + Grundform.",
+   "expl_en": "“Worth” is followed by the -ing form, never by to + base form."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "correct",
+   "prompt": "I would be inclined starting with the invoices.",
+   "answer": "I would be inclined to start with the invoices.",
+   "accepted": [
+    "I'd be inclined to start with the invoices."
+   ],
+   "expl": "Nach „be inclined“ folgt „to“ + Grundform.",
+   "expl_en": "“Be inclined” needs to + base form."
+  },
+  {
+   "topic": "c1-hedging",
+   "type": "correct",
+   "prompt": "It seems as the budget is tighter this year.",
+   "answer": "It seems that the budget is tighter this year.",
+   "accepted": [
+    "It seems the budget is tighter this year.",
+    "It seems as if the budget is tighter this year."
+   ],
+   "expl": "Nach „It seems“ folgt „that“ (oder nichts), nicht „as“.",
+   "expl_en": "“It seems” is followed by “that” (or nothing), not “as”."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "gap",
+   "prompt": "I ___ whether you could share the requirements by Friday.",
+   "answer": "was wondering",
+   "hint": "(wonder)",
+   "expl": "Die Verlaufsform der Vergangenheit macht die Bitte höflich – gemeint ist jetzt.",
+   "expl_en": "The past continuous makes the request polite – it still means now."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "gap",
+   "prompt": "We ___ to sign before the end of Q3.",
+   "answer": "were hoping",
+   "hint": "(hope)",
+   "expl": "„We were hoping …“ klingt weicher als „We want …“.",
+   "expl_en": "“We were hoping …” sounds softer than “We want …”."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "gap",
+   "prompt": "Would it be possible ___ the trial by two weeks?",
+   "answer": "to extend",
+   "hint": "(extend)",
+   "expl": "Nach „Would it be possible“ folgt „to“ + Grundform.",
+   "expl_en": "“Would it be possible” + to + base form."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "gap",
+   "prompt": "I was wondering if you ___ join the call on Monday.",
+   "answer": "could",
+   "hint": "(can)",
+   "expl": "Nach „I was wondering“ bleibt der Abstand: could statt can.",
+   "expl_en": "After “I was wondering” the distance continues: could instead of can."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "mc",
+   "prompt": "Which request sounds most diplomatic to a new client? ___",
+   "options": [
+    "Send me the data by Friday.",
+    "I was wondering whether you could send the data by Friday.",
+    "You must send the data by Friday.",
+    "I want the data by Friday."
+   ],
+   "answer": "I was wondering whether you could send the data by Friday.",
+   "expl": "Vergangenheit plus could: eine Bitte, die man ablehnen darf.",
+   "expl_en": "Past tense plus could: a request the client can decline."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "mc",
+   "prompt": "That timeline could be a bit ___ for us.",
+   "options": [
+    "tricky",
+    "impossible",
+    "stupid",
+    "wrong"
+   ],
+   "answer": "tricky",
+   "expl": "Untertreibung: „tricky“ heißt höflich „kaum machbar“.",
+   "expl_en": "Understatement: “tricky” is a polite way of saying “hardly possible”."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "mc",
+   "prompt": "We ___ to get your feedback this week.",
+   "options": [
+    "were hoping",
+    "are hope",
+    "have hope",
+    "hoping"
+   ],
+   "answer": "were hoping",
+   "expl": "„were hoping“ ist die höfliche, distanzierte Form des Wunsches.",
+   "expl_en": "“Were hoping” is the polite, distanced way to express a wish."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "transform",
+   "prompt": "Can you move the demo to Thursday? → I was wondering whether you ___ the demo to Thursday.",
+   "answer": "could move",
+   "expl": "Aus der direkten Frage wird eine indirekte Bitte mit could.",
+   "expl_en": "The direct question becomes an indirect request with could."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "transform",
+   "prompt": "Your offer is too expensive. → Your offer ___ be a bit of a stretch for our budget.",
+   "answer": "could",
+   "accepted": [
+    "might",
+    "may"
+   ],
+   "expl": "Einwand mit Abstand: „could be a bit of a stretch“ statt „is too expensive“.",
+   "expl_en": "An objection with distance: could be a bit of a stretch instead of is too expensive."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "transform",
+   "prompt": "We want a discount. → We ___ hoping for a small discount.",
+   "answer": "were",
+   "expl": "„We were hoping for …“ macht aus der Forderung einen Wunsch.",
+   "expl_en": "“We were hoping for …” turns the demand into a wish."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "correct",
+   "prompt": "We were hoping you can confirm the date.",
+   "answer": "We were hoping you could confirm the date.",
+   "expl": "Nach der Distanz-Vergangenheit steht could, nicht can.",
+   "expl_en": "After the distancing past, use could, not can."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "correct",
+   "prompt": "I was wondering whether could you share the price list.",
+   "answer": "I was wondering whether you could share the price list.",
+   "expl": "Indirekte Frage: normale Wortstellung, Subjekt vor Verb.",
+   "expl_en": "Indirect question: normal word order, subject before verb."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "type": "correct",
+   "prompt": "I was wondering if you can send the signed contract today.",
+   "answer": "I was wondering if you could send the signed contract today.",
+   "expl": "„I was wondering if …“ verlangt could statt can.",
+   "expl_en": "“I was wondering if …” needs could instead of can."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "gap",
+   "prompt": "What we really need ___ a clear timeline.",
+   "answer": "is",
+   "hint": "(is / are)",
+   "expl": "Der What-Satz zählt als eine Sache: is.",
+   "expl_en": "The what-clause counts as one thing: is."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "gap",
+   "prompt": "Not only ___ we reduce storage costs, but we also improved compliance.",
+   "answer": "did",
+   "hint": "(do)",
+   "expl": "Inversion nach „Not only“: Hilfsverb vor das Subjekt; Vergangenheit → did.",
+   "expl_en": "Inversion after “Not only”: auxiliary before the subject; past → did."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "gap",
+   "prompt": "It was the CFO ___ approved the budget in the end.",
+   "answer": "who",
+   "accepted": [
+    "that"
+   ],
+   "hint": "(who / which)",
+   "expl": "It-Cleft mit Person: who (oder that).",
+   "expl_en": "It-cleft with a person: who (or that)."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "gap",
+   "prompt": "Rarely ___ we seen such a fast rollout.",
+   "answer": "have",
+   "hint": "(have)",
+   "expl": "Nach „Rarely“ am Satzanfang: Hilfsverb vor das Subjekt – have we seen.",
+   "expl_en": "After “Rarely” at the start: auxiliary before the subject – have we seen."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "mc",
+   "prompt": "___ convinced them was the audit trail.",
+   "options": [
+    "What",
+    "That",
+    "Which",
+    "It"
+   ],
+   "answer": "What",
+   "expl": "What-Cleft: „What convinced them was …“ betont den Grund.",
+   "expl_en": "What-cleft: “What convinced them was …” stresses the reason."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "mc",
+   "prompt": "Never ___ a customer migrate 20 million documents in one weekend.",
+   "options": [
+    "have I seen",
+    "I have seen",
+    "I saw",
+    "did I saw"
+   ],
+   "answer": "have I seen",
+   "expl": "Inversion nach „Never“: have I seen.",
+   "expl_en": "Inversion after “Never”: have I seen."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "mc",
+   "prompt": "Only after the pilot ___ the full rollout.",
+   "options": [
+    "did they approve",
+    "they approved",
+    "they did approve",
+    "approved they"
+   ],
+   "answer": "did they approve",
+   "expl": "„Only after …“ am Satzanfang löst Inversion aus: did they approve.",
+   "expl_en": "“Only after …” at the start triggers inversion: did they approve."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "transform",
+   "prompt": "We really need better search. → What we really need ___ better search.",
+   "answer": "is",
+   "expl": "What-Cleft: „What“ + Subjekt + Verb + „is“ + das Betonte.",
+   "expl_en": "What-cleft: What + subject + verb + is + focus."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "transform",
+   "prompt": "The audit trail convinced them. → It was the audit trail ___ convinced them.",
+   "answer": "that",
+   "accepted": [
+    "which"
+   ],
+   "expl": "It-Cleft mit einer Sache: that (oder which).",
+   "expl_en": "It-cleft with a thing: that (or which)."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "transform",
+   "prompt": "We cut costs and we also improved compliance. → Not only ___ costs, but we also improved compliance.",
+   "answer": "did we cut",
+   "expl": "Inversion: „did“ + Subjekt + Grundform.",
+   "expl_en": "Inversion: did + subject + base form."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "correct",
+   "prompt": "What we need are a partner who understands compliance.",
+   "answer": "What we need is a partner who understands compliance.",
+   "expl": "Nach einem What-Satz steht in der Regel is.",
+   "expl_en": "After a what-clause, the verb is usually is."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "correct",
+   "prompt": "Rarely we have seen such a fast approval.",
+   "answer": "Rarely have we seen such a fast approval.",
+   "expl": "Nach „Rarely“ am Satzanfang: Hilfsverb vor das Subjekt.",
+   "expl_en": "After “Rarely” at the start: auxiliary before the subject."
+  },
+  {
+   "topic": "c1-emphasis",
+   "type": "correct",
+   "prompt": "Not only it saves time, but it also reduces errors.",
+   "answer": "Not only does it save time, but it also reduces errors.",
+   "expl": "Inversion mit „does“: „does it save“.",
+   "expl_en": "Inversion with does: does it save."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "mc",
+   "prompt": "The pilot went well. ___, the timeline for the rollout is still tight.",
+   "options": [
+    "That said",
+    "Because",
+    "Therefore",
+    "For example"
+   ],
+   "answer": "That said",
+   "expl": "„That said“ schränkt das Positive ein – wie „Allerdings“.",
+   "expl_en": "“That said” qualifies the good news – like “however”."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "mc",
+   "prompt": "Anna mentioned the audit trail. ___, we could also show the retention rules.",
+   "options": [
+    "To build on that",
+    "In contrast",
+    "Despite this",
+    "Instead"
+   ],
+   "answer": "To build on that",
+   "expl": "Anknüpfen an den Beitrag einer anderen Person: To build on that.",
+   "expl_en": "Building on someone else's point: To build on that."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "mc",
+   "prompt": "___, the pilot saved the team about ten hours a week.",
+   "options": [
+    "In short",
+    "On the other side",
+    "By the way of",
+    "Firstly of all"
+   ],
+   "answer": "In short",
+   "expl": "Fazit ankündigen: In short.",
+   "expl_en": "Announcing the bottom line: In short."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "mc",
+   "prompt": "The price is higher than the old system. ___, you save on hardware and maintenance.",
+   "options": [
+    "On the other hand",
+    "Moreover",
+    "As a result",
+    "For instance"
+   ],
+   "answer": "On the other hand",
+   "expl": "Gegensatz zwischen zwei Seiten: „On the other hand“.",
+   "expl_en": "A contrast between two sides: On the other hand."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "gap",
+   "prompt": "Coming back ___ your question about pricing, the licenses are per user.",
+   "answer": "to",
+   "hint": "(to / on / at)",
+   "expl": "Feste Verbindung: „coming back to“.",
+   "expl_en": "Fixed phrase: coming back to."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "gap",
+   "prompt": "To build ___ what Mark said, we could start with the invoices.",
+   "answer": "on",
+   "accepted": [
+    "upon"
+   ],
+   "hint": "(on / at / to)",
+   "expl": "Feste Verbindung: „build on something“.",
+   "expl_en": "Fixed phrase: build on something."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "gap",
+   "prompt": "Having ___ that, we still need IT to sign off.",
+   "answer": "said",
+   "hint": "(say)",
+   "expl": "„Having said that“ ist eine feste Wendung zum Einschränken.",
+   "expl_en": "“Having said that” is a fixed phrase for qualifying."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "gap",
+   "prompt": "All ___ all, the migration went smoothly.",
+   "answer": "in",
+   "hint": "(in / at / for)",
+   "expl": "Feste Wendung zum Zusammenfassen: All in all.",
+   "expl_en": "Fixed phrase for summing up: All in all."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "transform",
+   "prompt": "The demo was good. But we still need a business case. → The demo was good. That ___, we still need a business case.",
+   "answer": "said",
+   "expl": "„That said“ ersetzt das schlichte „But“ und klingt strukturierter.",
+   "expl_en": "“That said” replaces a plain “But” and sounds more structured."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "transform",
+   "prompt": "I want to return to the topic of security. → Coming ___ security, all data is encrypted at rest.",
+   "answer": "back to",
+   "expl": "Zurück zu einem früheren Punkt: Coming back to + Thema.",
+   "expl_en": "Back to an earlier point: Coming back to + topic."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "correct",
+   "prompt": "On the other side, the cloud version needs no local servers.",
+   "answer": "On the other hand, the cloud version needs no local servers.",
+   "expl": "Gegensatz heißt „on the other hand“, „side“ ist ein Ort.",
+   "expl_en": "The contrast is “on the other hand”; “side” is a place."
+  },
+  {
+   "topic": "c1-discourse",
+   "type": "correct",
+   "prompt": "To build up on that, we could add a second department.",
+   "answer": "To build on that, we could add a second department.",
+   "accepted": [
+    "To build upon that, we could add a second department."
+   ],
+   "expl": "Es heißt „build on“ (oder „build upon“), nicht „build up on“.",
+   "expl_en": "It is “build on” (or “build upon”), not “build up on”."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "gap",
+   "prompt": "The ___ of the new archive will start in May.",
+   "answer": "implementation",
+   "hint": "(implement)",
+   "expl": "Nomen zu implement: implementation.",
+   "expl_en": "Noun of implement: implementation."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "gap",
+   "prompt": "After the ___ of the budget, we will order the licenses.",
+   "answer": "approval",
+   "hint": "(approve)",
+   "expl": "Nomen zu approve: approval.",
+   "expl_en": "Noun of approve: approval."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "gap",
+   "prompt": "We expect a significant ___ in storage costs.",
+   "answer": "reduction",
+   "hint": "(reduce)",
+   "expl": "Nomen zu reduce: reduction – mit „in“ für den Bereich.",
+   "expl_en": "Noun of reduce: reduction – with “in” for the area."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "gap",
+   "prompt": "Please confirm the ___ date for the scanners.",
+   "answer": "delivery",
+   "hint": "(deliver)",
+   "expl": "Nomen zu deliver: delivery.",
+   "expl_en": "Noun of deliver: delivery."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "gap",
+   "prompt": "The ___ to move to the cloud was made in March.",
+   "answer": "decision",
+   "hint": "(decide)",
+   "expl": "Nomen zu decide: decision.",
+   "expl_en": "Noun of decide: decision."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "mc",
+   "prompt": "Upon ___ of the contract, we will send you the access data.",
+   "options": [
+    "receipt",
+    "receive",
+    "receiving of",
+    "received"
+   ],
+   "answer": "receipt",
+   "expl": "Nomen zu receive: receipt – „upon receipt of“ ist eine feste Mail-Wendung.",
+   "expl_en": "Noun of receive: receipt – “upon receipt of” is a fixed email phrase."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "mc",
+   "prompt": "The ___ of the legacy data took two weeks.",
+   "options": [
+    "migration",
+    "migrate",
+    "migrating of",
+    "migrated"
+   ],
+   "answer": "migration",
+   "expl": "Nach „The … of“ steht das Nomen: migration.",
+   "expl_en": "After “The … of”, use the noun: migration."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "transform",
+   "prompt": "We will migrate the data in June. → The ___ of the data is planned for June.",
+   "answer": "migration",
+   "expl": "Aus dem Verb migrate wird das Nomen migration.",
+   "expl_en": "The verb migrate becomes the noun migration."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "transform",
+   "prompt": "After the board approves it, we can start. → After the board's ___, we can start.",
+   "answer": "approval",
+   "expl": "Aus dem Nebensatz wird ein Nomen: the board's approval.",
+   "expl_en": "The clause becomes a noun: the board's approval."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "transform",
+   "prompt": "We need to decide by Friday. → We need a ___ by Friday.",
+   "answer": "decision",
+   "expl": "decide → decision.",
+   "expl_en": "decide → decision."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "correct",
+   "prompt": "The implement of the new workflow starts next week.",
+   "answer": "The implementation of the new workflow starts next week.",
+   "expl": "Nach „The“ steht das Nomen implementation, nicht das Verb.",
+   "expl_en": "After “The”, use the noun implementation, not the verb."
+  },
+  {
+   "topic": "c1-nominal",
+   "type": "correct",
+   "prompt": "We look forward to the approve of the pilot.",
+   "answer": "We look forward to the approval of the pilot.",
+   "expl": "Nomen zu approve: approval.",
+   "expl_en": "Noun of approve: approval."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "gap",
+   "prompt": "___ the contract, our legal team approved it.",
+   "answer": "Having reviewed",
+   "hint": "(review)",
+   "expl": "Erst geprüft, dann freigegeben: Having + 3. Form.",
+   "expl_en": "First reviewed, then approved: Having + past participle."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "gap",
+   "prompt": "___ OCR, the system reads every incoming invoice.",
+   "answer": "Using",
+   "hint": "(use)",
+   "expl": "Mittel und gleichzeitig: -ing-Form.",
+   "expl_en": "Means and at the same time: the -ing form."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "gap",
+   "prompt": "___ in German data centers, the documents stay GDPR-compliant.",
+   "answer": "Stored",
+   "hint": "(store)",
+   "expl": "Passive Bedeutung (die Dokumente werden gespeichert): 3. Form.",
+   "expl_en": "Passive meaning (the documents are stored): past participle."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "gap",
+   "prompt": "Having ___ the pilot, we moved on to the rollout.",
+   "answer": "finished",
+   "accepted": [
+    "completed"
+   ],
+   "hint": "(finish)",
+   "expl": "Nach „Having“ steht die 3. Form.",
+   "expl_en": "After “Having”, use the past participle."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "mc",
+   "prompt": "___ the demo, the IT lead asked about single sign-on.",
+   "options": [
+    "Having seen",
+    "Having see",
+    "Seen",
+    "Have seen"
+   ],
+   "answer": "Having seen",
+   "expl": "Erst die Demo gesehen, dann gefragt: Having + 3. Form.",
+   "expl_en": "First saw the demo, then asked: Having + past participle."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "mc",
+   "prompt": "___ by the auditors, the new process is now standard.",
+   "options": [
+    "Approved",
+    "Approving",
+    "Having approve",
+    "Approve"
+   ],
+   "answer": "Approved",
+   "expl": "Passiv (der Prozess wurde geprüft): 3. Form.",
+   "expl_en": "Passive (the process was approved): past participle."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "mc",
+   "prompt": "___ in the cloud, the archive needs no local servers.",
+   "options": [
+    "Running",
+    "Run",
+    "Having run in",
+    "Ran"
+   ],
+   "answer": "Running",
+   "expl": "Gleichzeitiger Zustand: -ing-Form.",
+   "expl_en": "An ongoing state at the same time: the -ing form."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "transform",
+   "prompt": "After we had tested the workflow, we trained the users. → ___ the workflow, we trained the users.",
+   "answer": "Having tested",
+   "expl": "Vorzeitig und gleiches Subjekt: Having + 3. Form.",
+   "expl_en": "Completed before, same subject: Having + past participle."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "transform",
+   "prompt": "Because it runs in the cloud, the archive scales automatically. → ___ in the cloud, the archive scales automatically.",
+   "answer": "Running",
+   "expl": "Grund und gleichzeitig: -ing-Form statt „Because it runs“.",
+   "expl_en": "Reason and at the same time: -ing form instead of “Because it runs”."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "transform",
+   "prompt": "The report was written in May, and it is already out of date. → ___ in May, the report is already out of date.",
+   "answer": "Written",
+   "expl": "Passive Bedeutung: nur die 3. Form.",
+   "expl_en": "Passive meaning: just the past participle."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "correct",
+   "prompt": "Having sign the contract, the customer received the access data.",
+   "answer": "Having signed the contract, the customer received the access data.",
+   "expl": "Nach „Having“ steht die 3. Form: signed.",
+   "expl_en": "After “Having”, use the past participle: signed."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "correct",
+   "prompt": "Having receiving your feedback, we updated the offer.",
+   "answer": "Having received your feedback, we updated the offer.",
+   "expl": "Having + 3. Form, nicht Having + -ing.",
+   "expl_en": "Having + past participle, not Having + -ing."
+  },
+  {
+   "topic": "c1-participle",
+   "type": "correct",
+   "prompt": "Use the new search, you can find any invoice in seconds.",
+   "answer": "Using the new search, you can find any invoice in seconds.",
+   "expl": "Mittel am Satzanfang: -ing-Form (Using).",
+   "expl_en": "A means at the start: the -ing form (Using)."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "gap",
+   "prompt": "We need your decision ___ the end of Q3.",
+   "answer": "by",
+   "hint": "(by / until)",
+   "expl": "Frist, spätestens: by.",
+   "expl_en": "A deadline, at the latest: by."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "gap",
+   "prompt": "The trial runs ___ June 30, then it ends automatically.",
+   "answer": "until",
+   "hint": "(by / until)",
+   "expl": "Dauer bis zu einem Zeitpunkt: until.",
+   "expl_en": "Duration up to a point in time: until."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "gap",
+   "prompt": "We can set up the test system ___ two weeks.",
+   "answer": "within",
+   "hint": "(within / during)",
+   "expl": "Innerhalb eines Zeitraums: within.",
+   "expl_en": "Inside a period of time: within."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "gap",
+   "prompt": "___ June 1, all invoices must be archived electronically.",
+   "answer": "As of",
+   "hint": "(As of / Since)",
+   "expl": "Ab einem Stichtag: As of.",
+   "expl_en": "From a key date onward: As of."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "mc",
+   "prompt": "The cloud version costs ___ of the on-premise license.",
+   "options": [
+    "a fraction",
+    "a part",
+    "a few",
+    "a little"
+   ],
+   "answer": "a fraction",
+   "expl": "„a fraction of“ = nur ein kleiner Teil davon.",
+   "expl_en": "“A fraction of” = only a small part of it."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "mc",
+   "prompt": "We process ___ 40,000 invoices a month – the exact number is 39,600.",
+   "options": [
+    "just under",
+    "well over",
+    "exactly",
+    "more than"
+   ],
+   "answer": "just under",
+   "expl": "Knapp unter einer Zahl: just under.",
+   "expl_en": "Slightly below a number: just under."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "mc",
+   "prompt": "Our new client has ___ many users as the old one – 2,000 instead of 1,000.",
+   "options": [
+    "twice as",
+    "two times more",
+    "double as",
+    "twice so"
+   ],
+   "answer": "twice as",
+   "expl": "Doppelt so viele: „twice as many as“.",
+   "expl_en": "Double the number: twice as many as."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "mc",
+   "prompt": "Please send the signed offer ___ Friday at the latest.",
+   "options": [
+    "by",
+    "until",
+    "till",
+    "within"
+   ],
+   "answer": "by",
+   "expl": "„at the latest“ zeigt eine Frist: by.",
+   "expl_en": "“At the latest” signals a deadline: by."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "transform",
+   "prompt": "About 60% of the documents are scanned. → ___ 60% of the documents are scanned.",
+   "answer": "Roughly",
+   "accepted": [
+    "Around",
+    "Approximately"
+   ],
+   "expl": "„Roughly“ klingt präziser und geschäftsmäßiger als „about“.",
+   "expl_en": "“Roughly” sounds more precise and businesslike than “about”."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "transform",
+   "prompt": "The rollout must be finished before September 30 at the latest. → The rollout must be finished ___ September 30.",
+   "answer": "by",
+   "accepted": [
+    "no later than"
+   ],
+   "expl": "Frist: „by September 30“.",
+   "expl_en": "Deadline: by September 30."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "correct",
+   "prompt": "We will send you the offer until Wednesday.",
+   "answer": "We will send you the offer by Wednesday.",
+   "expl": "Frist heißt „by“, nicht „until“.",
+   "expl_en": "A deadline is “by”, not “until”."
+  },
+  {
+   "topic": "c1-precision",
+   "type": "correct",
+   "prompt": "The new system is two times faster as the old one.",
+   "answer": "The new system is twice as fast as the old one.",
+   "accepted": [
+    "The new system is twice as fast as the old system."
+   ],
+   "expl": "Vergleich: „twice as“ + Adjektiv + „as“.",
+   "expl_en": "Comparison: twice as + adjective + as."
+  }
+ ]
+}

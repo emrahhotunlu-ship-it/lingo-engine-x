@@ -38,6 +38,8 @@ export type Route =
   | { name: 'meeting'; id?: string }
   // Lernberatung 27.09. (V3): persönliche Deutsch-Fallen (Vollbild, aus „Dein Stand“)
   | { name: 'patterns'; id?: string }
+  // Lernberatung 27.09. (Vorschlag 8): „Eine Botschaft, drei Tonlagen“ (Vollbild, freiwillig)
+  | { name: 'tones' }
   // Phase 4 – Input und Output (Plan §2.3). `ctx` bestimmt nur `log.ctx`, nie die Zählung.
   | InputRoute;
 

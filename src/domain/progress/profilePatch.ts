@@ -16,7 +16,7 @@ export type RoundEnd = {
   day: string;
   /** `check` = Wochen-Check (M10): zählt als Extra, nie zu einem Pflichtkanal. */
   /** `fluency` = Flüssigkeit 90 – 60 – 45 (Lernberatung V6): freiwillig, nie ein Pflichtkanal. */
-  act: 'review' | 'cards' | LearnAct | 'speak' | 'biz' | 'preply' | 'check' | 'say' | 'fluency';
+  act: 'review' | 'cards' | LearnAct | 'speak' | 'biz' | 'preply' | 'check' | 'say' | 'fluency' | 'tones';
   partial: boolean;
   n: number;
   right: number;
@@ -91,6 +91,9 @@ export function roundBonus(r: RoundEnd): number {
     // Flüssigkeit 90 – 60 – 45 (Lernberatung V6): drei Runden zum selben Inhalt.
     case 'fluency':
       return r.n >= 3 ? 15 : 0;
+    // „Eine Botschaft, drei Tonlagen“ (Lernberatung, Vorschlag 8): freiwillig, drei Fassungen.
+    case 'tones':
+      return r.n >= 1 ? 15 : 0;
     case 'preply':
       return 0;
   }

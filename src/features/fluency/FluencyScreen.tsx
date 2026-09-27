@@ -27,7 +27,6 @@ import { flush } from '../progress/persist';
 import { saveRepairs } from '../repair/store';
 import { TakeChunkButton } from '../speak/TakeChunkButton';
 import { recordFluencyDone, saveFluencyItem } from './persist';
-import { installTestEntry } from './testEntry';
 
 // Flüssigkeit 90 – 60 – 45 (Lernberatung 27.09., V6 / Vorschlag 5, 4-3-2-Methode): eine Frage,
 // dreimal dieselbe Antwort – 90 s, 60 s, 45 s –, gesprochen (Spracheingabe, wenn verfügbar)
@@ -37,7 +36,6 @@ import { installTestEntry } from './testEntry';
 // was flüssiger wurde, zwei fehlende Wendungen („Merken“), 0–3 Fehler → Reparatur-Sätze.
 // Freiwillig (`act.fluency`), keine Selbstbewertung (A7).
 
-installTestEntry();
 
 type Phase = 'ready' | 'run' | 'result';
 

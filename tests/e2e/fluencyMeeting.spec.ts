@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen } from './fixtures';
+import { boot, layoutProblems, screen, openSpeak } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Flüssigkeit 90 – 60 – 45 und „Mein nächster Termin“ (Lernberatung 27.09., V6/V4):
@@ -11,7 +11,7 @@ import { dump } from './trainerHelpers';
 //   Rollenspiel; „Meine Termine“ → Nachbesprechung (meeting-debrief@1) → Wendungen sofort.
 // - Ohne Spracheingabe bzw. ohne Claude: tippen, Kennzahlen, Speichern ohne Vorbereitung.
 // Die Einstiege unter „Sprechen“ setzt der Navigations-Umbau; hier springt der Test-Einstieg
-// `__LINGO_GO__` (nur mit eingespieltem Entwicklungs-Adapter) direkt hin.
+// den Einstieg unter Sprechen → Training.
 
 type Doc = Record<string, unknown>;
 const MOBILE = { width: 390, height: 844 };
@@ -31,8 +31,8 @@ async function installSkip(page: Page): Promise<void> {
 const skip = (page: Page, ms: number) => page.evaluate((m) => (window as unknown as { __lxSkip: (ms: number) => void }).__lxSkip(m), ms);
 const open = async (page: Page, name: 'fluency' | 'meeting') => {
   await screen(page, 'today');
-  await page.waitForFunction(() => typeof (window as unknown as { __LINGO_GO__?: unknown }).__LINGO_GO__ === 'function');
-  await page.evaluate((n) => (window as unknown as { __LINGO_GO__: (n: string) => void }).__LINGO_GO__(n), name);
+  await openSpeak(page);
+  await page.getByTestId(`training-${name}`).click();
   await expect(page.getByTestId(name)).toBeVisible();
 };
 const sttSay = (page: Page, text: string) => page.evaluate((t) => (window as unknown as { __LINGO_FAKE__: { sttSay(t: string): void } }).__LINGO_FAKE__.sttSay(t), text);
@@ -199,8 +199,14 @@ test('Termin (Handy, DE, Claude): Vorbereitung, alle Wendungen merken, Generalpr
   expect(sceneId).toMatch(/^sc-ai/);
   expect(d[`scene/${sceneId}`]).toMatchObject({ src: 'ai', pv: 'meeting-prep@1', meeting: m[0]?.id, persona: { name: 'Oliver Grant' } });
 
-  // Später: „Meine Termine“ → Nachbesprechung.
-  await page.evaluate(() => (window as unknown as { __LINGO_GO__: (n: string) => void }).__LINGO_GO__('meeting'));
+  // Später: „Meine Termine“ → Nachbesprechung. Zurück führt zur Herkunft (Termin), dann zur Liste.
+  await page.getByTestId('rp-close').click();
+  await page.locator('[data-screen="meeting"], [data-screen="speak"]').first().waitFor();
+  if (await page.locator('[data-screen="speak"]').isVisible()) await page.getByTestId('training-meeting').click();
+  else {
+    await page.getByTestId('meeting-close').click().catch(() => undefined);
+    if (await page.locator('[data-screen="speak"]').isVisible()) await page.getByTestId('training-meeting').click();
+  }
   await expect(page.getByTestId('meeting')).toHaveAttribute('data-view', 'list');
   await expect(page.getByTestId('meeting-item')).toHaveCount(1);
   await expect(page.getByTestId('meeting-item')).toContainText('Vorbereitet');
