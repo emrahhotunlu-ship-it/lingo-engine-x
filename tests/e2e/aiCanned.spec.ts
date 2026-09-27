@@ -82,7 +82,7 @@ test('Lektion „Anwenden": Rückmeldung von Claude, Schreibdokument gespeichert
   await playLesson(page, { words: lessonMeta('l07').words.map(([en, de]) => ({ en, de })), solve: grammarKey([l07]), answers, output: L07_OUTPUT, aiCheck: true });
   expect(await calls(page, 'lesson-production')).toBe(1);
   const writing = Object.entries(await dump(page)).find(([p]) => p.startsWith('writing/lesson-l07-'));
-  expect(writing?.[1]).toMatchObject({ lesson: 'l07', res: { pv: 'lesson-production@1' } });
+  expect(writing?.[1]).toMatchObject({ lesson: 'l07', res: { pv: 'lesson-production@2' } });
   expect(errors).toEqual([]);
 });
 
