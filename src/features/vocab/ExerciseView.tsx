@@ -267,8 +267,10 @@ export function ExerciseView({
     finish({ verdict }, prodText.trim(), null, { produce: { out: null, self } }, self.grade);
   };
 
+  const produceBusy = produceAsk.phase === 'queued' || produceAsk.phase === 'thinking' || produceAsk.phase === 'slow' || produceAsk.phase === 'streaming';
+
   const checkProduce = async () => {
-    if (fb || !prodText.trim() || produceAsk.phase === 'queued' || produceAsk.phase === 'thinking' || produceAsk.phase === 'slow') return;
+    if (fb || !prodText.trim() || produceBusy) return;
     prodInput.current?.blur();
     if (!ai) {
       produceLocal();
@@ -737,7 +739,7 @@ export function ExerciseView({
         <Button
           variant="primary"
           onClick={() => (e.input === 'produce' ? void checkProduce() : check(null))}
-          disabled={(e.input === 'tiles' && !placed.length) || (e.input === 'produce' && !prodText.trim())}
+          disabled={(e.input === 'tiles' && !placed.length) || (e.input === 'produce' && (!prodText.trim() || produceBusy))}
           data-testid="check"
         >
           {t('trCheck')}
@@ -830,7 +832,7 @@ function ProduceResult({ given, out, self }: { given: string; out: ProduceCheckO
         <span className="text-muted">{t('trYour')}: </span>
         {given}
       </p>
-      {out && normalize(out.fixed) !== normalize(given) && (
+      {out && out.fixed.trim() !== '' && normalize(out.fixed) !== normalize(given) && (
         <p className="text-sm">
           <span className="text-muted">{t('trProduceFixed')}: </span>
           <EnglishText as="span" text={out.fixed} {...src} testId="produce-fixed" />

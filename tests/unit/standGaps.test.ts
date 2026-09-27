@@ -146,12 +146,12 @@ describe('Wochen-Check: Aufgaben aus vorhandenen Bausteinen', () => {
     expect(tasks.every((g) => g.task.errorT === null)).toBe(true);
   });
 
-  it('heute fällige Karten kommen erst, wenn es sonst nicht reicht (Pflicht „Wiederholen" bleibt unberührt)', () => {
+  it('nie heute fällige Karten (Pflicht „Wiederholen" bleibt unberührt)', () => {
     const end = learningDayEnd(nowMs);
-    const notDue = cards.filter((c) => !c.hidden && !c.isNew && c.stage >= 1 && c.fsrs.due >= end).length;
     const words = items.filter((i) => i.kind === 'v');
     const picked = words.map((w) => cards.find((c) => c.key === (w as { key: string }).key)!);
-    if (notDue >= words.length) expect(picked.every((c) => c.fsrs.due >= end)).toBe(true);
+    expect(picked.length).toBeGreaterThan(0);
+    expect(picked.every((c) => c.fsrs.due >= end)).toBe(true);
   });
 
   it('gleicher Startwert = gleiche Auswahl; ohne Karten und Themen bleibt die Runde klein', () => {

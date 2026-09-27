@@ -36,7 +36,7 @@ const VERSION = 1;
 
 const VERDICT_ALIASES: ReadonlyArray<[RegExp, ProduceVerdict]> = [
   [/^(correct|right|good|ok|okay|natural|perfect)$/, 'correct'],
-  [/^(minor|small|almost|mostly[\s_-]?correct|minor[\s_-]?(error|issue|mistake)s?|partly[\s_-]?correct)$/, 'minor'],
+  [/^(minor|small|almost|mostly[\s_-]?correct|minor[\s_-]?(error|issue|mistake)s?|(partly|partially)[\s_-]?correct|partial)$/, 'minor'],
   [/^(wrong|incorrect|error|false|missing|misused|major)$/, 'wrong'],
 ];
 
@@ -62,12 +62,14 @@ const schemaFor = (uiLang: UiLang): z.ZodType<ProduceCheckOut> =>
     .object({
       verdict: z.preprocess(produceVerdict, z.enum(['correct', 'minor', 'wrong'])),
       usesTarget: z.preprocess(looseBool, z.boolean()),
-      fixed: clipped(1, 400),
+      // Bei „correct“ darf „fixed“ leer sein (nichts zu verbessern); sonst Pflicht (unten).
+      fixed: z.preprocess((v) => (v === undefined || v === null ? '' : v), clipped(0, 400)),
       why: clipped(1, 400),
       // Fehlt „better" oder ist es null, gibt es keine natürlichere Fassung.
       better: z.preprocess((v) => (v === undefined || v === null ? '' : v), clipped(0, 400)),
     })
     .superRefine((v, ctx) => {
+      if (v.verdict !== 'correct' && !v.fixed.trim()) ctx.addIssue({ code: 'custom', path: ['fixed'], message: 'fixed must contain the corrected sentence' });
       // Keine Widersprüche (Kap. 2): „richtig" setzt voraus, dass das Zielwort vorkommt.
       if (v.verdict !== 'wrong' && !v.usesTarget) {
         ctx.addIssue({ code: 'custom', path: ['verdict'], message: 'must be "wrong" when usesTarget is false' });

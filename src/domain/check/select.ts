@@ -41,10 +41,8 @@ const seenOf = (doc: Doc | undefined): Set<string> => new Set(Array.isArray(doc?
 export function selectCheck(i: SelectInput): CheckItem[] {
   const rng = mulberry32(hash32(i.seed));
   const known = i.cards.filter((c) => !c.hidden && !c.isNew && c.stage >= 1);
-  // Nicht heute fällige Karten zuerst (Pflicht „Wiederholen" bleibt unberührt), sonst zufällig.
-  const notDue = shuffle(known.filter((c) => c.fsrs.due >= i.dayEndMs), rng);
-  const due = shuffle(known.filter((c) => c.fsrs.due < i.dayEndMs), rng);
-  const ordered = [...notDue, ...due];
+  // Nur nicht heute fällige Karten: der Check darf der Pflicht „Wiederholen" nie Karten wegnehmen.
+  const ordered = shuffle(known.filter((c) => c.fsrs.due >= i.dayEndMs), rng);
   const poolSize = i.cards.filter((c) => !c.hidden).length;
 
   const used = new Set<string>();

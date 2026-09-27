@@ -78,11 +78,16 @@ describe('Vorlage course-extend@1', () => {
     expect(topicIdOf('unknown thing', topics)).toBe('unknown thing');
   });
 
-  it('abgelehnt: unbekanntes Thema überall, doppelter Titel eines vorhandenen Kurses, falsche Sprache der Einheit', () => {
+  it('unbekanntes Thema überall und falsche Sprache der Einheit abgelehnt; doppelter Titel fällt einzeln weg', () => {
     const v = vars();
     const raw = courseExtendExample(v);
     expect(courseExtend.schema(v).safeParse({ ...raw, lessons: raw.lessons.map((l) => ({ ...l, grammar: 'phonetics' })) }).success).toBe(false);
-    expect(courseExtend.schema(v).safeParse({ ...raw, lessons: raw.lessons.map((l, i) => (i === 0 ? { ...l, en: 'Opening and running a meeting' } : l)) }).success).toBe(false);
+    // Doppelter Titel eines vorhandenen Kurses: nur diese Lektion fällt weg (Rest bleibt, ≥ 3).
+    const dup = courseExtend.schema(v).safeParse({ ...raw, lessons: raw.lessons.map((l, i) => (i === 0 ? { ...l, en: 'Opening and running a meeting' } : l)) });
+    expect(dup.success).toBe(raw.lessons.length - 1 >= 3);
+    if (dup.success) expect(dup.data.lessons.map((l) => l.en)).not.toContain('Opening and running a meeting');
+    // Unbrauchbares Zielwort (leeres de) wirft nicht, sondern die Lektion fällt weg.
+    expect(() => courseExtend.schema(v).safeParse({ ...raw, lessons: raw.lessons.map((l, i) => (i === 0 ? { ...l, words: [['to chair', ''], ...l.words.slice(1)] } : l)) })).not.toThrow();
     expect(courseExtend.schema(v).safeParse({ ...raw, unit: { ...raw.unit, goal_de: raw.unit.goal_en } }).success).toBe(false);
   });
 });

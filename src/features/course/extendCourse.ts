@@ -5,12 +5,12 @@ import { readCollection, readDoc } from '../../data/reads';
 import { allLessons, baseLessonIds, catalog, courseExtension } from '../../domain/course/catalog';
 import { doneLessons } from '../../domain/course/courseDone';
 import { extendFacts } from '../../domain/course/extendInput';
-import { extensionState, extLessonDocs, nextExtIds } from '../../domain/course/extension';
+import { extCatalogOf, extensionState, extLessonDocs, nextExtIds, nextUnitN } from '../../domain/course/extension';
 import { getDb } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { CE_LESSONS, courseExtend, type CourseExtendOut, type CourseExtendVars } from '../../prompts/courseExtend';
 import { workContext } from '../../prompts/work';
-import { rememberLesson, useLearnInputs } from '../learn/inputs';
+import { loadLearnInputs, rememberLesson, useLearnInputs } from '../learn/inputs';
 
 // Kurs erweitern (Kap. 6.2): Eingaben für course-extend sammeln und das Ergebnis als neue
 // Lektionen `lesson/l25…` speichern – nur anlegen (`createIfMissing`), nie überschreiben.
@@ -39,6 +39,12 @@ export function useExtensionState(): { allowed: boolean; allDone: boolean } {
 
 /** Eingaben der Vorlage (liest `app/radar` einmal frisch; fehlt es, ohne Radar). */
 export async function extendVars(): Promise<CourseExtendVars> {
+  // Vorhandene Lektionen (Titel, Einheiten) müssen geladen sein, sonst doppeln sich Titel.
+  try {
+    await loadLearnInputs();
+  } catch (err) {
+    logWarn('course:extend', err, 'lesson');
+  }
   const live = useLive.getState();
   const db = getDb();
   let radar: Doc | null = null;
@@ -66,15 +72,19 @@ export async function saveExtension(out: CourseExtendOut, vars: Pick<CourseExten
   const writer = getWriter();
   if (!db || !writer) return [];
   let existing: string[];
+  let unitN = vars.unitN;
   try {
     const all = await readCollection(db, 'lesson');
     existing = [...all.valid.keys(), ...all.invalid];
+    // Einheitennummer aus dem frischen Lesen, nicht aus dem Katalog im Speicher (zwei Tabs,
+    // noch nicht geladene Lektionen): nie zwei Einheiten mit derselben Nummer.
+    unitN = Math.max(unitN, nextUnitN(extCatalogOf(all.valid)));
   } catch (err) {
     logError('course:extend', err, 'lesson');
     return [];
   }
   const ids = nextExtIds(existing, Math.min(CE_LESSONS, out.lessons.length));
-  const docs = extLessonDocs(out, { ids, unitN: vars.unitN, nowMs: Date.now(), pv: `${courseExtend.id}@${courseExtend.version}`, lang });
+  const docs = extLessonDocs(out, { ids, unitN, nowMs: Date.now(), pv: `${courseExtend.id}@${courseExtend.version}`, lang });
   const created: string[] = [];
   for (const { id, doc } of docs) {
     try {

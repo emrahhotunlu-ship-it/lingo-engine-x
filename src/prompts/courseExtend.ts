@@ -92,28 +92,43 @@ const schemaFor = (v: CourseExtendVars): z.ZodType<CourseExtendOut> => {
     }, z.enum(CE_LEVELS)),
     words: sliced(wordPair, CE_WORDS, CE_WORDS).superRefine((ws, ctx) => {
       const seen = new Set<string>();
-      ws.forEach(([w], i) => {
-        const k = loose(w);
+      ws.forEach((p, i) => {
+        // zod 4 führt superRefine auch nach Fehlern einzelner Einträge aus – dann ist p roh.
+        if (!Array.isArray(p)) return;
+        const k = loose(p[0]);
         if (seen.has(k)) ctx.addIssue({ code: 'custom', path: [i], message: 'words must be distinct' });
         seen.add(k);
       });
     }),
   });
   return z.object({
-    unit: z.object({
+    unit: z.preprocess((u) => {
+      // Fehlt das deutsche Ziel, das englische übernehmen (besser als die ganze Antwort zu verwerfen).
+      if (!u || typeof u !== 'object' || Array.isArray(u)) return u;
+      const o = u as Record<string, unknown>;
+      return typeof o.goal_de === 'string' && o.goal_de.trim() ? o : { ...o, goal_de: o.goal_en };
+    }, z.object({
       en: en(4, 80),
       de: de(4, 80),
       goal_en: en(10, 240),
       goal_de: de(10, 240),
       kind: z.preprocess((x) => (typeof x === 'string' && /life|everyday|alltag|private/i.test(x) ? 'life' : 'job'), z.enum(['job', 'life'])),
-    }),
+    })),
     // Lektionen einzeln prüfen: eine unbrauchbare fällt weg, gescheitert wird erst unter drei.
-    lessons: lenientArray(lesson, 3, CE_LESSONS).superRefine((ls, ctx) => {
+    // Doppelte oder schon vorhandene Titel fallen einzeln weg (nicht die ganze Antwort).
+    lessons: lenientArray(lesson, 3, CE_LESSONS).transform((ls, ctx) => {
       const titles = new Set(v.existing.map(loose));
-      ls.forEach((l, i) => {
-        if (titles.has(loose(l.en))) ctx.addIssue({ code: 'custom', path: [i, 'en'], message: 'title repeats an existing lesson' });
-        titles.add(loose(l.en));
+      const out = ls.filter((l) => {
+        const k = loose(l.en);
+        if (titles.has(k)) return false;
+        titles.add(k);
+        return true;
       });
+      if (out.length < 3) {
+        ctx.addIssue({ code: 'custom', path: [], message: 'at least 3 lessons with new, distinct titles are required' });
+        return z.NEVER;
+      }
+      return out;
     }),
   });
 };
