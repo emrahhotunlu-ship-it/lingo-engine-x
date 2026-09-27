@@ -5,7 +5,7 @@ import { containsPhrase, wordCountOf } from '../domain/chunks/newChunk';
 import { TOPICS } from '../domain/content';
 import { isWrongLang } from '../domain/lang/detect';
 import type { AnalysisView } from '../domain/speak/types';
-import { langName, langOf } from './common';
+import { langName, langOf, shortenText } from './common';
 import type { UiLang } from './types';
 
 // Die drei Schichten einer Satz-Analyse (Plan §5.3, §6.2), gemeinsam für Rollenspiel-Analyse,
@@ -22,6 +22,14 @@ export const UPGRADED_MAX = 400;
 
 export type ThreeLayersOut = AnalysisView;
 
+/** Fehlerkategorie tolerant lesen: bekannte Kennung, Einzahl/Mehrzahl-Variante oder „other“. */
+export function errorCat(raw: string): string {
+  const c = raw.trim().toLowerCase().replace(/[\s_]+/g, '-');
+  for (const k of [c, `${c}s`, c.replace(/s$/, '')]) if (ERROR_CATS.includes(k)) return k;
+  if (/^(vocabulary|word-?choice|lexis)$/.test(c)) return 'vocab';
+  return 'other';
+}
+
 export type ThreeLayersCtx = { sentence: string; focusWords: readonly string[]; uiLang: UiLang; upgradedMax?: number };
 
 const english = (max: number) =>
@@ -37,11 +45,13 @@ const errorSchema = (uiLang: UiLang) =>
     .object({
       wrong: z.string().trim().min(1).max(200),
       right: english(200),
-      cat: z.string().trim(),
-      why: z.string().trim().min(1).max(WHY_MAX),
-    })
-    .superRefine((e, ctx) => {
-      if (!ERROR_CATS.includes(e.cat)) ctx.addIssue({ code: 'custom', path: ['cat'], message: `cat must be one of: ${ERROR_CATS.join(', ')}` });
+      // Hinweis der Prüfung: unbekannte Kategorie („grammar“, „preposition“) → nächste bekannte oder „other“.
+      cat: z.string().trim().transform(errorCat),
+      why: z
+        .string()
+        .trim()
+        .min(1)
+        .transform((w) => shortenText(w, 40, WHY_MAX)),
     })
     .superRefine(langOf(['why'], uiLang));
 
@@ -57,7 +67,7 @@ const chunkSchema = (uiLang: UiLang) =>
       de: z.string().trim().min(1).max(120),
       def: english(160),
       kind: z.enum(['collocation', 'frame', 'phrase']),
-      register: z.enum(['formal', 'neutral', 'informal']),
+      register: z.preprocess((r) => (typeof r === 'string' && /^(casual|colloquial)$/i.test(r.trim()) ? 'informal' : typeof r === 'string' ? r.trim().toLowerCase() : r), z.enum(['formal', 'neutral', 'informal'])),
       why: z.string().trim().min(1).max(WHY_MAX),
     })
     .superRefine(langOf(['why'], uiLang));
@@ -76,6 +86,8 @@ export function threeLayersSchema(c: ThreeLayersCtx): z.ZodType<ThreeLayersOut> 
       chunks: z.array(chunkSchema(c.uiLang)).max(3),
       targets: z.array(z.string().trim().min(1)).max(8),
     })
+    // Hinweis der Prüfung: „minor“/„errors“ ohne einen einzigen Fehler heißt „clean“ (Kap. 2.2).
+    .transform((v) => (v.english && v.verdict !== 'clean' && v.errors.length === 0 ? { ...v, verdict: 'clean' as const } : v))
     .superRefine((v, ctx) => {
       // 1. Keine Widersprüche (Kap. 2.2).
       if (v.english) {

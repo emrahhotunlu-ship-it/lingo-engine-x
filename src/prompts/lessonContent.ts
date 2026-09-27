@@ -1,11 +1,12 @@
 import { z } from 'zod';
+import { coreWord } from '../domain/course/baseLesson';
 import { containsTarget } from '../domain/course/production';
 import { isWrongLang } from '../domain/lang/detect';
 import type { LessonMeta } from '../domain/learn/types';
-import { clip, header, langName } from './common';
+import { clip, header, langName, lenientArray, normalizeTaskRaw } from './common';
 import type { PromptTemplate, UiLang } from './types';
 
-// lesson-content@1 (phase2-plan §7, §4.8): Inhalt EINER Lektion (Wörter, Dialog, Fragen,
+// lesson-content@2 (phase2-plan §7, §4.8): Inhalt EINER Lektion (Wörter, Dialog, Fragen,
 // Grammatikaufgaben, Produktion) auf Knopfdruck „Lektion vorbereiten". Ausgabe direkt im
 // Speicherformat der alten App (`lesson/<lid>`), Fragen in beiden Sprachen (`q`/`q_alt`).
 
@@ -44,9 +45,11 @@ export type LessonContentOut = {
 export const RULE_MAX = 1500;
 export const SITUATION_MAX = 600;
 export const LINE_MAX = 220;
+/** Mindestens so viele erkannte Pflichtwörter (wie die lokale Prüfung, MIN_MUST_USE). */
+export const MUST_USE_MIN = 2;
 
 const ID = 'lesson-content';
-const VERSION = 1;
+const VERSION = 2;
 
 /** Form der Antwort, im Prompt gezeigt (kein echtes Beispiel: es hängt an der Lektion). */
 export const LESSON_CONTENT_SHAPE =
@@ -69,7 +72,7 @@ const schemaFor = (v: LessonContentVars): z.ZodType<LessonContentOut> => {
     def: z.string().trim().max(200).default(''),
     ex: z.string().trim().max(300).default(''),
   });
-  const line = z.object({ sp: z.string().trim().min(1).max(18), en: z.string().trim().min(1).max(LINE_MAX), de: z.string().trim().max(400).default('') });
+  const line = z.object({ sp: z.string().trim().min(1).max(40), en: z.string().trim().min(1).max(LINE_MAX), de: z.string().trim().max(400).default('') });
   const question = z.object({
     q: z.string().trim().min(3).max(300),
     options: z.array(z.string().trim().min(1).max(160)).length(4),
@@ -79,25 +82,51 @@ const schemaFor = (v: LessonContentVars): z.ZodType<LessonContentOut> => {
     options_alt: z.array(z.string().trim().min(1).max(160)).length(4),
     answer_alt: z.string().trim().min(1),
   });
-  const task = z.object({
-    topic: z.literal(v.meta.grammar),
-    type: z.enum(['mc', 'gap', 'transform', 'correct']),
-    prompt: z.string().trim().min(8).max(300),
-    answer: z.string().trim().min(1).max(200),
-    accepted: z.array(z.string().trim().min(1)).max(6).default([]),
-    options: z.array(z.string().trim().min(1).max(80)).length(4).nullable().default(null),
-    hint: z.string().trim().max(60).default(''),
-    expl: z.string().trim().min(8).max(400),
-    expl_en: z.string().trim().min(8).max(400),
-  });
+  const task = z
+    .object({
+      topic: z.literal(v.meta.grammar),
+      type: z.enum(['mc', 'gap', 'transform', 'correct']),
+      prompt: z.string().trim().min(8).max(300),
+      answer: z.string().trim().min(1).max(200),
+      accepted: z.array(z.string().trim().min(1)).max(6).default([]),
+      options: z.array(z.string().trim().min(1).max(80)).length(4).nullable().default(null),
+      hint: z.string().trim().max(60).default(''),
+      expl: z.string().trim().min(8).max(400),
+      expl_en: z.string().trim().min(8).max(400),
+    })
+    .superRefine((t, ctx) => {
+      const issue = (path: (string | number)[], message: string) => ctx.addIssue({ code: 'custom', path, message });
+      if (t.type === 'mc') {
+        if (!t.options) issue(['options'], 'mc needs 4 options');
+        else if (!t.options.includes(t.answer)) issue(['answer'], 'answer must be one of the options');
+      } else if (t.options) issue(['options'], 'options must be null unless type is mc');
+      if ((t.type === 'mc' || t.type === 'gap') && blanks(t.prompt) !== 1) issue(['prompt'], 'prompt must contain exactly one ___');
+      if (isWrongLang(t.expl, 'de')) issue(['expl'], 'must be written in German');
+      if (isWrongLang(t.expl_en, 'en')) issue(['expl_en'], 'must be written in English');
+    });
+  const targets = v.meta.words.map(([en]) => en);
+  /** W6: Pflichtwort der Vorgabe zuordnen („chair a meeting“, „attendees“ → „to chair a meeting“, „attendee“). */
+  const targetOf = (m: string): string | undefined =>
+    targets.find((t) => same(m, t) || same(coreWord(m), coreWord(t)) || containsTarget(m, t));
   return z
     .object({
       words: z.array(word).length(v.meta.words.length),
       dialogue: z.object({ title: z.string().trim().min(1).max(120), lines: z.array(line).min(8).max(14) }),
       questions: z.array(question).min(2).max(3),
-      tasks: z.array(task).min(4).max(6),
-      output: z.object({ de: z.string().trim().min(10).max(600), en: z.string().trim().min(10).max(600), mustUse: z.array(z.string().trim().min(1)).min(3).max(5) }),
+      // W8: Aufgaben einzeln prüfen; ungültige fallen weg, gescheitert wird erst unter 3 gültigen.
+      tasks: lenientArray(z.preprocess(normalizeTaskRaw, task), 3, 6),
+      output: z.object({ de: z.string().trim().min(10).max(600), en: z.string().trim().min(10).max(600), mustUse: z.array(z.string().trim().min(1)) }),
     })
+    .transform((o) => ({
+      ...o,
+      // Wörter ohne „to“ o. Ä. auf die Vorgabe zurückführen.
+      words: o.words.map((w, i) => {
+        const given = v.meta.words[i]?.[0];
+        return given && !same(w.en, given) && same(coreWord(w.en), coreWord(given)) ? { ...w, en: given } : w;
+      }),
+      // W6: Pflichtwörter den Vorgaben zuordnen, Unbekanntes verwerfen, doppelte zusammenfassen.
+      output: { ...o.output, mustUse: [...new Set(o.output.mustUse.map(targetOf).filter((t): t is string => !!t))].slice(0, 5) },
+    }))
     .superRefine((o, ctx) => {
       const issue = (path: (string | number)[], message: string) => ctx.addIssue({ code: 'custom', path, message });
       // Wörter genau wie vorgegeben, in derselben Reihenfolge.
@@ -117,21 +146,9 @@ const schemaFor = (v: LessonContentVars): z.ZodType<LessonContentOut> => {
         if (isWrongLang(q.q, v.uiLang)) issue(['questions', i, 'q'], `must be written in ${langName(v.uiLang)}`);
         if (isWrongLang(q.q_alt, other(v.uiLang))) issue(['questions', i, 'q_alt'], `must be written in ${langName(other(v.uiLang))}`);
       });
-      o.tasks.forEach((t, i) => {
-        if (t.type === 'mc') {
-          if (!t.options) issue(['tasks', i, 'options'], 'mc needs 4 options');
-          else if (!t.options.includes(t.answer)) issue(['tasks', i, 'answer'], 'answer must be one of the options');
-        } else if (t.options) issue(['tasks', i, 'options'], 'options must be null unless type is mc');
-        if ((t.type === 'mc' || t.type === 'gap') && blanks(t.prompt) !== 1) issue(['tasks', i, 'prompt'], 'prompt must contain exactly one ___');
-        if (isWrongLang(t.expl, 'de')) issue(['tasks', i, 'expl'], 'must be written in German');
-        if (isWrongLang(t.expl_en, 'en')) issue(['tasks', i, 'expl_en'], 'must be written in English');
-      });
       if (isWrongLang(o.output.de, 'de')) issue(['output', 'de'], 'must be written in German');
       if (isWrongLang(o.output.en, 'en')) issue(['output', 'en'], 'must be written in English');
-      const targets = v.meta.words.map(([en]) => en.trim().toLowerCase());
-      o.output.mustUse.forEach((m, i) => {
-        if (!targets.includes(m.trim().toLowerCase())) issue(['output', 'mustUse', i], 'must be one of the given English words');
-      });
+      if (o.output.mustUse.length < Math.min(MUST_USE_MIN, targets.length)) issue(['output', 'mustUse'], `must name at least ${MUST_USE_MIN} of the given English words`);
     });
 };
 
@@ -169,8 +186,8 @@ export const lessonContent: PromptTemplate<LessonContentVars, LessonContentOut> 
       '- tasks: 4–6 grammar items on this grammar point, set in this situation. EXACTLY ONE correct answer per item;',
       '  reject any item where a second option is also grammatical in some context, or list it in "accepted".',
       '  mc and gap prompts contain exactly one ___; mc has 4 options including the answer; other types have options null.',
-      '  expl in simple German, expl_en in simple English: name the signal word and the rule (never just repeat the answer).',
-      '- output: a short writing task from this situation that forces the grammar point; mustUse = 3–5 of the given English words.',
+      '  expl in simple German (put English words and phrases in “…”), expl_en in simple English: name the signal word and the rule (never just repeat the answer).',
+      '- output: a short writing task from this situation that forces the grammar point; mustUse = 3–5 of the given English words, written exactly as given.',
     ].join('\n');
   },
   schema: (v) => schemaFor(v),

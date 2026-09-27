@@ -121,7 +121,7 @@ test('„Lektion vorbereiten" speichert lesson/l09 im Format der alten App', asy
   const meta = lessonMeta('l09');
   expect((doc.words as Array<{ en: string }>).map((w) => w.en)).toEqual(meta.words.map(([en]) => en));
   expect((doc.tasks as Doc[]).every((t) => t.src === 'lesson' && t.topic === meta.grammar)).toBe(true);
-  expect(doc.lx).toMatchObject({ pv: 'lesson-content@1', lang: 'de' });
+  expect(doc.lx).toMatchObject({ pv: 'lesson-content@2', lang: 'de' });
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

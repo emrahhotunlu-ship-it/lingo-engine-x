@@ -35,10 +35,10 @@ describe('Vorlagen-Verzeichnis', () => {
   });
 });
 
-describe('word-lookup@1', () => {
+describe('word-lookup@2', () => {
   it('Kopfzeile, Stufe quick, 24-h-Zwischenspeicher, feste Datenzeilen', () => {
     const p = wordLookup.build(lookupVars);
-    expect(p.split('\n')[0]).toBe('[word-lookup@1]');
+    expect(p.split('\n')[0]).toBe('[word-lookup@2]');
     expect(templateIdOf(p)).toBe('word-lookup');
     expect(wordLookup.tier).toBe('quick');
     expect(wordLookup.cache).toEqual({ gcTime: 86_400_000 });
@@ -79,9 +79,10 @@ describe('word-lookup@1', () => {
     expect(r.pos).toBe('adj');
   });
 
-  it('weist falsche Stufe und fehlende Felder zurück', () => {
+  it('Stufe tolerant (W3), fehlende Pflichtfelder werden zurückgewiesen', () => {
     const s = wordLookup.schema(lookupVars);
-    expect(s.safeParse({ ...JSON.parse(WORD_LOOKUP_EXAMPLE), level: 'Z9' }).success).toBe(false);
+    expect(s.safeParse({ ...JSON.parse(WORD_LOOKUP_EXAMPLE), level: 'Z9' }).data?.level).toBe('');
+    expect(s.safeParse({ ...JSON.parse(WORD_LOOKUP_EXAMPLE), level: 'b2–C1' }).data?.level).toBe('B2');
     expect(s.safeParse({ lemma: 'x' }).success).toBe(false);
   });
 

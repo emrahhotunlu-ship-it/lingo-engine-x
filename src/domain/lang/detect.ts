@@ -15,6 +15,10 @@ const DE_WORDS = new Set([
   'sich', 'es', 'du', 'ich', 'wir', 'ihr', 'sie', 'dein', 'deine', 'deinem', 'deinen', 'ihre', 'zu',
   'bedeutet', 'heißt', 'steht', 'gibt', 'passt', 'klingt', 'fehlt', 'meist', 'oft', 'etwas', 'dieser',
   'diese', 'dieses', 'diesem', 'einfach', 'richtig', 'falsch', 'satz', 'wort', 'wörter',
+  // Typisch für knappe deutsche Hinweise zu englischen Wendungen (B1).
+  'statt', 'anstatt', 'nie', 'niemals', 'sagen', 'sagt', 'eher', 'typisch', 'häufig', 'meistens',
+  'immer', 'besser', 'lieber', 'wirkt', 'benutzt', 'verwendet', 'sondern', 'bzw',
+  'beispiel', 'wendung', 'kollokation', 'präposition', 'bedeutung', 'sinne',
 ]);
 
 const EN_WORDS = new Set([
@@ -27,12 +31,17 @@ const EN_WORDS = new Set([
 ]);
 
 const QUOTED = /„[^“”"]*[“”"]|“[^”]*”|"[^"]*"|‚[^‘’']*[‘’']|«[^»]*»|»[^«]*«|‘[^’]*’|\[[^\]]*\]/g;
+/**
+ * Einfache gerade Anführungszeichen 'let me know' als Zitat (B1). Öffnen nur am Wortanfang,
+ * schließen nur vor Satzzeichen/Leerraum; Apostrophe im Wort (don't, Let's) bleiben unberührt.
+ */
+const SINGLE_QUOTED = /(^|[\s(:;,–—/-])'((?:[^'\n]|'(?=[A-Za-z]))+?)'(?=$|[\s.,;:!?)–—/-])/g;
 const WORD = /[A-Za-zÄÖÜäöüß]+(?:['’][A-Za-z]+)?/g;
 const UMLAUT = /[äöüÄÖÜß]/;
 
 /** Entfernt zitierte Stellen, damit nur der erklärende Text zählt. */
 export function stripQuoted(text: string): string {
-  return text.replace(QUOTED, ' ');
+  return text.replace(QUOTED, ' ').replace(SINGLE_QUOTED, '$1 ');
 }
 
 /** Anzahl der Wörter (für die Regel „erst ab 4 Wörtern prüfen"). */
@@ -61,9 +70,17 @@ export function detectLang(text: string): DetectedLang {
   return 'unknown';
 }
 
-/** Liegt der Text erkennbar in der anderen Sprache als erwartet? Kurze Texte (< minWords) nie. */
+/**
+ * Liegt der Text erkennbar in der anderen Sprache als erwartet? Kurze Texte (< minWords) nie.
+ * Deutsche Hinweise nennen oft englische Wendungen ohne Anführungszeichen („Statt make a
+ * decision nie do a decision sagen."). Abgelehnt wird deshalb nur, wenn die erwartete Sprache
+ * praktisch keine Treffer hat und die andere deutlich: erwartet 0 und andere ≥ 3, oder
+ * erwartet 1 und andere ≥ 6 (ganze Texte in falscher Sprache, Kap. 10).
+ */
 export function isWrongLang(text: string, expected: 'de' | 'en', minWords = 4): boolean {
   if (wordCount(text) < minWords) return false;
-  const got = detectLang(text);
-  return got !== 'unknown' && got !== expected;
+  const s = langScores(text);
+  const own = expected === 'de' ? s.de : s.en;
+  const other = expected === 'de' ? s.en : s.de;
+  return (own === 0 && other >= 3) || (own === 1 && other >= 6);
 }

@@ -22,8 +22,20 @@ export const CARD_EXAMPLES_EXAMPLE =
 const ID = 'card-examples';
 const VERSION = 1;
 
+/** Tolerant lesen: `{en: "…"}` statt Text, mehr als vier Sätze (die ersten vier zählen). */
+function looseExamples(v: unknown): unknown {
+  if (!Array.isArray(v)) return v;
+  return (v as unknown[])
+    .map((x): unknown => {
+      if (!x || typeof x !== 'object' || Array.isArray(x)) return x;
+      const o = x as Record<string, unknown>;
+      return o.en ?? o.text ?? o.sentence ?? x;
+    })
+    .slice(0, 4);
+}
+
 const schema: z.ZodType<CardExamplesOut> = z.object({
-  examples: z
+  examples: z.preprocess(looseExamples, z
     .array(
       z
         .string()
@@ -33,7 +45,7 @@ const schema: z.ZodType<CardExamplesOut> = z.object({
         .refine((s) => !isWrongLang(s, 'en'), { message: 'must be written in English' }),
     )
     .min(2)
-    .max(4),
+    .max(4)),
 });
 
 export const cardExamples: PromptTemplate<CardExamplesVars, CardExamplesOut> = {

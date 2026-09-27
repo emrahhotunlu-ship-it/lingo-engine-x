@@ -199,7 +199,7 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       de,
       pos: resolved.pos ?? aiData?.pos ?? null,
       def,
-      level: aiData?.level ?? resolved.level ?? null,
+      level: aiData?.level || resolved.level || null,
       ex: exSentence,
       surface: req.surface,
       src: cardSrcFor(req.area),

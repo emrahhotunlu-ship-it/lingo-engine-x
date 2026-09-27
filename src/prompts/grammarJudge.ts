@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { clip, header, langName, langOf } from './common';
+import { clip, header, langName, langOf, shortenText } from './common';
 import type { PromptTemplate, UiLang } from './types';
 
 // grammar-judge@1 (phase2-plan §7, D13): Urteil über eine frei formulierte Grammatikantwort
@@ -26,25 +26,21 @@ export const GRAMMAR_JUDGE_EXAMPLE = '{"verdict":"correct","acceptable":true,"co
 const ID = 'grammar-judge';
 const VERSION = 1;
 
-const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
-
 const schemaFor = (uiLang: UiLang): z.ZodType<GrammarJudgeOut> =>
   z
     .object({
-      verdict: z.enum(['correct', 'near', 'wrong']),
+      verdict: z.preprocess((x) => (typeof x === 'string' ? x.trim().toLowerCase() : x), z.enum(['correct', 'near', 'wrong'])),
       acceptable: z.boolean(),
       corrected: z.string().trim().min(1).max(400),
+      // Zu lange Begründungen werden gekürzt statt abgelehnt (Hinweis der Prüfung).
       why: z
         .string()
         .trim()
         .min(1)
-        .max(300)
-        .refine((s) => words(s) <= JUDGE_WHY_WORDS + 5, { message: `at most ${JUDGE_WHY_WORDS} words` }),
+        .transform((s) => shortenText(s, JUDGE_WHY_WORDS + 5, 300)),
     })
-    .superRefine((v, ctx) => {
-      // Keine Widersprüche (Kap. 2.2): „auch akzeptabel" heißt nie „falsch".
-      if (v.acceptable && v.verdict === 'wrong') ctx.addIssue({ code: 'custom', path: ['verdict'], message: 'must not be "wrong" when acceptable is true' });
-    })
+    // W5 – keine Widersprüche (Kap. 2.2): „auch akzeptabel" heißt nie „falsch", also „fast richtig".
+    .transform((v) => (v.acceptable && v.verdict === 'wrong' ? { ...v, verdict: 'near' as const } : v))
     .superRefine(langOf(['why'], uiLang));
 
 export const grammarJudge: PromptTemplate<GrammarJudgeVars, GrammarJudgeOut> = {

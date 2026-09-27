@@ -105,7 +105,8 @@ describe('drei Schichten (Verfeinerungen 1–8)', () => {
 
   it('1: clean ⇔ keine Fehler; nicht Englisch → errors leer und verdict errors', () => {
     expect(layers().safeParse(base).success).toBe(true);
-    expect(layers().safeParse({ ...base, verdict: 'minor' }).success).toBe(false);
+    // Hinweis der Prüfung: „minor“ ohne Fehler wird zu „clean“ (statt abgelehnt).
+    expect(layers().safeParse({ ...base, verdict: 'minor' }).data?.verdict).toBe('clean');
     expect(layers().safeParse({ ...base, verdict: 'clean', errors: [err('must delay', 'need to push back')] }).success).toBe(false);
     expect(layers().safeParse({ ...base, english: false, verdict: 'errors' }).success).toBe(true);
     expect(layers().safeParse({ ...base, english: false, verdict: 'clean' }).success).toBe(false);
@@ -120,7 +121,9 @@ describe('drei Schichten (Verfeinerungen 1–8)', () => {
   it('3: Kategorie aus den 16 Themen oder der Zusatzliste', () => {
     expect(ERROR_CATS).toHaveLength(22);
     expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('must delay', 'need to push back', 'modals-deduction')] }).success).toBe(true);
-    expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('must delay', 'need to push back', 'tenses')] }).success).toBe(false);
+    // Unbekannte Kategorie → nächste bekannte oder „other“ (statt abgelehnt).
+    expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('must delay', 'need to push back', 'tenses')] }).data?.errors[0]?.cat).toBe('other');
+    expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('must delay', 'need to push back', 'preposition')] }).data?.errors[0]?.cat).toBe('prepositions');
   });
 
   it('4: britische Schreibweise ist kein Fehler', () => {

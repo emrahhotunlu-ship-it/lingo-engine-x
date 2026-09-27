@@ -25,7 +25,8 @@ const en = (max: number) =>
 
 export function phraseAdaptSchema(uiLang: UiLang): z.ZodType<PhraseAdaptOut> {
   return z.object({
-    phrases: z
+    // Mehr als drei Vorschläge: die ersten drei zählen (statt Ablehnung).
+    phrases: z.preprocess((a) => (Array.isArray(a) ? a.slice(0, 3) : a), z
       .array(
         z
           .object({ en: en(90), de: z.string().trim().min(1).max(120), def: en(160), ex: en(240), why: z.string().trim().min(1).max(200) })
@@ -34,7 +35,7 @@ export function phraseAdaptSchema(uiLang: UiLang): z.ZodType<PhraseAdaptOut> {
           })
           .superRefine(langOf(['why'], uiLang)),
       )
-      .length(3),
+      .length(3)),
   });
 }
 

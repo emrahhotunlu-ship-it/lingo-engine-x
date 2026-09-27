@@ -32,7 +32,7 @@ describe('Verzeichnis Phase 5', () => {
   });
 
   it('Kopfzeile, Stufe und Zwischenspeicher je Vorlage', () => {
-    expect(translate.build(trVars).split('\n')[0]).toBe('[translate@1]');
+    expect(translate.build(trVars).split('\n')[0]).toBe('[translate@2]');
     expect(translate.tier).toBe('quick');
     expect(translate.cache).toEqual({ gcTime: 86_400_000 });
     expect(preplyPrep.build(prepVars).split('\n')[0]).toBe('[preply-prep@1]');
@@ -81,14 +81,15 @@ describe('Beispielantworten bestehen ihr Schema', () => {
 });
 
 describe('Sprach- und Formprüfung', () => {
-  it('translate: Hauptfassung muss Zielsprache sein, mindestens eine Alternative (gleicher Ton erlaubt)', () => {
+  it('translate: Hauptfassung muss Zielsprache sein; Alternativen dürfen fehlen (W2, gleicher Ton erlaubt)', () => {
     const base = JSON.parse(TRANSLATE_EXAMPLE) as Record<string, unknown>;
     const s = translateSchema(trVars);
     expect(s.safeParse({ ...base, translation: 'Wir müssen das Budget für die Firma freigeben.' }).success).toBe(false);
     expect(
       s.safeParse({ ...base, alternatives: [{ text: 'We must approve it.', register: 'neutral', note: '' }] }).success,
     ).toBe(true);
-    expect(s.safeParse({ ...base, alternatives: [] }).success).toBe(false);
+    // W2: sehr kurze Texte haben oft keine echte Alternative – der Abschnitt wird dann ausgeblendet.
+    expect(s.safeParse({ ...base, alternatives: [] }).success).toBe(true);
   });
 
   it('preply-prep: watch nur aus übergebenen Fehlern; ohne Fehler leer erlaubt', () => {

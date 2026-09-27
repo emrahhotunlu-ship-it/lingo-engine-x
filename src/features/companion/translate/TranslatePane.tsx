@@ -94,7 +94,7 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
           </div>
         </div>
         <p className="-mt-2 text-xs text-muted" data-testid="tr-dir" data-dir={dirKnown ? `${from}-${to}` : 'auto'} aria-live="polite">
-          {r && s.dirOverride === null
+          {r && (s.dirOverride === null || r.from !== s.dirOverride)
             ? t('tlDetected', { from: langName(r.from), to: langName(r.from === 'de' ? 'en' : 'de') })
             : dirKnown
               ? t('tlFromTo', { from: langName(from), to: langName(to) })

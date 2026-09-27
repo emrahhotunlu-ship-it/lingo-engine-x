@@ -112,6 +112,43 @@ export function parseJsonText(text: string): unknown {
   return to > from ? tryParse(text.slice(from, to + 1)) : undefined;
 }
 
+/**
+ * Prompts, deren letzte Antwort ungültig war (B2): `sample` hat sie womöglich zwischengespeichert,
+ * „Erneut versuchen" bekäme ohne `refresh` dieselbe Antwort. Der NÄCHSTE, vom Nutzer ausgelöste
+ * Aufruf mit demselben Prompt fragt deshalb frisch (`refresh`) – nie ein automatischer Neuversuch.
+ * Gespeichert wird nur ein Streuwert (Stufe + Prompt), höchstens STALE_MAX Einträge.
+ */
+const staleKeys = new Set<string>();
+const STALE_MAX = 64;
+
+/** FNV-1a (53 Bit) über Stufe und Prompt – der Zwischenspeicher-Schlüssel von `sample` ohne `images`. */
+export function promptKey(tier: ModelTier, prompt: string): string {
+  const s = `${tier}\n${prompt}`;
+  let h1 = 0x811c9dc5;
+  let h2 = 0x1b873593;
+  for (let i = 0; i < s.length; i += 1) {
+    const c = s.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 0x01000193);
+    h2 = Math.imul(h2 ^ c, 0x5bd1e995);
+  }
+  return `${(h1 >>> 0).toString(36)}.${(h2 >>> 0).toString(36)}.${s.length}`;
+}
+
+function markStale(key: string): void {
+  staleKeys.delete(key);
+  staleKeys.add(key);
+  while (staleKeys.size > STALE_MAX) {
+    const oldest = staleKeys.values().next().value;
+    if (oldest === undefined) break;
+    staleKeys.delete(oldest);
+  }
+}
+
+/** Nur für Tests: Wird der nächste Aufruf mit diesem Prompt frisch gefragt? */
+export function isStalePrompt(tier: ModelTier, prompt: string): boolean {
+  return staleKeys.has(promptKey(tier, prompt));
+}
+
 type CallOut = { value: unknown; tier: ModelTier };
 
 async function callOnce(
@@ -188,15 +225,28 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
   const release = await aiQueue.acquire(signal, req.priority ?? 'user', () => phase('queued'));
   try {
     const t = template as PromptTemplate<unknown, unknown>;
-    const cache = cacheFor(template.cache, req.refresh === true);
-    const first = await callOnce(prompt, t, cache, signal, phase, scope);
+    const key = promptKey(template.tier, prompt);
+    const cache = cacheFor(template.cache, req.refresh === true || staleKeys.has(key));
+    let first: CallOut;
+    try {
+      first = await callOnce(prompt, t, cache, signal, phase, scope);
+    } catch (err) {
+      // `text-json`: auch eine unlesbare Textantwort kann im Zwischenspeicher liegen.
+      if (err instanceof AiFailure && err.kind === 'invalid') markStale(key);
+      throw err;
+    }
     const r1 = schema.safeParse(first.value);
-    if (r1.success) return { data: r1.data, tierApplied: first.tier, retried: false };
+    if (r1.success) {
+      staleKeys.delete(key);
+      return { data: r1.data, tierApplied: first.tier, retried: false };
+    }
+    markStale(key);
 
     logWarn(scope, { code: 'schema', message: describeIssues(r1.error.issues) }, 'first reply');
     const prompt2 = retryPrompt(prompt, r1.error.issues, first.value);
     budget(prompt2, SAMPLE_LIMIT_BYTES, scope);
-    const second = await callOnce(prompt2, t, cache, signal, phase, scope);
+    // Der eine Neuversuch (A6.3) fragt immer frisch, damit er keine gespeicherte Antwort trifft.
+    const second = await callOnce(prompt2, t, refreshCache(template.cache), signal, phase, scope);
     const r2 = schema.safeParse(second.value);
     if (r2.success) return { data: r2.data, tierApplied: second.tier, retried: true };
 
@@ -235,5 +285,6 @@ export async function askJson<V, O>(req: AiRequest<V, O>): Promise<AiResult<O>> 
 /** Nur für Tests: Warteschlange und Drosselung zurücksetzen. */
 export function resetAiGate(): void {
   aiQueue.reset();
+  staleKeys.clear();
   resetAiStatus();
 }

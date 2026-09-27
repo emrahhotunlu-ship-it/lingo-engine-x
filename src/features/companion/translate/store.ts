@@ -100,7 +100,8 @@ export async function runTranslate(opts: { refresh?: boolean } = {}): Promise<vo
       },
     });
     if (ctl !== c) return;
-    const src: TransLang = from === 'auto' ? (r.data.source ?? fromOf(s)) : from;
+    // W1: Claudes Angabe gilt auch bei fester Richtung (Englisch bei „DE → EN“ getippt).
+    const src: TransLang = r.data.source ?? (from === 'auto' ? fromOf(s) : from);
     const history = pushHistory({ t: Date.now(), text, dir: src, reg: s.register, main: r.data.translation });
     useTranslate.setState({ phase: 'done', result: { ...r.data, from: src, text }, history });
   } catch (err) {

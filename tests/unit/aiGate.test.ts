@@ -248,6 +248,55 @@ describe('Fehlercodes', () => {
     expect(calls).toHaveLength(2);
   });
 
+  it('B2: Neuversuch fragt frisch; nach Schemafehler holt „Erneut versuchen" mit refresh, danach wieder normal', async () => {
+    const s = new AbortController().signal;
+    const p = askJson({ template: tpl, vars: { word: 'b2' }, signal: s });
+    await flush();
+    expect(calls[0]!.options.cache).toBe(true);
+    calls[0]!.resolve({ ok: 1 });
+    await flush();
+    // Der interne zweite Versuch (A6.3) trifft keine gespeicherte Antwort.
+    expect(calls[1]!.options.cache).toEqual({ gcTime: 300_000, refresh: true });
+    calls[1]!.resolve({ ok: 2 });
+    await p.catch(() => undefined);
+    expect(calls).toHaveLength(2);
+    // Kein automatischer Neuversuch; erst der nächste Aufruf des Nutzers fragt frisch.
+    const retry = askJson({ template: tpl, vars: { word: 'b2' }, signal: s });
+    await flush();
+    expect(calls).toHaveLength(3);
+    expect(inputOf(calls[2])).toBe(inputOf(calls[0]));
+    expect(calls[2]!.options.cache).toEqual({ gcTime: 300_000, refresh: true });
+    calls[2]!.resolve(validReply);
+    await expect(retry).resolves.toMatchObject({ data: validReply, retried: false });
+    // Gültig beantwortet: der übernächste Aufruf nutzt wieder den Zwischenspeicher.
+    const again = askJson({ template: tpl, vars: { word: 'b2' }, signal: s });
+    await flush();
+    expect(calls[3]!.options.cache).toBe(true);
+    calls[3]!.resolve(validReply);
+    await again;
+    // Ein anderer Prompt ist nie betroffen.
+    const other = askJson({ template: tpl, vars: { word: 'other' }, signal: s });
+    await flush();
+    expect(calls[4]!.options.cache).toBe(true);
+    calls[4]!.resolve(validReply);
+    await other;
+  });
+
+  it('B2: erfolgreicher Neuversuch – der nächste Aufruf mit demselben Prompt fragt trotzdem frisch', async () => {
+    const s = new AbortController().signal;
+    const p = askJson({ template: tpl, vars: { word: 'b2b' }, signal: s });
+    await flush();
+    calls[0]!.resolve({ ok: 'x' });
+    await flush();
+    calls[1]!.resolve(validReply);
+    await expect(p).resolves.toMatchObject({ retried: true });
+    const next = askJson({ template: tpl, vars: { word: 'b2b' }, signal: s });
+    await flush();
+    expect(calls[2]!.options.cache).toEqual({ gcTime: 300_000, refresh: true });
+    calls[2]!.resolve(validReply);
+    await next;
+  });
+
   it('invalid_json: kein zweiter Aufruf, Rohtext bleibt als partial', async () => {
     const p = askJson({ template: tpl, vars: { word: 'a' }, signal: new AbortController().signal });
     await flush();

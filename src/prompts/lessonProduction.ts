@@ -1,9 +1,11 @@
 import { z } from 'zod';
+import { coreWord } from '../domain/course/baseLesson';
+import { containsTarget } from '../domain/course/production';
 import { isWrongLang } from '../domain/lang/detect';
-import { clip, header, langName, langOf } from './common';
+import { cefrLoose, clip, header, langName, langOf } from './common';
 import type { PromptTemplate, UiLang } from './types';
 
-// lesson-production@1 (phase2-plan §7, §4.9): Rückmeldung zur Produktion am Ende einer Lektion
+// lesson-production@2 (phase2-plan §7, §4.9): Rückmeldung zur Produktion am Ende einer Lektion
 // auf Knopfdruck „Prüfen lassen". Ergebnis → `writing/lesson-<lid>-<ms>` und Radar `w`.
 // Der Abschluss der Lektion hängt nie von der KI ab.
 
@@ -34,14 +36,21 @@ export const LESSON_PRODUCTION_EXAMPLE =
   '{"cefr":"B2","scores":{"task":80,"grammar":70,"vocabulary":75,"coherence":80,"register":85},"errors":[{"wrong":"…","right":"…","why":"…","cat":"tense","sev":"minor"}],"upgrades":[{"orig":"…","better":"…","why":"…"}],"mustUsed":["…"],"structureUsed":true,"cando":"partly","candoWhy":"…","model":"…"}';
 
 const ID = 'lesson-production';
-const VERSION = 1;
+const VERSION = 2;
 
 const score = z.number().min(0).max(100);
+
+const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+
+/** Die Vorgabe, die ein genanntes Pflichtwort meint (Grundform, ohne „to“, gebeugt), sonst `undefined`. */
+export function mustUseOf(required: readonly string[], named: string): string | undefined {
+  return required.find((r) => same(named, r) || same(coreWord(named), coreWord(r)) || containsTarget(named, r));
+}
 
 const schemaFor = (v: LessonProductionVars): z.ZodType<LessonProductionOut> =>
   z
     .object({
-      cefr: z.enum(['A2', 'B1', 'B2', 'C1', 'C2']),
+      cefr: z.preprocess(cefrLoose, z.enum(['A2', 'B1', 'B2', 'C1', 'C2'])),
       scores: z.object({ task: score, grammar: score, vocabulary: score, coherence: score, register: score }),
       errors: z
         .array(z.object({ wrong: z.string().trim().min(1).max(200), right: z.string().trim().min(1).max(200), why: z.string().trim().min(1).max(300), cat: z.string().trim().min(1).max(20), sev: z.enum(['minor', 'major']) }))
@@ -53,11 +62,10 @@ const schemaFor = (v: LessonProductionVars): z.ZodType<LessonProductionOut> =>
       candoWhy: z.string().trim().min(1).max(400),
       model: z.string().trim().min(10).max(1200),
     })
+    // W6: genannte Pflichtwörter den Vorgaben zuordnen („recap“, „action items“ → „to recap“,
+    // „action item“); Unbekanntes fällt weg, doppelte werden zusammengefasst.
+    .transform((o) => ({ ...o, mustUsed: [...new Set(o.mustUsed.map((m) => mustUseOf(v.mustUse, m)).filter((m): m is string => !!m))] }))
     .superRefine((o, ctx) => {
-      const allowed = v.mustUse.map((m) => m.trim().toLowerCase());
-      o.mustUsed.forEach((m, i) => {
-        if (!allowed.includes(m.trim().toLowerCase())) ctx.addIssue({ code: 'custom', path: ['mustUsed', i], message: 'must be one of the required words' });
-      });
       o.errors.forEach((e, i) => {
         if (isWrongLang(e.why, v.uiLang)) ctx.addIssue({ code: 'custom', path: ['errors', i, 'why'], message: `must be written in ${langName(v.uiLang)}` });
       });
@@ -85,10 +93,10 @@ export const lessonProduction: PromptTemplate<LessonProductionVars, LessonProduc
       LESSON_PRODUCTION_EXAMPLE,
       'Rules:',
       '- Judge only from the text given; if it is too short to judge, answer cando "partly", never invent evidence.',
-      '- errors: at most 6 real errors, most important first; why in the explanation language; cat one of',
+      '- errors: at most 6 real errors, most important first; why in the explanation language (English words and phrases in “…”); cat one of',
       '  tense, cond, verbform, pattern, modals, passive, reported, relative, articles, prep, order, wordchoice, register, spelling.',
       '- upgrades: at most 3 more natural C1 phrasings of the learner’s own sentences.',
-      '- mustUsed: the required words the learner used correctly (any inflected form). structureUsed: target structure used correctly at least once.',
+      '- mustUsed: the required words the learner used correctly (any inflected form), written exactly as in the list. structureUsed: target structure used correctly at least once.',
       '- candoWhy: one or two sentences in the explanation language. model: a short model answer in English (3–5 sentences).',
     ].join('\n');
   },

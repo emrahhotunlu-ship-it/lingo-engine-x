@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
-import { clip, header } from './common';
+import { clip, header, lenientArray, normalizeTaskRaw } from './common';
 import type { PromptTemplate } from './types';
 
-// grammar-items@1 (phase2-plan §7): neue Aufgaben zu EINEM Thema, nur auf Knopfdruck
+// grammar-items@2 (phase2-plan §7): neue Aufgaben zu EINEM Thema, nur auf Knopfdruck
 // („Neue Aufgaben zu {Thema}"). Ausgabe im Pool-Format der alten App, damit sie per
 // `poolIntake` gespeichert werden können. Erklärungen fest zweisprachig (de + en): Welche
 // angezeigt wird, entscheidet die Oberflächensprache, gemischt wird nie.
@@ -44,7 +44,7 @@ export const GRAMMAR_ITEMS_EXAMPLE =
   '{"items":[{"topic":"passive","type":"gap","prompt":"The new contract ___ (sign) yesterday.","answer":"was signed","accepted":[],"options":null,"hint_de":"(sign)","explanation_de":"„yesterday“ zeigt eine abgeschlossene Zeit, und der Vertrag handelt nicht selbst → was + 3. Form.","explanation_en":"“yesterday” shows finished time, and the contract does not act itself → was + past participle.","src":"ai"}]}';
 
 const ID = 'grammar-items';
-const VERSION = 1;
+const VERSION = 2;
 
 const blanks = (s: string) => (s.match(/_{3,}/g) ?? []).length;
 
@@ -74,8 +74,9 @@ const itemSchema = (topic: string) =>
       if (isWrongLang(it.explanation_en, 'en')) ctx.addIssue({ code: 'custom', path: ['explanation_en'], message: 'must be written in English' });
     });
 
+// W8: Aufgaben einzeln prüfen – ungültige fallen weg, gescheitert wird nur bei zu wenigen gültigen.
 const schemaFor = (v: GrammarItemsVars): z.ZodType<GrammarItemsOut> =>
-  z.object({ items: z.array(itemSchema(v.topic)).min(Math.min(3, v.count)).max(Math.max(v.count, 8)) });
+  z.object({ items: lenientArray(z.preprocess(normalizeTaskRaw, itemSchema(v.topic)), Math.min(3, v.count), Math.max(v.count, 8)) });
 
 export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
   id: ID,
@@ -113,7 +114,7 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
       '- "mc": prompt with one ___ and 3–4 options, "answer" identical to one option. "gap": one ___, hint_de gives the base form like "(work)".',
       '  "transform": a sentence, then "→" and the new sentence with one ___; answer is only the missing part.',
       '  "correct": one sentence with exactly one typical error; answer is the full corrected sentence; options null.',
-      '- explanation_de: 1–2 short sentences in simple German: the signal word and the rule it triggers (never just repeat the answer).',
+      '- explanation_de: 1–2 short sentences in simple German: the signal word and the rule it triggers (never just repeat the answer); put English words and phrases in “…”.',
       '- explanation_en: the same in simple English.',
     ].join('\n');
   },

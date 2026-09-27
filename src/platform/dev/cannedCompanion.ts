@@ -1,12 +1,12 @@
 import { registerCannedReply } from './fakeSample';
 
 // Feste Antworten des Entwicklungs-Adapters für Phase 5 (Plan §6.5): companion-chat@1,
-// translate@1, preply-prep@1, preply-import@1. Nur Entwicklung und Tests – nie im Build
+// translate@2, preply-prep@1, preply-import@1. Nur Entwicklung und Tests – nie im Build
 // (check-platform.mjs sperrt die Marker). Testmarker:
 // - Begleiter: `zzlong` (≈ 3.000 Zeichen, Scroll-Test), `zzen` (englische Antwort, Sprachtreue).
 //   Enthält die Einleitung die Schutzregel („has NOT checked"), endet die Antwort mit
 //   `[no-solution]`, sonst mit `[solution-ok]` – so prüft der E2E-Test das Schwärzen.
-// - Übersetzer: `zzsame` (erste Antwort ohne Alternativen → Schemafehler → Neuversuch).
+// - Übersetzer: `zzsame` (erste Antwort mit unlesbarem Register → Schemafehler → Neuversuch).
 // - Import: `zzempty` (alles leer).
 
 type Lang = 'de' | 'en';
@@ -60,7 +60,7 @@ export function companionChatReply(flat: string, raw?: unknown): string {
   return `**leverage** heißt hier *nutzen* oder *einsetzen*, um einen Vorteil zu erzielen.\n\n- „We can **leverage** our network to enter new markets.“\n- „She leveraged her experience in the negotiation.“\n\nIm Business-Englisch steht meist ein direktes Objekt dahinter. ${end}`;
 }
 
-// ---------------------------------------------------------------- translate@1
+// ---------------------------------------------------------------- translate@2
 
 function blockText(input: string): string {
   const m = /<<<\n([\s\S]*?)\n>>>/.exec(input);
@@ -80,8 +80,8 @@ export function translateReply(input: string): string {
     return JSON.stringify({
       source: 'de',
       translation: main,
-      register,
-      alternatives: same ? [] : [
+      register: same ? 'zz-unknown' : register,
+      alternatives: [
         { text: 'The budget needs to be signed off.', register: 'formal', note: note('passiv, typisch für E-Mails an die Geschäftsführung', 'passive, typical for emails to management') },
         { text: 'We have to okay the budget.', register: 'casual', note: note('locker, nur unter Kollegen', 'casual, only among colleagues') },
       ],
@@ -92,8 +92,8 @@ export function translateReply(input: string): string {
   return JSON.stringify({
     source: 'en',
     translation: 'Das ist die Übersetzung deines Textes auf Deutsch.',
-    register,
-    alternatives: same ? [] : [
+    register: same ? 'zz-unknown' : register,
+    alternatives: [
       { text: 'Hier ist die Übersetzung Ihres Textes.', register: 'formal', note: note('mit Sie, für Kunden', 'formal address, for customers') },
       { text: 'Hier ist dein Text auf Deutsch.', register: 'casual', note: note('locker', 'casual') },
     ],

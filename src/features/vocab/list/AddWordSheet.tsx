@@ -3,7 +3,7 @@ import { useClock } from '../../../app/clock';
 import { useAiAvailable } from '../../../ai/scope';
 import { useAsk } from '../../../ai/useAsk';
 import { useT, type MessageKey } from '../../../i18n';
-import { wordGen, type GenWord } from '../../../prompts/wordGen';
+import { spellingCorrection, wordGen, type GenWord } from '../../../prompts/wordGen';
 import { Button } from '../../../ui/Button';
 import { Sheet } from '../../../ui/Sheet';
 import { toast } from '../../../ui/Toast';
@@ -50,6 +50,9 @@ function AddBody() {
     const out = await fill.run({ mode: 'fill', count: 1, known: [], word: en.trim() });
     const w = out?.words[0];
     if (!w) return;
+    // Tippfehler („recieve“): die von Claude korrigierte Schreibweise übernehmen.
+    const fixed = spellingCorrection(en, w.word);
+    if (fixed) setEn(fixed);
     if (!de.trim()) setDe(w.de);
     if (!ex.trim()) setEx(w.ex);
     setExtra({ pos: w.pos, def: w.def, level: w.level });

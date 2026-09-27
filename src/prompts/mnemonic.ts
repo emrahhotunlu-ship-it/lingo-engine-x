@@ -13,7 +13,7 @@ export type MnemonicOut = { text: string };
 export const MNEMO_WORD_MAX = 60;
 export const MNEMO_MEANING_MAX = 160;
 export const MNEMO_SENTENCE_MAX = 240;
-export const MNEMO_TEXT_MAX = 260;
+export const MNEMO_TEXT_MAX = 320;
 
 export const MNEMONIC_EXAMPLE = '{"text":"…"}';
 

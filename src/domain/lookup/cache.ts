@@ -15,7 +15,7 @@ export const LOOKUP_COMPACT_BYTES = 150_000;
 
 const encoder = new TextEncoder();
 export const jsonBytes = (v: unknown): number => encoder.encode(JSON.stringify(v) ?? '').length;
-export const LOOKUP_PV = 'word-lookup@1';
+export const LOOKUP_PV = 'word-lookup@2';
 
 export type LookupEntry = {
   lemma: string;

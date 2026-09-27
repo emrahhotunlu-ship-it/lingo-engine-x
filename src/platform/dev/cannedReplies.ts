@@ -8,8 +8,8 @@ import { registerInputReplies } from './cannedReplies.input';
 import { assessReply } from './canned/assess';
 import { weeklyReply } from './canned/weekly';
 
-// Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@1,
-// produce-check@1, card-examples@1, lesson-content@1 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
+// Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
+// produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
 // Sonderwörter für Fehlerpfade:
 // - `zzqx`: erste Antwort verletzt das Schema, der Neuversuch („did not match") ist gültig,
 // - `zzjson`: gar kein JSON (→ `invalid_json`).
@@ -27,7 +27,7 @@ const isRetry = (input: string): boolean => input.includes('did not match the re
 
 const NOT_JSON = 'Sorry, I cannot give a clean answer for that right now.';
 
-// ---------------------------------------------------------------- word-lookup@1
+// ---------------------------------------------------------------- word-lookup@2
 
 type Entry = {
   lemma: string;
@@ -203,7 +203,7 @@ export function cardExamplesReply(input: string): string {
   });
 }
 
-// ---------------------------------------------------------------- lesson-content@1
+// ---------------------------------------------------------------- lesson-content@2
 
 /**
  * Eine vollständige Lektion aus den Zeilen des Prompts: die Zielwörter genau wie vorgegeben,

@@ -103,9 +103,9 @@ describe('Phase-2-Vorlagen: Kopfzeile, Stufe, Zwischenspeicher', () => {
     const ids = TEMPLATES.map((t) => t.id);
     for (const id of ['lesson-content', 'lesson-production', 'grammar-items', 'grammar-judge']) expect(ids).toContain(id);
     expect(grammarJudge.build(judgeVars).split('\n')[0]).toBe('[grammar-judge@1]');
-    expect(grammarItems.build(itemsVars).split('\n')[0]).toBe('[grammar-items@1]');
-    expect(lessonContent.build(contentVars).split('\n')[0]).toBe('[lesson-content@1]');
-    expect(lessonProduction.build(productionVars).split('\n')[0]).toBe('[lesson-production@1]');
+    expect(grammarItems.build(itemsVars).split('\n')[0]).toBe('[grammar-items@2]');
+    expect(lessonContent.build(contentVars).split('\n')[0]).toBe('[lesson-content@2]');
+    expect(lessonProduction.build(productionVars).split('\n')[0]).toBe('[lesson-production@2]');
     expect([grammarJudge.tier, grammarItems.tier, lessonContent.tier, lessonProduction.tier]).toEqual(['quick', 'default', 'default', 'default']);
     expect(grammarJudge.cache).toEqual({ gcTime: 86_400_000 });
     expect(grammarItems.cache).toBe(false);
@@ -120,7 +120,8 @@ describe('Beispiele bestehen das Schema, falsche Sprache nicht', () => {
   it('grammar-judge@1', () => {
     const s = grammarJudge.schema(judgeVars);
     expect(s.safeParse(JSON.parse(GRAMMAR_JUDGE_EXAMPLE)).success).toBe(true);
-    expect(s.safeParse({ verdict: 'wrong', acceptable: true, corrected: 'x', why: 'y' }).success).toBe(false);
+    // W5: „falsch, aber akzeptabel" wird zu „fast richtig" statt abgelehnt (Kap. 2.2, keine Widersprüche).
+    expect(s.safeParse({ verdict: 'wrong', acceptable: true, corrected: 'x', why: 'y' }).data?.verdict).toBe('near');
     expect(s.safeParse({ verdict: 'correct', acceptable: true, corrected: 'x', why: 'The answer is correct because the time is finished.' }).success).toBe(false);
     expect(s.safeParse({ verdict: 'correct', acceptable: true, corrected: 'x', why: 'Die Antwort ist richtig, weil die Zeit abgeschlossen ist.' }).success).toBe(true);
   });
@@ -160,7 +161,8 @@ describe('Beispiele bestehen das Schema, falsche Sprache nicht', () => {
     const valid = { ...ex, mustUsed: ['agenda'], model: 'Good morning, everyone. Here is the agenda for today.', candoWhy: 'Das Ziel ist teilweise erreicht.', errors: [], upgrades: [] };
     const r = s.safeParse(valid);
     expect(r.success, JSON.stringify(r.error?.issues)).toBe(true);
-    expect(s.safeParse({ ...valid, mustUsed: ['banana'] }).success).toBe(false);
+    // W6: Unbekannte Pflichtwörter fallen weg, statt die Rückmeldung abzulehnen.
+    expect(s.safeParse({ ...valid, mustUsed: ['banana'] }).data?.mustUsed).toEqual([]);
     expect(s.safeParse({ ...valid, candoWhy: 'The goal is partly met because the text is short.' }).success).toBe(false);
     const w = toWritingDoc({ lid: 'l07', text: productionVars.text, t: 1790497100000, out: s.parse(valid) });
     expect(w.path).toBe('writing/lesson-l07-1790497100000');

@@ -35,6 +35,11 @@ describe('Übersetzer: Ausgangssprache', () => {
     const noSource = { ...base };
     delete noSource.source;
     expect(auto.safeParse(noSource).success).toBe(false);
-    expect(translateSchema({ from: 'en', uiLang: 'de' }).safeParse(base).success).toBe(false);
+    // W1: Weicht Claudes Ausgangssprache von der gewählten ab, gilt Claudes Angabe (nicht ablehnen).
+    const other = translateSchema({ from: 'en', uiLang: 'de' }).safeParse(base);
+    expect(other.success).toBe(true);
+    expect(other.data?.source).toBe('de');
+    // Die Übersetzung muss dann in der anderen Sprache als `source` stehen.
+    expect(translateSchema({ from: 'en', uiLang: 'de' }).safeParse({ ...base, translation: 'Wir müssen das Budget noch heute freigeben, sonst wird es knapp.' }).success).toBe(false);
   });
 });

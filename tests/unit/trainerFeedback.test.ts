@@ -179,12 +179,12 @@ describe('Zwischenspeicher app/lookup (Format der alten App, ≤ 400)', () => {
   const out = { lemma: 'leverage', pos: 'verb', ipa: 'ˈlɛvərɪdʒ', level: 'C1', de: 'nutzen', def: 'use to advantage', ex: 'We leverage data.', sense: 's', note: 'Notiz' };
   it('anlegen, ergänzen ohne zu ersetzen, Schlüssel', () => {
     const e = cacheEntry(out, 'de', 5);
-    expect(e).toMatchObject({ lemma: 'leverage', de: 'nutzen', note_de: 'Notiz', t: 5, pv: 'word-lookup@1' });
+    expect(e).toMatchObject({ lemma: 'leverage', de: 'nutzen', note_de: 'Notiz', t: 5, pv: 'word-lookup@2' });
     expect(e.note_en).toBeUndefined();
     expect(cachePatch(undefined, 'leverage', e)).toEqual({ set: { items: { leverage: e } } });
     const cur = { items: { leverage: { lemma: 'leverage', pos: 'verb', de: 'hebeln', def: 'x', level: 'C1', note_de: 'alt' } } };
     const en = cacheEntry(out, 'en', 6);
-    expect(cachePatch(cur, 'leverage', en)).toEqual({ update: { items: { leverage: { note_en: 'Notiz', ipa: 'ˈlɛvərɪdʒ', ex: 'We leverage data.', t: 6, pv: 'word-lookup@1' } } } });
+    expect(cachePatch(cur, 'leverage', en)).toEqual({ update: { items: { leverage: { note_en: 'Notiz', ipa: 'ˈlɛvərɪdʒ', ex: 'We leverage data.', t: 6, pv: 'word-lookup@2' } } } });
     expect(readEntry(cur, 'leverage')?.de).toBe('hebeln');
     expect(lookupKey('Leverage')).toBe('leverage');
     expect(lookupKey('2026')).toBeNull();

@@ -30,6 +30,13 @@ export const APPLY_CHECK_EXAMPLE = JSON.stringify({
   tip: '…',
 });
 
+const CATS: readonly string[] = ERROR_CAT_VALUES;
+/** Fehlerkategorie tolerant: bekannte Kennung (Groß/klein, Leerzeichen → „-“), sonst „other“. */
+function catOf(raw: string): string {
+  const c = raw.trim().toLowerCase().replace(/[\s_]+/g, '-');
+  return CATS.includes(c) ? c : 'other';
+}
+
 const schemaFor = (vars: ApplyCheckVars): z.ZodType<ApplyCheckOut> =>
   z
     .object({
@@ -38,10 +45,12 @@ const schemaFor = (vars: ApplyCheckVars): z.ZodType<ApplyCheckOut> =>
       errors: z
         .array(
           z.object({
-            orig: z.string().trim().min(1).max(120),
+            orig: z.string().trim().min(1).max(200),
             fix: z.string().trim().min(1).max(200),
-            cat: z.enum(ERROR_CAT_VALUES),
-            topic: z.string().trim().max(40).nullable(),
+            // Unbekannte Kategorie („word choice“, „article“) → „other“ statt Ablehnung.
+            cat: z.preprocess((c) => (typeof c === 'string' ? catOf(c) : c), z.enum(ERROR_CAT_VALUES)),
+            // Fehlt das Thema oder ist es leer, gilt „keins“ (null).
+            topic: z.preprocess((t) => (t === undefined || t === '' ? null : t), z.string().trim().max(40).nullable()),
             why: z.string().trim().min(1).max(240),
           }),
         )
