@@ -14,7 +14,8 @@ export const REPAIR_MAX = 150;
 export const REPAIR_TEXT_MAX = 300;
 export const REPAIR_WHY_MAX = 200;
 
-export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'lesson';
+/** `fluency` = Flüssigkeit 90 – 60 – 45 (Lernberatung V6). */
+export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'lesson' | 'fluency';
 
 export type RepairItem = {
   id: string;

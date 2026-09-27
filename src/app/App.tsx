@@ -49,6 +49,8 @@ import { CompanionLayer } from '../features/companion/CompanionOverlay';
 import { installCompanionHotkeys } from '../features/companion/hotkeys';
 import { useCompanion } from '../features/companion/store';
 import { SayScreen } from '../features/say/SayScreen';
+import { FluencyScreen } from '../features/fluency/FluencyScreen';
+import { MeetingScreen } from '../features/meeting/MeetingScreen';
 // Phase 4: Lesen, Hören, Schreiben, Entdecken
 import { InputRoutes } from '../features/input/InputRoutes';
 import { AiTaskNotice } from '../features/input/AiTaskNotice';
@@ -301,6 +303,8 @@ export function App() {
               {screen === 'playbook' && <PlaybookScreen />}
               {screen === 'pitch' && <PitchCoach />}
               {screen === 'say' && <SayScreen />}
+              {screen === 'fluency' && <FluencyScreen />}
+              {screen === 'meeting' && <MeetingScreen />}
               {isInputScreen(screen) && <InputRoutes route={route} />}
             </motion.div>
         </main>

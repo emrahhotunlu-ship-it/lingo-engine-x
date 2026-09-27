@@ -642,6 +642,58 @@ export const saySchema = z.looseObject({
     .nullish(),
 });
 
+/**
+ * Neu (Lernberatung 27.09., V6): Flüssigkeit 90 – 60 – 45 – Durchgänge eines Monats
+ * (`fluency/<JJJJ-MM>`), je Eintrag Frage, drei Runden mit Kennzahlen und Rückmeldung. Tolerant gelesen.
+ */
+export const fluencySchema = z.looseObject({
+  v: num,
+  month: str,
+  items: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        t: num,
+        day: str,
+        q: str,
+        kind: str,
+        rounds: z.array(z.looseObject({ sec: num, text: str, ms: num, words: num, wpm: num, sentences: num, full: num })).nullish(),
+        fb: z.looseObject({}).nullish(),
+        ms: num,
+        lang: str,
+        ai: bool,
+      }),
+    )
+    .nullish(),
+});
+
+/**
+ * Neu (Lernberatung 27.09., V4): „Mein nächster Termin“ – echte Termine eines Monats
+ * (`meeting/<JJJJ-MM>`) mit Vorbereitung, Generalprobe-Szene und Nachbesprechungen. Tolerant gelesen.
+ */
+export const meetingSchema = z.looseObject({
+  v: num,
+  month: str,
+  items: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        t: num,
+        day: str,
+        who: str,
+        topic: str,
+        tricky: str,
+        notes: str,
+        when: str,
+        prep: z.looseObject({}).nullish(),
+        sceneId: str,
+        debrief: looseArr,
+        lang: str,
+      }),
+    )
+    .nullish(),
+});
+
 /** Neu ab Phase 3: Business-Einheiten eines Monats (`biz/<JJJJ-MM>`, Plan §3.5). */
 export const bizSchema = z.looseObject({
   v: num,

@@ -33,6 +33,9 @@ export type Route =
   | { name: 'pitch' }
   // Lernberatung 27.09. (V1/V2): „Sag es“ (Vollbild; Pflichtkanal oder freiwillig aus „Üben")
   | { name: 'say' }
+  // Lernberatung 27.09. (V6/V4): Flüssigkeit 90 – 60 – 45 und „Mein nächster Termin“ (Vollbild, freiwillig)
+  | { name: 'fluency' }
+  | { name: 'meeting'; id?: string }
   // Phase 4 – Input und Output (Plan §2.3). `ctx` bestimmt nur `log.ctx`, nie die Zählung.
   | InputRoute;
 

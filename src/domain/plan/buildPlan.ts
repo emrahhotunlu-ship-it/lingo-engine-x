@@ -204,7 +204,7 @@ export function deriveToday(i: DeriveInput): TodayState {
       continue;
     }
     // „Sag es“: eine freie Antwort, keine Antwort der Trefferquote (Pflicht zählt über `act.say`).
-    if (e.type === 'say') continue;
+    if (e.type === 'say' || e.type === 'fluency') continue;
     answers++;
     if (e.ok === true) correct++;
     const cardKey = entryCardKey(e);
