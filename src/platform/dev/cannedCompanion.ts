@@ -6,7 +6,7 @@ import { registerCannedReply } from './fakeSample';
 // - Begleiter: `zzlong` (≈ 3.000 Zeichen, Scroll-Test), `zzen` (englische Antwort, Sprachtreue).
 //   Enthält die Einleitung die Schutzregel („has NOT checked"), endet die Antwort mit
 //   `[no-solution]`, sonst mit `[solution-ok]` – so prüft der E2E-Test das Schwärzen.
-// - Übersetzer: `zzsame` (erste Antwort: alle Fassungen im selben Ton → Schemafehler → Neuversuch).
+// - Übersetzer: `zzsame` (erste Antwort ohne Alternativen → Schemafehler → Neuversuch).
 // - Import: `zzempty` (alles leer).
 
 type Lang = 'de' | 'en';
@@ -79,9 +79,9 @@ export function translateReply(input: string): string {
     return JSON.stringify({
       translation: main,
       register,
-      alternatives: [
-        { text: 'The budget needs to be signed off.', register: same ? register : 'formal', note: note('passiv, typisch für E-Mails an die Geschäftsführung', 'passive, typical for emails to management') },
-        { text: 'We have to okay the budget.', register: same ? register : 'casual', note: note('locker, nur unter Kollegen', 'casual, only among colleagues') },
+      alternatives: same ? [] : [
+        { text: 'The budget needs to be signed off.', register: 'formal', note: note('passiv, typisch für E-Mails an die Geschäftsführung', 'passive, typical for emails to management') },
+        { text: 'We have to okay the budget.', register: 'casual', note: note('locker, nur unter Kollegen', 'casual, only among colleagues') },
       ],
       notes: [note('„freigeben“ heißt hier approve oder sign off, nicht release.', '"freigeben" means approve or sign off here, not release.')],
       terms: [{ en: 'to sign off on', de: 'freigeben' }],
@@ -92,7 +92,7 @@ export function translateReply(input: string): string {
     register,
     alternatives: [
       { text: 'Hier ist die Übersetzung Ihres Textes.', register: same ? register : 'formal', note: note('mit Sie, für Kunden', 'formal address, for customers') },
-      { text: 'Hier ist dein Text auf Deutsch.', register: same ? register : 'casual', note: note('locker', 'casual') },
+      { text: 'Hier ist dein Text auf Deutsch.', register: 'casual', note: note('locker', 'casual') },
     ],
     notes: [],
     terms: [],

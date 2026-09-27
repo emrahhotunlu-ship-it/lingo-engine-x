@@ -3,6 +3,7 @@ import { askJson } from '../../../ai/gate';
 import { isAiFailure, type AiMessageKey, type AiPhase } from '../../../ai/types';
 import { useSettings } from '../../../app/settings';
 import { detectLang } from '../../../domain/lang/detect';
+import { isDictWord } from '../../../domain/lexicon/dict';
 import { logWarn } from '../../../platform/diagnostics';
 import { translate, TRANSLATE_MAX, type Register, type TransLang, type TranslateOut } from '../../../prompts/translate';
 import { pushHistory, readHistory, type HistoryEntry } from './history';
@@ -38,10 +39,19 @@ export const useTranslate = create<State>(() => ({
 
 let ctl: AbortController | null = null;
 
-/** Ausgangssprache: gewählt oder erkannt (unbekannt → Deutsch). */
+/**
+ * Ausgangssprache: gewählt oder erkannt. Kurze Texte ohne Funktionswörter („Keep up“) erkennt
+ * `detectLang` nicht; dann entscheidet das englische Wörterbuch: ohne Umlaut und überwiegend
+ * bekannte englische Wörter → Englisch, sonst Deutsch.
+ */
 export function fromOf(s: Pick<State, 'text' | 'dirOverride'>): TransLang {
   if (s.dirOverride) return s.dirOverride;
-  return detectLang(s.text) === 'en' ? 'en' : 'de';
+  const got = detectLang(s.text);
+  if (got !== 'unknown') return got;
+  if (/[äöüÄÖÜß]/.test(s.text)) return 'de';
+  const words = s.text.match(/[A-Za-z]+(?:['’][A-Za-z]+)?/g) ?? [];
+  const en = words.filter((w) => isDictWord(w)).length;
+  return words.length > 0 && en * 2 > words.length ? 'en' : 'de';
 }
 
 export function setTranslateText(text: string): void {
@@ -71,7 +81,7 @@ export async function runTranslate(opts: { refresh?: boolean } = {}): Promise<vo
   ctl?.abort();
   const c = new AbortController();
   ctl = c;
-  useTranslate.setState({ phase: 'queued', error: null, errorKind: null });
+  useTranslate.setState({ phase: 'queued', error: null, errorKind: null, result: null });
   try {
     const r = await askJson({
       template: translate,

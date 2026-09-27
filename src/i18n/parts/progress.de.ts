@@ -41,6 +41,7 @@ export const progressDe = {
   assessFirst: 'Jetzt einschätzen lassen',
   assessThinking: 'Claude wertet {n} Antworten aus …',
   assessThinkingShort: 'Claude wertet deine Belege aus …',
+  assessDuration: 'Das dauert meist 1–2 Minuten. Du kannst währenddessen weiterüben.',
   assessSlow: 'Das dauert länger als üblich. Der bisherige Stand bleibt sichtbar.',
   assessStop: 'Stopp',
   assessBusyOther: 'Wird gerade auf einem anderen Gerät erstellt.',

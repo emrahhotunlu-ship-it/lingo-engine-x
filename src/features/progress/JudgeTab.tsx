@@ -63,7 +63,9 @@ export function JudgeTab() {
         <>
           <p role="status" className="text-sm text-muted" data-testid="assess-phase" data-ai-phase={run.aiPhase ?? run.phase}>
             {run.answers > 0 ? t('assessThinking', { n: run.answers }) : t('assessThinkingShort')}
-            {run.aiPhase === 'slow' && <span className="mt-1 block text-xs">{t('assessSlow')}</span>}
+            <span className="mt-1 block text-xs" data-testid="assess-duration">
+              {run.aiPhase === 'slow' ? t('assessSlow') : t('assessDuration')}
+            </span>
           </p>
           <Button variant="ghost" icon="stop" onClick={stopAssess} data-testid="assess-stop">
             {t('assessStop')}

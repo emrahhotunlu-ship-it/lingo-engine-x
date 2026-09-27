@@ -38,6 +38,7 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   assessFirst: 'Get assessed now',
   assessThinking: 'Claude is reviewing {n} answers …',
   assessThinkingShort: 'Claude is reviewing your evidence …',
+  assessDuration: 'This usually takes 1–2 minutes. You can keep practicing meanwhile.',
   assessSlow: 'This is taking longer than usual. Your current result stays visible.',
   assessStop: 'Stop',
   assessBusyOther: 'Being created on another device right now.',

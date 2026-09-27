@@ -81,13 +81,14 @@ describe('Beispielantworten bestehen ihr Schema', () => {
 });
 
 describe('Sprach- und Formprüfung', () => {
-  it('translate: Hauptfassung muss Zielsprache sein, mindestens ein anderer Ton', () => {
+  it('translate: Hauptfassung muss Zielsprache sein, mindestens eine Alternative (gleicher Ton erlaubt)', () => {
     const base = JSON.parse(TRANSLATE_EXAMPLE) as Record<string, unknown>;
     const s = translateSchema(trVars);
     expect(s.safeParse({ ...base, translation: 'Wir müssen das Budget für die Firma freigeben.' }).success).toBe(false);
     expect(
-      s.safeParse({ ...base, alternatives: [{ text: 'We must approve it.', register: 'neutral', note: '' }, { text: 'Approve it.', register: 'neutral', note: '' }] }).success,
-    ).toBe(false);
+      s.safeParse({ ...base, alternatives: [{ text: 'We must approve it.', register: 'neutral', note: '' }] }).success,
+    ).toBe(true);
+    expect(s.safeParse({ ...base, alternatives: [] }).success).toBe(false);
   });
 
   it('preply-prep: watch nur aus übergebenen Fehlern; ohne Fehler leer erlaubt', () => {
