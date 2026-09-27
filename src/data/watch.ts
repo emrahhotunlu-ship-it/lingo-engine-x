@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { getDb } from '../platform/capabilities';
 import { describeError, logError, logWarn } from '../platform/diagnostics';
 import type { Db, DbErr, Unsub } from '../platform/types';
-import { validateDoc } from './validate';
+import { validateCached } from './validate';
 
 // Ansichtsgebundene Abos auf ganze Sammlungen (Plan §2.1): z. B. `scene` nur, solange Sprechen
 // offen ist. Jede Sammlung hat höchstens EIN Abo, egal wie viele Bildschirme sie brauchen
@@ -45,7 +45,7 @@ function open(name: WatchedName): () => void {
         for (const d of qs.docs) {
           const data = d.exists ? d.data() : undefined;
           if (!data) continue;
-          const res = validateDoc(`${name}/${d.id}`, data);
+          const res = validateCached(`${name}/${d.id}`, data);
           if (res.ok) map.set(d.id, res.value);
           else {
             bad.add(d.id);
@@ -171,7 +171,7 @@ export function watchDoc(db: Db, path: string, cb: (w: DocWatch) => void, onFail
           cb({ exists: false, data: undefined, ok: true, issues: [] });
           return;
         }
-        const res = validateDoc(path, data);
+        const res = validateCached(path, data);
         if (!res.ok && !reported) {
           reported = true;
           logError('data:validate', { code: 'invalid_document', message: res.issues.join('; ') }, path);
@@ -195,7 +195,7 @@ export function watchCollectionDocs(db: Db, name: string, cb: (w: CollectionWatc
           const data = d.exists ? d.data() : undefined;
           if (!data) continue;
           const path = `${name}/${d.id}`;
-          const res = validateDoc(path, data);
+          const res = validateCached(path, data);
           if (res.ok) docs.set(d.id, res.value);
           else {
             invalid.push(d.id);
@@ -234,7 +234,7 @@ export function watchFeed(db: Db, next: (docs: FeedDocs) => void, onFail: (code:
             const data = d.exists ? d.data() : undefined;
             if (!data) continue;
             const path = `feed/${d.id}`;
-            const res = validateDoc(path, data);
+            const res = validateCached(path, data);
             if (res.ok) out.push({ id: d.id, doc: res.value });
             else if (!reported.has(path)) {
               reported.add(path);

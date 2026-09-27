@@ -46,12 +46,6 @@ export function haptic(kind: HapticKind): boolean {
   if (!enabled) return false;
   const nav = vibrator();
   if (!nav) return false;
-  if (blocked) return false;
-  blocked = true;
-  unblock = setTimeout(() => {
-    blocked = false;
-    unblock = null;
-  }, DEDUPE_MS);
   try {
     return nav.vibrate(PATTERNS[kind]);
   } catch (err) {
@@ -64,6 +58,12 @@ export function haptic(kind: HapticKind): boolean {
 
 /** Rückmeldung beim Prüfen (Kap. 4.3): richtig = leicht, fast richtig = kurz, falsch = deutlicher. */
 export function verdictHaptic(verdict: 'correct' | 'near' | 'wrong'): boolean {
+  if (!enabled || blocked || !vibrator()) return false;
+  blocked = true;
+  unblock = setTimeout(() => {
+    blocked = false;
+    unblock = null;
+  }, DEDUPE_MS);
   return haptic(verdict === 'correct' ? 'success' : verdict === 'near' ? 'tap' : 'error');
 }
 

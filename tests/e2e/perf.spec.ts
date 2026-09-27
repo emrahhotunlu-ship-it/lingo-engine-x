@@ -3,6 +3,10 @@ import { readFileSync } from 'node:fs';
 import { boot, MIGRATED, ORIGIN, screen } from './fixtures';
 import { planPatch } from './trainerHelpers';
 
+type Validated = { misses: number; hits: number; ms: number };
+const validated = (page: Page): Promise<Validated> =>
+  page.evaluate(() => ((performance.getEntriesByName('lx:validated:vocab').at(-1) as PerformanceMark | undefined)?.detail as Validated | undefined) ?? { misses: -1, hits: -1, ms: -1 });
+
 // Leistung (P7-1, Kap. 14): mit 4-facher CPU-Drossel (Chromium) und dem Großdatensatz
 // (1.500 Vokabeln, 400 Radar-Ereignisse, 2 Jahre Profil):
 //   - „Heute" zeigt die Statuszeile mit echten Daten in < 2 s (auf dem Gerät zusätzlich `performance.mark('lx:status')`),
@@ -76,7 +80,12 @@ for (const kind of ['Plan von heute vorhanden', 'erster Start des Tages'] as con
       const errors = await bootReal(page, kind === 'Plan von heute vorhanden' && today.getHours() >= 4 ? { 'app/profile': { plan } } : {});
       await page.getByTestId('today-status').waitFor({ state: 'visible' });
       const at = await statusAt(page);
+      const live = await page.evaluate(() => performance.getEntriesByName('lx:live')[0]?.startTime ?? -1);
       test.info().annotations.push({ type: 'lx:status', description: `${Math.round(at)} ms` });
+      test.info().annotations.push({ type: 'lx:live', description: `${Math.round(live)} ms` });
+      // Reihenfolge der Messpunkte: Daten geprüft (lx:live) vor der Statuszeile.
+      expect(live).toBeGreaterThan(0);
+      expect(live).toBeLessThanOrEqual(at);
       expect(at).toBeGreaterThan(0);
       expect(at).toBeLessThan(rate === 1 ? 2000 : 4000);
       expect(errors).toEqual([]);
@@ -136,6 +145,24 @@ test('Buchstabenflug: p95 des Bildabstands unter 20 ms', async ({ page }) => {
   const p95 = sorted[Math.floor(sorted.length * 0.95)] ?? 0;
   expect(frames.length).toBeGreaterThan(30);
   expect(p95).toBeLessThan(20);
+});
+
+test('H6: eine geänderte Karte → das Vokabel-Abo prüft genau ein Dokument neu, der Rest kommt aus dem Zwischenspeicher', async ({ page }) => {
+  const errors = await bootReal(page);
+  await page.getByTestId('today-status').waitFor({ state: 'visible' });
+  const first = await validated(page);
+  // Erste Lieferung: alle Karten echt geprüft (Großdatensatz).
+  expect(first.misses).toBeGreaterThanOrEqual(1500);
+  const id = Object.keys(LARGE).find((k) => k.startsWith('vocab/'))!;
+  await page.evaluate(async (path) => {
+    const fake = (window as unknown as { __LINGO_FAKE__: { db: { db: { doc(p: string): { update(d: Record<string, unknown>): Promise<void> } } } } }).__LINGO_FAKE__;
+    await fake.db.db.doc(path).update({ hidden: false, lxPerf: 1 });
+  }, id);
+  await expect.poll(async () => (await validated(page)).hits).toBeGreaterThan(0);
+  const after = await validated(page);
+  expect(after.misses).toBe(1);
+  expect(after.hits).toBe(first.misses - 1);
+  expect(errors).toEqual([]);
 });
 
 test('dist/index.html bleibt unter der Warngrenze von 8 MB', async () => {

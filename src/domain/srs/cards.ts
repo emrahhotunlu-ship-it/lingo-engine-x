@@ -21,9 +21,22 @@ function counts(v: unknown): Record<string, Counts> {
   return out;
 }
 
+// P7-1: Satzstelle und Kollokationen hängen nur am Dokument. Unveränderte Dokumente kommen als
+// dasselbe Objekt (contract/db.d.ts, Validierungs-Cache H6) – je Dokument nur einmal suchen.
+type Static = { lemma: string; context: TrainCard['context']; col: TrainCard['col'] };
+const STATIC = new WeakMap<object, Static>();
+function staticOf(doc: Doc, word: string): Static {
+  const hit = STATIC.get(doc);
+  if (hit) return hit;
+  const s: Static = { lemma: lemmaOf(word), context: findContext(doc.ex, word), col: parseCollocs(doc.col) };
+  STATIC.set(doc, s);
+  return s;
+}
+
 export function toTrainCard(id: string, doc: Doc, inDb: boolean, nowMs: number): TrainCard | null {
   const word = str(doc.word);
   if (!word || isFutureFsrs(doc)) return null;
+  const st = staticOf(doc, word);
   const fsrs = readFsrs(doc, nowMs);
   const hist = Array.isArray(doc.hist) ? doc.hist : [];
   const last = hist[hist.length - 1] as Record<string, unknown> | undefined;
@@ -33,12 +46,12 @@ export function toTrainCard(id: string, doc: Doc, inDb: boolean, nowMs: number):
     path: `vocab/${id}`,
     inDb,
     word,
-    lemma: lemmaOf(word),
+    lemma: st.lemma,
     pos: str(doc.pos),
     de: str(doc.de),
     def: str(doc.def),
-    context: findContext(doc.ex, word),
-    col: parseCollocs(doc.col),
+    context: st.context,
+    col: st.col,
     src: str(doc.src),
     fsrs,
     stage: stageOf(doc),
