@@ -99,6 +99,22 @@ test('Datenexport über downloads liefert alle Dokumente als JSON', async ({ pag
   expect(Object.keys(json.documents)).toContain('daily/2026-09-20');
 });
 
+test('Englisch: Sicherung heißt „backup", Diagnose-Meldungen auf Englisch', async ({ page }) => {
+  const { errors } = await boot(page, {
+    migrated: true,
+    lang: 'en',
+    localStorage: { 'lx:diag': JSON.stringify([{ id: 1, t: Date.parse('2026-09-20T20:00:00+02:00'), level: 'warn', scope: 'grammar:generate', code: 'invalid_document', message: 'Pool ungültig – nicht überschrieben' }]) },
+  });
+  await openOverview(page);
+  await page.getByTestId('open-settings').click();
+  await page.getByRole('button', { name: 'Back up all data as JSON' }).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ filename: string }> } }).__LINGO_FAKE__.saved[0]?.filename ?? '')).toBe('lingo-engine-x-backup-2026-09-20.json');
+  const log = page.getByTestId('diag-log');
+  await expect(log).toContainText('Pool invalid – not overwritten');
+  await expect(log).not.toContainText('ungültig');
+  expect(errors).toEqual([]);
+});
+
 // ---------------------------------------------------------------- Phase 6 (Plan §9, §13)
 
 test('Tagesziel, neue Wörter pro Tag und Ton bleiben nach dem Neuladen', async ({ page }) => {

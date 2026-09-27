@@ -19,6 +19,7 @@ import { exportAll } from './exportData';
 import { VoiceSection } from './VoiceSection';
 import { LearningSection, SoundSection, SourcesSection } from './LearningSection';
 import { discCount } from '../../domain/discover/steps';
+import { diagText } from './diagText';
 
 // Einstellungen (Kap. 6.14): Sprache, Darstellung, Lernen (neue Wörter, Tagesziel), Üben, Stimme,
 // Ton, Datenexport, Quellen und Lizenzen, Diagnose.
@@ -218,8 +219,8 @@ function Diagnostics({ open }: { open: boolean }) {
             <li key={e.id} className="break-words">
               <span className="lx-tnum text-subtle">{time(e.t)}</span>{' '}
               <span className={e.level === 'error' ? 'text-danger-text' : e.level === 'warn' ? 'text-gold-text' : 'text-muted'}>{e.scope}</span>{' '}
-              {e.code && <span className="text-muted">[{e.code}]</span>} <span className="text-fg">{e.message}</span>
-              {e.detail && <span className="text-subtle"> · {e.detail}</span>}
+              {e.code && <span className="text-muted">[{e.code}]</span>} <span className="text-fg">{diagText(e.message, t)}</span>
+              {e.detail && <span className="text-subtle"> · {diagText(e.detail, t)}</span>}
             </li>
           ))}
         </ol>

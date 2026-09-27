@@ -56,7 +56,7 @@ export function DrillScreen() {
   const running = s.status === 'running';
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="drill" data-kind={s.kind} data-ctx={s.ctx}>
-      <RoundTop onClose={leave} progress={running && s.kind !== 'sprint' ? { n: s.pos + 1, total: items.length } : null} ctx={s.ctx} />
+      <RoundTop onClose={leave} progress={running && s.kind !== 'sprint' ? { n: s.pos + 1, total: items.length } : null} ctx={s.ctx} duty={`ch:${s.kind}`} />
       {s.kind === 'sprint' ? (
         <SprintView />
       ) : (

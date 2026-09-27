@@ -66,7 +66,12 @@ const DISTRACTORS_Q = ['did', 'do', 'does'];
 const DISTRACTORS_S = ['is', 'did', 'does', 'was', 'have'];
 const key = (t: string) => t.toLowerCase().replace(/[,;:]$/, '');
 
+/** Stehen mehrere Sätze im Text (Satzzeichen, danach ein neuer Satzanfang)? */
+export const multiSentence = (s: string): boolean => /[.!?]["”')]?\s+["“(]?[A-Z0-9]/.test(s.trim());
+
 export function buildOrder(sentence: string, opts: { seed: string; accepted?: readonly string[]; isPhrase?: (p: string) => boolean }): OrderItem | null {
+  // Satzbau legt genau EINEN Satz (Prüfbericht): Zwei Sätze in einer Aufgabe werden nie gestellt.
+  if (multiSentence(sentence)) return null;
   const { tiles: solution, end } = splitSentence(sentence, opts.isPhrase);
   if (solution.length < TILES_MIN - 1 || solution.length > TILES_MAX - 1) return null;
   const lower = new Set(solution.map(key));

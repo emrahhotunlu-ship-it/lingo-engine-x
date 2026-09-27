@@ -167,6 +167,8 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
   } else if (stateName === 'revising' || stateName === 'resubmitting') {
     body = (
       <div className="flex max-w-3xl flex-col gap-5">
+        {/* Beim Überarbeiten bleibt die Aufgabenstellung sichtbar (nicht mehr wechselbar). */}
+        <PromptCard prompt={prompt} canChange={false} busy={false} onOther={() => undefined} onOwn={() => undefined} />
         {prompt.useful.length > 0 && chips}
         <DraftArea value={revText} onChange={setRevText} label={t('wrDraftLabel')} draftKey={`write:rev:${id ?? ''}`} min={min} max={max} handle={draft} disabled={stateName === 'resubmitting'} />
         {state.context.failed && (

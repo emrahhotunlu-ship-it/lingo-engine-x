@@ -53,6 +53,8 @@ export function grammarKey(extra: readonly Doc[] = []): (shown: string) => strin
 export async function shownPrompt(page: Page): Promise<string> {
   const item = page.getByTestId('gr-item');
   if ((await item.getAttribute('data-type')) === 'correct') return item.getByTestId('correct-input').inputValue();
+  // Umformung ohne Lücke: Auftrag steht über dem leeren Ganzsatz-Feld.
+  if (await item.locator('[data-testid="correct-input"][data-whole]').count()) return item.getByTestId('transform-from').innerText();
   const from = item.getByTestId('transform-from');
   const pre = (await from.count()) ? await from.innerText() : '';
   return `${pre} ${await item.getByTestId('sentence').innerText()}`;
@@ -74,7 +76,7 @@ export async function answerGrammar(page: Page, solve: (shown: string) => string
     if (idx < 0) idx = 0;
     if (opts.wrong) idx = (idx + 1) % labels.length;
     await item.getByTestId('choice').nth(idx).click();
-  } else if (type === 'correct') {
+  } else if (type === 'correct' || (await item.getByTestId('correct-input').count())) {
     await item.getByTestId('correct-input').fill(text);
     await item.getByTestId('check').click();
   } else {
@@ -180,7 +182,7 @@ async function answerLessonWord(page: Page, words: ReadonlyArray<{ en: string; d
  * Eine geöffnete Lektion vom Start bis zur Zusammenfassung durchspielen (ohne KI).
  * `words`: Zielwörter (für die Wortübungen), `solve`: Lösungen der Grammatikaufgaben.
  */
-export async function playLesson(page: Page, o: { words: ReadonlyArray<{ en: string; de: string }>; solve: (shown: string) => string | null; answers?: Record<string, string>; output: string }): Promise<void> {
+export async function playLesson(page: Page, o: { words: ReadonlyArray<{ en: string; de: string }>; solve: (shown: string) => string | null; answers?: Record<string, string>; output: string; onGrammar?: (phase: 'before' | 'after') => Promise<void>; aiCheck?: boolean }): Promise<void> {
   const lesson = page.getByTestId('lesson');
   await expect(page.getByTestId('lesson-start')).toBeVisible();
   await page.getByTestId('lesson-start').click();
@@ -225,7 +227,9 @@ export async function playLesson(page: Page, o: { words: ReadonlyArray<{ en: str
     const next = stepNext('grammar');
     await expect(next.or(page.getByTestId('gr-item')).first()).toBeVisible();
     if (await next.isVisible()) break;
+    if (o.onGrammar) await o.onGrammar('before');
     await answerGrammar(page, o.solve);
+    if (o.onGrammar) await o.onGrammar('after');
     await nextItem(page);
     await expect(page.getByTestId('gr-item').getByTestId('verdict')).toHaveCount(0);
   }
@@ -234,7 +238,11 @@ export async function playLesson(page: Page, o: { words: ReadonlyArray<{ en: str
   await expect(lesson).toHaveAttribute('data-step', 'output');
   await page.getByTestId('output-input').fill(o.output);
   await expect(page.getByTestId('must-use').first()).toHaveAttribute('data-used', '');
-  await page.getByTestId('output-self').click();
+  if (o.aiCheck) {
+    // Rückmeldung von Claude (lesson-production@1).
+    await page.getByTestId('output-check').click();
+    await expect(page.getByTestId('output-ai')).toBeVisible();
+  } else await page.getByTestId('output-self').click();
   await expect(page.getByTestId('model-text')).toBeVisible();
   await stepNext('output').click();
   await expect(lesson).toHaveAttribute('data-step', 'summary');

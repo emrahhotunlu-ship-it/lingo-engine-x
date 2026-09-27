@@ -172,6 +172,17 @@ test.describe('EN', () => {
     expect(((await dump(page))['preply/pi1789668000000']!.hwDone as Record<string, string>)['0']).toBe(DAY);
     expect(await layoutProblems(page)).toEqual([]);
   });
+
+  test('neuer Plan auf Englisch: Ziel steht genau einmal', async ({ page }) => {
+    await openPreply(page, { lang: 'en' });
+    await page.getByTestId('pp-create').click();
+    const goal = page.getByTestId('pp-goal');
+    await expect(goal).toBeVisible();
+    const first = (await goal.locator('p').first().innerText()).trim();
+    expect(first.length).toBeGreaterThan(0);
+    await expect(page.getByTestId('pp-goal-en')).toHaveCount(0);
+    expect((await goal.innerText()).split(first).length - 1).toBe(1);
+  });
 });
 
 test.describe('Handy 390 (Touch)', () => {

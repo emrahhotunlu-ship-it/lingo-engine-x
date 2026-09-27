@@ -237,6 +237,32 @@ test('Neue Szene: KI-Karte erscheint, scene/sc-ai… ist gespeichert', async ({ 
   expect(ids).toHaveLength(2);
 });
 
+test('Übung „aus der Situation“: Runde bis zum Ende speichert Aktivität und Minuten', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await openHub(page);
+  const before = (await dump(page))['app/profile'] as { act?: Record<string, Record<string, number>>; minutes?: Record<string, number> };
+  const actOf = (p: typeof before) => p.act?.[DAY]?.speak ?? 0;
+  const minOf = (p: typeof before) => p.minutes?.[DAY] ?? 0;
+  await page.getByTestId('situation-start').click();
+  const drill = page.getByTestId('situation-drill');
+  for (let i = 0; i < 12; i++) {
+    await expect(drill).toHaveAttribute('data-state', /asking|done/);
+    if ((await drill.getAttribute('data-state')) === 'done') break;
+    await page.getByTestId('situation-input').fill('I see what you mean');
+    await page.getByTestId('situation-check').click();
+    await expect(drill).toHaveAttribute('data-state', 'checked');
+    await page.getByTestId('situation-next').click();
+  }
+  await expect(page.getByTestId('situation-result')).toBeVisible();
+  await expect.poll(async () => actOf((await dump(page))['app/profile'] as typeof before)).toBe(actOf(before) + 1);
+  expect(minOf((await dump(page))['app/profile'] as typeof before)).toBeGreaterThanOrEqual(minOf(before) + 1);
+  // Schließen nach dem Ende speichert nicht ein zweites Mal.
+  await drill.getByRole('button').last().click();
+  await page.waitForTimeout(300);
+  expect(actOf((await dump(page))['app/profile'] as typeof before)).toBe(actOf(before) + 1);
+  expect(errors).toEqual([]);
+});
+
 const LOOKS: Array<{ width: number; theme: Theme; lang: Lang }> = [
   { width: 390, theme: 'light', lang: 'en' },
   { width: 1440, theme: 'dark', lang: 'de' },

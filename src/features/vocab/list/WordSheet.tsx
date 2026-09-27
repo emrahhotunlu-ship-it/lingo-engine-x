@@ -167,8 +167,8 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
           <p className="lx-eyebrow">{t('vcBalance')}</p>
           <ul className="flex flex-col gap-1 text-sm">
             {balance.map((b) => (
-              <li key={b.ex} className="flex justify-between gap-3">
-                <span>{t(`exName_${b.ex}` as MessageKey)}</span>
+              <li key={`${b.legacy ? 'm' : 'x'}:${b.ex}`} className="flex justify-between gap-3" data-legacy={b.legacy ? '' : undefined}>
+                <span>{b.legacy ? t('exModeEarlier', { mode: t(`exMode_${b.ex}` as MessageKey) }) : t(`exName_${b.ex}` as MessageKey)}</span>
                 <span className="lx-tnum text-muted">{t('vcBalanceValue', { c: b.c, n: b.c + b.w })}</span>
               </li>
             ))}

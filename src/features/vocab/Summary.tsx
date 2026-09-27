@@ -21,6 +21,8 @@ export function Summary({ onBack }: { onBack: () => void }) {
   const n = results.length;
   const right = results.filter((r) => r.ok).length;
   const pct = n ? Math.round((right / n) * 100) : 0;
+  // Je Wort ein Chip (auch wenn es in der Runde mehrfach kam); rot, sobald ein Versuch falsch war.
+  const chips = [...results.reduce((m, r) => m.set(r.key, { key: r.key, word: r.word, ok: (m.get(r.key)?.ok ?? true) && r.ok }), new Map<string, { key: string; word: string; ok: boolean }>()).values()];
   const seeds = new Map<string, Record<string, unknown>>();
   for (const c of cards.values()) if (!c.inDb) seeds.set(c.id, { ...c.doc });
   return (
@@ -41,8 +43,8 @@ export function Summary({ onBack }: { onBack: () => void }) {
       </header>
       {n > 0 && (
         <ul className="flex flex-wrap gap-2" lang="en">
-          {results.map((r, i) => (
-            <li key={`${r.key}-${i}`} className={`rounded-full border px-3 py-1 text-sm ${r.ok ? 'border-line text-fg' : 'border-line text-danger-text'}`}>
+          {chips.map((r) => (
+            <li key={r.key} className={`rounded-full border px-3 py-1 text-sm ${r.ok ? 'border-line text-fg' : 'border-line text-danger-text'}`} data-testid="summary-chip" data-ok={r.ok ? '' : undefined}>
               {r.word}
             </li>
           ))}

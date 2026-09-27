@@ -48,7 +48,7 @@ export function GrammarSessionScreen() {
   const topics = [...new Set(s.results.map((r) => r.topic))];
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx}>
-      <RoundTop onClose={leave} progress={s.status === 'running' ? { n: s.pos + 1, total: s.tasks.length } : null} ctx={s.ctx} />
+      <RoundTop onClose={leave} progress={s.status === 'running' ? { n: s.pos + 1, total: s.tasks.length } : null} ctx={s.ctx} duty="ch:gram" />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={s.status === 'summary' ? 'summary' : `g-${s.step}`}

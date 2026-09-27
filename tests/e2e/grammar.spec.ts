@@ -207,6 +207,21 @@ test('Regelblatt: Wörter antippbar (Bedeutung, Lautschrift)', async ({ page }) 
   expect(errors).toEqual([]);
 });
 
+test('Themenliste: Reihenfolge passt zum Stufenwort; Englisch: Formmuster ohne deutsche Fachwörter', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, lang: 'en' });
+  await openGrammar(page);
+  const levels = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
+  expect(levels.length).toBe(16);
+  expect([...levels].sort((a, b) => a - b)).toEqual(levels);
+  await page.locator('[data-testid="topic"][data-topic="passive"]').click();
+  const patterns = page.getByTestId('rule-sheet').getByTestId('rule-pattern');
+  await expect(patterns.first()).toBeVisible();
+  const text = (await patterns.allInnerTexts()).join(' | ');
+  expect(text).toContain('past participle');
+  expect(text).not.toMatch(/3\. Form|Grundform/);
+  expect(errors).toEqual([]);
+});
+
 test('ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, freie Antwort „nicht sicher prüfbar"', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openGrammar(page);

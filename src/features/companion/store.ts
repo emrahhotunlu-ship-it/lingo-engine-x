@@ -56,6 +56,8 @@ type State = {
   lastOpenAt: number;
   /** Zähler für „Antwort fertig" (aria-live). */
   finished: number;
+  /** Zähler je eigener Nachricht (alle Wege: Eingabe, Vorschlag, „Claude fragen"): Verlauf ans Ende. */
+  sentSeq: number;
   /** Eingabe, die geöffnet werden soll (Übersetzer vorbefüllen, gestoppte Nachricht zurück). */
   prefill: { tab: CompanionTab; text: string; seq: number } | null;
 };
@@ -84,6 +86,7 @@ export const useCompanion = create<State>(() => ({
   openMsTotal: 0,
   lastOpenAt: -1,
   finished: 0,
+  sentSeq: 0,
   prefill: null,
 }));
 
@@ -230,6 +233,7 @@ export async function sendMessage(text: string, reuse?: ChatMsg): Promise<void> 
   useCompanion.setState((st) => ({
     pending: st.pending.some((m) => msgKey(m) === msgKey(userMsg)) ? st.pending : [...st.pending, userMsg],
     turn: { status: 'queued', text: '', errorKey: null, errorKind: null, userMsg },
+    sentSeq: st.sentSeq + 1,
   }));
 
   const { learner, work } = learnerFor(uiLang);
@@ -345,6 +349,7 @@ export function resetCompanion(): void {
     openMsTotal: 0,
     lastOpenAt: -1,
     finished: 0,
+    sentSeq: 0,
     prefill: null,
   });
 }

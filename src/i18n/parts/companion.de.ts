@@ -170,8 +170,8 @@ export const companionDe = {
   pvBack: 'Zurück zum Verlauf',
   pvReview: 'Vorschau öffnen',
 
-  tdExtraPreply: 'Preply-Stunde · {min} Min.',
-  tdExtraPreplyPlain: 'Preply-Stunde gehalten',
+  tdExtraPreply: 'Extra · Preply-Stunde · {min} Min.',
+  tdExtraPreplyPlain: 'Extra · Preply-Stunde gehalten',
 
   diagChat: 'Chat-Verlauf',
   diagChatValue: '{n} Nachrichten · {kb} KB',

@@ -56,7 +56,8 @@ export function PlanView({ plan }: { plan: Plan }) {
           <p className="flex-1 text-base font-medium">{!langMismatch && plan.goal_x ? plan.goal_x : <EnglishText as="span" text={plan.goal_en} {...src} />}</p>
           <IconButton icon="info" label={t('ppPurposeLabel')} onClick={() => setInfo((v) => !v)} aria-expanded={info} />
         </div>
-        {!langMismatch && plan.goal_x && plan.goal_en && <EnglishText as="p" className="text-sm text-muted" text={plan.goal_en} {...src} />}
+        {/* Zweite Zeile nur, wenn sie etwas anderes sagt (EN-Oberfläche: goal_x ist schon Englisch). */}
+        {!langMismatch && plan.goal_x && plan.goal_en && plan.goal_en.trim() !== plan.goal_x.trim() && <EnglishText as="p" className="text-sm text-muted" text={plan.goal_en} {...src} testId="pp-goal-en" />}
         {info && <p className="text-sm text-muted">{t('ppPurpose')}</p>}
         {langMismatch && <p className="text-xs text-subtle">{t('ppLangOnly', { lang: plan.lang === 'en' ? t('cmpLangEn') : t('cmpLangDe') })}</p>}
       </div>

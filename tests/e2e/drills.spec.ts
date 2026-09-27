@@ -91,6 +91,8 @@ test('Lückenjagd: Buchstaben landen in der Lücke, Tipp zeigt Platzhalter; Rund
     const item = page.getByTestId('drill-item');
     await expect(item).toHaveAttribute('data-kind', 'cloze');
     await expect(item.getByTestId('task-line')).toBeVisible();
+    // Statuszeile ohne eigenen Beherrschungswert: 0 Punkte mit dem Wort „neu", nie leer.
+    await expect(item.getByTestId('confidence')).toHaveText('neu');
     const gap = item.getByTestId('gap');
     // U-04: die Lücke ist leer, kein Ergebnisbereich, keine Wendung.
     await expect(gap).toHaveText(/^\s*$/);

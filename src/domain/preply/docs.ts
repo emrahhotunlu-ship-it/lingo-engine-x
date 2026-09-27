@@ -159,6 +159,14 @@ export function preplyList(all: ReadonlyMap<string, Doc>): PreplyView[] {
   return [...all].map(([id, d]) => readPreply(id, d)).sort((a, b) => b.t - a.t || b.id.localeCompare(a.id));
 }
 
+/**
+ * Minuten der am Lerntag `day` gehaltenen Preply-Stunden (Extra, A7 27.09.). Sie stecken in
+ * `app/profile.minutes[day]`, zählen aber nicht zum Minutenziel der App (Kap. 15).
+ */
+export function heldMinutesOn(list: readonly PreplyView[], day: string): number {
+  return list.reduce((n, v) => n + (v.kind === 'plan' && v.done && v.heldDay === day ? v.heldMin : 0), 0);
+}
+
 /** Jüngster offener Plan (`done !== true`) oder `null`. */
 export function openPlan(list: readonly PreplyView[]): PlanView | null {
   for (const v of list) if (v.kind === 'plan' && !v.done && (v.goal_en || v.say.length || v.talk.length)) return v;

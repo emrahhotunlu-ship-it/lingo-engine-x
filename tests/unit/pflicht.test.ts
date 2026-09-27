@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { addDays, dayKey } from '../../src/domain/date';
-import { pflichtFor, pflichtSinceGate, pflichtSinceOp, pflichtSinceValue, dutiesFeasible, type PflichtInput } from '../../src/domain/plan/pflicht';
+import { pflichtFor, pflichtSinceGate, pflichtSinceOp, pflichtSinceValue, dutiesFeasible, dutyStep, type PflichtInput } from '../../src/domain/plan/pflicht';
 import type { StoredPlan } from '../../src/domain/plan/types';
 import { profilePatch, type RoundEnd } from '../../src/domain/progress/profilePatch';
 import { applyUpdate } from '../../src/domain/srs/applyReview';
@@ -166,5 +166,18 @@ describe('K-04: Lektionswörter verdrängen nie alle eigenen neuen Karten (D17)'
     expect(newQuotaLeft(2, 6, 6)).toBe(2);
     expect(newQuotaLeft(0, 6, 6)).toBe(0);
     expect(newQuotaLeft(5, 3, 0)).toBe(2);
+  });
+});
+
+describe('Planleiste „Pflicht n von N"', () => {
+  const items = (s: Array<'done' | 'open'>) => (['review', 'lesson', 'ch:gram'] as const).map((id, k) => ({ id, state: s[k] ?? 'open' }));
+  it('nach der Lektion (erledigt) mit offener Grammatik: 2 von 3, nicht 3 von 3', () => {
+    expect(dutyStep({ done: 2, total: 3, items: items(['done', 'done', 'open']) }, 'lesson')).toBe(2);
+  });
+  it('während eines offenen Pflichtpunkts: der nächste Schritt', () => {
+    expect(dutyStep({ done: 1, total: 3, items: items(['done', 'open', 'open']) }, 'lesson')).toBe(2);
+    expect(dutyStep({ done: 2, total: 3, items: items(['done', 'done', 'open']) }, 'ch:gram')).toBe(3);
+    expect(dutyStep({ done: 3, total: 3, items: items(['done', 'done', 'done']) }, 'ch:gram')).toBe(3);
+    expect(dutyStep({ done: 0, total: 3, items: items([]) })).toBe(1);
   });
 });

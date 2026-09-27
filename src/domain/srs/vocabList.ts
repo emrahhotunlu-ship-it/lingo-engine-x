@@ -3,6 +3,7 @@ import { learningDayEnd } from '../date';
 import { legacyToFsrs } from './legacyFsrs';
 import { FSRS_VERSION, readFsrs } from './scheduler';
 import type { TrainCard } from './types';
+import { CATALOG } from './modes';
 import { clampStage, stageOf } from './ladder';
 
 // Wortschatz-Bereich (Funktionsabgleich M1, M2, M9): Liste mit Suche, Filtern und Sortierung,
@@ -87,12 +88,21 @@ export function vocabStats(cards: readonly TrainCard[], nowMs: number, today: st
   };
 }
 
-/** Bilanz je Abfrageart (`xs`) als Anteil richtig. */
-export function exerciseBalance(c: Pick<TrainCard, 'xs'>): Array<{ ex: string; c: number; w: number }> {
-  return Object.entries(c.xs)
-    .map(([ex, v]) => ({ ex, c: v.c, w: v.w }))
-    .filter((x) => x.c + x.w > 0)
-    .sort((a, b) => b.c + b.w - (a.c + a.w));
+/**
+ * Bilanz je Abfrageart: neue Werte je Übungsart (`xs`) und die älteren Werte der alten App je
+ * Modus (`modes`, {modus: {c, w}}). Die App zählt neue Antworten in beiden Feldern mit; deshalb
+ * erscheint je Modus nur der Rest `modes − Summe(xs)` als eigene Zeile (`legacy`), nie doppelt.
+ */
+export function exerciseBalance(c: Pick<TrainCard, 'xs'> & Partial<Pick<TrainCard, 'modes'>>): Array<{ ex: string; c: number; w: number; legacy: boolean }> {
+  const rows = Object.entries(c.xs)
+    .map(([ex, v]) => ({ ex, c: v.c, w: v.w, legacy: false }))
+    .filter((x) => x.c + x.w > 0);
+  for (const [mode, v] of Object.entries(c.modes ?? {})) {
+    const own = CATALOG.filter((d) => d.mode === mode).reduce((acc, d) => ({ c: acc.c + (c.xs[d.ex]?.c ?? 0), w: acc.w + (c.xs[d.ex]?.w ?? 0) }), { c: 0, w: 0 });
+    const rest = { c: Math.max(0, v.c - own.c), w: Math.max(0, v.w - own.w) };
+    if (rest.c + rest.w > 0) rows.push({ ex: mode, ...rest, legacy: true });
+  }
+  return rows.sort((a, b) => b.c + b.w - (a.c + a.w));
 }
 
 // ------------------------------------------------------------------ Aktionen am Wort

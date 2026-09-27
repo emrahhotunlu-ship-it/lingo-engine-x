@@ -142,12 +142,15 @@ test('Wechsel um 04:00: bis 03:59 gilt der Plan von gestern, ab 04:00 ein neuer 
   const { errors } = await boot(page, { migrated: true, now: '2026-09-21T03:59:00+02:00', fake: { patch: statePatch(new Set(['review'])) } });
   await screen(page, 'today');
   await checkConsistent(page, new Set(['review']));
+  // Kopfzeile zeigt den Lerntag (wie der Plan), nicht schon den neuen Kalendertag.
+  await expect(page.getByTestId('today-date')).toHaveText('Sonntag, 20. September');
   await page.waitForTimeout(300);
   expect(((await dump(page))['app/profile']?.plan as Doc).d).toBe(DAY);
   // 04:00: neuer Lerntag – ein neuer Plan, alle Punkte offen, nichts vom Vortag.
   await page.clock.setFixedTime(new Date('2026-09-21T04:00:30+02:00'));
   await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as Doc).d).toBe('2026-09-21');
+  await expect(page.getByTestId('today-date')).toHaveText('Montag, 21. September');
   const plan = (await dump(page))['app/profile']?.plan as { duty: string[] };
   const status = page.getByTestId('today-status');
   await expect(status).toHaveAttribute('data-done', '0');

@@ -6,7 +6,7 @@ import { maskText, redact, type Seeing } from '../../src/domain/companion/seeing
 import { suggestions } from '../../src/domain/companion/suggest';
 import { buildChatInput, HISTORY_MAX, TURNS_MAX_BYTES } from '../../src/domain/companion/turns';
 import { englishRuns, inlineText, parseMarkdown } from '../../src/domain/text/markdown';
-import { isAtBottom, nextScroll } from '../../src/ui/chat/scroll';
+import { afterScroll, isAtBottom, nextScroll } from '../../src/ui/chat/scroll';
 import { companionChat, NO_SOLUTION_RULE, type CompanionVars } from '../../src/prompts/companionChat';
 import { loadSeed, type Doc } from './helpers';
 
@@ -179,6 +179,14 @@ describe('Scroll-Logik (nextScroll)', () => {
     expect(nextScroll({ atBottom: false }, { ...m, scrollTop: 800 }, 'send').scrollTop).toBe(1500);
     expect(isAtBottom({ scrollTop: 1460, scrollHeight: 2000, clientHeight: 500 })).toBe(true);
     expect(isAtBottom({ scrollTop: 1400, scrollHeight: 2000, clientHeight: 500 })).toBe(false);
+  });
+
+  it('verspätetes Scroll-Ereignis nach eigenem Senden hebt „unten" nicht auf; echtes Hochscrollen schon', () => {
+    // Die App hat auf 1500 gesetzt, danach ist der Inhalt um 300 px gewachsen.
+    expect(afterScroll(true, { scrollTop: 1500, scrollHeight: 2300, clientHeight: 500 }, 1500)).toBe(true);
+    expect(afterScroll(true, { scrollTop: 1100, scrollHeight: 2300, clientHeight: 500 }, 1500)).toBe(false);
+    expect(afterScroll(false, { scrollTop: 1790, scrollHeight: 2300, clientHeight: 500 }, null)).toBe(true);
+    expect(afterScroll(false, { scrollTop: 1600, scrollHeight: 2300, clientHeight: 500 }, 1500)).toBe(false);
   });
 });
 

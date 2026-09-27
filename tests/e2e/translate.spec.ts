@@ -53,6 +53,26 @@ test.describe('Desktop 1440 DE', () => {
     expect(external).toEqual([]);
   });
 
+  test('Tonwechsel nach dem Ergebnis übersetzt genau einmal neu im gewählten Ton', async ({ page }) => {
+    const { errors } = await boot(page, { migrated: true });
+    await screen(page, 'today');
+    await page.keyboard.press('/');
+    await page.getByTestId('tr-input').fill('Wir müssen das Budget freigeben');
+    await page.getByTestId('tr-go').click();
+    await expect(page.getByTestId('tr-main')).toBeVisible();
+    expect(await calls(page, 'translate')).toHaveLength(1);
+    await page.getByTestId('tr-register').locator('[data-value="formal"]').click();
+    await expect.poll(async () => (await calls(page, 'translate')).length).toBe(2);
+    expect((await calls(page, 'translate'))[1]!.input).toContain('Register: formal');
+    expect((await calls(page, 'translate'))[0]!.input).toContain('Register: neutral');
+    await expect(page.getByTestId('tr-main')).toBeVisible();
+    // Derselbe Ton noch einmal: kein weiterer Aufruf.
+    await page.getByTestId('tr-register').locator('[data-value="formal"]').click();
+    await page.waitForTimeout(300);
+    expect(await calls(page, 'translate')).toHaveLength(2);
+    expect(errors).toEqual([]);
+  });
+
   test('zzsame: Schemafehler → genau ein Neuversuch (A6.3)', async ({ page }) => {
     await boot(page, { migrated: true });
     await screen(page, 'today');

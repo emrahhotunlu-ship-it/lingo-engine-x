@@ -1,4 +1,6 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useClock } from '../../app/clock';
+import { recordRoundEnd } from '../progress/persist';
 import { useT } from '../../i18n';
 import { useCollection } from '../../data/watch';
 import { answerDiff } from '../../domain/answer/diff';
@@ -49,6 +51,34 @@ export function SituationDrill({ scenes, onClose, minStage = 0 }: Props) {
   const [right, setRight] = useState(0);
   const input = useRef<HTMLInputElement>(null);
   const ex = list[pos];
+  // Minuten und Aktivität (Prüfbericht): aktive Zeit je Antwort, höchstens 60 s am Stück.
+  const activeMs = useRef(0);
+  const lastAt = useRef(0);
+  useEffect(() => {
+    lastAt.current = performance.now();
+  }, []);
+  const saved = useRef(false);
+  const answered = useRef(0);
+  const rightRef = useRef(0);
+  const touch = () => {
+    const now = performance.now();
+    activeMs.current += Math.min(60_000, Math.max(0, now - lastAt.current));
+    lastAt.current = now;
+  };
+  const save = (partial: boolean) => {
+    if (saved.current || answered.current < 1) return;
+    saved.current = true;
+    const day = useClock.getState().today;
+    void recordRoundEnd({ day, act: 'speak', partial, n: answered.current, right: rightRef.current, activeMs: activeMs.current, countAs: answered.current });
+  };
+  const done = round !== null && list.length > 0 && !ex;
+  useEffect(() => {
+    if (done) save(false);
+  });
+  const close = () => {
+    save(true);
+    onClose();
+  };
 
   if (round === null) return null;
   if (!list.length) {
@@ -56,7 +86,7 @@ export function SituationDrill({ scenes, onClose, minStage = 0 }: Props) {
       <Card channel="speak" data-testid="situation-drill" data-state="empty">
         <p className="text-sm text-muted">{t('sitEmpty')}</p>
         <div className="mt-3">
-          <Button onClick={onClose}>{t('close')}</Button>
+          <Button onClick={close}>{t('close')}</Button>
         </div>
       </Card>
     );
@@ -68,7 +98,7 @@ export function SituationDrill({ scenes, onClose, minStage = 0 }: Props) {
           {t('drillResult', { right, n: list.length })}
         </p>
         <div className="mt-3">
-          <Button onClick={onClose}>{t('close')}</Button>
+          <Button onClick={close}>{t('close')}</Button>
         </div>
       </Card>
     );
@@ -77,6 +107,9 @@ export function SituationDrill({ scenes, onClose, minStage = 0 }: Props) {
   const check = () => {
     if (!given.trim() || result) return;
     const r = checkSituation(given, ex);
+    touch();
+    answered.current += 1;
+    if (r.verdict === 'correct') rightRef.current += 1;
     setResult(r);
     if (r.verdict === 'correct') setRight((n) => n + 1);
   };
@@ -94,7 +127,7 @@ export function SituationDrill({ scenes, onClose, minStage = 0 }: Props) {
         <p className="text-xs font-medium text-muted" data-testid="status">
           {t('sitKind')} · <span className="lx-tnum">{t('sitProgress', { n: pos + 1, total: list.length })}</span>
         </p>
-        <IconButton icon="close" label={t('close')} onClick={onClose} />
+        <IconButton icon="close" label={t('close')} onClick={close} />
       </div>
       <p className="text-sm font-medium">{t('sitTask')}</p>
       <div className="flex flex-col gap-1 rounded-2xl bg-surface px-4 py-3 text-sm">

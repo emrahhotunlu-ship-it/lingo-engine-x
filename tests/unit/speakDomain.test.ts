@@ -252,6 +252,16 @@ describe('Szenen-Bibliothek', () => {
     expect(list[list.length - 1]!.id).toBe('sc-vida');
   });
 
+  it('done als Datum-Text (Form der alten App) zählt als gespielt, mit Datum als letztem Lauf', () => {
+    const v = sceneView('sc-vida', { ...(legacy[0] as Doc), done: '2026-09-23' }, 'legacy', 'de');
+    expect(v.runs).toBe(1);
+    expect(new Date(v.lastRun ?? 0).getDate()).toBe(23);
+    expect(sceneView('sc-vida', { ...(legacy[0] as Doc), done: '' }, 'legacy', 'de').runs).toBe(0);
+    expect(sceneView('sc-vida', { ...(legacy[0] as Doc), done: false }, 'legacy', 'de').runs).toBe(0);
+    // Die neue App zählt weiter, der Datum-Text bleibt stehen.
+    expect(sceneRunOp({ done: '2026-09-23' }, null, 10)).toEqual({ update: { runs: 1, lastRun: 10 } });
+  });
+
   it('Lauf-Vermerk: done nur bei fehlend/false, vorhandener Wert bleibt; Szene nur aus Inhalt → vollständig anlegen', () => {
     expect(sceneRunOp({ done: 3, runs: 2 }, null, 10)).toEqual({ update: { runs: 3, lastRun: 10 } });
     expect(sceneRunOp({ done: false }, null, 10)).toEqual({ update: { runs: 1, lastRun: 10, done: true } });

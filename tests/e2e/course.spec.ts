@@ -78,6 +78,45 @@ test('l07 mit gespeichertem Inhalt vollständig: course.done.l07, Pflichtpunkt �
   expect(external).toEqual([]);
 });
 
+test('Lektion der alten App: Umformung und Lücke ohne ___ als Ganzsatz-Eingabe', async ({ page }) => {
+  const l07 = storedL07();
+  // Form der alten App (lesson/<lid>.tasks): Auftrag im Satz, keine Lücke, Lösung ist der ganze Satz.
+  const noSlot = [
+    { topic: 'passive', type: 'transform', prompt: 'Active: "Our team checks every invoice." Change to passive.', options: null, answer: 'Every invoice is checked.', accepted: ['Every invoice is checked by our team.'], hint: '(Aktiv → Passiv, Präsens)', expl: 'Objekt wird Subjekt.', expl_en: 'The object becomes the subject.' },
+    { topic: 'passive', type: 'gap', prompt: 'Rewrite in the passive: The auditor approved the report.', options: null, answer: 'The report was approved.', accepted: ['The report was approved by the auditor.'], hint: '', expl: 'Vergangenheit → was + Partizip.', expl_en: 'Past → was + past participle.' },
+  ];
+  l07.tasks = [...noSlot, ...(l07.tasks as Doc[]).slice(0, 1)];
+  const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'lesson/l07': l07 } } });
+  await openLesson(page, 'l07');
+  const answers: Record<string, string> = {};
+  for (const q of l07.questions as Array<{ q: string; answer: string }>) answers[q.q] = q.answer;
+  const shown: string[] = [];
+  await playLesson(page, {
+    words: words('l07'),
+    solve: grammarKey([l07]),
+    answers,
+    output: L07_OUTPUT,
+    onGrammar: async (phase) => {
+      const item = page.getByTestId('gr-item');
+      if (!(await item.locator('[data-testid="correct-input"][data-whole]').count())) return;
+      if (phase === 'after') {
+        await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+        return;
+      }
+      {
+        // Feld ist leer und beschreibbar, der Auftrag steht darüber.
+        await expect(item.getByTestId('correct-input')).toHaveValue('');
+        await expect(item.getByTestId('correct-input')).toBeEditable();
+        shown.push(await item.getByTestId('transform-from').innerText());
+      }
+    },
+  });
+  expect(shown.sort()).toEqual(noSlot.map((t) => t.prompt).sort());
+  await expect.poll(async () => ((await dump(page))['app/course']?.done as Doc | undefined)?.l07).toMatchObject({ d: DAY });
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
+});
+
 test('Lektion: nach dem Neuladen im selben Schritt', async ({ page }) => {
   const l07 = storedL07();
   const { errors } = await boot(page, { migrated: true, fake: { persist: true, patch: { 'lesson/l07': l07 } } });

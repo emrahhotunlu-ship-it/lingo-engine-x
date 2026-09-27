@@ -39,6 +39,34 @@ export type Rule = {
 
 const pick = (p: Pair | undefined, lang: Lang): string => (p ? (lang === 'de' ? p[0] : p[1]) : '');
 
+/**
+ * Deutsche Fachwörter in den Formmustern der alten App (`forms[][1]`, z. B. „have/has + 3. Form").
+ * Die Inhalte bleiben unverändert; die Oberfläche setzt je Kennung den Text aus i18n
+ * (`grTerm_<id>`) ein – auf Englisch „past participle" statt „3. Form" (Sprachtreue, Kap. 10).
+ */
+export const PATTERN_TERMS: ReadonlyArray<readonly [de: string, id: string]> = [
+  ['normale Wortstellung', 'wordOrder'],
+  ['verschobene Zeit', 'backshift'],
+  ['eines von vielen', 'oneOfMany'],
+  ['bekannt, einzigartig', 'knownUnique'],
+  ['allgemein, abstrakt', 'generalAbstract'],
+  ['ohne Komma', 'noComma'],
+  ['mit Kommas', 'withCommas'],
+  ['Präposition', 'preposition'],
+  ['Fragewort', 'questionWord'],
+  ['Grundform', 'base'],
+  ['3. Form', 'pp'],
+  ['2. Form', 'past'],
+  ['Beruf', 'job'],
+];
+
+/** Formmuster mit übersetzten Fachwörtern (`term(id)` liefert den Text der Oberflächensprache). */
+export function localizePattern(pattern: string, term: (id: string) => string): string {
+  let out = pattern;
+  for (const [de, id] of PATTERN_TERMS) if (out.includes(de)) out = out.split(de).join(term(id));
+  return out;
+}
+
 /** Regelblatt eines Themas in der Oberflächensprache; `null` für unbekannte Themen. */
 export function ruleOf(topic: string, lang: Lang): Rule | null {
   const r = RAW.rules[topic];

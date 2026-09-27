@@ -2,7 +2,7 @@ import { lessonDoneOn } from '../course/courseDone';
 import { addDays, dayKey, isDayKey, legacyDayKey } from '../date';
 import { isDutyChannel } from './channels';
 import { isPhase2Plan } from './buildPlan';
-import type { StoredPlan } from './types';
+import type { DutyId, StoredPlan } from './types';
 
 // Pflicht und Serie (phase2-plan §6.3, Daten-Entwurf §7, verbindlich; behebt ALARM B1/B2).
 //
@@ -118,4 +118,15 @@ export function pflichtSinceOp(cur: Readonly<Doc> | undefined, value: string): {
   if (isDayKey(cur.pflichtSince)) return null;
   if (cur.pflichtSince != null) return 'conflict';
   return { update: { pflichtSince: value } };
+}
+
+/**
+ * Planleiste in Pflichtrunden: „Pflicht 2 von 3" (M11) – der Schritt, an dem man gerade ist.
+ * Ist der Pflichtpunkt dieser Runde schon erledigt (Zusammenfassung), zählt er als erledigter
+ * Schritt und nicht als „nächster" – sonst stünde „3 von 3", obwohl noch etwas offen ist.
+ */
+export function dutyStep(duties: { done: number; total: number; items: ReadonlyArray<{ id: DutyId; state: 'done' | 'open' }> }, duty?: DutyId | null): number {
+  const cur = duty ? duties.items.find((i) => i.id === duty) : undefined;
+  const n = cur?.state === 'done' ? duties.done : duties.done + 1;
+  return Math.max(1, Math.min(duties.total, n));
 }

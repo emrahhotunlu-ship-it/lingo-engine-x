@@ -11,7 +11,7 @@ import { Segmented } from '../../ui/Segmented';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useLive } from '../../data/live';
-import { legacyDayKey } from '../../domain/date';
+import { dayKeyNoon, legacyDayKey } from '../../domain/date';
 import { lessonMeta } from '../../domain/course/catalog';
 import { dutyMinutes } from '../../domain/plan/buildPlan';
 import { feasible, type FeasibleData } from '../../domain/plan/channels';
@@ -37,7 +37,7 @@ import { unlockSpeech, useSpeech } from '../../platform/speech';
 import { firstOpenDuty, useToday } from './state';
 import { feasibleData, healToday, retryPlan, useTodayPlan } from './store';
 import { TodayOffers } from '../speak/TodayOffers';
-import { PreplyTodayLine } from '../preply/TodayLine';
+import { PreplyTodayLine, usePreplyToday } from '../preply/TodayLine';
 import { InputOffers } from '../input/InputOffers';
 
 // „Heute": beim Öffnen ist sofort klar, was dran ist (Kap. 2.1). Eine Statuszeile, EIN großer
@@ -148,10 +148,14 @@ export function TodayScreen() {
 
   const data: FeasibleData | null = useMemo(() => (ready && state.status !== 'open' ? feasibleData(drillCards(now), lang, now) : null), [ready, state.status, now, lang]);
 
-  const dateLabel = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' }).format(now);
+  // Lerntag (Wechsel um 04:00), dieselbe Datumsfunktion wie der Plan: nachts gilt noch der Vortag.
+  const dateLabel = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' }).format(dayKeyNoon(today));
   const { done, total } = state.review;
   const left = Math.max(0, total - done);
   const pct = state.balance.answers ? Math.round((state.balance.correct / state.balance.answers) * 100) : 0;
+  // Minuten gegen das Tagesziel ohne gehaltene Preply-Stunden (Extra, eigene Zeile darunter).
+  const preplyToday = usePreplyToday();
+  const learnMin = Math.max(0, state.balance.minutes - preplyToday.minutes);
   const hero = firstOpenDuty(state);
   const onlyReview = state.duties.total === 1 && state.duties.items[0]?.id === 'review';
   const lesson = plan?.lesson ? lessonMeta(plan.lesson) : null;
@@ -207,7 +211,7 @@ export function TodayScreen() {
     <motion.div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
       <motion.header variants={item} className="flex flex-col gap-2">
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
-          <span>{dateLabel}</span>
+          <span data-testid="today-date" data-day={today}>{dateLabel}</span>
           <span className="lx-tnum" data-testid="today-streak">
             {tn('tdStreak', streak.count)}
           </span>
@@ -351,7 +355,7 @@ export function TodayScreen() {
 
       {dayLoaded && (state.balance.answers > 0 || state.extra > 0) && (
         <motion.p variants={item} className="lx-tnum text-sm text-muted" data-testid="balance">
-          {state.balance.answers > 0 && tn('tdBalance', state.balance.answers, { answers: state.balance.answers, pct, min: state.balance.minutes, goal: goalMin })}
+          {state.balance.answers > 0 && tn('tdBalance', state.balance.answers, { answers: state.balance.answers, pct, min: learnMin, goal: goalMin })}
           {state.balance.answers > 0 && state.extra > 0 && ' · '}
           {state.extra > 0 && tn('tdExtraCount', state.extra)}
         </motion.p>

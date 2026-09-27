@@ -8,7 +8,7 @@ import { solvedSentence } from '../../domain/course/baseLesson';
 import { topicP } from '../../domain/grammar/bkt';
 import { altFamily, checkGrammar } from '../../domain/grammar/check';
 import { alsoRight, altNote, examplesFor, formHint } from '../../domain/grammar/rules';
-import { scaffolded } from '../../domain/grammar/tasks';
+import { scaffolded, splitTransform, wholeSentence } from '../../domain/grammar/tasks';
 import { learnGrade } from '../../domain/learn/grade';
 import type { Ctx, GrammarAnswer, GrammarCheck, GrammarTask, Help, Verdict } from '../../domain/learn/types';
 import { maskOf } from '../../domain/answer/mask';
@@ -64,12 +64,6 @@ type Fb = {
 
 const GAP = /_{3,}/;
 
-/** Teilt „Satz A → Satz B mit ___" in Ausgang und Ziel. */
-function splitTransform(prompt: string): { from: string; target: string } {
-  const [a, b] = prompt.split('→');
-  return b === undefined ? { from: '', target: prompt } : { from: (a ?? '').trim(), target: b.trim() };
-}
-
 export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
@@ -79,7 +73,9 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
   const [pStart] = useState(() => topicP(task.topic, doc, now));
   const p = topicP(task.topic, doc, now);
-  const scaff = task.type === 'gap' && scaffolded(pStart);
+  // Ganzsatz-Eingabe: `correct` und Umformungen ohne Lücke `___` (Lektionen der alten App).
+  const whole = wholeSentence(task);
+  const scaff = task.type === 'gap' && !whole && scaffolded(pStart);
   const [fb, setFb] = useState<Fb | null>(null);
   const [tip, setTip] = useState<0 | 1 | 2>(0);
   const [judging, setJudging] = useState(false);
@@ -99,7 +95,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   }, []);
 
   const solution = task.answer;
-  const typedKind = task.type === 'gap' || task.type === 'transform';
+  const typedKind = !whole && (task.type === 'gap' || task.type === 'transform');
   const maskShown = typedKind && (scaff || tip > 0);
   const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
   const help: Help = { level: tip >= 2 ? 2 : tip >= 1 ? 1 : 0 };
@@ -132,7 +128,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       if (!choice) return;
       given = choice;
       setChosen(choice);
-    } else if (task.type === 'correct') given = text;
+    } else if (whole) given = text;
     else {
       given = typed.current;
       if (tip >= 2 && mask) {
@@ -274,7 +270,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
         )}
       </>
     );
-  } else if (task.type === 'transform') {
+  } else if (task.type === 'transform' && !whole) {
     const { from, target } = splitTransform(task.prompt);
     body = (
       <>
@@ -283,11 +279,13 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       </>
     );
   } else {
-    body = (
+    // Ganzsatz: `correct` (Satz steht im Feld) oder Umformung ohne Lücke (Auftrag oben, Feld leer).
+    const field = (
       <textarea
         className="lx-field"
         data-sentence=""
         data-testid="correct-input"
+        data-whole={task.type === 'correct' ? undefined : ''}
         data-state={fb ? fb.verdict : undefined}
         lang="en"
         rows={2}
@@ -297,7 +295,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
         autoComplete="off"
         autoCorrect="off"
         spellCheck={false}
-        aria-label={t('grCorrectLabel')}
+        aria-label={t(task.type === 'correct' ? 'grCorrectLabel' : 'grRewriteLabel')}
         onChange={(e) => {
           if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
           setText(e.target.value);
@@ -311,6 +309,20 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
         }}
       />
     );
+    body =
+      task.type === 'correct' ? (
+        field
+      ) : (
+        <>
+          <EnglishText as="p" className="lx-sentence" text={task.prompt} {...src} testId="transform-from" />
+          {task.hint && !task.prompt.includes(task.hint) && (
+            <p className="text-sm text-muted" data-testid="cue">
+              {task.hint}
+            </p>
+          )}
+          {field}
+        </>
+      );
   }
 
   // ------------------------------------------------------------------ Ergebnis

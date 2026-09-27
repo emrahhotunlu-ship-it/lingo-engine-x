@@ -70,8 +70,15 @@ export function setDirection(dir: TransLang | null): void {
   useTranslate.setState({ dirOverride: dir, result: null, phase: 'idle', error: null });
 }
 
+/**
+ * Ton wählen. Steht schon ein Ergebnis für denselben Text da, wird es im neuen Ton neu übersetzt
+ * (ein Aufruf auf diesen Klick) – sonst passte das angezeigte Ergebnis nicht mehr zur Auswahl.
+ */
 export function setRegister(register: Register): void {
+  const s = useTranslate.getState();
+  if (s.register === register) return;
   useTranslate.setState({ register });
+  if (s.result && !isTranslating() && s.result.text === s.text.trim()) void runTranslate();
 }
 
 export function isTranslating(): boolean {

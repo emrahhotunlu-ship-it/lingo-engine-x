@@ -17,6 +17,18 @@ export function isAtBottom(m: ScrollMetrics): boolean {
   return m.scrollHeight - m.scrollTop - m.clientHeight <= AT_BOTTOM_PX;
 }
 
+/**
+ * Bleibt man nach einem Scroll-Ereignis „unten"? Ein Ereignis kann verspätet eintreffen, nachdem
+ * der Inhalt schon weiter gewachsen ist (eigenes Senden, neue Nachricht). Solange die Position
+ * nicht über der zuletzt von der App gesetzten (`pinnedTop`) liegt, hat niemand hochgescrollt –
+ * dann bleibt es beim bisherigen Zustand. Nur echtes Hochscrollen löst „unten" auf.
+ */
+export function afterScroll(prevAtBottom: boolean, m: ScrollMetrics, pinnedTop: number | null): boolean {
+  if (isAtBottom(m)) return true;
+  if (pinnedTop !== null && m.scrollTop >= pinnedTop - 1) return prevAtBottom;
+  return false;
+}
+
 /** Was beim Wachsen des Inhalts (`grow`) bzw. nach eigenem Senden (`send`) zu tun ist. */
 export function nextScroll(prev: { atBottom: boolean }, m: ScrollMetrics, reason: 'grow' | 'send'): ScrollDecision {
   const bottom = Math.max(0, m.scrollHeight - m.clientHeight);
@@ -29,6 +41,7 @@ export function useStickToBottom() {
   const scroller = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const atBottom = useRef(true);
+  const pinned = useRef<number | null>(null);
   const [jump, setJump] = useState(false);
 
   const apply = useCallback((reason: 'grow' | 'send') => {
@@ -36,7 +49,10 @@ export function useStickToBottom() {
     if (!el) return;
     const d = nextScroll({ atBottom: atBottom.current }, el, reason);
     atBottom.current = d.atBottom;
-    if (d.scrollTop !== null) el.scrollTop = d.scrollTop;
+    if (d.scrollTop !== null) {
+      el.scrollTop = d.scrollTop;
+      pinned.current = el.scrollTop;
+    }
     setJump(d.jump);
   }, []);
 
@@ -45,8 +61,9 @@ export function useStickToBottom() {
     const inner = content.current;
     if (!el || !inner) return;
     const onScroll = () => {
-      atBottom.current = isAtBottom(el);
-      if (atBottom.current) setJump(false);
+      atBottom.current = afterScroll(atBottom.current, el, pinned.current);
+      if (!atBottom.current) pinned.current = null;
+      if (isAtBottom(el)) setJump(false);
     };
     el.addEventListener('scroll', onScroll, { passive: true });
     // Wächst der Inhalt ODER schrumpft der sichtbare Bereich (Vorschläge, Tastatur), gilt dieselbe Regel.
@@ -59,7 +76,8 @@ export function useStickToBottom() {
     };
   }, [apply]);
 
-  return { scroller, content, jump, toBottom: () => apply('send') };
+  const toBottom = useCallback(() => apply('send'), [apply]);
+  return { scroller, content, jump, toBottom };
 }
 
 const pageMetrics = (): ScrollMetrics => ({ scrollTop: window.scrollY, scrollHeight: document.documentElement.scrollHeight, clientHeight: window.innerHeight });

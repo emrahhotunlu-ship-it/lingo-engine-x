@@ -13,6 +13,7 @@ import { allMsgs, closeCompanion, msgKey, resend, retrySave, sendMessage, stopTu
 import { useStickToBottom } from '../../ui/chat/scroll';
 import { NewerPill } from '../../ui/chat/ChatInput';
 import { AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 
 // Reiter „Fragen" des Begleiters (Phase 5 §8.1): Verlauf ohne Scroll-Springen, laufende Antwort,
 // Fehler mit „Erneut senden", Vorschläge und Aktionen, Eingabe.
@@ -38,9 +39,20 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
 
   const send = (text: string) => {
     void sendMessage(text);
-    // Eigenes Senden ist eine ausdrückliche Handlung: nach unten (§8.1).
-    requestAnimationFrame(() => toBottom());
   };
+
+  // Eigenes Senden ist eine ausdrückliche Handlung: nach unten (§8.1) – auf jedem Weg (Eingabe,
+  // Vorschlag, „Claude fragen" aus dem Wort-Popup), auch wenn vorher hochgescrollt war.
+  const sentSeq = s.sentSeq;
+  useEffect(() => {
+    if (!sentSeq) return;
+    toBottom();
+    const id = requestAnimationFrame(() => toBottom());
+    return () => cancelAnimationFrame(id);
+  }, [sentSeq, toBottom]);
+
+  // Vorschläge: vor dem ersten Wechsel umbrechend; sobald ein Gespräch läuft, eine Zeile zum Wischen.
+  const compact = current.length > 0 || running;
 
   const stateOf = (m: ChatMsg): MsgState => {
     if (m.role === 'user') return turn.status === 'error' && turn.userMsg && msgKey(turn.userMsg) === msgKey(m) ? 'error' : 'done';
@@ -168,7 +180,14 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
           </div>
         )}
         {!running && ai && (
-          <div className="flex flex-wrap gap-2" role="group" aria-label={t('cmpSuggestLabel')}>
+          <div
+            className={compact ? '-mx-4 flex flex-nowrap gap-2 overflow-x-auto px-4 [scrollbar-width:none] sm:-mx-6 sm:px-6' : 'flex flex-wrap gap-2'}
+            role="group"
+            aria-label={t('cmpSuggestLabel')}
+            data-testid="chat-suggestions"
+            data-compact={compact ? '' : undefined}
+            data-hscroll={compact ? '' : undefined}
+          >
             {chips.map((k: SuggestKey) => (
               <button
                 key={k}
