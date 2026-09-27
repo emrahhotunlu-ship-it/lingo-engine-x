@@ -1,0 +1,411 @@
+[
+ {
+  "id": "u01",
+  "a": "It's possible the client hasn't received the invoice.",
+  "key": "MAY",
+  "gap": "The client ___ the invoice.",
+  "answers": [
+   "may not have received"
+  ],
+  "why": {
+   "de": "Vermutung über die Vergangenheit: may not have + 3. Form.",
+   "en": "A guess about the past: may not have + past participle."
+  }
+ },
+ {
+  "id": "u02",
+  "a": "I'm sure the CFO saw our proposal.",
+  "key": "MUST",
+  "gap": "The CFO ___ our proposal.",
+  "answers": [
+   "must have seen"
+  ],
+  "why": {
+   "de": "Sichere Vermutung über die Vergangenheit: must have + 3. Form.",
+   "en": "A confident guess about the past: must have + past participle."
+  }
+ },
+ {
+  "id": "u03",
+  "a": "It's impossible that they signed without reading it.",
+  "key": "CAN'T",
+  "gap": "They ___ without reading it.",
+  "answers": [
+   "can't have signed it",
+   "can't have signed"
+  ],
+  "why": {
+   "de": "Ausgeschlossen in der Vergangenheit: can’t have + 3. Form.",
+   "en": "Something impossible in the past: can’t have + past participle."
+  }
+ },
+ {
+  "id": "u04",
+  "a": "We started working with them three years ago.",
+  "key": "FOR",
+  "gap": "We ___ three years.",
+  "answers": [
+   "have worked with them for",
+   "have been working with them for",
+   "'ve worked with them for",
+   "'ve been working with them for"
+  ],
+  "why": {
+   "de": "Dauer bis heute: Present Perfect mit for + Zeitraum.",
+   "en": "Duration up to now: present perfect with for + period."
+  }
+ },
+ {
+  "id": "u05",
+  "a": "The last time I spoke to him was in May.",
+  "key": "SINCE",
+  "gap": "I ___ May.",
+  "answers": [
+   "haven't spoken to him since",
+   "have not spoken to him since"
+  ],
+  "why": {
+   "de": "Seit einem Zeitpunkt nicht mehr: Present Perfect mit since.",
+   "en": "Not since a point in time: present perfect with since."
+  }
+ },
+ {
+  "id": "u06",
+  "a": "They will deliver the software next week.",
+  "key": "BE",
+  "gap": "The software ___ next week.",
+  "answers": [
+   "will be delivered"
+  ],
+  "why": {
+   "de": "Passiv in der Zukunft: will be + 3. Form.",
+   "en": "Future passive: will be + past participle."
+  }
+ },
+ {
+  "id": "u07",
+  "a": "Someone has already approved the budget.",
+  "key": "BEEN",
+  "gap": "The budget ___ approved.",
+  "answers": [
+   "has already been"
+  ],
+  "why": {
+   "de": "Passiv im Present Perfect: has been + 3. Form.",
+   "en": "Present perfect passive: has been + past participle."
+  }
+ },
+ {
+  "id": "u08",
+  "a": "If we don't get the signature by Friday, we'll lose the discount.",
+  "key": "UNLESS",
+  "gap": "We'll lose the discount ___ by Friday.",
+  "answers": [
+   "unless we get the signature"
+  ],
+  "why": {
+   "de": "unless = if not; danach steht der Satz ohne not.",
+   "en": "Unless means if not, so the clause after it has no not."
+  }
+ },
+ {
+  "id": "u09",
+  "a": "Our price was too high, so we lost the deal.",
+  "key": "HAD",
+  "gap": "We would have won the deal if our price ___ too high.",
+  "answers": [
+   "hadn't been",
+   "had not been"
+  ],
+  "why": {
+   "de": "Dritter Konditional: if + Past Perfect, would have + 3. Form.",
+   "en": "Third conditional: if + past perfect, would have + past participle."
+  }
+ },
+ {
+  "id": "u10",
+  "a": "I regret not asking about the budget.",
+  "key": "WISH",
+  "gap": "I ___ about the budget.",
+  "answers": [
+   "wish I had asked",
+   "wish I'd asked"
+  ],
+  "why": {
+   "de": "Bedauern über die Vergangenheit: wish + Past Perfect.",
+   "en": "Regret about the past: wish + past perfect."
+  }
+ },
+ {
+  "id": "u11",
+  "a": "It wasn't necessary for you to send the documents twice.",
+  "key": "NEED",
+  "gap": "You ___ the documents twice.",
+  "answers": [
+   "needn't have sent",
+   "need not have sent",
+   "didn't need to send",
+   "did not need to send"
+  ],
+  "why": {
+   "de": "Unnötig, aber passiert: needn’t have + 3. Form.",
+   "en": "Unnecessary, but it happened: needn’t have + past participle."
+  }
+ },
+ {
+  "id": "u12",
+  "a": "They postponed the meeting because the CEO was sick.",
+  "key": "OFF",
+  "gap": "The meeting ___ because the CEO was sick.",
+  "answers": [
+   "was put off"
+  ],
+  "why": {
+   "de": "postpone = put off (Phrasal Verb), hier im Passiv.",
+   "en": "Postpone means put off (phrasal verb), here in the passive."
+  }
+ },
+ {
+  "id": "u13",
+  "a": "We need to investigate the problem immediately.",
+  "key": "LOOK",
+  "gap": "We need to ___ immediately.",
+  "answers": [
+   "look into the problem",
+   "look into it"
+  ],
+  "why": {
+   "de": "investigate = look into (gesprochen, weniger förmlich).",
+   "en": "Investigate means look into (spoken, less formal)."
+  }
+ },
+ {
+  "id": "u14",
+  "a": "The customer rejected our offer.",
+  "key": "TURNED",
+  "gap": "The customer ___ offer.",
+  "answers": [
+   "turned down our"
+  ],
+  "why": {
+   "de": "reject = turn down; das Objekt steht nach down.",
+   "en": "Reject means turn down; the object comes after down."
+  }
+ },
+ {
+  "id": "u15",
+  "a": "It's not necessary to decide today.",
+  "key": "HAVE",
+  "gap": "You ___ today.",
+  "answers": [
+   "don't have to decide",
+   "do not have to decide"
+  ],
+  "why": {
+   "de": "Keine Pflicht: don’t have to (nicht mustn’t, das wäre ein Verbot).",
+   "en": "No obligation: don’t have to (not mustn’t, which means it is forbidden)."
+  }
+ },
+ {
+  "id": "u16",
+  "a": "Nobody told me about the price change.",
+  "key": "INFORMED",
+  "gap": "I ___ about the price change.",
+  "answers": [
+   "wasn't informed",
+   "was not informed"
+  ],
+  "why": {
+   "de": "Passiv: Die handelnde Person ist unwichtig oder unbekannt.",
+   "en": "Passive: the person who acted is unknown or not important."
+  }
+ },
+ {
+  "id": "u17",
+  "a": "I'd prefer to discuss this by phone.",
+  "key": "RATHER",
+  "gap": "I ___ this by phone.",
+  "answers": [
+   "would rather discuss",
+   "'d rather discuss"
+  ],
+  "why": {
+   "de": "would rather + Grundform, ohne to.",
+   "en": "Would rather + base form, without to."
+  }
+ },
+ {
+  "id": "u18",
+  "a": "The implementation was slower than we expected.",
+  "key": "AS",
+  "gap": "The implementation was not ___ we expected.",
+  "answers": [
+   "as fast as",
+   "as quick as"
+  ],
+  "why": {
+   "de": "Vergleich mit not as … as.",
+   "en": "Comparison with not as … as."
+  }
+ },
+ {
+  "id": "u19",
+  "a": "It's the best offer we have ever received.",
+  "key": "NEVER",
+  "gap": "We ___ a better offer.",
+  "answers": [
+   "have never received",
+   "'ve never received"
+  ],
+  "why": {
+   "de": "Superlativ umgedreht: never + Present Perfect + Komparativ.",
+   "en": "Turning a superlative around: never + present perfect + comparative."
+  }
+ },
+ {
+  "id": "u20",
+  "a": "\"Where is the contract?\" she asked me.",
+  "key": "WAS",
+  "gap": "She asked me ___.",
+  "answers": [
+   "where the contract was"
+  ],
+  "why": {
+   "de": "Indirekte Frage: normale Wortstellung, Zeit einen Schritt zurück.",
+   "en": "Reported question: normal word order, tense one step back."
+  }
+ },
+ {
+  "id": "u21",
+  "a": "\"Do you have a budget for this?\" the consultant asked us.",
+  "key": "WHETHER",
+  "gap": "The consultant asked us ___ a budget for this.",
+  "answers": [
+   "whether we had"
+  ],
+  "why": {
+   "de": "Ja/Nein-Frage indirekt: whether/if, kein do, Zeit zurück.",
+   "en": "Reported yes/no question: whether/if, no do, tense one step back."
+  }
+ },
+ {
+  "id": "u22",
+  "a": "Although the price was high, they signed the contract.",
+  "key": "DESPITE",
+  "gap": "They signed the contract ___ was high.",
+  "answers": [
+   "despite the fact that the price"
+  ],
+  "why": {
+   "de": "despite steht vor einem Nomen; vor einem Satz: despite the fact that.",
+   "en": "Despite goes before a noun; before a clause, use despite the fact that."
+  }
+ },
+ {
+  "id": "u23",
+  "a": "We will only give a discount if you sign for three years.",
+  "key": "PROVIDED",
+  "gap": "We will give a discount ___ for three years.",
+  "answers": [
+   "provided that you sign",
+   "provided you sign"
+  ],
+  "why": {
+   "de": "provided (that) = nur wenn, eine klare Bedingung.",
+   "en": "Provided (that) means only if, a clear condition."
+  }
+ },
+ {
+  "id": "u24",
+  "a": "Understanding the customer's process really matters.",
+  "key": "WHAT",
+  "gap": "___ understanding the customer's process.",
+  "answers": [
+   "What really matters is"
+  ],
+  "why": {
+   "de": "Betonung durch Satzbau: What … is … hebt den Kern hervor.",
+   "en": "Emphasis through structure: What … is … highlights the key point."
+  }
+ },
+ {
+  "id": "u25",
+  "a": "I have rarely seen such a well-organized archive.",
+  "key": "HAVE",
+  "gap": "Rarely ___ such a well-organized archive.",
+  "answers": [
+   "have I seen"
+  ],
+  "why": {
+   "de": "Inversion nach rarely am Satzanfang: Hilfsverb vor Subjekt.",
+   "en": "Inversion after rarely at the start: auxiliary before subject."
+  }
+ },
+ {
+  "id": "u26",
+  "a": "The project was successful mainly because the team was motivated.",
+  "key": "DUE",
+  "gap": "The project's success was ___ the team's motivation.",
+  "answers": [
+   "mainly due to"
+  ],
+  "why": {
+   "de": "Nominalstil: due to + Nomen statt because + Satz.",
+   "en": "Nominal style: due to + noun instead of because + clause."
+  }
+ },
+ {
+  "id": "u27",
+  "a": "Could you send me the figures by Friday?",
+  "key": "WONDERING",
+  "gap": "I ___ send me the figures by Friday.",
+  "answers": [
+   "was wondering if you could",
+   "was wondering whether you could"
+  ],
+  "why": {
+   "de": "Indirekte, höfliche Bitte: I was wondering if you could …",
+   "en": "Indirect, polite request: I was wondering if you could …"
+  }
+ },
+ {
+  "id": "u28",
+  "a": "This solution will probably save you about 30 percent.",
+  "key": "LIKELY",
+  "gap": "This solution ___ save you about 30 percent.",
+  "answers": [
+   "is likely to"
+  ],
+  "why": {
+   "de": "Abschwächen: be likely to statt will probably.",
+   "en": "Hedging: be likely to instead of will probably."
+  }
+ },
+ {
+  "id": "u29",
+  "a": "We can't agree to these terms.",
+  "key": "POSITION",
+  "gap": "We ___ agree to these terms.",
+  "answers": [
+   "aren't in a position to",
+   "are not in a position to"
+  ],
+  "why": {
+   "de": "Diplomatische Distanz: not in a position to statt can’t.",
+   "en": "Diplomatic distance: not in a position to instead of can’t."
+  }
+ },
+ {
+  "id": "u30",
+  "a": "The price depends on the number of users.",
+  "key": "DEPENDING",
+  "gap": "The price varies ___ number of users.",
+  "answers": [
+   "depending on the"
+  ],
+  "why": {
+   "de": "depending on = je nach; die Präposition bleibt on.",
+   "en": "Depending on means \"according to\"; the preposition stays on."
+  }
+ }
+]
