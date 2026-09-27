@@ -1,5 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-import { screen, openTab } from './fixtures';
+import { openTab } from './fixtures';
 
 // Hilfen für die E2E-Tests von Phase 4 (Lesen, Hören, Schreiben, Entdecken).
 

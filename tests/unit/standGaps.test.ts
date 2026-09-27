@@ -269,9 +269,10 @@ describe('Ladepunkt am Reiter (M13)', () => {
   const task = (over: Partial<AiTask>): AiTask => ({ key: 'k', kind: 'write', route: { name: 'write', ctx: 'extra' }, phase: 'thinking', status: 'running', error: null, seen: false, startedAt: 1, ...over });
   it('nur laufende Korrekturen, am passenden Reiter', () => {
     expect([...runningTabs({})]).toEqual([]);
-    expect([...runningTabs({ a: task({}) })]).toEqual(['learn']);
+    // Neubau-Rahmen: freiwillige Einheiten liegen im Reiter „Lesen“.
+    expect([...runningTabs({ a: task({}) })]).toEqual(['read']);
     expect([...runningTabs({ a: task({ route: { name: 'write', ctx: 'duty' } }) })]).toEqual(['today']);
-    expect([...runningTabs({ a: task({ kind: 'discover', route: { name: 'discoverItem', feedId: 'f', itemId: 'i', ctx: 'extra' } }) })]).toEqual(['learn']);
+    expect([...runningTabs({ a: task({ kind: 'discover', route: { name: 'discoverItem', feedId: 'f', itemId: 'i', ctx: 'extra' } }) })]).toEqual(['read']);
     expect([...runningTabs({ a: task({ status: 'done' }), b: task({ key: 'b', status: 'error' }) })]).toEqual([]);
   });
 });

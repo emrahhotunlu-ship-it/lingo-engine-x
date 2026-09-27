@@ -193,7 +193,7 @@ test('reduzierte Bewegung: alles erscheint ohne Animation vollständig', async (
   await context.close();
 });
 
-// Prüfbericht W2: Reiterleiste bei 390 px – vier Reiter (Heute · Üben · Sprechen · Stand), jede
+// Prüfbericht W2: Reiterleiste bei 390 px – vier Reiter (Neubau: Heute · Wortschatz · Lesen · Sprechen), jede
 // Beschriftung einzeilig, mit Abstand zum Nachbarn, Touch-Ziele ≥ 44 px (beide Sprachen).
 for (const lang of LANGS) {
   test(`Reiterleiste 390 px einzeilig mit Abstand (${lang})`, async ({ browser }) => {
