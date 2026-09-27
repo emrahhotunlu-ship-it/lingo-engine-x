@@ -57,7 +57,7 @@ export async function changeAutoNext(on: boolean): Promise<void> {
 // Werte ohne lokale Kopie: angezeigt wird der Live-Stand des Profils; `optimistic` hält den
 // neuen Wert bis zur Bestätigung, bei Fehler fällt die Anzeige auf den gespeicherten Wert zurück.
 
-type Optimistic = Partial<Record<'goalMin' | 'newPerDay' | 'sound', number | boolean>> & { canDo?: Record<string, string | null> };
+type Optimistic = Partial<Record<'goalMin' | 'newPerDay' | 'sound' | 'haptic', number | boolean>> & { canDo?: Record<string, string | null> };
 export const useOptimistic = create<Optimistic>(() => ({}));
 
 async function persistField(patch: Record<string, unknown>, show: Optimistic, clear: () => void): Promise<void> {
@@ -82,6 +82,12 @@ export async function changeNewPerDay(n: number): Promise<void> {
 export async function changeSound(on: boolean): Promise<void> {
   if (useLive.getState().docs['app/profile']?.sound === on) return;
   await persistField({ sound: on }, { sound: on }, () => useOptimistic.setState({ sound: undefined }));
+}
+
+export async function changeHaptic(on: boolean): Promise<void> {
+  const cur = useLive.getState().docs['app/profile']?.haptic;
+  if ((cur !== false) === on) return;
+  await persistField({ haptic: on }, { haptic: on }, () => useOptimistic.setState({ haptic: undefined }));
 }
 
 /** Can-Do selbst markieren (`profile.canDo[<cefrId>] = Lerntag`) bzw. aufheben (`null`, nie gelöscht). */

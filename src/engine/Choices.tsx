@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { DURATION } from '../ui/motion';
+import { verdictHaptic } from '../platform/haptics';
 import { playCue } from '../platform/sound';
 
 // Auswahl aus vier Optionen: Tippen oder Ziffer 1–4. Nach der Wahl: gewählte rot bzw. grün,
@@ -11,6 +13,11 @@ type Props = { items: ChoiceItem[]; chosen: string | null; onChoose: (id: string
 
 export function Choices({ items, chosen, onChoose, label }: Props) {
   const done = chosen !== null;
+  // Vibration beim Wählen (Kap. 4.3) – auch bei Wahl per Ziffer; nur wo möglich und eingeschaltet.
+  const verdict = chosen === null ? null : items.find((o) => o.id === chosen)?.correct ? 'correct' : 'wrong';
+  useEffect(() => {
+    if (verdict) verdictHaptic(verdict);
+  }, [verdict, chosen]);
   return (
     <div role="group" aria-label={label} className="grid gap-2 sm:grid-cols-2" data-testid="choices">
       {items.map((o, i) => {

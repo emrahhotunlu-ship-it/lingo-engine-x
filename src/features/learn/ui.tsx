@@ -9,6 +9,8 @@ import { dutyStep } from '../../domain/plan/pflicht';
 import { CardStatus } from '../../engine/CardStatus';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
+import { verdictHaptic } from '../../platform/haptics';
+import { useSwipeLeft } from '../../engine/swipe';
 import type { WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { Button, IconButton } from '../../ui/Button';
@@ -136,16 +138,19 @@ export function NextButton({ onNext, auto, label, testId = 'next' }: { onNext: (
       window.removeEventListener('keydown', stop, true);
     };
   }, [running, testId]);
+  const fire = () => {
+    if (fired.current) return;
+    fired.current = true;
+    setRunning(false);
+    cb.current();
+  };
+  // Am Handy: nach links wischen = „Weiter“ (Kap. 4.5); Knopf, Enter und Autoweiter bleiben.
+  useSwipeLeft(fire, true);
   return (
     <Button
       variant="primary"
       iconAfter="arrowRight"
-      onClick={() => {
-        if (fired.current) return;
-        fired.current = true;
-        setRunning(false);
-        cb.current();
-      }}
+      onClick={fire}
       data-testid={testId}
       data-auto={running ? '' : undefined}
       className="overflow-hidden"
@@ -159,6 +164,12 @@ export function NextButton({ onNext, auto, label, testId = 'next' }: { onNext: (
 export const VERDICT_TONE: Record<Verdict, string> = { correct: 'text-accent-text', near: 'text-gold-text', wrong: 'text-danger-text' };
 
 export function VerdictLine({ verdict, text }: { verdict: Verdict; text: string }) {
+  // Kurze Vibration beim Erscheinen des Ergebnisses (Kap. 4.3), nur wo möglich und eingeschaltet;
+  // doppelte Meldungen desselben Prüfens fängt platform/haptics ab.
+  const first = useRef(verdict);
+  useEffect(() => {
+    verdictHaptic(first.current);
+  }, []);
   return (
     <p className={`text-base font-semibold ${VERDICT_TONE[verdict]}`} data-testid="verdict" data-verdict={verdict} role="status">
       {text}

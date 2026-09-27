@@ -2,6 +2,7 @@ import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } fr
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useHiddenInput } from './HiddenInput';
+import { verdictHaptic } from '../platform/haptics';
 import { playCue } from '../platform/sound';
 import type { MaskCell } from '../domain/answer/mask';
 
@@ -64,8 +65,11 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
   const width = useMotionValue<number | string>('3.5em');
   const locked = state !== 'input';
   // Ton zur Rückmeldung (Kap. 4.7), nur wenn eingeschaltet – einmal je Wechsel des Zustands.
+  // Dazu eine kurze Vibration, wo das Gerät sie kann (Kap. 4.3; iPhone: nur sichtbar).
   useEffect(() => {
-    if (state !== 'input') playCue(state);
+    if (state === 'input') return;
+    playCue(state);
+    verdictHaptic(state);
   }, [state]);
   const flyersNow = useRef<Flyer[]>([]);
   const timers = useRef(new Set<number>());

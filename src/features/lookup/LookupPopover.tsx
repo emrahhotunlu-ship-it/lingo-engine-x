@@ -21,6 +21,7 @@ import { wordLookup, type WordLookupOut } from '../../prompts/wordLookup';
 import { Button, IconButton } from '../../ui/Button';
 import { toast } from '../../ui/Toast';
 import { DURATION, EASE_OUT } from '../../ui/motion';
+import { SheetGrip, useSheetDrag } from '../../ui/sheetDrag';
 import { ensureLookupLoaded, saveLookupCard, storeLookup, useLookupData } from './store';
 import { openCompanion } from '../companion/store';
 
@@ -63,6 +64,8 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   const { t, lang } = useT();
   const sheet = useSheetMode();
   const panel = useRef<HTMLDivElement>(null);
+  // Blatt am Handy: am Griff nach unten wischen schließt (Kap. 4.5); der Inhalt scrollt weiter.
+  const drag = useSheetDrag(closeLookup, sheet);
   const [pos, setPos] = useState<CSSProperties>({ visibility: 'hidden' });
   const ai = useAiAvailable();
   const speech = useSpeech((s) => s.status);
@@ -379,11 +382,16 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
           className="lx-popover lx-sheet inset-x-0 bottom-0 max-h-[60svh] overflow-y-auto overscroll-contain rounded-t-[1.5rem] px-5 pt-4 pb-[max(env(safe-area-inset-bottom),1.25rem)]"
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 40, opacity: 0 }}
+          exit={{ y: '100%', opacity: 0 }}
           transition={{ duration: DURATION.base, ease: EASE_OUT }}
+          {...drag.panel}
         >
-          {/* Kein Ziehen am Blatt: `drag` setzte `touch-action: pan-x` und sperrte das Scrollen
-              am Handy. Geschlossen wird per Knopf, Esc oder Tippen außerhalb. */}
+          {/* Gezogen wird nur am Griff (`touch-action: none` nur dort): ein `drag` am ganzen Blatt
+              setzte `touch-action: pan-x` und sperrte das Scrollen am Handy. Außerdem schließen
+              Knopf, Esc oder Tippen außerhalb. */}
+          <div {...drag.handle} className="-mx-5 -mt-4 mb-1 flex h-7 flex-none items-start justify-center">
+            <SheetGrip />
+          </div>
           {content}
         </motion.div>
       </div>

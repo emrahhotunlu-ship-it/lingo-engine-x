@@ -26,6 +26,9 @@ export function normRate(v: unknown): number {
 /** Ton an? Standard aus (Kap. 4.7). */
 export const normSound = (v: unknown): boolean => v === true;
 
+/** Vibration an? Standard an (Kap. 4.3), nur `false` schaltet ab. */
+export const normHaptic = (v: unknown): boolean => v !== false;
+
 /**
  * Stimme für dieses Gerät (Plan E13): die gespeicherte, wenn sie es gibt, sonst die beste en-US-Stimme.
  * `missing` = gespeichert, aber auf diesem Gerät nicht vorhanden (Hinweis in den Einstellungen).
