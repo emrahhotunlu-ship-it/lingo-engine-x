@@ -143,6 +143,7 @@ export const learnDe = {
   grTip: 'Tipp',
   grGapLabel: 'Lücke im Satz',
   grCorrectLabel: 'Satz zum Verbessern',
+  grRewriteLabel: 'Dein umgeformter Satz',
   grJudging: 'Claude prüft deine Antwort …',
   grUnsure: 'Nicht sicher prüfbar – zählt nicht gegen dich',
   grVerdictDontKnow: 'Kein Problem – so geht es:',

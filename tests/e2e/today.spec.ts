@@ -1,4 +1,4 @@
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import { boot, layoutProblems, screen, SEED_EVENING, type Lang, type Theme } from './fixtures';
 import { DAY, dump, planPatch, writes } from './trainerHelpers';
@@ -91,6 +91,32 @@ test('erledigt ist Zustand, kein Knopf; Extra zählt nie zur Pflicht', async ({ 
   await expect(page.getByTestId('start')).toHaveCount(0);
   await expect(page.getByTestId('balance')).toHaveText('Heute: 3 Antworten · 67 % richtig · 15 von 25 Min. · Extra: 1 Karte');
   await expect(page.getByTestId('start-extra')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('gehaltene Preply-Stunde zählt nicht gegen das Minutenziel, sondern steht getrennt als Extra', async ({ page }) => {
+  const seed = JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Record<string, unknown>>;
+  const prof = seed['app/profile'] ?? {};
+  const minutes = { ...(prof.minutes as Record<string, number>), [DAY]: 15 + 50 };
+  const act = { ...(prof.act as Record<string, Record<string, number>>) };
+  act[DAY] = { ...(act[DAY] ?? {}), preply: 1 };
+  const entries = [
+    { t: 1, ok: true, lang: 'de', k: 'v', id: 'avoid', m: 'tr-mc_en', given: 'x', ans: 'x', g: 3, ms: 1000, ctx: 'rev' },
+    { t: 2, ok: true, lang: 'de', k: 'v', id: 'handle', m: 'tr-type', given: 'x', ans: 'x', g: 3, ms: 1000, ctx: 'rev' },
+  ];
+  const { errors } = await boot(page, {
+    migrated: true,
+    fake: {
+      patch: {
+        'app/profile': { ...planPatch(2), minutes, act },
+        [`log/${DAY}`]: { date: DAY, entries },
+        'preply/pp1789581600000': { done: true, doneT: Date.parse(SEED_EVENING), heldDay: DAY, heldMin: 50 },
+      },
+    },
+  });
+  await screen(page, 'today');
+  await expect(page.getByTestId('td-extra-preply')).toHaveText('Extra · Preply-Stunde · 50 Min.');
+  await expect(page.getByTestId('balance')).toHaveText('Heute: 2 Antworten · 100 % richtig · 15 von 25 Min.');
   expect(errors).toEqual([]);
 });
 

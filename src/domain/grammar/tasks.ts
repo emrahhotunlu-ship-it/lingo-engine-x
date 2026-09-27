@@ -15,6 +15,23 @@ import { asText } from '../text/str';
 type Doc = Record<string, unknown>;
 
 const TYPES: readonly GrammarTaskType[] = ['mc', 'gap', 'transform', 'correct'];
+const GAP_RE = /_{3,}/;
+
+/** Teilt „Satz A → Satz B mit ___" in Ausgang und Ziel (ohne Pfeil: alles ist Ziel). */
+export function splitTransform(prompt: string): { from: string; target: string } {
+  const [a, b] = prompt.split('→');
+  return b === undefined ? { from: '', target: prompt } : { from: (a ?? '').trim(), target: b.trim() };
+}
+
+/**
+ * Wird die Aufgabe als ganzer Satz eingegeben? `correct` immer; `gap`/`transform` dann, wenn der
+ * Zielsatz keine Lücke `___` hat (z. B. „Rewrite …: I'm sure he didn't …" → ganzer Satz).
+ */
+export function wholeSentence(t: Pick<GrammarTask, 'type' | 'prompt'>): boolean {
+  if (t.type === 'correct') return true;
+  if (t.type === 'mc') return false;
+  return !GAP_RE.test(t.type === 'transform' ? splitTransform(t.prompt).target : t.prompt);
+}
 const s = asText;
 const strOrNull = (v: unknown): string | null => {
   const t = s(v).trim();
@@ -30,10 +47,12 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
   const it = raw as Doc;
   const topic = s(it.topic);
   if (!topicById(topic)) return null;
-  const type = TYPES.includes(it.type as GrammarTaskType) ? (it.type as GrammarTaskType) : null;
+  let type = TYPES.includes(it.type as GrammarTaskType) ? (it.type as GrammarTaskType) : null;
   const prompt = s(it.prompt).trim();
   const answer = s(it.answer).trim();
   if (!type || !prompt || !answer) return null;
+  // Eine Lücke ohne `___` (Lektionen der alten App) wird als Umformung mit Ganzsatz-Eingabe gestellt.
+  if (type === 'gap' && !GAP_RE.test(prompt)) type = 'transform';
   let options: string[] | null = null;
   if (type === 'mc') {
     options = Array.isArray(it.options) ? it.options.map(s).filter(Boolean) : [];
@@ -125,6 +144,11 @@ export type RoundInput = {
   nextLessonTopic?: string | null;
   /** Thema der heutigen Lektion – in der Pflichtrunde ausgenommen (Kap. 15, nichts dreimal). */
   lessonTopicToday?: string | null;
+  /**
+   * Nur bei `duty`: das auf „Heute" angekündigte Fokus-Thema („Claude's focus · …"). Es steht
+   * vorn und bekommt etwa die Hälfte der Plätze; der Rest wird wie bisher aufgefüllt.
+   */
+  focusTopic?: string | null;
   grammarDocs: ReadonlyMap<string, Readonly<Doc>>;
   /** Offene Aufgaben aus `daily/*`, neueste Tage zuerst. */
   dailyOpen: readonly GrammarTask[];
@@ -213,8 +237,14 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   // 2. Themen der Runde.
   const ranked = rankTopics(i);
   let topics: string[];
+  const focus = i.mode === 'duty' && i.focusTopic && topicById(i.focusTopic) ? i.focusTopic : null;
   if (i.mode === 'topic' && i.topic && topicById(i.topic)) topics = [i.topic];
-  else {
+  else if (focus) {
+    // Das angekündigte Fokus-Thema gilt – auch wenn es das Thema der heutigen Lektion ist.
+    const skip = i.lessonTopicToday ?? null;
+    const order = ranked.map((r) => r.topic).filter((t) => t !== skip && t !== focus);
+    topics = [focus, ...order.slice(0, 2)];
+  } else {
     const skip = i.mode === 'duty' ? i.lessonTopicToday ?? null : null;
     const order = ranked.map((r) => r.topic).filter((t) => t !== skip);
     const next = i.nextLessonTopic && i.nextLessonTopic !== skip && topicById(i.nextLessonTopic) ? i.nextLessonTopic : null;
@@ -227,12 +257,15 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   const pOf = (t: string) => topicP(t, i.grammarDocs.get(t), i.nowMs);
   const perTopic = new Map<string, GrammarTask[]>(topics.map((t) => [t, []]));
   const slots = Math.max(0, i.size - errors.length);
+  // Mit Fokus: jeder zweite Platz gehört dem Fokus-Thema (f, a, f, b, …).
+  const turns = focus ? topics.slice(1).flatMap((t) => [focus, t]) : topics;
+  if (!turns.length) turns.push(...topics);
   let guard = 0;
   let k = 0;
   let placed = 0;
   while (placed < slots && guard < slots * topics.length * 4 + 8) {
     guard++;
-    const topic = topics[k % topics.length] as string;
+    const topic = turns[k % turns.length] as string;
     k++;
     const list = perTopic.get(topic) as GrammarTask[];
     const want = wantTypes(pOf(topic));
@@ -278,6 +311,20 @@ export function selectRound(i: RoundInput): GrammarTask[] {
     emptyTurns = 0;
   }
   return [...errors, ...out];
+}
+
+/**
+ * Fokus-Thema der Pflicht-Grammatik aus dem eingefrorenen Plan: Begründung des Pflichtkanals
+ * (`why[0]`) mit `['whyFocus', 0, 'grammar:<thema>']` – genau das, was „Heute" anzeigt.
+ */
+export function planFocusTopic(plan: { ids?: readonly string[]; why?: readonly (readonly (readonly unknown[])[])[] } | null | undefined): string | null {
+  if (!plan || plan.ids?.[0] !== 'gram') return null;
+  for (const w of plan.why?.[0] ?? []) {
+    const ref = w[0] === 'whyFocus' && typeof w[2] === 'string' ? w[2] : '';
+    const m = /^grammar:(.+)$/.exec(ref);
+    if (m?.[1] && topicById(m[1])) return m[1];
+  }
+  return null;
 }
 
 /** Ungesehene Aufgaben eines Themas in allen Quellen (für „Neue Aufgaben" erst unter 8). */

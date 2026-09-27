@@ -239,6 +239,49 @@ test.describe('Handy 390 (Touch)', () => {
     await expect.poll(async () => (await chatDoc(page)).msgs.length).toBe(6);
     expect(errors).toEqual([]);
   });
+
+  /** Unteres Ende des Verlaufs sichtbar, keine Pille „Neue Antwort". */
+  async function expectAtEnd(page: Page) {
+    const log = page.getByTestId('chat-log');
+    await expect.poll(() => log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight)).toBeLessThanOrEqual(48);
+    await expect(page.getByTestId('chat-jump')).toHaveCount(0);
+    const last = page.locator('[data-testid="chat-msg"][data-role="assistant"]').last();
+    await expect(last).toBeInViewport({ ratio: 0.3 });
+  }
+
+  test('erste Frage nach dem Öffnen: Frage und Antwort bleiben sichtbar; Vorschläge danach kompakt', async ({ page }) => {
+    const { errors } = await start(page);
+    await page.getByTestId('open-companion').tap();
+    await expect(page.getByTestId('companion')).toBeVisible();
+    const chips = page.getByTestId('chat-suggestions');
+    await page.getByTestId('chat-input').fill('Was heißt leverage?');
+    await page.getByTestId('chat-send').tap();
+    await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');
+    await expect(page.locator('[data-testid="chat-msg"][data-role="user"]').last()).toContainText('Was heißt leverage?');
+    await expectAtEnd(page);
+    // Nach dem ersten Senden: Vorschläge in einer Zeile, höchstens etwa ein Achtel der Höhe.
+    await expect(chips).toHaveAttribute('data-compact', '');
+    const box = await chips.boundingBox();
+    expect(box?.height ?? 999).toBeLessThanOrEqual(844 / 8);
+    // Zweite Frage über einen Vorschlag: wieder am Ende.
+    await chips.getByTestId('chat-suggestion').first().tap();
+    await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');
+    await expectAtEnd(page);
+    expect(await layoutProblems(page)).toEqual([]);
+    expect(errors).toEqual([]);
+  });
+
+  test('„Claude fragen" aus dem Wort-Popup: Frage und Antwort am Ende sichtbar', async ({ page }) => {
+    const { errors } = await start(page);
+    await page.getByTestId('open-companion').tap();
+    await page.locator('[data-testid="chat-msg"][data-role="assistant"] button.lx-word', { hasText: 'something' }).first().tap();
+    await expect(page.getByTestId('lookup')).toBeVisible();
+    await page.getByTestId('lk-ask').tap();
+    await expect(page.getByTestId('lookup')).toHaveCount(0);
+    await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');
+    await expectAtEnd(page);
+    expect(errors).toEqual([]);
+  });
 });
 
 test.describe('Handy 390: Begleiter sieht Phase-2–4-Bildschirme (Prüfbericht W1)', () => {

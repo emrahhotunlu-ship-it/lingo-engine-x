@@ -4,7 +4,7 @@ import { useSettings } from '../../app/settings';
 import { useLive } from '../../data/live';
 import { lessonMeta } from '../../domain/course/catalog';
 import { pickLesson } from '../../domain/course/next';
-import { ROUND_SIZE, selectRound, type RoundMode } from '../../domain/grammar/tasks';
+import { planFocusTopic, ROUND_SIZE, selectRound, wholeSentence, type RoundMode } from '../../domain/grammar/tasks';
 import type { Ctx, GrammarAnswer, GrammarTask } from '../../domain/learn/types';
 import type { Lang } from '../../domain/srs/types';
 import { learnRecorder } from '../progress/persist';
@@ -85,6 +85,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     topic: o.topic ?? null,
     nextLessonTopic: nextTopic,
     lessonTopicToday: plan?.duty.includes('lesson') ? (todayLesson?.grammar ?? null) : null,
+    focusTopic: mode === 'duty' ? planFocusTopic(plan) : null,
     grammarDocs: live.collections.grammar ?? new Map(),
     dailyOpen: [...(mode === 'topic' ? extraTasks : []), ...inputs.dailyOpen],
     pool: inputs.pool,
@@ -112,7 +113,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   });
   const first = tasks[0];
   if (!first) return null;
-  return first.type === 'mc' ? 'choice' : first.type === 'gap' || first.type === 'transform' ? 'typed' : null;
+  return first.type === 'mc' ? 'choice' : wholeSentence(first) ? null : 'typed';
 }
 
 export function touchGrammar(): void {
@@ -150,7 +151,7 @@ export function commitGrammar(a: GrammarAnswer): 'typed' | 'choice' | null {
   useGrammarSession.setState(next);
   const t = next.tasks[pos];
   if (!t || done) return null;
-  return t.type === 'mc' ? 'choice' : t.type === 'correct' ? null : 'typed';
+  return t.type === 'mc' ? 'choice' : wholeSentence(t) ? null : 'typed';
 }
 
 export function leaveGrammar(): void {

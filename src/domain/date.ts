@@ -65,6 +65,12 @@ export function learningDayEnd(nowMs: number): number {
   return d.getTime();
 }
 
+/** Mittag des Lerntags `JJJJ-MM-TT` als ms (Ortszeit) – zum Anzeigen des Lerntag-Datums. */
+export function dayKeyNoon(key: string): number {
+  const [y, m, d] = key.split('-').map(Number);
+  return new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1, 12).getTime();
+}
+
 /** Beginn des laufenden Lerntags (letztes 04:00 Uhr) in ms. */
 export function learningDayStart(nowMs: number): number {
   const d = new Date(nowMs);

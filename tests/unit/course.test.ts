@@ -3,7 +3,7 @@ import { LESSONS } from '../../src/domain/content';
 import { baseLesson } from '../../src/domain/course/baseLesson';
 import { catalog, lessonMeta } from '../../src/domain/course/catalog';
 import { courseDone, isLessonDone, lessonDoneOn } from '../../src/domain/course/courseDone';
-import { lessonWordCard, lessonWrite, readLesson } from '../../src/domain/course/lessonDoc';
+import { lessonWordCard, lessonWrite, questionOptions, readLesson } from '../../src/domain/course/lessonDoc';
 import { assessFocusTopic, pickLesson } from '../../src/domain/course/next';
 import { localProductionCheck } from '../../src/domain/course/production';
 import { applyUpdate } from '../../src/domain/srs/applyReview';
@@ -142,5 +142,18 @@ describe('K-05: Lektionskarte mit Dialogsatz', () => {
     const chair = lessonWordCard({ en: 'to chair a meeting', de: 'ein Meeting leiten', pos: 'phrase', def: '', ex: '' }, { lid: 'l01', lines, today: '2026-09-28', nowMs: 5 })!;
     expect(chair.doc.ex).toBe("Good morning, everyone. I'll [chair] the meeting today.");
     expect(lessonWordCard({ en: 'attendee', de: 'Teilnehmer', pos: 'noun', def: '', ex: '' }, { lid: 'l01', lines, today: '2026-09-28', nowMs: 5 })).toBeNull();
+  });
+});
+
+describe('Dialogfragen: Optionen fest gemischt', () => {
+  it('gleiche Menge, gleiche Reihenfolge bei jedem Aufruf, Lösung nicht immer vorn', () => {
+    const qs = Array.from({ length: 12 }, (_, k) => ({ q: `Frage ${k}?`, options: [`richtig ${k}`, 'b', 'c', 'd'] }));
+    const firsts = qs.map((q) => {
+      const a = questionOptions('l07', q);
+      expect(a).toEqual(questionOptions('l07', q));
+      expect([...a].sort()).toEqual([...q.options].sort());
+      return a[0];
+    });
+    expect(firsts.filter((f, k) => f === `richtig ${k}`).length).toBeLessThan(qs.length / 2);
   });
 });

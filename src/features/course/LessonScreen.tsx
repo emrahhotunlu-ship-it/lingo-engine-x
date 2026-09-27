@@ -98,7 +98,7 @@ function LessonRun({ id }: { id: string }) {
           <IconButton icon="close" label={t('lsClose')} onClick={leave} data-testid="round-close" />
           <p className="min-w-0 text-sm text-muted">{title}</p>
         </div>
-        <DutyBar ctx={run.ctx} />
+        <DutyBar ctx={run.ctx} duty="lesson" />
       </div>
       {idx >= 0 && (
         <ol className="grid grid-cols-4 gap-1.5" aria-label={t('lsSteps')}>

@@ -171,8 +171,8 @@ export const companionEn: Record<CompanionMessageKey, string> = {
   pvBack: 'Back to history',
   pvReview: 'Open preview',
 
-  tdExtraPreply: 'Preply lesson · {min} min',
-  tdExtraPreplyPlain: 'Preply lesson done',
+  tdExtraPreply: 'Extra · Preply lesson · {min} min',
+  tdExtraPreplyPlain: 'Extra · Preply lesson done',
 
   diagChat: 'Chat history',
   diagChatValue: '{n} messages · {kb} KB',

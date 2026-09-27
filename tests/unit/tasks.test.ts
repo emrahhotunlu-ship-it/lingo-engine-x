@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TOPICS } from '../../src/domain/content';
-import { normalizeTask, rankTopics, seedTasks, selectRound, toPoolItem, wantTypes } from '../../src/domain/grammar/tasks';
+import { normalizeTask, planFocusTopic, rankTopics, seedTasks, selectRound, splitTransform, toPoolItem, wantTypes, wholeSentence } from '../../src/domain/grammar/tasks';
 import type { GrammarTask } from '../../src/domain/learn/types';
 import { berlin } from './helpers';
 
@@ -22,6 +22,19 @@ describe('normalizeTask (validG)', () => {
     expect(normalizeTask({ topic: 'passive', type: 'gap', prompt: ' ', answer: 'b' }, 'ai')).toBeNull();
     expect(normalizeTask({ topic: 'passive', type: 'mc', prompt: 'a ___', answer: 'b', options: ['c', 'd'] }, 'ai')).toBeNull();
     expect(normalizeTask(null, 'ai')).toBeNull();
+  });
+
+  it('Lektionsaufgaben ohne ___: Ganzsatz-Eingabe (Lücke wird Umformung)', () => {
+    const tr = normalizeTask({ topic: 'modals-deduction', type: 'transform', prompt: "Rewrite using a modal of deduction: I'm 100% sure Tom didn't break it.", answer: "Tom can't have broken it." }, 'lesson')!;
+    expect(tr.type).toBe('transform');
+    expect(wholeSentence(tr)).toBe(true);
+    const gap = normalizeTask({ topic: 'passive', type: 'gap', prompt: 'Change to passive: They sign the form.', answer: 'The form is signed.' }, 'lesson')!;
+    expect(gap.type).toBe('transform');
+    expect(wholeSentence(gap)).toBe(true);
+    expect(wholeSentence(normalizeTask({ topic: 'passive', type: 'transform', prompt: 'They built it. → It ___.', answer: 'was built' }, 'pool')!)).toBe(false);
+    expect(wholeSentence(normalizeTask({ topic: 'passive', type: 'gap', prompt: 'It ___ (make) here.', answer: 'is made' }, 'pool')!)).toBe(false);
+    expect(wholeSentence(normalizeTask({ topic: 'passive', type: 'correct', prompt: 'It make here.', answer: 'It is made here.' }, 'pool')!)).toBe(true);
+    expect(splitTransform('A. → B ___.')).toEqual({ from: 'A.', target: 'B ___.' });
   });
 
   it('Pool-Form ist wieder lesbar (Rundreise)', () => {
@@ -62,6 +75,29 @@ describe('selectRound', () => {
     expect(r.some((t) => t.topic === 'conditionals')).toBe(false);
     expect(r.some((t) => t.topic === 'relative')).toBe(true);
     expect(r).toHaveLength(6);
+  });
+
+  it('Pflichtrunde übt das angekündigte Fokus-Thema (vorn, etwa die Hälfte), Rest wie bisher', () => {
+    for (const seed of ['a', 'b', 'c']) {
+      const r = selectRound({ ...input, seed, mode: 'duty', size: 6, focusTopic: 'passive', lessonTopicToday: 'conditionals' });
+      expect(r).toHaveLength(6);
+      expect(r[0]!.topic).toBe('passive');
+      expect(r.filter((t) => t.topic === 'passive').length).toBeGreaterThanOrEqual(3);
+      expect(new Set(r.map((t) => t.topic)).size).toBeGreaterThanOrEqual(2);
+      expect(r.some((t) => t.topic === 'conditionals')).toBe(false);
+      for (let i = 2; i < r.length; i++) expect(r[i]!.topic === r[i - 1]!.topic && r[i]!.topic === r[i - 2]!.topic).toBe(false);
+    }
+    // Unbekanntes Thema oder freie Runde: Fokus ohne Wirkung.
+    expect(selectRound({ ...input, mode: 'duty', size: 6, focusTopic: 'nope' }).map((t) => t.key)).toEqual(selectRound({ ...input, mode: 'duty', size: 6 }).map((t) => t.key));
+    expect(selectRound({ ...input, focusTopic: 'passive' }).map((t) => t.key)).toEqual(selectRound(input).map((t) => t.key));
+  });
+
+  it('planFocusTopic: Fokus-Kennung aus der Begründung des Pflichtkanals Grammatik', () => {
+    expect(planFocusTopic({ ids: ['gram', 'cloze'], why: [[['whyFocus', 0, 'grammar:passive'], ['agoDaysN', 3]], []] })).toBe('passive');
+    expect(planFocusTopic({ ids: ['cloze', 'gram'], why: [[['whyFocus', 0, 'grammar:passive']], []] })).toBeNull();
+    expect(planFocusTopic({ ids: ['gram'], why: [[['whyFocus']]] })).toBeNull();
+    expect(planFocusTopic({ ids: ['gram'], why: [[['whyFocus', 0, 'colloc']]] })).toBeNull();
+    expect(planFocusTopic(null)).toBeNull();
   });
 
   it('Quellen: offene daily-Aufgaben vor dem Pool, gesehene nie (außer als Notnagel)', () => {

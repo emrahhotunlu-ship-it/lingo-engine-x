@@ -5,10 +5,11 @@ import { useAsk } from '../../ai/useAsk';
 import { getWriter } from '../../data';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { coreWord } from '../../domain/course/baseLesson';
-import { lessonWordCard } from '../../domain/course/lessonDoc';
+import { lessonWordCard, questionOptions } from '../../domain/course/lessonDoc';
 import { localProductionCheck, usesWord, type ProductionCheck } from '../../domain/course/production';
 import { normCat, radarEvent } from '../../domain/grammar/radar';
 import { ruleOf } from '../../domain/grammar/rules';
+import { wholeSentence } from '../../domain/grammar/tasks';
 import { learnGrade } from '../../domain/learn/grade';
 import type { DrillAnswer, GrammarAnswer, GrammarTask, LessonContent, LessonMeta, RadarEvent } from '../../domain/learn/types';
 import { mergedVocab } from '../../domain/overview';
@@ -242,6 +243,9 @@ export function DialogStep({ meta, content, onComplete }: StepProps) {
   const lines = content.dialogue.lines;
   const qs = content.questions;
   const visibleQs = mode === 'listen' ? qs.slice(0, 1) : qs;
+  // Optionen fest gemischt (Lektion + Frage als Startwert): die Lösung steht nicht immer vorn,
+  // bleibt aber nach dem Neuzeichnen an derselben Stelle.
+  const optionsOf = useMemo(() => qs.map((q) => questionOptions(meta.id, q)), [qs, meta.id]);
   const allAnswered = qs.every((_, i) => answers[i] !== undefined);
   const hasDe = lang === 'de' && lines.some((l) => l.de);
 
@@ -318,12 +322,13 @@ export function DialogStep({ meta, content, onComplete }: StepProps) {
       )}
       {visibleQs.map((q, i) => {
         const chosen = answers[i];
+        const options = optionsOf[i] ?? q.options;
         return (
           <section key={i} className="flex flex-col gap-2 border-t border-line pt-4" data-testid="lesson-question" aria-label={t('lsQuestion')}>
             <p className="text-base font-medium" lang={lang}>
               {q.q}
             </p>
-            <Choices items={q.options.map((o, k) => ({ id: String(k), label: o, lang, correct: o === q.answer }))} chosen={chosen === undefined ? null : String(q.options.indexOf(chosen))} onChoose={(id) => answer(i, q.options[Number(id)] ?? '')} label={t('trChoicesLabel')} />
+            <Choices items={options.map((o, k) => ({ id: String(k), label: o, lang, correct: o === q.answer }))} chosen={chosen === undefined ? null : String(options.indexOf(chosen))} onChoose={(id) => answer(i, options[Number(id)] ?? '')} label={t('trChoicesLabel')} />
             {chosen !== undefined && <VerdictLine verdict={chosen === q.answer ? 'correct' : 'wrong'} text={chosen === q.answer ? t('trVerdictCorrect') : t('lsQuestionWrong', { answer: q.answer })} />}
           </section>
         );
@@ -350,7 +355,7 @@ export function GrammarStep({ meta, content, onComplete }: StepProps) {
     const next = idx + 1;
     setIdx(next);
     const nt = tasks[next];
-    return !nt ? null : nt.type === 'mc' ? 'choice' : nt.type === 'correct' ? null : 'typed';
+    return !nt ? null : nt.type === 'mc' ? 'choice' : wholeSentence(nt) ? null : 'typed';
   };
   const task = tasks[idx];
   return (

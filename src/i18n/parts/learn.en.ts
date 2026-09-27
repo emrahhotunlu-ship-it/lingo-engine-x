@@ -141,6 +141,7 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   grTip: 'Hint',
   grGapLabel: 'Gap in the sentence',
   grCorrectLabel: 'Sentence to correct',
+  grRewriteLabel: 'Your rewritten sentence',
   grJudging: 'Claude is checking your answer …',
   grUnsure: 'Can’t check this for sure – it won’t count against you',
   grVerdictDontKnow: 'No problem – here is how it goes:',

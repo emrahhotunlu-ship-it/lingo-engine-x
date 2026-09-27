@@ -5,6 +5,7 @@ import { useLive } from '../../data/live';
 import { certainty } from '../../domain/grammar/bkt';
 import type { Ctx, Verdict } from '../../domain/learn/types';
 import type { DutyId } from '../../domain/plan/types';
+import { dutyStep } from '../../domain/plan/pflicht';
 import { CardStatus } from '../../engine/CardStatus';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -61,21 +62,21 @@ export function ScreenHeader({ eyebrow, title, lead, back, right }: { eyebrow?: 
   );
 }
 
-/** Planleiste in Pflichtrunden: „Pflicht 2 von 3" (M11). */
-export function DutyBar({ ctx }: { ctx: Ctx }) {
+/** Planleiste in Pflichtrunden: „Pflicht 2 von 3" (M11), Schritt laut `dutyStep`. */
+export function DutyBar({ ctx, duty = null }: { ctx: Ctx; duty?: DutyId | null }) {
   const { t } = useT();
   const st = useToday();
   if (ctx !== 'duty' || st.duties.total < 2) return null;
-  const n = Math.min(st.duties.total, st.duties.done + 1);
+  const n = dutyStep(st.duties, duty);
   return (
-    <span className="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted" data-testid="duty-bar">
+    <span className="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted" data-testid="duty-bar" data-n={n} data-total={st.duties.total}>
       {t('lrDutyBar', { n, total: st.duties.total })}
     </span>
   );
 }
 
 /** Kopf einer Runde: Schließen, Fortschritt, Pflicht- bzw. Extra-Kennzeichen. */
-export function RoundTop({ onClose, progress, ctx, closeLabel }: { onClose: () => void; progress: { n: number; total: number } | null; ctx: Ctx; closeLabel?: string }) {
+export function RoundTop({ onClose, progress, ctx, closeLabel, duty = null }: { onClose: () => void; progress: { n: number; total: number } | null; ctx: Ctx; closeLabel?: string; duty?: DutyId | null }) {
   const { t } = useT();
   return (
     <div className="flex items-center justify-between gap-3">
@@ -88,7 +89,7 @@ export function RoundTop({ onClose, progress, ctx, closeLabel }: { onClose: () =
         )}
       </div>
       {ctx === 'duty' ? (
-        <DutyBar ctx={ctx} />
+        <DutyBar ctx={ctx} duty={duty} />
       ) : (
         <span className="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted">{t('trExtraBadge')}</span>
       )}

@@ -28,15 +28,28 @@ function useful(v: unknown): Array<{ en: string; de: string }> {
   return out.slice(0, 8);
 }
 
-/** Wurde die Szene schon gespielt? `done` der alten App ist ein Wahrheitswert. */
-const playedOf = (d: Doc): boolean => d.done === true || num(d.runs) > 0;
+/**
+ * Wurde die Szene schon gespielt? `done` der alten App ist ein Wahrheitswert oder das Datum des
+ * Spiels (`'2026-09-23'`); `runs` zählt die neue App.
+ */
+export const playedOf = (d: Doc): boolean => d.done === true || (typeof d.done === 'string' && d.done.trim() !== '') || (typeof d.done === 'number' && d.done > 0) || num(d.runs) > 0;
+
+/** Zeitpunkt aus `done` als Datum (`JJJJ-MM-TT`, 12 Uhr Ortszeit) bzw. ms; sonst 0. */
+const doneMs = (done: unknown): number => {
+  if (typeof done === 'number' && done > 1e11) return done;
+  if (typeof done !== 'string') return 0;
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(done.trim());
+  if (!m) return 0;
+  const t = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12).getTime();
+  return Number.isFinite(t) ? t : 0;
+};
 
 export function sceneView(id: string, d: Doc, src: SceneView['src'], lang: Lang): SceneView {
   const pick = (en: unknown, de: unknown) => (lang === 'de' ? str(de) || str(en) : str(en) || str(de));
   const p = persona(d.persona);
   const opening = str(d.opening);
   const runs = Math.max(num(d.runs), playedOf(d) ? 1 : 0);
-  const lastRun = num(d.lastRun) || (playedOf(d) && num(d.ts) ? num(d.ts) : 0);
+  const lastRun = num(d.lastRun) || doneMs(d.done) || (playedOf(d) && num(d.ts) ? num(d.ts) : 0);
   return {
     id,
     src,

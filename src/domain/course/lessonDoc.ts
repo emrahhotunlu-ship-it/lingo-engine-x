@@ -1,5 +1,6 @@
 import { validateDoc } from '../../data/validate';
 import { normalizeTask } from '../grammar/tasks';
+import { hash32, mulberry32, shuffle } from '../random';
 import type { GrammarTask, LessonContent, LessonMeta } from '../learn/types';
 import type { Lang } from '../srs/types';
 import { asText } from '../text/str';
@@ -110,4 +111,13 @@ export function lessonWrite(cur: Readonly<Doc> | undefined, out: Readonly<Doc>, 
   }
   update.lx = { ...obj(out.lx), regen: true };
   return { update };
+}
+
+/**
+ * Antwortoptionen einer Dialogfrage fest gemischt (Startwert: Lektion + Frage). Die Lösung steht
+ * so nicht immer vorn (gespeicherte Fragen der alten App haben sie oft an erster Stelle), bleibt
+ * aber bei jedem Neuzeichnen an derselben Stelle.
+ */
+export function questionOptions(lid: string, q: { q: string; options: readonly string[] }): string[] {
+  return shuffle(q.options, mulberry32(hash32(`${lid}|${q.q}`)));
 }
