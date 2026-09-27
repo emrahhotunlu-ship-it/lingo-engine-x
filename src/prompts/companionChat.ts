@@ -27,7 +27,7 @@ export type CompanionVars = {
 export const MESSAGE_MAX = 2_000;
 export const LEARNER_MAX = 2_500;
 const ID = 'companion-chat';
-const VERSION = 1;
+const VERSION = 2;
 
 /** Schutzregel, solange die Übung nicht geprüft ist (E5-05). Wörtlich getestet. */
 export const NO_SOLUTION_RULE =
@@ -60,7 +60,10 @@ export function buildLead(vars: CompanionVars): string {
     const sentence = maskText(vars.attach.sentence, vars.seeing);
     lines.push('', `Question is about: "${clip(word, 60)}" in the sentence: "${clip(sentence, 400)}"`);
   }
-  lines.push('', "The learner's messages follow. Answer the last one.");
+  lines.push(
+    '',
+    "The learner's messages follow. Answer the LAST message directly. The screen, the word and earlier messages are only background: if the last message asks about something else, answer that question and do not talk about the exercise.",
+  );
   return lines.join('\n');
 }
 

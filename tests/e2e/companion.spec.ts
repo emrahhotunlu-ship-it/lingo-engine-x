@@ -127,12 +127,17 @@ test.describe('Desktop 1440', () => {
     await expect(page.getByTestId('lookup')).toBeVisible();
     await page.getByTestId('lk-ask').click();
     await expect(page.getByTestId('lookup')).toHaveCount(0);
-    await expect(page.getByTestId('chat-attach')).toContainText('something');
     const user = page.locator('[data-testid="chat-msg"][data-role="user"]').last();
     await expect(user).toContainText('Erkläre mir „something“ in diesem Satz');
     await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toHaveAttribute('data-state', 'done');
     expect(await chatCalls(page)).toHaveLength(1);
     expect((await chatCalls(page))[0]!.input).toContain('Question is about: "something"');
+    // Das Wort gilt nur für diese eine Frage (Befund 27.09.: Claude antwortete auf den alten Bezug).
+    await expect(page.getByTestId('chat-attach')).toHaveCount(0);
+    await page.getByTestId('chat-input').fill('Was heißt deadline?');
+    await page.getByTestId('chat-send').click();
+    await expect.poll(async () => (await chatCalls(page)).length).toBe(2);
+    expect((await chatCalls(page))[1]!.input).not.toContain('Question is about');
   });
 
   test('C-06 Antwort in anderer Sprache wird eingeklappt, „Auf Deutsch neu fragen"', async ({ page }) => {

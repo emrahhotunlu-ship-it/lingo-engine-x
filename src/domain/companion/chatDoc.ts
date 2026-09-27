@@ -70,6 +70,26 @@ export function currentMsgs(msgs: readonly ChatMsg[], since: number): ChatMsg[] 
   return msgs.filter((m) => (m.t ?? 0) >= since);
 }
 
+/** Pause, nach der ein neues Thema beginnt (Emrahs Befund 27.09.: Claude antwortete auf die letzte Aufgabe). */
+export const CHAT_GAP_MS = 60 * 60 * 1000;
+
+/**
+ * Was als Gesprächsverlauf an Claude geht: ab „Neues Gespräch" und nur der letzte zusammenhängende
+ * Abschnitt – nach einer Pause von mehr als einer Stunde beginnt automatisch ein neues Thema.
+ */
+export function activeMsgs(msgs: readonly ChatMsg[], since: number, now: number): ChatMsg[] {
+  const cur = currentMsgs(msgs, since);
+  let start = cur.length;
+  let prev = now;
+  for (let i = cur.length - 1; i >= 0; i--) {
+    const t = cur[i]?.t;
+    if (t === undefined || prev - t > CHAT_GAP_MS) break;
+    prev = t;
+    start = i;
+  }
+  return cur.slice(start);
+}
+
 /** Text ohne Markdown-Hervorhebungen und Code – dort stehen meist englische Beispiele. */
 function explanatoryText(content: string): string {
   return content

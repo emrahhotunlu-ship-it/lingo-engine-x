@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { validateDoc } from '../../src/data/validate';
 import { BRIEF_MAX, learnerBrief, openGrammarErrors, weakestTopics } from '../../src/domain/companion/brief';
-import { appendChat, ASSISTANT_MAX, CHAT_MAX, CHAT_MAX_BYTES, currentMsgs, msgLang, readChat, replyLang, USER_MAX, type ChatMsg } from '../../src/domain/companion/chatDoc';
+import { activeMsgs, appendChat, ASSISTANT_MAX, CHAT_GAP_MS, CHAT_MAX, CHAT_MAX_BYTES, currentMsgs, msgLang, readChat, replyLang, USER_MAX, type ChatMsg } from '../../src/domain/companion/chatDoc';
 import { maskText, redact, type Seeing } from '../../src/domain/companion/seeing';
 import { suggestions } from '../../src/domain/companion/suggest';
 import { buildChatInput, HISTORY_MAX, TURNS_MAX_BYTES } from '../../src/domain/companion/turns';
@@ -114,7 +114,7 @@ describe('Schwärzen (seeing) und Schutzregel', () => {
 
   it('Kopfzeile, Stufe default, cache false; Sprache der Erklärungen', () => {
     const turns = companionChat.buildTurns(vars(null));
-    expect(turns[0]!.content.split('\n')[0]).toBe('[companion-chat@1]');
+    expect(turns[0]!.content.split('\n')[0]).toBe('[companion-chat@2]');
     expect(companionChat.tier).toBe('default');
     expect(companionChat.cache).toBe(false);
     expect(turns[0]!.content).toContain('Write your explanations in German');
@@ -198,5 +198,22 @@ describe('englishRuns (W5: englische Sätze ohne Anführungszeichen antippbar)',
   });
   it('lässt rein deutschen Text unverändert', () => {
     expect(englishRuns('Das ist ein ganz normaler deutscher Satz.').some((r) => r.en)).toBe(false);
+  });
+});
+
+// Emrahs Befund 27.09.: „Er antwortet auf den Kontext der letzten Aufgabe".
+describe('Gesprächsverlauf: nur der aktuelle Abschnitt', () => {
+  const now = 10 * CHAT_GAP_MS;
+  const m = (t: number, content: string) => ({ role: 'user' as const, content, t });
+  it('nach über einer Stunde Pause geht der alte Verlauf nicht mehr an Claude', () => {
+    expect(activeMsgs([m(now - 2 * CHAT_GAP_MS, 'alte Aufgabe')], 0, now)).toEqual([]);
+  });
+  it('zusammenhängendes Gespräch bleibt, ältere Abschnitte fallen weg', () => {
+    const msgs = [m(now - 3 * CHAT_GAP_MS, 'alt'), m(now - 20 * 60_000, 'a'), m(now - 5 * 60_000, 'b')];
+    expect(activeMsgs(msgs, 0, now).map((x) => x.content)).toEqual(['a', 'b']);
+  });
+  it('„Neues Gespräch" gilt weiter', () => {
+    const msgs = [m(now - 20 * 60_000, 'a'), m(now - 5 * 60_000, 'b')];
+    expect(activeMsgs(msgs, now - 10 * 60_000, now).map((x) => x.content)).toEqual(['b']);
   });
 });

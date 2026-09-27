@@ -4,7 +4,7 @@ import { isAiFailure, type AiErrorKind, type AiMessageKey, type AiPhase } from '
 import { useSettings } from '../../app/settings';
 import { useLive } from '../../data/live';
 import { learnerBrief } from '../../domain/companion/brief';
-import { currentMsgs, readChat, replyLang, type ChatMsg } from '../../domain/companion/chatDoc';
+import { activeMsgs, readChat, replyLang, type ChatMsg } from '../../domain/companion/chatDoc';
 import { dayKey } from '../../domain/date';
 import { companionChat, type Attach } from '../../prompts/companionChat';
 import { workContext } from '../../prompts/work';
@@ -101,6 +101,7 @@ function nextT(): number {
 
 let ctl: AbortController | null = null;
 let prefillSeq = 0;
+let lastAttach: Attach | null = null;
 
 // ------------------------------------------------------------------ Öffnen und Schließen
 
@@ -217,7 +218,9 @@ export async function sendMessage(text: string, reuse?: ChatMsg): Promise<void> 
   const content = text.trim();
   const uiLang = useSettings.getState().lang;
   const seeing = currentSeeing();
-  const attach = s.attach;
+  // „Erneut senden" behält das Wort der ursprünglichen Frage.
+  const attach = reuse ? lastAttach : s.attach;
+  lastAttach = attach;
   const userMsg: ChatMsg = reuse ?? {
     role: 'user',
     content: content.slice(0, 2_000),
@@ -226,11 +229,14 @@ export async function sendMessage(text: string, reuse?: ChatMsg): Promise<void> 
     ...(attach ? { ctx: `${attach.word}` } : seeing ? { ctx: seeing.label } : {}),
   };
   const shown = allMsgs(s);
-  const history = currentMsgs(
+  const history = activeMsgs(
     shown.filter((m) => msgKey(m) !== msgKey(userMsg)),
     s.since,
+    Date.now(),
   );
+  // Ein angetipptes Wort gilt nur für die eine Frage, nicht für alle folgenden.
   useCompanion.setState((st) => ({
+    attach: null,
     pending: st.pending.some((m) => msgKey(m) === msgKey(userMsg)) ? st.pending : [...st.pending, userMsg],
     turn: { status: 'queued', text: '', errorKey: null, errorKind: null, userMsg },
     sentSeq: st.sentSeq + 1,
