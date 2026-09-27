@@ -59,14 +59,18 @@ export async function answerAll(page: Page, n: number, from = 0): Promise<void> 
 
 export const entriesOf = (db: Dump, day = DAY): Array<Record<string, unknown>> => ((db[`log/${day}`]?.entries as Array<Record<string, unknown>> | undefined) ?? []);
 
-/** Zurück zu „Heute": Einheiten schließen (✕), sonst über den Reiter. */
+/** Zurück zu „Heute": Einheiten schließen (✕), sonst über den Reiter – je Schritt warten, bis der Wechsel fertig ist. */
 export async function backToToday(page: Page): Promise<void> {
+  const screens = () => page.locator('main [data-screen]').evaluateAll((els) => els.map((e) => e.getAttribute('data-screen') ?? ''));
   for (let i = 0; i < 4; i++) {
-    if (await page.locator('[data-screen="today"]').count()) break;
-    const close = page.getByTestId('unit-close').first();
-    if (await close.isVisible()) await close.click();
+    // Erst warten, bis genau ein Bildschirm da ist (der alte blendet sonst noch aus).
+    await expect.poll(async () => (await screens()).length).toBe(1);
+    const [cur] = await screens();
+    if (cur === 'today') return;
+    const close = page.locator(`main [data-screen="${cur}"] [data-testid="unit-close"]`).first();
+    if (await close.count()) await close.click();
     else await page.getByTestId('tab-today').click();
-    await page.waitForTimeout(200);
+    await expect.poll(async () => (await screens()).join(',')).not.toBe(cur);
   }
   await page.locator('[data-screen="today"]').waitFor({ state: 'visible' });
 }

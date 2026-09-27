@@ -273,7 +273,7 @@ export function App() {
               {screen === 'playbook' && <PlaybookScreen />}
               {screen === 'pitch' && <PitchCoach />}
               {screen === 'preply' && <PreplyScreen />}
-              {isInputScreen(screen) && <InputRoutes />}
+              {isInputScreen(screen) && <InputRoutes route={route} />}
             </motion.div>
           </AnimatePresence>
         </main>

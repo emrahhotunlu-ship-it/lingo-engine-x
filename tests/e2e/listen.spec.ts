@@ -79,6 +79,7 @@ test('Hören ohne Stimme: Hinweis, Text als Lesetext, trotzdem abschließbar (he
   await page.getByTestId('to-questions').click();
   await answerAll(page, 4);
   await expect(page.getByTestId('transcript')).toBeVisible();
+  await expect.poll(async () => ((await dump(page))['app/profile'] as { listen: Array<Record<string, unknown>> }).listen.at(-1)?.id).toBe(LPOOL_NEW);
   const profile = (await dump(page))['app/profile'] as { listen: Array<Record<string, unknown>> };
   expect(profile.listen.at(-1)).toMatchObject({ id: LPOOL_NEW, help: true, plays: 0 });
   expect(errors).toEqual([]);
@@ -93,6 +94,8 @@ test('Hören: „Text zeigen" zählt als Hilfe', async ({ page }) => {
   await expect(page.getByTestId('to-questions')).toBeEnabled();
   await page.getByTestId('to-questions').click();
   await answerAll(page, 4);
+  // Der Einheitsabschluss wird gespeichert, sobald die letzte Frage beantwortet ist (asynchron).
+  await expect.poll(async () => ((await dump(page))['app/profile'] as { listen: Array<Record<string, unknown>> }).listen.at(-1)?.id).toBe(LPOOL_NEW);
   const profile = (await dump(page))['app/profile'] as { listen: Array<Record<string, unknown>> };
   expect(profile.listen.at(-1)).toMatchObject({ help: true });
 });
@@ -108,9 +111,9 @@ test('Hören ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, kein Note
   await expect(page.getByTestId('transcript')).toBeVisible();
   await expect(page.locator('[data-ai]')).toHaveCount(0);
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
-  const db = await dump(page);
-  expect((db['app/profile'] as { act: Record<string, Record<string, number>> }).act[DAY]?.listen).toBeGreaterThanOrEqual(1);
-  expect(entriesOf(db).filter((e) => e.type === 'listen' && e.ref === `lpool/${LPOOL_NEW}`)).toHaveLength(4);
+  // Einheitsabschluss und Protokoll werden nach der letzten Frage gespeichert (asynchron).
+  await expect.poll(async () => ((await dump(page))['app/profile'] as { listen: Array<Record<string, unknown>> }).listen.at(-1)?.id).toBe(LPOOL_NEW);
+  await expect.poll(async () => entriesOf(await dump(page)).filter((e) => e.type === 'listen' && e.ref === `lpool/${LPOOL_NEW}`).length).toBe(4);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

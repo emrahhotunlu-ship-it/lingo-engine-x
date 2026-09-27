@@ -1,4 +1,4 @@
-import { useNav } from '../../app/nav';
+import type { Route } from '../../app/nav';
 import { DiscoverScreen } from '../discover/DiscoverScreen';
 import { ItemScreen } from '../discover/ItemScreen';
 import { ListenScreen } from '../listen/ListenScreen';
@@ -7,9 +7,11 @@ import { WriteScreen } from '../write/WriteScreen';
 import { HistoryScreen } from './HistoryScreen';
 
 // Bildschirme von Phase 4 an einer Stelle (App.tsx bindet nur diese Komponente ein).
+// Die Route kommt als Eigenschaft aus App.tsx, nicht aus dem Store: Beim Bildschirmwechsel bleibt
+// der alte Bildschirm während der Ausblendung stehen (AnimatePresence) und darf dabei nicht schon
+// den neuen zeigen – sonst träfe ein schneller Tipp eine Kopie, die gleich verschwindet.
 
-export function InputRoutes() {
-  const route = useNav((s) => s.route);
+export function InputRoutes({ route }: { route: Route }) {
   switch (route.name) {
     case 'read':
       return <ReadScreen ctx={route.ctx} />;
