@@ -4,7 +4,8 @@ import { useSettings } from '../../app/settings';
 import { useLive } from '../../data/live';
 import { lessonMeta } from '../../domain/course/catalog';
 import { pickLesson } from '../../domain/course/next';
-import { ROUND_SIZE, selectRound, type RoundMode } from '../../domain/grammar/tasks';
+import { gramRoundPartial, ROUND_SIZE, selectRound, type RoundMode } from '../../domain/grammar/tasks';
+import { DUTY_ROUND } from '../../domain/plan/channels';
 import type { Ctx, GrammarAnswer, GrammarTask } from '../../domain/learn/types';
 import type { Lang } from '../../domain/srs/types';
 import { learnRecorder } from '../progress/persist';
@@ -130,7 +131,7 @@ function finish(s: State, aborted: boolean): void {
     day: s.day,
     act: 'gram',
     ctx: s.ctx,
-    partial: aborted && s.pos < s.tasks.length,
+    partial: gramRoundPartial({ aborted, pos: s.pos, tasks: s.tasks.length, ctx: s.ctx, answers: n, dutyMin: DUTY_ROUND.gram }),
     n,
     right: s.results.filter((r) => r.ok).length,
     activeMs: s.activeMs,

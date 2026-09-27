@@ -11,7 +11,7 @@ import { findContext, parseCollocs } from '../../src/domain/srs/context';
 import { buildExercise } from '../../src/domain/srs/exercise';
 import { autoGrade, suggestGrade } from '../../src/domain/srs/grade';
 import { availableExercises, chooseExercise } from '../../src/domain/srs/modes';
-import { buildQueue, normalizeNewPerDay, planRound } from '../../src/domain/srs/queue';
+import { buildQueue, dueCards, normalizeNewPerDay, planRound } from '../../src/domain/srs/queue';
 import type { AnswerEvent, TrainCard } from '../../src/domain/srs/types';
 import { berlin, loadSeed } from './helpers';
 
@@ -30,10 +30,17 @@ describe('Runde: Kontingent, neue Karten auch bei vielen Fälligen, ausgeblendet
       it(`${dayKey(now)} · ${newPerDay} neue pro Tag`, () => {
         const plan = planRound({ cards, nowMs: now, newPerDay, introducedToday: 0, lang: 'de' });
         const available = cards.filter((c) => c.isNew && !c.hidden).length;
-        expect(plan.new).toBe(Math.min(newPerDay, available));
+        const due = dueCards(cards.filter((c) => !c.hidden), now).length;
+        if (due === 0) expect(plan.new).toBe(Math.min(newPerDay, available));
+        else {
+          // W2: Wiederholungen haben Vorrang – neue höchstens ~40 % des Budgets, Untergrenze min(2, Kontingent).
+          expect(plan.new).toBeLessThanOrEqual(Math.min(newPerDay, available, 5));
+          expect(plan.new).toBeGreaterThanOrEqual(Math.min(2, newPerDay, available));
+          if (due >= 10) expect(plan.due).toBeGreaterThanOrEqual(10);
+        }
         expect(plan.target).toBeGreaterThanOrEqual(10);
         expect(plan.target).toBeLessThanOrEqual(60);
-        const q = buildQueue({ cards, nowMs: now, target: plan.target, newQuotaLeft: newPerDay, exclude: new Set(), lang: 'de' });
+        const q = buildQueue({ cards, nowMs: now, target: plan.target, newQuotaLeft: plan.new, exclude: new Set(), lang: 'de' });
         expect(q).toHaveLength(plan.target);
         expect(new Set(q.map((i) => i.key)).size).toBe(q.length);
         const hidden = new Set(cards.filter((c) => c.hidden).map((c) => c.key));

@@ -64,6 +64,8 @@ export function poolIntake(
   batches: readonly IntakeBatch[],
   seen: ReadonlyMap<string, ReadonlySet<string>>,
   nowMs: number,
+  /** W1: je Tag Wörter des Tagesauftrags, deren Karte nicht angelegt werden konnte (zählen als offen). */
+  failedWords: Readonly<Record<string, number>> = {},
 ): PoolIntake {
   const res: PoolIntake = { op: null, invalid: false, added: 0, removed: 0, open: 0, bad: 0, marks: {} };
   if (cur && !validateDoc('app/pool', cur).ok) return { ...res, invalid: true };
@@ -93,6 +95,7 @@ export function poolIntake(
       items.push(toPoolItem({ ...t, src: b.src, ref }));
       res.added++;
     }
+    if (b.day) open += failedWords[b.day] ?? 0;
     res.open += open;
     res.bad += bad;
     if (b.day) res.marks[b.day] = { h: b.hash ?? 0, t: nowMs, w: b.words ?? 0, g, open, bad };

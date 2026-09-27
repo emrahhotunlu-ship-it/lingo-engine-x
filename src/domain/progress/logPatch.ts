@@ -3,7 +3,8 @@ import type { AnswerEvent } from '../srs/types';
 import type { ChannelLogEntry } from './channelLog';
 
 // Tagesprotokoll `log/<tag>` im Format der alten App (Daten-Entwurf §4): ein Dokument je
-// Lerntag, höchstens 300 Einträge (die neuesten bleiben), doppelte Einträge fallen heraus.
+// Lerntag, höchstens 300 Einträge (die neuesten bleiben, die erste „Wiederholen"-Antwort je Karte
+// zuerst, W4), doppelte Einträge fallen heraus.
 
 type Doc = Record<string, unknown>;
 
@@ -156,7 +157,38 @@ export function mergeLogEntries(current: readonly unknown[], added: readonly Any
     all.push(e);
   }
   const sorted = all.map((e, i) => ({ e, i })).sort((a, b) => tOf(a.e) - tOf(b.e) || a.i - b.i).map((x) => x.e);
-  let out = sorted.slice(-LOG_ENTRIES_MAX);
-  while (out.length > 1 && new TextEncoder().encode(JSON.stringify(out)).length > LOG_DOC_MAX_BYTES) out = out.slice(1);
+  // W4: Beim Kürzen fallen zuerst die ältesten übrigen Einträge weg; die erste „Wiederholen"-Antwort
+  // je Karte (zählt zur Pflicht, `deriveToday`) bleibt, damit „erledigt" nie wieder „offen" wird.
+  const keep = protectedEntries(sorted);
+  let out = sorted;
+  if (out.length > LOG_ENTRIES_MAX) out = dropOldest(out, out.length - LOG_ENTRIES_MAX, keep);
+  while (out.length > 1 && new TextEncoder().encode(JSON.stringify(out)).length > LOG_DOC_MAX_BYTES) out = dropOldest(out, 1, keep);
   return out;
+}
+
+/** Die erste `ctx:'rev'`-Vokabelantwort je Karte (pflichtrelevant). */
+function protectedEntries(list: readonly unknown[]): Set<unknown> {
+  const ids = new Set<string>();
+  const out = new Set<unknown>();
+  for (const e of list) {
+    const r = (e && typeof e === 'object' ? e : {}) as Doc;
+    if (r.ctx !== 'rev' || r.k !== 'v' || typeof r.id !== 'string' || ids.has(r.id)) continue;
+    ids.add(r.id);
+    out.add(e);
+  }
+  return out;
+}
+
+/** `n` Einträge entfernen: erst die ältesten ungeschützten, dann (nur wenn nötig) die ältesten geschützten. */
+function dropOldest(list: readonly unknown[], n: number, keep: ReadonlySet<unknown>): unknown[] {
+  const drop = new Set<unknown>();
+  for (const e of list) {
+    if (drop.size >= n) break;
+    if (!keep.has(e)) drop.add(e);
+  }
+  for (const e of list) {
+    if (drop.size >= n) break;
+    drop.add(e);
+  }
+  return list.filter((e) => !drop.has(e));
 }

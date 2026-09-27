@@ -104,7 +104,7 @@ export function tabId(): string {
  * keiner – dann wird `pflicht` nicht geschrieben. Die Heute-Anzeige meldet sich hier an, sobald
  * der Phase-2-Tagesplan aktiv ist.
  */
-export type PflichtResolver = (i: { profile: Readonly<Doc>; batch: Readonly<Open> }) => string | null;
+export type PflichtResolver = (i: { profile: Readonly<Doc>; batch: Readonly<Open> }) => string | readonly string[] | null;
 let pflichtResolver: PflichtResolver | null = null;
 export function setPflichtResolver(fn: PflichtResolver | null): void {
   pflichtResolver = fn;
@@ -303,19 +303,19 @@ async function sendProfile(writer: Writer, b: Batch): Promise<void> {
   const dev = tabId();
   const day = b.answers[0]?.day ?? b.counts[0]?.day ?? b.rounds[0]?.day ?? b.units[0]?.day ?? '';
   const ctx = { deviceId: dev, seq: b.seq, counts: b.counts, sprints: b.sprints, pruneSeqBefore: b.seq - SEQ_KEEP_MS };
-  const counters = (cur: Doc, c: typeof ctx & { pflichtDay?: string | null }): Doc | null =>
+  const counters = (cur: Doc, c: typeof ctx & { pflichtDay?: string | readonly string[] | null }): Doc | null =>
     unitsPatch(cur, profilePatch(cur, b.answers, b.rounds, c), b.units, { deviceId: dev, seq: b.seq });
   const compute = (cur: Doc): Doc | null => {
     const patch = counters(cur, ctx);
     if (!pflichtResolver || !validateDoc('app/profile', cur).ok) return patch;
     const next = applyUpdate(cur, patch ?? {});
-    let pflichtDay: string | null = null;
+    let pflichtDay: string | readonly string[] | null = null;
     try {
       pflichtDay = pflichtResolver({ profile: next, batch: b });
     } catch (err) {
       logError('learn:pflicht', err, 'Pflicht prüfen');
     }
-    if (!pflichtDay) return patch;
+    if (!pflichtDay || !pflichtDay.length) return patch;
     return counters(cur, { ...ctx, pflichtDay });
   };
   await writer.transform('app/profile', (cur) => {
@@ -345,13 +345,20 @@ async function sendProfile(writer: Writer, b: Batch): Promise<void> {
   });
 }
 
-async function sendLogs(writer: Writer): Promise<boolean> {
+async function sendLogs(writer: Writer, force: boolean): Promise<boolean> {
   let ok = true;
   const pending = usePending.getState().entries;
   const byDay = new Map<string, PendingEntry[]>();
   for (const e of pending) byDay.set(e.day, [...(byDay.get(e.day) ?? []), e]);
   for (const [day, list] of byDay) {
     const path = `log/${day}`;
+    const l = await lease(writer, path, force);
+    if (l !== 'ok') {
+      // Belegt oder Fehler: Einträge bleiben vorgemerkt (W3).
+      if (l === 'busy') busy = true;
+      else ok = false;
+      continue;
+    }
     const entries: AnyLogEntry[] = list.map((e) => {
       const out: Partial<PendingEntry> = { ...e };
       delete out.day;
@@ -438,14 +445,49 @@ async function sendFields(writer: Writer): Promise<boolean> {
   }
 }
 
+/**
+ * W3: Kurze, kooperative Sperre vor dem Sammel-Schreibvorgang auf `app/profile` bzw. `log/<tag>`.
+ * Alle Tabs und Geräte dieser App sperren so, bevor sie frisch lesen und zusammenführen
+ * (`transform`) – zwei Tabs überschreiben einander keine Zähler mehr. Belegt: Der Stapel bleibt
+ * vorgemerkt und geht beim nächsten Anlass (Antwort, Ruhe-Zeitgeber, Rundenende) hinaus – nie in
+ * einer Warteschleife. Beim Verlassen der Seite (`force`) wird trotzdem geschrieben, sonst ginge der
+ * Puffer (nur im Speicher) verloren.
+ */
+const LEASE_MS = 5000;
+type LeaseResult = 'ok' | 'busy' | 'error';
+async function lease(writer: Writer, path: string, force: boolean): Promise<LeaseResult> {
+  try {
+    const r = await writer.acquire(path, { holder: tabId(), ttlMs: LEASE_MS });
+    if (r.acquired || force) return 'ok';
+    return 'busy';
+  } catch (err) {
+    logWarn('learn:lease', err, path);
+    return force ? 'ok' : 'error';
+  }
+}
+
+let busy = false;
+let forceNext = false;
+
 async function flushOnce(): Promise<boolean> {
   const writer = getWriter();
   if (!writer) return false;
+  const force = forceNext;
+  forceNext = false;
+  busy = false;
   let ok = await sendCourse(writer);
 
   // Profil: erst ein gescheiterter Stapel (unverändert, dieselbe Folgenummer), dann der neue.
   let profileBlocked = false;
-  if (failedBatch) {
+  if (failedBatch || !isEmpty(open)) {
+    const l = await lease(writer, 'app/profile', force);
+    if (l !== 'ok') {
+      profileBlocked = true;
+      if (l === 'busy') busy = true;
+      else ok = false;
+    }
+  }
+  if (failedBatch && !profileBlocked) {
     try {
       await sendProfile(writer, failedBatch);
       failedBatch = null;
@@ -468,10 +510,12 @@ async function flushOnce(): Promise<boolean> {
     }
   }
 
-  ok = (await sendLogs(writer)) && ok;
+  ok = (await sendLogs(writer, force)) && ok;
   ok = (await sendRadar(writer)) && ok;
   ok = (await sendFields(writer)) && ok;
   usePending.setState({ failed: !ok });
+  // W3: belegt – ein späterer Versuch nach der Ruhezeit (länger als die Sperre), kein Warten.
+  if (busy) schedule();
   return ok;
 }
 
@@ -509,9 +553,16 @@ export function installFlushOnHide(): void {
   if (listening || typeof window === 'undefined') return;
   listening = true;
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') void flush();
+    if (document.visibilityState === 'hidden') void flushOnHide();
   });
-  window.addEventListener('pagehide', () => void flush());
+  window.addEventListener('pagehide', () => void flushOnHide());
+}
+
+/** W3: Beim Verlassen der Seite auch bei belegter Sperre schreiben (der Puffer liegt nur im Speicher). */
+export function flushOnHide(): Promise<boolean> {
+  forceNext = true;
+  if (running) again = true;
+  return flush();
 }
 
 /** Nur für Tests: Warteschlange leeren. */
@@ -528,5 +579,7 @@ export function resetPersistForTests(): void {
   tab = undefined;
   lastT = 0;
   pflichtResolver = null;
+  busy = false;
+  forceNext = false;
   usePending.setState(empty());
 }

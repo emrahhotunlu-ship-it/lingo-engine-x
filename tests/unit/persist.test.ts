@@ -91,6 +91,14 @@ describe('Sammel-Warteschlange', () => {
     await persist.flush();
     const tabB = persist.tabId();
     expect(tabA).not.toBe(tabB);
+    // W3: Tab A hält noch die kurze Sperre – der Stapel von Tab B bleibt vorgemerkt …
+    expect(profile().answers).toBe(1);
+    expect(persist.usePending.getState().failed).toBe(false);
+    // … und geht nach Ablauf der Sperre hinaus.
+    const later = Date.now() + 6000;
+    vi.spyOn(Date, 'now').mockReturnValue(later);
+    await persist.flush();
+    vi.restoreAllMocks();
     expect(profile().answers).toBe(2);
     expect(Object.keys(profile().lxSeq as object).sort()).toEqual([tabA, tabB].sort());
   });

@@ -36,8 +36,8 @@ export type CountEvent = { day: string; kind: 'v' | 'g'; channel: 'recog' | 'col
 export type PatchCtx = {
   deviceId: string | null;
   seq: number;
-  /** An diesem Lerntag ist die Pflicht erfüllt → `pflicht[day] = 1` (nur wenn noch nicht gesetzt). */
-  pflichtDay?: string | null;
+  /** An diesem Lerntag (bzw. diesen Lerntagen, B1) ist die Pflicht erfüllt → `pflicht[day] = 1` (nur wenn noch nicht gesetzt). */
+  pflichtDay?: string | readonly string[] | null;
   counts?: readonly CountEvent[];
   sprints?: readonly SprintEntry[];
   /** `lxSeq`-Einträge mit kleinerer Folgenummer (ms, älter als 14 Tage) werden auf `null` gesetzt (D7). */
@@ -180,6 +180,22 @@ export function profilePatch(cur: Doc, answers: readonly AnswerEvent[], rounds: 
       patch.lxSeq = seqs;
     }
   }
-  if (ctx.pflichtDay && !obj(cur.pflicht)[ctx.pflichtDay]) patch.pflicht = { [ctx.pflichtDay]: 1 };
+  // B1: auch mehrere Lerntage (Stapel über den Tageswechsel); nur setzen, nie entfernen.
+  const pflichtDays = ctx.pflichtDay ? (typeof ctx.pflichtDay === 'string' ? [ctx.pflichtDay] : ctx.pflichtDay) : [];
+  const pf: Doc = {};
+  for (const d of pflichtDays) if (d && !obj(cur.pflicht)[d]) pf[d] = 1;
+  if (Object.keys(pf).length) patch.pflicht = pf;
   return Object.keys(patch).length ? patch : null;
+}
+
+/**
+ * H2: `lxSeq` ohne die per `pruneSeqBefore` stillgelegten `null`-Einträge. Ein `update` kann Schlüssel
+ * nur auf `null` setzen, nie entfernen (Felder werden verschmolzen) – entfernt werden sie deshalb beim
+ * Verdichten des ganzen Profils (`profileWithout`, ganzes Dokument per `set`). Zahlen bleiben.
+ */
+export function compactSeq(lxSeq: unknown): Doc | undefined {
+  if (!lxSeq || typeof lxSeq !== 'object' || Array.isArray(lxSeq)) return undefined;
+  const out: Doc = {};
+  for (const [k, v] of Object.entries(lxSeq as Doc)) if (v !== null) out[k] = v;
+  return out;
 }

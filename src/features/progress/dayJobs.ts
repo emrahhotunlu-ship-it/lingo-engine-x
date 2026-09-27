@@ -60,22 +60,27 @@ export async function runDailyIntake(i: {
     // Eine Sperre für Karten UND Pool: Zwei Tabs legen so nie dieselbe Karte zweimal an.
     const lease = await i.writer.acquire('app/pool', { holder: i.tab, ttlMs: 15_000 });
     if (!lease.acquired) return { status: 'busy', openTasks: intake.openTasks, createdCards: 0, pool: null };
+    // W1: Scheitert eine Karte, bleibt ihr Tag offen (`open` > 0) – der nächste Abgleich holt sie nach.
+    const failedWords: Record<string, number> = {};
     for (const w of intake.words) {
       try {
         if ((await i.writer.createIfMissing(`vocab/${w.id}`, w.doc)) === 'created') created++;
       } catch (err) {
         logError('day:daily', err, `vocab/${w.id}`);
+        const day = w.ref.startsWith('daily/') ? w.ref.slice(6) : w.ref;
+        failedWords[day] = (failedWords[day] ?? 0) + 1;
       }
     }
-    if (!intake.batches.length) return { status: 'done', openTasks: intake.openTasks, createdCards: created, pool: null };
+    const status: IntakeResult['status'] = Object.keys(failedWords).length ? 'error' : 'done';
+    if (!intake.batches.length) return { status, openTasks: intake.openTasks, createdCards: created, pool: null };
     let res: PoolIntake | null = null;
     await i.writer.transform('app/pool', (cur) => {
-      res = poolIntake(cur, intake.batches, seenByTopic(i.grammarDocs), i.nowMs);
+      res = poolIntake(cur, intake.batches, seenByTopic(i.grammarDocs), i.nowMs, failedWords);
       return res.op;
     });
     const r = res as PoolIntake | null;
     if (r?.invalid) logError('day:pool', { code: 'invalid_document', message: 'Pool ungültig – nicht überschrieben' }, 'app/pool');
-    return { status: 'done', openTasks: intake.openTasks, createdCards: created, pool: r };
+    return { status, openTasks: intake.openTasks, createdCards: created, pool: r };
   } catch (err) {
     logError('day:pool', err, 'app/pool');
     return { status: 'error', openTasks: intake.openTasks, createdCards: created, pool: null };
