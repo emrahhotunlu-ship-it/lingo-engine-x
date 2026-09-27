@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { maskOf } from '../../domain/answer/mask';
+import { useSharedTarget } from '../../engine/shared';
 import { checkCloze, type ClozeCheck, type ClozeItem } from '../../domain/drills/cloze';
 import { missedWords, scoreDictation, type DictationScore } from '../../domain/drills/dictation';
 import { checkOrder, type OrderCheck, type OrderItem } from '../../domain/drills/order';
@@ -50,8 +51,10 @@ function useTiming() {
 }
 
 function Frame({ status, task, purpose, kind, children, actions, result }: { status: ReactNode; task: string; purpose: string; kind: string; children: ReactNode; actions?: ReactNode; result?: ReactNode }) {
+  // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Aufgabe (nur direkt nach dem Start).
+  const { ref: sharedRef, shared } = useSharedTarget<HTMLElement>('lx-hero');
   return (
-    <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="drill-item" data-kind={kind}>
+    <article ref={sharedRef} data-shared={shared ? '' : undefined} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="drill-item" data-kind={kind}>
       <header className="flex flex-col gap-2">
         {status}
         <TaskLine task={task} purpose={purpose} />

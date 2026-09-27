@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Db, DbErr, Unsub } from '../platform/types';
 import { describeError, logError, logWarn } from '../platform/diagnostics';
-import { validateDoc } from './validate';
+import { validateCached, validationStats } from './validate';
 
 // Laufende Ansicht auf die Dokumente, die die Oberfläche braucht. Jede Abfrage wird genau
 // einmal abonniert (startLive beim Start, Abmelden beim Beenden) – nie aus dem Render
@@ -47,7 +47,29 @@ function markLoaded(): void {
   const s = useLive.getState();
   if (s.status !== 'waiting') return;
   const all = LIVE_DOCS.every((p) => s.docs[p] !== undefined) && LIVE_COLLECTIONS.every((c) => s.collections[c] !== undefined);
-  if (all) useLive.setState({ status: 'ready' });
+  if (!all) return;
+  // Messpunkt (P7-1, Kap. 14): alle Live-Daten geprüft und bereit.
+  try {
+    performance.mark('lx:live');
+  } catch (err) {
+    logWarn('perf:mark', err);
+  }
+  useLive.setState({ status: 'ready' });
+}
+
+/**
+ * Messpunkt H6: je Sammlung die letzte Lieferung – wie viele Dokumente echt geprüft wurden und wie
+ * viele aus dem Zwischenspeicher kamen (`performance.getEntriesByName('lx:validated:vocab')`).
+ * Nur die jeweils letzte Marke bleibt stehen.
+ */
+function markValidated(name: string, before: { hits: number; misses: number; ms: number }): void {
+  const now = validationStats();
+  try {
+    performance.clearMarks(`lx:validated:${name}`);
+    performance.mark(`lx:validated:${name}`, { detail: { misses: now.misses - before.misses, hits: now.hits - before.hits, ms: Math.round((now.ms - before.ms) * 10) / 10 } });
+  } catch (err) {
+    logWarn('perf:mark', err);
+  }
 }
 
 function setInvalid(path: string, issues: string[] | null): void {
@@ -60,7 +82,8 @@ function setInvalid(path: string, issues: string[] | null): void {
 }
 
 function checked(path: string, data: Doc): { value: Doc; ok: boolean } {
-  const res = validateDoc(path, data);
+  // Unveränderte Dokumente kommen als dasselbe Objekt: nur einmal prüfen (H6).
+  const res = validateCached(path, data);
   if (res.ok) {
     setInvalid(path, null);
     return { value: res.value, ok: true };
@@ -112,6 +135,7 @@ export function startLive(db: Db): () => void {
     subscribe(name, (onError) =>
       db.collection(name).onSnapshot((qs) => {
         const map = new Map<string, Doc>();
+        const before = validationStats();
         for (const d of qs.docs) {
           const data = d.exists ? d.data() : undefined;
           if (!data) continue;
@@ -119,6 +143,7 @@ export function startLive(db: Db): () => void {
           // Karten und Themen mit ungültigem Aufbau werden gemeldet und nicht mitgezählt.
           if (res.ok) map.set(d.id, res.value);
         }
+        markValidated(name, before);
         useLive.setState((s) => ({ collections: { ...s.collections, [name]: map } }));
         retried.delete(name);
         markLoaded();
@@ -149,7 +174,7 @@ export function startDayLive(db: Db, day: string): () => void {
       (snap) => {
         if (stopped) return;
         const data = snap.exists ? snap.data() : undefined;
-        const res = data ? validateDoc(path, data) : null;
+        const res = data ? validateCached(path, data) : null;
         if (res && !res.ok) logError('data:validate', { code: 'invalid_document', message: res.issues.join('; ') }, path);
         useLive.setState({ day: { key: day, doc: data ?? null, invalid: !!res && !res.ok } });
         retried = false;

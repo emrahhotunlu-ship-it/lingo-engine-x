@@ -8,6 +8,7 @@ import { registerInputReplies } from './cannedReplies.input';
 import { assessReply } from './canned/assess';
 import { weeklyReply } from './canned/weekly';
 import { registerLearnReplies } from './cannedLearn';
+import { courseExtendReply } from './canned/courseExtend';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
 // produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -298,6 +299,8 @@ export function registerCannedReplies(): void {
   // Phase 6
   registerCannedReply('assess', assessReply);
   registerCannedReply('weekly-report', weeklyReply);
+  // Kurs-Erweiterung (Kap. 6.2)
+  registerCannedReply('course-extend', courseExtendReply);
   // Prüfbericht: word-gen, lesson-production, grammar-items, mnemonic
   registerLearnReplies();
 }

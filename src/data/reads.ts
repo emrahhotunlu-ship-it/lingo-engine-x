@@ -2,7 +2,7 @@ import type { Db } from '../platform/types';
 import { logError } from '../platform/diagnostics';
 import { APP_DOC_PATHS, COLLECTION_NAMES } from './paths';
 import { readOnce } from './snapshot';
-import { validateDoc } from './validate';
+import { validateCached } from './validate';
 
 // Einmaliges Lesen einzelner Dokumente und Sammlungen (Phase 2 D16: `lesson/<id>`, `app/pool`,
 // `app/radar` und `daily/*` werden per `get()` gelesen, ohne Live-Abo). Jedes Dokument läuft
@@ -20,7 +20,7 @@ export async function readDoc(db: Db, path: string): Promise<ReadDoc> {
   const snap = await readOnce(path, () => db.doc(path).get());
   const data = snap.exists ? snap.data() : undefined;
   if (!data) return { status: 'missing' };
-  const res = validateDoc(path, data);
+  const res = validateCached(path, data);
   if (res.ok) return { status: 'valid', doc: res.value };
   logError('data:validate', { code: 'invalid_document', message: res.issues.join('; ') }, path);
   return { status: 'invalid', doc: data, issues: res.issues };
@@ -51,7 +51,7 @@ export async function readCollection(db: Db, name: string, opts: ReadCollectionO
     const data = d.exists ? d.data() : undefined;
     if (!data) continue;
     const path = `${name}/${d.id}`;
-    const res = validateDoc(path, data);
+    const res = validateCached(path, data);
     if (res.ok) valid.set(d.id, res.value);
     else {
       invalid.push(d.id);

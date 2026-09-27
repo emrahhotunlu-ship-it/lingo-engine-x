@@ -26,6 +26,8 @@ import { applyDocumentSettings, isLang, isPalette, isThemeMode, resolveTheme, us
 import { settingsWritePending } from './actions';
 import { initSpeech } from '../platform/speech';
 import { setSoundEnabled } from '../platform/sound';
+import { setHapticsEnabled } from '../platform/haptics';
+import { normHaptic } from '../domain/progress/settings';
 // Phase 2: Lernen (docs/phase2-plan.md), Wortschatz (M1) und Wissen (M8).
 import { LearnHub } from '../features/learn/LearnHub';
 import { CourseScreen } from '../features/course/CourseScreen';
@@ -106,6 +108,12 @@ function useBoot(): void {
   useEffect(() => {
     setSoundEnabled(sound);
   }, [sound]);
+
+  // Vibration (Kap. 4.3): Standard an, abschaltbar (`app/profile.haptic === false`).
+  const hapticOn = normHaptic(profile?.haptic);
+  useEffect(() => {
+    setHapticsEnabled(hapticOn);
+  }, [hapticOn]);
 
   // Sprachausgabe (en-US): Stimmen laden, Stimme und Tempo aus dem Profil (nur Lesen).
   const voice = typeof profile?.voice === 'string' ? profile.voice : null;

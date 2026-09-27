@@ -6,6 +6,7 @@ import { useAiAvailable, useAiScope } from '../../ai/scope';
 import { isAiFailure } from '../../ai/types';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
+import { useSharedTarget } from '../../engine/shared';
 import { useT, type MessageKey } from '../../i18n';
 import { logWarn } from '../../platform/diagnostics';
 import { stopSpeech } from '../../platform/speech';
@@ -80,6 +81,8 @@ function LessonRun({ id }: { id: string }) {
   };
   useHotkeys({ escape: leave }, api.isInput);
 
+  // Kap. 4.4: Titel der Kurszeile → Kopf der Lektion (nur direkt nach dem Tippen im Kurs).
+  const { ref: sharedRef, shared } = useSharedTarget<HTMLParagraphElement>(`lesson-${id}`);
   useCompanionSee(meta ? { area: 'course', label: `${t('lhCourse')} · ${lang === 'de' ? meta.de : meta.en}`, phase: 'idle' } : null);
   if (!meta) return null;
   const cando = lang === 'de' ? meta.cando_de : meta.cando_en;
@@ -96,7 +99,9 @@ function LessonRun({ id }: { id: string }) {
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <IconButton icon="close" label={t('lsClose')} onClick={leave} data-testid="round-close" />
-          <p className="min-w-0 text-sm text-muted">{title}</p>
+          <p ref={sharedRef} data-shared={shared ? '' : undefined} className="min-w-0 text-sm text-muted" data-testid="lesson-title">
+            {title}
+          </p>
         </div>
         <DutyBar ctx={run.ctx} duty="lesson" />
       </div>

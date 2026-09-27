@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { armShared } from '../../engine/shared';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -252,7 +253,7 @@ export function TodayScreen() {
       </motion.header>
 
       {ready && dayLoaded && state.status === 'open' && hero && (
-        <motion.div variants={item}>
+        <motion.div variants={item} onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}>
           <Card channel={DUTY_TONE(hero)} aria-labelledby="td-hero" data-testid="hero" data-duty={hero}>
             <div className="flex items-start justify-between gap-4">
               <div className="flex min-w-0 flex-col gap-1">

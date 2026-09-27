@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
+import { SHARED_TRANSITION, sharedId, SOURCE_DEPENDENCY, useSharedEpoch } from '../../../engine/shared';
 import { invalidIdsOf, useLive } from '../../../data/live';
 import { buildTrainCards, meaningOf } from '../../../domain/srs/cards';
 import { buildChunkCards } from '../../../domain/srs/chunkCards';
@@ -71,6 +72,8 @@ export function VocabScreen() {
   const chunkCount = useMemo(() => cards.filter((c) => c.kind === 'chunk' && !c.hidden).length, [cards]);
   const list = useMemo(() => filterCards(cards, { filter, query: q, sort, nowMs: now }), [cards, filter, q, sort, now]);
   const current = open ? (cards.find((c) => c.key === open) ?? null) : null;
+  // Kap. 4.4: Das Wort der Zeile gleitet in den Titel des Wortblatts (gemeinsames Element).
+  const ep = useSharedEpoch();
 
   const newLine = stats.stockEmpty ? t('vcStockEmpty') : t('vcNewToday', { n: Math.min(stats.newToday, stats.quota), total: stats.quota });
   return (
@@ -153,7 +156,7 @@ export function VocabScreen() {
           <ul className="flex flex-col gap-1.5">
             {list.slice(0, limit).map((c) => (
               <li key={c.key}>
-                <WordRow card={c} nowMs={now} lang={lang} onOpen={() => setOpen(c.key)} />
+                <WordRow card={c} nowMs={now} lang={lang} onOpen={() => setOpen(c.key)} layoutId={sharedId(`word-${c.key}`, ep)} />
               </li>
             ))}
           </ul>
@@ -166,13 +169,13 @@ export function VocabScreen() {
           </div>
         )}
       </motion.div>
-      <WordSheet card={current} onClose={closeWord} />
+      <WordSheet card={current} onClose={closeWord} layoutId={current ? sharedId(`word-${current.key}`, ep) : undefined} />
       <AddWordSheet open={adding} onClose={closeAdd} />
     </motion.div>
   );
 }
 
-function WordRow({ card, nowMs, lang, onOpen }: { card: TrainCard; nowMs: number; lang: 'de' | 'en'; onOpen: () => void }) {
+function WordRow({ card, nowMs, lang, onOpen, layoutId }: { card: TrainCard; nowMs: number; lang: 'de' | 'en'; onOpen: () => void; layoutId: string }) {
   const { t } = useT();
   const conf = confidenceOf(card, nowMs);
   const meaning = meaningOf(card, lang);
@@ -189,9 +192,9 @@ function WordRow({ card, nowMs, lang, onOpen }: { card: TrainCard; nowMs: number
     >
       <span className="flex min-w-0 flex-col">
         <span className="flex min-w-0 items-center gap-2">
-          <span className="truncate font-medium" lang="en">
+          <motion.span layoutId={layoutId} layoutDependency={SOURCE_DEPENDENCY} transition={SHARED_TRANSITION} className="max-w-full self-start truncate font-medium" lang="en">
             {card.word}
-          </span>
+          </motion.span>
           {card.kind === 'chunk' && <span className="flex-none rounded-full border border-line px-2 py-0.5 text-[0.7rem] font-medium text-muted">{t('vcChunkBadge')}</span>}
         </span>
         {meaning && (

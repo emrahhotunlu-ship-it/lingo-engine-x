@@ -35,6 +35,17 @@ const family = (k: SprintKind) => (k.startsWith('card') ? 'card' : k.startsWith(
 
 export const sprintCard = (c: TrainCard): boolean => !c.hidden && !c.isNew && c.stage >= SPRINT_STAGE_MIN;
 
+/** Drei verschiedene Ablenker ≠ `own`: kleine Mengen gemischt, große per Zufallsgriff (linear statt quadratisch). */
+export function distractors(pool: readonly string[], own: string, rng: () => number, n = 3): string[] {
+  if (pool.length <= 24) return shuffle(pool.filter((x) => x !== own), rng).slice(0, n);
+  const out: string[] = [];
+  for (let tries = 0; out.length < n && tries < n * 20; tries++) {
+    const x = pool[Math.floor(rng() * pool.length)] as string;
+    if (x !== own && !out.includes(x)) out.push(x);
+  }
+  return out;
+}
+
 export function buildSprintDeck(i: {
   cards: readonly TrainCard[];
   grammarDocs: ReadonlyMap<string, Readonly<Record<string, unknown>>>;
@@ -47,13 +58,20 @@ export function buildSprintDeck(i: {
   const rng = mulberry32(hash32(i.seed));
   const cards = i.cards.filter(sprintCard);
   const byFamily: Record<'card' | 'gram' | 'colloc', SprintItem[]> = { card: [], gram: [], colloc: [] };
-  const meanings = cards.map((c) => meaningOf(c, i.lang)).filter((m): m is string => !!m).map((m) => shortMeaning(m, i.lang));
+  // Jede Bedeutung einmal kürzen; Ablenker aus den verschiedenen Bedeutungen ziehen (P7-1: früher
+  // wurde je Karte die ganze Liste gefiltert und gemischt – bei 1.500 Karten quadratisch).
+  const shortOf = new Map<TrainCard, string>();
   for (const c of cards) {
     const m = meaningOf(c, i.lang);
-    if (m) {
-      const others = shuffle(meanings.filter((x) => x !== shortMeaning(m, i.lang)), rng).slice(0, 3);
-      if (others.length === 3) byFamily.card.push({ id: `mc:${c.id}`, k: 'card-mc', prompt: c.word, answer: shortMeaning(m, i.lang), opts: shuffle([shortMeaning(m, i.lang), ...others], rng), cardId: c.id });
-      byFamily.card.push({ id: `type:${c.id}`, k: 'card-type', prompt: shortMeaning(m, i.lang), answer: c.word, opts: null, cardId: c.id, lemma: c.lemma });
+    if (m) shortOf.set(c, shortMeaning(m, i.lang));
+  }
+  const pool = [...new Set(shortOf.values())];
+  for (const c of cards) {
+    const short = shortOf.get(c);
+    if (short !== undefined) {
+      const others = distractors(pool, short, rng);
+      if (others.length === 3) byFamily.card.push({ id: `mc:${c.id}`, k: 'card-mc', prompt: c.word, answer: short, opts: shuffle([short, ...others], rng), cardId: c.id });
+      byFamily.card.push({ id: `type:${c.id}`, k: 'card-type', prompt: short, answer: c.word, opts: null, cardId: c.id, lemma: c.lemma });
     }
     for (const col of c.col) {
       if (!col.p || !col.gap || col.opts.length < 2) continue;

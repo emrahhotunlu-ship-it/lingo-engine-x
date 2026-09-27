@@ -19,6 +19,7 @@ import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll } from './exportData';
 import { VoiceSection } from './VoiceSection';
 import { LearningSection, SoundSection, SourcesSection } from './LearningSection';
+import { HapticSection } from './HapticSection';
 import { discCount } from '../../domain/discover/steps';
 import { diagText } from './diagText';
 
@@ -36,6 +37,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
         <Practice />
         <VoiceSection />
         <SoundSection />
+        <HapticSection />
         <DataSection />
         <SourcesSection />
         <Diagnostics open={open} />

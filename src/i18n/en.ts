@@ -9,6 +9,7 @@ import { inputEn } from './parts/input.en';
 import { progressEn } from './parts/progress.en';
 import { trainerEn } from './parts/trainer.en';
 import { standEn } from './parts/stand.en';
+import { engineEn } from './parts/engine.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -28,6 +29,8 @@ export const en: Record<MessageKey, string> = {
   ...trainerEn,
   // Gaps from the review: weekly check, week strip, color themes, work context, what's new
   ...standEn,
+  // Kurs-Erweiterung, Wischgesten, Vibration
+  ...engineEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

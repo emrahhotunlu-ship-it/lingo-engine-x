@@ -20,6 +20,21 @@ function vibrator(): VibrateNavigator | null {
 }
 
 let reported = false;
+let enabled = true;
+let blocked = false;
+let unblock: ReturnType<typeof setTimeout> | null = null;
+/**
+ * Zwei Meldungen desselben Prüfens (Lücke + Ergebniszeile) ergeben nur eine Vibration. Gesperrt
+ * wird per Zeitgeber statt per Uhrzeit (eine feste Testuhr hält `performance.now` an).
+ */
+const DEDUPE_MS = 300;
+
+/** Einstellung „Vibration“ aus `app/profile.haptic` übernehmen (Standard an). */
+export function setHapticsEnabled(on: boolean): void {
+  enabled = on;
+}
+
+export const hapticsEnabled = (): boolean => enabled;
 
 /** Kann dieses Gerät vibrieren? (iPhone/Safari: nein) */
 export function canVibrate(): boolean {
@@ -28,6 +43,7 @@ export function canVibrate(): boolean {
 
 /** Kurze Vibration, wo möglich. Liefert, ob das Gerät sie angenommen hat. */
 export function haptic(kind: HapticKind): boolean {
+  if (!enabled) return false;
   const nav = vibrator();
   if (!nav) return false;
   try {
@@ -38,4 +54,23 @@ export function haptic(kind: HapticKind): boolean {
     reported = true;
     return false;
   }
+}
+
+/** Rückmeldung beim Prüfen (Kap. 4.3): richtig = leicht, fast richtig = kurz, falsch = deutlicher. */
+export function verdictHaptic(verdict: 'correct' | 'near' | 'wrong'): boolean {
+  if (!enabled || blocked || !vibrator()) return false;
+  blocked = true;
+  unblock = setTimeout(() => {
+    blocked = false;
+    unblock = null;
+  }, DEDUPE_MS);
+  return haptic(verdict === 'correct' ? 'success' : verdict === 'near' ? 'tap' : 'error');
+}
+
+/** Nur für Tests: Sperrzeit zurücksetzen. */
+export function resetHaptics(): void {
+  if (unblock) clearTimeout(unblock);
+  unblock = null;
+  blocked = false;
+  enabled = true;
 }

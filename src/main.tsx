@@ -6,6 +6,8 @@ import { initDiagnostics, logError } from './platform/diagnostics';
 import { applyDocumentSettings, resolveTheme, useSettings } from './app/settings';
 
 async function boot(): Promise<void> {
+  // Messpunkt (P7-1): Skript geladen und ausgewertet, erstes Zeichnen folgt.
+  performance.mark('lx:boot');
   initDiagnostics();
   // Entwicklungs-Adapter nur im Dev-Server; im Produktions-Build ist dieser Zweig
   // entfernt (import.meta.env.DEV === false) – scripts/check-platform.mjs prüft das.

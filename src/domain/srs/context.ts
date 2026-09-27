@@ -41,17 +41,34 @@ function stripBrackets(s: string): string {
   return s.replace(/\[|\]/g, '');
 }
 
-/** Sucht `target` (erstes und letztes Wort dürfen gebeugt sein) in `sentence`. */
-export function locate(sentence: string, target: string): { start: number; end: number } | null {
-  const words = target.split(/\s+/).filter(Boolean);
-  if (!words.length) return null;
+const RE_CACHE = new Map<string, RegExp>();
+const RE_CACHE_MAX = 4000;
+
+/** Regex je Zielwendung, einmal gebaut (P7-1: ~1.500 Karten bei jedem Kartenaufbau). */
+function targetRe(words: readonly string[]): RegExp {
+  const key = words.join(' ');
+  const hit = RE_CACHE.get(key);
+  if (hit) return hit;
   const parts = words.map((w, i) => {
     const flex = i === 0 || i === words.length - 1;
     return flex ? `(?:${formsOf(w).map(escape).join('|')})` : escape(w);
   });
   // Ohne Lookbehind: Safari vor 16.4 kann `(?<!…)` nicht lesen. Die Wortgrenze davor steht in Gruppe 1.
   const re = new RegExp(`(^|[^A-Za-z'])(${parts.join('\\s+')})(?![A-Za-z'])`, 'i');
-  const m = re.exec(sentence);
+  if (RE_CACHE.size >= RE_CACHE_MAX) RE_CACHE.clear();
+  RE_CACHE.set(key, re);
+  return re;
+}
+
+/** Sucht `target` (erstes und letztes Wort dürfen gebeugt sein) in `sentence`. */
+export function locate(sentence: string, target: string): { start: number; end: number } | null {
+  const words = target.split(/\s+/).filter(Boolean);
+  if (!words.length) return null;
+  // P7-1: Jede Form des ersten Worts beginnt mit seinem Stamm ohne letzten Buchstaben (try → tries,
+  // make → making, stop → stopped). Fehlt er im Satz, gibt es keinen Treffer – ohne Regex-Bau.
+  const first = (words[0] ?? '').toLowerCase();
+  if (!sentence.toLowerCase().includes(first.length > 1 ? first.slice(0, -1) : first)) return null;
+  const m = targetRe(words).exec(sentence);
   if (!m) return null;
   const start = m.index + (m[1]?.length ?? 0);
   return { start, end: start + (m[2]?.length ?? 0) };

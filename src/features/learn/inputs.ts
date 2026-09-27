@@ -4,7 +4,8 @@ import { logWarn } from '../../platform/diagnostics';
 import { readCollection, readDoc } from '../../data/reads';
 import { useLive } from '../../data/live';
 import { doneLessons } from '../../domain/course/courseDone';
-import { lessonMeta } from '../../domain/course/catalog';
+import { lessonMeta, setCourseExtension } from '../../domain/course/catalog';
+import { extCatalogOf } from '../../domain/course/extension';
 import { readLesson } from '../../domain/course/lessonDoc';
 import { poolTasks } from '../../domain/grammar/pool';
 import type { GrammarTask } from '../../domain/learn/types';
@@ -30,6 +31,12 @@ type InputsState = {
 };
 
 export const useLearnInputs = create<InputsState>(() => ({ status: 'idle', pool: [], lessons: new Map(), dailyOpen: [], dailyDay: null }));
+
+// Kurs-Erweiterung (Kap. 6.2): Der Katalog kennt die Lektionen ab l25, sobald `lesson/*` gelesen
+// oder lokal ergänzt ist (vor dem Neuzeichnen der Oberfläche, die dieselbe Liste abonniert).
+useLearnInputs.subscribe((s, prev) => {
+  if (s.lessons !== prev.lessons) setCourseExtension(extCatalogOf(s.lessons));
+});
 
 let running: Promise<void> | null = null;
 

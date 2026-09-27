@@ -75,10 +75,10 @@ function ChunkOrigin({ card }: { card: TrainCard }) {
 }
 const STAGE_KEYS: MessageKey[] = ['stage0', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
 
-export function WordSheet({ card, onClose }: { card: TrainCard | null; onClose: () => void }) {
+export function WordSheet({ card, onClose, layoutId }: { card: TrainCard | null; onClose: () => void; layoutId?: string }) {
   const { t } = useT();
   return (
-    <Sheet open={!!card} onClose={onClose} title={card?.word ?? t('lhVocab')} closeLabel={t('close')}>
+    <Sheet open={!!card} onClose={onClose} title={card?.word ?? t('lhVocab')} closeLabel={t('close')} titleLayoutId={layoutId}>
       {card && <WordBody key={card.key} card={card} onClose={onClose} />}
     </Sheet>
   );

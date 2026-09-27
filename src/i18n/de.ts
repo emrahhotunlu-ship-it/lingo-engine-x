@@ -11,6 +11,7 @@ import { inputDe } from './parts/input.de';
 import { progressDe } from './parts/progress.de';
 import { trainerDe } from './parts/trainer.de';
 import { standDe } from './parts/stand.de';
+import { engineDe } from './parts/engine.de';
 
 export const de = {
   ...aiDe,
@@ -29,6 +30,8 @@ export const de = {
   ...trainerDe,
   // Lücken aus dem Abgleich: Wochen-Check, Wochenstreifen, Farbthemen, Kontext, Was ist neu
   ...standDe,
+  // Kurs-Erweiterung, Wischgesten, Vibration
+  ...engineDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

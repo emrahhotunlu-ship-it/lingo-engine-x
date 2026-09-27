@@ -2,17 +2,29 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { IconButton } from './Button';
 import { DURATION, EASE_OUT } from './motion';
+import { SheetGrip, useSheetDrag } from './sheetDrag';
+import { SHARED_TRANSITION } from '../engine/shared';
 
-type Props = { open: boolean; onClose: () => void; title: string; closeLabel: string; children: ReactNode };
+type Props = {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  closeLabel: string;
+  children: ReactNode;
+  /** Kap. 4.4: gemeinsames Element – der Titel gleitet vom auslösenden Element (z. B. Wortzeile) herein. */
+  titleLayoutId?: string;
+};
 
 /**
  * Blatt über dem Inhalt: am Handy von unten als Vollbild-Blatt, ab Tablet als Paneel rechts.
  * Esc schließt, der Fokus kehrt zum auslösenden Element zurück (Kap. 4.5).
  */
-export function Sheet({ open, onClose, title, closeLabel, children }: Props) {
+export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutId }: Props) {
   const titleId = useId();
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<Element | null>(null);
+  // Am Handy: am Griff/an der Kopfzeile nach unten wischen schließt (Kap. 4.5).
+  const drag = useSheetDrag(onClose);
 
   useEffect(() => {
     if (!open) return;
@@ -73,16 +85,21 @@ export function Sheet({ open, onClose, title, closeLabel, children }: Props) {
             tabIndex={-1}
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            // Am Handy gleitet das Blatt beim Schließen nach unten weg (auch nach dem Wischen).
+            exit={{ opacity: 0, y: drag.mobile ? '60%' : 20 }}
             transition={{ duration: DURATION.slow, ease: EASE_OUT }}
+            {...drag.panel}
             className="absolute inset-x-0 bottom-0 top-[max(env(safe-area-inset-top),1.5rem)] flex flex-col rounded-t-[1.5rem] border border-line bg-surface-solid shadow-2xl outline-none md:inset-y-3 md:right-3 md:left-auto md:top-3 md:w-[26rem] md:rounded-[1.5rem]"
           >
-            <header className="flex items-center justify-between gap-4 px-5 pt-4 pb-2 sm:px-6">
-              <h2 id={titleId} className="text-lg font-semibold tracking-tight">
-                {title}
-              </h2>
-              <IconButton icon="close" label={closeLabel} onClick={onClose} />
-            </header>
+            <div {...drag.handle} className="flex flex-none flex-col">
+              <SheetGrip />
+              <header className="flex items-center justify-between gap-4 px-5 pt-3 pb-2 sm:px-6 md:pt-4">
+                <motion.h2 id={titleId} layoutId={titleLayoutId} transition={SHARED_TRANSITION} className="text-lg font-semibold tracking-tight">
+                  {title}
+                </motion.h2>
+                <IconButton icon="close" label={closeLabel} onClick={onClose} />
+              </header>
+            </div>
             <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(env(safe-area-inset-bottom),1.5rem)] sm:px-6">{children}</div>
           </motion.div>
         </div>
