@@ -103,4 +103,18 @@ export const standDe = {
   wnWeek: '„Dein Stand" zeigt oben deine Woche als sieben Ringe und Claudes Niveau auf einer Skala; im Verlauf stehen jetzt auch die alten Wochen-Checks.',
   wnSettings: 'In den Einstellungen: Farbthema (Salbei, Ozean, Pflaume, Graphit) und dein beruflicher Kontext.',
   wnPreply: '„Als Preply-Stunde" gibt es jetzt bei Texten, Grammatikthemen, Szenen und im Wochenbericht.',
+
+  // UX-Beratung Nr. 6, 10, 11: Stand, Wortschatz, Einstellungen
+  ckTableToggle: 'Bisherige Checks ({n})',
+  feedRows_one: '{n} Eintrag',
+  feedRows_other: '{n} Einträge',
+  vtestTitle: 'Wortschatztest',
+  vtestNever: 'Noch nicht gemessen.',
+  vtestGo: 'Starten · 8 Min.',
+  histTraceTitle: 'Einschätzungen und Meilensteine',
+  setGroupLearn: 'Lernen',
+  setGroupLook: 'Aussehen und Ton',
+  setGroupData: 'Daten und Technik',
+  diagVersion: 'Version {v}',
+  vcSortToggle: 'Sortierung wechseln, jetzt: {sort}',
 } as const;

@@ -31,7 +31,7 @@ export const progressDe = {
   progTabs: 'Bereiche',
   progJudge: 'Urteil',
   progErrors: 'Fehler',
-  progPath: 'Weg nach C1',
+  progPath: 'Ziel C1',
   progHistory: 'Verlauf',
 
   // Urteil (Kap. 5)
@@ -112,7 +112,11 @@ export const progressDe = {
 
   // Weg nach C1
   canDoTitle: 'Was du auf dem Weg nach C1 können sollst',
-  canDoCount: '{level}: {done} von {total}',
+  canDoCount: '{done} von {total} geschafft',
+  canDoMore_one: '{n} weiterer offener Punkt',
+  canDoMore_other: '{n} weitere offene Punkte',
+  canDoReached_one: '{n} erreicht',
+  canDoReached_other: '{n} erreicht',
   canDoSelf: 'Kann ich',
   cdStatus_reached: 'Belegt',
   cdStatus_self: 'Selbst markiert',

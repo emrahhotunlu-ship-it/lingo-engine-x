@@ -103,7 +103,10 @@ function LessonRun({ id }: { id: string }) {
             {title}
           </p>
         </div>
-        <DutyBar ctx={run.ctx} duty="lesson" />
+        {/* „Pflicht 1 von 3“ bricht nie um (UX-Beratung Nr. 12). */}
+        <span className="flex-none whitespace-nowrap">
+          <DutyBar ctx={run.ctx} duty="lesson" />
+        </span>
       </div>
       {idx >= 0 && (
         <ol className="grid grid-cols-4 gap-1.5" aria-label={t('lsSteps')}>

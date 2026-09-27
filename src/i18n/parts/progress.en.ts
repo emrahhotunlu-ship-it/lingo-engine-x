@@ -29,7 +29,7 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   progTabs: 'Sections',
   progJudge: 'Judgment',
   progErrors: 'Mistakes',
-  progPath: 'Path to C1',
+  progPath: 'C1 goal',
   progHistory: 'History',
 
   assessFailed: 'The assessment could not be updated.',
@@ -107,7 +107,11 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   rc_spelling: 'Spelling',
 
   canDoTitle: 'What you should be able to do on the way to C1',
-  canDoCount: '{level}: {done} of {total}',
+  canDoCount: '{done} of {total} done',
+  canDoMore_one: '{n} more open item',
+  canDoMore_other: '{n} more open items',
+  canDoReached_one: '{n} reached',
+  canDoReached_other: '{n} reached',
   canDoSelf: 'I can do this',
   cdStatus_reached: 'Evidenced',
   cdStatus_self: 'Self-assessed',

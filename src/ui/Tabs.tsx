@@ -2,6 +2,7 @@ import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
 
 // Reiter nach WAI-ARIA (tablist/tab/tabpanel): Pfeiltasten wechseln, Pos1/Ende springen,
 // die Hervorhebung liegt direkt am aktiven Reiter (kein hängenbleibendes Layout-Element).
+// Alle Reiter stehen in EINER Zeile, auch am iPhone (UX-Beratung Nr. 6).
 
 export type TabItem<T extends string> = { id: T; label: string; testId?: string };
 
@@ -35,7 +36,7 @@ export function Tabs<T extends string>({ label, items, value, onChange, testId, 
 
   return (
     <div className="flex flex-col gap-5">
-      <div role="tablist" aria-label={label} onKeyDown={onKey} data-testid={testId} className="grid w-full grid-cols-2 gap-1 rounded-[var(--radius-control)] bg-track p-1 sm:grid-cols-4">
+      <div role="tablist" aria-label={label} onKeyDown={onKey} data-testid={testId} className="grid w-full auto-cols-fr grid-flow-col gap-1 rounded-[var(--radius-control)] bg-track p-1">
         {items.map((it, i) => {
           const active = it.id === value;
           return (
@@ -52,7 +53,7 @@ export function Tabs<T extends string>({ label, items, value, onChange, testId, 
               tabIndex={active ? 0 : -1}
               data-testid={it.testId}
               onClick={() => onChange(it.id)}
-              className={`relative min-h-11 rounded-[calc(var(--radius-control)-4px)] px-3 text-sm transition-colors ${active ? 'bg-surface-strong font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
+              className={`relative min-h-11 min-w-0 truncate whitespace-nowrap rounded-[calc(var(--radius-control)-4px)] px-1.5 text-sm sm:px-3 transition-colors ${active ? 'bg-surface-strong font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
             >
               {it.label}
             </button>

@@ -7,8 +7,8 @@ import { dayKey } from '../../domain/date';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
-import { Card } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';
+import { Fold } from '../../ui/Fold';
 import { toast } from '../../ui/Toast';
 import { startCheck } from '../check/session';
 
@@ -65,7 +65,8 @@ function SplitTable({ head, rows, more, testId }: { head: ReactNode; rows: React
 
 const pairText = (p: Pair, num: (n: number) => string): string => (p.n ? `${num(p.ok)}/${num(p.n)}` : '–');
 
-export function ChecksCard() {
+/** Zeile „Wochen-Check" oben im Verlauf; die bisherigen Checks liegen zugeklappt darunter. */
+export function ChecksRow() {
   const { t, tn, num } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
@@ -100,32 +101,33 @@ export function ChecksCard() {
   ));
 
   return (
-    <Card channel="grammar" aria-labelledby="checks-title" data-testid="checks-card">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="checks-title" className="text-lg font-semibold">
-          {t('ckTitle')}
-        </h2>
-        <span className="rounded-full border border-line px-3 py-1 text-xs font-medium text-muted">{t('trExtraBadge')}</span>
-      </div>
-      <p className="mt-1 text-sm text-muted">{t('ckLead')}</p>
-      {cmp && last && (
-        <p className="lx-tnum mt-3 text-sm" data-testid="check-last">
-          {cmp.prevPct === null ? t('ckLastOnly', { pct: cmp.pct, date: fmt(last.t) }) : t('ckLast', { pct: cmp.pct, date: fmt(last.t), prev: cmp.prevPct })}
-        </p>
-      )}
-      <div className="mt-4">
-        {doneWeek ? (
-          <p className="text-sm text-muted" data-testid="check-week-done">
-            {t('ckWeekDone')}
-          </p>
-        ) : (
+    <div className="flex flex-col gap-2 py-4" data-testid="checks-card">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex min-w-0 flex-1 basis-60 flex-col gap-0.5">
+          <h2 id="checks-title" className="text-base font-medium">
+            {t('ckTitle')} <span className="text-sm font-normal text-muted">· {t('trExtraBadge')}</span>
+          </h2>
+          {cmp && last ? (
+            <p className="lx-tnum text-sm text-muted" data-testid="check-last">
+              {cmp.prevPct === null ? t('ckLastOnly', { pct: cmp.pct, date: fmt(last.t) }) : t('ckLast', { pct: cmp.pct, date: fmt(last.t), prev: cmp.prevPct })}
+            </p>
+          ) : (
+            <p className="text-sm text-muted">{t('ckOfferSub')}</p>
+          )}
+          {doneWeek && (
+            <p className="text-sm text-muted" data-testid="check-week-done">
+              {t('ckWeekDone')}
+            </p>
+          )}
+        </div>
+        {!doneWeek && (
           <Button variant="secondary" icon="target" onClick={start} data-testid="check-start">
             {t('ckStart')}
           </Button>
         )}
       </div>
       {rows.length > 0 && (
-        <div className="mt-4">
+        <Disclosure label={t('ckTableToggle', { n: rows.length })} testId="checks-toggle">
           <SplitTable
             testId="checks-table"
             more={tn('ckMore', rows.length - SHOWN)}
@@ -155,13 +157,13 @@ export function ChecksCard() {
               </>
             }
           />
-        </div>
+        </Disclosure>
       )}
-    </Card>
+    </div>
   );
 }
 
-export function LegacyFeedCard() {
+export function LegacyFeedFold() {
   const { t, tn, num } = useT();
   const profile = useLive((s) => s.docs['app/profile']);
   const feed = useMemo(() => readFeed(profile, 40), [profile]);
@@ -179,11 +181,8 @@ export function LegacyFeedCard() {
     </tr>
   ));
   return (
-    <Card aria-labelledby="feed-title" data-testid="legacy-feed">
-      <h2 id="feed-title" className="text-lg font-semibold">
-        {t('feedTitle')}
-      </h2>
-      <p className="mt-1 text-sm text-muted">{t('feedLead')}</p>
+    <Fold title={t('feedTitle')} meta={tn('feedRows', feed.length)} testId="legacy-feed" toggleTestId="feed-toggle">
+      <p className="text-sm text-muted">{t('feedLead')}</p>
       <div className="mt-3">
         <SplitTable
           testId="feed-table"
@@ -212,6 +211,6 @@ export function LegacyFeedCard() {
           }
         />
       </div>
-    </Card>
+    </Fold>
   );
 }

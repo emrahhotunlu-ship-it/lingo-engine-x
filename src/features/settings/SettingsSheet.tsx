@@ -18,31 +18,53 @@ import { WorkContextSection } from './WorkContextSection';
 import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll } from './exportData';
 import { VoiceSection } from './VoiceSection';
-import { LearningSection, SoundSection, SourcesSection } from './LearningSection';
+import { LearningSection, SoundSection } from './LearningSection';
+import { Fold } from '../../ui/Fold';
 import { HapticSection } from './HapticSection';
 import { discCount } from '../../domain/discover/steps';
 import { diagText } from './diagText';
 
-// Einstellungen (Kap. 6.14): Sprache, Darstellung, Lernen (neue Wörter, Tagesziel), Üben, Stimme,
-// Ton, Datenexport, Quellen und Lizenzen, Diagnose.
+// Einstellungen (Kap. 6.14, UX-Beratung Nr. 11) in drei Gruppen: Lernen (neue Wörter, Tagesziel,
+// Arbeitskontext, Üben) · Aussehen und Ton (Sprache, Darstellung, Farbthema, Stimme, Töne, Vibration)
+// · Daten und Technik (Sicherung; Quellen und Diagnose zugeklappt).
 
 export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t } = useT();
   return (
     <Sheet open={open} onClose={onClose} title={t('settings')} closeLabel={t('close')}>
+      {/* UX-Beratung Nr. 11: drei Gruppen; Quellen und Diagnose zugeklappt, die Version steht in der Zeile. */}
       <div className="flex flex-col gap-8 pt-2">
-        <Appearance />
-        <LearningSection />
-        <WorkContextSection />
-        <Practice />
-        <VoiceSection />
-        <SoundSection />
-        <HapticSection />
-        <DataSection />
-        <SourcesSection />
-        <Diagnostics open={open} />
+        <Group title={t('setGroupLearn')} testId="set-group-learn">
+          <LearningSection />
+          <WorkContextSection />
+          <Practice />
+        </Group>
+        <Group title={t('setGroupLook')} testId="set-group-look">
+          <Appearance />
+          <VoiceSection />
+          <SoundSection />
+          <HapticSection />
+        </Group>
+        <Group title={t('setGroupData')} testId="set-group-data">
+          <DataSection />
+          <div className="flex flex-col divide-y divide-line border-y border-line">
+            <Fold title={t('sourcesTitle')} toggleTestId="sources-toggle">
+              <p className="text-sm text-muted">{t('sourcesText')}</p>
+            </Fold>
+            <Diagnostics open={open} />
+          </div>
+        </Group>
       </div>
     </Sheet>
+  );
+}
+
+function Group({ title, testId, children }: { title: string; testId: string; children: ReactNode }) {
+  return (
+    <section className="flex flex-col gap-6 border-t border-line pt-6 first:border-t-0 first:pt-0" data-testid={testId}>
+      <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+      {children}
+    </section>
   );
 }
 
@@ -185,8 +207,9 @@ function Diagnostics({ open }: { open: boolean }) {
     }
   };
 
+  const build = typeof __LX_BUILD__ === 'string' ? __LX_BUILD__ : 'dev';
   const rows: Array<[string, string]> = [
-    [t('diagBuild'), typeof __LX_BUILD__ === 'string' ? __LX_BUILD__ : 'dev'],
+    [t('diagBuild'), build],
     [t('capDb'), t(CAP_LABEL[caps.db])],
     [t('capSample'), t(CAP_LABEL[caps.sampleRevoked ? 'absent' : caps.sample])],
     [t('capDownloads'), t(CAP_LABEL[caps.downloads])],
@@ -204,8 +227,9 @@ function Diagnostics({ open }: { open: boolean }) {
     [t('diagDisc'), num(discCount(disc))],
   ];
 
+  // Warnungen bleiben sichtbar; die Messwerte und das Protokoll liegen zugeklappt darunter.
   return (
-    <Section title={t('settingsDiagnostics')}>
+    <>
       {docCount !== null && docCount >= DOC_COUNT_WARN && (
         <p className="text-sm text-gold-text" role="status" data-testid="diag-capacity-warn">
           {t('diagCapacityWarn', { n: docCount })}
@@ -216,41 +240,45 @@ function Diagnostics({ open }: { open: boolean }) {
           {t('diagProfileWarn')}
         </p>
       )}
-      {COMPACT_ENABLED && size.compactable && <CompactOffer />}
-      <dl className="flex flex-col">
-        {rows.map(([k, v]) => (
-          <div key={k} className="flex items-baseline justify-between gap-4 border-b border-line py-2.5" data-testid={k === t('diagDocuments') ? 'diag-capacity' : k === t('diagProfileSize') ? 'diag-profile-size' : undefined}>
-            <dt className="text-sm text-muted">{k}</dt>
-            <dd className="lx-tnum text-right text-sm font-medium">{v}</dd>
-          </div>
-        ))}
-      </dl>
-      <h4 className="mt-2 text-sm font-semibold">{t('diagLog')}</h4>
-      {log.length === 0 ? (
-        <p className="text-sm text-muted">{t('diagLogEmpty')}</p>
-      ) : (
-        <ol className="flex max-h-72 flex-col gap-2 overflow-y-auto rounded-xl bg-surface p-3 text-xs" data-testid="diag-log">
-          {[...log].reverse().map((e) => (
-            <li key={e.id} className="break-words">
-              <span className="lx-tnum text-subtle">{time(e.t)}</span>{' '}
-              <span className={e.level === 'error' ? 'text-danger-text' : e.level === 'warn' ? 'text-gold-text' : 'text-muted'}>{e.scope}</span>{' '}
-              {e.code && <span className="text-muted">[{e.code}]</span>} <span className="text-fg">{diagText(e.message, t)}</span>
-              {e.detail && <span className="text-subtle"> · {diagText(e.detail, t)}</span>}
-            </li>
-          ))}
-        </ol>
-      )}
-      {log.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          <Button icon="copy" onClick={() => void copy()}>
-            {t('diagLogCopy')}
-          </Button>
-          <Button variant="ghost" onClick={clearLog}>
-            {t('diagLogClear')}
-          </Button>
+      <Fold title={t('settingsDiagnostics')} meta={t('diagVersion', { v: build })} testId="diag" toggleTestId="diag-toggle">
+        <div className="flex flex-col gap-3">
+          {COMPACT_ENABLED && size.compactable && <CompactOffer />}
+          <dl className="flex flex-col">
+            {rows.map(([k, v]) => (
+              <div key={k} className="flex items-baseline justify-between gap-4 border-b border-line py-2.5" data-testid={k === t('diagDocuments') ? 'diag-capacity' : k === t('diagProfileSize') ? 'diag-profile-size' : undefined}>
+                <dt className="text-sm text-muted">{k}</dt>
+                <dd className="lx-tnum text-right text-sm font-medium">{v}</dd>
+              </div>
+            ))}
+          </dl>
+          <h4 className="mt-2 text-sm font-semibold">{t('diagLog')}</h4>
+          {log.length === 0 ? (
+            <p className="text-sm text-muted">{t('diagLogEmpty')}</p>
+          ) : (
+            <ol className="flex max-h-72 flex-col gap-2 overflow-y-auto rounded-xl bg-surface p-3 text-xs" data-testid="diag-log">
+              {[...log].reverse().map((e) => (
+                <li key={e.id} className="break-words">
+                  <span className="lx-tnum text-subtle">{time(e.t)}</span>{' '}
+                  <span className={e.level === 'error' ? 'text-danger-text' : e.level === 'warn' ? 'text-gold-text' : 'text-muted'}>{e.scope}</span>{' '}
+                  {e.code && <span className="text-muted">[{e.code}]</span>} <span className="text-fg">{diagText(e.message, t)}</span>
+                  {e.detail && <span className="text-subtle"> · {diagText(e.detail, t)}</span>}
+                </li>
+              ))}
+            </ol>
+          )}
+          {log.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              <Button icon="copy" onClick={() => void copy()}>
+                {t('diagLogCopy')}
+              </Button>
+              <Button variant="ghost" onClick={clearLog}>
+                {t('diagLogClear')}
+              </Button>
+            </div>
+          )}
         </div>
-      )}
-    </Section>
+      </Fold>
+    </>
   );
 }
 

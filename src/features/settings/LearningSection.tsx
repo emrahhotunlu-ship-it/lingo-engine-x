@@ -20,7 +20,7 @@ export function LearningSection() {
   const perDay = normNewPerDay(opt.newPerDay ?? profile?.newPerDay);
   return (
     <section className="flex flex-col gap-3" data-testid="learning-section">
-      <h3 className="lx-eyebrow">{t('settingsLearning')}</h3>
+      {/* Die Gruppe „Lernen“ trägt schon die Überschrift (UX-Beratung Nr. 11). */}
       <p className="text-sm font-medium">{t('setNewPerDay')}</p>
       <Segmented
         label={t('setNewPerDay')}
@@ -72,16 +72,6 @@ export function SoundSection() {
       ) : (
         <p className="text-sm text-muted">{t('setSoundNone')}</p>
       )}
-    </section>
-  );
-}
-
-export function SourcesSection() {
-  const { t } = useT();
-  return (
-    <section className="flex flex-col gap-2">
-      <h3 className="lx-eyebrow">{t('sourcesTitle')}</h3>
-      <p className="text-sm text-muted">{t('sourcesText')}</p>
     </section>
   );
 }
