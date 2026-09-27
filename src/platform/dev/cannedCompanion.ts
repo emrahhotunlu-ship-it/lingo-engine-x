@@ -93,8 +93,8 @@ export function translateReply(input: string): string {
     source: 'en',
     translation: 'Das ist die Übersetzung deines Textes auf Deutsch.',
     register,
-    alternatives: [
-      { text: 'Hier ist die Übersetzung Ihres Textes.', register: same ? register : 'formal', note: note('mit Sie, für Kunden', 'formal address, for customers') },
+    alternatives: same ? [] : [
+      { text: 'Hier ist die Übersetzung Ihres Textes.', register: 'formal', note: note('mit Sie, für Kunden', 'formal address, for customers') },
       { text: 'Hier ist dein Text auf Deutsch.', register: 'casual', note: note('locker', 'casual') },
     ],
     notes: [],
