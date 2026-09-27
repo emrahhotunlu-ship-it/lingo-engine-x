@@ -33,4 +33,10 @@ export const navDe = {
   spTrMeetingLead: 'Echten Termin vorbereiten, Generalprobe, Nachbesprechung',
   spTrFluencyLead: 'Dieselbe Antwort in 90, 60 und 45 Sekunden',
   spTrTonesLead: 'Slack, Mail an den CFO, Satz im Meeting',
+  introLblMeaning: 'Bedeutung',
+  introLblPos: 'Wortart',
+  introLblDef: 'Auf Englisch',
+  introLblSentence: 'Im Satz',
+  introLblColloc: 'Oft zusammen',
+  introManyMeanings: 'Mehrere Bedeutungen – welche gemeint ist, zeigt der Satz.',
 } as const;

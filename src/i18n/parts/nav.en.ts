@@ -32,4 +32,10 @@ export const navEn = {
   spTrMeetingLead: 'Prepare a real meeting, dress rehearsal, debrief',
   spTrFluencyLead: 'The same answer in 90, 60 and 45 seconds',
   spTrTonesLead: 'Slack, email to the CFO, a line in the meeting',
+  introLblMeaning: 'Meaning',
+  introLblPos: 'Part of speech',
+  introLblDef: 'In English',
+  introLblSentence: 'In context',
+  introLblColloc: 'Often with',
+  introManyMeanings: 'Several meanings – the sentence shows which one is meant.',
 } as const;

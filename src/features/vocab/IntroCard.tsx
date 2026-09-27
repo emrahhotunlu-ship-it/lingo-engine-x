@@ -1,6 +1,8 @@
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { EnglishText } from '../../engine/EnglishText';
+import { SpeakButton } from '../../engine/SpeakButton';
+import { ipaOf } from '../../domain/lexicon/pron';
 import { Ladder } from '../../engine/Ladder';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -25,45 +27,66 @@ export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: Fi
     onDone(kind);
   };
   useHotkeys({ enter: go }, api.isInput);
+  const ipa = ipaOf(card.word);
+  // Mehrere Bedeutungen („Schlussfolgerung; Abzug“) einzeln zeigen; welche gemeint ist, zeigt der Satz.
+  const meanings = (meaning ?? '').split(/\s*;\s*/).filter(Boolean);
+  const def = card.def && card.def.trim() && card.def.trim() !== meaning ? card.def.trim() : null;
+  const row = (label: string, body: React.ReactNode, testId?: string) => (
+    <div className="grid grid-cols-[6.5rem_1fr] items-baseline gap-3 border-t border-line py-2.5 first:border-t-0 sm:grid-cols-[8rem_1fr]" {...(testId ? { 'data-testid': testId } : {})}>
+      <dt className="text-xs font-medium tracking-wide text-subtle uppercase">{label}</dt>
+      <dd className="min-w-0">{body}</dd>
+    </div>
+  );
   return (
     <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="intro">
-      <header className="flex flex-col gap-3">
+      <header className="flex flex-col gap-2">
         <Ladder stage={0} label={t('stage0')} />
-        <p className="lx-eyebrow">{t('introEyebrow')}</p>
-        <h2 className="text-lg font-semibold tracking-tight sm:text-xl">{t('introTask')}</h2>
-        <p className="text-sm text-muted">
-          <span className="font-medium text-fg">{t('trPurposeLabel')}</span> {t('introPurpose')}
-        </p>
+        <h2 className="text-base font-medium text-muted">{t('introTask')}</h2>
       </header>
-      <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
         <p className="text-3xl font-semibold tracking-tight" lang="en" data-testid="intro-word">
           {card.word}
         </p>
-        {(meaning || pk) && (
-          <p className="text-base text-muted">
-            {meaning && <span lang={lang}>{meaning}</span>}
-            {meaning && pk && ' · '}
-            {pk && t(pk as MessageKey)}
-          </p>
-        )}
-        {card.context && (
-          <EnglishText
-            as="p"
-            className="lx-sentence mt-2"
-            testId="origin-sentence"
-            text={card.context.sentence}
-            area="intro"
-            source={card.path}
-            title={card.word}
-            highlight={[card.context.start, card.context.end]}
-          />
-        )}
-        {col && <p className="text-sm text-muted">{lang === 'de' && col.de ? t('whyCollocDe', { p: col.p, de: col.de }) : t('whyColloc', { p: col.p })}</p>}
+        <SpeakButton text={card.word} testId="intro-listen" />
       </div>
-      <div>
+      {ipa && (
+        <p className="-mt-4 text-sm text-muted" lang="en" data-testid="intro-ipa">
+          {ipa}
+        </p>
+      )}
+      <dl className="flex flex-col">
+        {meanings.length > 0 &&
+          row(
+            t('introLblMeaning'),
+            <span lang={lang} className="text-base">
+              {meanings.join(' · ')}
+              {meanings.length > 1 && <span className="block text-xs text-muted">{t('introManyMeanings')}</span>}
+            </span>,
+            'intro-meaning',
+          )}
+        {pk && row(t('introLblPos'), <span className="text-base">{t(pk as MessageKey)}</span>)}
+        {def && lang === 'de' && row(t('introLblDef'), <span lang="en" className="text-base">{def}</span>)}
+        {card.context &&
+          row(
+            t('introLblSentence'),
+            <EnglishText
+              as="p"
+              className="lx-sentence"
+              testId="origin-sentence"
+              text={card.context.sentence}
+              area="intro"
+              source={card.path}
+              title={card.word}
+              highlight={[card.context.start, card.context.end]}
+            />,
+          )}
+        {col && row(t('introLblColloc'), <span className="text-base"><span lang="en">{col.p}</span>{lang === 'de' && col.de ? <span className="text-muted"> – {col.de}</span> : null}</span>)}
+      </dl>
+      <div className="flex flex-wrap items-center gap-3">
         <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={go} data-testid="intro-continue">
           {t('introContinue')}
         </Button>
+        <span className="text-sm text-muted">{t('introPurpose')}</span>
       </div>
     </article>
   );
