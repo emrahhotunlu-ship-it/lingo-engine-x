@@ -5,7 +5,27 @@ import { FLUENCY_QUESTIONS } from '../../src/content/fluency/questions';
 import { THEMES, THEME_ORDER } from '../../src/content/nb/themes';
 import { TRAPS } from '../../src/content/nb/traps';
 import { themeSchema, trapSchema } from '../../src/content/nb/schemas';
-import { bizScenes, collocations, inboxFor, inboxMails, objections, objectionsFor, sceneById, themeTextFor, themeTexts, transforms } from '../../src/content/nb/load';
+import {
+  bizScenes,
+  buyTime,
+  collocations,
+  hotSeat,
+  inboxFor,
+  inboxMails,
+  numberDrills,
+  objections,
+  objectionsFor,
+  phrasalVerbs,
+  registerLadder,
+  sceneById,
+  stressWords,
+  themeTextFor,
+  themeTexts,
+  transforms,
+  transitionDrills,
+  wordFormation,
+} from '../../src/content/nb/load';
+import ipaJson from '../../src/content/pron/us-ipa.json';
 import { normText, phraseCore } from '../../src/domain/week';
 
 // Inhalte von `content/nb` gegen ihre Schemas (Plan §4.8): Anzahl, keine leeren Felder, IDs eindeutig,
@@ -192,9 +212,74 @@ describe('content/nb: Business-Szenen (N70)', () => {
   });
 });
 
+describe('content/nb: Soll-Inhalte (N107–N109)', () => {
+  it('Mengen laut Plan §4.8 und eindeutige IDs', () => {
+    const sets: [string, readonly { id: string }[], number][] = [
+      ['Wortbildung', wordFormation(), 20],
+      ['Register', registerLadder(), 20],
+      ['Phrasal Verbs', phrasalVerbs(), 25],
+      ['Überleitungen', transitionDrills(), 12],
+      ['Heißer Stuhl', hotSeat(), 15],
+      ['Zeit gewinnen', buyTime(), 15],
+      ['Betonung', stressWords(), 40],
+      ['Zahlen', numberDrills(), 30],
+    ];
+    for (const [name, list, n] of sets) {
+      expect(list, name).toHaveLength(n);
+      expect(uniq(list.map((x) => x.id)), name).toBe(true);
+    }
+  });
+  it('Wortbildung: Lösung gehört zur Wortfamilie; Register: Zielstufe ≠ Ausgangsstufe', () => {
+    for (const w of wordFormation()) {
+      expect(w.gap.split('___').length, w.id).toBe(2);
+      for (const a of w.answers) expect(w.family.some((f) => normText(a).startsWith(normText(f).slice(0, 6))), `${w.id} ${a}`).toBe(true);
+    }
+    for (const r of registerLadder()) {
+      expect(r.from).not.toBe(r.to);
+      expect(r.answers.map(normText), r.id).not.toContain(normText(r.sentence));
+    }
+  });
+  it('Phrasal Verbs: Mail- und Call-Fassung unterscheiden sich, die Call-Fassung enthält die Partikel', () => {
+    const PARTICLE = /\b(?:up|down|out|off|on|in|back|over|through|into|by|to|of)\b/;
+    for (const p of phrasalVerbs()) {
+      expect(normText(p.call[0] ?? ''), p.id).toContain(normText(p.phrasal).split(' ')[1] ?? '');
+      for (const c of p.call) {
+        expect(p.mail).not.toContain(c);
+        expect(PARTICLE.test(normText(c)), `${p.id}: ${c}`).toBe(true);
+      }
+    }
+  });
+  it('Überleitungen: so viele Lücken wie Antworten', () => {
+    for (const d of transitionDrills()) expect(d.text.split('___').length - 1, d.id).toBe(d.gaps.length);
+  });
+  it('Betonung: Silben ergeben das Wort; betonte Silbe passt zur eingebauten US-Lautschrift', () => {
+    const ipa = ipaJson as Record<string, string>;
+    let checked = 0;
+    for (const s of stressWords()) {
+      expect(s.syll.join(''), s.id).toBe(s.word);
+      expect(s.stress, s.id).toBeLessThan(s.syll.length);
+      const p = ipa[s.word];
+      if (!p || (p.match(/ˈ/g) ?? []).length !== 1) continue;
+      const before = p.split('ˈ')[0]?.replace(/ˌ/g, '') ?? '';
+      const nuclei = (before.match(/[aeiouɑæɐəɚɝɛɪɔʊʌɒɜ]+/g) ?? []).length;
+      expect(nuclei, `${s.word} ${p}`).toBe(s.stress);
+      checked++;
+    }
+    expect(checked).toBeGreaterThanOrEqual(35);
+  });
+  it('Zahlen, Heißer Stuhl, Zeit gewinnen: vollständig', () => {
+    for (const z of numberDrills()) expect(z.say[0]?.length, z.id).toBeGreaterThan(0);
+    for (const h of hotSeat()) expect(THEME_IDS).toContain(h.theme);
+    for (const g of buyTime()) expect(uniq(g.starters), g.id).toBe(true);
+  });
+});
+
 describe('content/nb: US-Schreibweise in allen JSON-Inhalten', () => {
   it('keine britischen Schreibweisen in englischen Texten', () => {
-    const all = [themeTexts(), collocations(), transforms(), objections(), inboxMails(), bizScenes()];
+    const all = [
+      themeTexts(), collocations(), transforms(), objections(), inboxMails(), bizScenes(),
+      wordFormation(), registerLadder(), phrasalVerbs(), transitionDrills(), hotSeat(), buyTime(), stressWords(), numberDrills(),
+    ];
     for (const s of all.flatMap((x) => englishStrings(x))) expect(UK_RE.test(s), s).toBe(false);
   });
 });

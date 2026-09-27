@@ -120,6 +120,85 @@ export const sceneSchema = z.object({
   criteria: z.array(bi).min(3).max(5),
 });
 
+// ------------------------------------------------------------------ Soll-Inhalte (N107–N109)
+
+const themeId = z.string().regex(/^t(0[1-9]|1[0-6])$/);
+const level = z.enum(['casual', 'neutral', 'formal']);
+
+/** Wortbildung (W5): Grundwort, Wortfamilie, Satz mit Lücke, Wortart. */
+export const wordFormationSchema = z.object({
+  id: z.string().regex(/^w\d{2}$/),
+  base: text,
+  family: z.array(text).min(2),
+  gap: z.string().includes('___'),
+  answers: z.array(text).min(1),
+  pos: z.enum(['noun', 'adjective', 'adverb', 'verb']),
+  why: bi,
+});
+
+/** Register-Leiter (W6): locker · neutral · formell, Satz auf eine andere Stufe bringen. */
+export const registerSchema = z.object({
+  id: z.string().regex(/^r\d{2}$/),
+  levels: z.object({ casual: text, neutral: text, formal: text }),
+  de: text,
+  sentence: text,
+  from: level,
+  to: level,
+  answers: z.array(text).min(1),
+});
+
+/** Phrasal Verbs (W4): Mail (formell) ↔ Call (gesprochen), jeweils erlaubte Fassungen. */
+export const phrasalSchema = z.object({
+  id: z.string().regex(/^p\d{2}$/),
+  formal: text,
+  phrasal: text,
+  de: text,
+  mail: z.array(text).min(1),
+  call: z.array(text).min(1),
+});
+
+/** Überleitungen (W8): kurze Rede mit Lücken (`___`) an den Übergängen. */
+export const transitionSchema = z.object({
+  id: z.string().regex(/^d\d{2}$/),
+  theme: themeId,
+  text,
+  gaps: z.array(z.object({ answers: z.array(text).min(1), fn: bi })).min(2).max(4),
+});
+
+/** Heißer Stuhl (I9): harte Frage nach der Präsentation, Musterantwort. */
+export const hotSeatSchema = z.object({ id: z.string().regex(/^h\d{2}$/), theme: themeId, q: text, de: text, model: text, tip: bi });
+
+/** Zeit gewinnen (I13): harte Frage, 2–3 passende Einstiege. */
+export const buyTimeSchema = z.object({ id: z.string().regex(/^g\d{2}$/), q: text, de: text, starters: z.array(text).min(2).max(3) });
+
+/** Wortbetonung (P1): Silben, betonte Silbe (0-basiert). */
+export const stressSchema = z.object({
+  id: z.string().regex(/^s\d{2}$/),
+  word: text,
+  syll: z.array(text).min(2),
+  stress: z.number().int().min(0),
+  de: text,
+  pos: z.enum(['noun', 'verb', 'adjective']).optional(),
+});
+
+/** Zahlen, Daten, Beträge (P4): gezeigt, gesprochen (erste Fassung = Muster für die Sprachausgabe). */
+export const numberSchema = z.object({
+  id: z.string().regex(/^z\d{2}$/),
+  kind: z.enum(['money', 'percent', 'date', 'time', 'quarter', 'number', 'fraction', 'year']),
+  show: text,
+  say: z.array(text).min(1),
+  note: bi,
+});
+
+export type WordFormation = z.infer<typeof wordFormationSchema>;
+export type RegisterItem = z.infer<typeof registerSchema>;
+export type PhrasalItem = z.infer<typeof phrasalSchema>;
+export type TransitionItem = z.infer<typeof transitionSchema>;
+export type HotSeatItem = z.infer<typeof hotSeatSchema>;
+export type BuyTimeItem = z.infer<typeof buyTimeSchema>;
+export type StressItem = z.infer<typeof stressSchema>;
+export type NumberItem = z.infer<typeof numberSchema>;
+
 export type ThemeText = z.infer<typeof themeTextSchema>;
 export type TextQuestion = z.infer<typeof questionSchema>;
 export type Colloc = z.infer<typeof collocSchema>;
