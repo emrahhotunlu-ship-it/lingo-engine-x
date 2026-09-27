@@ -66,3 +66,36 @@ describe.each(['dark', 'dim', 'light'])('Kontraste im Modus %s', (theme) => {
     }
   });
 });
+
+// Farbthemen (M21): jeder Akzentsatz in jedem Modus, auf den Flächen dieses Modus.
+function paletteTokens(palette: string, theme: string): Record<string, string> {
+  const sel = theme === 'dark' ? `:root\\[data-palette='${palette}'\\]\\s*\\{([^}]*)\\}` : `:root\\[data-palette='${palette}'\\]\\[data-theme='${theme}'\\]\\s*\\{([^}]*)\\}`;
+  const block = new RegExp(sel).exec(css)?.[1] ?? '';
+  return Object.fromEntries([...block.matchAll(/--lx-([\w-]+):\s*([^;]+);/g)].map((m) => [m[1] ?? '', (m[2] ?? '').trim()]));
+}
+
+describe.each(['ocean', 'plum', 'graphite'])('Farbthema %s', (palette) => {
+  it.each(['dark', 'dim', 'light'])('Modus %s: Akzent lesbar (Text ≥ 4,5:1, Knopf ≥ 4,5:1, Fläche ≥ 3:1)', (theme) => {
+    const own = paletteTokens(palette, theme);
+    for (const k of ['accent', 'accent-fg', 'accent-text', 'accent-soft', 'bg-glow-1']) expect(own[k], `${palette}/${theme} ${k}`).toBeTruthy();
+    const t = { ...tokens(theme), ...own };
+    const bg = parse(t.bg ?? '');
+    const surfaces: Array<[string, RGBA]> = [
+      ['Hintergrund', bg],
+      ['Glasfläche', over(parse(t.surface ?? ''), bg)],
+      ['Glasfläche stark', over(parse(t['surface-strong'] ?? ''), bg)],
+      ['Blatt', parse(t['surface-solid'] ?? '')],
+      ['Akzent weich', over(parse(t['accent-soft'] ?? ''), bg)],
+    ];
+    for (const [name, s] of surfaces) {
+      expect(ratio(parse(t['accent-text'] ?? ''), s), `accent-text auf ${name}`).toBeGreaterThanOrEqual(4.5);
+      expect(ratio(parse(t.accent ?? ''), s), `accent auf ${name}`).toBeGreaterThanOrEqual(3);
+    }
+    expect(ratio(parse(t['accent-fg'] ?? ''), parse(t.accent ?? '')), 'Knopftext auf Akzent').toBeGreaterThanOrEqual(4.5);
+  });
+});
+
+it('Salbei ist der Standard: ohne eigenen Block gelten die Grund-Tokens (Smaragd)', () => {
+  expect(css.includes(`[data-palette='sage']`)).toBe(false);
+  expect(tokens('dark').accent).toBe('#10b981');
+});

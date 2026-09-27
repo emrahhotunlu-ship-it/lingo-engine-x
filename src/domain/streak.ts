@@ -98,3 +98,30 @@ export function pflichtDays(pflicht: unknown): Set<string> {
   }
   return out;
 }
+
+// ------------------------------------------------------------------ Wochenstreifen (M7)
+
+export type WeekDayState = 'done' | 'rest' | 'open' | 'future';
+export type WeekDay = { day: string; state: WeekDayState; today: boolean };
+
+/**
+ * Die sieben Lerntage der ISO-Woche (Mo–So) von `input.today` mit derselben Regel wie die Serie:
+ * `done` = der Tag zählt (Pflicht erledigt bzw. vor `pflichtSince` die alte Regel), `rest` = Ruhetag,
+ * den die Serie überbrückt (aus `computeStreak`), `future` = nach heute, sonst `open` (heute noch
+ * offen oder ein vergangener Tag ohne Pflicht).
+ */
+export function weekStrip(input: StreakInput): WeekDay[] {
+  const { restDays } = computeStreak(input);
+  const rest = new Set(restDays);
+  const noon = new Date(`${input.today}T12:00:00Z`);
+  const monday = addDays(input.today, -((noon.getUTCDay() + 6) % 7));
+  return Array.from({ length: 7 }, (_, k) => {
+    const day = addDays(monday, k);
+    let state: WeekDayState;
+    if (day > input.today) state = 'future';
+    else if (active(input, day)) state = 'done';
+    else if (rest.has(day)) state = 'rest';
+    else state = 'open';
+    return { day, state, today: day === input.today };
+  });
+}

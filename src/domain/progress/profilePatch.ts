@@ -14,7 +14,8 @@ type Doc = Record<string, unknown>;
 
 export type RoundEnd = {
   day: string;
-  act: 'review' | 'cards' | LearnAct | 'speak' | 'biz' | 'preply';
+  /** `check` = Wochen-Check (M10): zählt als Extra, nie zu einem Pflichtkanal. */
+  act: 'review' | 'cards' | LearnAct | 'speak' | 'biz' | 'preply' | 'check';
   partial: boolean;
   n: number;
   right: number;
@@ -67,6 +68,7 @@ export function roundBonus(r: RoundEnd): number {
   switch (r.act) {
     case 'review':
     case 'gram':
+    case 'check':
       return r.n >= 8 ? 20 : 5;
     case 'cards':
       return r.n >= 10 ? 15 : 5;

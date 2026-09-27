@@ -14,7 +14,7 @@ async function boot(): Promise<void> {
     installFakeRuntime(optionsFromUrl(window.location.search));
   }
   const s = useSettings.getState();
-  applyDocumentSettings(s.lang, resolveTheme(s.theme, window.matchMedia('(prefers-color-scheme: light)').matches));
+  applyDocumentSettings(s.lang, resolveTheme(s.theme, window.matchMedia('(prefers-color-scheme: light)').matches), s.palette);
   const root = document.getElementById('root');
   if (!root) throw new Error('#root fehlt');
   createRoot(root).render(

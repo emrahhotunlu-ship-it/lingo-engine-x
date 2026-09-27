@@ -12,6 +12,7 @@ import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCatLabel } from './AnalysisCard';
 import { TakeChunkButton } from './TakeChunkButton';
+import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import type { RoleplayApi } from './useRoleplay';
 
 // Abschlussbericht (Plan §5.4): fester Teil sofort und ohne KI (Tatsachen, kein Punktestand),
@@ -194,6 +195,8 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
         <Button variant="ghost" disabled={saving} onClick={() => go({ name: 'today' })} data-testid="report-home">
           {t('repHome')}
         </Button>
+        {/* M18: aus der Szene eine Preply-Stunde machen. */}
+        {!saving && <AsPreplyLesson title={scene.title} />}
       </div>
     </motion.div>
   );

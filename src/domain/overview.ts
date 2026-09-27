@@ -1,6 +1,6 @@
 import { LESSONS, SEED_VOCAB, TOPICS, UNITS, seedCard, type Lesson } from './content';
 import { dayKey, learningDayEnd, legacyDayKey } from './date';
-import { computeStreak, pflichtDays, type Streak } from './streak';
+import { computeStreak, pflichtDays, weekStrip, type Streak, type StreakInput, type WeekDay } from './streak';
 import { mergeArchives } from './capacity/compact';
 
 // „Dein Stand": reine Berechnung aus den gelesenen Dokumenten (keine Seiteneffekte).
@@ -13,6 +13,8 @@ export type TopicState = { id: string; name: string; nameEn: string; p: number; 
 export type Overview = {
   today: string;
   streak: Streak;
+  /** Wochenstreifen Mo–So (M7), dieselbe Regel wie die Serie. */
+  week: WeekDay[];
   course: { done: number; total: number; next: Lesson | null; units: Array<{ id: string; de: string; en: string; done: number; total: number }> };
   /** `total` = aktive Karten; `hidden` = ausgeblendete (in der alten App „gelöscht", aber erhalten). */
   vocab: { total: number; hidden: number; byStage: [number, number, number, number, number, number]; due: number };
@@ -57,14 +59,16 @@ export function buildOverview(input: {
   const schemaDoc = input.schema ? obj(input.schema) : null;
   const pflichtSince = schemaDoc && typeof schemaDoc.pflichtSince === 'string' ? schemaDoc.pflichtSince : null;
 
-  const streak = computeStreak({
+  const streakInput: StreakInput = {
     days: obj(profile.days) as Record<string, number>,
     xpDays: obj(profile.xpDays) as Record<string, number>,
     pflichtSince,
     pflichtDone: pflichtDays(profile.pflicht),
     today,
     legacyToday: legacyDayKey(input.nowMs),
-  });
+  };
+  const streak = computeStreak(streakInput);
+  const week = weekStrip(streakInput);
 
   const doneMap = obj(obj(input.course).done);
   const doneIds = new Set(LESSONS.filter((l) => l.id in doneMap).map((l) => l.id));
@@ -113,6 +117,7 @@ export function buildOverview(input: {
   return {
     today,
     streak,
+    week,
     course: { done: doneIds.size, total: LESSONS.length, next, units },
     vocab: { total, hidden, byStage, due },
     grammar: { topics, weakest },

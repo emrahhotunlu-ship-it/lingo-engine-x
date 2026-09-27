@@ -2,6 +2,7 @@ import { clip } from '../../prompts/common';
 import cefr from '../../content/legacy/cefr.json';
 import { TOPICS } from '../content';
 import { daysBetween } from '../date';
+import { readChecks } from '../check/record';
 import {
   canDoSelf,
   grammarSources,
@@ -175,6 +176,13 @@ export function buildEvidence(i: EvidenceInput): EvidencePack {
   if (typeof ema.colloc === 'number') vLines.push({ id: 'v:colloc', text: `collocation accuracy ${r2(num(ema.colloc))} over ${num(n.colloc)} answers` });
   if (vs.leeches.length) vLines.push({ id: 'v:leech', text: clip(`often forgotten: ${vs.leeches.join(', ')}`, 500) });
   if (vt) vLines.push({ id: 'v:test', text: `vocabulary test ${vt.d}: passive about ${vt.passive}, active about ${vt.active}` });
+  // Wochen-Check (M10): gemischte Aufgaben ohne Tipps – die letzten drei als Beleg.
+  const checks = readChecks(i.profile).slice(-3);
+  if (checks.length)
+    vLines.push({
+      id: 'v:check',
+      text: clip(`weekly checks without hints (newest last): ${checks.map((c) => `${c.d || '?'} ${c.ok}/${c.n} (words ${c.vocab.ok}/${c.vocab.n}, collocations ${c.colloc.ok}/${c.colloc.n}, grammar ${c.gram.ok}/${c.gram.n})`).join('; ')}`, 400),
+    });
   sections.push(capped('v', 'Vocabulary', vLines));
 
   // l: Tagesprotokolle

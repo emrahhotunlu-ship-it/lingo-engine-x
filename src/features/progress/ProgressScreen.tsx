@@ -17,6 +17,7 @@ import { ErrorsTab } from './ErrorsTab';
 import { HistoryTab } from './HistoryTab';
 import { JudgeTab } from './JudgeTab';
 import { PathTab } from './PathTab';
+import { LevelScale, WeekStrip } from './StandHeader';
 
 // „Dein Stand" (Kap. 6.13, Plan E18): Kopfzeile mit Serie · Kurs · Karten und vier Reiter
 // Urteil · Fehler · Weg nach C1 · Verlauf – kein endloses Scrollen am Handy, nichts doppelt.
@@ -105,6 +106,12 @@ export function ProgressScreen() {
         <Stat label={t('streakLabel')} value={num(ov.streak.count)} unit={t(ov.streak.count === 1 ? 'streakUnit_one' : 'streakUnit_other')} testId="streak-count" />
         <Stat label={t('courseLabel')} value={num(ov.course.done)} unit={t('courseUnit', { total: ov.course.total })} testId="course-done" />
         <Stat label={t('vocabLabel')} value={num(ov.vocab.total)} unit={t(ov.vocab.total === 1 ? 'vocabUnit_one' : 'vocabUnit_other')} testId="vocab-total" />
+      </motion.div>
+
+      {/* M7: Wochenstreifen (gleiche Regel wie die Serie) und Niveau-Leiste in der Kopfzeile. */}
+      <motion.div variants={item} className="lx-glass grid gap-5 rounded-[var(--radius-card)] p-4 sm:grid-cols-2 sm:gap-8 sm:p-5" data-testid="stand-head">
+        <WeekStrip week={ov.week} />
+        {assess?.data.cefr ? <LevelScale data={assess.data} /> : <p className="self-center text-sm text-muted">{t('lvNone')}</p>}
       </motion.div>
 
       <LateRescueCard />

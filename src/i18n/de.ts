@@ -9,6 +9,7 @@ import { voiceDe } from './parts/voice.de';
 import { companionDe } from './parts/companion.de';
 import { inputDe } from './parts/input.de';
 import { progressDe } from './parts/progress.de';
+import { standDe } from './parts/stand.de';
 
 export const de = {
   ...aiDe,
@@ -23,6 +24,8 @@ export const de = {
   ...inputDe,
   // Phase 6 – Urteil, Fortschritt, Wortschatztest, Einstellungen
   ...progressDe,
+  // Lücken aus dem Abgleich: Wochen-Check, Wochenstreifen, Farbthemen, Kontext, Was ist neu
+  ...standDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

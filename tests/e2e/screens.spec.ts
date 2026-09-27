@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { boot, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { inputTour } from './inputHelpers';
-import { progressTour } from './progressHelpers';
+import { playCheck, progressTour } from './progressHelpers';
 
 // Jeder Bildschirm rendert auf 390, 1440 und 2560 px, in allen drei Modi und beiden
 // Sprachen: keine JS-Fehler, kein undefined/NaN/{0}, kein Querscrollen, nichts
@@ -220,6 +220,73 @@ for (const vp of VIEWPORTS) {
           else expect(P6_ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
           if (theme !== 'dim') await page.screenshot({ path: `${SHOTS}/p6-${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
         });
+        expect(errors).toEqual([]);
+        expect(external).toEqual([]);
+        await context.close();
+      });
+    }
+  }
+}
+
+// Lücken aus dem Abgleich: „Was ist neu" und Nachtragen-Hinweis auf Heute, Wochen-Check-Angebot,
+// Wochen-Check (Aufgabe und Ergebnis), Einstellungen mit Farbthema und beruflichem Kontext – in
+// allen Breiten, Modi und Sprachen. Englische Inhalte (lang="en") zählen nicht als Mischsprache.
+for (const vp of VIEWPORTS) {
+  for (const theme of THEMES) {
+    for (const lang of LANGS) {
+      test(`neu-${vp.name}-${theme}-${lang}`, async ({ browser }) => {
+        test.setTimeout(90_000);
+        const context = await browser.newContext({
+          viewport: { width: vp.width, height: vp.height },
+          isMobile: vp.mobile,
+          hasTouch: vp.mobile,
+          deviceScaleFactor: vp.mobile ? 2 : 1,
+          timezoneId: 'Europe/Berlin',
+          locale: lang === 'de' ? 'de-DE' : 'en-US',
+          reducedMotion: 'reduce',
+        });
+        const page = await context.newPage();
+        const { errors, external } = await boot(page, {
+          theme,
+          lang,
+          migrated: true,
+          whatsNew: true,
+          fake: { patch: { 'app/profile': { newPerDay: 0, plan: { d: '2026-09-20', v: 1, ids: [], why: [], duty: [], goal: { review: 0 }, lesson: null, at: 1 } } } },
+          localStorage: {
+            'sw2:__dirty': JSON.stringify({ 'vocab/vom-handy': 1_789_950_000_000 }),
+            'sw2:vocab/vom-handy': JSON.stringify({ word: 'from the phone', de: 'vom Handy', state: 'new', S: 0 }),
+          },
+        });
+        const check = async (name: string) => {
+          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
+          expect(await layoutProblems(page), name).toEqual([]);
+          const text = await page.evaluate(() => {
+            const clone = document.body.cloneNode(true) as HTMLElement;
+            clone.querySelectorAll('[lang]').forEach((n) => {
+              if (n.getAttribute('lang') !== document.documentElement.lang) n.remove();
+            });
+            clone.querySelectorAll('.sr-only').forEach((n) => n.remove());
+            return clone.innerText;
+          });
+          if (lang === 'en') expect(P6_GERMAN_IN_EN.exec(text)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
+          else expect(P6_ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
+          if (theme !== 'dim') await page.screenshot({ path: `${SHOTS}/neu-${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
+        };
+        await screen(page, 'today');
+        await expect(page.getByTestId('late-rescue-hint')).toBeVisible();
+        await expect(page.getByTestId('check-offer')).toBeVisible();
+        await page.getByTestId('whats-new-more').click();
+        await check('heute');
+        await page.getByTestId('check-offer-start').click();
+        await expect(page.getByTestId('check-item')).toBeVisible();
+        await check('wochencheck');
+        await playCheck(page);
+        await check('wochencheck-ergebnis');
+        await page.getByTestId('summary-back').click();
+        await screen(page, 'overview');
+        await page.getByTestId('open-settings').click();
+        await expect(page.getByTestId('work-ctx')).toBeVisible();
+        await check('einstellungen');
         expect(errors).toEqual([]);
         expect(external).toEqual([]);
         await context.close();

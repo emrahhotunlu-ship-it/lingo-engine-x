@@ -39,6 +39,9 @@ import { feasibleData, healToday, retryPlan, useTodayPlan } from './store';
 import { TodayOffers } from '../speak/TodayOffers';
 import { PreplyTodayLine, usePreplyToday } from '../preply/TodayLine';
 import { InputOffers } from '../input/InputOffers';
+import { LateRescueHint } from '../migration/LateRescueCard';
+import { checkAvailable, startCheck } from '../check/session';
+import { toast } from '../../ui/Toast';
 
 // „Heute": beim Öffnen ist sofort klar, was dran ist (Kap. 2.1). Eine Statuszeile, EIN großer
 // Knopf (erster offener Pflichtpunkt); Erledigtes ist Zustand, kein Knopf (Kap. 2.2). Angebote
@@ -165,6 +168,20 @@ export function TodayScreen() {
     if (state.status === 'nothing') return t('tdStatusNothing');
     if (onlyReview) return tn('tdStatusOpen', left);
     return t('tdStatusMulti', { done: state.duties.done, total: state.duties.total, missing: state.duties.missing.map((d) => dutyLabel(d, t)).join(', ') });
+  };
+
+  // Wochen-Check (M10): Angebot nach der Pflicht, höchstens einmal je Kalenderwoche, erst mit
+  // genug Übung (alte App: 40 Antworten). Zählt nie als Pflicht.
+  const checkOffer = checkAvailable(profile, today) && Number(obj(profile).answers ?? 0) >= 40;
+  const startWeekly = () => {
+    unlockSpeech();
+    const first = startCheck();
+    if (first === 'empty') {
+      toast(t('ckEmpty'));
+      return;
+    }
+    if (first === 'typed') api.focusNow();
+    go({ name: 'check' });
   };
 
   const extraRound = () => {
@@ -341,6 +358,17 @@ export function TodayScreen() {
               </Button>
             </div>
           </div>
+          {checkOffer && (
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-card)] border border-line p-4" data-testid="check-offer">
+              <span className="flex min-w-0 flex-col">
+                <span className="text-sm font-medium">{t('ckTitle')}</span>
+                <span className="text-sm text-muted">{t('ckOfferSub')}</span>
+              </span>
+              <Button variant="secondary" icon="target" onClick={startWeekly} data-testid="check-offer-start">
+                {t('ckStart')}
+              </Button>
+            </div>
+          )}
         </motion.section>
       )}
 
@@ -363,6 +391,9 @@ export function TodayScreen() {
 
       {/* Phase 5: gehaltene Preply-Stunde als Extra (Zustand, zählt nicht zu „x von y"). */}
       {dayLoaded && <PreplyTodayLine />}
+
+      {/* W5 (A7): Kopien der alten App in diesem Browser – eine leise Zeile, keine konkurrierende Karte. */}
+      {dayLoaded && <LateRescueHint />}
 
       {saveFailed && (
         <motion.div variants={item} className="flex flex-wrap items-center gap-3 text-sm text-danger-text" role="alert">
