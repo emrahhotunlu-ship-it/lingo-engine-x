@@ -102,7 +102,9 @@ function phase2Plan(today: string, round: RoundPlan, nowMs: number, p2: Phase2Pl
   const ch = ids[0] as DutyChannel;
   const dutyIds: DutyId[] = [];
   if (round.target > 0) dutyIds.push('review');
-  if (p2.lesson) dutyIds.push('lesson');
+  // Lektion 2–3× je Woche statt täglich (Lernberatung 27.09.): an „Sag es"-Tagen ist sie Angebot.
+  const lessonDuty = !!p2.lesson && !p2.say;
+  if (lessonDuty) dutyIds.push('lesson');
   dutyIds.push(`ch:${ch}`);
   return {
     d: today,

@@ -63,15 +63,17 @@ describe('Tagesplan mit „Sag es“', () => {
   const plan = (say: boolean, existing: unknown = null, today = '2026-09-28') =>
     buildPlan({ today, existing, round, nowMs: 1, phase2: { ranked: rankChannels(base({ today })), lesson: { lid: 'l07' }, say } });
 
-  it('Sag-es-Tag mit Claude: Pflichtkanal say (8 Min.), die beiden besten Kanäle bleiben Angebote', () => {
+  it('Sag-es-Tag mit Claude: Pflichtkanal say (8 Min.), Lektion nur Angebot, die beiden besten Kanäle bleiben Angebote', () => {
     const p = plan(true).plan;
     expect(p.ids[0]).toBe('say');
-    expect(p.duty).toEqual(['review', 'lesson', 'ch:say']);
+    // Lektion 2–3× je Woche statt täglich (Lernberatung): an Sag-es-Tagen keine Pflicht.
+    expect(p.duty).toEqual(['review', 'ch:say']);
+    expect(plan(false).plan.duty).toContain('lesson');
     expect(p.why[0]).toEqual([['whySay']]);
     expect(p.goal.ch).toBe(1);
     const ranked = rankChannels(base()).slice(0, 2).map((r) => r.id);
     expect(p.ids.slice(1)).toEqual(ranked);
-    expect(dutyMinutes(p)).toBe(10 + 12 + 8);
+    expect(dutyMinutes(p)).toBe(10 + 8);
   });
 
   it('ohne Sag-es-Tag bzw. ohne Claude: bisherige Wahl aus {gram, cloze}; Satzbau nie Pflicht', () => {

@@ -1,8 +1,16 @@
 import { typedForm } from '../chunks/situation';
 import { counts } from './cards';
 import { stageOf } from './ladder';
+
+/**
+ * Wendungen überspringen die Auswahlstufen (Lernberatung 27.09., „weglassen"): Erkennen und
+ * Zuordnen (1–2) sind für neue Business-Wendungen fast verschenkte Zeit – abgefragt wird ab
+ * „Mit Stütze abrufen" (3). Die gespeicherte Stufe bleibt unverändert (Kap. 9); nach einem
+ * Treffer auf Stufe 3 steigt sie regulär (nextStage).
+ */
+export const chunkStage = (s: Stage): Stage => (s === 1 || s === 2 ? 3 : s);
 import { isFutureFsrs, isNewState, readFsrs } from './scheduler';
-import type { ChunkInfo, ContextSpan, Lang, TrainCard } from './types';
+import type { ChunkInfo, ContextSpan, Lang, Stage, TrainCard } from './types';
 
 // Wendungen (`chunk/<id>`, altapp-analyse §5) als Trainerkarten (phase1-plan §4.1, phase3-plan
 // Z. 25): dieselbe FSRS-Planung wie Vokabeln. Die Planungsfelder der alten App (S, D, due, last,
@@ -130,7 +138,7 @@ export function toChunkCard(id: string, doc: Doc, nowMs: number): TrainCard | nu
     col: [],
     src: info.srcKind,
     fsrs,
-    stage: stageOf(doc),
+    stage: chunkStage(stageOf(doc)),
     isNew: isNewState(fsrs),
     hidden: doc.hidden === true,
     xs: counts(doc.xs),
