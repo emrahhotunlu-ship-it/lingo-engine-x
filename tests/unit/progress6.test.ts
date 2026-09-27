@@ -131,6 +131,24 @@ describe('Wochenbericht (Plan §7.3)', () => {
     const facts = weekFacts({ days: weekDays('2026-09-20').days, vocab, grammar: new Map(), writing: new Map(), talk: new Map(), profile: {} });
     expect(facts.map((f) => f.id)).toEqual(['vw:a']);
   });
+  it('Befunde H1/W4/H2: kein Anstieg ohne Vorwert, Pflicht erst ab pflichtSince, Titel beider Sprachen', () => {
+    const days = weekDays('2026-09-20').days; // 14.–20.09.
+    const grammar = new Map<string, Doc>([
+      ['passive', { hist: [{ d: '2026-09-16', p: 0.9 }] }],
+      ['modals', { hist: [{ d: '2026-09-01', p: 0.5 }, { d: '2026-09-16', p: 0.7 }] }],
+    ]);
+    const profile = { minutes: { '2026-09-15': 20, '2026-09-18': 10 }, days: { '2026-09-15': 30 }, pflicht: {} };
+    const writing = new Map<string, Doc>([['w1', { date: '2026-09-16', promptId: 'px', title: 'Kurzbericht: Quartal' }]]);
+    const prompts = new Map<string, Doc>([['2026-09-16', { p: { id: 'px', title_de: 'Kurzbericht: Quartal', title_en: 'Short report: quarter', task_en: 'Write it.' } }]]);
+    const base = { days, vocab: new Map(), grammar, writing, talk: new Map(), profile, prompts };
+    const facts = weekFacts(base);
+    expect(facts.filter((f) => f.kind === 'topic').map((f) => f.id)).toEqual(['gt:modals']);
+    expect(facts.find((f) => f.kind === 'text')).toMatchObject({ titles: { de: 'Kurzbericht: Quartal', en: 'Short report: quarter' } });
+    expect(facts.find((f) => f.kind === 'time')).toMatchObject({ minutes: 30, activeDays: 2, pflichtDays: null });
+    expect(weekFacts({ ...base, pflichtSince: '2026-09-25' }).find((f) => f.kind === 'time')).toMatchObject({ pflichtDays: null });
+    const since = weekFacts({ ...base, pflichtSince: '2026-09-17', profile: { ...profile, pflicht: { '2026-09-15': 1, '2026-09-18': 1 } } });
+    expect(since.find((f) => f.kind === 'time')).toMatchObject({ pflichtDays: 1 });
+  });
   it('weekly-report@1: Beispiel besteht das Schema, Verweise nur auf Fakten, feste Antwort gültig', () => {
     const facts = [
       { id: 'vw:a', text: 'new word "x"' },
@@ -146,6 +164,12 @@ describe('Wochenbericht (Plan §7.3)', () => {
     const bad = { ...weeklyExample({ lang: 'de', facts }), learned: [{ text: 'Etwas Neues gelernt heute.', ref: 'erfunden' }, { text: 'Noch etwas gelernt.', ref: 'vw:a' }] };
     expect(weeklySchema({ lang: 'de', facts }).safeParse(bad).success).toBe(false);
     expect(weeklySchema({ lang: 'en', facts }).safeParse(weeklyExample({ lang: 'de', facts })).success).toBe(false);
+    // Befund H7: Fakten, die das 6-KB-Budget abschneidet, stehen nicht im Prompt und sind kein gültiger Verweis.
+    const long = [...facts, ...Array.from({ length: 60 }, (_, i) => ({ id: `vw:x${i}`, text: 'x'.repeat(150) }))];
+    const cut = long[long.length - 1]!.id;
+    expect(weeklyReport.build({ lang: 'de', week: '2026-W38', facts: long })).not.toContain(`[${cut}]`);
+    const refCut = { ...weeklyExample({ lang: 'de', facts }), learned: [{ text: 'Diese Wörter sitzen jetzt gut.', ref: 'vw:a' }, { text: 'Auch dieses Wort sitzt jetzt.', ref: cut }] };
+    expect(weeklySchema({ lang: 'de', facts: long }).safeParse(refCut).success).toBe(false);
   });
   it('app/weekly: gleiche Woche und Sprache ersetzt, andere Sprache bleibt, höchstens 26', () => {
     const item = (w: string, lang: 'de' | 'en') => ({ w, lang, t: 1, pv: 'weekly-report@1', facts: [], text: { headline: 'h', learned: [], next: 'n' } });
@@ -160,14 +184,38 @@ describe('Wochenbericht (Plan §7.3)', () => {
 
 describe('Verlauf und Tagesbild (Plan §7.4)', () => {
   const profile = seed['app/profile']!;
-  it('einmal je Tag, höchstens 120, gekennzeichnet mit lx:1', () => {
+  it('einmal je Tag, höchstens 120, gekennzeichnet mit lx:2 (Maßstab 0–100)', () => {
     const snap = historySnapshot({ day: '2026-09-20', nowMs: now, profile, grammar: collection('grammar'), vocabNow: 6500 });
-    expect(snap.lx).toBe(1);
+    expect(snap.lx).toBe(2);
+    for (const k of ['o', 'vo', 'co', 'li', 'wr', 'gr', 're', 'fl'] as const) {
+      const v = snap[k];
+      if (v !== null) expect(Number.isInteger(v) && v >= 0 && v <= 100).toBe(true);
+    }
     expect(snap.vs).toBe(6500);
     expect(snap.gr).toBeGreaterThan(0);
     const patch = historyPatch({ ...profile, history: Array.from({ length: 130 }, (_, i) => ({ d: `2026-01-${i}` })) }, snap);
     expect((patch!.history as unknown[]).length).toBe(HISTORY_MAX);
     expect(historyPatch({ history: [{ d: '2026-09-20' }] }, snap)).toBeNull();
+  });
+  it('Befund B1: Altform 0–100 bleibt, Tagesbild in Prozent, frühe lx:1-Werte (0–1) nur beim Lesen umgerechnet', () => {
+    // Form der alten App (erfundene Werte): ganze Prozent, ohne lx.
+    const old = { d: '2026-09-18', o: 61, vo: 64, gr: 70, co: 58, re: 66, li: 55, wr: 62, fl: 57, vs: 3400 };
+    const early = { d: '2026-09-19', o: 0.72, vo: 0.7, gr: 0.61, co: 0.5, re: null, li: 0.5, wr: 0.55, fl: null, vs: 3400, lx: 1 };
+    const p = { ema: { all: 0.724, recog: 0.7, colloc: 0.5, listen: 0.483, write: 0.55 }, history: [old, early] };
+    const snap = historySnapshot({ day: '2026-09-20', nowMs: now, profile: p, grammar: new Map(), vocabNow: null });
+    expect(snap).toMatchObject({ o: 72, vo: 70, co: 50, li: 48, wr: 55, lx: 2 });
+    expect(snap.gr).toBeGreaterThan(1);
+    const patch = historyPatch(p, snap)!;
+    const hist = patch.history as Doc[];
+    expect(hist[0]).toEqual(old); // nie umgeschrieben
+    expect(hist[1]).toEqual(early);
+    const { series } = historySeries({ history: hist }, '2026-09-20');
+    expect(series.gr.map((x) => x.v)).toEqual([70, 61, snap.gr]);
+    expect(series.vo.map((x) => x.v)).toEqual([64, 70, 70]);
+    // Vorwert-Übernahme ohne Sprint/Lesen: Altwert in Prozent, nicht 0–1.
+    const next = historySnapshot({ day: '2026-09-21', nowMs: now, profile: { history: [old] }, grammar: new Map(), vocabNow: null });
+    expect(next.fl).toBe(57);
+    expect(next.re).toBe(66);
   });
   it('Reihen und Nahtstelle; Heatmap 26 Wochen ohne Zukunftstage', () => {
     const p = { history: [{ d: '2026-09-10', gr: 0.5, vo: 0.7 }, { d: '2026-09-19', gr: 0.55, vo: 0.72, lx: 1 }] };

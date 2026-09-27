@@ -143,7 +143,7 @@ export function buildEvidence(i: EvidenceInput): EvidencePack {
   sections.push(
     capped(
       'r',
-      'Mistake radar (category, source g=grammar w=writing r=reading v=vocab s=speaking)',
+      'Mistake radar (category, source g=grammar w=writing r=reading v=vocab s=sprint drill k=role-play b=business)',
       radar.map((e, k) => ({ id: `r:${k}`, text: clip(`${e.c}/${e.s}: "${e.g}" → "${e.a}"${e.q ? ` in "${e.q}"` : ''}`, 220) })),
     ),
   );

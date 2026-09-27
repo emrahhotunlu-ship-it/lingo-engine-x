@@ -98,6 +98,38 @@ describe('app/assess: beide Formen lesen, Hülle schreiben (A6.10)', () => {
     expect(upd.v).toBe(2);
   });
 
+  it('Befund W2/H3: Altform der alten App (gr…fl, low/mid/high) wird gelesen und beim ersten neuen Lauf in hist übernommen', () => {
+    // Form wie in den echten Daten, Werte erfunden.
+    const legacy = {
+      d: '2026-09-18', t: nowMs - 1000, lang: 'de', answers: 900, writings: 3,
+      data: {
+        level: 'Solides B2', cefr: 'B2', trend: 'flat',
+        dims: [
+          { id: 'gr', level: 'B2', confidence: 'mid', why: 'a' },
+          { id: 'vo', level: 'B2', confidence: 'mid', why: 'b' },
+          { id: 're', level: 'B2', confidence: 'low', why: 'c' },
+          { id: 'li', level: 'B1+', confidence: 'low', why: 'd' },
+          { id: 'wr', level: 'B2', confidence: 'high', why: 'e' },
+          { id: 'fl', level: 'B2', confidence: 'low', why: 'f' },
+        ],
+      },
+    };
+    const a = readAssess(legacy)!;
+    expect(a.data.dims.map((x) => [x.id, x.confidence])).toEqual([
+      ['grammar', 'fair'], ['vocabulary', 'fair'], ['reading', 'thin'], ['listening', 'thin'], ['writing', 'good'], ['speaking', 'thin'],
+    ]);
+    expect(a.data.dims.find((x) => x.id === 'listening')?.level).toBe('B1+');
+    const op = assessWrite(legacy, result(readAssessData({ cefr: 'B2+' })), nowMs) as { update: Doc };
+    const h = op.update.hist as Doc[];
+    expect(h).toHaveLength(2);
+    expect(h[0]).toEqual({ d: '2026-09-18', cefr: 'B2', trend: 'flat', dims: { grammar: 'B2', vocabulary: 'B2', reading: 'B2', listening: 'B1+', writing: 'B2', speaking: 'B2' } });
+    expect(h[1]).toMatchObject({ d: today, cefr: 'B2+' });
+    // Mit vorhandenem hist wird nichts nachgetragen.
+    const again = assessWrite({ ...legacy, hist: [] }, result(readAssessData({ cefr: 'B2+' })), nowMs) as { update: Doc };
+    expect(again.update.hist as Doc[]).toHaveLength(1);
+    expect(readAssess({ d: 'x', hist: [{ d: '2026-09-01', cefr: 'B2', dims: { gr: 'B2', fl: 'B1' } }], data: { cefr: 'B2' } })!.hist[0]!.dims).toEqual({ grammar: 'B2', speaking: 'B1' });
+  });
+
   it('das andere Gerät war schneller (cur.t > startedAt) → nichts schreiben', () => {
     const data = readAssessData({ cefr: 'B2' });
     expect(assessWrite({ t: nowMs + 5 }, result(data), nowMs)).toBeNull();
@@ -257,6 +289,19 @@ describe('assess@1: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")'
     const ev = ok();
     ev.strengths[0]!.ev = ['g:erfunden'];
     expect(s.safeParse(ev).success).toBe(false);
+  });
+
+  it('Befund H7: höchstens so viele Belege wie angewiesen, Titel in der Oberflächensprache', () => {
+    const s = assessSchema(vars);
+    const many = ok();
+    many.strengths[0]!.ev = pack.ids.slice(0, 4);
+    expect(pack.ids.length).toBeGreaterThanOrEqual(4);
+    expect(s.safeParse(many).success).toBe(false);
+    expect(assess.build(vars)).toContain('cites 1–3 evidence ids');
+    const title = ok();
+    title.strengths[0]!.title = 'Your emails are clear and well structured';
+    expect(s.safeParse(title).success).toBe(false);
+    expect(ok().blockers.every((b) => !/^(Mixed|Present)/.test(b.title))).toBe(true);
   });
 
   it('genau 6 eindeutige Fertigkeiten', () => {

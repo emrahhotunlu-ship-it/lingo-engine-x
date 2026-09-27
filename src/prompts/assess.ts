@@ -33,6 +33,8 @@ export type AssessOut = {
 };
 
 const ID = 'assess';
+/** Höchstzahl der Beleg-Kennungen je Stärke/Blocker – Anweisung und Schema gleich (Befund H7). */
+export const EV_MAX = 3;
 const VERSION = 1;
 
 const t = (max: number) => z.string().trim().min(1).max(max);
@@ -45,7 +47,7 @@ export function assessSchema(v: Pick<AssessVars, 'lang' | 'ids' | 'allowed'>): z
   const ev = z
     .array(z.string())
     .min(1)
-    .max(6)
+    .max(EV_MAX)
     .superRefine((xs, ctx) => {
       xs.forEach((x, i) => {
         if (!ids.has(x)) ctx.addIssue({ code: 'custom', path: [i], message: `unknown evidence id "${x}" – use only ids in [brackets]` });
@@ -61,13 +63,13 @@ export function assessSchema(v: Pick<AssessVars, 'lang' | 'ids' | 'allowed'>): z
       trendWhy: t(300),
       today: t(160),
       c1gap: z.array(t(90)).min(2).max(4),
-      strengths: z.array(z.object({ title: t(60), why: t(240), ev }).superRefine(langOf(['why'], v.lang))).length(2),
-      blockers: z.array(z.object({ title: t(60), why: t(240), fix: enText(200), action, ev }).superRefine(langOf(['why'], v.lang))).min(2).max(3),
+      strengths: z.array(z.object({ title: t(60), why: t(240), ev }).superRefine(langOf(['title', 'why'], v.lang))).length(2),
+      blockers: z.array(z.object({ title: t(60), why: t(240), fix: enText(200), action, ev }).superRefine(langOf(['title', 'why'], v.lang))).min(2).max(3),
       dims: z
         .array(z.object({ id: z.enum(DIMS), level: z.enum(LEVELS).nullable(), confidence: z.enum(['thin', 'fair', 'good']), why: z.string().trim().max(200) }).superRefine(langOf(['why'], v.lang)))
         .length(6)
         .refine((ds) => new Set(ds.map((d) => d.id)).size === 6, { message: 'dims must contain each of the six skills exactly once' }),
-      focus: z.object({ title: t(60), why: t(240), action, days: z.number().int().min(1).max(7) }).superRefine(langOf(['why'], v.lang)),
+      focus: z.object({ title: t(60), why: t(240), action, days: z.number().int().min(1).max(7) }).superRefine(langOf(['title', 'why'], v.lang)),
     })
     .superRefine(langOf(['level', 'levelWhy', 'trendWhy', 'today'], v.lang))
     .superRefine((o, ctx) => {
@@ -96,11 +98,11 @@ export function assessExample(v: Pick<AssessVars, 'lang' | 'ids' | 'allowed'>): 
       { title: de ? 'Fachwortschatz' : 'Domain vocabulary', why: de ? 'Du nutzt Fachbegriffe passend und ohne Umwege.' : 'You use technical terms correctly and directly.', ev: e },
     ],
     blockers: [
-      { title: 'Mixed conditionals', why: de ? 'Auf C1 erwartet man, Vergangenheit und Gegenwart sauber zu verknüpfen.' : 'At C1 you are expected to link past and present cleanly.', fix: 'If we had tested earlier, we would not be in this situation now.', action: a0, ev: e },
-      { title: 'Present perfect continuous', why: de ? 'Laufende Entwicklungen klingen im Present Simple unnatürlich.' : 'Ongoing developments sound unnatural in the present simple.', fix: 'We have been working on the migration since March.', action: a1, ev: e },
+      { title: de ? 'Gemischte Bedingungssätze' : 'Mixed conditionals', why: de ? 'Auf C1 erwartet man, Vergangenheit und Gegenwart sauber zu verknüpfen.' : 'At C1 you are expected to link past and present cleanly.', fix: 'If we had tested earlier, we would not be in this situation now.', action: a0, ev: e },
+      { title: de ? 'Verlaufsform im Present Perfect' : 'Present perfect continuous', why: de ? 'Laufende Entwicklungen klingen im Present Simple unnatürlich.' : 'Ongoing developments sound unnatural in the present simple.', fix: 'We have been working on the migration since March.', action: a1, ev: e },
     ],
     dims: DIMS.map((id) => ({ id, level: id === 'speaking' ? null : 'B2', confidence: id === 'speaking' ? 'thin' : 'fair', why: de ? 'Mehrere Belege der letzten Wochen.' : 'Several pieces of evidence from recent weeks.' })),
-    focus: { title: 'Mixed conditionals', why: de ? 'Größter Abstand zu C1 bei hoher Bedeutung für Verhandlungen.' : 'Biggest gap to C1 and highly relevant for negotiations.', action: a0, days: 3 },
+    focus: { title: de ? 'Gemischte Bedingungssätze' : 'Mixed conditionals', why: de ? 'Größter Abstand zu C1 bei hoher Bedeutung für Verhandlungen.' : 'Biggest gap to C1 and highly relevant for negotiations.', action: a0, days: 3 },
   };
 }
 
@@ -125,7 +127,7 @@ export const assess: PromptTemplate<AssessVars, AssessOut> = {
       '- Give a skill level (A2, B1, B1+, B2, B2+, C1, C1+) only where the evidence supports it; otherwise level null and confidence "thin".',
       '- Prefer "thin" to guessing. confidence: "thin" = little evidence, "fair" = some, "good" = plenty and consistent.',
       '- trend compares with the previous assessment and the recent logs: "up", "flat" or "down".',
-      '- Every strength and blocker cites 1–3 evidence ids in "ev", copied exactly from the brackets.',
+      `- Every strength and blocker cites 1–${EV_MAX} evidence ids in "ev", copied exactly from the brackets.`,
       '- blockers: why it stands out at C1 ("why"), how to get it right ("fix", one model sentence in American English), and one action from the allowed list.',
       '- focus: the one thing for the next days, with an allowed action and days 1–7.',
       'Language rules:',

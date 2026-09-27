@@ -20,11 +20,11 @@ Teil 1 ist die Wissensabfrage des Tests, keine Bewertung einer Wiederholung – 
 - `bands[b] = round2(k_b · m')`, `passive = round50(Σ 1000 · bands[b])`.
 - Streuung `SE = √Σ (1000² · x(1 − x) / 10)`, Band `pLo/pHi = passive ∓ 1,64 · SE`, begrenzt auf 0–10.000.
 - Aktiv: `aAcc = (richtig + 1) / (n + 2)`, `active = round50(passive · aAcc)`, `aLo/aHi` = `pLo/pHi · aAcc`.
-- Gespeichert zusätzlich: `fa`, `faN`, `pseudoN`, `mAcc`, `aAcc`, `dur` (ms), `d` (Lerntag), `t`, Kennung `v: 'lx1'`.
+- Gespeichert zusätzlich: `fa`, `faN`, `pseudoN`, `mAcc`, `aAcc`, `dur` (Sekunden, wie die alte App), `d` (Lerntag), `t`, Kennung `v: 'lx1'`.
 
 ## Speichern (`src/domain/vtest/persist.ts`)
 
-Über die eine Sammel-Warteschlange (`recordProfileFields`): `vtests` (≤ 20), `act[tag].vtest + 1`, `minutes[tag] + round(dur / 60.000)`. Ein schon gespeichertes Ergebnis (gleiches `t`) wird nie doppelt angehängt.
+Über die eine Sammel-Warteschlange (`recordProfileFields`): `vtests` (≤ 20), `act[tag].vtest + 1`, `minutes[tag] + round(dur / 60)`. Ein schon gespeichertes Ergebnis (gleiches `t`) wird nie doppelt angehängt.
 
 ## Englische Bedeutungen
 

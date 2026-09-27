@@ -48,7 +48,7 @@ export function factLine(f: WeekFact): string {
     case 'fixed':
       return `${f.n} former mistake sentence(s) in "${topicName(f.topic, 'en')}" now answered correctly`;
     case 'text':
-      return `wrote and revised a text: "${f.title || (f.lesson ? `lesson ${f.lesson}` : 'free text')}"`;
+      return `wrote and revised a text: "${f.titles?.en || f.title || (f.lesson ? `lesson ${f.lesson}` : 'free text')}"`;
     case 'talk':
       return `held a role-play conversation: "${f.title}"`;
     case 'time':

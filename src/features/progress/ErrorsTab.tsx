@@ -21,6 +21,9 @@ export function radarName(r: Pick<RadarRow, 'c' | 'kind'>, t: (k: MessageKey) =>
   return r.c;
 }
 
+/** Quellen mit Beschriftung: g/w/r/v/s aus der alten App (s = Sprint), k = Rollenspiel, b = Business. */
+const SOURCES: ReadonlySet<string> = new Set(['g', 'w', 'r', 'v', 's', 'k', 'b']);
+
 export function ErrorsTab() {
   const { t, tn, lang, num } = useT();
   const api = useHiddenInput();
@@ -52,10 +55,11 @@ export function ErrorsTab() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex min-w-0 flex-col gap-1">
                     <h3 className="text-base font-semibold">{radarName(r, t, lang)}</h3>
-                    <p className="text-sm text-muted">{t(`radarTrend_${r.trend}`, { n: r.nPrev30 })}</p>
-                    {r.sources.length > 0 && (
+                    {/* Vergleich nur mit echtem Vorzeitraum (Befund H8): ohne Fehler davor keine „(0)". */}
+                    {r.nPrev30 > 0 && <p className="text-sm text-muted">{t(`radarTrend_${r.trend}`, { n: r.nPrev30 })}</p>}
+                    {r.sources.some((s) => SOURCES.has(s)) && (
                       <p className="text-xs text-subtle" data-label="">
-                        {t('radarSources')}: {r.sources.map((s) => t(`src_${s}` as MessageKey)).join(' · ')}
+                        {t('radarSources')}: {r.sources.filter((s) => SOURCES.has(s)).map((s) => t(`src_${s}` as MessageKey)).join(' · ')}
                       </p>
                     )}
                   </div>

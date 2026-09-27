@@ -48,7 +48,10 @@ export const useAssessRun = create<RunState>(() => ({ phase: 'idle', aiPhase: nu
 let ctl: AbortController | null = null;
 let hideInstalled = false;
 
-const LEASE_MS = 240_000;
+// Sperre auf `app/assess` (db `acquire`): kurze Laufzeit, während des Aufrufs alle 60 s mit
+// derselben Kennung verlängert (db.d.ts „renew while working", Befund H6). Läuft von selbst ab.
+const LEASE_MS = 180_000;
+const RENEW_MS = 60_000;
 const LOG_DAYS = 14;
 
 function installHide(): void {
@@ -168,6 +171,7 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
   if (trigger === 'auto') useAssessRun.setState({ autoDay: today });
   const c = new AbortController();
   ctl = c;
+  let renew: ReturnType<typeof setInterval> | null = null;
   useAssessRun.setState({ phase: 'locking', aiPhase: null, error: null });
 
   try {
@@ -178,6 +182,14 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
         useAssessRun.setState({ phase: 'busy' });
         return 'busy';
       }
+      renew = setInterval(() => {
+        writer.acquire('app/assess', { holder: tabId(), ttlMs: LEASE_MS }).then(
+          (r) => {
+            if (!r.acquired) logWarn('assess:lease', { code: 'lease_lost', message: 'Sperre konnte nicht verlängert werden' }, 'app/assess');
+          },
+          (err: unknown) => logWarn('assess:lease', err, 'app/assess'),
+        );
+      }, RENEW_MS);
       // Tagessperre für den automatischen Lauf (auch für andere Geräte, Plan §4.5 Schritt 4).
       if (trigger === 'auto') await writer.update('app/assess', { run: { d: today, t: nowMs, by: tabId() } });
     }
@@ -259,6 +271,7 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
     if (ctl === c) useAssessRun.setState({ phase: 'error', aiPhase: null, error: key });
     return 'error';
   } finally {
+    if (renew) clearInterval(renew);
     if (ctl === c) ctl = null;
   }
 }

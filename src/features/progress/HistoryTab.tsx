@@ -11,6 +11,7 @@ import { addDays, daysBetween } from '../../domain/date';
 import { heatmap, historySeries, type SeriesKey } from '../../domain/progress/history';
 import { bktMeasures, fsrsMeasures } from '../../domain/progress/measures';
 import { citableFacts, lastWeekOf, topicName, weekFacts, type WeekFact } from '../../domain/progress/weekly';
+import { detectLang } from '../../domain/lang/detect';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
@@ -46,13 +47,20 @@ function factText(f: WeekFact, t: (k: MessageKey, v?: Record<string, string | nu
     case 'fixed':
       return tn('wf_fixed', f.n, { topic: topicName(f.topic, lang) });
     case 'text': {
+      // Titel nur in der Oberflächensprache (Sprachtreue, Befund H2): beide Titel der Aufgabe,
+      // sonst der gespeicherte Titel, wenn er erkennbar in dieser Sprache steht, sonst neutral.
       const l = f.lesson ? LESSONS.find((x) => x.id === f.lesson) : undefined;
-      return t('wf_text', { title: f.title || (l ? (lang === 'en' ? l.en : l.de) : '–') });
+      // Fehlt der Titel einer Sprache, trägt die Aufgabe oft den der anderen – daher auch hier prüfen.
+      const other = lang === 'de' ? 'en' : 'de';
+      const pick = f.titles?.[lang] || '';
+      const own = (pick && detectLang(pick) !== other ? pick : '') || (f.title && detectLang(f.title) === lang ? f.title : '');
+      return t('wf_text', { title: own || (l ? (lang === 'en' ? l.en : l.de) : t('wf_textOwn')) });
     }
     case 'talk':
       return t('wf_talk', { title: f.title || '–' });
     case 'time':
-      return t('wf_time', { min: f.minutes, days: f.activeDays, pflicht: f.pflichtDays });
+      // Vor `pflichtSince` (bzw. ohne erledigte Pflicht) nur Minuten und Lerntage, nie „Pflicht an 0 Tagen" (Befund W4).
+      return f.pflichtDays ? t('wf_time', { min: f.minutes, days: f.activeDays, pflicht: f.pflichtDays }) : t('wf_timePlain', { min: f.minutes, days: f.activeDays });
   }
 }
 
@@ -62,14 +70,15 @@ function Weekly() {
   const profile = useLive((s) => s.docs['app/profile']);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
-  const once = useCollectionsOnce(['writing', 'talk']);
+  const schema = useLive((s) => s.docs['app/schema']);
+  const once = useCollectionsOnce(['writing', 'talk', 'wprompt']);
   const weekly = useDocWatch('app/weekly');
   const ai = useAiAvailable();
   const scope = useAiScope();
   const week = useMemo(() => lastWeekOf(today), [today]);
   const facts = useMemo(
-    () => (once.status === 'ready' ? weekFacts({ days: week.days, vocab, grammar, writing: once.value.writing ?? EMPTY, talk: once.value.talk ?? EMPTY, profile: obj(profile) }) : []),
-    [once.status, once.value, week, vocab, grammar, profile],
+    () => (once.status === 'ready' ? weekFacts({ days: week.days, vocab, grammar, writing: once.value.writing ?? EMPTY, talk: once.value.talk ?? EMPTY, prompts: once.value.wprompt ?? EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null }) : []),
+    [once.status, once.value, week, vocab, grammar, profile, schema],
   );
   const stored = weekly.status === 'ready' ? storedWeekly(weekly.data, week.w, lang) : null;
   const wants = ai && weekly.status === 'ready' && once.status === 'ready' && !stored && citableFacts(facts).length >= WEEKLY_MIN_FACTS;

@@ -13,8 +13,21 @@ const ID = 'weekly-report';
 const VERSION = 1;
 export const WEEKLY_FACTS_MAX_BYTES = 6_000;
 
+/** Die Fakten, die tatsächlich im Prompt stehen (≤ 6 KB). Nur auf sie darf `ref` verweisen (Befund H7). */
+export function sentFacts(facts: WeeklyVars['facts']): Array<{ id: string; line: string }> {
+  let used = 0;
+  const out: Array<{ id: string; line: string }> = [];
+  for (const f of facts) {
+    const line = `[${f.id}] ${clip(f.text, 160)}`;
+    used += new TextEncoder().encode(line).length + 1;
+    if (used > WEEKLY_FACTS_MAX_BYTES) break;
+    out.push({ id: f.id, line });
+  }
+  return out;
+}
+
 export function weeklySchema(v: Pick<WeeklyVars, 'lang' | 'facts'>): z.ZodType<WeeklyOut> {
-  const ids = new Set(v.facts.map((f) => f.id));
+  const ids = new Set(sentFacts(v.facts).map((f) => f.id));
   return z
     .object({
       headline: z.string().trim().min(1).max(90),
@@ -51,14 +64,7 @@ export const weeklyReport: PromptTemplate<WeeklyVars, WeeklyOut> = {
   tier: 'default',
   cache: true,
   build(v) {
-    let used = 0;
-    const lines: string[] = [];
-    for (const f of v.facts) {
-      const line = `[${f.id}] ${clip(f.text, 160)}`;
-      used += new TextEncoder().encode(line).length + 1;
-      if (used > WEEKLY_FACTS_MAX_BYTES) break;
-      lines.push(line);
-    }
+    const lines = sentFacts(v.facts).map((f) => f.line);
     return [
       header({ id: ID, version: VERSION }),
       'You write a short weekly review for a German-speaking professional learning English (B2 aiming for C1).',

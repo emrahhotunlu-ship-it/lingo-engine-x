@@ -17,6 +17,6 @@ export function vtestPatch(cur: Doc, r: VtestResult, day: string): Record<string
   return {
     vtests: [...list, { ...r, v: 'lx1' }].slice(-VTESTS_MAX),
     act: { [day]: { vtest: num(dayAct.vtest) + 1 } },
-    minutes: { [day]: num(obj(cur.minutes)[day]) + Math.round(r.dur / 60_000) },
+    minutes: { [day]: num(obj(cur.minutes)[day]) + Math.round(r.dur / 60) },
   };
 }

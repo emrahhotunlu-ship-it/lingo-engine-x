@@ -3,8 +3,11 @@ import { topicP } from '../grammar/bkt';
 import { TOPICS } from '../content';
 
 // Verlauf (Plan §7.4, E14): `profile.history[]` (≤ 120) wird fortgeführt – ein Tagesbild je
-// Lerntag, gekennzeichnet mit `lx: 1` (neue Definition). Die Formeln der alten App sind nicht
+// Lerntag, gekennzeichnet mit `lx` (neue Definition). Die Formeln der alten App sind nicht
 // belegt; die Nahtstelle wird im Diagramm markiert.
+// Maßstab wie die alte App: Prozent 0–100, ganzzahlig (echte Altdaten z. B. `{o: 61, gr: 70}`).
+// Geschrieben wird `lx: 2` (0–100). Frühe Einträge mit `lx: 1` stehen im Maßstab 0–1; sie
+// werden nie umgeschrieben, nur beim Lesen umgerechnet (`pctOf`).
 //   o = ema.all, vo = ema.recog, co = ema.colloc, li = ema.listen, wr = ema.write,
 //   gr = Mittel der Anzeige-Beherrschung (mit Verfall), re = Mittel der letzten 5 Leseergebnisse
 //   (sonst Vorwert), fl = Sprint-Trefferquote (sonst Vorwert), vs = Wortschatz jetzt (sonst Vorwert).
@@ -13,10 +16,19 @@ type Doc = Readonly<Record<string, unknown>>;
 const obj = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Doc) : {});
 const arr = (v: unknown): Doc[] => (Array.isArray(v) ? v.map(obj) : []);
 const numOr = (v: unknown, d: number | null): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : d);
-const r3 = (x: number) => Math.round(x * 1000) / 1000;
+
+/** Wert eines Tagesbilds in Prozent 0–100. `lx: 1`-Einträge (0–1) werden umgerechnet. */
+export function pctOf(h: Doc, k: string): number | null {
+  const v = numOr(h[k], null);
+  if (v === null) return null;
+  const small = h.lx === 1 || h.lx === '1';
+  return Math.max(0, Math.min(100, small && v <= 1 ? v * 100 : v));
+}
+/** Anteil 0–1 → ganze Prozent. */
+const pct = (x: number | null): number | null => (x === null ? null : Math.max(0, Math.min(100, Math.round(x * 100))));
 
 export const HISTORY_MAX = 120;
-export type HistSnap = { d: string; o: number | null; vo: number | null; co: number | null; li: number | null; wr: number | null; gr: number; re: number | null; fl: number | null; vs: number | null; lx: 1 };
+export type HistSnap = { d: string; o: number | null; vo: number | null; co: number | null; li: number | null; wr: number | null; gr: number; re: number | null; fl: number | null; vs: number | null; lx: 2 };
 
 export function hasHistory(profile: Doc | undefined, day: string): boolean {
   return arr(profile?.history).some((h) => h.d === day);
@@ -30,24 +42,25 @@ export function historySnapshot(i: { day: string; nowMs: number; profile: Doc; g
   const gr = TOPICS.reduce((a, t) => a + topicP(t.id, i.grammar.get(t.id), i.nowMs), 0) / Math.max(1, TOPICS.length);
   const sprints = arr(p.sprints).sort((a, b) => (numOr(a.t, 0) ?? 0) - (numOr(b.t, 0) ?? 0));
   const sp = sprints[sprints.length - 1];
-  const fl = sp && numOr(sp.n, 0) ? (numOr(sp.ok, 0) ?? 0) / (numOr(sp.n, 1) ?? 1) : numOr(prev.fl, null);
+  const fl = sp && numOr(sp.n, 0) ? (numOr(sp.ok, 0) ?? 0) / (numOr(sp.n, 1) ?? 1) : null;
   const rs = (i.readingScores ?? []).slice(0, 5);
-  const re = rs.length ? rs.reduce((a, b) => a + b, 0) / rs.length / 100 : numOr(prev.re, null);
-  const rnd = (x: number | null) => (x === null ? null : r3(x));
+  const re = rs.length ? rs.reduce((a, b) => a + b, 0) / rs.length / 100 : null;
   return {
     d: i.day,
-    o: rnd(numOr(ema.all, null)),
-    vo: rnd(numOr(ema.recog, null)),
-    co: rnd(numOr(ema.colloc, null)),
-    li: rnd(numOr(ema.listen, null)),
-    wr: rnd(numOr(ema.write, null)),
-    gr: r3(gr),
-    re: rnd(re),
-    fl: rnd(fl),
+    o: pct(numOr(ema.all, null)),
+    vo: pct(numOr(ema.recog, null)),
+    co: pct(numOr(ema.colloc, null)),
+    li: pct(numOr(ema.listen, null)),
+    wr: pct(numOr(ema.write, null)),
+    gr: pct(gr) ?? 0,
+    re: re === null ? roundOr(pctOf(prev, 're')) : pct(re),
+    fl: fl === null ? roundOr(pctOf(prev, 'fl')) : pct(fl),
     vs: i.vocabNow ?? numOr(prev.vs, null),
-    lx: 1,
+    lx: 2,
   };
 }
+
+const roundOr = (x: number | null): number | null => (x === null ? null : Math.round(x));
 
 /** Profil-Änderung für das Tagesbild (einmal je Lerntag, ≤ 120) oder `null`. */
 export function historyPatch(profile: Doc, snap: HistSnap): Record<string, unknown> | null {
@@ -59,7 +72,7 @@ export function historyPatch(profile: Doc, snap: HistSnap): Record<string, unkno
 export type SeriesKey = 'gr' | 'vo' | 'li' | 'wr';
 export type SeriesPoint = { d: string; v: number };
 
-/** Linien der letzten `days` Tage (ohne fehlende Werte) und der erste Tag mit `lx` (Nahtstelle). */
+/** Linien der letzten `days` Tage in Prozent 0–100 (ohne fehlende Werte) und der erste Tag mit `lx` (Nahtstelle). */
 export function historySeries(profile: Doc | null | undefined, today: string, days = 120): { series: Record<SeriesKey, SeriesPoint[]>; seam: string | null } {
   const from = addDays(today, -(days - 1));
   const hist = arr(profile?.history)
@@ -67,10 +80,10 @@ export function historySeries(profile: Doc | null | undefined, today: string, da
     .sort((a, b) => ((a.d as string) < (b.d as string) ? -1 : 1));
   const out: Record<SeriesKey, SeriesPoint[]> = { gr: [], vo: [], li: [], wr: [] };
   for (const h of hist) for (const k of Object.keys(out) as SeriesKey[]) {
-    const v = numOr(h[k], null);
-    if (v !== null) out[k].push({ d: h.d as string, v: Math.max(0, Math.min(1, v)) });
+    const v = pctOf(h, k);
+    if (v !== null) out[k].push({ d: h.d as string, v });
   }
-  const seam = hist.find((h) => h.lx === 1 || h.lx === '1');
+  const seam = hist.find((h) => h.lx !== undefined && h.lx !== null);
   return { series: out, seam: seam && hist.some((h) => h.lx === undefined) ? (seam.d as string) : null };
 }
 

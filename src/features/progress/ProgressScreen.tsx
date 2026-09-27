@@ -41,8 +41,9 @@ const item = {
 
 function Stat({ label, value, unit, testId }: { label: string; value: string; unit: string; testId: string }) {
   return (
-    <div className="lx-glass flex min-w-0 flex-col gap-1 rounded-[var(--radius-card)] px-4 py-3">
-      <span className="lx-eyebrow hyphens-auto break-words">{label}</span>
+    <div className="lx-glass flex min-w-0 flex-col gap-1 rounded-[var(--radius-card)] px-3 py-3 sm:px-4">
+      {/* Nie mitten im Wort umbrechen (Befund H8): auf schmalen Bildschirmen enger gesetzt. */}
+      <span className="lx-eyebrow whitespace-nowrap tracking-[0.02em] sm:tracking-[0.08em]">{label}</span>
       <span className="flex flex-wrap items-baseline gap-x-1.5">
         <span className="lx-tnum text-2xl font-semibold tracking-tight" data-testid={testId}>
           {value}

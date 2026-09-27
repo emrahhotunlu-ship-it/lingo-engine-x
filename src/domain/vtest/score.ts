@@ -32,6 +32,7 @@ export type VtestResult = {
   pseudoN: number;
   mAcc: number;
   aAcc: number;
+  /** Dauer in Sekunden (wie die alte App). */
   dur: number;
 };
 
@@ -71,6 +72,7 @@ export function scoreVtest(a: VtestAnswers, meta: { t: number; d: string; dur: n
     pseudoN: faN,
     mAcc: round2(m),
     aAcc: round2(aAcc),
-    dur: Math.max(0, Math.round(meta.dur)),
+    // Dauer in Sekunden wie die alte App (`vtests[].dur`, Befund H4); `meta.dur` kommt in ms.
+    dur: Math.max(0, Math.round(meta.dur / 1000)),
   };
 }

@@ -55,7 +55,9 @@ const days = {};
 const xpDays = {};
 const minutes = {};
 const act = {};
+// Tagesbilder im Maßstab der alten App: ganze Prozent 0–100 (z. B. {o: 61, gr: 70}).
 const history = [];
+const pct = (x) => Math.round(x * 100);
 let answersTotal = 0;
 let xpTotal = 0;
 for (let i = 41; i >= 0; i--) {
@@ -76,14 +78,14 @@ for (let i = 41; i >= 0; i--) {
   act[k] = a;
   history.push({
     d: k,
-    o: round(0.55 + rnd() * 0.25),
-    vo: round(0.5 + rnd() * 0.3),
-    gr: round(0.45 + rnd() * 0.3),
-    co: round(0.4 + rnd() * 0.3),
-    re: round(0.5 + rnd() * 0.3),
-    li: round(0.45 + rnd() * 0.3),
-    wr: round(0.4 + rnd() * 0.3),
-    fl: round(0.4 + rnd() * 0.3),
+    o: pct(0.55 + rnd() * 0.25),
+    vo: pct(0.5 + rnd() * 0.3),
+    gr: pct(0.45 + rnd() * 0.3),
+    co: pct(0.4 + rnd() * 0.3),
+    re: pct(0.5 + rnd() * 0.3),
+    li: pct(0.45 + rnd() * 0.3),
+    wr: pct(0.4 + rnd() * 0.3),
+    fl: pct(0.4 + rnd() * 0.3),
     vs: int(3200, 3600),
   });
 }
@@ -528,13 +530,14 @@ put('app/assess', {
       { title: 'Mixed Conditionals', why: 'Auf C1 erwartet man, Vergangenheit und Gegenwart in einem Satz sauber zu verknüpfen.', fix: 'If we had tested earlier, we would not be in this situation now.', action: 'grammar:mixed-cond' },
       { title: 'Present Perfect Continuous', why: 'Laufende Entwicklungen klingen mit Present Simple unnatürlich.', fix: 'We have been working on the migration since March.', action: 'grammar:pres-perf-cont' },
     ],
+    // Kennungen der alten App (gr/vo/re/li/wr/fl, low/mid/high), wie in den echten Daten.
     dims: [
-      { id: 'grammar', level: 'B2', confidence: 'good', why: 'Viele Antworten in 12 Themen.' },
-      { id: 'vocabulary', level: 'B2+', confidence: 'good', why: 'Breiter Berufswortschatz.' },
-      { id: 'reading', level: 'B2+', confidence: 'fair', why: 'Einige Artikel mit guten Ergebnissen.' },
-      { id: 'listening', level: 'B2', confidence: 'fair', why: 'Drei Hörtexte ausgewertet.' },
-      { id: 'writing', level: 'B2', confidence: 'fair', why: 'Sechs bewertete Texte.' },
-      { id: 'speaking', level: 'B1+', confidence: 'thin', why: 'Bisher nur zwei Rollenspiele.' },
+      { id: 'gr', level: 'B2', confidence: 'high', why: 'Viele Antworten in 12 Themen.' },
+      { id: 'vo', level: 'B2+', confidence: 'high', why: 'Breiter Berufswortschatz.' },
+      { id: 're', level: 'B2+', confidence: 'mid', why: 'Einige Artikel mit guten Ergebnissen.' },
+      { id: 'li', level: 'B2', confidence: 'mid', why: 'Drei Hörtexte ausgewertet.' },
+      { id: 'wr', level: 'B2', confidence: 'mid', why: 'Sechs bewertete Texte.' },
+      { id: 'fl', level: 'B1+', confidence: 'low', why: 'Bisher nur zwei Sprints.' },
     ],
     focus: { title: 'Mixed Conditionals', why: 'Größter Abstand zu C1 bei hoher Relevanz für Verhandlungen.', action: 'grammar:mixed-cond', days: 3 },
   },

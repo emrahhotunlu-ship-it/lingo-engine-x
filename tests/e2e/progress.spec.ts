@@ -41,7 +41,10 @@ test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher
   const doc = (await dump(page))['app/assess']!;
   expect(doc).toMatchObject({ v: 2, pv: 'assess@1', tier: 'complex', lang: 'de' });
   expect((doc.run as Record<string, unknown>).d).toBe('2026-09-20');
-  expect((doc.hist as unknown[]).length).toBe(1);
+  // Befund H3: Die Einschätzung der alten App (Seed, 18.09., ohne hist) ist erster Verlaufseintrag.
+  const hist = doc.hist as Array<Record<string, unknown>>;
+  expect(hist.map((h) => h.d)).toEqual(['2026-09-18', '2026-09-20']);
+  expect(Object.keys(hist[0]!.dims as object)).toHaveLength(6);
   expect(((doc.data as Record<string, unknown>).dims as unknown[]).length).toBe(6);
   expect(await calls(page, 'assess')).toEqual([{ id: 'assess', tier: 'complex', cache: false }]);
   await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');

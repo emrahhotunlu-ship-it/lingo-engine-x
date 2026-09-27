@@ -1,4 +1,4 @@
-import { DIMS, isConfidence, isLevel, TRENDS, type AssessData, type AssessDim, type AssessHist, type AssessRead, type Dim, type Trend } from './types';
+import { DIMS, isConfidence, type Confidence, isLevel, TRENDS, type AssessData, type AssessDim, type AssessHist, type AssessRead, type Dim, type Trend } from './types';
 
 // `app/assess` lesen und schreiben (Plan §4.1, A6.10). Gelesen werden beide Formen: die Hülle
 // der alten App `{d, t, lang, answers, writings, data:{…}}` und die flache Form aus Anhang B.
@@ -17,6 +17,14 @@ const strs = (v: unknown): string[] => arr(v).filter((x): x is string => typeof 
 export const HIST_MAX = 60;
 export const ASSESS_PV = 'assess@1';
 
+// Kennungen der alten App (echte Daten): `dims[].id` gr/vo/re/li/wr/fl und `confidence`
+// low/mid/high. `fl` (Flüssigkeit, im alten Tagesplan vom Sprint gespeist) ist die Fertigkeit
+// Sprechen. Beim Lesen umgesetzt, gespeichert bleibt der Altstand unverändert.
+const LEGACY_DIM: Readonly<Record<string, Dim>> = { gr: 'grammar', vo: 'vocabulary', re: 'reading', li: 'listening', wr: 'writing', fl: 'speaking' };
+const LEGACY_CONF: Readonly<Record<string, Confidence>> = { low: 'thin', mid: 'fair', high: 'good' };
+const dimOf = (v: unknown): Dim | null => ((DIMS as readonly unknown[]).includes(v) ? (v as Dim) : typeof v === 'string' ? (LEGACY_DIM[v] ?? null) : null);
+const confOf = (v: unknown): Confidence => (isConfidence(v) ? v : typeof v === 'string' ? (LEGACY_CONF[v] ?? 'thin') : 'thin');
+
 const trendOf = (v: unknown): Trend | null => ((TRENDS as readonly unknown[]).includes(v) ? (v as Trend) : null);
 
 /** `data` aus einem Dokument beider Formen, tolerant normalisiert. */
@@ -25,8 +33,9 @@ export function readAssessData(raw: unknown): AssessData {
   const dims: AssessDim[] = [];
   for (const x of arr(d.dims)) {
     const o = obj(x);
-    if (!(DIMS as readonly unknown[]).includes(o.id) || dims.some((y) => y.id === o.id)) continue;
-    dims.push({ id: o.id as Dim, level: isLevel(o.level) ? o.level : null, confidence: isConfidence(o.confidence) ? o.confidence : 'thin', why: text(o.why) });
+    const id = dimOf(o.id);
+    if (!id || dims.some((y) => y.id === id)) continue;
+    dims.push({ id, level: isLevel(o.level) ? o.level : null, confidence: confOf(o.confidence), why: text(o.why) });
   }
   const f = obj(d.focus);
   return {
@@ -57,7 +66,10 @@ function readHist(v: unknown): AssessHist[] {
     const d = text(o.d);
     if (!d) continue;
     const dims: AssessHist['dims'] = {};
-    for (const [k, lv] of Object.entries(obj(o.dims))) if ((DIMS as readonly string[]).includes(k)) dims[k as Dim] = isLevel(lv) ? lv : null;
+    for (const [k, lv] of Object.entries(obj(o.dims))) {
+      const id = dimOf(k);
+      if (id) dims[id] = isLevel(lv) ? lv : null;
+    }
     out.push({ d, cefr: isLevel(o.cefr) ? o.cefr : null, trend: trendOf(o.trend), dims });
   }
   return out;
@@ -125,5 +137,11 @@ export function assessWrite(cur: Doc | undefined, r: AssessResult, startedAt: nu
   if (!cur) return { set: { ...body, hist: [entry] } };
   if (num(cur.t) > startedAt) return null;
   const prev = arr(cur.hist).filter((h) => obj(h).d !== r.day);
+  // Erster neuer Lauf auf einer Einschätzung der alten App (ohne `hist`): ihr Stand wird der
+  // erste Verlaufseintrag, denn ihr `data` wird gleich ersetzt (Befund H3).
+  if (!Array.isArray(cur.hist)) {
+    const old = readAssess(cur);
+    if (old?.d && old.d !== r.day) prev.push({ d: old.d, cefr: old.data.cefr, trend: old.data.trend, dims: Object.fromEntries(old.data.dims.map((x) => [x.id, x.level])) });
+  }
   return { update: { ...body, hist: [...prev, entry].slice(-HIST_MAX) } };
 }

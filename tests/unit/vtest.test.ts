@@ -88,6 +88,7 @@ describe('Speichern (Plan §8.3)', () => {
     expect((p.vtests as Array<Record<string, unknown>>).at(-1)).toMatchObject({ t: r.t, v: 'lx1' });
     expect(p.act).toEqual({ '2026-09-20': { vtest: 1 } });
     expect(p.minutes).toEqual({ '2026-09-20': 18 });
+    expect(r.dur).toBe(480); // Sekunden wie die alte App (Befund H4)
     expect(vtestPatch({ ...cur, vtests: [...cur.vtests, { t: r.t }] }, r, '2026-09-20')).toBeNull();
   });
 });

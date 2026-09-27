@@ -1,8 +1,10 @@
-import { useId } from 'react';
+import { useEffect, useId, useRef, useState, type RefObject } from 'react';
 import { Disclosure } from '../Disclosure';
 
-// Liniendiagramm in SVG (Plan §10.2): Werte 0–1 über Kalendertage, optional eine markierte
-// Nahtstelle. `role="img"` mit Beschreibung; dieselben Werte als Tabelle im Aufklapper.
+// Liniendiagramm in SVG (Plan §10.2): Werte in Prozent 0–100 über Kalendertage, optional eine
+// markierte Nahtstelle. `role="img"` mit Beschreibung; dieselben Werte als Tabelle im Aufklapper.
+// Die Breite des Koordinatensystems folgt der gemessenen Breite (1 Einheit = 1 px): Schrift und
+// Linien werden nie verzerrt, die Achsenbeschriftung bleibt bei 11 px.
 
 export type LineSeries = { key: string; label: string; color: string; points: ReadonlyArray<{ d: string; v: number }> };
 
@@ -18,35 +20,55 @@ type Props = {
   testId?: string;
 };
 
-const W = 640;
+const W_DEFAULT = 640;
 const H = 200;
-const PAD = { l: 32, r: 8, t: 10, b: 22 };
+const FONT = 11;
+const PAD = { l: 34, r: 8, t: 10, b: 22 };
+
+/** Gemessene Breite des Elements (ohne ResizeObserver: Vorgabe). */
+function useWidth(): [RefObject<HTMLDivElement | null>, number] {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [w, setW] = useState(W_DEFAULT);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver((entries) => {
+      const cw = Math.round(entries[0]?.contentRect.width ?? 0);
+      if (cw > 0) setW(cw);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, w];
+}
 
 const dayNum = (d: string): number => Date.UTC(Number(d.slice(0, 4)), Number(d.slice(5, 7)) - 1, Number(d.slice(8, 10))) / 86_400_000;
 
 export function LineChart({ series, from, to, label, seam, tableLabel, dateLabel, formatDate, testId }: Props) {
   const id = useId();
+  const [box, W] = useWidth();
   const x0 = dayNum(from);
   const span = Math.max(1, dayNum(to) - x0);
   const x = (d: string) => PAD.l + ((dayNum(d) - x0) / span) * (W - PAD.l - PAD.r);
-  const y = (v: number) => PAD.t + (1 - Math.max(0, Math.min(1, v))) * (H - PAD.t - PAD.b);
+  const y = (v: number) => PAD.t + (1 - Math.max(0, Math.min(100, v)) / 100) * (H - PAD.t - PAD.b);
   const dates = [...new Set(series.flatMap((s) => s.points.map((p) => p.d)))].sort();
   return (
     <figure className="flex flex-col gap-3" data-testid={testId}>
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-t`} className="h-auto w-full" preserveAspectRatio="none">
+      <div ref={box} className="w-full">
+      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-labelledby={`${id}-t`} className="block h-auto w-full">
         <title id={`${id}-t`}>{label}</title>
-        {[0, 0.25, 0.5, 0.75, 1].map((g) => (
+        {[0, 25, 50, 75, 100].map((g) => (
           <g key={g}>
             <line x1={PAD.l} x2={W - PAD.r} y1={y(g)} y2={y(g)} stroke="var(--lx-border)" strokeWidth={1} />
-            <text x={PAD.l - 6} y={y(g) + 4} textAnchor="end" fontSize={10} fill="var(--lx-fg-subtle)" className="lx-tnum">
-              {Math.round(g * 100)}
+            <text x={PAD.l - 6} y={y(g) + 4} textAnchor="end" fontSize={FONT} fill="var(--lx-fg-subtle)" className="lx-tnum">
+              {g}
             </text>
           </g>
         ))}
         {seam && (
           <g>
             <line x1={x(seam.d)} x2={x(seam.d)} y1={PAD.t} y2={H - PAD.b} stroke="var(--lx-fg-subtle)" strokeDasharray="3 4" strokeWidth={1} />
-            <text x={Math.min(W - PAD.r - 4, x(seam.d) + 4)} y={H - 6} fontSize={10} fill="var(--lx-fg-subtle)" textAnchor={x(seam.d) > W * 0.7 ? 'end' : 'start'}>
+            <text x={Math.min(W - PAD.r - 4, x(seam.d) + 4)} y={H - 6} fontSize={FONT} fill="var(--lx-fg-subtle)" textAnchor={x(seam.d) > W * 0.7 ? 'end' : 'start'}>
               {seam.label}
             </text>
           </g>
@@ -59,6 +81,7 @@ export function LineChart({ series, from, to, label, seam, tableLabel, dateLabel
           ) : null,
         )}
       </svg>
+      </div>
       <figcaption className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
         {series.map((s) => (
           <span key={s.key} className="inline-flex items-center gap-1.5">
@@ -91,7 +114,7 @@ export function LineChart({ series, from, to, label, seam, tableLabel, dateLabel
                     const p = s.points.find((q) => q.d === d);
                     return (
                       <td key={s.key} className="lx-tnum py-1 text-right text-muted">
-                        {p ? `${Math.round(p.v * 100)} %` : '–'}
+                        {p ? `${Math.round(p.v)} %` : '–'}
                       </td>
                     );
                   })}

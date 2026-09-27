@@ -1,5 +1,6 @@
 import { TOPICS } from '../content';
 import { addDays, isoWeek } from '../date';
+import { LEGACY_PROMPTS } from '../input/items';
 
 // Wochenbericht „was du diese Woche wirklich dazugelernt hast" (Kap. 6.13, Plan §7.3): Fakten
 // deterministisch, jeder mit Kennung, damit ein KI-Text (weekly-report@1) sie nur zitieren kann.
@@ -31,9 +32,10 @@ export type WeekFact =
   | { id: string; kind: 'word'; word: string; stable: boolean }
   | { id: string; kind: 'topic'; topic: string; from: number; to: number }
   | { id: string; kind: 'fixed'; topic: string; n: number }
-  | { id: string; kind: 'text'; title: string; lesson: string | null }
+  | { id: string; kind: 'text'; title: string; titles: { de: string; en: string } | null; lesson: string | null }
   | { id: string; kind: 'talk'; title: string }
-  | { id: string; kind: 'time'; minutes: number; activeDays: number; pflichtDays: number };
+  /** `pflichtDays` ist `null`, solange die Woche keinen Tag ab `pflichtSince` enthält (alte Serienregel). */
+  | { id: string; kind: 'time'; minutes: number; activeDays: number; pflichtDays: number | null };
 
 export const topicName = (id: string, lang: 'de' | 'en'): string => {
   const t = TOPICS.find((x) => x.id === id);
@@ -47,6 +49,10 @@ export function weekFacts(i: {
   writing: ReadonlyMap<string, Doc>;
   talk: ReadonlyMap<string, Doc>;
   profile: Doc;
+  /** `wprompt/<tag>`: Titel der Schreibaufgaben in beiden Sprachen (Sprachtreue, Befund H2). */
+  prompts?: ReadonlyMap<string, Doc>;
+  /** `app/schema.pflichtSince`: erst ab diesem Tag wird die Pflicht gezählt (Befund W4). */
+  pflichtSince?: string | null;
 }): WeekFact[] {
   const set = new Set(i.days);
   const first = i.days[0] ?? '';
@@ -73,17 +79,25 @@ export function weekFacts(i: {
     const before = hist.filter((h) => str(h.d) < first).pop();
     const during = hist.filter((h) => str(h.d) >= first && str(h.d) <= last).pop();
     if (!during) continue;
-    const from = before ? num(before.p) : (TOPICS.find((t) => t.id === id)?.p0 ?? 0.5);
+    // Anstieg nur gegen einen echten Vorwert vor der Woche (p0 ist kein Vorwert, Befund H1).
+    const from = before ? num(before.p) : null;
     const to = num(during.p);
-    if (to - from >= 0.03) facts.push({ id: `gt:${id}`, kind: 'topic', topic: id, from: Math.round(from * 100) / 100, to: Math.round(to * 100) / 100 });
+    if (from !== null && to - from >= 0.03) facts.push({ id: `gt:${id}`, kind: 'topic', topic: id, from: Math.round(from * 100) / 100, to: Math.round(to * 100) / 100 });
     const fixed = arr(d.errors).filter((e) => (e.done === true || num(e.box) >= 3) && set.has(dayOf(num(e.last)))).length;
     if (fixed) facts.push({ id: `ge:${id}`, kind: 'fixed', topic: id, n: fixed });
   }
 
   // Texte und Gespräche.
+  const titles = new Map<string, { de: string; en: string }>();
+  for (const p of LEGACY_PROMPTS) titles.set(p.id, p.title);
+  // Gespeicherte Aufgaben: nur die tatsächlich vorhandenen Titel (keine Übernahme aus der anderen Sprache).
+  for (const d of i.prompts?.values() ?? []) {
+    const p = obj(d.p);
+    if (str(p.id) && (str(p.title_de) || str(p.title_en))) titles.set(str(p.id), { de: str(p.title_de), en: str(p.title_en) });
+  }
   for (const [id, d] of i.writing) {
     const day = str(d.date) || dayOf(num(d.t));
-    if (set.has(day)) facts.push({ id: `wt:${id}`, kind: 'text', title: str(d.title) || str(d.task).slice(0, 60), lesson: str(d.lesson) || null });
+    if (set.has(day)) facts.push({ id: `wt:${id}`, kind: 'text', title: str(d.title) || str(d.task).slice(0, 60), titles: titles.get(str(d.promptId)) ?? null, lesson: str(d.lesson) || null });
   }
   for (const d of i.talk.values()) {
     for (const r of arr(d.runs)) if (set.has(str(r.day))) facts.push({ id: `rp:${str(r.id)}`, kind: 'talk', title: str(r.title) });
@@ -96,12 +110,14 @@ export function weekFacts(i: {
   let m = 0;
   let active = 0;
   let pf = 0;
+  const since = i.pflichtSince ?? null;
+  const counted = since ? i.days.filter((k) => k >= since).length : 0;
   for (const k of i.days) {
     m += num(minutes[k]);
     if (num(days[k]) > 0 || num(minutes[k]) > 0) active++;
-    if (pflicht[k] !== undefined && pflicht[k] !== null && pflicht[k] !== false && pflicht[k] !== 0) pf++;
+    if (since && k >= since && pflicht[k] !== undefined && pflicht[k] !== null && pflicht[k] !== false && pflicht[k] !== 0) pf++;
   }
-  if (active > 0) facts.push({ id: 'tm:week', kind: 'time', minutes: Math.round(m), activeDays: active, pflichtDays: pf });
+  if (active > 0) facts.push({ id: 'tm:week', kind: 'time', minutes: Math.round(m), activeDays: active, pflichtDays: counted > 0 ? pf : null });
   return facts;
 }
 
