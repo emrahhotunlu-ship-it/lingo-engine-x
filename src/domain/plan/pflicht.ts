@@ -62,13 +62,14 @@ export function pflichtFor(i: PflichtInput): boolean {
 /** Alle Pflichtpunkte ohne KI und ohne Sprachausgabe erfüllbar? (Voraussetzung für `pflichtSince`.) */
 export function dutiesFeasible(plan: StoredPlan | null, env: { tts: boolean; ai: boolean }, data?: { cloze: number; order: number }): boolean {
   if (!plan) return false;
-  void env; // Wiederholen, Lektion (Grundfassung) und die Pflichtkanäle brauchen weder KI noch Sprachausgabe.
+  void env; // Wiederholen, Lektion (Grundfassung) und die Pflichtkanäle brauchen weder KI noch Sprachausgabe („Sag es“: Speichern ohne Prüfung).
   return plan.duty.every((d) => {
     if (d === 'review' || d === 'lesson') return true;
     const ch = d.slice(3);
     if (!isDutyChannel(ch)) return false;
     if (!data) return true;
-    return ch === 'gram' || (ch === 'cloze' && data.cloze >= 8) || (ch === 'order' && data.order >= 6);
+    // „Sag es“ ist auch ohne Claude erfüllbar: dann wird die Antwort ohne Prüfung gespeichert.
+    return ch === 'gram' || ch === 'say' || (ch === 'cloze' && data.cloze >= 8) || (ch === 'order' && data.order >= 6);
   });
 }
 

@@ -11,7 +11,7 @@ type Doc = Record<string, unknown>;
 
 export type ChunkSource =
   | { kind: 'scene'; scene: string; sceneTitle: string; utterance: string; upgraded: string; turn: number }
-  | { kind: 'mail' | 'pitch' | 'biz'; ref: string; title: string; utterance: string; upgraded: string };
+  | { kind: 'mail' | 'pitch' | 'biz' | 'say'; ref: string; title: string; utterance: string; upgraded: string };
 
 export type NewChunkInput = {
   en: string;

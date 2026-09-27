@@ -14,7 +14,7 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useLive } from '../../data/live';
 import { dayKeyNoon, legacyDayKey } from '../../domain/date';
 import { lessonMeta } from '../../domain/course/catalog';
-import { dutyMinutes } from '../../domain/plan/buildPlan';
+import { dutyChannelMinutes, dutyMinutes } from '../../domain/plan/buildPlan';
 import { feasible, type FeasibleData } from '../../domain/plan/channels';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
@@ -57,9 +57,9 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE_OUT } },
 };
 
-const CHANNEL_KEY: Record<string, MessageKey> = { gram: 'drGram', cloze: 'drCloze', order: 'drOrder', sprint: 'drSprint', dictate: 'drDictate', vocab: 'tdOfferVocab' };
-const CHANNEL_ICON: Record<string, IconName> = { gram: 'grammar', cloze: 'link', order: 'grid', sprint: 'bolt', dictate: 'headphones', vocab: 'cards' };
-const CHANNEL_TONE: Record<string, Channel> = { gram: 'grammar', cloze: 'cards', order: 'grammar', sprint: 'write', dictate: 'listen', vocab: 'cards' };
+const CHANNEL_KEY: Record<string, MessageKey> = { gram: 'drGram', cloze: 'drCloze', order: 'drOrder', sprint: 'drSprint', dictate: 'drDictate', vocab: 'tdOfferVocab', say: 'sayTitle' };
+const CHANNEL_ICON: Record<string, IconName> = { gram: 'grammar', cloze: 'link', order: 'grid', sprint: 'bolt', dictate: 'headphones', vocab: 'cards', say: 'chat' };
+const CHANNEL_TONE: Record<string, Channel> = { gram: 'grammar', cloze: 'cards', order: 'grammar', sprint: 'write', dictate: 'listen', vocab: 'cards', say: 'speak' };
 const DUTY_TONE = (id: DutyId): Channel => (id === 'review' ? 'cards' : id === 'lesson' ? 'read' : (CHANNEL_TONE[id.slice(3)] ?? 'grammar'));
 const DUTY_ICON = (id: DutyId): IconName => (id === 'review' ? 'cards' : id === 'lesson' ? 'book' : (CHANNEL_ICON[id.slice(3)] ?? 'grammar'));
 const DECK_KEY: Record<Deck, MessageKey> = { all: 'tdDeckAll', hard: 'tdDeckHard', job: 'tdDeckJob', phrases: 'tdDeckPhrases' };
@@ -222,7 +222,7 @@ export function TodayScreen() {
   const heroTitle = (id: DutyId): string => {
     if (id === 'review') return t('tdReviewTitle');
     if (id === 'lesson') return lesson ? t('tdDutyLesson', { title: lang === 'de' ? lesson.de : lesson.en }) : t('lrDutyLesson');
-    return t('tdDutyCh', { channel: dutyLabel(id, t), min: 5 });
+    return t('tdDutyCh', { channel: dutyLabel(id, t), min: dutyChannelMinutes(id.slice(3)) });
   };
 
   return (

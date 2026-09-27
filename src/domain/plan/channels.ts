@@ -36,12 +36,49 @@ export const CHANNELS: readonly ChannelDef[] = [
 
 /** Kanäle, die diese Ausbaustufe ausführen kann (Kennungen der alten App, D19). */
 export const PHASE2_EXECUTABLE: readonly ExecChannel[] = ['gram', 'vocab', 'sprint', 'dictate', 'cloze', 'order'];
-/** Pflichtkanäle: ohne KI und ohne Sprachausgabe erfüllbar (D3). */
-export const DUTY_CHANNELS: readonly DutyChannel[] = ['gram', 'cloze', 'order'];
-export const isDutyChannel = (id: string): id is DutyChannel => (DUTY_CHANNELS as readonly string[]).includes(id);
+/**
+ * Pflichtkanäle, aus denen ein NEUER Plan nach Rang wählt: ohne KI und ohne Sprachausgabe erfüllbar (D3).
+ * Satzbau (`order`) ist seit „Sag es“ nur noch Angebot (Lernberatung 27.09., „Weglassen“), der Sprint war es schon.
+ */
+export const DUTY_CHANNELS: readonly DutyChannel[] = ['gram', 'cloze'];
+/** Pflichtkanäle, die ein GESPEICHERTER Plan tragen kann (ein Plan wird nie umgewürfelt, Kap. 15). */
+export const STORED_DUTY_CHANNELS: readonly DutyChannel[] = ['gram', 'cloze', 'order', 'say'];
+export const isDutyChannel = (id: string): id is DutyChannel => (STORED_DUTY_CHANNELS as readonly string[]).includes(id);
+/** Darf ein neuer Plan diesen Kanal nach Rang als Pflicht wählen? */
+export const isPickableDuty = (id: string): id is DutyChannel => (DUTY_CHANNELS as readonly string[]).includes(id);
 
-/** Rundengröße im Pflichtkanal (D20). */
-export const DUTY_ROUND: Readonly<Record<DutyChannel, number>> = { gram: 6, cloze: 8, order: 6 };
+/** Rundengröße im Pflichtkanal (D20). „Sag es“: eine Situation. */
+export const DUTY_ROUND: Readonly<Record<DutyChannel, number>> = { gram: 6, cloze: 8, order: 6, say: 1 };
+/** Minuten je Pflichtkanal (Plan §5.1; „Sag es“ 8 Min., Lernberatung V1). */
+export const DUTY_CH_MINUTES: Readonly<Record<DutyChannel, number>> = { gram: 5, cloze: 5, order: 5, say: 8 };
+
+// ------------------------------------------------------------------ „Sag es“ (Lernberatung V1/V2)
+
+/**
+ * Salz der Tagesauswahl; eine Änderung würfelt künftige Tage neu (gespeicherte Pläne nie). Gewählt
+ * so, dass die Stichtage der Testdaten (19.–22.09.2026) keine Sag-es-Tage sind: Die übrigen E2E-Tests
+ * bauen ihren Plan an diesen Tagen und erwarten die bisherige Wahl; `tests/e2e/say.spec.ts` nutzt den 23.09.
+ */
+const SAY_SALT = 'say33';
+
+/** Wochentag eines Schlüssels, Montag = 0. */
+function weekdayOf(key: string): number {
+  const [y, m, d] = key.split('-').map(Number);
+  return (new Date(Date.UTC(y ?? 1970, (m ?? 1) - 1, d ?? 1)).getUTCDay() + 6) % 7;
+}
+
+/**
+ * Ist „Sag es“ an diesem Lerntag der Pflichtkanal? Je Kalenderwoche (Mo–So) an 4 oder 5 Tagen,
+ * deterministisch aus dem Montag der Woche (gleiche Wahl bei jedem Neuzeichnen und auf jedem Gerät, Kap. 15).
+ */
+export function isSayDay(day: string): boolean {
+  if (!isDayKey(day)) return false;
+  const dow = weekdayOf(day);
+  const monday = addDays(day, -dow);
+  const n = 4 + (hash32(`${SAY_SALT}|n|${monday}`) % 2);
+  const order = [0, 1, 2, 3, 4, 5, 6].sort((a, b) => hash32(`${SAY_SALT}|${monday}|${a}`) - hash32(`${SAY_SALT}|${monday}|${b}`) || a - b);
+  return order.slice(0, n).includes(dow);
+}
 /** Minuten der Pflicht (D4): Wiederholen ≈ 10, Lektion 12, Kanal ≈ 5. */
 export const DUTY_MINUTES = { review: 10, lesson: 12 } as const;
 

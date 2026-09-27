@@ -172,7 +172,7 @@ export function logSources(logs: ReadonlyMap<string, Doc>): LogDaySource[] {
     const byKind: Record<string, { n: number; ok: number }> = {};
     const forgot: string[] = [];
     for (const e of arr(d.entries).map(obj)) {
-      if (e.type === 'speak' || e.type === 'biz') continue;
+      if (e.type === 'speak' || e.type === 'biz' || e.type === 'say') continue;
       const kind = str(e.type) || (e.k === 'v' ? 'vocab' : e.k === 'g' ? 'grammar' : str(e.k) || 'other');
       const b = (byKind[kind] ??= { n: 0, ok: 0 });
       b.n++;

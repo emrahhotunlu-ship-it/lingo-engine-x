@@ -21,6 +21,7 @@ import {
   sceneSchema,
   schemaDocSchema,
   talkSchema,
+  saySchema,
   bizSchema,
   vocabSchema,
   weeklySchema,
@@ -64,6 +65,8 @@ export const COLLECTIONS = {
   // Neu ab Phase 3 (Plan §3.1): Monatsdokumente für Gespräche und Business-Einheiten.
   talk: talkSchema,
   biz: bizSchema,
+  // Neu (Lernberatung 27.09., V1/V2): „Sag es“ als Monatsdokumente.
+  say: saySchema,
   // Neu ab Phase 7 (Plan §12.3): ausgelagerte Profiljahre.
   archive: archiveSchema,
 } as const satisfies Record<string, ZodType>;

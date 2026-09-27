@@ -11,6 +11,7 @@ import { trainerEn } from './parts/trainer.en';
 import { standEn } from './parts/stand.en';
 import { engineEn } from './parts/engine.en';
 import { hintEn } from './parts/hint.en';
+import { sayEn } from './parts/say.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -34,6 +35,8 @@ export const en: Record<MessageKey, string> = {
   ...engineEn,
   // Hint first, then the answer (self-correction)
   ...hintEn,
+  // Learning review 09/27: "Say it"
+  ...sayEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

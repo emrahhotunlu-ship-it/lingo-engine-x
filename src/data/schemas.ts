@@ -615,6 +615,33 @@ export const talkSchema = z.looseObject({
     .nullish(),
 });
 
+/**
+ * Neu (Lernberatung 27.09., V1/V2): „Sag es“ – freie Antworten eines Monats (`say/<JJJJ-MM>`),
+ * je Eintrag Situation, beide Fassungen und die Rückmeldungen. Tolerant gelesen.
+ */
+export const saySchema = z.looseObject({
+  v: num,
+  month: str,
+  items: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        t: num,
+        day: str,
+        sit: str,
+        kind: str,
+        a1: str,
+        a2: str,
+        fb1: z.looseObject({}).nullish(),
+        fb2: z.looseObject({}).nullish(),
+        ms: num,
+        lang: str,
+        ai: bool,
+      }),
+    )
+    .nullish(),
+});
+
 /** Neu ab Phase 3: Business-Einheiten eines Monats (`biz/<JJJJ-MM>`, Plan §3.5). */
 export const bizSchema = z.looseObject({
   v: num,

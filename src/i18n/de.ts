@@ -13,6 +13,7 @@ import { trainerDe } from './parts/trainer.de';
 import { standDe } from './parts/stand.de';
 import { engineDe } from './parts/engine.de';
 import { hintDe } from './parts/hint.de';
+import { sayDe } from './parts/say.de';
 
 export const de = {
   ...aiDe,
@@ -35,6 +36,8 @@ export const de = {
   ...engineDe,
   // Erst ein Hinweis, dann die Lösung (Selbstkorrektur)
   ...hintDe,
+  // Lernberatung 27.09.: „Sag es“
+  ...sayDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

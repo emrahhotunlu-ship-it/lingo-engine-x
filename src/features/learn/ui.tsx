@@ -311,7 +311,7 @@ export function TaskLine({ task, purpose }: { task: string; purpose: string }) {
   );
 }
 
-const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson: 'lrDutyLesson', 'ch:gram': 'drGram', 'ch:cloze': 'drCloze', 'ch:order': 'drOrder' };
+const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson: 'lrDutyLesson', 'ch:gram': 'drGram', 'ch:cloze': 'drCloze', 'ch:order': 'drOrder', 'ch:say': 'sayTitle' };
 
 export function dutyLabel(id: DutyId, t: (k: MessageKey) => string): string {
   const k = DUTY_LABEL[id];

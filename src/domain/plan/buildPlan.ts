@@ -1,8 +1,8 @@
 import { lessonDoneOn } from '../course/courseDone';
 import { entryCardKey } from '../progress/logPatch';
-import type { DutyChannel, ExecChannel } from '../learn/types';
+import type { DutyChannel } from '../learn/types';
 import type { RoundPlan } from '../srs/queue';
-import { DUTY_MINUTES, DUTY_ROUND, isDutyChannel, PHASE2_EXECUTABLE, type RankedChannel } from './channels';
+import { DUTY_CH_MINUTES, DUTY_MINUTES, DUTY_ROUND, isDutyChannel, isPickableDuty, PHASE2_EXECUTABLE, type RankedChannel } from './channels';
 import type { DutyId, DutyState, StoredPlan, TodayState, WhyKey } from './types';
 
 // Ein Plan je Lerntag, nie neu gewürfelt (Kap. 15). Der Plan ist eine reine Funktion der Daten.
@@ -59,10 +59,15 @@ export type Phase2PlanInput = {
   lesson: { lid: string } | null;
   /** Phase 6 (Plan E11, §5.3): Tagesziel in Minuten; bestimmt das Budget des Pflichtkanals. */
   goalMin?: number;
+  /**
+   * „Sag es“ (Lernberatung V1/V2): heute ist ein Sag-es-Tag (`isSayDay`) UND Claude ist verfügbar.
+   * Dann ist „Sag es“ der Pflichtkanal, die beiden bestplatzierten Kanäle bleiben Angebote.
+   */
+  say?: boolean;
 };
 
 /** Minuten je Pflichtkanal-Runde (Plan §5.1). */
-const DUTY_CH_MIN: Readonly<Record<DutyChannel, number>> = { gram: 5, cloze: 5, order: 5 };
+const DUTY_CH_MIN = DUTY_CH_MINUTES;
 /** Sekunden je Karte beim Wiederholen (Plan §5.3). */
 const REVIEW_SEC_PER_CARD = 27;
 
@@ -71,7 +76,7 @@ const REVIEW_SEC_PER_CARD = 27;
  * (`goalMin − Lektion − Wiederholen`), sonst der kürzeste. Ohne `goalMin` der erste nach Rang.
  */
 export function pickDutyChannel(ranked: readonly RankedChannel[], i: { goalMin?: number; lesson: boolean; reviewCards: number }): RankedChannel | null {
-  const duties = ranked.filter((r) => isDutyChannel(r.id));
+  const duties = ranked.filter((r) => isPickableDuty(r.id));
   if (!duties.length) return null;
   if (i.goalMin === undefined) return duties[0] ?? null;
   const budget = i.goalMin - (i.lesson ? DUTY_MINUTES.lesson : 0) - Math.ceil((i.reviewCards * REVIEW_SEC_PER_CARD) / 60);
@@ -87,7 +92,9 @@ function phase2Plan(today: string, round: RoundPlan, nowMs: number, p2: Phase2Pl
     ids = fromLegacy.ids;
     why = fromLegacy.why;
   } else {
-    const duty = pickDutyChannel(p2.ranked, { goalMin: p2.goalMin, lesson: !!p2.lesson, reviewCards: round.target }) ?? { id: 'gram' as ExecChannel, why: [['whyRotation']] as WhyKey[], score: 0, days: null };
+    const duty: { id: string; why: WhyKey[] } = p2.say
+      ? { id: 'say', why: [['whySay']] }
+      : (pickDutyChannel(p2.ranked, { goalMin: p2.goalMin, lesson: !!p2.lesson, reviewCards: round.target }) ?? { id: 'gram', why: [['whyRotation']] });
     const offers = p2.ranked.filter((r) => r.id !== duty.id).slice(0, 2);
     ids = [duty.id, ...offers.map((o) => o.id)];
     why = [duty.why, ...offers.map((o) => o.why)];
@@ -121,7 +128,7 @@ export function buildPlan(i: { today: string; existing: unknown; round: RoundPla
   const ex = i.existing && typeof i.existing === 'object' ? (i.existing as Doc) : null;
   const legacyToday = ex && ex.d === i.today && ex.v === undefined && isStrArr(ex.ids) ? { ids: ex.ids, why: Array.isArray(ex.why) ? (ex.why as WhyKey[][]) : [] } : null;
   if (i.phase2) {
-    const ok = legacyToday && legacyToday.ids.length > 0 && legacyToday.ids.every((id) => (PHASE2_EXECUTABLE as readonly string[]).includes(id)) && isDutyChannel(legacyToday.ids[0] ?? '');
+    const ok = legacyToday && legacyToday.ids.length > 0 && legacyToday.ids.every((id) => (PHASE2_EXECUTABLE as readonly string[]).includes(id)) && isPickableDuty(legacyToday.ids[0] ?? '');
     return { plan: phase2Plan(i.today, i.round, i.nowMs, i.phase2, ok ? legacyToday : null), changed: true };
   }
   const duty: StoredPlan['duty'] = i.round.target > 0 ? ['review'] : [];
@@ -132,10 +139,13 @@ export function buildPlan(i: { today: string; existing: unknown; round: RoundPla
   return { plan: { d: i.today, ids: [], why: [], ...base }, changed: true };
 }
 
+/** Minuten eines Pflichtkanals (`say` 8, sonst 5). */
+export const dutyChannelMinutes = (ch: string): number => (isDutyChannel(ch) ? DUTY_CH_MINUTES[ch] : 5);
+
 /** Minuten der Pflicht laut Plan (D4, P-06). */
 export function dutyMinutes(p: StoredPlan): number {
   let m = 0;
-  for (const d of p.duty) m += d === 'review' ? 10 : d === 'lesson' ? 12 : 5;
+  for (const d of p.duty) m += d === 'review' ? 10 : d === 'lesson' ? 12 : dutyChannelMinutes(d.slice(3));
   return m;
 }
 
@@ -191,6 +201,8 @@ export function deriveToday(i: DeriveInput): TodayState {
       biz++;
       continue;
     }
+    // „Sag es“: eine freie Antwort, keine Antwort der Trefferquote (Pflicht zählt über `act.say`).
+    if (e.type === 'say') continue;
     answers++;
     if (e.ok === true) correct++;
     const cardKey = entryCardKey(e);
