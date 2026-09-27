@@ -294,6 +294,11 @@ export function unseenCount(topic: string, doc: Readonly<Doc> | undefined, lists
  * Pflichtrunde mit weniger als `dutyMin` Antworten (z. B. zu wenige Aufgaben verfügbar). Eine
  * teilweise Runde zählt nie als erledigte Pflicht.
  */
-export function gramRoundPartial(i: { aborted: boolean; pos: number; tasks: number; ctx: string; answers: number; dutyMin: number }): boolean {
-  return (i.aborted && i.pos < i.tasks) || (i.ctx === 'duty' && i.answers < i.dutyMin);
+export function gramRoundPartial(i: { aborted: boolean; pos: number; tasks: number; ctx: string; mode?: string; answers: number; dutyMin: number }): boolean {
+  if (i.aborted && i.pos < i.tasks) return true;
+  if (i.ctx !== 'duty' || i.answers >= i.dutyMin) return false;
+  // Die reguläre Pflichtrunde zählt, wenn sie vollständig beantwortet ist – auch wenn es an dem
+  // Tag weniger als `dutyMin` Aufgaben gab (sonst wäre die Pflicht unerfüllbar, Serie!).
+  // Kurze Themen- oder Fehlerrunden erfüllen die Grammatik-Pflicht dagegen nicht.
+  return i.mode !== 'duty';
 }

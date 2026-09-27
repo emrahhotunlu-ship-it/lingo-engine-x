@@ -131,7 +131,7 @@ function finish(s: State, aborted: boolean): void {
     day: s.day,
     act: 'gram',
     ctx: s.ctx,
-    partial: gramRoundPartial({ aborted, pos: s.pos, tasks: s.tasks.length, ctx: s.ctx, answers: n, dutyMin: DUTY_ROUND.gram }),
+    partial: gramRoundPartial({ aborted, pos: s.pos, tasks: s.tasks.length, ctx: s.ctx, mode: s.mode, answers: n, dutyMin: DUTY_ROUND.gram }),
     n,
     right: s.results.filter((r) => r.ok).length,
     activeMs: s.activeMs,

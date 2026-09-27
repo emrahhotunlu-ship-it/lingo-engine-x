@@ -187,6 +187,9 @@ describe('H3: Grammatik-Pflicht erst mit voller Pflichtrunde', () => {
     expect(gramRoundPartial({ aborted: false, pos: n, tasks: n, ctx: 'duty', answers: n, dutyMin: n })).toBe(false);
     expect(gramRoundPartial({ aborted: false, pos: 3, tasks: 3, ctx: 'xtra', answers: 3, dutyMin: n })).toBe(false);
     expect(gramRoundPartial({ aborted: true, pos: 2, tasks: 8, ctx: 'xtra', answers: 2, dutyMin: n })).toBe(true);
+    // Reguläre Pflichtrunde mit nur 3 verfügbaren Aufgaben, vollständig beantwortet → erfüllt (nie unerfüllbar).
+    expect(gramRoundPartial({ aborted: false, pos: 3, tasks: 3, ctx: 'duty', mode: 'duty', answers: 3, dutyMin: n })).toBe(false);
+    expect(gramRoundPartial({ aborted: false, pos: 1, tasks: 1, ctx: 'duty', mode: 'errors', answers: 1, dutyMin: n })).toBe(true);
   });
 });
 
