@@ -9,6 +9,7 @@ import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ScreenHeader } from '../learn/ui';
 import { TopicSheet, topicName } from './GrammarScreen';
+import { useCompanionSee } from '../companion/seeing';
 
 // Nachschlagewerk „Wissen" (Funktionsabgleich M8): Suche über alle 16 Regelblätter (Name,
 // Signalwörter, Formen, Beispiele – in beiden Sprachen) und die Übersicht „Deutsch → Englisch:
@@ -43,6 +44,7 @@ export function WissenScreen() {
   const { t, lang } = useT();
   const go = useNav((s) => s.go);
   const [query, setQuery] = useState('');
+  useCompanionSee({ area: 'grammar', label: t('wsTitle'), phase: 'idle' });
   const q = useDeferredValue(query);
   const [open, setOpen] = useState<string | null>(null);
   const close = useCallback(() => setOpen(null), []);

@@ -215,7 +215,7 @@ describe('roleplay-report@1', () => {
       const withQuotes = { ...vars(uiLang), turns: [...vars(uiLang).turns, { me: 'the exposure here is the penalty', persona: '', v: 'clean', c: [] }, { me: 'we must delay the start', persona: '', v: 'errors', c: [] }] };
       expect(reportSchema(withQuotes).safeParse(JSON.parse(reportExample(uiLang))).success).toBe(true);
     }
-    expect(roleplayReport.tier).toBe('default');
+    expect(roleplayReport.tier).toBe('complex');
   });
 
   it('Zitate müssen aus eigenen Zügen stammen; Beispielsatz enthält die Wendung; Sprachtreue', () => {

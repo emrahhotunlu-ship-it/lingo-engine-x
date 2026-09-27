@@ -19,6 +19,7 @@ import { readResume, type ResumeCopy } from './resume';
 import { useRoleplay } from './useRoleplay';
 import type { TakeInput } from './TakeChunkButton';
 import { useSceneLibrary } from './useSceneLibrary';
+import { useCompanionSee } from '../companion/seeing';
 
 // Rollenspiel (Plan §5.2): Chat mit Streaming und Stopp, Analysepanel (Desktop rechts, Handy
 // inline unter dem Satz), Beenden → Bericht. Kopf: Status statt Text (Szene · Zug n · Ziel-Chip).
@@ -75,6 +76,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const { snap, state } = rp;
   const c = snap.context;
   const persona = scene.persona as NonNullable<SceneView['persona']>;
+  useCompanionSee({ area: 'speak', label: `${t('spTitle')} · ${lang === 'en' ? scene.titleEn : scene.title}`, phase: 'idle', detail: `Role play: ${scene.titleEn}\nSituation: ${scene.situationEn}\nGoal: ${scene.goalEn}` });
   const desktop = useIsDesktop();
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [allOpen, setAllOpen] = useState(false);

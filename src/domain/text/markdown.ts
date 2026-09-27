@@ -1,9 +1,10 @@
-// Toleranter Markdown-Parser für Claude-Antworten (Phase 5, E5-08). Rein, ohne Abhängigkeit.
+// Toleranter Markdown-Parser für Claude-Antworten (Phase 5, E5-08). Rein, ohne externe Abhängigkeit.
 // Unterstützt: Absätze, Zeilenumbrüche, **fett**, *kursiv*/_kursiv_, `code`, Listen (-, *, •, 1.),
 // Zitate (>), Überschriften (#…), Code-Blöcke (```). Alles andere – Links, Tabellen, HTML –
 // bleibt wörtlicher Text; React maskiert ihn beim Anzeigen (kein innerHTML).
 // Unfertige Marker (während des Streamens, z. B. `**bol`) erscheinen als Text. Der Parser
 // wirft nie, auch nicht für beliebige Präfixe einer Antwort.
+import { detectLang } from '../lang/detect';
 
 export type Inline =
   | { type: 'text'; text: string }
@@ -146,3 +147,26 @@ export function parseMarkdown(src: string): Block[] {
 export function inlineText(inl: readonly Inline[]): string {
   return inl.map((n) => (n.type === 'text' || n.type === 'code' ? n.text : inlineText(n.children))).join('');
 }
+
+// Satzweise (auch nach „:" und „;"), damit ein englischer Satz ohne Anführungszeichen mitten
+// in einer deutschen Erklärung antippbar wird. Englisch nur bei eindeutigem Ergebnis.
+const SENTENCE = /[^.!?:;\n]+[.!?:;]*\s*|\n+/g;
+
+/** Zerlegt Fließtext in Sätze und markiert eindeutig englische (Leerraum bleibt außen). */
+export function englishRuns(text: string): Array<{ text: string; en: boolean }> {
+  const parts = text.match(SENTENCE) ?? [text];
+  const out: Array<{ text: string; en: boolean }> = [];
+  for (const p of parts) {
+    if (detectLang(p) !== 'en') {
+      out.push({ text: p, en: false });
+      continue;
+    }
+    const lead = /^\s*/.exec(p)?.[0] ?? '';
+    const trail = /\s*$/.exec(p)?.[0] ?? '';
+    if (lead) out.push({ text: lead, en: false });
+    out.push({ text: p.trim(), en: true });
+    if (trail) out.push({ text: trail, en: false });
+  }
+  return out;
+}
+

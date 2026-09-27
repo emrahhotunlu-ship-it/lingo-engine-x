@@ -240,3 +240,48 @@ test.describe('Handy 390 (Touch)', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('Handy 390: Begleiter sieht Phase-2–4-Bildschirme (Prüfbericht W1)', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  const seeing = async (page: Page) => {
+    await page.getByTestId('open-companion').click();
+    await expect(page.getByTestId('companion')).toBeVisible();
+    const s = page.getByTestId('seeing');
+    const out = { area: await s.getAttribute('data-area'), text: await s.innerText() };
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('companion')).toHaveCount(0);
+    return out;
+  };
+
+  test('Grammatikaufgabe und Rollenspiel melden ihren Kontext statt „Heute"; offene Aufgabe mit Schutzregel', async ({ page }) => {
+    const { errors } = await start(page);
+    await page.getByTestId('tab-learn').click();
+    await page.getByTestId('hub-grammar').click();
+    await expect(page.getByTestId('grammar')).toBeVisible();
+    expect(await seeing(page)).toMatchObject({ area: 'grammar', text: 'sieht gerade: Grammatik' });
+    await page.getByTestId('gr-start').click();
+    await expect(page.getByTestId('gr-item')).toBeVisible();
+    const g = await seeing(page);
+    expect(g.area).toBe('grammar');
+    expect(g.text).toMatch(/^sieht gerade: Grammatik · \S/);
+    // Offene Aufgabe: Claude bekommt die Schutzregel und die Aufgabe, nie die Lösung.
+    await openAndSend(page, 'Hilf mir');
+    await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toContainText('[no-solution]');
+    expect((await chatCalls(page))[0]!.input).toContain('has NOT checked');
+    expect((await chatCalls(page))[0]!.input).not.toContain('Solution:');
+    await page.keyboard.press('Escape');
+    await page.getByTestId('round-close').click();
+
+    await page.getByTestId('tab-speak').click();
+    await expect(page.getByTestId('scene-card').first()).toBeVisible();
+    expect(await seeing(page)).toMatchObject({ area: 'speak', text: 'sieht gerade: Sprechen' });
+    await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
+    await page.getByTestId('briefing-start').click();
+    await screen(page, 'roleplay');
+    const r = await seeing(page);
+    expect(r.area).toBe('speak');
+    expect(r.text).toMatch(/^sieht gerade: Sprechen · \S/);
+    expect(errors).toEqual([]);
+  });
+});

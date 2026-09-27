@@ -1,6 +1,6 @@
 import { useMemo, type ReactNode } from 'react';
 import { detectLang } from '../domain/lang/detect';
-import { parseMarkdown, type Inline } from '../domain/text/markdown';
+import { englishRuns, parseMarkdown, type Inline } from '../domain/text/markdown';
 import { EnglishText } from './EnglishText';
 import type { WordTapArea } from './wordTap';
 
@@ -8,6 +8,7 @@ import type { WordTapArea } from './wordTap';
 // keine Links. Während des Streamens nur Text (keine Wortknöpfe, damit nichts unter dem Finger
 // wandert). Fertig: englische Stellen antippbar (Kap. 15 „Wörter nicht antippbar"):
 // - Oberfläche Deutsch: **fett**, *kursiv*, `code`, Zitate „…"/"…" und >-Zitate, sofern nicht Deutsch,
+//   dazu eindeutig englische Sätze ohne Anführungszeichen,
 // - Oberfläche Englisch: der ganze Text.
 
 type Props = {
@@ -26,6 +27,12 @@ const notGerman = (s: string) => detectLang(s) !== 'de' && /[A-Za-z]{2,}/.test(s
 
 function Plain({ text }: { text: string }) {
   return <>{text}</>;
+}
+
+function PlainOrEnglish({ text, eng, k }: { text: string; eng: (s: string, key: string) => ReactNode; k: string }) {
+  const runs = englishRuns(text);
+  if (!runs.some((r) => r.en)) return <>{text}</>;
+  return <>{runs.map((r, i) => (r.en ? eng(r.text, `${k}.${i}`) : <Plain key={i} text={r.text} />))}</>;
 }
 
 export function Markdown({ text, streaming, uiLang, area = 'companion', source = null, className }: Props) {
@@ -55,7 +62,7 @@ export function Markdown({ text, streaming, uiLang, area = 'companion', source =
               <Plain key={i} text={p} />
             );
           }
-          return <Plain key={i} text={p} />;
+          return <PlainOrEnglish key={i} text={p} eng={eng} k={`${key}p${i}`} />;
         })}
       </span>
     );

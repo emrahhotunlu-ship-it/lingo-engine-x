@@ -183,6 +183,7 @@ export const de = {
   navLabel: 'Bereiche',
   navToday: 'Heute',
   navOverview: 'Dein Stand',
+  tabOverview: 'Stand',
   tdStreak_one: 'Serie: {n} Tag',
   tdStreak_other: 'Serie: {n} Tage',
   tdStatusOpen_one: 'Noch {n} Karte',

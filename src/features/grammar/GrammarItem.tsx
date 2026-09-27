@@ -25,6 +25,8 @@ import { useT, type MessageKey } from '../../i18n';
 import { grammarJudge } from '../../prompts/grammarJudge';
 import { Button } from '../../ui/Button';
 import { logWarn } from '../../platform/diagnostics';
+import { topicById } from '../../domain/content';
+import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
 import { AlsoRight, CopyOnce, ExampleList, FormHint, LearnStatus, NextButton, OverrideButton, ResultArea, TaskLine, VerdictLine } from '../learn/ui';
 
@@ -101,6 +103,17 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const maskShown = typedKind && (scaff || tip > 0);
   const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
   const help: Help = { level: tip >= 2 ? 2 : tip >= 1 ? 1 : 0 };
+
+  // Was der Begleiter sieht (Phase 5 D4): vor dem Prüfen nur Thema und Aufgabe, nie die Lösung.
+  const tp = topicById(task.topic);
+  const topicLabel = tp ? (lang === 'en' ? (tp.name_en ?? tp.name) : tp.name) : task.topic;
+  useCompanionSee({
+    area: area === 'lesson' ? 'course' : 'grammar',
+    label: `${area === 'lesson' ? t('lhCourse') : t('grTitle')} · ${topicLabel}`,
+    phase: fb ? 'feedback' : 'question',
+    detail: task.options?.length ? `${task.prompt}\n${task.options.join(' / ')}` : task.prompt,
+    ...(fb ? { reveal: `Solution: ${solution}. Learner: ${fb.given || '(empty)'}` } : { mask: [solution, ...task.accepted] }),
+  });
 
   const elapsed = () => Math.max(0, Math.round(performance.now() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
 

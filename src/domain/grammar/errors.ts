@@ -120,6 +120,27 @@ export function reviewBase(ans: string): string {
   return cands.find((c) => isDictWord(c)) ?? cands[0] ?? w;
 }
 
+const squash = (s: string): string => s.toLowerCase().replace(/\s+/g, ' ').trim();
+
+/**
+ * Was in die Lücke gehört. Normal ist `ans` genau das fehlende Stück. Enthält `ans` auch den
+ * Text vor bzw. hinter der Lücke (ganzer Satz), wird dieser abgezogen; bleibt nichts, ist die
+ * Antwort leer.
+ */
+export function gapFill(q: string, ans: string): string {
+  const i = q.indexOf('___');
+  const before = squash(q.slice(0, i).replace(/\([^)]*\)/g, ''));
+  const after = squash(q.slice(i).replace(/^_+/, '').replace(/\([^)]*\)/g, ''));
+  const a = ans.replace(/\s+/g, ' ').trim();
+  const low = a.toLowerCase();
+  const hasBefore = before !== '' && low.startsWith(before + ' ');
+  const hasAfter = after !== '' && low.length > after.length && low.endsWith(after) && (/^[^\p{L}\p{N}]/u.test(after) || low.endsWith(' ' + after));
+  if (!hasBefore && !hasAfter) return a;
+  // Nur eine Seite passt, die andere ist nicht leer: unklar, welcher Teil fehlt → keine Aufgabe.
+  if ((before !== '' && !hasBefore) || (after !== '' && !hasAfter)) return '';
+  return a.slice(hasBefore ? before.length : 0, a.length - (hasAfter ? after.length : 0)).trim();
+}
+
 /** Aufgabe aus einem Fehlereintrag (Port von `reviewItem`): Lücke oder Satzkorrektur. */
 export function errorTask(topic: string, e: ErrorEntry): GrammarTask | null {
   const q = str(e.q).trim();
@@ -127,13 +148,18 @@ export function errorTask(topic: string, e: ErrorEntry): GrammarTask | null {
   const t = num(e.t);
   if (!q || !ans || e.done === true || t === null || legacyNorm(q) === legacyNorm(ans) || !topicById(topic)) return null;
   const gap = q.includes('___');
-  const base = gap && !/\([^)]*\)/.test(q) ? reviewBase(ans) : '';
+  // Absicherung (Prüfbericht H1): steht bei einer Lücke der GANZE Satz in `ans`, würde er sonst
+  // doppelt in die Lücke gesetzt („I I finished … yesterday. the report yesterday."). Dann den
+  // Text vor und hinter der Lücke abziehen; passt er nicht, gibt es keine Aufgabe.
+  const fill = gap ? gapFill(q, ans) : ans;
+  if (!fill) return null;
+  const base = gap && !/\([^)]*\)/.test(q) ? reviewBase(fill) : '';
   return {
     key: legacyTaskKey(q),
     topic,
     type: gap ? 'gap' : 'correct',
     prompt: q,
-    answer: ans,
+    answer: fill,
     accepted: [],
     options: null,
     hint: base ? `(${base})` : null,

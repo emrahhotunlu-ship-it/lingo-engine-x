@@ -156,7 +156,7 @@ export function ReadUnit({ item, pool, ctx, day, start, readingId, quiz, badge, 
   }
 
   return (
-    <UnitShell kind="read" ctx={ctx} state={stateName} title={t('ch_read')} onClose={close} status={status} task={task} purpose={t('rdPurpose')} aside={aside}>
+    <UnitShell kind="read" ctx={ctx} state={stateName} title={t('ch_read')} seeDetail={item.title} onClose={close} status={status} task={task} purpose={t('rdPurpose')} aside={aside}>
       {body}
     </UnitShell>
   );

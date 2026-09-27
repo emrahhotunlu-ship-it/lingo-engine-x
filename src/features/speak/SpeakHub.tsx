@@ -15,6 +15,7 @@ import { SceneCreateSheet } from './SceneCreateSheet';
 import { SituationDrill, useSituationPool } from './SituationDrill';
 import { useSceneLibrary } from './useSceneLibrary';
 import { useSpeakToday } from './useTodayEntries';
+import { useCompanionSee } from '../companion/seeing';
 
 // Sprechen-Übersicht (Plan §5.1): Statuszeile (Zustand, kein Knopf), Szenenkarten, „Neue Szene“
 // (nur mit KI). Ohne KI bleiben die Szenen lesbar, gestartet werden kann nicht.
@@ -26,6 +27,7 @@ export function SpeakHub() {
   const go = useNav((s) => s.go);
   const ai = useAiAvailable();
   const { scenes } = useSceneLibrary();
+  useCompanionSee({ area: 'speak', label: t('spTitle'), phase: 'idle' });
   const today = useSpeakToday();
   const [openId, setOpenId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);

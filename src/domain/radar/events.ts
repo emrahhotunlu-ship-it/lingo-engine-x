@@ -13,9 +13,9 @@ import type { ErrorCat, TextError } from '../input/types';
 
 const TOPIC_IDS: ReadonlySet<string> = new Set(TOPICS.map((t) => t.id));
 
-/** Fehlerart der Korrektur → Kategorie der alten App. Grammatik ohne bekanntes Thema → `verbform`. */
+/** Fehlerart der Korrektur → Kategorie der alten App. Grammatik ohne bekanntes Thema → `wordchoice` (Rückfall wie `normCat`, Prüfbericht H4). */
 const CAT_OF: Readonly<Record<ErrorCat, RadarCat>> = {
-  grammar: 'verbform',
+  grammar: 'wordchoice',
   vocabulary: 'wordchoice',
   collocation: 'wordchoice',
   spelling: 'spelling',

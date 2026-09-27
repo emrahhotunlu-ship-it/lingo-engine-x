@@ -204,7 +204,7 @@ describe('Fehler-Radar (Plan §3.8, F10)', () => {
     const e: TextError = { ...err('are working on it since', 'grammar', 'pres-perf-cont'), span: [24, 47] };
     const ev = radarEvents([e, err('x', 'grammar', 'unbekannt'), err('y', 'vocabulary'), err('z', 'word-order'), err('p', 'grammar', 'passive')], text, 'w', 100);
     expect(ev[0]).toEqual({ c: 'tense', s: 'w', t: 100, q: 'We are working on it since March.', g: 'are working on it since', a: 'are working on it since!' });
-    expect(ev.map((x) => x.c)).toEqual(['tense', 'verbform', 'wordchoice', 'order', 'passive']);
+    expect(ev.map((x) => x.c)).toEqual(['tense', 'wordchoice', 'wordchoice', 'order', 'passive']);
     for (const x of ev) expect(CAT_IDS as readonly string[]).toContain(x.c);
     expect(ev.map((x) => x.t)).toEqual([100, 101, 102, 103, 104]);
   });

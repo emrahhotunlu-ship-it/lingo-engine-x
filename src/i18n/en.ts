@@ -183,6 +183,7 @@ export const en: Record<MessageKey, string> = {
   navLabel: 'Sections',
   navToday: 'Today',
   navOverview: 'Your progress',
+  tabOverview: 'Progress',
   tdStreak_one: 'Streak: {n} day',
   tdStreak_other: 'Streak: {n} days',
   tdStatusOpen_one: '{n} card left',

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addError, capErrors, dueErrors, errorDue, reviewError, type ErrorEntry } from '../../src/domain/grammar/errors';
+import { addError, capErrors, dueErrors, errorDue, errorTask, gapFill, reviewError, type ErrorEntry } from '../../src/domain/grammar/errors';
 import { selectRound } from '../../src/domain/grammar/tasks';
 import { berlin } from './helpers';
 
@@ -85,5 +85,24 @@ describe('Fehler-Boxen 1/3/9 (D1)', () => {
     const b = reviewError([{ ...a[0]!, last: t0 }], t0, { ok: true, given: 'y', grade: 3, t: t0 + 1000 })!;
     expect((b[0]!.fsrs as { last: number }).last).toBe(t0 + DAY);
     expect(b[0]!.due).toBe(t0 + 1000 + 9 * DAY);
+  });
+});
+
+describe('errorTask: ganzer Satz als Lösung einer Lücke (Prüfbericht H1)', () => {
+  const e = (q: string, ans: string): ErrorEntry => ({ q, given: 'x', ans, t: t0, box: 0, due: t0, done: false });
+  it('normale Lücke bleibt unverändert', () => {
+    expect(errorTask('past-simple-perfect', e('I ___ (see) her yesterday.', 'saw'))?.answer).toBe('saw');
+    expect(gapFill('I ___ the report yesterday.', 'finished')).toBe('finished');
+  });
+  it('Satzanfang und -ende werden abgezogen, nichts doppelt in der Lücke', () => {
+    const task = errorTask('past-simple-perfect', e('I ___ the report yesterday.', 'I finished the report yesterday.'));
+    expect(task?.type).toBe('gap');
+    expect(task?.answer).toBe('finished');
+    expect(task!.prompt.replace('___', task!.answer)).toBe('I finished the report yesterday.');
+    expect(gapFill('___ is the future.', 'The cloud is the future.')).toBe('The cloud');
+  });
+  it('unklare Form ergibt keine Aufgabe statt eines doppelten Satzes', () => {
+    expect(gapFill('I ___ the report yesterday.', 'I finished it last week.')).toBe('');
+    expect(errorTask('past-simple-perfect', e('I ___ the report yesterday.', 'I finished it last week.'))).toBeNull();
   });
 });

@@ -16,6 +16,7 @@ import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { TakeChunkButton } from '../speak/TakeChunkButton';
 import { PlaybookDrill } from './PlaybookDrill';
+import { useCompanionSee } from '../companion/seeing';
 
 // Phrasen-Baukasten (Plan §5.5, D9): vier Entscheidungsbäume als Inhalt – ohne KI voll nutzbar.
 // Frage zur Lage → Optionen → Blatt mit Wendungen (antippbar, 🔊, Register, Hinweis, Beispiel,
@@ -27,6 +28,7 @@ export function PlaybookScreen() {
   const go = useNav((s) => s.go);
   const id = route.name === 'playbook' ? route.id : undefined;
   const pb = id ? playbookById(id) : undefined;
+  useCompanionSee({ area: 'business', label: pb ? `${t('bizPlay')} · ${pb.title[lang]}` : `${t('bizTitle')} · ${t('bizPlay')}`, phase: 'idle' });
 
   if (!pb) {
     return (

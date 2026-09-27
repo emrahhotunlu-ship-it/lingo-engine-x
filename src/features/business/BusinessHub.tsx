@@ -6,6 +6,7 @@ import { IconButton } from '../../ui/Button';
 import { ChannelIcon } from '../../ui/Card';
 import { Icon, type IconName } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
+import { useCompanionSee } from '../companion/seeing';
 
 // Business-Suite (Plan §5.5): drei Karten in Kanalfarbe Business. Ohne KI sind Refiner und
 // Coach mit Hinweis ausgegraut; der Baukasten bleibt voll nutzbar.
@@ -24,6 +25,7 @@ export function BusinessHub() {
   const { t } = useT();
   const go = useNav((s) => s.go);
   const ai = useAiAvailable();
+  useCompanionSee({ area: 'business', label: t('bizTitle'), phase: 'idle' });
   return (
     <motion.div data-testid="biz-hub" className="flex flex-col gap-6 py-6 sm:py-8" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
       <motion.header variants={item} className="flex items-start gap-2">

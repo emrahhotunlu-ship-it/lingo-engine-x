@@ -11,6 +11,7 @@ import { Icon } from '../../ui/Icon';
 import { Bar } from '../../ui/ProgressRing';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ScreenHeader } from '../learn/ui';
+import { useCompanionSee } from '../companion/seeing';
 
 // Kurs (Kap. 6.2): 24 Lektionen in 6 Einheiten, weitergeführt mit dem vorhandenen Kursstand.
 // Die nächste Lektion ist hervorgehoben; eine abgeschlossene Einheit wird zum Meilenstein
@@ -25,6 +26,7 @@ export function CourseScreen() {
   const { t, lang } = useT();
   const go = useNav((s) => s.go);
   const course = useLive((s) => s.docs['app/course']);
+  useCompanionSee({ area: 'course', label: t('csTitle'), phase: 'idle' });
   const assess = useLive((s) => s.docs['app/assess']);
   const done = useMemo(() => doneLessons(course), [course]);
   const next = useMemo(() => pickLesson({ course, assess, lang }), [course, assess, lang]);
@@ -49,7 +51,7 @@ export function CourseScreen() {
               <h2 id={`unit-${u.id}`} className="text-lg font-semibold tracking-tight">
                 {t('csUnit', { n: u.n, title: lang === 'de' ? u.de : u.en })}
               </h2>
-              <span className="lx-tnum text-sm text-muted">{t('csUnitCount', { done: uDone, total: u.lessons.length })}</span>
+              <span className="lx-tnum flex-none whitespace-nowrap text-sm text-muted">{t('csUnitCount', { done: uDone, total: u.lessons.length })}</span>
             </div>
             {complete && (
               <p className="flex items-start gap-2 rounded-xl bg-accent-soft px-4 py-3 text-sm" data-testid="milestone" lang={lang}>

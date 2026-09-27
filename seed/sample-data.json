@@ -1383,7 +1383,7 @@
     "s": "s",
     "t": 1789768800000,
     "q": "If we had tested earlier, we would not be in this situation now.",
-    "g": "If we had tested earlier, we would not be in this situation now if we tested.",
+    "g": "If we had tested earlier, we would not have been in this situation now.",
     "a": "If we had tested earlier, we would not be in this situation now."
    },
    {
@@ -1415,7 +1415,7 @@
     "s": "r",
     "t": 1789610400000,
     "q": "I'm meeting the CFO tomorrow at ten.",
-    "g": "I will meet the CFO tomorrow at ten, it is in my calendar.",
+    "g": "I will meet the CFO tomorrow at ten.",
     "a": "I'm meeting the CFO tomorrow at ten."
    },
    {
@@ -1463,7 +1463,7 @@
     "s": "r",
     "t": 1789372800000,
     "q": "If we had tested earlier, we would not be in this situation now.",
-    "g": "If we had tested earlier, we would not be in this situation now if we tested.",
+    "g": "If we had tested earlier, we would not have been in this situation now.",
     "a": "If we had tested earlier, we would not be in this situation now."
    },
    {
@@ -1519,7 +1519,7 @@
     "s": "r",
     "t": 1789095600000,
     "q": "I'm meeting the CFO tomorrow at ten.",
-    "g": "I will meet the CFO tomorrow at ten, it is in my calendar.",
+    "g": "I will meet the CFO tomorrow at ten.",
     "a": "I'm meeting the CFO tomorrow at ten."
    },
    {
@@ -1535,7 +1535,7 @@
     "s": "v",
     "t": 1789016400000,
     "q": "If we had tested earlier, we would not be in this situation now.",
-    "g": "If we had tested earlier, we would not be in this situation now if we tested.",
+    "g": "If we had tested earlier, we would not have been in this situation now.",
     "a": "If we had tested earlier, we would not be in this situation now."
    },
    {
@@ -1543,7 +1543,7 @@
     "s": "r",
     "t": 1788976800000,
     "q": "If we had tested earlier, we would not be in this situation now.",
-    "g": "If we had tested earlier, we would not be in this situation now if we tested.",
+    "g": "If we had tested earlier, we would not have been in this situation now.",
     "a": "If we had tested earlier, we would not be in this situation now."
    },
    {
@@ -3251,8 +3251,8 @@
   "errors": [
    {
     "q": "If they ___ today, we could start in May.",
-    "given": "If they would sign today, we could start in May.",
-    "ans": "If they signed today, we could start in May.",
+    "given": "would sign",
+    "ans": "signed",
     "t": 1789668000000,
     "src": "preply",
     "box": 2,
@@ -3337,9 +3337,9 @@
   ],
   "errors": [
    {
-    "q": "I___ the CFO tomorrow at ten.",
-    "given": "I will meet the CFO tomorrow at ten, it is in my calendar.",
-    "ans": "I'm meeting the CFO tomorrow at ten.",
+    "q": "___ the CFO tomorrow at ten.",
+    "given": "I will meet",
+    "ans": "I'm meeting",
     "t": 1788199200000,
     "src": "g",
     "box": 2,
@@ -3348,9 +3348,9 @@
     "last": 1788199200000
    },
    {
-    "q": "I___ the CFO tomorrow at ten.",
-    "given": "I will meet the CFO tomorrow at ten, it is in my calendar.",
-    "ans": "I'm meeting the CFO tomorrow at ten.",
+    "q": "___ the CFO tomorrow at ten.",
+    "given": "I will meet",
+    "ans": "I'm meeting",
     "t": 1789840800000,
     "src": "lesson",
     "box": 0,
@@ -3359,9 +3359,9 @@
     "last": 1789840800000
    },
    {
-    "q": "I___ the CFO tomorrow at ten.",
-    "given": "I will meet the CFO tomorrow at ten, it is in my calendar.",
-    "ans": "I'm meeting the CFO tomorrow at ten.",
+    "q": "___ the CFO tomorrow at ten.",
+    "given": "I will meet",
+    "ans": "I'm meeting",
     "t": 1789754400000,
     "src": "lesson",
     "box": 1,
@@ -3431,8 +3431,8 @@
   "errors": [
    {
     "q": "By Friday we ___ the import.",
-    "given": "By Friday we will finish the import.",
-    "ans": "By Friday we will have finished the import.",
+    "given": "will finish",
+    "ans": "will have finished",
     "t": 1788372000000,
     "src": "lesson",
     "box": 0,
@@ -3442,8 +3442,8 @@
    },
    {
     "q": "By Friday we ___ the import.",
-    "given": "By Friday we will finish the import.",
-    "ans": "By Friday we will have finished the import.",
+    "given": "will finish",
+    "ans": "will have finished",
     "t": 1788285600000,
     "src": "g",
     "box": 1,
@@ -3453,8 +3453,8 @@
    },
    {
     "q": "By Friday we ___ the import.",
-    "given": "By Friday we will finish the import.",
-    "ans": "By Friday we will have finished the import.",
+    "given": "will finish",
+    "ans": "will have finished",
     "t": 1788631200000,
     "src": "lesson",
     "box": 2,
@@ -3524,8 +3524,8 @@
   "errors": [
    {
     "q": "If we had tested earlier, we ___ in this situation now.",
-    "given": "If we had tested earlier, we would not be in this situation now if we tested.",
-    "ans": "If we had tested earlier, we would not be in this situation now.",
+    "given": "would not have been",
+    "ans": "would not be",
     "t": 1789668000000,
     "src": "preply",
     "box": 1,
@@ -3535,8 +3535,8 @@
    },
    {
     "q": "If we had tested earlier, we ___ in this situation now.",
-    "given": "If we had tested earlier, we would not be in this situation now if we tested.",
-    "ans": "If we had tested earlier, we would not be in this situation now.",
+    "given": "would not have been",
+    "ans": "would not be",
     "t": 1789322400000,
     "src": "lesson",
     "box": 0,
@@ -3546,8 +3546,8 @@
    },
    {
     "q": "If we had tested earlier, we ___ in this situation now.",
-    "given": "If we had tested earlier, we would not be in this situation now if we tested.",
-    "ans": "If we had tested earlier, we would not be in this situation now.",
+    "given": "would not have been",
+    "ans": "would not be",
     "t": 1788890400000,
     "src": "preply",
     "box": 0,
@@ -3613,8 +3613,8 @@
   "errors": [
    {
     "q": "The invoices are ___ by the system.",
-    "given": "The invoices are check by the system.",
-    "ans": "The invoices are checked by the system.",
+    "given": "check",
+    "ans": "checked",
     "t": 1789063200000,
     "src": "g",
     "box": 0,
@@ -3676,8 +3676,8 @@
   "errors": [
    {
     "q": "When I arrived, the meeting ___.",
-    "given": "When I arrived, the meeting already started.",
-    "ans": "When I arrived, the meeting had already started.",
+    "given": "already started",
+    "ans": "had already started",
     "t": 1788890400000,
     "src": "preply",
     "box": 2,
@@ -3747,8 +3747,8 @@
   "errors": [
    {
     "q": "I ___ the report yesterday.",
-    "given": "I have finished the report yesterday.",
-    "ans": "I finished the report yesterday.",
+    "given": "have finished",
+    "ans": "finished",
     "t": 1789668000000,
     "src": "g",
     "box": 0,
@@ -3758,8 +3758,8 @@
    },
    {
     "q": "I ___ the report yesterday.",
-    "given": "I have finished the report yesterday.",
-    "ans": "I finished the report yesterday.",
+    "given": "have finished",
+    "ans": "finished",
     "t": 1788976800000,
     "src": "preply",
     "box": 2,
@@ -3769,8 +3769,8 @@
    },
    {
     "q": "I ___ the report yesterday.",
-    "given": "I have finished the report yesterday.",
-    "ans": "I finished the report yesterday.",
+    "given": "have finished",
+    "ans": "finished",
     "t": 1788199200000,
     "src": "preply",
     "box": 0,
@@ -3840,8 +3840,8 @@
   "errors": [
    {
     "q": "We ___ on the migration since March.",
-    "given": "We work on the migration since March.",
-    "ans": "We have been working on the migration since March.",
+    "given": "work",
+    "ans": "have been working",
     "t": 1789668000000,
     "src": "lesson",
     "box": 1,
@@ -3851,8 +3851,8 @@
    },
    {
     "q": "We ___ on the migration since March.",
-    "given": "We work on the migration since March.",
-    "ans": "We have been working on the migration since March.",
+    "given": "work",
+    "ans": "have been working",
     "t": 1788199200000,
     "src": "g",
     "box": 0,
@@ -3862,8 +3862,8 @@
    },
    {
     "q": "We ___ on the migration since March.",
-    "given": "We work on the migration since March.",
-    "ans": "We have been working on the migration since March.",
+    "given": "work",
+    "ans": "have been working",
     "t": 1789236000000,
     "src": "lesson",
     "box": 2,
@@ -3949,8 +3949,8 @@
   "errors": [
    {
     "q": "Look! It ___ outside.",
-    "given": "Look! It snows outside.",
-    "ans": "Look! It is snowing outside.",
+    "given": "snows",
+    "ans": "is snowing",
     "t": 1789149600000,
     "src": "g",
     "box": 2,
@@ -4032,8 +4032,8 @@
   "errors": [
    {
     "q": "The customer ___ called is from Munich.",
-    "given": "The customer which called is from Munich.",
-    "ans": "The customer who called is from Munich.",
+    "given": "which",
+    "ans": "who",
     "t": 1788976800000,
     "src": "preply",
     "box": 2,
@@ -4043,8 +4043,8 @@
    },
    {
     "q": "The customer ___ called is from Munich.",
-    "given": "The customer which called is from Munich.",
-    "ans": "The customer who called is from Munich.",
+    "given": "which",
+    "ans": "who",
     "t": 1789236000000,
     "src": "preply",
     "box": 2,
@@ -4054,8 +4054,8 @@
    },
    {
     "q": "The customer ___ called is from Munich.",
-    "given": "The customer which called is from Munich.",
-    "ans": "The customer who called is from Munich.",
+    "given": "which",
+    "ans": "who",
     "t": 1788890400000,
     "src": "lesson",
     "box": 0,
@@ -4129,8 +4129,8 @@
   "errors": [
    {
     "q": "She said that she ___ the figures.",
-    "given": "She said that she will send the figures.",
-    "ans": "She said that she would send the figures.",
+    "given": "will send",
+    "ans": "would send",
     "t": 1788285600000,
     "src": "preply",
     "box": 0,
@@ -4200,8 +4200,8 @@
   "errors": [
    {
     "q": "I am used to ___ on Fridays.",
-    "given": "I am used to work late on Fridays.",
-    "ans": "I am used to working late on Fridays.",
+    "given": "work late",
+    "ans": "working late",
     "t": 1788631200000,
     "src": "g",
     "box": 2,
@@ -4211,8 +4211,8 @@
    },
    {
     "q": "I am used to ___ on Fridays.",
-    "given": "I am used to work late on Fridays.",
-    "ans": "I am used to working late on Fridays.",
+    "given": "work late",
+    "ans": "working late",
     "t": 1788631200000,
     "src": "g",
     "box": 0,

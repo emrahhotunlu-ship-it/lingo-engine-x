@@ -48,7 +48,7 @@ export function Segmented<T extends string>({ label, value, options, onChange }:
             aria-checked={active}
             tabIndex={active ? 0 : -1}
             onClick={() => onChange(o.value)}
-            className={`relative min-h-11 rounded-[calc(var(--radius-control)-4px)] px-3 text-sm transition-colors ${active ? 'font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
+            className={`relative min-h-11 min-w-0 rounded-[calc(var(--radius-control)-4px)] px-2 text-sm leading-tight transition-colors ${active ? 'font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
             {active && (
               // Gewählte Fläche: fest, mit Kante in Text-Grau (≥ 3:1 in allen Modi, WCAG 1.4.11).
@@ -60,7 +60,8 @@ export function Segmented<T extends string>({ label, value, options, onChange }:
                 aria-hidden="true"
               />
             )}
-            <span className="relative">{o.label}</span>
+            {/* Wörter bleiben ganz (kein globales overflow-wrap mitten im Wort); nur echte Silbentrennung. */}
+            <span className="relative [overflow-wrap:normal] [hyphens:auto]">{o.label}</span>
           </button>
         );
       })}

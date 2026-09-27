@@ -101,7 +101,7 @@ export function reportExample(uiLang: UiLang): string {
 export const roleplayReport: PromptTemplate<RoleplayReportVars, RoleplayReportOut> = {
   id: ID,
   version: VERSION,
-  tier: 'default',
+  tier: 'complex',
   cache: true,
   build(v) {
     const lines = v.turns.slice(-REP_TURNS_MAX).map((t, i) => {

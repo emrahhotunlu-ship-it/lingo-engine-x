@@ -22,6 +22,7 @@ import { useLearnInputs } from '../learn/inputs';
 import { CERTAINTY_KEYS, ScreenHeader } from '../learn/ui';
 import { generateTopicTasks } from './generate';
 import { setExtraTasks, startGrammar } from './session';
+import { useCompanionSee } from '../companion/seeing';
 
 // Grammatik (Kap. 6.4, phase2-plan §5.2/5.3): Themen nach Sicherheit, schwächste zuerst; je Thema
 // ein Regelblatt mit Formen, Signalwörtern, Kontrast zum Deutschen, typischen Fehlern und den
@@ -58,6 +59,7 @@ export function GrammarScreen() {
   const now = useClock((s) => s.now);
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   const [open, setOpen] = useState<string | null>(null);
+  useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
   const close = useCallback(() => setOpen(null), []);
 
   const topics = useMemo(
@@ -111,10 +113,10 @@ export function GrammarScreen() {
               >
                 <span className="flex min-w-0 flex-col gap-1">
                   <span className="font-medium">{topicName(tp.id, lang)}</span>
-                  <span className="flex items-center gap-2 text-xs text-muted">
+                  <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted">
                     <Dots n={tp.c.dots} />
-                    <span>{t(CERTAINTY_KEYS[tp.c.word])}</span>
-                    <span className="text-subtle">· {lang === 'en' ? (GROUP_EN[tp.group] ?? tp.group) : tp.group}</span>
+                    <span className="whitespace-nowrap">{t(CERTAINTY_KEYS[tp.c.word])}</span>
+                    <span className="whitespace-nowrap text-subtle">· {lang === 'en' ? (GROUP_EN[tp.group] ?? tp.group) : tp.group}</span>
                   </span>
                 </span>
                 {nDue > 0 && <span className="flex-none rounded-full bg-gold-soft px-2.5 py-0.5 text-xs font-medium text-gold-text">{tn('grDueBadge', nDue)}</span>}
@@ -146,6 +148,7 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
   const doc = useLive((s) => s.collections.grammar?.get(topic));
   const inputs = useLearnInputs();
   const rule = ruleOf(topic, lang);
+  useCompanionSee({ area: 'grammar', label: `${t('grTitle')} · ${topicName(topic, lang)}`, phase: 'idle' });
   const p = topicP(topic, doc, now);
   const errs = errorsOf(doc).filter((e) => e.done !== true);
   const unseen = unseenCount(topic, doc, [inputs.pool, inputs.dailyOpen]);

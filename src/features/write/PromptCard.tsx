@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import type { WritingPrompt } from '../../domain/input/types';
+import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
@@ -34,16 +35,18 @@ export function PromptCard({ prompt, canChange, busy, onOther, onOwn }: Props) {
         </span>
         <div className="flex min-w-0 flex-col gap-1">
           <h2 className="text-lg font-semibold tracking-tight">{prompt.title[lang]}</h2>
-          <p className="text-base" lang={lang}>
-            {prompt.task[lang]}
-          </p>
+          {lang === 'en' ? (
+            <EnglishText text={prompt.task.en} area="write" source={null} title={prompt.title.en} className="text-base" testId="prompt-task" />
+          ) : (
+            <p className="text-base" lang={lang}>
+              {prompt.task[lang]}
+            </p>
+          )}
         </div>
       </div>
       {lang === 'de' && prompt.task.en && (
         <Disclosure label={t('wrTaskEn')}>
-          <p className="text-sm text-muted" lang="en">
-            {prompt.task.en}
-          </p>
+          <EnglishText text={prompt.task.en} area="write" source={null} title={prompt.title.en} className="text-sm text-muted" testId="prompt-task-en" />
         </Disclosure>
       )}
       <p className="lx-tnum text-sm text-muted">

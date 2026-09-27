@@ -2,13 +2,12 @@ import { INPUT_MODULES, type ModuleDef } from '../../app/modules';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
 import { Card } from '../../ui/Card';
-import { Icon } from '../../ui/Icon';
 import { InputIcon } from '../../ui/InputIcon';
 import { useChannelState } from './InputOffers';
 
 // Modul-Einstieg im Reiter „Lernen" (Plan §2.2 INT, M13): Lesen, Hören, Schreiben – jederzeit
 // freiwillig erreichbar, dazu der Verlauf. Entdecken hat einen eigenen Reiter.
-// Heute Erledigtes steht als Zustand mit Häkchen daneben.
+// Heute Geübtes steht als ruhiger Hinweis „heute geübt“ daneben (Extra, keine Pflicht).
 
 export function InputModules({ only }: { only?: ReadonlyArray<ModuleDef['id']> }) {
   const { t } = useT();
@@ -40,9 +39,9 @@ export function InputModules({ only }: { only?: ReadonlyArray<ModuleDef['id']> }
                   </span>
                   <span className="flex-1 font-medium">{t(m.label)}</span>
                   {done && (
-                    <span className="inline-flex items-center gap-1 text-xs text-accent-text" data-testid="module-done">
-                      <Icon name="check" size={14} />
-                      {t('inDone')}
+                    // Freiwilliges Angebot (Kap. 2.6): Hinweis „heute geübt", kein „Erledigt"-Häkchen am Knopf.
+                    <span className="whitespace-nowrap text-xs text-muted" data-testid="module-done">
+                      {t('inPracticedToday')}
                     </span>
                   )}
                 </button>

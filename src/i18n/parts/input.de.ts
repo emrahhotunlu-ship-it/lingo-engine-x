@@ -70,6 +70,7 @@ export const inputDe = {
   inDraftWords: '{n} Wörter',
   inAnother: 'Noch einen Text',
   inDone: 'Erledigt',
+  inPracticedToday: 'heute geübt',
   inResult: 'Ergebnis',
   inAiOff: 'Claude ist gerade nicht verfügbar – neue Texte kommen, sobald die KI wieder da ist.',
   inGenerating: 'Claude schreibt …',

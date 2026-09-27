@@ -18,6 +18,7 @@ import { DutyBar, SummaryActions } from '../learn/ui';
 import { makeLessonMachine } from './lessonMachine';
 import { finishLesson, leaveLesson, openLesson, prepareLesson, saveStep, savedStep, startBaseLesson, touchLesson, useLessonRun, type Step } from './lessonRun';
 import { DialogStep, GrammarStep, OutputStep, WordsStep } from './LessonSteps';
+import { useCompanionSee } from '../companion/seeing';
 
 // Lektion (Kap. 6.2, phase2-plan §5.1): Ziel (Can-Do) am Anfang und am Ende, vier Schritte in
 // etwa 12 Minuten. Wiedereinstieg im gespeicherten Schritt.
@@ -79,6 +80,7 @@ function LessonRun({ id }: { id: string }) {
   };
   useHotkeys({ escape: leave }, api.isInput);
 
+  useCompanionSee(meta ? { area: 'course', label: `${t('lhCourse')} · ${lang === 'de' ? meta.de : meta.en}`, phase: 'idle' } : null);
   if (!meta) return null;
   const cando = lang === 'de' ? meta.cando_de : meta.cando_en;
   const title = lang === 'de' ? meta.de : meta.en;

@@ -12,11 +12,13 @@ import { RoundTop, SummaryActions } from '../learn/ui';
 import { ClozeItemView, DictationItem, OrderItemView } from './DrillItems';
 import { commitDrill, itemsOf, leaveDrill, touchDrill, useDrill } from './session';
 import { SprintView } from './SprintView';
+import { useCompanionSee } from '../companion/seeing';
 
 // Rahmen der vier Übungen: Kopf mit Schließen, Fortschritt und Pflicht-/Extra-Kennzeichen,
 // eine Aufgabe zur Zeit, am Ende die Zusammenfassung mit „Weiter: nächster Pflichtschritt".
 
 const EMPTY_KEY: Record<string, MessageKey> = { dictate: 'drDictateEmpty', cloze: 'drClozeEmpty', order: 'drOrderEmpty', sprint: 'drSprintEmpty' };
+const DRILL_NAME: Record<string, MessageKey> = { dictate: 'drDictate', cloze: 'drCloze', order: 'drOrder', sprint: 'drSprint' };
 
 export function DrillScreen() {
   const { t } = useT();
@@ -24,6 +26,7 @@ export function DrillScreen() {
   const go = useNav((s) => s.go);
   const s = useDrill();
   const items = itemsOf(s);
+  useCompanionSee({ area: 'drills', label: t(DRILL_NAME[s.kind] ?? 'drDictate'), phase: 'idle' });
 
   const leave = () => {
     api.blur();

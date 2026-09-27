@@ -32,12 +32,15 @@ test('Widerspruchstest: Angebotszeile, Modul-Häkchen und Klickziel folgen chann
   await screen(page, 'today');
   const offers = page.getByTestId('input-offers');
   await expect(offers).toBeVisible();
-  // Hören ist im Testbestand heute schon erledigt: keine Zeile, im Modul ein Häkchen.
+  // Hören ist im Testbestand heute schon erledigt: keine Zeile, im Modul der Hinweis „heute geübt“.
   await expect(page.locator('[data-testid="input-offer"][data-channel="listen"]')).toHaveCount(0);
   await expect(page.locator('[data-testid="input-offer"][data-channel="read"]')).toBeVisible();
   await expect(page.locator('[data-testid="input-offer"][data-channel="discover"]')).toContainText('neue Beiträge');
   await openLearn(page);
   await expect(page.locator('[data-module="listen"] [data-testid="module-done"]')).toHaveCount(1);
+  // Freiwilliges Modul: ruhiger Hinweis „heute geübt", kein „Erledigt" am Startknopf (Kap. 2.2/2.6).
+  await expect(page.locator('[data-module="listen"] [data-testid="module-done"]')).toHaveText('heute geübt');
+  await expect(page.locator('[data-module="listen"]')).not.toContainText('Erledigt');
   await expect(page.locator('[data-module="read"] [data-testid="module-done"]')).toHaveCount(0);
 
   // Lesen abschließen (Klickziel der Angebotszeile) → Zeile verschwindet, Modul zeigt erledigt.

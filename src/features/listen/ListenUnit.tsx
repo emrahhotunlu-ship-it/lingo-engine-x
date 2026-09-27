@@ -231,7 +231,7 @@ export function ListenUnit({ item, ctx, day, start, record, onAnother }: Props) 
   }
 
   return (
-    <UnitShell kind="listen" ctx={ctx} state={stateName} title={t('ch_listen')} onClose={close} status={status} task={task} purpose={t('lsPurpose')} aside={aside}>
+    <UnitShell kind="listen" ctx={ctx} state={stateName} title={t('ch_listen')} seeDetail={item.title} onClose={close} status={status} task={task} purpose={t('lsPurpose')} aside={aside}>
       {body}
     </UnitShell>
   );

@@ -135,6 +135,7 @@ function ItemUnit({ item, ctx, steps, startAt, savedDone }: { item: FeedItem; ct
       ctx={ctx}
       state={stateName}
       title={t('dcTitle')}
+      seeDetail={item.title}
       onClose={() => go({ name: 'discover' })}
       progress={<Stepper steps={stepItems} label={t('inSteps')} />}
       status={

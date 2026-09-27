@@ -24,6 +24,17 @@ test('Schreiben: Aufgabe des Tages, Abgeben, Korrektur mit Stellen, Überarbeite
   await expect.poll(async () => ((await dump(page))[`wprompt/${DAY}`]?.p as { id?: string } | undefined)?.id).toBe(promptId);
   expect(await layoutProblems(page)).toEqual([]);
 
+  // Englisch antippbar (Prüfbericht W5): Wörter der Wendungen und der englischen Aufgabe.
+  await page.getByTestId('useful-chip').first().locator('xpath=..').locator('button.lx-word').first().click();
+  await expect(page.getByTestId('lookup')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('lookup')).toHaveCount(0);
+  await card.getByRole('button', { name: /Aufgabe auf Englisch|English/ }).click();
+  await page.getByTestId('prompt-task-en').locator('button.lx-word').first().click();
+  await expect(page.getByTestId('lookup')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('lookup')).toHaveCount(0);
+
   // Wendungen: Tippen fügt ein, benutzte haken sich ab (M12).
   const chip = page.getByTestId('useful-chip').first();
   await expect(chip).toHaveAttribute('data-used', 'false');

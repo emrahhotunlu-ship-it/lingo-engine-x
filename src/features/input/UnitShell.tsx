@@ -6,6 +6,7 @@ import { IconButton } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import type { Channel } from '../../ui/Card';
+import { useCompanionSee } from '../companion/seeing';
 
 // Rahmen einer Einheit (Plan §6.1): Kopfleiste mit ✕ (44 px), Titel und Schritt bzw. Frage,
 // darunter die Statuszeile. Aufgabe in einer Zeile, „Wozu?" nur hinter dem Info-Symbol (A7).
@@ -24,10 +25,14 @@ type Props = {
   children: ReactNode;
   /** Ab `lg` zweispaltig: links der Text, rechts Fragen/Rückmeldung (sticky). */
   aside?: ReactNode;
+  /** Für den Begleiter (Phase 5 D4): Titel des Texts bzw. der Aufgabe, nie Lösungen. */
+  seeDetail?: string;
 };
 
-export function UnitShell({ kind, ctx, state, title, onClose, progress, status, task, purpose, children, aside }: Props) {
+export function UnitShell({ kind, ctx, state, title, onClose, progress, status, task, purpose, children, aside, seeDetail }: Props) {
   const { t } = useT();
+  const taskText = typeof task === 'string' ? task : '';
+  useCompanionSee({ area: kind, label: title, phase: 'idle', ...(seeDetail || taskText ? { detail: [seeDetail, taskText].filter(Boolean).join('\n') } : {}) });
   const [info, setInfo] = useState(false);
   const infoId = useId();
   const channel: Channel = kind;

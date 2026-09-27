@@ -71,6 +71,7 @@ export const inputEn: Record<InputMessageKey, string> = {
   inDraftWords: '{n} words',
   inAnother: 'Another text',
   inDone: 'Done',
+  inPracticedToday: 'practiced today',
   inResult: 'Result',
   inAiOff: "Claude isn't available right now – new texts will come once AI is back.",
   inGenerating: 'Claude is writing …',

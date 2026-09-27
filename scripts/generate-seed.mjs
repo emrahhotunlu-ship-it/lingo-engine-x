@@ -254,11 +254,11 @@ const WRONG = {
   'past-simple-perfect': ['I have finished the report yesterday.', 'I finished the report yesterday.'],
   'pres-perf-cont': ['We work on the migration since March.', 'We have been working on the migration since March.'],
   'past-perfect': ['When I arrived, the meeting already started.', 'When I arrived, the meeting had already started.'],
-  'future-forms': ['I will meet the CFO tomorrow at ten, it is in my calendar.', "I'm meeting the CFO tomorrow at ten."],
+  'future-forms': ['I will meet the CFO tomorrow at ten.', "I'm meeting the CFO tomorrow at ten."],
   'future-perf-cont': ['By Friday we will finish the import.', 'By Friday we will have finished the import.'],
   'used-to': ['I am used to work late on Fridays.', 'I am used to working late on Fridays.'],
   conditionals: ['If they would sign today, we could start in May.', 'If they signed today, we could start in May.'],
-  'mixed-cond': ['If we had tested earlier, we would not be in this situation now if we tested.', 'If we had tested earlier, we would not be in this situation now.'],
+  'mixed-cond': ['If we had tested earlier, we would not have been in this situation now.', 'If we had tested earlier, we would not be in this situation now.'],
   passive: ['The invoices are check by the system.', 'The invoices are checked by the system.'],
   reported: ['She said that she will send the figures.', 'She said that she would send the figures.'],
   relative: ['The customer which called is from Munich.', 'The customer who called is from Munich.'],
@@ -267,13 +267,30 @@ const WRONG = {
   prepositions: ['Revenue increased with 12 percent.', 'Revenue increased by 12 percent.'],
   articles: ['The cloud is future of our company.', 'The cloud is the future of our company.'],
 };
+/** Das Stück des falschen Satzes, das an der Stelle der Lücke steht (gleicher Anfang und Schluss abgezogen). */
+function wrongPart(wrong, right, start, end) {
+  const pre = right.slice(0, start);
+  const post = right.slice(end);
+  let a = 0;
+  while (a < pre.length && wrong[a] === pre[a]) a++;
+  let b = 0;
+  while (b < post.length && wrong[wrong.length - 1 - b] === post[post.length - 1 - b]) b++;
+  const part = wrong.slice(a, wrong.length - b).trim();
+  return part || wrong;
+}
 const withDocs = grammar.topics.slice(0, 12);
 withDocs.forEach((tp, i) => {
   const n = int(8, 60);
   const c = Math.round(n * (0.45 + rnd() * 0.45));
   const p = round(Math.min(0.95, Math.max(0.12, tp.p0 + (rnd() - 0.45) * 0.4)), 3);
-  const [given, ans] = WRONG[tp.id];
-  const q = ans.replace(/\b(is snowing|finished|have been working|had already started|'m meeting|will have finished|working late|signed|would not be|checked|would send|who|can't be|hearing|by|the future)\b/, '___');
+  const [wrong, right] = WRONG[tp.id];
+  // Wie in der echten Datenbank (Prüfbericht H1): `q` mit ___, `ans` nur das fehlende Stück,
+  // `given` das, was an dieser Stelle falsch stand – nie der ganze Satz.
+  const gapRe = /\b(is snowing|finished|have been working|had already started|I'm meeting|will have finished|working late|signed|would not be|checked|would send|who|can't be|hearing|by|the future)\b/;
+  const hit = gapRe.exec(right);
+  const q = hit ? right.replace(gapRe, '___') : wrong;
+  const ans = hit ? hit[0] : right;
+  const given = hit ? wrongPart(wrong, right, hit.index, hit.index + hit[0].length) : wrong;
   const errors = [];
   const errCount = int(1, 3);
   for (let e = 0; e < errCount; e++) {

@@ -9,6 +9,7 @@ import { processReview } from '../../domain/input/review';
 import { wordCount } from '../../domain/input/textStats';
 import type { WritingPrompt } from '../../domain/input/types';
 import { normalizeWriting } from '../../domain/input/writingRecord';
+import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
 import { writingReview } from '../../prompts/writingReview';
 import { Button } from '../../ui/Button';
@@ -120,18 +121,20 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
       <p className="lx-eyebrow">{t('wrUseful')}</p>
       <ul className="flex flex-wrap gap-2">
         {prompt.useful.map((u, i) => (
-          <li key={u}>
+          <li key={u} className={`inline-flex min-h-11 items-center gap-0.5 rounded-full pl-3 text-sm transition-colors ${used[i] ? 'bg-accent-soft text-accent-text' : 'bg-surface text-fg'}`}>
+            {/* Wörter antippbar (A7), Einfügen über den eigenen Knopf daneben. */}
+            {used[i] && <Icon name="check" size={14} className="mr-1" />}
+            <EnglishText as="span" text={u} area="write" source={null} title={prompt.title.en} />
             <button
               type="button"
               onClick={() => draft.current?.insert(u)}
               aria-label={t('wrInsert', { p: u })}
+              title={t('wrInsert', { p: u })}
               data-testid="useful-chip"
               data-used={String(!!used[i])}
-              className={`inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm transition-colors ${used[i] ? 'bg-accent-soft text-accent-text' : 'bg-surface text-fg hover:bg-surface-strong'}`}
-              lang="en"
+              className="inline-flex size-11 flex-none items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-strong hover:text-fg"
             >
-              {used[i] && <Icon name="check" size={14} />}
-              {u}
+              <Icon name="plus" size={16} />
             </button>
           </li>
         ))}
@@ -250,7 +253,7 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
   }
 
   return (
-    <UnitShell kind="write" ctx={ctx} state={stateName} title={t('ch_write')} onClose={close} status={status} task={task_} purpose={t('wrPurpose')}>
+    <UnitShell kind="write" ctx={ctx} state={stateName} title={t('ch_write')} seeDetail={`${prompt.title.en}\n${prompt.task.en}`} onClose={close} status={status} task={task_} purpose={t('wrPurpose')}>
       {body}
     </UnitShell>
   );

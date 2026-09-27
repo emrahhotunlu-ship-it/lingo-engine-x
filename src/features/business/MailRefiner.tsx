@@ -22,6 +22,7 @@ import { TakeChunkButton } from '../speak/TakeChunkButton';
 import { mailMachine } from './mailMachine';
 import { saveBizItem } from './persist';
 import { TilePicker } from './TilePicker';
+import { useCompanionSee } from '../companion/seeing';
 
 // E-Mail-Refiner (Plan §5.5): Eingabe → Claude bewertet Satz für Satz → je schwachem Satz
 // Bausteine wählen → fertige Mail zum Kopieren, Zahl der Änderungen, Wendungen mitnehmen.
@@ -36,6 +37,7 @@ export function MailRefiner() {
   const ai = useAiAvailable();
   const scope = useAiScope();
   const [snap, send] = useMachine(mailMachine);
+  useCompanionSee({ area: 'business', label: `${t('bizTitle')} · ${t('bizMail')}`, phase: 'idle' });
   const [text, setText] = useState(() => local.get(DRAFT_KEY) ?? '');
   const [recipient, setRecipient] = useState<Recipient>('client');
   const [intent, setIntent] = useState<Intent>('inform');

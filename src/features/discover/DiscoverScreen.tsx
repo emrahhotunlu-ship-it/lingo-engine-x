@@ -11,6 +11,7 @@ import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { Button } from '../../ui/Button';
 import { useFeedItems, useFeedSubscription } from './feedStore';
+import { useCompanionSee } from '../companion/seeing';
 
 // Entdecken (Kap. 6.9, Plan §4.4 Nr. 1): Beiträge der letzten 21 Feed-Dokumente, getrennt in
 // „Neu" und „Erledigt". Erledigte Beiträge sind Zustand ohne Knopf (F13, Kap. 15).
@@ -21,6 +22,7 @@ export function DiscoverScreen() {
   const { t } = useT();
   const go = useNav((s) => s.go);
   useFeedSubscription();
+  useCompanionSee({ area: 'discover', label: t('dcTitle'), phase: 'idle' });
   const { status, items } = useFeedItems();
   const disc = useLive((s) => s.docs['app/profile']?.disc);
   const { open, done } = useMemo(() => {

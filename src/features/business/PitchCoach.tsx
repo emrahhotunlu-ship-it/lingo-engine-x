@@ -26,6 +26,7 @@ import { AnalysisCard } from '../speak/AnalysisCard';
 import { TakeChunkButton } from '../speak/TakeChunkButton';
 import { saveBizItem } from './persist';
 import { pitchMachine } from './pitchMachine';
+import { useCompanionSee } from '../companion/seeing';
 
 // Präsentations-Coach (Plan §5.5): Folie → Sprechfassung (Sätze mit 🔊, Überleitungen markiert,
 // Nachsprechen) → eigener Versuch (Tippen oder Mikrofon) → Abdeckung der Punkte + drei Schichten.
@@ -38,6 +39,7 @@ export function PitchCoach() {
   const ai = useAiAvailable();
   const scope = useAiScope();
   const [snap, send] = useMachine(pitchMachine);
+  useCompanionSee({ area: 'business', label: `${t('bizTitle')} · ${t('bizPitch')}`, phase: 'idle' });
   const [slide, setSlide] = useState(() => local.get(DRAFT_KEY) ?? '');
   const [audience, setAudience] = useState<Audience>('clients');
   const [minutes, setMinutes] = useState(2);

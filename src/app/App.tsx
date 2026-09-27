@@ -157,12 +157,12 @@ function TabBar({ tab }: { tab: TabName }) {
     { name: 'learn' as const, label: t('tabLearn'), badge: 0 },
     { name: 'speak' as const, label: t('tabSpeak'), badge: 0 },
     { name: 'discover' as const, label: t('dcTitle'), badge: 0 },
-    { name: 'overview' as const, label: t('navOverview'), badge: 0 },
+    { name: 'overview' as const, label: t('tabOverview'), badge: 0 },
   ];
   return (
     <nav
       aria-label={t('navLabel')}
-      className="lx-glass fixed inset-x-0 bottom-0 z-40 flex justify-center gap-1 px-4 pt-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] md:static md:z-auto md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none"
+      className="lx-glass fixed inset-x-0 bottom-0 z-40 flex justify-center gap-0.5 px-2 pt-2 sm:gap-1 sm:px-4 pb-[max(env(safe-area-inset-bottom),0.5rem)] md:static md:z-auto md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none"
       data-testid="tabbar"
     >
       {tabs.map((t2) => {
@@ -174,7 +174,7 @@ function TabBar({ tab }: { tab: TabName }) {
             aria-current={active ? 'page' : undefined}
             onClick={() => go({ name: t2.name })}
             data-testid={`tab-${t2.name}`}
-            className={`relative inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] px-1.5 text-sm sm:px-4 transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
+            className={`relative inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 whitespace-nowrap rounded-[var(--radius-control)] px-1 text-xs sm:gap-1.5 sm:px-4 sm:text-sm transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
             {t2.label}
             {t2.badge > 0 && (
