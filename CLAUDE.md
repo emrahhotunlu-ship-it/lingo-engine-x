@@ -229,6 +229,23 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - nur die 16 Grammatik-IDs,
   - US-Englisch.
 
+**27.09.2026 – Fehlerbehebungs-Paket produktiv (Emrahs Freigabe „Ja, veröffentlichen“)**
+- `dist/index.html` aus `bc6750d` liegt auf `JLL8…`, Version `1790506302-f210` (Artefakt-Version 49).
+- Grundlage war eine Prüfrunde mit realistischen Claude-Antworten, echten Datenformen und Logik-Grenzfällen:
+  - KI-Vorlagen lesen tolerant.
+  - Nach Fehlantworten wird der Zwischenspeicher umgangen.
+  - Pflicht über 04:00, zwei Tabs, Vorrang der Wiederholungen.
+  - Übersetzer automatisch oder mit fester Richtung.
+- Rückweg: Version `1790493495-85c8`.
+- Offene Lücken laut Abgleich (Scratchpad `abgleich.md`) werden als Nächstes gebaut:
+  - Wendungs-Wiederholung,
+  - Abfragearten,
+  - alte Daten,
+  - Kontext-Feld,
+  - Wochen-Check, Wochenstreifen,
+  - „Als Preply-Stunde“,
+  - Kleinigkeiten.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
