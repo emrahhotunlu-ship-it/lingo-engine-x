@@ -43,7 +43,30 @@ export const germanText = (min: number, max: number) =>
 
 export const uiText = (lang: 'de' | 'en', min: number, max: number) => (lang === 'de' ? germanText(min, max) : englishText(min, max));
 
-export const questionSchema = z
+/**
+ * Antwort tolerant auf eine Option abbilden (Prüfhinweis): „B", „(B)", „B)" → zweite Option,
+ * „B) Audits reveal …" → die Option mit diesem Text; Groß/klein wie in der Option.
+ */
+export function answerToOption(raw: unknown): unknown {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return raw;
+  const q = raw as Record<string, unknown>;
+  const options = Array.isArray(q.options) ? (q.options as unknown[]).filter((o): o is string => typeof o === 'string') : [];
+  if (typeof q.answer !== 'string' || !options.length) return raw;
+  const lower = options.map((o) => o.trim().toLowerCase());
+  const a = q.answer.trim();
+  if (lower.includes(a.toLowerCase())) return { ...q, answer: options[lower.indexOf(a.toLowerCase())]?.trim() };
+  const m = a.match(/^\(?([A-Da-d])(?:[).:]|\s*[-–]\s*|\s+|$)\s*(.*)$/);
+  if (!m) return raw;
+  const rest = (m[2] ?? '').trim().toLowerCase();
+  if (rest) {
+    const byText = lower.indexOf(rest);
+    return byText >= 0 ? { ...q, answer: options[byText]?.trim() } : raw;
+  }
+  const byLetter = options[(m[1] ?? 'a').toLowerCase().charCodeAt(0) - 97];
+  return byLetter ? { ...q, answer: byLetter.trim() } : raw;
+}
+
+const questionObject = z
   .object({
     q: englishText(8, 220),
     options: z.array(englishText(1, 160)).length(4),
@@ -57,6 +80,8 @@ export const questionSchema = z
     if (new Set(lower).size !== lower.length) ctx.addIssue({ code: 'custom', path: ['options'], message: 'options must be distinct' });
     if (!lower.includes(q.answer.toLowerCase())) ctx.addIssue({ code: 'custom', path: ['answer'], message: 'answer must be exactly one of the options' });
   });
+
+export const questionSchema = z.preprocess(answerToOption, questionObject);
 
 export const questionsSchema = z
   .array(questionSchema)

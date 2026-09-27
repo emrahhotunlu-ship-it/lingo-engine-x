@@ -48,6 +48,52 @@ describe('AiQueue', () => {
     expect(order).toEqual(['user', 'bg']);
   });
 
+  it('höchstens ein Hintergrund-Platz: ein Nutzer-Aufruf wartet nie hinter zwei langen Hintergrund-Aufrufen', async () => {
+    const q = new AiQueue(2);
+    const s = new AbortController().signal;
+    const order: string[] = [];
+    const bg1 = await q.acquire(s, 'background');
+    let queuedBg = 0;
+    const bg2 = q.acquire(s, 'background', () => queuedBg++).then((rel) => (order.push('bg2'), rel));
+    await flush();
+    expect(queuedBg).toBe(1);
+    expect(q.running).toBe(1);
+    let queuedUser = 0;
+    const user = await q.acquire(s, 'user', () => queuedUser++);
+    expect(queuedUser).toBe(0);
+    expect(q.running).toBe(2);
+    user();
+    await flush();
+    // Freier Platz, aber schon ein Hintergrund-Aufruf aktiv: bg2 wartet weiter.
+    expect(order).toEqual([]);
+    expect(q.running).toBe(1);
+    bg1();
+    await flush();
+    expect(order).toEqual(['bg2']);
+    (await bg2)();
+    expect(q.running).toBe(0);
+    expect(q.queued).toBe(0);
+  });
+
+  it('wartender Hintergrund-Aufruf blockiert keinen später kommenden Nutzer-Aufruf', async () => {
+    const q = new AiQueue(2);
+    const s = new AbortController().signal;
+    const u1 = await q.acquire(s, 'user');
+    const bg1 = await q.acquire(s, 'background');
+    const order: string[] = [];
+    const bg2 = q.acquire(s, 'background').then((rel) => (order.push('bg2'), rel));
+    const u2 = q.acquire(s, 'user').then((rel) => (order.push('u2'), rel));
+    u1();
+    await flush();
+    expect(order).toEqual(['u2']);
+    bg1();
+    await flush();
+    expect(order).toEqual(['u2', 'bg2']);
+    (await u2)();
+    (await bg2)();
+    expect(q.running).toBe(0);
+  });
+
   it('meldet `queued` nur, wenn gewartet werden muss; Abbruch beim Warten → cancelled', async () => {
     const q = new AiQueue(1);
     const s = new AbortController().signal;

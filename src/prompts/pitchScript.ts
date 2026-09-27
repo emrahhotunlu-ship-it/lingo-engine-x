@@ -2,9 +2,10 @@ import { z } from 'zod';
 import { containsPhrase } from '../domain/chunks/newChunk';
 import { isWrongLang } from '../domain/lang/detect';
 import { clip, header } from './common';
+import { intIn, phraseIn, sliced } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// pitch-script@1 (Plan §5.5): aus Folieninhalt eine Sprechfassung – Kernpunkte, Sätze mit
+// pitch-script@2 (Plan §5.5): aus Folieninhalt eine Sprechfassung – Kernpunkte, Sätze mit
 // markierten Überleitungen, Kernwendungen zum Mitnehmen. `default`, zwischengespeichert.
 
 export type PitchScriptVars = { slide: string; audience: string; minutes: number; uiLang: UiLang };
@@ -18,7 +19,7 @@ export type PitchScriptOut = {
 export const PS_SLIDE_MAX = 1500;
 
 const ID = 'pitch-script';
-const VERSION = 1;
+const VERSION = 2;
 
 const en = (min: number, max: number) =>
   z
@@ -29,16 +30,17 @@ const en = (min: number, max: number) =>
     .refine((s) => !isWrongLang(s, 'en'), { message: 'must be written in English' });
 
 export const pitchScriptSchema: z.ZodType<PitchScriptOut> = z.object({
-  points: z.array(en(2, 120)).min(1).max(8),
-  script: z.array(z.object({ en: en(3, 300), signpost: z.boolean() })).min(2).max(20),
-  keyPhrases: z
-    .array(
-      z.object({ en: en(2, 80), de: z.string().trim().min(1).max(120), def: en(3, 160), ex: en(5, 240) }).superRefine((p, ctx) => {
-        if (!containsPhrase(p.ex, p.en)) ctx.addIssue({ code: 'custom', path: ['ex'], message: 'ex must contain en word for word' });
-      }),
-    )
-    .max(5),
-  seconds: z.number().int().min(20).max(400),
+  // Tolerant (Prüfhinweis): Listen gekappt, Sekunden gerundet, Wendung im Beispiel beugungstolerant.
+  points: sliced(en(2, 120), 1, 8),
+  script: sliced(z.object({ en: en(3, 300), signpost: z.boolean() }), 2, 20),
+  keyPhrases: sliced(
+    z.object({ en: en(2, 80), de: z.string().trim().min(1).max(120), def: en(3, 160), ex: en(5, 240) }).superRefine((p, ctx) => {
+      if (!containsPhrase(p.ex, p.en) && !phraseIn(p.ex, p.en)) ctx.addIssue({ code: 'custom', path: ['ex'], message: 'ex must contain en word for word' });
+    }),
+    0,
+    5,
+  ),
+  seconds: intIn(20, 400),
 });
 
 export const PITCH_SCRIPT_EXAMPLE = JSON.stringify({

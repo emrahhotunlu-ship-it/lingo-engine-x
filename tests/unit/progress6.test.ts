@@ -149,7 +149,7 @@ describe('Wochenbericht (Plan §7.3)', () => {
     const since = weekFacts({ ...base, pflichtSince: '2026-09-17', profile: { ...profile, pflicht: { '2026-09-15': 1, '2026-09-18': 1 } } });
     expect(since.find((f) => f.kind === 'time')).toMatchObject({ pflichtDays: 1 });
   });
-  it('weekly-report@1: Beispiel besteht das Schema, Verweise nur auf Fakten, feste Antwort gültig', () => {
+  it('weekly-report@2: Beispiel besteht das Schema, Verweise nur auf Fakten, feste Antwort gültig', () => {
     const facts = [
       { id: 'vw:a', text: 'new word "x"' },
       { id: 'gt:passive', text: 'passive 50% → 60%' },
@@ -158,7 +158,7 @@ describe('Wochenbericht (Plan §7.3)', () => {
     for (const lang of ['de', 'en'] as const) {
       expect(weeklySchema({ lang, facts }).safeParse(weeklyExample({ lang, facts })).success).toBe(true);
       const prompt = weeklyReport.build({ lang, week: '2026-W38', facts });
-      expect(prompt.split('\n')[0]).toBe('[weekly-report@1]');
+      expect(prompt.split('\n')[0]).toBe('[weekly-report@2]');
       expect(weeklySchema({ lang, facts }).safeParse(JSON.parse(weeklyReply(prompt))).success).toBe(true);
     }
     const bad = { ...weeklyExample({ lang: 'de', facts }), learned: [{ text: 'Etwas Neues gelernt heute.', ref: 'erfunden' }, { text: 'Noch etwas gelernt.', ref: 'vw:a' }] };

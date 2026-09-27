@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { clip, header } from './common';
 import { britishCount, englishText, germanText, glossInText, glossSchema, QUESTION_RULES, questionsSchema, words, type CefrValue } from './inputCommon';
+import { sliced } from './tolerant';
 import type { PromptTemplate } from './types';
 
-// listening-text@1 (Plan §5, Kap. 6.8): ein sprechbarer Hörtext im Altformat von `lpool/*`
+// listening-text@2 (Plan §5, Kap. 6.8): ein sprechbarer Hörtext im Altformat von `lpool/*`
 // mit vier Verständnisfragen und fünf Wörtern zur Vorbereitung. Der Text wird von der
 // Sprachausgabe vorgelesen – deshalb keine Überschriften, Listen, Sprechernamen oder Klammern.
 
@@ -28,10 +29,11 @@ export type ListeningTextOut = {
   vocab: Array<{ w: string; de: string; def: string }>;
 };
 
-export const LISTEN_WORDS = { min: 140, max: 360 } as const;
+/** Toleranzband um die erbetenen 170–300 Wörter; auch 370 Wörter lassen sich gut anhören. */
+export const LISTEN_WORDS = { min: 140, max: 400 } as const;
 
 const ID = 'listening-text';
-const VERSION = 1;
+const VERSION = 2;
 
 export const LISTENING_TEXT_EXAMPLE = JSON.stringify({
   title: 'A Quick Update Before the Client Call',
@@ -55,24 +57,47 @@ export const listeningTextShape = z.object({
   vocab: z.array(z.object({ w: z.string(), de: z.string(), def: z.string() })),
 });
 
-const schema: z.ZodType<ListeningTextOut> = z
-  .object({
-    title: englishText(3, 90),
-    genre: z.enum(LISTEN_GENRES),
-    topic_de: germanText(2, 80),
-    topic_en: englishText(2, 80),
-    text: englishText(200, 3000),
-    questions: questionsSchema,
-    vocab: glossSchema(5, 5),
-  })
-  .superRefine((v, ctx) => {
-    const n = words(v.text);
-    if (n < LISTEN_WORDS.min || n > LISTEN_WORDS.max) ctx.addIssue({ code: 'custom', path: ['text'], message: `must have 170–300 words (has ${n})` });
-    if (/^\s*[A-Z][\w .'-]{0,30}:/m.test(v.text)) ctx.addIssue({ code: 'custom', path: ['text'], message: 'no speaker names or labels at the start of a line' });
-    if (/[*#[\]()]/.test(v.text)) ctx.addIssue({ code: 'custom', path: ['text'], message: 'no markdown, headings, lists or brackets' });
-    if (britishCount(v.text) > 2) ctx.addIssue({ code: 'custom', path: ['text'], message: 'use American spelling' });
-    glossInText(v.vocab, v.text, ctx, 'vocab');
-  });
+/** Zeilenanfang „Name:" / „Name Nachname:" (1–3 großgeschriebene Wörter, keine Ziffern). */
+const NAME_LABEL = /^\s*(?:\*\*)?[A-Z][a-z'’-]+(?: [A-Z][a-z'’-]+){0,2}(?:\*\*)?:\s/;
+/** Ansagewörter, die als einzelnes „Wort:" am Anfang eines Monologs normal sind. */
+const OPENERS = new Set(['attention', 'update', 'reminder', 'note', 'hi', 'hello', 'quick', 'important', 'breaking', 'welcome', 'today', 'good', 'first', 'next', 'finally', 'so', 'okay', 'ok', 'listen', 'summary', 'announcement', 'news', 'headline', 'headlines']);
+
+/**
+ * Sprecherzeilen (Prüfbefund W4): Ein Dialog hat mehrere Zeilen, die mit „Name:" beginnen; ein
+ * einzelnes Namens-Etikett ganz am Anfang („Maria: …") zählt auch. „Attention all staff:",
+ * „Quick update:", „Here is the plan:" oder „At 8:30" sind dagegen Sätze des einen Sprechers.
+ */
+export function hasSpeakerLabels(text: string): boolean {
+  const lines = text.split('\n').filter((l) => l.trim());
+  if (lines.filter((l) => NAME_LABEL.test(l)).length >= 2) return true;
+  const first = lines[0]?.match(/^\s*(?:\*\*)?([A-Z][a-z'’-]+)(?:\*\*)?:\s/)?.[1];
+  return !!first && !OPENERS.has(first.toLowerCase());
+}
+
+const schemaFor = (vars: Pick<ListeningTextVars, 'genre'>): z.ZodType<ListeningTextOut> =>
+  z
+    .object({
+      title: englishText(3, 90),
+      // Groß geschrieben („Announcement") oder frei gewählt → die bestellte Gattung.
+      genre: z.preprocess((g) => {
+        const s = typeof g === 'string' ? g.trim().toLowerCase() : '';
+        return (LISTEN_GENRES as readonly string[]).includes(s) ? s : vars.genre;
+      }, z.enum(LISTEN_GENRES)),
+      topic_de: germanText(2, 80),
+      topic_en: englishText(2, 80),
+      text: englishText(200, 3000),
+      questions: questionsSchema,
+      // Mehr als fünf Wörter: die ersten fünf.
+      vocab: sliced(glossSchema(1, 1).element, 5, 5),
+    })
+    .superRefine((v, ctx) => {
+      const n = words(v.text);
+      if (n < LISTEN_WORDS.min || n > LISTEN_WORDS.max) ctx.addIssue({ code: 'custom', path: ['text'], message: `must have 170–300 words (has ${n})` });
+      if (hasSpeakerLabels(v.text)) ctx.addIssue({ code: 'custom', path: ['text'], message: 'no speaker names or labels at the start of a line' });
+      if (/[*#[\]()]/.test(v.text)) ctx.addIssue({ code: 'custom', path: ['text'], message: 'no markdown, headings, lists or brackets' });
+      if (britishCount(v.text) > 2) ctx.addIssue({ code: 'custom', path: ['text'], message: 'use American spelling' });
+      glossInText(v.vocab, v.text, ctx, 'vocab');
+    });
 
 export const listeningText: PromptTemplate<ListeningTextVars, ListeningTextOut> = {
   id: ID,
@@ -101,5 +126,5 @@ export const listeningText: PromptTemplate<ListeningTextVars, ListeningTextOut> 
       ...QUESTION_RULES,
     ].join('\n');
   },
-  schema: () => schema,
+  schema: (vars) => schemaFor(vars),
 };

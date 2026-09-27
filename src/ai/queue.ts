@@ -2,19 +2,25 @@ import { cancelledFailure } from './errors';
 import type { AiPriority } from './types';
 
 // Begrenzer: höchstens `max` Anfragen gleichzeitig (Kap. 10: zwei). 'user' vor 'background',
-// sonst in Ankunftsreihenfolge. Wer abbricht, während er wartet, verlässt die Schlange,
+// sonst in Ankunftsreihenfolge. Höchstens `maxBackground` (einen) der Plätze belegt eine
+// Hintergrund-Anfrage, damit ein Nutzer-Aufruf (z. B. die Figur im Rollenspiel) nie hinter zwei
+// langen Hintergrund-Aufrufen (Einschätzung, Wochenbericht, Analyse) wartet. Wer abbricht, während er wartet, verlässt die Schlange,
 // ohne dass `sample` je aufgerufen wird.
 
-type Waiter = { rank: number; seq: number; grant: () => void };
+type Waiter = { rank: number; seq: number; bg: boolean; grant: () => void };
 
 const RANK: Record<AiPriority, number> = { user: 0, background: 1 };
 
 export class AiQueue {
   private active = 0;
+  private activeBg = 0;
   private seq = 0;
   private waiting: Waiter[] = [];
 
-  constructor(readonly max = 2) {}
+  constructor(
+    readonly max = 2,
+    readonly maxBackground = 1,
+  ) {}
 
   get running(): number {
     return this.active;
@@ -30,18 +36,17 @@ export class AiQueue {
    */
   acquire(signal: AbortSignal, priority: AiPriority = 'user', onQueued?: () => void): Promise<() => void> {
     if (signal.aborted) return Promise.reject(cancelledFailure());
-    if (this.active < this.max && this.waiting.length === 0) {
-      this.active += 1;
-      return Promise.resolve(this.releaser());
-    }
+    const bg = priority === 'background';
+    // Sofort, wenn ein Platz frei ist und kein Wartender ihn nehmen könnte (Reihenfolge bleibt).
+    if (this.fits(bg) && !this.waiting.some((w) => this.fits(w.bg))) return Promise.resolve(this.take(bg));
     return new Promise<() => void>((resolve, reject) => {
       const waiter: Waiter = {
         rank: RANK[priority],
         seq: this.seq++,
+        bg,
         grant: () => {
           signal.removeEventListener('abort', onAbort);
-          this.active += 1;
-          resolve(this.releaser());
+          resolve(this.take(bg));
         },
       };
       const onAbort = () => {
@@ -58,24 +63,34 @@ export class AiQueue {
   /** Nur für Tests: Zustand verwerfen. */
   reset(): void {
     this.active = 0;
+    this.activeBg = 0;
     this.waiting = [];
   }
 
-  private releaser(): () => void {
+  private fits(bg: boolean): boolean {
+    return this.active < this.max && (!bg || this.activeBg < this.maxBackground);
+  }
+
+  private take(bg: boolean): () => void {
+    this.active += 1;
+    if (bg) this.activeBg += 1;
     let released = false;
     return () => {
       if (released) return;
       released = true;
       this.active = Math.max(0, this.active - 1);
+      if (bg) this.activeBg = Math.max(0, this.activeBg - 1);
       this.pump();
     };
   }
 
+  /** Vergibt freie Plätze an die ersten Wartenden, die passen (ein Hintergrund-Aufruf kann übersprungen werden). */
   private pump(): void {
-    while (this.active < this.max) {
-      const next = this.waiting.shift();
-      if (!next) return;
-      next.grant();
+    for (;;) {
+      const i = this.waiting.findIndex((w) => this.fits(w.bg));
+      if (i < 0) return;
+      const [next] = this.waiting.splice(i, 1);
+      next?.grant();
     }
   }
 }

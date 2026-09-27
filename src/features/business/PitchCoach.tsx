@@ -60,11 +60,12 @@ export function PitchCoach() {
     { value: 'partners', label: t('pitchAudPartners') },
   ];
 
-  async function run<V, O>(template: PromptTemplate<V, O>, vars: V): Promise<O | null> {
+  // `refresh`: Neuversuch nach einem Fehler – den Zwischenspeicher von `sample` einmal übergehen.
+  async function run<V, O>(template: PromptTemplate<V, O>, vars: V, refresh: boolean): Promise<O | null> {
     const x = scope.controller();
     ctl.current = x;
     try {
-      const r = await askJson({ template, vars, signal: x.signal, onPhase: (p) => p === 'slow' && send({ type: 'SLOW' }) });
+      const r = await askJson({ template, vars, signal: x.signal, refresh, onPhase: (p) => p === 'slow' && send({ type: 'SLOW' }) });
       return r.data;
     } catch (err) {
       if (isAiFailure(err) && err.kind === 'cancelled') send({ type: 'CANCEL' });
@@ -79,8 +80,9 @@ export function PitchCoach() {
   const makeScript = async () => {
     if (!slide.trim()) return;
     started.current = Date.now();
+    const refresh = !!c.error;
     send({ type: 'SCRIPT' });
-    const s = await run(pitchScript, { slide, audience, minutes, uiLang: lang });
+    const s = await run(pitchScript, { slide, audience, minutes, uiLang: lang }, refresh);
     if (s) send({ type: 'SCRIPT_DONE', script: s });
   };
 
@@ -88,8 +90,9 @@ export function PitchCoach() {
     const script = c.script;
     if (!script || !attempt.trim()) return;
     stopSpeech();
+    const refresh = !!c.error;
     send({ type: 'FEEDBACK', attempt });
-    const f = await run(pitchFeedback, { points: script.points, model: script.script.map((l) => l.en).join(' '), attempt, uiLang: lang });
+    const f = await run(pitchFeedback, { points: script.points, model: script.script.map((l) => l.en).join(' '), attempt, uiLang: lang }, refresh);
     if (!f) return;
     send({ type: 'FEEDBACK_DONE', feedback: f });
     local.remove(DRAFT_KEY);

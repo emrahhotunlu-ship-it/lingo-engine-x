@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { block, clip, header, langName } from './common';
+import { sliced } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// preply-prep@1: eine Preply-Stunde vorbereiten (Phase 5 §6.3, Kap. 6.10). Ergebnis im
+// preply-prep@2: eine Preply-Stunde vorbereiten (Phase 5 §6.3, Kap. 6.10). Ergebnis im
 // Altformat von `preply/pp<ms>`. `default`, `cache: false` („Neu erstellen" muss neu sein).
 // `watch` besteht NUR aus echten eigenen Fehlern (sonst Schemafehler → ein Neuversuch, A6.3).
 
@@ -30,7 +31,7 @@ export type PrepOut = {
 };
 
 const ID = 'preply-prep';
-const VERSION = 1;
+const VERSION = 2;
 export const PREP_ERRORS_MAX = 8;
 export const PREP_WORDS_MAX = 10;
 
@@ -43,6 +44,26 @@ const langIs = (lang: 'de' | 'en', field: string) => (s: string, ctx: z.Refineme
   if (isWrongLang(s, lang)) ctx.addIssue({ code: 'custom', message: `${field} must be written in ${langName(lang)}` });
 };
 
+/**
+ * Fehler aus `watch` der gegebenen Liste zuordnen (Prüfhinweis): gleich, Teilstück in eine der
+ * beiden Richtungen („look forward to hear" ↔ „We look forward to hear from you.") oder
+ * versehentlich die Korrektur kopiert. Ausgegeben wird der Fehler wörtlich wie gegeben; ohne
+ * Treffer bleibt der Wert stehen (und das Schema meldet ihn).
+ */
+export function matchMistake(mistake: unknown, errors: PrepVars['errors']): unknown {
+  if (typeof mistake !== 'string') return mistake;
+  const m = norm(mistake);
+  if (!m) return mistake;
+  const hit =
+    errors.find((e) => norm(e.wrong) === m) ??
+    errors.find((e) => {
+      const k = norm(e.wrong);
+      return m.length >= 8 && k.length >= 8 && (k.includes(m) || m.includes(k));
+    }) ??
+    errors.find((e) => norm(e.right) === m);
+  return hit ? hit.wrong.trim() : mistake;
+}
+
 export function prepSchema(vars: Pick<PrepVars, 'uiLang' | 'errors'>): z.ZodType<PrepOut> {
   const en = (max: number, field: string) => z.string().trim().min(1).max(max).superRefine(langIs('en', field));
   const ui = (max: number, field: string) => z.string().trim().min(1).max(max).superRefine(langIs(vars.uiLang, field));
@@ -52,12 +73,19 @@ export function prepSchema(vars: Pick<PrepVars, 'uiLang' | 'errors'>): z.ZodType
       title: ui(80, 'title'),
       goal_en: en(200, 'goal_en'),
       goal_x: ui(200, 'goal_x'),
-      warmup: z.array(en(160, 'warmup')).min(3).max(4),
-      talk: z.array(en(220, 'talk')).min(3).max(5),
-      say: z.array(en(160, 'say')).min(4).max(6),
-      watch: z
-        .array(z.object({ mistake: en(200, 'mistake'), fix: en(200, 'fix'), note: z.string().trim().max(160).superRefine(langIs(vars.uiLang, 'note')) }))
-        .max(4),
+      // Tolerant (Prüfhinweis): überzählige Einträge fallen weg, Fehler werden der Liste zugeordnet.
+      warmup: sliced(en(160, 'warmup'), 3, 4),
+      talk: sliced(en(220, 'talk'), 3, 5),
+      say: sliced(en(160, 'say'), 4, 6),
+      watch: sliced(
+        z.object({
+          mistake: z.preprocess((x) => matchMistake(x, vars.errors), en(200, 'mistake')),
+          fix: en(200, 'fix'),
+          note: z.string().trim().max(160).superRefine(langIs(vars.uiLang, 'note')),
+        }),
+        0,
+        4,
+      ),
       message: z.string().trim().min(60).max(700).superRefine(langIs('en', 'message')),
     })
     .superRefine((v, ctx) => {

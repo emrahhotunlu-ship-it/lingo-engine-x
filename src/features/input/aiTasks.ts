@@ -63,6 +63,8 @@ export async function startAiTask<V, O>(i: {
   vars: V;
   save: (data: O) => Promise<void>;
 }): Promise<O | null> {
+  // Neuversuch nach einem Fehler (gleicher Schlüssel): Zwischenspeicher von `sample` einmal übergehen.
+  const refresh = useAiTasks.getState().tasks[i.key]?.status === 'error';
   controllers.get(i.key)?.abort();
   const ctl = new AbortController();
   controllers.set(i.key, ctl);
@@ -76,6 +78,7 @@ export async function startAiTask<V, O>(i: {
       template: i.template,
       vars: i.vars,
       signal: ctl.signal,
+      refresh,
       onPhase: (p) => {
         if (mine() && p !== 'done' && p !== 'error') setTask(i.key, { phase: p });
       },

@@ -35,11 +35,11 @@ describe('Phase-4-Vorlagen: Kopfzeile, Stufe, Zwischenspeicher', () => {
   it('sind registriert und beginnen mit [id@1]', () => {
     const ids = TEMPLATES.map((t) => t.id);
     for (const id of ['reading-text', 'listening-text', 'writing-prompt', 'writing-review', 'reading-check', 'apply-check']) expect(ids).toContain(id);
-    expect(readingText.build(readVars).split('\n')[0]).toBe('[reading-text@1]');
-    expect(listeningText.build(listenVars).split('\n')[0]).toBe('[listening-text@1]');
-    expect(writingPrompt.build(promptVars).split('\n')[0]).toBe('[writing-prompt@1]');
-    expect(writingReview.build(reviewVars('Hello there.')).split('\n')[0]).toBe('[writing-review@1]');
-    expect(readingCheck.build(checkVars('Sum.')).split('\n')[0]).toBe('[reading-check@1]');
+    expect(readingText.build(readVars).split('\n')[0]).toBe('[reading-text@2]');
+    expect(listeningText.build(listenVars).split('\n')[0]).toBe('[listening-text@2]');
+    expect(writingPrompt.build(promptVars).split('\n')[0]).toBe('[writing-prompt@2]');
+    expect(writingReview.build(reviewVars('Hello there.')).split('\n')[0]).toBe('[writing-review@2]');
+    expect(readingCheck.build(checkVars('Sum.')).split('\n')[0]).toBe('[reading-check@2]');
     expect(applyCheck.build(applyVars('Text.')).split('\n')[0]).toBe('[apply-check@1]');
   });
 

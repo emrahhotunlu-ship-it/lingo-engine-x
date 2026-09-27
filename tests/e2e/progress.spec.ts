@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openOverview, screen, type Lang } from './fixtures';
 
 // Phase 6 (Plan §13): „Dein Stand" mit Urteil · Fehler · Weg nach C1 · Verlauf gegen den
-// Produktions-Build. Feste Antworten des Adapters: assess@1 und weekly-report@1 in DE und EN.
+// Produktions-Build. Feste Antworten des Adapters: assess@2 und weekly-report@2 in DE und EN.
 
 type Dump = Record<string, Record<string, unknown>>;
 type Call = { id: string | null; tier: string; cache?: unknown; input: string };
@@ -39,7 +39,7 @@ test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher
   await openOverview(page);
   await expect.poll(async () => (await dump(page))['app/assess']?.d).toBe('2026-09-20');
   const doc = (await dump(page))['app/assess']!;
-  expect(doc).toMatchObject({ v: 2, pv: 'assess@1', tier: 'complex', lang: 'de' });
+  expect(doc).toMatchObject({ v: 2, pv: 'assess@2', tier: 'complex', lang: 'de' });
   expect((doc.run as Record<string, unknown>).d).toBe('2026-09-20');
   // Befund H3: Die Einschätzung der alten App (Seed, 18.09., ohne hist) ist erster Verlaufseintrag.
   const hist = doc.hist as Array<Record<string, unknown>>;
@@ -193,6 +193,22 @@ test('Verlauf: Wochenbericht mit Fakten und gespeichertem KI-Text, Diagramm, Akt
   await tab(page, 'history');
   await expect(page.getByTestId('weekly-text')).toBeVisible();
   expect(await calls(page, 'weekly-report')).toHaveLength(1);
+  expect(errors).toEqual([]);
+});
+
+test('Verlauf: Wochenbericht schlägt fehl → Hinweis mit „Erneut versuchen", der Neuversuch fragt frisch (refresh)', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { sampleFailOnce: { 'weekly-report': 'upstream_error' } } });
+  await openOverview(page);
+  await tab(page, 'history');
+  await expect(page.getByTestId('weekly-error')).toBeVisible();
+  await expect(page.getByTestId('weekly-text')).toHaveCount(0);
+  expect(await calls(page, 'weekly-report')).toHaveLength(1);
+  await page.getByTestId('weekly-retry').click();
+  await expect(page.getByTestId('weekly-text')).toBeVisible();
+  await expect(page.getByTestId('weekly-error')).toHaveCount(0);
+  const all = await calls(page, 'weekly-report');
+  expect(all).toHaveLength(2);
+  expect(all[1]?.cache).toMatchObject({ refresh: true });
   expect(errors).toEqual([]);
 });
 

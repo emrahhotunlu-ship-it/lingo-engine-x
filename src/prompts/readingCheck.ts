@@ -2,9 +2,10 @@ import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { block, clip, fenced, header, langName, langOf } from './common';
 import { ERROR_CAT_VALUES, englishText } from './inputCommon';
+import { cefrLoose, clipped, inputCatLoose, intIn, sliced } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// reading-check@1 (Plan §5, F17): prüft Emrahs Zusammenfassung eines Lesetexts. Altform
+// reading-check@2 (Plan §5, F17): prüft Emrahs Zusammenfassung eines Lesetexts. Altform
 // `reading.res` der alten App {score, covered, misunderstood, language, feedback, model_summary}.
 
 export type ReadingCheckVars = { title: string; text: string; keypoints: readonly string[]; summary: string; uiLang: UiLang };
@@ -22,7 +23,8 @@ export const CHECK_TEXT_MAX = 8000;
 export const SUMMARY_MAX = 2000;
 
 const ID = 'reading-check';
-const VERSION = 1;
+const VERSION = 2;
+const CEFR_ALL = ['A2', 'B1', 'B1+', 'B2', 'B2+', 'C1', 'C1+', 'C2'] as const;
 
 export const READING_CHECK_EXAMPLE = JSON.stringify({
   score: 4,
@@ -36,19 +38,17 @@ export const READING_CHECK_EXAMPLE = JSON.stringify({
 const schemaFor = (uiLang: UiLang): z.ZodType<ReadingCheckOut> =>
   z
     .object({
-      score: z.number().int().min(1).max(5),
-      covered: z.array(z.string().trim().min(1).max(160)).max(8),
-      misunderstood: z.array(z.string().trim().min(1).max(200)).max(6),
+      // Tolerant gelesen (Prüfbefund W3): „4"/3.5 → Zahl, „B2-C1" → B2, „agreement" → grammar,
+      // zu lange Angaben gekürzt, überzählige Einträge abgeschnitten.
+      score: intIn(1, 5),
+      covered: sliced(clipped(1, 200), 0, 8),
+      misunderstood: sliced(clipped(1, 200), 0, 6),
       language: z.object({
-        cefr: z
-          .string()
-          .trim()
-          .toUpperCase()
-          .regex(/^(A2|B1\+?|B2\+?|C1\+?|C2)$/),
-        errors: z.array(z.object({ orig: z.string().trim().min(1).max(120), fix: z.string().trim().min(1).max(200), cat: z.enum(ERROR_CAT_VALUES), why: z.string().trim().min(1).max(240) })).max(8),
-        tips: z.array(z.string().trim().min(1).max(200)).max(3),
+        cefr: cefrLoose(CEFR_ALL),
+        errors: sliced(z.object({ orig: clipped(1, 300), fix: clipped(1, 300), cat: inputCatLoose, why: clipped(1, 240) }), 0, 8),
+        tips: sliced(clipped(1, 200), 0, 3),
       }),
-      feedback: z.string().trim().min(1).max(400),
+      feedback: clipped(1, 400),
       model_summary: englishText(20, 700),
     })
     .superRefine((v, ctx) => {

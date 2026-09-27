@@ -20,7 +20,13 @@ import type { ArticleItem, Cefr, ChoiceResult, Domain, Question, TextError, Unit
 import type { DiscStep } from '../../domain/discover/steps';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { nextT, recordChannelEntries, recordProfileFields, recordRadar, recordUnitEnd } from '../progress/persist';
+import { listeningText } from '../../prompts/listeningText';
+import { readingText } from '../../prompts/readingText';
+import { writingReview } from '../../prompts/writingReview';
 import { mergeLocal, putLocal } from './library';
+
+/** Vorlage und Version eines KI-Ergebnisses (folgt der Vorlage, nie von Hand). */
+const pvOf = (t: { id: string; version: number }): string => `${t.id}@${t.version}`;
 
 // Alle Schreibwege von Phase 4 (Plan §3.1) – Inhaltsdokumente über den einen Writer, alles in
 // `app/profile`, `log/<tag>` und `app/radar` ausschließlich über die gemeinsame Sammel-Warteschlange
@@ -52,7 +58,7 @@ async function patchProfile(scope: string, compute: (cur: Doc) => Doc | null): P
 
 export async function saveGeneratedArticle(a: GeneratedArticle, i: { level: Cefr; domain: Domain; day: string; src: 'ai' | 'own' }): Promise<string> {
   const t = nextT();
-  const doc = articleDoc(a, { t, level: i.level, domain: i.domain, pv: 'reading-text@1', src: i.src });
+  const doc = articleDoc(a, { t, level: i.level, domain: i.domain, pv: pvOf(readingText), src: i.src });
   const id = `ai${t}`;
   try {
     await writer().createIfMissing(`articles/${id}`, doc);
@@ -81,7 +87,7 @@ export async function enrichOwnArticle(id: string, a: Omit<GeneratedArticle, 'te
     keypoints: [...a.keypoints],
     glossary: a.glossary.map((g) => ({ ...g })),
     questions: a.questions.map((q) => ({ ...q, options: [...q.options] })),
-    pv: 'reading-text@1',
+    pv: pvOf(readingText),
   };
   try {
     await writer().transform(`articles/${id}`, (cur) => (cur ? { update: patch } : null));
@@ -94,7 +100,7 @@ export async function enrichOwnArticle(id: string, a: Omit<GeneratedArticle, 'te
 
 export async function saveGeneratedListening(l: GeneratedListening, i: { level: Cefr; domain: Domain; day: string }): Promise<string> {
   const t = nextT();
-  const doc = lpoolDoc(l, { t, level: i.level, domain: i.domain, pv: 'listening-text@1' });
+  const doc = lpoolDoc(l, { t, level: i.level, domain: i.domain, pv: pvOf(listeningText) });
   const id = `ai${t}`;
   try {
     await writer().createIfMissing(`lpool/${id}`, doc);
@@ -285,7 +291,7 @@ export async function reviseWriting(id: string, text: string, words: number): Pr
 }
 
 export async function saveWritingReview(id: string, res: WritingReviewRes, lang: 'de' | 'en', rev: number, text: string): Promise<void> {
-  const resDoc = { ...writingResDoc(res, lang, 'writing-review@1'), rev };
+  const resDoc = { ...writingResDoc(res, lang, pvOf(writingReview)), rev };
   try {
     await writer().transform(`writing/${id}`, (cur) => (cur ? { update: { res: resDoc } } : null));
   } catch (err) {

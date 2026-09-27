@@ -35,9 +35,9 @@ describe('Verzeichnis Phase 5', () => {
     expect(translate.build(trVars).split('\n')[0]).toBe('[translate@2]');
     expect(translate.tier).toBe('quick');
     expect(translate.cache).toEqual({ gcTime: 86_400_000 });
-    expect(preplyPrep.build(prepVars).split('\n')[0]).toBe('[preply-prep@1]');
+    expect(preplyPrep.build(prepVars).split('\n')[0]).toBe('[preply-prep@2]');
     expect([preplyPrep.tier, preplyPrep.cache]).toEqual(['default', false]);
-    expect(preplyImport.build(impVars).split('\n')[0]).toBe('[preply-import@1]');
+    expect(preplyImport.build(impVars).split('\n')[0]).toBe('[preply-import@2]');
     expect([preplyImport.tier, preplyImport.cache]).toEqual(['complex', false]);
     expect(templateIdOf([...companionChat.buildTurns({ uiLang: 'de', learner: '', work: '', seeing: null, attach: null, history: [], message: 'x' })])).toBe('companion-chat');
   });
@@ -108,7 +108,9 @@ describe('Sprach- und Formprüfung', () => {
     expect(s.safeParse({ ...base, tasks: [{ ...t0, explanation_de: 'The verb always takes on in this case.' }] }).success).toBe(false);
     const r = s.safeParse({ ...base, corrections: [{ ...base.corrections[0], topic: 'unknown-topic' }] });
     expect(r.success && r.data.corrections[0]!.topic).toBe('other');
-    expect(s.safeParse({ ...base, corrections: [{ ...base.corrections[0], right: 'It depends of the budget.' }] }).success).toBe(false);
+    // Gleiche Korrektur (nichts korrigiert) fällt still weg statt die ganze Antwort abzulehnen (W5).
+    const same = s.safeParse({ ...base, corrections: [{ ...base.corrections[0], right: 'It depends of the budget.' }] });
+    expect(same.success && same.data.corrections).toEqual([]);
   });
 });
 

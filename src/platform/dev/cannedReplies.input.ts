@@ -336,7 +336,7 @@ export function writingReviewReply(input: string): string {
   const bad = /zzqx/i.test(text) && !isRetry(input);
   return JSON.stringify({
     cefr: 'B2',
-    scores: { task: bad ? 9 : 4, grammar: found.some((f) => f.sev === 'major') ? 3 : 4, vocabulary: 4, coherence: 4, register: 3 },
+    scores: { task: bad ? 'n/a' : 4, grammar: found.some((f) => f.sev === 'major') ? 3 : 4, vocabulary: 4, coherence: 4, register: 3 },
     summary: t.summary,
     strengths: t.strengths,
     errors: found.map((f) => ({ orig: f.orig, fix: f.fix, cat: f.cat, topic: f.topic, sev: f.sev, why: f.why[lang] })),

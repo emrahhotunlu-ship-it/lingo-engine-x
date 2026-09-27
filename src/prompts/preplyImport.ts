@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
 import { block, clip, header, langName } from './common';
+import { clipped, sliced } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// preply-import@1: Lehrer-Text zerlegen in Korrekturen, Übungen, Vokabeln und Hausaufgaben
+// preply-import@2: Lehrer-Text zerlegen in Korrekturen, Übungen, Vokabeln und Hausaufgaben
 // (Phase 5 §6.4, Kap. 6.10). `complex` (Kap. 10), `cache: false`. Es wird nichts erfunden,
 // geschrieben wird erst nach der Bestätigung einzelner Einträge (E5-13).
 // Schutz gegen eingeschleuste Anweisungen: keine Werkzeuge, Ausgabe per zod, Text im Block.
@@ -31,11 +32,51 @@ export type ImportOut = {
 
 export const RAW_MAX = 12_000;
 const ID = 'preply-import';
-const VERSION = 1;
+const VERSION = 2;
 
 /** Beispielantwort (UI Deutsch); besteht selbst das Schema (Test). */
 export const IMPORT_EXAMPLE =
   '{"title":"Stunde: Präpositionen und Vorlieben","summary":"Wir haben Verben mit festen Präpositionen und das Ausdrücken von Vorlieben geübt.","corrections":[{"wrong":"It depends of the budget.","right":"It depends on the budget.","topic":"prepositions","why":"Nach „depend“ steht immer „on“."}],"tasks":[{"type":"gap","prompt":"It depends ___ the budget.","answer":"on","accepted":["on"],"options":[],"topic":"prepositions","explanation_de":"Das Verb „depend“ verlangt die Präposition „on“.","explanation_en":"The verb \\"depend\\" always takes the preposition \\"on\\"."}],"words":[{"en":"would rather","de":"lieber wollen","pos":"phrase","ex":"I\'d rather start with a pilot.","fromLesson":true}],"homework":["Schreibe fünf Sätze mit „would rather“."]}';
+
+const TYPE_ALIASES: Record<string, ItemType> = {
+  gap: 'gap',
+  'fill-in': 'gap',
+  'fill in': 'gap',
+  'fill-in-the-blank': 'gap',
+  'fill in the blank': 'gap',
+  'gap-fill': 'gap',
+  cloze: 'gap',
+  mc: 'mc',
+  'multiple-choice': 'mc',
+  'multiple choice': 'mc',
+  choice: 'mc',
+  transform: 'transform',
+  transformation: 'transform',
+  rewrite: 'transform',
+  correct: 'correct',
+  correction: 'correct',
+  'error-correction': 'correct',
+  'error correction': 'correct',
+};
+
+const rec = (v: unknown): Record<string, unknown> | null => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : null);
+
+function isSameCorrection(c: unknown): boolean {
+  const o = rec(c);
+  return !!o && typeof o.wrong === 'string' && typeof o.right === 'string' && o.wrong.trim().toLowerCase() === o.right.trim().toLowerCase();
+}
+
+/** Aufgabe vor der Prüfung: Typ abbilden, Optionen nur bei mc, mc-Antwort in der Schreibweise der Option. */
+function normalizeTask(v: unknown): unknown {
+  const o = rec(v);
+  if (!o) return v;
+  const type = typeof o.type === 'string' ? (TYPE_ALIASES[o.type.trim().toLowerCase()] ?? o.type) : o.type;
+  const options: unknown[] = Array.isArray(o.options) ? (o.options as unknown[]) : [];
+  if (type !== 'mc') return { ...o, type, options: [] };
+  const answer = typeof o.answer === 'string' ? o.answer.trim() : o.answer;
+  const hit = typeof answer === 'string' ? options.find((x) => typeof x === 'string' && x.trim().toLowerCase() === answer.toLowerCase()) : undefined;
+  return { ...o, type, options, answer: typeof hit === 'string' ? hit.trim() : answer };
+}
 
 export function importSchema(vars: Pick<ImportVars, 'uiLang' | 'topics'>): z.ZodType<ImportOut> {
   const ids = new Set([...vars.topics.map((t) => t.id), 'vocab', 'other']);
@@ -56,17 +97,23 @@ export function importSchema(vars: Pick<ImportVars, 'uiLang' | 'topics'>): z.Zod
   return z.object({
     title: ui(80),
     summary: ui(400, 0),
-    corrections: z
-      .array(
-        z
-          .object({ wrong: inLang('en', 200), right: inLang('en', 200), topic, why: z.string().trim().max(200).superRefine((s, ctx) => {
-            if (isWrongLang(s, vars.uiLang)) ctx.addIssue({ code: 'custom', message: `must be written in ${langName(vars.uiLang)}` });
-          }) })
-          .refine((c) => c.wrong.trim().toLowerCase() !== c.right.trim().toLowerCase(), { message: 'wrong and right must differ', path: ['right'] }),
-      )
-      .max(20),
-    tasks: z
-      .array(
+    // Tolerant gelesen (Prüfbefund W5): gleiche Korrekturen fallen weg, Listen werden gekürzt,
+    // Optionen bei Nicht-mc still geleert, mc-Antwort ohne Groß/klein zugeordnet.
+    corrections: z.preprocess(
+      (v) => (Array.isArray(v) ? v.filter((c) => !isSameCorrection(c)).slice(0, 20) : v),
+      z
+        .array(
+          z
+            .object({ wrong: inLang('en', 200), right: inLang('en', 200), topic, why: z.string().trim().max(200).superRefine((s, ctx) => {
+              if (isWrongLang(s, vars.uiLang)) ctx.addIssue({ code: 'custom', message: `must be written in ${langName(vars.uiLang)}` });
+            }) })
+            .refine((c) => c.wrong.trim().toLowerCase() !== c.right.trim().toLowerCase(), { message: 'wrong and right must differ', path: ['right'] }),
+        )
+        .max(20),
+    ),
+    tasks: sliced(
+      z.preprocess(
+        normalizeTask,
         z
           .object({
             type: z.enum(['gap', 'mc', 'transform', 'correct']),
@@ -83,22 +130,25 @@ export function importSchema(vars: Pick<ImportVars, 'uiLang' | 'topics'>): z.Zod
             if (t.type === 'mc') {
               if (t.options.length < 3) ctx.addIssue({ code: 'custom', path: ['options'], message: 'mc needs 3 or 4 options' });
               if (!t.options.includes(t.answer)) ctx.addIssue({ code: 'custom', path: ['options'], message: 'mc options must include the answer' });
-            } else if (t.options.length) ctx.addIssue({ code: 'custom', path: ['options'], message: 'options only for mc' });
+            }
           }),
-      )
-      .max(10),
-    words: z
-      .array(
-        z.object({
-          en: z.string().trim().min(1).max(60),
-          de: z.string().trim().min(1).max(120),
-          pos: z.string().trim().max(20),
-          ex: z.string().trim().max(220),
-          fromLesson: z.boolean(),
-        }),
-      )
-      .max(20),
-    homework: z.array(z.string().trim().min(1).max(240)).max(8),
+      ),
+      0,
+      10,
+    ),
+    words: sliced(
+      z.object({
+        en: z.string().trim().min(1).max(60),
+        de: z.string().trim().min(1).max(120),
+        pos: clipped(0, 20),
+        ex: z.string().trim().max(220),
+        // Fehlt die Angabe, gilt der Satz als aus der Stunde (wie beim Lesen in domain/preply/docs.ts).
+        fromLesson: z.boolean().default(true),
+      }),
+      0,
+      20,
+    ),
+    homework: sliced(clipped(1, 240), 0, 8),
   });
 }
 

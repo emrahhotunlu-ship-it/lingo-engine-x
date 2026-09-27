@@ -59,14 +59,14 @@ export function factLine(f: WeekFact): string {
 export type WeeklyResult = 'stored' | 'skipped' | 'error';
 
 /** KI-Text für die Woche erzeugen und speichern (nur wenn nötig und möglich). */
-export async function ensureWeeklyText(i: { w: string; lang: 'de' | 'en'; facts: readonly WeekFact[]; stored: WeeklyItem | null; signal: AbortSignal }): Promise<WeeklyResult> {
+export async function ensureWeeklyText(i: { w: string; lang: 'de' | 'en'; facts: readonly WeekFact[]; stored: WeeklyItem | null; signal: AbortSignal; refresh?: boolean }): Promise<WeeklyResult> {
   const cite = citableFacts(i.facts);
   if (i.stored || cite.length < WEEKLY_MIN_FACTS || !aiUsable()) return 'skipped';
   const writer = getWriter();
   if (!writer) return 'skipped';
   try {
     const facts = cite.map((f) => ({ id: f.id, text: factLine(f) }));
-    const r = await askJson({ template: weeklyReport, vars: { lang: i.lang, week: i.w, facts }, signal: i.signal, priority: 'background' });
+    const r = await askJson({ template: weeklyReport, vars: { lang: i.lang, week: i.w, facts }, signal: i.signal, priority: 'background', refresh: i.refresh === true });
     const item: WeeklyItem = { w: i.w, lang: i.lang, t: Date.now(), pv: `${weeklyReport.id}@${weeklyReport.version}`, facts: facts.map((f) => f.id), text: r.data };
     await writer.transform('app/weekly', (cur) => (storedWeekly(cur, i.w, i.lang) ? null : weeklyOp(cur, item)));
     return 'stored';

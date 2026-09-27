@@ -3,10 +3,11 @@ import { containsPhrase } from '../domain/chunks/newChunk';
 import { isWrongLang } from '../domain/lang/detect';
 import { clip, header, langName, langOf } from './common';
 import { ERROR_CATS } from './threeLayers';
+import { phraseIn, sliced, topicCat } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// roleplay-report@1 (Plan §5.4, §6.2): Urteil in Worten nach einem Gespräch – Ziel, Stärken
-// mit Zitat, Fokuspunkte, beste Wendungen. Kein Punktestand (Kap. 2.3). `default`, zwischen-
+// roleplay-report@2 (Plan §5.4, §6.2): Urteil in Worten nach einem Gespräch – Ziel, Stärken
+// mit Zitat, Fokuspunkte, beste Wendungen. Kein Punktestand (Kap. 2.3). `complex`, zwischen-
 // gespeichert. Zitate müssen wörtlich aus den eigenen Zügen stammen.
 
 export type ReportTurnInfo = { me: string; persona: string; v: string; c: readonly string[] };
@@ -33,7 +34,7 @@ export const REP_PERSONA_MAX = 200;
 export const REP_TURNS_MAX = 16;
 
 const ID = 'roleplay-report';
-const VERSION = 1;
+const VERSION = 2;
 
 const en = (max: number) =>
   z
@@ -54,15 +55,22 @@ export function reportSchema(v: Pick<RoleplayReportVars, 'turns' | 'uiLang'>): z
         .array(z.object({ quote: z.string().trim().min(1).max(300), why: z.string().trim().min(1).max(200) }).superRefine(langOf(['why'], v.uiLang)))
         .min(1)
         .max(2),
-      focus: z
-        .array(
-          z
-            .object({ title: z.string().trim().min(1).max(80), said: z.string().trim().min(1).max(300), better: en(300), why: z.string().trim().min(1).max(200), cat: z.string().trim() })
-            .superRefine(langOf(['title', 'why'], v.uiLang)),
-        )
-        .min(1)
-        .max(3),
-      phrases: z.array(z.object({ en: en(80), de: z.string().trim().min(1).max(120), def: en(160), ex: en(240) })).max(3),
+      // Tolerant (Prüfhinweis): ein gutes Gespräch darf ohne Fokuspunkt sein; freie Kategorie → Liste;
+      // überzählige Einträge fallen weg.
+      focus: sliced(
+        z
+          .object({
+            title: z.string().trim().min(1).max(80),
+            said: z.string().trim().min(1).max(300),
+            better: en(300),
+            why: z.string().trim().min(1).max(200),
+            cat: z.preprocess((c) => topicCat(c, ERROR_CATS), z.string().trim()),
+          })
+          .superRefine(langOf(['title', 'why'], v.uiLang)),
+        0,
+        3,
+      ),
+      phrases: sliced(z.object({ en: en(80), de: z.string().trim().min(1).max(120), def: en(160), ex: en(240) }), 0, 3),
     })
     .superRefine((o, ctx) => {
       o.strengths.forEach((s, i) => {
@@ -73,7 +81,7 @@ export function reportSchema(v: Pick<RoleplayReportVars, 'turns' | 'uiLang'>): z
         if (!ERROR_CATS.includes(f.cat)) ctx.addIssue({ code: 'custom', path: ['focus', i, 'cat'], message: `cat must be one of: ${ERROR_CATS.join(', ')}` });
       });
       o.phrases.forEach((p, i) => {
-        if (!containsPhrase(p.ex, p.en)) ctx.addIssue({ code: 'custom', path: ['phrases', i, 'ex'], message: 'ex must contain en word for word' });
+        if (!containsPhrase(p.ex, p.en) && !phraseIn(p.ex, p.en)) ctx.addIssue({ code: 'custom', path: ['phrases', i, 'ex'], message: 'ex must contain en word for word' });
       });
     })
     .superRefine(langOf(['summary'], v.uiLang));
@@ -125,7 +133,7 @@ export const roleplayReport: PromptTemplate<RoleplayReportVars, RoleplayReportOu
       '- goal.state: "reached", "partly" or "missed"; goal.why: one sentence.',
       '- summary: at most 3 sentences.',
       '- strengths: 1–2 items; quote copied word for word from a learner turn.',
-      '- focus: 1–3 items; said copied word for word from a learner turn; better = how a C1 speaker would say it;',
+      '- focus: 0–3 items (none if there is nothing to improve); said copied word for word from a learner turn; better = how a C1 speaker would say it;',
       `  cat one of ${ERROR_CATS.join(', ')}.`,
       '- phrases: up to 3 useful phrases for this situation that the learner has not saved yet; ex contains en word for word.',
       '- British spelling is never a mistake.',

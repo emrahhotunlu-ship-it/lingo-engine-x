@@ -2,9 +2,10 @@ import { z } from 'zod';
 import { block, clip, fenced, header, langName, langOf } from './common';
 import { isWrongLang } from '../domain/lang/detect';
 import { ERROR_CAT_VALUES, englishText, words } from './inputCommon';
+import { cefrLoose, clipped, inputCatLoose, intIn, sevLoose, sliced } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// writing-review@1 (Plan §5, Kap. 6.8): Korrektur eines eigenen Texts mit Begründung je Stelle.
+// writing-review@2 (Plan §5, Kap. 6.8): Korrektur eines eigenen Texts mit Begründung je Stelle.
 // Altform `res` der alten App. Erklärungen in der Oberflächensprache, alles Englische in US-Form.
 // Britische Schreibweise ist bei Emrah richtig (A7.3); meldet Claude sie trotzdem, macht die
 // Nachbearbeitung daraus einen Hinweis (usHints.ts) – kein Schemafehler, kein Neuversuch.
@@ -41,7 +42,7 @@ export const REVIEW_TEXT_MAX = 6000;
 export const REVIEW_TASK_MAX = 600;
 
 const ID = 'writing-review';
-const VERSION = 1;
+const VERSION = 2;
 
 export const WRITING_REVIEW_EXAMPLE = JSON.stringify({
   cefr: 'B2',
@@ -55,37 +56,35 @@ export const WRITING_REVIEW_EXAMPLE = JSON.stringify({
   next: '…',
 });
 
-const score = z.number().int().min(1).max(5);
+// Tolerant gelesen (Prüfbefund W3): Zahl als Text, Stufe mit Zusatz, freie Kategorie, „moderate",
+// fehlendes oder unbekanntes Thema, keine Stärken – all das wird normalisiert statt abgelehnt.
+const score = intIn(1, 5);
+const CEFR_ALL = ['A2', 'B1', 'B1+', 'B2', 'B2+', 'C1', 'C1+', 'C2'] as const;
 
 const schemaFor = (vars: WritingReviewVars): z.ZodType<WritingReviewOut> => {
-  const ui = (min: number, max: number) => z.string().trim().min(min).max(max);
   const textLen = Array.from(vars.text).length;
   return z
     .object({
-      cefr: z
-        .string()
-        .trim()
-        .toUpperCase()
-        .regex(/^(A2|B1\+?|B2\+?|C1\+?|C2)$/),
+      cefr: cefrLoose(CEFR_ALL),
       scores: z.object({ task: score, grammar: score, vocabulary: score, coherence: score, register: score }),
-      summary: ui(1, 300),
-      strengths: z.array(ui(1, 200)).min(1).max(3),
-      errors: z
-        .array(
-          z.object({
-            orig: z.string().trim().min(1).max(120),
-            fix: z.string().trim().min(1).max(200),
-            cat: z.enum(ERROR_CAT_VALUES),
-            topic: z.string().trim().max(40).nullable(),
-            sev: z.enum(['minor', 'major']),
-            why: ui(1, 240),
-          }),
-        )
-        .max(12),
+      summary: clipped(1, 300),
+      strengths: sliced(clipped(1, 200), 0, 3),
+      errors: sliced(
+        z.object({
+          orig: clipped(1, 300),
+          fix: clipped(1, 300),
+          cat: inputCatLoose,
+          topic: z.preprocess((t) => (typeof t === 'string' && vars.topics.includes(t.trim()) ? t.trim() : null), z.string().nullable()),
+          sev: sevLoose,
+          why: clipped(1, 240),
+        }),
+        0,
+        12,
+      ),
       improved: englishText(1, Math.max(400, Math.round(textLen * 1.4) + 200)),
-      upgrades: z.array(z.string().trim().min(1).max(160)).max(5),
-      phrases: z.array(z.string().trim().min(1).max(160)).max(5),
-      next: ui(1, 300),
+      upgrades: sliced(clipped(1, 160), 0, 5),
+      phrases: sliced(clipped(1, 160), 0, 5),
+      next: clipped(1, 300),
     })
     .superRefine((v, ctx) => {
       langOf(['summary', 'next'], vars.uiLang)(v, ctx);
@@ -124,7 +123,7 @@ export const writingReview: PromptTemplate<WritingReviewVars, WritingReviewOut> 
       'Rules:',
       '- cefr: your honest estimate of THIS text (A2, B1, B1+, B2, B2+, C1, C1+).',
       '- scores: 1–5 each for task fulfillment, grammar, vocabulary, coherence, register (tone).',
-      '- summary: 1–2 sentences in the explanation language; strengths: 1–3 short points in the explanation language.',
+      '- summary: 1–2 sentences in the explanation language; strengths: up to 3 short points in the explanation language.',
       '- errors: up to 12 real mistakes, most important first. orig = the exact words from the text (copy them character for character),',
       '  fix = the corrected words, cat = one of ' + ERROR_CAT_VALUES.join(', ') + ',',
       `  topic = one of these grammar topic ids if it fits, else null: ${vars.topics.join(', ')},`,
