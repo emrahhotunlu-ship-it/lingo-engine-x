@@ -1,5 +1,5 @@
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useT } from '../i18n';
 import { IconButton } from '../ui/Button';
 import { Icon } from '../ui/Icon';
@@ -17,11 +17,12 @@ import { savedScroll, tabOf, useNav, type Route, type TabName } from './nav';
 import { MigrationScreen } from '../features/migration/MigrationScreen';
 import { ProgressScreen } from '../features/progress/ProgressScreen';
 import { VtestScreen } from '../features/vtest/VtestScreen';
+import { CheckScreen } from '../features/check/CheckScreen';
 import { SettingsSheet } from '../features/settings/SettingsSheet';
 import { LookupLayer } from '../features/lookup/LookupPopover';
 import { HomeSkeleton } from '../features/system/HomeSkeleton';
 import { ConnectionLost, NoDbNotice } from '../features/system/NoDbNotice';
-import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
+import { applyDocumentSettings, isLang, isPalette, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
 import { initSpeech } from '../platform/speech';
 import { setSoundEnabled } from '../platform/sound';
@@ -50,6 +51,8 @@ import { PreplyScreen } from '../features/preply/PreplyScreen';
 // Phase 4: Lesen, Hören, Schreiben, Entdecken
 import { InputRoutes } from '../features/input/InputRoutes';
 import { AiTaskNotice } from '../features/input/AiTaskNotice';
+import { runningTabs, useAiTasks } from '../features/input/aiTasks';
+import { WhatsNew } from '../features/system/WhatsNew';
 import { isInputScreen } from './modules';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
@@ -93,6 +96,9 @@ function useBoot(): void {
     if (isLang(profile.lang) && profile.lang !== s.lang) s.setLangLocal(profile.lang);
     const theme = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { m?: unknown }).m : undefined;
     if (isThemeMode(theme) && theme !== s.theme) s.setThemeLocal(theme);
+    // Farbthema (M21): `theme.p` der alten App; fehlt es, bleibt die lokale Wahl (Standard Salbei).
+    const palette = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { p?: unknown }).p : undefined;
+    if (isPalette(palette) && palette !== s.palette) s.setPaletteLocal(palette);
   }, [profile]);
 
   // Töne (Kap. 4.7): Einstellung aus dem Profil, Standard aus.
@@ -111,14 +117,15 @@ function useBoot(): void {
   // Sprache und Modus auf <html> anwenden; „Automatisch" folgt dem System.
   const lang = useSettings((s) => s.lang);
   const theme = useSettings((s) => s.theme);
+  const palette = useSettings((s) => s.palette);
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: light)');
-    const apply = () => applyDocumentSettings(lang, resolveTheme(theme, mq.matches));
+    const apply = () => applyDocumentSettings(lang, resolveTheme(theme, mq.matches), palette);
     apply();
     if (theme !== 'auto') return;
     mq.addEventListener('change', apply);
     return () => mq.removeEventListener('change', apply);
-  }, [lang, theme]);
+  }, [lang, theme, palette]);
 }
 
 type Screen = 'loading' | 'nodb' | 'offline' | 'migration' | Route['name'];
@@ -160,6 +167,8 @@ function TabBar({ tab }: { tab: TabName }) {
   const { t } = useT();
   const go = useNav((s) => s.go);
   const open = useOpenDuties();
+  const tasks = useAiTasks((s) => s.tasks);
+  const busy = useMemo(() => runningTabs(tasks), [tasks]);
   const tabs = [
     { name: 'today' as const, label: t('navToday'), badge: open },
     { name: 'learn' as const, label: t('tabLearn'), badge: 0 },
@@ -188,6 +197,13 @@ function TabBar({ tab }: { tab: TabName }) {
             {t2.badge > 0 && (
               <span className="lx-tnum inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-2xs font-semibold text-accent-fg" data-testid="tab-badge" aria-label={t('tabOpen', { n: t2.badge })}>
                 {t2.badge}
+              </span>
+            )}
+            {/* M13: Ladepunkt, solange eine KI-Korrektur im Hintergrund läuft (Text für Vorleseprogramme). */}
+            {busy.has(t2.name) && (
+              <span className="absolute top-1 right-1" data-testid="tab-busy">
+                <span className="lx-busy-dot block" aria-hidden="true" />
+                <span className="sr-only">{t('tabBusy')}</span>
               </span>
             )}
           </button>
@@ -245,6 +261,8 @@ export function App() {
             <IconButton icon="sliders" label={t('openSettings')} onClick={() => setSettingsOpen(true)} data-testid="open-settings" />
           </div>
         </header>
+        {/* M20: einmaliger Hinweis „Was ist neu" nach einem Update (Merker im Browser). */}
+        {migratedScreen && <WhatsNew />}
         <main id="main" className="flex-1 pb-28 md:pb-16">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
@@ -266,6 +284,7 @@ export function App() {
               {screen === 'today' && <TodayScreen />}
               {screen === 'overview' && <ProgressScreen />}
               {screen === 'vtest' && <VtestScreen />}
+              {screen === 'check' && <CheckScreen />}
               {screen === 'trainer' && <TrainerScreen />}
               {screen === 'learn' && <LearnHub />}
               {screen === 'course' && <CourseScreen />}

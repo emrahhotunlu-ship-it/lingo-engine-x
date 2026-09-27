@@ -4,7 +4,8 @@ import { useLive } from '../data/live';
 import { logError } from '../platform/diagnostics';
 import { toast } from '../ui/Toast';
 import { translate } from '../i18n';
-import { useSettings, type Lang, type ThemeMode } from './settings';
+import { useSettings, type Lang, type Palette, type ThemeMode } from './settings';
+import { WORK_MAX } from '../prompts/work';
 
 // Einstellungen ändern: optimistisch sofort anzeigen, in `app/profile` speichern,
 // bei Fehler zurückrollen (Kap. 3.4).
@@ -44,6 +45,32 @@ export async function changeTheme(theme: ThemeMode): Promise<void> {
   if (prev === theme) return;
   s.setThemeLocal(theme);
   await persist({ theme: { m: theme } }, () => useSettings.getState().setThemeLocal(prev));
+}
+
+/** Farbthema (M21): `app/profile.theme.p` wie in der alten App; `theme.m` bleibt unberührt (verschmolzen). */
+export async function changePalette(palette: Palette): Promise<void> {
+  const s = useSettings.getState();
+  const prev = s.palette;
+  if (prev === palette) return;
+  s.setPaletteLocal(palette);
+  await persist({ theme: { p: palette } }, () => useSettings.getState().setPaletteLocal(prev));
+}
+
+/** Beruflicher Kontext (M22): Freitext, Leerraum zusammengefasst, höchstens 400 Zeichen. */
+export function normCtx(text: string): string {
+  return text.replace(/\s+/g, ' ').trim().slice(0, WORK_MAX);
+}
+
+/** Beruflichen Kontext in `app/profile.ctx` speichern (gelesen von prompts/work.ts). `false` = nicht gespeichert. */
+export async function changeCtx(text: string): Promise<boolean> {
+  const value = normCtx(text);
+  const current = useLive.getState().docs['app/profile'];
+  if (current && (typeof current.ctx === 'string' ? current.ctx : '') === value) return true;
+  let ok = true;
+  await persist({ ctx: value }, () => {
+    ok = false;
+  });
+  return ok;
 }
 
 /** „Automatisch weiter" nach richtiger Antwort (Funktionsabgleich M6), gespeichert in `app/profile.autoNext`. */

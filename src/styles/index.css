@@ -146,6 +146,73 @@
   color-scheme: light;
 }
 
+/* Farbthemen (M21, `app/profile.theme.p` wie in der alten App): Salbei ist der Standard oben
+   (Smaragd). Ozean, Pflaume und Graphit tauschen nur Akzent und Lichtschein, je Modus eigens
+   abgestimmt; Kanal-, Warn- und Fehlerfarben bleiben. Der Kontrasttest prüft jeden Satz. */
+:root[data-palette='ocean'] {
+  --lx-bg-glow-1: rgba(96, 165, 250, 0.1);
+  --lx-accent: #60a5fa;
+  --lx-accent-fg: #06121f;
+  --lx-accent-text: #93c5fd;
+  --lx-accent-soft: rgba(96, 165, 250, 0.14);
+}
+:root[data-palette='ocean'][data-theme='dim'] {
+  --lx-bg-glow-1: rgba(96, 165, 250, 0.07);
+  --lx-accent: #6aaefb;
+  --lx-accent-fg: #06121f;
+  --lx-accent-text: #a5cdfd;
+  --lx-accent-soft: rgba(106, 174, 251, 0.16);
+}
+:root[data-palette='ocean'][data-theme='light'] {
+  --lx-bg-glow-1: rgba(29, 78, 216, 0.07);
+  --lx-accent: #1d4ed8;
+  --lx-accent-fg: #ffffff;
+  --lx-accent-text: #1d4ed8;
+  --lx-accent-soft: rgba(29, 78, 216, 0.1);
+}
+:root[data-palette='plum'] {
+  --lx-bg-glow-1: rgba(216, 157, 201, 0.1);
+  --lx-accent: #d89dc9;
+  --lx-accent-fg: #1b1018;
+  --lx-accent-text: #e6b8da;
+  --lx-accent-soft: rgba(216, 157, 201, 0.14);
+}
+:root[data-palette='plum'][data-theme='dim'] {
+  --lx-bg-glow-1: rgba(216, 157, 201, 0.07);
+  --lx-accent: #dca5ce;
+  --lx-accent-fg: #1b1018;
+  --lx-accent-text: #ecc4e2;
+  --lx-accent-soft: rgba(220, 165, 206, 0.16);
+}
+:root[data-palette='plum'][data-theme='light'] {
+  --lx-bg-glow-1: rgba(122, 62, 108, 0.07);
+  --lx-accent: #7a3e6c;
+  --lx-accent-fg: #ffffff;
+  --lx-accent-text: #7a3e6c;
+  --lx-accent-soft: rgba(122, 62, 108, 0.1);
+}
+:root[data-palette='graphite'] {
+  --lx-bg-glow-1: rgba(229, 231, 235, 0.05);
+  --lx-accent: #e5e7eb;
+  --lx-accent-fg: #111318;
+  --lx-accent-text: #e5e7eb;
+  --lx-accent-soft: rgba(229, 231, 235, 0.12);
+}
+:root[data-palette='graphite'][data-theme='dim'] {
+  --lx-bg-glow-1: rgba(229, 231, 235, 0.04);
+  --lx-accent: #e5e7eb;
+  --lx-accent-fg: #111318;
+  --lx-accent-text: #eceef1;
+  --lx-accent-soft: rgba(229, 231, 235, 0.13);
+}
+:root[data-palette='graphite'][data-theme='light'] {
+  --lx-bg-glow-1: rgba(31, 35, 40, 0.05);
+  --lx-accent: #1f2328;
+  --lx-accent-fg: #ffffff;
+  --lx-accent-text: #1f2328;
+  --lx-accent-soft: rgba(31, 35, 40, 0.08);
+}
+
 /* Tailwind-Hilfsklassen auf die Tokens abbilden (bg-surface, text-muted, …). */
 @theme inline {
   --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -791,6 +858,60 @@ h3 {
   }
   .lx-flash-wrong {
     box-shadow: 0 0 0 2px var(--lx-danger-text);
+  }
+
+  /* Wochenstreifen (M7): ein Ring je Tag – Form und Zeichen tragen den Zustand, nicht nur die Farbe. */
+  .lx-ring {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    border: 2px solid var(--lx-fg-subtle);
+    color: var(--lx-fg-muted);
+  }
+  .lx-ring[data-state='done'] {
+    background: var(--lx-accent);
+    border-color: var(--lx-accent);
+    color: var(--lx-accent-fg);
+  }
+  .lx-ring[data-state='rest'] {
+    border-style: dashed;
+  }
+  .lx-ring[data-state='future'] {
+    border-style: dotted;
+    border-color: var(--lx-border);
+  }
+  .lx-ring[data-today] {
+    box-shadow:
+      0 0 0 2px var(--lx-bg),
+      0 0 0 4px var(--lx-accent-text);
+  }
+
+  /* Ladepunkt am Reiter (M13): eine KI-Korrektur läuft im Hintergrund. */
+  .lx-busy-dot {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 999px;
+    background: var(--lx-cyan-text);
+    animation: lx-breathe 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes lx-breathe {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lx-busy-dot {
+    animation: none;
   }
 }
 

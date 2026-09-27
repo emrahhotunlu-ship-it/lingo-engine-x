@@ -7,11 +7,11 @@ Stand 27.09.2026, Branch `claude/affectionate-cerf-pe6ej2`. „E2E" = Playwright
 | Kriterium | Beleg |
 |---|---|
 | Alle Module aus Kap. 6 vorhanden und bedienbar | `acceptance.spec` (alle Reiter, Dein Stand mit vier Reitern, Wortschatztest, Einstellungen); je Modul die Specs `today`, `trainer`, `course`, `grammar`, `drills`, `speak`, `business`, `read`, `listen`, `write`, `discover`, `companion`, `preply`, `progress`, `vtest`, `settings` |
-| Alle bisherigen Daten sichtbar und weitergeführt | `acceptance.spec` (Serie 12, Kurs 6, Karten 146 wie im Seed), `migration.spec`, Unit `migration`/`rescue`; Wendungen `chunk/*` (alte und neu mitgenommene) in der Wortschatzliste mit Filter „Wendungen“, eigenem Blatt (Ursprung, eigener Satz, Ursprungssatz) und Verstecken/Zurückholen (`trainerModes.spec` › Wortschatzliste) und in der täglichen Wiederholung mit FSRS aus den alten Planungsfeldern (Unit `chunkTrainer`, `trainerModes.spec` › Wendungen) |
+| Alle bisherigen Daten sichtbar und weitergeführt | `acceptance.spec` (Serie 12, Kurs 6, Karten 146 wie im Seed), `migration.spec`, Unit `migration`/`rescue`; Wendungen `chunk/*` in Wortschatzliste und täglicher Wiederholung (Unit `chunkTrainer`, `trainerModes.spec`); alte Wochen-Checks (`profile.checks[]`) und „Letzte Fortschritte“ (`profile.feed[]`) im Verlauf (`stand-gaps.spec`, Unit `standGaps`) |
 | Serie läuft weiter | Unit `streak` (Zeitmatrix), `capacity` (Serie vor/nach dem Auslagern an drei Zeitpunkten gleich), `migration` (`legacyStreak` = neue Serie) |
 | Tagesauftrag funktioniert unverändert | `acceptance.spec` (`daily/*`, `feed/*` bytegleich, `newWords` werden Karten), Unit `dailyIntake`, Writer verweigert `daily/*`/`feed/*` (Unit `writer`) |
 | Beim Öffnen in < 2 s klar, was heute dran ist | `perf.spec`: < 2 s ohne Drossel (Großdatensatz). **Befund:** mit 4-facher CPU-Drossel ≈ 3 s (Parsen des 2,5-MB-Bundles ≈ 1,1 s, Planaufbau über 1.500 Karten). Geprüft wird dort eine Regressionsgrenze von 4 s. **iPhone:** Emrah misst gefühlt beim Öffnen. |
-| Tippen in die Lücke wie nativ | `perf.spec` (keine Blockade > 100 ms bei 20 Anschlägen unter 4×, p95 Bildabstand < 20 ms), `trainer.spec` (Buchstaben landen in der Lücke). **iPhone:** Tastatur öffnet zuverlässig, Satz bleibt sichtbar. |
+| Tippen in die Lücke wie nativ | `perf.spec` (keine Blockade > 100 ms bei 20 Anschlägen unter 4×, p95 Bildabstand < 20 ms), `trainer.spec` (Buchstaben landen in der Lücke); Lücke und Prüfen-Knopf rollen über die Tastatur (`visualViewport`, für jede Lücke im `HiddenInput`): Unit `standGaps`, `stand-gaps.spec` mit nachgebildetem `visualViewport`. **iPhone:** Tastatur öffnet zuverlässig, Satz und Prüfen-Knopf bleiben sichtbar (Chromium hat keine echte Bildschirmtastatur). |
 | Alle Tests grün auf Handy und Desktop, alle Modi, beide Sprachen | `screens.spec` (Matrix inkl. `stand6-*`), `a11y.spec`, `npm run verify` |
 | Keine laufenden Kosten | `platform.spec`, `check:platform` (nichts wird extern geladen, kein Adapter im Build) |
 
@@ -41,13 +41,13 @@ Stand 27.09.2026, Branch `claude/affectionate-cerf-pe6ej2`. „E2E" = Playwright
 | Hinweis | Stand |
 |---|---|
 | H3 Fehlerzustand `log/<heute>` | erledigt: `startDayLive` meldet, Heute läuft mit leerer Bilanz weiter (`data/live.ts`) |
-| H5 `visualViewport` | umgesetzt für Chat und Eingabefelder (`ui/chat/keyboard.ts`, `DraftArea`); **iPhone-Prüfpunkt** für die Lücke |
+| H5 `visualViewport` | umgesetzt für Chat und Eingabefelder (`ui/chat/keyboard.ts`, `DraftArea`) und seit dem Lücken-Paket für jede Lücke (`useKeepGapVisible` im `HiddenInput`: Lücke und Prüfen-Knopf über der Tastatur; Unit `standGaps`, `stand-gaps.spec`); **iPhone-Prüfpunkt** am Gerät |
 | H6 Validierungs-Cache | offen – nicht Teil von Phase 6/7 umgesetzt (kein Befund in den Tests) |
 | Testuhr nur für `Date` | bekannt: `page.clock` ersetzt auch `performance`; `perf.spec` misst deshalb ohne Testuhr |
 | W1 Folgenummer beim Wiederholen | erledigt (persist D6, Unit `persist`) |
 | W2 zwei Tabs | erledigt (Tab-Kennung D7, Unit `persist`); Einschätzung zusätzlich mit `acquire` (Unit `assess`) |
 | W3 Puffer beim Schließen | erledigt (`installFlushOnHide`) |
-| W5 Nachtragen-Hinweis auch auf Heute | offen – der Hinweis steht nur auf „Dein Stand" |
+| W5 Nachtragen-Hinweis auch auf Heute | erledigt: leise Textzeile unten auf Heute (keine Karte, kein Primärknopf), führt zu „Dein Stand" (`LateRescueHint`, `stand-gaps.spec`, `screens.spec` `neu-*`) |
 | W6 „nachts zählt der Vortag" erklären | Prozess: im Bericht an Emrah |
 | W7 | nicht belegt, offen |
 | W8 alle angesammelten `daily/*` | erledigt (`runDailyIntake`, Unit `dailyIntake`) |
@@ -64,3 +64,15 @@ Stand 27.09.2026, Branch `claude/affectionate-cerf-pe6ej2`. „E2E" = Playwright
 | **iPhone-Prüfpunkt** | Hören (`listen_mc`, `dictation`) spielt beim Einblenden automatisch; blockiert Safari das ohne Tippen, hilft „Nochmal hören“. Bitte am Gerät prüfen. |
 | offen (Plan §4.5 „neu“) | Blutegel-Grenze (≤ 3 Karten mit `lapses ≥ 4` je Pflichtrunde) und Verschachtelung nach `topicKey` sind nicht umgesetzt; Heute gewichtet die Kanäle weiter nur mit Vokabeln (`dueCards` im Ranking) |
 | offen | „Eigener Satz“ ohne Claude erkennt unregelmäßige Formen von Wendungen nicht immer (z. B. „met … halfway“); mit Claude kein Problem |
+
+## Lücken aus dem Abgleich (Funktionsabgleich, 27.09.2026)
+
+| Punkt | Stand und Beleg |
+|---|---|
+| M7 Wochenstreifen + Niveau-Leiste | Kopfzeile von „Dein Stand": 7 Tagesringe Mo–So (Pflicht erledigt · Ruhetag · offen · kommt noch) mit derselben Regel wie die Serie (`weekStrip` in `domain/streak.ts`), Form + Zeichen + Vorlesetext statt nur Farbe; Skala B1 … C1+ mit Punkt und Band der Belastbarkeit (`domain/assessment/levelBar.ts`). Unit `standGaps`, `stand-gaps.spec`, `screens.spec`/`a11y.spec` (Tour „Dein Stand") |
+| M10 Wochen-Check | 12 gemischte Aufgaben ohne Tipps (5 Wörter, 2 Wendungen/Kollokationen, 5 Grammatik) aus den vorhandenen Bausteinen (`ExerciseView`/`GrammarItem` mit `noHelp`), Extra, höchstens einmal je Kalenderwoche, Antworten `ctx:'xtra'`, Rundenende `act:'check'` – zählt nie als Pflicht; heute fällige Karten werden nach hinten gestellt. Ergebnis im Format der alten App in `profile.checks[]` (angehängt, bestehende Einträge unverändert; über 20 fällt wie in der alten App der älteste heraus), Vergleich mit dem letzten Check, Beleg `v:check` für die Einschätzung. Angebot im Verlauf und nach der Pflicht auf Heute (ab 40 Antworten). Unit `standGaps`, `stand-gaps.spec`, `screens.spec` `neu-*`, `a11y.spec`. **Offen:** Wendungen aus `chunk/*` kommen erst mit der Wendungs-Wiederholung dazu (paralleles Paket) |
+| M13 Ladepunkt am Reiter | ruhiger Punkt mit Vorlesetext am Reiter der laufenden KI-Korrektur (`runningTabs`); Unit `standGaps`, `stand-gaps.spec` |
+| M18 „Als Preply-Stunde" | eingesetzt bei Lesen (Text), Entdecken (Beitrag), Regelblatt, Szene (Einweisung und Auswertung) und Wochenbericht; `stand-gaps.spec` (Regelblatt und Wochenbericht bis zum Anlass „Zu: …") |
+| M20 „Was ist neu" | schmale, schließbare Zeile oben (kein Blatt, kein Fokusraub), Merker `lx:whats-new` nur im Browser; `stand-gaps.spec`, `screens.spec` `neu-*` |
+| M21 Farbthemen | Salbei (Standard) · Ozean · Pflaume · Graphit über `profile.theme.p` (altes Format, `theme.m` bleibt), Akzent-Tokens je Modus in `styles/index.css`; Unit `contrast` (jeder Satz in jedem Modus), `stand-gaps.spec`, `a11y.spec` |
+| M22 Beruflicher Kontext | Feld in den Einstellungen (≤ 400 Zeichen, `profile.ctx`, gelesen von `prompts/work.ts`); Unit `standGaps`, `stand-gaps.spec` |

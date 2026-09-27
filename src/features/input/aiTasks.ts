@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { askJson } from '../../ai/gate';
 import { isAiFailure, type AiMessageKey, type AiPhase, type PromptTemplate } from '../../ai/types';
-import type { InputRoute } from '../../app/nav';
+import type { InputRoute, TabName } from '../../app/nav';
 import { logError, logWarn } from '../../platform/diagnostics';
 
 // KI-Korrekturen als App-Aufgabe (M14, Funktionsabgleich): Schreiben, Lesezusammenfassung und
@@ -50,6 +50,22 @@ function removeTask(key: string): void {
 }
 
 export const isRunning = (t: AiTask | undefined): boolean => !!t && t.status === 'running';
+
+/**
+ * Reiter mit laufender KI-Korrektur (M13, Ladepunkt): Entdecken-Beiträge am Reiter „Entdecken",
+ * Pflicht-Einheiten an „Heute", freiwillige Lesen/Schreiben-Einheiten an „Lernen".
+ */
+export function runningTabs(tasks: Readonly<Record<string, AiTask>>): Set<TabName> {
+  const out = new Set<TabName>();
+  for (const t of Object.values(tasks)) {
+    if (t.status !== 'running') continue;
+    const r = t.route;
+    if (r.name === 'discover' || r.name === 'discoverItem' || t.kind === 'discover') out.add('discover');
+    else if ('ctx' in r && r.ctx === 'duty') out.add('today');
+    else out.add('learn');
+  }
+  return out;
+}
 
 /**
  * Startet eine Korrektur. `save` speichert das Ergebnis (Datenbank) – erst danach gilt die

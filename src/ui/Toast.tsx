@@ -32,7 +32,7 @@ export function Toaster() {
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: DURATION.base, ease: EASE_OUT }}
             role={t.tone === 'error' ? 'alert' : 'status'}
-            className={`pointer-events-auto max-w-md rounded-2xl border border-line bg-surface-solid px-4 py-3 text-sm shadow-xl ${t.tone === 'error' ? 'text-danger-text' : 'text-fg'}`}
+            className={`pointer-events-auto max-w-[min(28rem,100%)] rounded-2xl border border-line bg-surface-solid px-4 py-3 text-sm shadow-xl ${t.tone === 'error' ? 'text-danger-text' : 'text-fg'}`}
           >
             {t.text}
           </motion.div>

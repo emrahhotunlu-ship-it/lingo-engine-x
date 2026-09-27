@@ -8,6 +8,7 @@ import { companionEn } from './parts/companion.en';
 import { inputEn } from './parts/input.en';
 import { progressEn } from './parts/progress.en';
 import { trainerEn } from './parts/trainer.en';
+import { standEn } from './parts/stand.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -25,6 +26,8 @@ export const en: Record<MessageKey, string> = {
   // Phase 6 – Urteil, Fortschritt, Wortschatztest, Einstellungen
   ...progressEn,
   ...trainerEn,
+  // Gaps from the review: weekly check, week strip, color themes, work context, what's new
+  ...standEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

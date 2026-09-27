@@ -12,8 +12,9 @@ import { countDocuments } from '../../data/reads';
 import { docCount as docCountOf, DOC_COUNT_WARN, profileSize } from '../../domain/capacity/profileSize';
 import { useClock } from '../../app/clock';
 import { COMPACT_ENABLED, compactPreview, runCompact } from './compactRun';
-import { useSettings, type Lang, type ThemeMode } from '../../app/settings';
-import { changeAutoNext, changeLang, changeTheme } from '../../app/actions';
+import { useSettings, type Lang, type Palette, type ThemeMode } from '../../app/settings';
+import { changeAutoNext, changeLang, changePalette, changeTheme } from '../../app/actions';
+import { WorkContextSection } from './WorkContextSection';
 import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll } from './exportData';
 import { VoiceSection } from './VoiceSection';
@@ -31,6 +32,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
       <div className="flex flex-col gap-8 pt-2">
         <Appearance />
         <LearningSection />
+        <WorkContextSection />
         <Practice />
         <VoiceSection />
         <SoundSection />
@@ -65,6 +67,14 @@ function Appearance() {
     { value: 'light', label: t('themeLight') },
     { value: 'auto', label: t('themeAuto') },
   ];
+  // Farbthema (M21): Salbei · Ozean · Pflaume · Graphit, gespeichert in `app/profile.theme.p`.
+  const palette = useSettings((s) => s.palette);
+  const palettes: ReadonlyArray<{ value: Palette; label: string }> = [
+    { value: 'sage', label: t('palette_sage') },
+    { value: 'ocean', label: t('palette_ocean') },
+    { value: 'plum', label: t('palette_plum') },
+    { value: 'graphite', label: t('palette_graphite') },
+  ];
   return (
     <>
       <Section title={t('settingsLanguage')}>
@@ -72,6 +82,8 @@ function Appearance() {
       </Section>
       <Section title={t('settingsAppearance')}>
         <Segmented label={t('settingsAppearance')} value={theme} options={themes} onChange={(v) => void changeTheme(v)} />
+        <p className="mt-2 text-sm font-medium">{t('setPalette')}</p>
+        <Segmented label={t('setPalette')} value={palette} options={palettes} columns={4} testId="set-palette" onChange={(v) => void changePalette(v)} />
       </Section>
     </>
   );

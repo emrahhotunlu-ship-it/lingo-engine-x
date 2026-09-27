@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useKeepGapVisible } from '../ui/chat/keyboard';
 
 // Ein einziges, dauerhaft eingehängtes, unsichtbares Eingabefeld (Architektur-Entwurf §6.2).
 // Es liegt genau über der aktiven Lücke: Ein Tippen auf die Lücke trifft das echte Feld
@@ -96,6 +97,12 @@ export function HiddenInputProvider({ children }: { children: ReactNode }) {
       window.removeEventListener('scroll', measure);
     };
   }, [box, measure]);
+
+  // iPhone-Tastatur (Kap. 4.1, H5): Lücke und Prüfen-Knopf bleiben über der Tastatur sichtbar –
+  // gilt für jede Lücke (Trainer, Grammatik, Übungen, Lektion, Check), dieselbe Lösung wie im Chat.
+  const getInput = useCallback(() => input.current, []);
+  const getGap = useCallback(() => target.current?.el ?? null, []);
+  useKeepGapVisible(getInput, getGap);
 
   // Beim Wechsel zwischen Bildschirmen bleibt das Feld eingehängt; ohne Ziel ruht es im Bild.
   useEffect(() => {

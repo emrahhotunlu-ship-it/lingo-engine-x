@@ -16,6 +16,7 @@ import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
 import { Sheet } from '../../ui/Sheet';
+import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { toast } from '../../ui/Toast';
 import { useLearnInputs } from '../learn/inputs';
@@ -326,6 +327,8 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
             {t('aiFailed')}
           </p>
         )}
+        {/* M18: aus dem Regelblatt eine Preply-Stunde machen. */}
+        <AsPreplyLesson title={topicName(topic, lang)} />
       </div>
       <Disclosure label={t('grRaw')}>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm" data-testid="gr-raw">

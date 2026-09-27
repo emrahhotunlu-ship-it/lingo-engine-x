@@ -1,0 +1,106 @@
+// Oberflächentexte der Lücken aus dem Abgleich (M7, M10, M13, M18, M20, M21, M22, W5), Deutsch.
+// Einfache Sprache, keine Fachwörter (CLAUDE.md A2).
+
+export const standDe = {
+  // Wochen-Check (M10)
+  ckTitle: 'Wochen-Check',
+  ckLead: '12 gemischte Aufgaben ohne Tipps – Wörter, Wendungen und Grammatik. Freiwillig, einmal pro Woche; zählt nicht zur Pflicht.',
+  ckOfferSub: '12 Aufgaben ohne Tipps · einmal pro Woche',
+  ckStart: 'Check starten',
+  ckClose: 'Check beenden',
+  ckBadge: 'Wochen-Check',
+  ckDone: 'Wochen-Check: {pct} % richtig',
+  ckFirst: 'Dein erster Check – ab nächster Woche siehst du hier den Vergleich.',
+  ckVsUp: 'Besser als beim letzten Check ({prev} % am {date}).',
+  ckVsDown: 'Etwas weniger als beim letzten Check ({prev} % am {date}).',
+  ckVsSame: 'Genauso wie beim letzten Check ({prev} % am {date}).',
+  ckAreaVocab: 'Wörter',
+  ckAreaColloc: 'Wendungen',
+  ckAreaGram: 'Grammatik',
+  ckFocus: 'Themen für die nächste Woche',
+  ckWords: 'Diese Wörter kommen wieder',
+  ckTooFew: 'Für ein Ergebnis braucht es mindestens 6 Antworten. Deine Antworten sind trotzdem gespeichert.',
+  ckSaveFailed: 'Das Ergebnis konnte nicht gespeichert werden. Deine Antworten sind gespeichert.',
+  ckNote: 'Der nächste Check ist ab Montag möglich.',
+  ckBack: 'Zu „Dein Stand"',
+  ckEmpty: 'Für einen Check fehlen noch geübte Wörter oder Themen.',
+  ckLastOnly: 'Letzter Check: {pct} % am {date}',
+  ckLast: 'Letzter Check: {pct} % am {date} · davor {prev} %',
+  ckWeekDone: 'Diese Woche erledigt – der nächste Check ist ab Montag möglich.',
+  ckMore_one: '{n} ältere Zeile zeigen',
+  ckMore_other: '{n} ältere Zeilen zeigen',
+  ckTableCaption: 'Bisherige Wochen-Checks',
+  ckColResult: 'Ergebnis',
+
+  // Letzte Fortschritte der alten App (profile.feed)
+  feedTitle: 'Letzte Fortschritte aus der alten App',
+  feedLead: 'So hat die alte App deine Einheiten festgehalten. Nur zum Nachlesen.',
+  feedColArea: 'Bereich',
+  feedColWords: 'Wörter',
+  feedAct_lesson: 'Lektion',
+  feedAct_cards: 'Vokabeln',
+  feedAct_review: 'Wiederholen',
+  feedAct_gram: 'Grammatik',
+  feedAct_read: 'Lesen',
+  feedAct_listen: 'Hören',
+  feedAct_write: 'Schreiben',
+  feedAct_sprint: 'Sprint',
+  feedAct_speak: 'Sprechen',
+  feedAct_discover: 'Entdecken',
+  feedAct_chunks: 'Wendungen',
+  feedAct_dictate: 'Diktat',
+  feedAct_cloze: 'Lückenjagd',
+  feedAct_order: 'Satzbau',
+  feedAct_vtest: 'Wortschatztest',
+  feedAct_preply: 'Preply',
+  feedAct_misc: 'Übung',
+
+  // Wochenstreifen und Niveau-Leiste (M7)
+  wkTitle: 'Diese Woche',
+  wkSummary_one: '{n} Tag erledigt',
+  wkSummary_other: '{n} Tage erledigt',
+  wkRestN: '1 Ruhetag',
+  wkDone: 'Pflicht erledigt',
+  wkRest: 'Ruhetag',
+  wkOpen: 'noch offen',
+  wkMissed: 'nicht erledigt',
+  wkFuture: 'kommt noch',
+  lvTitle: 'Niveau',
+  lvCaption: 'Claudes Stufe {level} · {conf}',
+  lvNone: 'Das Niveau erscheint hier nach Claudes erster Einschätzung.',
+
+  // Einstellungen: Farbthema (M21) und beruflicher Kontext (M22)
+  setPalette: 'Farbthema',
+  palette_sage: 'Salbei',
+  palette_ocean: 'Ozean',
+  palette_plum: 'Pflaume',
+  palette_graphite: 'Graphit',
+  ctxTitle: 'Beruflicher Kontext',
+  ctxHint: 'Worum geht es in deiner Arbeit? Claude nutzt das für Fachwörter, Lese- und Hörtexte, Schreibaufgaben und Rollenspiele.',
+  ctxPlaceholder: 'z. B. Projektleiter für Cloud-Software im Mittelstand, viele Kundentermine',
+  ctxCount: '{n} von {max} Zeichen',
+  ctxSave: 'Speichern',
+  ctxSaved: 'Beruflicher Kontext gespeichert',
+
+  // Wochenbericht als Preply-Stunde (M18)
+  weeklyPreplyTitle: 'Wochenbericht {from} bis {to}',
+
+  // W5: Nachtragen-Hinweis auf Heute
+  lateTodayHint_one: 'In diesem Browser liegt noch {n} Änderung aus der alten App.',
+  lateTodayHint_other: 'In diesem Browser liegen noch {n} Änderungen aus der alten App.',
+  lateTodayOpen: 'Ansehen',
+
+  // M13: Ladepunkt am Reiter
+  tabBusy: 'Claude korrigiert gerade im Hintergrund',
+
+  // M20: Was ist neu
+  wnTitle: 'Neu:',
+  wnLead: 'Wochen-Check, Wochenstreifen, Farbthemen und mehr.',
+  wnMore: 'Mehr',
+  wnLess: 'Weniger',
+  wnClose: 'Hinweis schließen',
+  wnCheck: 'Wochen-Check: 12 Aufgaben ohne Tipps, einmal pro Woche – unter „Dein Stand" › Verlauf und nach der Pflicht auf „Heute".',
+  wnWeek: '„Dein Stand" zeigt oben deine Woche als sieben Ringe und Claudes Niveau auf einer Skala; im Verlauf stehen jetzt auch die alten Wochen-Checks.',
+  wnSettings: 'In den Einstellungen: Farbthema (Salbei, Ozean, Pflaume, Graphit) und dein beruflicher Kontext.',
+  wnPreply: '„Als Preply-Stunde" gibt es jetzt bei Texten, Grammatikthemen, Szenen und im Wochenbericht.',
+} as const;

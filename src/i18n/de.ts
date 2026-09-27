@@ -10,6 +10,7 @@ import { companionDe } from './parts/companion.de';
 import { inputDe } from './parts/input.de';
 import { progressDe } from './parts/progress.de';
 import { trainerDe } from './parts/trainer.de';
+import { standDe } from './parts/stand.de';
 
 export const de = {
   ...aiDe,
@@ -26,6 +27,8 @@ export const de = {
   ...progressDe,
   // Trainer: neue Abfragearten und Wendungen
   ...trainerDe,
+  // Lücken aus dem Abgleich: Wochen-Check, Wochenstreifen, Farbthemen, Kontext, Was ist neu
+  ...standDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

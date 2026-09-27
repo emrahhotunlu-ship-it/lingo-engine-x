@@ -88,6 +88,7 @@ export function ExerciseView({
   again = false,
   onDone,
   onCommit,
+  noHelp = false,
 }: {
   exercise: Exercise;
   knownWords: ReadonlySet<string>;
@@ -96,6 +97,8 @@ export function ExerciseView({
   onDone: (kind: FirstKind) => void;
   /** Eigener Schreibweg (z. B. Wörter-Schritt der Lektion); Standard: die Trainer-Runde. */
   onCommit?: (ans: Answer) => FirstKind;
+  /** Wochen-Check (M10): ohne Tipp-Knopf – der Check misst, statt zu helfen. */
+  noHelp?: boolean;
 }) {
   const { t, tn, lang } = useT();
   const api = useHiddenInput();
@@ -739,7 +742,7 @@ export function ExerciseView({
         >
           {t('trCheck')}
         </Button>
-        {FREE_TYPED.has(e.ex) && tip < 2 && (
+        {FREE_TYPED.has(e.ex) && tip < 2 && !noHelp && (
           <Button variant="ghost" icon="lightbulb" onClick={showTip} data-testid="hint" data-level={tip}>
             {tip === 0 ? t('trTip') : t('trTipLetter')}
           </Button>

@@ -10,6 +10,7 @@ import { Button } from '../../ui/Button';
 import { Sheet } from '../../ui/Sheet';
 import { clearResume, readResume } from './resume';
 import { autoplayOn } from './autoplay';
+import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 
 // Einweisung (Plan §5.2): Lage, Ziel, Gegenüber, hilfreiche Wendungen (antippbar, 🔊), großer
 // Knopf „Gespräch starten“ – er schaltet die Sprachausgabe synchron in der Geste frei (iPhone)
@@ -95,6 +96,10 @@ export function SceneBriefing({ scene, onClose }: { scene: SceneView | null; onC
               {t('spStart')}
             </Button>
           )}
+          {/* M18: aus der Szene eine Preply-Stunde machen. */}
+          <div>
+            <AsPreplyLesson title={scene.title} />
+          </div>
         </div>
       )}
     </Sheet>

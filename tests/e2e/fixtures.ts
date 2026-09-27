@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import type { Page } from '@playwright/test';
 import type { InstallOptions } from '../../src/platform/dev/install';
+import { WHATS_NEW_KEY, WHATS_NEW_VERSION } from '../../src/features/system/whatsNew';
 
 // Lädt den Produktions-Build dist/index.html unter einer https-Adresse und spielt den
 // Entwicklungs-Adapter von außen ein (CLAUDE.md A7). Jede andere Anfrage wird
@@ -27,6 +28,8 @@ export type BootOptions = {
   now?: string;
   /** Einträge für localStorage vor dem Start (z. B. `sw2:`-Kopien der alten App). */
   localStorage?: Record<string, string>;
+  /** `true` = der Hinweis „Was ist neu" (M20) erscheint wie nach einem Update. */
+  whatsNew?: boolean;
 };
 
 export type Booted = { external: string[]; errors: string[] };
@@ -48,6 +51,10 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
     await route.abort();
   });
   await page.clock.setFixedTime(new Date(opts.now ?? SEED_EVENING));
+  // „Was ist neu" (M20) gilt in Tests als gesehen – außer ein Test prüft ihn ausdrücklich.
+  if (!opts.whatsNew) {
+    await page.addInitScript(([k, v]: [string, string]) => window.localStorage.setItem(k, v), [WHATS_NEW_KEY, WHATS_NEW_VERSION] as [string, string]);
+  }
   if (opts.localStorage) {
     await page.addInitScript((entries: Record<string, string>) => {
       for (const [k, v] of Object.entries(entries)) window.localStorage.setItem(k, v);

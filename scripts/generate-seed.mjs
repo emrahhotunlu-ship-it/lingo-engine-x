@@ -481,6 +481,11 @@ put('app/profile', {
     act: pick(['lesson', 'cards', 'gram', 'listen']),
     d: { lv: round(0.01 * i, 2), vp: int(0, 12), gr: round(0.02 * i, 2), xp: int(60, 240) },
   })),
+  // Wochen-Checks der alten App (`saveCheck`, ≤ 20). Feste Werte: keine Zufallszahlen, damit der Rest des Seeds gleich bleibt.
+  checks: [
+    { d: addDays(ANCHOR, -15), t: now - 15 * DAY, n: 12, ok: 8, vocab: [4, 5], colloc: [1, 2], gram: [3, 5], topics: ['passive', 'reported'], words: ['affect'], lvl: 61 },
+    { d: addDays(ANCHOR, -8), t: now - 8 * DAY, n: 12, ok: 9, vocab: [4, 5], colloc: [2, 2], gram: [3, 5], topics: ['mixed-cond'], words: ['afford'], lvl: 63 },
+  ],
   listen: passages.listen.slice(0, 3).map((p, i) => ({ id: p.id, level: p.level, n: 5, ok: int(3, 5), plays: int(1, 3), rate: 1, t: now - (i + 1) * 2 * DAY })),
   sprints: Array.from({ length: 4 }, (_, i) => {
     const n = int(18, 30);

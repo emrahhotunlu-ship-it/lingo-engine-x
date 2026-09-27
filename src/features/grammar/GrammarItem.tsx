@@ -46,6 +46,8 @@ export type GrammarItemProps = {
   area?: WordTapArea;
   /** Zusatz in der Statuszeile (z. B. „Deine Fehler"). */
   badge?: string | null;
+  /** Wochen-Check (M10): ohne Platzhalter und ohne Tipp – der Check misst, statt zu helfen. */
+  noHelp?: boolean;
 };
 
 type Fb = {
@@ -64,7 +66,7 @@ type Fb = {
 
 const GAP = /_{3,}/;
 
-export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null }: GrammarItemProps) {
+export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const ai = useAiAvailable();
@@ -75,7 +77,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const p = topicP(task.topic, doc, now);
   // Ganzsatz-Eingabe: `correct` und Umformungen ohne Lücke `___` (Lektionen der alten App).
   const whole = wholeSentence(task);
-  const scaff = task.type === 'gap' && !whole && scaffolded(pStart);
+  const scaff = task.type === 'gap' && !whole && scaffolded(pStart) && !noHelp;
   const [fb, setFb] = useState<Fb | null>(null);
   const [tip, setTip] = useState<0 | 1 | 2>(0);
   const [judging, setJudging] = useState(false);
@@ -412,7 +414,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
                 {t('trCheck')}
               </Button>
             )}
-            {typedKind && !scaff && tip < 2 && (
+            {typedKind && !scaff && tip < 2 && !noHelp && (
               <Button
                 variant="ghost"
                 icon="lightbulb"

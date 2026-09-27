@@ -7,6 +7,7 @@ import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCapabilities } from '../../platform/capabilities';
 import { useLateRescue, type RescueNote } from './lateRescue';
+import { useNav } from '../../app/nav';
 
 const NOTE_LABEL: Record<RescueNote['reason'], MessageKey> = {
   not_merged: 'skipNotMerged',
@@ -17,6 +18,33 @@ const NOTE_LABEL: Record<RescueNote['reason'], MessageKey> = {
   unknown_path: 'skipUnknown',
   missing_local: 'skipMissing',
 };
+
+/**
+ * W5 (A7): unauffälliger Hinweis auf „Heute", wenn dieser Browser noch Kopien der alten App hat.
+ * Eine Textzeile unten, keine Karte und kein Primärknopf – die rote Linie bleibt der Pflichtknopf
+ * (Kap. 2.1). Das Nachtragen selbst geschieht auf „Dein Stand".
+ */
+export function LateRescueHint() {
+  const { tn, t } = useT();
+  const db = useCapabilities((s) => s.db);
+  const go = useNav((s) => s.go);
+  const state = useLateRescue();
+  const { check } = state;
+  useEffect(() => {
+    if (db === 'ready') void check();
+  }, [db, check]);
+  if (state.phase !== 'pending' && state.phase !== 'failed') return null;
+  const n = state.items.length + state.notes.length;
+  return (
+    <p className="flex flex-wrap items-center gap-x-2 text-xs text-subtle" data-testid="late-rescue-hint">
+      <Icon name="download" size={14} />
+      <span>{tn('lateTodayHint', n)}</span>
+      <button type="button" className="inline-flex min-h-11 items-center font-medium text-cyan-text underline-offset-2 hover:underline" onClick={() => go({ name: 'overview' })} data-testid="late-rescue-open">
+        {t('lateTodayOpen')}
+      </button>
+    </p>
+  );
+}
 
 /** Hinweis oben auf „Dein Stand", wenn dieser Browser noch Kopien der alten App hat. */
 export function LateRescueCard() {

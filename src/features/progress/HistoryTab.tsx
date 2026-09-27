@@ -22,6 +22,8 @@ import { Skeleton } from '../../ui/Skeleton';
 import { aiUsable } from './assessRun';
 import { useCollectionsOnce, useDocsOnce } from './useOnce';
 import { ensureWeeklyText, storedWeekly, WEEKLY_MIN_FACTS } from './weeklyRun';
+import { ChecksCard, LegacyFeedCard } from './ChecksCard';
+import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 
 // Reiter „Verlauf" (Plan §7.3–7.5): Wortschatztest, Wochenbericht, Verlauf der letzten 120 Tage,
 // Aktivität, bisherige Einschätzungen, Meilensteine je Einheit und die eingeklappten Messwerte.
@@ -169,6 +171,12 @@ function Weekly() {
                 ))}
             </ul>
           )}
+          {/* M18: aus dem Wochenbericht eine Preply-Stunde machen. */}
+          {facts.length > 0 && (
+            <div className="mt-3">
+              <AsPreplyLesson title={stored?.text.headline || t('weeklyPreplyTitle', { from: date(dayMs(first)), to: date(dayMs(last)) })} />
+            </div>
+          )}
         </>
       )}
     </Card>
@@ -284,6 +292,8 @@ export function HistoryTab() {
         </div>
       </Card>
 
+      <ChecksCard />
+
       <Weekly />
 
       <Card aria-labelledby="hist-title">
@@ -346,6 +356,8 @@ export function HistoryTab() {
           </div>
         </Card>
       )}
+
+      <LegacyFeedCard />
 
       <Card data-testid="measures">
         <Disclosure label={t('measuresToggle')}>
