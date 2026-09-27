@@ -6,8 +6,9 @@ import { DURATION, EASE_OUT } from '../ui/motion';
 // Bewegung, nur die schlichte Überblendung der Bildschirme.
 //
 // 1. Innerhalb eines Bildschirms (Wortzeile → Titel des Wortblatts), beide Elemente gleichzeitig
-//    eingehängt: framer-motion `layoutId` (Kennung mit Epoche je Einhängen des Bildschirms, fester
-//    `layoutDependency` an der Quelle, damit gewöhnliche Neuzeichnungen nichts animieren).
+//    eingehängt: framer-motion `layoutId` (Kennung mit Epoche je Einhängen des Bildschirms,
+//    `layoutDependency` an der Quelle, der sich nur beim Öffnen/Schließen ändert, damit gewöhnliche
+//    Neuzeichnungen nichts animieren).
 // 2. Zwischen Bildschirmen (Heldenkarte → erste Übung, Kurszeile → Kopf der Lektion): Der alte
 //    Bildschirm blendet erst aus (`AnimatePresence mode="wait"`), dann erscheint der neue. Mit
 //    `layoutId` verlor framer dabei gelegentlich die Messung der Quelle (gemessen: etwa jeder
@@ -33,8 +34,13 @@ export function useSharedEpoch(): number {
 
 export const sharedId = (base: string, ep: number): string => `${base}@${ep}`;
 
-/** Quelle: fester `layoutDependency` – nur der gemeinsame Flug animiert, keine Neuzeichnung. */
-export const SOURCE_DEPENDENCY = 0;
+/**
+ * `layoutDependency` der Quelle: wechselt genau beim Öffnen/Schließen ihres Ziels. Der Wechsel
+ * startet framers Mess-Runde (Schnappschuss der Quelle, Ziel wird vermessen); ohne ihn fliegt das
+ * Ziel nur, wenn zufällig ein anderes Layout-Element im Baum gleichzeitig neu zeichnet.
+ * Gewöhnliche Neuzeichnungen animieren weiterhin nichts.
+ */
+export const sourceDependency = (open: boolean): number => (open ? 1 : 0);
 
 // ---------------------------------------------------------------- 2. Flug zwischen Bildschirmen
 

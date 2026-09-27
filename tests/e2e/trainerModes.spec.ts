@@ -228,7 +228,7 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
     expect(errors).toEqual([]);
   });
 
-  test('Wendung aus der Mail: Einsetzen mit anderen Wendungen als Ablenker, Protokoll als Wendung', async ({ page }) => {
+  test('Wendung aus der Mail auf Stufe 2: keine Auswahlfrage mehr, sondern Abruf mit Stütze; Protokoll als Wendung (Lernberatung 27.09.)', async ({ page }) => {
     const { errors } = await boot(page, {
       migrated: true,
       fake: { patch: { 'app/profile': planPatch(1), 'chunk/c-behind-schedule': forcedDoc(2, { ...strong('mc_de'), ...weak('match') }) } },
@@ -238,17 +238,11 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
     await screen(page, 'trainer');
     const ex = page.getByTestId('exercise');
     await expect(ex).toHaveAttribute('data-card', 'c-behind-schedule');
-    await expect(ex).toHaveAttribute('data-ex', 'match');
-    await expect(page.getByTestId('sentence')).toContainText('The scanners are running two weeks');
-    const labels = (await page.getByTestId('choice').allInnerTexts()).map((l) => l.replace(/^\d+\s*/, '').trim());
-    expect(labels).toContain('behind schedule');
-    // Ablenker sind andere Wendungen (mehrere Wörter), keine Einzelwörter.
-    expect(labels.filter((l) => l.includes(' ')).length).toBeGreaterThanOrEqual(3);
+    // Wendungen überspringen Erkennen/Zuordnen (Stufen 1–2): abgefragt wird ab „Mit Stütze abrufen".
+    const kind = await ex.getAttribute('data-ex');
+    expect(['match', 'mc_de', 'mc_en']).not.toContain(kind);
     await answerCurrent(page);
-    await expect.poll(async () => ((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined)?.find((e) => e.id === 'c-behind-schedule')).toMatchObject({ type: 'chunk', m: 'tr-match' });
-    const doc = (await dump(page))['chunk/c-behind-schedule'] as Doc;
-    expect(doc).not.toHaveProperty('modes.cloze');
-    expect(doc.xs).toMatchObject({ match: { c: 1, w: 6 } });
+    await expect.poll(async () => ((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined)?.find((e) => e.id === 'c-behind-schedule')).toMatchObject({ type: 'chunk' });
     expect(errors).toEqual([]);
   });
 });
