@@ -1,6 +1,6 @@
 import { mkdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { inputTour } from './inputHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
@@ -324,9 +324,10 @@ for (const vp of VIEWPORTS) {
         await check('wochencheck');
         await playCheck(page);
         await check('wochencheck-ergebnis');
+        // Zurück zur Herkunft (Heute), dann über „Stand“ in die Einstellungen.
         await page.getByTestId('summary-back').click();
-        await screen(page, 'overview');
-        await page.getByTestId('open-settings').click();
+        await screen(page, 'today');
+        await openSettings(page);
         await expect(page.getByTestId('work-ctx')).toBeVisible();
         await check('einstellungen');
         expect(errors).toEqual([]);

@@ -1,4 +1,4 @@
-import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
+import { MotionConfig, motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 import { useT } from '../i18n';
 import { Icon, type IconName } from '../ui/Icon';
@@ -264,12 +264,13 @@ export function App() {
         {/* M20: einmaliger Hinweis „Was ist neu" nach einem Update (Merker im Browser). */}
         {migratedScreen && <WhatsNew />}
         <main id="main" className={`flex-1 ${tab ? 'pb-28 md:pb-16' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>
-          <AnimatePresence mode="wait" initial={false}>
+          {/* Bildschirmwechsel ohne `AnimatePresence mode="wait"`: der neue Bildschirm steht sofort und
+              blendet nur ein. Ein Wechsel kann so nie an einer hängenden Ausblendung stecken bleiben
+              (schnelles Tippen, spätes Nachladen des Tagesplans). */}
             <motion.div
               key={screen}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
               transition={{ duration: DURATION.base }}
               data-screen={screen}
               onAnimationStart={(def) => {
@@ -302,7 +303,6 @@ export function App() {
               {screen === 'say' && <SayScreen />}
               {isInputScreen(screen) && <InputRoutes route={route} />}
             </motion.div>
-          </AnimatePresence>
         </main>
       </div>
       <SettingsSheet open={settingsOpen} onClose={closeSettings} />

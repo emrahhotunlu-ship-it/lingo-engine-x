@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
 
 // Abschlussprüfung (P7-4, docs/abnahme.md): Kap. 14 und 15 als durchlaufende Prüfungen gegen den
 // Produktions-Build. Weitere Kriterien belegen die dort genannten Specs und Unit-Tests.
@@ -30,7 +30,7 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
   test.setTimeout(90_000);
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  for (const tab of ['today', 'learn', 'speak', 'discover', 'overview'] as const) {
+  for (const tab of ['today', 'learn', 'speak', 'overview'] as const) {
     await page.getByTestId(`tab-${tab}`).click();
     await page.locator(`[data-screen="${tab}"]`).waitFor();
     await page.waitForTimeout(300);
@@ -44,7 +44,10 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
   }
   await page.getByTestId('vtest-start').click();
   await screen(page, 'vtest');
-  await page.getByTestId('open-settings').click();
+  // In Übungen gibt es keine Reiter und kein Zahnrad (UX-Beratung Nr. 4): ✕ führt zurück zu „Stand“.
+  await page.getByTestId('vt-close').click();
+  await screen(page, 'overview');
+  await openSettings(page);
   await expect(page.getByRole('dialog')).toBeVisible();
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
@@ -62,7 +65,9 @@ test('Kap. 14/9: der Tagesauftrag funktioniert unverändert – daily/* und feed
   await boot(page, { migrated: true });
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toBeVisible();
-  await page.getByTestId('tab-discover').click();
+  // Entdecken liegt seit der UX-Beratung 27.09. im Reiter „Üben“.
+  await page.getByTestId('tab-learn').click();
+  await page.locator('[data-testid="module"][data-module="discover"]').click();
   await page.locator('[data-screen="discover"]').waitFor();
   await page.getByTestId('tab-overview').click();
   await screen(page, 'overview');

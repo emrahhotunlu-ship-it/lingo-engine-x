@@ -5,11 +5,11 @@ import { useAiAvailable } from '../../ai/scope';
 import type { SceneView } from '../../domain/speak/types';
 import { EnglishText } from '../../engine/EnglishText';
 import { SpeakButton } from '../../engine/SpeakButton';
-import { speak, unlockSpeech } from '../../platform/speech';
+import { unlockSpeech } from '../../platform/speech';
 import { Button } from '../../ui/Button';
 import { Sheet } from '../../ui/Sheet';
 import { clearResume, readResume } from './resume';
-import { autoplayOn } from './autoplay';
+import { autoplayOn, queueOpening } from './autoplay';
 import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 
 // Einweisung (Plan §5.2): Lage, Ziel, Gegenüber, hilfreiche Wendungen (antippbar, 🔊), großer
@@ -26,10 +26,9 @@ export function SceneBriefing({ scene, onClose }: { scene: SceneView | null; onC
   const start = (resume: boolean) => {
     if (!scene) return;
     unlockSpeech();
-    if (!resume) {
-      clearResume(scene.id);
-      if (autoplayOn()) void speak(scene.opening);
-    }
+    // Die Eröffnung spricht das Rollenspiel selbst, sobald es steht (nie eine alte beim Fortsetzen).
+    queueOpening(!resume && autoplayOn() ? scene.opening : null);
+    if (!resume) clearResume(scene.id);
     onClose();
     go({ name: 'roleplay', sceneId: scene.id, resume });
   };

@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { boot, openOverview, screen, type Theme } from './fixtures';
+import { boot, openSettings, openOverview, screen, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { ARTICLE_OWN, inputTour, openModule } from './inputHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
@@ -97,7 +97,7 @@ test('axe · Einstellungen offen (alle Modi)', async ({ browser }) => {
     const page = await context.newPage();
     await boot(page, { theme, migrated: true });
     await openOverview(page);
-    await page.getByTestId('open-settings').click();
+    await openSettings(page);
     await expect(page.getByRole('dialog')).toBeVisible();
     const res = await new AxeBuilder({ page }).include('[role="dialog"]').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     expect(res.violations.map((v) => `${theme} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
@@ -109,7 +109,7 @@ test('Touch-Ziele am Handy mindestens 44 × 44 px', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await boot(page, { migrated: true });
   await openOverview(page);
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.waitForTimeout(400);
   const small = await page.evaluate(() =>
@@ -174,9 +174,10 @@ for (const theme of THEMES) {
       await scan('wochencheck');
       await playCheck(page);
       await scan('wochencheck-ergebnis');
+      // Zurück zur Herkunft (Heute), dann über „Stand“ in die Einstellungen.
       await page.getByTestId('summary-back').click();
-      await screen(page, 'overview');
-      await page.getByTestId('open-settings').click();
+      await screen(page, 'today');
+      await openSettings(page);
       await expect(page.getByTestId('work-ctx')).toBeVisible();
       for (const p of ['Pflaume', 'Graphit', 'Salbei'] as const) {
         await page.getByRole('radio', { name: p }).click();

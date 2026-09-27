@@ -22,7 +22,7 @@ test('Rundgang: keine fremden Anfragen, keine Fehler, Abos ≤ 64, Feed-Abo nach
   expect(external).toEqual([]);
 });
 
-test('Widerspruchstest: Angebotszeile, Modul-Häkchen und Klickziel folgen channelDone', async ({ page }) => {
+test('Widerspruchstest: Modul-Hinweis „heute geübt“ und Klickziel folgen channelDone', async ({ page }) => {
   test.setTimeout(90_000);
   // Pflicht ist heute nichts (Plan ohne Wiederholen) → Angebote sind sichtbar.
   await boot(page, {
@@ -30,12 +30,9 @@ test('Widerspruchstest: Angebotszeile, Modul-Häkchen und Klickziel folgen chann
     fake: { patch: { 'app/profile': { newPerDay: 0, plan: { d: '2026-09-20', v: 1, ids: [], why: [], duty: [], goal: { review: 0 }, lesson: null, at: 1 } }, 'articles/ai1789149600000': null } },
   });
   await screen(page, 'today');
-  const offers = page.getByTestId('input-offers');
-  await expect(offers).toBeVisible();
-  // Hören ist im Testbestand heute schon erledigt: keine Zeile, im Modul der Hinweis „heute geübt“.
-  await expect(page.locator('[data-testid="input-offer"][data-channel="listen"]')).toHaveCount(0);
-  await expect(page.locator('[data-testid="input-offer"][data-channel="read"]')).toBeVisible();
-  await expect(page.locator('[data-testid="input-offer"][data-channel="discover"]')).toContainText('neue Beiträge');
+  // UX-Beratung 27.09.: keine Angebotsliste mehr auf Heute – alles Freiwillige lebt in „Üben“.
+  await expect(page.getByTestId('input-offers')).toHaveCount(0);
+  // Hören ist im Testbestand heute schon erledigt: im Modul der Hinweis „heute geübt“.
   await openLearn(page);
   await expect(page.locator('[data-module="listen"] [data-testid="module-done"]')).toHaveCount(1);
   // Freiwilliges Modul: ruhiger Hinweis „heute geübt", kein „Erledigt" am Startknopf (Kap. 2.2/2.6).
@@ -43,16 +40,12 @@ test('Widerspruchstest: Angebotszeile, Modul-Häkchen und Klickziel folgen chann
   await expect(page.locator('[data-module="listen"]')).not.toContainText('Erledigt');
   await expect(page.locator('[data-module="read"] [data-testid="module-done"]')).toHaveCount(0);
 
-  // Lesen abschließen (Klickziel der Angebotszeile) → Zeile verschwindet, Modul zeigt erledigt.
-  await page.getByTestId('tab-today').click();
-  await screen(page, 'today');
-  await page.locator('[data-testid="input-offer"][data-channel="read"]').click();
+  // Lesen abschließen (Klickziel der Modulzeile) → ✕ führt zurück zu „Üben“, das Modul zeigt „heute geübt“.
+  await page.locator('[data-testid="module"][data-module="read"]').click();
   await page.getByTestId('read-done').click();
   await answerAll(page, 4);
   await expect(page.getByTestId('unit-done')).toBeVisible();
   await page.getByTestId('unit-close').click();
-  await screen(page, 'today');
-  await expect(page.locator('[data-testid="input-offer"][data-channel="read"]')).toHaveCount(0);
-  await openLearn(page);
+  await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
   await expect(page.locator('[data-module="read"] [data-testid="module-done"]')).toHaveCount(1);
 });

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, openSettings, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Stimme und Spracheingabe (Phase 3, Plan §9.2).
@@ -19,7 +19,7 @@ async function startRoleplay(page: Page): Promise<void> {
 test('Einstellungen: englische Stimmen, Probehören, Tempo wird in app/profile.rate gespeichert', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   const list = page.getByTestId('voice-select');
   await expect(list.getByRole('radio')).toHaveCount(2);
   await expect(list.getByRole('radio').first()).toContainText('Samantha');

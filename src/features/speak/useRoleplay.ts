@@ -10,7 +10,7 @@ import { buildRun, runId } from '../../domain/speak/transcript';
 import type { AnalysisSlot, SceneView, StoredReport, Turn } from '../../domain/speak/types';
 import { logWarn } from '../../platform/diagnostics';
 import { speak, stopSpeech } from '../../platform/speech';
-import { autoplayOn } from './autoplay';
+import { autoplayOn, takeOpening } from './autoplay';
 import { roleplayReport, type ReportTurnInfo } from '../../prompts/roleplayReport';
 import { FIGURE_TIER, roleplayTurn } from '../../prompts/roleplayTurn';
 import { turnAnalysis } from '../../prompts/turnAnalysis';
@@ -81,6 +81,8 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
   useEffect(() => {
     alive.current = true;
     lane.current?.open();
+    const opening = takeOpening();
+    if (opening) void speak(opening);
     return () => {
       alive.current = false;
       lane.current?.close();

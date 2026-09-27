@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, openSettings, screen } from './fixtures';
 import { expected, forcedPatch, planPatch } from './trainerHelpers';
 
 // Kap. 4.5 Wischgesten, sparsam: (1) im Trainer nach der Rückmeldung nach links wischen =
@@ -76,7 +76,7 @@ test('Trainer: nach der Rückmeldung nach links wischen = „Weiter“; senkrech
 test('Einstellungen am Handy: am Griff nach unten wischen schließt, kurzer Zug federt zurück, Inhalt scrollt', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   await expect(dialog.getByTestId('sheet-grip')).toBeVisible();
@@ -131,7 +131,7 @@ test('Desktop: kein Griff, Blatt nicht ziehbar (Paneel rechts)', async ({ page }
   await page.setViewportSize({ width: 1440, height: 900 });
   await boot(page, { migrated: true });
   await screen(page, 'today');
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.getByTestId('sheet-grip')).toBeHidden();
   await expect(page.locator('[data-sheet-handle]')).toHaveCount(0);

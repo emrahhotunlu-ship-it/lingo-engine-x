@@ -47,7 +47,7 @@ test('Plan wird einmal je Lerntag gespeichert und nach dem Neuladen nicht neu ge
   await screen(page, 'today');
   const status = page.getByTestId('today-status');
   // Tagesplan v2 (phase2-plan §6.1): Wiederholen + Lektion + Pflichtkanal, zwei Angebote.
-  await expect(status).toHaveText(/^Noch nicht fertig · 0 von 3 · es fehlt: /);
+  await expect(status).toHaveText('Heute · 0 von 3');
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as { v?: number } | undefined)?.v).toBe(1);
   type Plan = { d: string; v: number; ids: string[]; why: unknown[][]; duty: string[]; goal: { review: number; due: number; new: number; ahead: number; ch: number }; lesson: string | null; at: number };
   const plan = (await dump(page))['app/profile']?.plan as Plan;
@@ -90,7 +90,9 @@ test('erledigt ist Zustand, kein Knopf; Extra zählt nie zur Pflicht', async ({ 
   await expect(done.locator('button')).toHaveCount(0);
   await expect(page.getByTestId('start')).toHaveCount(0);
   await expect(page.getByTestId('balance')).toHaveText('Heute: 3 Antworten · 67 % richtig · 15 von 25 Min. · Extra: 1 Karte');
-  await expect(page.getByTestId('start-extra')).toBeVisible();
+  // Nach der Pflicht: EIN Vorschlag und „Mehr üben“ (UX-Beratung Nr. 1).
+  await expect(page.getByTestId('offer')).toHaveCount(1);
+  await expect(page.getByTestId('more-practice')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

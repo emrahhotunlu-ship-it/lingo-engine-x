@@ -27,8 +27,11 @@ export const activeSubscriptions = (page: Page): Promise<number> =>
 
 /** Reiter „Üben" öffnen (Lesen, Hören, Schreiben, Entdecken; UX-Beratung 27.09.). */
 export async function openLearn(page: Page): Promise<void> {
-  await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
+  // Nach dem Schließen einer Einheit steht man schon wieder in „Üben“ (Rückweg zur Herkunft).
+  if (!(await page.locator('[data-screen="learn"]').isVisible())) {
+    if (!(await page.getByTestId('tab-learn').isVisible())) await screen(page, 'today');
+    await page.getByTestId('tab-learn').click();
+  }
   await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
 }
 

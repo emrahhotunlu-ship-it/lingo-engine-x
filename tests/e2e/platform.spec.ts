@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, openOverview, screen } from './fixtures';
+import { boot, openSettings, openOverview, screen } from './fixtures';
 
 // Plattform-Test (Kap. 12): nichts von fremden Hosts, kein Absturz ohne Fähigkeiten,
 // kein Entwicklungs-Adapter im Produktions-Build.
@@ -42,7 +42,7 @@ test('ohne window.claude (gespeicherte Kopie): klarer Hinweis, kein Absturz, kei
 test('db und sample liefern null: klarer Hinweis statt Absturz', async ({ page }) => {
   const { errors, external } = await boot(page, { fake: { capabilities: { db: false, sample: false, downloads: false } } });
   await screen(page, 'nodb');
-  await page.getByTestId('open-settings').click();
+  await openSettings(page);
   await expect(page.getByRole('dialog')).toContainText('nicht verfügbar');
   await expect(page.getByRole('button', { name: 'Alle Daten als JSON sichern' })).toHaveCount(0);
   expect(errors).toEqual([]);
