@@ -57,6 +57,8 @@ export const themeTextSchema = z.object({
   notice: z.array(text).min(2).max(3),
   /** 3 Sätze zum Nachsprechen (wörtlich im Text). */
   shadow: z.array(text).length(3),
+  /** Stelle, an der das Werkzeug der Woche benutzt wird (wörtlich im Text, Prüfung S3). */
+  toolIn: text,
 });
 
 /** Kollokationen (W3, N101): Nomen + 2–4 Verben, typische Lehnübersetzung als Kontrast. */
@@ -65,7 +67,8 @@ export const collocSchema = z.object({
   noun: text,
   de: text,
   verbs: z.array(z.object({ v: text, de: text, ex: text })).min(2).max(4),
-  wrong: z.object({ v: text, note: bi }),
+  /** Typische deutsche Lehnübersetzung (falsch) und die richtige Verbindung. */
+  wrong: z.object({ phrase: text, right: text, note: bi }),
 });
 
 /** Satz-Umformung mit Schlüsselwort (G3, N102). `gap` ist Satz B mit „___“, `answers` die erlaubten Füllungen (3–6 Wörter). */

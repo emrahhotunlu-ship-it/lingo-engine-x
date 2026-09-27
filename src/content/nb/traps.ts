@@ -500,7 +500,7 @@ export const TRAPS: readonly Trap[] = [
     hint: { de: 'Kennt ihr euch schon?', en: 'Do you already know each other?' },
     drills: [
       { de: 'Ihr trefft euch zum zweiten Mal auf der Messe.', wrong: 'Great to meet you again!', right: ['Great to see you again!', 'Good to see you again!', 'Nice to see you again!'] },
-      { de: 'Ihr trefft euch zum ersten Mal.', wrong: 'Nice to see you, I am Emrah.', right: ["Nice to meet you, I'm Emrah.", 'Nice to meet you, I am Emrah.'] },
+      { de: 'Ihr trefft euch zum ersten Mal.', wrong: 'Nice to see you, I am the new account manager.', right: ["Nice to meet you, I'm the new account manager.", 'Nice to meet you, I am the new account manager.'] },
       { de: 'Der Kunde von letzter Woche kommt an deinen Stand.', wrong: 'Nice to meet you again, how have you been?', right: ['Nice to see you again, how have you been?', 'Good to see you again, how have you been?'] },
     ],
     detect: ['\\b(?:nice|good|great|lovely) to meet you again\\b', "\\b(?:nice|good|great|lovely) to see you,? (?:i am|i'm|my name is)\\b"],

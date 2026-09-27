@@ -355,7 +355,7 @@ describe('matchTrap (Startsatz)', () => {
       'The provision of cloud services is regulated.',
       'We have a strong pipeline with many prospects.',
       'The customer was very sympathetic to our situation.',
-      'Nice to meet you, I am Emrah.',
+      'Nice to meet you, I am the new account manager.',
       'Let me explain it to you.',
       'We waited until Friday, then we called again.',
     ];

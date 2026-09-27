@@ -1,0 +1,790 @@
+[
+ {
+  "id": "b01",
+  "theme": "t01",
+  "kind": "sales",
+  "title": {
+   "de": "Erstgespräch mit einem Interessenten",
+   "en": "Discovery call with a prospect"
+  },
+  "setting": {
+   "de": "Videocall mit der Leiterin Buchhaltung einer Spedition. Sie hat sich auf eine Anzeige gemeldet, weiß aber noch nicht genau, was sie will.",
+   "en": "Video call with the head of accounting at a logistics company. She answered an ad but is not sure yet what she wants."
+  },
+  "partner": {
+   "name": "Laura Fischer",
+   "role": "Head of Accounting, Fischer Logistics",
+   "mood": "friendly but busy"
+  },
+  "opener": "Hi, thanks for calling. I only have about 20 minutes, so what did you want to show me?",
+  "goals": [
+   {
+    "de": "5 offene Fragen stellen",
+    "en": "Ask 5 open questions"
+   },
+   {
+    "de": "den Bedarf in ihren Worten zusammenfassen",
+    "en": "Sum up her needs in her own words"
+   },
+   {
+    "de": "herausfinden, wer mitentscheidet",
+    "en": "Find out who else decides"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Sie spricht mehr als du.",
+    "en": "She talks more than you do."
+   },
+   {
+    "de": "Indirekte Fragen mit richtiger Wortstellung",
+    "en": "Indirect questions with correct word order"
+   },
+   {
+    "de": "Zusammenfassung mit „So if I’m hearing you correctly“",
+    "en": "A summary starting with \"So if I am hearing you correctly\""
+   },
+   {
+    "de": "klarer nächster Schritt am Ende",
+    "en": "A clear next step at the end"
+   }
+  ]
+ },
+ {
+  "id": "b02",
+  "theme": "t02",
+  "kind": "presentation",
+  "title": {
+   "de": "Elevator Pitch im Aufzug",
+   "en": "Elevator pitch in the elevator"
+  },
+  "setting": {
+   "de": "Auf einer Konferenz steigst du mit einem Geschäftsführer in den Aufzug. Er fragt, was du machst. Du hast etwa 60 Sekunden.",
+   "en": "At a conference, you step into the elevator with a managing director. He asks what you do. You have about 60 seconds."
+  },
+  "partner": {
+   "name": "Peter Wolf",
+   "role": "Managing Director, Wolf Metallbau",
+   "mood": "curious, no technical background"
+  },
+  "opener": "So, what do you do? Something with computers?",
+  "goals": [
+   {
+    "de": "den Wert ohne Fachbegriffe erklären",
+    "en": "Explain the value without technical terms"
+   },
+   {
+    "de": "ein Beispiel aus seiner Welt nennen",
+    "en": "Give an example from his world"
+   },
+   {
+    "de": "einen Anlass für ein zweites Gespräch schaffen",
+    "en": "Create a reason for a second conversation"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Nutzen statt Merkmale",
+    "en": "Benefits instead of features"
+   },
+   {
+    "de": "mindestens 2 Überleitungen",
+    "en": "At least 2 transitions"
+   },
+   {
+    "de": "unter 60 Sekunden",
+    "en": "Under 60 seconds"
+   },
+   {
+    "de": "eine Frage an ihn",
+    "en": "One question for him"
+   }
+  ]
+ },
+ {
+  "id": "b03",
+  "theme": "t03",
+  "kind": "negotiation",
+  "title": {
+   "de": "Preisgespräch mit der CFO",
+   "en": "Price discussion with the CFO"
+  },
+  "setting": {
+   "de": "Die CFO eines Lebensmittelherstellers findet euer Angebot zu teuer und zweifelt an den Einsparungen.",
+   "en": "The CFO of a food manufacturer thinks your offer is too expensive and doubts the savings."
+  },
+  "partner": {
+   "name": "Dr. Sabine Keller",
+   "role": "CFO, Keller Foods",
+   "mood": "skeptical, numbers-driven"
+  },
+  "opener": "I've looked at your offer. Frankly, I don't see how you get to those savings.",
+  "goals": [
+   {
+    "de": "den Einwand anerkennen",
+    "en": "Acknowledge the objection"
+   },
+   {
+    "de": "den ROI mit einer Zahl erklären",
+    "en": "Explain the ROI with one number"
+   },
+   {
+    "de": "einen Piloten vorschlagen",
+    "en": "Suggest a pilot"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "mindestens 2 Abschwächungen (should, around, likely)",
+    "en": "At least 2 hedges (should, around, likely)"
+   },
+   {
+    "de": "Zahlen korrekt ausgesprochen",
+    "en": "Numbers said correctly"
+   },
+   {
+    "de": "kein Rabatt ohne Gegenleistung",
+    "en": "No discount without something in return"
+   },
+   {
+    "de": "ruhiger, sachlicher Ton",
+    "en": "A calm, factual tone"
+   }
+  ]
+ },
+ {
+  "id": "b04",
+  "theme": "t04",
+  "kind": "sales",
+  "title": {
+   "de": "Sicherheitsfragen des IT-Leiters",
+   "en": "Security questions from the head of IT"
+  },
+  "setting": {
+   "de": "Ein skeptischer IT-Leiter prüft euch vor der Entscheidung. Er fragt nach Datenstandort, Verschlüsselung und GoBD.",
+   "en": "A skeptical head of IT checks you out before the decision. He asks about data location, encryption, and GoBD."
+  },
+  "partner": {
+   "name": "Markus Brandt",
+   "role": "Head of IT, Brandt Maschinenbau",
+   "mood": "suspicious, detail-oriented"
+  },
+  "opener": "Where exactly is our data stored, and who at your company can see it?",
+  "goals": [
+   {
+    "de": "drei Sicherheitsfragen genau beantworten",
+    "en": "Answer three security questions precisely"
+   },
+   {
+    "de": "bei Unsicherheit ehrlich nachreichen",
+    "en": "Honestly follow up when unsure"
+   },
+   {
+    "de": "einen Termin mit dem Sicherheitsbeauftragten anbieten",
+    "en": "Offer a call with the security officer"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "genaue Zusagen mit will, can, may",
+    "en": "Precise commitments with will, can, may"
+   },
+   {
+    "de": "Passiv für Abläufe",
+    "en": "Passive voice for processes"
+   },
+   {
+    "de": "keine Übertreibung",
+    "en": "No overpromising"
+   }
+  ]
+ },
+ {
+  "id": "b05",
+  "theme": "t05",
+  "kind": "sales",
+  "title": {
+   "de": "E-Rechnung: warum jetzt?",
+   "en": "E-invoicing: why now?"
+  },
+  "setting": {
+   "de": "Ein Geschäftsführer glaubt, er habe bei der E-Rechnung noch viel Zeit. Du hast 2 Minuten, um ihn zu überzeugen.",
+   "en": "A managing director believes he has plenty of time for e-invoicing. You have 2 minutes to convince him."
+  },
+  "partner": {
+   "name": "Thomas Richter",
+   "role": "Managing Director, Richter Elektro",
+   "mood": "relaxed, a bit dismissive"
+  },
+  "opener": "My tax advisor says we're fine until 2027. Why should I worry now?",
+  "goals": [
+   {
+    "de": "die Fristen richtig nennen",
+    "en": "State the deadlines correctly"
+   },
+   {
+    "de": "den Vorteil eines frühen Starts zeigen",
+    "en": "Show the benefit of starting early"
+   },
+   {
+    "de": "einen kleinen ersten Schritt vereinbaren",
+    "en": "Agree on a small first step"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Zukunftsformen richtig benutzt",
+    "en": "Future forms used correctly"
+   },
+   {
+    "de": "by und until richtig",
+    "en": "By and until used correctly"
+   },
+   {
+    "de": "kein Druck, sondern Nutzen",
+    "en": "No pressure, but benefits"
+   }
+  ]
+ },
+ {
+  "id": "b06",
+  "theme": "t06",
+  "kind": "presentation",
+  "title": {
+   "de": "Fragerunde nach der Präsentation",
+   "en": "Q&A after the presentation"
+  },
+  "setting": {
+   "de": "Nach deiner Präsentation vor der Geschäftsführung stellt der CEO drei harte Fragen.",
+   "en": "After your presentation to the management team, the CEO asks three tough questions."
+  },
+  "partner": {
+   "name": "Michael Weber",
+   "role": "CEO, Weber Group",
+   "mood": "impatient, direct"
+  },
+  "opener": "Nice slides. But why should we trust a company that's smaller than our IT department?",
+  "goals": [
+   {
+    "de": "drei harte Fragen beantworten",
+    "en": "Answer three tough questions"
+   },
+   {
+    "de": "Zeit gewinnen, ohne auszuweichen",
+    "en": "Buy time without dodging"
+   },
+   {
+    "de": "mit einer klaren Kernbotschaft schließen",
+    "en": "Close with a clear key message"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Wegweiser in der Rede",
+    "en": "Signposting"
+   },
+   {
+    "de": "Betonung durch Satzbau (What really matters is …)",
+    "en": "Emphasis through structure (What really matters is …)"
+   },
+   {
+    "de": "kurze Antworten, unter 45 Sekunden",
+    "en": "Short answers, under 45 seconds"
+   },
+   {
+    "de": "Zahlen mit Dezimalpunkt",
+    "en": "Numbers with a decimal point"
+   }
+  ]
+ },
+ {
+  "id": "b07",
+  "theme": "t07",
+  "kind": "negotiation",
+  "title": {
+   "de": "Verhandlung mit dem Einkauf",
+   "en": "Negotiation with procurement"
+  },
+  "setting": {
+   "de": "Die Einkäuferin verlangt 20 Prozent Rabatt. Du darfst höchstens 10 Prozent geben, und nur gegen eine längere Laufzeit.",
+   "en": "The buyer demands a 20 percent discount. You can give at most 10 percent, and only for a longer contract."
+  },
+  "partner": {
+   "name": "Julia Roth",
+   "role": "Procurement, Lindner Group",
+   "mood": "tough, well prepared"
+  },
+  "opener": "Let's get straight to the point. We need 20 percent off, or we go with the other offer.",
+  "goals": [
+   {
+    "de": "nach Spielraum fragen",
+    "en": "Ask where they have flexibility"
+   },
+   {
+    "de": "ein Zugeständnis nur gegen Gegenleistung",
+    "en": "Give a concession only in exchange for something"
+   },
+   {
+    "de": "ein offenes Thema vertagen",
+    "en": "Park an open topic"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Bedingungssätze (If you could …, we could …)",
+    "en": "Conditionals (If you could …, we could …)"
+   },
+   {
+    "de": "diplomatisches Nein statt „not possible“",
+    "en": "A diplomatic no instead of \"not possible\""
+   },
+   {
+    "de": "ruhig unter Druck",
+    "en": "Calm under pressure"
+   },
+   {
+    "de": "Zusammenfassung der Einigung",
+    "en": "A summary of the agreement"
+   }
+  ]
+ },
+ {
+  "id": "b08",
+  "theme": "t08",
+  "kind": "sales",
+  "title": {
+   "de": "Einen Reseller gewinnen",
+   "en": "Winning a reseller"
+  },
+  "setting": {
+   "de": "Videocall mit dem Geschäftsführer eines britischen Systemhauses. Er ist höflich, aber zurückhaltend.",
+   "en": "Video call with the managing director of a British IT service provider. He is polite but reserved."
+  },
+  "partner": {
+   "name": "James Clarke",
+   "role": "Managing Director, Brightline IT (UK)",
+   "mood": "polite, understated, noncommittal"
+  },
+  "opener": "Thanks for making the time. I must say, we're rather busy at the moment, but do go on.",
+  "goals": [
+   {
+    "de": "den Nutzen für den Partner zeigen",
+    "en": "Show the benefit for the partner"
+   },
+   {
+    "de": "britisches Understatement richtig deuten",
+    "en": "Read British understatement correctly"
+   },
+   {
+    "de": "einen konkreten nächsten Schritt vereinbaren",
+    "en": "Agree on a concrete next step"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "2. Konditional beim Überzeugen",
+    "en": "Second conditional when persuading"
+   },
+   {
+    "de": "commission statt provision",
+    "en": "Commission instead of provision"
+   },
+   {
+    "de": "ein Pilotkunde als Vorschlag",
+    "en": "One pilot client as a suggestion"
+   }
+  ]
+ },
+ {
+  "id": "b09",
+  "theme": "t09",
+  "kind": "phone",
+  "title": {
+   "de": "Anruf eines verärgerten Kunden (schlechte Verbindung)",
+   "en": "Call from an upset customer (bad connection)"
+  },
+  "setting": {
+   "de": "Ein Projektleiter ruft wütend an, weil die Umstellung zu spät ist. Die Leitung bricht zweimal ab.",
+   "en": "A project lead calls angrily because the migration is late. The line cuts out twice."
+  },
+  "partner": {
+   "name": "Frank Schulz",
+   "role": "Project Lead, Schulz Logistik",
+   "mood": "angry, stressed"
+  },
+  "opener": "Finally! I've been trying to reach you all morning. Do you have any idea what's going on with our migration?",
+  "goals": [
+   {
+    "de": "sich entschuldigen und Verantwortung übernehmen",
+    "en": "Apologize and take responsibility"
+   },
+   {
+    "de": "Ursache und Plan nennen",
+    "en": "Explain the cause and the plan"
+   },
+   {
+    "de": "bei Verbindungsproblemen nachfragen und zusammenfassen",
+    "en": "Check and sum up when the line breaks"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Present Perfect für den Stand",
+    "en": "Present perfect for the current status"
+   },
+   {
+    "de": "keine Ausreden",
+    "en": "No excuses"
+   },
+   {
+    "de": "ruhiger Ton",
+    "en": "A calm tone"
+   },
+   {
+    "de": "nächste Schritte mit Datum",
+    "en": "Next steps with dates"
+   }
+  ]
+ },
+ {
+  "id": "b10",
+  "theme": "t10",
+  "kind": "meeting",
+  "title": {
+   "de": "Meeting leiten",
+   "en": "Leading a meeting"
+  },
+  "setting": {
+   "de": "Du leitest das Pipeline-Meeting. Julia schweift ab, Tobias unterbricht ständig. Ziel: in 30 Minuten fertig.",
+   "en": "You are leading the pipeline meeting. Julia goes off topic, and Tobias keeps interrupting. Goal: finish in 30 minutes."
+  },
+  "partner": {
+   "name": "Julia and Tobias",
+   "role": "Account managers on your team",
+   "mood": "chatty (Julia), impatient (Tobias)"
+  },
+  "opener": "Before we start, can I quickly tell you about the customer visit yesterday? It was crazy.",
+  "goals": [
+   {
+    "de": "das Meeting eröffnen und die Agenda nennen",
+    "en": "Open the meeting and state the agenda"
+   },
+   {
+    "de": "höflich zurück zum Thema holen",
+    "en": "Politely bring people back to the topic"
+   },
+   {
+    "de": "mit Aufgaben, Namen und Terminen abschließen",
+    "en": "Close with tasks, names, and dates"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Gespräch steuern (Let’s take that offline)",
+    "en": "Steering phrases (Let us take that offline)"
+   },
+   {
+    "de": "mindestens 3 Überleitungen",
+    "en": "At least 3 transitions"
+   },
+   {
+    "de": "genaue Termine",
+    "en": "Precise dates"
+   },
+   {
+    "de": "niemand dominiert",
+    "en": "Nobody dominates"
+   }
+  ]
+ },
+ {
+  "id": "b11",
+  "theme": "t11",
+  "kind": "sales",
+  "title": {
+   "de": "Verlängerung und Referenz",
+   "en": "Renewal and reference"
+  },
+  "setting": {
+   "de": "Jahresgespräch mit einer zufriedenen Kundin. Du willst verlängern, ein zweites Team gewinnen und um eine Referenz bitten.",
+   "en": "Annual review with a happy customer. You want to renew, win a second team, and ask for a reference."
+  },
+  "partner": {
+   "name": "Anna Berger",
+   "role": "Head of Finance, Hartmann Foods",
+   "mood": "warm, but under cost pressure"
+  },
+  "opener": "Good to see you! It's been a busy year. So, what did you want to talk about?",
+  "goals": [
+   {
+    "de": "nach ehrlicher Rückmeldung fragen",
+    "en": "Ask for honest feedback"
+   },
+   {
+    "de": "eine Erweiterung vorsichtig ansprechen",
+    "en": "Carefully suggest an expansion"
+   },
+   {
+    "de": "um eine Referenz bitten, ohne Druck",
+    "en": "Ask for a reference without pressure"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "indirekte Bitten (I was wondering if …)",
+    "en": "Indirect requests (I was wondering if …)"
+   },
+   {
+    "de": "opportunity statt chance",
+    "en": "Opportunity instead of chance"
+   },
+   {
+    "de": "zuhören und nachfragen",
+    "en": "Listen and ask follow-up questions"
+   }
+  ]
+ },
+ {
+  "id": "b12",
+  "theme": "t12",
+  "kind": "smalltalk",
+  "title": {
+   "de": "Small Talk am Messestand",
+   "en": "Small talk at the booth"
+  },
+  "setting": {
+   "de": "Ein Besucher bleibt an eurem Stand stehen. Ziel ist kein Verkauf, sondern ein gutes Gespräch und ein Anlass für später.",
+   "en": "A visitor stops at your booth. The goal is not a sale, but a good conversation and a reason to follow up."
+  },
+  "partner": {
+   "name": "Kevin Brooks",
+   "role": "Operations Manager, Northline Freight",
+   "mood": "relaxed, curious"
+  },
+  "opener": "Hi there. Interesting poster. Is that all about e-invoicing?",
+  "goals": [
+   {
+    "de": "2 Anschlussfragen stellen",
+    "en": "Ask 2 follow-up questions"
+   },
+   {
+    "de": "eine kurze persönliche Geschichte erzählen",
+    "en": "Tell a short personal story"
+   },
+   {
+    "de": "elegant aussteigen",
+    "en": "End the conversation gracefully"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "lockerer Ton",
+    "en": "A relaxed tone"
+   },
+   {
+    "de": "Nice to meet you richtig benutzt",
+    "en": "Nice to meet you used correctly"
+   },
+   {
+    "de": "kein Verkaufsvortrag",
+    "en": "No sales pitch"
+   },
+   {
+    "de": "Gesprächsfluss vor Grammatik",
+    "en": "Flow of conversation before grammar"
+   }
+  ]
+ },
+ {
+  "id": "b13",
+  "theme": "t13",
+  "kind": "complaint",
+  "title": {
+   "de": "Reklamation an der Hotelrezeption",
+   "en": "Complaint at the hotel front desk"
+  },
+  "setting": {
+   "de": "Du kommst spät an und bekommst ein Zimmer, das du nicht gebucht hast. Die Rezeptionistin ist freundlich, aber müde.",
+   "en": "You arrive late and get a room you did not book. The receptionist is friendly but tired."
+  },
+  "partner": {
+   "name": "Emily",
+   "role": "Receptionist, Lakeside Hotel",
+   "mood": "friendly, tired"
+  },
+  "opener": "Good evening! Here's your key, room 104, right next to the elevator. Have a good night!",
+  "goals": [
+   {
+    "de": "das Problem klar beschreiben",
+    "en": "Describe the problem clearly"
+   },
+   {
+    "de": "höflich, aber bestimmt bleiben",
+    "en": "Stay polite but firm"
+   },
+   {
+    "de": "eine konkrete Lösung erreichen",
+    "en": "Get a concrete solution"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Modalverben (There must have been …)",
+    "en": "Modal verbs (There must have been …)"
+   },
+   {
+    "de": "get statt become",
+    "en": "Get instead of become"
+   },
+   {
+    "de": "keine lauten Vorwürfe",
+    "en": "No loud accusations"
+   }
+  ]
+ },
+ {
+  "id": "b14",
+  "theme": "t14",
+  "kind": "smalltalk",
+  "title": {
+   "de": "Geschichte beim Geschäftsessen",
+   "en": "A story at a business dinner"
+  },
+  "setting": {
+   "de": "Beim Abendessen nach einem Workshop fragt der Kunde nach deinem verrücktesten Projekt.",
+   "en": "At dinner after a workshop, the customer asks about your craziest project."
+  },
+  "partner": {
+   "name": "Sarah Lehmann",
+   "role": "Customer, Head of Operations",
+   "mood": "relaxed, enjoys a good story"
+  },
+  "opener": "So, what's the craziest project you've ever worked on?",
+  "goals": [
+   {
+    "de": "eine Geschichte in etwa 2 Minuten erzählen",
+    "en": "Tell a story in about 2 minutes"
+   },
+   {
+    "de": "einen Wendepunkt einbauen",
+    "en": "Include a turning point"
+   },
+   {
+    "de": "auf eine Rückfrage eingehen",
+    "en": "Respond to a follow-up question"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Erzählzeiten (Past Simple, Past Continuous, Past Perfect)",
+    "en": "Narrative tenses (past simple, past continuous, past perfect)"
+   },
+   {
+    "de": "mindestens 2 Erzähl-Wendungen",
+    "en": "At least 2 storytelling phrases"
+   },
+   {
+    "de": "Past Simple bei abgeschlossener Zeit",
+    "en": "Past simple with finished time"
+   }
+  ]
+ },
+ {
+  "id": "b15",
+  "theme": "t15",
+  "kind": "smalltalk",
+  "title": {
+   "de": "Meinung beim Mittagessen",
+   "en": "An opinion over lunch"
+  },
+  "setting": {
+   "de": "Ein Kollege behauptet, KI werde den Vertrieb ersetzen. Du siehst es differenzierter.",
+   "en": "A colleague claims AI will replace sales. You see it in a more nuanced way."
+  },
+  "partner": {
+   "name": "Mark Hoffmann",
+   "role": "Colleague, Sales",
+   "mood": "provocative, enthusiastic"
+  },
+  "opener": "Admit it: in five years, a chatbot will do your job better than you.",
+  "goals": [
+   {
+    "de": "eine Meinung klar vertreten",
+    "en": "State an opinion clearly"
+   },
+   {
+    "de": "auf ein Gegenargument eingehen",
+    "en": "Respond to a counterargument"
+   },
+   {
+    "de": "einen Punkt des anderen anerkennen",
+    "en": "Acknowledge one of his points"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Meinung abstufen (I’d argue, probably, might)",
+    "en": "Grading opinions (I would argue, probably, might)"
+   },
+   {
+    "de": "zustimmen und widersprechen mit Wendungen",
+    "en": "Agreeing and disagreeing with set phrases"
+   },
+   {
+    "de": "eventually richtig benutzt",
+    "en": "Eventually used correctly"
+   },
+   {
+    "de": "mindestens 2 Überleitungen",
+    "en": "At least 2 transitions"
+   }
+  ]
+ },
+ {
+  "id": "b16",
+  "theme": "t16",
+  "kind": "phone",
+  "title": {
+   "de": "Telefonat mit der Hausverwaltung",
+   "en": "Phone call with the property manager"
+  },
+  "setting": {
+   "de": "Die Heizung ist kaputt und ein Rohr tropft. Du rufst die Hausverwaltung an. Die Verbindung ist schlecht, und du musst deinen Namen buchstabieren.",
+   "en": "The heating is broken and a pipe is leaking. You call the property management company. The line is bad, and you have to spell your name."
+  },
+  "partner": {
+   "name": "Mrs. Carter",
+   "role": "Property management office",
+   "mood": "busy, a little impatient"
+  },
+  "opener": "Property management, this is Mrs. Carter. Sorry, the line is terrible. Could you repeat your name?",
+  "goals": [
+   {
+    "de": "das Problem genau beschreiben, auch ohne das richtige Wort",
+    "en": "Describe the problem precisely, even without the right word"
+   },
+   {
+    "de": "den Namen buchstabieren und Missverständnisse klären",
+    "en": "Spell your name and clear up misunderstandings"
+   },
+   {
+    "de": "einen Termin vereinbaren",
+    "en": "Make an appointment"
+   }
+  ],
+  "criteria": [
+   {
+    "de": "Umschreiben mit Relativsätzen (the thing that …)",
+    "en": "Paraphrasing with relative clauses (the thing that …)"
+   },
+   {
+    "de": "höfliche Bitten",
+    "en": "Polite requests"
+   },
+   {
+    "de": "am Ende Termin und nächste Schritte zusammenfassen",
+    "en": "Sum up the appointment and next steps at the end"
+   }
+  ]
+ }
+]
