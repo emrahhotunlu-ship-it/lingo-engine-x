@@ -246,6 +246,18 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - „Als Preply-Stunde“,
   - Kleinigkeiten.
 
+**27.09.2026, nachmittags – Komplettpaket produktiv (Emrahs Freigabe „Ja veröffentlichen“)**
+- `dist/index.html` (Code `835f7f0`, Commit `581740e`) liegt auf `JLL8…`, Version `1790518396-3735` (Artefakt-Version 50).
+- Enthalten: alle Lücken aus dem Abgleich:
+  - Wendungs-Wiederholung und 8 neue Abfragearten,
+  - Wochen-Check, Wochenstreifen, alte Daten, Farbthemen, Kontext, Als Preply-Stunde,
+  - feste Szenen, Kurs ab l25, Wischgesten, Vibration, Übergänge, Validierungs-Cache, App-Version in der Diagnose.
+- Rückweg: Version `1790506302-f210`.
+- Offen:
+  - Start ~2,7 s unter Drossel.
+  - iPhone-Prüfpunkte (Tastatur, Hören, Wischen, Übersetzer).
+- Emrah testet jetzt komplett und schickt gesammeltes Feedback.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
