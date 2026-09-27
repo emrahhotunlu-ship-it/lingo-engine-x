@@ -182,6 +182,7 @@ export const de = {
   diagDocuments: 'Dokumente in der Datenbank',
   diagDocumentsValue: '{n} von 5.000',
   diagDocumentsUnknown: 'wird gezählt',
+  diagBuild: 'App-Version',
   diagSchema: 'Datenversion',
   diagSchemaNone: 'noch nicht umgestellt',
   diagLog: 'Fehlerprotokoll',

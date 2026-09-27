@@ -186,6 +186,7 @@ function Diagnostics({ open }: { open: boolean }) {
   };
 
   const rows: Array<[string, string]> = [
+    [t('diagBuild'), typeof __LX_BUILD__ === 'string' ? __LX_BUILD__ : 'dev'],
     [t('capDb'), t(CAP_LABEL[caps.db])],
     [t('capSample'), t(CAP_LABEL[caps.sampleRevoked ? 'absent' : caps.sample])],
     [t('capDownloads'), t(CAP_LABEL[caps.downloads])],

@@ -181,6 +181,7 @@ export const en: Record<MessageKey, string> = {
   diagDocuments: 'Documents in the database',
   diagDocumentsValue: '{n} of 5,000',
   diagDocumentsUnknown: 'counting',
+  diagBuild: 'App version',
   diagSchema: 'Data version',
   diagSchemaNone: 'not upgraded yet',
   diagLog: 'Error log',
