@@ -12,6 +12,9 @@ type Doc = Record<string, unknown>;
 
 export type EmaChannel = 'recog' | 'write' | 'listen' | 'colloc' | 'all';
 
+/** Fertigkeit der Einschätzung, zu der ein Kanal gehört (Phase 6, Plan §5.1). */
+export type SkillId = 'grammar' | 'vocabulary' | 'reading' | 'listening' | 'writing' | 'speaking';
+
 export type ChannelDef = {
   id: ExecChannel;
   /** Schlüssel in `app/profile.act[tag]` (alte App). */
@@ -19,15 +22,16 @@ export type ChannelDef = {
   ema: EmaChannel;
   /** Minuten je Runde (Pflicht-Rundengröße). */
   min: number;
+  skill: SkillId;
 };
 
 export const CHANNELS: readonly ChannelDef[] = [
-  { id: 'gram', act: 'gram', ema: 'write', min: 5 },
-  { id: 'cloze', act: 'cloze', ema: 'colloc', min: 5 },
-  { id: 'order', act: 'order', ema: 'write', min: 5 },
-  { id: 'dictate', act: 'dictate', ema: 'listen', min: 6 },
-  { id: 'sprint', act: 'sprint', ema: 'all', min: 2 },
-  { id: 'vocab', act: 'cards', ema: 'recog', min: 10 },
+  { id: 'gram', act: 'gram', ema: 'write', min: 5, skill: 'grammar' },
+  { id: 'cloze', act: 'cloze', ema: 'colloc', min: 5, skill: 'vocabulary' },
+  { id: 'order', act: 'order', ema: 'write', min: 5, skill: 'grammar' },
+  { id: 'dictate', act: 'dictate', ema: 'listen', min: 6, skill: 'listening' },
+  { id: 'sprint', act: 'sprint', ema: 'all', min: 2, skill: 'vocabulary' },
+  { id: 'vocab', act: 'cards', ema: 'recog', min: 10, skill: 'vocabulary' },
 ];
 
 /** Kanäle, die diese Ausbaustufe ausführen kann (Kennungen der alten App, D19). */
@@ -94,11 +98,28 @@ export function weekCount(act: unknown, key: string, today: string): number {
   return n;
 }
 
+/**
+ * Was die Einschätzung zum Tagesplan beiträgt (Phase 6, Plan §5.2). Nur die Kennungen, keine
+ * Texte – deshalb unabhängig von der Sprache der gespeicherten Einschätzung.
+ */
+export type AssessPlanInput = {
+  /** Fokus gilt noch (`d + focus.days > heute`). */
+  focusValid: boolean;
+  /** Kanäle des Fokus (`focus.channels` bzw. `focusChannels(action)`). */
+  focusChannels: readonly string[];
+  /** Kennung für die Begründung, z. B. `grammar:mixed-cond`. */
+  focusRef: string | null;
+  /** Stufe und Belastbarkeit je Fertigkeit (fehlt = dünn). */
+  dims: Partial<Record<SkillId, { rank: number; confidence: 'thin' | 'fair' | 'good' }>>;
+};
+
 export type RankInput = {
   today: string;
   profile: Readonly<Doc>;
   /** `app/assess` Fokus-Aktion (nur bei passender Sprache), z. B. `grammar:passive` oder `colloc`. */
   focus: string | null;
+  /** Phase 6: Einschätzung (Fokus-Kanäle, Belastbarkeit, schwächste Fertigkeit); fehlt = Regeln aus Phase 2. */
+  assess?: AssessPlanInput | null;
   dueErrors: number;
   dueCards: number;
   data: FeasibleData;
@@ -120,30 +141,57 @@ export function channelScore(c: ChannelDef, i: RankInput): RankedChannel {
   const d = days === null ? 14 : days;
   score += Math.min(d, 10) * 3;
   if (d >= 2) why.push(days === null ? ['agoNever'] : ['agoDaysN', d]);
-  if (focusHits(i.focus, c)) {
+  const a = i.assess ?? null;
+  if (a?.focusValid && a.focusChannels.includes(c.id)) {
+    score += 30;
+    why.unshift(a.focusRef ? ['whyFocus', 0, a.focusRef] : ['whyFocus']);
+  } else if (!a?.focusValid && focusHits(i.focus, c)) {
     score += 30;
     why.unshift(['whyFocus']);
   }
-  const n = obj(i.profile.n);
-  const nCh = c.ema === 'all' ? Object.values(n).reduce<number>((a, v) => a + num(v), 0) : num(n[c.ema]);
-  if (nCh < 20) {
-    score += 14;
-    why.push(['whyThin']);
+  if (a && Object.keys(a.dims).length) {
+    // Phase 6: dünne Datenlage und schwächster Bereich aus der Einschätzung (Plan §5.2).
+    const mine = a.dims[c.skill];
+    if (!mine || mine.confidence === 'thin') {
+      score += 14;
+      why.push(['whyThin']);
+    }
+    const ranks = Object.values(a.dims)
+      .filter((d) => d.confidence !== 'thin' && d.rank >= 0)
+      .map((d) => d.rank);
+    if (mine && mine.confidence !== 'thin' && ranks.length > 1 && mine.rank <= Math.min(...ranks)) {
+      score += 12;
+      why.push(['whyWeakest']);
+    }
+  } else {
+    const n = obj(i.profile.n);
+    const nCh = c.ema === 'all' ? Object.values(n).reduce<number>((acc, v) => acc + num(v), 0) : num(n[c.ema]);
+    if (nCh < 20) {
+      score += 14;
+      why.push(['whyThin']);
+    }
+    const ema = obj(i.profile.ema);
+    const vals = (['recog', 'write', 'listen', 'colloc'] as const).map((k) => (typeof ema[k] === 'number' ? ema[k] : null)).filter((v): v is number => v !== null);
+    const mine = typeof ema[c.ema] === 'number' ? (ema[c.ema] as number) : null;
+    if (mine !== null && vals.length && mine <= Math.min(...vals) + 0.02) {
+      score += 12;
+      why.push(['whyWeakest']);
+    }
   }
-  const ema = obj(i.profile.ema);
-  const vals = (['recog', 'write', 'listen', 'colloc'] as const).map((k) => (typeof ema[k] === 'number' ? (ema[k]) : null)).filter((v): v is number => v !== null);
-  const mine = typeof ema[c.ema] === 'number' ? (ema[c.ema] as number) : null;
-  if (mine !== null && vals.length && mine <= Math.min(...vals) + 0.02) {
-    score += 12;
-    why.push(['whyWeakest']);
+  if (c.id === 'gram' && i.dueErrors >= 3) {
+    score += 10;
+    // Phase 6: auch dieser Faktor nennt seinen Grund (Kap. 6.1). Schlüssel der alten App (D14),
+    // additiv mit Kennung `gram` (Plan E10), damit die Anzeige „Fehlersätze" statt „Karten" sagt.
+    why.push(['whyDue', i.dueErrors, 'gram']);
   }
-  if (c.id === 'gram' && i.dueErrors >= 3) score += 10;
   if (c.id === 'vocab' && i.dueCards >= 10) {
     score += 10;
     why.push(['whyDue', i.dueCards]);
   }
-  score -= weekCount(act, c.act, i.today) * 6;
+  const week = weekCount(act, c.act, i.today);
+  score -= week * 6;
   // Jede Zeile nennt einen Grund (P-02); ohne besonderen Anlass „turnusmäßig dran" (Schlüssel der alten App).
+  // Höchstens zwei Gründe, der Fokus zuerst (Plan E9).
   return { id: c.id, score, why: why.length ? why.slice(0, 2) : [['whyRotation']], days };
 }
 

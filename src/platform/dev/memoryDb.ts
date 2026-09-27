@@ -33,6 +33,8 @@ export type MemoryDbHandle = {
   /** Phase 5: Die nächsten `times` Schreibvorgänge auf `path` scheitern mit `code`. */
   failWritesTo(path: string, code: DbErrCode, times?: number): void;
   activeSubscriptions(): number;
+  /** Phase 6 (Plan §13): Höchststand gleichzeitiger Abonnements seit dem Start. */
+  peakSubscriptions(): number;
 };
 
 const SEGMENT_RE = /^[A-Za-z0-9_\-.~:@+]+$/;
@@ -147,6 +149,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
   const queryListeners = new Set<{ spec: QuerySpec; fire: () => void }>();
   let failWrites = opts.failWrites;
   let subscriptionCount = 0;
+  let peakSubscriptions = 0;
   let failedSubscriptions = 0;
   let version = 0;
   const meta: SnapshotMetadata = Object.freeze({ fromCache: false, hasPendingWrites: false });
@@ -263,6 +266,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
       return false;
     }
     subscriptionCount++;
+    peakSubscriptions = Math.max(peakSubscriptions, subscriptionCount);
     return true;
   }
 
@@ -432,5 +436,6 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
       failPaths.set(path, { code, times });
     },
     activeSubscriptions: () => subscriptionCount,
+    peakSubscriptions: () => peakSubscriptions,
   };
 }

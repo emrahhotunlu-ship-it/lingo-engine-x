@@ -1,7 +1,7 @@
 import { lessonDoneOn } from '../course/courseDone';
 import type { DutyChannel, ExecChannel } from '../learn/types';
 import type { RoundPlan } from '../srs/queue';
-import { DUTY_ROUND, isDutyChannel, PHASE2_EXECUTABLE, type RankedChannel } from './channels';
+import { DUTY_MINUTES, DUTY_ROUND, isDutyChannel, PHASE2_EXECUTABLE, type RankedChannel } from './channels';
 import type { DutyId, DutyState, StoredPlan, TodayState, WhyKey } from './types';
 
 // Ein Plan je Lerntag, nie neu gewürfelt (Kap. 15). Der Plan ist eine reine Funktion der Daten.
@@ -56,7 +56,28 @@ export type Phase2PlanInput = {
   ranked: readonly RankedChannel[];
   /** Nächste offene Lektion (`pickLesson`); `null` = Kurs abgeschlossen. */
   lesson: { lid: string } | null;
+  /** Phase 6 (Plan E11, §5.3): Tagesziel in Minuten; bestimmt das Budget des Pflichtkanals. */
+  goalMin?: number;
 };
+
+/** Minuten je Pflichtkanal-Runde (Plan §5.1). */
+const DUTY_CH_MIN: Readonly<Record<DutyChannel, number>> = { gram: 5, cloze: 5, order: 5 };
+/** Sekunden je Karte beim Wiederholen (Plan §5.3). */
+const REVIEW_SEC_PER_CARD = 27;
+
+/**
+ * Pflichtkanal (Plan §5.3): der am höchsten eingestufte Pflichtkanal, der ins Minutenbudget passt
+ * (`goalMin − Lektion − Wiederholen`), sonst der kürzeste. Ohne `goalMin` der erste nach Rang.
+ */
+export function pickDutyChannel(ranked: readonly RankedChannel[], i: { goalMin?: number; lesson: boolean; reviewCards: number }): RankedChannel | null {
+  const duties = ranked.filter((r) => isDutyChannel(r.id));
+  if (!duties.length) return null;
+  if (i.goalMin === undefined) return duties[0] ?? null;
+  const budget = i.goalMin - (i.lesson ? DUTY_MINUTES.lesson : 0) - Math.ceil((i.reviewCards * REVIEW_SEC_PER_CARD) / 60);
+  const fits = duties.find((r) => DUTY_CH_MIN[r.id as DutyChannel] <= budget);
+  if (fits) return fits;
+  return [...duties].sort((a, b) => DUTY_CH_MIN[a.id as DutyChannel] - DUTY_CH_MIN[b.id as DutyChannel])[0] ?? null;
+}
 
 function phase2Plan(today: string, round: RoundPlan, nowMs: number, p2: Phase2PlanInput, fromLegacy: { ids: string[]; why: WhyKey[][] } | null): StoredPlan {
   let ids: string[];
@@ -65,7 +86,7 @@ function phase2Plan(today: string, round: RoundPlan, nowMs: number, p2: Phase2Pl
     ids = fromLegacy.ids;
     why = fromLegacy.why;
   } else {
-    const duty = p2.ranked.find((r) => isDutyChannel(r.id)) ?? { id: 'gram' as ExecChannel, why: [['whyRotation']] as WhyKey[], score: 0, days: null };
+    const duty = pickDutyChannel(p2.ranked, { goalMin: p2.goalMin, lesson: !!p2.lesson, reviewCards: round.target }) ?? { id: 'gram' as ExecChannel, why: [['whyRotation']] as WhyKey[], score: 0, days: null };
     const offers = p2.ranked.filter((r) => r.id !== duty.id).slice(0, 2);
     ids = [duty.id, ...offers.map((o) => o.id)];
     why = [duty.why, ...offers.map((o) => o.why)];

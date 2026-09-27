@@ -14,9 +14,11 @@ import { changeAutoNext, changeLang, changeTheme } from '../../app/actions';
 import { exportMessage } from '../migration/MigrationScreen';
 import { exportAll } from './exportData';
 import { VoiceSection } from './VoiceSection';
+import { LearningSection, SoundSection, SourcesSection } from './LearningSection';
 import { discCount } from '../../domain/discover/steps';
 
-// Einstellungen (Kap. 6.14): Sprache, Darstellung, Datenexport, Diagnose.
+// Einstellungen (Kap. 6.14): Sprache, Darstellung, Lernen (neue Wörter, Tagesziel), Üben, Stimme,
+// Ton, Datenexport, Quellen und Lizenzen, Diagnose.
 
 export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t } = useT();
@@ -24,9 +26,12 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
     <Sheet open={open} onClose={onClose} title={t('settings')} closeLabel={t('close')}>
       <div className="flex flex-col gap-8 pt-2">
         <Appearance />
+        <LearningSection />
         <Practice />
         <VoiceSection />
+        <SoundSection />
         <DataSection />
+        <SourcesSection />
         <Diagnostics open={open} />
       </div>
     </Sheet>

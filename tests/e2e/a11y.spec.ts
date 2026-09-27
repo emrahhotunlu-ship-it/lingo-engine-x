@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { boot, openOverview, screen, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { ARTICLE_OWN, inputTour, openModule } from './inputHelpers';
+import { progressTour } from './progressHelpers';
 
 // Barrierefreiheit (Kap. 8, Kap. 12): axe in allen drei Modi, Touch-Ziele ≥ 44 px.
 
@@ -93,10 +94,29 @@ test('Touch-Ziele am Handy mindestens 44 × 44 px', async ({ page }) => {
   await page.waitForTimeout(400);
   const small = await page.evaluate(() =>
     Array.from(document.querySelectorAll<HTMLElement>('button, [role="radio"], a[href], input, select, textarea'))
-      .filter((el) => el.offsetParent !== null && !el.classList.contains('sr-only'))
+      // Antippbare Wörter im Fließtext (`.lx-word`) fallen unter die Inline-Ausnahme von WCAG 2.5.8.
+      .filter((el) => el.offsetParent !== null && !el.classList.contains('sr-only') && !el.classList.contains('lx-word'))
       .map((el) => ({ label: el.getAttribute('aria-label') ?? el.textContent?.trim() ?? el.tagName, r: el.getBoundingClientRect() }))
       .filter(({ r }) => r.width < 44 || r.height < 44)
       .map(({ label, r }) => `${label} (${Math.round(r.width)}×${Math.round(r.height)})`),
   );
   expect(small).toEqual([]);
 });
+
+// Phase 6: Dein Stand (vier Reiter) und Wortschatztest je Modus und Breite.
+for (const theme of THEMES) {
+  for (const width of [390, 1440]) {
+    test(`axe · Dein Stand und Wortschatztest · ${theme} · ${width}px`, async ({ page }) => {
+      test.setTimeout(90_000);
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await boot(page, { theme, migrated: true });
+      const found: string[] = [];
+      await progressTour(page, async (name) => {
+        const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+        found.push(...res.violations.map((v) => `${name} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`));
+      });
+      expect(found).toEqual([]);
+    });
+  }
+}

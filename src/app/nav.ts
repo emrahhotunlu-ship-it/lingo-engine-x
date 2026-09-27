@@ -5,7 +5,9 @@ import { create } from 'zustand';
 
 export type Route =
   | { name: 'today' }
-  | { name: 'overview' }
+  // Phase 6: Dein Stand mit Reiter (Urteil, Fehler, Weg nach C1, Verlauf) und Wortschatztest.
+  | { name: 'overview'; tab?: 'judge' | 'errors' | 'path' | 'history' }
+  | { name: 'vtest' }
   | { name: 'trainer'; round: 'pflicht' | 'extra' }
   // Phase 2 (docs/phase2-plan.md §3): Reiter „Lernen" mit Kurs, Grammatik und Übungen.
   | { name: 'learn' }

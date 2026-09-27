@@ -98,3 +98,89 @@ test('Datenexport über downloads liefert alle Dokumente als JSON', async ({ pag
   expect(json.schemaVersion).toBe(1);
   expect(Object.keys(json.documents)).toContain('daily/2026-09-20');
 });
+
+// ---------------------------------------------------------------- Phase 6 (Plan §9, §13)
+
+test('Tagesziel, neue Wörter pro Tag und Ton bleiben nach dem Neuladen', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { persist: true, capabilities: { sample: false } } });
+  await openOverview(page);
+  await page.getByTestId('open-settings').click();
+  await page.getByTestId('set-goalmin').getByRole('radio', { name: '15' }).click();
+  await page.getByTestId('set-newperday').getByRole('radio', { name: '10' }).click();
+  await expect.poll(async () => (await dump(page))['app/profile']?.goalMin).toBe(15);
+  await expect.poll(async () => (await dump(page))['app/profile']?.newPerDay).toBe(10);
+  await expect(page.getByTestId('sound-section')).toBeVisible();
+  await page.reload();
+  await openOverview(page);
+  await page.getByTestId('open-settings').click();
+  await expect(page.getByTestId('set-goalmin').getByRole('radio', { name: '15' })).toHaveAttribute('aria-checked', 'true');
+  await expect(page.getByTestId('set-newperday').getByRole('radio', { name: '10' })).toHaveAttribute('aria-checked', 'true');
+  expect(errors).toEqual([]);
+});
+
+test('Ton an/aus wird in app/profile.sound gespeichert (WebAudio nachgebildet)', async ({ page }) => {
+  await page.addInitScript(() => {
+    class FakeParam {
+      value = 0;
+      setValueAtTime() {}
+      exponentialRampToValueAtTime() {}
+    }
+    class FakeNode {
+      frequency = new FakeParam();
+      gain = new FakeParam();
+      type = 'sine';
+      connect(n: unknown) {
+        return n;
+      }
+      start() {
+        (window as unknown as { __cues: number }).__cues = ((window as unknown as { __cues?: number }).__cues ?? 0) + 1;
+      }
+      stop() {}
+    }
+    class FakeCtx {
+      state = 'running';
+      currentTime = 0;
+      destination = {};
+      resume() {
+        return Promise.resolve();
+      }
+      createOscillator() {
+        return new FakeNode();
+      }
+      createGain() {
+        return new FakeNode();
+      }
+    }
+    (window as unknown as { AudioContext: unknown }).AudioContext = FakeCtx;
+  });
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await page.getByTestId('open-settings').click();
+  const sw = page.getByTestId('set-sound');
+  await expect(sw).toHaveAttribute('aria-checked', 'false');
+  await sw.click();
+  await expect.poll(async () => (await dump(page))['app/profile']?.sound).toBe(true);
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __cues?: number }).__cues ?? 0)).toBeGreaterThan(0);
+  await sw.click();
+  await expect.poll(async () => (await dump(page))['app/profile']?.sound).toBe(false);
+});
+
+test('scheitert das Speichern des Tagesziels, springt die Auswahl zurück und es gibt einen Hinweis', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { setFailWrites(c: string): void } } }).__LINGO_FAKE__.db.setFailWrites('invalid_argument'));
+  await page.getByTestId('open-settings').click();
+  await page.getByTestId('set-goalmin').getByRole('radio', { name: '40' }).click();
+  await expect(page.getByRole('alert').filter({ hasText: 'Konnte nicht gespeichert werden' })).toBeVisible();
+  await expect(page.getByTestId('set-goalmin').getByRole('radio', { name: '25' })).toHaveAttribute('aria-checked', 'true');
+  expect((await dump(page))['app/profile']?.goalMin).toBeUndefined();
+});
+
+test('gespeicherte Stimme fehlt auf dem Gerät: Hinweis, Probe hören spricht mit der besten US-Stimme', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/profile': { voice: 'Stimme-die-es-nicht-gibt' } } } });
+  await openOverview(page);
+  await page.getByTestId('open-settings').click();
+  await expect(page.getByTestId('voice-missing')).toBeVisible();
+  await page.getByTestId('voice-preview').first().click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { spoken: string[] } }).__LINGO_FAKE__.spoken.length)).toBeGreaterThan(0);
+});

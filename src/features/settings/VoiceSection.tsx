@@ -9,6 +9,7 @@ import { Button } from '../../ui/Button';
 import { Switch } from '../../ui/Switch';
 import { toast } from '../../ui/Toast';
 import { AUTOPLAY_KEY, autoplayOn } from '../speak/autoplay';
+import { resolveVoice } from '../../domain/progress/settings';
 
 // Einstellungen „Stimme“ (Plan §5.6): englische Stimmen (en-US zuerst) mit Probehören, Tempo
 // 0,8–1,1 (gespeichert beim Loslassen, nicht beim Ziehen), „Antworten im Rollenspiel vorlesen“.
@@ -34,6 +35,8 @@ export function VoiceSection() {
   const current = useSpeech((s) => s.voiceName);
   const profile = useLive((s) => s.docs['app/profile']);
   const savedRate = clampRate(typeof profile?.rate === 'number' ? profile.rate : 1);
+  // Plan E13: gespeicherte Stimme fehlt auf diesem Gerät → Hinweis, genutzt wird die beste en-US-Stimme.
+  const voiceMissing = status === 'ready' && resolveVoice(profile?.voice, voices, current).missing;
   const [rate, setRate] = useState(savedRate);
   const [autoplay, setAutoplay] = useState(autoplayOn);
   // Gespeicherter Wert hat sich geändert (anderes Gerät, Rückrollen): Anzeige nachziehen.
@@ -66,6 +69,11 @@ export function VoiceSection() {
   return (
     <section className="flex flex-col gap-3" data-testid="voice-section">
       <h3 className="lx-eyebrow">{t('voiceTitle')}</h3>
+      {voiceMissing && (
+        <p className="text-sm text-muted" data-testid="voice-missing">
+          {t('setVoiceMissing')}
+        </p>
+      )}
       {status === 'unsupported' || status === 'novoice' ? (
         <p className="text-sm text-muted">{t('voiceNone')}</p>
       ) : (

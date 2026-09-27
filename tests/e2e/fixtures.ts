@@ -71,7 +71,7 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
 }
 
 /** Wartet, bis ein Bildschirm fertig eingeblendet ist. */
-export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer' | 'speak' | 'roleplay' | 'business' | 'mail' | 'playbook' | 'pitch'): Promise<void> {
+export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer' | 'speak' | 'roleplay' | 'business' | 'mail' | 'playbook' | 'pitch' | 'grammarSession' | 'vtest'): Promise<void> {
   await page.locator(`[data-screen="${name}"]`).waitFor({ state: 'visible' });
   await page.waitForFunction((n) => {
     const el = document.querySelector(`[data-screen="${n}"]`);

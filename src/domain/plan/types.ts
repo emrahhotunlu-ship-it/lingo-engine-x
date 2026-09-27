@@ -1,6 +1,7 @@
 // Tagesplan (Daten-Entwurf §3.4, phase2-plan §6.1): Format der alten App `{d, ids, why}` plus neue Felder.
 
-export type WhyKey = [key: string] | [key: string, n: number];
+/** Begründungs-Schlüssel: `[key]`, `[key, n]` oder – additiv ab Phase 6 (Plan E10) – `[key, n, ref]`, z. B. `['whyFocus', 0, 'grammar:mixed-cond']`. `ref` ist eine Kennung, kein Satz. */
+export type WhyKey = [key: string] | [key: string, n: number] | [key: string, n: number, ref: string];
 export type DutyId = 'review' | 'lesson' | `ch:${string}`;
 
 export type StoredPlan = {

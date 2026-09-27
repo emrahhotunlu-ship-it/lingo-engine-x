@@ -9,10 +9,15 @@ type Props<T extends string> = {
   value: T;
   options: ReadonlyArray<Option<T>>;
   onChange: (value: T) => void;
+  /** Spalten (Phase 6: Zahlenauswahl in einer Reihe); Standard wie bisher 3 bzw. 2. */
+  columns?: 4 | 6;
+  testId?: string;
 };
 
+const COLS: Record<4 | 6, string> = { 4: 'grid-cols-4', 6: 'grid-cols-3 sm:grid-cols-6' };
+
 /** Auswahl als Radiogruppe: Pfeiltasten wechseln, gemeinsames Hervorhebungs-Element gleitet mit. */
-export function Segmented<T extends string>({ label, value, options, onChange }: Props<T>) {
+export function Segmented<T extends string>({ label, value, options, onChange, columns, testId }: Props<T>) {
   const id = useId();
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
   const index = Math.max(0, options.findIndex((o) => o.value === value));
@@ -33,7 +38,8 @@ export function Segmented<T extends string>({ label, value, options, onChange }:
       role="radiogroup"
       aria-label={label}
       onKeyDown={onKey}
-      className={`grid w-full gap-1 rounded-[var(--radius-control)] bg-track p-1 ${options.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}
+      data-testid={testId}
+      className={`grid w-full gap-1 rounded-[var(--radius-control)] bg-track p-1 ${columns ? COLS[columns] : options.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}
     >
       {options.map((o, i) => {
         const active = o.value === value;

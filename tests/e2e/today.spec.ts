@@ -89,7 +89,7 @@ test('erledigt ist Zustand, kein Knopf; Extra zählt nie zur Pflicht', async ({ 
   await expect(done).toHaveAttribute('data-state', 'done');
   await expect(done.locator('button')).toHaveCount(0);
   await expect(page.getByTestId('start')).toHaveCount(0);
-  await expect(page.getByTestId('balance')).toHaveText('Heute: 3 Antworten · 67 % richtig · 15 Min. · Extra: 1 Karte');
+  await expect(page.getByTestId('balance')).toHaveText('Heute: 3 Antworten · 67 % richtig · 15 von 25 Min. · Extra: 1 Karte');
   await expect(page.getByTestId('start-extra')).toBeVisible();
   expect(errors).toEqual([]);
 });

@@ -15,7 +15,8 @@ import { installFlushOnHide } from '../features/vocab/persist';
 import { useClock, useClockTicker } from './clock';
 import { savedScroll, tabOf, useNav, type Route, type TabName } from './nav';
 import { MigrationScreen } from '../features/migration/MigrationScreen';
-import { OverviewScreen } from '../features/progress/OverviewScreen';
+import { ProgressScreen } from '../features/progress/ProgressScreen';
+import { VtestScreen } from '../features/vtest/VtestScreen';
 import { SettingsSheet } from '../features/settings/SettingsSheet';
 import { LookupLayer } from '../features/lookup/LookupPopover';
 import { HomeSkeleton } from '../features/system/HomeSkeleton';
@@ -23,6 +24,7 @@ import { ConnectionLost, NoDbNotice } from '../features/system/NoDbNotice';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
 import { initSpeech } from '../platform/speech';
+import { setSoundEnabled } from '../platform/sound';
 // Phase 2: Lernen (docs/phase2-plan.md), Wortschatz (M1) und Wissen (M8).
 import { LearnHub } from '../features/learn/LearnHub';
 import { CourseScreen } from '../features/course/CourseScreen';
@@ -92,6 +94,12 @@ function useBoot(): void {
     const theme = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { m?: unknown }).m : undefined;
     if (isThemeMode(theme) && theme !== s.theme) s.setThemeLocal(theme);
   }, [profile]);
+
+  // Töne (Kap. 4.7): Einstellung aus dem Profil, Standard aus.
+  const sound = profile?.sound === true;
+  useEffect(() => {
+    setSoundEnabled(sound);
+  }, [sound]);
 
   // Sprachausgabe (en-US): Stimmen laden, Stimme und Tempo aus dem Profil (nur Lesen).
   const voice = typeof profile?.voice === 'string' ? profile.voice : null;
@@ -256,7 +264,8 @@ export function App() {
               {screen === 'offline' && <ConnectionLost />}
               {screen === 'migration' && <MigrationScreen />}
               {screen === 'today' && <TodayScreen />}
-              {screen === 'overview' && <OverviewScreen />}
+              {screen === 'overview' && <ProgressScreen />}
+              {screen === 'vtest' && <VtestScreen />}
               {screen === 'trainer' && <TrainerScreen />}
               {screen === 'learn' && <LearnHub />}
               {screen === 'course' && <CourseScreen />}

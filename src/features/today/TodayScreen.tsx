@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useT, type MessageKey } from '../../i18n';
@@ -16,7 +16,11 @@ import { lessonMeta } from '../../domain/course/catalog';
 import { dutyMinutes } from '../../domain/plan/buildPlan';
 import { feasible, type FeasibleData } from '../../domain/plan/channels';
 import { pflichtMarked } from '../../domain/plan/pflicht';
-import type { DutyId, WhyKey } from '../../domain/plan/types';
+import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
+import type { Lang } from '../../app/settings';
+import { actionLabel } from '../progress/actionRoute';
+import { normGoalMin } from '../../domain/progress/settings';
+import { maybeAutoAssess } from '../progress/assessRun';
 import type { ExecChannel } from '../../domain/learn/types';
 import { DECKS, DECK_SIZES, type Deck } from '../../domain/srs/vocabList';
 import { computeStreak, pflichtDays } from '../../domain/streak';
@@ -52,15 +56,28 @@ const DUTY_TONE = (id: DutyId): Channel => (id === 'review' ? 'cards' : id === '
 const DUTY_ICON = (id: DutyId): IconName => (id === 'review' ? 'cards' : id === 'lesson' ? 'book' : (CHANNEL_ICON[id.slice(3)] ?? 'grammar'));
 const DECK_KEY: Record<Deck, MessageKey> = { all: 'tdDeckAll', hard: 'tdDeckHard', job: 'tdDeckJob', phrases: 'tdDeckPhrases' };
 
-/** Begründung einer Planzeile (Schlüssel der alten App, D14). */
-export function whyText(why: readonly WhyKey[] | undefined, t: (k: MessageKey, v?: Record<string, string | number>) => string): string {
+/** Begründung einer Planzeile (Schlüssel der alten App, D14; `whyFocus` mit Kennung ab Phase 6, E10). */
+export function whyText(why: readonly WhyKey[] | undefined, t: (k: MessageKey, v?: Record<string, string | number>) => string, lang: Lang = 'de'): string {
   return (why ?? [])
     .map((w) => {
+      if (w[0] === 'whyFocus' && typeof w[2] === 'string' && w[2]) return t('why_whyFocusRef', { topic: actionLabel(w[2], t, lang) });
+      if (w[0] === 'whyDue' && w[2] === 'gram') return t('why_whyDueErrors', { n: w[1] ?? 0 });
       const key = `why_${w[0]}` as MessageKey;
       return w.length > 1 ? t(key, { n: w[1] as number }) : t(key);
     })
     .filter((s) => !s.startsWith('why_'))
     .join(' · ');
+}
+
+/** Grund einer Pflichtzeile: Kanal aus dem Plan, Wiederholen und Lektion aus dem eingefrorenen Plan. */
+function dutyWhy(id: DutyId, plan: StoredPlan | null, t: (k: MessageKey, v?: Record<string, string | number>) => string, lang: Lang): { text: string; keys: string } {
+  if (id === 'review') {
+    const due = plan?.goal.due ?? 0;
+    return due > 0 ? { text: t('why_whyDue', { n: due }), keys: 'whyDue' } : { text: t('why_whyReviewDaily'), keys: 'whyReviewDaily' };
+  }
+  if (id === 'lesson') return { text: t('tdLessonNext'), keys: 'lessonNext' };
+  const why = plan?.why[0];
+  return { text: whyText(why, t, lang) || t('why_whyRotation'), keys: (why ?? [['whyRotation']]).map((w) => w[0]).join(',') };
 }
 
 export function TodayScreen() {
@@ -98,6 +115,19 @@ export function TodayScreen() {
   useEffect(() => {
     if (ready && state.status === 'allDone' && !marked) void healToday();
   }, [ready, state.status, marked]);
+
+  // Auslöser der Einschätzung (Plan W1): der Übergang zu „Pflicht erledigt" – einmal je Tab und
+  // Lerntag, nur mit Grund (`assessDue`). Die Einschätzung selbst erscheint nie auf Heute (Kap. 2.1).
+  const seenOpen = useRef(false);
+  useEffect(() => {
+    if (!ready || !dayLoaded) return;
+    if (state.status === 'open') seenOpen.current = true;
+    else if (state.status === 'allDone' && seenOpen.current) {
+      seenOpen.current = false;
+      void maybeAutoAssess(Date.now());
+    }
+  }, [ready, dayLoaded, state.status]);
+  const goalMin = normGoalMin(obj(profile).goalMin);
 
   const data: FeasibleData | null = useMemo(() => (ready && state.status !== 'open' ? feasibleData(drillCards(now), lang, now) : null), [ready, state.status, now, lang]);
 
@@ -148,7 +178,7 @@ export function TodayScreen() {
       return done > 0 ? t('tdReviewProgress', { done, total, min }) : t('tdReviewEta', { min });
     }
     if (id === 'lesson') return lesson ? t('tdDutyLessonSub', { cando: lang === 'de' ? lesson.cando_de : lesson.cando_en }) : t('tdLessonNext');
-    return whyText(plan?.why[0], t) || t('tdDutyChSub');
+    return whyText(plan?.why[0], t, lang) || t('tdDutyChSub');
   };
   const heroTitle = (id: DutyId): string => {
     if (id === 'review') return t('tdReviewTitle');
@@ -225,6 +255,11 @@ export function TodayScreen() {
                 {d.id === 'review' && d.progress && !onlyReview && (
                   <span className="lx-tnum text-sm text-muted">{t('tdProgressLabel', { done: d.progress.done, total: d.progress.total })}</span>
                 )}
+                {!onlyReview && d.state === 'open' && (
+                  <span className="text-xs text-subtle" data-testid="reason" data-why={dutyWhy(d.id, plan, t, lang).keys}>
+                    {dutyWhy(d.id, plan, t, lang).text}
+                  </span>
+                )}
               </span>
               <span className="text-sm text-muted">{d.state === 'done' ? t('tdDutyDone') : t('tdDutyOpen')}</span>
             </li>
@@ -257,7 +292,9 @@ export function TodayScreen() {
                     <span className="flex min-w-0 flex-col">
                       <span className="font-medium">{t(CHANNEL_KEY[o.id] as MessageKey)}</span>
                       <span className="text-sm text-muted" data-testid="offer-why">
-                        {whyText(o.why, t) || t('why_whyRotation')}
+                        <span data-testid="reason" data-why={(o.why ?? [['whyRotation']]).map((w) => w[0]).join(',')}>
+                          {whyText(o.why, t, lang) || t('why_whyRotation')}
+                        </span>
                       </span>
                     </span>
                   </button>
@@ -297,7 +334,7 @@ export function TodayScreen() {
 
       {dayLoaded && (state.balance.answers > 0 || state.extra > 0) && (
         <motion.p variants={item} className="lx-tnum text-sm text-muted" data-testid="balance">
-          {state.balance.answers > 0 && tn('tdBalance', state.balance.answers, { answers: state.balance.answers, pct, min: state.balance.minutes })}
+          {state.balance.answers > 0 && tn('tdBalance', state.balance.answers, { answers: state.balance.answers, pct, min: state.balance.minutes, goal: goalMin })}
           {state.balance.answers > 0 && state.extra > 0 && ' · '}
           {state.extra > 0 && tn('tdExtraCount', state.extra)}
         </motion.p>

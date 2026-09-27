@@ -2,6 +2,7 @@ import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } fr
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useHiddenInput } from './HiddenInput';
+import { playCue } from '../platform/sound';
 import type { MaskCell } from '../domain/answer/mask';
 
 // Kinetische Lücke (Kap. 4.1, Architektur-Entwurf §6.1/6.3): getippt wird direkt in die Lücke.
@@ -62,6 +63,10 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
   const [focused, setFocused] = useState(false);
   const width = useMotionValue<number | string>('3.5em');
   const locked = state !== 'input';
+  // Ton zur Rückmeldung (Kap. 4.7), nur wenn eingeschaltet – einmal je Wechsel des Zustands.
+  useEffect(() => {
+    if (state !== 'input') playCue(state);
+  }, [state]);
   const flyersNow = useRef<Flyer[]>([]);
   const timers = useRef(new Set<number>());
   const landRef = useRef((f: Flyer) => {

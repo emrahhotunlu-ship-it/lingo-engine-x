@@ -24,6 +24,11 @@ import { ensurePflichtSince, healPflicht, runDailyIntake } from '../progress/day
 import { setPflichtResolver, tabId, usePending } from '../progress/persist';
 import { loadLearnInputs, recentLessonLines, setDailyOpen, useLearnInputs } from '../learn/inputs';
 import { computeToday } from './state';
+import { assessPlanInput } from '../../domain/assessment/planInput';
+import { normGoalMin } from '../../domain/progress/settings';
+import { historyPatch, historySnapshot } from '../../domain/progress/history';
+import { vocabGoal } from '../../domain/vocab/goal';
+import { recordProfileFields } from '../progress/persist';
 
 // Tagesplan: einmal je Lerntag festgelegt und in app/profile.plan gespeichert, nie neu
 // gewürfelt (Kap. 15). Ist das Speichern nicht möglich, gilt der lokal berechnete Plan für
@@ -126,13 +131,14 @@ export async function ensureDay(nowMs: number): Promise<void> {
       today,
       profile: profile ?? {},
       focus: focusAction(live.docs['app/assess'], lang),
+      assess: assessPlanInput(live.docs['app/assess'], today),
       dueErrors: dueErrors(live.collections.grammar ?? new Map(), nowMs).length,
       dueCards: dueCards(visible, nowMs).length,
       data: feasibleData(cards, lang, nowMs),
       env: { tts: useSpeech.getState().status === 'ready' },
     });
     const lesson = pickLesson({ course: live.docs['app/course'], assess: live.docs['app/assess'], lang });
-    built = buildPlan({ today, existing: profile?.plan, round, nowMs, phase2: { ranked, lesson } });
+    built = buildPlan({ today, existing: profile?.plan, round, nowMs, phase2: { ranked, lesson, goalMin: normGoalMin(profile?.goalMin) } });
   } catch (err) {
     // Nie endlos im Ladezustand: Hinweis mit „Erneut versuchen" (Kap. 3.4, keine stillen Fehler).
     logError('today:plan', err, 'Aufbau');
@@ -172,11 +178,31 @@ export async function ensureDay(nowMs: number): Promise<void> {
   }
 }
 
-/** Schritte 3 und 4 (nur mit gespeichertem Plan; ein lokaler Plan setzt nie `pflichtSince`). */
+let historyDay: string | null = null;
+
+/**
+ * Schritt 5 (Plan §5.4): ein Tagesbild je Lerntag in `profile.history` (≤ 120, `lx: 1`) – über die
+ * eine Sammel-Warteschlange, nur bei gültigem Profil und nur, wenn es für heute noch fehlt.
+ */
+function ensureHistory(today: string, nowMs: number): void {
+  if (historyDay === today) return;
+  const live = useLive.getState();
+  const profile = live.docs['app/profile'];
+  if (!profile) return;
+  historyDay = today;
+  const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
+  const goal = vocabGoal({ profile, cards, today });
+  void recordProfileFields('today:history', (cur) => historyPatch(cur, historySnapshot({ day: today, nowMs, profile: cur, grammar: live.collections.grammar ?? new Map(), vocabNow: goal.now }))).then((ok) => {
+    if (!ok) historyDay = null;
+  });
+}
+
+/** Schritte 3 bis 5 (nur mit gespeichertem Plan; ein lokaler Plan setzt nie `pflichtSince`). */
 async function afterPlan(today: string, nowMs: number): Promise<void> {
   const s = useTodayPlan.getState();
   if (s.day !== today || !s.plan) return;
   setPflichtResolver(resolvePflicht);
+  if (s.status === 'ready') ensureHistory(today, nowMs);
   const writer = getWriter();
   if (!writer) return;
   const live = useLive.getState();
@@ -250,5 +276,6 @@ export function retryPlan(nowMs: number): void {
 /** Nur für Tests. */
 export function resetTodayForTests(): void {
   intakeDay = null;
+  historyDay = null;
   useTodayPlan.setState({ day: null, plan: null, status: 'idle', exhausted: null });
 }

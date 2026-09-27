@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { create } from 'zustand';
 import { getDb } from '../platform/capabilities';
 import { describeError, logError, logWarn } from '../platform/diagnostics';
@@ -245,4 +245,26 @@ export function watchFeed(db: Db, next: (docs: FeedDocs) => void, onFail: (code:
         }, onError),
     onFail,
   );
+}
+
+// ---------------------------------------------------------------- Dokument-Abo als Hook (Phase 6, Plan E19)
+// `app/radar` (Reiter „Fehler") und `app/weekly` (Reiter „Verlauf"): genau EIN onSnapshot je
+// Hook-Instanz, nur solange der Reiter offen ist; im Effekt mit dem Pfad als stabiler Abhängigkeit.
+
+export type DocWatchState = { status: 'loading' | 'ready' | 'error'; data: Doc | null; ok: boolean };
+
+export function useDocWatch(path: string, enabled = true): DocWatchState {
+  const [state, setState] = useState<DocWatchState>({ status: 'loading', data: null, ok: true });
+  useEffect(() => {
+    if (!enabled) return;
+    const db = getDb();
+    if (!db) return;
+    return watchDoc(
+      db,
+      path,
+      (w) => setState({ status: 'ready', data: w.exists ? (w.data ?? null) : null, ok: w.ok }),
+      () => setState((s) => ({ ...s, status: 'error' })),
+    );
+  }, [path, enabled]);
+  return state;
 }

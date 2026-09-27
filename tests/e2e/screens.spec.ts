@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { boot, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { inputTour } from './inputHelpers';
+import { progressTour } from './progressHelpers';
 
 // Jeder Bildschirm rendert auf 390, 1440 und 2560 px, in allen drei Modi und beiden
 // Sprachen: keine JS-Fehler, kein undefined/NaN/{0}, kein Querscrollen, nichts
@@ -181,4 +182,48 @@ for (const lang of LANGS) {
     expect(errors).toEqual([]);
     await context.close();
   });
+}
+
+// Phase 6 (Plan §13, P7-2): Dein Stand mit vier Reitern und der Wortschatztest in allen Breiten,
+// Modi und Sprachen. Englische Inhalte (lang="en") zählen in der DE-Oberfläche nicht als Mischsprache.
+const P6_GERMAN_IN_EN = /[äöüÄÖÜß]|\b(und|nicht|wird|Karten|Tage|Urteil|Fehler|Verlauf|Weiter|Kenne)\b/;
+const P6_ENGLISH_UI_IN_DE = /\b(Judgment|Mistakes|History|Next|Skills|Strengths|Practice|Start test)\b/;
+
+for (const vp of VIEWPORTS) {
+  for (const theme of THEMES) {
+    for (const lang of LANGS) {
+      test(`stand6-${vp.name}-${theme}-${lang}`, async ({ browser }) => {
+        test.setTimeout(120_000);
+        const context = await browser.newContext({
+          viewport: { width: vp.width, height: vp.height },
+          isMobile: vp.mobile,
+          hasTouch: vp.mobile,
+          deviceScaleFactor: vp.mobile ? 2 : 1,
+          timezoneId: 'Europe/Berlin',
+          locale: lang === 'de' ? 'de-DE' : 'en-US',
+          reducedMotion: 'reduce',
+        });
+        const page = await context.newPage();
+        const { errors, external } = await boot(page, { theme, lang, migrated: true });
+        await progressTour(page, async (name) => {
+          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
+          expect(await layoutProblems(page), name).toEqual([]);
+          const text = await page.evaluate(() => {
+            const clone = document.querySelector('main')?.cloneNode(true) as HTMLElement | undefined;
+            if (!clone) return '';
+            clone.querySelectorAll('[lang]').forEach((n) => {
+              if (n.getAttribute('lang') !== document.documentElement.lang) n.remove();
+            });
+            return clone.innerText;
+          });
+          if (lang === 'en') expect(P6_GERMAN_IN_EN.exec(text)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
+          else expect(P6_ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
+          if (theme !== 'dim') await page.screenshot({ path: `${SHOTS}/p6-${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
+        });
+        expect(errors).toEqual([]);
+        expect(external).toEqual([]);
+        await context.close();
+      });
+    }
+  }
 }
