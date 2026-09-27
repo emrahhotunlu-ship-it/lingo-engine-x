@@ -52,6 +52,9 @@ test('Einstellung „Vibration“ aus: keine Vibration; wieder an wird gespeiche
   const { errors } = await startTrainer(page, { haptic: false });
   await answerCurrent(page);
   expect(await vibs(page)).toEqual([]);
+  // In Übungen gibt es kein Zahnrad (UX-Beratung Nr. 4): Runde schließen, dann über „Stand“.
+  await page.getByTestId('trainer-close').click();
+  await screen(page, 'today');
   await openSettings(page);
   const sw = page.getByTestId('set-haptic');
   await expect(sw).toBeVisible();
@@ -66,6 +69,8 @@ test('iPhone ohne navigator.vibrate: Hinweis statt Schalter, Prüfen ohne Fehler
   const { errors } = await startTrainer(page);
   await answerCurrent(page);
   await answerCurrent(page, { wrong: true });
+  await page.getByTestId('trainer-close').click();
+  await screen(page, 'today');
   await openSettings(page);
   await expect(page.getByTestId('haptic-none')).toBeVisible();
   await expect(page.getByTestId('set-haptic')).toHaveCount(0);

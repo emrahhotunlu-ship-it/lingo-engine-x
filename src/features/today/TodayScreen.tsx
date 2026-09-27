@@ -299,23 +299,17 @@ export function TodayScreen() {
           )}
           <TitleActions />
         </div>
-        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
           <span className="whitespace-nowrap" data-testid="today-date" data-day={today}>
             {dateLabel}
           </span>
           {ok && plan && state.status === 'open' && state.duties.total > 1 && (
-            <span className="whitespace-nowrap">
-              <span aria-hidden="true">· </span>
-              <span className="lx-tnum" data-testid="duty-minutes">
-                {t('tdMinutesShort', { min: dutyMinutes(plan) })}
-              </span>
+            <span className="lx-tnum whitespace-nowrap" data-testid="duty-minutes">
+              {t('tdMinutesShort', { min: dutyMinutes(plan) })}
             </span>
           )}
-          <span className="whitespace-nowrap">
-            <span aria-hidden="true">· </span>
-            <span className="lx-tnum" data-testid="today-streak">
-              {tn('tdStreak', streak.count)}
-            </span>
+          <span className="lx-tnum whitespace-nowrap" data-testid="today-streak">
+            {tn('tdStreak', streak.count)}
           </span>
         </p>
         {planStatus === 'error' && (

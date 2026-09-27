@@ -193,8 +193,8 @@ test('reduzierte Bewegung: alles erscheint ohne Animation vollständig', async (
   await context.close();
 });
 
-// Prüfbericht W2: Reiterleiste bei 390 px – jede Beschriftung einzeilig, mit Abstand zum
-// Nachbarn, Touch-Ziele ≥ 44 px (beide Sprachen).
+// Prüfbericht W2: Reiterleiste bei 390 px – vier Reiter (Heute · Üben · Sprechen · Stand), jede
+// Beschriftung einzeilig, mit Abstand zum Nachbarn, Touch-Ziele ≥ 44 px (beide Sprachen).
 for (const lang of LANGS) {
   test(`Reiterleiste 390 px einzeilig mit Abstand (${lang})`, async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin' });
@@ -203,7 +203,9 @@ for (const lang of LANGS) {
     await screen(page, 'today');
     const boxes = await page.getByTestId('tabbar').locator('button').evaluateAll((els) =>
       els.map((el) => {
-        const text = [...el.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim());
+        // Beschriftung unter dem Symbol (UX-Beratung Nr. 2: Symbol + Wort).
+        const label = [...el.querySelectorAll('span')].find((sp) => [...sp.childNodes].some((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) && !sp.closest('[data-testid="tab-badge"]'));
+        const text = label ? [...label.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) : undefined;
         const range = document.createRange();
         if (text) range.selectNodeContents(text);
         const lines = text ? new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size : 0;
@@ -212,7 +214,7 @@ for (const lang of LANGS) {
         return { label: text?.textContent ?? '', lines, h: b.height, w: b.width, left: b.left, right: b.right, textLeft: tr.left, textRight: tr.right };
       }),
     );
-    expect(boxes).toHaveLength(5);
+    expect(boxes).toHaveLength(4);
     for (const b of boxes) {
       expect(b.lines, b.label).toBe(1);
       expect(b.h, b.label).toBeGreaterThanOrEqual(44);

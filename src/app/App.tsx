@@ -200,10 +200,10 @@ function TabBar({ tab }: { tab: TabName }) {
             className={`relative flex min-h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] px-1 text-2xs transition-colors md:min-h-10 md:flex-none md:flex-row md:gap-1.5 md:rounded-full md:px-4 md:text-sm ${active ? 'font-semibold text-fg md:bg-surface-strong' : 'font-medium text-muted hover:text-fg'}`}
           >
             {/* Aktiver Reiter: Symbol auf heller Pille + fette Schrift (nicht nur Farbe). */}
-            <span className={`relative inline-flex rounded-full px-4 py-1 transition-colors duration-200 md:p-0 ${active ? 'bg-accent-soft text-accent-text md:bg-transparent md:text-fg' : ''}`}>
+            <span className={`relative inline-flex rounded-full px-4 py-1 transition-colors duration-200 md:py-0 md:pr-2 md:pl-0 ${active ? 'bg-accent-soft text-accent-text md:bg-transparent md:text-fg' : ''}`}>
               <Icon name={t2.icon} size={22} />
               {t2.badge > 0 && (
-                <span className="lx-tnum absolute -top-1 right-1 inline-flex md:-top-1.5 md:-right-2.5 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-2xs leading-4 font-semibold text-accent-fg" data-testid="tab-badge" aria-label={t('tabOpen', { n: t2.badge })}>
+                <span className="lx-tnum absolute -top-1 right-1 inline-flex md:-top-2 md:-right-1.5 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-2xs leading-4 font-semibold text-accent-fg" data-testid="tab-badge" aria-label={t('tabOpen', { n: t2.badge })}>
                   {t2.badge}
                 </span>
               )}
