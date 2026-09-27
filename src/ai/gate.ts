@@ -83,12 +83,68 @@ export function refreshCache(cache: CacheOpt): CacheOpt {
 }
 
 /**
+ * Repariert den häufigsten Fehler echter Antworten: gerade Anführungszeichen `"` MITTEN in einem
+ * JSON-Text, meist als Schluss eines deutschen „…" (Befund 27.09.: „Play" kann …). Zuerst werden
+ * „…" und “…" zu typografischen Paaren, dann wird jedes übrige `"` innerhalb eines Textes
+ * maskiert, auf das kein Strukturzeichen (`,` `:` `}` `]`) folgt.
+ */
+export function repairJson(src: string): string {
+  // Beendet `"` an Stelle i wirklich den Text? Nur, wenn danach ein Strukturzeichen kommt – ein
+  // Komma aber nur, wenn dahinter ein neuer JSON-Wert/Schlüssel beginnt (nicht „x", sondern …).
+  const closes = (s: string, i: number): boolean => {
+    const m = s.slice(i + 1).match(/^\s*(.)(\s*)(.?)/);
+    if (!m) return true;
+    const c = m[1];
+    if (c === '}' || c === ']' || c === ':') return true;
+    if (c === ',') return m[3] === '' || /["{[\-0-9tfn}\]]/.test(m[3] ?? '');
+    return false;
+  };
+  // Zuerst „…" / “…" zu typografischen Paaren, wenn das `"` den Text nicht beendet.
+  let paired = '';
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i]!;
+    paired += c;
+    if (c !== '„' && c !== '“') continue;
+    const j = src.indexOf('"', i + 1);
+    const nl = src.indexOf('\n', i + 1);
+    if (j < 0 || j - i > 200 || (nl >= 0 && nl < j) || /[„“]/.test(src.slice(i + 1, j)) || closes(src, j)) continue;
+    paired += src.slice(i + 1, j) + (c === '„' ? '“' : '”');
+    i = j;
+  }
+  let out = '';
+  let inStr = false;
+  for (let i = 0; i < paired.length; i++) {
+    const c = paired[i]!;
+    if (!inStr) {
+      if (c === '"') inStr = true;
+      out += c;
+      continue;
+    }
+    if (c === '\\') {
+      out += c + (paired[i + 1] ?? '');
+      i++;
+      continue;
+    }
+    if (c === '"') {
+      if (closes(paired, i)) {
+        inStr = false;
+        out += c;
+      } else out += '\\"';
+      continue;
+    }
+    // Rohe Zeilenumbrüche in Texten sind in JSON nicht erlaubt.
+    out += c === '\n' ? '\\n' : c;
+  }
+  return out;
+}
+
+/**
  * Liest eine Textantwort tolerant als JSON – dieselben drei Regeln wie `sample.json`
  * (contract/sample.d.ts): ganzer Text; sonst Inhalt EINES Markdown-Codeblocks; sonst vom ersten
  * `{`/`[` bis zum letzten `}`/`]`. `undefined`, wenn nichts davon lesbar ist.
  */
 export function parseJsonText(text: string): unknown {
-  const tryParse = (s: string): unknown => {
+  const strict = (s: string): unknown => {
     try {
       return JSON.parse(s) as unknown;
     } catch (err) {
@@ -96,6 +152,13 @@ export function parseJsonText(text: string): unknown {
       void err;
       return undefined;
     }
+  };
+  // Erst streng, dann repariert (deutsche Anführungszeichen „…" mit geradem Schlusszeichen).
+  const tryParse = (s: string): unknown => {
+    const v = strict(s);
+    if (v !== undefined) return v;
+    const fixed = repairJson(s);
+    return fixed === s ? undefined : strict(fixed);
   };
   const whole = tryParse(text.trim());
   if (whole !== undefined) return whole;
@@ -151,6 +214,10 @@ export function isStalePrompt(tier: ModelTier, prompt: string): boolean {
 
 type CallOut = { value: unknown; tier: ModelTier };
 
+/** An jede JSON-Vorlage angehängt: keine geraden Anführungszeichen in Texten. */
+export const QUOTE_RULE =
+  '\nJSON rule: never put the straight double quote character " inside a text value. For quotations inside text use „…“ (German) or “…” (English) or single quotes.';
+
 async function callOnce(
   prompt: string,
   template: PromptTemplate<unknown, unknown>,
@@ -186,7 +253,9 @@ async function callOnce(
     phase('streaming');
   };
   try {
-    if (template.verb === 'text-json') {
+    // Alle Vorlagen über den Text-Weg mit eigenem, reparierendem Lesen (Befund 27.09.: `sample.json`
+    // verwarf Antworten mit deutschen Anführungszeichen „…" – der Nutzer sah nur „unvollständig“).
+    {
       const res = await sample(prompt, { modelTier: template.tier, cache, signal: ctl.signal, onText });
       const tier = res.modelTierApplied ?? template.tier;
       if (tier !== template.tier) logWarn(scope, { code: 'tier_substituted', message: `${template.tier} → ${tier}` });
@@ -195,8 +264,6 @@ async function callOnce(
       if (value === undefined) throw failureFromSample({ code: 'invalid_json', message: res.truncated ? 'reply truncated' : 'no JSON value', text: res.text }, scope);
       return { value, tier };
     }
-    const value = await sample.json<unknown>(prompt, { modelTier: template.tier, cache, signal: ctl.signal, onText });
-    return { value, tier: template.tier };
   } catch (err) {
     throw failureFromSample(err, scope);
   } finally {
@@ -213,7 +280,7 @@ async function run<V, O>(req: AiRequest<V, O>, scope: string, phase: Phase): Pro
   let prompt: string;
   let schema: z.ZodType<O>;
   try {
-    prompt = template.build(vars);
+    prompt = template.build(vars) + QUOTE_RULE;
     schema = template.schema(vars);
   } catch (err) {
     logError(scope, err, 'build');

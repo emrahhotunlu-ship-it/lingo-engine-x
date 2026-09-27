@@ -169,12 +169,12 @@ describe('askJson mit refresh (E5-21)', () => {
     const p1 = askJson({ template: tpl, vars: { w: 'a' }, signal: new AbortController().signal });
     await flush();
     expect(calls[0]!.options.cache).toEqual({ gcTime: 86_400_000 });
-    calls[0]!.resolve({ ok: true });
+    calls[0]!.resolve({ text: '{"ok":true}', truncated: false });
     await p1;
     const p2 = askJson({ template: tpl, vars: { w: 'a' }, signal: new AbortController().signal, refresh: true });
     await flush();
     expect(calls[1]!.options.cache).toEqual({ gcTime: 86_400_000, refresh: true });
-    calls[1]!.resolve({ ok: true });
+    calls[1]!.resolve({ text: '{"ok":true}', truncated: false });
     await p2;
   });
 

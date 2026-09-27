@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-promise-reject-errors -- contract/sample.d.ts: `sample` lehnt mit schlichten Objekten {code, message, text?} ab, nicht mit Error. */
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { askJson, PROMPT_BUDGET_BYTES, resetAiGate, retryPrompt, SAMPLE_LIMIT_BYTES, SLOW_AFTER_MS } from '../../src/ai/gate';
+import { askJson, PROMPT_BUDGET_BYTES, QUOTE_RULE, resetAiGate, retryPrompt, SAMPLE_LIMIT_BYTES, SLOW_AFTER_MS } from '../../src/ai/gate';
 import { PROMPT_MAX_BYTES, SAMPLE_MAX_BYTES } from '../../src/prompts/common';
 import { callsInWindow, LOCAL_MAX_CALLS, useAiStatus } from '../../src/ai/status';
 import { AiFailure, type AiPhase } from '../../src/ai/types';
@@ -29,14 +29,15 @@ let impl: SampleFn | null = null;
 
 /** Nachbildung mit Hand-Steuerung: jeder Aufruf wartet, bis der Test ihn auflöst. */
 function manualSample(): SampleFn {
-  const json = <T,>(input: Claude.sample.SampleInput, options?: SampleOptions): Promise<T> =>
-    new Promise<T>((resolve, reject) => {
-      const call: Call = { input, options: options ?? {}, resolve: (v) => resolve(v as T), reject };
+  // Das Tor nutzt den Text-Weg (`sample()`) und liest JSON selbst; `resolve(v)` liefert v als Text.
+  const text = (input: Claude.sample.SampleInput, options?: SampleOptions): Promise<Claude.sample.SampleResult> =>
+    new Promise<Claude.sample.SampleResult>((resolve, reject) => {
+      const call: Call = { input, options: options ?? {}, resolve: (v) => resolve({ text: typeof v === 'string' ? v : JSON.stringify(v), truncated: false } as Claude.sample.SampleResult), reject };
       calls.push(call);
       options?.signal?.addEventListener('abort', () => reject({ code: 'cancelled', message: 'aborted' }), { once: true });
     });
-  const fn = (() => Promise.reject({ code: 'invalid_request', message: 'text not used here' })) as unknown as SampleFn;
-  return Object.assign(fn, { json, limits: () => Promise.resolve({ maxPromptBytes: 65536 }) });
+  const json = (() => Promise.reject({ code: 'invalid_request', message: 'json not used here' })) as SampleFn['json'];
+  return Object.assign(text as unknown as SampleFn, { json, limits: () => Promise.resolve({ maxPromptBytes: 65536 }) });
 }
 
 const proxy = Object.assign(
@@ -93,7 +94,7 @@ describe('askJson: Grundablauf', () => {
     await flush();
     expect(calls).toHaveLength(1);
     const c = calls[0]!;
-    expect(c.input).toBe('[unit-test@1]\nWord: x');
+    expect(c.input).toBe(`[unit-test@1]\nWord: x${QUOTE_RULE}`);
     expect(c.options.modelTier).toBe('quick');
     expect(c.options.cache).toBe(true);
     expect(c.options.signal).toBeInstanceOf(AbortSignal);

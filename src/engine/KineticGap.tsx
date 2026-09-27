@@ -164,7 +164,13 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
       return;
     }
     const em = parseFloat(getComputedStyle(g).fontSize) || 16;
-    const target = Math.max(3.5 * em, i.scrollWidth + 0.6 * em);
+    // Natürliche Breite = Summe der Wortgruppen (die Innenfläche selbst kann schon umbrechen);
+    // höchstens die volle Zeilenbreite, darüber bricht die Antwort zwischen Wörtern um.
+    const natural = Array.from(i.children).reduce((sum, el) => sum + el.getBoundingClientRect().width, 0) || i.scrollWidth;
+    let box: HTMLElement | null = g.parentElement;
+    while (box && getComputedStyle(box).display.startsWith('inline')) box = box.parentElement;
+    const avail = box && box.clientWidth > 0 ? box.clientWidth : Infinity;
+    const target = Math.min(Math.max(3.5 * em, natural + 0.6 * em), avail);
     const cur = width.get();
     if (typeof cur !== 'number' || reduce) width.set(target);
     else if (cur !== target) void animate(width, target, { type: 'spring', stiffness: 520, damping: 40 });
@@ -188,11 +194,18 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
           {mask ? (
             <MaskedLetters mask={mask} value={value} shown={locked ? (shown ?? null) : null} landed={landed} marks={marks} reduce={!!reduce} />
           ) : (
-            <AnimatePresence initial={false}>
-              {[...value].map((ch, i) => (
-                <Letter key={`${i}-${ch}`} ch={ch} i={i} landed={!!landed[i]} off={!!marks?.[i]} reduce={!!reduce} />
-              ))}
-            </AnimatePresence>
+            // Wörter bleiben zusammen; lange Antworten (ganze Satzteile) brechen zwischen Wörtern um,
+            // statt über den Rand hinauszulaufen (Befund 27.09.: Feld zu klein).
+            wordGroups(value).map((g) => (
+              <span key={g.start} className="lx-gap-word">
+                <AnimatePresence initial={false}>
+                  {[...g.text].map((ch, k) => {
+                    const i = g.start + k;
+                    return <Letter key={`${i}-${ch}`} ch={ch} i={i} landed={!!landed[i]} off={!!marks?.[i]} reduce={!!reduce} />;
+                  })}
+                </AnimatePresence>
+              </span>
+            ))
           )}
         </span>
       </motion.span>
@@ -291,4 +304,22 @@ function Letter({ ch, i, landed, off, reduce }: { ch: string; i: number; landed:
       {ch === ' ' ? '\u00a0' : ch}
     </motion.span>
   );
+}
+
+/** Buchstaben in Wortgruppen (je Wort samt folgendem Leerzeichen), Indizes bleiben global. */
+function wordGroups(value: string): Array<{ start: number; text: string }> {
+  const out: Array<{ start: number; text: string }> = [];
+  const chars = [...value];
+  let start = 0;
+  let cur = '';
+  chars.forEach((ch, i) => {
+    cur += ch;
+    if (ch === ' ') {
+      out.push({ start, text: cur });
+      start = i + 1;
+      cur = '';
+    }
+  });
+  if (cur) out.push({ start, text: cur });
+  return out;
 }

@@ -390,9 +390,18 @@ h3 {
     background: var(--lx-surface-strong);
     box-shadow: inset 0 -2px 0 0 var(--lx-accent);
   }
+  .lx-gap {
+    max-width: 100%;
+  }
   .lx-gap-inner {
     display: inline-flex;
+    flex-wrap: wrap;
     width: max-content;
+    max-width: 100%;
+  }
+  .lx-gap-word {
+    display: inline-flex;
+    white-space: pre;
   }
   .lx-letter {
     display: inline-block;
