@@ -52,9 +52,9 @@ test('Claudes Fokus (Mixed Conditionals, gültig bis 20.09.) steht im Plan vom 2
   await expect.poll(async () => (await planOf(page))?.d).toBe('2026-09-20');
   const plan = await planOf(page);
   expect(JSON.stringify(plan.why)).toContain('["whyFocus",0,"grammar:mixed-cond"]');
+  // Satzbau ist seit der Lernberatung (27.09.) nur noch Angebot; Pflicht ist Grammatik oder Lückenjagd.
   const ch = plan.duty.find((d) => d.startsWith('ch:'));
-  expect(['ch:gram', 'ch:order']).toContain(ch);
-  await expect(page.locator(`[data-testid="duty"][data-duty="${ch}"] [data-testid="reason"]`)).toContainText('Claudes Fokus · ');
+  expect(['ch:gram', 'ch:cloze']).toContain(ch);
 });
 
 test('am nächsten Tag: abgelaufener Fokus wirkt nicht mehr, eine neue Einschätzung wirkt', async ({ browser }) => {
