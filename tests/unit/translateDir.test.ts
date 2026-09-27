@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { fromOf } from '../../src/features/companion/translate/store';
+import { fromOf, requestFrom } from '../../src/features/companion/translate/store';
+import { TRANSLATE_EXAMPLE, translateSchema } from '../../src/prompts/translate';
 
 // Übersetzungsrichtung: kurze englische Wendungen ohne Funktionswörter (Emrahs Befund „Keep up“)
 // dürfen nicht als Deutsch gelten.
@@ -22,5 +23,18 @@ describe('Übersetzer: Ausgangssprache', () => {
     expect(dir('This is the budget for the project.')).toBe('en');
     expect(dir('Das ist nicht das Budget.')).toBe('de');
     expect(fromOf({ text: 'Keep up', dirOverride: 'de' })).toBe('de');
+  });
+
+  it('unsichere Texte gehen als „auto“ an Claude; Claude muss dann die Ausgangssprache nennen', () => {
+    expect(requestFrom({ text: 'Keep up', dirOverride: null })).toBe('auto');
+    expect(requestFrom({ text: 'Keep up', dirOverride: 'en' })).toBe('en');
+    expect(requestFrom({ text: 'This is the budget.', dirOverride: null })).toBe('en');
+    const base = JSON.parse(TRANSLATE_EXAMPLE) as Record<string, unknown>;
+    const auto = translateSchema({ from: 'auto', uiLang: 'de' });
+    expect(auto.safeParse(base).success).toBe(true);
+    const noSource = { ...base };
+    delete noSource.source;
+    expect(auto.safeParse(noSource).success).toBe(false);
+    expect(translateSchema({ from: 'en', uiLang: 'de' }).safeParse(base).success).toBe(false);
   });
 });

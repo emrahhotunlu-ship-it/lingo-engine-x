@@ -68,15 +68,17 @@ function blockText(input: string): string {
 }
 
 export function translateReply(input: string): string {
-  const from = langOf(line(input, 'From'));
+  const text = blockText(input);
+  const fromLine = line(input, 'From');
+  const from: Lang = /detect/i.test(fromLine) ? (/[äöüß]|\b(der|die|das|und|nicht|ist)\b/i.test(text) ? 'de' : 'en') : langOf(fromLine);
   const register = line(input, 'Register') || 'neutral';
   const notesLang = langOf(line(input, 'Notes language'));
-  const text = blockText(input);
   const same = /zzsame/i.test(text) && !isRetry(input);
   const note = (de: string, en: string) => (notesLang === 'de' ? de : en);
   if (from === 'de') {
     const main = /budget/i.test(text) ? 'We need to approve the budget.' : 'Here is the translation of your text in natural American English.';
     return JSON.stringify({
+      source: 'de',
       translation: main,
       register,
       alternatives: same ? [] : [
@@ -88,6 +90,7 @@ export function translateReply(input: string): string {
     });
   }
   return JSON.stringify({
+    source: 'en',
     translation: 'Das ist die Übersetzung deines Textes auf Deutsch.',
     register,
     alternatives: [

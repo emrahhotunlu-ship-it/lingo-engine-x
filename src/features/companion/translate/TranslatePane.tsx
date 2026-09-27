@@ -5,10 +5,9 @@ import { useT, type MessageKey } from '../../../i18n';
 import { speak, unlockSpeech, useSpeech } from '../../../platform/speech';
 import { TRANSLATE_MAX, type Register } from '../../../prompts/translate';
 import { IconButton } from '../../../ui/Button';
-import { Icon } from '../../../ui/Icon';
 import { CopyButton } from '../../preply/CopyBox';
 import { useCompanion } from '../store';
-import { fillFromHistory, fromOf, isTranslating, runTranslate, setRegister, setTranslateText, stopTranslate, swapDirection, useTranslate } from './store';
+import { fillFromHistory, fromOf, isTranslating, requestFrom, runTranslate, setRegister, setTranslateText, stopTranslate, setDirection, useTranslate } from './store';
 
 // Übersetzer im Begleiter (Phase 5 §8.2, Kap. 6.12): Eingabe, Richtung ⇄, Ton (Formell/Neutral/
 // Locker), „Übersetzen". Ergebnis: Hauptfassung (englisch antippbar, 🔊, Kopieren), Alternativen mit
@@ -16,6 +15,8 @@ import { fillFromHistory, fromOf, isTranslating, runTranslate, setRegister, setT
 // das Wort-Antippen als Karte speichern (`src: 'translate'`, Ursprungssatz = Übersetzung).
 
 const REG_KEY: Record<Register, MessageKey> = { formal: 'tlRegFormal', neutral: 'tlRegNeutral', casual: 'tlRegCasual' };
+
+const DIRS = [null, 'de', 'en'] as const;
 
 const short = (s: string, max = 70): string => (Array.from(s).length <= max ? s : `${Array.from(s).slice(0, max - 1).join('')}…`);
 
@@ -29,6 +30,7 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
   const mainRef = useRef<HTMLDivElement>(null);
   const from = fromOf(s);
   const to = from === 'de' ? 'en' : 'de';
+  const dirKnown = requestFrom(s) !== 'auto';
   const busy = isTranslating();
 
   useEffect(() => {
@@ -57,17 +59,24 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
     <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain">
       <div className="mx-auto flex w-full max-w-[48rem] flex-col gap-4 px-4 py-4 sm:px-6">
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={swapDirection}
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm font-semibold hover:bg-surface"
-            data-testid="tr-dir"
-            data-dir={`${from}-${to}`}
-            aria-label={`${t('tlDirLabel')}: ${t('tlFromTo', { from: langName(from), to: langName(to) })}. ${t('tlSwap')}`}
-          >
-            {t('tlFromTo', { from: langName(from), to: langName(to) })}
-            <Icon name="refresh" size={16} />
-          </button>
+          <div role="radiogroup" aria-label={t('tlDirLabel')} className="flex rounded-[var(--radius-control)] bg-track p-1" data-testid="tr-mode">
+            {DIRS.map((v) => {
+              const on = s.dirOverride === v;
+              return (
+                <button
+                  key={v ?? 'auto'}
+                  type="button"
+                  role="radio"
+                  aria-checked={on}
+                  onClick={() => setDirection(v)}
+                  className={`min-h-9 whitespace-nowrap rounded-[calc(var(--radius-control)-4px)] px-3 text-sm ${on ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
+                  data-value={v ?? 'auto'}
+                >
+                  {v === null ? t('tlAuto') : t('tlFromTo', { from: v.toUpperCase(), to: (v === 'de' ? 'en' : 'de').toUpperCase() })}
+                </button>
+              );
+            })}
+          </div>
           <div role="radiogroup" aria-label={t('tlRegister')} className="flex rounded-[var(--radius-control)] bg-track p-1" data-testid="tr-register">
             {(['formal', 'neutral', 'casual'] as const).map((v) => (
               <button
@@ -84,6 +93,13 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
             ))}
           </div>
         </div>
+        <p className="-mt-2 text-xs text-muted" data-testid="tr-dir" data-dir={dirKnown ? `${from}-${to}` : 'auto'} aria-live="polite">
+          {r && s.dirOverride === null
+            ? t('tlDetected', { from: langName(r.from), to: langName(r.from === 'de' ? 'en' : 'de') })
+            : dirKnown
+              ? t('tlFromTo', { from: langName(from), to: langName(to) })
+              : t('tlAutoHint')}
+        </p>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="tr-input" className="sr-only">
             {t('tlInputLabel')}

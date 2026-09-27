@@ -64,6 +64,34 @@ test.describe('Desktop 1440 DE', () => {
   });
 });
 
+test.describe('Handy 390 DE: Richtung', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  test('Automatisch: „Keep up“ erkennt Claude als Englisch → Deutsch; feste Wahl EN → DE geht ohne Erkennung', async ({ page }) => {
+    const { errors } = await boot(page, { migrated: true });
+    await screen(page, 'today');
+    await page.getByTestId('open-companion').tap();
+    await page.getByTestId('companion-tab-translate').tap();
+    await expect(page.getByTestId('tr-mode').locator('[data-value="auto"]')).toHaveAttribute('aria-checked', 'true');
+    await page.getByTestId('tr-input').fill('Keep up');
+    await expect(page.getByTestId('tr-dir')).toHaveAttribute('data-dir', 'auto');
+    await page.getByTestId('tr-go').tap();
+    await expect(page.getByTestId('tr-main')).toHaveAttribute('lang', 'de');
+    await expect(page.getByTestId('tr-dir')).toContainText('Erkannt: Englisch → Deutsch');
+    const first = await calls(page, 'translate');
+    expect(first.at(-1)?.input).toContain('From: detect it yourself');
+
+    await page.getByTestId('tr-mode').locator('[data-value="en"]').tap();
+    await expect(page.getByTestId('tr-dir')).toHaveAttribute('data-dir', 'en-de');
+    await page.getByTestId('tr-go').tap();
+    await expect(page.getByTestId('tr-main')).toHaveAttribute('lang', 'de');
+    const second = await calls(page, 'translate');
+    expect(second.at(-1)?.input).toContain('From: English');
+    expect(await layoutProblems(page)).toEqual([]);
+    expect(errors).toEqual([]);
+  });
+});
+
 test.describe('Handy 390 EN', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 

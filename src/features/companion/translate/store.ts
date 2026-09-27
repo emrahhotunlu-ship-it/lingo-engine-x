@@ -5,12 +5,12 @@ import { useSettings } from '../../../app/settings';
 import { detectLang } from '../../../domain/lang/detect';
 import { isDictWord } from '../../../domain/lexicon/dict';
 import { logWarn } from '../../../platform/diagnostics';
-import { translate, TRANSLATE_MAX, type Register, type TransLang, type TranslateOut } from '../../../prompts/translate';
+import { translate, TRANSLATE_MAX, type Register, type TransLang, type TranslateFrom, type TranslateOut } from '../../../prompts/translate';
 import { pushHistory, readHistory, type HistoryEntry } from './history';
 
 // Zustand des Übersetzers (Phase 5 §3.3/§8.2). Ein Aufruf je „Übersetzen" (ausdrückliche Handlung).
-// Die Richtung schlägt die Spracherkennung vor (`unknown` → Deutsch → Englisch); der Umschalter
-// überschreibt sie. Der Aufruf lebt im Store: Reiterwechsel bricht ihn nicht ab.
+// Richtung: „Automatisch“ (Standard) oder fest DE → EN / EN → DE. Automatisch erkennt die App
+// eindeutige Texte selbst; ist sie unsicher (kurze Wendungen), bestimmt Claude die Sprache. Der Aufruf lebt im Store: Reiterwechsel bricht ihn nicht ab.
 
 type Phase = AiPhase | 'idle';
 
@@ -58,9 +58,16 @@ export function setTranslateText(text: string): void {
   useTranslate.setState({ text: text.slice(0, TRANSLATE_MAX) });
 }
 
-export function swapDirection(): void {
-  const s = useTranslate.getState();
-  useTranslate.setState({ dirOverride: fromOf(s) === 'de' ? 'en' : 'de' });
+/** Was an Claude geht: feste Wahl, eindeutige Erkennung oder `auto`. */
+export function requestFrom(s: Pick<State, 'text' | 'dirOverride'>): TranslateFrom {
+  if (s.dirOverride) return s.dirOverride;
+  const got = detectLang(s.text);
+  return got === 'unknown' ? 'auto' : got;
+}
+
+/** Richtung wählen: `null` = automatisch. */
+export function setDirection(dir: TransLang | null): void {
+  useTranslate.setState({ dirOverride: dir, result: null, phase: 'idle', error: null });
 }
 
 export function setRegister(register: Register): void {
@@ -76,7 +83,7 @@ export async function runTranslate(opts: { refresh?: boolean } = {}): Promise<vo
   const s = useTranslate.getState();
   const text = s.text.trim();
   if (!text || isTranslating()) return;
-  const from = fromOf(s);
+  const from = requestFrom(s);
   const uiLang = useSettings.getState().lang;
   ctl?.abort();
   const c = new AbortController();
@@ -93,8 +100,9 @@ export async function runTranslate(opts: { refresh?: boolean } = {}): Promise<vo
       },
     });
     if (ctl !== c) return;
-    const history = pushHistory({ t: Date.now(), text, dir: from, reg: s.register, main: r.data.translation });
-    useTranslate.setState({ phase: 'done', result: { ...r.data, from, text }, history });
+    const src: TransLang = from === 'auto' ? (r.data.source ?? fromOf(s)) : from;
+    const history = pushHistory({ t: Date.now(), text, dir: src, reg: s.register, main: r.data.translation });
+    useTranslate.setState({ phase: 'done', result: { ...r.data, from: src, text }, history });
   } catch (err) {
     if (ctl !== c) return;
     if (isAiFailure(err) && err.kind === 'cancelled') {
@@ -117,5 +125,5 @@ export function stopTranslate(): void {
 }
 
 export function fillFromHistory(e: HistoryEntry): void {
-  useTranslate.setState({ text: e.text, dirOverride: e.dir, register: e.reg, result: null, phase: 'idle', error: null });
+  useTranslate.setState({ text: e.text, dirOverride: null, register: e.reg, result: null, phase: 'idle', error: null });
 }
