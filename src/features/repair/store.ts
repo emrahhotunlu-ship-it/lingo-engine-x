@@ -11,12 +11,26 @@ type Doc = Record<string, unknown>;
 
 const opFor = (cur: Readonly<Doc> | undefined, items: RepairItem[]) => (cur ? { update: { items } } : { set: { items } });
 
+/**
+ * Regel 6 (Kap. 9): Ein unerwarteter Stand wird nie überschrieben. `items` muss eine Liste sein,
+ * und jeder Eintrag muss lesbar sein – sonst wird nichts geschrieben (gemeldet über das Protokoll).
+ */
+function writable(cur: Readonly<Doc> | undefined): boolean {
+  if (!cur || cur.items == null) return true;
+  if (!Array.isArray(cur.items)) return false;
+  return readRepairs(cur).length === cur.items.length;
+}
+
 /** Reparatur-Sätze anlegen (z. B. aus Sag es, Gespräch, Schreiben). true = gespeichert oder nichts zu tun. */
 export async function saveRepairs(add: readonly NewRepair[]): Promise<boolean> {
   const writer = getWriter();
   if (!writer || !add.length) return false;
   try {
     await writer.transform(REPAIR_PATH, (cur) => {
+      if (!writable(cur)) {
+        logError('repair:save', new Error('app/repair unerwarteter Aufbau – nicht geschrieben'));
+        return null;
+      }
       const next = addRepairs(readRepairs(cur), add, Date.now());
       return next ? opFor(cur, next) : null;
     });
@@ -34,6 +48,10 @@ export async function recordRepair(id: string, ok: boolean): Promise<boolean> {
   const t = Date.now();
   try {
     await writer.transform(REPAIR_PATH, (cur) => {
+      if (!writable(cur)) {
+        logError('repair:review', new Error('app/repair unerwarteter Aufbau – nicht geschrieben'), id);
+        return null;
+      }
       const next = reviewRepair(readRepairs(cur), id, ok, t);
       return next ? opFor(cur, next) : null;
     });

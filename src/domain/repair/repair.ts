@@ -91,10 +91,15 @@ export function readRepairs(doc: Readonly<Doc> | undefined): RepairItem[] {
   return out;
 }
 
-/** Auf `max` kürzen: zuerst die ältesten erledigten, dann die ältesten offenen. */
-export function capRepairs(list: readonly RepairItem[], max = REPAIR_MAX): RepairItem[] {
+/** Obergrenze der Dokumentgröße (A6.6: 256 KiB je Dokument, mit Reserve). */
+export const REPAIR_MAX_BYTES = 200 * 1024;
+const enc = new TextEncoder();
+const bytesOf = (v: unknown): number => enc.encode(JSON.stringify(v)).length;
+
+/** Auf `max` Einträge und `REPAIR_MAX_BYTES` kürzen: zuerst die ältesten erledigten, dann die ältesten offenen. */
+export function capRepairs(list: readonly RepairItem[], max = REPAIR_MAX, maxBytes = REPAIR_MAX_BYTES): RepairItem[] {
   const out = [...list];
-  while (out.length > max) {
+  while (out.length > 1 && (out.length > max || bytesOf({ items: out }) > maxBytes)) {
     const doneIdx = out.findIndex((e) => e.done === true);
     out.splice(doneIdx >= 0 ? doneIdx : 0, 1);
   }

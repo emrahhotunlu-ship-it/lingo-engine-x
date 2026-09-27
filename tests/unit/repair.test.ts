@@ -38,5 +38,10 @@ describe('Reparatur-Sätze (V2)', () => {
     expect(c.some((e) => e.done)).toBe(false);
     expect(readRepairs({ items: [null, { wrong: 'a' }, { wrong: 'a b', right: 'c d', t: T }] })).toHaveLength(1);
     expect(validateDoc('app/repair', { items: c }).ok).toBe(true);
+    // Größe: auch bei langen Einträgen bleibt das Dokument unter 200 KiB (A6.6).
+    const long = Array.from({ length: REPAIR_MAX }, (_, i) => ({ id: `x${i}`, wrong: 'ä'.repeat(300), right: 'ö'.repeat(300), why: 'ü'.repeat(200), ctx: 'c'.repeat(120), fix: Array.from({ length: 6 }, () => 'f'.repeat(80)), src: 'say' as const, t: T, box: 0, due: T }));
+    const cut = capRepairs(long);
+    expect(new TextEncoder().encode(JSON.stringify({ items: cut })).length).toBeLessThanOrEqual(200 * 1024);
+    expect(cut.length).toBeLessThan(REPAIR_MAX);
   });
 });
