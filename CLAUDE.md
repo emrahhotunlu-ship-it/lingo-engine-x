@@ -60,8 +60,10 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 - [ ] Phase 4 – Input und Output: Lesen, Hören, Schreiben, Entdecken
 - [ ] Phase 5 – Begleiter und Brücke: Claude-Chat, Übersetzer, Preply-Brücke
   - [x] Phasen 2–5 gebaut und zusammengeführt (Stand `59bbc06`, verify grün: 728 Unit, 245 E2E); kombinierte Prüfung ohne Blocker, Befunde behoben (`690cc64`), Test-Link `AXHkh6…` Version `1790477322-3c8f`
-- [ ] Phase 6 – Urteil: KI-Einschätzung, Fortschritt, Wochenbericht, Tagesplan-Gewichtung
+- [x] Phase 6 – Urteil: KI-Einschätzung, Fortschritt, Wochenbericht, Tagesplan-Gewichtung (`4423372`, geprüft, Befunde behoben)
 - [ ] Phase 7 – Politur und Umzug (Veröffentlichung auf die alte Adresse nur nach Emrahs ausdrücklichem OK)
+  - [x] P7-1 bis P7-4; komplette App auf dem Test-Link `AXHkh6…` Version `1790487478-0d6d` (verify grün: 810 Unit, 312 E2E)
+  - [ ] P7-5 Umzug auf `JLL8…`: wartet auf Emrahs Freigabe
 
 ## A5. Subagents (`.claude/agents/`)
 | Subagent | Wann einsetzen | Rechte |
