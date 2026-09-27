@@ -31,6 +31,16 @@ describe('grammarWrite (Schreibweg grammar/<topic>)', () => {
     expect(d.kind === 'update' && 'errors' in d.patch).toBe(false);
   });
 
+  it('richtig erst nach Hinweis → zählt als falsch, der erste Versuch wird als Fehler gemerkt (Lernwissenschaft 27.09.)', () => {
+    const w = grammarWrite({ p: 0.5, last: 1 }, { ...answer({ t: t0, verdict: 'correct', given: 'will have finished' }), firstWrong: 'finish' });
+    expect(w.kind).toBe('update');
+    if (w.kind !== 'update') return;
+    expect(w.patch.c).toBe(0);
+    expect(w.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: 'finish', ans: 'will have finished', t: t0, src: 'seed' }]);
+    const plain = grammarWrite({ p: 0.5, last: 1 }, answer({ t: t0, verdict: 'correct', given: 'will have finished' }));
+    expect(plain.kind === 'update' && (plain.patch.p as number) > (w.patch.p as number)).toBe(true);
+  });
+
   it('Deckel 40/10/80/20/10, unbekannte Felder bleiben erhalten', () => {
     const cur = {
       id: 'future-perf-cont',

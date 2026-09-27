@@ -13,6 +13,7 @@ export const repairDe = {
   rxInputLabel: 'Dein neuer Satz',
   rxCheck: 'Prüfen',
   rxSkip: 'Überspringen',
+  rxStepStart: 'Nochmal, aber besser – starten',
   rxSkipAll: 'Jetzt nicht',
   rxNext: 'Weiter',
   rxVerdictOk: 'Richtig.',

@@ -60,6 +60,8 @@ export type GrammarAnswer = {
   judged: 'local' | 'ai' | 'noai';
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */
   override?: boolean;
+  /** Erster, falscher Versuch vor dem Hinweis (Selbstkorrektur): zählt für Beherrschung und Fehler als falsch. */
+  firstWrong?: string;
 };
 
 /** Quellen: g Grammatik, s Sprint, w Schreiben, v Vokabeln (alte App); k Sprechen, b Business (Phase 3). */

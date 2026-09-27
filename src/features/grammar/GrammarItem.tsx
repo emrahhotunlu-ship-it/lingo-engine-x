@@ -85,6 +85,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const [tip, setTip] = useState<0 | 1 | 2>(0);
   /** „Erst ein Hinweis, dann die Lösung": Hinweis nach falschem erstem Versuch (zweiter Versuch). */
   const [retry, setRetry] = useState<GrammarRetryHint | null>(null);
+  const firstWrong = useRef<string | null>(null);
   const fieldRef = useRef<HTMLTextAreaElement>(null);
   const [judging, setJudging] = useState(false);
   const [chosen, setChosen] = useState<string | null>(null);
@@ -132,6 +133,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     // Erster Versuch falsch → Hinweis statt Lösung; die Eingabe bleibt stehen, der Fokus bleibt im
     // Feld. Nicht bei Auswahl, nicht im Wochen-Check, nicht bei „nicht sicher prüfbar".
     if (verdict === 'wrong' && !retry && !noHelp && task.type !== 'mc' && !extra.unsure) {
+      firstWrong.current = given;
       setRetry(grammarRetryHint(task, tp ? topicLabel : null, hintVisible));
       if (whole) fieldRef.current?.focus({ preventScroll: true });
       else api.focusNow();
@@ -217,6 +219,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       help: fb.help,
       judged: fb.judged,
       ...(fb.override ? { override: true } : {}),
+      ...(retry && firstWrong.current !== null ? { firstWrong: firstWrong.current } : {}),
     };
     const kind = onDone(a);
     if (kind === 'typed') api.focusNow();

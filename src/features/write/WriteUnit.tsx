@@ -113,6 +113,8 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
   const view = useMemo(() => (id && doc ? normalizeWriting(id, doc) : null), [id, doc]);
   const task = useAiTasks((s) => (id ? s.tasks[`write:${id}`] : undefined));
   const [revText, setRevText] = useState('');
+  // Solange „Nochmal, aber besser" läuft, ist die Korrektur ausgeblendet (abrufen statt abschreiben).
+  const [repairOn, setRepairOn] = useState(false);
 
   useEffect(() => {
     if (task && task.status !== 'running' && stateName === 'submitted') markTaskSeen(task.key);
@@ -217,11 +219,11 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
         </div>
         {running && <AiRunPanel phase={task.phase} error={null} onStop={() => stopAiTask(task.key)} note={t('inAiBackground')} />}
         {task?.status === 'error' && view && <AiRunPanel phase="error" error={task.error} onRetry={() => startReview(view.id, view.text, view.rev, prompt, ctx)} />}
-        {res && view && (
+        {res && view && !repairOn && (
           <ReviewView res={res} text={view.text} area="write" sourceRef={`writing/${view.id}`} title={prompt.title.en} stale={stale} onRecheck={ai ? () => startReview(view.id, view.text, view.rev, prompt, ctx) : null} />
         )}
         {res && view && !stale && !running && (
-          <RepairStep key={`${view.id}-${view.rev}`} candidates={repairsFromWriting(view.text, res.errors, prompt.title.en)} area="write" source={`writing/${view.id}`} />
+          <RepairStep key={`${view.id}-${view.rev}`} candidates={repairsFromWriting(view.text, res.errors, prompt.title.en)} area="write" source={`writing/${view.id}`} onActive={setRepairOn} />
         )}
         {!res && !running && view && (
           <div className="flex flex-col gap-3" data-testid="no-review">

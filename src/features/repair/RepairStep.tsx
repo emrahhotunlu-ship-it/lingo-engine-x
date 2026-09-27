@@ -21,6 +21,8 @@ type Props = {
   candidates: readonly NewRepair[];
   area: WordTapArea;
   source: string | null;
+  /** Läuft der Schritt? Solange blendet die Seite ihre Korrekturen aus (abrufen statt abschreiben). */
+  onActive?: (active: boolean) => void;
 };
 
 /** Kandidaten, die noch nie geübt wurden (einmal beim Öffnen festgelegt). */
@@ -39,13 +41,22 @@ function pick(candidates: readonly NewRepair[]): Array<RepairView & { add: NewRe
   return out;
 }
 
-export function RepairStep({ candidates, area, source }: Props) {
+export function RepairStep({ candidates, area, source, onActive }: Props) {
   const { t } = useT();
   const [items] = useState(() => pick(candidates));
   const [pos, setPos] = useState(0);
-  const [end, setEnd] = useState<'done' | 'skipped' | null>(null);
+  const [started, setStarted] = useState(false);
+  const [end, setEndState] = useState<'done' | 'skipped' | null>(null);
   if (!items.length) return null;
   const cur = items[pos];
+  const setEnd = (v: 'done' | 'skipped') => {
+    setEndState(v);
+    onActive?.(false);
+  };
+  const start = () => {
+    setStarted(true);
+    onActive?.(true);
+  };
   const advance = () => {
     if (pos + 1 < items.length) setPos(pos + 1);
     else setEnd('done');
@@ -72,6 +83,12 @@ export function RepairStep({ candidates, area, source }: Props) {
           <motion.p key="end" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="text-sm text-muted" data-testid="repair-step-end" role="status">
             {end === 'done' ? t('rxStepDone') : t('rxStepSkipped')}
           </motion.p>
+        ) : !started ? (
+          <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
+            <Button variant="primary" icon="refresh" onClick={start} data-testid="repair-step-start">
+              {t('rxStepStart')}
+            </Button>
+          </motion.div>
         ) : (
           cur && (
             <motion.div key={cur.id} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
@@ -82,8 +99,10 @@ export function RepairStep({ candidates, area, source }: Props) {
                 source={source}
                 status={items.length > 1 ? t('rxCount', { n: pos + 1, total: items.length }) : undefined}
                 onResult={({ ok }) => {
-                  // Erst sicherstellen, dass der Satz gespeichert ist (idempotent), dann die Wiederholung.
-                  void saveRepairs([cur.add]).then(() => recordRepair(cur.id, ok));
+                  // Erst sicherstellen, dass der Satz gespeichert ist (idempotent). Direkt nach der
+                  // Korrektur ist ein Treffer noch kein freier Abruf (Lernwissenschaft 27.09.): nur ein
+                  // Fehler wird eingetragen, sonst bleibt der Satz in Box 0 und kommt morgen wieder.
+                  void saveRepairs([cur.add]).then(() => (ok ? undefined : recordRepair(cur.id, false)));
                 }}
                 onNext={advance}
                 onSkip={advance}

@@ -66,8 +66,10 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
       return;
     }
     const out = await ask.run({ wrong: item.wrong, right: item.right, why: item.why ?? '', given, uiLang: lang });
-    // KI nicht erreichbar oder abgebrochen: die lokale Prüfung zählt.
-    finish(out ? (out.ok ? 'ok' : 'no') : 'no', out?.note ?? null, given);
+    // KI nicht erreichbar, abgebrochen oder unlesbar: nicht als falsch werten (Lernwissenschaft
+    // 27.09.) – der Satz bleibt offen, der Fehler steht da, „Prüfen" fragt erneut.
+    if (!out) return;
+    finish(out.ok ? 'ok' : 'no', out.note ?? null, given);
   };
 
   const tone = !res ? '' : res.verdict === 'no' ? 'text-danger-text' : res.verdict === 'close' ? 'text-gold-text' : 'text-accent-text';
@@ -143,6 +145,7 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
           data-testid="repair-input"
         />
         {busy && <AiRunPanel phase={ask.phase} error={null} onStop={ask.stop} skeleton={false} />}
+        {!busy && !res && ask.error && <AiRunPanel phase="error" error={ask.error} onRetry={() => void check()} skeleton={false} />}
       </div>
 
       {!res && (

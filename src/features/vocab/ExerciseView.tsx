@@ -195,7 +195,9 @@ export function ExerciseView({
         ...(e.limitMs ? { limitMs: e.limitMs } : {}),
         ...(extraFb.timedOut ? { timedOut: true } : {}),
       });
-    const grade = forced !== undefined && companionHelp ? (Math.min(forced, 2) as Grade) : g;
+    // „Beginnt mit …" hieß: Emrah wusste das Wort nicht – auch ein Treffer danach ist „Nochmal".
+    const g2: Grade = retry?.kind === 'start' && forced === undefined ? 1 : g;
+    const grade = forced !== undefined && companionHelp ? (Math.min(forced, 2) as Grade) : g2;
     const t0 = Date.now();
     const after = reviewFsrs(card.fsrs, grade, t0);
     const dueInMs = Math.max(0, after.due - t0);

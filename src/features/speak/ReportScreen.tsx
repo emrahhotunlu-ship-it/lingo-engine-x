@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
 import { reportStats } from '../../domain/speak/reportStats';
@@ -31,6 +31,8 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
   const cat = useCatLabel();
   const c = rp.snap.context;
   const saving = rp.state === 'finishing';
+  // Solange „Nochmal, aber besser" läuft, sind die Fokuspunkte ausgeblendet (abrufen statt abschreiben).
+  const [repairOn, setRepairOn] = useState(false);
   const stats = useMemo(() => reportStats(c.turns, c.analyses, c.taken, c.startedAt, c.endedAt ?? c.startedAt), [c.turns, c.analyses, c.taken, c.startedAt, c.endedAt]);
   const rep = c.report;
   const foreign = rep.data && rep.data.lang !== lang;
@@ -130,7 +132,7 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
                 </ul>
               </Card>
               {/* Ein gutes Gespräch darf ohne Fokuspunkt sein (roleplay-report@2). */}
-              {rep.data.focus.length > 0 && (
+              {rep.data.focus.length > 0 && !repairOn && (
                 <Card as="div">
                   <p className="lx-eyebrow">{t('repFocus')}</p>
                   <ul className="mt-2 flex flex-col gap-3">
@@ -189,7 +191,7 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
         )}
       </section>
 
-      {!saving && repairs.length > 0 && <RepairStep candidates={repairs} area="speak" source={`scene/${scene.id}`} />}
+      {!saving && repairs.length > 0 && <RepairStep candidates={repairs} area="speak" source={`scene/${scene.id}`} onActive={setRepairOn} />}
 
       <div className="flex flex-wrap gap-3">
         <Button variant="primary" icon="refresh" disabled={saving} onClick={() => go({ name: 'roleplay', sceneId: scene.id, n: n + 1 })} data-testid="report-again">

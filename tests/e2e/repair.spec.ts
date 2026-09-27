@@ -139,6 +139,7 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
 
   const step = page.getByTestId('repair-step');
   await expect(step).toBeVisible();
+  await step.getByTestId('repair-step-start').click();
   await expect(step.getByTestId('repair-item')).toHaveCount(1);
   await expect(step.getByTestId('repair-wrong')).toContainText('We must delay the start by two weeks.');
   await expect(step.getByTestId('repair-right')).toHaveCount(0);
@@ -152,7 +153,9 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
   await page.screenshot({ path: 'test-results/screens/reparatur-rollenspiel-390.png', fullPage: true });
   await step.getByTestId('repair-next').click();
   await expect(step).toHaveAttribute('data-state', 'done');
-  await expect.poll(async () => (await repairs(page))[0]?.box).toBe(1);
+  // Direkt nach der Korrektur ist ein Treffer noch kein freier Abruf: Box bleibt 0, morgen wieder.
+  await page.waitForTimeout(300);
+  expect((await repairs(page))[0]?.box).toBe(0);
   expect((await repairs(page))[0]).toMatchObject({ ctx: expect.any(String), fix: ['need to delay'] });
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
@@ -171,6 +174,9 @@ test('Schreiben: Schritt nach der Korrektur, Überspringen ohne Vorwurf (Desktop
 
   const step = page.getByTestId('repair-step');
   await expect(step).toBeVisible();
+  await step.getByTestId('repair-step-start').click();
+  // Solange der Schritt läuft, ist die Korrektur ausgeblendet (abrufen statt abschreiben).
+  await expect(page.getByTestId('review')).toHaveCount(0);
   await expect(step.getByTestId('repair-item')).toContainText('Satz 1 von 2');
   await expect(step.getByTestId('repair-wrong')).toContainText('It depends of the final tests with your data.');
   await expect.poll(async () => (await repairs(page)).map((e) => e.src)).toEqual(['write', 'write']);
@@ -187,7 +193,9 @@ test('Schreiben: Schritt nach der Korrektur, Überspringen ohne Vorwurf (Desktop
   await step.getByTestId('repair-skip').click();
   await expect(step).toHaveAttribute('data-state', 'done');
   await expect(step.getByTestId('repair-step-end')).toHaveText('Fertig. Diese Sätze kommen in der Wiederholung wieder.');
-  await expect.poll(async () => (await repairs(page)).map((e) => e.box)).toEqual([1, 0]);
+  await expect(page.getByTestId('review')).toBeVisible();
+  await page.waitForTimeout(300);
+  expect((await repairs(page)).map((e) => e.box)).toEqual([0, 0]);
   expect((await repairs(page))[1]?.last).toBeUndefined();
   expect(await layoutProblems(page)).toEqual([]);
   await page.screenshot({ path: 'test-results/screens/reparatur-schreiben-1280.png', fullPage: true });

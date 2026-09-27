@@ -31,7 +31,8 @@ function patchFor(cur: Doc, a: GrammarAnswer): Doc {
   const topic = a.task.topic;
   const p0 = p0Of(topic);
   const t = a.t;
-  const ok = !a.dontKnow && a.verdict !== 'wrong';
+  // Richtig erst nach Hinweis (Lernwissenschaft 27.09.): für Beherrschung, Fälligkeit und Fehler falsch.
+  const ok = !a.dontKnow && a.verdict !== 'wrong' && a.firstWrong === undefined;
   const pNow = displayP(num(cur.p, p0), p0, typeof cur.last === 'number' && cur.last > 0 ? cur.last : null, t);
   const step = bktStep({
     p: pNow,
@@ -69,7 +70,7 @@ function patchFor(cur: Doc, a: GrammarAnswer): Doc {
     const next = reviewError(errors, a.task.errorT, { ok, given: a.dontKnow ? '' : a.given, grade: a.grade, t });
     if (next) patch.errors = next;
   } else if (!ok && !a.dontKnow) {
-    patch.errors = addError(errors, { q: a.task.prompt, given: a.given, ans: a.task.answer, t, src: a.task.src });
+    patch.errors = addError(errors, { q: a.task.prompt, given: a.firstWrong ?? a.given, ans: a.task.answer, t, src: a.task.src });
   }
   return patch;
 }
