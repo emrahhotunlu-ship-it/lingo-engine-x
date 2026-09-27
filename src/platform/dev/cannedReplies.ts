@@ -11,6 +11,7 @@ import { registerLearnReplies } from './cannedLearn';
 import { registerSayReplies } from './cannedSay';
 import { courseExtendReply } from './canned/courseExtend';
 import { repairCheckReply } from './canned/repairCheck';
+import { registerFluencyMeetingReplies } from './canned/fluencyMeeting';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
 // produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -305,6 +306,8 @@ export function registerCannedReplies(): void {
   registerCannedReply('course-extend', courseExtendReply);
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   registerCannedReply('repair-check', repairCheckReply);
+  // Lernberatung 27.09., V6/V4: fluency-check, meeting-prep, meeting-debrief
+  registerFluencyMeetingReplies();
   // Prüfbericht: word-gen, lesson-production, grammar-items, mnemonic
   registerLearnReplies();
   // Lernberatung 27.09.: say-check („Sag es“)

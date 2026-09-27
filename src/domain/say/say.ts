@@ -1,7 +1,7 @@
 import type { Situation } from '../../content/say/situations';
 import { sentenceSplit } from '../input/textStats';
 import { hash32 } from '../random';
-import type { NewRepair } from '../repair/repair';
+import type { NewRepair, RepairSrc } from '../repair/repair';
 import type { SayCorrection } from './sayDoc';
 
 // „Sag es“ (Lernberatung 27.09., V1/V2): reine Logik – Situation des Tages und Reparatur-Sätze
@@ -24,7 +24,7 @@ const norm = (s: string) => s.replace(/[’‘]/g, "'").replace(/\s+/g, ' ').tri
  * wird der ganze eigene Satz gemerkt („Damals hast du gesagt: …“) und die Korrektur darin ersetzt;
  * sonst bleibt es beim Ausschnitt. `ctx` = Situation.
  */
-export function repairsFromCorrections(text: string, corrections: readonly SayCorrection[], ctx: string): NewRepair[] {
+export function repairsFromCorrections(text: string, corrections: readonly SayCorrection[], ctx: string, src: RepairSrc = 'say'): NewRepair[] {
   const sentences = sentenceSplit(text).map((s) => s.text.replace(/\s+/g, ' ').trim());
   const out: NewRepair[] = [];
   for (const c of corrections) {
@@ -39,7 +39,7 @@ export function repairsFromCorrections(text: string, corrections: readonly SayCo
       const fixed = `${sentence.slice(0, at)}${right}${sentence.slice(at + wrong.length)}`;
       if (at >= 0 && norm(fixed) !== norm(sentence)) full = { wrong: sentence, right: fixed };
     }
-    out.push({ wrong: full.wrong, right: full.right, why: c.why, src: 'say', ctx });
+    out.push({ wrong: full.wrong, right: full.right, why: c.why, src, ctx });
   }
   return out;
 }

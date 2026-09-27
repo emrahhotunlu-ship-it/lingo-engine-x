@@ -14,6 +14,8 @@ import { standDe } from './parts/stand.de';
 import { engineDe } from './parts/engine.de';
 import { hintDe } from './parts/hint.de';
 import { sayDe } from './parts/say.de';
+import { fluencyDe } from './parts/fluency.de';
+import { meetingDe } from './parts/meeting.de';
 import { repairDe } from './parts/repair.de';
 
 export const de = {
@@ -39,6 +41,9 @@ export const de = {
   ...hintDe,
   // Lernberatung 27.09.: „Sag es“
   ...sayDe,
+  // Lernberatung 27.09.: Flüssigkeit 90 – 60 – 45, „Mein nächster Termin“
+  ...fluencyDe,
+  ...meetingDe,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   ...repairDe,
   appName: 'Lingo-Engine X',

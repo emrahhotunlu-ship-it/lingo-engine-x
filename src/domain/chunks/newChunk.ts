@@ -11,7 +11,8 @@ type Doc = Record<string, unknown>;
 
 export type ChunkSource =
   | { kind: 'scene'; scene: string; sceneTitle: string; utterance: string; upgraded: string; turn: number }
-  | { kind: 'mail' | 'pitch' | 'biz' | 'say'; ref: string; title: string; utterance: string; upgraded: string };
+  // `fluency` / `meeting`: Flüssigkeit 90 – 60 – 45 und „Mein nächster Termin“ (Lernberatung V6/V4).
+  | { kind: 'mail' | 'pitch' | 'biz' | 'say' | 'fluency' | 'meeting'; ref: string; title: string; utterance: string; upgraded: string };
 
 export type NewChunkInput = {
   en: string;

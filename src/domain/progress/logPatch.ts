@@ -173,15 +173,15 @@ export type ActivityLogEntry = {
   t: number;
   ok: boolean;
   lang: string;
-  type: 'speak' | 'biz' | 'say';
+  type: 'speak' | 'biz' | 'say' | 'fluency';
   /** Szene bzw. Einheit (`sc-vida`, `mail`, `pb-decline` …). */
   id: string;
-  m: 'speak' | 'biz-mail' | 'biz-pitch' | 'biz-play' | 'say';
+  m: 'speak' | 'biz-mail' | 'biz-pitch' | 'biz-play' | 'say' | 'fluency';
   q: string;
   /** Eigene Züge (Sprechen) bzw. Fragen (Drill); 1 bei Mail und Pitch. */
   n: number;
   ms: number;
-  ctx: 'spk' | 'biz' | 'say';
+  ctx: 'spk' | 'biz' | 'say' | 'fluency';
 };
 
 /** Aktivitätseintrag mit gekürztem Titel und gerundeter Dauer. */

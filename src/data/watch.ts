@@ -13,7 +13,8 @@ import { validateCached } from './validate';
 
 type Doc = Record<string, unknown>;
 
-export type WatchedName = 'scene' | 'chunk';
+// `meeting`: „Meine Termine“ (Lernberatung V4), nur solange der Termin-Bildschirm offen ist.
+export type WatchedName = 'scene' | 'chunk' | 'meeting';
 
 type WatchState = {
   /** `undefined` = noch nicht geladen. */

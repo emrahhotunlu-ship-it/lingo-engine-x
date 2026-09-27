@@ -26,6 +26,9 @@ import { weeklyReport } from './weeklyReport';
 import { courseExtend } from './courseExtend';
 import { sayCheck } from './sayCheck';
 import { repairCheck } from './repairCheck';
+import { fluencyCheck } from './fluencyCheck';
+import { meetingPrep } from './meetingPrep';
+import { meetingDebrief } from './meetingDebrief';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -64,6 +67,10 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   sayCheck,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   repairCheck,
+  // Lernberatung 27.09., V6/V4 – Flüssigkeit 90 – 60 – 45, „Mein nächster Termin“
+  fluencyCheck,
+  meetingPrep,
+  meetingDebrief,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */
