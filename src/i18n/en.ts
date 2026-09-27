@@ -1,10 +1,28 @@
 import type { MessageKey } from './de';
 import { aiEn } from './parts/ai.en';
+import { learnEn } from './parts/learn.en';
+import { speakEn } from './parts/speak.en';
+import { bizEn } from './parts/biz.en';
+import { voiceEn } from './parts/voice.en';
+import { companionEn } from './parts/companion.en';
+import { inputEn } from './parts/input.en';
+import { progressEn } from './parts/progress.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
 export const en: Record<MessageKey, string> = {
   ...aiEn,
+  ...learnEn,
+  // Phase 3 – Sprechen, Business, Stimme
+  ...speakEn,
+  ...bizEn,
+  ...voiceEn,
+  // Phase 5 – Begleiter, Übersetzer, Preply
+  ...companionEn,
+  // Phase 4 – Lesen, Hören, Schreiben, Entdecken
+  ...inputEn,
+  // Phase 6 – Urteil, Fortschritt, Wortschatztest, Einstellungen
+  ...progressEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',
@@ -168,6 +186,7 @@ export const en: Record<MessageKey, string> = {
   navLabel: 'Sections',
   navToday: 'Today',
   navOverview: 'Your progress',
+  tabOverview: 'Progress',
   tdStreak_one: 'Streak: {n} day',
   tdStreak_other: 'Streak: {n} days',
   tdStatusOpen_one: '{n} card left',
@@ -188,8 +207,8 @@ export const en: Record<MessageKey, string> = {
   tdExtraHint: 'Counts as extra, not toward your daily goal.',
   tdExtraCount_one: 'Extra: {n} card',
   tdExtraCount_other: 'Extra: {n} cards',
-  tdBalance_one: 'Today: {answers} answer · {pct}% correct · {min} min',
-  tdBalance_other: 'Today: {answers} answers · {pct}% correct · {min} min',
+  tdBalance_one: 'Today: {answers} answer · {pct}% correct · {min} of {goal} min',
+  tdBalance_other: 'Today: {answers} answers · {pct}% correct · {min} of {goal} min',
   tdPlanError: 'Today’s plan could not be created just now. Your data is unchanged.',
   tdPlanRetry: 'Try again',
   tdNotSaved: 'Not everything is saved yet.',

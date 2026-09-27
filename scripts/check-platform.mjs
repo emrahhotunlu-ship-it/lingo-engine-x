@@ -39,7 +39,15 @@ const loaders = [
 for (const [re, label] of loaders) if (re.test(html)) problems.push(`Ladeziel gefunden: ${label}`);
 
 // Spuren des Entwicklungs-Adapters und der Testdaten (Kap. 3.3).
-const devMarkers = ['__LINGO_FAKE__', '__LINGO_FAKE_OPTIONS__', 'lx:fake-db', 'Feste Beispielantwort', 'installFakeRuntime', 'createMemoryDb', 'Alex Muster', 'zzjson', 'com.apple.voice.compact'];
+const devMarkers = ['__LINGO_FAKE__', '__LINGO_FAKE_OPTIONS__', 'lx:fake-db', 'Feste Beispielantwort', 'installFakeRuntime', 'createMemoryDb', 'Alex Muster', 'zzjson', 'com.apple.voice.compact',
+  // Phase 3: nachgebildete Sprech-/Business-Antworten und Spracheingabe
+  'zzde', 'I wanted to let you know that', 'InvalidStateError: already started'];
+// Phase 5: Testmarker der festen Antworten (Begleiter, Übersetzer, Preply).
+devMarkers.push('zzlong', 'zzen', 'zzsame', 'zzempty', '[no-solution]', 'registerCompanionReplies');
+// Phase 4: Titel der festen Lese-/Hörtexte des Entwicklungs-Adapters.
+devMarkers.push('Heads-Up Before the Client Call', 'Four-Day Week Really Work');
+// Phase 6/7: Fehlerpfade und Messhilfen des Adapters.
+devMarkers.push('assessBad', 'peakSubscriptions', 'setAssessBad');
 for (const m of devMarkers) if (html.includes(m)) problems.push(`Entwicklungs-Adapter oder Testdaten im Build: "${m}"`);
 
 // Kopf

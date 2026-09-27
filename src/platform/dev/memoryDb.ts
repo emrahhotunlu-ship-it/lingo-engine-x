@@ -30,7 +30,11 @@ export type MemoryDbHandle = {
   load(all: Record<string, Json>): void;
   writes(): ReadonlyArray<{ op: 'set' | 'update' | 'delete'; path: string }>;
   setFailWrites(code: DbErrCode | undefined): void;
+  /** Phase 5: Die nächsten `times` Schreibvorgänge auf `path` scheitern mit `code`. */
+  failWritesTo(path: string, code: DbErrCode, times?: number): void;
   activeSubscriptions(): number;
+  /** Phase 6 (Plan §13): Höchststand gleichzeitiger Abonnements seit dem Start. */
+  peakSubscriptions(): number;
 };
 
 const SEGMENT_RE = /^[A-Za-z0-9_\-.~:@+]+$/;
@@ -145,6 +149,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
   const queryListeners = new Set<{ spec: QuerySpec; fire: () => void }>();
   let failWrites = opts.failWrites;
   let subscriptionCount = 0;
+  let peakSubscriptions = 0;
   let failedSubscriptions = 0;
   let version = 0;
   const meta: SnapshotMetadata = Object.freeze({ fromCache: false, hasPendingWrites: false });
@@ -185,8 +190,15 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
     if (opts.onChange) opts.onChange(dump());
   }
 
-  function guardWrite(): void {
+  const failPaths = new Map<string, { code: DbErrCode; times: number }>();
+  function guardWrite(path?: string): void {
     if (failWrites) throw new DbFailure(failWrites, `simulated ${failWrites}`);
+    const f = path ? failPaths.get(path) : undefined;
+    if (f && path) {
+      if (f.times <= 1) failPaths.delete(path);
+      else failPaths.set(path, { code: f.code, times: f.times - 1 });
+      throw new DbFailure(f.code, `simulated ${f.code} for ${path}`);
+    }
   }
 
   function dump(): Record<string, Json> {
@@ -254,6 +266,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
       return false;
     }
     subscriptionCount++;
+    peakSubscriptions = Math.max(peakSubscriptions, subscriptionCount);
     return true;
   }
 
@@ -323,7 +336,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
       get: () => delay(() => snapshotOf(path)),
       set: (data) =>
         delay(() => {
-          guardWrite();
+          guardWrite(path);
           const body = checkBody(data);
           if (!docs.has(path) && docs.size >= MAX_DOCS) throw new DbFailure('quota_exceeded', 'artifact database holds 5,000 documents');
           store(path, body);
@@ -332,7 +345,7 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
         }),
       update: (data) =>
         delay(() => {
-          guardWrite();
+          guardWrite(path);
           const patch = checkBody(data);
           const cur = docs.get(path);
           if (!cur) throw new DbFailure('invalid_argument', 'update requires an existing document');
@@ -419,6 +432,10 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
     setFailWrites: (code) => {
       failWrites = code;
     },
+    failWritesTo: (path, code, times = 1) => {
+      failPaths.set(path, { code, times });
+    },
     activeSubscriptions: () => subscriptionCount,
+    peakSubscriptions: () => peakSubscriptions,
   };
 }

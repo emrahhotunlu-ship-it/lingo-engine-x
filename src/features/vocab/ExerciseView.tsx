@@ -28,7 +28,11 @@ import { locate } from '../../domain/srs/context';
 import { choiceVerdict } from '../../domain/srs/exercise';
 import type { CheckResult, ContextSpan, Exercise, Grade, Option, TrainCard } from '../../domain/srs/types';
 import { requestExamples, useExamples } from './examples';
-import { commitAnswer, type FirstKind } from './session';
+import { commitAnswer, type Answer, type FirstKind } from './session';
+import { CopyOnce, NextButton, OverrideButton } from '../learn/ui';
+import { MnemonicBlock } from './mnemonic';
+import { useCompanionSee } from '../companion/seeing';
+import { companionOpenedSince, companionOpenMs } from '../companion/store';
 
 // Eine Übung (CLAUDE.md A7 „Emrahs Rückmeldung zum Trainer"): Status oben, Aufgabe in einer
 // Zeile, Antwort → Prüfen → Ergebnis mit Markierung, Bedeutung, Formhinweis, Beispielsätzen.
@@ -45,6 +49,8 @@ type Feedback = {
   /** Sicherheit nach dieser Antwort (Status passt zu Ergebnis und Abstand, F5). */
   confidence: Confidence;
   ms: number;
+  /** Einspruch „Ich lag richtig" (M4). */
+  override: boolean;
 };
 
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose4' };
@@ -55,12 +61,15 @@ export function ExerciseView({
   knownWords,
   again = false,
   onDone,
+  onCommit,
 }: {
   exercise: Exercise;
   knownWords: ReadonlySet<string>;
   /** Kommt die Karte nach einem Fehler in dieser Runde noch einmal (F10)? */
   again?: boolean;
   onDone: (kind: FirstKind) => void;
+  /** Eigener Schreibweg (z. B. Wörter-Schritt der Lektion); Standard: die Trainer-Runde. */
+  onCommit?: (ans: Answer) => FirstKind;
 }) {
   const { t, tn, lang } = useT();
   const api = useHiddenInput();
@@ -78,10 +87,12 @@ export function ExerciseView({
   const deletions = useRef(0);
   const shownAt = useRef(0);
   const lookupAtStart = useRef(0);
+  const companionAtStart = useRef(0);
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     shownAt.current = performance.now();
     lookupAtStart.current = lookupOpenMs();
+    companionAtStart.current = companionOpenMs();
     // Tastatur am Desktop (F7): liegt der Fokus nirgends, beginnt er bei der Übung.
     const a = document.activeElement;
     if (!a || a === document.body) root.current?.querySelector<HTMLElement>('[data-testid="exercise"]')?.focus({ preventScroll: true });
@@ -94,7 +105,10 @@ export function ExerciseView({
   const check = (chosen: Option | null) => {
     if (fb) return;
     const nowPerf = performance.now();
-    const paused = lookupOpenMs() - lookupAtStart.current;
+    // Offene Zeit von Nachschlagen und Begleiter zählt nicht zur Antwortzeit (Phase 5, E5-05).
+    const paused = lookupOpenMs() - lookupAtStart.current + (companionOpenMs() - companionAtStart.current);
+    // Den Begleiter vor dem Prüfen zu öffnen zählt als Hilfe: höchstens „Schwer" (E5-05, A7).
+    const companionHelp = companionOpenedSince(shownAt.current);
     const ms = Math.max(0, Math.round(nowPerf - shownAt.current - paused));
     let result: CheckResult;
     let given: string;
@@ -114,13 +128,13 @@ export function ExerciseView({
       firstKeyMs: firstKey,
       chars: solution.length,
       deletions: deletions.current,
-      hintLevel: FREE_TYPED.has(e.ex) ? tip : 0,
+      hintLevel: companionHelp ? 2 : FREE_TYPED.has(e.ex) ? tip : 0,
     });
     const t0 = Date.now();
     const after = reviewFsrs(card.fsrs, grade, t0);
     const dueInMs = Math.max(0, after.due - t0);
     const confidence = confidenceOf({ isNew: false, stage: Math.max(1, card.stage) as TrainCard['stage'], fsrs: after }, t0);
-    setFb({ result, given, chosen, grade, dueInMs, ms, confidence });
+    setFb({ result, given, chosen, grade, dueInMs, ms, confidence, override: false });
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen").
     if (ai && storedExamples(card.doc).length === 0 && cardExamples(card, shownSentence).length < EXAMPLES_MIN) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
@@ -129,7 +143,8 @@ export function ExerciseView({
 
   const next = () => {
     if (!fb) return;
-    const kind = commitAnswer({ grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1 });
+    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1 };
+    const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
     else api.blur();
@@ -169,6 +184,20 @@ export function ExerciseView({
   const helped = e.ex === 'cloze_hint';
   const mask = helped ? maskOf(solution, { firstLetter: true }) : FREE_TYPED.has(e.ex) && tip > 0 ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
+
+  // Was der Begleiter sieht (Phase 5 §8.4): vor dem Prüfen Aufgabe und Satz mit ___, nie die Lösung.
+  const blanked = e.sentence ? `${e.sentence.sentence.slice(0, e.sentence.start)}___${e.sentence.sentence.slice(e.sentence.end)}` : '';
+  const seeDetail =
+    e.ex === 'mc_en'
+      ? `${t(`task_${e.ex}` as MessageKey)}\n${e.sentence?.sentence ?? card.word}`
+      : `${t(`task_${e.ex}` as MessageKey)}\n${blanked || e.meaning || ''}${e.meaning && blanked ? `\n(${e.meaning})` : ''}`;
+  useCompanionSee({
+    area: 'trainer',
+    label: `${t('cmpSeeTrainer')} · ${t(`exName_${e.ex}` as MessageKey)}`,
+    phase: fb ? 'feedback' : 'question',
+    detail: seeDetail,
+    ...(fb ? { reveal: `Solution: ${solution}. Learner: ${fb.given || '(empty)'}` } : { mask: [solution, card.word, card.lemma, ...e.accepted] }),
+  });
 
   const sentence = (span: ContextSpan, slot: ReactNode | null, opts: { mark?: boolean } = {}) => (
     <EnglishText
@@ -260,8 +289,9 @@ export function ExerciseView({
   let result: ReactNode = undefined;
   if (fb) {
     const v = fb.result;
-    const verdictKey: MessageKey =
-      v.verdict === 'correct'
+    const verdictKey: MessageKey = fb.override
+      ? 'lrOverridden'
+      : v.verdict === 'correct'
         ? v.variant === 'uk'
           ? 'trVerdictUk'
           : 'trVerdictCorrect'
@@ -297,7 +327,7 @@ export function ExerciseView({
     result = (
       <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
-          <p className={`text-base font-semibold ${tone}`} data-testid="verdict" data-verdict={v.verdict}>
+          <p className={`text-base font-semibold ${fb.override ? 'text-accent-text' : tone}`} data-testid="verdict" data-verdict={fb.override ? 'correct' : v.verdict}>
             {t(verdictKey, { solution })}
           </p>
           {v.verdict !== 'correct' && e.input === 'typed' && (
@@ -389,13 +419,14 @@ export function ExerciseView({
             )}
           </div>
         )}
+        <MnemonicBlock card={card} />
+        {v.verdict === 'wrong' && e.input === 'typed' && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
+        {v.verdict === 'wrong' && e.input === 'typed' && <CopyOnce solution={solution} />}
         <div className="flex items-center justify-between gap-3 pt-1">
-          <span className="text-xs text-subtle" data-testid="due-in" data-grade={fb.grade}>
+          <span className="text-xs text-subtle" data-testid="due-in" data-grade={fb.override ? 3 : fb.grade}>
             {t('trAgainIn', { when: when(fb.dueInMs) })}
           </span>
-          <Button variant="primary" iconAfter="arrowRight" onClick={next} data-testid="next">
-            {t('trNext')}
-          </Button>
+          <NextButton onNext={next} auto={v.verdict === 'correct' && tip === 0 && !fb.override} />
         </div>
       </motion.div>
     );

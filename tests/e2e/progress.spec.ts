@@ -1,0 +1,218 @@
+import { expect, test, type Page } from '@playwright/test';
+import { boot, layoutProblems, openOverview, screen, type Lang } from './fixtures';
+
+// Phase 6 (Plan §13): „Dein Stand" mit Urteil · Fehler · Weg nach C1 · Verlauf gegen den
+// Produktions-Build. Feste Antworten des Adapters: assess@1 und weekly-report@1 in DE und EN.
+
+type Dump = Record<string, Record<string, unknown>>;
+type Call = { id: string | null; tier: string; cache?: unknown; input: string };
+const dump = (page: Page) => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Dump } } }).__LINGO_FAKE__.db.dump());
+const calls = (page: Page, id: string) =>
+  page.evaluate((tid) => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Call[] } }).__LINGO_FAKE__.sampleCalls.filter((c) => c.id === tid).map((c) => ({ id: c.id, tier: c.tier, cache: c.cache })), id);
+
+test.use({ viewport: { width: 1440, height: 900 } });
+
+async function tab(page: Page, id: 'judge' | 'errors' | 'path' | 'history') {
+  await page.getByTestId(`tab-${id}`).click();
+  await expect(page.getByTestId(`tab-${id}`)).toHaveAttribute('aria-selected', 'true');
+}
+
+for (const lang of ['de', 'en'] as Lang[]) {
+  for (const width of [390, 1440]) {
+    test(`vier Reiter ohne undefined/NaN/{0} und ohne Querscrollen · ${lang} · ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      const { errors, external } = await boot(page, { migrated: true, lang });
+      await openOverview(page);
+      for (const id of ['judge', 'errors', 'path', 'history'] as const) {
+        await tab(page, id);
+        await page.waitForTimeout(300);
+        expect(await layoutProblems(page), id).toEqual([]);
+      }
+      expect(errors).toEqual([]);
+      expect(external).toEqual([]);
+    });
+  }
+}
+
+test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher); Hülle mit Verlauf gespeichert', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await openOverview(page);
+  await expect.poll(async () => (await dump(page))['app/assess']?.d).toBe('2026-09-20');
+  const doc = (await dump(page))['app/assess']!;
+  expect(doc).toMatchObject({ v: 2, pv: 'assess@1', tier: 'complex', lang: 'de' });
+  expect((doc.run as Record<string, unknown>).d).toBe('2026-09-20');
+  // Befund H3: Die Einschätzung der alten App (Seed, 18.09., ohne hist) ist erster Verlaufseintrag.
+  const hist = doc.hist as Array<Record<string, unknown>>;
+  expect(hist.map((h) => h.d)).toEqual(['2026-09-18', '2026-09-20']);
+  expect(Object.keys(hist[0]!.dims as object)).toHaveLength(6);
+  expect(((doc.data as Record<string, unknown>).dims as unknown[]).length).toBe(6);
+  expect(await calls(page, 'assess')).toEqual([{ id: 'assess', tier: 'complex', cache: false }]);
+  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await expect(page.getByTestId('assess-stamp')).toContainText('20. September 2026');
+  await expect(page.getByTestId('dim')).toHaveCount(6);
+  // Tagessperre: Reiterwechsel und Rückkehr lösen keinen zweiten Lauf aus.
+  await page.getByTestId('tab-today').click();
+  await screen(page, 'today');
+  await page.getByTestId('tab-overview').click();
+  await screen(page, 'overview');
+  await page.waitForTimeout(500);
+  expect(await calls(page, 'assess')).toHaveLength(1);
+  expect(errors).toEqual([]);
+});
+
+test('„Neu einschätzen" fragt ausdrücklich neu, „Denkt nach …" mit Stopp; der alte Stand bleibt sichtbar', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { sampleDelayMs: 1500 } });
+  await openOverview(page);
+  await expect(page.getByTestId('assess-phase')).toBeVisible();
+  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await expect(page.getByTestId('assess-stop')).toBeVisible();
+  await expect(page.getByTestId('assess-renew')).toBeVisible({ timeout: 15_000 });
+  await page.getByTestId('assess-renew').click();
+  await expect(page.getByTestId('assess-phase')).toBeVisible();
+  await page.getByTestId('assess-stop').click();
+  await expect(page.getByTestId('assess-renew')).toBeVisible();
+  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  expect(await calls(page, 'assess')).toHaveLength(2);
+});
+
+test('rate_limited: Hinweis, kein zweiter Aufruf, alter Stand bleibt', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { sampleFail: { assess: 'rate_limited' } } });
+  await openOverview(page);
+  await expect(page.getByTestId('assess-error')).toBeVisible();
+  await page.waitForTimeout(1000);
+  expect(await calls(page, 'assess')).toHaveLength(1);
+  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  expect((await dump(page))['app/assess']?.d).toBe('2026-09-18');
+});
+
+test('ohne sample: Einschätzung wird angezeigt, ohne Knopf und ohne Aufruf', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await expect(page.getByTestId('assess-renew')).toHaveCount(0);
+  await expect(page.locator('[data-ai]')).toHaveCount(0);
+});
+
+test('not_granted: Knopf verschwindet, Stand bleibt', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { sampleFail: { assess: 'not_granted' } } });
+  await openOverview(page);
+  await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
+  await expect(page.getByTestId('assess-renew')).toHaveCount(0);
+  expect(await calls(page, 'assess')).toHaveLength(1);
+});
+
+test('schemawidrige erste Antwort: genau ein Neuversuch, dann gespeichert (A6.3)', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { assessBad: true } });
+  await openOverview(page);
+  await expect.poll(async () => (await dump(page))['app/assess']?.d).toBe('2026-09-20');
+  expect(await calls(page, 'assess')).toHaveLength(2);
+});
+
+test('einfacheres Modell: die antwortende Stufe wird gespeichert und genannt', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { tierApplied: 'default' } });
+  await openOverview(page);
+  await expect.poll(async () => (await dump(page))['app/assess']?.tier).toBe('default');
+  await expect(page.getByTestId('assess-stamp')).toContainText('einfacheren Modell');
+});
+
+test('Oberfläche EN, gespeicherte Einschätzung DE: Stufen sichtbar, Texte erst nach genau einem neuen Lauf', async ({ page }) => {
+  // Einschätzung von heute: nur der Sprachwechsel ist ein Grund.
+  await boot(page, { migrated: true, lang: 'en', fake: { patch: { 'app/assess': { d: '2026-09-20' } } } });
+  await openOverview(page);
+  await expect.poll(async () => (await dump(page))['app/assess']?.lang).toBe('en');
+  expect(await calls(page, 'assess')).toHaveLength(1);
+  await expect(page.getByTestId('strength').first()).toBeVisible();
+  const text = await page.getByTestId('judge').innerText();
+  expect(text).not.toMatch(/[äöüß]/);
+});
+
+test('„Üben" beim Blocker öffnet die Übung; ohne Ziel fehlt der Knopf', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await expect(page.getByTestId('blocker')).toHaveCount(2);
+  await expect(page.getByTestId('blocker-practice')).toHaveCount(2);
+  await page.getByTestId('blocker-practice').first().click();
+  await screen(page, 'grammarSession');
+});
+
+test('Blocker mit unbekannter Aktion: kein „Üben"-Knopf', async ({ page }) => {
+  const data = {
+    cefr: 'B2',
+    level: 'Solides B2 mit Luft nach oben in mehreren Bereichen.',
+    blockers: [{ title: 'Unbekannt', why: 'Ohne Ziel in der App.', fix: 'This has no target.', action: 'grammar:unknown' }],
+    dims: [],
+  };
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/assess': { data } } } });
+  await openOverview(page);
+  await expect(page.getByTestId('blocker')).toHaveCount(1);
+  await expect(page.getByTestId('blocker-practice')).toHaveCount(0);
+});
+
+test('Fehler-Radar: Zeilen mit Trend, Beispiele, „Üben" führt zur Fehlerwiederholung', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await tab(page, 'errors');
+  const rows = page.getByTestId('radar-row');
+  await expect(rows.first()).toBeVisible();
+  for (const r of await rows.all()) expect(['more', 'same', 'fewer']).toContain(await r.getAttribute('data-trend'));
+  const practice = page.getByTestId('radar-practice').first();
+  await practice.click();
+  await screen(page, 'grammarSession');
+});
+
+test('Weg nach C1: Status je Punkt, „Kann ich" wird in profile.canDo gespeichert und zählt', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await tab(page, 'path');
+  await expect(page.getByTestId('cando')).toHaveCount(40);
+  await expect(page.getByTestId('vocab-goal')).toContainText('8.000');
+  const item = page.locator('[data-testid="cando"][data-status="open"]').first();
+  const id = await item.getAttribute('data-id');
+  await item.getByTestId('cando-self').click();
+  await expect(page.locator(`[data-testid="cando"][data-id="${id}"]`)).toHaveAttribute('data-status', 'self');
+  await expect.poll(async () => ((await dump(page))['app/profile']?.canDo as Record<string, unknown>)[id ?? '']).toBe('2026-09-20');
+  await page.locator(`[data-testid="cando"][data-id="${id}"]`).getByTestId('cando-self').click();
+  await expect.poll(async () => ((await dump(page))['app/profile']?.canDo as Record<string, unknown>)[id ?? '']).toBeNull();
+});
+
+test('Verlauf: Wochenbericht mit Fakten und gespeichertem KI-Text, Diagramm, Aktivität, Messwerte erst beim Aufklappen', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await openOverview(page);
+  await tab(page, 'history');
+  await expect(page.getByTestId('weekly')).toHaveAttribute('data-week', '2026-W37');
+  await expect(page.getByTestId('weekly-fact').first()).toBeVisible();
+  await expect(page.getByTestId('weekly-text')).toBeVisible();
+  await expect.poll(async () => ((await dump(page))['app/weekly']?.items as unknown[] | undefined)?.length).toBe(1);
+  expect(await calls(page, 'weekly-report')).toHaveLength(1);
+  await expect(page.getByTestId('history-chart')).toBeVisible();
+  await expect(page.getByTestId('heatmap')).toBeVisible();
+  await page.getByTestId('measures').getByRole('button').click();
+  await expect(page.getByTestId('measures').locator('table')).toHaveCount(2);
+  // Zweites Öffnen: der Bericht liegt schon vor, kein weiterer Aufruf.
+  await tab(page, 'judge');
+  await tab(page, 'history');
+  await expect(page.getByTestId('weekly-text')).toBeVisible();
+  expect(await calls(page, 'weekly-report')).toHaveLength(1);
+  expect(errors).toEqual([]);
+});
+
+test('der zuletzt offene Reiter bleibt beim nächsten Öffnen', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await tab(page, 'path');
+  await page.getByTestId('tab-today').click();
+  await screen(page, 'today');
+  await page.getByTestId('tab-overview').click();
+  await expect(page.getByTestId('tab-path')).toHaveAttribute('aria-selected', 'true');
+});
+
+test('Abo-Höchststand bleibt über einen Durchlauf aller Reiter ≤ 32', async ({ page }) => {
+  await boot(page, { migrated: true });
+  await openOverview(page);
+  for (const id of ['judge', 'errors', 'path', 'history'] as const) {
+    await tab(page, id);
+    await page.waitForTimeout(200);
+  }
+  const peak = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { peakSubscriptions(): number } } }).__LINGO_FAKE__.db.peakSubscriptions());
+  expect(peak).toBeLessThanOrEqual(32);
+});

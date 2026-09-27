@@ -52,7 +52,19 @@ describe('Der eine Schreibpfad', () => {
   it('kennt kein Löschen', () => {
     const w = createWriter(createMemoryDb().db) as unknown as Record<string, unknown>;
     expect(w.delete).toBeUndefined();
-    expect(Object.keys(w).sort()).toEqual(['createIfMissing', 'patch', 'set', 'transform', 'update']);
+    // Phase 7 (Plan §12.3): `compact` ersetzt nur app/profile nach Archivierung, löscht nie ein Dokument.
+    expect(Object.keys(w).sort()).toEqual(['acquire', 'compact', 'createIfMissing', 'patch', 'set', 'transform', 'update']);
+  });
+
+  it('acquire: kurze Sperre ohne data; belegt ist ein normales Ergebnis; daily/* verweigert', async () => {
+    const h = createMemoryDb({ seed: { 'app/pool': { items: [] } } });
+    const a = createWriter(h.db);
+    expect(await a.acquire('app/pool', { holder: 'tab-a', ttlMs: 15000 })).toMatchObject({ acquired: true });
+    expect(await a.acquire('app/pool', { holder: 'tab-b', ttlMs: 15000 })).toMatchObject({ acquired: false });
+    // Verlängern mit derselben Kennung geht; das Dokument bleibt unverändert.
+    expect(await a.acquire('app/pool', { holder: 'tab-a', ttlMs: 15000 })).toMatchObject({ acquired: true });
+    expect(h.dump()['app/pool']).toEqual({ items: [] });
+    await expect(a.acquire('daily/2026-09-27', { holder: 'tab-a' })).rejects.toMatchObject({ code: 'read_only' });
   });
 
   it('schreibt je Dokument nacheinander, in Aufruf-Reihenfolge', async () => {

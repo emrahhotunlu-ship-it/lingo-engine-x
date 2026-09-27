@@ -141,6 +141,15 @@ test.describe('Desktop', () => {
     await page.mouse.click(5, 5);
     await expect(page.getByTestId('lookup')).toHaveCount(0);
     await expect.poll(active).toBe('gap-input');
+    // Auch langes Drücken auf eine leere Stelle (> 1 s) gibt den Fokus zurück (keine Zeitgrenze).
+    await page.getByTestId('sentence').locator('button.lx-word[data-word="rush"]').click();
+    await expect(page.getByTestId('lookup')).toBeVisible();
+    await page.mouse.move(5, 5);
+    await page.mouse.down();
+    await page.waitForTimeout(1300);
+    await page.mouse.up();
+    await expect(page.getByTestId('lookup')).toHaveCount(0);
+    await expect.poll(active).toBe('gap-input');
     // Getippt wird direkt weiter.
     await page.keyboard.type('avoid', { delay: 20 });
     await expect(page.locator('[data-slot="letter"][data-filled]')).toHaveCount(5);
@@ -178,8 +187,8 @@ test('Handy: Nachschlage-Blatt lässt sich bei niedriger Höhe per Finger scroll
   await page.getByTestId('sentence').locator('button.lx-word[data-word="driving"]').tap();
   const lk = page.getByTestId('lookup');
   await expect(lk).toBeVisible();
-  await page.getByTestId('lk-ask').tap();
-  await expect(page.getByTestId('lk-sense')).toBeVisible();
+  // „Claude fragen" öffnet seit Phase 5 den Begleiter (E5-09); das Blatt wird hier nur durch die niedrige Höhe voll.
+  await expect(page.getByTestId('lk-ipa')).toBeVisible();
   await page.waitForTimeout(400);
   const m = await lk.evaluate((el) => ({ ch: el.clientHeight, sh: el.scrollHeight, ta: getComputedStyle(el).touchAction }));
   expect(m.sh, 'Inhalt höher als das Blatt').toBeGreaterThan(m.ch);

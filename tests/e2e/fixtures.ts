@@ -71,7 +71,7 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
 }
 
 /** Wartet, bis ein Bildschirm fertig eingeblendet ist. */
-export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer'): Promise<void> {
+export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer' | 'speak' | 'roleplay' | 'business' | 'mail' | 'playbook' | 'pitch' | 'grammarSession' | 'vtest'): Promise<void> {
   await page.locator(`[data-screen="${name}"]`).waitFor({ state: 'visible' });
   await page.waitForFunction((n) => {
     const el = document.querySelector(`[data-screen="${n}"]`);
@@ -100,6 +100,8 @@ export async function layoutProblems(page: Page): Promise<string[]> {
     for (const el of Array.from(document.querySelectorAll<HTMLElement>('body *'))) {
       const cs = getComputedStyle(el);
       if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('[aria-hidden="true"], .sr-only')) continue;
+      // Waagrecht wischbare Leisten (z. B. Wendungs-Chips, Phase 3) dürfen über den Rand laufen.
+      if (el.closest('[data-hscroll]')) continue;
       const r = el.getBoundingClientRect();
       if (r.width === 0 || r.height === 0) continue;
       if (r.right > vw + 1 || r.left < -1) out.push(`Ragt aus dem Bild: <${el.tagName.toLowerCase()} class="${el.className}"> (${Math.round(r.left)}–${Math.round(r.right)})`);

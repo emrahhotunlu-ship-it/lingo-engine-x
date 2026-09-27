@@ -1,5 +1,5 @@
 import type { AiMessageKey } from '../i18n/parts/ai.de';
-import type { CacheOpt, ModelTier, PromptTemplate } from '../prompts/types';
+import type { CacheOpt, ChatTemplate, ModelTier, PromptTemplate } from '../prompts/types';
 
 // Typen des KI-Tors (Kap. 10, Architektur-Entwurf §3.1).
 
@@ -38,8 +38,9 @@ export type AiRequest<V, O> = {
   priority?: AiPriority;
   onPhase?: (phase: AiPhase) => void;
   /**
-   * Nur auf den Knopf „Erneut versuchen": den gespeicherten `sample`-Zwischenstand einmal
-   * überspringen und überschreiben (`cache: {gcTime, refresh: true}`, contract/sample.d.ts).
+   * Nur beim Knopf „Erneut versuchen" nach einer ungültigen Antwort (Phase 5, E5-21): Der
+   * Zwischenspeicher von `sample` wird einmal übergangen (`cache: {gcTime, refresh: true}`),
+   * sonst käme dieselbe schemawidrige Antwort bis zu 24 h zurück.
    */
   refresh?: boolean;
 };
@@ -47,8 +48,8 @@ export type AiRequest<V, O> = {
 export type AiResult<O> = {
   data: O;
   /**
-   * Die angefragte Stufe. `sample.json` meldet die tatsächlich antwortende Stufe nicht
-   * (contract/sample.d.ts: nur `sample()` liefert `modelTierApplied`).
+   * Die antwortende Stufe: bei `verb: 'text-json'` die von `sample()` gemeldete
+   * (`modelTierApplied`), sonst die angefragte – `sample.json` meldet sie nicht (contract/sample.d.ts).
    */
   tierApplied: ModelTier;
   /** true, wenn erst der eine erlaubte Neuversuch nach einem Schemafehler gültig war (A6.3). */
@@ -73,3 +74,19 @@ export class AiFailure extends Error {
 }
 
 export const isAiFailure = (err: unknown): err is AiFailure => err instanceof AiFailure;
+
+// ---------------------------------------------------------------- Streaming (Phase 3, Plan §6.1)
+
+export type { ChatTemplate };
+
+export type StreamRequest<V> = {
+  template: ChatTemplate<V>;
+  vars: V;
+  signal: AbortSignal;
+  priority?: AiPriority;
+  onPhase?: (phase: AiPhase) => void;
+  /** Bereinigter Text bis hierher (der ganze Text, nicht nur der Zuwachs). */
+  onText?: (cleaned: string) => void;
+};
+
+export type StreamResult = { text: string; truncated: boolean; tierApplied: ModelTier };

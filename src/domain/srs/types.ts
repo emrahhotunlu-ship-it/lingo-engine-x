@@ -93,9 +93,13 @@ export type AnswerEvent = {
   ans: string;
   ms: number;
   lang: Lang;
-  /** Pflichtrunde oder freiwillige Extra-Runde. */
-  ctx: 'rev' | 'xtra';
+  /** Pflichtrunde „Wiederholen", Pflicht der Lektion (Phase 2) oder freiwillige Extra-Runde. */
+  ctx: 'rev' | 'duty' | 'xtra';
+  /** Lektion, aus deren Wörter-Schritt die Antwort stammt (Phase 2, D17). */
+  lesson?: string;
   colIndex?: number;
+  /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */
+  override?: boolean;
 };
 
 export type WhyPart = { key: string; vars?: Record<string, string | number>; lang?: Lang };

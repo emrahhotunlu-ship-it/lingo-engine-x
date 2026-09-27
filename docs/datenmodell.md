@@ -61,3 +61,68 @@ Stand: Phase 0. Grundlage sind die bestehende Datenbank (`docs/datenstruktur.jso
   - bestehende Deckel: Log 300 je Tag, Radar 400, Lookup 400, Chat 40
   - neue Ströme: werden zusammengefasst statt ein Dokument je Eintrag
 - Die Diagnose-Ansicht zeigt die aktuelle Dokumentzahl.
+
+## Ergänzungen Phase 3 – Sprechen und Business
+
+Nur neue Felder und Sammlungen; alte Felder bleiben unverändert, gelöscht wird nie.
+
+| Pfad | Neu | Schreibweg |
+|---|---|---|
+| `talk/<JJJJ-MM>` | `{v, month, runs[]}` – je Gespräch `{id, t, day, scene, title, src, turns, ms, end, goal, clean, errs, taken, lines ≤ 16, report, lang, tier, v}`; ≤ 200 KiB (Verdichtung: zuerst `lines`, dann `report.focus/strengths` der ältesten) | `transform`, idempotent über `run.id` (Gesprächsende; KI-Bericht wird nachgetragen) |
+| `biz/<JJJJ-MM>` | `{v, month, items[]}` – `mail` / `pitch` / `play`; ≤ 200 KiB (Verdichtung: zuerst die Texte der ältesten) | `transform`, idempotent über `item.id` |
+| `chunk/c-<slug>` | zusätzlich `def`, `whyLang`, `origin {v, kind, ref, title, t}`, `src.kind` (`scene`/`mail`/`pitch`/`biz`), `src.ts`; `also` wird nie geschrieben | nur anlegen, wenn die Wendung fehlt; „Wieder aufnehmen“ = `update({hidden:false})` |
+| `scene/<id>` | Lauf-Vermerk `runs`, `lastRun`, `done:true` (nur wenn fehlend/false); KI-Szenen `scene/sc-ai<ms36>` mit `src:'ai'`, `pv`, `gram`, `words` | `transform` bzw. `createIfMissing` |
+| `app/radar.events` | Quellen `k` (Sprechen) und `b` (Business), nur Fehler zu Grammatikthemen, Kategorie der alten App (`topicCat`), ≤ 400 | gemeinsamer Puffer (`recordActivity`) |
+| `log/<tag>` | Einträge `{t, ok, lang, type:'speak'|'biz', id, m, q, n, ms, ctx:'spk'|'biz'}` – nie `k:'v'`, nie `ctx:'rev'|'xtra'` | gemeinsamer Puffer (`recordActivity`) |
+| `app/profile` | `act[tag].speak` / `speak~` / `biz`; `days`/`answers` + eigene Züge (`countAs`); `voice`, `rate` (Felder der alten App) | gemeinsamer Puffer bzw. `patch` |
+
+Browser-Speicher (nur Bequemlichkeit): `lx:roleplay:<szene>` (Fortsetzen, ≤ 40 KB), `lx:draft:speak:<szene>`, `lx:draft:mail`, `lx:draft:pitch`, `lx:speak-autoplay`, `lx:stt-blocked`.
+
+## Phase 5: Begleiter und Preply-Brücke (nur neue, optionale Felder)
+
+Plan: `docs/phase5-plan.md` §5, E5-22. Alte Felder und Formen bleiben unverändert, es wird nichts gelöscht.
+
+| Dokument | Neu | Schreibweg |
+|---|---|---|
+| `app/chat` | `since` (Beginn des laufenden Gesprächs); je Nachricht `t`, `lang`, `ctx`, `stopped` | `features/companion/persistChat.ts` (`transform`, ≤ 40 Nachrichten, ≤ 180 KB) |
+| `preply/pp<ms>` | `pv`, `heldDay`, `heldMin`; `ctx.kind: 'held'` für „Stunde ohne Plan" | `features/preply/actions.ts` (`createIfMissing`, gehalten per `transform`) |
+| `preply/pi<ms>` | `t`, `lang`, `pv`, `items` (Übungen, `tasks` bleibt Liste von Texten), `sel`, `res`, `hwDone` | `features/preply/actions.ts` (`applied:false` vor der Übernahme) |
+| `app/pool.items[]` | `id` (`pi<ms>-t<i>`) | Übernahme, kein Verdrängen bei 90 |
+| `vocab/<id>` | `src: 'preply' \| 'translate'`, `origin.kind: 'preply' \| 'translate' \| 'companion'` | über `saveCardOp` (nur anlegen oder Satz ergänzen) |
+| `grammar/<topic>.errors[]` | Einträge mit `src: 'preply'` (Box 0, fällig +1 Tag) | Deckel 10: erst erledigte, dann älteste |
+| `app/radar.events[]` | Einträge mit `s: 'g'` aus Lehrer-Korrekturen, Kategorie der alten App | Sammel-Warteschlange (`learnRecorder.radar`), Deckel 400, nach Zeit |
+| `app/profile` | `act[tag].preply`, `minutes[tag]` (keine `days`/`xpDays`/Pflicht), `lxSeq` gegen Doppelzählung | Sammel-Warteschlange (`recordRoundEnd`, `act:'preply'`) |
+
+Browser-Speicher (nur Bequemlichkeit): `lx:draft:chat`, `lx:draft:preply-import`, `lx:translate-history` (≤ 20), `lx:companion-tab`, `lx:companion-tier`.
+Abos: `app/chat` nur bei offenem Begleiter, `preply` nur bei offenem Preply-Bildschirm (`src/data/watch.ts`).
+## Phase 4: Lesen, Hören, Schreiben, Entdecken
+
+Alle Formate bleiben Altformat; neue Felder sind nur zusätzlich und tolerant gelesen (`nullish`). Geschrieben wird nur auf eine Handlung hin, über den einen Writer; alles in `app/profile`, `log/<tag>` und `app/radar` nur über die gemeinsame Sammel-Warteschlange (`features/progress/persist.ts`: `recordUnitEnd`, `recordChannelEntries`, `recordRadar`, `recordProfileFields`). `feed/*` und `daily/*` werden nie geschrieben.
+
+| Dokument | Wann | Operation | Neue Felder |
+|---|---|---|---|
+| `articles/ai<t>` | Text erzeugt, eigener Text (M16, `src:'own'`), Aufbereitung eines eigenen Texts | `createIfMissing` bzw. `transform → update` | `topic_en`, `questions`, `domain`, `t`, `pv` |
+| `lpool/ai<t>` | Hörtext erzeugt | `createIfMissing` | `topic_en`, `vocab[].def`, `domain`, `t`, `pv` |
+| `reading/r<t>` | letzte Frage beantwortet (Einheit fertig); Zusammenfassung/Prüfung später | `createIfMissing`, dann `transform → update` | `quiz {n, ok}`, `domain`, `ref`, `res.lang`, `res.pv` |
+| `wprompt/<tag>` | erstes Öffnen von Schreiben; „Andere Aufgabe"/„Eigenes Thema" nur ohne heutigen Text | `transform` (anlegen, sonst gespeicherte gewinnt) bzw. `update` | `p.domain`, `t` |
+| `writing/w<t>` | erste Abgabe; Überarbeitung; Korrektur | `createIfMissing`, dann `transform → update` | `lang`, `domain`, `rev`, `res.{usHints, lang, pv, rev}` |
+| `app/profile` | Einheit abgeschlossen (Sammel-Schreibweg, `lxSeq`) | wie Phase 1 | Zähler wie alte App: `days`, `answers`, `xpDays` (+10/+3 je Frage, +15 je Einheit), `act[tag].{read,listen,write,discover}`, `minutes`, `mix`, `listen[]` (≤ 80, plus `help`), `ema/n.listen` |
+| `app/profile.disc`, `.gen` | Schritt in Entdecken; KI-Erzeugung | Sammel-Warteschlange (`recordProfileFields`), nur bei Änderung | – |
+| `app/radar` | Korrektur mit Fehlern (Quelle `w` Schreiben/Anwenden, `r` Lesen), Kategorie der alten App (`topicCat`/`normCat`) | Sammel-Warteschlange (`recordRadar` → `mergeRadar`, ≤ 400) | – (britische Formen nie) |
+| `log/<tag>` | Verständnisfragen | Sammel-Schreibweg | Einträge `{t, ok, lang, type, ref, q, given, ans, ms, ctx}` (`ch` Pflicht, `xtra` Extra) ohne `id`/`k` |
+| `vocab/<slug>` | „Als Karte speichern" (Wort-Antippen, Wendungen) | Phase-1-Weg | `src ∈ {read, listen, write}`, `origin.kind ∈ {read, listen, write, discover}` |
+
+- **Erledigt** heißt je Kanal: `act[tag][kanal] ≥ 1` (gespeichert ⊕ Puffer, `domain/plan/inputChannels.ts`).
+- **Hören** schreibt kein eigenes Dokument (`profile.listen[]`), **Entdecken** nur `profile.disc` – der Text beim Anwenden bleibt im Browser.
+- **Abos:** zusätzlich genau eines auf `feed` (sortiert nach `d`, 21 Dokumente), nur solange Entdecken offen ist; alles andere per `get()`.
+- **Kapazität:** höchstens 6 neue Dokumente je Tag bei Vollnutzung aller vier Module, im Mittel ≤ 4 (Test `tests/unit/inputData.test.ts`). Die Diagnose zeigt zusätzlich die Zahl der Entdecken-Einträge.
+
+## Ergänzungen Phase 6/7 (additiv, nichts gelöscht)
+
+| Pfad | Neu | Schreibweg |
+|---|---|---|
+| `app/assess` | Hülle `{d, t, lang, answers, writings, data}` wie die alte App, dazu `v: 2`, `pv: 'assess@1'`, `tier` (antwortende Stufe), `basis`, `hist[]` (≤ 60), `run {d, t, by}` (Tagessperre); `data.strengths[].ev`, `data.blockers[].ev`, `data.focus.channels`. `data` immer vollständig (fehlend = `null`). Flache Form wird weiter gelesen. | `assessRun` → `writer.transform` (`assessWrite`), vorher `acquire` (240 s) |
+| `app/weekly` | `{items: [{w, lang, t, pv, facts[], text {headline, learned[{text, ref}], next}}]}` (≤ 26) | `weeklyRun` → `writer.transform` |
+| `app/profile` | `goalMin` (10–40, Standard 25), `sound` (Standard aus), `canDo[<cefrId>] = Lerntag \| null`, `history[].lx = 1` (Tagesbild dieser App), `vtests[].v = 'lx1'`, `act[tag].vtest` | Einstellungen über `app/actions` (optimistisch mit Rückrollen); Tagesbild und Test über die Sammel-Warteschlange |
+| `app/profile.plan.why` | `[key, n, ref]` additiv, z. B. `['whyFocus', 0, 'grammar:mixed-cond']`, `['whyDue', 4, 'gram']` | Tagesplan (einmal je Lerntag) |
+| `archive/profile-<JJJJ>` | ausgelagerte Tageskarten `days, xpDays, minutes, act, pflicht` eines Jahres (`v: 1, year, from, t`) | `runCompact` (erst nach Abnahme freigeschaltet, `COMPACT_ENABLED`) |

@@ -19,6 +19,8 @@ export function useHotkeys(map: HotkeyMap, isOwnInput: (el: EventTarget | null) 
         m.escape?.();
         return;
       }
+      // Ein modaler Dialog (z. B. der Claude-Begleiter, Phase 5) liegt darüber: keine Übungstasten.
+      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
       const t = e.target as HTMLElement | null;
       if (isOwnInput(t)) return;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;

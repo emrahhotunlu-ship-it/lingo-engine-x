@@ -1,4 +1,4 @@
-import type { Db } from '../platform/types';
+import type { Db, DbAcquireResult } from '../platform/types';
 import { describeError, logError, logWarn } from '../platform/diagnostics';
 import { jsonEqual, patchIsNoop } from '../domain/equal';
 import { isReadOnlyPath } from './paths';
@@ -50,7 +50,21 @@ export type Writer = {
   createIfMissing(path: string, data: Record<string, unknown>): Promise<'created' | 'exists'>;
   /** Felder in ein BESTEHENDES Dokument einmischen; schlägt fehl, wenn es fehlt (db `update`). */
   update(path: string, patch: Record<string, unknown>): Promise<WriteOutcome>;
+  /**
+   * Kurze, kooperative Sperre auf ein Dokument (db `acquire`, ohne `data`). `{acquired:false}` ist ein
+   * normales Ergebnis: Der Aufrufer versucht es erst beim nächsten Anlass wieder, nie in einer Schleife.
+   */
+  acquire(path: string, opts: { holder: string; ttlMs?: number }): Promise<AcquireOutcome>;
+  /**
+   * Phase 7 (Plan §12.3, W5): ein bestehendes Dokument durch eine aus dem FRISCHEN Stand berechnete
+   * Fassung ersetzen (`set`) und danach neu lesen und prüfen. Nur für `app/profile` (Auslagern alter
+   * Jahre nach vorheriger Archivierung). `build` liefert `null`, wenn nichts zu tun ist, und wirft,
+   * wenn die Vorbedingung (Archiv inhaltsgleich) nicht erfüllt ist – dann wird nichts geschrieben.
+   */
+  compact(path: string, build: (fresh: Record<string, unknown>) => Record<string, unknown> | null): Promise<'compacted' | 'unchanged'>;
 };
+
+export type AcquireOutcome = { acquired: boolean; expiresAt?: string };
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
@@ -69,6 +83,8 @@ const KNOWN_CODES = new Set([
 
 /** Dokumente, die `transform` per `replace` ganz ersetzen darf: nur Zwischenspeicher. */
 const REPLACEABLE = new Set(['app/lookup']);
+/** Dokumente, die `compact` ersetzen darf (Plan §12.3). */
+const COMPACTABLE = new Set(['app/profile']);
 
 export function createWriter(db: Db): Writer {
   const queues = new Map<string, Promise<unknown>>();
@@ -187,6 +203,35 @@ export function createWriter(db: Db): Writer {
         await withRetry(path, () => db.doc(path).update(patchData));
         return 'written';
       });
+    },
+    compact(path, build) {
+      guard(path);
+      return enqueue(path, async (): Promise<'compacted' | 'unchanged'> => {
+        if (!COMPACTABLE.has(path)) throw new WriteError('invalid_argument', `compact ist für ${path} nicht erlaubt`, path);
+        const snap = await db.doc(path).get();
+        const fresh = snap.exists ? snap.data() : undefined;
+        if (!fresh) throw new WriteError('missing', `${path} fehlt – nichts zu verdichten`, path);
+        const next = build(fresh);
+        if (!next || jsonEqual(fresh, next)) return 'unchanged';
+        await withRetry(path, () => db.doc(path).set(next));
+        const after = await db.doc(path).get();
+        if (!after.exists || !jsonEqual(after.data(), next)) {
+          const err = new WriteError('verify_failed', `${path} nach dem Verdichten nicht wie erwartet`, path);
+          logError('data:compact', err, path);
+          throw err;
+        }
+        return 'compacted';
+      });
+    },
+    async acquire(path, opts) {
+      guard(path);
+      let res: DbAcquireResult | null = null;
+      // Mit derselben Kennung ist ein zweiter Versuch nur eine Verlängerung – also unschädlich.
+      await withRetry(path, async () => {
+        res = await db.doc(path).acquire({ holder: opts.holder, ttlMs: opts.ttlMs });
+      });
+      const r = res as DbAcquireResult | null;
+      return { acquired: !!r?.acquired, ...(r?.expiresAt ? { expiresAt: r.expiresAt } : {}) };
     },
   };
 }

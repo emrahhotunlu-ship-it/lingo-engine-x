@@ -59,8 +59,11 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
 - [ ] Phase 4 – Input und Output: Lesen, Hören, Schreiben, Entdecken
 - [ ] Phase 5 – Begleiter und Brücke: Claude-Chat, Übersetzer, Preply-Brücke
-- [ ] Phase 6 – Urteil: KI-Einschätzung, Fortschritt, Wochenbericht, Tagesplan-Gewichtung
-- [ ] Phase 7 – Politur und Umzug (Veröffentlichung auf die alte Adresse nur nach Emrahs ausdrücklichem OK)
+  - [x] Phasen 2–5 gebaut und zusammengeführt (Stand `59bbc06`, verify grün: 728 Unit, 245 E2E); kombinierte Prüfung ohne Blocker, Befunde behoben (`690cc64`), Test-Link `AXHkh6…` Version `1790477322-3c8f`
+- [x] Phase 6 – Urteil: KI-Einschätzung, Fortschritt, Wochenbericht, Tagesplan-Gewichtung (`4423372`, geprüft, Befunde behoben)
+- [x] Phase 7 – Politur und Umzug (Veröffentlichung auf die alte Adresse nur nach Emrahs ausdrücklichem OK)
+  - [x] P7-1 bis P7-4; komplette App auf dem Test-Link `AXHkh6…` Version `1790487478-0d6d` (verify grün: 810 Unit, 312 E2E)
+  - [x] P7-5 Umzug: komplette App auf `JLL8…` Version `1790493495-85c8` (27.09.2026, Emrahs Freigabe „Ja, veröffentlichen“)
 
 ## A5. Subagents (`.claude/agents/`)
 | Subagent | Wann einsetzen | Rechte |
@@ -177,6 +180,49 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - Enthalten sind: automatische Einstufung, Status, Platzhalter, Beispiele, Wort-Antippen mit Lautschrift und Aussprache, „Claude fragen".
 - Geprüft von data-guard, platform-guard und ux-reviewer (je eine Runde plus Nachprüfung).
 - Der Sicherheitsfilter der Sitzung verlangt vor jeder Veröffentlichung auf `JLL8…` Emrahs ausdrückliche Freigabe.
+
+**27.09.2026 – Preply und Serie:** Eine gehaltene Preply-Stunde zählt nur als Extra, nicht als Pflicht für die Serie (Emrahs Wahl).
+
+**27.09.2026 – Kontingent sparen (Emrahs Vorgabe)**
+- Keine zusätzlichen Planungs- oder Parallelrunden.
+- Zusammenführen und Prüfen in einem Durchgang, mit einem kombinierten Prüfer (Daten + Plattform + UX).
+- Die Phasen 6+7 baut ein Helfer.
+- Berichte an Emrah nur an Meilensteinen, kurz.
+
+**26.09.2026, ca. 23 Uhr – neue Zusammenarbeit (Emrahs Vorgabe, gilt ab sofort)**
+- **Immer nur ein kleines Problem zur Zeit.** Funktionierender Code wird nicht nebenbei mit angefasst.
+- **Vor jeder neuen Funktion oder größeren Änderung** wird der Ansatz in ein bis zwei Sätzen skizziert. Umgesetzt wird erst nach Emrahs „Go".
+- **Stand der Arbeitszweige** (lokal, noch nicht zusammengeführt):
+  - Phase 2 Domäne `worktree-agent-a1fcb727b01f42d07` (fertig)
+  - Phase 2 Bildschirme `worktree-agent-aaed2392f8db972dd` (Zwischenstand `07be1e7`, ungetestet)
+  - Phase 3 `worktree-agent-aca0f22367f924b04` (fertig)
+  - Phase 4 `worktree-agent-ac729d3fd574a67cf` (Zwischenstand `74a13e6`, ungetestet)
+  - Phase 5 `worktree-agent-ae7b0211db2f2df80` (fertig)
+- Zusammengeführt wird einzeln nacheinander, jeweils mit vollem Testlauf.
+
+**26.09.2026, ca. 22:30 Uhr – ohne „Go" durchbauen (Emrahs Vorgabe, ersetzt das Vorab-Abstimmen)**
+- Kein „Go" mehr vor jedem Schritt. Die restlichen Schritte laufen ohne Rückfrage nacheinander:
+  1. Phase 2 grün,
+  2. Phase 3 + 5 zusammenführen (Streaming vereinheitlichen),
+  3. Phase 4 fertig,
+  4. ein kombinierter Prüfer,
+  5. Test-Link,
+  6. Phasen 6+7.
+- Effizient, keine Schleifen, kein endloses Nachbessern (A2 gilt streng).
+- Ziel: Ergebnis in etwa 12 Stunden.
+- Bis zum Go-Live keine Rückfragen. Nach einer Limit-Pause automatisch weitermachen (stündlicher Check-in per `send_later`).
+- Veröffentlichen auf `JLL8…` (Go-Live) weiterhin nur mit Emrahs ausdrücklicher Freigabe.
+
+**27.09.2026 – Go-Live der kompletten App (Emrahs Freigabe „Ja, veröffentlichen“)**
+- `dist/index.html` aus `86893f7` liegt auf `JLL8…`, Version `1790493495-85c8` (Artefakt-Version 48).
+  - Fähigkeiten `db`, `sample`, `downloads`; Vertrag bleibt 0.2.49.
+- Rückweg: Phase-1-Version `1790444355-d812` wiederherstellen.
+- Offen für Emrahs Rückmeldung am iPhone:
+  - Ladezeit (~3 s unter Drossel),
+  - automatische Einschätzung beim Öffnen von „Dein Stand“,
+  - lange Can-Do-Liste,
+  - „Wiederholen“ dreimal auf Heute.
+- `writer.compact` bleibt aus.
 
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.

@@ -5,7 +5,16 @@ import { locate, lemmaOf } from './context';
 // Der Ursprungssatz ist Pflicht (Kap. 15: keine Karten ohne Ursprungssatz). Kein `fsrs`:
 // `readFsrs` leitet es aus den alten Feldern ab, genau wie bei jeder Karte der alten App.
 
-export type CardOrigin = { v: 1; kind: 'trainer' | 'intro' | 'summary' | 'lookup' | 'daily'; ref?: string; title?: string; t: number };
+export type CardOrigin = {
+  v: 1;
+  // Phase 5: 'preply' (Lehrer-Import), 'translate' (Übersetzer), 'companion' (Begleiter)
+  kind: 'trainer' | 'intro' | 'summary' | 'lookup' | 'daily' | 'lesson' | 'user' | 'ai' | 'speak' | 'business' | 'preply' | 'translate' | 'companion'
+    // Phase 4: Lesen, Hören, Schreiben, Entdecken (F21)
+    | 'read' | 'listen' | 'write' | 'discover';
+  ref?: string;
+  title?: string;
+  t: number;
+};
 
 export type NewVocabInput = {
   word: string;
@@ -15,7 +24,10 @@ export type NewVocabInput = {
   level?: string | null;
   ex?: string | null;
   surface?: string | null;
-  src: 'lookup' | 'coach';
+  /** Phase 2 (M2): `user` eigenes Wort, `ai` bzw. `job` von Claude vorgeschlagen. */
+  src: 'lookup' | 'coach' | 'lesson' | 'user' | 'ai' | 'job' | 'preply' | 'translate' | 'claude' | 'read' | 'listen' | 'write';
+  /** Lektion, aus der die Karte stammt (`src:'lesson'`, Phase 2 D17). */
+  lesson?: string | null;
   origin: CardOrigin;
   today: string;
 };
@@ -85,6 +97,7 @@ export function newVocabDoc(i: NewVocabInput): { id: string; doc: Record<string,
       src: i.src,
       added: i.today,
       origin,
+      ...(i.lesson ? { lesson: i.lesson } : {}),
     },
   };
 }

@@ -611,3 +611,161 @@ h3 {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------------------------------------------------------------- Phase 2: Lernen */
+
+@layer components {
+  /* Eingabe, die wie der Satz selbst aussieht (Satzkorrektur, Diktat, Produktion): kein Feld unter dem Satz. */
+  .lx-field {
+    width: 100%;
+    border-radius: var(--radius-control);
+    border: 1px solid var(--lx-border);
+    background: var(--lx-surface);
+    color: var(--lx-fg);
+    padding: 0.75rem 0.875rem;
+    font: inherit;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    resize: vertical;
+  }
+  .lx-field:focus {
+    outline: 2px solid var(--lx-focus);
+    outline-offset: 1px;
+  }
+  .lx-field[data-sentence] {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    resize: none;
+  }
+  .lx-field[data-state='correct'] {
+    border-color: var(--lx-accent);
+    background: var(--lx-accent-soft);
+  }
+  .lx-field[data-state='near'] {
+    border-color: var(--lx-gold-text);
+    background: var(--lx-gold-soft);
+  }
+  .lx-field[data-state='wrong'] {
+    border-color: var(--lx-danger-text);
+    background: var(--lx-danger-soft);
+  }
+
+  /* Bausteine im Satzbau: tippen oder ziehen. */
+  .lx-tile {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--lx-border);
+    background: var(--lx-surface-strong);
+    color: var(--lx-fg);
+    font-size: var(--text-base);
+    font-weight: 500;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    transition: background-color 0.15s, border-color 0.15s, opacity 0.15s;
+  }
+  .lx-tile[data-dragging] {
+    cursor: grabbing;
+    opacity: 0.85;
+    box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+  }
+  .lx-tile[data-state='off'] {
+    border-color: var(--lx-danger-text);
+    background: var(--lx-danger-soft);
+  }
+  .lx-tile[data-state='near'] {
+    border-color: var(--lx-gold-text);
+    background: var(--lx-gold-soft);
+  }
+  .lx-tile[data-state='ok'] {
+    border-color: var(--lx-accent);
+    background: var(--lx-accent-soft);
+  }
+  .lx-tile-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-height: 3.5rem;
+    padding: 0.5rem;
+    border-radius: var(--radius-control);
+    border: 1px dashed var(--lx-border);
+  }
+  .lx-tile-line[data-over] {
+    border-color: var(--lx-accent);
+  }
+
+  /* Filter- und Auswahl-Chips. */
+  .lx-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.75rem;
+    padding: 0.25rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--lx-border);
+    background: var(--lx-surface);
+    color: var(--lx-fg-muted);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .lx-chip[aria-pressed='true'],
+  .lx-chip[data-on] {
+    background: var(--lx-surface-solid);
+    color: var(--lx-fg);
+    border-color: var(--lx-fg-subtle);
+  }
+  .lx-chip[data-used] {
+    color: var(--lx-accent-text);
+    border-color: var(--lx-accent);
+  }
+
+  /* Automatisch weiter (M6): Ablaufbalken am Knopf „Weiter". */
+  .lx-autonext {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    border-radius: 0 0 var(--radius-control) var(--radius-control);
+    background: var(--lx-accent-fg);
+    opacity: 0.55;
+    transform-origin: left center;
+    animation: lx-autonext 1.2s linear forwards;
+  }
+
+  /* Zeitbalken im Sprint. */
+  .lx-timer {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--lx-track);
+    overflow: hidden;
+  }
+  .lx-timer > span {
+    display: block;
+    height: 100%;
+    background: var(--lx-accent);
+    transform-origin: left center;
+  }
+  .lx-flash-ok {
+    box-shadow: 0 0 0 2px var(--lx-accent);
+  }
+  .lx-flash-wrong {
+    box-shadow: 0 0 0 2px var(--lx-danger-text);
+  }
+}
+
+@keyframes lx-autonext {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

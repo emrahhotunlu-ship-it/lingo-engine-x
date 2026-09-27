@@ -22,6 +22,41 @@ function area(): Storage | null {
   }
 }
 
+function sessionArea(): Storage | null {
+  try {
+    return typeof window === 'undefined' ? null : window.sessionStorage;
+  } catch (err) {
+    report('storage:open', err, 'session');
+    return null;
+  }
+}
+
+/**
+ * Speicher je Tab (`sessionStorage`), nur für die Tab-Kennung `lx:tab` (Phase 2 D7): Zwei Tabs
+ * derselben Seite bekommen so verschiedene Kennungen und verwerfen sich keine Sammel-Stapel.
+ */
+export const session = {
+  get(key: string): string | null {
+    try {
+      return sessionArea()?.getItem(key) ?? null;
+    } catch (err) {
+      report('storage:get', err, key);
+      return null;
+    }
+  },
+  set(key: string, value: string): boolean {
+    try {
+      const a = sessionArea();
+      if (!a) return false;
+      a.setItem(key, value);
+      return true;
+    } catch (err) {
+      report('storage:set', err, key);
+      return false;
+    }
+  },
+};
+
 export const local = {
   get(key: string): string | null {
     try {

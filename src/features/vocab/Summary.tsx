@@ -5,6 +5,7 @@ import { useHotkeys } from '../../engine/useHotkeys';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { usePending, retryFailed } from './persist';
 import { useSession } from './session';
+import { SummaryActions } from '../learn/ui';
 
 // Zusammenfassung am Rundenende: Anzahl, Trefferquote, nicht Gespeichertes mit „Erneut speichern".
 
@@ -57,11 +58,8 @@ export function Summary({ onBack }: { onBack: () => void }) {
           </div>
         </div>
       )}
-      <div>
-        <Button variant="primary" size="lg" onClick={onBack} data-testid="summary-back">
-          {t('sumBack')}
-        </Button>
-      </div>
+      {/* M11: „Weiter: nächster Pflichtschritt" – sonst „Zurück zu Heute". */}
+      <SummaryActions onBack={onBack} />
     </article>
   );
 }

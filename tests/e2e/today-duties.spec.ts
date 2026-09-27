@@ -1,0 +1,157 @@
+import { readFileSync } from 'node:fs';
+import { expect, test, type Page } from '@playwright/test';
+import { boot, screen } from './fixtures';
+import { DAY, dump, writes } from './trainerHelpers';
+
+// Heute mit Tagesplan v2 (phase2-plan §6, §9.3): Zähler, Häkchen, Statuszeile, Heldenkarte und
+// Reiter-Zahl sagen bei 0, 1, 2 und 3 von 3 dasselbe (Kap. 2.2); Erledigtes ist Zustand ohne
+// bedienbares Kind; Wechsel um 04:00; ein schon gespeicherter Plan von heute bleibt unverändert.
+
+type Doc = Record<string, unknown>;
+const SEED = JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Doc>;
+const LABEL: Record<string, string> = { review: 'Wiederholen', lesson: 'Lektion', 'ch:order': 'Satzbau' };
+const DUTIES = ['review', 'lesson', 'ch:order'] as const;
+
+/** Plan v2 von heute mit fester Zielmenge (2 Karten), Lektion l08, Pflichtkanal Satzbau. */
+const PLAN = {
+  d: DAY,
+  v: 1,
+  ids: ['order', 'cloze', 'gram'],
+  why: [[['agoNever']], [['whyThin']], [['whyRotation']]],
+  duty: [...DUTIES],
+  goal: { review: 2, due: 2, new: 0, ahead: 0, ch: 6 },
+  lesson: 'l08',
+  at: 1,
+};
+
+/** Anfangsbestand, in dem genau die Punkte `done` erledigt sind. */
+function statePatch(done: ReadonlySet<string>): Record<string, Doc> {
+  const profile = SEED['app/profile'] as Doc;
+  const act = { ...(profile.act as Record<string, Doc>) };
+  const dayAct = { ...(act[DAY] ?? {}) };
+  delete dayAct.order;
+  if (done.has('ch:order')) dayAct.order = 1;
+  act[DAY] = dayAct;
+  const course = SEED['app/course'] as Doc;
+  const courseDone = { ...(course.done as Record<string, Doc>) };
+  if (done.has('lesson')) courseDone.l08 = { d: DAY, n: 12, ok: 10, t: Date.parse('2026-09-20T19:00:00+02:00') };
+  const entries = done.has('review')
+    ? [
+        { t: 1, ok: true, lang: 'de', k: 'v', id: 'avoid', m: 'tr-type', given: 'avoid', ans: 'avoid', g: 3, ms: 1000, ctx: 'rev' },
+        { t: 2, ok: true, lang: 'de', k: 'v', id: 'handle', m: 'tr-type', given: 'handle', ans: 'handle', g: 3, ms: 1000, ctx: 'rev' },
+      ]
+    : [];
+  const p: Doc = { plan: PLAN, act };
+  if (profile.pflicht && typeof profile.pflicht === 'object') p.pflicht = { ...(profile.pflicht as Doc), [DAY]: undefined };
+  return { 'app/profile': p, 'app/course': { done: courseDone }, [`log/${DAY}`]: { date: DAY, entries } };
+}
+
+async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<void> {
+  const n = done.size;
+  const open = DUTIES.filter((d) => !done.has(d));
+  const status = page.getByTestId('today-status');
+  await expect(status).toHaveAttribute('data-done', String(n));
+  await expect(status).toHaveAttribute('data-total', '3');
+  if (n === 3) {
+    await expect(status).toHaveText('Fertig für heute');
+    await expect(status).toHaveAttribute('data-status', 'allDone');
+  } else {
+    await expect(status).toHaveText(`Noch nicht fertig · ${n} von 3 · es fehlt: ${open.map((d) => LABEL[d]).join(', ')}`);
+    await expect(status).toHaveAttribute('data-status', 'open');
+  }
+  // Häkchen: genau die erledigten Punkte, in Plan-Reihenfolge; keiner hat ein bedienbares Kind.
+  const items = page.getByTestId('duty');
+  await expect(items).toHaveCount(3);
+  expect(await items.evaluateAll((els) => els.map((e) => [e.getAttribute('data-duty'), e.getAttribute('data-state')]))).toEqual(DUTIES.map((d) => [d, done.has(d) ? 'done' : 'open']));
+  await expect(page.locator('[data-testid="duty"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(0);
+  for (const d of DUTIES) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText(done.has(d) ? 'erledigt' : 'offen');
+  // Heldenkarte = erster offener Punkt, genau ein Primärknopf; alles erledigt → kein Knopf, Extra sichtbar.
+  if (open.length) {
+    await expect(page.getByTestId('hero')).toHaveAttribute('data-duty', open[0] ?? '');
+    await expect(page.getByTestId('start')).toHaveCount(1);
+    await expect(page.getByTestId('tab-badge')).toHaveText(String(open.length));
+    await expect(page.getByTestId('extra')).toHaveCount(0);
+  } else {
+    await expect(page.getByTestId('hero')).toHaveCount(0);
+    await expect(page.getByTestId('start')).toHaveCount(0);
+    await expect(page.getByTestId('tab-badge')).toHaveCount(0);
+    await expect(page.getByTestId('extra')).toBeVisible();
+    // Angebote erst jetzt, jeweils mit Grund (Kap. 2.6).
+    const offers = page.getByTestId('offer');
+    expect(await offers.count()).toBeGreaterThanOrEqual(1);
+    for (const o of await offers.all()) await expect(o.getByTestId('offer-why')).not.toBeEmpty();
+  }
+}
+
+const CASES: Array<{ name: string; done: string[] }> = [
+  { name: '0 von 3', done: [] },
+  { name: '1 von 3 (Wiederholen)', done: ['review'] },
+  { name: '1 von 3 (nur Satzbau)', done: ['ch:order'] },
+  { name: '2 von 3', done: ['review', 'lesson'] },
+  { name: '3 von 3', done: ['review', 'lesson', 'ch:order'] },
+];
+
+for (const c of CASES) {
+  test(`widerspruchsfrei bei ${c.name}: Statuszeile, Häkchen, Heldenkarte, Reiter-Zahl`, async ({ page }) => {
+    const done = new Set(c.done);
+    const { errors, external } = await boot(page, { migrated: true, fake: { patch: statePatch(done) } });
+    await screen(page, 'today');
+    await checkConsistent(page, done);
+    // Der gespeicherte Plan wird nicht neu geschrieben (Kap. 15: nie neu gewürfelt).
+    await page.waitForTimeout(300);
+    expect((await dump(page))['app/profile']?.plan).toEqual(PLAN);
+    // Pflicht erledigt → pflicht[heute] = 1 (Regel 1); sonst nie gesetzt.
+    if (done.size === 3) await expect.poll(async () => ((await dump(page))['app/profile']?.pflicht as Doc | undefined)?.[DAY]).toBe(1);
+    else expect(((await dump(page))['app/profile']?.pflicht as Doc | undefined)?.[DAY]).toBeUndefined();
+    expect(errors).toEqual([]);
+    expect(external).toEqual([]);
+  });
+}
+
+test('Plan bleibt nach dem Neuladen gleich (Zähler und Häkchen auch)', async ({ page }) => {
+  const done = new Set(['review']);
+  const { errors } = await boot(page, { migrated: true, fake: { persist: true, patch: statePatch(done) } });
+  await screen(page, 'today');
+  await checkConsistent(page, done);
+  await page.reload();
+  await screen(page, 'today');
+  await checkConsistent(page, done);
+  await page.waitForTimeout(300);
+  expect((await writes(page)).filter((w) => w.path === 'app/profile')).toHaveLength(0);
+  expect((await dump(page))['app/profile']?.plan).toEqual(PLAN);
+  expect(errors).toEqual([]);
+});
+
+test('Plan von heute bleibt nach dem Update gleich: Phase-1-Plan gilt bis 04:00, kein pflichtSince', async ({ page }) => {
+  const phase1 = { d: DAY, v: 1, ids: [], why: [], duty: ['review'], goal: { review: 12 }, lesson: null, at: 1 };
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: phase1 } } } });
+  await screen(page, 'today');
+  await expect(page.getByTestId('today-status')).toHaveText('Noch 12 Karten');
+  await expect(page.getByTestId('duty')).toHaveCount(0);
+  await expect(page.getByTestId('hero')).toHaveAttribute('data-duty', 'review');
+  await page.waitForTimeout(500);
+  const d = await dump(page);
+  expect(d['app/profile']?.plan).toEqual(phase1);
+  // Erst ein Phase-2-Plan von heute setzt pflichtSince (§6.3, Regel 2).
+  expect(d['app/schema']?.pflichtSince).toBeUndefined();
+  expect((await writes(page)).filter((w) => w.path === 'app/profile' || w.path === 'app/schema')).toHaveLength(0);
+  expect(errors).toEqual([]);
+});
+
+test('Wechsel um 04:00: bis 03:59 gilt der Plan von gestern, ab 04:00 ein neuer Plan', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, now: '2026-09-21T03:59:00+02:00', fake: { patch: statePatch(new Set(['review'])) } });
+  await screen(page, 'today');
+  await checkConsistent(page, new Set(['review']));
+  await page.waitForTimeout(300);
+  expect(((await dump(page))['app/profile']?.plan as Doc).d).toBe(DAY);
+  // 04:00: neuer Lerntag – ein neuer Plan, alle Punkte offen, nichts vom Vortag.
+  await page.clock.setFixedTime(new Date('2026-09-21T04:00:30+02:00'));
+  await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+  await expect.poll(async () => ((await dump(page))['app/profile']?.plan as Doc).d).toBe('2026-09-21');
+  const plan = (await dump(page))['app/profile']?.plan as { duty: string[] };
+  const status = page.getByTestId('today-status');
+  await expect(status).toHaveAttribute('data-done', '0');
+  await expect(status).toHaveAttribute('data-total', String(plan.duty.length));
+  await expect(page.locator('[data-testid="duty"][data-state="done"]')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});

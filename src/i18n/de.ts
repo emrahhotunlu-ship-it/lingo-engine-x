@@ -2,9 +2,27 @@
 // Einfache Sprache, keine Fachwörter (CLAUDE.md A2).
 
 import { aiDe } from './parts/ai.de';
+import { learnDe } from './parts/learn.de';
+import { speakDe } from './parts/speak.de';
+import { bizDe } from './parts/biz.de';
+import { voiceDe } from './parts/voice.de';
+import { companionDe } from './parts/companion.de';
+import { inputDe } from './parts/input.de';
+import { progressDe } from './parts/progress.de';
 
 export const de = {
   ...aiDe,
+  ...learnDe,
+  // Phase 3 – Sprechen, Business, Stimme
+  ...speakDe,
+  ...bizDe,
+  ...voiceDe,
+  // Phase 5 – Begleiter, Übersetzer, Preply
+  ...companionDe,
+  // Phase 4 – Lesen, Hören, Schreiben, Entdecken
+  ...inputDe,
+  // Phase 6 – Urteil, Fortschritt, Wortschatztest, Einstellungen
+  ...progressDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',
@@ -168,6 +186,7 @@ export const de = {
   navLabel: 'Bereiche',
   navToday: 'Heute',
   navOverview: 'Dein Stand',
+  tabOverview: 'Stand',
   tdStreak_one: 'Serie: {n} Tag',
   tdStreak_other: 'Serie: {n} Tage',
   tdStatusOpen_one: 'Noch {n} Karte',
@@ -188,8 +207,8 @@ export const de = {
   tdExtraHint: 'Zählt als Extra, nicht zum Tagesziel.',
   tdExtraCount_one: 'Extra: {n} Karte',
   tdExtraCount_other: 'Extra: {n} Karten',
-  tdBalance_one: 'Heute: {answers} Antwort · {pct} % richtig · {min} Min.',
-  tdBalance_other: 'Heute: {answers} Antworten · {pct} % richtig · {min} Min.',
+  tdBalance_one: 'Heute: {answers} Antwort · {pct} % richtig · {min} von {goal} Min.',
+  tdBalance_other: 'Heute: {answers} Antworten · {pct} % richtig · {min} von {goal} Min.',
   tdPlanError: 'Dein Tagesplan konnte gerade nicht erstellt werden. Deine Daten sind unverändert.',
   tdPlanRetry: 'Erneut versuchen',
   tdNotSaved: 'Noch nicht alles gespeichert.',

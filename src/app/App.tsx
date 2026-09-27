@@ -2,6 +2,7 @@ import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import { useT } from '../i18n';
 import { IconButton } from '../ui/Button';
+import { Icon } from '../ui/Icon';
 import { Toaster } from '../ui/Toast';
 import { DURATION } from '../ui/motion';
 import { getDb, initCapabilities, useCapabilities } from '../platform/capabilities';
@@ -12,9 +13,10 @@ import { ensureDay } from '../features/today/store';
 import { TrainerScreen } from '../features/vocab/TrainerScreen';
 import { installFlushOnHide } from '../features/vocab/persist';
 import { useClock, useClockTicker } from './clock';
-import { useNav, type Route } from './nav';
+import { savedScroll, tabOf, useNav, type Route, type TabName } from './nav';
 import { MigrationScreen } from '../features/migration/MigrationScreen';
-import { OverviewScreen } from '../features/progress/OverviewScreen';
+import { ProgressScreen } from '../features/progress/ProgressScreen';
+import { VtestScreen } from '../features/vtest/VtestScreen';
 import { SettingsSheet } from '../features/settings/SettingsSheet';
 import { LookupLayer } from '../features/lookup/LookupPopover';
 import { HomeSkeleton } from '../features/system/HomeSkeleton';
@@ -22,6 +24,33 @@ import { ConnectionLost, NoDbNotice } from '../features/system/NoDbNotice';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
 import { initSpeech } from '../platform/speech';
+import { setSoundEnabled } from '../platform/sound';
+// Phase 2: Lernen (docs/phase2-plan.md), Wortschatz (M1) und Wissen (M8).
+import { LearnHub } from '../features/learn/LearnHub';
+import { CourseScreen } from '../features/course/CourseScreen';
+import { LessonScreen } from '../features/course/LessonScreen';
+import { GrammarScreen } from '../features/grammar/GrammarScreen';
+import { GrammarSessionScreen } from '../features/grammar/SessionScreen';
+import { WissenScreen } from '../features/grammar/WissenScreen';
+import { DrillScreen } from '../features/drills/DrillScreen';
+import { VocabScreen } from '../features/vocab/list/VocabScreen';
+import { useToday } from '../features/today/state';
+import { SpeakHub } from '../features/speak/SpeakHub';
+import { RoleplayScreen } from '../features/speak/RoleplayScreen';
+import { BusinessHub } from '../features/business/BusinessHub';
+import { MailRefiner } from '../features/business/MailRefiner';
+import { PlaybookScreen } from '../features/business/PlaybookScreen';
+import { PitchCoach } from '../features/business/PitchCoach';
+// Phase 5: Begleiter, Übersetzer, Preply-Brücke
+import { useAiAvailable } from '../ai/scope';
+import { CompanionLayer } from '../features/companion/CompanionOverlay';
+import { installCompanionHotkeys } from '../features/companion/hotkeys';
+import { openCompanion, useCompanion } from '../features/companion/store';
+import { PreplyScreen } from '../features/preply/PreplyScreen';
+// Phase 4: Lesen, Hören, Schreiben, Entdecken
+import { InputRoutes } from '../features/input/InputRoutes';
+import { AiTaskNotice } from '../features/input/AiTaskNotice';
+import { isInputScreen } from './modules';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
 // den Bildschirm. Der Rahmen rendert sofort; Funktionen kommen dazu, sobald die
@@ -53,6 +82,7 @@ function useBoot(): void {
 
   useEffect(() => {
     installFlushOnHide();
+    installCompanionHotkeys();
   }, []);
 
   // Gespeicherte Einstellungen aus app/profile übernehmen (maßgeblich gegenüber localStorage).
@@ -64,6 +94,12 @@ function useBoot(): void {
     const theme = profile.theme && typeof profile.theme === 'object' ? (profile.theme as { m?: unknown }).m : undefined;
     if (isThemeMode(theme) && theme !== s.theme) s.setThemeLocal(theme);
   }, [profile]);
+
+  // Töne (Kap. 4.7): Einstellung aus dem Profil, Standard aus.
+  const sound = profile?.sound === true;
+  useEffect(() => {
+    setSoundEnabled(sound);
+  }, [sound]);
 
   // Sprachausgabe (en-US): Stimmen laden, Stimme und Tempo aus dem Profil (nur Lesen).
   const voice = typeof profile?.voice === 'string' ? profile.voice : null;
@@ -114,31 +150,46 @@ function useEnsureDay(active: boolean): void {
   }, [active, today]);
 }
 
-function TabBar({ route }: { route: Screen }) {
+/** Zahl offener Pflichtpunkte am Reiter „Heute" (M13). */
+function useOpenDuties(): number {
+  const st = useToday();
+  return st.ready && st.dayLoaded && st.status === 'open' ? st.duties.total - st.duties.done : 0;
+}
+
+function TabBar({ tab }: { tab: TabName }) {
   const { t } = useT();
   const go = useNav((s) => s.go);
+  const open = useOpenDuties();
   const tabs = [
-    { name: 'today' as const, label: t('navToday') },
-    { name: 'overview' as const, label: t('navOverview') },
+    { name: 'today' as const, label: t('navToday'), badge: open },
+    { name: 'learn' as const, label: t('tabLearn'), badge: 0 },
+    { name: 'speak' as const, label: t('tabSpeak'), badge: 0 },
+    { name: 'discover' as const, label: t('dcTitle'), badge: 0 },
+    { name: 'overview' as const, label: t('tabOverview'), badge: 0 },
   ];
   return (
     <nav
       aria-label={t('navLabel')}
-      className="lx-glass fixed inset-x-0 bottom-0 z-40 flex justify-center gap-1 px-4 pt-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] md:static md:z-auto md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none"
+      className="lx-glass fixed inset-x-0 bottom-0 z-40 flex justify-center gap-0.5 px-2 pt-2 sm:gap-1 sm:px-4 pb-[max(env(safe-area-inset-bottom),0.5rem)] md:static md:z-auto md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none"
       data-testid="tabbar"
     >
-      {tabs.map((tab) => {
-        const active = route === tab.name;
+      {tabs.map((t2) => {
+        const active = tab === t2.name;
         return (
           <button
-            key={tab.name}
+            key={t2.name}
             type="button"
             aria-current={active ? 'page' : undefined}
-            onClick={() => go({ name: tab.name })}
-            data-testid={`tab-${tab.name}`}
-            className={`min-h-11 flex-1 rounded-[var(--radius-control)] px-4 text-sm transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
+            onClick={() => go({ name: t2.name })}
+            data-testid={`tab-${t2.name}`}
+            className={`relative inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 whitespace-nowrap rounded-[var(--radius-control)] px-1 text-xs sm:gap-1.5 sm:px-4 sm:text-sm transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
-            {tab.label}
+            {t2.label}
+            {t2.badge > 0 && (
+              <span className="lx-tnum inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-2xs font-semibold text-accent-fg" data-testid="tab-badge" aria-label={t('tabOpen', { n: t2.badge })}>
+                {t2.badge}
+              </span>
+            )}
           </button>
         );
       })}
@@ -150,8 +201,13 @@ export function App() {
   useBoot();
   const { t } = useT();
   const screen = useScreen();
-  const migratedScreen = screen === 'today' || screen === 'overview' || screen === 'trainer';
+  const migratedScreen = screen !== 'loading' && screen !== 'nodb' && screen !== 'offline' && screen !== 'migration';
+  const ai = useAiAvailable();
+  const companionOpen = useCompanion((s) => s.open);
   useEnsureDay(migratedScreen);
+  const route = useNav((s) => s.route);
+  const tab = migratedScreen ? tabOf(route.name) : null;
+
   const [settingsOpen, setSettingsOpen] = useState(false);
   const closeSettings = useCallback(() => setSettingsOpen(false), []);
 
@@ -165,14 +221,27 @@ export function App() {
         {t('skipToContent')}
       </a>
       {/* Bei offenem Blatt ist der Hintergrund inert: kein Fokus, kein VoiceOver-Wischen dorthin. */}
-      <div className="mx-auto flex min-h-dvh w-full max-w-[76rem] flex-col px-4 sm:px-6 lg:px-10" inert={settingsOpen}>
+      <div className="mx-auto flex min-h-dvh w-full max-w-[76rem] flex-col px-4 sm:px-6 lg:px-10" inert={settingsOpen || companionOpen}>
         <header className="flex items-center justify-between gap-4 pt-3 sm:pt-5">
           <p className="flex items-center gap-2 text-base font-semibold tracking-tight">
             <span className="inline-block size-2.5 rounded-full bg-accent shadow-[0_0_12px_var(--lx-accent)]" aria-hidden="true" />
             {t('appName')}
           </p>
           <div className="flex items-center gap-2">
-            {(screen === 'today' || screen === 'overview') && <TabBar route={screen} />}
+            {tab && <TabBar tab={tab} />}
+            {ai && migratedScreen && (
+              <button
+                type="button"
+                onClick={() => openCompanion()}
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-accent-text transition-colors hover:bg-surface"
+                aria-label={t('openCompanion')}
+                data-testid="open-companion"
+                data-ai=""
+              >
+                <Icon name="sparkle" size={20} />
+                <span className="hidden sm:inline">{t('openCompanion')}</span>
+              </button>
+            )}
             <IconButton icon="sliders" label={t('openSettings')} onClick={() => setSettingsOpen(true)} data-testid="open-settings" />
           </div>
         </header>
@@ -185,20 +254,43 @@ export function App() {
               exit={{ opacity: 0 }}
               transition={{ duration: DURATION.base }}
               data-screen={screen}
+              onAnimationStart={(def) => {
+                // Bildlaufposition je Liste (M13): beim Zurückkehren wiederherstellen, sonst oben beginnen.
+                if (def && typeof def === 'object' && 'opacity' in def && def.opacity === 1) window.scrollTo({ top: savedScroll(screen as Route['name']) });
+              }}
             >
               {screen === 'loading' && <HomeSkeleton />}
               {screen === 'nodb' && <NoDbNotice />}
               {screen === 'offline' && <ConnectionLost />}
               {screen === 'migration' && <MigrationScreen />}
               {screen === 'today' && <TodayScreen />}
-              {screen === 'overview' && <OverviewScreen />}
+              {screen === 'overview' && <ProgressScreen />}
+              {screen === 'vtest' && <VtestScreen />}
               {screen === 'trainer' && <TrainerScreen />}
+              {screen === 'learn' && <LearnHub />}
+              {screen === 'course' && <CourseScreen />}
+              {screen === 'lesson' && route.name === 'lesson' && <LessonScreen id={route.id} />}
+              {screen === 'grammar' && <GrammarScreen />}
+              {screen === 'grammarSession' && <GrammarSessionScreen />}
+              {screen === 'wissen' && <WissenScreen />}
+              {screen === 'drill' && <DrillScreen />}
+              {screen === 'vocab' && <VocabScreen />}
+              {screen === 'speak' && <SpeakHub />}
+              {screen === 'roleplay' && <RoleplayScreen />}
+              {screen === 'business' && <BusinessHub />}
+              {screen === 'mail' && <MailRefiner />}
+              {screen === 'playbook' && <PlaybookScreen />}
+              {screen === 'pitch' && <PitchCoach />}
+              {screen === 'preply' && <PreplyScreen />}
+              {isInputScreen(screen) && <InputRoutes route={route} />}
             </motion.div>
           </AnimatePresence>
         </main>
       </div>
       <SettingsSheet open={settingsOpen} onClose={closeSettings} />
       <Toaster />
+      <CompanionLayer />
+      <AiTaskNotice />
       <LookupLayer />
       </HiddenInputProvider>
     </MotionConfig>

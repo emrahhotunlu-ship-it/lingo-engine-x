@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { DURATION } from '../ui/motion';
+import { playCue } from '../platform/sound';
 
 // Auswahl aus vier Optionen: Tippen oder Ziffer 1–4. Nach der Wahl: gewählte rot bzw. grün,
 // die richtige grün (Lern-Entwurf §4.1).
@@ -24,7 +25,10 @@ export function Choices({ items, chosen, onChoose, label }: Props) {
             aria-pressed={o.id === chosen}
             whileTap={done ? undefined : { scale: 0.98 }}
             transition={{ duration: DURATION.fast }}
-            onClick={() => onChoose(o.id)}
+            onClick={() => {
+              playCue(o.correct ? 'correct' : 'wrong');
+              onChoose(o.id);
+            }}
             className="lx-choice"
           >
             <span className="lx-choice-key" aria-hidden="true">
