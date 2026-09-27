@@ -71,7 +71,10 @@ export async function checkSettled(page: Page, testId: 'check-item' | 'check-sum
     const el = document.querySelector(`[data-testid="${id}"]`)?.parentElement;
     if (!el) return false;
     const cs = getComputedStyle(el);
-    return cs.opacity === '1' && (cs.transform === 'none' || cs.transform === 'matrix(1, 0, 0, 1, 0, 0)');
+    // Auch der Bildschirm selbst (Überblendung beim Wechsel) muss fertig sein.
+    const scr = el.closest('[data-screen]');
+    const screenDone = !scr || getComputedStyle(scr).opacity === '1';
+    return screenDone && cs.opacity === '1' && (cs.transform === 'none' || cs.transform === 'matrix(1, 0, 0, 1, 0, 0)');
   }, testId);
 }
 

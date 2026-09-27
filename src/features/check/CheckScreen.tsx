@@ -62,7 +62,7 @@ export function CheckScreen() {
     .filter((c): c is NonNullable<typeof c> => !!c);
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="check-screen" data-status={s.status}>
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 overflow-x-clip py-4 sm:py-8" data-testid="check-screen" data-status={s.status}>
       <RoundTop onClose={leave} closeLabel={t('ckClose')} progress={s.status === 'running' ? { n: s.pos + 1, total: s.items.length } : null} ctx="xtra" />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
