@@ -8,6 +8,7 @@ import { registerInputReplies } from './cannedReplies.input';
 import { assessReply } from './canned/assess';
 import { weeklyReply } from './canned/weekly';
 import { registerLearnReplies } from './cannedLearn';
+import { registerSayReplies } from './cannedSay';
 import { courseExtendReply } from './canned/courseExtend';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
@@ -303,6 +304,8 @@ export function registerCannedReplies(): void {
   registerCannedReply('course-extend', courseExtendReply);
   // Prüfbericht: word-gen, lesson-production, grammar-items, mnemonic
   registerLearnReplies();
+  // Lernberatung 27.09.: say-check („Sag es“)
+  registerSayReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

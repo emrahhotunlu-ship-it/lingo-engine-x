@@ -53,6 +53,25 @@ export async function waitForDb(): Promise<Db | null> {
   return capability('db');
 }
 
+/**
+ * „Sag es“ im Tagesplan: Ist `sample` nutzbar? Wartet höchstens `maxMs` auf die Antwort der
+ * Laufzeit (sonst `false` – der Plan nimmt dann die bisherige Wahl). Kein Aufruf von `sample`.
+ */
+export async function sampleUsableWithin(maxMs: number): Promise<boolean> {
+  const usable = (ns: unknown) => !!ns && !useCapabilities.getState().sampleRevoked;
+  const s = useCapabilities.getState();
+  if (s.sample !== 'pending') return s.sample === 'ready' && !s.sampleRevoked;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<false>((resolve) => {
+    timer = setTimeout(() => resolve(false), maxMs);
+  });
+  try {
+    return await Promise.race([capability('sample').then(usable), late]);
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
+}
+
 export function markSampleRevoked(): void {
   useCapabilities.setState({ sampleRevoked: true });
 }

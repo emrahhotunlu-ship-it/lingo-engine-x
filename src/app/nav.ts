@@ -30,6 +30,8 @@ export type Route =
   | { name: 'pitch' }
   // Phase 5: Preply-Brücke
   | { name: 'preply' }
+  // Lernberatung 27.09. (V1/V2): „Sag es“ (Vollbild, Pflichtkanal)
+  | { name: 'say' }
   // Phase 4 – Input und Output (Plan §2.3). `ctx` bestimmt nur `log.ctx`, nie die Zählung.
   | InputRoute;
 

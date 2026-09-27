@@ -10,14 +10,14 @@ import { orderSentences } from '../../domain/drills/sources';
 import { buildSprintDeck } from '../../domain/drills/sprint';
 import { dueErrors } from '../../domain/grammar/errors';
 import { buildPlan, readPlan } from '../../domain/plan/buildPlan';
-import { rankChannels, type FeasibleData } from '../../domain/plan/channels';
+import { isSayDay, rankChannels, type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
 import { buildTrainCards } from '../../domain/srs/cards';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { dueCards, planRound, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
-import { getDb } from '../../platform/capabilities';
+import { getDb, sampleUsableWithin } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { useSpeech } from '../../platform/speech';
 import { mergedVocab } from '../../domain/overview';
@@ -55,6 +55,8 @@ type PlanState = {
 export const useTodayPlan = create<PlanState>(() => ({ day: null, plan: null, status: 'idle', exhausted: null }));
 
 let intakeDay: string | null = null;
+/** Höchstens so lange wartet der Plan auf die Antwort der Laufzeit zu `sample` („Sag es“). */
+const SAY_WAIT_MS = 1500;
 /** H4: Lerntag, an dem nach 20 Uhr schon einmal neu abgeglichen wurde. */
 let lateIntakeDay: string | null = null;
 const LATE_INTAKE_HOUR = 20;
@@ -188,6 +190,8 @@ export async function ensureDay(nowMs: number): Promise<void> {
       afterPaint(() => void afterPlan(today, nowMs));
       return;
     }
+    // „Sag es“ (Lernberatung V1/V2): an 4–5 Tagen je Woche Pflichtkanal – nur mit nutzbarem Claude.
+    const say = isSayDay(today) && (await sampleUsableWithin(SAY_WAIT_MS));
     const lang = useSettings.getState().lang;
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
     // Wendungen (`chunk/*`) gehören zur täglichen Wiederholung (Kap. 5, M15): gleiche Planung.
@@ -211,7 +215,7 @@ export async function ensureDay(nowMs: number): Promise<void> {
       env: { tts: useSpeech.getState().status === 'ready' },
     });
     const lesson = pickLesson({ course: live.docs['app/course'], assess: live.docs['app/assess'], lang });
-    built = buildPlan({ today, existing: profile?.plan, round, nowMs, phase2: { ranked, lesson, goalMin: normGoalMin(profile?.goalMin) } });
+    built = buildPlan({ today, existing: profile?.plan, round, nowMs, phase2: { ranked, lesson, goalMin: normGoalMin(profile?.goalMin), say } });
   } catch (err) {
     // Nie endlos im Ladezustand: Hinweis mit „Erneut versuchen" (Kap. 3.4, keine stillen Fehler).
     logError('today:plan', err, 'Aufbau');

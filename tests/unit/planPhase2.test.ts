@@ -49,7 +49,7 @@ describe('Kanäle und Tagesplan v2', () => {
     }
   });
 
-  it('P-03: Pflichtkanal ∈ {gram, cloze, order}, nie vocab, dictate oder sprint', () => {
+  it('P-03: Pflichtkanal ∈ {gram, cloze}, nie vocab, dictate, sprint oder (seit „Sag es“) order', () => {
     const focusDictate = base({ focus: 'dictate', profile: { act: {}, ema: { listen: 0.1 }, n: { listen: 0 } } });
     const p = plan2(focusDictate).plan;
     expect(DUTY_CHANNELS).toContain(p.ids[0]);
@@ -67,7 +67,7 @@ describe('Kanäle und Tagesplan v2', () => {
     expect(r1).toBeLessThan(r0);
   });
 
-  it('P-05: über 14 Lerntage kommt jeder machbare Pflichtkanal dran, keiner öfter als 3× je Woche', () => {
+  it('P-05: über 14 Lerntage kommt jeder machbare Pflichtkanal dran, keiner öfter als 4× je Woche (zwei Pflichtkanäle seit „Sag es“)', () => {
     const act: Record<string, Record<string, number>> = {};
     const counts: Record<string, number[]> = { gram: [0, 0], cloze: [0, 0], order: [0, 0] };
     for (let d = 0; d < 14; d++) {
@@ -79,8 +79,8 @@ describe('Kanäle und Tagesplan v2', () => {
     }
     for (const ch of DUTY_CHANNELS) {
       expect(counts[ch]![0]! + counts[ch]![1]!, ch).toBeGreaterThanOrEqual(1);
-      expect(counts[ch]![0], ch).toBeLessThanOrEqual(3);
-      expect(counts[ch]![1], ch).toBeLessThanOrEqual(3);
+      expect(counts[ch]![0], ch).toBeLessThanOrEqual(4);
+      expect(counts[ch]![1], ch).toBeLessThanOrEqual(4);
     }
   });
 
@@ -112,8 +112,11 @@ describe('Kanäle und Tagesplan v2', () => {
     const old = { d: '2026-09-28', ids: ['sprint', 'gram', 'order'], why: [[['whyWeakest']]] };
     const p = plan2(base(), old).plan;
     expect(p.ids[0]).not.toBe('sprint');
-    const good = { d: '2026-09-28', ids: ['order', 'gram', 'sprint'], why: [[['agoDaysN', 4]], [['whyWeakest']], [['agoNever']]] };
-    expect(plan2(base(), good).plan).toMatchObject({ ids: good.ids, why: good.why, duty: ['review', 'lesson', 'ch:order'] });
+    const good = { d: '2026-09-28', ids: ['cloze', 'gram', 'sprint'], why: [[['agoDaysN', 4]], [['whyWeakest']], [['agoNever']]] };
+    expect(plan2(base(), good).plan).toMatchObject({ ids: good.ids, why: good.why, duty: ['review', 'lesson', 'ch:cloze'] });
+    // Satzbau ist seit „Sag es“ nur noch Angebot: ein Altplan mit ids[0] = order wird nicht übernommen.
+    const order = { d: '2026-09-28', ids: ['order', 'gram', 'sprint'], why: [[['agoDaysN', 4]], [['whyWeakest']], [['agoNever']]] };
+    expect(plan2(base(), order).plan.ids[0]).not.toBe('order');
     const listen = { d: '2026-09-28', ids: ['gram', 'listen'], why: [] };
     expect(plan2(base(), listen).plan.ids).not.toEqual(listen.ids);
   });

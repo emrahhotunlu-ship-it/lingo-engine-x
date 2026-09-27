@@ -133,7 +133,10 @@ async function stableBox(loc: Locator): Promise<{ x: number; y: number; width: n
 }
 
 test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erledigt', async ({ page }) => {
-  const { errors, external } = await boot(page, { migrated: true });
+  // Seit „Sag es“ wählt ein neuer Plan Satzbau nie mehr als Pflicht; ein schon gespeicherter Plan
+  // mit `ch:order` gilt aber unverändert weiter (nie umgewürfelt) – genau das prüft dieser Test.
+  const plan = { d: DAY, v: 1, ids: ['order', 'cloze', 'gram'], why: [[['whyRotation']], [['whyRotation']], [['whyRotation']]], duty: ['ch:order'], goal: { review: 0, ch: 6 }, lesson: null, at: 1 };
+  const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan } } } });
   await screen(page, 'today');
   await expect(page.locator('[data-testid="duty"][data-duty="ch:order"]')).toHaveAttribute('data-state', 'open');
   const before = await dump(page);

@@ -1,0 +1,41 @@
+import type { sayDe } from './say.de';
+
+// UI texts for "Say it" (learning review 09/27, V1/V2), English – American spelling.
+
+export const sayEn: Record<keyof typeof sayDe, string> = {
+  sayTitle: 'Say it',
+  sayTask: 'Answer in 3–6 sentences in English.',
+  sayPurpose:
+    'Free production trains what matters in a real conversation: building your own sentences. In the second round you rewrite the answer from memory – that is what makes the improvement stick. Your mistakes go into your review as repair sentences.',
+  sayKind_job: 'Work',
+  sayKind_life: 'Everyday life',
+  sayPass: 'Round {n} of 2',
+  sayTimeLeft: '{t} left',
+  sayTimeUp: "Time's up – take your time to finish",
+  sayOther: 'Other situation',
+  saySituation: 'Situation',
+  sayDraftLabel: 'Your answer',
+  sayDraftLabel2: 'Your new answer',
+  sayCheck: 'Check',
+  sayMinHint: 'At least {n} words',
+  sayCorrections: 'Corrections',
+  sayNoCorrections: 'No mistakes found.',
+  sayUpgrades: 'C1 upgrade',
+  sayBetter: 'Better version',
+  sayRepairsSaved_one: '{n} sentence goes into your review.',
+  sayRepairsSaved_other: '{n} sentences go into your review.',
+  sayRepairsFailed: "The sentences for your review couldn't be saved.",
+  sayAgain: 'Again, but better',
+  sayAgainTask: 'Rewrite the same answer – from memory, with the improvements.',
+  sayBefore: 'Before',
+  sayAfter: 'After',
+  sayStillOpen: 'Not quite yet',
+  sayDone: 'Done for today',
+  sayBoth: 'Your two versions',
+  sayNoAi: "Claude isn't available right now. Your answer is saved without a check and still counts.",
+  saySaveNoAi: 'Save without a check',
+  sayFinishNoAi: 'Finish without a second check',
+  saySaveFailed: 'Not saved.',
+  sayRetrySave: 'Save again',
+  why_whySay: 'Free production, 4–5 times a week',
+};

@@ -50,6 +50,7 @@ import { CompanionLayer } from '../features/companion/CompanionOverlay';
 import { installCompanionHotkeys } from '../features/companion/hotkeys';
 import { openCompanion, useCompanion } from '../features/companion/store';
 import { PreplyScreen } from '../features/preply/PreplyScreen';
+import { SayScreen } from '../features/say/SayScreen';
 // Phase 4: Lesen, Hören, Schreiben, Entdecken
 import { InputRoutes } from '../features/input/InputRoutes';
 import { AiTaskNotice } from '../features/input/AiTaskNotice';
@@ -309,6 +310,7 @@ export function App() {
               {screen === 'playbook' && <PlaybookScreen />}
               {screen === 'pitch' && <PitchCoach />}
               {screen === 'preply' && <PreplyScreen />}
+              {screen === 'say' && <SayScreen />}
               {isInputScreen(screen) && <InputRoutes route={route} />}
             </motion.div>
           </AnimatePresence>
