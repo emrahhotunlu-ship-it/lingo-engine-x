@@ -61,7 +61,7 @@ export const THEMES: readonly WeekTheme[] = [
       { en: "So if I'm hearing you correctly, …", de: 'Wenn ich Sie richtig verstehe, …', def: 'introduces a summary to check understanding' },
       { en: 'Who else is involved in the decision?', de: 'Wer entscheidet noch mit?', def: 'asks about the other decision makers' },
     ],
-    keywords: ['discovery', 'prospect', 'requirement', 'need', 'pain point', 'process', 'decision maker', 'stakeholder', 'qualif', 'budget'],
+    keywords: ['discovery', 'prospect', 'requirement', 'need', 'pain point', 'process', 'decision maker', 'stakeholder', 'qualify', 'qualification', 'budget'],
     fluencyQ: 'dms-value',
     scene: 'b01',
     goals: [
@@ -151,7 +151,7 @@ export const THEMES: readonly WeekTheme[] = [
       { en: 'audit-proof archiving', de: 'revisionssichere Archivierung', def: 'archiving that cannot be changed later and passes an audit' },
       { en: 'Let me double-check that and get back to you', de: 'Das prüfe ich noch einmal und melde mich bei Ihnen', def: 'promises a verified answer later instead of guessing' },
     ],
-    keywords: ['security', 'secure', 'gdpr', 'gobd', 'compliance', 'complian', 'encrypt', 'data center', 'hosting', 'access', 'audit', 'certif', 'backup', 'privacy'],
+    keywords: ['security', 'secure', 'gdpr', 'gobd', 'compliance', 'complian', 'encrypt', 'data center', 'hosting', 'access', 'audit', 'certificate', 'certification', 'backup', 'privacy'],
     fluencyQ: 'security',
     scene: 'b04',
     goals: [

@@ -295,6 +295,15 @@ describe('isThemeCard (anki-regeln §5 Stufe 4)', () => {
     expect(isThemeCard({ word: 'price', doc: { origin: { kind: 'say', ref: 'theme:t05' } } }, 't03')).toBe(false);
     expect(isThemeCard({ word: 'hotel' }, null)).toBe(false);
   });
+  it('Stichwörter nur als Wortanfang mit kurzer Endung (keine Fehltreffer)', () => {
+    expect(isThemeCard({ word: 'eventually' }, 't12')).toBe(false);
+    expect(isThemeCard({ word: 'events' }, 't12')).toBe(true);
+    expect(isThemeCard({ word: 'career' }, 't13')).toBe(false);
+    expect(isThemeCard({ word: 'rental car' }, 't13')).toBe(true);
+    expect(isThemeCard({ word: 'aim' }, 't15')).toBe(false);
+    expect(isThemeCard({ word: 'certificate' }, 't04')).toBe(true);
+    expect(isThemeCard({ word: 'e-invoicing' }, 't05')).toBe(true);
+  });
   it('jedes Thema erkennt seine eigenen Wendungen', () => {
     for (const t of THEMES) for (const p of t.phrases) expect(isThemeCard({ word: p.en }, t)).toBe(true);
   });

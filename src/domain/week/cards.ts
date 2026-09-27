@@ -34,11 +34,13 @@ function tagOf(v: unknown): string | null {
   return null;
 }
 
+/** Stichwort als Wortanfang: kurze Stichwörter (≤ 3 Zeichen) nur ganz (oder mit -s), sonst ≤ 4 Zeichen Endung. */
 function keywordHit(word: string, keyword: string): boolean {
   const k = normText(keyword);
   if (!k) return false;
   const esc = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(`(?:^| )${esc}`).test(word);
+  const tail = k.length <= 3 ? 's?' : "[a-z']{0,4}";
+  return new RegExp(`(?:^| )${esc}${tail}(?= |$)`).test(word);
 }
 
 export function isThemeCard(card: ThemeCardLike, theme: WeekTheme | ThemeId | null | undefined): boolean {
