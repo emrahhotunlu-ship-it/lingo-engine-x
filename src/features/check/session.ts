@@ -142,11 +142,12 @@ function advance(s: State, row: CheckRow, cards = s.cards): CheckKind {
 }
 
 /** Antwort auf eine Vokabel- bzw. Wendungsaufgabe (Schreibweg wie im Wörter-Schritt der Lektion). */
-export function commitCheckWord(ans: Answer): FirstKind {
+/** `step` = Aufgabe, zu der die Antwort gehört; eine verspätete (z. B. doppelt getippt beim Ausblenden) wird ignoriert. */
+export function commitCheckWord(ans: Answer, step: number): FirstKind {
   const s = useCheck.getState();
   const it = s.items[s.pos];
   const e = s.exercise;
-  if (!s.active || !it || it.kind !== 'v' || !e) return null;
+  if (!s.active || s.step !== step || !it || it.kind !== 'v' || !e) return null;
   const card = e.card;
   const a: AnswerEvent = {
     t: nextT(),
@@ -172,10 +173,10 @@ export function commitCheckWord(ans: Answer): FirstKind {
 }
 
 /** Antwort auf eine Grammatikaufgabe (gleicher Schreibweg wie jede Grammatikrunde, `ctx:'xtra'`). */
-export function commitCheckGrammar(a: GrammarAnswer): CheckKind {
+export function commitCheckGrammar(a: GrammarAnswer, step: number): CheckKind {
   const s = useCheck.getState();
   const it = s.items[s.pos];
-  if (!s.active || !it || it.kind !== 'g') return null;
+  if (!s.active || s.step !== step || !it || it.kind !== 'g') return null;
   void learnRecorder.grammar(a);
   return advance(s, { kind: 'g', topic: a.task.topic, ok: !a.dontKnow && a.verdict !== 'wrong' });
 }

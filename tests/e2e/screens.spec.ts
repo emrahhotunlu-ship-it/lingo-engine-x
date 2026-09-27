@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { boot, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { inputTour } from './inputHelpers';
-import { playCheck, progressTour } from './progressHelpers';
+import { checkSettled, playCheck, progressTour } from './progressHelpers';
 
 // Jeder Bildschirm rendert auf 390, 1440 und 2560 px, in allen drei Modi und beiden
 // Sprachen: keine JS-Fehler, kein undefined/NaN/{0}, kein Querscrollen, nichts
@@ -278,7 +278,7 @@ for (const vp of VIEWPORTS) {
         await page.getByTestId('whats-new-more').click();
         await check('heute');
         await page.getByTestId('check-offer-start').click();
-        await expect(page.getByTestId('check-item')).toBeVisible();
+        await checkSettled(page);
         await check('wochencheck');
         await playCheck(page);
         await check('wochencheck-ergebnis');

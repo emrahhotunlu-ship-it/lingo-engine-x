@@ -37,6 +37,8 @@ export function CheckScreen() {
   const go = useNav((s) => s.go);
   const s = useCheck();
   const item = s.items[s.pos];
+  // Die Aufgabe merkt sich ihren Schritt: eine ausgeblendete Aufgabe kann nichts mehr eintragen.
+  const step = s.step;
   useCompanionSee({ area: 'overview', label: t('ckTitle'), phase: 'idle' });
 
   const leave = () => {
@@ -72,11 +74,11 @@ export function CheckScreen() {
         >
           {s.status === 'running' && item?.kind === 'v' && s.exercise ? (
             <div data-testid="check-item" data-kind="v" data-ex={s.exercise.ex} data-n={s.pos + 1}>
-              <ExerciseView exercise={s.exercise} knownWords={knownWords} onDone={() => undefined} onCommit={commitCheckWord} noHelp />
+              <ExerciseView exercise={s.exercise} knownWords={knownWords} onDone={() => undefined} onCommit={(a) => commitCheckWord(a, step)} noHelp />
             </div>
           ) : s.status === 'running' && item?.kind === 'g' ? (
             <div data-testid="check-item" data-kind="g" data-n={s.pos + 1}>
-              <GrammarItem task={item.task} ctx="xtra" day={s.day} onDone={commitCheckGrammar} noHelp badge={t('ckBadge')} />
+              <GrammarItem task={item.task} ctx="xtra" day={s.day} onDone={(a) => commitCheckGrammar(a, step)} noHelp badge={t('ckBadge')} />
             </div>
           ) : (
             <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="check-summary" data-saved={s.saved}>

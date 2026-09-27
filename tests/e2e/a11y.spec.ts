@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { boot, openOverview, screen, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { ARTICLE_OWN, inputTour, openModule } from './inputHelpers';
-import { playCheck, progressTour } from './progressHelpers';
+import { checkSettled, playCheck, progressTour } from './progressHelpers';
 
 // Barrierefreiheit (Kap. 8, Kap. 12): axe in allen drei Modi, Touch-Ziele ≥ 44 px.
 
@@ -150,7 +150,7 @@ for (const theme of THEMES) {
       await page.getByTestId('whats-new-more').click();
       await scan('heute');
       await page.getByTestId('check-offer-start').click();
-      await expect(page.getByTestId('check-item')).toBeVisible();
+      await checkSettled(page);
       await scan('wochencheck');
       await playCheck(page);
       await scan('wochencheck-ergebnis');

@@ -15,7 +15,7 @@ export async function progressTour(page: Page, visit: (name: string) => Promise<
     await visit(`stand-${id}`);
   }
   await page.getByTestId('check-start').click();
-  await expect(page.getByTestId('check-item')).toBeVisible();
+  await checkSettled(page);
   await page.waitForTimeout(250);
   await visit('wochencheck');
   await page.getByTestId('round-close').click();
@@ -50,12 +50,34 @@ export async function answerCheckItem(page: Page, n: number, total: number): Pro
     await item.getByTestId('check').click();
   }
   await expect(item.getByTestId('verdict')).toBeVisible();
-  // Nach einer richtigen Wahl geht es nach kurzer Zeit von selbst weiter.
-  await item.getByTestId('next').click({ timeout: 800 }).catch(() => undefined);
+  // Weiter – nach einer richtigen Wahl geht es auch von selbst weiter; bis die Aufgabe weg ist.
+  await expect
+    .poll(
+      async () => {
+        if (!(await item.count())) return true;
+        const next = item.getByTestId('next');
+        if (await next.isVisible().catch(() => false)) await next.click({ timeout: 1000 }).catch(() => undefined);
+        return (await item.count()) === 0;
+      },
+      { timeout: 15_000 },
+    )
+    .toBe(true);
+}
+
+/** Warten, bis die Aufgabe bzw. Zusammenfassung des Checks fertig eingeblendet ist (Deckkraft 1, keine Verschiebung). */
+export async function checkSettled(page: Page, testId: 'check-item' | 'check-summary' = 'check-item'): Promise<void> {
+  await expect(page.getByTestId(testId)).toBeVisible();
+  await page.waitForFunction((id) => {
+    const el = document.querySelector(`[data-testid="${id}"]`)?.parentElement;
+    if (!el) return false;
+    const cs = getComputedStyle(el);
+    return cs.opacity === '1' && (cs.transform === 'none' || cs.transform === 'matrix(1, 0, 0, 1, 0, 0)');
+  }, testId);
 }
 
 /** Den ganzen Wochen-Check durchspielen (ab der ersten Aufgabe) bis zur Zusammenfassung. */
 export async function playCheck(page: Page): Promise<void> {
   for (let n = 1; n <= 12; n++) await answerCheckItem(page, n, 12);
-  await expect(page.getByTestId('check-summary')).toBeVisible();
+  // Die Zusammenfassung gleitet von rechts herein: erst prüfen, wenn sie steht.
+  await checkSettled(page, 'check-summary');
 }
