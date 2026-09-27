@@ -4,7 +4,6 @@ import { typeInGap } from './learnHelpers';
 import { openModule } from './inputHelpers';
 import { answerCheckItem, playCheck } from './progressHelpers';
 import { dump, planPatch } from './trainerHelpers';
-import { WHATS_NEW_KEY, WHATS_NEW_VERSION } from '../../src/features/system/whatsNew';
 
 // Lücken aus dem Abgleich (Kap. 9/14, M7, M10, M13, M18, M20, M21, M22, W5, Kap. 4.1):
 // alte Daten sichtbar, Wochen-Check, Wochenstreifen und Niveau-Leiste, Farbthema und beruflicher
@@ -277,21 +276,10 @@ test('M13: Ladepunkt am Reiter, solange eine KI-Korrektur im Hintergrund läuft'
   await expect(page.getByTestId('tab-busy')).toHaveCount(0);
 });
 
-test('M20: „Was ist neu" erscheint einmal nach dem Update, ist schließbar und bleibt dann weg', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true, whatsNew: true, fake: { persist: true } });
+test('„Was ist neu“ ist entfernt (Emrahs Wunsch 27.09.) – auch nach einem Update kein Hinweis', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, whatsNew: true });
   await screen(page, 'today');
-  const note = page.getByTestId('whats-new');
-  await expect(note).toBeVisible();
-  // Keine konkurrierende Karte: der Pflichtknopf bleibt der einzige große Knopf.
   await expect(page.getByTestId('start')).toBeVisible();
-  await note.getByTestId('whats-new-more').click();
-  await expect(note.getByTestId('whats-new-list').locator('li')).toHaveCount(4);
-  expect(await layoutProblems(page)).toEqual([]);
-  await note.getByTestId('whats-new-close').click();
-  await expect(note).toHaveCount(0);
-  expect(await page.evaluate((k) => window.localStorage.getItem(k), WHATS_NEW_KEY)).toBe(WHATS_NEW_VERSION);
-  await page.reload();
-  await screen(page, 'today');
   await expect(page.getByTestId('whats-new')).toHaveCount(0);
   expect(errors).toEqual([]);
 });

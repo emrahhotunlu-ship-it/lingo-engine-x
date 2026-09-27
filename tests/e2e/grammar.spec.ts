@@ -98,7 +98,7 @@ test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis u
   expect(external).toEqual([]);
 });
 
-test('Themenrunde: Satzkorrektur, Umformen und Lücke; freie Antwort beurteilt Claude („auch akzeptabel")', async ({ page }) => {
+test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Antwort ist sofort falsch, ohne auf Claude zu warten (27.09.)', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await openGrammar(page);
   await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
@@ -114,10 +114,9 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; freie Antwort beurteilt C
     const type = (await item.getAttribute('data-type')) ?? '';
     seen.add(type);
     if (type === 'correct' && !judged) {
-      // Frei formuliert und lokal abgelehnt → einmal Claude (D13); Urteil mit Begründung.
+      // Emrahs Wunsch 27.09.: Bewertung sofort. Deutlich andere Antwort → Hinweis, dann falsch; kein Claude-Aufruf.
       await answerGrammar(page, solve, { given: 'Getting up early is something I have been used to for many years.' });
-      await expect(item.getByTestId('judge-why')).toHaveText('Deine Antwort ist grammatisch richtig und passt zur Aufgabe, auch wenn sie anders gebaut ist.');
-      await expect(item.getByTestId('verdict')).not.toHaveAttribute('data-verdict', 'wrong');
+      await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
       judged = true;
     } else {
       await answerGrammar(page, solve);
@@ -129,7 +128,7 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; freie Antwort beurteilt C
   expect([...seen].sort()).toEqual(expect.arrayContaining(['correct', 'gap', 'transform']));
   expect(judged).toBe(true);
   const calls = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null; tier: string }> } }).__LINGO_FAKE__.sampleCalls.map((c) => `${c.id}:${c.tier}`));
-  expect(calls).toEqual(['grammar-judge:quick']);
+  expect(calls).toEqual([]);
   expect(errors).toEqual([]);
 });
 
@@ -240,7 +239,9 @@ test('ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, freie Antwort �
     if (await page.getByTestId('summary').isVisible()) break;
     const item = page.getByTestId('gr-item');
     if ((await item.getAttribute('data-type')) === 'correct' && !sawCorrect) {
-      await answerGrammar(page, solve, { given: 'Getting up early is something I have been used to for many years.' });
+      // Fast gleiche Variante der Lösung (ein Wort mehr) → „nicht sicher prüfbar“.
+      const sol = solve(await shownPrompt(page)) ?? '';
+      await answerGrammar(page, solve, { given: sol.replace(/^(\S+)/, '$1 really') });
       await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'near');
       await expect(item.getByTestId('verdict')).toHaveText('Nicht sicher prüfbar – zählt nicht gegen dich');
       sawCorrect = true;

@@ -14,6 +14,6 @@ describe('Trainer: Fortschritt zählt, was wirklich noch kommt', () => {
     expect(p).toEqual({ n: 16, total: 20 });
   });
   it('Zusammenfassung: kein Fortschritt', () => {
-    expect(roundProgress({ ...base, status: 'summary' as never, queue: q(1), pos: 1, answered: q(1) })).toBeNull();
+    expect(roundProgress({ ...base, status: 'summary', queue: q(1), pos: 1, answered: q(1) })).toBeNull();
   });
 });

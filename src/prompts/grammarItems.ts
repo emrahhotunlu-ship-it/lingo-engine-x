@@ -109,6 +109,7 @@ export const grammarItems: PromptTemplate<GrammarItemsVars, GrammarItemsOut> = {
       GRAMMAR_ITEMS_EXAMPLE,
       'Rules:',
       '- EXACTLY ONE correct answer per item. Reject any item where a second option is also grammatical in some context.',
+      '- Tense items (mc and gap): the sentence MUST contain a clear signal (e.g. "yesterday", "right now", "since 2020", "every Monday", "by next June") that rules out every other option. Without such a signal, "is" vs. "was" is ambiguous – never write that.',
       '  If another form would also be correct, add a signal word that rules it out, or list it in "accepted".',
       '- If there are recent mistakes, write NEW items that test exactly the same confusion with different sentences.',
       '- "mc": prompt with one ___ and 3–4 options, "answer" identical to one option. "gap": one ___, hint_de gives the base form like "(work)".',

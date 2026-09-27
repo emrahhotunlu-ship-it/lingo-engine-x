@@ -125,3 +125,28 @@ export function checkGrammar(task: GrammarTask, givenRaw: string, deps: GrammarC
   const free = task.type === 'transform' || task.type === 'correct';
   return { verdict: 'wrong', ops, needsJudge: free && splitWords(raw).length >= 3 };
 }
+
+/**
+ * Frei formulierte Umformung/Korrektur ohne Treffer: Ist sie der Lösung sehr ähnlich (gleiche Wörter
+ * bis auf eine kleine Abweichung), kann sie eine gültige Variante sein → „nicht sicher prüfbar“.
+ * Sonst ist sie falsch. Ersetzt das Warten auf Claude (Emrahs Wunsch 27.09.: Bewertung sofort).
+ */
+export function closeVariant(task: Pick<GrammarTask, 'answer' | 'accepted'>, given: string): boolean {
+  const words = (s: string) => splitWords(legacyNorm(s));
+  const g = words(given);
+  if (!g.length) return false;
+  return [task.answer, ...task.accepted].some((t) => {
+    const w = words(t);
+    if (!w.length || Math.abs(w.length - g.length) > 2) return false;
+    const pool = [...w];
+    let hit = 0;
+    for (const x of g) {
+      const i = pool.indexOf(x);
+      if (i >= 0) {
+        hit++;
+        pool.splice(i, 1);
+      }
+    }
+    return hit / Math.max(w.length, g.length) >= 0.75;
+  });
+}

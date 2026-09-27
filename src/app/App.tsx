@@ -57,7 +57,6 @@ import { TonesScreen } from '../features/tones/TonesScreen';
 import { InputRoutes } from '../features/input/InputRoutes';
 import { AiTaskNotice } from '../features/input/AiTaskNotice';
 import { runningTabs, useAiTasks } from '../features/input/aiTasks';
-import { WhatsNew } from '../features/system/WhatsNew';
 import { isInputScreen } from './modules';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
@@ -265,8 +264,6 @@ export function App() {
             <SettingsButton />
           </div>
         )}
-        {/* M20: einmaliger Hinweis „Was ist neu" nach einem Update (Merker im Browser). */}
-        {migratedScreen && <WhatsNew />}
         <main id="main" className={`flex-1 ${tab ? 'pb-28 md:pb-16' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>
           {/* Bildschirmwechsel ohne `AnimatePresence mode="wait"`: der neue Bildschirm steht sofort und
               blendet nur ein. Ein Wechsel kann so nie an einer hängenden Ausblendung stecken bleiben

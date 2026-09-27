@@ -167,7 +167,6 @@ for (const theme of THEMES) {
       };
       await screen(page, 'today');
       await expect(page.getByTestId('late-rescue-hint')).toBeVisible();
-      await page.getByTestId('whats-new-more').click();
       await scan('heute');
       await page.getByTestId('check-offer-start').click();
       await checkSettled(page);

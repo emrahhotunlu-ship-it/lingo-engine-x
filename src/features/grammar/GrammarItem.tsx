@@ -1,13 +1,10 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { useSharedTarget } from '../../engine/shared';
-import { askJson } from '../../ai/gate';
-import { useAiAvailable, useAiScope } from '../../ai/scope';
-import { isAiFailure } from '../../ai/types';
 import { useLive } from '../../data/live';
 import { solvedSentence } from '../../domain/course/baseLesson';
 import { topicP } from '../../domain/grammar/bkt';
-import { altFamily, checkGrammar } from '../../domain/grammar/check';
+import { altFamily, checkGrammar, closeVariant } from '../../domain/grammar/check';
 import { alsoRight, altNote, examplesFor, formHint } from '../../domain/grammar/rules';
 import { grammarRetryHint, type GrammarRetryHint } from '../../domain/grammar/retryHint';
 import { scaffolded, splitTransform, wholeSentence } from '../../domain/grammar/tasks';
@@ -24,9 +21,7 @@ import { SentenceDiff } from '../../engine/SentenceDiff';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
-import { grammarJudge } from '../../prompts/grammarJudge';
 import { Button } from '../../ui/Button';
-import { logWarn } from '../../platform/diagnostics';
 import { topicById } from '../../domain/content';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
@@ -72,8 +67,6 @@ const GAP = /_{3,}/;
 export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
-  const ai = useAiAvailable();
-  const scope = useAiScope();
   const now = useClock((s) => s.now);
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
   const [pStart] = useState(() => topicP(task.topic, doc, now));
@@ -87,7 +80,8 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const [retry, setRetry] = useState<GrammarRetryHint | null>(null);
   const firstWrong = useRef<string | null>(null);
   const fieldRef = useRef<HTMLTextAreaElement>(null);
-  const [judging, setJudging] = useState(false);
+  // Seit 27.09. ohne Claude-Nachprüfung: nie im Wartezustand.
+  const judging = false;
   const [chosen, setChosen] = useState<string | null>(null);
   const [text, setText] = useState(task.type === 'correct' ? task.prompt : '');
   const typed = useRef('');
@@ -148,7 +142,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     if (typedKind && window.matchMedia('(pointer: coarse)').matches) api.blur();
   };
 
-  const check = async (choice?: string) => {
+  const check = (choice?: string) => {
     if (fb || judging) return;
     let given: string;
     if (task.type === 'mc') {
@@ -169,26 +163,10 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       finishCheck(res.verdict, res, given);
       return;
     }
-    // D13: lokal abgelehnt, frei formuliert, lang genug → einmal Claude fragen; sonst „nicht sicher prüfbar".
-    if (!ai) {
-      finishCheck('near', res, given, { judged: 'noai', unsure: true });
-      return;
-    }
-    setJudging(true);
-    try {
-      const r = await askJson({
-        template: grammarJudge,
-        vars: { topic: task.topic, type: task.type, prompt: task.prompt, answer: task.answer, accepted: task.accepted, given, uiLang: lang },
-        signal: scope.controller().signal,
-      });
-      const v: Verdict = r.data.verdict === 'wrong' && r.data.acceptable ? 'near' : r.data.verdict;
-      finishCheck(v, res, given, { judged: 'ai', why: r.data.why });
-    } catch (err) {
-      if (!isAiFailure(err) || err.kind !== 'cancelled') logWarn('grammar:judge', err, task.topic);
-      finishCheck('near', res, given, { judged: 'noai', unsure: true });
-    } finally {
-      setJudging(false);
-    }
+    // Emrahs Wunsch 27.09.: Bewertung sofort, kein Warten auf Claude. Sehr ähnlich zur Lösung →
+    // mögliche gültige Variante („nicht sicher prüfbar“, mit „Ich lag richtig“); sonst falsch.
+    if (closeVariant(task, given)) finishCheck('near', res, given, { judged: 'noai', unsure: true });
+    else finishCheck('wrong', res, given);
   };
 
   const dontKnow = () => {

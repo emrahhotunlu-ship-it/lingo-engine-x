@@ -932,3 +932,15 @@ h3 {
     transform: scaleX(1);
   }
 }
+
+/* Emrahs Wunsch 27.09.: Antwortansicht am iPhone kompakter, weniger Scrollen (aus Version 54 übernommen). */
+@media (max-width: 480px) {
+  [data-testid='gr-item'] { padding: 14px; gap: 12px; }
+  [data-testid='result'] { gap: 8px; padding-top: 12px; }
+  [data-testid='examples'] { gap: 4px; }
+  [data-testid='examples'] li { font-size: 0.85rem; line-height: 1.35; }
+  [data-testid='also-right'] { gap: 2px; }
+  [data-testid='sentence-diff'] { gap: 4px; font-size: 0.9rem; }
+  [data-testid='verdict'] { font-size: 0.95rem; margin: 0; }
+  [data-testid='form-hint'] { font-size: 0.85rem; }
+}
