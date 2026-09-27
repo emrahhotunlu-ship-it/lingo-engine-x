@@ -1,6 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import { boot, openSettings, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
+import { TABS } from '../../src/app/shell/tabs';
 import { learnTour } from './learnHelpers';
 import { inputTour } from './inputHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
@@ -193,7 +194,7 @@ test('reduzierte Bewegung: alles erscheint ohne Animation vollständig', async (
   await context.close();
 });
 
-// Prüfbericht W2: Reiterleiste bei 390 px – vier Reiter (Neubau: Heute · Wortschatz · Lesen · Sprechen), jede
+// Prüfbericht W2: Reiterleiste bei 390 px – alle Reiter aus `TABS` (Neubau: Heute · Wortschatz · Üben · Lesen · Sprechen), jede
 // Beschriftung einzeilig, mit Abstand zum Nachbarn, Touch-Ziele ≥ 44 px (beide Sprachen).
 for (const lang of LANGS) {
   test(`Reiterleiste 390 px einzeilig mit Abstand (${lang})`, async ({ browser }) => {
@@ -214,7 +215,7 @@ for (const lang of LANGS) {
         return { label: text?.textContent ?? '', lines, h: b.height, w: b.width, left: b.left, right: b.right, textLeft: tr.left, textRight: tr.right };
       }),
     );
-    expect(boxes).toHaveLength(4);
+    expect(boxes).toHaveLength(TABS.length);
     for (const b of boxes) {
       expect(b.lines, b.label).toBe(1);
       expect(b.h, b.label).toBeGreaterThanOrEqual(44);
