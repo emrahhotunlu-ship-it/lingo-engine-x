@@ -281,6 +281,12 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - Rückweg: Version `1790536760-1f37`.
 - **Kommentare in der App** sind Emrahs bevorzugter Testweg: an Claude gesendet, mit Ort; nach dem Beheben im Thread antworten und auflösen.
 
+**27.09.2026, spätabends – Neuansatz, dann direkter Neubau (Emrahs Vorgabe)**
+- Kritik: buggy, laggy, „stürzt ab“ (Neustart mitten in der Übung), überladen, keine klare User Journey, kein Anki-Modus, Übersetzer → Wortschatz umständlich, Vokabeltrainer nicht auffindbar.
+- Konzept `docs/produktkonzept.md` + Prototyp v1 (separates Artefakt `GgEpb8…`, Kopie `docs/prototyp/v1.html`). Emrahs Urteil: „Anki-Modus gar nicht schlecht, Optik auch gut, aber viel zu dünn von den Features insgesamt.“ → **Keine Funktion fällt weg**, dazu das Beste der Marktführer; aufgeräumt, aber featurestark.
+- Emrah: „Kannst du nicht gleich die App programmieren? Ich will die App in 12 Stunden fertig haben!“ → Prototyp v2 gestoppt, direkter Neubau der Oberfläche (Daten-/Domänenschicht bleibt). Plan in `docs/neubau/`. Feste Grenze: Was nach 12 Stunden nicht grün ist, kommt ins nächste Paket. Erst Test-Link `AXHkh6…`, `JLL8…` nur mit „Ja, veröffentlichen“.
+- **Anki-Modus (Emrahs Wunsch, im Prototyp v1 gutgeheißen):** Im Wortschatz gibt es Aufdecken + 4 Knöpfe (Nochmal/Schwer/Gut/Leicht) mit angezeigten Intervallen und hervorgehobenem App-Vorschlag. Das ist die einzige Ausnahme von „keine Selbstbewertung“ (18:15). Im Tippen-Modus und in allen Übungen bewertet weiter die App.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
