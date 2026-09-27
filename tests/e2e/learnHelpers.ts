@@ -83,6 +83,11 @@ export async function answerGrammar(page: Page, solve: (shown: string) => string
     await typeInGap(page, text);
     await item.getByTestId('check').click();
   }
+  // Falsch getippt: erst ein Hinweis, dann der zweite Versuch (hier unverändert → Ergebnis).
+  if (type !== 'mc') {
+    await expect(item.getByTestId('verdict').or(item.getByTestId('retry-hint'))).toBeVisible();
+    if (await item.getByTestId('retry-hint').isVisible()) await item.getByTestId('check').click();
+  }
   await expect(item.getByTestId('verdict')).toBeVisible();
   return { type, answer };
 }

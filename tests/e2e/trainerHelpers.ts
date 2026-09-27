@@ -183,6 +183,9 @@ export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Pr
     await page.getByTestId('gap-input').click();
     await page.keyboard.type(opts.wrong ? 'zzzz' : answer, { delay: 30 });
     await page.keyboard.press('Enter');
+    // Falsch getippt: erst ein Hinweis, dann der zweite Versuch (hier unverändert → Ergebnis).
+    await expect(page.getByTestId('verdict').or(page.getByTestId('retry-hint'))).toBeVisible();
+    if (await page.getByTestId('retry-hint').isVisible()) await page.keyboard.press('Enter');
   }
   await expect(page.getByTestId('verdict')).toBeVisible();
   await expect(page.getByTestId('next')).toBeVisible();

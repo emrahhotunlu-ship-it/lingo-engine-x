@@ -9,6 +9,7 @@ import { solvedSentence } from '../../domain/course/baseLesson';
 import { topicP } from '../../domain/grammar/bkt';
 import { altFamily, checkGrammar } from '../../domain/grammar/check';
 import { alsoRight, altNote, examplesFor, formHint } from '../../domain/grammar/rules';
+import { grammarRetryHint, type GrammarRetryHint } from '../../domain/grammar/retryHint';
 import { scaffolded, splitTransform, wholeSentence } from '../../domain/grammar/tasks';
 import { learnGrade } from '../../domain/learn/grade';
 import type { Ctx, GrammarAnswer, GrammarCheck, GrammarTask, Help, Verdict } from '../../domain/learn/types';
@@ -29,6 +30,7 @@ import { logWarn } from '../../platform/diagnostics';
 import { topicById } from '../../domain/content';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
+import { RetryHintLine } from '../learn/RetryHint';
 import { AlsoRight, CopyOnce, ExampleList, FormHint, LearnStatus, NextButton, OverrideButton, ResultArea, TaskLine, VerdictLine } from '../learn/ui';
 
 // Eine Grammatikaufgabe (phase2-plan §5.0/§5.2, CLAUDE.md A7): Status oben, Aufgabe in einer
@@ -81,6 +83,9 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const scaff = task.type === 'gap' && !whole && scaffolded(pStart) && !noHelp;
   const [fb, setFb] = useState<Fb | null>(null);
   const [tip, setTip] = useState<0 | 1 | 2>(0);
+  /** „Erst ein Hinweis, dann die Lösung": Hinweis nach falschem erstem Versuch (zweiter Versuch). */
+  const [retry, setRetry] = useState<GrammarRetryHint | null>(null);
+  const fieldRef = useRef<HTMLTextAreaElement>(null);
   const [judging, setJudging] = useState(false);
   const [chosen, setChosen] = useState<string | null>(null);
   const [text, setText] = useState(task.type === 'correct' ? task.prompt : '');
@@ -103,7 +108,8 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const typedKind = !whole && (task.type === 'gap' || task.type === 'transform');
   const maskShown = typedKind && (scaff || tip > 0);
   const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
-  const help: Help = { level: tip >= 2 ? 2 : tip >= 1 ? 1 : 0 };
+  // Zweiter Versuch nach dem Hinweis zählt wie „Tipp" Stufe 2: richtig höchstens „Schwer".
+  const help: Help = { level: tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0 };
 
   // Was der Begleiter sieht (Phase 5 D4): vor dem Prüfen nur Thema und Aufgabe, nie die Lösung.
   const tp = topicById(task.topic);
@@ -118,7 +124,21 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
 
   const elapsed = () => Math.max(0, Math.round(performance.now() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
 
+  // Steht der Hinweis der Aufgabe schon vor dem Prüfen da (Stütze unter der Lücke, im Satz oder
+  // über dem Feld der Umformung)? Dann nennt der Hinweis für den zweiten Versuch das Thema.
+  const hintVisible = !!task.hint && (task.prompt.includes(task.hint) || task.type === 'gap' || (whole && task.type === 'transform'));
+
   const finishCheck = (verdict: Verdict, check: GrammarCheck | null, given: string, extra: Partial<Fb> = {}) => {
+    // Erster Versuch falsch → Hinweis statt Lösung; die Eingabe bleibt stehen, der Fokus bleibt im
+    // Feld. Nicht bei Auswahl, nicht im Wochen-Check, nicht bei „nicht sicher prüfbar".
+    if (verdict === 'wrong' && !retry && !noHelp && task.type !== 'mc' && !extra.unsure) {
+      setRetry(grammarRetryHint(task, tp ? topicLabel : null, hintVisible));
+      if (whole) fieldRef.current?.focus({ preventScroll: true });
+      else api.focusNow();
+      return;
+    }
+    // Zeit: Gesamtzeit ab dem Einblenden über beide Versuche (durch die Deckelung auf „Schwer"
+    // entscheidet sie beim zweiten Versuch nicht mehr über die Note).
     const ms = elapsed();
     const firstKeyMs = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current));
     const grade = learnGrade(task.type, verdict, { submitMs: ms, firstKeyMs }, help);
@@ -287,6 +307,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     // Ganzsatz: `correct` (Satz steht im Feld) oder Umformung ohne Lücke (Auftrag oben, Feld leer).
     const field = (
       <textarea
+        ref={fieldRef}
         className="lx-field"
         data-sentence=""
         data-testid="correct-input"
@@ -411,7 +432,14 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
           <LearnStatus p={p} n={typeof doc?.n === 'number' ? doc.n : 0} recent={Array.isArray(doc?.recent) ? (doc.recent as number[]) : null} kind={t(`grKind_${task.type}` as MessageKey)} kindId={task.type} extra={badge} />
           <TaskLine task={t(`grTask_${task.type}` as MessageKey)} purpose={t('purposeGrammar')} />
         </header>
-        <div className="flex flex-col gap-4">{body}</div>
+        <div className="flex flex-col gap-4">
+          {body}
+          {retry && !fb && (
+            <RetryHintLine
+              text={retry.kind === 'hint' ? t('rhGrammarHint', { hint: retry.text }) : retry.kind === 'topic' ? t('rhGrammarTopic', { topic: retry.name }) : t('rhGrammarVerb')}
+            />
+          )}
+        </div>
         {!fb && (
           <div className="flex flex-wrap items-center gap-2">
             {task.type !== 'mc' && (
@@ -419,7 +447,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
                 {t('trCheck')}
               </Button>
             )}
-            {typedKind && !scaff && tip < 2 && !noHelp && (
+            {typedKind && !scaff && tip < 2 && !noHelp && !retry && (
               <Button
                 variant="ghost"
                 icon="lightbulb"
@@ -433,7 +461,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
                 {tip === 0 ? t('grTip') : t('trTipLetter')}
               </Button>
             )}
-            {scaff && tip < 2 && (
+            {scaff && tip < 2 && !retry && (
               <Button
                 variant="ghost"
                 icon="lightbulb"

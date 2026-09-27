@@ -12,6 +12,7 @@ import { progressDe } from './parts/progress.de';
 import { trainerDe } from './parts/trainer.de';
 import { standDe } from './parts/stand.de';
 import { engineDe } from './parts/engine.de';
+import { hintDe } from './parts/hint.de';
 
 export const de = {
   ...aiDe,
@@ -32,6 +33,8 @@ export const de = {
   ...standDe,
   // Kurs-Erweiterung, Wischgesten, Vibration
   ...engineDe,
+  // Erst ein Hinweis, dann die Lösung (Selbstkorrektur)
+  ...hintDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

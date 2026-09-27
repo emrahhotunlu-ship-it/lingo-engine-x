@@ -11,7 +11,7 @@ import { Choices } from '../../engine/Choices';
 import { EnglishText } from '../../engine/EnglishText';
 import { ExerciseFrame } from '../../engine/ExerciseFrame';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { KineticGap, type GapState } from '../../engine/KineticGap';
+import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { Tiles } from '../../engine/Tiles';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
@@ -19,6 +19,7 @@ import { checkTyped, checkWithHint } from '../../domain/answer/check';
 import { answerDiff, charDiff } from '../../domain/answer/diff';
 import { formKind } from '../../domain/answer/form';
 import { maskOf } from '../../domain/answer/mask';
+import { retryHint, type RetryHint } from '../../domain/answer/retryHint';
 import { normalize } from '../../domain/answer/normalize';
 import { checkSituation, typedForm } from '../../domain/chunks/situation';
 import { scoreDictation } from '../../domain/drills/dictation';
@@ -42,6 +43,7 @@ import { commitAnswer, type Answer, type FirstKind } from './session';
 import { CopyOnce, NextButton, OverrideButton } from '../learn/ui';
 import { AiRunPanel } from '../input/AiRunPanel';
 import { MnemonicBlock } from './mnemonic';
+import { RetryHintLine } from '../learn/RetryHint';
 import { useCompanionSee } from '../companion/seeing';
 import { companionOpenedSince, companionOpenMs } from '../companion/store';
 
@@ -81,6 +83,11 @@ const MEANING_ASKED: ReadonlySet<ExerciseId> = new Set(['mc_en', 'listen_mc', 'm
 /** Arten, die den Satz vor dem Prüfen zeigen (Beispiele wiederholen ihn nicht). */
 const SHOWS_SENTENCE: ReadonlySet<ExerciseId> = new Set(['colloc', 'mc_en', 'spot', 'match', 'tiles', 'listen_mc']);
 const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
+/**
+ * „Erst ein Hinweis, dann die Lösung" (Lernberatung Vorschlag 4): getippte Arten mit zweitem
+ * Versuch. Nicht Diktat und Tempo (Zeitbalken), nicht Auswahl, nie im Wochen-Check (`noHelp`).
+ */
+const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'type', 'situation']);
 
 export function ExerciseView({
   exercise,
@@ -109,6 +116,8 @@ export function ExerciseView({
   const card = e.card;
   const [fb, setFb] = useState<Feedback | null>(null);
   const [tip, setTip] = useState<0 | 1 | 2>(0);
+  /** Hinweis nach einem falschen ersten Versuch; gesetzt = zweiter Versuch läuft bzw. lief. */
+  const [retry, setRetry] = useState<RetryHint | null>(null);
   const [placed, setPlaced] = useState<number[]>([]);
   const [prodText, setProdText] = useState('');
   const [left, setLeft] = useState(e.limitMs ?? 0);
@@ -152,7 +161,8 @@ export function ExerciseView({
 
   const shownSentence = e.input === 'typed' || SHOWS_SENTENCE.has(e.ex) ? (e.sentence?.sentence ?? null) : null;
   const solution = e.accepted[0] ?? card.word;
-  const hintShown = e.ex === 'cloze_hint' || (FREE_TYPED.has(e.ex) && tip >= 2);
+  // Der Hinweis „beginnt mit …" deckt in der Lücke den ersten Buchstaben auf (wie „Tipp" Stufe 2).
+  const hintShown = e.ex === 'cloze_hint' || (FREE_TYPED.has(e.ex) && tip >= 2) || retry?.kind === 'start';
   const meaningText = lang === 'de' ? card.de : card.def;
 
   /** Antwortzeit ohne offenes Nachschlagen und Begleiter; Hören ab Tonende. */
@@ -176,7 +186,10 @@ export function ExerciseView({
         firstKeyMs: firstKey,
         chars: solution.length,
         deletions: deletions.current,
-        hintLevel: companionHelp ? 2 : FREE_TYPED.has(e.ex) ? tip : 0,
+        // Zweiter Versuch nach dem Hinweis zählt wie „Tipp" Stufe 2: höchstens „Schwer". Die Zeit ist
+        // die Gesamtzeit ab dem Einblenden (beide Versuche); durch die Deckelung entscheidet sie
+        // nicht mehr über die Note, bleibt aber als ehrliche Antwortzeit gespeichert.
+        hintLevel: companionHelp || retry ? 2 : FREE_TYPED.has(e.ex) ? tip : 0,
         tiles: e.tiles?.length ?? 0,
         replays: Math.max(0, plays.current - 1),
         ...(e.limitMs ? { limitMs: e.limitMs } : {}),
@@ -195,6 +208,19 @@ export function ExerciseView({
     if (LISTEN.has(e.ex)) stopSpeech();
   };
 
+  /**
+   * Erster Versuch falsch (nicht „fast richtig") → Hinweis statt Lösung. Die Eingabe bleibt
+   * stehen, der Fokus bleibt in der Lücke (iPhone: im selben Handler). `true`, wenn so.
+   */
+  const offerRetry = (given: string, result: CheckResult): boolean => {
+    if (retry || noHelp || !RETRY_EX.has(e.ex)) return false;
+    const h = retryHint(given, e.accepted, e.ex === 'situation' ? typedForm(card.word) : card.lemma, result);
+    if (!h) return false;
+    setRetry(h);
+    api.focusNow();
+    return true;
+  };
+
   const check = (chosen: Option | null, opts: { timedOut?: boolean } = {}) => {
     if (fb) return;
     if (e.input === 'choice') {
@@ -209,8 +235,16 @@ export function ExerciseView({
       return;
     }
     if (e.ex === 'situation') {
-      const given = typed.current.trim();
-      finish(checkSituation(given, { accepted: e.accepted, en: card.word }), given, null);
+      let given = typed.current.trim();
+      // Zweiter Versuch mit aufgedecktem Anfangsbuchstaben: wer ihn nicht mittippt, meint ihn mit.
+      const first = retry?.kind === 'start' ? maskOf(solution, { firstLetter: true })[0] : undefined;
+      if (first?.kind === 'slot' && first.hint && given && hintOffset([first], given) === 1) {
+        const withHint = first.hint + given;
+        if (checkSituation(withHint, { accepted: e.accepted, en: card.word }).verdict !== 'wrong') given = withHint;
+      }
+      const res = checkSituation(given, { accepted: e.accepted, en: card.word });
+      if (offerRetry(given, res)) return;
+      finish(res, given, null);
       return;
     }
     if (e.ex === 'dictation' && /\s/.test(solution)) {
@@ -222,6 +256,7 @@ export function ExerciseView({
     }
     const hint = hintShown ? (maskOf(solution, { firstLetter: true }).find((c) => c.kind === 'slot')?.hint ?? null) : null;
     const r = checkWithHint(typed.current, e.accepted, { lemma: card.lemma, knownWords }, hint);
+    if (!opts.timedOut && offerRetry(r.effective, r.result)) return;
     finish(r.result, r.effective, null, opts.timedOut ? { timedOut: true } : {});
   };
   const checkRef = useRef(check);
@@ -325,7 +360,21 @@ export function ExerciseView({
 
   const gapState: GapState = !fb ? 'input' : fb.result.verdict;
   const helped = e.ex === 'cloze_hint';
-  const mask = helped ? maskOf(solution, { firstLetter: true }) : FREE_TYPED.has(e.ex) && tip > 0 ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
+  const mask =
+    helped || retry?.kind === 'start'
+      ? maskOf(solution, { firstLetter: true })
+      : FREE_TYPED.has(e.ex) && tip > 0
+        ? maskOf(solution, { firstLetter: tip >= 2 })
+        : null;
+  const retryText = !retry
+    ? null
+    : retry.kind === 'spelling'
+      ? t('rhSpelling')
+      : retry.kind === 'form'
+        ? t('rhForm')
+        : retry.words > 1
+          ? t('rhStartPhrase', { start: retry.start, n: retry.words })
+          : tn('rhStartWord', retry.letters, { start: retry.start });
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
 
   // Was der Begleiter sieht (Phase 5 §8.4): vor dem Prüfen Aufgabe und Satz mit ___, nie die Lösung.
@@ -428,6 +477,7 @@ export function ExerciseView({
             {gap}
           </p>
         )}
+        {retryText && !fb && <RetryHintLine text={retryText} />}
         {e.ex !== 'type' && e.ex !== 'dictation' && e.ex !== 'situation' && !(e.ex === 'speed' && !e.sentence) && cue(e.meaning)}
       </>
     );
@@ -723,7 +773,7 @@ export function ExerciseView({
           <span className="text-xs text-subtle" data-testid="due-in" data-grade={fb.override ? 3 : fb.grade}>
             {t('trAgainIn', { when: when(fb.dueInMs) })}
           </span>
-          <NextButton onNext={next} auto={v.verdict === 'correct' && tip === 0 && !fb.override && !prod} />
+          <NextButton onNext={next} auto={v.verdict === 'correct' && tip === 0 && !retry && !fb.override && !prod} />
         </div>
       </motion.div>
     );
@@ -744,7 +794,7 @@ export function ExerciseView({
         >
           {t('trCheck')}
         </Button>
-        {FREE_TYPED.has(e.ex) && tip < 2 && !noHelp && (
+        {FREE_TYPED.has(e.ex) && tip < 2 && !noHelp && !retry && (
           <Button variant="ghost" icon="lightbulb" onClick={showTip} data-testid="hint" data-level={tip}>
             {tip === 0 ? t('trTip') : t('trTipLetter')}
           </Button>

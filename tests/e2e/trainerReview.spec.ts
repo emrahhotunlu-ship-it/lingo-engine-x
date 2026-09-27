@@ -99,6 +99,9 @@ test.describe('Desktop', () => {
     await page.getByTestId('gap-input').click();
     await page.keyboard.type('zzzz', { delay: 20 });
     await page.keyboard.press('Enter');
+    // Erst ein Hinweis, dann der zweite Versuch (unverändert → falsch).
+    await expect(page.getByTestId('retry-hint')).toBeVisible();
+    await page.keyboard.press('Enter');
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
     await expect(page.getByTestId('confidence')).toHaveText('unsicher');
     await page.keyboard.press('Enter');
