@@ -187,8 +187,8 @@ test('Handy: Nachschlage-Blatt lässt sich bei niedriger Höhe per Finger scroll
   await page.getByTestId('sentence').locator('button.lx-word[data-word="driving"]').tap();
   const lk = page.getByTestId('lookup');
   await expect(lk).toBeVisible();
-  await page.getByTestId('lk-ask').tap();
-  await expect(page.getByTestId('lk-sense')).toBeVisible();
+  // „Claude fragen" öffnet seit Phase 5 den Begleiter (E5-09); das Blatt wird hier nur durch die niedrige Höhe voll.
+  await expect(page.getByTestId('lk-ipa')).toBeVisible();
   await page.waitForTimeout(400);
   const m = await lk.evaluate((el) => ({ ch: el.clientHeight, sh: el.scrollHeight, ta: getComputedStyle(el).touchAction }));
   expect(m.sh, 'Inhalt höher als das Blatt').toBeGreaterThan(m.ch);

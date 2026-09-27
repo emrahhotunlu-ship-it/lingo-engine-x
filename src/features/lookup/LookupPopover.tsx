@@ -93,10 +93,14 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
   // Esc, Schließen-Knopf und Klick außerhalb schließen; der Fokus geht dabei synchron zurück
   // (vorheriger Fokus, sonst das Wort – closeLookup).
   useEffect(() => {
+    // Schließt das Fenster, bevor der verzögerte Fokus (20 ms) kam, darf dieser den
+    // zurückgegebenen Fokus nicht mehr an das verschwindende Fenster ziehen.
+    let closing = false;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       e.preventDefault();
       e.stopPropagation();
+      closing = true;
       closeLookup();
     };
     const onDown = (e: PointerEvent) => {
@@ -104,6 +108,7 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       if (!target || panel.current?.contains(target)) return;
       if (target instanceof Element && target.closest('button.lx-word')) return;
       const back = focusTargetOf(req);
+      closing = true;
       closeLookup({ restoreFocus: false });
       // Tippen auf eine leere Stelle nimmt dem Element beim Loslassen den Fokus. Deshalb erst
       // danach zurückgeben – noch im selben Tippen (click), damit iOS die Tastatur wieder öffnet.
@@ -123,7 +128,9 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
     };
     window.addEventListener('keydown', onKey, true);
     document.addEventListener('pointerdown', onDown, true);
-    const focusTimer = window.setTimeout(() => panel.current?.focus({ preventScroll: true }), 20);
+    const focusTimer = window.setTimeout(() => {
+      if (!closing) panel.current?.focus({ preventScroll: true });
+    }, 20);
     return () => {
       window.clearTimeout(focusTimer);
       window.removeEventListener('keydown', onKey, true);

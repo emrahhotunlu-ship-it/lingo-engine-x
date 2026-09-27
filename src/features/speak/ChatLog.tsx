@@ -1,25 +1,19 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useT } from '../../i18n';
 import type { AnalysisSlot, Persona, Turn } from '../../domain/speak/types';
 import { EnglishText } from '../../engine/EnglishText';
 import { SpeakButton } from '../../engine/SpeakButton';
 import { Button } from '../../ui/Button';
-import { Icon } from '../../ui/Icon';
+import { NewerPill } from '../../ui/chat/ChatInput';
+import { usePageStickToBottom } from '../../ui/chat/scroll';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { VERDICT_KEY } from './AnalysisCard';
 
 // Gesprächsverlauf (Plan §5.2). Figur links, eigene Sätze rechts, unter jedem eigenen Satz ein
-// Analyse-Chip mit Status-Punkt. Nichts öffnet sich von selbst. Scrollen: Nur wenn man unten ist
-// (≤ 48 px), folgt die Ansicht neuem Text; sonst erscheint die Pille „Neue Antwort ↓“ (Kap. 15:
-// „Chat springt beim Lesen nach unten“ darf nicht wiederkommen).
-
-const NEAR_BOTTOM_PX = 48;
-
-function atBottom(): boolean {
-  const doc = document.documentElement;
-  return window.innerHeight + window.scrollY >= doc.scrollHeight - NEAR_BOTTOM_PX;
-}
+// Analyse-Chip mit Status-Punkt. Nichts öffnet sich von selbst. Scrollen nach der gemeinsamen
+// Regel aller Gespräche (ui/chat/scroll): Nur wer unten ist (≤ 48 px), dem folgt die Ansicht;
+// sonst erscheint die Pille „Neue Antwort ↓“ (Kap. 15).
 
 const DOT: Record<string, string> = {
   pending: 'bg-subtle animate-pulse',
@@ -54,27 +48,7 @@ type Props = {
 export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial, phase, onStop, openIdx, onChip, renderInline }: Props) {
   const { t } = useT();
   const count = turns.length + (partial ? 1 : 0);
-  // Folgt die Ansicht neuem Text? Nur, wenn man unten ist (Scroll-Ereignis setzt den Zustand).
-  const [atEnd, setAtEnd] = useState(true);
-  const [seen, setSeen] = useState(count);
-  if (atEnd && seen !== count) setSeen(count);
-  const newer = !atEnd && count > seen;
-
-  useEffect(() => {
-    const onScroll = () => setAtEnd(atBottom());
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Neue Züge oder einlaufender Text: nur folgen, wenn man unten war (Kap. 15).
-  useLayoutEffect(() => {
-    if (atEnd) window.scrollTo({ top: document.documentElement.scrollHeight });
-  }, [count, partial, atEnd]);
-
-  const toBottom = () => {
-    setAtEnd(true);
-    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
-  };
+  const { jump, toBottom } = usePageStickToBottom(`${count}|${partial.length}`);
 
   return (
     <div className="flex flex-col gap-4" aria-live="polite" aria-relevant="additions">
@@ -167,20 +141,7 @@ export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial
       )}
 
       <AnimatePresence>
-        {newer && (
-          <motion.button
-            type="button"
-            data-testid="rp-newer"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            onClick={toBottom}
-            className="fixed bottom-40 left-1/2 z-30 inline-flex min-h-11 -translate-x-1/2 items-center gap-2 rounded-full bg-surface-solid px-4 text-sm font-medium shadow-xl"
-          >
-            {t('spNewer')}
-            <Icon name="arrowDown" size={16} />
-          </motion.button>
-        )}
+        {jump && <NewerPill label={t('spNewer')} arrow onClick={toBottom} testId="rp-newer" className="fixed bottom-40 left-1/2 z-30 -translate-x-1/2 bg-surface-solid" />}
       </AnimatePresence>
     </div>
   );

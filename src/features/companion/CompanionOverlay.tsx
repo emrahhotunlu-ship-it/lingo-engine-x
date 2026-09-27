@@ -12,7 +12,7 @@ import { ChatPane } from './ChatPane';
 import { useCurrentSeeing } from './seeing';
 import { closeCompanion, isTurnRunning, newConversation, receiveChatDoc, removeAttach, setCompanionTab, setTier, useCompanion, type CompanionTab } from './store';
 import { TranslatePane } from './translate/TranslatePane';
-import { useKeyboardInset } from './useKeyboardInset';
+import { useKeyboardBox } from '../../ui/chat/keyboard';
 
 // Der Claude-Begleiter als großes Overlay (Phase 5 §8.1, Kap. 6.12): am Handy ein Vollbild-Blatt,
 // am Desktop zentriert min(56rem, 92vw) × min(88vh, 60rem) – keine schmale Seitenleiste (Kap. 15).
@@ -51,7 +51,7 @@ function CompanionOverlay() {
   const ai = useAiAvailable();
   const [focusSeq, setFocusSeq] = useState(0);
   const [mobile] = useState(() => window.innerWidth < 768);
-  const kb = useKeyboardInset(mobile);
+  const kb = useKeyboardBox(mobile);
   useChatWatch();
 
   // Esc schließt das Overlay auch dann, wenn der Fokus gerade nirgends im Dialog liegt (z. B. nach

@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import { boot, screen } from './fixtures';
 import { clozeSolution, orderSolution, shiftPerf, typeInGap } from './learnHelpers';
 import { DAY, dump, writes, type Dump } from './trainerHelpers';
@@ -47,18 +47,23 @@ test('Diktat: Satz wird gesprochen, nicht angezeigt; Runde vollständig; Log und
   })();
   await openDrill(page, 'dictate');
   const verdicts: string[] = [];
+  // Zahl der bisher gehörten Sätze (inkl. „Nochmal hören"): Jede Aufgabe wartet auf ihren EIGENEN Satz.
+  let heard = 0;
   for (let i = 0; i < 12; i++) {
     await expect(page.getByTestId('drill-item').or(page.getByTestId('summary')).first()).toBeVisible();
     if (await page.getByTestId('summary').isVisible()) break;
     await expect(page.getByTestId('dictate-input')).toBeVisible();
-    await expect.poll(async () => (await spoken(page)).length).toBeGreaterThan(i);
-    const said = (await spoken(page)).at(-1) ?? '';
+    await expect.poll(async () => (await spoken(page)).length).toBeGreaterThan(heard);
+    const all = await spoken(page);
+    const said = all.at(-1) ?? '';
+    heard = all.length;
     // U-04: der gesprochene Satz steht vor dem Prüfen nirgends im DOM.
     expect(await page.locator('main').evaluate((el) => el.outerHTML)).not.toContain(said);
     if (i === 0) {
       const n = (await spoken(page)).length;
       await page.getByTestId('drill-replay').click();
       await expect.poll(async () => (await spoken(page)).length).toBe(n + 1);
+      heard = n + 1;
     }
     await page.getByTestId('dictate-input').fill(i === 2 ? said.replace(/\w+/, 'Zzzz') : said);
     await page.getByTestId('check').click();
@@ -113,6 +118,18 @@ test('Lückenjagd: Buchstaben landen in der Lücke, Tipp zeigt Platzhalter; Rund
   expect(external).toEqual([]);
 });
 
+/** Maße eines Elements, sobald sie sich zwischen zwei Messungen (50 ms) nicht mehr ändern. */
+async function stableBox(loc: Locator): Promise<{ x: number; y: number; width: number; height: number } | null> {
+  let prev = await loc.boundingBox();
+  for (let k = 0; k < 20; k++) {
+    await loc.page().waitForTimeout(50);
+    const cur = await loc.boundingBox();
+    if (prev && cur && Math.abs(prev.x - cur.x) < 0.5 && Math.abs(prev.y - cur.y) < 0.5 && Math.abs(prev.width - cur.width) < 0.5) return cur;
+    prev = cur;
+  }
+  return prev;
+}
+
 test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erledigt', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
@@ -137,8 +154,9 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
       const tile = item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${text.replace(/"/g, '\\"')}"]`).first();
       if (i === 0 && n % 2 === 1) {
         // Ziehen: Baustein in die Satzzeile (ans Ende).
-        const from = await tile.boundingBox();
-        const line = await item.getByTestId('tile-line').boundingBox();
+        // Erst messen, wenn die Bausteine stillstehen (Layout-Animation nach dem letzten Zug).
+        const from = await stableBox(tile);
+        const line = await stableBox(item.getByTestId('tile-line'));
         if (!from || !line) throw new Error('keine Maße');
         await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
         await page.mouse.down();

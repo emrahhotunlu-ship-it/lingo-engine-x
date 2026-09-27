@@ -6,7 +6,7 @@ import { maskText, redact, type Seeing } from '../../src/domain/companion/seeing
 import { suggestions } from '../../src/domain/companion/suggest';
 import { buildChatInput, HISTORY_MAX, TURNS_MAX_BYTES } from '../../src/domain/companion/turns';
 import { inlineText, parseMarkdown } from '../../src/domain/text/markdown';
-import { isAtBottom, nextScroll } from '../../src/features/companion/useStickToBottom';
+import { isAtBottom, nextScroll } from '../../src/ui/chat/scroll';
 import { companionChat, NO_SOLUTION_RULE, type CompanionVars } from '../../src/prompts/companionChat';
 import { loadSeed, type Doc } from './helpers';
 

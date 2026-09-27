@@ -99,8 +99,11 @@ test.describe('Desktop 1440 DE', () => {
     const writesBefore = (await writes(page)).length;
     await page.getByTestId('pi-apply').dblclick();
     await expect(page.getByTestId('pi-applied')).toBeVisible();
-    for (const p of ['vocab/would-rather', 'grammar/prepositions', 'app/radar', 'app/pool', piPath]) expect(await countWrites(page, p), p).toBe(p === piPath ? 2 : 1);
-    expect((await writes(page)).length - writesBefore).toBe(5);
+    // Nur die Schreibvorgänge der Übernahme zählen (beim Start verarbeitet der Tagesplan daily/* → app/pool, Phase 2).
+    const applyWrites = (await writes(page)).slice(writesBefore);
+    for (const p of ['vocab/would-rather', 'grammar/prepositions', 'app/radar', 'app/pool']) expect(applyWrites.filter((w) => w.path === p).length, p).toBe(1);
+    expect(await countWrites(page, piPath)).toBe(2);
+    expect(applyWrites.length).toBe(5);
     const d = await dump(page);
     expect(d[piPath]).toMatchObject({ applied: true, sel: { c: [0, 1], t: [0], w: [0] } });
     expect(d['vocab/would-rather']).toMatchObject({ src: 'preply', ex: 'I [would rather] start with a small pilot.', origin: { kind: 'preply' } });

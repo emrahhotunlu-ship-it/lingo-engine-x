@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-// Kein Scroll-Springen im Chat (Phase 5 §8.1, Kap. 15 „Chat springt beim Lesen nach unten"):
+// Gemeinsame Scroll-Regel aller Gespräche (Rollenspiel Phase 3, Begleiter Phase 5; Kap. 15
+// „Chat springt beim Lesen nach unten" darf nicht wiederkommen):
 // - Wer unten ist (≤ 48 px), bleibt beim Wachsen der Antwort unten – sofort, nicht weich.
 // - Wer hochgescrollt hat, bleibt stehen; es erscheint die Pille „Neue Antwort ↓".
 // - Eigenes Senden ist eine ausdrückliche Handlung und führt nach unten.
-// Die Entscheidung trifft die reine Funktion `nextScroll` (unit-getestet).
+// Die Entscheidung trifft die reine Funktion `nextScroll` (unit-getestet). Zwei Hüllen: im
+// eigenen Scroll-Bereich (Begleiter) und auf der Seite selbst (Rollenspiel).
 
 export const AT_BOTTOM_PX = 48;
 
@@ -22,7 +24,7 @@ export function nextScroll(prev: { atBottom: boolean }, m: ScrollMetrics, reason
   return { scrollTop: null, atBottom: false, jump: !isAtBottom(m) };
 }
 
-/** Liefert die Refs für Scroll-Container und Inhalt sowie die Pille „Neue Antwort ↓". */
+/** Eigener Scroll-Bereich: Refs für Bereich und Inhalt sowie die Pille „Neue Antwort ↓". */
 export function useStickToBottom() {
   const scroller = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
@@ -58,4 +60,39 @@ export function useStickToBottom() {
   }, [apply]);
 
   return { scroller, content, jump, toBottom: () => apply('send') };
+}
+
+const pageMetrics = (): ScrollMetrics => ({ scrollTop: window.scrollY, scrollHeight: document.documentElement.scrollHeight, clientHeight: window.innerHeight });
+
+/**
+ * Gespräch auf der Seite selbst (Rollenspiel): `growKey` ändert sich mit jedem neuen Zug bzw.
+ * einlaufendem Text. Liefert die Pille und „nach unten" (eigenes Senden, Klick auf die Pille).
+ */
+export function usePageStickToBottom(growKey: unknown) {
+  const atBottom = useRef(true);
+  const [jump, setJump] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      atBottom.current = isAtBottom(pageMetrics());
+      if (atBottom.current) setJump(false);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useLayoutEffect(() => {
+    const d = nextScroll({ atBottom: atBottom.current }, pageMetrics(), 'grow');
+    atBottom.current = d.atBottom;
+    if (d.scrollTop !== null) window.scrollTo({ top: d.scrollTop });
+    setJump(d.jump);
+  }, [growKey]);
+
+  const toBottom = useCallback(() => {
+    atBottom.current = true;
+    setJump(false);
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  }, []);
+
+  return { jump, toBottom };
 }

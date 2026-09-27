@@ -1,12 +1,12 @@
-import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAiStatus } from '../../ai/status';
 import { useT } from '../../i18n';
 import { KEY_PREFIX, local } from '../../platform/storage';
-import { Icon } from '../../ui/Icon';
+import { ChatInput } from '../../ui/chat/ChatInput';
 
-// Eingabe des Begleiters (Phase 5 §8.1): 16 px (kein Zoom am iPhone), wächst bis 6 Zeilen.
-// Desktop: Enter sendet, Umschalt+Enter bricht um. Touch: Return bricht um, gesendet wird mit
-// dem Knopf. Entwurf lokal (`lx:draft:chat`). Während einer Antwort: Stopp statt Senden.
+// Eingabe des Begleiters (Phase 5 §8.1) auf der gemeinsamen Eingabezeile (ui/chat/ChatInput):
+// Entwurf lokal (`lx:draft:chat`), Vorbelegung, Pause nach `rate_limited`. Während einer
+// Antwort: Stopp statt Senden.
 
 const DRAFT_KEY = `${KEY_PREFIX}draft:chat`;
 const MAX = 2_000;
@@ -48,14 +48,6 @@ export function Composer({ running, onSend, onStop, prefill, focusSeq }: Props) 
     if (focusSeq > 0) area.current?.focus({ preventScroll: true });
   }, [focusSeq]);
 
-  useLayoutEffect(() => {
-    const el = area.current;
-    if (!el) return;
-    el.style.height = 'auto';
-    const line = parseFloat(getComputedStyle(el).lineHeight) || 24;
-    el.style.height = `${Math.min(el.scrollHeight, line * 6 + 20)}px`;
-  }, [value]);
-
   const change = (v: string) => {
     const next = v.slice(0, MAX);
     setValue(next);
@@ -70,14 +62,6 @@ export function Composer({ running, onSend, onStop, prefill, focusSeq }: Props) 
     change('');
   };
 
-  const onKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing) return;
-    // Touch-Geräte: Return bricht um, gesendet wird mit dem Knopf.
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-    e.preventDefault();
-    send();
-  };
-
   const time = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(pausedUntil);
   return (
     <div className="flex flex-col gap-1.5">
@@ -86,49 +70,23 @@ export function Composer({ running, onSend, onStop, prefill, focusSeq }: Props) 
           {t('aiBusy')} · {t('cmpPausedUntil', { time })}
         </p>
       )}
-      <div className="flex items-end gap-2 rounded-2xl border border-line bg-surface-solid p-1.5 pl-3 focus-within:border-[var(--lx-fg-subtle)]">
-        <label className="sr-only" htmlFor="chat-input">
-          {t('cmpInputLabel')}
-        </label>
-        <textarea
-          id="chat-input"
-          ref={area}
-          rows={1}
-          value={value}
-          onChange={(e) => change(e.target.value)}
-          onKeyDown={onKey}
-          placeholder={t('cmpPlaceholder')}
-          enterKeyHint="send"
-          maxLength={MAX}
-          className="max-h-48 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-base leading-6 text-fg outline-none placeholder:text-subtle"
-          data-testid="chat-input"
-        />
-        {running ? (
-          <button
-            type="button"
-            onClick={onStop}
-            className="inline-flex size-11 flex-none items-center justify-center rounded-xl bg-surface-strong text-fg"
-            aria-label={t('cmpStop')}
-            title={t('cmpStop')}
-            data-testid="chat-stop"
-          >
-            <span className="block size-3.5 rounded-[3px] bg-current" aria-hidden="true" />
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={send}
-            disabled={!value.trim() || paused}
-            className="inline-flex size-11 flex-none items-center justify-center rounded-xl bg-accent text-accent-fg transition-opacity disabled:opacity-40"
-            aria-label={t('cmpSend')}
-            title={t('cmpSend')}
-            data-testid="chat-send"
-            data-ai=""
-          >
-            <Icon name="arrowRight" size={20} className="-rotate-90" />
-          </button>
-        )}
-      </div>
+      <ChatInput
+        id="chat-input"
+        ref={area}
+        value={value}
+        onChange={change}
+        onSend={send}
+        disabled={paused}
+        running={running}
+        onStop={onStop}
+        maxLength={MAX}
+        label={t('cmpInputLabel')}
+        placeholder={t('cmpPlaceholder')}
+        sendLabel={t('cmpSend')}
+        stopLabel={t('cmpStop')}
+        testIds={{ input: 'chat-input', send: 'chat-send', stop: 'chat-stop' }}
+        sendAi
+      />
     </div>
   );
 }

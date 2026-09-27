@@ -10,7 +10,9 @@ import { ChatMessage, type MsgState } from './ChatMessage';
 import { Composer } from './Composer';
 import { useCurrentSeeing } from './seeing';
 import { allMsgs, closeCompanion, msgKey, resend, retrySave, sendMessage, stopTurn, useCompanion } from './store';
-import { useStickToBottom } from './useStickToBottom';
+import { useStickToBottom } from '../../ui/chat/scroll';
+import { NewerPill } from '../../ui/chat/ChatInput';
+import { AnimatePresence } from 'framer-motion';
 
 // Reiter „Fragen" des Begleiters (Phase 5 §8.1): Verlauf ohne Scroll-Springen, laufende Antwort,
 // Fehler mit „Erneut senden", Vorschläge und Aktionen, Eingabe.
@@ -149,16 +151,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
             )}
           </div>
         </div>
-        {jump && (
-          <button
-            type="button"
-            onClick={toBottom}
-            className="lx-glass absolute bottom-3 left-1/2 inline-flex min-h-11 -translate-x-1/2 items-center gap-1.5 rounded-full px-4 text-sm font-semibold"
-            data-testid="chat-jump"
-          >
-            {t('cmpJump')}
-          </button>
-        )}
+        <AnimatePresence>{jump && <NewerPill label={t('cmpJump')} onClick={toBottom} testId="chat-jump" className="absolute bottom-3 left-1/2 -translate-x-1/2" />}</AnimatePresence>
       </div>
       <p className="sr-only" aria-live="polite">
         {s.finished > 0 ? t('cmpDone', { n: s.finished }) : ''}

@@ -72,8 +72,12 @@ test('Baukasten ohne Claude: bis zu den Wendungen, Mitnehmen, Drill mit 6 Fragen
   await screen(page, 'playbook');
   await expect(page.getByTestId('pb-card')).toHaveCount(4);
   await page.locator('[data-testid="pb-card"][data-id="decline"]').click();
-  await page.getByTestId('pb-option').first().click();
-  await page.getByTestId('pb-option').first().click();
+  const firstOption = page.getByTestId('pb-option').first();
+  const level1 = await firstOption.innerText();
+  await firstOption.click();
+  // Erst klicken, wenn die nächste Ebene steht (sonst trifft der Klick die ausblendende Ebene).
+  await expect(firstOption).not.toHaveText(level1);
+  await firstOption.click();
   await expect(page.getByTestId('pb-phrase')).toHaveCount(3);
   await expect(page.getByTestId('pb-adapt')).toHaveCount(0);
   const take = page.getByTestId('pb-phrase').first().getByTestId('take-chunk');
