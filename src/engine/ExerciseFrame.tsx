@@ -1,4 +1,5 @@
 import { useId, useState, type ReactNode } from 'react';
+import { useSharedTarget } from './shared';
 import { Icon } from '../ui/Icon';
 
 // Rahmen einer Übung (Kap. 2.4 in der Fassung von CLAUDE.md A7 „Emrahs Rückmeldung"):
@@ -22,8 +23,12 @@ type Props = {
 export function ExerciseFrame({ status, task, infoLabel, purpose, body, actions, resultLabel, result, meta }: Props) {
   const [info, setInfo] = useState(false);
   const infoId = useId();
+  // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Übung (nur direkt nach dem Start).
+  const { ref, shared } = useSharedTarget<HTMLElement>('lx-hero');
   return (
     <article
+      ref={ref}
+      data-shared={shared ? '' : undefined}
       className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 outline-none sm:p-7"
       tabIndex={-1}
       data-testid="exercise"

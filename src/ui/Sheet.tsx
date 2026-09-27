@@ -3,14 +3,23 @@ import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { IconButton } from './Button';
 import { DURATION, EASE_OUT } from './motion';
 import { SheetGrip, useSheetDrag } from './sheetDrag';
+import { SHARED_TRANSITION } from '../engine/shared';
 
-type Props = { open: boolean; onClose: () => void; title: string; closeLabel: string; children: ReactNode };
+type Props = {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  closeLabel: string;
+  children: ReactNode;
+  /** Kap. 4.4: gemeinsames Element – der Titel gleitet vom auslösenden Element (z. B. Wortzeile) herein. */
+  titleLayoutId?: string;
+};
 
 /**
  * Blatt über dem Inhalt: am Handy von unten als Vollbild-Blatt, ab Tablet als Paneel rechts.
  * Esc schließt, der Fokus kehrt zum auslösenden Element zurück (Kap. 4.5).
  */
-export function Sheet({ open, onClose, title, closeLabel, children }: Props) {
+export function Sheet({ open, onClose, title, closeLabel, children, titleLayoutId }: Props) {
   const titleId = useId();
   const panel = useRef<HTMLDivElement>(null);
   const opener = useRef<Element | null>(null);
@@ -85,9 +94,9 @@ export function Sheet({ open, onClose, title, closeLabel, children }: Props) {
             <div {...drag.handle} className="flex flex-none flex-col">
               <SheetGrip />
               <header className="flex items-center justify-between gap-4 px-5 pt-3 pb-2 sm:px-6 md:pt-4">
-                <h2 id={titleId} className="text-lg font-semibold tracking-tight">
+                <motion.h2 id={titleId} layoutId={titleLayoutId} transition={SHARED_TRANSITION} className="text-lg font-semibold tracking-tight">
                   {title}
-                </h2>
+                </motion.h2>
                 <IconButton icon="close" label={closeLabel} onClick={onClose} />
               </header>
             </div>

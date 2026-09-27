@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
+import { useSharedTarget } from '../../engine/shared';
 import { askJson } from '../../ai/gate';
 import { useAiAvailable, useAiScope } from '../../ai/scope';
 import { isAiFailure } from '../../ai/types';
@@ -86,6 +87,8 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const firstKeyAt = useRef<number | null>(null);
   const lookupAt = useRef(0);
   const root = useRef<HTMLDivElement>(null);
+  // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Aufgabe (nur direkt nach dem Start).
+  const { ref: sharedRef, shared } = useSharedTarget<HTMLElement>('lx-hero');
 
   useEffect(() => {
     shownAt.current = performance.now();
@@ -393,6 +396,8 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   return (
     <div ref={root} tabIndex={-1} className="outline-none">
       <article
+        ref={sharedRef}
+        data-shared={shared ? '' : undefined}
         className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7"
         data-testid="gr-item"
         data-type={task.type}

@@ -6,6 +6,7 @@ import { doneLessons } from '../../domain/course/courseDone';
 import { pickLesson } from '../../domain/course/next';
 import { topicById } from '../../domain/content';
 import { EXT_UNIT_FIRST } from '../../domain/course/extension';
+import { armShared } from '../../engine/shared';
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
 import { Bar } from '../../ui/ProgressRing';
@@ -82,13 +83,19 @@ export function CourseScreen() {
                     <button
                       type="button"
                       className={`lx-glass flex w-full items-center justify-between gap-3 rounded-[var(--radius-card)] px-4 py-3 text-left transition-colors hover:bg-surface-strong ${state === 'next' ? 'ring-1 ring-accent' : ''}`}
-                      onClick={() => go({ name: 'lesson', id: l.id })}
+                      onClick={(e) => {
+                        // Kap. 4.4: Der Titel der Zeile gleitet in den Kopf der Lektion.
+                        armShared(`lesson-${l.id}`, e.currentTarget.querySelector('[data-shared-src]'));
+                        go({ name: 'lesson', id: l.id });
+                      }}
                       data-testid="lesson-row"
                       data-lesson={l.id}
                       data-state={state}
                     >
                       <span className="flex min-w-0 flex-col gap-0.5">
-                        <span className="font-medium">{lang === 'de' ? l.de : l.en}</span>
+                        <span className="max-w-full self-start font-medium" data-shared-src="">
+                          {lang === 'de' ? l.de : l.en}
+                        </span>
                         <span className="text-xs text-muted">
                           {l.level} · {lang === 'en' ? (tp?.name_en ?? tp?.name) : tp?.name}
                         </span>
