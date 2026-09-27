@@ -223,6 +223,11 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - lange Can-Do-Liste,
   - „Wiederholen“ dreimal auf Heute.
 - `writer.compact` bleibt aus.
+- Tagesauftrag (Routine „Englisch – Tagesaufgaben & Entdecken-Beiträge“) zeigte auf ein anderes Artefakt (`CzgW…`). Mit Emrahs „Ja“ zurück auf `JLL8…` gestellt:
+  - Datenmodell der alten App,
+  - schreibt nur `daily/<morgen>` und `feed/<morgen>` und nur, wenn noch nicht vorhanden,
+  - nur die 16 Grammatik-IDs,
+  - US-Englisch.
 
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
