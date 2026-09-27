@@ -19,6 +19,7 @@ import { startDrill, drillCards, type DrillKind } from '../drills/session';
 import { feasible } from '../../domain/plan/channels';
 import { feasibleData } from '../today/store';
 import { loadLearnInputs, useLearnInputs } from './inputs';
+import { InputModules } from '../input/InputModules';
 
 // Reiter „Lernen" (M13): Kurs, Wortschatz, Grammatik, Wissen und Übungen an einem Ort. Nichts
 // hier ist Pflicht – die Pflicht steht auf „Heute" (Kap. 2.6). Übungen, die gerade nicht machbar
@@ -120,6 +121,11 @@ export function LearnHub() {
         <Row icon="grammar" channel="grammar" title={t('lhGrammar')} sub={t('lhGrammarSub')} onClick={() => go({ name: 'grammar' })} testId="hub-grammar" badge={nErr ? tn('grDueBadge', nErr) : null} />
         <Row icon="book" channel="read" title={t('lhWissen')} sub={t('lhWissenSub')} onClick={() => go({ name: 'wissen' })} testId="hub-wissen" />
       </motion.section>
+
+      {/* Phase 4 (M13): Lesen, Hören, Schreiben – freiwillig, mit Verlauf. Entdecken hat einen eigenen Reiter. */}
+      <motion.div variants={item}>
+        <InputModules only={['read', 'listen', 'write']} />
+      </motion.div>
 
       <motion.section variants={item} className="flex flex-col gap-3" aria-labelledby="lh-drills">
         <h2 id="lh-drills" className="lx-eyebrow">

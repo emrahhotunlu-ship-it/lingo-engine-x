@@ -62,7 +62,8 @@ export type GrammarAnswer = {
 };
 
 /** Quellen: g Grammatik, s Sprint, w Schreiben, v Vokabeln (alte App); k Sprechen, b Business (Phase 3). */
-export type RadarEvent = { c: string; s: 'g' | 's' | 'w' | 'v' | 'k' | 'b'; t: number; q: string; g: string; a: string };
+/** Quellen der alten App: g Grammatik/Preply, w Schreiben, r Lesen, v Vokabeln, s Sprint; k Sprechen, b Business. */
+export type RadarEvent = { c: string; s: 'g' | 's' | 'w' | 'r' | 'v' | 'k' | 'b'; t: number; q: string; g: string; a: string };
 
 export type DrillAnswer = {
   kind: 'x';

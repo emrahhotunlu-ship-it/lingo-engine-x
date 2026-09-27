@@ -210,3 +210,39 @@ export function watchCollectionDocs(db: Db, name: string, cb: (w: CollectionWatc
     onFail,
   );
 }
+
+// ---------------------------------------------------------------- Beiträge des Tagesauftrags (Phase 4, F24)
+// `feed` sortiert nach `d` absteigend, die neuesten 21 Dokumente – genau EIN onSnapshot, nur solange
+// Entdecken offen ist. `feed/*` wird nie geschrieben (Kap. 9, Regel 4; der Writer verweigert es).
+
+export const FEED_LIMIT = 21;
+export type FeedDocs = ReadonlyArray<{ id: string; doc: Doc }>;
+
+/** Gültige Beiträge in Abfrage-Reihenfolge; ungültige werden gemeldet und ausgelassen. */
+export function watchFeed(db: Db, next: (docs: FeedDocs) => void, onFail: (code: string) => void = () => undefined): () => void {
+  const reported = new Set<string>();
+  return resilient(
+    'feed',
+    (onError) =>
+      db
+        .collection('feed')
+        .orderBy('d', 'desc')
+        .limit(FEED_LIMIT)
+        .onSnapshot((qs) => {
+          const out: Array<{ id: string; doc: Doc }> = [];
+          for (const d of qs.docs) {
+            const data = d.exists ? d.data() : undefined;
+            if (!data) continue;
+            const path = `feed/${d.id}`;
+            const res = validateDoc(path, data);
+            if (res.ok) out.push({ id: d.id, doc: res.value });
+            else if (!reported.has(path)) {
+              reported.add(path);
+              logError('data:validate', { code: 'invalid_document', message: res.issues.join('; ') }, path);
+            }
+          }
+          next(out);
+        }, onError),
+    onFail,
+  );
+}

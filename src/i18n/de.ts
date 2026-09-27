@@ -7,6 +7,7 @@ import { speakDe } from './parts/speak.de';
 import { bizDe } from './parts/biz.de';
 import { voiceDe } from './parts/voice.de';
 import { companionDe } from './parts/companion.de';
+import { inputDe } from './parts/input.de';
 
 export const de = {
   ...aiDe,
@@ -17,6 +18,8 @@ export const de = {
   ...voiceDe,
   // Phase 5 – Begleiter, Übersetzer, Preply
   ...companionDe,
+  // Phase 4 – Lesen, Hören, Schreiben, Entdecken
+  ...inputDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

@@ -34,9 +34,16 @@ export type CollectionRead = {
   possiblyTruncated: boolean;
 };
 
-/** Eine ganze Sammlung einmal lesen (kein Abo). */
-export async function readCollection(db: Db, name: string): Promise<CollectionRead> {
-  const q = await readOnce(name, () => db.collection(name).get());
+/** Sortierung und Menge (Phase 4: `feed` nach `d` absteigend, die neuesten 21). */
+export type ReadCollectionOptions = { orderBy?: string; dir?: 'asc' | 'desc'; limit?: number };
+
+/** Eine ganze Sammlung (bzw. die ersten `limit` nach `orderBy`) einmal lesen (kein Abo). */
+export async function readCollection(db: Db, name: string, opts: ReadCollectionOptions = {}): Promise<CollectionRead> {
+  const q = await readOnce(name, () => {
+    const base = db.collection(name);
+    const ordered = opts.orderBy ? base.orderBy(opts.orderBy, opts.dir ?? 'asc') : base;
+    return opts.limit ? ordered.limit(Math.max(1, Math.min(1000, Math.round(opts.limit)))).get() : ordered.get();
+  });
   const valid = new Map<string, Doc>();
   const invalid: string[] = [];
   for (const d of q.docs) {

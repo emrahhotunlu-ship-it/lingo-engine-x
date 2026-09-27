@@ -45,6 +45,10 @@ import { CompanionLayer } from '../features/companion/CompanionOverlay';
 import { installCompanionHotkeys } from '../features/companion/hotkeys';
 import { openCompanion, useCompanion } from '../features/companion/store';
 import { PreplyScreen } from '../features/preply/PreplyScreen';
+// Phase 4: Lesen, Hören, Schreiben, Entdecken
+import { InputRoutes } from '../features/input/InputRoutes';
+import { AiTaskNotice } from '../features/input/AiTaskNotice';
+import { isInputScreen } from './modules';
 
 // App-Rahmen: startet die Fähigkeiten, abonniert die Daten genau einmal und wählt
 // den Bildschirm. Der Rahmen rendert sofort; Funktionen kommen dazu, sobald die
@@ -148,11 +152,11 @@ function TabBar({ tab }: { tab: TabName }) {
   const { t } = useT();
   const go = useNav((s) => s.go);
   const open = useOpenDuties();
-  // Reiter Entdecken erscheint erst mit seinem Bildschirm (keine toten Reiter).
   const tabs = [
     { name: 'today' as const, label: t('navToday'), badge: open },
     { name: 'learn' as const, label: t('tabLearn'), badge: 0 },
     { name: 'speak' as const, label: t('tabSpeak'), badge: 0 },
+    { name: 'discover' as const, label: t('dcTitle'), badge: 0 },
     { name: 'overview' as const, label: t('navOverview'), badge: 0 },
   ];
   return (
@@ -170,7 +174,7 @@ function TabBar({ tab }: { tab: TabName }) {
             aria-current={active ? 'page' : undefined}
             onClick={() => go({ name: t2.name })}
             data-testid={`tab-${t2.name}`}
-            className={`relative inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] px-4 text-sm transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
+            className={`relative inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] px-1.5 text-sm sm:px-4 transition-colors md:flex-none ${active ? 'lx-tab-active bg-surface-strong font-semibold text-fg' : 'font-medium text-muted hover:text-fg'}`}
           >
             {t2.label}
             {t2.badge > 0 && (
@@ -269,6 +273,7 @@ export function App() {
               {screen === 'playbook' && <PlaybookScreen />}
               {screen === 'pitch' && <PitchCoach />}
               {screen === 'preply' && <PreplyScreen />}
+              {isInputScreen(screen) && <InputRoutes />}
             </motion.div>
           </AnimatePresence>
         </main>
@@ -276,6 +281,7 @@ export function App() {
       <SettingsSheet open={settingsOpen} onClose={closeSettings} />
       <Toaster />
       <CompanionLayer />
+      <AiTaskNotice />
       <LookupLayer />
       </HiddenInputProvider>
     </MotionConfig>

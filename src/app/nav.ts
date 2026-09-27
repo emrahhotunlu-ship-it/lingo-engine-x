@@ -25,12 +25,23 @@ export type Route =
   | { name: 'playbook'; id?: string }
   | { name: 'pitch' }
   // Phase 5: Preply-Brücke
-  | { name: 'preply' };
+  | { name: 'preply' }
+  // Phase 4 – Input und Output (Plan §2.3). `ctx` bestimmt nur `log.ctx`, nie die Zählung.
+  | InputRoute;
+
+export type UnitCtx = 'duty' | 'extra';
+export type InputRoute =
+  | { name: 'read'; ctx: UnitCtx }
+  | { name: 'listen'; ctx: UnitCtx }
+  | { name: 'write'; ctx: UnitCtx }
+  | { name: 'discover' }
+  | { name: 'discoverItem'; feedId: string; itemId: string; ctx: UnitCtx }
+  | { name: 'history'; kind: 'read' | 'listen' | 'write' | 'discover' };
 
 export type RouteName = Route['name'];
 
-/** Reiter der Navigation (M13). Entdecken kommt erst mit seinem Bildschirm dazu. */
-export type TabName = 'today' | 'learn' | 'speak' | 'overview';
+/** Reiter der Navigation (M13): Heute · Lernen · Sprechen · Entdecken · Dein Stand. */
+export type TabName = 'today' | 'learn' | 'speak' | 'discover' | 'overview';
 
 /** Zu welchem Reiter gehört ein Bildschirm? Übungen und Trainer zählen zu keinem Reiter (Vollbild). */
 export function tabOf(name: RouteName): TabName | null {
@@ -51,13 +62,15 @@ export function tabOf(name: RouteName): TabName | null {
     case 'playbook':
     case 'pitch':
       return 'speak';
+    case 'discover':
+      return 'discover';
     default:
       return null;
   }
 }
 
 /** Listen, deren Bildlaufposition gemerkt wird (M13). */
-const SCROLL_KEEP: ReadonlySet<RouteName> = new Set(['learn', 'course', 'grammar', 'vocab', 'wissen', 'speak', 'business', 'overview']);
+const SCROLL_KEEP: ReadonlySet<RouteName> = new Set(['learn', 'course', 'grammar', 'vocab', 'wissen', 'speak', 'business', 'discover', 'overview']);
 
 type NavState = {
   route: Route;

@@ -164,7 +164,8 @@ let initialized = false;
 let unlocked = false;
 let session = 0;
 let lastCancelAt = -Infinity;
-let current: { id: number; utterance: UtteranceLike | null; finish: (o: SpeakOutcome) => void } | null = null;
+type ChunkListener = (i: number, total: number, chunk: string) => void;
+let current: { id: number; utterance: UtteranceLike | null; finish: (o: SpeakOutcome) => void; onChunk?: ChunkListener | undefined } | null = null;
 let wakeTimer: ReturnType<typeof setInterval> | null = null;
 let startTimer: ReturnType<typeof setTimeout> | null = null;
 const voiceTimers: Array<ReturnType<typeof setTimeout>> = [];
@@ -286,6 +287,15 @@ function speakChunk(e: Env, chunks: readonly string[], i: number, id: number, ra
     finishCurrent('done');
     return;
   }
+  const listener = current.onChunk;
+  if (listener) {
+    // Rückruf vor jedem Stück (Satz-Anzeige beim Hören); ein Fehler darin stoppt nie die Ausgabe.
+    try {
+      listener(i, chunks.length, text);
+    } catch (err) {
+      logWarn('speech:onChunk', err);
+    }
+  }
   const u = new e.Utterance(text);
   const v = chosenVoice();
   u.lang = v ? v.lang : 'en-US';
@@ -322,12 +332,28 @@ function speakChunk(e: Env, chunks: readonly string[], i: number, id: number, ra
  * Spricht englischen Text. Eine laufende Ausgabe wird ersetzt (ihr Promise meldet `stopped`).
  * Löst mit `done` auf, wenn alles gesprochen ist.
  */
-export function speak(text: string, opts: { rate?: number; voice?: string } = {}): Promise<SpeakOutcome> {
+export type SpeakOptions = {
+  rate?: number;
+  /** Stimme nur für diese Ausgabe (Phase 3, Probesatz); die gespeicherte Wahl bleibt. */
+  voice?: string;
+  /** Beginnt beim Stück `startAt` (0-basiert, wie `speechChunks`). */
+  startAt?: number;
+  /** Wird vor jedem Stück aufgerufen: Index, Anzahl, Text. */
+  onChunk?: ChunkListener;
+};
+
+/** Die Stücke, in die `speak` einen Text zerlegt (für Satz-Navigation und Anzeige). */
+export function speechChunks(text: string): string[] {
+  return chunkText(text);
+}
+
+export function speak(text: string, opts: SpeakOptions = {}): Promise<SpeakOutcome> {
   const e = env();
   const status = useSpeech.getState().status;
   if (!e || status === 'unsupported' || status === 'novoice') return Promise.resolve('unavailable');
   const chunks = chunkText(text);
   if (chunks.length === 0) return Promise.resolve('done');
+  const from = Math.min(chunks.length - 1, Math.max(0, Math.floor(opts.startAt ?? 0)));
 
   const busy = current !== null || e.synth.speaking || e.synth.pending;
   finishCurrent('stopped');
@@ -339,6 +365,7 @@ export function speak(text: string, opts: { rate?: number; voice?: string } = {}
     current = {
       id,
       utterance: null,
+      onChunk: opts.onChunk,
       finish: (o) => {
         if (settled) return;
         settled = true;
@@ -354,7 +381,7 @@ export function speak(text: string, opts: { rate?: number; voice?: string } = {}
     const wait = Math.max(0, lastCancelAt + CANCEL_GAP_MS - now);
     const start = () => {
       startTimer = null;
-      speakChunk(e, chunks, 0, id, rate);
+      speakChunk(e, chunks, from, id, rate);
     };
     if (wait > 0) startTimer = setTimeout(start, wait);
     else start();

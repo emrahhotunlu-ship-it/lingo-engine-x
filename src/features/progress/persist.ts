@@ -7,9 +7,11 @@ import { grammarWrite } from '../../domain/grammar/write';
 import type { DrillAnswer, GrammarAnswer, LearnRecorder, LearnRoundEnd, LessonDone, RadarEvent, SprintEntry } from '../../domain/learn/types';
 import { activityEntry, drillLogEntry, grammarLogEntry, logEntry, mergeLogEntries, type ActivityLogEntry, type AnyLogEntry } from '../../domain/progress/logPatch';
 import { minimalProfile, profilePatch, roundMinutes, SEQ_KEEP_MS, type CountEvent, type RoundEnd } from '../../domain/progress/profilePatch';
+import { unitMinutes, unitsPatch, type UnitEnd } from '../../domain/progress/unitPatch';
 import { applyUpdate } from '../../domain/srs/applyReview';
 import type { AnswerEvent } from '../../domain/srs/types';
 import type { Writer } from '../../data/writer';
+import type { ChannelLogEntry } from '../../domain/progress/channelLog';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local, session } from '../../platform/storage';
 
@@ -39,6 +41,8 @@ type PendingState = {
   rounds: Array<{ day: string; act: string; partial: boolean }>;
   /** Lerntage mit abgeschlossener, noch nicht gespeicherter Lektion (D10). */
   lessonDays: string[];
+  /** Phase 4 (F5): abgeschlossene Einheiten, noch nicht gespeichert – Lerntag → act-Schlüssel → Anzahl. */
+  units: Record<string, Record<string, number>>;
   /** Karten, deren Speichern gescheitert ist (erneut anwendbar, ohne Schaden). */
   failedCards: AnswerEvent[];
   /** Grammatik-Antworten, deren Thema nicht gespeichert werden konnte. */
@@ -47,7 +51,7 @@ type PendingState = {
   failed: boolean;
 };
 
-const empty = (): PendingState => ({ entries: [], minutes: {}, rounds: [], lessonDays: [], failedCards: [], failedGrammar: [], failed: false });
+const empty = (): PendingState => ({ entries: [], minutes: {}, rounds: [], lessonDays: [], units: {}, failedCards: [], failedGrammar: [], failed: false });
 export const usePending = create<PendingState>(empty);
 
 const FLUSH_EVERY = 4;
@@ -55,10 +59,12 @@ const FLUSH_IDLE_MS = 8000;
 const T_KEY = `${KEY_PREFIX}lastT`;
 const TAB_KEY = `${KEY_PREFIX}tab`;
 
-type Batch = { seq: number; answers: AnswerEvent[]; counts: CountEvent[]; rounds: RoundEnd[]; sprints: SprintEntry[] };
+type Batch = { seq: number; answers: AnswerEvent[]; counts: CountEvent[]; rounds: RoundEnd[]; sprints: SprintEntry[]; units: UnitEnd[] };
 type Open = Omit<Batch, 'seq'>;
-const emptyOpen = (): Open => ({ answers: [], counts: [], rounds: [], sprints: [] });
-const isEmpty = (o: Open) => !o.answers.length && !o.counts.length && !o.rounds.length && !o.sprints.length;
+const emptyOpen = (): Open => ({ answers: [], counts: [], rounds: [], sprints: [], units: [] });
+const isEmpty = (o: Open) => !o.answers.length && !o.counts.length && !o.rounds.length && !o.sprints.length && !o.units.length;
+/** Phase 4: Profilfelder ohne Zähler (`disc`, `gen`) – idempotent, nur bei echter Änderung. */
+type FieldPatch = { scope: string; compute: (cur: Readonly<Doc>) => Doc | null; done: (ok: boolean) => void };
 
 let lastT = 0;
 let open: Open = emptyOpen();
@@ -66,6 +72,7 @@ let open: Open = emptyOpen();
 let failedBatch: Batch | null = null;
 let radarQueue: RadarEvent[] = [];
 let lessonQueue: LessonDone[] = [];
+let fieldQueue: FieldPatch[] = [];
 let idle: number | null = null;
 let running: Promise<boolean> | null = null;
 let again = false;
@@ -159,6 +166,52 @@ export function recordActivity(e: ActivityLogEntry, round: RoundEnd & { day: str
   return flush();
 }
 
+const addUnit = (units: PendingState['units'], u: UnitEnd, sign: 1 | -1): PendingState['units'] => {
+  const day = { ...(units[u.day] ?? {}) };
+  day[u.act] = Math.max(0, (day[u.act] ?? 0) + sign);
+  return { ...units, [u.day]: day };
+};
+
+/**
+ * Phase 4 (Plan §3.2, F5–F9): Abschluss einer Einheit aus Lesen, Hören, Schreiben oder Entdecken –
+ * im SELBEN Stapel wie alle Zähler (Folgenummer), optimistisch sichtbar, sofort gespeichert.
+ */
+export function recordUnitEnd(u: UnitEnd): Promise<boolean> {
+  open.units.push(u);
+  usePending.setState((s) => ({ units: addUnit(s.units, u, 1), minutes: { ...s.minutes, [u.day]: (s.minutes[u.day] ?? 0) + unitMinutes(u) } }));
+  return flush();
+}
+
+/** Phase 4: Protokolleinträge der Verständnisfragen (Lesen, Hören, Entdecken). */
+export function recordChannelEntries(entries: ReadonlyArray<ChannelLogEntry & { day: string }>): void {
+  if (!entries.length) return;
+  for (const e of entries) {
+    const out: Partial<ChannelLogEntry & { day: string }> = { ...e };
+    delete out.day;
+    pushEntry(out as ChannelLogEntry, e.day);
+  }
+  schedule();
+}
+
+/** Phase 4 (F10): Fehler aus einer KI-Korrektur ins Radar, sofort gespeichert. */
+export function recordRadar(events: readonly RadarEvent[]): Promise<boolean> {
+  if (!events.length) return Promise.resolve(true);
+  radarQueue.push(...events);
+  return flush();
+}
+
+/**
+ * Phase 4: Profilfelder ohne Zähler (`disc`, `gen`). `compute` läuft auf dem frischen Stand und
+ * liefert nur echte Änderungen (sonst `null`). Löst mit `true` auf, sobald der Schreibvorgang
+ * gelungen ist; bei einem Fehler bleibt der Eintrag für den nächsten Durchlauf vorgemerkt.
+ */
+export function recordProfileFields(scope: string, compute: (cur: Readonly<Doc>) => Doc | null): Promise<boolean> {
+  return new Promise<boolean>((resolve) => {
+    fieldQueue.push({ scope, compute, done: resolve });
+    void flush();
+  });
+}
+
 const grammarChannel = (a: GrammarAnswer): CountEvent['channel'] => (a.task.type === 'mc' ? null : 'write');
 const DRILL_COUNT: Partial<Record<DrillAnswer['type'], { kind: 'v' | 'g'; channel: CountEvent['channel'] }>> = {
   dictate: { kind: 'g', channel: 'listen' },
@@ -247,10 +300,12 @@ async function sendCourse(writer: Writer): Promise<boolean> {
 
 async function sendProfile(writer: Writer, b: Batch): Promise<void> {
   const dev = tabId();
-  const day = b.answers[0]?.day ?? b.counts[0]?.day ?? b.rounds[0]?.day ?? '';
+  const day = b.answers[0]?.day ?? b.counts[0]?.day ?? b.rounds[0]?.day ?? b.units[0]?.day ?? '';
   const ctx = { deviceId: dev, seq: b.seq, counts: b.counts, sprints: b.sprints, pruneSeqBefore: b.seq - SEQ_KEEP_MS };
+  const counters = (cur: Doc, c: typeof ctx & { pflichtDay?: string | null }): Doc | null =>
+    unitsPatch(cur, profilePatch(cur, b.answers, b.rounds, c), b.units, { deviceId: dev, seq: b.seq });
   const compute = (cur: Doc): Doc | null => {
-    const patch = profilePatch(cur, b.answers, b.rounds, ctx);
+    const patch = counters(cur, ctx);
     if (!pflichtResolver || !validateDoc('app/profile', cur).ok) return patch;
     const next = applyUpdate(cur, patch ?? {});
     let pflichtDay: string | null = null;
@@ -260,7 +315,7 @@ async function sendProfile(writer: Writer, b: Batch): Promise<void> {
       logError('learn:pflicht', err, 'Pflicht prüfen');
     }
     if (!pflichtDay) return patch;
-    return profilePatch(cur, b.answers, b.rounds, { ...ctx, pflichtDay });
+    return counters(cur, { ...ctx, pflichtDay });
   };
   await writer.transform('app/profile', (cur) => {
     if (!cur) {
@@ -280,7 +335,12 @@ async function sendProfile(writer: Writer, b: Batch): Promise<void> {
       const i = rounds.findIndex((x) => x.day === r.day && x.act === r.act && x.partial === r.partial);
       if (i >= 0) rounds.splice(i, 1);
     }
-    return { minutes, rounds };
+    let units = s.units;
+    for (const u of b.units) {
+      minutes[u.day] = Math.max(0, (minutes[u.day] ?? 0) - unitMinutes(u));
+      units = addUnit(units, u, -1);
+    }
+    return { minutes, rounds, units };
   });
 }
 
@@ -345,6 +405,38 @@ async function sendRadar(writer: Writer): Promise<boolean> {
   }
 }
 
+async function sendFields(writer: Writer): Promise<boolean> {
+  if (!fieldQueue.length) return true;
+  const batch = fieldQueue;
+  fieldQueue = [];
+  try {
+    await writer.transform('app/profile', (cur) => {
+      if (!cur || !validateDoc('app/profile', cur).ok) return null;
+      let next: Doc = cur;
+      let patch: Doc = {};
+      for (const f of batch) {
+        try {
+          const p = f.compute(next);
+          if (!p) continue;
+          patch = { ...patch, ...p };
+          next = applyUpdate(next, p);
+        } catch (err) {
+          logError(f.scope, err, 'app/profile');
+        }
+      }
+      return Object.keys(patch).length ? { update: patch } : null;
+    });
+    for (const f of batch) f.done(true);
+    return true;
+  } catch (err) {
+    logError(batch[0]?.scope ?? 'input:profile', err, 'app/profile');
+    for (const f of batch) f.done(false);
+    // Bleibt vorgemerkt: `compute` ist idempotent (nur fehlende Werte), ein späterer Durchlauf holt es nach.
+    fieldQueue = [...batch, ...fieldQueue];
+    return false;
+  }
+}
+
 async function flushOnce(): Promise<boolean> {
   const writer = getWriter();
   if (!writer) return false;
@@ -377,6 +469,7 @@ async function flushOnce(): Promise<boolean> {
 
   ok = (await sendLogs(writer)) && ok;
   ok = (await sendRadar(writer)) && ok;
+  ok = (await sendFields(writer)) && ok;
   usePending.setState({ failed: !ok });
   return ok;
 }
@@ -426,6 +519,8 @@ export function resetPersistForTests(): void {
   failedBatch = null;
   radarQueue = [];
   lessonQueue = [];
+  for (const f of fieldQueue) f.done(false);
+  fieldQueue = [];
   bufferedAnswers = 0;
   running = null;
   again = false;

@@ -1,5 +1,6 @@
 import type { DrillAnswer, GrammarAnswer } from '../learn/types';
 import type { AnswerEvent } from '../srs/types';
+import type { ChannelLogEntry } from './channelLog';
 
 // Tagesprotokoll `log/<tag>` im Format der alten App (Daten-Entwurf §4): ein Dokument je
 // Lerntag, höchstens 300 Einträge (die neuesten bleiben), doppelte Einträge fallen heraus.
@@ -63,7 +64,8 @@ export type DrillLogEntry = {
   override?: true;
 };
 
-export type AnyLogEntry = LogEntry | GrammarLogEntry | DrillLogEntry | ActivityLogEntry;
+/** Phase 4: Verständnisfragen aus Lesen, Hören, Entdecken (`channelLog.ts`, ohne `id`/`k`). */
+export type AnyLogEntry = LogEntry | GrammarLogEntry | DrillLogEntry | ActivityLogEntry | ChannelLogEntry;
 
 export const DONT_KNOW = "(don't know)";
 

@@ -32,6 +32,7 @@ import { firstOpenDuty, useToday } from './state';
 import { feasibleData, healToday, retryPlan, useTodayPlan } from './store';
 import { TodayOffers } from '../speak/TodayOffers';
 import { PreplyTodayLine } from '../preply/TodayLine';
+import { InputOffers } from '../input/InputOffers';
 
 // „Heute": beim Öffnen ist sofort klar, was dran ist (Kap. 2.1). Eine Statuszeile, EIN großer
 // Knopf (erster offener Pflichtpunkt); Erledigtes ist Zustand, kein Knopf (Kap. 2.2). Angebote
@@ -287,6 +288,12 @@ export function TodayScreen() {
 
       {/* Sprechen und Business (Phase 3) sind Angebote: erst nach der Pflicht (Kap. 2.1, 2.6). */}
       {ready && dayLoaded && (state.status === 'allDone' || state.status === 'nothing') && <TodayOffers />}
+      {/* Lesen, Hören, Schreiben, Entdecken (Phase 4) sind ebenfalls Angebote nach der Pflicht. */}
+      {ready && dayLoaded && (state.status === 'allDone' || state.status === 'nothing') && (
+        <motion.div variants={item}>
+          <InputOffers />
+        </motion.div>
+      )}
 
       {dayLoaded && (state.balance.answers > 0 || state.extra > 0) && (
         <motion.p variants={item} className="lx-tnum text-sm text-muted" data-testid="balance">

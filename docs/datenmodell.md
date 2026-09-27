@@ -95,3 +95,24 @@ Plan: `docs/phase5-plan.md` §5, E5-22. Alte Felder und Formen bleiben unveränd
 
 Browser-Speicher (nur Bequemlichkeit): `lx:draft:chat`, `lx:draft:preply-import`, `lx:translate-history` (≤ 20), `lx:companion-tab`, `lx:companion-tier`.
 Abos: `app/chat` nur bei offenem Begleiter, `preply` nur bei offenem Preply-Bildschirm (`src/data/watch.ts`).
+## Phase 4: Lesen, Hören, Schreiben, Entdecken
+
+Alle Formate bleiben Altformat; neue Felder sind nur zusätzlich und tolerant gelesen (`nullish`). Geschrieben wird nur auf eine Handlung hin, über den einen Writer; alles in `app/profile`, `log/<tag>` und `app/radar` nur über die gemeinsame Sammel-Warteschlange (`features/progress/persist.ts`: `recordUnitEnd`, `recordChannelEntries`, `recordRadar`, `recordProfileFields`). `feed/*` und `daily/*` werden nie geschrieben.
+
+| Dokument | Wann | Operation | Neue Felder |
+|---|---|---|---|
+| `articles/ai<t>` | Text erzeugt, eigener Text (M16, `src:'own'`), Aufbereitung eines eigenen Texts | `createIfMissing` bzw. `transform → update` | `topic_en`, `questions`, `domain`, `t`, `pv` |
+| `lpool/ai<t>` | Hörtext erzeugt | `createIfMissing` | `topic_en`, `vocab[].def`, `domain`, `t`, `pv` |
+| `reading/r<t>` | letzte Frage beantwortet (Einheit fertig); Zusammenfassung/Prüfung später | `createIfMissing`, dann `transform → update` | `quiz {n, ok}`, `domain`, `ref`, `res.lang`, `res.pv` |
+| `wprompt/<tag>` | erstes Öffnen von Schreiben; „Andere Aufgabe"/„Eigenes Thema" nur ohne heutigen Text | `transform` (anlegen, sonst gespeicherte gewinnt) bzw. `update` | `p.domain`, `t` |
+| `writing/w<t>` | erste Abgabe; Überarbeitung; Korrektur | `createIfMissing`, dann `transform → update` | `lang`, `domain`, `rev`, `res.{usHints, lang, pv, rev}` |
+| `app/profile` | Einheit abgeschlossen (Sammel-Schreibweg, `lxSeq`) | wie Phase 1 | Zähler wie alte App: `days`, `answers`, `xpDays` (+10/+3 je Frage, +15 je Einheit), `act[tag].{read,listen,write,discover}`, `minutes`, `mix`, `listen[]` (≤ 80, plus `help`), `ema/n.listen` |
+| `app/profile.disc`, `.gen` | Schritt in Entdecken; KI-Erzeugung | Sammel-Warteschlange (`recordProfileFields`), nur bei Änderung | – |
+| `app/radar` | Korrektur mit Fehlern (Quelle `w` Schreiben/Anwenden, `r` Lesen), Kategorie der alten App (`topicCat`/`normCat`) | Sammel-Warteschlange (`recordRadar` → `mergeRadar`, ≤ 400) | – (britische Formen nie) |
+| `log/<tag>` | Verständnisfragen | Sammel-Schreibweg | Einträge `{t, ok, lang, type, ref, q, given, ans, ms, ctx}` (`ch` Pflicht, `xtra` Extra) ohne `id`/`k` |
+| `vocab/<slug>` | „Als Karte speichern" (Wort-Antippen, Wendungen) | Phase-1-Weg | `src ∈ {read, listen, write}`, `origin.kind ∈ {read, listen, write, discover}` |
+
+- **Erledigt** heißt je Kanal: `act[tag][kanal] ≥ 1` (gespeichert ⊕ Puffer, `domain/plan/inputChannels.ts`).
+- **Hören** schreibt kein eigenes Dokument (`profile.listen[]`), **Entdecken** nur `profile.disc` – der Text beim Anwenden bleibt im Browser.
+- **Abos:** zusätzlich genau eines auf `feed` (sortiert nach `d`, 21 Dokumente), nur solange Entdecken offen ist; alles andere per `get()`.
+- **Kapazität:** höchstens 6 neue Dokumente je Tag bei Vollnutzung aller vier Module, im Mittel ≤ 4 (Test `tests/unit/inputData.test.ts`). Die Diagnose zeigt zusätzlich die Zahl der Entdecken-Einträge.

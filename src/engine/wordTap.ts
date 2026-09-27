@@ -5,7 +5,9 @@ import type { Token } from '../domain/text/types';
 // Nachschlage-Fensters. Die Zeit, in der das Fenster offen ist, zählt nicht zur Antwortzeit.
 
 // Phase 5: 'companion' (Antwort im Begleiter), 'translate' (Übersetzer), 'preply' (Plan, Import)
-export type WordTapArea = 'trainer' | 'intro' | 'summary' | 'lookup' | 'lesson' | 'speak' | 'business' | 'companion' | 'translate' | 'preply';
+export type WordTapArea = 'trainer' | 'intro' | 'summary' | 'lookup' | 'lesson' | 'speak' | 'business' | 'companion' | 'translate' | 'preply'
+  // Phase 4: Lesen, Hören, Schreiben, Entdecken
+  | 'read' | 'listen' | 'write' | 'discover';
 
 export type WordTapRequest = {
   surface: string;

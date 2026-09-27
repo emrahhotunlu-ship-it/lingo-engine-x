@@ -4,6 +4,7 @@ import { grammarJudge } from './grammarJudge';
 import { lessonContent } from './lessonContent';
 import { lessonProduction } from './lessonProduction';
 import { mnemonic } from './mnemonic';
+import { INPUT_TEMPLATES } from './inputRegistry';
 import { produceCheck } from './produceCheck';
 import { wordGen } from './wordGen';
 import { companionChat } from './companionChat';
@@ -47,6 +48,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   translate,
   preplyPrep,
   preplyImport,
+  // Phase 4 – Lesen, Hören, Schreiben, Entdecken
+  ...INPUT_TEMPLATES,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

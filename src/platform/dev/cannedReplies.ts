@@ -4,6 +4,7 @@ import { registerCannedReply } from './fakeSample';
 import { roleplayReportReply, roleplayTurnReply, sceneGenReply, turnAnalysisReply } from './cannedSpeak';
 import { mailRefineReply, phraseAdaptReply, pitchFeedbackReply, pitchScriptReply } from './cannedBiz';
 import { registerCompanionReplies } from './cannedCompanion';
+import { registerInputReplies } from './cannedReplies.input';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@1,
 // produce-check@1, card-examples@1, lesson-content@1 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -289,6 +290,8 @@ export function registerCannedReplies(): void {
   registerCannedReply('pitch-feedback', pitchFeedbackReply);
   // Phase 5: companion-chat, translate, preply-prep, preply-import
   registerCompanionReplies();
+  // Phase 4: reading-text, listening-text, writing-prompt, writing-review, reading-check, apply-check
+  registerInputReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll
