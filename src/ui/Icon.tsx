@@ -48,6 +48,8 @@ const paths = {
   chart: 'M4 20h16M6 16v-5M10 16V7M14 16v-8M18 16V4',
   history: 'M4 12a8 8 0 102.3-5.7M4 5v4h4M12 8v4l3 2',
   gear: 'M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 13.5a7.6 7.6 0 000-3l2-1.6-2-3.4-2.4 1a7.5 7.5 0 00-2.6-1.5L14 2.5h-4l-.4 2.5A7.5 7.5 0 007 6.5l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 000 3l-2 1.6 2 3.4 2.4-1a7.5 7.5 0 002.6 1.5l.4 2.5h4l.4-2.5a7.5 7.5 0 002.6-1.5l2.4 1 2-3.4z',
+  // Übersetzen (Lucide „languages“, vereinfacht)
+  translate: 'M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6',
 } as const;
 
 export type IconName = keyof typeof paths;

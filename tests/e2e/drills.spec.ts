@@ -112,7 +112,8 @@ test('Lückenjagd: Buchstaben landen in der Lücke, Tipp zeigt Platzhalter; Rund
   }
   await expect(page.getByTestId('summary')).toBeVisible();
   expect(verdicts).toHaveLength(8);
-  expect(verdicts.every((v) => v === 'correct'), verdicts.join(',')).toBe(true);
+  // „near“ = akzeptierte andere Wortstellung (seit dem C1-Werkzeugkasten gibt es Sätze mit mehreren gültigen Stellungen).
+  expect(verdicts.every((v) => v === 'correct' || v === 'near'), verdicts.join(',')).toBe(true);
   await expect.poll(async () => logOf(await dump(page), 'cloze').length).toBe(logOf(before, 'cloze').length + 8);
   await expect.poll(async () => actOf(await dump(page), 'cloze')).toBe(actOf(before, 'cloze') + 1);
   await noCardOrTopicWrites(page);

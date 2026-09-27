@@ -16,7 +16,7 @@ import { useT, type MessageKey } from '../../i18n';
 import { Button, IconButton } from '../../ui/Button';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ExerciseBar } from '../../ui/ExerciseBar';
-import { ClaudeButton, TitleActions } from '../system/Chrome';
+import { ExerciseActions, TitleActions } from '../system/Chrome';
 import { firstOpenDuty, useToday } from '../today/state';
 import { startDuty } from './flow';
 
@@ -118,7 +118,7 @@ export function ExerciseTop({
       progressLabel={has ? t('nvProgress', { n: Math.max(1, Math.min(progress.total, progress.n)), total: progress.total }) : undefined}
       progressTestId={progressTestId ?? 'round-progress'}
       note={note}
-      end={<ClaudeButton />}
+      end={<ExerciseActions />}
     />
   );
 }

@@ -34,6 +34,8 @@ function collectTasks(extra: readonly Doc[]): Known[] {
   };
   walk(json('../../src/content/legacy/grammar.json'));
   walk(json('../../src/content/grammar-extra.json'));
+  // C1-Werkzeugkasten (Lernberatung 27.09.): Aufgaben und Beispielsätze fließen auch in den Satzbau.
+  walk(json('../../src/content/c1/toolkit.json'));
   walk(json('../../src/content/legacy/rules.json'));
   // C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): Aufgaben und Fallen der Regelblätter.
   walk(json('../../src/content/c1/toolkit.json'));
@@ -281,6 +283,8 @@ function corpus(extra: readonly Doc[] = []): string[] {
   };
   for (const f of ['grammar', 'rules', 'vocab', 'context', 'course', 'passages', 'scenes', 'feed-seed']) walk(json(`../../src/content/legacy/${f}.json`));
   walk(json('../../src/content/grammar-extra.json'));
+  // C1-Werkzeugkasten (Lernberatung 27.09.): Aufgaben und Beispielsätze fließen auch in den Satzbau.
+  walk(json('../../src/content/c1/toolkit.json'));
   walk(SEED);
   walk(extra);
   return [...out];

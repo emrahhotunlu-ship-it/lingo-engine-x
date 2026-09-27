@@ -228,6 +228,21 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
 }
 
 /** Aktueller Reparatur-Satz der Runde (vor den Karten), sonst `null`. */
+/**
+ * Fortschritt „n von gesamt“ (Emrahs Befund 27.09.: „15/15 erledigt, trotzdem weitere Fragen“).
+ * Gesamt ist nie kleiner als das, was wirklich noch kommt: Reparatur-Sätze und wieder eingereihte
+ * Karten („Nochmal“) zählen mit. n = gesamt − noch offen + 1, solange die Runde läuft.
+ */
+export function roundProgress(s: Pick<SessionState, 'status' | 'round' | 'queue' | 'pos' | 'target' | 'doneBefore' | 'answered' | 'repairs' | 'repairPos'>): { n: number; total: number } | null {
+  if (s.status !== 'running') return null;
+  const base = s.round === 'pflicht' ? s.doneBefore : 0;
+  const left = Math.max(0, s.queue.length - s.pos) + Math.max(0, s.repairs.length - s.repairPos);
+  const done = base + s.answered.length;
+  const total = Math.max(base + s.target, done + left);
+  if (total <= 0) return null;
+  return { n: Math.min(total, Math.max(1, total - left + 1)), total };
+}
+
 export const currentRepair = (s: Pick<SessionState, 'status' | 'repairs' | 'repairPos'>): RepairItem | null => (s.status === 'running' ? (s.repairs[s.repairPos] ?? null) : null);
 
 /** Ergebnis eines Reparatur-Satzes übernehmen (Protokoll, `app/repair`); weiter geht es mit `nextRepair`. */

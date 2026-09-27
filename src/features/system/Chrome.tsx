@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { useAiAvailable } from '../../ai/scope';
-import { useNav } from '../../app/nav';
 import { openSettings } from '../../app/sheets';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
@@ -27,20 +26,28 @@ export function ClaudeButton() {
   );
 }
 
-/** Zahnrad: öffnet die Einstellungen (nur auf „Stand"). */
+/** Übersetzer direkt (Emrahs Wunsch 27.09.: überall erreichbar). Ohne KI unsichtbar. */
+export function TranslateButton() {
+  const { t } = useT();
+  const ai = useAiAvailable();
+  if (!ai) return null;
+  return <IconButton icon="translate" label={t('cmpTabTranslate')} onClick={() => openCompanion({ tab: 'translate' })} data-testid="open-translate" data-ai="" />;
+}
+
+/** Zahnrad: öffnet die Einstellungen – auf jeder Seite und in jeder Übung (Emrahs Wunsch 27.09.). */
 export function SettingsButton() {
   const { t } = useT();
   return <IconButton icon="gear" label={t('openSettings')} onClick={openSettings} data-testid="open-settings" />;
 }
 
-/** Rechte Seite einer Titelzeile: eigene Knöpfe, dann Claude; auf „Stand" zusätzlich das Zahnrad. */
+/** Rechte Seite einer Titelzeile: eigene Knöpfe, dann Übersetzer, Claude und Zahnrad – überall gleich. */
 export function TitleActions({ children }: { children?: ReactNode }) {
-  const onStand = useNav((s) => s.route.name === 'overview');
   return (
     <div className="flex flex-none items-center gap-1">
       {children}
+      <TranslateButton />
       <ClaudeButton />
-      {onStand && <SettingsButton />}
+      <SettingsButton />
     </div>
   );
 }
@@ -57,5 +64,16 @@ export function TabTitle({ title, sub, actions, testId }: { title: ReactNode; su
       </div>
       {sub}
     </header>
+  );
+}
+
+/** Rechte Seite der Übungsleiste: Übersetzer, Claude, Zahnrad (Emrahs Wunsch 27.09.). */
+export function ExerciseActions() {
+  return (
+    <div className="flex flex-none items-center gap-0.5">
+      <TranslateButton />
+      <ClaudeButton />
+      <SettingsButton />
+    </div>
   );
 }

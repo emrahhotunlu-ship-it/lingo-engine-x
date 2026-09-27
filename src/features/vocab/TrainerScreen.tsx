@@ -11,7 +11,8 @@ import { IntroCard } from './IntroCard';
 import { Summary } from './Summary';
 import { abortExamples } from './examples';
 import { flush } from './persist';
-import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, touch, useSession } from './session';
+import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, touch, useSession } from './session';
+import { useShallow } from 'zustand/react/shallow';
 import { RepairItem } from '../repair/RepairItem';
 import { ExerciseTop } from '../learn/ui';
 
@@ -31,9 +32,6 @@ export function TrainerScreen() {
   const step = useSession((s) => s.step);
   const cards = useSession((s) => s.cards);
   const pool = useSession((s) => s.pool);
-  const answered = useSession((s) => s.answered.length);
-  const target = useSession((s) => s.target);
-  const doneBefore = useSession((s) => s.doneBefore);
   const repair = useSession(currentRepair);
 
   const knownWords = useMemo(() => new Set(pool.map((c) => normalize(c.lemma))), [pool]);
@@ -69,8 +67,7 @@ export function TrainerScreen() {
 
   const item = queue[pos];
   const introCard = status === 'running' && item?.phase === 'intro' ? cards.get(item.key) : undefined;
-  const total = round === 'pflicht' ? doneBefore + target : target;
-  const current = Math.min(total, (round === 'pflicht' ? doneBefore : 0) + answered + (status === 'running' ? 1 : 0));
+  const progress = useSession(useShallow(roundProgress));
   const onDone = () => undefined;
 
   return (
@@ -79,7 +76,7 @@ export function TrainerScreen() {
         onClose={leave}
         closeLabel={t('trClose')}
         closeTestId="trainer-close"
-        progress={status === 'running' && total > 0 ? { n: current, total } : null}
+        progress={progress}
         progressTestId="trainer-progress"
         ctx={round === 'extra' ? 'extra' : 'duty'}
         duty="review"

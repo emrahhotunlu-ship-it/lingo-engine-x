@@ -63,6 +63,8 @@ async function playRound(page: Page, opts: { wrongAt?: number } = {}): Promise<A
 }
 
 test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis und Beispielen; Schreibwege', async ({ page }) => {
+  // Lange Runde (seit dem C1-Werkzeugkasten 23 Themen); unter Last mehr Zeit.
+  test.slow();
   const { errors, external } = await boot(page, { migrated: true });
   await openGrammar(page);
   const before = await dump(page);
@@ -132,6 +134,8 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; freie Antwort beurteilt C
 });
 
 test('Auswahl, Lücke, Umformen, Satzkorrektur: alle vier Typen über zwei Runden, alle richtig, ohne Notenknopf', async ({ page }) => {
+  // Lange Runde (seit dem C1-Werkzeugkasten 23 Themen); unter Last mehr Zeit.
+  test.slow();
   // Freie Runde (Auswahl, Lücke, Umformen) + Themenrunde (Satzkorrektur) – jeweils bis zum Ende.
   const { errors } = await boot(page, { migrated: true });
   await openGrammar(page);
