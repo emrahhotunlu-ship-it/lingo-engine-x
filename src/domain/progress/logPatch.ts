@@ -57,6 +57,8 @@ export function entryCardKey(e: { id?: unknown; k?: unknown; type?: unknown }): 
   if (typeof e.id !== 'string' || !e.id) return null;
   if (e.type === 'chunk') return `chunk/${e.id}`;
   if (e.k === 'v') return `vocab/${e.id}`;
+  // Lernberatung 27.09., V2: Reparatur-Sätze zählen wie eine Karte zu „Wiederholen“.
+  if (e.type === 'repair') return `repair/${e.id}`;
   return null;
 }
 
@@ -96,8 +98,31 @@ export type DrillLogEntry = {
   override?: true;
 };
 
+/**
+ * Reparatur-Satz (Lernberatung 27.09., V2): `id` aus `app/repair`, `q` = alter Satz, `ans` = bessere
+ * Fassung. Zählt mit `ctx:'rev'` zu „Wiederholen“ (Schlüssel `repair/<id>`, `entryCardKey`).
+ */
+export type RepairLogEntry = {
+  t: number;
+  ok: boolean;
+  lang: string;
+  type: 'repair';
+  id: string;
+  m: 'repair';
+  q: string;
+  given: string;
+  ans: string;
+  g: number;
+  ms: number;
+  ctx: 'rev' | 'xtra';
+};
+
+export function repairLogEntry(i: Omit<RepairLogEntry, 'type' | 'm'>): RepairLogEntry {
+  return { ...i, type: 'repair', m: 'repair', q: clip(i.q), given: clip(i.given), ans: clip(i.ans) };
+}
+
 /** Phase 4: Verständnisfragen aus Lesen, Hören, Entdecken (`channelLog.ts`, ohne `id`/`k`). */
-export type AnyLogEntry = LogEntry | ChunkLogEntry | GrammarLogEntry | DrillLogEntry | ActivityLogEntry | ChannelLogEntry;
+export type AnyLogEntry = LogEntry | ChunkLogEntry | GrammarLogEntry | DrillLogEntry | ActivityLogEntry | ChannelLogEntry | RepairLogEntry;
 
 export const DONT_KNOW = "(don't know)";
 

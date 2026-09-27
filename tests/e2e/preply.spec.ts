@@ -101,13 +101,15 @@ test.describe('Desktop 1440 DE', () => {
     await expect(page.getByTestId('pi-applied')).toBeVisible();
     // Nur die Schreibvorgänge der Übernahme zählen (beim Start verarbeitet der Tagesplan daily/* → app/pool, Phase 2).
     const applyWrites = (await writes(page)).slice(writesBefore);
-    for (const p of ['vocab/would-rather', 'grammar/prepositions', 'app/radar', 'app/pool']) expect(applyWrites.filter((w) => w.path === p).length, p).toBe(1);
+    // Lernberatung V2: die Korrekturen werden zusätzlich Reparatur-Sätze (ein Schreibvorgang `app/repair`).
+    for (const p of ['vocab/would-rather', 'grammar/prepositions', 'app/radar', 'app/pool', 'app/repair']) expect(applyWrites.filter((w) => w.path === p).length, p).toBe(1);
     expect(await countWrites(page, piPath)).toBe(2);
-    expect(applyWrites.length).toBe(5);
+    expect(applyWrites.length).toBe(6);
     const d = await dump(page);
     expect(d[piPath]).toMatchObject({ applied: true, sel: { c: [0, 1], t: [0], w: [0] } });
     expect(d['vocab/would-rather']).toMatchObject({ src: 'preply', ex: 'I [would rather] start with a small pilot.', origin: { kind: 'preply' } });
     expect((d['grammar/prepositions']!.errors as Doc[])[0]).toMatchObject({ given: 'It depends of the budget.', box: 0, src: 'preply' });
+    expect((d['app/repair']!.items as Doc[]).map((e) => [e.src, e.wrong, e.box])).toEqual(expect.arrayContaining([['preply', 'It depends of the budget.', 0]]));
     const pool = d['app/pool']!.items as Doc[];
     expect(pool.filter((i) => typeof i.id === 'string' && i.id.startsWith(piPath.slice(7)))).toHaveLength(1);
     const radar = d['app/radar']!.events as Doc[];

@@ -18,6 +18,8 @@ import { preplyPrep, type PrepCtx, type PrepOut } from '../../prompts/preplyPrep
 import { workContext } from '../../prompts/work';
 import { flush, learnRecorder, recordRoundEnd } from '../progress/persist';
 import { usePreply } from './store';
+import { repairsFromPreply } from '../../domain/repair/sources';
+import { saveRepairs } from '../repair/store';
 
 // Schreibwege der Preply-Brücke (Phase 5 §5.1), nur über den einen Writer. Jede KI-Anfrage geht
 // auf eine ausdrückliche Handlung zurück („Plan erstellen", „Analysieren"). Geschrieben wird:
@@ -275,6 +277,11 @@ export async function runApply(pi: ImportView, sel: ApplySel, plan: ApplyPlan): 
       failed.add('pool');
     }
   }
+  // Lernberatung V2: ausgewählte Lehrer-Korrekturen (ganzer Satz falsch → richtig) werden
+  // Reparatur-Sätze. Idempotent (gleicher falscher Satz = gleicher Eintrag); ein Fehler hier hält
+  // die Übernahme nicht auf (gemeldet in saveRepairs).
+  const repairs = repairsFromPreply(pi.corrections, sel.c, pi.title || 'Preply');
+  if (repairs.length) await saveRepairs(repairs);
   if (failed.size) return { ok: false, failed: [...failed], res, plan };
   try {
     await writer.transform(`preply/${pi.id}`, (cur) => {

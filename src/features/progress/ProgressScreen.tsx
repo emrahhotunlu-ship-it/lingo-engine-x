@@ -18,6 +18,7 @@ import { HistoryTab } from './HistoryTab';
 import { JudgeTab } from './JudgeTab';
 import { PathTab } from './PathTab';
 import { LevelScale, WeekStrip } from './StandHeader';
+import { RepairStandLine } from '../repair/StandLine';
 
 // „Dein Stand" (Kap. 6.13, Plan E18): Kopfzeile mit Serie · Kurs · Karten und vier Reiter
 // Urteil · Fehler · Weg nach C1 · Verlauf – kein endloses Scrollen am Handy, nichts doppelt.
@@ -113,6 +114,7 @@ export function ProgressScreen() {
         <WeekStrip week={ov.week} />
         {assess?.data.cefr ? <LevelScale data={assess.data} /> : <p className="self-center text-sm text-muted">{t('lvNone')}</p>}
       </motion.div>
+      <RepairStandLine />
 
       <LateRescueCard />
 

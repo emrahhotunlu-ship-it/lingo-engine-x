@@ -5,7 +5,7 @@ import { courseDone } from '../../domain/course/courseDone';
 import { mergeRadar, radarEvent, topicCat } from '../../domain/grammar/radar';
 import { grammarWrite } from '../../domain/grammar/write';
 import type { DrillAnswer, GrammarAnswer, LearnRecorder, LearnRoundEnd, LessonDone, RadarEvent, SprintEntry } from '../../domain/learn/types';
-import { activityEntry, drillLogEntry, grammarLogEntry, logEntry, mergeLogEntries, type ActivityLogEntry, type AnyLogEntry } from '../../domain/progress/logPatch';
+import { activityEntry, drillLogEntry, grammarLogEntry, logEntry, mergeLogEntries, type ActivityLogEntry, type AnyLogEntry, type RepairLogEntry } from '../../domain/progress/logPatch';
 import { minimalProfile, profilePatch, roundMinutes, SEQ_KEEP_MS, type CountEvent, type RoundEnd } from '../../domain/progress/profilePatch';
 import { unitMinutes, unitsPatch, type UnitEnd } from '../../domain/progress/unitPatch';
 import { applyUpdate } from '../../domain/srs/applyReview';
@@ -180,6 +180,12 @@ export function recordUnitEnd(u: UnitEnd): Promise<boolean> {
   open.units.push(u);
   usePending.setState((s) => ({ units: addUnit(s.units, u, 1), minutes: { ...s.minutes, [u.day]: (s.minutes[u.day] ?? 0) + unitMinutes(u) } }));
   return flush();
+}
+
+/** Lernberatung 27.09., V2: Antwort auf einen Reparatur-Satz ins Tagesprotokoll (zählt zu „Wiederholen“). */
+export function recordRepairAnswer(e: RepairLogEntry, day: string, immediate: boolean): void {
+  pushEntry(e, day);
+  afterAnswer(immediate);
 }
 
 /** Phase 4: Protokolleinträge der Verständnisfragen (Lesen, Hören, Entdecken). */

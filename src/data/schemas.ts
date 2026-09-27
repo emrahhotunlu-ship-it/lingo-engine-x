@@ -60,7 +60,7 @@ export const assessSchema = assessDataSchema.extend({
 /** Neu (Lernberatung 27.09., V2): Reparatur-Sätze – eigene falsche Sätze aus freiem Formulieren. */
 export const repairSchema = z.looseObject({
   items: z
-    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num }))
+    .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num, fix: strArr }))
     .nullish(),
 });
 

@@ -20,6 +20,8 @@ import { saveReport, saveRun } from './persist';
 import { clearResume, writeResume, type ResumeCopy } from './resume';
 import { roleplayMachine, stateName, type RoleplayContext } from './roleplayMachine';
 import { legacySceneDoc, workContext } from './useSceneLibrary';
+import { repairsFromTalk } from '../../domain/repair/sources';
+import { saveRepairs } from '../repair/store';
 
 // Steuerung eines Rollenspiels: verbindet die reine Maschine mit KI-Tor, Analysespur,
 // Speichern und Sprachausgabe. Jeder KI-Aufruf entsteht aus einer Handlung (Senden, Beenden,
@@ -138,7 +140,9 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
       const a = c.analyses[i];
       return a?.state === 'done' && a.data ? a.data.errors.map((e) => ({ cat: e.cat, wrong: e.wrong, right: e.right, sentence: t.text })) : [];
     });
-    const ok = await saveRun({ run, lang: useSettings.getState().lang, legacyScene: legacySceneDoc(scene.id), errors, nowMs: Date.now() });
+    // Lernberatung V2: eigene Sätze mit echten Fehlern werden Reparatur-Sätze (parallel, blockiert nichts).
+    const repairs = repairsFromTalk(c.turns, c.analyses, scene.titleEn);
+    const [ok] = await Promise.all([saveRun({ run, lang: useSettings.getState().lang, legacyScene: legacySceneDoc(scene.id), errors, nowMs: Date.now() }), repairs.length ? saveRepairs(repairs) : Promise.resolve(true)]);
     if (ok) clearResume(scene.id);
     if (!alive.current) return;
     send({ type: ok ? 'SAVED' : 'SAVE_FAILED' });
