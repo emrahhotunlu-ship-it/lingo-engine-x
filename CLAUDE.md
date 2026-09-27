@@ -61,9 +61,9 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 - [ ] Phase 5 – Begleiter und Brücke: Claude-Chat, Übersetzer, Preply-Brücke
   - [x] Phasen 2–5 gebaut und zusammengeführt (Stand `59bbc06`, verify grün: 728 Unit, 245 E2E); kombinierte Prüfung ohne Blocker, Befunde behoben (`690cc64`), Test-Link `AXHkh6…` Version `1790477322-3c8f`
 - [x] Phase 6 – Urteil: KI-Einschätzung, Fortschritt, Wochenbericht, Tagesplan-Gewichtung (`4423372`, geprüft, Befunde behoben)
-- [ ] Phase 7 – Politur und Umzug (Veröffentlichung auf die alte Adresse nur nach Emrahs ausdrücklichem OK)
+- [x] Phase 7 – Politur und Umzug (Veröffentlichung auf die alte Adresse nur nach Emrahs ausdrücklichem OK)
   - [x] P7-1 bis P7-4; komplette App auf dem Test-Link `AXHkh6…` Version `1790487478-0d6d` (verify grün: 810 Unit, 312 E2E)
-  - [ ] P7-5 Umzug auf `JLL8…`: wartet auf Emrahs Freigabe
+  - [x] P7-5 Umzug: komplette App auf `JLL8…` Version `1790493495-85c8` (27.09.2026, Emrahs Freigabe „Ja, veröffentlichen“)
 
 ## A5. Subagents (`.claude/agents/`)
 | Subagent | Wann einsetzen | Rechte |
@@ -212,6 +212,17 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - Ziel: Ergebnis in etwa 12 Stunden.
 - Bis zum Go-Live keine Rückfragen. Nach einer Limit-Pause automatisch weitermachen (stündlicher Check-in per `send_later`).
 - Veröffentlichen auf `JLL8…` (Go-Live) weiterhin nur mit Emrahs ausdrücklicher Freigabe.
+
+**27.09.2026 – Go-Live der kompletten App (Emrahs Freigabe „Ja, veröffentlichen“)**
+- `dist/index.html` aus `86893f7` liegt auf `JLL8…`, Version `1790493495-85c8` (Artefakt-Version 48).
+  - Fähigkeiten `db`, `sample`, `downloads`; Vertrag bleibt 0.2.49.
+- Rückweg: Phase-1-Version `1790444355-d812` wiederherstellen.
+- Offen für Emrahs Rückmeldung am iPhone:
+  - Ladezeit (~3 s unter Drossel),
+  - automatische Einschätzung beim Öffnen von „Dein Stand“,
+  - lange Can-Do-Liste,
+  - „Wiederholen“ dreimal auf Heute.
+- `writer.compact` bleibt aus.
 
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
