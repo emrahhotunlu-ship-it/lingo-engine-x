@@ -48,7 +48,7 @@ export function fsrsMeasures(vocab: ReadonlyMap<string, Doc>, nowMs: number, log
     for (const doc of logs.values()) {
       const entries = Array.isArray(doc.entries) ? doc.entries : [];
       for (const e of entries.map(obj)) {
-        if (e.k !== 'v' || e.ctx !== 'rev') continue;
+        if ((e.k !== 'v' && e.type !== 'chunk') || e.ctx !== 'rev') continue;
         n++;
         if (e.ok === true) ok++;
       }

@@ -7,6 +7,7 @@ import { voiceEn } from './parts/voice.en';
 import { companionEn } from './parts/companion.en';
 import { inputEn } from './parts/input.en';
 import { progressEn } from './parts/progress.en';
+import { trainerEn } from './parts/trainer.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -23,6 +24,7 @@ export const en: Record<MessageKey, string> = {
   ...inputEn,
   // Phase 6 – Urteil, Fortschritt, Wortschatztest, Einstellungen
   ...progressEn,
+  ...trainerEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

@@ -10,6 +10,8 @@ import { retrievability } from '../../../domain/srs/scheduler';
 import { exerciseBalance } from '../../../domain/srs/vocabList';
 import type { AnswerEvent, TrainCard } from '../../../domain/srs/types';
 import { EnglishText } from '../../../engine/EnglishText';
+import { SpeakButton } from '../../../engine/SpeakButton';
+import { chunkWhy } from '../../../domain/srs/chunkCards';
 import { useHiddenInput } from '../../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../../i18n';
 import { speak, useSpeech } from '../../../platform/speech';
@@ -28,6 +30,49 @@ import { markKnown, resetCard, setHidden } from './actions';
 // Aktionen. FSRS-Zahlen nur unter „Messwerte".
 
 const DAY = 86_400_000;
+const REGISTER_KEYS: Record<string, MessageKey> = { formal: 'regFormal', neutral: 'regNeutral', informal: 'regInformal' };
+const ORIGIN_KEYS: Record<string, MessageKey> = { scene: 'vcOriginScene', mail: 'vcOriginMail', pitch: 'vcOriginPitch', biz: 'vcOriginBiz' };
+
+/**
+ * Ursprung einer Wendung (M1): Szene bzw. Mail/Pitch/Baukasten, der eigene Satz von damals und die
+ * aufgewertete Fassung (Ursprungssatz, jedes Wort antippbar, Stelle markiert, vorlesbar).
+ */
+function ChunkOrigin({ card }: { card: TrainCard }) {
+  const { t } = useT();
+  const c = card.chunk;
+  if (!c) return null;
+  const kindKey = ORIGIN_KEYS[c.srcKind] ?? 'vcOriginOther';
+  const sentence = card.context?.sentence ?? c.upgraded;
+  return (
+    <section className="flex flex-col gap-2" data-testid="chunk-origin" data-src={c.srcKind}>
+      <p className="lx-eyebrow">{t('vcOrigin')}</p>
+      <p className="text-sm font-medium" data-testid="chunk-origin-title">
+        {t(kindKey)}
+        {c.title ? <span className="text-muted"> · {c.title}</span> : null}
+      </p>
+      {c.utterance && (
+        <p className="text-sm" data-testid="chunk-then">
+          <span className="text-muted">{t('sitThen')}</span> <span lang="en">„{c.utterance}“</span>
+        </p>
+      )}
+      {sentence && (
+        <div className="flex items-start gap-1">
+          <EnglishText
+            as="p"
+            className="min-w-0 flex-1 text-[0.95rem] leading-relaxed"
+            testId="origin-sentence"
+            text={sentence}
+            area="lookup"
+            source={card.path}
+            title={card.word}
+            highlight={card.context ? [card.context.start, card.context.end] : null}
+          />
+          <SpeakButton text={sentence} />
+        </div>
+      )}
+    </section>
+  );
+}
 const STAGE_KEYS: MessageKey[] = ['stage0', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
 
 export function WordSheet({ card, onClose }: { card: TrainCard | null; onClose: () => void }) {
@@ -62,7 +107,10 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
   const conf = confidenceOf(card, now);
   const meaning = meaningOf(card, lang);
   const pk = posKey(card.pos);
-  const examples = cardExamples(card, null);
+  const register = card.chunk?.register && REGISTER_KEYS[card.chunk.register] ? t(REGISTER_KEYS[card.chunk.register] as MessageKey) : null;
+  const why = chunkWhy(card, lang);
+  // Der Ursprungssatz einer Wendung steht schon beim Ursprung – nichts doppelt.
+  const examples = cardExamples(card, card.kind === 'chunk' ? (card.context?.sentence ?? card.chunk?.upgraded ?? null) : null);
   const balance = exerciseBalance(card);
   const src = { area: 'lookup' as const, source: card.path, title: card.word };
 
@@ -115,11 +163,17 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
           <span>{t('lkStage', { n: card.stage })}</span>
           <span className="text-subtle">· {t(STAGE_KEYS[card.stage] ?? 'stage0')}</span>
         </p>
-        {(meaning || pk) && (
+        {(meaning || pk || register) && (
           <p className="text-base">
             {meaning && <span lang={lang}>{meaning}</span>}
-            {meaning && pk && <span className="text-muted"> · </span>}
+            {meaning && (pk || register) && <span className="text-muted"> · </span>}
             {pk && <span className="text-muted">{t(pk as MessageKey)}</span>}
+            {register && <span className="text-muted" data-testid="chunk-register">{register}</span>}
+          </p>
+        )}
+        {why && (
+          <p className="text-sm text-muted" lang={lang} data-testid="chunk-why">
+            {why}
           </p>
         )}
         <p className="text-sm text-muted" data-testid="word-next">
@@ -133,6 +187,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
           </div>
         )}
       </section>
+      {card.kind === 'chunk' && <ChunkOrigin card={card} />}
       {examples.length > 0 && (
         <section className="flex flex-col gap-1.5" data-testid="examples">
           <p className="lx-eyebrow">{t('trExamples')}</p>
@@ -225,7 +280,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
             {t('vcPractice')}
           </Button>
         )}
-        {!card.hidden && card.stage < 4 && probe === 'idle' && (
+        {!card.hidden && card.kind === 'vocab' && card.stage < 4 && probe === 'idle' && (
           <Button variant="secondary" icon="check" onClick={() => setProbe('asking')} data-testid="word-known">
             {t('vcKnown')}
           </Button>

@@ -1,7 +1,8 @@
 import { hash32, mulberry32, shuffle } from '../random';
+import { typedForm } from '../chunks/situation';
 import { meaningOf, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
-import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, Stage, TrainCard } from './types';
+import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
 
 // Übung aus Karte und Art bauen (Lern-Entwurf §4.4 Ablenker). Zufall mit Startwert:
 // dieselbe Karte am selben Tag zeigt dieselben Optionen in derselben Reihenfolge.
@@ -88,7 +89,7 @@ function meaningDistractors(card: TrainCard, pool: readonly TrainCard[], lang: L
     const label = shortMeaning(m, lang);
     if (norm(label) === norm(targetLabel) || sharesWord(m, target) || norm(c.lemma) === norm(card.lemma) || tooClose(card, c)) continue;
     const score =
-      (c.pos && c.pos === card.pos ? 3 : 0) + (Math.abs(label.length - targetLabel.length) <= 12 ? 2 : 0) + (c.stage === card.stage ? 1 : 0) + rng() * 0.5 - stemPenalty(card, c);
+      (c.kind === card.kind ? 4 : 0) + (c.pos && c.pos === card.pos ? 3 : 0) + (Math.abs(label.length - targetLabel.length) <= 12 ? 2 : 0) + (c.stage === card.stage ? 1 : 0) + rng() * 0.5 - stemPenalty(card, c);
     cands.push({ card: c, label, score });
   }
   return pick(cands, 3).map((d, i) => ({ id: `d${i}`, label: d.label, lang, correct: false, fromWord: d.card.word, fromMeaning: m(d.card, lang) }));
@@ -106,10 +107,99 @@ function wordDistractors(card: TrainCard, pool: readonly TrainCard[], lang: Lang
     const cm = meaningOf(c, lang);
     if (cm && target && sharesWord(cm, target)) continue;
     if (tooClose(card, c)) continue;
-    const score = (c.pos && c.pos === card.pos ? 3 : 0) + (Math.abs(c.word.length - card.word.length) <= 3 ? 2 : 0) + (c.stage === card.stage ? 1 : 0) + rng() * 0.5 - stemPenalty(card, c);
-    cands.push({ card: c, label: c.word, score });
+    // Wendungen bekommen Wendungen als Ablenker, Wörter Wörter (sonst verrät die Länge die Lösung).
+    const sameKind = c.kind === card.kind ? 4 : 0;
+    const score = sameKind + (c.pos && c.pos === card.pos ? 3 : 0) + (Math.abs(c.word.length - card.word.length) <= 3 ? 2 : 0) + (c.stage === card.stage ? 1 : 0) + rng() * 0.5 - stemPenalty(card, c);
+    cands.push({ card: c, label: c.kind === 'chunk' ? typedForm(c.word) : c.word, score });
   }
   return pick(cands, 3).map((d, i) => ({ id: `d${i}`, label: d.label, lang: 'en', correct: false, fromWord: d.card.word, fromMeaning: m(d.card, lang) }));
+}
+
+/**
+ * Ablenker in der Form der Lösung (match): steht im Satz „relied“, heißen die Ablenker „trusted“
+ * statt „trust“ – sonst verrät die Endung die Lösung. Nur einzelne Wörter mit regelmäßiger Endung.
+ */
+export function inflectLike(solution: string, lemma: string, other: string): string {
+  const sol = solution.toLowerCase();
+  const lem = lemma.toLowerCase().replace(/^to\s+/, '');
+  const oth = other.replace(/^to\s+/i, '');
+  if (sol === lem || /\s/.test(sol) || /\s/.test(oth)) return oth;
+  const group = sol.endsWith('ing') ? 'ing' : sol.endsWith('ed') ? 'ed' : sol.endsWith('s') && !sol.endsWith('ss') ? 's' : null;
+  if (!group) return oth;
+  return regularForm(oth, group);
+}
+
+/** Regelmäßige Form eines einzelnen Worts: -ing, -ed, -s (e-Wegfall, y → ies/ied, -es nach Zischlaut). */
+export function regularForm(w: string, group: 'ing' | 'ed' | 's'): string {
+  const low = w.toLowerCase();
+  const consY = /[^aeiou]y$/.test(low);
+  if (group === 'ing') return low.endsWith('ie') ? `${w.slice(0, -2)}ying` : low.endsWith('e') && !low.endsWith('ee') ? `${w.slice(0, -1)}ing` : `${w}ing`;
+  if (group === 'ed') return consY ? `${w.slice(0, -1)}ied` : low.endsWith('e') ? `${w}d` : `${w}ed`;
+  return consY ? `${w.slice(0, -1)}ies` : /(s|x|z|ch|sh)$/.test(low) ? `${w}es` : `${w}s`;
+}
+
+const FOREIGN = 'etaoinshrdlucmfwyp';
+const FILLER_WORDS = ['a', 'the', 'to', 'of'];
+const TILE_LETTERS_MAX = 14;
+
+/**
+ * Bausteine (phase1-plan §4.2): ein Wort mit ≤ 14 Buchstaben → Buchstaben plus 2 fremde
+ * Buchstaben; längere Wörter → Zweiergruppen ohne Fremde; Mehrwort und Wendungen → Wörter plus
+ * 2 Fremdwörter. Nie in Lösungsreihenfolge.
+ */
+export function buildTiles(solution: string, otherWords: readonly string[], rng: () => number): { tiles: Tile[]; mode: 'letters' | 'words' } {
+  const sol = solution.trim();
+  let parts: string[];
+  let extra: string[] = [];
+  let mode: 'letters' | 'words' = 'letters';
+  if (/\s/.test(sol)) {
+    mode = 'words';
+    parts = sol.split(/\s+/);
+    const low = new Set(parts.map((p) => p.toLowerCase()));
+    const pool = [...otherWords.filter((w) => /^[a-z'-]+$/i.test(w) && !low.has(w.toLowerCase())), ...FILLER_WORDS.filter((w) => !low.has(w))];
+    const uniq = [...new Set(pool)];
+    extra = shuffle(uniq, rng).slice(0, 2);
+  } else if (sol.length <= TILE_LETTERS_MAX) {
+    parts = Array.from(sol);
+    const used = new Set(parts.map((c) => c.toLowerCase()));
+    const free = Array.from(FOREIGN).filter((c) => !used.has(c));
+    extra = shuffle(free, rng).slice(0, 2);
+  } else {
+    parts = [];
+    for (let i = 0; i < sol.length; i += 2) parts.push(sol.slice(i, i + 2));
+  }
+  const all: Tile[] = [...parts.map((text, id) => ({ id, text, distractor: false })), ...extra.map((text, k) => ({ id: parts.length + k, text, distractor: true }))];
+  let mixed = shuffle(all, rng);
+  const inOrder = (xs: readonly Tile[]) => xs.filter((x) => !x.distractor).map((x) => x.text).join('\u0000') === parts.join('\u0000');
+  if (all.length > 1 && inOrder(mixed)) mixed = [...mixed.slice(1), mixed[0] as Tile];
+  if (all.length > 1 && inOrder(mixed)) mixed = [...mixed].reverse();
+  return { tiles: mixed, mode };
+}
+
+/** Zusammengesetzte Antwort aus gesetzten Bausteinen. */
+export function tilesAnswer(tiles: readonly Tile[], placed: readonly number[], mode: 'letters' | 'words'): string {
+  const byId = new Map(tiles.map((t) => [t.id, t.text]));
+  const parts = placed.map((id) => byId.get(id) ?? '');
+  return mode === 'words' ? parts.join(' ') : parts.join('');
+}
+
+/** Zeitgrenze für `speed`: clamp(4000 + 400·Länge, 6000, 14000) ms. */
+export const speedLimitMs = (solution: string): number => Math.min(14_000, Math.max(6_000, 4_000 + 400 * solution.length));
+
+/** Szene einer Wendung für die Situationsübung (Titel, Lage, Gegenüber in Oberflächensprache). */
+export type SceneLookup = (id: string) => { title: string; situation: string; counterpart: string } | null;
+
+function situationTask(card: TrainCard, lang: Lang, sceneOf?: SceneLookup): SituationTask {
+  const c = card.chunk;
+  const scene = c?.scene && sceneOf ? sceneOf(c.scene) : null;
+  return {
+    sceneTitle: scene?.title || c?.sceneTitle || c?.scene || '',
+    situation: scene?.situation ?? '',
+    counterpart: scene?.counterpart ?? '',
+    intent: meaningOf(card, lang) ?? '',
+    then: c?.utterance ?? '',
+    upgraded: c?.upgraded ?? '',
+  };
 }
 
 function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
@@ -118,7 +208,10 @@ function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
   return usable[Math.floor(rng() * usable.length)] ?? usable[0] ?? null;
 }
 
-export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string): Exercise {
+/** Lösungsform einer freistehenden Abfrage (ohne Satz): Wort bzw. Wendung ohne „…“. */
+const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedForm(card.word) : card.word);
+
+export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup } = {}): Exercise {
   const def = exerciseDef(ex);
   const rng = mulberry32(hash32(`${card.key}|${ex}|${seed}`));
   const meaning = meaningOf(card, lang);
@@ -126,14 +219,51 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
   const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
 
   switch (ex) {
+    case 'listen_mc':
     case 'mc_en': {
       const label = shortMeaning(meaning ?? '', lang);
       const correct: Option = { id: 'ok', label, lang, correct: true };
-      return { ...base, sentence: card.context, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng)], rng), accepted: [label] };
+      const options = shuffle([correct, ...meaningDistractors(card, pool, lang, rng)], rng);
+      if (ex === 'listen_mc') return { ...base, sentence: card.context, options, accepted: [label], speak: card.context?.sentence ?? bareAnswer(card) };
+      return { ...base, sentence: card.context, options, accepted: [label] };
+    }
+    case 'spot': {
+      const gap = card.context?.gap ?? card.word;
+      return { ...base, sentence: card.context, accepted: [gap] };
+    }
+    case 'match': {
+      const answer = card.context?.gap ?? bareAnswer(card);
+      const correct: Option = { id: 'ok', label: answer, lang: 'en', correct: true };
+      const ds = wordDistractors(card, pool, lang, rng).map((d) => ({ ...d, label: card.context ? inflectLike(answer, card.lemma, d.label) : d.label }))
+        .filter((d) => norm(d.label) !== norm(answer));
+      return { ...base, sentence: card.context, options: shuffle([correct, ...ds], rng), accepted: [answer] };
+    }
+    case 'tiles': {
+      const answer = card.context?.gap ?? (card.kind === 'chunk' ? typedForm(card.word) : card.lemma);
+      const others = pool.filter((c) => c.key !== card.key).map((c) => c.lemma);
+      const { tiles } = buildTiles(answer, others, rng);
+      return { ...base, sentence: card.context, tiles, accepted: [answer] };
+    }
+    case 'dictation': {
+      const gap = card.context?.gap ?? card.word;
+      return { ...base, sentence: card.context, accepted: [gap], speak: card.context?.sentence ?? gap };
+    }
+    case 'speed': {
+      if (card.context) return { ...base, sentence: card.context, accepted: [card.context.gap], limitMs: speedLimitMs(card.context.gap) };
+      const accepted = [bareAnswer(card)];
+      if (card.lemma !== accepted[0]) accepted.push(card.lemma);
+      return { ...base, accepted, limitMs: speedLimitMs(accepted[0] ?? card.word) };
+    }
+    case 'produce':
+      return { ...base, accepted: [] };
+    case 'situation': {
+      const typed = typedForm(card.word);
+      return { ...base, accepted: [...new Set([typed, card.word])].filter(Boolean), situation: situationTask(card, lang, opts.sceneOf) };
     }
     case 'mc_de': {
-      const correct: Option = { id: 'ok', label: card.word, lang: 'en', correct: true };
-      return { ...base, options: shuffle([correct, ...wordDistractors(card, pool, lang, rng)], rng), accepted: [card.word] };
+      const label = bareAnswer(card);
+      const correct: Option = { id: 'ok', label, lang: 'en', correct: true };
+      return { ...base, options: shuffle([correct, ...wordDistractors(card, pool, lang, rng)], rng), accepted: [label] };
     }
     case 'colloc': {
       const c = pickColloc(card, rng);
@@ -148,7 +278,7 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
       return { ...base, sentence: card.context, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: [gap] };
     }
     case 'type': {
-      const accepted = [card.word];
+      const accepted = [bareAnswer(card)];
       if (card.lemma !== card.word) accepted.push(card.lemma);
       return { ...base, accepted };
     }
@@ -162,8 +292,8 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
  */
 export function choiceVerdict(e: Pick<Exercise, 'ex' | 'card' | 'meaning'>, chosen: Option): CheckResult {
   if (chosen.correct) return { verdict: 'correct' };
-  if (e.ex === 'mc_de' || e.ex === 'mc_en') {
-    const other = chosen.fromMeaning ?? (e.ex === 'mc_en' ? chosen.label : null);
+  if (e.ex === 'mc_de' || e.ex === 'mc_en' || e.ex === 'listen_mc' || e.ex === 'match') {
+    const other = chosen.fromMeaning ?? (e.ex === 'mc_en' || e.ex === 'listen_mc' ? chosen.label : null);
     if (meaningsOverlap(other, e.meaning)) return { verdict: 'near', kind: 'synonym', ...(chosen.fromWord ? { otherWord: chosen.fromWord } : {}) };
   }
   return { verdict: 'wrong' };

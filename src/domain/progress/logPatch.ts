@@ -29,6 +29,37 @@ export type LogEntry = {
   override?: true;
 };
 
+/**
+ * Wendungs-Eintrag (phase1-plan §3.5, Form der alten App: `type:'chunk'`, kein `k`). `q` ist die
+ * Wendung. Zählt wie eine Vokabel zu „Wiederholen“ (Schlüssel `chunk/<id>`, `entryCardKey`).
+ */
+export type ChunkLogEntry = {
+  t: number;
+  ok: boolean;
+  lang: string;
+  type: 'chunk';
+  id: string;
+  m: string;
+  q: string;
+  given: string;
+  ans: string;
+  g: number;
+  ms: number;
+  ctx: 'rev' | 'duty' | 'xtra';
+  override?: true;
+};
+
+/**
+ * Kartenschlüssel eines Protokolleintrags: `chunk/<id>` (Wendung), `vocab/<id>` (Vokabel),
+ * sonst `null` (Grammatik, Übungen, Gespräche). Grundlage für „Wiederholen“ (Kap. 2.2).
+ */
+export function entryCardKey(e: { id?: unknown; k?: unknown; type?: unknown }): string | null {
+  if (typeof e.id !== 'string' || !e.id) return null;
+  if (e.type === 'chunk') return `chunk/${e.id}`;
+  if (e.k === 'v') return `vocab/${e.id}`;
+  return null;
+}
+
 /** Grammatik-Eintrag (Form der alten App, `session.js:437`, plus `ms`/`ctx`). */
 export type GrammarLogEntry = {
   t: number;
@@ -66,7 +97,7 @@ export type DrillLogEntry = {
 };
 
 /** Phase 4: Verständnisfragen aus Lesen, Hören, Entdecken (`channelLog.ts`, ohne `id`/`k`). */
-export type AnyLogEntry = LogEntry | GrammarLogEntry | DrillLogEntry | ActivityLogEntry | ChannelLogEntry;
+export type AnyLogEntry = LogEntry | ChunkLogEntry | GrammarLogEntry | DrillLogEntry | ActivityLogEntry | ChannelLogEntry;
 
 export const DONT_KNOW = "(don't know)";
 
@@ -133,7 +164,10 @@ export function activityEntry(e: ActivityLogEntry): ActivityLogEntry {
   return { ...e, q: clip(e.q), n: Math.max(0, Math.round(e.n)), ms: Math.max(0, Math.round(e.ms)) };
 }
 
-export function logEntry(a: AnswerEvent): LogEntry {
+export function logEntry(a: AnswerEvent): LogEntry | ChunkLogEntry {
+  if (a.kind === 'chunk') {
+    return { t: a.t, ok: a.grade > 1, lang: a.lang, type: 'chunk', id: a.id, m: `tr-${a.ex}`, q: clip(a.q ?? a.ans), given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.override ? { override: true as const } : {}) };
+  }
   return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}), ...(a.override ? { override: true as const } : {}) };
 }
 
@@ -166,14 +200,15 @@ export function mergeLogEntries(current: readonly unknown[], added: readonly Any
   return out;
 }
 
-/** Die erste `ctx:'rev'`-Vokabelantwort je Karte (pflichtrelevant). */
+/** Die erste `ctx:'rev'`-Antwort je Karte (Vokabel oder Wendung; pflichtrelevant). */
 function protectedEntries(list: readonly unknown[]): Set<unknown> {
   const ids = new Set<string>();
   const out = new Set<unknown>();
   for (const e of list) {
     const r = (e && typeof e === 'object' ? e : {}) as Doc;
-    if (r.ctx !== 'rev' || r.k !== 'v' || typeof r.id !== 'string' || ids.has(r.id)) continue;
-    ids.add(r.id);
+    const key = entryCardKey(r);
+    if (r.ctx !== 'rev' || !key || ids.has(key)) continue;
+    ids.add(key);
     out.add(e);
   }
   return out;

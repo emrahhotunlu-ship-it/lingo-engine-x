@@ -6,18 +6,58 @@ export type Grade = 1 | 2 | 3 | 4;
 export type Stage = 0 | 1 | 2 | 3 | 4 | 5;
 export type Lang = 'de' | 'en';
 
-/** Übungsarten des MVP. Die IDs folgen der alten App, wo sie dieselbe Übung kannte (Daten-Entwurf 1.2). */
-export type ExerciseId = 'mc_en' | 'mc_de' | 'cloze_hint' | 'type' | 'cloze' | 'colloc';
+/**
+ * Übungsarten (phase1-plan §4.2). Die IDs folgen der alten App, wo sie dieselbe Übung kannte
+ * (Daten-Entwurf 1.2). `situation` = Wendung „aus der Situation heraus“ (M15, nur Wendungen mit Szene).
+ */
+export type ExerciseId =
+  | 'mc_en'
+  | 'spot'
+  | 'listen_mc'
+  | 'mc_de'
+  | 'match'
+  | 'cloze_hint'
+  | 'tiles'
+  | 'type'
+  | 'cloze'
+  | 'colloc'
+  | 'situation'
+  | 'dictation'
+  | 'speed'
+  | 'produce';
 /** Modus der alten App (Schlüssel in `modes` und `hist[].m`). */
 export type LegacyMode = 'recog' | 'cloze' | 'type' | 'colloc' | 'listen' | 'produce';
-export type InputKind = 'choice' | 'typed';
+export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce';
 
 /** Satz mit markierter Stelle: `sentence.slice(start, end) === gap`. */
 export type ContextSpan = { sentence: string; start: number; end: number; gap: string };
 export type Colloc = { index: number; p: string; de: string; gap: string; opts: string[]; ctx: ContextSpan | null };
 export type Counts = { c: number; w: number };
 
+/** Herkunft und Zusatzangaben einer Wendung (`chunk/<id>`, altapp-analyse §5). */
+export type ChunkInfo = {
+  register: string | null;
+  why: string | null;
+  /** Sprache von `why` (fehlt bei Wendungen der alten App: dann Deutsch). */
+  whyLang: Lang | null;
+  /** Eigener Satz im Gespräch bzw. im Entwurf („Damals hattest du gesagt“). */
+  utterance: string | null;
+  /** Aufgewertete Fassung – der Ursprungssatz der Karte. */
+  upgraded: string | null;
+  /** Szene (Rollenspiel) oder null (Mail, Pitch, Baukasten). */
+  scene: string | null;
+  sceneTitle: string | null;
+  /** 'scene' | 'mail' | 'pitch' | 'biz' | … */
+  srcKind: string;
+  /** Titel der Quelle (Szene, „Email Refiner“ …). */
+  title: string | null;
+};
+
+export type CardKind = 'vocab' | 'chunk';
+
 export type TrainCard = {
+  /** Vokabel (`vocab/<id>`) oder Wendung (`chunk/<id>`). */
+  kind: CardKind;
   key: string;
   id: string;
   path: string;
@@ -38,6 +78,10 @@ export type TrainCard = {
   xs: Record<string, Counts>;
   modes: Record<string, Counts>;
   lastMode: string | null;
+  /** Übungsart der letzten Antwort (`hist[].x`, nur von dieser App geschrieben). */
+  lastEx: string | null;
+  /** Nur bei Wendungen. */
+  chunk: ChunkInfo | null;
   intro: string | null;
   order: number;
   added: string;
@@ -62,6 +106,27 @@ export type Exercise = {
   options: Option[];
   /** Akzeptierte Lösungen (getippt) bzw. richtige Beschriftung (Auswahl); `accepted[0]` wird angezeigt. */
   accepted: string[];
+  /** Vorgelesener Text (listen_mc, dictation). */
+  speak?: string;
+  /** Bausteine (tiles). */
+  tiles?: Tile[];
+  /** Zeitgrenze in ms (speed). */
+  limitMs?: number;
+  /** Szene und Absicht (situation, M15). */
+  situation?: SituationTask;
+};
+
+/** Baustein (tiles): Text und ob er ein Fremdbaustein ist. */
+export type Tile = { id: number; text: string; distractor: boolean };
+
+/** Aufgabe „aus der Situation heraus“ (M15). */
+export type SituationTask = {
+  sceneTitle: string;
+  situation: string;
+  counterpart: string;
+  intent: string;
+  then: string;
+  upgraded: string;
 };
 
 export type QueueItem = { key: string; reason: 'due' | 'new' | 'ahead' | 'again'; phase: 'intro' | 'quiz' };
@@ -85,9 +150,12 @@ export type AnswerEvent = {
   t: number;
   /** Lerntag des Rundenbeginns. */
   day: string;
-  kind: 'v';
+  /** Vokabel (`v`) oder Wendung (`chunk`). */
+  kind: 'v' | 'chunk';
   id: string;
   ex: ExerciseId;
+  /** Nur Wendungen: die Wendung selbst (Protokoll `q`, Form der alten App). */
+  q?: string;
   grade: Grade;
   given: string;
   ans: string;

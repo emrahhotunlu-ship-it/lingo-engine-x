@@ -92,8 +92,12 @@ describe('Abfrageart: je Stufe mindestens zwei, schwächste zuerst, Rückfall oh
     expect(availableExercises(noCtx, 'de', 100)).not.toContain('cloze_hint');
     const weak = card({ stage: 4, ex: 'It is [reliable].', xs: { cloze: { c: 0, w: 5 } } });
     expect(chooseExercise(weak, 'de', 100)).toBe('cloze');
-    const tie = card({ stage: 3, ex: 'It is [reliable].', hist: [{ t: 1, m: 'cloze', g: 3 }] });
-    expect(chooseExercise(tie, 'de', 100)).toBe('type');
+    // Gleichstand: nicht dieselbe Art wie zuletzt (`hist[].x`, neu) …
+    const tie = card({ stage: 3, ex: 'It is [reliable].', hist: [{ t: 1, m: 'cloze', x: 'cloze_hint', g: 3 }] });
+    expect(chooseExercise(tie, 'de', 100)).toBe('tiles');
+    // … bzw. bei Einträgen der alten App (nur `m`) nicht derselbe Modus.
+    const tieOld = card({ stage: 5, ex: 'It is [reliable].', hist: [{ t: 1, m: 'listen', g: 3 }] });
+    expect(chooseExercise(tieOld, 'de', 100, [], { tts: true, ai: false })).toBe('speed');
     expect(chooseExercise(card({ stage: 3, ex: 'It is [reliable].' }), 'de', 100)).toBe('cloze_hint');
   });
 

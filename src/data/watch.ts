@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { getDb } from '../platform/capabilities';
 import { describeError, logError, logWarn } from '../platform/diagnostics';
 import type { Db, DbErr, Unsub } from '../platform/types';
+import { useLive } from './live';
 import { validateDoc } from './validate';
 
 // Ansichtsgebundene Abos auf ganze Sammlungen (Plan §2.1): z. B. `scene` nur, solange Sprechen
@@ -106,13 +107,19 @@ export function watchCollection(name: WatchedName): () => void {
   };
 }
 
-/** Sammlung, solange die Komponente eingehängt ist. `undefined` = lädt noch. */
+/**
+ * Sammlung, solange die Komponente eingehängt ist. `undefined` = lädt noch. `chunk` gehört seit
+ * der Wendungs-Wiederholung zu den Dauer-Abos (data/live.ts) – dort gelesen, nie ein zweites Abo.
+ */
 export function useCollection(name: WatchedName, enabled = true): ReadonlyMap<string, Doc> | undefined {
+  const fromLive = name === 'chunk';
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || fromLive) return;
     return watchCollection(name);
-  }, [name, enabled]);
-  return useWatched((s) => s.docs[name]);
+  }, [name, enabled, fromLive]);
+  const watched = useWatched((s) => s.docs[name]);
+  const live = useLive((s) => (fromLive ? s.collections.chunk : undefined));
+  return fromLive ? live : watched;
 }
 
 /** Nur für Tests. */

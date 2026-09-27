@@ -4,7 +4,7 @@ import { validateDoc } from '../../data/validate';
 import { stageOf, nextStage } from './ladder';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
-import type { AnswerEvent, LegacyMode } from './types';
+import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
 
 // Schreiben je bewerteter Antwort (Daten-Entwurf §1.3/1.4): rein, ohne Seiteneffekte.
 // Ausgeführt im Writer per `transform`, also immer auf dem frischen Stand des Dokuments.
@@ -43,6 +43,38 @@ export const cardPatchSchema = z
   })
   .strict()
   .refine((p) => p.fsrs.last === p.last && p.fsrs.due === p.due);
+
+/**
+ * Wendungen (phase1-plan §3.3): wie Karten, aber ohne `pa`/`ac`/`co`/`colN`; `modes` nur für die
+ * Modi der alten Wendungs-Wiederholung (`cloze`, `produce`), sonst gar nicht.
+ */
+export const chunkPatchSchema = z
+  .object({
+    S: z.number().min(0).max(365),
+    D: z.number().min(1).max(10),
+    due: z.number().int().nonnegative(),
+    last: z.number().int().positive(),
+    state: z.enum(['learning', 'review']),
+    reps: z.number().int().min(1),
+    lapses: z.number().int().min(0),
+    stage: z.number().int().min(1).max(5),
+    modes: z.partialRecord(z.enum(['cloze', 'produce']), countsSchema).optional(),
+    xs: z.record(z.string().max(24), countsSchema),
+    hist: z.array(z.looseObject({ t: z.number(), g: z.number().optional() })).max(HIST_MAX),
+    intro: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    fsrs: fsrsSchema.extend({ v: z.literal(1), src: z.literal('lx'), last: z.number().int() }),
+  })
+  .strict()
+  .refine((p) => p.fsrs.last === p.last && p.fsrs.due === p.due);
+
+/** Modus der alten Wendungs-Wiederholung je Übungsart; Auswahlarten zählen nur in `xs`. */
+export function chunkMode(ex: ExerciseId): 'cloze' | 'produce' | null {
+  if (ex === 'produce') return 'produce';
+  const input = exerciseDef(ex).input;
+  return input === 'typed' || input === 'tiles' ? 'cloze' : null;
+}
+
+export const isChunkPath = (path: string): boolean => path.startsWith('chunk/');
 
 const num = (v: unknown, d = 0): number => (typeof v === 'number' && Number.isFinite(v) ? v : d);
 const round4 = (v: number) => Math.round(v * 10_000) / 10_000;
@@ -90,6 +122,7 @@ function skillPatch(cur: Doc, mode: LegacyMode, grade: number, colIndex: number 
 
 /** Patch für eine Karte, deren Dokument vorliegt (bzw. aus der Voreinstellung angelegt wird). */
 export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
+  if (a.kind === 'chunk') return chunkPatch(cur, a);
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
   const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t);
@@ -112,10 +145,42 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     stage: nextStage(stageOf(cur), def.level, a.grade),
     modes: { [def.mode]: { c: Math.round(num(prevMode.c)) + ok, w: Math.round(num(prevMode.w)) + (1 - ok) } },
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
-    hist: [...hist, { t: a.t, m: def.mode, g: a.grade }].slice(-HIST_MAX),
+    hist: [...hist, { t: a.t, m: def.mode, g: a.grade, x: a.ex }].slice(-HIST_MAX),
     ...skillPatch(cur, def.mode, a.grade, a.colIndex, col.length),
   };
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
+  if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
+  return patch;
+}
+
+/** Patch für eine Wendung (§3.3): Planung wie Karten, keine Fähigkeitswerte. */
+export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
+  const def = exerciseDef(a.ex);
+  const wasNew = cur.state === 'new';
+  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t);
+  const xs = isObj(cur.xs) ? cur.xs : {};
+  const prevXs = isObj(xs[a.ex]) ? (xs[a.ex] as Doc) : {};
+  const ok = a.grade > 1 ? 1 : 0;
+  const hist: unknown[] = Array.isArray(cur.hist) ? (cur.hist as unknown[]) : [];
+  const patch: Doc = {
+    fsrs: f,
+    S: Math.min(round4(f.stability), 365),
+    D: Math.min(10, Math.max(1, round4(f.difficulty))),
+    due: f.due,
+    last: a.t,
+    state: f.state === 2 ? 'review' : 'learning',
+    reps: Math.max(0, Math.round(num(cur.reps))) + 1,
+    lapses: Math.max(0, Math.round(num(cur.lapses))) + (a.grade === 1 && !wasNew ? 1 : 0),
+    stage: nextStage(stageOf(cur), def.level, a.grade),
+    xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
+    hist: [...hist, { t: a.t, m: def.mode, g: a.grade, x: a.ex }].slice(-HIST_MAX),
+  };
+  const mode = chunkMode(a.ex);
+  if (mode) {
+    const modes = isObj(cur.modes) ? cur.modes : {};
+    const prev = isObj(modes[mode]) ? (modes[mode]) : {};
+    patch.modes = { [mode]: { c: Math.round(num(prev.c)) + ok, w: Math.round(num(prev.w)) + (1 - ok) } };
+  }
   if (wasNew && (typeof cur.intro !== 'string' || !cur.intro)) patch.intro = a.day;
   return patch;
 }
@@ -127,6 +192,9 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
 export function reviewWrite(path: string, current: Doc | undefined, a: AnswerEvent, seedDefault: Doc | null): CardWrite {
   let base: Doc;
   let create = false;
+  const chunk = isChunkPath(path);
+  // Wendungen werden nie angelegt – nur vorhandene Dokumente bekommen ihre Planung (§3.3).
+  if (!current && chunk) return { kind: 'skip', reason: 'missing' };
   if (!current) {
     if (!seedDefault) return { kind: 'skip', reason: 'missing' };
     base = seedDefault;
@@ -140,8 +208,8 @@ export function reviewWrite(path: string, current: Doc | undefined, a: AnswerEve
     if (isFutureFsrs(current)) return { kind: 'skip', reason: 'future_fsrs' };
     base = current;
   }
-  const patch = cardPatch(base, a);
-  if (!cardPatchSchema.safeParse(patch).success) return { kind: 'skip', reason: 'invalid_result' };
+  const patch = chunk ? chunkPatch(base, a) : cardPatch(base, a);
+  if (!(chunk ? chunkPatchSchema : cardPatchSchema).safeParse(patch).success) return { kind: 'skip', reason: 'invalid_result' };
   const merged = applyUpdate(base, patch);
   if (!validateDoc(path, merged).ok) return { kind: 'skip', reason: 'invalid_result' };
   if (new TextEncoder().encode(JSON.stringify(merged)).length >= MAX_CARD_BYTES) return { kind: 'skip', reason: 'invalid_result' };

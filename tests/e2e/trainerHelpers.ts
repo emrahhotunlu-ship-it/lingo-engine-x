@@ -43,18 +43,71 @@ export function forcedPatch(): Record<string, Doc> {
 
 const bracket = (ex: unknown) => /\[([^\]]+)\]/.exec(typeof ex === 'string' ? ex : '')?.[1]?.trim() ?? '';
 
-/** Richtige Antwort je Übung – aus den Testdaten. */
-export function expected(ex: string, id: string, col: number | null): string {
+/** Wendung ohne „…“ und Satzzeichen am Rand – so wird sie getippt (wie domain/chunks/situation.ts). */
+export const typedForm = (en: string): string =>
+  en
+    .replace(/…|\.\.\./g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/^[,;:.!?]+|[,;:.!?]+$/g, '')
+    .trim();
+
+/** Stelle der Wendung in der aufgewerteten Fassung (Testdaten: wörtlich enthalten). */
+function chunkGap(d: Doc): string {
+  const raw = (d.src as Doc | undefined)?.upgraded;
+  const up = typeof raw === 'string' ? raw : '';
+  const want = typedForm(String(d.en));
+  const i = up.toLowerCase().indexOf(want.toLowerCase());
+  return i >= 0 ? up.slice(i, i + want.length) : want;
+}
+
+/** Richtige Antwort je Übung – aus den Testdaten. `kind` = data-kind der Übung (vocab | chunk). */
+export function expected(ex: string, id: string, col: number | null, kind: string = 'vocab', lang: string = 'de'): string {
+  // Bedeutung als Option: Deutsch die erste Übersetzung, Englisch die Erklärung bis zum Semikolon.
+  const meaning = (d: Doc) => (lang === 'en' ? (String(d.def).split(';')[0] ?? '') : (String(d.de).split(/[;,]/)[0] ?? '')).trim();
+  if (kind === 'chunk') {
+    const d = SEED[`chunk/${id}`] ?? {};
+    switch (ex) {
+      case 'mc_en':
+      case 'listen_mc':
+        return meaning(d);
+      case 'mc_de':
+      case 'type':
+      case 'situation':
+        return typedForm(String(d.en));
+      case 'speed':
+      case 'cloze':
+      case 'cloze_hint':
+      case 'match':
+      case 'tiles':
+      case 'dictation':
+        return chunkGap(d);
+      case 'produce':
+        return typedForm(String(d.en));
+      default:
+        throw new Error(`unbekannte Übung ${ex} (Wendung)`);
+    }
+  }
   const d = SEED[`vocab/${id}`] ?? {};
   switch (ex) {
     case 'mc_en':
-      return (String(d.de).split(/[;,]/)[0] ?? '').trim();
+    case 'listen_mc':
+      return meaning(d);
     case 'mc_de':
     case 'type':
       return String(d.word);
     case 'cloze':
     case 'cloze_hint':
+    case 'match':
+    case 'dictation':
+    case 'spot':
       return bracket(d.ex);
+    case 'speed':
+      return bracket(d.ex) || String(d.word);
+    case 'tiles':
+      return bracket(d.ex) || String(d.word).replace(/^to\s+/i, '');
+    case 'produce':
+      return String(d.word).replace(/^to\s+/i, '');
     case 'colloc':
       {
         const gap = (Array.isArray(d.col) ? (d.col[col ?? 0] as Doc) : {}).gap;
@@ -65,8 +118,37 @@ export function expected(ex: string, id: string, col: number | null): string {
   }
 }
 
+/** Setzt die Lösung aus den Bausteinen (Buchstaben bzw. Wörter) per Tippen zusammen. */
+export async function placeTiles(page: Page, answer: string, opts: { wrong?: boolean } = {}): Promise<void> {
+  const words = /\s/.test(answer);
+  const parts = words ? answer.split(/\s+/) : Array.from(answer);
+  if (opts.wrong) {
+    await page.locator('[data-testid="tile"][data-where="pool"]').first().click();
+    return;
+  }
+  // Lange Wörter kommen als Zweiergruppen.
+  const pool = await page.locator('[data-testid="tile"][data-where="pool"]').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
+  const pairs = !words && pool.every((x) => x.length <= 2) && pool.some((x) => x.length === 2);
+  const seq = pairs ? answer.match(/.{1,2}/g) ?? [] : parts;
+  for (const p of seq) await page.locator(`[data-testid="tile"][data-where="pool"][data-tile="${p.replace(/"/g, '\\"')}"]`).first().click();
+}
+
+/** Satz für „Eigener Satz“, den die feste Testantwort als richtig wertet (Großbuchstabe, Punkt, Zielwort). */
+export const produceSentence = (target: string): string => `In our team we ${target} every single week.`;
+
+const isTouch = (page: Page): Promise<boolean> => page.evaluate(() => window.matchMedia('(pointer: coarse)').matches);
+
 /** Beantwortet die aktuelle Übung (Tastatur); die App stuft selbst ein, Enter geht weiter. Rückgabe: Übungsart. */
 export async function answerCurrent(page: Page, opts: { wrong?: boolean } = {}): Promise<string> {
+  const { ex, step } = await answerOnly(page, opts);
+  if (await isTouch(page)) await page.getByTestId('next').click();
+  else await page.keyboard.press('Enter');
+  await expect(page.locator(`[data-step="${step}"]`)).toHaveCount(0);
+  return ex;
+}
+
+/** Beantwortet die aktuelle Übung bis zum Ergebnis (ohne „Weiter"). */
+export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Promise<{ ex: string; step: string }> {
   // Erst antworten, wenn genau eine Übung steht (kein Übergang mehr läuft).
   await expect(page.locator('[data-step]')).toHaveCount(1);
   const step = await page.locator('[data-step]').getAttribute('data-step');
@@ -74,14 +156,29 @@ export async function answerCurrent(page: Page, opts: { wrong?: boolean } = {}):
   await expect(exEl).toBeVisible();
   const ex = (await exEl.getAttribute('data-ex')) ?? '';
   const id = (await exEl.getAttribute('data-card')) ?? '';
+  const kind = (await exEl.getAttribute('data-kind')) ?? 'vocab';
   const colAttr = await exEl.getAttribute('data-col');
-  const answer = expected(ex, id, colAttr === null ? null : Number(colAttr));
-  if (ex === 'mc_en' || ex === 'mc_de' || ex === 'colloc') {
+  const lang = await page.evaluate(() => document.documentElement.lang);
+  const answer = expected(ex, id, colAttr === null ? null : Number(colAttr), kind, lang);
+  if (ex === 'mc_en' || ex === 'mc_de' || ex === 'colloc' || ex === 'listen_mc' || ex === 'match') {
     const labels = await page.getByTestId('choice').allInnerTexts();
     const idx = labels.findIndex((l) => l.replace(/^\d+\s*/, '').trim() === answer);
     expect(idx, `${ex} ${id}: „${answer}" in ${labels.join(' | ')}`).toBeGreaterThanOrEqual(0);
     const pick = opts.wrong ? (idx + 1) % labels.length : idx;
-    await page.keyboard.press(String(pick + 1));
+    // Handy: keine Ziffern-Tasten – dort wird getippt.
+    if (await isTouch(page)) await page.getByTestId('choice').nth(pick).click();
+    else await page.keyboard.press(String(pick + 1));
+  } else if (ex === 'spot') {
+    const first = answer.split(/\s+/)[0] ?? answer;
+    const words = page.getByTestId('spot-word');
+    if (opts.wrong) await words.filter({ hasNotText: first }).first().click();
+    else await words.filter({ hasText: new RegExp(`^${first}$`) }).first().click();
+  } else if (ex === 'tiles') {
+    await placeTiles(page, answer, opts);
+    await page.getByTestId('check').click();
+  } else if (ex === 'produce') {
+    await page.getByTestId('produce-input').fill(opts.wrong ? 'The meeting starts at nine.' : produceSentence(answer));
+    await page.getByTestId('check').click();
   } else {
     await page.getByTestId('gap-input').click();
     await page.keyboard.type(opts.wrong ? 'zzzz' : answer, { delay: 30 });
@@ -91,7 +188,90 @@ export async function answerCurrent(page: Page, opts: { wrong?: boolean } = {}):
   await expect(page.getByTestId('next')).toBeVisible();
   // Keine Bewertungsknöpfe mehr (CLAUDE.md A7): die Note steht schon fest.
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
-  await page.keyboard.press('Enter');
-  await expect(page.locator(`[data-step="${step ?? ''}"]`)).toHaveCount(0);
-  return ex;
+  return { ex, step: step ?? '' };
+}
+
+/**
+ * Rundgang durch die neuen Abfragearten (screens.spec, a11y.spec): je Art eine Karte, die als
+ * erste fällig ist und deren schwächste Art feststeht – in dieser Reihenfolge. Dazu die Wendung
+ * „aus der Situation“ und das Blatt einer Wendung in der Wortschatzliste.
+ */
+export const TOUR: ReadonlyArray<{ path: string; ex: string; stage: number; others: string[] }> = [
+  { path: 'vocab/avoid', ex: 'spot', stage: 1, others: ['mc_en', 'listen_mc'] },
+  { path: 'vocab/deserve', ex: 'listen_mc', stage: 1, others: ['mc_en', 'spot'] },
+  { path: 'vocab/convince', ex: 'match', stage: 2, others: ['mc_de'] },
+  { path: 'vocab/afford', ex: 'tiles', stage: 3, others: ['cloze_hint'] },
+  { path: 'vocab/achieve', ex: 'dictation', stage: 5, others: ['speed', 'produce'] },
+  { path: 'vocab/approach', ex: 'speed', stage: 5, others: ['dictation', 'produce'] },
+  { path: 'vocab/affect', ex: 'produce', stage: 5, others: ['dictation', 'speed'] },
+  { path: 'chunk/c-non-negotiable', ex: 'situation', stage: 4, others: ['type', 'cloze'] },
+];
+
+export function tourPatch(): Record<string, Doc> {
+  // Ohne „Automatisch weiter“ (M6): die Prüfung des Ergebnisses dauert länger als 1,2 s.
+  const out: Record<string, Doc> = { 'app/profile': { ...planPatch(TOUR.length), autoNext: false } };
+  TOUR.forEach((t, i) => {
+    const xs: Record<string, { c: number; w: number }> = { [t.ex]: { c: 0, w: 6 } };
+    for (const o of t.others) xs[o] = { c: 6, w: 0 };
+    out[t.path] = { state: 'learning', stage: t.stage, S: 1, D: 5, due: 1_680_000_000_000 + i * 1000, last: 1_679_900_000_000, reps: 3, lapses: 0, xs };
+  });
+  // Englische Oberfläche: die Absicht der Situationsübung braucht die englische Erklärung.
+  out['chunk/c-non-negotiable'] = { ...out['chunk/c-non-negotiable'], def: 'not open to discussion or change' };
+  return out;
+}
+
+/** Besucht jede neue Abfrageart (Frage und Ergebnis) und das Wendungsblatt; `scan` prüft den Zustand. */
+export async function trainerTour(page: Page, scan: (name: string) => Promise<void>): Promise<void> {
+  await page.getByTestId('start').click();
+  await page.getByTestId('trainer').waitFor();
+  const visited = new Set<string>();
+  for (let i = 0; i < 30 && visited.size < TOUR.length; i++) {
+    await expect(page.locator('[data-step]')).toHaveCount(1);
+    const exEl = page.getByTestId('exercise');
+    await expect(exEl).toBeVisible();
+    const card = (await exEl.getAttribute('data-card')) ?? '';
+    const t = TOUR.find((x) => x.path.endsWith(`/${card}`));
+    // Wiedervorlage einer schon besuchten Karte (Lernschritte, F10): einfach lösen.
+    if (!t || visited.has(t.path)) {
+      await answerCurrent(page);
+      continue;
+    }
+    visited.add(t.path);
+    const progress = await page.getByTestId('trainer-progress').innerText();
+    await expect(exEl, `${card} · Stufe ${await exEl.getAttribute('data-stage')} · ${progress} · Folge ${[...visited].join(',')}`).toHaveAttribute('data-ex', t.ex);
+    // Kartenwechsel fertig eingeblendet (seitliche Überblendung), dann erst prüfen.
+    await page.waitForFunction(() => {
+      const el = document.querySelector<HTMLElement>('[data-step]');
+      if (!el) return false;
+      const cs = getComputedStyle(el);
+      return cs.opacity === '1' && (cs.transform === 'none' || cs.transform === 'matrix(1, 0, 0, 1, 0, 0)');
+    });
+    // Wie learnTour: kurz warten, bis alle Übergänge (auch im Inhalt) stehen.
+    await page.waitForTimeout(450);
+    await scan(`trainer-${t.ex}`);
+    // Tempo: dauert die Prüfung des Frage-Zustands länger als die Zeitgrenze, steht das Ergebnis schon.
+    let timedOut = t.ex === 'speed' && (await page.getByTestId('verdict').isVisible());
+    if (t.ex === 'speed' && !timedOut && Number((await page.getByTestId('speed-bar').getAttribute('data-left-ms').catch(() => '0')) ?? '0') < 3000) {
+      // Zu knapp zum Tippen: den Ablauf abwarten (kein Wettlauf mit dem Balken).
+      await expect(page.getByTestId('verdict')).toBeVisible();
+      timedOut = true;
+    }
+    const step = timedOut ? ((await page.locator('[data-step]').getAttribute('data-step')) ?? '') : (await answerOnly(page)).step;
+    await page.waitForTimeout(450);
+    await scan(`trainer-${t.ex}-ergebnis`);
+    if (await isTouch(page)) await page.getByTestId('next').click();
+    else await page.keyboard.press('Enter');
+    await expect(page.locator(`[data-step="${step}"]`)).toHaveCount(0);
+  }
+  expect(visited.size).toBe(TOUR.length);
+  await page.getByTestId('trainer-close').click();
+  await page.getByTestId('tab-learn').click();
+  await page.getByTestId('hub-vocab').click();
+  await expect(page.getByTestId('vocab')).toBeVisible();
+  await page.locator('[data-testid="vocab-filter"][data-filter="phrases"]').click();
+  await page.locator('[data-testid="vocab-row"][data-word="c-i-take-your-point-but"]').click();
+  await expect(page.getByTestId('chunk-origin')).toBeVisible();
+  await page.waitForTimeout(450);
+  await scan('wortschatz-wendung');
+  await page.keyboard.press('Escape');
 }

@@ -4,6 +4,7 @@ import { boot, openOverview, screen, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { ARTICLE_OWN, inputTour, openModule } from './inputHelpers';
 import { progressTour } from './progressHelpers';
+import { tourPatch, trainerTour } from './trainerHelpers';
 
 // Barrierefreiheit (Kap. 8, Kap. 12): axe in allen drei Modi, Touch-Ziele ≥ 44 px.
 
@@ -36,6 +37,25 @@ for (const theme of THEMES) {
       await screen(page, 'today');
       const found: string[] = [];
       await learnTour(page, async (name) => {
+        const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+        found.push(...res.violations.map((v) => `${name} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`));
+      });
+      expect(found).toEqual([]);
+    });
+  }
+}
+
+// Trainer: jede neue Abfrageart (Frage und Ergebnis), Situation, Wendungsblatt – je Modus und Breite.
+for (const theme of THEMES) {
+  for (const width of [390, 1440]) {
+    test(`axe · Trainer-Abfragearten und Wendungen · ${theme} · ${width}px`, async ({ page }) => {
+      test.setTimeout(90_000);
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await boot(page, { theme, migrated: true, fake: { patch: tourPatch() } });
+      await screen(page, 'today');
+      const found: string[] = [];
+      await trainerTour(page, async (name) => {
         const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
         found.push(...res.violations.map((v) => `${name} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`));
       });

@@ -4,6 +4,7 @@ import { boot, layoutProblems, openOverview, screen, type Lang, type Theme } fro
 import { learnTour } from './learnHelpers';
 import { inputTour } from './inputHelpers';
 import { progressTour } from './progressHelpers';
+import { tourPatch, trainerTour } from './trainerHelpers';
 
 // Jeder Bildschirm rendert auf 390, 1440 und 2560 px, in allen drei Modi und beiden
 // Sprachen: keine JS-Fehler, kein undefined/NaN/{0}, kein Querscrollen, nichts
@@ -132,6 +133,47 @@ for (const vp of VIEWPORTS) {
           if (lang === 'en') expect(P4_GERMAN_IN_EN.exec(text)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
           else expect(P4_ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
           if (theme !== 'dim') await page.screenshot({ path: `${SHOTS}/input-${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
+        });
+        expect(errors).toEqual([]);
+        expect(external).toEqual([]);
+        await context.close();
+      });
+    }
+  }
+}
+
+// Trainer: neue Abfragearten (Frage und Ergebnis), Wendung aus der Situation, Wendungsblatt der
+// Wortschatzliste – in allen Breiten, Modi und Sprachen.
+for (const vp of VIEWPORTS) {
+  for (const theme of THEMES) {
+    for (const lang of LANGS) {
+      test(`trainer-${vp.name}-${theme}-${lang}`, async ({ browser }) => {
+        test.setTimeout(90_000);
+        const context = await browser.newContext({
+          viewport: { width: vp.width, height: vp.height },
+          isMobile: vp.mobile,
+          hasTouch: vp.mobile,
+          deviceScaleFactor: vp.mobile ? 2 : 1,
+          timezoneId: 'Europe/Berlin',
+          locale: lang === 'de' ? 'de-DE' : 'en-US',
+          reducedMotion: 'reduce',
+        });
+        const page = await context.newPage();
+        const { errors, external } = await boot(page, { theme, lang, migrated: true, fake: { patch: tourPatch() } });
+        await screen(page, 'today');
+        await trainerTour(page, async (name) => {
+          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
+          expect(await layoutProblems(page), name).toEqual([]);
+          // Englische Inhalte (lang="en") und Zitate gehören nicht zur Oberfläche.
+          const text = await page.evaluate(() => {
+            const clone = document.body.cloneNode(true) as HTMLElement;
+            clone.querySelectorAll('[lang="en"]').forEach((el) => el.remove());
+            return clone.innerText;
+          });
+          const ui = (lang === 'en' ? await page.locator('body').innerText() : text).replace(/„[^“”]*[“”]|“[^”]*”|"[^"]*"/g, ' ');
+          if (lang === 'en') expect(GERMAN_IN_EN.exec(ui)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
+          else expect(ENGLISH_UI_IN_DE.exec(ui)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
+          await page.screenshot({ path: `${SHOTS}/${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
         });
         expect(errors).toEqual([]);
         expect(external).toEqual([]);
