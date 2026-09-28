@@ -150,3 +150,27 @@ for (const [theme, lang] of [['dark', 'de'], ['dim', 'en'], ['light', 'de']] as 
     }
   });
 }
+
+test('Tageseinheit Block 3: 90/60/45 mit Frage A der Woche und Wochenziel-Leiste', async ({ page }) => {
+  const { errors } = await bootAt(page, { name: 'fluency', unit: 3 });
+  await screen(page, 'fluency');
+  await expect(page.getByTestId('fluency-question')).toHaveAttribute('data-q', /.+/);
+  await page.getByTestId('fluency-start').click();
+  await expect(page.getByTestId('target-bar')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('Tageseinheit Block 3: Rollenspiel zum Thema mit Wochenziel-Leiste, „Weiter“ im Bericht wartet nicht auf die KI', async ({ page }) => {
+  await installGoalCheckReply(page);
+  const { errors } = await bootAt(page, { name: 'roleplay', sceneId: 'b03', unit: 3 });
+  await screen(page, 'roleplay');
+  await expect(page.getByTestId('target-bar')).toBeVisible();
+  await expect(page.getByTestId('rp-traps')).toBeVisible();
+  await send(page, 'I understand it may seem high at first glance, but it pays for itself within 18 months.');
+  // Zähler der Wochenziele stehen da (die Wendungen hängen vom Wochenthema des Testtags ab).
+  expect(await page.getByTestId('target-bar').getByTestId('target-chip').count()).toBeGreaterThan(0);
+  await page.getByTestId('rp-end').click();
+  await expect(page.getByTestId('report')).toHaveAttribute('data-state', 'saved');
+  await expect(page.getByTestId('report-unit-next')).toBeEnabled();
+  expect(errors).toEqual([]);
+});
