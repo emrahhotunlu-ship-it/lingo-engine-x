@@ -122,6 +122,12 @@ test('Block 5: aus dem Kopf neu formulieren, danach beide Fassungen nebeneinande
 test('Werkzeug der Woche: grammar?topic=c1-hedging öffnet das Themenblatt', async ({ page }) => {
   const { errors } = await bootAt(page, { name: 'grammar', topic: 'c1-hedging' });
   await expect(page.getByTestId('rule-sheet')).toHaveAttribute('data-topic', 'c1-hedging');
+  // Umschalter steht auf dem C1-Werkzeugkasten; B2-Themen sind einen Tipp entfernt.
+  await page.keyboard.press('Escape');
+  await expect(page.locator('ul[data-set="c1"] [data-testid="topic"]')).toHaveCount(7);
+  await page.getByTestId('gr-set-b2').click();
+  await expect(page.locator('[data-testid="topic"][data-topic^="c1-"]')).toHaveCount(0);
+  await expect(page.locator('[data-testid="topic"]')).toHaveCount(16);
   expect(errors).toEqual([]);
 });
 

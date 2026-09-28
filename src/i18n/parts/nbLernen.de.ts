@@ -58,4 +58,7 @@ export const nbLernenDe = {
   nbLernenResumePattern: 'Deutsch-Falle · Aufgabe {n} von {total}',
   nbLernenStartSet: 'Typische Fallen im Beruf',
   nbLernenStartSetLead: '25 klassische Deutsch-Fallen – je 3 Sätze zum Umschreiben, auch ohne KI.',
+  nbLernenGrammarSet: 'Themen',
+  nbLernenGrammarB2: 'B2-Themen',
+  nbLernenGrammarC1: 'C1-Werkzeugkasten',
 } as const;
