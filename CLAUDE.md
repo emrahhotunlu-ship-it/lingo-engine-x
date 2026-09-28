@@ -287,6 +287,11 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - Emrah: „Kannst du nicht gleich die App programmieren? Ich will die App in 12 Stunden fertig haben!“ → Prototyp v2 gestoppt, direkter Neubau der Oberfläche (Daten-/Domänenschicht bleibt). Plan in `docs/neubau/`. Feste Grenze: Was nach 12 Stunden nicht grün ist, kommt ins nächste Paket. Erst Test-Link `AXHkh6…`, `JLL8…` nur mit „Ja, veröffentlichen“.
 - **Anki-Modus (Emrahs Wunsch, im Prototyp v1 gutgeheißen):** Im Wortschatz gibt es Aufdecken + 4 Knöpfe (Nochmal/Schwer/Gut/Leicht) mit angezeigten Intervallen und hervorgehobenem App-Vorschlag. Das ist die einzige Ausnahme von „keine Selbstbewertung“ (18:15). Im Tippen-Modus und in allen Übungen bewertet weiter die App.
 
+**28.09.2026 – Preply-Bereich entfällt (Emrahs Vorgabe)**
+- Der Preply-Bereich wird komplett aus der Oberfläche entfernt (Seiten, Einstiege, „Nächste Stunde“, Wochenziele, „Als Preply-Stunde“, „Mit Lehrer besprechen“, Preply-Rollen im Wochenplan). Die Daten (`preply/*`, `app/week.preplyNext`, `app/decks.flagged`) bleiben unangetastet in der Datenbank.
+- Übrig bleibt nur **„Lehrer-Feedback einfügen“**: Emrah fügt Wörter, Wendungen, Korrekturen oder Übungen aus der Stunde ein. Die App macht daraus Karteikarten (mit Ursprungssatz), Reparatur-Sätze und eine Übungsrunde in der App.
+- Emrah hat den Test-Link des Neubaus als „ganz in Ordnung“ bewertet und will die App wie geplant fertig (Paket B). Das Wochenlimit ist knapp, deshalb: keine zusätzlichen Prüfrunden, eine volle Testsuite vor dem Test-Link.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
