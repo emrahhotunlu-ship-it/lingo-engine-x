@@ -74,4 +74,15 @@ export const nbProfilEn: Record<keyof typeof nbProfilDe, string> = {
   nbProfilCsv: 'Cards as CSV for Anki',
   nbProfilCsvHint: 'German on the front, English on the back, source sentence as the third field.',
   nbProfilCsvEmpty: 'No cards to export yet.',
+  // Make me an exercise (N96)
+  nbProfilDrillOffer: 'Make me an exercise on this',
+  nbProfilDrillTitle: 'Exercise from Claude',
+  nbProfilDrillLoading: 'Claude is writing five sentences …',
+  nbProfilDrillTask: 'Type the missing word into the gap.',
+  nbProfilDrillGap: 'Gap',
+  nbProfilDrillRight: 'Correct',
+  nbProfilDrillWrong: 'Not yet – here is the answer:',
+  nbProfilDrillScore: '{right} of {total} correct',
+  nbProfilDrillBack: 'Back to the conversation',
+  nbProfilDrillAgain: 'Five new sentences',
 } as const;

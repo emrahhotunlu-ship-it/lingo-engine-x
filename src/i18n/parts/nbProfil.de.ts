@@ -73,4 +73,15 @@ export const nbProfilDe = {
   nbProfilCsv: 'Karten als CSV für Anki',
   nbProfilCsvHint: 'Deutsch vorn, Englisch hinten, Ursprungssatz als drittes Feld.',
   nbProfilCsvEmpty: 'Noch keine Karten zum Exportieren.',
+  // Mach mir eine Übung dazu (N96)
+  nbProfilDrillOffer: 'Mach mir eine Übung dazu',
+  nbProfilDrillTitle: 'Übung von Claude',
+  nbProfilDrillLoading: 'Claude baut fünf Sätze …',
+  nbProfilDrillTask: 'Tippe das fehlende Wort in die Lücke.',
+  nbProfilDrillGap: 'Lücke',
+  nbProfilDrillRight: 'Richtig',
+  nbProfilDrillWrong: 'Noch nicht – so heißt es:',
+  nbProfilDrillScore: '{right} von {total} richtig',
+  nbProfilDrillBack: 'Zurück zum Gespräch',
+  nbProfilDrillAgain: 'Fünf neue Sätze',
 } as const;

@@ -85,7 +85,16 @@ test.describe('Handy 390', () => {
     const keys = await page.getByTestId('chat-suggestion').evaluateAll((els) => els.map((e) => e.getAttribute('data-key')));
     expect(keys).toEqual(['nbProfilSgExample', 'nbProfilSgOther', 'nbProfilSgGerman']);
     await expect(page.getByTestId('chat-suggestion').nth(1)).toHaveText('Wann nimmt man das andere?');
-    expect(errors).toEqual([]);
+    // N96: „Mach mir eine Übung dazu“ startet die Übung im Player (Thema = Frage und Antwort).
+    await page.locator('[data-testid="chat-action"][data-action="drill"]').tap();
+    await screen(page, 'claudeDrill');
+    const call = (await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null; input: string }> } }).__LINGO_FAKE__.sampleCalls)).filter((c) => c.id === 'claude-drill');
+    expect(call).toHaveLength(1);
+    expect(call[0]?.input).toContain('since 2020');
+    // Ohne feste Antwort des Adapters: sauberer Fehlerzustand mit „Erneut versuchen“ (A6.3).
+    await expect(page.getByTestId('cd-item').or(page.getByTestId('cd-error'))).toBeVisible();
+    expect(await layoutProblems(page)).toEqual([]);
+    expect(errors.filter((e) => !e.includes('claude-drill'))).toEqual([]);
   });
 });
 
