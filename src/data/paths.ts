@@ -36,6 +36,7 @@ import {
   weekSchema,
   outSchema,
   memorySchema,
+  compareSchema,
 } from './schemas';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
@@ -60,6 +61,8 @@ export const APP_DOCS = {
   'app/week': weekSchema,
   // Paket B (Backlog B5): „Claude merkt sich“ – Fakten aus Gesprächen und Terminen.
   'app/memory': memorySchema,
+  // Paket B (Backlog B1): monatliche Vergleichsaufgabe.
+  'app/compare': compareSchema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {

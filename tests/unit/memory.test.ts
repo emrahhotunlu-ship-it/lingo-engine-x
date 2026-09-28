@@ -77,7 +77,8 @@ describe('app/memory (domain/memory)', () => {
 
   it('Verlauf: Lerner/Coach je Zeile, älteste fallen bei Überlänge heraus; ohne eigene Nachricht leer', () => {
     expect(transcriptOf([{ role: 'assistant', content: 'Hallo' }])).toBe('');
-    const msgs = Array.from({ length: 30 }, (_, i) => ({ role: (i % 2 ? 'assistant' : 'user') as 'user' | 'assistant', content: `Nachricht ${i} ${'z'.repeat(500)}` }));
+    const roleOf = (i: number): 'user' | 'assistant' => (i % 2 ? 'assistant' : 'user');
+    const msgs = Array.from({ length: 30 }, (_, i) => ({ role: roleOf(i), content: `Nachricht ${i} ${'z'.repeat(500)}` }));
     const tr = transcriptOf(msgs, 3_000);
     expect(tr.length).toBeLessThanOrEqual(3_000);
     expect(tr.split('\n').at(-1)).toMatch(/^Coach: Nachricht 29/);

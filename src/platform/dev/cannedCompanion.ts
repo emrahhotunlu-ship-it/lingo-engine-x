@@ -203,7 +203,29 @@ function memoryExtractReply(input: string): string {
   return JSON.stringify({ facts });
 }
 
+// ---------------------------------------------------------------- compare@1 (B1)
+
+function compareReply(input: string): string {
+  const en = /Write all fields in English/.test(input);
+  return JSON.stringify(
+    en
+      ? {
+          summary: 'You speak more fluently than four weeks ago and your email is clearer. You used more of your own phrases and made fewer typical German-English mistakes. Your sentences are still quite short when you speak.',
+          better: ['More words per minute in the 45-second task', 'You used "push back the deadline" naturally'],
+          next: 'Link your ideas with "that said" or "on top of that" when you speak.',
+          level: 'Both versions are B2, the new one is closer to C1 in range.',
+        }
+      : {
+          summary: 'Du sprichst flüssiger als vor vier Wochen und deine Mail ist klarer aufgebaut. Du hast mehr eigene Wendungen benutzt und weniger typische Deutsch-Fallen gemacht. Beim Sprechen sind deine Sätze noch recht kurz.',
+          better: ['Mehr Wörter pro Minute im 45-Sekunden-Durchgang', 'Du hast "push back the deadline" frei benutzt'],
+          next: 'Verbinde beim Sprechen deine Gedanken mit "that said" oder "on top of that".',
+          level: 'Beide Fassungen liegen bei B2, die neue ist im Wortschatz näher an C1.',
+        },
+  );
+}
+
 export function registerCompanionReplies(): void {
+  registerCannedReply('compare', compareReply);
   registerCannedReply('companion-chat', companionChatReply);
   registerCannedReply('memory-extract', memoryExtractReply);
   registerCannedReply('translate', translateReply);
