@@ -172,3 +172,26 @@ for (const theme of ['dark', 'dim', 'light'] as const) {
     await scan('vocab');
   });
 }
+
+// G3/N04: Neuladen bei Karte 23 setzt bei 23 fort, ohne doppelten Schreibvorgang (WP0b-Fortsetzen).
+test('Neuladen bei Karte 23: gleiche Stelle, kein doppelter Eintrag', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const { patch, ids } = ankiPatch(30);
+  await boot(page, { migrated: true, fake: { persist: true, patch: { 'app/profile': planPatch(30), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } as never });
+  await startReview(page);
+  for (let i = 0; i < 22; i++) {
+    const card = (await page.getByTestId('flip').getAttribute('data-card')) ?? '';
+    await page.keyboard.press(' ');
+    await page.keyboard.press('3');
+    await expect(page.locator(`[data-testid="flip"][data-card="${card}"]`)).toHaveCount(0);
+  }
+  const at23 = (await page.getByTestId('flip').getAttribute('data-card')) ?? '';
+  await expect(page.getByTestId('trainer-progress')).toContainText('23');
+  const logged = async () => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => ids.includes(String(e.id)) && e.m === 'tr-flip').length;
+  await expect.poll(logged).toBe(22);
+  await page.reload();
+  await screen(page, 'trainer');
+  await expect(page.getByTestId('flip')).toHaveAttribute('data-card', at23);
+  await expect(page.getByTestId('trainer-progress')).toContainText('23');
+  expect(await logged()).toBe(22);
+});
