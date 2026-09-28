@@ -68,7 +68,9 @@ test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis u
   const before = await dump(page);
   await page.getByTestId('gr-start').click();
   const rows = await playRound(page, { wrongAt: 1 });
-  expect(rows).toHaveLength(8);
+  // N47: Die falsche Aufgabe kommt am Rundenende einmal wieder (nicht gezählt, nicht gespeichert).
+  expect(rows).toHaveLength(9);
+  expect(rows[8]?.prompt).toBe(rows[1]?.prompt);
   expect(rows[1]?.verdict).toBe('wrong');
   expect(rows.filter((_, i) => i !== 1).every((r) => r.verdict === 'correct'), JSON.stringify(rows)).toBe(true);
   expect(new Set(rows.map((r) => r.type)).size).toBeGreaterThanOrEqual(2);

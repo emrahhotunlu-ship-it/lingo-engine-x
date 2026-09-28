@@ -62,4 +62,5 @@ export const nbLernenDe = {
   nbLernenGrammarB2: 'B2-Themen',
   nbLernenGrammarC1: 'C1-Werkzeugkasten',
   nbLernenBrief: 'Kurz erklärt',
+  nbLernenRepeatBadge: 'Nochmal',
 } as const;
