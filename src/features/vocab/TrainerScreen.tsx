@@ -11,7 +11,7 @@ import { Summary } from './Summary';
 import { abortExamples } from './examples';
 import { flush } from './persist';
 import { answerRepair, commitHeld, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, skipCurrent, touch, useSession } from './session';
-import { UndoBar } from './anki/UndoBar';
+import { UndoBar, useUndoBar } from './anki/UndoBar';
 import { FlipCard } from './anki/FlipCard';
 import { StepBoundary } from '../../app/shell/Boundary';
 import { usePlayerSkip } from '../../app/shell/Player';
@@ -38,6 +38,7 @@ export function TrainerScreen() {
   const step = useSession((s) => s.step);
   const cards = useSession((s) => s.cards);
   const pool = useSession((s) => s.pool);
+  const undo = useUndoBar();
   const repair = useSession(currentRepair);
 
   const knownWords = useMemo(() => new Set(pool.map((c) => normalize(c.lemma))), [pool]);
@@ -90,18 +91,16 @@ export function TrainerScreen() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="trainer">
-      <div className="relative">
-        <ExerciseTop
-          onClose={leave}
-          closeLabel={t('trClose')}
-          closeTestId="trainer-close"
-          progress={progress}
-          progressTestId="trainer-progress"
-          ctx={round === 'extra' ? 'extra' : 'duty'}
-          duty="review"
-        />
-        <UndoBar />
-      </div>
+      <ExerciseTop
+        onClose={leave}
+        closeLabel={t('trClose')}
+        closeTestId="trainer-close"
+        progress={progress}
+        progressTestId="trainer-progress"
+        ctx={round === 'extra' ? 'extra' : 'duty'}
+        duty="review"
+        middleOverlay={undo.t !== null ? <UndoBar /> : null}
+      />
       <motion.div
         key={status === 'summary' ? 'summary' : `step-${step}`}
         data-step={status === 'summary' ? 'summary' : step}

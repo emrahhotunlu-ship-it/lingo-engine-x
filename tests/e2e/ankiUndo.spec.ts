@@ -22,6 +22,12 @@ test('Rückgängig: dieselbe Karte von vorn, gespeichert wird nur die neue Bewer
   await page.locator('[data-testid="grades"] button[data-grade="1"]').click();
   await expect(page.getByTestId('undo-bar')).toBeVisible();
   await expect(page.getByTestId('undo-bar')).toContainText(/\S/);
+  // Befund 28.09. (Emrahs Kommentar): der Streifen deckte ✕, Übersetzer, Claude und Einstellungen
+  // zu. Jetzt ersetzt er nur den Fortschrittsbalken, die Symbole bleiben immer erreichbar.
+  await expect(page.getByTestId('trainer-close')).toBeVisible();
+  await expect(page.getByTestId('open-translate')).toBeVisible();
+  await expect(page.getByTestId('open-companion')).toBeVisible();
+  await expect(page.getByTestId('open-settings')).toBeVisible();
   await page.getByTestId('undo').click();
   await expect(page.getByTestId('undo-bar')).toHaveCount(0);
   await expect(flip).toHaveAttribute('data-card', id);

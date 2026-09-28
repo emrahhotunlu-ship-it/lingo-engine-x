@@ -122,6 +122,7 @@ export function ExerciseTop({
   progressTestId,
   ctx = null,
   duty = null,
+  middleOverlay = null,
 }: {
   onClose: () => void;
   closeLabel?: string;
@@ -130,6 +131,8 @@ export function ExerciseTop({
   progressTestId?: string;
   ctx?: Ctx | 'extra' | null;
   duty?: DutyId | null;
+  /** Siehe `ExerciseBar`: ersetzt nur den Fortschrittsbalken, nie ✕ oder `end`. */
+  middleOverlay?: ReactNode;
 }) {
   const { t } = useT();
   const player = usePlayer();
@@ -153,6 +156,7 @@ export function ExerciseTop({
       progressTestId={progressTestId ?? 'round-progress'}
       note={note}
       end={<ExerciseActions />}
+      middleOverlay={middleOverlay}
     />
   );
 }
