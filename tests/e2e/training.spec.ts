@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openEntry, openTab, screen } from './fixtures';
 import { nbLog, outItems, typeGap } from './trainingHelpers';
@@ -264,3 +265,19 @@ test('Soll N109: Wortbetonung und Zahlen ohne KI', async ({ page }) => {
   await page.getByTestId('number-reveal').click();
   await expect(page.getByTestId('feedback-solution')).toContainText('one point five billion euros');
 });
+
+for (const theme of ['dark', 'dim', 'light'] as const) {
+  test(`Barrierefreiheit (${theme}): Kollokation und Posteingang ohne ernste axe-Verstöße`, async ({ page }) => {
+    await boot(page, { migrated: true, theme, lang: theme === 'light' ? 'en' : 'de' });
+    await openEntry(page, 'training-colloc');
+    await screen(page, 'nbdrill');
+    const a = await new AxeBuilder({ page }).include('[data-testid="nbdrill"]').analyze();
+    expect(a.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
+    await page.getByTestId('round-close').click();
+    await openEntry(page, 'training-inbox');
+    await screen(page, 'inbox');
+    const b = await new AxeBuilder({ page }).include('[data-testid="inbox"]').analyze();
+    expect(b.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
+    expect(await layoutProblems(page)).toEqual([]);
+  });
+}
