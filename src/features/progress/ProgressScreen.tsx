@@ -16,22 +16,23 @@ import { ErrorsTab } from './ErrorsTab';
 import { HistoryTab } from './HistoryTab';
 import { JudgeTab } from './JudgeTab';
 import { PathTab } from './PathTab';
-import { LevelScale, WeekStrip } from './StandHeader';
-import { RepairStandLine } from '../repair/StandLine';
-import { PatternsStandCard } from '../patterns/StandCard';
+import { LevelScale } from './StandHeader';
+import { StatsTab } from './StatsTab';
 
-// „Dein Stand" (Kap. 6.13, Plan E18, UX-Beratung Nr. 6): eine Kopfkarte mit Serie · Kurs · Karten,
-// Woche und Niveau, darunter vier Reiter in einer Zeile
-// Urteil · Fehler · Weg nach C1 · Verlauf – kein endloses Scrollen am Handy, nichts doppelt.
-// Der zuletzt offene Reiter steht in localStorage (Bequemlichkeit). Das Öffnen ist einer der
-// beiden Auslöser der Einschätzung (Plan W1).
+// „Dein Stand" (Kap. 6.13, Neubau plan.md §1.3): Kopf Kurs · Wörter · Niveau-Skala, darunter fünf
+// Reiter Urteil · Fehler · Ziel C1 · Statistik · Verlauf – kein endloses Scrollen am Handy, nichts
+// doppelt. Serie und Wochenstreifen stehen im Profil-Blatt, die Tests und der Wochenbericht dort als
+// Zeilen. Das Profil-Blatt öffnet die Seite direkt auf einem Reiter (`route.tab`); sonst gilt der
+// zuletzt offene Reiter aus localStorage (Bequemlichkeit). Das Öffnen ist einer der beiden Auslöser
+// der Einschätzung (Plan W1).
 
-export type ProgressTab = 'judge' | 'errors' | 'path' | 'history';
+export type ProgressTab = 'judge' | 'errors' | 'path' | 'stats' | 'history';
 const TAB_KEY = 'lx:progress-tab';
 const TABS: ReadonlyArray<{ id: ProgressTab; label: MessageKey }> = [
   { id: 'judge', label: 'progJudge' },
   { id: 'errors', label: 'progErrors' },
   { id: 'path', label: 'progPath' },
+  { id: 'stats', label: 'nbProfilTabStats' },
   { id: 'history', label: 'progHistory' },
 ];
 const isTab = (v: unknown): v is ProgressTab => TABS.some((x) => x.id === v);
@@ -75,6 +76,13 @@ export function ProgressScreen() {
     setTab(id);
     local.set(TAB_KEY, id);
   };
+  // Aus dem Profil-Blatt direkt auf einen Reiter, auch wenn die Seite schon offen ist.
+  const routeTab = route.name === 'overview' ? route.tab : undefined;
+  const [seenRouteTab, setSeenRouteTab] = useState(routeTab);
+  if (routeTab !== seenRouteTab) {
+    setSeenRouteTab(routeTab);
+    if (routeTab) setTab(routeTab);
+  }
 
   // Auslöser der Einschätzung (Plan W1): Reiter „Dein Stand" geöffnet – höchstens einmal je Tag.
   useEffect(() => {
@@ -102,21 +110,19 @@ export function ProgressScreen() {
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('ovTitle')}</h1>
       </motion.header>
 
-      {/* UX-Beratung Nr. 6: EINE Kopfkarte – Serie · Kurs · Wörter, darunter Woche und Niveau. */}
+      {/* plan.md §1.3: EINE Kopfkarte – Kurs · Wörter · Niveau, darunter die Niveau-Skala. */}
       <motion.section variants={item} aria-label={t('ovTitle')} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
         <div className="grid grid-cols-3 gap-3 sm:gap-6">
-          <Stat label={t('streakLabel')} value={num(ov.streak.count)} unit={t(ov.streak.count === 1 ? 'streakUnit_one' : 'streakUnit_other')} testId="streak-count" />
           <Stat label={t('courseLabel')} value={num(ov.course.done)} unit={t('courseUnit', { total: ov.course.total })} testId="course-done" />
           <Stat label={t('vocabLabel')} value={num(ov.vocab.total)} unit={t(ov.vocab.total === 1 ? 'vocabUnit_one' : 'vocabUnit_other')} testId="vocab-total" />
+          <Stat label={t('nbProfilLevel')} value={assess?.data.cefr ?? '–'} unit={assess?.data.cefr ? t('nbProfilLevelUnit') : t('nbProfilLevelNone')} testId="stand-level" />
         </div>
-        <div className="grid gap-5 border-t border-line pt-4 sm:grid-cols-2 sm:gap-8">
-          <WeekStrip week={ov.week} />
-          {assess?.data.cefr ? <LevelScale data={assess.data} /> : <p className="self-center text-sm text-muted">{t('lvNone')}</p>}
-        </div>
+        {assess?.data.cefr && (
+          <div className="border-t border-line pt-4">
+            <LevelScale data={assess.data} />
+          </div>
+        )}
       </motion.section>
-      <RepairStandLine />
-      {/* Lernberatung V3/V8: Deutsch-Fallen mit Verlauf und Wochenfokus. */}
-      <PatternsStandCard />
 
       <LateRescueCard />
 
@@ -125,6 +131,7 @@ export function ProgressScreen() {
           {tab === 'judge' && <JudgeTab />}
           {tab === 'errors' && <ErrorsTab />}
           {tab === 'path' && <PathTab />}
+          {tab === 'stats' && <StatsTab />}
           {tab === 'history' && <HistoryTab />}
         </Tabs>
       </motion.div>

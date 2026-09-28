@@ -143,3 +143,92 @@ export const vtestMachine = setup({
     cancelled: { type: 'final' },
   },
 });
+
+// ------------------------------------------------------------------ Fortsetzen (Neubau G3, §3.2)
+
+/** Momentaufnahme des laufenden Tests: nur Zustand und Antworten, die Aufgaben entstehen neu aus `seed`. */
+export type VtestSnap = {
+  v: 1;
+  seed: string;
+  lang: 'de' | 'en';
+  day: string;
+  state: 'yesno' | 'meaning' | 'active' | 'asking';
+  resumeTo: 'yesno' | 'meaning' | 'active';
+  i: number;
+  yes: string[];
+  mRight: number;
+  aRight: number;
+  started: number;
+  answered: { id?: string; correct: boolean } | null;
+};
+
+const RUNNING: ReadonlySet<string> = new Set(['yesno', 'meaning', 'active', 'asking']);
+
+/** Momentaufnahme aus dem Maschinenzustand; `null` außerhalb der drei Teile (Einstieg, Ergebnis …). */
+export function vtestSnapOf(state: string, c: Ctx): VtestSnap | null {
+  if (!RUNNING.has(state)) return null;
+  return {
+    v: 1,
+    seed: c.input.seed,
+    lang: c.input.lang,
+    day: c.input.day,
+    state: state as VtestSnap['state'],
+    resumeTo: c.resumeTo,
+    i: c.i,
+    yes: [...c.yes],
+    mRight: c.mRight,
+    aRight: c.aRight,
+    started: c.started,
+    answered: c.answered,
+  };
+}
+
+export function isVtestSnap(x: unknown): x is VtestSnap {
+  if (!x || typeof x !== 'object') return false;
+  const s = x as Record<string, unknown>;
+  return (
+    s.v === 1 &&
+    typeof s.seed === 'string' &&
+    typeof s.day === 'string' &&
+    (s.lang === 'de' || s.lang === 'en') &&
+    typeof s.state === 'string' &&
+    RUNNING.has(s.state) &&
+    (s.resumeTo === 'yesno' || s.resumeTo === 'meaning' || s.resumeTo === 'active') &&
+    typeof s.i === 'number' &&
+    Array.isArray(s.yes) &&
+    s.yes.every((w) => typeof w === 'string') &&
+    typeof s.mRight === 'number' &&
+    typeof s.aRight === 'number' &&
+    typeof s.started === 'number'
+  );
+}
+
+/**
+ * Stellt den Maschinenzustand genau an derselben Stelle her (gleiches Wort, gleiche Antwort). Die
+ * Aufgaben entstehen aus `seed` deterministisch neu; `input` bringt die aktuellen Speicherwege.
+ * `null` = passt nicht (z. B. Position außerhalb der Liste) → verwerfen.
+ */
+export function restoredVtest(s: VtestSnap, input: VtestInput) {
+  const yes = new Set(s.yes);
+  const yesno = buildYesNo(s.seed);
+  const part = s.state === 'asking' ? s.resumeTo : s.state;
+  const meaning = part === 'yesno' ? [] : buildMeaning(yes, s.lang, s.seed);
+  const active = part === 'active' ? buildActive(yes, new Set(meaning.map((m) => m.w)), s.lang, s.seed) : [];
+  const len = part === 'yesno' ? yesno.length : part === 'meaning' ? meaning.length : active.length;
+  if (s.i < 0 || s.i >= len) return null;
+  const context: Ctx = {
+    input: { ...input, seed: s.seed, lang: s.lang, day: s.day },
+    started: s.started,
+    yesno,
+    yes,
+    i: s.i,
+    meaning,
+    mRight: s.mRight,
+    active,
+    aRight: s.aRight,
+    answered: s.answered,
+    result: null,
+    resumeTo: s.resumeTo,
+  };
+  return vtestMachine.resolveState({ value: s.state, context });
+}
