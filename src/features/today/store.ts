@@ -365,6 +365,17 @@ export async function healToday(): Promise<void> {
   await healPflicht(writer, dutyInput(s.day, s.plan));
 }
 
+/**
+ * Selbstheilung `pflicht[day]` für einen bestimmten Lerntag (z. B. Block der Tageseinheit, der vor
+ * 04:00 begonnen und danach beendet wurde). Setzt nur, entfernt nie.
+ */
+export async function healDay(day: string): Promise<void> {
+  const writer = getWriter();
+  const plan = planFor(day);
+  if (!plan || !writer) return;
+  await healPflicht(writer, dutyInput(day, plan));
+}
+
 /** B1: beim Tageswechsel einmal die gemerkten Vortage heilen (setzt nur, entfernt nie). */
 async function healPastDays(today: string): Promise<void> {
   const writer = getWriter();

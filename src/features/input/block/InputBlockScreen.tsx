@@ -29,6 +29,7 @@ import { QuestionCard } from '../QuestionCard';
 import { StatusLine } from '../StatusLine';
 import { UnitShell } from '../UnitShell';
 import { blockRoutes } from '../resume';
+import { rememberInput } from '../../unit/run';
 import { freshRun, patchRun, runKey, useBlockRun, type BlockStep } from './run';
 import { sourceFromRef, type BlockSource } from './source';
 
@@ -158,6 +159,8 @@ function BlockUnit({ src, day, kind, summary }: { src: BlockSource; day: string;
   const finish = () => {
     stopSpeech();
     patchRun(key, { step: 'done' });
+    // Sätze und Wendungen aus dem Text für das Nachsprechen und die Aufgabe (Block 3) merken.
+    rememberInput(src.shadow, src.notice.map((n) => n.en));
     unitDone(2);
     // Ohne angemeldeten Ablauf (P1) zurück zur Herkunft statt stehen zu bleiben.
     queueMicrotask(() => {
