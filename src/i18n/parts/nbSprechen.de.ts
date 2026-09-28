@@ -58,4 +58,9 @@ export const nbSprechenDe = {
   nbSprechenWpmCompare: 'Dienstag: {n} Wörter/Min.',
   nbSprechenWpmTitle: 'Tempo im 45-Sekunden-Durchgang',
   nbSprechenAgain: 'Nochmal, aber besser',
+  nbSprechenPreplyNext: 'Nächste Stunde am',
+  nbSprechenPreplyNextClear: 'Entfernen',
+  nbSprechenPreplyNextFailed: 'Nicht gespeichert – bitte erneut wählen.',
+  nbSprechenPreplyToday: 'Preply-Stunde heute · vorbereiten',
+  nbSprechenPreplyTomorrow: 'Preply-Stunde morgen · vorbereiten',
 } as const;

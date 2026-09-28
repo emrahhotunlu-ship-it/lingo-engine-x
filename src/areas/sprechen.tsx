@@ -11,6 +11,7 @@ import { SpeakHub } from '../features/speak/SpeakHub';
 import { TonesScreen } from '../features/tones/TonesScreen';
 import { P5_UNIT_BLOCKS } from '../features/speak/unit';
 import { P5_RESUMABLES } from '../features/speak/resumable';
+import { PreplyNextTodayLine } from '../features/preply/NextLesson';
 
 // Bereich „Sprechen & Schreiben“ – Besitz: Paket P5 (docs/neubau/architektur.md §5.2).
 // WP0a: heutige Bildschirme unter den heutigen Routennamen.
@@ -59,4 +60,6 @@ export const sprechen = defineArea({
   },
   unitBlocks: P5_UNIT_BLOCKS,
   resumables: P5_RESUMABLES,
+  // L9: ruhige Zeile auf Heute, nur am Tag vor und am Tag der Stunde.
+  sections: [{ id: 'sp-preply-next', place: 'today', order: 40, component: PreplyNextTodayLine }],
 });

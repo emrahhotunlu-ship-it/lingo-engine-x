@@ -233,7 +233,8 @@ function TalkSegment() {
     tone: 'gold',
     title: next ? t('nbSprechenNextMeeting', { who: next.who }) : t('mtTitle'),
     sub: next ? [next.when, next.topic].filter(Boolean).join(' · ') : t('nbSprechenMeetingSub'),
-    run: () => go(next ? { name: 'meeting', id: next.id } : { name: 'meeting' }),
+    // Die Seite „Mein nächster Termin“ zeigt die Liste mit dem Termin oben (Vorbereitung, Generalprobe).
+    run: () => go({ name: 'meeting' }),
   });
 
   const ready = scenes?.filter((s) => s.valid && s.id !== week?.id) ?? [];

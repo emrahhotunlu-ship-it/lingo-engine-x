@@ -18,6 +18,7 @@ import { DRAFT_KEY, ImportPane } from './ImportPane';
 import { importMachine } from './importMachine';
 import { PlanView } from './PlanView';
 import { PrepForm } from './PrepForm';
+import { NextLessonRow } from './NextLesson';
 import { openPreplyEntry, receivePreply, setPreplyTab, usePreply, type PreplyTab } from './store';
 
 // Preply-Brücke (Phase 5 §8.3, Kap. 6.10): Vorbereiten | Übernehmen | Verlauf. Je Reiter
@@ -99,6 +100,7 @@ export function PreplySection() {
 
   return (
     <div className="flex flex-col gap-5" data-testid="preply">
+      <NextLessonRow />
       <header className="flex flex-col gap-3">
         <div role="tablist" aria-label={t('ppTitle')} className="flex w-full max-w-md rounded-[var(--radius-control)] bg-track p-1">
           {tabs.map((x) => (

@@ -31,7 +31,7 @@ const actOf = (d: Dump, day: string): Doc => (d['app/profile']?.act as Record<st
 /** Einstieg unter Sprechen → Training. */
 async function openTones(page: Page): Promise<void> {
   await screen(page, 'today');
-  await openSpeak(page);
+  await openSpeak(page, 'write');
   await page.getByTestId('training-tones').click();
   await expect(page.locator('[data-screen="tones"]')).toBeVisible();
   await expect(page.getByTestId('tones')).toHaveAttribute('data-phase', 'write');

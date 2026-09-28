@@ -59,4 +59,9 @@ export const nbSprechenEn: Record<keyof typeof nbSprechenDe, string> = {
   nbSprechenWpmCompare: 'Tuesday: {n} words/min',
   nbSprechenWpmTitle: 'Pace in the 45-second round',
   nbSprechenAgain: 'Again, but better',
+  nbSprechenPreplyNext: 'Next lesson on',
+  nbSprechenPreplyNextClear: 'Remove',
+  nbSprechenPreplyNextFailed: 'Not saved – please pick the date again.',
+  nbSprechenPreplyToday: 'Preply lesson today · prepare',
+  nbSprechenPreplyTomorrow: 'Preply lesson tomorrow · prepare',
 };

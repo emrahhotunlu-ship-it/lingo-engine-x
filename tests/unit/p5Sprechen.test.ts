@@ -85,7 +85,7 @@ describe('Ziel-Checkliste (N72)', () => {
   });
 
   it('Verlauf wird gekürzt, das Ende bleibt', () => {
-    const turns = Array.from({ length: 60 }, (_, i) => ({ role: (i % 2 ? 'me' : 'persona') as 'me' | 'persona', text: `line ${i} `.repeat(30) }));
+    const turns = Array.from({ length: 60 }, (_, i) => ({ role: (i % 2 ? 'me' : 'persona'), text: `line ${i} `.repeat(30) }));
     const t = transcript(turns);
     expect(t.length).toBeLessThanOrEqual(6000);
     expect(t).toContain('line 59');
@@ -162,9 +162,9 @@ describe('Sprechen-Wurzel und Fortsetzen', () => {
 
     expect(fluencyResume.restore({ q: 'price', round: 2, t0: 1, rounds: [{ sec: 90, text: 'a' }, { sec: 60, text: 'b' }] })).toBe(true);
     expect(fluencyResume.take()?.round).toBe(2);
-    expect(fluencyResume.restore({ q: 'price', round: 3, t0: 1, rounds: [] } as never)).toBe(false);
+    expect(fluencyResume.restore({ q: 'price', round: 3, t0: 1, rounds: [] })).toBe(false);
 
     expect(roleplayResume.route({ sceneId: 'b03', unit: 3 })).toEqual({ name: 'roleplay', sceneId: 'b03', resume: true, unit: 3 });
-    expect(roleplayResume.restore({ sceneId: '' } as never)).toBe(false);
+    expect(roleplayResume.restore({ sceneId: '' })).toBe(false);
   });
 });

@@ -41,11 +41,15 @@ const SENTENCES = ['That depends on your test team and the exposure.', 'I think 
 test('Übersicht: Szenen aus Inhalt und Datenbank, KI-Szene, unvollständige Szene ohne Start', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
   await openHub(page);
-  await expect(page.getByTestId('speak-status')).toHaveAttribute('data-done', 'false');
-  await expect(page.getByTestId('scene-card')).toHaveCount(8);
+  // Neubau I15: Sprech-Status nur, wenn Block 3 heute ein Gespräch ist (Sonntag: Wochen-Check).
+  await expect(page.getByTestId('speak-status')).toHaveCount(0);
+  await expect(page.getByTestId('scenes-own').getByTestId('scene-card')).toHaveCount(7);
+  // Neubau N70: Business-Szenen aus P7a (erste 4, „Alle zeigen“), Szene zum Wochenthema oben.
+  await expect(page.getByTestId('scenes-biz').getByTestId('scene-card')).toHaveCount(4);
+  await expect(page.getByTestId('speak-theme-scene')).toBeVisible();
   await expect(page.locator('[data-testid="scene-card"][data-src="ai"]')).toHaveCount(1);
   // Vier Szenen der alten App plus die festen „Preisverhandlung“ und „Partner-Pitch“ (Kap. 6.5).
-  await expect(page.locator('[data-testid="scene-card"][data-src="legacy"]')).toHaveCount(6);
+  await expect(page.getByTestId('scenes-own').locator('[data-testid="scene-card"][data-src="legacy"]')).toHaveCount(6);
   await expect(page.locator('[data-testid="scene-card"][data-scene="sc-price"]')).toContainText('Preis');
   await expect(page.locator('[data-testid="scene-card"][data-scene="sc-pitch"]')).toContainText('Vertriebspartnerschaft');
   // Unvollständige Szenen stehen nicht in der Liste, sondern zugeklappt darunter (UX-Beratung Nr. 7).
@@ -140,7 +144,7 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   // Reiter „Sprechen“: erledigt ist Zustand, kein Knopf (Kap. 2.2).
   await page.getByTestId('tab-speak').click();
   await screen(page, 'speak');
-  await expect(page.getByTestId('speak-status')).toHaveAttribute('data-done', 'true');
+  await expect(page.getByTestId('speak-status')).toHaveCount(0);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
