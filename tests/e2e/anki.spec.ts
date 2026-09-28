@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openTab, screen } from './fixtures';
 import { DAY, dump, planPatch } from './trainerHelpers';
@@ -148,3 +149,26 @@ test.describe('Handy', () => {
     expect(errors).toEqual([]);
   });
 });
+
+// G5: Hauptbildschirme je Modus mit axe, keine ernsten Verstöße.
+for (const theme of ['dark', 'dim', 'light'] as const) {
+  test(`axe · Wortschatz + Aufdecken · ${theme}`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const { patch } = ankiPatch(3);
+    await boot(page, { theme, migrated: true, fake: { patch: { 'app/profile': planPatch(3), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
+    const scan = async (name: string) => {
+      const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+      const serious = res.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
+      expect(serious.map((v) => `${name} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+    };
+    await startReview(page);
+    await scan('flip-front');
+    await page.getByTestId('flip-show').click();
+    await expect(page.getByTestId('grades')).toBeVisible();
+    await scan('flip-back');
+    await page.getByTestId('trainer-close').click();
+    await screen(page, 'vocab');
+    await scan('vocab');
+  });
+}
