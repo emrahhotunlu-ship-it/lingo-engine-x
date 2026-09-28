@@ -86,6 +86,7 @@
 | Kompatibilitäts-Test-IDs (`hub-*`, `training-*`) nach einer stabilen Woche vereinheitlichen | architektur §2.8 | nur zusammen mit den Specs |
 
 ## 5. Offene Rückmeldungen von Emrah (am iPhone prüfen)
+- **28.09., 17:07 (Anki-Rückgängig-Bereich):** Die Gesamtzahl wächst mit, wenn eine Karte „Nochmal" bekommt und in der Runde wiederkommt (aktuell bewusst so, anki-regeln.md §2 „zählt im Zähler mit"). Emrahs Wunsch: feste Gesamtzahl, „Nochmal"-Karten als eigener kleiner Zähler daneben. Ändert die Zähl-Logik → nicht nebenbei, erst mit Emrahs OK.
 - **Aus A7, 27.09.:**
   - Ladezeit (Budget jetzt < 1,5 s bei 4× Drossel),
   - automatische Einschätzung beim Öffnen von „Dein Stand“,
