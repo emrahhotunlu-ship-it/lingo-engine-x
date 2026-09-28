@@ -7,7 +7,8 @@ export type ChannelLogEntry = {
   t: number;
   ok: boolean;
   lang: string;
-  type: 'read' | 'listen' | 'discover';
+  /** `nb-*`: neue Übungen (Paket P7, Kollokationen, Einwände, Posteingang …). */
+  type: 'read' | 'listen' | 'discover' | `nb-${string}`;
   ref: string;
   q: string;
   given: string;
