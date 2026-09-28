@@ -20,6 +20,7 @@ import { QuestionCard } from '../input/QuestionCard';
 import { StatusLine } from '../input/StatusLine';
 import { UnitShell } from '../input/UnitShell';
 import { listenMachine } from './machine';
+import { reportPos } from '../input/resume';
 import { TranscriptView } from './TranscriptView';
 
 // Eine Hör-Einheit (Plan §4.2): Wörter vorab → hören ohne Text → Fragen mit Beleg (abspielbar)
@@ -72,6 +73,9 @@ export function ListenUnit({ item, ctx, day, start, record, onAnother }: Props) 
   const [state, send] = useMachine(listenMachine, { input: { total: questions.length, start, run } });
   const stateName = typeof state.value === 'string' ? state.value : (Object.keys(state.value)[0] ?? 'prep');
   const noAudio = speech === 'unsupported' || speech === 'novoice';
+  useEffect(() => {
+    reportPos('listen', stateName === 'done' ? null : { route: { name: 'listen', ctx: 'extra', id: item.id }, title: item.title, step: stateName });
+  }, [stateName, item.id, item.title]);
 
   useEffect(() => () => stopSpeech(), []);
   // Ohne Stimme: Hinweis und Text als Lesetext – die Einheit bleibt abschließbar (F14).

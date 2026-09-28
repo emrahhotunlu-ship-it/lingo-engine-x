@@ -20,6 +20,7 @@ import { ArticleView } from './ArticleView';
 import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import { readMachine } from './machine';
 import { SummaryStep } from './SummaryStep';
+import { reportPos, takePending } from '../input/resume';
 
 // Eine Lese-Einheit (Plan §4.1): lesen → Fragen mit Beleg → Abschluss → Zusammenfassung.
 
@@ -52,11 +53,24 @@ export function ReadUnit({ item, pool, ctx, day, start, readingId, quiz, badge, 
   }, [clock]);
   const [state, send] = useMachine(readMachine, { input: { total: questions.length, start, readingId, run } });
   const [showText, setShowText] = useState(false);
+  // Fortsetzen (G3): Leseposition und Schritt melden; nach dem Herstellen an den Absatz springen.
+  const [pending] = useState(() => {
+    const p = takePending('read');
+    return p && p.route.name === 'read' && p.route.id === item.id ? p : null;
+  });
+  const para = useRef(pending?.para ?? 0);
   const stateName = typeof state.value === 'string' ? state.value : Object.keys(state.value)[0] ?? 'reading';
   const results = state.context.results;
   const ok = quiz ? quiz.ok : results.filter((r) => r.correct).length;
   const n = quiz ? quiz.n : results.length;
   const route = { name: 'read' as const, ctx };
+  const report = useCallback(
+    (step: string) => reportPos('read', step === 'done' ? null : { route: { name: 'read', ctx: 'extra', id: item.id }, title: item.title, step, para: para.current }),
+    [item.id, item.title],
+  );
+  useEffect(() => {
+    report(stateName === 'summary' ? 'done' : stateName);
+  }, [stateName, report]);
 
   const close = () => back();
   const status = <StatusLine channel="read" level={item.level} domain={item.domain} minutes={readingMinutes(item.text)} />;
@@ -76,7 +90,16 @@ export function ReadUnit({ item, pool, ctx, day, start, readingId, quiz, badge, 
             </Disclosure>
           </div>
         )}
-        <ArticleView item={item} badge={badge} />
+        <ArticleView
+          item={item}
+          badge={badge}
+          practice
+          startPara={pending?.para ?? null}
+          onPara={(i) => {
+            para.current = i;
+            report('reading');
+          }}
+        />
         {extra}
         <div className="flex flex-wrap items-center gap-3">
           <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => send({ type: 'DONE_READING' })} data-testid="read-done">

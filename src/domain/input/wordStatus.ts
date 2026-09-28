@@ -69,3 +69,27 @@ export function statusCss(scope: string, st: TextStatus): string {
   if (st.known.length) rules.push(`${sel(st.known)}{text-decoration-line:underline;text-decoration-color:color-mix(in srgb,var(--lx-accent-text) 55%,transparent);text-underline-offset:4px}`);
   return rules.join('\n');
 }
+
+export type TextCard = { key: string; word: string; hidden?: boolean; originRef?: string | null };
+
+/**
+ * Karten „aus diesem Text“ (Neubau N52, LingQ LQ8): gespeichert mit diesem Text als Herkunft oder
+ * mit einem Wort bzw. einer Wendung, die im Text steht (auch gebeugt). Reihenfolge wie `cards`.
+ */
+export function textCardKeys(text: string, ref: string | null, cards: Iterable<TextCard>): string[] {
+  const forms = new Set<string>();
+  for (const w of textForms(text, true)) {
+    forms.add(keyOf(w));
+    for (const c of lemmaCandidates(keyOf(w))) forms.add(keyOf(c));
+  }
+  const flat = ` ${text.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9' -]+/g, ' ').replace(/\s+/g, ' ')} `;
+  const out: string[] = [];
+  for (const c of cards) {
+    if (c.hidden) continue;
+    const w = keyOf(c.word.replace(/^to\s+/i, '').replace(/…|\.\.\./g, ' ').replace(/[?!.,]+$/g, ''));
+    if (!w) continue;
+    const hit = (!!ref && c.originRef === ref) || (/\s/.test(w) ? flat.includes(` ${w} `) : forms.has(w));
+    if (hit) out.push(c.key);
+  }
+  return out;
+}

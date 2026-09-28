@@ -5,7 +5,7 @@ import { isDictWord } from '../../src/domain/lexicon/dict';
 import { ladderFor, ladderRate, LADDER_BASE, LADDER_FAST, LADDER_SLOW } from '../../src/domain/input/ladder';
 import { newShare, textForms } from '../../src/domain/input/newShare';
 import { inputBlockPlan, isThemeTextId, noticeRows, phraseSentence, quoteSentence, shadowSentences, summaryReady, themeArticle, themeQuestions } from '../../src/domain/input/unitInput';
-import { statusCss, statusIndex, textStatus } from '../../src/domain/input/wordStatus';
+import { statusCss, statusIndex, textCardKeys, textStatus } from '../../src/domain/input/wordStatus';
 import { themeRef } from '../../src/domain/week';
 
 // Neubau P4 (plan.md §4.5): „x % neu“ (N50), Wortstatus (N51), Block 2 (N53, M7, M9, S1), Tempo-Leiter (N54).
@@ -141,6 +141,21 @@ describe('M9: Fragen mit Belegstelle und Grund', () => {
     expect(shadowSentences('Short. This sentence has exactly seven words here. Another fine sentence with enough words in it.')).toHaveLength(2);
     expect(summaryReady('The memo says customers should talk most. Ask open questions and find the decision maker.')).toBe(true);
     expect(summaryReady('Too short.')).toBe(false);
+  });
+});
+
+describe('N52: Wörter aus diesem Text', () => {
+  it('Herkunft oder Vorkommen im Text (auch gebeugt und als Wendung), ohne ausgeblendete', () => {
+    const cards = [
+      { key: 'vocab/negotiate', word: 'negotiate' },
+      { key: 'vocab/walk-through', word: 'walk me through' },
+      { key: 'vocab/other', word: 'giraffe', originRef: 'theme:t01' },
+      { key: 'vocab/none', word: 'banana' },
+      { key: 'vocab/hidden', word: 'price', hidden: true },
+    ];
+    const keys = textCardKeys('We negotiated the price. Walk me through your process.', 'theme:t01', cards);
+    expect(keys).toEqual(['vocab/negotiate', 'vocab/walk-through', 'vocab/other']);
+    expect(textCardKeys('Nothing here.', null, cards)).toEqual([]);
   });
 });
 
