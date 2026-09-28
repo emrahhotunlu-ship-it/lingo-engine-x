@@ -1,3 +1,4 @@
+import { usePlayerSkip } from '../../app/shell/Player';
 import { useRef, useState } from 'react';
 import type { ScreenProps } from '../../app/registry';
 import { useSettings } from '../../app/settings';
@@ -53,6 +54,7 @@ export function PressureScreen({ route }: ScreenProps<'pressure'>) {
   const { t } = useT();
   useState(() => ensurePressure(route, useSettings.getState().lang));
   const s = usePressure((x) => x.s);
+  usePlayerSkip(skipObjection);
   if (!s) {
     return (
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4" data-testid="pressure" data-state="empty">

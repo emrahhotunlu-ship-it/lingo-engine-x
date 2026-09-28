@@ -5,18 +5,17 @@ import { useNav } from '../app/nav';
 import { useSettings } from '../app/settings';
 import { EntryList } from '../app/shell/Hub';
 import { InboxScreen } from '../features/inbox/InboxScreen';
-import { inboxResume, startInbox } from '../features/inbox/session';
+import { ensureInbox, inboxResume, startInbox } from '../features/inbox/session';
 import { NbDrillScreen } from '../features/nbdrill/NbDrillScreen';
-import { drillResume, startDrill, type DrillSet } from '../features/nbdrill/session';
-import { installResumeSaver } from '../features/nbdrill/shared';
+import { drillResume, ensureDrill, startDrill, type DrillSet } from '../features/nbdrill/session';
 import { P7_UNIT_BLOCKS } from '../features/nbdrill/unitBlocks';
 import { PressureScreen } from '../features/pressure/PressureScreen';
-import { pressureResume, startPressure } from '../features/pressure/session';
+import { ensurePressure, pressureResume, startPressure } from '../features/pressure/session';
 import { PronScreen } from '../features/pron/PronScreen';
 import { PronDrillScreen } from '../features/pron/PronDrillScreen';
-import { pronDrillResume, startPronDrill } from '../features/pron/drill';
+import { ensurePronDrill, pronDrillResume, startPronDrill } from '../features/pron/drill';
 import type { ScreenProps } from '../app/registry';
-import { pronResume, startShadow } from '../features/pron/session';
+import { ensurePron, pronResume, startShadow } from '../features/pron/session';
 
 // Bereich „Training“ (neue Übungen: Tipp-Drills, Druck-Serie, Posteingang, Nachsprechen) –
 // Besitz: Paket P7 (docs/neubau/plan.md §4.8). Einstiege auf den Plätzen `learn` (Training),
@@ -69,11 +68,12 @@ export const training = defineArea({
     nbdrill: {
       kind: 'exercise',
       component: NbDrillScreen,
+      ensure: (r) => ensureDrill(r, lang()),
       params: z.object({ set: z.enum(['colloc', 'transform', 'wordform', 'register', 'phrasal', 'transition']), n: z.number().int().min(1).max(10).optional() }),
     },
-    pressure: { kind: 'exercise', component: PressureScreen, params: z.object({ set: z.enum(['objection', 'hotseat', 'buytime']).optional() }) },
-    inbox: { kind: 'exercise', component: InboxScreen, params: z.object({ id: z.string().optional() }) },
-    pron: { kind: 'exercise', component: PronRoute, params: z.object({ kind: z.enum(['shadow', 'stress', 'numbers']), src: z.string().optional() }) },
+    pressure: { kind: 'exercise', component: PressureScreen, ensure: (r) => ensurePressure(r, lang()), params: z.object({ set: z.enum(['objection', 'hotseat', 'buytime']).optional() }) },
+    inbox: { kind: 'exercise', component: InboxScreen, ensure: (r) => ensureInbox(r, lang()), params: z.object({ id: z.string().optional() }) },
+    pron: { kind: 'exercise', component: PronRoute, ensure: (r) => (r.kind === 'shadow' ? ensurePron(r) : ensurePronDrill(r, lang())), params: z.object({ kind: z.enum(['shadow', 'stress', 'numbers']), src: z.string().optional() }) },
   },
   sections: [
     { id: 'nb-training-learn', place: 'learn', order: 60, component: LearnSection },
@@ -175,7 +175,4 @@ export const training = defineArea({
   ],
   resumables: RESUMABLES,
   unitBlocks: P7_UNIT_BLOCKS,
-  boot: () => {
-    for (const r of RESUMABLES) installResumeSaver(r as never);
-  },
 });

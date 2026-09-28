@@ -1,3 +1,4 @@
+import { usePlayerSkip } from '../../app/shell/Player';
 import { useState } from 'react';
 import type { ScreenProps } from '../../app/registry';
 import { useSettings } from '../../app/settings';
@@ -21,6 +22,7 @@ export function PronDrillScreen({ route }: ScreenProps<'pron'>) {
   const { t } = useT();
   useState(() => ensurePronDrill(route, useSettings.getState().lang));
   const s = usePronDrill((x) => x.s);
+  usePlayerSkip(skipPron);
   if (!s || s.kind !== route.kind) {
     return (
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4" data-testid="pron" data-state="empty">

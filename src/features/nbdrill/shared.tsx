@@ -1,8 +1,9 @@
-import { Component, useEffect, useId, useRef, useState, type ErrorInfo, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { leaveBack, useNav } from '../../app/nav';
-import { playerNotes } from '../../app/registry';
-import { clearResume, loadResume, saveResume, type Resumable } from '../../app/resume';
+import { usePlayer } from '../../app/shell/playerContext';
+import { toast } from '../../ui/Toast';
+import { clearResume, holdResume, loadResume, type Resumable } from '../../app/resume';
 import type { Route } from '../../app/router/types';
 import { unitDone } from '../../app/unit/done';
 import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types';
@@ -14,8 +15,7 @@ import type { WeekTargets } from '../../domain/week/types';
 import { detectTargets } from '../../domain/week/targets';
 import { useT, type MessageKey } from '../../i18n';
 import { logError } from '../../platform/diagnostics';
-import { local, session } from '../../platform/storage';
-import { Button } from '../../ui/Button';
+import { local } from '../../platform/storage';
 import { ExerciseBar } from '../../ui/ExerciseBar';
 import { Icon } from '../../ui/Icon';
 import { recordChannelEntries } from '../progress/persist';
@@ -123,7 +123,7 @@ export function nextRound(set: string): number {
   return n;
 }
 
-// ------------------------------------------------------------------ Fortsetzen (bis WP0b)
+// ------------------------------------------------------------------ Fortsetzen (WP0b sichert, hier nur Herstellen im `ensure`)
 
 /**
  * Stellt eine Momentaufnahme aus `lx:resume:<id>` her (gleicher Lerntag, gleiche Version).
@@ -141,60 +141,26 @@ export function restoreSaved<S>(r: Resumable<S>, day: string): boolean {
   }
 }
 
-const tabId = (): string => session.get('lx:tab') || 'tab';
-
-/**
- * Sichert die Momentaufnahme 300 ms nach jeder Änderung und beim Verbergen der Seite
- * (architektur.md §3.2). Übergang bis WP0b die Sicherung für alle `resumables` übernimmt.
- */
-export function installResumeSaver<S>(r: Resumable<S>): () => void {
-  let timer: ReturnType<typeof setTimeout> | null = null;
-  const flush = () => {
-    timer = null;
-    let snap: S | null;
-    try {
-      snap = r.snapshot();
-    } catch (err) {
-      logError('training:snapshot', err, r.id);
-      return;
-    }
-    if (snap === null) {
-      clearResume(r.id);
-      return;
-    }
-    saveResume({ v: r.version, id: r.id, day: currentDay(), savedAt: Date.now(), tabId: tabId(), route: r.route(snap), data: snap });
-  };
-  const schedule = () => {
-    if (timer !== null) clearTimeout(timer);
-    timer = setTimeout(flush, 300);
-  };
-  const onHide = () => {
-    if (document.visibilityState === 'hidden' && timer !== null) {
-      clearTimeout(timer);
-      flush();
-    }
-  };
-  const unsub = r.subscribe(schedule);
-  document.addEventListener('visibilitychange', onHide);
-  window.addEventListener('pagehide', onHide);
-  return () => {
-    unsub();
-    document.removeEventListener('visibilitychange', onHide);
-    window.removeEventListener('pagehide', onHide);
-  };
-}
-
 // ------------------------------------------------------------------ Oberfläche
 
-/** Übungsleiste: ✕ · Balken · Übersetzen/Claude; darunter „Tageseinheit · Block n“ oder „Extra“. */
-export function TrainingBar({ route, unit, progress, onClose }: { route: Route; unit: UnitRun | null; progress: { n: number; total: number } | null; onClose?: () => void }) {
+/**
+ * Übungsleiste: ✕ · Balken · Übersetzen/Claude; darunter der Beitrag des Players (P1: „Tageseinheit ·
+ * Block 2 von 5“), sonst „Tageseinheit · Block n“ bzw. „Extra“. ✕ fragt nie nach (N02): Fortsetz-Stand
+ * behalten, schließen, ruhig bestätigen.
+ */
+export function TrainingBar({ unit, progress, onClose }: { route?: Route; unit: UnitRun | null; progress: { n: number; total: number } | null; onClose?: () => void }) {
   const { t } = useT();
-  // Beiträge anderer Bereiche (P1: „Tageseinheit · Block 2 von 5“); feste Reihenfolge je Aufruf.
-  const notes = playerNotes().map((n) => n.use(route));
-  const note = notes.find((x) => x) ?? (unit ? t('nbTrainingUnitNote', { n: unit.block }) : t('trExtraBadge'));
+  const player = usePlayer();
+  const note = player.note ?? (unit ? t('nbTrainingUnitNote', { n: unit.block }) : t('trExtraBadge'));
+  const close = () => {
+    const kept = holdResume();
+    if (onClose) onClose();
+    else leaveBack();
+    if (kept) toast(t('nbShSaved'));
+  };
   return (
     <ExerciseBar
-      onClose={onClose ?? (() => leaveBack())}
+      onClose={close}
       closeLabel={t('trClose')}
       progress={progress}
       progressLabel={progress ? `${progress.n} / ${progress.total}` : undefined}
@@ -324,46 +290,5 @@ export function GoalLine({ text, targets }: { text: string; targets: UnitRun['ta
 
 // ------------------------------------------------------------------ Fehlergrenze je Aufgabe
 
-type BoundaryProps = { resetKey: string | number; scope: string; onSkip?: () => void; children: ReactNode };
-
-/**
- * Fehlergrenze um die aktuelle Aufgabe (architektur.md §3.1, Ebene „Schritt“): Ein Fehler kostet
- * nur diese Aufgabe; „Diese Aufgabe überspringen“ geht ohne Bewertung weiter. Vertrag wie
- * `StepBoundary` aus WP0b (`resetKey`), bis zum Merge hier.
- */
-export class StepBoundary extends Component<BoundaryProps, { failedAt: string | number | null }> {
-  override state = { failedAt: null as string | number | null };
-  static getDerivedStateFromError(): { failedAt: string } {
-    return { failedAt: '__pending__' };
-  }
-  override componentDidCatch(error: unknown, info: ErrorInfo): void {
-    logError(`ui:${this.props.scope}`, error, info.componentStack ?? undefined);
-    this.setState({ failedAt: this.props.resetKey });
-  }
-  override componentDidUpdate(prev: BoundaryProps): void {
-    if (prev.resetKey !== this.props.resetKey && this.state.failedAt !== null) this.setState({ failedAt: null });
-  }
-  override render(): ReactNode {
-    if (this.state.failedAt === null) return this.props.children;
-    return <StepFailed onSkip={this.props.onSkip} />;
-  }
-}
-
-function StepFailed({ onSkip }: { onSkip?: (() => void) | undefined }) {
-  const { t } = useT();
-  return (
-    <div className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" role="alert" data-testid="step-failed">
-      <p className="text-sm">{t('nbTrainingStepError')}</p>
-      <div className="flex flex-wrap gap-3">
-        {onSkip && (
-          <Button variant="primary" onClick={onSkip} data-testid="step-skip">
-            {t('nbTrainingSkip')}
-          </Button>
-        )}
-        <Button variant="ghost" onClick={() => leaveBack()} data-testid="step-leave">
-          {t('trClose')}
-        </Button>
-      </div>
-    </div>
-  );
-}
+/** Fehlergrenze um die aktuelle Aufgabe: der WP0b-Baustein (`resetKey`, `scope`, `onSkip`). */
+export { StepBoundary } from '../../app/shell/Boundary';

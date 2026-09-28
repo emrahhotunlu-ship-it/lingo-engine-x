@@ -1,3 +1,4 @@
+import { usePlayerSkip } from '../../app/shell/Player';
 import { useRef, useState } from 'react';
 import type { ScreenProps } from '../../app/registry';
 import { useSettings } from '../../app/settings';
@@ -26,6 +27,7 @@ export function NbDrillScreen({ route }: ScreenProps<'nbdrill'>) {
   // Sitzung SYNCHRON vor dem ersten Zeichnen sicherstellen (Deep-Link, Neuladen ohne Player).
   useState(() => ensureDrill(route, useSettings.getState().lang));
   const s = useDrill((x) => x.s);
+  usePlayerSkip(skipItem);
 
   if (!s || s.set !== route.set) {
     return (

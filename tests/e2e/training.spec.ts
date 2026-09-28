@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { boot, bootAt, layoutProblems, openEntry, openTab, screen } from './fixtures';
+import { boot, bootAt, crashOnce, layoutProblems, openEntry, openTab, screen } from './fixtures';
 import { nbLog, outItems, typeGap } from './trainingHelpers';
 
 // Paket P7b (docs/neubau/plan.md §4.8, N101–N106): Kollokationen, Satz-Umformung, Einwand-Training,
@@ -281,3 +281,22 @@ for (const theme of ['dark', 'dim', 'light'] as const) {
     expect(await layoutProblems(page)).toEqual([]);
   });
 }
+
+// WP0b-Befund: Die Probe des Players (nach den Kindern) wirft im selben Rendern erneut, weil
+// `pendingCrash` erst im Commit gelöscht wird – dann greift die Übungs-Grenze statt der Schritt-Grenze.
+// Wunsch an den Integrator (Boundary.tsx); bis dahin vorgemerkt.
+test.fixme('G4: lx:crash-once – Aufgabe überspringen, die Runde läuft weiter', async ({ page }) => {
+  await boot(page, { migrated: true, localStorage: crashOnce('nbdrill') });
+  await openEntry(page, 'training-colloc');
+  await expect(page.getByTestId('boundary-step')).toBeVisible();
+  await page.getByTestId('boundary-skip').click();
+  await expect(page.getByTestId('colloc-item')).toBeVisible();
+  await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+});
+
+test.fixme('G4: lx:crash-once auch im Einwand-Training', async ({ page }) => {
+  await bootAt(page, { name: 'pressure' }, { localStorage: crashOnce('pressure') });
+  await screen(page, 'pressure');
+  await page.getByTestId('boundary-skip').click();
+  await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+});

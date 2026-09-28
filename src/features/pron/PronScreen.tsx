@@ -1,3 +1,4 @@
+import { usePlayerSkip } from '../../app/shell/Player';
 import { useEffect, useRef, useState } from 'react';
 import type { ScreenProps } from '../../app/registry';
 import { shadowSteps, youMs } from '../../domain/nbdrill/shadow';
@@ -19,6 +20,7 @@ export function PronScreen({ route }: ScreenProps<'pron'>) {
   const { t } = useT();
   useState(() => ensurePron(route));
   const s = usePron((x) => x.s);
+  usePlayerSkip(finishShadow);
   if (!s) {
     return (
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4" data-testid="pron" data-state="empty">
