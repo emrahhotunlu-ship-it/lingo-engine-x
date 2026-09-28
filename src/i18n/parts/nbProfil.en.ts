@@ -61,4 +61,14 @@ export const nbProfilEn: Record<keyof typeof nbProfilDe, string> = {
   nbProfilPerfMs: '{ms} ms',
   nbProfilPerfNone: 'not measured yet',
   nbProfilPerfCopy: 'Copy measurements',
+  // Claude sheet (N93, follow-up chips)
+  nbProfilToVocab: 'Vocabulary',
+  nbProfilInVocab: 'In your vocabulary',
+  nbProfilSgExample: 'One more example',
+  nbProfilSgOther: 'When do you use the other one?',
+  nbProfilSgGerman: 'Explain it in German',
+  nbProfilTabJudge: 'Verdict',
+  nbProfilTabErrors: 'Errors',
+  nbProfilTabPath: 'C1 goal',
+  nbProfilTabHistory: 'History',
 } as const;

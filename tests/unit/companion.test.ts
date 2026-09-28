@@ -146,7 +146,7 @@ describe('Vorschläge', () => {
   it('je Lage feste Schlüssel, nach einer Antwort genau drei Folgechips', () => {
     expect(suggestions({ seeing: { area: 'trainer', label: 'x', phase: 'question' }, hasWord: false, afterReply: false })).toEqual(['sgHint', 'sgRule']);
     expect(suggestions({ seeing: null, hasWord: true, afterReply: false })).toContain('sgWordColloc');
-    expect(suggestions({ seeing: null, hasWord: false, afterReply: true })).toEqual(['sgSimpler', 'sgMoreExamples', 'sgQuizMe']);
+    expect(suggestions({ seeing: null, hasWord: false, afterReply: true })).toEqual(['nbProfilSgExample', 'nbProfilSgOther', 'nbProfilSgGerman']);
   });
 });
 

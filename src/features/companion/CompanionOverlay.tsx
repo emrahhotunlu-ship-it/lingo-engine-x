@@ -106,8 +106,9 @@ function CompanionOverlay() {
 
   const areaLabel = seeing?.label ?? (route === 'overview' ? t('cmpSeeOverview') : onPreply ? t('cmpSeePreply') : t('cmpSeeToday'));
   const tabs: Array<{ id: CompanionTab; label: string }> = [
-    { id: 'chat', label: t('cmpTabChat') },
+    // Neubau (plan.md §1.2): Umschalter „Übersetzen · Fragen“.
     { id: 'translate', label: t('cmpTabTranslate') },
+    { id: 'chat', label: t('cmpTabChat') },
   ];
 
   const style = kb ? { height: kb.height, top: kb.top, bottom: 'auto' } : undefined;

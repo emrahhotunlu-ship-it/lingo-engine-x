@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openOverview, screen, type Lang } from './fixtures';
+import { openWeekly } from './profilHelpers';
 
 // Phase 6 (Plan §13): „Dein Stand" mit Urteil · Fehler · Weg nach C1 · Verlauf gegen den
 // Produktions-Build. Feste Antworten des Adapters: assess@2 und weekly-report@2 in DE und EN.
@@ -12,18 +13,18 @@ const calls = (page: Page, id: string) =>
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
-async function tab(page: Page, id: 'judge' | 'errors' | 'path' | 'history') {
+async function tab(page: Page, id: 'judge' | 'errors' | 'path' | 'stats' | 'history') {
   await page.getByTestId(`tab-${id}`).click();
   await expect(page.getByTestId(`tab-${id}`)).toHaveAttribute('aria-selected', 'true');
 }
 
 for (const lang of ['de', 'en'] as Lang[]) {
   for (const width of [390, 1440]) {
-    test(`vier Reiter ohne undefined/NaN/{0} und ohne Querscrollen · ${lang} · ${width}px`, async ({ page }) => {
+    test(`fünf Reiter ohne undefined/NaN/{0} und ohne Querscrollen · ${lang} · ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       const { errors, external } = await boot(page, { migrated: true, lang });
       await openOverview(page);
-      for (const id of ['judge', 'errors', 'path', 'history'] as const) {
+      for (const id of ['judge', 'errors', 'path', 'stats', 'history'] as const) {
         await tab(page, id);
         await page.waitForTimeout(300);
         expect(await layoutProblems(page), id).toEqual([]);
@@ -178,26 +179,27 @@ test('Weg nach C1: Status je Punkt, „Kann ich" wird in profile.canDo gespeiche
   await expect.poll(async () => ((await dump(page))['app/profile']?.canDo as Record<string, unknown>)[id ?? '']).toBeNull();
 });
 
-test('Verlauf: Wochenbericht mit Fakten und gespeichertem KI-Text, Diagramm, Aktivität, Messwerte erst beim Aufklappen', async ({ page }) => {
+test('Wochenbericht mit Fakten und gespeichertem KI-Text; Verlauf mit Diagramm und Messwerten; Statistik mit Heatmap', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
-  await openOverview(page);
-  await tab(page, 'history');
+  await openWeekly(page);
   await expect(page.getByTestId('weekly')).toHaveAttribute('data-week', '2026-W37');
   await expect(page.getByTestId('weekly-fact').first()).toBeVisible();
   await expect(page.getByTestId('weekly-text')).toBeVisible();
   await expect.poll(async () => ((await dump(page))['app/weekly']?.items as unknown[] | undefined)?.length).toBe(1);
   expect(await calls(page, 'weekly-report')).toHaveLength(1);
-  // Diagramm und Aktivität liegen zugeklappt darunter (UX-Beratung Nr. 6).
+  // Verlauf: Diagramm und Messwerte (BKT) zugeklappt (UX-Beratung Nr. 6).
+  await openOverview(page);
+  await tab(page, 'history');
   await expect(page.getByTestId('history-chart')).toHaveCount(0);
   await page.getByTestId('history-toggle').click();
-  await page.getByTestId('heat-toggle').click();
   await expect(page.getByTestId('history-chart')).toBeVisible();
-  await expect(page.getByTestId('heatmap')).toBeVisible();
   await page.getByTestId('measures').getByRole('button').click();
-  await expect(page.getByTestId('measures').locator('table')).toHaveCount(2);
+  await expect(page.getByTestId('measures').locator('table')).toHaveCount(1);
+  // Statistik: Heatmap offen, darunter die Karten-Messwerte (bis P3 den Platz `stand` füllt).
+  await tab(page, 'stats');
+  await expect(page.getByTestId('heatmap')).toBeVisible();
   // Zweites Öffnen: der Bericht liegt schon vor, kein weiterer Aufruf.
-  await tab(page, 'judge');
-  await tab(page, 'history');
+  await openWeekly(page);
   await expect(page.getByTestId('weekly-text')).toBeVisible();
   expect(await calls(page, 'weekly-report')).toHaveLength(1);
   expect(errors).toEqual([]);
@@ -205,8 +207,7 @@ test('Verlauf: Wochenbericht mit Fakten und gespeichertem KI-Text, Diagramm, Akt
 
 test('Verlauf: Wochenbericht schlägt fehl → Hinweis mit „Erneut versuchen", der Neuversuch fragt frisch (refresh)', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { sampleFailOnce: { 'weekly-report': 'upstream_error' } } });
-  await openOverview(page);
-  await tab(page, 'history');
+  await openWeekly(page);
   await expect(page.getByTestId('weekly-error')).toBeVisible();
   await expect(page.getByTestId('weekly-text')).toHaveCount(0);
   expect(await calls(page, 'weekly-report')).toHaveLength(1);
@@ -232,7 +233,7 @@ test('der zuletzt offene Reiter bleibt beim nächsten Öffnen', async ({ page })
 test('Abo-Höchststand bleibt über einen Durchlauf aller Reiter ≤ 32', async ({ page }) => {
   await boot(page, { migrated: true });
   await openOverview(page);
-  for (const id of ['judge', 'errors', 'path', 'history'] as const) {
+  for (const id of ['judge', 'errors', 'path', 'stats', 'history'] as const) {
     await tab(page, id);
     await page.waitForTimeout(200);
   }

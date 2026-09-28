@@ -101,7 +101,7 @@ export function ProfileHead() {
   }, [assessDoc, lang]);
   const fmt = useMemo(() => {
     const short = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'narrow' });
-    const long = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long' });
+    const long = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' });
     return { short: (d: string) => short.format(dayKeyNoon(d)), long: (d: string) => long.format(dayKeyNoon(d)) };
   }, [lang]);
   const restFree = !view.dots.some((d) => d.dot === 'rest');
@@ -111,7 +111,7 @@ export function ProfileHead() {
     <section className="lx-glass flex flex-col gap-4 rounded-[var(--radius-card)] p-4" aria-label={t('nbProfilHeadLabel')} data-testid="profile-head">
       <div className="flex items-baseline justify-between gap-3">
         <p className="flex items-baseline gap-2">
-          <span className="lx-tnum text-3xl font-semibold tracking-tight" data-testid="profile-streak" data-count={count}>
+          <span className="lx-tnum text-3xl font-semibold tracking-tight" data-testid="streak-count" data-count={count}>
             {num(count)}
           </span>
           <span className="text-sm text-muted">{tn('nbProfilStreak', count)}</span>
@@ -120,11 +120,11 @@ export function ProfileHead() {
           {restFree ? t('nbProfilRestFree') : t('nbProfilRestUsed')}
         </p>
       </div>
-      <ol className="grid grid-cols-7 gap-1" aria-label={t('wkTitle')} data-testid="profile-week">
+      <ol className="grid grid-cols-7 gap-1" aria-label={t('wkTitle')} data-testid="week-strip">
         {view.dots.map((d) => {
           const label = `${fmt.long(d.day)}: ${t(DOT_LABEL[d.dot])}`;
           return (
-            <li key={d.day} className="flex flex-col items-center gap-1" data-testid="profile-dot" data-day={d.day} data-dot={d.dot} data-today={d.today ? '' : undefined} title={label}>
+            <li key={d.day} className="flex flex-col items-center gap-1" data-testid="week-day" data-day={d.day} data-state={d.dot} data-today={d.today ? '' : undefined} title={label}>
               <span className="sr-only">{label}</span>
               <Dot state={d.dot} today={d.today} />
               <span className={`text-2xs ${d.today ? 'font-semibold text-fg' : 'text-muted'}`} aria-hidden="true">
@@ -161,11 +161,11 @@ export function ProfileHead() {
 }
 
 const STAND_ROWS: ReadonlyArray<{ tab: ProgressTab; icon: IconName; label: MessageKey; sub: MessageKey }> = [
-  { tab: 'judge', icon: 'sparkle', label: 'progJudge', sub: 'nbProfilSubJudge' },
-  { tab: 'errors', icon: 'alert', label: 'progErrors', sub: 'nbProfilSubErrors' },
-  { tab: 'path', icon: 'target', label: 'progPath', sub: 'nbProfilSubPath' },
+  { tab: 'judge', icon: 'sparkle', label: 'nbProfilTabJudge', sub: 'nbProfilSubJudge' },
+  { tab: 'errors', icon: 'alert', label: 'nbProfilTabErrors', sub: 'nbProfilSubErrors' },
+  { tab: 'path', icon: 'target', label: 'nbProfilTabPath', sub: 'nbProfilSubPath' },
   { tab: 'stats', icon: 'chart', label: 'nbProfilTabStats', sub: 'nbProfilSubStats' },
-  { tab: 'history', icon: 'history', label: 'progHistory', sub: 'nbProfilSubHistory' },
+  { tab: 'history', icon: 'history', label: 'nbProfilTabHistory', sub: 'nbProfilSubHistory' },
 ];
 
 /** Stand: jede Zeile öffnet „Dein Stand“ direkt auf ihrem Reiter. */

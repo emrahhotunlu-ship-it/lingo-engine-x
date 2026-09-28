@@ -29,11 +29,11 @@ import { StatsTab } from './StatsTab';
 export type ProgressTab = 'judge' | 'errors' | 'path' | 'stats' | 'history';
 const TAB_KEY = 'lx:progress-tab';
 const TABS: ReadonlyArray<{ id: ProgressTab; label: MessageKey }> = [
-  { id: 'judge', label: 'progJudge' },
-  { id: 'errors', label: 'progErrors' },
-  { id: 'path', label: 'progPath' },
+  { id: 'judge', label: 'nbProfilTabJudge' },
+  { id: 'errors', label: 'nbProfilTabErrors' },
+  { id: 'path', label: 'nbProfilTabPath' },
   { id: 'stats', label: 'nbProfilTabStats' },
-  { id: 'history', label: 'progHistory' },
+  { id: 'history', label: 'nbProfilTabHistory' },
 ];
 const isTab = (v: unknown): v is ProgressTab => TABS.some((x) => x.id === v);
 const EMPTY = new Map<string, Record<string, unknown>>();
