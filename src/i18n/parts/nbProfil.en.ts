@@ -71,4 +71,7 @@ export const nbProfilEn: Record<keyof typeof nbProfilDe, string> = {
   nbProfilTabErrors: 'Errors',
   nbProfilTabPath: 'C1 goal',
   nbProfilTabHistory: 'History',
+  nbProfilCsv: 'Cards as CSV for Anki',
+  nbProfilCsvHint: 'German on the front, English on the back, source sentence as the third field.',
+  nbProfilCsvEmpty: 'No cards to export yet.',
 } as const;

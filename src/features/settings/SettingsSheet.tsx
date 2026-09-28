@@ -17,7 +17,7 @@ import { useSettings, type Lang, type Palette, type ThemeMode } from '../../app/
 import { changeAutoNext, changeLang, changePalette, changeTheme } from '../../app/actions';
 import { WorkContextSection } from './WorkContextSection';
 import { exportMessage } from '../migration/MigrationScreen';
-import { exportAll } from './exportData';
+import { exportAll, exportAnkiCsv } from './exportData';
 import { VoiceSection } from './VoiceSection';
 import { LearningSection, SoundSection } from './LearningSection';
 import { Fold } from '../../ui/Fold';
@@ -174,7 +174,15 @@ function DataSection() {
   const downloads = useCapabilities((s) => s.downloads);
   const db = useCapabilities((s) => s.db);
   const [busy, setBusy] = useState(false);
+  const [csvBusy, setCsvBusy] = useState(false);
   if (downloads !== 'ready' || db !== 'ready') return null;
+  const runCsv = async () => {
+    setCsvBusy(true);
+    const outcome = await exportAnkiCsv();
+    setCsvBusy(false);
+    if (outcome === 'empty') toast(t('nbProfilCsvEmpty'));
+    else toast(t(exportMessage[outcome]), outcome === 'saved' || outcome === 'declined' ? 'info' : 'error');
+  };
   const run = async () => {
     setBusy(true);
     const outcome = await exportAll();
@@ -186,6 +194,10 @@ function DataSection() {
       <Button icon="download" onClick={() => void run()} busy={busy} busyLabel={t('exportRunning')} className="w-full">
         {t('exportButton')}
       </Button>
+      <Button variant="secondary" icon="cards" onClick={() => void runCsv()} busy={csvBusy} busyLabel={t('exportRunning')} className="w-full" data-testid="export-csv">
+        {t('nbProfilCsv')}
+      </Button>
+      <p className="text-sm text-muted">{t('nbProfilCsvHint')}</p>
     </Section>
   );
 }

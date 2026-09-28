@@ -70,4 +70,7 @@ export const nbProfilDe = {
   nbProfilTabErrors: 'Fehler',
   nbProfilTabPath: 'Ziel C1',
   nbProfilTabHistory: 'Verlauf',
+  nbProfilCsv: 'Karten als CSV für Anki',
+  nbProfilCsvHint: 'Deutsch vorn, Englisch hinten, Ursprungssatz als drittes Feld.',
+  nbProfilCsvEmpty: 'Noch keine Karten zum Exportieren.',
 } as const;
