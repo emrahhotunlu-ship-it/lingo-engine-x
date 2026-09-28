@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react';
+import { reportPos } from '../input/resume';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useNav, type UnitCtx } from '../../app/nav';
@@ -84,6 +85,9 @@ function ItemUnit({ item, ctx, steps, startAt, savedDone }: { item: FeedItem; ct
 
   const [state, send] = useMachine(discoverMachine, { input: { steps, startAt, total: questions.length, mark, finish } });
   const stateName = typeof state.value === 'string' ? state.value : (Object.keys(state.value)[0] ?? 'prep');
+  useEffect(() => {
+    reportPos('discover', stateName === 'done' ? null : { route: { name: 'discoverItem', feedId: item.feedId, itemId: item.itemId, ctx: 'extra' }, title: item.title, step: stateName });
+  }, [stateName, item.feedId, item.itemId, item.title]);
   // Der abgegebene Text liegt nur in diesem Browser (gelesen, sobald der Beitrag fertig ist).
   const sent = useMemo(() => (stateName === 'done' ? loadSent(item.itemId) : ''), [stateName, item.itemId]);
 

@@ -7,6 +7,7 @@ import { TOPICS } from '../../domain/content';
 import { usedChunks } from '../../domain/input/chunkMatch';
 import { processReview } from '../../domain/input/review';
 import { wordCount } from '../../domain/input/textStats';
+import { reportPos } from '../input/resume';
 import type { WritingPrompt } from '../../domain/input/types';
 import { normalizeWriting } from '../../domain/input/writingRecord';
 import { EnglishText } from '../../engine/EnglishText';
@@ -26,6 +27,7 @@ import { UnitShell } from '../input/UnitShell';
 import { writeMachine } from './machine';
 import { PromptCard } from './PromptCard';
 import { ReviewView } from './ReviewView';
+import { Alternatives } from './Alternatives';
 import { repairsFromWriting } from '../../domain/repair/sources';
 import { RepairStep } from '../repair/RepairStep';
 import { saveRepairs } from '../repair/store';
@@ -108,6 +110,11 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
 
   const [state, send] = useMachine(writeMachine, { input: { start: writingId ? 'submitted' : 'drafting', writingId, rev, submit, revise } });
   const stateName = typeof state.value === 'string' ? state.value : 'drafting';
+  // Fortsetzen (G3): Schritt und Entwurf (der Text selbst liegt in `lx:draft:*`, die Fassung in db).
+  const words = wordCount(text);
+  useEffect(() => {
+    reportPos('write', stateName === 'submitted' ? null : { route: { name: 'write', ctx: 'extra' }, title: prompt.title.en, step: stateName, words });
+  }, [stateName, words, prompt.title.en]);
   const id = state.context.writingId;
   const doc = useInputLibrary((s) => (id ? s.docs.writing.get(id) : undefined));
   const view = useMemo(() => (id && doc ? normalizeWriting(id, doc) : null), [id, doc]);
@@ -221,6 +228,17 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
         {task?.status === 'error' && view && <AiRunPanel phase="error" error={task.error} onRetry={() => startReview(view.id, view.text, view.rev, prompt, ctx)} />}
         {res && view && !repairOn && (
           <ReviewView res={res} text={view.text} area="write" sourceRef={`writing/${view.id}`} title={prompt.title.en} stale={stale} onRecheck={ai ? () => startReview(view.id, view.text, view.rev, prompt, ctx) : null} />
+        )}
+        {view && !running && !repairOn && (
+          <Alternatives
+            text={view.text}
+            sourceRef={`writing/${view.id}`}
+            title={prompt.title.en}
+            onAdopt={(next) => {
+              setRevText(next);
+              send({ type: 'REVISE' });
+            }}
+          />
         )}
         {res && view && !stale && !running && (
           <RepairStep key={`${view.id}-${view.rev}`} candidates={repairsFromWriting(view.text, res.errors, prompt.title.en)} area="write" source={`writing/${view.id}`} onActive={setRepairOn} />

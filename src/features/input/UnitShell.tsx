@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useId, useState, type ReactNode } from 'react';
 import { useNav } from '../../app/nav';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
 import { IconButton } from '../../ui/Button';
@@ -90,14 +91,17 @@ export function UnitShell({ kind, ctx, state, title, onClose, progress, status, 
           </p>
         )}
       </header>
-      {aside ? (
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,68ch)_minmax(0,1fr)] lg:items-start">
-          <div className="min-w-0">{children}</div>
-          <div className="min-w-0 lg:sticky lg:top-4">{aside}</div>
-        </div>
-      ) : (
-        children
-      )}
+      {/* Fehlergrenze je Schritt (G4): eine kaputte Aufgabe kostet nur diesen Schritt. */}
+      <StepBoundary resetKey={state} scope={kind} detail={state}>
+        {aside ? (
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,68ch)_minmax(0,1fr)] lg:items-start">
+            <div className="min-w-0">{children}</div>
+            <div className="min-w-0 lg:sticky lg:top-4">{aside}</div>
+          </div>
+        ) : (
+          children
+        )}
+      </StepBoundary>
     </motion.section>
   );
 }

@@ -1,5 +1,6 @@
 import { expect, type Page } from '@playwright/test';
-import { openTab } from './fixtures';
+import { routeToString } from '../../src/app/router/deeplink';
+import { openSpeak, openTab, ORIGIN } from './fixtures';
 
 // Hilfen für die E2E-Tests von Phase 4 (Lesen, Hören, Schreiben, Entdecken).
 
@@ -35,8 +36,32 @@ export async function openLearn(page: Page): Promise<void> {
   await page.locator('[data-screen="library"]').waitFor({ state: 'visible' });
 }
 
-/** Ein Modul öffnen: Lesen, Hören, Schreiben und Entdecken über den Reiter „Lesen“. */
+/**
+ * Ein Modul öffnen: Lesen, Hören (Text/Hörtext des Tages) und Entdecken („Alle Beiträge“) über den
+ * Reiter „Lesen“; Schreiben liegt im Neubau unter „Sprechen · Schreiben“ (Einstieg `hub-write`).
+ */
 export async function openModule(page: Page, id: 'read' | 'listen' | 'write' | 'discover'): Promise<void> {
+  if (id === 'write') {
+    // Nach einem Neuladen mit Deep-Link öffnet die App die Schreibaufgabe selbst.
+    if (page.url().includes('#go=write')) {
+      const open = await page
+        .locator('[data-screen="write"]')
+        .waitFor({ state: 'visible', timeout: 5000 })
+        .then(() => true)
+        .catch(() => false);
+      if (open) return;
+    }
+    await openSpeak(page, 'write');
+    const entry = page.getByTestId('hub-write').first();
+    if (await entry.count()) await entry.click();
+    // Bis P5 die Einstiege des Platzes `write` zeigt: Deep-Link (wird nur beim Start gelesen).
+    else {
+      await page.goto(`${ORIGIN}/#go=${encodeURIComponent(routeToString({ name: 'write', ctx: 'extra' }))}`);
+      await page.reload();
+    }
+    await page.locator('[data-screen="write"]').waitFor({ state: 'visible' });
+    return;
+  }
   await openLearn(page);
   await page.locator(`[data-testid="module"][data-module="${id}"]`).click();
   await page.locator(`[data-screen="${id}"]`).waitFor({ state: 'visible' });

@@ -19,6 +19,9 @@ import { ensureLibrary, rememberPick, useInputLibrary } from '../input/library';
 import { UnitShell } from '../input/UnitShell';
 import { useInputContext } from '../input/useInputContext';
 import { ReadUnit } from './ReadUnit';
+import { themeTextFor } from '../../content/nb/load';
+import { themeById } from '../../content/nb/themes';
+import { isThemeTextId, themeArticle } from '../../domain/input/unitInput';
 
 // Lesen (Kap. 6.8, Plan §4.1, M12, M16): Wahl des Tages nach F1–F4 (gespeichert → Startbestand →
 // Claude auf Klick, mit Themenwahl), heute Erledigtes ist Zustand mit Ergebnis. Eigener Text
@@ -39,7 +42,15 @@ const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v)
 
 type Chosen = { id: string; fresh: true } | null;
 
-export function ReadScreen({ ctx }: { ctx: UnitCtx }) {
+/** Themen-Text als Lese-Einheit (Kennung `x-t01` …) oder `null`. */
+function themeItem(id: string, lang: 'de' | 'en'): ArticleItem | null {
+  if (!isThemeTextId(id)) return null;
+  const theme = themeById(id.slice(2));
+  const tt = themeTextFor(id.slice(2));
+  return theme && tt ? themeArticle(tt, theme, lang) : null;
+}
+
+export function ReadScreen({ ctx, id, mode }: { ctx: UnitCtx; id?: string | undefined; mode?: 'own' | 'gen' | undefined }) {
   const { t } = useT();
   const back = useNav((s) => s.back);
   const input = useInputContext();
@@ -49,7 +60,8 @@ export function ReadScreen({ ctx }: { ctx: UnitCtx }) {
   const picks = useInputLibrary((s) => s.picks);
   const [chosen, setChosen] = useState<Chosen>(null);
   const [another, setAnother] = useState(false);
-  const [own, setOwn] = useState(false);
+  const [own, setOwn] = useState(mode === 'own');
+  const { lang } = useT();
 
   useEffect(() => {
     void ensureLibrary();
@@ -71,6 +83,28 @@ export function ReadScreen({ ctx }: { ctx: UnitCtx }) {
     if (picked && !picks[pickKey]) rememberPick(pickKey, picked.id);
   }, [picked, picks, pickKey]);
 
+  const badgeOf = (item: ArticleItem): string | null => (articles.get(item.id)?.src === 'own' ? t('rdOwnBadge') : null);
+  const direct = id ? (themeItem(id, lang) ?? (status === 'ready' ? findArticle(id, db) : null)) : null;
+  if (direct && !chosen && !own) {
+    const doneRow = today.find((r) => r.doc.articleId === direct.id && num(r.doc.t) > 0);
+    const quiz = doneRow?.doc.quiz && typeof doneRow.doc.quiz === 'object' ? (doneRow.doc.quiz as Doc) : null;
+    return (
+      <ReadUnit
+        key={`id-${direct.id}`}
+        item={direct}
+        pool={db}
+        ctx="extra"
+        day={input.day}
+        start={doneRow ? 'done' : 'reading'}
+        readingId={doneRow?.id ?? null}
+        quiz={quiz ? { n: num(quiz.n), ok: num(quiz.ok) } : null}
+        badge={badgeOf(direct)}
+        extra={<OwnEnrich item={direct} doc={articles.get(direct.id)} />}
+        onAnother={null}
+      />
+    );
+  }
+
   if (status === 'idle' || status === 'loading') return <ReadSkeleton />;
   if (status === 'error') {
     return (
@@ -85,18 +119,24 @@ export function ReadScreen({ ctx }: { ctx: UnitCtx }) {
     );
   }
 
-  const badgeOf = (item: ArticleItem): string | null => (articles.get(item.id)?.src === 'own' ? t('rdOwnBadge') : null);
-
   if (own) {
     return (
       <OwnText
         ctx={ctx}
-        onCancel={() => setOwn(false)}
+        onCancel={() => (mode === 'own' ? back() : setOwn(false))}
         onSaved={(id) => {
           setOwn(false);
           setChosen({ id, fresh: true });
         }}
       />
+    );
+  }
+
+  if (mode === 'gen' && !chosen) {
+    return (
+      <UnitShell kind="read" ctx="extra" state="gen" title={t('ch_read')} onClose={back}>
+        <Generator onCreated={(nid) => setChosen({ id: nid, fresh: true })} onOwn={() => setOwn(true)} />
+      </UnitShell>
     );
   }
 

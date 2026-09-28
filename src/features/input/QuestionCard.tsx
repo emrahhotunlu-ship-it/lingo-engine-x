@@ -4,6 +4,7 @@ import { EnglishText } from '../../engine/EnglishText';
 import { useHotkeys } from '../../engine/useHotkeys';
 import type { WordTapArea } from '../../engine/wordTap';
 import { evidenceSentence } from '../../domain/input/evidence';
+import { quoteSentence } from '../../domain/input/unitInput';
 import type { ChoiceResult, Question } from '../../domain/input/types';
 import { useT } from '../../i18n';
 import { haptic } from '../../platform/haptics';
@@ -46,7 +47,12 @@ export function QuestionCard({ question, index, total, source, area, sourceRef, 
     return () => clock.pause();
   }, [clock]);
 
-  const evidence = useMemo(() => (done ? evidenceSentence(source, question.options[question.answer] ?? '', question.q) : null), [done, source, question]);
+  // Mit wörtlichem Zitat (Themen-Texte, M9) steht genau dieser Satz als Beleg; sonst die beste Überlappung.
+  const evidence = useMemo(() => {
+    if (!done) return null;
+    if (question.quote) return { text: quoteSentence(source, question.quote), start: 0, end: 0 };
+    return evidenceSentence(source, question.options[question.answer] ?? '', question.q);
+  }, [done, source, question]);
   const explain = question.explain[lang] ?? null;
 
   const choose = (i: number) => {

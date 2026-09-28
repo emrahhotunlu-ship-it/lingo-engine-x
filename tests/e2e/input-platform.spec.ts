@@ -32,13 +32,10 @@ test('Widerspruchstest: Modul-Hinweis „heute geübt“ und Klickziel folgen ch
   await screen(page, 'today');
   // UX-Beratung 27.09.: keine Angebotsliste mehr auf Heute – alles Freiwillige lebt in „Üben“.
   await expect(page.getByTestId('input-offers')).toHaveCount(0);
-  // Hören ist im Testbestand heute schon erledigt: im Modul der Hinweis „heute geübt“.
+  // Neubau (Reiter Lesen): „heute gelesen/gehört“ hängt am Text selbst, nicht am Kanal.
   await openLearn(page);
-  await expect(page.locator('[data-module="listen"] [data-testid="module-done"]')).toHaveCount(1);
-  // Freiwilliges Modul: ruhiger Hinweis „heute geübt", kein „Erledigt" am Startknopf (Kap. 2.2/2.6).
-  await expect(page.locator('[data-module="listen"] [data-testid="module-done"]')).toHaveText('heute geübt');
-  await expect(page.locator('[data-module="listen"]')).not.toContainText('Erledigt');
   await expect(page.locator('[data-module="read"] [data-testid="module-done"]')).toHaveCount(0);
+  await expect(page.locator('[data-module="listen"]')).not.toContainText('Erledigt');
 
   // Lesen abschließen (Klickziel der Modulzeile) → ✕ führt zurück zu „Lesen“, das Modul zeigt „heute geübt“.
   await page.locator('[data-testid="module"][data-module="read"]').click();
@@ -47,5 +44,8 @@ test('Widerspruchstest: Modul-Hinweis „heute geübt“ und Klickziel folgen ch
   await expect(page.getByTestId('unit-done')).toBeVisible();
   await page.getByTestId('unit-close').click();
   await page.locator('[data-screen="library"]').waitFor({ state: 'visible' });
+  // Freiwillig: ruhiger Hinweis „heute gelesen“, kein „Erledigt“ am Klickziel (Kap. 2.2/2.6).
   await expect(page.locator('[data-module="read"] [data-testid="module-done"]')).toHaveCount(1);
+  await expect(page.locator('[data-module="read"] [data-testid="module-done"]')).toContainText('heute gelesen');
+  await expect(page.locator('[data-module="read"]')).not.toContainText('Erledigt');
 });
