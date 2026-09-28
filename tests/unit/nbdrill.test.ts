@@ -188,7 +188,7 @@ describe('Einwände, Posteingang, Nachsprechen, Auswahl', () => {
     expect(nextStep('gist', 'read')).toBe('done');
     expect(nextStep('gist', 'full')).toBe('reply');
     expect(nextStep('reply', 'reply')).toBe('done');
-    const mails = [{ id: 'm01', theme: 't01' }, { id: 'm02', theme: 't02' }] as Parameters<typeof pickMail>[0];
+    const mails = [{ id: 'm01', theme: 't01' }, { id: 'm02', theme: 't02' }] as unknown as Parameters<typeof pickMail>[0];
     expect(pickMail(mails, 't02')?.id).toBe('m02');
     expect(pickMail(mails, 't09')?.id).toBe('m01');
     expect(pickMail(mails, 't02', 'm01')?.id).toBe('m01');
