@@ -148,6 +148,20 @@ export const nbTrainingDe = {
   nbTrainingInboxReadDone: 'In Block 3 antwortest du auf diese Mail.',
   nbTrainingInboxSelfCompare: 'Vergleiche selbst: Hakst du alle Punkte ab?',
 
+  // Aussprache-Minute (Soll N109)
+  nbTrainingStress: 'Wortbetonung',
+  nbTrainingStressSub: 'Welche Silbe wird betont?',
+  nbTrainingStressTask: 'Tippe die betonte Silbe an.',
+  nbTrainingStressPurpose: 'Viele Lehnwörter betont man im Englischen anders als im Deutschen (DOCument, nicht DokuMENT).',
+  nbTrainingStressWhy: 'Englisch betont anders als das deutsche „{de}“. Hör es dir an und sprich nach.',
+  nbTrainingNumbers: 'Zahlen & Beträge',
+  nbTrainingNumbersSub: 'Laut sagen, dann Lösung hören',
+  nbTrainingNumbersTask: 'Sag die Zahl laut. Dann deck die Lösung auf.',
+  nbTrainingNumbersPurpose: 'Zahlen, Daten und Beträge müssen im Call sitzen – Milliarde = billion, Punkt statt Komma.',
+  nbTrainingNumbersReveal: 'Lösung zeigen',
+  nbTrainingResumeStress: 'Wortbetonung · Wort {n} von {total}',
+  nbTrainingResumeNumbers: 'Zahlen · {n} von {total}',
+
   // Nachsprechen
   nbTrainingShadowTask: 'Hör zu und sprich sofort nach.',
   nbTrainingShadowPurpose: 'Rhythmus, Betonung und Wendungen werden automatisch. Es gibt keine Wertung.',

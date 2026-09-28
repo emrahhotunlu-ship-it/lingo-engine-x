@@ -7,3 +7,5 @@ export * from './pick';
 export * from './pressure';
 export * from './shadow';
 export * from './inbox';
+export * from './motor';
+export * from './stress';

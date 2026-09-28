@@ -13,6 +13,9 @@ import { P7_UNIT_BLOCKS } from '../features/nbdrill/unitBlocks';
 import { PressureScreen } from '../features/pressure/PressureScreen';
 import { pressureResume, startPressure } from '../features/pressure/session';
 import { PronScreen } from '../features/pron/PronScreen';
+import { PronDrillScreen } from '../features/pron/PronDrillScreen';
+import { pronDrillResume, startPronDrill } from '../features/pron/drill';
+import type { ScreenProps } from '../app/registry';
 import { pronResume, startShadow } from '../features/pron/session';
 
 // Bereich „Training“ (neue Übungen: Tipp-Drills, Druck-Serie, Posteingang, Nachsprechen) –
@@ -40,6 +43,11 @@ const drillStart = (set: DrillSet) => (api: FocusApi) => {
   go({ name: 'nbdrill', set });
 };
 
+/** Nachsprechen oder Aussprache-Minute (Betonung, Zahlen) – eine Route `pron`. */
+function PronRoute(props: ScreenProps<'pron'>) {
+  return props.route.kind === 'shadow' ? <PronScreen {...props} /> : <PronDrillScreen {...props} />;
+}
+
 function LearnSection() {
   return <EntryList place="learn" group="nb-learn" title="nbTrainingSecLearn" />;
 }
@@ -53,7 +61,7 @@ function WriteSection() {
   return <EntryList place="write" group="nb-write" title="nbTrainingSecWrite" />;
 }
 
-const RESUMABLES = [drillResume, pressureResume, inboxResume, pronResume] as const;
+const RESUMABLES = [drillResume, pressureResume, inboxResume, pronResume, pronDrillResume] as const;
 
 export const training = defineArea({
   id: 'training',
@@ -65,7 +73,7 @@ export const training = defineArea({
     },
     pressure: { kind: 'exercise', component: PressureScreen, params: z.object({ set: z.enum(['objection', 'hotseat', 'buytime']).optional() }) },
     inbox: { kind: 'exercise', component: InboxScreen, params: z.object({ id: z.string().optional() }) },
-    pron: { kind: 'exercise', component: PronScreen, params: z.object({ kind: z.enum(['shadow', 'stress', 'numbers']), src: z.string().optional() }) },
+    pron: { kind: 'exercise', component: PronRoute, params: z.object({ kind: z.enum(['shadow', 'stress', 'numbers']), src: z.string().optional() }) },
   },
   sections: [
     { id: 'nb-training-learn', place: 'learn', order: 60, component: LearnSection },
@@ -126,6 +134,30 @@ export const training = defineArea({
       icon: 'speaker',
       start: () => {
         if (startShadow({})) go({ name: 'pron', kind: 'shadow' });
+      },
+    },
+    {
+      id: 'training-stress',
+      place: 'speak',
+      group: 'nb-pron',
+      order: 51,
+      label: 'nbTrainingStress',
+      sub: 'nbTrainingStressSub',
+      icon: 'target',
+      start: () => {
+        if (startPronDrill('stress', lang())) go({ name: 'pron', kind: 'stress' });
+      },
+    },
+    {
+      id: 'training-numbers',
+      place: 'speak',
+      group: 'nb-pron',
+      order: 52,
+      label: 'nbTrainingNumbers',
+      sub: 'nbTrainingNumbersSub',
+      icon: 'chart',
+      start: () => {
+        if (startPronDrill('numbers', lang())) go({ name: 'pron', kind: 'numbers' });
       },
     },
     {

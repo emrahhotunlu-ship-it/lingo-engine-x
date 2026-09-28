@@ -192,3 +192,75 @@ test('Deep-Link öffnet die Übung direkt (neue Runde als Extra)', async ({ page
   await expect(page.getByTestId('colloc-item')).toBeVisible();
   expect(await layoutProblems(page)).toEqual([]);
 });
+
+test('Soll N107: Register-Leiter – ganzer Satz, Hinweis, zweiter Versuch', async ({ page }) => {
+  await boot(page, { migrated: true });
+  await openEntry(page, 'training-register');
+  await screen(page, 'nbdrill');
+  const item = page.getByTestId('register-item');
+  await expect(item).toHaveAttribute('data-id', 'r01');
+  await expect(page.getByTestId('motor-chip')).toHaveText('casual → neutral');
+  await page.getByTestId('motor-input').fill('I have them.');
+  await page.getByTestId('drill-check').click();
+  await expect(page.getByTestId('drill-step')).toHaveAttribute('data-kind', 'start');
+  await page.getByTestId('motor-input').fill('I received the documents yesterday.');
+  await page.getByTestId('drill-check').click();
+  await expect(item).toHaveAttribute('data-state', 'close');
+  await expect(page.getByTestId('feedback-fixes')).toContainText('receive');
+  await page.getByTestId('next').click();
+  await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
+});
+
+test('Soll N107: Überleitungen und Wortbildung erreichbar', async ({ page }) => {
+  await boot(page, { migrated: true });
+  await openEntry(page, 'training-transition');
+  await screen(page, 'nbdrill');
+  await expect(page.getByTestId('transition-item')).toBeVisible();
+  await expect(page.getByTestId('motor-gap')).toBeVisible();
+  await page.getByTestId('round-close').click();
+  await openEntry(page, 'training-wordform');
+  await screen(page, 'nbdrill');
+  await expect(page.getByTestId('wordform-item')).toHaveAttribute('data-id', 'w01');
+  await typeGap(page, 'compliant');
+  await expect(page.getByTestId('wordform-item')).toHaveAttribute('data-state', 'ok');
+});
+
+test('Soll N108: Heißer Stuhl und Zeit gewinnen mit Zeitbalken und Muster zum Vergleich', async ({ page }) => {
+  await boot(page, { migrated: true });
+  await openEntry(page, 'training-hotseat');
+  await screen(page, 'pressure');
+  await expect(page.getByTestId('hotseat-item')).toBeVisible();
+  await expect(page.getByTestId('pressure-think')).toBeVisible();
+  await page.getByTestId('pressure-start').click();
+  await page.getByTestId('pressure-input').fill("That's a fair question. We have run many projects like yours.");
+  await page.getByTestId('pressure-check').click();
+  await expect(page.getByTestId('pressure-review')).toHaveAttribute('data-mode', 'self');
+  await expect(page.getByTestId('feedback-solution')).toBeVisible();
+  await page.getByTestId('round-close').click();
+  await openEntry(page, 'training-buytime');
+  await screen(page, 'pressure');
+  await expect(page.getByTestId('buytime-item')).toBeVisible();
+  // Zeit gewinnen: keine Bedenkzeit, sofort Antwortzeit.
+  await expect(page.getByTestId('pressure-answer')).toBeVisible();
+  await page.getByTestId('pressure-input').fill("That's a fair question.");
+  await page.getByTestId('pressure-check').click();
+  await expect(page.getByTestId('pressure-starters')).toBeVisible();
+});
+
+test('Soll N109: Wortbetonung und Zahlen ohne KI', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openEntry(page, 'training-stress');
+  await screen(page, 'pron');
+  await expect(page.getByTestId('stress-item')).toHaveAttribute('data-id', 's01');
+  await page.getByTestId('syll-1').click();
+  await expect(page.getByTestId('stress-item')).toHaveAttribute('data-state', 'wrong');
+  await expect(page.getByTestId('feedback-solution')).toHaveText(/DOC·u·ment/);
+  await page.getByTestId('next').click();
+  await expect(page.getByTestId('round-progress')).toHaveText('2 / 8');
+  await page.getByTestId('round-close').click();
+  await openEntry(page, 'training-numbers');
+  await screen(page, 'pron');
+  await expect(page.getByTestId('number-show')).toHaveText('€1.5bn');
+  await page.getByTestId('number-reveal').click();
+  await expect(page.getByTestId('feedback-solution')).toContainText('one point five billion euros');
+});
