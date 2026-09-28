@@ -11,7 +11,8 @@ describe('Preply: nächste Stunde', () => {
     expect(preplyNextOp({ v: 1, preplyNext: '2026-10-01' }, true, '2026-10-01')).toBeNull();
     expect(preplyNextOp({ v: 2 }, false, '2026-10-01')).toBeNull();
     expect(preplyNextOp({ v: 3 }, true, '2026-10-01')).toEqual({ update: { preplyNext: '2026-10-01' } });
-    expect(preplyNextOp({ cur: {} }, true, '')).toEqual({ update: { preplyNext: '', v: 1 } });
+    expect(preplyNextOp({ cur: {} }, true, '')).toBeNull();
+    expect(preplyNextOp({ preplyNext: '2026-10-01' }, true, '')).toEqual({ update: { preplyNext: '', v: 1 } });
   });
 
   it('nur künftige Termine gelten', () => {

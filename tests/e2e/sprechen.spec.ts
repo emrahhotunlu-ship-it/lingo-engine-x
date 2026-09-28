@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openSpeak, screen } from './fixtures';
 import { installGoalCheckReply } from './sprechenHelpers';
@@ -134,3 +135,18 @@ test('Tageseinheit Block 3: Sag es zum Wochenthema mit Wochenziel-Leiste, Zähle
   await expect(page.getByTestId('say-again')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+for (const [theme, lang] of [['dark', 'de'], ['dim', 'en'], ['light', 'de']] as const) {
+  test(`Wurzel Sprechen · ${theme} · ${lang} · axe (Gespräche, Schreiben)`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await boot(page, { migrated: true, theme, lang });
+    await screen(page, 'today');
+    for (const seg of ['talk', 'write'] as const) {
+      await openSpeak(page, seg);
+      expect(await layoutProblems(page)).toEqual([]);
+      const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+      expect(res.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
+      await page.screenshot({ path: `test-results/screens/sprechen-${seg}-${theme}-${lang}.png`, fullPage: true });
+    }
+  });
+}
