@@ -36,6 +36,16 @@ describe('Vibration', () => {
     expect(vibrate).toHaveBeenLastCalledWith(8);
   });
 
+  it('neues Prüfen mit anderem Ergebnis vibriert sofort, auch während der Sperrzeit', () => {
+    const vibrate = vi.fn(() => true);
+    vi.stubGlobal('navigator', { vibrate });
+    expect(verdictHaptic('correct')).toBe(true);
+    // Zeitgeber noch nicht gelaufen (z. B. ausgelasteter Hauptthread): anderes Ergebnis = neues Prüfen.
+    expect(verdictHaptic('wrong')).toBe(true);
+    expect(verdictHaptic('wrong')).toBe(false);
+    expect(vibrate.mock.calls).toEqual([[[12, 40, 18]], [[30, 60, 30]]]);
+  });
+
   it('Einstellung aus: nie vibrieren', () => {
     const vibrate = vi.fn(() => true);
     vi.stubGlobal('navigator', { vibrate });

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { TABS } from '../../src/app/shell/tabs';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen, openTab } from './fixtures';
-import { openProfileRow } from './profilHelpers';
+import { openProfileRow, openWeekly } from './profilHelpers';
 
 // Abschlussprüfung (P7-4, docs/abnahme.md): Kap. 14 und 15 als durchlaufende Prüfungen gegen den
 // Produktions-Build. Weitere Kriterien belegen die dort genannten Specs und Unit-Tests.
@@ -75,6 +75,9 @@ test('Kap. 14/9: der Tagesauftrag funktioniert unverändert – daily/* und feed
   await page.locator('[data-screen="discover"]').waitFor();
   await openOverview(page);
   await page.getByTestId('tab-history').click();
+  await expect(page.getByTestId('history')).toBeVisible();
+  // Der Wochenbericht ist im Neubau eine eigene Seite (Profil › Wochenbericht), nicht mehr im Verlauf.
+  await openWeekly(page);
   await expect(page.getByTestId('weekly')).toBeVisible();
   await page.waitForTimeout(800);
   const db = await dump(page);

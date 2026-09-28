@@ -107,7 +107,7 @@ export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: s
             {chunkCount > 0 && <> · {tn('vcChunks', chunkCount)}</>} · {tn('vocabDue', stats.due)}
           </span>
         }
-        right={
+        titleAction={
           <Button variant="secondary" onClick={() => (setSelecting((v) => !v), setSelected(new Set()))} data-testid="vocab-select" aria-pressed={selecting}>
             {selecting ? t('nbWsSelDone') : t('nbWsSelect')}
           </Button>

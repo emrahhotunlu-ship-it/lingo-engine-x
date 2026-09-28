@@ -35,12 +35,25 @@ function tagOf(v: unknown): string | null {
 }
 
 /** Stichwort als Wortanfang: kurze Stichwörter (≤ 3 Zeichen) nur ganz (oder mit -s), sonst ≤ 4 Zeichen Endung. */
-function keywordHit(word: string, keyword: string): boolean {
+function keywordRe(keyword: string): RegExp | null {
   const k = normText(keyword);
-  if (!k) return false;
+  if (!k) return null;
   const esc = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const tail = k.length <= 3 ? 's?' : "[a-z']{0,4}";
-  return new RegExp(`(?:^| )${esc}${tail}(?= |$)`).test(word);
+  return new RegExp(`(?:^| )${esc}${tail}(?= |$)`);
+}
+
+// Leistung (perf.spec, Großdatensatz): Wendungskerne und Stichwort-Regex je Thema nur EINMAL bauen,
+// nicht für jede der bis zu 1.500 fälligen Karten neu (normText + RegExp je Karte × Wendung/Stichwort).
+type Prepared = { cores: readonly string[]; keys: readonly RegExp[] };
+const PREPARED = new WeakMap<WeekTheme, Prepared>();
+
+function prepared(t: WeekTheme): Prepared {
+  const hit = PREPARED.get(t);
+  if (hit) return hit;
+  const p: Prepared = { cores: t.phrases.map((x) => phraseCore(x.en)), keys: t.keywords.map(keywordRe).filter((r): r is RegExp => r !== null) };
+  PREPARED.set(t, p);
+  return p;
 }
 
 export function isThemeCard(card: ThemeCardLike, theme: WeekTheme | ThemeId | null | undefined): boolean {
@@ -55,10 +68,11 @@ export function isThemeCard(card: ThemeCardLike, theme: WeekTheme | ThemeId | nu
   const raw = card.word ?? card.en ?? card.lemma ?? (typeof doc?.word === 'string' ? doc.word : typeof doc?.en === 'string' ? doc.en : '');
   const word = normText(raw ?? '');
   if (!word) return false;
-  for (const p of t.phrases) {
-    const core = phraseCore(p.en);
+  const { cores, keys } = prepared(t);
+  const multi = word.split(' ').length >= 2;
+  for (const core of cores) {
     if (core === word) return true;
-    if (word.split(' ').length >= 2 && (hasWords(core, word) || hasWords(word, core))) return true;
+    if (multi && (hasWords(core, word) || hasWords(word, core))) return true;
   }
-  return t.keywords.some((k) => keywordHit(word, k));
+  return keys.some((re) => re.test(word));
 }
