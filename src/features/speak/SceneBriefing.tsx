@@ -11,6 +11,8 @@ import { Sheet } from '../../ui/Sheet';
 import { clearResume, readResume } from './resume';
 import { autoplayOn, queueOpening } from './autoplay';
 import { AsPreplyLesson } from '../preply/AsPreplyLesson';
+import { sceneGoals } from '../../domain/speak/bizScenes';
+import { GoalChecklist } from './GoalChecklist';
 
 // Einweisung (Plan §5.2): Lage, Ziel, Gegenüber, hilfreiche Wendungen (antippbar, 🔊), großer
 // Knopf „Gespräch starten“ – er schaltet die Sprachausgabe synchron in der Geste frei (iPhone)
@@ -47,9 +49,10 @@ export function SceneBriefing({ scene, onClose }: { scene: SceneView | null; onC
             <p className="lx-eyebrow">{t('spSituation')}</p>
             <p className="text-base leading-relaxed">{scene.situation}</p>
           </section>
-          <section className="flex flex-col gap-1">
+          {/* N72 / I2: Ziel-Checkliste – dieselben Ziele stehen im Gespräch oben und im Bericht. */}
+          <section className="flex flex-col gap-2">
             <p className="lx-eyebrow">{t('spGoal')}</p>
-            <p className="text-base font-medium leading-relaxed">{scene.goal}</p>
+            <GoalChecklist goals={sceneGoals(scene)} marks={null} testId="briefing-goals" />
           </section>
           {scene.persona?.traits && (
             <section className="flex flex-col gap-1">

@@ -73,7 +73,12 @@ async function fullRun(page: Page, lang: Lang, viewport: { width: number; height
   await page.getByTestId('start').click();
 
   const say = page.getByTestId('say');
+  // Neubau N71 „Laut zuerst“: Zeitbalken, laut sprechen, dann aufschreiben.
+  await expect(say).toHaveAttribute('data-phase', 'aloud');
+  await expect(page.getByTestId('say-aloud-timer')).toHaveAttribute('data-left', '60');
+  await page.getByTestId('say-aloud-done').click();
   await expect(say).toHaveAttribute('data-phase', 'write1');
+  await expect(page.getByTestId('say-dictate-hint')).toBeVisible();
   await expect(page.getByTestId('task')).toHaveText(TEXT[lang].task);
   // Zweck nur hinter dem Info-Symbol (A7).
   await expect(page.getByTestId('purpose')).toHaveCount(0);
@@ -181,6 +186,7 @@ test.describe('ohne Claude', () => {
     const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/profile': { plan: SAY_PLAN } } } });
     await screen(page, 'today');
     await page.getByTestId('start').click();
+    await page.getByTestId('say-aloud-done').click();
     await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'write1');
     await expect(page.getByTestId('say-noai-hint')).toBeVisible();
     await expect(page.getByTestId('say-check')).toHaveCount(0);

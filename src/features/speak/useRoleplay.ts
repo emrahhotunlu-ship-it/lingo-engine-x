@@ -19,8 +19,11 @@ import { AnalysisLane } from './analysisLane';
 import { saveReport, saveRun } from './persist';
 import { clearResume, writeResume, type ResumeCopy } from './resume';
 import { roleplayMachine, stateName, type RoleplayContext } from './roleplayMachine';
-import { legacySceneDoc, workContext } from './useSceneLibrary';
+import { runMarkerFor, workContext } from './useSceneLibrary';
 import { repairsFromTalk } from '../../domain/repair/sources';
+import { sceneCriteria, sceneGoals } from '../../domain/speak/bizScenes';
+import { mergeGoalMarks, type GoalMark } from '../../domain/speak/goals';
+import { goalCheck, type CriterionMark } from '../../prompts/nb/p5/goalCheck';
 import { saveRepairs } from '../repair/store';
 import { patternHints } from '../patterns/store';
 
@@ -64,6 +67,9 @@ export function reportTurns(turns: readonly Turn[], analyses: Readonly<Record<nu
 
 export type RoleplayApi = ReturnType<typeof useRoleplay>;
 
+/** Kriterien-Raster am Gesprächsende (N72). */
+export type CriteriaState = { state: 'idle' | 'pending' | 'done' | 'failed'; data: CriterionMark[] };
+
 export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
   const scope = useAiScope();
   const lang = useSettings((s) => s.lang);
@@ -78,6 +84,13 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
   const saving = useRef(false);
   const runRef = useRef<ReturnType<typeof buildRun> | null>(null);
   const alive = useRef(true);
+  // Ziel-Checkliste (N72): Haken nach jeder Antwort der Figur, nie zurückgenommen.
+  // Die Szene ändert sich innerhalb eines Gesprächs nicht (neue Szene = neuer Schlüssel).
+  const [goalsEn] = useState(() => sceneGoals(scene).map((g) => g.en));
+  const [critEn] = useState(() => sceneCriteria(scene).map((c) => c.en));
+  const [goals, setGoalsState] = useState<GoalMark[]>(() => mergeGoalMarks(resume?.goals ?? [], [], goalsEn.length));
+  const goalsRef = useRef(goals);
+  const [criteria, setCriteria] = useState<CriteriaState>({ state: 'idle', data: [] });
 
   useEffect(() => {
     alive.current = true;
@@ -97,8 +110,41 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
   const persistCopy = useCallback(() => {
     const c = actor.getSnapshot().context;
     if (!c.turns.some((t) => t.role === 'me')) return;
-    writeResume(scene.id, { v: 1, turns: c.turns, analyses: c.analyses, startedAt: startedAt, day: day, taken: c.taken });
+    writeResume(scene.id, { v: 1, turns: c.turns, analyses: c.analyses, startedAt: startedAt, day: day, taken: c.taken, goals: goalsRef.current });
   }, [actor, scene.id, startedAt, day]);
+
+  // ------------------------------------------------------------ Ziel-Checkliste (goal-check@1)
+
+  /** Nach jeder Antwort der Figur (Handlung „Senden“) bzw. am Ende mit Kriterien. Ohne KI: nichts. */
+  const checkGoals = useCallback(
+    async (final: boolean) => {
+      const n = goalsEn.length;
+      const turns = actor.getSnapshot().context.turns.map((t) => ({ role: t.role, text: t.text }));
+      if (!n || !turns.some((t) => t.role === 'me')) return;
+      const withCrit = final && critEn.length > 0;
+      if (withCrit) setCriteria({ state: 'pending', data: [] });
+      const ctl = scope.controller();
+      try {
+        const r = await askJson({
+          template: goalCheck,
+          vars: { goals: goalsEn, criteria: critEn, turns, final: withCrit, uiLang: useSettings.getState().lang },
+          signal: ctl.signal,
+          priority: 'background',
+        });
+        if (!alive.current) return;
+        const merged = mergeGoalMarks(goalsRef.current, r.data.goals, n);
+        goalsRef.current = merged;
+        setGoalsState(merged);
+        if (withCrit) setCriteria({ state: 'done', data: r.data.criteria });
+        if (!final) persistCopy();
+      } catch (err) {
+        if (!alive.current || (isAiFailure(err) && err.kind === 'cancelled')) return;
+        logWarn('speak:goal-check', err, scene.id);
+        if (withCrit) setCriteria({ state: 'failed', data: [] });
+      }
+    },
+    [actor, scope, scene.id, persistCopy, goalsEn, critEn],
+  );
 
   // ------------------------------------------------------------ Bericht
 
@@ -145,13 +191,16 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
     });
     // Lernberatung V2: eigene Sätze mit echten Fehlern werden Reparatur-Sätze (parallel, blockiert nichts).
     const repairs = repairsFromTalk(c.turns, c.analyses, scene.titleEn);
-    const [ok] = await Promise.all([saveRun({ run, lang: useSettings.getState().lang, legacyScene: legacySceneDoc(scene.id), errors, nowMs: Date.now() }), repairs.length ? saveRepairs(repairs) : Promise.resolve(true)]);
+    const [ok] = await Promise.all([saveRun({ run, lang: useSettings.getState().lang, legacyScene: runMarkerFor(scene.id), errors, nowMs: Date.now() }), repairs.length ? saveRepairs(repairs) : Promise.resolve(true)]);
     if (ok) clearResume(scene.id);
     if (!alive.current) return;
     send({ type: ok ? 'SAVED' : 'SAVE_FAILED' });
-    if (run.turns >= 1) void requestReport();
+    if (run.turns >= 1) {
+      void requestReport();
+      void checkGoals(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- ctx liest nur den aktuellen Stand der Maschine
-  }, [actor, scene, send, requestReport]);
+  }, [actor, scene, send, requestReport, checkGoals]);
 
   // ------------------------------------------------------------ Analyse
 
@@ -231,6 +280,7 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
         const all = ctx().turns;
         analyze(all.length - 2);
         persistCopy();
+        void checkGoals(false);
         if (autoplayOn()) void speak(r.text);
       } catch (err) {
         if (!alive.current) return;
@@ -241,7 +291,7 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- ctx liest nur den aktuellen Stand der Maschine
-    [actor, scene, scope, send, analyze, persistCopy],
+    [actor, scene, scope, send, analyze, persistCopy, checkGoals],
   );
 
   const stop = useCallback(() => figureCtl.current?.abort(), []);
@@ -281,5 +331,10 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
     setDraft,
     markTaken,
     startedAt,
+    day,
+    goals,
+    goalTexts: goalsEn,
+    criteria,
+    retryCriteria: () => void checkGoals(true),
   };
 }

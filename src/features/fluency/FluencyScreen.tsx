@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -27,6 +28,13 @@ import { flush } from '../progress/persist';
 import { saveRepairs } from '../repair/store';
 import { TakeChunkButton } from '../speak/TakeChunkButton';
 import { recordFluencyDone, saveFluencyItem } from './persist';
+import { useDocWatch } from '../../data/watch';
+import { tuesdayOf, tuesdayWpm } from '../../domain/fluency/wpm';
+import { unitResult } from '../../domain/speak/unitResult';
+import { fluencyResume, type FluencySnap } from '../speak/resumable';
+import { TargetBar } from '../speak/TargetBar';
+import { finishUnit, unitBlockOf } from '../speak/unit';
+import { useUnitCtx } from '../speak/useUnit';
 
 // Flüssigkeit 90 – 60 – 45 (Lernberatung 27.09., V6 / Vorschlag 5, 4-3-2-Methode): eine Frage,
 // dreimal dieselbe Antwort – 90 s, 60 s, 45 s –, gesprochen (Spracheingabe, wenn verfügbar)
@@ -46,6 +54,30 @@ const fmt = (ms: number): string => {
 
 /** Monotone Uhr: der Zeitbalken folgt der echten Zeit, auch wenn `Date` angehalten ist. */
 const mono = (): number => performance.now();
+
+/** Runden aus der Momentaufnahme tolerant lesen (Fortsetzen, G3). */
+function roundsOf(list: FluencySnap['rounds']): FluencyRound[] {
+  const n = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
+  return list.map((r) => ({ sec: n(r.sec), text: typeof r.text === 'string' ? r.text.slice(0, FLUENCY_TEXT_MAX) : '', ms: n(r.ms), words: n(r.words), wpm: n(r.wpm), sentences: n(r.sentences), full: n(r.full) }));
+}
+
+/** Neubau N73: Wörter pro Minute im 45-s-Durchgang, am Freitag gegen Dienstag. */
+function WpmCard({ rounds, day, q }: { rounds: FluencyRound[]; day: string; q: string }) {
+  const { t } = useT();
+  const r45 = rounds.find((r) => r.sec === 45);
+  const tue = tuesdayOf(day);
+  const cur = useDocWatch(fluencyPath(day), !!tue);
+  const prev = useDocWatch(tue ? fluencyPath(tue) : fluencyPath(day), !!tue && fluencyPath(tue) !== fluencyPath(day));
+  const before = tue ? tuesdayWpm([cur.data, prev.data], day, q) : null;
+  if (!r45) return null;
+  return (
+    <Card as="div" channel="speak" className="flex flex-col gap-1" data-testid="fluency-wpm" data-wpm={r45.wpm} data-tue={before ?? undefined}>
+      <p className="lx-eyebrow">{t('nbSprechenWpmTitle')}</p>
+      <p className="lx-tnum text-2xl font-semibold">{t('nbSprechenWpm', { n: r45.wpm })}</p>
+      {before !== null && <p className="lx-tnum text-sm text-muted" data-testid="fluency-wpm-tue">{t('nbSprechenWpmCompare', { n: before })}</p>}
+    </Card>
+  );
+}
 
 const fbOf = (o: FluencyCheckOut | null): FluencyFeedback | null => (o ? { progress: o.progress, missing: o.missing, corrections: o.corrections } : null);
 
@@ -88,16 +120,24 @@ export function FluencyScreen() {
   const listening = useStt((s) => s.listening);
   const sttStatus = useStt((s) => s.status);
   const [day] = useState(() => useClock.getState().today);
+  const unit = useNav((s) => (s.route.name === 'fluency' ? unitBlockOf(s.route.unit) : null));
+  const ctx = useUnitCtx('task.fluency', unit);
+  const [restored] = useState<FluencySnap | null>(() => fluencyResume.take());
   const [shift, setShift] = useState(0);
-  const q = useMemo(() => questionFor(FLUENCY_QUESTIONS, day, shift), [day, shift]);
+  // Tageseinheit (Di/Fr): Frage A der Woche; Fortsetzen: dieselbe Frage.
+  const fixedQ = restored?.q ?? (unit ? (ctx?.theme?.fluencyQ ?? null) : null);
+  const q = useMemo(() => {
+    const fixed = shift === 0 && fixedQ ? FLUENCY_QUESTIONS.find((x) => x.id === fixedQ) : undefined;
+    return fixed ?? questionFor(FLUENCY_QUESTIONS, day, shift);
+  }, [day, shift, fixedQ]);
   const [phase, setPhase] = useState<Phase>('ready');
-  const [round, setRound] = useState<RoundIndex>(0);
-  const [rounds, setRounds] = useState<FluencyRound[]>([]);
+  const [round, setRound] = useState<RoundIndex>(() => (restored ? (restored.round as RoundIndex) : 0));
+  const [rounds, setRounds] = useState<FluencyRound[]>(() => (restored ? roundsOf(restored.rounds) : []));
   const [start, setStart] = useState(0);
   const [over, setOver] = useState(false);
   const [text, setText] = useState('');
   const [interim, setInterim] = useState('');
-  const [t0, setT0] = useState(() => Date.now());
+  const [t0, setT0] = useState(() => restored?.t0 ?? Date.now());
   const [fb, setFb] = useState<FluencyCheckOut | null>(null);
   const [repairs, setRepairs] = useState<{ state: 'idle' | 'saved' | 'failed'; n: number }>({ state: 'idle', n: 0 });
   const [saveFailed, setSaveFailed] = useState(false);
@@ -109,6 +149,13 @@ export function FluencyScreen() {
   const itemId = useMemo(() => (q ? fluencyId(q.id, t0) : ''), [q, t0]);
   const key = (r: number) => `fluency:${day}:${q?.id ?? ''}:${r}`;
   const sec = FLUENCY_ROUNDS[round];
+
+  // Fortsetzen (G3): Frage, Runde und gesprochene Runden; das Ende löscht die Momentaufnahme.
+  useEffect(() => {
+    if (!q) return;
+    if (phase === 'result') fluencyResume.clear();
+    else fluencyResume.set({ q: q.id, round, t0, rounds: rounds.map((r) => ({ ...r })), ...(unit ? { unit } : {}) });
+  }, [phase, q, round, t0, rounds, unit]);
 
   useCompanionSee({ area: 'speak', label: t('fluTitle'), phase: phase === 'result' ? 'feedback' : 'idle', ...(q ? { detail: `Fluency question: ${q.en}` } : {}) });
   useHotkeys({ escape: () => go({ name: 'speak' }) }, () => false);
@@ -172,6 +219,26 @@ export function FluencyScreen() {
     setSaveFailed(!a || !b);
   };
 
+  /** Tageseinheit: Block 3 abschließen (Text der 45-s-Runde, Korrekturen). */
+  const reportUnit = () => {
+    const it = done.current;
+    if (!unit || !it || !q) return;
+    const lastText = [...it.rounds].reverse().find((r) => r.text.trim())?.text ?? '';
+    finishUnit('task.fluency', unit, unitResult('task.fluency', `${fluencyPath(it.day)}#${it.id}`, lastText, fb?.corrections ?? [], null));
+  };
+
+  /** „Nochmal, aber besser“ (N74): dieselbe Frage, drei neue Runden. */
+  const againSame = () => {
+    setRound(0);
+    setRounds([]);
+    setFb(null);
+    setRepairs({ state: 'idle', n: 0 });
+    setSaveFailed(false);
+    setT0(Date.now());
+    done.current = null;
+    setPhase('ready');
+  };
+
   const restart = () => {
     setShift((n) => n + 1);
     setRound(0);
@@ -233,6 +300,8 @@ export function FluencyScreen() {
         )}
       </header>
 
+      {/* G4: eine kaputte Aufgabe kostet nur diesen Schritt. */}
+      <StepBoundary resetKey={`${phase}-${round}`} scope="fluency">
       <div className="flex max-w-3xl flex-col gap-5">
         <Card channel="speak" className="flex flex-col gap-2" data-testid="fluency-question" data-q={q.id}>
           <p className="lx-eyebrow">{t('fluQuestion')}</p>
@@ -280,6 +349,7 @@ export function FluencyScreen() {
 
         {phase === 'run' && (
           <>
+            <TargetBar text={text} ctx={ctx} />
             <TimeBar key={`${round}-${start}`} start={start} total={sec * 1000} onOver={() => setOver(true)} />
             <DraftArea handle={draft} value={text} onChange={(v) => setText(v.slice(0, FLUENCY_TEXT_MAX))} label={t('fluDraftLabel')} draftKey={key(round)} rows={6} disabled={over} testId="fluency-draft" />
             <div className="flex flex-wrap items-center gap-3">
@@ -331,10 +401,15 @@ export function FluencyScreen() {
             saveFailed={saveFailed}
             onRetrySave={() => void retrySave()}
             onAgain={restart}
+            onAgainSame={againSame}
             onBack={() => go({ name: 'speak' })}
+            onUnit={unit ? reportUnit : null}
+            day={day}
+            qId={q.id}
           />
         )}
       </div>
+      </StepBoundary>
     </motion.section>
   );
 }
@@ -354,16 +429,22 @@ type ResultProps = {
   saveFailed: boolean;
   onRetrySave: () => void;
   onAgain: () => void;
+  onAgainSame: () => void;
   onBack: () => void;
+  /** Tageseinheit: Block 3 melden (statt „Zurück“). */
+  onUnit: (() => void) | null;
+  day: string;
+  qId: string;
 };
 
 /** Ergebnis: ruhige Kennzahlen je Runde, Rückmeldung von Claude, die drei Fassungen. */
-function Result({ rounds, fb, ai, aiPhase, aiError, onStop, onRetry, question, sourceRef, repairs, repairsText, saveFailed, onRetrySave, onAgain, onBack }: ResultProps) {
+function Result({ rounds, fb, ai, aiPhase, aiError, onStop, onRetry, question, sourceRef, repairs, repairsText, saveFailed, onRetrySave, onAgain, onAgainSame, onBack, onUnit, day, qId }: ResultProps) {
   const { t, lang } = useT();
   const first = rounds[0];
   const third = rounds[2];
   return (
     <div className="flex flex-col gap-5" data-testid="fluency-result">
+      <WpmCard rounds={rounds} day={day} q={qId} />
       <Card as="div" className="flex flex-col gap-3" data-testid="fluency-stats">
         <p className="lx-eyebrow">{t('fluResult')}</p>
         <table className="w-full text-left text-sm">
@@ -478,15 +559,27 @@ function Result({ rounds, fb, ai, aiPhase, aiError, onStop, onRetry, question, s
         </div>
       )}
 
-      {!isBusy(aiPhase) && (
-        <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary" size="lg" onClick={onBack} data-testid="fluency-back">
-            {t('fluBack')}
-          </Button>
-          <Button icon="refresh" onClick={onAgain} data-testid="fluency-again">
-            {t('fluAgain')}
+      {onUnit ? (
+        // Tageseinheit: „Weiter“ ist nie von der KI blockiert (G6).
+        <div>
+          <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={onUnit} data-testid="fluency-unit-next">
+            {t('nbSprechenUnitDone')}
           </Button>
         </div>
+      ) : (
+        !isBusy(aiPhase) && (
+          <div className="flex flex-wrap items-center gap-3">
+            <Button variant="primary" size="lg" onClick={onBack} data-testid="fluency-back">
+              {t('fluBack')}
+            </Button>
+            <Button icon="refresh" onClick={onAgainSame} data-testid="fluency-again-same">
+              {t('nbSprechenAgain')}
+            </Button>
+            <Button variant="ghost" onClick={onAgain} data-testid="fluency-again">
+              {t('fluAgain')}
+            </Button>
+          </div>
+        )
       )}
     </div>
   );

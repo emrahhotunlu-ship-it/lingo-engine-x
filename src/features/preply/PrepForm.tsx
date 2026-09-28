@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { FlaggedCards } from './FlaggedCards';
 import { useAiAvailable, useAiScope } from '../../ai/scope';
 import { isAiFailure, type AiMessageKey, type AiPhase } from '../../ai/types';
 import { useLive } from '../../data/live';
@@ -162,6 +163,7 @@ export function PrepForm({ last, onCreated }: { last: ImportView | null; onCreat
           ))}
         </div>
       </div>
+      <FlaggedCards />
       {focus.length > 0 && (
         <div className="flex flex-col gap-2" data-testid="pp-focus">
           <p className="text-sm font-semibold">{t('ptFocusTitle')}</p>

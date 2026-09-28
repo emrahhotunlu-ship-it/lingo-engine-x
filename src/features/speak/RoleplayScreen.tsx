@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -12,6 +13,13 @@ import { Sheet } from '../../ui/Sheet';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION } from '../../ui/motion';
 import { AnalysisCard } from './AnalysisCard';
+import { GoalChecklist } from './GoalChecklist';
+import { roleplayResume } from './resumable';
+import { TargetBar } from './TargetBar';
+import { TrapWatch, TurnTimer } from './TurnAids';
+import { roleplayUnitKind, unitBlockOf } from './unit';
+import { useUnitCtx } from './useUnit';
+import { sceneGoals } from '../../domain/speak/bizScenes';
 import { ChatLog } from './ChatLog';
 import { Composer } from './Composer';
 import { ReportScreen } from './ReportScreen';
@@ -87,6 +95,17 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const myTurns = useMemo(() => c.turns.filter((x) => x.role === 'me').length, [c.turns]);
   const pending = Object.values(c.analyses).filter((a) => a.state === 'pending').length;
   const restore = useMemo(() => ({ text: c.draft, chip: c.draftChip, n: c.restoreN }), [c.draft, c.draftChip, c.restoreN]);
+  const goalList = useMemo(() => sceneGoals(scene), [scene]);
+  const unit = useNav((s) => (s.route.name === 'roleplay' ? unitBlockOf(s.route.unit) : null));
+  const unitCtx = useUnitCtx(roleplayUnitKind(rp.day), unit);
+  const myText = useMemo(() => c.turns.filter((x) => x.role === 'me').map((x) => x.text).join('\n'), [c.turns]);
+  // Fortsetzen (G3): Hülle um die vorhandene Kopie `lx:roleplay:<szene>`; der Bericht beendet es.
+  const hasMine = myText.length > 0;
+  const reported = state === 'report';
+  useEffect(() => {
+    if (reported) roleplayResume.clear();
+    else if (hasMine) roleplayResume.set({ sceneId: scene.id, ...(unit ? { unit } : {}) });
+  }, [hasMine, reported, scene.id, unit]);
 
   const takeInput = useCallback(
     (idx: number) =>
@@ -120,7 +139,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   );
 
   if (state === 'report' || state === 'finishing') {
-    return <ReportScreen scene={scene} rp={rp} />;
+    return <ReportScreen scene={scene} rp={rp} unit={unit} />;
   }
 
   const mine = c.turns.map((x, i) => (x.role === 'me' ? i : -1)).filter((i) => i >= 0);
@@ -148,6 +167,14 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
           {t('spEnd')}
         </Button>
       </header>
+      {/* N72: die Ziele stehen oben; Haken kommen nach jeder Antwort der Figur (goal-check@1). */}
+      <div className="lx-glass rounded-2xl px-4 py-3" data-testid="rp-goals-box">
+        <GoalChecklist goals={goalList} marks={rp.goals} testId="rp-goals" />
+        <div className="mt-2">
+          <TrapWatch />
+        </div>
+      </div>
+      {unit && <TargetBar text={myText} ctx={unitCtx} />}
       <AnimatePresence initial={false}>
         {goalOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: DURATION.base }} className="overflow-hidden">
@@ -162,6 +189,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
       </AnimatePresence>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,44rem)_minmax(0,1fr)]">
+        <StepBoundary resetKey={c.turns.length} scope="roleplay">
         <div className="flex min-w-0 flex-col gap-4 pb-44 lg:pb-0">
           <ChatLog
             turns={c.turns}
@@ -215,6 +243,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
             </Card>
           )}
 
+          {(state === 'composing' || phase !== 'other') && <TurnTimer key={c.turns.length} active={state === 'composing'} />}
           {(state === 'composing' || phase !== 'other') && (
             <Composer sceneId={scene.id} useful={scene.useful} busy={busy} restore={restore} onSend={(text, chip) => void rp.sendTurn(text, chip)} />
           )}
@@ -227,6 +256,8 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
             </div>
           )}
         </div>
+
+        </StepBoundary>
 
         {desktop && (
           <aside aria-label={t('spAnalysisPanel')} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] self-start overflow-y-auto lg:block" data-testid="analysis-panel">

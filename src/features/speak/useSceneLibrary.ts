@@ -5,7 +5,9 @@ import fixedScenes from '../../content/speak/scenes.json';
 import contextJson from '../../content/legacy/context.json';
 import { useLive } from '../../data/live';
 import { useCollection, useWatched } from '../../data/watch';
+import { bizScenes } from '../../content/nb/load';
 import { TOPICS } from '../../domain/content';
+import { bizRunMarker, bizSceneDoc, isBizId } from '../../domain/speak/bizScenes';
 import { mergeScenes } from '../../domain/speak/library';
 import type { SceneView } from '../../domain/speak/types';
 
@@ -20,16 +22,28 @@ type Doc = Record<string, unknown>;
 export const LEGACY_SCENES = [...(legacyScenes as unknown as Doc[]), ...(fixedScenes as unknown as Doc[])];
 const EMPTY = new Set<string>();
 
+// Neubau (N70): die 16 Business-Szenen aus P7a kommen dazu – erst beim ersten Gebrauch geparst
+// (`content/nb/load.ts`, Anhang A 5c), danach im Speicher.
+let contentCache: Doc[] | null = null;
+export function contentScenes(): Doc[] {
+  return (contentCache ??= [...LEGACY_SCENES, ...bizScenes().map(bizSceneDoc)]);
+}
+
 export function useSceneLibrary(): { scenes: SceneView[] | null } {
   const lang = useSettings((s) => s.lang);
   const db = useCollection('scene');
   const invalid = useWatched((s) => s.invalid.scene) ?? EMPTY;
-  const scenes = useMemo(() => (db ? mergeScenes(LEGACY_SCENES, db, invalid, lang) : null), [db, invalid, lang]);
+  const scenes = useMemo(() => (db ? mergeScenes(contentScenes(), db, invalid, lang) : null), [db, invalid, lang]);
   return { scenes };
 }
 
 export function legacySceneDoc(id: string): Doc | null {
-  return LEGACY_SCENES.find((s) => s.id === id) ?? null;
+  return contentScenes().find((s) => s.id === id) ?? null;
+}
+
+/** Inhalt für den Lauf-Vermerk `scene/<id>`: Business-Szenen nur als Kennung (Inhalt bleibt Quelle). */
+export function runMarkerFor(id: string): Doc | null {
+  return isBizId(id) ? bizRunMarker(id) : legacySceneDoc(id);
 }
 
 /** Berufskontext für die Vorlagen (`app/profile.ctx`, sonst der der alten App). */

@@ -1,3 +1,4 @@
+import { readGoalMarks, type GoalMark } from '../../domain/speak/goals';
 import type { AnalysisSlot, Turn } from '../../domain/speak/types';
 import { KEY_PREFIX, local } from '../../platform/storage';
 
@@ -5,7 +6,8 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 // (Bequemlichkeit, Kap. 3.1). Nur fertige Analysen, höchstens 40 KB. Jeder Zugriff ist über
 // platform/storage abgesichert. Nach dem Speichern des Berichts wird die Kopie gelöscht.
 
-export type ResumeCopy = { v: 1; turns: Turn[]; analyses: Record<number, AnalysisSlot>; startedAt: number; day: string; taken: string[] };
+/** `goals`: Ziel-Checkliste (N72), damit die Haken ein Neuladen überstehen. */
+export type ResumeCopy = { v: 1; turns: Turn[]; analyses: Record<number, AnalysisSlot>; startedAt: number; day: string; taken: string[]; goals?: GoalMark[] };
 
 export const RESUME_MAX_BYTES = 40_000;
 const key = (sceneId: string) => `${KEY_PREFIX}roleplay:${sceneId}`;
@@ -22,7 +24,15 @@ export function readResume(sceneId: string, today: string): ResumeCopy | null {
   for (const [k, a] of Object.entries(raw.analyses ?? {})) {
     if (a && typeof a === 'object' && a.state === 'done' && a.data) analyses[Number(k)] = a;
   }
-  return { v: 1, turns, analyses, startedAt: raw.startedAt, day: raw.day, taken: Array.isArray(raw.taken) ? raw.taken.filter((x): x is string => typeof x === 'string') : [] };
+  return {
+    v: 1,
+    turns,
+    analyses,
+    startedAt: raw.startedAt,
+    day: raw.day,
+    taken: Array.isArray(raw.taken) ? raw.taken.filter((x): x is string => typeof x === 'string') : [],
+    goals: readGoalMarks(raw.goals),
+  };
 }
 
 export function writeResume(sceneId: string, copy: ResumeCopy): void {

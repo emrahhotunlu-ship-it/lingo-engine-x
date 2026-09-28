@@ -17,6 +17,12 @@ import type { RoleplayApi } from './useRoleplay';
 import { repairsFromTalk } from '../../domain/repair/sources';
 import { ExerciseTop } from '../learn/ui';
 import { RepairStep } from '../repair/RepairStep';
+import { sceneCriteria, sceneGoals } from '../../domain/speak/bizScenes';
+import { metCount } from '../../domain/speak/goals';
+import { CriteriaGrid, GoalChecklist } from './GoalChecklist';
+import type { UnitBlockNo } from '../../app/unit/types';
+import { unitResult, type Correction } from '../../domain/speak/unitResult';
+import { finishUnit, roleplayUnitKind } from './unit';
 
 // Abschlussbericht (Plan §5.4): fester Teil sofort und ohne KI (Tatsachen, kein Punktestand),
 // dazu der KI-Bericht in Worten. Gespeichert wird beim Anzeigen des festen Teils; der KI-Bericht
@@ -25,7 +31,21 @@ import { RepairStep } from '../repair/RepairStep';
 
 const GOAL_KEY = { reached: 'repGoalReached', partly: 'repGoalPartly', missed: 'repGoalMissed' } as const;
 
-export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi }) {
+/** Tageseinheit: Block 3 (Rollenspiel oder Generalprobe) mit eigenen Sätzen und Korrekturen melden. */
+function reportUnit(scene: SceneView, rp: RoleplayApi, block: UnitBlockNo): void {
+  const c = rp.snap.context;
+  const kind = roleplayUnitKind(rp.day);
+  const text = c.turns.filter((x) => x.role === 'me').map((x) => x.text).join('\n');
+  const fixes: Correction[] = [];
+  c.turns.forEach((_, i) => {
+    const a = c.analyses[i];
+    if (a?.state === 'done' && a.data) for (const e of a.data.errors) fixes.push({ wrong: e.wrong, right: e.right, why: e.why });
+  });
+  const better = c.report.data?.focus.map((f) => f.better).join(' ') ?? null;
+  finishUnit(kind, block, unitResult(kind, `talk/${rp.day.slice(0, 7)}#${scene.id}`, text, fixes, better));
+}
+
+export function ReportScreen({ scene, rp, unit = null }: { scene: SceneView; rp: RoleplayApi; unit?: UnitBlockNo | null }) {
   const { t, lang } = useT();
   const go = useNav((s) => s.go);
   const back = useNav((s) => s.back);
@@ -42,6 +62,8 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
   const n = route.name === 'roleplay' ? (route.n ?? 0) : 0;
   // Lernberatung V2: „Nochmal, aber besser" – eigene Sätze mit Korrektur neu formulieren.
   const repairs = useMemo(() => repairsFromTalk(c.turns, c.analyses, scene.titleEn), [c.turns, c.analyses, scene.titleEn]);
+  const goalList = useMemo(() => sceneGoals(scene), [scene]);
+  const critList = useMemo(() => sceneCriteria(scene), [scene]);
 
   return (
     <motion.div
@@ -87,6 +109,35 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
           </p>
         )}
       </Card>
+
+      {/* N72: Ziele mit Beleg (✓ / teilweise / ✗) und Kriterien-Raster. */}
+      {goalList.length > 0 && (
+        <Card as="div" className="flex flex-col gap-3" data-testid="report-goals">
+          <p className="lx-eyebrow">{t('nbSprechenGoalsTitle')}</p>
+          <p className="lx-tnum text-sm text-muted">{t('nbSprechenGoalsCount', { n: metCount(rp.goals), m: goalList.length })}</p>
+          <GoalChecklist goals={goalList} marks={rp.goals} quotes missedAsX testId="report-goal-list" />
+          {critList.length > 0 && (
+            <div className="flex flex-col gap-2 border-t border-line pt-3" data-testid="report-criteria" data-state={rp.criteria.state}>
+              <p className="lx-eyebrow">{t('nbSprechenCriteria')}</p>
+              {(rp.criteria.state === 'pending' || rp.criteria.state === 'idle') && (
+                <div role="status" className="flex flex-col gap-2">
+                  <p className="text-sm text-muted">{t('nbSprechenCriteriaWait')}</p>
+                  <Skeleton className="h-4 w-5/6" />
+                </div>
+              )}
+              {rp.criteria.state === 'failed' && (
+                <div role="alert" className="flex flex-wrap items-center gap-3">
+                  <p className="text-sm text-muted">{t('nbSprechenCriteriaFailed')}</p>
+                  <Button icon="refresh" data-ai="" data-testid="criteria-retry" onClick={rp.retryCriteria}>
+                    {t('aiRetry')}
+                  </Button>
+                </div>
+              )}
+              {rp.criteria.state === 'done' && <CriteriaGrid criteria={critList} marks={rp.criteria.data} />}
+            </div>
+          )}
+        </Card>
+      )}
 
       <section data-testid="report-ai" data-state={aiState} className="flex flex-col gap-4" aria-busy={aiState === 'thinking' || aiState === 'slow' || aiState === 'waiting'}>
         {(aiState === 'waiting' || aiState === 'idle' || aiState === 'thinking' || aiState === 'slow') && (
@@ -214,8 +265,16 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
 
       {!saving && repairs.length > 0 && <RepairStep candidates={repairs} area="speak" source={`scene/${scene.id}`} onActive={setRepairOn} />}
 
+      {unit && (
+        // Tageseinheit: „Weiter“ wartet nie auf den KI-Bericht (G6), nur auf das Speichern.
+        <div>
+          <Button variant="primary" size="lg" iconAfter="arrowRight" disabled={saving} onClick={() => reportUnit(scene, rp, unit)} data-testid="report-unit-next">
+            {t('nbSprechenUnitDone')}
+          </Button>
+        </div>
+      )}
       <div className="flex flex-wrap gap-3">
-        <Button variant="primary" icon="refresh" disabled={saving} onClick={() => go({ name: 'roleplay', sceneId: scene.id, n: n + 1 })} data-testid="report-again">
+        <Button variant={unit ? 'secondary' : 'primary'} icon="refresh" disabled={saving} onClick={() => go({ name: 'roleplay', sceneId: scene.id, n: n + 1 })} data-testid="report-again">
           {t('repAgain')}
         </Button>
         <Button icon="chat" disabled={saving} onClick={() => go({ name: 'speak' })} data-testid="report-other">
