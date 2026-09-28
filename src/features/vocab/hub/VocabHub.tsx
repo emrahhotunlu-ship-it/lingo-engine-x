@@ -13,6 +13,9 @@ import { useHiddenInput } from '../../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../../i18n';
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
+import { HeroCard } from '../../../ui/HeroCard';
+import { Row, RowList } from '../../../ui/RowList';
+import { Eyebrow } from '../../../ui/Eyebrow';
 import { Segmented } from '../../../ui/Segmented';
 import { toast } from '../../../ui/Toast';
 import { prefsOp } from '../../../domain/srs/decks';
@@ -57,16 +60,6 @@ export function Counts({ c, testId }: { c: DeckCounts; testId?: string }) {
         {c.due}
       </span>
     </span>
-  );
-}
-
-function RowButton({ onClick, testId, children, data }: { onClick: () => void; testId: string; children: React.ReactNode; data?: Record<string, string> }) {
-  return (
-    <li>
-      <button type="button" onClick={onClick} data-testid={testId} {...data} className="flex min-h-14 w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-surface-strong">
-        {children}
-      </button>
-    </li>
   );
 }
 
@@ -144,51 +137,39 @@ export function VocabHub() {
         </label>
       </form>
       {hits && (
-        <ul className="lx-glass -mt-3 flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]" data-testid="ws-hits">
+        <RowList testId="ws-hits" label={t('nbWsSearch')}>
           {hits.map((c) => (
-            <RowButton key={c.key} onClick={() => openSheet('word', { key: c.key })} testId="vocab-row" data={{ 'data-word': c.id, 'data-kind': c.kind }}>
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span className="truncate font-medium" lang="en">
-                  {c.word}
-                </span>
-                <span className="truncate text-sm text-muted" lang={lang}>
-                  {meaningOf(c, lang)}
-                </span>
-              </span>
-            </RowButton>
+            <Row key={c.key} title={<span lang="en">{c.word}</span>} sub={<span lang={lang}>{meaningOf(c, lang)}</span>} onClick={() => openSheet('word', { key: c.key })} testId="vocab-row" data={{ 'data-word': c.id, 'data-kind': c.kind }} />
           ))}
-          <RowButton onClick={() => go({ name: 'vocabList', q: q.trim() })} testId="ws-hits-all">
-            <span className="flex-1 text-sm font-medium">{t('nbWsAllSub')} ›</span>
-          </RowButton>
-        </ul>
+          <Row title={t('nbWsAllSub')} onClick={() => go({ name: 'vocabList', q: q.trim() })} testId="ws-hits-all" />
+        </RowList>
       )}
 
-      <section className="lx-glass flex flex-col gap-4 rounded-[var(--radius-card)] p-5 sm:p-6" data-testid="ws-due" data-total={total}>
-        <div className="flex items-baseline justify-between gap-3">
-          <p className="lx-eyebrow">{t('nbWsDueEyebrow')}</p>
-          {total > 0 && (
-            <span className="lx-tnum text-sm text-muted" data-testid="ws-minutes">
-              {t('nbWsMinutes', { n: minutes })}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <h2 className="lx-tnum text-2xl font-semibold tracking-tight">{total > 0 ? tn('nbWsDueHeadline', total) : t('nbWsNothingDue')}</h2>
-          <dl className="lx-tnum flex gap-4 text-sm" data-testid="ws-counts">
-            {(
-              [
-                ['new', 'nbWsCountNew', allShown.new, 'text-cyan-text'],
-                ['learning', 'nbWsCountLearn', allShown.learning, 'text-gold-text'],
-                ['due', 'nbWsCountDue', allShown.due, 'text-accent-text'],
-              ] as const
-            ).map(([k, key, n, tone]) => (
-              <div key={k} className="flex flex-col items-center" data-count={k}>
-                <dt className="text-xs text-muted">{t(key)}</dt>
-                <dd className={`text-lg font-semibold ${tone}`}>{n}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+      <HeroCard
+        testId="ws-due"
+        eyebrow={t('nbWsDueEyebrow')}
+        meta={total > 0 ? <span data-testid="ws-minutes">{t('nbWsMinutes', { n: minutes })}</span> : undefined}
+        title={<span className="lx-tnum">{total > 0 ? tn('nbWsDueHeadline', total) : t('nbWsNothingDue')}</span>}
+        action={
+          <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => startAllDue(api, theme)} disabled={total === 0} data-testid="ws-review">
+            {t('nbWsReview')}
+          </Button>
+        }
+      >
+        <dl className="lx-tnum m-0 flex gap-5 text-sm" data-testid="ws-counts" data-total={total}>
+          {(
+            [
+              ['new', 'nbWsCountNew', allShown.new, 'text-cyan-text'],
+              ['learning', 'nbWsCountLearn', allShown.learning, 'text-gold-text'],
+              ['due', 'nbWsCountDue', allShown.due, 'text-accent-text'],
+            ] as const
+          ).map(([k, key, n, tone]) => (
+            <div key={k} className="flex flex-col" data-count={k}>
+              <dt className="text-xs text-muted">{t(key)}</dt>
+              <dd className={`m-0 text-lg font-semibold ${tone}`}>{n}</dd>
+            </div>
+          ))}
+        </dl>
         <Segmented<Mode>
           label={t('nbWsModeLabel')}
           value={mode}
@@ -200,14 +181,11 @@ export function VocabHub() {
           onChange={setMode}
           testId="ws-mode"
         />
-        <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => startAllDue(api, theme)} disabled={total === 0} data-testid="ws-review">
-          {t('nbWsReview')}
-        </Button>
-      </section>
+      </HeroCard>
 
-      <section className="flex flex-col gap-2" data-testid="ws-forecast" aria-label={t('nbWsForecast')}>
-        <p className="lx-eyebrow">{t('nbWsForecast')}</p>
-        <ol className="grid grid-cols-7 items-end gap-1.5">
+      <section className="flex flex-col gap-2.5" data-testid="ws-forecast" aria-label={t('nbWsForecast')}>
+        <Eyebrow>{t('nbWsForecast')}</Eyebrow>
+        <ol className="m-0 grid list-none grid-cols-7 items-end gap-1.5 p-0">
           {fc.map((d, i) => (
             <li key={d.day} className="flex flex-col items-center gap-1" aria-label={t('nbWsForecastBar', { day: dayLabel(d.day, i), n: d.n })} data-n={d.n}>
               <span className="lx-tnum text-xs text-muted" aria-hidden="true">
@@ -222,70 +200,47 @@ export function VocabHub() {
         </ol>
       </section>
 
-      <section className="flex flex-col gap-2">
-        <p className="lx-eyebrow">{t('nbWsDecks')}</p>
-        <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]" data-testid="ws-decks">
-          <RowButton onClick={() => go({ name: 'deck', id: 'inbox' })} testId="ws-inbox" data={{ 'data-deck': 'inbox' }}>
-            <span className="inline-flex size-9 flex-none items-center justify-center rounded-xl bg-surface-strong text-cyan-text">
-              <Icon name="download" size={18} />
-            </span>
-            <span className="flex min-w-0 flex-1 flex-col">
-              <span className="font-medium">{t('nbWsDeckInbox')}</span>
-              <span className="text-sm text-muted">{inbox.n === 0 ? t('nbWsInboxEmpty') : inbox.days === null ? t('nbWsInboxNoQuota', { n: inbox.n }) : t('nbWsInbox', { n: inbox.n, days: inbox.days })}</span>
+      <RowList title={t('nbWsDecks')} testId="ws-decks">
+        <Row
+          icon="download"
+          channel="cards"
+          title={t('nbWsDeckInbox')}
+          sub={
+            <>
+              {inbox.n === 0 ? t('nbWsInboxEmpty') : inbox.days === null ? t('nbWsInboxNoQuota', { n: inbox.n }) : t('nbWsInbox', { n: inbox.n, days: inbox.days })}
               {inbox.review && (
-                <span className="text-sm text-gold-text" data-testid="ws-inbox-review">
+                <span className="block text-gold-text" data-testid="ws-inbox-review">
                   {t('nbWsInboxReview')}
                 </span>
               )}
-            </span>
-            <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-          </RowButton>
-          {rows.map((d) => (
-            <RowButton key={d.id} onClick={() => go({ name: 'deck', id: d.id })} testId="ws-deck" data={{ 'data-deck': d.id }}>
-              <span className="inline-flex size-9 flex-none items-center justify-center rounded-xl bg-surface-strong text-accent-text">
-                <Icon name="cards" size={18} />
-              </span>
-              <span className="min-w-0 flex-1 truncate font-medium">{d.name}</span>
-              <Counts c={d.counts} />
-              <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-            </RowButton>
-          ))}
-          <RowButton onClick={() => openSheet('x:deck-new')} testId="ws-new-deck">
-            <span className="inline-flex size-9 flex-none items-center justify-center rounded-xl bg-surface-strong text-muted">
-              <Icon name="plus" size={18} />
-            </span>
-            <span className="flex-1 font-medium">{t('nbWsNewDeck')}</span>
-          </RowButton>
-        </ul>
-      </section>
+            </>
+          }
+          onClick={() => go({ name: 'deck', id: 'inbox' })}
+          testId="ws-inbox"
+          data={{ 'data-deck': 'inbox' }}
+        />
+        {rows.map((d) => (
+          <Row key={d.id} icon="cards" channel="cards" title={d.name} value={<Counts c={d.counts} />} chevron onClick={() => go({ name: 'deck', id: d.id })} testId="ws-deck" data={{ 'data-deck': d.id }} />
+        ))}
+        <Row icon="plus" title={t('nbWsNewDeck')} onClick={() => openSheet('x:deck-new')} testId="ws-new-deck" />
+      </RowList>
 
-      <section className="flex flex-col gap-2">
-        <p className="lx-eyebrow">{t('nbWsRecent')}</p>
-        <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]" data-testid="ws-recent">
-          {recent.map((c) => (
-            <RowButton key={c.key} onClick={() => openSheet('word', { key: c.key })} testId="vocab-row" data={{ 'data-word': c.id, 'data-kind': c.kind }}>
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span className="truncate font-medium" lang="en">
-                  {c.word}
-                </span>
-                <span className="truncate text-sm text-muted" lang={lang}>
-                  {meaningOf(c, lang)}
-                </span>
-              </span>
-              <span className="flex-none text-xs text-muted">{state(c)}</span>
-            </RowButton>
-          ))}
-          <RowButton onClick={() => go({ name: 'vocabList' })} testId="ws-all">
-            <span className="flex min-w-0 flex-1 flex-col">
-              <span className="font-medium">{tn('nbWsAll', visible.length)}</span>
-              <span className="text-sm text-muted">{t('nbWsAllSub')}</span>
-            </span>
-            <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-          </RowButton>
-        </ul>
-      </section>
-      <p className="text-center">
-        <button type="button" className="text-sm text-muted underline-offset-4 hover:underline" onClick={() => openSheet('x:extra')} data-testid="ws-more">
+      <RowList title={t('nbWsRecent')} testId="ws-recent">
+        {recent.map((c) => (
+          <Row
+            key={c.key}
+            title={<span lang="en">{c.word}</span>}
+            sub={<span lang={lang}>{meaningOf(c, lang)}</span>}
+            value={state(c)}
+            onClick={() => openSheet('word', { key: c.key })}
+            testId="vocab-row"
+            data={{ 'data-word': c.id, 'data-kind': c.kind }}
+          />
+        ))}
+        <Row title={tn('nbWsAll', visible.length)} sub={t('nbWsAllSub')} onClick={() => go({ name: 'vocabList' })} testId="ws-all" />
+      </RowList>
+      <p className="m-0 text-center">
+        <button type="button" className="min-h-11 text-sm text-muted underline-offset-4 hover:underline" onClick={() => openSheet('x:extra')} data-testid="ws-more">
           {t('nbWsMore')} ›
         </button>
       </p>
