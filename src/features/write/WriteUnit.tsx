@@ -27,6 +27,7 @@ import { UnitShell } from '../input/UnitShell';
 import { writeMachine } from './machine';
 import { PromptCard } from './PromptCard';
 import { ReviewView } from './ReviewView';
+import { Alternatives } from './Alternatives';
 import { repairsFromWriting } from '../../domain/repair/sources';
 import { RepairStep } from '../repair/RepairStep';
 import { saveRepairs } from '../repair/store';
@@ -227,6 +228,17 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
         {task?.status === 'error' && view && <AiRunPanel phase="error" error={task.error} onRetry={() => startReview(view.id, view.text, view.rev, prompt, ctx)} />}
         {res && view && !repairOn && (
           <ReviewView res={res} text={view.text} area="write" sourceRef={`writing/${view.id}`} title={prompt.title.en} stale={stale} onRecheck={ai ? () => startReview(view.id, view.text, view.rev, prompt, ctx) : null} />
+        )}
+        {view && !running && !repairOn && (
+          <Alternatives
+            text={view.text}
+            sourceRef={`writing/${view.id}`}
+            title={prompt.title.en}
+            onAdopt={(next) => {
+              setRevText(next);
+              send({ type: 'REVISE' });
+            }}
+          />
         )}
         {res && view && !stale && !running && (
           <RepairStep key={`${view.id}-${view.rev}`} candidates={repairsFromWriting(view.text, res.errors, prompt.title.en)} area="write" source={`writing/${view.id}`} onActive={setRepairOn} />

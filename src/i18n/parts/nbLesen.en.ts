@@ -91,4 +91,9 @@ export const nbLesenEn: Record<keyof typeof nbLesenDe, string> = {
   nbLesenLevelEasier: 'Easier',
   nbLesenLevelHarder: 'Closer to C1',
   nbLesenLevelOriginal: 'Original text',
+  nbLesenAltTitle: 'Alternatives per sentence',
+  nbLesenAltHint: 'Tap a sentence: Claude suggests 2–3 more natural versions.',
+  nbLesenAltAdopt: 'Use this',
+  nbLesenAltSave: '+ Vocab',
+  nbLesenAltSaved: 'In your vocab',
 };

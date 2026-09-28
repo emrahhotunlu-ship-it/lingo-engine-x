@@ -90,4 +90,9 @@ export const nbLesenDe = {
   nbLesenLevelEasier: 'Leichter',
   nbLesenLevelHarder: 'Näher an C1',
   nbLesenLevelOriginal: 'Originaltext',
+  nbLesenAltTitle: 'Alternativen je Satz',
+  nbLesenAltHint: 'Tippe einen Satz an: Claude schlägt 2–3 natürlichere Fassungen vor.',
+  nbLesenAltAdopt: 'Übernehmen',
+  nbLesenAltSave: '+ Wortschatz',
+  nbLesenAltSaved: 'Im Wortschatz',
 } as const;
