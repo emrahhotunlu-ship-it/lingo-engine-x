@@ -93,7 +93,8 @@ function StressStep({ s, w }: { s: PronDrillSession; w: StressItem }) {
           <div className="flex items-center gap-2">
             <SpeakButton text={w.word} testId="stress-speak" />
           </div>
-          <FeedbackPanel fb={fb} onNext={nextPron} />
+          {/* Betonungs-Schreibweise (DOC·u·ment) ist kein antippbarer Text. */}
+          <FeedbackPanel fb={fb} onNext={nextPron} area={null} />
         </div>
       )}
     </article>

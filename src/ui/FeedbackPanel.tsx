@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
+import { EnglishText } from '../engine/EnglishText';
+import type { WordTapArea } from '../engine/wordTap';
 import { useT } from '../i18n';
 import { Button } from './Button';
 import { Icon, type IconName } from './Icon';
@@ -26,6 +28,11 @@ export type FeedbackPanelProps = {
   onWhy?: (question: string) => void;
   /** „Merken“ an einer Aufwertung (z. B. als Karte speichern); ohne Angabe kein Knopf. */
   onKeep?: (u: Upgrade) => void;
+  /**
+   * Bereich für Wort-Antippen (Kap. 15): Lösung, richtige Form und Aufwertung sind antippbar.
+   * `null` = nur Text (z. B. Betonungs-Schreibweise „DOC·u·ment“, keine echten Wörter).
+   */
+  area?: WordTapArea | null;
   testId?: string;
 };
 
@@ -38,8 +45,17 @@ const TONE: Record<Feedback['verdict'], Tone> = {
   unchecked: { key: 'nbShFbUnchecked', icon: 'info', stripe: 'var(--lx-fg-subtle)', text: 'text-muted' },
 };
 
-export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, testId = 'feedback' }: FeedbackPanelProps) {
+export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, area = 'trainer', testId = 'feedback' }: FeedbackPanelProps) {
   const { t } = useT();
+  // „Deine Antwort“ bleibt Text (enthält den Fehler); nur Richtiges ist antippbar.
+  const en = (text: string, className?: string): ReactNode =>
+    area ? (
+      <EnglishText as="span" text={text} area={area} {...(className ? { className } : {})} />
+    ) : (
+      <span className={className} lang="en">
+        {text}
+      </span>
+    );
   const [kept, setKept] = useState<ReadonlySet<string>>(() => new Set());
   const fixes = topFixes(fb.fixes);
   const upgrades = topUpgrades(fb.upgrades);
@@ -82,9 +98,7 @@ export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, testId = '
       {fb.solution && (
         <p className="m-0 text-[0.9375rem]" data-testid="feedback-solution">
           <span className="text-muted">{t('nbShFbSolution')}: </span>
-          <span className="font-semibold" lang="en">
-            {fb.solution}
-          </span>
+          {en(fb.solution, 'font-semibold')}
         </p>
       )}
       {fixes.length > 0 && (
@@ -101,7 +115,7 @@ export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, testId = '
                       {' → '}
                     </>
                   )}
-                  <span className="font-semibold">{f.right}</span>
+                  {en(f.right, 'font-semibold')}
                 </span>
                 <span className="text-sm text-muted" data-testid="feedback-why-text">
                   {f.why}
@@ -119,7 +133,7 @@ export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, testId = '
             return (
               <div key={i} className="flex items-start justify-between gap-3 text-[0.9375rem]" data-testid="feedback-upgrade">
                 <span className="flex min-w-0 flex-col gap-0.5">
-                  <span lang="en">{u.to}</span>
+                  {en(u.to)}
                   {u.note && <span className="text-sm text-muted">{u.note}</span>}
                 </span>
                 {onKeep && (
