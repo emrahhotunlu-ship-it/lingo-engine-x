@@ -104,10 +104,13 @@ export function LibraryScreen() {
       out.push({ key: `theme:${tt.id}`, mode: 'read', title: tt.title, level: 'B2+', domain: theme.kind === 'life' ? 'life' : 'work', text: tt.text, route: { name: 'read', ctx: 'extra', id: tt.id }, eyebrow: t('nbLesenThemeText'), testId: 'lib-theme', channel: 'read', done: readToday.has(tt.id) });
     }
     if (status === 'ready') {
-      const pr = picks[`read|${input.day}`];
+      // Wie der Leser: heute Gelesenes zuerst (Zustand), sonst die gemerkte bzw. berechnete Wahl des Tages.
+      const readRow = readingsOn(reading, input.day)[0];
+      const readId = typeof readRow?.doc.articleId === 'string' ? readRow.doc.articleId : null;
+      const pr = readId ?? picks[`read|${input.day}`];
       const a = pr ? findArticle(pr, dbA) : pickArticle({ day: input.day, target: input.target, domain: input.domain }, dbA, readDoneBefore(reading, input.day));
       if (a) out.push({ key: `pick-read:${a.id}`, mode: 'read', title: a.title, level: a.level, domain: a.domain, text: a.text, route: { name: 'read', ctx: 'extra' }, eyebrow: t('nbLesenPickRead'), testId: 'module', module: 'read', channel: 'read', done: readToday.has(a.id), own: articles.get(a.id)?.src === 'own' });
-      const pl = picks[`listen|${input.day}`];
+      const pl = listensOn(rows, input.day)[0]?.id ?? picks[`listen|${input.day}`];
       const l = pl ? findListening(pl, dbL) : pickListening({ day: input.day, target: input.target, domain: input.domain }, dbL, listenDoneBefore(rows, input.day));
       if (l) out.push({ key: `pick-listen:${l.id}`, mode: 'listen', title: l.title, level: l.level, domain: l.domain, text: l.text, route: { name: 'listen', ctx: 'extra' }, eyebrow: t('nbLesenPickListen'), testId: 'module', module: 'listen', channel: 'listen', done: heardToday.has(l.id) });
     }
@@ -199,7 +202,11 @@ export function LibraryScreen() {
                 </span>
                 <span className="lx-tnum flex flex-wrap items-center gap-x-2 text-sm text-muted" data-testid="lib-meta">
                   <span>{meta(tile)}</span>
-                  {tile.done && <span className="text-accent-text">· {t(tile.mode === 'listen' ? 'nbLesenHeardToday' : 'nbLesenReadToday')}</span>}
+                  {tile.done && (
+                    <span className="text-accent-text" data-testid="module-done">
+                      · {t(tile.mode === 'listen' ? 'nbLesenHeardToday' : 'nbLesenReadToday')}
+                    </span>
+                  )}
                 </span>
               </button>
             ))}

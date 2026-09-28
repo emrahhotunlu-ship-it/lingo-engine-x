@@ -6,7 +6,9 @@ import { ladderFor, ladderRate, LADDER_BASE, LADDER_FAST, LADDER_SLOW } from '..
 import { newShare, textForms } from '../../src/domain/input/newShare';
 import { inputBlockPlan, isThemeTextId, noticeRows, phraseSentence, quoteSentence, shadowSentences, summaryReady, themeArticle, themeQuestions } from '../../src/domain/input/unitInput';
 import { statusCss, statusIndex, textCardKeys, textStatus } from '../../src/domain/input/wordStatus';
-import { themeRef } from '../../src/domain/week';
+import { EMPTY_TARGETS, themeRef } from '../../src/domain/week';
+import type { UnitCtx } from '../../src/app/unit/types';
+import { INPUT_BLOCKS } from '../../src/features/input/block/run';
 import { catOf, categoryCounts, writingFeedback } from '../../src/domain/input/writeFeedback';
 
 // Neubau P4 (plan.md §4.5): „x % neu“ (N50), Wortstatus (N51), Block 2 (N53, M7, M9, S1), Tempo-Leiter (N54).
@@ -157,6 +159,22 @@ describe('N52: Wörter aus diesem Text', () => {
     const keys = textCardKeys('We negotiated the price. Walk me through your process.', 'theme:t01', cards);
     expect(keys).toEqual(['vocab/negotiate', 'vocab/walk-through', 'vocab/other']);
     expect(textCardKeys('Nothing here.', null, cards)).toEqual([]);
+  });
+});
+
+describe('N53: Anbieter input.read / input.listen', () => {
+  it('start(ctx) liefert synchron die Route und füllt Nachsprech-Sätze und Wendungen (ohne KI: Themen-Text)', () => {
+    const read = INPUT_BLOCKS.find((b) => b.kind === 'input.read');
+    const listen = INPUT_BLOCKS.find((b) => b.kind === 'input.listen');
+    expect(read?.feasible({ ai: false, tts: false })).toBe(true);
+    expect(listen?.feasible({ ai: true, tts: false })).toBe(false);
+    const theme = themeById('t01');
+    const ctx: UnitCtx = { day: '2026-09-28', block: 2, theme, targets: EMPTY_TARGETS, minutes: 5 };
+    const r = read?.start(ctx);
+    expect(r).toEqual({ name: 'inputUnit', day: '2026-09-28', kind: 'read', ref: 'theme:x-t01' });
+    expect(ctx.sentences).toHaveLength(3);
+    expect(ctx.phrases?.length).toBeGreaterThanOrEqual(2);
+    expect(read?.start({ ...ctx, theme: null })).toBe(false);
   });
 });
 

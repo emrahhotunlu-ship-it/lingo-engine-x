@@ -42,11 +42,23 @@ export async function openLearn(page: Page): Promise<void> {
  */
 export async function openModule(page: Page, id: 'read' | 'listen' | 'write' | 'discover'): Promise<void> {
   if (id === 'write') {
+    // Nach einem Neuladen mit Deep-Link öffnet die App die Schreibaufgabe selbst.
+    if (page.url().includes('#go=write')) {
+      const open = await page
+        .locator('[data-screen="write"]')
+        .waitFor({ state: 'visible', timeout: 5000 })
+        .then(() => true)
+        .catch(() => false);
+      if (open) return;
+    }
     await openSpeak(page, 'write');
     const entry = page.getByTestId('hub-write').first();
     if (await entry.count()) await entry.click();
     // Bis P5 die Einstiege des Platzes `write` zeigt: Deep-Link (wird nur beim Start gelesen).
-    else await page.goto(`${ORIGIN}/#go=${encodeURIComponent(routeToString({ name: 'write', ctx: 'extra' }))}`);
+    else {
+      await page.goto(`${ORIGIN}/#go=${encodeURIComponent(routeToString({ name: 'write', ctx: 'extra' }))}`);
+      await page.reload();
+    }
     await page.locator('[data-screen="write"]').waitFor({ state: 'visible' });
     return;
   }

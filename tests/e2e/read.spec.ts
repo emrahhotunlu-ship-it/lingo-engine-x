@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { boot, layoutProblems } from './fixtures';
-import { ARTICLE_OWN, ARTICLE_Q, DAY, answerAll, dump, entriesOf, openModule, sampleCalls } from './inputHelpers';
+import { ARTICLE_OWN, ARTICLE_Q, DAY, answerAll, dump, entriesOf, openLearn, openModule, sampleCalls } from './inputHelpers';
 
 // Lesen (Plan §4.1, §8.3): Artikel lesen → Wort antippen → Karte speichern → Fragen mit Beleg →
 // Abschluss ohne KI → Zusammenfassung prüfen lassen (App-Aufgabe) → reading/r*, Radar, act.read.
@@ -113,7 +113,9 @@ const READ_ALL: Record<string, Record<string, unknown>> = {};
 test('Lesen: neuer Text mit Themenwahl (M12) – genau ein Aufruf, gespeichert und sofort lesbar', async ({ page }) => {
   test.setTimeout(60_000);
   await boot(page, { migrated: true, fake: { patch: { ...PATCH, ...READ_ALL } } });
-  await openModule(page, 'read');
+  // Neubau: „Neuer Text“ unter „Neu hinzufügen“ im Reiter Lesen.
+  await openLearn(page);
+  await page.getByTestId('lib-new-text').click();
   await expect(page.getByTestId('empty-state')).toBeVisible();
   await page.locator('[data-testid="topic-chip"][data-topic="tech"]').click();
   await expect(page.locator('[data-testid="topic-chip"][data-topic="tech"]')).toHaveAttribute('aria-checked', 'true');
@@ -131,10 +133,10 @@ test('Lesen: neuer Text mit Themenwahl (M12) – genau ein Aufruf, gespeichert u
 test('Lesen: eigener Text als Lese-Einheit in articles/* – nie in feed/* (M16)', async ({ page }) => {
   test.setTimeout(60_000);
   await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { ...PATCH, ...READ_ALL } } });
-  await openModule(page, 'read');
-  await expect(page.getByTestId('empty-state')).toBeVisible();
+  // Neubau: „+ Eigener Text“ direkt im Reiter Lesen.
+  await openLearn(page);
   const feedBefore = Object.keys(await dump(page)).filter((p) => p.startsWith('feed/'));
-  await page.getByTestId('own-open').click();
+  await page.getByTestId('lib-own').click();
   await page.getByTestId('own-draft').fill(Array.from({ length: 70 }, (_, i) => (i % 10 === 9 ? 'meeting.' : 'partner')).join(' '));
   await page.getByTestId('own-save').click();
   await expect(page.getByTestId('article')).toBeVisible();
