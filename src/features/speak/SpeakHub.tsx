@@ -333,11 +333,7 @@ function WriteSegment() {
     { id: 'biz-mail', icon: 'copy', tone: 'write', title: t('nbSprechenMail'), sub: ai ? t('bizMailLead') : t('bizNoAi'), disabled: !ai, run: () => go({ name: 'mail' }) },
     { id: 'training-tones', icon: 'chat', tone: 'write', title: t('tnTitle'), sub: t('spTrTonesLead'), run: () => go({ name: 'tones' }) },
   ];
-  const foreign = useEntryRows(entriesFor('write').filter((e) => !e.group || e.group === 'write'));
-  return (
-    <>
-      <RowCard rows={[...own, ...foreign]} label={t('nbSprechenWriteTasks')} testId="speak-write" />
-      <OtherGroups place="write" skip={[undefined, 'write']} />
-    </>
-  );
+  // Einstiege anderer Bereiche am Platz `write` (P4 Schreibaufgabe/Verlauf, P7 Posteingang): alle hier.
+  const foreign = useEntryRows(entriesFor('write'));
+  return <RowCard rows={[...own, ...foreign]} label={t('nbSprechenWriteTasks')} testId="speak-write" />;
 }

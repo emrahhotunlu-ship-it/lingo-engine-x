@@ -56,10 +56,7 @@ test('Wurzel: drei Bereiche, Szene der Woche, Gespräch in 2 Tipps, Ziel-Haken, 
 
   // Neuladen nach Zug 3: dieselbe Szene, drei eigene Züge, Haken bleibt.
   await page.reload();
-  await screen(page, 'today');
-  await openSpeak(page, 'talk');
-  await page.getByTestId('speak-theme-scene').click();
-  await page.getByTestId('rp-resume').click();
+  // Fortsetzen (N04/G3): frische Momentaufnahme → automatisch zurück an dieselbe Stelle.
   await screen(page, 'roleplay');
   await expect(page.locator('[data-testid="rp-turn"][data-role="me"]')).toHaveCount(3);
   await expect(page.getByTestId('rp-goals')).toHaveAttribute('data-met', '1');

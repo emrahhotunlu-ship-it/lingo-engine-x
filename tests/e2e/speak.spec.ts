@@ -230,10 +230,7 @@ test('Neu laden mitten im Gespräch: „Fortsetzen“ stellt die Züge wieder he
   await say(page, SENTENCES[0]!);
   await say(page, SENTENCES[1]!);
   await page.reload();
-  await openHub(page);
-  await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
-  await expect(page.getByTestId('rp-resume')).toBeVisible();
-  await page.getByTestId('rp-resume').click();
+  // Neubau (WP0b, N04): frische Momentaufnahme (< 2 Min.) → direkt zurück ins Gespräch.
   await screen(page, 'roleplay');
   await expect(page.locator('[data-testid="rp-turn"][data-role="me"]')).toHaveCount(2);
   await expect(page.getByTestId('rp-turn-count')).toHaveText('Zug 3');
