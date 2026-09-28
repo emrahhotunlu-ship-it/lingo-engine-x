@@ -280,8 +280,26 @@ export function pendingResume(): PendingResume | null {
   return { env, resumable: r, age: Math.max(0, now - env.savedAt), otherTab: env.tabId !== deps.tabId() };
 }
 
+/**
+ * P1 (Tageseinheit): Sitzungen, die ein Block der Tageseinheit sind, bekommen keine eigene Zeile –
+ * dort führt der Knopf der Tageskarte weiter (plan.md §1.3 Nr. 3). Das automatische Fortsetzen
+ * (< 2 Min.) bleibt unberührt.
+ */
+let rowHidden: ((p: PendingResume) => boolean) | null = null;
+export function setResumeRowHidden(fn: ((p: PendingResume) => boolean) | null): void {
+  rowHidden = fn;
+  if (deps) refreshPending();
+}
+
 function refreshPending(): void {
-  useResume.setState((s) => ({ pending: pendingResume(), rev: s.rev + 1 }));
+  const p = pendingResume();
+  let hide = false;
+  try {
+    hide = !!p && !!rowHidden?.(p);
+  } catch (err) {
+    logWarn('resume:row', err, p?.env.id);
+  }
+  useResume.setState((s) => ({ pending: hide ? null : p, rev: s.rev + 1 }));
 }
 
 /** Wirft eine Momentaufnahme weg (z. B. „Nein“ beim anderen Fenster). */

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { useClock } from '../app/clock';
 import { defineArea } from '../app/registry';
-import type { Resumable } from '../app/resume';
+import { loadResume, setResumeRowHidden, type Resumable } from '../app/resume';
 import type { Route } from '../app/router/types';
 import { HubSections } from '../app/shell/Hub';
 import { placesOf } from '../app/shell/tabs';
@@ -71,6 +71,9 @@ export const unitResumable: Resumable<UnitSnap> = {
   snapshot() {
     const s = useUnitRun.getState();
     if (!s.day || !s.block || !s.route) return null;
+    // Einheit fertig: nichts mehr fortzusetzen (erledigt ist Zustand).
+    const st = todayNow();
+    if (st.day === s.day && st.status === 'allDone') return null;
     const { day, block, duty, kind, via, watch, routeName, route, sentences, phrases, task, confirmed, offline, at, draft } = s;
     return { day, block, duty, kind, via, watch, routeName, route, sentences, phrases, task, confirmed, offline, at, draft };
   },
@@ -107,6 +110,13 @@ export const heute = defineArea({
     if (booted) return;
     booted = true;
     setUnitDoneHandler(handleUnitDone);
+    // Keine zusätzliche „Weitermachen“-Zeile für Blöcke der Einheit: Die Tageskarte führt weiter.
+    setResumeRowHidden((p) => {
+      if (p.env.id === 'unit') return true;
+      const u = loadResume('unit');
+      const r = (u?.data as { route?: unknown } | undefined)?.route;
+      return !!u && u.day === p.env.day && JSON.stringify(r) === JSON.stringify(p.env.route);
+    });
     installUnitWatch();
     // Ein Abo auf `app/week`, sobald die Datenbank bereit ist (parallel zu den Live-Abos, N14).
     if (useCapabilities.getState().db === 'ready') startWeekWatch();

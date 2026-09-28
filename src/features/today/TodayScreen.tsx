@@ -8,6 +8,8 @@ import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
+import { Eyebrow } from '../../ui/Eyebrow';
+import { HeroCard } from '../../ui/HeroCard';
 import { ChannelIcon, type Channel } from '../../ui/Card';
 import { Icon, type IconName } from '../../ui/Icon';
 import { Skeleton } from '../../ui/Skeleton';
@@ -243,25 +245,21 @@ function UnitCard({ view, rows, title, minLeft }: { view: TodayView; rows: CardR
   };
   return (
     <section
-      className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-4 sm:p-5"
+      className="lx-card flex flex-col gap-3.5 p-[1.125rem]"
       aria-labelledby="td-unit-title"
       data-testid="today-card"
       data-shape={view.plan?.u?.shape ?? 'legacy'}
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
     >
-      <div className="flex items-baseline justify-between gap-3">
-        <p className="lx-eyebrow whitespace-nowrap">{t('nbHeuteUnit')}</p>
-        <span
-          className="lx-tnum text-right text-sm whitespace-nowrap text-muted"
-          data-testid="today-status"
-          data-status={view.status}
-          data-done={done}
-          data-total={total}
-          aria-label={t('nbHeuteRingLabel', { done, total })}
-        >
-          {t('nbHeuteRing', { done, total, min: minLeft })}
-        </span>
-      </div>
+      <Eyebrow
+        meta={
+          <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} aria-label={t('nbHeuteRingLabel', { done, total })} className="whitespace-nowrap">
+            {t('nbHeuteRing', { done, total, min: minLeft })}
+          </span>
+        }
+      >
+        {t('nbHeuteUnit')}
+      </Eyebrow>
       <div className="flex flex-col gap-4" data-testid="hero" data-duty={now?.id}>
         <h2 id="td-unit-title" className="text-lg leading-snug font-semibold tracking-tight text-balance" data-testid="today-title">
           {title}
@@ -311,28 +309,29 @@ function DoneCard({ view, tomorrow }: { view: TodayView; tomorrow: string }) {
   const pct = view.balance.answers ? Math.round((view.balance.correct / view.balance.answers) * 100) : 0;
   const blocks = view.duties.total;
   return (
-    <section className="lx-glass flex flex-col gap-2 rounded-[var(--radius-card)] p-4 sm:p-5" data-testid="today-card" data-done="true">
-      <p className="lx-eyebrow text-accent-text">
-        <span aria-hidden="true">✓ </span>
-        <span data-testid="today-status" data-status={view.status} data-done={view.duties.done} data-total={view.duties.total}>
-          {t('nbHeuteDoneTitle')}
-        </span>
-      </p>
-      <h2 className="lx-tnum text-lg font-semibold tracking-tight text-balance" data-testid="balance">
-        {view.balance.answers > 0
-          ? t('nbHeuteDoneStats', {
-              min: learnMin,
-              blocks,
-              answers: view.balance.answers,
-              pct,
-            })
-          : t('nbHeuteDoneStatsNoAnswers', { min: learnMin, blocks })}
-        {view.extra > 0 && <span className="font-normal text-muted"> · {tn('tdExtraCount', view.extra)}</span>}
-      </h2>
-      <p className="text-sm text-muted" data-testid="today-tomorrow">
-        {tomorrow}
-      </p>
-    </section>
+    <div data-testid="today-card" data-done="true">
+      <HeroCard
+        tone="done"
+        eyebrow={
+          <>
+            <span aria-hidden="true">✓ </span>
+            <span data-testid="today-status" data-status={view.status} data-done={view.duties.done} data-total={view.duties.total}>
+              {t('nbHeuteDoneTitle')}
+            </span>
+          </>
+        }
+        title={
+          <span className="lx-tnum" data-testid="balance">
+            {view.balance.answers > 0 ? t('nbHeuteDoneStats', { min: learnMin, blocks, answers: view.balance.answers, pct }) : t('nbHeuteDoneStatsNoAnswers', { min: learnMin, blocks })}
+            {view.extra > 0 && <span className="font-normal text-muted"> · {tn('tdExtraCount', view.extra)}</span>}
+          </span>
+        }
+      >
+        <p className="text-sm text-muted" data-testid="today-tomorrow">
+          {tomorrow}
+        </p>
+      </HeroCard>
+    </div>
   );
 }
 
