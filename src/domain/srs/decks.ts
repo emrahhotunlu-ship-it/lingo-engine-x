@@ -20,7 +20,8 @@ export const DECK_LIMITS = { decks: 40, idsPerDeck: 500, idsTotal: 2000, flagged
 /** Hartnäckig (N28): ab 6 Fehlschlägen. */
 export const LEECH_MIN = 6;
 
-export type DeckMode = 'type' | 'flip';
+/** Gemerkter Modus eines Stapels; `listen` = Hör-Modus (N35). */
+export type DeckMode = 'type' | 'flip' | 'listen';
 export type ReviewModePref = 'auto' | 'type' | 'flip';
 export type DeckFilter = {
   kinds?: ('vocab' | 'chunk')[];
@@ -40,7 +41,7 @@ const isObj = (v: unknown): v is Doc => typeof v === 'object' && v !== null && !
 const str = (v: unknown): string | undefined => (typeof v === 'string' && v.trim() ? v : undefined);
 const numOr = (v: unknown): number | undefined => (typeof v === 'number' && Number.isFinite(v) ? v : undefined);
 const strs = (v: unknown): string[] | undefined => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : undefined);
-const mode = (v: unknown): DeckMode | undefined => (v === 'type' || v === 'flip' ? v : undefined);
+const mode = (v: unknown): DeckMode | undefined => (v === 'type' || v === 'flip' || v === 'listen' ? v : undefined);
 const dir = (v: unknown): FlipDir | undefined => (v === 'de-en' || v === 'en-de' || v === 'mix' ? v : undefined);
 export const jsonBytes = (v: unknown): number => new TextEncoder().encode(JSON.stringify(v ?? null)).length;
 

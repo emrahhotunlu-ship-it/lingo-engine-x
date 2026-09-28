@@ -10,7 +10,8 @@ import { IntroCard } from './IntroCard';
 import { Summary } from './Summary';
 import { abortExamples } from './examples';
 import { flush } from './persist';
-import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, skipCurrent, touch, useSession } from './session';
+import { answerRepair, commitHeld, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, skipCurrent, touch, useSession } from './session';
+import { UndoBar } from './anki/UndoBar';
 import { FlipCard } from './anki/FlipCard';
 import { StepBoundary } from '../../app/shell/Boundary';
 import { usePlayerSkip } from '../../app/shell/Player';
@@ -56,6 +57,8 @@ export function TrainerScreen() {
 
   // Bildschirmwechsel: laufende KI-Anfragen für Beispielsätze abbrechen (A6.2).
   useEffect(() => () => abortExamples(), []);
+  // B4: Wer den Trainer verlässt, schreibt eine zurückgehaltene Bewertung sofort fest.
+  useEffect(() => () => commitHeld(), []);
 
   useEffect(() => {
     const onVis = () => pauseActivity(document.visibilityState === 'hidden');
@@ -87,15 +90,18 @@ export function TrainerScreen() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="trainer">
-      <ExerciseTop
-        onClose={leave}
-        closeLabel={t('trClose')}
-        closeTestId="trainer-close"
-        progress={progress}
-        progressTestId="trainer-progress"
-        ctx={round === 'extra' ? 'extra' : 'duty'}
-        duty="review"
-      />
+      <div className="relative">
+        <ExerciseTop
+          onClose={leave}
+          closeLabel={t('trClose')}
+          closeTestId="trainer-close"
+          progress={progress}
+          progressTestId="trainer-progress"
+          ctx={round === 'extra' ? 'extra' : 'duty'}
+          duty="review"
+        />
+        <UndoBar />
+      </div>
       <motion.div
         key={status === 'summary' ? 'summary' : `step-${step}`}
         data-step={status === 'summary' ? 'summary' : step}

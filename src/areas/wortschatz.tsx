@@ -12,29 +12,31 @@ import { VocabScreen } from '../features/vocab/list/VocabScreen';
 import { installFlushOnHide } from '../features/vocab/persist';
 import { restoreTrainer, roundProgress, startSession, trainerSnapshot, TRAINER_RESUME_ID, useSession, type TrainerSnapshot } from '../features/vocab/session';
 import { TrainerScreen } from '../features/vocab/TrainerScreen';
+import { ListenLoop } from '../features/vocab/listen/ListenLoop';
 import type { ScreenProps } from '../app/registry';
 
 // Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
 // Reiter-Wurzel `vocab` (Suche, „Alle fälligen“, Prognose, Stapel, Eingangskorb, Zuletzt), Seiten
 // `deck` und `vocabList`, Übung `trainer` (Tippen und Aufdecken), Blätter `word`, `add`, `x:extra`,
-// `x:deck-new`, Einstellungs-Abschnitt „Wortschatz“, Statistik auf Platz `stand`, Block 1 `review`.
+// `x:deck-new`, Hörschleife `listenLoop` (N35), Einstellungs-Abschnitt „Wortschatz“, Statistik auf Platz `stand`, Block 1 `review`.
 
 declare module '../app/router/types' {
   interface RouteParams {
     vocab: NoParams;
     vocabList: { filter?: string; q?: string };
     deck: { id: string };
-    trainer: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip'; deck?: string };
+    trainer: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip' | 'listen'; deck?: string };
+    listenLoop: NoParams;
   }
 }
 
-const trainerParams = z.object({ round: z.enum(['pflicht', 'extra']), mode: z.enum(['auto', 'type', 'flip']).optional(), deck: z.string().max(64).optional() });
+const trainerParams = z.object({ round: z.enum(['pflicht', 'extra']), mode: z.enum(['auto', 'type', 'flip', 'listen']).optional(), deck: z.string().max(64).optional() });
 
 /**
  * Übung ohne Sitzung (Deep-Link, Neuladen): aktive Sitzung → weiter; sonst Momentaufnahme
  * herstellen; sonst neu starten. `false` → ruhiger Hinweis und zurück zur Herkunft (§2.3).
  */
-function ensureTrainer(route: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip'; deck?: string }): boolean {
+function ensureTrainer(route: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip' | 'listen'; deck?: string }): boolean {
   if (useSession.getState().active) return true;
   if (restoreFor('trainer')) return true;
   startSession(route.round, { ...(route.deck ? { deck: route.deck } : {}), ...(route.mode ? { mode: route.mode } : {}) });
@@ -78,6 +80,8 @@ export const wortschatz = defineArea({
     vocabList: { kind: 'page', component: VocabListPage, title: 'nbWsListTitle', keepScroll: true, params: z.object({ filter: z.string().max(24).optional(), q: z.string().max(80).optional() }) },
     deck: { kind: 'page', component: DeckScreen, title: 'nbWsDecks', params: z.object({ id: z.string().min(1).max(64) }) },
     trainer: { kind: 'exercise', component: TrainerScreen, params: trainerParams, ensure: ensureTrainer },
+    // N35 Hörschleife (Extra-Runde): schreibt nichts, zählt nicht als Wiederholung.
+    listenLoop: { kind: 'exercise', component: ListenLoop, title: 'nbWsLoopTitle' },
   },
   sections: [{ id: 'ws-stats', place: 'stand', order: 50, component: VocabStatsSection }],
   sheets: [

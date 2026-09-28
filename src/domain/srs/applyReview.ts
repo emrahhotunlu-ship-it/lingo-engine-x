@@ -127,7 +127,17 @@ function skillPatch(cur: Doc, mode: LegacyMode, grade: number, colIndex: number 
  */
 function stageAfter(cur: Doc, a: AnswerEvent): number {
   if (a.ex === 'flip') return flipStage(stageOf(cur), a.grade);
-  return nextStage(stageOf(cur), exerciseDef(a.ex).level, a.grade);
+  return nextStage(stageOf(cur), levelFor(a.ex, stageOf(cur)), a.grade);
+}
+
+/**
+ * Stufe, als die eine Übung zählt. Hör-Lücke (`dictation`, N35 Hör-Modus): höchstens eine Stufe über
+ * der eigenen – sie prüft Gehör und Schreibung, nicht die Bedeutung. Auf Stufe 4–5 (Leiter) ändert
+ * das nichts; im Hör-Modus hebt eine junge Karte so je Antwort nur um eine Stufe und fällt nie tiefer.
+ */
+export function levelFor(ex: ExerciseId, stage: number): number {
+  const level = exerciseDef(ex).level;
+  return ex === 'dictation' ? Math.min(level, Math.max(1, stage) + 1) : level;
 }
 
 /** Patch für eine Karte, deren Dokument vorliegt (bzw. aus der Voreinstellung angelegt wird). */

@@ -196,4 +196,28 @@ export const nbWsDe = {
   // Karten-Fehler (Fehlergrenze)
   nbWsCardBroken: 'Diese Karte konnte nicht angezeigt werden.',
   nbWsSkip: 'Überspringen',
+  // Rückgängig (B4)
+  nbWsUndo: 'Rückgängig',
+  nbWsUndoRated: 'Bewertet:',
+  // Hör-Modus und Hörschleife (N35)
+  nbWsModeListen: 'Hören',
+  nbWsListenHint: 'Hören: Die Karte wird vorgelesen. Sichere Karten tippst du in die Lücke, junge wählst du nach Gehör.',
+  nbWsListenNoTts: 'Ohne Sprachausgabe fragt „Hören“ wie „Tippen“.',
+  nbWsLoopTitle: 'Hörschleife',
+  nbWsLoopSub: '10 Sätze hören und nachsprechen, ohne Bewertung',
+  nbWsLoopTask: 'Hör zu und sprich den Satz in der Pause nach.',
+  nbWsLoopPurpose: 'Viele Wiederholungen ganzer Sätze trainieren Hörverstehen und Aussprache. Zählt nicht als Wiederholung.',
+  nbWsLoopProgress: 'Satz {n} von {total}',
+  nbWsLoopPause: 'Pause',
+  nbWsLoopPlay: 'Weiter abspielen',
+  nbWsLoopNext: 'Nächster Satz',
+  nbWsLoopShowText: 'Text zeigen',
+  nbWsLoopHideText: 'Text verbergen',
+  nbWsLoopSpeaking: 'Spricht …',
+  nbWsLoopRepeat: 'Jetzt du – nachsprechen',
+  nbWsLoopDone: 'Fertig: {n} Sätze gehört.',
+  nbWsLoopAgain: 'Noch einmal',
+  nbWsLoopNone: 'Keine Sätze zum Hören – Karten mit Ursprungssatz fehlen.',
+  nbWsLoopNoTts: 'Die Sprachausgabe ist auf diesem Gerät nicht verfügbar.',
+  nbWsLoopClose: 'Hörschleife beenden',
 } as const;
