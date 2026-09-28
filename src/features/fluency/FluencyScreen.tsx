@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -299,6 +300,8 @@ export function FluencyScreen() {
         )}
       </header>
 
+      {/* G4: eine kaputte Aufgabe kostet nur diesen Schritt. */}
+      <StepBoundary resetKey={`${phase}-${round}`} scope="fluency">
       <div className="flex max-w-3xl flex-col gap-5">
         <Card channel="speak" className="flex flex-col gap-2" data-testid="fluency-question" data-q={q.id}>
           <p className="lx-eyebrow">{t('fluQuestion')}</p>
@@ -406,6 +409,7 @@ export function FluencyScreen() {
           />
         )}
       </div>
+      </StepBoundary>
     </motion.section>
   );
 }

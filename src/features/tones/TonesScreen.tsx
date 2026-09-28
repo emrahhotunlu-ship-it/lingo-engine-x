@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -202,6 +203,8 @@ export function TonesScreen() {
         )}
       </header>
 
+      {/* G4: eine kaputte Aufgabe kostet nur diesen Schritt. */}
+      <StepBoundary resetKey={phase} scope="tones">
       <div className="flex max-w-3xl flex-col gap-5">
         <Card channel="write" className="flex flex-col gap-3" data-testid="tones-message" data-msg={msg.id} data-kind={msg.kind}>
           <p className="lx-eyebrow">{t('tnMessage')}</p>
@@ -298,6 +301,7 @@ export function TonesScreen() {
             </>
           ))}
       </div>
+      </StepBoundary>
     </motion.section>
   );
 }

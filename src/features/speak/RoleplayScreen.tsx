@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -188,6 +189,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
       </AnimatePresence>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,44rem)_minmax(0,1fr)]">
+        <StepBoundary resetKey={c.turns.length} scope="roleplay">
         <div className="flex min-w-0 flex-col gap-4 pb-44 lg:pb-0">
           <ChatLog
             turns={c.turns}
@@ -254,6 +256,8 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
             </div>
           )}
         </div>
+
+        </StepBoundary>
 
         {desktop && (
           <aside aria-label={t('spAnalysisPanel')} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] self-start overflow-y-auto lg:block" data-testid="analysis-panel">

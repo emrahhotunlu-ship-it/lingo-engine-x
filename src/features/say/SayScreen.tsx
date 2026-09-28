@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -279,6 +280,8 @@ export function SayScreen() {
         )}
       </header>
 
+      {/* G4: eine kaputte Aufgabe kostet nur diesen Schritt. */}
+      <StepBoundary resetKey={phase} scope="say">
       <div className="flex max-w-3xl flex-col gap-5">
         {phase !== 'final' && situationCard}
 
@@ -400,6 +403,7 @@ export function SayScreen() {
           <FinalView item={doneItem} fb1={fb1} fb2={fb2} situation={situation} saveFailed={saveFailed} onRetrySave={() => void retrySave()} unit={!!unit} />
         )}
       </div>
+      </StepBoundary>
     </motion.section>
   );
 }

@@ -15,6 +15,8 @@ import type { SceneView } from '../../domain/speak/types';
 import { nextMeeting } from '../../domain/meeting/next';
 import { Button } from '../../ui/Button';
 import { Icon, type IconName } from '../../ui/Icon';
+import { Row, RowList } from '../../ui/RowList';
+import type { Channel } from '../../ui/Card';
 import { Segmented } from '../../ui/Segmented';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
@@ -119,42 +121,17 @@ export type RowItem = {
   tone?: 'speak' | 'write' | 'gold' | 'cyan';
 };
 
-const TONE: Record<NonNullable<RowItem['tone']>, string> = {
-  speak: 'text-ch-speak',
-  write: 'text-ch-write',
-  gold: 'text-gold-text',
-  cyan: 'text-cyan-text',
-};
+const CHANNEL: Record<NonNullable<RowItem['tone']>, Channel> = { speak: 'speak', write: 'write', gold: 'business', cyan: 'listen' };
 
-/** Zeilenliste in einer Karte (v1 `.card.list`); jede Zeile ein Knopf mit stabiler Test-ID. */
+/** Zeilenliste in einer Karte (WP0b-Bausteine `RowList`/`Row`, Optik wie v1). */
 export function RowCard({ rows, label, testId }: { rows: readonly RowItem[]; label?: string; testId?: string }) {
   if (!rows.length) return null;
   return (
-    <section className="flex flex-col gap-2" aria-label={label} data-testid={testId}>
-      {label && <h2 className="lx-eyebrow">{label}</h2>}
-      <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]">
-        {rows.map((r) => (
-          <li key={r.id}>
-            <button
-              type="button"
-              data-testid={r.id}
-              disabled={r.disabled}
-              onClick={r.run}
-              className="flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-strong disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              <span className={`inline-flex size-9 flex-none items-center justify-center rounded-xl bg-surface ${r.tone ? TONE[r.tone] : 'text-muted'}`}>
-                <Icon name={r.icon} />
-              </span>
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span className="font-medium">{r.title}</span>
-                {r.sub && <span className="text-sm text-muted">{r.sub}</span>}
-              </span>
-              {!r.disabled && <Icon name="arrowRight" size={18} className="flex-none text-subtle" />}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <RowList {...(label ? { title: label } : {})} {...(testId ? { testId } : {})}>
+      {rows.map((r) => (
+        <Row key={r.id} testId={r.id} icon={r.icon} {...(r.tone ? { channel: CHANNEL[r.tone] } : {})} title={r.title} sub={r.sub} disabled={r.disabled} onClick={r.run} />
+      ))}
+    </RowList>
   );
 }
 
