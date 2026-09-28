@@ -50,6 +50,10 @@ const paths = {
   gear: 'M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 13.5a7.6 7.6 0 000-3l2-1.6-2-3.4-2.4 1a7.5 7.5 0 00-2.6-1.5L14 2.5h-4l-.4 2.5A7.5 7.5 0 007 6.5l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 000 3l-2 1.6 2 3.4 2.4-1a7.5 7.5 0 002.6 1.5l.4 2.5h4l.4-2.5a7.5 7.5 0 002.6-1.5l2.4 1 2-3.4z',
   // Übersetzen (Lucide „languages“, vereinfacht)
   translate: 'M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6',
+  // Rahmen (WP0b, Prototyp v1): Profil, Chevrons für Zeilen und „‹ Herkunft“
+  user: 'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c1.5-4 4.5-6 8-6s6.5 2 8 6',
+  chevronRight: 'M9 6l6 6-6 6',
+  chevronLeft: 'M15 6l-6 6 6 6',
 } as const;
 
 export type IconName = keyof typeof paths;

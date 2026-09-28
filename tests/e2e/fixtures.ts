@@ -139,29 +139,41 @@ export async function openLearnPage(page: Page): Promise<void> {
   await openTab(page, 'learn');
 }
 
-/** Profil öffnen (WP0a: der Profil-Knopf oben links führt zu „Dein Stand“; WP0b/P6: Profil-Blatt). */
+/** Profil-Blatt öffnen (WP0b): Profil-Knopf oben links auf jeder Reiter-Wurzel. */
 export async function openProfile(page: Page): Promise<void> {
   const btn = page.getByTestId('open-profile');
   await page.getByTestId('tabbar').waitFor();
   for (let i = 0; i < 2 && !(await btn.isVisible()); i++) await page.getByTestId('tab-today').click();
   await btn.click();
+  await page.getByTestId('profile-sheet').waitFor();
 }
 
-/** „Dein Stand“: über den Profil-Knopf (war ein Reiter). */
+/** „Dein Stand“: Profil-Blatt → „Dein Stand ›“ (war ein Reiter). */
 export async function openOverview(page: Page): Promise<void> {
   await openProfile(page);
+  await page.getByTestId('profile-overview').click();
+  // Das Profil-Blatt blendet aus; erst danach zählt der Bildschirm (axe, Dialog-Zählung).
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
   await screen(page, 'overview');
 }
 
 /**
- * Einstellungen öffnen: Das Zahnrad steht auf jeder Seite und in jeder Übung (und auf den
- * System-Bildschirmen ohne Reiter). Steht es nicht im Bild, erst zu „Dein Stand“.
+ * Einstellungen öffnen: Das Zahnrad steht auf jeder Seite (und auf den System-Bildschirmen ohne
+ * Reiter). Sonst über das Profil-Blatt („Einstellungen ›“).
  */
 export async function openSettings(page: Page): Promise<void> {
   const gear = page.getByTestId('open-settings').first();
-  if (!(await gear.isVisible())) await openOverview(page);
-  await gear.click();
+  if (await gear.isVisible()) {
+    await gear.click();
+    return;
+  }
+  await openProfile(page);
+  await page.getByTestId('profile-settings').click();
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
 }
+
+/** Fehlergrenze testen (G4): der Bildschirm `route` wirft beim nächsten Zeichnen genau einmal. */
+export const crashOnce = (route: string): Record<string, string> => ({ 'lx:crash-once': route });
 
 /**
  * Reiter „Sprechen“ mit einem Bereich öffnen. Neubau (plan.md §1.3): Gespräche · Schreiben · Preply
