@@ -84,7 +84,7 @@ describe('Katalog: flip wird nie automatisch gewählt', () => {
 });
 
 const hist = (...h: Array<[number, number, string]>) => h.map(([t, g, x]) => ({ t, g, x, m: x === 'flip' ? 'recog' : 'type' }));
-const reviewed = (stage: number, h: Doc[]) => card({ state: 'review', stage, reps: h.length || 1, S: 3, D: 5, due: NOW - 1000, last: (h.at(-1)?.t as number) ?? NOW - 3 * D, hist: h });
+const reviewed = (stage: number, h: Doc[]) => card({ state: 'review', stage, reps: h.length || 1, S: 3, D: 5, due: NOW - 1000, last: (h.at(-1)?.t) ?? NOW - 3 * D, hist: h });
 
 describe('pickMode: alle 7 Regeln in ihrer Reihenfolge', () => {
   const base = { day: DAY, lang: 'de' as const, due: true };

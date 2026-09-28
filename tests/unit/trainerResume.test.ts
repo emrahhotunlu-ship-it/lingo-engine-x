@@ -5,6 +5,7 @@ import type { Db } from '../../src/platform/types';
 import { useLive } from '../../src/data/live';
 import { dayKey } from '../../src/domain/date';
 import type { StoredPlan } from '../../src/domain/plan/types';
+import type { TrainerSnapshot } from '../../src/features/vocab/session';
 
 // Trainer-Sitzung im Anki-Modus (P3): Modus je Karte, Fortsetzen (Momentaufnahme → Herstellen →
 // gleiche Position, nie Schreiben), Überspringen ohne Bewertung, Block 1 meldet unitDone(1).
@@ -69,7 +70,7 @@ describe('Fortsetzen (Resumable trainer)', () => {
     S.commitAnswer({ grade: 3, given: '', ms: 2000, ok: true });
     const at = S.useSession.getState();
     const key = at.queue[at.pos]?.key;
-    const snap = JSON.parse(JSON.stringify(S.trainerSnapshot())) as S.TrainerSnapshot;
+    const snap = JSON.parse(JSON.stringify(S.trainerSnapshot())) as TrainerSnapshot;
     expect(snap.pos).toBe(2);
     await persist.flush();
     const writes = h.writes().length;
@@ -84,7 +85,7 @@ describe('Fortsetzen (Resumable trainer)', () => {
   });
   it('inzwischen beantwortete Karte wird übersprungen; fremder Lerntag verworfen', () => {
     S.startSession('pflicht');
-    const snap = S.trainerSnapshot() as S.TrainerSnapshot;
+    const snap = S.trainerSnapshot() as TrainerSnapshot;
     const first = snap.queue[0]?.key.slice(6) ?? '';
     const docs = vocab(8);
     docs.set(first, { ...(docs.get(first) as Doc), last: snap.at + 10 });
