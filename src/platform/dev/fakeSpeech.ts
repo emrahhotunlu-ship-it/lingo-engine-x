@@ -19,6 +19,8 @@ export type FakeSpeechOptions = {
   msPerChar?: number;
   /** Gemeinsames Protokoll, z. B. `control.spoken` des Entwicklungs-Adapters. */
   spoken?: string[];
+  /** Wortgrenzen melden (`boundary`, wie Chrome/Safari mit lokaler Stimme); Standard: ja. */
+  boundary?: boolean;
 };
 
 export type FakeSpeechEvent = { type: 'speak' | 'start' | 'end' | 'cancel' | 'resume' | 'pause'; t: number; text?: string };
@@ -35,7 +37,7 @@ export class FakeUtterance {
   onstart: Handler = null;
   onend: Handler = null;
   onerror: Handler = null;
-  onboundary: Handler = null;
+  onboundary: ((ev: { name: string; charIndex: number; charLength: number }) => void) | null = null;
 
   constructor(text = '') {
     this.text = text;
@@ -60,12 +62,14 @@ export class FakeSynth {
   private timer: ReturnType<typeof setTimeout> | null = null;
   private available: readonly SpeechVoiceLike[];
   private listeners = new Set<() => void>();
+  private boundaryTimers: Array<ReturnType<typeof setTimeout>> = [];
 
   constructor(
     private readonly all: readonly SpeechVoiceLike[],
     delayMs: number,
     private readonly msPerChar: number,
     private readonly handle: Pick<FakeSpeechHandle, 'spoken' | 'utterances' | 'events'>,
+    private readonly boundary: boolean = true,
   ) {
     this.available = delayMs > 0 ? [] : all;
     if (delayMs > 0) setTimeout(() => this.setVoices(this.all), delayMs);
@@ -108,6 +112,7 @@ export class FakeSynth {
     this.log('cancel');
     if (this.timer !== null) clearTimeout(this.timer);
     this.timer = null;
+    this.clearBoundaries();
     const cur = this.current;
     const waiting = this.queue;
     this.current = null;
@@ -126,6 +131,10 @@ export class FakeSynth {
     this.paused = false;
   }
 
+  private clearBoundaries(): void {
+    this.boundaryTimers.splice(0).forEach((t) => clearTimeout(t));
+  }
+
   private log(type: FakeSpeechEvent['type'], text?: string): void {
     this.handle.events.push(text === undefined ? { type, t: Date.now() } : { type, t: Date.now(), text });
   }
@@ -142,8 +151,21 @@ export class FakeSynth {
     }
     u.onstart?.({});
     const ms = Math.max(20, Math.round((u.text.length * this.msPerChar) / (u.rate || 1)));
+    if (this.boundary && u.text.trim()) {
+      // Wortgrenzen wie ein Browser: je Wort `name: 'word'`, Zeichen-Index im Text der Äußerung.
+      for (const m of u.text.matchAll(/\S+/g)) {
+        const at = m.index ?? 0;
+        const len = m[0].length;
+        this.boundaryTimers.push(
+          setTimeout(() => {
+            if (this.current === u) u.onboundary?.({ name: 'word', charIndex: at, charLength: len });
+          }, Math.round((at * this.msPerChar) / (u.rate || 1))),
+        );
+      }
+    }
     this.timer = setTimeout(() => {
       this.timer = null;
+      this.clearBoundaries();
       this.current = null;
       this.log('end', u.text);
       u.onend?.({});
@@ -154,7 +176,7 @@ export class FakeSynth {
 
 export function createFakeSpeech(opts: FakeSpeechOptions = {}): FakeSpeechHandle {
   const handle = { spoken: opts.spoken ?? [], utterances: [], events: [] } as Pick<FakeSpeechHandle, 'spoken' | 'utterances' | 'events'>;
-  const synth = new FakeSynth(opts.voices ?? FAKE_VOICES, opts.voicesDelayMs ?? 0, opts.msPerChar ?? 5, handle);
+  const synth = new FakeSynth(opts.voices ?? FAKE_VOICES, opts.voicesDelayMs ?? 0, opts.msPerChar ?? 5, handle, opts.boundary ?? true);
   return { ...handle, synth, Utterance: FakeUtterance };
 }
 

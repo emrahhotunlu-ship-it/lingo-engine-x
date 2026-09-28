@@ -5,7 +5,10 @@ import { paragraphs, sentenceSplit } from '../../domain/input/textStats';
 import { statusCss, statusIndex, textCardKeys, textStatus, type StatusCard, type TextCard } from '../../domain/input/wordStatus';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import type { WordTapArea } from '../../engine/wordTap';
+import { openLookup, type WordTapArea, type WordTapRequest } from '../../engine/wordTap';
+import { speak, speechChunks, stopSpeech, unlockSpeech, useSpeech } from '../../platform/speech';
+import { boundarySpan } from './karaoke';
+import { phraseSpan } from './phrase';
 import { useT } from '../../i18n';
 import { Button, IconButton } from '../../ui/Button';
 import { startSession } from '../vocab/session';
@@ -77,8 +80,95 @@ export function ReaderText({ text: original, title, sourceRef, area, practice = 
   const [sentMode, setSentMode] = useState(false);
   const sentences = useMemo(() => sentenceSplit(text).map((s) => s.text), [text]);
   const [si, setSi] = useState(0);
-
   const box = useRef<HTMLDivElement>(null);
+
+  // Wendung markieren (N57, LingQ/Readlang): erstes + letztes Wort antippen → ein Eintrag im Wortblatt.
+  const [phraseOn, setPhraseOn] = useState(false);
+  const [first, setFirst] = useState<{ text: string; start: number; end: number } | null>(null);
+  const onWord = (req: WordTapRequest): boolean => {
+    if (!phraseOn) return false;
+    if (!first || first.text !== req.text) {
+      setFirst({ text: req.text, start: req.start, end: req.end });
+      return true;
+    }
+    if (first.start === req.start) {
+      // Dasselbe Wort noch einmal: normales Nachschlagen dieses Worts.
+      setFirst(null);
+      setPhraseOn(false);
+      return false;
+    }
+    const span = phraseSpan(req.text, req.tokens, first, req);
+    if (!span) {
+      setFirst({ text: req.text, start: req.start, end: req.end });
+      return true;
+    }
+    setFirst(null);
+    setPhraseOn(false);
+    openLookup({ ...req, surface: span.surface, start: span.start, end: span.end, index: span.index });
+    return true;
+  };
+
+  // Vorlesen mit Wort-Markierung (N58): Absatz für Absatz ab dem obersten sichtbaren; markiert
+  // wird nur, wo der Browser Wortgrenzen meldet (`boundary`), sonst nur der Absatz.
+  const speech = useSpeech((s) => s.status);
+  const [aloud, setAloud] = useState<{ unit: number; span: readonly [number, number] | null } | null>(null);
+  const aloudRun = useRef(0);
+  const reading = useRef(false);
+  const topPara = useRef(0);
+  const stopAloud = () => {
+    aloudRun.current++;
+    if (reading.current) stopSpeech();
+    reading.current = false;
+    setAloud(null);
+  };
+  const readAloud = () => {
+    unlockSpeech();
+    const id = ++aloudRun.current;
+    reading.current = true;
+    const units = sentMode ? [sentences[si] ?? ''] : paras;
+    const step = (k: number) => {
+      if (aloudRun.current !== id) return;
+      const unit = units[k];
+      if (unit === undefined) {
+        reading.current = false;
+        setAloud(null);
+        return;
+      }
+      const chunks = speechChunks(unit);
+      setAloud({ unit: k, span: null });
+      if (!sentMode) {
+        const el = box.current?.querySelector(`[data-para="${k}"]`);
+        if (el instanceof HTMLElement && typeof el.scrollIntoView === 'function') el.scrollIntoView({ block: 'nearest' });
+      }
+      void speak(unit, {
+        onBoundary: (ci, at, len) => {
+          if (aloudRun.current === id) setAloud({ unit: k, span: boundarySpan(unit, chunks, ci, at, len) });
+        },
+      }).then((o) => {
+        if (aloudRun.current !== id) return;
+        if (o === 'done') step(k + 1);
+        else {
+          reading.current = false;
+          setAloud(null);
+        }
+      });
+    };
+    step(sentMode ? 0 : Math.max(0, Math.min(units.length - 1, topPara.current)));
+  };
+  // Moduswechsel, Satzwechsel und Textfassung beenden das Vorlesen (in den Klicks); Verlassen hier.
+  useEffect(
+    () => () => {
+      aloudRun.current++;
+      if (reading.current) stopSpeech();
+    },
+    [],
+  );
+  const markFor = (unitText: string, k: number): readonly [number, number] | null => {
+    if (first && first.text === unitText) return [first.start, first.end];
+    if (aloud && aloud.unit === k && aloud.span) return aloud.span;
+    return null;
+  };
+
   const report = useRef(onPara);
   useEffect(() => {
     report.current = onPara;
@@ -94,7 +184,10 @@ export function ReaderText({ text: original, title, sourceRef, area, practice = 
         if (e.isIntersecting) seen.add(i);
         else seen.delete(i);
       }
-      if (seen.size) report.current?.(Math.min(...seen));
+      if (seen.size) {
+        topPara.current = Math.min(...seen);
+        report.current?.(topPara.current);
+      }
     });
     root.querySelectorAll('[data-para]').forEach((el) => io.observe(el));
     return () => io.disconnect();
@@ -124,16 +217,28 @@ export function ReaderText({ text: original, title, sourceRef, area, practice = 
         <div className="flex flex-col gap-2" data-testid="text-level" data-variant={variant?.dir ?? 'original'}>
           <div className="flex flex-wrap gap-2">
             {variant ? (
-              <Button variant="ghost" onClick={() => setVariant(null)} data-testid="level-original">
+              <Button variant="ghost" onClick={() => {
+                  stopAloud();
+                  setVariant(null);
+                }}
+                data-testid="level-original">
                 {t('nbLesenLevelOriginal')}
               </Button>
             ) : (
               !isBusy(gen.phase) && (
                 <>
-                  <Button variant="ghost" onClick={() => void rewrite('easier')} data-testid="level-easier" data-ai="">
+                  <Button variant="ghost" onClick={() => {
+                      stopAloud();
+                      void rewrite('easier');
+                    }}
+                    data-testid="level-easier" data-ai="">
                     {t('nbLesenLevelEasier')}
                   </Button>
-                  <Button variant="ghost" onClick={() => void rewrite('harder')} data-testid="level-harder" data-ai="">
+                  <Button variant="ghost" onClick={() => {
+                      stopAloud();
+                      void rewrite('harder');
+                    }}
+                    data-testid="level-harder" data-ai="">
                     {t('nbLesenLevelHarder')}
                   </Button>
                 </>
@@ -143,27 +248,59 @@ export function ReaderText({ text: original, title, sourceRef, area, practice = 
           <AiRunPanel phase={gen.phase} error={gen.error} onStop={gen.stop} onRetry={() => void rewrite('easier')} skeleton={false} />
         </div>
       )}
-      {sentences.length > 2 && (
-        <div className="flex">
-          <button type="button" className="text-sm font-medium text-accent-text" aria-pressed={sentMode} onClick={() => setSentMode((v) => !v)} data-testid="sentence-mode">
+      <div className="flex flex-wrap gap-x-5 gap-y-2">
+        {sentences.length > 2 && (
+          <button type="button" className="min-h-11 text-sm font-medium text-accent-text" aria-pressed={sentMode} onClick={() => {
+              stopAloud();
+              setSentMode((v) => !v);
+            }}
+            data-testid="sentence-mode">
             {sentMode ? t('nbLesenPageMode') : t('nbLesenSentenceMode')}
           </button>
-        </div>
+        )}
+        <button
+          type="button"
+          className="min-h-11 text-sm font-medium text-accent-text"
+          aria-pressed={phraseOn}
+          onClick={() => {
+            setFirst(null);
+            setPhraseOn((v) => !v);
+          }}
+          data-testid="phrase-mode"
+        >
+          {phraseOn ? t('nbLesenPhraseCancel') : t('nbLesenPhraseMark')}
+        </button>
+        {speech === 'ready' && (
+          <button type="button" className="min-h-11 text-sm font-medium text-accent-text" aria-pressed={!!aloud} onClick={() => (aloud ? stopAloud() : readAloud())} data-testid="read-aloud">
+            {aloud ? t('nbLesenAloudStop') : t('nbLesenAloud')}
+          </button>
+        )}
+      </div>
+      {phraseOn && (
+        <p className="text-sm text-muted" role="status" data-testid="phrase-hint" data-step={first ? 'last' : 'first'}>
+          {first ? t('nbLesenPhraseLast') : t('nbLesenPhraseFirst')}
+        </p>
       )}
       {sentMode ? (
-        <div lang="en" className="flex max-w-[68ch] flex-col gap-3" data-testid="sentence-view" data-i={si}>
+        <div lang="en" className="flex max-w-[68ch] flex-col gap-3" data-testid="sentence-view" data-i={si} data-reading={aloud ? true : undefined}>
           <p className="lx-tnum text-xs text-muted">{t('nbLesenSentenceOf', { i: si + 1, n: sentences.length })}</p>
-          <EnglishText text={sentences[si] ?? ''} area={area} source={sourceRef} title={title} className="min-h-24 text-xl leading-relaxed" />
+          <EnglishText text={sentences[si] ?? ''} area={area} source={sourceRef} title={title} className="min-h-24 text-xl leading-relaxed" onWord={onWord} highlight={markFor(sentences[si] ?? '', 0)} />
           <div className="flex gap-2">
-            <IconButton icon="arrowLeft" label={t('nbLesenPrev')} disabled={si === 0} onClick={() => setSi((i) => Math.max(0, i - 1))} data-testid="sentence-prev" />
-            <IconButton icon="arrowRight" label={t('nbLesenNext')} disabled={si >= sentences.length - 1} onClick={() => setSi((i) => Math.min(sentences.length - 1, i + 1))} data-testid="sentence-next" />
+            <IconButton icon="arrowLeft" label={t('nbLesenPrev')} disabled={si === 0} onClick={() => {
+                stopAloud();
+                setSi((i) => Math.max(0, i - 1));
+              }} data-testid="sentence-prev" />
+            <IconButton icon="arrowRight" label={t('nbLesenNext')} disabled={si >= sentences.length - 1} onClick={() => {
+                stopAloud();
+                setSi((i) => Math.min(sentences.length - 1, i + 1));
+              }} data-testid="sentence-next" />
           </div>
         </div>
       ) : (
         <div ref={box} lang="en" className={`flex max-w-[68ch] flex-col gap-4 ${className ?? ''}`}>
           {paras.map((p, i) => (
-            <div key={i} data-para={i}>
-              <EnglishText text={p} area={area} source={sourceRef} title={title} className="text-[1.0625rem] leading-[1.75]" />
+            <div key={i} data-para={i} data-reading={aloud?.unit === i || undefined} className={aloud?.unit === i ? '-mx-2 rounded-xl bg-[var(--lx-cyan-soft)] px-2' : undefined}>
+              <EnglishText text={p} area={area} source={sourceRef} title={title} className="text-[1.0625rem] leading-[1.75]" onWord={onWord} highlight={markFor(p, i)} />
             </div>
           ))}
         </div>

@@ -6,6 +6,7 @@ import { installUnitPrefetch } from '../features/input/block/prefetch';
 import { INPUT_BLOCKS } from '../features/input/block/run';
 import { InputRoutes } from '../features/input/InputRoutes';
 import { INPUT_RESUMABLES } from '../features/input/resume';
+import { DialogScreen } from '../features/listen/DialogUnit';
 import { LibraryScreen } from '../features/read/LibraryScreen';
 
 // Bereich „Lesen & Hören“ – Besitz: Paket P4 (docs/neubau/plan.md §1.3, §4.5).
@@ -23,6 +24,8 @@ declare module '../app/router/types' {
     write: { ctx: UnitCtx };
     discoverItem: { feedId: string; itemId: string; ctx: UnitCtx };
     inputUnit: { day: string; kind: 'read' | 'listen'; ref: string; summary?: boolean };
+    /** Meeting hören mit 2–3 Stimmen → Stichworte → Follow-up-Mail (Backlog B6). */
+    listenDialog: { ctx: UnitCtx };
   }
 }
 
@@ -48,6 +51,7 @@ export const lesen = defineArea({
       component: InputBlockScreen,
       params: z.object({ day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), kind: z.enum(['read', 'listen']), ref: z.string().min(3), summary: z.boolean().optional() }),
     },
+    listenDialog: { kind: 'exercise', component: DialogScreen, params: z.object({ ctx }) },
   },
   entries: [
     { id: 'hub-write', place: 'write', group: 'write', order: 50, label: 'nbLesenWriteTask', sub: 'nbLesenWriteTaskSub', icon: 'grammar', route: { name: 'write', ctx: 'extra' } },

@@ -28,6 +28,7 @@ import { writeMachine } from './machine';
 import { PromptCard } from './PromptCard';
 import { ReviewView } from './ReviewView';
 import { Alternatives } from './Alternatives';
+import { ToneRead } from './ToneRead';
 import { repairsFromWriting } from '../../domain/repair/sources';
 import { RepairStep } from '../repair/RepairStep';
 import { saveRepairs } from '../repair/store';
@@ -169,6 +170,7 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
         {changePrompt?.panel}
         {prompt.useful.length > 0 && chips}
         <DraftArea value={text} onChange={setText} label={t('wrDraftLabel')} draftKey={draftKey} min={min} max={max} handle={draft} disabled={stateName === 'submitting'} />
+        <ToneRead text={text} />
         {state.context.failed && (
           <p className="text-sm text-danger-text" role="alert">
             {t('inSaveFailed')}
@@ -189,6 +191,7 @@ export function WriteUnit({ prompt, ctx, day, writingId, rev, changePrompt }: Pr
         <PromptCard prompt={prompt} canChange={false} busy={false} onOther={() => undefined} onOwn={() => undefined} />
         {prompt.useful.length > 0 && chips}
         <DraftArea value={revText} onChange={setRevText} label={t('wrDraftLabel')} draftKey={`write:rev:${id ?? ''}`} min={min} max={max} handle={draft} disabled={stateName === 'resubmitting'} />
+        <ToneRead text={revText} />
         {state.context.failed && (
           <p className="text-sm text-danger-text" role="alert">
             {t('inSaveFailed')}

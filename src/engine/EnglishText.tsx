@@ -1,7 +1,7 @@
 import { useMemo, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { tokenize } from '../domain/text/tokenize';
 import type { Token } from '../domain/text/types';
-import { openLookup, useLookup, type WordTapArea } from './wordTap';
+import { openLookup, useLookup, type WordTapArea, type WordTapRequest } from './wordTap';
 
 // Englischer Text mit antippbaren Wörtern (Kap. 6.11, Plan §5.6). Jedes Wort ist ein Knopf
 // `button.lx-word`; ein Tippen öffnet das Nachschlage-Fenster. `exclude` (die Lösung während
@@ -21,6 +21,11 @@ export type EnglishTextProps = {
   as?: 'p' | 'span' | 'div';
   className?: string;
   testId?: string;
+  /**
+   * Fängt das Antippen eines Worts ab (z. B. „Wendung markieren“ im Leser, N57). Liefert der
+   * Aufruf `true`, öffnet sich kein Nachschlagen; sonst wie bisher.
+   */
+  onWord?: ((req: WordTapRequest) => boolean) | null;
 };
 
 type Piece = ({ kind: 'tokens'; from: number; to: number; plain?: boolean; mark?: boolean } | { kind: 'slot'; node: ReactNode }) & { tail?: string };
@@ -28,7 +33,7 @@ type Piece = ({ kind: 'tokens'; from: number; to: number; plain?: boolean; mark?
 /** Satzzeichen direkt hinter einer Stelle („.", „)," …) – sie bleiben mit dem Wort in einer Zeile (H6). */
 const TAIL = /^[^\s\p{L}\p{N}]+/u;
 
-export function EnglishText({ text, area, source = null, title = null, exclude = null, highlight = null, slot = null, as = 'p', className, testId }: EnglishTextProps) {
+export function EnglishText({ text, area, source = null, title = null, exclude = null, highlight = null, slot = null, as = 'p', className, testId, onWord = null }: EnglishTextProps) {
   const tokens = useMemo(() => tokenize(text), [text]);
   const active = useLookup((s) => s.req);
   const root = useRef<HTMLElement>(null);
@@ -80,7 +85,9 @@ export function EnglishText({ text, area, source = null, title = null, exclude =
             const before = focusBefore.current;
             focusBefore.current = null;
             const returnFocus = before && before !== e.currentTarget && !before.classList.contains('lx-word') ? before : null;
-            openLookup({ surface: t.text, text, start, end, tokens, index: index < 0 ? 0 : index, area, source, title, anchor: e.currentTarget, returnFocus });
+            const req: WordTapRequest = { surface: t.text, text, start, end, tokens, index: index < 0 ? 0 : index, area, source, title, anchor: e.currentTarget, returnFocus };
+            if (onWord?.(req)) return;
+            openLookup(req);
           }}
         >
           {t.text}

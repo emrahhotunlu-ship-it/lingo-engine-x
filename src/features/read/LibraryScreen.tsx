@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useAiAvailable } from '../../ai/scope';
 import { useNav, type Route } from '../../app/nav';
 import { HubSections } from '../../app/shell/Hub';
 import { placesOf } from '../../app/shell/tabs';
@@ -64,6 +65,7 @@ function useVocabFn(): (w: string) => boolean {
 
 export function LibraryScreen() {
   const { t } = useT();
+  const ai = useAiAvailable();
   const go = useNav((s) => s.go);
   const input = useInputContext();
   const { theme } = useWeek();
@@ -259,6 +261,7 @@ export function LibraryScreen() {
           <Row icon="plus" channel="read" title={t('nbLesenOwn')} sub={t('nbLesenOwnSub')} onClick={() => go({ name: 'read', ctx: 'extra', mode: 'own' })} testId="lib-own" />
           <Row icon="sparkle" channel="read" title={t('nbLesenNewText')} sub={t('nbLesenNewTextSub')} onClick={() => go({ name: 'read', ctx: 'extra', mode: 'gen' })} testId="lib-new-text" />
           <Row icon="headphones" channel="listen" title={t('nbLesenNewListen')} sub={t('nbLesenNewListenSub')} onClick={() => go({ name: 'listen', ctx: 'extra', mode: 'gen' })} testId="lib-new-listen" />
+          {ai && <Row icon="headphones" channel="listen" title={t('nbLesenDlgRow')} sub={t('nbLesenDlgRowSub')} onClick={() => go({ name: 'listenDialog', ctx: 'extra' })} testId="lib-dialog" />}
         </List>
       </Section>
 
