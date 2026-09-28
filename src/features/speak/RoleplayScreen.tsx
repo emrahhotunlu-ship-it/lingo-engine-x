@@ -13,6 +13,10 @@ import { Skeleton } from '../../ui/Skeleton';
 import { DURATION } from '../../ui/motion';
 import { AnalysisCard } from './AnalysisCard';
 import { GoalChecklist } from './GoalChecklist';
+import { roleplayResume } from './resumable';
+import { TargetBar } from './TargetBar';
+import { roleplayUnitKind, unitBlockOf } from './unit';
+import { useUnitCtx } from './useUnit';
 import { sceneGoals } from '../../domain/speak/bizScenes';
 import { ChatLog } from './ChatLog';
 import { Composer } from './Composer';
@@ -90,6 +94,16 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const pending = Object.values(c.analyses).filter((a) => a.state === 'pending').length;
   const restore = useMemo(() => ({ text: c.draft, chip: c.draftChip, n: c.restoreN }), [c.draft, c.draftChip, c.restoreN]);
   const goalList = useMemo(() => sceneGoals(scene), [scene]);
+  const unit = useNav((s) => (s.route.name === 'roleplay' ? unitBlockOf(s.route.unit) : null));
+  const unitCtx = useUnitCtx(roleplayUnitKind(rp.day), unit);
+  const myText = useMemo(() => c.turns.filter((x) => x.role === 'me').map((x) => x.text).join('\n'), [c.turns]);
+  // Fortsetzen (G3): Hülle um die vorhandene Kopie `lx:roleplay:<szene>`; der Bericht beendet es.
+  const hasMine = myText.length > 0;
+  const reported = state === 'report';
+  useEffect(() => {
+    if (reported) roleplayResume.clear();
+    else if (hasMine) roleplayResume.set({ sceneId: scene.id, ...(unit ? { unit } : {}) });
+  }, [hasMine, reported, scene.id, unit]);
 
   const takeInput = useCallback(
     (idx: number) =>
@@ -123,7 +137,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   );
 
   if (state === 'report' || state === 'finishing') {
-    return <ReportScreen scene={scene} rp={rp} />;
+    return <ReportScreen scene={scene} rp={rp} unit={unit} />;
   }
 
   const mine = c.turns.map((x, i) => (x.role === 'me' ? i : -1)).filter((i) => i >= 0);
@@ -155,6 +169,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
       <div className="lx-glass rounded-2xl px-4 py-3" data-testid="rp-goals-box">
         <GoalChecklist goals={goalList} marks={rp.goals} testId="rp-goals" />
       </div>
+      {unit && <TargetBar text={myText} ctx={unitCtx} />}
       <AnimatePresence initial={false}>
         {goalOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: DURATION.base }} className="overflow-hidden">

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useAiAvailable } from '../../ai/scope';
@@ -23,6 +23,11 @@ import { SummaryActions } from '../learn/ui';
 import { flush } from '../progress/persist';
 import { saveRepairs } from '../repair/store';
 import { recordTonesDone, saveToneItem } from './persist';
+import { unitResult } from '../../domain/speak/unitResult';
+import { tonesResume, type TonesSnap } from '../speak/resumable';
+import { TargetBar } from '../speak/TargetBar';
+import { finishUnit, unitBlockOf } from '../speak/unit';
+import { useUnitCtx } from '../speak/useUnit';
 
 // „Eine Botschaft, drei Tonlagen“ (Lernberatung 27.09., Vorschlag 8 / V7): ein Sachverhalt,
 // dreimal formuliert – Slack an einen Kollegen, Mail an den CFO des Kunden, Satz im Meeting →
@@ -45,10 +50,14 @@ export function TonesScreen() {
   const go = useNav((s) => s.go);
   const ai = useAiAvailable();
   const [day] = useState(() => useClock.getState().today);
+  const unit = useNav((s) => (s.route.name === 'tones' ? unitBlockOf(s.route.unit) : null));
+  const ctx = useUnitCtx('task.tones', unit);
+  // Fortsetzen (G3): derselbe Sachverhalt; die Entwürfe liegen schon in `lx:draft:tones:*`.
+  const [restored] = useState<TonesSnap | null>(() => tonesResume.take());
   const [shift, setShift] = useState(0);
-  const msg = useMemo(() => messageFor(TONE_MESSAGES, day, shift), [day, shift]);
+  const msg = useMemo(() => (shift === 0 && restored ? TONE_MESSAGES.find((m) => m.id === restored.msg) : undefined) ?? messageFor(TONE_MESSAGES, day, shift), [day, shift, restored]);
   const [phase, setPhase] = useState<Phase>('write');
-  const [t0] = useState(() => Date.now());
+  const [t0, setT0] = useState(() => Date.now());
   const key = (r: ToneRegister) => `tones:${day}:${msg?.id ?? ''}:${r}`;
   // Entwürfe des Sachverhalts laden (Bequemlichkeit, localStorage).
   const draftsOf = (id: string | undefined): Record<ToneRegister, string> => {
@@ -66,6 +75,12 @@ export function TonesScreen() {
   const infoId = useId();
   const [info, setInfo] = useState(false);
   const message = msg ? (lang === 'de' ? msg.de : msg.en) : '';
+
+  useEffect(() => {
+    if (!msg) return;
+    if (phase === 'write') tonesResume.set({ msg: msg.id, step: 0, ...(unit ? { unit } : {}) });
+    else tonesResume.clear();
+  }, [phase, msg, unit]);
 
   useCompanionSee({ area: 'write', label: t('tnTitle'), phase: phase === 'result' ? 'feedback' : 'idle', ...(message ? { detail: message } : {}) });
   useHotkeys({ escape: () => go({ name: 'today' }) }, () => false);
@@ -110,6 +125,27 @@ export function TonesScreen() {
     const next = shift + 1;
     setShift(next);
     setTexts(draftsOf(messageFor(TONE_MESSAGES, day, next)?.id));
+  };
+
+  /** „Nochmal, aber besser“ (N74): derselbe Sachverhalt, drei neue Fassungen aus dem Kopf. */
+  const again = () => {
+    finished.current = null;
+    setDoneItem(null);
+    setFb(null);
+    setRepairs({ state: 'idle', n: 0 });
+    setSaveFailed(false);
+    setTexts({ ...EMPTY });
+    setT0(Date.now());
+    setPhase('write');
+  };
+
+  /** Tageseinheit: Block 3 melden (Mail an den CFO als Haupttext, Musterfassung, Korrekturen). */
+  const reportUnit = () => {
+    const it = finished.current;
+    if (!unit || !it) return;
+    const model = it.fb?.versions.find((v) => v.reg === 'cfo')?.model ?? null;
+    const text = TONE_REGISTERS.map((r) => it.texts[r]).filter(Boolean).join('\n\n');
+    finishUnit('task.tones', unit, unitResult('task.tones', `tones/${it.day.slice(0, 7)}#${it.id}`, text, it.fb?.corrections ?? [], model));
   };
 
   const retrySave = async () => {
@@ -181,6 +217,7 @@ export function TonesScreen() {
 
         {phase === 'write' && (
           <>
+            <TargetBar text={TONE_REGISTERS.map((r) => texts[r]).join('\n')} ctx={ctx} />
             {TONE_REGISTERS.map((r) => (
               <div key={r} className="flex flex-col gap-1" data-testid="tones-field" data-reg={r}>
                 <DraftArea
@@ -243,7 +280,23 @@ export function TonesScreen() {
             </Button>
           </div>
         )}
-        {phase === 'result' && <SummaryActions onBack={() => undefined} />}
+        {phase === 'result' &&
+          (unit ? (
+            <div>
+              <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={reportUnit} data-testid="tones-unit-next">
+                {t('nbSprechenUnitDone')}
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div>
+                <Button icon="refresh" onClick={again} data-testid="tones-again">
+                  {t('nbSprechenAgain')}
+                </Button>
+              </div>
+              <SummaryActions onBack={() => undefined} />
+            </>
+          ))}
       </div>
     </motion.section>
   );

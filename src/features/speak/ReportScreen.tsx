@@ -20,6 +20,9 @@ import { RepairStep } from '../repair/RepairStep';
 import { sceneCriteria, sceneGoals } from '../../domain/speak/bizScenes';
 import { metCount } from '../../domain/speak/goals';
 import { CriteriaGrid, GoalChecklist } from './GoalChecklist';
+import type { UnitBlockNo } from '../../app/unit/types';
+import { unitResult, type Correction } from '../../domain/speak/unitResult';
+import { finishUnit, roleplayUnitKind } from './unit';
 
 // Abschlussbericht (Plan §5.4): fester Teil sofort und ohne KI (Tatsachen, kein Punktestand),
 // dazu der KI-Bericht in Worten. Gespeichert wird beim Anzeigen des festen Teils; der KI-Bericht
@@ -28,7 +31,21 @@ import { CriteriaGrid, GoalChecklist } from './GoalChecklist';
 
 const GOAL_KEY = { reached: 'repGoalReached', partly: 'repGoalPartly', missed: 'repGoalMissed' } as const;
 
-export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi }) {
+/** Tageseinheit: Block 3 (Rollenspiel oder Generalprobe) mit eigenen Sätzen und Korrekturen melden. */
+function reportUnit(scene: SceneView, rp: RoleplayApi, block: UnitBlockNo): void {
+  const c = rp.snap.context;
+  const kind = roleplayUnitKind(rp.day);
+  const text = c.turns.filter((x) => x.role === 'me').map((x) => x.text).join('\n');
+  const fixes: Correction[] = [];
+  c.turns.forEach((_, i) => {
+    const a = c.analyses[i];
+    if (a?.state === 'done' && a.data) for (const e of a.data.errors) fixes.push({ wrong: e.wrong, right: e.right, why: e.why });
+  });
+  const better = c.report.data?.focus.map((f) => f.better).join(' ') ?? null;
+  finishUnit(kind, block, unitResult(kind, `talk/${rp.day.slice(0, 7)}#${scene.id}`, text, fixes, better));
+}
+
+export function ReportScreen({ scene, rp, unit = null }: { scene: SceneView; rp: RoleplayApi; unit?: UnitBlockNo | null }) {
   const { t, lang } = useT();
   const go = useNav((s) => s.go);
   const back = useNav((s) => s.back);
@@ -248,8 +265,16 @@ export function ReportScreen({ scene, rp }: { scene: SceneView; rp: RoleplayApi 
 
       {!saving && repairs.length > 0 && <RepairStep candidates={repairs} area="speak" source={`scene/${scene.id}`} onActive={setRepairOn} />}
 
+      {unit && (
+        // Tageseinheit: „Weiter“ wartet nie auf den KI-Bericht (G6), nur auf das Speichern.
+        <div>
+          <Button variant="primary" size="lg" iconAfter="arrowRight" disabled={saving} onClick={() => reportUnit(scene, rp, unit)} data-testid="report-unit-next">
+            {t('nbSprechenUnitDone')}
+          </Button>
+        </div>
+      )}
       <div className="flex flex-wrap gap-3">
-        <Button variant="primary" icon="refresh" disabled={saving} onClick={() => go({ name: 'roleplay', sceneId: scene.id, n: n + 1 })} data-testid="report-again">
+        <Button variant={unit ? 'secondary' : 'primary'} icon="refresh" disabled={saving} onClick={() => go({ name: 'roleplay', sceneId: scene.id, n: n + 1 })} data-testid="report-again">
           {t('repAgain')}
         </Button>
         <Button icon="chat" disabled={saving} onClick={() => go({ name: 'speak' })} data-testid="report-other">

@@ -1,5 +1,6 @@
 import { useMachine } from '@xstate/react';
-import { useMemo, useRef, useState } from 'react';
+import { mailResume } from '../speak/resumable';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { TitleActions } from '../system/Chrome';
 import { useNav } from '../../app/nav';
@@ -39,7 +40,8 @@ export function MailRefiner() {
   const scope = useAiScope();
   const [snap, send] = useMachine(mailMachine);
   useCompanionSee({ area: 'business', label: `${t('bizTitle')} · ${t('bizMail')}`, phase: 'idle' });
-  const [text, setText] = useState(() => local.get(DRAFT_KEY) ?? '');
+  // Fortsetzen (G3): Entwurf aus der Momentaufnahme, sonst aus `lx:draft:mail`.
+  const [text, setText] = useState(() => mailResume.take()?.text ?? local.get(DRAFT_KEY) ?? '');
   const [recipient, setRecipient] = useState<Recipient>('client');
   const [intent, setIntent] = useState<Intent>('inform');
   const [copied, setCopied] = useState<'none' | 'ok' | 'manual'>('none');
@@ -51,6 +53,10 @@ export function MailRefiner() {
   const finalRef = useRef<HTMLDivElement>(null);
   const c = snap.context;
   const state = snap.value;
+  useEffect(() => {
+    if (state === 'done') mailResume.clear();
+    else if (text.trim()) mailResume.set({ step: state === 'choosing' ? 'pick' : 'write', text: text.slice(0, 4000) });
+  }, [state, text]);
 
   const recipients: ReadonlyArray<{ value: Recipient; label: string }> = [
     { value: 'client', label: t('mailRcpClient') },

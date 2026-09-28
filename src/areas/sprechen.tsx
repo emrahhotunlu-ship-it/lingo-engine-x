@@ -10,6 +10,7 @@ import { RoleplayScreen } from '../features/speak/RoleplayScreen';
 import { SpeakHub } from '../features/speak/SpeakHub';
 import { TonesScreen } from '../features/tones/TonesScreen';
 import { P5_UNIT_BLOCKS } from '../features/speak/unit';
+import { P5_RESUMABLES } from '../features/speak/resumable';
 
 // Bereich „Sprechen & Schreiben“ – Besitz: Paket P5 (docs/neubau/architektur.md §5.2).
 // WP0a: heutige Bildschirme unter den heutigen Routennamen.
@@ -57,4 +58,5 @@ export const sprechen = defineArea({
     tones: { kind: 'exercise', component: TonesScreen, params: unitParam },
   },
   unitBlocks: P5_UNIT_BLOCKS,
+  resumables: P5_RESUMABLES,
 });
