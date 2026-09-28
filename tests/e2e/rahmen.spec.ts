@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, crashOnce, layoutProblems, openOverview, openProfile, openTab, screen, type Lang, type Theme } from './fixtures';
+import { openProfileRow } from './profilHelpers';
 
 // Neubau WP0b – Rahmen (docs/neubau/plan.md §4.1, architektur.md §5.5): Einstieg, Rückweg zur
 // Herkunft, Neuladen/Fortsetzen, Fehlergrenzen per `lx:crash-once`, 390 px, beide Sprachen, drei
@@ -7,10 +8,9 @@ import { boot, crashOnce, layoutProblems, openOverview, openProfile, openTab, sc
 
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
+/** Vokabeltest: Einstieg über die Profil-Zeile (Neubau, früher „Dein Stand“ → Verlauf). */
 async function openVtest(page: Page): Promise<void> {
-  await openOverview(page);
-  await page.getByTestId('tab-history').click();
-  await page.getByTestId('vtest-start').click();
+  await openProfileRow(page, 'profile-vtest');
   await screen(page, 'vtest');
 }
 
@@ -48,15 +48,13 @@ test('Rückweg zur Herkunft: Seite „‹ Heute“, Übung ✕ zurück zur Herku
   await openOverview(page);
   await expect(page.getByTestId('page-back')).toContainText('Heute');
   await expect(page.getByTestId('tabbar')).toBeVisible();
-  // Übung über der Seite: keine Reiterleiste, ✕ führt zurück zur Seite.
-  await page.getByTestId('tab-history').click();
-  await page.getByTestId('vtest-start').click();
-  await screen(page, 'vtest');
+  await page.getByTestId('page-back').click();
+  await screen(page, 'today');
+  // Übung (aus dem Profil-Blatt): keine Reiterleiste, ✕ führt zurück zur Herkunft.
+  await openVtest(page);
   await expect(page.getByTestId('tabbar')).toHaveCount(0);
   await expect(page.getByTestId('open-settings')).toHaveCount(0);
   await page.getByTestId('vt-close').click();
-  await screen(page, 'overview');
-  await page.getByTestId('page-back').click();
   await screen(page, 'today');
   // Bildlauf der Reiter-Wurzel bleibt über eine Seite hinweg erhalten.
   await openTab(page, 'learn');
@@ -101,19 +99,15 @@ test('Fehlergrenze Seite (lx:crash-once): „Seite neu aufbauen“, Reiter bleib
 test('Fehlergrenze Übung (lx:crash-once): Hinweis statt weißer Seite, „Übung beenden“ führt zur Herkunft, App läuft weiter', async ({ page }) => {
   await boot(page, { migrated: true, localStorage: crashOnce('vtest') });
   await screen(page, 'today');
-  await openOverview(page);
-  await page.getByTestId('tab-history').click();
-  await page.getByTestId('vtest-start').click();
+  await openProfileRow(page, 'profile-vtest');
   await expect(page.getByTestId('boundary-exercise')).toBeVisible();
   await page.getByTestId('boundary-end').click();
-  await screen(page, 'overview');
+  await screen(page, 'today');
   await openVtestAgain(page);
 });
 
 async function openVtestAgain(page: Page): Promise<void> {
-  await page.getByTestId('tab-history').click();
-  await page.getByTestId('vtest-start').click();
-  await screen(page, 'vtest');
+  await openVtest(page);
   await expect(page.getByTestId('boundary-exercise')).toHaveCount(0);
 }
 

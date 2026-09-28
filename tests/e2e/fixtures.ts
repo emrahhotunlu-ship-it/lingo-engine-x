@@ -129,6 +129,15 @@ export async function openEntry(page: Page, testId: string): Promise<void> {
       return;
     }
   }
+  // Einstiege am Platz `write`/`preply` liegen im Reiter Sprechen hinter einem Segment.
+  for (const seg of ['write', 'preply'] as const) {
+    await openSpeak(page, seg);
+    const el = page.getByTestId(testId).first();
+    if (await el.isVisible()) {
+      await el.click();
+      return;
+    }
+  }
   // Nichts gefunden: Einstiege, die auf Daten warten (z. B. Kurzübungen), erscheinen auf „Üben“.
   await openTab(page, 'learn');
   await page.getByTestId(testId).first().click();

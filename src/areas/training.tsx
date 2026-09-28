@@ -3,7 +3,6 @@ import type { FocusApi } from '../app/registry';
 import { defineArea } from '../app/registry';
 import { useNav } from '../app/nav';
 import { useSettings } from '../app/settings';
-import { EntryList } from '../app/shell/Hub';
 import { InboxScreen } from '../features/inbox/InboxScreen';
 import { ensureInbox, inboxResume, startInbox } from '../features/inbox/session';
 import { NbDrillScreen } from '../features/nbdrill/NbDrillScreen';
@@ -47,19 +46,6 @@ function PronRoute(props: ScreenProps<'pron'>) {
   return props.route.kind === 'shadow' ? <PronScreen {...props} /> : <PronDrillScreen {...props} />;
 }
 
-function LearnSection() {
-  return <EntryList place="learn" group="nb-learn" title="nbTrainingSecLearn" />;
-}
-function SpeakSection() {
-  return <EntryList place="speak" group="nb-speak" title="nbTrainingSecSpeak" />;
-}
-function PronSection() {
-  return <EntryList place="speak" group="nb-pron" title="nbTrainingSecPron" />;
-}
-function WriteSection() {
-  return <EntryList place="write" group="nb-write" title="nbTrainingSecWrite" />;
-}
-
 const RESUMABLES = [drillResume, pressureResume, inboxResume, pronResume, pronDrillResume] as const;
 
 export const training = defineArea({
@@ -75,12 +61,8 @@ export const training = defineArea({
     inbox: { kind: 'exercise', component: InboxScreen, ensure: (r) => ensureInbox(r, lang()), params: z.object({ id: z.string().optional() }) },
     pron: { kind: 'exercise', component: PronRoute, ensure: (r) => (r.kind === 'shadow' ? ensurePron(r) : ensurePronDrill(r, lang())), params: z.object({ kind: z.enum(['shadow', 'stress', 'numbers']), src: z.string().optional() }) },
   },
-  sections: [
-    { id: 'nb-training-learn', place: 'learn', order: 60, component: LearnSection },
-    { id: 'nb-training-speak', place: 'speak', order: 60, component: SpeakSection },
-    { id: 'nb-training-pron', place: 'speak', order: 61, component: PronSection },
-    { id: 'nb-training-write', place: 'write', order: 60, component: WriteSection },
-  ],
+  // Keine eigenen Abschnitte: Die Reiter-Wurzeln (Üben, Sprechen/Schreiben) zeigen die Einstiege
+  // aller Bereiche selbst – ein zusätzlicher Abschnitt hätte jeden Einstieg doppelt gezeigt (Kap. 15).
   entries: [
     { id: 'training-colloc', place: 'learn', group: 'nb-learn', order: 50, label: 'nbTrainingColloc', sub: 'nbTrainingCollocSub', icon: 'grid', start: drillStart('colloc') },
     { id: 'training-transform', place: 'learn', group: 'nb-learn', order: 51, label: 'nbTrainingTransform', sub: 'nbTrainingTransformSub', icon: 'refresh', start: drillStart('transform') },

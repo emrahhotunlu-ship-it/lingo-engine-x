@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
-import { boot, bootAt, crashOnce, layoutProblems, openEntry, openTab, screen } from './fixtures';
+import { boot, bootAt, crashOnce, layoutProblems, openEntry, openSpeak, openTab, screen } from './fixtures';
 import { nbLog, outItems, typeGap } from './trainingHelpers';
 
 // Paket P7b (docs/neubau/plan.md §4.8, N101–N106): Kollokationen, Satz-Umformung, Einwand-Training,
@@ -18,6 +18,7 @@ test('Einstiege: jede Übung 1 Tipp ab ihrem Reiter', async ({ page }) => {
   await openTab(page, 'speak');
   await expect(page.getByTestId('training-objection')).toBeVisible();
   await expect(page.getByTestId('training-shadow')).toBeVisible();
+  await openSpeak(page, 'write');
   await expect(page.getByTestId('training-inbox')).toBeVisible();
   expect(await layoutProblems(page)).toEqual([]);
 });

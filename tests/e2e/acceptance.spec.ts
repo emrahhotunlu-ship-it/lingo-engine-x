@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { TABS } from '../../src/app/shell/tabs';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen, openTab } from './fixtures';
+import { openProfileRow } from './profilHelpers';
 
 // Abschlussprüfung (P7-4, docs/abnahme.md): Kap. 14 und 15 als durchlaufende Prüfungen gegen den
 // Produktions-Build. Weitere Kriterien belegen die dort genannten Specs und Unit-Tests.
@@ -44,11 +45,12 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
     await page.waitForTimeout(300);
     expect(await duplicates(page), id).toEqual([]);
   }
-  await page.getByTestId('vtest-start').click();
+  // Vokabeltest über die Profil-Zeile (Neubau).
+  await openProfileRow(page, 'profile-vtest');
   await screen(page, 'vtest');
-  // In Übungen gibt es keine Reiter und kein Zahnrad (UX-Beratung Nr. 4): ✕ führt zurück zu „Stand“.
+  // In Übungen gibt es keine Reiter und kein Zahnrad (UX-Beratung Nr. 4): ✕ führt zurück zur Herkunft.
   await page.getByTestId('vt-close').click();
-  await screen(page, 'overview');
+  await screen(page, 'today');
   await openSettings(page);
   await expect(page.getByRole('dialog')).toBeVisible();
   expect(errors).toEqual([]);
