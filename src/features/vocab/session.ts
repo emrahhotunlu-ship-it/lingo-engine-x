@@ -8,7 +8,15 @@ import { applyUpdate, cardPatch } from '../../domain/srs/applyReview';
 import { buildTrainCards, toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
 import { buildExercise, type SceneLookup } from '../../domain/srs/exercise';
-import { chooseExercise, type ExerciseEnv } from '../../domain/srs/modes';
+import { chooseExercise, supports, type ExerciseEnv } from '../../domain/srs/modes';
+import { againPos, calibration, controlAllowed, controlCounts, dirFor, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
+import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
+import { isThemeCard } from '../../domain/week/cards';
+import type { WeekTheme } from '../../domain/week/types';
+import { unitDone } from '../../app/unit/done';
+import { clearResume } from '../../app/resume';
+import { useDecks } from './decksStore';
+import { cardGo } from './cardMark';
 import { entryCardKey } from '../../domain/progress/logPatch';
 import { sceneView } from '../../domain/speak/library';
 import { selectAiAvailable } from '../../ai/scope';
@@ -18,9 +26,9 @@ import { useWatched } from '../../data/watch';
 import { legacySceneDoc } from '../speak/useSceneLibrary';
 import { buildQueue, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState } from '../../domain/srs/scheduler';
-import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
+import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, Stage, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
-import { inDeck, type Deck } from '../../domain/srs/vocabList';
+import type { Deck } from '../../domain/srs/vocabList';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './persist';
 import { pickDailyRepairs, repairsDoneToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
@@ -60,6 +68,22 @@ type SessionState = {
   /** Lernberatung V2: fällige Reparatur-Sätze vor den Karten (höchstens 4 je Tag). */
   repairs: RepairItem[];
   repairPos: number;
+  /** Anki (anki-regeln.md): gewünschter Modus, Richtung der Aufdeck-Karten, Stapel. */
+  mode: RequestedMode;
+  dir: FlipDir;
+  deck: string;
+  /** Anzeige-Name der Runde (Stapel) für „Weiter, wo du warst“. */
+  label: string | null;
+  /** Kontrollen dieser Sitzung und (beim Start gezählt) dieser Woche/dieses Tages (§4). */
+  controls: number;
+  ctlWeek: number;
+  ctlDay: number;
+  /** Schwache Kalibrierung: strenge Leicht-Grenze (§4). */
+  strict: boolean;
+  /** Block 1 der Tageseinheit (Abschluss → `unitDone(1)`). */
+  unit: boolean;
+  /** Ausgewählte Karten (nur `only`): fürs Fortsetzen. */
+  only: string[] | null;
 };
 
 const EXTRA_TARGET = 10;
@@ -91,6 +115,16 @@ export const useSession = create<SessionState>(() => ({
   lastInteract: 0,
   repairs: [],
   repairPos: 0,
+  mode: 'type',
+  dir: 'de-en',
+  deck: 'all',
+  label: null,
+  controls: 0,
+  ctlWeek: 0,
+  ctlDay: 0,
+  strict: false,
+  unit: false,
+  only: null,
 }));
 
 /** Heutige Einträge: Datenbank und noch nicht gespeicherter Puffer. */
@@ -119,12 +153,69 @@ function sceneLookup(lang: Lang): SceneLookup {
   };
 }
 
-function exerciseFor(s: Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env'>, item: QueueItem): Exercise | null {
+type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay'>;
+
+/** Modus je Karte nach anki-regeln §1 (`pickMode`, die Regel steht nur in domain/srs/flip.ts). */
+export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode {
+  return pickMode({
+    card,
+    requested: s.mode,
+    day: s.day,
+    lang: s.lang,
+    due: item.reason === 'due',
+    controlAllowed: controlAllowed({ week: s.ctlWeek, day: s.ctlDay, session: s.controls }),
+  });
+}
+
+function build(s: ExCtx, card: TrainCard, ex: ExerciseId): Exercise {
+  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang) });
+}
+
+function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   const card = s.cards.get(item.key);
   if (!card || item.phase !== 'quiz') return null;
+  const hit = takePrebuilt(s, item);
+  if (hit) return hit;
+  const picked = modeFor(s, card, item);
+  if (picked === 'flip') return { ...build(s, card, 'flip'), dir: dirFor(card.key, s.dir, s.day) };
+  if (picked === 'control') {
+    // Kontrolle (§4): frei im Ursprungssatz (`cloze`), ohne Satz `type`; die App bewertet.
+    const n = s.pool.length - 1;
+    const ex: ExerciseId | null = supports(card, 'cloze', s.lang, n, s.env) ? 'cloze' : supports(card, 'type', s.lang, n, s.env) ? 'type' : null;
+    if (ex) return { ...build(s, card, ex), check: 'control' };
+  }
+  if (picked === 'probe') {
+    // Prüfabfrage (§1 Regel 6): tippen mit Stütze, Leiter auf Stufe 3 (cloze_hint/tiles).
+    const ex = chooseExercise({ ...card, stage: 3 as Stage }, s.lang, s.pool.length - 1, s.recentEx, s.env);
+    if (ex) return { ...build(s, card, ex), check: 'probe' };
+  }
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;
-  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[item.key] ?? 0}`, { sceneOf: sceneLookup(s.lang) });
+  return build(s, card, ex);
+}
+
+// n+1 vorberechnen (leistung.md §4 Nr. 4): nach dem Prüfen im Leerlauf, beim „Weiter“ nur noch tauschen.
+let prebuilt: { sig: string; ex: Exercise } | null = null;
+const sigOf = (s: ExCtx, item: QueueItem, recent: readonly ExerciseId[]) => `${item.key}|${s.shown[item.key] ?? 0}|${recent.join(',')}|${s.controls}|${s.mode}|${s.dir}|${s.day}`;
+
+function takePrebuilt(s: ExCtx, item: QueueItem): Exercise | null {
+  const p = prebuilt;
+  prebuilt = null;
+  if (!p || p.sig !== sigOf(s, item, s.recentEx)) return null;
+  return p.ex.card === s.cards.get(item.key) ? p.ex : null;
+}
+
+/** Nächste Karte vorbereiten (aus der Übung nach dem Prüfen, im Leerlauf). Rein lesend. */
+export function prepareNext(): void {
+  const s = useSession.getState();
+  if (!s.active || s.status !== 'running' || !s.exercise) return;
+  const item = s.queue[s.pos + 1];
+  if (!item || item.phase !== 'quiz' || item.key === s.exercise.card.key) return;
+  const recent = [...s.recentEx, s.exercise.ex].slice(-2);
+  const ctx: ExCtx = { ...s, recentEx: recent };
+  prebuilt = null;
+  const ex = exerciseFor(ctx, item);
+  if (ex) prebuilt = { sig: sigOf(ctx, item, recent), ex };
 }
 
 /** Alle Karten der Runde: Vokabeln und Wendungen (`chunk/*`) mit derselben Planung. */
@@ -151,10 +242,43 @@ export type FirstKind = 'typed' | 'choice' | 'intro' | null;
 /** Tastatur nur für die Lücke (getippt); alles andere schließt sie (iPhone: im selben Handler). */
 export const firstKindOf = (e: Exercise | null): FirstKind => (!e ? null : e.input === 'typed' ? 'typed' : 'choice');
 
-/** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
-/** Freie Runde (M9): Stapel und Größe; `only` = genau diese Karten („Jetzt üben" am Wortblatt). */
-export type SessionOpts = { deck?: Deck; size?: number; only?: readonly string[] };
+/** Karte im Aufdecken-Modus? */
+export const isFlip = (e: Exercise | null): boolean => e?.ex === 'flip';
 
+/**
+ * Optionen der Runde. `deck`: `all`, ein eingebauter Stapel (`hard`, `job`, `phrases`, `inbox` …)
+ * oder die Kennung eines eigenen Stapels (`app/decks`). `only` = genau diese Karten („Jetzt üben“).
+ * `pick` = zeitweilige Auswahl (Blatt Extra-Runde, kein neues Dokument). `mode`/`dir` wie anki-regeln
+ * §1/§8; ohne Angabe gilt der gemerkte Modus des Stapels bzw. der Standard-Modus.
+ */
+export type SessionOpts = {
+  deck?: Deck | string;
+  size?: number;
+  only?: readonly string[];
+  mode?: RequestedMode;
+  dir?: FlipDir;
+  pick?: (c: TrainCard) => boolean;
+  /** Neue Karten (aus dem Rest-Kontingent) zulassen – Standard: ja, außer bei `pick`. */
+  allowNew?: boolean;
+  label?: string;
+  /** Block 1 der Tageseinheit. */
+  unit?: boolean;
+  /** Wochenthema (Block 1: Themenkarten zuerst; Korb-Stufe 4). */
+  theme?: WeekTheme | null;
+};
+
+/** Modus und Richtung ohne ausdrückliche Angabe: Stapel-Merker, sonst Standard (Einstellungen „Wortschatz“). */
+export function defaultsFor(round: Round, deck: string): { mode: RequestedMode; dir: FlipDir } {
+  const d = useDecks.getState().decks;
+  const std = d.prefs.mode;
+  // Tageseinheit und „Alle fälligen“: immer Deutsch → Englisch (§8), Modus `auto` bzw. der Standard.
+  if (round === 'pflicht' || deck === 'all') return { mode: std ?? 'auto', dir: 'de-en' };
+  const own = isBuiltinDeck(deck) ? d.builtin[deck] : d.decks[deck];
+  // Stapel: gemerkter Modus, sonst Aufdecken (Emrahs Wunsch); ist der Standard „Tippen“, gilt er auch hier.
+  return { mode: own?.mode ?? (std === 'type' ? 'type' : 'flip'), dir: own?.dir ?? d.prefs.dir ?? 'de-en' };
+}
+
+/** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
 export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const live = useLive.getState();
   const now = useClock.getState().now;
@@ -182,15 +306,28 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const plannedNew = plan?.goal.new;
   const newQuotaLeft = round === 'pflicht' && plannedNew !== undefined ? Math.min(quota, Math.max(0, plannedNew - Math.max(0, introducedToday - introducedLessonToday))) : quota;
   const deck = opts.deck ?? 'all';
+  const defaults = defaultsFor(round, deck);
+  const mode = opts.mode ?? defaults.mode;
+  // §8: Tageseinheit und „Alle fälligen“ immer Deutsch → Englisch.
+  const dir: FlipDir = round === 'pflicht' || deck === 'all' ? 'de-en' : (opts.dir ?? defaults.dir);
+  const theme = opts.theme ?? null;
+  const isTheme = theme ? (c: TrainCard) => isThemeCard(c, theme) : undefined;
+  const ctx: DeckCtx = { nowMs: now, weekStartMs: weekStartMs(now), isTheme };
   // Lernberatung V2: fällige Reparatur-Sätze zählen zur Runde (Pflicht bzw. freie Runde „alle“).
-  const repairs = !opts.only && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), target) : [];
+  const repairs = !opts.only && !opts.pick && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), target) : [];
   const cardTarget = Math.max(0, target - repairs.length);
+  const deckPool = round === 'extra' && deck !== 'all' ? deckCards(cards, deck, useDecks.getState().decks, ctx) : cards;
+  const chosen = opts.pick ? deckPool.filter(opts.pick) : deckPool;
+  // anki-regeln §5: EIN Kontingent für alle Wege; Stapel bekommen neue Karten aus dem Rest, nur passende.
+  const allowNew = opts.allowNew ?? !opts.pick;
   const queue = opts.only
     ? opts.only
         .map((k) => byKey.get(k))
         .filter((c): c is TrainCard => !!c && !c.hidden)
         .map((c): QueueItem => ({ key: c.key, reason: c.isNew ? 'new' : 'due', phase: c.stage === 0 ? 'intro' : 'quiz' }))
-    : buildQueue({ cards: round === 'extra' && deck !== 'all' ? cards.filter((c) => inDeck(c, deck)) : cards, nowMs: now, target: cardTarget, newQuotaLeft: round === 'extra' && deck !== 'all' ? 0 : newQuotaLeft, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
+    : buildQueue({ cards: chosen, nowMs: now, target: cardTarget, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, isTheme });
+  const docs = pool.map((c) => c.doc);
+  const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
   const base: SessionState = {
     active: true,
     status: 'running',
@@ -214,7 +351,18 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     lastInteract: performance.now(),
     repairs,
     repairPos: 0,
+    mode,
+    dir,
+    deck,
+    label: opts.label ?? null,
+    controls: 0,
+    ctlWeek: ctl.week,
+    ctlDay: ctl.day,
+    strict: mode !== 'type' && calibration(docs, now).strict,
+    unit: opts.unit === true,
+    only: opts.only ? [...opts.only] : null,
   };
+  prebuilt = null;
   const next = { ...base, ...settle(base, 0) };
   if (next.pos >= next.queue.length && !repairs.length) next.status = 'summary';
   // H1: Pflichtrunde ohne abfragbare Karte (z. B. nach dem Neuladen) – „Wiederholen" ist erschöpft.
@@ -297,8 +445,12 @@ export function pauseActivity(hidden: boolean): void {
   }
 }
 
+export const TRAINER_RESUME_ID = 'trainer';
+
 function finish(s: SessionState, aborted: boolean): void {
   const n = s.results.length;
+  // Reguläres Ende löscht die Momentaufnahme; ✕ behält sie (architektur.md §3.2).
+  if (!aborted) clearResume(TRAINER_RESUME_ID);
   // Regel 1b: Die Pflichtrunde hatte nichts mehr abzufragen, obwohl das Ziel nicht erreicht ist.
   if (!aborted && s.round === 'pflicht' && s.doneBefore + new Set(s.answered).size < s.doneBefore + s.target) markExhausted(s.day);
   const rest = s.queue.length - s.pos;
@@ -310,6 +462,7 @@ function finish(s: SessionState, aborted: boolean): void {
     right: s.results.filter((r) => r.ok).length,
     activeMs: s.activeMs,
   });
+  if (!aborted && s.unit) unitDone(1);
 }
 
 /** Einführung einer neuen Karte gesehen: die erste Abfrage folgt zwei Karten später. */
@@ -335,18 +488,27 @@ function advanceFrom(s: SessionState): FirstKind {
   return item.phase === 'intro' ? 'intro' : firstKindOf(next.exercise);
 }
 
-export type Answer = { grade: Grade; given: string; ms: number; ok: boolean; override?: boolean };
+export type Answer = {
+  grade: Grade;
+  given: string;
+  ms: number;
+  ok: boolean;
+  override?: boolean;
+  /** Aufdecken: beim Aufdecken reservierter Zeitstempel (gleich für Vorschau und Speichern, architektur.md §4.3). */
+  t?: number;
+};
 
 /** Bewertete Antwort übernehmen: Karte sofort speichern, Protokoll und Zähler vormerken, weiter. */
 export function commitAnswer(ans: Answer): FirstKind {
   touch();
+  cardGo();
   const s = useSession.getState();
   const e = s.exercise;
   const item = s.queue[s.pos];
   if (!e || !item) return null;
   const card = e.card;
   const a: AnswerEvent = {
-    t: nextT(),
+    t: ans.t ?? nextT(),
     day: s.day,
     kind: card.kind === 'chunk' ? 'chunk' : 'v',
     id: card.id,
@@ -373,7 +535,9 @@ export function commitAnswer(ans: Answer): FirstKind {
   const shown = { ...s.shown, [card.key]: (s.shown[card.key] ?? 0) + 1 };
   const queue = [...s.queue];
   const again = isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
-  if (again) queue.splice(Math.min(queue.length, s.pos + 4), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
+  if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip'), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  const control = e.check === 'control' ? 1 : 0;
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
   return advanceFrom({
     ...s,
@@ -381,6 +545,9 @@ export function commitAnswer(ans: Answer): FirstKind {
     queue,
     shown,
     answered,
+    controls: s.controls + control,
+    ctlDay: s.ctlDay + control,
+    ctlWeek: s.ctlWeek + control,
     recentEx: [...s.recentEx, e.ex].slice(-2),
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });

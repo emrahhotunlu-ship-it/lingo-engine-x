@@ -169,7 +169,9 @@ export function buildQueue(i: {
   const act = active(i.cards, i.lang).filter((c) => !i.exclude.has(c.key));
   const fresh = newCards(act, i.isTheme);
   const nNew = Math.min(Math.max(0, i.newQuotaLeft), fresh.length, i.target);
-  const due = dueCards(act, i.nowMs);
+  // Block 1 (Prüfung Tageseinheit M1): fällige Karten zum Wochenthema zuerst, sonst nach Dringlichkeit.
+  const urgent = dueCards(act, i.nowMs);
+  const due = i.isTheme ? [...urgent.filter(i.isTheme), ...urgent.filter((c) => !i.isTheme?.(c))] : urgent;
   const reviews = due.slice(0, i.target - nNew).map((c): QueueItem => ({ key: c.key, reason: 'due', phase: 'quiz' }));
   if (reviews.length + nNew < i.target) {
     for (const c of aheadCards(act, i.nowMs).slice(0, i.target - nNew - reviews.length)) reviews.push({ key: c.key, reason: 'ahead', phase: 'quiz' });
