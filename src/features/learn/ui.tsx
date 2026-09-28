@@ -58,8 +58,24 @@ export function LearnStatus({ p, n, recent, kind, kindId, extra }: { p: number |
  * rechts eigene Knöpfe und das Claude-Symbol (UX-Beratung Nr. 3/7). Reiter-Startseiten nutzen
  * `TabTitle` ohne Zurück-Pfeil.
  */
-export function ScreenHeader({ eyebrow, title, lead, back, right }: { eyebrow?: string; title: string; lead?: ReactNode; back?: () => void; right?: ReactNode }) {
+export function ScreenHeader({
+  eyebrow,
+  title,
+  lead,
+  back,
+  right,
+  titleAction,
+}: {
+  eyebrow?: string;
+  title: string;
+  lead?: ReactNode;
+  back?: () => void;
+  right?: ReactNode;
+  /** Knopf der Seite in der Titelzeile (rechts neben dem Titel) – wenn oben neben „‹ Herkunft“ und den drei Symbolen kein Platz ist (390 px). */
+  titleAction?: ReactNode;
+}) {
   // Neubau (WP0b, Prototyp v1): links „‹ Herkunft“, rechts Übersetzen, Claude, Zahnrad; darunter der Titel.
+  const h1 = <h1 className="min-w-0 text-[1.75rem] leading-tight font-bold tracking-[-0.02em] sm:text-3xl">{title}</h1>;
   return (
     <header className="flex flex-col gap-2">
       <div className="flex min-h-11 items-center justify-between gap-3">
@@ -67,7 +83,14 @@ export function ScreenHeader({ eyebrow, title, lead, back, right }: { eyebrow?: 
         <TitleActions>{right}</TitleActions>
       </div>
       {eyebrow && <p className="lx-eyebrow m-0 text-subtle">{eyebrow}</p>}
-      <h1 className="text-[1.75rem] leading-tight font-bold tracking-[-0.02em] sm:text-3xl">{title}</h1>
+      {titleAction ? (
+        <div className="flex items-center justify-between gap-3">
+          {h1}
+          <div className="flex-none">{titleAction}</div>
+        </div>
+      ) : (
+        h1
+      )}
       {lead && <div className="max-w-2xl text-base text-muted">{lead}</div>}
     </header>
   );

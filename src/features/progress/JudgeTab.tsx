@@ -56,6 +56,12 @@ export function JudgeTab() {
   const running = run.phase === 'locking' || run.phase === 'gathering' || run.phase === 'asking' || run.phase === 'saving';
   const same = a?.lang === lang;
   const d = a?.data;
+  // Kap. 15 „dasselbe mehrfach“: Ist der Fokus einer der Blocker (meist der erste), steht er EINMAL –
+  // als hervorgehobener Blocker mit Fokus-Zeile und Begründung, ohne eigene Fokus-Karte.
+  const focusAt = useMemo(() => {
+    const f = d?.focus?.title.trim().toLowerCase();
+    return f ? (d?.blockers.findIndex((b) => b.title.trim().toLowerCase() === f) ?? -1) : -1;
+  }, [d]);
 
   const renew = ai && (
     <div className="flex flex-wrap items-center gap-3">
@@ -184,7 +190,7 @@ export function JudgeTab() {
         </ul>
       </Card>
 
-      {same && d.focus && (
+      {same && d.focus && focusAt < 0 && (
         <Card channel="grammar" aria-labelledby="judge-focus" data-testid="focus">
           <p id="judge-focus" className="lx-eyebrow">
             {t('focusTitle')} · {tn('focusDays', d.focus.days)}
@@ -225,8 +231,19 @@ export function JudgeTab() {
           </h2>
           <ul className="mt-3 flex flex-col gap-5">
             {d.blockers.map((b, i) => (
-              <li key={i} className="flex flex-col gap-2" data-testid="blocker">
+              <li key={i} className="flex flex-col gap-2" data-testid="blocker" data-focus={i === focusAt ? '' : undefined}>
+                {i === focusAt && d.focus && (
+                  <p className="lx-eyebrow" data-testid="focus">
+                    {t('focusTitle')} · {tn('focusDays', d.focus.days)}
+                  </p>
+                )}
                 <p className="text-base font-semibold">{b.title}</p>
+                {i === focusAt && d.focus && (
+                  <div>
+                    <p className="text-sm text-muted">{d.focus.why}</p>
+                    <p className="mt-1 text-xs text-subtle">{t('focusNext')}</p>
+                  </div>
+                )}
                 <div>
                   <p className="text-xs text-subtle" data-label="">
                     {t('blockerWhyC1')}
