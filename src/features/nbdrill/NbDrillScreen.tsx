@@ -1,18 +1,19 @@
 import { useRef, useState } from 'react';
 import type { ScreenProps } from '../../app/registry';
 import { useSettings } from '../../app/settings';
-import type { Colloc, Transform } from '../../content/nb/schemas';
+import { transforms } from '../../content/nb/load';
+import type { Colloc } from '../../content/nb/schemas';
+import { motorFilled, motorStart, type MotorItem, type MotorSet } from '../../domain/nbdrill/motor';
 import { calqueVerb, collocDone, collocNeed, collocVerdict, type CollocStep } from '../../domain/nbdrill/colloc';
-import { fillGap, transformStart } from '../../domain/nbdrill/transform';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, type GapState as KGapState } from '../../engine/KineticGap';
-import { useT } from '../../i18n';
+import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { FeedbackPanel } from '../../ui/FeedbackPanel';
 import type { Feedback, Fix } from '../../ui/feedback/types';
 import { SessionEnd } from '../../ui/SessionEnd';
-import { collocOf, collocSubmit, drillMs, drillRight, endDrill, ensureDrill, gapSubmit, giveUp, nextItem, skipItem, transformOf, useDrill, type DrillSession } from './session';
+import { collocOf, collocSubmit, drillMs, drillRight, endDrill, ensureDrill, gapSubmit, giveUp, nextItem, skipItem, motorOf, useDrill, type DrillSession } from './session';
 import { finishUnit, Note, StepBoundary, TaskHead, TrainingBar } from './shared';
 
 // Tipp-Drill-Motor (Plan N101/N102): Kollokationen tippen und Satz-Umformung mit Schlüsselwort.
@@ -36,13 +37,13 @@ export function NbDrillScreen({ route }: ScreenProps<'nbdrill'>) {
   }
   if (s.done) return <DrillEnd s={s} route={route} />;
   const c = collocOf(s);
-  const tr = transformOf(s);
+  const mo = motorOf(s);
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 pb-8" data-testid="nbdrill" data-set={s.set} data-pos={s.pos} data-state="open">
       <TrainingBar route={route} unit={s.unit} progress={{ n: s.pos + 1, total: s.ids.length }} />
       <StepBoundary resetKey={`${s.set}-${s.pos}`} scope="nbdrill" onSkip={skipItem}>
         {c && <CollocItem key={c.id} s={s} c={c} />}
-        {tr && <TransformItem key={tr.id} s={s} tr={tr} />}
+        {mo && <MotorItemView key={mo.id} s={s} m={mo} />}
       </StepBoundary>
     </div>
   );
@@ -195,73 +196,124 @@ function StepNote({ step, c }: { step: CollocStep; c: Colloc }) {
   }
 }
 
-// ------------------------------------------------------------------ Satz-Umformung
+// ------------------------------------------------------------------ Motor-Sätze (Umformung, Wortbildung, Register, Phrasal Verbs, Überleitungen)
 
-function TransformItem({ s, tr }: { s: DrillSession; tr: Transform }) {
+const MOTOR_TEXT: Record<MotorSet, { name: MessageKey; task: MessageKey; purpose: MessageKey }> = {
+  transform: { name: 'nbTrainingTransform', task: 'nbTrainingTransformTask', purpose: 'nbTrainingTransformPurpose' },
+  wordform: { name: 'nbTrainingWordform', task: 'nbTrainingWordformTask', purpose: 'nbTrainingWordformPurpose' },
+  register: { name: 'nbTrainingRegister', task: 'nbTrainingRegisterTask', purpose: 'nbTrainingRegisterPurpose' },
+  phrasal: { name: 'nbTrainingPhrasal', task: 'nbTrainingPhrasalTask', purpose: 'nbTrainingPhrasalPurpose' },
+  transition: { name: 'nbTrainingTransition', task: 'nbTrainingTransitionTask', purpose: 'nbTrainingTransitionPurpose' },
+};
+
+function MotorItemView({ s, m }: { s: DrillSession; m: MotorItem }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
   const g = s.gap;
   const typed = useRef('');
+  const [draft, setDraft] = useState('');
   const [shownAt] = useState(() => ({ current: performance.now() }));
   if (!g) return null;
+  const full = !m.gap;
+  const tr = m.set === 'transform' ? (transforms().find((x) => x.id === m.id) ?? null) : null;
   const check = () => {
     if (g.final) {
       nextItem();
       return;
     }
-    const given = typed.current.trim();
+    const given = (full ? draft : typed.current).trim();
     if (!given) return;
     const r = gapSubmit(given, performance.now() - shownAt.current);
     typed.current = '';
+    setDraft('');
     const after = useDrill.getState().s?.gap;
-    if (r && after && !after.final) api.focusNow();
-    else api.blur();
+    if (!full) {
+      if (r && after && !after.final) api.focusNow();
+      else api.blur();
+    }
   };
   const dontKnow = () => {
     giveUp(performance.now() - shownAt.current);
-    api.blur();
+    if (!full) api.blur();
   };
-  const solution = tr.answers[0] ?? '';
+  const solution = m.answers[0] ?? '';
   const hint = !g.final && g.check ? g.check.hint : null;
-  const hintText = hint === 'keyword' ? t('nbTrainingHintKeyword', { key: tr.key }) : hint === 'length' ? t('nbTrainingHintLength') : hint === 'start' ? t('nbTrainingHintStart', { start: transformStart(tr) }) : null;
+  const hintText =
+    hint === 'keyword' ? t('nbTrainingHintKeyword', { key: m.chip }) : hint === 'length' ? t('nbTrainingHintLength') : hint === 'start' ? t('nbTrainingHintStart', { start: motorStart(m, tr) }) : null;
   const last = g.given[g.given.length - 1] ?? '';
+  const right = g.check?.verdict === 'ok' ? g.check.match : solution;
   const fb: Feedback | null =
     g.final && g.check
       ? {
           verdict: g.check.verdict === 'ok' ? (g.tries === 1 ? 'ok' : 'close') : g.check.verdict === 'close' ? 'close' : 'wrong',
           ...(g.check.uk ? { effect: t('nbTrainingUkNote', { us: g.check.match }) } : {}),
-          ...(last ? { mine: fillGap(tr, last) } : {}),
-          solution: fillGap(tr, g.check.verdict === 'ok' ? g.check.match : solution),
-          fixes: [{ kind: 'form', mine: g.check.verdict === 'ok' ? '' : last, right: g.check.verdict === 'ok' ? g.check.match : solution, why: tr.why[lang] }],
-          why: { question: `${tr.a} → ${fillGap(tr, solution)} (${tr.key})` },
+          ...(last ? { mine: motorFilled(m, last) } : {}),
+          solution: motorFilled(m, right),
+          fixes: [{ kind: 'form', mine: g.check.verdict === 'ok' ? '' : last, right, why: m.why[lang] }],
+          ...(m.answers.length > 1 ? { upgrades: m.answers.filter((a) => a !== right).map((a) => ({ to: motorFilled(m, a) })) } : {}),
+          why: { question: `${m.source ?? m.gap ?? ''} → ${motorFilled(m, solution)} (${m.chip})` },
         }
       : null;
-  const gapIdx = tr.gap.indexOf('___');
+  const gapIdx = m.gap ? m.gap.indexOf('___') : -1;
   const gapNode = g.final ? (
     <span className="lx-gap font-medium" data-testid="gap" data-state="reveal" style={{ width: 'auto' }}>
-      {g.check?.verdict === 'ok' ? g.check.match : solution}
+      {right}
     </span>
   ) : (
     <KineticGap key={g.tries} label={t('nbTrainingTransformGap')} maxLength={60} state="input" onChange={(v) => (typed.current = v)} onEnter={check} />
   );
+  const txt = MOTOR_TEXT[m.set];
   return (
-    <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="transform-item" data-id={tr.id} data-tries={g.tries} data-state={g.final ? (fb?.verdict ?? 'done') : 'open'}>
-      <TaskHead status={t('nbTrainingTransform')} task={t('nbTrainingTransformTask')} purpose={t('nbTrainingTransformPurpose')} />
+    <article
+      className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7"
+      data-testid={`${m.set}-item`}
+      data-set={m.set}
+      data-id={m.id}
+      data-tries={g.tries}
+      data-state={g.final ? (fb?.verdict ?? 'done') : 'open'}
+    >
+      <TaskHead status={t(txt.name)} task={t(txt.task)} purpose={t(txt.purpose)} />
       <div className="flex flex-col gap-3">
-        <p className="text-lg leading-relaxed" lang="en" data-testid="transform-a">
-          <span className="mr-2 text-xs font-semibold text-subtle">A</span>
-          {tr.a}
-        </p>
-        <p className="flex items-center gap-2 text-sm">
-          <span className="text-muted">{t('nbTrainingTransformKey')}:</span>
-          <span className="lx-chip font-semibold tracking-wide" data-testid="transform-key" lang="en">
-            {tr.key}
+        {m.source && (
+          <p className="text-lg leading-relaxed" lang="en" data-testid="motor-source">
+            {m.gap && <span className="mr-2 text-xs font-semibold text-subtle">A</span>}
+            {m.source}
+          </p>
+        )}
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="lx-chip font-semibold tracking-wide" data-testid="motor-chip" lang="en">
+            {m.chip}
           </span>
-        </p>
-        <div className="flex items-baseline gap-2">
-          <span className="text-xs font-semibold text-subtle">B</span>
-          <EnglishText as="p" className="lx-sentence" testId="transform-b" text={tr.gap} area="lesson" source={`transform/${tr.id}`} slot={gapIdx >= 0 ? { start: gapIdx, end: gapIdx + 3, node: gapNode } : null} />
+          {m.note && <span className="text-muted">{m.note[lang]}</span>}
         </div>
+        {m.gap && (
+          <div className="flex items-baseline gap-2">
+            {m.source && <span className="text-xs font-semibold text-subtle">B</span>}
+            <EnglishText as="p" className="lx-sentence" testId="motor-gap" text={m.gap} area="lesson" source={`${m.set}/${m.id}`} slot={gapIdx >= 0 ? { start: gapIdx, end: gapIdx + 3, node: gapNode } : null} />
+          </div>
+        )}
+        {full && !g.final && (
+          <textarea
+            className="lx-field min-h-20 text-base"
+            lang="en"
+            rows={2}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                check();
+              }
+            }}
+            aria-label={t('nbTrainingMotorFull')}
+            placeholder={t('nbTrainingMotorFull')}
+            autoCapitalize="sentences"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            data-testid="motor-input"
+          />
+        )}
       </div>
       {!g.final && (
         <>

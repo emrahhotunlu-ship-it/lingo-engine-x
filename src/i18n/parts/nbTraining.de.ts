@@ -63,6 +63,26 @@ export const nbTrainingDe = {
   nbTrainingHintLength: 'Noch nicht. Das sind zu viele Wörter, höchstens 6.',
   nbTrainingHintStart: 'Noch nicht. Die Lösung beginnt mit „{start} …“.',
 
+  // Motor-Sätze (Soll N107)
+  nbTrainingWordform: 'Wortbildung',
+  nbTrainingWordformSub: 'Die richtige Form aus der Wortfamilie',
+  nbTrainingWordformTask: 'Setze das Wort in der passenden Form in die Lücke.',
+  nbTrainingWordformPurpose: 'Wortfamilien machen dich genauer (compliance, compliant) – ein Prüfungsformat für C1.',
+  nbTrainingRegister: 'Register-Leiter',
+  nbTrainingRegisterSub: 'Locker · neutral · formell',
+  nbTrainingRegisterTask: 'Schreib den Satz auf der Zielstufe neu.',
+  nbTrainingRegisterPurpose: 'Dieselbe Aussage passend zum Gegenüber: im Chat locker, in der Mail an den CFO formell.',
+  nbTrainingPhrasal: 'Phrasal Verbs',
+  nbTrainingPhrasalSub: 'Mail ↔ Call',
+  nbTrainingPhrasalTask: 'Schreib den Satz so, wie man ihn im Call sagt – oder umgekehrt für die Mail.',
+  nbTrainingPhrasalPurpose: 'Im Gespräch klingen Phrasal Verbs natürlich (push back), in der Mail das formelle Verb (postpone).',
+  nbTrainingTransition: 'Überleitungen',
+  nbTrainingTransitionSub: 'Wegweiser in der Rede',
+  nbTrainingTransitionTask: 'Setze eine passende Überleitung in die Lücke.',
+  nbTrainingTransitionPurpose: 'Überleitungen führen die Zuhörer durch deine Aussage – klar gegliedert wie auf C1.',
+  nbTrainingMotorFull: 'Dein Satz',
+  nbTrainingResumeMotor: 'Training · Aufgabe {n} von {total}',
+
   // Einwand-Training
   nbTrainingPressureTask: 'Antworte dem Kunden auf seinen Einwand.',
   nbTrainingPressurePurpose: 'Schnell und passend auf Gegenargumente reagieren – mit einem festen Muster, das auch unter Druck trägt.',

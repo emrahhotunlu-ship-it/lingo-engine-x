@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import type { Resumable } from '../../app/resume';
 import type { RouteOf } from '../../app/router/types';
-import { collocations, transforms } from '../../content/nb/load';
-import type { Colloc, Transform } from '../../content/nb/schemas';
+import { collocations, phrasalVerbs, registerLadder, transforms, transitionDrills, wordFormation } from '../../content/nb/load';
+import type { Colloc } from '../../content/nb/schemas';
+import { checkMotor, fromPhrasal, fromRegister, fromTransform, fromTransition, fromWordFormation, motorFilled, type MotorCheck, type MotorItem, type MotorSet } from '../../domain/nbdrill/motor';
 import { collocDone, collocGiveUp, collocTry, collocVerdict, newCollocState, type CollocState, type CollocStep } from '../../domain/nbdrill/colloc';
 import { outId, outRef } from '../../domain/nbdrill/outDoc';
 import { pickRotating } from '../../domain/nbdrill/pick';
-import { checkTransform, fillGap, type TransformCheck } from '../../domain/nbdrill/transform';
 import type { MessageKey } from '../../i18n';
 import { currentDay, logAnswers, nextRound, restoreSaved, saveOut, type NbLogType, type UnitRun } from './shared';
 
@@ -15,14 +15,14 @@ import { currentDay, logAnswers, nextRound, restoreSaved, saveOut, type NbLogTyp
 // Position und den Zustand der aktuellen Aufgabe (architektur.md §3.2). Jede beendete Aufgabe
 // geht sofort ins Tagesprotokoll, die ganze Runde als ein Eintrag in `out/<Monat>`.
 
-export type DrillSet = 'colloc' | 'transform';
-export const DRILL_SETS: readonly DrillSet[] = ['colloc', 'transform'];
+export type DrillSet = 'colloc' | MotorSet;
+export const DRILL_SETS: readonly DrillSet[] = ['colloc', 'transform', 'wordform', 'register', 'phrasal', 'transition'];
 export const DRILL_N = 5;
 
 export type ItemVerdict = 'ok' | 'close' | 'wrong';
 export type ItemResult = { id: string; verdict: ItemVerdict; given: string; ms: number };
 
-export type GapState = { tries: number; given: string[]; check: TransformCheck | null; final: boolean };
+export type GapState = { tries: number; given: string[]; check: MotorCheck | null; final: boolean };
 
 export type DrillSession = {
   v: 1;
@@ -44,8 +44,27 @@ export const useDrill = create<Store>(() => ({ s: null }));
 
 const newGap = (): GapState => ({ tries: 0, given: [], check: null, final: false });
 
-function itemsOf(set: DrillSet): ReadonlyArray<Colloc | Transform> {
-  return set === 'colloc' ? collocations() : transforms();
+const motorCache = new Map<MotorSet, readonly MotorItem[]>();
+export function motorItems(set: MotorSet): readonly MotorItem[] {
+  let list = motorCache.get(set);
+  if (!list) {
+    list =
+      set === 'transform'
+        ? transforms().map(fromTransform)
+        : set === 'wordform'
+          ? wordFormation().map(fromWordFormation)
+          : set === 'register'
+            ? registerLadder().map(fromRegister)
+            : set === 'phrasal'
+              ? phrasalVerbs().map(fromPhrasal)
+              : transitionDrills().flatMap(fromTransition);
+    motorCache.set(set, list);
+  }
+  return list;
+}
+
+function itemsOf(set: DrillSet): ReadonlyArray<{ id: string }> {
+  return set === 'colloc' ? collocations() : motorItems(set);
 }
 
 export function collocOf(s: DrillSession): Colloc | null {
@@ -54,13 +73,15 @@ export function collocOf(s: DrillSession): Colloc | null {
   return collocations().find((c) => c.id === id) ?? null;
 }
 
-export function transformOf(s: DrillSession): Transform | null {
-  if (s.set !== 'transform') return null;
+export function motorOf(s: DrillSession): MotorItem | null {
+  if (s.set === 'colloc') return null;
   const id = s.ids[s.pos];
-  return transforms().find((c) => c.id === id) ?? null;
+  return motorItems(s.set).find((c) => c.id === id) ?? null;
 }
 
-const LOG_TYPE: Record<DrillSet, NbLogType> = { colloc: 'nb-colloc', transform: 'nb-transform' };
+const transformFor = (m: MotorItem) => (m.set === 'transform' ? (transforms().find((x) => x.id === m.id) ?? null) : null);
+
+const logType = (set: DrillSet): NbLogType => `nb-${set}`;
 
 /** Neue Runde (SYNCHRON im Klick). `false` = keine Inhalte. */
 export function startDrill(set: DrillSet, opts: { unit?: UnitRun | null; lang: 'de' | 'en'; n?: number }): boolean {
@@ -74,7 +95,7 @@ export function startDrill(set: DrillSet, opts: { unit?: UnitRun | null; lang: '
     pos: 0,
     results: [],
     colloc: set === 'colloc' ? newCollocState() : null,
-    gap: set === 'transform' ? newGap() : null,
+    gap: set !== 'colloc' ? newGap() : null,
     day: opts.unit?.day ?? currentDay(),
     t0: Date.now(),
     lang: opts.lang,
@@ -90,7 +111,7 @@ const put = (s: DrillSession) => useDrill.setState({ s });
 function record(s: DrillSession, r: ItemResult, q: string, ans: string): DrillSession {
   logAnswers([
     {
-      type: LOG_TYPE[s.set],
+      type: logType(s.set),
       ref: outRef({ id: outId(s.set, s.t0), d: s.day }),
       q,
       given: r.given,
@@ -130,25 +151,25 @@ export function giveUp(ms: number): void {
     put(record({ ...s, colloc: st }, { id: c.id, verdict: collocVerdict(c, st), given: [...st.found, ...st.tried].join(', '), ms }, c.noun, c.verbs.map((v) => v.v).join(', ')));
     return;
   }
-  const t = transformOf(s);
-  if (t && s.gap && !s.gap.final) {
-    const check = checkTransform(t, '');
-    put(record({ ...s, gap: { ...s.gap, check, final: true } }, { id: t.id, verdict: 'wrong', given: '', ms }, `${t.a} (${t.key})`, fillGap(t, t.answers[0] ?? '')));
+  const m = motorOf(s);
+  if (m && s.gap && !s.gap.final) {
+    const check = checkMotor(m, '', transformFor(m));
+    put(record({ ...s, gap: { ...s.gap, check, final: true } }, { id: m.id, verdict: 'wrong', given: '', ms }, `${m.source ?? m.gap ?? ''} (${m.chip})`, motorFilled(m, m.answers[0] ?? '')));
   }
 }
 
 /** Umformung: ein Versuch. Erst Hinweis, dann zweiter Versuch, dann Lösung. */
-export function gapSubmit(given: string, ms: number): TransformCheck | null {
+export function gapSubmit(given: string, ms: number): MotorCheck | null {
   const s = useDrill.getState().s;
-  const t = s ? transformOf(s) : null;
+  const t = s ? motorOf(s) : null;
   if (!s || !t || !s.gap || s.gap.final || !given.trim()) return null;
-  const check = checkTransform(t, given);
+  const check = checkMotor(t, given, transformFor(t));
   const tries = s.gap.tries + 1;
   const final = check.verdict === 'ok' || tries >= 2;
   let next: DrillSession = { ...s, gap: { tries, given: [...s.gap.given, given.trim()], check, final } };
   if (final) {
     const verdict: ItemVerdict = check.verdict === 'ok' ? (tries === 1 ? 'ok' : 'close') : check.verdict === 'close' ? 'close' : 'wrong';
-    next = record(next, { id: t.id, verdict, given: given.trim(), ms }, `${t.a} (${t.key})`, fillGap(t, t.answers[0] ?? ''));
+    next = record(next, { id: t.id, verdict, given: given.trim(), ms }, `${t.source ?? t.gap ?? ''} (${t.chip})`, motorFilled(t, t.answers[0] ?? ''));
   }
   put(next);
   return check;
@@ -165,7 +186,7 @@ export function nextItem(): void {
     void saveRound(done);
     return;
   }
-  put({ ...s, pos, colloc: s.set === 'colloc' ? newCollocState() : null, gap: s.set === 'transform' ? newGap() : null });
+  put({ ...s, pos, colloc: s.set === 'colloc' ? newCollocState() : null, gap: s.set !== 'colloc' ? newGap() : null });
 }
 
 /** Fehlergrenze: Aufgabe ohne Bewertung überspringen. */
@@ -201,12 +222,12 @@ export function endDrill(): void {
 
 // ------------------------------------------------------------------ Fortsetzen
 
-const RESUME_KEY: Record<DrillSet, MessageKey> = { colloc: 'nbTrainingResumeColloc', transform: 'nbTrainingResumeTransform' };
+const RESUME_KEY: Record<DrillSet, MessageKey> = { colloc: 'nbTrainingResumeColloc', transform: 'nbTrainingResumeTransform', wordform: 'nbTrainingResumeMotor', register: 'nbTrainingResumeMotor', phrasal: 'nbTrainingResumeMotor', transition: 'nbTrainingResumeMotor' };
 
 function isSession(x: unknown): x is DrillSession {
   if (!x || typeof x !== 'object') return false;
   const s = x as Partial<DrillSession>;
-  return s.v === 1 && (s.set === 'colloc' || s.set === 'transform') && Array.isArray(s.ids) && typeof s.pos === 'number' && Array.isArray(s.results) && typeof s.day === 'string';
+  return s.v === 1 && typeof s.set === 'string' && (DRILL_SETS as readonly string[]).includes(s.set) && Array.isArray(s.ids) && typeof s.pos === 'number' && Array.isArray(s.results) && typeof s.day === 'string';
 }
 
 export const drillResume: Resumable<DrillSession> = {

@@ -78,7 +78,7 @@ export async function saveOut(item: OutItem): Promise<boolean> {
 }
 
 /** Arten im Tagesprotokoll (Präfix `nb-`, damit keine Auswertung sie mit Lesen/Hören verwechselt). */
-export type NbLogType = 'nb-colloc' | 'nb-transform' | 'nb-objection' | 'nb-inbox';
+export type NbLogType = `nb-${string}`;
 
 export type NbAnswer = {
   type: NbLogType;

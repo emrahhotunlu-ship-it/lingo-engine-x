@@ -69,7 +69,7 @@ test('Satz-Umformung: Hinweis, zweiter Versuch, Neuladen setzt an derselben Aufg
   await screen(page, 'nbdrill');
   const item = page.getByTestId('transform-item');
   await expect(item).toHaveAttribute('data-id', 'u01');
-  await expect(page.getByTestId('transform-key')).toHaveText('MAY');
+  await expect(page.getByTestId('motor-chip')).toHaveText('MAY');
   await typeGap(page, 'did not get');
   await expect(page.getByTestId('drill-step')).toHaveAttribute('data-kind', 'keyword');
   await typeGap(page, 'may not have received');

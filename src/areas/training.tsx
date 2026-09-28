@@ -23,7 +23,7 @@ import { pronResume, startShadow } from '../features/pron/session';
 
 declare module '../app/router/types' {
   interface RouteParams {
-    nbdrill: { set: 'colloc' | 'transform'; n?: number };
+    nbdrill: { set: DrillSet; n?: number };
     pressure: NoParams;
     inbox: { id?: string };
     pron: { kind: 'shadow' | 'stress' | 'numbers'; src?: string };
@@ -61,7 +61,7 @@ export const training = defineArea({
     nbdrill: {
       kind: 'exercise',
       component: NbDrillScreen,
-      params: z.object({ set: z.enum(['colloc', 'transform']), n: z.number().int().min(1).max(10).optional() }),
+      params: z.object({ set: z.enum(['colloc', 'transform', 'wordform', 'register', 'phrasal', 'transition']), n: z.number().int().min(1).max(10).optional() }),
     },
     pressure: { kind: 'exercise', component: PressureScreen },
     inbox: { kind: 'exercise', component: InboxScreen, params: z.object({ id: z.string().optional() }) },
@@ -76,6 +76,10 @@ export const training = defineArea({
   entries: [
     { id: 'training-colloc', place: 'learn', group: 'nb-learn', order: 50, label: 'nbTrainingColloc', sub: 'nbTrainingCollocSub', icon: 'grid', start: drillStart('colloc') },
     { id: 'training-transform', place: 'learn', group: 'nb-learn', order: 51, label: 'nbTrainingTransform', sub: 'nbTrainingTransformSub', icon: 'refresh', start: drillStart('transform') },
+    { id: 'training-wordform', place: 'learn', group: 'nb-learn', order: 52, label: 'nbTrainingWordform', sub: 'nbTrainingWordformSub', icon: 'layers', start: drillStart('wordform') },
+    { id: 'training-register', place: 'learn', group: 'nb-learn', order: 53, label: 'nbTrainingRegister', sub: 'nbTrainingRegisterSub', icon: 'sliders', start: drillStart('register') },
+    { id: 'training-phrasal', place: 'learn', group: 'nb-learn', order: 54, label: 'nbTrainingPhrasal', sub: 'nbTrainingPhrasalSub', icon: 'chat', start: drillStart('phrasal') },
+    { id: 'training-transition', place: 'learn', group: 'nb-learn', order: 55, label: 'nbTrainingTransition', sub: 'nbTrainingTransitionSub', icon: 'link', start: drillStart('transition') },
     {
       id: 'training-objection',
       place: 'speak',
