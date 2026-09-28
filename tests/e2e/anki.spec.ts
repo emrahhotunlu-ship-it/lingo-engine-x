@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openTab, screen } from './fixtures';
+import { boot, crashOnce, openTab, screen } from './fixtures';
 import { DAY, dump, planPatch } from './trainerHelpers';
 import { ankiPatch, lastCardMs, swipe } from './wortschatzHelpers';
 
@@ -194,4 +194,25 @@ test('Neuladen bei Karte 23: gleiche Stelle, kein doppelter Eintrag', async ({ p
   await expect(page.getByTestId('flip')).toHaveAttribute('data-card', at23);
   await expect(page.getByTestId('trainer-progress')).toContainText('23');
   expect(await logged()).toBe(22);
+});
+
+// G4: Eine Karte stürzt ab (`lx:crash-once=trainer`) → „Diese Aufgabe überspringen“, die Runde endet regulär.
+// WP0b: Die Probe der Übungsebene (Player.tsx, Geschwister nach den Kindern) wirft im selben
+// Render-Durchgang ebenfalls, weil `disarmCrashProbe` erst im Commit läuft – dann gewinnt die
+// Player-Grenze ohne „Überspringen“. Wunsch an den Integrator; bis dahin fixme.
+test.fixme('Kaputte Karte wird übersprungen, ohne Bewertung; die Runde endet regulär', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const { patch, ids } = ankiPatch(3);
+  await boot(page, { migrated: true, localStorage: crashOnce('trainer'), fake: { patch: { 'app/profile': planPatch(3), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
+  await startReview(page);
+  await page.getByTestId('boundary-skip').click();
+  for (let i = 0; i < 2; i++) {
+    const card = (await page.getByTestId('flip').getAttribute('data-card')) ?? '';
+    await page.keyboard.press(' ');
+    await page.keyboard.press('3');
+    await expect(page.locator(`[data-testid="flip"][data-card="${card}"]`)).toHaveCount(0);
+  }
+  await expect(page.getByTestId('summary')).toBeVisible();
+  const logged = (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => ids.includes(String(e.id)) && e.m === 'tr-flip');
+  expect(logged.length).toBe(2);
 });

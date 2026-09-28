@@ -13,6 +13,7 @@ import { flush } from './persist';
 import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, skipCurrent, touch, useSession } from './session';
 import { FlipCard } from './anki/FlipCard';
 import { StepBoundary } from '../../app/shell/Boundary';
+import { usePlayerSkip } from '../../app/shell/Player';
 import { cardShown } from './cardMark';
 import { useShallow } from 'zustand/react/shallow';
 import { RepairItem } from '../repair/RepairItem';
@@ -77,6 +78,8 @@ export function TrainerScreen() {
     if (skipCurrent() === 'typed') api.focusNow();
     else api.blur();
   };
+  // Fehlergrenze der Übungsebene (G4): „Diese Aufgabe überspringen“ geht ohne Bewertung weiter.
+  usePlayerSkip(status === 'running' ? skip : null);
   // Messmarke lx:card: neue Karte gezeichnet (nächster Frame nach dem Einhängen).
   useLayoutEffect(() => {
     cardShown();
