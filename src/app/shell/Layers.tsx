@@ -96,6 +96,19 @@ function useScrollMemo(key: string, name: RouteName): void {
     scrollTopNext = false;
     if (Math.abs(window.scrollY - y) > 1) window.scrollTo({ top: y });
     markNavPainted();
+    // Ist die Seite beim ersten Bild noch zu kurz (Inhalt kommt einen Takt später), wird der
+    // Bildlauf gekappt – dann in den nächsten Bildern noch zweimal nachziehen, solange niemand scrollt.
+    if (y <= 0 || Math.abs(window.scrollY - y) <= 1) return;
+    let tries = 0;
+    let id = 0;
+    const again = () => {
+      if (current.current !== key) return;
+      window.scrollTo({ top: y });
+      scrollMemo.set(key, y);
+      if (Math.abs(window.scrollY - y) > 1 && ++tries < 3) id = requestAnimationFrame(again);
+    };
+    id = requestAnimationFrame(again);
+    return () => cancelAnimationFrame(id);
   }, [key, name]);
 }
 
