@@ -23,7 +23,7 @@ import { nextT, recordAnswer } from '../../progress/persist';
 import { Dots } from '../../grammar/GrammarScreen';
 import { isLeech, MnemonicBlock } from '../mnemonic';
 import { startSession } from '../session';
-import { againTomorrow, markKnown, resetCard, setHidden } from './actions';
+import { againTomorrow, editCard, markKnown, resetCard, setHidden } from './actions';
 import { addIdsOp, failures, flaggedOp, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
 import { histOf } from '../../../domain/srs/flip';
 import { useDecks, writeDecks } from '../decksStore';
@@ -381,6 +381,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
         )}
       </section>
 
+      {card.kind === 'vocab' && card.inDb && !card.hidden && <EditCard card={card} />}
       <Disclosure label={t('grRaw')}>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm" data-testid="word-raw">
           <dt className="text-muted">{t('vcRawR')}</dt>
@@ -396,5 +397,46 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
         </dl>
       </Disclosure>
     </div>
+  );
+}
+
+/** Karte bearbeiten (N31): Bedeutung und Ursprungssatz; der Satz muss das Wort enthalten. */
+function EditCard({ card }: { card: TrainCard }) {
+  const { t, lang } = useT();
+  const [meaning, setMeaning] = useState(meaningOf(card, lang) ?? '');
+  const [sentence, setSentence] = useState(card.context?.sentence ?? '');
+  const [busy, setBusy] = useState(false);
+  const save = async () => {
+    setBusy(true);
+    const r = await editCard(card, lang, { meaning, sentence });
+    setBusy(false);
+    if (r === 'ok') toast(t('nbWsSaved'), 'info');
+    else toast(t(r === 'sentence' ? 'nbWsEditErrSentence' : r === 'meaning' ? 'nbWsEditErrMeaning' : 'saveFailed'), 'error');
+  };
+  return (
+    <Disclosure label={t('nbWsEdit')}>
+      <form
+        className="flex flex-col gap-3"
+        data-testid="word-edit"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void save();
+        }}
+      >
+        <label className="flex flex-col gap-1">
+          <span className="text-sm text-muted">{t('nbWsEditMeaning')}</span>
+          <input className="lx-field" lang={lang} value={meaning} onChange={(e) => setMeaning(e.target.value)} data-testid="word-edit-meaning" />
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-sm text-muted">{t('nbWsEditSentence')}</span>
+          <textarea className="lx-field min-h-20" lang="en" value={sentence} onChange={(e) => setSentence(e.target.value)} data-testid="word-edit-sentence" />
+        </label>
+        <div>
+          <Button type="submit" variant="secondary" busy={busy} data-testid="word-edit-save">
+            {t('nbWsSave')}
+          </Button>
+        </div>
+      </form>
+    </Disclosure>
   );
 }

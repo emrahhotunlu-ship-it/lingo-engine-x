@@ -147,6 +147,11 @@ export const nbWsDe = {
   nbWsLeechTitle: 'Hartnäckige Karte',
   nbWsLeechSub: 'Schon {n}-mal danebengelegen. Probier einen neuen Zugang:',
   nbWsNewExample: 'Neues Beispiel',
+  nbWsEdit: 'Karte bearbeiten',
+  nbWsEditMeaning: 'Bedeutung',
+  nbWsEditSentence: 'Ursprungssatz (mit dem Wort)',
+  nbWsEditErrSentence: 'Der Satz muss das Wort enthalten.',
+  nbWsEditErrMeaning: 'Bitte eine Bedeutung eingeben.',
   nbWsAddToDeck: 'Zu Stapel',
   nbWsAddedToDeck: 'Zum Stapel „{name}“ hinzugefügt.',
   // Liste
