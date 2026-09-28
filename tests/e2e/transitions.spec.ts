@@ -1,10 +1,10 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen, openEntry, openTab } from './fixtures';
+import { boot, screen, openEntry } from './fixtures';
 import { forcedPatch, planPatch } from './trainerHelpers';
 
 // Kap. 4.4 Übergänge mit gemeinsamen Elementen: Heldenkarte → erste Übung, Kurszeile → Kopf der
-// Lektion (Flug per framer `animate`, engine/shared.tsx), Wortzeile → Titel des Wortblatts
-// (framer `layoutId`). Geprüft wird, dass das Ziel direkt nach dem Tippen von der Quelle
+// Lektion (Flug per framer `animate`, engine/shared.tsx). Der Listen-Flug Wortzeile → Wortblatt
+// ist bewusst entfernt (leistung.md §3.2). Geprüft wird, dass das Ziel direkt nach dem Tippen von der Quelle
 // heranfliegt (Transform in den ersten Bildern, danach Ruhe), dass es ohne Tippen nicht fliegt und
 // dass `prefers-reduced-motion` die Bewegung abschaltet.
 
@@ -80,22 +80,6 @@ test('Heldenkarte → erste Übung: die Karte gleitet in die Übung', async ({ p
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
   await expect(page.getByTestId('exercise')).toHaveAttribute('data-shared', '');
-  const p = await probed(page);
-  expect(moving(p).length).toBeGreaterThan(0);
-  expect(p.frames.at(-1)).toBe('none');
-  expect(errors).toEqual([]);
-});
-
-test('Wortzeile → Wortblatt: das Wort gleitet in den Titel', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  const { errors } = await boot(page, { migrated: true });
-  await screen(page, 'today');
-  await openTab(page, 'vocab');
-  const row = page.getByTestId('vocab-row').first();
-  await expect(row).toBeVisible();
-  await probe(page, '[role="dialog"] h2');
-  await row.click();
-  await expect(page.getByRole('dialog')).toBeVisible();
   const p = await probed(page);
   expect(moving(p).length).toBeGreaterThan(0);
   expect(p.frames.at(-1)).toBe('none');
