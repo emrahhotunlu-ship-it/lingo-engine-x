@@ -80,11 +80,15 @@ test.describe('Desktop', () => {
     const { errors } = await boot(page, { migrated: true, fake: { patch: bigVocab(1500) } });
     await screen(page, 'today');
     await openTab(page, 'vocab');
-    const t0 = await page.evaluate(() => performance.now());
-    await page.getByTestId('ws-all').click();
-    await page.getByTestId('vocab-row').first().waitFor();
-    const t1 = await page.evaluate(() => performance.now());
-    expect(t1 - t0).toBeLessThan(300);
+    // Im Browser gemessen: Tipp auf „Alle Einträge“ → erste Zeile im Bild (ohne Playwright-Umlauf).
+    const ms = await page.evaluate(async () => {
+      const t0 = performance.now();
+      document.querySelector<HTMLElement>('[data-testid="ws-all"]')?.click();
+      for (let i = 0; i < 200 && !document.querySelector('[data-testid="vocab-list"] [data-testid="vocab-row"]'); i++) await new Promise((r) => requestAnimationFrame(() => r(null)));
+      await new Promise((r) => requestAnimationFrame(() => r(null)));
+      return performance.now() - t0;
+    });
+    expect(ms).toBeLessThan(300);
     expect(await page.getByTestId('vocab-row').count()).toBeLessThanOrEqual(60);
     await page.getByTestId('vocab-more').click();
     expect(await page.getByTestId('vocab-row').count()).toBeLessThanOrEqual(100);
