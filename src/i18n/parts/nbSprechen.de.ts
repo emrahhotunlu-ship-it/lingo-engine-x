@@ -68,4 +68,8 @@ export const nbSprechenDe = {
   nbSprechenTurnUp: 'Zeit um – sag es trotzdem',
   nbSprechenTurnTimerOff: 'Zeitlimit aus',
   nbSprechenTurnTimerOn: '45 s je Zug',
+  nbSprechenApplyTitle: 'Jetzt du',
+  nbSprechenApplyTask: 'Sag es laut für deine eigene Lage und schreib es auf – mit mindestens einer der Wendungen oben.',
+  nbSprechenApplyUsed: 'Benutzt: {list}',
+  nbSprechenApplyNone: 'Noch keine der Wendungen benutzt.',
 } as const;

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { ApplyStep } from './ApplyStep';
 import { useEffect, useState } from 'react';
 import { TitleActions } from '../system/Chrome';
 import { useNav } from '../../app/nav';
@@ -189,6 +190,7 @@ function Leaf({ pb, nodeId, title, phrases }: { pb: Playbook; nodeId: string; ti
           ))}
         </ul>
       </Card>
+      <ApplyStep phrases={phrases.map((p) => p.en)} />
       {ai && !open && (
         <div>
           <Button icon="sparkle" onClick={() => setOpen(true)} data-testid="pb-adapt" data-ai="">

@@ -69,4 +69,8 @@ export const nbSprechenEn: Record<keyof typeof nbSprechenDe, string> = {
   nbSprechenTurnUp: 'Time\'s up – say it anyway',
   nbSprechenTurnTimerOff: 'Turn timer off',
   nbSprechenTurnTimerOn: '45 s per turn',
+  nbSprechenApplyTitle: 'Your turn',
+  nbSprechenApplyTask: 'Say it out loud for your own situation and write it down – using at least one of the phrases above.',
+  nbSprechenApplyUsed: 'Used: {list}',
+  nbSprechenApplyNone: 'None of the phrases used yet.',
 };
