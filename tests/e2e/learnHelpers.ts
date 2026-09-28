@@ -412,7 +412,7 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
   await settle();
   await visit('wissen');
   await hub();
-  await page.getByTestId('hub-vocab').click();
+  await page.getByTestId('tab-vocab').click();
   await expect(page.getByTestId('vocab')).toBeVisible();
   await settle();
   await visit('wortschatz');
