@@ -26,9 +26,8 @@ import { useWatched } from '../../data/watch';
 import { legacySceneDoc } from '../speak/useSceneLibrary';
 import { buildQueue, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState } from '../../domain/srs/scheduler';
-import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, Stage, TrainCard } from '../../domain/srs/types';
+import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
-import type { Deck } from '../../domain/srs/vocabList';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './persist';
 import { pickDailyRepairs, repairsDoneToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
@@ -186,7 +185,7 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   }
   if (picked === 'probe') {
     // Prüfabfrage (§1 Regel 6): tippen mit Stütze, Leiter auf Stufe 3 (cloze_hint/tiles).
-    const ex = chooseExercise({ ...card, stage: 3 as Stage }, s.lang, s.pool.length - 1, s.recentEx, s.env);
+    const ex = chooseExercise({ ...card, stage: 3 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
     if (ex) return { ...build(s, card, ex), check: 'probe' };
   }
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
@@ -252,7 +251,7 @@ export const isFlip = (e: Exercise | null): boolean => e?.ex === 'flip';
  * §1/§8; ohne Angabe gilt der gemerkte Modus des Stapels bzw. der Standard-Modus.
  */
 export type SessionOpts = {
-  deck?: Deck | string;
+  deck?: string;
   size?: number;
   only?: readonly string[];
   mode?: RequestedMode;

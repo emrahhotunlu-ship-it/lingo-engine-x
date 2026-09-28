@@ -35,6 +35,12 @@ import { commitAnswer, prepareNext, useSession, type FirstKind } from '../sessio
 
 const GRADE_KEY: Record<Grade, MessageKey> = { 1: 'nbWsGrade1', 2: 'nbWsGrade2', 3: 'nbWsGrade3', 4: 'nbWsGrade4' };
 
+/** Denkzeit bis jetzt (außerhalb des Renderns aufgerufen). */
+function thinkMs(start: number, hidden: number): number {
+  const now = performance.now();
+  return Math.max(0, now - (start || now) - hidden);
+}
+
 function idle(fn: () => void): void {
   const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
   if (ric) ric(fn, { timeout: 400 });
@@ -85,7 +91,7 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const front = dir === 'de-en' ? (card.context?.sentence ?? null) : (card.context?.sentence ?? null);
   const reveal = () => {
     if (shown) return;
-    const ms = Math.max(0, performance.now() - (shownAt.current || performance.now()) - hiddenMs.current);
+    const ms = thinkMs(shownAt.current, hiddenMs.current);
     const suggest = flipSuggest({ revealMs: ms, phrase: isPhraseCard(card), frontWords: wordCount(front), seenToday: again || seenOn(card.doc, day), hidden: wasHidden.current, strict });
     const tt = nextT();
     setShown({ t: tt, ms: Math.round(ms), suggest, iv: previewIntervals(card.fsrs, tt) });
@@ -129,9 +135,11 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   });
   // Wischen (nur Finger, nach dem Aufdecken): links = Nochmal, rechts = Vorschlag.
   const gradeRef = useRef(grade);
-  gradeRef.current = grade;
   const suggestRef = useRef<Grade | null>(null);
-  suggestRef.current = shown?.suggest ?? null;
+  useEffect(() => {
+    gradeRef.current = grade;
+    suggestRef.current = shown?.suggest ?? null;
+  });
   useEffect(() => {
     let start: { x: number; y: number; t: number; id: number } | null = null;
     const down = (ev: TouchEvent) => {

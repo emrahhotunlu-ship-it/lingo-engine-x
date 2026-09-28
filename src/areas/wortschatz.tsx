@@ -1,80 +1,97 @@
-import { useState } from 'react';
 import { z } from 'zod';
 import { defineArea } from '../app/registry';
-import { HubSections } from '../app/shell/Hub';
-import { placesOf } from '../app/shell/tabs';
-import { useHiddenInput } from '../engine/HiddenInput';
-import { startDuty } from '../features/learn/flow';
-import { useToday } from '../features/today/state';
-import { FreeRoundSheet } from '../features/vocab/FreeRoundSheet';
-import { installFlushOnHide } from '../features/vocab/persist';
-import { TrainerScreen } from '../features/vocab/TrainerScreen';
+import { loadResume } from '../app/resume';
+import type { Resumable } from '../app/resume';
+import type { UnitBlockProvider } from '../app/unit/types';
+import { installDecksWatch } from '../features/vocab/decksStore';
+import { DeckScreen } from '../features/vocab/hub/DeckScreen';
+import { VocabStatsSection, VocabSettingsSection } from '../features/vocab/hub/Sections';
+import { AddSheetHost, ExtraSheet, NewDeckSheet, WordSheetHost } from '../features/vocab/hub/Sheets';
+import { VocabHub } from '../features/vocab/hub/VocabHub';
 import { VocabScreen } from '../features/vocab/list/VocabScreen';
-import { useT } from '../i18n';
-import { ChannelIcon } from '../ui/Card';
-import { Icon } from '../ui/Icon';
+import { installFlushOnHide } from '../features/vocab/persist';
+import { restoreTrainer, roundProgress, startSession, trainerSnapshot, TRAINER_RESUME_ID, useSession, type TrainerSnapshot } from '../features/vocab/session';
+import { TrainerScreen } from '../features/vocab/TrainerScreen';
+import type { ScreenProps } from '../app/registry';
 
-// Bereich „Wortschatz“ – Besitz: Paket P3 (docs/neubau/architektur.md §5.2).
-// WP0a: Die Reiter-Wurzel zeigt die heutige Wortliste; darüber der direkte Einstieg in den
-// Vokabeltrainer (Wiederholen als Pflicht, freie Runde als Extra). P3 baut Stapel und Anki-Modus.
+// Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
+// Reiter-Wurzel `vocab` (Suche, „Alle fälligen“, Prognose, Stapel, Eingangskorb, Zuletzt), Seiten
+// `deck` und `vocabList`, Übung `trainer` (Tippen und Aufdecken), Blätter `word`, `add`, `x:extra`,
+// `x:deck-new`, Einstellungs-Abschnitt „Wortschatz“, Statistik auf Platz `stand`, Block 1 `review`.
 
 declare module '../app/router/types' {
   interface RouteParams {
     vocab: NoParams;
-    trainer: { round: 'pflicht' | 'extra' };
+    vocabList: { filter?: string; q?: string };
+    deck: { id: string };
+    trainer: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip'; deck?: string };
   }
 }
 
-function Row({ title, sub, onClick, testId, icon }: { title: string; sub: string; onClick: () => void; testId: string; icon: 'cards' | 'plus' }) {
-  return (
-    <li>
-      <button type="button" onClick={onClick} data-testid={testId} className="flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-strong">
-        <ChannelIcon channel="cards">
-          <Icon name={icon} />
-        </ChannelIcon>
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="font-medium">{title}</span>
-          <span className="text-sm text-muted">{sub}</span>
-        </span>
-        <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-      </button>
-    </li>
-  );
+const trainerParams = z.object({ round: z.enum(['pflicht', 'extra']), mode: z.enum(['auto', 'type', 'flip']).optional(), deck: z.string().max(64).optional() });
+
+/**
+ * Übung ohne Sitzung (Deep-Link, Neuladen): aktive Sitzung → weiter; sonst Momentaufnahme
+ * herstellen; sonst neu starten. `false` → ruhiger Hinweis und zurück zur Herkunft (§2.3).
+ */
+function ensureTrainer(route: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip'; deck?: string }): boolean {
+  if (useSession.getState().active) return true;
+  const env = loadResume(TRAINER_RESUME_ID);
+  if (env && env.v === 1 && restoreTrainer(env.data as TrainerSnapshot)) return true;
+  startSession(route.round, { ...(route.deck ? { deck: route.deck } : {}), ...(route.mode ? { mode: route.mode } : {}) });
+  const s = useSession.getState();
+  return s.active && (s.status === 'running' || s.queue.length > 0);
 }
 
-/** Direkter Einstieg in den Trainer (Platz `vocab`): Pflicht-Wiederholung, solange offen, und freie Runde. */
-function TrainerEntry() {
-  const { t } = useT();
-  const api = useHiddenInput();
-  const st = useToday();
-  const [free, setFree] = useState(false);
-  const reviewOpen = st.ready && st.duties.items.some((d) => d.id === 'review' && d.state === 'open');
-  return (
-    <>
-      <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]" aria-label={t('lhVocab')} data-testid="vocab-trainer">
-        {reviewOpen && <Row icon="cards" title={t('tdReviewTitle')} sub={t('nbShReviewSub')} onClick={() => startDuty('review', api)} testId="vocab-review" />}
-        <Row icon="plus" title={t('lhVocabFree')} sub={t('lhFreeRoundSub')} onClick={() => setFree(true)} testId="vocab-free-round" />
-      </ul>
-      <FreeRoundSheet open={free} onClose={() => setFree(false)} />
-    </>
-  );
-}
+const trainerResume: Resumable<TrainerSnapshot> = {
+  id: TRAINER_RESUME_ID,
+  version: 1,
+  origin: 'vocab',
+  snapshot: trainerSnapshot,
+  subscribe: (cb) => useSession.subscribe(cb),
+  restore: restoreTrainer,
+  route: (s) => ({ name: 'trainer', round: s.round, ...(s.deck !== 'all' ? { deck: s.deck } : {}) }),
+  label: (s, t) => {
+    const p = roundProgress({ status: 'running', round: s.round, queue: s.queue, pos: s.pos, target: s.target, doneBefore: s.doneBefore, answered: s.answered, repairs: [], repairPos: 0 });
+    return t('nbWsResume', { deck: s.label ?? t(s.round === 'pflicht' ? 'nbWsReview' : 'nbWsDeckAll'), n: p?.n ?? s.pos + 1, total: p?.total ?? s.queue.length });
+  },
+};
 
-/** Reiter-Wurzel: Wortliste mit den Abschnitten des Platzes `vocab` unter der Titelzeile. */
-function VocabRoot() {
-  return (
-    <VocabScreen root>
-      <HubSections places={placesOf('vocab')} />
-    </VocabScreen>
-  );
+/** Block 1 der Tageseinheit (plan.md §1.5): Reparatur-Sätze, dann Wochenthema, dann Fällige; `auto`, DE→EN. */
+const reviewBlock: UnitBlockProvider = {
+  kind: 'review',
+  feasible: () => true,
+  start: (ctx) => {
+    startSession('pflicht', { mode: 'auto', unit: true, theme: ctx.theme });
+    const s = useSession.getState();
+    return s.active ? { name: 'trainer', round: 'pflicht' } : false;
+  },
+};
+
+function VocabListPage({ route }: ScreenProps<'vocabList'>) {
+  return <VocabScreen filter={route.filter} q={route.q} />;
 }
 
 export const wortschatz = defineArea({
   id: 'wortschatz',
   screens: {
-    vocab: { kind: 'tab', component: VocabRoot, title: 'vcTitle', keepScroll: true },
-    trainer: { kind: 'exercise', component: TrainerScreen, params: z.object({ round: z.enum(['pflicht', 'extra']) }) },
+    vocab: { kind: 'tab', component: VocabHub, title: 'nbWsTitle', keepScroll: true },
+    vocabList: { kind: 'page', component: VocabListPage, title: 'nbWsListTitle', keepScroll: true, params: z.object({ filter: z.string().max(24).optional(), q: z.string().max(80).optional() }) },
+    deck: { kind: 'page', component: DeckScreen, title: 'nbWsDecks', params: z.object({ id: z.string().min(1).max(64) }) },
+    trainer: { kind: 'exercise', component: TrainerScreen, params: trainerParams, ensure: ensureTrainer },
   },
-  sections: [{ id: 'ws-trainer', place: 'vocab', order: 10, component: TrainerEntry }],
-  boot: () => installFlushOnHide(),
+  sections: [{ id: 'ws-stats', place: 'stand', order: 50, component: VocabStatsSection }],
+  sheets: [
+    { id: 'word', component: WordSheetHost },
+    { id: 'add', component: AddSheetHost },
+    { id: 'x:extra', component: ExtraSheet },
+    { id: 'x:deck-new', component: NewDeckSheet },
+  ],
+  settings: [{ id: 'ws-vocab', group: 'vocab', order: 10, component: VocabSettingsSection }],
+  resumables: [trainerResume],
+  unitBlocks: [reviewBlock],
+  boot: () => {
+    installFlushOnHide();
+    installDecksWatch();
+  },
 });
