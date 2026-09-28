@@ -17,6 +17,7 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { flush } from '../progress/persist';
 import { ExerciseTop, SummaryActions } from '../learn/ui';
 import { makeLessonMachine } from './lessonMachine';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { ensureLesson } from './resume';
 import { setLessonStep, finishLesson, leaveLesson, openLesson, prepareLesson, saveStep, savedStep, startBaseLesson, touchLesson, useLessonRun, type Step } from './lessonRun';
 import { DialogStep, GrammarStep, OutputStep, WordsStep } from './LessonSteps';
@@ -116,14 +117,16 @@ function LessonRun({ id }: { id: string }) {
       <motion.div key={step} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
         {step === 'intro' && <LessonIntro cando={cando} onStart={next} />}
         {step !== 'intro' && step !== 'summary' && (run.status !== 'ready' || !run.content) && <LessonIntro cando={cando} onStart={() => undefined} resume />}
-        {run.status === 'ready' && run.content && (
-          <>
-            {step === 'words' && <WordsStep meta={meta} content={run.content} onComplete={next} />}
-            {step === 'dialog' && <DialogStep meta={meta} content={run.content} onComplete={next} />}
-            {step === 'grammar' && <GrammarStep meta={meta} content={run.content} onComplete={next} />}
-            {step === 'output' && <OutputStep meta={meta} content={run.content} onComplete={next} />}
-          </>
-        )}
+        <StepBoundary resetKey={step} scope="lesson" onSkip={next}>
+          {run.status === 'ready' && run.content && (
+            <>
+              {step === 'words' && <WordsStep meta={meta} content={run.content} onComplete={next} />}
+              {step === 'dialog' && <DialogStep meta={meta} content={run.content} onComplete={next} />}
+              {step === 'grammar' && <GrammarStep meta={meta} content={run.content} onComplete={next} />}
+              {step === 'output' && <OutputStep meta={meta} content={run.content} onComplete={next} />}
+            </>
+          )}
+        </StepBoundary>
         {step === 'summary' && (
           <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="summary">
             <header className="flex items-start gap-3">

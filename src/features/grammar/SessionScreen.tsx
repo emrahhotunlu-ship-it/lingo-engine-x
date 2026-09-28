@@ -9,9 +9,10 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { flush } from '../progress/persist';
 import { RoundTop, SummaryActions } from '../learn/ui';
 import { GrammarItem } from './GrammarItem';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { topicName } from './GrammarScreen';
 import { ensureGrammar } from './resume';
-import { inRepeat, commitGrammar, leaveGrammar, touchGrammar, useGrammarSession } from './session';
+import { skipGrammar, inRepeat, commitGrammar, leaveGrammar, touchGrammar, useGrammarSession } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
@@ -60,7 +61,9 @@ export function GrammarSessionScreen() {
           und blendet nur kurz ein (≤ 150 ms, Deckkraft/Verschieben). */}
       <motion.div key={s.status === 'summary' ? 'summary' : `g-${s.step}`} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
         {s.status === 'running' && task ? (
-          <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} badge={inRepeat(s) ? t('nbLernenRepeatBadge') : task.errorT !== null ? t('grReviewBadge') : null} />
+          <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} badge={inRepeat(s) ? t('nbLernenRepeatBadge') : task.errorT !== null ? t('grReviewBadge') : null} />
+          </StepBoundary>
         ) : (
           <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="summary">
             <header className="flex items-start gap-3">

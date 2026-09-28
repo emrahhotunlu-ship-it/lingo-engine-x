@@ -11,8 +11,9 @@ import { ExerciseTop } from '../../learn/ui';
 import { flush } from '../../progress/persist';
 import { GrammarItem } from '../GrammarItem';
 import { FocusItem } from './FocusItem';
+import { StepBoundary } from '../../../app/shell/Boundary';
 import { ensureFocus } from './resume';
-import { commitFocus, leaveFocus, reportFocusDone, touchFocus, useFocus } from './session';
+import { skipFocus, commitFocus, leaveFocus, reportFocusDone, touchFocus, useFocus } from './session';
 
 // Block 4 „Fokus“ der Tageseinheit (plan.md §1.5, N41): höchstens 3 Korrekturen plus Mini-Drill,
 // aufgefüllt mit fälligen Fehlersätzen. Aufgabe zu Aufgabe ohne Warten (N45).
@@ -64,17 +65,34 @@ export function FocusScreen() {
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="unit-focus" data-block={block ?? ''} data-main={main}>
       <ExerciseTop onClose={leave} progress={status === 'running' ? { n: pos + 1, total: tasks.length } : null} ctx="duty" />
       <motion.div key={status === 'summary' ? 'summary' : `f-${step}`} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
-        {status === 'running' && task?.kind === 'grammar' && (
-          <GrammarItem
-            key={task.id}
-            task={task.task}
-            ctx="duty"
-            day={day}
-            badge={task.reason === 'due' ? t('grReviewBadge') : t('nbLernenFocusDaily')}
-            onDone={(a) => focusNext(commitFocus({ id: task.id, kind: 'grammar', ok: !a.dontKnow && a.verdict !== 'wrong', verdict: a.verdict === 'correct' ? 'ok' : a.verdict === 'near' ? 'close' : 'wrong', right: task.task.answer }, { answer: a }))}
-          />
-        )}
-        {status === 'running' && task && task.kind !== 'grammar' && <FocusItem key={task.id} task={task} status={statusLine} onDone={(row, missed) => focusNext(commitFocus(row, missed ? { missed } : undefined))} />}
+        <StepBoundary resetKey={`f-${step}`} scope="unitFocus" onSkip={skipFocus}>
+          {status === 'running' && task?.kind === 'grammar' && (
+            <GrammarItem
+              key={task.id}
+              task={task.task}
+              ctx="duty"
+              day={day}
+              badge={task.reason === 'due' ? t('grReviewBadge') : t('nbLernenFocusDaily')}
+              onDone={(a) =>
+                focusNext(
+                  commitFocus(
+                    {
+                      id: task.id,
+                      kind: 'grammar',
+                      ok: !a.dontKnow && a.verdict !== 'wrong',
+                      verdict: a.verdict === 'correct' ? 'ok' : a.verdict === 'near' ? 'close' : 'wrong',
+                      right: task.task.answer,
+                    },
+                    { answer: a },
+                  ),
+                )
+              }
+            />
+          )}
+          {status === 'running' && task && task.kind !== 'grammar' && (
+            <FocusItem key={task.id} task={task} status={statusLine} onDone={(row, missed) => focusNext(commitFocus(row, missed ? { missed } : undefined))} />
+          )}
+        </StepBoundary>
         {status === 'summary' && (
           <div className="lx-glass rounded-[var(--radius-card)] p-5 sm:p-7">
             <SessionEnd

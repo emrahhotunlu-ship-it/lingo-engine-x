@@ -11,8 +11,9 @@ import { flush } from '../progress/persist';
 import { RoundTop, SummaryActions } from '../learn/ui';
 import { ClozeItemView, DictationItem, OrderItemView } from './DrillItems';
 import { ensureDrill } from './resume';
-import { commitDrill, itemsOf, leaveDrill, touchDrill, useDrill } from './session';
+import { skipDrill, commitDrill, itemsOf, leaveDrill, touchDrill, useDrill } from './session';
 import { SprintView } from './SprintView';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { useCompanionSee } from '../companion/seeing';
 
 // Rahmen der vier Übungen: Kopf mit Schließen, Fortschritt und Pflicht-/Extra-Kennzeichen,
@@ -67,9 +68,11 @@ export function DrillScreen() {
         <SprintView />
       ) : (
         <motion.div key={running ? `d-${s.step}` : 'summary'} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
-          {running && s.kind === 'dictate' && s.dictate[s.pos] && <DictationItem item={s.dictate[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
-          {running && s.kind === 'cloze' && s.cloze[s.pos] && <ClozeItemView item={s.cloze[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
-          {running && s.kind === 'order' && s.order[s.pos] && <OrderItemView item={s.order[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
+          <StepBoundary resetKey={`d-${s.step}`} scope="drill" onSkip={skipDrill}>
+            {running && s.kind === 'dictate' && s.dictate[s.pos] && <DictationItem item={s.dictate[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
+            {running && s.kind === 'cloze' && s.cloze[s.pos] && <ClozeItemView item={s.cloze[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
+            {running && s.kind === 'order' && s.order[s.pos] && <OrderItemView item={s.order[s.pos]!} ctx={s.ctx} day={s.day} onDone={commitDrill} />}
+          </StepBoundary>
           {!running && (
             <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="summary">
               <header className="flex items-start gap-3">

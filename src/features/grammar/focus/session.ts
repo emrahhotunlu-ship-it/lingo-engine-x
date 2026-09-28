@@ -165,3 +165,13 @@ export function restoreFocus(snap: FocusSnap): boolean {
   useFocus.setState({ ...initial(), ...snap, active: true, step: useFocus.getState().step + 1, lastInteract: performance.now() });
   return true;
 }
+
+/** Fehlergrenze (G4): kaputte Aufgabe ohne Bewertung überspringen. */
+export function skipFocus(): void {
+  const s = useFocus.getState();
+  if (!s.active || s.status !== 'running') return;
+  const pos = s.pos + 1;
+  const done = pos >= s.tasks.length;
+  useFocus.setState({ pos, step: s.step + 1, status: done ? 'summary' : 'running' });
+  if (done) finishFocus();
+}

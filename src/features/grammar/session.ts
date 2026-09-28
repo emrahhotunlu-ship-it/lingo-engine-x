@@ -213,3 +213,14 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
   });
   return true;
 }
+
+/** Fehlergrenze (G4): kaputte Aufgabe ohne Bewertung überspringen. */
+export function skipGrammar(): void {
+  const s = useGrammarSession.getState();
+  if (!s.active || s.status !== 'running') return;
+  const pos = s.pos + 1;
+  const done = pos >= s.tasks.length;
+  const next: State = { ...s, pos, step: s.step + 1, status: done ? 'summary' : 'running' };
+  if (done) finish(next, false);
+  useGrammarSession.setState(next);
+}

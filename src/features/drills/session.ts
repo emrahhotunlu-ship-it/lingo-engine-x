@@ -228,3 +228,14 @@ export function restoreDrill(snap: DrillSnap): boolean {
   });
   return true;
 }
+
+/** Fehlergrenze (G4): kaputte Aufgabe ohne Bewertung überspringen. */
+export function skipDrill(): void {
+  const s = useDrill.getState();
+  if (!s.active || s.status !== 'running' || s.kind === 'sprint') return;
+  const pos = s.pos + 1;
+  const done = pos >= itemsOf(s).length;
+  const next: State = { ...s, pos, step: s.step + 1, status: done ? 'summary' : 'running' };
+  if (done) roundEnd(next, false);
+  useDrill.setState(next);
+}
