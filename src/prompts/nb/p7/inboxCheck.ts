@@ -91,7 +91,7 @@ export const inboxCheck: PromptTemplate<InboxCheckVars, InboxCheckOut> = {
         gist: z.preprocess(looseBool, z.boolean()),
         gistNote: clipped(1, 240),
         must: z.preprocess(
-          (x) => (Array.isArray(x) ? v.must.map((_, i) => x[i] ?? false) : x),
+          (x: unknown) => (Array.isArray(x) ? v.must.map((_, i): unknown => (x as unknown[])[i] ?? false) : x),
           z.array(z.preprocess(looseBool, z.boolean())),
         ),
         tone: toneLoose,
