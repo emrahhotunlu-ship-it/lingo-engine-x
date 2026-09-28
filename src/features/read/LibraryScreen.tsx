@@ -161,7 +161,7 @@ export function LibraryScreen() {
   return (
     <div className="flex flex-col gap-7 py-6 sm:py-10" data-testid="library">
       <TabTitle title={t('nbShTabRead')} />
-      <div role="radiogroup" aria-label={t('nbLesenChips')} className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" data-testid="lib-chips">
+      <div role="radiogroup" aria-label={t('nbLesenChips')} className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" data-testid="lib-chips" data-hscroll="">
         {CHIPS.map((c) => (
           <button
             key={c}
@@ -291,10 +291,10 @@ function Row({ icon, channel, title, sub, onClick, testId, module, dataKey, lang
       <button type="button" onClick={onClick} data-testid={testId} data-module={module} data-key={dataKey} className="flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-strong">
         <ChannelIcon channel={channel}>{INPUT_ICONS.has(icon) ? <InputIcon name={icon as InputIconName} /> : <Icon name={icon as IconName} />}</ChannelIcon>
         <span className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate font-medium" lang={lang}>
+          <span className="font-medium [overflow-wrap:anywhere]" lang={lang}>
             {title}
           </span>
-          <span className="lx-tnum truncate text-sm text-muted">{sub}</span>
+          <span className="lx-tnum text-sm text-muted [overflow-wrap:anywhere]">{sub}</span>
         </span>
         <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
       </button>

@@ -78,6 +78,7 @@ const patternsDoc = async (page: Page) => (await dump(page))['app/patterns'] as 
 async function openPatterns(page: Page, opts: BootOptions) {
   const booted = await boot(page, { migrated: true, ...opts });
   await openOverview(page);
+  await page.getByTestId('tab-errors').click();
   await expect(page.getByTestId('patterns-stand')).toBeVisible();
   await page.getByTestId('patterns-open').click();
   await page.locator('[data-screen="patterns"]').waitFor({ state: 'visible' });
@@ -207,6 +208,7 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
   test('Dein Stand, Sprachtreue, Wochenbericht und Preply-Wochenfokus', async ({ page }) => {
     const { errors, external } = await boot(page, { migrated: true, lang: 'en', fake: { patch: { 'app/patterns': PRESET, 'say/2026-09': SAY_DOC } } });
     await openOverview(page);
+    await page.getByTestId('tab-errors').click();
     const card = page.getByTestId('patterns-stand');
     await expect(card).toContainText('Your German traps');
     await expect(page.getByTestId('patterns-stand-item')).toHaveCount(2);

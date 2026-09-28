@@ -222,13 +222,13 @@ function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { card: Tra
       )}
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="flex min-w-0 items-center gap-2">
-          <span className="max-w-full truncate font-medium" lang="en">
+          <span className="max-w-full font-medium [overflow-wrap:anywhere]" lang="en">
             {card.word}
           </span>
           {card.kind === 'chunk' && <span className="flex-none rounded-full border border-line px-2 py-0.5 text-[0.7rem] font-medium text-muted">{t('vcChunkBadge')}</span>}
         </span>
         {meaning && (
-          <span className="truncate text-sm text-muted" lang={lang}>
+          <span className="text-sm text-muted [overflow-wrap:anywhere]" lang={lang}>
             {meaning}
           </span>
         )}
