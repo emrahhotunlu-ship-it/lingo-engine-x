@@ -1,8 +1,8 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { useEffect, useLayoutEffect, useMemo } from 'react';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
-import { DURATION, EASE_OUT } from '../../ui/motion';
+import { Button } from '../../ui/Button';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { normalize } from '../../domain/answer/normalize';
@@ -11,12 +11,17 @@ import { IntroCard } from './IntroCard';
 import { Summary } from './Summary';
 import { abortExamples } from './examples';
 import { flush } from './persist';
-import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, touch, useSession } from './session';
+import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, skipCurrent, touch, useSession } from './session';
+import { FlipCard } from './anki/FlipCard';
+import { CardBoundary } from './CardBoundary';
+import { cardShown } from './cardMark';
 import { useShallow } from 'zustand/react/shallow';
 import { RepairItem } from '../repair/RepairItem';
 import { ExerciseTop } from '../learn/ui';
 
-// Vokabeltrainer: eine Karte zur Zeit, Kartenwechsel als kurze Seitwärts-Überblendung.
+// Vokabeltrainer: eine Karte zur Zeit. Kartenwechsel ohne Warte-Animation (leistung.md §4 Nr. 4):
+// die neue Karte ersetzt sofort und blendet nur ein (120 ms, nur Deckkraft – kein seitliches
+// Verschieben, das am Handy kurz waagrecht überstand). Jede Karte in einer eigenen Fehlergrenze.
 // Esc verlässt die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
 
 export function TrainerScreen() {
@@ -69,6 +74,14 @@ export function TrainerScreen() {
   const introCard = status === 'running' && item?.phase === 'intro' ? cards.get(item.key) : undefined;
   const progress = useSession(useShallow(roundProgress));
   const onDone = () => undefined;
+  const skip = () => {
+    if (skipCurrent() === 'typed') api.focusNow();
+    else api.blur();
+  };
+  // Messmarke lx:card: neue Karte gezeichnet (nächster Frame nach dem Einhängen).
+  useLayoutEffect(() => {
+    cardShown();
+  }, [step]);
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="trainer">
@@ -81,38 +94,55 @@ export function TrainerScreen() {
         ctx={round === 'extra' ? 'extra' : 'duty'}
         duty="review"
       />
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={status === 'summary' ? 'summary' : `step-${step}`}
-          data-step={status === 'summary' ? 'summary' : step}
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -24 }}
-          transition={{ duration: DURATION.base, ease: EASE_OUT }}
-        >
-          {status === 'summary' ? (
-            <Summary onBack={leave} />
-          ) : repair ? (
-            <RepairItem
-              key={repair.id}
-              item={repair}
-              mode="review"
-              area="trainer"
-              source={null}
-              onResult={({ ok, given, ms }) => answerRepair(ok, given, ms)}
-              onNext={() => {
-                // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
-                if (nextRepair() === 'typed') api.focusNow();
-                else api.blur();
-              }}
-            />
-          ) : introCard ? (
-            <IntroCard card={introCard} onDone={onDone} />
-          ) : exercise ? (
-            <ExerciseView exercise={exercise} knownWords={knownWords} again={item?.reason === 'again'} onDone={onDone} />
-          ) : null}
-        </motion.div>
-      </AnimatePresence>
+      <motion.div
+        key={status === 'summary' ? 'summary' : `step-${step}`}
+        data-step={status === 'summary' ? 'summary' : step}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.12, ease: 'easeOut' }}
+      >
+        {status === 'summary' ? (
+          <Summary onBack={leave} />
+        ) : (
+          <CardBoundary
+            resetKey={step}
+            where={item?.key ?? 'repair'}
+            onSkip={skip}
+            fallback={(doSkip) => (
+              <article className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" data-testid="card-broken" role="alert">
+                <p className="text-base">{t('nbWsCardBroken')}</p>
+                <div>
+                  <Button variant="primary" onClick={doSkip} data-testid="card-skip">
+                    {t('nbWsSkip')}
+                  </Button>
+                </div>
+              </article>
+            )}
+          >
+            {repair ? (
+              <RepairItem
+                key={repair.id}
+                item={repair}
+                mode="review"
+                area="trainer"
+                source={null}
+                onResult={({ ok, given, ms }) => answerRepair(ok, given, ms)}
+                onNext={() => {
+                  // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
+                  if (nextRepair() === 'typed') api.focusNow();
+                  else api.blur();
+                }}
+              />
+            ) : introCard ? (
+              <IntroCard card={introCard} onDone={onDone} />
+            ) : exercise?.ex === 'flip' ? (
+              <FlipCard key={`${exercise.card.key}-${step}`} exercise={exercise} again={item?.reason === 'again'} onDone={onDone} />
+            ) : exercise ? (
+              <ExerciseView exercise={exercise} knownWords={knownWords} again={item?.reason === 'again'} onDone={onDone} />
+            ) : null}
+          </CardBoundary>
+        )}
+      </motion.div>
     </div>
   );
 }

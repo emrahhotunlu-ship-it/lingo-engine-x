@@ -561,3 +561,136 @@ export function leaveSession(): void {
   useSession.setState({ active: false, exercise: null });
 }
 
+
+/**
+ * Karte ohne Bewertung überspringen (Fehlergrenze „Diese Aufgabe überspringen“, architektur.md §3.1):
+ * nichts wird geschrieben, die Runde läuft mit der nächsten Karte weiter.
+ */
+export function skipCurrent(): FirstKind {
+  const s = useSession.getState();
+  if (!s.active || s.status !== 'running') return null;
+  if (currentRepair(s)) return nextRepair();
+  return advanceFrom(s);
+}
+
+// ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2)
+
+export type TrainerSnapshot = {
+  round: Round;
+  mode: RequestedMode;
+  dir: FlipDir;
+  deck: string;
+  label: string | null;
+  day: string;
+  /** Zeitpunkt der Momentaufnahme: Karten mit `last` ≥ `at` gelten als inzwischen beantwortet. */
+  at: number;
+  queue: QueueItem[];
+  pos: number;
+  shown: Record<string, number>;
+  answered: string[];
+  results: ResultRow[];
+  repairs: string[];
+  repairPos: number;
+  target: number;
+  doneBefore: number;
+  unit: boolean;
+  controls: number;
+};
+
+const RESULTS_MAX = 100;
+
+/** Reiner Lesezugriff (JSON, nur Schlüssel und Positionen – nie Karteninhalte). */
+export function trainerSnapshot(): TrainerSnapshot | null {
+  const s = useSession.getState();
+  if (!s.active || s.status !== 'running') return null;
+  return {
+    round: s.round,
+    mode: s.mode,
+    dir: s.dir,
+    deck: s.deck,
+    label: s.label,
+    day: s.day,
+    at: Date.now(),
+    queue: s.queue.map((q) => ({ key: q.key, reason: q.reason, phase: q.phase })),
+    pos: s.pos,
+    shown: s.shown,
+    answered: s.answered,
+    results: s.results.slice(-RESULTS_MAX),
+    repairs: s.repairs.map((r) => r.id),
+    repairPos: s.repairPos,
+    target: s.target,
+    doneBefore: s.doneBefore,
+    unit: s.unit,
+    controls: s.controls,
+  };
+}
+
+const lastOf = (c: TrainCard): number => (typeof c.doc.last === 'number' ? c.doc.last : 0);
+
+/**
+ * Sitzung SYNCHRON herstellen (Klick-Handler, iPhone-Tastatur); schreibt nie in die db. Karten werden
+ * aus den Live-Daten neu gebaut. Übersprungen: fehlende Karten und offene Karten, die seit der
+ * Momentaufnahme beantwortet wurden (`last` ≥ `at`). Ein offener Prüf-Zustand wird nicht nachgebaut.
+ */
+export function restoreTrainer(snap: TrainerSnapshot): boolean {
+  if (!snap || !Array.isArray(snap.queue) || typeof snap.pos !== 'number') return false;
+  const now = useClock.getState().now;
+  const day = dayKey(Date.now());
+  if (snap.day !== day) return false;
+  const cards = allTrainCards(now);
+  const byKey = new Map(cards.map((c) => [c.key, c]));
+  const pool = cards.filter((c) => !c.hidden);
+  const live = useLive.getState();
+  const repairsAll = pickDailyRepairs(live.docs['app/repair'], now, new Set(), 50);
+  const repairs = (snap.repairs ?? []).map((id) => repairsAll.find((r) => r.id === id)).filter((r): r is RepairItem => !!r);
+  const keep = snap.queue.map((q, i) => {
+    const c = byKey.get(q.key);
+    if (!c || c.hidden) return false;
+    return !(i >= snap.pos && lastOf(c) >= snap.at);
+  });
+  const queue = snap.queue.filter((_, i) => keep[i]);
+  const removedBefore = keep.slice(0, snap.pos).filter((k) => !k).length;
+  const pos = Math.max(0, Math.min(queue.length, snap.pos - removedBefore));
+  const docs = pool.map((c) => c.doc);
+  const ctl = snap.mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
+  const base: SessionState = {
+    active: true,
+    status: 'running',
+    round: snap.round,
+    day,
+    lang: useSettings.getState().lang,
+    env: currentEnv(),
+    cards: byKey,
+    pool,
+    queue,
+    pos,
+    exercise: null,
+    step: useSession.getState().step,
+    shown: snap.shown ?? {},
+    recentEx: [],
+    answered: snap.answered ?? [],
+    results: snap.results ?? [],
+    target: snap.target,
+    doneBefore: snap.doneBefore,
+    // Nur die neuen aktiven Minuten zählen (§3.2).
+    activeMs: 0,
+    lastInteract: performance.now(),
+    repairs,
+    repairPos: Math.min(snap.repairPos ?? 0, repairs.length),
+    mode: snap.mode,
+    dir: snap.dir,
+    deck: snap.deck,
+    label: snap.label,
+    controls: snap.controls ?? 0,
+    ctlWeek: ctl.week,
+    ctlDay: ctl.day,
+    strict: snap.mode !== 'type' && calibration(docs, now).strict,
+    unit: snap.unit === true,
+    only: null,
+  };
+  prebuilt = null;
+  const next = { ...base, ...settle(base, pos) };
+  if (next.pos >= next.queue.length && next.repairPos >= repairs.length) return false;
+  useSession.setState(next);
+  return true;
+}
