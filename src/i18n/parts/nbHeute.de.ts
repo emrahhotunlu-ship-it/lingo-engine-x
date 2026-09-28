@@ -21,7 +21,7 @@ export const nbHeuteDe = {
   nbHeuteBlock_again: 'Nochmal, aber besser',
   nbHeuteBlock_check: 'Wochen-Check',
   // Grund je Block (eine kurze Zeile)
-  nbHeuteWhy_review: '{n} Karten · Fällige und Wochenthema zuerst',
+  nbHeuteWhy_review: '{n} Karten · Wochenthema zuerst',
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_inputRead: 'Kurzer Text zum Thema, danach nachsprechen',
   nbHeuteWhy_inputListen: 'Hörstück zum Thema, danach nachsprechen',
