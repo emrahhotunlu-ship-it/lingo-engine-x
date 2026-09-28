@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems } from './fixtures';
+import { boot, layoutProblems, screen } from './fixtures';
 import { DAY, dump, openModule, sampleCalls } from './inputHelpers';
 
 // Schreiben (Plan §4.3, §8.3): Aufgabe stabil je Lerntag, Entwurf überlebt Neuladen, Abgeben

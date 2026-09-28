@@ -1,4 +1,5 @@
 import { registerCannedReply } from '../fakeSample';
+import { registerP4bReplies } from './p4b';
 
 // Feste Antworten für die Neubau-Vorlagen goal-check@1 (P5), claude-drill@1 (P6),
 // unit-listen@1, text-level@1, alternatives@1 (P4) und text-cards@1 (P3). Sie lesen nur die
@@ -175,4 +176,5 @@ export function registerNbReplies(): void {
   registerCannedReply('text-level', textLevelReply);
   registerCannedReply('alternatives', alternativesReply);
   registerCannedReply('text-cards', textCardsReply);
+  registerP4bReplies();
 }

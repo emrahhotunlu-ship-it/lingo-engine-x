@@ -39,7 +39,12 @@ type UtteranceLike = {
   volume: number;
   onend: ((ev: unknown) => void) | null;
   onerror: ((ev: { error?: string }) => void) | null;
+  /** Wortgrenzen (N58); feuert nicht in jedem Browser und nicht mit jeder Stimme. */
+  onboundary?: ((ev: { name?: string; charIndex?: number; charLength?: number }) => void) | null;
 };
+
+/** Wortgrenze beim Vorlesen: Stück-Index, Zeichen-Index im Stück, Länge (falls gemeldet). */
+export type BoundaryListener = (chunk: number, charIndex: number, charLength: number | null) => void;
 
 type SynthLike = {
   readonly speaking: boolean;
@@ -165,7 +170,7 @@ let unlocked = false;
 let session = 0;
 let lastCancelAt = -Infinity;
 type ChunkListener = (i: number, total: number, chunk: string) => void;
-let current: { id: number; utterance: UtteranceLike | null; finish: (o: SpeakOutcome) => void; onChunk?: ChunkListener | undefined } | null = null;
+let current: { id: number; utterance: UtteranceLike | null; finish: (o: SpeakOutcome) => void; onChunk?: ChunkListener | undefined; onBoundary?: BoundaryListener | undefined } | null = null;
 let wakeTimer: ReturnType<typeof setInterval> | null = null;
 let startTimer: ReturnType<typeof setTimeout> | null = null;
 const voiceTimers: Array<ReturnType<typeof setTimeout>> = [];
@@ -307,6 +312,21 @@ function speakChunk(e: Env, chunks: readonly string[], i: number, id: number, ra
     if (id !== session) return;
     speakChunk(e, chunks, i + 1, id, rate);
   };
+  const onBoundary = current.onBoundary;
+  if (onBoundary) {
+    // Wort-Markierung beim Vorlesen (N58): nur, wo der Browser Wortgrenzen meldet.
+    u.onboundary = (ev) => {
+      if (id !== session) return;
+      if (ev?.name && ev.name !== 'word') return;
+      const at = typeof ev?.charIndex === 'number' ? ev.charIndex : -1;
+      if (at < 0) return;
+      try {
+        onBoundary(i, at, typeof ev?.charLength === 'number' && ev.charLength > 0 ? ev.charLength : null);
+      } catch (err) {
+        logWarn('speech:onBoundary', err);
+      }
+    };
+  }
   u.onerror = (ev) => {
     if (id !== session) return;
     const code = ev?.error;
@@ -340,6 +360,8 @@ export type SpeakOptions = {
   startAt?: number;
   /** Wird vor jedem Stück aufgerufen: Index, Anzahl, Text. */
   onChunk?: ChunkListener;
+  /** Wird an jeder gemeldeten Wortgrenze aufgerufen (N58); bleibt still, wo der Browser keine meldet. */
+  onBoundary?: BoundaryListener;
 };
 
 /** Die Stücke, in die `speak` einen Text zerlegt (für Satz-Navigation und Anzeige). */
@@ -366,6 +388,7 @@ export function speak(text: string, opts: SpeakOptions = {}): Promise<SpeakOutco
       id,
       utterance: null,
       onChunk: opts.onChunk,
+      onBoundary: opts.onBoundary,
       finish: (o) => {
         if (settled) return;
         settled = true;
