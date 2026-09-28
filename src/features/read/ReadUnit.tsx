@@ -17,7 +17,6 @@ import { QuestionCard } from '../input/QuestionCard';
 import { StatusLine } from '../input/StatusLine';
 import { UnitShell } from '../input/UnitShell';
 import { ArticleView } from './ArticleView';
-import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import { readMachine } from './machine';
 import { SummaryStep } from './SummaryStep';
 import { reportPos, takePending } from '../input/resume';
@@ -105,8 +104,6 @@ export function ReadUnit({ item, pool, ctx, day, start, readingId, quiz, badge, 
           <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => send({ type: 'DONE_READING' })} data-testid="read-done">
             {t('rdDone')}
           </Button>
-          {/* M18: aus dem Text eine Preply-Stunde machen. */}
-          <AsPreplyLesson title={item.title} />
         </div>
       </div>
     );

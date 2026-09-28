@@ -86,23 +86,44 @@ Nur neue Felder und Sammlungen; alte Felder bleiben unverändert, gelöscht wird
 
 Browser-Speicher (nur Bequemlichkeit): `lx:roleplay:<szene>` (Fortsetzen, ≤ 40 KB), `lx:draft:speak:<szene>`, `lx:draft:mail`, `lx:draft:pitch`, `lx:speak-autoplay`, `lx:stt-blocked`.
 
-## Phase 5: Begleiter und Preply-Brücke (nur neue, optionale Felder)
+## Phase 5: Begleiter und Übersetzer (nur neue, optionale Felder)
 
 Plan: `docs/phase5-plan.md` §5, E5-22. Alte Felder und Formen bleiben unverändert, es wird nichts gelöscht.
 
 | Dokument | Neu | Schreibweg |
 |---|---|---|
 | `app/chat` | `since` (Beginn des laufenden Gesprächs); je Nachricht `t`, `lang`, `ctx`, `stopped` | `features/companion/persistChat.ts` (`transform`, ≤ 40 Nachrichten, ≤ 180 KB) |
-| `preply/pp<ms>` | `pv`, `heldDay`, `heldMin`; `ctx.kind: 'held'` für „Stunde ohne Plan" | `features/preply/actions.ts` (`createIfMissing`, gehalten per `transform`) |
-| `preply/pi<ms>` | `t`, `lang`, `pv`, `items` (Übungen, `tasks` bleibt Liste von Texten), `sel`, `res`, `hwDone` | `features/preply/actions.ts` (`applied:false` vor der Übernahme) |
-| `app/pool.items[]` | `id` (`pi<ms>-t<i>`) | Übernahme, kein Verdrängen bei 90 |
-| `vocab/<id>` | `src: 'preply' \| 'translate'`, `origin.kind: 'preply' \| 'translate' \| 'companion'` | über `saveCardOp` (nur anlegen oder Satz ergänzen) |
-| `grammar/<topic>.errors[]` | Einträge mit `src: 'preply'` (Box 0, fällig +1 Tag) | Deckel 10: erst erledigte, dann älteste |
-| `app/radar.events[]` | Einträge mit `s: 'g'` aus Lehrer-Korrekturen, Kategorie der alten App | Sammel-Warteschlange (`learnRecorder.radar`), Deckel 400, nach Zeit |
-| `app/profile` | `act[tag].preply`, `minutes[tag]` (keine `days`/`xpDays`/Pflicht), `lxSeq` gegen Doppelzählung | Sammel-Warteschlange (`recordRoundEnd`, `act:'preply'`) |
 
-Browser-Speicher (nur Bequemlichkeit): `lx:draft:chat`, `lx:draft:preply-import`, `lx:translate-history` (≤ 20), `lx:companion-tab`, `lx:companion-tier`.
-Abos: `app/chat` nur bei offenem Begleiter, `preply` nur bei offenem Preply-Bildschirm (`src/data/watch.ts`).
+Browser-Speicher (nur Bequemlichkeit): `lx:draft:chat`, `lx:translate-history` (≤ 20), `lx:companion-tab`, `lx:companion-tier`.
+Abos: `app/chat` nur bei offenem Begleiter (`src/data/watch.ts`).
+
+### Preply-Brücke (bis 28.09.2026) – entfernt, Daten bleiben
+
+Emrahs Vorgabe vom 28.09.2026: der Preply-Bereich (Vorbereiten, Import, Verlauf, „Als Preply-
+Stunde", „Mit Lehrer besprechen") ist vollständig aus der Oberfläche entfernt. Die Dokumente
+`preply/pp<ms>` und `preply/pi<ms>` (Plan, Import, Übungen, `hwDone`), `app/decks.flagged` und
+`app/week.preplyNext`/`app/week.hint.src:'preply'` bleiben unangetastet in der Datenbank stehen
+(Kap. 9, Regel 6: nichts wird gelöscht) und werden weiterhin tolerant gelesen, u. a. für „Dein
+Stand" (Deutsch-Fallen, Einschätzung) und den Eingangskorb-Stapel `src:preply`. Neu geschrieben
+wird dorthin nichts mehr. An ihre Stelle tritt „Lehrer-Feedback einfügen" (siehe unten).
+
+## Lehrer-Feedback einfügen (ab 28.09.2026, ersetzt die Preply-Brücke)
+
+`docs/neubau/plan.md` Abschnitt L. Emrah fügt das Feedback seines Lehrers als Text ein; die Vorlage
+`teacher-feedback@1` (`src/prompts/teacherFeedback.ts`) zerlegt ihn in Wörter/Wendungen,
+Korrekturen und Übungsideen. Nur auf Tipp, kein eigener Timer, keine automatische Wiederholung
+(A6.2/A6.3).
+
+| Dokument | Felder | Schreibweg |
+|---|---|---|
+| `teacher/<JJJJ-MM>` | `{v: 1, items: [{id, t, lang, raw, title, summary, corrections: [{wrong, right, why}], words: [{en, de, pos, ex, fromLesson}], tasks: string[]}]}` | `src/features/teacher/actions.ts::saveTeacherFeedback` (`writer.transform`, `src/domain/teacher/store.ts`: ≤ 200 Einträge, `raw` ≤ 4 KB, Dokument < 200 KiB, wie `out/<Monat>`) |
+| `vocab/<id>` | Kartenvorschlag übernehmen: `src: 'teacher'`, `origin.kind: 'teacher'` | über `addWord`/`saveCardOp` (Ursprungssatz Pflicht, Kap. 15) |
+| `app/repair` | Korrektur übernehmen: Reparatur-Satz mit `src: 'teacher'` | `domain/repair/sources.ts::repairsFromTeacher` → `saveRepairs` |
+
+„Jetzt üben" startet die vorhandene Übung „Mach mir eine Übung dazu" (`claude-drill@1`,
+`src/features/companion/drill.ts`) mit dem Feedback als Kontext – keine neue Übungs-Engine.
+Ohne Claude (`not_granted`): Hinweis und ein reiner Zeilen-Rückfall (`src/domain/teacher/fallback.ts`,
+Muster „Wort – Bedeutung"), ohne Speicherweg (kein Ursprungssatz, Kap. 15).
 ## Phase 4: Lesen, Hören, Schreiben, Entdecken
 
 Alle Formate bleiben Altformat; neue Felder sind nur zusätzlich und tolerant gelesen (`nullish`). Geschrieben wird nur auf eine Handlung hin, über den einen Writer; alles in `app/profile`, `log/<tag>` und `app/radar` nur über die gemeinsame Sammel-Warteschlange (`features/progress/persist.ts`: `recordUnitEnd`, `recordChannelEntries`, `recordRadar`, `recordProfileFields`). `feed/*` und `daily/*` werden nie geschrieben.
@@ -146,7 +167,7 @@ Deklariert in WP0a (`src/data/{paths,schemas}.ts`, tolerant/`looseObject`); gesc
 | Pfad | Neu | Grenze | Schreibweg |
 |---|---|---|---|
 | `app/decks` | `{v: 1, decks: {<id>: {name, order, created, mode?: 'type'\|'flip', dir?: 'de-en'\|'en-de'\|'mix', size?, hidden?, filter {kinds?, src?, stage {min?, max?}?, due?, hard?, query?, ids? (≤ 500)}}}, builtin?: {<id>: {mode?, dir?, size?}}, prefs?: {dir?: 'de-en'\|'en-de'\|'mix', grades?: 4\|2, mode?: 'auto'\|'type'\|'flip'}, flagged?: string[] (≤ 200)}` – eigene Stapel als gespeicherte Filter; Karten bekommen **kein** neues Feld, die Zugehörigkeit ergibt `matchDeck(card, filter)`. Löschen eines Stapels = `hidden: true` (zählt in die 40). Grenzen werden vor jedem Schreiben geprüft (`domain/srs/decks.ts`), verletzt → Hinweis statt Schreiben | ≤ 40 Stapel, ≤ 500 IDs je Stapel, ≤ 2.000 IDs gesamt, `flagged` ≤ 200, `jsonBytes` ≤ 64 KiB | P3 → `writer.transform` |
-| `app/week` | `{v: 1, cur?: {wk: 'JJJJ-Www', theme: 't01'…'t16', by: 'auto'\|'user', at}, hist?: [{wk, theme, by}], preplyNext?: string, targets?: {wk, traps: string[], tool: string, preply?: string}, hint?: {wk, theme, src: 'meeting'\|'preply'}}` – Wochenthema und Wochenziele; `hint` = Termin-/Preply-Thema mit Vorrang beim Vorschlag (N17) | ≤ 26 Wochen in `hist`, < 8 KiB | P1 → `writer.transform`; `preplyNext` und `hint` P5 (feldweise) |
+| `app/week` | `{v: 1, cur?: {wk: 'JJJJ-Www', theme: 't01'…'t16', by: 'auto'\|'user', at}, hist?: [{wk, theme, by}], targets?: {wk, traps: string[], tool: string}, hint?: {wk, theme, src: 'meeting'}}` – Wochenthema und Wochenziele; `hint` = Terminthema mit Vorrang beim Vorschlag (N17). Frühere Felder `preplyNext` und `targets.preply` sowie `hint.src:'preply'` (bis 28.09.2026) werden, falls noch vorhanden, tolerant gelesen und nicht mehr ausgewertet oder geschrieben | ≤ 26 Wochen in `hist`, < 8 KiB | P1 → `writer.transform` |
 | `out/<JJJJ-MM>` | `{v: 1, items: [{id, k, d, theme?, ok?, text?, fb?, ms?}]}` – Ergebnisse der neuen Übungen (Kollokationen, Einwände, Posteingang, Nachsprechen …) als Monatsdokument (A6.6) | ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB | P7 → `writer.transform`, idempotent über `item.id`; Antworten zusätzlich ins Tagesprotokoll über `recordChannelEntries` |
 
 ## Ergänzungen Paket B (docs/backlog.md §1, additiv, nichts gelöscht)

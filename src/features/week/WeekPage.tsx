@@ -16,7 +16,7 @@ import { chooseTheme } from './store';
 import { useWeekState } from './useWeekState';
 
 // Seite „Deine Woche“ (plan.md §1.5, N11/N13; Einstieg auf Üben › Dein Weg): Thema, Kernaufgabe,
-// Wendungen, Ziele (≤ 5: Fallen, Werkzeug, Preply), Wochenplan Mo–So und „Thema ändern“.
+// Wendungen, Ziele (≤ 4: Fallen, Werkzeug), Wochenplan Mo–So und „Thema ändern“.
 
 export function WeekPage() {
   const { t, tn, lang } = useT();
@@ -84,7 +84,6 @@ export function WeekPage() {
           {targets.goals.length > 0 && (
             <li className="px-4 py-2.5">{targets.goals.map((g) => tn(`nbHeuteGoal_${g.kind}` as PluralBase, g.need)).join(' · ')}</li>
           )}
-          {targets.preply && <li className="px-4 py-2.5">{targets.preply}</li>}
         </ul>
       </section>
       <section className="flex flex-col gap-2">

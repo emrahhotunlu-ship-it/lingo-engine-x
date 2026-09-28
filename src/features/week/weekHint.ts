@@ -4,8 +4,8 @@ import { hintFor, weekHintOp } from '../../domain/week/hint';
 import type { WeekHint } from '../../domain/week/types';
 import { logError } from '../../platform/diagnostics';
 
-// Vorrang beim Wochenthema (Neubau N17): Nach dem Speichern eines Termins bzw. einer
-// Preply-Vorbereitung das erkannte Thema als `app/week.hint` vermerken – feldweise per
+// Vorrang beim Wochenthema (Neubau N17): Nach dem Speichern eines Termins das erkannte
+// Thema als `app/week.hint` vermerken – feldweise per
 // `writer.transform`, nur bei gültigem Dokument (data-guard 00:35). Fehler blockieren nie das
 // eigentliche Speichern; sie landen in der Diagnose.
 

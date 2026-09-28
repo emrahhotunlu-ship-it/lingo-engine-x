@@ -13,6 +13,7 @@ import { installFlushOnHide } from '../features/vocab/persist';
 import { restoreTrainer, roundProgress, startSession, trainerSnapshot, TRAINER_RESUME_ID, useSession, type TrainerSnapshot } from '../features/vocab/session';
 import { TrainerScreen } from '../features/vocab/TrainerScreen';
 import { ListenLoop } from '../features/vocab/listen/ListenLoop';
+import { TeacherFeedbackScreen } from '../features/teacher/TeacherFeedbackScreen';
 import type { ScreenProps } from '../app/registry';
 
 // Bereich „Wortschatz & Anki“ – Besitz: Paket P3 (plan.md §4.4, anki-regeln.md).
@@ -27,6 +28,8 @@ declare module '../app/router/types' {
     deck: { id: string };
     trainer: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip' | 'listen'; deck?: string };
     listenLoop: NoParams;
+    /** Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke). */
+    teacherFeedback: NoParams;
   }
 }
 
@@ -82,7 +85,13 @@ export const wortschatz = defineArea({
     trainer: { kind: 'exercise', component: TrainerScreen, params: trainerParams, ensure: ensureTrainer },
     // N35 Hörschleife (Extra-Runde): schreibt nichts, zählt nicht als Wiederholung.
     listenLoop: { kind: 'exercise', component: ListenLoop, title: 'nbWsLoopTitle' },
+    // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke).
+    teacherFeedback: { kind: 'page', component: TeacherFeedbackScreen, title: 'tfTitle' },
   },
+  entries: [
+    // Zeile unter Üben (place 'learn'): Lehrer-Feedback einfügen.
+    { id: 'entry-teacher-feedback', place: 'learn', group: 'nb-learn', order: 56, label: 'tfEntryLabel', sub: 'tfEntrySub', icon: 'chat', route: { name: 'teacherFeedback' } },
+  ],
   sections: [{ id: 'ws-stats', place: 'stand', order: 50, component: VocabStatsSection }],
   sheets: [
     { id: 'word', component: WordSheetHost },

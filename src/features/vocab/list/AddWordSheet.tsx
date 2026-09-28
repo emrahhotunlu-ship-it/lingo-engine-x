@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useClock } from '../../../app/clock';
+import { useNav } from '../../../app/nav';
 import { useAiAvailable } from '../../../ai/scope';
 import { useAsk } from '../../../ai/useAsk';
 import { useT, type MessageKey } from '../../../i18n';
@@ -27,13 +28,14 @@ export function AddWordSheet({ open, onClose }: { open: boolean; onClose: () => 
   const { t } = useT();
   return (
     <Sheet open={open} onClose={onClose} title={t('vcAddTitle')} closeLabel={t('close')}>
-      {open && <AddBody />}
+      {open && <AddBody onClose={onClose} />}
     </Sheet>
   );
 }
 
-function AddBody() {
+function AddBody({ onClose }: { onClose: () => void }) {
   const { t } = useT();
+  const go = useNav((s) => s.go);
   const ai = useAiAvailable();
   const today = useClock((s) => s.today);
   const fill = useAsk(wordGen);
@@ -190,6 +192,22 @@ function AddBody() {
         </section>
       )}
       {ai && <FromText />}
+      <section className="flex flex-col gap-2">
+        <h3 className="lx-eyebrow">{t('vcFromTeacher')}</h3>
+        <div>
+          <Button
+            variant="secondary"
+            icon="chat"
+            onClick={() => {
+              onClose();
+              go({ name: 'teacherFeedback' });
+            }}
+            data-testid="add-teacher-feedback"
+          >
+            {t('vcFromTeacherGo')}
+          </Button>
+        </div>
+      </section>
     </div>
   );
 }

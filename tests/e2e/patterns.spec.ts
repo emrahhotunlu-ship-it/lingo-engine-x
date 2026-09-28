@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen, type BootOptions, openSpeak } from './fixtures';
+import { boot, layoutProblems, openOverview, screen, type BootOptions } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Persönliche „Deutsch-Fallen“ (Lernberatung 27.09., V3) und Wochenfokus Preply ↔ App (V8/Nr. 9):
@@ -8,8 +8,7 @@ import { dump } from './trainerHelpers';
 //   eigenem Beispiel und Verlauf; `app/patterns` gespeichert (gekappt, Verlauf je ISO-Woche).
 // - Kurzdrill: eigene Sätze als Reparatur-Sätze (src `pattern`), neue Sätze mit pattern-check@1.
 // - Vorhandene Muster: Karte auf „Dein Stand“ mit Wochenfokus, kein automatischer Aufruf in
-//   derselben Woche; Wochenbericht mit seltener/gleich/häufiger; Preply-Vorbereitung mit Fokus
-//   und „Please pay attention to: …“ in der Nachricht; Hinweis im Prompt von „Sag es“.
+//   derselben Woche; Wochenbericht mit seltener/gleich/häufiger; Hinweis im Prompt von „Sag es“.
 // Handy (390) und Desktop.
 
 type Doc = Record<string, unknown>;
@@ -205,7 +204,7 @@ for (const size of SIZES) {
 test.describe('Vorhandene Muster (Desktop, EN)', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
-  test('Dein Stand, Sprachtreue, Wochenbericht und Preply-Wochenfokus', async ({ page }) => {
+  test('Dein Stand, Sprachtreue, Wochenbericht und Wochenfokus', async ({ page }) => {
     const { errors, external } = await boot(page, { migrated: true, lang: 'en', fake: { patch: { 'app/patterns': PRESET, 'say/2026-09': SAY_DOC } } });
     await openOverview(page);
     await page.getByTestId('tab-errors').click();
@@ -233,23 +232,6 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     await expect(page.getByTestId('patterns-focus')).toContainText('Weekly focus');
     // Diese Woche schon erkannt: kein automatischer Aufruf.
     expect((await calls(page)).filter((c) => c.id === 'patterns')).toEqual([]);
-
-    // Preply: Wochenfokus in der Vorbereitung und in der Nachricht an den Lehrer.
-    await page.getByTestId('patterns-close').click();
-    await screen(page, 'overview');
-    // Preply liegt seit der neuen Struktur unter Sprechen → Preply.
-    await openSpeak(page, 'preply');
-    await expect(page.getByTestId('pp-focus')).toContainText('“since” with the present tense');
-    await page.getByTestId('pp-create').click();
-    await expect(page.getByTestId('pp-plan')).toBeVisible();
-    await expect(page.getByTestId('pp-plan-focus')).toContainText('“actual” used for “current”');
-    await expect(page.getByTestId('pp-message')).toContainText('Please pay attention to: “since” with the present tense; “actual” used for “current”');
-    const pp = Object.entries(await dump(page)).find(([k]) => k.startsWith('preply/pp') && k !== 'preply/pp1789581600000')![1];
-    expect(pp.message).toContain('Please pay attention to:');
-    expect((pp.focus as Doc[]).slice(0, 2)).toEqual([
-      { de: SINCE.title_de, en: SINCE.title_en },
-      { de: ACTUAL.title_de, en: ACTUAL.title_en },
-    ]);
     expect(await layoutProblems(page)).toEqual([]);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);

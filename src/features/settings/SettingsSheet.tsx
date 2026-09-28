@@ -230,7 +230,6 @@ function Diagnostics({ open }: { open: boolean }) {
         setDocCount(docCountOf(c.byCollection).total);
         const raw = new Map<string, Record<string, unknown>>();
         if (c.chat) raw.set('app/chat', c.chat);
-        for (let i = 0; i < c.preply; i++) raw.set(`preply/${i}`, {});
         setP5(phase5Diag(raw));
       },
       (err: unknown) => {
@@ -263,8 +262,8 @@ function Diagnostics({ open }: { open: boolean }) {
     [t('diagDocuments'), docCount === null ? t('diagDocumentsUnknown') : t('diagDocumentsValue', { n: docCount })],
     // Phase 7 (Plan §12.3): Profilgröße gegen 256 KiB und Prognose.
     [t('diagProfileSize'), `${t('diagProfileSizeValue', { kb: Math.round(size.bytes / 1024) })}${size.yearsLeft !== null ? ` · ${t('diagProfileYears', { years: size.yearsLeft })}` : ''}`],
-    // Phase 5 (§5.8): Größe des Chat-Verlaufs und Preply-Dokumente.
-    ...(p5 ? ([[t('diagChat'), t('diagChatValue', { n: p5.chatMsgs, kb: p5.chatKb })], [t('diagPreply'), t('diagDocumentsValue', { n: p5.preply })]] as Array<[string, string]>) : []),
+    // Phase 5 (§5.8): Größe des Chat-Verlaufs.
+    ...(p5 ? ([[t('diagChat'), t('diagChatValue', { n: p5.chatMsgs, kb: p5.chatKb })]] as Array<[string, string]>) : []),
     [
       t('diagSchema'),
       schema && typeof schema.version === 'number'

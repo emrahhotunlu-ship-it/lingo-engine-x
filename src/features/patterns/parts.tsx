@@ -2,7 +2,7 @@ import { addDays, isoWeek } from '../../domain/date';
 import { trendOf, type FocusPoint, type PatternsDoc, type Trend } from '../../domain/patterns/patterns';
 import { useT, type MessageKey } from '../../i18n';
 
-// Kleine gemeinsame Bausteine der Deutsch-Fallen (Liste, „Dein Stand“, Wochenbericht, Preply).
+// Kleine gemeinsame Bausteine der Deutsch-Fallen (Liste, „Dein Stand“, Wochenbericht).
 
 export const TREND_KEY: Record<Trend, MessageKey> = { fewer: 'ptTrend_fewer', same: 'ptTrend_same', more: 'ptTrend_more' };
 export const TREND_TONE: Record<Trend, string> = { fewer: 'text-accent-text', same: 'text-muted', more: 'text-gold-text' };

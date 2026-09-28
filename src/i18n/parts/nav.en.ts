@@ -22,7 +22,6 @@ export const navEn = {
   spSegLabel: 'Section',
   spSegScenes: 'Scenes',
   spSegBusiness: 'Business',
-  spSegPreply: 'Preply',
   spIncomplete_one: '{n} incomplete scene',
   spIncomplete_other: '{n} incomplete scenes',
   grLookup: 'Search a rule or trap',

@@ -1,5 +1,5 @@
 import { THEME_ORDER, isThemeId, themeById } from '../../content/nb/themes';
-import { isDayKey, isoWeek } from '../date';
+import { isoWeek } from '../date';
 import { hintOf, readHint } from './hint';
 import type { ThemeHint, ThemeId, WeekCur, WeekDoc, WeekHist, WeekStoredTargets, WeekTheme } from './types';
 
@@ -33,7 +33,6 @@ export function readWeekDoc(raw: unknown): WeekDoc {
     }
     if (hist.length) out.hist = hist.slice(-HIST_MAX);
   }
-  if (isDayKey(d.preplyNext)) out.preplyNext = d.preplyNext;
   const hint = readHint(d.hint);
   if (hint) out.hint = hint;
   const t = obj(d.targets);
@@ -43,8 +42,6 @@ export function readWeekDoc(raw: unknown): WeekDoc {
       traps: Array.isArray(t.traps) ? t.traps.map((x) => str(x, 60)).filter(Boolean).slice(0, 3) : [],
       tool: str(t.tool, 60),
     };
-    const preply = str(t.preply);
-    if (preply) targets.preply = preply;
     out.targets = targets;
   }
   return out;
@@ -64,12 +61,11 @@ export function storedTheme(week: WeekDoc | null | undefined, wk: string): WeekH
 }
 
 /**
- * Vorschlag für eine Woche: Termin > Preply > das nächste Thema der Reihenfolge nach dem zuletzt
+ * Vorschlag für eine Woche: Termin > das nächste Thema der Reihenfolge nach dem zuletzt
  * gespeicherten (vor dieser Woche). Nach dem 16. Thema beginnt der zweite Durchgang.
  */
 export function suggestTheme(week: WeekDoc | null | undefined, wk: string, hint?: ThemeHint): ThemeId {
   if (hint?.meeting && isThemeId(hint.meeting)) return hint.meeting;
-  if (hint?.preply && isThemeId(hint.preply)) return hint.preply;
   const before = weeksOf(week).filter((h) => h.wk < wk);
   const last = before[before.length - 1];
   if (!last) return THEME_ORDER[0] ?? 't01';
@@ -93,7 +89,7 @@ export type ThemePick = {
 export function themeFor(day: string, week: WeekDoc | null | undefined, hint?: ThemeHint): ThemePick {
   const wk = isoWeek(day);
   const s = storedTheme(week, wk);
-  // N17: ohne ausdrücklichen Hinweis gilt der gespeicherte Termin-/Preply-Hinweis dieser Woche.
+  // N17: ohne ausdrücklichen Hinweis gilt der gespeicherte Termin-Hinweis dieser Woche.
   const id = s ? s.theme : suggestTheme(week, wk, hint ?? hintOf(week, wk));
   const theme = themeById(id) ?? themeById('t01');
   if (!theme) throw new Error('content/nb/themes leer');

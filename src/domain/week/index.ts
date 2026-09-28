@@ -5,15 +5,12 @@ export { isoWeek, readWeekDoc, storedTheme, suggestTheme, themeFor, needsThemeCo
 export {
   unitPlanFor,
   resolveBlock,
-  preplyRole,
   dowOf,
   SHORT_GOAL_MAX,
   REVIEW_SEC,
   FULL_MIN,
   SHORT_MIN,
   SUNDAY_MIN,
-  PREPLY_DAY_MIN,
-  NORMAL_DAYS_MIN,
   LISTEN_WORDS,
   type ResolvedBlock,
 } from './plan';

@@ -48,7 +48,6 @@ function CompanionOverlay() {
   const tier = useCompanion((s) => s.tier);
   const seeing = useCurrentSeeing();
   const route = useNav((s) => s.route.name);
-  const onPreply = useNav((s) => s.route.name === 'speak' && s.route.seg === 'preply');
   const ai = useAiAvailable();
   const [focusSeq, setFocusSeq] = useState(0);
   const [mobile] = useState(() => window.innerWidth < 768);
@@ -104,7 +103,7 @@ function CompanionOverlay() {
     }
   };
 
-  const areaLabel = seeing?.label ?? (route === 'overview' ? t('cmpSeeOverview') : onPreply ? t('cmpSeePreply') : t('cmpSeeToday'));
+  const areaLabel = seeing?.label ?? (route === 'overview' ? t('cmpSeeOverview') : t('cmpSeeToday'));
   const tabs: Array<{ id: CompanionTab; label: string }> = [
     // Neubau (plan.md §1.2): Umschalter „Übersetzen · Fragen“.
     { id: 'translate', label: t('cmpTabTranslate') },

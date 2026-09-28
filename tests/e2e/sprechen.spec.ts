@@ -4,8 +4,8 @@ import { boot, bootAt, layoutProblems, openSpeak, screen } from './fixtures';
 import { installGoalCheckReply } from './sprechenHelpers';
 import { DAY, dump } from './trainerHelpers';
 
-// Neubau P5 – Sprechen, Business & Preply (plan.md §4.6): Sprechen-Wurzel mit Gespräche ·
-// Schreiben · Preply, Gespräch in ≤ 2 Tipps, Ziel-Checkliste mit Haken (goal-check@1),
+// Neubau P5 – Sprechen & Business (plan.md §4.6): Sprechen-Wurzel mit Gespräche · Schreiben,
+// Gespräch in ≤ 2 Tipps, Ziel-Checkliste mit Haken (goal-check@1),
 // Fortsetzen nach Neuladen nach Zug 3, „Laut zuerst“ bis zur besseren Fassung mit ▶, Sag es ohne
 // KI speicherbar, Einheits-Modus (Block 3) mit Wochenziel-Leiste.
 
@@ -23,14 +23,13 @@ async function send(page: Page, text: string): Promise<void> {
 
 test.use({ viewport: MOBILE });
 
-test('Wurzel: drei Bereiche, Szene der Woche, Gespräch in 2 Tipps, Ziel-Haken, Neuladen nach Zug 3, Bericht mit Raster', async ({ page }) => {
+test('Wurzel: zwei Bereiche, Szene der Woche, Gespräch in 2 Tipps, Ziel-Haken, Neuladen nach Zug 3, Bericht mit Raster', async ({ page }) => {
   await installGoalCheckReply(page);
   const { errors, external } = await boot(page, { migrated: true, fake: { persist: true } });
   await screen(page, 'today');
   await openSpeak(page, 'talk');
   await expect(page.getByTestId('speak-seg-talk')).toBeVisible();
   await expect(page.getByTestId('speak-seg-write')).toBeVisible();
-  await expect(page.getByTestId('speak-seg-preply')).toBeVisible();
   await expect(page.getByTestId('training-meeting')).toBeVisible();
   await expect(page.getByTestId('speak-training').getByTestId('training-fluency')).toBeVisible();
   expect(await layoutProblems(page)).toEqual([]);

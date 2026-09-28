@@ -6,7 +6,6 @@ import { collectMistakes, uniqueMistakes, type Mistake } from '../../src/domain/
 import {
   capPatterns,
   countWeeks,
-  focusLine,
   matchPattern,
   mergeHistory,
   patternHintsOf,
@@ -17,7 +16,6 @@ import {
   topPatterns,
   trendOf,
   weekFocus,
-  withFocusLine,
   type Pattern,
   type PatternsDoc,
 } from '../../src/domain/patterns/patterns';
@@ -178,25 +176,13 @@ describe('lokale Zählung und Verlauf (ohne KI)', () => {
   });
 });
 
-describe('Wochenfokus Preply ↔ App (V8)', () => {
-  const names = (id: string) => (id === 'articles' ? { de: 'Artikel', en: 'Articles' } : null);
-
-  it('Muster aus dem letzten Import zuerst, höchstens 3, Themen füllen auf', () => {
-    const d = doc([SINCE, ACTUAL], [{ w: isoWeek(TODAY), counts: { 'since-present': 5 } }]);
-    const imp = { corrections: [{ wrong: 'The actual plan is fine.', right: 'The current plan is fine.' }, { wrong: 'I need an information.', right: 'I need some information.', topic: 'articles' }] };
-    const f = weekFocus(d, imp, TODAY, names);
-    expect(f.map((x) => x.id)).toEqual(['actual-current', 'since-present', 'topic:articles']);
-    expect(f[2]).toMatchObject({ de: 'Artikel', en: 'Articles', patternId: null });
-    expect(weekFocus(null, null, TODAY, names)).toEqual([]);
-  });
-
-  it('Nachricht an den Lehrer: „Please pay attention to: …“ genau einmal', () => {
-    const f = weekFocus(doc([SINCE, ACTUAL]), null, TODAY, names);
-    expect(focusLine(f)).toBe('Please pay attention to: “since” with the present tense; “actual” used for “current”.');
-    const msg = withFocusLine('Hi! Could we practice objections?', f);
-    expect(msg).toBe('Hi! Could we practice objections?\n\nPlease pay attention to: “since” with the present tense; “actual” used for “current”.');
-    expect(withFocusLine(msg, f)).toBe(msg);
-    expect(withFocusLine('Hi', [])).toBe('Hi');
+describe('Wochenfokus (V8)', () => {
+  it('Top-Muster nach Häufigkeit, höchstens 3, ohne Preply-Import', () => {
+    const d = doc([SINCE, ACTUAL], [{ w: isoWeek(TODAY), counts: { 'actual-current': 5 } }]);
+    const f = weekFocus(d, TODAY);
+    expect(f.map((x) => x.id)).toEqual(['actual-current', 'since-present']);
+    expect(f[0]).toMatchObject({ patternId: 'actual-current' });
+    expect(weekFocus(null, TODAY)).toEqual([]);
   });
 });
 

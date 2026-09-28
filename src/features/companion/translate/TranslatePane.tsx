@@ -8,7 +8,7 @@ import { IconButton } from '../../../ui/Button';
 import { dayKey } from '../../../domain/date';
 import { toast } from '../../../ui/Toast';
 import { saveLookupCard } from '../../lookup/store';
-import { CopyButton } from '../../preply/CopyBox';
+import { CopyButton } from '../../../ui/CopyBox';
 import { useCompanion } from '../store';
 import { saveTargets, type SaveTarget } from '../../../domain/companion/saveTargets';
 import { fillFromHistory, fromOf, isTranslating, requestFrom, runTranslate, setRegister, setTranslateText, stopTranslate, setDirection, useTranslate } from './store';

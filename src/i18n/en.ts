@@ -19,6 +19,7 @@ import { tonesEn } from './parts/tones.en';
 import { repairEn } from './parts/repair.en';
 import { navEn } from './parts/nav.en';
 import { patternsEn } from './parts/patterns.en';
+import { teacherEn } from './parts/teacher.en';
 import { nbShEn } from './parts/nbSh.en';
 import { nbHeuteEn } from './parts/nbHeute.en';
 import { nbLernenEn } from './parts/nbLernen.en';
@@ -64,6 +65,7 @@ export const en: Record<MessageKey, string> = {
   ...navEn,
   // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
   ...patternsEn,
+  ...teacherEn,
   // Rebuild (docs/neubau/architektur.md §2.8): one part per area, own prefix only
   ...nbShEn,
   ...nbHeuteEn,

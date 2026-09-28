@@ -5,12 +5,12 @@ import { hasWords, normText, phraseCore } from './text';
 import { matchTraps, type TrapHit } from './traps';
 import type { TargetKind, ThemeId, WeekDoc, WeekTargets, WeekTheme } from './types';
 
-// Wochenziele (Plan N13, Lehrer W7/W8/G2): ≤ 5 Ziele (3 Fallen, 1 Werkzeug, 1 Preply-Ziel) und die
+// Wochenziele (Plan N13, Lehrer W7/W8/G2): ≤ 4 Ziele (3 Fallen, 1 Werkzeug) und die
 // Zählziele der Aufgaben („Ziel: 2 Abschwächungen · 3 Überleitungen“). `detectTargets` zählt lokal beim Tippen.
 
 export const TRAPS_MAX = 3;
 
-export const EMPTY_TARGETS: WeekTargets = { wk: null, theme: null, traps: [], tool: null, preply: null, goals: [], phrases: [] };
+export const EMPTY_TARGETS: WeekTargets = { wk: null, theme: null, traps: [], tool: null, goals: [], phrases: [] };
 
 /**
  * Wochenziele einer Woche. Gespeicherte Ziele in `app/week.targets` (gleiche Woche) gehen vor.
@@ -39,7 +39,6 @@ export function weekTargets(theme: WeekTheme | ThemeId | null | undefined, opts:
     theme: t.id,
     traps,
     tool: stored?.tool || t.tool,
-    preply: stored?.preply ?? null,
     goals: t.goals.map((g) => ({ ...g })),
     phrases: t.phrases.map((p) => p.en),
   };

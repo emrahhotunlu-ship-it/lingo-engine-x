@@ -10,7 +10,6 @@ import { Button } from '../../ui/Button';
 import { Sheet } from '../../ui/Sheet';
 import { clearResume, readResume } from './resume';
 import { queueOpening, speakRepliesOn } from './autoplay';
-import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import { sceneGoals } from '../../domain/speak/bizScenes';
 import { GoalChecklist } from './GoalChecklist';
 
@@ -98,10 +97,6 @@ export function SceneBriefing({ scene, onClose }: { scene: SceneView | null; onC
               {t('spStart')}
             </Button>
           )}
-          {/* M18: aus der Szene eine Preply-Stunde machen. */}
-          <div>
-            <AsPreplyLesson title={scene.title} />
-          </div>
         </div>
       )}
     </Sheet>

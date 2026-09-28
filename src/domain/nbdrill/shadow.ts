@@ -1,7 +1,7 @@
 // Nachsprechen Satz für Satz (Lehrer P2, Plan N105): Ein Satz wird vorgesprochen, danach erscheint
 // „Jetzt du“ so lange, wie der Satz gedauert hat. Drei Durchgänge mit steigendem Tempo
 // (0,9 · 1,0 · 1,1). Keine Wertung. Quellen: Sätze aus Block 2 (`ctx.sentences`), sonst die
-// Wendungen (Preply-Tag), sonst die drei Nachsprech-Sätze des Themen-Texts.
+// Wendungen, sonst die drei Nachsprech-Sätze des Themen-Texts.
 
 export const SHADOW_RATES = [0.9, 1, 1.1] as const;
 export const SHADOW_MAX = 3;

@@ -13,7 +13,6 @@ import { Skeleton } from '../../ui/Skeleton';
 import { aiUsable } from './assessRun';
 import { useCollectionsOnce } from './useOnce';
 import { ensureWeeklyText, storedWeekly, WEEKLY_MIN_FACTS } from './weeklyRun';
-import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 
 // Wochenbericht (Plan §7.3, O13): eigene Seite `weekly`, erreichbar über das Profil-Blatt und
 // montags über eine ruhige Zeile auf Heute (plan.md §1.2/§1.3). Inhalt unverändert aus dem
@@ -156,12 +155,6 @@ export function WeeklyCard() {
                   </li>
                 ))}
             </ul>
-          )}
-          {/* M18: aus dem Wochenbericht eine Preply-Stunde machen. */}
-          {facts.length > 0 && (
-            <div className="mt-3">
-              <AsPreplyLesson title={stored?.text.headline || t('weeklyPreplyTitle', { from: date(dayMs(first)), to: date(dayMs(last)) })} />
-            </div>
           )}
         </>
       )}

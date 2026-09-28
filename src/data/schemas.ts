@@ -848,6 +848,30 @@ export const compareSchema = z.looseObject({
     .nullish(),
 });
 
+/**
+ * Lehrer-Feedback je Monat (`teacher/<JJJJ-MM>`, 28.09.2026, ersetzt die Preply-Brücke): der
+ * eingefügte Text und das Ergebnis, je Verarbeitung ein Eintrag. Grenzen wie `out/<Monat>`
+ * (Kap. 9, Regel 6): ≤ 200 Einträge, `raw` ≤ 4 KB, das Dokument bleibt unter 200 KiB.
+ */
+export const teacherSchema = z.looseObject({
+  v: num,
+  items: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        t: num,
+        lang: str,
+        raw: str,
+        title: str,
+        summary: str,
+        corrections: looseArr,
+        words: looseArr,
+        tasks: strArr,
+      }),
+    )
+    .nullish(),
+});
+
 /** Ergebnisse der neuen Übungen je Monat (`out/<JJJJ-MM>`; ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB). Schreibt P7. */
 export const outSchema = z.looseObject({
   v: num,

@@ -26,7 +26,6 @@ export const nbHeuteDe = {
   nbHeuteWhy_inputRead: 'Kurzer Text zum Thema',
   nbHeuteWhy_inputListen: 'Hörstück zum Thema',
   nbHeuteWhy_inputMail: 'Kundenmail lesen: Was will sie wirklich?',
-  nbHeuteWhy_inputImport: 'Stoff deiner Preply-Stunde übernehmen',
   nbHeuteWhy_shadow: 'Wendungen der Woche nachsprechen',
   nbHeuteWhy_say: 'Sag es zum Thema, erst laut',
   nbHeuteWhy_fluency: '90 · 60 · 45 Sek. zur Frage der Woche',
@@ -37,7 +36,6 @@ export const nbHeuteDe = {
   nbHeuteWhy_meeting: 'Generalprobe für deinen Termin',
   nbHeuteWhy_roleplay: 'Rollenspiel zum Thema',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
-  nbHeuteWhy_preply: 'Vorbereitung auf deine Preply-Stunde',
   nbHeuteWhy_focus: 'Deine Korrekturen aus der Aufgabe',
   nbHeuteWhy_again: 'Aus dem Kopf neu formulieren',
   // Fertig-Zustand (N15)

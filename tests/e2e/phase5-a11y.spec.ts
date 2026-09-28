@@ -1,11 +1,12 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSpeak, layoutProblems, screen, type Theme } from './fixtures';
+import { boot, openTab, layoutProblems, screen, type Theme } from './fixtures';
 
 // Phase 5: Barrierefreiheit und Gestalt (Plan §10.2 screens-phase5 / a11y-phase5, verkleinert):
-// je Modus und Breite Begleiter mit Antwort, Übersetzer-Ergebnis, Preply-Plan und Import-Vorschau.
-// Geprüft: axe (WCAG 2.1 AA), `layoutProblems`, Touch-Ziele ≥ 44 px im Begleiter. Bildschirmfotos
-// liegen für den ux-reviewer unter test-results/.
+// je Modus und Breite Begleiter mit Antwort, Übersetzer-Ergebnis und Lehrer-Feedback einfügen
+// (28.09.2026, ersetzt die Preply-Plan-/Import-Vorschau). Geprüft: axe (WCAG 2.1 AA),
+// `layoutProblems`, Touch-Ziele ≥ 44 px im Begleiter. Bildschirmfotos liegen für den ux-reviewer
+// unter test-results/.
 
 const THEMES: Theme[] = ['dark', 'dim', 'light'];
 
@@ -52,20 +53,17 @@ for (const theme of THEMES) {
       await page.screenshot({ path: info.outputPath(`translate-${theme}-${width}.png`) });
       await page.getByTestId('companion-close').click();
 
-      // Preply: Plan und Import-Vorschau
-      await openSpeak(page, 'preply');
-      await page.getByTestId('pp-create').click();
-      await expect(page.getByTestId('pp-plan')).toBeVisible();
+      // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke)
+      await openTab(page, 'vocab');
+      await page.getByTestId('vocab-add').click();
+      await page.getByTestId('add-teacher-feedback').click();
+      await expect(page.getByTestId('teacher-feedback')).toBeVisible();
+      await page.getByTestId('tf-input').fill('Teacher: "depend of" -> depend on. New word: would rather.');
+      await page.getByTestId('tf-go').click();
+      await expect(page.getByTestId('tf-words')).toBeVisible();
       expect(await axe(page, 'main')).toEqual([]);
       expect(await layoutProblems(page)).toEqual([]);
-      await page.screenshot({ path: info.outputPath(`preply-plan-${theme}-${width}.png`), fullPage: true });
-      await page.getByTestId('pp-tab-import').click();
-      await page.getByTestId('pi-raw').fill('Teacher: "depend of" -> depend on');
-      await page.getByTestId('pi-analyze').click();
-      await expect(page.getByTestId('pi-review')).toBeVisible();
-      expect(await axe(page, 'main')).toEqual([]);
-      expect(await layoutProblems(page)).toEqual([]);
-      await page.screenshot({ path: info.outputPath(`preply-import-${theme}-${width}.png`), fullPage: true });
+      await page.screenshot({ path: info.outputPath(`teacher-feedback-${theme}-${width}.png`), fullPage: true });
       expect(errors).toEqual([]);
     });
   }

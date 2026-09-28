@@ -1,14 +1,14 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen, openEntry } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
 import { typeInGap } from './learnHelpers';
 import { openModule } from './inputHelpers';
 import { answerCheckItem, playCheck } from './progressHelpers';
 import { dump, planPatch } from './trainerHelpers';
-import { openChecks, openProfileContent, openWeekly } from './profilHelpers';
+import { openChecks, openProfileContent } from './profilHelpers';
 
 // Lücken aus dem Abgleich (Kap. 9/14, M7, M10, M13, M18, M20, M21, M22, W5, Kap. 4.1):
 // alte Daten sichtbar, Wochen-Check, Wochenstreifen und Niveau-Leiste, Farbthema und beruflicher
-// Kontext, „Als Preply-Stunde", Nachtragen-Hinweis auf Heute, Ladepunkt, „Was ist neu" und die
+// Kontext, Nachtragen-Hinweis auf Heute, Ladepunkt, „Was ist neu" und die
 // Lücke über der iPhone-Tastatur. Gegen den Produktions-Build mit eingespieltem Adapter.
 
 test.use({ viewport: { width: 1440, height: 900 } });
@@ -193,44 +193,6 @@ test('M21 + M22: Farbthema aus theme.p, umschaltbar; beruflicher Kontext wird in
   await expect.poll(async () => (await profileOf(page)).ctx).toBe('Projektleiter für Cloud-Software, viele Kundentermine');
   await expect(ctx.getByTestId('work-ctx-save')).toBeDisabled();
   await expect(ctx.getByTestId('work-ctx-input')).toHaveAttribute('maxlength', '400');
-  expect(errors).toEqual([]);
-});
-
-test('M18: „Als Preply-Stunde" im Text, an der Szene und im Wochenbericht', async ({ page }) => {
-  test.setTimeout(60_000);
-  const { errors } = await boot(page, { migrated: true });
-  // Lesen
-  await openModule(page, 'read');
-  await expect(page.getByTestId('as-preply')).toBeVisible();
-  await page.getByTestId('unit-close').click();
-  await page.locator('[data-screen="library"]').waitFor({ state: 'visible' });
-  // Szene (Einweisung)
-  await page.getByTestId('tab-speak').click();
-  await page.getByTestId('scene-card').first().click();
-  await expect(page.getByTestId('briefing').getByTestId('as-preply')).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(page.getByTestId('briefing')).toHaveCount(0);
-  // Wochenbericht
-  await openWeekly(page);
-  await page.getByTestId('weekly').getByTestId('as-preply').click();
-  await expect(page.getByTestId('preply')).toBeVisible();
-  await expect(page.locator('[data-testid="pp-ctx"] [data-value="about"]')).toHaveAttribute('aria-checked', 'true');
-  expect(errors).toEqual([]);
-});
-
-test('M18: vom Regelblatt zu „Vorbereiten" mit Anlass „Zu: Passiv"', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true });
-  await screen(page, 'today');
-  await openEntry(page, 'hub-grammar');
-  await page.locator('[data-testid="topic"][data-topic="passive"]').click();
-  const sheet = page.getByTestId('rule-sheet');
-  await expect(sheet).toBeVisible();
-  await sheet.getByTestId('as-preply').click();
-  await expect(page.getByTestId('preply')).toBeVisible();
-  await expect(page.getByTestId('rule-sheet')).toHaveCount(0);
-  const about = page.locator('[data-testid="pp-ctx"] [data-value="about"]');
-  await expect(about).toHaveAttribute('aria-checked', 'true');
-  await expect(about).toContainText('Passiv');
   expect(errors).toEqual([]);
 });
 

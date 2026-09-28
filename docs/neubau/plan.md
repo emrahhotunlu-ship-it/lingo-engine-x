@@ -490,25 +490,35 @@ Die Einstiege (`entries`) behalten ihre heutigen Test-IDs. Jede Zeile nennt den 
 | K8 | Pitch: Rückmeldung | Pitch | P5 | FeedbackPanel |
 | K9 | Wendungen mitnehmen | Refiner/Pitch/Baukasten | P5 | – |
 
-### L. Preply-Brücke (9)
-| # | Funktion | Neuer Ort | Paket | Änderung |
+### L. Preply-Brücke (entfernt 28.09.2026) → Lehrer-Feedback einfügen
+Emrahs Vorgabe (28.09.2026): die Preply-Brücke (L1–L9, unten zur Erinnerung durchgestrichen) ist
+komplett aus der Oberfläche entfernt – kein Vorbereiten, kein Plan, keine „Als Preply-Stunde“, keine
+Preply-Zeile auf Heute. Die Dokumente `preply/*` bleiben in der Datenbank (Kap. 9, Regel 6), es wird
+nur nichts mehr geschrieben. An ihre Stelle tritt **„Lehrer-Feedback einfügen“**: Ws › „Hinzufügen“
+und eine Zeile unter Üben öffnen `TeacherFeedbackScreen` (`src/features/teacher/`); die Vorlage
+`teacher-feedback@1` zerlegt den eingefügten Text in Kartenvorschläge (→ Wortschatz, Stapel
+„Lehrer“), Korrekturen (→ Reparatur-Sätze) und Übungsideen. „Jetzt üben“ startet die vorhandene
+Übung „Mach mir eine Übung dazu“ (`claude-drill@1`) – keine neue Übungs-Engine. Siehe
+`docs/datenmodell.md` Abschnitt „Lehrer-Feedback einfügen“.
+
+| # | Funktion (bis 28.09.2026) | ~~Alter Ort~~ | Paket | Änderung |
 |---|---|---|---|---|
-| L1 | Stunde vorbereiten | S/P › Vorbereiten | P5 | – |
-| L2 | Stundenplan + Kopieren | S/P › Plan | P5 | – |
-| L3 | Wochenfokus in der Nachricht | S/P › Plan | P5 | – |
-| L4 | Vom Lehrer übernehmen | S/P › Übernehmen | P5 | – |
-| L5 | Vorschau + Übernahme | S/P › Übernehmen | P5 | – |
-| L6 | Stunde gehalten | S/P › Gehalten | P5 | – |
-| L7 | Verlauf der Stunden | S/P › Verlauf | P5 | – |
-| L8 | „Als Preply-Stunde“ von überall | an Artikel, Text, Thema, Szene, Bericht, Wochenbericht, Claude | P5 (Komponente) | – |
-| L9 | Preply-Zeile auf Heute | H › ruhige Zeile | P5 | – |
+| ~~L1~~ | ~~Stunde vorbereiten~~ | ~~S/P › Vorbereiten~~ | P5 | entfernt |
+| ~~L2~~ | ~~Stundenplan + Kopieren~~ | ~~S/P › Plan~~ | P5 | entfernt |
+| ~~L3~~ | ~~Wochenfokus in der Nachricht~~ | ~~S/P › Plan~~ | P5 | entfernt |
+| L4 | Vom Lehrer übernehmen | Ws › Hinzufügen bzw. Üben › Lehrer-Feedback einfügen | – | ersetzt durch „Lehrer-Feedback einfügen“ |
+| L5 | Vorschau + Übernahme | Lehrer-Feedback einfügen: Kartenvorschläge, Korrekturen | – | ersetzt |
+| ~~L6~~ | ~~Stunde gehalten~~ | ~~S/P › Gehalten~~ | P5 | entfernt |
+| ~~L7~~ | ~~Verlauf der Stunden~~ | ~~S/P › Verlauf~~ | P5 | entfernt |
+| ~~L8~~ | ~~„Als Preply-Stunde“ von überall~~ | ~~an Artikel, Text, Thema, Szene, Bericht, Wochenbericht, Claude~~ | P5 | entfernt |
+| ~~L9~~ | ~~Preply-Zeile auf Heute~~ | ~~H › ruhige Zeile~~ | P5 | entfernt |
 
 ### M. Fehler als Lernquelle (5)
 | # | Funktion | Neuer Ort | Paket | Änderung |
 |---|---|---|---|---|
 | M1 | Deutsch-Fallen erkennen | Ü › Grammatik & Fallen › Deutsch-Fallen | P2 | – |
 | M2 | Wochentrend | Deutsch-Fallen | P2 | – |
-| M3 | Wochenfokus (App + Preply) | Deutsch-Fallen; Seite „Deine Woche“ zeigt ihn als Wochenziel | P2 (P1 zeigt) | – |
+| M3 | Wochenfokus | Deutsch-Fallen; Seite „Deine Woche“ zeigt ihn als Wochenziel | P2 (P1 zeigt) | seit 28.09.2026 ohne Preply-Import |
 | M4 | Fallen-Kurzdrill | Deutsch-Fallen | P2 | + Startsatz (N43), **+R** |
 | M5 | Fehler-Radar 30 Tage | St › Fehler | P6 | – |
 

@@ -97,13 +97,22 @@ export function repairsFromWriting(text: string, errors: ReadonlyArray<{ orig: s
   return dedupe(repairsFromText(text, errors.map((e) => ({ wrong: e.orig, right: e.fix, cat: e.cat, why: e.why })), 'write', ctx));
 }
 
-/** Preply: ausgewählte Korrekturen des Lehrers (ganzer Satz falsch → ganzer Satz richtig). */
+/** Preply (bis 28.09.2026): ausgewählte Korrekturen des Lehrers (ganzer Satz falsch → ganzer Satz richtig). */
 export function repairsFromPreply(corrections: ReadonlyArray<{ wrong: string; right: string; why: string }>, sel: readonly number[], ctx: string): NewRepair[] {
+  return correctionsToRepairs(corrections, sel, 'preply', ctx);
+}
+
+/** Lehrer-Feedback (28.09.2026, ersetzt die Preply-Brücke): ausgewählte Korrekturen des Lehrers. */
+export function repairsFromTeacher(corrections: ReadonlyArray<{ wrong: string; right: string; why: string }>, sel: readonly number[], ctx: string): NewRepair[] {
+  return correctionsToRepairs(corrections, sel, 'teacher', ctx);
+}
+
+function correctionsToRepairs(corrections: ReadonlyArray<{ wrong: string; right: string; why: string }>, sel: readonly number[], src: 'preply' | 'teacher', ctx: string): NewRepair[] {
   const out: NewRepair[] = [];
   for (const i of [...new Set(sel)].sort((a, b) => a - b)) {
     const c = corrections[i];
     if (!c || !isReal(c)) continue;
-    out.push({ wrong: c.wrong.trim(), right: c.right.trim(), why: c.why.trim() || null, src: 'preply', ctx });
+    out.push({ wrong: c.wrong.trim(), right: c.right.trim(), why: c.why.trim() || null, src, ctx });
   }
   return dedupe(out);
 }

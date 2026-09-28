@@ -53,9 +53,23 @@ export async function editCard(card: TrainCard, lang: 'de' | 'en', e: { meaning:
 
 export type AddOutcome = 'created' | 'extended' | 'exists' | 'invalid' | 'failed';
 
-/** Neue Karte (eigenes Wort oder von Claude). Ohne Satz mit dem Wort gibt es keine Karte (Kap. 15). */
-export async function addWord(w: { word: string; de: string; pos?: string | null; def?: string | null; ex: string; level?: string | null }, src: 'user' | 'ai' | 'job', today: string): Promise<AddOutcome> {
-  const made = newVocabDoc({ word: w.word, de: w.de, pos: w.pos ?? null, def: w.def ?? null, level: w.level ?? null, ex: w.ex, surface: null, src, origin: { v: 1, kind: src === 'user' ? 'user' : 'ai', t: Date.now() }, today });
+/**
+ * Neue Karte (eigenes Wort, von Claude oder aus dem Lehrer-Feedback). Ohne Satz mit dem Wort gibt
+ * es keine Karte (Kap. 15). `teacher` (28.09.2026, ersetzt die Preply-Brücke): Stapel „Lehrer“.
+ */
+export async function addWord(w: { word: string; de: string; pos?: string | null; def?: string | null; ex: string; level?: string | null }, src: 'user' | 'ai' | 'job' | 'teacher', today: string): Promise<AddOutcome> {
+  const made = newVocabDoc({
+    word: w.word,
+    de: w.de,
+    pos: w.pos ?? null,
+    def: w.def ?? null,
+    level: w.level ?? null,
+    ex: w.ex,
+    surface: null,
+    src,
+    origin: { v: 1, kind: src === 'user' ? 'user' : src === 'teacher' ? 'teacher' : 'ai', t: Date.now() },
+    today,
+  });
   if (!made) return 'invalid';
   const writer = getWriter();
   if (!writer) return 'failed';

@@ -82,7 +82,6 @@ export const standEn = {
   ctxSaved: 'Work context saved',
 
   // Weekly report as a Preply lesson (M18)
-  weeklyPreplyTitle: 'Weekly report {from} to {to}',
 
   // W5: hint on Today
   lateTodayHint_one: 'This browser still has {n} change from the old app.',
@@ -101,7 +100,7 @@ export const standEn = {
   wnCheck: 'Weekly check: 12 tasks without hints, once a week – under “Where you stand” › History and on Today once your required tasks are done.',
   wnWeek: '“Where you stand” now shows your week as seven rings and Claude’s level on a scale; History also lists your old weekly checks.',
   wnSettings: 'In the settings: color theme (Sage, Ocean, Plum, Graphite) and your work context.',
-  wnPreply: '“As a Preply lesson” is now available for texts, grammar topics, scenes and the weekly report.',
+  wnTeacher: 'New: add teacher feedback – your notes become flashcards and a practice round.',
 
   // UX review no. 6, 10, 11: standing, vocabulary, settings
   ckTableToggle: 'Previous checks ({n})',
