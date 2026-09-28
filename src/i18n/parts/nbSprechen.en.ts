@@ -73,4 +73,5 @@ export const nbSprechenEn: Record<keyof typeof nbSprechenDe, string> = {
   nbSprechenApplyTask: 'Say it out loud for your own situation and write it down – using at least one of the phrases above.',
   nbSprechenApplyUsed: 'Used: {list}',
   nbSprechenApplyNone: 'None of the phrases used yet.',
+  nbSprechenFlagged: 'Discuss with your teacher',
 };

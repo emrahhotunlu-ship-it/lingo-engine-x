@@ -72,4 +72,5 @@ export const nbSprechenDe = {
   nbSprechenApplyTask: 'Sag es laut für deine eigene Lage und schreib es auf – mit mindestens einer der Wendungen oben.',
   nbSprechenApplyUsed: 'Benutzt: {list}',
   nbSprechenApplyNone: 'Noch keine der Wendungen benutzt.',
+  nbSprechenFlagged: 'Mit dem Lehrer besprechen',
 } as const;
