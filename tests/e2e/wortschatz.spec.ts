@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { boot, layoutProblems, openSettings, openTab, screen } from './fixtures';
+import { boot, layoutProblems, openOverview, openSettings, openTab, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 import { bigVocab } from './wortschatzHelpers';
 
@@ -135,4 +135,20 @@ test.describe('Desktop', () => {
     await sec.getByTestId('set-vocab-grades').locator('[role="radio"]').nth(1).click();
     await expect.poll(async () => ((await dump(page))['app/decks']?.prefs as Doc | undefined)?.grades).toBe(2);
   });
+});
+
+test('Dein Stand: Abschnitt „Wortschatz-Statistik“ (Platz stand); ohne KI bleibt Aufdecken erfüllbar', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
+  await openOverview(page);
+  const stats = page.getByTestId('ws-stats');
+  await stats.scrollIntoViewIfNeeded();
+  await expect(stats).toBeVisible();
+  await expect(page.getByTestId('ws-stat-retention')).toContainText('%');
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-review').click();
+  await screen(page, 'trainer');
+  const flip = page.getByTestId('flip').or(page.getByTestId('intro')).or(page.getByTestId('repair-item'));
+  await expect(flip.first()).toBeVisible();
+  expect(errors).toEqual([]);
 });
