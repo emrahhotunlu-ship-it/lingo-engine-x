@@ -13,6 +13,7 @@ import { teacherFeedback, RAW_MAX, type TeacherOut } from '../../prompts/teacher
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { toast } from '../../ui/Toast';
+import type { AddOutcome } from '../vocab/list/actions';
 import { addTeacherWord, applyTeacherCorrections, saveTeacherFeedback } from './actions';
 
 // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke): großes Textfeld, „Verarbeiten“
@@ -32,13 +33,16 @@ export function TeacherFeedbackScreen() {
   const ask = useAsk(teacherFeedback);
   const [raw, setRaw] = useState('');
   const [savedRaw, setSavedRaw] = useState('');
-  const [wordsDone, setWordsDone] = useState<ReadonlySet<number>>(new Set());
+  // Je Wort das Ergebnis merken statt nur „erledigt“: „exists“ zeigt Emrah, dass die Karte schon
+  // da war (sein Wunsch, 28.09.), „invalid“/„failed“ bleiben anklickbar statt für immer zu hängen.
+  const [wordsDone, setWordsDone] = useState<ReadonlyMap<number, AddOutcome>>(new Map());
+  const [takingAll, setTakingAll] = useState(false);
   const [corrOff, setCorrOff] = useState<ReadonlySet<number>>(new Set());
   const [corrDone, setCorrDone] = useState(false);
   const out: TeacherOut | null = ask.data;
 
   const run = async () => {
-    setWordsDone(new Set());
+    setWordsDone(new Map());
     setCorrOff(new Set());
     setCorrDone(false);
     const r = await ask.run({ uiLang: lang, raw, today: dayKey(Date.now()) });
@@ -52,8 +56,20 @@ export function TeacherFeedbackScreen() {
     const w = out?.words[i];
     if (!w || wordsDone.has(i)) return;
     const res = await addTeacherWord({ word: w.en, de: w.de, pos: w.pos || null, ex: w.ex }, today);
-    if (res === 'created' || res === 'extended' || res === 'exists') setWordsDone((s) => new Set(s).add(i));
+    if (res === 'created' || res === 'extended' || res === 'exists') setWordsDone((s) => new Map(s).set(i, res));
     else toast(t('lkSaveFailed'), 'error');
+  };
+
+  // „Alle übernehmen“ (Emrahs Wunsch, 28.09.): nacheinander, damit jedes Wort einzeln über den
+  // vorhandenen Weg geschrieben wird (ein Schreibpfad, Kap. 9); bereits erledigte werden übersprungen.
+  const takeAllWords = async () => {
+    if (!out || takingAll) return;
+    setTakingAll(true);
+    try {
+      for (let i = 0; i < out.words.length; i++) if (!wordsDone.has(i)) await takeWord(i);
+    } finally {
+      setTakingAll(false);
+    }
   };
 
   const takeCorrections = async () => {
@@ -132,21 +148,34 @@ export function TeacherFeedbackScreen() {
 
       {out && out.words.length > 0 && (
         <Card className="flex flex-col gap-3" data-testid="tf-words">
-          <p className="lx-eyebrow">{t('tfWordsTitle')}</p>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="lx-eyebrow">{t('tfWordsTitle')}</p>
+            <Button
+              variant="secondary"
+              disabled={takingAll || out.words.every((_, i) => wordsDone.has(i))}
+              onClick={() => void takeAllWords()}
+              data-testid="tf-words-take-all"
+            >
+              {t('tfWordsTakeAll')}
+            </Button>
+          </div>
           <ul className="flex flex-col gap-3">
-            {out.words.map((w, i) => (
-              <li key={`${w.en}-${i}`} className="flex items-start justify-between gap-3 border-b border-line pb-3 last:border-0 last:pb-0" data-testid="tf-word">
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-medium">
-                    <EnglishText as="span" text={w.en} area="lookup" source="teacher-feedback" /> — {w.de}
-                  </p>
-                  {w.ex && <EnglishText as="p" className="text-sm text-muted" text={w.ex} area="lookup" source={null} />}
-                </div>
-                <Button variant={wordsDone.has(i) ? 'ghost' : 'secondary'} disabled={wordsDone.has(i)} onClick={() => void takeWord(i)} data-testid="tf-word-take">
-                  {wordsDone.has(i) ? t('lkSaved') : t('vcAddOne')}
-                </Button>
-              </li>
-            ))}
+            {out.words.map((w, i) => {
+              const done = wordsDone.get(i);
+              return (
+                <li key={`${w.en}-${i}`} className="flex items-start justify-between gap-3 border-b border-line pb-3 last:border-0 last:pb-0" data-testid="tf-word">
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm font-medium">
+                      <EnglishText as="span" text={w.en} area="lookup" source="teacher-feedback" /> — {w.de}
+                    </p>
+                    {w.ex && <EnglishText as="p" className="text-sm text-muted" text={w.ex} area="lookup" source={null} />}
+                  </div>
+                  <Button variant={done ? 'ghost' : 'secondary'} disabled={!!done || takingAll} onClick={() => void takeWord(i)} data-testid="tf-word-take">
+                    {done === 'exists' ? t('tfWordAlready') : done ? t('lkSaved') : t('vcAddOne')}
+                  </Button>
+                </li>
+              );
+            })}
           </ul>
         </Card>
       )}

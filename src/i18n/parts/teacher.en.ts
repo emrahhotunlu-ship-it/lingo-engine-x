@@ -12,6 +12,8 @@ export const teacherEn = {
   tfFallbackTitle: 'Words found',
   tfFallbackHint: 'Without Claude there is no example sentence. Open "Add" in the vocabulary and add one before saving the card.',
   tfWordsTitle: 'New words and phrases',
+  tfWordsTakeAll: 'Add all',
+  tfWordAlready: 'Already in your vocabulary',
   tfCorrectionsTitle: 'Corrections',
   tfCorrectionsApply: 'Add as repair sentences',
   tfRepairSaved: 'Saved as repair sentences.',

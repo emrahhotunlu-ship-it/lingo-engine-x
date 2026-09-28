@@ -76,3 +76,26 @@ test('ohne Claude: Hinweis und einfacher Zeilen-Rückfall statt Kartenvorschläg
   await expect(page.getByTestId('tf-fallback')).toContainText('abhängen von');
   expect(errors).toEqual([]);
 });
+
+test('Alle übernehmen speichert alle Kartenvorschläge auf einmal; schon vorhandene Wörter werden erkannt', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'vocab');
+  await page.getByTestId('vocab-add').click();
+  await page.getByTestId('add-teacher-feedback').click();
+
+  // Zwei Kartenvorschläge, auf einen Klick übernommen (Emrahs Wunsch, 28.09.). „phase out“ ist in
+  // den Testdaten schon eine Karte – damit prüft dieselbe Aktion auch das Erkennen von Dopplungen.
+  await page.getByTestId('tf-input').fill('New phrases from today: would rather, phase out. zzmulti');
+  await page.getByTestId('tf-go').click();
+  await expect(page.getByTestId('tf-words')).toBeVisible();
+  await expect(page.getByTestId('tf-word')).toHaveCount(2);
+  await page.getByTestId('tf-words-take-all').click();
+  const buttons = page.getByTestId('tf-word-take');
+  await expect(buttons.nth(0)).toHaveText('In deinen Karten');
+  await expect(buttons.nth(1)).toHaveText('Schon im Wortschatz');
+  await expect
+    .poll(async () => Object.entries(await dump(page)).some(([k, d]) => k.startsWith('vocab/') && (d as Record<string, unknown>).src === 'teacher' && (d as Record<string, unknown>).word === 'would rather'))
+    .toBe(true);
+  expect(errors).toEqual([]);
+});

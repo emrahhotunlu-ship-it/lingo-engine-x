@@ -12,6 +12,8 @@ export const teacherDe = {
   tfFallbackTitle: 'Gefundene Wörter',
   tfFallbackHint: 'Ohne Claude fehlt der Beispielsatz. Öffne „Hinzufügen“ im Wortschatz und ergänze ihn, bevor du die Karte speicherst.',
   tfWordsTitle: 'Neue Wörter und Wendungen',
+  tfWordsTakeAll: 'Alle übernehmen',
+  tfWordAlready: 'Schon im Wortschatz',
   tfCorrectionsTitle: 'Korrekturen',
   tfCorrectionsApply: 'Als Reparatur-Sätze übernehmen',
   tfRepairSaved: 'Als Reparatur-Sätze gespeichert.',

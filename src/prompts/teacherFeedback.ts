@@ -75,7 +75,10 @@ export function teacherFeedbackSchema(vars: Pick<TeacherVars, 'uiLang'>): z.ZodT
         en: z.string().trim().min(1).max(60),
         de: z.string().trim().min(1).max(120),
         pos: clipped(0, 20),
-        ex: z.string().trim().max(220),
+        // min(1): ein Kartenvorschlag ohne Ursprungssatz lässt sich nicht übernehmen (Kap. 15,
+        // addTeacherWord). Eine leere ex verletzt das Schema und löst den einen erlaubten
+        // Reparatur-Versuch aus (A6.3), statt erst beim Klick auf „Übernehmen“ zu scheitern.
+        ex: z.string().trim().min(1).max(220),
         // Fehlt die Angabe, gilt der Satz als aus dem Feedback.
         fromLesson: z.boolean().default(true),
       }),

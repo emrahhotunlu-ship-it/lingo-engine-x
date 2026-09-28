@@ -11,6 +11,19 @@ const blockOf = (input: string): string => (/<<<\n([\s\S]*?)\n>>>/.exec(input)?.
 export function teacherFeedbackReply(input: string): string {
   const en = isEn(input);
   const empty = /zzempty/i.test(blockOf(input));
+  const multi = /zzmulti/i.test(blockOf(input));
+  if (multi) {
+    return JSON.stringify({
+      title: en ? 'Two new phrases' : 'Zwei neue Wendungen',
+      summary: '',
+      corrections: [],
+      words: [
+        { en: 'would rather', de: 'lieber wollen', pos: 'phrase', ex: 'We would rather start with a pilot.', fromLesson: true },
+        { en: 'phase out', de: 'auslaufen lassen', pos: 'verb', ex: 'We will phase out the old version.', fromLesson: true },
+      ],
+      tasks: [],
+    });
+  }
   if (empty) {
     return JSON.stringify({
       title: en ? 'Lesson notes' : 'Stundennotizen',
