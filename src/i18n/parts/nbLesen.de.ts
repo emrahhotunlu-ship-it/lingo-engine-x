@@ -85,4 +85,6 @@ export const nbLesenDe = {
   nbLesenResumeWrite: 'Schreiben: Entwurf mit {n} Wörtern',
   nbLesenResumeDiscover: 'Beitrag: {title}',
   nbLesenResumeBlock: 'Tageseinheit · Input: {title}',
+  nbLesenSentenceMode: 'Satz für Satz',
+  nbLesenPageMode: 'Ganzer Text',
 } as const;

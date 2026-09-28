@@ -22,6 +22,13 @@ test.describe('Lesen (Neubau P4)', () => {
     await screen(page, 'read');
     await expect(page.getByTestId('article')).toHaveAttribute('data-id', ARTICLE_Q);
     await expect(page.getByTestId('reader-legend')).toBeVisible();
+    // Satzmodus (N56): ein Satz, blättern.
+    await page.getByTestId('sentence-mode').click();
+    await expect(page.getByTestId('sentence-view')).toHaveAttribute('data-i', '0');
+    await page.getByTestId('sentence-next').click();
+    await expect(page.getByTestId('sentence-view')).toHaveAttribute('data-i', '1');
+    await page.getByTestId('sentence-mode').click();
+    await expect(page.getByTestId('sentence-view')).toHaveCount(0);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });

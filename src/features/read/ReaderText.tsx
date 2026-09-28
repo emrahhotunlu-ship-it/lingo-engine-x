@@ -1,13 +1,13 @@
-import { useEffect, useId, useMemo, useRef } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
-import { paragraphs } from '../../domain/input/textStats';
+import { paragraphs, sentenceSplit } from '../../domain/input/textStats';
 import { statusCss, statusIndex, textCardKeys, textStatus, type StatusCard, type TextCard } from '../../domain/input/wordStatus';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import type { WordTapArea } from '../../engine/wordTap';
 import { useT } from '../../i18n';
-import { Button } from '../../ui/Button';
+import { Button, IconButton } from '../../ui/Button';
 import { startSession } from '../vocab/session';
 
 // Lesetext im LingQ-Stil (Neubau N51, N52): jedes Wort antippbar (Wort-Popover mit „+ Wortschatz“,
@@ -59,6 +59,10 @@ export function ReaderText({ text, title, sourceRef, area, practice = true, clas
   const css = useMemo(() => statusCss(scope, textStatus(text, index)), [scope, text, index]);
   const keys = useMemo(() => textCardKeys(text, sourceRef, cards.text), [text, sourceRef, cards]);
   const paras = useMemo(() => paragraphs(text), [text]);
+  // Satzmodus (N56, LingQ 5): ein Satz im Blick, ‹ › blättern.
+  const [sentMode, setSentMode] = useState(false);
+  const sentences = useMemo(() => sentenceSplit(text).map((s) => s.text), [text]);
+  const [si, setSi] = useState(0);
 
   const box = useRef<HTMLDivElement>(null);
   const report = useRef(onPara);
@@ -80,7 +84,7 @@ export function ReaderText({ text, title, sourceRef, area, practice = true, clas
     });
     root.querySelectorAll('[data-para]').forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [paras]);
+  }, [paras, sentMode]);
   // Nach dem Fortsetzen einmal an den gemerkten Absatz springen.
   useEffect(() => {
     if (startPara === null || startPara <= 0) return;
@@ -98,13 +102,31 @@ export function ReaderText({ text, title, sourceRef, area, practice = true, clas
   return (
     <div className="flex flex-col gap-4" data-reader={scope} data-testid="reader-text">
       {css && <style>{css}</style>}
-      <div ref={box} lang="en" className={`flex max-w-[68ch] flex-col gap-4 ${className ?? ''}`}>
-        {paras.map((p, i) => (
-          <div key={i} data-para={i}>
-            <EnglishText text={p} area={area} source={sourceRef} title={title} className="text-[1.0625rem] leading-[1.75]" />
+      {sentences.length > 2 && (
+        <div className="flex">
+          <button type="button" className="text-sm font-medium text-accent-text" aria-pressed={sentMode} onClick={() => setSentMode((v) => !v)} data-testid="sentence-mode">
+            {sentMode ? t('nbLesenPageMode') : t('nbLesenSentenceMode')}
+          </button>
+        </div>
+      )}
+      {sentMode ? (
+        <div lang="en" className="flex max-w-[68ch] flex-col gap-3" data-testid="sentence-view" data-i={si}>
+          <p className="lx-tnum text-xs text-muted">{t('nbLesenSentenceOf', { i: si + 1, n: sentences.length })}</p>
+          <EnglishText text={sentences[si] ?? ''} area={area} source={sourceRef} title={title} className="min-h-24 text-xl leading-relaxed" />
+          <div className="flex gap-2">
+            <IconButton icon="arrowLeft" label={t('nbLesenPrev')} disabled={si === 0} onClick={() => setSi((i) => Math.max(0, i - 1))} data-testid="sentence-prev" />
+            <IconButton icon="arrowRight" label={t('nbLesenNext')} disabled={si >= sentences.length - 1} onClick={() => setSi((i) => Math.min(sentences.length - 1, i + 1))} data-testid="sentence-next" />
           </div>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div ref={box} lang="en" className={`flex max-w-[68ch] flex-col gap-4 ${className ?? ''}`}>
+          {paras.map((p, i) => (
+            <div key={i} data-para={i}>
+              <EnglishText text={p} area={area} source={sourceRef} title={title} className="text-[1.0625rem] leading-[1.75]" />
+            </div>
+          ))}
+        </div>
+      )}
       <p className="text-xs text-subtle" data-testid="reader-legend">
         {t('nbLesenLegend')}
       </p>

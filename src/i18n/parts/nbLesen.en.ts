@@ -86,4 +86,6 @@ export const nbLesenEn: Record<keyof typeof nbLesenDe, string> = {
   nbLesenResumeWrite: 'Writing: draft with {n} words',
   nbLesenResumeDiscover: 'Post: {title}',
   nbLesenResumeBlock: 'Daily unit · Input: {title}',
+  nbLesenSentenceMode: 'Sentence by sentence',
+  nbLesenPageMode: 'Full text',
 };
