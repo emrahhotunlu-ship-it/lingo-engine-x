@@ -170,6 +170,7 @@ export function TeacherFeedbackScreen() {
                       return n;
                     })
                   }
+                  aria-label={`${c.wrong} → ${c.right}`}
                   data-testid="tf-corr-check"
                 />
                 <div>
