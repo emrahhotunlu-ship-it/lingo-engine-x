@@ -3,6 +3,7 @@ import { useNav } from '../../app/nav';
 import { StepBoundary } from '../../app/shell/Boundary';
 import type { ScreenProps } from '../../app/registry';
 import { THEMES } from '../../content/nb/themes';
+import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
@@ -53,7 +54,7 @@ function Confirm() {
           <ul className="flex flex-wrap gap-2">
             {th.phrases.slice(0, 5).map((p) => (
               <li key={p.en} className="lx-chip" lang="en">
-                {p.en}
+                <EnglishText as="span" text={p.en} area="lesson" source="unit" />
               </li>
             ))}
           </ul>
@@ -116,7 +117,7 @@ function Next() {
             <ul className="flex flex-wrap gap-2" lang="en">
               {targets.phrases.slice(0, 3).map((p) => (
                 <li key={p} className="lx-chip">
-                  {p}
+                  <EnglishText as="span" text={p} area="lesson" source="unit" />
                 </li>
               ))}
             </ul>
@@ -147,7 +148,7 @@ export function UnitCardScreen({ route }: ScreenProps<'unitCard'>) {
   const done = useToday((s) => s.duties.done);
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 py-4 sm:py-8" data-testid="unit-card" data-step={route.step}>
-      <ExerciseTop onClose={() => leaveToToday(t)} closeLabel={t('nbHeuteClose')} closeTestId="unit-close" progress={total ? { n: Math.min(total, done + 1), total } : null} ctx="duty" />
+      <ExerciseTop onClose={() => leaveToToday(t)} closeLabel={t('nbHeuteClose')} closeTestId="unit-close" progress={total ? { n: Math.min(total, done), total } : null} ctx="duty" />
       <StepBoundary resetKey={route.step} scope="unitCard" onSkip={() => leaveToToday(t)}>
         {route.step === 'confirm' ? <Confirm /> : <Next />}
       </StepBoundary>

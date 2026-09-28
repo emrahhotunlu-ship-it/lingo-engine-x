@@ -1,6 +1,7 @@
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
-import { unitBlockFor, type FocusApi } from '../../app/registry';
+import { resumables, unitBlockFor, type FocusApi } from '../../app/registry';
+import { loadResume } from '../../app/resume';
 import type { Route } from '../../app/router/types';
 import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types';
 import { useLive } from '../../data/live';
@@ -22,7 +23,7 @@ import { startGrammar } from '../grammar/session';
 import { recordProfileFields, usePending } from '../progress/persist';
 import { markUnitLocal } from '../today/marks';
 import { todayNow } from '../today/state';
-import { healToday } from '../today/store';
+import { healDay } from '../today/store';
 import { startSession } from '../vocab/session';
 import { weekDocNow } from '../week/store';
 import { EMPTY_RUN, useUnitRun, type UnitRun, type UnitVia } from './runStore';
@@ -134,9 +135,46 @@ function fallback(block: UnitBlock, kind: UnitBlock['kind'], api: FocusApi): { r
   return { route: { name: 'unitStep', step: 'again', block: 5 }, via: 'own', watch: null };
 }
 
-/** Einen Block starten (Anbieter oder Ersatz). SYNCHRON im Klick (iPhone-Tastatur). */
+/**
+ * Unterbrochenen Block fortsetzen statt neu starten (Fortsetzen, N04): Gehört der Lauf (im Speicher
+ * oder aus `lx:resume:unit`) zu diesem Pflichtpunkt und liegt für die Übung des Blocks ein Stand
+ * desselben Lerntags seit dem Blockstart vor, wird dieser hergestellt und die Übung geöffnet.
+ * `false` → der Block startet neu. SYNCHRON im Klick.
+ */
+function resumeRow(u: UnitNow, row: UnitRow): boolean {
+  const mem = useUnitRun.getState();
+  let run: Partial<UnitRun> | null = mem.day === u.day && mem.duty === row.id && mem.route ? mem : null;
+  if (!run) {
+    const env = loadResume('unit');
+    const d = env?.data as Partial<UnitRun> | null | undefined;
+    if (env?.day === u.day && d?.day === u.day && d.duty === row.id && d.route) run = d;
+  }
+  const route = run?.route;
+  if (!run || !route) return false;
+  const since = run.at ?? 0;
+  for (const r of resumables()) {
+    // Nur die Übung selbst; die Hülle der Einheit trägt dieselbe Route.
+    if (r.id === 'unit') continue;
+    const env = loadResume(r.id);
+    if (!env || env.v !== r.version || env.day !== u.day || env.route.name !== route.name || env.savedAt < since) continue;
+    let ok = false;
+    try {
+      ok = r.restore(env.data);
+    } catch (err) {
+      logWarn('unit:resume', err, r.id);
+    }
+    if (!ok) continue;
+    if (run !== mem) useUnitRun.setState({ ...EMPTY_RUN, ...run, confirmed: mem.confirmed ?? run.confirmed ?? null }, true);
+    useNav.getState().go(route);
+    return true;
+  }
+  return false;
+}
+
+/** Einen Block starten (Anbieter oder Ersatz); ein unterbrochener Block wird fortgesetzt. SYNCHRON im Klick (iPhone-Tastatur). */
 export function startRow(u: UnitNow, row: UnitRow, api: FocusApi): void {
   unlockSpeech();
+  if (resumeRow(u, row)) return;
   const block = u.up.blocks.find((b) => b.block === row.block && b.channel === row.id) ?? u.up.blocks.find((b) => b.channel === row.id);
   if (!block) {
     logWarn('unit:start', `Block ${row.id} fehlt im Plan`);
@@ -223,16 +261,18 @@ export function markBlockDone(day: string, duty: string): void {
     .then(() => recordProfileFields('unit:done', (cur) => unitDonePatch(cur, day, key)))
     .then((ok) => {
       if (!ok) logWarn('unit:done', { code: 'not_saved', message: `${key} nicht gespeichert – wird nachgeholt` }, 'app/profile');
-      return healToday();
+      return healDay(day);
     })
     .catch((err: unknown) => logError('unit:done', err, key));
 }
 
-/** Pflichtpunkt eines Blocks im heutigen Plan (Block-Nr. → `review`/`ch:u-*`). */
+/**
+ * Pflichtpunkt eines Blocks (Block-Nr. → `review`/`ch:u-*`) mit seinem Lerntag. Der Lauf gewinnt:
+ * Ein Block, der vor 04:00 begonnen und danach beendet wurde, zählt für den Tag, an dem er begann.
+ */
 function dutyOfBlock(block: UnitBlockNo): { day: string; duty: string } | null {
   const run = useUnitRun.getState();
-  const today = useClock.getState().today;
-  if (run.day === today && run.block === block && run.duty) return { day: today, duty: run.duty };
+  if (run.day && run.block === block && run.duty) return { day: run.day, duty: run.duty };
   const u = unitNow();
   const b = u?.up.blocks.find((x) => x.block === block);
   return u && b ? { day: u.day, duty: b.channel } : null;
@@ -252,10 +292,31 @@ export function handleUnitDone(block: UnitBlockNo, result?: UnitTaskResult): voi
   }
   const run = useUnitRun.getState();
   const late = run.block !== null && run.block > block;
+  if (!late && startNextStep(block)) return;
   if (target.duty !== 'review') markBlockDone(target.day, target.duty);
   if (late) return;
   setRun({ via: null, watch: null, routeName: 'unitCard', route: { name: 'unitCard', step: 'next' } });
   useNav.getState().go({ name: 'unitCard', step: 'next' });
+}
+
+/**
+ * Mehrschrittiger Block (Block 2: Input → Nachsprechen, plan.md §1.5): Nach dem ersten Schritt startet
+ * der letzte Schritt des Blocks, statt den Block zu zählen. Nur mit Anbieter und nur, wenn er JETZT
+ * machbar ist (Sprachausgabe, wie der Hinweis im Input-Block); sonst zählt der Block wie bisher.
+ * Die eigenen Ersatzschritte enthalten das Nachsprechen schon.
+ */
+function startNextStep(block: UnitBlockNo): boolean {
+  const run = useUnitRun.getState();
+  if (run.block !== block || run.via !== 'provider' || !run.kind) return false;
+  const u = unitNow();
+  const b = u && u.day === run.day ? u.up.blocks.find((x) => x.block === block && x.channel === run.duty) : undefined;
+  const next = b && b.steps.length > 1 ? b.steps[b.steps.length - 1] : undefined;
+  if (!u || !b || !next || next === run.kind) return false;
+  const route = tryProvider(b, ctxFor(u, b), envNow(), next);
+  if (!route) return false;
+  setRun({ kind: next, via: 'provider', watch: null, routeName: route.name, route, at: Date.now() });
+  useNav.getState().go(route);
+  return true;
 }
 
 /** Ergebnis von `input.*` (Sätze, Wendungen) für die Folgeblöcke merken. */

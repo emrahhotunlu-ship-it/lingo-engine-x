@@ -92,9 +92,9 @@ export function unitDonePatch(cur: Readonly<Record<string, unknown>>, day: strin
   const dayAct = act[day] && typeof act[day] === 'object' && !Array.isArray(act[day]) ? (act[day] as Record<string, unknown>) : {};
   const n = dayAct[key];
   if (typeof n === 'number' && n >= 1) return null;
-  // Die übrigen `u-*` desselben Tages mitschreiben: Mehrere Feld-Patches eines Stapels werden flach
-  // zusammengelegt (`sendFields`), `update` verschmilzt verschachtelte Objekte (db.d.ts) – so geht
-  // kein zweiter Block im selben Stapel verloren. Andere Zähler bleiben unberührt.
+  // Die übrigen `u-*` desselben Tages mitschreiben (zusätzliche Absicherung): `sendFields` führt die
+  // Feld-Patches eines Stapels tief zusammen, `update` verschmilzt verschachtelte Objekte (db.d.ts) –
+  // so geht kein zweiter Block im selben Stapel verloren. Andere Zähler bleiben unberührt.
   const units: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(dayAct)) if (k.startsWith('u-') && typeof v === 'number') units[k] = v;
   return { act: { [day]: { ...units, [key]: 1 } } };

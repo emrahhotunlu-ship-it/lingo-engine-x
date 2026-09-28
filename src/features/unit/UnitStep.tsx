@@ -6,6 +6,7 @@ import { unitDone } from '../../app/unit/done';
 import { inboxFor, themeTextFor } from '../../content/nb/load';
 import type { TextQuestion } from '../../content/nb/schemas';
 import { normText, phraseCore } from '../../domain/week';
+import { EnglishText } from '../../engine/EnglishText';
 import { useT, type MessageKey } from '../../i18n';
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
 import { Button } from '../../ui/Button';
@@ -90,9 +91,7 @@ function InputStep() {
           text && <h2 className="text-lg font-semibold" lang="en">{text.title}</h2>
         )}
         {mail && <p className="font-medium" lang="en">{mail.subject}</p>}
-        <p className="whitespace-pre-line text-base leading-relaxed" lang="en" data-testid="unit-text">
-          {body}
-        </p>
+        <EnglishText as="p" text={body} area="read" source="unit" className="whitespace-pre-line text-base leading-relaxed" testId="unit-text" />
         {tts && (
           <div>
             <Button variant="ghost" icon={speaking ? 'stop' : 'speaker'} onClick={() => (speaking ? stopSpeech() : void speak(body))} data-testid="unit-read-aloud">
@@ -135,7 +134,7 @@ function InputStep() {
         <ul className="flex flex-wrap gap-2" lang="en">
           {notice.map((n) => (
             <li key={n} className="lx-chip">
-              {n}
+              <EnglishText as="span" text={n} area="read" source="unit" />
             </li>
           ))}
         </ul>

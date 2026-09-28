@@ -48,7 +48,10 @@ function useOpenDuties(): number {
   return useToday((st) => (st.ready && st.dayLoaded && st.status === 'open' ? st.duties.total - st.duties.done : 0));
 }
 
-/** Zeile unter dem Balken: „Tageseinheit · Block 2 von 5“, solange eine Übung ein Block der Einheit ist. */
+/**
+ * Zeile unter dem Balken: „Tageseinheit · Block 2 von 5“, solange eine Übung ein Block der Einheit ist.
+ * Nicht auf der Zwischen-/Bestätigungskarte: Die nennt den Stand selbst (Kap. 2.2, eine Zahl).
+ */
 function useUnitNote(route: Route): string | null {
   const { t } = useT();
   const today = useClock((s) => s.today);
@@ -56,7 +59,7 @@ function useUnitNote(route: Route): string | null {
   const runRoute = useUnitRun((s) => s.routeName);
   const duty = useUnitRun((s) => s.duty);
   const duties = useToday((s) => s.plan?.duty);
-  if (runDay !== today || !duty || !duties || (runRoute !== route.name && route.name !== 'unitCard' && route.name !== 'unitStep')) return null;
+  if (route.name === 'unitCard' || runDay !== today || !duty || !duties || (runRoute !== route.name && route.name !== 'unitStep')) return null;
   const n = duties.indexOf(duty as (typeof duties)[number]) + 1;
   return n > 0 ? t('nbHeuteNote', { n, total: duties.length }) : null;
 }
