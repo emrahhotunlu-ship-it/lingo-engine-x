@@ -9,6 +9,7 @@ import { SayScreen } from '../features/say/SayScreen';
 import { RoleplayScreen } from '../features/speak/RoleplayScreen';
 import { SpeakHub } from '../features/speak/SpeakHub';
 import { TonesScreen } from '../features/tones/TonesScreen';
+import { P5_UNIT_BLOCKS } from '../features/speak/unit';
 
 // Bereich „Sprechen & Schreiben“ – Besitz: Paket P5 (docs/neubau/architektur.md §5.2).
 // WP0a: heutige Bildschirme unter den heutigen Routennamen.
@@ -19,12 +20,13 @@ declare module '../app/router/types' {
     speak: { seg?: SpeakSeg | 'talk' | 'write' };
     meeting: { id?: string };
     playbook: { id?: string };
-    roleplay: { sceneId: string; resume?: boolean; n?: number };
+    /** `unit`: Block der Tageseinheit (Rollenspiel am Samstag, Generalprobe am Donnerstag). */
+    roleplay: { sceneId: string; resume?: boolean; n?: number; unit?: number };
     mail: NoParams;
     pitch: NoParams;
-    say: NoParams;
-    fluency: NoParams;
-    tones: NoParams;
+    say: { unit?: number };
+    fluency: { unit?: number };
+    tones: { unit?: number };
   }
 }
 
@@ -34,6 +36,8 @@ function SpeakRoot() {
 }
 
 const optId = z.object({ id: z.string().optional() });
+/** Block der Tageseinheit (N75); ohne = freies Üben. */
+const unitParam = z.object({ unit: z.number().int().min(1).max(5).optional() });
 
 export const sprechen = defineArea({
   id: 'sprechen',
@@ -44,12 +48,13 @@ export const sprechen = defineArea({
     roleplay: {
       kind: 'exercise',
       component: RoleplayScreen,
-      params: z.object({ sceneId: z.string().min(1), resume: z.boolean().optional(), n: z.number().int().nonnegative().optional() }),
+      params: z.object({ sceneId: z.string().min(1), resume: z.boolean().optional(), n: z.number().int().nonnegative().optional(), unit: z.number().int().min(1).max(5).optional() }),
     },
     mail: { kind: 'exercise', component: MailRefiner },
     pitch: { kind: 'exercise', component: PitchCoach },
-    say: { kind: 'exercise', component: SayScreen, title: 'sayTitle' },
-    fluency: { kind: 'exercise', component: FluencyScreen },
-    tones: { kind: 'exercise', component: TonesScreen },
+    say: { kind: 'exercise', component: SayScreen, title: 'sayTitle', params: unitParam },
+    fluency: { kind: 'exercise', component: FluencyScreen, params: unitParam },
+    tones: { kind: 'exercise', component: TonesScreen, params: unitParam },
   },
+  unitBlocks: P5_UNIT_BLOCKS,
 });

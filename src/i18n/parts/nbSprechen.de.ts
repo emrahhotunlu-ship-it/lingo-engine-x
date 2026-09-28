@@ -31,4 +31,12 @@ export const nbSprechenDe = {
   nbSprechenCriteriaWait: 'Claude prüft die Kriterien …',
   nbSprechenCriteriaFailed: 'Die Kriterien konnten nicht geprüft werden.',
   nbSprechenGoalsNoAi: 'Ohne Claude ohne Haken – prüfe selbst, ob du die Ziele erreicht hast.',
+  nbSprechenTgtGoal: 'Ziel',
+  nbSprechenTgtPhrase: '{have}/{need} deiner Wendungen',
+  nbSprechenTgtHedge: '{have}/{need} Abschwächungen',
+  nbSprechenTgtTransition: '{have}/{need} Überleitungen',
+  nbSprechenTgtTool: 'Werkzeug: {tool}',
+  nbSprechenTgtPhrases: 'Wendungen',
+  nbSprechenUnitNext: 'Weiter',
+  nbSprechenUnitNote: 'Tageseinheit · Aufgabe',
 } as const;

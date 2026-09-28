@@ -32,4 +32,12 @@ export const nbSprechenEn: Record<keyof typeof nbSprechenDe, string> = {
   nbSprechenCriteriaWait: 'Claude is checking the criteria …',
   nbSprechenCriteriaFailed: 'The criteria could not be checked.',
   nbSprechenGoalsNoAi: 'Without Claude there are no ticks – check yourself whether you met the goals.',
+  nbSprechenTgtGoal: 'Goal',
+  nbSprechenTgtPhrase: '{have}/{need} of your phrases',
+  nbSprechenTgtHedge: '{have}/{need} hedges',
+  nbSprechenTgtTransition: '{have}/{need} transitions',
+  nbSprechenTgtTool: 'Tool: {tool}',
+  nbSprechenTgtPhrases: 'Phrases',
+  nbSprechenUnitNext: 'Continue',
+  nbSprechenUnitNote: 'Daily session · task',
 };
