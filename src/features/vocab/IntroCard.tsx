@@ -10,7 +10,10 @@ import { meaningOf } from '../../domain/srs/cards';
 import { posKey } from '../../domain/srs/explain';
 import type { TrainCard } from '../../domain/srs/types';
 import type { MessageKey } from '../../i18n';
-import { continueIntro, type FirstKind } from './session';
+import { continueIntro, skipCurrent, type FirstKind } from './session';
+import { markKnown } from './list/actions';
+import { useClock } from '../../app/clock';
+import { toast } from '../../ui/Toast';
 
 // Einführung einer neuen Karte (Stufe 0): Bedeutung, Ursprungssatz, Verbindung. Schreibt nichts.
 
@@ -27,6 +30,16 @@ export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: Fi
     onDone(kind);
   };
   useHotkeys({ enter: go }, api.isInput);
+  const day = useClock((s) => s.today);
+  // Soll N32 („Kenne ich“, Memrise): wie „Kann ich sicher“ – Stufe 4, in 30 Tagen wieder; die Karte
+  // fällt aus der Runde (keine Abfrage heute).
+  const known = () => {
+    const kind = skipCurrent();
+    if (kind === 'typed') api.focusNow();
+    else api.blur();
+    onDone(kind);
+    void markKnown(card, day).then((ok) => toast(ok ? t('vcKnownSaved') : t('saveFailed'), ok ? 'info' : 'error'));
+  };
   const ipa = ipaOf(card.word);
   // Mehrere Bedeutungen („Schlussfolgerung; Abzug“) einzeln zeigen; welche gemeint ist, zeigt der Satz.
   const meanings = (meaning ?? '').split(/\s*;\s*/).filter(Boolean);
@@ -86,6 +99,11 @@ export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: Fi
         <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={go} data-testid="intro-continue">
           {t('introContinue')}
         </Button>
+        {card.kind === 'vocab' && (
+          <Button variant="ghost" icon="check" onClick={known} data-testid="intro-known">
+            {t('vcKnown')}
+          </Button>
+        )}
         <span className="text-sm text-muted">{t('introPurpose')}</span>
       </div>
     </article>

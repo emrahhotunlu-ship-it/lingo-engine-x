@@ -2,6 +2,7 @@ import { expect, test, type Browser, type Page } from '@playwright/test';
 import { boot, screen, openEntry } from './fixtures';
 import { answerGrammar, grammarKey, shownPrompt, typeInGap } from './learnHelpers';
 import { DAY, dump, expected, planPatch } from './trainerHelpers';
+import { TYPE_MODE } from './trainerHelpers';
 
 // „Erst ein Hinweis, dann die Lösung" (Lernberatung Vorschlag 4): Falsch getippt → gezielter
 // Hinweis unter der Lücke, Eingabe bleibt stehen, Fokus bleibt in der Lücke, zweiter Versuch.
@@ -16,7 +17,7 @@ const OVERCOME = { 'vocab/overcome': { state: 'learning', stage: 4, S: 1, D: 5, 
 const entriesFor = async (page: Page, id: string) => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.id === id);
 
 async function startCloze(page: Page) {
-  const booted = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(1), ...OVERCOME } } });
+  const booted = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...OVERCOME } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');

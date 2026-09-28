@@ -282,6 +282,9 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
       if (card.lemma !== card.word) accepted.push(card.lemma);
       return { ...base, accepted };
     }
+    case 'flip':
+      // Anki (anki-regeln §1): Vorderseite Bedeutung + Ursprungssatz mit Lücke, Rückseite voll.
+      return { ...base, sentence: card.context, accepted: [card.context?.gap ?? bareAnswer(card)] };
   }
 }
 

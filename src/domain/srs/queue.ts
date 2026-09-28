@@ -31,13 +31,29 @@ export function normalizeNewPerDay(v: unknown): NewPerDay {
 
 const reviewCost = (c: TrainCard) => (c.stage <= 2 ? 12 : c.stage <= 4 ? 20 : 35);
 
-/** Quellen mit Emrahs eigenem Kontext zuerst, Startwortschatz zuletzt. */
-// Mitgenommene Wendungen (Gespräch, Mail, Pitch, Baukasten) sind eigener Kontext wie „coach“.
-const SRC_RANK = ['lookup', 'read', 'translate', 'lesson', 'coach', 'scene', 'mail', 'pitch', 'biz', 'preply', 'claude', 'ai', 'user', 'listen', 'write', 'job', 'seed'];
-const srcRank = (s: string | null) => {
-  const i = SRC_RANK.indexOf(s ?? '');
-  return i === -1 ? SRC_RANK.length - 1 : i;
-};
+/**
+ * Eingangskorb (anki-regeln.md §5, ersetzt `SRC_RANK`): Emrahs eigener Kontext zuerst, der
+ * Startwortschatz zuletzt. Stufen: 1 Termin · 2 Preply · 3 eigener Output/eigene Korrektur ·
+ * 4 Wochenthema (`isThemeCard`, von außen) · 5 eigene Funde · 6 Lektion und Vorschläge ·
+ * 7 Startwortschatz und Unbekanntes. Innerhalb einer Stufe die älteste zuerst.
+ */
+export const INBOX_TIERS: readonly (readonly string[])[] = [
+  ['meeting'],
+  ['preply'],
+  ['say', 'fluency', 'scene', 'mail', 'pitch', 'biz', 'coach'],
+  [],
+  ['lookup', 'read', 'listen', 'translate', 'write', 'user', 'claude'],
+  ['lesson', 'ai', 'job', 'daily'],
+];
+const THEME_TIER = 3;
+const LAST_TIER = INBOX_TIERS.length;
+
+/** Stufe im Eingangskorb (0 = zuerst). Themenkarten landen auf Stufe 4 (Index 3), außer ihre Quelle ist höher. */
+export function inboxTier(src: string | null, theme = false): number {
+  const i = INBOX_TIERS.findIndex((t) => t.includes(src ?? ''));
+  const own = i === -1 ? LAST_TIER : i;
+  return theme ? Math.min(own, THEME_TIER) : own;
+}
 
 /** Kann die Karte in dieser Sprache überhaupt abgefragt werden? */
 export const quizzable = (c: TrainCard, lang: Lang, poolSize: number): boolean => availableExercises(c, lang, poolSize).length > 0;
@@ -57,10 +73,12 @@ export function dueCards(cards: readonly TrainCard[], nowMs: number): TrainCard[
     .map((x) => x.c);
 }
 
-export function newCards(cards: readonly TrainCard[]): TrainCard[] {
+/** Neue Karten in Korb-Reihenfolge (§5); `isTheme` = Stufe 4 „Wochenthema“ (domain/week `isThemeCard`). */
+export function newCards(cards: readonly TrainCard[], isTheme?: (c: TrainCard) => boolean): TrainCard[] {
+  const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(c.src, isTheme ? isTheme(c) : false)]));
   return cards
     .filter((c) => c.isNew)
-    .sort((a, b) => srcRank(a.src) - srcRank(b.src) || a.order - b.order || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || (a.key < b.key ? -1 : 1));
+    .sort((a, b) => (tier.get(a.key) ?? LAST_TIER) - (tier.get(b.key) ?? LAST_TIER) || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || a.order - b.order || (a.key < b.key ? -1 : 1));
 }
 
 function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {
@@ -144,12 +162,16 @@ export function buildQueue(i: {
   newQuotaLeft: number;
   exclude: ReadonlySet<string>;
   lang: Lang;
+  /** Stufe 4 des Eingangskorbs (Wochenthema). */
+  isTheme?: (c: TrainCard) => boolean;
 }): QueueItem[] {
   if (i.target <= 0) return [];
   const act = active(i.cards, i.lang).filter((c) => !i.exclude.has(c.key));
-  const fresh = newCards(act);
+  const fresh = newCards(act, i.isTheme);
   const nNew = Math.min(Math.max(0, i.newQuotaLeft), fresh.length, i.target);
-  const due = dueCards(act, i.nowMs);
+  // Block 1 (Prüfung Tageseinheit M1): fällige Karten zum Wochenthema zuerst, sonst nach Dringlichkeit.
+  const urgent = dueCards(act, i.nowMs);
+  const due = i.isTheme ? [...urgent.filter(i.isTheme), ...urgent.filter((c) => !i.isTheme?.(c))] : urgent;
   const reviews = due.slice(0, i.target - nNew).map((c): QueueItem => ({ key: c.key, reason: 'due', phase: 'quiz' }));
   if (reviews.length + nNew < i.target) {
     for (const c of aheadCards(act, i.nowMs).slice(0, i.target - nNew - reviews.length)) reviews.push({ key: c.key, reason: 'ahead', phase: 'quiz' });

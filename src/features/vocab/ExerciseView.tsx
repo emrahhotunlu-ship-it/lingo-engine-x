@@ -39,7 +39,7 @@ import type { CheckResult, ContextSpan, Exercise, ExerciseId, Grade, Option, Tra
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
 import { produceCheck, type ProduceCheckOut } from '../../prompts/produceCheck';
 import { requestExamples, useExamples } from './examples';
-import { commitAnswer, type Answer, type FirstKind } from './session';
+import { commitAnswer, prepareNext, type Answer, type FirstKind } from './session';
 import { CopyOnce, NextButton, OverrideButton } from '../learn/ui';
 import { AiRunPanel } from '../input/AiRunPanel';
 import { MnemonicBlock } from './mnemonic';
@@ -135,6 +135,13 @@ export function ExerciseView({
   const audioEnd = useRef<number | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const prodInput = useRef<HTMLTextAreaElement>(null);
+  // n+1 vorberechnen, sobald das Ergebnis steht (nur Trainer-Runde, im Leerlauf).
+  const hasResult = fb !== null;
+  useEffect(() => {
+    if (!hasResult || onCommit) return;
+    const id = window.setTimeout(prepareNext, 30);
+    return () => window.clearTimeout(id);
+  }, [hasResult, onCommit]);
 
   const play = () => {
     if (!e.speak) return;
@@ -813,7 +820,7 @@ export function ExerciseView({
             word={t(CONFIDENCE_KEYS[confidence])}
             label={t('confLabel', { level: t(CONFIDENCE_KEYS[confidence]) })}
             again={again ? t('trAgainBadge') : null}
-            kind={t(`exName_${e.ex}` as MessageKey)}
+            kind={e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${e.ex}` as MessageKey)}` : t(`exName_${e.ex}` as MessageKey)}
             kindLabel={t('exKindLabel', { name: '' }).trim()}
           />
         }

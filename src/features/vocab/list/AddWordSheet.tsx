@@ -9,6 +9,7 @@ import { Sheet } from '../../../ui/Sheet';
 import { toast } from '../../../ui/Toast';
 import { EnglishText } from '../../../engine/EnglishText';
 import { addGenerated, addWord, knownWords, type AddOutcome } from './actions';
+import { FromText } from './FromText';
 
 // Wörter hinzufügen (Funktionsabgleich M2): eigenes Wort (Englisch, Deutsch, Satz – ohne Satz
 // keine Karte, Kap. 15; mit Claude lässt sich alles auf Knopfdruck ergänzen), „Neue Wörter von
@@ -188,6 +189,7 @@ function AddBody() {
           )}
         </section>
       )}
+      {ai && <FromText />}
     </div>
   );
 }

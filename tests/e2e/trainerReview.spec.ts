@@ -1,6 +1,7 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 import { boot, layoutProblems, screen, type Lang } from './fixtures';
 import { expected, forcedPatch, planPatch } from './trainerHelpers';
+import { TYPE_MODE } from './trainerHelpers';
 
 // Befunde aus Daten-, Plattform- und UX-Prüfung des umgebauten Vokabeltrainers.
 // Gegen den Produktions-Build mit eingespieltem Adapter.
@@ -8,7 +9,7 @@ import { expected, forcedPatch, planPatch } from './trainerHelpers';
 const forced = (id: string) => forcedPatch()[`vocab/${id}`] ?? {};
 
 async function startWith(page: Page, patch: Record<string, Record<string, unknown>>, opts: { lang?: Lang } = {}) {
-  const booted = await boot(page, { migrated: true, ...(opts.lang ? { lang: opts.lang } : {}), fake: { patch: { 'app/profile': planPatch(1), ...patch } } });
+  const booted = await boot(page, { migrated: true, ...(opts.lang ? { lang: opts.lang } : {}), fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...patch } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
@@ -167,7 +168,7 @@ test.describe('Desktop', () => {
   });
 
   test('H3: Heute sagt „Wiederholen" nur einmal', async ({ page }) => {
-    const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(3), ...forcedPatch() } } });
+    const { errors } = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(3), ...forcedPatch() } } });
     await screen(page, 'today');
     await expect(page.getByTestId('today-status')).toHaveText('Noch 3 Karten');
     await expect(page.getByTestId('start')).toHaveText('Starten');
@@ -179,7 +180,7 @@ test.describe('Desktop', () => {
 
 test('Handy: Nachschlage-Blatt lässt sich bei niedriger Höhe per Finger scrollen', async ({ browser }) => {
   const { context, page } = await mobile(browser, 520);
-  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(1), 'vocab/avoid': forced('avoid') } } });
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'vocab/avoid': forced('avoid') } } });
   await screen(page, 'today');
   await page.getByTestId('start').tap();
   await screen(page, 'trainer');
@@ -215,7 +216,7 @@ test('Handy: Nachschlage-Blatt lässt sich bei niedriger Höhe per Finger scroll
 
 test('Handy: keine Ziffern-Tasten an den Auswahlknöpfen', async ({ browser }) => {
   const { context, page } = await mobile(browser);
-  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(1), 'vocab/deserve': forced('deserve') } } });
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'vocab/deserve': forced('deserve') } } });
   await screen(page, 'today');
   await page.getByTestId('start').tap();
   await screen(page, 'trainer');

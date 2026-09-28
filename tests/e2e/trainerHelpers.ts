@@ -34,8 +34,14 @@ export const FORCED: Record<string, { stage: number; xs: Record<string, { c: num
   handle: { stage: 4, xs: { colloc: { c: 0, w: 6 }, type: { c: 6, w: 0 }, cloze: { c: 6, w: 0 } } },
 };
 
+/**
+ * Standard-Modus „Tippen“ (Anki-Regeln §1: `auto` deckt junge Karten auf). Die Tipp-Leiter mit ihren
+ * Abfragearten wird so weiter geprüft; das Aufdecken prüft `anki.spec.ts`.
+ */
+export const TYPE_MODE: Record<string, Doc> = { 'app/decks': { v: 1, prefs: { mode: 'type', dir: 'de-en', grades: 4 } } };
+
 export function forcedPatch(): Record<string, Doc> {
-  const out: Record<string, Doc> = {};
+  const out: Record<string, Doc> = { ...TYPE_MODE };
   Object.entries(FORCED).forEach(([id, f], i) => {
     out[`vocab/${id}`] = { state: 'learning', stage: f.stage, S: 1, D: 5, due: 1_700_000_000_000 + i * 1000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: f.xs };
   });
@@ -213,7 +219,7 @@ export const TOUR: ReadonlyArray<{ path: string; ex: string; stage: number; othe
 
 export function tourPatch(): Record<string, Doc> {
   // Ohne „Automatisch weiter“ (M6): die Prüfung des Ergebnisses dauert länger als 1,2 s.
-  const out: Record<string, Doc> = { 'app/profile': { ...planPatch(TOUR.length), autoNext: false } };
+  const out: Record<string, Doc> = { ...TYPE_MODE, 'app/profile': { ...planPatch(TOUR.length), autoNext: false } };
   TOUR.forEach((t, i) => {
     const xs: Record<string, { c: number; w: number }> = { [t.ex]: { c: 0, w: 6 } };
     for (const o of t.others) xs[o] = { c: 6, w: 0 };
@@ -271,6 +277,7 @@ export async function trainerTour(page: Page, scan: (name: string) => Promise<vo
   await page.getByTestId('trainer-close').click();
   await openTab(page, 'vocab');
   await expect(page.getByTestId('vocab')).toBeVisible();
+  await page.getByTestId('ws-all').click();
   await page.locator('[data-testid="vocab-filter"][data-filter="phrases"]').click();
   await page.locator('[data-testid="vocab-row"][data-word="c-i-take-your-point-but"]').click();
   await expect(page.getByTestId('chunk-origin')).toBeVisible();

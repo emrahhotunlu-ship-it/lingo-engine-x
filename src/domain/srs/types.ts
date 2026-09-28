@@ -24,10 +24,12 @@ export type ExerciseId =
   | 'situation'
   | 'dictation'
   | 'speed'
-  | 'produce';
+  | 'produce'
+  /** Anki „Aufdecken“ (anki-regeln.md): nie automatisch gewählt, nur über `pickMode`. */
+  | 'flip';
 /** Modus der alten App (Schlüssel in `modes` und `hist[].m`). */
 export type LegacyMode = 'recog' | 'cloze' | 'type' | 'colloc' | 'listen' | 'produce';
-export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce';
+export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce' | 'flip';
 
 /** Satz mit markierter Stelle: `sentence.slice(start, end) === gap`. */
 export type ContextSpan = { sentence: string; start: number; end: number; gap: string };
@@ -114,6 +116,10 @@ export type Exercise = {
   limitMs?: number;
   /** Szene und Absicht (situation, M15). */
   situation?: SituationTask;
+  /** Anki (anki-regeln §1): getippte Kontrolle nach „Leicht“ bzw. Prüfabfrage nach „Gut“. */
+  check?: 'control' | 'probe';
+  /** Nur `flip`: Richtung der Karte (§8). */
+  dir?: 'de-en' | 'en-de';
 };
 
 /** Baustein (tiles): Text und ob er ein Fremdbaustein ist. */

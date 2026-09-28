@@ -2,6 +2,7 @@ import { getWriter } from '../../../data';
 import { useLive } from '../../../data/live';
 import { hiddenOp, knownOp, resetOp, type CardOp } from '../../../domain/srs/vocabList';
 import { newVocabDoc, saveCardOp } from '../../../domain/srs/newCard';
+import { editOp, tomorrowOp } from '../../../domain/srs/cardOps';
 import type { GenWord } from '../../../prompts/wordGen';
 import type { TrainCard } from '../../../domain/srs/types';
 import { logError } from '../../../platform/diagnostics';
@@ -28,6 +29,27 @@ export const setHidden = (card: TrainCard, hidden: boolean): Promise<boolean> =>
 export const resetCard = (card: TrainCard): Promise<boolean> => run(card.path, (cur) => resetOp(cur, card.path, Date.now()), 'vocab:reset');
 
 export const markKnown = (card: TrainCard, day: string): Promise<boolean> => run(card.path, (cur) => knownOp(cur, card.path, card.inDb ? null : { ...card.doc }, Date.now(), day), 'vocab:known');
+
+/** „Morgen wieder“ (N25): am nächsten Lerntag fällig, nur `due`/`fsrs` (A6.14). */
+export const againTomorrow = (card: TrainCard): Promise<boolean> => run(card.path, (cur) => tomorrowOp(cur, card.path, Date.now()), 'vocab:tomorrow');
+
+/** Karte bearbeiten (N31): Bedeutung und Ursprungssatz, per `transform`. */
+export async function editCard(card: TrainCard, lang: 'de' | 'en', e: { meaning: string; sentence: string }): Promise<'ok' | 'sentence' | 'meaning' | 'failed'> {
+  const writer = getWriter();
+  if (!writer) return 'failed';
+  let err: 'sentence' | 'meaning' | undefined;
+  try {
+    await writer.transform(card.path, (cur) => {
+      const r = editOp(cur, card.path, lang, e);
+      err = r.error;
+      return r.op;
+    });
+    return err ?? 'ok';
+  } catch (x) {
+    logError('vocab:edit', x, card.path);
+    return 'failed';
+  }
+}
 
 export type AddOutcome = 'created' | 'extended' | 'exists' | 'invalid' | 'failed';
 
