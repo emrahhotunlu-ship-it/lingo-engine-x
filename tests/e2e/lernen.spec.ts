@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
+import { grammarKey, L07_OUTPUT, lessonMeta, playLesson, storedL07 } from './learnHelpers';
 
 // Paket P2 (docs/neubau/plan.md §4.3): Üben-Hub mit vier Abschnitten, jede Übung ≤ 2 Tipps ab
 // Üben, Tageseinheit Block 4 (Fokus, Mini-Drill bei Fallen-Korrektur) und Block 5 (beide
@@ -161,5 +162,62 @@ test('Grammatik-Runde: „Kurz erklärt“ vor der Aufgabe, zugeklappt (N46)', a
   await expect(page.getByTestId('gr-brief-text')).toHaveCount(0);
   await page.getByTestId('gr-brief').click();
   await expect(page.getByTestId('gr-brief-text')).not.toBeEmpty();
+  expect(errors).toEqual([]);
+});
+
+test('Neuladen in der Grammatik-Runde bei Aufgabe 4: gleiche Aufgabe, keine doppelten Einträge (G3)', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { persist: true } });
+  await screen(page, 'today');
+  await openTab(page, 'learn');
+  await page.getByTestId('hub-grammar').click();
+  await page.getByTestId('gr-start').click();
+  for (let i = 0; i < 3; i++) {
+    await expect(page.getByTestId('gr-item')).toHaveCount(1);
+    await page.getByTestId('dont-know').click();
+    await page.getByTestId('next').click();
+  }
+  await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\b8\b/);
+  const prompt = await page.getByTestId('gr-item').getAttribute('data-topic');
+  const text = await page.getByTestId('gr-item').getByTestId('task-line').innerText();
+  const logged = async () => (((await dump(page))['log/2026-09-20']?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g').length;
+  await expect.poll(logged).toBe(3);
+  await page.waitForTimeout(600);
+  await page.reload();
+  await screen(page, 'grammarSession');
+  await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\b8\b/);
+  await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', prompt ?? '');
+  await expect(page.getByTestId('gr-item').getByTestId('task-line')).toHaveText(text);
+  expect(await logged()).toBe(3);
+  expect(errors).toEqual([]);
+});
+
+test('Neuladen in der Lektion, Schritt 3 (Grammatik) bei Aufgabe 2: dort geht es weiter bis zum Ende (G3)', async ({ page }) => {
+  const l07 = storedL07();
+  const { errors } = await boot(page, { migrated: true, fake: { persist: true, patch: { 'lesson/l07': l07 } } });
+  await screen(page, 'today');
+  await openTab(page, 'learn');
+  await page.getByTestId('hub-course').click();
+  await page.locator('[data-testid="lesson-row"][data-lesson="l07"]').click();
+  const answers: Record<string, string> = {};
+  for (const q of l07.questions as Array<{ q: string; answer: string }>) answers[q.q] = q.answer;
+  let n = 0;
+  let reloaded = false;
+  await playLesson(page, {
+    words: lessonMeta('l07').words.map(([en, de]) => ({ en, de })),
+    solve: grammarKey([l07]),
+    answers,
+    output: L07_OUTPUT,
+    onGrammar: async (phase) => {
+      if (phase !== 'before' || ++n !== 2 || reloaded) return;
+      reloaded = true;
+      const before = await page.getByTestId('gr-item').innerText();
+      await page.waitForTimeout(600);
+      await page.reload();
+      await screen(page, 'lesson');
+      await expect(page.getByTestId('lesson')).toHaveAttribute('data-step', 'grammar');
+      await expect(page.getByTestId('gr-item')).toHaveText(before);
+    },
+  });
+  expect(reloaded).toBe(true);
   expect(errors).toEqual([]);
 });
