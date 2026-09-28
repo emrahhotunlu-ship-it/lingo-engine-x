@@ -104,7 +104,7 @@ test('Schreiben: Aufgabe und Entwurf überleben ein Neuladen', async ({ page }) 
   await page.reload();
   // Fortsetzen (Neubau plan.md §0, app/resume.ts): Der letzte Schritt liegt < 2 Min. zurück, also öffnet
   // der Rahmen die Schreibaufgabe nach dem Neuladen direkt wieder – ohne Umweg über die Reiter.
-  await expect(page.locator('[data-screen="write"]')).toBeVisible();
+  await screen(page, 'write');
   await expect(page.getByTestId('prompt-card')).toHaveAttribute('data-id', id ?? '');
   await expect(page.getByTestId('draft')).toHaveValue('This is my first draft about the delay.');
   expect((await dump(page))[`wprompt/${DAY}`]?.t).toBe(t1);
