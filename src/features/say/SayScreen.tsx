@@ -55,6 +55,13 @@ type Phase = 'aloud' | 'write1' | 'feedback' | 'write2' | 'final';
 /** Schritt in der Übungsleiste: 1 Sprechen und Schreiben · 2 Rückmeldung und zweiter Versuch · 3 Vergleich. */
 const STEP_OF: Record<Phase, number> = { aloud: 1, write1: 1, feedback: 2, write2: 2, final: 3 };
 
+/** Gespeicherte Rückmeldung (Fortsetzen) grob prüfen, bevor sie angezeigt/gespeichert wird. */
+function isSayOut(v: unknown): v is SayCheckOut {
+  if (!v || typeof v !== 'object') return false;
+  const o = v as Record<string, unknown>;
+  return Array.isArray(o.corrections) && Array.isArray(o.upgrades) && typeof o.better === 'string' && typeof o.praise === 'string';
+}
+
 /** Laut sprechen: sanfte Zeitanzeige (nur Anzeige, bricht nichts ab). */
 export const ALOUD_MS = 60_000;
 
@@ -120,9 +127,9 @@ export function SayScreen() {
   const [passStart, setPassStart] = useState(() => Date.now());
   const key1 = `say:${day}:${sit?.id ?? ''}:1`;
   const key2 = `say:${day}:${sit?.id ?? ''}:2`;
-  const [text1, setText1] = useState(() => loadDraft(key1));
+  const [text1, setText1] = useState(() => restored?.a1 ?? loadDraft(key1));
   const [text2, setText2] = useState('');
-  const [fb1, setFb1] = useState<SayCheckOut | null>(null);
+  const [fb1, setFb1] = useState<SayCheckOut | null>(() => (restored?.phase === 'write2' && isSayOut(restored.fb1) ? restored.fb1 : null));
   const [fb2, setFb2] = useState<SayCheckOut | null>(null);
   const [repairs, setRepairs] = useState<{ state: 'idle' | 'saved' | 'failed'; n: number }>({ state: 'idle', n: 0 });
   const [saveFailed, setSaveFailed] = useState(false);
@@ -138,9 +145,10 @@ export function SayScreen() {
   // Schritt für das Fortsetzen melden; das reguläre Ende löscht ihn.
   useEffect(() => {
     if (!sit) return;
-    if (phase === 'aloud' || phase === 'write1' || phase === 'write2') sayResume.set({ phase, sit: sit.id, t0, ...(unit ? { unit } : {}) });
+    if (phase === 'aloud' || phase === 'write1') sayResume.set({ phase, sit: sit.id, t0, ...(unit ? { unit } : {}) });
+    else if (phase === 'write2') sayResume.set({ phase, sit: sit.id, t0, a1: text1.slice(0, TEXT_MAX), ...(fb1 ? { fb1 } : {}), ...(unit ? { unit } : {}) });
     else if (phase === 'final') sayResume.clear();
-  }, [phase, sit, t0, unit]);
+  }, [phase, sit, t0, unit, text1, fb1]);
 
   useCompanionSee({ area: 'write', label: t('sayTitle'), phase: phase === 'feedback' || phase === 'final' ? 'feedback' : 'idle', ...(situation ? { detail: situation } : {}) });
   useHotkeys({ escape: back }, () => false);

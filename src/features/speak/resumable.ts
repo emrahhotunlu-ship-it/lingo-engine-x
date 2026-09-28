@@ -58,7 +58,8 @@ const optUnit = (v: unknown) => v === undefined || (typeof v === 'number' && v >
 
 // ---------------------------------------------------------------- Verträge je Übung
 
-export type SaySnap = { phase: 'aloud' | 'write1' | 'write2'; sit: string; t0: number; unit?: number };
+/** `a1`/`fb1`: erste Fassung und Rückmeldung, damit der zweite Durchgang nach dem Neuladen nichts verliert. */
+export type SaySnap = { phase: 'aloud' | 'write1' | 'write2'; sit: string; t0: number; unit?: number; a1?: string; fb1?: unknown };
 export const sayResume = stepResumable<SaySnap>({
   id: 'say',
   version: 1,
