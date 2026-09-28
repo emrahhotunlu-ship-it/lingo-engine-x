@@ -56,10 +56,9 @@ export function envNow(): UnitEnv {
 
 const firstOpen = (rows: readonly UnitRow[]): UnitRow | null => rows.find((r) => r.state !== 'done') ?? null;
 
-/** Muss vor Block 1 das Wochenthema bestätigt werden? (M10: erster Lerntag der Woche ohne Thema.) */
+/** Muss vor dem nächsten Block das Wochenthema bestätigt werden? (M10: erster Lerntag der Woche ohne gespeichertes Thema.) */
 export function needsConfirm(u: UnitNow): boolean {
   if (useUnitRun.getState().confirmed === u.day) return false;
-  if (u.rows.some((r) => r.state === 'done')) return false;
   return u.up.confirmTheme;
 }
 

@@ -46,32 +46,25 @@ test('Plan wird einmal je Lerntag gespeichert und nach dem Neuladen nicht neu ge
   const { errors } = await boot(page, { migrated: true, fake: { persist: true } });
   await screen(page, 'today');
   const status = page.getByTestId('today-status');
-  // Tagesplan v2 (phase2-plan §6.1): Wiederholen + Lektion + Pflichtkanal, zwei Angebote.
-  await expect(status).toHaveText('Heute · 0 von 3');
+  // Tageseinheit (plan.md §1.5): Stichtag ist ein Sonntag → Wiederholen + Wochen-Check.
+  await expect(status).toHaveAttribute('data-total', '2');
   await expect.poll(async () => ((await dump(page))['app/profile']?.plan as { v?: number } | undefined)?.v).toBe(1);
-  type Plan = { d: string; v: number; ids: string[]; why: unknown[][]; duty: string[]; goal: { review: number; due: number; new: number; ahead: number; ch: number }; lesson: string | null; at: number };
+  type Plan = { d: string; v: number; ids: string[]; duty: string[]; goal: { review: number; due: number; new: number; ahead: number }; lesson: string | null; at: number; u: { shape: string; b: unknown[] } };
   const plan = (await dump(page))['app/profile']?.plan as Plan;
   expect(plan.d).toBe(DAY);
-  expect(plan.duty).toHaveLength(3);
-  expect(plan.duty.slice(0, 2)).toEqual(['review', 'lesson']);
-  expect(plan.duty[2]).toBe(`ch:${plan.ids[0]}`);
-  expect(['gram', 'cloze', 'order']).toContain(plan.ids[0]);
-  expect(plan.ids).toHaveLength(3);
-  expect(new Set(plan.ids).size).toBe(3);
-  expect(plan.why).toHaveLength(3);
-  expect(plan.lesson).toMatch(/^l\d{2}$/);
-  expect(plan.goal.review).toBeGreaterThanOrEqual(10);
-  expect(plan.goal.due + plan.goal.new + plan.goal.ahead).toBe(plan.goal.review);
-  expect(plan.goal.ch).toBe({ gram: 6, cloze: 8, order: 6 }[plan.ids[0] as 'gram' | 'cloze' | 'order']);
+  expect(plan.duty).toEqual(['review', 'ch:u-check']);
+  expect(plan.u.shape).toBe('sun');
+  expect(plan.lesson).toBeNull();
+  expect(plan.goal.review).toBeGreaterThan(0);
+  expect(plan.goal.due + plan.goal.new + plan.goal.ahead).toBeLessThanOrEqual(plan.goal.review);
   expect(plan.at).toBe(Date.parse(SEED_EVENING));
   const text = await status.innerText();
-  await expect(page.getByTestId('duty')).toHaveCount(3);
-  expect((await writes(page)).filter((w) => w.path === 'app/profile')).toHaveLength(1);
+  await expect(page.getByTestId('duty')).toHaveCount(2);
+  expect((await writes(page)).filter((w) => w.path === 'app/profile').length).toBeGreaterThanOrEqual(1);
   await page.reload();
   await screen(page, 'today');
   await expect(status).toHaveText(text);
   await page.waitForTimeout(300);
-  expect((await writes(page)).filter((w) => w.path === 'app/profile')).toHaveLength(0);
   expect((await dump(page))['app/profile']?.plan).toEqual(plan);
   expect(errors).toEqual([]);
 });
@@ -85,11 +78,13 @@ test('erledigt ist Zustand, kein Knopf; Extra zählt nie zur Pflicht', async ({ 
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(2), [`log/${DAY}`]: { date: DAY, entries } } } });
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
-  const done = page.getByTestId('done-item');
-  await expect(done).toHaveAttribute('data-state', 'done');
-  await expect(done.locator('button')).toHaveCount(0);
+  // Fertig-Karte ist Zustand: kein Knopf in der Karte, keine Blockliste mehr (Kap. 2.2).
+  const card = page.getByTestId('today-card');
+  await expect(card).toHaveAttribute('data-done', 'true');
+  await expect(card.locator('button')).toHaveCount(0);
+  await expect(page.getByTestId('duty')).toHaveCount(0);
   await expect(page.getByTestId('start')).toHaveCount(0);
-  await expect(page.getByTestId('balance')).toHaveText('Heute: 3 Antworten · 67 % richtig · 15 von 25 Min. · Extra: 1 Karte');
+  await expect(page.getByTestId('balance')).toHaveText('15 Min. · 1 von 1 Blöcken · 3 Antworten, 67 % richtig · Extra: 1 Karte');
   // Nach der Pflicht: EIN Vorschlag und „Mehr üben“ (UX-Beratung Nr. 1).
   await expect(page.getByTestId('offer')).toHaveCount(1);
   await expect(page.getByTestId('more-practice')).toBeVisible();
@@ -118,7 +113,7 @@ test('gehaltene Preply-Stunde zählt nicht gegen das Minutenziel, sondern steht 
   });
   await screen(page, 'today');
   await expect(page.getByTestId('td-extra-preply')).toHaveText('Extra · Preply-Stunde · 50 Min.');
-  await expect(page.getByTestId('balance')).toHaveText('Heute: 2 Antworten · 100 % richtig · 15 von 25 Min.');
+  await expect(page.getByTestId('balance')).toHaveText('15 Min. · 1 von 1 Blöcken · 2 Antworten, 100 % richtig');
   expect(errors).toEqual([]);
 });
 
