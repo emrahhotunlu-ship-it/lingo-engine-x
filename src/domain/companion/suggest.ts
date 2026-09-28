@@ -15,12 +15,16 @@ export type SuggestKey =
   | 'sgPreply'
   | 'sgWeakest'
   | 'sgSimpler'
-  | 'sgQuizMe';
+  | 'sgQuizMe'
+  // Neubau (plan.md §1.2): Rückfrage-Chips nach jeder Antwort, z. B. nach „Warum?“.
+  | 'nbProfilSgExample'
+  | 'nbProfilSgOther'
+  | 'nbProfilSgGerman';
 
 export type SuggestLage = { seeing: Seeing | null; hasWord: boolean; afterReply: boolean };
 
 export function suggestions(l: SuggestLage): SuggestKey[] {
-  if (l.afterReply) return ['sgSimpler', 'sgMoreExamples', 'sgQuizMe'];
+  if (l.afterReply) return ['nbProfilSgExample', 'nbProfilSgOther', 'nbProfilSgGerman'];
   if (l.hasWord) return ['sgWordColloc', 'sgWordRegister', 'sgWordQuiz'];
   if (l.seeing?.phase === 'question') return ['sgHint', 'sgRule'];
   if (l.seeing?.phase === 'feedback') return ['sgWhyWrong', 'sgMoreExamples', 'sgConfusable'];

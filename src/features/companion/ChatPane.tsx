@@ -6,6 +6,7 @@ import { Markdown } from '../../engine/Markdown';
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
 import { openPreplyPrep } from '../preply/store';
+import { startClaudeDrill } from './drill';
 import { ChatMessage, type MsgState } from './ChatMessage';
 import { Composer } from './Composer';
 import { useCurrentSeeing } from './seeing';
@@ -72,7 +73,16 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
     />
   );
 
-  const action = (kind: 'practice' | 'preply') => {
+  const action = (kind: 'practice' | 'preply' | 'drill') => {
+    if (kind === 'drill') {
+      // N96: die letzte Frage und Antwort sind das Thema der fünf Aufgaben.
+      const lastUser = [...current].reverse().find((m) => m.role === 'user');
+      const context = [lastUser ? `Learner: ${lastUser.content}` : '', lastAssistant ? `Tutor: ${lastAssistant.content}` : ''].filter(Boolean).join('\n\n');
+      closeCompanion();
+      startClaudeDrill(context);
+      go({ name: 'claudeDrill' });
+      return;
+    }
     if (kind === 'preply') {
       const topic = s.attach?.word ?? seeing?.label ?? '';
       closeCompanion();
@@ -203,6 +213,17 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
             ))}
             {afterReply && (
               <>
+                <button
+                  type="button"
+                  onClick={() => action('drill')}
+                  className="inline-flex min-h-11 flex-none items-center gap-1.5 rounded-full bg-accent-soft px-4 text-sm font-semibold text-accent-text"
+                  data-testid="chat-action"
+                  data-action="drill"
+                  data-ai=""
+                >
+                  <Icon name="target" size={16} />
+                  {t('nbProfilDrillOffer')}
+                </button>
                 <button
                   type="button"
                   onClick={() => action('practice')}

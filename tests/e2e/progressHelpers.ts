@@ -1,5 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 import { openOverview, screen } from './fixtures';
+import { openProfileRow } from './profilHelpers';
 import { typeInGap } from './learnHelpers';
 
 // Rundgang durch die Phase-6-Bildschirme (Plan §13): die vier Reiter von „Dein Stand", der
@@ -8,20 +9,21 @@ import { typeInGap } from './learnHelpers';
 
 export async function progressTour(page: Page, visit: (name: string) => Promise<void>): Promise<void> {
   await openOverview(page);
-  for (const id of ['judge', 'errors', 'path', 'history'] as const) {
+  for (const id of ['judge', 'errors', 'path', 'stats', 'history'] as const) {
     await page.getByTestId(`tab-${id}`).click();
     await expect(page.getByTestId(`tab-${id}`)).toHaveAttribute('aria-selected', 'true');
     await page.waitForTimeout(250);
     await visit(`stand-${id}`);
   }
+  await openProfileRow(page, 'profile-check');
+  await screen(page, 'checks');
   await page.getByTestId('check-start').click();
   await checkSettled(page);
   await page.waitForTimeout(250);
   await visit('wochencheck');
   await page.getByTestId('round-close').click();
-  await screen(page, 'overview');
-  await expect(page.getByTestId('tab-history')).toHaveAttribute('aria-selected', 'true');
-  await page.getByTestId('vtest-start').click();
+  await screen(page, 'checks');
+  await openProfileRow(page, 'profile-vtest');
   await screen(page, 'vtest');
   await visit('wortschatztest');
   await page.getByTestId('vt-start').click();

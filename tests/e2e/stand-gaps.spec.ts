@@ -4,6 +4,7 @@ import { typeInGap } from './learnHelpers';
 import { openModule } from './inputHelpers';
 import { answerCheckItem, playCheck } from './progressHelpers';
 import { dump, planPatch } from './trainerHelpers';
+import { openChecks, openProfileContent, openWeekly } from './profilHelpers';
 
 // Lücken aus dem Abgleich (Kap. 9/14, M7, M10, M13, M18, M20, M21, M22, W5, Kap. 4.1):
 // alte Daten sichtbar, Wochen-Check, Wochenstreifen und Niveau-Leiste, Farbthema und beruflicher
@@ -24,7 +25,7 @@ async function openHistory(page: Page): Promise<void> {
 
 test('Kap. 9/14: alte Wochen-Checks und „Letzte Fortschritte" sind im Verlauf sichtbar (nur lesen)', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
-  await openHistory(page);
+  await openChecks(page);
   const card = page.getByTestId('checks-card');
   await card.getByTestId('checks-toggle').click();
   await expect(card.getByTestId('check-row')).toHaveCount(2);
@@ -32,6 +33,7 @@ test('Kap. 9/14: alte Wochen-Checks und „Letzte Fortschritte" sind im Verlauf 
   await expect(card.getByTestId('check-row').first()).toContainText('4/5');
   await expect(card.getByTestId('check-last')).toContainText('75 %');
   await expect(card.getByTestId('check-last')).toContainText('67 %');
+  await openHistory(page);
   const feed = page.getByTestId('legacy-feed');
   await feed.getByTestId('feed-toggle').click();
   await expect(feed.getByTestId('feed-row')).toHaveCount(6);
@@ -56,9 +58,7 @@ test('M10: Wochen-Check – 12 Aufgaben ohne Tipps, Ergebnis im alten Format, Ve
   const seedProfile = await profileOf(page);
   const gramBefore = ((seedProfile.act as Record<string, Doc>)['2026-09-20'] ?? {}).gram;
 
-  await openOverview(page);
-  await screen(page, 'overview');
-  await page.getByTestId('tab-history').click();
+  await openChecks(page);
   await page.getByTestId('check-start').click();
   await expect(page.locator('[data-screen="check"]')).toBeVisible();
   await expect(page.getByTestId('check-screen')).toContainText('Extra');
@@ -117,7 +117,7 @@ test('M10: Angebot auf Heute erst nach der Pflicht; Abbruch vor 6 Antworten spei
   // ✕ führt dorthin zurück, woher der Check kam: nach Heute (UX-Beratung Nr. 3); in „Stand → Verlauf“ bleibt er erreichbar.
   await page.getByTestId('round-close').click();
   await screen(page, 'today');
-  await openHistory(page);
+  await openChecks(page);
   await expect(page.getByTestId('check-start')).toBeVisible();
   expect(((await profileOf(page)).checks as unknown[]).length).toBe(2);
   expect(errors).toEqual([]);
@@ -133,14 +133,15 @@ test('M10: ist diese Woche schon ein Check gespeichert, gibt es kein Angebot', a
   await screen(page, 'today');
   await expect(page.getByTestId('extra')).toBeVisible();
   await expect(page.getByTestId('check-offer')).toHaveCount(0);
-  await openHistory(page);
+  await openChecks(page);
   await expect(page.getByTestId('check-week-done')).toBeVisible();
   await expect(page.getByTestId('check-last')).toContainText('83 %');
 });
 
 test('M7: Wochenstreifen (7 Tagesringe, dieselbe Regel wie die Serie) und Niveau-Leiste in der Kopfzeile', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
-  await openOverview(page);
+  // Neubau: Serie und Wochenstreifen stehen im Profil (Pflicht · nur Extra · Ruhetag · offen).
+  await openProfileContent(page);
   const strip = page.getByTestId('week-strip');
   await expect(strip.getByTestId('week-day')).toHaveCount(7);
   await expect(strip.getByTestId('week-day').last()).toHaveAttribute('data-today', '');
@@ -148,10 +149,11 @@ test('M7: Wochenstreifen (7 Tagesringe, dieselbe Regel wie die Serie) und Niveau
   // Nie nur Farbe: jeder Ring hat eine Beschriftung für Vorleseprogramme.
   await expect(strip.getByTestId('week-day').first()).toContainText('Montag, 14. September');
   const states = await strip.getByTestId('week-day').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
-  expect(states.every((s) => s && ['done', 'rest', 'open'].includes(s))).toBe(true);
+  expect(states.every((s) => s && ['done', 'extra', 'rest', 'open'].includes(s))).toBe(true);
   // Serie 12 nach alter Regel: die ganze Woche zählt.
   expect(states).toEqual(['done', 'done', 'done', 'done', 'done', 'done', 'done']);
-  await expect(page.getByTestId('week-summary')).toHaveText('7 Tage erledigt');
+  await expect(page.getByTestId('profile-sheet-streak')).toContainText('12');
+  await openOverview(page);
 
   const scale = page.getByTestId('level-scale');
   await expect(scale).toBeVisible();
@@ -204,9 +206,7 @@ test('M18: „Als Preply-Stunde" im Text, an der Szene und im Wochenbericht', as
   await page.keyboard.press('Escape');
   await expect(page.getByTestId('briefing')).toHaveCount(0);
   // Wochenbericht
-  await openOverview(page);
-  await screen(page, 'overview');
-  await page.getByTestId('tab-history').click();
+  await openWeekly(page);
   await page.getByTestId('weekly').getByTestId('as-preply').click();
   await expect(page.getByTestId('preply')).toBeVisible();
   await expect(page.locator('[data-testid="pp-ctx"] [data-value="about"]')).toHaveAttribute('aria-checked', 'true');

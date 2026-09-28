@@ -5,6 +5,9 @@ import { levelRank } from '../assessment/types';
 // Weg nach C1 (Plan §7.2, E16): Status je Can-Do-Punkt aus `cefr.json`. Die Belegart steht in
 // `item.evidence`. `reached` = belegt, `self` = von Emrah markiert (`profile.canDo[<id>]`),
 // `open` = Daten da, aber noch nicht erreicht, `thin` = zu wenig Daten für ein Urteil.
+// Neubau N92 (lehrer.md X2): Ein C1-Punkt gilt erst mit ZWEI echten Belegen als erreicht
+// (`canDoEvidence`). Die Selbstmarkierung bleibt sichtbar getrennt („selbst eingeschätzt“) und
+// zählt in der Zusammenfassung nicht mit.
 
 export type CanDoItem = { id: string; level: string; dim: string; de: string; en: string; tip_de: string; tip_en: string; evidence: string };
 export type CanDoStatus = 'reached' | 'self' | 'open' | 'thin';
@@ -16,6 +19,8 @@ export type CanDoEnv = {
   /** Beherrschung je Grammatikthema (mit Anzeige-Verfall) und Antworten. */
   grammar: ReadonlyMap<string, { p: number; n: number }>;
   vtest: { passive: number; active: number } | null;
+  /** Alle Wortschatztests (für C1: zwei Tests über der Schwelle = zwei Belege). Fehlt = nur `vtest`. */
+  vtests?: ReadonlyArray<{ passive: number; active: number }>;
   colloc: { ema: number | null; n: number };
   radar: { n30: number; nPrev30: number };
   /** Korrigierte Texte, neueste zuerst. */
@@ -24,6 +29,8 @@ export type CanDoEnv = {
   listening: ReadonlyArray<{ level: string; n: number; ok: number }>;
   /** Sprechstufe der Einschätzung, nur bei Belastbarkeit ≠ thin. */
   speaking: string | null;
+  /** Belastbarkeit der Sprechstufe (`good` = zwei Belege, sonst einer). */
+  speakingConf?: 'fair' | 'good' | null;
   /** `profile.canDo` (Selbstmarkierungen; Lektions-Kennungen der alten App werden ignoriert). */
   self: Readonly<Record<string, unknown>>;
 };
@@ -83,21 +90,62 @@ function evidenceStatus(item: CanDoItem, env: CanDoEnv): Exclude<CanDoStatus, 's
   }
 }
 
+/** Belege für C1 (N92). */
+export const C1_MIN_EVIDENCE = 2;
+
+/**
+ * Zahl der echten Belege, die einen Punkt auf seiner Stufe tragen (lehrer.md X2). Einzelne
+ * Leistungen zählen einzeln (Texte, Hörergebnisse, Tests, beherrschte Themen); zusammengefasste
+ * Messwerte zählen je volle 100 Antworten (Kollokationen) bzw. als Vergleich zweier Zeiträume
+ * (Fehler-Radar = 2). Die Selbstmarkierung ist nie ein Beleg.
+ */
+export function canDoEvidence(item: CanDoItem, env: CanDoEnv): number {
+  const c1 = item.level === 'C1';
+  const tests = env.vtests ?? (env.vtest ? [env.vtest] : []);
+  switch (item.evidence) {
+    case 'grammar':
+      return lessonTopics(item.level).filter((t) => {
+        const x = env.grammar.get(t);
+        return !!x && x.n >= 5 && x.p >= 0.75;
+      }).length;
+    case 'vocab_passive':
+      return tests.filter((v) => v.passive >= (c1 ? 8000 : 6000)).length;
+    case 'vocab_active':
+      return tests.filter((v) => v.active >= (c1 ? 6000 : 4000)).length;
+    case 'colloc':
+      return env.colloc.ema !== null && env.colloc.ema >= 0.75 ? Math.floor(env.colloc.n / 100) : 0;
+    case 'errors':
+      return evidenceStatus(item, env) === 'reached' ? 2 : 0;
+    case 'writing':
+      return env.writing.filter((w) => levelAtLeast(w.cefr, item.level)).length;
+    case 'writing_register':
+      return env.writing.filter((w) => w.register !== null && w.register >= 4).length;
+    case 'listening':
+      return env.listening.filter((l) => levelAtLeast(l.level, item.level) && l.n > 0 && l.ok / l.n >= 0.8).length;
+    case 'fluency':
+      return env.speaking && levelAtLeast(env.speaking, item.level) ? (env.speakingConf === 'good' ? 2 : 1) : 0;
+    default:
+      return 0;
+  }
+}
+
 export function canDoStatus(item: CanDoItem, env: CanDoEnv): CanDoStatus {
-  const st = evidenceStatus(item, env);
+  const raw = evidenceStatus(item, env);
+  // C1 erst mit zwei Belegen (N92); bis dahin bleibt der Punkt offen.
+  const st = raw === 'reached' && item.level === 'C1' && canDoEvidence(item, env) < C1_MIN_EVIDENCE ? 'open' : raw;
   if (st === 'reached') return 'reached';
   const mark = env.self[item.id];
   if (mark !== undefined && mark !== null && mark !== false) return 'self';
   return item.evidence === 'self' ? 'open' : st;
 }
 
-export type CanDoLevelSummary = { level: string; done: number; total: number };
+export type CanDoLevelSummary = { level: string; done: number; self: number; total: number };
 
-/** „B2: 9 von 18" – erreicht oder selbst markiert zählen. */
+/** „B2: 9 von 18 belegt · 3 selbst eingeschätzt" – nur Belegtes zählt (N92). */
 export function canDoSummary(items: readonly CanDoItem[], status: (i: CanDoItem) => CanDoStatus): CanDoLevelSummary[] {
   const levels = [...new Set(items.map((i) => i.level))];
   return levels.map((level) => {
     const xs = items.filter((i) => i.level === level);
-    return { level, done: xs.filter((i) => ['reached', 'self'].includes(status(i))).length, total: xs.length };
+    return { level, done: xs.filter((i) => status(i) === 'reached').length, self: xs.filter((i) => status(i) === 'self').length, total: xs.length };
   });
 }

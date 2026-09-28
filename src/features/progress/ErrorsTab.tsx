@@ -10,10 +10,13 @@ import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Skeleton } from '../../ui/Skeleton';
 import { actionRoute, startAction } from './actionRoute';
+import { RepairStandLine } from '../repair/StandLine';
+import { PatternsStandCard } from '../patterns/StandCard';
 
 // Reiter „Fehler" (Plan §7.1): Fehler-Radar der letzten 30 Tage je Kategorie mit Veränderung zu
 // den 30 Tagen davor, Quellen und zwei Beispielen. `app/radar` wird nur abonniert, solange der
-// Reiter offen ist (Plan E19).
+// Reiter offen ist (Plan E19). Neubau: Reparatur-Sätze (Zeile) und Deutsch-Fallen (Karte) stehen
+// oben in diesem Reiter statt über allen Reitern von „Dein Stand“.
 
 export function radarName(r: Pick<RadarRow, 'c' | 'kind'>, t: (k: MessageKey) => string, lang: 'de' | 'en'): string {
   if (r.kind === 'cat') return t(`rc_${r.c}` as MessageKey);
@@ -41,6 +44,10 @@ export function ErrorsTab() {
   }
 
   return (
+    <div className="flex flex-col gap-4">
+      <RepairStandLine />
+      {/* Lernberatung V3/V8: Deutsch-Fallen mit Verlauf und Wochenfokus. */}
+      <PatternsStandCard />
     <section aria-labelledby="radar-title" className="flex flex-col gap-4" data-testid="radar">
       <h2 id="radar-title" className="text-lg font-semibold">
         {t('radarTitle')}
@@ -95,5 +102,6 @@ export function ErrorsTab() {
         </ul>
       )}
     </section>
+    </div>
   );
 }

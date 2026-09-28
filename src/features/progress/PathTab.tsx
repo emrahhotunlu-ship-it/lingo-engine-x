@@ -7,7 +7,7 @@ import { readAssess } from '../../domain/assessment/envelope';
 import { lastVtest, listenSources, writingSources } from '../../domain/assessment/sources';
 import { TOPICS } from '../../domain/content';
 import { topicP } from '../../domain/grammar/bkt';
-import { canDoStatus, canDoSummary, CANDO_DIMS, CANDO_ITEMS, type CanDoEnv, type CanDoItem, type CanDoStatus } from '../../domain/progress/cando';
+import { canDoEvidence, canDoStatus, canDoSummary, CANDO_DIMS, CANDO_ITEMS, type CanDoEnv, type CanDoItem, type CanDoStatus } from '../../domain/progress/cando';
 import { radarTotals } from '../../domain/progress/radar';
 import { buildTrainCards } from '../../domain/srs/cards';
 import { vocabGoal } from '../../domain/vocab/goal';
@@ -21,6 +21,8 @@ import { useCollectionsOnce } from './useOnce';
 // Reiter „Weg nach C1" (Plan §7.2, E16): Can-Do-Liste mit Status je Punkt, dazu Claudes
 // „was noch fehlt" (nur in der eigenen Sprache) und das Wortschatzziel 8.000. Kurz gehalten
 // (UX-Beratung Nr. 6): je Stufe nur die ersten offenen Punkte, erreichte zugeklappt.
+// N92: C1 zählt erst mit zwei Belegen (Zahl je Punkt sichtbar); „selbst eingeschätzt“ steht
+// getrennt neben der Zahl und zählt nicht mit.
 
 type Doc = Record<string, unknown>;
 const EMPTY = new Map<string, Doc>();
@@ -49,7 +51,13 @@ export function PathTab() {
     const n = obj(p.n);
     const vt = lastVtest(p);
     const sp = assess?.data.dims.find((d) => d.id === 'speaking');
+    const vtests = (Array.isArray(p.vtests) ? p.vtests : [])
+      .map(obj)
+      .filter((v) => typeof v.passive === 'number')
+      .map((v) => ({ passive: v.passive as number, active: typeof v.active === 'number' ? v.active : 0 }));
     return {
+      vtests,
+      speakingConf: sp && sp.level && sp.confidence !== 'thin' ? sp.confidence : null,
       grammar: new Map(TOPICS.map((tp) => [tp.id, { p: topicP(tp.id, grammar.get(tp.id), now), n: typeof grammar.get(tp.id)?.n === 'number' ? (grammar.get(tp.id)?.n as number) : 0 }])),
       vtest: vt ? { passive: vt.passive, active: vt.active } : null,
       colloc: { ema: typeof ema.colloc === 'number' ? ema.colloc : null, n: typeof n.colloc === 'number' ? n.colloc : 0 },
@@ -78,6 +86,7 @@ export function PathTab() {
     const st = statusOf(i);
     const dim = CANDO_DIMS.find((d) => d.id === i.dim);
     const marked = st === 'self';
+    const evidence = i.level === 'C1' ? canDoEvidence(i, env) : 0;
     return (
       <li key={i.id} className="flex items-start gap-3 py-3" data-testid="cando" data-id={i.id} data-status={st}>
         <span className={`mt-0.5 inline-flex size-6 flex-none items-center justify-center rounded-full ${st === 'reached' ? 'text-accent-text' : 'text-muted'}`} aria-hidden="true">
@@ -89,6 +98,12 @@ export function PathTab() {
             {dim ? `${lang === 'en' ? dim.en : dim.de} · ` : ''}
             {t(`cdStatus_${st}` as MessageKey)}
           </span>
+          {i.level === 'C1' && (st === 'reached' || evidence > 0) && (
+            <span className="lx-tnum text-xs text-muted" data-testid="cando-evidence" data-n={evidence}>
+              {tn('nbProfilEvidence', evidence)}
+              {st !== 'reached' ? ` · ${t('nbProfilEvidenceNeed')}` : ''}
+            </span>
+          )}
           {st !== 'reached' && <span className="text-xs text-muted">{lang === 'en' ? i.tip_en : i.tip_de}</span>}
         </span>
         {st !== 'reached' && (
@@ -141,8 +156,9 @@ export function PathTab() {
             <Card key={s.level} as="div" className="flex flex-col py-3 sm:py-4" data-testid="cando-level" data-level={s.level}>
               <div className="flex items-baseline justify-between gap-3 py-2">
                 <h3 className="text-base font-semibold">{s.level}</h3>
-                <p className="lx-tnum text-sm text-muted" data-testid="cando-count" data-level={s.level}>
-                  {t('canDoCount', { level: s.level, done: s.done, total: s.total })}
+                <p className="lx-tnum text-right text-sm text-muted" data-testid="cando-count" data-level={s.level} data-done={s.done} data-self={s.self}>
+                  {t('nbProfilCanDoCount', { level: s.level, done: s.done, total: s.total })}
+                  {s.self > 0 && <span className="block text-xs text-subtle">{t('nbProfilCanDoSelf', { n: s.self })}</span>}
                 </p>
               </div>
               {todo.length > 0 && <ul className="flex flex-col divide-y divide-line border-t border-line">{todo.slice(0, SHOWN).map(itemRow)}</ul>}

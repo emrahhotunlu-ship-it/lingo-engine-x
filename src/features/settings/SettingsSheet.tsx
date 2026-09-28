@@ -17,17 +17,24 @@ import { useSettings, type Lang, type Palette, type ThemeMode } from '../../app/
 import { changeAutoNext, changeLang, changePalette, changeTheme } from '../../app/actions';
 import { WorkContextSection } from './WorkContextSection';
 import { exportMessage } from '../migration/MigrationScreen';
-import { exportAll } from './exportData';
+import { exportAll, exportAnkiCsv } from './exportData';
 import { VoiceSection } from './VoiceSection';
 import { LearningSection, SoundSection } from './LearningSection';
 import { Fold } from '../../ui/Fold';
 import { HapticSection } from './HapticSection';
 import { discCount } from '../../domain/discover/steps';
 import { diagText } from './diagText';
+import { perfText, readPerfMarks, type PerfName } from './perfMarks';
 
-// Einstellungen (Kap. 6.14, UX-Beratung Nr. 11) in drei Gruppen: Lernen (neue Wörter, Tagesziel,
-// Arbeitskontext, Üben) · Aussehen und Ton (Sprache, Darstellung, Farbthema, Stimme, Töne, Vibration)
-// · Daten und Technik (Sicherung; Quellen und Diagnose zugeklappt).
+// Einstellungen (Kap. 6.14, Neubau plan.md §1.2, N94, markt.md UI 24) in sechs Gruppen:
+//   1 Lernen          Tagesziel, Neue Wörter/Tag, Automatisch weiter
+//   2 Wortschatz      nur angemeldete Abschnitte (P3: Modus, Richtung, 4 oder 2 Knöpfe)
+//   3 Stimme & Ton    Stimme, Tempo, Probehören, Vorlesen im Rollenspiel, Töne, Vibration
+//   4 Mein Kontext    beruflicher Kontext
+//   5 Darstellung     Sprache, Modus, Farbthema
+//   6 Daten           Sicherung, Diagnose mit Messwerten, Profilgröße (aus), Quellen
+// Abschnitte anderer Bereiche (`SettingsDef.group`) erscheinen am Ende ihrer Gruppe; eine Gruppe
+// ohne Inhalt entfällt.
 
 /** Einstellungs-Abschnitte, die Bereiche angemeldet haben (je Gruppe in `order`-Reihenfolge). */
 function Registered({ groups }: { groups: SettingsGroup[] }) {
@@ -42,25 +49,36 @@ function Registered({ groups }: { groups: SettingsGroup[] }) {
 
 export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t } = useT();
+  const hasVocab = settingsSections('vocab').length > 0;
   return (
     <Sheet open={open} onClose={onClose} title={t('settings')} closeLabel={t('close')}>
-      {/* UX-Beratung Nr. 11: drei Gruppen; Quellen und Diagnose zugeklappt, die Version steht in der Zeile. */}
+      {/* N94: sechs Gruppen; Quellen und Diagnose zugeklappt, die Version steht in der Zeile. */}
       <div className="flex flex-col gap-8 pt-2">
         <Group title={t('setGroupLearn')} testId="set-group-learn">
           <LearningSection />
-          <WorkContextSection />
           <Practice />
-          {/* Registrierte Abschnitte der Bereiche (architektur.md §2.6, plan.md §1.2), bis P6 umbaut. */}
-          <Registered groups={['learn', 'vocab', 'context']} />
+          <Registered groups={['learn']} />
         </Group>
-        <Group title={t('setGroupLook')} testId="set-group-look">
-          <Appearance />
+        {hasVocab && (
+          <Group title={t('nbProfilSetVocab')} testId="set-group-vocab">
+            <Registered groups={['vocab']} />
+          </Group>
+        )}
+        <Group title={t('nbProfilSetVoice')} testId="set-group-voice">
           <VoiceSection />
           <SoundSection />
           <HapticSection />
-          <Registered groups={['voice', 'look']} />
+          <Registered groups={['voice']} />
         </Group>
-        <Group title={t('setGroupData')} testId="set-group-data">
+        <Group title={t('nbProfilSetContext')} testId="set-group-context">
+          <WorkContextSection />
+          <Registered groups={['context']} />
+        </Group>
+        <Group title={t('nbProfilSetLook')} testId="set-group-look">
+          <Appearance />
+          <Registered groups={['look']} />
+        </Group>
+        <Group title={t('nbProfilSetData')} testId="set-group-data">
           <DataSection />
           <div className="flex flex-col divide-y divide-line border-y border-line">
             <Fold title={t('sourcesTitle')} toggleTestId="sources-toggle">
@@ -156,7 +174,15 @@ function DataSection() {
   const downloads = useCapabilities((s) => s.downloads);
   const db = useCapabilities((s) => s.db);
   const [busy, setBusy] = useState(false);
+  const [csvBusy, setCsvBusy] = useState(false);
   if (downloads !== 'ready' || db !== 'ready') return null;
+  const runCsv = async () => {
+    setCsvBusy(true);
+    const outcome = await exportAnkiCsv();
+    setCsvBusy(false);
+    if (outcome === 'empty') toast(t('nbProfilCsvEmpty'));
+    else toast(t(exportMessage[outcome]), outcome === 'saved' || outcome === 'declined' ? 'info' : 'error');
+  };
   const run = async () => {
     setBusy(true);
     const outcome = await exportAll();
@@ -168,11 +194,16 @@ function DataSection() {
       <Button icon="download" onClick={() => void run()} busy={busy} busyLabel={t('exportRunning')} className="w-full">
         {t('exportButton')}
       </Button>
+      <Button variant="secondary" icon="cards" onClick={() => void runCsv()} busy={csvBusy} busyLabel={t('exportRunning')} className="w-full" data-testid="export-csv">
+        {t('nbProfilCsv')}
+      </Button>
+      <p className="text-sm text-muted">{t('nbProfilCsvHint')}</p>
     </Section>
   );
 }
 
 const CAP_LABEL: Record<CapStatus, MessageKey> = { ready: 'capReady', pending: 'capPending', absent: 'capAbsent' };
+const PERF_LABEL: Record<PerfName, MessageKey> = { 'lx:boot': 'nbProfilPerfBoot', 'lx:live': 'nbProfilPerfLive', 'lx:status': 'nbProfilPerfStatus', 'lx:card': 'nbProfilPerfCard' };
 
 function Diagnostics({ open }: { open: boolean }) {
   const { t, num, date, lang } = useT();
@@ -243,6 +274,18 @@ function Diagnostics({ open }: { open: boolean }) {
     [t('diagDisc'), num(discCount(disc))],
   ];
 
+  // N95: die vier Messpunkte, beim Öffnen gelesen und kopierbar.
+  const perf = open ? readPerfMarks() : [];
+  const copyPerf = async () => {
+    try {
+      await navigator.clipboard.writeText(`${build} ${perfText(perf)}`);
+      toast(t('diagLogCopied'));
+    } catch (err) {
+      logWarn('diagnostics:copy-perf', err);
+      toast(t('diagLogCopyFailed'), 'error');
+    }
+  };
+
   // Warnungen bleiben sichtbar; die Messwerte und das Protokoll liegen zugeklappt darunter.
   return (
     <>
@@ -267,6 +310,22 @@ function Diagnostics({ open }: { open: boolean }) {
               </div>
             ))}
           </dl>
+          <h4 className="mt-2 text-sm font-semibold">{t('nbProfilPerfTitle')}</h4>
+          <dl className="flex flex-col" data-testid="diag-perf">
+            {perf.map((r) => (
+              <div key={r.name} className="flex items-baseline justify-between gap-4 border-b border-line py-2" data-testid="diag-perf-row" data-name={r.name} data-ms={r.ms ?? ''}>
+                <dt className="text-sm text-muted">
+                  {t(PERF_LABEL[r.name])} <span className="text-xs text-subtle">{r.name}</span>
+                </dt>
+                <dd className="lx-tnum text-right text-sm font-medium">{r.ms === null ? t('nbProfilPerfNone') : t('nbProfilPerfMs', { ms: num(r.ms) })}</dd>
+              </div>
+            ))}
+          </dl>
+          <div>
+            <Button icon="copy" variant="ghost" onClick={() => void copyPerf()} data-testid="diag-perf-copy">
+              {t('nbProfilPerfCopy')}
+            </Button>
+          </div>
           <h4 className="mt-2 text-sm font-semibold">{t('diagLog')}</h4>
           {log.length === 0 ? (
             <p className="text-sm text-muted">{t('diagLogEmpty')}</p>
