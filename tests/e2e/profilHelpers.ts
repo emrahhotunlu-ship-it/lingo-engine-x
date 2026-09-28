@@ -12,10 +12,17 @@ export async function openProfileContent(page: Page): Promise<void> {
   await expect(page.getByTestId('profile-head')).toBeVisible();
 }
 
-/** Eine Zeile im Profil antippen (2 Tipps ab jeder Reiter-Wurzel). */
+/** Profil-Blatt schließen (Esc) und warten, bis es weg ist. */
+export async function closeProfile(page: Page): Promise<void> {
+  await page.keyboard.press('Escape');
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
+}
+
+/** Eine Zeile im Profil antippen (2 Tipps ab jeder Reiter-Wurzel); das Blatt blendet aus. */
 export async function openProfileRow(page: Page, testId: string): Promise<void> {
   await openProfileContent(page);
   await page.getByTestId(testId).click();
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
 }
 
 /** „Dein Stand“ direkt auf einem Reiter (über das Profil). */

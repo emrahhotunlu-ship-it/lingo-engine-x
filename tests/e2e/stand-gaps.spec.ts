@@ -152,7 +152,7 @@ test('M7: Wochenstreifen (7 Tagesringe, dieselbe Regel wie die Serie) und Niveau
   expect(states.every((s) => s && ['done', 'extra', 'rest', 'open'].includes(s))).toBe(true);
   // Serie 12 nach alter Regel: die ganze Woche zählt.
   expect(states).toEqual(['done', 'done', 'done', 'done', 'done', 'done', 'done']);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  await expect(page.getByTestId('profile-sheet-streak')).toContainText('12');
   await openOverview(page);
 
   const scale = page.getByTestId('level-scale');

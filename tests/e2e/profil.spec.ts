@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { TABS } from '../../src/app/shell/tabs';
 import { boot, layoutProblems, openSettings, screen } from './fixtures';
-import { openProfileContent, openProfileRow, openStandTab, startVtest } from './profilHelpers';
+import { closeProfile, openProfileContent, openProfileRow, openStandTab, startVtest } from './profilHelpers';
 
 // Paket P6 (docs/neubau/plan.md §4.7): Profil-Blatt, „Dein Stand“ mit fünf Reitern, Tests,
 // Claude-Blatt (Übersetzen → „+ Wortschatz“ in einem Tipp, Rückfrage-Chips), Einstellungen in
@@ -17,10 +17,11 @@ test.describe('Handy 390', () => {
     const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
     await screen(page, 'today');
     await openProfileContent(page);
-    await expect(page.getByTestId('streak-count')).toHaveText('12');
+    await expect(page.getByTestId('profile-sheet-streak')).toContainText('12');
     await expect(page.getByTestId('week-strip').getByTestId('week-day')).toHaveCount(7);
     await expect(page.getByTestId('profile-judge-line')).toContainText('B2');
     expect(await layoutProblems(page)).toEqual([]);
+    await closeProfile(page);
     for (const tab of ['judge', 'errors', 'path', 'stats', 'history'] as const) {
       await openStandTab(page, tab);
       expect(await layoutProblems(page), tab).toEqual([]);
@@ -139,6 +140,7 @@ test.describe('Desktop 1440', () => {
       await page.getByTestId(`tab-${id}`).click();
       await openProfileContent(page);
       await expect(page.getByTestId('profile-stats')).toBeVisible();
+      await closeProfile(page);
     }
   });
 });

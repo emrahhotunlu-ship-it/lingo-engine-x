@@ -1,7 +1,7 @@
-import { useEffect, useMemo, type ReactNode } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
-import { closeSheet, openSheet } from '../../../app/sheets';
+import { closeSheet } from '../../../app/sheets';
 import { useLive } from '../../../data/live';
 import { readAssess } from '../../../domain/assessment/envelope';
 import { lastVtest } from '../../../domain/assessment/sources';
@@ -11,6 +11,7 @@ import { firstSentence, streakView, type DotState } from '../../../domain/progre
 import { useT, type MessageKey } from '../../../i18n';
 import { useCapabilities } from '../../../platform/capabilities';
 import { Icon, type IconName } from '../../../ui/Icon';
+import { Row, RowList } from '../../../ui/RowList';
 import { useLateRescue } from '../../migration/lateRescue';
 import type { ProgressTab } from '../ProgressScreen';
 
@@ -31,33 +32,6 @@ const EMPTY = new Map<string, Doc>();
 function leave(run: () => void): void {
   closeSheet('profile');
   run();
-}
-
-export function ProfileRow({ icon, title, sub, onClick, testId, trailing }: { icon: IconName; title: string; sub?: ReactNode; onClick: () => void; testId: string; trailing?: ReactNode }) {
-  return (
-    <li>
-      <button type="button" onClick={onClick} data-testid={testId} className="flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-strong">
-        <span className="inline-flex size-9 flex-none items-center justify-center rounded-xl bg-surface-strong text-muted" aria-hidden="true">
-          <Icon name={icon} size={20} />
-        </span>
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="font-medium">{title}</span>
-          {sub && <span className="lx-tnum text-sm text-muted">{sub}</span>}
-        </span>
-        {trailing}
-        <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-      </button>
-    </li>
-  );
-}
-
-export function ProfileGroup({ title, testId, children }: { title?: string; testId: string; children: ReactNode }) {
-  return (
-    <section className="flex flex-col gap-2" aria-label={title} data-testid={testId}>
-      {title && <h2 className="lx-eyebrow px-1">{title}</h2>}
-      <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]">{children}</ul>
-    </section>
-  );
 }
 
 const DOT_CLASS: Record<DotState, string> = {
@@ -85,7 +59,7 @@ const DOT_LABEL: Record<DotState, MessageKey> = { done: 'nbProfilDotDone', extra
 
 /** Kopf: Serie, sieben Punkte Mo–So, Urteil in einem Satz (Tipp → Stand/Urteil). */
 export function ProfileHead() {
-  const { t, tn, num, lang } = useT();
+  const { t, lang } = useT();
   const go = useNav((s) => s.go);
   const now = useClock((s) => s.now);
   const profile = useLive((s) => s.docs['app/profile']);
@@ -108,14 +82,11 @@ export function ProfileHead() {
   const count = view.streak.count;
 
   return (
-    <section className="lx-glass flex flex-col gap-4 rounded-[var(--radius-card)] p-4" aria-label={t('nbProfilHeadLabel')} data-testid="profile-head">
-      <div className="flex items-baseline justify-between gap-3">
-        <p className="flex items-baseline gap-2">
-          <span className="lx-tnum text-3xl font-semibold tracking-tight" data-testid="streak-count" data-count={count}>
-            {num(count)}
-          </span>
-          <span className="text-sm text-muted">{tn('nbProfilStreak', count)}</span>
-        </p>
+    <section className="lx-glass flex flex-col gap-4 rounded-[var(--radius-card)] p-4" aria-label={t('nbProfilHeadLabel')} data-testid="profile-week-head">
+      <div className="flex items-baseline justify-between gap-3" data-testid="profile-week-top">
+        <h2 className="lx-eyebrow" data-count={count}>
+          {t('wkTitle')}
+        </h2>
         <p className="text-xs text-muted" data-testid="profile-rest">
           {restFree ? t('nbProfilRestFree') : t('nbProfilRestUsed')}
         </p>
@@ -173,11 +144,11 @@ export function ProfileStandRows() {
   const { t } = useT();
   const go = useNav((s) => s.go);
   return (
-    <ProfileGroup title={t('nbProfilGroupStand')} testId="profile-stand">
+    <RowList title={t('nbProfilGroupStand')} testId="profile-stand">
       {STAND_ROWS.map((r) => (
-        <ProfileRow key={r.tab} icon={r.icon} title={t(r.label)} sub={t(r.sub)} testId={`profile-${r.tab}`} onClick={() => leave(() => go({ name: 'overview', tab: r.tab }))} />
+        <Row key={r.tab} icon={r.icon} title={t(r.label)} sub={t(r.sub)} testId={`profile-${r.tab}`} onClick={() => leave(() => go({ name: 'overview', tab: r.tab }))} />
       ))}
-    </ProfileGroup>
+    </RowList>
   );
 }
 
@@ -194,10 +165,10 @@ export function ProfileTestRows() {
   const checkSub = doneWeek ? t('nbProfilCheckDone', { pct: cmp?.pct ?? 0 }) : cmp ? t('nbProfilCheckLast', { pct: cmp.pct }) : t('nbProfilCheckNever');
   const vtSub = vt ? t('nbProfilVtestLast', { p: vt.passive }) : t('vtestNever');
   return (
-    <ProfileGroup title={t('nbProfilGroupTests')} testId="profile-tests">
-      <ProfileRow icon="target" title={t('ckTitle')} sub={checkSub} testId="profile-check" onClick={() => leave(() => go({ name: 'checks' }))} />
-      <ProfileRow icon="cards" title={t('vtestTitle')} sub={vtSub} testId="profile-vtest" onClick={() => leave(() => go({ name: 'vtest' }))} />
-    </ProfileGroup>
+    <RowList title={t('nbProfilGroupTests')} testId="profile-tests">
+      <Row icon="target" title={t('ckTitle')} sub={checkSub} testId="profile-check" onClick={() => leave(() => go({ name: 'checks' }))} />
+      <Row icon="cards" title={t('vtestTitle')} sub={vtSub} testId="profile-vtest" onClick={() => leave(() => go({ name: 'vtest' }))} />
+    </RowList>
   );
 }
 
@@ -206,10 +177,9 @@ export function ProfileMoreRows() {
   const { t } = useT();
   const go = useNav((s) => s.go);
   return (
-    <ProfileGroup testId="profile-more">
-      <ProfileRow icon="book" title={t('nbProfilWeekly')} sub={t('nbProfilWeeklySub')} testId="profile-weekly" onClick={() => leave(() => go({ name: 'weekly' }))} />
-      <ProfileRow icon="gear" title={t('settings')} sub={t('nbProfilSettingsSub')} testId="profile-settings" onClick={() => openSheet('settings')} />
-    </ProfileGroup>
+    <RowList testId="profile-more">
+      <Row icon="book" title={t('nbProfilWeekly')} sub={t('nbProfilWeeklySub')} testId="profile-weekly" onClick={() => leave(() => go({ name: 'weekly' }))} />
+    </RowList>
   );
 }
 
@@ -226,8 +196,8 @@ export function ProfileRescueRow() {
   if (state.phase !== 'pending' && state.phase !== 'failed') return null;
   const n = state.items.length + state.notes.length;
   return (
-    <ProfileGroup testId="profile-rescue">
-      <ProfileRow icon="download" title={t('nbProfilRescue')} sub={tn('lateTodayHint', n)} testId="profile-rescue-row" onClick={() => leave(() => go({ name: 'overview', tab: 'history' }))} />
-    </ProfileGroup>
+    <RowList testId="profile-rescue">
+      <Row icon="download" title={t('nbProfilRescue')} sub={tn('lateTodayHint', n)} testId="profile-rescue-row" onClick={() => leave(() => go({ name: 'overview', tab: 'history' }))} />
+    </RowList>
   );
 }

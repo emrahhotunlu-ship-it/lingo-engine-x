@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { defineArea } from '../app/registry';
-import { HubSections } from '../app/shell/Hub';
 import { installCompanionHotkeys } from '../features/companion/hotkeys';
 import { ClaudeDrillScreen } from '../features/companion/ClaudeDrillScreen';
 import { ProgressScreen } from '../features/progress/ProgressScreen';
@@ -27,17 +26,9 @@ declare module '../app/router/types' {
   }
 }
 
-/**
- * „Dein Stand“. Bis der Rahmen das Profil-Blatt zeichnet (WP0b), führt der Profil-Knopf hierher;
- * dann stehen die Abschnitte des Platzes `profile` unter der Seite.
- */
+/** „Dein Stand“; der Platz `stand` steht im Reiter „Zahlen“ (Statistik, plan.md §1.3). */
 function OverviewPage() {
-  return (
-    <>
-      <ProgressScreen />
-      <HubSections places={['profile']} />
-    </>
-  );
+  return <ProgressScreen />;
 }
 
 export const profil = defineArea({
