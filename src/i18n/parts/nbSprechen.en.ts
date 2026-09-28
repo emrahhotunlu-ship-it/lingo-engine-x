@@ -2,4 +2,34 @@
 
 import type { nbSprechenDe } from './nbSprechen.de';
 
-export const nbSprechenEn: Record<keyof typeof nbSprechenDe, string> = {};
+export const nbSprechenEn: Record<keyof typeof nbSprechenDe, string> = {
+  nbSprechenSegTalk: 'Conversations',
+  nbSprechenSegWrite: 'Writing',
+  nbSprechenStatusOpen: 'A conversation is due today',
+  nbSprechenPron: 'Pronunciation',
+  nbSprechenWeekScene: 'Role play: {title}',
+  nbSprechenWeekSceneSub: 'Scene for this week\'s theme · with {name}',
+  nbSprechenNextMeeting: 'My next meeting: {who}',
+  nbSprechenMeetingSub: 'Prepare a real meeting, dress rehearsal',
+  nbSprechenFluencySub: 'Same answer, shorter each time · words per minute',
+  nbSprechenPlaybook: 'Negotiation toolkit',
+  nbSprechenSceneChunks: 'Phrases from your scenes',
+  nbSprechenThisWeek: 'This week',
+  nbSprechenBizScenes: 'Business scenes',
+  nbSprechenOwnScenes: 'Your scenes',
+  nbSprechenAllScenes: 'Show all {n}',
+  nbSprechenSaySub: 'Speak out loud, then write it down',
+  nbSprechenMail: 'Improve an email',
+  nbSprechenWriteTasks: 'Tasks',
+  nbSprechenGoals: 'Goals',
+  nbSprechenGoalMet: 'met',
+  nbSprechenGoalPartly: 'partly',
+  nbSprechenGoalOpen: 'open',
+  nbSprechenCritMissed: 'missed',
+  nbSprechenGoalsTitle: 'Your goals',
+  nbSprechenGoalsCount: '{n} of {m} goals met',
+  nbSprechenCriteria: 'Criteria',
+  nbSprechenCriteriaWait: 'Claude is checking the criteria …',
+  nbSprechenCriteriaFailed: 'The criteria could not be checked.',
+  nbSprechenGoalsNoAi: 'Without Claude there are no ticks – check yourself whether you met the goals.',
+};

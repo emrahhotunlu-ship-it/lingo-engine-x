@@ -12,6 +12,8 @@ import { Sheet } from '../../ui/Sheet';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION } from '../../ui/motion';
 import { AnalysisCard } from './AnalysisCard';
+import { GoalChecklist } from './GoalChecklist';
+import { sceneGoals } from '../../domain/speak/bizScenes';
 import { ChatLog } from './ChatLog';
 import { Composer } from './Composer';
 import { ReportScreen } from './ReportScreen';
@@ -87,6 +89,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const myTurns = useMemo(() => c.turns.filter((x) => x.role === 'me').length, [c.turns]);
   const pending = Object.values(c.analyses).filter((a) => a.state === 'pending').length;
   const restore = useMemo(() => ({ text: c.draft, chip: c.draftChip, n: c.restoreN }), [c.draft, c.draftChip, c.restoreN]);
+  const goalList = useMemo(() => sceneGoals(scene), [scene]);
 
   const takeInput = useCallback(
     (idx: number) =>
@@ -148,6 +151,10 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
           {t('spEnd')}
         </Button>
       </header>
+      {/* N72: die Ziele stehen oben; Haken kommen nach jeder Antwort der Figur (goal-check@1). */}
+      <div className="lx-glass rounded-2xl px-4 py-3" data-testid="rp-goals-box">
+        <GoalChecklist goals={goalList} marks={rp.goals} testId="rp-goals" />
+      </div>
       <AnimatePresence initial={false}>
         {goalOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: DURATION.base }} className="overflow-hidden">

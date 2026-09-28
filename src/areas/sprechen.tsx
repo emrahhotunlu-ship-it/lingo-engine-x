@@ -1,7 +1,5 @@
 import { z } from 'zod';
 import { defineArea } from '../app/registry';
-import { HubSections } from '../app/shell/Hub';
-import { placesOf } from '../app/shell/tabs';
 import { MailRefiner } from '../features/business/MailRefiner';
 import { PitchCoach } from '../features/business/PitchCoach';
 import { PlaybookScreen } from '../features/business/PlaybookScreen';
@@ -17,7 +15,8 @@ import { TonesScreen } from '../features/tones/TonesScreen';
 
 declare module '../app/router/types' {
   interface RouteParams {
-    speak: { seg?: SpeakSeg };
+    /** Neubau: `talk` · `write` · `preply`; alte Namen `scenes`/`business` bleiben als Alias lesbar. */
+    speak: { seg?: SpeakSeg | 'talk' | 'write' };
     meeting: { id?: string };
     playbook: { id?: string };
     roleplay: { sceneId: string; resume?: boolean; n?: number };
@@ -29,14 +28,9 @@ declare module '../app/router/types' {
   }
 }
 
-/** Reiter-Wurzel: Sprechen mit Umschalter, darunter die Abschnitte der Plätze `speak` und `write`. */
+/** Reiter-Wurzel: Sprechen mit Umschalter; die Abschnitte der Plätze `speak`/`write` zeigt der jeweilige Bereich. */
 function SpeakRoot() {
-  return (
-    <>
-      <SpeakHub />
-      <HubSections places={placesOf('speak')} />
-    </>
-  );
+  return <SpeakHub />;
 }
 
 const optId = z.object({ id: z.string().optional() });
@@ -44,7 +38,7 @@ const optId = z.object({ id: z.string().optional() });
 export const sprechen = defineArea({
   id: 'sprechen',
   screens: {
-    speak: { kind: 'tab', component: SpeakRoot, title: 'tabSpeak', keepScroll: true, params: z.object({ seg: z.enum(['scenes', 'business', 'preply']).optional() }) },
+    speak: { kind: 'tab', component: SpeakRoot, title: 'tabSpeak', keepScroll: true, params: z.object({ seg: z.enum(['talk', 'write', 'preply', 'scenes', 'business']).optional() }) },
     meeting: { kind: 'page', component: MeetingScreen, title: 'mtTitle', params: optId },
     playbook: { kind: 'page', component: PlaybookScreen, params: optId },
     roleplay: {

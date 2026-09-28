@@ -1,11 +1,44 @@
-import data from '../../content/business/playbooks.json';
+import raw from '../../content/business/playbooks.json?raw';
+import { logError } from '../../platform/diagnostics';
 import type { DrillItem, Playbook, PlaybookNode } from './types';
 
 // Phrasen-Baukasten (Plan D9): Entscheidungsbäume als INHALT, zweisprachig, ohne KI nutzbar.
+// Neubau (Anhang A 5c, N76): als Text eingebettet und erst beim ersten Gebrauch geparst – nicht
+// schon beim Start der App. Unlesbarer Inhalt ergibt eine leere Liste (Test sichert den Inhalt).
 
-export const PLAYBOOKS = (data as unknown as { playbooks: Playbook[] }).playbooks;
+let cache: readonly Playbook[] | null = null;
 
-export const playbookById = (id: string): Playbook | undefined => PLAYBOOKS.find((p) => p.id === id);
+/** Alle Baukästen (einmal geparst, danach im Speicher). */
+export function playbooks(): readonly Playbook[] {
+  if (cache) return cache;
+  let list: Playbook[];
+  try {
+    const parsed = JSON.parse(raw) as { playbooks?: unknown };
+    list = Array.isArray(parsed.playbooks) ? (parsed.playbooks as Playbook[]) : [];
+  } catch (err) {
+    logError('content:playbooks', err, 'playbooks.json nicht lesbar');
+    list = [];
+  }
+  cache = list;
+  return cache;
+}
+
+/**
+ * Alte Schnittstelle (Liste): liest erst beim Zugriff (`PLAYBOOKS.map`, `for … of`), nicht beim
+ * Laden des Moduls. Neue Stellen nutzen `playbooks()`.
+ */
+export const PLAYBOOKS: readonly Playbook[] = new Proxy([] as Playbook[], {
+  get(_t, prop) {
+    const list = playbooks();
+    const v: unknown = Reflect.get(list, prop);
+    return typeof v === 'function' ? (v as (...a: unknown[]) => unknown).bind(list) : v;
+  },
+  has: (_t, prop) => Reflect.has(playbooks(), prop),
+  ownKeys: () => Reflect.ownKeys(playbooks()),
+  getOwnPropertyDescriptor: (_t, prop) => Reflect.getOwnPropertyDescriptor(playbooks(), prop),
+});
+
+export const playbookById = (id: string): Playbook | undefined => playbooks().find((p) => p.id === id);
 
 export function nodeOf(pb: Playbook, id: string): PlaybookNode | undefined {
   return Object.hasOwn(pb.nodes, id) ? pb.nodes[id] : undefined;

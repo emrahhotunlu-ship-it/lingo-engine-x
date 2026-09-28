@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { clip, header, langName, langOf } from '../../common';
 import { clipped, intIn } from '../../tolerant';
+import type { GoalMark, GoalState } from '../../../domain/speak/goals';
 import type { PromptTemplate, UiLang } from '../../types';
 
 // goal-check@1 (Neubau N72, Speak/Yoodli): Ziel-Checkliste und Kriterien-Raster im Rollenspiel.
@@ -22,8 +23,7 @@ export type GoalCheckVars = {
   uiLang: UiLang;
 };
 
-export type GoalState = 'met' | 'partly' | 'open';
-export type GoalMark = { i: number; state: GoalState; quote: string };
+export type { GoalMark, GoalState };
 export type CriterionMark = { i: number; state: GoalState; quote: string; note: string };
 export type GoalCheckOut = { goals: GoalMark[]; criteria: CriterionMark[] };
 

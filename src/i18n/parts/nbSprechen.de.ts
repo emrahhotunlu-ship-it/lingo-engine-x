@@ -1,4 +1,34 @@
 // Neubau – Bereich Sprechen und Schreiben (P5), Deutsch. Nur Schlüssel mit dem Präfix `nbSprechen`
 // (docs/neubau/architektur.md §2.8; doppelte Schlüssel verbietet tests/unit/i18nParts.test.ts).
 
-export const nbSprechenDe = {} as const;
+export const nbSprechenDe = {
+  nbSprechenSegTalk: 'Gespräche',
+  nbSprechenSegWrite: 'Schreiben',
+  nbSprechenStatusOpen: 'Heute ist ein Gespräch dran',
+  nbSprechenPron: 'Aussprache',
+  nbSprechenWeekScene: 'Rollenspiel: {title}',
+  nbSprechenWeekSceneSub: 'Szene zum Wochenthema · mit {name}',
+  nbSprechenNextMeeting: 'Mein nächster Termin: {who}',
+  nbSprechenMeetingSub: 'Echten Termin vorbereiten, Generalprobe',
+  nbSprechenFluencySub: 'Dieselbe Antwort, immer kürzer · Wörter pro Minute',
+  nbSprechenPlaybook: 'Verhandlungs-Baukasten',
+  nbSprechenSceneChunks: 'Wendungen aus deinen Szenen',
+  nbSprechenThisWeek: 'Diese Woche',
+  nbSprechenBizScenes: 'Business-Szenen',
+  nbSprechenOwnScenes: 'Deine Szenen',
+  nbSprechenAllScenes: 'Alle {n} zeigen',
+  nbSprechenSaySub: 'Laut sprechen, dann aufschreiben',
+  nbSprechenMail: 'E-Mail verbessern',
+  nbSprechenWriteTasks: 'Aufgaben',
+  nbSprechenGoals: 'Ziele',
+  nbSprechenGoalMet: 'erreicht',
+  nbSprechenGoalPartly: 'teilweise',
+  nbSprechenGoalOpen: 'offen',
+  nbSprechenCritMissed: 'verfehlt',
+  nbSprechenGoalsTitle: 'Deine Ziele',
+  nbSprechenGoalsCount: '{n} von {m} Zielen erreicht',
+  nbSprechenCriteria: 'Kriterien',
+  nbSprechenCriteriaWait: 'Claude prüft die Kriterien …',
+  nbSprechenCriteriaFailed: 'Die Kriterien konnten nicht geprüft werden.',
+  nbSprechenGoalsNoAi: 'Ohne Claude ohne Haken – prüfe selbst, ob du die Ziele erreicht hast.',
+} as const;
