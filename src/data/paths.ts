@@ -37,6 +37,7 @@ import {
   outSchema,
   memorySchema,
   compareSchema,
+  teacherSchema,
 } from './schemas';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
@@ -94,6 +95,8 @@ export const COLLECTIONS = {
   archive: archiveSchema,
   // Neubau (docs/neubau/plan.md §4.10): Ergebnisse der neuen Übungen als Monatsdokumente (P7).
   out: outSchema,
+  // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke): Monatsdokumente.
+  teacher: teacherSchema,
 } as const satisfies Record<string, ZodType>;
 
 export type AppDocPath = keyof typeof APP_DOCS;

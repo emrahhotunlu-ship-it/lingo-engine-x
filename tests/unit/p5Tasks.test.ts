@@ -9,8 +9,8 @@ import { hintFor, hintOf, readHint, themeFromText, weekHintOp } from '../../src/
 import { readWeekDoc, suggestTheme, themeFor } from '../../src/domain/week';
 import { newVocabDoc } from '../../src/domain/srs/newCard';
 
-// Neubau N79 + B9 (Pitch 30/60/120, Diagramm, Umschreiben, Rückübersetzung) und N17 (Termin-/
-// Preply-Thema hat Vorrang beim Wochenthema-Vorschlag).
+// Neubau N79 + B9 (Pitch 30/60/120, Diagramm, Umschreiben, Rückübersetzung) und N17 (Terminthema
+// hat Vorrang beim Wochenthema-Vorschlag).
 
 const sample = createFakeSample(() => 'ok', () => ({}), 0);
 
@@ -137,7 +137,7 @@ describe('Sprechaufgaben: reine Logik', () => {
   });
 });
 
-describe('N17: Termin- oder Preply-Thema hat Vorrang beim Wochenthema-Vorschlag', () => {
+describe('N17: Terminthema hat Vorrang beim Wochenthema-Vorschlag', () => {
   it('Thema aus freiem Text (Schlüsselwörter der 16 Themen)', () => {
     expect(themeFromText('CFO wants to see the ROI and a business case')).toBe('t03');
     expect(themeFromText('Demo for the board meeting, slides ready')).toBe('t06');
@@ -155,19 +155,13 @@ describe('N17: Termin- oder Preply-Thema hat Vorrang beim Wochenthema-Vorschlag'
     expect(themeFor('2026-10-12', week).id).toBe(suggestTheme(week, '2026-W42'));
     // bestätigte Woche: die Wahl gilt
     expect(themeFor('2026-09-28', week).id).toBe('t01');
-    // ausdrücklicher Hinweis schlägt den gespeicherten
-    expect(themeFor('2026-10-05', week, { preply: 't07' }).id).toBe('t07');
     expect(hintOf(week, '2026-W41')).toEqual({ meeting: 't11' });
     expect(hintOf(week, '2026-W42')).toBeUndefined();
   });
 
-  it('Preply-Hinweis: wirkt ohne Termin, ersetzt aber keinen Termin derselben Woche', () => {
-    const preply = hintFor('preply', 'Negotiating a discount for a longer contract term', '2026-10-06');
-    expect(preply?.theme).toBe('t07');
-    expect(themeFor('2026-10-05', readWeekDoc({ v: 1, hint: preply })).id).toBe('t07');
-    const meeting = { wk: '2026-W41', theme: 't03', src: 'meeting' };
-    expect(weekHintOp({ v: 1, hint: meeting }, true, preply)).toBeNull();
-    expect(weekHintOp({ v: 1, hint: { ...meeting, wk: '2026-W40' } }, true, preply)).toEqual({ update: { hint: preply } });
+  it('ein früherer Preply-Hinweis im Dokument (bis 28.09.2026) wird nicht mehr ausgewertet', () => {
+    // readHint verwirft `src: 'preply'`; ein solcher Hinweis zählt beim Wochenthema nicht mehr.
+    expect(readHint({ wk: '2026-W41', theme: 't07', src: 'preply' })).toBeUndefined();
   });
 
   it('Schreibweg: feldweise, nie bei ungültigem Dokument, nichts bei gleichem Hinweis', () => {

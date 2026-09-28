@@ -1,7 +1,6 @@
-import { addDays, isoWeek } from '../date';
+import { isoWeek } from '../date';
 import { themeFor } from './theme';
 import type {
-  PreplyRole,
   UnitBlock,
   UnitBlockKind,
   UnitBlockOpts,
@@ -21,15 +20,12 @@ import type {
 
 export const SHORT_GOAL_MAX = 20;
 /** Block-1-Budget in Sekunden (M2). */
-export const REVIEW_SEC = { full: 480, short: 300, tiny: 180, sun: 300, preplyDay: 300 } as const;
+export const REVIEW_SEC = { full: 480, short: 300, tiny: 180, sun: 300 } as const;
 /** Minuten je Block der vollen Einheit (Summe 27). */
 export const FULL_MIN = { review: 8, input: 5, task: 9, roleplay: 12, focus: 3, again: 2 } as const;
 /** Kurz-Einheit (M3): Tagesziel 10 → 3/5/2, Tagesziel 15–20 → 5/7/3. */
 export const SHORT_MIN = { tiny: { review: 3, task: 5, again: 2 }, short: { review: 5, task: 7, again: 3 } } as const;
 export const SUNDAY_MIN = { review: 5, check: 5 } as const;
-export const PREPLY_DAY_MIN = { review: 5, shadow: 3 } as const;
-/** Mindestens so viele Tage Mo–Sa mit normalem Wochenplan-Output (S2b). */
-export const NORMAL_DAYS_MIN = 3;
 export const LISTEN_WORDS: readonly [number, number] = [150, 180];
 
 const CHANNEL: Readonly<Record<1 | 2 | 3 | 4 | 5, UnitChannel>> = {
@@ -101,38 +97,6 @@ function taskStep(dow: number, day: string, theme: WeekTheme, prefs: UnitPrefs, 
   }
 }
 
-/** Preply-Rolle eines Tages: Tag der Stunde > Tag danach > Tag davor (S2b). */
-function rawRole(day: string, lessons: ReadonlySet<string>): PreplyRole | null {
-  if (lessons.has(day)) return 'day';
-  if (lessons.has(addDays(day, -1))) return 'after';
-  if (lessons.has(addDays(day, 1))) return 'before';
-  return null;
-}
-
-/**
- * Preply-Rolle nach den Wochenregeln (S2b): Sonntag verschiebt nie; Mo–Sa bleiben mindestens
- * `NORMAL_DAYS_MIN` Tage normal – dafür fallen zuerst „Tag davor“, dann „Tag danach“ weg (spätester Tag zuerst).
- */
-export function preplyRole(day: string, preplyDays: readonly string[] | undefined): PreplyRole | null {
-  if (!preplyDays?.length || dowOf(day) === 7) return null;
-  const lessons = new Set(preplyDays);
-  const monday = addDays(day, 1 - dowOf(day));
-  const roles = new Map<string, PreplyRole>();
-  for (let i = 0; i < 6; i++) {
-    const d = addDays(monday, i);
-    const r = rawRole(d, lessons);
-    if (r) roles.set(d, r);
-  }
-  for (const drop of ['before', 'after'] as const) {
-    const days = [...roles.entries()].filter(([, r]) => r === drop).map(([d]) => d).sort().reverse();
-    for (const d of days) {
-      if (6 - roles.size >= NORMAL_DAYS_MIN) break;
-      roles.delete(d);
-    }
-  }
-  return roles.get(day) ?? null;
-}
-
 function normalGoal(v: unknown): number {
   return typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : 25;
 }
@@ -147,7 +111,6 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
   const dow = dowOf(day);
   const goalMin = normalGoal(prefs.goalMin);
   const short = goalMin <= SHORT_GOAL_MAX;
-  const role = preplyRole(day, prefs.preplyDays);
   const blocks: UnitBlock[] = [];
   let shape: UnitShape;
   let reviewSec: number;
@@ -158,12 +121,6 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
     reviewSec = REVIEW_SEC.sun;
     blocks.push(block(1, step('review'), SUNDAY_MIN.review));
     blocks.push(block(3, step('task.check'), SUNDAY_MIN.check, 'ch:u-check'));
-  } else if (role === 'day') {
-    // S2a: Tag der Stunde: Block 1 (≤ 5 Min.) + Wendungen nachsprechen (3 Min.).
-    shape = 'preply-day';
-    reviewSec = REVIEW_SEC.preplyDay;
-    blocks.push(block(1, step('review'), PREPLY_DAY_MIN.review));
-    blocks.push(block(2, step('pron.shadow', { src: 'phrases', preply: 'day' }), PREPLY_DAY_MIN.shadow));
   } else if (short) {
     const m = goalMin <= 10 ? SHORT_MIN.tiny : SHORT_MIN.short;
     shape = 'short';
@@ -182,20 +139,6 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
     blocks.push(block(5, step('again'), FULL_MIN.again));
   }
 
-  // S2: Preply-Tag davor / danach verschiebt Block 2 bzw. 3; der normale Block bleibt als Rückfall (`alt`).
-  if (role === 'before' || role === 'after') {
-    for (let i = 0; i < blocks.length; i++) {
-      const b = blocks[i];
-      if (!b) continue;
-      const alt: UnitStep = { kind: b.kind, steps: b.steps, opts: b.opts };
-      if (b.block === 3) {
-        blocks[i] = { ...b, ...step('task.say', { aloud: true, preply: role }), alt };
-      } else if (b.block === 2 && role === 'after') {
-        blocks[i] = { ...b, ...step('input.read', { src: 'preply-import', preply: 'after' }), alt };
-      }
-    }
-  }
-
   // M2: Ist `goal.review` = 0, entfällt Block 1.
   const kept = prefs.reviewCount === 0 ? blocks.filter((b) => b.block !== 1) : blocks;
   return {
@@ -210,7 +153,6 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
     short,
     goalMin,
     reviewSec,
-    preply: role,
     blocks: kept,
     duty: kept.map((b) => b.channel),
     minutes: kept.reduce((s, b) => s + b.min, 0),
@@ -227,7 +169,7 @@ export type ResolvedBlock = UnitStep & {
 
 /**
  * Ausführung eines Blocks mit der aktuellen Umgebung (beim Blockstart, M4/M5):
- * - ohne KI: Preply-Blöcke → normaler Wochenplan; Rollenspiel und Generalprobe → Einwand-Training;
+ * - ohne KI: Rollenspiel und Generalprobe → Einwand-Training;
  *   Tonlagen → Posteingang; Hörtext zum Thema → Themen-Text vorlesen + Zusammenfassung; Dialog → Feed.
  * - ohne Sprachausgabe: Hören → Lesen, Nachsprechen entfällt (ist es der ganze Block: Wendungen lesen).
  */
@@ -235,10 +177,6 @@ export function resolveBlock(b: UnitBlock, env: UnitEnv): ResolvedBlock {
   let s: UnitStep = { kind: b.kind, steps: [...b.steps], opts: { ...b.opts } };
   let fallback = false;
   if (!env.ai) {
-    if (b.alt && (b.opts.preply === 'before' || b.opts.preply === 'after')) {
-      s = { kind: b.alt.kind, steps: [...b.alt.steps], opts: { ...b.alt.opts } };
-      fallback = true;
-    }
     const swap = (kind: UnitBlockKind, opts: UnitBlockOpts) => {
       s = { kind, steps: s.steps.map((k) => (k === s.kind ? kind : k)), opts };
       fallback = true;

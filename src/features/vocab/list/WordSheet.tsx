@@ -24,7 +24,7 @@ import { Dots } from '../../grammar/GrammarScreen';
 import { isLeech, MnemonicBlock } from '../mnemonic';
 import { startSession } from '../session';
 import { againTomorrow, editCard, markKnown, resetCard, setHidden } from './actions';
-import { addIdsOp, failures, flaggedOp, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
+import { addIdsOp, failures, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
 import { histOf } from '../../../domain/srs/flip';
 import { useDecks, writeDecks } from '../decksStore';
 import { decksErrorKey } from '../hub/errors';
@@ -122,7 +122,6 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
   const ai = useAiAvailable();
   const decks = useDecks((s) => s.decks);
   const own = visibleDecks(decks);
-  const flagged = decks.flagged.includes(card.key);
   const extra = useExamples((s) => s.byCard[card.id]);
   const leech = isLeechCard(card);
   const history = histOf(card.doc).slice(-12);
@@ -362,11 +361,6 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
         {card.inDb && !card.hidden && !card.isNew && (
           <Button variant="ghost" icon="undo" onClick={() => (confirmReset ? void reset() : setConfirmReset(true))} busy={busy} data-testid="word-reset">
             {confirmReset ? t('vcResetConfirm') : t('nbWsFromScratch')}
-          </Button>
-        )}
-        {!card.hidden && (
-          <Button variant="ghost" icon="flag" onClick={() => decksWrite((cur) => flaggedOp(cur, card.key, !flagged), flagged ? t('nbWsSaved') : t('nbWsFlagToast'))} data-testid="word-flag" aria-pressed={flagged}>
-            {flagged ? t('nbWsUnflag') : t('nbWsFlag')}
           </Button>
         )}
         {!card.hidden && own.length > 0 && (

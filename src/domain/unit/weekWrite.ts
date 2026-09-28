@@ -49,7 +49,6 @@ export function weekThemePatch(raw: Readonly<Doc> | null | undefined, c: WeekCho
     const t = obj(d.targets);
     if (!t || t.wk !== c.wk) {
       const next: Doc = { wk: c.wk, traps: targets.traps.slice(0, 3), tool: targets.tool ?? '' };
-      if (targets.preply) next.preply = targets.preply;
       patch.targets = next;
     }
   }

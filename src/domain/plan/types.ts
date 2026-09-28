@@ -36,7 +36,7 @@ export type UnitMeta = {
   theme: string;
   min: number;
   b: UnitMetaBlock[];
-  /** Preply-Termine, mit denen der Plan entstand (Soll N16). */
+  /** Preply-Termine älterer Pläne (bis 28.09.2026); nur noch gelesen, nie ausgewertet. */
   pp?: string[];
 };
 

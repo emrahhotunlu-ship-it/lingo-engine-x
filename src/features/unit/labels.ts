@@ -14,8 +14,6 @@ export function blockName(kind: UnitBlockKind, block: number, t: T): string {
 /** Kurzer Grund eines Blocks (eine Zeile). `reviewTotal` = Umfang von Block 1. */
 export function blockWhy(b: Pick<UnitBlock, 'block' | 'kind' | 'opts'>, t: T, reviewTotal = 0): string {
   const o = b.opts;
-  if (o.preply === 'before' && b.block === 3) return t('nbHeuteWhy_preply');
-  if (o.src === 'preply-import') return t('nbHeuteWhy_inputImport');
   switch (b.kind) {
     case 'review':
       return reviewTotal > 0 ? t('nbHeuteWhy_review', { n: reviewTotal }) : t('nbHeuteWhy_reviewNone');

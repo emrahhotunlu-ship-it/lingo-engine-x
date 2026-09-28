@@ -193,13 +193,14 @@ test.describe('Desktop 1440', () => {
     await expect(page.getByTestId('companion')).toHaveCount(0);
     await expect.poll(() => subs(page)).toBe(base);
     // C-10: Grundstock auf „Heute“ – je Dokument bzw. Sammlung genau EIN Abo (Kap. 3.4), keine Dopplung.
-    // Neubau: 5 Live-Dokumente (profile, course, assess, schema, repair) + 4 Sammlungen (vocab, grammar,
-    // archive, chunk) + Tagesprotokoll log/<heute> + app/week (Wochenplan) + app/decks (Stapel) = 12,
+    // Neubau: 6 Live-Dokumente (profile, course, assess, schema, repair, memory – „Claude merkt sich“
+    // liest app/memory synchron aus dem Live-Stand, prompts/work.ts) + 4 Sammlungen (vocab, grammar,
+    // archive, chunk) + Tagesprotokoll log/<heute> + app/week (Wochenplan) + app/decks (Stapel) = 13,
     // weit unter der Vertragsgrenze von 64 je Ansicht (db.d.ts). Früher (Phase 5) waren es ≤ 10.
     const paths = await subPaths(page);
     expect(paths).toHaveLength(base);
     expect(paths.filter((p, i) => paths.indexOf(p) !== i), 'doppelte Abos').toEqual([]);
-    expect(base).toBeLessThanOrEqual(12);
+    expect(base).toBeLessThanOrEqual(13);
     await expect.poll(async () => (await chatDoc(page)).msgs.length, { timeout: 15_000 }).toBe(6);
     expect((await chatDoc(page)).msgs.at(-1)?.stopped).toBeUndefined();
   });

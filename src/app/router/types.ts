@@ -33,4 +33,5 @@ export type ScreenKind = 'tab' | 'page' | 'exercise';
 
 /** Gemeinsame Parameter-Typen mehrerer Bereiche. */
 export type UnitCtx = 'duty' | 'extra';
+/** `preply` nur noch als alter Deep-Link lesbar (führt zu „Gespräche“, 28.09.2026). */
 export type SpeakSeg = 'scenes' | 'business' | 'preply';

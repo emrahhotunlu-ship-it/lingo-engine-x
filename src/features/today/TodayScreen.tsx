@@ -37,7 +37,6 @@ import { dutyLabel } from '../learn/ui';
 import { unlockSpeech, useSpeech } from '../../platform/speech';
 import { firstOpenDuty, useToday, type TodayView } from './state';
 import { feasibleData, healToday, retryPlan } from './store';
-import { PreplyTodayLine, usePreplyToday } from '../preply/TodayLine';
 import { TabTitle } from '../system/Chrome';
 import { unitRows, minutesLeft, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
@@ -303,8 +302,7 @@ function UnitCard({ view, rows, title, minLeft }: { view: TodayView; rows: CardR
 /** Fertig-Zustand (N15): Bilanz und „Morgen: …“ – ein Zustand, kein Knopf. */
 function DoneCard({ view, tomorrow }: { view: TodayView; tomorrow: string }) {
   const { t, tn } = useT();
-  const preply = usePreplyToday();
-  const learnMin = Math.max(0, view.balance.minutes - preply.minutes);
+  const learnMin = Math.max(0, view.balance.minutes);
   const pct = view.balance.answers ? Math.round((view.balance.correct / view.balance.answers) * 100) : 0;
   const blocks = view.duties.total;
   return (
@@ -584,9 +582,8 @@ export function TodayScreen() {
         </p>
       )}
 
-      {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Preply (P5), Speicher- und Planfehler (P1). */}
+      {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Speicher- und Planfehler (P1). */}
       {ok && <MissedCheck today={today} />}
-      {dayLoaded && <PreplyTodayLine />}
       {saveFailed && (
         <div className="flex flex-wrap items-center gap-3 text-sm text-danger-text" role="alert" data-testid="save-failed">
           <span>{t('tdNotSaved')}</span>

@@ -21,6 +21,7 @@ import { tonesDe } from './parts/tones.de';
 import { repairDe } from './parts/repair.de';
 import { navDe } from './parts/nav.de';
 import { patternsDe } from './parts/patterns.de';
+import { teacherDe } from './parts/teacher.de';
 import { nbShDe } from './parts/nbSh.de';
 import { nbHeuteDe } from './parts/nbHeute.de';
 import { nbLernenDe } from './parts/nbLernen.de';
@@ -65,6 +66,8 @@ export const de = {
   ...navDe,
   // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
   ...patternsDe,
+  // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke)
+  ...teacherDe,
   // Neubau (docs/neubau/architektur.md §2.8): je Bereich ein Teil, nur mit eigenem Präfix
   ...nbShDe,
   ...nbHeuteDe,

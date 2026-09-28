@@ -17,6 +17,7 @@ import { patternCheckReply, patternsReply } from './canned/patterns';
 import { registerP7Replies } from './canned/p7';
 import { registerNbReplies } from './canned/nb';
 import { registerP5TaskReplies } from './canned/p5tasks';
+import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
 // produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -300,8 +301,10 @@ export function registerCannedReplies(): void {
   registerCannedReply('phrase-adapt', phraseAdaptReply);
   registerCannedReply('pitch-script', pitchScriptReply);
   registerCannedReply('pitch-feedback', pitchFeedbackReply);
-  // Phase 5: companion-chat, translate, preply-prep, preply-import
+  // Phase 5: companion-chat, translate
   registerCompanionReplies();
+  // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke)
+  registerTeacherFeedbackReply();
   // Phase 4: reading-text, listening-text, writing-prompt, writing-review, reading-check, apply-check
   registerInputReplies();
   // Phase 6

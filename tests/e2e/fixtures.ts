@@ -129,8 +129,8 @@ export async function openEntry(page: Page, testId: string): Promise<void> {
       return;
     }
   }
-  // Einstiege am Platz `write`/`preply` liegen im Reiter Sprechen hinter einem Segment.
-  for (const seg of ['write', 'preply'] as const) {
+  // Einstiege am Platz `write` liegen im Reiter Sprechen hinter einem Segment.
+  for (const seg of ['write'] as const) {
     await openSpeak(page, seg);
     const el = page.getByTestId(testId).first();
     if (await el.isVisible()) {
@@ -193,15 +193,15 @@ export async function openSettings(page: Page): Promise<void> {
 export const crashOnce = (route: string): Record<string, string> => ({ 'lx:crash-once': route });
 
 /**
- * Reiter „Sprechen“ mit einem Bereich öffnen. Neubau (plan.md §1.3): Gespräche · Schreiben · Preply
- * (`talk`/`write`/`preply`); bis P5 umbaut, heißen die Bereiche Szenen · Business · Preply. Der
- * Helfer nimmt beide Namen und wählt, was die App gerade anbietet.
+ * Reiter „Sprechen“ mit einem Bereich öffnen. Neubau (plan.md §1.3): Gespräche · Schreiben
+ * (`talk`/`write`); bis P5 umbaut, heißen die Bereiche Szenen · Business. Der frühere Preply-Bereich
+ * (bis 28.09.2026) führt zu Gespräche. Der Helfer nimmt beide Namen und wählt, was die App gerade anbietet.
  */
-export async function openSpeak(page: Page, seg: 'talk' | 'write' | 'preply' | 'scenes' | 'business' = 'talk'): Promise<void> {
+export async function openSpeak(page: Page, seg: 'talk' | 'write' | 'scenes' | 'business' = 'talk'): Promise<void> {
   await openTab(page, 'speak');
   const hub = page.getByTestId('speak-hub');
   await hub.waitFor();
-  const alias: Record<string, string[]> = { talk: ['talk', 'scenes'], scenes: ['scenes', 'talk'], write: ['write', 'business'], business: ['business', 'write'], preply: ['preply'] };
+  const alias: Record<string, string[]> = { talk: ['talk', 'scenes'], scenes: ['scenes', 'talk'], write: ['write', 'business'], business: ['business', 'write'] };
   const names = alias[seg] ?? [seg];
   let target = names[0] ?? seg;
   for (const n of names) {

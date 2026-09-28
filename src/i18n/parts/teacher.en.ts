@@ -1,0 +1,23 @@
+// Add teacher feedback (28.09.2026, replaces the Preply bridge), English.
+
+export const teacherEn = {
+  tfEyebrow: 'After the lesson',
+  tfTitle: 'Add teacher feedback',
+  tfEntryLabel: 'Add teacher feedback',
+  tfEntrySub: 'Your teacher’s notes become flashcards and a practice round',
+  tfIntro: 'Paste what your teacher told you – words, corrections, practice ideas. The app turns it into flashcards and a practice round.',
+  tfPlaceholder: 'Paste your teacher’s notes, chat messages or corrections …',
+  tfProcess: 'Process',
+  tfNoAi: 'Processing needs Claude. Without Claude the app only recognizes simple lines "word – meaning".',
+  tfFallbackTitle: 'Words found',
+  tfFallbackHint: 'Without Claude there is no example sentence. Open "Add" in the vocabulary and add one before saving the card.',
+  tfWordsTitle: 'New words and phrases',
+  tfCorrectionsTitle: 'Corrections',
+  tfCorrectionsApply: 'Add as repair sentences',
+  tfRepairSaved: 'Saved as repair sentences.',
+  tfTasksTitle: 'Practice ideas from your teacher',
+  tfPractice: 'Practice now',
+  tfEmpty: 'Nothing found in this text.',
+  vcFromTeacher: 'Teacher feedback',
+  vcFromTeacherGo: 'Add feedback after a lesson',
+};

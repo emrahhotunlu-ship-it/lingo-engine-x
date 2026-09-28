@@ -11,7 +11,6 @@ export const companionDe = {
   cmpSeeing: 'sieht gerade: {label}',
   cmpSeeToday: 'Heute',
   cmpSeeOverview: 'Dein Stand',
-  cmpSeePreply: 'Preply',
   cmpSeeTrainer: 'Übung',
   cmpAbout: 'Zu: {word}',
   cmpAttachRemove: 'Bezug entfernen',
@@ -44,7 +43,6 @@ export const companionDe = {
   cmpTierDeep: 'Gründlich',
   cmpActPractice: 'Weiter üben',
   cmpActBack: 'Zurück zur Übung',
-  cmpActPreply: 'Als Preply-Stunde',
   cmpPausedUntil: 'wieder ab {time}',
   cmpCopy: 'Kopieren',
   cmpCopied: 'Kopiert ✓',
@@ -178,7 +176,6 @@ export const companionDe = {
 
   diagChat: 'Chat-Verlauf',
   diagChatValue: '{n} Nachrichten · {kb} KB',
-  diagPreply: 'Preply-Dokumente',
 } as const;
 
 export type CompanionMessageKey = keyof typeof companionDe;

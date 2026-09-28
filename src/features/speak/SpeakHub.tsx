@@ -20,7 +20,6 @@ import type { Channel } from '../../ui/Card';
 import { Segmented } from '../../ui/Segmented';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
-import { PreplySection } from '../preply/PreplyScreen';
 import { TabTitle } from '../system/Chrome';
 import { SceneBriefing } from './SceneBriefing';
 import { SceneCard } from './SceneCard';
@@ -31,28 +30,26 @@ import { useSpeakToday } from './useTodayEntries';
 import { useCompanionSee } from '../companion/seeing';
 import { useClock } from '../../app/clock';
 
-// Reiter „Sprechen“ (Neubau plan.md §1.3, N70): Umschalter Gespräche · Schreiben · Preply.
+// Reiter „Sprechen“ (Neubau plan.md §1.3, N70): Umschalter Gespräche · Schreiben.
 // - Gespräche: „Diese Woche“ (Szene zum Wochenthema, Termin), Szenen (Business-Bibliothek aus P7a,
 //   eigene Szenen, „Neue Szene“, unvollständige zugeklappt), Training (eigene Zeilen + Einstiege
 //   anderer Bereiche am Platz `speak`, z. B. Einwand-Training von P7), weitere Gruppen (Aussprache).
 // - Schreiben: Sag es, E-Mail verbessern, Drei Tonlagen + Einstiege am Platz `write` (P4, P7).
-// - Preply: die Preply-Brücke.
 // Optik wie Prototyp v1: Zeilenlisten in einer Karte, Eyebrow-Überschriften. Keine Layout-Animation.
 
-export type SpeakSegNb = 'talk' | 'write' | 'preply';
+export type SpeakSegNb = 'talk' | 'write';
 
-/** Alte Namen (Deep-Links, Specs) auf die neuen Bereiche abbilden. */
+/** Alte Namen (Deep-Links, Specs) auf die neuen Bereiche abbilden; der frühere Preply-Bereich führt zu „Gespräche“ (28.09.2026). */
 export function normSeg(seg: string | undefined | null): SpeakSegNb | null {
-  if (seg === 'talk' || seg === 'scenes') return 'talk';
+  if (seg === 'talk' || seg === 'scenes' || seg === 'preply') return 'talk';
   if (seg === 'write' || seg === 'business') return 'write';
-  if (seg === 'preply') return 'preply';
   return null;
 }
 
 /** Zuletzt gewählter Bereich (nur im Speicher): ein Reiterwechsel kehrt dorthin zurück. */
 let lastSeg: SpeakSegNb = 'talk';
 
-const PLACE_OF: Record<SpeakSegNb, Place | null> = { talk: 'speak', write: 'write', preply: null };
+const PLACE_OF: Record<SpeakSegNb, Place> = { talk: 'speak', write: 'write' };
 
 export function SpeakHub() {
   const { t } = useT();
@@ -75,7 +72,6 @@ export function SpeakHub() {
           options={[
             { value: 'talk', label: t('nbSprechenSegTalk'), testId: 'speak-seg-talk' },
             { value: 'write', label: t('nbSprechenSegWrite'), testId: 'speak-seg-write' },
-            { value: 'preply', label: t('spSegPreply'), testId: 'speak-seg-preply' },
           ]}
           onChange={(v) => go({ name: 'speak', seg: v })}
         />
@@ -83,8 +79,7 @@ export function SpeakHub() {
       <motion.div key={seg} className="flex flex-col gap-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
         {seg === 'talk' && <TalkSegment />}
         {seg === 'write' && <WriteSegment />}
-        {seg === 'preply' && <PreplySection />}
-        {place && <HubSections places={[place]} />}
+        <HubSections places={[place]} />
       </motion.div>
     </div>
   );

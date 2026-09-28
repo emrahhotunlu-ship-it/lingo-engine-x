@@ -33,13 +33,13 @@ const reviewCost = (c: TrainCard) => (c.stage <= 2 ? 12 : c.stage <= 4 ? 20 : 35
 
 /**
  * Eingangskorb (anki-regeln.md §5, ersetzt `SRC_RANK`): Emrahs eigener Kontext zuerst, der
- * Startwortschatz zuletzt. Stufen: 1 Termin · 2 Preply · 3 eigener Output/eigene Korrektur ·
+ * Startwortschatz zuletzt. Stufen: 1 Termin · 2 Lehrer (Lehrer-Feedback, frühere Preply-Importe) · 3 eigener Output/eigene Korrektur ·
  * 4 Wochenthema (`isThemeCard`, von außen) · 5 eigene Funde · 6 Lektion und Vorschläge ·
  * 7 Startwortschatz und Unbekanntes. Innerhalb einer Stufe die älteste zuerst.
  */
 export const INBOX_TIERS: readonly (readonly string[])[] = [
   ['meeting'],
-  ['preply'],
+  ['teacher', 'preply'],
   ['say', 'fluency', 'scene', 'mail', 'pitch', 'biz', 'coach'],
   [],
   ['lookup', 'read', 'listen', 'translate', 'write', 'user', 'claude'],

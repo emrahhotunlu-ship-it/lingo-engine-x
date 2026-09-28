@@ -41,19 +41,21 @@ export function readHint(raw: unknown): WeekHint | undefined {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined;
   const h = raw as Doc;
   if (typeof h.wk !== 'string' || !WK_RE.test(h.wk) || !isThemeId(h.theme)) return undefined;
-  return { wk: h.wk, theme: h.theme, src: h.src === 'preply' ? 'preply' : 'meeting' };
+  // Frühere Preply-Hinweise (bis 28.09.2026) bleiben im Dokument, werden aber nicht mehr ausgewertet.
+  if (h.src === 'preply') return undefined;
+  return { wk: h.wk, theme: h.theme, src: 'meeting' };
 }
 
 /** Vorrang-Hinweis einer Woche für `suggestTheme` (nur, wenn der Hinweis diese Woche betrifft). */
 export function hintOf(week: WeekDoc | null | undefined, wk: string): ThemeHint | undefined {
   const h = week?.hint;
   if (!h || h.wk !== wk) return undefined;
-  return h.src === 'meeting' ? { meeting: h.theme } : { preply: h.theme };
+  return { meeting: h.theme };
 }
 
 /**
  * Schreibweg für `hint` (feldweise, für `writer.transform`). Fehlt das Dokument: anlegen mit `v: 1`.
- * `valid = false`: nichts schreiben. Ein Termin-Hinweis derselben Woche wird von Preply nie ersetzt.
+ * `valid = false`: nichts schreiben.
  */
 export function weekHintOp(cur: Doc | undefined, valid: boolean, hint: WeekHint | null): WeekOp {
   if (!hint) return null;
@@ -61,7 +63,6 @@ export function weekHintOp(cur: Doc | undefined, valid: boolean, hint: WeekHint 
   if (!valid) return null;
   const old = readHint(cur.hint);
   if (old && old.wk === hint.wk && old.theme === hint.theme && old.src === hint.src) return null;
-  if (old && old.wk === hint.wk && old.src === 'meeting' && hint.src === 'preply') return null;
   const patch: Doc = { hint };
   if (typeof cur.v !== 'number' || cur.v < 1) patch.v = 1;
   return { update: patch };

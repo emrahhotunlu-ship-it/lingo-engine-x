@@ -131,7 +131,8 @@ export function matchDeck(c: TrainCard, f: DeckFilter, nowMs: number): boolean {
   if (c.hidden) return false;
   if (f.ids && !f.ids.includes(c.key) && !f.ids.includes(c.id)) return false;
   if (f.kinds?.length && !f.kinds.includes(c.kind)) return false;
-  if (f.src?.length && !f.src.includes(c.src ?? '')) return false;
+  // Quelle „Lehrer“ (`preply`) umfasst auch das neue Lehrer-Feedback (`teacher`).
+  if (f.src?.length && !f.src.includes(c.src ?? '') && !(c.src === 'teacher' && f.src.includes('preply'))) return false;
   if (f.stage) {
     const s = stageOf(c.doc);
     if (f.stage.min !== undefined && s < f.stage.min) return false;
@@ -154,7 +155,8 @@ export const isBuiltinDeck = (id: string): id is BuiltinDeck => (BUILTIN_DECKS a
 const SRC_DECK: Record<string, readonly string[]> = {
   'src:translate': ['translate'],
   'src:lookup': ['lookup', 'read', 'listen'],
-  'src:preply': ['preply'],
+  // „Vom Lehrer“: Lehrer-Feedback (`teacher`, ab 28.09.2026) und frühere Preply-Importe (`preply`).
+  'src:preply': ['teacher', 'preply'],
   'src:lesson': ['lesson'],
   'src:ai': ['ai', 'claude'],
 };

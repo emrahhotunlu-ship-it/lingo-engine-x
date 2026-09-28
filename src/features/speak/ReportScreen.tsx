@@ -12,7 +12,6 @@ import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCatLabel } from './AnalysisCard';
 import { TakeChunkButton } from './TakeChunkButton';
-import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import type { RoleplayApi } from './useRoleplay';
 import { repairsFromTalk } from '../../domain/repair/sources';
 import { ExerciseTop } from '../learn/ui';
@@ -283,8 +282,6 @@ export function ReportScreen({ scene, rp, unit = null }: { scene: SceneView; rp:
         <Button variant="ghost" disabled={saving} onClick={() => go({ name: 'today' })} data-testid="report-home">
           {t('repHome')}
         </Button>
-        {/* M18: aus der Szene eine Preply-Stunde machen. */}
-        {!saving && <AsPreplyLesson title={scene.title} />}
       </div>
     </motion.div>
   );

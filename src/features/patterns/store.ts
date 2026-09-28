@@ -47,7 +47,7 @@ async function safeDoc(db: Db, path: string): Promise<Doc | null> {
   }
 }
 
-export type PatternData = { doc: PatternsDoc | null; mistakes: Mistake[]; preply: Map<string, Doc> };
+export type PatternData = { doc: PatternsDoc | null; mistakes: Mistake[] };
 
 /** Alle Fehlerquellen einmal lesen (kein Abo). Grammatik und Reparatur-Sätze kommen aus den Live-Daten. */
 export async function loadPatternData(db: Db): Promise<PatternData> {
@@ -63,7 +63,7 @@ export async function loadPatternData(db: Db): Promise<PatternData> {
   const mistakes = collectMistakes({ grammar: live.collections.grammar ?? null, talk, writing, preply, say, radar, repair: live.docs['app/repair'] ?? null });
   const parsed = readPatterns(doc);
   cached = parsed;
-  return { doc: parsed, mistakes, preply };
+  return { doc: parsed, mistakes };
 }
 
 // ------------------------------------------------------------------ Hinweise für andere Prompts

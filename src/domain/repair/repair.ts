@@ -15,7 +15,7 @@ export const REPAIR_TEXT_MAX = 300;
 export const REPAIR_WHY_MAX = 200;
 
 /** `fluency` = Flüssigkeit 90 – 60 – 45 (V6), `pattern` = Deutsch-Fallen (V3), `tone` = drei Tonlagen (Vorschlag 8). */
-export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'lesson' | 'fluency' | 'pattern' | 'tone';
+export type RepairSrc = 'say' | 'talk' | 'write' | 'preply' | 'teacher' | 'lesson' | 'fluency' | 'pattern' | 'tone';
 
 export type RepairItem = {
   id: string;

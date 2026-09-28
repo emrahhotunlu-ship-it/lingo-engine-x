@@ -11,7 +11,6 @@ import {
   matchTrap,
   matchTraps,
   needsThemeConfirm,
-  preplyRole,
   readWeekDoc,
   resolveBlock,
   suggestTheme,
@@ -74,9 +73,8 @@ describe('Wochenthema', () => {
     const last: WeekDoc = { v: 1, cur: { wk: '2026-W40', theme: 't11', by: 'auto' } };
     expect(suggestTheme(last, '2026-W41')).toBe(THEME_ORDER[0]);
   });
-  it('Termin vor Preply vor Reihenfolge (N17)', () => {
-    expect(suggestTheme(null, '2026-W41', { meeting: 't04', preply: 't07' })).toBe('t04');
-    expect(suggestTheme(null, '2026-W41', { preply: 't07' })).toBe('t07');
+  it('Termin geht vor der Reihenfolge (N17)', () => {
+    expect(suggestTheme(null, '2026-W41', { meeting: 't04' })).toBe('t04');
   });
   it('withTheme schiebt die Vorwoche nach hist und kappt bei 26', () => {
     let doc: WeekDoc | null = null;
@@ -91,10 +89,11 @@ describe('Wochenthema', () => {
     expect(again.hist?.some((h) => h.wk === '2026-W39')).toBe(false);
   });
   it('readWeekDoc liest tolerant und verwirft Unsinn', () => {
+    // Frühere Preply-Termine (`preplyNext`, bis 28.09.2026) werden als unbekanntes Feld verworfen.
     const doc = readWeekDoc({ v: 1, cur: { wk: '2026-W40', theme: 't99', by: 'x' }, hist: [{ wk: 'bad', theme: 't01' }, { wk: '2026-W39', theme: 't02' }], preplyNext: '2026-10-01', extra: 1 });
     expect(doc.cur).toBeUndefined();
     expect(doc.hist).toEqual([{ wk: '2026-W39', theme: 't02', by: 'auto' }]);
-    expect(doc.preplyNext).toBe('2026-10-01');
+    expect(doc).not.toHaveProperty('preplyNext');
     expect(readWeekDoc(null)).toEqual({ v: 1 });
   });
 });
@@ -220,37 +219,6 @@ describe('unitPlanFor: Wochenplan (N12, M2, M3, M5, M7, S5)', () => {
   });
 });
 
-describe('Preply-Verschiebung (N16, S2)', () => {
-  const week: WeekDoc = { v: 1, cur: { wk: '2026-W40', theme: 't07', by: 'user' } };
-  it('Tag davor, Tag der Stunde, Tag danach', () => {
-    const lessons = ['2026-09-30']; // Mittwoch
-    const before = unitPlanFor('2026-09-29', week, { goalMin: 30, preplyDays: lessons });
-    expect(before.preply).toBe('before');
-    expect(before.blocks.find((b) => b.block === 3)).toMatchObject({ kind: 'task.say', opts: { preply: 'before' }, alt: { kind: 'task.fluency' } });
-    const day = unitPlanFor('2026-09-30', week, { goalMin: 30, preplyDays: lessons });
-    expect(day.shape).toBe('preply-day');
-    expect(day.duty).toEqual(['review', 'ch:u-in']);
-    expect(day.blocks.map((b) => b.min)).toEqual([5, 3]);
-    const after = unitPlanFor('2026-10-01', week, { goalMin: 30, preplyDays: lessons });
-    expect(after.blocks.find((b) => b.block === 2)).toMatchObject({ opts: { src: 'preply-import' } });
-    // Ohne KI: normaler Wochenplan, gleiche Blockzahl (S2c, M4a).
-    const b2 = after.blocks.find((b) => b.block === 2);
-    if (!b2) throw new Error('Block 2 fehlt');
-    expect(resolveBlock(b2, { ai: false, tts: true }).opts.src).toBe('feed');
-  });
-  it('Kollisionen: Tag der Stunde > Tag danach > Tag davor; mindestens 3 normale Tage Mo–Sa', () => {
-    const lessons = ['2026-09-29', '2026-10-01']; // Di + Do
-    expect(preplyRole('2026-09-30', lessons)).toBe('after'); // Mi ist Tag danach (Di) und Tag davor (Do)
-    const roles = W40.map((d) => preplyRole(d, lessons));
-    expect(roles.filter((r) => r === null).length).toBeGreaterThanOrEqual(3 + 1); // + Sonntag
-    const many = ['2026-09-29', '2026-10-01', '2026-10-03'];
-    const r2 = W40.slice(0, 6).map((d) => preplyRole(d, many));
-    expect(r2.filter((r) => r === null).length).toBeGreaterThanOrEqual(3);
-    expect(r2.filter((r) => r === 'day').length).toBe(3);
-    expect(preplyRole('2026-10-04', ['2026-10-04'])).toBeNull();
-  });
-});
-
 describe('block1Order (M1, M2)', () => {
   const c = (id: string, sec = 10, theme = false) => ({ item: id, sec, theme });
   it('Reparatur ≤ 3 und ≤ 120 s, dann fällige (Thema zuerst), neue an 2, 5, 8', () => {
@@ -315,8 +283,8 @@ describe('Wochenziele und Erkennen (N13)', () => {
     expect(t.traps).toEqual(['p:since-for', 'f19', 'f20']);
     expect(t.tool).toBe('c1-hedging');
     expect(t.phrases).toHaveLength(5);
-    const stored = weekTargets('t03', { day: '2026-09-28', week: { v: 1, targets: { wk: '2026-W40', traps: ['f01'], tool: 'passive', preply: 'Fewer fillers' } } });
-    expect(stored).toMatchObject({ traps: ['f01'], tool: 'passive', preply: 'Fewer fillers' });
+    const stored = weekTargets('t03', { day: '2026-09-28', week: { v: 1, targets: { wk: '2026-W40', traps: ['f01'], tool: 'passive' } } });
+    expect(stored).toMatchObject({ traps: ['f01'], tool: 'passive' });
     expect(weekTargets(null).traps).toEqual([]);
   });
   it('detectTargets zählt Abschwächungen, Überleitungen und Wendungen', () => {

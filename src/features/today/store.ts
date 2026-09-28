@@ -59,7 +59,7 @@ let intakeDay: string | null = null;
 /** H4: Lerntag, an dem nach 20 Uhr schon einmal neu abgeglichen wurde. */
 let lateIntakeDay: string | null = null;
 const LATE_INTAKE_HOUR = 20;
-/** Höchstens so lange wartet ein NEUER Plan auf `app/week` (Preply-Termine, Thema der Woche). */
+/** Höchstens so lange wartet ein NEUER Plan auf `app/week` (Thema der Woche). */
 const WEEK_WAIT_MS = 400;
 
 // ------------------------------------------------------------------ lokale Kopie `lx:plan:<tag>`
@@ -192,8 +192,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const lang = useSettings.getState().lang;
   const week = weekDocNow();
   const goalMin = normGoalMin(profile?.goalMin);
-  const preplyDays = week.preplyNext ? [week.preplyNext] : undefined;
-  const draft = unitDraft({ day: today, week, goalMin, ...(preplyDays ? { preplyDays } : {}) });
+  const draft = unitDraft({ day: today, week, goalMin });
   let review = { goal: 0, due: 0, fresh: 0, repairs: 0 };
   if (draft.duty.includes('review')) {
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
@@ -212,7 +211,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
       theme: themeFor(today, week).theme,
     });
   }
-  return buildUnitStored({ day: today, nowMs, week, goalMin, ...(preplyDays ? { preplyDays } : {}), review });
+  return buildUnitStored({ day: today, nowMs, week, goalMin, review });
 }
 
 /** Plan in `app/profile.plan` speichern – außer ein anderes Gerät hat für heute schon einen (der gilt). */
@@ -277,7 +276,7 @@ export async function ensureDay(nowMs: number): Promise<void> {
     afterPaint(() => void followUp(today, nowMs, localPlan));
     return;
   }
-  // 3) Neuer Plan: nur kurz auf `app/week` warten (Thema, Preply-Termine), nie auf KI oder Schreiben.
+  // 3) Neuer Plan: nur kurz auf `app/week` warten (Thema), nie auf KI oder Schreiben.
   await weekReady();
   if (useTodayPlan.getState().day !== today) return;
   let built: StoredPlan;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { useT } from '../../i18n';
-import { logWarn } from '../../platform/diagnostics';
-import { Icon } from '../../ui/Icon';
+import { useT } from '../i18n';
+import { logWarn } from '../platform/diagnostics';
+import { Icon } from './Icon';
 
 // Kopieren (Phase 5, E5-18): zuerst `navigator.clipboard.writeText`. Im iframe kann die
 // Zwischenablage gesperrt sein (weder contract/ noch permissions.d.ts sichern sie zu) – dann wird

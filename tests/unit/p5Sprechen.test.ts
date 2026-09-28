@@ -146,7 +146,8 @@ describe('Sprechen-Wurzel und Fortsetzen', () => {
   it('alte Bereichsnamen werden abgebildet', () => {
     expect(normSeg('scenes')).toBe('talk');
     expect(normSeg('business')).toBe('write');
-    expect(normSeg('preply')).toBe('preply');
+    // Der frühere Preply-Bereich (bis 28.09.2026) führt jetzt zu „Gespräche“.
+    expect(normSeg('preply')).toBe('talk');
     expect(normSeg(undefined)).toBeNull();
   });
 

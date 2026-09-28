@@ -3,7 +3,7 @@ import type { UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs, WeekDo
 import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
 
 // Tageseinheit als gespeicherter Tagesplan (plan.md §1.5, N10/N12; Prüfung M2, M5). Rein.
-// - Der Plan entsteht EINMAL je Lerntag aus Wochentag, Tagesziel und Preply-Terminen (nie aus `env`)
+// - Der Plan entsteht EINMAL je Lerntag aus Wochentag und Tagesziel (nie aus `env`)
 //   und wird als `app/profile.plan` gespeichert: `duty` = `plan.duty` der Einheit (`review`, `ch:u-*`),
 //   `goal.review` = Umfang von Block 1, `u` = eingefrorene Eckdaten (Blöcke, Minuten, Thema).
 // - „x von n“ kommt immer aus `duty.length` (M2); `pflichtFor` bleibt unverändert.
@@ -15,7 +15,6 @@ export type UnitBuildInput = {
   nowMs: number;
   week: WeekDoc | null | undefined;
   goalMin: number;
-  preplyDays?: readonly string[];
   /** Umfang von Block 1 (mit dem Budget aus `unitPlanFor(...).reviewSec` berechnet). */
   review: ReviewGoal;
 };
@@ -25,17 +24,14 @@ export function unitDraft(i: Omit<UnitBuildInput, 'nowMs' | 'review'>): UnitPlan
   return unitPlanFor(i.day, i.week, prefsOf(i));
 }
 
-function prefsOf(i: { goalMin: number; preplyDays?: readonly string[] }, reviewCount?: number): UnitPrefs {
+function prefsOf(i: { goalMin: number }, reviewCount?: number): UnitPrefs {
   const p: UnitPrefs = { goalMin: i.goalMin };
-  if (i.preplyDays?.length) p.preplyDays = i.preplyDays;
   if (reviewCount !== undefined) p.reviewCount = reviewCount;
   return p;
 }
 
-function metaOf(up: UnitPlan, i: { goalMin: number; preplyDays?: readonly string[] }): UnitMeta {
-  const m: UnitMeta = { v: 1, shape: up.shape, goalMin: up.goalMin, theme: up.theme, min: up.minutes, b: up.blocks.map((b) => [b.block, b.kind, b.min]) };
-  if (i.preplyDays?.length) m.pp = [...i.preplyDays].slice(0, 8);
-  return m;
+function metaOf(up: UnitPlan): UnitMeta {
+  return { v: 1, shape: up.shape, goalMin: up.goalMin, theme: up.theme, min: up.minutes, b: up.blocks.map((b) => [b.block, b.kind, b.min]) };
 }
 
 /** Der gespeicherte Tagesplan der Einheit (fester Schlüsselsatz, weil `update` verschmilzt). */
@@ -51,7 +47,7 @@ export function buildUnitStored(i: UnitBuildInput): StoredPlan {
     goal: hasReview ? { review: i.review.goal, due: i.review.due, new: i.review.fresh, ahead: 0 } : { review: 0, due: 0, new: 0, ahead: 0 },
     lesson: null,
     at: i.nowMs,
-    u: metaOf(up, i),
+    u: metaOf(up),
   };
 }
 
@@ -61,11 +57,11 @@ export const isUnitPlan = (p: StoredPlan | null | undefined): p is StoredPlan & 
 /**
  * Die Einheit eines gespeicherten Plans mit dem aktuellen Wochenthema: Blockarten, Minuten und
  * `duty` stammen aus dem eingefrorenen Plan; Thema und Block-Optionen (Frage A, Szene …) aus der
- * aktuellen Woche. Weicht die Neuberechnung ab (z. B. geänderte Preply-Termine), gilt der
+ * aktuellen Woche. Weicht die Neuberechnung ab (z. B. ein älterer Plan mit Preply-Rollen, `u.pp`), gilt der
  * eingefrorene Plan mit schlichten Blöcken – nie neu gewürfelt (Kap. 15).
  */
 export function unitPlanOf(p: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
-  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin, ...(p.u.pp ? { preplyDays: p.u.pp } : {}) }, p.goal.review));
+  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin }, p.goal.review));
   const same = live.duty.length === p.duty.length && live.duty.every((d, k) => d === p.duty[k]) && live.blocks.every((b, k) => b.kind === p.u.b[k]?.[1]);
   if (same) return live;
   const blocks: UnitBlock[] = p.u.b.map(([block, kind, min], k) => ({

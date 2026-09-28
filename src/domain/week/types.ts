@@ -32,10 +32,7 @@ export type InputSrc =
   | 'feed' // ungelesener Feed-Beitrag oder Text aus der Bibliothek
   | 'feed-life' // Alltags-Input (Feed Alltag oder gespeicherter Alltagstext)
   | 'inbox' // Kundenmail des Posteingangs
-  | 'phrases' // die 5 Wendungen der Woche
-  | 'preply-import'; // Import der Preply-Stunde
-
-export type PreplyRole = 'before' | 'day' | 'after';
+  | 'phrases'; // die 5 Wendungen der Woche
 
 export type UnitBlockOpts = {
   src?: InputSrc;
@@ -59,7 +56,6 @@ export type UnitBlockOpts = {
   short?: boolean;
   /** Business-Szene zum Thema (Rollenspiel). */
   scene?: string;
-  preply?: PreplyRole;
 };
 
 export type UnitChannel = 'review' | 'ch:u-in' | 'ch:u-task' | 'ch:u-focus' | 'ch:u-again' | 'ch:u-check';
@@ -71,11 +67,9 @@ export type UnitBlock = UnitStep & {
   /** Minuten (Deckel für die Planung, bricht nichts ab). */
   min: number;
   channel: UnitChannel;
-  /** Normaler Wochenplan-Block, falls dieser Block wegen Preply verschoben ist (Rückfall ohne KI, S2c). */
-  alt?: UnitStep;
 };
 
-export type UnitShape = 'full' | 'short' | 'sat' | 'sun' | 'preply-day';
+export type UnitShape = 'full' | 'short' | 'sat' | 'sun';
 
 /**
  * Der Plan eines Lerntags. Er hängt nie von `env` ab (Prüfung M5) und wird je Lerntag eingefroren:
@@ -96,7 +90,6 @@ export type UnitPlan = {
   goalMin: number;
   /** Zeitbudget für Block 1 in Sekunden (M2); die Reparatur-Zeit geht davon ab. */
   reviewSec: number;
-  preply: PreplyRole | null;
   blocks: readonly UnitBlock[];
   /** `plan.duty`: „x von n“ kommt immer aus `duty.length`. */
   duty: readonly UnitChannel[];
@@ -108,27 +101,24 @@ export type UnitPrefs = {
   goalMin?: number;
   /** Tage bis zum nächsten Termin (`meeting/*`); 0–3 → Generalprobe am Donnerstag. */
   meetingInDays?: number | null;
-  /** Termine der Preply-Stunden (`JJJJ-MM-TT`), z. B. aus `app/week.preplyNext`. */
-  preplyDays?: readonly string[];
   /** Geplanter Umfang von Block 1 (`goal.review`); 0 → Block 1 entfällt (M2). */
   reviewCount?: number;
   /** Vorrang beim Themenvorschlag (N17). */
   themeHint?: ThemeHint;
 };
 
-export type ThemeHint = { meeting?: ThemeId | null; preply?: ThemeId | null };
+export type ThemeHint = { meeting?: ThemeId | null };
 
 /** Dokument `app/week` (Plan §4.10). */
 export type WeekCur = { wk: string; theme: ThemeId; by: 'auto' | 'user'; at?: number };
 export type WeekHist = { wk: string; theme: ThemeId; by: 'auto' | 'user' };
-export type WeekStoredTargets = { wk: string; traps: string[]; tool: string; preply?: string };
-/** Vorrang-Hinweis (N17): Thema eines Termins bzw. einer Preply-Stunde in Kalenderwoche `wk`. */
-export type WeekHint = { wk: string; theme: ThemeId; src: 'meeting' | 'preply' };
+export type WeekStoredTargets = { wk: string; traps: string[]; tool: string };
+/** Vorrang-Hinweis (N17): Thema eines Termins in Kalenderwoche `wk`. */
+export type WeekHint = { wk: string; theme: ThemeId; src: 'meeting' };
 export type WeekDoc = {
   v: 1;
   cur?: WeekCur;
   hist?: WeekHist[];
-  preplyNext?: string;
   targets?: WeekStoredTargets;
   hint?: WeekHint;
 };
@@ -140,7 +130,6 @@ export type WeekTargets = {
   traps: string[];
   /** Werkzeug der Woche (Grammatik-ID). */
   tool: string | null;
-  preply: string | null;
   goals: ThemeGoal[];
   /** Die 5 Wendungen der Woche (Englisch). */
   phrases: string[];

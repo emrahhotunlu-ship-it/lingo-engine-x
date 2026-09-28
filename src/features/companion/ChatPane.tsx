@@ -5,7 +5,6 @@ import { suggestions, type SuggestKey } from '../../domain/companion/suggest';
 import { Markdown } from '../../engine/Markdown';
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
-import { openPreplyPrep } from '../preply/store';
 import { startClaudeDrill } from './drill';
 import { ChatMessage, type MsgState } from './ChatMessage';
 import { RememberChip } from './RememberChip';
@@ -74,7 +73,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
     />
   );
 
-  const action = (kind: 'practice' | 'preply' | 'drill') => {
+  const action = (kind: 'practice' | 'drill') => {
     if (kind === 'drill') {
       // N96: die letzte Frage und Antwort sind das Thema der fünf Aufgaben.
       const lastUser = [...current].reverse().find((m) => m.role === 'user');
@@ -82,12 +81,6 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
       closeCompanion();
       startClaudeDrill(context);
       go({ name: 'claudeDrill' });
-      return;
-    }
-    if (kind === 'preply') {
-      const topic = s.attach?.word ?? seeing?.label ?? '';
-      closeCompanion();
-      openPreplyPrep(topic ? { title: topic } : null);
       return;
     }
     closeCompanion();
@@ -234,16 +227,6 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
                 >
                   <Icon name="arrowRight" size={16} />
                   {seeing?.area === 'trainer' ? t('cmpActBack') : t('cmpActPractice')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => action('preply')}
-                  className="inline-flex min-h-11 flex-none items-center gap-1.5 rounded-full bg-accent-soft px-4 text-sm font-semibold text-accent-text"
-                  data-testid="chat-action"
-                  data-action="preply"
-                >
-                  <Icon name="book" size={16} />
-                  {t('cmpActPreply')}
                 </button>
                 {/* B5: „Merken“ – Claude merkt sich bis zu 5 Fakten aus diesem Gespräch. */}
                 <RememberChip />

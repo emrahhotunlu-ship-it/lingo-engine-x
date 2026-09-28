@@ -63,7 +63,10 @@ test('Hör-Modus: Stapel „Hören“ spricht den Satz, getippt wird in die Lüc
 test('Hörschleife: aus der Extra-Runde, spricht von selbst, anhalten, Text zeigen, schreibt nichts', async ({ page }) => {
   test.setTimeout(60_000);
   const { patch, ids } = ankiPatch(3);
-  const { errors } = await boot(page, { migrated: true, fake: { patch } });
+  // Der Seed enthält am Stichtag (Kap. 3.3) bereits echte Übungseinträge für einzelne Startwörter
+  // (`achieve`, `action-item`); ohne sie zu entfernen, verwechselt der Vergleich unten Altes mit
+  // dem, was die Hörschleife angeblich schreibt.
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { ...patch, [`log/${DAY}`]: null } } });
   await screen(page, 'today');
   await openTab(page, 'vocab');
   await page.getByTestId('ws-more').click();

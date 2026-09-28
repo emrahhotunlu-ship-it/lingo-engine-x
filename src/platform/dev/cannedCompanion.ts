@@ -1,13 +1,12 @@
 import { registerCannedReply } from './fakeSample';
 
 // Feste Antworten des Entwicklungs-Adapters für Phase 5 (Plan §6.5): companion-chat@1,
-// translate@3, preply-prep@1, preply-import@1. Nur Entwicklung und Tests – nie im Build
+// translate@3. Nur Entwicklung und Tests – nie im Build
 // (check-platform.mjs sperrt die Marker). Testmarker:
 // - Begleiter: `zzlong` (≈ 3.000 Zeichen, Scroll-Test), `zzen` (englische Antwort, Sprachtreue).
 //   Enthält die Einleitung die Schutzregel („has NOT checked"), endet die Antwort mit
 //   `[no-solution]`, sonst mit `[solution-ok]` – so prüft der E2E-Test das Schwärzen.
 // - Übersetzer: `zzsame` (erste Antwort mit unlesbarem Register → Schemafehler → Neuversuch).
-// - Import: `zzempty` (alles leer).
 
 type Lang = 'de' | 'en';
 
@@ -115,82 +114,6 @@ export function translateReply(input: string): string {
   });
 }
 
-// ---------------------------------------------------------------- preply-prep@1
-
-export function preplyPrepReply(input: string): string {
-  const lang = langOf(line(input, 'Explanation language'));
-  const block = /Real recent mistakes of the learner \(wrong → correct\):\n([\s\S]*?)\nWords to use actively/.exec(input)?.[1] ?? '';
-  const errors = block
-    .split('\n')
-    .map((l) => /^- (.*) → (.*)$/.exec(l))
-    .filter((m): m is RegExpExecArray => !!m)
-    .slice(0, 2)
-    .map((m) => ({ mistake: (m[1] ?? '').trim(), fix: (m[2] ?? '').trim(), note: lang === 'de' ? 'Achte hier auf die richtige Form.' : 'Watch the correct form here.' }));
-  const de = lang === 'de';
-  return JSON.stringify({
-    title: de ? 'Einwände souverän behandeln' : 'Handling objections with confidence',
-    goal_en: 'Handle three typical objections to a cloud DMS without hesitating.',
-    goal_x: de ? 'Drei typische Einwände gegen ein Cloud-DMS ohne Zögern entkräften.' : 'Handle three typical objections to a cloud DMS without hesitating.',
-    warmup: ['What was the hardest question a customer asked you this month?', 'How do you usually start a sales call?', 'Which objection do you hear most often?'],
-    talk: ['Describe a deal you lost and what you would do differently.', 'How do you explain data security to a skeptical CFO?', 'Role-play: the customer says the price is too high.'],
-    say: [
-      'I understand your concern, and that is exactly why we offer a pilot.',
-      'Would it help if we started with one department?',
-      'Let me walk you through how other customers solved this.',
-      'If you had the numbers in one place, would that change your view?',
-    ],
-    watch: errors,
-    message: 'Hi! In our next lesson I would like to practice handling objections in sales calls. Could we do a short role-play where you are a skeptical customer? Please correct my verb forms.',
-  });
-}
-
-// ---------------------------------------------------------------- preply-import@1
-
-export function preplyImportReply(input: string): string {
-  const lang = langOf(line(input, 'Explanation language'));
-  const de = lang === 'de';
-  if (/zzempty/i.test(blockText(input))) {
-    return JSON.stringify({ title: de ? 'Leere Stunde' : 'Empty lesson', summary: '', corrections: [], tasks: [], words: [], homework: [] });
-  }
-  return JSON.stringify({
-    title: de ? 'Stunde: Präpositionen und Vorlieben' : 'Lesson: prepositions and preferences',
-    summary: de ? 'Wir haben Verben mit festen Präpositionen und Vorlieben geübt.' : 'We practiced verbs with fixed prepositions and talking about preferences.',
-    corrections: [
-      { wrong: 'It depends of the budget.', right: 'It depends on the budget.', topic: 'prepositions', why: de ? 'Nach „depend“ steht immer „on“.' : 'The verb "depend" always takes "on".' },
-      { wrong: 'I am agree with you.', right: 'I agree with you.', topic: 'other', why: de ? '„agree“ ist ein Verb, kein Adjektiv.' : '"Agree" is a verb, not an adjective.' },
-    ],
-    tasks: [
-      {
-        type: 'gap',
-        prompt: 'It depends ___ the budget.',
-        answer: 'on',
-        accepted: ['on'],
-        options: [],
-        topic: 'prepositions',
-        explanation_de: 'Das Verb „depend“ verlangt die Präposition „on“.',
-        explanation_en: 'The verb "depend" always takes the preposition "on".',
-      },
-      {
-        type: 'mc',
-        prompt: 'I ___ with your proposal.',
-        answer: 'agree',
-        accepted: [],
-        options: ['agree', 'am agree', 'agreeing', 'am agreed'],
-        topic: 'other',
-        explanation_de: 'Es heißt „I agree“ – ohne „am“, denn „agree“ ist ein Verb.',
-        explanation_en: 'We say "I agree" without "am" because "agree" is a verb.',
-      },
-    ],
-    words: [
-      { en: 'would rather', de: 'lieber wollen', pos: 'phrase', ex: 'I would rather start with a small pilot.', fromLesson: true },
-      { en: 'bottleneck', de: 'Engpass', pos: 'noun', ex: 'The approval process is our biggest bottleneck.', fromLesson: true },
-      { en: 'to leverage', de: 'nutzen', pos: 'verb', ex: 'We should use our network.', fromLesson: false },
-    ],
-    homework: [de ? 'Schreibe fünf Sätze mit „would rather“.' : 'Write five sentences with "would rather".'],
-  });
-}
-
-/** Meldet die festen Antworten der Phase 5 beim Entwicklungs-Adapter an. */
 // ---------------------------------------------------------------- memory-extract@1 (B5)
 // Zwei feste Fakten in der verlangten Sprache; Testmarker `zznone` im Gespräch → leere Liste.
 
@@ -229,6 +152,4 @@ export function registerCompanionReplies(): void {
   registerCannedReply('companion-chat', companionChatReply);
   registerCannedReply('memory-extract', memoryExtractReply);
   registerCannedReply('translate', translateReply);
-  registerCannedReply('preply-prep', preplyPrepReply);
-  registerCannedReply('preply-import', preplyImportReply);
 }

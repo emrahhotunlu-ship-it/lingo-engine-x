@@ -9,9 +9,8 @@ import { NB_TEMPLATES } from './nb';
 import { produceCheck } from './produceCheck';
 import { wordGen } from './wordGen';
 import { companionChat } from './companionChat';
-import { preplyImport } from './preplyImport';
-import { preplyPrep } from './preplyPrep';
 import { translate } from './translate';
+import { teacherFeedback } from './teacherFeedback';
 import type { ChatTemplate, PromptTemplate } from './types';
 import { wordLookup } from './wordLookup';
 import { turnAnalysis } from './turnAnalysis';
@@ -58,10 +57,10 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   phraseAdapt,
   pitchScript,
   pitchFeedback,
-  // Phase 5 – Übersetzer, Preply-Brücke
+  // Phase 5 – Übersetzer
   translate,
-  preplyPrep,
-  preplyImport,
+  // Lehrer-Feedback (28.09.2026, ersetzt die Preply-Brücke)
+  teacherFeedback,
   // Phase 4 – Lesen, Hören, Schreiben, Entdecken
   ...INPUT_TEMPLATES,
   // Phase 6 – Urteil

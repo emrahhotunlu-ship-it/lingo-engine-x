@@ -22,7 +22,6 @@ import { UnitShell } from '../input/UnitShell';
 import { useFeedItems, useFeedSubscription } from './feedStore';
 import { discoverMachine } from './machine';
 import { PrepStep, TakeStep, UseStep, DoneStep, loadSent, saveSent } from './steps';
-import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 
 // Ein Beitrag als Lektion (Kap. 6.9, Plan §4.4 Nr. 2–6): Schritte nach `stepsFor`, Wiedereinstieg
 // im ersten offenen Schritt; jeder abgeschlossene Schritt ist Zustand (Häkchen), kein Knopf.
@@ -156,10 +155,6 @@ function ItemUnit({ item, ctx, steps, startAt, savedDone }: { item: FeedItem; ct
     >
       <div className="flex max-w-3xl flex-col gap-5">
         {body}
-        {/* M18: aus dem Beitrag eine Preply-Stunde machen. */}
-        <div className="border-t border-line pt-3">
-          <AsPreplyLesson title={item.title} />
-        </div>
       </div>
     </UnitShell>
   );

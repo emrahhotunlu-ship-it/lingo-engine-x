@@ -1,7 +1,7 @@
 import { getWriter } from '../../data';
 import { meetingPath, patchMeetingItem, upsertMeetingItem, withDebrief, type DebriefEntry, type MeetingItem, type MeetingPrep } from '../../domain/meeting/meetingDoc';
 import { logError } from '../../platform/diagnostics';
-import { noteWeekHint } from '../preply/weekHint';
+import { noteWeekHint } from '../week/weekHint';
 
 // Schreibwege von „Mein nächster Termin“ (Lernberatung 27.09., V4): nur über den einen Writer,
 // nur auf Handlungen hin (Vorbereitung erstellt, Generalprobe gestartet, Nachbesprechung).
