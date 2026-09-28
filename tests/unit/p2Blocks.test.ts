@@ -3,6 +3,7 @@ import { lernen } from '../../src/areas/lernen';
 import { useFocus } from '../../src/features/grammar/focus/session';
 import { useAgain } from '../../src/features/repair/again/session';
 import { EMPTY_TARGETS } from '../../src/domain/week';
+import type { UnitBlockProvider } from '../../src/app/unit/types';
 
 // Anbieter der Blöcke 4 und 5 (plan.md §4.10): synchron, ohne KI machbar, Route der Übung.
 
@@ -21,7 +22,7 @@ const ctx = {
 };
 
 describe('Block-Anbieter focus/again', () => {
-  const blocks = lernen.unitBlocks;
+  const blocks: readonly UnitBlockProvider[] = lernen.unitBlocks;
   it('beide sind angemeldet und immer machbar', () => {
     expect(blocks.map((b) => b.kind)).toEqual(['focus', 'again']);
     expect(blocks.every((b) => b.feasible({ ai: false, tts: false }))).toBe(true);
