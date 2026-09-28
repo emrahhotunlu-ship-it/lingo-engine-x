@@ -150,3 +150,16 @@ test('Deutsch-Fallen ohne KI: Startsatz-Falle in 2 Tipps ab Üben, 3 Sätze mit 
   await expect(page.getByTestId('pattern-drill-end')).toHaveAttribute('data-total', '3');
   expect(errors).toEqual([]);
 });
+
+test('Grammatik-Runde: „Kurz erklärt“ vor der Aufgabe, zugeklappt (N46)', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'learn');
+  await page.getByTestId('hub-grammar').click();
+  await page.getByTestId('gr-start').click();
+  await expect(page.getByTestId('gr-item')).toBeVisible();
+  await expect(page.getByTestId('gr-brief-text')).toHaveCount(0);
+  await page.getByTestId('gr-brief').click();
+  await expect(page.getByTestId('gr-brief-text')).not.toBeEmpty();
+  expect(errors).toEqual([]);
+});

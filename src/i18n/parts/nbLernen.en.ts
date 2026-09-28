@@ -60,4 +60,5 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenGrammarSet: 'Topics',
   nbLernenGrammarB2: 'B2 topics',
   nbLernenGrammarC1: 'C1 toolkit',
+  nbLernenBrief: 'Quick rule',
 };
