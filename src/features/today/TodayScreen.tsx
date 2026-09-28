@@ -279,7 +279,7 @@ function UnitCard({ view, rows, title, minLeft }: { view: TodayView; rows: CardR
               <BlockDot state={r.state} />
               <span className="flex min-w-0 flex-1 flex-col">
                 <span className={`text-sm font-semibold ${r.state === 'done' ? 'text-muted' : ''}`}>{r.name}</span>
-                <span className="truncate text-xs text-muted" data-testid="reason" data-why={r.whyKey}>
+                <span className="text-xs text-muted" data-testid="reason" data-why={r.whyKey}>
                   {r.id === 'review' && r.progress && r.state !== 'done' && r.progress.done > 0
                     ? t('tdProgressLabel', {
                         done: r.progress.done,
