@@ -33,6 +33,8 @@ import { meetingDebrief } from './meetingDebrief';
 import { patterns } from './patterns';
 import { patternCheck } from './patternCheck';
 import { toneCheck } from './toneCheck';
+import { memoryExtract } from './memoryExtract';
+import { compare } from './compare';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -82,6 +84,10 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   toneCheck,
   // Neubau (docs/neubau/plan.md §3.2): neue Vorlagen der Pakete P1–P7
   ...NB_TEMPLATES,
+  // Paket B: „Claude merkt sich“ (B5)
+  memoryExtract,
+  // Paket B: monatliche Vergleichsaufgabe (B1)
+  compare,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

@@ -80,11 +80,11 @@ TABS = [
 
 **Kopf auf jeder Reiter-Wurzel** (WP0, wie in v1):
 - Links: Profil-Knopf (Initiale + „Serie 12“), öffnet das Profil-Blatt.
-- Rechts: **Übersetzen** und **Claude**, beide öffnen das Claude-Blatt. Ohne KI sind sie unsichtbar.
+- Rechts: **Übersetzen** und **Claude**, beide öffnen das Claude-Blatt. Ohne KI sind sie unsichtbar. Dazu immer das **Zahnrad** (Einstellungen-Blatt; Emrahs Vorgabe A7 Paket 2, Fehlermeldung 28.09.).
 - Darunter: großer Titel.
-- Auf Seiten: links „‹ Herkunft“, rechts wieder Übersetzen und Claude.
+- Auf Seiten: links „‹ Herkunft“, rechts wieder Übersetzen, Claude und Zahnrad.
 
-**Übungsebene (Player, WP0):** eine Leiste mit ✕ · Balken · „12 / 40 (+2)“ · Übersetzen · Claude.
+**Übungsebene (Player, WP0):** eine Leiste mit ✕ · Balken · „12 / 40 (+2)“ · Übersetzen · Claude · Zahnrad (das Einstellungen-Blatt liegt über der Übung, sie läuft danach weiter).
 - ✕ fragt nie nach, ein Toast bestätigt „Gespeichert. Du kannst jederzeit weitermachen.“
 - Unter dem Balken steht „Tageseinheit · Block 2 von 5“, „Pflicht“ oder „Extra“.
 - Es gibt keinen Kopf und keine Reiterleiste.

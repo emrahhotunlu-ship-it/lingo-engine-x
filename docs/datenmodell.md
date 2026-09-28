@@ -149,4 +149,11 @@ Deklariert in WP0a (`src/data/{paths,schemas}.ts`, tolerant/`looseObject`); gesc
 | `app/week` | `{v: 1, cur?: {wk: 'JJJJ-Www', theme: 't01'…'t16', by: 'auto'\|'user', at}, hist?: [{wk, theme, by}], preplyNext?: string, targets?: {wk, traps: string[], tool: string, preply?: string}, hint?: {wk, theme, src: 'meeting'\|'preply'}}` – Wochenthema und Wochenziele; `hint` = Termin-/Preply-Thema mit Vorrang beim Vorschlag (N17) | ≤ 26 Wochen in `hist`, < 8 KiB | P1 → `writer.transform`; `preplyNext` und `hint` P5 (feldweise) |
 | `out/<JJJJ-MM>` | `{v: 1, items: [{id, k, d, theme?, ok?, text?, fb?, ms?}]}` – Ergebnisse der neuen Übungen (Kollokationen, Einwände, Posteingang, Nachsprechen …) als Monatsdokument (A6.6) | ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB | P7 → `writer.transform`, idempotent über `item.id`; Antworten zusätzlich ins Tagesprotokoll über `recordChannelEntries` |
 
+## Ergänzungen Paket B (docs/backlog.md §1, additiv, nichts gelöscht)
+
+| Pfad | Neu | Grenze | Schreibweg |
+|---|---|---|---|
+| `app/memory` | `{v: 1, items: [{id, text, src: 'chat:<t>'\|'meeting:<id>', t, lang?: 'de'\|'en'}]}` – „Claude merkt sich“ (B5): Fakten aus Gesprächen, in den Einstellungen sichtbar und einzeln löschbar (Löschen entfernt nur den einen Eintrag, nie das Dokument); eine erneute Aufnahme derselben Quelle ersetzt deren Fakten. **Live-Abo** (`LIVE_DOCS`), weil die Vorlagen die Fakten synchron im Klick lesen | ≤ 5 je Quelle, ≤ 40 gesamt (älteste fallen heraus), ≤ 160 Zeichen je Fakt, < 16 KiB | `features/companion/memory.ts` → `writer.transform`; unerwarteter Aufbau → nichts geschrieben |
+| `app/compare` | `{v: 1, items: [{month: 'JJJJ-MM', day, t, task: 'ct1'…, speak {text, sec, m {words, traps, per100, wpm, phrases[]}}, write {text, m}, base?: 'JJJJ-MM', verdict? {summary, better[] ≤ 3, next, level, lang, pv}}]}` – monatliche Vergleichsaufgabe (B1); derselbe Monat wird ersetzt. Kein Live-Abo (`useDocWatch` auf Heute nur in der letzten Monatswoche, im Stand und in der Übung) | ≤ 12 Läufe, Texte ≤ 1.500 Zeichen, Urteil ≤ 1.200 Zeichen, < 120 KiB | `features/progress/compare/store.ts` → `writer.transform`; unerwarteter Aufbau → nichts geschrieben |
+
 **Lokal** (`platform/storage`, nur Bequemlichkeit): `lx:plan:<tag>` (P1), `lx:resume` und `lx:resume:<id>` (Hülle `{v, id, day, savedAt, tabId, route, data}`, ≤ 50 KB; `src/app/resume.ts`).

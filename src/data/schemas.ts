@@ -811,6 +811,43 @@ export const weekSchema = z.looseObject({
   hint: z.looseObject({ wk: str, theme: str, src: str }).nullish(),
 });
 
+/**
+ * „Claude merkt sich“ (Backlog B5): `{v, items: [{id, text, src, t, lang}]}`, höchstens 40 Fakten
+ * zu je ≤ 160 Zeichen, ≤ 5 je Gespräch/Termin (gekappt beim Schreiben, domain/memory). Tolerant.
+ */
+export const memorySchema = z.looseObject({
+  v: num,
+  items: z.array(z.looseObject({ id: str, text: str, src: str, t: num, lang: str })).nullish(),
+});
+
+const compareSide = z.looseObject({
+  text: str,
+  sec: num,
+  m: z.looseObject({ words: num, traps: num, per100: num, wpm: num, phrases: strArr }).nullish(),
+});
+
+/**
+ * Monatliche Vergleichsaufgabe (Backlog B1): `{v, items: [{month, day, t, task, speak, write, base,
+ * verdict}]}`, höchstens 12 Läufe, Texte ≤ 1.500 Zeichen (gekappt beim Schreiben, domain/compare). Tolerant.
+ */
+export const compareSchema = z.looseObject({
+  v: num,
+  items: z
+    .array(
+      z.looseObject({
+        month: str,
+        day: str,
+        t: num,
+        task: str,
+        base: str,
+        speak: compareSide.nullish(),
+        write: compareSide.nullish(),
+        verdict: z.looseObject({ summary: str, better: strArr, next: str, level: str, lang: str, pv: str }).nullish(),
+      }),
+    )
+    .nullish(),
+});
+
 /** Ergebnisse der neuen Übungen je Monat (`out/<JJJJ-MM>`; ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB). Schreibt P7. */
 export const outSchema = z.looseObject({
   v: num,

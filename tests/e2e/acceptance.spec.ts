@@ -48,7 +48,7 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
   // Vokabeltest über die Profil-Zeile (Neubau).
   await openProfileRow(page, 'profile-vtest');
   await screen(page, 'vtest');
-  // In Übungen gibt es keine Reiter und kein Zahnrad (UX-Beratung Nr. 4): ✕ führt zurück zur Herkunft.
+  // In Übungen gibt es keine Reiter (UX-Beratung Nr. 4); das Zahnrad steht in der Übungsleiste (A7 Paket 2). ✕ führt zurück zur Herkunft.
   await page.getByTestId('vt-close').click();
   await screen(page, 'today');
   await openSettings(page);

@@ -21,6 +21,7 @@ import { AiRunPanel, isBusy } from '../input/AiRunPanel';
 import { clearDraft, loadDraft } from '../input/draft';
 import { DraftArea } from '../input/DraftArea';
 import { SummaryActions } from '../learn/ui';
+import { TitleActions } from '../system/Chrome';
 import { flush } from '../progress/persist';
 import { saveRepairs } from '../repair/store';
 import { recordTonesDone, saveToneItem } from './persist';
@@ -176,6 +177,7 @@ export function TonesScreen() {
           <h1 id={`${infoId}-title`} className="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight">
             {t('tnTitle')}
           </h1>
+          <TitleActions />
         </div>
         <p className="lx-tnum text-xs font-medium text-muted" data-testid="tones-status">
           {statusParts.join(' · ')}

@@ -175,8 +175,8 @@ export async function openOverview(page: Page): Promise<void> {
 }
 
 /**
- * Einstellungen öffnen: Das Zahnrad steht auf jeder Seite (und auf den System-Bildschirmen ohne
- * Reiter). Sonst über das Profil-Blatt („Einstellungen ›“).
+ * Einstellungen öffnen: Das Zahnrad steht im Kopf, auf jeder Seite, in jeder Übung und auf den
+ * System-Bildschirmen. Sonst über das Profil-Blatt („Einstellungen ›“).
  */
 export async function openSettings(page: Page): Promise<void> {
   const gear = page.getByTestId('open-settings').first();

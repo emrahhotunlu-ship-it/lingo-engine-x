@@ -33,6 +33,7 @@ import { tuesdayOf, tuesdayWpm } from '../../domain/fluency/wpm';
 import { unitResult } from '../../domain/speak/unitResult';
 import { fluencyResume, type FluencySnap } from '../speak/resumable';
 import { TargetBar } from '../speak/TargetBar';
+import { TitleActions } from '../system/Chrome';
 import { finishUnit, unitBlockOf } from '../speak/unit';
 import { useUnitCtx } from '../speak/useUnit';
 
@@ -273,6 +274,7 @@ export function FluencyScreen() {
           <h1 id={`${infoId}-title`} className="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight">
             {t('fluTitle')}
           </h1>
+          <TitleActions />
         </div>
         <p className="lx-tnum text-xs font-medium text-muted" data-testid="fluency-status">
           {status}
