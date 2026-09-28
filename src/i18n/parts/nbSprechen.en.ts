@@ -64,4 +64,9 @@ export const nbSprechenEn: Record<keyof typeof nbSprechenDe, string> = {
   nbSprechenPreplyNextFailed: 'Not saved – please pick the date again.',
   nbSprechenPreplyToday: 'Preply lesson today · prepare',
   nbSprechenPreplyTomorrow: 'Preply lesson tomorrow · prepare',
+  nbSprechenTraps: 'Watch out for:',
+  nbSprechenTurnLeft: '{s} s left for your turn',
+  nbSprechenTurnUp: 'Time\'s up – say it anyway',
+  nbSprechenTurnTimerOff: 'Turn timer off',
+  nbSprechenTurnTimerOn: '45 s per turn',
 };

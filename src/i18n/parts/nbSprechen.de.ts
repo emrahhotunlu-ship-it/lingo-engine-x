@@ -63,4 +63,9 @@ export const nbSprechenDe = {
   nbSprechenPreplyNextFailed: 'Nicht gespeichert – bitte erneut wählen.',
   nbSprechenPreplyToday: 'Preply-Stunde heute · vorbereiten',
   nbSprechenPreplyTomorrow: 'Preply-Stunde morgen · vorbereiten',
+  nbSprechenTraps: 'Fallen im Blick:',
+  nbSprechenTurnLeft: 'noch {s} s für deinen Zug',
+  nbSprechenTurnUp: 'Zeit um – sag es trotzdem',
+  nbSprechenTurnTimerOff: 'Zeitlimit aus',
+  nbSprechenTurnTimerOn: '45 s je Zug',
 } as const;

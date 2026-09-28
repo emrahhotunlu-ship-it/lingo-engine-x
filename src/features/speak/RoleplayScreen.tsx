@@ -15,6 +15,7 @@ import { AnalysisCard } from './AnalysisCard';
 import { GoalChecklist } from './GoalChecklist';
 import { roleplayResume } from './resumable';
 import { TargetBar } from './TargetBar';
+import { TrapWatch, TurnTimer } from './TurnAids';
 import { roleplayUnitKind, unitBlockOf } from './unit';
 import { useUnitCtx } from './useUnit';
 import { sceneGoals } from '../../domain/speak/bizScenes';
@@ -168,6 +169,9 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
       {/* N72: die Ziele stehen oben; Haken kommen nach jeder Antwort der Figur (goal-check@1). */}
       <div className="lx-glass rounded-2xl px-4 py-3" data-testid="rp-goals-box">
         <GoalChecklist goals={goalList} marks={rp.goals} testId="rp-goals" />
+        <div className="mt-2">
+          <TrapWatch />
+        </div>
       </div>
       {unit && <TargetBar text={myText} ctx={unitCtx} />}
       <AnimatePresence initial={false}>
@@ -237,6 +241,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
             </Card>
           )}
 
+          {(state === 'composing' || phase !== 'other') && <TurnTimer startKey={c.turns.length} active={state === 'composing'} />}
           {(state === 'composing' || phase !== 'other') && (
             <Composer sceneId={scene.id} useful={scene.useful} busy={busy} restore={restore} onSend={(text, chip) => void rp.sendTurn(text, chip)} />
           )}
