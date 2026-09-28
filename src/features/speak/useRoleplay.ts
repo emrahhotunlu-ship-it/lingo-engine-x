@@ -10,7 +10,7 @@ import { buildRun, runId } from '../../domain/speak/transcript';
 import type { AnalysisSlot, SceneView, StoredReport, Turn } from '../../domain/speak/types';
 import { logWarn } from '../../platform/diagnostics';
 import { speak, stopSpeech } from '../../platform/speech';
-import { autoplayOn, takeOpening } from './autoplay';
+import { speakRepliesOn, takeOpening } from './autoplay';
 import { roleplayReport, type ReportTurnInfo } from '../../prompts/roleplayReport';
 import { FIGURE_TIER, roleplayTurn } from '../../prompts/roleplayTurn';
 import { turnAnalysis } from '../../prompts/turnAnalysis';
@@ -281,7 +281,7 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
         analyze(all.length - 2);
         persistCopy();
         void checkGoals(false);
-        if (autoplayOn()) void speak(r.text);
+        if (speakRepliesOn()) void speak(r.text);
       } catch (err) {
         if (!alive.current) return;
         if (isAiFailure(err) && err.kind === 'cancelled') send({ type: 'CANCELLED' });

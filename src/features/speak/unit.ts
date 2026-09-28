@@ -7,7 +7,7 @@ import { nextMeeting } from '../../domain/meeting/next';
 import { logWarn } from '../../platform/diagnostics';
 import { unlockSpeech } from '../../platform/speech';
 import { KEY_PREFIX, local } from '../../platform/storage';
-import { autoplayOn, queueOpening } from './autoplay';
+import { queueOpening, speakRepliesOn } from './autoplay';
 import { readResume } from './resume';
 import { legacySceneDoc } from './useSceneLibrary';
 
@@ -92,7 +92,7 @@ function roleplayRoute(sceneId: string, ctx: UnitCtx): Route {
   const resume = !!readResume(sceneId, useClock.getState().today);
   const scene = legacySceneDoc(sceneId);
   const opening = typeof scene?.opening === 'string' ? scene.opening : null;
-  queueOpening(!resume && autoplayOn() ? opening : null);
+  queueOpening(!resume && speakRepliesOn() ? opening : null);
   return { name: 'roleplay', sceneId, resume, unit: ctx.block };
 }
 

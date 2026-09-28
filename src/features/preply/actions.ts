@@ -21,6 +21,9 @@ import { usePreply } from './store';
 import { repairsFromPreply } from '../../domain/repair/sources';
 import { saveRepairs } from '../repair/store';
 import { withFocusLine, type FocusPoint } from '../../domain/patterns/patterns';
+import { readPreplyNext } from '../../domain/preply/next';
+import { useWeekDoc } from '../../app/useWeek';
+import { noteWeekHint } from './weekHint';
 
 // Schreibwege der Preply-Brücke (Phase 5 §5.1), nur über den einen Writer. Jede KI-Anfrage geht
 // auf eine ausdrückliche Handlung zurück („Plan erstellen", „Analysieren"). Geschrieben wird:
@@ -126,6 +129,10 @@ export async function savePlan(out: PrepOut, meta: { ctx: PrepCtx; minutes: numb
   }
   const id = `pp${ms}`;
   if (!writer) throw new Error('db unavailable');
+  // N17: Das Thema der Stunde hat Vorrang beim Wochenthema-Vorschlag (Woche der nächsten Stunde).
+  const today = dayKey(ms);
+  const lessonDay = readPreplyNext(useWeekDoc.getState().data, today) ?? today;
+  void noteWeekHint('preply', [meta.ctx.title, meta.ctx.topic, out.title, out.goal_en].filter(Boolean).join(' '), lessonDay);
   let r = await writer.createIfMissing(`preply/${id}`, doc);
   if (r === 'exists') {
     r = await writer.createIfMissing(`preply/pp${ms + 1}`, { ...doc, t: ms + 1 });

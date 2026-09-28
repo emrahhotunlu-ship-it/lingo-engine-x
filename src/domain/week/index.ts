@@ -22,3 +22,4 @@ export { isThemeCard, themeRef, type ThemeCardLike } from './cards';
 export { weekTargets, detectTargets, EMPTY_TARGETS, HEDGES, TRANSITIONS, TRAPS_MAX, allThemes, type TargetHit, type TargetCount, type TargetScan } from './targets';
 export { matchTrap, matchTraps, type TrapHit } from './traps';
 export { normText, phraseCore } from './text';
+export { themeFromText, hintFor, hintOf, readHint, weekHintOp } from './hint';

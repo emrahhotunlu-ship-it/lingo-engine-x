@@ -18,6 +18,11 @@ async function openHub(page: Page): Promise<void> {
   await page.getByTestId('tab-speak').click();
   await screen(page, 'speak');
   await expect(page.getByTestId('scene-card').first()).toBeVisible();
+  // Der Abschnitt blendet ein (Segment-Übergang): erst voll sichtbar prüfen (axe misst sonst Mischfarben).
+  await page.waitForFunction(() => {
+    const el = document.querySelector('[data-testid="speak-scenes"]')?.parentElement;
+    return !!el && getComputedStyle(el).opacity === '1';
+  });
 }
 
 async function startScene(page: Page, id = 'sc-vida'): Promise<void> {
