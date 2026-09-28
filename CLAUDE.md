@@ -287,6 +287,15 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - Emrah: „Kannst du nicht gleich die App programmieren? Ich will die App in 12 Stunden fertig haben!“ → Prototyp v2 gestoppt, direkter Neubau der Oberfläche (Daten-/Domänenschicht bleibt). Plan in `docs/neubau/`. Feste Grenze: Was nach 12 Stunden nicht grün ist, kommt ins nächste Paket. Erst Test-Link `AXHkh6…`, `JLL8…` nur mit „Ja, veröffentlichen“.
 - **Anki-Modus (Emrahs Wunsch, im Prototyp v1 gutgeheißen):** Im Wortschatz gibt es Aufdecken + 4 Knöpfe (Nochmal/Schwer/Gut/Leicht) mit angezeigten Intervallen und hervorgehobenem App-Vorschlag. Das ist die einzige Ausnahme von „keine Selbstbewertung“ (18:15). Im Tippen-Modus und in allen Übungen bewertet weiter die App.
 
+**28.09.2026, abends – drei Fehlerbehebungen live (Emrahs Freigabe „Gut klappt kann live gehen")**
+- `dist/index.html` (Code `ee760c4`) liegt auf `JLL8…`, Version `1790618058-dad7` (Artefakt-Version 58).
+- Behoben seit dem Go-Live:
+  - Der Rückgängig-Streifen (Anki „Nochmal") verdeckte kurz Übersetzer, Claude und Einstellungen (`ExerciseBar.middleOverlay` statt eigener absoluter Ebene).
+  - „Lehrer-Feedback einfügen“: Kartenvorschlag ohne Beispielsatz scheiterte ohne erkennbaren Grund (Schema verlangt jetzt einen Beispielsatz), dazu „Alle übernehmen“ und die Anzeige „Schon im Wortschatz“.
+  - Unregelmäßige Verben im Beispielsatz (z. B. „catch“ → „caught“) wurden nicht erkannt, Kartenanlegen scheiterte deshalb auch außerhalb von Lehrer-Feedback (Chat, „Aus Text“, Wort-Antippen).
+- Rückweg: Version `1790611182-9431`.
+- Test-Link `AXHkh6…` zeigt denselben Stand (Version `1790617899-8ef7`).
+
 **28.09.2026 – Neubau live: Go-Live der kompletten neuen App (Emrahs Freigabe „Ja veröffentlichen")**
 - `dist/index.html` (Code `b130915`) liegt auf `JLL8…`, Version `1790611182-9431` (Artefakt-Version 57).
   - Fähigkeiten `db`, `sample`, `downloads`; Vertrag bleibt 0.2.49.
