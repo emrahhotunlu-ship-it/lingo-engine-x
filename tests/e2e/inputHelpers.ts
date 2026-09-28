@@ -26,6 +26,22 @@ export const sampleCalls = (page: Page): Promise<Array<{ id: string | null; tier
 export const activeSubscriptions = (page: Page): Promise<number> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { activeSubscriptions(): number } } }).__LINGO_FAKE__.db.activeSubscriptions());
 
+/** Laufende Abos je Ziel (Dokumentpfad bzw. `<Sammlung>/*`), sortiert. */
+export const activePaths = (page: Page): Promise<string[]> =>
+  page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { activePaths(): string[] } } }).__LINGO_FAKE__.db.activePaths());
+
+/** Abos, sobald sie sich nicht mehr ändern (zwei gleiche Lesungen im Abstand von 300 ms). */
+export async function settledPaths(page: Page): Promise<string[]> {
+  let prev = await activePaths(page);
+  for (let i = 0; i < 20; i++) {
+    await page.waitForTimeout(300);
+    const cur = await activePaths(page);
+    if (JSON.stringify(cur) === JSON.stringify(prev)) return cur;
+    prev = cur;
+  }
+  return prev;
+}
+
 /** Reiter „Lesen“ öffnen (Lesen, Hören, Schreiben, Entdecken; Neubau-Rahmen, Wurzel `library`). */
 export async function openLearn(page: Page): Promise<void> {
   // Nach dem Schließen einer Einheit steht man schon wieder in „Lesen“ (Rückweg zur Herkunft).

@@ -140,7 +140,9 @@ test.describe('Desktop', () => {
 test('Dein Stand: Abschnitt „Wortschatz-Statistik“ (Platz stand); ohne KI bleibt Aufdecken erfüllbar', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
+  // Platz `stand` liegt im Reiter „Statistik“ von „Dein Stand“ (Neubau plan.md §1.3).
   await openOverview(page);
+  await page.getByTestId('tab-stats').click();
   const stats = page.getByTestId('ws-stats');
   await stats.scrollIntoViewIfNeeded();
   await expect(stats).toBeVisible();
