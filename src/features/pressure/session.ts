@@ -5,7 +5,7 @@ import { isAiFailure, type AiMessageKey, type AiPhase } from '../../ai/types';
 import type { Resumable } from '../../app/resume';
 import type { RouteOf } from '../../app/router/types';
 import type { UnitTaskResult } from '../../app/unit/types';
-import { objections } from '../../content/nb/load';
+import { buyTime, hotSeat, objections } from '../../content/nb/load';
 import type { Objection } from '../../content/nb/schemas';
 import { outId, outRef } from '../../domain/nbdrill/outDoc';
 import { pickRotating, preferFirst } from '../../domain/nbdrill/pick';
@@ -24,8 +24,33 @@ import { currentDay, logAnswers, nextRound, restoreSaved, saveOut, type UnitRun 
 export type PressurePhase = 'think' | 'answer' | 'review';
 export type AiSlot = { phase: AiPhase | 'idle'; error: AiMessageKey | null; fixes: PressureFix[]; effect: string };
 
+export type PressureSet = 'objection' | 'hotseat' | 'buytime';
+
+/** Eine Druck-Aufgabe in gemeinsamer Form (Einwand, Heißer Stuhl, Zeit gewinnen). */
+export type PressureItem = {
+  id: string;
+  set: PressureSet;
+  line: string;
+  de: string;
+  /** Musterantwort bzw. erster passender Einstieg. */
+  model: string;
+  obj?: Objection;
+  tip?: { de: string; en: string };
+  starters?: string[];
+  theme?: string;
+};
+
+/** Zeiten je Art (Lehrer I3, I9, I13): Zeit gewinnen ohne Bedenkzeit, nur der Einstieg. */
+export const TIMES: Record<PressureSet, { think: number; answer: number }> = {
+  objection: { think: 10_000, answer: 30_000 },
+  hotseat: { think: 10_000, answer: 30_000 },
+  buytime: { think: 0, answer: 20_000 },
+};
+
 export type PressureSession = {
   v: 1;
+  /** Art der Serie (fehlt in alten Momentaufnahmen = Einwände). */
+  set?: PressureSet;
   ids: string[];
   pos: number;
   phase: PressurePhase;
@@ -49,20 +74,40 @@ const get = () => usePressure.getState().s;
 
 let ctl: AbortController | null = null;
 
-export const objectionOf = (s: PressureSession, pos = s.pos): Objection | null => objections().find((o) => o.id === s.ids[pos]) ?? null;
+const itemCache = new Map<PressureSet, readonly PressureItem[]>();
+export function pressureItems(set: PressureSet): readonly PressureItem[] {
+  let list = itemCache.get(set);
+  if (!list) {
+    list =
+      set === 'objection'
+        ? objections().map((o) => ({ id: o.id, set, line: o.line, de: o.de, model: modelText(o), obj: o, tip: o.tip, theme: o.theme }))
+        : set === 'hotseat'
+          ? hotSeat().map((h) => ({ id: h.id, set, line: h.q, de: h.de, model: h.model, tip: h.tip, theme: h.theme }))
+          : buyTime().map((g) => ({ id: g.id, set, line: g.q, de: g.de, model: g.starters[0] ?? '', starters: [...g.starters] }));
+    itemCache.set(set, list);
+  }
+  return list;
+}
 
-export function startPressure(opts: { unit?: UnitRun | null; lang: 'de' | 'en'; n?: number; theme?: string | null }): boolean {
+export const setOf = (s: PressureSession): PressureSet => s.set ?? 'objection';
+export const itemOf = (s: PressureSession, pos = s.pos): PressureItem | null => pressureItems(setOf(s)).find((o) => o.id === s.ids[pos]) ?? null;
+export const objectionOf = (s: PressureSession, pos = s.pos): Objection | null => itemOf(s, pos)?.obj ?? null;
+const firstPhase = (set: PressureSet): PressurePhase => (TIMES[set].think > 0 ? 'think' : 'answer');
+
+export function startPressure(opts: { unit?: UnitRun | null; lang: 'de' | 'en'; n?: number; theme?: string | null; set?: PressureSet }): boolean {
+  const set = opts.set ?? 'objection';
   const theme = opts.theme ?? opts.unit?.theme ?? null;
-  const list = preferFirst(objections(), (o) => o.theme === theme);
+  const list = preferFirst(pressureItems(set), (o) => !!theme && o.theme === theme);
   // Mit Thema: zuerst dessen Einwände, der Rest reihum; ohne Thema reihum.
   const n = opts.n ?? PRESSURE_N;
   const own = theme ? list.filter((o) => o.theme === theme) : [];
-  const rest = pickRotating(list.filter((o) => !own.includes(o)), n - Math.min(n, own.length), nextRound('pressure'));
+  const rest = pickRotating(list.filter((o) => !own.includes(o)), n - Math.min(n, own.length), nextRound(`pressure-${set}`));
   const picked = [...own.slice(0, n), ...rest].slice(0, n);
   if (!picked.length) return false;
   ctl?.abort();
   ctl = null;
-  put({ v: 1, ids: picked.map((o) => o.id), pos: 0, phase: 'think', draft: '', answers: [], ai: {}, day: opts.unit?.day ?? currentDay(), t0: Date.now(), lang: opts.lang, unit: opts.unit ?? null, answerAt: 0, done: false, saved: false });
+  const phase = firstPhase(set);
+  put({ v: 1, set, ids: picked.map((o) => o.id), pos: 0, phase, draft: '', answers: [], ai: {}, day: opts.unit?.day ?? currentDay(), t0: Date.now(), lang: opts.lang, unit: opts.unit ?? null, answerAt: phase === 'answer' ? Date.now() : 0, done: false, saved: false });
   return true;
 }
 
@@ -83,11 +128,12 @@ const aiOn = () => selectAiAvailable(useCapabilities.getState());
 /** Antwort abschließen (Knopf oder Zeit um). Die KI prüft im Hintergrund. */
 export function submitAnswer(): void {
   const s = get();
-  const o = s ? objectionOf(s) : null;
+  const o = s ? itemOf(s) : null;
   if (!s || !o || s.phase !== 'answer') return;
   const text = s.draft.trim();
   const ms = s.answerAt ? Math.max(0, Date.now() - s.answerAt) : 0;
-  const ai = aiOn() && !!text;
+  // Die KI prüft nur das Einwand-Muster; Heißer Stuhl und Zeit gewinnen vergleichen mit dem Muster.
+  const ai = aiOn() && !!text && !!o.obj;
   const ans: PressureAnswer = { id: o.id, text, ms, moves: null, by: null };
   const next: PressureSession = {
     ...s,
@@ -96,7 +142,7 @@ export function submitAnswer(): void {
     ai: ai ? { ...s.ai, [o.id]: { phase: 'queued', error: null, fixes: [], effect: '' } } : s.ai,
   };
   put(next);
-  if (ai) void runCheck(o, text, s.lang);
+  if (ai && o.obj) void runCheck(o.obj, text, s.lang);
 }
 
 function patchAi(id: string, slot: Partial<AiSlot>): void {
@@ -146,11 +192,12 @@ export function toggleMove(id: string, move: Move): void {
 /** Weiter zum nächsten Einwand; nach dem letzten Ende der Serie. */
 export function nextObjection(): void {
   const s = get();
-  const o = s ? objectionOf(s) : null;
+  const o = s ? itemOf(s) : null;
   if (!s || !o || s.phase !== 'review') return;
   const a = s.answers.find((x) => x.id === o.id);
+  const set = setOf(s);
   logAnswers([
-    { type: 'nb-objection', ref: outRef({ id: outId('objection', s.t0), d: s.day }), q: o.line, given: a?.text ?? '', ans: modelText(o), ok: movesScore(a?.moves) >= 3, ms: a?.ms ?? 0, day: s.day, lang: s.lang, duty: !!s.unit, t: Date.now() },
+    { type: `nb-${set}`, ref: outRef({ id: outId(set, s.t0), d: s.day }), q: o.line, given: a?.text ?? '', ans: o.model, ok: answerOk(set, a), ms: a?.ms ?? 0, day: s.day, lang: s.lang, duty: !!s.unit, t: Date.now() },
   ]);
   if (s.pos + 1 >= s.ids.length) {
     const done = { ...s, done: true };
@@ -158,7 +205,8 @@ export function nextObjection(): void {
     void saveSeries(done);
     return;
   }
-  put({ ...s, pos: s.pos + 1, phase: 'think', draft: '', answerAt: 0 });
+  const phase = firstPhase(set);
+  put({ ...s, pos: s.pos + 1, phase, draft: '', answerAt: phase === 'answer' ? Date.now() : 0 });
 }
 
 /** Fehlergrenze: Einwand ohne Bewertung überspringen. */
@@ -166,7 +214,10 @@ export function skipObjection(): void {
   const s = get();
   if (!s) return;
   if (s.pos + 1 >= s.ids.length) put({ ...s, done: true });
-  else put({ ...s, pos: s.pos + 1, phase: 'think', draft: '', answerAt: 0 });
+  else {
+    const phase = firstPhase(setOf(s));
+    put({ ...s, pos: s.pos + 1, phase, draft: '', answerAt: phase === 'answer' ? Date.now() : 0 });
+  }
 }
 
 export function markSaved(): void {
@@ -175,14 +226,20 @@ export function markSaved(): void {
 }
 
 export const pressureMs = (s: PressureSession): number => s.answers.reduce((n, a) => n + a.ms, 0);
-export const pressureRight = (s: PressureSession): number => s.answers.filter((a) => movesScore(a.moves) >= 3).length;
+/** Richtig: Einwand mit ≥ 3 Schritten des Musters; Heißer Stuhl und Zeit gewinnen: überhaupt geantwortet. */
+export function answerOk(set: PressureSet, a: PressureAnswer | undefined): boolean {
+  if (!a) return false;
+  return set === 'objection' ? movesScore(a.moves) >= 3 : a.text.trim().length > 0;
+}
+export const pressureRight = (s: PressureSession): number => s.answers.filter((a) => answerOk(setOf(s), a)).length;
 export const bestOf = (s: PressureSession): PressureAnswer | null => bestAnswer(s.answers);
 
 function saveSeries(s: PressureSession): Promise<boolean> {
   const text = s.answers.map((a) => `${a.id}: ${a.text || '–'}`).join('\n');
+  const set = setOf(s);
   return saveOut({
-    id: outId('objection', s.t0),
-    k: 'objection',
+    id: outId(set, s.t0),
+    k: set,
     d: s.day,
     t: s.t0,
     ...(s.unit?.theme ? { theme: s.unit.theme } : {}),
@@ -225,7 +282,7 @@ function isSession(x: unknown): x is PressureSession {
   return s.v === 1 && Array.isArray(s.ids) && typeof s.pos === 'number' && Array.isArray(s.answers) && typeof s.day === 'string' && (s.phase === 'think' || s.phase === 'answer' || s.phase === 'review');
 }
 
-const RESUME_KEY: MessageKey = 'nbTrainingResumeObjection';
+const RESUME_KEY: Record<PressureSet, MessageKey> = { objection: 'nbTrainingResumeObjection', hotseat: 'nbTrainingResumeHotseat', buytime: 'nbTrainingResumeBuytime' };
 
 export const pressureResume: Resumable<PressureSession> = {
   id: 'pressure',
@@ -238,7 +295,7 @@ export const pressureResume: Resumable<PressureSession> = {
   subscribe: (cb) => usePressure.subscribe(cb),
   restore: (s) => {
     if (!isSession(s)) return false;
-    const known = new Set(objections().map((o) => o.id));
+    const known = new Set(pressureItems(s.set ?? 'objection').map((o) => o.id));
     if (!s.ids.every((id) => known.has(id)) || s.pos >= s.ids.length) return false;
     // Laufende KI-Prüfungen werden nicht nachgeholt: ohne Ergebnis gilt der Selbstcheck.
     const ai: Record<string, AiSlot> = {};
@@ -247,12 +304,17 @@ export const pressureResume: Resumable<PressureSession> = {
     put({ ...s, ai, answerAt: s.phase === 'answer' ? Date.now() : s.answerAt, done: false });
     return true;
   },
-  route: () => ({ name: 'pressure' }),
-  label: (s, t) => t(RESUME_KEY, { n: s.pos + 1, total: s.ids.length }),
+  route: (s) => ({ name: 'pressure', set: setOf(s) }),
+  label: (s, t) => t(RESUME_KEY[setOf(s)], { n: s.pos + 1, total: s.ids.length }),
 };
 
-export function ensurePressure(_route: RouteOf<'pressure'>, lang: 'de' | 'en'): boolean {
-  if (get()) return true;
-  if (restoreSaved(pressureResume, currentDay())) return true;
-  return startPressure({ lang });
+export function ensurePressure(route: RouteOf<'pressure'>, lang: 'de' | 'en'): boolean {
+  const want = route.set ?? 'objection';
+  const cur = get();
+  if (cur && setOf(cur) === want) return true;
+  if (restoreSaved(pressureResume, currentDay())) {
+    const r = get();
+    if (r && setOf(r) === want) return true;
+  }
+  return startPressure({ lang, set: want });
 }

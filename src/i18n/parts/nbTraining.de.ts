@@ -111,6 +111,20 @@ export const nbTrainingDe = {
   nbTrainingNoAnswer: '(keine Antwort)',
   nbTrainingObjectionOf: 'Einwand {n} von {total}',
 
+  // Heißer Stuhl, Zeit gewinnen (Soll N108)
+  nbTrainingHotseat: 'Heißer Stuhl',
+  nbTrainingHotseatSub: '3 kritische Fragen nach der Präsentation',
+  nbTrainingHotseatTask: 'Beantworte die kritische Frage. Zeit zu gewinnen ist erlaubt.',
+  nbTrainingHotseatPurpose: 'Spontan und sicher auf Zwischenfragen eingehen, ohne ins Stocken zu kommen.',
+  nbTrainingBuytime: 'Zeit gewinnen',
+  nbTrainingBuytimeSub: '5 harte Fragen · nur der Einstieg',
+  nbTrainingBuytimeTask: 'Sag nur den Einstieg, der dir Zeit verschafft.',
+  nbTrainingBuytimePurpose: 'Ein guter erster Satz gibt dir Zeit zum Denken und hält das Wort bei dir.',
+  nbTrainingQuestionOf: 'Frage {n} von {total}',
+  nbTrainingStarters: 'Passende Einstiege',
+  nbTrainingResumeHotseat: 'Heißer Stuhl · Frage {n} von {total}',
+  nbTrainingResumeBuytime: 'Zeit gewinnen · Frage {n} von {total}',
+
   // Posteingang
   nbTrainingInboxRead: 'Lies die Mail. Tippe unbekannte Wörter an.',
   nbTrainingInboxPurpose: 'Mails verstehen – auch das, was zwischen den Zeilen steht – und passend antworten.',

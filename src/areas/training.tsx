@@ -24,7 +24,7 @@ import { pronResume, startShadow } from '../features/pron/session';
 declare module '../app/router/types' {
   interface RouteParams {
     nbdrill: { set: DrillSet; n?: number };
-    pressure: NoParams;
+    pressure: { set?: 'objection' | 'hotseat' | 'buytime' };
     inbox: { id?: string };
     pron: { kind: 'shadow' | 'stress' | 'numbers'; src?: string };
   }
@@ -63,7 +63,7 @@ export const training = defineArea({
       component: NbDrillScreen,
       params: z.object({ set: z.enum(['colloc', 'transform', 'wordform', 'register', 'phrasal', 'transition']), n: z.number().int().min(1).max(10).optional() }),
     },
-    pressure: { kind: 'exercise', component: PressureScreen },
+    pressure: { kind: 'exercise', component: PressureScreen, params: z.object({ set: z.enum(['objection', 'hotseat', 'buytime']).optional() }) },
     inbox: { kind: 'exercise', component: InboxScreen, params: z.object({ id: z.string().optional() }) },
     pron: { kind: 'exercise', component: PronScreen, params: z.object({ kind: z.enum(['shadow', 'stress', 'numbers']), src: z.string().optional() }) },
   },
@@ -90,6 +90,30 @@ export const training = defineArea({
       icon: 'bolt',
       start: () => {
         if (startPressure({ lang: lang() })) go({ name: 'pressure' });
+      },
+    },
+    {
+      id: 'training-hotseat',
+      place: 'speak',
+      group: 'nb-speak',
+      order: 51,
+      label: 'nbTrainingHotseat',
+      sub: 'nbTrainingHotseatSub',
+      icon: 'target',
+      start: () => {
+        if (startPressure({ lang: lang(), set: 'hotseat', n: 3 })) go({ name: 'pressure', set: 'hotseat' });
+      },
+    },
+    {
+      id: 'training-buytime',
+      place: 'speak',
+      group: 'nb-speak',
+      order: 52,
+      label: 'nbTrainingBuytime',
+      sub: 'nbTrainingBuytimeSub',
+      icon: 'history',
+      start: () => {
+        if (startPressure({ lang: lang(), set: 'buytime', n: 5 })) go({ name: 'pressure', set: 'buytime' });
       },
     },
     {
