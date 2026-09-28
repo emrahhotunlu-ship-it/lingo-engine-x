@@ -152,6 +152,8 @@ export async function openProfile(page: Page): Promise<void> {
 export async function openOverview(page: Page): Promise<void> {
   await openProfile(page);
   await page.getByTestId('profile-overview').click();
+  // Das Profil-Blatt blendet aus; erst danach zählt der Bildschirm (axe, Dialog-Zählung).
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
   await screen(page, 'overview');
 }
 
@@ -167,6 +169,7 @@ export async function openSettings(page: Page): Promise<void> {
   }
   await openProfile(page);
   await page.getByTestId('profile-settings').click();
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
 }
 
 /** Fehlergrenze testen (G4): der Bildschirm `route` wirft beim nächsten Zeichnen genau einmal. */
