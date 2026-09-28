@@ -5,7 +5,7 @@ import { logWarn } from '../platform/diagnostics';
 //   dem nächsten Bild die Messung `lx:nav` (Dauer = `duration`, Ziel < 100 ms).
 // - `lx:card`: „Weiter“/Bewertung → nächste Karte im Bild. Die Übung ruft `cardStart()` im Klick
 //   und `cardShown()` im Effekt/Layout-Effekt der neuen Karte (Ziel < 50 ms). Beide Werte stehen
-//   als `performance.measure` in der Zeitleiste; die Diagnose (P6) liest `lastMeasure`.
+//   als Marke mit `detail.ms` in der Zeitleiste (wie `lx:validated:*`); die Diagnose (P6) liest `lastMeasure`.
 // Nur die jeweils letzte Messung bleibt stehen (kein Wachsen der Zeitleiste).
 
 function safe(fn: () => void): void {
@@ -32,8 +32,8 @@ export function markNavPainted(): void {
   navStart = null;
   requestAnimationFrame(() =>
     safe(() => {
-      performance.clearMeasures('lx:nav');
-      performance.measure('lx:nav', { start, end: now() });
+      performance.clearMarks('lx:nav');
+      performance.mark('lx:nav', { detail: { ms: Math.round((now() - start) * 10) / 10 } });
     }),
   );
 }
@@ -55,8 +55,8 @@ export function cardShown(id?: string): void {
   cardT0 = null;
   requestAnimationFrame(() =>
     safe(() => {
-      performance.clearMeasures('lx:card');
-      performance.measure('lx:card', { start, end: now(), detail: id ?? null });
+      performance.clearMarks('lx:card');
+      performance.mark('lx:card', { detail: { ms: Math.round((now() - start) * 10) / 10, id: id ?? null } });
     }),
   );
 }
@@ -64,7 +64,8 @@ export function cardShown(id?: string): void {
 /** Letzte Messung (Diagnose, Tests): Dauer in ms oder `null`. */
 export function lastMeasure(name: 'lx:nav' | 'lx:card'): number | null {
   if (typeof performance === 'undefined' || typeof performance.getEntriesByName !== 'function') return null;
-  const list = performance.getEntriesByName(name, 'measure');
-  const last = list[list.length - 1];
-  return last ? Math.round(last.duration * 10) / 10 : null;
+  const list = performance.getEntriesByName(name, 'mark');
+  const last = list[list.length - 1] as PerformanceMark | undefined;
+  const ms = (last?.detail as { ms?: unknown } | null | undefined)?.ms;
+  return typeof ms === 'number' ? ms : null;
 }
