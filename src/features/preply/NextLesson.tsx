@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
+import { useWeekDoc, watchWeek } from '../../app/useWeek';
 import { getWriter } from '../../data';
 import { validateDoc } from '../../data/validate';
-import { useDocWatch } from '../../data/watch';
 import { addDays } from '../../domain/date';
 import { preplyNextOp, readPreplyNext, validNext } from '../../domain/preply/next';
 import { useT } from '../../i18n';
+import { useCapabilities } from '../../platform/capabilities';
 import { logError } from '../../platform/diagnostics';
 import { Icon } from '../../ui/Icon';
 
@@ -26,13 +27,22 @@ export async function savePreplyNext(next: string): Promise<boolean> {
   }
 }
 
+/** `app/week` über das EINE referenzgezählte Abo (app/useWeek.ts), nie ein zweites onSnapshot (Kap. 3.4). */
+function useWeekRaw(): { status: 'loading' | 'ready' | 'error'; data: Record<string, unknown> | null } {
+  const dbReady = useCapabilities((s) => s.db === 'ready');
+  useEffect(() => (dbReady ? watchWeek() : undefined), [dbReady]);
+  const status = useWeekDoc((s) => s.status);
+  const data = useWeekDoc((s) => s.data);
+  return { status, data };
+}
+
 const fieldClass = 'lx-glass rounded-[var(--radius-control)] px-3 py-2 text-base text-fg lx-tnum';
 
 /** Zeile in der Preply-Brücke: Datum der nächsten Stunde setzen oder löschen. */
 export function NextLessonRow() {
   const { t } = useT();
   const today = useClock((s) => s.today);
-  const w = useDocWatch('app/week');
+  const w = useWeekRaw();
   const stored = readPreplyNext(w.data, today);
   const [state, setState] = useState<'idle' | 'saving' | 'failed'>('idle');
   const set = (v: string) => {
@@ -66,7 +76,7 @@ export function PreplyNextTodayLine() {
   const { t } = useT();
   const today = useClock((s) => s.today);
   const go = useNav((s) => s.go);
-  const w = useDocWatch('app/week');
+  const w = useWeekRaw();
   const next = readPreplyNext(w.data, today);
   if (!next || (next !== today && next !== addDays(today, 1))) return null;
   return (

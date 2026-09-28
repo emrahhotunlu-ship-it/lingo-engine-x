@@ -63,7 +63,8 @@ export async function prefetchUnitInput(): Promise<void> {
   const src = plan.src;
   const key = `${day}|${src}`;
   const cur = useUnitPrefetch.getState();
-  if (cur.key === key && (cur.status === 'running' || cur.status === 'done')) return;
+  // Ein Fehler ist für diesen Lerntag endgültig (A6.3): kein neuer Aufruf beim nächsten Block.
+  if (cur.key === key && cur.status !== 'idle') return;
   if (unitListenFor(day, src)) {
     useUnitPrefetch.setState({ key, status: 'done' });
     return;

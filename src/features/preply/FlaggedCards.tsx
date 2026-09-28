@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useLive } from '../../data/live';
-import { useDocWatch } from '../../data/watch';
 import { useT } from '../../i18n';
+import { useDecks } from '../vocab/decksStore';
 
 // Neubau N80/N33: Karten mit der Markierung „Mit Lehrer besprechen“ (`app/decks.flagged`, schreibt P3)
 // erscheinen in der Preply-Vorbereitung – nur lesend, höchstens 12, als Wort der Karte.
@@ -21,9 +21,10 @@ export function flaggedWords(decks: Doc | null | undefined, vocab: ReadonlyMap<s
 
 export function FlaggedCards() {
   const { t } = useT();
-  const decks = useDocWatch('app/decks');
+  // Liest das dauerhafte Abo aus decksStore (kein zweites onSnapshot auf `app/decks`, Kap. 3.4).
+  const decks = useDecks((s) => s.raw);
   const vocab = useLive((s) => s.collections.vocab);
-  const words = useMemo(() => flaggedWords(decks.data, vocab), [decks.data, vocab]);
+  const words = useMemo(() => flaggedWords(decks, vocab), [decks, vocab]);
   if (!words.length) return null;
   return (
     <div className="flex flex-col gap-2" data-testid="pp-flagged" data-n={words.length}>
