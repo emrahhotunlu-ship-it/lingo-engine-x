@@ -98,6 +98,12 @@ export function VocabHub() {
     const own = visibleDecks(decks).map((d) => ({ id: d.id, name: d.name, cards: deckCards(cards, d.id, decks, ctx) }));
     return [...builtin, ...own].map((d) => ({ ...d, counts: deckCounts(d.cards, now) }));
   }, [cards, decks, ctx, now, t]);
+  const hits = useMemo(() => {
+    const k = q.trim().toLowerCase();
+    if (k.length < 2) return null;
+    const low = (x: string | null) => (x ?? '').toLowerCase();
+    return visible.filter((c) => low(c.word).includes(k) || low(c.de).includes(k) || low(c.def).includes(k)).slice(0, 8);
+  }, [q, visible]);
   const recent = useMemo(() => [...visible].sort((a, b) => (a.added < b.added ? 1 : a.added > b.added ? -1 : b.order - a.order)).slice(0, 5), [visible]);
 
   const setMode = (m: Mode) => {
@@ -134,9 +140,28 @@ export function VocabHub() {
         <label className="relative block">
           <span className="sr-only">{t('nbWsSearch')}</span>
           <Icon name="search" size={18} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-subtle" />
-          <input type="search" className="lx-field pl-10" value={q} placeholder={t('nbWsSearch')} onChange={(e) => setQ(e.target.value)} data-testid="ws-search" autoComplete="off" spellCheck={false} enterKeyHint="search" />
+          <input type="search" className="lx-field pl-10" value={q} placeholder={t('nbWsSearch')} onChange={(e) => setQ(e.target.value)} data-testid="vocab-search" autoComplete="off" spellCheck={false} enterKeyHint="search" />
         </label>
       </form>
+      {hits && (
+        <ul className="lx-glass -mt-3 flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]" data-testid="ws-hits">
+          {hits.map((c) => (
+            <RowButton key={c.key} onClick={() => openSheet('word', { key: c.key })} testId="vocab-row" data={{ 'data-word': c.id, 'data-kind': c.kind }}>
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="truncate font-medium" lang="en">
+                  {c.word}
+                </span>
+                <span className="truncate text-sm text-muted" lang={lang}>
+                  {meaningOf(c, lang)}
+                </span>
+              </span>
+            </RowButton>
+          ))}
+          <RowButton onClick={() => go({ name: 'vocabList', q: q.trim() })} testId="ws-hits-all">
+            <span className="flex-1 text-sm font-medium">{t('nbWsAllSub')} ›</span>
+          </RowButton>
+        </ul>
+      )}
 
       <section className="lx-glass flex flex-col gap-4 rounded-[var(--radius-card)] p-5 sm:p-6" data-testid="ws-due" data-total={total}>
         <div className="flex items-baseline justify-between gap-3">
