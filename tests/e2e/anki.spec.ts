@@ -1,0 +1,150 @@
+import { expect, test, type Page } from '@playwright/test';
+import { boot, openTab, screen } from './fixtures';
+import { DAY, dump, planPatch } from './trainerHelpers';
+import { ankiPatch, lastCardMs, swipe } from './wortschatzHelpers';
+
+// Anki-Modus „Aufdecken“ (plan.md N20/N21/N29, anki-regeln.md): 40 Karten am Stück, Vorderseite
+// Bedeutung + Satz mit Lücke, Rückseite voll, 4 Knöpfe mit Intervall und Vorschlag, Tasten 1–4,
+// Wischen, Schreibweg (xs.flip, hist x:'flip', fsrs zusätzlich, alte Felder gespiegelt).
+
+type Doc = Record<string, unknown>;
+
+async function startReview(page: Page): Promise<void> {
+  await screen(page, 'today');
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-review').click();
+  await screen(page, 'trainer');
+}
+
+test.describe('Desktop', () => {
+  test.use({ viewport: { width: 1280, height: 900 } });
+
+  test('40 Karten am Stück aufdecken und bewerten: lx:card < 50 ms (Median), Schreibweg je Karte', async ({ page }) => {
+    const { patch, ids } = ankiPatch(40);
+    const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(40), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip', dir: 'de-en', grades: 4 } } } } });
+    await startReview(page);
+    const seen: string[] = [];
+    const ms: number[] = [];
+    for (let i = 0; i < 40; i++) {
+      if (i > 0) {
+        await expect.poll(() => lastCardMs(page)).not.toBeNull();
+        ms.push((await lastCardMs(page)) ?? 0);
+      }
+      const flip = page.getByTestId('flip');
+      await expect(flip).toBeVisible();
+      const card = (await flip.getAttribute('data-card')) ?? '';
+      seen.push(card);
+      if (i === 0) {
+        // Vorderseite: Bedeutung + Lücke, keine Lösung im DOM, kein ▶ (anki-regeln §0).
+        await expect(page.getByTestId('flip-front')).not.toBeEmpty();
+        await expect(page.getByTestId('flip-gap')).toBeVisible();
+        await expect(page.getByTestId('flip-listen')).toHaveCount(0);
+        await expect(flip).toHaveAttribute('data-dir', 'de-en');
+      }
+      await page.keyboard.press(' ');
+      await expect(page.getByTestId('grades')).toBeVisible();
+      if (i === 0) {
+        await expect(page.getByTestId('flip-answer')).toBeVisible();
+        await expect(page.getByTestId('grade')).toHaveCount(4);
+        await expect(page.locator('[data-testid="grade"][data-suggested]')).toHaveCount(1);
+        for (const iv of await page.getByTestId('grade-iv').allInnerTexts()) expect(iv).toMatch(/\d/);
+        await expect(page.getByTestId('suggest-note')).toBeVisible();
+      }
+      // Taste 3 = Gut (Review-Karten: keine Wiedervorlage in der Runde).
+      await page.keyboard.press('3');
+      await expect(page.locator(`[data-testid="flip"][data-card="${card}"]`)).toHaveCount(0);
+    }
+    await expect(page.getByTestId('summary')).toBeVisible();
+    expect(new Set(seen).size).toBe(40);
+    expect(ms.length).toBe(39);
+    const sorted = [...ms].sort((a, b) => a - b);
+    expect(sorted[Math.floor(sorted.length / 2)]).toBeLessThan(50);
+    // Schreibweg: jede Karte einmal, Stufe höchstens 2, alte Felder gespiegelt.
+    const flipped = async () => {
+      const db = await dump(page);
+      return ids.filter((id) => (((db[`vocab/${id}`]?.xs as Doc | undefined)?.flip as Doc | undefined)?.c ?? 0) === 1).length;
+    };
+    await expect.poll(flipped, { timeout: 15_000 }).toBe(40);
+    const db = await dump(page);
+    for (const id of ids) {
+      const d = db[`vocab/${id}`] as Doc;
+      expect(d.stage).toBe(2);
+      expect((d.fsrs as Doc).due).toBe(d.due);
+      expect((d.hist as Doc[]).at(-1)).toMatchObject({ x: 'flip', m: 'recog', g: 3 });
+      expect(d.word).toBeTruthy();
+    }
+    const log = ((db[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => ids.includes(String(e.id)) && e.m === 'tr-flip');
+    expect(log.length).toBe(40);
+    expect(errors).toEqual([]);
+    expect(external).toEqual([]);
+  });
+
+  test('Nochmal: Wiedervorlage nach 5 anderen Karten, wieder aufgedeckt, höchstens Gut', async ({ page }) => {
+    const { patch } = ankiPatch(8);
+    await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(8), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
+    await startReview(page);
+    const first = (await page.getByTestId('flip').getAttribute('data-card')) ?? '';
+    await page.keyboard.press(' ');
+    await page.keyboard.press('1');
+    const order: string[] = [];
+    for (let i = 0; i < 6; i++) {
+      const flip = page.getByTestId('flip');
+      await expect(flip).toBeVisible();
+      order.push((await flip.getAttribute('data-card')) ?? '');
+      await page.keyboard.press(' ');
+      await expect(page.getByTestId('grades')).toBeVisible();
+      if (i === 5) {
+        const s = Number(await flip.getAttribute('data-suggest'));
+        expect(s).toBeLessThanOrEqual(3);
+      }
+      await page.keyboard.press('3');
+      await expect(page.locator('[data-testid="flip"][data-shown]')).toHaveCount(0);
+    }
+    expect(order.slice(0, 5)).not.toContain(first);
+    expect(order[5]).toBe(first);
+  });
+
+  test('Stapel mit Richtung Englisch → Deutsch: Vorderseite Englisch, Rückseite Bedeutung', async ({ page }) => {
+    const { patch } = ankiPatch(3, { src: 'preply' });
+    await boot(page, { migrated: true, fake: { patch: { ...patch, 'app/decks': { v: 1, builtin: { 'src:preply': { mode: 'flip', dir: 'en-de' } } } } } });
+    await screen(page, 'today');
+    await openTab(page, 'vocab');
+    await page.locator('[data-testid="ws-deck"][data-deck="src:preply"]').click();
+    await screen(page, 'deck');
+    await page.getByTestId('deck-start').click();
+    await screen(page, 'trainer');
+    await expect(page.getByTestId('flip')).toHaveAttribute('data-dir', 'en-de');
+  });
+});
+
+test.describe('Handy', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  test('Wischen: links = Nochmal, rechts = Vorschlag; kein Querüberstand', async ({ page }) => {
+    const { patch, ids } = ankiPatch(8);
+    const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(8), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
+    await startReview(page);
+    const a = (await page.getByTestId('flip').getAttribute('data-card')) ?? '';
+    await page.getByTestId('flip-show').click();
+    await expect(page.getByTestId('grades')).toBeVisible();
+    await swipe(page, '[data-testid="flip-back"]', -140, 0);
+    await expect(page.locator(`[data-testid="flip"][data-card="${a}"]`)).toHaveCount(0);
+    const b = (await page.getByTestId('flip').getAttribute('data-card')) ?? '';
+    await page.getByTestId('exercise').click();
+    await expect(page.getByTestId('grades')).toBeVisible();
+    const suggest = Number(await page.getByTestId('flip').getAttribute('data-suggest'));
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+    await swipe(page, '[data-testid="flip-back"]', 140, 0);
+    await expect(page.locator(`[data-testid="flip"][data-card="${b}"]`)).toHaveCount(0);
+    await expect
+      .poll(async () => {
+        const db = await dump(page);
+        const ga = ((db[`vocab/${a}`] as Doc).hist as Doc[]).at(-1)?.g;
+        const gb = ((db[`vocab/${b}`] as Doc).hist as Doc[]).at(-1)?.g;
+        return [ga, gb];
+      })
+      .toEqual([1, suggest]);
+    expect(ids).toContain(a);
+    expect(errors).toEqual([]);
+  });
+});

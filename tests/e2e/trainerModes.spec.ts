@@ -1,6 +1,7 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 import { boot, layoutProblems, screen, openTab } from './fixtures';
 import { DAY, answerCurrent, dump, planPatch, produceSentence } from './trainerHelpers';
+import { TYPE_MODE } from './trainerHelpers';
 
 // Neue Abfragearten (phase1-plan §4.2) und Wendungen in der täglichen Wiederholung (Kap. 5, M15):
 // jede neue Art einmal am Handy (390 px, Touch), eine Runde mit fälliger Wendung, Wortschatzliste
@@ -33,7 +34,7 @@ const MODES: Array<{ ex: string; stage: number; others: string[] }> = [
 async function startRound(page: Page, patch: Record<string, Doc>, opts: { sample?: boolean } = {}) {
   const booted = await boot(page, {
     migrated: true,
-    fake: { patch: { 'app/profile': planPatch(1), ...patch }, ...(opts.sample === false ? { capabilities: { sample: false } } : {}) },
+    fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...patch }, ...(opts.sample === false ? { capabilities: { sample: false } } : {}) },
   });
   await screen(page, 'today');
   await page.getByTestId('start').tap();
@@ -169,7 +170,7 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
   test('Pflichtrunde mit fälliger Wendung: Abfrage im Originalsatz, FSRS zusätzlich, Protokoll wie die alte App, Pflicht erledigt', async ({ page }) => {
     const { errors, external } = await boot(page, {
       migrated: true,
-      fake: { patch: { 'app/profile': planPatch(1), 'chunk/c-non-negotiable': forcedDoc(3, { ...strong('tiles'), ...weak('cloze_hint') }) } },
+      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-non-negotiable': forcedDoc(3, { ...strong('tiles'), ...weak('cloze_hint') }) } },
     });
     await screen(page, 'today');
     await page.getByTestId('start').click();
@@ -207,7 +208,7 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
   test('Aus der Situation (M15): Szene und Absicht, Wendung frei tippen, „Damals hattest du gesagt"', async ({ page }) => {
     const { errors } = await boot(page, {
       migrated: true,
-      fake: { patch: { 'app/profile': planPatch(1), 'chunk/c-non-negotiable': forcedDoc(4, { ...strong('type', 'cloze'), ...weak('situation') }) } },
+      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-non-negotiable': forcedDoc(4, { ...strong('type', 'cloze'), ...weak('situation') }) } },
     });
     await screen(page, 'today');
     await page.getByTestId('start').click();
@@ -231,7 +232,7 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
   test('Wendung aus der Mail auf Stufe 2: keine Auswahlfrage mehr, sondern Abruf mit Stütze; Protokoll als Wendung (Lernberatung 27.09.)', async ({ page }) => {
     const { errors } = await boot(page, {
       migrated: true,
-      fake: { patch: { 'app/profile': planPatch(1), 'chunk/c-behind-schedule': forcedDoc(2, { ...strong('mc_de'), ...weak('match') }) } },
+      fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'chunk/c-behind-schedule': forcedDoc(2, { ...strong('mc_de'), ...weak('match') }) } },
     });
     await screen(page, 'today');
     await page.getByTestId('start').click();
@@ -255,6 +256,8 @@ test.describe('Wortschatzliste: Wendungen', () => {
     await screen(page, 'today');
     await openTab(page, 'vocab');
     await expect(page.getByTestId('vocab')).toBeVisible();
+    // Neubau (plan.md §1.3): die Liste liegt unter „Alle Einträge ›“.
+    await page.getByTestId('ws-all').click();
     await expect(page.getByTestId('vocab-status')).toContainText('6 Wendungen');
     await page.locator('[data-testid="vocab-filter"][data-filter="phrases"]').click();
     const rows = page.locator('[data-testid="vocab-row"][data-kind="chunk"]');

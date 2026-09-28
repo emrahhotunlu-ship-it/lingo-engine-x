@@ -3,21 +3,26 @@
 // (nächster Frame). Das Ergebnis steht als `performance.measure('lx:card')` für Diagnose und Tests.
 
 let goAt = 0;
+let pending = false;
 
 export function cardGo(): void {
   goAt = performance.now();
+  pending = true;
 }
 
 export function cardShown(): void {
-  if (!goAt) return;
+  if (!pending) return;
+  pending = false;
   const start = goAt;
-  goAt = 0;
   requestAnimationFrame(() => {
+    const end = performance.now();
+    // Letzter Wert auch am Trainer (Diagnose, Tests: data-card-ms) – ohne Test-Code im Build.
+    document.querySelector('[data-testid="trainer"]')?.setAttribute('data-card-ms', String(Math.round((end - start) * 10) / 10));
     try {
-      performance.measure('lx:card', { start, end: performance.now() });
+      performance.measure('lx:card', { start, end });
     } catch {
       // Ältere Browser ohne Optionen-Objekt: Messung entfällt (reine Diagnose, kein Fehlerfall).
-      goAt = 0;
+      pending = false;
     }
   });
 }
