@@ -99,6 +99,7 @@ export const nbHeuteDe = {
   nbHeuteAgainFixOpen: 'noch prüfen',
   nbHeuteAgainDone: 'Block abschließen',
   nbHeuteCheckEmpty: 'Für den Wochen-Check gibt es diese Woche noch zu wenig Stoff. Der Block zählt trotzdem.',
+  nbHeuteCheckMissed: 'Extra · Wochen-Check der letzten Woche nachholen',
   nbHeuteCheckEmptyOk: 'Weiter',
   // Fortsetzen
   nbHeuteResumeUnit: 'Tageseinheit · Block {n} von {total}',

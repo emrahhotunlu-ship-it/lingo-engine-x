@@ -95,6 +95,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteAgainFixOpen: 'check again',
   nbHeuteAgainDone: 'Finish block',
   nbHeuteCheckEmpty: 'There isn’t enough material for a weekly check yet. The block still counts.',
+  nbHeuteCheckMissed: 'Extra · Catch up on last week’s check',
   nbHeuteCheckEmptyOk: 'Continue',
   nbHeuteResumeUnit: 'Daily session · block {n} of {total}',
   nbHeuteResumeCheck: 'Weekly check · item {n} of {total}',

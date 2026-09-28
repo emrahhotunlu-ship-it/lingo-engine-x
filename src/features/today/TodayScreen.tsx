@@ -1,4 +1,7 @@
 import { motion } from "framer-motion";
+import { checkAvailable, startCheck } from '../check/session';
+import { dowOf } from '../../domain/week';
+import { toast } from '../../ui/Toast';
 import { useEffect, useMemo, useRef } from "react";
 import { armShared } from "../../engine/shared";
 import { useClock } from "../../app/clock";
@@ -570,6 +573,32 @@ function WorthNow({ today, lang }: { today: string; lang: Lang }) {
   );
 }
 
+/** S5: Ein verpasster Wochen-Check erscheint am Montag als ruhige Extra-Zeile (zählt nie zur Pflicht). */
+function MissedCheck({ today }: { today: string }) {
+  const { t } = useT();
+  const api = useHiddenInput();
+  const go = useNav((s) => s.go);
+  const profile = useLive((s) => s.docs['app/profile']);
+  if (dowOf(today) !== 1 || !checkAvailable(profile, addDays(today, -1)) || Number(obj(profile).answers ?? 0) < 40) return null;
+  const run = () => {
+    unlockSpeech();
+    const first = startCheck();
+    if (first === 'empty') {
+      toast(t('ckEmpty'));
+      return;
+    }
+    if (first === 'typed') api.focusNow();
+    go({ name: 'check' });
+  };
+  return (
+    <button type="button" onClick={run} data-testid="check-missed" className="flex min-h-11 items-center gap-2 text-left text-sm text-muted hover:text-fg">
+      <Icon name="target" size={16} className="flex-none" />
+      <span className="flex-1">{t('nbHeuteCheckMissed')}</span>
+      <Icon name="arrowRight" size={14} className="flex-none text-subtle" />
+    </button>
+  );
+}
+
 export function TodayScreen() {
   const { t, lang } = useT();
   const today = useClock((s) => s.today);
@@ -716,6 +745,7 @@ export function TodayScreen() {
       )}
 
       {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Preply (P5), Nachtragen (P6), Speicher- und Planfehler (P1). */}
+      {ok && <MissedCheck today={today} />}
       {dayLoaded && <PreplyTodayLine />}
       {dayLoaded && <LateRescueHint />}
       {saveFailed && (
