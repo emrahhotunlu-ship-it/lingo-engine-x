@@ -2,6 +2,7 @@ import { useNav } from '../../app/nav';
 import type { FocusApi } from '../../app/registry';
 import { unlockSpeech } from '../../platform/speech';
 import { useTodayPlan } from '../today/store';
+import type { WeekTheme } from '../../domain/week/types';
 import { startSession, useSession, type SessionOpts } from './session';
 
 // Starts des Wortschatz-Bereichs: synchron im Klick (iPhone-Tastatur), dann `go` in den Player.
@@ -10,11 +11,11 @@ import { startSession, useSession, type SessionOpts } from './session';
  * „Wiederholen →“ auf „Alle fälligen“: Ist „Wiederholen“ heute Pflicht und noch offen, zählt die
  * Runde zur Pflicht (Modus aus den Einstellungen, DE→EN); sonst eine Extra-Runde über alle Fälligen.
  */
-export function startAllDue(api: FocusApi): void {
+export function startAllDue(api: FocusApi, theme: WeekTheme | null = null): void {
   unlockSpeech();
   const plan = useTodayPlan.getState().plan;
   if (plan?.duty.includes('review')) {
-    const first = startSession('pflicht');
+    const first = startSession('pflicht', { theme });
     const s = useSession.getState();
     if (s.status === 'running') {
       if (first === 'typed') api.focusNow();
@@ -23,7 +24,7 @@ export function startAllDue(api: FocusApi): void {
       return;
     }
   }
-  startExtra(api, { deck: 'all', size: 20 });
+  startExtra(api, { deck: 'all', size: 20, theme });
 }
 
 /** Freie Runde (Extra): Stapel, zeitweilige Auswahl oder genau diese Karten. */

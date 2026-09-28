@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
+import { useWeek } from '../../../app/useWeek';
 import { openSheet } from '../../../app/sheets';
 import { addDays, dayKey, dayKeyNoon, daysBetween } from '../../../domain/date';
 import { meaningOf } from '../../../domain/srs/cards';
@@ -78,6 +79,7 @@ export function VocabHub() {
   const cards = useVocabCards();
   const quota = useQuota(cards);
   const ctx = useDeckCtx();
+  const { theme } = useWeek();
   const decks = useDecks((s) => s.decks);
   const mode: Mode = decks.prefs.mode ?? 'auto';
   const [q, setQ] = useState('');
@@ -173,7 +175,7 @@ export function VocabHub() {
           onChange={setMode}
           testId="ws-mode"
         />
-        <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => startAllDue(api)} disabled={total === 0} data-testid="ws-review">
+        <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => startAllDue(api, theme)} disabled={total === 0} data-testid="ws-review">
           {t('nbWsReview')}
         </Button>
       </section>
