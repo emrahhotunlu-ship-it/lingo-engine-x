@@ -19,7 +19,7 @@ import { AnalysisLane } from './analysisLane';
 import { saveReport, saveRun } from './persist';
 import { clearResume, writeResume, type ResumeCopy } from './resume';
 import { roleplayMachine, stateName, type RoleplayContext } from './roleplayMachine';
-import { legacySceneDoc, workContext } from './useSceneLibrary';
+import { runMarkerFor, workContext } from './useSceneLibrary';
 import { repairsFromTalk } from '../../domain/repair/sources';
 import { saveRepairs } from '../repair/store';
 import { patternHints } from '../patterns/store';
@@ -145,7 +145,7 @@ export function useRoleplay(scene: SceneView, resume: ResumeCopy | null) {
     });
     // Lernberatung V2: eigene Sätze mit echten Fehlern werden Reparatur-Sätze (parallel, blockiert nichts).
     const repairs = repairsFromTalk(c.turns, c.analyses, scene.titleEn);
-    const [ok] = await Promise.all([saveRun({ run, lang: useSettings.getState().lang, legacyScene: legacySceneDoc(scene.id), errors, nowMs: Date.now() }), repairs.length ? saveRepairs(repairs) : Promise.resolve(true)]);
+    const [ok] = await Promise.all([saveRun({ run, lang: useSettings.getState().lang, legacyScene: runMarkerFor(scene.id), errors, nowMs: Date.now() }), repairs.length ? saveRepairs(repairs) : Promise.resolve(true)]);
     if (ok) clearResume(scene.id);
     if (!alive.current) return;
     send({ type: ok ? 'SAVED' : 'SAVE_FAILED' });
