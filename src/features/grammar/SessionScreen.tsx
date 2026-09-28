@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useNav } from '../../app/nav';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
@@ -10,6 +10,7 @@ import { flush } from '../progress/persist';
 import { RoundTop, SummaryActions } from '../learn/ui';
 import { GrammarItem } from './GrammarItem';
 import { topicName } from './GrammarScreen';
+import { ensureGrammar } from './resume';
 import { commitGrammar, leaveGrammar, touchGrammar, useGrammarSession } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
@@ -30,8 +31,14 @@ export function GrammarSessionScreen() {
   };
   useHotkeys({ escape: leave }, api.isInput);
 
+  // Neuladen/Deep-Link (G3): erst aus dem Fortsetz-Speicher herstellen, sonst neu starten.
+  useLayoutEffect(() => {
+    const r = useNav.getState().route;
+    if (!useGrammarSession.getState().active && r.name === 'grammarSession') ensureGrammar(r);
+  }, []);
+
   useEffect(() => {
-    if (!s.active && useNav.getState().route.name === 'grammarSession') back();
+    if (!useGrammarSession.getState().active && useNav.getState().route.name === 'grammarSession') back();
   }, [s.active, back]);
 
   useEffect(() => {

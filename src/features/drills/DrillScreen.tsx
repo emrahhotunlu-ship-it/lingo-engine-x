@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useNav } from '../../app/nav';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
@@ -10,6 +10,7 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { flush } from '../progress/persist';
 import { RoundTop, SummaryActions } from '../learn/ui';
 import { ClozeItemView, DictationItem, OrderItemView } from './DrillItems';
+import { ensureDrill } from './resume';
 import { commitDrill, itemsOf, leaveDrill, touchDrill, useDrill } from './session';
 import { SprintView } from './SprintView';
 import { useCompanionSee } from '../companion/seeing';
@@ -37,8 +38,13 @@ export function DrillScreen() {
   };
   useHotkeys({ escape: leave }, api.isInput);
 
+  useLayoutEffect(() => {
+    const r = useNav.getState().route;
+    if (!useDrill.getState().active && r.name === 'drill') ensureDrill(r);
+  }, []);
+
   useEffect(() => {
-    if (!s.active && useNav.getState().route.name === 'drill') back();
+    if (!useDrill.getState().active && useNav.getState().route.name === 'drill') back();
   }, [s.active, back]);
 
   useEffect(() => {

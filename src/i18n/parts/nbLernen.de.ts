@@ -52,4 +52,8 @@ export const nbLernenDe = {
   nbLernenHubWissen: 'Nachschlagen',
   nbLernenHubWissenSub: 'Deutsch → Englisch: wo es klemmt',
   nbLernenHubTraining: 'Training',
+  nbLernenResumeGrammar: 'Grammatik · Aufgabe {n} von {total}',
+  nbLernenResumeDrill: 'Kurzübung · Aufgabe {n} von {total}',
+  nbLernenResumeLesson: 'Lektion · Schritt {n} von 4',
+  nbLernenResumePattern: 'Deutsch-Falle · Aufgabe {n} von {total}',
 } as const;

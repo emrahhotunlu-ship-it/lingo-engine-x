@@ -51,4 +51,8 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenHubWissen: 'Look it up',
   nbLernenHubWissenSub: 'German → English: where it gets stuck',
   nbLernenHubTraining: 'Training',
+  nbLernenResumeGrammar: 'Grammar · task {n} of {total}',
+  nbLernenResumeDrill: 'Quick drill · task {n} of {total}',
+  nbLernenResumeLesson: 'Lesson · step {n} of 4',
+  nbLernenResumePattern: 'German trap · task {n} of {total}',
 };

@@ -196,3 +196,35 @@ export function leaveDrill(): void {
   if (s.status === 'running' && s.kind !== 'sprint') roundEnd(s, true);
   useDrill.setState({ active: false });
 }
+
+// ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2, G3)
+// Diktat, Lückenjagd, Satzbau: Aufgaben, Position und Ergebnisse. Sprint nicht (Wertung auf Zeit).
+
+export type DrillSnap = Pick<State, 'status' | 'kind' | 'ctx' | 'day' | 'lang' | 'dictate' | 'cloze' | 'order' | 'pos' | 'results'>;
+
+export function drillSnapshot(): DrillSnap | null {
+  const s = useDrill.getState();
+  if (!s.active || s.kind === 'sprint' || !itemsOf(s).length) return null;
+  const { status, kind, ctx, day, lang, dictate, cloze, order, pos, results } = s;
+  return { status, kind, ctx, day, lang, dictate, cloze, order, pos, results };
+}
+
+/** Synchron herstellen; die Karten (Beispiele, Nachschlagen) kommen frisch aus den Live-Daten. */
+export function restoreDrill(snap: DrillSnap): boolean {
+  if (!snap || snap.kind === 'sprint' || !['dictate', 'cloze', 'order'].includes(snap.kind) || typeof snap.pos !== 'number') return false;
+  const len = itemsOf({ ...snap, sprint: [] }).length;
+  if (!len || snap.pos < 0 || snap.pos > len) return false;
+  const cards = drillCards(useClock.getState().now);
+  useDrill.setState({
+    ...snap,
+    sprint: [],
+    results: Array.isArray(snap.results) ? snap.results : [],
+    active: true,
+    cards: new Map(cards.map((c) => [c.id, c])),
+    allCols: cards.flatMap((c) => c.col.filter((x) => x.p && x.gap).map((x) => ({ p: x.p, gap: x.gap }))),
+    step: useDrill.getState().step + 1,
+    activeMs: 0,
+    lastInteract: performance.now(),
+  });
+  return true;
+}

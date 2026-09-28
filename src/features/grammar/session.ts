@@ -161,3 +161,30 @@ export function leaveGrammar(): void {
   if (s.status === 'running') finish(s, true);
   useGrammarSession.setState({ active: false });
 }
+
+// ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2, G3)
+
+export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day' | 'lang' | 'tasks' | 'pos' | 'results'>;
+
+/** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */
+export function grammarSnapshot(): GrammarSnap | null {
+  const s = useGrammarSession.getState();
+  if (!s.active || !s.tasks.length) return null;
+  const { status, mode, topic, ctx, day, lang, tasks, pos, results } = s;
+  return { status, mode, topic, ctx, day, lang, tasks, pos, results };
+}
+
+/** Synchron herstellen (gleiche Aufgabe); schreibt nie in die db, aktive Minuten zählen neu. */
+export function restoreGrammar(snap: GrammarSnap): boolean {
+  if (!snap || !Array.isArray(snap.tasks) || !snap.tasks.length || typeof snap.pos !== 'number' || snap.pos < 0 || snap.pos > snap.tasks.length) return false;
+  useGrammarSession.setState({
+    ...snap,
+    results: Array.isArray(snap.results) ? snap.results : [],
+    active: true,
+    step: useGrammarSession.getState().step + 1,
+    startedAt: performance.now(),
+    activeMs: 0,
+    lastInteract: performance.now(),
+  });
+  return true;
+}

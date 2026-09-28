@@ -16,6 +16,9 @@ import { startFocus } from '../features/grammar/focus/session';
 import { AgainScreen } from '../features/repair/again/AgainScreen';
 import { againResume, ensureAgain } from '../features/repair/again/resume';
 import { startAgain } from '../features/repair/again/session';
+import { ensureGrammar, grammarResume } from '../features/grammar/resume';
+import { drillResume, ensureDrill } from '../features/drills/resume';
+import { ensureLesson, lessonResume } from '../features/course/resume';
 
 // Bereich „Lernen“ (Kurs, Grammatik, Training) – Besitz: Paket P2 (docs/neubau/architektur.md §5.2).
 // WP0a: heutige Bildschirme unter den heutigen Routennamen; „Üben“ (`learn`) ist Reiter-Wurzel
@@ -61,15 +64,17 @@ export const lernen = defineArea({
     grammar: { kind: 'page', component: GrammarScreen, title: 'grTitle', keepScroll: true, params: z.object({ topic: z.string().optional() }) },
     wissen: { kind: 'page', component: WissenScreen, title: 'wsTraps', keepScroll: true },
     patterns: { kind: 'page', component: PatternsScreen, title: 'ptTitle', params: z.object({ id: z.string().optional() }) },
-    lesson: { kind: 'exercise', component: LessonRoute, params: z.object({ id: z.string().min(1) }) },
+    lesson: { kind: 'exercise', component: LessonRoute, params: z.object({ id: z.string().min(1) }), ensure: ensureLesson },
     grammarSession: {
       kind: 'exercise',
       component: GrammarSessionScreen,
+      ensure: ensureGrammar,
       params: z.object({ mode: z.enum(['duty', 'xtra', 'errors', 'topic']), topic: z.string().optional() }),
     },
     drill: {
       kind: 'exercise',
       component: DrillScreen,
+      ensure: ensureDrill,
       params: z.object({ kind: z.enum(['dictate', 'cloze', 'order', 'sprint']), ctx: z.enum(['duty', 'xtra']) }),
     },
     unitFocus: { kind: 'exercise', component: FocusScreen, title: 'nbLernenFocusTitle', ensure: ensureFocus },
@@ -94,5 +99,5 @@ export const lernen = defineArea({
       },
     },
   ],
-  resumables: [focusResume, againResume],
+  resumables: [focusResume, againResume, grammarResume, drillResume, lessonResume],
 });

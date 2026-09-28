@@ -17,7 +17,8 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { flush } from '../progress/persist';
 import { ExerciseTop, SummaryActions } from '../learn/ui';
 import { makeLessonMachine } from './lessonMachine';
-import { finishLesson, leaveLesson, openLesson, prepareLesson, saveStep, savedStep, startBaseLesson, touchLesson, useLessonRun, type Step } from './lessonRun';
+import { ensureLesson } from './resume';
+import { setLessonStep, finishLesson, leaveLesson, openLesson, prepareLesson, saveStep, savedStep, startBaseLesson, touchLesson, useLessonRun, type Step } from './lessonRun';
 import { DialogStep, GrammarStep, OutputStep, WordsStep } from './LessonSteps';
 import { useCompanionSee } from '../companion/seeing';
 
@@ -30,7 +31,11 @@ const ORDER: Step[] = ['words', 'dialog', 'grammar', 'output'];
 export function LessonScreen({ id }: { id: string }) {
   const lid = useLessonRun((s) => s.lid);
   useEffect(() => {
-    if (useLessonRun.getState().lid !== id) void openLesson(id);
+    if (useLessonRun.getState().lid !== id) {
+      // Neuladen (G3): Schritt und Stand im Schritt aus dem Fortsetz-Speicher vormerken.
+      ensureLesson({ name: 'lesson', id });
+      void openLesson(id);
+    }
   }, [id]);
   if (lid !== id) return <LessonSkeleton />;
   return <LessonRun key={id} id={id} />;
@@ -51,13 +56,14 @@ function LessonRun({ id }: { id: string }) {
   const api = useHiddenInput();
   const back = useNav((s) => s.back);
   const run = useLessonRun();
-  const machine = useMemo(() => makeLessonMachine(savedStep(id) ?? 'intro'), [id]);
+  const machine = useMemo(() => makeLessonMachine(useLessonRun.getState().lid === id ? useLessonRun.getState().step : (savedStep(id) ?? 'intro')), [id]);
   const [snap, send] = useMachine(machine);
   const step: Step = snap.value;
   const meta = run.meta;
 
   useEffect(() => {
     saveStep(id, step);
+    setLessonStep(step);
     if (step === 'summary') void finishLesson();
   }, [id, step]);
 
