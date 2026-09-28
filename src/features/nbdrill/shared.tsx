@@ -9,7 +9,6 @@ import { unitDone } from '../../app/unit/done';
 import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types';
 import { getWriter } from '../../data';
 import { outPath, upsertOut, type OutItem } from '../../domain/nbdrill/outDoc';
-import type { ChannelLogEntry } from '../../domain/progress/channelLog';
 import { channelLogEntry } from '../../domain/progress/channelLog';
 import type { WeekTargets } from '../../domain/week/types';
 import { detectTargets } from '../../domain/week/targets';
@@ -105,9 +104,8 @@ export function logAnswers(rows: readonly NbAnswer[]): void {
   try {
     recordChannelEntries(
       rows.map((r) => {
-        const base = channelLogEntry({ t: r.t, ok: r.ok, lang: r.lang, type: 'read', ref: r.ref, q: r.q, given: r.given, ans: r.ans, ms: r.ms, ctx: r.duty ? 'duty' : 'extra' });
-        // `type` ist im Kanal-Typ (noch) auf read/listen/discover beschränkt – Wunsch an den Integrator.
-        return { ...base, type: r.type, day: r.day } as unknown as ChannelLogEntry & { day: string };
+        const base = channelLogEntry({ t: r.t, ok: r.ok, lang: r.lang, type: r.type, ref: r.ref, q: r.q, given: r.given, ans: r.ans, ms: r.ms, ctx: r.duty ? 'duty' : 'extra' });
+        return { ...base, day: r.day };
       }),
     );
   } catch (err) {

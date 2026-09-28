@@ -282,9 +282,8 @@ for (const theme of ['dark', 'dim', 'light'] as const) {
   });
 }
 
-// WP0b-Befund: Die Probe des Players (nach den Kindern) wirft im selben Rendern erneut, weil
-// `pendingCrash` erst im Commit gelöscht wird – dann greift die Übungs-Grenze statt der Schritt-Grenze.
-// Wunsch an den Integrator (Boundary.tsx); bis dahin vorgemerkt.
+// Offen (Boundary.tsx, WP0b): Bei lx:crash-once greift die Übungs-Grenze statt der Schritt-Grenze.
+// Zwei Behebungsversuche in P7b gescheitert (siehe Bericht) – bis zur Behebung vorgemerkt.
 test.fixme('G4: lx:crash-once – Aufgabe überspringen, die Runde läuft weiter', async ({ page }) => {
   await boot(page, { migrated: true, localStorage: crashOnce('nbdrill') });
   await openEntry(page, 'training-colloc');
