@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { useClock } from '../../app/clock';
+import { useWeekDoc as useAppWeekDoc, watchWeek } from '../../app/useWeek';
 import { getWriter } from '../../data';
 import { validateDoc } from '../../data/validate';
-import { watchDoc } from '../../data/watch';
 import { isoWeek } from '../../domain/date';
 import { weekDocNew, weekThemePatch } from '../../domain/unit/weekWrite';
 import { readWeekDoc, themeFor, weekTargets } from '../../domain/week';
@@ -31,24 +31,30 @@ export const useWeekDoc = create<WeekDocState>(() => ({ status: 'idle', raw: nul
 
 let stop: (() => void) | null = null;
 
-/** Abo starten (einmal; weitere Aufrufe tun nichts). */
+/**
+ * Abo starten (einmal; weitere Aufrufe tun nichts). Es nutzt das EINE, referenzgezählte Abo des
+ * Rahmens (`app/useWeek.ts#watchWeek`) mit einer dauerhaften Anmeldung und spiegelt es hierher.
+ */
 export function startWeekWatch(): void {
   if (stop) return;
-  const db = getDb();
-  if (!db) return;
-  useWeekDoc.setState({ status: 'loading' });
-  stop = watchDoc(
-    db,
-    'app/week',
-    (w) => {
-      const raw = w.exists ? (w.data ?? null) : null;
-      const chosen = useWeekDoc.getState().chosen;
-      // Die optimistische Wahl endet, sobald das Dokument sie trägt.
-      const keep = chosen && !(raw && typeof raw.cur === 'object' && (raw.cur as Doc | null)?.wk === chosen.wk && (raw.cur as Doc | null)?.theme === chosen.theme);
-      useWeekDoc.setState({ status: 'ready', raw, ok: w.ok, chosen: keep ? chosen : null });
-    },
-    () => useWeekDoc.setState({ status: 'error' }),
-  );
+  if (!getDb()) return;
+  const release = watchWeek();
+  const sync = (w: ReturnType<typeof useAppWeekDoc.getState>) => {
+    if (w.status === 'loading') return;
+    const raw = w.data;
+    const chosen = useWeekDoc.getState().chosen;
+    // Die optimistische Wahl endet, sobald das Dokument sie trägt.
+    const cur = raw && typeof raw.cur === 'object' ? (raw.cur as Doc | null) : null;
+    const keep = chosen && !(cur?.wk === chosen.wk && cur.theme === chosen.theme);
+    useWeekDoc.setState({ status: w.status, raw, ok: w.ok, chosen: keep ? chosen : null });
+  };
+  const unsub = useAppWeekDoc.subscribe(sync);
+  if (useWeekDoc.getState().status === 'idle') useWeekDoc.setState({ status: 'loading' });
+  sync(useAppWeekDoc.getState());
+  stop = () => {
+    unsub();
+    release();
+  };
 }
 
 /** Wochen-Dokument für die Domäne: ungültig → nur Vorschlag (leer), optimistische Wahl eingerechnet. */

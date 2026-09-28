@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNav } from '../../app/nav';
+import { StepBoundary } from '../../app/shell/Boundary';
 import type { ScreenProps } from '../../app/registry';
 import { unitDone } from '../../app/unit/done';
 import { inboxFor, themeTextFor } from '../../content/nb/load';
@@ -262,7 +263,9 @@ export function UnitStepScreen({ route }: ScreenProps<'unitStep'>) {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 py-4 sm:py-8" data-testid="unit-step" data-step={route.step}>
       <ExerciseTop onClose={() => leave(t)} closeLabel={t('nbHeuteClose')} closeTestId="unit-close" progress={total ? { n: Math.min(total, done + 1), total } : null} ctx="duty" />
-      {route.step === 'input' ? <InputStep /> : route.step === 'again' ? <AgainStep /> : <CheckEmpty block={route.block} />}
+      <StepBoundary resetKey={`${route.step}-${route.block}`} scope="unitStep" onSkip={() => leave(t)}>
+        {route.step === 'input' ? <InputStep /> : route.step === 'again' ? <AgainStep /> : <CheckEmpty block={route.block} />}
+      </StepBoundary>
     </div>
   );
 }

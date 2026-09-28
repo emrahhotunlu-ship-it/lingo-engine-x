@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNav } from '../../app/nav';
+import { StepBoundary } from '../../app/shell/Boundary';
 import type { ScreenProps } from '../../app/registry';
 import { THEMES } from '../../content/nb/themes';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -147,7 +148,9 @@ export function UnitCardScreen({ route }: ScreenProps<'unitCard'>) {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 py-4 sm:py-8" data-testid="unit-card" data-step={route.step}>
       <ExerciseTop onClose={() => leaveToToday(t)} closeLabel={t('nbHeuteClose')} closeTestId="unit-close" progress={total ? { n: Math.min(total, done + 1), total } : null} ctx="duty" />
-      {route.step === 'confirm' ? <Confirm /> : <Next />}
+      <StepBoundary resetKey={route.step} scope="unitCard" onSkip={() => leaveToToday(t)}>
+        {route.step === 'confirm' ? <Confirm /> : <Next />}
+      </StepBoundary>
     </div>
   );
 }

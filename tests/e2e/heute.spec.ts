@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { boot, layoutProblems, screen } from './fixtures';
+import { boot, crashOnce, layoutProblems, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 import { MON, MON_9, SUN_9, TUE_9, WEEK_W39, mondayPlan, profileWith, reviewedLog, unitStatus } from './heuteHelpers';
 
@@ -135,4 +135,22 @@ test('„Deine Woche“ über die Unterzeile von Heute, Thema wechseln schreibt 
   // Gleiche Woche: kein neuer Verlaufseintrag; der Seed-Verlauf (KW 37) bleibt unverändert.
   expect(((await dump(page))['app/week']?.hist as Doc[]).map((h) => h.wk)).toEqual(['2026-W37']);
   expect(errors).toEqual([]);
+});
+
+test('Fehlergrenze (lx:crash-once) im Ersatzschritt der Einheit: Hinweis statt weißer Seite, zurück zu Heute, Einheit läuft weiter', async ({ page }) => {
+  const { errors } = await boot(page, {
+    migrated: true,
+    now: MON_9,
+    localStorage: crashOnce('unitStep'),
+    fake: { patch: { ...WEEK_W39, ...profileWith(MON, mondayPlan(), []), ...reviewedLog(MON) } },
+  });
+  await screen(page, 'today');
+  await page.getByTestId('start').click();
+  await expect(page.getByTestId('boundary-exercise')).toBeVisible();
+  await page.getByTestId('boundary-end').click();
+  await screen(page, 'today');
+  await expect(page.getByTestId('start')).toHaveAttribute('data-duty', 'ch:u-in');
+  await page.getByTestId('start').click();
+  await expect(page.getByTestId('unit-input')).toBeVisible();
+  expect(errors.filter((e) => !e.includes('crash-once'))).toEqual([]);
 });
