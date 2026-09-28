@@ -13,6 +13,7 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { Skeleton } from '../../ui/Skeleton';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { AiRunPanel } from '../input/AiRunPanel';
+import { TitleActions } from '../system/Chrome';
 import { FocusList, TrendLine } from './parts';
 import { PatternDrill } from './PatternDrill';
 import { isRunning, recognizePatterns, stopPatterns, usePatternsRun } from './store';
@@ -75,6 +76,7 @@ export function PatternsScreen() {
           >
             <Icon name="info" size={18} />
           </button>
+          <TitleActions />
         </div>
         {active || startTrap ? (
           <p className="lx-tnum text-xs font-medium text-muted">

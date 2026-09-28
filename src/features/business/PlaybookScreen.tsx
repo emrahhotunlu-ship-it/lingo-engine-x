@@ -82,7 +82,16 @@ function Tree({ pb }: { pb: Playbook }) {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  if (drill) return <PlaybookDrill pb={pb} onClose={() => setDrill(false)} />;
+  // Übersetzer, Claude und Zahnrad auch im Drill (A7 Paket 2: überall mit einem Tipp).
+  if (drill)
+    return (
+      <div className="flex flex-col gap-3 py-4">
+        <div className="flex justify-end">
+          <TitleActions />
+        </div>
+        <PlaybookDrill pb={pb} onClose={() => setDrill(false)} />
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-5 py-6" data-testid="playbook" data-id={pb.id}>

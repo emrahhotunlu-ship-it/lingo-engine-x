@@ -1,6 +1,6 @@
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
-import { ClaudeButton, TitleActions, TranslateButton } from '../../features/system/Chrome';
+import { ClaudeButton, SettingsButton, TitleActions, TranslateButton } from '../../features/system/Chrome';
 import { useNav } from '../nav';
 import { screenOf } from '../registry';
 import { openSheet } from '../sheets';
@@ -8,7 +8,8 @@ import { useInitial, useStreakCount } from './useStreak';
 
 // Kopf des Rahmens (docs/neubau/architektur.md §2.5, plan.md §1.2, Prototyp v1 `.top`):
 // - Reiter-Wurzel: links der Profil-Knopf (Initiale + „Serie 12“) → Profil-Blatt; rechts
-//   Übersetzen und Claude (ohne KI unsichtbar). Den großen Titel zeichnet die Seite selbst.
+//   Übersetzen und Claude (ohne KI unsichtbar), dazu immer das Zahnrad (A7 Paket 2: Einstellungen
+//   überall mit einem Tipp). Den großen Titel zeichnet die Seite selbst.
 // - Seite: links „‹ Herkunft“, rechts Übersetzen, Claude und das Zahnrad (`PageTop`).
 
 /** Profil-Knopf oben links (öffnet das Profil-Blatt). */
@@ -44,6 +45,7 @@ export function TopBar() {
       <div className="flex flex-none items-center gap-1">
         <TranslateButton />
         <ClaudeButton />
+        <SettingsButton />
       </div>
     </div>
   );

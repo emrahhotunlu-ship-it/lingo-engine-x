@@ -11,7 +11,10 @@ import { openCompanion } from '../companion/store';
 //   rechts. Die Titelzeile der Seite zeigt nur noch den Titel (und eigene Knöpfe) – `TitleActions`
 //   zeichnet in der Ebene `tab` kein zweites Übersetzen/Claude.
 // - Seite: rechts Übersetzen, Claude und das Zahnrad.
-// - Übung: die gemeinsame Übungsleiste mit Übersetzen und Claude (das Zahnrad liegt im Profil-Blatt).
+// - Übung: die gemeinsame Übungsleiste mit Übersetzen, Claude und Zahnrad.
+// Emrahs feste Vorgabe (CLAUDE.md A7, Paket 2; Fehlermeldung am iPhone 28.09.): Übersetzer, Claude
+// und Einstellungen auf jeder Seite und in jeder Übung mit einem Tipp. Die Einstellungen sind ein
+// Blatt über der Ebene: die laufende Übung bleibt darunter stehen und läuft danach weiter.
 
 /** Claude-Symbol: öffnet den Begleiter (Claude fragen / Übersetzen). Ohne KI unsichtbar. */
 export function ClaudeButton() {
@@ -38,7 +41,7 @@ export function TranslateButton() {
   return <IconButton icon="translate" label={t('cmpTabTranslate')} onClick={() => openCompanion({ tab: 'translate' })} data-testid="open-translate" data-ai="" />;
 }
 
-/** Zahnrad: öffnet die Einstellungen (Seiten und System-Bildschirme; auf den Reitern im Profil-Blatt). */
+/** Zahnrad: öffnet die Einstellungen als Blatt (Kopf, Seiten, Übungen und System-Bildschirme). */
 export function SettingsButton() {
   const { t } = useT();
   return <IconButton icon="gear" label={t('openSettings')} onClick={openSettings} data-testid="open-settings" />;
@@ -76,12 +79,13 @@ export function TabTitle({ title, sub, actions, testId }: { title: ReactNode; su
   );
 }
 
-/** Rechte Seite der Übungsleiste: Übersetzer und Claude (plan.md §1.2; das Zahnrad liegt im Profil-Blatt). */
+/** Rechte Seite der Übungsleiste: Übersetzer, Claude und Zahnrad (plan.md §1.2, A7 Paket 2). */
 export function ExerciseActions() {
   return (
-    <div className="flex flex-none items-center gap-0.5">
+    <div className="flex flex-none items-center gap-0.5" data-testid="exercise-actions">
       <TranslateButton />
       <ClaudeButton />
+      <SettingsButton />
     </div>
   );
 }

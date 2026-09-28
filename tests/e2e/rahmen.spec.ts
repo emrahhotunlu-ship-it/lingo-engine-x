@@ -22,6 +22,7 @@ test('Einstieg: Kopf wie v1 (Profil + Serie links, Übersetzen + Claude rechts),
   await expect(top.getByTestId('profile-streak')).toHaveText('Serie 12');
   await expect(top.getByTestId('open-companion')).toBeVisible();
   await expect(top.getByTestId('open-translate')).toBeVisible();
+  await expect(top.getByTestId('open-settings')).toBeVisible();
   // Genau ein Claude-Knopf auf der Wurzel (die Seite zeichnet keinen zweiten).
   await expect(page.getByTestId('open-companion')).toHaveCount(1);
   const tabs = page.getByTestId('tabbar').locator('button');
@@ -53,7 +54,8 @@ test('Rückweg zur Herkunft: Seite „‹ Heute“, Übung ✕ zurück zur Herku
   // Übung (aus dem Profil-Blatt): keine Reiterleiste, ✕ führt zurück zur Herkunft.
   await openVtest(page);
   await expect(page.getByTestId('tabbar')).toHaveCount(0);
-  await expect(page.getByTestId('open-settings')).toHaveCount(0);
+  // Einstellungen auch in der Übung (A7 Paket 2): das Zahnrad steht in der Übungsleiste.
+  await expect(page.getByTestId('exercise-bar').getByTestId('open-settings')).toBeVisible();
   await page.getByTestId('vt-close').click();
   await screen(page, 'today');
   // Bildlauf der Reiter-Wurzel bleibt über eine Seite hinweg erhalten.
