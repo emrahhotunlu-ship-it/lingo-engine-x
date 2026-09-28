@@ -2,8 +2,11 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles/index.css';
 import { App } from './app/App';
-import { initDiagnostics, logError } from './platform/diagnostics';
+import { initDiagnostics, logContext, logError, logWarn } from './platform/diagnostics';
 import { applyDocumentSettings, resolveTheme, useSettings } from './app/settings';
+
+/** Komponenten-Stapel kurz fürs Protokoll. */
+const stackOf = (info: { componentStack?: string | null }): string => (info.componentStack ?? '').split('\n').slice(0, 6).join(' ‹ ').replace(/\s+/g, ' ').trim();
 
 async function boot(): Promise<void> {
   // Messpunkt (P7-1): Skript geladen und ausgewertet, erstes Zeichnen folgt.
@@ -19,7 +22,13 @@ async function boot(): Promise<void> {
   applyDocumentSettings(s.lang, resolveTheme(s.theme, window.matchMedia('(prefers-color-scheme: light)').matches), s.palette);
   const root = document.getElementById('root');
   if (!root) throw new Error('#root fehlt');
-  createRoot(root).render(
+  // Wurzel-Ebene der Fehlergrenzen (architektur.md §3.1 Nr. 1): Was keine Grenze fängt, landet
+  // sofort im Diagnose-Protokoll (mit Route). Gefangene Fehler protokolliert die Grenze selbst.
+  createRoot(root, {
+    onUncaughtError: (err, info) => logError('react:uncaught', err, [logContext(), stackOf(info)].filter(Boolean).join(' · ')),
+    onCaughtError: () => undefined,
+    onRecoverableError: (err, info) => logWarn('react:recoverable', err, stackOf(info)),
+  }).render(
     <StrictMode>
       <App />
     </StrictMode>,

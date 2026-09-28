@@ -95,10 +95,39 @@ export function initDiagnostics(): void {
   }
   if (typeof window !== 'undefined') {
     window.addEventListener('error', (ev) => {
-      logError('window:error', ev.error ?? { message: ev.message }, `${ev.filename}:${ev.lineno}`);
+      logError('window:error', ev.error ?? { message: ev.message }, withContext(`${ev.filename}:${ev.lineno}`));
     });
     window.addEventListener('unhandledrejection', (ev) => {
-      logError('window:unhandledrejection', ev.reason);
+      logError('window:unhandledrejection', ev.reason, withContext(undefined));
     });
   }
+}
+
+// ---------------------------------------------------------------- Kontext (Neubau WP0b, leistung.md §6)
+// Globale Fehler (außerhalb des Renderns) bekommen die aktuelle Route und Position mit ins
+// Protokoll. Der Rahmen meldet eine Lesefunktion an; die Diagnose importiert nichts aus dem Rahmen.
+// Jeder Eintrag wird wie bisher SOFORT lokal gesichert (`persist` in `log`) und überlebt so ein
+// anschließendes Neuladen.
+
+let context: (() => string | null) | null = null;
+
+/** Liefert die aktuelle Route/Position als kurzen Text (z. B. `trainer?round=extra · Karte 7/20`). */
+export function setLogContext(fn: (() => string | null) | null): void {
+  context = fn;
+}
+
+function withContext(detail: string | undefined): string | undefined {
+  let ctx: string | null = null;
+  try {
+    ctx = context?.() ?? null;
+  } catch (err) {
+    pushEntry({ level: 'warn', scope: 'diagnostics:context', message: describeError(err).message }, false);
+  }
+  if (!ctx) return detail;
+  return detail ? `${detail} · ${ctx}` : ctx;
+}
+
+/** Aktueller Kontext (für Grenzen und `runAction`). */
+export function logContext(): string | undefined {
+  return withContext(undefined);
 }
