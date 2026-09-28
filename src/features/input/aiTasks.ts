@@ -61,8 +61,6 @@ export function runningTabs(tasks: Readonly<Record<string, AiTask>>): Set<TabNam
     if (t.status !== 'running') continue;
     const r = t.route;
     if ('ctx' in r && r.ctx === 'duty') out.add('today');
-    // Neubau: Schreiben liegt unter „Sprechen“ (Platz `write`), Lesen und Entdecken unter „Lesen“.
-    else if (t.kind === 'write') out.add('speak');
     else out.add('read');
   }
   return out;
