@@ -170,3 +170,66 @@ Alles hier ist „sollte“.
 - **Sollte-Befunde:** klein bis mittel, gern im nächsten Paket.
 
 **Freigabe: Ja, nach Umsetzung der Muss-Befunde.** Danach genügt eine gezielte Nachprüfung nur dieser Stellen, dazu ein grüner Lauf von `nbWeek.test.ts` mit den neuen Sätzen für „kein Fehlalarm“.
+
+---
+
+## Nachprüfung der Muss-Stellen aus `docs/neubau/pruefung-inhalte.md`
+
+Ich habe keinen Code geändert. Die Muster in `src/content/nb/traps.ts` habe ich von Hand durchgespielt, einen Testlauf konnte ich nicht starten (kein Befehlszugriff). Die Umwandlung in `src/domain/week/traps.ts` macht aus ’ ein ', das hilft. Alle Negativsätze aus meiner ersten Prüfung stehen in `tests/unit/nbWeek.test.ts`. Beim Nachprüfen habe ich aber weitere Fehlalarme gefunden, und zwar in Mustern, die ich selbst vorgeschlagen hatte. Das ist mein Fehler aus Runde 1.
+
+### traps.ts – Erkennung
+
+- **f03:** ok
+- **f05:** ok. Eine Lücke bleibt in Muster 2: „Can you send me the prospect's email address?“ wird gemeldet. Korrektur (gleich mitnehmen): `'\\bsend (?:me|us) (?:a|the|your) (?:new )?prospect\\b(?!\'| (?:list|data|details|contact|name|info)\\b)'`
+- **f06:** Muster ok.
+- **f10: nicht ok.** „Do we have a date for the go-live yet?“ ist Standard-Englisch und wird gemeldet. Muster 1 ersetzen durch zwei Einträge:
+  - `'\\b(?:make|made) an? date (?:with|for)\\b'`
+  - `'\\b(?:have|had) an? date with\\b'`
+- **f11: nicht ok.** „We cannot confirm until Monday.“ wird gemeldet, weil `\bnot` das Wort „cannot“ nicht trifft. In beiden Lookbehinds `\\bcannot|` ergänzen: `(?<!(?:\\bnot|\\bcannot|n't|…`
+  - Sollte, Paket B: Die Lücke `[^.?!]{0,40}?` erlaubt Kommas. Deshalb wird „I'll send it tomorrow, I'm out until Monday.“ gemeldet. Besser: `[^.?!,;]{0,40}?`
+- **f12:** ok für den Testsatz. Sollte, Paket B: „We are flexible since this is a pilot.“ wird noch gemeldet. Lookahead erweitern auf `(?:i|we|you|they|he|she|it|this|that|there|(?:the|our|your|their|my) \\w+ (?:is|are|was|were|has|have|will|can))`
+- **f14:** ok. Sollte, Paket B: „a feedback culture“ und „a feedback tool“ werden gemeldet. `culture|process|tool|platform|technology` in die Ausnahmen aufnehmen.
+- **f20: nicht ok, zwei Fehlalarme in Emrahs Kernsätzen.**
+  - Muster 1: „Can you tell me who does the invoicing today?“ wird gemeldet. Bei who als Subjekt ist does das Vollverb, der Satz ist also richtig. Korrektur: `who` aus `(?:what|how|when|where|why|who|which)` streichen.
+  - Muster 2: „When you have a minute, could you take a look?“ wird gemeldet, eine sehr häufige Mail-Formel. Korrektur: `when` streichen und die Lücke ohne Komma schreiben: `…(?:why|what|how|where) (?:you|we|they) (…)\\b[^.!?,]*\\?`
+- **f21:** ok. Das Muster stimmt, Übung 1 und das `why` in beiden Sprachen auch.
+- **f22:** ok wie gefordert. „We have signed 12 new partners since the end of last year.“ wird aber noch gemeldet, weil vor „last year“ das Wort „of“ steht. Korrektur (gleich mitnehmen): die Lücke `[^.?!]{0,40}?` ersetzen durch `(?:(?!\\bsince\\b)[^.?!]){0,40}?`
+- **f23:** ok
+- **f25: nicht ok.** „You must have heard about the new mandate.“ wird gemeldet. Diese Vermutung mit must übt t13 (`modals-deduction`). Korrektur: `'\\byou must\\b(?! (?:be|have|feel|know)\\b)'`. Übung 1 wird weiter erkannt.
+
+Beispiel, Übungen und Lösungen der jeweiligen Falle bleiben mit allen Korrekturen gültig. Diese neuen Sätze gehören in den Test „kein Fehlalarm“:
+- „Do we have a date for the go-live yet?“
+- „We cannot confirm until Monday.“
+- „Can you tell me who does the invoicing today?“
+- „When you have a minute, could you take a look?“
+- „You must have heard about the new mandate.“
+- „Can you send me the prospect's email address?“
+- „We have signed 12 new partners since the end of last year.“
+
+### Inhalte
+
+- **f06 Grund:** ok. Sollte: Der `hint` „Ist es Glück oder eine Gelegenheit?“ passt nicht mehr zum neuen Grund. Besser: „Kleine Gelegenheit oder Wahrscheinlichkeit – oder eine geschäftliche Chance?“
+- **f10 Lösung:** ok
+- **f21 Übung:** ok
+- **x-t05 Frage, x-t08, x-t04:** ok
+- **c10, c34, c32:** ok
+- **Let's-Stellen:** ok. c09, c22, c26, c29, c37, d11, p11 und b10 sind umgesetzt. Übrig ist nur extras r08: Dort steht „Let us conclude the meeting here.“ als erste Antwort, also als Musterlösung. Die beiden Antworten tauschen, damit „Let's conclude …“ die Musterlösung ist. Aufwand klein.
+- **u14, u28:** ok
+- **o05, o09:** ok
+- **inbox.json:** ok. Alle 30 Stellen gehen nach der Anrede groß weiter, keine Mail beginnt mehr klein.
+- **d10, d12:** ok
+
+### Stichprobe Sollte-Stellen
+
+- **t08 gerund-inf:** ok, auch Fokus, `toolIn` in x-t08 und das Kriterium in b08.
+- **x-t14:** ok
+- **C1-Strukturen:** ok. „Rarely has a regulation offered …“ (Inversion, x-t05), „Managing the IT of more than 200 …, your team …“ (x-t08) und „Driving ahead of us …, the farmer …“ (x-t14) sind korrekt gebaut.
+
+### Freigabe: Nein in diesem Stand.
+
+**Ja, sobald die vier Muss-Korrekturen umgesetzt sind** (f10, f11 „cannot“, f20 mit beiden Mustern, f25) und `nbWeek.test.ts` mit den neuen Negativsätzen grün ist. Nach A2 ist dafür keine weitere Prüfrunde nötig, die Negativsätze sichern die Korrekturen ab.
+
+- **Gleich mitnehmen:** f05 und f22, je eine Zeile.
+- **Paket B:** f11 (Kommas), f12, f14, der f06-Hinweis und die Reihenfolge in r08.
+
+**Integrator (00:25 UTC):** Alle genannten Korrekturen (Muss, gleich mitnehmen und Paket-B-Kleinigkeiten) an P7 übergeben; Freigabe gilt mit grünem nbWeek.test.ts inkl. der neuen Negativsätze (A2: keine weitere Runde).
