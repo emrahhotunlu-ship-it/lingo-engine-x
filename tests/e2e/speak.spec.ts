@@ -138,7 +138,8 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   // Heute: Das Gespräch zählt nicht als „Wiederholen“; Angebote erst nach der Pflicht (Kap. 2.1).
   await page.getByTestId('report-home').click();
   await screen(page, 'today');
-  await expect(page.getByTestId('today-status')).toHaveText('Heute · 0 von 3');
+  // Neubau: Sonntag = Tageseinheit mit 2 Blöcken (Wiederholen + Wochen-Check); das Gespräch zählt in keinen.
+  await expect(page.getByTestId('today-status')).toHaveText('0 von 2 · noch ca. 10 Min.');
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
   await expect(page.getByTestId('extra')).toHaveCount(0);
   // Reiter „Sprechen“: erledigt ist Zustand, kein Knopf (Kap. 2.2).

@@ -168,19 +168,24 @@ test.describe('C1-Werkzeugkasten', () => {
       await screen(page, 'grammarSession');
       // Erste Aufgabe falsch, der Rest richtig – alle aus dem Thema.
       const topics: string[] = [];
+      const answers: Array<string | null> = [];
       for (let k = 0; k < 12; k++) {
         await expect(page.getByTestId('gr-item').or(page.getByTestId('summary')).first()).toBeVisible();
         if (await page.getByTestId('summary').isVisible()) break;
         topics.push((await page.getByTestId('gr-item').getAttribute('data-topic')) ?? '');
         const r = await answerGrammar(page, solve, { wrong: k === 0 });
+        answers.push(r.answer);
         expect(r.answer, `Lösung für Aufgabe ${k + 1} bekannt`).not.toBeNull();
         if (k === 0) expect(await layoutProblems(page)).toEqual([]);
         await nextItem(page);
         await expect(page.getByTestId('gr-item').getByTestId('result')).toHaveCount(0);
       }
       await expect(page.getByTestId('summary')).toBeVisible();
-      expect(topics).toHaveLength(8);
+      // 8 Aufgaben + die falsch beantwortete einmal am Rundenende (N47).
+      expect(topics).toHaveLength(9);
+      expect(answers.at(-1)).toBe(answers[0]);
       expect(topics.every((t) => t === 'c1-emphasis')).toBe(true);
+      // Die Wiederholung wird nicht noch einmal gespeichert: genau ein Fehler.
       await expect.poll(async () => (((await dump(page))['grammar/c1-emphasis']?.errors as Doc[] | undefined) ?? []).length).toBe(1);
       expect(errors).toEqual([]);
       expect(external).toEqual([]);

@@ -224,6 +224,8 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     await expect(weekly).toContainText('German traps');
 
     // Liste: die Regel liegt nur auf Deutsch vor → Hinweis statt gemischter Sprache.
+    // Der Einstieg steht auf der Karte „Deine Deutsch-Fallen“ im Reiter Fehler (Neubau: Stand-Reiter).
+    await page.getByTestId('tab-errors').click();
     await page.getByTestId('patterns-open').click();
     await page.locator('[data-screen="patterns"]').waitFor({ state: 'visible' });
     await expect(page.getByTestId('pattern-rule')).toHaveCount(0);
@@ -260,6 +262,9 @@ test('„Sag es“ bekommt die Top-3-Muster als Hinweis im Prompt (Handy)', asyn
   await boot(page, { migrated: true, fake: { patch: { 'app/patterns': PRESET, 'app/profile': { plan } } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
+  // Neubau N71 „Laut zuerst“: erst laut sprechen, dann aufschreiben.
+  await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'aloud');
+  await page.getByTestId('say-aloud-done').click();
   await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'write1');
   await page
     .getByTestId('say-draft')

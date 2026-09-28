@@ -14,9 +14,12 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   test.setTimeout(90_000);
   const { errors, external } = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(6), ...forcedPatch() } } });
   await screen(page, 'today');
-  await expect(page.getByTestId('today-status')).toHaveText('Noch 6 Karten');
+  // Neubau: Die Tageskarte zählt Blöcke und Minuten; die 6 Karten stehen in der Leiste der Runde.
+  await expect(page.getByTestId('today-status')).toHaveText('0 von 1 · noch ca. 10 Min.');
+  await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-now', 'true');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
+  await expect(page.getByTestId('exercise-bar').getByRole('progressbar')).toHaveAttribute('aria-valuemax', '6');
 
   const seen = new Set<string>();
   for (let i = 0; i < 30; i++) {
@@ -59,8 +62,9 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   await page.getByTestId('summary-back').click();
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
-  await expect(page.getByTestId('done-item')).toBeVisible();
-  await expect(page.getByTestId('done-item').locator('button')).toHaveCount(0);
+  const doneCard = page.locator('[data-testid="today-card"][data-done="true"]');
+  await expect(doneCard).toBeVisible();
+  await expect(doneCard.locator('button')).toHaveCount(0);
   await expect(page.getByTestId('start')).toHaveCount(0);
   await expect(page.getByTestId('offer')).toHaveCount(1);
   await expect(page.getByTestId('more-practice')).toBeVisible();

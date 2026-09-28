@@ -5,7 +5,8 @@ import { DAY, dump } from './trainerHelpers';
 
 // Kurs und Lektion (phase2-plan §5.1, §9.3): Kursstand weitergeführt, eine Lektion vollständig
 // (gespeicherter Inhalt, Grundfassung ohne KI, „Lektion vorbereiten"), Abschluss in app/course,
-// Pflichtpunkt „Lektion" auf Heute erledigt, Wiedereinstieg im selben Schritt.
+// Lektion als Angebot (Neubau plan.md §0: zählt als Extra, nie zur Pflicht der Tageseinheit),
+// Wiedereinstieg im selben Schritt.
 
 type Doc = Record<string, unknown>;
 
@@ -39,9 +40,11 @@ test('Kurs: l01–l06 erledigt, genau eine nächste Lektion, Einheit 1 als Meile
   expect(external).toEqual([]);
 });
 
-test('l07 mit gespeichertem Inhalt vollständig: course.done.l07, Pflichtpunkt „Lektion" erledigt', async ({ page }) => {
+test('l07 mit gespeichertem Inhalt vollständig: course.done.l07, zählt als Extra, nicht zur Pflicht', async ({ page }) => {
   const l07 = storedL07();
   const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'lesson/l07': l07 } } });
+  await screen(page, 'today');
+  const before = { done: await page.getByTestId('today-status').getAttribute('data-done'), total: await page.getByTestId('today-status').getAttribute('data-total') };
   await openLesson(page, 'l07');
   await expect(page.getByTestId('lesson')).toHaveAttribute('data-source', 'db');
   const answers: Record<string, string> = {};
@@ -64,14 +67,18 @@ test('l07 mit gespeichertem Inhalt vollständig: course.done.l07, Pflichtpunkt �
   expect(String(card?.ex)).toContain('invoice');
   await expect.poll(async () => (((await dump(page))['app/profile']?.act as Record<string, Doc> | undefined)?.[DAY] ?? {}).lesson).toBe(1);
 
-  // Heute: Pflichtpunkt „Lektion" ist Zustand, kein Knopf.
+  // Kurs: l07 ist erledigt, die nächste Lektion ist l08.
   await page.getByTestId('summary-back').click();
+  await openEntry(page, 'hub-course');
+  await expect(page.getByTestId('course')).toBeVisible();
+  await expect(page.locator('[data-testid="lesson-row"][data-lesson="l07"]')).toHaveAttribute('data-state', 'done');
+  await expect(page.locator('[data-testid="lesson-row"][data-lesson="l08"]')).toHaveAttribute('data-state', 'next');
+  // Heute: Die Lektion ist ein Angebot (Extra) – kein Pflichtpunkt, der Zähler der Tageseinheit bleibt (Kap. 2.6).
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
-  const duty = page.locator('[data-testid="duty"][data-duty="lesson"]');
-  await expect(duty).toHaveAttribute('data-state', 'done');
-  await expect(duty.locator('button, a, input')).toHaveCount(0);
-  await expect(page.getByTestId('today-status')).toHaveAttribute('data-done', '1');
+  await expect(page.locator('[data-testid="duty"][data-duty="lesson"]')).toHaveCount(0);
+  await expect(page.getByTestId('today-status')).toHaveAttribute('data-done', before.done ?? '');
+  await expect(page.getByTestId('today-status')).toHaveAttribute('data-total', before.total ?? '');
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
@@ -122,7 +129,9 @@ test('Lektion: nach dem Neuladen im selben Schritt', async ({ page }) => {
   await page.getByTestId('lesson-start').click();
   await expect(page.getByTestId('lesson')).toHaveAttribute('data-step', 'words');
   await page.reload();
-  await openLesson(page, 'l07');
+  // Fortsetzen (plan.md §0): Der letzte Schritt ist keine 2 Min. her → die App führt direkt zurück in die Lektion.
+  await screen(page, 'lesson');
+  await expect(page.getByTestId('lesson')).toHaveAttribute('data-lesson', 'l07');
   await expect(page.getByTestId('lesson')).toHaveAttribute('data-step', 'words');
   await expect(page.getByTestId('intro').or(page.getByTestId('exercise')).first()).toBeVisible();
   expect(errors).toEqual([]);

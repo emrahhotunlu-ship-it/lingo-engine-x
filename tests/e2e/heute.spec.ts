@@ -10,6 +10,10 @@ import { MON, MON_9, SUN_9, TUE_9, WEEK_W39, mondayPlan, profileWith, reviewedLo
 
 type Doc = Record<string, unknown>;
 
+/** Reparatur-Satz aus „Sag es“ (Block 3) vom Montagmorgen – Material für Block 5. */
+const SAY_REPAIR_T = Date.parse('2026-09-21T08:30:00+02:00');
+const SAY_REPAIR = { id: 'rh01', wrong: 'Please send me the actual version of the contract.', right: 'Please send me the current version of the contract.', why: '„actual“ heißt „tatsächlich“.', src: 'say', t: SAY_REPAIR_T, box: 0, due: SAY_REPAIR_T + 86_400_000 };
+
 test('Morgen-Journey: Tageskarte mit 5 Blöcken, ein Tipp bis zur ersten Aufgabe', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors, external } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39 } } });
@@ -36,12 +40,13 @@ test('Morgen-Journey: Tageskarte mit 5 Blöcken, ein Tipp bis zur ersten Aufgabe
   expect(external).toEqual([]);
 });
 
-test('Montag: Bestätigungskarte, Ersatzblöcke bis „Fertig“, Serie +1, ohne KI', async ({ page }) => {
+test('Montag: Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne KI und ohne Sprachausgabe', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, {
     migrated: true,
     now: MON_9,
-    fake: { capabilities: { sample: false }, patch: { ...profileWith(MON, mondayPlan(), ['u-task', 'u-focus'], {}), ...reviewedLog(MON) } },
+    // Ohne Sprachausgabe entfällt das Nachsprechen nach Block 2 (plan.md §1.5, Rückfälle).
+    fake: { capabilities: { sample: false }, speech: false, patch: { ...profileWith(MON, mondayPlan(), ['u-task', 'u-focus'], {}), ...reviewedLog(MON), 'app/repair': { items: [SAY_REPAIR] } } },
   });
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toHaveAttribute('data-done', '3');
@@ -55,21 +60,34 @@ test('Montag: Bestätigungskarte, Ersatzblöcke bis „Fertig“, Serie +1, ohne
   // Vorschlag = nächstes Thema der Reihenfolge nach KW 38 (t02 → t13, lehrer.md §3).
   await expect(page.getByTestId('unit-confirm')).toHaveAttribute('data-theme-id', 't13');
   await page.getByTestId('unit-confirm-ok').click();
-  // Block 2 (Ersatz): Themen-Text, zwei Fragen mit Belegstelle und Grund, Wendungen.
-  await screen(page, 'unitStep');
-  await expect(page.getByTestId('unit-input')).toBeVisible();
-  await page.getByTestId('unit-q1-opt').first().click();
-  await page.getByTestId('unit-q2-opt').first().click();
-  await expect(page.getByTestId('unit-q-why')).toHaveCount(2);
-  await page.getByTestId('unit-input-done').click();
-  // Zwischenkarte → Block 5 (Ersatz „Nochmal, aber besser“).
+  // Block 2 (Anbieter `input.read`, Übung `inputUnit`): Themen-Text des bestätigten Themas, zwei Fragen
+  // mit Belegstelle und Grund (auch bei richtig, M9), Wendungen mitnehmen.
+  await screen(page, 'inputUnit');
+  const block = page.getByTestId('input-block');
+  await expect(block).toHaveAttribute('data-step', 'input');
+  await expect(block).toHaveAttribute('data-ref', /^theme:.*t13$/);
+  await page.getByTestId('block-to-questions').click();
+  for (let i = 0; i < 2; i++) {
+    await expect(page.getByTestId('question')).toHaveAttribute('data-index', String(i));
+    await page.getByTestId('option').first().click();
+    await expect(page.getByTestId('evidence')).toBeVisible();
+    await expect(page.getByTestId('explain')).toBeVisible();
+    await page.getByTestId('next').click();
+  }
+  await expect(block).toHaveAttribute('data-step', 'notice');
+  expect(await page.getByTestId('notice-row').count()).toBeGreaterThanOrEqual(2);
+  await page.getByTestId('block-next').click();
+  // Zwischenkarte → Block 5 „Nochmal, aber besser“ (Anbieter `again`, Übung `unitAgain`): Material ist der
+  // Reparatur-Satz von heute (Block 3) – geräteübergreifend aus `app/repair`, ohne KI lokal verglichen.
   await screen(page, 'unitCard');
   await expect(page.getByTestId('unit-between')).toHaveAttribute('data-next', 'ch:u-again');
   await page.getByTestId('unit-next').click();
-  await screen(page, 'unitStep');
-  await page.getByTestId('unit-again-text').fill('Walk me through your current process, please. What would success look like for you?');
-  await page.getByTestId('unit-again-compare').click();
-  await page.getByTestId('unit-again-done').click();
+  await screen(page, 'unitAgain');
+  await page.getByTestId('again-input').fill('Please send me the current version of the contract today.');
+  await page.getByTestId('again-compare').click();
+  await expect(page.getByTestId('again-new')).toContainText('current version of the contract today');
+  await expect(page.getByTestId('again-better')).toContainText(SAY_REPAIR.right);
+  await page.getByTestId('next').click();
   // Ende der Einheit → zurück zu Heute: Fertig-Zustand, kein Knopf, Serie +1.
   await expect(page.getByTestId('unit-end')).toBeVisible();
   await page.getByTestId('session-end-next').click();
@@ -137,20 +155,30 @@ test('„Deine Woche“ über die Unterzeile von Heute, Thema wechseln schreibt 
   expect(errors).toEqual([]);
 });
 
-test('Fehlergrenze (lx:crash-once) im Ersatzschritt der Einheit: Hinweis statt weißer Seite, zurück zu Heute, Einheit läuft weiter', async ({ page }) => {
+test('Fehlergrenze (lx:crash-once) in Block 2 der Einheit: Hinweis statt weißer Seite, Überspringen, Einheit läuft weiter', async ({ page }) => {
   const { errors } = await boot(page, {
     migrated: true,
     now: MON_9,
-    localStorage: crashOnce('unitStep'),
+    localStorage: crashOnce('inputUnit'),
     fake: { patch: { ...WEEK_W39, ...profileWith(MON, mondayPlan(), []), ...reviewedLog(MON) } },
   });
   await screen(page, 'today');
-  await page.getByTestId('start').click();
-  await expect(page.getByTestId('boundary-exercise')).toBeVisible();
-  await page.getByTestId('boundary-end').click();
-  await screen(page, 'today');
   await expect(page.getByTestId('start')).toHaveAttribute('data-duty', 'ch:u-in');
   await page.getByTestId('start').click();
-  await expect(page.getByTestId('unit-input')).toBeVisible();
+  // Die Schritt-Grenze der Übung fängt den Fehler (G4): Leiste der Einheit bleibt, Hinweis mit „Überspringen“.
+  await screen(page, 'inputUnit');
+  await expect(page.getByTestId('boundary-step')).toBeVisible();
+  await expect(page.getByTestId('boundary-exercise')).toHaveCount(0);
+  await page.getByTestId('boundary-skip').click();
+  // Überspringen führt ohne Bewertung zum nächsten Schritt (Fragen); Block 2 läuft bis zum Ende weiter,
+  // mit Sprachausgabe folgt das Nachsprechen (plan.md §1.5).
+  await expect(page.getByTestId('input-block')).toHaveAttribute('data-step', 'q');
+  for (let i = 0; i < 2; i++) {
+    await page.getByTestId('option').first().click();
+    await page.getByTestId('next').click();
+  }
+  await page.getByTestId('block-next').click();
+  await screen(page, 'pron');
+  await expect(page.getByTestId('pron')).toHaveAttribute('data-kind', 'shadow');
   expect(errors.filter((e) => !e.includes('crash-once'))).toEqual([]);
 });

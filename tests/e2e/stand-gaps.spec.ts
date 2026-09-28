@@ -104,20 +104,22 @@ test('M10: Wochen-Check – 12 Aufgaben ohne Tipps, Ergebnis im alten Format, Ve
   expect(external).toEqual([]);
 });
 
-test('M10: Angebot auf Heute erst nach der Pflicht; Abbruch vor 6 Antworten speichert kein Ergebnis', async ({ page }) => {
+test('M10: kein Angebot auf Heute, Einstieg über Profil → Wochen-Check; Abbruch vor 6 Antworten speichert kein Ergebnis', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(0) } } });
   await screen(page, 'today');
+  // Neubau (plan.md B12, §1.4): Heute beherbergt nichts doppelt – nach der Pflicht nur „Lohnt sich jetzt“,
+  // der Wochen-Check liegt im Profil unter Tests (Extra).
   await expect(page.getByTestId('extra')).toBeVisible();
-  const offer = page.getByTestId('check-offer');
-  await expect(offer).toBeVisible();
-  await offer.getByTestId('check-offer-start').click();
+  await expect(page.getByTestId('check-offer')).toHaveCount(0);
+  await openChecks(page);
+  await page.getByTestId('check-start').click();
   await expect(page.locator('[data-screen="check"]')).toBeVisible();
+  await expect(page.getByTestId('check-screen')).toContainText('Extra');
   await answerCheckItem(page, 1, 12);
   await answerCheckItem(page, 2, 12);
-  // ✕ führt dorthin zurück, woher der Check kam: nach Heute (UX-Beratung Nr. 3); in „Stand → Verlauf“ bleibt er erreichbar.
+  // ✕ führt dorthin zurück, woher der Check kam (UX-Beratung Nr. 3): zur Seite Wochen-Check, Start wieder da.
   await page.getByTestId('round-close').click();
-  await screen(page, 'today');
-  await openChecks(page);
+  await screen(page, 'checks');
   await expect(page.getByTestId('check-start')).toBeVisible();
   expect(((await profileOf(page)).checks as unknown[]).length).toBe(2);
   expect(errors).toEqual([]);
@@ -153,7 +155,10 @@ test('M7: Wochenstreifen (7 Tagesringe, dieselbe Regel wie die Serie) und Niveau
   // Serie 12 nach alter Regel: die ganze Woche zählt.
   expect(states).toEqual(['done', 'done', 'done', 'done', 'done', 'done', 'done']);
   await expect(page.getByTestId('profile-sheet-streak')).toContainText('12');
-  await openOverview(page);
+  // Das Profil-Blatt ist schon offen: „Dein Stand ›“ direkt darin (ein zweiter Profil-Tipp träfe den Hintergrund).
+  await page.getByTestId('profile-overview').click();
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
+  await screen(page, 'overview');
 
   const scale = page.getByTestId('level-scale');
   await expect(scale).toBeVisible();

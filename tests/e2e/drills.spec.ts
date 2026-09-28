@@ -183,14 +183,19 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
   expect(logOf(d, 'order').slice(-6).every((e) => e.ctx === 'duty')).toBe(true);
   await expect.poll(async () => actOf(await dump(page), 'order')).toBe(actOf(before, 'order') + 1);
   await noCardOrTopicWrites(page);
-  // Heute: der Pflichtkanal ist Zustand, kein Knopf.
+  // Heute: der einzige Pflichtkanal ist erledigt → Fertig-Karte (Zustand, kein Knopf; Neubau N15).
   await page.getByTestId('summary-back').click();
   await expect(page.getByTestId('learn-hub')).toBeVisible();
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
-  const duty = page.locator('[data-testid="duty"][data-duty="ch:order"]');
-  await expect(duty).toHaveAttribute('data-state', 'done');
-  await expect(duty.locator('button, a, input')).toHaveCount(0);
+  const status = page.getByTestId('today-status');
+  await expect(status).toHaveAttribute('data-status', 'allDone');
+  await expect(status).toHaveAttribute('data-done', '1');
+  await expect(status).toHaveAttribute('data-total', '1');
+  const card = page.locator('[data-testid="today-card"][data-done="true"]');
+  await expect(card).toBeVisible();
+  await expect(card.locator('button, a, input')).toHaveCount(0);
+  await expect(page.getByTestId('start')).toHaveCount(0);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

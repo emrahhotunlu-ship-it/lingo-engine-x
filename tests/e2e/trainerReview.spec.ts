@@ -170,7 +170,7 @@ test.describe('Desktop', () => {
   test('H3: Heute sagt „Wiederholen" nur einmal', async ({ page }) => {
     const { errors } = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(3), ...forcedPatch() } } });
     await screen(page, 'today');
-    await expect(page.getByTestId('today-status')).toHaveText('Noch 3 Karten');
+    await expect(page.getByTestId('today-status')).toHaveText('0 von 1 · noch ca. 10 Min.');
     await expect(page.getByTestId('start')).toHaveText('Starten');
     const text = await page.locator('main').innerText();
     expect(text.match(/Wiederholen/g) ?? []).toHaveLength(1);

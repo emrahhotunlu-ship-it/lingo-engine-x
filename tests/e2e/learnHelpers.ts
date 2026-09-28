@@ -185,7 +185,11 @@ async function answerLessonWord(page: Page, words: ReadonlyArray<{ en: string; d
   }
   await expect(page.getByTestId('verdict')).toBeVisible();
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
-  await page.getByTestId('next').click();
+  // „Automatisch weiter“ (M6) wechselt nach 1,2 s – unter Last manchmal vor dem Klick. Dann ist der
+  // Wechsel schon passiert; in jedem Fall muss das Ergebnis dieser Übung verschwinden.
+  const verdict = await page.getByTestId('verdict').elementHandle();
+  await page.getByTestId('next').click({ timeout: 2_000 }).catch(() => undefined);
+  await verdict?.waitForElementState('hidden');
 }
 
 /**
