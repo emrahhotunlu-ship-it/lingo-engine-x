@@ -93,7 +93,7 @@ const ModuleIcon = ({ name, channel }: { name: InputIconName; channel: Channel }
  * `entries: [{ place: 'learn', group }]` an: `way` (Dein Weg, z. B. P1 „Deine Woche“), `errors`
  * (Aus deinen Fehlern), `grammar` (Grammatik & Fallen), `training` (Training, z. B. P7). Einstiege
  * ohne oder mit unbekannter Gruppe erscheinen unter „Training“ – nichts geht verloren. */
-export const LEARN_GROUPS = ['way', 'errors', 'grammar', 'training'] as const;
+export const LEARN_GROUPS = ['path', 'way', 'errors', 'grammar', 'training'] as const;
 
 function ForeignRows({ group }: { group: (typeof LEARN_GROUPS)[number] }) {
   const { t } = useT();
@@ -179,8 +179,9 @@ export function LearnHub() {
 
       {/* 1. Dein Weg: Deine Woche (P1) und die Kurs-Karte (nächste Lektion, Fortschritt). */}
       <Section id="lh-way" title={t('nbLernenHubWay')}>
-        {entriesFor('learn', 'way').length > 0 && (
+        {(entriesFor('learn', 'path').length > 0 || entriesFor('learn', 'way').length > 0) && (
           <List label={t('nbLernenHubWay')}>
+            <ForeignRows group="path" />
             <ForeignRows group="way" />
           </List>
         )}

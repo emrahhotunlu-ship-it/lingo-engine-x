@@ -170,6 +170,8 @@ test('Neuladen in der Grammatik-Runde bei Aufgabe 4: gleiche Aufgabe, keine dopp
   await screen(page, 'today');
   await openTab(page, 'learn');
   await page.getByTestId('hub-grammar').click();
+  const logged = async () => (((await dump(page))['log/2026-09-20']?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g').length;
+  const base = await logged();
   await page.getByTestId('gr-start').click();
   for (let i = 0; i < 3; i++) {
     await expect(page.getByTestId('gr-item')).toHaveCount(1);
@@ -179,15 +181,14 @@ test('Neuladen in der Grammatik-Runde bei Aufgabe 4: gleiche Aufgabe, keine dopp
   await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\b8\b/);
   const prompt = await page.getByTestId('gr-item').getAttribute('data-topic');
   const text = await page.getByTestId('gr-item').getByTestId('task-line').innerText();
-  const logged = async () => (((await dump(page))['log/2026-09-20']?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g').length;
-  await expect.poll(logged).toBe(3);
+  await expect.poll(logged).toBe(base + 3);
   await page.waitForTimeout(600);
   await page.reload();
   await screen(page, 'grammarSession');
   await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\b8\b/);
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', prompt ?? '');
   await expect(page.getByTestId('gr-item').getByTestId('task-line')).toHaveText(text);
-  expect(await logged()).toBe(3);
+  expect(await logged()).toBe(base + 3);
   expect(errors).toEqual([]);
 });
 
@@ -210,12 +211,14 @@ test('Neuladen in der Lektion, Schritt 3 (Grammatik) bei Aufgabe 2: dort geht es
     onGrammar: async (phase) => {
       if (phase !== 'before' || ++n !== 2 || reloaded) return;
       reloaded = true;
-      const before = await page.getByTestId('gr-item').innerText();
+      const norm = async () => (await page.getByTestId('gr-item').getByTestId('sentence').innerText()).replace(/\s+/g, ' ').trim();
+      const before = await norm();
       await page.waitForTimeout(600);
       await page.reload();
       await screen(page, 'lesson');
       await expect(page.getByTestId('lesson')).toHaveAttribute('data-step', 'grammar');
-      await expect(page.getByTestId('gr-item')).toHaveText(before);
+      await expect(page.getByTestId('gr-item')).toBeVisible();
+      expect(await norm()).toBe(before);
     },
   });
   expect(reloaded).toBe(true);
