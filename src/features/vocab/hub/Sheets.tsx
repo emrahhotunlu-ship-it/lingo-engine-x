@@ -11,6 +11,7 @@ import { useT, type MessageKey } from '../../../i18n';
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { Sheet } from '../../../ui/Sheet';
+import { unlockSpeech, useSpeech } from '../../../platform/speech';
 import { toast } from '../../../ui/Toast';
 import { useDecks, writeDecks } from '../decksStore';
 import { WordSheet } from '../list/WordSheet';
@@ -138,6 +139,7 @@ export function ExtraSheet({ onClose }: SheetProps) {
     startExtra(api, { deck: 'all', pick: (c) => keys.has(c.key), allowNew: o.allowNew === true, size: Math.min(o.size ?? 20, Math.max(1, keys.size)), label: o.label });
   };
   const own = visibleDecks(decks);
+  const tts = useSpeech((s) => s.status === 'ready');
   return (
     <Sheet open onClose={onClose} title={t('nbWsExtraTitle')} closeLabel={t('close')}>
       <div className="flex flex-col gap-4" data-testid="extra-sheet">
@@ -154,6 +156,26 @@ export function ExtraSheet({ onClose }: SheetProps) {
             </li>
           ))}
         </ul>
+        {tts && (
+          <button
+            type="button"
+            onClick={() => {
+              // iPhone: Sprachausgabe im selben Klick freischalten; die Schleife spricht danach von selbst.
+              unlockSpeech();
+              onClose();
+              go({ name: 'listenLoop' });
+            }}
+            className="flex min-h-14 w-full items-center gap-3 rounded-2xl bg-surface px-4 py-2.5 text-left"
+            data-testid="extra-loop"
+          >
+            <Icon name="headphones" size={18} className="flex-none text-subtle" />
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="font-medium">{t('nbWsLoopTitle')}</span>
+              <span className="text-sm text-muted">{t('nbWsLoopSub')}</span>
+            </span>
+            <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
+          </button>
+        )}
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium">{t('nbWsExtraDeck')}</p>
           <div className="flex flex-wrap gap-2">

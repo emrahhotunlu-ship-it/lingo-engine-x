@@ -210,6 +210,6 @@ test('Kaputte Karte wird übersprungen, ohne Bewertung; die Runde endet regulär
     await expect(page.locator(`[data-testid="flip"][data-card="${card}"]`)).toHaveCount(0);
   }
   await expect(page.getByTestId('summary')).toBeVisible();
-  const logged = (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => ids.includes(String(e.id)) && e.m === 'tr-flip');
-  expect(logged.length).toBe(2);
+  // B4: Die vorletzte Aufdeck-Bewertung wird erst mit der letzten festgeschrieben – daher abwarten.
+  await expect.poll(async () => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => ids.includes(String(e.id)) && e.m === 'tr-flip').length).toBe(2);
 });

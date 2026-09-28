@@ -11,6 +11,7 @@ import { buildExercise, type SceneLookup } from '../../domain/srs/exercise';
 import { chooseExercise, supports, type ExerciseEnv } from '../../domain/srs/modes';
 import { againPos, calibration, controlAllowed, controlCounts, dirFor, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
 import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
+import { listenExercise } from '../../domain/srs/listen';
 import { isThemeCard } from '../../domain/week/cards';
 import { REPAIR_MAX } from '../../domain/week/review';
 import type { WeekTheme } from '../../domain/week/types';
@@ -30,6 +31,7 @@ import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './persist';
+import { flushOnHide } from '../progress/persist';
 import { pickDailyRepairs, repairsDoneToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
 import { commitRepairAnswer } from '../repair/review';
@@ -176,6 +178,11 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   if (!card || item.phase !== 'quiz') return null;
   const hit = takePrebuilt(s, item);
   if (hit) return hit;
+  // N35 Hör-Modus: die Sprachausgabe spricht, getippt wird in die Lücke (sonst die Leiter).
+  if (s.mode === 'listen') {
+    const lx = listenExercise(card, s.lang, s.pool.length - 1, s.env);
+    if (lx) return build(s, card, lx);
+  }
   const picked = modeFor(s, card, item);
   if (picked === 'flip') return { ...build(s, card, 'flip'), dir: dirFor(card.key, s.dir, s.day) };
   if (picked === 'control') {
@@ -280,6 +287,7 @@ export function defaultsFor(round: Round, deck: string): { mode: RequestedMode; 
 
 /** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
 export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
+  commitHeld();
   const live = useLive.getState();
   const now = useClock.getState().now;
   const day = dayKey(Date.now());
@@ -468,6 +476,7 @@ function finish(s: SessionState, aborted: boolean): void {
 /** Einführung einer neuen Karte gesehen: die erste Abfrage folgt zwei Karten später. */
 export function continueIntro(): FirstKind {
   touch();
+  commitHeld();
   const s = useSession.getState();
   const item = s.queue[s.pos];
   if (!item) return null;
@@ -476,16 +485,24 @@ export function continueIntro(): FirstKind {
   return advanceFrom({ ...s, queue });
 }
 
-function advanceFrom(s: SessionState): FirstKind {
+/** Nächster Zustand ohne Seiteneffekte (Ende → `summary`). */
+function advanceState(s: SessionState): SessionState {
   const next = { ...s, ...settle(s, s.pos + 1) };
-  if (next.pos >= next.queue.length) {
-    next.status = 'summary';
-    finish(next, false);
-  }
+  if (next.pos >= next.queue.length) next.status = 'summary';
+  return next;
+}
+
+/** Zustand übernehmen; am Rundenende `finish`. */
+function applyAdvance(next: SessionState): FirstKind {
+  if (next.status === 'summary') finish(next, false);
   useSession.setState(next);
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
   return item.phase === 'intro' ? 'intro' : firstKindOf(next.exercise);
+}
+
+function advanceFrom(s: SessionState): FirstKind {
+  return applyAdvance(advanceState(s));
 }
 
 export type Answer = {
@@ -502,6 +519,8 @@ export type Answer = {
 export function commitAnswer(ans: Answer): FirstKind {
   touch();
   cardGo();
+  // B4: eine zurückgehaltene Aufdeck-Bewertung gilt, sobald die nächste Antwort kommt.
+  commitHeld();
   const s = useSession.getState();
   const e = s.exercise;
   const item = s.queue[s.pos];
@@ -529,8 +548,8 @@ export function commitAnswer(ans: Answer): FirstKind {
   const updated = (card.kind === 'chunk' ? toChunkCard(card.id, nextDoc, a.t) : toTrainCard(card.id, nextDoc, true, a.t)) ?? card;
   const cards = new Map(s.cards);
   cards.set(card.key, updated);
-  void saveCard(a, card.inDb || card.kind === 'chunk' ? null : { ...card.doc });
-  recordAnswer(a, s.results.length === 0);
+  const seed = card.inDb || card.kind === 'chunk' ? null : { ...card.doc };
+  const immediate = s.results.length === 0;
 
   const shown = { ...s.shown, [card.key]: (s.shown[card.key] ?? 0) + 1 };
   const queue = [...s.queue];
@@ -539,7 +558,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip'), 0, { key: card.key, reason: 'again', phase: 'quiz' });
   const control = e.check === 'control' ? 1 : 0;
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
-  return advanceFrom({
+  const next = advanceState({
     ...s,
     cards,
     queue,
@@ -551,10 +570,105 @@ export function commitAnswer(ans: Answer): FirstKind {
     recentEx: [...s.recentEx, e.ex].slice(-2),
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });
+  // B4: Aufdecken-Bewertungen 5 s zurückhalten (Karte, Protokoll, Zähler), solange die Runde
+  // weiterläuft. Die letzte Antwort einer Runde gilt sofort: Rundenende, Pflicht, act/Serie und der
+  // Einheits-Ablauf bleiben so unverändert (keine zurückgenommenen Zähler, die nie sinken dürfen).
+  if (e.ex === 'flip' && next.status !== 'summary') {
+    holdAnswer({ a, seed, immediate, before: s, step: next.step, word: card.word });
+    return applyAdvance(next);
+  }
+  void saveCard(a, seed);
+  recordAnswer(a, immediate);
+  return applyAdvance(next);
+}
+
+// ------------------------------------------------------------------ Rückgängig (B4, markt AN2)
+
+/** So lange bleibt eine Aufdeck-Bewertung rückgängig machbar. */
+export const UNDO_MS = 5000;
+
+type Held = {
+  a: AnswerEvent;
+  seed: Doc | null;
+  immediate: boolean;
+  /** Sitzung vor der Bewertung (wird bei „Rückgängig“ wiederhergestellt). */
+  before: SessionState;
+  /** `step` der Ansicht direkt nach der Bewertung: nur dort gilt „Rückgängig“. */
+  step: number;
+  word: string;
+  timer: ReturnType<typeof setTimeout> | null;
+};
+
+/**
+ * Die letzte Aufdeck-Bewertung – bis zum Festschreiben ist NICHTS gespeichert: keine Karte, kein
+ * Protokolleintrag, kein Zähler. „Rückgängig“ muss deshalb nie ein Dokument
+ * zurückschreiben (der Schreibpfad kennt kein Löschen von Feldern) und kann nie Neueres überschreiben.
+ */
+let held: Held | null = null;
+
+/** Für die Anzeige: gibt es gerade etwas rückgängig zu machen? */
+export const useUndo = create<{ t: number | null; word: string }>(() => ({ t: null, word: '' }));
+
+let guarded = false;
+/** Seite wird verborgen oder verlassen: sofort festschreiben und gesammelt speichern. */
+function installHeldGuard(): void {
+  if (guarded || typeof window === 'undefined') return;
+  guarded = true;
+  const onHide = () => {
+    if (!held) return;
+    commitHeld();
+    void flushOnHide();
+  };
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') onHide();
+  });
+  window.addEventListener('pagehide', onHide);
+}
+
+function holdAnswer(h: Omit<Held, 'timer'>): void {
+  commitHeld();
+  installHeldGuard();
+  // Fenster abgelaufen: festschreiben und gleich gesammelt speichern (Emrah ist gerade nicht am Antworten).
+  held = { ...h, timer: setTimeout(() => commitHeld(true), UNDO_MS) };
+  useUndo.setState({ t: h.a.t, word: h.word });
+}
+
+/**
+ * Zurückgehaltene Bewertung festschreiben (Zeitablauf, nächste Antwort, Weitergehen, Verlassen, neue
+ * Runde) – genau einmal, über denselben Weg wie jede andere Antwort (`saveCard` → `transform`).
+ */
+export function commitHeld(flushNow = false): void {
+  const h = held;
+  if (!h) return;
+  held = null;
+  if (h.timer !== null) clearTimeout(h.timer);
+  useUndo.setState({ t: null, word: '' });
+  void saveCard(h.a, h.seed);
+  recordAnswer(h.a, h.immediate || flushNow);
+}
+
+/**
+ * „Rückgängig“: Die letzte Aufdeck-Bewertung verwerfen und dieselbe Karte wieder von vorn zeigen.
+ * Nur solange die Ansicht direkt danach steht (sonst `false`). Die Runde (Zähler, Warteschlange,
+ * Wiedervorlage, Kontrollen) ist danach genau wie vor der Bewertung; aktive Zeit zählt weiter.
+ */
+export function undoLast(): FirstKind | false {
+  const h = held;
+  const s = useSession.getState();
+  if (!h || !s.active || s.step !== h.step) return false;
+  held = null;
+  if (h.timer !== null) clearTimeout(h.timer);
+  useUndo.setState({ t: null, word: '' });
+  prebuilt = null;
+  touch();
+  const cur = useSession.getState();
+  useSession.setState({ ...h.before, step: cur.step + 1, activeMs: cur.activeMs, lastInteract: cur.lastInteract });
+  return firstKindOf(h.before.exercise);
 }
 
 /** Runde verlassen (alles Beantwortete ist gespeichert bzw. vorgemerkt). */
 export function leaveSession(): void {
+  commitHeld();
   const s = useSession.getState();
   if (!s.active) return;
   if (s.status === 'running' && s.results.length > 0) finish(s, true);
@@ -567,6 +681,7 @@ export function leaveSession(): void {
  * nichts wird geschrieben, die Runde läuft mit der nächsten Karte weiter.
  */
 export function skipCurrent(): FirstKind {
+  commitHeld();
   const s = useSession.getState();
   if (!s.active || s.status !== 'running') return null;
   if (currentRepair(s)) return nextRepair();
@@ -634,6 +749,7 @@ const lastOf = (c: TrainCard): number => (typeof c.doc.last === 'number' ? c.doc
  */
 export function restoreTrainer(snap: TrainerSnapshot): boolean {
   if (!snap || !Array.isArray(snap.queue) || typeof snap.pos !== 'number') return false;
+  commitHeld();
   const now = useClock.getState().now;
   const day = dayKey(Date.now());
   if (snap.day !== day) return false;

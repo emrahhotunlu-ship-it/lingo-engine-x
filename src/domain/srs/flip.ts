@@ -25,8 +25,11 @@ export const CONTROL = { perWeek: 5, perDay: 2, perSession: 1, windowDays: 28, m
 /** Beim Tippen: Wiedervorlage nach 3 anderen Karten (pos + 4). */
 export const TYPE_AGAIN_GAP = 4;
 
-/** Gewünschter Modus: `auto` (Tageseinheit, „Alle fälligen“), Stapel-Modus `flip` oder `type`. */
-export type RequestedMode = 'auto' | 'type' | 'flip';
+/**
+ * Gewünschter Modus: `auto` (Tageseinheit, „Alle fälligen“), Stapel-Modus `flip` oder `type`,
+ * oder `listen` (N35 Hör-Modus: die Sprachausgabe spricht, getippt wird in die Lücke – `listen.ts`).
+ */
+export type RequestedMode = 'auto' | 'type' | 'flip' | 'listen';
 /**
  * Gewählter Modus je Karte: Aufdecken, Tippen (Leiter), Kontrolle (frei tippen nach „Leicht“) oder
  * Prüfabfrage (tippen mit Stütze auf Stufe 3 nach „Gut“).
@@ -83,7 +86,7 @@ export type PickInput = {
  * 7 sonst → Aufdecken
  */
 export function pickMode(i: PickInput): PickedMode {
-  if (i.requested === 'type' || !meaningOf(i.card, i.lang)) return 'type';
+  if (i.requested === 'type' || i.requested === 'listen' || !meaningOf(i.card, i.lang)) return 'type';
   const last = lastRating(i.card.doc);
   if (last && dayKey(last.t) === i.day) return isFlipEntry(last) ? 'flip' : 'type';
   const easyFlip = isFlipEntry(last) && last?.g === 4;

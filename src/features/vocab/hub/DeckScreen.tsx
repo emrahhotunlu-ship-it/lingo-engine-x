@@ -11,6 +11,7 @@ import { useWeek } from '../../../app/useWeek';
 import { useT } from '../../../i18n';
 import { Button } from '../../../ui/Button';
 import { Segmented } from '../../../ui/Segmented';
+import { useSpeech } from '../../../platform/speech';
 import { toast } from '../../../ui/Toast';
 import { ScreenHeader } from '../../learn/ui';
 import { useDecks, writeDecks } from '../decksStore';
@@ -35,6 +36,7 @@ export function DeckScreen({ route }: ScreenProps<'deck'>) {
   const cards = useVocabCards();
   const quota = useQuota(cards);
   const ctx = useDeckCtx();
+  const tts = useSpeech((s) => s.status === 'ready');
   const { theme } = useWeek();
   const id = route.id;
   const builtin = isBuiltinDeck(id);
@@ -73,10 +75,16 @@ export function DeckScreen({ route }: ScreenProps<'deck'>) {
             options={[
               { value: 'flip', label: t('nbWsModeFlip') },
               { value: 'type', label: t('nbWsModeType') },
+              { value: 'listen', label: t('nbWsModeListen') },
             ]}
             onChange={(m) => save({ mode: m })}
             testId="deck-mode"
           />
+          {mode === 'listen' && (
+            <p className="text-sm text-muted" data-testid="deck-listen-hint">
+              {t(tts ? 'nbWsListenHint' : 'nbWsListenNoTts')}
+            </p>
+          )}
         </div>
         {mode === 'flip' && (
           <div className="flex flex-col gap-2">
