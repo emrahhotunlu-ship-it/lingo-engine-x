@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 import { useNav } from '../../app/nav';
 import { useAiAvailable, useAiScope } from '../../ai/scope';
@@ -107,41 +107,39 @@ function LessonRun({ id }: { id: string }) {
           </p>
         )}
       </div>
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div key={step} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
-          {step === 'intro' && <LessonIntro cando={cando} onStart={next} />}
-          {step !== 'intro' && step !== 'summary' && (run.status !== 'ready' || !run.content) && <LessonIntro cando={cando} onStart={() => undefined} resume />}
-          {run.status === 'ready' && run.content && (
-            <>
-              {step === 'words' && <WordsStep meta={meta} content={run.content} onComplete={next} />}
-              {step === 'dialog' && <DialogStep meta={meta} content={run.content} onComplete={next} />}
-              {step === 'grammar' && <GrammarStep meta={meta} content={run.content} onComplete={next} />}
-              {step === 'output' && <OutputStep meta={meta} content={run.content} onComplete={next} />}
-            </>
-          )}
-          {step === 'summary' && (
-            <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="summary">
-              <header className="flex items-start gap-3">
-                <span className="inline-flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent-text">
-                  <Icon name="check" size={22} />
-                </span>
-                <div className="flex flex-col gap-1">
-                  <h2 className="text-xl font-semibold tracking-tight">{t('lsDone')}</h2>
-                  <p className="text-base" lang={lang} data-testid="lesson-cando">
-                    {t('lsGoal', { cando })}
+      <motion.div key={step} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
+        {step === 'intro' && <LessonIntro cando={cando} onStart={next} />}
+        {step !== 'intro' && step !== 'summary' && (run.status !== 'ready' || !run.content) && <LessonIntro cando={cando} onStart={() => undefined} resume />}
+        {run.status === 'ready' && run.content && (
+          <>
+            {step === 'words' && <WordsStep meta={meta} content={run.content} onComplete={next} />}
+            {step === 'dialog' && <DialogStep meta={meta} content={run.content} onComplete={next} />}
+            {step === 'grammar' && <GrammarStep meta={meta} content={run.content} onComplete={next} />}
+            {step === 'output' && <OutputStep meta={meta} content={run.content} onComplete={next} />}
+          </>
+        )}
+        {step === 'summary' && (
+          <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="summary">
+            <header className="flex items-start gap-3">
+              <span className="inline-flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent-text">
+                <Icon name="check" size={22} />
+              </span>
+              <div className="flex flex-col gap-1">
+                <h2 className="text-xl font-semibold tracking-tight">{t('lsDone')}</h2>
+                <p className="text-base" lang={lang} data-testid="lesson-cando">
+                  {t('lsGoal', { cando })}
+                </p>
+                {run.n > 0 && (
+                  <p className="lx-tnum text-sm text-muted" data-testid="summary-stats">
+                    {tn('lsAnswers', run.n, { pct: Math.round((run.ok / run.n) * 100) })}
                   </p>
-                  {run.n > 0 && (
-                    <p className="lx-tnum text-sm text-muted" data-testid="summary-stats">
-                      {tn('lsAnswers', run.n, { pct: Math.round((run.ok / run.n) * 100) })}
-                    </p>
-                  )}
-                </div>
-              </header>
-              <SummaryActions onBack={() => leaveLesson()} backTo={{ name: 'course' }} backLabel={t('lsBackToCourse')} />
-            </article>
-          )}
-        </motion.div>
-      </AnimatePresence>
+                )}
+              </div>
+            </header>
+            <SummaryActions onBack={() => leaveLesson()} backTo={{ name: 'course' }} backLabel={t('lsBackToCourse')} />
+          </article>
+        )}
+      </motion.div>
       {idx > 0 && step !== 'summary' && (
         <div>
           <Button variant="ghost" icon="arrowLeft" onClick={() => send({ type: 'BACK' })} data-testid="lesson-back">

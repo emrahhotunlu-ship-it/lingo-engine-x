@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { drillTasks, type DrillTask } from '../../domain/patterns/drill';
 import type { Mistake } from '../../domain/patterns/mistakes';
@@ -46,48 +46,53 @@ export function PatternDrill({ pattern, all, mistakes, rule, onDone }: Props) {
 
   return (
     <section className="flex flex-col gap-4" data-testid="pattern-drill" data-state={done ? 'done' : 'open'} data-id={pattern.id} aria-label={t('ptDrillTitle')}>
-      <AnimatePresence mode="wait" initial={false}>
-        {done ? (
-          <motion.div key="end" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
-            <Card className="flex flex-col gap-4">
-              <p className="lx-tnum text-base font-medium" role="status" data-testid="pattern-drill-end" data-ok={ok} data-total={tasks.length}>
-                {t('ptDrillDone', { ok, total: tasks.length })}
-              </p>
-              <div>
-                <Button variant="primary" icon="arrowLeft" onClick={onDone} data-testid="pattern-drill-back">
-                  {t('ptDrillBack')}
-                </Button>
-              </div>
-            </Card>
+      {done ? (
+        <motion.div key="end" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
+          <Card className="flex flex-col gap-4">
+            <p className="lx-tnum text-base font-medium" role="status" data-testid="pattern-drill-end" data-ok={ok} data-total={tasks.length}>
+              {t('ptDrillDone', { ok, total: tasks.length })}
+            </p>
+            <div>
+              <Button variant="primary" icon="arrowLeft" onClick={onDone} data-testid="pattern-drill-back">
+                {t('ptDrillBack')}
+              </Button>
+            </div>
+          </Card>
+        </motion.div>
+      ) : (
+        cur && (
+          <motion.div key={pos} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
+            {cur.kind === 'fix' ? (
+              <RepairItem
+                item={{ id: repairId(cur.wrong), wrong: cur.wrong, right: cur.right, ...(rule ? { why: rule } : {}), src: 'pattern' }}
+                mode="step"
+                area="lesson"
+                source="app/patterns"
+                status={status}
+                onResult={({ ok: right }) => {
+                  if (right) setOk((n) => n + 1);
+                  // Der eigene Satz wird Reparatur-Satz (idempotent). Direkt nach dem Zeigen ist ein
+                  // Treffer noch kein freier Abruf: nur ein Fehler wird eingetragen (wie RepairStep).
+                  const add = { wrong: cur.wrong, right: cur.right, why: rule, src: 'pattern' as const, ctx: pattern.title_en };
+                  void saveRepairs([add]).then(() => (right ? undefined : recordRepair(repairId(cur.wrong), false)));
+                }}
+                onNext={advance}
+                onSkip={advance}
+                nextLabel={t('ptNext')}
+              />
+            ) : (
+              <FreeItem
+                task={cur.task}
+                pattern={pattern.title_en}
+                example={pattern.examples[0] ? `${pattern.examples[0].wrong} => ${pattern.examples[0].right}` : ''}
+                status={status}
+                onResult={(right) => right && setOk((n) => n + 1)}
+                onNext={advance}
+              />
+            )}
           </motion.div>
-        ) : (
-          cur && (
-            <motion.div key={pos} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
-              {cur.kind === 'fix' ? (
-                <RepairItem
-                  item={{ id: repairId(cur.wrong), wrong: cur.wrong, right: cur.right, ...(rule ? { why: rule } : {}), src: 'pattern' }}
-                  mode="step"
-                  area="lesson"
-                  source="app/patterns"
-                  status={status}
-                  onResult={({ ok: right }) => {
-                    if (right) setOk((n) => n + 1);
-                    // Der eigene Satz wird Reparatur-Satz (idempotent). Direkt nach dem Zeigen ist ein
-                    // Treffer noch kein freier Abruf: nur ein Fehler wird eingetragen (wie RepairStep).
-                    const add = { wrong: cur.wrong, right: cur.right, why: rule, src: 'pattern' as const, ctx: pattern.title_en };
-                    void saveRepairs([add]).then(() => (right ? undefined : recordRepair(repairId(cur.wrong), false)));
-                  }}
-                  onNext={advance}
-                  onSkip={advance}
-                  nextLabel={t('ptNext')}
-                />
-              ) : (
-                <FreeItem task={cur.task} pattern={pattern.title_en} example={pattern.examples[0] ? `${pattern.examples[0].wrong} => ${pattern.examples[0].right}` : ''} status={status} onResult={(right) => right && setOk((n) => n + 1)} onNext={advance} />
-              )}
-            </motion.div>
-          )
-        )}
-      </AnimatePresence>
+        )
+      )}
     </section>
   );
 }

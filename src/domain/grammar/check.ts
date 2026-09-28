@@ -5,7 +5,7 @@ import { toUS } from '../answer/spelling';
 import type { GrammarCheck, GrammarTask } from '../learn/types';
 import { lemmaCandidates } from '../text/lemma';
 import { legacyNorm } from './key';
-import { ALT_FAMILIES } from './rules';
+import { altFamilies } from './rules';
 
 // Lokale Prüfung einer Grammatikantwort (phase2-plan §5.0, D13). Reihenfolge, die erste Regel gilt:
 // 1. gleich (nach `legacyNorm`: Kurzformen wie 've, n't, I'm allgemein aufgelöst, ohne `accepted`),
@@ -31,7 +31,7 @@ const aspectCanon = (arr: readonly string[]) =>
 
 /** „Auch richtig"-Familie der Antwort (Port von `altCheck`, explain.js:174) oder `null`. */
 export function altFamily(task: Pick<GrammarTask, 'topic' | 'prompt' | 'answer'>, given: string): string | null {
-  const famOk = (id: string) => ALT_FAMILIES.some((f) => f.id === id && f.topics.includes(task.topic));
+  const famOk = (id: string) => altFamilies().some((f) => f.id === id && f.topics.includes(task.topic));
   const g = splitWords(legacyNorm(given));
   const c = splitWords(legacyNorm(task.answer));
   if (!g.length || !c.length) return null;

@@ -1,7 +1,9 @@
 import courseJson from '../content/legacy/course.json';
-import grammarJson from '../content/legacy/grammar.json';
+// Nur die Themenlisten als benannte Importe (P2, Anhang A 5c): Startaufgaben und Regelblätter
+// liest `domain/grammar/raw.ts` als Text und parst sie erst bei Bedarf.
+import { topics as legacyTopics, groupEn as legacyGroupEn } from '../content/legacy/grammar.json';
 import vocabJson from '../content/legacy/vocab.json';
-import c1Json from '../content/c1/toolkit.json';
+import { topics as c1Topics, groupEn as c1GroupEn } from '../content/c1/toolkit.json';
 
 // Voreinstellungen der alten App als Daten (CLAUDE.md A6.11): Lehrplan, Grammatikthemen,
 // Startvokabeln. Die alte App hielt sie im Code und legte die Datenbank darüber.
@@ -37,12 +39,12 @@ export const UNITS = courseJson.units as Unit[];
 export const LESSONS = courseJson.lessons as Lesson[];
 export const LESSON_STEPS = courseJson.lessonSteps as LessonStep[];
 /** Die 16 Themen der alten App (auch die Kennungen des Claude-Tagesauftrags). */
-export const LEGACY_TOPICS = grammarJson.topics as Topic[];
+export const LEGACY_TOPICS = legacyTopics as Topic[];
 /** C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): 7 Themen mit Präfix `c1-`, gleiches Format. */
-export const C1_TOPICS = c1Json.topics as Topic[];
+export const C1_TOPICS = c1Topics as Topic[];
 /** Alle Themen: die alten zuerst, dann der C1-Werkzeugkasten. */
 export const TOPICS: readonly Topic[] = [...LEGACY_TOPICS, ...C1_TOPICS];
-export const GROUP_EN = { ...grammarJson.groupEn, ...c1Json.groupEn } as Record<string, string>;
+export const GROUP_EN = { ...legacyGroupEn, ...c1GroupEn } as Record<string, string>;
 export const SEED_VOCAB = vocabJson.seedVocab as SeedWord[];
 const COLLOC = vocabJson.colloc as Record<string, unknown[]>;
 
