@@ -524,8 +524,8 @@
    "phrase": "lead a conversation",
    "right": "have a conversation",
    "note": {
-    "de": "„Ein Gespräch führen“ heißt have a conversation.",
-    "en": "You have a conversation; \"lead\" is a literal translation of \"führen\"."
+    "de": "„Ein Gespräch führen“ heißt have a conversation. Richtig ist aber „lead the conversation“ = das Gespräch steuern.",
+    "en": "You have a conversation; \"lead\" is a literal translation of \"führen\". But \"lead the conversation\" (steer it) is correct."
    }
   }
  },
@@ -606,7 +606,7 @@
    },
    {
     "v": "run",
-    "de": "laufen",
+    "de": "(Gefahr) laufen",
     "ex": "Without backups, you run the risk of a long outage."
    },
    {
@@ -761,7 +761,7 @@
    },
    {
     "v": "stay in",
-    "de": "bleiben in",
+    "de": "in Kontakt bleiben",
     "ex": "Let's stay in contact after the project."
    }
   ],
@@ -905,6 +905,11 @@
     "ex": "We launched the project in January."
    },
    {
+    "v": "run",
+    "de": "durchführen",
+    "ex": "We ran the project with a small team."
+   },
+   {
     "v": "manage",
     "de": "leiten",
     "ex": "Who is going to manage the project on your side?"
@@ -916,11 +921,11 @@
    }
   ],
   "wrong": {
-   "phrase": "lead through a project",
-   "right": "carry out a project",
+   "phrase": "make a project",
+   "right": "run a project",
    "note": {
-    "de": "„Ein Projekt durchführen“ heißt carry out oder run a project.",
-    "en": "You carry out or run a project; \"lead through\" is a literal translation."
+    "de": "„Ein Projekt durchführen“ heißt run oder carry out a project.",
+    "en": "You run or carry out a project; \"make a project\" is a literal translation."
    }
   }
  },
@@ -979,8 +984,8 @@
    "phrase": "wake interest",
    "right": "generate interest",
    "note": {
-    "de": "„Interesse wecken“ heißt generate, spark oder arouse interest.",
-    "en": "You generate or spark interest; \"wake\" is a literal translation of \"wecken\"."
+    "de": "„Interesse wecken“ heißt generate, spark oder attract interest.",
+    "en": "You generate, spark, or attract interest; \"wake\" is a literal translation of \"wecken\"."
    }
   }
  },
@@ -1051,16 +1056,16 @@
    },
    {
     "v": "set",
-    "de": "geben (Vorbild)",
+    "de": "mit gutem Beispiel vorangehen",
     "ex": "Managers should set an example for their teams."
    }
   ],
   "wrong": {
-   "phrase": "name an example",
+   "phrase": "bring an example",
    "right": "give an example",
    "note": {
-    "de": "„Ein Beispiel nennen“ heißt give an example.",
-    "en": "You give an example; \"name\" is a literal translation of \"nennen\"."
+    "de": "„Ein Beispiel bringen“ heißt give an example.",
+    "en": "You give an example; \"bring\" is a literal translation of \"bringen\"."
    }
   }
  },

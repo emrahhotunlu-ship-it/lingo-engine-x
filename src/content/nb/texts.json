@@ -4,7 +4,7 @@
   "theme": "t01",
   "genre": "memo",
   "title": "Before your next discovery call",
-  "text": "Most first calls with a prospect go wrong in the first five minutes. We start talking about features, and the customer politely waits for the call to end. This quarter, let's try something different: the customer should do most of the talking.\n\nOpen with a simple request: walk me through your current process. Then listen. Ask how many people touch an invoice before it is paid, and find out where documents get stuck. Keep your questions open. Instead of asking whether they use shared drives, ask them how they find a contract today.\n\nTwo questions tell you more than any others. The first is about timing: What's prompting you to look at this now? A new regulation, a failed audit, or a new CFO usually means there is real pressure. The second is about the goal: What would success look like for you? If they can't answer, the project probably has no budget yet.\n\nBefore you hang up, summarize what you heard. Start with So if I'm hearing you correctly, and repeat their three main problems in their own words. Finally, don't forget to ask who else is involved in the decision. Deals rarely die because of price. They die because we never met the person who signs.",
+  "text": "Most first calls with a prospect go wrong in the first five minutes. We start talking about features, and the customer politely waits for the call to end. This quarter, let's try something different: the customer should do most of the talking.\n\nOpen with a simple request: “Walk me through your current process.” Then listen. Ask how many people touch an invoice before it is paid, and find out where documents get stuck. Keep your questions open. Instead of asking whether they use shared drives, ask them how they find a contract today.\n\nTwo questions tell you more than any others. The first is about timing: “What's prompting you to look at this now?” A new regulation, a failed audit, or a new CFO usually means there is real pressure. The second is about the goal: “What would success look like for you?” If they can't answer, the project probably has no budget yet.\n\nBefore you hang up, summarize what you heard. Start with “So if I'm hearing you correctly,” and repeat their three main problems in their own words. Finally, don't forget to ask who else is involved in the decision. Deals rarely die because of price. They die because we never met the person who signs.",
   "core": {
    "q": {
     "de": "Was soll laut Memo in einem guten Erstgespräch passieren?",
@@ -25,20 +25,20 @@
   },
   "between": {
    "q": {
-    "de": "Warum sterben Deals laut Autor meistens wirklich?",
-    "en": "Why do deals really fail, according to the writer?"
+    "de": "Was passiert laut Autor heute meistens in Erstgesprächen?",
+    "en": "What usually happens in first calls today, according to the writer?"
    },
    "options": [
-    "The seller never met the real decision maker.",
-    "The price is too high.",
-    "The product has too few features.",
-    "The call is too short."
+    "Sellers talk about features, and customers lose interest.",
+    "Customers ask too many questions.",
+    "Sellers forget to mention the price.",
+    "Customers end the call after one minute."
    ],
    "answer": 0,
-   "quote": "They die because we never met the person who signs.",
+   "quote": "We start talking about features, and the customer politely waits for the call to end.",
    "why": {
-    "de": "Er sagt es nicht wörtlich, aber gemeint ist: Wer den Entscheider nie trifft, verliert den Deal – nicht der Preis ist schuld.",
-    "en": "He does not say it in those words, but the point is that missing the decision maker kills deals, not the price."
+    "de": "Es steht nicht wörtlich da: „politely waits for the call to end“ heißt, dass der Kunde das Interesse verloren hat.",
+    "en": "The text doesn't say it directly: \"politely waits for the call to end\" means the customer has lost interest."
    }
   },
   "notice": [
@@ -58,7 +58,7 @@
   "theme": "t02",
   "genre": "post",
   "title": "How I explained my job to my neighbor",
-  "text": "Last week, my neighbor asked me what I actually do. I sell cloud software for documents, I said, and I watched him lose interest. So I tried again, without any technical words.\n\nIn a nutshell, we help companies find the right document in seconds instead of digging through folders. Think about a mid-sized manufacturer. Invoices arrive by email, contracts sit in three different places, and nobody knows which version is the latest. What that means for you is simple: less time searching, fewer mistakes, and no panic when the auditor calls.\n\nThe key idea is a single source of truth. Every contract, invoice, and delivery note lives in one place, with a clear history of who changed what. Access is controlled, so people only see what they need.\n\nMy neighbor nodded. Then he asked the question every customer asks: how long does it take to get started? That is where the cloud really helps. There is no server to install, and the team can work with the system from day one.\n\nHe still doesn't find my job exciting. But for the first time, he understood it.",
+  "text": "Last week, my neighbor asked me what I actually do. “I sell cloud software for documents,” I said, and I watched him lose interest. So I tried again, without any technical words.\n\nIn a nutshell, we help companies find the right document in seconds instead of digging through folders. Think about a mid-sized manufacturer. Invoices arrive by email, contracts sit in three different places, and nobody knows which version is the latest. What that means for you is simple: less time searching, fewer mistakes, and no panic when the auditor calls.\n\nThe key idea is a single source of truth. Every contract, invoice, and delivery note lives in one place, with a clear history of who changed what. Access is controlled, so people only see what they need.\n\nMy neighbor nodded. Then he asked the question every customer asks: how long does it take to get started? That is where the cloud really helps. There is no server to install, and the team can work with the system from day one.\n\nHe still doesn't find my job exciting. But for the first time, he understood it.",
   "core": {
    "q": {
     "de": "Welchen Hauptnutzen beschreibt der Autor?",
@@ -105,18 +105,18 @@
    "The key idea is a single source of truth.",
    "There is no server to install, and the team can work with the system from day one."
   ],
-  "toolIn": "What that means for you is simple"
+  "toolIn": "In a nutshell"
  },
  {
   "id": "x-t03",
   "theme": "t03",
   "genre": "email",
   "title": "Your question about the price",
-  "text": "Subject: Your question about the price\n\nDear Ms. Keller,\n\nThank you for your time on Tuesday. You mentioned that our offer is higher than the quote from your current provider. I understand it may seem high at first glance, so I would like to put the numbers into context.\n\nYour team currently spends roughly a third of its week searching for invoices and contracts. Based on the figures you shared, that is about 1,400 hours per year. If our system cuts that time in half, it should save you around 60,000 euros a year.\n\nWhen we look at the total cost of ownership, the picture changes. Your current solution needs its own servers, regular updates, and an external consultant for every change. Our price already includes hosting, updates, and support. Over a three-year period, we estimate that your costs would be about 15 percent lower, even though the license itself is more expensive.\n\nIn similar projects, the system usually pays for itself within 18 months. Of course, every company is different, so I would suggest a short pilot with your accounts payable team. That way, you can check the numbers with your own data before you commit.\n\nBest regards",
+  "text": "Subject: Your question about the price\n\nDear Dr. Keller,\n\nThank you for your time on Tuesday. You mentioned that our offer is higher than the quote from your current provider. I understand it may seem high at first glance, so I would like to put the numbers into context.\n\nYour team currently spends roughly a third of its week searching for invoices and contracts. Based on the figures you shared, that is about 1,400 hours per year. If our system cuts that time in half, it should save you around 35,000 euros a year.\n\nWhen we look at the total cost of ownership, the picture changes. Your current solution needs its own servers, regular updates, and an external consultant for every change. Our price already includes hosting, updates, and support. Over a three-year period, we estimate that your costs would be about 15 percent lower, even though the license itself is more expensive.\n\nIn similar projects, the system usually pays for itself within 18 months. Of course, every company is different, so I would suggest a short pilot with your accounts payable team. That way, you can check the numbers with your own data before you commit.\n\nBest regards",
   "core": {
    "q": {
-    "de": "Was schlägt der Autor vor, bevor Frau Keller sich festlegt?",
-    "en": "What does the writer suggest before Ms. Keller commits?"
+    "de": "Was schlägt der Autor vor, bevor Frau Dr. Keller sich festlegt?",
+    "en": "What does the writer suggest before Dr. Keller commits?"
    },
    "options": [
     "A short pilot with her own data",
@@ -139,7 +139,7 @@
    "options": [
     "To show hidden costs of the current solution",
     "To recommend a consultant",
-    "To criticize Ms. Keller’s team",
+    "To criticize Dr. Keller’s team",
     "To explain the pilot"
    ],
    "answer": 0,
@@ -159,14 +159,14 @@
    "When we look at the total cost of ownership, the picture changes.",
    "In similar projects, the system usually pays for itself within 18 months."
   ],
-  "toolIn": "it should save you around 60,000 euros a year"
+  "toolIn": "it should save you around 35,000 euros a year"
  },
  {
   "id": "x-t04",
   "theme": "t04",
   "genre": "email",
   "title": "Answers to your security questions",
-  "text": "Subject: Answers to your security questions\n\nHi Mr. Brandt,\n\nThanks again for the detailed list of questions. Here are the answers our security team and I can give you today.\n\nAll customer data is hosted in EU data centers in Frankfurt and Amsterdam. No data is transferred outside the EU, and our subcontractors are listed in the data processing agreement. Documents are encrypted at rest and in transit, and the keys are managed separately from the storage.\n\nWe use role-based access: your administrators decide which groups can see, edit, or delete documents, and every action is logged. For tax-relevant records, we offer audit-proof archiving in line with GoBD. Once a document has been archived, it cannot be changed or deleted before the retention period ends.\n\nYou also asked about backups. Backups are created every night and are stored in a second data center. In the unlikely case of an outage, your data can be restored within four hours.\n\nOne question I can't answer with certainty yet: whether our certificate covers the new AI search module. Let me double-check that and get back to you by Friday. I would rather give you a precise answer than a quick one.\n\nBest regards",
+  "text": "Subject: Answers to your security questions\n\nHi Mr. Brandt,\n\nThanks again for the detailed list of questions. Here are the answers our security team and I can give you today.\n\nAll customer data is hosted in EU data centers in Frankfurt and Amsterdam. No data is transferred outside the EU, and our subprocessors are listed in the data processing agreement. Documents are encrypted at rest and in transit, and the keys are managed separately from the storage.\n\nWe use role-based access: your administrators decide which groups can see, edit, or delete documents, and every action is logged. For tax-relevant records, we offer audit-proof archiving in line with GoBD. Once a document has been archived, it cannot be changed or deleted before the retention period ends.\n\nYou also asked about backups. Backups are created every night and are stored in a second data center. In the unlikely event of an outage, your data can be restored within four hours.\n\nOne question I can't answer with certainty yet: whether our certificate covers the new AI search module. Let me double-check that and get back to you by Friday. I would rather give you a precise answer than a quick one.\n\nBest regards",
   "core": {
    "q": {
     "de": "Wo liegen die Kundendaten?",
@@ -220,7 +220,7 @@
   "theme": "t05",
   "genre": "article",
   "title": "E-invoicing in Germany: why waiting is the expensive option",
-  "text": "E-invoicing in Germany: why waiting is the expensive option\n\nAs of January 1, 2025, every German company must be able to receive electronic invoices. For sending, the mandate is being phased in: larger companies will have to issue e-invoices from 2027, and smaller ones from 2028. On top of that, the EU is preparing its ViDA package, which is going to connect invoices with digital tax reporting.\n\nMany managing directors are still waiting. Their logic sounds reasonable: the deadline is still some time away, and the software market is changing. But for most companies, it's not a question of if, but when. And the later they start, the more expensive the project gets, because consultants and IT partners will be fully booked at the end of 2026 and in 2027.\n\nCompanies that get ahead of the deadline have a clear advantage. They can test the process with a few suppliers, train their accounting team, and fix problems while volumes are still low. At the same time, they start saving money right away, because digital invoices are processed faster and with fewer errors.\n\nThe message for decision makers is simple. The rules will not go away. The question is whether you want to stay compliant under pressure or on your own schedule.",
+  "text": "E-invoicing in Germany: why waiting is the expensive option\n\nAs of January 1, 2025, every German company must be able to receive electronic invoices. For sending, the mandate is being phased in: larger companies will have to issue e-invoices from 2027, and smaller ones from 2028. On top of that, the EU's ViDA package, adopted in 2025, is going to link invoices to digital tax reporting from 2030.\n\nMany managing directors are still waiting. Their logic sounds reasonable: the deadline is still some time away, and the software market is changing. But for most companies, it's not a question of if, but when. And the later they start, the more expensive the project gets, because consultants and IT partners will be fully booked at the end of 2026 and in 2027.\n\nCompanies that get ahead of the deadline have a clear advantage. They can test the process with a few suppliers, train their accounting team, and fix problems while volumes are still low. At the same time, they start saving money right away, because digital invoices are processed faster and with fewer errors.\n\nThe message for decision makers is simple. The rules will not go away. The question is whether you want to stay compliant under pressure or on your own schedule.",
   "core": {
    "q": {
     "de": "Was muss jedes deutsche Unternehmen seit dem 1. Januar 2025 können?",
@@ -328,7 +328,7 @@
   "theme": "t07",
   "genre": "memo",
   "title": "Notes from today’s negotiation",
-  "text": "Subject: Notes from today's negotiation with Lindner Group\n\nTeam,\n\nHere is a short summary of today's call with Ms. Roth from procurement. She opened with a clear demand: a 20 percent discount, or they would stay with their current provider. I didn't react to the number right away. Instead, I asked: Where do you have some flexibility? It turned out that the budget is fixed for this year, but the contract length is open.\n\nThat gave us room to move. I told her: If you could commit to three years, we could offer a lower price per user. We also discussed payment terms. She asked for 90 days, which we normally don't accept. I said, That's not something I can agree to today, but I will check it with our finance team.\n\nIn the end, we agreed on 10 percent for a three-year contract, with the option to add more users at the same price. The question of the setup fee is still open. We decided to park it and discuss it next week.\n\nIf finance approves the payment terms, we should be able to sign before the end of the quarter.\n\nBest",
+  "text": "Subject: Notes from today's negotiation with Lindner Group\n\nTeam,\n\nHere is a short summary of today's call with Ms. Roth from procurement. She opened with a clear demand: a 20 percent discount, or they would stay with their current provider. I didn't react to the number right away. Instead, I asked, “Where do you have some flexibility?” It turned out that the budget is fixed for this year, but the contract length is open.\n\nThat gave us room to move. I told her, “If you could commit to three years, we could offer a lower price per user.” We also discussed payment terms. She asked for 90 days, which we normally don't accept. I said, “That's not something I can agree to today, but I will check it with our finance team.”\n\nIn the end, we agreed on 10 percent for a three-year contract, with the option to add more users at the same price. The question of the setup fee is still open. We decided to park it and discuss it next week.\n\nIf finance approves the payment terms, we should be able to sign before the end of the quarter.\n\nBest",
   "core": {
    "q": {
     "de": "Was hat der Einkauf am Anfang verlangt?",
@@ -353,7 +353,7 @@
     "en": "Why was the contract length useful for the seller?"
    },
    "options": [
-    "It gave him something to trade for the discount.",
+    "It let him ask for something in return for the discount.",
     "It made the deal smaller.",
     "It ended the negotiation.",
     "It was required by law."
@@ -382,7 +382,7 @@
   "theme": "t08",
   "genre": "email",
   "title": "Partnership idea for Brightline IT",
-  "text": "Subject: Partnership idea for Brightline IT\n\nDear Mr. Clarke,\n\nWe met briefly at the partner event in Manchester last month, where you mentioned that many of your clients are asking about document management in the cloud. I've been thinking about our conversation, and I believe there could be a mutually beneficial partnership between our companies.\n\nYour team already manages the IT of more than 200 mid-sized companies. If you added our platform to your portfolio, you could offer those clients a complete solution for invoices, contracts, and archiving. What's in it for you is recurring revenue: partners earn a commission of 20 percent on every license, every year, as long as the customer stays.\n\nYou wouldn't be on your own with the product. Our program includes enablement and co-marketing, which means technical training for your consultants, ready-made campaigns, and joint events with our sales team. If a project were too big for your team, our experts would support you on site.\n\nI realize you probably receive offers like this every week, so I will keep it short. Would you be open to a quick call next Tuesday or Wednesday? Twenty minutes would be enough to see whether it makes sense for both sides.\n\nKind regards",
+  "text": "Subject: Partnership idea for Brightline IT\n\nDear Mr. Clarke,\n\nWe met briefly at the partner event in Manchester last month, where you mentioned that many of your clients are asking about document management in the cloud. I've been thinking about our conversation, and I believe there could be a mutually beneficial partnership between our companies.\n\nYour team already manages the IT of more than 200 mid-sized companies. If you added our platform to your portfolio, you could offer those clients a complete solution for invoices, contracts, and archiving. What's in it for you is recurring revenue: partners earn a commission of 20 percent on every license, every year, as long as the customer stays.\n\nYou wouldn't be on your own with the product. Our program includes enablement and co-marketing, which means technical training for your consultants, ready-made campaigns, and joint events with our sales team. If a project were too big for your team, our experts would support you on site.\n\nI realize you probably receive offers like this every week, so I will keep it short. Would you be open to a quick call next Tuesday or Wednesday? It might be worth spending twenty minutes to see whether it makes sense for both sides.\n\nKind regards",
   "core": {
    "q": {
     "de": "Wie viel Provision bekommen Partner?",
@@ -427,9 +427,9 @@
   "shadow": [
    "What's in it for you is recurring revenue.",
    "Our program includes enablement and co-marketing.",
-   "Twenty minutes would be enough to see whether it makes sense for both sides."
+   "It might be worth spending twenty minutes to see whether it makes sense for both sides."
   ],
-  "toolIn": "If you added our platform to your portfolio, you could offer those clients a complete solution"
+  "toolIn": "worth spending twenty minutes"
  },
  {
   "id": "x-t09",
@@ -452,7 +452,7 @@
    "quote": "about 80,000 of your older files use a format that our import tool did not recognize",
    "why": {
     "de": "Die Ursache steht direkt nach „We’ve identified the root cause“: ein Dateiformat, das das Werkzeug nicht erkannte.",
-    "en": "The cause comes right after \"We have identified the root cause\": a file format the tool did not recognize."
+    "en": "The cause comes right after \"We've identified the root cause\": a file format the tool did not recognize."
    }
   },
   "between": {
@@ -483,14 +483,14 @@
    "We've identified the root cause.",
    "I'll keep you posted with a short update every Friday."
   ],
-  "toolIn": "I know your team has been waiting for almost two weeks"
+  "toolIn": "and we have missed that date"
  },
  {
   "id": "x-t10",
   "theme": "t10",
   "genre": "story",
   "title": "Thirty minutes of pipeline review",
-  "text": "Every Monday at nine, I run a 30-minute pipeline review with my team. Last week, it almost got out of control.\n\nLet's get started, I said at 9:02, and shared the forecast. We had 14 open deals worth 1.8 million euros, and six of them were due to close by the end of the quarter on September 30. I asked each account manager for a one-sentence update.\n\nJulia began, but after two minutes she was still talking about a customer's new office building. Can I just jump in here? I asked. What's the next step, and when is it? She laughed and said: a demo on Thursday at 2 p.m.\n\nThen Tobias started a long discussion about our price list for public sector customers. It's an important topic, but not for this meeting. Let's take that offline, I suggested, and we scheduled a separate call for Wednesday.\n\nNear the end, we found a problem: nobody had followed up with a prospect in Vienna for three weeks. Who's going to own this? Tobias volunteered and promised to call them by Tuesday noon.\n\nTo wrap up, I summarized the three action items, with names and dates. We finished at 9:29, one minute early.",
+  "text": "Every Monday at nine, I run a 30-minute pipeline review with my team. Last week, it almost got out of control.\n\n“Let's get started,” I said at 9:02, and shared the forecast. We had 14 open deals worth 1.8 million euros, and six of them were due to close by the end of the quarter on September 30. I asked each account manager for a one-sentence update.\n\nJulia began, but after two minutes she was still talking about a customer's new office building. “Can I just jump in here?” I asked. “What's the next step, and when is it?” She laughed and said, “A demo on Thursday at 2 p.m.”\n\nThen Tobias started a long discussion about our price list for public sector customers. It's an important topic, but not for this meeting. “Let's take that offline,” I suggested, and we scheduled a separate call for Wednesday.\n\nNear the end, we found a problem: nobody had followed up with a prospect in Vienna for three weeks. “Who's going to own this?” I asked. Tobias volunteered and promised to call them by Tuesday noon.\n\nTo wrap up, I summarized the three action items, with names and dates. We finished at 9:29, one minute early.",
   "core": {
    "q": {
     "de": "Was hat Tobias übernommen?",
@@ -534,10 +534,10 @@
   ],
   "shadow": [
    "Can I just jump in here?",
-   "Let's take that offline, I suggested, and we scheduled a separate call for Wednesday.",
+   "What's the next step, and when is it?",
    "To wrap up, I summarized the three action items, with names and dates."
   ],
-  "toolIn": "We had 14 open deals worth 1.8 million euros"
+  "toolIn": "six of them were due to close by the end of the quarter on September 30"
  },
  {
   "id": "x-t11",
@@ -598,7 +598,7 @@
   "theme": "t12",
   "genre": "story",
   "title": "Five minutes at the booth",
-  "text": "It's the second day of the trade show in Stuttgart, and our booth is busy. A man in a gray jacket is looking at our poster about e-invoicing, so I walk over and say hello. What brings you to the show? He tells me he works for a logistics company near Hamburg and is looking for ideas for their archive.\n\nI ask him a follow-up question: How's business on your end? He laughs and says they are hiring right now, because two big customers are moving their warehouses to northern Germany. That explains his visit: more customers mean more paper.\n\nWe talk for about five minutes. I don't pitch the product. Instead, I ask how they handle delivery notes today, and I tell him a short story about a customer with the same problem. Then I notice that his colleague is waving at him from the next booth. I'll let you get back to it, I say, and we exchange cards.\n\nThe next morning, I send him a LinkedIn message: Great connecting with you at the trade show in Stuttgart. Here is the case study I mentioned. Let's stay in touch. Two weeks later, he asks for a demo.",
+  "text": "It's the second day of the trade show in Stuttgart, and our booth is busy. A man in a gray jacket is looking at our poster about e-invoicing, so I walk over and say hello. “What brings you to the show?” He tells me he works for a logistics company near Hamburg and is looking for ideas for their archive.\n\nI ask him a follow-up question: “How's business on your end?” He laughs and says they are hiring right now, because two big customers are moving their warehouses to northern Germany. That explains his visit: more customers mean more paper.\n\nWe talk for about five minutes. I don't pitch the product. Instead, I ask how they handle delivery notes today, and I tell him a short story about a customer with the same problem. Then I notice that his colleague is waving at him from the next booth. “I'll let you get back to it,” I say, and we exchange cards.\n\nThe next morning, I send him a LinkedIn message: “Great connecting with you at the trade show in Stuttgart. Here is the case study I mentioned. Let's stay in touch.” Two weeks later, he asks for a demo.",
   "core": {
    "q": {
     "de": "Warum kommt der Mann an den Stand?",
@@ -642,7 +642,7 @@
   ],
   "shadow": [
    "What brings you to the show?",
-   "I'll let you get back to it, I say, and we exchange cards.",
+   "How's business on your end?",
    "Two weeks later, he asks for a demo."
   ],
   "toolIn": "they are hiring right now"
@@ -652,7 +652,7 @@
   "theme": "t13",
   "genre": "story",
   "title": "Polite but firm",
-  "text": "The trip to the trade show in Chicago started badly. My flight from Frankfurt was two hours late, so I missed my connection in New York. At the transfer desk, I stayed calm and asked: Could you rebook me on the next flight? The agent typed for a long time and finally found a seat on an evening flight.\n\nWhen I arrived at the hotel close to midnight, the receptionist gave me a small room next to the elevator. That's not what I booked, I told her politely. I had reserved a quiet room with a desk, because I needed to prepare a presentation. She checked her screen. There must have been a mix-up with the booking system, she said. The hotel couldn't have lost my reservation, because I had the confirmation on my phone.\n\nI was tired, but I didn't raise my voice. I was wondering if there's anything you could do tonight, I said. I'd appreciate it if you could at least move me tomorrow morning. Ten minutes later, she handed me a new key: a corner room on the twelfth floor, with a desk and a view of the lake.\n\nThe lesson? Polite but firm works better than angry.",
+  "text": "The trip to the trade show in Chicago started badly. My flight from Frankfurt was two hours late, so I missed my connection in New York. At the transfer desk, I stayed calm and asked, “Could you rebook me on the next flight?” The agent typed for a long time and finally found a seat on an evening flight.\n\nWhen I arrived at the hotel close to midnight, the receptionist gave me a small room next to the elevator. “That's not what I booked,” I told her politely. I had reserved a quiet room with a desk, because I needed to prepare a presentation. She checked her screen. “There must have been a mix-up with the booking system,” she said. It couldn't have been my mistake, because I had the confirmation on my phone.\n\nI was tired, but I didn't raise my voice. “I was wondering if there's anything you could do tonight,” I said. “I'd appreciate it if you could at least move me tomorrow morning.” The next morning, she moved me to a corner room on the twelfth floor, with a desk and a view of the lake.\n\nThe lesson? Polite but firm works better than angry.",
   "core": {
    "q": {
     "de": "Warum hat der Autor den Anschluss in New York verpasst?",
@@ -696,7 +696,7 @@
   ],
   "shadow": [
    "Could you rebook me on the next flight?",
-   "There must have been a mix-up with the booking system, she said.",
+   "There must have been a mix-up with the booking system",
    "Polite but firm works better than angry."
   ],
   "toolIn": "There must have been a mix-up with the booking system"
@@ -706,7 +706,7 @@
   "theme": "t14",
   "genre": "story",
   "title": "The shortcut",
-  "text": "Last spring, my friend Tom and I had planned a weekend in the mountains. We had booked a small cabin, packed the car, and left early on Saturday morning. Everything was going well until the GPS sent us up a narrow forest road.\n\nSo there I was, in a rented minivan, on a muddy road with no cell phone signal and a very hungry friend next to me. It was getting dark, and I had no idea where we were. After twenty minutes, we saw a farmer who was fixing a fence. I explained our problem, and he laughed.\n\nIt turned out that we had driven past the cabin an hour earlier. The owner had changed the address online, but our GPS was still using the old map. The farmer drove ahead of us with his tractor all the way back to the main road.\n\nThe funny thing is, Tom still says it was the best part of the trip. Long story short, we arrived late, ate cold pizza, and slept like logs. In the end, the weekend turned out perfect, and now I always download offline maps before a trip.",
+  "text": "Last spring, my friend Tom and I planned a weekend in the mountains. We had booked a small cabin weeks before, so on Saturday we packed the car and left early. Everything was going well until the GPS sent us up a narrow forest road.\n\nSo there I was, in a rented minivan, on a muddy road with no cell phone signal and a very hungry friend next to me. It was getting dark, and I had no idea where we were. After twenty minutes, we saw a farmer who was fixing a fence. I explained our problem, and he laughed.\n\nIt turned out that we had driven past the cabin an hour earlier. The owner had changed the address online, but our GPS was still using the old map. The farmer drove ahead of us with his tractor all the way back to the main road.\n\nThe funny thing is, Tom still says it was the best part of the trip. Long story short, we arrived late, ate cold pizza, and slept like logs. In the end, the weekend turned out perfect, and now I always download offline maps before a trip.",
   "core": {
    "q": {
     "de": "Warum hat das Navi sie falsch geleitet?",
@@ -760,7 +760,7 @@
   "theme": "t15",
   "genre": "story",
   "title": "Will AI replace salespeople?",
-  "text": "At lunch today, my colleague Mark claimed that AI will replace most sales jobs within five years. He had just read an article about chatbots that can write offers and answer customer questions on their own.\n\nI see where you're coming from, but I don't think it's that simple, I said. I'd argue that AI will probably change the job more than it replaces it. Tools that summarize calls or draft emails are already saving us time. But a customer who is about to spend half a million euros still wants to talk to a person they trust.\n\nMark wasn't convinced. Customers don't care who writes the offer, he said, as long as it's fast and cheap. That's a fair point for small, simple deals, I admitted. If you only sell a few licenses, a website and a chatbot might be enough.\n\nIt's a bit more nuanced than that for complex projects, though. Someone has to understand the politics inside a company, notice when the CFO is nervous, and find a compromise that works for everyone. At least for now, that is hard to automate.\n\nIn the end, we agreed on one thing: salespeople who use AI well will likely replace those who don't. Whether Mark is right about the rest, time will tell.",
+  "text": "At lunch today, my colleague Mark claimed that AI will replace most sales jobs within five years. He had just read an article about chatbots that can write offers and answer customer questions on their own.\n\n“I see where you're coming from, but I don't think it's that simple,” I said. “I'd argue that AI will probably change the job more than it replaces it. Tools that summarize calls or draft emails are already saving us time. But a customer who is about to spend half a million euros still wants to talk to a person they trust.”\n\nMark wasn't convinced. “Customers don't care who writes the offer,” he said, “as long as it's fast and cheap.” “That's a fair point for small, simple deals,” I admitted. “If you only sell a few licenses, a website and a chatbot might be enough.”\n\nIt's a bit more nuanced than that for complex projects, though. Someone has to understand the politics inside a company, notice when the CFO is nervous, and find a compromise that works for everyone. At least for now, that is hard to automate.\n\nIn the end, we agreed on one thing: salespeople who use AI well will likely replace those who don't. Whether Mark is right about the rest, time will tell.",
   "core": {
    "q": {
     "de": "Was glaubt Mark?",
@@ -794,7 +794,7 @@
    "quote": "That's a fair point for small, simple deals",
    "why": {
     "de": "Mit „That’s a fair point“ stimmt er teilweise zu – aber nur für kleine Deals.",
-    "en": "With \"That is a fair point\", he partly agrees, but only for small deals."
+    "en": "With \"That's a fair point,\" he partly agrees, but only for small deals."
    }
   },
   "notice": [
@@ -804,7 +804,7 @@
   ],
   "shadow": [
    "I'd argue that AI will probably change the job more than it replaces it.",
-   "That's a fair point for small, simple deals, I admitted.",
+   "That's a fair point for small, simple deals.",
    "Whether Mark is right about the rest, time will tell."
   ],
   "toolIn": "AI will probably change the job more than it replaces it"

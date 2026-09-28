@@ -45,7 +45,7 @@
     "analytical",
     "analytics"
    ],
-   "gap": "Our ___ shows that invoices wait nine days on average.",
+   "gap": "A quick ___ of your invoices shows that they wait nine days on average.",
    "answers": [
     "analysis"
    ],
@@ -66,7 +66,8 @@
    ],
    "gap": "She has a very ___ approach to sales.",
    "answers": [
-    "analytical"
+    "analytical",
+    "analytic"
    ],
    "pos": "adjective",
    "why": {
@@ -335,9 +336,9 @@
     "competitor",
     "competitive"
    ],
-   "gap": "Our biggest ___ is based in Munich.",
+   "gap": "Most of our ___ are based in Germany.",
    "answers": [
-    "competitor"
+    "competitors"
    ],
    "pos": "noun",
    "why": {
@@ -728,11 +729,11 @@
    "phrasal": "wrap up",
    "de": "abschließen",
    "mail": [
-    "We will finalize the contract on Friday."
+    "We will finalize the negotiations on Friday."
    ],
    "call": [
-    "We'll wrap up the contract on Friday.",
-    "We will wrap up the contract on Friday."
+    "We'll wrap up the negotiations on Friday.",
+    "We will wrap up the negotiations on Friday."
    ]
   },
   {
@@ -1077,7 +1078,7 @@
      "answers": [
       "Bottom line",
       "The bottom line is",
-      "In the end"
+      "All in all"
      ],
      "fn": {
       "de": "Fazit",
@@ -1189,8 +1190,8 @@
       "For example"
      ],
      "fn": {
-      "de": "Umformulierung",
-      "en": "rephrasing"
+      "de": "Erklärung oder Beispiel",
+      "en": "explanation or example"
      }
     },
     {
@@ -1534,7 +1535,7 @@
    "theme": "t04",
    "q": "Can your employees read our documents?",
    "de": "Können Ihre Mitarbeiter unsere Dokumente lesen?",
-   "model": "No, they can't. Documents are encrypted, and access is logged. Only if you ask us for support can an administrator see what you share with them.",
+   "model": "Not without your permission. Documents are encrypted, every access is logged, and only if you open a support case can an administrator see what you share with them.",
    "tip": {
     "de": "Kurz und klar antworten, dann erklären.",
     "en": "Answer short and clear, then explain."

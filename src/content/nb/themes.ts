@@ -55,13 +55,13 @@ export const THEMES: readonly WeekTheme[] = [
     },
     trap: 'f20',
     phrases: [
-      { en: 'walk me through your current process', de: 'erklär mir Schritt für Schritt, wie ihr es heute macht', def: 'describe your current way of working step by step' },
+      { en: 'walk me through your current process', de: 'erklären Sie mir Schritt für Schritt, wie Sie es heute machen', def: 'describe your current way of working step by step' },
       { en: "What's prompting you to look at this now?", de: 'Was bringt Sie dazu, sich das gerade jetzt anzusehen?', def: 'asks for the trigger behind the interest' },
       { en: 'What would success look like for you?', de: 'Woran würden Sie Erfolg messen?', def: 'asks how the customer defines a good result' },
       { en: "So if I'm hearing you correctly, …", de: 'Wenn ich Sie richtig verstehe, …', def: 'introduces a summary to check understanding' },
       { en: 'Who else is involved in the decision?', de: 'Wer entscheidet noch mit?', def: 'asks about the other decision makers' },
     ],
-    keywords: ['discovery', 'prospect', 'requirement', 'need', 'pain point', 'process', 'decision maker', 'stakeholder', 'qualify', 'qualification', 'budget'],
+    keywords: ['discovery', 'prospect', 'requirement', 'business need', 'pain point', 'current process', 'decision maker', 'stakeholder', 'qualify', 'qualification', 'budget'],
     fluencyQ: 'dms-value',
     scene: 'b01',
     goals: [
@@ -146,9 +146,9 @@ export const THEMES: readonly WeekTheme[] = [
     trap: 'f13',
     phrases: [
       { en: 'hosted in EU data centers', de: 'in Rechenzentren in der EU betrieben', def: 'the servers are located inside the EU' },
-      { en: 'encrypted at rest and in transit', de: 'gespeichert und bei der Übertragung verschlüsselt', def: 'data is protected both when stored and when sent' },
+      { en: 'encrypted at rest and in transit', de: 'verschlüsselt – im Speicher und bei der Übertragung', def: 'data is protected both when stored and when sent' },
       { en: 'role-based access', de: 'rollenbasierte Zugriffsrechte', def: 'people only see what their role allows' },
-      { en: 'audit-proof archiving', de: 'revisionssichere Archivierung', def: 'archiving that cannot be changed later and passes an audit' },
+      { en: 'audit-proof archiving', de: 'revisionssichere Archivierung', def: 'archiving that cannot be changed later and passes an audit (US customers often say tamper-proof or immutable archiving)' },
       { en: 'Let me double-check that and get back to you', de: 'Das prüfe ich noch einmal und melde mich bei Ihnen', def: 'promises a verified answer later instead of guessing' },
     ],
     keywords: ['security', 'secure', 'gdpr', 'gobd', 'compliance', 'complian', 'encrypt', 'data center', 'hosting', 'access', 'audit', 'certificate', 'certification', 'backup', 'privacy'],
@@ -211,7 +211,7 @@ export const THEMES: readonly WeekTheme[] = [
       { en: "I'll come back to that in a minute", de: 'Darauf komme ich gleich zurück', def: 'postpones a question politely' },
       { en: "That's a great question", de: 'Das ist eine sehr gute Frage', def: 'acknowledges a question and buys a moment to think' },
     ],
-    keywords: ['demo', 'presentation', 'present', 'slide', 'chart', 'graph', 'figure', 'trend', 'decision maker', 'board', 'q&a'],
+    keywords: ['demo', 'presentation', 'present', 'slide', 'chart', 'graph', 'figure', 'trend', 'decision maker', 'board meeting', 'board member', 'q&a'],
     fluencyQ: 'ai-docs',
     scene: 'b06',
     goals: [
@@ -258,10 +258,10 @@ export const THEMES: readonly WeekTheme[] = [
       de: 'Ein Systemhaus als Reseller gewinnen: Pitch und Nachfass-Mail.',
       en: 'Win an IT service provider as a reseller: pitch and follow-up email.',
     },
-    tool: 'conditionals',
+    tool: 'gerund-inf',
     focus: {
-      de: 'Überzeugen mit dem 2. Konditional; britisches Understatement verstehen.',
-      en: 'Persuading with the second conditional; understanding British understatement.',
+      de: 'Überzeugen und nachfassen: -ing nach worth, open to, look forward to; britisches Understatement verstehen.',
+      en: 'Persuading and following up: -ing after worth, open to, look forward to; understanding British understatement.',
     },
     trap: 'f04',
     phrases: [
@@ -301,7 +301,7 @@ export const THEMES: readonly WeekTheme[] = [
       { en: "I'll keep you posted", de: 'Ich halte Sie auf dem Laufenden', def: 'promises regular updates' },
       { en: 'to make up for it', de: 'um es wiedergutzumachen', def: 'to compensate for the problem' },
     ],
-    keywords: ['delay', 'escalat', 'complain', 'complaint', 'apolog', 'issue', 'incident', 'outage', 'root cause', 'fix', 'problem', 'upset'],
+    keywords: ['delay', 'escalat', 'complain', 'complaint', 'apolog', 'incident', 'outage', 'root cause', 'upset customer'],
     fluencyQ: 'deal-stuck',
     scene: 'b09',
     goals: [
@@ -331,7 +331,7 @@ export const THEMES: readonly WeekTheme[] = [
       { en: "Who's going to own this?", de: 'Wer übernimmt das?', def: 'asks who is responsible for a task' },
       { en: 'To wrap up, …', de: 'Zum Abschluss …', def: 'starts the final summary' },
     ],
-    keywords: ['pipeline', 'forecast', 'kickoff', 'meeting', 'agenda', 'quota', 'target', 'team', 'owner', 'action item', 'q1', 'q2', 'q3', 'q4'],
+    keywords: ['pipeline', 'forecast', 'kickoff', 'agenda', 'quota', 'sales target', 'sales team', 'action item', 'q1', 'q2', 'q3', 'q4'],
     fluencyQ: 'kpi',
     scene: 'b10',
     goals: [
@@ -346,7 +346,7 @@ export const THEMES: readonly WeekTheme[] = [
     title: { de: 'Bestandskunden: Verlängerung, Upsell, Referenz', en: 'Existing customers: renewal, upsell, reference' },
     task: {
       de: 'Verlängerungsgespräch führen und um eine Referenz bitten.',
-      en: 'Lead a renewal conversation and ask for a reference.',
+      en: 'Have a renewal conversation and ask for a reference.',
     },
     tool: 'c1-diplomacy',
     focus: {
@@ -420,7 +420,7 @@ export const THEMES: readonly WeekTheme[] = [
       { en: "I'd appreciate it if …", de: 'Ich wäre Ihnen dankbar, wenn …', def: 'a polite way to ask for something' },
       { en: "I'd like to get this straightened out", de: 'Ich möchte das gern klären', def: 'wants the problem solved' },
     ],
-    keywords: ['hotel', 'flight', 'airline', 'airport', 'rental', 'car', 'booking', 'book', 'room', 'reservation', 'luggage', 'baggage', 'refund', 'upgrade', 'travel'],
+    keywords: ['hotel', 'flight', 'airline', 'airport', 'rental', 'car', 'booking', 'room', 'reservation', 'luggage', 'baggage', 'refund', 'upgrade', 'travel'],
     fluencyQ: 'travel',
     scene: 'b13',
     goals: [
@@ -510,7 +510,7 @@ export const THEMES: readonly WeekTheme[] = [
       { en: 'What are my options?', de: 'Welche Möglichkeiten habe ich?', def: 'asks which choices are available' },
       { en: 'Would it be possible to …?', de: 'Wäre es möglich, …?', def: 'a polite request' },
     ],
-    keywords: ['doctor', 'appointment', 'apartment', 'landlord', 'repair', 'plumber', 'heating', 'leak', 'prescription', 'deposit', 'office', 'insurance', 'rent'],
+    keywords: ['doctor', 'appointment', 'apartment', 'landlord', 'repair', 'plumber', 'heating', 'leak', 'prescription', 'deposit', 'insurance', 'rent'],
     fluencyQ: 'habits',
     scene: 'b16',
     goals: [

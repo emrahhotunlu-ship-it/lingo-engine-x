@@ -24,9 +24,9 @@
   "de": "Schicken Sie mir einfach ein paar Unterlagen, ich melde mich dann.",
   "model": {
    "acknowledge": "Of course, I'm happy to send you something.",
-   "ask": "So I send you the right material, which part is most relevant for you right now: invoices, contracts, or the archive?",
+   "ask": "Just so I send you the right material: which part matters most to you right now, invoices, contracts, or the archive?",
    "answer": "Then I'll send you a two-page summary and a short case study from a company of your size, instead of our full brochure.",
-   "secure": "Could we put 15 minutes in the calendar next week to go through any questions?"
+   "secure": "Could we put 15 minutes on the calendar next week to go through any questions?"
   },
   "tip": {
    "de": "Ja sagen, aber gezielt nachfragen und einen festen nächsten Termin sichern.",
@@ -74,7 +74,7 @@
   "line": "We don't put sensitive data in the cloud. Period.",
   "de": "Sensible Daten kommen bei uns nicht in die Cloud. Punkt.",
   "model": {
-   "acknowledge": "That's a very reasonable position, especially with personnel and financial records.",
+   "acknowledge": "I understand, and I appreciate how seriously you take this, especially with personnel and financial records.",
    "ask": "Is the concern mainly about where the data is stored, or about who can access it?",
    "answer": "Your data would be hosted in EU data centers and encrypted at rest and in transit, and many of our customers are banks and health care providers with very strict rules.",
    "secure": "Would you be open to a call with our security officer, so your IT team can ask their questions directly?"
@@ -110,7 +110,7 @@
   "model": {
    "acknowledge": "Thanks for telling me. That helps me a lot.",
    "ask": "Who else would be involved in the decision, and what matters most to them?",
-   "answer": "In similar projects, it worked well when we prepared a short business case that the decision maker can read in five minutes.",
+   "answer": "In similar projects, it worked well when we prepared a short business case that the decision maker could read in five minutes.",
    "secure": "Would you be willing to introduce me, or should I prepare the summary for you to share?"
   },
   "tip": {
@@ -176,7 +176,7 @@
   "line": "We need at least 20 percent off, or we can't move forward.",
   "de": "Wir brauchen mindestens 20 Prozent Nachlass, sonst geht es nicht weiter.",
   "model": {
-   "acknowledge": "I understand that you have a budget to meet.",
+   "acknowledge": "I understand that you're working with a tight budget.",
    "ask": "Where do you have some flexibility: the contract length, the number of users, or the start date?",
    "answer": "If you could commit to three years, we could reduce the price per user, but a straight 20 percent without any change isn't something I can offer.",
    "secure": "Would it help if I put together two options, so you can choose the one that fits your budget?"
@@ -229,7 +229,7 @@
   "model": {
    "acknowledge": "I understand why that's important to you.",
    "ask": "Are you thinking mainly about technical failures, or also about mistakes by users?",
-   "answer": "No provider can honestly promise 100 percent, but we keep backups in a second data center, and deleted documents can be restored for 30 days.",
+   "answer": "No provider can honestly promise 100 percent, but we keep backups in a second data center, and deleted documents can be restored for up to 30 days.",
    "secure": "Should I send you our backup and recovery policy, so your IT team can check the details?"
   },
   "tip": {

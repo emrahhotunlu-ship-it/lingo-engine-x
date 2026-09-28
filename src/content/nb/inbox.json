@@ -28,7 +28,7 @@
     "en": "Suggest a concrete next step after year-end"
    }
   ],
-  "reply": "Hi Laura,\n\nThanks for your quick reply, and good luck with the year-end closing. I completely understand that a new project is the last thing your team needs right now.\n\nI've attached a one-page overview with our prices and a short example from a logistics company of your size. It shows how little time the setup takes for the accounting team: about two hours of workshops in total. If it helps, I can also prepare a short summary for your managing director.\n\nWould it make sense to talk again in the second week of January?\n\nBest regards"
+  "reply": "Hi Laura,\n\nThanks for your quick reply, and good luck with the year-end closing. I completely understand that a new project is the last thing your team needs right now.\n\nI've attached a one-page overview with our prices and a short example from a logistics company of your size. It shows how little time the setup takes for the accounting team: about two hours of workshops in total. If it helps, I can also prepare a short summary for your managing director.\n\nWould it make sense to talk again in late February?\n\nBest regards"
  },
  {
   "id": "m02",
@@ -63,7 +63,7 @@
   "from": "Dr. Sabine Keller",
   "role": "CFO, Keller Foods",
   "subject": "Re: Your offer",
-  "body": "Dear Sir or Madam,\n\nThank you for the offer. We have reviewed it with our controller. Frankly, the annual license fee is higher than we expected, and the savings you mention seem optimistic. Our current provider has offered to extend our contract at the same price. Please let me know if there is anything you can do.\n\nKind regards,\nDr. Sabine Keller",
+  "body": "Hello,\n\nThank you for the offer. We have reviewed it with our controller. Frankly, the annual license fee is higher than we expected, and the savings you mention seem optimistic. Our current provider has offered to extend our contract at the same price. Please let me know if there is anything you can do.\n\nKind regards,\nDr. Sabine Keller",
   "hidden": {
    "de": "Sie glaubt die Einsparungen nicht und nutzt das Angebot des Altanbieters als Druckmittel. Sie will verhandeln, nicht absagen.",
    "en": "She does not believe the savings and uses the old provider’s offer as leverage. She wants to negotiate, not say no."
@@ -202,7 +202,7 @@
     "en": "Confirm the deadline"
    }
   ],
-  "reply": "Hello Ms. Roth,\n\nThank you for your openness, and I'm glad to hear you're ready to move forward. You'll have my answer by Wednesday.\n\nMatching the lowest offer isn't something I can agree to, because our price includes hosting, updates, and support that other offers often charge separately. However, there is a way we could move closer: if you could commit to three years, we could reduce the price per user by eight percent.\n\nWould it help to go through both offers line by line in a short call on Tuesday?\n\nBest regards"
+  "reply": "Hello Ms. Roth,\n\nThank you for your openness, and I'm glad to hear you're ready to move forward. Here is my answer ahead of your Wednesday deadline.\n\nMatching the lowest offer isn't something I can agree to, because our price includes hosting, updates, and support that other offers often charge separately. However, there is a way we could move closer: if you could commit to three years, we could reduce the price per user by eight percent.\n\nWould it help to compare the offers line by line in a short call on Tuesday?\n\nBest regards"
  },
  {
   "id": "m08",
@@ -237,7 +237,7 @@
   "from": "Frank Schulz",
   "role": "Project Lead, Schulz Logistik",
   "subject": "Migration still not finished!!",
-  "body": "Hello,\n\nThis is the second time I have to write to you. The migration was supposed to be finished on September 15. It is now September 28, and my team still can't find half of the old contracts. I have to explain this to our CEO tomorrow morning. What exactly is going on?\n\nFrank Schulz",
+  "body": "Hello,\n\nThis is the second time I've had to write to you. The migration was supposed to be finished on September 15. It is now September 28, and my team still can't find half of the old contracts. I have to explain this to our CEO tomorrow morning. What exactly is going on?\n\nFrank Schulz",
   "hidden": {
    "de": "Er steht selbst unter Druck vor seinem Chef und braucht morgen früh eine klare, erklärbare Antwort.",
    "en": "He is under pressure from his own boss and needs a clear answer he can explain tomorrow morning."
@@ -268,7 +268,7 @@
   "from": "Tobias Maier",
   "role": "Account Manager (your team)",
   "subject": "Monday meeting",
-  "body": "Hi,\n\nQuick question about Monday: could we skip the pipeline review this week? Most of us are preparing year-end offers, and to be honest, the meeting usually takes an hour and doesn't really help us. Maybe we could just update the CRM instead?\n\nThanks,\nTobias",
+  "body": "Hi,\n\nQuick question about Monday: could we skip the pipeline review this week? Most of us are preparing year-end offers, and to be honest, the meeting usually runs way over time and doesn't really help us. Maybe we could just update the CRM instead?\n\nThanks,\nTobias",
   "hidden": {
    "de": "Das Meeting wird als Zeitverschwendung empfunden. Eigentlich geht es darum, dass es zu lang und zu wenig nützlich ist.",
    "en": "The team sees the meeting as a waste of time. The real issue is that it is too long and not useful enough."
@@ -287,7 +287,7 @@
     "en": "Suggest a concrete improvement"
    }
   ],
-  "reply": "Hi Tobias,\n\nThanks for being honest. You're right, an hour is too long, especially at this time of year.\n\nI'd still like to meet, because the forecast for the quarter depends on the next four weeks. But let's make it shorter: 30 minutes, one sentence per deal, and we'll take any longer discussions offline. If the CRM is up to date by Friday, we can go even faster.\n\nWho's going to own the agenda this week? Maybe you'd like to try it?\n\nBest"
+  "reply": "Hi Tobias,\n\nThanks for being honest. You're right, it runs too long, especially at this time of year.\n\nI'd still like to meet, because the forecast for the quarter depends on the next four weeks. But let's make it shorter: 30 minutes, one sentence per deal, and we'll take any longer discussions offline. If the CRM is up to date by Friday, we can go even faster.\n\nWho's going to own the agenda this week? Maybe you'd like to try it?\n\nBest"
  },
  {
   "id": "m11",
@@ -422,7 +422,7 @@
     "en": "Suggest a better way to say it"
    }
   ],
-  "reply": "Hey Mark,\n\nYes, I read it, thanks. I see where you're coming from, but I think it's a bit more nuanced than that. The AI search is a strong argument, and management is right to push it.\n\nHowever, if we tell customers it will replace their staff, the works council will stop the project before it starts. I'd argue that it's better to say the AI takes over the boring searching, so people can focus on the work that needs their judgment.\n\nShall we try both versions with a customer next week and see which works better? Time will tell.\n\nBest"
+  "reply": "Hey Mark,\n\nYes, I read it, thanks. I see where you're coming from, but I think it's a bit more nuanced than that. The AI search is a strong argument, and management is right to push it.\n\nHowever, if we tell customers it will replace their staff, the works council could well stop the project before it even starts. I'd argue that it's better to say the AI takes over the boring searching, so people can focus on the work that needs their judgment.\n\nShall we try both versions with a customer next week and see which works better? Time will tell.\n\nBest"
  },
  {
   "id": "m16",

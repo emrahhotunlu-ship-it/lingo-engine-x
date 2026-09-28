@@ -35,8 +35,8 @@
    "can't have signed"
   ],
   "why": {
-   "de": "Ausgeschlossen in der Vergangenheit: can’t have + 3. Form.",
-   "en": "Something impossible in the past: can’t have + past participle."
+   "de": "Ausgeschlossen in der Vergangenheit: can’t have + 3. Form. Im US-Englisch meist couldn’t have.",
+   "en": "Something impossible in the past: can’t have + past participle. In US English, couldn’t have is more common."
   }
  },
  {
@@ -62,7 +62,9 @@
   "gap": "I ___ May.",
   "answers": [
    "haven't spoken to him since",
-   "have not spoken to him since"
+   "have not spoken to him since",
+   "haven't talked to him since",
+   "haven't spoken with him since"
   ],
   "why": {
    "de": "Seit einem Zeitpunkt nicht mehr: Present Perfect mit since.",
@@ -112,10 +114,10 @@
   "id": "u09",
   "a": "Our price was too high, so we lost the deal.",
   "key": "HAD",
-  "gap": "We would have won the deal if our price ___ too high.",
+  "gap": "If ___ too high, we would have won the deal.",
   "answers": [
-   "hadn't been",
-   "had not been"
+   "our price hadn't been",
+   "our price had not been"
   ],
   "why": {
    "de": "Dritter Konditional: if + Past Perfect, would have + 3. Form.",
@@ -142,10 +144,10 @@
   "key": "NEED",
   "gap": "You ___ the documents twice.",
   "answers": [
-   "needn't have sent",
-   "need not have sent",
    "didn't need to send",
-   "did not need to send"
+   "did not need to send",
+   "needn't have sent",
+   "need not have sent"
   ],
   "why": {
    "de": "Unnötig, aber passiert: needn’t have + 3. Form.",
@@ -200,7 +202,8 @@
   "gap": "You ___ today.",
   "answers": [
    "don't have to decide",
-   "do not have to decide"
+   "do not have to decide",
+   "don't have to make a decision"
   ],
   "why": {
    "de": "Keine Pflicht: don’t have to (nicht mustn’t, das wäre ein Verbot).",
@@ -214,7 +217,8 @@
   "gap": "I ___ about the price change.",
   "answers": [
    "wasn't informed",
-   "was not informed"
+   "was not informed",
+   "was never informed"
   ],
   "why": {
    "de": "Passiv: Die handelnde Person ist unwichtig oder unbekannt.",
@@ -282,7 +286,8 @@
   "key": "WHETHER",
   "gap": "The consultant asked us ___ a budget for this.",
   "answers": [
-   "whether we had"
+   "whether we had",
+   "whether or not we had"
   ],
   "why": {
    "de": "Ja/Nein-Frage indirekt: whether/if, kein do, Zeit zurück.",
@@ -348,7 +353,8 @@
   "key": "DUE",
   "gap": "The project's success was ___ the team's motivation.",
   "answers": [
-   "mainly due to"
+   "mainly due to",
+   "due mainly to"
   ],
   "why": {
    "de": "Nominalstil: due to + Nomen statt because + Satz.",
@@ -407,7 +413,7 @@
   ],
   "why": {
    "de": "depending on = je nach; die Präposition bleibt on.",
-   "en": "Depending on means \"according to\"; the preposition stays on."
+   "en": "Depending on means \"based on\" (German: je nach); the preposition stays on."
   }
  }
 ]

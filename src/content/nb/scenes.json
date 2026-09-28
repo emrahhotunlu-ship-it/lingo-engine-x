@@ -33,8 +33,8 @@
   ],
   "criteria": [
    {
-    "de": "Sie spricht mehr als du.",
-    "en": "She talks more than you do."
+    "de": "Deine Beiträge sind kurz: vor allem Fragen, höchstens 2 Sätze Produkt am Stück.",
+    "en": "Your turns are short: mostly questions, at most 2 sentences about the product at a time."
    },
    {
     "de": "Indirekte Fragen mit richtiger Wortstellung",
@@ -42,7 +42,7 @@
    },
    {
     "de": "Zusammenfassung mit „So if I’m hearing you correctly“",
-    "en": "A summary starting with \"So if I am hearing you correctly\""
+    "en": "A summary starting with \"So if I'm hearing you correctly\""
    },
    {
     "de": "klarer nächster Schritt am Ende",
@@ -92,8 +92,8 @@
     "en": "At least 2 transitions"
    },
    {
-    "de": "unter 60 Sekunden",
-    "en": "Under 60 seconds"
+    "de": "unter 60 Sekunden bzw. höchstens 150 Wörter",
+    "en": "Under 60 seconds, or at most 150 words"
    },
    {
     "de": "eine Frage an ihn",
@@ -139,8 +139,8 @@
     "en": "At least 2 hedges (should, around, likely)"
    },
    {
-    "de": "Zahlen korrekt ausgesprochen",
-    "en": "Numbers said correctly"
+    "de": "Zahlen im englischen Format (1.5 million, 15 percent)",
+    "en": "Numbers in English format (1.5 million, 15 percent)"
    },
    {
     "de": "kein Rabatt ohne Gegenleistung",
@@ -194,8 +194,8 @@
     "en": "Passive voice for processes"
    },
    {
-    "de": "keine Übertreibung",
-    "en": "No overpromising"
+    "de": "keine absoluten Zusagen (never, 100 percent, guarantee)",
+    "en": "No absolute promises (never, 100 percent, guarantee)"
    }
   ]
  },
@@ -288,8 +288,8 @@
     "en": "Emphasis through structure (What really matters is …)"
    },
    {
-    "de": "kurze Antworten, unter 45 Sekunden",
-    "en": "Short answers, under 45 seconds"
+    "de": "kurze Antworten, höchstens 4 Sätze je Antwort",
+    "en": "Short answers, at most 4 sentences each"
    },
    {
     "de": "Zahlen mit Dezimalpunkt",
@@ -382,8 +382,8 @@
   ],
   "criteria": [
    {
-    "de": "2. Konditional beim Überzeugen",
-    "en": "Second conditional when persuading"
+    "de": "-ing nach worth / open to / look forward to",
+    "en": "-ing after worth / open to / look forward to"
    },
    {
     "de": "commission statt provision",
@@ -492,8 +492,8 @@
     "en": "Precise dates"
    },
    {
-    "de": "niemand dominiert",
-    "en": "Nobody dominates"
+    "de": "du holst jede Figur mindestens einmal zum Thema zurück",
+    "en": "You bring each person back to the topic at least once"
    }
   ]
  },
@@ -590,8 +590,8 @@
     "en": "No sales pitch"
    },
    {
-    "de": "Gesprächsfluss vor Grammatik",
-    "en": "Flow of conversation before grammar"
+    "de": "am Ende ein Anlass für später (Karte, LinkedIn, Fallstudie)",
+    "en": "A reason to follow up at the end (card, LinkedIn, case study)"
    }
   ]
  },
@@ -655,7 +655,7 @@
    "en": "At dinner after a workshop, the customer asks about your craziest project."
   },
   "partner": {
-   "name": "Sarah Lehmann",
+   "name": "Claire Morgan",
    "role": "Customer, Head of Operations",
    "mood": "relaxed, enjoys a good story"
   },
@@ -724,7 +724,7 @@
   "criteria": [
    {
     "de": "Meinung abstufen (I’d argue, probably, might)",
-    "en": "Grading opinions (I would argue, probably, might)"
+    "en": "Grading opinions (I'd argue, probably, might)"
    },
    {
     "de": "zustimmen und widersprechen mit Wendungen",
