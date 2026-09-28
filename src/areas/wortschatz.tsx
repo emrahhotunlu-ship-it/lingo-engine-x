@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { defineArea } from '../app/registry';
-import { loadResume } from '../app/resume';
+import { restoreFor } from '../app/resume';
 import type { Resumable } from '../app/resume';
 import type { UnitBlockProvider } from '../app/unit/types';
 import { installDecksWatch } from '../features/vocab/decksStore';
@@ -36,8 +36,7 @@ const trainerParams = z.object({ round: z.enum(['pflicht', 'extra']), mode: z.en
  */
 function ensureTrainer(route: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip'; deck?: string }): boolean {
   if (useSession.getState().active) return true;
-  const env = loadResume(TRAINER_RESUME_ID);
-  if (env && env.v === 1 && restoreTrainer(env.data as TrainerSnapshot)) return true;
+  if (restoreFor('trainer')) return true;
   startSession(route.round, { ...(route.deck ? { deck: route.deck } : {}), ...(route.mode ? { mode: route.mode } : {}) });
   const s = useSession.getState();
   return s.active && (s.status === 'running' || s.queue.length > 0);

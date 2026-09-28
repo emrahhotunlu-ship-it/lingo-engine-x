@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { useEffect, useLayoutEffect, useMemo } from 'react';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
-import { Button } from '../../ui/Button';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { normalize } from '../../domain/answer/normalize';
@@ -13,7 +12,7 @@ import { abortExamples } from './examples';
 import { flush } from './persist';
 import { answerRepair, currentRepair, leaveSession, nextRepair, pauseActivity, roundProgress, skipCurrent, touch, useSession } from './session';
 import { FlipCard } from './anki/FlipCard';
-import { CardBoundary } from './CardBoundary';
+import { StepBoundary } from '../../app/shell/Boundary';
 import { cardShown } from './cardMark';
 import { useShallow } from 'zustand/react/shallow';
 import { RepairItem } from '../repair/RepairItem';
@@ -104,21 +103,7 @@ export function TrainerScreen() {
         {status === 'summary' ? (
           <Summary onBack={leave} />
         ) : (
-          <CardBoundary
-            resetKey={step}
-            where={item?.key ?? 'repair'}
-            onSkip={skip}
-            fallback={(doSkip) => (
-              <article className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" data-testid="card-broken" role="alert">
-                <p className="text-base">{t('nbWsCardBroken')}</p>
-                <div>
-                  <Button variant="primary" onClick={doSkip} data-testid="card-skip">
-                    {t('nbWsSkip')}
-                  </Button>
-                </div>
-              </article>
-            )}
-          >
+          <StepBoundary resetKey={step} scope="trainer" detail={item?.key ?? 'repair'} onSkip={skip}>
             {repair ? (
               <RepairItem
                 key={repair.id}
@@ -140,7 +125,7 @@ export function TrainerScreen() {
             ) : exercise ? (
               <ExerciseView exercise={exercise} knownWords={knownWords} again={item?.reason === 'again'} onDone={onDone} />
             ) : null}
-          </CardBoundary>
+          </StepBoundary>
         )}
       </motion.div>
     </div>

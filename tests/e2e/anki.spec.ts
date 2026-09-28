@@ -46,10 +46,10 @@ test.describe('Desktop', () => {
       await expect(page.getByTestId('grades')).toBeVisible();
       if (i === 0) {
         await expect(page.getByTestId('flip-answer')).toBeVisible();
-        await expect(page.getByTestId('grade')).toHaveCount(4);
-        await expect(page.locator('[data-testid="grade"][data-suggested]')).toHaveCount(1);
-        for (const iv of await page.getByTestId('grade-iv').allInnerTexts()) expect(iv).toMatch(/\d/);
-        await expect(page.getByTestId('suggest-note')).toBeVisible();
+        await expect(page.locator('[data-testid="grades"] button')).toHaveCount(4);
+        await expect(page.locator('[data-testid="grades"] button[data-suggest]')).toHaveCount(1);
+        for (const iv of await page.locator('[data-testid="grades"] button small').allInnerTexts()) expect(iv).toMatch(/\d/);
+        await expect(page.getByTestId('grades-note')).toBeVisible();
       }
       // Taste 3 = Gut (Review-Karten: keine Wiedervorlage in der Runde).
       await page.keyboard.press('3');

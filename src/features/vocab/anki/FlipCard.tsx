@@ -19,6 +19,7 @@ import { classifySwipe, swipeExcluded } from '../../../engine/swipe';
 import { useHotkeys } from '../../../engine/useHotkeys';
 import { useT, type MessageKey } from '../../../i18n';
 import { Button } from '../../../ui/Button';
+import { GradeButtons } from '../../../ui/GradeButtons';
 import { Icon } from '../../../ui/Icon';
 import { nextT } from '../../progress/persist';
 import { useDecks } from '../decksStore';
@@ -314,32 +315,13 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
         </Button>
       ) : (
         <div className="flex flex-col gap-2">
-          <div className={`grid gap-2 ${twoButtons ? 'grid-cols-2' : 'grid-cols-4'}`} role="group" aria-label={t('nbWsGradesLabel')} data-testid="grades">
-            {grades.map((g, i) => {
-              const suggested = g === shown.suggest;
-              const label = twoButtons ? t(i === 0 ? 'nbWsGradeNo' : 'nbWsGradeYes') : t(GRADE_KEY[g]);
-              return (
-                <button
-                  key={`${i}-${g}`}
-                  type="button"
-                  onClick={() => grade(g)}
-                  className={`flex min-h-14 min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl border-2 bg-surface-strong px-1 py-2 text-[0.9rem] font-semibold transition-colors ${suggested ? 'border-accent' : 'border-transparent'} ${g === 1 ? 'text-danger-text' : ''}`}
-                  data-testid="grade"
-                  data-grade={g}
-                  data-suggested={suggested ? '' : undefined}
-                  aria-keyshortcuts={twoButtons ? String(i + 1) : String(g)}
-                >
-                  <span className="max-w-full truncate">{label}</span>
-                  <small className="lx-tnum text-xs font-medium text-muted" data-testid="grade-iv">
-                    {formatInterval(shown.iv[g], lang)}
-                  </small>
-                </button>
-              );
-            })}
-          </div>
-          <p className="text-center text-xs text-subtle" data-testid="suggest-note">
-            {t('nbWsSuggest', { grade: t(GRADE_KEY[shown.suggest]) })} · {t('nbWsSwipeHint', { again: t('nbWsGrade1'), grade: t(GRADE_KEY[shown.suggest]) })}
-          </p>
+          <GradeButtons
+            options={grades.map((g, i) => ({ grade: g, label: twoButtons ? t(i === 0 ? 'nbWsGradeNo' : 'nbWsGradeYes') : t(GRADE_KEY[g]), interval: formatInterval(shown.iv[g], lang) }))}
+            suggest={shown.suggest}
+            onGrade={grade}
+            label={t('nbWsGradesLabel')}
+            note={`${t('nbWsSuggest', { grade: t(GRADE_KEY[shown.suggest]) })} · ${t('nbWsSwipeHint', { again: t('nbWsGrade1'), grade: t(GRADE_KEY[shown.suggest]) })}`}
+          />
         </div>
       )}
     </div>
