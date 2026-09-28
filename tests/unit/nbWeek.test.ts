@@ -393,6 +393,16 @@ describe('matchTrap (Startsatz)', () => {
       'The outage looks serious.',
       'Can you explain her decision?',
       'That makes the picture clearer.',
+      // Nachprüfung Englischlehrer (28.09.)
+      'Do we have a date for the go-live yet?',
+      'We cannot confirm until Monday.',
+      'Can you tell me who does the invoicing today?',
+      'When you have a minute, could you take a look?',
+      'You must have heard about the new mandate.',
+      "Can you send me the prospect's email address?",
+      'We have signed 12 new partners since the end of last year.',
+      'We are flexible since this is a pilot.',
+      'We have a feedback culture.',
     ];
     for (const s of ok) expect(matchTraps(s), s).toEqual([]);
   });
