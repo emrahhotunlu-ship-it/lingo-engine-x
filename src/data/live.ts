@@ -96,6 +96,24 @@ function checked(path: string, data: Doc): { value: Doc; ok: boolean } {
   return { value: data, ok: false };
 }
 
+/** Höchstdauer eines Prüf-Stücks (ein Bild bei 60 fps). */
+export const SLICE_MS = 16;
+
+const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+
+/** Haupt-Thread kurz freigeben (`scheduler.yield`, wo vorhanden; sonst ein Zeitgeber). */
+function yieldThen(fn: () => void): void {
+  const sch = (globalThis as { scheduler?: { yield?: () => Promise<void> } }).scheduler;
+  if (typeof sch?.yield === 'function') {
+    sch.yield().then(fn, (err: unknown) => {
+      logWarn('data:live', err, 'yield');
+      setTimeout(fn, 0);
+    });
+    return;
+  }
+  setTimeout(fn, 0);
+}
+
 export function startLive(db: Db): () => void {
   let stopped = false;
   const unsubs = new Map<string, Unsub>();
@@ -132,28 +150,52 @@ export function startLive(db: Db): () => void {
       }, onError),
     );
   }
+  // Sammlungen in Stücken prüfen (Neubau N09, leistung.md §4 Nr. 6): Die Einzeldokumente oben
+  // (Heute braucht sie zuerst) werden sofort geprüft. Eine Lieferung einer Sammlung wird geprüft,
+  // bis ein Stück SLICE_MS überschreitet; dann gibt sie den Haupt-Thread frei und macht danach
+  // weiter. Kleine Lieferungen (meist Treffer im Zwischenspeicher) bleiben synchron wie bisher.
+  // Kommt eine neuere Lieferung, bevor die alte fertig ist, gilt nur die neue (sie ist vollständig).
+  const jobs = new Map<string, number>();
   for (const name of LIVE_COLLECTIONS) {
     subscribe(name, (onError) =>
       db.collection(name).onSnapshot((qs) => {
+        const job = (jobs.get(name) ?? 0) + 1;
+        jobs.set(name, job);
+        const docs = qs.docs;
         const map = new Map<string, Doc>();
         const before = validationStats();
-        for (const d of qs.docs) {
-          const data = d.exists ? d.data() : undefined;
-          if (!data) continue;
-          const res = checked(`${name}/${d.id}`, data);
-          // Karten und Themen mit ungültigem Aufbau werden gemeldet und nicht mitgezählt.
-          if (res.ok) map.set(d.id, res.value);
-        }
-        markValidated(name, before);
-        useLive.setState((s) => ({ collections: { ...s.collections, [name]: map } }));
-        retried.delete(name);
-        markLoaded();
+        let i = 0;
+        const step = (): void => {
+          if (stopped || jobs.get(name) !== job) return;
+          const t0 = now();
+          for (; i < docs.length; i++) {
+            const d = docs[i];
+            if (!d) continue;
+            const data = d.exists ? d.data() : undefined;
+            if (data) {
+              const res = checked(`${name}/${d.id}`, data);
+              // Karten und Themen mit ungültigem Aufbau werden gemeldet und nicht mitgezählt.
+              if (res.ok) map.set(d.id, res.value);
+            }
+            if (now() - t0 > SLICE_MS && i < docs.length - 1) {
+              i++;
+              yieldThen(step);
+              return;
+            }
+          }
+          markValidated(name, before);
+          useLive.setState((s) => ({ collections: { ...s.collections, [name]: map } }));
+          retried.delete(name);
+          markLoaded();
+        };
+        step();
       }, onError),
     );
   }
 
   return () => {
     stopped = true;
+    jobs.clear();
     unsubs.forEach((u) => u());
     unsubs.clear();
     useLive.setState(initial());
