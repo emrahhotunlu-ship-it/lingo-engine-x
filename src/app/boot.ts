@@ -139,10 +139,19 @@ export function readDeepLink(hash: string): Route | null {
   return route;
 }
 
+let deepLinkUsed = false;
+
+/** Wurde beim Start ein Deep-Link angewandt? (Dann kein automatisches Fortsetzen.) */
+export function deepLinkApplied(): boolean {
+  return deepLinkUsed;
+}
+
 export function useDeepLink(active: boolean): void {
   useEffect(() => {
     if (!active) return;
     const route = readDeepLink(window.location.hash);
-    if (route) useNav.getState().go(route);
+    if (!route) return;
+    deepLinkUsed = true;
+    useNav.getState().go(route);
   }, [active]);
 }
