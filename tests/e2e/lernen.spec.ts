@@ -124,3 +124,23 @@ test('Werkzeug der Woche: grammar?topic=c1-hedging öffnet das Themenblatt', asy
   await expect(page.getByTestId('rule-sheet')).toHaveAttribute('data-topic', 'c1-hedging');
   expect(errors).toEqual([]);
 });
+
+test('Deutsch-Fallen ohne KI: Startsatz-Falle in 2 Tipps ab Üben, 3 Sätze mit Hinweis und Lösung', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await screen(page, 'today');
+  await openTab(page, 'learn');
+  await page.getByTestId('hub-patterns').click();
+  await expect(page.getByTestId('patterns-start')).toBeVisible();
+  await page.getByTestId('pattern-start-f03').click();
+  await expect(page.getByTestId('patterns')).toHaveAttribute('data-view', 'drill');
+  for (let i = 0; i < 3; i++) {
+    const item = page.locator('[data-testid="focus-item"][data-state="open"]');
+    await expect(item).toHaveAttribute('data-trap', 'f03');
+    await expect(page.getByTestId('focus-hint')).toBeVisible();
+    await page.getByTestId('focus-dont-know').click();
+    await expect(page.getByTestId('feedback-fixes')).not.toBeEmpty();
+    await page.getByTestId('next').click();
+  }
+  await expect(page.getByTestId('pattern-drill-end')).toHaveAttribute('data-total', '3');
+  expect(errors).toEqual([]);
+});

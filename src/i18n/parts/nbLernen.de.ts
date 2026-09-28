@@ -56,4 +56,6 @@ export const nbLernenDe = {
   nbLernenResumeDrill: 'Kurzübung · Aufgabe {n} von {total}',
   nbLernenResumeLesson: 'Lektion · Schritt {n} von 4',
   nbLernenResumePattern: 'Deutsch-Falle · Aufgabe {n} von {total}',
+  nbLernenStartSet: 'Typische Fallen im Beruf',
+  nbLernenStartSetLead: '25 klassische Deutsch-Fallen – je 3 Sätze zum Umschreiben, auch ohne KI.',
 } as const;

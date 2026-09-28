@@ -55,4 +55,6 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenResumeDrill: 'Quick drill · task {n} of {total}',
   nbLernenResumeLesson: 'Lesson · step {n} of 4',
   nbLernenResumePattern: 'German trap · task {n} of {total}',
+  nbLernenStartSet: 'Typical traps at work',
+  nbLernenStartSetLead: '25 classic German traps – 3 sentences each to rewrite, also without AI.',
 };

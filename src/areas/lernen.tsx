@@ -19,6 +19,7 @@ import { startAgain } from '../features/repair/again/session';
 import { ensureGrammar, grammarResume } from '../features/grammar/resume';
 import { drillResume, ensureDrill } from '../features/drills/resume';
 import { ensureLesson, lessonResume } from '../features/course/resume';
+import { patternResume } from '../features/patterns/run';
 
 // Bereich „Lernen“ (Kurs, Grammatik, Training) – Besitz: Paket P2 (docs/neubau/architektur.md §5.2).
 // WP0a: heutige Bildschirme unter den heutigen Routennamen; „Üben“ (`learn`) ist Reiter-Wurzel
@@ -99,5 +100,5 @@ export const lernen = defineArea({
       },
     },
   ],
-  resumables: [focusResume, againResume, grammarResume, drillResume, lessonResume],
+  resumables: [focusResume, againResume, grammarResume, drillResume, lessonResume, patternResume],
 });

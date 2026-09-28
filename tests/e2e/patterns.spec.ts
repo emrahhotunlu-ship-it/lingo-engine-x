@@ -132,13 +132,22 @@ for (const size of SIZES) {
     await expect(drill).toHaveAttribute('data-id', 'since-present');
     let fixes = 0;
     let frees = 0;
-    for (let i = 0; i < 8; i++) {
+    let starts = 0;
+    for (let i = 0; i < 12; i++) {
       if ((await drill.getAttribute('data-state')) === 'done') break;
       // Nur die offene Aufgabe (die beantwortete blendet noch aus).
       const repair = page.locator('[data-testid="repair-item"][data-state="open"]');
       const free = page.locator('[data-testid="pattern-free"][data-state="open"]');
-      await expect(repair.or(free)).toBeVisible();
-      if (await repair.isVisible()) {
+      // N43: 3 Sätze aus dem Startsatz der Fallen sind eingestreut (zählen nicht in den Trend).
+      const start = page.locator('[data-testid="focus-item"][data-state="open"]');
+      await expect(repair.or(free).or(start)).toBeVisible();
+      if (await start.isVisible()) {
+        await expect(page.getByTestId('focus-hint')).toBeVisible();
+        await page.getByTestId('focus-dont-know').click();
+        await expect(page.getByTestId('feedback-solution')).toBeVisible();
+        starts++;
+        await page.getByTestId('next').click();
+      } else if (await repair.isVisible()) {
         await expect(repair).toContainText('aus deinen Deutsch-Fallen');
         await expect(page.getByTestId('repair-right')).toHaveCount(0);
         await page.getByTestId('repair-input').fill('We have been partners for many years now.');
@@ -176,6 +185,7 @@ for (const size of SIZES) {
     expect(fixes).toBeGreaterThanOrEqual(1);
     expect(frees).toBeGreaterThanOrEqual(2);
     expect(fixes + frees).toBeLessThanOrEqual(7);
+    expect(starts).toBe(3);
     const end = page.getByTestId('pattern-drill-end');
     await expect(end).toHaveAttribute('data-ok', String(fixes + frees - 1));
     // Eigene Sätze sind jetzt Reparatur-Sätze mit Quelle „pattern“ (oder waren es schon).
