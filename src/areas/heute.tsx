@@ -9,7 +9,7 @@ import { setUnitDoneHandler } from '../app/unit/done';
 import { CheckScreen } from '../features/check/CheckScreen';
 import { checkResumable, ensureCheck } from '../features/check/resume';
 import { TodayScreen } from '../features/today/TodayScreen';
-import { useToday } from '../features/today/state';
+import { todayNow, useToday } from '../features/today/state';
 import { UnitCardScreen } from '../features/unit/UnitCard';
 import { UnitStepScreen } from '../features/unit/UnitStep';
 import { handleUnitDone, installUnitWatch } from '../features/unit/run';
@@ -81,7 +81,11 @@ export const unitResumable: Resumable<UnitSnap> = {
     return true;
   },
   route: (s) => s.route ?? { name: 'today' },
-  label: (s, t) => t('nbHeuteResumeUnit', { n: s.block ?? 1, total: 5 }),
+  label: (s, t) => {
+    const duties = todayNow().plan?.duty ?? [];
+    const n = duties.indexOf((s.duty ?? '') as (typeof duties)[number]) + 1;
+    return t('nbHeuteResumeUnit', { n: n || (s.block ?? 1), total: duties.length || 5 });
+  },
 };
 
 let booted = false;
