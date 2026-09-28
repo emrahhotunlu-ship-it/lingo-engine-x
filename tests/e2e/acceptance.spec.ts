@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { TABS } from '../../src/app/shell/tabs';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen, openTab } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen, openTab } from './fixtures';
 
 // Abschlussprüfung (P7-4, docs/abnahme.md): Kap. 14 und 15 als durchlaufende Prüfungen gegen den
 // Produktions-Build. Weitere Kriterien belegen die dort genannten Specs und Unit-Tests.
@@ -57,8 +57,8 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
 
 test('Kap. 14: alle bisherigen Daten sichtbar, Serie läuft weiter', async ({ page }) => {
   await boot(page, { migrated: true });
+  await expectStreak(page, '12');
   await openOverview(page);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
   await expect(page.getByTestId('course-done')).toHaveText('6');
   await expect(page.getByTestId('vocab-total')).toHaveText('146');
 });

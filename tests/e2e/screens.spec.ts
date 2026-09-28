@@ -1,6 +1,6 @@
 import { mkdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen, type Lang, type Theme } from './fixtures';
 import { TABS } from '../../src/app/shell/tabs';
 import { learnTour } from './learnHelpers';
 import { inputTour } from './inputHelpers';
@@ -188,8 +188,7 @@ test('reduzierte Bewegung: alles erscheint ohne Animation vollständig', async (
   const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 }, timezoneId: 'Europe/Berlin' });
   const page = await context.newPage();
   const { errors } = await boot(page, { migrated: true });
-  await openOverview(page);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  await expectStreak(page, '12');
   expect(errors).toEqual([]);
   await context.close();
 });

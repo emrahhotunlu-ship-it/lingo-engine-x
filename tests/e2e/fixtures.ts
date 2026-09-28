@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import type { InstallOptions } from '../../src/platform/dev/install';
 import { WHATS_NEW_KEY, WHATS_NEW_VERSION } from '../../src/features/system/whatsNew';
 import { routeToString } from '../../src/app/router/deeplink';
@@ -146,6 +146,14 @@ export async function openProfile(page: Page): Promise<void> {
   for (let i = 0; i < 2 && !(await btn.isVisible()); i++) await page.getByTestId('tab-today').click();
   await btn.click();
   await page.getByTestId('profile-sheet').waitFor();
+}
+
+/** Serie im Profil-Blatt prüfen (die Zahl stand früher auf „Dein Stand“), danach Blatt schließen. */
+export async function expectStreak(page: Page, n: string): Promise<void> {
+  await openProfile(page);
+  await expect(page.getByTestId('profile-sheet-streak')).toContainText(n);
+  await page.keyboard.press('Escape');
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
 }
 
 /** „Dein Stand“: Profil-Blatt → „Dein Stand ›“ (war ein Reiter). */

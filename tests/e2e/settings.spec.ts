@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, openOverview } from './fixtures';
+import { boot, openSettings, openOverview, expectStreak } from './fixtures';
 
 type Dump = Record<string, Record<string, unknown>>;
 const dump = (page: Page) =>
@@ -78,8 +78,7 @@ test('scheitert das Speichern, wird die Änderung zurückgenommen und gemeldet',
 
 test('ein ungültiges Profil wird gemeldet, angezeigt und beim Speichern nie ersetzt', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { rate: 'schnell' } } } });
-  await openOverview(page);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  await expectStreak(page, '12');
   await openSettings(page);
   await page.getByRole('radio', { name: 'English' }).click();
   await expect.poll(async () => (await dump(page))['app/profile']?.lang).toBe('en');

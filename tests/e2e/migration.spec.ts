@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { boot, openSettings, openOverview, screen } from './fixtures';
+import { boot, openSettings, openOverview, expectStreak, screen } from './fixtures';
 
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
@@ -29,8 +29,8 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
 
   // Ausführen → Übersicht mit denselben Werten.
   await page.getByRole('button', { name: 'Umstellung ausführen' }).click();
+  await expectStreak(page, '12');
   await openOverview(page);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
   await expect(page.getByTestId('course-done')).toHaveText('6');
   await expect(page.getByTestId('vocab-total')).toHaveText('146');
   await expect(page.getByText('Umgestellt am 20. September 2026')).toBeVisible();
