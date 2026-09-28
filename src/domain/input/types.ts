@@ -18,6 +18,8 @@ export type Question = {
   answer: number;
   type: QuestionType;
   explain: { de?: string; en?: string };
+  /** Belegstelle als wörtliches Zitat (Themen-Texte, Neubau M9); sonst sucht die Oberfläche den Satz. */
+  quote?: string;
 };
 
 export type ChoiceResult = { key: string; chosen: number; correct: boolean; ms: number };
