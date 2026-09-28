@@ -820,7 +820,7 @@ export function ExerciseView({
             word={t(CONFIDENCE_KEYS[confidence])}
             label={t('confLabel', { level: t(CONFIDENCE_KEYS[confidence]) })}
             again={again ? t('trAgainBadge') : null}
-            kind={t(`exName_${e.ex}` as MessageKey)}
+            kind={e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${e.ex}` as MessageKey)}` : t(`exName_${e.ex}` as MessageKey)}
             kindLabel={t('exKindLabel', { name: '' }).trim()}
           />
         }

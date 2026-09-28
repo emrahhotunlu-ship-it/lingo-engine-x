@@ -6,6 +6,38 @@ import { useHiddenInput } from '../../engine/HiddenInput';
 import { usePending, retryFailed } from './persist';
 import { useSession } from './session';
 import { SummaryActions } from '../learn/ui';
+import { useClock } from '../../app/clock';
+import { calibration, CONTROL } from '../../domain/srs/flip';
+import { local } from '../../platform/storage';
+import { useState } from 'react';
+
+const CALIB_KEY = 'lx:calib-hint';
+
+/**
+ * Kalibrierung (anki-regeln §4): ruhiger Satz, wenn „Leicht“ zuletzt zu oft danebenlag – höchstens
+ * alle 14 Tage (Merker lokal, reine Bequemlichkeit). Kein Zwang, keine Sperre.
+ */
+function CalibHint() {
+  const { t } = useT();
+  const now = useClock((s) => s.now);
+  const strict = useSession((s) => s.strict);
+  const pool = useSession((s) => s.pool);
+  const [show] = useState(() => {
+    if (!strict) return null;
+    const last = Number(local.get(CALIB_KEY)) || 0;
+    if (now - last < CONTROL.hintEveryDays * 86_400_000) return null;
+    const c = calibration(pool.map((x) => x.doc), now);
+    if (!c.strict) return null;
+    local.set(CALIB_KEY, String(now));
+    return c;
+  });
+  if (!show) return null;
+  return (
+    <p className="text-sm text-muted" data-testid="calib-hint">
+      {t('nbWsCalib', { hits: show.hits, pairs: show.pairs })}
+    </p>
+  );
+}
 
 // Zusammenfassung am Rundenende: Anzahl, Trefferquote, nicht Gespeichertes mit „Erneut speichern".
 
@@ -50,6 +82,7 @@ export function Summary({ onBack }: { onBack: () => void }) {
           ))}
         </ul>
       )}
+      <CalibHint />
       {(failedCards.length > 0 || failed) && (
         <div className="flex flex-col gap-2 rounded-xl bg-danger-soft p-3" role="alert">
           <p className="text-sm">{failedCards.length ? tn('sumNotSaved', failedCards.length) : t('tdNotSaved')}</p>
