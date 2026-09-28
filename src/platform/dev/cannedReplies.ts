@@ -16,6 +16,7 @@ import { registerFluencyMeetingReplies } from './canned/fluencyMeeting';
 import { patternCheckReply, patternsReply } from './canned/patterns';
 import { registerP7Replies } from './canned/p7';
 import { registerNbReplies } from './canned/nb';
+import { registerP5TaskReplies } from './canned/p5tasks';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
 // produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
@@ -325,6 +326,8 @@ export function registerCannedReplies(): void {
   registerToneReplies();
   // Neubau: goal-check, claude-drill, unit-listen, text-level, alternatives, text-cards
   registerNbReplies();
+  // Neubau P5: speak-task-check (Pitch 30/60/120, Diagramm, Umschreiben, Rückübersetzung)
+  registerP5TaskReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

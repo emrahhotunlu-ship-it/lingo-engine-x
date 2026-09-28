@@ -13,6 +13,7 @@ import { Sheet } from '../../ui/Sheet';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION } from '../../ui/motion';
 import { AnalysisCard } from './AnalysisCard';
+import { setCallMode, useCallMode } from './autoplay';
 import { GoalChecklist } from './GoalChecklist';
 import { roleplayResume } from './resumable';
 import { TargetBar } from './TargetBar';
@@ -90,6 +91,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [allOpen, setAllOpen] = useState(false);
   const [goalOpen, setGoalOpen] = useState(false);
+  const call = useCallMode((s) => s.on);
   const pausedUntil = useAiStatus((s) => s.pausedUntil);
   const now = useClock((s) => s.now);
   const myTurns = useMemo(() => c.turns.filter((x) => x.role === 'me').length, [c.turns]);
@@ -170,9 +172,24 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
       {/* N72: die Ziele stehen oben; Haken kommen nach jeder Antwort der Figur (goal-check@1). */}
       <div className="lx-glass rounded-2xl px-4 py-3" data-testid="rp-goals-box">
         <GoalChecklist goals={goalList} marks={rp.goals} testId="rp-goals" />
-        <div className="mt-2">
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           <TrapWatch />
+          <button
+            type="button"
+            className="ml-auto inline-flex min-h-8 items-center gap-1 rounded-full px-1 text-xs text-muted hover:text-fg"
+            aria-pressed={call}
+            onClick={() => setCallMode(!call)}
+            data-testid="rp-call-toggle"
+          >
+            <Icon name="speaker" size={14} />
+            {t('nbSprechenCallMode')}
+          </button>
         </div>
+        {call && (
+          <p className="mt-1 text-xs text-muted" data-testid="rp-call-note">
+            {t('nbSprechenCallOn')}
+          </p>
+        )}
       </div>
       {unit && <TargetBar text={myText} ctx={unitCtx} />}
       <AnimatePresence initial={false}>
@@ -206,6 +223,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
               else setOpenIdx((cur) => (cur === i ? null : i));
             }}
             renderInline={(i) => card(i)}
+            call={call}
           />
 
           {(c.error || c.interrupted) && state === 'composing' && (
@@ -244,6 +262,11 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
           )}
 
           {(state === 'composing' || phase !== 'other') && <TurnTimer key={c.turns.length} active={state === 'composing'} />}
+          {call && state === 'composing' && (
+            <p className="text-xs text-muted" data-testid="rp-call-hint">
+              {t('nbSprechenCallHint')}
+            </p>
+          )}
           {(state === 'composing' || phase !== 'other') && (
             <Composer sceneId={scene.id} useful={scene.useful} busy={busy} restore={restore} onSend={(text, chip) => void rp.sendTurn(text, chip)} />
           )}

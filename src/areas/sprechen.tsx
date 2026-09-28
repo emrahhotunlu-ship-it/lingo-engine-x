@@ -12,6 +12,8 @@ import { TonesScreen } from '../features/tones/TonesScreen';
 import { P5_UNIT_BLOCKS } from '../features/speak/unit';
 import { P5_RESUMABLES } from '../features/speak/resumable';
 import { PreplyNextTodayLine } from '../features/preply/NextLesson';
+import { SpeakTaskScreen } from '../features/speak/tasks/SpeakTaskScreen';
+import type { SpeakTaskKind } from '../prompts/nb/p5/speakTaskCheck';
 
 // Bereich „Sprechen & Schreiben“ – Besitz: Paket P5 (docs/neubau/architektur.md §5.2).
 // WP0a: heutige Bildschirme unter den heutigen Routennamen.
@@ -29,6 +31,8 @@ declare module '../app/router/types' {
     say: { unit?: number };
     fluency: { unit?: number };
     tones: { unit?: number };
+    /** Kurze Sprechaufgaben (N79, B9): Pitch 30/60/120, Diagramm, Umschreiben, Rückübersetzung. */
+    sptask: { kind: SpeakTaskKind };
   }
 }
 
@@ -57,7 +61,15 @@ export const sprechen = defineArea({
     say: { kind: 'exercise', component: SayScreen, title: 'sayTitle', params: unitParam },
     fluency: { kind: 'exercise', component: FluencyScreen, params: unitParam },
     tones: { kind: 'exercise', component: TonesScreen, params: unitParam },
+    sptask: { kind: 'exercise', component: SpeakTaskScreen, params: z.object({ kind: z.enum(['pitch', 'chart', 'circum', 'back']) }) },
   },
+  // Sprechen › Training (N79, B9): je ein Tipp ab dem Reiter.
+  entries: [
+    { id: 'training-pitch3', place: 'speak', group: 'training', order: 60, label: 'nbSprechenTaskPitch', sub: 'nbSprechenTaskPitchSub', icon: 'mic', route: { name: 'sptask', kind: 'pitch' } },
+    { id: 'training-chart', place: 'speak', group: 'training', order: 61, label: 'nbSprechenTaskChart', sub: 'nbSprechenTaskChartSub', icon: 'chart', route: { name: 'sptask', kind: 'chart' } },
+    { id: 'training-circum', place: 'speak', group: 'training', order: 62, label: 'nbSprechenTaskCircum', sub: 'nbSprechenTaskCircumSub', icon: 'lightbulb', route: { name: 'sptask', kind: 'circum' } },
+    { id: 'training-back', place: 'speak', group: 'training', order: 63, label: 'nbSprechenTaskBack', sub: 'nbSprechenTaskBackSub', icon: 'refresh', route: { name: 'sptask', kind: 'back' } },
+  ],
   unitBlocks: P5_UNIT_BLOCKS,
   resumables: P5_RESUMABLES,
   // L9: ruhige Zeile auf Heute, nur am Tag vor und am Tag der Stunde.

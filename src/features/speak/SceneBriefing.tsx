@@ -9,7 +9,7 @@ import { unlockSpeech } from '../../platform/speech';
 import { Button } from '../../ui/Button';
 import { Sheet } from '../../ui/Sheet';
 import { clearResume, readResume } from './resume';
-import { autoplayOn, queueOpening } from './autoplay';
+import { queueOpening, speakRepliesOn } from './autoplay';
 import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 import { sceneGoals } from '../../domain/speak/bizScenes';
 import { GoalChecklist } from './GoalChecklist';
@@ -29,7 +29,7 @@ export function SceneBriefing({ scene, onClose }: { scene: SceneView | null; onC
     if (!scene) return;
     unlockSpeech();
     // Die Eröffnung spricht das Rollenspiel selbst, sobald es steht (nie eine alte beim Fortsetzen).
-    queueOpening(!resume && autoplayOn() ? scene.opening : null);
+    queueOpening(!resume && speakRepliesOn() ? scene.opening : null);
     if (!resume) clearResume(scene.id);
     onClose();
     go({ name: 'roleplay', sceneId: scene.id, resume });
