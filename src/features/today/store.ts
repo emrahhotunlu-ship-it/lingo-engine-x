@@ -4,43 +4,44 @@ import { getWriter } from '../../data';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { validateDoc } from '../../data/validate';
 import { dayKey } from '../../domain/date';
-import { pickLesson } from '../../domain/course/next';
 import { clozeCandidates } from '../../domain/drills/cloze';
 import { orderSentences } from '../../domain/drills/sources';
 import { buildSprintDeck } from '../../domain/drills/sprint';
-import { dueErrors } from '../../domain/grammar/errors';
-import { buildPlan, readPlan } from '../../domain/plan/buildPlan';
-import { isSayDay, rankChannels, type FeasibleData } from '../../domain/plan/channels';
+import { readPlan } from '../../domain/plan/buildPlan';
+import { type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
+import { repairsDoneToday, pickDailyRepairs } from '../../domain/repair/daily';
 import { buildTrainCards } from '../../domain/srs/cards';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
-import { dueCards, planRound, quizzable } from '../../domain/srs/queue';
+import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
-import { getDb, sampleUsableWithin } from '../../platform/capabilities';
+import { buildUnitStored, unitDraft } from '../../domain/unit/plan';
+import { unitReviewGoal } from '../../domain/unit/review';
+import { REPAIR_MAX, themeFor } from '../../domain/week';
+import { getDb } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
-import { useSpeech } from '../../platform/speech';
+import { KEY_PREFIX, local } from '../../platform/storage';
 import { mergedVocab } from '../../domain/overview';
 import { ensurePflichtSince, healPflicht, runDailyIntake } from '../progress/dayJobs';
 import { setPflichtResolver, tabId, usePending } from '../progress/persist';
 import { loadLearnInputs, recentLessonLines, setDailyOpen, useLearnInputs } from '../learn/inputs';
 import { computeDayWith } from './state';
 import type { DayEntry } from '../../domain/plan/buildPlan';
-import { assessPlanInput } from '../../domain/assessment/planInput';
 import { normGoalMin } from '../../domain/progress/settings';
 import { historyPatch, historySnapshot } from '../../domain/progress/history';
 import { vocabGoal } from '../../domain/vocab/goal';
 import { recordProfileFields } from '../progress/persist';
+import { startWeekWatch, useWeekDoc, weekDocNow, weekLoaded } from '../week/store';
 
-// Tagesplan: einmal je Lerntag festgelegt und in app/profile.plan gespeichert, nie neu
-// gewürfelt (Kap. 15). Ist das Speichern nicht möglich, gilt der lokal berechnete Plan für
-// den Tag (eingefroren), und nichts wird überschrieben.
+// Tagesplan = Tageseinheit (plan.md §1.5, N10/N12): einmal je Lerntag festgelegt und in
+// app/profile.plan gespeichert, nie neu gewürfelt (Kap. 15). Ein schon gespeicherter Plan von heute
+// (auch ein Plan von Phase 1/2 nach einem Update mitten am Tag) bleibt bis 04:00 unverändert.
 //
-// `ensureDay` (phase2-plan §6.4), jeder Schritt protokolliert und blockiert die folgenden nicht:
-// 1. alle liegengebliebenen `daily/*` → Karten und Pool (einmal je Tab und Lerntag),
-// 2. Plan (nur ohne Plan dieser App von heute; ein Phase-1-Plan von heute bleibt bis 04:00),
-// 3. `pflichtSince` (einmal je Datenbank, nur mit Phase-2-Plan von heute),
-// 4. Selbstheilung `pflicht[heute]`.
+// N14 „Heute sofort“ (leistung.md §4 Nr. 3, Anhang A Nr. 3): Der Plan steht nach dem ersten Abo –
+// aus `app/profile.plan`, sonst aus der lokalen Kopie `lx:plan:<tag>`, sonst sofort neu berechnet
+// (ohne `env`, M5; ohne Warten auf KI oder Sprachausgabe). Speichern, Tagesauftrag (`intake`),
+// `pflichtSince`, Selbstheilung und Tagesbild laufen DANACH und blockieren die Statuszeile nie.
 
 type Doc = Record<string, unknown>;
 
@@ -55,11 +56,34 @@ type PlanState = {
 export const useTodayPlan = create<PlanState>(() => ({ day: null, plan: null, status: 'idle', exhausted: null }));
 
 let intakeDay: string | null = null;
-/** Höchstens so lange wartet der Plan auf die Antwort der Laufzeit zu `sample` („Sag es“). */
-const SAY_WAIT_MS = 1500;
 /** H4: Lerntag, an dem nach 20 Uhr schon einmal neu abgeglichen wurde. */
 let lateIntakeDay: string | null = null;
 const LATE_INTAKE_HOUR = 20;
+/** Höchstens so lange wartet ein NEUER Plan auf `app/week` (Preply-Termine, Thema der Woche). */
+const WEEK_WAIT_MS = 400;
+
+// ------------------------------------------------------------------ lokale Kopie `lx:plan:<tag>`
+
+const PLAN_PREFIX = `${KEY_PREFIX}plan:`;
+const PLAN_KEEP = 3;
+
+/** Lokale Kopie des Plans (Bequemlichkeit, Kap. 3.1: maßgeblich bleibt `app/profile.plan`). */
+export function loadLocalPlan(day: string): StoredPlan | null {
+  return readPlan(local.getJson<unknown>(`${PLAN_PREFIX}${day}`), day);
+}
+
+export function saveLocalPlan(plan: StoredPlan): void {
+  const key = `${PLAN_PREFIX}${plan.d}`;
+  const raw = JSON.stringify(plan);
+  if (local.get(key) === raw) return;
+  local.set(key, raw);
+  const old = local
+    .keys()
+    .filter((k) => k.startsWith(PLAN_PREFIX))
+    .sort()
+    .slice(0, -PLAN_KEEP);
+  for (const k of old) local.remove(k);
+}
 
 // B1: Pläne und zuletzt bekannte Live-Einträge der letzten Lerntage – damit ein Stapel, der erst
 // nach 04:00 ankommt (Funkloch) oder aus einer Runde über 04:00 stammt, die Pflicht seines Tages
@@ -126,15 +150,6 @@ export function feasibleData(cards: readonly TrainCard[], lang: Lang, nowMs: num
   };
 }
 
-/** Fokus-Aktion der Einschätzung (`grammar:<topic>`, `colloc` …), nur bei passender Sprache. */
-function focusAction(assess: Doc | null | undefined, lang: Lang): string | null {
-  if (!assess) return null;
-  if (typeof assess.lang === 'string' && assess.lang !== lang) return null;
-  const data = assess.data && typeof assess.data === 'object' ? (assess.data as Doc) : assess;
-  const focus = data.focus && typeof data.focus === 'object' ? (data.focus as Doc) : null;
-  return typeof focus?.action === 'string' ? focus.action.trim() || null : null;
-}
-
 async function intake(today: string, nowMs: number): Promise<void> {
   if (intakeDay === today) return;
   const db = getDb();
@@ -148,81 +163,61 @@ async function intake(today: string, nowMs: number): Promise<void> {
   if (res.status === 'done') intakeDay = today;
 }
 
-/**
- * P7-1: Folgearbeiten (Tagesbild, pflichtSince, Selbstheilung) erst nach dem Zeichnen der
- * Statuszeile – sie rechnen über alle Karten und würden sonst das erste Bild verzögern.
- */
+/** Folgearbeiten erst nach dem Zeichnen der Statuszeile (P7-1, N14). */
 function afterPaint(fn: () => void): void {
   if (typeof window === 'undefined') fn();
   else window.setTimeout(fn, 60);
 }
 
-export async function ensureDay(nowMs: number): Promise<void> {
-  const today = dayKey(nowMs);
-  const cur = useTodayPlan.getState();
-  if (cur.day === today && cur.status !== 'idle') {
-    // Plan steht: nur Selbstheilung (z. B. beim Sichtbarwerden der Seite).
-    if (cur.status === 'ready' || cur.status === 'local') void afterPlan(today, nowMs);
-    lateIntake(today, nowMs);
-    return;
-  }
-  useTodayPlan.setState({ day: today, plan: null, status: 'building', exhausted: cur.exhausted === today ? today : null });
+/** Wartet kurz auf `app/week` (nur für einen NEUEN Plan; nie länger als `WEEK_WAIT_MS`). */
+function weekReady(): Promise<void> {
+  if (weekLoaded()) return Promise.resolve();
+  return new Promise((resolve) => {
+    const done = () => {
+      unsub();
+      window.clearTimeout(timer);
+      resolve();
+    };
+    const unsub = useWeekDoc.subscribe(() => {
+      if (weekLoaded()) done();
+    });
+    const timer = window.setTimeout(done, WEEK_WAIT_MS);
+  });
+}
 
-  // P7-1 (a): Gibt es schon einen Plan dieser App von heute, zeigt Heute ihn sofort; Abgleich des
-  // Tagesauftrags und Lerninhalte laufen danach (sie ändern einen Plan von heute nie).
-  const early = readPlan(useLive.getState().docs['app/profile']?.plan, today);
-  if (early) useTodayPlan.setState({ day: today, plan: early, status: 'ready' });
-
-  try {
-    await intake(today, nowMs);
-  } catch (err) {
-    logError('day:daily', err, 'Abgleich');
-  }
-  await loadLearnInputs();
-
+/** Neuer Tagesplan der Einheit aus den Live-Daten (rein rechnend, schreibt nichts). */
+export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const live = useLive.getState();
   const profile = live.docs['app/profile'];
-  let built: ReturnType<typeof buildPlan>;
-  try {
-    const kept = readPlan(profile?.plan, today);
-    if (kept) {
-      useTodayPlan.setState({ day: today, plan: kept, status: 'ready' });
-      afterPaint(() => void afterPlan(today, nowMs));
-      return;
-    }
-    // „Sag es“ (Lernberatung V1/V2): an 4–5 Tagen je Woche Pflichtkanal – nur mit nutzbarem Claude.
-    const say = isSayDay(today) && (await sampleUsableWithin(SAY_WAIT_MS));
-    const lang = useSettings.getState().lang;
+  const lang = useSettings.getState().lang;
+  const week = weekDocNow();
+  const goalMin = normGoalMin(profile?.goalMin);
+  const preplyDays = week.preplyNext ? [week.preplyNext] : undefined;
+  const draft = unitDraft({ day: today, week, goalMin, ...(preplyDays ? { preplyDays } : {}) });
+  let review = { goal: 0, due: 0, fresh: 0, repairs: 0 };
+  if (draft.duty.includes('review')) {
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
     // Wendungen (`chunk/*`) gehören zur täglichen Wiederholung (Kap. 5, M15): gleiche Planung.
-    const round = planRound({
-      cards: [...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'chunk'))],
+    const all = [...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'chunk'))];
+    const introduced = cards.filter((c) => c.intro === today);
+    const entries = live.day?.key === today && Array.isArray(live.day.doc?.entries) ? (live.day.doc.entries as Array<{ type?: unknown; id?: unknown }>) : [];
+    const repairs = pickDailyRepairs(live.docs['app/repair'], nowMs, repairsDoneToday(entries), REPAIR_MAX).length;
+    review = unitReviewGoal({
+      cards: all,
+      repairs,
       nowMs,
-      newPerDay: typeof profile?.newPerDay === 'number' ? profile.newPerDay : 5,
-      introducedToday: cards.filter((c) => c.intro === today).length,
-      introducedLessonToday: cards.filter((c) => c.intro === today && c.src === 'lesson').length,
       lang,
+      budgetSec: draft.reviewSec,
+      quotaLeft: newQuotaLeft(profile?.newPerDay, introduced.length, introduced.filter((c) => c.src === 'lesson').length),
+      theme: themeFor(today, week).theme,
     });
-    const visible = cards.filter((c) => !c.hidden);
-    const ranked = rankChannels({
-      today,
-      profile: profile ?? {},
-      focus: focusAction(live.docs['app/assess'], lang),
-      assess: assessPlanInput(live.docs['app/assess'], today),
-      dueErrors: dueErrors(live.collections.grammar ?? new Map(), nowMs).length,
-      dueCards: dueCards(visible, nowMs).length,
-      data: feasibleData(cards, lang, nowMs),
-      env: { tts: useSpeech.getState().status === 'ready' },
-    });
-    const lesson = pickLesson({ course: live.docs['app/course'], assess: live.docs['app/assess'], lang });
-    built = buildPlan({ today, existing: profile?.plan, round, nowMs, phase2: { ranked, lesson, goalMin: normGoalMin(profile?.goalMin), say } });
-  } catch (err) {
-    // Nie endlos im Ladezustand: Hinweis mit „Erneut versuchen" (Kap. 3.4, keine stillen Fehler).
-    logError('today:plan', err, 'Aufbau');
-    if (useTodayPlan.getState().day === today) useTodayPlan.setState({ day: today, plan: null, status: 'error' });
-    return;
   }
-  let final: StoredPlan = built.plan;
+  return buildUnitStored({ day: today, nowMs, week, goalMin, ...(preplyDays ? { preplyDays } : {}), review });
+}
+
+/** Plan in `app/profile.plan` speichern – außer ein anderes Gerät hat für heute schon einen (der gilt). */
+async function storePlan(today: string, plan: StoredPlan): Promise<void> {
+  let final: StoredPlan = plan;
   let status: PlanState['status'] = 'ready';
   const writer = getWriter();
   try {
@@ -239,7 +234,7 @@ export async function ensureDay(nowMs: number): Promise<void> {
         final = other;
         return null;
       }
-      return { update: { plan: built.plan } };
+      return { update: { plan } };
     });
     if (invalid) {
       status = 'local';
@@ -250,9 +245,66 @@ export async function ensureDay(nowMs: number): Promise<void> {
     logError('today:plan', err, 'app/profile');
   }
   if (useTodayPlan.getState().day === today) {
+    saveLocalPlan(final);
     useTodayPlan.setState({ day: today, plan: final, status });
-    afterPaint(() => void afterPlan(today, nowMs));
   }
+}
+
+export async function ensureDay(nowMs: number): Promise<void> {
+  const today = dayKey(nowMs);
+  startWeekWatch();
+  const cur = useTodayPlan.getState();
+  if (cur.day === today && cur.status !== 'idle') {
+    // Plan steht: nur Selbstheilung (z. B. beim Sichtbarwerden der Seite).
+    if (cur.status === 'ready' || cur.status === 'local') void afterPlan(today, nowMs);
+    lateIntake(today, nowMs);
+    return;
+  }
+  useTodayPlan.setState({ day: today, plan: null, status: 'building', exhausted: cur.exhausted === today ? today : null });
+
+  // 1) Gespeicherter Plan von heute (auch Phase 1/2): sofort zeichnen, nie ändern.
+  const kept = readPlan(useLive.getState().docs['app/profile']?.plan, today);
+  if (kept) {
+    useTodayPlan.setState({ day: today, plan: kept, status: 'ready' });
+    saveLocalPlan(kept);
+    afterPaint(() => void followUp(today, nowMs, null));
+    return;
+  }
+  // 2) Lokale Kopie (z. B. Neuladen, bevor das Speichern ankam): sofort zeichnen, danach speichern.
+  const localPlan = loadLocalPlan(today);
+  if (localPlan) {
+    useTodayPlan.setState({ day: today, plan: localPlan, status: 'ready' });
+    afterPaint(() => void followUp(today, nowMs, localPlan));
+    return;
+  }
+  // 3) Neuer Plan: nur kurz auf `app/week` warten (Thema, Preply-Termine), nie auf KI oder Schreiben.
+  await weekReady();
+  if (useTodayPlan.getState().day !== today) return;
+  let built: StoredPlan;
+  try {
+    const again = readPlan(useLive.getState().docs['app/profile']?.plan, today);
+    built = again ?? buildTodayPlan(today, nowMs);
+  } catch (err) {
+    // Nie endlos im Ladezustand: Hinweis mit „Erneut versuchen" (Kap. 3.4, keine stillen Fehler).
+    logError('today:plan', err, 'Aufbau');
+    if (useTodayPlan.getState().day === today) useTodayPlan.setState({ day: today, plan: null, status: 'error' });
+    return;
+  }
+  useTodayPlan.setState({ day: today, plan: built, status: 'ready' });
+  saveLocalPlan(built);
+  afterPaint(() => void followUp(today, nowMs, built));
+}
+
+/** Nach dem ersten Bild: Plan speichern, Tagesauftrag, Lerninhalte, dann Schritte 3 bis 5. */
+async function followUp(today: string, nowMs: number, toStore: StoredPlan | null): Promise<void> {
+  if (toStore) await storePlan(today, toStore);
+  try {
+    await intake(today, nowMs);
+  } catch (err) {
+    logError('day:daily', err, 'Abgleich');
+  }
+  await loadLearnInputs();
+  await afterPlan(today, nowMs);
 }
 
 /**
@@ -295,7 +347,7 @@ async function afterPlan(today: string, nowMs: number): Promise<void> {
   if (!writer) return;
   const live = useLive.getState();
   const profile = live.docs['app/profile'];
-  if (s.status === 'ready' && profile) {
+  if (s.status === 'ready' && profile && readPlan(profile.plan, today)) {
     const lang = useSettings.getState().lang;
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
     const data = feasibleData(cards, lang, nowMs);

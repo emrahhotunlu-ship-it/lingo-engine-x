@@ -9,6 +9,7 @@ import { startSession } from '../vocab/session';
 import { startGrammar } from '../grammar/session';
 import { startDrill } from '../drills/session';
 import { useTodayPlan } from '../today/store';
+import { startUnitDuty } from '../unit/run';
 
 // Pflichtpunkte starten – von der Heldenkarte auf „Heute" und aus jeder Pflicht-Zusammenfassung
 // („Weiter: nächster Pflichtschritt", M11). Die Runden werden synchron im Klick gebaut, damit
@@ -28,6 +29,9 @@ export function startDuty(id: DutyId, api: FocusApi): void {
   const go = useNav.getState().go;
   // iPhone: Sprachausgabe nur in einer Nutzergeste freischalten.
   unlockSpeech();
+  // Neubau (plan.md §1.5): Ist heute die Tageseinheit der Plan, startet jeder Pflichtpunkt seinen
+  // Block (Anbieter oder Ersatz) – auch aus „Weiter: …“ einer Pflicht-Zusammenfassung.
+  if ((id === 'review' || id.startsWith('ch:u-')) && startUnitDuty(id, api)) return;
   if (id === 'review') {
     const first = startSession('pflicht');
     if (first === 'typed') api.focusNow();

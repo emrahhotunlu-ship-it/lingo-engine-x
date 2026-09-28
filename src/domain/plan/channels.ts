@@ -43,7 +43,16 @@ export const PHASE2_EXECUTABLE: readonly ExecChannel[] = ['gram', 'vocab', 'spri
 export const DUTY_CHANNELS: readonly DutyChannel[] = ['gram', 'cloze'];
 /** Pflichtkanäle, die ein GESPEICHERTER Plan tragen kann (ein Plan wird nie umgewürfelt, Kap. 15). */
 export const STORED_DUTY_CHANNELS: readonly DutyChannel[] = ['gram', 'cloze', 'order', 'say'];
-export const isDutyChannel = (id: string): id is DutyChannel => (STORED_DUTY_CHANNELS as readonly string[]).includes(id);
+/**
+ * Neubau (plan.md §1.5, P1, additiv): Pflicht-Kanäle der Tageseinheit (`plan.duty` = `ch:u-*`).
+ * Gezählt über `act[tag]['u-…'] ≥ 1`; `pflichtFor` bleibt unverändert.
+ */
+export const UNIT_DUTY_CHANNELS = ['u-in', 'u-task', 'u-focus', 'u-again', 'u-check'] as const;
+export type UnitDutyChannel = (typeof UNIT_DUTY_CHANNELS)[number];
+export const isUnitDutyChannel = (id: string): id is UnitDutyChannel => (UNIT_DUTY_CHANNELS as readonly string[]).includes(id);
+/** Minuten je Block-Kanal, falls der Plan keine eingefrorenen Minuten trägt. */
+export const UNIT_CH_MINUTES: Readonly<Record<UnitDutyChannel, number>> = { 'u-in': 5, 'u-task': 9, 'u-focus': 3, 'u-again': 2, 'u-check': 5 };
+export const isDutyChannel = (id: string): id is DutyChannel | UnitDutyChannel => (STORED_DUTY_CHANNELS as readonly string[]).includes(id) || isUnitDutyChannel(id);
 /** Darf ein neuer Plan diesen Kanal nach Rang als Pflicht wählen? */
 export const isPickableDuty = (id: string): id is DutyChannel => (DUTY_CHANNELS as readonly string[]).includes(id);
 

@@ -63,7 +63,7 @@ export function CheckScreen() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 overflow-x-clip py-4 sm:py-8" data-testid="check-screen" data-status={s.status}>
-      <RoundTop onClose={leave} closeLabel={t('ckClose')} progress={s.status === 'running' ? { n: s.pos + 1, total: s.items.length } : null} ctx="extra" />
+      <RoundTop onClose={leave} closeLabel={t('ckClose')} progress={s.status === 'running' ? { n: s.pos + 1, total: s.items.length } : null} ctx={s.unit ? 'duty' : 'extra'} />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={s.status === 'summary' ? 'summary' : `c-${s.step}`}
@@ -78,7 +78,7 @@ export function CheckScreen() {
             </div>
           ) : s.status === 'running' && item?.kind === 'g' ? (
             <div data-testid="check-item" data-kind="g" data-n={s.pos + 1}>
-              <GrammarItem task={item.task} ctx="xtra" day={s.day} onDone={(a) => commitCheckGrammar(a, step)} noHelp badge={t('ckBadge')} />
+              <GrammarItem task={item.task} ctx={s.unit ? 'duty' : 'xtra'} day={s.day} onDone={(a) => commitCheckGrammar(a, step)} noHelp badge={t('ckBadge')} />
             </div>
           ) : (
             <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="check-summary" data-saved={s.saved}>
