@@ -1,4 +1,42 @@
 // Neubau – Bereich Lernen – Kurs, Grammatik, Training (P2), Deutsch. Nur Schlüssel mit dem Präfix `nbLernen`
 // (docs/neubau/architektur.md §2.8; doppelte Schlüssel verbietet tests/unit/i18nParts.test.ts).
 
-export const nbLernenDe = {} as const;
+export const nbLernenDe = {
+  nbLernenDone: 'Fertig',
+  // Block 4 „Fokus“
+  nbLernenFocusTitle: 'Fokus',
+  nbLernenFocusFix: 'Korrektur aus deiner Aufgabe',
+  nbLernenFocusOwn: 'Deutsch-Falle in deinem Text',
+  nbLernenFocusTrap: 'Falle der Woche',
+  nbLernenFocusDrill: 'Mini-Drill · Satz {n} von {total}',
+  nbLernenFocusTask: 'Schreib den Satz richtig.',
+  nbLernenFocusTaskOwn: 'Schreib deinen Satz ohne die Falle.',
+  nbLernenFocusPurpose: 'Wer die Korrektur selbst bildet, behält sie. Erst ein Hinweis, dann dein Versuch, dann Lösung und Grund.',
+  nbLernenFocusInput: 'Dein verbesserter Satz',
+  nbLernenFocusHintMeaning: 'Hier stimmt die Bedeutung nicht ganz – welches Wort meinst du wirklich?',
+  nbLernenFocusHintTrap: 'Hier steckt eine typische Deutsch-Falle.',
+  nbLernenFocusHintGoal: 'Nutze das Ziel der Woche.',
+  nbLernenFocusHintForm: 'Achte auf die Form – ein kleines Stück ist falsch.',
+  nbLernenFocusWhyFallback: 'So steht es in der Korrektur deiner Aufgabe.',
+  nbLernenFocusOwnNote: 'Die Falle ist raus. Den Rest des Satzes prüft die App ohne KI nicht.',
+  nbLernenFocusCount: 'Aufgabe {n} von {total}',
+  nbLernenFocusDaily: 'Tagesauftrag',
+  nbLernenResumeFocus: 'Fokus · Aufgabe {n} von {total}',
+  // Block 5 „Nochmal, aber besser“
+  nbLernenAgainTitle: 'Nochmal, aber besser',
+  nbLernenAgainTask: 'Schreib deinen Text noch einmal – aus dem Kopf und besser.',
+  nbLernenAgainEmptyTask: 'Heute gibt es nichts neu zu formulieren.',
+  nbLernenAgainEmpty: 'Du hast heute noch keinen eigenen Text geschrieben. Der Block ist trotzdem erledigt.',
+  nbLernenAgainPurpose: 'Aus dem Kopf neu formulieren festigt die Korrekturen. Danach siehst du beide Fassungen nebeneinander.',
+  nbLernenAgainRemember: 'Denk an',
+  nbLernenAgainInput: 'Deine neue Fassung',
+  nbLernenAgainPlaceholder: 'Schreib hier deine neue Fassung …',
+  nbLernenAgainCompare: 'Vergleichen',
+  nbLernenAgainNew: 'Deine neue Fassung',
+  nbLernenAgainModel: 'Musterlösung',
+  nbLernenAgainBefore: 'Vorher',
+  nbLernenAgainChecked: '{ok} von {total} Korrekturen sind jetzt drin.',
+  nbLernenAgainNoChecks: 'Ohne Korrekturen vergleichst du selbst: Was ist jetzt besser?',
+  nbLernenAgainSaved_one: '{n} Satz kommt morgen in die Wiederholung.',
+  nbLernenAgainSaved_other: '{n} Sätze kommen morgen in die Wiederholung.',
+} as const;

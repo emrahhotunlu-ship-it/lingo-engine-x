@@ -62,7 +62,9 @@ export function GrammarScreen() {
   const back = useNav((s) => s.back);
   const now = useClock((s) => s.now);
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
-  const [open, setOpen] = useState<string | null>(null);
+  // `grammar?topic=` (Werkzeug der Woche, 1 Tipp von „Deine Woche“): das Themenblatt öffnet sofort.
+  const deepTopic = useNav((s) => (s.route.name === 'grammar' ? (s.route.topic ?? null) : null));
+  const [open, setOpen] = useState<string | null>(() => (deepTopic && topicById(deepTopic) ? deepTopic : null));
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
   const close = useCallback(() => setOpen(null), []);
 
