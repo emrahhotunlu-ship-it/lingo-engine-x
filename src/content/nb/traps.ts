@@ -120,7 +120,7 @@ export const TRAPS: readonly Trap[] = [
     ],
     detect: [
       "\\b(?:attach(?:ed)?|print(?:ed)?|read) (?:a |the |our |your |this )?(?:new )?prospects?\\b(?!'| (?:list|data|call|meeting|our|a|an|the|some)\\b)",
-      '\\bsend (?:me|us) (?:a|the|your) (?:new )?prospect\\b(?! (?:list|data)\\b)',
+      "\\bsend (?:me|us) (?:a|the|your) (?:new )?prospect\\b(?!'| (?:list|data|details|contact|name|info)\\b)",
       '\\bprospects? (?:about|on) (?:your|our|the) (?:product|products|solution|company|services|archive)',
     ],
   },
@@ -134,7 +134,7 @@ export const TRAPS: readonly Trap[] = [
       de: '„chance“ passt für kleine Gelegenheiten (I didn’t get a chance to …) und für Wahrscheinlichkeit (a good chance of winning). Eine geschäftliche Chance ist opportunity.',
       en: '"Chance" works for small openings (I didn\'t get a chance to …) and for likelihood (a good chance of winning). A business opening is an opportunity.',
     },
-    hint: { de: 'Ist es Glück oder eine Gelegenheit?', en: 'Is it luck or an opening?' },
+    hint: { de: 'Kleine Gelegenheit oder Wahrscheinlichkeit – oder eine geschäftliche Chance?', en: 'A small opening or a likelihood – or a business opening?' },
     drills: [
       { wrong: 'The new mandate is a great chance for our partners.', right: ['The new mandate is a great opportunity for our partners.'] },
       { wrong: 'We see a big chance in the public sector.', right: ['We see a big opportunity in the public sector.', 'We see a major opportunity in the public sector.'] },
@@ -221,7 +221,8 @@ export const TRAPS: readonly Trap[] = [
       { wrong: 'I have a date at the doctor tomorrow.', right: ["I have a doctor's appointment tomorrow.", 'I have an appointment with the doctor tomorrow.'] },
     ],
     detect: [
-      '\\b(?:make|made|have|had) an? date (?:with|for)\\b',
+      '\\b(?:make|made) an? date (?:with|for)\\b',
+      '\\b(?:have|had) an? date with\\b',
       '\\bdate with (?:the|a|our|my) (?:customer|client|prospect|cfo|ceo|team|partner)\\b',
       '\\bdate (?:at|with) the (?:doctor|dentist)\\b',
       '\\btermins?\\b',
@@ -244,8 +245,8 @@ export const TRAPS: readonly Trap[] = [
       { wrong: 'Please pay the invoice until March 31.', right: ['Please pay the invoice by March 31.'] },
     ],
     detect: [
-      "(?<!(?:\\bnot|n't|\\bnever|\\bonly|\\bpostpon\\w*|\\bdelay\\w*|\\bput off|\\bpush(?:ed)? back|\\bwait\\w*|\\bhold|\\bheld)\\b[^.?!]{0,60})\\b(?:send|sent|finish|finished|deliver|submit|pay|sign|confirm|complete|decide|reply|respond)\\b[^.?!]{0,40}?\\buntil (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|the end|end of|next week|january|february|march|april|may|june|july|august|september|october|november|december|\\d)",
-      "(?<!(?:\\bnot|n't|\\bnever|\\bonly|\\bpostpon\\w*|\\bdelay\\w*|\\bput off|\\bpush(?:ed)? back|\\bwait\\w*|\\bhold|\\bheld)\\b[^.?!]{0,60})\\b(?:decision|answer|feedback|reply|confirmation|payment|offer|quote|signature)s? until\\b",
+      "(?<!(?:\\bnot|\\bcannot|n't|\\bnever|\\bonly|\\bpostpon\\w*|\\bdelay\\w*|\\bput off|\\bpush(?:ed)? back|\\bwait\\w*|\\bhold|\\bheld)\\b[^.?!]{0,60})\\b(?:send|sent|finish|finished|deliver|submit|pay|sign|confirm|complete|decide|reply|respond)\\b[^.?!,;]{0,40}?\\buntil (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|the end|end of|next week|january|february|march|april|may|june|july|august|september|october|november|december|\\d)",
+      "(?<!(?:\\bnot|\\bcannot|n't|\\bnever|\\bonly|\\bpostpon\\w*|\\bdelay\\w*|\\bput off|\\bpush(?:ed)? back|\\bwait\\w*|\\bhold|\\bheld)\\b[^.?!]{0,60})\\b(?:decision|answer|feedback|reply|confirmation|payment|offer|quote|signature)s? until\\b",
     ],
   },
   {
@@ -266,8 +267,8 @@ export const TRAPS: readonly Trap[] = [
     ],
     detect: [
       '\\bsince (?:one|two|three|four|five|six|seven|eight|nine|ten|a few|several|many|\\d+) (?:days?|weeks?|months?|years?|hours?)\\b',
-      '\\b(?:i|we|you|they) (?:am|are|work|know|use|live|wait)\\b[^.?!]{0,30}?\\bsince(?! (?:i|we|you|they|he|she|it|(?:the|our) \\w+ (?:is|are|was|were|has|have))\\b)\\b',
-      '\\b(?:he|she|it) (?:is|works|knows|uses|lives|waits)\\b[^.?!]{0,30}?\\bsince(?! (?:i|we|you|they|he|she|it|(?:the|our) \\w+ (?:is|are|was|were|has|have))\\b)\\b',
+      '\\b(?:i|we|you|they) (?:am|are|work|know|use|live|wait)\\b[^.?!]{0,30}?\\bsince(?! (?:i|we|you|they|he|she|it|this|that|there|(?:the|our|your|their|my) \\w+ (?:is|are|was|were|has|have|will|can))\\b)\\b',
+      '\\b(?:he|she|it) (?:is|works|knows|uses|lives|waits)\\b[^.?!]{0,30}?\\bsince(?! (?:i|we|you|they|he|she|it|this|that|there|(?:the|our|your|their|my) \\w+ (?:is|are|was|were|has|have|will|can))\\b)\\b',
     ],
   },
   {
@@ -311,7 +312,7 @@ export const TRAPS: readonly Trap[] = [
     ],
     detect: [
       '\\b(?:informations|feedbacks|advices|softwares|equipments|furnitures|knowledges|evidences|luggages|baggages)\\b',
-      '\\ban? (?:information|advice|feedback)\\b(?! (?:loop|form|session|call|survey|request|security|system|sheet|meeting|round|management|officer|event|page|desk)\\b)',
+      '\\ban? (?:information|advice|feedback)\\b(?! (?:loop|form|session|call|survey|request|security|system|sheet|meeting|round|management|officer|event|page|desk|culture|process|tool|platform|technology)\\b)',
     ],
   },
   {
@@ -425,8 +426,8 @@ export const TRAPS: readonly Trap[] = [
       { wrong: "I'd like to know how long does the migration take.", right: ["I'd like to know how long the migration takes.", "I'd like to know how long the migration will take."] },
     ],
     detect: [
-      '\\b(?:tell me|know|ask|wonder(?:ing)?|explain|remember|sure|idea) (?:what|how|when|where|why|who|which)(?: (?:many|much|long|often)(?: \\w+)?)? (?:do|does|did) (?:you|we|they|he|she|it|your|the|our)\\b',
-      '(?:^|[.!?]\\s+)(?:why|what|how|where|when) (?:you|we|they) (?:need|want|think|use|have|mean|see|plan|know|like|do)\\b[^.!?]*\\?',
+      '\\b(?:tell me|know|ask|wonder(?:ing)?|explain|remember|sure|idea) (?:what|how|when|where|why|which)(?: (?:many|much|long|often)(?: \\w+)?)? (?:do|does|did) (?:you|we|they|he|she|it|your|the|our)\\b',
+      '(?:^|[.!?]\\s+)(?:why|what|how|where) (?:you|we|they) (?:need|want|think|use|have|mean|see|plan|know|like|do)\\b[^.!?,]*\\?',
     ],
   },
   {
@@ -464,7 +465,7 @@ export const TRAPS: readonly Trap[] = [
       { wrong: 'She has visited our booth last year.', right: ['She visited our booth last year.'] },
     ],
     detect: [
-      "\\b(?:have|has|'ve) (?:been|seen|met|visited|had|done|sent|spoken|talked|called|signed|received|made|gone|written|finished)\\b[^.?!]{0,40}?(?<!\\b(?:since|over the|in the|for the|during the) )\\b(?:yesterday|last (?:week|month|year|monday|tuesday|wednesday|thursday|friday|night|time)|ago|in (?:19|20)\\d\\d)\\b",
+      "\\b(?:have|has|'ve) (?:been|seen|met|visited|had|done|sent|spoken|talked|called|signed|received|made|gone|written|finished)\\b(?:(?!\\bsince\\b)[^.?!]){0,40}?(?<!\\b(?:since|over the|in the|for the|during the) )\\b(?:yesterday|last (?:week|month|year|monday|tuesday|wednesday|thursday|friday|night|time)|ago|in (?:19|20)\\d\\d)\\b",
     ],
   },
   {
@@ -524,7 +525,7 @@ export const TRAPS: readonly Trap[] = [
       { wrong: 'That is wrong.', right: ["I'm not sure that's quite right.", 'I see it a bit differently.', "I don't think that's quite right."] },
       { wrong: 'This is not possible for us.', right: ["I'm afraid that won't be possible for us.", "That's not something we can do.", "Unfortunately, that won't work for us."] },
     ],
-    detect: ['\\b(?:this|that|it) is not possible\\b', '\\byou must\\b(?! (?:be|have been|have had|feel|know)\\b)', "\\bthat(?:'s| is) wrong\\b"],
+    detect: ['\\b(?:this|that|it) is not possible\\b', '\\byou must\\b(?! (?:be|have|feel|know)\\b)', "\\bthat(?:'s| is) wrong\\b"],
   },
 ];
 
