@@ -5,6 +5,7 @@ import { expect, type Page } from '@playwright/test';
 // Gemeinsame Navigation (openTab, openEntry, openProfile, bootAt …) steht in `fixtures.ts` (WP0).
 
 type Doc = Record<string, unknown>;
+type Docs = Record<string, Doc>;
 const SEED = JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Doc>;
 
 /** Montag nach dem Stichtag der Testdaten (Kalenderwoche 2026-W39), 09:00 in Berlin. */
@@ -17,7 +18,7 @@ export const SUN_9 = '2026-09-27T09:00:00+02:00';
 export const WEEK_W39 = { 'app/week': { v: 1, cur: { wk: '2026-W39', theme: 't01', by: 'user', at: 1 } } };
 
 /** Zwei beantwortete Wiederholungen von heute (`ctx:'rev'`) – mit `goal.review = 2` ist Block 1 erledigt. */
-export const reviewedLog = (day: string): Doc => ({
+export const reviewedLog = (day: string): Docs => ({
   [`log/${day}`]: {
     date: day,
     entries: [
@@ -51,7 +52,7 @@ export function mondayPlan(day = MON): Doc {
 }
 
 /** `app/profile` aus dem Seed mit Plan, den genannten erledigten Blöcken (`u-*`) und `answers` Antworten heute. */
-export function profileWith(day: string, plan: Doc, done: string[] = [], over: Doc = {}, answers = 2): Doc {
+export function profileWith(day: string, plan: Doc, done: string[] = [], over: Doc = {}, answers = 2): Docs {
   const profile = SEED['app/profile'] as Doc;
   const act = { ...(profile.act as Record<string, Doc>) };
   act[day] = { ...(act[day] ?? {}), ...Object.fromEntries(done.map((k) => [k, 1])) };
