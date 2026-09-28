@@ -76,7 +76,7 @@
   "model": {
    "acknowledge": "That's a very reasonable position, especially with personnel and financial records.",
    "ask": "Is the concern mainly about where the data is stored, or about who can access it?",
-   "answer": "Our data is hosted in EU data centers and encrypted at rest and in transit, and many of our customers are banks and health care providers with very strict rules.",
+   "answer": "Your data would be hosted in EU data centers and encrypted at rest and in transit, and many of our customers are banks and health care providers with very strict rules.",
    "secure": "Would you be open to a call with our security officer, so your IT team can ask their questions directly?"
   },
   "tip": {
@@ -144,7 +144,7 @@
   "model": {
    "acknowledge": "I understand. Three years is a long time to commit.",
    "ask": "What worries you most about a longer contract: the budget, or the risk that the solution doesn't fit?",
-   "answer": "We can start with a one-year contract, and if you decide to extend it later, the three-year conditions still apply.",
+   "answer": "We can start with a one-year contract, and if you decide to extend it later, you still get the three-year pricing.",
    "secure": "Would that give you enough flexibility to move forward this quarter?"
   },
   "tip": {

@@ -199,6 +199,14 @@ describe('content/nb: Posteingang (L2)', () => {
     }
     expect(inboxFor('t07')?.id).toBe('m07');
   });
+  it('nach der Anrede geht es groß weiter (englische Regel, Prüfung Inhalte §8)', () => {
+    for (const m of list) {
+      for (const t of [m.body, m.reply]) {
+        const after = /^[^\n]*,\n\n(.)/.exec(t)?.[1] ?? '';
+        expect(after, `${m.id}: ${t.slice(0, 40)}`).toMatch(/[A-Z]/);
+      }
+    }
+  });
 });
 
 describe('content/nb: Business-Szenen (N70)', () => {

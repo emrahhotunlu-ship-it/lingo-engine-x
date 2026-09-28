@@ -262,7 +262,7 @@
    {
     "v": "negotiate",
     "de": "verhandeln",
-    "ex": "Let us negotiate the price after the pilot."
+    "ex": "Let's negotiate the price after the pilot."
    }
   ],
   "wrong": {
@@ -296,11 +296,11 @@
    }
   ],
   "wrong": {
-   "phrase": "close a contract",
-   "right": "sign a contract",
+   "phrase": "quit a contract",
+   "right": "terminate a contract",
    "note": {
-    "de": "„Einen Vertrag schließen“ heißt sign a contract oder enter into a contract.",
-    "en": "You sign or enter into a contract; \"close a contract\" is a literal translation."
+    "de": "„Einen Vertrag kündigen“ heißt terminate oder cancel; quit sagt man beim Job.",
+    "en": "To end a contract, use terminate or cancel; you quit a job."
    }
   }
  },
@@ -642,7 +642,7 @@
    {
     "v": "set",
     "de": "festlegen",
-    "ex": "Let us set a realistic target for the pilot."
+    "ex": "Let's set a realistic target for the pilot."
    }
   ],
   "wrong": {
@@ -762,7 +762,7 @@
    {
     "v": "stay in",
     "de": "bleiben in",
-    "ex": "Let us stay in contact after the project."
+    "ex": "Let's stay in contact after the project."
    }
   ],
   "wrong": {
@@ -847,7 +847,7 @@
    {
     "v": "find",
     "de": "finden",
-    "ex": "Let us find a compromise that works for both sides."
+    "ex": "Let's find a compromise that works for both sides."
    },
    {
     "v": "agree on",
@@ -937,7 +937,7 @@
    {
     "v": "run",
     "de": "durchführen",
-    "ex": "Our consultant will run the training on site."
+    "ex": "Our consultant will run the training session on site."
    },
    {
     "v": "attend",
@@ -947,10 +947,10 @@
   ],
   "wrong": {
    "phrase": "make a training",
-   "right": "do a training",
+   "right": "run a training session",
    "note": {
-    "de": "„Eine Schulung machen“ heißt do, attend oder run a training course.",
-    "en": "You do, attend, or run a training course; \"make\" does not work here."
+    "de": "„Eine Schulung machen“ heißt run a training session oder do some training. training ist unzählbar: nicht „a training“.",
+    "en": "Say run a training session or do some training. Training is uncountable, so not \"a training\"."
    }
   }
  },
@@ -1006,11 +1006,11 @@
    }
   ],
   "wrong": {
-   "phrase": "cover the need",
-   "right": "meet the need",
+   "phrase": "ask the need",
+   "right": "identify the need",
    "note": {
-    "de": "„Den Bedarf decken“ heißt meet the need.",
-    "en": "You meet a need; \"cover\" is a literal translation of \"decken\"."
+    "de": "„Den Bedarf abfragen“ heißt identify oder assess the need. „Does this cover your needs?“ ist dagegen richtig.",
+    "en": "To find out what a customer needs, you identify or assess the need. \"Does this cover your needs?\" is correct."
    }
   }
  },
@@ -1077,7 +1077,7 @@
    {
     "v": "agree on",
     "de": "vereinbaren",
-    "ex": "Let us agree on the next steps before we hang up."
+    "ex": "Let's agree on the next steps before we hang up."
    },
    {
     "v": "skip",

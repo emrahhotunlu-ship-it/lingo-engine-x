@@ -818,7 +818,7 @@
    "phrasal": "go over",
    "de": "durchgehen",
    "mail": [
-    "Let us review the numbers."
+    "We will review the numbers."
    ],
    "call": [
     "Let's go over the numbers.",
@@ -1369,12 +1369,12 @@
   {
    "id": "d10",
    "theme": "t14",
-   "text": "___, we were lost on a muddy forest road. ___, a farmer showed up on his tractor. ___, we had driven past the cabin an hour earlier.",
+   "text": "___, lost on a muddy forest road with no signal. ___, a farmer showed up on his tractor. ___ we had driven past the cabin an hour earlier.",
    "gaps": [
     {
      "answers": [
-      "So there I was",
-      "So there we were"
+      "So there we were",
+      "So there I was"
      ],
      "fn": {
       "de": "Erzählbeginn",
@@ -1394,8 +1394,7 @@
     },
     {
      "answers": [
-      "It turned out that",
-      "As it turned out"
+      "It turned out that"
      ],
      "fn": {
       "de": "Auflösung",
@@ -1407,7 +1406,7 @@
   {
    "id": "d11",
    "theme": "t07",
-   "text": "We cannot give 20 percent on a one-year contract. ___, if you could commit to three years, we could reduce the price per user. ___ the setup fee, let us park that for now. ___, we are close to an agreement.",
+   "text": "We cannot give 20 percent on a one-year contract. ___, if you could commit to three years, we could reduce the price per user. ___ the setup fee, let's park that for now. ___, we are close to an agreement.",
    "gaps": [
     {
      "answers": [
@@ -1447,7 +1446,7 @@
   {
    "id": "d12",
    "theme": "t11",
-   "text": "Your team has processed 30,000 invoices this year. ___, approval now takes three days instead of nine. ___, HR is still working with paper. ___, a short workshop could show whether it makes sense.",
+   "text": "Your team has cut the approval time by two thirds this year. ___, approval now takes three days instead of nine. ___, HR is still working with paper. ___, a short workshop could show whether it makes sense.",
    "gaps": [
     {
      "answers": [

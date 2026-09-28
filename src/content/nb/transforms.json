@@ -183,13 +183,14 @@
   "id": "u14",
   "a": "The customer rejected our offer.",
   "key": "TURNED",
-  "gap": "The customer ___ offer.",
+  "gap": "The customer ___.",
   "answers": [
-   "turned down our"
+   "turned down our offer",
+   "turned our offer down"
   ],
   "why": {
-   "de": "reject = turn down; das Objekt steht nach down.",
-   "en": "Reject means turn down; the object comes after down."
+   "de": "reject = turn down. Ein Nomen steht vor oder nach down, ein Pronomen nur davor: turned it down.",
+   "en": "Reject means turn down. A noun can go before or after down; a pronoun only before it: turned it down."
   }
  },
  {
@@ -374,11 +375,12 @@
   "key": "LIKELY",
   "gap": "This solution ___ save you about 30 percent.",
   "answers": [
-   "is likely to"
+   "is likely to",
+   "will likely"
   ],
   "why": {
-   "de": "Abschwächen: be likely to statt will probably.",
-   "en": "Hedging: be likely to instead of will probably."
+   "de": "Abschwächen: be likely to statt will probably. Im US-Englisch ist auch will likely üblich.",
+   "en": "Hedging: be likely to instead of will probably. In US English, will likely is also common."
   }
  },
  {
