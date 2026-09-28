@@ -24,6 +24,9 @@ export const CATALOG: readonly ExerciseDef[] = [
   { ex: 'dictation', stage: 5, level: 5, mode: 'listen', input: 'typed' },
   { ex: 'speed', stage: 5, level: 5, mode: 'type', input: 'typed' },
   { ex: 'produce', stage: 5, level: 5, mode: 'produce', input: 'produce' },
+  // Anki „Aufdecken“ (architektur.md §4.2): Stufe 0, damit die Nachbarstufen-Suche es nie findet;
+  // `supports` liefert immer `false`. Ohne Eintrag fiele `exerciseDef('flip')` still auf `mc_en` zurück.
+  { ex: 'flip', stage: 0, level: 2, mode: 'recog', input: 'flip' },
 ];
 
 /** Was die Umgebung kann: Sprachausgabe (listen_mc, dictation) und KI (produce). */
@@ -64,6 +67,8 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return env.tts && !!card.context;
     case 'produce':
       return env.ai && !!meaning;
+    case 'flip':
+      return false;
   }
 }
 

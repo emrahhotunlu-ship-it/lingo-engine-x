@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { fsrsSchema } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
+import { flipStage } from './flip';
 import { stageOf, nextStage } from './ladder';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
@@ -120,6 +121,15 @@ function skillPatch(cur: Doc, mode: LegacyMode, grade: number, colIndex: number 
   return out;
 }
 
+/**
+ * Neue Stufe: Aufdecken (`flip`) nach der Stufenregel aus anki-regeln.md §3 (höchstens bis 2, je
+ * Antwort höchstens eine Stufe, nie unter 1), sonst die Leiter (`nextStage`).
+ */
+function stageAfter(cur: Doc, a: AnswerEvent): number {
+  if (a.ex === 'flip') return flipStage(stageOf(cur), a.grade);
+  return nextStage(stageOf(cur), exerciseDef(a.ex).level, a.grade);
+}
+
 /** Patch für eine Karte, deren Dokument vorliegt (bzw. aus der Voreinstellung angelegt wird). */
 export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   if (a.kind === 'chunk') return chunkPatch(cur, a);
@@ -142,7 +152,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
     lapses: Math.max(0, Math.round(num(cur.lapses))) + (a.grade === 1 && !wasNew ? 1 : 0),
-    stage: nextStage(stageOf(cur), def.level, a.grade),
+    stage: stageAfter(cur, a),
     modes: { [def.mode]: { c: Math.round(num(prevMode.c)) + ok, w: Math.round(num(prevMode.w)) + (1 - ok) } },
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, { t: a.t, m: def.mode, g: a.grade, x: a.ex }].slice(-HIST_MAX),
@@ -171,7 +181,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
     lapses: Math.max(0, Math.round(num(cur.lapses))) + (a.grade === 1 && !wasNew ? 1 : 0),
-    stage: nextStage(stageOf(cur), def.level, a.grade),
+    stage: stageAfter(cur, a),
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, { t: a.t, m: def.mode, g: a.grade, x: a.ex }].slice(-HIST_MAX),
   };
