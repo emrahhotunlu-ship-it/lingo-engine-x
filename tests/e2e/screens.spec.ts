@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen, type Lang, type Theme } from './fixtures';
 import { TABS } from '../../src/app/shell/tabs';
 import { learnTour } from './learnHelpers';
+import { openChecks } from './profilHelpers';
 import { inputTour } from './inputHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
 import { tourPatch, trainerTour } from './trainerHelpers';
@@ -318,16 +319,17 @@ for (const vp of VIEWPORTS) {
         };
         await screen(page, 'today');
         await expect(page.getByTestId('late-rescue-hint')).toBeVisible();
-        await expect(page.getByTestId('check-offer')).toBeVisible();
         await check('heute');
-        await page.getByTestId('check-offer-start').click();
+        // Der Wochen-Check startet (Neubau) über Profil → „Wochen-Check“, nicht mehr auf Heute.
+        await openChecks(page);
+        await page.getByTestId('check-start').click();
         await checkSettled(page);
         await check('wochencheck');
         await playCheck(page);
         await check('wochencheck-ergebnis');
-        // Zurück zur Herkunft (Heute), dann über „Stand“ in die Einstellungen.
+        // Zurück zur Herkunft (Seite Wochen-Check), dann in die Einstellungen.
         await page.getByTestId('summary-back').click();
-        await screen(page, 'today');
+        await screen(page, 'checks');
         await openSettings(page);
         await expect(page.getByTestId('work-ctx')).toBeVisible();
         await check('einstellungen');
