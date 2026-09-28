@@ -197,10 +197,7 @@ test('Neuladen bei Karte 23: gleiche Stelle, kein doppelter Eintrag', async ({ p
 });
 
 // G4: Eine Karte stürzt ab (`lx:crash-once=trainer`) → „Diese Aufgabe überspringen“, die Runde endet regulär.
-// WP0b: Die Probe der Übungsebene (Player.tsx, Geschwister nach den Kindern) wirft im selben
-// Render-Durchgang ebenfalls, weil `disarmCrashProbe` erst im Commit läuft – dann gewinnt die
-// Player-Grenze ohne „Überspringen“. Wunsch an den Integrator; bis dahin fixme.
-test.fixme('Kaputte Karte wird übersprungen, ohne Bewertung; die Runde endet regulär', async ({ page }) => {
+test('Kaputte Karte wird übersprungen, ohne Bewertung; die Runde endet regulär', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   const { patch, ids } = ankiPatch(3);
   await boot(page, { migrated: true, localStorage: crashOnce('trainer'), fake: { patch: { 'app/profile': planPatch(3), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });

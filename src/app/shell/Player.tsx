@@ -132,7 +132,7 @@ export function Player({ route, children }: { route: Route; children: ReactNode 
           <PlayerBody route={route}>{children}</PlayerBody>
           {/* Nach den Kindern: Liegt in der Übung eine StepBoundary, verbraucht deren Probe den
               Schlüssel zuerst („Diese Aufgabe überspringen“); sonst greift diese Ebene. */}
-          <CrashProbe name={route.name} />
+          <CrashProbe name={route.name} level="player" />
         </ErrorBoundary>
       </PlayerContext.Provider>
     </LayerContext.Provider>

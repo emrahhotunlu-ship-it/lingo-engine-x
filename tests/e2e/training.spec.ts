@@ -282,9 +282,7 @@ for (const theme of ['dark', 'dim', 'light'] as const) {
   });
 }
 
-// Offen (Boundary.tsx, WP0b): Bei lx:crash-once greift die Übungs-Grenze statt der Schritt-Grenze.
-// Zwei Behebungsversuche in P7b gescheitert (siehe Bericht) – bis zur Behebung vorgemerkt.
-test.fixme('G4: lx:crash-once – Aufgabe überspringen, die Runde läuft weiter', async ({ page }) => {
+test('G4: lx:crash-once – Aufgabe überspringen, die Runde läuft weiter', async ({ page }) => {
   await boot(page, { migrated: true, localStorage: crashOnce('nbdrill') });
   await openEntry(page, 'training-colloc');
   await expect(page.getByTestId('boundary-step')).toBeVisible();
@@ -293,7 +291,7 @@ test.fixme('G4: lx:crash-once – Aufgabe überspringen, die Runde läuft weiter
   await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
 });
 
-test.fixme('G4: lx:crash-once auch im Einwand-Training', async ({ page }) => {
+test('G4: lx:crash-once auch im Einwand-Training', async ({ page }) => {
   await bootAt(page, { name: 'pressure' }, { localStorage: crashOnce('pressure') });
   await screen(page, 'pressure');
   await page.getByTestId('boundary-skip').click();

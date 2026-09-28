@@ -65,24 +65,31 @@ export class ErrorBoundary extends Component<BoundaryProps, BoundaryState> {
 
 /** Ausgelöste Probe: wirft, bis eine Grenze den Fehler angenommen hat (auch bei Wiederholungen des Renderns). */
 let pendingCrash: string | null = null;
+/** Hat eine Schritt-Probe den Wurf übernommen, bleibt die Probe der Übungsebene im selben Durchgang still. */
+let stepClaimed = false;
 
 /**
  * Wirft genau einmal, wenn `localStorage['lx:crash-once'] === name`, und löscht den Schlüssel –
  * so erholt sich „Seite neu aufbauen“/„Überspringen“ sofort. E2E setzt ihn über
  * `boot({ localStorage })`; im Alltag ist der Schlüssel nie gesetzt.
  */
-export function CrashProbe({ name }: { name: string }) {
+export function CrashProbe({ name, level = 'screen' }: { name: string; level?: 'screen' | 'step' | 'player' }) {
   if (pendingCrash === null && local.get(CRASH_KEY) === name) {
     local.remove(CRASH_KEY);
     pendingCrash = name;
   }
-  if (pendingCrash === name) throw new Error(`crash-once: ${name}`);
-  return null;
+  if (pendingCrash !== name) return null;
+  // Die Schritt-Grenze hat den Wurf schon angenommen: nicht nochmals auf Übungsebene werfen,
+  // sonst verdeckt der Übungs-Hinweis „Diese Aufgabe überspringen“ (disarm läuft erst im Commit).
+  if (level === 'player' && stepClaimed) return null;
+  if (level === 'step') stepClaimed = true;
+  throw new Error(`crash-once: ${name}`);
 }
 
 /** Nach dem Fangen: Die Probe ist verbraucht (erst im Commit, damit React-Wiederholungen weiter werfen). */
 function disarmCrashProbe(): void {
   pendingCrash = null;
+  stepClaimed = false;
 }
 
 function Notice({ title, sub, children, testId }: { title: string; sub: string; children: ReactNode; testId: string }) {
@@ -179,7 +186,7 @@ export function StepBoundary({ resetKey, scope, detail, onSkip, children }: { re
       )}
     >
       {/* Test-Schalter `lx:crash-once=<route>` (G4): zuerst hier, damit die Übung weiterläuft. */}
-      {route && <CrashProbe name={route.name} />}
+      {route && <CrashProbe name={route.name} level="step" />}
       {children}
     </ErrorBoundary>
   );
