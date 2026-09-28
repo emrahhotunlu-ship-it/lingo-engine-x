@@ -122,12 +122,15 @@ export type ThemeHint = { meeting?: ThemeId | null; preply?: ThemeId | null };
 export type WeekCur = { wk: string; theme: ThemeId; by: 'auto' | 'user'; at?: number };
 export type WeekHist = { wk: string; theme: ThemeId; by: 'auto' | 'user' };
 export type WeekStoredTargets = { wk: string; traps: string[]; tool: string; preply?: string };
+/** Vorrang-Hinweis (N17): Thema eines Termins bzw. einer Preply-Stunde in Kalenderwoche `wk`. */
+export type WeekHint = { wk: string; theme: ThemeId; src: 'meeting' | 'preply' };
 export type WeekDoc = {
   v: 1;
   cur?: WeekCur;
   hist?: WeekHist[];
   preplyNext?: string;
   targets?: WeekStoredTargets;
+  hint?: WeekHint;
 };
 
 export type WeekTargets = {

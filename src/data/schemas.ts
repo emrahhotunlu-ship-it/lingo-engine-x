@@ -798,13 +798,17 @@ export const decksSchema = z.looseObject({
   flagged: strArr,
 });
 
-/** Wochenthema und Wochenziele (`app/week`; ≤ 26 Wochen in `hist`, < 8 KiB). Schreibt P1, `preplyNext` P5. */
+/**
+ * Wochenthema und Wochenziele (`app/week`; ≤ 26 Wochen in `hist`, < 8 KiB). Schreibt P1,
+ * `preplyNext` und `hint` P5 (`hint`: Termin-/Preply-Thema mit Vorrang beim Vorschlag, N17; ein Eintrag).
+ */
 export const weekSchema = z.looseObject({
   v: num,
   cur: z.looseObject({ wk: str, theme: str, by: str, at: num }).nullish(),
   hist: z.array(z.looseObject({ wk: str, theme: str, by: str })).nullish(),
   preplyNext: str,
   targets: z.looseObject({ wk: str, traps: strArr, tool: str, preply: str }).nullish(),
+  hint: z.looseObject({ wk: str, theme: str, src: str }).nullish(),
 });
 
 /** Ergebnisse der neuen Übungen je Monat (`out/<JJJJ-MM>`; ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB). Schreibt P7. */

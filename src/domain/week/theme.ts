@@ -1,5 +1,6 @@
 import { THEME_ORDER, isThemeId, themeById } from '../../content/nb/themes';
 import { isDayKey, isoWeek } from '../date';
+import { hintOf, readHint } from './hint';
 import type { ThemeHint, ThemeId, WeekCur, WeekDoc, WeekHist, WeekStoredTargets, WeekTheme } from './types';
 
 // Wochenthema (Plan §1.5, N11, N17; Prüfung M10): lesen, vorschlagen, bestätigen. Rein und getestet.
@@ -33,6 +34,8 @@ export function readWeekDoc(raw: unknown): WeekDoc {
     if (hist.length) out.hist = hist.slice(-HIST_MAX);
   }
   if (isDayKey(d.preplyNext)) out.preplyNext = d.preplyNext;
+  const hint = readHint(d.hint);
+  if (hint) out.hint = hint;
   const t = obj(d.targets);
   if (typeof t.wk === 'string' && WK_RE.test(t.wk)) {
     const targets: WeekStoredTargets = {
@@ -90,7 +93,8 @@ export type ThemePick = {
 export function themeFor(day: string, week: WeekDoc | null | undefined, hint?: ThemeHint): ThemePick {
   const wk = isoWeek(day);
   const s = storedTheme(week, wk);
-  const id = s ? s.theme : suggestTheme(week, wk, hint);
+  // N17: ohne ausdrücklichen Hinweis gilt der gespeicherte Termin-/Preply-Hinweis dieser Woche.
+  const id = s ? s.theme : suggestTheme(week, wk, hint ?? hintOf(week, wk));
   const theme = themeById(id) ?? themeById('t01');
   if (!theme) throw new Error('content/nb/themes leer');
   return { wk, id: theme.id, theme, by: s ? s.by : 'auto', stored: !!s };
