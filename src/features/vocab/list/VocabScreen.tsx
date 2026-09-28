@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useCallback, useDeferredValue, useMemo, useState } from 'react';
+import { useCallback, useDeferredValue, useMemo, useState, type ReactNode } from 'react';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
 import { SHARED_TRANSITION, sharedId, sourceDependency, useSharedEpoch } from '../../../engine/shared';
@@ -43,7 +43,11 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE_OUT } },
 };
 
-export function VocabScreen() {
+/**
+ * `root`: Wurzel des Reiters „Wortschatz“ (Neubau-Rahmen) – ohne Zurück-Pfeil. `children` stehen
+ * direkt unter der Titelzeile (z. B. der Einstieg in den Trainer).
+ */
+export function VocabScreen({ root = false, children }: { root?: boolean; children?: ReactNode } = {}) {
   const { t, tn, lang } = useT();
   const go = useNav((s) => s.go);
   const now = useClock((s) => s.now);
@@ -81,7 +85,7 @@ export function VocabScreen() {
       <motion.div variants={item}>
         <ScreenHeader
           title={t('vcTitle')}
-          back={() => go({ name: 'learn' })}
+          back={root ? undefined : () => go({ name: 'learn' })}
           lead={
             <span className="lx-tnum block truncate text-sm" data-testid="vocab-status">
               {tn('vcTotal', stats.total - chunkCount)}
@@ -95,6 +99,7 @@ export function VocabScreen() {
           }
         />
       </motion.div>
+      {children && <motion.div variants={item}>{children}</motion.div>}
       <motion.div variants={item} className="flex flex-col gap-3">
         {/* UX-Beratung Nr. 10: Suche und Sortierung in einer Zeile, Filter als EINE wischbare Reihe. */}
         <div className="flex items-center gap-2">

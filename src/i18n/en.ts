@@ -19,6 +19,14 @@ import { tonesEn } from './parts/tones.en';
 import { repairEn } from './parts/repair.en';
 import { navEn } from './parts/nav.en';
 import { patternsEn } from './parts/patterns.en';
+import { nbShEn } from './parts/nbSh.en';
+import { nbHeuteEn } from './parts/nbHeute.en';
+import { nbLernenEn } from './parts/nbLernen.en';
+import { nbWsEn } from './parts/nbWs.en';
+import { nbLesenEn } from './parts/nbLesen.en';
+import { nbSprechenEn } from './parts/nbSprechen.en';
+import { nbProfilEn } from './parts/nbProfil.en';
+import { nbTrainingEn } from './parts/nbTraining.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -56,6 +64,15 @@ export const en: Record<MessageKey, string> = {
   ...navEn,
   // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
   ...patternsEn,
+  // Rebuild (docs/neubau/architektur.md §2.8): one part per area, own prefix only
+  ...nbShEn,
+  ...nbHeuteEn,
+  ...nbLernenEn,
+  ...nbWsEn,
+  ...nbLesenEn,
+  ...nbSprechenEn,
+  ...nbProfilEn,
+  ...nbTrainingEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

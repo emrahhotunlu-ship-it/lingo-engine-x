@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, screen, openEntry } from './fixtures';
 import { clozeSolution, orderSolution, shiftPerf, typeInGap } from './learnHelpers';
 import { DAY, dump, writes, type Dump } from './trainerHelpers';
 
@@ -12,9 +12,7 @@ type Doc = Record<string, unknown>;
 
 async function openDrill(page: Page, kind: 'dictate' | 'cloze' | 'order' | 'sprint'): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await expect(page.getByTestId('learn-hub')).toBeVisible();
-  await page.getByTestId(`hub-drill-${kind}`).click();
+  await openEntry(page, `hub-drill-${kind}`);
   await expect(page.getByTestId('drill')).toHaveAttribute('data-kind', kind);
 }
 

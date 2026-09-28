@@ -1011,6 +1011,27 @@ docs['app/radar'].events.push(
   });
 }
 
+// ------------------------------------------------------------------ Neubau (docs/neubau/plan.md §4.10)
+// Je ein kleines Beispiel der neuen Dokumente (tolerant gelesen; P1/P3/P7 schreiben sie später).
+put('app/week', {
+  v: 1,
+  cur: { wk: '2026-W38', theme: 't02', by: 'auto', at: now - 6 * DAY },
+  hist: [{ wk: '2026-W37', theme: 't01', by: 'auto' }],
+  targets: { wk: '2026-W38', traps: [], tool: 'gerund-inf' },
+});
+put('app/decks', {
+  v: 1,
+  decks: {
+    'd-kunden': { name: 'Kundentermine', order: 1, created: addDays(ANCHOR, -2), mode: 'flip', size: 20, filter: { kinds: ['vocab', 'chunk'], query: 'client' } },
+  },
+  prefs: { dir: 'de-en', grades: 4 },
+  flagged: [],
+});
+put('out/2026-09', {
+  v: 1,
+  items: [{ id: `o${now - DAY}`, k: 'colloc', d: addDays(ANCHOR, -1), theme: 't02', ok: true, text: 'make a decision', ms: 4200 }],
+});
+
 // ------------------------------------------------------------------ Ausgabe
 const sorted = Object.fromEntries(Object.keys(docs).sort().map((k) => [k, docs[k]]));
 mkdirSync(new URL('../seed/', import.meta.url), { recursive: true });

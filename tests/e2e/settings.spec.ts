@@ -58,7 +58,7 @@ test('Diagnose zeigt Fähigkeiten, Dokumentzahl und Datenversion', async ({ page
   await expect(dialog.getByText('Datenbank', { exact: true })).toHaveCount(0);
   await dialog.getByTestId('diag-toggle').click();
   await expect(dialog.getByText('Datenbank', { exact: true })).toBeVisible();
-  await expect(dialog.getByText('209 von 5.000')).toBeVisible();
+  await expect(dialog.getByText('212 von 5.000')).toBeVisible();
   await expect(dialog.getByText(/^1 · 20\. September 2026$/)).toBeVisible();
   await expect(dialog.getByText('Keine Fehler protokolliert.')).toBeVisible();
 });
@@ -100,7 +100,7 @@ test('Datenexport über downloads liefert alle Dokumente als JSON', async ({ pag
   await expect(page.getByText('Sicherung gespeichert.')).toBeVisible();
   const saved = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ data: string }> } }).__LINGO_FAKE__.saved[0]?.data ?? '{}');
   const json = JSON.parse(saved) as { documentCount: number; schemaVersion: number; documents: Record<string, unknown> };
-  expect(json.documentCount).toBe(209);
+  expect(json.documentCount).toBe(212);
   expect(json.schemaVersion).toBe(1);
   expect(Object.keys(json.documents)).toContain('daily/2026-09-20');
 });

@@ -1,5 +1,5 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, screen, openEntry } from './fixtures';
 import { answerGrammar, grammarKey, shownPrompt, typeInGap } from './learnHelpers';
 import { DAY, dump, expected, planPatch } from './trainerHelpers';
 
@@ -111,8 +111,7 @@ test.describe('Desktop', () => {
   test('Grammatik: getippte Aufgabe falsch → Hinweis, zweiter Versuch richtig → „Schwer", kein Fehlereintrag', async ({ page }) => {
     const { errors } = await boot(page, { migrated: true });
     await screen(page, 'today');
-    await page.getByTestId('tab-learn').click();
-    await page.getByTestId('hub-grammar').click();
+    await openEntry(page, 'hub-grammar');
     await page.getByTestId('gr-start').click();
     const item = page.getByTestId('gr-item');
     // Auswahlaufgaben richtig beantworten, bis eine getippte Aufgabe kommt.

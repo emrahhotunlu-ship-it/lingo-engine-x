@@ -21,6 +21,14 @@ import { tonesDe } from './parts/tones.de';
 import { repairDe } from './parts/repair.de';
 import { navDe } from './parts/nav.de';
 import { patternsDe } from './parts/patterns.de';
+import { nbShDe } from './parts/nbSh.de';
+import { nbHeuteDe } from './parts/nbHeute.de';
+import { nbLernenDe } from './parts/nbLernen.de';
+import { nbWsDe } from './parts/nbWs.de';
+import { nbLesenDe } from './parts/nbLesen.de';
+import { nbSprechenDe } from './parts/nbSprechen.de';
+import { nbProfilDe } from './parts/nbProfil.de';
+import { nbTrainingDe } from './parts/nbTraining.de';
 
 export const de = {
   ...aiDe,
@@ -57,6 +65,15 @@ export const de = {
   ...navDe,
   // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
   ...patternsDe,
+  // Neubau (docs/neubau/architektur.md §2.8): je Bereich ein Teil, nur mit eigenem Präfix
+  ...nbShDe,
+  ...nbHeuteDe,
+  ...nbLernenDe,
+  ...nbWsDe,
+  ...nbLesenDe,
+  ...nbSprechenDe,
+  ...nbProfilDe,
+  ...nbTrainingDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

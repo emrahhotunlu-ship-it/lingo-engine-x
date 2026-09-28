@@ -32,6 +32,9 @@ import {
   wpromptSchema,
   writingSchema,
   archiveSchema,
+  decksSchema,
+  weekSchema,
+  outSchema,
 } from './schemas';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
@@ -51,6 +54,9 @@ export const APP_DOCS = {
   'app/repair': repairSchema,
   // Neu (Lernberatung 27.09., V3): persönliche Deutsch-Fallen (Fehlermuster).
   'app/patterns': patternsSchema,
+  // Neubau (docs/neubau/plan.md §4.10): Stapel (P3) und Wochenthema (P1).
+  'app/decks': decksSchema,
+  'app/week': weekSchema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {
@@ -80,6 +86,8 @@ export const COLLECTIONS = {
   tones: tonesSchema,
   // Neu ab Phase 7 (Plan §12.3): ausgelagerte Profiljahre.
   archive: archiveSchema,
+  // Neubau (docs/neubau/plan.md §4.10): Ergebnisse der neuen Übungen als Monatsdokumente (P7).
+  out: outSchema,
 } as const satisfies Record<string, ZodType>;
 
 export type AppDocPath = keyof typeof APP_DOCS;

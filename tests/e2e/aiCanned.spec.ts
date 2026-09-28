@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, screen, openEntry, openTab } from './fixtures';
 import { grammarKey, L07_OUTPUT, lessonMeta, playLesson, storedL07 } from './learnHelpers';
 import { dump } from './trainerHelpers';
 
@@ -16,9 +16,7 @@ test.use({ viewport: { width: 1440, height: 900 } });
 
 async function openVocab(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await expect(page.getByTestId('learn-hub')).toBeVisible();
-  await page.getByTestId('hub-vocab').click();
+  await openTab(page, 'vocab');
   await expect(page.getByTestId('vocab')).toBeVisible();
 }
 
@@ -74,8 +72,7 @@ test('Lektion „Anwenden": Rückmeldung von Claude, Schreibdokument gespeichert
   const l07 = storedL07();
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'lesson/l07': l07 } } });
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await page.getByTestId('hub-course').click();
+  await openEntry(page, 'hub-course');
   await page.locator('[data-testid="lesson-row"][data-lesson="l07"]').click();
   const answers: Record<string, string> = {};
   for (const q of l07.questions as Array<{ q: string; answer: string }>) answers[q.q] = q.answer;
@@ -89,8 +86,7 @@ test('Lektion „Anwenden": Rückmeldung von Claude, Schreibdokument gespeichert
 test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten Themenrunde zuerst', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await page.getByTestId('hub-grammar').click();
+  await openEntry(page, 'hub-grammar');
   await expect(page.getByTestId('grammar')).toBeVisible();
   // Das erste Thema, bei dem der Knopf erscheint (weniger als 8 ungesehene Aufgaben).
   const topics = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-topic') ?? ''));

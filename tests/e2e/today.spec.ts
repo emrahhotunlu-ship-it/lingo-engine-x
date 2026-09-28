@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, layoutProblems, screen, SEED_EVENING, type Lang, type Theme } from './fixtures';
+import { boot, layoutProblems, screen, SEED_EVENING, type Lang, type Theme, openOverview } from './fixtures';
 import { DAY, dump, planPatch, writes } from './trainerHelpers';
 
 // „Heute": eine Statuszeile, EIN großer Knopf, Plan einmal je Lerntag (Tagesplan v2, phase2-plan §6),
@@ -127,7 +127,7 @@ test('„Dein Stand" über die Navigation, zurück zu Heute', async ({ page }) =
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
   await expect(page.getByTestId('today-streak')).toHaveText('Serie: 12 Tage');
-  await page.getByTestId('tab-overview').click();
+  await openOverview(page);
   await screen(page, 'overview');
   await expect(page.getByTestId('streak-count')).toHaveText('12');
   await page.getByTestId('tab-today').click();

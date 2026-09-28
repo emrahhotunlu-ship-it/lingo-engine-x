@@ -53,7 +53,7 @@ export const isRunning = (t: AiTask | undefined): boolean => !!t && t.status ===
 
 /**
  * Reiter mit laufender KI-Korrektur (M13, Ladepunkt): Pflicht-Einheiten an „Heute", freiwillige
- * Lesen/Schreiben-Einheiten und Entdecken-Beiträge an „Üben" (UX-Beratung 27.09.: Entdecken liegt in Üben).
+ * Lesen/Schreiben-Einheiten und Entdecken-Beiträge an „Lesen" (Neubau-Rahmen, 4 Reiter).
  */
 export function runningTabs(tasks: Readonly<Record<string, AiTask>>): Set<TabName> {
   const out = new Set<TabName>();
@@ -61,7 +61,7 @@ export function runningTabs(tasks: Readonly<Record<string, AiTask>>): Set<TabNam
     if (t.status !== 'running') continue;
     const r = t.route;
     if ('ctx' in r && r.ctx === 'duty') out.add('today');
-    else out.add('learn');
+    else out.add('read');
   }
   return out;
 }

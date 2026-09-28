@@ -1,5 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-import { screen } from './fixtures';
+import { openTab } from './fixtures';
 
 // Hilfen für die E2E-Tests von Phase 4 (Lesen, Hören, Schreiben, Entdecken).
 
@@ -25,17 +25,17 @@ export const sampleCalls = (page: Page): Promise<Array<{ id: string | null; tier
 export const activeSubscriptions = (page: Page): Promise<number> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { activeSubscriptions(): number } } }).__LINGO_FAKE__.db.activeSubscriptions());
 
-/** Reiter „Üben" öffnen (Lesen, Hören, Schreiben, Entdecken; UX-Beratung 27.09.). */
+/** Reiter „Lesen“ öffnen (Lesen, Hören, Schreiben, Entdecken; Neubau-Rahmen, Wurzel `library`). */
 export async function openLearn(page: Page): Promise<void> {
-  // Nach dem Schließen einer Einheit steht man schon wieder in „Üben“ (Rückweg zur Herkunft).
-  if (!(await page.locator('[data-screen="learn"]').isVisible())) {
-    if (!(await page.getByTestId('tab-learn').isVisible())) await screen(page, 'today');
-    await page.getByTestId('tab-learn').click();
+  // Nach dem Schließen einer Einheit steht man schon wieder in „Lesen“ (Rückweg zur Herkunft).
+  if (!(await page.locator('[data-screen="library"]').isVisible())) {
+    await page.getByTestId('tabbar').waitFor();
+    await openTab(page, 'read');
   }
-  await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
+  await page.locator('[data-screen="library"]').waitFor({ state: 'visible' });
 }
 
-/** Ein Modul öffnen: Lesen, Hören, Schreiben und Entdecken über den Reiter „Üben". */
+/** Ein Modul öffnen: Lesen, Hören, Schreiben und Entdecken über den Reiter „Lesen“. */
 export async function openModule(page: Page, id: 'read' | 'listen' | 'write' | 'discover'): Promise<void> {
   await openLearn(page);
   await page.locator(`[data-testid="module"][data-module="${id}"]`).click();

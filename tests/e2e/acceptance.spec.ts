@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
+import { TABS } from '../../src/app/shell/tabs';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, screen, openTab } from './fixtures';
 
 // Abschlussprüfung (P7-4, docs/abnahme.md): Kap. 14 und 15 als durchlaufende Prüfungen gegen den
 // Produktions-Build. Weitere Kriterien belegen die dort genannten Specs und Unit-Tests.
@@ -30,12 +31,13 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
   test.setTimeout(90_000);
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  for (const tab of ['today', 'learn', 'speak', 'overview'] as const) {
-    await page.getByTestId(`tab-${tab}`).click();
-    await page.locator(`[data-screen="${tab}"]`).waitFor();
+  // Neubau (§5.5): alle Reiter aus `TABS`, dazu die Seite „Dein Stand“.
+  const stops: Array<[string, () => Promise<void>]> = [...TABS.map((t): [string, () => Promise<void>] => [t.id, () => openTab(page, t.id)]), ['overview', () => openOverview(page)]];
+  for (const [name, open] of stops) {
+    await open();
     await page.waitForTimeout(300);
-    expect(await layoutProblems(page), tab).toEqual([]);
-    expect(await duplicates(page), tab).toEqual([]);
+    expect(await layoutProblems(page), name).toEqual([]);
+    expect(await duplicates(page), name).toEqual([]);
   }
   for (const id of ['errors', 'path', 'history'] as const) {
     await page.getByTestId(`tab-${id}`).click();
@@ -65,12 +67,11 @@ test('Kap. 14/9: der Tagesauftrag funktioniert unverändert – daily/* und feed
   await boot(page, { migrated: true });
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toBeVisible();
-  // Entdecken liegt seit der UX-Beratung 27.09. im Reiter „Üben“.
-  await page.getByTestId('tab-learn').click();
+  // Entdecken liegt im Reiter „Lesen“ (Neubau-Rahmen).
+  await openTab(page, 'read');
   await page.locator('[data-testid="module"][data-module="discover"]').click();
   await page.locator('[data-screen="discover"]').waitFor();
-  await page.getByTestId('tab-overview').click();
-  await screen(page, 'overview');
+  await openOverview(page);
   await page.getByTestId('tab-history').click();
   await expect(page.getByTestId('weekly')).toBeVisible();
   await page.waitForTimeout(800);

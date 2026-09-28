@@ -1,5 +1,5 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen } from './fixtures';
+import { boot, layoutProblems, screen, openTab } from './fixtures';
 import { DAY, answerCurrent, dump, planPatch, produceSentence } from './trainerHelpers';
 
 // Neue Abfragearten (phase1-plan §4.2) und Wendungen in der täglichen Wiederholung (Kap. 5, M15):
@@ -253,8 +253,7 @@ test.describe('Wortschatzliste: Wendungen', () => {
   test('Filter „Wendungen", eigenes Blatt mit Ursprung, verstecken und zurückholen', async ({ page }) => {
     const { errors, external } = await boot(page, { migrated: true });
     await screen(page, 'today');
-    await page.getByTestId('tab-learn').click();
-    await page.getByTestId('hub-vocab').click();
+    await openTab(page, 'vocab');
     await expect(page.getByTestId('vocab')).toBeVisible();
     await expect(page.getByTestId('vocab-status')).toContainText('6 Wendungen');
     await page.locator('[data-testid="vocab-filter"][data-filter="phrases"]').click();

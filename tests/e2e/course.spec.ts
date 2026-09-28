@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, screen, openEntry } from './fixtures';
 import { grammarKey, L07_OUTPUT, lessonMeta, playLesson, storedL07 } from './learnHelpers';
 import { DAY, dump } from './trainerHelpers';
 
@@ -11,9 +11,7 @@ type Doc = Record<string, unknown>;
 
 async function openCourse(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await expect(page.getByTestId('learn-hub')).toBeVisible();
-  await page.getByTestId('hub-course').click();
+  await openEntry(page, 'hub-course');
   await expect(page.getByTestId('course')).toBeVisible();
 }
 

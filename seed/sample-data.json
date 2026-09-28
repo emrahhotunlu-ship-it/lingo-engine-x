@@ -148,6 +148,30 @@
   },
   "res": {}
  },
+ "app/decks": {
+  "v": 1,
+  "decks": {
+   "d-kunden": {
+    "name": "Kundentermine",
+    "order": 1,
+    "created": "2026-09-18",
+    "mode": "flip",
+    "size": 20,
+    "filter": {
+     "kinds": [
+      "vocab",
+      "chunk"
+     ],
+     "query": "client"
+    }
+   }
+  },
+  "prefs": {
+   "dir": "de-en",
+   "grades": 4
+  },
+  "flagged": []
+ },
  "app/lookup": {
   "items": {
    "procurement": {
@@ -1656,6 +1680,27 @@
     "a": "If we started"
    }
   ]
+ },
+ "app/week": {
+  "v": 1,
+  "cur": {
+   "wk": "2026-W38",
+   "theme": "t02",
+   "by": "auto",
+   "at": 1789408800000
+  },
+  "hist": [
+   {
+    "wk": "2026-W37",
+    "theme": "t01",
+    "by": "auto"
+   }
+  ],
+  "targets": {
+   "wk": "2026-W38",
+   "traps": [],
+   "tool": "gerund-inf"
+  }
  },
  "articles/ai1789149600000": {
   "id": "ai1789149600000",
@@ -8808,6 +8853,20 @@
   "src": "ai",
   "t": 1789668000000,
   "pv": "listening-text@1"
+ },
+ "out/2026-09": {
+  "v": 1,
+  "items": [
+   {
+    "id": "o1789840800000",
+    "k": "colloc",
+    "d": "2026-09-19",
+    "theme": "t02",
+    "ok": true,
+    "text": "make a decision",
+    "ms": 4200
+   }
+  ]
  },
  "preply/pi1789668000000": {
   "kind": "import",

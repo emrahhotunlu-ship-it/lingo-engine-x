@@ -5,6 +5,7 @@ import { lessonContent } from './lessonContent';
 import { lessonProduction } from './lessonProduction';
 import { mnemonic } from './mnemonic';
 import { INPUT_TEMPLATES } from './inputRegistry';
+import { NB_TEMPLATES } from './nb';
 import { produceCheck } from './produceCheck';
 import { wordGen } from './wordGen';
 import { companionChat } from './companionChat';
@@ -79,6 +80,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   patternCheck,
   // Lernberatung 27.09., Vorschlag 8 – Eine Botschaft, drei Tonlagen
   toneCheck,
+  // Neubau (docs/neubau/plan.md §3.2): neue Vorlagen der Pakete P1–P7
+  ...NB_TEMPLATES,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */
