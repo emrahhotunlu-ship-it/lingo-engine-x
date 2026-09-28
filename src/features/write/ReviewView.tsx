@@ -9,6 +9,8 @@ import type { WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
+import { FeedbackPanel } from '../../ui/FeedbackPanel';
+import { categoryCounts, writingFeedback } from '../../domain/input/writeFeedback';
 
 // Rückmeldung zu einem eigenen Text (Plan §4.3 Nr. 4, F11, F19, F25): Urteil in Worten
 // („Dieser Text: etwa B2"), fünf Kriterien als Punktreihe mit Wort (Zahlen nur unter
@@ -36,6 +38,7 @@ export function ReviewView({ res, text, area, sourceRef, title, stale, onRecheck
   const fits = feedbackFits(res.lang, [res.summary, res.next, ...res.strengths, ...res.errors.map((e) => e.why)], lang);
   const other = lang === 'de' ? 'en' : 'de';
   const act = active !== null ? res.errors[active] : undefined;
+  const cats = categoryCounts(res.errors, res.upgrades);
   const topicName = (id: string | null) => {
     const tp = id ? topicById(id) : undefined;
     return tp ? (lang === 'de' ? tp.name : (tp.name_en ?? tp.name)) : null;
@@ -44,10 +47,23 @@ export function ReviewView({ res, text, area, sourceRef, title, stale, onRecheck
   return (
     <section className="flex flex-col gap-5" data-testid="review" data-cefr={res.cefr ?? ''}>
       {stale && <p className="text-xs text-subtle">{t('wrPrevFeedback')}</p>}
-      <header className="flex flex-col gap-1">
+      <header className="flex flex-col gap-3">
         <p className="lx-eyebrow">{t('wrReviewTitle')}</p>
-        {res.cefr && <p className="text-xl font-semibold tracking-tight">{t('wrLevel', { cefr: res.cefr })}</p>}
-        {fits && res.summary && <p className="text-base text-muted">{res.summary}</p>}
+        {/* Einheitsstil (N55): Wirkung in einem Satz, ≤ 3 Korrekturen (Fallen zuerst), ≤ 2 Aufwertungen. */}
+        <FeedbackPanel fb={writingFeedback(res, fits && res.summary ? res.summary : res.errors.length ? t('nbLesenEffectFixes', { n: res.errors.length }) : t('nbLesenEffectClean'))} />
+        <ul className="flex flex-wrap gap-2" data-testid="write-cats">
+          {(['error', 'natural', 'tone'] as const).map((c) => (
+            <li key={c} className="lx-tnum rounded-full bg-surface px-3 py-1 text-sm" data-cat={c} data-n={cats[c]}>
+              {t(c === 'error' ? 'nbLesenCatError' : c === 'natural' ? 'nbLesenCatNatural' : 'nbLesenCatTone')} {cats[c]}
+            </li>
+          ))}
+        </ul>
+        {/* Niveau nur als ruhiger Satz (H18). */}
+        {res.cefr && (
+          <p className="text-sm text-muted" data-testid="write-cefr">
+            {t('nbLesenCefr', { level: res.cefr })}
+          </p>
+        )}
       </header>
 
       {Object.keys(res.scores).length > 0 && (

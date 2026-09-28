@@ -7,6 +7,7 @@ import { newShare, textForms } from '../../src/domain/input/newShare';
 import { inputBlockPlan, isThemeTextId, noticeRows, phraseSentence, quoteSentence, shadowSentences, summaryReady, themeArticle, themeQuestions } from '../../src/domain/input/unitInput';
 import { statusCss, statusIndex, textCardKeys, textStatus } from '../../src/domain/input/wordStatus';
 import { themeRef } from '../../src/domain/week';
+import { catOf, categoryCounts, writingFeedback } from '../../src/domain/input/writeFeedback';
 
 // Neubau P4 (plan.md §4.5): „x % neu“ (N50), Wortstatus (N51), Block 2 (N53, M7, M9, S1), Tempo-Leiter (N54).
 
@@ -156,6 +157,23 @@ describe('N52: Wörter aus diesem Text', () => {
     const keys = textCardKeys('We negotiated the price. Walk me through your process.', 'theme:t01', cards);
     expect(keys).toEqual(['vocab/negotiate', 'vocab/walk-through', 'vocab/other']);
     expect(textCardKeys('Nothing here.', null, cards)).toEqual([]);
+  });
+});
+
+describe('N55: Schreibwerkstatt im Einheitsstil', () => {
+  const err = (orig: string, fix: string, cat: string, sev: 'minor' | 'major' = 'minor') => ({ orig, fix, cat, sev, why: 'Grund.', topic: null });
+  it('Kategorien Fehler · Natürlicher · Ton; Aufwertungen zählen als natürlicher', () => {
+    expect(catOf('register')).toBe('tone');
+    expect(catOf('collocation')).toBe('natural');
+    expect(catOf('grammar')).toBe('error');
+    expect(categoryCounts([err('a', 'b', 'grammar'), err('c', 'd', 'register')], ['x'])).toEqual({ error: 1, natural: 1, tone: 1 });
+  });
+  it('Verdikt, Wirkung und Korrekturen mit Grund', () => {
+    const fb = writingFeedback({ errors: [err('He go', 'He goes', 'grammar', 'major')], upgrades: ['u1', 'u2', 'u3'], summary: 'Klar.' });
+    expect(fb.verdict).toBe('wrong');
+    expect(fb.effect).toBe('Klar.');
+    expect(fb.fixes[0]).toMatchObject({ kind: 'meaning', mine: 'He go', right: 'He goes', why: 'Grund.' });
+    expect(writingFeedback({ errors: [], upgrades: [], summary: '' }).verdict).toBe('ok');
   });
 });
 

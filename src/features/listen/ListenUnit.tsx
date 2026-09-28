@@ -6,7 +6,9 @@ import { useLive } from '../../data/live';
 import { paragraphs } from '../../domain/input/textStats';
 import { shuffleOptions } from '../../domain/input/questions';
 import type { ChoiceResult, ListeningItem } from '../../domain/input/types';
-import { AudioBar, RATES } from '../../engine/AudioBar';
+import { RATES } from '../../engine/AudioBar';
+import { ladderFor, ladderRate } from '../../domain/input/ladder';
+import { TempoPlayer } from './TempoPlayer';
 import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
 import { stopSpeech, useSpeech } from '../../platform/speech';
@@ -15,7 +17,7 @@ import { Skeleton } from '../../ui/Skeleton';
 import { useActiveClock } from '../input/activeClock';
 import { ChunkList } from '../input/ChunkList';
 import { completeListening } from '../input/complete';
-import type { ListenRow } from '../input/derive';
+import { listenRows, type ListenRow } from '../input/derive';
 import { QuestionCard } from '../input/QuestionCard';
 import { StatusLine } from '../input/StatusLine';
 import { UnitShell } from '../input/UnitShell';
@@ -47,6 +49,9 @@ export function ListenUnit({ item, ctx, day, start, record, onAnother }: Props) 
   const speech = useSpeech((s) => s.status);
   const profileRate = useLive((s) => s.docs['app/profile']?.rate);
   const [rate, setRate] = useState(() => nearestRate(profileRate));
+  const listenProfile = useLive((s) => s.docs['app/profile']);
+  const ladder = useMemo(() => ladderFor(listenRows(listenProfile)), [listenProfile]);
+  const [passes, setPasses] = useState(0);
   const questions = useMemo(() => item.questions.map((q) => shuffleOptions(q, `${day}|${item.id}`)), [item, day]);
   const live = useRef({ item, questions, day, ctx, rate });
   useEffect(() => {
@@ -125,15 +130,16 @@ export function ListenUnit({ item, ctx, day, start, record, onAnother }: Props) 
             {t('lsAudioOff')}
           </p>
         ) : (
-          <AudioBar
+          // Tempo-Leiter (N54): 1. Hören langsam, 2. Hören schneller; Satz ▶/↺, Pause je Satz.
+          <TempoPlayer
             text={item.text}
-            rate={rate}
-            onRate={setRate}
-            labels={{ play: t('lsPlay'), stop: t('lsStop'), back: t('lsBack'), rate: t('lsRate'), part: (i, n) => t('lsPart', { i, n }) }}
-            onPlayFromStart={() => send({ type: 'PLAYED' })}
-            onOutcome={(o, fromStart) => {
-              if (o === 'done' && fromStart) send({ type: 'HEARD' });
-              if (o === 'unavailable') send({ type: 'NO_AUDIO' });
+            ladder={ladder}
+            passes={passes}
+            onPass={(n) => {
+              setPasses(n);
+              setRate(ladderRate(ladder, n));
+              send({ type: 'PLAYED' });
+              send({ type: 'HEARD' });
             }}
           />
         )}
