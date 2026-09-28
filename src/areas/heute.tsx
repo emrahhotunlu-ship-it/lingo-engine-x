@@ -64,7 +64,7 @@ function useUnitNote(route: Route): string | null {
 type UnitSnap = Pick<UnitRun, 'day' | 'block' | 'duty' | 'kind' | 'via' | 'watch' | 'routeName' | 'route' | 'sentences' | 'phrases' | 'task' | 'confirmed' | 'offline' | 'at' | 'draft'>;
 
 /** Fortsetzen der Einheit (G3): Block, Ersatzweg, Ergebnisse für Block 4/5, Entwurf. */
-const unitResumable: Resumable<UnitSnap> = {
+export const unitResumable: Resumable<UnitSnap> = {
   id: 'unit',
   version: 1,
   origin: 'today',
