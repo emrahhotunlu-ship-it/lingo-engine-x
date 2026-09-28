@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { INPUT_MODULES } from '../../app/modules';
 import { useNav } from '../../app/nav';
@@ -8,7 +8,8 @@ import { lessonMeta, lessonOrder } from '../../domain/course/catalog';
 import { doneLessons } from '../../domain/course/courseDone';
 import { pickLesson } from '../../domain/course/next';
 import { dueErrors } from '../../domain/grammar/errors';
-import { dueCards } from '../../domain/srs/queue';
+import { repairStats } from '../../domain/repair/daily';
+import { entriesFor } from '../../app/registry';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
 import { useSpeech, unlockSpeech } from '../../platform/speech';
@@ -23,7 +24,7 @@ import { feasibleData } from '../today/store';
 import { loadLearnInputs, useLearnInputs } from './inputs';
 import { useChannelState } from '../input/InputOffers';
 import { TabTitle } from '../system/Chrome';
-import { FreeRoundSheet } from '../vocab/FreeRoundSheet';
+import { startGrammar } from '../grammar/session';
 
 // Reiter „Üben" (UX-Beratung Nr. 8, bisher „Lernen"): gegliedert nach Kurs, Wortschatz und
 // Grammatik, Kurzübungen, Lesen/Hören/Schreiben (mit „Sag es") und Entdecken. Nichts hier ist
@@ -88,6 +89,35 @@ const ModuleIcon = ({ name, channel }: { name: InputIconName; channel: Channel }
   </span>
 );
 
+/** Gruppen der Einstiege auf dem Platz `learn` (plan.md §1.3). Fremde Bereiche hängen ihre Zeilen per
+ * `entries: [{ place: 'learn', group }]` an: `way` (Dein Weg, z. B. P1 „Deine Woche“), `errors`
+ * (Aus deinen Fehlern), `grammar` (Grammatik & Fallen), `training` (Training, z. B. P7). Einstiege
+ * ohne oder mit unbekannter Gruppe erscheinen unter „Training“ – nichts geht verloren. */
+export const LEARN_GROUPS = ['way', 'errors', 'grammar', 'training'] as const;
+
+function ForeignRows({ group }: { group: (typeof LEARN_GROUPS)[number] }) {
+  const { t } = useT();
+  const api = useHiddenInput();
+  const go = useNav((s) => s.go);
+  const all = entriesFor('learn');
+  const known = new Set<string>(LEARN_GROUPS);
+  const list = all.filter((e) => (group === 'training' ? !e.group || !known.has(e.group) || e.group === 'training' : e.group === group));
+  return (
+    <>
+      {list.map((e) => (
+        <Row
+          key={e.id}
+          icon={<ChannelIcon channel="grammar"><Icon name={e.icon} /></ChannelIcon>}
+          title={t(e.label)}
+          sub={e.sub ? t(e.sub) : ''}
+          onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)}
+          testId={e.id}
+        />
+      ))}
+    </>
+  );
+}
+
 export function LearnHub() {
   const { t, tn, lang } = useT();
   const api = useHiddenInput();
@@ -96,10 +126,10 @@ export function LearnHub() {
   const course = useLive((s) => s.docs['app/course']);
   const assess = useLive((s) => s.docs['app/assess']);
   const grammar = useLive((s) => s.collections.grammar);
+  const repairDoc = useLive((s) => s.docs['app/repair']);
   const vocab = useLive((s) => s.collections.vocab);
   const tts = useSpeech((s) => s.status === 'ready');
   const inputs = useLearnInputs((s) => s.status);
-  const [freeRound, setFreeRound] = useState(false);
 
   useEffect(() => {
     if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
@@ -119,9 +149,10 @@ export function LearnHub() {
     return { doneN: order.filter((id) => done.has(id)).length, totalN: order.length };
   }, [course, lessons]);
   const nErr = useMemo(() => dueErrors(grammar ?? new Map(), now).length, [grammar, now]);
-  const { data, nDue } = useMemo(() => {
+  const rep = useMemo(() => repairStats(repairDoc), [repairDoc]);
+  const data = useMemo(() => {
     const cards = drillCards(now);
-    return { data: feasibleData(cards, lang, now), nDue: dueCards(cards, now).length };
+    return feasibleData(cards, lang, now);
     // `inputs` und `vocab`: neu rechnen, sobald Pool/Lektionen bzw. Karten da sind.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [now, lang, inputs, vocab]);
@@ -133,6 +164,11 @@ export function LearnHub() {
     else api.blur();
     go({ name: 'drill', kind, ctx: 'xtra' });
   };
+  const startErrors = () => {
+    const first = startGrammar({ mode: 'errors' });
+    if (first === 'typed') api.focusNow();
+    go({ name: 'grammarSession', mode: 'errors' });
+  };
 
   const drills = DRILLS.filter((d) => feasible(d.kind, data, { tts }));
   return (
@@ -141,10 +177,17 @@ export function LearnHub() {
         <TabTitle title={t('lhTitle')} />
       </motion.div>
 
-      <Section id="lh-course" title={t('lhCourse')}>
-        <div className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5">
-          <p className="text-sm text-muted">{t('csProgress', { done: doneN, total: totalN })}</p>
+      {/* 1. Dein Weg: Deine Woche (P1) und die Kurs-Karte (nächste Lektion, Fortschritt). */}
+      <Section id="lh-way" title={t('nbLernenHubWay')}>
+        {entriesFor('learn', 'way').length > 0 && (
+          <List label={t('nbLernenHubWay')}>
+            <ForeignRows group="way" />
+          </List>
+        )}
+        <div className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" data-testid="hub-course-card">
+          <p className="lx-eyebrow">{t('lhCourse')}</p>
           <p className="text-lg font-semibold tracking-tight">{meta ? (lang === 'de' ? meta.de : meta.en) : t('courseComplete')}</p>
+          <p className="text-sm text-muted">{t('csProgress', { done: doneN, total: totalN })}</p>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             {meta && (
               <Button variant="primary" iconAfter="arrowRight" onClick={() => go({ name: 'lesson', id: meta.id })} data-testid="hub-next-lesson">
@@ -159,35 +202,41 @@ export function LearnHub() {
         </div>
       </Section>
 
-      <Section id="lh-library" title={`${t('lhVocab')} · ${t('lhGrammar')}`}>
-        <List label={t('lhLibrary')}>
-          <Row
-            icon={<ChannelIcon channel="cards"><Icon name="cards" /></ChannelIcon>}
-            title={t('lhVocab')}
-            sub={nDue ? tn('vocabDue', nDue) : t('lhVocabSub')}
-            onClick={() => go({ name: 'vocab' })}
-            testId="hub-vocab"
-          />
-          <Row
-            icon={<ChannelIcon channel="cards"><Icon name="plus" /></ChannelIcon>}
-            title={t('lhVocabFree')}
-            sub={t('lhFreeRoundSub')}
-            onClick={() => setFreeRound(true)}
-            testId="hub-free-round"
-          />
-          <Row
-            icon={<ChannelIcon channel="grammar"><Icon name="grammar" /></ChannelIcon>}
-            title={t('lhGrammar')}
-            sub={t('lhGrammarSub')}
-            onClick={() => go({ name: 'grammar' })}
-            testId="hub-grammar"
-            badge={nErr ? tn('grDueBadge', nErr) : null}
-          />
+      {/* 2. Aus deinen Fehlern (Prüfung Ü1: der einzige Abschnitt mit fälligen Elementen, deshalb oben). */}
+      <Section id="lh-errors" title={t('nbLernenHubErrors')}>
+        <List label={t('nbLernenHubErrors')} testId="hub-errors-list">
+          {nErr > 0 ? (
+            <Row icon={<ChannelIcon channel="grammar"><Icon name="refresh" /></ChannelIcon>} title={t('nbLernenHubGrammarErrors')} sub={tn('grDueBadge', nErr)} onClick={startErrors} testId="hub-errors" badge={String(nErr)} />
+          ) : (
+            <li className="flex min-h-14 items-center gap-3 px-4 py-3 text-sm text-muted" data-testid="hub-errors-none">
+              <ChannelIcon channel="grammar"><Icon name="check" /></ChannelIcon>
+              <span>{t('nbLernenHubNoErrors')}</span>
+            </li>
+          )}
+          <li className="flex min-h-14 items-center gap-3 px-4 py-3" data-testid="hub-repair">
+            <ChannelIcon channel="speak"><Icon name="refresh" /></ChannelIcon>
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="font-medium">{t('nbLernenHubRepair')}</span>
+              <span className="lx-tnum text-sm text-muted">{t('nbLernenHubRepairSub', { open: rep.open, safe: rep.safe })}</span>
+            </span>
+          </li>
+          <ForeignRows group="errors" />
         </List>
       </Section>
 
-      {drills.length > 0 && (
-        <Section id="lh-drills" title={t('lhDrills')}>
+      {/* 3. Grammatik & Fallen. */}
+      <Section id="lh-grammar" title={t('nbLernenHubGrammar')}>
+        <List label={t('nbLernenHubGrammar')}>
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="grammar" /></ChannelIcon>} title={t('lhGrammar')} sub={t('nbLernenHubGrammarSub')} onClick={() => go({ name: 'grammar' })} testId="hub-grammar" badge={nErr ? tn('grDueBadge', nErr) : null} />
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="target" /></ChannelIcon>} title={t('nbLernenHubPatterns')} sub={t('nbLernenHubPatternsSub')} onClick={() => go({ name: 'patterns' })} testId="hub-patterns" />
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="book" /></ChannelIcon>} title={t('nbLernenHubWissen')} sub={t('nbLernenHubWissenSub')} onClick={() => go({ name: 'wissen' })} testId="hub-wissen" />
+          <ForeignRows group="grammar" />
+        </List>
+      </Section>
+
+      {/* 4. Training: Kurzübungen (nur machbare, G5) und die neuen Übungen anderer Bereiche (P7). */}
+      <Section id="lh-drills" title={t('nbLernenHubTraining')}>
+        {drills.length > 0 && (
           <div className="grid grid-cols-2 gap-3">
             {drills.map((d) => (
               <button
@@ -205,12 +254,13 @@ export function LearnHub() {
               </button>
             ))}
           </div>
-        </Section>
-      )}
-
-      <InputSections />
-
-      <FreeRoundSheet open={freeRound} onClose={() => setFreeRound(false)} />
+        )}
+        {entriesFor('learn').some((e) => !e.group || !(LEARN_GROUPS as readonly string[]).includes(e.group) || e.group === 'training') && (
+          <List label={t('nbLernenHubTraining')}>
+            <ForeignRows group="training" />
+          </List>
+        )}
+      </Section>
     </motion.div>
   );
 }
