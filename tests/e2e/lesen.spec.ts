@@ -96,6 +96,15 @@ test.describe('Lesen (Neubau P4)', () => {
     expect(external).toEqual([]);
   });
 
+  test('Schreibwerkstatt: weitere Gattung (N61) wird Aufgabe des Tages, mit eigenem Wortziel', async ({ page }) => {
+    const { errors } = await bootAt(page, { name: 'write', ctx: 'extra' }, { fake: { capabilities: { sample: false } } });
+    await screen(page, 'write');
+    await page.locator('[data-testid="genre-chip"][data-id="nb-half"]').click();
+    await expect(page.getByTestId('prompt-card')).toHaveAttribute('data-id', 'nb-half');
+    await expect.poll(async () => JSON.stringify((await dump(page))[`wprompt/${DAY}`] ?? {})).toContain('nb-half');
+    expect(errors).toEqual([]);
+  });
+
   test('Block 2 Dienstag ohne KI: Themen-Text vorgelesen (Tempo-Leiter), Fragen, Zusammenfassung in 3 Sätzen', async ({ page }) => {
     test.setTimeout(90_000);
     const { errors } = await bootAt(page, { name: 'inputUnit', day: DAY, kind: 'listen', ref: 'theme:x-t01', summary: true }, { fake: { capabilities: { sample: false } } });

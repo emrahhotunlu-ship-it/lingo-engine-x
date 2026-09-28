@@ -95,4 +95,5 @@ export const nbLesenDe = {
   nbLesenAltAdopt: 'Übernehmen',
   nbLesenAltSave: '+ Wortschatz',
   nbLesenAltSaved: 'Im Wortschatz',
+  nbLesenGenres: 'Andere Gattung',
 } as const;

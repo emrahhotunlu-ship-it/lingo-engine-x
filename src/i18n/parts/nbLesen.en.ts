@@ -96,4 +96,5 @@ export const nbLesenEn: Record<keyof typeof nbLesenDe, string> = {
   nbLesenAltAdopt: 'Use this',
   nbLesenAltSave: '+ Vocab',
   nbLesenAltSaved: 'In your vocab',
+  nbLesenGenres: 'Another genre',
 };
