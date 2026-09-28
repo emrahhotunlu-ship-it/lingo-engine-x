@@ -85,4 +85,17 @@ export const nbProfilEn: Record<keyof typeof nbProfilDe, string> = {
   nbProfilDrillScore: '{right} of {total} correct',
   nbProfilDrillBack: 'Back to the conversation',
   nbProfilDrillAgain: 'Five new sentences',
+  // Claude remembers (backlog B5)
+  nbProfilMemOffer: 'Remember',
+  nbProfilMemRunning: 'Claude is remembering …',
+  nbProfilMemFailed: 'Could not remember – try again',
+  nbProfilMemNone: 'Nothing new to remember',
+  nbProfilMemDone_one: 'Remembered {n} thing',
+  nbProfilMemDone_other: 'Remembered {n} things',
+  nbProfilMemTitle: 'Claude remembers',
+  nbProfilMemLead: 'Facts from your conversations that Claude takes into account next time. Tap “Remember” in a conversation.',
+  nbProfilMemEmpty: 'Nothing remembered yet.',
+  nbProfilMemDelete: 'Forget “{text}”',
+  nbProfilMemDeleteFailed: 'Could not be deleted.',
+  nbProfilMemCount: '{n} of {max}',
 } as const;

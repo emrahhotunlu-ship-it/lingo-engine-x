@@ -807,6 +807,15 @@ export const weekSchema = z.looseObject({
   targets: z.looseObject({ wk: str, traps: strArr, tool: str, preply: str }).nullish(),
 });
 
+/**
+ * „Claude merkt sich“ (Backlog B5): `{v, items: [{id, text, src, t, lang}]}`, höchstens 40 Fakten
+ * zu je ≤ 160 Zeichen, ≤ 5 je Gespräch/Termin (gekappt beim Schreiben, domain/memory). Tolerant.
+ */
+export const memorySchema = z.looseObject({
+  v: num,
+  items: z.array(z.looseObject({ id: str, text: str, src: str, t: num, lang: str })).nullish(),
+});
+
 /** Ergebnisse der neuen Übungen je Monat (`out/<JJJJ-MM>`; ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB). Schreibt P7. */
 export const outSchema = z.looseObject({
   v: num,

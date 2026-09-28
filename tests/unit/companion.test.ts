@@ -114,7 +114,7 @@ describe('Schwärzen (seeing) und Schutzregel', () => {
 
   it('Kopfzeile, Stufe default, cache false; Sprache der Erklärungen', () => {
     const turns = companionChat.buildTurns(vars(null));
-    expect(turns[0]!.content.split('\n')[0]).toBe('[companion-chat@2]');
+    expect(turns[0]!.content.split('\n')[0]).toBe('[companion-chat@3]');
     expect(companionChat.tier).toBe('default');
     expect(companionChat.cache).toBe(false);
     expect(turns[0]!.content).toContain('Write your explanations in German');

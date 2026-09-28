@@ -84,4 +84,17 @@ export const nbProfilDe = {
   nbProfilDrillScore: '{right} von {total} richtig',
   nbProfilDrillBack: 'Zurück zum Gespräch',
   nbProfilDrillAgain: 'Fünf neue Sätze',
+  // Claude merkt sich (Backlog B5)
+  nbProfilMemOffer: 'Merken',
+  nbProfilMemRunning: 'Claude merkt sich …',
+  nbProfilMemFailed: 'Merken fehlgeschlagen – nochmal',
+  nbProfilMemNone: 'Nichts Neues zum Merken',
+  nbProfilMemDone_one: '{n} Sache gemerkt',
+  nbProfilMemDone_other: '{n} Dinge gemerkt',
+  nbProfilMemTitle: 'Claude merkt sich',
+  nbProfilMemLead: 'Fakten aus deinen Gesprächen, die Claude beim nächsten Mal berücksichtigt. Tippe im Gespräch auf „Merken“.',
+  nbProfilMemEmpty: 'Noch nichts gemerkt.',
+  nbProfilMemDelete: '„{text}“ vergessen',
+  nbProfilMemDeleteFailed: 'Konnte nicht gelöscht werden.',
+  nbProfilMemCount: '{n} von {max}',
 } as const;

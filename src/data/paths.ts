@@ -35,6 +35,7 @@ import {
   decksSchema,
   weekSchema,
   outSchema,
+  memorySchema,
 } from './schemas';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
@@ -57,6 +58,8 @@ export const APP_DOCS = {
   // Neubau (docs/neubau/plan.md §4.10): Stapel (P3) und Wochenthema (P1).
   'app/decks': decksSchema,
   'app/week': weekSchema,
+  // Paket B (Backlog B5): „Claude merkt sich“ – Fakten aus Gesprächen und Terminen.
+  'app/memory': memorySchema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {

@@ -8,6 +8,7 @@ import { Icon } from '../../ui/Icon';
 import { openPreplyPrep } from '../preply/store';
 import { startClaudeDrill } from './drill';
 import { ChatMessage, type MsgState } from './ChatMessage';
+import { RememberChip } from './RememberChip';
 import { Composer } from './Composer';
 import { useCurrentSeeing } from './seeing';
 import { allMsgs, closeCompanion, msgKey, resend, retrySave, sendMessage, stopTurn, useCompanion } from './store';
@@ -244,6 +245,8 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
                   <Icon name="book" size={16} />
                   {t('cmpActPreply')}
                 </button>
+                {/* B5: „Merken“ – Claude merkt sich bis zu 5 Fakten aus diesem Gespräch. */}
+                <RememberChip />
               </>
             )}
           </div>

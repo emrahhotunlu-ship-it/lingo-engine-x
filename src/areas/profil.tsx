@@ -8,6 +8,7 @@ import { ProfileHead, ProfileMoreRows, ProfileRescueRow, ProfileStandRows, Profi
 import { VtestScreen } from '../features/vtest/VtestScreen';
 import { vtestResume } from '../features/vtest/session';
 import { useClaudeDrill } from '../features/companion/drill';
+import { MemorySection } from '../features/settings/MemorySection';
 
 // Bereich „Profil, Stand & Claude“ – Besitz: Paket P6 (docs/neubau/plan.md §4.7).
 // - Profil-Blatt (Platz `profile`): Kopf · Stand › · Tests › · Wochenbericht › · Einstellungen ›
@@ -57,6 +58,8 @@ export const profil = defineArea({
     { id: 'today-rescue', place: 'today', order: 80, component: TodayRescueRow },
     { id: 'today-weekly', place: 'today', order: 85, component: TodayWeeklyRow },
   ],
+  // Paket B (Backlog B5): „Claude merkt sich“ – sichtbar und löschbar unter „Mein Kontext“.
+  settings: [{ id: 'memory', group: 'context', order: 50, component: MemorySection }],
   resumables: [vtestResume],
   boot: () => installCompanionHotkeys(),
 });

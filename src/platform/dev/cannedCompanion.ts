@@ -191,8 +191,21 @@ export function preplyImportReply(input: string): string {
 }
 
 /** Meldet die festen Antworten der Phase 5 beim Entwicklungs-Adapter an. */
+// ---------------------------------------------------------------- memory-extract@1 (B5)
+// Zwei feste Fakten in der verlangten Sprache; Testmarker `zznone` im Gespräch → leere Liste.
+
+function memoryExtractReply(input: string): string {
+  if (/zznone/i.test(input)) return JSON.stringify({ facts: [] });
+  const en = /sentence in English/.test(input);
+  const facts = en
+    ? ['Has a trade fair in London on October 14.', 'Presents the Q3 numbers to the CFO next week.']
+    : ['Hat am 14. Oktober eine Messe in London.', 'Präsentiert nächste Woche die Q3-Zahlen vor dem CFO.'];
+  return JSON.stringify({ facts });
+}
+
 export function registerCompanionReplies(): void {
   registerCannedReply('companion-chat', companionChatReply);
+  registerCannedReply('memory-extract', memoryExtractReply);
   registerCannedReply('translate', translateReply);
   registerCannedReply('preply-prep', preplyPrepReply);
   registerCannedReply('preply-import', preplyImportReply);
