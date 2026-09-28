@@ -92,4 +92,29 @@ test.describe('Lesen (Neubau P4)', () => {
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
+
+  test('Block 2 Dienstag ohne KI: Themen-Text vorgelesen (Tempo-Leiter), Fragen, Zusammenfassung in 3 Sätzen', async ({ page }) => {
+    test.setTimeout(90_000);
+    const { errors } = await bootAt(page, { name: 'inputUnit', day: DAY, kind: 'listen', ref: 'theme:x-t01', summary: true }, { fake: { capabilities: { sample: false } } });
+    await screen(page, 'inputUnit');
+    const player = page.getByTestId('tempo-player');
+    await expect(player).toHaveAttribute('data-pass', '1');
+    // Kein Text vor den Fragen.
+    await expect(page.getByTestId('reader-text')).toHaveCount(0);
+    await page.getByTestId('tempo-play').click();
+    await expect(player).toHaveAttribute('data-pass', '2', { timeout: 60_000 });
+    expect(Number(await player.getAttribute('data-rate'))).toBeGreaterThan(1);
+    await page.getByTestId('block-to-questions').click();
+    for (let i = 0; i < 2; i++) {
+      await page.getByTestId('option').first().click();
+      await page.getByTestId('next').click();
+    }
+    await expect(page.getByTestId('block-summary')).toBeVisible();
+    await expect(page.getByTestId('block-summary-save')).toBeDisabled();
+    await page.getByTestId('block-summary-draft').fill('The memo says the customer should talk most. Sellers should ask open questions. They must find out who signs.');
+    await page.getByTestId('block-summary-save').click();
+    await expect(page.getByTestId('input-block')).toHaveAttribute('data-step', 'notice');
+    await expect.poll(async () => Object.values(await dump(page)).some((d) => d.articleId === 'x-t01' && String(d.summary).startsWith('The memo says'))).toBe(true);
+    expect(errors).toEqual([]);
+  });
 });
