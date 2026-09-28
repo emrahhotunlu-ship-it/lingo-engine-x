@@ -87,4 +87,7 @@ export const nbLesenDe = {
   nbLesenResumeBlock: 'Tageseinheit · Input: {title}',
   nbLesenSentenceMode: 'Satz für Satz',
   nbLesenPageMode: 'Ganzer Text',
+  nbLesenLevelEasier: 'Leichter',
+  nbLesenLevelHarder: 'Näher an C1',
+  nbLesenLevelOriginal: 'Originaltext',
 } as const;

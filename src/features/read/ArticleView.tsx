@@ -15,7 +15,7 @@ export function ArticleView({ item, badge, practice = false, onPara, startPara }
         </h2>
         {item.teaser && <EnglishText text={item.teaser} area="read" source={item.ref} title={item.title} className="text-base text-muted" />}
       </header>
-      <ReaderText text={item.text} title={item.title} sourceRef={item.ref} area="read" practice={practice} onPara={onPara} startPara={startPara ?? null} />
+      <ReaderText text={item.text} title={item.title} sourceRef={item.ref} area="read" practice={practice} levels={practice} onPara={onPara} startPara={startPara ?? null} />
     </article>
   );
 }

@@ -22,6 +22,9 @@ test.describe('Lesen (Neubau P4)', () => {
     await screen(page, 'read');
     await expect(page.getByTestId('article')).toHaveAttribute('data-id', ARTICLE_Q);
     await expect(page.getByTestId('reader-legend')).toBeVisible();
+    // „Leichter / Näher an C1“ (N59) nur auf Knopfdruck, mit KI.
+    await expect(page.getByTestId('level-easier')).toBeVisible();
+    await expect(page.getByTestId('level-harder')).toBeVisible();
     // Satzmodus (N56): ein Satz, blättern.
     await page.getByTestId('sentence-mode').click();
     await expect(page.getByTestId('sentence-view')).toHaveAttribute('data-i', '0');

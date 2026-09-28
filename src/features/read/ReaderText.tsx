@@ -9,6 +9,10 @@ import type { WordTapArea } from '../../engine/wordTap';
 import { useT } from '../../i18n';
 import { Button, IconButton } from '../../ui/Button';
 import { startSession } from '../vocab/session';
+import { useAiAvailable } from '../../ai/scope';
+import { useAsk } from '../../ai/useAsk';
+import { textLevel } from '../../prompts/nb/p4/textLevel';
+import { AiRunPanel, isBusy } from '../input/AiRunPanel';
 
 // Lesetext im LingQ-Stil (Neubau N51, N52): jedes Wort antippbar (Wort-Popover mit „+ Wortschatz“,
 // Ursprungssatz = der Satz im Text), Wörter aus dem eigenen Wortschatz dezent markiert, darunter
@@ -46,10 +50,20 @@ type Props = {
   onPara?: (i: number) => void;
   /** Absatz, zu dem beim ersten Zeichnen gesprungen wird (Fortsetzen). */
   startPara?: number | null;
+  /** „Leichter“ / „Näher an C1“ anbieten (N59, nur mit KI). */
+  levels?: boolean;
 };
 
-export function ReaderText({ text, title, sourceRef, area, practice = true, className, onPara, startPara = null }: Props) {
+export function ReaderText({ text: original, title, sourceRef, area, practice = true, className, onPara, startPara = null, levels = false }: Props) {
   const { t } = useT();
+  const ai = useAiAvailable();
+  const gen = useAsk(textLevel);
+  const [variant, setVariant] = useState<{ dir: 'easier' | 'harder'; text: string } | null>(null);
+  const text = variant?.text ?? original;
+  const rewrite = async (dir: 'easier' | 'harder') => {
+    const out = await gen.run({ text: original, direction: dir });
+    if (out?.text) setVariant({ dir, text: out.text });
+  };
   const scope = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const vocab = useLive((s) => s.collections.vocab);
   const go = useNav((s) => s.go);
@@ -102,6 +116,29 @@ export function ReaderText({ text, title, sourceRef, area, practice = true, clas
   return (
     <div className="flex flex-col gap-4" data-reader={scope} data-testid="reader-text">
       {css && <style>{css}</style>}
+      {levels && ai && (
+        <div className="flex flex-col gap-2" data-testid="text-level" data-variant={variant?.dir ?? 'original'}>
+          <div className="flex flex-wrap gap-2">
+            {variant ? (
+              <Button variant="ghost" onClick={() => setVariant(null)} data-testid="level-original">
+                {t('nbLesenLevelOriginal')}
+              </Button>
+            ) : (
+              !isBusy(gen.phase) && (
+                <>
+                  <Button variant="ghost" onClick={() => void rewrite('easier')} data-testid="level-easier" data-ai="">
+                    {t('nbLesenLevelEasier')}
+                  </Button>
+                  <Button variant="ghost" onClick={() => void rewrite('harder')} data-testid="level-harder" data-ai="">
+                    {t('nbLesenLevelHarder')}
+                  </Button>
+                </>
+              )
+            )}
+          </div>
+          <AiRunPanel phase={gen.phase} error={gen.error} onStop={gen.stop} onRetry={() => void rewrite('easier')} skeleton={false} />
+        </div>
+      )}
       {sentences.length > 2 && (
         <div className="flex">
           <button type="button" className="text-sm font-medium text-accent-text" aria-pressed={sentMode} onClick={() => setSentMode((v) => !v)} data-testid="sentence-mode">

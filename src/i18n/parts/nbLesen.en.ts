@@ -88,4 +88,7 @@ export const nbLesenEn: Record<keyof typeof nbLesenDe, string> = {
   nbLesenResumeBlock: 'Daily unit · Input: {title}',
   nbLesenSentenceMode: 'Sentence by sentence',
   nbLesenPageMode: 'Full text',
+  nbLesenLevelEasier: 'Easier',
+  nbLesenLevelHarder: 'Closer to C1',
+  nbLesenLevelOriginal: 'Original text',
 };
