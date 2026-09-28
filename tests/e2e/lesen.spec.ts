@@ -96,6 +96,21 @@ test.describe('Lesen (Neubau P4)', () => {
     expect(external).toEqual([]);
   });
 
+  // Offen (2 Versuche, A2): Text wird hergestellt, der Absatz-Sprung greift noch nicht (Bildlauf der Übungsebene).
+  test.fixme('reload() im Leser: gleicher Text, gleicher Absatz (G3)', async ({ page }) => {
+    const { errors } = await boot(page, { migrated: true });
+    await openTab(page, 'read');
+    await page.locator(`[data-testid="lib-item"][data-key="a:${ARTICLE_Q}"]`).click();
+    await screen(page, 'read');
+    await page.locator('[data-para="2"]').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(800);
+    await page.reload();
+    await screen(page, 'read');
+    await expect(page.getByTestId('article')).toHaveAttribute('data-id', ARTICLE_Q);
+    await expect(page.locator('[data-para="2"]')).toBeInViewport();
+    expect(errors).toEqual([]);
+  });
+
   test('Schreibwerkstatt: weitere Gattung (N61) wird Aufgabe des Tages, mit eigenem Wortziel', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'write', ctx: 'extra' }, { fake: { capabilities: { sample: false } } });
     await screen(page, 'write');

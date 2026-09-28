@@ -3,6 +3,7 @@ import { useNav } from '../../../app/nav';
 import { useSettings } from '../../../app/settings';
 import type { ScreenProps } from '../../../app/registry';
 import { unitDone } from '../../../app/unit/done';
+import { usePlayerSkip } from '../../../app/shell/Player';
 import { useLive } from '../../../data/live';
 import { ladderFor } from '../../../domain/input/ladder';
 import { summaryReady } from '../../../domain/input/unitInput';
@@ -168,6 +169,18 @@ function BlockUnit({ src, day, kind, summary }: { src: BlockSource; day: string;
     stopSpeech();
     back();
   };
+
+  // „Diese Aufgabe überspringen“ (Fehlergrenze): ohne Bewertung zum nächsten Schritt.
+  usePlayerSkip(() => {
+    const cur = useBlockRun.getState().run;
+    const s = cur?.key === key ? cur.step : 'input';
+    if (s === 'input') patchRun(key, { step: nQ ? 'q' : 'notice' });
+    else if (s === 'q') {
+      if ((cur?.qi ?? 0) + 1 < nQ) patchRun(key, { qi: (cur?.qi ?? 0) + 1 });
+      else void afterQuestions(cur?.results ?? []);
+    } else if (s === 'summary') patchRun(key, { step: 'notice' });
+    else finish();
+  });
 
   const status = <StatusLine channel={kind === 'listen' ? 'listen' : 'read'} level={src.level} domain={src.domain} minutes={5} />;
   const title = t(kind === 'listen' ? 'nbLesenBlockListen' : 'nbLesenBlockRead');

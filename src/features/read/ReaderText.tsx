@@ -102,8 +102,12 @@ export function ReaderText({ text: original, title, sourceRef, area, practice = 
   // Nach dem Fortsetzen einmal an den gemerkten Absatz springen.
   useEffect(() => {
     if (startPara === null || startPara <= 0) return;
-    const el = box.current?.querySelector(`[data-para="${startPara}"]`);
-    if (el instanceof HTMLElement) el.scrollIntoView({ block: 'start' });
+    // Nach dem Einblenden der Übungsebene springen (der Rahmen setzt den Bildlauf beim Öffnen zurück).
+    const id = window.setTimeout(() => {
+      const el = box.current?.querySelector(`[data-para="${startPara}"]`);
+      if (el instanceof HTMLElement) el.scrollIntoView({ block: 'start' });
+    }, 350);
+    return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
