@@ -150,6 +150,8 @@ test.describe('C1-Werkzeugkasten', () => {
       await page.setViewportSize(viewport);
       const { errors, external } = await boot(page, { migrated: true, lang });
       await openGrammar(page);
+      // P2: Umschalter B2-Themen · C1-Werkzeugkasten (plan.md §1.3).
+      await page.getByTestId('gr-set-c1').click();
       const c1 = page.locator('[data-testid="topic"][data-topic^="c1-"]');
       await expect(c1).toHaveCount(7);
       await expect(page.locator('[data-testid="topic"][data-topic="c1-hedging"]')).toContainText(TEXT[lang].group);

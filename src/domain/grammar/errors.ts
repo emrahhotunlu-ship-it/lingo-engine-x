@@ -153,8 +153,7 @@ export function errorTask(topic: string, e: ErrorEntry): GrammarTask | null {
   // Text vor und hinter der Lücke abziehen; passt er nicht, gibt es keine Aufgabe.
   const fill = gap ? gapFill(q, ans) : ans;
   if (!fill) return null;
-  const base = gap && !/\([^)]*\)/.test(q) ? reviewBase(fill) : '';
-  return {
+  const task: GrammarTask = {
     key: legacyTaskKey(q),
     topic,
     type: gap ? 'gap' : 'correct',
@@ -162,12 +161,33 @@ export function errorTask(topic: string, e: ErrorEntry): GrammarTask | null {
     answer: fill,
     accepted: [],
     options: null,
-    hint: base ? `(${base})` : null,
+    hint: null,
     expl: { de: null, en: null },
     src: 'review',
     ref: `grammar/${topic}`,
     errorT: t,
   };
+  // Hinweis (Grundform) erst beim ersten Lesen: `reviewBase` braucht das Wörterbuch (≈100 ms
+  // Parsen bei 4×), `dueErrors` zählt aber schon auf dem Startpfad (leistung.md §3.2 Nr. 3, N45).
+  if (gap && !/\([^)]*\)/.test(q)) lazyHint(task, fill);
+  return task;
+}
+
+function lazyHint(task: GrammarTask, fill: string): void {
+  const fix = (v: string | null) => Object.defineProperty(task, 'hint', { value: v, enumerable: true, writable: true, configurable: true });
+  Object.defineProperty(task, 'hint', {
+    enumerable: true,
+    configurable: true,
+    get() {
+      const base = reviewBase(fill);
+      const v = base ? `(${base})` : null;
+      fix(v);
+      return v;
+    },
+    set(v: string | null) {
+      fix(v);
+    },
+  });
 }
 
 export type DueError = { topic: string; e: ErrorEntry; box: number; due: number; task: GrammarTask };

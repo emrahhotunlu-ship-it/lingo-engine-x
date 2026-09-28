@@ -68,7 +68,9 @@ test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis u
   const before = await dump(page);
   await page.getByTestId('gr-start').click();
   const rows = await playRound(page, { wrongAt: 1 });
-  expect(rows).toHaveLength(8);
+  // N47: Die falsche Aufgabe kommt am Rundenende einmal wieder (nicht gezählt, nicht gespeichert).
+  expect(rows).toHaveLength(9);
+  expect(rows[8]?.prompt).toBe(rows[1]?.prompt);
   expect(rows[1]?.verdict).toBe('wrong');
   expect(rows.filter((_, i) => i !== 1).every((r) => r.verdict === 'correct'), JSON.stringify(rows)).toBe(true);
   expect(new Set(rows.map((r) => r.type)).size).toBeGreaterThanOrEqual(2);
@@ -212,9 +214,14 @@ test('Themenliste: Reihenfolge passt zum Stufenwort; Englisch: Formmuster ohne d
   const { errors } = await boot(page, { migrated: true, lang: 'en' });
   await openGrammar(page);
   const levels = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
-  // 16 Themen der alten App + 7 des C1-Werkzeugkastens (Lernberatung, Vorschlag 7).
-  expect(levels.length).toBe(23);
+  // 16 Themen der alten App; die 7 des C1-Werkzeugkastens hinter dem Umschalter (P2, plan.md §1.3).
+  expect(levels.length).toBe(16);
   expect([...levels].sort((a, b) => a - b)).toEqual(levels);
+  await page.getByTestId('gr-set-c1').click();
+  const c1 = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
+  expect(c1.length).toBe(7);
+  expect([...c1].sort((a, b) => a - b)).toEqual(c1);
+  await page.getByTestId('gr-set-b2').click();
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();
   const patterns = page.getByTestId('rule-sheet').getByTestId('rule-pattern');
   await expect(patterns.first()).toBeVisible();

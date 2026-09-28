@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useLive } from '../../data/live';
 import { readRepairs, repairId, type NewRepair, type RepairItem as Repair } from '../../domain/repair/repair';
@@ -78,39 +78,45 @@ export function RepairStep({ candidates, area, source, onActive }: Props) {
         </div>
         {!end && <p className="text-sm text-muted">{t('rxStepLead')}</p>}
       </header>
-      <AnimatePresence mode="wait" initial={false}>
-        {end ? (
-          <motion.p key="end" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="text-sm text-muted" data-testid="repair-step-end" role="status">
-            {end === 'done' ? t('rxStepDone') : t('rxStepSkipped')}
-          </motion.p>
-        ) : !started ? (
-          <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
-            <Button variant="primary" icon="refresh" onClick={start} data-testid="repair-step-start">
-              {t('rxStepStart')}
-            </Button>
+      {end ? (
+        <motion.p
+          key="end"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: DURATION.base, ease: EASE_OUT }}
+          className="text-sm text-muted"
+          data-testid="repair-step-end"
+          role="status"
+        >
+          {end === 'done' ? t('rxStepDone') : t('rxStepSkipped')}
+        </motion.p>
+      ) : !started ? (
+        <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
+          <Button variant="primary" icon="refresh" onClick={start} data-testid="repair-step-start">
+            {t('rxStepStart')}
+          </Button>
+        </motion.div>
+      ) : (
+        cur && (
+          <motion.div key={cur.id} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
+            <RepairItem
+              item={cur}
+              mode="step"
+              area={area}
+              source={source}
+              status={items.length > 1 ? t('rxCount', { n: pos + 1, total: items.length }) : undefined}
+              onResult={({ ok }) => {
+                // Erst sicherstellen, dass der Satz gespeichert ist (idempotent). Direkt nach der
+                // Korrektur ist ein Treffer noch kein freier Abruf (Lernwissenschaft 27.09.): nur ein
+                // Fehler wird eingetragen, sonst bleibt der Satz in Box 0 und kommt morgen wieder.
+                void saveRepairs([cur.add]).then(() => (ok ? undefined : recordRepair(cur.id, false)));
+              }}
+              onNext={advance}
+              onSkip={advance}
+            />
           </motion.div>
-        ) : (
-          cur && (
-            <motion.div key={cur.id} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
-              <RepairItem
-                item={cur}
-                mode="step"
-                area={area}
-                source={source}
-                status={items.length > 1 ? t('rxCount', { n: pos + 1, total: items.length }) : undefined}
-                onResult={({ ok }) => {
-                  // Erst sicherstellen, dass der Satz gespeichert ist (idempotent). Direkt nach der
-                  // Korrektur ist ein Treffer noch kein freier Abruf (Lernwissenschaft 27.09.): nur ein
-                  // Fehler wird eingetragen, sonst bleibt der Satz in Box 0 und kommt morgen wieder.
-                  void saveRepairs([cur.add]).then(() => (ok ? undefined : recordRepair(cur.id, false)));
-                }}
-                onNext={advance}
-                onSkip={advance}
-              />
-            </motion.div>
-          )
-        )}
-      </AnimatePresence>
+        )
+      )}
     </section>
   );
 }
