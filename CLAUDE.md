@@ -287,6 +287,14 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - Emrah: „Kannst du nicht gleich die App programmieren? Ich will die App in 12 Stunden fertig haben!“ → Prototyp v2 gestoppt, direkter Neubau der Oberfläche (Daten-/Domänenschicht bleibt). Plan in `docs/neubau/`. Feste Grenze: Was nach 12 Stunden nicht grün ist, kommt ins nächste Paket. Erst Test-Link `AXHkh6…`, `JLL8…` nur mit „Ja, veröffentlichen“.
 - **Anki-Modus (Emrahs Wunsch, im Prototyp v1 gutgeheißen):** Im Wortschatz gibt es Aufdecken + 4 Knöpfe (Nochmal/Schwer/Gut/Leicht) mit angezeigten Intervallen und hervorgehobenem App-Vorschlag. Das ist die einzige Ausnahme von „keine Selbstbewertung“ (18:15). Im Tippen-Modus und in allen Übungen bewertet weiter die App.
 
+**28.09.2026 – Neubau live: Go-Live der kompletten neuen App (Emrahs Freigabe „Ja veröffentlichen")**
+- `dist/index.html` (Code `b130915`) liegt auf `JLL8…`, Version `1790611182-9431` (Artefakt-Version 57).
+  - Fähigkeiten `db`, `sample`, `downloads`; Vertrag bleibt 0.2.49.
+- Enthalten: der komplette Neubau (5 Reiter, Tageseinheit als Pflicht, Anki-Modus, Lesen/Hören/Schreiben, Sprechen, Claude/Übersetzer/Einstellungen überall, Paket B, Preply-Bereich entfernt, „Lehrer-Feedback einfügen" ersetzt die Preply-Brücke).
+- Geprüft: komplette Testsuite (1537/1537 Unit, 528/534 E2E; die 5 restlichen Ausreißer liefen einzeln alle grün, kein echter Fehler).
+- Rückweg: die vorherige Live-Version `1790544781-73d9` wiederherstellen.
+- Test-Link `AXHkh6…` zeigt denselben Stand (Version `1790608126-4108`).
+
 **28.09.2026 – Preply-Bereich entfällt (Emrahs Vorgabe)**
 - Der Preply-Bereich wird komplett aus der Oberfläche entfernt (Seiten, Einstiege, „Nächste Stunde“, Wochenziele, „Als Preply-Stunde“, „Mit Lehrer besprechen“, Preply-Rollen im Wochenplan). Die Daten (`preply/*`, `app/week.preplyNext`, `app/decks.flagged`) bleiben unangetastet in der Datenbank.
 - Übrig bleibt nur **„Lehrer-Feedback einfügen“**: Emrah fügt Wörter, Wendungen, Korrekturen oder Übungen aus der Stunde ein. Die App macht daraus Karteikarten (mit Ursprungssatz), Reparatur-Sätze und eine Übungsrunde in der App.
