@@ -34,17 +34,12 @@ export function TrapWatch() {
   );
 }
 
-/** Zeitbalken je Zug: läuft ab der letzten Antwort der Figur; `startKey` wechselt je Zug. */
-export function TurnTimer({ startKey, active }: { startKey: number; active: boolean }) {
+/** Zeitbalken je Zug: läuft ab der letzten Antwort der Figur (neuer `key` je Zug beim Aufrufer). */
+export function TurnTimer({ active }: { active: boolean }) {
   const { t } = useT();
   const [on, setOn] = useState(turnTimerOn);
-  const [start, setStart] = useState(() => Date.now());
+  const [start] = useState(() => Date.now());
   const [now, setNow] = useState(() => Date.now());
-  useEffect(() => {
-    const s = Date.now();
-    setStart(s);
-    setNow(s);
-  }, [startKey]);
   useEffect(() => {
     if (!on || !active) return;
     const id = window.setInterval(() => setNow(Date.now()), 500);

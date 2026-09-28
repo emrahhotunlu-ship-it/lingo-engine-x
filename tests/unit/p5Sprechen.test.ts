@@ -85,7 +85,7 @@ describe('Ziel-Checkliste (N72)', () => {
   });
 
   it('Verlauf wird gekürzt, das Ende bleibt', () => {
-    const turns = Array.from({ length: 60 }, (_, i) => ({ role: (i % 2 ? 'me' : 'persona'), text: `line ${i} `.repeat(30) }));
+    const turns: Array<{ role: 'me' | 'persona'; text: string }> = Array.from({ length: 60 }, (_, i) => ({ role: i % 2 ? 'me' : 'persona', text: `line ${i} `.repeat(30) }));
     const t = transcript(turns);
     expect(t.length).toBeLessThanOrEqual(6000);
     expect(t).toContain('line 59');

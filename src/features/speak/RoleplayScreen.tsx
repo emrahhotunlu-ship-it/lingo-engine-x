@@ -241,7 +241,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
             </Card>
           )}
 
-          {(state === 'composing' || phase !== 'other') && <TurnTimer startKey={c.turns.length} active={state === 'composing'} />}
+          {(state === 'composing' || phase !== 'other') && <TurnTimer key={c.turns.length} active={state === 'composing'} />}
           {(state === 'composing' || phase !== 'other') && (
             <Composer sceneId={scene.id} useful={scene.useful} busy={busy} restore={restore} onSend={(text, chip) => void rp.sendTurn(text, chip)} />
           )}
