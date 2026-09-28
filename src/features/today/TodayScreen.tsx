@@ -38,7 +38,6 @@ import { unlockSpeech, useSpeech } from '../../platform/speech';
 import { firstOpenDuty, useToday, type TodayView } from './state';
 import { feasibleData, healToday, retryPlan } from './store';
 import { PreplyTodayLine, usePreplyToday } from '../preply/TodayLine';
-import { LateRescueHint } from '../migration/LateRescueCard';
 import { TabTitle } from '../system/Chrome';
 import { unitRows, minutesLeft, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
@@ -585,10 +584,9 @@ export function TodayScreen() {
         </p>
       )}
 
-      {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Preply (P5), Nachtragen (P6), Speicher- und Planfehler (P1). */}
+      {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Preply (P5), Speicher- und Planfehler (P1). */}
       {ok && <MissedCheck today={today} />}
       {dayLoaded && <PreplyTodayLine />}
-      {dayLoaded && <LateRescueHint />}
       {saveFailed && (
         <div className="flex flex-wrap items-center gap-3 text-sm text-danger-text" role="alert" data-testid="save-failed">
           <span>{t('tdNotSaved')}</span>

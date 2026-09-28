@@ -350,7 +350,14 @@ export function TaskLine({ task, purpose }: { task: string; purpose: string }) {
   );
 }
 
-const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson: 'lrDutyLesson', 'ch:gram': 'drGram', 'ch:cloze': 'drCloze', 'ch:order': 'drOrder', 'ch:say': 'sayTitle' };
+const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson: 'lrDutyLesson', 'ch:gram': 'drGram', 'ch:cloze': 'drCloze', 'ch:order': 'drOrder', 'ch:say': 'sayTitle',
+  // Tageseinheit (Neubau): Pflichtpunkte `ch:u-*` heißen wie die Blöcke auf der Tageskarte.
+  'ch:u-in': 'nbHeuteBlock_input',
+  'ch:u-task': 'nbHeuteBlock_task',
+  'ch:u-focus': 'nbHeuteBlock_focus',
+  'ch:u-again': 'nbHeuteBlock_again',
+  'ch:u-check': 'nbHeuteBlock_check',
+};
 
 export function dutyLabel(id: DutyId, t: (k: MessageKey) => string): string {
   const k = DUTY_LABEL[id];
