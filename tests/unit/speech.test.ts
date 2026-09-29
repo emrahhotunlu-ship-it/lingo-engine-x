@@ -79,17 +79,27 @@ describe('pickVoice', () => {
 
   it('gespeicherte Stimme gewinnt, wenn sie englisch ist', () => {
     expect(pickVoice(list, 'Daniel')).toBe(1);
-    expect(pickVoice(list, 'Anna')).toBe(4);
-    expect(pickVoice(list, 'Unbekannt')).toBe(4);
+    expect(pickVoice(list, 'Anna')).toBe(3);
+    expect(pickVoice(list, 'Unbekannt')).toBe(3);
   });
 
-  it('Reihenfolge: Premium/Enhanced → en-US lokal → en-US → en-* → −1', () => {
-    expect(pickVoice(list)).toBe(4);
-    expect(pickVoice(list.slice(0, 4))).toBe(3);
+  it('Reihenfolge: normale lokale en-US-Stimme → en-US lokal → en-US → en-* → −1 (Befund 29.09.: Premium/Enhanced stottert, kommt erst als letzter Ausweg)', () => {
+    expect(pickVoice(list)).toBe(3);
     expect(pickVoice(list.slice(0, 3))).toBe(2);
     expect(pickVoice([voice('Anna', 'de-DE'), voice('Karen', 'en_AU')])).toBe(1);
     expect(pickVoice([voice('Anna', 'de-DE')])).toBe(-1);
     expect(pickVoice([])).toBe(-1);
+  });
+
+  it('nur Premium/Enhanced verfügbar: kommt trotzdem dran, aber erst als letzter Ausweg', () => {
+    expect(pickVoice([voice('Anna', 'de-DE'), voice('Ava (Premium)', 'en-US', false)])).toBe(1);
+  });
+
+  it('Spaß-Stimmen (Bad News, Zarvox, …) werden nie gewählt, auch nicht als gespeicherte Stimme', () => {
+    const withNovelty = [...list, voice('Zarvox', 'en-US', true), voice('Bad News', 'en-US', true)];
+    expect(pickVoice(withNovelty)).toBe(3);
+    expect(pickVoice(withNovelty, 'Zarvox')).toBe(3);
+    expect(pickVoice([voice('Anna', 'de-DE'), voice('Zarvox', 'en-US', true)])).toBe(-1);
   });
 
   it('Sprechtempo wird auf 0,8–1,1 begrenzt', () => {

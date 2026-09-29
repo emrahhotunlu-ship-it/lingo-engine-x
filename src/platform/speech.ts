@@ -88,17 +88,38 @@ const isEnglish = (v: SpeechVoiceLike): boolean => normLang(v.lang).startsWith('
 const isUS = (v: SpeechVoiceLike): boolean => normLang(v.lang) === 'en-us';
 
 /**
- * Wählt die Stimme: gespeicherte Stimme (genauer Name, englisch) → en-US „Premium"/„Enhanced"
- * → en-US lokal → en-US → irgendein en-*. Liefert den Index oder −1.
+ * iOS/macOS „Spaß"-Stimmen (Bad News, Zarvox, Whisper, Cellos, …): technisch als en-US gemeldet,
+ * aber absichtlich kaum verständlich (Roboter, Flüstern, Instrumente). Befund 29.09. (Emrahs
+ * Kommentar „die meisten vorgeschlagenen Stimmen sind gar nicht verständlich"): es gibt auf dem
+ * iPhone mehr solcher Spaß-Stimmen als brauchbare Stimmen, sie wurden bisher mitgezählt. Sie werden
+ * nirgends automatisch gewählt und stehen auch in der Stimmen-Liste der Einstellungen nicht mehr.
+ */
+const NOVELTY_VOICES = new Set(
+  ['Albert', 'Bad News', 'Bahh', 'Bells', 'Boing', 'Bubbles', 'Cellos', 'Deranged', 'Good News', 'Hysterical', 'Jester', 'Junior', 'Organ', 'Pipe Organ', 'Princess', 'Ralph', 'Superstar', 'Trinoids', 'Whisper', 'Wobble', 'Zarvox'].map((n) => n.toLowerCase()),
+);
+const isNovelty = (v: SpeechVoiceLike): boolean => NOVELTY_VOICES.has(v.name.toLowerCase());
+
+/**
+ * Wählt die Stimme: gespeicherte Stimme (genauer Name, englisch, keine Spaß-Stimme) → normale
+ * (nicht „Premium"/„Enhanced") en-US-Stimme des Geräts → irgendeine lokale en-US-Stimme → en-US
+ * → irgendein en-*. Liefert den Index oder −1.
+ *
+ * Befund 29.09. (Emrah: Audio weiterhin abgehackt, „fundamental falsche Klasse/Vorgehen"): die
+ * „Premium"/„Enhanced"-Stimmen (hochwertigere, größere Sprachmodelle) galten bisher als erste Wahl.
+ * Genau diese Stimmen sind unter der Web-Speech-API auf dem iPhone bekanntermaßen anfällig für
+ * Stottern bei schnell aufeinanderfolgenden Äußerungen (anders als über die Systemfunktionen, wo sie
+ * einwandfrei laufen) – die normale Gerätestimme (z. B. „Samantha") ist dafür gebaut und zuverlässig.
+ * Eine Premium/Enhanced-Stimme kommt jetzt nur noch zum Zug, wenn gar keine normale lokale
+ * en-US-Stimme verfügbar ist.
  */
 export function pickVoice(voices: readonly SpeechVoiceLike[], preferred?: string | null): number {
   const find = (fn: (v: SpeechVoiceLike) => boolean) => voices.findIndex(fn);
   const steps: Array<(v: SpeechVoiceLike) => boolean> = [
-    (v) => !!preferred && v.name === preferred && isEnglish(v),
-    (v) => isUS(v) && /premium|enhanced/i.test(v.name),
-    (v) => isUS(v) && v.localService,
-    isUS,
-    isEnglish,
+    (v) => !!preferred && v.name === preferred && isEnglish(v) && !isNovelty(v),
+    (v) => isUS(v) && v.localService && !isNovelty(v) && !/premium|enhanced/i.test(v.name),
+    (v) => isUS(v) && v.localService && !isNovelty(v),
+    (v) => isUS(v) && !isNovelty(v),
+    (v) => isEnglish(v) && !isNovelty(v),
   ];
   for (const step of steps) {
     const i = find(step);
@@ -176,11 +197,12 @@ let wakeTimer: ReturnType<typeof setInterval> | null = null;
 let startTimer: ReturnType<typeof setTimeout> | null = null;
 const voiceTimers: Array<ReturnType<typeof setTimeout>> = [];
 
-/** Englische Stimmen, en-US zuerst, dann nach Region und Name (Plan §7). */
+/** Englische Stimmen ohne Spaß-Stimmen, en-US zuerst, dann nach Region und Name (Plan §7). */
 export function listVoices(list: readonly SpeechVoiceLike[] = voices): VoiceInfo[] {
   const seen = new Set<string>();
   return list
     .filter(isEnglish)
+    .filter((v) => !isNovelty(v))
     .filter((v) => (seen.has(v.name) ? false : (seen.add(v.name), true)))
     .map((v) => ({ name: v.name, lang: v.lang.replace('_', '-'), local: v.localService, us: isUS(v) }))
     .sort((a, b) => Number(b.us) - Number(a.us) || a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name));

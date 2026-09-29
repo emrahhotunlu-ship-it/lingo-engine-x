@@ -46,6 +46,13 @@ describe('Stimmen', () => {
     expect(list[0]).toEqual({ name: 'Alex', lang: 'en-US', local: false, us: true });
   });
 
+  it('listVoices: iOS-Spaß-Stimmen (Zarvox, Bad News, …) tauchen nicht auf (Befund 29.09.)', () => {
+    const zarvox: SpeechVoiceLike = { name: 'Zarvox', lang: 'en-US', localService: true, default: false, voiceURI: 'z' };
+    const badNews: SpeechVoiceLike = { name: 'Bad News', lang: 'en-US', localService: true, default: false, voiceURI: 'bn' };
+    const list = listVoices([...FAKE_VOICES, zarvox, badNews]);
+    expect(list.map((v) => v.name)).toEqual(['Samantha', 'Daniel']);
+  });
+
   it('useSpeech.voices wird befüllt; Probehören spricht mit genau dieser Stimme, ohne die Wahl zu ändern', async () => {
     const fake = installFakeSpeech(win.window as object);
     initSpeech({ voice: 'Samantha' });
