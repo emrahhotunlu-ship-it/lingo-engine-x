@@ -10,13 +10,16 @@ import { undoLast, useUndo } from '../session';
 // deckte der Streifen ✕, Übersetzer, Claude und Einstellungen zu – genau die Symbole, die überall
 // erreichbar sein sollen. Jetzt ersetzt er nur den Fortschrittsbalken (`ExerciseTop.middleOverlay`,
 // dieselbe Stelle, dieselbe Höhe), ✕ und die Symbole rechts bleiben immer sichtbar und anklickbar.
+//
+// Befund 29.09. (Emrahs Kommentar „blockiert den Counter“): auch die Zahl „n / total“ ist dabei
+// verschwunden. Der Streifen zeigt sie jetzt selbst weiter an derselben Stelle (`trainer-progress`).
 
 /** `null`, solange nichts vorgemerkt ist – dann zeigt `ExerciseTop` den normalen Fortschrittsbalken. */
 export function useUndoBar(): { t: number | null; word: string } {
   return useUndo((s) => s);
 }
 
-export function UndoBar() {
+export function UndoBar({ progress, progressTestId = 'round-progress' }: { progress?: { n: number; total: number } | null; progressTestId?: string }) {
   const { t } = useT();
   const api = useHiddenInput();
   const word = useUndo((s) => s.word);
@@ -28,8 +31,13 @@ export function UndoBar() {
   };
   return (
     <div className="flex min-w-0 items-center gap-2" role="status" data-testid="undo-bar">
+      {progress && progress.total > 0 && (
+        <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
+          {Math.max(1, Math.min(progress.total, progress.n))} / {progress.total}
+        </span>
+      )}
       <span className="min-w-0 flex-1 truncate text-xs text-muted">
-        {t('nbWsUndoRated')}{' '}
+        <span className="sr-only">{t('nbWsUndoRated')} </span>
         <span lang="en" className="font-medium text-fg">
           {word}
         </span>

@@ -99,7 +99,7 @@ export function TrainerScreen() {
         progressTestId="trainer-progress"
         ctx={round === 'extra' ? 'extra' : 'duty'}
         duty="review"
-        middleOverlay={undo.t !== null ? <UndoBar /> : null}
+        middleOverlay={undo.t !== null ? <UndoBar progress={progress} progressTestId="trainer-progress" /> : null}
       />
       <motion.div
         key={status === 'summary' ? 'summary' : `step-${step}`}

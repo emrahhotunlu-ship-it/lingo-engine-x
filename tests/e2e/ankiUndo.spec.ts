@@ -28,6 +28,9 @@ test('Rückgängig: dieselbe Karte von vorn, gespeichert wird nur die neue Bewer
   await expect(page.getByTestId('open-translate')).toBeVisible();
   await expect(page.getByTestId('open-companion')).toBeVisible();
   await expect(page.getByTestId('open-settings')).toBeVisible();
+  // Befund 29.09. (Emrahs Kommentar „blockiert den Counter"): die Zahl „n / total" bleibt jetzt
+  // auch während „Rückgängig" sichtbar, statt für die 5 s zu verschwinden.
+  await expect(page.getByTestId('trainer-progress')).toContainText('2 / 4');
   await page.getByTestId('undo').click();
   await expect(page.getByTestId('undo-bar')).toHaveCount(0);
   await expect(flip).toHaveAttribute('data-card', id);
