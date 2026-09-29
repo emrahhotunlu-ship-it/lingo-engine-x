@@ -287,6 +287,16 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - Emrah: „Kannst du nicht gleich die App programmieren? Ich will die App in 12 Stunden fertig haben!“ → Prototyp v2 gestoppt, direkter Neubau der Oberfläche (Daten-/Domänenschicht bleibt). Plan in `docs/neubau/`. Feste Grenze: Was nach 12 Stunden nicht grün ist, kommt ins nächste Paket. Erst Test-Link `AXHkh6…`, `JLL8…` nur mit „Ja, veröffentlichen“.
 - **Anki-Modus (Emrahs Wunsch, im Prototyp v1 gutgeheißen):** Im Wortschatz gibt es Aufdecken + 4 Knöpfe (Nochmal/Schwer/Gut/Leicht) mit angezeigten Intervallen und hervorgehobenem App-Vorschlag. Das ist die einzige Ausnahme von „keine Selbstbewertung“ (18:15). Im Tippen-Modus und in allen Übungen bewertet weiter die App.
 
+**29.09.2026, morgens – zwei weitere Fehlerbehebungen live (Emrahs Freigabe „Ja veröffentlichen")**
+- `dist/index.html` (Code `550fd09`) liegt auf `JLL8…`, Version `1790667533-ce08` (Artefakt-Version 59).
+- Behoben:
+  - Der Zähler „n / total" verschwand während „Rückgängig" mit (UndoBar zeigt ihn jetzt selbst an derselben Stelle).
+  - Karten ohne Beispielsatz (z. B. aus der Umstellung der alten App) bekamen beim Aufdecken keinen ergänzt – Claude tut das jetzt auch dort einmalig, wie schon beim Tippen.
+  - Dabei einen eigenen Fehler beim Bauen gefunden und behoben: ein instabiler `useExamples`-Selektor (neues leeres Array je Aufruf) ließ die Karte endlos neu zeichnen (React-Fehler #185).
+- Rückweg: Version `1790618058-dad7`.
+- Beide Fixes waren auf dem Test-Link `AXHkh6…` geprüft (Version `1790666982-b9d9`), bevor sie live gingen.
+- Zusätzlich per Kommentar geklärt (keine Code-Änderung nötig): die 4 Anki-Bewertungsknöpfe und die feste Deutsch→Englisch-Richtung in der Pflicht sind bewusst so gebaut (Lernwissenschaft + Englischlehrer bestätigt, siehe Sitzungsverlauf); die wachsende Aufgabenzahl bei „Nochmal" ist ebenfalls bekanntes Verhalten, im Backlog als offener Wunsch vermerkt.
+
 **28.09.2026, abends – drei Fehlerbehebungen live (Emrahs Freigabe „Gut klappt kann live gehen")**
 - `dist/index.html` (Code `ee760c4`) liegt auf `JLL8…`, Version `1790618058-dad7` (Artefakt-Version 58).
 - Behoben seit dem Go-Live:
