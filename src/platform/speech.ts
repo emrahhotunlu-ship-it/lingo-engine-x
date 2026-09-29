@@ -6,7 +6,8 @@ import { logWarn } from './diagnostics';
 // - Stimmen kommen verzögert: getVoices() sofort und nach 250/500/1000/2000 ms, dazu `voiceschanged`.
 // - Stücke ≤ 150 Zeichen, an Satzgrenzen getrennt, nacheinander gesprochen.
 // - Nach cancel() 60 ms warten, sonst verschluckt Safari die nächste Äußerung.
-// - Wecker: alle 5 s resume(), solange gesprochen wird (gegen stilles Pausieren).
+// - Wecker: alle 5 s resume(), solange gesprochen wird (gegen Chromes stilles Pausieren) –
+//   nicht auf iPhone/iPad, dort verursacht resume() während echtem Sprechen selbst ein Stottern.
 // - unlockSpeech() synchron im ersten Klick, damit später automatisch gesprochen werden darf.
 
 /** Das, was die App von einer Stimme braucht (Teil von `SpeechSynthesisVoice`). */
@@ -260,13 +261,29 @@ export function setSpeechPrefs(p: SpeechPrefs): void {
   applyVoice();
 }
 
+/**
+ * iPhone/iPad, auch iPadOS ≥ 13 (meldet sich als „MacIntel", aber mit Touch).
+ * Befund 29.09. (Emrahs Kommentar „am Handy immer abgehackt, am Laptop nie"): der Wecker unten
+ * ist gegen Chromes stilles Pausieren nach etwa 15 s Inaktivität gedacht. Genau dieses `resume()`
+ * ist auf iOS/Safari selbst die Ursache für ein Stottern, wenn die Äußerung in Wirklichkeit gar
+ * nicht pausiert war (bekanntes WebKit-Verhalten) – bei längeren Sätzen (langsameres Tempo der
+ * Tempo-Leiter) griff der Wecker mitten im Satz. Auf iOS gibt es das Chrome-Pausieren nicht,
+ * deshalb bleibt der Wecker dort ganz aus.
+ */
+function isIOS(): boolean {
+  const n = typeof navigator === 'undefined' ? null : navigator;
+  if (!n) return false;
+  if (/iPad|iPhone|iPod/.test(n.userAgent ?? '')) return true;
+  return n.platform === 'MacIntel' && (n.maxTouchPoints ?? 0) > 1;
+}
+
 function stopWake(): void {
   if (wakeTimer !== null) clearInterval(wakeTimer);
   wakeTimer = null;
 }
 
 function startWake(e: Env): void {
-  if (wakeTimer !== null) return;
+  if (wakeTimer !== null || isIOS()) return;
   wakeTimer = setInterval(() => {
     if (e.synth.speaking) e.synth.resume();
   }, WAKE_MS);

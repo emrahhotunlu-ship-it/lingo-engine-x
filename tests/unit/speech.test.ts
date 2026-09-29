@@ -206,6 +206,30 @@ describe('Sprachausgabe mit nachgebildetem speechSynthesis', () => {
     expect(fake.events.filter((e) => e.type === 'resume')).toHaveLength(resumes);
   });
 
+  it('kein Wecker auf iPhone/iPad: resume() während echtem Sprechen stottert dort selbst (Befund 29.09.)', async () => {
+    vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15' });
+    fake = installFakeSpeech(win.window as object, { msPerChar: 200 });
+    initSpeech();
+    const p = speak('A slow voice reads this long sentence well past the five second wake timer mark.');
+    await vi.advanceTimersByTimeAsync(WAKE_MS * 3);
+    expect(fake.events.filter((e) => e.type === 'resume')).toHaveLength(0);
+    await vi.runAllTimersAsync();
+    await p;
+    vi.unstubAllGlobals();
+  });
+
+  it('iPadOS meldet sich als MacIntel mit Touch: auch dort kein Wecker', async () => {
+    vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)', platform: 'MacIntel', maxTouchPoints: 5 });
+    fake = installFakeSpeech(win.window as object, { msPerChar: 200 });
+    initSpeech();
+    const p = speak('A slow voice reads this long sentence well past the five second wake timer mark.');
+    await vi.advanceTimersByTimeAsync(WAKE_MS * 3);
+    expect(fake.events.filter((e) => e.type === 'resume')).toHaveLength(0);
+    await vi.runAllTimersAsync();
+    await p;
+    vi.unstubAllGlobals();
+  });
+
   it('unlockSpeech: eine stumme, leere Äußerung, nur einmal', () => {
     fake = installFakeSpeech(win.window as object);
     initSpeech();
