@@ -104,6 +104,14 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**29.09.2026, vormittags – Sprachausgabe am iPhone nicht mehr abgehackt live (Emrahs Freigabe „Bitte veröffentlichen")**
+- `dist/index.html` (Code `9ea0996`) liegt auf `JLL8…`, Version `1790671851-fc37` (Artefakt-Version 60).
+- Ursache: Der 5-Sekunden-Wecker gegen Chromes stilles Pausieren rief `resume()` auch dann auf, wenn auf dem iPhone in Wirklichkeit gar nicht pausiert war – genau das ist auf iOS/Safari selbst die Ursache für ein Stottern mitten im Satz (Kap. 15 „Sprachausgabe am Handy abgehackt"), besonders bei längeren Sätzen (z. B. langsameres Tempo bei der Tempo-Leiter). Am Laptop (Chrome) tritt das Problem nicht auf, deshalb war es Emrah dort nie aufgefallen.
+- Jetzt: Der Wecker läuft nur noch auf Geräten, die ihn wirklich brauchen (nicht iPhone/iPad, auch nicht iPadOS im „MacIntel"-Gewand).
+- Rückweg: Version `1790667533-ce08`.
+- Vorher auf dem Test-Link `AXHkh6…` geprüft (Version `1790668580-16be`).
+- Offen: eine zweite Rückmeldung („Gut · 1 Tag", Wort kam trotzdem noch in derselben Pflicht-Runde wieder) ist noch nicht geklärt – die „Nochmal"-Logik innerhalb der Runde greift laut Code nur bei Karten, die noch in der kurzen Lernphase sind, nicht bei einem „1 Tag"-Intervall. Ohne das genaue Wort und ohne zu wissen, ob die zweite Abfrage dieselbe Übungsart war, würde eine Behebung nur geraten sein; Emrah wurde im Kommentar-Thread danach gefragt.
+
 **26.09.2026 – Antworten auf die Phase-0-Fragen**
 1. **Datenquelle:** Nur die per Link geteilte „Sprachwerkstatt" (Vertrag 0.2.49) enthält echte Lernstände. Der private Neubau-Versuch vom 26.09. mit eigener Datenbank bleibt unberührt, es wird nichts daraus übernommen.
 2. **Serie für neue Tage:** Ein Tag zählt, wenn die **Pflicht erledigt** ist. **Ein Ruhetag pro Kalenderwoche** (Mo–So) bricht die Serie nicht. Er wird nicht angespart. Die Regel gilt ab dem ersten Tag, an dem die App die Pflicht erfasst (`pflichtSince`, Phase 1). Davor gilt die alte Regel (A6.13).
