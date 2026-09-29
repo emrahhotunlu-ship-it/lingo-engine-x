@@ -104,6 +104,11 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**29.09.2026, mittags – bei der iPhone-Sprachausgabe bleiben, kein eigener Server (Emrahs Entscheidung)**
+- Emrah hat vorgeschlagen, für bessere Sprachqualität einen externen Sprachdienst/eine Schnittstelle anzubinden. Das geht innerhalb eines Claude-Artefakts technisch nicht: die Sicherheitsregel (CSP, Kap. 3.1) blockiert jede externe Anfrage außer zu den paar erlaubten CDN-Adressen, egal mit welcher Freigabe; ein API-Schlüssel im Code wäre für jeden Besucher offen einsehbar. Ein echter externer Dienst bräuchte einen eigenen Server dazwischen – neue Architektur, eigenes Hosting, laufende Kosten, mehr Wartung.
+- Emrahs Entscheidung nach Rückfrage: **bei der eingebauten iPhone-Sprachausgabe bleiben**, kein eigener Server, keine Zusatzkosten außerhalb des Claude-Abos (Kap. 14). Kap. 3.1 („nicht verhandelbar") bleibt damit unangetastet.
+- Die verbleibende „abgehackt/maschinell"-Rückmeldung wird innerhalb dieser Grenze weiter untersucht: zwei Behebungsversuche sind bereits gemacht (Wecker-Fix, Stimmen-Vorrang weg von Premium/Enhanced); Emrahs Antworten auf die drei Diagnose-Fragen (mitten im Wort/Satz vs. nur zwischen Sätzen; andere Stimme probiert; Hörbeispiel) stehen noch aus.
+
 **29.09.2026, vormittags – Sprachausgabe am iPhone nicht mehr abgehackt live (Emrahs Freigabe „Bitte veröffentlichen")**
 - `dist/index.html` (Code `9ea0996`) liegt auf `JLL8…`, Version `1790671851-fc37` (Artefakt-Version 60).
 - Ursache: Der 5-Sekunden-Wecker gegen Chromes stilles Pausieren rief `resume()` auch dann auf, wenn auf dem iPhone in Wirklichkeit gar nicht pausiert war – genau das ist auf iOS/Safari selbst die Ursache für ein Stottern mitten im Satz (Kap. 15 „Sprachausgabe am Handy abgehackt"), besonders bei längeren Sätzen (z. B. langsameres Tempo bei der Tempo-Leiter). Am Laptop (Chrome) tritt das Problem nicht auf, deshalb war es Emrah dort nie aufgefallen.
