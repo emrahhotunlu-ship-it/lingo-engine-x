@@ -213,3 +213,21 @@ test('Kaputte Karte wird übersprungen, ohne Bewertung; die Runde endet regulär
   // B4: Die vorletzte Aufdeck-Bewertung wird erst mit der letzten festgeschrieben – daher abwarten.
   await expect.poll(async () => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => ids.includes(String(e.id)) && e.m === 'tr-flip').length).toBe(2);
 });
+
+// Befund 29.09. (Emrahs Kommentar): eine Karte ohne Beispielsatz zeigte auf der Rückseite gar
+// keinen Satz (Kap. 15: keine Karte ohne Ursprungssatz). Betrifft z. B. Karten aus der Umstellung
+// der alten App, die nie einen Satz hatten. Claude ergänzt jetzt beim Aufdecken einen Satz, genau
+// wie im Tippen-Modus (ExerciseView.tsx).
+test('Karte ohne Beispielsatz: Claude ergänzt beim Aufdecken einen Satz (einmalig, gespeichert)', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const { patch, ids } = ankiPatch(1, { ex: '', col: [] });
+  await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(1), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
+  await startReview(page);
+  const id = ids[0] ?? '';
+  await expect(page.getByTestId('flip')).toHaveAttribute('data-card', id);
+  await page.getByTestId('flip-show').click();
+  await expect(page.getByTestId('example').first()).toBeVisible();
+  await expect
+    .poll(async () => ((await dump(page))[`vocab/${id}`]?.xEx as Doc[] | undefined)?.length ?? 0)
+    .toBeGreaterThan(0);
+});

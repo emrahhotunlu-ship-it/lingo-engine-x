@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useAiAvailable } from '../../../ai/scope';
 import { useClock } from '../../../app/clock';
 import { maskOf } from '../../../domain/answer/mask';
 import { ipaOf } from '../../../domain/lexicon/pron';
 import { meaningOf } from '../../../domain/srs/cards';
 import { chunkWhy } from '../../../domain/srs/chunkCards';
 import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../../domain/srs/confidence';
-import { cardExamples } from '../../../domain/srs/examples';
+import { cardExamples, EXAMPLES_MIN, storedExamples } from '../../../domain/srs/examples';
 import { posKey } from '../../../domain/srs/explain';
 import { flipSuggest, formatInterval, seenOn, wordCount } from '../../../domain/srs/flip';
 import { previewIntervals } from '../../../domain/srs/scheduler';
@@ -24,6 +25,7 @@ import { Icon } from '../../../ui/Icon';
 import { nextT } from '../../progress/persist';
 import { useDecks } from '../decksStore';
 import { MnemonicBlock } from '../mnemonic';
+import { requestExamples, useExamples } from '../examples';
 import { commitAnswer, prepareNext, useSession, type FirstKind } from '../session';
 
 // Anki „Aufdecken“ (anki-regeln.md, architektur.md §4.1, Optik wie Prototyp v1):
@@ -35,6 +37,11 @@ import { commitAnswer, prepareNext, useSession, type FirstKind } from '../sessio
 // reserviert – Vorschau und Speichern rechnen mit demselben `t` (§4.3).
 
 const GRADE_KEY: Record<Grade, MessageKey> = { 1: 'nbWsGrade1', 2: 'nbWsGrade2', 3: 'nbWsGrade3', 4: 'nbWsGrade4' };
+
+// Feste leere Referenz statt `?? []` im Selektor: ein neues Array bei jedem Aufruf lässt
+// `useSyncExternalStore` (in zustand) denken, der Schnappschuss habe sich geändert, und rendert
+// endlos neu (React-Fehler #185, Befund beim Bauen dieser Änderung).
+const NO_EXAMPLES: readonly { en: string; t: number }[] = [];
 
 /** Denkzeit bis jetzt (außerhalb des Renderns aufgerufen). */
 function thinkMs(start: number, hidden: number): number {
@@ -51,6 +58,7 @@ function idle(fn: () => void): void {
 export function FlipCard({ exercise, again = false, onDone }: { exercise: Exercise; again?: boolean; onDone: (kind: FirstKind) => void }) {
   const { t, lang } = useT();
   const api = useHiddenInput();
+  const ai = useAiAvailable();
   const now = useClock((s) => s.now);
   const day = useSession((s) => s.day);
   const strict = useSession((s) => s.strict);
@@ -96,6 +104,9 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
     const suggest = flipSuggest({ revealMs: ms, phrase: isPhraseCard(card), frontWords: wordCount(front), seenToday: again || seenOn(card.doc, day), hidden: wasHidden.current, strict });
     const tt = nextT();
     setShown({ t: tt, ms: Math.round(ms), suggest, iv: previewIntervals(card.fsrs, tt) });
+    // Fehlt der Rückseite ein Beispielsatz (Befund 29.09.: Karte ohne Ursprungssatz, Kap. 15),
+    // ergänzt Claude ihn einmal je Karte – genau wie beim Tippen (ExerciseView.tsx).
+    if (ai && storedExamples(card.doc).length === 0 && cardExamples(card, card.context?.sentence ?? null).length < EXAMPLES_MIN) requestExamples(card);
     idle(prepareNext);
   };
 
@@ -185,7 +196,8 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const pk = posKey(card.pos);
   const ipa = shown ? ipaOf(card.word) : null;
   const why = chunkWhy(card, lang);
-  const examples = shown ? cardExamples(card, ctx?.sentence ?? null) : [];
+  const freshEntry = useExamples((s) => s.byCard[card.id]);
+  const examples = shown ? cardExamples(card, ctx?.sentence ?? null, freshEntry?.items ?? NO_EXAMPLES) : [];
   const col = card.col.filter((c) => c.p).slice(0, 3);
 
   return (
