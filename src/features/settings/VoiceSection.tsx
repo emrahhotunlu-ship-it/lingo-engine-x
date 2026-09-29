@@ -31,7 +31,10 @@ async function saveProfile(patch: Record<string, unknown>, rollback: () => void,
 export function VoiceSection() {
   const { t } = useT();
   const status = useSpeech((s) => s.status);
-  const voices = useSpeech((s) => s.voices ?? []);
+  // Nur en-US zur Wahl (A7.3, Befund 29.09.: „weiterhin komplett nutzlose Stimmen" – gemeint waren
+  // andere Englisch-Varianten wie en-GB/-IN/-AU). Das Hör-Meeting nutzt weiterhin alle Akzente
+  // (`useSpeech().voices` bleibt unangetastet, siehe `dialogVoices.ts`).
+  const voices = useSpeech((s) => s.voices ?? []).filter((v) => v.us);
   const current = useSpeech((s) => s.voiceName);
   const profile = useLive((s) => s.docs['app/profile']);
   const savedRate = clampRate(typeof profile?.rate === 'number' ? profile.rate : 1);

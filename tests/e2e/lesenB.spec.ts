@@ -53,8 +53,8 @@ test.describe('Lesen & Hören, Paket B', () => {
     await page.getByTestId('lib-dialog').click();
     await screen(page, 'listenDialog');
     await expect(page.getByTestId('dialog-speaker')).toHaveCount(3);
-    // Nachgebildete Stimmen: Samantha (en-US) und Daniel (en-GB) → zwei Stimmen, Rückfall für die dritte Person.
-    await expect(page.getByTestId('dialog-speakers')).toHaveAttribute('data-voices', '2');
+    // Nachgebildete Stimmen: Samantha und Zoe (en-US) und Daniel (en-GB) → drei eigene Stimmen.
+    await expect(page.getByTestId('dialog-speakers')).toHaveAttribute('data-voices', '3');
     await expect(page.locator('[data-testid="dialog-speaker"][data-accent="gb"]')).toHaveAttribute('data-voice', 'Daniel');
     // Kein Text vor dem Hören.
     await expect(page.getByTestId('dialog-transcript')).toHaveCount(0);

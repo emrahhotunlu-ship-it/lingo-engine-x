@@ -197,7 +197,13 @@ let wakeTimer: ReturnType<typeof setInterval> | null = null;
 let startTimer: ReturnType<typeof setTimeout> | null = null;
 const voiceTimers: Array<ReturnType<typeof setTimeout>> = [];
 
-/** Englische Stimmen ohne Spaß-Stimmen, en-US zuerst, dann nach Region und Name (Plan §7). */
+/**
+ * Englische Stimmen ohne Spaß-Stimmen, en-US zuerst, dann nach Region und Name (Plan §7).
+ *
+ * Liefert bewusst alle englischen Sprachvarianten (auch en-GB/-IN/-AU): das Hör-Meeting
+ * (`dialogVoices.ts`) braucht sie für passende Sprecher-Akzente. Die Stimmen-Auswahl in den
+ * Einstellungen (nur en-US, A7.3) filtert selbst weiter (`VoiceSection.tsx`).
+ */
 export function listVoices(list: readonly SpeechVoiceLike[] = voices): VoiceInfo[] {
   const seen = new Set<string>();
   return list

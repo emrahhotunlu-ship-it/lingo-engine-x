@@ -27,7 +27,7 @@ test('Einstellungen: englische Stimmen, Probehören, Tempo wird in app/profile.r
   await page.getByTestId('voice-preview').nth(1).click();
   await expect.poll(() => spoken(page)).toContain('This is how I sound.');
   await list.getByRole('radio').nth(1).click();
-  await expect.poll(async () => ((await dump(page))['app/profile'] as Doc).voice).toBe('Daniel');
+  await expect.poll(async () => ((await dump(page))['app/profile'] as Doc).voice).toBe('Zoe');
   const rate = page.getByTestId('voice-rate');
   await rate.focus();
   await page.keyboard.press('ArrowLeft');
