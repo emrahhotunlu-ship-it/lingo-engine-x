@@ -21,7 +21,7 @@ test('Einstellungen: englische Stimmen, Probehören, Tempo wird in app/profile.r
   await screen(page, 'today');
   await openSettings(page);
   const list = page.getByTestId('voice-select');
-  await expect(list.getByRole('radio')).toHaveCount(2);
+  await expect(list.getByRole('radio')).toHaveCount(3);
   await expect(list.getByRole('radio').first()).toContainText('Samantha');
   await expect(list).not.toContainText('Anna');
   await page.getByTestId('voice-preview').nth(1).click();
