@@ -95,11 +95,20 @@ describe('pickVoice', () => {
     expect(pickVoice([voice('Anna', 'de-DE'), voice('Ava (Premium)', 'en-US', false)])).toBe(1);
   });
 
-  it('Spaß-Stimmen (Bad News, Zarvox, …) werden nie gewählt, auch nicht als gespeicherte Stimme', () => {
-    const withNovelty = [...list, voice('Zarvox', 'en-US', true), voice('Bad News', 'en-US', true)];
+  it('Spaß-Stimmen (Bad News, Zarvox, Fred, Kathy, Monster, …) werden nie gewählt, auch nicht als gespeicherte Stimme', () => {
+    const withNovelty = [...list, voice('Zarvox', 'en-US', true), voice('Bad News', 'en-US', true), voice('Fred', 'en-US', true), voice('Kathy', 'en-US', true), voice('Monster', 'en-US', true)];
     expect(pickVoice(withNovelty)).toBe(3);
     expect(pickVoice(withNovelty, 'Zarvox')).toBe(3);
     expect(pickVoice([voice('Anna', 'de-DE'), voice('Zarvox', 'en-US', true)])).toBe(-1);
+  });
+
+  it('Spaß-Stimmen mit übersetztem Anzeigenamen (Gerät auf Deutsch, Befund 30.09.): erkannt über `name` oder über die unübersetzte `voiceURI`', () => {
+    const germanNamed: SpeechVoiceLike = { name: 'Schlechte Neuigkeiten', lang: 'en-US', localService: true, default: false, voiceURI: 'com.apple.voice.compact.de-DE.Schlechte-Neuigkeiten' };
+    const englishUri: SpeechVoiceLike = { name: 'Bubble Voice', lang: 'en-US', localService: true, default: false, voiceURI: 'com.apple.voice.compact.en-US.Bubbles' };
+    expect(pickVoice([...list, germanNamed])).toBe(3);
+    expect(pickVoice([...list, englishUri])).toBe(3);
+    expect(pickVoice([voice('Anna', 'de-DE'), germanNamed])).toBe(-1);
+    expect(pickVoice([voice('Anna', 'de-DE'), englishUri])).toBe(-1);
   });
 
   it('Sprechtempo wird auf 0,8–1,1 begrenzt', () => {

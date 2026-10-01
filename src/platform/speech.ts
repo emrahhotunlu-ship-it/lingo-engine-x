@@ -91,13 +91,56 @@ const isUS = (v: SpeechVoiceLike): boolean => normLang(v.lang) === 'en-us';
  * iOS/macOS „Spaß"-Stimmen (Bad News, Zarvox, Whisper, Cellos, …): technisch als en-US gemeldet,
  * aber absichtlich kaum verständlich (Roboter, Flüstern, Instrumente). Befund 29.09. (Emrahs
  * Kommentar „die meisten vorgeschlagenen Stimmen sind gar nicht verständlich"): es gibt auf dem
- * iPhone mehr solcher Spaß-Stimmen als brauchbare Stimmen, sie wurden bisher mitgezählt. Sie werden
- * nirgends automatisch gewählt und stehen auch in der Stimmen-Liste der Einstellungen nicht mehr.
+ * iPhone mehr solcher Spaß-Stimmen als brauchbare Stimmen, sie wurden bisher mitgezählt.
+ *
+ * Befund 30.09. (Screenshot, Emrahs iPhone auf Deutsch): Der erste Versuch griff nicht, weil Apple
+ * den angezeigten Namen je nach Gerätesprache übersetzt – „Bad News" zeigt sich dort als
+ * „Schlechte Neuigkeiten", „Bubbles" als „Seifenblasen" usw. Nur `name` ist übersetzt, `voiceURI`
+ * (die interne Kennung) bleibt englisch – deshalb zählt unten zusätzlich ein Treffer in der
+ * `voiceURI`, sprachunabhängig. Dabei fehlten auch drei echte Spaß-Stimmen in der ersten Liste
+ * (Fred, Kathy/„Katrin", Monster), die jetzt ergänzt sind.
  */
-const NOVELTY_VOICES = new Set(
-  ['Albert', 'Bad News', 'Bahh', 'Bells', 'Boing', 'Bubbles', 'Cellos', 'Deranged', 'Good News', 'Hysterical', 'Jester', 'Junior', 'Organ', 'Pipe Organ', 'Princess', 'Ralph', 'Superstar', 'Trinoids', 'Whisper', 'Wobble', 'Zarvox'].map((n) => n.toLowerCase()),
-);
-const isNovelty = (v: SpeechVoiceLike): boolean => NOVELTY_VOICES.has(v.name.toLowerCase());
+const NOVELTY_NAMES = [
+  'Albert',
+  'Bad News',
+  'Bahh',
+  'Bells',
+  'Boing',
+  'Bubbles',
+  'Cellos',
+  'Deranged',
+  'Fred',
+  'Good News',
+  'Hysterical',
+  'Jester',
+  'Junior',
+  'Kathy',
+  'Monster',
+  'Organ',
+  'Pipe Organ',
+  'Princess',
+  'Ralph',
+  'Superstar',
+  'Trinoids',
+  'Whisper',
+  'Wobble',
+  'Zarvox',
+  // deutsche Anzeigenamen (Emrahs Gerät, A6.5 „Emrah ist der einzige Nutzer")
+  'Flüstern',
+  'Glocken',
+  'Gute Neuigkeiten',
+  'Katrin',
+  'Orgel',
+  'Schlechte Neuigkeiten',
+  'Seifenblasen',
+];
+const normalizeId = (s: string) => s.toLowerCase().replace(/[^a-z]/g, '');
+const NOVELTY_IDS = [...new Set(NOVELTY_NAMES.map(normalizeId))];
+const isNovelty = (v: SpeechVoiceLike): boolean => {
+  if (NOVELTY_IDS.includes(normalizeId(v.name))) return true;
+  const uri = normalizeId(v.voiceURI ?? '');
+  return uri.length > 0 && NOVELTY_IDS.some((id) => id.length >= 4 && uri.includes(id));
+};
 
 /**
  * Wählt die Stimme: gespeicherte Stimme (genauer Name, englisch, keine Spaß-Stimme) → normale
