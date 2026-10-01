@@ -15,7 +15,8 @@ import { TodayCompareRow } from '../features/progress/compare/CompareView';
 // Bereich „Profil, Stand & Claude“ – Besitz: Paket P6 (docs/neubau/plan.md §4.7).
 // - Profil-Blatt (Platz `profile`): Kopf · Stand › · Tests › · Wochenbericht › · Einstellungen ›
 //   · Nachtragen (nur wenn nötig). Den Blatt-Host zeichnet der Rahmen (WP0b).
-// - Seite „Dein Stand“ (`overview`) mit fünf Reitern; „Statistik“ trägt den Platz `stand`.
+// - „Dein Stand“ (`overview`) ist der Reiter „Fortschritt“ in der Leiste, mit fünf inneren Reitern;
+//   „Statistik“ trägt den Platz `stand`.
 // - Seiten `checks` (Wochen-Check) und `weekly` (Wochenbericht), Übung `vtest` (fortsetzbar).
 // - Ruhige Zeilen auf Heute: Nachtragen, Wochenbericht (montags).
 
@@ -38,12 +39,13 @@ function OverviewPage() {
 export const profil = defineArea({
   id: 'profil',
   screens: {
+    // Reiter-Wurzel „Fortschritt“ (Emrahs Wunsch 01.10.2026): der Kopf kommt vom Rahmen (Profil-Knopf,
+    // Übersetzen, Claude, Zahnrad), den großen Titel zeichnet die Seite selbst.
     overview: {
-      kind: 'page',
+      kind: 'tab',
       component: OverviewPage,
       title: 'ovTitle',
       keepScroll: true,
-      chrome: 'shell',
       params: z.object({ tab: z.enum(['judge', 'errors', 'path', 'stats', 'history']).optional() }),
     },
     checks: { kind: 'page', component: ChecksPage, title: 'ckTitle', keepScroll: true, chrome: 'shell' },

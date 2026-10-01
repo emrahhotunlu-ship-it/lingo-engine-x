@@ -7,6 +7,7 @@ export const nbShDe = {
   nbShTabRead: 'Lesen',
   nbShTabSpeak: 'Sprechen',
   nbShTabLearn: 'Üben',
+  nbShTabProgress: 'Fortschritt',
   nbShProfile: 'Profil und Stand',
   nbShReviewSub: 'Deine fälligen Karten',
   nbShFbOk: 'Richtig',

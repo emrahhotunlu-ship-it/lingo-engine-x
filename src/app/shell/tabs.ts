@@ -27,7 +27,9 @@ export type TabDef = {
   readonly badge?: BadgeId;
 };
 
-// Fünf Reiter (docs/neubau/plan.md §1.1): Heute · Wortschatz · Üben · Lesen · Sprechen.
+// Sechs Reiter: Heute · Wortschatz · Üben · Lesen · Sprechen (docs/neubau/plan.md §1.1) und, seit
+// Emrahs Wunsch vom 01.10.2026 („Fortschritt ist zu versteckt“), Fortschritt = die Seite „Dein Stand“
+// (Route `overview`), die vorher nur über das Profil-Blatt erreichbar war.
 // Die Test-IDs `tab-learn`, `learn-hub` und `hub-*` bleiben.
 export const TABS = [
   { id: 'today', label: 'nbShTabToday', icon: 'sun', root: { name: 'today' }, places: ['today'], badge: 'openDuties' },
@@ -35,6 +37,7 @@ export const TABS = [
   { id: 'learn', label: 'nbShTabLearn', icon: 'layers', root: { name: 'learn' }, places: ['learn'] },
   { id: 'read', label: 'nbShTabRead', icon: 'book', root: { name: 'library' }, places: ['read'] },
   { id: 'speak', label: 'nbShTabSpeak', icon: 'chat', root: { name: 'speak' }, places: ['speak', 'write'] },
+  { id: 'progress', label: 'nbShTabProgress', icon: 'chart', root: { name: 'overview' }, places: [] },
 ] as const satisfies readonly TabDef[];
 
 export type TabId = (typeof TABS)[number]['id'];

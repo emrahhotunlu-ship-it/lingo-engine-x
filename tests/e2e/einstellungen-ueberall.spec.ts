@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openOverview, openTab, screen, tabRoot } from './fixtures';
+import { boot, openProfile, openTab, screen, tabRoot } from './fixtures';
 import { answerCurrent, forcedPatch, planPatch } from './trainerHelpers';
 
 // Emrahs Fehlermeldung am iPhone „Einstellungen nicht überall“ (CLAUDE.md A7, Paket 2):
@@ -23,7 +23,7 @@ async function openAndClose(page: Page, scope: string): Promise<void> {
 test('Einstellungen aus jeder Reiter-Seite und von einer Seite mit einem Tipp', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  for (const id of ['today', 'vocab', 'learn', 'read', 'speak'] as const) {
+  for (const id of ['today', 'vocab', 'learn', 'read', 'speak', 'progress'] as const) {
     await openTab(page, id);
     // Kopf: Übersetzen · Claude · Zahnrad.
     const top = page.getByTestId('topbar');
@@ -32,9 +32,14 @@ test('Einstellungen aus jeder Reiter-Seite und von einer Seite mit einem Tipp', 
     await openAndClose(page, 'topbar');
     await screen(page, tabRoot(id));
   }
-  await openOverview(page);
+  // Von einer Seite (nicht Reiter-Wurzel): der Wochenbericht aus dem Profil-Blatt.
+  await openTab(page, 'today');
+  await openProfile(page);
+  await page.getByTestId('profile-weekly').click();
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
+  await screen(page, 'weekly');
   await openAndClose(page, 'page-bar');
-  await screen(page, 'overview');
+  await screen(page, 'weekly');
   expect(errors).toEqual([]);
 });
 

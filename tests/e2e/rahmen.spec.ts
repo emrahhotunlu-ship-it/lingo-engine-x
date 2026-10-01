@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, crashOnce, layoutProblems, openOverview, openProfile, openTab, screen, type Lang, type Theme } from './fixtures';
+import { boot, crashOnce, layoutProblems, openProfile, openTab, screen, type Lang, type Theme } from './fixtures';
 import { openProfileRow } from './profilHelpers';
 
 // Neubau WP0b – Rahmen (docs/neubau/plan.md §4.1, architektur.md §5.5): Einstieg, Rückweg zur
@@ -26,9 +26,9 @@ test('Einstieg: Kopf wie v1 (Profil + Serie links, Übersetzen + Claude rechts),
   // Genau ein Claude-Knopf auf der Wurzel (die Seite zeichnet keinen zweiten).
   await expect(page.getByTestId('open-companion')).toHaveCount(1);
   const tabs = page.getByTestId('tabbar').locator('button');
-  await expect(tabs).toHaveCount(5);
+  await expect(tabs).toHaveCount(6);
   for (const b of await tabs.all()) expect((await b.boundingBox())?.height ?? 99).toBeLessThan(64);
-  for (const id of ['vocab', 'learn', 'read', 'speak', 'today'] as const) {
+  for (const id of ['vocab', 'learn', 'read', 'speak', 'progress', 'today'] as const) {
     await openTab(page, id);
     await expect(page.getByTestId('topbar')).toBeVisible();
     expect(await layoutProblems(page), id).toEqual([]);
@@ -46,10 +46,11 @@ test('Einstieg: Kopf wie v1 (Profil + Serie links, Übersetzen + Claude rechts),
 test('Rückweg zur Herkunft: Seite „‹ Heute“, Übung ✕ zurück zur Herkunft, Bildlauf bleibt; aktiver Reiter → Wurzel', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await openOverview(page);
-  await expect(page.getByTestId('page-back')).toContainText('Heute');
+  await page.getByTestId('today-theme').click();
+  await screen(page, 'week');
+  await expect(page.getByTestId('back').first()).toContainText('Heute');
   await expect(page.getByTestId('tabbar')).toBeVisible();
-  await page.getByTestId('page-back').click();
+  await page.getByTestId('back').first().click();
   await screen(page, 'today');
   // Übung (aus dem Profil-Blatt): keine Reiterleiste, ✕ führt zurück zur Herkunft.
   await openVtest(page);

@@ -21,7 +21,7 @@ const AREAS: AreaDef[] = [
       learn: { kind: 'tab', component: Empty },
       grammar: { kind: 'page', component: Empty },
       course: { kind: 'page', component: Empty },
-      overview: { kind: 'page', component: Empty, params: z.object({ tab: z.enum(['judge', 'errors', 'path', 'history']).optional() }) },
+      overview: { kind: 'tab', component: Empty, params: z.object({ tab: z.enum(['judge', 'errors', 'path', 'history']).optional() }) },
       lesson: { kind: 'exercise', component: Empty, params: z.object({ id: z.string().min(1) }) },
       trainer: { kind: 'exercise', component: Empty, params: z.object({ round: z.enum(['pflicht', 'extra']) }) },
       roleplay: { kind: 'exercise', component: Empty, params: z.object({ sceneId: z.string(), resume: z.boolean().optional(), n: z.number().optional() }) },
@@ -37,8 +37,9 @@ const top = (c: Core): Route => c.overlay?.route ?? (c.stacks[c.tab].at(-1) as R
 beforeAll(() => installAreas(AREAS));
 
 describe('Register', () => {
-  it('fünf Reiter mit Wurzeln; `learn` bleibt die Test-ID von „Üben“', () => {
-    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'read', 'speak']);
+  it('sechs Reiter mit Wurzeln (zuletzt „Fortschritt“ = Dein Stand); `learn` bleibt die Test-ID von „Üben“', () => {
+    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'read', 'speak', 'progress']);
+    expect(TABS.find((t) => t.id === 'progress')?.root.name).toBe('overview');
   });
 
   it('kennt Ebenen und wirft bei doppelten Bildschirmen', () => {
@@ -51,6 +52,13 @@ describe('Register', () => {
 
   it('jede Reiter-Wurzel ist ein Reiter-Bildschirm', () => {
     for (const t of TABS) expect(kindOf(t.root.name), t.id).toBe('tab');
+  });
+
+  it('„Dein Stand“ (overview) wechselt zum Reiter Fortschritt, statt als Seite auf den aktiven Reiter zu kommen', () => {
+    const c = navigate(start(), { name: 'overview', tab: 'history' });
+    expect(c.tab).toBe('progress');
+    expect(c.stacks.progress).toEqual([{ name: 'overview', tab: 'history' }]);
+    expect(c.stacks.today.map((r) => r.name)).toEqual(['today']);
   });
 });
 
@@ -97,9 +105,9 @@ describe('Router: Reiter-Stapel und Übungsebene', () => {
   });
 
   it('andere Reiter behalten ihren Stapel; auf der Wurzel tut back() nichts', () => {
-    let c = navigate(start(), { name: 'overview' });
+    let c = navigate(start(), { name: 'grammar' });
     c = navigate(c, { name: 'vocab' });
-    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'overview']);
+    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'grammar']);
     expect(goBack(c)).toBe(c);
   });
 });
