@@ -104,6 +104,13 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**01.10.2026 – Handy-Modus, Reiter „Fortschritt“, Stimmenliste live (Emrahs Freigabe „Ja live nehmen“)**
+- `dist/index.html` (Code `22584e6`, dist `b7af3ec`) liegt auf `JLL8…`, Version `1790880701-ce75` (Artefakt-Version 61). Rückweg: Version `1790671851-fc37`.
+- **Handy-Modus** (automatisch: Touch + kurze Bildschirmseite < 500 px; Schalter „Am Handy“ in den Einstellungen, je Gerät): Die Aufgabe des Tages (Block 3, außer Wochen-Check) und das Nachsprechen sind am Handy nicht Pflicht. Nur eine Ansicht (`domain/plan/phone`): der gespeicherte Plan bleibt, Zähler, Zeilen und `pflichtFor` lesen dieselbe Liste, die Serie reißt nicht. Am Laptop volle Liste.
+- **Fortschritt** als eigener sechster Reiter unten. **Stimmenliste:** Spaß-Stimmen (auch deutsch benannte) ausgeblendet, einfache lokale en-US-Stimmen zuerst, Wecker nicht auf iOS.
+- Datenbank: keine Schemaänderung, nichts migriert; `phoneMode` liegt nur in `localStorage`. Live-Version vor dem Veröffentlichen erneut gelesen (unverändert).
+- Offen: iPhone-Audio weiter robotisch (Plattformgrenze, A7 29.09.), „Gut · 1 Tag“-Wiederkehr, „Anzeige Fehler“.
+
 **29.09.2026, mittags – bei der iPhone-Sprachausgabe bleiben, kein eigener Server (Emrahs Entscheidung)**
 - Emrah hat vorgeschlagen, für bessere Sprachqualität einen externen Sprachdienst/eine Schnittstelle anzubinden. Das geht innerhalb eines Claude-Artefakts technisch nicht: die Sicherheitsregel (CSP, Kap. 3.1) blockiert jede externe Anfrage außer zu den paar erlaubten CDN-Adressen, egal mit welcher Freigabe; ein API-Schlüssel im Code wäre für jeden Besucher offen einsehbar. Ein echter externer Dienst bräuchte einen eigenen Server dazwischen – neue Architektur, eigenes Hosting, laufende Kosten, mehr Wartung.
 - Emrahs Entscheidung nach Rückfrage: **bei der eingebauten iPhone-Sprachausgabe bleiben**, kein eigener Server, keine Zusatzkosten außerhalb des Claude-Abos (Kap. 14). Kap. 3.1 („nicht verhandelbar") bleibt damit unangetastet.
