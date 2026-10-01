@@ -1,4 +1,4 @@
-import type { UnitBlockKind, WeekTargets, WeekTheme } from '../../domain/week/types';
+import type { UnitBlockKind, UnitEnv, WeekTargets, WeekTheme } from '../../domain/week/types';
 import type { Fix } from '../../ui/feedback/types';
 import type { Route } from '../router/types';
 
@@ -43,7 +43,7 @@ export type UnitCtx = {
 export type UnitBlockProvider = {
   kind: UnitBlockKind;
   /** Rückfälle entscheidet P1 beim Blockstart mit `resolveBlock(block, env)` (domain/week, M5). */
-  feasible(env: { ai: boolean; tts: boolean }): boolean;
+  feasible(env: UnitEnv): boolean;
   /** SYNCHRON im Klick (iPhone-Tastatur): Sitzung bauen und Ziel liefern; `false` = nicht startbar. */
   start(ctx: UnitCtx): Route | false;
 };

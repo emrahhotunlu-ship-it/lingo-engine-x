@@ -168,6 +168,9 @@ for (const theme of THEMES) {
       };
       await screen(page, 'today');
       await expect(page.getByTestId('late-rescue-hint')).toBeVisible();
+      // Die Tageskarte blendet Zähler und Zeilen noch ein, wenn der Hinweis schon steht: erst ruhen lassen,
+      // sonst misst axe den Kontrast mitten im Übergang (sporadisch rot, auch ohne Codeänderung).
+      await page.waitForTimeout(400);
       await scan('heute');
       // Der Wochen-Check startet (Neubau) über Profil → „Wochen-Check“, nicht mehr auf Heute.
       await openChecks(page);

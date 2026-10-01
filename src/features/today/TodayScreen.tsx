@@ -19,6 +19,7 @@ import { invalidIdsOf } from '../../data/live';
 import { dayKeyNoon, legacyDayKey, addDays } from '../../domain/date';
 import { dutyChannelMinutes, dutyMinutes } from '../../domain/plan/buildPlan';
 import { feasible, rankChannels } from '../../domain/plan/channels';
+import { hiddenDuties } from '../../domain/plan/phone';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
 import type { Lang } from '../../app/settings';
@@ -41,7 +42,7 @@ import { TabTitle } from '../system/Chrome';
 import { unitRows, minutesLeft, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import { unitPlanFor } from '../../domain/week';
-import type { UnitBlock } from '../../domain/week/types';
+import type { UnitBlock, UnitPlan } from '../../domain/week/types';
 import { assessPlanInput } from '../../domain/assessment/planInput';
 import { dueErrors } from '../../domain/grammar/errors';
 import { dueCards } from '../../domain/srs/queue';
@@ -438,6 +439,26 @@ function WorthNow({ today, lang }: { today: string; lang: Lang }) {
   );
 }
 
+/**
+ * Handy-Modus (Emrah 01.10.2026): Eine ruhige Zeile sagt, was am Handy nicht Pflicht ist (Zustand, kein
+ * Knopf, Kap. 2.2). Gleiche Texte wie die Tageskarte (`blockName`/`blockWhy`).
+ */
+function PhoneHint({ plan, up }: { plan: StoredPlan; up: UnitPlan | null }) {
+  const { t } = useT();
+  const hidden = hiddenDuties(plan);
+  if (!up || !hidden.length) return null;
+  const names = hidden
+    .map((id) => up.blocks.find((b) => b.channel === id))
+    .filter((b): b is UnitBlock => !!b)
+    .map((b) => `${blockName(b.kind, b.block, t)} (${blockWhy(b, t)})`);
+  if (!names.length) return null;
+  return (
+    <p className="text-xs text-subtle" data-testid="today-phone-hint">
+      {t('nbHeutePhoneHint', { block: names.join(', ') })}
+    </p>
+  );
+}
+
 /** S5: Ein verpasster Wochen-Check erscheint am Montag als ruhige Extra-Zeile (zählt nie zur Pflicht). */
 function MissedCheck({ today }: { today: string }) {
   const { t } = useT();
@@ -581,6 +602,8 @@ export function TodayScreen() {
           {t('nbHeuteLegacy')}
         </p>
       )}
+
+      {ok && unit && <PhoneHint plan={unit} up={up} />}
 
       {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Speicher- und Planfehler (P1). */}
       {ok && <MissedCheck today={today} />}

@@ -15,7 +15,8 @@ const lang = () => useSettings.getState().lang;
 export const P7_UNIT_BLOCKS: readonly UnitBlockProvider[] = [
   {
     kind: 'pron.shadow',
-    feasible: (env) => env.tts,
+    // Am Handy entfällt das Nachsprechen (Emrah 01.10.2026): der Block zählt dann nach dem Input.
+    feasible: (env) => env.tts && !env.phone,
     start: (ctx: UnitCtx) => {
       // Quellen: Sätze aus Block 2, sonst Themen-Text der Woche, sonst die Wendungen der Woche.
       const phrases = ctx.phrases?.length ? ctx.phrases : ctx.targets.phrases;

@@ -22,7 +22,8 @@ export type UnitBlockKind =
   | 'focus.colloc'
   | 'again';
 
-export type UnitEnv = { ai: boolean; tts: boolean };
+/** `phone`: Handy-Ansicht gilt (Emrah 01.10.2026) – Nachsprechen und Sprech-/Schreibaufgaben entfallen. */
+export type UnitEnv = { ai: boolean; tts: boolean; phone?: boolean };
 
 /** Quelle des Inputs in Block 2 (Prüfung M7) bzw. des Nachsprechens. */
 export type InputSrc =

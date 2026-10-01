@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { useClock } from '../../app/clock';
+import { useSettings } from '../../app/settings';
 import { useLive } from '../../data/live';
 import { deriveToday, mergeEntries, type DayEntry } from '../../domain/plan/buildPlan';
 import type { DutyId, StoredPlan, TodayState } from '../../domain/plan/types';
@@ -7,6 +8,7 @@ import type { Ctx, DutyChannel } from '../../domain/learn/types';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import { usePending } from '../progress/persist';
 import { useUnitRun } from '../unit/runStore';
+import { viewPlan } from './device';
 import { useUnitMarks } from './marks';
 import { useTodayPlan } from './store';
 
@@ -68,7 +70,7 @@ export function computeToday(day: string): TodayState {
   const live = useLive.getState();
   return derive({
     day,
-    plan: p.day === day ? p.plan : null,
+    plan: viewPlan(p.day === day ? p.plan : null),
     exhausted: p.exhausted === day,
     profile: live.docs['app/profile'],
     course: live.docs['app/course'],
@@ -131,7 +133,8 @@ function readInputs(): Inputs {
   const pend = usePending.getState();
   return {
     today,
-    plan: p.day === today ? p.plan : null,
+    // Handy-Ansicht (Emrah 01.10.2026): am Handy ohne die Aufgabe des Tages; sonst der Plan wie gespeichert.
+    plan: viewPlan(p.day === today ? p.plan : null),
     planStatus: p.day === today ? p.status : 'idle',
     exhausted: p.exhausted === today,
     profile: live.docs['app/profile'],
@@ -205,6 +208,8 @@ function install(): void {
   useLive.subscribe(refresh);
   usePending.subscribe(refresh);
   useUnitMarks.subscribe(refresh);
+  // Schalter „Am Handy …“ in den Einstellungen: die Ansicht sofort nachziehen (ohne Wirkung bei Sprache/Thema).
+  useSettings.subscribe(refresh);
 }
 
 /** Stand von „Heute" als Hook – nur mit Selektor (ohne Selektor: der ganze, stabile Stand). */

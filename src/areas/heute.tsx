@@ -8,6 +8,7 @@ import { placesOf } from '../app/shell/tabs';
 import { setUnitDoneHandler } from '../app/unit/done';
 import { CheckScreen } from '../features/check/CheckScreen';
 import { checkResumable, ensureCheck } from '../features/check/resume';
+import { PhoneModeSection } from '../features/settings/PhoneModeSection';
 import { TodayScreen } from '../features/today/TodayScreen';
 import { todayNow, useToday } from '../features/today/state';
 import { UnitCardScreen } from '../features/unit/UnitCard';
@@ -106,6 +107,7 @@ export const heute = defineArea({
     unitStep: { kind: 'exercise', component: UnitStepScreen, title: 'nbHeuteUnit', params: z.object({ step: z.enum(['input', 'again', 'check']), block: z.coerce.number().int().min(1).max(5) }) },
   },
   entries: [{ id: 'hub-week', place: 'learn', group: 'path', order: 5, label: 'nbHeuteWeekEntry', sub: 'nbHeuteWeekEntrySub', icon: 'target', route: { name: 'week' } }],
+  settings: [{ id: 'phone-mode', group: 'learn', order: 20, component: PhoneModeSection }],
   badge: { id: 'openDuties', use: useOpenDuties },
   playerNote: { use: useUnitNote },
   resumables: [unitResumable, checkResumable],

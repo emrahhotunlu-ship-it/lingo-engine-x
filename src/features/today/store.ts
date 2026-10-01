@@ -26,6 +26,7 @@ import { mergedVocab } from '../../domain/overview';
 import { ensurePflichtSince, healPflicht, runDailyIntake } from '../progress/dayJobs';
 import { setPflichtResolver, tabId, usePending } from '../progress/persist';
 import { loadLearnInputs, recentLessonLines, setDailyOpen, useLearnInputs } from '../learn/inputs';
+import { viewPlan } from './device';
 import { computeDayWith } from './state';
 import type { DayEntry } from '../../domain/plan/buildPlan';
 import { normGoalMin } from '../../domain/progress/settings';
@@ -112,11 +113,15 @@ useLive.subscribe((s) => {
   if (d?.key && d.doc && Array.isArray(d.doc.entries) && dayMemo.get(d.key)?.entries !== d.doc.entries) remember(d.key, { entries: d.doc.entries as DayEntry[] });
 });
 
-/** Plan eines Lerntags: aktueller Plan, gemerkter Plan oder `app/profile.plan` (falls noch dieser Tag). */
+/**
+ * Plan eines Lerntags: aktueller Plan, gemerkter Plan oder `app/profile.plan` (falls noch dieser Tag) –
+ * in der Ansicht dieses Geräts (Handy: ohne die Aufgabe des Tages). Die Pflicht-Prüfung (`pflichtFor`)
+ * liest dieselbe Liste wie Zähler und Zeilen, sonst würde `pflicht[tag]` am Handy nie gesetzt.
+ */
 function planFor(day: string, profile?: Readonly<Doc> | null): StoredPlan | null {
   const s = useTodayPlan.getState();
-  if (s.day === day && s.plan && s.plan.d === day) return s.plan;
-  return dayMemo.get(day)?.plan ?? readPlan(profile?.plan, day) ?? readPlan(useLive.getState().docs['app/profile']?.plan, day);
+  if (s.day === day && s.plan && s.plan.d === day) return viewPlan(s.plan);
+  return viewPlan(dayMemo.get(day)?.plan ?? readPlan(profile?.plan, day) ?? readPlan(useLive.getState().docs['app/profile']?.plan, day));
 }
 
 /** Eingaben für `pflichtFor`/`healPflicht` eines Lerntags (live ⊕ Puffer ⊕ Gemerktes). */
@@ -361,7 +366,7 @@ export async function healToday(): Promise<void> {
   const s = useTodayPlan.getState();
   const writer = getWriter();
   if (!s.plan || !s.day || !writer) return;
-  await healPflicht(writer, dutyInput(s.day, s.plan));
+  await healPflicht(writer, dutyInput(s.day, viewPlan(s.plan) ?? s.plan));
 }
 
 /**

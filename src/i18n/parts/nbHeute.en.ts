@@ -46,6 +46,11 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteMore: 'Practice more',
   nbHeuteLocal: 'Plan saved on this device only.',
   nbHeuteLegacy: 'Today still follows your earlier plan. The daily session starts tomorrow.',
+  // Phone mode (Emrah 2026-10-01)
+  nbHeutePhoneHint: 'Not required on your phone: {block}. Speaking and longer writing work better on a laptop.',
+  nbHeutePhoneSetTitle: 'On the phone',
+  nbHeutePhoneSet: 'Do not require speaking and writing tasks on the phone',
+  nbHeutePhoneSetNote: "Today's task (speaking, longer writing) is then left out of today's required list, and so is the speak-along step. Your day still counts for the streak once the rest of the required list is done. On a laptop the full list applies.",
   nbHeuteConfirmEyebrow: 'New week',
   nbHeuteConfirmTitle: 'Theme of this week',
   nbHeuteConfirmLead: 'Every task this week builds on this theme: text, phrases, task and scene.',

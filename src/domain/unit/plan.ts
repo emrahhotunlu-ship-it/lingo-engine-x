@@ -1,5 +1,6 @@
 import { unitPlanFor } from '../week';
 import type { UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs, WeekDoc } from '../week/types';
+import { rawPlan } from '../plan/phone';
 import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
 
 // Tageseinheit als gespeicherter Tagesplan (plan.md §1.5, N10/N12; Prüfung M2, M5). Rein.
@@ -60,7 +61,10 @@ export const isUnitPlan = (p: StoredPlan | null | undefined): p is StoredPlan & 
  * aktuellen Woche. Weicht die Neuberechnung ab (z. B. ein älterer Plan mit Preply-Rollen, `u.pp`), gilt der
  * eingefrorene Plan mit schlichten Blöcken – nie neu gewürfelt (Kap. 15).
  */
-export function unitPlanOf(p: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
+export function unitPlanOf(view: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
+  // Die Handy-Ansicht (`domain/plan/phone`) lässt Blöcke aus `duty` weg; die Einheit selbst wird immer aus
+  // dem gespeicherten Plan abgeleitet (Zeilen und Knopf finden ihren Block über den Kanal, nicht über den Index).
+  const p = rawPlan(view) as StoredPlan & { u: UnitMeta };
   const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin }, p.goal.review));
   const same = live.duty.length === p.duty.length && live.duty.every((d, k) => d === p.duty[k]) && live.blocks.every((b, k) => b.kind === p.u.b[k]?.[1]);
   if (same) return live;

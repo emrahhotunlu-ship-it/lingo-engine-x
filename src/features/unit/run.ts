@@ -22,6 +22,7 @@ import { startCheck } from '../check/session';
 import { startGrammar } from '../grammar/session';
 import { recordProfileFields, usePending } from '../progress/persist';
 import { markUnitLocal } from '../today/marks';
+import { phoneActive } from '../today/device';
 import { todayNow } from '../today/state';
 import { healDay } from '../today/store';
 import { startSession } from '../vocab/session';
@@ -52,7 +53,7 @@ export function unitNow(): UnitNow | null {
 
 /** Umgebung beim Blockstart: KI nur, wenn sie JETZT bereit ist (M4d); Sprachausgabe mit Stimme. */
 export function envNow(): UnitEnv {
-  return { ai: selectAiAvailable(useCapabilities.getState()), tts: useSpeech.getState().status === 'ready' };
+  return { ai: selectAiAvailable(useCapabilities.getState()), tts: useSpeech.getState().status === 'ready', phone: phoneActive() };
 }
 
 const firstOpen = (rows: readonly UnitRow[]): UnitRow | null => rows.find((r) => r.state !== 'done') ?? null;

@@ -48,6 +48,11 @@ export const nbHeuteDe = {
   nbHeuteMore: 'Mehr üben',
   nbHeuteLocal: 'Plan nur auf diesem Gerät gespeichert.',
   nbHeuteLegacy: 'Heute gilt noch der Plan von vorhin. Ab morgen kommt die Tageseinheit.',
+  // Handy-Modus (Emrah 01.10.2026)
+  nbHeutePhoneHint: 'Am Handy nicht Pflicht: {block}. Sprechen und längeres Schreiben gehen am Laptop besser.',
+  nbHeutePhoneSetTitle: 'Am Handy',
+  nbHeutePhoneSet: 'Sprech- und Schreibaufgaben am Handy nicht als Pflicht',
+  nbHeutePhoneSetNote: 'Die Aufgabe des Tages (Sprechen, längeres Schreiben) fehlt dann in der Pflicht für heute, ebenso das Nachsprechen. Dein Tag zählt für die Serie, sobald die übrige Pflicht erledigt ist. Am Laptop gilt weiter die volle Liste.',
   // Zwischen- und Bestätigungskarte (unitCard)
   nbHeuteConfirmEyebrow: 'Neue Woche',
   nbHeuteConfirmTitle: 'Thema dieser Woche',
