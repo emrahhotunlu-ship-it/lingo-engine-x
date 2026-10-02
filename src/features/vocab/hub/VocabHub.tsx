@@ -186,7 +186,7 @@ export function VocabHub() {
           <p className="m-0 text-sm text-muted" data-testid="ws-behind" data-n={behind}>
             {tn('nbWsBehind', behind)}
             {braked && (
-              <span className="block text-gold-text" data-testid="ws-braked">
+              <span className="block text-muted" data-testid="ws-braked">
                 {t('nbWsBraked')}
               </span>
             )}
