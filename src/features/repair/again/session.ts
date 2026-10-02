@@ -40,8 +40,11 @@ export function startAgain(ctx: Pick<UnitCtx, 'day' | 'block' | 'task'> | null):
   const day = ctx?.day ?? useClock.getState().today;
   const task: TaskLike | null = ctx?.task ? { text: ctx.task.text, ...(ctx.task.better ? { better: ctx.task.better } : {}), fixes: ctx.task.fixes } : null;
   const src = againSource({ day, task, repairDoc: useLive.getState().docs['app/repair'] ?? null, now: useClock.getState().now });
-  useAgain.setState({ ...initial(), draft: src.olds?.length ? src.olds.map((o) => o.wrong).join('\n') : '', active: true, day, lang: useSettings.getState().lang, block: ctx ? ctx.block : null, taskKind: ctx?.task?.kind ?? null, task, src, startedAt: Date.now() });
+  useAgain.setState({ ...initial(), draft: againStart(src), active: true, day, lang: useSettings.getState().lang, block: ctx ? ctx.block : null, taskKind: ctx?.task?.kind ?? null, task, src, startedAt: Date.now() });
 }
+
+/** Startwert des Feldes: dein Text von vorhin bzw. die alten Sätze – es wird nur die falsche Stelle geändert. */
+export const againStart = (src: AgainSource): string => (src.olds?.length ? src.olds.map((o) => o.wrong).join('\n') : src.before);
 
 export function setAgainDraft(draft: string): void {
   useAgain.setState({ draft });

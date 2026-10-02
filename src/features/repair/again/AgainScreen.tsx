@@ -12,7 +12,7 @@ import { useCompanionSee } from '../../companion/seeing';
 import { ExerciseTop, TaskLine } from '../../learn/ui';
 import { flush } from '../../progress/persist';
 import { ensureAgain } from './resume';
-import { compareAgain, leaveAgain, reportAgainDone, setAgainDraft, useAgain } from './session';
+import { againStart, compareAgain, leaveAgain, reportAgainDone, setAgainDraft, useAgain } from './session';
 
 // Block 5 „Nochmal, aber besser“ (plan.md §1.5, N42, S4): Emrah schreibt seinen Text aus Block 3
 // aus dem Kopf neu. Danach stehen Neufassung und bessere Fassung nebeneinander, darunter je
@@ -82,6 +82,14 @@ export function AgainScreen() {
           </div>
         ) : (
           <>
+            {phase === 'write' && !src.olds?.length && (
+              <div className="flex flex-col gap-1" data-testid="again-before">
+                <p className="lx-eyebrow">{t('nbLernenAgainBeforeLead')}</p>
+                <p lang="en" className="text-base leading-relaxed">
+                  {src.before}
+                </p>
+              </div>
+            )}
             {phase === 'write' && src.olds && src.olds.length > 0 && (
               <div className="flex flex-col gap-1" data-testid="again-olds">
                 <p className="lx-eyebrow">{t('nbLernenAgainOldLead')}</p>
@@ -121,7 +129,7 @@ export function AgainScreen() {
             />
             {phase === 'write' && (
               <div className="flex flex-wrap items-center gap-3">
-                <Button variant="primary" disabled={!draft.trim()} onClick={compareAgain} data-testid="again-compare">
+                <Button variant="primary" disabled={!draft.trim() || draft.trim() === againStart(src).trim()} onClick={compareAgain} data-testid="again-compare">
                   {t('nbLernenAgainCompare')}
                 </Button>
               </div>

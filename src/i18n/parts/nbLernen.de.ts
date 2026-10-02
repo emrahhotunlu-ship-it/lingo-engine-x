@@ -24,7 +24,8 @@ export const nbLernenDe = {
   nbLernenResumeFocus: 'Fokus · Aufgabe {n} von {total}',
   // Block 5 „Nochmal, aber besser“
   nbLernenAgainTitle: 'Nochmal, aber besser',
-  nbLernenAgainTask: 'Schreib deinen Text noch einmal – aus dem Kopf und besser.',
+  nbLernenAgainTask: 'Verbessere deinen Text von vorhin. Ändere nur die Stellen, die korrigiert wurden.',
+  nbLernenAgainBeforeLead: 'Dein Text von vorhin',
   nbLernenAgainOldTask: 'Korrigiere diese Sätze von früher. Ändere nur die falsche Stelle.',
   nbLernenAgainOldLead: 'Deine Sätze von früher',
   nbLernenAgainEmptyTask: 'Heute gibt es nichts neu zu formulieren.',
