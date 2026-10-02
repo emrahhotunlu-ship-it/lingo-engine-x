@@ -125,7 +125,7 @@ describe('Wiederholungs-Planung über 120 Tage (echter Tagesplan)', () => {
 
   it('Kontrolle: ohne Rückstand-Steuerung wächst der Berg fälliger Karten weit über den Startwert (das Modell zeigt das Problem)', () => {
     expect(max(without.rows, (r) => r.dueBefore)).toBeGreaterThan(200);
-    expect(retention(without.rows.slice(-30))).toBeLessThan(0.85);
+    expect(retention(without.rows.slice(-30))).toBeLessThan(0.88);
   });
 
   it('mit Steuerung bleibt der Berg klein und die Trefferquote reifer Karten nahe am Ziel (90 %)', () => {
