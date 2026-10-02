@@ -106,6 +106,13 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**02.10.2026, nachts – Satzbau mit neuen Sätzen von Claude, Test-Link (noch nicht live; Emrahs „Ja“ auf „nicht immer dieselben Sätze“)**
+- Anlass: Emrah („Ist das so intelligent, immer mit den gleichen Sätzen zu arbeiten?“). Neben den 57 festen Sätzen kommen **neue, von Claude erzeugte Sätze** (Vorlage `order-gen@1`, `src/prompts/orderGen.ts`).
+- **Prüfung vor der Anzeige** (`acceptGenerated`, `src/domain/drills/orderPool.ts`): Bausteine gehen genau auf, jede zweite Reihenfolge belegt, Sprache/US-Schreibweise/Tonklammer, keine Dubletten, **keine frei beweglichen Zusätze als eigener Baustein**, Fehlfassung nie eine mögliche Umstellung. Nur formal; inhaltlich kann ein Satz Fehler haben, deshalb Kennzeichnung „Neuer Satz von Claude. Nur formal geprüft, kann Fehler enthalten.“ (auch in der Rückmeldung). Fehler bei Claude-Sätzen machen ein Thema nicht zum Fehlerthema.
+- **Vorrat im Hintergrund** (`src/features/drills/orderGen.ts`, nur `localStorage`, keine Datenbank): eine Anfrage je Handlung (Runde starten/beenden), danach 20 Minuten Ruhe auch nach Fehler, kein Timer, kein Neuversuch (A6.2/A6.3), Hintergrund-Priorität. Runde: höchstens die Hälfte aus dem Vorrat, gesehene Sätze (Ringpuffer 40) gemieden, Themen mit zuletzt falschen Sätzen bevorzugt (mit anderen Sätzen). Ohne Vorrat oder bei Fehler gilt der feste Pool wie bisher.
+- Prüfer: Englischlehrer (Prompt und Prüfregeln), Lernwissenschaftler (Kennzeichnung, Note, Kontingent); Korrekturen eingebaut. Test-Link `AXHkh6…` Version `1790968541-f995` (Artefakt-Version 22). Geprüft: 1621 Unit, 551 von 553 E2E, die 2 Ausreißer (Last) liefen einzeln grün.
+- **Verschoben:** Stichprobe des Englischlehrers über 20 echte Claude-Sätze (Ausschussquote), Meldefunktion „Satz fehlerhaft“, Vorrat mit Verfallsdatum, Wiederholung des genau falschen Satzes (Reparatur-Sätze), Abbruch bei Bildschirmwechsel.
+
 **02.10.2026, spätabends – Satzbau neu gebaut, live (Emrahs „Ja in Abstimmung mit Englischlehrer und Lernwissenschaftler“, dann „Ja live nehmen“)**
 - **Live:** `dist/index.html` (Commit „dist: Satzbau mit Zeichen-Markierung …“) auf `JLL8…`, Version `1790965299-5b89` (Artefakt-Version 64). **Rückweg:** Version `1790952158-defe`. Live-Version vorher erneut gelesen (unverändert).
 - Anlass: Emrahs Screenshot „erneut eine naja Aufgabenstellung“ (keine klare Aufgabe, keine Hilfe, irrelevante Regel). **Ersetzt** die Satzbau-Zeilen im Hilfen-Paket (Tipp mit Wortzahl/Regel, Knopf „Deutsch“, Ablenker, Claude-Satz je Runde).
