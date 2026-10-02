@@ -1,11 +1,11 @@
-import { isDictWord } from '../lexicon/dict';
 import type { Verdict } from '../learn/types';
 import { hash32, mulberry32, shuffle } from '../random';
+import { poolNorm, segment, type PoolEntry } from './orderPool';
 
-// Satzbau (phase2-plan §5.6): einen Satz aus 7–14 Bausteinen legen. Feste Wendungen bleiben
-// ein Baustein, dazu 1–2 Ablenker mit Grammatikbezug (did, do, is …). Die Mischung ist nie
-// gleich der Lösung. Wertung gegen alle gültigen Reihenfolgen; genau ein versetzter Baustein
-// ist „fast richtig", ein benutzter Ablenker „falsch". Keine BKT-Schreibvorgänge (D12).
+// Satzbau (phase2-plan §5.6, neu 02.10.2026): einen englischen Satz aus 5–9 Bausteinen legen, dessen deutsche
+// Bedeutung vorab dasteht. Alle Bausteine gehören dazu (keine Ablenker), feste Wendungen sind ein Baustein. Die
+// Mischung ist nie gleich der Lösung oder einer gültigen Umstellung. Wertung gegen alle gültigen Reihenfolgen;
+// genau ein versetzter Baustein ist „fast richtig". Keine BKT-Schreibvorgänge (D12).
 
 export type Tile = { id: number; text: string; distractor: boolean };
 export type OrderItem = {
@@ -13,80 +13,52 @@ export type OrderItem = {
   sentence: string;
   /** Satzzeichen am Ende (wird nicht gelegt). */
   end: string;
+  /** Deutsche Bedeutung (steht vorab da). */
+  de: string;
   /** Lösung als Baustein-Texte. */
   solution: string[];
   /** Weitere gültige Reihenfolgen. */
   accepted: string[][];
-  /** Gemischte Bausteine inkl. Ablenker. */
+  /** Weitere gültige Sätze (Anzeige „Auch richtig“). */
+  alts: string[];
+  /** Warum-Zeile zum Satz. */
+  why: { de: string; en: string };
+  /** Typische falsche Fassung (optional). */
+  bad: string | null;
+  /** Gemischte Bausteine. */
   tiles: Tile[];
 };
 
 export const ORDER_ROUND = 6;
-export const TILES_MIN = 7;
-export const TILES_MAX = 14;
 
-/** Feste Wendungen, die ein Baustein bleiben. */
-const FIXED = ['as soon as', 'as well as', 'in order to', 'at the moment', 'at the end of', 'in front of', 'as long as', 'even though', 'so far', 'used to', 'going to', 'have to', 'had to', 'has to', 'next week', 'last week', 'last year', 'next year', 'right now', 'by the time'];
+const key = (t: string) => poolNorm(t);
 
-function splitSentence(sentence: string, isPhrase?: (p: string) => boolean): { tiles: string[]; end: string } {
-  const m = /([.!?]+)["”']?$/.exec(sentence.trim());
-  const end = m ? m[0] : '';
-  const body = end ? sentence.trim().slice(0, -end.length) : sentence.trim();
-  const words = body.split(/\s+/).filter(Boolean);
-  const tiles: string[] = [];
-  for (let i = 0; i < words.length; ) {
-    let took = 0;
-    for (const len of [4, 3, 2]) {
-      if (i + len > words.length) continue;
-      const cand = words
-        .slice(i, i + len)
-        .join(' ')
-        .toLowerCase()
-        .replace(/[,;:]$/, '');
-      if (FIXED.includes(cand) || isPhrase?.(cand)) {
-        took = len;
-        break;
-      }
-    }
-    if (took) {
-      tiles.push(words.slice(i, i + took).join(' '));
-      i += took;
-    } else {
-      tiles.push(words[i] as string);
-      i++;
-    }
-  }
-  // Der Großbuchstabe am Anfang verrät den ersten Baustein – außer bei „I" und Namen.
-  const first = tiles[0];
-  if (first && first !== 'I' && !/^I'/.test(first) && isDictWord(first.toLowerCase().replace(/[^a-z'-]/g, ''))) tiles[0] = first.charAt(0).toLowerCase() + first.slice(1);
-  return { tiles, end };
-}
+/** Satzzeichen am Ende des Satzes. */
+const endOf = (s: string): string => /([.!?]+)["”']?$/.exec(s.trim())?.[0] ?? '';
 
-const DISTRACTORS_Q = ['did', 'do', 'does'];
-const DISTRACTORS_S = ['is', 'did', 'does', 'was', 'have'];
-const key = (t: string) => t.toLowerCase().replace(/[,;:]$/, '');
-
-/** Stehen mehrere Sätze im Text (Satzzeichen, danach ein neuer Satzanfang)? */
-export const multiSentence = (s: string): boolean => /[.!?]["”')]?\s+["“(]?[A-Z0-9]/.test(s.trim());
-
-export function buildOrder(sentence: string, opts: { seed: string; accepted?: readonly string[]; isPhrase?: (p: string) => boolean }): OrderItem | null {
-  // Satzbau legt genau EINEN Satz (Prüfbericht): Zwei Sätze in einer Aufgabe werden nie gestellt.
-  if (multiSentence(sentence)) return null;
-  const { tiles: solution, end } = splitSentence(sentence, opts.isPhrase);
-  if (solution.length < TILES_MIN - 1 || solution.length > TILES_MAX - 1) return null;
-  const lower = new Set(solution.map(key));
-  const pool = (end.startsWith('?') ? DISTRACTORS_Q : DISTRACTORS_S).filter((d) => !lower.has(d));
-  const nDis = Math.min(solution.length >= 11 ? 1 : 2, TILES_MAX - solution.length, pool.length);
-  const rng = mulberry32(hash32(`${opts.seed}|${sentence}`));
-  const distractors = shuffle(pool, rng).slice(0, Math.max(1, nDis));
-  const all: Tile[] = [...solution.map((text, id) => ({ id, text, distractor: false })), ...distractors.map((text, k) => ({ id: solution.length + k, text, distractor: true }))];
-  const accepted = (opts.accepted ?? []).map((a) => splitSentence(a, opts.isPhrase).tiles).filter((t) => t.length === solution.length);
+/** Aufgabe aus einem Pool-Eintrag. Die Mischung hängt nur von `seed` und dem Satz ab. */
+export function buildOrder(entry: PoolEntry, opts: { seed: string; topicRef?: string }): OrderItem {
+  const solution = [...entry.chunks];
+  const accepted = entry.alt.map((a) => segment(a, entry.chunks)).filter((s): s is string[] => s !== null);
+  const rng = mulberry32(hash32(`${opts.seed}|${entry.en}`));
+  const all: Tile[] = solution.map((text, id) => ({ id, text, distractor: false }));
   let tiles = shuffle(all, rng);
-  // Nie gleich der Lösung: Liegen die echten Bausteine in Lösungsreihenfolge, wird rotiert.
-  for (let guard = 0; guard < all.length && isSolved(tiles.filter((t) => !t.distractor).map((t) => t.text), solution, accepted); guard++) {
+  // Nie gleich der Lösung oder einer gültigen Umstellung: Liegen die Bausteine so, wird rotiert.
+  for (let guard = 0; guard < all.length && isSolved(tiles.map((t) => t.text), solution, accepted); guard++) {
     tiles = [...tiles.slice(1), tiles[0] as Tile];
   }
-  return { key: `order:${hash32(sentence)}`, sentence, end, solution, accepted, tiles };
+  return {
+    key: `order:${hash32(entry.en)}|${opts.topicRef ?? `rules/${entry.topic}`}`,
+    sentence: entry.en,
+    end: endOf(entry.en),
+    de: entry.de,
+    solution,
+    accepted,
+    alts: [...entry.alt],
+    why: entry.why,
+    bad: entry.bad,
+    tiles,
+  };
 }
 
 function sameSeq(a: readonly string[], b: readonly string[]): boolean {

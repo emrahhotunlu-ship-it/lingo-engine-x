@@ -28,7 +28,7 @@ describe('Fortsetzen', () => {
   });
 
   it('Kurzübung: Lückenjagd an derselben Stelle; Sprint wird nie gesichert', () => {
-    useDrill.setState({ active: true, status: 'running', kind: 'order', ctx: 'xtra', day: '2026-09-20', lang: 'de', dictate: [], cloze: [], order: [{ key: 'o1' }, { key: 'o2' }] as never, sprint: [], pos: 1, results: [] });
+    useDrill.setState({ active: true, status: 'running', kind: 'order', ctx: 'xtra', day: '2026-09-20', lang: 'de', dictate: [], cloze: [], order: [{ key: 'o1', de: 'x' }, { key: 'o2', de: 'y' }] as never, sprint: [], pos: 1, results: [] });
     const snap = drillSnapshot();
     expect(snap?.pos).toBe(1);
     useDrill.setState({ active: false, pos: 0 });
@@ -36,6 +36,18 @@ describe('Fortsetzen', () => {
     expect(useDrill.getState().pos).toBe(1);
     useDrill.setState({ kind: 'sprint', sprint: [{}] as never });
     expect(drillSnapshot()).toBeNull();
+  });
+
+  it('Satzbau aus der Zeit vor dem festen Pool (ohne deutsche Bedeutung, mit Ablenkern) wird nicht fortgesetzt', () => {
+    useDrill.setState({ active: true, status: 'running', kind: 'order', ctx: 'xtra', day: '2026-09-20', lang: 'de', dictate: [], cloze: [], order: [{ key: 'o1' }, { key: 'o2' }] as never, sprint: [], pos: 1, results: [] });
+    const old = JSON.parse(JSON.stringify(drillSnapshot())) as NonNullable<ReturnType<typeof drillSnapshot>>;
+    useDrill.setState({ active: false, pos: 0 });
+    expect(restoreDrill(old)).toBe(false);
+    // Diktat und Lückenjagd bleiben unberührt.
+    useDrill.setState({ active: true, status: 'running', kind: 'cloze', ctx: 'xtra', day: '2026-09-20', lang: 'de', dictate: [], cloze: [{ key: 'c1' }] as never, order: [], sprint: [], pos: 0, results: [] });
+    const cl = JSON.parse(JSON.stringify(drillSnapshot())) as NonNullable<ReturnType<typeof drillSnapshot>>;
+    useDrill.setState({ active: false });
+    expect(restoreDrill(cl)).toBe(true);
   });
 
   it('Block 4: gleiche Aufgabe, beantwortete bleiben beantwortet', () => {

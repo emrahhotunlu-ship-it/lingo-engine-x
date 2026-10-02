@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { pickTile } from '../domain/srs/exercise';
+import { isTilePrefix, pickTile } from '../domain/srs/exercise';
 import type { Tile } from '../domain/drills/order';
 
 // Bausteine mit der Tastatur (Emrah 02.10.2026: am Rechner tippen statt nur klicken). Ein Textfeld unter den
@@ -42,18 +42,31 @@ export function TilesKeyboard({ tiles, placed, onChange, onSubmit, locked, mode,
       }
       setText('');
     } else {
-      const parts = value.split(/\s+/);
-      const done = flush || /\s$/.test(value) ? parts : parts.slice(0, -1);
-      const pending = flush || /\s$/.test(value) ? [] : [parts[parts.length - 1] ?? ''];
-      for (const p of done) {
-        if (!p) continue;
-        const id = pickTile(tiles, next, p, 'words');
-        if (id === null) {
-          rest.push(p);
-          bad = p;
-        } else next = [...next, id];
-      }
-      setText([...rest, ...pending].join(' '));
+      // Wörter sammeln, bis sie genau einen freien Baustein ergeben (auch Mehrwort-Bausteine wie „a bit of a stretch“).
+      // Ist das Gesammelte der Anfang eines freien Mehrwort-Bausteins, bleibt es im Feld stehen (kein Fehler).
+      const complete = flush || /\s$/.test(value);
+      const words = value.split(/\s+/).filter(Boolean);
+      let acc: string[] = [];
+      words.forEach((w, i) => {
+        const cand = [...acc, w].join(' ');
+        // Das letzte Wort ohne Leertaste ist noch nicht fertig getippt: stehen lassen.
+        if (i === words.length - 1 && !complete) {
+          acc = [...acc, w];
+          return;
+        }
+        const id = pickTile(tiles, next, cand, 'words');
+        if (id !== null) {
+          next = [...next, id];
+          acc = [];
+        } else if (isTilePrefix(tiles, next, cand)) {
+          acc = [...acc, w];
+        } else {
+          rest.push(...acc, w);
+          bad = cand;
+          acc = [];
+        }
+      });
+      setText([...rest, ...acc].join(' ') + (complete && acc.length ? ' ' : ''));
     }
     setMiss(bad);
     if (next.length !== placed.length) onChange(next);

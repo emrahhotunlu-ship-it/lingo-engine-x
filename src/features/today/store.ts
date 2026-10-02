@@ -5,7 +5,7 @@ import { invalidIdsOf, useLive } from '../../data/live';
 import { validateDoc } from '../../data/validate';
 import { dayKey } from '../../domain/date';
 import { clozeCandidates } from '../../domain/drills/cloze';
-import { orderSentences } from '../../domain/drills/sources';
+import { orderPoolSize } from '../../domain/drills/orderPool';
 import { buildSprintDeck } from '../../domain/drills/sprint';
 import { readPlan } from '../../domain/plan/buildPlan';
 import { type FeasibleData } from '../../domain/plan/channels';
@@ -25,7 +25,7 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 import { mergedVocab } from '../../domain/overview';
 import { ensurePflichtSince, healPflicht, runDailyIntake } from '../progress/dayJobs';
 import { setPflichtResolver, tabId, usePending } from '../progress/persist';
-import { loadLearnInputs, recentLessonLines, setDailyOpen, useLearnInputs } from '../learn/inputs';
+import { loadLearnInputs, setDailyOpen, useLearnInputs } from '../learn/inputs';
 import { viewPlan } from './device';
 import { computeDayWith } from './state';
 import type { DayEntry } from '../../domain/plan/buildPlan';
@@ -149,7 +149,8 @@ export function feasibleData(cards: readonly TrainCard[], lang: Lang, nowMs: num
   const inputs = useLearnInputs.getState();
   return {
     cloze: clozeCandidates(visible).length,
-    order: orderSentences({ lessonLines: recentLessonLines(lang), extraTasks: inputs.pool }).length,
+    // Fester Pool (02.10.2026): konstant, unabhängig von Lektionen und Pool-Aufgaben – ein gespeicherter Plan mit ch:order bleibt erfüllbar.
+    order: orderPoolSize(),
     sprint: buildSprintDeck({ cards: visible, grammarDocs: live.collections.grammar ?? new Map(), pool: inputs.pool, lang, nowMs, seed: 'feasible', max: 40 }).length,
     vocab: visible.filter((c) => quizzable(c, lang, visible.length - 1)).length,
   };

@@ -318,3 +318,10 @@ export function pickTile(tiles: readonly Tile[], placed: readonly number[], toke
   const hit = free.find((t) => (mode === 'letters' ? t.text.toLowerCase() : tileKey(t.text)) === want);
   return hit ? hit.id : null;
 }
+
+/** Ist `token` (ganze Wörter) der Anfang eines noch freien Mehrwort-Bausteins, sodass weitergetippt werden darf? */
+export function isTilePrefix(tiles: readonly Tile[], placed: readonly number[], token: string): boolean {
+  const want = tileKey(token);
+  if (!want) return false;
+  return tiles.some((t) => !placed.includes(t.id) && tileKey(t.text).startsWith(`${want} `));
+}

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { allCollocations, buildCloze, checkCloze, clozeCandidates, clozeFeasible } from '../../src/domain/drills/cloze';
 import { missedWords, scoreDictation } from '../../src/domain/drills/dictation';
 import { buildOrder, checkOrder } from '../../src/domain/drills/order';
-import { dictationSentences, orderSentences } from '../../src/domain/drills/sources';
+import { orderPoolSize, segment, type PoolEntry } from '../../src/domain/drills/orderPool';
+import { dictationSentences } from '../../src/domain/drills/sources';
 import { appendSprint, buildSprintDeck, sprintAnswer, sprintEntry, sprintRadar, sprintStart, SPRINTS_MAX } from '../../src/domain/drills/sprint';
 import { learnGrade } from '../../src/domain/learn/grade';
 import { toTrainCard } from '../../src/domain/srs/cards';
@@ -115,47 +116,64 @@ describe('Lückenjagd', () => {
 });
 
 describe('Satzbau', () => {
-  it('nie zwei Sätze in einer Aufgabe', () => {
-    expect(buildOrder('We met the client. Then we signed the new contract today.', { seed: 'a' })).toBeNull();
-    expect(buildOrder('Is it ready? We need the final numbers by Friday.', { seed: 'a' })).toBeNull();
-    expect(buildOrder('We met the new client yesterday at the office.', { seed: 'a' })).not.toBeNull();
+  const entry = (over: Partial<PoolEntry> = {}): PoolEntry => ({
+    topic: 'c1-precision',
+    en: 'We need your decision by the end of Q3.',
+    de: 'Wir brauchen Ihre Entscheidung bis Ende des dritten Quartals.',
+    chunks: ['we', 'need', 'your decision', 'by', 'the end of Q3'],
+    alt: ['By the end of Q3, we need your decision.'],
+    single: null,
+    why: { de: 'Zeitangabe mit by.', en: 'Time expression with by.' },
+    bad: null,
+    ...over,
+  });
+  const idsOf = (it0: ReturnType<typeof buildOrder>, texts: readonly string[]) => texts.map((tx) => it0.tiles.find((x) => x.text === tx)!.id);
+
+  it('S-01: Bausteine gleich den Pool-Bausteinen, keine Ablenker, Bedeutung und Warum im Item', () => {
+    const it0 = buildOrder(entry(), { seed: 'a' });
+    expect(it0.tiles.map((x) => x.text).sort()).toEqual([...entry().chunks].sort());
+    expect(it0.tiles.some((x) => x.distractor)).toBe(false);
+    expect(it0.de).toContain('Entscheidung');
+    expect(it0.why.de).toContain('by');
+    expect(it0.end).toBe('.');
+    expect(it0.key).toContain('|rules/c1-precision');
   });
 
-  it('S-01: zwei gültige Reihenfolgen', () => {
-    const it0 = buildOrder('I met the new client yesterday at the office.', { seed: 'a', accepted: ['Yesterday I met the new client at the office.'] })!;
-    const ids = (texts: string[]) => texts.map((t) => it0.tiles.find((x) => x.text.toLowerCase() === t.toLowerCase() && !x.distractor)!.id);
-    expect(checkOrder(it0, ids(it0.solution)).verdict).toBe('correct');
-    expect(checkOrder(it0, ids(it0.accepted[0]!)).verdict).toBe('correct');
+  it('S-02: Lösung und jede gültige Umstellung sind richtig', () => {
+    const it0 = buildOrder(entry(), { seed: 'a' });
+    expect(checkOrder(it0, idsOf(it0, it0.solution)).verdict).toBe('correct');
+    expect(it0.accepted).toHaveLength(1);
+    expect(it0.accepted[0]).toEqual(['by', 'the end of Q3', 'we', 'need', 'your decision']);
+    expect(checkOrder(it0, idsOf(it0, it0.accepted[0]!)).verdict).toBe('correct');
+    expect(it0.alts).toEqual(['By the end of Q3, we need your decision.']);
   });
 
-  it('S-02: 1.000 Mischungen nie gleich der Lösung', () => {
-    const s = 'We have been working on the new release since March.';
+  it('S-03: 1.000 Mischungen nie gleich der Lösung oder einer gültigen Umstellung', () => {
     for (let i = 0; i < 1000; i++) {
-      const it0 = buildOrder(s, { seed: `seed-${i}` })!;
-      const real = it0.tiles.filter((t) => !t.distractor).map((t) => t.text.toLowerCase());
-      expect(real.join(' ')).not.toBe(it0.solution.map((t) => t.toLowerCase()).join(' '));
-      expect(it0.tiles.length).toBeGreaterThanOrEqual(7);
-      expect(it0.tiles.length).toBeLessThanOrEqual(14);
+      const it0 = buildOrder(entry(), { seed: `seed-${i}` });
+      const seq = it0.tiles.map((x) => x.text.toLowerCase()).join(' ');
+      expect(seq).not.toBe(it0.solution.map((x) => x.toLowerCase()).join(' '));
+      for (const a of it0.accepted) expect(seq).not.toBe(a.map((x) => x.toLowerCase()).join(' '));
     }
   });
 
-  it('S-03: Ablenker benutzt → falsch; S-04: ein versetzter Baustein → fast richtig', () => {
-    const it0 = buildOrder('She asked me where the meeting room was.', { seed: 'b' })!;
-    const idOf = (t: string) => it0.tiles.find((x) => x.text === t && !x.distractor)!.id;
-    const sol = it0.solution.map(idOf);
-    const dis = it0.tiles.find((t) => t.distractor)!.id;
-    expect(checkOrder(it0, [...sol.slice(0, -1), dis]).verdict).toBe('wrong');
-    expect(checkOrder(it0, [...sol.slice(0, -1), sol[sol.length - 1]!, dis])).toMatchObject({ verdict: 'wrong', usedDistractor: true });
-    const moved = [sol[1]!, sol[0]!, ...sol.slice(2)];
-    expect(checkOrder(it0, moved).verdict).toBe('near');
-    const two = [sol[1]!, sol[0]!, sol[3]!, sol[2]!, ...sol.slice(4)];
-    expect(checkOrder(it0, two).verdict).toBe('wrong');
+  it('S-04: ein versetzter Baustein → fast richtig, zwei vertauschte → falsch', () => {
+    const it0 = buildOrder(entry({ alt: [], single: 'Nach need steht das Objekt, dann die Zeitangabe.' }), { seed: 'b' });
+    const sol = idsOf(it0, it0.solution);
+    expect(checkOrder(it0, [sol[1]!, sol[0]!, ...sol.slice(2)]).verdict).toBe('near');
+    expect(checkOrder(it0, [sol[1]!, sol[0]!, sol[3]!, sol[2]!, sol[4]!]).verdict).toBe('wrong');
+    expect(checkOrder(it0, sol.slice(0, 3)).verdict).toBe('wrong');
   });
 
-  it('feste Wendungen bleiben ein Baustein; Material aus dem Regelwerk', () => {
-    const it0 = buildOrder('I will call you as soon as I arrive at the airport.', { seed: 'c' })!;
-    expect(it0.solution).toContain('as soon as');
-    expect(orderSentences({}).length).toBeGreaterThanOrEqual(30);
+  it('Zerlegung: segment() findet dieselben Bausteine in anderer Reihenfolge, sonst null', () => {
+    const chunks = entry().chunks;
+    expect(segment('By the end of Q3, we need your decision.', chunks)).toEqual(['by', 'the end of Q3', 'we', 'need', 'your decision']);
+    expect(segment('We need your decision.', chunks)).toBeNull();
+    expect(segment('We need your decision by the end of Q3 today.', chunks)).toBeNull();
+  });
+
+  it('Pool: fester Bestand mit Pflichtfeldern (Machbarkeit unabhängig von Lektionen)', () => {
+    expect(orderPoolSize()).toBeGreaterThanOrEqual(6);
   });
 });
 

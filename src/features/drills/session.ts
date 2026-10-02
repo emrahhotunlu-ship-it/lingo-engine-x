@@ -4,14 +4,14 @@ import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { buildCloze, CLOZE_ROUND, type ClozeItem } from '../../domain/drills/cloze';
 import { buildOrder, ORDER_ROUND, type OrderItem } from '../../domain/drills/order';
-import { dictationSentences, orderSentences, type DrillSentence } from '../../domain/drills/sources';
+import { orderPool } from '../../domain/drills/orderPool';
+import { dictationSentences, type DrillSentence } from '../../domain/drills/sources';
 import { buildSprintDeck, type SprintItem } from '../../domain/drills/sprint';
 import type { Ctx, DrillAnswer, RadarEvent, SprintEntry } from '../../domain/learn/types';
 import { DUTY_ROUND } from '../../domain/plan/channels';
 import { hash32, mulberry32, shuffle } from '../../domain/random';
 import { buildTrainCards } from '../../domain/srs/cards';
 import type { Lang, TrainCard } from '../../domain/srs/types';
-import { isDictPhrase as isPhrase } from '../../domain/lexicon/dict';
 import { learnRecorder } from '../progress/persist';
 import { recentLessonLines, useLearnInputs } from '../learn/inputs';
 import { roundCtx } from '../today/state';
@@ -83,15 +83,10 @@ export function dictationItems(cards: readonly TrainCard[], lang: Lang, seed: st
   return shuffle(head, mulberry32(hash32(seed))).slice(0, n);
 }
 
-export function orderItems(lang: Lang, seed: string, n = ORDER_ROUND): OrderItem[] {
-  const sentences = orderSentences({ lessonLines: recentLessonLines(lang), extraTasks: useLearnInputs.getState().pool });
-  const out: OrderItem[] = [];
-  for (const s of shuffle(sentences, mulberry32(hash32(seed)))) {
-    if (out.length >= n) break;
-    const it = buildOrder(s.s, { seed, isPhrase });
-    if (it) out.push({ ...it, key: `${it.key}|${s.ref ?? ''}` });
-  }
-  return out;
+export function orderItems(seed: string, n = ORDER_ROUND): OrderItem[] {
+  return shuffle(orderPool(), mulberry32(hash32(seed)))
+    .slice(0, n)
+    .map((e) => buildOrder(e, { seed }));
 }
 
 /** Thema eines Satzbau-Satzes (aus der Herkunft `rules/<topic>` bzw. `grammar/<topic>`). */
@@ -129,7 +124,7 @@ export function startDrill(kind: DrillKind, day?: string): 'typed' | 'choice' | 
   };
   if (kind === 'dictate') base.dictate = dictationItems(cards, lang, seed);
   else if (kind === 'cloze') base.cloze = buildCloze({ cards, seed, n: ctx === 'duty' ? DUTY_ROUND.cloze : CLOZE_ROUND });
-  else if (kind === 'order') base.order = orderItems(lang, seed, ctx === 'duty' ? DUTY_ROUND.order : ORDER_ROUND);
+  else if (kind === 'order') base.order = orderItems(seed, ctx === 'duty' ? DUTY_ROUND.order : ORDER_ROUND);
   else base.sprint = buildSprintDeck({ cards, grammarDocs: live.collections.grammar ?? new Map(), pool: useLearnInputs.getState().pool, lang, nowMs, seed });
   const len = itemsOf(base).length;
   if (!len) base.status = 'summary';
@@ -212,6 +207,8 @@ export function drillSnapshot(): DrillSnap | null {
 /** Synchron herstellen; die Karten (Beispiele, Nachschlagen) kommen frisch aus den Live-Daten. */
 export function restoreDrill(snap: DrillSnap): boolean {
   if (!snap || snap.kind === 'sprint' || !['dictate', 'cloze', 'order'].includes(snap.kind) || typeof snap.pos !== 'number') return false;
+  // Satzbau-Aufgaben aus der Zeit vor dem festen Pool (ohne deutsche Bedeutung, mit Ablenkern) werden nicht fortgesetzt.
+  if (snap.kind === 'order' && (!Array.isArray(snap.order) || snap.order.some((it) => typeof (it as { de?: unknown })?.de !== 'string'))) return false;
   const len = itemsOf({ ...snap, sprint: [] }).length;
   if (!len || snap.pos < 0 || snap.pos > len) return false;
   const cards = drillCards(useClock.getState().now);

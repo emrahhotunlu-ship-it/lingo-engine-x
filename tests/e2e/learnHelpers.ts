@@ -322,37 +322,56 @@ export async function clozeSolution(page: Page): Promise<string | null> {
   return null;
 }
 
-const DISTRACTORS = new Set(['is', 'did', 'does', 'do', 'was', 'have']);
+type PoolJson = { items?: Array<{ chunks: string[]; en: string; alt?: string[] }> };
 
-/** Reihenfolge der Bausteine für den Satzbau (Indizes in die Pool-Bausteine); `null`, wenn unbekannt. */
-export function orderSolution(tiles: readonly string[], end: string): number[] | null {
-  const norm = (s: string) => s.toLowerCase().replace(/\s+/g, ' ').trim();
-  const words = new Set(tiles.flatMap((t) => norm(t).split(' ')));
-  for (const s of allSentences()) {
-    if (end && !s.trim().endsWith(end)) continue;
-    const body = norm(end ? s.trim().slice(0, -end.length) : s.trim().replace(/[.!?]+$/, ''));
-    if (!body.split(' ').every((w) => words.has(w))) continue;
-    const used = new Array<boolean>(tiles.length).fill(false);
-    const seq: number[] = [];
-    const dfs = (rest: string): boolean => {
-      if (!rest) return true;
-      for (let i = 0; i < tiles.length; i++) {
-        if (used[i]) continue;
-        const t = norm(tiles[i] ?? '');
-        if (rest === t || rest.startsWith(`${t} `)) {
-          used[i] = true;
-          seq.push(i);
-          if (dfs(rest.slice(t.length).trimStart())) return true;
-          used[i] = false;
-          seq.pop();
-        }
+const normTile = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/[^a-z0-9' ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+/** Indizes der Bausteine in der Reihenfolge eines Satzes (jeder Baustein genau einmal); `null`, wenn es nicht aufgeht. */
+function sequenceOf(tiles: readonly string[], sentence: string): number[] | null {
+  const used = new Array<boolean>(tiles.length).fill(false);
+  const seq: number[] = [];
+  const dfs = (rest: string): boolean => {
+    if (!rest) return used.every(Boolean);
+    for (let i = 0; i < tiles.length; i++) {
+      if (used[i]) continue;
+      const t = normTile(tiles[i] ?? '');
+      if (rest === t || rest.startsWith(`${t} `)) {
+        used[i] = true;
+        seq.push(i);
+        if (dfs(rest.slice(t.length).trimStart())) return true;
+        used[i] = false;
+        seq.pop();
       }
-      return false;
-    };
-    // Übrig bleiben dürfen nur Ablenker (did, do, is …), und die bleiben es auch.
-    if (dfs(body) && tiles.every((t, i) => seq.includes(i) || DISTRACTORS.has(norm(t)))) return seq;
+    }
+    return false;
+  };
+  return dfs(normTile(sentence)) ? [...seq] : null;
+}
+
+/**
+ * Alle gültigen Reihenfolgen der Bausteine für den Satzbau (Indizes in `tiles`), die Hauptfassung zuerst.
+ * Gelesen wird der feste Pool `src/content/c1/order.json`; leer, wenn die Bausteine zu keinem Eintrag passen.
+ */
+export function orderSolutions(tiles: readonly string[]): number[][] {
+  const pool = json('../../src/content/c1/order.json') as PoolJson;
+  const key = (xs: readonly string[]) => xs.map(normTile).sort().join('|');
+  const want = key(tiles);
+  for (const it of pool.items ?? []) {
+    if (key(it.chunks) !== want) continue;
+    return [it.en, ...(it.alt ?? [])].map((s) => sequenceOf(tiles, s)).filter((s): s is number[] => s !== null);
   }
-  return null;
+  return [];
+}
+
+/** Hauptfassung der Reihenfolge (Indizes in die Bausteine); `null`, wenn unbekannt. */
+export function orderSolution(tiles: readonly string[], _end = ''): number[] | null {
+  return orderSolutions(tiles)[0] ?? null;
 }
 
 /**
