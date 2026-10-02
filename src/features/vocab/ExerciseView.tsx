@@ -13,6 +13,7 @@ import { ExerciseFrame } from '../../engine/ExerciseFrame';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { Tiles } from '../../engine/Tiles';
+import { hasFinePointer, TilesKeyboard } from '../../engine/TilesKeyboard';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
 import { checkTyped, checkWithHint } from '../../domain/answer/check';
@@ -553,6 +554,22 @@ export function ExerciseView({
           if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
           setPlaced(p);
         }} locked={!!fb} labels={{ line: t('trTilesLine'), pool: t('trTilesPool') }} />
+        {!fb && hasFinePointer() && (
+          <TilesKeyboard
+            tiles={e.tiles ?? []}
+            placed={placed}
+            onChange={(p) => {
+              if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
+              setPlaced(p);
+            }}
+            onSubmit={() => check(null)}
+            locked={!!fb}
+            mode={/\s/.test(solution) ? 'words' : 'letters'}
+            label={t('trTilesTypeLabel')}
+            hint={t('trTilesTypeHint')}
+            unknown={(tok) => t('trTilesTypeMiss', { word: tok })}
+          />
+        )}
       </>
     );
   } else if (e.input === 'produce') {

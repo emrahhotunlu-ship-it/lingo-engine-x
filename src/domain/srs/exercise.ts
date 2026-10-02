@@ -301,3 +301,20 @@ export function choiceVerdict(e: Pick<Exercise, 'ex' | 'card' | 'meaning'>, chos
   }
   return { verdict: 'wrong' };
 }
+
+// ------------------------------------------------------------------ Bausteine per Tastatur (Emrah 02.10.2026)
+
+const tileKey = (s: string): string => s.toLowerCase().replace(/[’‘]/g, "'").replace(/^[^a-z0-9']+|[^a-z0-9']+$/g, '');
+
+/**
+ * Welcher noch freie Baustein passt zu dem, was getippt wurde? Wörter: ganzes Wort (Groß-/Kleinschreibung und
+ * Satzzeichen am Rand egal); Buchstaben: ein Zeichen. Gleiche Bausteine werden der Reihe nach vergeben.
+ * `null`, wenn kein freier Baustein passt.
+ */
+export function pickTile(tiles: readonly Tile[], placed: readonly number[], token: string, mode: 'letters' | 'words'): number | null {
+  const want = mode === 'letters' ? token.toLowerCase() : tileKey(token);
+  if (!want) return null;
+  const free = tiles.filter((t) => !placed.includes(t.id));
+  const hit = free.find((t) => (mode === 'letters' ? t.text.toLowerCase() : tileKey(t.text)) === want);
+  return hit ? hit.id : null;
+}

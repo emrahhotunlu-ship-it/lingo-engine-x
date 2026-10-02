@@ -15,6 +15,7 @@ import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, hintOffset } from '../../engine/KineticGap';
 import { SentenceDiff } from '../../engine/SentenceDiff';
 import { Tiles } from '../../engine/Tiles';
+import { hasFinePointer, TilesKeyboard } from '../../engine/TilesKeyboard';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
@@ -427,6 +428,22 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
         timing.markKey();
         setPlaced(p);
       }} locked={!!fb} marks={fb ? marks : undefined} labels={{ line: t('drTileLine'), pool: t('drTilePool') }} />
+      {!fb && hasFinePointer() && (
+        <TilesKeyboard
+          tiles={item.tiles}
+          placed={placed}
+          onChange={(p) => {
+            timing.markKey();
+            setPlaced(p);
+          }}
+          onSubmit={check}
+          locked={!!fb}
+          mode="words"
+          label={t('trTilesTypeLabel')}
+          hint={t('trTilesTypeHint')}
+          unknown={(tok) => t('trTilesTypeMiss', { word: tok })}
+        />
+      )}
       {item.end && (
         <p className="text-sm text-subtle" aria-hidden="true">
           {t('drEnd', { end: item.end })}
