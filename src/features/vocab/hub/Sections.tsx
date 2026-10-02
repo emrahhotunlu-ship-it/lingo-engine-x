@@ -86,9 +86,11 @@ export function VocabStatsSection() {
   return (
     <section className="flex flex-col gap-3" data-testid="ws-stats">
       <h2 className="lx-eyebrow">{t('nbWsStatsTitle')}</h2>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {cell(t('nbWsRetention'), pct, 'ws-stat-retention', t('nbWsAnswers', { n: s.answers }))}
         {cell(t('nbWsMedianS'), s.medianStability === null ? '–' : t('nbWsDaysN', { n: s.medianStability }), 'ws-stat-median')}
+        {cell(t('nbWsActive'), num(s.active), 'ws-stat-active', t('nbWsActiveSub', { n: s.practicing }))}
+        {cell(t('nbWsExpected'), num(s.expected), 'ws-stat-expected', t('nbWsExpectedSub'))}
         {cell(t('nbWsSure'), num(s.sure), 'ws-stat-sure')}
         {cell(t('nbWsStateMatureL'), num(s.byState.mature), 'ws-stat-mature')}
       </div>

@@ -1,7 +1,7 @@
 import { dayKey } from '../date';
 import { confidenceOf } from './confidence';
 import { histOf } from './flip';
-import { isLearningState } from './scheduler';
+import { isLearningState, retrievability } from './scheduler';
 import type { TrainCard } from './types';
 
 // Wortschatz-Statistik (plan.md N27, Platz `stand`): Erinnerungsquote der letzten 30 Tage,
@@ -21,6 +21,12 @@ export type VocabStatistics = {
   /** Sicher und sehr sicher (Punkte ≥ 4 von 5). */
   sure: number;
   total: number;
+  /** „Aktiv fest“: frei getippt belegt (Stufe ≥ 4) und Stabilität ≥ 21 Tage. Aufdecken zählt nie (es hebt höchstens bis Stufe 2). */
+  active: number;
+  /** „Übt“: Stufe ≥ 3, noch nicht aktiv fest. */
+  practicing: number;
+  /** Erwartete Zahl gekonnter Karten heute: Summe der Abrufwahrscheinlichkeiten aller gelernten Karten (sinkt, wenn Wiederholungen ausbleiben). */
+  expected: number;
 };
 
 export function median(xs: readonly number[]): number | null {
@@ -32,7 +38,7 @@ export function median(xs: readonly number[]): number | null {
 
 export function vocabStatistics(cards: readonly TrainCard[], nowMs: number, windowDays = 30): VocabStatistics {
   const from = nowMs - windowDays * DAY_MS;
-  const out: VocabStatistics = { retention: null, answers: 0, byState: { new: 0, learning: 0, young: 0, mature: 0 }, medianStability: null, sure: 0, total: 0 };
+  const out: VocabStatistics = { retention: null, answers: 0, byState: { new: 0, learning: 0, young: 0, mature: 0 }, medianStability: null, sure: 0, total: 0, active: 0, practicing: 0, expected: 0 };
   const stab: number[] = [];
   let ok = 0;
   for (const c of cards) {
@@ -42,7 +48,12 @@ export function vocabStatistics(cards: readonly TrainCard[], nowMs: number, wind
     else if (isLearningState(c.fsrs)) out.byState.learning++;
     else if (c.fsrs.stability >= MATURE_DAYS) out.byState.mature++;
     else out.byState.young++;
-    if (!c.isNew) stab.push(c.fsrs.stability);
+    if (!c.isNew) {
+      stab.push(c.fsrs.stability);
+      out.expected += retrievability(c.fsrs, nowMs);
+      if (c.stage >= 4 && c.fsrs.stability >= MATURE_DAYS) out.active++;
+      else if (c.stage >= 3) out.practicing++;
+    }
     if (confidenceOf(c, nowMs) >= 3) out.sure++;
     const seen = new Set<string>();
     for (const h of histOf(c.doc)) {
@@ -55,6 +66,7 @@ export function vocabStatistics(cards: readonly TrainCard[], nowMs: number, wind
     }
   }
   out.retention = out.answers ? ok / out.answers : null;
+  out.expected = Math.round(out.expected);
   const m = median(stab);
   out.medianStability = m === null ? null : Math.round(m * 10) / 10;
   return out;

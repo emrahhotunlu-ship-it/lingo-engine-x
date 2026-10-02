@@ -176,6 +176,10 @@ export const nbWsDe = {
   nbWsFilterLeech: 'Hartnäckig',
   nbWsListTitle: 'Alle Einträge',
   // Statistik (Platz „stand“)
+  nbWsActive: 'Aktiv fest',
+  nbWsActiveSub: '{n} üben noch',
+  nbWsExpected: 'Erwartet gekonnt',
+  nbWsExpectedSub: 'Schätzung, sinkt ohne Wiederholen',
   nbWsStatsTitle: 'Wortschatz-Statistik',
   nbWsRetention: 'Erinnerungsquote (30 Tage)',
   nbWsStateNewL: 'Neu',

@@ -43,3 +43,19 @@ export function expectedNewPerDay(quota: number, braked: boolean): number {
   const q = Number.isFinite(quota) && quota > 0 ? Math.floor(quota) : 0;
   return Math.min(q, braked ? NEW_MIN : NEW_TYPICAL_MAX);
 }
+
+// Kapazitätsregel (Methodenplan Lernwissenschaft 02.10.2026): Wie viele neue Wörter heute Platz haben, hängt davon ab, wie viel
+// Wiederholarbeit in den nächsten Tagen ohnehin kommt. Budget B Minuten Wortschatz je Tag; ein neues Wort kostet 50 s Einführung
+// plus etwa 22 s Wiederholungen im ersten Monat. Untergrenze `NEW_MIN` (Kap. 15), Obergrenze 6 (mehr empfiehlt der Lehrer nicht).
+
+/** Wortschatz-Zeit je Tag in Sekunden (12 Minuten). */
+export const VOCAB_BUDGET_SEC = 720;
+/** Sekunden, die ein neues Wort im ersten Monat insgesamt je Tag erzeugt. */
+export const NEW_LOAD_SEC = 72;
+export const NEW_PER_DAY_MAX = 6;
+
+/** Neue Wörter, die heute Platz haben: aus dem mittleren Wiederholaufwand heute und der folgenden sechs Tage (in Sekunden je Tag). */
+export function capacityNew(loadSecPerDay: number): number {
+  const load = Number.isFinite(loadSecPerDay) && loadSecPerDay > 0 ? loadSecPerDay : 0;
+  return Math.min(NEW_PER_DAY_MAX, Math.max(NEW_MIN, Math.floor((VOCAB_BUDGET_SEC - load) / NEW_LOAD_SEC)));
+}
