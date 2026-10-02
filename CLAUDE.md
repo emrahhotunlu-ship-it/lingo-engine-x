@@ -106,7 +106,8 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
-**02.10.2026, spätabends – Satzbau neu gebaut, Test-Link (noch nicht live; Emrahs „Ja in Abstimmung mit Englischlehrer und Lernwissenschaftler“)**
+**02.10.2026, spätabends – Satzbau neu gebaut, live (Emrahs „Ja in Abstimmung mit Englischlehrer und Lernwissenschaftler“, dann „Ja live nehmen“)**
+- **Live:** `dist/index.html` (Commit „dist: Satzbau mit Zeichen-Markierung …“) auf `JLL8…`, Version `1790965299-5b89` (Artefakt-Version 64). **Rückweg:** Version `1790952158-defe`. Live-Version vorher erneut gelesen (unverändert).
 - Anlass: Emrahs Screenshot „erneut eine naja Aufgabenstellung“ (keine klare Aufgabe, keine Hilfe, irrelevante Regel). **Ersetzt** die Satzbau-Zeilen im Hilfen-Paket (Tipp mit Wortzahl/Regel, Knopf „Deutsch“, Ablenker, Claude-Satz je Runde).
 - Neu: fester Pool `src/content/c1/order.json` (57 C1-Sätze, 7 Themen, von Hand geschrieben und vom Englischlehrer gegengelesen, **kein Claude-Aufruf**). Die **deutsche Bedeutung steht vorab** („Du willst sagen:“, bleibt auch in der englischen Oberfläche deutsch, `lang="de"`), alle Bausteine gehören dazu (keine Ablenker), feste Wendungen sind ein Baustein, zweite gültige Reihenfolgen (`alt`) zählen als richtig und erscheinen unter „Auch richtig“. Danach „Warum so?“ je Satz plus „Typischer Fehler“; **kein automatisches Weiter**.
 - Tipp-Leiter: 1 = guter Anfang (Hilfe 1), 2 = die ersten zwei Bausteine nach vorn (Hilfe 2). Markierung mit Zeichen ✓ / ↔ / ✕ plus Screenreader-Text, gesperrte Bausteine lassen Wischen zu, Bausteine ≥ 44 px, Satzende in Klartext. Jede Runde mischt anders (Startzeit im Seed).
