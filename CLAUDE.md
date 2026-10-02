@@ -106,7 +106,8 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
-**02.10.2026, nachts – Satzbau mit neuen Sätzen von Claude, Test-Link (noch nicht live; Emrahs „Ja“ auf „nicht immer dieselben Sätze“)**
+**02.10.2026, nachts – Satzbau mit neuen Sätzen von Claude, live (Emrahs „Ja“ auf „nicht immer dieselben Sätze“, dann „Ja live nehmen“)**
+- **Live:** `dist/index.html` (Commit „dist: Satzbau mit neuen, geprüften Sätzen von Claude“) auf `JLL8…`, Version `1790969044-1fb7` (Artefakt-Version 65). **Rückweg:** Version `1790965299-5b89`. platform-guard Freigabe, Live-Version vorher erneut gelesen (unverändert).
 - Anlass: Emrah („Ist das so intelligent, immer mit den gleichen Sätzen zu arbeiten?“). Neben den 57 festen Sätzen kommen **neue, von Claude erzeugte Sätze** (Vorlage `order-gen@1`, `src/prompts/orderGen.ts`).
 - **Prüfung vor der Anzeige** (`acceptGenerated`, `src/domain/drills/orderPool.ts`): Bausteine gehen genau auf, jede zweite Reihenfolge belegt, Sprache/US-Schreibweise/Tonklammer, keine Dubletten, **keine frei beweglichen Zusätze als eigener Baustein**, Fehlfassung nie eine mögliche Umstellung. Nur formal; inhaltlich kann ein Satz Fehler haben, deshalb Kennzeichnung „Neuer Satz von Claude. Nur formal geprüft, kann Fehler enthalten.“ (auch in der Rückmeldung). Fehler bei Claude-Sätzen machen ein Thema nicht zum Fehlerthema.
 - **Vorrat im Hintergrund** (`src/features/drills/orderGen.ts`, nur `localStorage`, keine Datenbank): eine Anfrage je Handlung (Runde starten/beenden), danach 20 Minuten Ruhe auch nach Fehler, kein Timer, kein Neuversuch (A6.2/A6.3), Hintergrund-Priorität. Runde: höchstens die Hälfte aus dem Vorrat, gesehene Sätze (Ringpuffer 40) gemieden, Themen mit zuletzt falschen Sätzen bevorzugt (mit anderen Sätzen). Ohne Vorrat oder bei Fehler gilt der feste Pool wie bisher.
