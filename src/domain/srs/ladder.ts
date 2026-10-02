@@ -27,9 +27,17 @@ export function stageOf(doc: Doc): Stage {
  * Neue Stufe nach einer Antwort: Aufstieg nur mit einer Übung mindestens der eigenen Stufe,
  * „Leicht" eine Stufe mehr, „Nochmal" höchstens auf die Stufe unter der Übung. Nie unter 1.
  */
+/** Ab dieser Übungsstufe ist die Eingabe frei (Tippen ohne Stütze); nur dort springt „Leicht“ eine Stufe weiter. */
+export const FREE_LEVEL = 4;
+
 export function nextStage(stage: number, level: number, grade: Grade): Stage {
   const s = Math.max(1, stage);
-  if (grade >= 3) return clampStage(level >= s ? Math.min(5, Math.max(s + 1, level) + (grade === 4 ? 1 : 0)) : s);
+  if (grade >= 3) {
+    if (level < s) return clampStage(s);
+    // Auswahl und Stütze beweisen keinen freien Abruf (Prüfung Lernwissenschaft 02.10.2026): kein Bonus für „Leicht“.
+    const bonus = grade === 4 && level >= FREE_LEVEL ? 1 : 0;
+    return clampStage(Math.min(5, Math.max(s + 1, level) + bonus));
+  }
   if (grade === 1) return clampStage(Math.max(1, Math.min(s, level - 1)));
   return clampStage(s);
 }

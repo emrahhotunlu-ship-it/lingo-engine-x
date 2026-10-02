@@ -34,6 +34,8 @@ export function block1Order<T>(i: {
   fresh: readonly ReviewCandidate<T>[];
   budgetSec: number;
   quotaLeft: number;
+  /** Mindestzahl neuer Karten unabhängig vom 40-%-Anteil (Kapazitätsregel `unit/backlog.ts`); sonst `NEW_MIN`. */
+  floorNew?: number;
 }): ReviewOrder<T> {
   const budget = Math.max(0, cost(i.budgetSec));
   const quota = Math.max(0, Math.floor(i.quotaLeft));
@@ -49,7 +51,7 @@ export function block1Order<T>(i: {
   let left = budget - repairSec;
 
   // Neue Karten: bis etwa 40 % der Kartenzeit, mindestens min(2, Kontingent).
-  const floor = Math.min(NEW_MIN, quota, i.fresh.length);
+  const floor = Math.min(Math.max(NEW_MIN, Math.floor(i.floorNew ?? 0)), quota, i.fresh.length);
   const fresh: ReviewCandidate<T>[] = [];
   let newSec = 0;
   for (const c of i.fresh) {

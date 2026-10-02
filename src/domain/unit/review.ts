@@ -1,10 +1,12 @@
 import { isThemeCard } from '../week/cards';
 import { block1Order, NEW_MIN } from '../week/review';
 import type { WeekTheme } from '../week/types';
-import { cardSec, NEW_SEC, REPAIR_SEC } from '../srs/cost';
+import { CARD_SEC, cardSec, NEW_SEC, REPAIR_SEC } from '../srs/cost';
 import { dueCards, newCards, quizzable } from '../srs/queue';
+import { isLearningState } from '../srs/scheduler';
 import type { Lang, TrainCard } from '../srs/types';
-import { backlogBraked, backlogBudget, overdueCount } from './backlog';
+import { forecast } from '../srs/forecast';
+import { backlogBraked, backlogBudget, capacityNew, overdueCount } from './backlog';
 import type { ReviewGoal } from './plan';
 
 // Umfang von Block 1 „Wiederholen“ für den Tagesplan (Prüfung M1, M2; anki-regeln §5): fällige
@@ -45,5 +47,17 @@ export function unitReviewGoal(i: {
           budgetSec: backlogBudget(i.budgetSec, overdue),
           quotaLeft: backlogBraked(overdue) ? Math.min(i.quotaLeft, NEW_MIN) : Math.min(i.quotaLeft, calm.fresh),
         });
+  // Kapazitätsregel: ist mehr Platz, als der 40-%-Anteil zulässt, kommen bis zu `capacityNew` neue Wörter (nie bei Bremse).
+  if (!backlogBraked(overdue)) {
+    const dueToday = dueCards(act, i.nowMs).filter((c) => !isLearningState(c.fsrs)).length;
+    const next = forecast(act, i.nowMs, 6).reduce((a, d) => a + d.n, 0);
+    const loadSec = ((dueToday + next) / 7) * CARD_SEC.mid;
+    const target = Math.min(i.quotaLeft, capacityNew(loadSec), base.fresh.length);
+    if (target > r.fresh) {
+      const extra = (target - r.fresh) * NEW_SEC;
+      const wide = block1Order<TrainCard | null>({ ...base, budgetSec: (overdue === 0 ? i.budgetSec : backlogBudget(i.budgetSec, overdue)) + extra, quotaLeft: target, floorNew: target });
+      return { goal: wide.goal, due: wide.due, fresh: wide.fresh, repairs: wide.repairs, sec: Math.round(wide.sec), overdue };
+    }
+  }
   return { goal: r.goal, due: r.due, fresh: r.fresh, repairs: r.repairs, sec: Math.round(r.sec), overdue };
 }

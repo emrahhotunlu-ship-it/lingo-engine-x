@@ -119,7 +119,8 @@ describe('Leiter (Formeln der alten App)', () => {
 
   it('nextStage: Aufstieg nur mit Übung ≥ eigener Stufe, Leicht +1, Nochmal zurück', () => {
     expect(nextStage(0, 1, 3)).toBe(2);
-    expect(nextStage(1, 1, 4)).toBe(3);
+    expect(nextStage(1, 1, 4)).toBe(2); // „Leicht“ ohne freie Eingabe: kein Bonus
+    expect(nextStage(3, 4, 4)).toBe(5);
     expect(nextStage(4, 2, 3)).toBe(4);
     expect(nextStage(4, 4, 1)).toBe(3);
     expect(nextStage(3, 4, 2)).toBe(3);

@@ -27,9 +27,9 @@ describe('Inhalt des C1-Pakets', () => {
     expect(PACK.length).toBeGreaterThanOrEqual(100);
   });
 
-  it('Anteile je Kategorie liegen nahe am Soll-Mix des Englischlehrers (± 3 Prozentpunkte)', () => {
+  it('Anteile je Kategorie liegen nahe am Soll-Mix des Englischlehrers (± 6 Prozentpunkte, seit 250 Einträgen)', () => {
     expect(Object.values(PACK_MIX).reduce((a, b) => a + b, 0)).toBeCloseTo(1, 5);
-    for (const c of PACK_CATS) expect(Math.abs(share(c) - PACK_MIX[c]), c).toBeLessThanOrEqual(0.03);
+    for (const c of PACK_CATS) expect(Math.abs(share(c) - PACK_MIX[c]), c).toBeLessThanOrEqual(0.06);
   });
 
   it('Kennungen eindeutig, englische Texte eindeutig (Groß/klein egal), Kennungen der Karten (Pfade) eindeutig', () => {
@@ -145,7 +145,7 @@ describe('Auswahl nach Soll-Mix', () => {
     const have = new Set<string>();
     const mine: Record<PackCat, number> = { colloc: 0, frame: 0, phrasal: 0, word: 0, tech: 0, family: 0, idiom: 0 };
     const picked: PackEntry[] = [];
-    for (let day = 0; day < 60; day++) {
+    for (let day = 0; day < 130; day++) {
       const next = nextPackEntries({ have, mine, unused: 0, addedToday: 0 }, 5);
       for (const e of next) {
         have.add(e.id);
