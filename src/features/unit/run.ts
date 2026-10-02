@@ -9,7 +9,7 @@ import { readOnce } from '../../data/snapshot';
 import type { DutyId, StoredPlan, UnitMeta } from '../../domain/plan/types';
 import { sayPath, type SayItem } from '../../domain/say/sayDoc';
 import { buildTrainCards } from '../../domain/srs/cards';
-import { isUnitPlan, unitActKey, unitDonePatch, unitPlanOf } from '../../domain/unit/plan';
+import { isUnitPlan, lapPatch, unitActKey, unitDonePatch, unitPlanOf } from '../../domain/unit/plan';
 import { unitPhrases } from '../../domain/unit/phrases';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { resolveBlock, themeFor, weekTargets } from '../../domain/week';
@@ -265,6 +265,10 @@ export function markBlockDone(day: string, duty: string): void {
       return healDay(day);
     })
     .catch((err: unknown) => logError('unit:done', err, key));
+  // Aufgabe des Tages am Laptop (nicht die Handy-Übung): für die Wochenbilanz „x von 2“ auf Heute.
+  if (duty === 'ch:u-task' && !phoneActive()) {
+    fieldsChain = fieldsChain.then(() => recordProfileFields('unit:lap', (cur) => lapPatch(cur, day))).catch((err: unknown) => logError('unit:lap', err, day));
+  }
 }
 
 /**

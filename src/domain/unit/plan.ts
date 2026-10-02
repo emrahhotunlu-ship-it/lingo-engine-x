@@ -1,6 +1,7 @@
+import { isoWeek } from '../date';
 import { unitPlanFor } from '../week';
 import type { UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs, WeekDoc } from '../week/types';
-import { rawPlan } from '../plan/phone';
+import { isPhoneView, phoneUnitPlan, rawPlan } from '../plan/phone';
 import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
 
 // Tageseinheit als gespeicherter Tagesplan (plan.md §1.5, N10/N12; Prüfung M2, M5). Rein.
@@ -62,9 +63,13 @@ export const isUnitPlan = (p: StoredPlan | null | undefined): p is StoredPlan & 
  * eingefrorene Plan mit schlichten Blöcken – nie neu gewürfelt (Kap. 15).
  */
 export function unitPlanOf(view: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
-  // Die Handy-Ansicht (`domain/plan/phone`) lässt Blöcke aus `duty` weg; die Einheit selbst wird immer aus
-  // dem gespeicherten Plan abgeleitet (Zeilen und Knopf finden ihren Block über den Kanal, nicht über den Index).
-  const p = rawPlan(view) as StoredPlan & { u: UnitMeta };
+  // Die Handy-Ansicht (`domain/plan/phone`) ersetzt Block 3; die Einheit selbst wird immer aus dem
+  // gespeicherten Plan abgeleitet und erst danach für das Handy angepasst (Blöcke bleiben über den Kanal auffindbar).
+  const up = storedUnitPlan(rawPlan(view) as StoredPlan & { u: UnitMeta }, week);
+  return isPhoneView(view) ? phoneUnitPlan(up) : up;
+}
+
+function storedUnitPlan(p: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
   const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin }, p.goal.review));
   const same = live.duty.length === p.duty.length && live.duty.every((d, k) => d === p.duty[k]) && live.blocks.every((b, k) => b.kind === p.u.b[k]?.[1]);
   if (same) return live;
@@ -98,4 +103,27 @@ export function unitDonePatch(cur: Readonly<Record<string, unknown>>, day: strin
   const units: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(dayAct)) if (k.startsWith('u-') && typeof v === 'number') units[k] = v;
   return { act: { [day]: { ...units, [key]: 1 } } };
+}
+
+// ------------------------------------------------------------------ Aufgabe des Tages am Laptop (Wochenbilanz)
+
+/** Ziel je Woche: Aufgaben des Tages (Sprechen, längeres Schreiben), die am Laptop erledigt wurden. */
+export const LAP_GOAL = 2;
+
+/**
+ * Profil-Patch „Aufgabe des Tages am Laptop erledigt“: `lap[tag] = 1` (idempotent). Eigenes Feld, damit die
+ * Wochenbilanz auch dann stimmt, wenn dieselbe Pflicht an anderen Tagen am Handy als kurze Übung zählt.
+ */
+export function lapPatch(cur: Readonly<Record<string, unknown>>, day: string): Record<string, unknown> | null {
+  const lap = cur.lap && typeof cur.lap === 'object' && !Array.isArray(cur.lap) ? (cur.lap as Record<string, unknown>) : {};
+  if (lap[day] === 1) return null;
+  return { lap: { [day]: 1 } };
+}
+
+/** Wie viele Laptop-Aufgaben stehen diese Woche (Mo–So, bis heute) im Profil? */
+export function lapThisWeek(profile: Readonly<Record<string, unknown>> | null | undefined, today: string): number {
+  const lap = profile?.lap;
+  if (!lap || typeof lap !== 'object' || Array.isArray(lap)) return 0;
+  const wk = isoWeek(today);
+  return Object.entries(lap as Record<string, unknown>).filter(([k, v]) => v === 1 && k <= today && isoWeek(k) === wk).length;
 }

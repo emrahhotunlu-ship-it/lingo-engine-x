@@ -36,8 +36,9 @@ export const nbHeuteDe = {
   nbHeuteWhy_meeting: 'Generalprobe für deinen Termin',
   nbHeuteWhy_roleplay: 'Rollenspiel zum Thema',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
-  nbHeuteWhy_focus: 'Deine Korrekturen aus der Aufgabe',
-  nbHeuteWhy_again: 'Aus dem Kopf neu formulieren',
+  nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
+  nbHeuteWhy_colloc: 'Kollokationen zum Thema selbst tippen',
+  nbHeuteWhy_again: 'Einen Satz aus dem Kopf besser formulieren',
   // Fertig-Zustand (N15)
   nbHeuteDoneTitle: 'Fertig für heute',
   nbHeuteDoneStats: '{min} Min. · {blocks} von {blocks} Blöcken · {answers} Antworten, {pct} % richtig',
@@ -49,10 +50,12 @@ export const nbHeuteDe = {
   nbHeuteLocal: 'Plan nur auf diesem Gerät gespeichert.',
   nbHeuteLegacy: 'Heute gilt noch der Plan von vorhin. Ab morgen kommt die Tageseinheit.',
   // Handy-Modus (Emrah 01.10.2026)
-  nbHeutePhoneHint: 'Am Handy nicht Pflicht: {block}. Sprechen und längeres Schreiben gehen am Laptop besser.',
+  nbHeutePhoneHint: 'Am Handy ist die Aufgabe des Tages kurz und ohne Sprechen: {to}. Sprechen und längeres Schreiben gehen am Laptop besser.',
+  nbHeuteLap: 'Aufgabe des Tages am Laptop diese Woche: {n} von {total}',
+  nbHeuteLapMore: 'Sag es jetzt als Extra',
   nbHeutePhoneSetTitle: 'Am Handy',
-  nbHeutePhoneSet: 'Sprech- und Schreibaufgaben am Handy nicht als Pflicht',
-  nbHeutePhoneSetNote: 'Die Aufgabe des Tages (Sprechen, längeres Schreiben) fehlt dann in der Pflicht für heute, ebenso das Nachsprechen. Dein Tag zählt für die Serie, sobald die übrige Pflicht erledigt ist. Am Laptop gilt weiter die volle Liste.',
+  nbHeutePhoneSet: 'Am Handy kurze Aufgabe statt Sprechen und Schreiben',
+  nbHeutePhoneSetNote: 'Statt Sprechen und längerem Schreiben gibt es am Handy eine kurze Übung zum Tippen, das Nachsprechen entfällt. Dein Tag zählt für die Serie, sobald die Pflicht erledigt ist. Am Laptop gilt weiter die volle Aufgabe.',
   // Zwischen- und Bestätigungskarte (unitCard)
   nbHeuteConfirmEyebrow: 'Neue Woche',
   nbHeuteConfirmTitle: 'Thema dieser Woche',

@@ -6,7 +6,7 @@ import { hash32 } from '../random';
 import type { Lang } from '../srs/types';
 import { matchTraps } from '../week/traps';
 import { checkRepairLocal } from './check';
-import { readRepairs, repairNorm, type NewRepair, type RepairItem, type RepairSrc } from './repair';
+import { dueRepairs, readRepairs, repairNorm, type NewRepair, type RepairItem, type RepairSrc } from './repair';
 
 // Tageseinheit, Blöcke 4 „Fokus“ und 5 „Nochmal, aber besser“ (plan.md §1.5, N41/N42;
 // Prüfung Tageseinheit M4b/c, M6, M9, S4). Rein und getestet: Die Bildschirme bekommen hier
@@ -222,18 +222,29 @@ export function fixedNow(text: string, f: Pick<FixLike, 'mine' | 'right'>): bool
 // ------------------------------------------------------------------ Block 5
 
 export type AgainSource = {
-  /** Was Emrah in Block 3 geschrieben hat (oder seine Sätze von heute). */
+  /** Was Emrah in Block 3 geschrieben hat (oder seine Sätze von heute bzw. von früher). */
   before: string;
   /** Bessere Fassung (KI), ohne KI das Muster bzw. die Startsatz-Lösung, sonst `null`. */
   better: string | null;
   betterFrom: 'task' | 'trap' | null;
   fixes: FixLike[];
+  /** Ohne Aufgabe von heute (Handy-Tag): die fälligen Reparatur-Sätze von früher, `fixes` sind genau diese. */
+  olds?: Array<{ id: string; wrong: string; right: string }>;
 };
 
-export function againSource(i: Pick<FocusInput, 'task' | 'repairDoc' | 'day' | 'traps'>): AgainSource {
+/** Reparatur-Sätze von früher in Block 5, wenn heute keine Aufgabe vorliegt. */
+export const AGAIN_OLD = 3;
+
+export function againSource(i: Pick<FocusInput, 'task' | 'repairDoc' | 'day' | 'traps'> & { now?: number }): AgainSource {
   const traps = i.traps ?? TRAPS;
-  const fixes = corrections(i);
   const today = todaysRepairs(i.repairDoc, i.day);
+  // Keine Aufgabe und keine Sätze von heute (Handy-Tag, zweites Gerät): die ältesten fälligen Sätze.
+  const old = !i.task && !today.length && i.now !== undefined ? dueRepairs(readRepairs(i.repairDoc ?? undefined), i.now).slice(0, AGAIN_OLD) : [];
+  if (old.length) {
+    const fixes = old.map((r): FixLike => ({ kind: 'form', mine: r.wrong, right: r.right, why: r.why ?? '' }));
+    return { before: old.map((r) => r.wrong).join(' '), better: old.map((r) => r.right).join(' '), betterFrom: 'task', fixes, olds: old.map((r) => ({ id: r.id, wrong: r.wrong, right: r.right })) };
+  }
+  const fixes = corrections(i);
   const before = i.task?.text.trim() || today.map((r) => r.wrong).join(' ');
   if (i.task?.better?.trim()) return { before, better: i.task.better.trim(), betterFrom: 'task', fixes };
   if (!i.task && today.length) return { before, better: today.map((r) => r.right).join(' '), betterFrom: 'task', fixes };

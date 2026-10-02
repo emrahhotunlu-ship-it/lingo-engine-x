@@ -39,8 +39,9 @@ export function blockWhy(b: Pick<UnitBlock, 'block' | 'kind' | 'opts'>, t: T, re
       return t('nbHeuteWhy_roleplay');
     case 'task.check':
       return t('nbHeuteWhy_check');
-    case 'focus':
     case 'focus.colloc':
+      return b.block === 3 ? t('nbHeuteWhy_colloc') : t('nbHeuteWhy_focus');
+    case 'focus':
       return t('nbHeuteWhy_focus');
     case 'again':
       return t('nbHeuteWhy_again');

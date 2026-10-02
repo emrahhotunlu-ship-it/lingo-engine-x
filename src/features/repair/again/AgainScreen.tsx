@@ -68,7 +68,7 @@ export function AgainScreen() {
             <Icon name="refresh" size={14} />
             {t('nbLernenAgainTitle')}
           </p>
-          <TaskLine task={empty ? t('nbLernenAgainEmptyTask') : t('nbLernenAgainTask')} purpose={t('nbLernenAgainPurpose')} />
+          <TaskLine task={empty ? t('nbLernenAgainEmptyTask') : src.olds?.length ? t('nbLernenAgainOldTask') : t('nbLernenAgainTask')} purpose={t('nbLernenAgainPurpose')} />
         </header>
 
         {empty ? (
@@ -82,6 +82,18 @@ export function AgainScreen() {
           </div>
         ) : (
           <>
+            {phase === 'write' && src.olds && src.olds.length > 0 && (
+              <div className="flex flex-col gap-1" data-testid="again-olds">
+                <p className="lx-eyebrow">{t('nbLernenAgainOldLead')}</p>
+                <ul className="flex flex-col gap-1 text-base">
+                  {src.olds.map((o) => (
+                    <li key={o.id} lang="en">
+                      {o.wrong}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {phase === 'write' && src.fixes.length > 0 && (
               <div className="flex flex-col gap-1" data-testid="again-remember">
                 <p className="lx-eyebrow">{t('nbLernenAgainRemember')}</p>

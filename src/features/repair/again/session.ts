@@ -6,7 +6,7 @@ import type { UnitBlockNo, UnitCtx } from '../../../app/unit/types';
 import { useLive } from '../../../data/live';
 import { againChecks, againSource, repairSrcOf, unitRepairs, type AgainCheck, type AgainSource, type TaskLike } from '../../../domain/repair/unit';
 import type { Lang } from '../../../domain/srs/types';
-import { saveRepairs } from '../store';
+import { recordRepair, saveRepairs } from '../store';
 
 // Block 5 der Tageseinheit „Nochmal, aber besser“ (plan.md §1.5, N42; Prüfung M4c, S4): aus dem
 // Kopf neu formulieren, dann Neufassung ↔ bessere Fassung nebeneinander und je Korrektur „jetzt
@@ -39,7 +39,7 @@ export const useAgain = create<State>(initial);
 export function startAgain(ctx: Pick<UnitCtx, 'day' | 'block' | 'task'> | null): void {
   const day = ctx?.day ?? useClock.getState().today;
   const task: TaskLike | null = ctx?.task ? { text: ctx.task.text, ...(ctx.task.better ? { better: ctx.task.better } : {}), fixes: ctx.task.fixes } : null;
-  const src = againSource({ day, task, repairDoc: useLive.getState().docs['app/repair'] ?? null });
+  const src = againSource({ day, task, repairDoc: useLive.getState().docs['app/repair'] ?? null, now: useClock.getState().now });
   useAgain.setState({ ...initial(), active: true, day, lang: useSettings.getState().lang, block: ctx ? ctx.block : null, taskKind: ctx?.task?.kind ?? null, task, src, startedAt: Date.now() });
 }
 
@@ -54,6 +54,16 @@ export function compareAgain(): void {
   const checks = againChecks(s.draft, s.src.fixes);
   // Belegt sind nur Korrekturen der KI aus Block 3 (bzw. die Reparatur-Sätze von heute, die es
   // schon gibt – `addRepairs` legt nichts doppelt an). Ohne KI gibt es keine `fixes`.
+  // Sätze von früher (Handy-Tag): Das ist die Wiederholung der Reparatur-Box – Box +1 bei „jetzt richtig“,
+  // sonst morgen wieder (`recordRepair`); es entstehen keine neuen Karten.
+  if (s.src.olds?.length) {
+    useAgain.setState({ phase: 'compare', checks, saved: 0 });
+    checks.forEach((c, k) => {
+      const id = s.src.olds?.[k]?.id;
+      if (id) void recordRepair(id, c.ok);
+    });
+    return;
+  }
   const add = unitRepairs({ fixes: s.src.fixes, src: repairSrcOf(s.taskKind), lang: s.lang });
   useAgain.setState({ phase: 'compare', checks, saved: add.length });
   if (add.length) void saveRepairs(add);
