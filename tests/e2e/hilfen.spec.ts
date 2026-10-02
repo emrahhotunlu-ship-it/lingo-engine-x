@@ -105,18 +105,33 @@ async function openOrder(page: Page) {
   return booted;
 }
 
-test('Satzbau: klare Aufgabe, Tipp (Anfang und Wortzahl, dann erster Baustein) und „Deutsch“', async ({ page }) => {
+test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann erster Baustein), Warum nach dem Prüfen', async ({ page }) => {
   const { errors } = await openOrder(page);
   const item = page.getByTestId('drill-item');
-  await expect(page.getByTestId('task-line')).toContainText('richtigen englischen Satz');
+  await expect(page.getByTestId('task-line')).toContainText('englischen Satz aus den Bausteinen');
+  // Die deutsche Bedeutung steht von Anfang an da (keine Hilfe, kein Knopf), die Warum-Zeile erst danach.
+  await expect(item.getByTestId('order-de')).toBeVisible();
+  expect(((await item.getByTestId('order-de').textContent()) ?? '').trim().length).toBeGreaterThan(10);
+  await expect(item.getByTestId('order-de-btn')).toHaveCount(0);
+  await expect(item.getByTestId('order-why')).toHaveCount(0);
+  const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
+  const order = (orderSolution(texts, '') ?? []).map((k) => texts[k] ?? '');
+  expect(order).toHaveLength(texts.length);
   await expect(item.getByTestId('tip-info')).toHaveCount(0);
   await item.getByTestId('hint').click();
-  await expect(item.getByTestId('tip-info')).toContainText('beginnt mit');
+  await expect(item.getByTestId('tip-info')).toContainText('guter Anfang');
   await item.getByTestId('hint').click();
   await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(1);
+  await expect(item.getByTestId('tip-info')).toContainText('liegt schon');
   await expect(item.getByTestId('hint')).toHaveCount(0);
-  await item.getByTestId('order-de-btn').click();
-  await expect(item.getByTestId('order-de')).toBeVisible();
+  for (const [n, text] of order.slice(1).entries()) {
+    await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${text.replace(/"/g, '\\"')}"]`).first().click();
+    await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(n + 2);
+  }
+  await item.getByTestId('check').click();
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+  await expect(page.getByTestId('verdict')).toContainText('mit Tipp');
+  await expect(item.getByTestId('order-why')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

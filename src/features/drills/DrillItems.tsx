@@ -5,7 +5,7 @@ import { checkCloze, type ClozeCheck, type ClozeItem } from '../../domain/drills
 import { missedWords, scoreDictation, type DictationScore } from '../../domain/drills/dictation';
 import { checkOrder, type OrderCheck, type OrderItem } from '../../domain/drills/order';
 import { radarEvent } from '../../domain/grammar/radar';
-import { examplesFor, ruleOf } from '../../domain/grammar/rules';
+import { examplesFor } from '../../domain/grammar/rules';
 import { learnGrade } from '../../domain/learn/grade';
 import type { Ctx, DrillAnswer, Help, RadarEvent, Verdict } from '../../domain/learn/types';
 import { cardExamples } from '../../domain/srs/examples';

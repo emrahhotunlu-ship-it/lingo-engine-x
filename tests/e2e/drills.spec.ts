@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { boot, screen, openEntry } from './fixtures';
-import { clozeSolution, orderSolution, shiftPerf, typeInGap } from './learnHelpers';
+import { clozeSolution, orderSolution, orderSolutions, shiftPerf, typeInGap } from './learnHelpers';
 import { DAY, dump, writes, type Dump } from './trainerHelpers';
 
 // Übungen ohne KI (phase2-plan §5.4–5.7, §9.3): je Übung eine vollständige Runde. Diktat mit
@@ -149,6 +149,9 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
     const item = page.getByTestId('drill-item');
     await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(0);
     await expect(item.getByTestId('diff-correct')).toHaveCount(0);
+    // Die deutsche Bedeutung steht vorab da, die Warum-Zeile erst nach dem Prüfen.
+    await expect(item.getByTestId('order-de')).toBeVisible();
+    await expect(item.getByTestId('order-why')).toHaveCount(0);
     const pool = item.getByTestId('tile-pool').getByTestId('tile');
     const texts = await pool.evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
     const order = orderSolution(texts, '');
@@ -173,6 +176,12 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
     const line = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile')));
     expect(line).toEqual(ids);
     await item.getByTestId('check').click();
+    await expect(item.getByTestId('order-why')).toBeVisible();
+    if (i === 0) {
+      // Kein automatisches Weiter: Emrah liest die Warum-Zeile in Ruhe (nur der Knopf geht weiter).
+      await page.waitForTimeout(1500);
+      await expect(item.getByTestId('order-why')).toBeVisible();
+    }
     verdicts.push(await finishItem(page));
   }
   await expect(page.getByTestId('summary')).toBeVisible();
@@ -198,6 +207,99 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
   await expect(page.getByTestId('start')).toHaveCount(0);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
+});
+
+const ORDER_PLAN = { d: DAY, v: 1, ids: ['order', 'cloze', 'gram'], why: [[['whyRotation']], [['whyRotation']], [['whyRotation']]], duty: ['ch:order'], goal: { review: 0, ch: 6 }, lesson: null, at: 1 };
+
+/** Bausteine des aktuellen Satzes (Texte in der Reihenfolge des Vorrats). */
+const poolTexts = (item: Locator): Promise<string[]> => item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
+
+async function clickTiles(item: Locator, texts: readonly string[]): Promise<void> {
+  for (const [n, text] of texts.entries()) {
+    await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${text.replace(/"/g, '\\"')}"]`).first().click();
+    await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(n + 1);
+  }
+}
+
+test('Satzbau: eine zweite gültige Reihenfolge zählt als richtig, „Auch richtig“ nennt sie', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: ORDER_PLAN } } } });
+  await openDrill(page, 'order');
+  let used = 0;
+  for (let i = 0; i < 6 && used < 2; i++) {
+    const item = page.getByTestId('drill-item');
+    await expect(item.getByTestId('order-de')).toBeVisible();
+    const texts = await poolTexts(item);
+    const sols = orderSolutions(texts);
+    expect(sols.length, `Satz aus ${texts.join(' | ')}`).toBeGreaterThan(0);
+    const pick = sols.length > 1 ? 1 : 0;
+    if (pick === 1) used++;
+    await clickTiles(item, (sols[pick] ?? []).map((k) => texts[k] ?? ''));
+    await item.getByTestId('check').click();
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+    if (pick === 1) {
+      await expect(item.getByTestId('also-right')).toBeVisible();
+      await expect(item.getByTestId('diff-correct')).toBeVisible();
+    } else await expect(item.getByTestId('also-right')).toHaveCount(0);
+    await finishItem(page);
+  }
+  expect(used, 'mindestens ein Satz mit zweiter Reihenfolge in der Runde').toBeGreaterThanOrEqual(1);
+  expect(errors).toEqual([]);
+});
+
+test('Satzbau: ein versetzter Baustein ist „fast richtig“, die falsche Stelle ist markiert; zwei vertauschte sind falsch', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: ORDER_PLAN } } } });
+  await openDrill(page, 'order');
+  for (let round = 0; round < 2; round++) {
+    const item = page.getByTestId('drill-item');
+    await expect(item.getByTestId('order-de')).toBeVisible();
+    const texts = await poolTexts(item);
+    const sols = orderSolutions(texts);
+    const seq = (sols[0] ?? []).map((k) => texts[k] ?? '');
+    expect(seq.length).toBeGreaterThanOrEqual(5);
+    // Runde 0: letzten Baustein vor den vorletzten (ein Baustein versetzt, aber nur wenn das keine andere gültige Reihenfolge ist).
+    // Runde 1: die ersten beiden und die letzten beiden vertauschen → falsch.
+    const swapped = [...seq];
+    if (round === 0) [swapped[swapped.length - 2], swapped[swapped.length - 1]] = [swapped[swapped.length - 1] as string, swapped[swapped.length - 2] as string];
+    else {
+      [swapped[0], swapped[1]] = [swapped[1] as string, swapped[0] as string];
+      [swapped[swapped.length - 2], swapped[swapped.length - 1]] = [swapped[swapped.length - 1] as string, swapped[swapped.length - 2] as string];
+    }
+    const valid = sols.map((s) => s.map((k) => texts[k] ?? '').join('|'));
+    if (valid.includes(swapped.join('|'))) {
+      // Zufällig selbst eine gültige Umstellung: dieser Satz taugt nicht für den Test, nächsten nehmen.
+      await clickTiles(item, seq);
+      await item.getByTestId('check').click();
+      await finishItem(page);
+      round--;
+      continue;
+    }
+    await clickTiles(item, swapped);
+    await item.getByTestId('check').click();
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', round === 0 ? 'near' : 'wrong');
+    // Die falsch gelegten Bausteine sind markiert (Zustand am Baustein, nicht nur Farbe im Verlauf).
+    const states = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
+    expect(states.some((x) => x === 'near' || x === 'off')).toBe(true);
+    await expect(item.getByTestId('order-why')).toBeVisible();
+    await expect(item.getByTestId('diff-correct')).toBeVisible();
+    await finishItem(page);
+  }
+  expect(errors).toEqual([]);
+});
+
+test('Satzbau am Handy (390 × 844): Bedeutung, Bausteine und Prüfen ohne Seitwärtsrollen sichtbar', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce', timezoneId: 'Europe/Berlin', locale: 'de-DE' });
+  const page = await context.newPage();
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: ORDER_PLAN } } } });
+  await openDrill(page, 'order');
+  const item = page.getByTestId('drill-item');
+  await expect(item.getByTestId('order-de')).toBeVisible();
+  await expect(item.getByTestId('check')).toBeVisible();
+  await expect(page.getByTestId('tiles-type')).toHaveCount(0);
+  const box = await item.getByTestId('tile-pool').boundingBox();
+  expect(box && box.x >= 0 && box.x + box.width <= 390).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  expect(errors).toEqual([]);
+  await context.close();
 });
 
 test('Sprint: 90 Sekunden bis zum Ende; nur sprints, act und Radar, kein Log', async ({ page }) => {
