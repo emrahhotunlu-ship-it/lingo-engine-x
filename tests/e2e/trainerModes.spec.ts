@@ -258,10 +258,10 @@ test.describe('Wortschatzliste: Wendungen', () => {
     await expect(page.getByTestId('vocab')).toBeVisible();
     // Neubau (plan.md §1.3): die Liste liegt unter „Alle Einträge ›“.
     await page.getByTestId('ws-all').click();
-    await expect(page.getByTestId('vocab-status')).toContainText('6 Wendungen');
+    await expect(page.getByTestId('vocab-status')).toContainText('8 Wendungen');
     await page.locator('[data-testid="vocab-filter"][data-filter="phrases"]').click();
     const rows = page.locator('[data-testid="vocab-row"][data-kind="chunk"]');
-    await expect(rows).toHaveCount(6);
+    await expect(rows).toHaveCount(8);
     await page.locator('[data-testid="vocab-row"][data-word="c-i-take-your-point-but"]').click();
     const sheet = page.getByTestId('word-sheet');
     await expect(sheet).toBeVisible();

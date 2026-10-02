@@ -37,7 +37,7 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toHaveCount(0);
 
   const dump = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump() ?? {});
-  expect(Object.keys(dump)).toHaveLength(212);
+  expect(Object.keys(dump)).toHaveLength(214);
   expect(dump['app/schema']).toMatchObject({ version: 1, cutover: '2026-09-20' });
   expect(dump['vocab/reliable']).toHaveProperty('fsrs');
 
