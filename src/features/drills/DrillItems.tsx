@@ -459,6 +459,11 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
         <p className="text-xl font-semibold leading-snug tracking-tight" lang="de" data-testid="order-de">
           {item.de}
         </p>
+        {item.ai && (
+          <p className="text-xs text-subtle" data-testid="order-ai">
+            {t('drOrderAi')}
+          </p>
+        )}
       </div>
       {!fb && tip >= 1 && (
         <p className="text-sm text-muted" role="status" data-testid="tip-info">

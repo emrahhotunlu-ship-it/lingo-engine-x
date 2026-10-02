@@ -1,4 +1,5 @@
 import { cardExamples } from './cardExamples';
+import { orderGen } from './orderGen';
 import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
 import { lessonContent } from './lessonContent';
@@ -41,6 +42,7 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   wordLookup,
   produceCheck,
   cardExamples,
+  orderGen,
   // Phase 2 (docs/phase2-plan.md §7)
   lessonContent,
   lessonProduction,

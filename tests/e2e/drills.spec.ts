@@ -327,6 +327,63 @@ test('Satzbau am Handy (390 × 844): Bedeutung, Bausteine und Prüfen ohne Seitw
   await context.close();
 });
 
+const ORDER_GEN_KEY = 'lx:orderGen:v1';
+const sampleIds = (page: Page): Promise<Array<string | null>> =>
+  page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null }> } }).__LINGO_FAKE__.sampleCalls.map((c) => c.id));
+
+/** Alle sechs Sätze einer Runde durchgehen (Tipp ×2 legt zwei Bausteine, dann prüfen) und zählen, wie viele von Claude sind. */
+async function aiSentencesInRound(page: Page): Promise<{ ai: number; quokka: number }> {
+  let ai = 0;
+  let quokka = 0;
+  for (let i = 0; i < 6; i++) {
+    const item = page.getByTestId('drill-item');
+    await expect(item.getByTestId('order-de')).toBeVisible();
+    if ((await item.getByTestId('order-ai').count()) > 0) {
+      ai++;
+      if (/Quokka/.test((await item.getByTestId('order-de').textContent()) ?? '')) quokka++;
+    }
+    await item.getByTestId('hint').click();
+    await item.getByTestId('hint').click();
+    await item.getByTestId('check').click();
+    await finishItem(page);
+  }
+  return { ai, quokka };
+}
+
+test('Satzbau: nach der ersten Runde kommen neue, geprüfte Sätze von Claude dazu (markiert, höchstens die Hälfte), eine Anfrage', async ({ page }) => {
+  const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: ORDER_PLAN } } } });
+  await openDrill(page, 'order');
+  // Erste Runde: der Vorrat ist leer, alle Sätze kommen aus dem festen Pool; im Hintergrund läuft genau eine Anfrage.
+  await expect(page.getByTestId('drill-item').getByTestId('order-ai')).toHaveCount(0);
+  await expect.poll(async () => (await sampleIds(page)).filter((id) => id === 'order-gen').length).toBe(1);
+  await expect.poll(() => page.evaluate((k) => window.localStorage.getItem(k), ORDER_GEN_KEY)).toContain('Quokka');
+  await page.getByTestId('round-close').click();
+  await page.getByTestId('tab-today').click().catch(() => undefined);
+  // Zweite Runde: drei neue Sätze von Claude (markiert), die anderen drei aus dem Pool.
+  await openDrill(page, 'order');
+  const r = await aiSentencesInRound(page);
+  expect(r).toEqual({ ai: 3, quokka: 3 });
+  // Nicht noch eine Anfrage: Ruhezeit nach der ersten (auch am Rundenende).
+  expect((await sampleIds(page)).filter((id) => id === 'order-gen')).toHaveLength(1);
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
+});
+
+test('Satzbau: Claude antwortet ungültig oder nicht → fester Pool, kein Fehlerbanner, kein zweiter Versuch', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: ORDER_PLAN } }, sampleFail: { 'order-gen': 'rate_limited' } } });
+  await openDrill(page, 'order');
+  await expect.poll(async () => (await sampleIds(page)).filter((id) => id === 'order-gen').length).toBeGreaterThanOrEqual(1);
+  await page.getByTestId('round-close').click();
+  await page.getByTestId('tab-today').click().catch(() => undefined);
+  await openDrill(page, 'order');
+  await expect(page.getByTestId('drill-item').getByTestId('order-de')).toBeVisible();
+  const r = await aiSentencesInRound(page);
+  expect(r.ai).toBe(0);
+  expect((await sampleIds(page)).filter((id) => id === 'order-gen')).toHaveLength(1);
+  await expect(page.locator('[role="alert"]')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test('Sprint: 90 Sekunden bis zum Ende; nur sprints, act und Radar, kein Log', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');

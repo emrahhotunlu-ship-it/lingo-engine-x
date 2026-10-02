@@ -27,6 +27,8 @@ export type OrderItem = {
   bad: string | null;
   /** Gemischte Bausteine. */
   tiles: Tile[];
+  /** Neuer, von Claude erzeugter Satz (geprüft), nicht aus dem festen Pool. */
+  ai?: boolean;
 };
 
 export const ORDER_ROUND = 6;
@@ -58,6 +60,7 @@ export function buildOrder(entry: PoolEntry, opts: { seed: string; topicRef?: st
     why: entry.why,
     bad: entry.bad,
     tiles,
+    ...(entry.ai ? { ai: true } : {}),
   };
 }
 

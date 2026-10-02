@@ -208,6 +208,7 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   drTaskDictate: 'Listen and type the whole sentence.',
   drTaskCloze: 'Fill in the word partner.',
   drTaskOrder: 'Build the English sentence from the tiles. Every tile belongs.',
+  drOrderAi: 'New sentence from Claude, checked automatically',
   drOrderMeaning: 'You want to say (in German):',
   drTipFirst: 'Place the first two tiles',
   drTipStart: 'A good start: “{first}”.',

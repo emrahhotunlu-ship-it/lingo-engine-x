@@ -212,6 +212,7 @@ export const learnDe = {
   drTaskDictate: 'Hör zu und schreib den ganzen Satz.',
   drTaskCloze: 'Ergänze den Wortpartner.',
   drTaskOrder: 'Lege den englischen Satz aus den Bausteinen. Alle gehören dazu.',
+  drOrderAi: 'Neuer Satz von Claude, automatisch geprüft',
   drOrderMeaning: 'Du willst sagen:',
   drTipFirst: 'Die ersten zwei Bausteine legen',
   drTipStart: 'Ein guter Anfang: „{first}“.',

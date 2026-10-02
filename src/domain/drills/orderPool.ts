@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import poolRaw from '../../content/c1/order.json?raw';
 import { logError, logWarn } from '../../platform/diagnostics';
+import { isWrongLang } from '../lang/detect';
 
 // Fester Pool der Übung „Satzbau“ (Emrah 02.10.2026, nach Beratung Englischlehrer + Lernwissenschaft): C1-Sätze
 // mit deutscher Bedeutung, von Hand gesetzten Bausteinen, allen gültigen Reihenfolgen (`alt`) oder dem Grund,
@@ -19,6 +20,8 @@ export type PoolEntry = {
   why: { de: string; en: string };
   /** Typische falsche Fassung eines Deutschsprachigen (optional). */
   bad: string | null;
+  /** Von Claude erzeugt (und automatisch geprüft), nicht aus dem festen Pool. */
+  ai?: boolean;
 };
 
 const RawEntry = z.object({
@@ -112,3 +115,46 @@ export function orderPool(): readonly PoolEntry[] {
 
 /** Zahl der Pool-Sätze (konstant; Grundlage der Machbarkeit des Kanals „Satzbau“). */
 export const orderPoolSize = (): number => orderPool().length;
+
+// ------------------------------------------------------------------ von Claude erzeugte Sätze
+// Dieselben Regeln wie beim festen Pool (tests/unit/orderPool.test.ts), damit ein erzeugter Satz nie schlechter ist
+// als ein handgeschriebener: Bausteine gehen genau auf, jede zweite Reihenfolge ist belegt, Sprache und Schreibweise
+// stimmen. Was nicht besteht, fällt still weg (fester Pool springt ein).
+
+export const ORDER_TOPICS = ['c1-emphasis', 'c1-discourse', 'c1-hedging', 'c1-diplomacy', 'c1-precision', 'c1-nominal', 'c1-participle'] as const;
+
+const BRITISH = /\b(colour|organis|realis|programme|centre|licence|cheque|whilst|learnt|behaviour|favour|catalogue|labour|analyse)\w*/i;
+const wordsOf = (s: string): string[] => s.split(/\s+/).filter(Boolean);
+/** Deutsche Zitate in „…“ / “…” aus einem englischen Text nehmen, bevor die Sprache geprüft wird. */
+const withoutQuotes = (s: string): string => s.replace(/[“„][^”“]*[”“]/g, ' ');
+
+/** Normalform aller Sätze des festen Pools (Dubletten-Prüfung). */
+export const poolSentenceKeys = (): Set<string> => new Set(orderPool().flatMap((e) => [e.en, ...e.alt]).map(poolNorm));
+
+/**
+ * Prüft einen von Claude erzeugten Eintrag. `known` enthält die Normalform schon bekannter Sätze (fester Pool,
+ * zuletzt gesehene, schon im Vorrat). Gibt den geprüften Eintrag zurück oder `null`.
+ */
+export function acceptGenerated(raw: unknown, known: ReadonlySet<string>): PoolEntry | null {
+  const p = RawEntry.safeParse(raw);
+  if (!p.success) return null;
+  const r = p.data;
+  if (!(ORDER_TOPICS as readonly string[]).includes(r.topic)) return null;
+  const e = accept(r);
+  if (!e) return null;
+  const texts = [e.en, e.de, e.why.de, e.why.en, e.bad ?? '', ...e.alt, ...e.chunks];
+  if (texts.some((t) => t.includes('"'))) return null;
+  if (e.chunks.some((c) => wordsOf(c).length > 5 || /[.,;:!?]/.test(c))) return null;
+  if (!/[.?!]$/.test(e.en) || wordsOf(e.en).length < 6 || wordsOf(e.en).length > 22) return null;
+  if (wordsOf(e.de).length < 4 || wordsOf(e.de).length > 20 || !/[.?!)]$/.test(e.de)) return null;
+  if ((e.topic === 'c1-hedging' || e.topic === 'c1-diplomacy') && !/\([^)]+\)/.test(e.de)) return null;
+  if (e.single !== null && e.single.length < 15) return null;
+  if (e.why.de.length < 20 || e.why.en.length < 20) return null;
+  if (isWrongLang(e.de, 'de', 3) || isWrongLang(e.why.de, 'de', 3) || isWrongLang(withoutQuotes(e.why.en), 'en', 3)) return null;
+  if (BRITISH.test([e.en, ...e.alt].join(' '))) return null;
+  if ([e.en, ...e.alt].some((x) => known.has(poolNorm(x)))) return null;
+  // Die Fehlfassung darf sich auch nur in der Zeichensetzung unterscheiden (z. B. Komma), aber nicht Buchstabe für Buchstabe gleich sein.
+  const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+  if (e.bad && [e.en, ...e.alt].some((x) => same(x, e.bad as string))) return null;
+  return { ...e, ai: true };
+}
