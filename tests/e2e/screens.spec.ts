@@ -85,8 +85,14 @@ for (const vp of VIEWPORTS) {
         await learnTour(page, async (name) => {
           expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
           expect(await layoutProblems(page), name).toEqual([]);
-          // Zitierte Wörter („würde") gehören zur Erklärung, nicht zur Oberfläche.
-          const text = (await page.locator('body').innerText()).replace(/„[^“”]*[“”]|“[^”]*”|"[^"]*"/g, ' ');
+          // Zitierte Wörter („würde") gehören zur Erklärung, nicht zur Oberfläche. Deutsches Übungsmaterial
+          // (Satzbau: „Du willst sagen“ mit der deutschen Bedeutung) ist als lang="de" ausgezeichnet und gehört dazu.
+          const body = await page.evaluate(() => {
+            const copy = document.body.cloneNode(true) as HTMLElement;
+            copy.querySelectorAll('[lang="de"]').forEach((e) => e.remove());
+            return copy.textContent ?? '';
+          });
+          const text = body.replace(/„[^“”]*[“”]|“[^”]*”|"[^"]*"/g, ' ');
           if (lang === 'en') expect(GERMAN_IN_EN.exec(text)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
           else expect(ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
           await page.screenshot({ path: `${SHOTS}/${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
