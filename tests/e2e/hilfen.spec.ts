@@ -105,7 +105,7 @@ async function openOrder(page: Page) {
   return booted;
 }
 
-test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann erster Baustein), Warum nach dem Prüfen', async ({ page }) => {
+test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann die ersten zwei Bausteine), Warum nach dem Prüfen', async ({ page }) => {
   const { errors } = await openOrder(page);
   const item = page.getByTestId('drill-item');
   await expect(page.getByTestId('task-line')).toContainText('englischen Satz aus den Bausteinen');
@@ -118,15 +118,24 @@ test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann erster B
   const order = (orderSolution(texts) ?? []).map((k) => texts[k] ?? '');
   expect(order).toHaveLength(texts.length);
   await expect(item.getByTestId('tip-info')).toHaveCount(0);
+  // Erst einen falschen Baustein legen (der letzte der Lösung): Tipp 2 stellt trotzdem die ersten zwei nach vorn.
+  const last = order[order.length - 1] ?? '';
+  await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${last.replace(/"/g, '\\"')}"]`).first().click();
   await item.getByTestId('hint').click();
   await expect(item.getByTestId('tip-info')).toContainText('guter Anfang');
   await item.getByTestId('hint').click();
-  await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(1);
-  await expect(item.getByTestId('tip-info')).toContainText('liegt schon');
+  await expect(item.getByTestId('tip-info')).toContainText('Die ersten beiden Bausteine');
+  await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(2 + 1);
+  const line = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile')));
+  expect(line.slice(0, 2)).toEqual(order.slice(0, 2));
   await expect(item.getByTestId('hint')).toHaveCount(0);
-  for (const [n, text] of order.slice(1).entries()) {
+  // „Neu legen“ räumt die Zeile; der Tipp-Text behauptet nicht, dass etwas liegt.
+  await item.getByTestId('tiles-reset').click();
+  await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(0);
+  await expect(item.getByTestId('tip-info')).toContainText('Die ersten beiden Bausteine:');
+  for (const [n, text] of order.entries()) {
     await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${text.replace(/"/g, '\\"')}"]`).first().click();
-    await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(n + 2);
+    await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(n + 1);
   }
   await item.getByTestId('check').click();
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');

@@ -100,7 +100,8 @@ export function startDrill(kind: DrillKind, day?: string): 'typed' | 'choice' | 
   const cards = drillCards(nowMs);
   const ctx: Ctx = kind === 'cloze' || kind === 'order' ? roundCtx(kind, d) : 'xtra';
   roundNo++;
-  const seed = `${d}|${kind}|${roundNo}`;
+  // Satzbau: nach einem Neuladen beginnt `roundNo` wieder bei 1; die Startzeit sorgt für andere Sätze als in der Runde davor.
+  const seed = kind === 'order' ? `${d}|${kind}|${roundNo}|${nowMs}` : `${d}|${kind}|${roundNo}`;
   const live = useLive.getState();
   const base: State = {
     ...useDrill.getState(),

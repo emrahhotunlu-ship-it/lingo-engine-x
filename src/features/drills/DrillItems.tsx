@@ -362,15 +362,17 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
   const topic = orderTopic(item);
   const byId = useMemo(() => new Map(item.tiles.map((x) => [x.id, x])), [item]);
   // Hilfen (Emrah 02.10.2026, nach Beratung Englischlehrer + Lernwissenschaft): Tipp 1 nennt einen guten Anfang
-  // (Hilfe 1), Tipp 2 legt den ersten Baustein (Hilfe 2). Die deutsche Bedeutung steht immer da und ist keine Hilfe.
+  // (Hilfe 1), Tipp 2 legt die ersten zwei Bausteine nach vorn (Hilfe 2, zweite Information). Die deutsche
+  // Bedeutung steht immer da und ist keine Hilfe.
   const [tip, setTip] = useState<0 | 1 | 2>(0);
   const first = item.solution[0] ?? '';
-  const firstTile = item.tiles.find((x) => x.text === first) ?? null;
+  const second = item.solution[1] ?? '';
+  const leadIds = [first, second].map((x) => item.tiles.find((tile) => tile.text === x)?.id).filter((id): id is number => id !== undefined);
   const showTip = () => {
     if (tip === 0) setTip(1);
     else {
       setTip(2);
-      if (firstTile && !placed.length) setPlaced([firstTile.id]);
+      setPlaced([...leadIds, ...placed.filter((id) => !leadIds.includes(id))]);
     }
   };
 
@@ -439,7 +441,7 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
                 {item.why[lang]}
               </p>
               {item.bad && (
-                <p className="text-sm text-muted" lang="en" data-testid="order-bad">
+                <p className="text-sm text-muted" lang={lang} data-testid="order-bad">
                   {t('drTrapBad', { bad: item.bad })}
                 </p>
               )}
@@ -460,7 +462,7 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
       </div>
       {!fb && tip >= 1 && (
         <p className="text-sm text-muted" role="status" data-testid="tip-info">
-          {tip >= 2 ? t('drTipPlaced', { first }) : t('drTipStart', { first })}
+          {tip >= 2 ? t('drTipPlaced', { first, second }) : t('drTipStart', { first })}
         </p>
       )}
       <Tiles tiles={item.tiles} placed={placed} onChange={(p) => {

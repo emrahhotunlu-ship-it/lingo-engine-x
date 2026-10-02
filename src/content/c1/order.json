@@ -107,7 +107,7 @@
   {
    "topic": "c1-emphasis",
    "en": "Rarely have we seen such a fast rollout.",
-   "de": "Einen so schnellen Rollout haben wir selten erlebt.",
+   "de": "Selten haben wir einen so schnellen Rollout erlebt.",
    "chunks": [
     "rarely",
     "have",
@@ -172,8 +172,7 @@
    "de": "Allerdings ist der Zeitplan für den Rollout weiterhin knapp.",
    "chunks": [
     "that said",
-    "the timeline",
-    "for the rollout",
+    "the timeline for the rollout",
     "is",
     "still",
     "tight"
@@ -336,7 +335,8 @@
    ],
    "alt": [
     "The migration, all in all, went very smoothly.",
-    "The migration went very smoothly, all in all."
+    "The migration went very smoothly, all in all.",
+    "The migration went, all in all, very smoothly."
    ],
    "why": [
     "Im Deutschen ist „reibungslos“ Adjektiv und Adverb zugleich; nach went braucht Englisch das Adverb smoothly, und very steht davor. All in all bleibt ein Block.",
@@ -464,8 +464,8 @@
     "I'm not sure your team is ready quite yet."
    ],
    "why": [
-    "„Quite“ steht direkt vor dem Adjektiv („quite ready“) oder in der festen Wendung „ready quite yet“; „yet“ gehört ans Satzende, während das deutsche „schon“ mitten im Satz stehen darf. „Not sure“ macht aus einem harten Urteil eine milde Einschätzung.",
-    "“Quite” sits right before the adjective (“quite ready”) or in the fixed phrase “ready quite yet”; “yet” goes at the very end, whereas German “schon” can sit mid-sentence. “Not sure” turns a hard judgment into a mild assessment."
+    "„Quite“ steht direkt vor dem Adjektiv („quite ready“), und „yet“ gehört ans Satzende, während das deutsche „schon“ mitten im Satz stehen darf. „Not sure“ macht aus einem harten Urteil eine milde Einschätzung.",
+    "“Quite” sits right before the adjective (“quite ready”), and “yet” goes at the very end, whereas German “schon” can sit mid-sentence. “Not sure” turns a hard judgment into a mild assessment."
    ]
   },
   {
@@ -585,25 +585,6 @@
     "Im Deutschen steht das Verb nach „dass“ am Ende („bestätigen könnten“). Im Englischen folgt „you could confirm“ direkt auf „hoping“, meist ohne „that“.",
     "In German the verb goes to the end after “dass” (“bestätigen könnten”). In English “you could confirm” follows “hoping” directly, usually without “that”."
    ]
-  },
-  {
-   "topic": "c1-diplomacy",
-   "en": "Would it be possible to extend the trial by two weeks?",
-   "de": "Wäre es möglich, die Testphase um zwei Wochen zu verlängern? (höflich, an einen Anbieter)",
-   "chunks": [
-    "would",
-    "it",
-    "be possible",
-    "to extend",
-    "the trial",
-    "by two weeks"
-   ],
-   "single": "Frage mit Umkehrung „Would it be possible“ ist fester Rahmen; „by two weeks“ gehört hinter das Objekt und lässt sich nicht verschieben.",
-   "why": [
-    "Im Deutschen steht „um zwei Wochen“ vor dem Verb; im Englischen kommt „by two weeks“ nach dem Objekt. Nach „Would it be possible“ folgt „to“ plus Grundform, kein „that“-Satz.",
-    "In German “um zwei Wochen” comes before the verb; in English “by two weeks” comes after the object. “Would it be possible” is followed by “to” plus base form, not a “that” clause."
-   ],
-   "bad": "Would it be possible to extend by two weeks the trial?"
   },
   {
    "topic": "c1-diplomacy",
@@ -793,8 +774,8 @@
     "All invoices must, as of June 1, be archived electronically."
    ],
    "why": [
-    "„Ab dem 1. Juni“ ist im Business-Englisch as of June 1, ohne „from … on“ und nicht since, das nach hinten blickt. Das Datum steht im US-Stil: erst der Monat, dann der Tag.",
-    "“Ab dem 1. Juni” is as of June 1 in business English, without “from … on” and not since, which looks backward. The date follows the US pattern: month first, then day."
+    "„Ab dem 1. Juni“ ist im Business-Englisch as of June 1 (kürzer als from June 1 on) und nicht since, das nach hinten blickt. Das Datum steht im US-Stil: erst der Monat, dann der Tag.",
+    "“Ab dem 1. Juni” is as of June 1 in business English (shorter than from June 1 on) and not since, which looks backward. The date follows the US pattern: month first, then day."
    ]
   },
   {
@@ -889,8 +870,8 @@
    ],
    "single": "„in storage costs“ gehört fest zu „reduction“; vorn im Satz würde es einen Gegensatz betonen und klingt ohne Kontext unnatürlich.",
    "why": [
-    "Nach „reduction“ folgt die Größe, die sinkt, mit „in“ – nicht im Genitiv wie im Deutschen. Das Adjektiv steht zwischen Artikel und Nomen.",
-    "After “reduction”, the thing that falls follows with “in” rather than as a genitive, as in German. The adjective sits between the article and the noun."
+    "Nach „reduction“ ist in + das, was sinkt, die übliche Wahl: a reduction in costs. „Reduction of“ steht meist vor einem Betrag (a reduction of 10 percent). Der deutsche Genitiv („der Speicherkosten“) ist hier die Falle.",
+    "After “reduction”, in is the usual choice for what falls: a reduction in costs. “Reduction of” mostly introduces an amount (a reduction of 10 percent). The German genitive (“der Speicherkosten”) is the trap here."
    ]
   },
   {
