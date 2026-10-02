@@ -1,5 +1,6 @@
 import { validateDoc } from '../../data/validate';
 import { learningDayEnd } from '../date';
+import { expectedNewPerDay } from '../unit/backlog';
 import { applyUpdate } from './applyReview';
 import { histOf, type FlipDir } from './flip';
 import { stageOf } from './ladder';
@@ -217,9 +218,13 @@ export function estimateMinutes(c: DeckCounts, newCap = Infinity): number {
   return sec <= 0 ? 0 : Math.max(1, Math.round(sec / 60));
 }
 
-/** Eingangskorb: Anzahl und Reichweite in Tagen (Anzahl ÷ Kontingent, anki-regeln §5). */
-export function inboxReach(inbox: number, quota: number): { n: number; days: number | null; review: boolean } {
-  const days = quota > 0 ? Math.ceil(inbox / quota) : null;
+/**
+ * Eingangskorb: Anzahl und Reichweite in Tagen (Anzahl ÷ neue Wörter, die wirklich kommen, anki-regeln §5).
+ * Wirklich = Kontingent, im Alltag höchstens 3, bei Rückstand 2 (`expectedNewPerDay`) – nicht das Kontingent allein.
+ */
+export function inboxReach(inbox: number, quota: number, braked = false): { n: number; days: number | null; review: boolean } {
+  const rate = expectedNewPerDay(quota, braked);
+  const days = rate > 0 ? Math.ceil(inbox / rate) : null;
   return { n: inbox, days, review: days !== null && days >= 30 };
 }
 

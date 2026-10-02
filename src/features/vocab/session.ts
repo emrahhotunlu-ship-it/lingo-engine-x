@@ -169,8 +169,9 @@ export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode 
   });
 }
 
-function build(s: ExCtx, card: TrainCard, ex: ExerciseId): Exercise {
-  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang) });
+/** `origin`: Prüfabfrage und Kontrolle bleiben beim Ursprungssatz (sonst wechselt der Satz ab Stufe 3, `domain/srs/rotate.ts`). */
+function build(s: ExCtx, card: TrainCard, ex: ExerciseId, origin = false): Exercise {
+  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang), origin });
 }
 
 function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
@@ -189,12 +190,12 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
     // Kontrolle (§4): frei im Ursprungssatz (`cloze`), ohne Satz `type`; die App bewertet.
     const n = s.pool.length - 1;
     const ex: ExerciseId | null = supports(card, 'cloze', s.lang, n, s.env) ? 'cloze' : supports(card, 'type', s.lang, n, s.env) ? 'type' : null;
-    if (ex) return { ...build(s, card, ex), check: 'control' };
+    if (ex) return { ...build(s, card, ex, true), check: 'control' };
   }
   if (picked === 'probe') {
     // Prüfabfrage (§1 Regel 6): tippen mit Stütze, Leiter auf Stufe 3 (cloze_hint/tiles).
     const ex = chooseExercise({ ...card, stage: 3 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
-    if (ex) return { ...build(s, card, ex), check: 'probe' };
+    if (ex) return { ...build(s, card, ex, true), check: 'probe' };
   }
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;

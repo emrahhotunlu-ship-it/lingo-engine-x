@@ -5,8 +5,11 @@ import { useWeek } from '../../../app/useWeek';
 import { openSheet } from '../../../app/sheets';
 import { addDays, dayKey, dayKeyNoon, daysBetween } from '../../../domain/date';
 import { meaningOf } from '../../../domain/srs/cards';
-import { BUILTIN_DECKS, deckCards, deckCounts, estimateMinutes, inboxReach, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
+import { estimateRoundMinutes } from '../../../domain/srs/cost';
+import { BUILTIN_DECKS, deckCards, deckCounts, inboxReach, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
 import { forecast } from '../../../domain/srs/forecast';
+import { backlogBraked, overdueCount } from '../../../domain/unit/backlog';
+import { useToday } from '../../today/state';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
 import type { TrainCard } from '../../../domain/srs/types';
 import { useHiddenInput } from '../../../engine/HiddenInput';
@@ -81,11 +84,19 @@ export function VocabHub() {
   const all = useMemo(() => deckCounts(visible, now), [visible, now]);
   const allShown: DeckCounts = { ...all, new: Math.min(all.new, quota.left) };
   const total = allShown.new + allShown.learning + allShown.due;
-  const minutes = estimateMinutes(allShown);
+  // Zeit wie im Tagesplan gerechnet (`domain/srs/cost.ts`), im Modus „Aufdecken“ kürzer – nicht mehr zwei verschiedene Annahmen.
+  const minutes = estimateRoundMinutes(visible, now, quota.left, mode === 'flip');
+  const behind = useMemo(() => overdueCount(visible, now), [visible, now]);
+  const braked = backlogBraked(behind);
+  // Was der Knopf „Wiederholen“ jetzt tut (Emrah 02.10.2026: „Alle fälligen 60 Karten“, aber die Runde hat weniger):
+  // Pflicht offen → die Pflichtrunde des Tagesplans, sonst eine freiwillige Runde mit bis zu 20 Karten.
+  const dutyOpen = useToday((s) => s.duties.items.some((d) => d.id === 'review' && d.state === 'open'));
+  const dutyTotal = useToday((s) => s.review.total);
+  const dutyDone = useToday((s) => s.review.done);
   const fc = useMemo(() => forecast(visible, now), [visible, now]);
   const fcMax = Math.max(1, ...fc.map((d) => d.n));
   const perDay = normalizeNewPerDay(quota.perDay);
-  const inbox = inboxReach(all.new, perDay);
+  const inbox = inboxReach(all.new, perDay, braked);
   const rows = useMemo(() => {
     const builtin = BUILTIN_DECKS.map((id) => ({ id, name: t(DECK_LABEL[id]), cards: deckCards(cards, id, decks, ctx) })).filter((d) => d.cards.length > 0 && d.id !== 'inbox');
     const own = visibleDecks(decks).map((d) => ({ id: d.id, name: d.name, cards: deckCards(cards, d.id, decks, ctx) }));
@@ -170,6 +181,21 @@ export function VocabHub() {
             </div>
           ))}
         </dl>
+        {behind > 0 && (
+          <p className="m-0 text-sm text-muted" data-testid="ws-behind" data-n={behind}>
+            {tn('nbWsBehind', behind)}
+            {braked && (
+              <span className="block text-gold-text" data-testid="ws-braked">
+                {t('nbWsBraked')}
+              </span>
+            )}
+          </p>
+        )}
+        {total > 0 && (
+          <p className="m-0 text-sm text-muted" data-testid="ws-round-hint" data-duty={dutyOpen && dutyTotal > 0 ? '' : undefined}>
+            {dutyOpen && dutyTotal > 0 ? t('nbWsDutyLeft', { left: Math.max(1, dutyTotal - dutyDone), total: dutyTotal }) : t('nbWsExtraRound', { n: Math.min(20, total) })}
+          </p>
+        )}
         <Segmented<Mode>
           label={t('nbWsModeLabel')}
           value={mode}

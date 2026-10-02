@@ -210,6 +210,7 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
 
   settingsLearning: 'Learning',
   setNewPerDay: 'New words per day',
+  setNewPerDayHint: 'At most this many. When a lot is due for review, fewer new words come, at least 2 a day.',
   setGoalMin: 'Daily goal in minutes',
   setGoalMinHint: 'Sets how much the daily plan schedules – from the next plan on.',
   setSoundTitle: 'Sound',

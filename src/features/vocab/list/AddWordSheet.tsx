@@ -9,7 +9,7 @@ import { Button } from '../../../ui/Button';
 import { Sheet } from '../../../ui/Sheet';
 import { toast } from '../../../ui/Toast';
 import { EnglishText } from '../../../engine/EnglishText';
-import { addGenerated, addWord, knownWords, type AddOutcome } from './actions';
+import { addGenerated, addWord, knownKeys, knownWords, wordKey, type AddOutcome } from './actions';
 import { FromText } from './FromText';
 
 // Wörter hinzufügen (Funktionsabgleich M2): eigenes Wort (Englisch, Deutsch, Satz – ohne Satz
@@ -46,6 +46,8 @@ function AddBody({ onClose }: { onClose: () => void }) {
   const [extra, setExtra] = useState<{ pos: string; def: string; level: string }>({ pos: '', def: '', level: '' });
   const [genSrc, setGenSrc] = useState<'ai' | 'job'>('ai');
   const [added, setAdded] = useState<string[]>([]);
+  // Schlüssel der Wörter, die schon im Wortschatz waren, als Claude gefragt wurde: Vorschläge davon werden nicht gezeigt.
+  const [have, setHave] = useState<ReadonlySet<string>>(new Set());
   const [saving, setSaving] = useState(false);
   const busy = (p: string) => p === 'queued' || p === 'thinking' || p === 'streaming' || p === 'slow';
 
@@ -77,6 +79,7 @@ function AddBody({ onClose }: { onClose: () => void }) {
   const generate = async (mode: 'general' | 'job') => {
     setGenSrc(mode === 'job' ? 'job' : 'ai');
     setAdded([]);
+    setHave(knownKeys());
     await gen.run({ mode, count: 8, known: knownWords() });
   };
 
@@ -86,8 +89,10 @@ function AddBody({ onClose }: { onClose: () => void }) {
     else toast(t(OUTCOME[res]), 'error');
   };
 
+  // Nur Neues zeigen (höchstens 8): Claude kennt zwar die zuletzt hinzugefügten Wörter, aber nicht alle.
+  const fresh = (gen.data?.words ?? []).filter((w) => !have.has(wordKey(w.word))).slice(0, 8);
   const addAll = async () => {
-    for (const w of gen.data?.words ?? []) if (!added.includes(w.word)) await addOne(w);
+    for (const w of fresh) if (!added.includes(w.word)) await addOne(w);
     toast(t('vcAllAdded'));
   };
 
@@ -160,7 +165,7 @@ function AddBody({ onClose }: { onClose: () => void }) {
           {gen.data && (
             <>
               <ul className="flex flex-col gap-3" data-testid="gen-list">
-                {gen.data.words.map((w) => {
+                {fresh.map((w) => {
                   const done = added.includes(w.word);
                   return (
                     <li key={w.word} className="flex flex-col gap-1 rounded-xl bg-surface p-3" data-testid="gen-word" data-word={w.word}>

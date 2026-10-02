@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { fsrsSchema } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
+import { dayKey } from '../date';
 import { flipStage } from './flip';
 import { stageOf, nextStage } from './ladder';
 import { exerciseDef } from './modes';
@@ -126,9 +127,16 @@ function skillPatch(cur: Doc, mode: LegacyMode, grade: number, colIndex: number 
  * Antwort höchstens eine Stufe, nie unter 1), sonst die Leiter (`nextStage`).
  */
 function stageAfter(cur: Doc, a: AnswerEvent): number {
-  if (a.ex === 'flip') return flipStage(stageOf(cur), a.grade);
-  return nextStage(stageOf(cur), levelFor(a.ex, stageOf(cur)), a.grade);
+  const now = stageOf(cur);
+  const next = a.ex === 'flip' ? flipStage(now, a.grade) : nextStage(now, levelFor(a.ex, now), a.grade);
+  // Tagesbremse (phase1-plan §4, Prüfung Lernwissenschaft 02.10.2026): höchstens EIN Aufstieg je Karte und Lerntag. Wiederholungen
+  // am selben Tag (Lernschritte, „Nochmal“-Wiedervorlage) beweisen nichts über das Gedächtnis von morgen und heben die Stufe nicht.
+  // Abstieg bleibt immer möglich.
+  return next > now && answeredOn(cur, a.day) ? now : next;
 }
+
+/** Wurde die Karte an diesem Lerntag schon beantwortet? (`last` = Zeitpunkt der letzten Antwort.) */
+const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'number' && Number.isFinite(cur.last) && cur.last > 0 && dayKey(cur.last) === day;
 
 /**
  * Stufe, als die eine Übung zählt. Hör-Lücke (`dictation`, N35 Hör-Modus): höchstens eine Stufe über

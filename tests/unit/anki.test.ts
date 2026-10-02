@@ -5,7 +5,7 @@ import { toTrainCard } from '../../src/domain/srs/cards';
 import { toChunkCard } from '../../src/domain/srs/chunkCards';
 import { CONTROL, FLIP, againPos, calibration, controlAllowed, controlsSince, dirFor, flipStage, flipSuggest, formatInterval, pickMode, weekStartMs } from '../../src/domain/srs/flip';
 import { availableExercises, chooseExercise, exerciseDef } from '../../src/domain/srs/modes';
-import { inboxTier, newCards } from '../../src/domain/srs/queue';
+import { inboxTier, newCards, tierSrc } from '../../src/domain/srs/queue';
 import type { AnswerEvent, Grade, TrainCard } from '../../src/domain/srs/types';
 import { berlin } from './helpers';
 
@@ -208,6 +208,20 @@ describe('Eingangskorb (§5)', () => {
     const mk = (id: string, src: string, added: string) => card({ src, added, word: id, ex: `The [${id}] matters.` }, id);
     const cards = [mk('s1', 'seed', '2026-01-01'), mk('l2', 'lookup', '2026-09-10'), mk('l1', 'lookup', '2026-09-01'), mk('p1', 'preply', '2026-09-20'), mk('m1', 'meeting', '2026-09-25'), mk('x1', 'weird', '2026-01-01')];
     expect(newCards(cards).map((c) => c.id)).toEqual(['m1', 'p1', 'l1', 'l2', 's1', 'x1']);
+  });
+  it('Wörter des Tagesauftrags (src coach, origin daily) stehen NACH eigenen Funden; Druck-Training-Wörter (coach) bleiben bei eigenem Output', () => {
+    const mk = (id: string, src: string, added: string, origin?: Doc) => card({ src, added, word: id, ex: `The [${id}] matters.`, ...(origin ? { origin } : {}) }, id);
+    const cards = [
+      mk('d1', 'coach', '2026-09-01', { v: 1, kind: 'daily', ref: 'daily/2026-09-01', t: 1 }),
+      mk('l1', 'lookup', '2026-09-20'),
+      mk('c1', 'coach', '2026-09-25', { v: 1, kind: 'business', ref: 'circum/x', t: 1 }),
+      mk('a1', 'ai', '2026-09-02'),
+    ];
+    // coach (eigener Output) → lookup (eigene Funde) → Vorschläge nach Alter: ai (09-02) vor daily (09-01)? Gleiche Stufe, die älteste zuerst.
+    expect(newCards(cards).map((c) => c.id)).toEqual(['c1', 'l1', 'd1', 'a1']);
+    expect(tierSrc(cards[0] as TrainCard)).toBe('daily');
+    expect(tierSrc(cards[2] as TrainCard)).toBe('coach');
+    expect(tierSrc(cards[1] as TrainCard)).toBe('lookup');
   });
   it('Wochenthema ist Stufe 4 (vor eigenen Funden, hinter eigenem Output)', () => {
     expect(inboxTier('lookup', true)).toBe(3);

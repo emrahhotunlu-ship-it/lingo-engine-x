@@ -12,11 +12,12 @@ export function blockName(kind: UnitBlockKind, block: number, t: T): string {
 }
 
 /** Kurzer Grund eines Blocks (eine Zeile). `reviewTotal` = Umfang von Block 1. */
-export function blockWhy(b: Pick<UnitBlock, 'block' | 'kind' | 'opts'>, t: T, reviewTotal = 0): string {
+/** `behind` = Block 1 ist wegen Rückstand länger geplant als sonst (`domain/unit/backlog.ts`): die Zeile nennt den Grund. */
+export function blockWhy(b: Pick<UnitBlock, 'block' | 'kind' | 'opts'>, t: T, reviewTotal = 0, behind = false): string {
   const o = b.opts;
   switch (b.kind) {
     case 'review':
-      return reviewTotal > 0 ? t('nbHeuteWhy_review', { n: reviewTotal }) : t('nbHeuteWhy_reviewNone');
+      return reviewTotal > 0 ? t(behind ? 'nbHeuteWhy_reviewBehind' : 'nbHeuteWhy_review', { n: reviewTotal }) : t('nbHeuteWhy_reviewNone');
     case 'input.read':
       return t('nbHeuteWhy_inputRead');
     case 'input.listen':

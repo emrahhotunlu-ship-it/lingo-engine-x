@@ -1,19 +1,19 @@
 import { isThemeCard } from '../week/cards';
-import { block1Order } from '../week/review';
+import { block1Order, NEW_MIN } from '../week/review';
 import type { WeekTheme } from '../week/types';
+import { cardSec, NEW_SEC, REPAIR_SEC } from '../srs/cost';
 import { dueCards, newCards, quizzable } from '../srs/queue';
 import type { Lang, TrainCard } from '../srs/types';
+import { backlogBraked, backlogBudget, overdueCount } from './backlog';
 import type { ReviewGoal } from './plan';
 
 // Umfang von Block 1 „Wiederholen“ für den Tagesplan (Prüfung M1, M2; anki-regeln §5): fällige
 // Reparatur-Sätze → fällige Karten (Wochenthema zuerst) → neue Karten eingestreut, im Budget der
 // Einheit (`unitPlanFor(...).reviewSec`). Lernkarten liegen innerhalb des Budgets, nichts wird
 // vorgezogen. Das Ergebnis wird als `goal.review` eingefroren; Block 1 endet dort, nicht nach Zeit.
-
-/** Geschätzte Sekunden je Karte (wie der Trainer: frische Stufen schneller). */
-const reviewSec = (c: TrainCard): number => (c.stage <= 2 ? 12 : c.stage <= 4 ? 20 : 35);
-const NEW_SEC = 50;
-const REPAIR_SEC = 40;
+// Rückstand (02.10.2026, `backlog.ts`): Je überfälliger Karte wächst das Budget (höchstens +50 %), und ab 15
+// überfälligen Karten kommt nur die Mindestzahl neuer Wörter – sonst wächst der Berg fälliger Karten immer weiter.
+// Geschätzte Sekunden je Karte: `domain/srs/cost.ts` (eine Quelle für Plan und Anzeige).
 
 export function unitReviewGoal(i: {
   cards: readonly TrainCard[];
@@ -28,12 +28,22 @@ export function unitReviewGoal(i: {
 }): ReviewGoal {
   const pool = i.cards.filter((c) => !c.hidden);
   const act = pool.filter((c) => quizzable(c, i.lang, pool.length - 1));
-  const r = block1Order<TrainCard | null>({
+  const overdue = overdueCount(act, i.nowMs);
+  const base = {
     repairs: Array.from({ length: Math.max(0, Math.floor(i.repairs)) }, () => ({ item: null, sec: REPAIR_SEC })),
-    due: dueCards(act, i.nowMs).map((c) => ({ item: c, sec: reviewSec(c), theme: i.theme ? isThemeCard(c, i.theme) : false })),
+    due: dueCards(act, i.nowMs).map((c) => ({ item: c, sec: cardSec(c), theme: i.theme ? isThemeCard(c, i.theme) : false })),
     fresh: newCards(act).map((c) => ({ item: c, sec: NEW_SEC })),
-    budgetSec: i.budgetSec,
-    quotaLeft: i.quotaLeft,
-  });
-  return { goal: r.goal, due: r.due, fresh: r.fresh, repairs: r.repairs };
+  };
+  // Plan ohne Rückstand-Zuschlag: bei Rückstand wächst die Zeit nur für Wiederholungen. Der Anteil neuer Wörter wird
+  // immer vom Grundbudget gerechnet, damit er mit dem Rückstand nie steigt (Prüfung Lernwissenschaft 02.10.2026).
+  const calm = block1Order<TrainCard | null>({ ...base, budgetSec: i.budgetSec, quotaLeft: i.quotaLeft });
+  const r =
+    overdue === 0
+      ? calm
+      : block1Order<TrainCard | null>({
+          ...base,
+          budgetSec: backlogBudget(i.budgetSec, overdue),
+          quotaLeft: backlogBraked(overdue) ? Math.min(i.quotaLeft, NEW_MIN) : Math.min(i.quotaLeft, calm.fresh),
+        });
+  return { goal: r.goal, due: r.due, fresh: r.fresh, repairs: r.repairs, sec: Math.round(r.sec), overdue };
 }

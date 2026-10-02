@@ -104,6 +104,8 @@ export type UnitPrefs = {
   meetingInDays?: number | null;
   /** Geplanter Umfang von Block 1 (`goal.review`); 0 → Block 1 entfällt (M2). */
   reviewCount?: number;
+  /** Geplante Minuten von Block 1 bei Rückstand (nie unter dem Grundwert, höchstens `REVIEW_MIN_MAX`). */
+  reviewMin?: number;
   /** Vorrang beim Themenvorschlag (N17). */
   themeHint?: ThemeHint;
 };

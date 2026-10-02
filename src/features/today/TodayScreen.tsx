@@ -554,7 +554,7 @@ export function TodayScreen() {
       return {
         id: r.id,
         name: blockName(r.kind, r.block, t),
-        why: b ? blockWhy(b, t, plan.goal.review) : '',
+        why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '',
         whyKey: b?.kind ?? r.kind,
         min: r.min,
         state: r.state,

@@ -10,7 +10,8 @@ import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
 //   `goal.review` = Umfang von Block 1, `u` = eingefrorene Eckdaten (Blöcke, Minuten, Thema).
 // - „x von n“ kommt immer aus `duty.length` (M2); `pflichtFor` bleibt unverändert.
 
-export type ReviewGoal = { goal: number; due: number; fresh: number; repairs: number };
+/** `sec` = geplante Sekunden von Block 1, `overdue` = überfällige Karten beim Planen (nur zur Anzeige, nicht gespeichert). */
+export type ReviewGoal = { goal: number; due: number; fresh: number; repairs: number; sec?: number; overdue?: number };
 
 export type UnitBuildInput = {
   day: string;
@@ -26,9 +27,10 @@ export function unitDraft(i: Omit<UnitBuildInput, 'nowMs' | 'review'>): UnitPlan
   return unitPlanFor(i.day, i.week, prefsOf(i));
 }
 
-function prefsOf(i: { goalMin: number }, reviewCount?: number): UnitPrefs {
+function prefsOf(i: { goalMin: number }, reviewCount?: number, reviewMin?: number): UnitPrefs {
   const p: UnitPrefs = { goalMin: i.goalMin };
   if (reviewCount !== undefined) p.reviewCount = reviewCount;
+  if (reviewMin !== undefined && reviewMin > 0) p.reviewMin = reviewMin;
   return p;
 }
 
@@ -38,7 +40,7 @@ function metaOf(up: UnitPlan): UnitMeta {
 
 /** Der gespeicherte Tagesplan der Einheit (fester Schlüsselsatz, weil `update` verschmilzt). */
 export function buildUnitStored(i: UnitBuildInput): StoredPlan {
-  const up = unitPlanFor(i.day, i.week, prefsOf(i, i.review.goal));
+  const up = unitPlanFor(i.day, i.week, prefsOf(i, i.review.goal, i.review.sec !== undefined ? Math.ceil(i.review.sec / 60) : undefined));
   const hasReview = up.duty.includes('review');
   return {
     d: i.day,
@@ -70,7 +72,9 @@ export function unitPlanOf(view: StoredPlan & { u: UnitMeta }, week: WeekDoc | n
 }
 
 function storedUnitPlan(p: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
-  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin }, p.goal.review));
+  // Die Minuten von Block 1 stammen aus dem eingefrorenen Plan (bei Rückstand länger als der Grundwert).
+  const storedReviewMin = p.u.b.find(([, kind]) => kind === 'review')?.[2];
+  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin }, p.goal.review, storedReviewMin));
   const same = live.duty.length === p.duty.length && live.duty.every((d, k) => d === p.duty[k]) && live.blocks.every((b, k) => b.kind === p.u.b[k]?.[1]);
   if (same) return live;
   const blocks: UnitBlock[] = p.u.b.map(([block, kind, min], k) => ({

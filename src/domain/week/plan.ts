@@ -26,6 +26,8 @@ export const FULL_MIN = { review: 8, input: 5, task: 9, roleplay: 12, focus: 3, 
 /** Kurz-Einheit (M3): Tagesziel 10 → 3/5/2, Tagesziel 15–20 → 5/7/3. */
 export const SHORT_MIN = { tiny: { review: 3, task: 5, again: 2 }, short: { review: 5, task: 7, again: 3 } } as const;
 export const SUNDAY_MIN = { review: 5, check: 5 } as const;
+/** Mehr als so viele Minuten plant Block 1 auch bei großem Rückstand nie (`domain/unit/backlog.ts`). */
+export const REVIEW_MIN_MAX = 15;
 export const LISTEN_WORDS: readonly [number, number] = [150, 180];
 
 const CHANNEL: Readonly<Record<1 | 2 | 3 | 4 | 5, UnitChannel>> = {
@@ -114,24 +116,26 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
   const blocks: UnitBlock[] = [];
   let shape: UnitShape;
   let reviewSec: number;
+  // Rückstand: Block 1 darf länger dauern als der Grundwert (Anzeige „ca. n Min.“ bleibt wahr), nie kürzer.
+  const reviewMin = (base: number): number => Math.max(base, Math.min(REVIEW_MIN_MAX, Math.ceil(prefs.reviewMin ?? 0)));
 
   if (dow === 7) {
     // S5: Block 1 (≤ 5 Min.) + Wochen-Check (5 Min.), unabhängig vom Tagesziel.
     shape = 'sun';
     reviewSec = REVIEW_SEC.sun;
-    blocks.push(block(1, step('review'), SUNDAY_MIN.review));
+    blocks.push(block(1, step('review'), reviewMin(SUNDAY_MIN.review)));
     blocks.push(block(3, step('task.check'), SUNDAY_MIN.check, 'ch:u-check'));
   } else if (short) {
     const m = goalMin <= 10 ? SHORT_MIN.tiny : SHORT_MIN.short;
     shape = 'short';
     reviewSec = goalMin <= 10 ? REVIEW_SEC.tiny : REVIEW_SEC.short;
-    blocks.push(block(1, step('review'), m.review));
+    blocks.push(block(1, step('review'), reviewMin(m.review)));
     blocks.push(block(3, taskStep(dow, day, theme, prefs, true, false), m.task));
     blocks.push(block(5, step('again'), m.again));
   } else {
     shape = dow === 6 ? 'sat' : 'full';
     reviewSec = REVIEW_SEC.full;
-    blocks.push(block(1, step('review'), FULL_MIN.review));
+    blocks.push(block(1, step('review'), reviewMin(FULL_MIN.review)));
     const input = inputStep(dow, day, theme);
     if (input) blocks.push(block(2, input, FULL_MIN.input));
     blocks.push(block(3, taskStep(dow, day, theme, prefs, false, !!input), dow === 6 ? FULL_MIN.roleplay : FULL_MIN.task));

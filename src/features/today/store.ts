@@ -16,7 +16,7 @@ import { buildTrainCards } from '../../domain/srs/cards';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
-import { buildUnitStored, unitDraft } from '../../domain/unit/plan';
+import { buildUnitStored, unitDraft, type ReviewGoal } from '../../domain/unit/plan';
 import { unitReviewGoal } from '../../domain/unit/review';
 import { REPAIR_MAX, themeFor } from '../../domain/week';
 import { getDb } from '../../platform/capabilities';
@@ -199,7 +199,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const week = weekDocNow();
   const goalMin = normGoalMin(profile?.goalMin);
   const draft = unitDraft({ day: today, week, goalMin });
-  let review = { goal: 0, due: 0, fresh: 0, repairs: 0 };
+  let review: ReviewGoal = { goal: 0, due: 0, fresh: 0, repairs: 0 };
   if (draft.duty.includes('review')) {
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
     // Wendungen (`chunk/*`) gehören zur täglichen Wiederholung (Kap. 5, M15): gleiche Planung.

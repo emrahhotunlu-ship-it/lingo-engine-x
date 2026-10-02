@@ -21,6 +21,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteBlock_again: 'Again, but better',
   nbHeuteBlock_check: 'Weekly check',
   nbHeuteWhy_review: '{n} cards · due and theme first',
+  nbHeuteWhy_reviewBehind: '{n} cards · catching up, the rest tomorrow',
   nbHeuteWhy_reviewNone: 'Due cards and new words',
   nbHeuteWhy_inputRead: 'Short text on the theme',
   nbHeuteWhy_inputListen: 'Audio on the theme',

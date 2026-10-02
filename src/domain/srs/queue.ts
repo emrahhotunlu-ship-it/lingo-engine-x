@@ -1,4 +1,5 @@
 import { learningDayEnd } from '../date';
+import { cardSec, NEW_SEC } from './cost';
 import { availableExercises } from './modes';
 import { isLearningState, retrievability } from './scheduler';
 import type { Lang, QueueItem, TrainCard } from './types';
@@ -12,7 +13,7 @@ export const ROUND_SECONDS = 600;
 export const ROUND_MIN = 10;
 export const ROUND_MAX = 60;
 const LEARNING_MAX = 15;
-const NEW_COST = 50;
+const NEW_COST = NEW_SEC;
 
 /** Gespeicherter Wert → erlaubter Wert (nächster, bei Gleichstand der kleinere); fehlt er, 5. */
 export function normalizeNewPerDay(v: unknown): NewPerDay {
@@ -29,7 +30,7 @@ export function normalizeNewPerDay(v: unknown): NewPerDay {
   return best;
 }
 
-const reviewCost = (c: TrainCard) => (c.stage <= 2 ? 12 : c.stage <= 4 ? 20 : 35);
+const reviewCost = cardSec;
 
 /**
  * Eingangskorb (anki-regeln.md §5, ersetzt `SRC_RANK`): Emrahs eigener Kontext zuerst, der
@@ -55,6 +56,17 @@ export function inboxTier(src: string | null, theme = false): number {
   return theme ? Math.min(own, THEME_TIER) : own;
 }
 
+/**
+ * Herkunft für den Korb. Wörter des täglichen Claude-Auftrags tragen `src: 'coach'` (`dailyIntake.ts`), sind aber
+ * allgemeine Vorschläge und gehören wie `ai` auf Stufe 6 – nicht zu Emrahs eigenem Output (Stufe 3), sonst stünden sie vor
+ * seinen eigenen Funden (Prüfung Englischlehrer 02.10.2026). Andere `coach`-Wörter (Druck-Training, Umschreiben) bleiben Stufe 3.
+ */
+export function tierSrc(c: Pick<TrainCard, 'src' | 'doc'>): string | null {
+  if (c.src !== 'coach') return c.src;
+  const o = c.doc.origin;
+  return o && typeof o === 'object' && (o as { kind?: unknown }).kind === 'daily' ? 'daily' : c.src;
+}
+
 /** Kann die Karte in dieser Sprache überhaupt abgefragt werden? */
 export const quizzable = (c: TrainCard, lang: Lang, poolSize: number): boolean => availableExercises(c, lang, poolSize).length > 0;
 
@@ -75,7 +87,7 @@ export function dueCards(cards: readonly TrainCard[], nowMs: number): TrainCard[
 
 /** Neue Karten in Korb-Reihenfolge (§5); `isTheme` = Stufe 4 „Wochenthema“ (domain/week `isThemeCard`). */
 export function newCards(cards: readonly TrainCard[], isTheme?: (c: TrainCard) => boolean): TrainCard[] {
-  const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(c.src, isTheme ? isTheme(c) : false)]));
+  const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(tierSrc(c), isTheme ? isTheme(c) : false)]));
   return cards
     .filter((c) => c.isNew)
     .sort((a, b) => (tier.get(a.key) ?? LAST_TIER) - (tier.get(b.key) ?? LAST_TIER) || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || a.order - b.order || (a.key < b.key ? -1 : 1));

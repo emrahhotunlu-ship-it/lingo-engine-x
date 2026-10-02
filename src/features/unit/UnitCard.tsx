@@ -133,7 +133,7 @@ function Next() {
       <div className="lx-glass flex flex-col items-center gap-2 rounded-[var(--radius-card)] px-5 py-7 text-center">
         {prev && <p className="lx-eyebrow text-accent-text">✓ {t('nbHeuteBetweenDone', { block: blockName(prev.kind, prev.block, t) })}</p>}
         <h2 className="text-xl font-semibold tracking-tight">{t('nbHeuteRing', { done: view.duties.done, total: view.duties.total, min: rows.filter((r) => r.state !== 'done').reduce((s, r) => s + r.min, 0) })}</h2>
-        <p className="text-sm text-muted">{t('nbHeuteBetweenNext', { block: blockName(nextRow.kind, nextRow.block, t), why: b ? blockWhy(b, t, plan.goal.review) : '' })}</p>
+        <p className="text-sm text-muted">{t('nbHeuteBetweenNext', { block: blockName(nextRow.kind, nextRow.block, t), why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '' })}</p>
       </div>
       <Button variant="primary" size="lg" className="w-full" iconAfter="arrowRight" onClick={() => continueUnit(api)} data-testid="unit-next">
         {t('nbHeuteBetweenGo')}

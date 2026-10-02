@@ -120,7 +120,7 @@ Regel für `ex === 'flip'` in `cardPatch` und `chunkPatch`, mit `s0 = stageOf(cu
 **Entscheidung:** Das Kontingent bleibt wie in Kap. 6.3: **0/2/5/10, Standard 5**, je Lerntag (04:00), **ein** Kontingent für alle Wege. Der Eingangskorb ist die Menge aller neuen, nicht ausgeblendeten Karten, geordnet nach Nutzen.
 
 - **Geltung:** Das Limit gilt gemeinsam für Tageseinheit, „Alle fälligen“ und Stapel (`newQuotaLeft`, die D17-Lektionsregel bleibt). Aufdecken ändert daran nichts.
-- **Viele Fällige:** W2 bleibt (etwa 40 % der Zeit, Untergrenze `min(2, Kontingent)`). Es gibt **keine** zusätzliche Rückstandsbremse auf 0 wie in Lernarchitektur 3.2, das widerspräche Kap. 15.
+- **Viele Fällige:** W2 bleibt (etwa 40 % der Zeit, Untergrenze `min(2, Kontingent)`). Es gibt **keine** Rückstandsbremse auf 0 wie in Lernarchitektur 3.2, das widerspräche Kap. 15. Seit 02.10.2026 gibt es eine Bremse **bis auf die Untergrenze 2** (§9): ab 15 überfälligen Karten.
 - **„Höchstens 8 pro Tag“** (Lehrer 2.1, Lernarchitektur 3.2) wird nicht übernommen. Der Auftrag geht vor, 10 bleibt wählbar.
 - **Stapel:** Neue Karten kommen nur aus dem Rest-Kontingent und nur, wenn sie zum Stapel passen. Heute bekommen Stapel außer „alle“ gar keine neuen Karten. Das muss sich ändern, sonst lernt Emrah im Stapel „Aus Preply“ die neuen Preply-Wörter nie. „Jetzt üben“ am Wortblatt und „Kenne ich schon“ bleiben ausdrückliche Ausnahmen.
 - **Reihenfolge** (ersetzt `SRC_RANK` in `queue.ts`, innerhalb einer Stufe die älteste zuerst):
@@ -129,11 +129,11 @@ Regel für `ex === 'flip'` in `cardPatch` und `chunkPatch`, mit `s0 = stageOf(cu
   3. eigener Output und eigene Korrektur: `say`, `fluency`, `scene`, `mail`, `pitch`, `biz`, `coach`
   4. Wochenthema (sobald P1 ein Themen-Merkmal liefert, bis dahin leer)
   5. eigene Funde: `lookup`, `read`, `listen`, `translate`, `write`, `user`, `claude`
-  6. Lektion und Vorschläge: `lesson`, `ai`, `job`, `daily`
+  6. Lektion und Vorschläge: `lesson`, `ai`, `job`, `daily` (Wörter des Tagesauftrags tragen `src: 'coach'` mit `origin.kind: 'daily'` und zählen seit 02.10.2026 hierher, `tierSrc` in `queue.ts`)
   7. Startwortschatz und Unbekanntes: `seed`, sonst
-- **Anzeige im Wortschatz:** „Eingangskorb 42 · reicht für 9 Tage“ (Anzahl ÷ Kontingent). Ab 30 Tagen Reichweite erscheint ein ruhiger Hinweis „Korb sichten“ mit „Kenne ich schon“ und „Ausblenden“ je Karte. Nie automatisch löschen (Kap. 9), kein rotes Abzeichen (Kap. 7).
+- **Anzeige im Wortschatz:** „Eingangskorb 42 · reicht für 14 Tage“ (Anzahl ÷ neue Wörter, die wirklich kommen: Kontingent, im Alltag höchstens 3, bei Rückstand 2; seit 02.10.2026, vorher Anzahl ÷ Kontingent). Ab 30 Tagen Reichweite erscheint ein ruhiger Hinweis „Korb sichten“ mit „Kenne ich schon“ und „Ausblenden“ je Karte. Nie automatisch löschen (Kap. 9), kein rotes Abzeichen (Kap. 7).
 
-**Begründung:** Jede neue Karte zieht im ersten Monat etwa 4–6 Abrufe nach sich. Bei 5 am Tag bleibt der Deckel von 6–8 Minuten haltbar, 10 bleibt für Termin-Wochen wählbar. Emrahs eigener Kontext (Termin, Lehrer, eigene Fehler) ist am relevantesten und am besten verankert und kommt deshalb zuerst. Innerhalb einer Stufe kommt die älteste zuerst, damit keine Karte übergangen wird.
+**Begründung:** Jede neue Karte zieht im ersten Monat etwa 4–6 Abrufe nach sich. (Korrektur 02.10.2026: Die Simulation über 120 Tage zeigt, dass der feste 8-Minuten-Deckel bei 5 am Tag NICHT haltbar war, siehe §9. Im Alltag kommen etwa 2–3 neue Wörter am Tag, das Kontingent ist eine Obergrenze.) Emrahs eigener Kontext (Termin, Lehrer, eigene Fehler) ist am relevantesten und am besten verankert und kommt deshalb zuerst. Innerhalb einer Stufe kommt die älteste zuerst, damit keine Karte übergangen wird.
 
 ---
 
@@ -167,7 +167,7 @@ export const CONTROL = { perWeek: 5, perDay: 2, perSession: 1, windowDays: 28, m
   - nur fällige Karten,
   - Grenzen 1 / 2 / 5 im Stapel,
   - Kalibrierung mit 7 von 10 schaltet die strenge Grenze, mit 8 von 10 nicht.
-- **Eingangskorb:** `meeting` vor `preply` vor `lookup` vor `seed`, innerhalb einer Stufe die älteste zuerst.
+- **Eingangskorb:** `meeting` vor `preply` vor `lookup` vor `seed`, innerhalb einer Stufe die älteste zuerst. Tagesauftrags-Wörter (`coach` + `origin.kind: 'daily'`) nach den eigenen Funden.
 
 ---
 Bezug: /home/user/lingo-engine-x/docs/neubau/architektur.md · /home/user/lingo-engine-x/src/domain/srs/applyReview.ts (Schema `stage ≥ 1`) · /home/user/lingo-engine-x/src/domain/srs/queue.ts (`SRC_RANK`) · /home/user/lingo-engine-x/src/domain/srs/chunkCards.ts (`chunkStage`) · /home/user/lingo-engine-x/src/features/vocab/session.ts (Wiedervorlage, neue Karten in Stapeln) · /home/user/lingo-engine-x/src/domain/srs/confidence.ts
@@ -175,3 +175,18 @@ Bezug: /home/user/lingo-engine-x/docs/neubau/architektur.md · /home/user/lingo-
 ## 8. Ergänzung Product Owner (27.09.2026)
 - **Richtung je Stapel wählbar** wie in Anki: „Deutsch → Englisch (aktiv)“ ist Standard (Vorderseite laut Regel oben: Bedeutung + Ursprungssatz mit Lücke), „Englisch → Deutsch (verstehen)“ und „Gemischt“ sind wählbar. In der Tageseinheit und in „Alle fälligen“ gilt immer Deutsch → Englisch.
 - Grund: Emrah hat im Prototyp v1 die Vorderseite Englisch gesehen und den Modus gelobt; die Lernwissenschaft verlangt aktiven Abruf. Beides bleibt so möglich.
+
+## 9. Änderungen 02.10.2026 (Emrah: „Wie intelligent ist der Anki-Modus wirklich?“)
+Grundlage: Langzeit-Simulation `tests/unit/backlogSim.test.ts` (120 Tage, echter Tagesplan, FSRS, Startstand 52 überfällig / 53 neu), Prüfung durch Englischlehrer und Lernwissenschaft.
+
+- **Befund:** Das feste 8-Minuten-Budget (`REVIEW_SEC`) trug nur etwa 13 fällige Karten und höchstens 3 neue am Tag. Der Berg fälliger Karten wuchs von 60 auf 256 bis 368 (nach einem Jahr 900 bis über 1.000), die Trefferquote reifer Karten fiel von 0,89 auf 0,79 bis 0,83 (nach einem Jahr 0,70 bis 0,77). Die Einstellungen 5 und 10 neue Wörter lieferten dasselbe Ergebnis.
+- **Rückstand-Steuerung** (`domain/unit/backlog.ts`, `unit/review.ts`):
+  1. Je überfälliger Karte (gestern oder früher fällig) +8 s Wiederholzeit, höchstens +50 % (Vollplan: bis 12 statt 8 Minuten). Block 1 nennt den Grund („Rückstand, der Rest morgen“), die Minutenanzeige folgt dem Plan.
+  2. Ab 15 überfälligen Karten nur noch 2 neue Wörter (Untergrenze, Kap. 15). Der Anteil neuer Wörter wird immer vom Grundbudget gerechnet, damit er mit dem Rückstand nie steigt.
+  - Ergebnis im Modell (120 Tage): Berg ≤ 81 (auch nach einer Woche Pause), Trefferquote reifer Karten 0,87 bis 0,91, im Mittel 2,6 neue Wörter am Tag, geplant im Mittel 8,8 Minuten (höchstens 12). Nach 365 Tagen: Berg ≤ 60, Trefferquote 0,89.
+- **Eine Kostenquelle** (`domain/srs/cost.ts`): 12/20/35 s je Karte nach Stufe, 50 s neu, 40 s Reparatur; Aufdecken 8 s. Plan, ältere Rundenplanung und Zeitanzeige im Wortschatz rechnen gleich (vorher 8 s, 12/20/35 s und 27 s).
+- **Ehrliche Anzeige** (Wortschatz): „n Karten sind schon länger fällig“, bei Bremse der Grund, was der Knopf „Wiederholen“ gerade startet (Pflicht von heute oder freie Runde mit bis zu 20 Karten), nach der Runde „Noch n Karten sind fällig · Noch eine Runde“.
+- **Kontext-Wechsel** (`domain/srs/rotate.ts`): Ab Stufe 3 wechseln sich bei den Satzübungen (cloze, cloze_hint, tiles, speed, dictation) der Ursprungssatz und die gespeicherten Claude-Sätze (`xEx`) je Wiederholung ab (`reps % n`). Aufdecken, Prüfabfrage und Kontrolle bleiben im Ursprungssatz. Reine Ansicht, nichts wird geschrieben.
+- **Stufe und Note:** Bausteine (`tiles`) sind höchstens „Gut“ (Rekonstruktion, kein freier Abruf). Tagesbremse (`applyReview.stageAfter`): höchstens ein Aufstieg je Karte und Lerntag, Wiederholungen am selben Tag heben die Stufe nicht, Abstieg bleibt möglich.
+- **„Nicht vorschlagen“-Liste für Claude** (`domain/srs/known.ts`): die zuletzt hinzugefügten 600 Wörter und Wendungen samt Startwortschatz (vorher: die alphabetisch letzten 200 Dokument-Wörter). Vorschläge, die schon da sind, werden nicht angezeigt.
+- **Offen** (Lernwissenschaft „später“): Kostenmodell aus gemessenen Zeiten (`log/<Tag>.ms`), Aufholmodus (aufdecken statt tippen bei ≥ 40 Überfälligen), Gewichtung der Note nach Art der Übung, billigere Wartung reifer Karten, Blutegel-Grenze, `planRound`/`ROUND_*` (ungenutzt, nur noch in Tests) entfernen.
