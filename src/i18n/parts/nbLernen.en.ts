@@ -24,7 +24,7 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenResumeFocus: 'Focus · task {n} of {total}',
   nbLernenAgainTitle: 'Again, but better',
   nbLernenAgainTask: 'Write your text again – from memory and better.',
-  nbLernenAgainOldTask: 'Write these earlier sentences again, this time better.',
+  nbLernenAgainOldTask: 'Correct these earlier sentences. Change only the wrong part.',
   nbLernenAgainOldLead: 'Your earlier sentences',
   nbLernenAgainEmptyTask: 'Nothing to rewrite today.',
   nbLernenAgainEmpty: 'You have not written a text of your own today. This block still counts as done.',
