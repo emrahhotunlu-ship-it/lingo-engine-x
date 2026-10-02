@@ -45,6 +45,7 @@ export const DECK_LABEL: Record<BuiltinDeck, MessageKey> = {
   'src:preply': 'nbWsDeckSrcPreply',
   'src:lesson': 'nbWsDeckSrcLesson',
   'src:ai': 'nbWsDeckSrcAi',
+  'src:pack': 'nbWsDeckSrcPack',
 };
 
 type Mode = 'auto' | 'flip' | 'type';

@@ -149,7 +149,7 @@ export function matchDeck(c: TrainCard, f: DeckFilter, nowMs: number): boolean {
 }
 
 /** Eingebaute Stapel (plan.md §1.3): nicht gespeichert, reine Regeln. */
-export const BUILTIN_DECKS = ['inbox', 'hard', 'leech', 'job', 'phrases', 'theme', 'mistakes', 'src:translate', 'src:lookup', 'src:preply', 'src:lesson', 'src:ai'] as const;
+export const BUILTIN_DECKS = ['inbox', 'hard', 'leech', 'job', 'phrases', 'theme', 'mistakes', 'src:translate', 'src:lookup', 'src:preply', 'src:lesson', 'src:ai', 'src:pack'] as const;
 export type BuiltinDeck = (typeof BUILTIN_DECKS)[number];
 export const isBuiltinDeck = (id: string): id is BuiltinDeck => (BUILTIN_DECKS as readonly string[]).includes(id);
 
@@ -160,6 +160,7 @@ const SRC_DECK: Record<string, readonly string[]> = {
   'src:preply': ['teacher', 'preply'],
   'src:lesson': ['lesson'],
   'src:ai': ['ai', 'claude'],
+  'src:pack': ['pack'],
 };
 
 export type DeckCtx = { nowMs: number; weekStartMs: number; isTheme?: (c: TrainCard) => boolean };

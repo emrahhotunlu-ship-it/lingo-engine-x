@@ -33,7 +33,8 @@ export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce' | 'fli
 
 /** Satz mit markierter Stelle: `sentence.slice(start, end) === gap`. */
 export type ContextSpan = { sentence: string; start: number; end: number; gap: string };
-export type Colloc = { index: number; p: string; de: string; gap: string; opts: string[]; ctx: ContextSpan | null };
+/** `ai`: von Claude ergänzt (`collocs.ts`): kann Fehler enthalten, „Ich lag richtig“ ist erlaubt. */
+export type Colloc = { index: number; p: string; de: string; gap: string; opts: string[]; ctx: ContextSpan | null; ai?: boolean };
 export type Counts = { c: number; w: number };
 
 /** Herkunft und Zusatzangaben einer Wendung (`chunk/<id>`, altapp-analyse §5). */

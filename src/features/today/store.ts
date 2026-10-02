@@ -18,6 +18,7 @@ import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
 import { buildUnitStored, unitDraft, type ReviewGoal } from '../../domain/unit/plan';
 import { unitReviewGoal } from '../../domain/unit/review';
+import { packTopUp } from './pack';
 import { REPAIR_MAX, themeFor } from '../../domain/week';
 import { getDb } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
@@ -307,6 +308,12 @@ async function followUp(today: string, nowMs: number, toStore: StoredPlan | null
     await intake(today, nowMs);
   } catch (err) {
     logError('day:daily', err, 'Abgleich');
+  }
+  // C1-Paket: bis zu 2 geprüfte Einträge je Lerntag als neue Karten (nach den eigenen Funden im Korb).
+  try {
+    await packTopUp(today, nowMs);
+  } catch (err) {
+    logError('day:pack', err, 'C1-Paket');
   }
   await loadLearnInputs();
   await afterPlan(today, nowMs);

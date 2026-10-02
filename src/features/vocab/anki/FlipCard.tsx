@@ -6,7 +6,7 @@ import { ipaOf } from '../../../domain/lexicon/pron';
 import { meaningOf } from '../../../domain/srs/cards';
 import { chunkWhy } from '../../../domain/srs/chunkCards';
 import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../../domain/srs/confidence';
-import { cardExamples, EXAMPLES_MIN, storedExamples } from '../../../domain/srs/examples';
+import { cardExamples, wantsEnrichment } from '../../../domain/srs/examples';
 import { posKey } from '../../../domain/srs/explain';
 import { flipSuggest, formatInterval, seenOn, wordCount } from '../../../domain/srs/flip';
 import { previewIntervals } from '../../../domain/srs/scheduler';
@@ -106,7 +106,7 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
     setShown({ t: tt, ms: Math.round(ms), suggest, iv: previewIntervals(card.fsrs, tt) });
     // Fehlt der Rückseite ein Beispielsatz (Befund 29.09.: Karte ohne Ursprungssatz, Kap. 15),
     // ergänzt Claude ihn einmal je Karte – genau wie beim Tippen (ExerciseView.tsx).
-    if (ai && storedExamples(card.doc).length === 0 && cardExamples(card, card.context?.sentence ?? null).length < EXAMPLES_MIN) requestExamples(card);
+    if (ai && wantsEnrichment(card, card.context?.sentence ?? null, Date.now())) requestExamples(card);
     idle(prepareNext);
   };
 
@@ -303,6 +303,11 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
                     </li>
                   ))}
                 </ul>
+                {col.some((c) => c.ai) && (
+                  <p className="text-xs text-subtle" data-testid="flip-col-ai">
+                    {t('nbWsColAiNote')}
+                  </p>
+                )}
               </div>
             )}
             {examples.length > 0 && (

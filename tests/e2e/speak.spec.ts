@@ -144,7 +144,8 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   await page.getByTestId('report-home').click();
   await screen(page, 'today');
   // Neubau: Sonntag = Tageseinheit mit 2 Blöcken (Wiederholen + Wochen-Check); das Gespräch zählt in keinen.
-  await expect(page.getByTestId('today-status')).toHaveText('0 von 2 · noch ca. 10 Min.');
+  // Wiederholen darf bei Rückstand länger dauern (Seed: viele überfällige Karten; Sonntag 5 Min. + höchstens 50 %), der Wochen-Check bleibt bei 5.
+  await expect(page.getByTestId('today-status')).toHaveText(/^0 von 2 · noch ca\. (10|11|12|13) Min\.$/);
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
   await expect(page.getByTestId('extra')).toHaveCount(0);
   // Reiter „Sprechen“: erledigt ist Zustand, kein Knopf (Kap. 2.2).

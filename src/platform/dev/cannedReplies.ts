@@ -20,7 +20,7 @@ import { registerP5TaskReplies } from './canned/p5tasks';
 import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
-// produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
+// produce-check@1, card-examples@2, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
 // Sonderwörter für Fehlerpfade:
 // - `zzqx`: erste Antwort verletzt das Schema, der Neuversuch („did not match") ist gültig,
 // - `zzjson`: gar kein JSON (→ `invalid_json`).
@@ -199,18 +199,21 @@ export function produceCheckReply(input: string): string {
   return JSON.stringify({ verdict, usesTarget: uses, fixed, why: WHY[verdict][lang], better: '' });
 }
 
-// ---------------------------------------------------------------- card-examples@1
+// ---------------------------------------------------------------- card-examples@2
 
 /** Drei Sätze mit dem Wort (Grundform, ohne „to "). `zzjson` im Wort → kein JSON. */
 export function cardExamplesReply(input: string): string {
   const word = line(input, 'Word').replace(/^to\s+/i, '').trim() || 'word';
   if (/zzjson/i.test(word)) return NOT_JSON;
+  // Ein gültiger Wortpartner nur, wenn das Wort `colq` enthält (E2E „Wortpartner von Claude“); sonst wie bisher keiner.
+  const collocations = /colq/i.test(word) ? [{ p: `${word} the plan`, de: 'den Plan voranbringen', gap: 'plan', opts: ['table', 'price', 'story'], ex: `We [${word} the plan] together every week.` }] : [];
   return JSON.stringify({
     examples: [
       `Our team tried to ${word} the new plan before the deadline.`,
       `It is not always easy to ${word} people in a short meeting.`,
       `She had to ${word} her manager with clear numbers and examples.`,
     ],
+    collocations,
   });
 }
 

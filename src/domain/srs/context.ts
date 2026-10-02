@@ -187,7 +187,7 @@ export function parseCollocs(col: unknown): Colloc[] {
       const hit = locate(inner, gap);
       if (hit) ctx = { sentence, start: offset + hit.start, end: offset + hit.end, gap: inner.slice(hit.start, hit.end) };
     }
-    out.push({ index, p: str(c.p), de: str(c.de), gap, opts, ctx });
+    out.push({ index, p: str(c.p), de: str(c.de), gap, opts, ctx, ...(c.ai === 1 || c.ai === true ? { ai: true } : {}) });
   });
   return out;
 }

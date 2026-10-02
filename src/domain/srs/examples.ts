@@ -2,6 +2,7 @@ import { hash32 } from '../random';
 import { stripGapMarks } from '../text/tokenize';
 import { containsPhrase } from '../chunks/newChunk';
 import { locate, lemmaOf } from './context';
+import { needsCollocs } from './collocs';
 import type { TrainCard } from './types';
 
 // Beispielsätze nach dem Prüfen (CLAUDE.md A7): Ursprungssatz, Sätze der Kollokationen und
@@ -61,6 +62,14 @@ export function cardExamples(card: Pick<TrainCard, 'context' | 'doc'>, shown: st
   }
   for (const x of [...storedExamples(card.doc), ...extra]) add(x.en, 'ai');
   return out.slice(0, EXAMPLES_MAX);
+}
+
+/**
+ * Soll Claude für diese Karte etwas ergänzen? Beispielsätze (wenn eigene fehlen und noch keine gespeichert sind) und/oder
+ * typische Wortpartner (wenn `col` leer ist, `collocs.ts`). EINE Anfrage deckt beides ab, höchstens einmal je Karte und Seitenaufruf.
+ */
+export function wantsEnrichment(card: Pick<TrainCard, 'context' | 'doc' | 'kind' | 'inDb'>, shown: string | null, nowMs: number): boolean {
+  return (storedExamples(card.doc).length === 0 && cardExamples(card, shown).length < EXAMPLES_MIN) || needsCollocs(card, nowMs);
 }
 
 /** KI-Beispiele prüfen: enthalten das Wort (auch gebeugt), keine Klammern, sinnvolle Länge. */

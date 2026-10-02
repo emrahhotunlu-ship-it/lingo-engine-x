@@ -4,13 +4,14 @@ import { resumables, unitBlockFor, type FocusApi } from '../../app/registry';
 import { loadResume } from '../../app/resume';
 import type { Route } from '../../app/router/types';
 import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types';
-import { useLive } from '../../data/live';
+import { invalidIdsOf, useLive } from '../../data/live';
 import { readOnce } from '../../data/snapshot';
 import type { DutyId, StoredPlan, UnitMeta } from '../../domain/plan/types';
 import { sayPath, type SayItem } from '../../domain/say/sayDoc';
 import { buildTrainCards } from '../../domain/srs/cards';
+import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { isUnitPlan, lapPatch, unitActKey, unitDonePatch, unitPlanOf } from '../../domain/unit/plan';
-import { unitPhrases } from '../../domain/unit/phrases';
+import { unitPhrases, weakWords } from '../../domain/unit/phrases';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { resolveBlock, themeFor, weekTargets } from '../../domain/week';
 import type { UnitBlock, UnitEnv, UnitPlan } from '../../domain/week/types';
@@ -74,8 +75,11 @@ export function ctxFor(u: UnitNow, block: UnitBlock): UnitCtx {
   let phrases = same && run.phrases.length ? run.phrases : [];
   if (!phrases.length) {
     const live = useLive.getState();
-    const cards = buildTrainCards(live.collections.vocab ?? new Map(), useClock.getState().now);
-    phrases = unitPhrases(cards, u.day, targets);
+    const now = useClock.getState().now;
+    const cards = buildTrainCards(live.collections.vocab ?? new Map(), now, invalidIdsOf(live.invalid, 'vocab'));
+    const chunks = buildChunkCards(live.collections.chunk ?? new Map(), now, invalidIdsOf(live.invalid, 'chunk'));
+    // Dazu bis zu zwei schwache Wörter oder Wendungen: Block 3 wiederholt sie mit einer zweiten Methode (Produktion).
+    phrases = unitPhrases(cards, u.day, targets, weakWords([...cards, ...chunks]));
   }
   const ctx: UnitCtx = { day: u.day, block: block.block, theme: pick.theme, targets, minutes: block.min, phrases };
   if (same && run.sentences.length) ctx.sentences = run.sentences;

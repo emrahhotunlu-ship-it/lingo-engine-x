@@ -35,8 +35,8 @@ const reviewCost = cardSec;
 /**
  * Eingangskorb (anki-regeln.md §5, ersetzt `SRC_RANK`): Emrahs eigener Kontext zuerst, der
  * Startwortschatz zuletzt. Stufen: 1 Termin · 2 Lehrer (Lehrer-Feedback, frühere Preply-Importe) · 3 eigener Output/eigene Korrektur ·
- * 4 Wochenthema (`isThemeCard`, von außen) · 5 eigene Funde · 6 Lektion und Vorschläge ·
- * 7 Startwortschatz und Unbekanntes. Innerhalb einer Stufe die älteste zuerst.
+ * 4 Wochenthema (`isThemeCard`, von außen) · 5 eigene Funde · 6 C1-Paket · 7 Lektion und Vorschläge ·
+ * 8 Startwortschatz und Unbekanntes. Innerhalb einer Stufe die älteste zuerst.
  */
 export const INBOX_TIERS: readonly (readonly string[])[] = [
   ['meeting'],
@@ -44,6 +44,8 @@ export const INBOX_TIERS: readonly (readonly string[])[] = [
   ['say', 'fluency', 'scene', 'mail', 'pitch', 'biz', 'coach'],
   [],
   ['lookup', 'read', 'listen', 'translate', 'write', 'user', 'claude'],
+  // C1-Paket (02.10.2026): geprüfte, geplante C1-Einträge hinter Emrahs eigenen Funden, vor allgemeinen Vorschlägen.
+  ['pack'],
   ['lesson', 'ai', 'job', 'daily'],
 ];
 const THEME_TIER = 3;

@@ -1,0 +1,1005 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "colloc-01",
+   "cat": "colloc",
+   "en": "address concerns",
+   "de": "Bedenken ausräumen, auf Bedenken eingehen",
+   "def": "to deal openly with worries that someone has raised",
+   "ex": "We would like to address concerns about data security before we go any further.",
+   "register": "neutral",
+   "why": "Bedenken „ausräumen“ oder darauf „eingehen“ heißt address concerns, nicht solve concerns."
+  },
+  {
+   "id": "colloc-02",
+   "cat": "colloc",
+   "en": "raise concerns",
+   "de": "Bedenken äußern",
+   "def": "to tell others that you are worried about something",
+   "ex": "If anyone wants to raise concerns about the timeline, please do it before Friday.",
+   "register": "neutral",
+   "why": "Bedenken „äußern“ heißt raise concerns, nicht say concerns."
+  },
+  {
+   "id": "colloc-03",
+   "cat": "colloc",
+   "en": "strike a balance",
+   "de": "einen Mittelweg finden",
+   "def": "to find a fair compromise between two things that pull in different directions",
+   "ex": "We need to strike a balance between speed and compliance.",
+   "register": "neutral",
+   "why": "Einen Mittelweg „finden“ heißt meist strike a balance, nicht make a balance."
+  },
+  {
+   "id": "colloc-04",
+   "cat": "colloc",
+   "en": "reach a consensus",
+   "de": "einen Konsens erzielen",
+   "def": "to arrive at an agreement that everyone accepts",
+   "ex": "We hope to reach a consensus before the steering committee meets.",
+   "register": "formal",
+   "why": "Einen Konsens „erzielen“ heißt reach a consensus, nicht make a consensus."
+  },
+  {
+   "id": "colloc-05",
+   "cat": "colloc",
+   "en": "meet a requirement",
+   "de": "eine Anforderung erfüllen",
+   "def": "to satisfy a condition that has been set",
+   "ex": "Our archive can meet a requirement like GoBD without extra tools.",
+   "register": "neutral",
+   "why": "Eine Anforderung „erfüllen“ heißt meet a requirement, nicht fill a requirement."
+  },
+  {
+   "id": "colloc-06",
+   "cat": "colloc",
+   "en": "mitigate a risk",
+   "de": "ein Risiko abschwächen",
+   "def": "to make a danger or problem less serious",
+   "ex": "A phased rollout helps us mitigate a risk before it becomes a problem.",
+   "register": "formal",
+   "why": "Ein Risiko „abschwächen“ heißt mitigate a risk; weaken a risk klingt unnatürlich."
+  },
+  {
+   "id": "colloc-07",
+   "cat": "colloc",
+   "en": "weigh the options",
+   "de": "die Optionen abwägen",
+   "def": "to think carefully about the good and bad sides of each choice",
+   "ex": "Let us weigh the options before we commit to a vendor.",
+   "register": "neutral",
+   "why": "Abwägen heißt das Verb weigh, nicht das Nomen weight: weigh the options."
+  },
+  {
+   "id": "colloc-08",
+   "cat": "colloc",
+   "en": "set a precedent",
+   "de": "einen Präzedenzfall schaffen",
+   "def": "to create an example that others will expect to follow",
+   "ex": "A discount this large would set a precedent for every other customer.",
+   "register": "neutral",
+   "why": "Einen Präzedenzfall „schaffen“ heißt set a precedent, nicht make a precedent."
+  },
+  {
+   "id": "colloc-09",
+   "cat": "colloc",
+   "en": "secure buy-in",
+   "de": "Zustimmung und Rückhalt sichern",
+   "def": "to win the support of the people who must agree",
+   "ex": "Our first goal is to secure buy-in from the finance team.",
+   "register": "neutral",
+   "why": "„Rückhalt sichern“ heißt secure buy-in; buy-in ist die Zustimmung, kein Kauf."
+  },
+  {
+   "id": "colloc-10",
+   "cat": "colloc",
+   "en": "drive adoption",
+   "de": "die Nutzung vorantreiben",
+   "def": "to make more people start using a product or tool",
+   "ex": "A short training plan can drive adoption across all departments.",
+   "register": "neutral",
+   "why": "„Nutzung vorantreiben“ heißt drive adoption, nicht push the usage."
+  },
+  {
+   "id": "colloc-11",
+   "cat": "colloc",
+   "en": "streamline a process",
+   "de": "einen Prozess verschlanken",
+   "def": "to make a process simpler and faster by removing unnecessary steps",
+   "ex": "The new workflow lets us streamline a process that used to take weeks.",
+   "register": "neutral",
+   "why": "Streamline a process heißt „vereinfachen und beschleunigen“; das Nomen dazu ist streamlining."
+  },
+  {
+   "id": "colloc-12",
+   "cat": "colloc",
+   "en": "foster collaboration",
+   "de": "Zusammenarbeit fördern",
+   "def": "to help people work together better",
+   "ex": "Shared dashboards foster collaboration between sales and support.",
+   "register": "formal",
+   "why": "Foster ist förmlicher als support oder promote und passt in Berichte und Pitches."
+  },
+  {
+   "id": "colloc-13",
+   "cat": "colloc",
+   "en": "stick to the timeline",
+   "de": "den Zeitplan einhalten",
+   "def": "to keep to the schedule that was agreed",
+   "ex": "We will stick to the timeline unless the client changes the scope.",
+   "register": "neutral",
+   "why": "Einen Zeitplan „einhalten“ heißt stick to oder keep to the timeline, nicht hold the timeline."
+  },
+  {
+   "id": "colloc-14",
+   "cat": "colloc",
+   "en": "fall behind schedule",
+   "de": "in Verzug geraten",
+   "def": "to be later than planned",
+   "ex": "If we fall behind schedule, the launch date moves into January.",
+   "register": "neutral",
+   "why": "„In Verzug geraten“ heißt fall behind schedule, nicht get in delay."
+  },
+  {
+   "id": "colloc-15",
+   "cat": "colloc",
+   "en": "run into obstacles",
+   "de": "auf Hindernisse stoßen",
+   "def": "to meet problems that slow you down",
+   "ex": "We did not expect to run into obstacles this early in the project.",
+   "register": "neutral",
+   "why": "„Auf Hindernisse stoßen“ heißt run into obstacles, nicht bump on obstacles."
+  },
+  {
+   "id": "colloc-16",
+   "cat": "colloc",
+   "en": "gain traction",
+   "de": "an Fahrt gewinnen, Anklang finden",
+   "def": "to start to succeed and attract more interest or users",
+   "ex": "The new product line is starting to gain traction in the DACH region.",
+   "register": "neutral",
+   "why": "„An Fahrt gewinnen“ im Geschäft heißt gain traction (oder gain momentum), nicht win speed."
+  },
+  {
+   "id": "colloc-17",
+   "cat": "colloc",
+   "en": "build a business case",
+   "de": "einen Business Case erarbeiten",
+   "def": "to prepare the arguments and numbers that justify an investment",
+   "ex": "We still have to build a business case for the cloud migration.",
+   "register": "neutral",
+   "why": "Build a business case heißt „erarbeiten“; make the case for heißt „überzeugend vortragen“."
+  },
+  {
+   "id": "colloc-18",
+   "cat": "colloc",
+   "en": "make a compelling case",
+   "de": "überzeugend argumentieren",
+   "def": "to give strong reasons that make others agree",
+   "ex": "You need to make a compelling case for the extra budget.",
+   "register": "formal",
+   "why": "Make a case for heißt „Argumente vortragen“; compelling heißt „zwingend überzeugend“."
+  },
+  {
+   "id": "colloc-19",
+   "cat": "colloc",
+   "en": "exceed expectations",
+   "de": "Erwartungen übertreffen",
+   "def": "to be better than people hoped",
+   "ex": "Our goal is to exceed expectations in the first ninety days.",
+   "register": "neutral",
+   "why": "Erwartungen „übertreffen“ heißt exceed expectations, nicht overtake."
+  },
+  {
+   "id": "colloc-20",
+   "cat": "colloc",
+   "en": "take ownership",
+   "de": "Verantwortung übernehmen",
+   "def": "to accept that something is your job and make sure it gets done",
+   "ex": "Someone has to take ownership of the data migration.",
+   "register": "neutral",
+   "why": "Take ownership betont die Zuständigkeit; take responsibility betont eher Pflicht oder Schuld."
+  },
+  {
+   "id": "colloc-21",
+   "cat": "colloc",
+   "en": "close the gap",
+   "de": "die Lücke schließen",
+   "def": "to reduce a difference until it disappears",
+   "ex": "This update will close the gap between our offer and the market.",
+   "register": "neutral",
+   "why": "Eine Lücke „schließen“ heißt close the gap, nicht shut."
+  },
+  {
+   "id": "colloc-22",
+   "cat": "colloc",
+   "en": "keep sb in the loop",
+   "de": "jemanden auf dem Laufenden halten",
+   "def": "to make sure someone always gets the latest information",
+   "ex": "Please keep me in the loop on any changes to the contract.",
+   "register": "informal",
+   "why": "„Auf dem Laufenden halten“ heißt keep sb in the loop (auch: keep sb posted), nicht hold up to date."
+  },
+  {
+   "id": "colloc-23",
+   "cat": "colloc",
+   "en": "honor a commitment",
+   "de": "eine Zusage einhalten",
+   "def": "to do what you promised",
+   "ex": "We always honor a commitment once it is in writing.",
+   "register": "formal",
+   "why": "Eine Zusage „einhalten“ heißt honor a commitment (oder keep a promise), nicht hold a commitment."
+  },
+  {
+   "id": "colloc-24",
+   "cat": "colloc",
+   "en": "pose a risk",
+   "de": "ein Risiko darstellen",
+   "def": "to be a possible source of danger or loss",
+   "ex": "An unclear data policy can pose a risk for the whole project.",
+   "register": "formal",
+   "why": "Ein Risiko „darstellen“ heißt pose (oder present) a risk, nicht put a risk."
+  },
+  {
+   "id": "colloc-25",
+   "cat": "colloc",
+   "en": "yield results",
+   "de": "Ergebnisse bringen",
+   "def": "to produce a useful or positive outcome",
+   "ex": "The pilot should yield results within six weeks.",
+   "register": "formal",
+   "why": "Yield ist förmlicher als bring: yield results, yield returns."
+  },
+  {
+   "id": "frame-01",
+   "cat": "frame",
+   "en": "that said",
+   "de": "allerdings, dennoch",
+   "def": "used to add a point that limits what you just said",
+   "ex": "The license fee is higher. That said, the total cost over three years is lower.",
+   "register": "neutral",
+   "why": "Mit that said schränkt man das Vorige ein; es steht am Satzanfang, danach ein Komma."
+  },
+  {
+   "id": "frame-02",
+   "cat": "frame",
+   "en": "on the other hand",
+   "de": "andererseits",
+   "def": "used to introduce a contrasting point",
+   "ex": "Cloud is faster to deploy. On the other hand, some customers want full control.",
+   "register": "neutral",
+   "why": "On the other hand folgt fast immer auf on the one hand oder eine erste Aussage."
+  },
+  {
+   "id": "frame-03",
+   "cat": "frame",
+   "en": "all in all",
+   "de": "alles in allem",
+   "def": "used to give a final overall view",
+   "ex": "All in all, the pilot went better than we expected.",
+   "register": "neutral",
+   "why": "All in all fasst zusammen; es steht meist am Satzanfang, danach ein Komma."
+  },
+  {
+   "id": "frame-04",
+   "cat": "frame",
+   "en": "to be fair",
+   "de": "fairerweise (muss man sagen)",
+   "def": "used to add a point that is fair to the other side",
+   "ex": "To be fair, the first version had no audit trail either.",
+   "register": "informal",
+   "why": "To be fair gibt der Gegenseite recht und mildert Kritik."
+  },
+  {
+   "id": "frame-05",
+   "cat": "frame",
+   "en": "as far as I can tell",
+   "de": "soweit ich das beurteilen kann",
+   "def": "used when you are fairly sure but not certain",
+   "ex": "As far as I can tell, the contract does not cover backups.",
+   "register": "neutral",
+   "why": "As far as I can tell heißt „soweit ich sehen kann“ und klingt sachlicher als I think."
+  },
+  {
+   "id": "frame-06",
+   "cat": "frame",
+   "en": "would be inclined to",
+   "de": "würde eher dazu neigen, zu",
+   "def": "used to say politely what you would probably choose",
+   "ex": "I would be inclined to wait until we see the second quarter numbers.",
+   "register": "formal",
+   "why": "Would be inclined to + Verb mildert eine Empfehlung ab und klingt förmlich."
+  },
+  {
+   "id": "frame-07",
+   "cat": "frame",
+   "en": "it seems to me that",
+   "de": "mir scheint, dass",
+   "def": "used to give your view in a careful way",
+   "ex": "It seems to me that the real issue is the integration, not the price.",
+   "register": "neutral",
+   "why": "It seems to me that leitet eine vorsichtige Meinung ein; danach folgt ein ganzer Satz."
+  },
+  {
+   "id": "frame-08",
+   "cat": "frame",
+   "en": "if I may",
+   "de": "wenn ich darf",
+   "def": "a polite way to ask permission to say something",
+   "ex": "If I may, I would like to add one point about the timeline.",
+   "register": "formal",
+   "why": "If I may ist höflich-förmlich; im Meeting oft vor einem Einwurf."
+  },
+  {
+   "id": "frame-09",
+   "cat": "frame",
+   "en": "let me push back on that",
+   "de": "da muss ich kurz widersprechen",
+   "def": "a polite but clear way to disagree",
+   "ex": "Let me push back on that a little: the data does not show a drop in usage.",
+   "register": "neutral",
+   "why": "Let me push back on that widerspricht höflich; deutlicher als „I am not sure“, freundlicher als „you are wrong“."
+  },
+  {
+   "id": "frame-10",
+   "cat": "frame",
+   "en": "I see where you are coming from",
+   "de": "ich verstehe deinen Standpunkt",
+   "def": "used to show understanding before you disagree",
+   "ex": "I see where you are coming from, but the budget is fixed for this year.",
+   "register": "neutral",
+   "why": "Dieser Satz zeigt Verständnis; erst danach kommt das „but“."
+  },
+  {
+   "id": "frame-11",
+   "cat": "frame",
+   "en": "with that in mind",
+   "de": "vor diesem Hintergrund",
+   "def": "used to link a decision to what was just said",
+   "ex": "With that in mind, I suggest we start with a small pilot.",
+   "register": "neutral",
+   "why": "With that in mind verbindet einen Vorschlag mit dem, was gerade gesagt wurde."
+  },
+  {
+   "id": "frame-12",
+   "cat": "frame",
+   "en": "be that as it may",
+   "de": "wie dem auch sei",
+   "def": "used to say that something does not change your point",
+   "ex": "Be that as it may, we still need a signed order by Friday.",
+   "register": "formal",
+   "why": "Be that as it may ist förmlich; nicht „as it may be“."
+  },
+  {
+   "id": "frame-13",
+   "cat": "frame",
+   "en": "in light of",
+   "de": "angesichts, im Hinblick auf",
+   "def": "used to say that you consider new facts",
+   "ex": "In light of the new regulation, we need to update the contract.",
+   "register": "formal",
+   "why": "In light of + Nomen heißt „angesichts“ (ähnlich: in view of)."
+  },
+  {
+   "id": "frame-14",
+   "cat": "frame",
+   "en": "moving forward",
+   "de": "künftig, von nun an",
+   "def": "used to talk about what will happen from now on",
+   "ex": "Moving forward, every project will have a named owner.",
+   "register": "neutral",
+   "why": "Moving forward heißt „ab jetzt, künftig“, nicht „vorwärtsbewegen“."
+  },
+  {
+   "id": "frame-15",
+   "cat": "frame",
+   "en": "for the time being",
+   "de": "vorerst",
+   "def": "used for a temporary situation",
+   "ex": "For the time being, we will keep both systems running.",
+   "register": "neutral",
+   "why": "For the time being heißt „vorerst“, nicht at the time being."
+  },
+  {
+   "id": "frame-16",
+   "cat": "frame",
+   "en": "would it be fair to say",
+   "de": "wäre es fair zu sagen",
+   "def": "used to check whether you understood correctly",
+   "ex": "Would it be fair to say that price is your main concern?",
+   "register": "neutral",
+   "why": "Would it be fair to say fasst vorsichtig zusammen und lädt zum Korrigieren ein."
+  },
+  {
+   "id": "frame-17",
+   "cat": "frame",
+   "en": "let me take a step back",
+   "de": "lassen Sie mich kurz einen Schritt zurücktreten",
+   "def": "used to look at the bigger picture again",
+   "ex": "Let me take a step back and look at the overall goal.",
+   "register": "neutral",
+   "why": "Take a step back ist bildlich gemeint: kurz Abstand nehmen, nicht „zurückgehen“."
+  },
+  {
+   "id": "frame-18",
+   "cat": "frame",
+   "en": "to put it differently",
+   "de": "anders gesagt",
+   "def": "used to explain the same idea in other words",
+   "ex": "To put it differently, we cannot sign before legal has reviewed it.",
+   "register": "neutral",
+   "why": "To put it differently leitet eine Umformulierung ein, nicht „in other words“ ersetzen."
+  },
+  {
+   "id": "frame-19",
+   "cat": "frame",
+   "en": "what I am hearing is",
+   "de": "was ich höre, ist",
+   "def": "used to repeat what the other person seems to say",
+   "ex": "What I am hearing is that integration matters more than price.",
+   "register": "neutral",
+   "why": "What I am hearing is zeigt aktives Zuhören; danach folgt die eigene Zusammenfassung."
+  },
+  {
+   "id": "frame-20",
+   "cat": "frame",
+   "en": "let us circle back to",
+   "de": "darauf kommen wir später zurück",
+   "def": "used to return to a topic that you left earlier",
+   "ex": "Let us circle back to pricing once we agree on the scope.",
+   "register": "informal",
+   "why": "Circle back to ist US-Business-Sprache für „später wieder aufgreifen“."
+  },
+  {
+   "id": "phrasal-01",
+   "cat": "phrasal",
+   "en": "push back on",
+   "de": "sich wehren gegen, Einwände erheben gegen",
+   "def": "to disagree with or resist something",
+   "ex": "The customer started to push back on the price right away.",
+   "register": "neutral",
+   "why": "Push back on = widersprechen; formeller: object to oder challenge."
+  },
+  {
+   "id": "phrasal-02",
+   "cat": "phrasal",
+   "en": "look into",
+   "de": "prüfen, untersuchen",
+   "def": "to investigate a question or problem",
+   "ex": "We will look into the issue and get back to you by Friday.",
+   "register": "neutral",
+   "why": "Look into ist die Gesprächsform von investigate; in der E-Mail klingt investigate förmlicher."
+  },
+  {
+   "id": "phrasal-03",
+   "cat": "phrasal",
+   "en": "follow up on",
+   "de": "nachfassen zu",
+   "def": "to take further action after an earlier contact",
+   "ex": "I will follow up on the open items after the call.",
+   "register": "neutral",
+   "why": "Follow up on heißt „zu einem Thema nachfassen“; follow up with sb heißt „bei jemandem nachhaken“."
+  },
+  {
+   "id": "phrasal-04",
+   "cat": "phrasal",
+   "en": "sign off on",
+   "de": "freigeben, abnehmen",
+   "def": "to give official approval",
+   "ex": "Legal still needs to sign off on the final contract.",
+   "register": "neutral",
+   "why": "Sign off on ist die Gesprächsform von approve."
+  },
+  {
+   "id": "phrasal-05",
+   "cat": "phrasal",
+   "en": "iron out",
+   "de": "klären, ausbügeln",
+   "def": "to solve small remaining problems",
+   "ex": "We still need to iron out a few details in the contract.",
+   "register": "informal",
+   "why": "Iron out ist informeller als resolve; es passt zu kleinen Details."
+  },
+  {
+   "id": "phrasal-06",
+   "cat": "phrasal",
+   "en": "roll out",
+   "de": "einführen, ausrollen",
+   "def": "to introduce something step by step",
+   "ex": "We plan to roll out the new portal in March.",
+   "register": "neutral",
+   "why": "Roll out ist die Gesprächsform von launch oder implement."
+  },
+  {
+   "id": "phrasal-07",
+   "cat": "phrasal",
+   "en": "scale up",
+   "de": "hochskalieren, ausbauen",
+   "def": "to make something bigger as demand grows",
+   "ex": "The platform can scale up quickly when the load increases.",
+   "register": "neutral",
+   "why": "Scale up ist das Gegenteil von scale down; formeller: expand."
+  },
+  {
+   "id": "phrasal-08",
+   "cat": "phrasal",
+   "en": "phase out",
+   "de": "auslaufen lassen",
+   "def": "to stop using something gradually",
+   "ex": "We will phase out the old interface by the end of the year.",
+   "register": "neutral",
+   "why": "Phase out = schrittweise abschaffen; formeller: discontinue."
+  },
+  {
+   "id": "phrasal-09",
+   "cat": "phrasal",
+   "en": "step in",
+   "de": "einspringen, eingreifen",
+   "def": "to get involved to help or to solve a problem",
+   "ex": "If the project slips, our director will step in.",
+   "register": "neutral",
+   "why": "Step in heißt „einspringen“ oder „eingreifen“, ohne Ort danach."
+  },
+  {
+   "id": "phrasal-10",
+   "cat": "phrasal",
+   "en": "wrap up",
+   "de": "abschließen, zum Ende bringen",
+   "def": "to finish something",
+   "ex": "Let us wrap up the meeting with a quick summary.",
+   "register": "informal",
+   "why": "Wrap up ist die Gesprächsform von conclude."
+  },
+  {
+   "id": "phrasal-11",
+   "cat": "phrasal",
+   "en": "reach out to",
+   "de": "sich melden bei, Kontakt aufnehmen mit",
+   "def": "to contact someone, often to offer or ask for help",
+   "ex": "Please reach out to our support team if you need help.",
+   "register": "neutral",
+   "why": "Reach out to ist freundlicher als contact; im Kundengespräch sehr üblich."
+  },
+  {
+   "id": "phrasal-12",
+   "cat": "phrasal",
+   "en": "bring forward",
+   "de": "vorziehen",
+   "def": "to move something to an earlier time",
+   "ex": "Can we bring forward the demo by one week?",
+   "register": "neutral",
+   "why": "Bring forward = vorziehen; das Gegenteil ist push back = verschieben."
+  },
+  {
+   "id": "word-01",
+   "cat": "word",
+   "en": "trade-off",
+   "de": "Kompromiss, Abwägung",
+   "def": "a situation where you must give up one good thing to get another",
+   "ex": "There is always a trade-off between speed and quality.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "word-02",
+   "cat": "word",
+   "en": "constraint",
+   "de": "Einschränkung, Zwangsbedingung",
+   "def": "something that limits what you can do",
+   "ex": "Budget is our biggest constraint for this year.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "word-03",
+   "cat": "word",
+   "en": "mitigate",
+   "de": "abschwächen, mindern",
+   "def": "to make something bad less serious",
+   "ex": "Regular backups mitigate the risk of data loss.",
+   "register": "formal",
+   "pos": "verb"
+  },
+  {
+   "id": "word-04",
+   "cat": "word",
+   "en": "outweigh",
+   "de": "überwiegen",
+   "def": "to be more important or bigger than something else",
+   "ex": "In our calculation, the long-term savings outweigh the one-time setup cost.",
+   "register": "formal",
+   "pos": "verb"
+  },
+  {
+   "id": "word-05",
+   "cat": "word",
+   "en": "feasible",
+   "de": "machbar, durchführbar",
+   "def": "possible to do in practice",
+   "ex": "A full migration in one month is not feasible.",
+   "register": "neutral",
+   "pos": "adjective"
+  },
+  {
+   "id": "word-06",
+   "cat": "word",
+   "en": "viable",
+   "de": "tragfähig, praktikabel",
+   "def": "able to work successfully, especially in business",
+   "ex": "We need a viable plan before we ask for more budget.",
+   "register": "neutral",
+   "pos": "adjective"
+  },
+  {
+   "id": "word-07",
+   "cat": "word",
+   "en": "leverage",
+   "de": "nutzen, ausspielen (Hebel)",
+   "def": "to use something you have to get a better result",
+   "ex": "We can leverage our existing partners to enter the new market.",
+   "register": "neutral",
+   "pos": "verb"
+  },
+  {
+   "id": "word-08",
+   "cat": "word",
+   "en": "streamline",
+   "de": "verschlanken, straffen",
+   "def": "to make a process or system simpler and more efficient",
+   "ex": "The new tool helps us streamline our approval process.",
+   "register": "neutral",
+   "pos": "verb"
+  },
+  {
+   "id": "word-09",
+   "cat": "word",
+   "en": "robust",
+   "de": "belastbar, stabil",
+   "def": "strong and able to work well in difficult conditions",
+   "ex": "We need a robust solution that works even during peak load.",
+   "register": "neutral",
+   "pos": "adjective"
+  },
+  {
+   "id": "word-10",
+   "cat": "word",
+   "en": "scalable",
+   "de": "skalierbar",
+   "def": "able to grow easily when more capacity is needed",
+   "ex": "Our cloud platform is scalable, so you only pay for what you use.",
+   "register": "neutral",
+   "pos": "adjective"
+  },
+  {
+   "id": "word-11",
+   "cat": "word",
+   "en": "bottleneck",
+   "de": "Engpass",
+   "def": "a point in a process where work slows down",
+   "ex": "Manual approvals are the bottleneck in our invoice process.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "word-12",
+   "cat": "word",
+   "en": "benchmark",
+   "de": "Maßstab, Vergleichswert",
+   "def": "a standard that you compare other things with",
+   "ex": "We used the industry average as a benchmark.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "word-13",
+   "cat": "word",
+   "en": "rationale",
+   "de": "Begründung, Überlegung dahinter",
+   "def": "the reasons that explain a decision",
+   "ex": "Can you explain the rationale behind this price?",
+   "register": "formal",
+   "pos": "noun"
+  },
+  {
+   "id": "word-14",
+   "cat": "word",
+   "en": "overhead",
+   "de": "Gemeinkosten, Zusatzaufwand",
+   "def": "regular costs or extra work that do not produce direct value",
+   "ex": "Automation reduces the administrative overhead in our finance team.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "word-15",
+   "cat": "word",
+   "en": "tangible",
+   "de": "greifbar, konkret",
+   "def": "clear and real enough to be seen or measured",
+   "ex": "The pilot gave us tangible results within a month.",
+   "register": "neutral",
+   "pos": "adjective"
+  },
+  {
+   "id": "tech-01",
+   "cat": "tech",
+   "en": "retention period",
+   "de": "Aufbewahrungsfrist",
+   "def": "the length of time that a document must be kept",
+   "ex": "The retention period for invoices differs from country to country.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-02",
+   "cat": "tech",
+   "en": "audit trail",
+   "de": "Prüfpfad, lückenlose Nachverfolgung",
+   "def": "a record that shows who did what and when",
+   "ex": "Every change leaves an audit trail that auditors can follow.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-03",
+   "cat": "tech",
+   "en": "data residency",
+   "de": "Datenspeicherort",
+   "def": "the country or region where data is physically stored",
+   "ex": "Data residency in the EU is a must for many of our customers.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-04",
+   "cat": "tech",
+   "en": "single source of truth",
+   "de": "zentrale, verlässliche Datenquelle",
+   "def": "one place that holds the official version of the data",
+   "ex": "The archive becomes the single source of truth for all contracts.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-05",
+   "cat": "tech",
+   "en": "role-based access",
+   "de": "rollenbasierter Zugriff",
+   "def": "a way to give people access according to their job role",
+   "ex": "Role-based access keeps sensitive files away from the wrong people.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-06",
+   "cat": "tech",
+   "en": "phased rollout",
+   "de": "schrittweise Einführung",
+   "def": "a launch in several stages instead of all at once",
+   "ex": "A phased rollout lets us fix problems before every team goes live.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-07",
+   "cat": "tech",
+   "en": "legacy system",
+   "de": "Altsystem",
+   "def": "an old system that is still in use",
+   "ex": "Many customers still depend on a legacy system for their invoices.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-08",
+   "cat": "tech",
+   "en": "vendor lock-in",
+   "de": "Abhängigkeit von einem Anbieter",
+   "def": "a situation where it is very hard to switch to another supplier",
+   "ex": "Open standards protect our customers from vendor lock-in when they switch providers.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-09",
+   "cat": "tech",
+   "en": "uptime",
+   "de": "Verfügbarkeit (Betriebszeit)",
+   "def": "the time during which a system is working and available",
+   "ex": "Our contract guarantees an uptime of 99.9 percent.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-10",
+   "cat": "tech",
+   "en": "service level agreement",
+   "de": "Dienstgütevereinbarung (SLA)",
+   "def": "a contract that defines the quality of a service, such as response times",
+   "ex": "The service level agreement defines how fast we respond to incidents.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-11",
+   "cat": "tech",
+   "en": "tamper-proof",
+   "de": "manipulationssicher",
+   "def": "built so that nobody can change it without being noticed",
+   "ex": "An audit-proof archive needs tamper-proof storage so that nobody can change old files.",
+   "register": "neutral",
+   "pos": "adjective"
+  },
+  {
+   "id": "tech-12",
+   "cat": "tech",
+   "en": "document lifecycle",
+   "de": "Dokumentenlebenszyklus",
+   "def": "the stages of a document from creation to deletion",
+   "ex": "Good governance covers the whole document lifecycle, from scanning to deletion.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "tech-13",
+   "cat": "tech",
+   "en": "workflow automation",
+   "de": "Workflow-Automatisierung",
+   "def": "using software to run recurring steps without manual work",
+   "ex": "Workflow automation cuts the time for invoice approval in half.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "family-01",
+   "cat": "family",
+   "en": "compliance",
+   "de": "Einhaltung, Compliance",
+   "def": "the fact of following rules and laws (verb: comply, adjective: compliant)",
+   "ex": "Full compliance with the new rules is mandatory from 2027.",
+   "register": "formal",
+   "pos": "noun"
+  },
+  {
+   "id": "family-02",
+   "cat": "family",
+   "en": "compliant",
+   "de": "regelkonform",
+   "def": "following the rules and laws (noun: compliance)",
+   "ex": "Our archive keeps you compliant with GoBD at all times.",
+   "register": "formal",
+   "pos": "adjective"
+  },
+  {
+   "id": "family-03",
+   "cat": "family",
+   "en": "consistency",
+   "de": "Einheitlichkeit, Konsistenz",
+   "def": "the quality of always behaving or looking the same way (adjective: consistent)",
+   "ex": "Consistency across all offices makes training much easier.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "family-04",
+   "cat": "family",
+   "en": "consistent",
+   "de": "einheitlich, durchgängig",
+   "def": "always the same in quality or behavior (noun: consistency)",
+   "ex": "We need consistent data in every system, otherwise reports contradict each other.",
+   "register": "neutral",
+   "pos": "adjective"
+  },
+  {
+   "id": "family-05",
+   "cat": "family",
+   "en": "reliability",
+   "de": "Zuverlässigkeit",
+   "def": "the quality of being dependable (adjective: reliable)",
+   "ex": "Reliability is more important to our customers than the lowest price.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "family-06",
+   "cat": "family",
+   "en": "adoption",
+   "de": "Einführung, Akzeptanz (Nutzung)",
+   "def": "the process of starting to use something (verb: adopt)",
+   "ex": "User adoption was higher than we had planned.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "family-07",
+   "cat": "family",
+   "en": "availability",
+   "de": "Verfügbarkeit",
+   "def": "the fact that something can be used when needed (adjective: available)",
+   "ex": "High availability is part of every enterprise contract.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "family-08",
+   "cat": "family",
+   "en": "efficiency",
+   "de": "Effizienz, Wirtschaftlichkeit",
+   "def": "working well without wasting time or money (adjective: efficient)",
+   "ex": "The new process improves efficiency in the finance team.",
+   "register": "neutral",
+   "pos": "noun"
+  },
+  {
+   "id": "idiom-01",
+   "cat": "idiom",
+   "en": "move the needle",
+   "de": "spürbar etwas bewegen",
+   "def": "to make a real difference to a result",
+   "ex": "One more feature will not move the needle for our customers.",
+   "register": "informal",
+   "why": "Move the needle = messbare Wirkung haben; oft in Verneinung: will not move the needle."
+  },
+  {
+   "id": "idiom-02",
+   "cat": "idiom",
+   "en": "ballpark figure",
+   "de": "grobe Schätzung, Größenordnung",
+   "def": "a rough number that is close enough for planning",
+   "ex": "Can you give me a ballpark figure for the migration cost?",
+   "register": "informal",
+   "why": "Ballpark figure ist eine Näherung, kein genauer Preis."
+  },
+  {
+   "id": "idiom-03",
+   "cat": "idiom",
+   "en": "low-hanging fruit",
+   "de": "leicht erreichbare Erfolge",
+   "def": "an easy opportunity that brings quick results",
+   "ex": "Let us start with the low-hanging fruit and tackle the hard part later.",
+   "register": "informal",
+   "why": "Low-hanging fruit = das Naheliegende zuerst; nicht „easy fruits“."
+  },
+  {
+   "id": "idiom-04",
+   "cat": "idiom",
+   "en": "win-win",
+   "de": "für beide Seiten vorteilhaft",
+   "def": "good for everyone who is involved",
+   "ex": "A shared pilot would be a win-win for both companies.",
+   "register": "informal",
+   "why": "A win-win ist ein Nomen oder Adjektiv: a win-win situation."
+  },
+  {
+   "id": "idiom-05",
+   "cat": "idiom",
+   "en": "on the same page",
+   "de": "einer Meinung, auf demselben Stand",
+   "def": "having the same understanding of a situation",
+   "ex": "Before the call, let us make sure we are all on the same page.",
+   "register": "informal",
+   "why": "On the same page = gleicher Wissensstand, nicht nur gleiche Meinung."
+  },
+  {
+   "id": "idiom-06",
+   "cat": "idiom",
+   "en": "bring to the table",
+   "de": "einbringen, beitragen",
+   "def": "to offer something useful in a discussion or partnership",
+   "ex": "Every partner should know what they bring to the table.",
+   "register": "neutral",
+   "why": "Bring to the table = etwas Wertvolles einbringen; nicht „bring on the table“."
+  },
+  {
+   "id": "idiom-07",
+   "cat": "idiom",
+   "en": "back to the drawing board",
+   "de": "zurück an den Anfang, neu planen",
+   "def": "used when a plan failed and you must start again",
+   "ex": "If the pilot fails, it is back to the drawing board.",
+   "register": "informal",
+   "why": "Back to the drawing board = der Plan ist gescheitert; nicht zurück zum Zeichenbrett im Wortsinn."
+  }
+ ]
+}

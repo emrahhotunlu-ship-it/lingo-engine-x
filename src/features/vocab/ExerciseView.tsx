@@ -27,7 +27,7 @@ import { scoreDictation } from '../../domain/drills/dictation';
 import { tokenize } from '../../domain/text/tokenize';
 import { chunkWhy } from '../../domain/srs/chunkCards';
 import { CONFIDENCE_KEYS, confidenceDots, confidenceOf, type Confidence } from '../../domain/srs/confidence';
-import { cardExamples, EXAMPLES_MIN, storedExamples } from '../../domain/srs/examples';
+import { cardExamples, EXAMPLES_MIN, wantsEnrichment } from '../../domain/srs/examples';
 import { posKey } from '../../domain/srs/explain';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
 import { exerciseDef } from '../../domain/srs/modes';
@@ -240,7 +240,7 @@ export function ExerciseView({
     const confidence = confidenceOf({ isNew: false, stage: Math.max(1, card.stage) as TrainCard['stage'], fsrs: after }, t0);
     setFb({ result, given, chosen, grade, dueInMs, ms, confidence, override: false, ...extraFb });
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen").
-    if (ai && storedExamples(card.doc).length === 0 && cardExamples(card, shownSentence).length < EXAMPLES_MIN) requestExamples(card);
+    if (ai && wantsEnrichment(card, shownSentence, Date.now())) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
     if (e.input === 'typed' && window.matchMedia('(pointer: coarse)').matches) api.blur();
     if (LISTEN.has(e.ex)) stopSpeech();
@@ -787,6 +787,11 @@ export function ExerciseView({
             </p>
           )
         )}
+        {col?.ai && (
+          <p className="text-xs text-subtle" data-testid="colloc-ai-note">
+            {t('nbWsColAiNote')}
+          </p>
+        )}
         {why && (
           <p className="text-sm text-muted" lang={lang} data-testid="chunk-why">
             {why}
@@ -823,7 +828,8 @@ export function ExerciseView({
         )}
         <MoreInfo card={card} />
         <MnemonicBlock card={card} />
-        {v.verdict === 'wrong' && e.input === 'typed' && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
+        {/* Einspruch „Ich lag richtig“: beim Tippen immer, bei einem Wortpartner von Claude auch (ein Ablenker kann zufällig stimmen). */}
+        {v.verdict === 'wrong' && (e.input === 'typed' || col?.ai) && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
         {v.verdict === 'wrong' && e.input === 'typed' && <CopyOnce solution={solution} />}
         <div className="flex items-center justify-between gap-3 pt-1">
           <span className="text-xs text-subtle" data-testid="due-in" data-grade={fb.override ? 3 : fb.grade}>
