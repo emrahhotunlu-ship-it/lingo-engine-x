@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useAiAvailable } from '../../ai/scope';
+import { useAsk } from '../../ai/useAsk';
 import { maskOf } from '../../domain/answer/mask';
 import { useSharedTarget } from '../../engine/shared';
 import { checkCloze, type ClozeCheck, type ClozeItem } from '../../domain/drills/cloze';
@@ -20,6 +22,7 @@ import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { speak, useSpeech } from '../../platform/speech';
+import { translate } from '../../prompts/translate';
 import { Button } from '../../ui/Button';
 import { nextT } from '../progress/persist';
 import { CopyOnce, ExampleList, FormHint, LearnStatus, NextButton, OverrideButton, ResultArea, TaskLine, VerdictLine } from '../learn/ui';
@@ -361,12 +364,32 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
   const [fb, setFb] = useState<{ res: OrderCheck; grade: Grade; ms: number } | null>(null);
   const topic = orderTopic(item);
   const byId = useMemo(() => new Map(item.tiles.map((x) => [x.id, x])), [item]);
+  const ai = useAiAvailable();
+  const ask = useAsk(translate);
+  // Hilfen (Emrah 02.10.2026: „keine Infos, keine Hilfestellung“): Tipp Stufe 1 = Wortzahl, Anfang und Regel,
+  // Stufe 2 = erster Baustein liegt schon; „Deutsch“ zeigt die Bedeutung des Satzes. Beides zählt als Hilfe.
+  const [tip, setTip] = useState<0 | 1 | 2>(0);
+  const [de, setDe] = useState<string | null>(null);
+  const first = item.solution[0] ?? '';
+  const firstTile = item.tiles.find((x) => !x.distractor && x.text === first) ?? null;
+  const showTip = () => {
+    if (tip === 0) setTip(1);
+    else {
+      setTip(2);
+      if (firstTile && !placed.length) setPlaced([firstTile.id]);
+    }
+  };
+  const showDe = async () => {
+    const out = await ask.run({ text: item.sentence, from: 'en', register: 'neutral', uiLang: lang });
+    if (out?.translation.trim()) setDe(out.translation.trim());
+  };
+  const busy = ask.phase === 'queued' || ask.phase === 'thinking' || ask.phase === 'streaming' || ask.phase === 'slow';
 
   const check = () => {
     if (fb || !placed.length) return;
     const res = checkOrder(item, placed);
     const ms = timing.elapsed();
-    const grade = learnGrade('order', res.verdict, { submitMs: ms, units: item.tiles.length }, { level: 0 });
+    const grade = learnGrade('order', res.verdict, { submitMs: ms, units: item.tiles.length }, { level: Math.max(tip, de ? 1 : 0) as 0 | 1 | 2 });
     setFb({ res, grade, ms });
   };
 
@@ -404,6 +427,16 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
                 {t('drReset')}
               </Button>
             )}
+            {tip < 2 && (
+              <Button variant="ghost" icon="lightbulb" onClick={showTip} data-testid="hint" data-level={tip}>
+                {tip === 0 ? t('trTip') : t('drTipFirst')}
+              </Button>
+            )}
+            {!de && (ai || busy) && (
+              <Button variant="ghost" onClick={() => void showDe()} disabled={busy} data-testid="order-de-btn">
+                {busy ? t('trTransBusy') : t('trTrans')}
+              </Button>
+            )}
           </div>
         )
       }
@@ -424,6 +457,17 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
         )
       }
     >
+      {!fb && de && (
+        <p className="text-base font-medium" lang="de" data-testid="order-de">
+          {de}
+        </p>
+      )}
+      {!fb && tip >= 1 && (
+        <div className="flex flex-col gap-1" data-testid="tip-info">
+          <p className="text-sm text-muted">{t('drTipOrder', { n: item.solution.length, first })}</p>
+          {rule && <FormHint text={rule.core} />}
+        </div>
+      )}
       <Tiles tiles={item.tiles} placed={placed} onChange={(p) => {
         timing.markKey();
         setPlaced(p);

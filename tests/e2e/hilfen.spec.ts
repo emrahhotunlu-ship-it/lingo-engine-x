@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, openEntry, screen } from './fixtures';
+import { orderSolution } from './learnHelpers';
 import { TOUR, answerOnly, dump, expected, forcedPatch, planPatch, tourPatch } from './trainerHelpers';
 
 // Einheitliche Hilfen in jeder Übung (Emrah 02.10.2026): Tipp (Stufe 1 Wortart und Bedeutung/Erklärung, Stufe 2
@@ -21,7 +22,8 @@ const forced = (): Record<string, Doc> => ({ ...forcedPatch(), 'app/profile': { 
 
 test('Auswahl (mc_en): Tipp zeigt die englische Erklärung (nie die deutsche Lösung), Stufe 2 streicht eine falsche Option, zählt als Hilfe', async ({ page }) => {
   const errors = await open(page, forced(), 'mc_en');
-  const de = String(((await dump(page))['vocab/deserve'] ?? {}).de ?? '');
+  const deRaw = ((await dump(page))['vocab/deserve'] ?? {}).de;
+  const de = typeof deRaw === 'string' ? deRaw : '';
   await expect(page.getByTestId('choice')).toHaveCount(4);
   await expect(page.getByTestId('tip-info')).toHaveCount(0);
   const hint = page.getByTestId('hint');
@@ -85,6 +87,70 @@ test('Beispielsatz: „Deutsch“ übersetzt einmal per Claude, zeigt es und spe
   await expect(btn).toBeVisible();
   await btn.click();
   await expect(page.getByTestId('example-trans-text').first()).toBeVisible();
-  const doc = (await dump(page))['vocab/deserve'] as Doc | undefined;
+  const doc = (await dump(page))['vocab/deserve'];
   expect(Object.keys((doc?.exDe as Doc | undefined) ?? {}).length).toBeGreaterThanOrEqual(1);
+});
+
+// ------------------------------------------------------------------ Satzbau (Emrah 02.10.2026)
+
+
+const ORDER_PLAN = { d: '2026-09-20', v: 1, ids: ['order', 'cloze', 'gram'], why: [[['whyRotation']], [['whyRotation']], [['whyRotation']]], duty: ['ch:order'], goal: { review: 0, ch: 6 }, lesson: null, at: 1 };
+
+async function openOrder(page: Page) {
+  const booted = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: ORDER_PLAN } } } });
+  await screen(page, 'today');
+  await openEntry(page, 'hub-drill-order');
+  await expect(page.getByTestId('drill')).toHaveAttribute('data-kind', 'order');
+  await expect(page.getByTestId('drill-item')).toBeVisible();
+  return booted;
+}
+
+test('Satzbau: klare Aufgabe, Tipp (Anfang und Wortzahl, dann erster Baustein) und „Deutsch“', async ({ page }) => {
+  const { errors } = await openOrder(page);
+  const item = page.getByTestId('drill-item');
+  await expect(page.getByTestId('task-line')).toContainText('richtigen englischen Satz');
+  await expect(item.getByTestId('tip-info')).toHaveCount(0);
+  await item.getByTestId('hint').click();
+  await expect(item.getByTestId('tip-info')).toContainText('beginnt mit');
+  await item.getByTestId('hint').click();
+  await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(1);
+  await expect(item.getByTestId('hint')).toHaveCount(0);
+  await item.getByTestId('order-de-btn').click();
+  await expect(item.getByTestId('order-de')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('Satzbau am Rechner: Wörter tippen legt die Bausteine, Enter im leeren Feld prüft, Rücktaste nimmt zurück', async ({ page }) => {
+  const { errors } = await openOrder(page);
+  const item = page.getByTestId('drill-item');
+  const field = item.getByTestId('tiles-type');
+  await expect(field).toBeVisible();
+  await expect(field).toBeFocused();
+  const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
+  const order = orderSolution(texts, '');
+  expect(order).not.toBeNull();
+  const words = (order ?? []).map((k) => texts[k] ?? '');
+  // Erst falsch tippen: unbekanntes Wort bleibt im Feld, Hinweis erscheint.
+  await page.keyboard.type('zzzzz ');
+  await expect(item.getByTestId('tiles-type-miss')).toBeVisible();
+  await field.fill('');
+  for (const w of words) await page.keyboard.type(`${w} `);
+  await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(words.length);
+  // Rücktaste im leeren Feld nimmt den letzten Baustein zurück, erneutes Tippen legt ihn wieder.
+  await page.keyboard.press('Backspace');
+  await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(words.length - 1);
+  await page.keyboard.type(`${words[words.length - 1]} `);
+  await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(words.length);
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('verdict')).toBeVisible();
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+  expect(errors).toEqual([]);
+});
+
+test('Bausteine am Handy: kein Tastaturfeld (nur Tippen auf die Bausteine)', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin', locale: 'de-DE' });
+  const page = await context.newPage();
+  await openOrder(page);
+  await expect(page.getByTestId('tiles-type')).toHaveCount(0);
+  await context.close();
 });
