@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { askJson } from '../../ai/gate';
 import { isAiFailure } from '../../ai/types';
 import { getWriter } from '../../data';
-import { acceptCollocations, collocPatch } from '../../domain/srs/collocs';
+import { acceptCollocations, collocPatch, type StoredColloc } from '../../domain/srs/collocs';
 import { acceptExamples, examplesPatch, storedExamples, type StoredExample } from '../../domain/srs/examples';
 import type { TrainCard } from '../../domain/srs/types';
 import { cardExamples as template } from '../../prompts/cardExamples';
@@ -14,7 +14,8 @@ import { logError, logWarn } from '../../platform/diagnostics';
 // als Dokument existiert und das jeweilige Feld noch fehlt (frischer Stand, nur ergänzen, nie ersetzen). Gab es keinen
 // brauchbaren Wortpartner, merkt `colAt`, dass es versucht wurde (30 Tage Ruhe).
 
-type Entry = { status: 'loading' | 'done' | 'error'; items: StoredExample[] };
+/** `col`: von Claude ergänzte Wortpartner, die tatsächlich gespeichert wurden (die Karte der laufenden Runde kennt sie noch nicht). */
+type Entry = { status: 'loading' | 'done' | 'error'; items: StoredExample[]; col?: readonly StoredColloc[] };
 export const useExamples = create<{ byCard: Record<string, Entry> }>(() => ({ byCard: {} }));
 
 let ctl: AbortController | null = null;
@@ -46,10 +47,15 @@ export function requestExamples(card: TrainCard): void {
       const writer = getWriter();
       if (!writer) return;
       try {
+        let saved: readonly StoredColloc[] = [];
         await writer.transform(card.path, (cur) => {
-          const patch = { ...(examplesPatch(cur, items) ?? {}), ...(card.kind === 'vocab' && card.inDb ? (collocPatch(cur, cols, now) ?? {}) : {}) };
+          const colPatch = card.kind === 'vocab' && card.inDb ? collocPatch(cur, cols, now) : null;
+          saved = colPatch?.col ?? [];
+          const patch = { ...(examplesPatch(cur, items) ?? {}), ...(colPatch ?? {}) };
           return Object.keys(patch).length ? { update: patch } : null;
         });
+        // Die Rückseite zeigt die Wortpartner sofort, aber nur, was wirklich gespeichert wurde.
+        if (saved.length) set(card.id, { status: 'done', items, col: saved });
       } catch (err) {
         logError('trainer:examples', err, card.path);
       }

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import raw from '../../content/c1/pack.json';
 import { newChunkDoc, takeChunkOp } from '../chunks/newChunk';
+import { dayKey } from '../date';
 import { newVocabDoc, saveCardOp } from '../srs/newCard';
 
 // C1-Paket (Emrah 02.10.2026, Englischlehrer: „Es gibt keinen C1-Plan“): 100 von Hand geschriebene, geprüfte Einträge für
@@ -90,7 +91,7 @@ type Doc = Readonly<Record<string, unknown>>;
 
 /** Schreibvorgang für `writer.transform`: nur anlegen, wenn es das Dokument noch nicht gibt (nie ersetzen). */
 export function packOp(cur: Doc | undefined, made: PackDoc): { set: Record<string, unknown> } | { update: Record<string, unknown> } | null {
-  if (made.kind === 'chunk') return takeChunkOp(cur as Record<string, unknown> | undefined, made);
+  if (made.kind === 'chunk') return takeChunkOp(cur, made);
   return saveCardOp(cur, made);
 }
 
@@ -113,10 +114,13 @@ const originRef = (d: Doc): string => {
   return typeof a === 'string' && a.startsWith(PACK_REF) ? a : typeof b === 'string' && b.startsWith(PACK_REF) ? b : '';
 };
 
+// Lerntag der Karte: Vokabeln tragen den Tagesschlüssel in `added`, Wendungen den Zeitpunkt in `created` (ms). Der Zeitpunkt
+// wird mit derselben Tagesfunktion wie überall umgerechnet (Tageswechsel 04:00 Ortszeit), nicht als UTC-Datum – sonst käme
+// zwischen 2 und 4 Uhr nachts bei jedem Start der Seite noch einmal derselbe Zulauf.
 const dayOf = (d: Doc): string => {
   if (typeof d.added === 'string') return d.added.slice(0, 10);
   const c = d.created;
-  return typeof c === 'number' && Number.isFinite(c) ? new Date(c).toISOString().slice(0, 10) : typeof c === 'string' ? c.slice(0, 10) : '';
+  return typeof c === 'number' && Number.isFinite(c) ? dayKey(c) : typeof c === 'string' ? c.slice(0, 10) : '';
 };
 
 /** Zustand des Pakets aus den Sammlungen `vocab` und `chunk` (kennt nur die Datenbank, nicht den Startwortschatz). */

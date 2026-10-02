@@ -196,6 +196,15 @@ describe('Zustand aus der Datenbank', () => {
     const wd = packDoc(w, TODAY, NOW)!;
     expect(packState(new Map([[wd.id, { ...wd.doc, hidden: true }]]), new Map(), TODAY, NOW).unused).toBe(0);
   });
+
+  it('nachts zwischen 2 und 4 Uhr angelegte Wendung gehört zum Lerntag davor (Tageswechsel 04:00, nicht UTC)', () => {
+    const c = PACK.find((e) => e.cat === 'colloc') as PackEntry;
+    const night = berlin('2026-10-06', 2, 30); // Kalendertag 06.10., Lerntag 05.10.
+    const cd = packDoc(c, TODAY, night)!;
+    const chunks = new Map<string, Record<string, unknown>>([[cd.id, cd.doc]]);
+    expect(packState(new Map(), chunks, '2026-10-05', night).addedToday).toBe(1);
+    expect(packState(new Map(), chunks, '2026-10-06', berlin('2026-10-06', 9)).addedToday).toBe(0);
+  });
 });
 
 describe('Reihenfolge im Eingangskorb', () => {

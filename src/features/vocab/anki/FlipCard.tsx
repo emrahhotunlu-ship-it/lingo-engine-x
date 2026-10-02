@@ -198,7 +198,8 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const why = chunkWhy(card, lang);
   const freshEntry = useExamples((s) => s.byCard[card.id]);
   const examples = shown ? cardExamples(card, ctx?.sentence ?? null, freshEntry?.items ?? NO_EXAMPLES) : [];
-  const col = card.col.filter((c) => c.p).slice(0, 3);
+  // Eigene Wortpartner der Karte; fehlen sie, zeigt die Rückseite sofort, was Claude eben ergänzt hat (gespeichert, `ai`).
+  const col = (card.col.length ? card.col.map((c) => ({ p: c.p, de: c.de, ai: !!c.ai })) : (freshEntry?.col ?? []).map((c) => ({ p: c.p, de: c.de, ai: true }))).filter((c) => c.p).slice(0, 3);
 
   return (
     <div className="flex flex-col gap-4" data-testid="flip" data-card={card.id} data-kind={card.kind} data-dir={dir} data-shown={shown ? '' : undefined} data-suggest={shown?.suggest}>
