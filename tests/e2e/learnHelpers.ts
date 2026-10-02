@@ -370,7 +370,7 @@ export function orderSolutions(tiles: readonly string[]): number[][] {
 }
 
 /** Hauptfassung der Reihenfolge (Indizes in die Bausteine); `null`, wenn unbekannt. */
-export function orderSolution(tiles: readonly string[], _end = ''): number[] | null {
+export function orderSolution(tiles: readonly string[]): number[] | null {
   return orderSolutions(tiles)[0] ?? null;
 }
 

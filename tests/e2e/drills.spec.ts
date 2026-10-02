@@ -154,7 +154,7 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
     await expect(item.getByTestId('order-why')).toHaveCount(0);
     const pool = item.getByTestId('tile-pool').getByTestId('tile');
     const texts = await pool.evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
-    const order = orderSolution(texts, '');
+    const order = orderSolution(texts);
     expect(order, `Satz aus ${texts.join(' | ')}`).not.toBeNull();
     const ids = (order ?? []).map((k) => texts[k] ?? '');
     for (const [n, text] of ids.entries()) {

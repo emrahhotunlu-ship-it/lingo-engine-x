@@ -115,7 +115,7 @@ test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann erster B
   await expect(item.getByTestId('order-de-btn')).toHaveCount(0);
   await expect(item.getByTestId('order-why')).toHaveCount(0);
   const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
-  const order = (orderSolution(texts, '') ?? []).map((k) => texts[k] ?? '');
+  const order = (orderSolution(texts) ?? []).map((k) => texts[k] ?? '');
   expect(order).toHaveLength(texts.length);
   await expect(item.getByTestId('tip-info')).toHaveCount(0);
   await item.getByTestId('hint').click();
@@ -142,7 +142,7 @@ test('Satzbau am Rechner: Wörter tippen legt die Bausteine, Enter im leeren Fel
   await expect(field).toBeVisible();
   await expect(field).toBeFocused();
   const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
-  const order = orderSolution(texts, '');
+  const order = orderSolution(texts);
   expect(order).not.toBeNull();
   const words = (order ?? []).map((k) => texts[k] ?? '');
   // Erst falsch tippen: unbekanntes Wort bleibt im Feld, Hinweis erscheint.
