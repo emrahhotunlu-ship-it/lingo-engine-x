@@ -277,7 +277,7 @@ test.describe('Wortschatzliste: Wendungen', () => {
     await sheet.getByTestId('word-hide').click();
     await expect(sheet).toBeHidden();
     await expect.poll(async () => (await dump(page))['chunk/c-i-take-your-point-but']?.hidden).toBe(true);
-    await expect(rows).toHaveCount(5);
+    await expect(rows).toHaveCount(7);
     await page.locator('[data-testid="vocab-filter"][data-filter="hidden"]').click();
     await page.locator('[data-testid="vocab-row"][data-word="c-i-take-your-point-but"]').click();
     await page.getByTestId('word-unhide').click();
