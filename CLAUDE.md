@@ -106,6 +106,13 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**02.10.2026, spätabends – Satzbau neu gebaut, Test-Link (noch nicht live; Emrahs „Ja in Abstimmung mit Englischlehrer und Lernwissenschaftler“)**
+- Anlass: Emrahs Screenshot „erneut eine naja Aufgabenstellung“ (keine klare Aufgabe, keine Hilfe, irrelevante Regel). **Ersetzt** die Satzbau-Zeilen im Hilfen-Paket (Tipp mit Wortzahl/Regel, Knopf „Deutsch“, Ablenker, Claude-Satz je Runde).
+- Neu: fester Pool `src/content/c1/order.json` (57 C1-Sätze, 7 Themen, von Hand geschrieben und vom Englischlehrer gegengelesen, **kein Claude-Aufruf**). Die **deutsche Bedeutung steht vorab** („Du willst sagen:“, bleibt auch in der englischen Oberfläche deutsch, `lang="de"`), alle Bausteine gehören dazu (keine Ablenker), feste Wendungen sind ein Baustein, zweite gültige Reihenfolgen (`alt`) zählen als richtig und erscheinen unter „Auch richtig“. Danach „Warum so?“ je Satz plus „Typischer Fehler“; **kein automatisches Weiter**.
+- Tipp-Leiter: 1 = guter Anfang (Hilfe 1), 2 = die ersten zwei Bausteine nach vorn (Hilfe 2). Markierung mit Zeichen ✓ / ↔ / ✕ plus Screenreader-Text, gesperrte Bausteine lassen Wischen zu, Bausteine ≥ 44 px, Satzende in Klartext. Jede Runde mischt anders (Startzeit im Seed).
+- Prüfer: Englischlehrer (Pool, 2 Runden inkl. Korrekturen), Lernwissenschaftler (4 Pflichtfragen), ux-reviewer (Handy + Desktop, drei Modi), platform-guard (Freigabe). Test-Link `AXHkh6…` Version `1790964697-5c36` (Artefakt-Version 21). Geprüft: 1598 Unit, 549 von 551 E2E, die 2 Ausreißer (Last) liefen einzeln grün.
+- **Bewusst verschoben:** falsch gelöste Sätze später wiederholen (Reparatur-Sätze), Warum-Zeilen bei ~20 Sätzen noch näher an die Aufgabe, 10–15 Alltagssätze, „Prüfen/Weiter“ als feste Leiste unten am Handy, „fast richtig“ nicht als richtig zählen, Tipp-Nutzung im Protokoll, Fehler-Radar für Satzbau.
+
 **02.10.2026, abends – Hilfen-Paket live (Emrahs Freigabe „Live nehmen“)**
 - `dist/index.html` (Commit „dist: Endstand nach voller Prüfung (Hilfen-Paket)“) liegt auf `JLL8…`, Version `1790952158-defe` (Artefakt-Version 63). Rückweg: Version `1790937770-1325`. Test-Link `AXHkh6…` Version `1790951496-dc3a`.
 - Anlass: Emrahs App-Kommentare („keine Erläuterung, keine Übersetzung, kein Mehr-Infos-Knopf, Tipp nicht konsistent“, „Bausteine nur mit Maus“, „Satzbau ohne Aufgabenstellung“, „Nochmal, aber besser unklar“, „erste Option immer richtig“).
