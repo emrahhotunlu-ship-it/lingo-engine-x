@@ -17,6 +17,8 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 ## A2. Zusammenarbeit mit Emrah
 - Emrah hat **keine Entwicklererfahrung** und arbeitet **ausschließlich am Handy**. Er installiert nichts und führt nichts aus. Ist doch etwas von ihm nötig: einfache Worte und genaue Klicks am Handy.
 - Kommunikation auf **Deutsch**, klar, ohne Fachjargon.
+  - **Emrahs Vorgabe vom 02.10.2026 (gilt für jede Antwort):** Immer so erklären, dass auch Nicht-Entwickler es verstehen. Keine Fachwörter (Commit, Branch, Build, Lint, E2E, Seed …) ohne einfache Erklärung, lieber sagen, was man als Nutzer davon merkt. Den aktuellen Stand grundsätzlich erklären (was ist fertig, woran arbeite ich, was wartet auf Emrah).
+  - **Bei jedem Test-Link und jeder Live-Schaltung am Ende:** (1) was genau geändert wurde, in Alltagssprache und aus Sicht von Emrah, (2) wie er es am Handy testet, Schritt für Schritt mit genauen Klicks, (3) woran er erkennt, dass es richtig funktioniert, und was er mir schicken soll, wenn nicht.
 - Die Entscheidungsfragen wurden in Phase 0 gebündelt gestellt (höchstens fünf). Danach arbeitest du selbstständig und fragst nur noch bei echten Blockern.
 - **Nie still überspringen:** Was sich in der Cloud-Umgebung nicht installieren oder ausführen lässt, offen sagen und den nächstbesten Weg vorschlagen.
 - Keine Geheimnisse und **keine echten persönlichen Daten** im Repository. Testdaten sind erfunden (`seed/sample-data.json`).
