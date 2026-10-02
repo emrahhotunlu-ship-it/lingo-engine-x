@@ -3,6 +3,7 @@ import { themeById } from '../../../content/nb/themes';
 import { flattenFeed } from '../../../domain/discover/feedItems';
 import { stepState, stepsFor } from '../../../domain/discover/steps';
 import { articleQuestions, LEGACY_ARTICLES } from '../../../domain/input/items';
+import { shuffleOptions } from '../../../domain/input/questions';
 import type { ArticleItem, Domain, FeedItem, Question } from '../../../domain/input/types';
 import { noticeRows, shadowSentences, themeArticle, themeQuestions, type InputBlockPlan, type NoticeRow } from '../../../domain/input/unitInput';
 import { wordCount } from '../../../domain/input/textStats';
@@ -124,8 +125,17 @@ function feedSource(f: FeedItem, lang: 'de' | 'en'): BlockSource | null {
   };
 }
 
-/** Quelle aus `ref` (Route); `null` = (noch) nicht verfügbar. */
+/**
+ * Quelle aus `ref` (Route); `null` = (noch) nicht verfügbar. Die Antwortoptionen sind fest gemischt (Quelle +
+ * Frage als Startwert): Die richtige Antwort stand sonst immer vorn (Emrah 02.10.2026), bleibt aber nach dem
+ * Neuzeichnen und auf jedem Gerät an derselben Stelle.
+ */
 export function sourceFromRef(ref: string, lang: 'de' | 'en'): BlockSource | null {
+  const s = buildSource(ref, lang);
+  return s ? { ...s, questions: s.questions.map((q) => shuffleOptions(q, s.ref)) } : null;
+}
+
+function buildSource(ref: string, lang: 'de' | 'en'): BlockSource | null {
   const [kind, rest = ''] = ref.split(/:(.*)/s, 2) as [string, string?];
   if (kind === 'theme') {
     const theme = /^x-(t\d{2})$/.exec(rest)?.[1];
