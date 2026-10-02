@@ -104,6 +104,10 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**02.10.2026 – „Stunde auswerten“ (Preply-Audio/Transkript) verworfen (Emrahs Entscheidung)**
+- Idee: Preply-Stunden als Transkript einlesen und Schwächen auswerten. Preply liefert nur Audio; in der App geht keine Audio-Umwandlung (kein Audio in `sample`, kein eigenes Modell unter 16 MB, keine externen Dienste, Kap. 3.1). Der Weg über ein Transkript von außen (z. B. am MacBook) war Emrah zu umständlich.
+- Entscheidung: nicht bauen. Bestehen bleibt „Lehrer-Feedback einfügen“ (kurze Korrekturen und Wörter als Text). Nur auf Emrahs Wunsch neu aufgreifen.
+
 **02.10.2026 – Handy-Tagesplan und Reparatur-Sätze live (Emrahs Freigabe „Ja live nehmen“)**
 - `dist/index.html` (Commit „dist: Reparatur-Sätze nur an der falschen Stelle korrigieren“) liegt auf `JLL8…`, Version `1790937770-1325` (Artefakt-Version 62). Rückweg: Version `1790880701-ce75`. Test-Link `AXHkh6…` Version `1790935452-334d`.
 - Anlass: Emrah merkte, dass Fokus und „Nochmal, aber besser“ am Handy ohne Aufgabe des Tages sinnlos sind, und wollte ein überdachtes C1-Tageskonzept je Gerät (Englischlehrer-Beratung, Emrahs „Ja, so bauen“).
