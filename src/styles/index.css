@@ -779,6 +779,17 @@ h3 {
     -webkit-user-select: none;
     cursor: grab;
     transition: background-color 0.15s, border-color 0.15s, opacity 0.15s;
+    min-width: 2.75rem;
+    justify-content: center;
+  }
+  /* Nach dem Prüfen sind die Bausteine gesperrt: Wischen darüber muss die Seite bewegen (Kap. 4.5). */
+  .lx-tile:disabled {
+    touch-action: auto;
+    cursor: default;
+  }
+  .lx-tile-mark {
+    margin-right: 0.4rem;
+    font-weight: 700;
   }
   .lx-tile[data-dragging] {
     cursor: grabbing;

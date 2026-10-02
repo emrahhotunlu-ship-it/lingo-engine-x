@@ -279,6 +279,15 @@ test('Satzbau: ein versetzter Baustein ist „fast richtig“, die falsche Stell
     // Die falsch gelegten Bausteine sind markiert (Zustand am Baustein, nicht nur Farbe im Verlauf).
     const states = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
     expect(states.some((x) => x === 'near' || x === 'off')).toBe(true);
+    // Und nicht nur über die Farbe: jeder markierte Baustein trägt ein Zeichen und einen Text für Screenreader.
+    const marks = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) =>
+      els.map((e) => ({ state: e.getAttribute('data-state'), glyph: e.querySelector('.lx-tile-mark')?.textContent ?? '', sr: e.querySelector('.sr-only')?.textContent ?? '' })),
+    );
+    for (const m of marks) {
+      expect(m.glyph, JSON.stringify(m)).toMatch(/^[✓↔✕]$/);
+      expect(m.sr.length, JSON.stringify(m)).toBeGreaterThan(3);
+    }
+    expect(new Set(marks.map((m) => m.glyph)).size, 'ok und falsch sind an den Zeichen unterscheidbar').toBeGreaterThan(1);
     await expect(item.getByTestId('order-why')).toBeVisible();
     await expect(item.getByTestId('diff-correct')).toBeVisible();
     await finishItem(page);
@@ -298,6 +307,22 @@ test('Satzbau am Handy (390 × 844): Bedeutung, Bausteine und Prüfen ohne Seitw
   const box = await item.getByTestId('tile-pool').boundingBox();
   expect(box && box.x >= 0 && box.x + box.width <= 390).toBe(true);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  // Satzende in Klartext (nicht nur „.“) und jeder Baustein mindestens 44 px breit und hoch.
+  await expect(item.getByTestId('order-end')).toContainText(/endet mit (einem Punkt|einem Fragezeichen|einem Ausrufezeichen)/);
+  const sizes = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => ({ w: e.getBoundingClientRect().width, h: e.getBoundingClientRect().height })));
+  for (const sz of sizes) {
+    expect(sz.w).toBeGreaterThanOrEqual(43.5);
+    expect(sz.h).toBeGreaterThanOrEqual(43.5);
+  }
+  // Vor dem Prüfen ziehen die Bausteine (kein Scrollen darauf), danach gesperrt: Wischen scrollt die Seite.
+  const tileTouch = () => item.getByTestId('tile').first().evaluate((e) => getComputedStyle(e).touchAction);
+  expect(await tileTouch()).toBe('none');
+  const texts = await poolTexts(item);
+  await clickTiles(item, (orderSolutions(texts)[0] ?? []).map((k) => texts[k] ?? ''));
+  await item.getByTestId('check').click();
+  await expect(page.getByTestId('verdict')).toBeVisible();
+  expect(await tileTouch()).toBe('auto');
+  await expect(item.getByTestId('order-end')).toHaveCount(0);
   expect(errors).toEqual([]);
   await context.close();
 });

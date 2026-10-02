@@ -15,13 +15,18 @@ type Props = {
   locked: boolean;
   marks?: Readonly<Record<number, Mark>>;
   labels: { line: string; pool: string };
+  /** Beschriftung der Markierungen für Screenreader (die Markierung zeigt zusätzlich zur Farbe ein Zeichen). */
+  markLabels?: Readonly<Record<Mark, string>>;
 };
+
+/** Zeichen je Markierung: Farbe allein reicht nicht (WCAG 1.4.1). */
+const MARK_GLYPH: Readonly<Record<Mark, string>> = { ok: '✓', near: '↔', off: '✕' };
 
 type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: number; dy: number; moved: boolean; pointer: number };
 
 const THRESHOLD = 6;
 
-export function Tiles({ tiles, placed, onChange, locked, marks, labels }: Props) {
+export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels }: Props) {
   const reduce = useReducedMotion();
   const line = useRef<HTMLDivElement>(null);
   const refs = useRef(new Map<number, HTMLButtonElement>());
@@ -90,6 +95,7 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels }: Props)
     const t = byId.get(id);
     if (!t) return null;
     const dragging = drag?.id === id && drag.moved;
+    const mark = marks?.[id];
     return (
       <motion.button
         key={id}
@@ -104,7 +110,7 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels }: Props)
         data-testid="tile"
         data-tile={t.text}
         data-where={where}
-        data-state={marks?.[id]}
+        data-state={mark}
         data-dragging={dragging || undefined}
         disabled={locked}
         style={dragging ? { transform: `translate(${drag.dx}px, ${drag.dy}px)`, position: 'relative' } : undefined}
@@ -124,6 +130,14 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels }: Props)
           toggle(id);
         }}
       >
+        {mark && (
+          <>
+            <span className="lx-tile-mark" aria-hidden="true">
+              {MARK_GLYPH[mark]}
+            </span>
+            {markLabels?.[mark] && <span className="sr-only">{markLabels[mark]}: </span>}
+          </>
+        )}
         {t.text}
       </motion.button>
     );
