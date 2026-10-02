@@ -104,6 +104,15 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**02.10.2026 – Handy-Tagesplan und Reparatur-Sätze live (Emrahs Freigabe „Ja live nehmen“)**
+- `dist/index.html` (Commit „dist: Reparatur-Sätze nur an der falschen Stelle korrigieren“) liegt auf `JLL8…`, Version `1790937770-1325` (Artefakt-Version 62). Rückweg: Version `1790880701-ce75`. Test-Link `AXHkh6…` Version `1790935452-334d`.
+- Anlass: Emrah merkte, dass Fokus und „Nochmal, aber besser“ am Handy ohne Aufgabe des Tages sinnlos sind, und wollte ein überdachtes C1-Tageskonzept je Gerät (Englischlehrer-Beratung, Emrahs „Ja, so bauen“).
+- **Handy-Plan** (löst das reine Ausblenden vom 01.10. ab): Block 3 wird am Handy durch eine kurze Übung ersetzt (Mo–Mi `focus.colloc`, Do–Sa `task.objection` mit 3 Antworten, max. 6 Min.), derselbe Pflichtpunkt `ch:u-task`, gespeicherter Plan unberührt (`domain/plan/phone`, `unitPlanOf`). Am Laptop volle Aufgabe.
+- **Block 5** ohne Aufgabe von heute: die ältesten fälligen Reparatur-Sätze (≤ 3), Box wird per `recordRepair` weitergezählt. Fokus-/Nochmal-Texte sprechen nicht mehr von „der Aufgabe“.
+- **Wochenbilanz** „Aufgabe des Tages am Laptop diese Woche: x von 2“: neues, rein ergänzendes Profilfeld `app/profile.lap[tag] = 1` (nur Laptop-Erledigungen; nichts gelöscht oder umgeschrieben), dazu am Laptop das freiwillige Extra „Sag es“.
+- **Reparatur-Sätze** (Emrahs App-Kommentar „halber Roman“): ab 9 Wörtern steht der alte Satz im Feld, nur die falsche Stelle wird geändert.
+- Geprüft: 1574 Unit, 542 E2E (volle Suite vor der Reparatur-Änderung), danach 82 betroffene E2E grün. Live-Version vor dem Veröffentlichen erneut gelesen (unverändert).
+
 **01.10.2026 – Handy-Modus, Reiter „Fortschritt“, Stimmenliste live (Emrahs Freigabe „Ja live nehmen“)**
 - `dist/index.html` (Code `22584e6`, dist `b7af3ec`) liegt auf `JLL8…`, Version `1790880701-ce75` (Artefakt-Version 61). Rückweg: Version `1790671851-fc37`.
 - **Handy-Modus** (automatisch: Touch + kurze Bildschirmseite < 500 px; Schalter „Am Handy“ in den Einstellungen, je Gerät): Die Aufgabe des Tages (Block 3, außer Wochen-Check) und das Nachsprechen sind am Handy nicht Pflicht. Nur eine Ansicht (`domain/plan/phone`): der gespeicherte Plan bleibt, Zähler, Zeilen und `pflichtFor` lesen dieselbe Liste, die Serie reißt nicht. Am Laptop volle Liste.
