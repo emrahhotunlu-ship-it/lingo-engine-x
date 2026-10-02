@@ -23,6 +23,7 @@ export async function packTopUp(today: string, nowMs: number): Promise<number> {
   packDay = today;
   const picks = nextPackEntries(packState(vocab, chunks, today, nowMs), normalizeNewPerDay(profile.newPerDay));
   let written = 0;
+  let failed = false;
   for (const e of picks) {
     const made = packDoc(e, today, nowMs);
     if (!made) continue;
@@ -35,9 +36,12 @@ export async function packTopUp(today: string, nowMs: number): Promise<number> {
       });
       if (wrote) written++;
     } catch (err) {
+      failed = true;
       logError('day:pack', err, made.path);
     }
   }
+  // Nach einem Schreibfehler später am Tag noch einmal versuchen (nie in einer Schleife, nur beim nächsten Tagesstart der Seite).
+  if (failed) packDay = null;
   return written;
 }
 

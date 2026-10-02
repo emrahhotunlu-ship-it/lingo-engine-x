@@ -91,6 +91,8 @@ type Doc = Readonly<Record<string, unknown>>;
 
 /** Schreibvorgang für `writer.transform`: nur anlegen, wenn es das Dokument noch nicht gibt (nie ersetzen). */
 export function packOp(cur: Doc | undefined, made: PackDoc): { set: Record<string, unknown> } | { update: Record<string, unknown> } | null {
+  // Nur anlegen: eine vorhandene Karte (auch eine eigene mit gleicher Kennung) bleibt unberührt, sie bekommt nie die Herkunft „Paket“.
+  if (cur) return null;
   if (made.kind === 'chunk') return takeChunkOp(cur, made);
   return saveCardOp(cur, made);
 }
