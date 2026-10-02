@@ -51,7 +51,8 @@ export function unitReviewGoal(i: {
   if (!backlogBraked(overdue)) {
     const dueToday = dueCards(act, i.nowMs).filter((c) => !isLearningState(c.fsrs)).length;
     const next = forecast(act, i.nowMs, 6).reduce((a, d) => a + d.n, 0);
-    const loadSec = ((dueToday + next) / 7) * CARD_SEC.mid;
+    // Ein voller heutiger Tag bremst genauso wie ein dauerhaft voller: es zählt der höhere Wert.
+    const loadSec = Math.max(dueToday, (dueToday + next) / 7) * CARD_SEC.mid;
     const target = Math.min(i.quotaLeft, capacityNew(loadSec), base.fresh.length);
     if (target > r.fresh) {
       const extra = (target - r.fresh) * NEW_SEC;

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { toTrainCard } from '../../src/domain/srs/cards';
 import type { TrainCard } from '../../src/domain/srs/types';
-import { BACKLOG_BRAKE_AT, BACKLOG_MAX_SHARE, BACKLOG_SEC_PER_CARD, backlogBraked, backlogBudget, overdueCount } from '../../src/domain/unit/backlog';
+import { BACKLOG_BRAKE_AT, BACKLOG_MAX_SHARE, BACKLOG_SEC_PER_CARD, backlogBraked, backlogBudget, capacityNew, overdueCount } from '../../src/domain/unit/backlog';
 import { buildUnitStored, unitPlanOf } from '../../src/domain/unit/plan';
 import { unitReviewGoal } from '../../src/domain/unit/review';
 import { REVIEW_MIN_MAX, REVIEW_SEC, unitPlanFor } from '../../src/domain/week/plan';
@@ -61,9 +61,10 @@ describe('unitReviewGoal mit Rückstand', () => {
   it('ohne Rückstand ändert sich nichts: Budget und Zahl neuer Wörter wie bisher', () => {
     const g = goal(cards(0, 40, 20));
     expect(g.overdue).toBe(0);
-    expect(g.sec).toBeLessThanOrEqual(REVIEW_SEC.full);
+    // Kapazitätsregel (02.10.2026): ist viel Platz, kommen bis zu 6 neue Wörter; jedes über die üblichen 3 hinaus bringt seine 50 s mit.
     expect(g.fresh).toBeGreaterThanOrEqual(2);
-    expect(g.fresh).toBeLessThanOrEqual(3);
+    expect(g.fresh).toBeLessThanOrEqual(6);
+    expect(g.sec).toBeLessThanOrEqual(REVIEW_SEC.full + Math.max(0, g.fresh - 3) * 50);
     expect(g.goal).toBe(g.repairs + g.due + g.fresh);
   });
 
@@ -131,5 +132,31 @@ describe('Minuten von Block 1 in der Anzeige', () => {
     const old = buildUnitStored({ day: MON, nowMs: NOW, week: null, goalMin: 25, review: { goal: 12, due: 8, fresh: 3, repairs: 1 } });
     expect(old.u?.min).toBe(27);
     expect(unitPlanOf(old as typeof old & { u: NonNullable<typeof old.u> }, null).minutes).toBe(27);
+  });
+});
+
+describe('Kapazitätsregel für neue Wörter', () => {
+  it('capacityNew: wenig Last → bis 6, viel Last → Untergrenze 2, dazwischen nach 72 s je Wort', () => {
+    expect(capacityNew(0)).toBe(6);
+    expect(capacityNew(300)).toBe(5); // (720 − 300) / 72 = 5,8
+    expect(capacityNew(600)).toBe(2); // 1,6 → Untergrenze
+    expect(capacityNew(5000)).toBe(2);
+    expect(capacityNew(Number.NaN)).toBe(6);
+  });
+
+  it('wenig fällig und Kontingent 5: bis 5 neue Wörter am Tag, Zeit wächst nur um die 50 s je zusätzliches Wort', () => {
+    const g = goal(cards(0, 6, 20), REVIEW_SEC.full, 5);
+    expect(g.fresh).toBe(5);
+    expect(g.sec).toBeLessThanOrEqual(REVIEW_SEC.full + 2 * 50);
+  });
+
+  it('viel Last (viele Karten fällig in den nächsten Tagen): bleibt bei den üblichen höchstens 3', () => {
+    const g = goal(cards(0, 40, 20), REVIEW_SEC.full, 5);
+    expect(g.fresh).toBeLessThanOrEqual(3);
+  });
+
+  it('bei Bremse (≥ 15 überfällig) bleibt es bei der Mindestzahl, Kontingent 0 liefert keine neuen', () => {
+    expect(goal(cards(20, 10, 20), REVIEW_SEC.full, 5).fresh).toBe(2);
+    expect(goal(cards(0, 6, 20), REVIEW_SEC.full, 0).fresh).toBe(0);
   });
 });

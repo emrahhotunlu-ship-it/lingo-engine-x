@@ -48,9 +48,9 @@ describe('Hör-Lücke: Stufe höchstens +1', () => {
     expect(levelFor('dictation', 5)).toBe(5);
     expect(levelFor('type', 1)).toBe(4);
   });
-  it('junge Karte: richtig → +1, Leicht → +2, falsch → bleibt', () => {
+  it('junge Karte: richtig → +1, Leicht ebenfalls +1 (Hör-Lücke ist kein freier Abruf), falsch → bleibt', () => {
     expect(cardPatch(doc(1, { stage: 1 }), answer({ grade: 3 })).stage).toBe(2);
-    expect(cardPatch(doc(1, { stage: 1 }), answer({ grade: 4 })).stage).toBe(3);
+    expect(cardPatch(doc(1, { stage: 1 }), answer({ grade: 4 })).stage).toBe(2);
     expect(cardPatch(doc(1, { stage: 3 }), answer({ grade: 1, given: 'x' })).stage).toBe(3);
   });
   it('Leiter auf Stufe 4–5 unverändert (4 → 5, 5 falsch → 4)', () => {

@@ -124,7 +124,7 @@ describe('Wiederholungs-Planung über 120 Tage (echter Tagesplan)', () => {
   const without = simulate(120, { control: false });
 
   it('Kontrolle: ohne Rückstand-Steuerung wächst der Berg fälliger Karten weit über den Startwert (das Modell zeigt das Problem)', () => {
-    expect(max(without.rows, (r) => r.dueBefore)).toBeGreaterThan(250);
+    expect(max(without.rows, (r) => r.dueBefore)).toBeGreaterThan(200);
     expect(retention(without.rows.slice(-30))).toBeLessThan(0.85);
   });
 
