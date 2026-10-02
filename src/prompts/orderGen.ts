@@ -22,7 +22,7 @@ export const ORDER_GEN_MAX_ITEMS = 8;
 
 /** Beispielantwort im Prompt; muss selbst das Schema bestehen (Test). */
 export const ORDER_GEN_EXAMPLE =
-  '{"items":[{"topic":"c1-emphasis","en":"What we need is a partner who understands compliance.","de":"Was wir brauchen, ist ein Partner, der Compliance versteht.","chunks":["what","we","need","is","a partner","who understands compliance"],"alt":["A partner who understands compliance is what we need."],"why":["Der What-Satz ist das Subjekt, deshalb steht kein Komma vor is.","The what-clause is the subject, so there is no comma before is."],"bad":"What we need, is a partner who understands compliance."},{"topic":"c1-hedging","en":"It might be worth revisiting the timeline before we sign.","de":"Es könnte sich lohnen, den Zeitplan vor der Unterschrift noch einmal anzusehen. (vorsichtig vorgeschlagen)","chunks":["it","might","be worth","revisiting","the timeline","before we sign"],"alt":["Before we sign, it might be worth revisiting the timeline."],"why":["Nach worth steht die -ing-Form, nicht ein to-Infinitiv.","After worth comes the -ing form, not a to-infinitive."]}]}';
+  '{"items":[{"topic":"c1-emphasis","en":"What we need is a partner who understands compliance.","de":"Was wir brauchen, ist ein Partner, der Compliance versteht.","chunks":["what","we","need","is","a partner","who understands compliance"],"alt":["A partner who understands compliance is what we need."],"why":["Der What-Satz ist das Subjekt, deshalb steht kein Komma vor is.","The what-clause is the subject, so there is no comma before is."],"bad":"What we need, is a partner who understands compliance."},{"topic":"c1-hedging","en":"It might be worth revisiting the timeline before we sign.","de":"Es könnte sich lohnen, den Zeitplan vor der Unterschrift noch einmal anzusehen. (vorsichtig vorgeschlagen)","chunks":["it","might","be worth","revisiting","the timeline","before we sign"],"alt":["Before we sign, it might be worth revisiting the timeline."],"why":["Nach worth steht die -ing-Form, nicht ein to-Infinitiv.","After worth comes the -ing form, not a to-infinitive."]},{"topic":"c1-emphasis","en":"It was the audit trail that convinced them.","de":"Es war die Prüfspur, die sie überzeugt hat.","chunks":["it was","the audit trail","that","convinced","them"],"single":"A cleft sentence keeps the focus phrase right after it was, so there is no second natural order.","why":["Im Deutschen heißt es Es war X, der …; im Englischen folgt that, nicht who oder which.","German says Es war X, der …; English continues with that, not who or which."],"bad":"It was the audit trail what convinced them."}]}';
 
 const ID = 'order-gen';
 const VERSION = 1;
@@ -41,10 +41,10 @@ function looseItem(x: unknown): unknown {
     topic: str(x.topic ?? x.theme),
     en: str(x.en ?? x.sentence),
     de: str(x.de ?? x.german),
-    chunks: Array.isArray(x.chunks) ? x.chunks.map((c) => (typeof c === 'string' ? c.trim() : c)) : x.chunks,
+    chunks: Array.isArray(x.chunks) ? (x.chunks as unknown[]).map((c): unknown => (typeof c === 'string' ? c.trim() : c)) : x.chunks,
     ...(alt === undefined || alt === null ? {} : { alt: typeof alt === 'string' ? (alt.trim() ? [alt.trim()] : []) : alt }),
     ...(typeof x.single === 'string' ? { single: x.single.trim() } : {}),
-    why: Array.isArray(w) ? w.map((t) => (typeof t === 'string' ? t.trim() : t)) : w,
+    why: Array.isArray(w) ? (w as unknown[]).map((t): unknown => (typeof t === 'string' ? t.trim() : t)) : w,
     ...(typeof x.bad === 'string' ? { bad: x.bad.trim() } : {}),
   };
 }
@@ -79,10 +79,12 @@ export const orderGen: PromptTemplate<OrderGenVars, OrderGenOut> = {
       'Rules:',
       '- en: one natural business sentence, 8–18 words, a pattern that German speakers often get wrong. Always end with . ? or !',
       '- de: the German meaning, natural German, never a word-for-word copy. For c1-hedging and c1-diplomacy add the tone in brackets at the end, for example (vorsichtig) or (höflich, an einen Kunden).',
-      '- chunks: 5–9 tiles in the order of the sentence, lowercase except I and names, no punctuation, at most 5 words each. Fixed phrases (on the other hand, a bit of a stretch) are ONE tile. Every tile belongs to the sentence, no distractors. Together the tiles must give exactly the sentence.',
-      '- alt: ALL other natural sentences that use exactly the same tiles in another order (full sentences, with the same wording). If there are none, leave alt empty and put one short English reason in single (why there is no second natural order). Never give both.',
-      '- why: two lines, [German, English]. Explain the pattern the learner has to place correctly, not vocabulary. Each line at least one full sentence.',
-      '- bad: optional typical mistake of a German speaker (a full wrong sentence), never equal to a correct order.',
+      '- chunks: 5–9 tiles in the order of the sentence, lowercase except I and names, no punctuation, at most 5 words each. Fixed phrases (on the other hand, a bit of a stretch) are ONE tile. Every tile belongs to the sentence, no distractors. Together the tiles must give exactly the sentence. Never make a free adverbial its own tile (also, still, usually, today, next quarter, by Friday, in March, for now): put it INSIDE the tile of a neighbor so its position is fixed, for example "ship the pilot in March" as one tile. Do not use numbers with dots or commas and no abbreviations with dots in tiles.',
+      '- alt: First try to move every movable part (a fronted phrase, an adverbial, a participle clause) to the start, the middle and the end. List EACH full sentence that sounds natural to an American business speaker and uses exactly the same tiles. Prefer sentences with a fixed frame (cleft sentences, inversion, not only … but, worth + -ing, participle clauses) where there is no second order. If you are not sure that a second order is natural, do not list it: leave alt empty and use single instead. Never give both.',
+      '- single: use it for fixed frames. Give one concrete English reason, not a general remark.',
+      '- why: two lines, [German, English]. Name the German habit and the mistake it causes, for example Im Deutschen … ; im Englischen … . Each line at least one full sentence. Do not explain vocabulary.',
+      '- bad: whenever there is one, give the typical wrong sentence a German speaker would write. It must use different words or a wrong form. It must never be another order of the same tiles that could be correct.',
+      '- de: the German must make the intended structure recognizable (for a cleft sentence Es war X, der …), so that the learner knows which sentence is wanted.',
       '- Use a word from the learner vocabulary only if it fits naturally.',
       '- Spread the sentences over the topics. Vary subjects and situations (meetings, contracts, projects, customers). No brackets in en. No straight double quotes anywhere.',
     ].join('\n');

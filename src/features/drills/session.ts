@@ -196,7 +196,8 @@ export function commitDrill(a: DrillAnswer, label: string): 'typed' | 'choice' |
   touchDrill();
   const s = useDrill.getState();
   learnRecorder.drill(a);
-  if (s.kind === 'order') noteResult(orderTopic(s.order[s.pos] as OrderItem), a.verdict);
+  // Ein Fehler bei einem Satz von Claude (nur formal geprüft) macht das Thema nicht zum Fehlerthema.
+  if (s.kind === 'order' && !(s.order[s.pos] as OrderItem).ai) noteResult(orderTopic(s.order[s.pos] as OrderItem), a.verdict);
   const results = [...s.results, { label, ok: a.verdict !== 'wrong', verdict: a.verdict }];
   const pos = s.pos + 1;
   const done = pos >= itemsOf(s).length;

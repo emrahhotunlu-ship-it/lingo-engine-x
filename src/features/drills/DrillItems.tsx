@@ -446,6 +446,11 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
                 </p>
               )}
             </div>
+            {item.ai && (
+              <p className="text-sm text-muted" data-testid="order-ai-note">
+                {t('drOrderAiNote')}
+              </p>
+            )}
             {topic && <ExampleList items={examplesFor(topic, { exclude: item.sentence, max: 2 })} source={`grammar/${topic}`} />}
             <div className="flex justify-end pt-1">
               <NextButton onNext={next} auto={false} />
@@ -460,7 +465,7 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
           {item.de}
         </p>
         {item.ai && (
-          <p className="text-xs text-subtle" data-testid="order-ai">
+          <p className="text-xs text-muted" data-testid="order-ai">
             {t('drOrderAi')}
           </p>
         )}

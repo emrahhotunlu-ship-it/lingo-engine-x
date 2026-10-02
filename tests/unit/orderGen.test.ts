@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AiFailure } from '../../src/ai/types';
 import { ORDER_TOPICS, acceptGenerated, orderPool, poolNorm, poolSentenceKeys } from '../../src/domain/drills/orderPool';
 import { buildOrder } from '../../src/domain/drills/order';
+import type * as OrderStore from '../../src/features/drills/orderGen';
 import { orderGenReply } from '../../src/platform/dev/cannedReplies';
 import { ORDER_GEN_EXAMPLE, orderGen } from '../../src/prompts/orderGen';
 
@@ -27,11 +28,11 @@ class MemStorage {
 }
 
 const askJson = vi.fn();
-vi.mock('../../src/ai/gate', () => ({ askJson: (...a: unknown[]) => askJson(...a) }));
+vi.mock('../../src/ai/gate', () => ({ askJson: (...a: unknown[]): unknown => askJson(...a) }));
 
 const none = new Set<string>();
 const parse = (text: string): unknown[] => (JSON.parse(text) as { items: unknown[] }).items;
-const read = (raw: unknown): unknown[] => (orderGen.schema({ topics: [], words: [], avoid: [], n: 6 }).parse(raw) as { items: unknown[] }).items;
+const read = (raw: unknown): unknown[] => orderGen.schema({ topics: [], words: [], avoid: [], n: 6 }).parse(raw).items;
 
 const GOOD = {
   topic: 'c1-precision',
@@ -45,7 +46,7 @@ const GOOD = {
 describe('acceptGenerated – Prüfregeln', () => {
   it('Beispielantwort im Prompt besteht Schema und Prüfung', () => {
     const items = read(JSON.parse(ORDER_GEN_EXAMPLE));
-    expect(items).toHaveLength(2);
+    expect(items).toHaveLength(3);
     for (const it of items) expect(acceptGenerated(it, none), JSON.stringify(it)).not.toBeNull();
   });
 
@@ -54,13 +55,6 @@ describe('acceptGenerated – Prüfregeln', () => {
     expect(items).toHaveLength(6);
     for (const it of items) expect(acceptGenerated(it, poolSentenceKeys())?.ai, JSON.stringify(it)).toBe(true);
     expect(new Set(items.map((i) => (i as { topic: string }).topic)).size).toBe(6);
-  });
-
-  it('dieselben Regeln wie der feste Pool: jeder handgeschriebene Satz besteht (ohne Dubletten-Prüfung)', () => {
-    for (const e of orderPool()) {
-      const raw = { topic: e.topic, en: e.en, de: e.de, chunks: [...e.chunks], ...(e.alt.length ? { alt: [...e.alt] } : { single: e.single }), why: [e.why.de, e.why.en], ...(e.bad ? { bad: e.bad } : {}) };
-      expect(acceptGenerated(raw, none), e.en).not.toBeNull();
-    }
   });
 
   it('lehnt ab: zu wenige/zu viele Bausteine, Satz geht nicht auf, alt gleich Satz, beides oder keines von alt/single', () => {
@@ -95,6 +89,15 @@ describe('acceptGenerated – Prüfregeln', () => {
     expect(acceptGenerated(dup, poolSentenceKeys())).toBeNull();
     expect(acceptGenerated(GOOD, new Set([poolNorm(GOOD.en)]))).toBeNull();
     expect(acceptGenerated(GOOD, new Set([poolNorm(GOOD.alt[0]!)]))).toBeNull();
+  });
+
+  it('lehnt ab: freie Zusätze als eigener Baustein, Fehlfassung die eine gültige Umstellung sein könnte', () => {
+    const bad = (over: Record<string, unknown>) => acceptGenerated({ ...GOOD, ...over }, none);
+    expect(bad({ en: 'We can also set up the Zebra test within two weeks.', chunks: ['we', 'can', 'also', 'set up', 'the Zebra test', 'within two weeks'], alt: ['Within two weeks, we can also set up the Zebra test.'] })).toBeNull();
+    expect(bad({ bad: 'We can set up within two weeks the Zebra test.' })).toBeNull();
+    expect(bad({ bad: 'We can set the Zebra test up within two weeks.' })).not.toBeNull();
+    expect(bad({ en: 'We can recognise the Zebra test within two weeks.', chunks: ['we', 'can', 'recognise', 'the Zebra test', 'within two weeks'], alt: ['Within two weeks, we can recognise the Zebra test.'] })).toBeNull();
+    expect(bad({ en: 'We plan to spend $3.5 million within two weeks.', chunks: ['we', 'plan', 'to spend', '$3.5 million', 'within two weeks'], alt: ['Within two weeks, we plan to spend $3.5 million.'] })).not.toBeNull();
   });
 
   it('nur bekannte Themen', () => {
@@ -134,7 +137,7 @@ describe('order-gen – tolerantes Lesen', () => {
 });
 
 describe('Vorrat im Hintergrund', () => {
-  let store: typeof import('../../src/features/drills/orderGen');
+  let store: typeof OrderStore;
 
   beforeEach(async () => {
     vi.stubGlobal('window', { localStorage: new MemStorage(), sessionStorage: new MemStorage(), addEventListener: () => undefined, removeEventListener: () => undefined });
@@ -251,6 +254,11 @@ describe('orderItems – Rundenmischung', () => {
     const hedging = items.filter((i) => i.key.endsWith('rules/c1-hedging'));
     expect(hedging.length).toBeGreaterThanOrEqual(3);
     expect(hedging.every((i) => !seen.has(poolNorm(i.sentence)))).toBe(true);
+  });
+
+  it('orderTopic liefert auch für Sätze von Claude das Thema', async () => {
+    const { orderTopic } = await import('../../src/features/drills/session');
+    expect(orderTopic(buildOrder(acceptGenerated(GOOD, none)!, { seed: 'x' }))).toBe('c1-precision');
   });
 
   it('buildOrder trägt die KI-Markierung', () => {

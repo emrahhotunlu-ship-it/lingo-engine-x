@@ -342,9 +342,13 @@ async function aiSentencesInRound(page: Page): Promise<{ ai: number; quokka: num
       ai++;
       if (/Quokka/.test((await item.getByTestId('order-de').textContent()) ?? '')) quokka++;
     }
+    const isAi = (await item.getByTestId('order-ai').count()) > 0;
     await item.getByTestId('hint').click();
     await item.getByTestId('hint').click();
     await item.getByTestId('check').click();
+    // Bei Sätzen von Claude steht auch in der Rückmeldung der ehrliche Hinweis.
+    if (isAi) await expect(item.getByTestId('order-ai-note')).toBeVisible();
+    else await expect(item.getByTestId('order-ai-note')).toHaveCount(0);
     await finishItem(page);
   }
   return { ai, quokka };

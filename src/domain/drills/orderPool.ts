@@ -123,12 +123,15 @@ export const orderPoolSize = (): number => orderPool().length;
 
 export const ORDER_TOPICS = ['c1-emphasis', 'c1-discourse', 'c1-hedging', 'c1-diplomacy', 'c1-precision', 'c1-nominal', 'c1-participle'] as const;
 
-const BRITISH = /\b(colour|organis|realis|programme|centre|licence|cheque|whilst|learnt|behaviour|favour|catalogue|labour|analyse)\w*/i;
+const BRITISH = /\b(colour|organis|realis|programme|centre|licence|cheque|whilst|learnt|behaviour|favour|catalogue|labour|analyse|recognis|prioritis|minimis|customis|summaris|finalis|optimis|honour|enquir|towards|amongst)\w*/i;
 const wordsOf = (s: string): string[] => s.split(/\s+/).filter(Boolean);
 /** Deutsche Zitate in „…“ / “…” aus einem englischen Text nehmen, bevor die Sprache geprüft wird. */
 const withoutQuotes = (s: string): string => s.replace(/[“„][^”“]*[”“]/g, ' ');
 
 /** Normalform aller Sätze des festen Pools (Dubletten-Prüfung). */
+/** Frei bewegliche Zusätze als eigener Baustein: dann gäbe es unerfasste gültige Reihenfolgen. */
+const MOVABLE = /^(also|still|just|only|often|usually|always|never|soon|today|tomorrow|already|then|now|next (week|month|quarter|year)|last (week|month|quarter|year)|in (q[1-4]|january|february|march|april|may|june|july|august|september|october|november|december)|by (monday|tuesday|wednesday|thursday|friday|next \w+)|for now|in the meantime)$/;
+
 export const poolSentenceKeys = (): Set<string> => new Set(orderPool().flatMap((e) => [e.en, ...e.alt]).map(poolNorm));
 
 /**
@@ -144,7 +147,8 @@ export function acceptGenerated(raw: unknown, known: ReadonlySet<string>): PoolE
   if (!e) return null;
   const texts = [e.en, e.de, e.why.de, e.why.en, e.bad ?? '', ...e.alt, ...e.chunks];
   if (texts.some((t) => t.includes('"'))) return null;
-  if (e.chunks.some((c) => wordsOf(c).length > 5 || /[.,;:!?]/.test(c))) return null;
+  if (e.chunks.some((c) => wordsOf(c).length > 5 || /[.,;:!?]/.test(c.replace(/(?<=\d)[.,](?=\d)/g, '')))) return null;
+  if (e.chunks.some((c) => MOVABLE.test(poolNorm(c)))) return null;
   if (!/[.?!]$/.test(e.en) || wordsOf(e.en).length < 6 || wordsOf(e.en).length > 22) return null;
   if (wordsOf(e.de).length < 4 || wordsOf(e.de).length > 20 || !/[.?!)]$/.test(e.de)) return null;
   if ((e.topic === 'c1-hedging' || e.topic === 'c1-diplomacy') && !/\([^)]+\)/.test(e.de)) return null;
@@ -156,5 +160,7 @@ export function acceptGenerated(raw: unknown, known: ReadonlySet<string>): PoolE
   // Die Fehlfassung darf sich auch nur in der Zeichensetzung unterscheiden (z. B. Komma), aber nicht Buchstabe für Buchstabe gleich sein.
   const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
   if (e.bad && [e.en, ...e.alt].some((x) => same(x, e.bad as string))) return null;
+  // Dieselben Bausteine in anderer Reihenfolge wären vielleicht ein richtiger Satz: nur erlaubt, wenn es nach Normalisierung ein bekannter ist.
+  if (e.bad && segment(e.bad, e.chunks) && ![e.en, ...e.alt].some((x) => poolNorm(x) === poolNorm(e.bad as string))) return null;
   return { ...e, ai: true };
 }
