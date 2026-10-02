@@ -2,6 +2,7 @@ import { learningDayEnd } from '../date';
 import { cardSec, NEW_SEC } from './cost';
 import { availableExercises } from './modes';
 import { isLearningState, retrievability } from './scheduler';
+import { themeFirst } from '../week/review';
 import type { Lang, QueueItem, TrainCard } from './types';
 
 // Runde „Wiederholen" (Lern-Entwurf §3): fällige Karten nach Dringlichkeit, dazu neue Karten
@@ -184,8 +185,8 @@ export function buildQueue(i: {
   const fresh = newCards(act, i.isTheme);
   const nNew = Math.min(Math.max(0, i.newQuotaLeft), fresh.length, i.target);
   // Block 1 (Prüfung Tageseinheit M1): fällige Karten zum Wochenthema zuerst, sonst nach Dringlichkeit.
-  const urgent = dueCards(act, i.nowMs);
-  const due = i.isTheme ? [...urgent.filter(i.isTheme), ...urgent.filter((c) => !i.isTheme?.(c))] : urgent;
+  const urgent = capLeeches(dueCards(act, i.nowMs));
+  const due = i.isTheme ? themeFirst(urgent.map((c) => ({ c, theme: i.isTheme?.(c) === true })), i.target).map((x) => x.c) : urgent;
   const reviews = due.slice(0, i.target - nNew).map((c): QueueItem => ({ key: c.key, reason: 'due', phase: 'quiz' }));
   if (reviews.length + nNew < i.target) {
     for (const c of aheadCards(act, i.nowMs).slice(0, i.target - nNew - reviews.length)) reviews.push({ key: c.key, reason: 'ahead', phase: 'quiz' });
@@ -194,6 +195,17 @@ export function buildQueue(i: {
   const out: QueueItem[] = [...reviews];
   news.forEach((n, k) => out.splice(Math.min(out.length, 2 + 3 * k), 0, n));
   return out;
+}
+
+/** Dauerfehler („Blutegel“): ab so vielen Vergessen-Fällen kostet eine Karte unverhältnismäßig viel Zeit. */
+export const LEECH_AT = 5;
+/** Höchstens so viele Dauerfehler-Karten je Runde; der Rest kommt an den nächsten Tagen (bleibt fällig, geht nie verloren). */
+export const LEECH_MAX = 3;
+
+/** Begrenzt Dauerfehler-Karten in einer Runde (Reihenfolge der übrigen bleibt). */
+export function capLeeches(due: readonly TrainCard[]): TrainCard[] {
+  let n = 0;
+  return due.filter((c) => (c.fsrs.lapses >= LEECH_AT ? ++n <= LEECH_MAX : true));
 }
 
 /** Wiedervorlage in der Runde: frühestens drei Karten später (höchstens ans Ende). */

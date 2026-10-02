@@ -33,6 +33,7 @@ import { autoGrade, produceGrade } from '../../domain/srs/grade';
 import { exerciseDef } from '../../domain/srs/modes';
 import { selfCheckProduce, type SelfCheck } from '../../domain/srs/produce';
 import { reviewFsrs } from '../../domain/srs/scheduler';
+import { noteWeight } from '../../domain/srs/weight';
 import { locate } from '../../domain/srs/context';
 import { choiceVerdict, tilesAnswer } from '../../domain/srs/exercise';
 import { locateChunk } from '../../domain/srs/chunkCards';
@@ -70,6 +71,8 @@ type Feedback = {
   ms: number;
   /** Einspruch „Ich lag richtig" (M4). */
   override: boolean;
+  /** Genutzte Hilfe (Tipp, zweiter Versuch, Begleiter): gewichtet die Antwort geringer. */
+  hint: 0 | 1 | 2;
   /** spot: angetippte Stelle. */
   picked?: { start: number; end: number } | null;
   /** speed: Zeit abgelaufen. */
@@ -235,10 +238,11 @@ export function ExerciseView({
     const g2: Grade = retry?.kind === 'start' && forced === undefined ? 1 : g;
     const grade = forced !== undefined && companionHelp ? (Math.min(forced, 2) as Grade) : g2;
     const t0 = Date.now();
-    const after = reviewFsrs(card.fsrs, grade, t0);
+    const hintUsed: 0 | 1 | 2 = companionHelp || retry ? 2 : tip;
+    const after = reviewFsrs(card.fsrs, grade, t0, noteWeight(e.ex, hintUsed));
     const dueInMs = Math.max(0, after.due - t0);
     const confidence = confidenceOf({ isNew: false, stage: Math.max(1, card.stage) as TrainCard['stage'], fsrs: after }, t0);
-    setFb({ result, given, chosen, grade, dueInMs, ms, confidence, override: false, ...extraFb });
+    setFb({ result, given, chosen, grade, dueInMs, ms, confidence, override: false, hint: hintUsed, ...extraFb });
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen").
     if (ai && wantsEnrichment(card, shownSentence, Date.now())) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
@@ -358,7 +362,7 @@ export function ExerciseView({
 
   const next = () => {
     if (!fb) return;
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1 };
+    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();

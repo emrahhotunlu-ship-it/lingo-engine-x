@@ -9,7 +9,8 @@ import { buildTrainCards, toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
 import { buildExercise, type SceneLookup } from '../../domain/srs/exercise';
 import { chooseExercise, supports, type ExerciseEnv } from '../../domain/srs/modes';
-import { againPos, calibration, controlAllowed, controlCounts, dirFor, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
+import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
+import { againPos, calibration, controlAllowed, controlCounts, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
 import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
 import { listenExercise } from '../../domain/srs/listen';
 import { isThemeCard } from '../../domain/week/cards';
@@ -86,11 +87,20 @@ type SessionState = {
   unit: boolean;
   /** Ausgewählte Karten (nur `only`): fürs Fortsetzen. */
   only: string[] | null;
+  /** Aufholmodus dieser Runde (viele überfällige Karten, Modus `auto`). */
+  catchUp: boolean;
+  /** Eigene Sätze (`produce`) in dieser Runde (Deckel `PRODUCE_MAX`). */
+  produced: number;
 };
 
 const EXTRA_TARGET = 10;
 const AGAIN_WINDOW_MS = 20 * 60_000;
 const MAX_SHOWN = 3;
+/** Eigene Sätze je Runde (teuerste Übung). */
+const PRODUCE_MAX = 2;
+/** Wartung reifer Karten: ab dieser Stabilität (Tage) und nur jede so vielte Wiederholung in voller Form. */
+const MAINTENANCE_S = 21;
+const MAINTENANCE_EVERY = 3;
 const IDLE_CAP_MS = 60_000;
 const ROUND_MIN = 10;
 
@@ -127,6 +137,8 @@ export const useSession = create<SessionState>(() => ({
   strict: false,
   unit: false,
   only: null,
+  catchUp: false,
+  produced: 0,
 }));
 
 /** Heutige Einträge: Datenbank und noch nicht gespeicherter Puffer. */
@@ -155,7 +167,7 @@ function sceneLookup(lang: Lang): SceneLookup {
   };
 }
 
-type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay'>;
+type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'produced'>;
 
 /** Modus je Karte nach anki-regeln §1 (`pickMode`, die Regel steht nur in domain/srs/flip.ts). */
 export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode {
@@ -166,6 +178,8 @@ export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode 
     lang: s.lang,
     due: item.reason === 'due',
     controlAllowed: controlAllowed({ week: s.ctlWeek, day: s.ctlDay, session: s.controls }),
+    catchUp: s.catchUp && s.mode === 'auto',
+    key: card.key,
   });
 }
 
@@ -197,9 +211,41 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
     const ex = chooseExercise({ ...card, stage: 3 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
     if (ex) return { ...build(s, card, ex, true), check: 'probe' };
   }
+  const lighter = lighterExercise(s, card);
+  if (lighter) return build(s, card, lighter);
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;
+  if (ex === 'produce' && s.produced >= PRODUCE_MAX) {
+    const other = chooseExercise({ ...card, stage: 4 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
+    if (other && other !== 'produce') return build(s, card, other);
+  }
   return build(s, card, ex);
+}
+
+/** Frei getippte Arten (Stufe 4) – ohne Auswahl und ohne Stütze. */
+const FREE_TYPED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'cloze', 'situation']);
+
+/**
+ * Billigere, aber gleichwertige Abfrage in zwei Fällen (Methodenplan Lernwissenschaft 02.10.2026), nur im Modus `auto`:
+ * - L5: Nach einer bestandenen Stützen-Abfrage an einem früheren Tag (Stufe 3, Lücke mit Hilfe oder Bausteine) kommt der nächste
+ *   getippte Termin FREI (ohne Anfangsbuchstaben) – sonst läuft Stufe 3 zweimal mit Hilfe und der erste freie Abruf käme erst am 4. Termin.
+ * - L4: Reife Karten (Stufe 5, Stabilität ≥ 21 Tage) bekommen die volle „Sicher anwenden“-Form nur bei jeder dritten Wiederholung;
+ *   sonst genügt freies Tippen (Stufe 4).
+ */
+function lighterExercise(s: ExCtx, card: TrainCard): ExerciseId | null {
+  if (s.mode !== 'auto') return null;
+  const n = s.pool.length - 1;
+  const freeOne = (): ExerciseId | null => {
+    const ex = chooseExercise({ ...card, stage: 4 }, s.lang, n, s.recentEx, s.env);
+    return ex && FREE_TYPED.has(ex) ? ex : null;
+  };
+  if (card.stage === 3) {
+    const last = lastRating(card.doc);
+    if (last && (last.x === 'cloze_hint' || last.x === 'tiles') && (last.g ?? 0) >= 3 && dayKey(last.t) !== s.day) return freeOne();
+  }
+  const reps = typeof card.doc.reps === 'number' ? card.doc.reps : 0;
+  if (card.stage >= 5 && card.fsrs.stability >= MAINTENANCE_S && reps % MAINTENANCE_EVERY !== 0) return freeOne();
+  return null;
 }
 
 // n+1 vorberechnen (leistung.md §4 Nr. 4): nach dem Prüfen im Leerlauf, beim „Weiter“ nur noch tauschen.
@@ -220,7 +266,7 @@ export function prepareNext(): void {
   const item = s.queue[s.pos + 1];
   if (!item || item.phase !== 'quiz' || item.key === s.exercise.card.key) return;
   const recent = [...s.recentEx, s.exercise.ex].slice(-2);
-  const ctx: ExCtx = { ...s, recentEx: recent };
+  const ctx: ExCtx = { ...s, recentEx: recent, produced: s.produced + (s.exercise.ex === 'produce' ? 1 : 0) };
   prebuilt = null;
   const ex = exerciseFor(ctx, item);
   if (ex) prebuilt = { sig: sigOf(ctx, item, recent), ex };
@@ -370,6 +416,8 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     strict: mode !== 'type' && calibration(docs, now).strict,
     unit: opts.unit === true,
     only: opts.only ? [...opts.only] : null,
+    catchUp: mode === 'auto' && catchUpOn(overdueCount(pool, now)),
+    produced: 0,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, 0) };
@@ -512,6 +560,8 @@ export type Answer = {
   ms: number;
   ok: boolean;
   override?: boolean;
+  /** Genutzte Hilfe der Antwort (`weight.ts`). */
+  hint?: 0 | 1 | 2;
   /** Aufdecken: beim Aufdecken reservierter Zeitstempel (gleich für Vorschau und Speichern, architektur.md §4.3). */
   t?: number;
 };
@@ -543,6 +593,8 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
+  if (ans.hint) a.hint = ans.hint;
+  if (e.check) a.check = e.check;
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
@@ -556,7 +608,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   const queue = [...s.queue];
   const again = isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
   // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
-  if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip'), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3), 0, { key: card.key, reason: 'again', phase: 'quiz' });
   const control = e.check === 'control' ? 1 : 0;
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
   const next = advanceState({
@@ -569,6 +621,7 @@ export function commitAnswer(ans: Answer): FirstKind {
     ctlDay: s.ctlDay + control,
     ctlWeek: s.ctlWeek + control,
     recentEx: [...s.recentEx, e.ex].slice(-2),
+    produced: s.produced + (e.ex === 'produce' ? 1 : 0),
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });
   // B4: Aufdecken-Bewertungen 5 s zurückhalten (Karte, Protokoll, Zähler), solange die Runde
@@ -804,6 +857,8 @@ export function restoreTrainer(snap: TrainerSnapshot): boolean {
     strict: snap.mode !== 'type' && calibration(docs, now).strict,
     unit: snap.unit === true,
     only: null,
+    catchUp: false,
+    produced: 0,
   };
   prebuilt = null;
   const next = { ...base, ...settle(base, pos) };

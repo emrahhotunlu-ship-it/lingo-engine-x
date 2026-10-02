@@ -11,6 +11,19 @@ export const REPAIR_MAX = 3;
 export const REPAIR_SEC_MAX = 120;
 export const NEW_SHARE = 0.4;
 export const NEW_MIN = 2;
+/** Bei vielen fälligen Karten (Rückstand) bekommt das Wochenthema höchstens ein Drittel der Plätze (Prüfung Lernwissenschaft 02.10.2026). */
+export const THEME_SHARE_BEHIND = 1 / 3;
+export const THEME_CAP_FROM = 15;
+
+/** Wochenthema zuerst; bei Rückstand (≥ 15 Karten fällig) nur so viele, wie ein Drittel der `slots` Plätze ausmachen, der Rest nach Dringlichkeit. */
+export function themeFirst<T extends { theme?: boolean }>(due: readonly T[], slots: number): T[] {
+  const theme = due.filter((c) => c.theme);
+  const rest = due.filter((c) => !c.theme);
+  if (due.length < THEME_CAP_FROM || !Number.isFinite(slots)) return [...theme, ...rest];
+  const cap = Math.max(1, Math.ceil(slots * THEME_SHARE_BEHIND));
+  const first = theme.slice(0, cap);
+  return [...first, ...due.filter((c) => !first.includes(c))];
+}
 
 export type ReviewCandidate<T> = { item: T; sec: number; theme?: boolean };
 export type ReviewReason = 'repair' | 'due' | 'new';
@@ -64,7 +77,8 @@ export function block1Order<T>(i: {
   left -= newSec;
 
   // Fällige Karten: Wochenthema zuerst, sonst in der übergebenen Dringlichkeit.
-  const dueSorted = [...i.due.filter((c) => c.theme), ...i.due.filter((c) => !c.theme)];
+  const avg = i.due.length ? i.due.reduce((a, c) => a + cost(c.sec), 0) / i.due.length : 0;
+  const dueSorted = themeFirst(i.due, avg > 0 ? Math.floor(left / avg) : Infinity);
   const due: ReviewCandidate<T>[] = [];
   for (const c of dueSorted) {
     if (left - cost(c.sec) < 0) break;

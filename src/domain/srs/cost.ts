@@ -34,3 +34,19 @@ export function estimateRoundMinutes(cards: readonly TrainCard[], nowMs: number,
   sec += Math.min(fresh, Math.max(0, newCap)) * (flip ? FLIP_NEW_SEC : NEW_SEC);
   return sec <= 0 ? 0 : Math.max(1, Math.round(sec / 60));
 }
+
+/** Reife Karten (Stufe 5, Stabilität ≥ 21 Tage) kommen nur bei jeder dritten Wiederholung in voller Form (`session.ts`). */
+const MAINT_S = 21;
+const CATCHUP_S = 7;
+
+/**
+ * Geplante Sekunden einer fälligen Karte: wie `cardSec`, aber mit der billigeren Wartung reifer Karten (zwei Drittel freies Tippen,
+ * ein Drittel volle Form) und im Aufholmodus (drei Viertel Aufdecken) für reife Karten ab Stufe 3.
+ */
+export function plannedCardSec(c: Pick<TrainCard, 'stage' | 'fsrs'>, catchUp: boolean): number {
+  const base = cardSec(c);
+  const s = c.fsrs.stability;
+  if (catchUp && c.stage >= 3 && s >= CATCHUP_S) return 0.75 * FLIP_SEC + 0.25 * base;
+  if (c.stage >= 5 && s >= MAINT_S) return (2 / 3) * CARD_SEC.mid + (1 / 3) * base;
+  return base;
+}

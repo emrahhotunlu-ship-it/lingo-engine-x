@@ -59,3 +59,11 @@ export function capacityNew(loadSecPerDay: number): number {
   const load = Number.isFinite(loadSecPerDay) && loadSecPerDay > 0 ? loadSecPerDay : 0;
   return Math.min(NEW_PER_DAY_MAX, Math.max(NEW_MIN, Math.floor((VOCAB_BUDGET_SEC - load) / NEW_LOAD_SEC)));
 }
+
+// Aufholmodus (Methodenplan Lernwissenschaft 02.10.2026): ab so vielen überfälligen Karten werden fällige, reife Karten (Stabilität
+// ≥ 7 Tage) aufgedeckt statt getippt, jede vierte bleibt getippt (Kontrolle). Das gibt etwa doppelt so viele Karten je Minute.
+export const CATCHUP_AT = 40;
+export const CATCHUP_MIN_S = 7;
+/** Jede so vielte Karte bleibt im Aufholmodus getippt. */
+export const CATCHUP_TYPED_EVERY = 4;
+export const catchUpOn = (overdue: number): boolean => overdue >= CATCHUP_AT;

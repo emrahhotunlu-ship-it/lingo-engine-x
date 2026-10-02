@@ -175,6 +175,10 @@ export type AnswerEvent = {
   colIndex?: number;
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */
   override?: boolean;
+  /** Genutzter Tipp (1 Platzhalter, 2 erster Buchstabe): gewichtet die Antwort geringer (`weight.ts`). */
+  hint?: 0 | 1 | 2;
+  /** Prüfabfrage bzw. Kontrolle (`flip.ts`). */
+  check?: 'probe' | 'control';
 };
 
 export type WhyPart = { key: string; vars?: Record<string, string | number>; lang?: Lang };

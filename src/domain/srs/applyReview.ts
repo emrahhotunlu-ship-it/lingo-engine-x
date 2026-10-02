@@ -6,6 +6,7 @@ import { flipStage } from './flip';
 import { stageOf, nextStage } from './ladder';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
+import { noteWeight } from './weight';
 import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
 
 // Schreiben je bewerteter Antwort (Daten-Entwurf §1.3/1.4): rein, ohne Seiteneffekte.
@@ -153,7 +154,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   if (a.kind === 'chunk') return chunkPatch(cur, a);
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t);
+  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0));
   const modes = isObj(cur.modes) ? cur.modes : {};
   const prevMode = isObj(modes[def.mode]) ? (modes[def.mode] as Doc) : {};
   const xs = isObj(cur.xs) ? cur.xs : {};
@@ -185,7 +186,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
 export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t);
+  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0));
   const xs = isObj(cur.xs) ? cur.xs : {};
   const prevXs = isObj(xs[a.ex]) ? (xs[a.ex] as Doc) : {};
   const ok = a.grade > 1 ? 1 : 0;

@@ -1,6 +1,7 @@
 import { addDays, dayKey, learningDayStart } from '../date';
 import { meaningOf } from './cards';
 import { stageOf } from './ladder';
+import { CATCHUP_MIN_S, CATCHUP_TYPED_EVERY } from '../unit/backlog';
 import type { Grade, Lang, TrainCard } from './types';
 
 // Anki-Modus „Aufdecken“ (docs/neubau/anki-regeln.md, verbindlich): Modus-Regel für `auto`,
@@ -73,7 +74,18 @@ export type PickInput = {
   due: boolean;
   /** Nur Stapel im Aufdecken-Modus: Kontrolle erlaubt (Deckel 1/2/5, `controlAllowed`). */
   controlAllowed?: boolean;
+  /** Aufholmodus (`unit/backlog.ts`): reife, fällige Karten aufdecken statt tippen, jede vierte tippen. */
+  catchUp?: boolean;
+  /** Kennung der Karte (für die feste Wahl „jede vierte“). */
+  key?: string;
 };
+
+/** Feste, wiederholbare Wahl je Karte und Lerntag: jede `every`-te Karte. */
+function everyNth(key: string, day: string, every: number): boolean {
+  let h = 0;
+  for (const ch of `${key}|${day}`) h = (h * 31 + ch.charCodeAt(0)) | 0;
+  return Math.abs(h) % every === 0;
+}
 
 /**
  * Modus je Karte (§1, der erste Treffer entscheidet):
@@ -92,6 +104,7 @@ export function pickMode(i: PickInput): PickedMode {
   const easyFlip = isFlipEntry(last) && last?.g === 4;
   if (i.requested === 'flip') return easyFlip && i.due && i.controlAllowed === true ? 'control' : 'flip';
   if (easyFlip && i.due) return 'control';
+  if (i.catchUp && i.due && stageOf(i.card.doc) >= 3 && (num(i.card.doc.S) ?? 0) >= CATCHUP_MIN_S && !everyNth(i.key ?? (typeof i.card.doc.id === 'string' ? i.card.doc.id : ''), i.day, CATCHUP_TYPED_EVERY)) return 'flip';
   if (stageOf(i.card.doc) >= 3) return 'type';
   if (isFlipEntry(last) && last?.g === 3) return 'probe';
   return 'flip';
@@ -135,7 +148,10 @@ export function flipStage(s0: number, grade: Grade): number {
 }
 
 /** Wiedervorlage nach „Nochmal“: Aufdecken nach 5 anderen Karten, Tippen nach 3 (höchstens ans Ende). */
-export const againPos = (pos: number, queueLen: number, flip: boolean): number => Math.min(queueLen, pos + (flip ? FLIP.againGap : TYPE_AGAIN_GAP));
+export const againPos = (pos: number, queueLen: number, flip: boolean, passed = false): number =>
+  Math.min(queueLen, pos + Math.max(flip ? FLIP.againGap : TYPE_AGAIN_GAP, passed ? PASSED_AGAIN_GAP : 0));
+/** Nach „Gut“ im Lernschritt (kurze Wiedervorlage nach 10 Min.) mindestens 8 Karten dazwischen – sonst prüft die Wiedervorlage nur das Kurzzeitgedächtnis. */
+export const PASSED_AGAIN_GAP = 8;
 
 /** Richtung einer Karte; `mix` wählt je Karte und Lerntag fest (kein Würfeln beim Neuzeichnen). */
 export function dirFor(key: string, dir: FlipDir, day: string): 'de-en' | 'en-de' {

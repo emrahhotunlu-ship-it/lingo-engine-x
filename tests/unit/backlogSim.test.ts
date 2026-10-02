@@ -1,3 +1,4 @@
+import { plannedCardSec } from '../../src/domain/srs/cost';
 import { describe, expect, it } from 'vitest';
 import { dayKey, learningDayEnd } from '../../src/domain/date';
 import { mulberry32 } from '../../src/domain/random';
@@ -93,7 +94,8 @@ function simulate(days: number, opts: { control: boolean; pause?: [number, numbe
       const card = mk(t).find((c) => c.key === item.key);
       if (!card) continue;
       t += 15_000;
-      sec += card.isNew ? 50 : card.stage <= 2 ? 12 : card.stage <= 4 ? 20 : 35;
+      // Wie die App seit Paket 3 plant: reife Karten billiger (Wartung), im Aufholmodus (≥ 40 überfällig) aufgedeckt.
+      sec += card.isNew ? 50 : plannedCardSec(card, overdueBefore >= 40);
       const p = card.isNew ? 0.8 : isLearningState(card.fsrs) ? Math.max(0.9, retrievability(card.fsrs, t)) : retrievability(card.fsrs, t);
       const ok = rng() < p;
       const doc = docs.get(card.id)!;
