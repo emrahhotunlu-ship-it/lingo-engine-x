@@ -43,6 +43,8 @@ import { commitAnswer, prepareNext, type Answer, type FirstKind } from './sessio
 import { CopyOnce, NextButton, OverrideButton } from '../learn/ui';
 import { AiRunPanel } from '../input/AiRunPanel';
 import { MnemonicBlock } from './mnemonic';
+import { ExampleTranslation } from './ExampleTranslation';
+import { MoreInfo } from './MoreInfo';
 import { RetryHintLine } from '../learn/RetryHint';
 import { useCompanionSee } from '../companion/seeing';
 import { companionOpenedSince, companionOpenMs } from '../companion/store';
@@ -78,8 +80,18 @@ type Feedback = {
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
 /** Freie Tipp-Arten: „Tipp" deckt Platzhalter bzw. den ersten Buchstaben auf (zählt als Hilfe). */
 const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'type', 'situation']);
-/** Arten, deren Frage schon die Bedeutung ist bzw. die sie als Stütze zeigen – im Ergebnis nicht noch einmal (H3). */
-const MEANING_ASKED: ReadonlySet<ExerciseId> = new Set(['mc_en', 'listen_mc', 'mc_de', 'type', 'spot', 'match', 'tiles', 'situation']);
+/**
+ * Arten, deren Frage die deutsche Bedeutung nach der Antwort noch zeigt – im Ergebnis nicht noch einmal (H3, Kap. 15).
+ * Bei allen übrigen (mc_en, listen_mc, spot, tiles, Lücken, Diktat …) steht sie nach der Antwort immer da (Emrah 02.10.2026).
+ */
+const MEANING_VISIBLE: ReadonlySet<ExerciseId> = new Set(['mc_de', 'type', 'match', 'situation']);
+/** Arten ohne Tipp (Zeitbalken: Tempo misst, statt zu helfen). */
+const NO_TIP: ReadonlySet<ExerciseId> = new Set(['speed']);
+/** Arten, deren Lösung die deutsche Bedeutung ist: der Tipp darf sie nicht verraten (englische Erklärung stattdessen). */
+const ANSWER_IS_DE: ReadonlySet<ExerciseId> = new Set(['mc_en', 'listen_mc']);
+/** Höchste Tipp-Stufe: getippte freie Arten und Auswahl 2 (Info, dann Buchstabe bzw. Option streichen), alle übrigen 1 (Info). */
+const maxTipOf = (ex: ExerciseId, input: Exercise['input']): 0 | 1 | 2 => (NO_TIP.has(ex) ? 0 : FREE_TYPED.has(ex) || input === 'choice' ? 2 : 1);
+const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 /** Arten, die den Satz vor dem Prüfen zeigen (Beispiele wiederholen ihn nicht). */
 const SHOWS_SENTENCE: ReadonlySet<ExerciseId> = new Set(['colloc', 'mc_en', 'spot', 'match', 'tiles', 'listen_mc']);
 const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
@@ -172,6 +184,22 @@ export function ExerciseView({
   const hintShown = e.ex === 'cloze_hint' || (FREE_TYPED.has(e.ex) && tip >= 2) || retry?.kind === 'start';
   const meaningText = lang === 'de' ? card.de : card.def;
 
+  // Tipp für alle Arten (Emrah 02.10.2026): Stufe 1 Wortart und Bedeutung bzw. Erklärung (nie die Lösung),
+  // Stufe 2 der erste Buchstabe (getippt) bzw. eine falsche Option weniger (Auswahl). Zählt als Hilfe (`hintLevel`).
+  const maxTip: 0 | 1 | 2 = noHelp ? 0 : maxTipOf(e.ex, e.input);
+  const maskWord = (s: string): string => [card.word, card.lemma].filter(Boolean).reduce((acc, w) => acc.replace(new RegExp(escapeRe(w), 'gi'), '…'), s);
+  const tipBase: string | null = (() => {
+    const pk = posKey(card.pos);
+    const def = card.def ? maskWord(card.def) : null;
+    const de = lang === 'de' ? card.de : null;
+    // Zeigt die Frage die Bedeutung schon (e.meaning), kommt die Erklärung; sonst die Bedeutung.
+    const mean = ANSWER_IS_DE.has(e.ex) ? def : e.meaning ? (def ?? de) : (de ?? def);
+    return [pk ? t(pk as MessageKey) : null, mean].filter(Boolean).join(' · ') || null;
+  })();
+  const tipAvailable = maxTip > 0 && (FREE_TYPED.has(e.ex) || !!tipBase);
+  const removedId = tip >= 2 && e.input === 'choice' ? (e.options.find((o) => !o.correct)?.id ?? null) : null;
+  const visibleOptions = removedId ? e.options.filter((o) => o.id !== removedId) : e.options;
+
   /** Antwortzeit ohne offenes Nachschlagen und Begleiter; Hören ab Tonende. */
   const measure = () => {
     const nowPerf = performance.now();
@@ -196,7 +224,7 @@ export function ExerciseView({
         // Zweiter Versuch nach dem Hinweis zählt wie „Tipp" Stufe 2: höchstens „Schwer". Die Zeit ist
         // die Gesamtzeit ab dem Einblenden (beide Versuche); durch die Deckelung entscheidet sie
         // nicht mehr über die Note, bleibt aber als ehrliche Antwortzeit gespeichert.
-        hintLevel: companionHelp || retry ? 2 : FREE_TYPED.has(e.ex) ? tip : 0,
+        hintLevel: companionHelp || retry ? 2 : tip,
         tiles: e.tiles?.length ?? 0,
         replays: Math.max(0, plays.current - 1),
         ...(e.limitMs ? { limitMs: e.limitMs } : {}),
@@ -339,7 +367,7 @@ export function ExerciseView({
 
   const showTip = () => {
     setTip((v) => (v === 0 ? 1 : 2));
-    api.focusNow();
+    if (e.input === 'typed') api.focusNow();
   };
 
   useHotkeys(
@@ -352,7 +380,7 @@ export function ExerciseView({
       },
       digit: (n) => {
         if (fb || e.input !== 'choice' || useLookup.getState().req) return;
-        const o = e.options[n - 1];
+        const o = visibleOptions[n - 1];
         if (o) check(o);
       },
     },
@@ -607,7 +635,7 @@ export function ExerciseView({
           ))}
         {(e.ex === 'colloc' || e.ex === 'match') && e.sentence && sentence(e.sentence, gapSlot)}
         {e.ex === 'match' && e.sentence && cue(e.meaning)}
-        <Choices items={e.options} chosen={fb?.chosen?.id ?? null} onChoose={(id) => check(e.options.find((o) => o.id === id) ?? null)} label={t('trChoicesLabel')} />
+        <Choices items={visibleOptions} chosen={fb?.chosen?.id ?? null} onChoose={(id) => check(e.options.find((o) => o.id === id) ?? null)} label={t('trChoicesLabel')} />
       </>
     );
   }
@@ -650,7 +678,7 @@ export function ExerciseView({
     const chars = nearChars ? charDiff(bare(fb.given), bare(solution)) : [];
     const diff = writes && !nearChars ? answerDiff(bare(fb.given), bare(solution)) : [];
     // Bedeutung nur, wo sie nicht schon die Frage war (H3).
-    const meaning = MEANING_ASKED.has(e.ex) || (e.ex === 'speed' && !e.sentence) ? null : meaningText;
+    const meaning = MEANING_VISIBLE.has(e.ex) || (e.ex === 'speed' && !e.sentence) ? null : meaningText;
     const pk = posKey(card.pos);
     const fk = e.input === 'typed' && card.kind === 'vocab' && v.verdict !== 'correct' ? formKind(solution, card.lemma, card.pos) : null;
     const col = e.ex === 'colloc' && e.colloc ? e.colloc : null;
@@ -765,6 +793,7 @@ export function ExerciseView({
               {examples.map((x) => (
                 <li key={x.en} className="text-[0.95rem] leading-relaxed" data-testid="example" data-src={x.src}>
                   <EnglishText as="span" text={x.en} {...src} highlight={target(x.en)} />
+                  <ExampleTranslation card={card} en={x.en} />
                 </li>
               ))}
             </ul>
@@ -775,6 +804,7 @@ export function ExerciseView({
             )}
           </div>
         )}
+        <MoreInfo card={card} />
         <MnemonicBlock card={card} />
         {v.verdict === 'wrong' && e.input === 'typed' && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
         {v.verdict === 'wrong' && e.input === 'typed' && <CopyOnce solution={solution} />}
@@ -792,22 +822,39 @@ export function ExerciseView({
   const confidence: Confidence = fb ? fb.confidence : confidenceBefore;
   const purposeKey: MessageKey =
     e.ex === 'colloc' ? 'purposeColloc' : e.ex === 'situation' ? 'purposeSituation' : LISTEN.has(e.ex) && def.stage < 5 ? 'purposeListen' : (PURPOSE[def.stage] ?? 'purpose1');
-  const actions =
+  const tipButton =
+    !fb && tipAvailable && tip < maxTip && !retry ? (
+      <Button variant="ghost" icon="lightbulb" onClick={showTip} data-testid="hint" data-level={tip}>
+        {tip === 0 ? t('trTip') : e.input === 'choice' ? t('trTipRemove') : t('trTipLetter')}
+      </Button>
+    ) : null;
+  const tipLine =
+    !fb && tip >= 1 && tipBase ? (
+      <p className="text-sm text-muted" data-testid="tip-info" lang={ANSWER_IS_DE.has(e.ex) ? 'en' : lang}>
+        {tipBase}
+      </p>
+    ) : null;
+  const checkButton =
     !fb && (e.input === 'typed' || e.input === 'tiles' || e.input === 'produce') ? (
-      <div className="flex flex-wrap items-center gap-2">
-        <Button
-          variant="primary"
-          onClick={() => (e.input === 'produce' ? void checkProduce() : check(null))}
-          disabled={(e.input === 'tiles' && !placed.length) || (e.input === 'produce' && (!prodText.trim() || produceBusy))}
-          data-testid="check"
-        >
-          {t('trCheck')}
-        </Button>
-        {FREE_TYPED.has(e.ex) && tip < 2 && !noHelp && !retry && (
-          <Button variant="ghost" icon="lightbulb" onClick={showTip} data-testid="hint" data-level={tip}>
-            {tip === 0 ? t('trTip') : t('trTipLetter')}
-          </Button>
+      <Button
+        variant="primary"
+        onClick={() => (e.input === 'produce' ? void checkProduce() : check(null))}
+        disabled={(e.input === 'tiles' && !placed.length) || (e.input === 'produce' && (!prodText.trim() || produceBusy))}
+        data-testid="check"
+      >
+        {t('trCheck')}
+      </Button>
+    ) : null;
+  const actions =
+    checkButton || tipButton || tipLine ? (
+      <div className="flex flex-col gap-2">
+        {(checkButton || tipButton) && (
+          <div className="flex flex-wrap items-center gap-2">
+            {checkButton}
+            {tipButton}
+          </div>
         )}
+        {tipLine}
       </div>
     ) : undefined;
   return (

@@ -1,3 +1,4 @@
+import { hash32 } from '../random';
 import { stripGapMarks } from '../text/tokenize';
 import { containsPhrase } from '../chunks/newChunk';
 import { locate, lemmaOf } from './context';
@@ -86,4 +87,29 @@ export function examplesPatch(cur: Readonly<Record<string, unknown>> | undefined
   // Vorhandenes (auch Unerwartetes) wird nie ersetzt.
   if (cur.xEx !== undefined && cur.xEx !== null) return null;
   return { xEx: add.slice(0, X_EX_MAX).map((x) => ({ en: x.en, t: x.t })) };
+}
+
+// ------------------------------------------------------------------ Deutsche Übersetzung (02.10.2026)
+
+/** Höchstens so viele Übersetzungen je Karte (Dokumentgröße, A6.6). */
+export const EX_DE_MAX = 8;
+
+/** Schlüssel der Übersetzung eines Beispielsatzes: Hash des normalisierten englischen Satzes. */
+export const exDeKey = (en: string): string => `s${hash32(key(en)).toString(36)}`;
+
+/** Gespeicherte deutsche Übersetzung eines Beispielsatzes (`exDe`), tolerant gelesen. */
+export function storedTranslation(doc: Readonly<Record<string, unknown>>, en: string): string | null {
+  const m = doc.exDe;
+  if (!m || typeof m !== 'object' || Array.isArray(m)) return null;
+  const v = (m as Record<string, unknown>)[exDeKey(en)];
+  return typeof v === 'string' && v.trim() ? v.trim() : null;
+}
+
+/** Patch „Übersetzung ergänzen": nur wenn noch keine da ist und Platz bleibt; nie ersetzt. */
+export function translationPatch(cur: Readonly<Record<string, unknown>> | undefined, en: string, de: string): { exDe: Record<string, string> } | null {
+  const text = de.replace(/\s+/g, ' ').trim().slice(0, 400);
+  if (!cur || !text || storedTranslation(cur, en)) return null;
+  const m = cur.exDe && typeof cur.exDe === 'object' && !Array.isArray(cur.exDe) ? Object.keys(cur.exDe).length : 0;
+  if (m >= EX_DE_MAX) return null;
+  return { exDe: { [exDeKey(en)]: text } };
 }
