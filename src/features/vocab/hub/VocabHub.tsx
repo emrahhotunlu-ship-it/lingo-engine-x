@@ -8,7 +8,7 @@ import { meaningOf } from '../../../domain/srs/cards';
 import { estimateRoundMinutes } from '../../../domain/srs/cost';
 import { BUILTIN_DECKS, deckCards, deckCounts, inboxReach, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
 import { forecast } from '../../../domain/srs/forecast';
-import { backlogBraked, overdueCount } from '../../../domain/unit/backlog';
+import { backlogBraked, catchUpOn, overdueCount } from '../../../domain/unit/backlog';
 import { useToday } from '../../today/state';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
 import type { TrainCard } from '../../../domain/srs/types';
@@ -188,6 +188,11 @@ export function VocabHub() {
             {braked && (
               <span className="block text-gold-text" data-testid="ws-braked">
                 {t('nbWsBraked')}
+              </span>
+            )}
+            {catchUpOn(behind) && (
+              <span className="block text-muted" data-testid="ws-catchup">
+                {t('nbWsCatchUp')}
               </span>
             )}
           </p>

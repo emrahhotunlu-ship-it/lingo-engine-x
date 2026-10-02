@@ -211,13 +211,13 @@ function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
     const ex = chooseExercise({ ...card, stage: 3 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
     if (ex) return { ...build(s, card, ex, true), check: 'probe' };
   }
-  const lighter = lighterExercise(s, card);
+  const lighter = item.reason === 'due' ? lighterExercise(s, card) : null;
   if (lighter) return build(s, card, lighter);
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;
   if (ex === 'produce' && s.produced >= PRODUCE_MAX) {
     const other = chooseExercise({ ...card, stage: 4 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
-    if (other && other !== 'produce') return build(s, card, other);
+    if (other && FREE_TYPED.has(other)) return build(s, card, other);
   }
   return build(s, card, ex);
 }
@@ -595,6 +595,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (ans.override) a.override = true;
   if (ans.hint) a.hint = ans.hint;
   if (e.check) a.check = e.check;
+  if (e.ex === 'flip' && s.catchUp && card.stage >= 3) a.catchUp = true;
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));

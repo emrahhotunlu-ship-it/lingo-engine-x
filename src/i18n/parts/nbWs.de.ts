@@ -39,6 +39,7 @@ export const nbWsDe = {
   nbWsMinutes: 'ca. {n} Min.',
   nbWsBehind_one: 'Eine Karte ist schon länger fällig.',
   nbWsBehind_other: '{n} Karten sind schon länger fällig.',
+  nbWsCatchUp: 'Aufholmodus: Reife Wörter prüfe ich heute schneller (aufdecken), jedes vierte tippst du.',
   nbWsBraked: 'Bis du aufgeholt hast, kommen nur 2 neue Wörter pro Tag.',
   nbWsDutyLeft: 'Der Knopf startet die Pflicht von heute: noch {left} von {total} Karten.',
   nbWsExtraRound: 'Der Knopf startet eine freiwillige Runde mit bis zu {n} Karten.',

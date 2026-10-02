@@ -38,6 +38,7 @@ export const nbWsEn: Record<keyof typeof nbWsDe, string> = {
   nbWsMinutes: 'about {n} min',
   nbWsBehind_one: 'One card has been due for a while.',
   nbWsBehind_other: '{n} cards have been due for a while.',
+  nbWsCatchUp: 'Catch-up mode: I check mature words faster today (flip), every fourth one you type.',
   nbWsBraked: 'Until you catch up, only 2 new words come per day.',
   nbWsDutyLeft: 'The button starts today’s required review: {left} of {total} cards left.',
   nbWsExtraRound: 'The button starts an optional round of up to {n} cards.',

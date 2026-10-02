@@ -74,11 +74,11 @@ describe('matchDeck (rein)', () => {
     expect(c.due).toBe(1);
     expect(c.learning).toBe(learning.fsrs.state === 1 || learning.fsrs.state === 3 ? 1 : 0);
   });
-  it('Reichweite Eingangskorb mit der Zahl, die wirklich kommt (Kontingent, im Alltag höchstens 3, bei Rückstand 2), Hinweis ab 30 Tagen', () => {
-    expect(inboxReach(42, 5)).toEqual({ n: 42, days: 14, review: false });
+  it('Reichweite Eingangskorb mit der Zahl, die wirklich kommt (Kontingent, im Alltag höchstens 5, bei Rückstand 2), Hinweis ab 30 Tagen', () => {
+    expect(inboxReach(42, 5)).toEqual({ n: 42, days: 9, review: false });
     expect(inboxReach(42, 5, true)).toEqual({ n: 42, days: 21, review: false });
     expect(inboxReach(42, 2)).toEqual({ n: 42, days: 21, review: false });
-    expect(inboxReach(42, 10).days).toBe(14);
+    expect(inboxReach(42, 10).days).toBe(9);
     expect(inboxReach(150, 5).review).toBe(true);
     expect(inboxReach(60, 5, true).review).toBe(true);
     expect(inboxReach(10, 0).days).toBeNull();

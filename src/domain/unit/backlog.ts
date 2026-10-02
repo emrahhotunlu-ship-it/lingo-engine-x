@@ -18,7 +18,7 @@ export const BACKLOG_MAX_SHARE = 0.5;
 export const BACKLOG_BRAKE_AT = 15;
 
 /** Im Alltag kommen höchstens so viele neue Wörter am Tag (40 % der Wiederholzeit, `week/review.ts`): Grundlage für „reicht für n Tage“. */
-export const NEW_TYPICAL_MAX = 3;
+export const NEW_TYPICAL_MAX = 5;
 
 /** Karten, die gestern oder früher fällig waren (Lerntag beginnt um 04:00 Uhr). Neue Karten zählen nie. */
 export function overdueCount(cards: readonly TrainCard[], nowMs: number): number {
@@ -46,13 +46,13 @@ export function expectedNewPerDay(quota: number, braked: boolean): number {
 
 // Kapazitätsregel (Methodenplan Lernwissenschaft 02.10.2026): Wie viele neue Wörter heute Platz haben, hängt davon ab, wie viel
 // Wiederholarbeit in den nächsten Tagen ohnehin kommt. Budget B Minuten Wortschatz je Tag; ein neues Wort kostet 50 s Einführung
-// plus etwa 22 s Wiederholungen im ersten Monat. Untergrenze `NEW_MIN` (Kap. 15), Obergrenze 6 (mehr empfiehlt der Lehrer nicht).
+// plus rund 90 s Wiederholungen im ersten Monat (6–8 Wiederholungen, Prüfung Lernwissenschaft: 72 war zu niedrig). Untergrenze `NEW_MIN` (Kap. 15), Obergrenze 5 (mehr ist dauerhaft nicht tragbar).
 
 /** Wortschatz-Zeit je Tag in Sekunden (12 Minuten). */
 export const VOCAB_BUDGET_SEC = 720;
 /** Sekunden, die ein neues Wort im ersten Monat insgesamt je Tag erzeugt. */
-export const NEW_LOAD_SEC = 72;
-export const NEW_PER_DAY_MAX = 6;
+export const NEW_LOAD_SEC = 140;
+export const NEW_PER_DAY_MAX = 5;
 
 /** Neue Wörter, die heute Platz haben: aus dem mittleren Wiederholaufwand heute und der folgenden sechs Tage (in Sekunden je Tag). */
 export function capacityNew(loadSecPerDay: number): number {

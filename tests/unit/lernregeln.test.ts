@@ -27,6 +27,7 @@ describe('Gewichtung der Note', () => {
     expect(noteWeight('cloze', 1)).toBe(NOTE_WEIGHT.help);
     expect(noteWeight('produce')).toBe(NOTE_WEIGHT.produce);
     expect(noteWeight('flip')).toBe(1);
+    expect(noteWeight('flip', 0, true)).toBe(NOTE_WEIGHT.catchUp);
   });
 
   const review = readFsrs({ state: 'review', S: 20, D: 5, due: NOW, last: NOW - 20 * DAY_MS, reps: 6, lapses: 0 }, NOW);

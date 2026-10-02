@@ -154,7 +154,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   if (a.kind === 'chunk') return chunkPatch(cur, a);
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0));
+  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true));
   const modes = isObj(cur.modes) ? cur.modes : {};
   const prevMode = isObj(modes[def.mode]) ? (modes[def.mode] as Doc) : {};
   const xs = isObj(cur.xs) ? cur.xs : {};
@@ -186,7 +186,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
 export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0));
+  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true));
   const xs = isObj(cur.xs) ? cur.xs : {};
   const prevXs = isObj(xs[a.ex]) ? (xs[a.ex] as Doc) : {};
   const ok = a.grade > 1 ? 1 : 0;

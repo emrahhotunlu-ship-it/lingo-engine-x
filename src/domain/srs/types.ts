@@ -179,6 +179,8 @@ export type AnswerEvent = {
   hint?: 0 | 1 | 2;
   /** Prüfabfrage bzw. Kontrolle (`flip.ts`). */
   check?: 'probe' | 'control';
+  /** Aufdecken im Aufholmodus: gilt nur als schwacher Beleg (`weight.ts`). */
+  catchUp?: true;
 };
 
 export type WhyPart = { key: string; vars?: Record<string, string | number>; lang?: Lang };

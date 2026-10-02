@@ -104,7 +104,7 @@ export function pickMode(i: PickInput): PickedMode {
   const easyFlip = isFlipEntry(last) && last?.g === 4;
   if (i.requested === 'flip') return easyFlip && i.due && i.controlAllowed === true ? 'control' : 'flip';
   if (easyFlip && i.due) return 'control';
-  if (i.catchUp && i.due && stageOf(i.card.doc) >= 3 && (num(i.card.doc.S) ?? 0) >= CATCHUP_MIN_S && !everyNth(i.key ?? (typeof i.card.doc.id === 'string' ? i.card.doc.id : ''), i.day, CATCHUP_TYPED_EVERY)) return 'flip';
+  if (i.catchUp && i.due && stageOf(i.card.doc) >= 3 && (num(i.card.doc.S) ?? 0) >= CATCHUP_MIN_S && !(histOf(i.card.doc).slice(-2).length === 2 && histOf(i.card.doc).slice(-2).every(isFlipEntry)) && !everyNth(i.key ?? (typeof i.card.doc.id === 'string' ? i.card.doc.id : ''), i.day, CATCHUP_TYPED_EVERY)) return 'flip';
   if (stageOf(i.card.doc) >= 3) return 'type';
   if (isFlipEntry(last) && last?.g === 3) return 'probe';
   return 'flip';
