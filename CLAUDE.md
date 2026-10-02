@@ -104,6 +104,14 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**02.10.2026, abends – Hilfen-Paket live (Emrahs Freigabe „Live nehmen“)**
+- `dist/index.html` (Commit „dist: Endstand nach voller Prüfung (Hilfen-Paket)“) liegt auf `JLL8…`, Version `1790952158-defe` (Artefakt-Version 63). Rückweg: Version `1790937770-1325`. Test-Link `AXHkh6…` Version `1790951496-dc3a`.
+- Anlass: Emrahs App-Kommentare („keine Erläuterung, keine Übersetzung, kein Mehr-Infos-Knopf, Tipp nicht konsistent“, „Bausteine nur mit Maus“, „Satzbau ohne Aufgabenstellung“, „Nochmal, aber besser unklar“, „erste Option immer richtig“).
+- **Tipp** in jeder Übungsart außer Tempo: Stufe 1 Wortart + Bedeutung bzw. englische Erklärung (nie die Lösung), Stufe 2 erster Buchstabe bzw. eine falsche Option weniger; zählt als Hilfe (`hintLevel`), im Wochen-Check aus (`noHelp`). **Nach der Antwort** immer die deutsche Bedeutung (außer wo die Frage sie noch zeigt, H3), dazu „Mehr Infos“ (`MoreInfo`) und je Beispielsatz „Deutsch“ (`ExampleTranslation`, einmal Claude, gespeichert als **neues, nur ergänzendes Kartenfeld `exDe`**, höchstens 8 je Karte).
+- **Satzbau:** klare Aufgabe, Tipp (Wortzahl/Anfang/Regel, dann erster Baustein), „Deutsch“; **Tastatur-Bausteine** am Rechner (`TilesKeyboard`, nur feiner Zeiger) in Satzbau und Vokabel-Bausteinen.
+- **Fehler behoben:** Input-Block (Block 2) mischte die Antwortoptionen nicht (richtige Antwort immer vorn) → `sourceFromRef` mischt fest. „Nochmal, aber besser“: Text von vorhin im Feld, klare Aufgabe. Reparatur-Sätze ab 9 Wörtern vorbefüllt.
+- Geprüft: 1585 Unit, 545 E2E (3 Last-Ausreißer liefen einzeln grün), Plattform-Prüfung Freigabe. Live-Version vor dem Veröffentlichen erneut gelesen (unverändert).
+
 **02.10.2026 – „Stunde auswerten“ (Preply-Audio/Transkript) verworfen (Emrahs Entscheidung)**
 - Idee: Preply-Stunden als Transkript einlesen und Schwächen auswerten. Preply liefert nur Audio; in der App geht keine Audio-Umwandlung (kein Audio in `sample`, kein eigenes Modell unter 16 MB, keine externen Dienste, Kap. 3.1). Der Weg über ein Transkript von außen (z. B. am MacBook) war Emrah zu umständlich.
 - Entscheidung: nicht bauen. Bestehen bleibt „Lehrer-Feedback einfügen“ (kurze Korrekturen und Wörter als Text). Nur auf Emrahs Wunsch neu aufgreifen.
