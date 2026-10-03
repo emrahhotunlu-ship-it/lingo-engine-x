@@ -9,7 +9,9 @@ import { buyTime, hotSeat, objections } from '../../content/nb/load';
 import type { Objection } from '../../content/nb/schemas';
 import { outId, outRef } from '../../domain/nbdrill/outDoc';
 import { pickRotating, preferFirst } from '../../domain/nbdrill/pick';
-import { bestAnswer, modelText, movesScore, noMoves, PRESSURE_N, PRESSURE_TEXT_MAX, type Move, type Moves, type PressureAnswer } from '../../domain/nbdrill/pressure';
+import { bestAnswer, modelText, movesScore, noMoves, PRESSURE_N, PRESSURE_TEXT_MAX, structuredPart, type Move, type Moves, type PressureAnswer } from '../../domain/nbdrill/pressure';
+import { attemptScore, roundLevel, type Level } from '../../domain/levels/levels';
+import { currentLevel, nextLevel, recordLevel } from '../levels/store';
 import type { MessageKey } from '../../i18n';
 import { logWarn } from '../../platform/diagnostics';
 import { useCapabilities } from '../../platform/capabilities';
@@ -66,6 +68,13 @@ export type PressureSession = {
   answerAt: number;
   done: boolean;
   saved: boolean;
+  /** Lernpfad (nur Einwände): Grundstufe der Runde und Stufe je Eintrag. Fehlt bei alten Momentaufnahmen (= 5). */
+  lv?: Level;
+  lvs?: Level[];
+  /** Genutzte Hilfe beim aktuellen Eintrag (Satzanfänge auf Stufe 4). */
+  hint?: 0 | 1 | 2;
+  /** Stufe für die nächste Runde nach dieser (am Ende berechnet, nur Anzeige). */
+  lvAfter?: Level;
 };
 
 export const usePressure = create<{ s: PressureSession | null }>(() => ({ s: null }));
@@ -93,6 +102,18 @@ export const setOf = (s: PressureSession): PressureSet => s.set ?? 'objection';
 export const itemOf = (s: PressureSession, pos = s.pos): PressureItem | null => pressureItems(setOf(s)).find((o) => o.id === s.ids[pos]) ?? null;
 export const objectionOf = (s: PressureSession, pos = s.pos): Objection | null => itemOf(s, pos)?.obj ?? null;
 const firstPhase = (set: PressureSet): PressurePhase => (TIMES[set].think > 0 ? 'think' : 'answer');
+/** Bedenkzeit nur auf Stufe 5 (Einwände) bzw. wie bisher (Heißer Stuhl, Zeit gewinnen). */
+const phaseFor = (set: PressureSet, lv: Level | undefined): PressurePhase => (lv !== undefined && lv < 5 ? 'answer' : firstPhase(set));
+
+/** Stufe des aktuellen Eintrags (Einwände); alte Momentaufnahmen und andere Arten: 5 (wie bisher). */
+export const levelAt = (s: PressureSession, pos = s.pos): Level => s.lvs?.[pos] ?? s.lv ?? 5;
+
+/** Wert einer Antwort für die Stufen-Steuerung (0..1): Stufe 1–2 Anteil richtig, sonst Schritte/4, Hilfe deckelt. */
+export function answerScore(a: PressureAnswer | undefined): number {
+  if (!a) return 0;
+  const part = a.part !== undefined ? a.part : movesScore(a.moves) / 4;
+  return attemptScore(part, a.hint ?? 0);
+}
 
 export function startPressure(opts: { unit?: UnitRun | null; lang: 'de' | 'en'; n?: number; theme?: string | null; set?: PressureSet }): boolean {
   const set = opts.set ?? 'objection';
@@ -106,8 +127,9 @@ export function startPressure(opts: { unit?: UnitRun | null; lang: 'de' | 'en'; 
   if (!picked.length) return false;
   ctl?.abort();
   ctl = null;
-  const phase = firstPhase(set);
-  put({ v: 1, set, ids: picked.map((o) => o.id), pos: 0, phase, draft: '', answers: [], ai: {}, day: opts.unit?.day ?? currentDay(), t0: Date.now(), lang: opts.lang, unit: opts.unit ?? null, answerAt: phase === 'answer' ? Date.now() : 0, done: false, saved: false });
+  const lv = set === 'objection' ? currentLevel('nb-objection') : undefined;
+  const phase = phaseFor(set, lv);
+  put({ v: 1, set, ids: picked.map((o) => o.id), pos: 0, phase, draft: '', answers: [], ai: {}, day: opts.unit?.day ?? currentDay(), t0: Date.now(), lang: opts.lang, unit: opts.unit ?? null, answerAt: phase === 'answer' ? Date.now() : 0, done: false, saved: false, ...(lv ? { lv, lvs: [lv], hint: 0 as const } : {}) });
   return true;
 }
 
@@ -134,7 +156,7 @@ export function submitAnswer(): void {
   const ms = s.answerAt ? Math.max(0, Date.now() - s.answerAt) : 0;
   // Die KI prüft nur das Einwand-Muster; Heißer Stuhl und Zeit gewinnen vergleichen mit dem Muster.
   const ai = aiOn() && !!text && !!o.obj;
-  const ans: PressureAnswer = { id: o.id, text, ms, moves: null, by: null };
+  const ans: PressureAnswer = { id: o.id, text, ms, moves: null, by: null, ...(s.lv ? { lv: levelAt(s), hint: s.hint ?? 0 } : {}) };
   const next: PressureSession = {
     ...s,
     phase: 'review',
@@ -143,6 +165,35 @@ export function submitAnswer(): void {
   };
   put(next);
   if (ai && o.obj) void runCheck(o.obj, text, s.lang);
+}
+
+/** Stufe 1–2: Zuordnung prüfen (ohne KI, sofort). `picked[i]` = gewählter Schritt für Platz i. */
+export function submitStructured(picked: readonly (Move | null)[]): void {
+  const s = get();
+  const o = s ? itemOf(s) : null;
+  if (!s || !o || s.phase !== 'answer') return;
+  const part = structuredPart(picked);
+  const ms = s.answerAt ? Math.max(0, Date.now() - s.answerAt) : 0;
+  const ans: PressureAnswer = { id: o.id, text: '', ms, moves: null, by: null, lv: levelAt(s), part, pick: [...picked] };
+  put({ ...s, phase: 'review', answers: [...s.answers.filter((a) => a.id !== o.id), ans] });
+}
+
+/** Satzanfänge auf Stufe 4 einblenden (zählt als Hilfe). */
+export function showHint(): void {
+  const s = get();
+  if (!s || s.phase !== 'answer') return;
+  put({ ...s, hint: 1 });
+}
+
+/** Knopf „Leichter“: dieser Eintrag eine Stufe leichter (nur in dieser Runde, vor dem Prüfen). */
+export function easierNow(): void {
+  const s = get();
+  if (!s?.lv || s.phase === 'review') return;
+  const cur = levelAt(s);
+  if (cur <= 1) return;
+  const lvs = [...(s.lvs ?? [])];
+  lvs[s.pos] = (cur - 1) as Level;
+  put({ ...s, lvs, phase: 'answer', draft: '', hint: 0, answerAt: Date.now() });
 }
 
 function patchAi(id: string, slot: Partial<AiSlot>): void {
@@ -200,13 +251,17 @@ export function nextObjection(): void {
     { type: `nb-${set}`, ref: outRef({ id: outId(set, s.t0), d: s.day }), q: o.line, given: a?.text ?? '', ans: o.model, ok: answerOk(set, a), ms: a?.ms ?? 0, day: s.day, lang: s.lang, duty: !!s.unit, t: Date.now() },
   ]);
   if (s.pos + 1 >= s.ids.length) {
-    const done = { ...s, done: true };
+    const scores = s.ids.map((id) => answerScore(s.answers.find((x) => x.id === id)));
+    const done: PressureSession = { ...s, done: true, ...(s.lv ? { lvAfter: nextLevel('nb-objection', scores, s.day) } : {}) };
     put(done);
     void saveSeries(done);
+    if (done.lv) void recordLevel('nb-objection', scores, done.day);
     return;
   }
-  const phase = firstPhase(set);
-  put({ ...s, pos: s.pos + 1, phase, draft: '', answerAt: phase === 'answer' ? Date.now() : 0 });
+  // Nach zwei schwachen Antworten in Folge kommt der nächste Einwand eine Stufe leichter (nur in dieser Runde).
+  const lvNext = s.lv ? roundLevel(s.lv, s.ids.slice(0, s.pos + 1).map((id) => answerScore(s.answers.find((x) => x.id === id)))) : undefined;
+  const phase = phaseFor(set, lvNext);
+  put({ ...s, pos: s.pos + 1, phase, draft: '', answerAt: phase === 'answer' ? Date.now() : 0, ...(lvNext ? { lvs: [...(s.lvs ?? []), lvNext], hint: 0 as const } : {}) });
 }
 
 /** Fehlergrenze: Einwand ohne Bewertung überspringen. */
@@ -215,8 +270,9 @@ export function skipObjection(): void {
   if (!s) return;
   if (s.pos + 1 >= s.ids.length) put({ ...s, done: true });
   else {
-    const phase = firstPhase(setOf(s));
-    put({ ...s, pos: s.pos + 1, phase, draft: '', answerAt: phase === 'answer' ? Date.now() : 0 });
+    const lvNext = s.lv;
+    const phase = phaseFor(setOf(s), lvNext);
+    put({ ...s, pos: s.pos + 1, phase, draft: '', answerAt: phase === 'answer' ? Date.now() : 0, ...(lvNext ? { lvs: [...(s.lvs ?? []), lvNext], hint: 0 as const } : {}) });
   }
 }
 
@@ -229,10 +285,13 @@ export const pressureMs = (s: PressureSession): number => s.answers.reduce((n, a
 /** Richtig: Einwand mit ≥ 3 Schritten des Musters; Heißer Stuhl und Zeit gewinnen: überhaupt geantwortet. */
 export function answerOk(set: PressureSet, a: PressureAnswer | undefined): boolean {
   if (!a) return false;
-  return set === 'objection' ? movesScore(a.moves) >= 3 : a.text.trim().length > 0;
+  if (set !== 'objection') return a.text.trim().length > 0;
+  return a.part !== undefined ? a.part >= 0.75 : movesScore(a.moves) >= 3;
 }
 export const pressureRight = (s: PressureSession): number => s.answers.filter((a) => answerOk(setOf(s), a)).length;
-export const bestOf = (s: PressureSession): PressureAnswer | null => bestAnswer(s.answers);
+/** Beste Antwort; auf Stufe 1–2 (ohne eigenen Text) die beste Zuordnung – gemerkt wird dann die Musterantwort. */
+export const bestOf = (s: PressureSession): PressureAnswer | null =>
+  bestAnswer(s.answers) ?? [...s.answers].filter((a) => (a.part ?? 0) > 0).sort((a, b) => (b.part ?? 0) - (a.part ?? 0))[0] ?? null;
 
 function saveSeries(s: PressureSession): Promise<boolean> {
   const text = s.answers.map((a) => `${a.id}: ${a.text || '–'}`).join('\n');

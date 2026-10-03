@@ -17,6 +17,7 @@ import {
   profileSchema,
   radarSchema,
   repairSchema,
+  levelsSchema,
   patternsSchema,
   readingSchema,
   sceneSchema,
@@ -55,6 +56,7 @@ export const APP_DOCS = {
   'app/weekly': weeklySchema,
   // Neu (Lernberatung 27.09., V2): Reparatur-Sätze aus Sag es, Gespräch, Schreiben.
   'app/repair': repairSchema,
+  'app/levels': levelsSchema,
   // Neu (Lernberatung 27.09., V3): persönliche Deutsch-Fallen (Fehlermuster).
   'app/patterns': patternsSchema,
   // Neubau (docs/neubau/plan.md §4.10): Stapel (P3) und Wochenthema (P1).
