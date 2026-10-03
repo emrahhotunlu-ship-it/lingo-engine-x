@@ -228,7 +228,7 @@ with open(os.path.join(cache, "NAWL_12_with_en_definitions.csv"), encoding="utf-
     for i, row in enumerate(csv.reader(f)):
         if i and len(row) > 1 and row[0] and row[1]:
             learner_def.setdefault(row[0].strip().lower(), row[1].strip())
-cmu_ipa = json.load(open(os.path.join(root, "src", "content", "pron", "us-ipa.json"), encoding="utf-8"))
+cmu_ipa = json.load(open(os.path.join(cache, "us-ipa.json"), encoding="utf-8"))  # CMU, US (aus git show cd82ca3:src/content/pron/us-ipa.json)
 
 
 def german_sides_of(lemma):

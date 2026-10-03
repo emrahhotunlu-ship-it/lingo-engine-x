@@ -11,6 +11,8 @@ for (const theme of ['dark', 'light'] as Theme[]) {
     test('Heute, Fahrplan, Training und Übersetzer ohne axe-Befund und ohne Querscrollen', async ({ page }) => {
       await boot(page, { theme, fake: { seed: 'empty', patch: { 'coach/profile': placedProfile() } } });
       const scan = async (where: string) => {
+        // Erst prüfen, wenn die Einblendung fertig ist (halbe Deckkraft senkt den Kontrast).
+        await page.waitForFunction(() => Array.from(document.querySelectorAll('main > div, [role="dialog"]')).every((e) => getComputedStyle(e).opacity === '1'));
         const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
         expect(res.violations.map((v) => `${where}: ${v.id} – ${v.nodes[0]?.target.join(' ')}`)).toEqual([]);
         expect(await layoutProblems(page)).toEqual([]);

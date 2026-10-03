@@ -7,7 +7,7 @@ Erzeugt einmalig in der Cloud-Umgebung, Ergebnis liegt im Repository. Emrah füh
 3. `python3 scripts/bank/03_build.py <cache>`:
    - Tatoeba-Satzpaare Englisch–Deutsch (manythings.org/anki `deu-eng.zip`, CC BY 2.0 FR),
    - Lerner-Definitionen (NGSL, TSL, NAWL),
-   - US-Lautschrift (`src/content/pron/us-ipa.json`),
+   - US-Lautschrift aus dem CMU-Wörterbuch (`us-ipa.json` im Cache, aus `git show cd82ca3:src/content/pron/us-ipa.json`),
    - die geprüften Korrekturen aus `review-fixes.jsonl`.
 
 Der Cache-Ordner braucht die Dateien der Quellen:
