@@ -1,35 +1,49 @@
 import { readFileSync } from 'node:fs';
 import type { Page } from '@playwright/test';
 import type { InstallOptions } from '../../src/platform/dev/install';
-import { WHATS_NEW_KEY, WHATS_NEW_VERSION } from '../../src/features/system/whatsNew';
 
 // Lädt den Produktions-Build dist/index.html unter einer https-Adresse und spielt den
-// Entwicklungs-Adapter von außen ein (CLAUDE.md A7). Jede andere Anfrage wird
-// abgefangen, protokolliert und abgebrochen – so beweist jeder Test nebenbei, dass
-// die App nichts von fremden Hosts lädt (Kap. 12, Plattform-Test).
+// Entwicklungs-Adapter von außen ein (CLAUDE.md A7). Jede andere Anfrage wird abgefangen,
+// protokolliert und abgebrochen: So beweist jeder Test nebenbei, dass die App nichts von fremden
+// Hosts lädt.
 
 export const ORIGIN = 'https://lingo.artifact.test';
 const HTML = readFileSync(new URL('../../dist/index.html', import.meta.url), 'utf8');
 const RUNTIME = readFileSync(new URL('../.runtime/fake-claude.js', import.meta.url), 'utf8');
 
 /** Stichtag der Testdaten: Sonntag, 20.09.2026, 21:00 Uhr in Berlin. */
-export const SEED_EVENING = '2026-09-20T21:00:00+02:00';
-export const MIGRATED = { 'app/schema': { version: 1, cutover: '2026-09-20', migratedAt: Date.parse('2026-09-20T20:30:00+02:00'), app: 'lingo-engine-x' } };
+export const NOW = '2026-09-20T21:00:00+02:00';
+const NOW_MS = Date.parse(NOW);
 
-export type Theme = 'dark' | 'dim' | 'light';
+export type Theme = 'dark' | 'light';
 export type Lang = 'de' | 'en';
 
+/** Ein eingestuftes Profil (B2), damit Tests direkt trainieren können. */
+export function placedProfile(extra: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    v: 1,
+    created: NOW_MS - 86_400_000,
+    newPerDay: 3,
+    planStart: '2026-09-01',
+    placement: {
+      at: NOW_MS - 86_400_000,
+      size: 4200,
+      bands: [1, 0.98, 0.9, 0.8, 0.62, 0.45, 0.3, 0.2, 0.1],
+      falseAlarm: 0,
+      grammar: { 'pres-simple-cont': 0.9, 'past-simple-perfect': 0.5, articles: 0.4 },
+      level: 'B2',
+    },
+    imported: { at: NOW_MS - 86_400_000, cards: 0, days: ['2026-09-18', '2026-09-19'], grammar: {} },
+    ...extra,
+  };
+}
+
 export type BootOptions = {
-  /** Optionen des Entwicklungs-Adapters; `false` = gar keine Laufzeit (wie eine gespeicherte Kopie). */
+  /** Optionen des Entwicklungs-Adapters; `false` = gar keine Laufzeit. */
   fake?: InstallOptions | false;
   theme?: Theme;
   lang?: Lang;
-  migrated?: boolean;
   now?: string;
-  /** Einträge für localStorage vor dem Start (z. B. `sw2:`-Kopien der alten App). */
-  localStorage?: Record<string, string>;
-  /** `true` = der Hinweis „Was ist neu" (M20) erscheint wie nach einem Update. */
-  whatsNew?: boolean;
 };
 
 export type Booted = { external: string[]; errors: string[] };
@@ -50,24 +64,15 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
     external.push(url);
     await route.abort();
   });
-  await page.clock.setFixedTime(new Date(opts.now ?? SEED_EVENING));
-  // „Was ist neu" (M20) gilt in Tests als gesehen – außer ein Test prüft ihn ausdrücklich.
-  if (!opts.whatsNew) {
-    await page.addInitScript(([k, v]: [string, string]) => window.localStorage.setItem(k, v), [WHATS_NEW_KEY, WHATS_NEW_VERSION] as [string, string]);
-  }
-  if (opts.localStorage) {
-    await page.addInitScript((entries: Record<string, string>) => {
-      for (const [k, v] of Object.entries(entries)) window.localStorage.setItem(k, v);
-    }, opts.localStorage);
+  await page.clock.setFixedTime(new Date(opts.now ?? NOW));
+  if (opts.lang || opts.theme) {
+    await page.addInitScript(([lang, theme]: [string, string]) => {
+      if (lang) window.localStorage.setItem('lx:lang', lang);
+      if (theme) window.localStorage.setItem('lx:theme', theme);
+    }, [opts.lang ?? '', opts.theme ?? ''] as [string, string]);
   }
   if (opts.fake !== false) {
     const fake: InstallOptions = { ...(opts.fake ?? {}) };
-    const patch = { ...(fake.patch ?? {}) };
-    if (opts.migrated) Object.assign(patch, MIGRATED);
-    if (opts.theme || opts.lang) {
-      patch['app/profile'] = { ...(patch['app/profile'] ?? {}), ...(opts.lang ? { lang: opts.lang } : {}), ...(opts.theme ? { theme: { m: opts.theme, p: 'ocean' } } : {}) };
-    }
-    fake.patch = patch;
     await page.addInitScript((o: InstallOptions) => {
       window.__LINGO_FAKE_OPTIONS__ = o;
     }, fake);
@@ -77,44 +82,7 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
   return { external, errors };
 }
 
-/** Wartet, bis ein Bildschirm fertig eingeblendet ist. */
-export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer' | 'speak' | 'roleplay' | 'mail' | 'playbook' | 'pitch' | 'grammarSession' | 'vtest' | 'learn'): Promise<void> {
-  await page.locator(`[data-screen="${name}"]`).waitFor({ state: 'visible' });
-  await page.waitForFunction((n) => {
-    const el = document.querySelector(`[data-screen="${n}"]`);
-    return !!el && getComputedStyle(el).opacity === '1';
-  }, name);
-}
-
-/** Start ist „Heute"; „Dein Stand" liegt eine Navigation weiter. */
-export async function openOverview(page: Page): Promise<void> {
-  await screen(page, 'today');
-  await page.getByTestId('tab-overview').click();
-  await screen(page, 'overview');
-}
-
-/**
- * Einstellungen öffnen (UX-Beratung 27.09.): das Zahnrad sitzt auf „Stand" (und auf den
- * System-Bildschirmen ohne Reiter). Steht es nicht im Bild, erst zum Reiter „Stand".
- */
-export async function openSettings(page: Page): Promise<void> {
-  const gear = page.getByTestId('open-settings');
-  if (!(await gear.isVisible())) {
-    await page.getByTestId('tab-overview').click();
-    await screen(page, 'overview');
-  }
-  await gear.click();
-}
-
-/** Reiter „Sprechen" mit einem Bereich öffnen: Szenen · Business · Preply (UX-Beratung Nr. 7). */
-export async function openSpeak(page: Page, seg: 'scenes' | 'business' | 'preply' = 'scenes'): Promise<void> {
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
-  if (seg !== 'scenes' || (await page.getByTestId('speak-hub').getAttribute('data-seg')) !== 'scenes') await page.getByTestId(`speak-seg-${seg}`).click();
-  await page.locator(`[data-testid="speak-hub"][data-seg="${seg}"]`).waitFor();
-}
-
-/** Prüfungen, die auf jedem Bildschirm gelten (Kap. 12). */
+/** Prüfungen, die auf jedem Bildschirm gelten. */
 export async function layoutProblems(page: Page): Promise<string[]> {
   return page.evaluate(() => {
     const out: string[] = [];
@@ -125,18 +93,47 @@ export async function layoutProblems(page: Page): Promise<string[]> {
     if (ph) out.push(`Unersetzter Platzhalter ${ph[0]}`);
     const vw = document.documentElement.clientWidth;
     if (document.documentElement.scrollWidth > vw + 1) out.push(`Querscrollen: ${document.documentElement.scrollWidth} > ${vw}`);
-    for (const el of Array.from(document.querySelectorAll<HTMLElement>('body *'))) {
-      const cs = getComputedStyle(el);
-      if (cs.display === 'none' || cs.visibility === 'hidden' || el.closest('[aria-hidden="true"], .sr-only')) continue;
-      // Waagrecht wischbare Leisten (z. B. Wendungs-Chips, Phase 3) dürfen über den Rand laufen.
-      if (el.closest('[data-hscroll]')) continue;
-      const r = el.getBoundingClientRect();
-      if (r.width === 0 || r.height === 0) continue;
-      if (r.right > vw + 1 || r.left < -1) out.push(`Ragt aus dem Bild: <${el.tagName.toLowerCase()} class="${el.className}"> (${Math.round(r.left)}–${Math.round(r.right)})`);
-      const clips = ['hidden', 'clip'].includes(cs.overflowX) || ['hidden', 'clip'].includes(cs.overflowY);
-      const hasText = Array.from(el.childNodes).some((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim());
-      if (clips && hasText && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2)) out.push(`Abgeschnittener Text: „${el.textContent?.trim().slice(0, 40)}"`);
-    }
-    return [...new Set(out)].slice(0, 10);
+    return out;
   });
+}
+
+/**
+ * Eine Trainingseinheit durchspielen, egal welche Abfrage kommt. Liefert die Zahl der Schritte.
+ * `answer` bestimmt, was in Lücken getippt wird (Standard: absichtlich falsch → Lösung wird gezeigt).
+ */
+export async function playSession(page: Page, maxSteps = 120): Promise<number> {
+  for (let i = 0; i < maxSteps; i++) {
+    const done = page.getByTestId('session-done');
+    const sortKnow = page.getByTestId('sort-new');
+    const meet = page.getByTestId('meet-done');
+    const choices = page.getByTestId('choices');
+    const check = page.getByTestId('check');
+    const next = page.getByTestId('next');
+    await done.or(sortKnow).or(meet).or(choices).or(check).or(next).first().waitFor();
+    if (await done.isVisible()) return i;
+    if (await next.isVisible()) {
+      await next.click();
+      continue;
+    }
+    if (await sortKnow.isVisible()) {
+      await sortKnow.click();
+      continue;
+    }
+    if (await meet.isVisible()) {
+      await meet.click();
+      continue;
+    }
+    if (await choices.isVisible()) {
+      await choices.getByRole('button').first().click();
+      await next.waitFor();
+      continue;
+    }
+    if (await check.isVisible()) {
+      await page.locator('.lx-hidden-input').click();
+      await page.keyboard.type('xyz');
+      await check.click();
+      await next.waitFor();
+    }
+  }
+  throw new Error('Einheit nicht beendet');
 }

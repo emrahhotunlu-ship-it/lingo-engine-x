@@ -22,7 +22,9 @@ import { repairDe } from './parts/repair.de';
 import { navDe } from './parts/nav.de';
 import { patternsDe } from './parts/patterns.de';
 
+import { coachDe } from './parts/coach.de';
 export const de = {
+  ...coachDe,
   ...aiDe,
   ...learnDe,
   // Phase 3 – Sprechen, Business, Stimme

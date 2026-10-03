@@ -1,7 +1,7 @@
 # Neustart: Dein persönlicher Englisch-Trainer
 
 Konzept vom 03.10.2026, Anlass: Emrahs Rückmeldung („zu viele Token, Bugs, nicht intelligent, langweilig, Input fürn Arsch, komplett neu aufsetzen“).
-Status: **Entwurf, wartet auf Emrahs Go.** Nach dem Go ersetzt dieses Dokument den alten Auftrag (`docs/auftrag.md`) überall dort, wo es abweicht.
+Status: **Freigegeben am 03.10.2026 (Emrahs Go).** Interessen: Economy, Tech/KI/Software, Business & Startups, Sport & Fußball, Wissenschaft & Psychologie · Formate: YouTube-Videos und Artikel · Preply: 2–4 Stunden pro Woche. Nach dem Go ersetzt dieses Dokument den alten Auftrag (`docs/auftrag.md`) überall dort, wo es abweicht.
 
 ---
 

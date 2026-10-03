@@ -2,8 +2,8 @@ import type { CapabilityName, ClaudeHost, DbErrCode, Downloads, Permissions } fr
 import { createMemoryDb, type MemoryDbHandle } from './memoryDb';
 import { createFakeSample, type FakeSampleMode, type SampleFailMap } from './fakeSample';
 import type { SampleErrorCode } from '../types';
-import { registerCannedReplies, withCallLog, type SampleCall } from './cannedReplies';
-import { setAssessBad } from './canned/assess';
+import { registerCannedReplies, withCallLog, type SampleCall } from './callLog';
+
 
 // Nachbildung von `window.claude` für Dev-Server und E2E-Tests (Kap. 3.3).
 
@@ -94,7 +94,7 @@ export function createFakeClaude(opts: FakeOptions = {}): { claude: ClaudeHost; 
 
   let sampleMode: FakeSampleMode = opts.sampleMode ?? 'ok';
   registerCannedReplies();
-  setAssessBad(opts.assessBad === true);
+
   const sampleCalls: SampleCall[] = [];
   let sampleFail: SampleFailMap = { ...(opts.sampleFail ?? {}) };
   const delay = { ms: opts.sampleDelayMs ?? 0 };

@@ -22,7 +22,9 @@ import { patternsEn } from './parts/patterns.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
+import { coachEn } from './parts/coach.en';
 export const en: Record<MessageKey, string> = {
+  ...coachEn,
   ...aiEn,
   ...learnEn,
   // Phase 3 – Sprechen, Business, Stimme

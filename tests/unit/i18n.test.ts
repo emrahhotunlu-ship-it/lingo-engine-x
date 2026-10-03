@@ -36,16 +36,10 @@ describe('Oberflächentexte', () => {
 
 describe('Übernommene Inhalte je Sprache', () => {
   it('jedes Grammatikthema hat einen englischen Namen ohne deutsche Wörter', async () => {
-    const { TOPICS } = await import('../../src/domain/content');
-    for (const t of TOPICS) {
+    const { GRAMMAR_TOPICS } = await import('../../src/coach/grammar');
+    for (const t of GRAMMAR_TOPICS) {
       expect(t.name_en, t.id).toBeTruthy();
-      expect(/[äöüß]|\b(Passiv|Rede|Zukunft|Infinitiv|Artikel|Verbindungen)\b/.test(t.name_en ?? ''), `${t.id}: ${t.name_en}`).toBe(false);
+      expect(/[äöüß]|\b(Passiv|Rede|Zukunft|Infinitiv|Artikel|Verbindungen)\b/.test(t.name_en), `${t.id}: ${t.name_en}`).toBe(false);
     }
-  });
-
-  it('jede Lektion und Einheit hat Titel auf Deutsch und Englisch', async () => {
-    const { LESSONS, UNITS } = await import('../../src/domain/content');
-    for (const l of LESSONS) expect([l.de, l.en, l.cando_de, l.cando_en].every(Boolean), l.id).toBe(true);
-    for (const u of UNITS) expect([u.de, u.en].every(Boolean), u.id).toBe(true);
   });
 });

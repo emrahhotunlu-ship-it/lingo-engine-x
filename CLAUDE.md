@@ -10,6 +10,7 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 ## A1. Auftrag in Kürze
 - **Was:** Neubau von null (Greenfield) einer persönlichen High-End-Englisch-App (B2 → C1) für Emrah. Sie läuft als **veröffentlichtes Claude-Artefakt**: eine einzige HTML-Datei, Datenbank und KI ausschließlich über `claude.use("db")` / `claude.use("sample")`.
 - **Vorgänger-App:** Von ihr werden nur **die Daten und die Funktionsideen** übernommen, **kein Code**.
+- **Neustart (03.10.2026, Emrahs Go):** `docs/neustart.md` ist das gültige Konzept (persönlicher Trainer, vier Bereiche, Fahrplan B2→C1, Token-Regeln). Wo es vom alten Auftrag abweicht, gilt `docs/neustart.md`.
 - **Vollständiger Auftrag:** `docs/auftrag.md` (Kapitel 0–15). Vor jeder Phase die betroffenen Kapitel dort vollständig lesen, besonders Kap. 4 (Interaktions-Engine), 5 (Lernwissenschaft), 6 (Funktionsumfang), 7 (Motivation), 8 (Design-System), 9 (Daten), 10 (KI-Schicht), 12 (Tests), 13 (Phasenplan).
 - **Maßgebliche Laufzeit-Verträge:** `contract/*.d.ts` (Version 0.2.49). **Vor jedem Daten- oder KI-Code** `contract/claude.d.ts`, `contract/db.d.ts` und `contract/sample.d.ts` vollständig lesen, nichts aus dem Gedächtnis raten. Widerspricht der Auftragstext einem Vertrag, gilt der Vertrag (Kap. 3.1: „maßgeblich").
 - **Bestehende Datenstruktur:** `docs/datenstruktur.json` (Anhang B). Sie ist die Referenz für jeden Dokumentpfad und jedes Feld der alten Datenbank.
@@ -64,6 +65,11 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 - [x] Phase 7 – Politur und Umzug (Veröffentlichung auf die alte Adresse nur nach Emrahs ausdrücklichem OK)
   - [x] P7-1 bis P7-4; komplette App auf dem Test-Link `AXHkh6…` Version `1790487478-0d6d` (verify grün: 810 Unit, 312 E2E)
   - [x] P7-5 Umzug: komplette App auf `JLL8…` Version `1790493495-85c8` (27.09.2026, Emrahs Freigabe „Ja, veröffentlichen“)
+
+- [ ] **Neustart** (`docs/neustart.md`, ab 03.10.2026)
+  - [x] Konzept und Fragen (Interessen, Formate, Preply), Emrahs Go
+  - [ ] Schritt 1 – Fundament: Lernstoff-Bank, Datenübernahme, Einstufungstest, neuer Heute-Bildschirm
+  - [ ] Schritt 2 – Training · [ ] Schritt 3 – Input · [ ] Schritt 4 – Fahrplan · [ ] Schritt 5 – Umzug (nur mit OK)
 
 ## A5. Subagents (`.claude/agents/`)
 | Subagent | Wann einsetzen | Rechte |
@@ -281,6 +287,14 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - Rückweg: Version `1790536760-1f37`.
 - **Kommentare in der App** sind Emrahs bevorzugter Testweg: an Claude gesendet, mit Ort; nach dem Beheben im Thread antworten und auflösen.
 
+**03.10.2026 – Neustart (Emrahs Go)**
+- Emrah ist unzufrieden: zu viele Token, Bugs und unlogische Mechanismen, nicht persönlich und nicht intelligent, langweilige Übungen, Input unbrauchbar. Er will einen kompletten Neuaufbau, frei von der alten Struktur. Wörter und Lernstände werden übernommen.
+- Konzept: `docs/neustart.md`. Gebaut wird in einem Arbeitsstrang, nicht mit parallelen Helfern. KI nur auf Knopfdruck plus ein Trainer-Brief pro Woche.
+- **Input-Interessen:** Economy, Tech/KI/Software, Business & Startups, Sport & Fußball, Wissenschaft & Psychologie.
+- **Formate:** YouTube-Videos und Artikel.
+- **Preply:** weiter 2–4 Stunden pro Woche. Sprechen läuft vor allem dort, die App bereitet vor.
+- Tagesrahmen 30 Min. Kern plus bis zu 30 Min. Extra, Ziel C1 in spätestens 12 Monaten.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
@@ -299,7 +313,11 @@ Alles läuft in der Cloud-Umgebung. Chromium liegt unter `/opt/pw-browsers`, **n
 | `npm run verify` | alles zusammen: vor jeder Auslieferung |
 | `npm run seed` | erzeugt `seed/sample-data.json` neu (deterministisch, Stichtag 20.09.2026) |
 
-**Struktur:**
+**Struktur (seit dem Neustart, 03.10.2026):**
+- `src/bank`: eingebaute Lernstoff-Bank (`content/bank/words.json`, erzeugt von `scripts/bank/*.py`, siehe dort README).
+- `src/coach`: reine Logik des Trainers, nämlich Datenmodell `coach/*`, Einheit, Einstufung, Übernahme der Altdaten, Fahrplan-Werte.
+- `src/screens`: Bildschirme und Blätter des Trainers. `src/app`: Rahmen, Navigation (`route.ts`), Einstellungen.
+- Die alten Bereiche (`src/features`, die meisten `src/domain`- und `src/prompts`-Module) sind entfernt. In der Git-Historie bis `cd82ca3` sind sie erhalten.
 - `src/platform`: einziger Zugang zu `claude.use`, Browser-Speicher (`storage.ts`) und Diagnose-Protokoll (`diagnostics.ts`).
 - `src/platform/dev`: Entwicklungs-Adapter. E2E-Tests spielen ihn als `tests/.runtime/fake-claude.js` von außen ein.
 - `src/data`: Schemas, Pfade, der eine Schreibpfad (`writer.ts`), Voll-Lesen (`snapshot.ts`) und Live-Abos (`live.ts`, je Abfrage genau ein `onSnapshot`).
