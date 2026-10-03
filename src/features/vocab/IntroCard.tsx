@@ -45,8 +45,8 @@ export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: Fi
   const meanings = (meaning ?? '').split(/\s*;\s*/).filter(Boolean);
   const def = card.def && card.def.trim() && card.def.trim() !== meaning ? card.def.trim() : null;
   const row = (label: string, body: React.ReactNode, testId?: string) => (
-    <div className="grid grid-cols-[6.5rem_1fr] items-baseline gap-3 border-t border-line py-2.5 first:border-t-0 sm:grid-cols-[8rem_1fr]" {...(testId ? { 'data-testid': testId } : {})}>
-      <dt className="text-xs font-medium tracking-wide text-subtle uppercase">{label}</dt>
+    <div className="flex flex-col gap-1 border-t border-line py-2.5 first:border-t-0 sm:grid sm:grid-cols-[8rem_1fr] sm:items-baseline sm:gap-3" {...(testId ? { 'data-testid': testId } : {})}>
+      <dt className="min-w-0 text-xs font-medium tracking-wide break-words text-subtle uppercase">{label}</dt>
       <dd className="min-w-0">{body}</dd>
     </div>
   );
