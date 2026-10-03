@@ -68,7 +68,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 
 - [ ] **Neustart** (`docs/neustart.md`, ab 03.10.2026)
   - [x] Konzept und Fragen (Interessen, Formate, Preply), Emrahs Go
-  - [x] Schritt 1 – Fundament: Lernstoff-Bank (8.342 Wörter, 588 Phrasal Verbs, geprüft), Datenübernahme, Einstufungstest, Heute, Wort-Training (Sortieren, Einführen, 4 Abfragearten, FSRS, automatische Note), Fahrplan, Übersetzer, Claude fragen, Einstellungen. Zuerst nur auf dem Test-Link `AXHkh6…`, `main` bleibt bis zum Umzug beim alten Stand.
+  - [x] Schritt 1 – Fundament: Lernstoff-Bank (8.342 Wörter, 588 Phrasal Verbs, geprüft), Datenübernahme, Einstufungstest, Heute, Wort-Training (Sortieren, Einführen, 4 Abfragearten, FSRS, automatische Note), Fahrplan, Übersetzer, Claude fragen, Einstellungen. Auf dem Test-Link `AXHkh6…` Version `1791069842-9340` (Code `ab068f2`); `main` bleibt bis zum Umzug beim alten Stand.
   - [ ] Schritt 2 – Training · [ ] Schritt 3 – Input · [ ] Schritt 4 – Fahrplan · [ ] Schritt 5 – Umzug (nur mit OK)
 
 ## A5. Subagents (`.claude/agents/`)
