@@ -9,7 +9,7 @@ import { buyTime, hotSeat, objections } from '../../content/nb/load';
 import type { Objection } from '../../content/nb/schemas';
 import { outId, outRef } from '../../domain/nbdrill/outDoc';
 import { pickRotating, preferFirst } from '../../domain/nbdrill/pick';
-import { bestAnswer, modelText, movesScore, noMoves, PRESSURE_N, PRESSURE_TEXT_MAX, structuredPart, type Move, type Moves, type PressureAnswer } from '../../domain/nbdrill/pressure';
+import { bestAnswer, modelText, MOVES, movesScore, noMoves, PRESSURE_N, PRESSURE_TEXT_MAX, starterOf, structuredPart, type Move, type Moves, type PressureAnswer } from '../../domain/nbdrill/pressure';
 import { attemptScore, roundLevel, type Level } from '../../domain/levels/levels';
 import { currentLevel, nextLevel, recordLevel } from '../levels/store';
 import type { MessageKey } from '../../i18n';
@@ -19,9 +19,10 @@ import { pressureCheck, type PressureFix } from '../../prompts/nb/p7/pressureChe
 import type { Fix } from '../../ui/feedback/types';
 import { currentDay, logAnswers, nextRound, restoreSaved, saveOut, type UnitRun } from '../nbdrill/shared';
 
-// Einwand-Training als Druck-Serie (Plan N103). Phasen je Einwand: Bedenkzeit (10 s) → Antwort
-// (30 s) → Rückblick. Die KI (`pressure-check@1`) prüft im Hintergrund, „Weiter“ wartet nie.
-// Ohne KI (oder bei Fehler) hakt Emrah das Muster selbst ab und sieht die Musterantwort.
+// Einwand-Training (Plan N103) mit Lernpfad (docs/lernpfad-plan.md, 03.10.2026): Stufe 1–2 ordnen bzw. wählen
+// (ohne KI, sofort bewertet), Stufe 3–5 eigene Antwort; Bedenkzeit und Zeitziel nur auf Stufe 5, die Uhr gibt nie
+// selbst ab. Die KI (`pressure-check@2`) prüft im Hintergrund, „Weiter“ wartet nie. Ohne KI (oder bei Fehler) hakt
+// Emrah das Muster selbst ab – das zählt für die Stufe nur nach unten (keine Selbstbewertung für den Aufstieg).
 
 export type PressurePhase = 'think' | 'answer' | 'review';
 export type AiSlot = { phase: AiPhase | 'idle'; error: AiMessageKey | null; fixes: PressureFix[]; effect: string };
@@ -75,6 +76,8 @@ export type PressureSession = {
   hint?: 0 | 1 | 2;
   /** Stufe für die nächste Runde nach dieser (am Ende berechnet, nur Anzeige). */
   lvAfter?: Level;
+  /** Stufen-Ergebnis dieser Runde gespeichert (einmal je Runde, ggf. nach den letzten KI-Prüfungen). */
+  recorded?: boolean;
 };
 
 export const usePressure = create<{ s: PressureSession | null }>(() => ({ s: null }));
@@ -108,12 +111,27 @@ const phaseFor = (set: PressureSet, lv: Level | undefined): PressurePhase => (lv
 /** Stufe des aktuellen Eintrags (Einwände); alte Momentaufnahmen und andere Arten: 5 (wie bisher). */
 export const levelAt = (s: PressureSession, pos = s.pos): Level => s.lvs?.[pos] ?? s.lv ?? 5;
 
-/** Wert einer Antwort für die Stufen-Steuerung (0..1): Stufe 1–2 Anteil richtig, sonst Schritte/4, Hilfe deckelt. */
-export function answerScore(a: PressureAnswer | undefined): number {
-  if (!a) return 0;
-  const part = a.part !== undefined ? a.part : movesScore(a.moves) / 4;
-  return attemptScore(part, a.hint ?? 0);
+/**
+ * Wert einer Antwort für die Stufen-Steuerung (0..1) oder `null`, wenn sie nicht gewertet ist (übersprungen, KI prüft
+ * noch oder Fehler ohne Selbstcheck). Stufe 1–2: Anteil richtig; sonst Schritte/4 laut KI. Hilfe und Erleichterung
+ * deckeln; ein Selbstcheck zählt höchstens 0,6 (nur für den Abstieg, A7 „keine Selbstbewertung“).
+ */
+export function answerScore(a: PressureAnswer | undefined): number | null {
+  if (!a) return null;
+  if (a.part !== undefined) return attemptScore(a.part, a.hint ?? 0);
+  if (a.by === 'ai') return attemptScore(movesScore(a.moves) / 4, a.hint ?? 0);
+  if (a.by === 'self') return Math.min(0.6, attemptScore(movesScore(a.moves) / 4, a.hint ?? 0));
+  return null;
 }
+
+const scoresOf = (s: PressureSession, upto = s.ids.length): number[] =>
+  s.ids.slice(0, upto).flatMap((id) => {
+    const v = answerScore(s.answers.find((x) => x.id === id));
+    return v === null ? [] : [v];
+  });
+
+/** Hilfe des aktuellen Eintrags: Satzanfänge (Stufe 4) oder leichter als die Grundstufe gelöst (Knopf/Runde) = Hilfe 1. */
+const hintNow = (s: PressureSession, extra: 0 | 1 = 0): 0 | 1 | 2 => Math.max(s.hint ?? 0, extra, s.lv && levelAt(s) < s.lv ? 1 : 0) as 0 | 1 | 2;
 
 export function startPressure(opts: { unit?: UnitRun | null; lang: 'de' | 'en'; n?: number; theme?: string | null; set?: PressureSet }): boolean {
   const set = opts.set ?? 'objection';
@@ -147,8 +165,17 @@ export function setDraft(text: string): void {
 
 const aiOn = () => selectAiAvailable(useCapabilities.getState());
 
-/** Antwort abschließen (Knopf oder Zeit um). Die KI prüft im Hintergrund. */
+/** Antwort abschließen (Knopf). Die KI prüft im Hintergrund. */
 export function submitAnswer(): void {
+  finishAnswer(0);
+}
+
+/** Stufe 3: Satzanfänge waren vorgegeben. Voll gewertet nur, wenn alle vier Sätze eigenständig ergänzt sind. */
+export function submitStarters(own: boolean): void {
+  finishAnswer(own ? 0 : 1);
+}
+
+function finishAnswer(extra: 0 | 1): void {
   const s = get();
   const o = s ? itemOf(s) : null;
   if (!s || !o || s.phase !== 'answer') return;
@@ -156,7 +183,7 @@ export function submitAnswer(): void {
   const ms = s.answerAt ? Math.max(0, Date.now() - s.answerAt) : 0;
   // Die KI prüft nur das Einwand-Muster; Heißer Stuhl und Zeit gewinnen vergleichen mit dem Muster.
   const ai = aiOn() && !!text && !!o.obj;
-  const ans: PressureAnswer = { id: o.id, text, ms, moves: null, by: null, ...(s.lv ? { lv: levelAt(s), hint: s.hint ?? 0 } : {}) };
+  const ans: PressureAnswer = { id: o.id, text, ms, moves: null, by: null, ...(s.lv ? { lv: levelAt(s), hint: hintNow(s, extra) } : {}) };
   const next: PressureSession = {
     ...s,
     phase: 'review',
@@ -164,17 +191,17 @@ export function submitAnswer(): void {
     ai: ai ? { ...s.ai, [o.id]: { phase: 'queued', error: null, fixes: [], effect: '' } } : s.ai,
   };
   put(next);
-  if (ai && o.obj) void runCheck(o.obj, text, s.lang);
+  if (ai && o.obj) void runCheck(o.obj, text, s.lang, false, s.lv ? levelAt(s) : undefined);
 }
 
-/** Stufe 1–2: Zuordnung prüfen (ohne KI, sofort). `picked[i]` = gewählter Schritt für Platz i. */
-export function submitStructured(picked: readonly (Move | null)[]): void {
+/** Stufe 1–2: Zuordnung prüfen (ohne KI, sofort). `picked[i]` = gewählter Schritt für Platz i, `texts[i]` der gewählte Satz. */
+export function submitStructured(picked: readonly (Move | null)[], texts: readonly string[] = []): void {
   const s = get();
   const o = s ? itemOf(s) : null;
   if (!s || !o || s.phase !== 'answer') return;
   const part = structuredPart(picked);
   const ms = s.answerAt ? Math.max(0, Date.now() - s.answerAt) : 0;
-  const ans: PressureAnswer = { id: o.id, text: '', ms, moves: null, by: null, lv: levelAt(s), part, pick: [...picked] };
+  const ans: PressureAnswer = { id: o.id, text: '', ms, moves: null, by: null, lv: levelAt(s), part, hint: hintNow(s), pick: [...picked], pickText: [...texts] };
   put({ ...s, phase: 'review', answers: [...s.answers.filter((a) => a.id !== o.id), ans] });
 }
 
@@ -203,10 +230,13 @@ function patchAi(id: string, slot: Partial<AiSlot>): void {
   put({ ...s, ai: { ...s.ai, [id]: { ...cur, ...slot } } });
 }
 
-async function runCheck(o: Objection, text: string, lang: 'de' | 'en', refresh = false): Promise<void> {
+async function runCheck(o: Objection, text: string, lang: 'de' | 'en', refresh = false, level?: number): Promise<void> {
   ctl ??= new AbortController();
+  // Stufe 3: Claude erfährt die vorgegebenen Satzanfänge, damit sie nicht als eigener Beleg zählen.
+  const starters = level === 3 ? MOVES.map((k) => starterOf(o.model[k])) : undefined;
   try {
-    const r = await askJson({ template: pressureCheck, vars: { objection: o.line, answer: text, model: modelText(o), uiLang: lang }, signal: ctl.signal, refresh, onPhase: (p) => patchAi(o.id, { phase: p }) });
+    const vars = { objection: o.line, answer: text, model: modelText(o), uiLang: lang, ...(level ? { level } : {}), ...(starters ? { starters } : {}) };
+    const r = await askJson({ template: pressureCheck, vars, signal: ctl.signal, refresh, onPhase: (p) => patchAi(o.id, { phase: p }) });
     const d = r.data;
     const moves: Moves = { acknowledge: d.acknowledge, ask: d.ask, answer: d.answer, secure: d.secure };
     const s = get();
@@ -216,11 +246,28 @@ async function runCheck(o: Objection, text: string, lang: 'de' | 'en', refresh =
       answers: s.answers.map((a) => (a.id === o.id && a.by !== 'self' ? { ...a, moves, better: d.better, by: 'ai' } : a.id === o.id ? { ...a, better: d.better } : a)),
       ai: { ...s.ai, [o.id]: { phase: 'done', error: null, fixes: d.fixes, effect: d.effect } },
     });
+    settleLevels();
   } catch (err) {
     if (isAiFailure(err) && err.kind === 'cancelled') return;
     if (!isAiFailure(err)) logWarn('pressure:check', err, o.id);
     patchAi(o.id, { phase: 'error', error: isAiFailure(err) ? (err.messageKey ?? 'aiFailed') : 'aiFailed' });
+    settleLevels();
   }
+}
+
+const BUSY: ReadonlySet<string> = new Set(['queued', 'thinking', 'streaming', 'slow']);
+
+/**
+ * Stufen-Ergebnis der Runde speichern – genau einmal, sobald die Runde fertig ist und keine KI-Prüfung mehr läuft
+ * (`force`: beim Verlassen mit dem, was gewertet ist). Nicht gewertete Antworten zählen nicht.
+ */
+function settleLevels(force = false): void {
+  const s = get();
+  if (!s?.done || !s.lv || s.recorded) return;
+  if (!force && Object.values(s.ai).some((a) => BUSY.has(a.phase))) return;
+  const scores = scoresOf(s);
+  put({ ...s, recorded: true, lvAfter: nextLevel('nb-objection', scores, s.day) });
+  if (scores.length) void recordLevel('nb-objection', scores, s.day);
 }
 
 /** „Erneut versuchen“ nach einem KI-Fehler (nur auf Knopfdruck, A6.3). */
@@ -230,7 +277,7 @@ export function retryCheck(id: string): void {
   const a = s?.answers.find((x) => x.id === id);
   if (!s || !o || !a?.text) return;
   patchAi(id, { phase: 'queued', error: null });
-  void runCheck(o, a.text, s.lang, true);
+  void runCheck(o, a.text, s.lang, true, a.lv);
 }
 
 /** Selbstcheck ohne KI: einen Schritt an- oder abhaken. */
@@ -244,22 +291,21 @@ export function toggleMove(id: string, move: Move): void {
 export function nextObjection(): void {
   const s = get();
   const o = s ? itemOf(s) : null;
-  if (!s || !o || s.phase !== 'review') return;
+  if (!s || !o || s.done || s.phase !== 'review') return;
   const a = s.answers.find((x) => x.id === o.id);
   const set = setOf(s);
   logAnswers([
     { type: `nb-${set}`, ref: outRef({ id: outId(set, s.t0), d: s.day }), q: o.line, given: a?.text ?? '', ans: o.model, ok: answerOk(set, a), ms: a?.ms ?? 0, day: s.day, lang: s.lang, duty: !!s.unit, t: Date.now() },
   ]);
   if (s.pos + 1 >= s.ids.length) {
-    const scores = s.ids.map((id) => answerScore(s.answers.find((x) => x.id === id)));
-    const done: PressureSession = { ...s, done: true, ...(s.lv ? { lvAfter: nextLevel('nb-objection', scores, s.day) } : {}) };
+    const done: PressureSession = { ...s, done: true };
     put(done);
     void saveSeries(done);
-    if (done.lv) void recordLevel('nb-objection', scores, done.day);
+    settleLevels();
     return;
   }
   // Nach zwei schwachen Antworten in Folge kommt der nächste Einwand eine Stufe leichter (nur in dieser Runde).
-  const lvNext = s.lv ? roundLevel(s.lv, s.ids.slice(0, s.pos + 1).map((id) => answerScore(s.answers.find((x) => x.id === id)))) : undefined;
+  const lvNext = s.lv ? roundLevel(s.lv, scoresOf(s, s.pos + 1)) : undefined;
   const phase = phaseFor(set, lvNext);
   put({ ...s, pos: s.pos + 1, phase, draft: '', answerAt: phase === 'answer' ? Date.now() : 0, ...(lvNext ? { lvs: [...(s.lvs ?? []), lvNext], hint: 0 as const } : {}) });
 }
@@ -328,6 +374,7 @@ export function pressureResult(s: PressureSession): UnitTaskResult {
 }
 
 export function endPressure(): void {
+  settleLevels(true);
   ctl?.abort();
   ctl = null;
   usePressure.setState({ s: null });

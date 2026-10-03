@@ -41,6 +41,8 @@ export type PressureAnswer = {
   hint?: 0 | 1 | 2;
   /** Stufe 1–2: gewählter Schritt je Platz (für den Rückblick). */
   pick?: (Move | null)[];
+  /** Stufe 1–2: gewählter Satz je Platz (für „Du hattest: …“). */
+  pickText?: string[];
 };
 
 /** Beste Antwort der Serie: meiste Schritte, dann längster Text; `null` ohne Text. */

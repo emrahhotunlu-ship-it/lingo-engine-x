@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { applyAttempt, attemptScore, levelsPatch, readEntry, roundLevel, START_LEVEL, type LevelEntry } from '../../src/domain/levels/levels';
 import { objections } from '../../src/content/nb/load';
+import { answerScore } from '../../src/features/pressure/session';
 import { choiceOptions, MOVES, orderPool, starterOf, starterPrefill, structuredPart } from '../../src/domain/nbdrill/pressure';
 
 // Lernpfad (docs/lernpfad-plan.md): Stufe folgt dem Erfolg, Hilfe deckelt, nie mehr als eine Stufe je Lerntag.
@@ -55,7 +56,8 @@ describe('Lernpfad-Stufen', () => {
   it('Patch ersetzt nur den eigenen Eintrag, andere Arten bleiben', () => {
     const cur = { v: 1, k: { other: { l: 4 } } };
     const p = levelsPatch(cur, 'nb-objection', [1], '2026-10-03');
-    expect(p).toEqual({ v: 1, k: { other: { l: 4 }, 'nb-objection': { l: 2, w: [1], n: 1, ch: '' } } });
+    expect(p).toEqual({ k: { other: { l: 4 }, 'nb-objection': { l: 2, w: [1], n: 1, ch: '' } } });
+    expect(levelsPatch(undefined, 'nb-objection', [1], '2026-10-03').v).toBe(1);
   });
 });
 
@@ -91,5 +93,22 @@ describe('Einwände: Hilfen der Stufen 1–4', () => {
     expect(starterOf('I appreciate you being open about that, and I understand why.')).toBe('I appreciate you being …');
     expect(starterOf('Of course, I am happy to help.')).toBe('Of course …');
     expect(starterPrefill('Of course, I am happy to help.')).toBe('Of course ');
+  });
+});
+
+describe('Einwände: welche Antworten die Stufe steuern', () => {
+  const base = { id: 'o01', text: 'x', ms: 0, moves: null, by: null } as const;
+  const all = { acknowledge: true, ask: true, answer: true, secure: true };
+
+  it('nicht gewertet (übersprungen, KI läuft noch, Fehler ohne Selbstcheck) zählt nicht', () => {
+    expect(answerScore(undefined)).toBeNull();
+    expect(answerScore({ ...base })).toBeNull();
+  });
+
+  it('KI-Wertung voll, Selbstcheck höchstens 0,6 (nur für den Abstieg), Hilfe deckelt', () => {
+    expect(answerScore({ ...base, moves: all, by: 'ai' })).toBe(1);
+    expect(answerScore({ ...base, moves: all, by: 'self' })).toBe(0.6);
+    expect(answerScore({ ...base, moves: all, by: 'ai', hint: 1 })).toBe(0.6);
+    expect(answerScore({ ...base, text: '', part: 0.75 })).toBe(0.75);
   });
 });

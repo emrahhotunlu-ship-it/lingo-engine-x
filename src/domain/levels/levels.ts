@@ -66,5 +66,6 @@ export function levelsPatch(cur: Readonly<Record<string, unknown>> | undefined, 
   let e = readEntry(cur, kind);
   for (const s of scores) e = applyAttempt(e, s, day);
   const k = cur && typeof cur.k === 'object' && cur.k ? { ...(cur.k as Record<string, unknown>) } : {};
-  return { v: 1, k: { ...k, [kind]: e } };
+  // `v` nur setzen, wenn es fehlt (eine spätere Fassung behält ihre Version).
+  return { ...(typeof cur?.v === 'number' ? {} : { v: 1 }), k: { ...k, [kind]: e } };
 }

@@ -4,8 +4,8 @@ import { looseBool } from '../../produceCheck';
 import { clipped, sliced } from '../../tolerant';
 import type { PromptTemplate, UiLang } from '../../types';
 
-// pressure-check@1 (Plan §3.2, N103, Lehrer I3): Einwand-Training. Emrah hatte 30 s für eine
-// Antwort auf einen Kunden-Einwand. Geprüft wird das Muster anerkennen · nachfragen · antworten ·
+// pressure-check@2 (Plan §3.2, N103, Lehrer I3; Lernpfad 03.10.2026): Einwand-Training. Emrah antwortet auf
+// Stufe 3 (Satzanfänge vorgegeben), 4 (frei) oder 5 (frei mit 45-s-Zeitziel) auf einen Kunden-Einwand. Geprüft wird das Muster anerkennen · nachfragen · antworten ·
 // absichern, dazu höchstens 3 Korrekturen und eine bessere Fassung seiner Antwort (US-Englisch).
 // `quick`: eine kurze Antwort mitten in einer Serie; die Serie läuft ohne Warten weiter.
 
@@ -16,6 +16,10 @@ export type PressureCheckVars = {
   answer: string;
   /** Musterantwort (Englisch) als Orientierung. */
   model: string;
+  /** Lernpfad-Stufe 3–5 (fehlt = 5). */
+  level?: number;
+  /** Vorgegebene Satzanfänge (Stufe 3): zählen nicht als eigener Beleg. */
+  starters?: string[];
   uiLang: UiLang;
 };
 
@@ -32,7 +36,7 @@ export type PressureCheckOut = {
 
 export const PC_TEXT_MAX = 600;
 const ID = 'pressure-check';
-const VERSION = 1;
+const VERSION = 2;
 
 export const PRESSURE_CHECK_EXAMPLE =
   '{"acknowledge":true,"ask":false,"answer":true,"secure":false,"effect":"…","fixes":[{"mine":"…","right":"…","why":"…"}],"better":"…"}';
@@ -47,7 +51,11 @@ export const pressureCheck: PromptTemplate<PressureCheckVars, PressureCheckOut> 
   build(v) {
     return [
       header({ id: ID, version: VERSION }),
-      'A German-speaking salesperson (B2, aiming for C1) practices handling customer objections in English under time pressure (30 seconds per answer).',
+      'A German-speaking salesperson (B2, aiming for C1) practices handling customer objections in English.',
+      `He answers on level ${v.level ?? 5} of 5 (3 = sentence starters given, 4 = free answer, 5 = free answer with a 45-second time goal).`,
+      ...(v.starters?.length
+        ? [`Given sentence starters (not his own words, do not count them as evidence for a move): ${v.starters.map((x) => clip(x, 60)).join(' | ')}`, 'A move counts only if his own continuation does the job of that move.']
+        : []),
       'The pattern he should follow has four moves: 1) acknowledge the concern, 2) ask a clarifying question, 3) answer with a benefit or fact, 4) secure a next step or agreement.',
       'Judge his answer. American English is the standard; British spelling and British words are correct too. Spoken style and short sentences are fine.',
       `Customer objection: ${clip(v.objection, 300)}`,
