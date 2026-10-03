@@ -1,12 +1,13 @@
-import { LayoutGroup, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import type { KeyboardEvent } from 'react';
 import { useT } from '../../i18n';
 import { EnglishText } from '../../engine/EnglishText';
-import { spring } from '../../ui/motion';
+import { DURATION, EASE_OUT } from '../../ui/motion';
 
 // Satz-Bausteine (Kap. 4.2) für den E-Mail-Refiner: Ein Tipp (oder Ziffer 1–4, Pfeiltasten)
-// lässt den gewählten Baustein in den Platz gleiten, die anderen weichen animiert aus
-// (gemeinsames Layout-Element). „Original behalten“ ist immer eine Option.
+// setzt den gewählten Baustein in den Platz. Neubau (Leistung §3.2.8, N76): keine Layout-Animation
+// mehr, der neue Baustein blendet nur ein (Deckkraft + kurzes Verschieben, ≤ 150 ms).
+// „Original behalten“ ist immer eine Option.
 // Hinweis: Sobald `src/engine/tiles` aus Phase 1 vorliegt, kann dieser Baustein darauf umziehen.
 
 export type TileOption = { text: string; register?: string; why?: string };
@@ -46,11 +47,11 @@ export function TilePicker({ seg, original, options, chosen, onPick }: Props) {
   const regLabel = (r?: string) => (r === 'formal' ? t('regFormal') : r === 'informal' ? t('regInformal') : r === 'neutral' ? t('regNeutral') : null);
 
   return (
-    <LayoutGroup id={`seg-${seg}`}>
+    <div className="contents" data-seg={seg}>
       <div role="group" aria-label={t('mailTask')} tabIndex={0} onKeyDown={onKey} className="flex flex-col gap-2 rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-[var(--lx-accent)]">
         <div data-testid="tile-slot" data-chosen={chosen} className="min-h-12 rounded-2xl border border-dashed border-line p-1.5">
           {current && (
-            <motion.div layoutId={`tile-${seg}-${current.k}`} transition={spring} className="rounded-xl bg-surface-strong px-3 py-2.5">
+            <motion.div key={current.k} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }} className="rounded-xl bg-surface-strong px-3 py-2.5">
               <EnglishText text={current.text} area="business" className="text-base" />
               {current.k >= 0 && current.why && <p className="mt-1 text-xs text-muted">{current.why}</p>}
             </motion.div>
@@ -61,11 +62,9 @@ export function TilePicker({ seg, original, options, chosen, onPick }: Props) {
             const label = regLabel(o.register);
             const idx = all.findIndex((x) => x.k === o.k) + 1;
             return (
-              <motion.button
+              <button
                 key={o.k}
                 type="button"
-                layoutId={`tile-${seg}-${o.k}`}
-                transition={spring}
                 data-testid="tile"
                 data-opt={o.k}
                 onClick={() => onPick(o.k)}
@@ -79,11 +78,11 @@ export function TilePicker({ seg, original, options, chosen, onPick }: Props) {
                   <span lang="en">{o.text}</span>
                 </span>
                 {label && <span className="shrink-0 rounded-full bg-surface px-2 py-0.5 text-xs text-muted">{label}</span>}
-              </motion.button>
+              </button>
             );
           })}
         </div>
       </div>
-    </LayoutGroup>
+    </div>
   );
 }

@@ -24,14 +24,17 @@ export type ExerciseId =
   | 'situation'
   | 'dictation'
   | 'speed'
-  | 'produce';
+  | 'produce'
+  /** Anki „Aufdecken“ (anki-regeln.md): nie automatisch gewählt, nur über `pickMode`. */
+  | 'flip';
 /** Modus der alten App (Schlüssel in `modes` und `hist[].m`). */
 export type LegacyMode = 'recog' | 'cloze' | 'type' | 'colloc' | 'listen' | 'produce';
-export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce';
+export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce' | 'flip';
 
 /** Satz mit markierter Stelle: `sentence.slice(start, end) === gap`. */
 export type ContextSpan = { sentence: string; start: number; end: number; gap: string };
-export type Colloc = { index: number; p: string; de: string; gap: string; opts: string[]; ctx: ContextSpan | null };
+/** `ai`: von Claude ergänzt (`collocs.ts`): kann Fehler enthalten, „Ich lag richtig“ ist erlaubt. */
+export type Colloc = { index: number; p: string; de: string; gap: string; opts: string[]; ctx: ContextSpan | null; ai?: boolean };
 export type Counts = { c: number; w: number };
 
 /** Herkunft und Zusatzangaben einer Wendung (`chunk/<id>`, altapp-analyse §5). */
@@ -114,6 +117,10 @@ export type Exercise = {
   limitMs?: number;
   /** Szene und Absicht (situation, M15). */
   situation?: SituationTask;
+  /** Anki (anki-regeln §1): getippte Kontrolle nach „Leicht“ bzw. Prüfabfrage nach „Gut“. */
+  check?: 'control' | 'probe';
+  /** Nur `flip`: Richtung der Karte (§8). */
+  dir?: 'de-en' | 'en-de';
 };
 
 /** Baustein (tiles): Text und ob er ein Fremdbaustein ist. */
@@ -168,6 +175,12 @@ export type AnswerEvent = {
   colIndex?: number;
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */
   override?: boolean;
+  /** Genutzter Tipp (1 Platzhalter, 2 erster Buchstabe): gewichtet die Antwort geringer (`weight.ts`). */
+  hint?: 0 | 1 | 2;
+  /** Prüfabfrage bzw. Kontrolle (`flip.ts`). */
+  check?: 'probe' | 'control';
+  /** Aufdecken im Aufholmodus: gilt nur als schwacher Beleg (`weight.ts`). */
+  catchUp?: true;
 };
 
 export type WhyPart = { key: string; vars?: Record<string, string | number>; lang?: Lang };

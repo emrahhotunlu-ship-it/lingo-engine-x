@@ -7,10 +7,13 @@ import { locate, lemmaOf } from './context';
 
 export type CardOrigin = {
   v: 1;
-  // Phase 5: 'preply' (Lehrer-Import), 'translate' (Übersetzer), 'companion' (Begleiter)
-  kind: 'trainer' | 'intro' | 'summary' | 'lookup' | 'daily' | 'lesson' | 'user' | 'ai' | 'speak' | 'business' | 'preply' | 'translate' | 'companion'
+  // Phase 5: 'preply' (früherer Lehrer-Import), 'translate' (Übersetzer), 'companion' (Begleiter);
+  // 'teacher' (Lehrer-Feedback, ab 28.09.2026)
+  kind: 'trainer' | 'intro' | 'summary' | 'lookup' | 'daily' | 'lesson' | 'user' | 'ai' | 'speak' | 'business' | 'preply' | 'teacher' | 'translate' | 'companion'
     // Phase 4: Lesen, Hören, Schreiben, Entdecken (F21)
-    | 'read' | 'listen' | 'write' | 'discover';
+    | 'read' | 'listen' | 'write' | 'discover'
+    // C1-Paket (02.10.2026)
+    | 'pack';
   ref?: string;
   title?: string;
   t: number;
@@ -25,7 +28,7 @@ export type NewVocabInput = {
   ex?: string | null;
   surface?: string | null;
   /** Phase 2 (M2): `user` eigenes Wort, `ai` bzw. `job` von Claude vorgeschlagen. */
-  src: 'lookup' | 'coach' | 'lesson' | 'user' | 'ai' | 'job' | 'preply' | 'translate' | 'claude' | 'read' | 'listen' | 'write';
+  src: 'lookup' | 'coach' | 'lesson' | 'user' | 'ai' | 'job' | 'preply' | 'teacher' | 'translate' | 'claude' | 'read' | 'listen' | 'write' | 'pack';
   /** Lektion, aus der die Karte stammt (`src:'lesson'`, Phase 2 D17). */
   lesson?: string | null;
   origin: CardOrigin;

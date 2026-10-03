@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, openSettings, openOverview, screen } from './fixtures';
+import { boot, openSettings, openOverview, expectStreak, screen } from './fixtures';
 
 // Plattform-Test (Kap. 12): nichts von fremden Hosts, kein Absturz ohne Fähigkeiten,
 // kein Entwicklungs-Adapter im Produktions-Build.
@@ -69,8 +69,7 @@ test('bricht ein Datenbank-Abonnement ab, erscheint eine klare Meldung mit Neu l
 
 test('reißt die Brücke einmal ab (unavailable), wird neu abonniert und die App läuft normal', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { failSubscriptions: 'unavailable', failSubscriptionsTimes: 6 } });
-  await openOverview(page);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  await expectStreak(page, '12');
   expect(errors).toEqual([]);
 });
 

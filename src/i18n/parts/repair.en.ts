@@ -18,6 +18,7 @@ export const repairEn = {
   rxVerdictOk: 'Correct.',
   rxVerdictClose: 'Correct – with a small difference.',
   rxVerdictNo: 'Not quite yet.',
+  rxEditHint: 'Change only the wrong part. The rest stays.',
   rxYouWrote: 'You wrote',
   rxBetter: 'Better version',
   rxWhy: 'Why',

@@ -1,11 +1,12 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { ApplyStep } from './ApplyStep';
 import { useEffect, useState } from 'react';
 import { TitleActions } from '../system/Chrome';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
-import { nodeOf, PLAYBOOKS, playbookById } from '../../domain/business/playbook';
+import { nodeOf, playbooks, playbookById } from '../../domain/business/playbook';
 import type { Playbook, PlaybookPhrase } from '../../domain/business/types';
 import { EnglishText } from '../../engine/EnglishText';
 import { SpeakButton } from '../../engine/SpeakButton';
@@ -44,7 +45,7 @@ export function PlaybookScreen() {
           <TitleActions />
         </header>
         <div className="grid gap-3 md:grid-cols-2">
-          {PLAYBOOKS.map((p) => (
+          {playbooks().map((p) => (
             <button
               key={p.id}
               type="button"
@@ -81,7 +82,16 @@ function Tree({ pb }: { pb: Playbook }) {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  if (drill) return <PlaybookDrill pb={pb} onClose={() => setDrill(false)} />;
+  // Übersetzer, Claude und Zahnrad auch im Drill (A7 Paket 2: überall mit einem Tipp).
+  if (drill)
+    return (
+      <div className="flex flex-col gap-3 py-4">
+        <div className="flex justify-end">
+          <TitleActions />
+        </div>
+        <PlaybookDrill pb={pb} onClose={() => setDrill(false)} />
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-5 py-6" data-testid="playbook" data-id={pb.id}>
@@ -113,8 +123,8 @@ function Tree({ pb }: { pb: Playbook }) {
         <TitleActions />
       </header>
 
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div key={cur?.id ?? 'x'} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: DURATION.base, ease: EASE_OUT }}>
+      {/* Neubau (Leistung §4 Nr. 4, N76): kein AnimatePresence mode="wait" – der nächste Schritt blendet sofort ein. */}
+      <motion.div key={cur?.id ?? 'x'} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
           {cur?.kind === 'question' && (
             <Card channel="business" className="flex flex-col gap-3">
               <p className="text-base font-semibold">{cur.q[lang]}</p>
@@ -129,8 +139,7 @@ function Tree({ pb }: { pb: Playbook }) {
             </Card>
           )}
           {cur?.kind === 'leaf' && <Leaf pb={pb} nodeId={cur.id} title={cur.title[lang]} phrases={cur.phrases} />}
-        </motion.div>
-      </AnimatePresence>
+      </motion.div>
 
       <div className="flex flex-wrap gap-3 border-t border-line pt-5">
         <Button icon="cards" onClick={() => setDrill(true)} data-testid="drill-start">
@@ -190,6 +199,7 @@ function Leaf({ pb, nodeId, title, phrases }: { pb: Playbook; nodeId: string; ti
           ))}
         </ul>
       </Card>
+      <ApplyStep phrases={phrases.map((p) => p.en)} />
       {ai && !open && (
         <div>
           <Button icon="sparkle" onClick={() => setOpen(true)} data-testid="pb-adapt" data-ai="">

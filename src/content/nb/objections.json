@@ -1,0 +1,427 @@
+[
+ {
+  "id": "o01",
+  "theme": "t03",
+  "kind": "price",
+  "line": "Honestly, your price is about 30 percent higher than your competitor's.",
+  "de": "Ehrlich gesagt ist Ihr Preis etwa 30 Prozent höher als der Ihres Wettbewerbers.",
+  "model": {
+   "acknowledge": "I appreciate you being open about that, and I understand why the difference stands out.",
+   "ask": "May I ask what their offer includes? For example, are hosting, updates, and support part of it?",
+   "answer": "In most comparisons we've seen, the gap closes once you look at the total cost of ownership, because we include hosting, updates, and support.",
+   "secure": "Would it help if I put both offers side by side, so you can compare them line by line?"
+  },
+  "tip": {
+   "de": "Nicht sofort verteidigen: erst verstehen, womit verglichen wird.",
+   "en": "Do not defend right away: first find out what they are comparing."
+  }
+ },
+ {
+  "id": "o02",
+  "theme": "t01",
+  "kind": "send-info",
+  "line": "Just send me some information, and I'll get back to you.",
+  "de": "Schicken Sie mir einfach ein paar Unterlagen, ich melde mich dann.",
+  "model": {
+   "acknowledge": "Of course, I'm happy to send you something.",
+   "ask": "Just so I send you the right material: which part matters most to you right now, invoices, contracts, or the archive?",
+   "answer": "Then I'll send you a two-page summary and a short case study from a company of your size, instead of our full brochure.",
+   "secure": "Could we put 15 minutes on the calendar next week to go through any questions?"
+  },
+  "tip": {
+   "de": "Ja sagen, aber gezielt nachfragen und einen festen nächsten Termin sichern.",
+   "en": "Say yes, but ask a focused question and secure a fixed next step."
+  }
+ },
+ {
+  "id": "o03",
+  "theme": "t01",
+  "kind": "competitor",
+  "line": "We're already talking to another provider.",
+  "de": "Wir sprechen schon mit einem anderen Anbieter.",
+  "model": {
+   "acknowledge": "That makes sense. It's smart to compare options for a decision like this.",
+   "ask": "What do you like about their approach so far, and is there anything you're still unsure about?",
+   "answer": "Many of our customers compared us with other providers, and the deciding factors were usually our audit-proof archive and how quickly the team could start.",
+   "secure": "Would it be useful if I showed you those two points in a 20-minute demo, so you have a fair comparison?"
+  },
+  "tip": {
+   "de": "Den Wettbewerber nie schlechtmachen: nach offenen Punkten fragen.",
+   "en": "Never criticize the competitor: ask about open questions instead."
+  }
+ },
+ {
+  "id": "o04",
+  "theme": "t05",
+  "kind": "timing",
+  "line": "This isn't a priority for us right now. Maybe next year.",
+  "de": "Das hat gerade keine Priorität für uns. Vielleicht nächstes Jahr.",
+  "model": {
+   "acknowledge": "I understand. You probably have a lot on your plate this year.",
+   "ask": "Can I ask what's at the top of your list at the moment?",
+   "answer": "The reason many companies start now is the e-invoicing mandate: if you wait until next year, you'll be doing the project under time pressure.",
+   "secure": "Would it make sense to do a short check of where you stand today, so you can plan next year's budget with real numbers?"
+  },
+  "tip": {
+   "de": "Den Zeitpunkt respektieren, aber einen kleinen, günstigen ersten Schritt anbieten.",
+   "en": "Respect the timing, but offer a small, easy first step."
+  }
+ },
+ {
+  "id": "o05",
+  "theme": "t04",
+  "kind": "security",
+  "line": "We don't put sensitive data in the cloud. Period.",
+  "de": "Sensible Daten kommen bei uns nicht in die Cloud. Punkt.",
+  "model": {
+   "acknowledge": "I understand, and I appreciate how seriously you take this, especially with personnel and financial records.",
+   "ask": "Is the concern mainly about where the data is stored, or about who can access it?",
+   "answer": "Your data would be hosted in EU data centers and encrypted at rest and in transit, and many of our customers are banks and health care providers with very strict rules.",
+   "secure": "Would you be open to a call with our security officer, so your IT team can ask their questions directly?"
+  },
+  "tip": {
+   "de": "Die Sorge ernst nehmen und in eine konkrete Frage übersetzen: Ort oder Zugriff?",
+   "en": "Take the concern seriously and turn it into a concrete question: location or access?"
+  }
+ },
+ {
+  "id": "o06",
+  "theme": "t02",
+  "kind": "status-quo",
+  "line": "Our current system works fine. Why should we change?",
+  "de": "Unser jetziges System funktioniert gut. Warum sollten wir wechseln?",
+  "model": {
+   "acknowledge": "If it works, that's a good reason to be careful with change.",
+   "ask": "How long does it take your team today to find a contract from three years ago?",
+   "answer": "Customers usually tell us the system works, but the searching, the paper, and the manual approvals cost them hours every week.",
+   "secure": "Would it be worth measuring that for one week, so you can decide based on facts?"
+  },
+  "tip": {
+   "de": "Nicht widersprechen: mit einer Frage die versteckten Kosten sichtbar machen.",
+   "en": "Do not argue: use a question to make the hidden costs visible."
+  }
+ },
+ {
+  "id": "o07",
+  "theme": "t01",
+  "kind": "authority",
+  "line": "I'm not the one who decides this.",
+  "de": "Das entscheide nicht ich.",
+  "model": {
+   "acknowledge": "Thanks for telling me. That helps me a lot.",
+   "ask": "Who else would be involved in the decision, and what matters most to them?",
+   "answer": "In similar projects, it worked well when we prepared a short business case that the decision maker could read in five minutes.",
+   "secure": "Would you be willing to introduce me, or should I prepare the summary for you to share?"
+  },
+  "tip": {
+   "de": "Den Gesprächspartner als Verbündeten gewinnen, nicht übergehen.",
+   "en": "Win your contact as an ally; do not go around them."
+  }
+ },
+ {
+  "id": "o08",
+  "theme": "t02",
+  "kind": "need",
+  "line": "We only have a few documents. We don't need a system for that.",
+  "de": "Wir haben nur wenige Dokumente. Dafür brauchen wir kein System.",
+  "model": {
+   "acknowledge": "That's a fair point. Not every company needs a big solution.",
+   "ask": "Roughly how many invoices and contracts does your team handle per month?",
+   "answer": "Even smaller teams often start with just one process, like invoice approval, and the costs grow with the number of users.",
+   "secure": "Should I send you a simple calculation for your numbers, so you can see if it's worth it?"
+  },
+  "tip": {
+   "de": "Zustimmen, wo es stimmt, dann mit echten Zahlen weiterfragen.",
+   "en": "Agree where it is true, then ask for real numbers."
+  }
+ },
+ {
+  "id": "o09",
+  "theme": "t07",
+  "kind": "contract",
+  "line": "We can't commit to a three-year contract.",
+  "de": "Auf drei Jahre können wir uns nicht festlegen.",
+  "model": {
+   "acknowledge": "I understand. Three years is a long time to commit.",
+   "ask": "What worries you most about a longer contract: the budget, or the risk that the solution doesn't fit?",
+   "answer": "We can start with a one-year contract, and if you decide to extend it later, you still get the three-year pricing.",
+   "secure": "Would that give you enough flexibility to move forward this quarter?"
+  },
+  "tip": {
+   "de": "Den Grund der Sorge finden und eine flexible Brücke anbieten.",
+   "en": "Find the reason for the worry and offer a flexible bridge."
+  }
+ },
+ {
+  "id": "o10",
+  "theme": "t09",
+  "kind": "risk",
+  "line": "What if the migration goes wrong? We can't afford any downtime.",
+  "de": "Was, wenn die Umstellung schiefgeht? Ausfallzeiten können wir uns nicht leisten.",
+  "model": {
+   "acknowledge": "That's exactly the right question to ask before a migration.",
+   "ask": "Which documents or processes would be the most critical if they weren't available for a day?",
+   "answer": "We migrate in stages, the old system stays available until everything has been checked, and we test with a copy of your data first.",
+   "secure": "Shall I send you our migration plan from a similar project, so your IT team can review it?"
+  },
+  "tip": {
+   "de": "Die Frage loben und mit einem konkreten Plan antworten, nicht mit Versprechen.",
+   "en": "Praise the question and answer with a concrete plan, not promises."
+  }
+ },
+ {
+  "id": "o11",
+  "theme": "t07",
+  "kind": "price",
+  "line": "We need at least 20 percent off, or we can't move forward.",
+  "de": "Wir brauchen mindestens 20 Prozent Nachlass, sonst geht es nicht weiter.",
+  "model": {
+   "acknowledge": "I understand that you're working with a tight budget.",
+   "ask": "Where do you have some flexibility: the contract length, the number of users, or the start date?",
+   "answer": "If you could commit to three years, we could reduce the price per user, but a straight 20 percent without any change isn't something I can offer.",
+   "secure": "Would it help if I put together two options, so you can choose the one that fits your budget?"
+  },
+  "tip": {
+   "de": "Nie ein Zugeständnis ohne Gegenleistung: nach Spielraum fragen.",
+   "en": "Never give a concession for nothing: ask where they have flexibility."
+  }
+ },
+ {
+  "id": "o12",
+  "theme": "t11",
+  "kind": "timing",
+  "line": "We'll decide about the renewal at the last minute, as always.",
+  "de": "Über die Verlängerung entscheiden wir wie immer in letzter Minute.",
+  "model": {
+   "acknowledge": "Fair enough. I know how busy the end of the year gets.",
+   "ask": "Is there anything you'd like to change in the contract this time, like more users or another department?",
+   "answer": "If we talk about it now, you can lock in this year's prices before the new price list comes out in January.",
+   "secure": "Could we set up a 30-minute call in October to go through the options?"
+  },
+  "tip": {
+   "de": "Einen Vorteil für frühes Handeln nennen, ohne Druck zu machen.",
+   "en": "Name a benefit of acting early without putting on pressure."
+  }
+ },
+ {
+  "id": "o13",
+  "theme": "t06",
+  "kind": "competitor",
+  "line": "Your competitor's demo looked more modern.",
+  "de": "Die Demo Ihres Wettbewerbers wirkte moderner.",
+  "model": {
+   "acknowledge": "Thanks for the honest feedback. First impressions matter.",
+   "ask": "Which part looked more modern to you: the design, or specific functions?",
+   "answer": "Our new interface will be released next month, and I'd be happy to show you a preview, including the mobile app.",
+   "secure": "Would you like to see the preview with your team next week?"
+  },
+  "tip": {
+   "de": "Kritik annehmen und genau nachfragen, was gemeint ist.",
+   "en": "Accept the criticism and ask exactly what they mean."
+  }
+ },
+ {
+  "id": "o14",
+  "theme": "t04",
+  "kind": "security",
+  "line": "Can you guarantee that our data will never be lost?",
+  "de": "Können Sie garantieren, dass unsere Daten nie verloren gehen?",
+  "model": {
+   "acknowledge": "I understand why that's important to you.",
+   "ask": "Are you thinking mainly about technical failures, or also about mistakes by users?",
+   "answer": "No provider can honestly promise 100 percent, but we keep backups in a second data center, and deleted documents can be restored for up to 30 days.",
+   "secure": "Should I send you our backup and recovery policy, so your IT team can check the details?"
+  },
+  "tip": {
+   "de": "Nicht zu viel versprechen: ehrlich bleiben und mit Fakten antworten.",
+   "en": "Do not overpromise: stay honest and answer with facts."
+  }
+ },
+ {
+  "id": "o15",
+  "theme": "t08",
+  "kind": "need",
+  "line": "Why should we add another product to our portfolio?",
+  "de": "Warum sollten wir noch ein Produkt ins Portfolio nehmen?",
+  "model": {
+   "acknowledge": "Good question. Your consultants are already busy.",
+   "ask": "How often do your clients ask you about document management or e-invoicing?",
+   "answer": "Partners tell us it's an easy way to create recurring revenue with clients they already have, and we handle most of the technical work.",
+   "secure": "Would you be open to a quick call with one of our current partners?"
+  },
+  "tip": {
+   "de": "Den Nutzen für den Partner zeigen, nicht die eigenen Produktmerkmale.",
+   "en": "Show the benefit for the partner, not your product features."
+  }
+ },
+ {
+  "id": "o16",
+  "theme": "t08",
+  "kind": "price",
+  "line": "The commission is too low for the effort.",
+  "de": "Die Provision ist für den Aufwand zu niedrig.",
+  "model": {
+   "acknowledge": "I appreciate you being direct about that.",
+   "ask": "What would make the effort worth it for your team: a higher percentage, or more support in the first projects?",
+   "answer": "In the first year, we can run the first two projects together with you, which reduces your effort a lot.",
+   "secure": "Could we try that with one pilot client and review the numbers after six months?"
+  },
+  "tip": {
+   "de": "Statt am Prozentsatz zu drehen, den Aufwand senken.",
+   "en": "Instead of changing the percentage, reduce the effort."
+  }
+ },
+ {
+  "id": "o17",
+  "theme": "t05",
+  "kind": "timing",
+  "line": "The deadline is still far away.",
+  "de": "Die Frist ist noch weit weg.",
+  "model": {
+   "acknowledge": "You're right, there's still some time.",
+   "ask": "How long did your last software project take from the decision to go-live?",
+   "answer": "Most e-invoicing projects take six to nine months, and IT partners will be very busy close to the deadline.",
+   "secure": "Would it make sense to plan the first steps now and start the project in spring?"
+  },
+  "tip": {
+   "de": "Mit einer Frage zur eigenen Erfahrung des Kunden die Zeit greifbar machen.",
+   "en": "Use a question about the customer’s own experience to make the timeline real."
+  }
+ },
+ {
+  "id": "o18",
+  "theme": "t06",
+  "kind": "authority",
+  "line": "I need to discuss this with the board first.",
+  "de": "Das muss ich erst mit der Geschäftsführung besprechen.",
+  "model": {
+   "acknowledge": "Of course. A decision like this should go to the board.",
+   "ask": "What do you think the board will ask about first?",
+   "answer": "I can prepare a one-page summary with the costs, the savings, and the timeline, so you have everything in one place.",
+   "secure": "When is the next board meeting, so I can send you the summary a few days before?"
+  },
+  "tip": {
+   "de": "Helfen, intern zu verkaufen: Fragen der Entscheider vorwegnehmen.",
+   "en": "Help them sell internally: anticipate the decision makers’ questions."
+  }
+ },
+ {
+  "id": "o19",
+  "theme": "t10",
+  "kind": "status-quo",
+  "line": "Our sales team won't use another tool.",
+  "de": "Unser Vertrieb wird kein weiteres Werkzeug benutzen.",
+  "model": {
+   "acknowledge": "That's a real risk. A tool nobody uses is worth nothing.",
+   "ask": "What tools does the team use every day right now?",
+   "answer": "Our system works inside the email program and the CRM they already use, so they don't have to open anything new.",
+   "secure": "Could we test it with two people from your team for two weeks?"
+  },
+  "tip": {
+   "de": "Die Sorge teilen und einen kleinen Test anbieten.",
+   "en": "Share the concern and offer a small test."
+  }
+ },
+ {
+  "id": "o20",
+  "theme": "t11",
+  "kind": "need",
+  "line": "We're happy with what we have. We don't need more features.",
+  "de": "Wir sind zufrieden mit dem, was wir haben. Mehr Funktionen brauchen wir nicht.",
+  "model": {
+   "acknowledge": "I'm glad to hear it's working well for you.",
+   "ask": "Are there any processes where your team still works with paper or email attachments?",
+   "answer": "Some customers add one department at a time, and the price per user goes down as they grow.",
+   "secure": "Would you be open to a short workshop with HR to see if it's relevant?"
+  },
+  "tip": {
+   "de": "Zufriedenheit feiern, dann nach Lücken fragen statt Funktionen anpreisen.",
+   "en": "Celebrate the success, then ask about gaps instead of pushing features."
+  }
+ },
+ {
+  "id": "o21",
+  "theme": "t09",
+  "kind": "risk",
+  "line": "You already missed one deadline. Why should we trust you now?",
+  "de": "Sie haben schon eine Frist verpasst. Warum sollten wir Ihnen jetzt vertrauen?",
+  "model": {
+   "acknowledge": "That's a fair point, and I'm sorry we let you down.",
+   "ask": "What would you need to see from us in the next two weeks to feel confident again?",
+   "answer": "We've added two engineers to the project, and you'll get a short status update from me every Friday.",
+   "secure": "Can we agree on the next milestone together, so you can measure our progress?"
+  },
+  "tip": {
+   "de": "Verantwortung übernehmen und Vertrauen an messbare Schritte knüpfen.",
+   "en": "Take responsibility and link trust to measurable steps."
+  }
+ },
+ {
+  "id": "o22",
+  "theme": "t12",
+  "kind": "send-info",
+  "line": "Just connect with me on LinkedIn, and we'll see.",
+  "de": "Vernetzen Sie sich einfach auf LinkedIn mit mir, dann sehen wir weiter.",
+  "model": {
+   "acknowledge": "Sure, I'll send you a request today.",
+   "ask": "Is there a topic you'd like me to share with you, like e-invoicing or cloud archiving?",
+   "answer": "I'll send you the short case study I mentioned, from a logistics company similar to yours.",
+   "secure": "If it's interesting, would a 15-minute call next month make sense?"
+  },
+  "tip": {
+   "de": "Locker bleiben, aber einen Anlass für den nächsten Kontakt schaffen.",
+   "en": "Stay relaxed, but create a reason for the next contact."
+  }
+ },
+ {
+  "id": "o23",
+  "theme": "t08",
+  "kind": "competitor",
+  "line": "We already work with another software vendor in this area.",
+  "de": "Wir arbeiten in diesem Bereich schon mit einem anderen Softwareanbieter.",
+  "model": {
+   "acknowledge": "That makes sense. You probably have good experience with them.",
+   "ask": "Are there any client requests that their solution doesn't cover today?",
+   "answer": "Several of our partners work with two vendors, and they use us for cloud projects and e-invoicing.",
+   "secure": "Would a short comparison of both portfolios help you decide?"
+  },
+  "tip": {
+   "de": "Ergänzen statt ersetzen: nach Lücken im bestehenden Angebot fragen.",
+   "en": "Add, do not replace: ask about gaps in the current offer."
+  }
+ },
+ {
+  "id": "o24",
+  "theme": "t07",
+  "kind": "contract",
+  "line": "Your payment terms are too strict. We pay after 90 days.",
+  "de": "Ihre Zahlungsbedingungen sind zu streng. Wir zahlen nach 90 Tagen.",
+  "model": {
+   "acknowledge": "I understand. Ninety days is your standard process.",
+   "ask": "Is that a fixed rule, or is there flexibility for strategic suppliers?",
+   "answer": "Our standard is 30 days, but we could meet you halfway at 60 days for a three-year contract.",
+   "secure": "Would 60 days work for your finance team?"
+  },
+  "tip": {
+   "de": "Einen Mittelweg anbieten, aber nur gegen eine Gegenleistung.",
+   "en": "Offer a middle ground, but only in exchange for something."
+  }
+ },
+ {
+  "id": "o25",
+  "theme": "t04",
+  "kind": "security",
+  "line": "Our works council will never agree to this.",
+  "de": "Unser Betriebsrat wird dem nie zustimmen.",
+  "model": {
+   "acknowledge": "Thanks for raising it early. The works council is an important partner.",
+   "ask": "What are their typical concerns: monitoring of employees, or access to personnel data?",
+   "answer": "With role-based access, managers can't see personal data they don't need, and we have a sample agreement that other works councils have approved.",
+   "secure": "Shall I send you the sample agreement, so you can discuss it with them?"
+  },
+  "tip": {
+   "de": "Den Betriebsrat als Partner sehen und konkrete Unterlagen anbieten.",
+   "en": "See the works council as a partner and offer concrete documents."
+  }
+ }
+]

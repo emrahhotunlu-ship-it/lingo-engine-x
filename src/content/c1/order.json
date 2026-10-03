@@ -1,0 +1,1149 @@
+{
+ "items": [
+  {
+   "topic": "c1-emphasis",
+   "en": "What we need is a partner who understands compliance.",
+   "de": "Was wir brauchen, ist ein Partner, der Compliance versteht.",
+   "chunks": [
+    "what",
+    "we",
+    "need",
+    "is",
+    "a partner",
+    "who",
+    "understands",
+    "compliance"
+   ],
+   "alt": [
+    "A partner who understands compliance is what we need."
+   ],
+   "why": [
+    "Im Deutschen folgt nach dem Komma oft „das ist“. Im Englischen fehlen Komma und that: What we need is …, direkt mit is.",
+    "German often adds “das ist” after the comma. English has neither the comma nor that: What we need is …, straight into is."
+   ],
+   "bad": "What we need, that is a partner who understands compliance."
+  },
+  {
+   "topic": "c1-emphasis",
+   "en": "It was the CFO who approved the budget.",
+   "de": "Der CFO war es, der das Budget genehmigt hat.",
+   "chunks": [
+    "it",
+    "was",
+    "the CFO",
+    "who",
+    "approved",
+    "the budget"
+   ],
+   "single": "Der It-Spaltsatz ist ein fester Rahmen: Das Betonte steht zwischen was und who, nichts davon lässt sich verschieben.",
+   "why": [
+    "Der Spaltsatz hebt the CFO zwischen it was und who hervor; bei Personen steht who. Deutsche greifen hier oft zu which.",
+    "The cleft sentence puts the CFO between it was and who; for people, use who. Germans often reach for which here."
+   ],
+   "bad": "It was the CFO which approved the budget."
+  },
+  {
+   "topic": "c1-emphasis",
+   "en": "It was the audit trail that convinced them.",
+   "de": "Es war der Audit-Trail, der sie überzeugt hat.",
+   "chunks": [
+    "it",
+    "was",
+    "the audit trail",
+    "that",
+    "convinced",
+    "them"
+   ],
+   "single": "Der It-Spaltsatz hält das Betonte zwischen was und that fest; Verb und Objekt folgen direkt, eine andere Reihenfolge ändert den Sinn.",
+   "why": [
+    "Bei einer Sache steht im Spaltsatz that, und das Verb folgt direkt dahinter. Ein Komma wie im Deutschen („Audit-Trail, der …“) gibt es im Englischen nicht.",
+    "With a thing, the cleft sentence uses that, and the verb follows right after it. There is no comma as in German (“Audit-Trail, der …”)."
+   ]
+  },
+  {
+   "topic": "c1-emphasis",
+   "en": "Not only did we cut costs, but we also improved compliance.",
+   "de": "Wir haben nicht nur Kosten gesenkt, sondern auch die Compliance verbessert.",
+   "chunks": [
+    "not only",
+    "did",
+    "we",
+    "cut costs",
+    "but",
+    "we",
+    "also",
+    "improved",
+    "compliance"
+   ],
+   "single": "Not only am Anfang löst die Umstellung aus, und but we also ist der feste zweite Teil; keine zweite natürliche Reihenfolge.",
+   "why": [
+    "Im Deutschen steht „nicht nur“ mitten im Satz. Im Englischen rückt es nach vorn und das Hilfsverb did geht vor das Subjekt: did we cut.",
+    "In German “nicht nur” sits mid-sentence. In English it moves to the front and the auxiliary did goes before the subject: did we cut."
+   ],
+   "bad": "Not only we cut costs, but also we improved compliance."
+  },
+  {
+   "topic": "c1-emphasis",
+   "en": "Not only does it save time, but it also reduces errors.",
+   "de": "Es spart nicht nur Zeit, sondern reduziert auch Fehler.",
+   "chunks": [
+    "not only",
+    "does",
+    "it",
+    "save time",
+    "but",
+    "it",
+    "also",
+    "reduces",
+    "errors"
+   ],
+   "single": "Not only löst die Umstellung aus, und but it also bleibt der feste zweite Teil mit normaler Stellung; nichts lässt sich verschieben.",
+   "why": [
+    "Bei does it save trägt does das -s, deshalb bleibt save ohne -s. In der zweiten Hälfte gilt wieder die normale Stellung: it also reduces.",
+    "In does it save, does carries the -s, so save stays without -s. The second half is back to normal order: it also reduces."
+   ],
+   "bad": "Not only does it saves time, but it also reduces errors."
+  },
+  {
+   "topic": "c1-emphasis",
+   "en": "Rarely have we seen such a fast rollout.",
+   "de": "Selten haben wir einen so schnellen Rollout erlebt.",
+   "chunks": [
+    "rarely",
+    "have",
+    "we",
+    "seen",
+    "such a",
+    "fast rollout"
+   ],
+   "alt": [
+    "We have rarely seen such a fast rollout."
+   ],
+   "why": [
+    "Nach rarely am Satzanfang rückt have vor we; seen bleibt hinten. Für „so ein schneller“ gilt such a fast, nie „so a fast“.",
+    "After rarely at the start, have moves before we, and seen stays at the end. For “so ein schneller” use such a fast, never “so a fast”."
+   ],
+   "bad": "Rarely we have seen such a fast rollout."
+  },
+  {
+   "topic": "c1-emphasis",
+   "en": "Never have I seen a customer migrate 20 million documents.",
+   "de": "Noch nie habe ich einen Kunden 20 Millionen Dokumente migrieren sehen.",
+   "chunks": [
+    "never",
+    "have",
+    "I",
+    "seen",
+    "a customer",
+    "migrate",
+    "20 million documents"
+   ],
+   "alt": [
+    "I have never seen a customer migrate 20 million documents."
+   ],
+   "why": [
+    "Im Deutschen rückt nach „noch nie“ das flektierte Verb vor das Subjekt; im Englischen ist es das Hilfsverb have, und seen bleibt hinten. Nach seen steht migrate ohne to.",
+    "In German the finite verb moves before the subject after “noch nie”; in English it is the auxiliary have, and seen stays behind. After seen comes migrate without to."
+   ],
+   "bad": "Never I have seen a customer migrate 20 million documents."
+  },
+  {
+   "topic": "c1-emphasis",
+   "en": "Only after the pilot did they approve the full rollout.",
+   "de": "Erst nach dem Pilotprojekt haben sie den kompletten Rollout freigegeben.",
+   "chunks": [
+    "only after",
+    "the pilot",
+    "did",
+    "they",
+    "approve",
+    "the full rollout"
+   ],
+   "single": "Only after am Satzanfang verlangt did vor they; Aux, Subjekt und Verb stehen fest, eine Umstellung ist nur mit anderem Satzbau möglich.",
+   "why": [
+    "Only after am Anfang löst die Umstellung aus: did they approve. Did trägt die Vergangenheit, approve bleibt in der Grundform.",
+    "Only after at the start triggers inversion: did they approve. Did carries the past tense, so approve stays in the base form."
+   ],
+   "bad": "Only after the pilot they approved the full rollout."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "That said, the timeline for the rollout is still tight.",
+   "de": "Allerdings ist der Zeitplan für den Rollout weiterhin knapp.",
+   "chunks": [
+    "that said",
+    "the timeline for the rollout",
+    "is",
+    "still",
+    "tight"
+   ],
+   "single": "That said steht als fester Einstieg vorn und still sitzt fest vor tight; eine zweite natürliche Reihenfolge gibt es nicht.",
+   "why": [
+    "That said schränkt das Vorherige ein, wie „allerdings“. Danach bleibt die Stellung normal (the timeline is), während im Deutschen das Verb vorrückt.",
+    "That said qualifies what came before, like “allerdings”. Normal order follows (the timeline is), while German moves the verb forward."
+   ],
+   "bad": "That said, is the timeline for the rollout still tight."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "Having said that, we still need IT to sign off.",
+   "de": "Trotzdem brauchen wir noch die Freigabe der IT.",
+   "chunks": [
+    "having said that",
+    "we",
+    "still",
+    "need",
+    "IT",
+    "to sign off"
+   ],
+   "single": "Having said that gehört als fester Block an den Anfang; need IT to sign off ist eine feste Kette, nichts lässt sich verschieben.",
+   "why": [
+    "Das Adverb still steht vor dem Verb need, nicht dahinter wie bei „brauchen noch“. Danach kommt die Person und to + Grundform: need IT to sign off.",
+    "The adverb still goes before the verb need, not after it as in German “brauchen noch”. Then comes the person and to + base form: need IT to sign off."
+   ],
+   "bad": "Having said that, we need still IT to sign off."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "On the other hand, the cloud version needs no local servers.",
+   "de": "Andererseits braucht die Cloud-Version keine lokalen Server.",
+   "chunks": [
+    "on the other hand",
+    "the cloud version",
+    "needs",
+    "no",
+    "local servers"
+   ],
+   "alt": [
+    "The cloud version, on the other hand, needs no local servers.",
+    "The cloud version needs no local servers, on the other hand."
+   ],
+   "why": [
+    "Aus „auf der anderen Seite“ wird oft fälschlich on the other side. Richtig ist der feste Block on the other hand.",
+    "“Auf der anderen Seite” often turns into on the other side by mistake. The correct fixed block is on the other hand."
+   ],
+   "bad": "On the other side, the cloud version needs no local servers."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "In short, the pilot saved the team about ten hours a week.",
+   "de": "Kurz gesagt hat das Pilotprojekt dem Team etwa zehn Stunden pro Woche gespart.",
+   "chunks": [
+    "in short",
+    "the pilot",
+    "saved",
+    "the team",
+    "about ten hours",
+    "a week"
+   ],
+   "single": "In short fasst vorn zusammen, am Ende klingt es unnatürlich; die Folge saved the team about ten hours a week ist fest.",
+   "why": [
+    "Nach saved steht erst die Person, dann die Menge, ohne to oder for: saved the team ten hours. Das deutsche „dem Team“ wird einfach direkt hinter das Verb gestellt.",
+    "After saved comes the person first, then the amount, without to or for: saved the team ten hours. The German “dem Team” just goes right after the verb."
+   ],
+   "bad": "In short, the pilot saved to the team about ten hours a week."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "Coming back to security, all data is encrypted at rest.",
+   "de": "Um auf die Sicherheit zurückzukommen: Alle Daten sind im Ruhezustand verschlüsselt.",
+   "chunks": [
+    "coming back to",
+    "security",
+    "all data",
+    "is",
+    "encrypted",
+    "at rest"
+   ],
+   "single": "Coming back to security ist ein fester Einstieg am Anfang; ans Ende gestellt verliert er seine Funktion.",
+   "why": [
+    "Aus „zurückkommen auf“ wird oft fälschlich coming back on. Richtig ist coming back to + Thema, danach der Hauptsatz in normaler Stellung.",
+    "“Zurückkommen auf” often becomes coming back on by mistake. The correct form is coming back to + topic, followed by a main clause in normal order."
+   ],
+   "bad": "Coming back on security, all data is encrypted at rest."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "To build on that, we could add a second department.",
+   "de": "Darauf aufbauend könnten wir eine zweite Abteilung einbinden.",
+   "chunks": [
+    "to build on that",
+    "we",
+    "could",
+    "add",
+    "a second department"
+   ],
+   "alt": [
+    "We could add a second department to build on that."
+   ],
+   "why": [
+    "Aus „darauf aufbauen“ schleicht sich oft ein up ein. Es heißt build on, und nach dem Komma folgt gleich we could add.",
+    "From “darauf aufbauen” a stray up often sneaks in. It is build on, and right after the comma comes we could add."
+   ],
+   "bad": "To build up on that, we could add a second department."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "Coming back to your question about pricing, the licenses are per user.",
+   "de": "Um auf Ihre Frage zu den Preisen zurückzukommen: Die Lizenzen gelten pro Nutzer.",
+   "chunks": [
+    "coming back to",
+    "your question",
+    "about pricing",
+    "the licenses",
+    "are",
+    "per user"
+   ],
+   "single": "Coming back to your question about pricing ist der feste Einstieg vorn; per user bleibt am Ende, eine zweite Reihenfolge gibt es nicht.",
+   "why": [
+    "Aus „Frage zu“ wird im Englischen question about, nicht to. Und „pro Nutzer“ heißt per user, ohne Artikel.",
+    "“Frage zu” becomes question about in English, not to. And “pro Nutzer” is per user, without an article."
+   ],
+   "bad": "Coming back to your question to pricing, the licenses are per user."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "To build on what Mark said, we could start with the invoices.",
+   "de": "Um an das anzuknüpfen, was Mark gesagt hat, könnten wir mit den Rechnungen beginnen.",
+   "chunks": [
+    "to build on",
+    "what Mark said",
+    "we",
+    "could",
+    "start",
+    "with the invoices"
+   ],
+   "alt": [
+    "We could start with the invoices to build on what Mark said."
+   ],
+   "why": [
+    "Nach dem Nebensatz kehrt das Deutsche um („könnten wir“). Im Englischen bleibt die normale Stellung: we could start.",
+    "After the introductory clause German inverts (“könnten wir”). English keeps normal order: we could start."
+   ],
+   "bad": "To build on what Mark said, could we start with the invoices."
+  },
+  {
+   "topic": "c1-discourse",
+   "en": "All in all, the migration went very smoothly.",
+   "de": "Alles in allem ist die Migration sehr reibungslos verlaufen.",
+   "chunks": [
+    "all in all",
+    "the migration",
+    "went",
+    "very",
+    "smoothly"
+   ],
+   "alt": [
+    "The migration, all in all, went very smoothly.",
+    "The migration went very smoothly, all in all.",
+    "The migration went, all in all, very smoothly."
+   ],
+   "why": [
+    "Im Deutschen ist „reibungslos“ Adjektiv und Adverb zugleich; nach went braucht Englisch das Adverb smoothly, und very steht davor. All in all bleibt ein Block.",
+    "In German “reibungslos” serves as both adjective and adverb; after went English needs the adverb smoothly, with very in front. All in all stays together as one block."
+   ],
+   "bad": "All in all, the migration went very smooth."
+  },
+  {
+   "topic": "c1-hedging",
+   "en": "It might be worth revisiting the timeline before we sign.",
+   "de": "Es könnte sich lohnen, den Zeitplan noch einmal zu prüfen, bevor wir unterschreiben. (vorsichtig, als Vorschlag)",
+   "chunks": [
+    "it",
+    "might",
+    "be",
+    "worth",
+    "revisiting",
+    "the timeline",
+    "before",
+    "we",
+    "sign"
+   ],
+   "alt": [
+    "Before we sign, it might be worth revisiting the timeline."
+   ],
+   "why": [
+    "Steht „before we sign“ vorn, bleibt die Reihenfolge Subjekt–Verb: it might. Im Deutschen rutscht das Verb nach vorn („könnte es“), im Englischen nicht.",
+    "If “before we sign” comes first, the order stays subject–verb: it might. German moves the verb forward (“könnte es”), English does not."
+   ],
+   "bad": "Before we sign, might it be worth revisiting the timeline."
+  },
+  {
+   "topic": "c1-hedging",
+   "en": "I'd be inclined to start with the finance team.",
+   "de": "Ich wäre geneigt, mit dem Finanzteam anzufangen. (vorsichtig, als Empfehlung)",
+   "chunks": [
+    "I'd",
+    "be inclined to",
+    "start",
+    "with",
+    "the finance team"
+   ],
+   "single": "Fester Rahmen „I'd be inclined to“ plus start with; keine Gruppe lässt sich verschieben, ohne dass der Satz unnatürlich wird.",
+   "why": [
+    "Anders als im Deutschen steht „with the finance team“ hinter „start“, nicht davor. „Be inclined“ braucht dazu „to“ plus Grundform.",
+    "Unlike in German, “with the finance team” comes after “start”, not before it. “Be inclined” also needs “to” plus the base form."
+   ],
+   "bad": "I'd be inclined with the finance team to start."
+  },
+  {
+   "topic": "c1-hedging",
+   "en": "It seems that the budget is tighter than we expected.",
+   "de": "Es scheint, dass das Budget knapper ist, als wir erwartet haben. (vorsichtig, als Eindruck)",
+   "chunks": [
+    "it seems that",
+    "the budget",
+    "is",
+    "tighter",
+    "than",
+    "we",
+    "expected"
+   ],
+   "single": "Fester Einstieg „It seems that“, danach normale Folge Subjekt–Verb; „than we expected“ hängt am Komparativ und lässt sich nicht lösen.",
+   "why": [
+    "Im Deutschen rutscht das Verb nach „dass“ ans Ende. Im Englischen bleibt es direkt hinter dem Subjekt: the budget is tighter.",
+    "In German the verb moves to the end after “dass”. In English it stays right after the subject: the budget is tighter."
+   ],
+   "bad": "It seems that the budget tighter is than we expected."
+  },
+  {
+   "topic": "c1-hedging",
+   "en": "The migration could take slightly longer than planned.",
+   "de": "Die Migration könnte etwas länger dauern als geplant. (vorsichtig, an einen Kunden)",
+   "chunks": [
+    "the migration",
+    "could",
+    "take",
+    "slightly",
+    "longer",
+    "than planned"
+   ],
+   "single": "„Slightly“ steht fest direkt vor „longer“, und „than planned“ hängt am Komparativ; die Teile haben nur diese eine natürliche Folge.",
+   "why": [
+    "Nach „than“ steht hier nur das Partizip: than planned, ohne „it was“ und ohne „as“. „Slightly“ sitzt direkt vor „longer“ und schwächt die schlechte Nachricht ab.",
+    "After “than” only the participle follows here: than planned, with no “it was” and no “as”. “Slightly” sits right before “longer” and softens the bad news."
+   ],
+   "bad": "The migration could take slightly longer as planned."
+  },
+  {
+   "topic": "c1-hedging",
+   "en": "Without training, the rollout might run into difficulties.",
+   "de": "Ohne Schulung könnte die Einführung auf Schwierigkeiten stoßen. (vorsichtig, als Warnung)",
+   "chunks": [
+    "without",
+    "training",
+    "the rollout",
+    "might",
+    "run into",
+    "difficulties"
+   ],
+   "alt": [
+    "The rollout might run into difficulties without training.",
+    "The rollout without training might run into difficulties.",
+    "The rollout might, without training, run into difficulties."
+   ],
+   "why": [
+    "Anders als im Deutschen folgt nach dem vorangestellten „Without training“ keine Umkehrung: erst das Subjekt, dann „might“. Die Bedingung darf auch hinten stehen.",
+    "Unlike in German, no inversion follows the fronted “Without training”: subject first, then “might”. The condition can also go at the end."
+   ],
+   "bad": "Without training might the rollout run into difficulties."
+  },
+  {
+   "topic": "c1-hedging",
+   "en": "I'm not sure your team is quite ready yet.",
+   "de": "Ich bin nicht sicher, ob Ihr Team schon ganz bereit ist. (vorsichtig, an einen Kunden)",
+   "chunks": [
+    "I'm not sure",
+    "your team",
+    "is",
+    "quite",
+    "ready",
+    "yet"
+   ],
+   "alt": [
+    "I'm not sure your team is ready quite yet."
+   ],
+   "why": [
+    "„Quite“ steht direkt vor dem Adjektiv („quite ready“), und „yet“ gehört ans Satzende, während das deutsche „schon“ mitten im Satz stehen darf. „Not sure“ macht aus einem harten Urteil eine milde Einschätzung.",
+    "“Quite” sits right before the adjective (“quite ready”), and “yet” goes at the very end, whereas German “schon” can sit mid-sentence. “Not sure” turns a hard judgment into a mild assessment."
+   ]
+  },
+  {
+   "topic": "c1-hedging",
+   "en": "This could delay the go-live by a few days.",
+   "de": "Das könnte den Go-live um ein paar Tage verzögern. (vorsichtig, an einen Kunden)",
+   "chunks": [
+    "this",
+    "could",
+    "delay",
+    "the go-live",
+    "by",
+    "a few days"
+   ],
+   "single": "Das Maß der Verzögerung „by a few days“ folgt fest hinter dem Objekt; es lässt sich nicht nach vorn ziehen.",
+   "why": [
+    "Im Deutschen steht „um ein paar Tage“ vor dem Verb; im Englischen kommt „by a few days“ erst nach dem Objekt. „Could“ macht aus der sicheren Aussage eine Möglichkeit.",
+    "In German “um ein paar Tage” comes before the verb; in English “by a few days” comes after the object. “Could” turns a certainty into a possibility."
+   ],
+   "bad": "This could by a few days delay the go-live."
+  },
+  {
+   "topic": "c1-hedging",
+   "en": "It might be worth considering a phased rollout.",
+   "de": "Es könnte sich lohnen, eine gestaffelte Einführung in Betracht zu ziehen. (vorsichtig, als Vorschlag)",
+   "chunks": [
+    "it",
+    "might",
+    "be",
+    "worth",
+    "considering",
+    "a phased rollout"
+   ],
+   "single": "Fester Rahmen „It might be worth + -ing“; das Objekt folgt direkt auf die -ing-Form und nichts lässt sich verschieben.",
+   "why": [
+    "Nach „worth“ steht die -ing-Form, nie „to“ plus Grundform wie beim deutschen „zu“-Infinitiv. Das Objekt folgt direkt auf „considering“.",
+    "After “worth” comes the -ing form, never “to” plus base form as with the German “zu” infinitive. The object follows “considering” directly."
+   ],
+   "bad": "It might be worth to consider a phased rollout."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "en": "I was wondering whether we could move the call.",
+   "de": "Ich habe mich gefragt, ob wir das Telefonat verschieben könnten. (höflich, an einen Kunden)",
+   "chunks": [
+    "I",
+    "was wondering",
+    "whether",
+    "we",
+    "could",
+    "move",
+    "the call"
+   ],
+   "single": "Fester Rahmen „I was wondering whether“, danach Subjekt vor could; es gibt keine zweite natürliche Reihenfolge.",
+   "why": [
+    "Nach „whether“ steht das Subjekt vor „could“ (we could), nicht danach. Im Deutschen rutscht das Verb ans Ende, im Englischen bleibt es beim Subjekt.",
+    "After “whether” the subject comes before “could” (we could), not after it. In German the verb moves to the end; in English it stays next to the subject."
+   ],
+   "bad": "I was wondering whether could we move the call."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "en": "I was wondering whether you could share the requirements by Friday.",
+   "de": "Ich habe mich gefragt, ob Sie uns die Anforderungen bis Freitag zusenden könnten. (höflich, an einen Kunden)",
+   "chunks": [
+    "I",
+    "was wondering",
+    "whether",
+    "you",
+    "could",
+    "share",
+    "the requirements",
+    "by Friday"
+   ],
+   "single": "Fester Rahmen mit whether + Subjekt + could; die Frist „by Friday“ gehört ans Ende, weil sie sich auf share bezieht.",
+   "why": [
+    "Im Deutschen steht „bis Freitag“ mitten im Satz vor dem Verb. Im Englischen rutscht „by Friday“ ans Ende, direkt hinter das Objekt.",
+    "In German “bis Freitag” sits mid-sentence before the verb. In English “by Friday” moves to the end, right after the object."
+   ],
+   "bad": "I was wondering whether you could by Friday share the requirements."
+  },
+  {
+   "topic": "c1-diplomacy",
+   "en": "We were hoping to get your feedback this week.",
+   "de": "Wir hatten gehofft, diese Woche Ihre Rückmeldung zu erhalten. (höflich, an einen Kunden)",
+   "chunks": [
+    "we",
+    "were",
+    "hoping",
+    "to get",
+    "your feedback",
+    "this week"
+   ],
+   "alt": [
+    "This week, we were hoping to get your feedback."
+   ],
+   "why": [
+    "Die Zeitangabe steht vorn oder ganz am Ende, selten mitten im Satz wie im Deutschen. „Were hoping“ klingt höflicher als „hope“.",
+    "The time phrase goes first or at the very end, rarely mid-sentence as in German. “Were hoping” sounds more polite than “hope”."
+   ]
+  },
+  {
+   "topic": "c1-diplomacy",
+   "en": "We were hoping you could confirm the date.",
+   "de": "Wir hatten gehofft, dass Sie uns das Datum bestätigen könnten. (höflich, an einen Kunden)",
+   "chunks": [
+    "we",
+    "were",
+    "hoping",
+    "you",
+    "could",
+    "confirm",
+    "the date"
+   ],
+   "single": "Nach „were hoping“ folgt der Wunsch direkt als Nebensatz: Subjekt, dann could, dann Verb. Die Reihenfolge ist fest.",
+   "why": [
+    "Im Deutschen steht das Verb nach „dass“ am Ende („bestätigen könnten“). Im Englischen folgt „you could confirm“ direkt auf „hoping“, meist ohne „that“.",
+    "In German the verb goes to the end after “dass” (“bestätigen könnten”). In English “you could confirm” follows “hoping” directly, usually without “that”."
+   ]
+  },
+  {
+   "topic": "c1-diplomacy",
+   "en": "Would it be possible to send the quote again?",
+   "de": "Wäre es möglich, das Angebot noch einmal zu schicken? (höflich, an einen Geschäftspartner)",
+   "chunks": [
+    "would",
+    "it",
+    "be possible",
+    "to send",
+    "the quote",
+    "again"
+   ],
+   "single": "Feste Frageform mit Umkehrung; „again“ steht am Ende nach dem Objekt, davor klingt es unnatürlich.",
+   "why": [
+    "Im Deutschen steht „noch einmal“ vor dem Verb; im Englischen steht „again“ am Ende, nach dem Objekt. Das ist der typische Fehler: send again the quote.",
+    "In German “noch einmal” comes before the verb; in English “again” goes at the end, after the object. The typical mistake is “send again the quote”."
+   ],
+   "bad": "Would it be possible to send again the quote?"
+  },
+  {
+   "topic": "c1-diplomacy",
+   "en": "Your proposal could be a bit of a stretch for our budget.",
+   "de": "Ihr Angebot könnte für unser Budget etwas sportlich sein. (höflich, an einen Anbieter)",
+   "chunks": [
+    "your proposal",
+    "could",
+    "be",
+    "a bit of a stretch",
+    "for our budget"
+   ],
+   "alt": [
+    "For our budget, your proposal could be a bit of a stretch."
+   ],
+   "why": [
+    "„For our budget“ darf vorn oder hinten stehen. „A bit of a stretch“ bleibt als feste Untertreibung zusammen; das „of a“ darf nicht fehlen.",
+    "“For our budget” can go first or last. “A bit of a stretch” stays together as a fixed understatement; the “of a” cannot be dropped."
+   ]
+  },
+  {
+   "topic": "c1-diplomacy",
+   "en": "That timeline could be a bit tricky for us.",
+   "de": "Dieser Zeitplan könnte für uns etwas knifflig werden. (höflich, an einen Kunden)",
+   "chunks": [
+    "that timeline",
+    "could",
+    "be",
+    "a bit",
+    "tricky",
+    "for us"
+   ],
+   "alt": [
+    "For us, that timeline could be a bit tricky."
+   ],
+   "why": [
+    "„A bit“ steht direkt vor dem Adjektiv, „for us“ darf vorn oder hinten stehen. „Tricky“ ist die höfliche Untertreibung für „kaum machbar“.",
+    "“A bit” sits right before the adjective, and “for us” can go first or last. “Tricky” is the polite understatement for “hardly doable”."
+   ]
+  },
+  {
+   "topic": "c1-precision",
+   "en": "Roughly 40 percent of invoices still arrive as PDFs.",
+   "de": "Rund 40 Prozent der Rechnungen kommen immer noch als PDF an.",
+   "chunks": [
+    "roughly",
+    "40 percent of invoices",
+    "still",
+    "arrive",
+    "as PDFs"
+   ],
+   "single": "Roughly klebt an der Zahl, still muss vor dem Verb stehen, und der Rest ist eine feste Kette ohne verschiebbare Zeitangabe.",
+   "why": [
+    "Die Annäherung steht direkt vor der Zahl, und „noch“ heißt hier still und steht vor dem Verb, nicht danach wie im Deutschen („kommen noch an“).",
+    "The approximation goes directly in front of the number, and still goes before the main verb, not after it as in German (“kommen noch an”)."
+   ],
+   "bad": "Roughly 40 percent of invoices arrive still as PDFs."
+  },
+  {
+   "topic": "c1-precision",
+   "en": "Well over half of our customers have moved to the cloud.",
+   "de": "Weit über die Hälfte unserer Kunden ist in die Cloud umgezogen.",
+   "chunks": [
+    "well over",
+    "half of our customers",
+    "have",
+    "moved",
+    "to the cloud"
+   ],
+   "single": "Well over gehört fest vor half, und alle anderen Teile haben nur eine natürliche Stelle; keine Zeitangabe oder Satzadverb zum Verschieben.",
+   "why": [
+    "„Weit über die Hälfte“ ist im Englischen well over half, ohne Artikel: kein „over the half“. Das verstärkende well steht direkt vor over.",
+    "“Weit über die Hälfte” is well over half in English, with no article, so never “over the half”. The intensifier well sits directly in front of over."
+   ],
+   "bad": "Well over the half of our customers have moved to the cloud."
+  },
+  {
+   "topic": "c1-precision",
+   "en": "Our cloud version costs only a fraction of the old license.",
+   "de": "Unsere Cloud-Version kostet nur einen Bruchteil der alten Lizenz.",
+   "chunks": [
+    "our cloud version",
+    "costs",
+    "only",
+    "a fraction of",
+    "the old license"
+   ],
+   "alt": [
+    "Our cloud version only costs a fraction of the old license."
+   ],
+   "why": [
+    "Für „nur ein Bruchteil von“ braucht das Englische den festen Block a fraction of, danach folgt sofort das Verglichene. Deutsche greifen oft zu „a small part of“.",
+    "For “only a fraction of …” English needs the fixed block a fraction of, followed straight away by the thing being compared. German speakers often reach for “a small part of”."
+   ]
+  },
+  {
+   "topic": "c1-precision",
+   "en": "Our new system is twice as fast as the old one.",
+   "de": "Unser neues System ist doppelt so schnell wie das alte.",
+   "chunks": [
+    "our new system",
+    "is",
+    "twice",
+    "as fast as",
+    "the old one"
+   ],
+   "single": "Der feste Rahmen twice as fast as und das Gerüst aus Subjekt und is lassen keine zweite natürliche Reihenfolge zu.",
+   "why": [
+    "„Doppelt so schnell wie“ wird zu twice as fast as: twice steht vor dem ganzen as-Rahmen. „Twice faster than“ ist der typische Deutsch-Fehler.",
+    "“Doppelt so schnell wie” becomes twice as fast as, with twice in front of the whole as … as frame. “Twice faster than” is the typical German-speaker error."
+   ],
+   "bad": "Our new system is twice faster than the old one."
+  },
+  {
+   "topic": "c1-precision",
+   "en": "We can set up the test system within two weeks.",
+   "de": "Wir können das Testsystem innerhalb von zwei Wochen einrichten.",
+   "chunks": [
+    "we",
+    "can",
+    "set up",
+    "the test system",
+    "within two weeks"
+   ],
+   "alt": [
+    "Within two weeks, we can set up the test system.",
+    "We can, within two weeks, set up the test system."
+   ],
+   "why": [
+    "Within two weeks heißt „innerhalb von zwei Wochen“; in two weeks würde „in zwei Wochen“ bedeuten, also erst danach. Die Zeitangabe steht nie zwischen set up und seinem Objekt.",
+    "Within two weeks means “innerhalb von zwei Wochen”, while in two weeks would mean “in zwei Wochen”, so only afterwards. The time phrase never sits between set up and its object."
+   ],
+   "bad": "We can set up the test system in two weeks."
+  },
+  {
+   "topic": "c1-precision",
+   "en": "We need your decision by the end of Q3.",
+   "de": "Wir brauchen Ihre Entscheidung bis Ende Q3.",
+   "chunks": [
+    "we",
+    "need",
+    "your decision",
+    "by",
+    "the end of Q3"
+   ],
+   "alt": [
+    "By the end of Q3, we need your decision."
+   ],
+   "why": [
+    "Eine Frist („bis“ im Sinn von spätestens) heißt by. Until würde bedeuten, dass die Entscheidung bis dahin andauert; das ist der typische Deutsch-Fehler.",
+    "A deadline (German “bis” meaning no later than) is by. Until would mean the decision lasts up to that point, which is the typical German-speaker error."
+   ],
+   "bad": "We need your decision until the end of Q3."
+  },
+  {
+   "topic": "c1-precision",
+   "en": "As of June 1, all invoices must be archived electronically.",
+   "de": "Ab dem 1. Juni müssen alle Rechnungen elektronisch archiviert werden.",
+   "chunks": [
+    "as of June 1",
+    "all invoices",
+    "must",
+    "be archived",
+    "electronically"
+   ],
+   "alt": [
+    "All invoices must be archived electronically as of June 1.",
+    "All invoices must, as of June 1, be archived electronically."
+   ],
+   "why": [
+    "„Ab dem 1. Juni“ ist im Business-Englisch as of June 1 (kürzer als from June 1 on) und nicht since, das nach hinten blickt. Das Datum steht im US-Stil: erst der Monat, dann der Tag.",
+    "“Ab dem 1. Juni” is as of June 1 in business English (shorter than from June 1 on) and not since, which looks backward. The date follows the US pattern: month first, then day."
+   ]
+  },
+  {
+   "topic": "c1-precision",
+   "en": "Your free trial will run until June 30.",
+   "de": "Ihre kostenlose Testphase läuft bis zum 30. Juni.",
+   "chunks": [
+    "your free trial",
+    "will",
+    "run",
+    "until",
+    "June 30"
+   ],
+   "single": "Until hängt direkt am Datum, und vorangestellt („Until June 30, your free trial will run“) klingt der Satz im Business-Englisch unnatürlich.",
+   "why": [
+    "Until beschreibt eine Dauer: Die Testphase läuft durchgehend bis zum 30. Juni, danach endet sie. Für eine Frist wäre by richtig.",
+    "Until describes a duration: the trial runs continuously up to June 30 and then ends. For a deadline, by would be correct."
+   ]
+  },
+  {
+   "topic": "c1-precision",
+   "en": "Please send us the signed quote by Wednesday at the latest.",
+   "de": "Bitte senden Sie uns das unterschriebene Angebot spätestens bis Mittwoch.",
+   "chunks": [
+    "please",
+    "send",
+    "us",
+    "the signed quote",
+    "by",
+    "Wednesday at the latest"
+   ],
+   "alt": [
+    "By Wednesday at the latest, please send us the signed quote.",
+    "Send us the signed quote by Wednesday at the latest, please."
+   ],
+   "why": [
+    "Aus „spätestens bis“ wird gern das falsche latest by. Im Englischen steht by plus Zeitpunkt zuerst, at the latest folgt mit Artikel.",
+    "German “spätestens bis” often turns into the wrong latest by. In English, by plus the point in time comes first, and at the latest follows with its article."
+   ],
+   "bad": "Please send us the signed quote latest by Wednesday."
+  },
+  {
+   "topic": "c1-nominal",
+   "en": "The migration of the legacy data took two weeks.",
+   "de": "Die Migration der Altdaten hat zwei Wochen gedauert.",
+   "chunks": [
+    "the migration",
+    "of",
+    "the legacy data",
+    "took",
+    "two weeks"
+   ],
+   "single": "Subjekt, Verb und Dauer stehen fest hintereinander; die Dauer ist hier das Objekt von took und lässt sich nicht nach vorn ziehen.",
+   "why": [
+    "Der deutsche Genitiv („der Altdaten“) wird im Englischen zu „of“ plus Nomen, an derselben Stelle. Die Dauer folgt dem Verb direkt, ohne „for“: took two weeks.",
+    "The German genitive (“der Altdaten”) becomes “of” plus noun, in the same position. The duration follows the verb directly, without “for”: took two weeks."
+   ],
+   "bad": "The migration of the legacy data took for two weeks."
+  },
+  {
+   "topic": "c1-nominal",
+   "en": "Following the approval of the budget, we will order the licenses.",
+   "de": "Nach der Freigabe des Budgets werden wir die Lizenzen bestellen.",
+   "chunks": [
+    "following",
+    "the approval",
+    "of the budget",
+    "we",
+    "will",
+    "order",
+    "the licenses"
+   ],
+   "alt": [
+    "We will order the licenses following the approval of the budget."
+   ],
+   "why": [
+    "Aus „nach der Freigabe“ wird „following the approval of …“: Das Nomen „approval“ nimmt sein Objekt mit „of“ mit, das Verb „approve“ passt hier nicht.",
+    "German “nach der Freigabe” becomes “following the approval of …”: the noun “approval” takes its object with “of”, and the verb “approve” does not fit here."
+   ],
+   "bad": "Following the approve of the budget, we will order the licenses."
+  },
+  {
+   "topic": "c1-nominal",
+   "en": "We expect a significant reduction in storage costs.",
+   "de": "Wir erwarten eine deutliche Senkung der Speicherkosten.",
+   "chunks": [
+    "we",
+    "expect",
+    "a significant reduction",
+    "in",
+    "storage costs"
+   ],
+   "single": "„in storage costs“ gehört fest zu „reduction“; vorn im Satz würde es einen Gegensatz betonen und klingt ohne Kontext unnatürlich.",
+   "why": [
+    "Nach „reduction“ ist in + das, was sinkt, die übliche Wahl: a reduction in costs. „Reduction of“ steht meist vor einem Betrag (a reduction of 10 percent). Der deutsche Genitiv („der Speicherkosten“) ist hier die Falle.",
+    "After “reduction”, in is the usual choice for what falls: a reduction in costs. “Reduction of” mostly introduces an amount (a reduction of 10 percent). The German genitive (“der Speicherkosten”) is the trap here."
+   ]
+  },
+  {
+   "topic": "c1-nominal",
+   "en": "The implementation of the archive starts in May.",
+   "de": "Die Implementierung des Archivs startet im Mai.",
+   "chunks": [
+    "the implementation",
+    "of",
+    "the archive",
+    "starts",
+    "in May"
+   ],
+   "alt": [
+    "In May, the implementation of the archive starts."
+   ],
+   "why": [
+    "Der deutsche Genitiv („des Archivs“) wird im Englischen mit „of“ gebildet. Wer „von“ wörtlich übersetzt („Implementierung von …“), landet bei „from“.",
+    "The German genitive (“des Archivs”) becomes “of” in English. Translating “von” word for word (“Implementierung von …”) leads to “from”."
+   ],
+   "bad": "The implementation from the archive starts in May."
+  },
+  {
+   "topic": "c1-nominal",
+   "en": "The decision to move to the cloud was made in March.",
+   "de": "Die Entscheidung für den Wechsel in die Cloud fiel im März.",
+   "chunks": [
+    "the decision",
+    "to move",
+    "to the cloud",
+    "was",
+    "made",
+    "in March"
+   ],
+   "alt": [
+    "In March, the decision to move to the cloud was made.",
+    "The decision was made in March to move to the cloud.",
+    "In March, the decision was made to move to the cloud."
+   ],
+   "why": [
+    "Nach „decision“ folgt „to“ + Grundform, nicht „für“ + -ing wie im deutschen „Entscheidung für den Wechsel“. Im US-Englisch wird eine Entscheidung „made“, nicht „taken“.",
+    "After “decision” comes “to” + base form, not “for” + -ing as in the German “Entscheidung für den Wechsel”. In US English a decision is “made”, not “taken”."
+   ],
+   "bad": "The decision for moving to the cloud was made in March."
+  },
+  {
+   "topic": "c1-nominal",
+   "en": "Upon receipt of the contract, we will send you the login credentials.",
+   "de": "Nach Erhalt des Vertrags werden wir Ihnen die Zugangsdaten schicken.",
+   "chunks": [
+    "upon receipt",
+    "of",
+    "the contract",
+    "we",
+    "will",
+    "send",
+    "you",
+    "the login credentials"
+   ],
+   "alt": [
+    "We will send you the login credentials upon receipt of the contract."
+   ],
+   "why": [
+    "„Nach Erhalt“ heißt „upon receipt“, nicht „reception“: Das ist die Rezeption am Eingang. Das Objekt hängt wieder mit „of“ am Nomen.",
+    "“Nach Erhalt” is “upon receipt”, not “reception”, which is the front desk. The object again attaches to the noun with “of”."
+   ],
+   "bad": "Upon reception of the contract, we will send you the login credentials."
+  },
+  {
+   "topic": "c1-nominal",
+   "en": "We look forward to the completion of the pilot.",
+   "de": "Wir freuen uns auf den Abschluss des Pilotprojekts.",
+   "chunks": [
+    "we",
+    "look forward to",
+    "the completion",
+    "of",
+    "the pilot"
+   ],
+   "single": "Feste Wendung „look forward to“ plus Nomen mit „of“: alle Teile hängen aneinander, nichts lässt sich vor- oder nachstellen.",
+   "why": [
+    "„Sich freuen auf“ wird zu „look forward to“, nicht zu „look forward for“. Nach diesem „to“ folgt ein Nomen oder -ing, nie to + Grundform.",
+    "“Sich freuen auf” becomes “look forward to”, not “look forward for”. After this “to” comes a noun or -ing, never to + base form."
+   ],
+   "bad": "We look forward for the completion of the pilot."
+  },
+  {
+   "topic": "c1-nominal",
+   "en": "After the board's approval, we can start.",
+   "de": "Nach der Zustimmung des Vorstands können wir starten.",
+   "chunks": [
+    "after",
+    "the board's approval",
+    "we",
+    "can",
+    "start"
+   ],
+   "alt": [
+    "We can start after the board's approval."
+   ],
+   "why": [
+    "Der deutsche Genitiv („Zustimmung des Vorstands“) wird bei Gremien gern zu the board's approval: Der Besitzer steht mit 's davor, statt mit „of“ dahinter.",
+    "The German genitive (“Zustimmung des Vorstands”) often becomes the board's approval for bodies like a board: the owner comes first with 's instead of after the noun with “of”."
+   ]
+  },
+  {
+   "topic": "c1-participle",
+   "en": "Having seen the demo, the IT lead asked about single sign-on.",
+   "de": "Nachdem der IT-Leiter die Demo gesehen hatte, fragte er nach Single Sign-on.",
+   "chunks": [
+    "having",
+    "seen",
+    "the demo",
+    "the IT lead",
+    "asked about",
+    "single sign-on"
+   ],
+   "alt": [
+    "The IT lead asked about single sign-on, having seen the demo.",
+    "The IT lead, having seen the demo, asked about single sign-on."
+   ],
+   "why": [
+    "Aus „nachdem er … gesehen hatte“ wird „having“ + 3. Form. Das Subjekt dahinter muss der sein, der die Demo gesehen hat, nicht ein Thema oder ein Passiv.",
+    "“Nachdem er … gesehen hatte” becomes “having” + past participle. The subject that follows must be the one who saw the demo, not a topic or a passive."
+   ],
+   "bad": "Having seen the demo, questions about single sign-on came up."
+  },
+  {
+   "topic": "c1-participle",
+   "en": "Having received your feedback, we updated the proposal.",
+   "de": "Nachdem wir Ihr Feedback erhalten hatten, haben wir das Angebot aktualisiert.",
+   "chunks": [
+    "having",
+    "received",
+    "your feedback",
+    "we",
+    "updated",
+    "the proposal"
+   ],
+   "alt": [
+    "We updated the proposal, having received your feedback."
+   ],
+   "why": [
+    "Nach „having“ steht immer die 3. Form (received), nie „receiving“. Das Subjekt danach, „we“, ist derjenige, der das Feedback erhalten hat.",
+    "After “having” comes the past participle (received), never “receiving”. The subject that follows, “we”, is the one who received the feedback."
+   ],
+   "bad": "Having receiving your feedback, we updated the proposal."
+  },
+  {
+   "topic": "c1-participle",
+   "en": "Using OCR, the system reads every incoming invoice.",
+   "de": "Mithilfe von OCR liest das System jede eingehende Rechnung.",
+   "chunks": [
+    "using",
+    "OCR",
+    "the system",
+    "reads",
+    "every incoming invoice"
+   ],
+   "alt": [
+    "The system reads every incoming invoice using OCR.",
+    "The system, using OCR, reads every incoming invoice."
+   ],
+   "why": [
+    "Die -ing-Form nennt das Mittel und läuft gleichzeitig zur Hauptaussage. Das Subjekt danach muss selbst OCR nutzen: das System, nicht die Rechnung.",
+    "The -ing form names the means and runs at the same time as the main action. The subject after it must be the one using OCR: the system, not the invoice."
+   ],
+   "bad": "Using OCR, every incoming invoice is read by the system."
+  },
+  {
+   "topic": "c1-participle",
+   "en": "Running in the cloud, the archive needs no local servers.",
+   "de": "Da das Archiv in der Cloud läuft, braucht es keine lokalen Server.",
+   "chunks": [
+    "running",
+    "in the cloud",
+    "the archive",
+    "needs",
+    "no local servers"
+   ],
+   "alt": [
+    "The archive, running in the cloud, needs no local servers."
+   ],
+   "why": [
+    "Die -ing-Form ersetzt „da … läuft“ und nennt Zustand und Grund zugleich. Das Subjekt danach muss das sein, was in der Cloud läuft.",
+    "The -ing form replaces “da … läuft” and gives state and reason at once. The subject after it must be the thing that runs in the cloud."
+   ],
+   "bad": "Running in the cloud, no local servers are needed."
+  },
+  {
+   "topic": "c1-participle",
+   "en": "Stored in German data centers, the documents stay GDPR-compliant.",
+   "de": "Da die Dokumente in deutschen Rechenzentren gespeichert sind, bleiben sie DSGVO-konform.",
+   "chunks": [
+    "stored",
+    "in German data centers",
+    "the documents",
+    "stay",
+    "GDPR-compliant"
+   ],
+   "alt": [
+    "The documents, stored in German data centers, stay GDPR-compliant."
+   ],
+   "why": [
+    "Die 3. Form allein trägt schon die passive Bedeutung („gespeichert“); „being“ oder „which are“ sind nicht nötig. Danach steht das, was gespeichert wurde.",
+    "The past participle alone already carries the passive meaning (“gespeichert”); “being” or “which are” is not needed. What follows is the thing that was stored."
+   ],
+   "bad": "Storing in German data centers, the documents stay GDPR-compliant."
+  },
+  {
+   "topic": "c1-participle",
+   "en": "Approved by the auditors, the new process is now standard.",
+   "de": "Der neue Prozess wurde von den Auditoren freigegeben und ist jetzt Standard.",
+   "chunks": [
+    "approved",
+    "by the auditors",
+    "the new process",
+    "is",
+    "now standard"
+   ],
+   "alt": [
+    "The new process, approved by the auditors, is now standard."
+   ],
+   "why": [
+    "Aus zwei deutschen Verben („wurde freigegeben und ist“) wird eine 3.-Form-Gruppe plus Hauptsatz. Wer freigibt, steht nach „by“, nicht nach „from“.",
+    "Two German verbs (“wurde freigegeben und ist”) become a past-participle phrase plus a main clause. The person who approves follows “by”, not “from”."
+   ],
+   "bad": "Approved from the auditors, the new process is now standard."
+  },
+  {
+   "topic": "c1-participle",
+   "en": "Written in May, the report is already out of date.",
+   "de": "Der im Mai verfasste Bericht ist schon veraltet.",
+   "chunks": [
+    "written",
+    "in May",
+    "the report",
+    "is",
+    "already",
+    "out of date"
+   ],
+   "alt": [
+    "The report, written in May, is already out of date."
+   ],
+   "why": [
+    "Die 3. Form „written“ ersetzt den Relativsatz „der im Mai geschrieben wurde“ und beschreibt das Subjekt, das gleich danach kommt.",
+    "The past participle “written” replaces the relative clause “der im Mai geschrieben wurde” and describes the subject that comes right after it."
+   ]
+  },
+  {
+   "topic": "c1-participle",
+   "en": "Using the new search, you can find any invoice in seconds.",
+   "de": "Mit der neuen Suche können Sie jede Rechnung in Sekunden finden.",
+   "chunks": [
+    "using",
+    "the new search",
+    "you",
+    "can",
+    "find",
+    "any invoice",
+    "in seconds"
+   ],
+   "alt": [
+    "You can find any invoice in seconds using the new search.",
+    "You can find any invoice using the new search in seconds.",
+    "In seconds, you can find any invoice using the new search."
+   ],
+   "why": [
+    "„Using the new search“ ersetzt „mit der neuen Suche“. Nach „with“ steht ein Nomen („With the new search, …“); „with using“ ist ein typischer Fehler. Das Subjekt danach ist der Nutzer: „you“.",
+    "“Using the new search” replaces “mit der neuen Suche”. After “with” comes a noun (“With the new search, …”); “with using” is a typical mistake. The subject that follows is the user: “you”."
+   ],
+   "bad": "With using the new search, you can find any invoice in seconds."
+  }
+ ]
+}

@@ -1,152 +1,181 @@
 import { create } from 'zustand';
+import { keepsScroll, kindOf } from './registry';
+import type { Route, RouteName, RouteOf, UnitCtx } from './router/types';
+import { START_TAB, TABS, tabOfRoot, type TabId } from './shell/tabs';
 
 // Navigation ohne Router und ohne History-API (im iframe teilt sich der Verlauf mit claude.ai).
-// Start ist immer „Heute" (Kap. 2.1). UX-Beratung 27.09. (Nr. 3): Die Navigation merkt sich den
-// Herkunftsbildschirm; `back()` führt immer dorthin zurück, woher man kam. Reiter-Startseiten
-// haben keinen Zurück-Weg (ein Reiterwechsel beginnt einen neuen Verlauf).
+// Router-Store des neuen Rahmens (docs/neubau/architektur.md §2.3): je Reiter ein Stapel
+// [Wurzel, Seite, Seite …] und darüber eine Übungsebene. Die API bleibt wie bisher:
+// `useNav`, `go`, `back`, `leaveBack`, `Route`, `isExercise`, `tabOf`, `savedScroll`.
+//
+// - `go(Reiter-Wurzel)`: wechselt den Reiter und setzt ihn auf die Wurzel (neue Wurzelparameter).
+// - `go(Seite)`: legt die Seite auf den Stapel des aktiven Reiters. Die Herkunft bleibt so immer
+//   der Ort, von dem man kam. Ist sie gleich dem Eintrag darunter, wirkt es wie `back()`.
+// - `go(Übung)`: öffnet die Übungsebene über der Herkunft. Übung → Übung ersetzt den Eintrag –
+//   eine beendete Übung ist nie ein Rückweg.
+// - `back()`: schließt die Übungsebene, sonst eine Seite zurück; auf der Wurzel passiert nichts.
+//
+// Die Bildschirm-Ebene (`tab`/`page`/`exercise`) meldet jeder Bereich in `src/areas/*.tsx` an.
 
-export type SpeakSeg = 'scenes' | 'business' | 'preply';
+export type { Route, RouteName, UnitCtx };
+export type { SpeakSeg } from './router/types';
 
-export type Route =
-  | { name: 'today' }
-  // Phase 6: Dein Stand mit Reiter (Urteil, Fehler, Weg nach C1, Verlauf) und Wortschatztest.
-  | { name: 'overview'; tab?: 'judge' | 'errors' | 'path' | 'history' }
-  | { name: 'vtest' }
-  // Funktionsabgleich M10: Wochen-Check (Vollbild, freiwillig).
-  | { name: 'check' }
-  | { name: 'trainer'; round: 'pflicht' | 'extra' }
-  // Reiter „Üben" (bisher „Lernen"): Kurs, Wortschatz, Grammatik, Kurzübungen, Lesen/Hören/Schreiben, Entdecken.
-  | { name: 'learn' }
-  | { name: 'course' }
-  | { name: 'lesson'; id: string }
-  | { name: 'grammar' }
-  | { name: 'grammarSession'; mode: 'duty' | 'xtra' | 'errors' | 'topic'; topic?: string }
-  | { name: 'drill'; kind: 'dictate' | 'cloze' | 'order' | 'sprint'; ctx: 'duty' | 'xtra' }
-  // Funktionsabgleich M1 (Wortschatz) und M8 (Nachschlagewerk, jetzt „Typische Fallen" in Grammatik).
-  | { name: 'vocab' }
-  | { name: 'wissen' }
-  // Reiter „Sprechen" mit Umschalter Szenen · Business · Preply (UX-Beratung Nr. 7).
-  | { name: 'speak'; seg?: SpeakSeg }
-  | { name: 'roleplay'; sceneId: string; resume?: boolean; n?: number }
-  | { name: 'mail' }
-  | { name: 'playbook'; id?: string }
-  | { name: 'pitch' }
-  // Lernberatung 27.09. (V1/V2): „Sag es“ (Vollbild; Pflichtkanal oder freiwillig aus „Üben")
-  | { name: 'say' }
-  // Lernberatung 27.09. (V6/V4): Flüssigkeit 90 – 60 – 45 und „Mein nächster Termin“ (Vollbild, freiwillig)
-  | { name: 'fluency' }
-  | { name: 'meeting'; id?: string }
-  // Lernberatung 27.09. (V3): persönliche Deutsch-Fallen (Vollbild, aus „Dein Stand“)
-  | { name: 'patterns'; id?: string }
-  // Lernberatung 27.09. (Vorschlag 8): „Eine Botschaft, drei Tonlagen“ (Vollbild, freiwillig)
-  | { name: 'tones' }
-  // Phase 4 – Input und Output (Plan §2.3). `ctx` bestimmt nur `log.ctx`, nie die Zählung.
-  | InputRoute;
+/** Routen von Phase 4 (Lesen, Hören, Schreiben, Entdecken). `ctx` bestimmt nur `log.ctx`, nie die Zählung. */
+export type InputRoute = RouteOf<'read' | 'listen' | 'write' | 'discover' | 'discoverItem' | 'history'>;
 
-export type UnitCtx = 'duty' | 'extra';
-export type InputRoute =
-  | { name: 'read'; ctx: UnitCtx }
-  | { name: 'listen'; ctx: UnitCtx }
-  | { name: 'write'; ctx: UnitCtx }
-  | { name: 'discover' }
-  | { name: 'discoverItem'; feedId: string; itemId: string; ctx: UnitCtx }
-  | { name: 'history'; kind: 'read' | 'listen' | 'write' | 'discover' };
+/** Reiter der Navigation (Daten in `shell/tabs.ts`). */
+export type TabName = TabId;
 
-export type RouteName = Route['name'];
-
-/** Reiter der Navigation (UX-Beratung Nr. 2): Heute · Üben · Sprechen · Stand. */
-export type TabName = 'today' | 'learn' | 'speak' | 'overview';
-
-export const TAB_ROOTS: readonly TabName[] = ['today', 'learn', 'speak', 'overview'];
-
-/** Zu welchem Reiter gehört ein Bildschirm? Übungen zählen zu keinem Reiter (Vollbild, Übungsleiste). */
-export function tabOf(name: RouteName): TabName | null {
-  switch (name) {
-    case 'today':
-      return 'today';
-    case 'overview':
-      return 'overview';
-    case 'learn':
-    case 'course':
-    case 'grammar':
-    case 'vocab':
-    case 'wissen':
-    case 'discover':
-    case 'history':
-      return 'learn';
-    case 'speak':
-    case 'mail':
-    case 'playbook':
-    case 'pitch':
-      return 'speak';
-    default:
-      return null;
-  }
-}
+export const TAB_ROOTS: readonly RouteName[] = TABS.map((t) => t.root.name);
 
 /** Startseite eines Reiters (nie ein Zurück-Pfeil). */
-export const isTabRoot = (name: RouteName): boolean => (TAB_ROOTS as readonly string[]).includes(name);
+export const isTabRoot = (name: RouteName): boolean => kindOf(name) === 'tab';
+
+/** Vollbild-Übungen: ohne Reiterleiste, mit der gemeinsamen Übungsleiste. */
+export const isExercise = (name: RouteName): boolean => kindOf(name) === 'exercise';
 
 /**
- * Vollbild-Übungen: ohne Reiterleiste, mit der gemeinsamen Übungsleiste. Aus einer Übung in die
- * nächste (z. B. „Weiter: nächster Pflichtschritt") ersetzt den Eintrag – eine beendete Übung
- * ist nie ein Rückweg.
+ * Zu welchem Reiter gehört ein Bildschirm? Reiter-Wurzeln zu ihrem Reiter, Seiten zum aktiven
+ * Reiter (sie liegen auf dessen Stapel), Übungen zu keinem (Vollbild, Übungsleiste).
  */
-const EXERCISES: ReadonlySet<RouteName> = new Set(['trainer', 'lesson', 'grammarSession', 'drill', 'say', 'roleplay', 'check', 'vtest', 'read', 'listen', 'write', 'discoverItem']);
-export const isExercise = (name: RouteName): boolean => EXERCISES.has(name);
-
-/** Listen, deren Bildlaufposition gemerkt wird (M13). */
-const SCROLL_KEEP: ReadonlySet<RouteName> = new Set(['learn', 'course', 'grammar', 'vocab', 'wissen', 'speak', 'discover', 'overview']);
+export function tabOf(name: RouteName): TabName | null {
+  const kind = kindOf(name);
+  if (kind === 'exercise') return null;
+  if (kind === 'tab') return tabOfRoot(name);
+  return useNav.getState().tab;
+}
 
 const STACK_MAX = 20;
 
-const same = (a: Route, b: Route): boolean => JSON.stringify(a) === JSON.stringify(b);
+const same = (a: Route | undefined, b: Route): boolean => !!a && JSON.stringify(a) === JSON.stringify(b);
 
-type NavState = {
+type Overlay = { route: Route; origin: TabName };
+
+type Core = {
+  /** Aktiver Reiter. */
+  tab: TabName;
+  /** Je Reiter: [Wurzel, Seite, Seite …] (nur im Speicher). */
+  stacks: Readonly<Record<TabName, readonly Route[]>>;
+  /** Übungsebene (Player) über der Herkunft. */
+  overlay: Overlay | null;
+};
+
+type NavState = Core & {
+  /** Abgeleitet: sichtbarer Bildschirm (`overlay?.route ?? oben auf dem Stapel`). */
   route: Route;
-  /** Herkunft: zuletzt besuchte Bildschirme (oben = direkte Herkunft). Nur im Speicher. */
+  /** Abgeleitet: Herkunftskette (oben = direkte Herkunft), wie bisher. */
   stack: readonly Route[];
   /** Bildlaufposition je Liste (nur im Speicher, Bequemlichkeit). */
   scroll: Partial<Record<RouteName, number>>;
   go: (route: Route) => void;
-  /** Zurück dorthin, woher man kam; ohne Herkunft zur Startseite des Reiters (sonst Heute). */
+  /** Zurück dorthin, woher man kam; auf einer Reiter-Wurzel passiert nichts. */
   back: () => void;
+  /** Ersetzt den sichtbaren Eintrag (gleiche Ebene), ohne die Herkunft zu ändern. */
+  replace: (route: Route) => void;
+  /** Tipp auf einen Reiter: fremder Reiter → dessen Stapel; aktiver Reiter → zurück zur Wurzel. */
+  switchTab: (tab: TabName) => void;
 };
 
-function fallbackOf(route: Route): Route {
-  const tab = tabOf(route.name);
-  return { name: tab && tab !== route.name ? tab : 'today' };
+const top = (s: readonly Route[]): Route | undefined => s[s.length - 1];
+
+function rootOf(tab: TabName): Route {
+  return TABS.find((t) => t.id === tab)?.root ?? TABS[0].root;
 }
 
-function keepScroll(cur: Route, scroll: Partial<Record<RouteName, number>>): Partial<Record<RouteName, number>> {
-  const out = { ...scroll };
-  if (SCROLL_KEEP.has(cur.name) && typeof window !== 'undefined') out[cur.name] = window.scrollY;
+function initialStacks(): Record<TabName, readonly Route[]> {
+  const out = {} as Record<TabName, readonly Route[]>;
+  for (const t of TABS) out[t.id] = [t.root];
   return out;
 }
 
-export const useNav = create<NavState>((set, get) => ({
-  route: { name: 'today' },
-  stack: [],
-  scroll: {},
-  go(route) {
-    const { route: cur, stack, scroll } = get();
-    let next: readonly Route[];
-    if (isTabRoot(route.name)) next = [];
-    else if (stack.length && same(stack[stack.length - 1] as Route, route)) next = stack.slice(0, -1);
-    else if (cur.name === route.name || (isExercise(cur.name) && isExercise(route.name))) next = stack;
-    else next = [...stack, cur].slice(-STACK_MAX);
-    set({ route, stack: next, scroll: keepScroll(cur, scroll) });
-  },
-  back() {
-    const { route: cur, stack, scroll } = get();
-    const prev = stack[stack.length - 1];
-    set({ route: prev ?? fallbackOf(cur), stack: prev ? stack.slice(0, -1) : [], scroll: keepScroll(cur, scroll) });
-  },
-}));
+/** Abgeleitete Felder – dieselben Route-Objekte, damit `leaveBack` Gleichheit prüfen kann. */
+function derive(c: Core): { route: Route; stack: readonly Route[] } {
+  const s = c.stacks[c.tab];
+  if (c.overlay) return { route: c.overlay.route, stack: c.stacks[c.overlay.origin] };
+  return { route: top(s) ?? rootOf(c.tab), stack: s.slice(0, -1) };
+}
+
+function keepScroll(cur: Route, scroll: Partial<Record<RouteName, number>>): Partial<Record<RouteName, number>> {
+  if (!keepsScroll(cur.name) || typeof window === 'undefined') return scroll;
+  return { ...scroll, [cur.name]: window.scrollY };
+}
+
+function withStack(c: Core, tab: TabName, stack: readonly Route[]): Record<TabName, readonly Route[]> {
+  return { ...c.stacks, [tab]: stack };
+}
+
+/** Reiner Übergang (testbar ohne Store): Kern + Ziel → neuer Kern. */
+export function navigate(c: Core, route: Route): Core {
+  const kind = kindOf(route.name);
+  if (kind === 'tab') {
+    const tab = tabOfRoot(route.name) ?? c.tab;
+    return { tab, stacks: withStack(c, tab, [route]), overlay: null };
+  }
+  if (kind === 'exercise') {
+    if (c.overlay) return { ...c, overlay: { route, origin: c.overlay.origin } };
+    return { ...c, overlay: { route, origin: c.tab } };
+  }
+  // Seite: auf den Stapel des aktiven Reiters (bzw. der Herkunft der Übung).
+  const tab = c.overlay ? c.overlay.origin : c.tab;
+  const s = c.stacks[tab];
+  const cur = top(s);
+  if (c.overlay && same(cur, route)) return { tab, stacks: c.stacks, overlay: null };
+  if (s.length >= 2 && same(s[s.length - 2], route)) return { tab, stacks: withStack(c, tab, s.slice(0, -1)), overlay: null };
+  if (cur && cur.name === route.name && s.length > 1) return { tab, stacks: withStack(c, tab, [...s.slice(0, -1), route]), overlay: null };
+  return { tab, stacks: withStack(c, tab, [...s, route].slice(-STACK_MAX)), overlay: null };
+}
+
+/** Reiner Rückweg: Übungsebene schließen, sonst eine Seite zurück; auf der Wurzel nichts. */
+export function goBack(c: Core): Core {
+  if (c.overlay) return { tab: c.overlay.origin, stacks: c.stacks, overlay: null };
+  const s = c.stacks[c.tab];
+  if (s.length > 1) return { ...c, stacks: withStack(c, c.tab, s.slice(0, -1)) };
+  return c;
+}
+
+const initialCore: Core = { tab: START_TAB, stacks: initialStacks(), overlay: null };
+
+export const useNav = create<NavState>((set, get) => {
+  const apply = (next: Core) => {
+    const { route: cur, scroll } = get();
+    const d = derive(next);
+    if (d.route === cur && next.stacks === get().stacks && next.overlay === get().overlay && next.tab === get().tab) return;
+    set({ ...next, ...d, scroll: keepScroll(cur, scroll) });
+  };
+  return {
+    ...initialCore,
+    ...derive(initialCore),
+    scroll: {},
+    go(route) {
+      apply(navigate(get(), route));
+    },
+    back() {
+      apply(goBack(get()));
+    },
+    replace(route) {
+      const c = get();
+      if (c.overlay) {
+        apply({ ...c, overlay: { route, origin: c.overlay.origin } });
+        return;
+      }
+      const s = c.stacks[c.tab];
+      apply({ ...c, stacks: withStack(c, c.tab, [...s.slice(0, -1), route]) });
+    },
+    switchTab(tab) {
+      const c = get();
+      if (tab === c.tab && !c.overlay) {
+        const root = c.stacks[tab][0] ?? rootOf(tab);
+        apply({ ...c, stacks: withStack(c, tab, [root]) });
+        return;
+      }
+      apply({ ...c, tab, overlay: null });
+    },
+  };
+});
 
 /** Gemerkte Position eines Bildschirms (0, wenn keine Liste oder noch nie besucht). */
 export function savedScroll(name: RouteName): number {
-  return SCROLL_KEEP.has(name) ? (useNav.getState().scroll[name] ?? 0) : 0;
+  return keepsScroll(name) ? (useNav.getState().scroll[name] ?? 0) : 0;
 }
 
 /**

@@ -13,8 +13,8 @@ const TYPED: Partial<Record<ExerciseId, { good: number; easy: number }>> = {
   situation: { good: 10000, easy: 4000 },
   dictation: { good: 6000, easy: 2500 },
 };
-/** Bausteine: Zeit bis „Prüfen“ minus 600 ms je Baustein. */
-const TILES = { good: 9000, easy: 3500, perTile: 600 };
+/** Bausteine: Zeit bis „Prüfen“ minus 600 ms je Baustein. Nie „Leicht“: Buchstaben oder Wörter sind vorgegeben. */
+const TILES = { good: 9000, perTile: 600 };
 const REPLAY_MS = 1200;
 
 export type Timing = {
@@ -46,8 +46,10 @@ export function suggestGrade(ex: ExerciseId, verdict: Verdict, timing: Timing): 
   const choice = CHOICE_GOOD[ex];
   if (choice !== undefined) return timing.submitMs <= choice + REPLAY_MS * (timing.replays ?? 0) ? 3 : 2;
   if (ex === 'tiles') {
+    // Rekonstruktion aus vorgegebenen Teilen ist kein freier Abruf: höchstens „Gut“ (Prüfung Lernwissenschaft 02.10.2026),
+    // sonst wüchse die Stabilität schneller, als der Nachweis trägt.
     const T = timing.submitMs - TILES.perTile * (timing.tiles ?? 0);
-    return T <= TILES.easy ? 4 : T <= TILES.good ? 3 : 2;
+    return T <= TILES.good ? 3 : 2;
   }
   if (ex === 'speed') {
     // Abgelaufen: richtig gilt nur als „Schwer“. Sonst gegen die Grenze G: ≤ 0,6·G Leicht, ≤ G Gut.

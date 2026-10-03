@@ -17,7 +17,7 @@ import { Icon } from '../../ui/Icon';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
 import { Sheet } from '../../ui/Sheet';
-import { AsPreplyLesson } from '../preply/AsPreplyLesson';
+import { Segmented } from '../../ui/Segmented';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { toast } from '../../ui/Toast';
 import { useLearnInputs } from '../learn/inputs';
@@ -62,7 +62,11 @@ export function GrammarScreen() {
   const back = useNav((s) => s.back);
   const now = useClock((s) => s.now);
   const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
-  const [open, setOpen] = useState<string | null>(null);
+  // `grammar?topic=` (Werkzeug der Woche, 1 Tipp von „Deine Woche“): das Themenblatt öffnet sofort.
+  const deepTopic = useNav((s) => (s.route.name === 'grammar' ? (s.route.topic ?? null) : null));
+  const [open, setOpen] = useState<string | null>(() => (deepTopic && topicById(deepTopic) ? deepTopic : null));
+  // Umschalter B2-Themen · C1-Werkzeugkasten (plan.md §1.3); ein Deep-Link auf `c1-*` öffnet den Werkzeugkasten.
+  const [set, setSet] = useState<'b2' | 'c1'>(() => (deepTopic?.startsWith('c1-') ? 'c1' : 'b2'));
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
   const close = useCallback(() => setOpen(null), []);
 
@@ -110,8 +114,20 @@ export function GrammarScreen() {
           <Icon name="arrowRight" size={16} className="flex-none text-subtle" />
         </button>
       </motion.div>
-      <motion.ul variants={item} className="grid gap-2 sm:grid-cols-2" aria-label={t('grTopics')}>
-        {topics.map((tp) => {
+      <motion.div variants={item} className="max-w-sm">
+        <Segmented
+          label={t('nbLernenGrammarSet')}
+          value={set}
+          options={[
+            { value: 'b2', label: t('nbLernenGrammarB2'), testId: 'gr-set-b2' },
+            { value: 'c1', label: t('nbLernenGrammarC1'), testId: 'gr-set-c1' },
+          ]}
+          onChange={setSet}
+          testId="gr-set"
+        />
+      </motion.div>
+      <motion.ul variants={item} className="grid gap-2 sm:grid-cols-2" aria-label={t('grTopics')} data-set={set}>
+        {topics.filter((tp) => tp.id.startsWith('c1-') === (set === 'c1')).map((tp) => {
           const nDue = due.filter((d) => d.topic === tp.id).length;
           return (
             <li key={tp.id}>
@@ -336,8 +352,6 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
             {t('aiFailed')}
           </p>
         )}
-        {/* M18: aus dem Regelblatt eine Preply-Stunde machen. */}
-        <AsPreplyLesson title={topicName(topic, lang)} />
       </div>
       <Disclosure label={t('grRaw')}>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm" data-testid="gr-raw">

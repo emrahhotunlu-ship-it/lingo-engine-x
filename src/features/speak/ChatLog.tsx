@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useT } from '../../i18n';
 import type { AnalysisSlot, Persona, Turn } from '../../domain/speak/types';
 import { EnglishText } from '../../engine/EnglishText';
@@ -43,10 +43,13 @@ type Props = {
   openIdx: number | null;
   onChip: (idx: number) => void;
   renderInline: (idx: number) => ReactNode;
+  /** Anruf-Modus (B9): Text der Figur verdeckt, bis getippt wird; die Stimme liest vor. */
+  call?: boolean;
 };
 
-export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial, phase, onStop, openIdx, onChip, renderInline }: Props) {
+export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial, phase, onStop, openIdx, onChip, renderInline, call = false }: Props) {
   const { t } = useT();
+  const [shown, setShown] = useState<ReadonlySet<number>>(() => new Set());
   const count = turns.length + (partial ? 1 : 0);
   const { jump, toBottom } = usePageStickToBottom(`${count}|${partial.length}`);
 
@@ -68,7 +71,18 @@ export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial
               {persona.name} · {persona.role}
             </p>
             <div className="lx-glass flex items-start gap-1 rounded-2xl rounded-tl-md px-4 py-3">
-              <EnglishText text={turn.text} area="speak" source={`scene/${sceneId}`} title={sceneTitle} className="min-w-0 flex-1 text-base leading-relaxed" />
+              {call && !shown.has(i) ? (
+                <button
+                  type="button"
+                  className="min-h-11 min-w-0 flex-1 text-left text-sm text-muted underline-offset-2 hover:text-fg hover:underline"
+                  onClick={() => setShown((cur) => new Set(cur).add(i))}
+                  data-testid="rp-call-reveal"
+                >
+                  {t('nbSprechenCallReveal')}
+                </button>
+              ) : (
+                <EnglishText text={turn.text} area="speak" source={`scene/${sceneId}`} title={sceneTitle} className="min-w-0 flex-1 text-base leading-relaxed" />
+              )}
               <SpeakButton text={turn.text} />
             </div>
             {turn.truncated && <p className="text-xs text-subtle">{t('spTruncated')}</p>}
@@ -112,7 +126,11 @@ export function ChatLog({ turns, analyses, persona, sceneId, sceneTitle, partial
             {persona.name} · {persona.role}
           </p>
           <div className="lx-glass rounded-2xl rounded-tl-md px-4 py-3" aria-busy={!partial}>
-            {partial ? (
+            {partial && call ? (
+              <p data-testid="rp-call-speaking" className="text-sm text-muted">
+                {t('nbSprechenCallSpeaking', { name: persona.name })}
+              </p>
+            ) : partial ? (
               <p lang="en" className="text-base leading-relaxed">
                 {partial}
               </p>

@@ -1,32 +1,34 @@
-import { motion } from 'framer-motion';
-import { useCallback, useDeferredValue, useMemo, useState } from 'react';
+import { useDeferredValue, useMemo, useState } from 'react';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
-import { SHARED_TRANSITION, sharedId, sourceDependency, useSharedEpoch } from '../../../engine/shared';
-import { invalidIdsOf, useLive } from '../../../data/live';
-import { buildTrainCards, meaningOf } from '../../../domain/srs/cards';
-import { buildChunkCards } from '../../../domain/srs/chunkCards';
+import { openSheet } from '../../../app/sheets';
+import { useLive } from '../../../data/live';
+import { meaningOf } from '../../../domain/srs/cards';
 import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../../domain/srs/confidence';
+import { addIdsOp, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
 import { filterCards, VOCAB_FILTERS, vocabStats, type VocabFilter, type VocabSort } from '../../../domain/srs/vocabList';
 import { normalizeNewPerDay } from '../../../domain/srs/queue';
 import type { TrainCard } from '../../../domain/srs/types';
 import { useT, type MessageKey } from '../../../i18n';
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
-import { DURATION, EASE_OUT } from '../../../ui/motion';
+import { toast } from '../../../ui/Toast';
 import { Dots } from '../../grammar/GrammarScreen';
 import { ScreenHeader } from '../../learn/ui';
-import { AddWordSheet } from './AddWordSheet';
-import { WordSheet } from './WordSheet';
+import { useDecks, writeDecks } from '../decksStore';
+import { useVocabCards } from '../hub/data';
+import { decksErrorKey } from '../hub/errors';
+import { setHidden } from './actions';
 
-// Wortschatz (Funktionsabgleich M1): alle Karten mit Suche, Filtern und Sortierung, oben der
-// Status als eine Zeile. Ein Tippen öffnet das Wortblatt mit Status, Beispielen und Aktionen.
+// Wortliste als Browser (plan.md N24, D1/D2): Suche, Filter-Chips (Mehrfachauswahl unter
+// „Auswählen“: Ausblenden, zu Stapel), Sortierung. 50 Zeilen je Seite, `content-visibility`, keine
+// Layout-Animationen (leistung.md §3.2 Nr. 6). Ein Tippen öffnet das Wortblatt (`word`).
 
-type Doc = Record<string, unknown>;
-const EMPTY = new Map<string, Doc>();
-const PAGE = 120;
+const PAGE = 50;
+type Filter = VocabFilter | 'leech';
+const FILTERS: readonly Filter[] = [...VOCAB_FILTERS.slice(0, VOCAB_FILTERS.length - 1), 'leech', 'hidden'];
 
-const FILTER_KEY: Record<VocabFilter, MessageKey> = {
+const FILTER_KEY: Record<Filter, MessageKey> = {
   all: 'vcFilterAll',
   due: 'vcFilterDue',
   new: 'vcFilterNew',
@@ -35,68 +37,83 @@ const FILTER_KEY: Record<VocabFilter, MessageKey> = {
   solid: 'vcFilterSolid',
   job: 'vcFilterJob',
   phrases: 'vcFilterPhrases',
+  leech: 'nbWsFilterLeech',
   hidden: 'vcFilterHidden',
 };
 
-const item = {
-  hidden: { opacity: 0, y: 8 },
-  show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE_OUT } },
-};
+const isFilter = (v: unknown): v is Filter => typeof v === 'string' && (FILTERS as readonly string[]).includes(v);
 
-export function VocabScreen() {
+export function VocabScreen({ filter: initialFilter, q: initialQ }: { filter?: string | undefined; q?: string | undefined } = {}) {
   const { t, tn, lang } = useT();
-  const go = useNav((s) => s.go);
+  const back = useNav((s) => s.back);
   const now = useClock((s) => s.now);
   const today = useClock((s) => s.today);
-  const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
-  const chunks = useLive((s) => s.collections.chunk) ?? EMPTY;
-  const invalid = useLive((s) => s.invalid);
   const newPerDay = useLive((s) => s.docs['app/profile']?.newPerDay);
-  const [filter, setFilter] = useState<VocabFilter>('all');
+  const decks = useDecks((s) => s.decks);
+  const cards = useVocabCards();
+  const [filter, setFilter] = useState<Filter>(isFilter(initialFilter) ? initialFilter : 'all');
   const [sort, setSort] = useState<VocabSort>('stage');
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialQ ?? '');
   const q = useDeferredValue(query);
   const [limit, setLimit] = useState(PAGE);
-  const [open, setOpen] = useState<string | null>(null);
-  const [adding, setAdding] = useState(false);
-  const closeWord = useCallback(() => setOpen(null), []);
-  const closeAdd = useCallback(() => setAdding(false), []);
+  const [selecting, setSelecting] = useState(false);
+  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
+  const [busy, setBusy] = useState(false);
 
-  // Wendungen (`chunk/*`) stehen mit in der Liste (Filter „Wendungen“, M1).
-  const cards = useMemo(
-    () => [...buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), ...buildChunkCards(chunks, now, invalidIdsOf(invalid, 'chunk'))],
-    [vocab, chunks, now, invalid],
-  );
   const stats = useMemo(() => vocabStats(cards, now, today, normalizeNewPerDay(newPerDay)), [cards, now, today, newPerDay]);
   const chunkCount = useMemo(() => cards.filter((c) => c.kind === 'chunk' && !c.hidden).length, [cards]);
-  const list = useMemo(() => filterCards(cards, { filter, query: q, sort, nowMs: now }), [cards, filter, q, sort, now]);
-  const current = open ? (cards.find((c) => c.key === open) ?? null) : null;
-  // Kap. 4.4: Das Wort der Zeile gleitet in den Titel des Wortblatts (gemeinsames Element).
-  const ep = useSharedEpoch();
-
+  const list = useMemo(() => {
+    if (filter === 'leech') return filterCards(cards, { filter: 'all', query: q, sort, nowMs: now }).filter(isLeechCard);
+    return filterCards(cards, { filter, query: q, sort, nowMs: now });
+  }, [cards, filter, q, sort, now]);
   const sortLabel = t(sort === 'stage' ? 'vcSortStage' : 'vcSortAz');
   const newLine = stats.stockEmpty ? t('vcStockEmpty') : t('vcNewToday', { n: Math.min(stats.newToday, stats.quota), total: stats.quota });
+  const own = visibleDecks(decks);
+
+  const toggle = (key: string) =>
+    setSelected((s) => {
+      const n = new Set(s);
+      if (n.has(key)) n.delete(key);
+      else n.add(key);
+      return n;
+    });
+  const chosen = (): TrainCard[] => cards.filter((c) => selected.has(c.key));
+  const hideSelected = async () => {
+    setBusy(true);
+    let ok = true;
+    for (const c of chosen()) ok = (await setHidden(c, filter !== 'hidden')) && ok;
+    setBusy(false);
+    toast(ok ? t(filter === 'hidden' ? 'vcUnhiddenToast' : 'vcHiddenToast') : t('saveFailed'), ok ? 'info' : 'error');
+    setSelected(new Set());
+  };
+  const addToDeck = async (id: string, name: string) => {
+    const keys = [...selected];
+    const r = await writeDecks((cur) => addIdsOp(cur, id, keys));
+    if (!r.ok) toast(t(decksErrorKey(r.error)), 'error');
+    else {
+      toast(t('nbWsAddedToDeck', { name }), 'info');
+      setSelected(new Set());
+    }
+  };
+
   return (
-    <motion.div className="flex flex-col gap-4 py-6 sm:gap-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="vocab">
-      <motion.div variants={item}>
-        <ScreenHeader
-          title={t('vcTitle')}
-          back={() => go({ name: 'learn' })}
-          lead={
-            <span className="lx-tnum block truncate text-sm" data-testid="vocab-status">
-              {tn('vcTotal', stats.total - chunkCount)}
-              {chunkCount > 0 && <> · {tn('vcChunks', chunkCount)}</>} · {tn('vocabDue', stats.due)}
-            </span>
-          }
-          right={
-            <Button variant="secondary" icon="plus" onClick={() => setAdding(true)} data-testid="vocab-add">
-              {t('vcAdd')}
-            </Button>
-          }
-        />
-      </motion.div>
-      <motion.div variants={item} className="flex flex-col gap-3">
-        {/* UX-Beratung Nr. 10: Suche und Sortierung in einer Zeile, Filter als EINE wischbare Reihe. */}
+    <div className="flex flex-col gap-4 py-6 sm:gap-6 sm:py-10" data-testid="vocab-list">
+      <ScreenHeader
+        title={t('nbWsListTitle')}
+        back={back}
+        lead={
+          <span className="lx-tnum block truncate text-sm" data-testid="vocab-status">
+            {tn('vcTotal', stats.total - chunkCount)}
+            {chunkCount > 0 && <> · {tn('vcChunks', chunkCount)}</>} · {tn('vocabDue', stats.due)}
+          </span>
+        }
+        titleAction={
+          <Button variant="secondary" onClick={() => (setSelecting((v) => !v), setSelected(new Set()))} data-testid="vocab-select" aria-pressed={selecting}>
+            {selecting ? t('nbWsSelDone') : t('nbWsSelect')}
+          </Button>
+        }
+      />
+      <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <label className="relative block min-w-0 flex-1">
             <span className="sr-only">{t('vcSearch')}</span>
@@ -115,20 +132,13 @@ export function VocabScreen() {
               spellCheck={false}
             />
           </label>
-          <button
-            type="button"
-            className="lx-chip flex-none"
-            onClick={() => setSort((v) => (v === 'stage' ? 'az' : 'stage'))}
-            aria-label={t('vcSortToggle', { sort: sortLabel })}
-            data-testid="vocab-sort"
-            data-sort={sort}
-          >
+          <button type="button" className="lx-chip flex-none" onClick={() => setSort((v) => (v === 'stage' ? 'az' : 'stage'))} aria-label={t('vcSortToggle', { sort: sortLabel })} data-testid="vocab-sort" data-sort={sort}>
             <Icon name="sort" size={16} />
             <span aria-hidden="true">{sortLabel}</span>
           </button>
         </div>
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label={t('vcFilters')} data-hscroll="">
-          {VOCAB_FILTERS.map((f) => (
+          {FILTERS.map((f) => (
             <button
               key={f}
               type="button"
@@ -137,6 +147,7 @@ export function VocabScreen() {
               onClick={() => {
                 setFilter(f);
                 setLimit(PAGE);
+                setSelected(new Set());
               }}
               data-testid="vocab-filter"
               data-filter={f}
@@ -145,8 +156,21 @@ export function VocabScreen() {
             </button>
           ))}
         </div>
-      </motion.div>
-      <motion.div variants={item} className="flex flex-col gap-2">
+      </div>
+      {selecting && selected.size > 0 && (
+        <div className="lx-glass sticky top-2 z-10 flex flex-wrap items-center gap-2 rounded-2xl p-3" data-testid="vocab-bulk">
+          <span className="lx-tnum text-sm font-medium">{tn('nbWsSelected', selected.size)}</span>
+          <Button variant="secondary" icon="eyeOff" busy={busy} onClick={() => void hideSelected()} data-testid="vocab-bulk-hide">
+            {filter === 'hidden' ? t('vcUnhide') : t('nbWsHideSel')}
+          </Button>
+          {own.map((d) => (
+            <button key={d.id} type="button" className="lx-chip" onClick={() => void addToDeck(d.id, d.name)} data-testid="vocab-bulk-deck" data-deck={d.id}>
+              + {d.name}
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="flex flex-col gap-2">
         <p className="lx-tnum text-sm text-muted" data-testid="vocab-count">
           {tn('vcShown', list.length)} · {newLine}
         </p>
@@ -157,8 +181,8 @@ export function VocabScreen() {
         ) : (
           <ul className="flex flex-col gap-1.5">
             {list.slice(0, limit).map((c) => (
-              <li key={c.key}>
-                <WordRow card={c} open={open === c.key} nowMs={now} lang={lang} onOpen={() => setOpen(c.key)} layoutId={sharedId(`word-${c.key}`, ep)} />
+              <li key={c.key} style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 60px' }}>
+                <WordRow card={c} nowMs={now} lang={lang} selecting={selecting} selected={selected.has(c.key)} onOpen={() => (selecting ? toggle(c.key) : openSheet('word', { key: c.key }))} />
               </li>
             ))}
           </ul>
@@ -170,37 +194,41 @@ export function VocabScreen() {
             </Button>
           </div>
         )}
-      </motion.div>
-      <WordSheet card={current} onClose={closeWord} layoutId={current ? sharedId(`word-${current.key}`, ep) : undefined} />
-      <AddWordSheet open={adding} onClose={closeAdd} />
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
-function WordRow({ card, open, nowMs, lang, onOpen, layoutId }: { card: TrainCard; open: boolean; nowMs: number; lang: 'de' | 'en'; onOpen: () => void; layoutId: string }) {
+function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { card: TrainCard; nowMs: number; lang: 'de' | 'en'; onOpen: () => void; selecting: boolean; selected: boolean }) {
   const { t } = useT();
   const conf = confidenceOf(card, nowMs);
   const meaning = meaningOf(card, lang);
   return (
     <button
       type="button"
-      className="flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-surface"
+      className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-surface ${selected ? 'bg-accent-soft' : ''}`}
       onClick={onOpen}
       data-testid="vocab-row"
       data-word={card.id}
       data-kind={card.kind}
       data-stage={card.stage}
       data-hidden={card.hidden || undefined}
+      aria-pressed={selecting ? selected : undefined}
     >
-      <span className="flex min-w-0 flex-col">
+      {selecting && (
+        <span className={`inline-flex size-5 flex-none items-center justify-center rounded-md border ${selected ? 'border-accent bg-accent text-accent-fg' : 'border-line'}`} aria-hidden="true">
+          {selected && <Icon name="check" size={14} />}
+        </span>
+      )}
+      <span className="flex min-w-0 flex-1 flex-col">
         <span className="flex min-w-0 items-center gap-2">
-          <motion.span layoutId={layoutId} layoutDependency={sourceDependency(open)} transition={SHARED_TRANSITION} className="max-w-full self-start truncate font-medium" lang="en">
+          <span className="max-w-full font-medium [overflow-wrap:anywhere]" lang="en">
             {card.word}
-          </motion.span>
+          </span>
           {card.kind === 'chunk' && <span className="flex-none rounded-full border border-line px-2 py-0.5 text-[0.7rem] font-medium text-muted">{t('vcChunkBadge')}</span>}
         </span>
         {meaning && (
-          <span className="text-sm text-muted" lang={lang}>
+          <span className="text-sm text-muted [overflow-wrap:anywhere]" lang={lang}>
             {meaning}
           </span>
         )}

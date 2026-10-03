@@ -17,6 +17,7 @@ import {
   profileSchema,
   radarSchema,
   repairSchema,
+  levelsSchema,
   patternsSchema,
   readingSchema,
   sceneSchema,
@@ -32,6 +33,12 @@ import {
   wpromptSchema,
   writingSchema,
   archiveSchema,
+  decksSchema,
+  weekSchema,
+  outSchema,
+  memorySchema,
+  compareSchema,
+  teacherSchema,
 } from './schemas';
 
 // Alle bekannten Pfade der Datenbank (Anhang B + docs/altapp-analyse.md, Abschnitt 5).
@@ -49,8 +56,16 @@ export const APP_DOCS = {
   'app/weekly': weeklySchema,
   // Neu (Lernberatung 27.09., V2): Reparatur-Sätze aus Sag es, Gespräch, Schreiben.
   'app/repair': repairSchema,
+  'app/levels': levelsSchema,
   // Neu (Lernberatung 27.09., V3): persönliche Deutsch-Fallen (Fehlermuster).
   'app/patterns': patternsSchema,
+  // Neubau (docs/neubau/plan.md §4.10): Stapel (P3) und Wochenthema (P1).
+  'app/decks': decksSchema,
+  'app/week': weekSchema,
+  // Paket B (Backlog B5): „Claude merkt sich“ – Fakten aus Gesprächen und Terminen.
+  'app/memory': memorySchema,
+  // Paket B (Backlog B1): monatliche Vergleichsaufgabe.
+  'app/compare': compareSchema,
 } as const satisfies Record<string, ZodType>;
 
 export const COLLECTIONS = {
@@ -80,6 +95,10 @@ export const COLLECTIONS = {
   tones: tonesSchema,
   // Neu ab Phase 7 (Plan §12.3): ausgelagerte Profiljahre.
   archive: archiveSchema,
+  // Neubau (docs/neubau/plan.md §4.10): Ergebnisse der neuen Übungen als Monatsdokumente (P7).
+  out: outSchema,
+  // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke): Monatsdokumente.
+  teacher: teacherSchema,
 } as const satisfies Record<string, ZodType>;
 
 export type AppDocPath = keyof typeof APP_DOCS;

@@ -5,8 +5,6 @@ import { listeningText, hasSpeakerLabels, type ListeningTextVars } from '../../s
 import { mailRefine, MAIL_OPTION_MAX } from '../../src/prompts/mailRefine';
 import { pitchFeedback, pitchFeedbackExample } from '../../src/prompts/pitchFeedback';
 import { pitchScript, PITCH_SCRIPT_EXAMPLE } from '../../src/prompts/pitchScript';
-import { importSchema, IMPORT_EXAMPLE } from '../../src/prompts/preplyImport';
-import { prepSchema, PREP_EXAMPLE } from '../../src/prompts/preplyPrep';
 import { readingCheck, READING_CHECK_EXAMPLE } from '../../src/prompts/readingCheck';
 import { readingText, type ReadingTextVars } from '../../src/prompts/readingText';
 import { reportExample, reportSchema } from '../../src/prompts/roleplayReport';
@@ -140,37 +138,6 @@ describe('W4 listening-text@2', () => {
   });
 });
 
-describe('W5 preply-import@2', () => {
-  const vars = { uiLang: 'de' as const, topics: TOPICS.map((t) => ({ id: t.id, name: t.name_en ?? t.name })) };
-  const s = importSchema(vars);
-
-  it('Optionen bei Nicht-mc still geleert, mc-Antwort ohne Groß/klein, Typ-Synonym', () => {
-    const r = clone(IMPORT_EXAMPLE);
-    r.tasks[0].options = ['on', 'of', 'in'];
-    r.tasks.push({ type: 'mc', prompt: 'It depends ___ the budget.', answer: 'on', accepted: [], options: ['On', 'Of', 'In'], topic: 'prepositions', explanation_de: 'Nach depend steht on.', explanation_en: 'Use on after depend.' });
-    r.tasks.push({ ...r.tasks[0], type: 'fill-in' });
-    const res = s.safeParse(r);
-    expect(issues(res)).toEqual([]);
-    expect(res.data!.tasks[0]!.options).toEqual([]);
-    expect(res.data!.tasks[1]).toMatchObject({ type: 'mc', answer: 'On' });
-    expect(res.data!.tasks[2]!.type).toBe('gap');
-  });
-
-  it('Wörter und Hausaufgaben gekürzt statt abgelehnt; Wortart gekürzt; fromLesson fehlt → true', () => {
-    const r = clone(IMPORT_EXAMPLE);
-    r.words = Array.from({ length: 22 }, (_, i) => ({ en: 'w' + i, de: 'x', pos: 'noun', ex: 'w' + i, fromLesson: true }));
-    r.words[0].pos = 'phrasal verb (separable)';
-    delete r.words[1].fromLesson;
-    r.homework = Array.from({ length: 9 }, (_, i) => `Aufgabe ${i + 1}`);
-    const res = s.safeParse(r);
-    expect(issues(res)).toEqual([]);
-    expect(res.data!.words).toHaveLength(20);
-    expect(Array.from(res.data!.words[0]!.pos).length).toBeLessThanOrEqual(20);
-    expect(res.data!.words[1]!.fromLesson).toBe(true);
-    expect(res.data!.homework).toHaveLength(8);
-  });
-});
-
 describe('W8 weekly-report@2: Verweis tolerant', () => {
   const facts = [...Array.from({ length: 5 }, (_, i) => ({ id: `vw:v${i}`, text: `new word "negotiate${i}" still recalled` })), { id: 'tm:week', text: '210 minutes on 6 days' }];
   for (const lang of ['de', 'en'] as const) {
@@ -290,7 +257,7 @@ describe('Hinweise: Business (pitch-script@2, pitch-feedback@2, mail-refine@2)',
   });
 });
 
-describe('Hinweise: reading-text@2, writing-prompt@2, preply-prep@2', () => {
+describe('Hinweise: reading-text@2, writing-prompt@2', () => {
   const para = (n: number) => Array.from({ length: n }, (_, i) => `Small companies in Germany still keep their invoices in folders, and many managers feel the cost of this habit only when an audit arrives number ${i}.`).join(' ');
   const vars: ReadingTextVars = { level: 'B2+', domain: 'work', topicHint: '', avoid: [], context: 'c' };
   const text = [para(4), para(4), para(4), para(4), para(3)].join('\n\n');
@@ -329,27 +296,5 @@ describe('Hinweise: reading-text@2, writing-prompt@2, preply-prep@2', () => {
     expect(s.parse({ ...ex, genre: 'Complaint' }).genre).toBe('complaint');
   });
 
-  for (const uiLang of ['de', 'en'] as const) {
-    it(`preply-prep ${uiLang}: Fehler als Teilstück oder Korrektur zugeordnet, sieben Sätze → sechs`, () => {
-      const errors = [{ wrong: 'We look forward to hear from you.', right: 'We look forward to hearing from you.', topic: 'gerund-inf' }, { wrong: 'It depends of the budget.', right: 'It depends on the budget.', topic: 'prepositions' }];
-      const s = prepSchema({ uiLang, errors });
-      const ex = clone(PREP_EXAMPLE);
-      ex.watch.push({ mistake: 'It depends of the budget.', fix: 'It depends on the budget.', note: uiLang === 'de' ? 'Nach „depend“ folgt „on“.' : 'Use "on" after "depend".' });
-      if (uiLang === 'en') {
-        ex.title = 'Handling objections';
-        ex.goal_x = 'Handle three typical objections without hesitating.';
-        for (const w of ex.watch) w.note = 'Use the -ing form after "look forward to".';
-      }
-      ex.watch[0].mistake = 'look forward to hear';
-      ex.watch[1].mistake = 'It depends on the budget';
-      ex.say.push('I see your point, but let me explain.', 'Could we look at this from another angle?', 'That is a fair question.');
-      const res = s.safeParse(ex);
-      expect(issues(res)).toEqual([]);
-      expect(res.data!.watch.map((w) => w.mistake)).toEqual(['We look forward to hear from you.', 'It depends of the budget.']);
-      expect(res.data!.say).toHaveLength(6);
-      const bad = clone(ex);
-      bad.watch[0].mistake = 'I am working here since 2019.';
-      expect(s.safeParse(bad).success).toBe(false);
-    });
-  }
+
 });

@@ -2,6 +2,7 @@ import { hash32, mulberry32, shuffle } from '../random';
 import { typedForm } from '../chunks/situation';
 import { meaningOf, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
+import { rotatedContext } from './rotate';
 import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
 
 // Übung aus Karte und Art bauen (Lern-Entwurf §4.4 Ablenker). Zufall mit Startwert:
@@ -211,12 +212,14 @@ function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
 /** Lösungsform einer freistehenden Abfrage (ohne Satz): Wort bzw. Wendung ohne „…“. */
 const bareAnswer = (card: TrainCard): string => (card.kind === 'chunk' ? typedForm(card.word) : card.word);
 
-export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup } = {}): Exercise {
+/** `origin`: immer der Ursprungssatz (Prüfabfrage und Kontrolle nach dem Aufdecken), sonst wechselt der Satz ab Stufe 3 (`rotate.ts`). */
+export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool: readonly TrainCard[], seed: string, opts: { sceneOf?: SceneLookup; origin?: boolean } = {}): Exercise {
   const def = exerciseDef(ex);
   const rng = mulberry32(hash32(`${card.key}|${ex}|${seed}`));
   const meaning = meaningOf(card, lang);
   const stage = Math.max(1, card.stage) as Stage;
   const base: Exercise = { ex, input: def.input, card, stage, sentence: null, meaning, firstLetter: null, colloc: null, options: [], accepted: [] };
+  const ctx = opts.origin ? card.context : rotatedContext(card, ex);
 
   switch (ex) {
     case 'listen_mc':
@@ -239,17 +242,17 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
       return { ...base, sentence: card.context, options: shuffle([correct, ...ds], rng), accepted: [answer] };
     }
     case 'tiles': {
-      const answer = card.context?.gap ?? (card.kind === 'chunk' ? typedForm(card.word) : card.lemma);
+      const answer = ctx?.gap ?? (card.kind === 'chunk' ? typedForm(card.word) : card.lemma);
       const others = pool.filter((c) => c.key !== card.key).map((c) => c.lemma);
       const { tiles } = buildTiles(answer, others, rng);
-      return { ...base, sentence: card.context, tiles, accepted: [answer] };
+      return { ...base, sentence: ctx, tiles, accepted: [answer] };
     }
     case 'dictation': {
-      const gap = card.context?.gap ?? card.word;
-      return { ...base, sentence: card.context, accepted: [gap], speak: card.context?.sentence ?? gap };
+      const gap = ctx?.gap ?? card.word;
+      return { ...base, sentence: ctx, accepted: [gap], speak: ctx?.sentence ?? gap };
     }
     case 'speed': {
-      if (card.context) return { ...base, sentence: card.context, accepted: [card.context.gap], limitMs: speedLimitMs(card.context.gap) };
+      if (ctx) return { ...base, sentence: ctx, accepted: [ctx.gap], limitMs: speedLimitMs(ctx.gap) };
       const accepted = [bareAnswer(card)];
       if (card.lemma !== accepted[0]) accepted.push(card.lemma);
       return { ...base, accepted, limitMs: speedLimitMs(accepted[0] ?? card.word) };
@@ -274,14 +277,17 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
     }
     case 'cloze_hint':
     case 'cloze': {
-      const gap = card.context?.gap ?? card.word;
-      return { ...base, sentence: card.context, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: [gap] };
+      const gap = ctx?.gap ?? card.word;
+      return { ...base, sentence: ctx, firstLetter: ex === 'cloze_hint' ? gap.slice(0, 1) : null, accepted: [gap] };
     }
     case 'type': {
       const accepted = [bareAnswer(card)];
       if (card.lemma !== card.word) accepted.push(card.lemma);
       return { ...base, accepted };
     }
+    case 'flip':
+      // Anki (anki-regeln §1): Vorderseite Bedeutung + Ursprungssatz mit Lücke, Rückseite voll.
+      return { ...base, sentence: card.context, accepted: [card.context?.gap ?? bareAnswer(card)] };
   }
 }
 
@@ -297,4 +303,28 @@ export function choiceVerdict(e: Pick<Exercise, 'ex' | 'card' | 'meaning'>, chos
     if (meaningsOverlap(other, e.meaning)) return { verdict: 'near', kind: 'synonym', ...(chosen.fromWord ? { otherWord: chosen.fromWord } : {}) };
   }
   return { verdict: 'wrong' };
+}
+
+// ------------------------------------------------------------------ Bausteine per Tastatur (Emrah 02.10.2026)
+
+const tileKey = (s: string): string => s.toLowerCase().replace(/[’‘]/g, "'").replace(/^[^a-z0-9']+|[^a-z0-9']+$/g, '');
+
+/**
+ * Welcher noch freie Baustein passt zu dem, was getippt wurde? Wörter: ganzes Wort (Groß-/Kleinschreibung und
+ * Satzzeichen am Rand egal); Buchstaben: ein Zeichen. Gleiche Bausteine werden der Reihe nach vergeben.
+ * `null`, wenn kein freier Baustein passt.
+ */
+export function pickTile(tiles: readonly Tile[], placed: readonly number[], token: string, mode: 'letters' | 'words'): number | null {
+  const want = mode === 'letters' ? token.toLowerCase() : tileKey(token);
+  if (!want) return null;
+  const free = tiles.filter((t) => !placed.includes(t.id));
+  const hit = free.find((t) => (mode === 'letters' ? t.text.toLowerCase() : tileKey(t.text)) === want);
+  return hit ? hit.id : null;
+}
+
+/** Ist `token` (ganze Wörter) der Anfang eines noch freien Mehrwort-Bausteins, sodass weitergetippt werden darf? */
+export function isTilePrefix(tiles: readonly Tile[], placed: readonly number[], token: string): boolean {
+  const want = tileKey(token);
+  if (!want) return false;
+  return tiles.some((t) => !placed.includes(t.id) && tileKey(t.text).startsWith(`${want} `));
 }

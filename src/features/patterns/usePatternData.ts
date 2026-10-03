@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useClock } from '../../app/clock';
-import { TOPICS } from '../../domain/content';
-import { lastImport, preplyList } from '../../domain/preply/docs';
 import { countWeeks, mergeHistory, recentWeeks, weekFocus, type FocusPoint, type PatternsDoc } from '../../domain/patterns/patterns';
 import type { Mistake } from '../../domain/patterns/mistakes';
-import { topicName } from '../../domain/progress/weekly';
 import { getDb, useCapabilities } from '../../platform/capabilities';
 import { logWarn } from '../../platform/diagnostics';
 import { loadPatternData, syncHistory, usePatternsRun } from './store';
@@ -20,18 +17,14 @@ export type PatternView = {
   focus: FocusPoint[];
 };
 
-const TOPIC_IDS = new Set(TOPICS.map((t) => t.id));
-const topicNames = (id: string) => (TOPIC_IDS.has(id) ? { de: topicName(id, 'de'), en: topicName(id, 'en') } : null);
-
 export function usePatternData(enabled = true): PatternView {
   const db = useCapabilities((s) => s.db);
   const today = useClock((s) => s.today);
   const last = usePatternsRun((s) => s.last);
-  const [state, setState] = useState<{ status: 'loading' | 'ready' | 'error'; doc: PatternsDoc | null; mistakes: Mistake[]; imp: ReturnType<typeof lastImport> }>({
+  const [state, setState] = useState<{ status: 'loading' | 'ready' | 'error'; doc: PatternsDoc | null; mistakes: Mistake[] }>({
     status: 'loading',
     doc: null,
     mistakes: [],
-    imp: null,
   });
 
   useEffect(() => {
@@ -42,7 +35,7 @@ export function usePatternData(enabled = true): PatternView {
     loadPatternData(handle).then(
       (d) => {
         if (!alive) return;
-        setState({ status: 'ready', doc: d.doc, mistakes: d.mistakes, imp: lastImport(preplyList(d.preply)) });
+        setState({ status: 'ready', doc: d.doc, mistakes: d.mistakes });
         if (d.doc?.items.length) void syncHistory(d.mistakes, d.doc.items, today);
       },
       (err: unknown) => {
@@ -61,6 +54,6 @@ export function usePatternData(enabled = true): PatternView {
     // Frisch gezählte Wochen dazu (Anzeige sofort, gespeichert wird im Hintergrund).
     return { ...base, history: mergeHistory(base.history, countWeeks(state.mistakes, base.items, recentWeeks(today, 4))) };
   }, [base, state.mistakes, state.status, today]);
-  const focus = useMemo(() => weekFocus(doc, state.imp, today, topicNames), [doc, state.imp, today]);
+  const focus = useMemo(() => weekFocus(doc, today), [doc, today]);
   return { status: state.status, doc, mistakes: state.mistakes, focus };
 }

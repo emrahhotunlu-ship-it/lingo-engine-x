@@ -19,6 +19,7 @@ export const repairDe = {
   rxVerdictOk: 'Richtig.',
   rxVerdictClose: 'Richtig – mit einer kleinen Abweichung.',
   rxVerdictNo: 'Noch nicht ganz.',
+  rxEditHint: 'Ändere nur die falsche Stelle. Der Rest bleibt stehen.',
   rxYouWrote: 'Du hast geschrieben',
   rxBetter: 'Bessere Fassung',
   rxWhy: 'Warum',

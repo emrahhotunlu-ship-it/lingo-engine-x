@@ -1,9 +1,8 @@
-import rulesJson from '../../content/legacy/rules.json';
-import c1Json from '../../content/c1/toolkit.json';
 import { topicById } from '../content';
 import { detectLang } from '../lang/detect';
 import type { GrammarTask } from '../learn/types';
 import type { Lang } from '../srs/types';
+import { asList, asRecord, rulesJson, toolkitJson } from './raw';
 
 // Regelwerk der alten App typisiert (content/legacy/rules.json) und die Hilfen nach dem Prüfen
 // (phase2-plan §5.0): eine Zeile Form-Hinweis, 2–3 Beispiele, „Auch richtig". Texte immer in der
@@ -23,13 +22,23 @@ type RawRule = {
 };
 type AltFamily = { id: string; topics: string[]; note: Pair };
 
-const LEGACY = rulesJson as unknown as { rules: Record<string, RawRule>; altFamilies: AltFamily[] };
 // Regelblätter des C1-Werkzeugkastens (content/c1/toolkit.json) im selben Format, nur ergänzt.
-const RAW: { rules: Record<string, RawRule>; altFamilies: AltFamily[] } = {
-  rules: { ...(c1Json.rules as unknown as Record<string, RawRule>), ...LEGACY.rules },
-  altFamilies: LEGACY.altFamilies,
-};
-export const ALT_FAMILIES: readonly AltFamily[] = RAW.altFamilies;
+// Geparst erst beim ersten Gebrauch (`raw.ts`, leistung.md §4 Nr. 5).
+let rawCache: { rules: Record<string, RawRule>; altFamilies: AltFamily[] } | null = null;
+function raw(): { rules: Record<string, RawRule>; altFamilies: AltFamily[] } {
+  if (rawCache) return rawCache;
+  const legacy = rulesJson();
+  rawCache = {
+    rules: { ...(asRecord(toolkitJson().rules) as Record<string, RawRule>), ...(asRecord(legacy.rules) as Record<string, RawRule>) },
+    altFamilies: asList(legacy.altFamilies) as AltFamily[],
+  };
+  return rawCache;
+}
+
+/** „Auch richtig“-Familien des Regelwerks. */
+export function altFamilies(): readonly AltFamily[] {
+  return raw().altFamilies;
+}
 
 export type Rule = {
   topic: string;
@@ -75,7 +84,7 @@ export function localizePattern(pattern: string, term: (id: string) => string): 
 
 /** Regelblatt eines Themas in der Oberflächensprache; `null` für unbekannte Themen. */
 export function ruleOf(topic: string, lang: Lang): Rule | null {
-  const r = RAW.rules[topic];
+  const r = raw().rules[topic];
   const tp = topicById(topic);
   if (!r || !tp) return null;
   return {
@@ -112,7 +121,7 @@ export function formHint(task: Pick<GrammarTask, 'topic' | 'expl'>, lang: Lang):
  * ohne den Satz der Aufgabe selbst. Deterministisch, damit dieselbe Aufgabe dieselben Beispiele zeigt.
  */
 export function examplesFor(topic: string, opts: { exclude?: string; max?: number; offset?: number } = {}): string[] {
-  const r = RAW.rules[topic];
+  const r = raw().rules[topic];
   const tp = topicById(topic);
   const all: string[] = [];
   const push = (x: unknown) => {
@@ -130,7 +139,7 @@ export function examplesFor(topic: string, opts: { exclude?: string; max?: numbe
 
 /** Alle englischen Beispielsätze eines Themas (Formen, Fallen, Themenbeispiele), ohne Doppelte. */
 export function ruleExamples(topic: string, max = 6): string[] {
-  const r = RAW.rules[topic];
+  const r = raw().rules[topic];
   const out: string[] = [];
   const push = (x: unknown) => {
     const t = typeof x === 'string' ? x.trim() : '';
@@ -150,5 +159,5 @@ export function alsoRight(task: Pick<GrammarTask, 'topic' | 'answer' | 'accepted
 
 /** Hinweis einer „Auch richtig"-Familie (für `checkGrammar` kind `alt`). */
 export function altNote(id: string, lang: Lang): string {
-  return pick(ALT_FAMILIES.find((f) => f.id === id)?.note, lang);
+  return pick(altFamilies().find((f) => f.id === id)?.note, lang);
 }

@@ -65,9 +65,22 @@ function toStored(card: Card, nowMs: number): FsrsStored {
   };
 }
 
-export function reviewFsrs(f: FsrsStored, grade: Grade, nowMs: number): FsrsStored {
+const REVIEW = 2;
+const DAY_MS = 86_400_000;
+
+/**
+ * Nächster FSRS-Stand. `weight` (`weight.ts`) gewichtet den Zuwachs der Stabilität nur bei einer gelungenen Wiederholung einer
+ * Karte im Review-Zustand: S' = S + w · (S_fsrs − S). Das Intervall folgt dem Verhältnis Intervall/Stabilität von FSRS
+ * (bei Zielquote 0,9 gilt Intervall ≈ Stabilität; Streuung und Grenzen bleiben erhalten). Lernschritte und „Nochmal“ bleiben unberührt.
+ */
+export function reviewFsrs(f: FsrsStored, grade: Grade, nowMs: number, weight = 1): FsrsStored {
   const next = scheduler.next(toTsFsrsCard(f, nowMs), new Date(nowMs), grade);
-  return toStored(next.card, nowMs);
+  const out = toStored(next.card, nowMs);
+  if (weight === 1 || f.state !== REVIEW || out.state !== REVIEW || grade < 2 || !(f.stability > 0) || !(out.stability > 0)) return out;
+  const s = round4(Math.min(365, Math.max(0.1, f.stability + weight * (out.stability - f.stability))));
+  const ratio = out.scheduledDays > 0 ? out.scheduledDays / out.stability : 1;
+  const days = Math.min(365, Math.max(1, Math.round(s * ratio)));
+  return { ...out, stability: s, scheduledDays: days, due: Math.round(nowMs + days * DAY_MS) };
 }
 
 /** Abstand bis zur nächsten Fälligkeit je Note (ms) – Beschriftung der Bewertungsknöpfe. */

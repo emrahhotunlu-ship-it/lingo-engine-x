@@ -9,7 +9,7 @@ import { markWhatsNewSeen, whatsNewSeen } from './whatsNew';
 // „Was ist neu" (M20): eine schmale, schließbare Zeile oben – kein Blatt, das beim Öffnen den
 // Fokus nimmt und keine Karte, die mit dem Pflichtknopf konkurriert (Kap. 2.1). Einmal je Update.
 
-const LINES: readonly MessageKey[] = ['wnCheck', 'wnWeek', 'wnSettings', 'wnPreply'];
+const LINES: readonly MessageKey[] = ['wnCheck', 'wnWeek', 'wnSettings', 'wnTeacher'];
 
 export function WhatsNew() {
   const { t } = useT();

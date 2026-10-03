@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems } from './fixtures';
+import { boot, layoutProblems, screen } from './fixtures';
 import { DAY, dump, openModule, sampleCalls } from './inputHelpers';
 
 // Schreiben (Plan §4.3, §8.3): Aufgabe stabil je Lerntag, Entwurf überlebt Neuladen, Abgeben
@@ -102,7 +102,9 @@ test('Schreiben: Aufgabe und Entwurf überleben ein Neuladen', async ({ page }) 
   await typeText(page, 'This is my first draft about the delay.');
   await page.waitForTimeout(1000);
   await page.reload();
-  await openModule(page, 'write');
+  // Fortsetzen (Neubau plan.md §0, app/resume.ts): Der letzte Schritt liegt < 2 Min. zurück, also öffnet
+  // der Rahmen die Schreibaufgabe nach dem Neuladen direkt wieder – ohne Umweg über die Reiter.
+  await screen(page, 'write');
   await expect(page.getByTestId('prompt-card')).toHaveAttribute('data-id', id ?? '');
   await expect(page.getByTestId('draft')).toHaveValue('This is my first draft about the delay.');
   expect((await dump(page))[`wprompt/${DAY}`]?.t).toBe(t1);

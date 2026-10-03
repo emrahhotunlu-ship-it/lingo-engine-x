@@ -1,7 +1,9 @@
 import { mkdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen, type Lang, type Theme } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen, type Lang, type Theme } from './fixtures';
+import { TABS } from '../../src/app/shell/tabs';
 import { learnTour } from './learnHelpers';
+import { openChecks } from './profilHelpers';
 import { inputTour } from './inputHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
 import { tourPatch, trainerTour } from './trainerHelpers';
@@ -83,8 +85,14 @@ for (const vp of VIEWPORTS) {
         await learnTour(page, async (name) => {
           expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
           expect(await layoutProblems(page), name).toEqual([]);
-          // Zitierte Wörter („würde") gehören zur Erklärung, nicht zur Oberfläche.
-          const text = (await page.locator('body').innerText()).replace(/„[^“”]*[“”]|“[^”]*”|"[^"]*"/g, ' ');
+          // Zitierte Wörter („würde") gehören zur Erklärung, nicht zur Oberfläche. Deutsches Übungsmaterial
+          // (Satzbau: „Du willst sagen“ mit der deutschen Bedeutung) ist als lang="de" ausgezeichnet und gehört dazu.
+          const body = await page.evaluate(() => {
+            const copy = document.body.cloneNode(true) as HTMLElement;
+            copy.querySelectorAll('[lang="de"]').forEach((e) => e.remove());
+            return copy.textContent ?? '';
+          });
+          const text = body.replace(/„[^“”]*[“”]|“[^”]*”|"[^"]*"/g, ' ');
           if (lang === 'en') expect(GERMAN_IN_EN.exec(text)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
           else expect(ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
           await page.screenshot({ path: `${SHOTS}/${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
@@ -187,13 +195,12 @@ test('reduzierte Bewegung: alles erscheint ohne Animation vollständig', async (
   const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 }, timezoneId: 'Europe/Berlin' });
   const page = await context.newPage();
   const { errors } = await boot(page, { migrated: true });
-  await openOverview(page);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  await expectStreak(page, '12');
   expect(errors).toEqual([]);
   await context.close();
 });
 
-// Prüfbericht W2: Reiterleiste bei 390 px – vier Reiter (Heute · Üben · Sprechen · Stand), jede
+// Prüfbericht W2: Reiterleiste bei 390 px – alle Reiter aus `TABS` (Neubau: Heute · Wortschatz · Üben · Lesen · Sprechen), jede
 // Beschriftung einzeilig, mit Abstand zum Nachbarn, Touch-Ziele ≥ 44 px (beide Sprachen).
 for (const lang of LANGS) {
   test(`Reiterleiste 390 px einzeilig mit Abstand (${lang})`, async ({ browser }) => {
@@ -214,7 +221,7 @@ for (const lang of LANGS) {
         return { label: text?.textContent ?? '', lines, h: b.height, w: b.width, left: b.left, right: b.right, textLeft: tr.left, textRight: tr.right };
       }),
     );
-    expect(boxes).toHaveLength(4);
+    expect(boxes).toHaveLength(TABS.length);
     for (const b of boxes) {
       expect(b.lines, b.label).toBe(1);
       expect(b.h, b.label).toBeGreaterThanOrEqual(44);
@@ -318,16 +325,17 @@ for (const vp of VIEWPORTS) {
         };
         await screen(page, 'today');
         await expect(page.getByTestId('late-rescue-hint')).toBeVisible();
-        await expect(page.getByTestId('check-offer')).toBeVisible();
         await check('heute');
-        await page.getByTestId('check-offer-start').click();
+        // Der Wochen-Check startet (Neubau) über Profil → „Wochen-Check“, nicht mehr auf Heute.
+        await openChecks(page);
+        await page.getByTestId('check-start').click();
         await checkSettled(page);
         await check('wochencheck');
         await playCheck(page);
         await check('wochencheck-ergebnis');
-        // Zurück zur Herkunft (Heute), dann über „Stand“ in die Einstellungen.
+        // Zurück zur Herkunft (Seite Wochen-Check), dann in die Einstellungen.
         await page.getByTestId('summary-back').click();
-        await screen(page, 'today');
+        await screen(page, 'checks');
         await openSettings(page);
         await expect(page.getByTestId('work-ctx')).toBeVisible();
         await check('einstellungen');

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen } from './fixtures';
+import { boot, layoutProblems, screen, openEntry } from './fixtures';
 import { dump, forcedPatch, planPatch } from './trainerHelpers';
 import type { InstallOptions } from '../../src/platform/dev/install';
 
@@ -11,6 +11,7 @@ const calls = (page: Page): Promise<Call[]> =>
   page.evaluate(() => [...(window as unknown as { __LINGO_FAKE__: { sampleCalls: Call[] } }).__LINGO_FAKE__.sampleCalls]);
 const chatCalls = async (page: Page) => (await calls(page)).filter((c) => c.id === 'companion-chat');
 const subs = (page: Page): Promise<number> => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { activeSubscriptions(): number } } }).__LINGO_FAKE__.db.activeSubscriptions());
+const subPaths = (page: Page): Promise<string[]> => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { activePaths(): string[] } } }).__LINGO_FAKE__.db.activePaths());
 type Msg = { role: string; content: string; t?: number; lang?: string; stopped?: boolean };
 const chatDoc = async (page: Page) => (await dump(page))['app/chat'] as { msgs: Msg[]; since?: number };
 
@@ -191,7 +192,15 @@ test.describe('Desktop 1440', () => {
     await page.getByTestId('companion-close').click();
     await expect(page.getByTestId('companion')).toHaveCount(0);
     await expect.poll(() => subs(page)).toBe(base);
-    expect(base).toBeLessThanOrEqual(10);
+    // C-10: Grundstock auf „Heute“ – je Dokument bzw. Sammlung genau EIN Abo (Kap. 3.4), keine Dopplung.
+    // Neubau: 6 Live-Dokumente (profile, course, assess, schema, repair, memory – „Claude merkt sich“
+    // liest app/memory synchron aus dem Live-Stand, prompts/work.ts) + 4 Sammlungen (vocab, grammar,
+    // archive, chunk) + Tagesprotokoll log/<heute> + app/week (Wochenplan) + app/decks (Stapel) = 13,
+    // weit unter der Vertragsgrenze von 64 je Ansicht (db.d.ts). Früher (Phase 5) waren es ≤ 10.
+    const paths = await subPaths(page);
+    expect(paths).toHaveLength(base);
+    expect(paths.filter((p, i) => paths.indexOf(p) !== i), 'doppelte Abos').toEqual([]);
+    expect(base).toBeLessThanOrEqual(13);
     await expect.poll(async () => (await chatDoc(page)).msgs.length, { timeout: 15_000 }).toBe(6);
     expect((await chatDoc(page)).msgs.at(-1)?.stopped).toBeUndefined();
   });
@@ -304,8 +313,7 @@ test.describe('Handy 390: Begleiter sieht Phase-2–4-Bildschirme (Prüfbericht 
 
   test('Grammatikaufgabe und Rollenspiel melden ihren Kontext statt „Heute"; offene Aufgabe mit Schutzregel', async ({ page }) => {
     const { errors } = await start(page);
-    await page.getByTestId('tab-learn').click();
-    await page.getByTestId('hub-grammar').click();
+    await openEntry(page, 'hub-grammar');
     await expect(page.getByTestId('grammar')).toBeVisible();
     expect(await seeing(page)).toMatchObject({ area: 'grammar', text: 'sieht gerade: Grammatik' });
     await page.getByTestId('gr-start').click();

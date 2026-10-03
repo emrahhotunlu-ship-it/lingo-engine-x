@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { boot, openSettings, openOverview, screen, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
+import { openChecks } from './profilHelpers';
 import { ARTICLE_OWN, inputTour, openModule } from './inputHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
 import { tourPatch, trainerTour } from './trainerHelpers';
@@ -167,15 +168,20 @@ for (const theme of THEMES) {
       };
       await screen(page, 'today');
       await expect(page.getByTestId('late-rescue-hint')).toBeVisible();
+      // Die Tageskarte blendet Zähler und Zeilen noch ein, wenn der Hinweis schon steht: erst ruhen lassen,
+      // sonst misst axe den Kontrast mitten im Übergang (sporadisch rot, auch ohne Codeänderung).
+      await page.waitForTimeout(400);
       await scan('heute');
-      await page.getByTestId('check-offer-start').click();
+      // Der Wochen-Check startet (Neubau) über Profil → „Wochen-Check“, nicht mehr auf Heute.
+      await openChecks(page);
+      await page.getByTestId('check-start').click();
       await checkSettled(page);
       await scan('wochencheck');
       await playCheck(page);
       await scan('wochencheck-ergebnis');
-      // Zurück zur Herkunft (Heute), dann über „Stand“ in die Einstellungen.
+      // Zurück zur Herkunft (Seite Wochen-Check), dann in die Einstellungen.
       await page.getByTestId('summary-back').click();
-      await screen(page, 'today');
+      await screen(page, 'checks');
       await openSettings(page);
       await expect(page.getByTestId('work-ctx')).toBeVisible();
       for (const p of ['Pflaume', 'Graphit', 'Salbei'] as const) {

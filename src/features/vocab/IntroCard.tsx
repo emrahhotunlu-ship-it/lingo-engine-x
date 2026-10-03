@@ -10,7 +10,10 @@ import { meaningOf } from '../../domain/srs/cards';
 import { posKey } from '../../domain/srs/explain';
 import type { TrainCard } from '../../domain/srs/types';
 import type { MessageKey } from '../../i18n';
-import { continueIntro, type FirstKind } from './session';
+import { continueIntro, skipCurrent, type FirstKind } from './session';
+import { markKnown } from './list/actions';
+import { useClock } from '../../app/clock';
+import { toast } from '../../ui/Toast';
 
 // Einführung einer neuen Karte (Stufe 0): Bedeutung, Ursprungssatz, Verbindung. Schreibt nichts.
 
@@ -27,13 +30,23 @@ export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: Fi
     onDone(kind);
   };
   useHotkeys({ enter: go }, api.isInput);
+  const day = useClock((s) => s.today);
+  // Soll N32 („Kenne ich“, Memrise): wie „Kann ich sicher“ – Stufe 4, in 30 Tagen wieder; die Karte
+  // fällt aus der Runde (keine Abfrage heute).
+  const known = () => {
+    const kind = skipCurrent();
+    if (kind === 'typed') api.focusNow();
+    else api.blur();
+    onDone(kind);
+    void markKnown(card, day).then((ok) => toast(ok ? t('vcKnownSaved') : t('saveFailed'), ok ? 'info' : 'error'));
+  };
   const ipa = ipaOf(card.word);
   // Mehrere Bedeutungen („Schlussfolgerung; Abzug“) einzeln zeigen; welche gemeint ist, zeigt der Satz.
   const meanings = (meaning ?? '').split(/\s*;\s*/).filter(Boolean);
   const def = card.def && card.def.trim() && card.def.trim() !== meaning ? card.def.trim() : null;
   const row = (label: string, body: React.ReactNode, testId?: string) => (
-    <div className="grid grid-cols-[6.5rem_1fr] items-baseline gap-3 border-t border-line py-2.5 first:border-t-0 sm:grid-cols-[8rem_1fr]" {...(testId ? { 'data-testid': testId } : {})}>
-      <dt className="text-xs font-medium tracking-wide text-subtle uppercase">{label}</dt>
+    <div className="flex flex-col gap-1 border-t border-line py-2.5 first:border-t-0 sm:grid sm:grid-cols-[8rem_1fr] sm:items-baseline sm:gap-3" {...(testId ? { 'data-testid': testId } : {})}>
+      <dt className="min-w-0 text-xs font-medium tracking-wide break-words text-subtle uppercase">{label}</dt>
       <dd className="min-w-0">{body}</dd>
     </div>
   );
@@ -86,6 +99,11 @@ export function IntroCard({ card, onDone }: { card: TrainCard; onDone: (kind: Fi
         <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={go} data-testid="intro-continue">
           {t('introContinue')}
         </Button>
+        {card.kind === 'vocab' && (
+          <Button variant="ghost" icon="check" onClick={known} data-testid="intro-known">
+            {t('vcKnown')}
+          </Button>
+        )}
         <span className="text-sm text-muted">{t('introPurpose')}</span>
       </div>
     </article>

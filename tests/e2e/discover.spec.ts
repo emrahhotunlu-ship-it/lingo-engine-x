@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { boot, layoutProblems } from './fixtures';
-import { DAY, activeSubscriptions, answerAll, dump, entriesOf, openModule } from './inputHelpers';
+import { boot, layoutProblems, screen } from './fixtures';
+import { DAY, activePaths, answerAll, dump, entriesOf, openModule, settledPaths } from './inputHelpers';
 
 // Entdecken (Kap. 6.9, Plan §4.4, §8.3): Liste „Neu"/„Erledigt", Artikel in vier Schritten,
 // Video/Podcast in drei ohne Zitat und ohne Fragen, sichere Links, `disc` im Altformat,
@@ -10,10 +10,16 @@ test('Entdecken: Artikel in vier Schritten, Schreibwege, Feed unverändert, Abo 
   test.setTimeout(90_000);
   const { errors, external } = await boot(page, { migrated: true });
   const before = await dump(page);
-  const baseSubs = await activeSubscriptions(page);
+  // Abos auf „Heute“, sobald alles steht (Neubau: ein Abo je Dokument, Reiter-Wurzeln haben eigene).
+  await screen(page, 'today');
+  const baseSubs = await settledPaths(page);
+  expect(baseSubs).not.toContain('feed/*');
   await openModule(page, 'discover');
   await expect(page.getByTestId('feed-list')).toBeVisible();
-  expect(await activeSubscriptions(page)).toBe(baseSubs + 1);
+  // Genau EIN Abo auf `feed`, solange Entdecken offen ist, und keine Dopplung.
+  const open = await activePaths(page);
+  expect(open.filter((p) => p === 'feed/*')).toHaveLength(1);
+  expect(open.filter((p, i) => open.indexOf(p) !== i), 'doppelte Abos').toEqual([]);
   expect(await layoutProblems(page)).toEqual([]);
 
   // Erledigt ist Zustand ohne Knopf.
@@ -75,7 +81,7 @@ test('Entdecken: Artikel in vier Schritten, Schreibwege, Feed unverändert, Abo 
   await expect(page.getByTestId('unit-close')).toHaveCount(0);
   await page.getByTestId('tab-today').click();
   await page.locator('[data-screen="today"]').waitFor();
-  await expect.poll(() => activeSubscriptions(page)).toBe(baseSubs);
+  await expect.poll(() => activePaths(page)).toEqual(baseSubs);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

@@ -3,14 +3,16 @@ import { boot, layoutProblems, screen, type Lang } from './fixtures';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
 // „Sag es“ (Lernberatung 27.09., V1/V2):
-// - Plan: am Sag-es-Tag (23.09.2026) ist „Sag es“ Pflichtkanal – nur mit Claude; Satzbau nie Pflicht.
+// - Plan (Neubau, Wochenplan plan.md §1.5): montags ist „Sag es“ Block 3 der Tageseinheit (Pflicht),
+//   mit und ohne Claude derselbe Plan (M5) – ohne Claude wird ungeprüft gespeichert.
 // - Ablauf: Situation → Antwort → Prüfen → drei Schichten → „Nochmal, aber besser“ → zweite Prüfung
 //   → beide Fassungen. Korrekturen des ersten Durchgangs landen in `app/repair`, der Eintrag in
 //   `say/<Monat>`, `act.say` erfüllt die Pflicht (erst nach dem zweiten Durchgang).
 // - Ohne Claude blockiert der Baustein die Pflicht nicht: Speichern ohne Prüfung.
 
 type Doc = Record<string, unknown>;
-const SAY_DAY = '2026-09-23';
+/** Montag nach dem Stichtag (KW 39): Block 3 laut Wochenplan = „Sag es“. */
+const SAY_DAY = '2026-09-21';
 
 const FIRST =
   'Thank you for your honest feedback. I understand that the price looks high compared to your current archive. ' +
@@ -27,39 +29,41 @@ const DESKTOP = { width: 1280, height: 900 };
 /** Gespeicherter Plan des Stichtags mit „Sag es“ als einzigem Pflichtpunkt. */
 const SAY_PLAN = { d: DAY, v: 1, ids: ['say', 'gram', 'cloze'], why: [[['whySay']], [['whyRotation']], [['whyRotation']]], duty: ['ch:say'], goal: { review: 0, ch: 1 }, lesson: null, at: 1 };
 
-const planOf = async (page: Page) => (await dump(page))['app/profile']?.plan as { d: string; ids: string[]; duty: string[] } | undefined;
+const planOf = async (page: Page) => (await dump(page))['app/profile']?.plan as { d: string; duty: string[]; u?: { b: Array<[number, string, number]> } } | undefined;
 const actOf = (d: Dump, day: string): Doc => (d['app/profile']?.act as Record<string, Doc> | undefined)?.[day] ?? {};
 
-const TEXT: Record<Lang, { title: string; task: string; before: string; hero: string }> = {
-  de: { title: 'Sag es', task: 'Antworte in 3–6 Sätzen auf Englisch.', before: 'Vorher', hero: 'Sag es · etwa 8 Min.' },
-  en: { title: 'Say it', task: 'Answer in 3–6 sentences in English.', before: 'Before', hero: 'Say it · about 8 min' },
+const TEXT: Record<Lang, { title: string; task: string; before: string; min: string }> = {
+  de: { title: 'Sag es', task: 'Antworte in 3–6 Sätzen auf Englisch.', before: 'Vorher', min: '8 Min.' },
+  en: { title: 'Say it', task: 'Answer in 3–6 sentences in English.', before: 'Before', min: '8 min' },
 };
 
 test.describe('Tagesplan', () => {
   test.use({ viewport: DESKTOP });
 
-  test('am Sag-es-Tag mit Claude ist „Sag es“ Pflicht (8 Min.), ohne Claude die bisherige Wahl', async ({ page, browser }) => {
+  test('am Sag-es-Tag (Montag) ist „Sag es“ Block 3 der Pflicht; ohne Claude derselbe Plan', async ({ page, browser }) => {
     const { errors, external } = await boot(page, { migrated: true, now: `${SAY_DAY}T20:00:00+02:00` });
     await screen(page, 'today');
     await expect.poll(async () => (await planOf(page))?.d).toBe(SAY_DAY);
     const plan = (await planOf(page))!;
-    expect(plan.ids[0]).toBe('say');
-    expect(plan.duty.at(-1)).toBe('ch:say');
-    const row = page.locator('[data-testid="duty"][data-duty="ch:say"]');
+    expect(plan.u?.b.find((b) => b[0] === 3)?.[1]).toBe('task.say');
+    expect(plan.duty).toContain('ch:u-task');
+    const row = page.locator('[data-testid="duty"][data-duty="ch:u-task"]');
     await expect(row).toHaveAttribute('data-state', 'open');
     await expect(row).toContainText('Sag es');
-    await expect(row.getByTestId('reason')).toHaveAttribute('data-why', 'whySay');
+    await expect(row.getByTestId('reason')).toHaveAttribute('data-why', 'task.say');
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
 
+    // Ohne Claude: Blockzahl, Blöcke und Pflicht unverändert (M5) – „Sag es“ speichert dann ungeprüft.
     const ctx = await browser.newContext({ viewport: DESKTOP, timezoneId: 'Europe/Berlin', locale: 'de-DE' });
     const p2 = await ctx.newPage();
     await boot(p2, { migrated: true, now: `${SAY_DAY}T20:00:00+02:00`, fake: { capabilities: { sample: false } } });
     await screen(p2, 'today');
     await expect.poll(async () => (await planOf(p2))?.d).toBe(SAY_DAY);
     const without = (await planOf(p2))!;
-    expect(['gram', 'cloze']).toContain(without.ids[0]);
-    expect(without.duty).not.toContain('ch:say');
+    expect(without.u?.b).toEqual(plan.u?.b);
+    expect(without.duty).toEqual(plan.duty);
+    await expect(p2.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Sag es');
     await ctx.close();
   });
 });
@@ -69,11 +73,18 @@ async function fullRun(page: Page, lang: Lang, viewport: { width: number; height
   const { errors, external } = await boot(page, { migrated: true, lang, fake: { patch: { 'app/profile': { plan: SAY_PLAN } } } });
   await screen(page, 'today');
   await expect(page.getByTestId('hero')).toHaveAttribute('data-duty', 'ch:say');
-  await expect(page.getByTestId('hero')).toContainText(TEXT[lang].hero);
+  const sayRow = page.locator('[data-testid="duty"][data-duty="ch:say"]');
+  await expect(sayRow).toContainText(TEXT[lang].title);
+  await expect(sayRow).toContainText(TEXT[lang].min);
   await page.getByTestId('start').click();
 
   const say = page.getByTestId('say');
+  // Neubau N71 „Laut zuerst“: Zeitbalken, laut sprechen, dann aufschreiben.
+  await expect(say).toHaveAttribute('data-phase', 'aloud');
+  await expect(page.getByTestId('say-aloud-timer')).toHaveAttribute('data-left', '60');
+  await page.getByTestId('say-aloud-done').click();
   await expect(say).toHaveAttribute('data-phase', 'write1');
+  await expect(page.getByTestId('say-dictate-hint')).toBeVisible();
   await expect(page.getByTestId('task')).toHaveText(TEXT[lang].task);
   // Zweck nur hinter dem Info-Symbol (A7).
   await expect(page.getByTestId('purpose')).toHaveCount(0);
@@ -152,12 +163,13 @@ async function fullRun(page: Page, lang: Lang, viewport: { width: number; height
   expect(log).toHaveLength(1);
   expect(log[0]).toMatchObject({ id: sit, m: 'say', ctx: 'say', n: 2, ok: true });
 
-  // Heute: der Pflichtkanal ist Zustand, kein Knopf.
+  // Heute: der Pflichtkanal ist erledigt → Fertig-Karte (Zustand, kein Knopf; Neubau N15).
   await page.getByTestId('summary-back').click();
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toHaveAttribute('data-status', 'allDone');
-  const done = page.locator('[data-testid="done-item"], [data-testid="duty"]').filter({ hasText: TEXT[lang].title });
-  await expect(done).toHaveAttribute('data-state', 'done');
+  await expect(page.getByTestId('today-status')).toHaveAttribute('data-done', '1');
+  const done = page.locator('[data-testid="today-card"][data-done="true"]');
+  await expect(done).toBeVisible();
   await expect(done.locator('button, a, input, textarea')).toHaveCount(0);
   await expect(page.getByTestId('hero')).toHaveCount(0);
   expect(errors).toEqual([]);
@@ -181,6 +193,7 @@ test.describe('ohne Claude', () => {
     const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/profile': { plan: SAY_PLAN } } } });
     await screen(page, 'today');
     await page.getByTestId('start').click();
+    await page.getByTestId('say-aloud-done').click();
     await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'write1');
     await expect(page.getByTestId('say-noai-hint')).toBeVisible();
     await expect(page.getByTestId('say-check')).toHaveCount(0);

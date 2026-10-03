@@ -1,7 +1,4 @@
-import grammarJson from '../../content/legacy/grammar.json';
 import extraJson from '../../content/grammar-extra.json';
-import rulesJson from '../../content/legacy/rules.json';
-import c1Json from '../../content/c1/toolkit.json';
 import { TOPICS, topicById } from '../content';
 import type { GrammarTask, GrammarTaskType, TaskSrc } from '../learn/types';
 import { hash32, mulberry32, shuffle } from '../random';
@@ -9,6 +6,7 @@ import { topicP } from './bkt';
 import { dueErrors } from './errors';
 import { legacyTaskKey } from './key';
 import { asText } from '../text/str';
+import { asList, asRecord, grammarJson, rulesJson, toolkitJson } from './raw';
 
 // Aufgaben: Normalisierung (Port von `validG`, grammar.js:51) und Auswahl einer Runde
 // (phase2-plan §5.2). Rein: Zeit und Startwert kommen als Parameter.
@@ -95,10 +93,13 @@ export function toPoolItem(t: GrammarTask): Doc {
 }
 
 type RuleTrap = { bad?: unknown; good?: unknown; why?: unknown };
-const RULES: Record<string, { traps?: RuleTrap[] }> = {
-  ...(c1Json.rules as unknown as Record<string, { traps?: RuleTrap[] }>),
-  ...(rulesJson as { rules: Record<string, { traps?: RuleTrap[] }> }).rules,
-};
+/** Fallen des Regelwerks je Thema (geparst beim ersten Gebrauch, `raw.ts`). */
+function ruleTraps(): Record<string, { traps?: RuleTrap[] }> {
+  return {
+    ...(asRecord(toolkitJson().rules) as Record<string, { traps?: RuleTrap[] }>),
+    ...(asRecord(rulesJson().rules) as Record<string, { traps?: RuleTrap[] }>),
+  };
+}
 
 let seedCache: GrammarTask[] | null = null;
 /**
@@ -117,10 +118,11 @@ export function seedTasks(): readonly GrammarTask[] {
       out.push(t);
     }
   };
-  for (const g of grammarJson.seedGrammar as unknown[]) push(normalizeTask(g, 'seed'));
+  for (const g of asList(grammarJson().seedGrammar)) push(normalizeTask(g, 'seed'));
   for (const g of extraJson.tasks as unknown[]) push(normalizeTask(g, 'seed', 'content/grammar-extra'));
   // C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): je Thema mindestens 12 Startaufgaben.
-  for (const g of c1Json.tasks as unknown[]) push(normalizeTask(g, 'seed', 'content/c1'));
+  for (const g of asList(toolkitJson().tasks)) push(normalizeTask(g, 'seed', 'content/c1'));
+  const RULES = ruleTraps();
   for (const tp of TOPICS) {
     for (const trap of RULES[tp.id]?.traps ?? []) {
       const why = Array.isArray(trap.why) ? trap.why.map(s) : [];

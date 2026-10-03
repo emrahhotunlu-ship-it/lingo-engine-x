@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, openOverview } from './fixtures';
+import { boot, openSettings, openOverview, expectStreak } from './fixtures';
 
 type Dump = Record<string, Record<string, unknown>>;
 const dump = (page: Page) =>
@@ -58,7 +58,7 @@ test('Diagnose zeigt Fähigkeiten, Dokumentzahl und Datenversion', async ({ page
   await expect(dialog.getByText('Datenbank', { exact: true })).toHaveCount(0);
   await dialog.getByTestId('diag-toggle').click();
   await expect(dialog.getByText('Datenbank', { exact: true })).toBeVisible();
-  await expect(dialog.getByText('209 von 5.000')).toBeVisible();
+  await expect(dialog.getByText('214 von 5.000')).toBeVisible();
   await expect(dialog.getByText(/^1 · 20\. September 2026$/)).toBeVisible();
   await expect(dialog.getByText('Keine Fehler protokolliert.')).toBeVisible();
 });
@@ -78,8 +78,7 @@ test('scheitert das Speichern, wird die Änderung zurückgenommen und gemeldet',
 
 test('ein ungültiges Profil wird gemeldet, angezeigt und beim Speichern nie ersetzt', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { rate: 'schnell' } } } });
-  await openOverview(page);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
+  await expectStreak(page, '12');
   await openSettings(page);
   await page.getByRole('radio', { name: 'English' }).click();
   await expect.poll(async () => (await dump(page))['app/profile']?.lang).toBe('en');
@@ -100,7 +99,7 @@ test('Datenexport über downloads liefert alle Dokumente als JSON', async ({ pag
   await expect(page.getByText('Sicherung gespeichert.')).toBeVisible();
   const saved = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { saved: Array<{ data: string }> } }).__LINGO_FAKE__.saved[0]?.data ?? '{}');
   const json = JSON.parse(saved) as { documentCount: number; schemaVersion: number; documents: Record<string, unknown> };
-  expect(json.documentCount).toBe(209);
+  expect(json.documentCount).toBe(214);
   expect(json.schemaVersion).toBe(1);
   expect(Object.keys(json.documents)).toContain('daily/2026-09-20');
 });

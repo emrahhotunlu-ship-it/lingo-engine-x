@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { INPUT_MODULES } from '../../app/modules';
 import { useNav } from '../../app/nav';
@@ -8,7 +8,8 @@ import { lessonMeta, lessonOrder } from '../../domain/course/catalog';
 import { doneLessons } from '../../domain/course/courseDone';
 import { pickLesson } from '../../domain/course/next';
 import { dueErrors } from '../../domain/grammar/errors';
-import { dueCards } from '../../domain/srs/queue';
+import { repairStats } from '../../domain/repair/daily';
+import { entriesFor } from '../../app/registry';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
 import { useSpeech, unlockSpeech } from '../../platform/speech';
@@ -23,7 +24,7 @@ import { feasibleData } from '../today/store';
 import { loadLearnInputs, useLearnInputs } from './inputs';
 import { useChannelState } from '../input/InputOffers';
 import { TabTitle } from '../system/Chrome';
-import { FreeRoundSheet } from '../vocab/FreeRoundSheet';
+import { startGrammar } from '../grammar/session';
 
 // Reiter „Üben" (UX-Beratung Nr. 8, bisher „Lernen"): gegliedert nach Kurs, Wortschatz und
 // Grammatik, Kurzübungen, Lesen/Hören/Schreiben (mit „Sag es") und Entdecken. Nichts hier ist
@@ -88,6 +89,35 @@ const ModuleIcon = ({ name, channel }: { name: InputIconName; channel: Channel }
   </span>
 );
 
+/** Gruppen der Einstiege auf dem Platz `learn` (plan.md §1.3). Fremde Bereiche hängen ihre Zeilen per
+ * `entries: [{ place: 'learn', group }]` an: `way` (Dein Weg, z. B. P1 „Deine Woche“), `errors`
+ * (Aus deinen Fehlern), `grammar` (Grammatik & Fallen), `training` (Training, z. B. P7). Einstiege
+ * ohne oder mit unbekannter Gruppe erscheinen unter „Training“ – nichts geht verloren. */
+export const LEARN_GROUPS = ['path', 'way', 'errors', 'grammar', 'training'] as const;
+
+function ForeignRows({ group }: { group: (typeof LEARN_GROUPS)[number] }) {
+  const { t } = useT();
+  const api = useHiddenInput();
+  const go = useNav((s) => s.go);
+  const all = entriesFor('learn');
+  const known = new Set<string>(LEARN_GROUPS);
+  const list = all.filter((e) => (group === 'training' ? !e.group || !known.has(e.group) || e.group === 'training' : e.group === group));
+  return (
+    <>
+      {list.map((e) => (
+        <Row
+          key={e.id}
+          icon={<ChannelIcon channel="grammar"><Icon name={e.icon} /></ChannelIcon>}
+          title={t(e.label)}
+          sub={e.sub ? t(e.sub) : ''}
+          onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)}
+          testId={e.id}
+        />
+      ))}
+    </>
+  );
+}
+
 export function LearnHub() {
   const { t, tn, lang } = useT();
   const api = useHiddenInput();
@@ -96,11 +126,10 @@ export function LearnHub() {
   const course = useLive((s) => s.docs['app/course']);
   const assess = useLive((s) => s.docs['app/assess']);
   const grammar = useLive((s) => s.collections.grammar);
+  const repairDoc = useLive((s) => s.docs['app/repair']);
   const vocab = useLive((s) => s.collections.vocab);
   const tts = useSpeech((s) => s.status === 'ready');
   const inputs = useLearnInputs((s) => s.status);
-  const { rows } = useChannelState();
-  const [freeRound, setFreeRound] = useState(false);
 
   useEffect(() => {
     if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
@@ -120,9 +149,10 @@ export function LearnHub() {
     return { doneN: order.filter((id) => done.has(id)).length, totalN: order.length };
   }, [course, lessons]);
   const nErr = useMemo(() => dueErrors(grammar ?? new Map(), now).length, [grammar, now]);
-  const { data, nDue } = useMemo(() => {
+  const rep = useMemo(() => repairStats(repairDoc), [repairDoc]);
+  const data = useMemo(() => {
     const cards = drillCards(now);
-    return { data: feasibleData(cards, lang, now), nDue: dueCards(cards, now).length };
+    return feasibleData(cards, lang, now);
     // `inputs` und `vocab`: neu rechnen, sobald Pool/Lektionen bzw. Karten da sind.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [now, lang, inputs, vocab]);
@@ -134,8 +164,116 @@ export function LearnHub() {
     else api.blur();
     go({ name: 'drill', kind, ctx: 'xtra' });
   };
+  const startErrors = () => {
+    const first = startGrammar({ mode: 'errors' });
+    if (first === 'typed') api.focusNow();
+    go({ name: 'grammarSession', mode: 'errors' });
+  };
 
   const drills = DRILLS.filter((d) => feasible(d.kind, data, { tts }));
+  return (
+    <motion.div className="flex flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
+      <motion.div variants={item}>
+        <TabTitle title={t('lhTitle')} />
+      </motion.div>
+
+      {/* 1. Dein Weg: Deine Woche (P1) und die Kurs-Karte (nächste Lektion, Fortschritt). */}
+      <Section id="lh-way" title={t('nbLernenHubWay')}>
+        {(entriesFor('learn', 'path').length > 0 || entriesFor('learn', 'way').length > 0) && (
+          <List label={t('nbLernenHubWay')}>
+            <ForeignRows group="path" />
+            <ForeignRows group="way" />
+          </List>
+        )}
+        <div className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" data-testid="hub-course-card">
+          <p className="lx-eyebrow">{t('lhCourse')}</p>
+          <p className="text-lg font-semibold tracking-tight">{meta ? (lang === 'de' ? meta.de : meta.en) : t('courseComplete')}</p>
+          <p className="text-sm text-muted">{t('csProgress', { done: doneN, total: totalN })}</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {meta && (
+              <Button variant="primary" iconAfter="arrowRight" onClick={() => go({ name: 'lesson', id: meta.id })} data-testid="hub-next-lesson">
+                {t('lhOpenLesson')}
+              </Button>
+            )}
+            <button type="button" className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-accent-text hover:underline" onClick={() => go({ name: 'course' })} data-testid="hub-course">
+              {t('lhAllLessons')}
+              <Icon name="arrowRight" size={16} />
+            </button>
+          </div>
+        </div>
+      </Section>
+
+      {/* 2. Aus deinen Fehlern (Prüfung Ü1: der einzige Abschnitt mit fälligen Elementen, deshalb oben). */}
+      <Section id="lh-errors" title={t('nbLernenHubErrors')}>
+        <List label={t('nbLernenHubErrors')} testId="hub-errors-list">
+          {nErr > 0 ? (
+            <Row icon={<ChannelIcon channel="grammar"><Icon name="refresh" /></ChannelIcon>} title={t('nbLernenHubGrammarErrors')} sub={tn('grDueBadge', nErr)} onClick={startErrors} testId="hub-errors" badge={String(nErr)} />
+          ) : (
+            <li className="flex min-h-14 items-center gap-3 px-4 py-3 text-sm text-muted" data-testid="hub-errors-none">
+              <ChannelIcon channel="grammar"><Icon name="check" /></ChannelIcon>
+              <span>{t('nbLernenHubNoErrors')}</span>
+            </li>
+          )}
+          <li className="flex min-h-14 items-center gap-3 px-4 py-3" data-testid="hub-repair">
+            <ChannelIcon channel="speak"><Icon name="refresh" /></ChannelIcon>
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="font-medium">{t('nbLernenHubRepair')}</span>
+              <span className="lx-tnum text-sm text-muted">{t('nbLernenHubRepairSub', { open: rep.open, safe: rep.safe })}</span>
+            </span>
+          </li>
+          <ForeignRows group="errors" />
+        </List>
+      </Section>
+
+      {/* 3. Grammatik & Fallen. */}
+      <Section id="lh-grammar" title={t('nbLernenHubGrammar')}>
+        <List label={t('nbLernenHubGrammar')}>
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="grammar" /></ChannelIcon>} title={t('lhGrammar')} sub={t('nbLernenHubGrammarSub')} onClick={() => go({ name: 'grammar' })} testId="hub-grammar" badge={nErr ? tn('grDueBadge', nErr) : null} />
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="target" /></ChannelIcon>} title={t('nbLernenHubPatterns')} sub={t('nbLernenHubPatternsSub')} onClick={() => go({ name: 'patterns' })} testId="hub-patterns" />
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="book" /></ChannelIcon>} title={t('nbLernenHubWissen')} sub={t('nbLernenHubWissenSub')} onClick={() => go({ name: 'wissen' })} testId="hub-wissen" />
+          <ForeignRows group="grammar" />
+        </List>
+      </Section>
+
+      {/* 4. Training: Kurzübungen (nur machbare, G5) und die neuen Übungen anderer Bereiche (P7). */}
+      <Section id="lh-drills" title={t('nbLernenHubTraining')}>
+        {drills.length > 0 && (
+          <div className="grid grid-cols-2 gap-3">
+            {drills.map((d) => (
+              <button
+                key={d.kind}
+                type="button"
+                onClick={() => startDrillRound(d.kind)}
+                data-testid={`hub-drill-${d.kind}`}
+                className="lx-glass flex min-h-28 flex-col items-start gap-2 rounded-[var(--radius-card)] p-4 text-left transition-colors hover:bg-surface-strong"
+              >
+                <ChannelIcon channel={d.channel}>
+                  <Icon name={d.icon} />
+                </ChannelIcon>
+                <span className="font-medium">{t(d.title)}</span>
+                <span className="text-xs text-muted">{t(d.sub)}</span>
+              </button>
+            ))}
+          </div>
+        )}
+        {entriesFor('learn').some((e) => !e.group || !(LEARN_GROUPS as readonly string[]).includes(e.group) || e.group === 'training') && (
+          <List label={t('nbLernenHubTraining')}>
+            <ForeignRows group="training" />
+          </List>
+        )}
+      </Section>
+    </motion.div>
+  );
+}
+
+/**
+ * Lesen, Hören, Schreiben (mit „Sag es“) und Entdecken – auch Wurzel des Reiters „Lesen“ im
+ * Neubau-Rahmen (WP0a: `areas/lesen.tsx`, bis P4 die Bibliothek baut).
+ */
+export function InputSections() {
+  const { t } = useT();
+  const go = useNav((s) => s.go);
+  const { rows } = useChannelState();
   const done = (id: string) => rows.find((r) => r.module.id === id)?.done ?? false;
   const practiced = (id: string) =>
     done(id) ? (
@@ -162,78 +300,7 @@ export function LearnHub() {
   };
 
   return (
-    <motion.div className="flex flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
-      <motion.div variants={item}>
-        <TabTitle title={t('lhTitle')} />
-      </motion.div>
-
-      <Section id="lh-course" title={t('lhCourse')}>
-        <div className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5">
-          <p className="text-sm text-muted">{t('csProgress', { done: doneN, total: totalN })}</p>
-          <p className="text-lg font-semibold tracking-tight">{meta ? (lang === 'de' ? meta.de : meta.en) : t('courseComplete')}</p>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            {meta && (
-              <Button variant="primary" iconAfter="arrowRight" onClick={() => go({ name: 'lesson', id: meta.id })} data-testid="hub-next-lesson">
-                {t('lhOpenLesson')}
-              </Button>
-            )}
-            <button type="button" className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-accent-text hover:underline" onClick={() => go({ name: 'course' })} data-testid="hub-course">
-              {t('lhAllLessons')}
-              <Icon name="arrowRight" size={16} />
-            </button>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="lh-library" title={`${t('lhVocab')} · ${t('lhGrammar')}`}>
-        <List label={t('lhLibrary')}>
-          <Row
-            icon={<ChannelIcon channel="cards"><Icon name="cards" /></ChannelIcon>}
-            title={t('lhVocab')}
-            sub={nDue ? tn('vocabDue', nDue) : t('lhVocabSub')}
-            onClick={() => go({ name: 'vocab' })}
-            testId="hub-vocab"
-          />
-          <Row
-            icon={<ChannelIcon channel="cards"><Icon name="plus" /></ChannelIcon>}
-            title={t('lhVocabFree')}
-            sub={t('lhFreeRoundSub')}
-            onClick={() => setFreeRound(true)}
-            testId="hub-free-round"
-          />
-          <Row
-            icon={<ChannelIcon channel="grammar"><Icon name="grammar" /></ChannelIcon>}
-            title={t('lhGrammar')}
-            sub={t('lhGrammarSub')}
-            onClick={() => go({ name: 'grammar' })}
-            testId="hub-grammar"
-            badge={nErr ? tn('grDueBadge', nErr) : null}
-          />
-        </List>
-      </Section>
-
-      {drills.length > 0 && (
-        <Section id="lh-drills" title={t('lhDrills')}>
-          <div className="grid grid-cols-2 gap-3">
-            {drills.map((d) => (
-              <button
-                key={d.kind}
-                type="button"
-                onClick={() => startDrillRound(d.kind)}
-                data-testid={`hub-drill-${d.kind}`}
-                className="lx-glass flex min-h-28 flex-col items-start gap-2 rounded-[var(--radius-card)] p-4 text-left transition-colors hover:bg-surface-strong"
-              >
-                <ChannelIcon channel={d.channel}>
-                  <Icon name={d.icon} />
-                </ChannelIcon>
-                <span className="font-medium">{t(d.title)}</span>
-                <span className="text-xs text-muted">{t(d.sub)}</span>
-              </button>
-            ))}
-          </div>
-        </Section>
-      )}
-
+    <>
       <Section id="lh-input" title={t('lhInput')}>
         <List label={t('lhInput')} testId="input-modules">
           {moduleRow('read')}
@@ -248,7 +315,6 @@ export function LearnHub() {
         <List label={t('ch_discover')}>{moduleRow('discover')}</List>
       </Section>
 
-      <FreeRoundSheet open={freeRound} onClose={() => setFreeRound(false)} />
-    </motion.div>
+    </>
   );
 }

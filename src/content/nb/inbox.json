@@ -1,0 +1,458 @@
+[
+ {
+  "id": "m01",
+  "theme": "t01",
+  "from": "Laura Fischer",
+  "role": "Head of Accounting, Fischer Logistics",
+  "subject": "Your call yesterday",
+  "body": "Hi,\n\nThanks for the call yesterday. The demo looked interesting. However, we are in the middle of our year-end closing, and my team is already working overtime. Could you just send me a price list? I'll share it with our managing director when things calm down.\n\nBest,\nLaura",
+  "hidden": {
+   "de": "Ihr Team ist überlastet, und sie fürchtet zusätzliche Arbeit. Entscheiden wird der Geschäftsführer.",
+   "en": "Her team is overloaded, and she is afraid of extra work. The managing director will decide."
+  },
+  "must": [
+   {
+    "de": "Verständnis für die stressige Zeit zeigen",
+    "en": "Show understanding for the busy period"
+   },
+   {
+    "de": "zeigen, wie wenig Aufwand ihr Team hätte",
+    "en": "Show how little effort it means for her team"
+   },
+   {
+    "de": "eine Kurzfassung für den Geschäftsführer anbieten",
+    "en": "Offer a short summary for the managing director"
+   },
+   {
+    "de": "einen konkreten nächsten Schritt nach dem Jahresabschluss vorschlagen",
+    "en": "Suggest a concrete next step after year-end"
+   }
+  ],
+  "reply": "Hi Laura,\n\nThanks for your quick reply, and good luck with the year-end closing. I completely understand that a new project is the last thing your team needs right now.\n\nI've attached a one-page overview with our prices and a short example from a logistics company of your size. It shows how little time the setup takes for the accounting team: about two hours of workshops in total. If it helps, I can also prepare a short summary for your managing director.\n\nWould it make sense to talk again in late February?\n\nBest regards"
+ },
+ {
+  "id": "m02",
+  "theme": "t02",
+  "from": "Peter Wolf",
+  "role": "Managing Director, Wolf Metallbau",
+  "subject": "Cloud archive?",
+  "body": "Hello,\n\nMy IT partner told me we should move our archive to the cloud. To be honest, I don't really understand what we would gain. We have a server in the basement, and it has worked for twelve years. Can you explain in simple words why we should spend money on this?\n\nRegards,\nPeter Wolf",
+  "hidden": {
+   "de": "Er fühlt sich von Technik überfordert und will nicht dumm dastehen. Außerdem hängt er am Bewährten.",
+   "en": "He feels overwhelmed by the technology and does not want to look foolish. He is also attached to what has always worked."
+  },
+  "must": [
+   {
+    "de": "in einfachen Worten ohne Fachbegriffe antworten",
+    "en": "Answer in plain words without technical terms"
+   },
+   {
+    "de": "den Nutzen für seinen Betrieb nennen, nicht Produktmerkmale",
+    "en": "Name the benefit for his business, not product features"
+   },
+   {
+    "de": "das bestehende System respektieren",
+    "en": "Respect the current system"
+   }
+  ],
+  "reply": "Hello Mr. Wolf,\n\nThanks for asking so directly. It's a fair question, and your server has clearly done its job well.\n\nIn a nutshell, a cloud archive means your documents are stored safely in a professional data center instead of your basement. What that means for you: no worries about hardware failures or backups, and your team can find any invoice or drawing in seconds, even from the construction site.\n\nIf you like, I can show you in 20 minutes what that would look like with your own documents. Would next Thursday work for you?\n\nBest regards"
+ },
+ {
+  "id": "m03",
+  "theme": "t03",
+  "from": "Dr. Sabine Keller",
+  "role": "CFO, Keller Foods",
+  "subject": "Re: Your offer",
+  "body": "Hello,\n\nThank you for the offer. We have reviewed it with our controller. Frankly, the annual license fee is higher than we expected, and the savings you mention seem optimistic. Our current provider has offered to extend our contract at the same price. Please let me know if there is anything you can do.\n\nKind regards,\nDr. Sabine Keller",
+  "hidden": {
+   "de": "Sie glaubt die Einsparungen nicht und nutzt das Angebot des Altanbieters als Druckmittel. Sie will verhandeln, nicht absagen.",
+   "en": "She does not believe the savings and uses the old provider’s offer as leverage. She wants to negotiate, not say no."
+  },
+  "must": [
+   {
+    "de": "die Zweifel an den Einsparungen ernst nehmen",
+    "en": "Take her doubts about the savings seriously"
+   },
+   {
+    "de": "die Einsparungen mit ihren eigenen Zahlen belegen",
+    "en": "Back up the savings with her own numbers"
+   },
+   {
+    "de": "nicht sofort Rabatt geben, sondern einen Weg anbieten",
+    "en": "Do not give a discount right away, but offer a way forward"
+   }
+  ],
+  "reply": "Dear Dr. Keller,\n\nThank you for reviewing our offer so carefully. I understand it may seem high at first glance, and I appreciate that you told me openly.\n\nYou are right to question the savings. Instead of relying on our estimates, I suggest a four-week pilot with your accounts payable team. We would measure the time per invoice before and after, so you can calculate the total cost of ownership with your own data.\n\nIf the numbers don't convince you, you can simply extend your current contract. Would a short call on Tuesday or Wednesday work to discuss the pilot?\n\nKind regards"
+ },
+ {
+  "id": "m04",
+  "theme": "t04",
+  "from": "Markus Brandt",
+  "role": "Head of IT, Brandt Maschinenbau",
+  "subject": "Security questionnaire",
+  "body": "Hi,\n\nBefore we continue, I need your answers to the attached security questionnaire (48 questions). I also need your ISO certificate and the list of all subcontractors. To be clear: our board has had bad experiences with cloud providers in the past. I will not recommend anything that I cannot fully explain to them.\n\nMarkus Brandt",
+  "hidden": {
+   "de": "Er trägt das Risiko gegenüber der Geschäftsführung und hat Angst, sich zu blamieren. Er braucht Belege, die er weitergeben kann.",
+   "en": "He carries the risk in front of the board and is afraid of being embarrassed. He needs evidence he can pass on."
+  },
+  "must": [
+   {
+    "de": "seine Vorsicht anerkennen",
+    "en": "Acknowledge his caution"
+   },
+   {
+    "de": "konkrete Unterlagen und einen Termin nennen",
+    "en": "Name concrete documents and a date"
+   },
+   {
+    "de": "nichts versprechen, was nicht sicher ist",
+    "en": "Do not promise anything that is not certain"
+   },
+   {
+    "de": "Hilfe für seine Präsentation vor der Geschäftsführung anbieten",
+    "en": "Offer help for his presentation to the board"
+   }
+  ],
+  "reply": "Hi Mr. Brandt,\n\nThank you for the questionnaire. Given your board's experience, it makes complete sense to check everything carefully.\n\nOur security officer will complete the questionnaire by next Friday. I've already attached our ISO 27001 certificate and the list of subcontractors. For three of the questions, about penetration tests, we will need to double-check the latest results, so I will send those answers separately rather than guess.\n\nIf it helps, we can also join a short call with your board to answer their questions directly. Just let me know.\n\nBest regards"
+ },
+ {
+  "id": "m05",
+  "theme": "t05",
+  "from": "Thomas Richter",
+  "role": "Managing Director, Richter Elektro",
+  "subject": "E-invoicing – do we really need to act now?",
+  "body": "Hello,\n\nMy tax advisor keeps talking about e-invoicing. As far as I understand, we only have to be able to receive e-invoices, and our accounting software can already open PDF files. So I don't see why we should start a project now. Or am I missing something?\n\nBest,\nThomas Richter",
+  "hidden": {
+   "de": "Er hofft, dass er nichts tun muss, und ist unsicher, ob er die Regeln richtig verstanden hat. Er will nicht belehrt werden.",
+   "en": "He hopes he does not have to do anything and is unsure whether he understood the rules. He does not want to be lectured."
+  },
+  "must": [
+   {
+    "de": "seine Frage respektvoll beantworten",
+    "en": "Answer his question respectfully"
+   },
+   {
+    "de": "den Unterschied zwischen PDF und E-Rechnung einfach erklären",
+    "en": "Explain the difference between a PDF and an e-invoice simply"
+   },
+   {
+    "de": "die kommenden Fristen nennen",
+    "en": "Name the upcoming deadlines"
+   },
+   {
+    "de": "einen kleinen ersten Schritt vorschlagen",
+    "en": "Suggest a small first step"
+   }
+  ],
+  "reply": "Hello Mr. Richter,\n\nThat's a very good question, and many managing directors are asking the same thing.\n\nA PDF is not an e-invoice in the legal sense. An e-invoice is a structured file, like XRechnung or ZUGFeRD, that software can read automatically. Receiving them has been mandatory since January 2025, and the obligation to send them is being phased in from 2027.\n\nYou don't need a big project today. I'd suggest a 30-minute check of your current software with your tax advisor, so you know exactly what's missing. Would that be helpful?\n\nBest regards"
+ },
+ {
+  "id": "m06",
+  "theme": "t06",
+  "from": "Claudia Weber",
+  "role": "Assistant to the CEO, Weber Group",
+  "subject": "Presentation on Thursday",
+  "body": "Dear all,\n\nJust a quick note for Thursday: Mr. Weber has only 20 minutes instead of the planned 45, because of an urgent board call. He also asked me to tell you that he is not interested in technical details. He wants to know one thing: what does it cost, and what does it bring?\n\nBest regards,\nClaudia Weber",
+  "hidden": {
+   "de": "Der Chef hat wenig Zeit und wenig Geduld. Wer jetzt nicht auf den Punkt kommt, verliert ihn.",
+   "en": "The boss has little time and little patience. If you do not get to the point, you will lose him."
+  },
+  "must": [
+   {
+    "de": "die Änderung positiv bestätigen",
+    "en": "Confirm the change positively"
+   },
+   {
+    "de": "zeigen, dass die Präsentation angepasst wird",
+    "en": "Show that the presentation will be adjusted"
+   },
+   {
+    "de": "Kosten und Nutzen als Kern ankündigen",
+    "en": "Announce costs and benefits as the core"
+   }
+  ],
+  "reply": "Dear Ms. Weber,\n\nThank you for letting me know, and please tell Mr. Weber that 20 minutes is perfectly fine.\n\nI'll adjust the presentation to three slides: the investment, the savings, and the timeline. What really matters for him is the business case, so I'll skip the technical part completely. We'll leave at least five minutes for his questions.\n\nIf he would like to see the numbers in advance, I'm happy to send a one-page summary tomorrow.\n\nBest regards"
+ },
+ {
+  "id": "m07",
+  "theme": "t07",
+  "from": "Julia Roth",
+  "role": "Procurement, Lindner Group",
+  "subject": "Final offer",
+  "body": "Hello,\n\nWe have now received three offers. Yours is the most expensive. If you can match the lowest offer, we are ready to sign by the end of the month. Otherwise, we will have to go with another provider. I need your answer by Wednesday.\n\nRegards,\nJulia Roth",
+  "hidden": {
+   "de": "Sie will die Firma eigentlich (sonst würde sie nicht schreiben), braucht aber einen Erfolg für den Einkauf. Die Frist ist ein Druckmittel.",
+   "en": "She actually wants your company (otherwise she would not write), but she needs a win for procurement. The deadline is a pressure tactic."
+  },
+  "must": [
+   {
+    "de": "ruhig und höflich bleiben",
+    "en": "Stay calm and polite"
+   },
+   {
+    "de": "nicht einfach den Preis senken",
+    "en": "Do not simply lower the price"
+   },
+   {
+    "de": "ein Zugeständnis nur gegen eine Gegenleistung anbieten",
+    "en": "Offer a concession only in exchange for something"
+   },
+   {
+    "de": "die Frist bestätigen",
+    "en": "Confirm the deadline"
+   }
+  ],
+  "reply": "Hello Ms. Roth,\n\nThank you for your openness, and I'm glad to hear you're ready to move forward. Here is my answer ahead of your Wednesday deadline.\n\nMatching the lowest offer isn't something I can agree to, because our price includes hosting, updates, and support that other offers often charge separately. However, there is a way we could move closer: if you could commit to three years, we could reduce the price per user by eight percent.\n\nWould it help to compare the offers line by line in a short call on Tuesday?\n\nBest regards"
+ },
+ {
+  "id": "m08",
+  "theme": "t08",
+  "from": "James Clarke",
+  "role": "Managing Director, Brightline IT (UK)",
+  "subject": "Re: Partnership idea",
+  "body": "Hi,\n\nThanks for your email. Sounds quite interesting. We're rather busy at the moment, but it might be worth a chat at some point. Perhaps after the summer?\n\nCheers,\nJames",
+  "hidden": {
+   "de": "Britisches Understatement: „quite interesting“ und „might be worth a chat“ heißen eher „vielleicht, aber keine Priorität“. Ohne klaren Anlass passiert nichts.",
+   "en": "British understatement: \"quite interesting\" and \"might be worth a chat\" mean \"maybe, but not a priority\". Without a clear reason, nothing will happen."
+  },
+  "must": [
+   {
+    "de": "die Antwort richtig einordnen und keinen Druck machen",
+    "en": "Read the answer correctly and do not push"
+   },
+   {
+    "de": "einen kleinen, konkreten Anlass bieten",
+    "en": "Offer a small, concrete reason to talk"
+   },
+   {
+    "de": "einen Termin nach dem Sommer festhalten",
+    "en": "Secure a date after the summer"
+   }
+  ],
+  "reply": "Hi James,\n\nThanks for getting back to me, and I completely understand that summer is a busy time.\n\nTo make it easy, I'll send you a two-page overview of our partner program in the meantime, including the commission model and what we do for enablement and co-marketing. You can look at it whenever it suits you.\n\nWould you be open to a quick call in the first week of September? I'm happy to work around your schedule.\n\nBest regards"
+ },
+ {
+  "id": "m09",
+  "theme": "t09",
+  "from": "Frank Schulz",
+  "role": "Project Lead, Schulz Logistik",
+  "subject": "Migration still not finished!!",
+  "body": "Hello,\n\nThis is the second time I've had to write to you. The migration was supposed to be finished on September 15. It is now September 28, and my team still can't find half of the old contracts. I have to explain this to our CEO tomorrow morning. What exactly is going on?\n\nFrank Schulz",
+  "hidden": {
+   "de": "Er steht selbst unter Druck vor seinem Chef und braucht morgen früh eine klare, erklärbare Antwort.",
+   "en": "He is under pressure from his own boss and needs a clear answer he can explain tomorrow morning."
+  },
+  "must": [
+   {
+    "de": "sich klar entschuldigen, ohne Ausreden",
+    "en": "Apologize clearly, without excuses"
+   },
+   {
+    "de": "Ursache und Maßnahmen nennen",
+    "en": "Name the cause and the actions"
+   },
+   {
+    "de": "ein festes Datum und regelmäßige Updates zusagen",
+    "en": "Commit to a fixed date and regular updates"
+   },
+   {
+    "de": "Hilfe für das Gespräch mit dem Chef anbieten",
+    "en": "Offer help for the conversation with his CEO"
+   }
+  ],
+  "reply": "Hello Mr. Schulz,\n\nI owe you an apology. You should not have had to write twice, and I understand how difficult this is for you.\n\nWe've identified the root cause: about 80,000 older files use a format our import tool did not recognize. Here's what we're doing about it: two additional engineers are working on the remaining files, and we expect everything to be complete by October 2. Until then, all contracts are still available in the old system.\n\nI'll send you a one-page summary tonight that you can share with your CEO. I'll keep you posted every Friday.\n\nBest regards"
+ },
+ {
+  "id": "m10",
+  "theme": "t10",
+  "from": "Tobias Maier",
+  "role": "Account Manager (your team)",
+  "subject": "Monday meeting",
+  "body": "Hi,\n\nQuick question about Monday: could we skip the pipeline review this week? Most of us are preparing year-end offers, and to be honest, the meeting usually runs way over time and doesn't really help us. Maybe we could just update the CRM instead?\n\nThanks,\nTobias",
+  "hidden": {
+   "de": "Das Meeting wird als Zeitverschwendung empfunden. Eigentlich geht es darum, dass es zu lang und zu wenig nützlich ist.",
+   "en": "The team sees the meeting as a waste of time. The real issue is that it is too long and not useful enough."
+  },
+  "must": [
+   {
+    "de": "die Kritik ernst nehmen",
+    "en": "Take the criticism seriously"
+   },
+   {
+    "de": "erklären, warum das Meeting wichtig ist",
+    "en": "Explain why the meeting matters"
+   },
+   {
+    "de": "eine konkrete Verbesserung vorschlagen",
+    "en": "Suggest a concrete improvement"
+   }
+  ],
+  "reply": "Hi Tobias,\n\nThanks for being honest. You're right, it runs too long, especially at this time of year.\n\nI'd still like to meet, because the forecast for the quarter depends on the next four weeks. But let's make it shorter: 30 minutes, one sentence per deal, and we'll take any longer discussions offline. If the CRM is up to date by Friday, we can go even faster.\n\nWho's going to own the agenda this week? Maybe you'd like to try it?\n\nBest"
+ },
+ {
+  "id": "m11",
+  "theme": "t11",
+  "from": "Anna Berger",
+  "role": "Head of Finance, Hartmann Foods",
+  "subject": "Contract renewal",
+  "body": "Hi,\n\nOur contract ends on October 31. I assume it will just renew automatically? By the way, our new CFO has asked all departments to review their software costs, so I may need to justify the license fee internally.\n\nBest regards,\nAnna",
+  "hidden": {
+   "de": "Die Verlängerung ist in Gefahr: Der neue CFO prüft Kosten, und Anna braucht Argumente, um den Vertrag intern zu verteidigen.",
+   "en": "The renewal is at risk: the new CFO is reviewing costs, and Anna needs arguments to defend the contract internally."
+  },
+  "must": [
+   {
+    "de": "die Verlängerung bestätigen",
+    "en": "Confirm the renewal"
+   },
+   {
+    "de": "das versteckte Risiko erkennen",
+    "en": "Recognize the hidden risk"
+   },
+   {
+    "de": "Belege für den Nutzen anbieten",
+    "en": "Offer evidence of the benefit"
+   },
+   {
+    "de": "Unterstützung für das interne Gespräch anbieten",
+    "en": "Offer support for the internal conversation"
+   }
+  ],
+  "reply": "Hi Anna,\n\nYes, the contract renews automatically on November 1, so there's nothing you need to do.\n\nSince your new CFO is reviewing costs, I was wondering if a short summary of your results would help. Over the past year, your team has processed more than 30,000 invoices in the system, and the approval time has dropped from nine days to three. I'd be happy to put this on one page for you.\n\nIf it's useful, I could also join a short meeting with your CFO. No pressure at all, of course.\n\nBest regards"
+ },
+ {
+  "id": "m12",
+  "theme": "t12",
+  "from": "Kevin Brooks",
+  "role": "Operations Manager, Northline Freight",
+  "subject": "Great meeting you",
+  "body": "Hi,\n\nGreat meeting you at the trade show last week. I passed your brochure on to my boss, but honestly, we're not looking at new software until next year. Let's stay in touch though.\n\nBest,\nKevin",
+  "hidden": {
+   "de": "Höfliche Absage für jetzt. Kevin ist nicht der Entscheider, aber offen für Kontakt.",
+   "en": "A polite no for now. Kevin is not the decision maker, but he is open to staying in contact."
+  },
+  "must": [
+   {
+    "de": "locker und freundlich antworten",
+    "en": "Reply in a relaxed, friendly tone"
+   },
+   {
+    "de": "den Kontakt ohne Druck halten",
+    "en": "Keep in touch without pushing"
+   },
+   {
+    "de": "einen nützlichen Mehrwert anbieten",
+    "en": "Offer something useful"
+   }
+  ],
+  "reply": "Hi Kevin,\n\nGreat connecting with you at the show, and thanks for passing the brochure on.\n\nTotally understood about the timing. In the meantime, I thought you might find this short case study interesting. It's from a freight company that cut its paperwork in half, and it takes about three minutes to read.\n\nI'll check in again early next year. Let's stay in touch, and good luck with the busy season!\n\nBest"
+ },
+ {
+  "id": "m13",
+  "theme": "t13",
+  "from": "Guest Relations, Lakeside Hotel",
+  "role": "Hotel",
+  "subject": "Your stay last week",
+  "body": "Dear Guest,\n\nThank you for staying with us. We are sorry to hear that your room was not as expected on your first night. As a gesture of goodwill, we would like to offer you a 10% discount on your next stay.\n\nKind regards,\nGuest Relations",
+  "hidden": {
+   "de": "Das Hotel will die Sache mit einem Gutschein für die Zukunft erledigen, ohne das eigentliche Problem (falsches Zimmer, bezahlter Preis) zu lösen.",
+   "en": "The hotel wants to settle the matter with a voucher for the future without solving the real problem (the wrong room and the price paid)."
+  },
+  "must": [
+   {
+    "de": "höflich, aber bestimmt bleiben",
+    "en": "Stay polite but firm"
+   },
+   {
+    "de": "das Problem genau beschreiben",
+    "en": "Describe the problem precisely"
+   },
+   {
+    "de": "eine konkrete Lösung verlangen",
+    "en": "Ask for a concrete solution"
+   }
+  ],
+  "reply": "Dear Guest Relations team,\n\nThank you for your reply. I appreciate the offer, but I'm afraid a discount on a future stay doesn't really solve the problem.\n\nI had booked and paid for a quiet room with a desk, which I needed for work. On the first night, I was given a small room next to the elevator. That's not what I booked. I'd appreciate it if you could refund the difference for that night instead.\n\nI'd like to get this straightened out, and I'm sure we can find a fair solution.\n\nKind regards"
+ },
+ {
+  "id": "m14",
+  "theme": "t14",
+  "from": "Sarah Lehmann",
+  "role": "Marketing, your company",
+  "subject": "Customer story for the newsletter",
+  "body": "Hi,\n\nFor the next newsletter, I'd love a short customer story from you, about 150 words. Something personal would be great: how the project started, what went wrong, and how it ended. Could you send me something by Friday?\n\nThanks!\nSarah",
+  "hidden": {
+   "de": "Sarah will keine Faktenliste, sondern eine Geschichte mit Wendepunkt. Die Zeit ist knapp.",
+   "en": "Sarah does not want a list of facts but a story with a turning point. Time is short."
+  },
+  "must": [
+   {
+    "de": "zusagen und die Frist bestätigen",
+    "en": "Agree and confirm the deadline"
+   },
+   {
+    "de": "eine kurze Geschichte mit Anfang, Wendepunkt und Ende liefern oder skizzieren",
+    "en": "Deliver or outline a short story with a beginning, a turning point, and an end"
+   }
+  ],
+  "reply": "Hi Sarah,\n\nHappy to help, and Friday works. Here's a first draft:\n\nLast spring, a food company called us because their auditor had found 400 missing invoices. So there I was, in a basement full of boxes, wondering where to start. It turned out that most invoices had simply been filed under the wrong supplier. Long story short, we scanned everything in two weeks, and the system now finds any invoice in seconds. In the end, the auditor was the happiest person in the room.\n\nLet me know if you'd like any changes.\n\nBest"
+ },
+ {
+  "id": "m15",
+  "theme": "t15",
+  "from": "Mark Hoffmann",
+  "role": "Colleague, Sales",
+  "subject": "That article about AI",
+  "body": "Hey,\n\nDid you read the article I sent you? I really think we should tell our customers that our AI search will replace their archive staff. It's the strongest argument we have. Management loves it. What do you think?\n\nMark",
+  "hidden": {
+   "de": "Mark will Zustimmung. Die Aussage ist übertrieben und könnte Kunden (und Betriebsräte) abschrecken.",
+   "en": "Mark wants agreement. The claim is exaggerated and could scare off customers (and works councils)."
+  },
+  "must": [
+   {
+    "de": "seinen Punkt anerkennen",
+    "en": "Acknowledge his point"
+   },
+   {
+    "de": "widersprechen, ohne ihn anzugreifen",
+    "en": "Disagree without attacking him"
+   },
+   {
+    "de": "eine bessere Formulierung vorschlagen",
+    "en": "Suggest a better way to say it"
+   }
+  ],
+  "reply": "Hey Mark,\n\nYes, I read it, thanks. I see where you're coming from, but I think it's a bit more nuanced than that. The AI search is a strong argument, and management is right to push it.\n\nHowever, if we tell customers it will replace their staff, the works council could well stop the project before it even starts. I'd argue that it's better to say the AI takes over the boring searching, so people can focus on the work that needs their judgment.\n\nShall we try both versions with a customer next week and see which works better? Time will tell.\n\nBest"
+ },
+ {
+  "id": "m16",
+  "theme": "t16",
+  "from": "Mr. Novak",
+  "role": "Landlord",
+  "subject": "Re: Heating",
+  "body": "Hello,\n\nI have received your message. The plumber is very busy right now. He can come in about three weeks. Until then, please use an electric heater.\n\nRegards,\nJ. Novak",
+  "hidden": {
+   "de": "Der Vermieter schiebt das Problem auf und ignoriert das Leck. Drei Wochen ohne Heizung im Herbst sind nicht akzeptabel.",
+   "en": "The landlord is putting the problem off and ignores the leak. Three weeks without heating in the fall is not acceptable."
+  },
+  "must": [
+   {
+    "de": "höflich bleiben, aber klar widersprechen",
+    "en": "Stay polite but disagree clearly"
+   },
+   {
+    "de": "auf das Leck und mögliche Schäden hinweisen",
+    "en": "Point out the leak and possible damage"
+   },
+   {
+    "de": "eine schnellere Lösung verlangen",
+    "en": "Ask for a faster solution"
+   },
+   {
+    "de": "nach den Möglichkeiten fragen",
+    "en": "Ask about the options"
+   }
+  ],
+  "reply": "Hello Mr. Novak,\n\nThank you for your quick reply. I understand that the plumber is busy, but I'm afraid three weeks is too long.\n\nBesides the heating, there is still a small leak at the pipe, and the water could damage the wooden floor. Could you take a look at it yourself this week, or ask another company? Would it be possible to at least fix the leak before the weekend?\n\nIf the repair takes longer, what are my options? I would also like to know who pays for the electricity for the heater.\n\nBest regards"
+ }
+]

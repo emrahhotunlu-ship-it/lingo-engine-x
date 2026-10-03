@@ -17,6 +17,7 @@ import { ensureLibrary, useInputLibrary } from '../input/library';
 import { UnitShell } from '../input/UnitShell';
 import { useInputContext } from '../input/useInputContext';
 import { nextT } from '../progress/persist';
+import { GENRE_PROMPTS, GenreChips } from './genres';
 import { WriteUnit } from './WriteUnit';
 
 // Schreiben (Kap. 6.8, Plan §4.3, F18, M12): eine Aufgabe je Lerntag in `wprompt/<tag>` –
@@ -84,7 +85,7 @@ export function WriteScreen({ ctx }: { ctx: UnitCtx }) {
   }
 
   // Die heutige Abgabe gehört zu ihrer Aufgabe; sonst die gespeicherte bzw. die berechnete.
-  const prompt: WritingPrompt | null = today ? (LEGACY_PROMPTS.find((p) => p.id === today.promptId) ?? (stored?.id === today.promptId ? stored : null) ?? stored) : (stored ?? fallback);
+  const prompt: WritingPrompt | null = today ? (LEGACY_PROMPTS.find((p) => p.id === today.promptId) ?? GENRE_PROMPTS.find((p) => p.id === today.promptId) ?? (stored?.id === today.promptId ? stored : null) ?? stored) : (stored ?? fallback);
   if (!prompt) return null;
 
   const replace = async (ownTopic: string) => {
@@ -114,6 +115,18 @@ export function WriteScreen({ ctx }: { ctx: UnitCtx }) {
     }
   };
 
+  // Weitere Gattungen (N61): feste Aufgabe als Aufgabe des Tages, solange heute nichts abgegeben ist.
+  const pickGenre = async (p: WritingPrompt) => {
+    setChanging(true);
+    try {
+      await replaceDailyPrompt(input.day, promptToDoc(p));
+    } catch {
+      toast(t('inSaveFailed'), 'error');
+    } finally {
+      setChanging(false);
+    }
+  };
+
   const todayDoc: Doc | undefined = today ? writing.get(today.id) : undefined;
   return (
     <WriteUnit
@@ -130,7 +143,12 @@ export function WriteScreen({ ctx }: { ctx: UnitCtx }) {
               busy: changing || gen.phase === 'queued' || gen.phase === 'thinking' || gen.phase === 'streaming' || gen.phase === 'slow',
               onOther: () => void replace(''),
               onOwn: (topic) => void replace(topic),
-              panel: <AiRunPanel phase={gen.phase} error={gen.error} onStop={gen.stop} onRetry={() => void replace('')} skeleton={false} />,
+              panel: (
+                <>
+                  <AiRunPanel phase={gen.phase} error={gen.error} onStop={gen.stop} onRetry={() => void replace('')} skeleton={false} />
+                  <GenreChips current={prompt.id} disabled={changing} onPick={(p) => void pickGenre(p)} />
+                </>
+              ),
             }
       }
     />

@@ -1,3 +1,4 @@
+import { openLearnPage } from './fixtures';
 import { readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 
@@ -184,7 +185,11 @@ async function answerLessonWord(page: Page, words: ReadonlyArray<{ en: string; d
   }
   await expect(page.getByTestId('verdict')).toBeVisible();
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
-  await page.getByTestId('next').click();
+  // „Automatisch weiter“ (M6) wechselt nach 1,2 s – unter Last manchmal vor dem Klick. Dann ist der
+  // Wechsel schon passiert; in jedem Fall muss das Ergebnis dieser Übung verschwinden.
+  const verdict = await page.getByTestId('verdict').elementHandle();
+  await page.getByTestId('next').click({ timeout: 2_000 }).catch(() => undefined);
+  await verdict?.waitForElementState('hidden');
 }
 
 /**
@@ -279,7 +284,11 @@ function corpus(extra: readonly Doc[] = []): string[] {
       const target = o.type === 'transform' ? (o.prompt.split('→')[1] ?? '') : o.prompt;
       if (/_{3,}/.test(target)) out.add(plain(target.replace(/_{3,}/, o.answer.trim()).replace(/\s*\([^)]*\)/g, '')));
     }
-    Object.values(o).forEach(walk);
+    // Der Fehlersatz einer Satzkorrektur („Rarely we have seen …“) ist nie eine Lösung für Satzbau.
+    const skip = o.type === 'correct' ? 'prompt' : null;
+    Object.entries(o).forEach(([k, x]) => {
+      if (k !== skip) walk(x);
+    });
   };
   for (const f of ['grammar', 'rules', 'vocab', 'context', 'course', 'passages', 'scenes', 'feed-seed']) walk(json(`../../src/content/legacy/${f}.json`));
   walk(json('../../src/content/grammar-extra.json'));
@@ -313,37 +322,56 @@ export async function clozeSolution(page: Page): Promise<string | null> {
   return null;
 }
 
-const DISTRACTORS = new Set(['is', 'did', 'does', 'do', 'was', 'have']);
+type PoolJson = { items?: Array<{ chunks: string[]; en: string; alt?: string[] }> };
 
-/** Reihenfolge der Bausteine für den Satzbau (Indizes in die Pool-Bausteine); `null`, wenn unbekannt. */
-export function orderSolution(tiles: readonly string[], end: string): number[] | null {
-  const norm = (s: string) => s.toLowerCase().replace(/\s+/g, ' ').trim();
-  const words = new Set(tiles.flatMap((t) => norm(t).split(' ')));
-  for (const s of allSentences()) {
-    if (end && !s.trim().endsWith(end)) continue;
-    const body = norm(end ? s.trim().slice(0, -end.length) : s.trim().replace(/[.!?]+$/, ''));
-    if (!body.split(' ').every((w) => words.has(w))) continue;
-    const used = new Array<boolean>(tiles.length).fill(false);
-    const seq: number[] = [];
-    const dfs = (rest: string): boolean => {
-      if (!rest) return true;
-      for (let i = 0; i < tiles.length; i++) {
-        if (used[i]) continue;
-        const t = norm(tiles[i] ?? '');
-        if (rest === t || rest.startsWith(`${t} `)) {
-          used[i] = true;
-          seq.push(i);
-          if (dfs(rest.slice(t.length).trimStart())) return true;
-          used[i] = false;
-          seq.pop();
-        }
+const normTile = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/[^a-z0-9' ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+/** Indizes der Bausteine in der Reihenfolge eines Satzes (jeder Baustein genau einmal); `null`, wenn es nicht aufgeht. */
+function sequenceOf(tiles: readonly string[], sentence: string): number[] | null {
+  const used = new Array<boolean>(tiles.length).fill(false);
+  const seq: number[] = [];
+  const dfs = (rest: string): boolean => {
+    if (!rest) return used.every(Boolean);
+    for (let i = 0; i < tiles.length; i++) {
+      if (used[i]) continue;
+      const t = normTile(tiles[i] ?? '');
+      if (rest === t || rest.startsWith(`${t} `)) {
+        used[i] = true;
+        seq.push(i);
+        if (dfs(rest.slice(t.length).trimStart())) return true;
+        used[i] = false;
+        seq.pop();
       }
-      return false;
-    };
-    // Übrig bleiben dürfen nur Ablenker (did, do, is …), und die bleiben es auch.
-    if (dfs(body) && tiles.every((t, i) => seq.includes(i) || DISTRACTORS.has(norm(t)))) return seq;
+    }
+    return false;
+  };
+  return dfs(normTile(sentence)) ? [...seq] : null;
+}
+
+/**
+ * Alle gültigen Reihenfolgen der Bausteine für den Satzbau (Indizes in `tiles`), die Hauptfassung zuerst.
+ * Gelesen wird der feste Pool `src/content/c1/order.json`; leer, wenn die Bausteine zu keinem Eintrag passen.
+ */
+export function orderSolutions(tiles: readonly string[]): number[][] {
+  const pool = json('../../src/content/c1/order.json') as PoolJson;
+  const key = (xs: readonly string[]) => xs.map(normTile).sort().join('|');
+  const want = key(tiles);
+  for (const it of pool.items ?? []) {
+    if (key(it.chunks) !== want) continue;
+    return [it.en, ...(it.alt ?? [])].map((s) => sequenceOf(tiles, s)).filter((s): s is number[] => s !== null);
   }
-  return null;
+  return [];
+}
+
+/** Hauptfassung der Reihenfolge (Indizes in die Bausteine); `null`, wenn unbekannt. */
+export function orderSolution(tiles: readonly string[]): number[] | null {
+  return orderSolutions(tiles)[0] ?? null;
 }
 
 /**
@@ -369,7 +397,7 @@ export type LearnScreen = 'lernen' | 'kurs' | 'lektion' | 'grammatik' | 'regelbl
 export async function learnTour(page: Page, visit: (name: LearnScreen) => Promise<void>): Promise<void> {
   const settle = () => page.waitForTimeout(450);
   const hub = async () => {
-    await page.getByTestId('tab-learn').click();
+    await openLearnPage(page);
     await expect(page.getByTestId('learn-hub')).toBeVisible();
     await settle();
   };
@@ -407,7 +435,7 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
   await settle();
   await visit('wissen');
   await hub();
-  await page.getByTestId('hub-vocab').click();
+  await page.getByTestId('tab-vocab').click();
   await expect(page.getByTestId('vocab')).toBeVisible();
   await settle();
   await visit('wortschatz');

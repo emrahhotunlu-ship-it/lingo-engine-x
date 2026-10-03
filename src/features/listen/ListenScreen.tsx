@@ -24,7 +24,7 @@ import { ListenUnit } from './ListenUnit';
 const WORK_GENRES: readonly ListenGenre[] = ['briefing', 'update', 'voicemail'];
 const LIFE_GENRES: readonly ListenGenre[] = ['podcast', 'news', 'announcement'];
 
-export function ListenScreen({ ctx }: { ctx: UnitCtx }) {
+export function ListenScreen({ ctx, id, mode }: { ctx: UnitCtx; id?: string | undefined; mode?: 'gen' | undefined }) {
   const { t } = useT();
   const back = useNav((s) => s.back);
   const input = useInputContext();
@@ -72,6 +72,19 @@ export function ListenScreen({ ctx }: { ctx: UnitCtx }) {
             {t('inReload')}
           </Button>
         </div>
+      </UnitShell>
+    );
+  }
+
+  const direct = id ? findListening(id, db) : null;
+  if (direct && !fresh && !another) {
+    const rec = today.find((r) => r.id === direct.id) ?? null;
+    return <ListenUnit key={`id-${direct.id}`} item={direct} ctx="extra" day={input.day} start={rec ? 'done' : 'prep'} record={rec} onAnother={null} />;
+  }
+  if (mode === 'gen' && !fresh) {
+    return (
+      <UnitShell kind="listen" ctx="extra" state="gen" title={t('ch_listen')} onClose={back}>
+        <ListenGenerator onCreated={setFresh} />
       </UnitShell>
     );
   }

@@ -79,17 +79,36 @@ describe('pickVoice', () => {
 
   it('gespeicherte Stimme gewinnt, wenn sie englisch ist', () => {
     expect(pickVoice(list, 'Daniel')).toBe(1);
-    expect(pickVoice(list, 'Anna')).toBe(4);
-    expect(pickVoice(list, 'Unbekannt')).toBe(4);
+    expect(pickVoice(list, 'Anna')).toBe(3);
+    expect(pickVoice(list, 'Unbekannt')).toBe(3);
   });
 
-  it('Reihenfolge: Premium/Enhanced → en-US lokal → en-US → en-* → −1', () => {
-    expect(pickVoice(list)).toBe(4);
-    expect(pickVoice(list.slice(0, 4))).toBe(3);
+  it('Reihenfolge: normale lokale en-US-Stimme → en-US lokal → en-US → en-* → −1 (Befund 29.09.: Premium/Enhanced stottert, kommt erst als letzter Ausweg)', () => {
+    expect(pickVoice(list)).toBe(3);
     expect(pickVoice(list.slice(0, 3))).toBe(2);
     expect(pickVoice([voice('Anna', 'de-DE'), voice('Karen', 'en_AU')])).toBe(1);
     expect(pickVoice([voice('Anna', 'de-DE')])).toBe(-1);
     expect(pickVoice([])).toBe(-1);
+  });
+
+  it('nur Premium/Enhanced verfügbar: kommt trotzdem dran, aber erst als letzter Ausweg', () => {
+    expect(pickVoice([voice('Anna', 'de-DE'), voice('Ava (Premium)', 'en-US', false)])).toBe(1);
+  });
+
+  it('Spaß-Stimmen (Bad News, Zarvox, Fred, Kathy, Monster, …) werden nie gewählt, auch nicht als gespeicherte Stimme', () => {
+    const withNovelty = [...list, voice('Zarvox', 'en-US', true), voice('Bad News', 'en-US', true), voice('Fred', 'en-US', true), voice('Kathy', 'en-US', true), voice('Monster', 'en-US', true)];
+    expect(pickVoice(withNovelty)).toBe(3);
+    expect(pickVoice(withNovelty, 'Zarvox')).toBe(3);
+    expect(pickVoice([voice('Anna', 'de-DE'), voice('Zarvox', 'en-US', true)])).toBe(-1);
+  });
+
+  it('Spaß-Stimmen mit übersetztem Anzeigenamen (Gerät auf Deutsch, Befund 30.09.): erkannt über `name` oder über die unübersetzte `voiceURI`', () => {
+    const germanNamed: SpeechVoiceLike = { name: 'Schlechte Neuigkeiten', lang: 'en-US', localService: true, default: false, voiceURI: 'com.apple.voice.compact.de-DE.Schlechte-Neuigkeiten' };
+    const englishUri: SpeechVoiceLike = { name: 'Bubble Voice', lang: 'en-US', localService: true, default: false, voiceURI: 'com.apple.voice.compact.en-US.Bubbles' };
+    expect(pickVoice([...list, germanNamed])).toBe(3);
+    expect(pickVoice([...list, englishUri])).toBe(3);
+    expect(pickVoice([voice('Anna', 'de-DE'), germanNamed])).toBe(-1);
+    expect(pickVoice([voice('Anna', 'de-DE'), englishUri])).toBe(-1);
   });
 
   it('Sprechtempo wird auf 0,8–1,1 begrenzt', () => {
@@ -204,6 +223,30 @@ describe('Sprachausgabe mit nachgebildetem speechSynthesis', () => {
     const resumes = fake.events.filter((e) => e.type === 'resume').length;
     await vi.advanceTimersByTimeAsync(WAKE_MS * 3);
     expect(fake.events.filter((e) => e.type === 'resume')).toHaveLength(resumes);
+  });
+
+  it('kein Wecker auf iPhone/iPad: resume() während echtem Sprechen stottert dort selbst (Befund 29.09.)', async () => {
+    vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15' });
+    fake = installFakeSpeech(win.window as object, { msPerChar: 200 });
+    initSpeech();
+    const p = speak('A slow voice reads this long sentence well past the five second wake timer mark.');
+    await vi.advanceTimersByTimeAsync(WAKE_MS * 3);
+    expect(fake.events.filter((e) => e.type === 'resume')).toHaveLength(0);
+    await vi.runAllTimersAsync();
+    await p;
+    vi.unstubAllGlobals();
+  });
+
+  it('iPadOS meldet sich als MacIntel mit Touch: auch dort kein Wecker', async () => {
+    vi.stubGlobal('navigator', { userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)', platform: 'MacIntel', maxTouchPoints: 5 });
+    fake = installFakeSpeech(win.window as object, { msPerChar: 200 });
+    initSpeech();
+    const p = speak('A slow voice reads this long sentence well past the five second wake timer mark.');
+    await vi.advanceTimersByTimeAsync(WAKE_MS * 3);
+    expect(fake.events.filter((e) => e.type === 'resume')).toHaveLength(0);
+    await vi.runAllTimersAsync();
+    await p;
+    vi.unstubAllGlobals();
   });
 
   it('unlockSpeech: eine stumme, leere Äußerung, nur einmal', () => {

@@ -20,11 +20,15 @@ import { useCompanionSee } from '../companion/seeing';
 import { InfoToggle } from '../progress/JudgeTab';
 import { ExerciseTop } from '../learn/ui';
 import { recordProfileFields } from '../progress/persist';
-import { vtestMachine } from './machine';
+import { restoredVtest, vtestMachine, vtestSnapOf } from './machine';
+import { setVtestSnap, takePendingVtest, useVtestSession } from './session';
 
 // Wortschatztest (Plan §8, E17): freiwillig, nie Pflicht. Teil 1 ist eine Wissensabfrage des
 // Tests (Kenne ich / Kenne ich nicht) – keine Selbstbewertung einer Wiederholung. Teil 2 wählt
 // die Bedeutung, Teil 3 tippt das Wort in die Lücke (Buchstaben-Platzhalter und erster Buchstabe).
+// Neubau (G3): Nach jedem Schritt liegt eine Momentaufnahme in `session.ts`; nach dem Neuladen
+// bzw. beim erneuten Öffnen am selben Lerntag geht es an genau derselben Stelle weiter. ✕ fragt
+// nie nach (N02) und behält den Stand; „Abbrechen“ fragt und verwirft ihn.
 
 async function saveResult(r: VtestResult, day: string): Promise<void> {
   const ok = await recordProfileFields('vtest:save', (cur) => vtestPatch(cur, r, day));
@@ -38,13 +42,23 @@ export function VtestScreen() {
   const api = useHiddenInput();
   const day = useClock((s) => s.today);
   const input = useMemo(() => ({ seed: day, lang: useSettings.getState().lang, day, now: () => Date.now(), save: (r: VtestResult) => saveResult(r, day) }), [day]);
-  const [snap, send] = useMachine(vtestMachine, { input });
+  // Herstellen: vom Rahmen übergeben (Neuladen) oder der Stand dieses Lerntags (✕ und erneut öffnen).
+  const [restored] = useState(() => {
+    const p = takePendingVtest() ?? useVtestSession.getState().snap;
+    return p && p.day === day ? restoredVtest(p, input) : null;
+  });
+  const [snap, send] = useMachine(vtestMachine, restored ? { input, snapshot: restored } : { input });
   const c = snap.context;
   const state = snap.value as string;
   const [typed, setTyped] = useState('');
   const typedRef = useRef('');
 
   useCompanionSee({ area: 'overview', label: t('vtTitle'), phase: state === 'result' ? 'feedback' : 'question' });
+
+  // Momentaufnahme nach jedem Schritt (reiner Lesezugriff; Ergebnis/Abbruch → null = gelöscht).
+  useEffect(() => {
+    setVtestSnap(vtestSnapOf(state, c));
+  }, [state, c]);
 
   // Tasten im Ja/Nein-Teil: J/N bzw. 1/2 (Plan §8.1).
   useEffect(() => {
@@ -121,7 +135,7 @@ export function VtestScreen() {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 py-6 sm:py-10" data-testid="vtest" data-state={state}>
       <ExerciseTop
-        onClose={() => (running ? send({ type: 'CANCEL' }) : back())}
+        onClose={back}
         closeLabel={t('vtCancel')}
         closeTestId="vt-close"
         progress={running ? { n: c.i + 1, total: state === 'yesno' ? c.yesno.length : state === 'meaning' ? c.meaning.length : c.active.length } : null}

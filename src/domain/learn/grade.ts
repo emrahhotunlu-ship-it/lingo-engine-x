@@ -27,8 +27,8 @@ const LIMITS: Record<Exclude<LearnKind, 'order'>, Limits> = {
   cloze: { good: 8000, easy: 3000, measure: 'firstKey' },
 };
 
-/** Satzbau: 9 s + 0,6 s je Baustein, nie „Leicht". */
-const orderLimits = (units: number | undefined): Limits => ({ good: 9000 + 600 * Math.max(0, units ?? 0), easy: null, measure: 'submit' });
+/** Satzbau: 13 s + 0,6 s je Baustein (die deutsche Bedeutung wird mitgelesen), nie „Leicht". */
+const orderLimits = (units: number | undefined): Limits => ({ good: 13000 + 600 * Math.max(0, units ?? 0), easy: null, measure: 'submit' });
 
 /** Mehr als zweimal nochmal hören zählt als Hilfe 1 (Diktat, §5.4). */
 export const FREE_REPLAYS = 2;

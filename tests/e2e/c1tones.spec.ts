@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen, type Lang, openSpeak } from './fixtures';
+import { boot, layoutProblems, screen, type Lang, openSpeak, openEntry } from './fixtures';
 import { answerGrammar, grammarKey, nextItem } from './learnHelpers';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
@@ -31,7 +31,7 @@ const actOf = (d: Dump, day: string): Doc => (d['app/profile']?.act as Record<st
 /** Einstieg unter Sprechen → Training. */
 async function openTones(page: Page): Promise<void> {
   await screen(page, 'today');
-  await openSpeak(page);
+  await openSpeak(page, 'write');
   await page.getByTestId('training-tones').click();
   await expect(page.locator('[data-screen="tones"]')).toBeVisible();
   await expect(page.getByTestId('tones')).toHaveAttribute('data-phase', 'write');
@@ -140,8 +140,7 @@ test.describe('Eine Botschaft, drei Tonlagen', () => {
 
 async function openGrammar(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await page.getByTestId('hub-grammar').click();
+  await openEntry(page, 'hub-grammar');
   await expect(page.getByTestId('grammar')).toBeVisible();
 }
 
@@ -151,6 +150,8 @@ test.describe('C1-Werkzeugkasten', () => {
       await page.setViewportSize(viewport);
       const { errors, external } = await boot(page, { migrated: true, lang });
       await openGrammar(page);
+      // P2: Umschalter B2-Themen · C1-Werkzeugkasten (plan.md §1.3).
+      await page.getByTestId('gr-set-c1').click();
       const c1 = page.locator('[data-testid="topic"][data-topic^="c1-"]');
       await expect(c1).toHaveCount(7);
       await expect(page.locator('[data-testid="topic"][data-topic="c1-hedging"]')).toContainText(TEXT[lang].group);
@@ -167,19 +168,24 @@ test.describe('C1-Werkzeugkasten', () => {
       await screen(page, 'grammarSession');
       // Erste Aufgabe falsch, der Rest richtig – alle aus dem Thema.
       const topics: string[] = [];
+      const answers: Array<string | null> = [];
       for (let k = 0; k < 12; k++) {
         await expect(page.getByTestId('gr-item').or(page.getByTestId('summary')).first()).toBeVisible();
         if (await page.getByTestId('summary').isVisible()) break;
         topics.push((await page.getByTestId('gr-item').getAttribute('data-topic')) ?? '');
         const r = await answerGrammar(page, solve, { wrong: k === 0 });
+        answers.push(r.answer);
         expect(r.answer, `Lösung für Aufgabe ${k + 1} bekannt`).not.toBeNull();
         if (k === 0) expect(await layoutProblems(page)).toEqual([]);
         await nextItem(page);
         await expect(page.getByTestId('gr-item').getByTestId('result')).toHaveCount(0);
       }
       await expect(page.getByTestId('summary')).toBeVisible();
-      expect(topics).toHaveLength(8);
+      // 8 Aufgaben + die falsch beantwortete einmal am Rundenende (N47).
+      expect(topics).toHaveLength(9);
+      expect(answers.at(-1)).toBe(answers[0]);
       expect(topics.every((t) => t === 'c1-emphasis')).toBe(true);
+      // Die Wiederholung wird nicht noch einmal gespeichert: genau ein Fehler.
       await expect.poll(async () => (((await dump(page))['grammar/c1-emphasis']?.errors as Doc[] | undefined) ?? []).length).toBe(1);
       expect(errors).toEqual([]);
       expect(external).toEqual([]);

@@ -1,12 +1,7 @@
-import { solvedSentence } from '../course/baseLesson';
-import { ruleExamples } from '../grammar/rules';
-import { seedTasks } from '../grammar/tasks';
-import { TOPICS } from '../content';
-import type { GrammarTask } from '../learn/types';
 import type { TrainCard } from '../srs/types';
 
-// Satzmaterial der Übungen (phase2-plan §5.4, §5.6): nur aus dem, was die App schon hat –
-// ohne KI. Bekanntes zuerst (Karten, die schon gelernt werden), dann Lektionen, dann Regelwerk.
+// Satzmaterial des Diktats (phase2-plan §5.4): nur aus dem, was die App schon hat – ohne KI. Bekanntes zuerst
+// (Karten, die schon gelernt werden), dann Lektionen. Satzbau hat seit 02.10.2026 einen eigenen Pool (`orderPool.ts`).
 
 export type DrillSentence = { s: string; src: 'card' | 'lesson' | 'rule' | 'grammar'; ref: string | null; words: number };
 
@@ -55,28 +50,5 @@ export function dictationSentences(i: SourceInput): DrillSentence[] {
     seen.add(k);
     out.push({ s, src, ref, words: wordCount(s) });
   }, i);
-  return out;
-}
-
-/**
- * Satzbau-Sätze: 6–12 Wörter (mit 1–2 Ablenkern 7–14 Bausteine) aus dem Regelwerk (Formen,
- * gute Fassung der Fallen), eingesetzten Grammatik-Lösungen und Dialogzeilen.
- */
-export function orderSentences(i: { lessonLines?: ReadonlyArray<{ en: string; ref: string }>; extraTasks?: readonly GrammarTask[] }): DrillSentence[] {
-  const out: DrillSentence[] = [];
-  const seen = new Set<string>();
-  const push = (raw: string, src: DrillSentence['src'], ref: string | null) => {
-    const s = plainSentence(raw);
-    const k = s.toLowerCase();
-    if (seen.has(k) || !isCleanSentence(s, 6, 12)) return;
-    seen.add(k);
-    out.push({ s, src, ref, words: wordCount(s) });
-  };
-  for (const tp of TOPICS) for (const ex of ruleExamples(tp.id, 12)) push(ex, 'rule', `rules/${tp.id}`);
-  for (const t of [...(i.extraTasks ?? []), ...seedTasks()]) {
-    const s = solvedSentence(t);
-    if (s) push(s, 'grammar', `grammar/${t.topic}`);
-  }
-  for (const l of i.lessonLines ?? []) push(l.en, 'lesson', l.ref);
   return out;
 }

@@ -20,9 +20,15 @@ type Props = {
   note?: ReactNode;
   /** Rechts: Claude-Symbol (und ggf. weitere Symbole). */
   end?: ReactNode;
+  /**
+   * Ersetzt vorübergehend nur den Fortschrittsbalken samt Wort (z. B. Anki „Rückgängig", B4),
+   * nie ✕ und nie `end` – sonst sind Übersetzer, Claude und Einstellungen kurz nicht erreichbar
+   * (Emrahs Vorgabe „überall", 27.09., Befund 28.09.: der Streifen hat genau das verdeckt).
+   */
+  middleOverlay?: ReactNode;
 };
 
-export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', progress = null, progressLabel, progressTestId = 'round-progress', note, end }: Props) {
+export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', progress = null, progressLabel, progressTestId = 'round-progress', note, end, middleOverlay = null }: Props) {
   const has = !!progress && progress.total > 0;
   const n = has ? Math.max(1, Math.min(progress.total, progress.n)) : 0;
   const pct = has ? Math.round((n / progress.total) * 100) : 0;
@@ -30,7 +36,9 @@ export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', 
     <div className="flex min-h-12 items-center gap-2 sm:gap-3" data-testid="exercise-bar">
       <IconButton icon="close" label={closeLabel} onClick={onClose} data-testid={closeTestId} className="-ml-2 flex-none" />
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        {has ? (
+        {middleOverlay ? (
+          middleOverlay
+        ) : has ? (
           <div className="flex items-center gap-3">
             <div
               className="h-1.5 flex-1 overflow-hidden rounded-full bg-track"

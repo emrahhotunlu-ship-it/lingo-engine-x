@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, screen } from './fixtures';
 import { dump, forcedPatch, planPatch } from './trainerHelpers';
+import { TYPE_MODE } from './trainerHelpers';
 
 // Trainer nach Emrahs Rückmeldung (CLAUDE.md A7): keine Selbstbewertung, Status oben statt
 // Erklärtexten, Platzhalter je Buchstabe, Beispielsätze, Wort-Antippen mit Wörterbuch,
@@ -15,7 +16,7 @@ const sampleCalls = (page: Page): Promise<Calls> =>
 async function startWith(page: Page, patch: Record<string, Record<string, unknown>>, opts: { sample?: boolean } = {}) {
   const booted = await boot(page, {
     migrated: true,
-    fake: { patch: { 'app/profile': planPatch(1), ...patch }, ...(opts.sample === false ? { capabilities: { sample: false } } : {}) },
+    fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...patch }, ...(opts.sample === false ? { capabilities: { sample: false } } : {}) },
   });
   await screen(page, 'today');
   await page.getByTestId('start').click();
@@ -179,7 +180,7 @@ test('ohne KI: keine KI-Knöpfe, keine Beispiel-Anfrage, Wörterbuch funktionier
 test('Handy: Nachschlagen als Blatt von unten, kein Querscrollen', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin', locale: 'de-DE' });
   const page = await context.newPage();
-  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(1), 'vocab/avoid': avoid() } } });
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), 'vocab/avoid': avoid() } } });
   await screen(page, 'today');
   await page.getByTestId('start').tap();
   await screen(page, 'trainer');

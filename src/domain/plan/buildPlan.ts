@@ -2,7 +2,8 @@ import { lessonDoneOn } from '../course/courseDone';
 import { entryCardKey } from '../progress/logPatch';
 import type { DutyChannel } from '../learn/types';
 import type { RoundPlan } from '../srs/queue';
-import { DUTY_CH_MINUTES, DUTY_MINUTES, DUTY_ROUND, isDutyChannel, isPickableDuty, PHASE2_EXECUTABLE, type RankedChannel } from './channels';
+import { DUTY_CH_MINUTES, DUTY_MINUTES, DUTY_ROUND, isPickableDuty, isUnitDutyChannel, PHASE2_EXECUTABLE, STORED_DUTY_CHANNELS, UNIT_CH_MINUTES, type RankedChannel } from './channels';
+import { readUnitMeta } from './unitMeta';
 import type { DutyId, DutyState, StoredPlan, TodayState, WhyKey } from './types';
 
 // Ein Plan je Lerntag, nie neu gewürfelt (Kap. 15). Der Plan ist eine reine Funktion der Daten.
@@ -31,7 +32,7 @@ export function readPlan(v: unknown, today: string): StoredPlan | null {
     const x = nonNeg(goal[k]);
     if (x !== undefined) g[k] = x;
   }
-  return {
+  const out: StoredPlan = {
     d: today,
     ids: isStrArr(p.ids) ? p.ids : [],
     why: Array.isArray(p.why) ? (p.why as WhyKey[][]) : [],
@@ -41,6 +42,10 @@ export function readPlan(v: unknown, today: string): StoredPlan | null {
     lesson: typeof p.lesson === 'string' ? p.lesson : null,
     at: typeof p.at === 'number' ? p.at : 0,
   };
+  // Neubau (P1, additiv): eingefrorene Eckdaten der Tageseinheit, tolerant gelesen.
+  const u = readUnitMeta(p.u);
+  if (u) out.u = u;
+  return out;
 }
 
 /** Ist das ein Plan mit Phase-2-Pflicht (Pflichtkanal)? Nur dann darf `pflichtSince` gesetzt werden. */
@@ -141,11 +146,13 @@ export function buildPlan(i: { today: string; existing: unknown; round: RoundPla
   return { plan: { d: i.today, ids: [], why: [], ...base }, changed: true };
 }
 
-/** Minuten eines Pflichtkanals (`say` 8, sonst 5). */
-export const dutyChannelMinutes = (ch: string): number => (isDutyChannel(ch) ? DUTY_CH_MINUTES[ch] : 5);
+/** Minuten eines Pflichtkanals (`say` 8, sonst 5; Blöcke der Tageseinheit laut `UNIT_CH_MINUTES`). */
+export const dutyChannelMinutes = (ch: string): number =>
+  isUnitDutyChannel(ch) ? UNIT_CH_MINUTES[ch] : (STORED_DUTY_CHANNELS as readonly string[]).includes(ch) ? DUTY_CH_MINUTES[ch as DutyChannel] : 5;
 
-/** Minuten der Pflicht laut Plan (D4, P-06). */
+/** Minuten der Pflicht laut Plan (D4, P-06; Tageseinheit: eingefrorene Minuten). */
 export function dutyMinutes(p: StoredPlan): number {
+  if (p.u) return p.u.min;
   let m = 0;
   for (const d of p.duty) m += d === 'review' ? 10 : d === 'lesson' ? 12 : dutyChannelMinutes(d.slice(3));
   return m;

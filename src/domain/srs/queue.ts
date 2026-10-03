@@ -1,6 +1,8 @@
 import { learningDayEnd } from '../date';
+import { cardSec, NEW_SEC } from './cost';
 import { availableExercises } from './modes';
 import { isLearningState, retrievability } from './scheduler';
+import { themeFirst } from '../week/review';
 import type { Lang, QueueItem, TrainCard } from './types';
 
 // Runde „Wiederholen" (Lern-Entwurf §3): fällige Karten nach Dringlichkeit, dazu neue Karten
@@ -12,7 +14,7 @@ export const ROUND_SECONDS = 600;
 export const ROUND_MIN = 10;
 export const ROUND_MAX = 60;
 const LEARNING_MAX = 15;
-const NEW_COST = 50;
+const NEW_COST = NEW_SEC;
 
 /** Gespeicherter Wert → erlaubter Wert (nächster, bei Gleichstand der kleinere); fehlt er, 5. */
 export function normalizeNewPerDay(v: unknown): NewPerDay {
@@ -29,15 +31,44 @@ export function normalizeNewPerDay(v: unknown): NewPerDay {
   return best;
 }
 
-const reviewCost = (c: TrainCard) => (c.stage <= 2 ? 12 : c.stage <= 4 ? 20 : 35);
+const reviewCost = cardSec;
 
-/** Quellen mit Emrahs eigenem Kontext zuerst, Startwortschatz zuletzt. */
-// Mitgenommene Wendungen (Gespräch, Mail, Pitch, Baukasten) sind eigener Kontext wie „coach“.
-const SRC_RANK = ['lookup', 'read', 'translate', 'lesson', 'coach', 'scene', 'mail', 'pitch', 'biz', 'preply', 'claude', 'ai', 'user', 'listen', 'write', 'job', 'seed'];
-const srcRank = (s: string | null) => {
-  const i = SRC_RANK.indexOf(s ?? '');
-  return i === -1 ? SRC_RANK.length - 1 : i;
-};
+/**
+ * Eingangskorb (anki-regeln.md §5, ersetzt `SRC_RANK`): Emrahs eigener Kontext zuerst, der
+ * Startwortschatz zuletzt. Stufen: 1 Termin · 2 Lehrer (Lehrer-Feedback, frühere Preply-Importe) · 3 eigener Output/eigene Korrektur ·
+ * 4 Wochenthema (`isThemeCard`, von außen) · 5 eigene Funde · 6 C1-Paket · 7 Lektion und Vorschläge ·
+ * 8 Startwortschatz und Unbekanntes. Innerhalb einer Stufe die älteste zuerst.
+ */
+export const INBOX_TIERS: readonly (readonly string[])[] = [
+  ['meeting'],
+  ['teacher', 'preply'],
+  ['say', 'fluency', 'scene', 'mail', 'pitch', 'biz', 'coach'],
+  [],
+  ['lookup', 'read', 'listen', 'translate', 'write', 'user', 'claude'],
+  // C1-Paket (02.10.2026): geprüfte, geplante C1-Einträge hinter Emrahs eigenen Funden, vor allgemeinen Vorschlägen.
+  ['pack'],
+  ['lesson', 'ai', 'job', 'daily'],
+];
+const THEME_TIER = 3;
+const LAST_TIER = INBOX_TIERS.length;
+
+/** Stufe im Eingangskorb (0 = zuerst). Themenkarten landen auf Stufe 4 (Index 3), außer ihre Quelle ist höher. */
+export function inboxTier(src: string | null, theme = false): number {
+  const i = INBOX_TIERS.findIndex((t) => t.includes(src ?? ''));
+  const own = i === -1 ? LAST_TIER : i;
+  return theme ? Math.min(own, THEME_TIER) : own;
+}
+
+/**
+ * Herkunft für den Korb. Wörter des täglichen Claude-Auftrags tragen `src: 'coach'` (`dailyIntake.ts`), sind aber
+ * allgemeine Vorschläge und gehören wie `ai` auf Stufe 6 – nicht zu Emrahs eigenem Output (Stufe 3), sonst stünden sie vor
+ * seinen eigenen Funden (Prüfung Englischlehrer 02.10.2026). Andere `coach`-Wörter (Druck-Training, Umschreiben) bleiben Stufe 3.
+ */
+export function tierSrc(c: Pick<TrainCard, 'src' | 'doc'>): string | null {
+  if (c.src !== 'coach') return c.src;
+  const o = c.doc.origin;
+  return o && typeof o === 'object' && (o as { kind?: unknown }).kind === 'daily' ? 'daily' : c.src;
+}
 
 /** Kann die Karte in dieser Sprache überhaupt abgefragt werden? */
 export const quizzable = (c: TrainCard, lang: Lang, poolSize: number): boolean => availableExercises(c, lang, poolSize).length > 0;
@@ -57,10 +88,12 @@ export function dueCards(cards: readonly TrainCard[], nowMs: number): TrainCard[
     .map((x) => x.c);
 }
 
-export function newCards(cards: readonly TrainCard[]): TrainCard[] {
+/** Neue Karten in Korb-Reihenfolge (§5); `isTheme` = Stufe 4 „Wochenthema“ (domain/week `isThemeCard`). */
+export function newCards(cards: readonly TrainCard[], isTheme?: (c: TrainCard) => boolean): TrainCard[] {
+  const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(tierSrc(c), isTheme ? isTheme(c) : false)]));
   return cards
     .filter((c) => c.isNew)
-    .sort((a, b) => srcRank(a.src) - srcRank(b.src) || a.order - b.order || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || (a.key < b.key ? -1 : 1));
+    .sort((a, b) => (tier.get(a.key) ?? LAST_TIER) - (tier.get(b.key) ?? LAST_TIER) || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || a.order - b.order || (a.key < b.key ? -1 : 1));
 }
 
 function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {
@@ -144,12 +177,16 @@ export function buildQueue(i: {
   newQuotaLeft: number;
   exclude: ReadonlySet<string>;
   lang: Lang;
+  /** Stufe 4 des Eingangskorbs (Wochenthema). */
+  isTheme?: (c: TrainCard) => boolean;
 }): QueueItem[] {
   if (i.target <= 0) return [];
   const act = active(i.cards, i.lang).filter((c) => !i.exclude.has(c.key));
-  const fresh = newCards(act);
+  const fresh = newCards(act, i.isTheme);
   const nNew = Math.min(Math.max(0, i.newQuotaLeft), fresh.length, i.target);
-  const due = dueCards(act, i.nowMs);
+  // Block 1 (Prüfung Tageseinheit M1): fällige Karten zum Wochenthema zuerst, sonst nach Dringlichkeit.
+  const urgent = capLeeches(dueCards(act, i.nowMs));
+  const due = i.isTheme ? themeFirst(urgent.map((c) => ({ c, theme: i.isTheme?.(c) === true })), i.target).map((x) => x.c) : urgent;
   const reviews = due.slice(0, i.target - nNew).map((c): QueueItem => ({ key: c.key, reason: 'due', phase: 'quiz' }));
   if (reviews.length + nNew < i.target) {
     for (const c of aheadCards(act, i.nowMs).slice(0, i.target - nNew - reviews.length)) reviews.push({ key: c.key, reason: 'ahead', phase: 'quiz' });
@@ -158,6 +195,17 @@ export function buildQueue(i: {
   const out: QueueItem[] = [...reviews];
   news.forEach((n, k) => out.splice(Math.min(out.length, 2 + 3 * k), 0, n));
   return out;
+}
+
+/** Dauerfehler („Blutegel“): ab so vielen Vergessen-Fällen kostet eine Karte unverhältnismäßig viel Zeit. */
+export const LEECH_AT = 5;
+/** Höchstens so viele Dauerfehler-Karten je Runde; der Rest kommt an den nächsten Tagen (bleibt fällig, geht nie verloren). */
+export const LEECH_MAX = 3;
+
+/** Begrenzt Dauerfehler-Karten in einer Runde (Reihenfolge der übrigen bleibt). */
+export function capLeeches(due: readonly TrainCard[]): TrainCard[] {
+  let n = 0;
+  return due.filter((c) => (c.fsrs.lapses >= LEECH_AT ? ++n <= LEECH_MAX : true));
 }
 
 /** Wiedervorlage in der Runde: frühestens drei Karten später (höchstens ans Ende). */

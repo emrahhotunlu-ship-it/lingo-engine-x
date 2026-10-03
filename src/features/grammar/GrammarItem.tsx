@@ -5,7 +5,7 @@ import { useLive } from '../../data/live';
 import { solvedSentence } from '../../domain/course/baseLesson';
 import { topicP } from '../../domain/grammar/bkt';
 import { altFamily, checkGrammar, closeVariant } from '../../domain/grammar/check';
-import { alsoRight, altNote, examplesFor, formHint } from '../../domain/grammar/rules';
+import { alsoRight, altNote, examplesFor, formHint, ruleOf } from '../../domain/grammar/rules';
 import { grammarRetryHint, type GrammarRetryHint } from '../../domain/grammar/retryHint';
 import { scaffolded, splitTransform, wholeSentence } from '../../domain/grammar/tasks';
 import { learnGrade } from '../../domain/learn/grade';
@@ -22,6 +22,7 @@ import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
+import { Disclosure } from '../../ui/Disclosure';
 import { topicById } from '../../domain/content';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
@@ -100,6 +101,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   }, []);
 
   const solution = task.answer;
+  const briefRule = useMemo(() => ruleOf(task.topic, lang)?.core ?? '', [task.topic, lang]);
   const typedKind = !whole && (task.type === 'gap' || task.type === 'transform');
   const maskShown = typedKind && (scaff || tip > 0);
   const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
@@ -413,6 +415,15 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
           <LearnStatus p={p} n={typeof doc?.n === 'number' ? doc.n : 0} recent={Array.isArray(doc?.recent) ? (doc.recent as number[]) : null} kind={t(`grKind_${task.type}` as MessageKey)} kindId={task.type} extra={badge} />
           <TaskLine task={t(`grTask_${task.type}` as MessageKey)} purpose={t('purposeGrammar')} />
         </header>
+        {/* N46 „Kurz erklärt“ (Soll): die Regel in einem Satz, zugeklappt, ohne KI; nicht im Wochen-Check
+            und nicht in der Lektion (dort steht die Regel schon über der Aufgabe). */}
+        {!fb && !noHelp && area !== 'lesson' && briefRule && (
+          <Disclosure label={t('nbLernenBrief')} testId="gr-brief">
+            <p className="text-sm text-muted" lang={lang} data-testid="gr-brief-text">
+              {briefRule}
+            </p>
+          </Disclosure>
+        )}
         <div className="flex flex-col gap-4">
           {body}
           {retry && !fb && (

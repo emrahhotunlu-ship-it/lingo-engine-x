@@ -7,7 +7,8 @@ import { Icon } from '../../ui/Icon';
 import { DURATION } from '../../ui/motion';
 
 // Szenenkarte (Plan §5.1): Titel in UI-Sprache, Gegenüber, Stufe, „noch nie“ / „zuletzt vor n
-// Tagen“, Kante in Kanalfarbe Sprechen. Ein Tipp öffnet die Einweisung.
+// Tagen“, Kante in Kanalfarbe Sprechen. Ein Tipp öffnet die Einweisung. Neubau (Leistung §3.2.8):
+// keine Layout-Animation in Listen, nur die Tipp-Rückmeldung (Skalierung).
 
 export function SceneCard({ scene, onOpen }: { scene: SceneView; onOpen: () => void }) {
   const { t, tn } = useT();
@@ -16,7 +17,6 @@ export function SceneCard({ scene, onOpen }: { scene: SceneView; onOpen: () => v
   return (
     <motion.button
       type="button"
-      layout
       data-testid="scene-card"
       data-scene={scene.id}
       data-src={scene.src}

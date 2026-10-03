@@ -33,6 +33,8 @@ export type MemoryDbHandle = {
   /** Phase 5: Die nächsten `times` Schreibvorgänge auf `path` scheitern mit `code`. */
   failWritesTo(path: string, code: DbErrCode, times?: number): void;
   activeSubscriptions(): number;
+  /** Laufende Abos je Ziel (Dokumentpfad bzw. `<Sammlung>/*`), eines je Eintrag, sortiert – für „ein Abo je Dokument“. */
+  activePaths(): string[];
   /** Phase 6 (Plan §13): Höchststand gleichzeitiger Abonnements seit dem Start. */
   peakSubscriptions(): number;
 };
@@ -436,6 +438,8 @@ export function createMemoryDb(opts: MemoryDbOptions = {}): MemoryDbHandle {
       failPaths.set(path, { code, times });
     },
     activeSubscriptions: () => subscriptionCount,
+    activePaths: () =>
+      [...[...docListeners.entries()].flatMap(([p, set]) => Array.from({ length: set.size }, () => p)), ...[...queryListeners].map((q) => `${q.spec.path}/*`)].sort(),
     peakSubscriptions: () => peakSubscriptions,
   };
 }

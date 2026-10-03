@@ -18,6 +18,26 @@ export type StoredPlan = {
   lesson: string | null;
   /** ms der Festlegung. */
   at: number;
+  /**
+   * Neubau (plan.md §1.5, P1, additiv): eingefrorene Eckdaten der Tageseinheit. Fehlt bei Plänen
+   * von Phase 1/2; dann gilt der Plan wie bisher. Rückweg-sicher (die alte App liest nur `d/ids/why`).
+   */
+  u?: UnitMeta;
+};
+
+/** Block der Tageseinheit im gespeicherten Plan: [Block-Nr., Art, Minuten]. */
+export type UnitMetaBlock = [block: 1 | 2 | 3 | 4 | 5, kind: string, min: number];
+
+/** Eingefrorene Eckdaten der Tageseinheit (ohne `env`, Prüfbefund M5). */
+export type UnitMeta = {
+  v: 1;
+  shape: string;
+  goalMin: number;
+  theme: string;
+  min: number;
+  b: UnitMetaBlock[];
+  /** Preply-Termine älterer Pläne (bis 28.09.2026); nur noch gelesen, nie ausgewertet. */
+  pp?: string[];
 };
 
 export type DutyState = { id: DutyId; state: 'done' | 'open'; progress: { done: number; total: number } | null };

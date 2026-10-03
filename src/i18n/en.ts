@@ -19,6 +19,15 @@ import { tonesEn } from './parts/tones.en';
 import { repairEn } from './parts/repair.en';
 import { navEn } from './parts/nav.en';
 import { patternsEn } from './parts/patterns.en';
+import { teacherEn } from './parts/teacher.en';
+import { nbShEn } from './parts/nbSh.en';
+import { nbHeuteEn } from './parts/nbHeute.en';
+import { nbLernenEn } from './parts/nbLernen.en';
+import { nbWsEn } from './parts/nbWs.en';
+import { nbLesenEn } from './parts/nbLesen.en';
+import { nbSprechenEn } from './parts/nbSprechen.en';
+import { nbProfilEn } from './parts/nbProfil.en';
+import { nbTrainingEn } from './parts/nbTraining.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -56,6 +65,16 @@ export const en: Record<MessageKey, string> = {
   ...navEn,
   // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
   ...patternsEn,
+  ...teacherEn,
+  // Rebuild (docs/neubau/architektur.md §2.8): one part per area, own prefix only
+  ...nbShEn,
+  ...nbHeuteEn,
+  ...nbLernenEn,
+  ...nbWsEn,
+  ...nbLesenEn,
+  ...nbSprechenEn,
+  ...nbProfilEn,
+  ...nbTrainingEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',
@@ -363,6 +382,21 @@ export const en: Record<MessageKey, string> = {
   trAgainIn: 'Back {when}',
   trTip: 'Hint',
   trTipLetter: 'First letter',
+  trTilesTypeLabel: 'Type the tiles',
+  trTilesTypeHint: 'Or type the words: word, space · Enter checks',
+  trTilesTypeMiss: '“{word}” is not a free tile.',
+  trTipRemove: 'Remove a wrong option',
+  trTipPos: 'Part of speech',
+  trMore: 'More info',
+  trMoreLess: 'Less',
+  trMoreMeaning: 'Meaning',
+  trMoreDef: 'Explanation',
+  trMorePos: 'Part of speech',
+  trMoreCol: 'Common combinations',
+  trMoreRegister: 'Style',
+  trTrans: 'German',
+  trTransBusy: 'Translating …',
+  trTransFail: 'Translation not possible right now. Tap again.',
   trVerdictTypo: 'Almost – typo',
   trVerdictForm: 'Almost – different form',
   trVerdictSynonym: 'Also possible – the answer was “{solution}”',

@@ -18,6 +18,11 @@ async function openHub(page: Page): Promise<void> {
   await page.getByTestId('tab-speak').click();
   await screen(page, 'speak');
   await expect(page.getByTestId('scene-card').first()).toBeVisible();
+  // Der Abschnitt blendet ein (Segment-Übergang): erst voll sichtbar prüfen (axe misst sonst Mischfarben).
+  await page.waitForFunction(() => {
+    const el = document.querySelector('[data-testid="speak-scenes"]')?.parentElement;
+    return !!el && getComputedStyle(el).opacity === '1';
+  });
 }
 
 async function startScene(page: Page, id = 'sc-vida'): Promise<void> {
@@ -41,11 +46,15 @@ const SENTENCES = ['That depends on your test team and the exposure.', 'I think 
 test('Übersicht: Szenen aus Inhalt und Datenbank, KI-Szene, unvollständige Szene ohne Start', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
   await openHub(page);
-  await expect(page.getByTestId('speak-status')).toHaveAttribute('data-done', 'false');
-  await expect(page.getByTestId('scene-card')).toHaveCount(8);
+  // Neubau I15: Sprech-Status nur, wenn Block 3 heute ein Gespräch ist (Sonntag: Wochen-Check).
+  await expect(page.getByTestId('speak-status')).toHaveCount(0);
+  await expect(page.getByTestId('scenes-own').getByTestId('scene-card')).toHaveCount(7);
+  // Neubau N70: Business-Szenen aus P7a (erste 4, „Alle zeigen“), Szene zum Wochenthema oben.
+  await expect(page.getByTestId('scenes-biz').getByTestId('scene-card')).toHaveCount(4);
+  await expect(page.getByTestId('speak-theme-scene')).toBeVisible();
   await expect(page.locator('[data-testid="scene-card"][data-src="ai"]')).toHaveCount(1);
   // Vier Szenen der alten App plus die festen „Preisverhandlung“ und „Partner-Pitch“ (Kap. 6.5).
-  await expect(page.locator('[data-testid="scene-card"][data-src="legacy"]')).toHaveCount(6);
+  await expect(page.getByTestId('scenes-own').locator('[data-testid="scene-card"][data-src="legacy"]')).toHaveCount(6);
   await expect(page.locator('[data-testid="scene-card"][data-scene="sc-price"]')).toContainText('Preis');
   await expect(page.locator('[data-testid="scene-card"][data-scene="sc-pitch"]')).toContainText('Vertriebspartnerschaft');
   // Unvollständige Szenen stehen nicht in der Liste, sondern zugeklappt darunter (UX-Beratung Nr. 7).
@@ -134,13 +143,15 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   // Heute: Das Gespräch zählt nicht als „Wiederholen“; Angebote erst nach der Pflicht (Kap. 2.1).
   await page.getByTestId('report-home').click();
   await screen(page, 'today');
-  await expect(page.getByTestId('today-status')).toHaveText('Heute · 0 von 3');
+  // Neubau: Sonntag = Tageseinheit mit 2 Blöcken (Wiederholen + Wochen-Check); das Gespräch zählt in keinen.
+  // Wiederholen darf bei Rückstand länger dauern (Seed: viele überfällige Karten; Sonntag 5 Min. + höchstens 50 %), der Wochen-Check bleibt bei 5.
+  await expect(page.getByTestId('today-status')).toHaveText(/^0 von 2 · noch ca\. (10|11|12|13) Min\.$/);
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
   await expect(page.getByTestId('extra')).toHaveCount(0);
   // Reiter „Sprechen“: erledigt ist Zustand, kein Knopf (Kap. 2.2).
   await page.getByTestId('tab-speak').click();
   await screen(page, 'speak');
-  await expect(page.getByTestId('speak-status')).toHaveAttribute('data-done', 'true');
+  await expect(page.getByTestId('speak-status')).toHaveCount(0);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
@@ -226,10 +237,7 @@ test('Neu laden mitten im Gespräch: „Fortsetzen“ stellt die Züge wieder he
   await say(page, SENTENCES[0]!);
   await say(page, SENTENCES[1]!);
   await page.reload();
-  await openHub(page);
-  await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
-  await expect(page.getByTestId('rp-resume')).toBeVisible();
-  await page.getByTestId('rp-resume').click();
+  // Neubau (WP0b, N04): frische Momentaufnahme (< 2 Min.) → direkt zurück ins Gespräch.
   await screen(page, 'roleplay');
   await expect(page.locator('[data-testid="rp-turn"][data-role="me"]')).toHaveCount(2);
   await expect(page.getByTestId('rp-turn-count')).toHaveText('Zug 3');

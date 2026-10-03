@@ -83,7 +83,6 @@ export const standDe = {
   ctxSaved: 'Beruflicher Kontext gespeichert',
 
   // Wochenbericht als Preply-Stunde (M18)
-  weeklyPreplyTitle: 'Wochenbericht {from} bis {to}',
 
   // W5: Nachtragen-Hinweis auf Heute
   lateTodayHint_one: 'In diesem Browser liegt noch {n} Änderung aus der alten App.',
@@ -102,7 +101,7 @@ export const standDe = {
   wnCheck: 'Wochen-Check: 12 Aufgaben ohne Tipps, einmal pro Woche – unter „Dein Stand" › Verlauf und nach der Pflicht auf „Heute".',
   wnWeek: '„Dein Stand" zeigt oben deine Woche als sieben Ringe und Claudes Niveau auf einer Skala; im Verlauf stehen jetzt auch die alten Wochen-Checks.',
   wnSettings: 'In den Einstellungen: Farbthema (Salbei, Ozean, Pflaume, Graphit) und dein beruflicher Kontext.',
-  wnPreply: '„Als Preply-Stunde" gibt es jetzt bei Texten, Grammatikthemen, Szenen und im Wochenbericht.',
+  wnTeacher: 'Neu: Lehrer-Feedback einfügen – aus den Notizen deines Lehrers werden Karten und eine Übung.',
 
   // UX-Beratung Nr. 6, 10, 11: Stand, Wortschatz, Einstellungen
   ckTableToggle: 'Bisherige Checks ({n})',

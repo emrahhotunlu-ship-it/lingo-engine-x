@@ -7,7 +7,8 @@ import { learnerBrief } from '../../domain/companion/brief';
 import { activeMsgs, readChat, replyLang, type ChatMsg } from '../../domain/companion/chatDoc';
 import { dayKey } from '../../domain/date';
 import { companionChat, type Attach } from '../../prompts/companionChat';
-import { workContext } from '../../prompts/work';
+import { factsForPrompt, readMemory } from '../../domain/memory/memory';
+import { MEMORY_PROMPT_FACTS, workContext } from '../../prompts/work';
 import { logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
 import { saveChatMsgs, saveChatSince, type SaveOutcome } from './persistChat';
@@ -172,7 +173,7 @@ export function allMsgs(s: Pick<State, 'dbMsgs' | 'pending'>): ChatMsg[] {
   return [...s.dbMsgs, ...s.pending.filter((m) => !keys.has(msgKey(m)))];
 }
 
-function learnerFor(uiLang: 'de' | 'en'): { learner: string; work: string } {
+function learnerFor(uiLang: 'de' | 'en'): { learner: string; work: string; memory: string[] } {
   const live = useLive.getState();
   const profile = live.docs['app/profile'] ?? null;
   const pflicht = profile && typeof profile.pflicht === 'object' && profile.pflicht ? (profile.pflicht as Record<string, unknown>) : null;
@@ -183,7 +184,9 @@ function learnerFor(uiLang: 'de' | 'en'): { learner: string; work: string } {
     uiLang,
     pflichtDone: pflicht ? !!pflicht[dayKey(Date.now())] : null,
   });
-  return { learner, work: workContext(profile?.ctx) };
+  // „Claude merkt sich“ (B5): gemerkte Fakten, neueste zuerst.
+  const memory = factsForPrompt(readMemory(live.docs['app/memory'] ?? null), MEMORY_PROMPT_FACTS);
+  return { learner, work: workContext(profile?.ctx), memory };
 }
 
 async function persist(add: ChatMsg[]): Promise<void> {
@@ -242,8 +245,8 @@ export async function sendMessage(text: string, reuse?: ChatMsg): Promise<void> 
     sentSeq: st.sentSeq + 1,
   }));
 
-  const { learner, work } = learnerFor(uiLang);
-  const turns = companionChat.buildTurns({ uiLang, learner, work, seeing, attach, history, message: userMsg.content });
+  const { learner, work, memory } = learnerFor(uiLang);
+  const turns = companionChat.buildTurns({ uiLang, learner, work, memory, seeing, attach, history, message: userMsg.content });
   ctl?.abort();
   const c = new AbortController();
   ctl = c;

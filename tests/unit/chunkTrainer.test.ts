@@ -316,8 +316,9 @@ describe('Einstufung der neuen Arten (ohne Selbstbewertung)', () => {
     expect(autoGrade('speed', { verdict: 'wrong' }, { submitMs: 7300, limitMs: 7200, timedOut: true })).toBe(1);
   });
 
-  it('Bausteine: 600 ms je Baustein abgezogen; Hören: 1,2 s je Wiederholung', () => {
-    expect(autoGrade('tiles', { verdict: 'correct' }, { submitMs: 8300, tiles: 8 })).toBe(4);
+  it('Bausteine: 600 ms je Baustein abgezogen, nie „Leicht“ (Rekonstruktion); Hören: 1,2 s je Wiederholung', () => {
+    expect(autoGrade('tiles', { verdict: 'correct' }, { submitMs: 8300, tiles: 8 })).toBe(3);
+    expect(autoGrade('tiles', { verdict: 'correct' }, { submitMs: 1500, tiles: 4 })).toBe(3);
     expect(autoGrade('tiles', { verdict: 'correct' }, { submitMs: 13000, tiles: 8 })).toBe(3);
     expect(autoGrade('tiles', { verdict: 'correct' }, { submitMs: 20000, tiles: 8 })).toBe(2);
     expect(autoGrade('listen_mc', { verdict: 'correct' }, { submitMs: 9000, replays: 1 })).toBe(3);
