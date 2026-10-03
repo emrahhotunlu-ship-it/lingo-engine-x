@@ -25,7 +25,8 @@ export function HomeScreen() {
   const profile = useCoach((s) => s.profile);
   const cards = useCoach((s) => s.cards);
   const days = useCoach((s) => s.days);
-  const imported = !!profile?.imported;
+  const importFailed = useCoach((s) => s.importFailed === true);
+  const imported = !!profile?.imported || importFailed;
   const day = days[today] ?? emptyDay();
   const yesterday = days[addDays(today, -1)];
   const placed = !!profile?.placement;

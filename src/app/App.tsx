@@ -56,6 +56,9 @@ function useBoot(): void {
       await saveCards(plan.cards);
       await saveProfile({ imported: plan.imported });
       if (plan.cards.length) toast(t('cImported', { n: plan.cards.length }));
+    }).then((plan) => {
+      // Gescheitert (Fehler steht im Protokoll): weiterarbeiten, beim nächsten Öffnen erneut versuchen.
+      if (!plan) useCoach.setState({ importFailed: true });
     });
   }, [status, imported, t]);
 

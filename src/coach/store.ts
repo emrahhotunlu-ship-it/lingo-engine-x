@@ -36,6 +36,8 @@ type CoachState = {
   days: Readonly<Record<string, DayRec>>;
   /** Dokumente mit unerwartetem Aufbau (werden nie überschrieben). */
   invalid: readonly string[];
+  /** Übernahme der Altdaten in dieser Ansicht gescheitert: Die App läuft trotzdem weiter. */
+  importFailed?: boolean;
 };
 
 export const useCoach = create<CoachState>(() => ({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [] }));
