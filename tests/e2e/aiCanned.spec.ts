@@ -1,3 +1,5 @@
+import { legacyTaskKey } from '../../src/domain/grammar/key';
+import bank from '../../src/content/grammar-bank.json' with { type: 'json' };
 import { expect, test, type Page } from '@playwright/test';
 import { boot, screen, openEntry, openTab } from './fixtures';
 import { grammarKey, L07_OUTPUT, lessonMeta, playLesson, storedL07 } from './learnHelpers';
@@ -84,7 +86,9 @@ test('Lektion „Anwenden": Rückmeldung von Claude, Schreibdokument gespeichert
 });
 
 test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten Themenrunde zuerst', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true });
+  // Mit der Grammatik-Bank hat jedes Thema 15 Aufgaben: Der Knopf erscheint erst, wenn ein Thema fast durchgespielt ist.
+  const seen = (bank.tasks as Array<{ topic: string; prompt: string }>).filter((x) => x.topic === 'passive').map((x) => legacyTaskKey(x.prompt));
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'grammar/passive': { seen } } } });
   await screen(page, 'today');
   await openEntry(page, 'hub-grammar');
   await expect(page.getByTestId('grammar')).toBeVisible();
@@ -113,10 +117,10 @@ test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten The
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute('data-topic', found);
     src = (await item.getAttribute('data-src')) ?? '';
-    if (src === 'ai') break;
+    if (src === 'pool') break;
     await item.getByTestId('dont-know').click();
     await page.getByTestId('next').click();
   }
-  expect(src).toBe('ai');
+  expect(src).toBe('pool');
   expect(errors).toEqual([]);
 });

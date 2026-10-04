@@ -15,7 +15,7 @@ test.describe('Handy 390', () => {
     const { errors, external } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39, ...patch } } });
     await screen(page, 'today');
     const first = page.getByTestId('duty').first();
-    await expect(first.getByTestId('reason')).toContainText('Rückstand, der Rest morgen');
+    await expect(first.getByTestId('reason')).toContainText('überfällig, der Rest morgen');
     // Die Minuten von Block 1 wachsen mit dem Rückstand (mehr als die 8 des Grundplans).
     const min = Number(((await first.innerText()).match(/(\d+)\s*Min\./) ?? [])[1] ?? 0);
     expect(min).toBeGreaterThan(8);
