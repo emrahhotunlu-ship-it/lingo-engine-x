@@ -106,6 +106,11 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**04.10.2026 – Fokus nur noch Vokabeln und Grammatik (Emrahs Vorgabe)**
+- Emrah: „insgesamt nicht zufrieden … an vielen Stellen nicht logisch. Fokus komplett auf Vokabeln und Grammatik, weg von Artikeln und Videos … Und mach die Bugs weg!!“
+- Entscheidung nach Rückfrage: Tageseinheit nur noch Wortschatz · Grammatik · Anwenden (Satzbau, Korrektur eigener falscher Sätze). Reiter: Heute · Wortschatz · Grammatik · Fortschritt. Lesen, Hören/Videos, Entdecken und Schreiben werden ausgeblendet. **Sprechen bleibt als freiwilliges Extra** (kleiner Einstieg auf Heute, nicht in der Pflicht). Übersetzer und „Claude fragen“ bleiben. Alle Daten bleiben unangetastet in der Datenbank (nur ausgeblendet).
+- Fehler aus Emrahs Protokoll: Bei den Buchstaben-/Wort-Bausteinen rutschte „Prüfen“ beim Antippen unter den Finger (Prüfung nach 1–2 Bausteinen: „whether“ → „we“, „somewhat“ → „h“, „are handled“ → „handled“) – behoben (Platzhalter im Vorrat, feste Höhe, feste Lückenbreite).
+
 **03.10.2026, früh – Wortschatz-Paket 2+3 auf dem Test-Link (Emrahs Auftrag: „perfekter Vokabellern-Bereich für die 8000 C1-Wörter“, Vorrang vor allem anderen)**
 - **Test-Link** `AXHkh6…` Version `1790983920-8a14` (Artefakt-Version 24), Code `b9b9865`. Geprüft: Typprüfung, Lint, 1734 Unit, 560 von 561 E2E (1 Last-Ausreißer in `grammar.spec` lief einzeln grün), Plattform-Prüfung Freigabe, data-guard (OK, zwei Warnungen behoben), learning-scientist (Befunde eingearbeitet). ux-reviewer für Hub/Paket-Stapel/Wortpartner läuft nach dem Test-Link.
 - **Grundlage** `docs/wortschatz-plan.md` (Englischlehrer + Lernwissenschaft): 8000 Wortfamilien sind passives Verstehen, aktiv üben ~1500–2000 Einheiten; 4–5 neue Einheiten/Tag sind dauerhaft tragbar (12–15 Min. Wortschatz), 8–10 nicht.
