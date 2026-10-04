@@ -69,10 +69,12 @@ export function gapIn(view: CardView, pick = 0): GapSentence | null {
 
 /** Drei falsche, aber plausible Bedeutungen (gleiche Wortart, ähnliche Häufigkeit), fest je Karte. */
 export function distractors(view: CardView, n = 3): string[] {
-  const all = bank().words;
+  // Phrasal Verben und Wendungen bekommen Ablenker aus ihrer eigenen Gruppe (sonst gäbe es keine).
+  const isPhrase = view.pos === 'pv' || view.pos === 'phr';
+  const all = isPhrase ? bank().phrasal : bank().words;
   const own = new Set(view.de.split(', '));
   const target = bank().byId.get(view.id)?.r ?? 3000;
-  const pool = all.filter((w) => w.i !== view.id && (!view.pos || w.p === view.pos) && Math.abs(w.r - target) < 2500 && !own.has(w.de.split(', ')[0] ?? ''));
+  const pool = all.filter((w) => w.i !== view.id && (!view.pos || w.p === view.pos) && (isPhrase || Math.abs(w.r - target) < 2500) && !own.has(w.de.split(', ')[0] ?? ''));
   let h = 0;
   for (const ch of view.id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   const out: string[] = [];

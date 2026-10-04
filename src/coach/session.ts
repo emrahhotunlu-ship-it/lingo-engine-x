@@ -83,7 +83,7 @@ export type Candidate = { id: string; sort: boolean; word?: BankWord };
 
 export function dueIds(cards: ReadonlyMap<string, CardRec>, nowMs: number): string[] {
   return [...cards]
-    .filter(([, c]) => c.f.state !== 0 && c.f.due <= nowMs)
+    .filter(([, c]) => c.f.state !== 0 && !c.hide && c.f.due <= nowMs)
     .sort((a, b) => a[1].f.due - b[1].f.due)
     .map(([id]) => id);
 }
@@ -104,7 +104,7 @@ export function knownShare(placement: Placement | undefined, rank: number): numb
 
 export function* newCandidates(cards: ReadonlyMap<string, CardRec>, placement?: Placement): Generator<Candidate, void, unknown> {
   // 1. Eigene, noch nie geübte Wörter aus der alten App.
-  for (const [id, c] of cards) if (c.f.state === 0 && !c.known) yield { id, sort: false };
+  for (const [id, c] of cards) if (c.f.state === 0 && !c.known && !c.hide) yield { id, sort: false };
   // 2. Bank: allgemeiner Wortschatz und Beruf im Wechsel (2 : 1).
   const b = bank();
   const pool = [...b.words, ...b.phrasal].filter((w) => !cards.has(w.i)).sort((x, y) => x.r - y.r);
@@ -166,7 +166,7 @@ export class Session {
     if (ready >= 0) {
       const [a] = this.again.splice(ready, 1);
       const rec = cards.get(a!.id);
-      if (rec) return { kind: 'review', id: a!.id, format: formatFor(a!.id, rec) };
+      if (rec && !rec.hide) return { kind: 'review', id: a!.id, format: formatFor(a!.id, rec) };
     }
     const wantNew = this.introduced < this.quota && (this.steps % 3 === 0 || this.reviews.length === 0);
     if (wantNew) {
@@ -176,14 +176,14 @@ export class Session {
     while (this.reviews.length) {
       const id = this.reviews.shift()!;
       const rec = cards.get(id);
-      if (rec) return { kind: 'review', id, format: formatFor(id, rec) };
+      if (rec && !rec.hide) return { kind: 'review', id, format: formatFor(id, rec) };
     }
     const s = this.takeCandidate();
     if (s) return s;
     if (this.again.length) {
       const a = this.again.shift()!;
       const rec = cards.get(a.id);
-      if (rec) return { kind: 'review', id: a.id, format: formatFor(a.id, rec) };
+      if (rec && !rec.hide) return { kind: 'review', id: a.id, format: formatFor(a.id, rec) };
     }
     return null;
   }

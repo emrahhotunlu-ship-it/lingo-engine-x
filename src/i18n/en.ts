@@ -20,6 +20,7 @@ import { repairEn } from './parts/repair.en';
 import { navEn } from './parts/nav.en';
 import { patternsEn } from './parts/patterns.en';
 import { writeEn } from './parts/write.en';
+import { wortschatzEn } from './parts/wortschatz.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -61,6 +62,7 @@ export const en: Record<MessageKey, string> = {
   ...patternsEn,
   // Paket A: Schreiben, Reparatur, Stolpersteine
   ...writeEn,
+  ...wortschatzEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

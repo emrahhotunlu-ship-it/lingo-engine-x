@@ -50,7 +50,7 @@ export function TapText({ text, className }: { text: string; className?: string 
   );
 }
 
-const POS_KEY: Record<string, MessageKey> = { n: 'cPosN', v: 'cPosV', adj: 'cPosAdj', adv: 'cPosAdv', pv: 'cPosPv' };
+const POS_KEY: Record<string, MessageKey> = { n: 'cPosN', v: 'cPosV', adj: 'cPosAdj', adv: 'cPosAdv', pv: 'cPosPv', phr: 'mwPosPhr' };
 
 export function PosLabel({ pos }: { pos: string }) {
   const { t } = useT();

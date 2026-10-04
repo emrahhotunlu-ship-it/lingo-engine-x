@@ -1,4 +1,5 @@
 import bankRaw from '../content/bank/words.json?raw';
+import phrasesRaw from '../content/bank/phrases.json?raw';
 import { logError } from '../platform/diagnostics';
 
 // Eingebaute Lernstoff-Bank (docs/neustart.md §8): Wörter mit Häufigkeitsrang, deutscher Bedeutung,
@@ -32,6 +33,7 @@ type BankFile = { v: number; src: string; words: BankWord[]; phrasal: (BankWord 
 
 export type Bank = {
   words: readonly BankWord[];
+  /** Phrasal Verben, feste Ausdrücke und die Business-Wendungen (Kennung `ph-…`). */
   phrasal: readonly BankWord[];
   pseudo: readonly string[];
   byId: ReadonlyMap<string, BankWord>;
@@ -49,11 +51,22 @@ export function bank(): Bank {
     logError('bank:parse', err);
     file = { v: 0, src: '', words: [], phrasal: [], pseudo: [] };
   }
-  const phrasal = file.phrasal.map((p) => ({ ...p, r: rankFromZipf(p.z), l: ['phrasal'] }));
+  const phrasal: BankWord[] = [...file.phrasal.map((p) => ({ ...p, r: rankFromZipf(p.z), l: ['phrasal'] })), ...businessPhrases()];
   const byId = new Map<string, BankWord>();
   for (const w of [...file.words, ...phrasal]) if (!byId.has(w.i)) byId.set(w.i, w);
   cached = { words: file.words, phrasal, pseudo: file.pseudo, byId, source: file.src };
   return cached;
+}
+
+/** Business- und C1-Wendungen (phrases.json): ganz normale Karten, Rang zwischen den Wörtern. */
+function businessPhrases(): BankWord[] {
+  try {
+    const file = JSON.parse(phrasesRaw) as { phrases?: BankWord[] };
+    return Array.isArray(file.phrases) ? file.phrases : [];
+  } catch (err) {
+    logError('bank:phrases', err);
+    return [];
+  }
 }
 
 /** Ungefährer Rang aus der Zipf-Häufigkeit (Phrasal Verbs haben keinen Listenrang). */
@@ -79,7 +92,7 @@ export function lookupWord(query: string, limit = 6): BankWord[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const b = bank();
-  const exact = b.byId.get(wordId(q));
+  const exact = b.byId.get(wordId(q)) ?? b.phrasal.find((p) => p.w.toLowerCase() === q);
   const out: BankWord[] = exact ? [exact] : [];
   const seen = new Set(out.map((w) => w.i));
   const deHit = (de: string) => de.toLowerCase().split(/[,;]\s*/).some((d) => d === q || d.replace(/^(sich|der|die|das) /, '') === q);
@@ -92,7 +105,7 @@ export function lookupWord(query: string, limit = 6): BankWord[] {
     }
   }
   if (out.length < limit && q.length >= 4) {
-    for (const w of b.words) {
+    for (const w of [...b.words, ...b.phrasal]) {
       if (out.length >= limit) break;
       if (!seen.has(w.i) && (w.w.startsWith(q) || w.de.toLowerCase().includes(q))) {
         out.push(w);

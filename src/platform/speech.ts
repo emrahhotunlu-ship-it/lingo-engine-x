@@ -351,9 +351,10 @@ export function speak(text: string, opts: SpeakOptions = {}): Promise<SpeakOutco
   const e = env();
   const status = useSpeech.getState().status;
   if (!e || status === 'unsupported' || status === 'novoice') return Promise.resolve('unavailable');
-  const chunks = chunkText(text);
+  // Wendungen: das Kürzel „sth/sb" wird als „something/somebody" gesprochen.
+  const chunks = chunkText(text.replace(/\bsth\b/g, 'something').replace(/\bsb\b/g, 'somebody'));
   if (chunks.length === 0) return Promise.resolve('done');
-  const from = Math.min(chunks.length - 1, Math.max(0, Math.floor(opts.startAt ?? 0)));
+  const from =Math.min(chunks.length - 1, Math.max(0, Math.floor(opts.startAt ?? 0)));
 
   const busy = current !== null || e.synth.speaking || e.synth.pending;
   finishCurrent('stopped');

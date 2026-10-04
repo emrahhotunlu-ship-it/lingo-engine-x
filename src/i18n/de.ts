@@ -22,6 +22,7 @@ import { repairDe } from './parts/repair.de';
 import { navDe } from './parts/nav.de';
 import { patternsDe } from './parts/patterns.de';
 import { writeDe } from './parts/write.de';
+import { wortschatzDe } from './parts/wortschatz.de';
 
 import { coachDe } from './parts/coach.de';
 export const de = {
@@ -62,6 +63,8 @@ export const de = {
   ...patternsDe,
   // Paket A: Schreiben, Reparatur, Stolpersteine
   ...writeDe,
+  // Paket B: Mein Wortschatz, Wendungen, Preply-Brücke
+  ...wortschatzDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

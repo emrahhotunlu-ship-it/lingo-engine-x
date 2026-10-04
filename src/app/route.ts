@@ -3,7 +3,7 @@ import { create } from 'zustand';
 // Navigation des Trainers: wenige Bildschirme, kein Router nötig. Blätter (Übersetzer, Claude
 // fragen, Einstellungen, Wort) liegen über dem aktuellen Bildschirm.
 
-export type Route = { name: 'home' } | { name: 'plan' } | { name: 'input' } | { name: 'placement' } | { name: 'check' } | { name: 'blitz' } | { name: 'session'; extra?: boolean } | { name: 'write'; from?: { day: string; id: string } };
+export type Route = { name: 'home' } | { name: 'plan' } | { name: 'input' } | { name: 'vocab' } | { name: 'preply' } | { name: 'placement' } | { name: 'check' } | { name: 'blitz' } | { name: 'session'; extra?: boolean } | { name: 'write'; from?: { day: string; id: string } };
 export type SheetName = 'settings' | 'translate' | 'ask' | null;
 
 type RouteState = {

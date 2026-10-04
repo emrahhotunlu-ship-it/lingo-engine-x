@@ -178,6 +178,14 @@ export function HomeScreen() {
             <p className="mt-2 text-sm text-muted">{t('cRmVocabText', { now: num(vocab), target: num(VOCAB_C1) })}</p>
           </button>
         )}
+
+        {placed && (
+          <div className="mt-3 lg:col-start-2">
+            <Button variant="ghost" icon="chat" onClick={() => go({ name: 'preply' })} data-testid="open-preply">
+              {t('brgEntry')}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
