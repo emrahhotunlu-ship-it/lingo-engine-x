@@ -1,6 +1,6 @@
 import { validateDoc } from '../../data/validate';
 import { logWarn } from '../../platform/diagnostics';
-import { jsonBytes, monthOf, upsertById } from '../speak/talkDoc';
+import { jsonBytes, monthOf, upsertById } from '../monthDoc';
 
 // Ergebnisse der neuen Übungen als Monatsdokument `out/<JJJJ-MM>` (Plan §4.10, A6.6): ein Eintrag
 // je beendeter Übung (Kollokationen-Runde, Umformungen, Einwand-Serie, Posteingang, Nachsprechen),

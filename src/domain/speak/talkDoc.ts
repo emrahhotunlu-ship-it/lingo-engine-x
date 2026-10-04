@@ -1,4 +1,4 @@
-import { logWarn } from '../../platform/diagnostics';
+import { compactList, jsonBytes, monthOf, obj, upsertById } from '../monthDoc';
 import type { TalkRun } from './types';
 
 // Gesprächsläufe als Monatsdokument `talk/<JJJJ-MM>` (Plan §3.4, A6.6: wachsende Ströme
@@ -12,49 +12,8 @@ export const TALK_DOC_MAX_BYTES = 200 * 1024;
 export const LINE_MAX = 200;
 export const LINES_MAX = 16;
 
-const encoder = new TextEncoder();
-export const jsonBytes = (v: unknown): number => encoder.encode(JSON.stringify(v)).length;
-
-/** Monatsschlüssel eines Lerntags: '2026-09-30' → '2026-09'. */
-export function monthOf(day: string): string {
-  return day.slice(0, 7);
-}
-
-const obj = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Doc) : {});
-const tOf = (v: unknown): number => {
-  const t = obj(v).t;
-  return typeof t === 'number' && Number.isFinite(t) ? t : 0;
-};
-
-/** Liste mit `item` (gleiche `id` wird ersetzt), nach Zeit sortiert. */
-export function upsertById(list: readonly unknown[], item: { id: string; t: number }): unknown[] {
-  const rest = list.filter((x) => obj(x).id !== item.id);
-  return [...rest, item].sort((a, b) => tOf(a) - tOf(b));
-}
-
-/**
- * Verdichtet eine Liste von Einträgen, bis sie (als Dokument) unter `maxBytes` liegt. `steps`
- * sind Felder, die nacheinander beim jeweils ältesten Eintrag geleert werden, der sie noch hat.
- */
-export function compactList(list: readonly unknown[], steps: ReadonlyArray<(item: Doc) => Doc | null>, maxBytes: number, wrap: (items: unknown[]) => Doc): unknown[] {
-  let items = list.map((x) => ({ ...obj(x) }));
-  for (const step of steps) {
-    let i = 0;
-    while (jsonBytes(wrap(items)) > maxBytes && i < items.length) {
-      const next = step(items[i] as Doc);
-      if (next) items = items.map((x, k) => (k === i ? next : x));
-      i++;
-    }
-  }
-  // Letzte Rettung: älteste Einträge entfernen (ohne sie wäre das Dokument nicht schreibbar) – nie still.
-  const before = items.length;
-  while (items.length > 1 && jsonBytes(wrap(items)) > maxBytes) items = items.slice(1);
-  if (items.length < before) {
-    const month = obj(wrap([])).month;
-    logWarn('compact:drop', new Error(`${before - items.length} oldest entries removed to stay under ${maxBytes} bytes`), typeof month === 'string' ? month : undefined);
-  }
-  return items;
-}
+// Wiederausfuhr, damit bestehende Importe gültig bleiben (neuer Ort: domain/monthDoc.ts).
+export { compactList, jsonBytes, monthOf, upsertById };
 
 const TALK_STEPS: ReadonlyArray<(r: Doc) => Doc | null> = [
   (r) => (Array.isArray(r.lines) && r.lines.length ? { ...r, lines: [] } : null),

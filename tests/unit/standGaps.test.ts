@@ -10,7 +10,7 @@ import { buildTrainCards } from '../../src/domain/srs/cards';
 import { deriveToday } from '../../src/domain/plan/buildPlan';
 import { profilePatch, roundBonus, type RoundEnd } from '../../src/domain/progress/profilePatch';
 import { keepVisibleDelta, keyboardCovers } from '../../src/ui/chat/keyboard';
-import { runningTabs, type AiTask } from '../../src/features/input/aiTasks';
+import { runningTabs, type AiTask } from '../../src/app/shell/aiTasks';
 import { normCtx } from '../../src/app/actions';
 import { WORK_MAX, workContext } from '../../src/prompts/work';
 import { buildEvidence } from '../../src/domain/assessment/evidence';

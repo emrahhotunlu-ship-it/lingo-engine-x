@@ -6,7 +6,7 @@ import { articleQuestions, LEGACY_ARTICLES } from '../../../domain/input/items';
 import { shuffleOptions } from '../../../domain/input/questions';
 import type { ArticleItem, Domain, FeedItem, Question } from '../../../domain/input/types';
 import { noticeRows, shadowSentences, themeArticle, themeQuestions, type InputBlockPlan, type NoticeRow } from '../../../domain/input/unitInput';
-import { wordCount } from '../../../domain/input/textStats';
+import { wordCount } from '../../../domain/text/textStats';
 import type { ThemeId } from '../../../domain/week/types';
 import { useLive } from '../../../data/live';
 import { useFeed } from '../../discover/feedStore';

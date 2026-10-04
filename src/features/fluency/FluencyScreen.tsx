@@ -21,7 +21,7 @@ import { Fold, FoldGroup } from '../../ui/Fold';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCompanionSee } from '../companion/seeing';
-import { AiRunPanel, isBusy } from '../input/AiRunPanel';
+import { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 import { clearDraft, loadDraft } from '../input/draft';
 import { DraftArea, type DraftHandle } from '../input/DraftArea';
 import { flush } from '../progress/persist';

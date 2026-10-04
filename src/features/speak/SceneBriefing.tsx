@@ -9,7 +9,7 @@ import { unlockSpeech } from '../../platform/speech';
 import { Button } from '../../ui/Button';
 import { Sheet } from '../../ui/Sheet';
 import { clearResume, readResume } from './resume';
-import { queueOpening, speakRepliesOn } from './autoplay';
+import { queueOpening, speakRepliesOn } from '../../app/voice/autoplay';
 import { sceneGoals } from '../../domain/speak/bizScenes';
 import { GoalChecklist } from './GoalChecklist';
 

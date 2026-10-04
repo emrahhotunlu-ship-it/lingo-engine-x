@@ -11,7 +11,7 @@ import { writingPrompt, WRITE_GENRES } from '../../prompts/writingPrompt';
 import { Button } from '../../ui/Button';
 import { Skeleton } from '../../ui/Skeleton';
 import { toast } from '../../ui/Toast';
-import { AiRunPanel } from '../input/AiRunPanel';
+import { AiRunPanel } from '../../ui/AiRunPanel';
 import { ensureDailyPrompt, replaceDailyPrompt } from '../input/complete';
 import { ensureLibrary, useInputLibrary } from '../input/library';
 import { UnitShell } from '../input/UnitShell';

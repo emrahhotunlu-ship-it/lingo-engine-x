@@ -10,7 +10,7 @@ import { buildRun, runId } from '../../domain/speak/transcript';
 import type { AnalysisSlot, SceneView, StoredReport, Turn } from '../../domain/speak/types';
 import { logWarn } from '../../platform/diagnostics';
 import { speak, stopSpeech } from '../../platform/speech';
-import { speakRepliesOn, takeOpening } from './autoplay';
+import { speakRepliesOn, takeOpening } from '../../app/voice/autoplay';
 import { roleplayReport, type ReportTurnInfo } from '../../prompts/roleplayReport';
 import { FIGURE_TIER, roleplayTurn } from '../../prompts/roleplayTurn';
 import { turnAnalysis } from '../../prompts/turnAnalysis';

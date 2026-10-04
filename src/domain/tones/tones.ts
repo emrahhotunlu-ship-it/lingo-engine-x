@@ -3,7 +3,7 @@ import { TONE_REGISTERS, type ToneKind, type ToneMessage, type ToneRegister } fr
 import { hash32 } from '../random';
 import { repairsFromText } from '../repair/sources';
 import type { NewRepair } from '../repair/repair';
-import { compactList, monthOf, upsertById } from '../speak/talkDoc';
+import { compactList, monthOf, upsertById } from '../monthDoc';
 
 // „Eine Botschaft, drei Tonlagen“ (Lernberatung 27.09., Vorschlag 8 / V7): reine Logik.
 // Sachverhalt des Tages, Reparatur-Sätze aus echten Fehlern und das Monatsdokument

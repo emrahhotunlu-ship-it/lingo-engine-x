@@ -1,5 +1,5 @@
 import { dayKey } from '../../domain/date';
-import { cardSrcFor } from '../../domain/input/cardSrc';
+import { cardSrcFor } from '../../domain/lookup/cardSrc';
 import type { WordTapArea } from '../../engine/wordTap';
 import { logWarn } from '../../platform/diagnostics';
 import { saveLookupCard } from '../lookup/store';

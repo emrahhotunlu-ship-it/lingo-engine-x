@@ -96,18 +96,6 @@ export type FeedItem = {
   guide: { de?: string[]; en?: string[] };
 };
 
-export type ErrorCat = 'grammar' | 'vocabulary' | 'collocation' | 'spelling' | 'punctuation' | 'register' | 'coherence' | 'word-order' | 'other';
-
-export const ERROR_CATS: readonly ErrorCat[] = ['grammar', 'vocabulary', 'collocation', 'spelling', 'punctuation', 'register', 'coherence', 'word-order', 'other'];
-
-export type TextError = {
-  orig: string;
-  fix: string;
-  cat: ErrorCat;
-  topic: string | null;
-  sev: 'minor' | 'major';
-  why: string;
-  span: [number, number] | null;
-};
+export { ERROR_CATS, type ErrorCat, type TextError } from '../radar/types';
 
 export type UsHint = { orig: string; us: string };

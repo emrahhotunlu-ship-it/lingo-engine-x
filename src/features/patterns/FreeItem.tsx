@@ -8,7 +8,7 @@ import { patternCheck, type PatternCheckOut } from '../../prompts/patternCheck';
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
-import { AiRunPanel, isBusy } from '../input/AiRunPanel';
+import { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 
 // Neuer Satz im Kurzdrill einer Deutsch-Falle (Lernberatung 27.09., V3): Aufgabe (Englisch,
 // antippbar) → eigener Satz → pattern-check@1 → Urteil, bessere Fassung, Grund → „Weiter“.

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { toUS } from '../domain/answer/spelling';
 import { isWrongLang } from '../domain/lang/detect';
-import { usesChunk } from '../domain/input/chunkMatch';
+import { usesChunk } from '../domain/text/chunkMatch';
 
 // Gemeinsame Bausteine der Phase-4-Vorlagen (Plan §5): Fragen im Altformat, Glossar, Zählen,
 // Sprachtreue je Feld und britische Schreibweisen im erzeugten Text.

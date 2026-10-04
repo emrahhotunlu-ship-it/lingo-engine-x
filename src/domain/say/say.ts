@@ -1,5 +1,5 @@
 import type { Situation } from '../../content/say/situations';
-import { sentenceSplit } from '../input/textStats';
+import { sentenceSplit } from '../text/textStats';
 import { hash32 } from '../random';
 import type { NewRepair, RepairSrc } from '../repair/repair';
 import type { SayCorrection } from './sayDoc';

@@ -10,7 +10,7 @@ import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Skeleton } from '../../ui/Skeleton';
 import { toast } from '../../ui/Toast';
-import { AiRunPanel, isBusy } from '../input/AiRunPanel';
+import { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 import { saveGeneratedListening } from '../input/complete';
 import { dbListening, findListening, listenDoneBefore, listenRows, listensOn, pickListening } from '../input/derive';
 import { ensureLibrary, rememberPick, useInputLibrary } from '../input/library';

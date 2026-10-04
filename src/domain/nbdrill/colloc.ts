@@ -1,6 +1,6 @@
 import type { Colloc } from '../../content/nb/schemas';
 import { matchVerb } from './check';
-import { normText } from '../week/text';
+import { normText } from '../text/normText';
 
 // Kollokationen tippen (Lehrer W3, Plan N101): In der Mitte steht ein Nomen, Emrah tippt passende
 // Verben – eines nach dem anderen, nie Auswahl (Generierungseffekt). Ablauf je Aufgabe:

@@ -1,5 +1,5 @@
 import { useEffect, useId, useImperativeHandle, useRef, type Ref } from 'react';
-import { wordCount } from '../../domain/input/textStats';
+import { wordCount } from '../../domain/text/textStats';
 import { useT } from '../../i18n';
 import { saveDraft } from './draft';
 

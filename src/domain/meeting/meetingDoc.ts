@@ -1,5 +1,5 @@
 import { validateDoc } from '../../data/validate';
-import { compactList, monthOf, upsertById } from '../speak/talkDoc';
+import { compactList, monthOf, upsertById } from '../monthDoc';
 
 // „Mein nächster Termin“ (Lernberatung 27.09., V4 / Vorschlag 6) als Monatsdokument
 // `meeting/<JJJJ-MM>` (A6.6: wachsende Ströme zusammenfassen; Monat = Lerntag der Eingabe).

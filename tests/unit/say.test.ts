@@ -9,7 +9,7 @@ import { profilePatch } from '../../src/domain/progress/profilePatch';
 import { addRepairs } from '../../src/domain/repair/repair';
 import { repairsFromCorrections, situationFor } from '../../src/domain/say/say';
 import { compactSay, SAY_DOC_MAX_BYTES, sayId, upsertSayItem, type SayItem } from '../../src/domain/say/sayDoc';
-import { jsonBytes } from '../../src/domain/speak/talkDoc';
+import { jsonBytes } from '../../src/domain/monthDoc';
 import { validateDoc } from '../../src/data/validate';
 import { registerCannedReplies } from '../../src/platform/dev/cannedReplies';
 import { createFakeSample } from '../../src/platform/dev/fakeSample';

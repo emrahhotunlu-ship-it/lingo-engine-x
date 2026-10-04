@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { runningTabs, useAiTasks } from '../../features/input/aiTasks';
+import { runningTabs, useAiTasks } from './aiTasks';
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
 import { markNavStart } from '../perf';

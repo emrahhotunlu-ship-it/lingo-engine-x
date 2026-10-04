@@ -30,7 +30,7 @@ import type { Feedback } from '../../ui/feedback/types';
 import { Icon } from '../../ui/Icon';
 import { phoneActive } from '../today/device';
 import { SessionEnd } from '../../ui/SessionEnd';
-import { AiRunPanel } from '../input/AiRunPanel';
+import { AiRunPanel } from '../../ui/AiRunPanel';
 import { saveLookupCard } from '../lookup/store';
 import { finishUnit, GoalLine, Note, StepBoundary, TaskHead, TimeBar, TrainingBar, useCountdown } from '../nbdrill/shared';
 import {

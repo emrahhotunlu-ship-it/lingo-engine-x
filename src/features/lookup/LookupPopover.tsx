@@ -6,7 +6,7 @@ import { invalidIdsOf, useLive } from '../../data/live';
 import { slug } from '../../domain/content';
 import { dayKey } from '../../domain/date';
 import { resolveWord, posHint, type CardInfo } from '../../domain/lookup/resolve';
-import { cardSrcFor } from '../../domain/input/cardSrc';
+import { cardSrcFor } from '../../domain/lookup/cardSrc';
 import { mergedVocab } from '../../domain/overview';
 import { lemmaOf } from '../../domain/srs/context';
 import { posKey } from '../../domain/srs/explain';

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { askJson } from '../../ai/gate';
 import { isAiFailure, type AiMessageKey, type AiPhase, type PromptTemplate } from '../../ai/types';
-import type { InputRoute, TabName } from '../../app/nav';
+import type { InputRoute, TabName } from '../nav';
 import { logError, logWarn } from '../../platform/diagnostics';
 
 // KI-Korrekturen als App-Aufgabe (M14, Funktionsabgleich): Schreiben, Lesezusammenfassung und

@@ -18,7 +18,7 @@ import { Icon } from '../../ui/Icon';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCompanionSee } from '../companion/seeing';
-import { AiRunPanel, isBusy } from '../input/AiRunPanel';
+import { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 import { createSceneDoc, takeChunk } from '../speak/persist';
 import { TakeChunkButton, type TakeInput } from '../speak/TakeChunkButton';
 import { TitleActions } from '../system/Chrome';

@@ -7,7 +7,7 @@ import { themeTextFor } from '../../content/nb/load';
 import { useLive } from '../../data/live';
 import { isDictWord } from '../../domain/lexicon/dict';
 import { newShare } from '../../domain/input/newShare';
-import { readingMinutes } from '../../domain/input/textStats';
+import { readingMinutes } from '../../domain/text/textStats';
 import type { Domain } from '../../domain/input/types';
 import { statusIndex } from '../../domain/input/wordStatus';
 import { lemmaCandidates } from '../../domain/text/lemma';

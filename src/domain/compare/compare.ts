@@ -1,8 +1,8 @@
 import { COMPARE_TASKS } from '../../content/compare';
 import { addDays, daysBetween } from '../date';
-import { wordCount } from '../input/textStats';
-import { hasWords, normText, phraseCore } from '../week/text';
-import { matchTraps } from '../week/traps';
+import { wordCount } from '../text/textStats';
+import { hasWords, normText, phraseCore } from '../text/normText';
+import { matchTraps } from '../patterns/traps';
 
 // Monatliche Vergleichsaufgabe (Backlog B1, lehrer.md X1, Lücke 10): dieselbe Sprech- (45 s) und
 // Schreibaufgabe wie beim letzten Mal, beide Fassungen nebeneinander, Claude beschreibt den

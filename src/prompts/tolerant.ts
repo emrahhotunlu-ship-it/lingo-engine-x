@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { usesChunk } from '../domain/input/chunkMatch';
+import { usesChunk } from '../domain/text/chunkMatch';
 import { ERROR_CAT_VALUES } from './inputCommon';
 
 // Tolerantes Lesen von KI-Antworten: Was sich sinnvoll normalisieren lässt (kürzen, abbilden,

@@ -1,6 +1,6 @@
 import { validateDoc } from '../../data/validate';
 import { logWarn } from '../../platform/diagnostics';
-import { jsonBytes, monthOf, upsertById } from '../speak/talkDoc';
+import { jsonBytes, monthOf, upsertById } from '../monthDoc';
 
 // Lehrer-Feedback als Monatsdokument `teacher/<JJJJ-MM>` (28.09.2026, ersetzt die Preply-Brücke):
 // ein Eintrag je verarbeitetem Text, idempotent über `id`. Grenzen wie `out/<Monat>`

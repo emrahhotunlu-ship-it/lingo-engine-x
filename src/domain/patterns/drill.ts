@@ -1,6 +1,6 @@
 import { TRAPS, type Trap } from '../../content/nb/traps';
 import { hash32 } from '../random';
-import { matchTraps } from '../week/traps';
+import { matchTraps } from './traps';
 import { repairNorm } from '../repair/repair';
 import type { Mistake } from './mistakes';
 import { matchPattern, type Pattern } from './patterns';

@@ -1,5 +1,5 @@
 import { validateDoc } from '../../data/validate';
-import { compactList, monthOf, upsertById } from '../speak/talkDoc';
+import { compactList, monthOf, upsertById } from '../monthDoc';
 
 // Flüssigkeit 90 – 60 – 45 (Lernberatung 27.09., V6 / Vorschlag 5) als Monatsdokument
 // `fluency/<JJJJ-MM>` (A6.6: wachsende Ströme zusammenfassen). Ein Eintrag je Durchgang,

@@ -8,7 +8,7 @@ import { cleanMeetingInput, compactMeetings, listMeetings, MEETING_DEBRIEF_MAX, 
 import { roundBonus } from '../../src/domain/progress/profilePatch';
 import { addRepairs } from '../../src/domain/repair/repair';
 import { repairsFromCorrections } from '../../src/domain/say/say';
-import { compactList, jsonBytes } from '../../src/domain/speak/talkDoc';
+import { compactList, jsonBytes } from '../../src/domain/monthDoc';
 import { clearLog, getLog } from '../../src/platform/diagnostics';
 import { registerCannedReplies } from '../../src/platform/dev/cannedReplies';
 import { createFakeSample } from '../../src/platform/dev/fakeSample';

@@ -6,7 +6,7 @@ import { drillQuestions, drillScore, PLAYBOOKS, walk } from '../../src/domain/bu
 import type { BizItem } from '../../src/domain/business/types';
 import { containsPhrase } from '../../src/domain/chunks/newChunk';
 import { usSpelling } from '../../src/domain/text/lemma';
-import { jsonBytes } from '../../src/domain/speak/talkDoc';
+import { jsonBytes } from '../../src/domain/monthDoc';
 import { validateDoc } from '../../src/data/validate';
 
 // Business-Domäne (Plan §9.1): Baukasten-Inhalt, Refiner-Zusammensetzung, biz-Dokument.

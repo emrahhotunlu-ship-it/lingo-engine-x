@@ -1,6 +1,6 @@
 import type { UnitBlockKind, UnitTaskResult } from '../../app/unit/types';
 import type { Fix } from '../../ui/feedback/types';
-import { matchTrap } from '../week/traps';
+import { matchTrap } from '../patterns/traps';
 
 // Ergebnis eines Aufgaben-Blocks (Block 3) für Fokus (Block 4) und „Nochmal, aber besser“
 // (Block 5) – aus den vorhandenen Rückmeldungen von Sag es, 90/60/45, Tonlagen und Rollenspiel

@@ -8,7 +8,7 @@ import { local } from '../../platform/storage';
 import { Button } from '../../ui/Button';
 import { Switch } from '../../ui/Switch';
 import { toast } from '../../ui/Toast';
-import { AUTOPLAY_KEY, autoplayOn } from '../speak/autoplay';
+import { AUTOPLAY_KEY, autoplayOn } from '../../app/voice/autoplay';
 import { resolveVoice } from '../../domain/progress/settings';
 
 // Einstellungen „Stimme“ (Plan §5.6): englische Stimmen (en-US zuerst) mit Probehören, Tempo

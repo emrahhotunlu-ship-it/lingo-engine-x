@@ -1,4 +1,4 @@
-import { compactList, monthOf, upsertById } from '../speak/talkDoc';
+import { compactList, monthOf, upsertById } from '../monthDoc';
 import type { BizItem } from './types';
 
 // Business-Einheiten als Monatsdokument `biz/<JJJJ-MM>` (Plan §3.5). Idempotent über `id`.

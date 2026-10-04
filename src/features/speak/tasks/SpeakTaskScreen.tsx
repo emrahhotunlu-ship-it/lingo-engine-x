@@ -14,7 +14,7 @@ import { FeedbackPanel } from '../../../ui/FeedbackPanel';
 import type { Feedback, Fix } from '../../../ui/feedback/types';
 import { SessionEnd } from '../../../ui/SessionEnd';
 import { useCompanionSee } from '../../companion/seeing';
-import { AiRunPanel, isBusy } from '../../input/AiRunPanel';
+import { AiRunPanel, isBusy } from '../../../ui/AiRunPanel';
 import { saveLookupCard } from '../../lookup/store';
 import { logAnswers, nextRound, Note, TaskHead, TimeBar, TrainingBar, useCountdown } from '../../nbdrill/shared';
 import { ChartSvg } from './ChartSvg';

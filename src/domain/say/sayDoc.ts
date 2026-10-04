@@ -1,4 +1,4 @@
-import { compactList, monthOf, upsertById } from '../speak/talkDoc';
+import { compactList, monthOf, upsertById } from '../monthDoc';
 
 // „Sag es“ (Lernberatung 27.09., V1/V2) als Monatsdokument `say/<JJJJ-MM>` (A6.6: wachsende
 // Ströme zusammenfassen). Ein Eintrag je Situation und Tag, idempotent über `id` – nach der

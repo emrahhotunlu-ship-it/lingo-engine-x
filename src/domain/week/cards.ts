@@ -1,5 +1,5 @@
 import { themeById } from '../../content/nb/themes';
-import { hasWords, normText, phraseCore } from './text';
+import { hasWords, normText, phraseCore } from '../text/normText';
 import type { ThemeId, WeekTheme } from './types';
 
 // Gehört eine Karte zum Wochenthema? (Plan N23, anki-regeln §5 Stufe 4, Prüfung M1: nur für fällige

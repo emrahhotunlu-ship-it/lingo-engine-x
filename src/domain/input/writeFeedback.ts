@@ -1,4 +1,4 @@
-import { matchTrap } from '../week/traps';
+import { matchTrap } from '../patterns/traps';
 import type { Feedback, Fix } from '../../ui/feedback/types';
 import type { WritingErrorView, WritingResView } from './writingRecord';
 

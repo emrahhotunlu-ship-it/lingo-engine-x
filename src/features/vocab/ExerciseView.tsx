@@ -43,7 +43,7 @@ import { produceCheck, type ProduceCheckOut } from '../../prompts/produceCheck';
 import { requestExamples, useExamples } from './examples';
 import { commitAnswer, prepareNext, type Answer, type FirstKind } from './session';
 import { CopyOnce, NextButton, OverrideButton } from '../learn/ui';
-import { AiRunPanel } from '../input/AiRunPanel';
+import { AiRunPanel } from '../../ui/AiRunPanel';
 import { MnemonicBlock } from './mnemonic';
 import { ExampleTranslation } from './ExampleTranslation';
 import { MoreInfo } from './MoreInfo';

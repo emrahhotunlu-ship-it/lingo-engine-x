@@ -11,7 +11,7 @@ import { repairCheck } from '../../prompts/repairCheck';
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
-import { AiRunPanel } from '../input/AiRunPanel';
+import { AiRunPanel } from '../../ui/AiRunPanel';
 
 // Ein Reparatur-Satz (Lernberatung 27.09., V2): der alte eigene Satz steht da, die bessere
 // Fassung ist verborgen. Emrah schreibt den Satz neu → Prüfung (lokal zuerst, sonst

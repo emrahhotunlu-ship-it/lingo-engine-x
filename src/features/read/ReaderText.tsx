@@ -1,7 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
-import { paragraphs, sentenceSplit } from '../../domain/input/textStats';
+import { paragraphs, sentenceSplit } from '../../domain/text/textStats';
 import { statusCss, statusIndex, textCardKeys, textStatus, type StatusCard, type TextCard } from '../../domain/input/wordStatus';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -15,7 +15,7 @@ import { startSession } from '../vocab/session';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { textLevel } from '../../prompts/nb/p4/textLevel';
-import { AiRunPanel, isBusy } from '../input/AiRunPanel';
+import { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 
 // Lesetext im LingQ-Stil (Neubau N51, N52): jedes Wort antippbar (Wort-Popover mit „+ Wortschatz“,
 // Ursprungssatz = der Satz im Text), Wörter aus dem eigenen Wortschatz dezent markiert, darunter

@@ -8,7 +8,7 @@ import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { FeedbackPanel } from '../../ui/FeedbackPanel';
 import type { Feedback } from '../../ui/feedback/types';
-import { AiRunPanel } from '../input/AiRunPanel';
+import { AiRunPanel } from '../../ui/AiRunPanel';
 import { finishUnit, GoalLine, Note, StepBoundary, TaskHead, TrainingBar } from '../nbdrill/shared';
 import { advance, endInbox, ensureInbox, finishReview, inboxResult, mailOf, retryInboxCheck, setGist, setReply, toggleMust, useInbox, type InboxSession } from './session';
 

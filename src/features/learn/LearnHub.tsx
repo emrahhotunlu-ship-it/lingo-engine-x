@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
-import { INPUT_MODULES } from '../../app/modules';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
 import { lessonMeta, lessonOrder } from '../../domain/course/catalog';
@@ -16,13 +15,11 @@ import { useSpeech, unlockSpeech } from '../../platform/speech';
 import { Button } from '../../ui/Button';
 import { ChannelIcon, type Channel } from '../../ui/Card';
 import { Icon, type IconName } from '../../ui/Icon';
-import { InputIcon, type InputIconName } from '../../ui/InputIcon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { startDrill, drillCards, type DrillKind } from '../drills/session';
 import { feasible } from '../../domain/plan/channels';
 import { feasibleData } from '../today/store';
 import { loadLearnInputs, useLearnInputs } from './inputs';
-import { useChannelState } from '../input/InputOffers';
 import { TabTitle } from '../system/Chrome';
 import { startGrammar } from '../grammar/session';
 
@@ -43,8 +40,6 @@ const DRILLS: Array<{ kind: DrillKind; icon: IconName; title: MessageKey; sub: M
   { kind: 'dictate', icon: 'headphones', title: 'drDictate', sub: 'lhDictateSub', channel: 'listen' },
   { kind: 'sprint', icon: 'bolt', title: 'drSprint', sub: 'lhSprintSub', channel: 'write' },
 ];
-
-const INPUT_SUB: Record<string, MessageKey> = { read: 'lhReadSub', listen: 'lhListenSub', write: 'lhWriteSub', discover: 'lhDiscoverSub' };
 
 /** Eine Zeilenform für „öffnen" (visuelle Regel 6): Symbol links, Titel + Nebenzeile, Pfeil rechts. */
 function Row({ icon, title, sub, onClick, testId, badge, note, module }: { icon: ReactNode; title: string; sub: string; onClick: () => void; testId: string; badge?: string | null; note?: ReactNode; module?: string }) {
@@ -82,12 +77,6 @@ function Section({ id, title, children }: { id: string; title: string; children:
     </motion.section>
   );
 }
-
-const ModuleIcon = ({ name, channel }: { name: InputIconName; channel: Channel }) => (
-  <span className="inline-flex size-9 flex-none items-center justify-center rounded-xl bg-surface" style={{ color: `var(--lx-ch-${channel})` }}>
-    <InputIcon name={name} />
-  </span>
-);
 
 /** Gruppen der Einstiege auf dem Platz `learn` (plan.md §1.3). Fremde Bereiche hängen ihre Zeilen per
  * `entries: [{ place: 'learn', group }]` an: `way` (Dein Weg, z. B. P1 „Deine Woche“), `errors`
@@ -263,58 +252,5 @@ export function LearnHub() {
         )}
       </Section>
     </motion.div>
-  );
-}
-
-/**
- * Lesen, Hören, Schreiben (mit „Sag es“) und Entdecken – auch Wurzel des Reiters „Lesen“ im
- * Neubau-Rahmen (WP0a: `areas/lesen.tsx`, bis P4 die Bibliothek baut).
- */
-export function InputSections() {
-  const { t } = useT();
-  const go = useNav((s) => s.go);
-  const { rows } = useChannelState();
-  const done = (id: string) => rows.find((r) => r.module.id === id)?.done ?? false;
-  const practiced = (id: string) =>
-    done(id) ? (
-      // Freiwilliges Angebot (Kap. 2.6): Hinweis „heute geübt", kein „Erledigt"-Häkchen am Knopf.
-      <span className="flex-none whitespace-nowrap text-xs text-muted" data-testid="module-done">
-        {t('inPracticedToday')}
-      </span>
-    ) : null;
-  const moduleRow = (id: 'read' | 'listen' | 'write' | 'discover') => {
-    const m = INPUT_MODULES.find((x) => x.id === id);
-    if (!m) return null;
-    return (
-      <Row
-        key={m.id}
-        icon={<ModuleIcon name={m.icon} channel={m.channel} />}
-        title={t(m.label)}
-        sub={t(INPUT_SUB[m.id] ?? 'lhReadSub')}
-        onClick={() => go(m.route)}
-        testId="module"
-        module={m.id}
-        note={practiced(m.id)}
-      />
-    );
-  };
-
-  return (
-    <>
-      <Section id="lh-input" title={t('lhInput')}>
-        <List label={t('lhInput')} testId="input-modules">
-          {moduleRow('read')}
-          {moduleRow('listen')}
-          {moduleRow('write')}
-          {/* Lernberatung 27.09.: „Sag es" auch freiwillig, jederzeit (zählt nur, wenn es heute Pflicht ist). */}
-          <Row icon={<ChannelIcon channel="speak"><Icon name="chat" /></ChannelIcon>} title={t('sayTitle')} sub={t('lhSaySub')} onClick={() => go({ name: 'say' })} testId="hub-say" />
-        </List>
-      </Section>
-
-      <Section id="lh-discover" title={t('ch_discover')}>
-        <List label={t('ch_discover')}>{moduleRow('discover')}</List>
-      </Section>
-
-    </>
   );
 }

@@ -1,5 +1,5 @@
 import type { FluencyQuestion } from '../../content/fluency/questions';
-import { sentenceSplit, wordCount } from '../input/textStats';
+import { sentenceSplit, wordCount } from '../text/textStats';
 import { hash32 } from '../random';
 
 // Flüssigkeit 90 – 60 – 45 (Lernberatung 27.09., V6 / Vorschlag 5): reine Logik ohne KI –

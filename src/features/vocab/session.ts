@@ -26,7 +26,7 @@ import { selectAiAvailable } from '../../ai/scope';
 import { useCapabilities } from '../../platform/capabilities';
 import { useSpeech } from '../../platform/speech';
 import { useWatched } from '../../data/watch';
-import { legacySceneDoc } from '../speak/useSceneLibrary';
+import { legacySceneDoc } from '../../domain/chunks/legacyScene';
 import { buildQueue, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';

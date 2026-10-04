@@ -1,5 +1,5 @@
 import { lemmaCandidates } from '../text/lemma';
-import { sentenceSplit } from './textStats';
+import { sentenceSplit } from '../text/textStats';
 
 // Beleg im Text (Plan F15): der Satz mit der größten Wortüberlappung zur richtigen Option,
 // die Frage zählt halb mit (Gleichstand, Umschreibungen). Verglichen werden Inhaltswörter mit

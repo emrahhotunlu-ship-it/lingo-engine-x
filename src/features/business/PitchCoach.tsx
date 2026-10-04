@@ -11,7 +11,7 @@ import { isAiFailure, type PromptTemplate } from '../../ai/types';
 import { bizId, PITCH_TEXT_MAX } from '../../domain/business/bizDoc';
 import { coverageCount } from '../../domain/business/coverage';
 import type { Audience } from '../../domain/business/types';
-import { monthOf } from '../../domain/speak/talkDoc';
+import { monthOf } from '../../domain/monthDoc';
 import { EnglishText } from '../../engine/EnglishText';
 import { MicButton } from '../../engine/MicButton';
 import { SpeakButton } from '../../engine/SpeakButton';

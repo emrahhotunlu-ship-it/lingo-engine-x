@@ -14,7 +14,7 @@ import { rankTopics, seedTasks, selectRound } from '../../src/domain/grammar/tas
 import { grammarWrite } from '../../src/domain/grammar/write';
 import { detectLang, isWrongLang } from '../../src/domain/lang/detect';
 import { roundBonus } from '../../src/domain/progress/profilePatch';
-import { jsonBytes } from '../../src/domain/speak/talkDoc';
+import { jsonBytes } from '../../src/domain/monthDoc';
 import { compactTones, messageFor, repairsFromTones, toneId, tonesPath, TONES_DOC_MAX_BYTES, upsertToneItem, type ToneItem } from '../../src/domain/tones/tones';
 import { validateDoc } from '../../src/data/validate';
 import { registerCannedReplies } from '../../src/platform/dev/cannedReplies';

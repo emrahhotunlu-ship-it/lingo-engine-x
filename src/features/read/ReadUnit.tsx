@@ -4,7 +4,7 @@ import { useNav, type UnitCtx } from '../../app/nav';
 import { useSettings } from '../../app/settings';
 import { articleQuestions } from '../../domain/input/items';
 import { shuffleOptions } from '../../domain/input/questions';
-import { readingMinutes } from '../../domain/input/textStats';
+import { readingMinutes } from '../../domain/text/textStats';
 import type { ArticleItem, ChoiceResult } from '../../domain/input/types';
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';

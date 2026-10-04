@@ -31,7 +31,7 @@ import {
   youMs,
   type OutItem,
 } from '../../src/domain/nbdrill';
-import { jsonBytes } from '../../src/domain/speak/talkDoc';
+import { jsonBytes } from '../../src/domain/monthDoc';
 
 const DEAL: Colloc = {
   id: 'c01',

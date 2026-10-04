@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import feedSeed from '../../src/content/legacy/feed-seed.json';
 import passages from '../../src/content/legacy/passages.json';
-import { chunkParts, sentenceWith, usedChunks, usesChunk } from '../../src/domain/input/chunkMatch';
+import { chunkParts, sentenceWith, usedChunks, usesChunk } from '../../src/domain/text/chunkMatch';
 import { locateAll, locateError } from '../../src/domain/input/errorSpans';
 import { evidenceSentence } from '../../src/domain/input/evidence';
 import { articleQuestions, LEGACY_ARTICLES, LEGACY_LISTENING, LEGACY_PROMPTS } from '../../src/domain/input/items';
@@ -9,7 +9,7 @@ import { keypointQuestions, KEYPOINT_QUESTION } from '../../src/domain/input/key
 import { docDomain, domainTarget, feedDomain, LEGACY_DOMAIN } from '../../src/domain/input/mix';
 import { gradeChoice, normalizeFeedQuestion, normalizeLegacyQuestion, normalizeQuestions, shuffleOptions } from '../../src/domain/input/questions';
 import { pickItem, pickPrompt } from '../../src/domain/input/select';
-import { paragraphs, readingMinutes, sentenceSplit, wordCount } from '../../src/domain/input/textStats';
+import { paragraphs, readingMinutes, sentenceSplit, wordCount } from '../../src/domain/text/textStats';
 import { isUkToUs, splitUkHints } from '../../src/domain/input/usHints';
 import { normalizeWriting } from '../../src/domain/input/writingRecord';
 import { processReview } from '../../src/domain/input/review';

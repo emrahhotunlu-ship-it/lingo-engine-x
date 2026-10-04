@@ -5,7 +5,7 @@ import { useNav } from '../../app/nav';
 import type { ScreenProps } from '../../app/registry';
 import { useSettings } from '../../app/settings';
 import { dayKey } from '../../domain/date';
-import { wordCount } from '../../domain/input/textStats';
+import { wordCount } from '../../domain/text/textStats';
 import { EnglishText } from '../../engine/EnglishText';
 import { useT, type MessageKey } from '../../i18n';
 import { speak, stopSpeech, unlockSpeech, useSpeech } from '../../platform/speech';
@@ -14,7 +14,7 @@ import { listeningDialog, type Accent, type ListeningDialogOut } from '../../pro
 import { Button } from '../../ui/Button';
 import { FeedbackPanel } from '../../ui/FeedbackPanel';
 import { useActiveClock } from '../input/activeClock';
-import { AiRunPanel, isBusy } from '../input/AiRunPanel';
+import { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 import { clearDraft, loadDraft } from '../input/draft';
 import { DraftArea } from '../input/DraftArea';
 import { UnitShell } from '../input/UnitShell';

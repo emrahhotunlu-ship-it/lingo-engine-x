@@ -1,8 +1,8 @@
 import { THEMES, themeById } from '../../content/nb/themes';
 import { TRAPS } from '../../content/nb/traps';
 import { isoWeek } from '../date';
-import { hasWords, normText, phraseCore } from './text';
-import { matchTraps, type TrapHit } from './traps';
+import { hasWords, normText, phraseCore } from '../text/normText';
+import { matchTraps, type TrapHit } from '../patterns/traps';
 import type { TargetKind, ThemeId, WeekDoc, WeekTargets, WeekTheme } from './types';
 
 // Wochenziele (Plan N13, Lehrer W7/W8/G2): ≤ 4 Ziele (3 Fallen, 1 Werkzeug) und die

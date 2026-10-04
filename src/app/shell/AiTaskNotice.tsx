@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useNav } from '../../app/nav';
+import { useNav } from '../nav';
 import { useT } from '../../i18n';
 import { Button, IconButton } from '../../ui/Button';
 import { DURATION, EASE_OUT } from '../../ui/motion';

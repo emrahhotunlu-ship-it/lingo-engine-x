@@ -2,14 +2,14 @@ import { useMemo, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { useSettings } from '../../app/settings';
-import { sentenceSplit } from '../../domain/input/textStats';
+import { sentenceSplit } from '../../domain/text/textStats';
 import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
 import { alternatives } from '../../prompts/nb/p4/alternatives';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
 import { toast } from '../../ui/Toast';
-import { AiRunPanel } from '../input/AiRunPanel';
+import { AiRunPanel } from '../../ui/AiRunPanel';
 import { saveChunkCard } from '../input/cards';
 
 // Alternativen je Satz (Neubau N60, DeepL Write): erst auf Tipp auf einen Satz des eigenen Texts,

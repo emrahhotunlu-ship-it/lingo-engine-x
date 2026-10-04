@@ -1,7 +1,7 @@
 import { editDistance } from '../answer/diff';
 import { toUS } from '../answer/spelling';
 import { lemmaCandidates } from '../text/lemma';
-import { normText } from '../week/text';
+import { normText } from '../text/normText';
 
 // Lokale Prüfung getippter Antworten der neuen Übungen (Plan N101/N102, rein, ohne KI):
 // Groß-/Kleinschreibung, Satzzeichen, gerade/typografische Apostrophe und Kurzformen zählen nicht

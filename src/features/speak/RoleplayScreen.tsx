@@ -13,7 +13,7 @@ import { Sheet } from '../../ui/Sheet';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION } from '../../ui/motion';
 import { AnalysisCard } from './AnalysisCard';
-import { setCallMode, useCallMode } from './autoplay';
+import { setCallMode, useCallMode } from '../../app/voice/autoplay';
 import { GoalChecklist } from './GoalChecklist';
 import { roleplayResume } from './resumable';
 import { TargetBar } from './TargetBar';

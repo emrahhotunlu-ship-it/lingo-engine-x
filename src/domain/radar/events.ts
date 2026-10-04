@@ -1,8 +1,8 @@
 import { TOPICS } from '../content';
 import { normCat, topicCat, type RadarCat } from '../grammar/radar';
 import type { RadarEvent } from '../learn/types';
-import { sentenceSplit } from '../input/textStats';
-import type { ErrorCat, TextError } from '../input/types';
+import { sentenceSplit } from '../text/textStats';
+import type { ErrorCat, TextError } from './types';
 
 // Fehler-Radar `app/radar.events` im Altformat {c, s, t, q, g, a} (Plan §3.8, F10):
 // c = Kategorie der alten App (models.js ERR_CATS, wie Phase 2/3: `topicCat`/`normCat`),

@@ -12,7 +12,7 @@ import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { Skeleton } from '../../ui/Skeleton';
 import { useHotkeys } from '../../engine/useHotkeys';
-import { AiRunPanel } from '../input/AiRunPanel';
+import { AiRunPanel } from '../../ui/AiRunPanel';
 import { TitleActions } from '../system/Chrome';
 import { FocusList, TrendLine } from './parts';
 import { PatternDrill } from './PatternDrill';

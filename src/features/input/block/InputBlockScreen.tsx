@@ -7,7 +7,7 @@ import { usePlayerSkip } from '../../../app/shell/Player';
 import { useLive } from '../../../data/live';
 import { ladderFor } from '../../../domain/input/ladder';
 import { summaryReady } from '../../../domain/input/unitInput';
-import { wordCount } from '../../../domain/input/textStats';
+import { wordCount } from '../../../domain/text/textStats';
 import type { ChoiceResult } from '../../../domain/input/types';
 import { EnglishText } from '../../../engine/EnglishText';
 import { useT } from '../../../i18n';

@@ -11,7 +11,7 @@ import { isAiFailure } from '../../ai/types';
 import { bizId, MAIL_TEXT_MAX } from '../../domain/business/bizDoc';
 import { changesOf, composeMail, MAIL_MAX, pickList, segmentMail, wordCount } from '../../domain/business/mailCompose';
 import type { Intent, Recipient } from '../../domain/business/types';
-import { monthOf } from '../../domain/speak/talkDoc';
+import { monthOf } from '../../domain/monthDoc';
 import { EnglishText } from '../../engine/EnglishText';
 import { logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';

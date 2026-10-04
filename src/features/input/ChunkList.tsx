@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useLive } from '../../data/live';
 import { slug } from '../../domain/content';
-import { sentenceWith } from '../../domain/input/chunkMatch';
+import { sentenceWith } from '../../domain/text/chunkMatch';
 import { EnglishText } from '../../engine/EnglishText';
 import type { WordTapArea } from '../../engine/wordTap';
 import { useT } from '../../i18n';

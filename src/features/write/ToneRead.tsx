@@ -1,10 +1,10 @@
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
 import { useSettings } from '../../app/settings';
-import { wordCount } from '../../domain/input/textStats';
+import { wordCount } from '../../domain/text/textStats';
 import { useT, type MessageKey } from '../../i18n';
 import { toneRead } from '../../prompts/nb/p4/toneRead';
-import { AiRunPanel, isBusy } from '../input/AiRunPanel';
+import { AiRunPanel, isBusy } from '../../ui/AiRunPanel';
 
 // Ton-Erkennung im eigenen Text (Backlog B9, Markt GR2): auf Tipp „Wie wirkt das?“ → „Wirkt: höflich,
 // direkt“ mit einem Satz Begründung und höchstens einem Tipp. Nur mit Claude, ab 12 Wörtern; nichts

@@ -1,33 +1,22 @@
 import { useMemo } from 'react';
 import { useSettings } from '../../app/settings';
-import legacyScenes from '../../content/legacy/scenes.json';
-import fixedScenes from '../../content/speak/scenes.json';
 import contextJson from '../../content/legacy/context.json';
 import { useLive } from '../../data/live';
 import { useCollection, useWatched } from '../../data/watch';
-import { bizScenes } from '../../content/nb/load';
 import { TOPICS } from '../../domain/content';
-import { bizRunMarker, bizSceneDoc, isBizId } from '../../domain/speak/bizScenes';
+import { bizRunMarker, isBizId } from '../../domain/speak/bizScenes';
 import { mergeScenes } from '../../domain/speak/library';
+import { contentScenes, legacySceneDoc, LEGACY_SCENES } from '../../domain/chunks/legacyScene';
 import type { SceneView } from '../../domain/speak/types';
+
+export { contentScenes, legacySceneDoc, LEGACY_SCENES };
 
 // Szenen-Bibliothek der Oberfläche (Plan §2.1): Inhalt ⊕ `scene/*` (Datenbank gewinnt). Das Abo
 // auf `scene` besteht nur, solange ein Sprechen-Bildschirm eingehängt ist.
 
 type Doc = Record<string, unknown>;
 
-// Feste Szenen = die vier der alten App plus „Preisverhandlung“ und „Partner-Pitch“ (Kap. 6.5,
-// `content/speak/scenes.json`). Beide sind Inhalt (Quelle `legacy`) und werden von `scene/<id>`
-// überlagert; ein Lauf legt `scene/<id>` wie bei den alten Szenen erst beim Speichern an.
-export const LEGACY_SCENES = [...(legacyScenes as unknown as Doc[]), ...(fixedScenes as unknown as Doc[])];
 const EMPTY = new Set<string>();
-
-// Neubau (N70): die 16 Business-Szenen aus P7a kommen dazu – erst beim ersten Gebrauch geparst
-// (`content/nb/load.ts`, Anhang A 5c), danach im Speicher.
-let contentCache: Doc[] | null = null;
-export function contentScenes(): Doc[] {
-  return (contentCache ??= [...LEGACY_SCENES, ...bizScenes().map(bizSceneDoc)]);
-}
 
 export function useSceneLibrary(): { scenes: SceneView[] | null } {
   const lang = useSettings((s) => s.lang);
@@ -35,10 +24,6 @@ export function useSceneLibrary(): { scenes: SceneView[] | null } {
   const invalid = useWatched((s) => s.invalid.scene) ?? EMPTY;
   const scenes = useMemo(() => (db ? mergeScenes(contentScenes(), db, invalid, lang) : null), [db, invalid, lang]);
   return { scenes };
-}
-
-export function legacySceneDoc(id: string): Doc | null {
-  return contentScenes().find((s) => s.id === id) ?? null;
 }
 
 /** Inhalt für den Lauf-Vermerk `scene/<id>`: Business-Szenen nur als Kennung (Inhalt bleibt Quelle). */

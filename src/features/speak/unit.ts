@@ -7,7 +7,7 @@ import { nextMeeting } from '../../domain/meeting/next';
 import { logWarn } from '../../platform/diagnostics';
 import { unlockSpeech } from '../../platform/speech';
 import { KEY_PREFIX, local } from '../../platform/storage';
-import { queueOpening, speakRepliesOn } from './autoplay';
+import { queueOpening, speakRepliesOn } from '../../app/voice/autoplay';
 import { readResume } from './resume';
 import { legacySceneDoc } from './useSceneLibrary';
 

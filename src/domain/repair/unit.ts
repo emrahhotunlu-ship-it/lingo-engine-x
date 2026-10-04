@@ -4,7 +4,7 @@ import type { DueError } from '../grammar/errors';
 import type { GrammarTask } from '../learn/types';
 import { hash32 } from '../random';
 import type { Lang } from '../srs/types';
-import { matchTraps } from '../week/traps';
+import { matchTraps } from '../patterns/traps';
 import { checkRepairLocal } from './check';
 import { dueRepairs, readRepairs, repairNorm, type NewRepair, type RepairItem, type RepairSrc } from './repair';
 

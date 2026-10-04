@@ -1,7 +1,7 @@
 import type { ThemeText } from '../../content/nb/schemas';
 import { isoWeek, normText, phraseCore, resolveBlock, themeRef, unitPlanFor } from '../week';
 import type { InputSrc, ThemeId, UnitEnv, WeekDoc, WeekTheme } from '../week/types';
-import { sentenceSplit } from './textStats';
+import { sentenceSplit } from '../text/textStats';
 import type { ArticleItem, Question } from './types';
 
 // Block 2 der Tageseinheit (Neubau N53, Prüfung Tageseinheit M7, M9, S1): Quelle je Wochentag und

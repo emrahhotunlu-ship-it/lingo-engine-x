@@ -2,7 +2,7 @@ import { getWriter } from '../../data';
 import { upsertBizItem } from '../../domain/business/bizDoc';
 import type { BizItem } from '../../domain/business/types';
 import { radarEvents, type RadarError } from '../../domain/progress/radarPatch';
-import { monthOf } from '../../domain/speak/talkDoc';
+import { monthOf } from '../../domain/monthDoc';
 import type { ActivityLogEntry } from '../../domain/progress/logPatch';
 import { logError } from '../../platform/diagnostics';
 import { nextT, recordActivity } from '../progress/persist';

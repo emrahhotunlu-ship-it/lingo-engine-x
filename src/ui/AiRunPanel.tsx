@@ -1,7 +1,7 @@
-import type { AiMessageKey, AiPhase } from '../../ai/types';
-import { useT } from '../../i18n';
-import { Button } from '../../ui/Button';
-import { Skeleton } from '../../ui/Skeleton';
+import type { AiMessageKey, AiPhase } from '../ai/types';
+import { useT } from '../i18n';
+import { Button } from './Button';
+import { Skeleton } from './Skeleton';
 
 // Anzeige einer laufenden KI-Anfrage (A6.2/A6.3, Plan §5): „Denkt nach …" bis zum ersten Text,
 // nach der Wartezeit je Stufe ein ruhiger Hinweis mit Stopp-Knopf – kein Timer-Abbruch.

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { useNav, type UnitCtx } from '../../app/nav';
 import { useSettings } from '../../app/settings';
 import { useLive } from '../../data/live';
-import { paragraphs } from '../../domain/input/textStats';
+import { paragraphs } from '../../domain/text/textStats';
 import { shuffleOptions } from '../../domain/input/questions';
 import type { ChoiceResult, ListeningItem } from '../../domain/input/types';
 import { RATES } from '../../engine/AudioBar';
