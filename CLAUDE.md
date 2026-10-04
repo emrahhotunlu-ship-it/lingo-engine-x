@@ -324,12 +324,13 @@ Alles läuft in der Cloud-Umgebung. Chromium liegt unter `/opt/pw-browsers`, **n
 | Befehl | Zweck |
 |---|---|
 | `npm run dev` | Dev-Server mit Entwicklungs-Adapter; `?fake=nodb,nosample,empty,persist` steuert ihn |
-| `npm run build` | Produktions-Build → genau eine `dist/index.html` |
+| `npm run build` | Produktions-Build → genau eine `dist/index.html`, **ohne** Testwerkzeuge (Fassung für `JLL8…`) |
+| `npm run build:test` | Test-Build (`LX_TEST=1`) → ebenfalls `dist/index.html`, **mit** Testwerkzeugen in den Einstellungen und dem Knopf „Test: Einstufung überspringen (B2)". Nur für den Test-Link. Er überschreibt `dist/index.html`: vor der Auslieferung der Hauptfassung wieder `npm run build` ausführen |
 | `npm run typecheck` · `npm run lint` | TypeScript strict (App ohne Node-Typen und gesamt) · ESLint mit Typinformationen |
 | `npm test` | Unit-Tests (Vitest, `TZ=Europe/Berlin`) |
-| `npm run test:e2e` | baut App und Test-Laufzeit, dann Playwright gegen `dist/index.html` |
-| `npm run check:platform` | eine Datei, < 16 MB, keine Ladeziele, kein Entwicklungs-Adapter |
-| `npm run verify` | alles zusammen: vor jeder Auslieferung |
+| `npm run test:e2e` | baut den **Test-Build** und die Test-Laufzeit, dann Playwright gegen `dist/index.html` (so sind auch die Testwerkzeuge getestet) |
+| `npm run check:platform -- --prod` · `-- --test` | eine Datei, < 16 MB, keine Ladeziele, kein Entwicklungs-Adapter; `--prod`: die Kennzeichnung `lx-test-tools` und die Texte der Testwerkzeuge dürfen **nicht** in der Datei stehen; `--test`: sie müssen drinstehen; ohne Schalter nur die gemeinsamen Prüfungen |
+| `npm run verify` | alles zusammen, vor jeder Auslieferung: typecheck, lint, Unit, `build` + `check:platform --prod`, dann `build:test` + Laufzeit + Playwright, dann `check:platform --test`. Danach liegt der Test-Build in `dist/`; die Hauptfassung neu mit `npm run build` bauen |
 | `npm run seed` | erzeugt `seed/sample-data.json` neu (deterministisch, Stichtag 20.09.2026) |
 
 **Struktur (seit dem Neustart, 03.10.2026):**
@@ -351,6 +352,8 @@ Alles läuft in der Cloud-Umgebung. Chromium liegt unter `/opt/pw-browsers`, **n
 - Jeder Fehler geht über `logError`/`logWarn`.
 - Jeder Text steht in `src/i18n`, auf Englisch in amerikanischer Schreibweise.
 - Übernommene Inhalte gibt es zweisprachig (`name`/`name_en`, `de`/`en`). Angezeigt wird immer die Variante der Oberflächensprache (Kap. 10, Sprachtreue).
+- **Testwerkzeuge nur im Test-Build:** Die Oberfläche (`src/screens/TestTools.tsx`, Texte `src/i18n/parts/testtools.*.ts`, Logik `src/coach/testActions.ts` und `testData.ts`) hängt nur hinter der Konstante `TEST_BUILD` aus `src/app/testBuild.ts` (`__LX_TEST__`, gesetzt von `LX_TEST=1`). Zweige immer mit der **Konstante** schreiben (`TEST_BUILD && …`), nie mit der Funktion `isTestBuild()`: Nur die Konstante wird beim Bauen gefaltet und der Zweig entfernt. Die Texte stehen bewusst **nicht** in `de.ts`/`en.ts`. `check:platform --prod` fängt jeden Fehler.
+- **Desktop-Layout ab 1024 px** (`useDesktop` in `src/app/useDesktop.ts`): Die Reiter stehen oben in der Kopfleiste (nur **eine** Navigation im Dokument, nie zwei), Inhalte nutzen `lg:max-w-5xl` (Übungen und Einstufung `lg:max-w-3xl`), Heute und Fahrplan zweispaltig, Input mit zwei Beiträgen nebeneinander. Die Schrift wächst bei sehr breiten Fenstern über `html { font-size: clamp(...) }`. Handy unverändert.
 - Vorhandene Subagents unter `.claude/agents/` lädt Claude Code beim Sitzungsstart. Sind sie in einer Sitzung nicht als Agententyp verfügbar, einen allgemeinen Agenten mit der jeweiligen Datei als Anweisung starten.
 
 ---

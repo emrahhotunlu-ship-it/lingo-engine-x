@@ -19,6 +19,8 @@ import {
 import { topicById, type GrammarTask } from '../coach/grammar';
 import { GrammarItem } from './GrammarTask';
 import type { Placement } from '../coach/types';
+import { TEST_BUILD } from '../app/testBuild';
+import { TestSkipButton } from './TestTools';
 
 // Einstufung (docs/neustart.md §6): Wortschatz Ja/Nein mit Kontrollwörtern und Stichproben,
 // danach eine Grammatikaufgabe je Thema, am Ende der Startpunkt mit Niveau.
@@ -106,7 +108,7 @@ export function PlacementScreen({ mode = 'placement' }: { mode?: 'placement' | '
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 pt-6" data-testid={check ? 'check' : 'placement'}>
+    <div className="mx-auto max-w-2xl px-4 pt-6 lg:max-w-3xl lg:pt-10" data-testid={check ? 'check' : 'placement'}>
       <div className="mb-5 flex items-center justify-between">
         <h1 className="text-lg font-semibold">{check ? t('cCkTitle') : t('cPlTitle')}</h1>
         <Button variant="ghost" onClick={() => go({ name: check ? 'plan' : 'home' })} data-testid="placement-close">
@@ -122,6 +124,11 @@ export function PlacementScreen({ mode = 'placement' }: { mode?: 'placement' | '
               {t('cPlStart')}
             </Button>
           </div>
+          {TEST_BUILD && !check && (
+            <div className="mt-3">
+              <TestSkipButton />
+            </div>
+          )}
         </section>
       )}
 

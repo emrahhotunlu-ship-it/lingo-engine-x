@@ -190,11 +190,11 @@ export function InputScreen() {
     .flatMap((d) => d.items.map((item) => ({ d: d.d, item })))
     .filter(({ d, item }) => !inlog.it[logKey(d, item)]);
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-6" data-testid="input">
+    <div className="mx-auto max-w-3xl px-4 pt-6 lg:max-w-5xl lg:pt-10" data-testid="input">
       <h1 className="text-xl font-semibold tracking-tight">{t('cInTitle')}</h1>
       <p className="mt-1 text-sm text-muted">{t('cInIntro')}</p>
-      <div className="mt-5 space-y-4">
-        {todays.length === 0 && <p className="text-sm text-muted">{t('cInEmpty')}</p>}
+      <div className="mt-5 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-5 lg:space-y-0">
+        {todays.length === 0 && <p className="text-sm text-muted lg:col-span-2">{t('cInEmpty')}</p>}
         {todays.map((item) => (
           <InputCard key={item.id} item={item} day={today} />
         ))}
@@ -202,7 +202,7 @@ export function InputScreen() {
       {earlier.length > 0 && (
         <section className="mt-8">
           <h2 className="lx-eyebrow text-muted">{t('cInEarlier')}</h2>
-          <div className="mt-3 space-y-4">
+          <div className="mt-3 space-y-4 lg:grid lg:grid-cols-2 lg:items-start lg:gap-5 lg:space-y-0">
             {earlier.map(({ d, item }) => (
               <InputCard key={`${d}-${item.id}`} item={item} day={d} />
             ))}

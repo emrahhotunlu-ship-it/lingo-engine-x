@@ -302,3 +302,53 @@ export async function saveBrief(week: string, rec: BriefRec): Promise<void> {
   useCoach.setState((s) => ({ briefs: { ...s.briefs, [week]: rec } }));
   await patchDoc('coach/briefs', { w: { [week]: rec } });
 }
+
+// ── Sammelschreiber für die Testwerkzeuge (nur im Test-Build benutzt, siehe src/coach/testActions.ts) ──
+
+/** Mehrere Tageswerte auf einmal: lokal sofort, je Jahresdokument ein Schreibvorgang. */
+export async function saveDays(recs: Readonly<Record<string, DayRec>>): Promise<void> {
+  const entries = Object.entries(recs);
+  if (!entries.length) return;
+  useCoach.setState((s) => ({ days: { ...s.days, ...recs } }));
+  const byDoc = new Map<string, Record<string, DayRec>>();
+  for (const [day, rec] of entries) {
+    const path = daysDocOf(day);
+    byDoc.set(path, { ...(byDoc.get(path) ?? {}), [day]: rec });
+  }
+  await Promise.all([...byDoc].map(([path, d]) => patchDoc(path, { d })));
+}
+
+/** Grammatik-Stände mehrerer Themen auf einmal (Gesehen-Liste bleibt). */
+export async function saveGrammarStates(t: Readonly<Record<string, TopicState>>): Promise<void> {
+  if (!Object.keys(t).length) return;
+  const cur = useCoach.getState().grammar ?? { t: {}, seen: {} };
+  useCoach.setState({ grammar: { t: { ...cur.t, ...t }, seen: cur.seen } });
+  await patchDoc('coach/grammar', { t });
+}
+
+/** Beiträge eines Tages schreiben (`input/<Tag>`). Sonst nur vom Tagesauftrag geschrieben; weitere Felder des Dokuments bleiben. */
+export async function saveInputDay(day: string, items: readonly InputItem[]): Promise<void> {
+  if (!writer) return;
+  useCoach.setState((s) => ({ input: [{ d: day, items: [...items] }, ...s.input.filter((x) => x.d !== day)].sort((a, b) => b.d.localeCompare(a.d)) }));
+  try {
+    await writer.patch(`input/${day}`, { d: day, items: [...items] }, null);
+  } catch (err) {
+    logError('input:write', err, `input/${day}`);
+  }
+}
+
+/** Bewertungen und eigene Zeit eines Tages zurücknehmen. Gelöscht wird nie: Die Einträge werden mit null überschrieben (beim Lesen ignoriert). */
+export async function clearInLogDay(day: string): Promise<void> {
+  const st = useCoach.getState();
+  const keys = Object.entries(st.inlog.it)
+    .filter(([, e]) => e.d === day)
+    .map(([k]) => k);
+  const hasOwn = (st.inlog.own[day] ?? 0) > 0;
+  if (!keys.length && !hasOwn) return;
+  const it = { ...st.inlog.it };
+  for (const k of keys) delete it[k];
+  const own = { ...st.inlog.own };
+  delete own[day];
+  useCoach.setState({ inlog: { it, own } });
+  await patchDoc(inlogDocOf(day), { ...(keys.length ? { it: Object.fromEntries(keys.map((k) => [k, null])) } : {}), ...(hasOwn ? { own: { [day]: 0 } } : {}) });
+}

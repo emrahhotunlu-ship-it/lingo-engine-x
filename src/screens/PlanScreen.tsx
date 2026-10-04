@@ -42,7 +42,7 @@ export function PlanScreen() {
   const p = profile?.placement;
   if (!p) {
     return (
-      <div className="mx-auto max-w-3xl px-4 pt-6" data-testid="plan">
+      <div className="mx-auto max-w-3xl px-4 pt-6 lg:max-w-5xl lg:pt-10" data-testid="plan">
         <h1 className="text-xl font-semibold tracking-tight">{t('cRmTitle')}</h1>
         <p className="mt-4 text-sm text-muted">{t('cRmNoPlace')}</p>
         <div className="mt-5">
@@ -62,53 +62,58 @@ export function PlanScreen() {
   const start = profile?.planStart ? new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(dayKeyNoon(profile.planStart)) : '';
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-6" data-testid="plan">
+    <div className="mx-auto max-w-3xl px-4 pt-6 lg:max-w-5xl lg:pt-10" data-testid="plan">
       <h1 className="text-xl font-semibold tracking-tight">{t('cRmTitle')}</h1>
       <p className="mt-1 text-sm text-muted">
         {start && t('cRmStart', { date: start })} · {t('cPlLevel', { level: p.level })}
       </p>
 
-      <section className="lx-glass mt-5 space-y-6 rounded-[var(--radius-card)] p-5 sm:p-7">
-        <Meter
-          label={t('cRmVocab')}
-          value={vocab}
-          max={VOCAB_C1}
-          text={`${t('cRmVocabText', { now: num(vocab), target: num(VOCAB_C1) })} · ${t('cRmLearned', { n: learnedSince(cards, p.at) })}`}
-          testId="meter-vocab"
-        />
-        <Meter
-          label={t('cRmInput')}
-          value={inputHours(inlog, today)}
-          max={INPUT_HOURS_TARGET}
-          text={t('cRmInputText', { h: inputHours(inlog, today), target: INPUT_HOURS_TARGET })}
-          testId="meter-input"
-        />
-        <Meter label={t('cRmGrammar')} value={g.solid} max={g.total} text={t('cRmGrammarText', { n: g.solid, total: g.total })} testId="meter-grammar" />
-        {g.weakest.length > 0 && (
-          <div>
-            <h3 className="lx-eyebrow text-muted">{t('cRmFocus')}</h3>
-            <ul className="mt-2 flex flex-wrap gap-2">
-              {g.weakest.map((id) => {
-                const topic = topicById(id);
-                return (
-                  <li key={id} className="rounded-full bg-surface px-3 py-1 text-xs text-fg">
-                    {topic ? (lang === 'de' ? topic.name : topic.name_en) : id}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
-        <p className="text-sm text-fg" data-testid="forecast">
-          {fc === null ? t('cRmForecastNone') : t('cRmForecast', { when: fmtMonth(now + fc * 86_400_000) })}
-        </p>
-      </section>
+      <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-6">
+        <div>
+          <section className="lx-glass mt-5 space-y-6 rounded-[var(--radius-card)] p-5 sm:p-7">
+            <Meter
+              label={t('cRmVocab')}
+              value={vocab}
+              max={VOCAB_C1}
+              text={`${t('cRmVocabText', { now: num(vocab), target: num(VOCAB_C1) })} · ${t('cRmLearned', { n: learnedSince(cards, p.at) })}`}
+              testId="meter-vocab"
+            />
+            <Meter
+              label={t('cRmInput')}
+              value={inputHours(inlog, today)}
+              max={INPUT_HOURS_TARGET}
+              text={t('cRmInputText', { h: inputHours(inlog, today), target: INPUT_HOURS_TARGET })}
+              testId="meter-input"
+            />
+            <Meter label={t('cRmGrammar')} value={g.solid} max={g.total} text={t('cRmGrammarText', { n: g.solid, total: g.total })} testId="meter-grammar" />
+            {g.weakest.length > 0 && (
+              <div>
+                <h3 className="lx-eyebrow text-muted">{t('cRmFocus')}</h3>
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  {g.weakest.map((id) => {
+                    const topic = topicById(id);
+                    return (
+                      <li key={id} className="rounded-full bg-surface px-3 py-1 text-xs text-fg">
+                        {topic ? (lang === 'de' ? topic.name : topic.name_en) : id}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+            <p className="text-sm text-fg" data-testid="forecast">
+              {fc === null ? t('cRmForecastNone') : t('cRmForecast', { when: fmtMonth(now + fc * 86_400_000) })}
+            </p>
+          </section>
+          <BriefCard />
+        </div>
+        <div>
+          <CurveCard />
+          <CheckCard />
+        </div>
+      </div>
 
-      <BriefCard />
-      <CurveCard />
-      <CheckCard />
-
-      <ol className="mt-6 space-y-3" aria-label={t('cRmTitle')}>
+      <ol className="mt-6 space-y-3 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0" aria-label={t('cRmTitle')}>
         {STAGE_KEYS.map((key, i) => {
           const n = i + 1;
           const current = n === stage;

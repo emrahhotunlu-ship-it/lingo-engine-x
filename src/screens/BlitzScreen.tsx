@@ -80,7 +80,7 @@ export function BlitzScreen() {
   const ring = useMemo(() => (flash === 'ok' ? 'ring-2 ring-accent' : flash === 'bad' ? 'ring-2 ring-danger-text/60' : ''), [flash]);
 
   return (
-    <div className="mx-auto max-w-2xl px-4 pt-3" data-testid="blitz">
+    <div className="mx-auto max-w-2xl px-4 pt-3 lg:max-w-3xl lg:pt-8" data-testid="blitz">
       <ExerciseBar onClose={() => go({ name: 'home' })} closeLabel={t('cSessQuit')} closeTestId="blitz-quit" progress={phase === 'run' ? { n: SECONDS - left, total: SECONDS } : null} progressLabel={t('cBlitzLeft', { n: left })} />
       <div className={`lx-glass mt-3 rounded-[var(--radius-card)] p-5 transition-shadow sm:p-7 ${ring}`}>
         <StepHead kind="choose" lv={null} />

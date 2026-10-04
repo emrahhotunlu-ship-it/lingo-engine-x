@@ -16,6 +16,7 @@ import { markNoDb, saveCards, saveProfile, saveSummary, startCoach, startInput, 
 import { buildSummary } from '../coach/summary';
 import { addDays } from '../domain/date';
 import { useClock } from './clock';
+import { useDesktop } from './useDesktop';
 import { importLegacy } from '../coach/legacy';
 import { HomeScreen } from '../screens/HomeScreen';
 import { PlanScreen } from '../screens/PlanScreen';
@@ -120,19 +121,50 @@ const TABS: ReadonlyArray<{ route: 'home' | 'input' | 'plan'; icon: IconName; ke
   { route: 'plan', icon: 'chart', key: 'cTabPlan' },
 ];
 
+const isFlow = (route: string): boolean => route === 'session' || route === 'placement' || route === 'check' || route === 'blitz';
+
+/** Desktop (ab 1024 px): die Reiter stehen oben in der Kopfleiste, neben dem Namen. */
+function DesktopNav() {
+  const { t } = useT();
+  const route = useRoute((s) => s.route.name);
+  return (
+    <nav aria-label="Navigation" className="ml-6 mr-auto flex items-center gap-1">
+      {TABS.map((tab) => {
+        const active = route === tab.route;
+        return (
+          <button
+            key={tab.route}
+            type="button"
+            onClick={() => go({ name: tab.route })}
+            aria-current={active ? 'page' : undefined}
+            data-testid={`tab-${tab.route}`}
+            className={`inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors ${active ? 'bg-accent-soft text-fg' : 'text-muted hover:bg-surface hover:text-fg'}`}
+          >
+            <Icon name={tab.icon} size={18} />
+            {t(tab.key)}
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
 function TopBar() {
   const { t } = useT();
   const route = useRoute((s) => s.route.name);
+  const desktop = useDesktop();
   const actions: ReadonlyArray<{ icon: IconName; label: string; run: () => void; testId: string }> = [
     { icon: 'translate', label: t('cTranslate'), run: () => openSheet('translate'), testId: 'open-translate' },
     { icon: 'chat', label: t('cAsk'), run: () => openSheet('ask'), testId: 'open-ask' },
     { icon: 'gear', label: t('cSettings'), run: () => openSheet('settings'), testId: 'open-settings' },
   ];
-  const inFlow = route === 'session' || route === 'placement' || route === 'check' || route === 'blitz';
+  const inFlow = isFlow(route);
+  const nav = desktop && !inFlow;
   return (
     <header className="sticky top-0 z-20 border-b border-line/60 bg-bg/80 backdrop-blur-xl [-webkit-backdrop-filter:blur(20px)] pt-[env(safe-area-inset-top)]">
-      <div className="mx-auto flex h-14 max-w-3xl items-center gap-2 px-4">
-        <span className="mr-auto text-sm font-semibold tracking-tight text-fg">{inFlow ? '' : 'Lingo'}</span>
+      <div className="mx-auto flex h-14 max-w-3xl items-center gap-2 px-4 lg:max-w-5xl">
+        <span className={`text-sm font-semibold tracking-tight text-fg ${nav ? '' : 'mr-auto'}`}>{inFlow ? '' : 'Lingo'}</span>
+        {nav && <DesktopNav />}
         {actions.map((a) => (
           <button
             key={a.testId}
@@ -154,7 +186,8 @@ function TopBar() {
 function TabBar() {
   const { t } = useT();
   const route = useRoute((s) => s.route.name);
-  if (route === 'session' || route === 'placement' || route === 'check' || route === 'blitz') return null;
+  const desktop = useDesktop();
+  if (isFlow(route) || desktop) return null;
   return (
     <nav
       aria-label="Navigation"
@@ -195,7 +228,7 @@ function Screen() {
   }
   if (status === 'loading') {
     return (
-      <div className="mx-auto max-w-3xl space-y-4 px-4 pt-8" aria-busy="true">
+      <div className="mx-auto max-w-3xl space-y-4 px-4 pt-8 lg:max-w-5xl" aria-busy="true">
         <Skeleton className="h-8 w-2/3" />
         <Skeleton className="h-40 w-full" />
         <Skeleton className="h-24 w-full" />
@@ -231,7 +264,7 @@ export function App() {
       <HiddenInputProvider>
         <div className="min-h-dvh bg-bg text-fg">
           <TopBar />
-          <main className="pb-28">
+          <main className="pb-28 lg:pb-16">
             <Screen />
           </main>
           <TabBar />

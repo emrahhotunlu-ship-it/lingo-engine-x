@@ -9,15 +9,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:test": "LX_TEST=1 vite build",
     "build:runtime": "vite build -c vite.runtime.config.ts",
     "seed": "node scripts/generate-seed.mjs",
     "pron": "node scripts/build-pron.mjs",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.json --noEmit",
     "lint": "eslint .",
     "test": "TZ=Europe/Berlin vitest run",
-    "test:e2e": "npm run build && npm run build:runtime && playwright test",
+    "test:e2e": "npm run build:test && npm run build:runtime && playwright test",
     "check:platform": "node scripts/check-platform.mjs",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run test:e2e && npm run check:platform"
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run build && npm run check:platform -- --prod && npm run test:e2e && npm run check:platform -- --test"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
