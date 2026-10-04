@@ -35,6 +35,7 @@ export function PlanScreen() {
   const cards = useCoach((s) => s.cards);
   const days = useCoach((s) => s.days);
   const inlog = useCoach((s) => s.inlog);
+  const grammar = useCoach((s) => s.grammar);
   useEffect(() => setAskContext(''), []);
 
   const p = profile?.placement;
@@ -54,7 +55,6 @@ export function PlanScreen() {
 
   const stage = stageOf(profile?.planStart, today);
   const vocab = vocabNow(profile, cards);
-  const grammar = useCoach((s) => s.grammar);
   const g = grammarSolid(profile, grammar?.t);
   const fc = forecastDays(profile, cards, days, today);
   const fmtMonth = (ms: number) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { month: 'long', year: 'numeric' }).format(ms);
