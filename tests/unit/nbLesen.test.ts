@@ -82,27 +82,17 @@ describe('N51: Wortstatus', () => {
 });
 
 describe('N53/M7: Quelle von Block 2 je Wochentag', () => {
-  const on = { ai: true, tts: true };
-  // KW 40/2026: Mo 28.09. … So 04.10. (gerade Kalenderwoche)
-  it('Mo Themen-Text, Di Hörtext zum Thema, Do Dialog, Fr Alltag in Berufswochen', () => {
-    expect(inputBlockPlan('2026-09-28', 't01', on)).toEqual({ kind: 'read', src: 'theme-text', summary: false, ladder: false });
-    expect(inputBlockPlan('2026-09-29', 't01', on)).toEqual({ kind: 'listen', src: 'theme-listen', summary: false, ladder: true });
-    expect(inputBlockPlan('2026-10-01', 't01', on)).toMatchObject({ kind: 'listen', src: 'dialog' });
-    expect(inputBlockPlan('2026-10-02', 't01', on)).toMatchObject({ kind: 'read', src: 'feed-life' });
-    expect(inputBlockPlan('2026-10-02', 't14', on)).toMatchObject({ kind: 'read', src: 'feed' });
-    expect(inputBlockPlan('2026-10-03', 't01', on)).toBeNull();
-    expect(inputBlockPlan('2026-10-04', 't01', on)).toBeNull();
-  });
-
-  it('ohne KI: Di Themen-Text vorgelesen + Zusammenfassung, Do Feed; ohne Sprachausgabe Lesen', () => {
-    expect(inputBlockPlan('2026-09-29', 't01', { ai: false, tts: true })).toEqual({ kind: 'listen', src: 'theme-text', summary: true, ladder: true });
-    expect(inputBlockPlan('2026-10-01', 't01', { ai: false, tts: true })).toMatchObject({ kind: 'listen', src: 'feed' });
-    expect(inputBlockPlan('2026-09-29', 't01', { ai: false, tts: false })).toMatchObject({ kind: 'read', src: 'theme-text', summary: true });
-  });
-
-  it('Mittwoch in ungeraden Wochen ist der Posteingang (kein Lese-Block)', () => {
-    expect(inputBlockPlan('2026-09-23', 't01', on)).toBeNull();
-    expect(inputBlockPlan('2026-09-30', 't01', on)).toMatchObject({ kind: 'read', src: 'feed' });
+  // Seit 04.10.2026 (Fokus Vokabeln und Grammatik) plant `unitPlanFor` an keinem Tag mehr Lese-/Hör-Input:
+  // Block 2 ist der Grammatik-Block. `inputBlockPlan` liefert deshalb immer `null`; ältere gespeicherte
+  // Pläne mit Input-Block startet der Anbieter weiter (Themen-Text als Rückfall, siehe „Block-Anbieter“ unten).
+  it('kein Tag hat einen Input-Block – bei KI und Sprachausgabe an oder aus', () => {
+    // KW 39 (ungerade) und KW 40 (gerade): Mo 21.09. … So 04.10.
+    for (let d = 21; d <= 34; d++) {
+      const day = d <= 30 ? `2026-09-${d}` : `2026-10-0${d - 30}`;
+      for (const ai of [true, false])
+        for (const tts of [true, false])
+          for (const theme of ['t01', 't14'] as const) expect(inputBlockPlan(day, theme, { ai, tts }), `${day} ai=${ai} tts=${tts} ${theme}`).toBeNull();
+    }
   });
 });
 

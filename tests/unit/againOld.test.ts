@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { againChecks, againSource } from '../../src/domain/repair/unit';
 
 // Block 5 „Nochmal, aber besser“ ohne Aufgabe von heute (Handy-Tag, Emrah 02.10.2026): Die ältesten
-// fälligen Reparatur-Sätze sind der Stoff. Mit Aufgabe oder Sätzen von heute bleibt alles wie bisher.
+// fälligen Reparatur-Sätze sind der Stoff. Mit Aufgabe bleibt alles wie bisher; Sätze von heute kommen frühestens morgen.
 
 const DAY = '2026-10-02';
 const NOW = Date.parse('2026-10-02T09:00:00+02:00');
@@ -44,11 +44,14 @@ describe('againSource ohne Aufgabe', () => {
     expect(src.before).toBe('I am agree.');
   });
 
-  it('Sätze von heute haben Vorrang vor denen von früher', () => {
+  it('Sätze von heute kommen nicht am selben Tag (verteilt statt massiert, seit 04.10.2026): nur die fälligen von früher', () => {
     const today = item(9, { t: NOW - 60_000, due: NOW + D });
     const src = againSource({ day: DAY, task: null, repairDoc: doc(item(1), today), now: NOW });
-    expect(src.olds).toBeUndefined();
-    expect(src.before).toContain('point 9');
+    expect(src.olds?.map((o) => o.id)).toEqual(['r1']);
+    expect(src.before).toContain('point 1');
+    expect(src.before).not.toContain('point 9');
+    // Nur Sätze von heute, nichts fällig: leerer Stoff statt der Fehler von eben.
+    expect(againSource({ day: DAY, task: null, repairDoc: doc(today), now: NOW })).toEqual({ before: '', better: null, betterFrom: null, fixes: [] });
   });
 
   it('ohne `now` (alter Aufrufer) greift der Rückfall nicht', () => {

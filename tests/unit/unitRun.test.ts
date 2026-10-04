@@ -3,6 +3,7 @@ import type { AreaDef } from '../../src/app/registry';
 import type { UnitCtx } from '../../src/app/unit/types';
 import { createWriter, type Writer } from '../../src/data/writer';
 import type { StoredPlan } from '../../src/domain/plan/types';
+import type * as PlanModule from '../../src/domain/week/plan';
 import { createMemoryDb, type MemoryDbHandle } from '../../src/platform/dev/memoryDb';
 import { berlin } from './helpers';
 
@@ -33,8 +34,28 @@ class MemStorage {
 const storage = new MemStorage();
 
 type Doc = Record<string, unknown>;
-const holder = vi.hoisted(() => ({ writer: null as Writer | null }));
+const holder = vi.hoisted(() => ({ writer: null as Writer | null, legacyPlan: false }));
 vi.mock('../../src/data', () => ({ getWriter: () => holder.writer }));
+// Seit 04.10.2026 plant `unitPlanFor` nur noch Wortschatz · Grammatik · Satzbau · Fehler korrigieren.
+// Die Ablauf-Logik für ältere Pläne (Sprechaufgabe in Block 3, Block 2 = Input → Nachsprechen) gibt es
+// weiter; damit sie geprüft bleibt, liefert der Planer hier auf Wunsch den früheren Montagsplan.
+vi.mock('../../src/domain/week/plan', async (importOriginal) => {
+  const real = await importOriginal<typeof PlanModule>();
+  type Plan = ReturnType<typeof real.unitPlanFor>;
+  type Block = Plan['blocks'][number];
+  const legacy = (p: Plan): Plan => {
+    if (p.shape !== 'full') return p;
+    const blocks: Block[] = [
+      ...p.blocks.filter((b) => b.block === 1),
+      { block: 2, kind: 'input.read', steps: ['input.read', 'pron.shadow'], opts: { src: 'theme-text' }, min: 5, channel: 'ch:u-in' },
+      { block: 3, kind: 'task.say', steps: ['task.say'], opts: {}, min: 9, channel: 'ch:u-task' },
+      { block: 4, kind: 'focus', steps: ['focus'], opts: {}, min: 3, channel: 'ch:u-focus' },
+      { block: 5, kind: 'again', steps: ['again'], opts: {}, min: 2, channel: 'ch:u-again' },
+    ];
+    return { ...p, blocks, duty: blocks.map((b) => b.channel), minutes: blocks.reduce((sum, b) => sum + b.min, 0) };
+  };
+  return { ...real, unitPlanFor: (...a: Parameters<typeof real.unitPlanFor>): Plan => (holder.legacyPlan ? legacy(real.unitPlanFor(...a)) : real.unitPlanFor(...a)) };
+});
 
 const { installAreas } = await import('../../src/app/registry');
 const { useClock } = await import('../../src/app/clock');
@@ -136,11 +157,16 @@ describe('Befund 1: Block über 04:00 zählt für den Lerntag, an dem er begann'
   });
 });
 
-describe('Tageseinheit mit gespeichertem Plan', () => {
+describe('Tageseinheit mit gespeichertem Plan (älteres Format mit Sprechaufgabe und Input-Block)', () => {
   const MON = '2026-09-28';
   const unitPlan = () => buildUnitStored({ day: MON, nowMs: berlin(MON, 9), week: null, goalMin: 25, review: { goal: 12, due: 8, fresh: 3, repairs: 1 } });
 
+  afterEach(() => {
+    holder.legacyPlan = false;
+  });
+
   beforeEach(() => {
+    holder.legacyPlan = true;
     setup({ 'app/profile': { ...baseProfile(), days: { [MON]: 8 } } });
     useClock.setState({ today: MON, now: berlin(MON, 9) });
     store.useTodayPlan.setState({ day: MON, plan: unitPlan(), status: 'ready', exhausted: null });
@@ -189,5 +215,24 @@ describe('Tageseinheit mit gespeichertem Plan', () => {
     expect(shadowStart).toHaveBeenCalledTimes(1);
     expect(useNav.getState().route).toMatchObject({ name: 'unitCard', step: 'next' });
     await vi.waitFor(() => expect(actOf(MON)?.['u-in']).toBe(1));
+  });
+});
+
+describe('Tageseinheit seit 04.10.2026 (Vokabeln und Grammatik)', () => {
+  const MON = '2026-09-28';
+
+  it('Montag: Zeilen Grammatik und Satzbau, kein Input; Grammatik-Block zählt ohne Folgeschritt', async () => {
+    setup({ 'app/profile': { ...baseProfile(), days: { [MON]: 8 } } });
+    useClock.setState({ today: MON, now: berlin(MON, 9) });
+    const stored = buildUnitStored({ day: MON, nowMs: berlin(MON, 9), week: null, goalMin: 25, review: { goal: 12, due: 8, fresh: 3, repairs: 1 } });
+    store.useTodayPlan.setState({ day: MON, plan: stored, status: 'ready', exhausted: null });
+    const u = run.unitNow();
+    expect(u?.rows.map((r) => r.id)).toEqual(['review', 'ch:u-focus', 'ch:u-task', 'ch:u-again']);
+    expect(u?.up.blocks.find((b) => b.block === 3)?.kind).toBe('task.order');
+    useUnitRun.setState({ ...EMPTY_RUN, day: MON, block: 2, duty: 'ch:u-focus', kind: 'grammar', via: 'provider', routeName: 'unitFocus', route: { name: 'unitFocus' }, at: 1 }, true);
+    run.handleUnitDone(2);
+    expect(shadowStart).not.toHaveBeenCalled();
+    expect(useNav.getState().route).toMatchObject({ name: 'unitCard', step: 'next' });
+    await vi.waitFor(() => expect(actOf(MON)?.['u-focus']).toBe(1));
   });
 });

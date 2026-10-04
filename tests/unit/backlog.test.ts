@@ -4,7 +4,7 @@ import type { TrainCard } from '../../src/domain/srs/types';
 import { BACKLOG_BRAKE_AT, BACKLOG_MAX_SHARE, BACKLOG_SEC_PER_CARD, backlogBraked, backlogBudget, capacityNew, overdueCount } from '../../src/domain/unit/backlog';
 import { buildUnitStored, unitPlanOf } from '../../src/domain/unit/plan';
 import { unitReviewGoal } from '../../src/domain/unit/review';
-import { REVIEW_MIN_MAX, REVIEW_SEC, unitPlanFor } from '../../src/domain/week/plan';
+import { REVIEW_MIN_MAX, REVIEW_SEC, VG_MIN, unitPlanFor } from '../../src/domain/week/plan';
 import { berlin } from './helpers';
 
 // Rückstand-Steuerung des Tagesplans (Emrah 02.10.2026): Zeit wächst mit überfälligen Karten (höchstens +50 %), ab 15
@@ -130,8 +130,11 @@ describe('Minuten von Block 1 in der Anzeige', () => {
 
   it('ein älterer Plan ohne Zuschlag bleibt unverändert', () => {
     const old = buildUnitStored({ day: MON, nowMs: NOW, week: null, goalMin: 25, review: { goal: 12, due: 8, fresh: 3, repairs: 1 } });
-    expect(old.u?.min).toBe(27);
-    expect(unitPlanOf(old as typeof old & { u: NonNullable<typeof old.u> }, null).minutes).toBe(27);
+    // Volle Einheit seit 04.10.2026: Wortschatz 8 · Grammatik 7 · Satzbau 5 · Fehler korrigieren 3 = 23 Min.
+    const base = VG_MIN.full.review + VG_MIN.full.grammar + VG_MIN.full.order + VG_MIN.full.again;
+    expect(base).toBe(23);
+    expect(old.u?.min).toBe(base);
+    expect(unitPlanOf(old as typeof old & { u: NonNullable<typeof old.u> }, null).minutes).toBe(base);
   });
 });
 

@@ -96,7 +96,10 @@ describe('forPhone', () => {
   });
 
   it('phoneUnitPlan ersetzt Block 3 im Einheit-Plan (Art, Schritte, Optionen, Minuten)', () => {
-    const up = unitPlanFor('2026-10-01', null, {});
+    // Älterer gespeicherter Plan (vor dem 04.10.2026) mit Sprechaufgabe in Block 3: am Handy weiter ersetzt.
+    const base = unitPlanFor('2026-10-01', null, {});
+    const old = base.blocks.filter((b) => b.block !== 3).concat({ block: 3, kind: 'task.roleplay', steps: ['task.roleplay'], opts: {}, min: 12, channel: 'ch:u-task' }).sort((a, b) => a.block - b.block);
+    const up = { ...base, blocks: old, minutes: old.reduce((sum, b) => sum + b.min, 0) };
     const ph = phoneUnitPlan(up);
     const b3 = ph.blocks.find((b) => b.block === 3);
     expect(b3?.kind).toBe('task.objection');
@@ -105,6 +108,19 @@ describe('forPhone', () => {
     expect(ph.duty).toEqual(up.duty);
     expect(ph.minutes).toBe(up.minutes - up.blocks.find((b) => b.block === 3)!.min + 6);
     expect(phoneUnitPlan(unitPlanFor('2026-09-27', null, {})).blocks.map((b) => b.kind)).toContain('task.check');
+  });
+
+  it('Satzbau (Block 3 seit 04.10.2026) bleibt am Handy: phoneReplaces false, Plan und Ansicht unverändert', () => {
+    expect(phoneReplaces(3, 'task.order')).toBe(false);
+    const up = unitPlanFor('2026-10-01', null, {});
+    expect(up.blocks.find((b) => b.block === 3)?.kind).toBe('task.order');
+    const ph = phoneUnitPlan(up);
+    expect(ph.blocks).toEqual(up.blocks);
+    expect(ph.minutes).toBe(up.minutes);
+    const p = thursday();
+    const order: StoredPlan = { ...p, u: { ...p.u!, b: p.u!.b.map((x) => (x[0] === 3 ? ([3, 'task.order', 5] as typeof x) : x)) } };
+    expect(forPhone(order)).toBe(order);
+    expect(isPhoneView(forPhone(order))).toBe(false);
   });
 
   it('uneinheitliche Plandaten (duty und u.b verschieden lang): unverändert statt zu raten', () => {

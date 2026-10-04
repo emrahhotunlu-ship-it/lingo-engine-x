@@ -2,10 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { lernen } from '../../src/areas/lernen';
 import { useFocus } from '../../src/features/grammar/focus/session';
 import { useAgain } from '../../src/features/repair/again/session';
+import { useDrill } from '../../src/features/drills/session';
+import { useGrammarSession } from '../../src/features/grammar/session';
 import { EMPTY_TARGETS } from '../../src/domain/week';
 import type { UnitBlockProvider } from '../../src/app/unit/types';
 
-// Anbieter der Blöcke 4 und 5 (plan.md §4.10): synchron, ohne KI machbar, Route der Übung.
+// Anbieter der Blöcke focus/again (plan.md §4.10), Grammatik `grammar` (Block 2) und Satzbau `task.order` (Block 3, beide seit 04.10.2026):
+// synchron, ohne KI machbar, Route der Übung.
 
 const ctx = {
   day: '2026-09-20',
@@ -21,15 +24,37 @@ const ctx = {
   },
 };
 
-describe('Block-Anbieter focus/again', () => {
+describe('Block-Anbieter focus/grammar/task.order/again', () => {
   const blocks: readonly UnitBlockProvider[] = lernen.unitBlocks;
-  it('beide sind angemeldet und immer machbar', () => {
-    expect(blocks.map((b) => b.kind)).toEqual(['focus', 'again']);
+  const of = (kind: UnitBlockProvider['kind']): UnitBlockProvider => blocks.find((b) => b.kind === kind)!;
+  it('alle vier sind angemeldet und immer machbar (focus bleibt für ältere gespeicherte Pläne)', () => {
+    expect(blocks.map((b) => b.kind)).toEqual(['focus', 'grammar', 'task.order', 'again']);
     expect(blocks.every((b) => b.feasible({ ai: false, tts: false }))).toBe(true);
   });
 
+  it('grammar startet die Grammatikrunde als Pflicht für Block 2, Rundengröße aus dem Plan', () => {
+    const r = of('grammar').start({ ...ctx, block: 2, opts: { n: 6 } });
+    expect(r).toEqual({ name: 'grammarSession', mode: 'duty' });
+    const s = useGrammarSession.getState();
+    expect(s.active).toBe(true);
+    expect(s.mode).toBe('duty');
+    expect(s.ctx).toBe('duty');
+    expect(s.block).toBe(2);
+    expect(s.tasks.length).toBeLessThanOrEqual(6);
+  });
+
+  it('task.order startet die Satzbau-Runde als Pflicht für Block 3', () => {
+    const r = of('task.order').start({ ...ctx, block: 3 });
+    expect(r).toEqual({ name: 'drill', kind: 'order', ctx: 'duty' });
+    const s = useDrill.getState();
+    expect(s.active).toBe(true);
+    expect(s.kind).toBe('order');
+    expect(s.ctx).toBe('duty');
+    expect(s.block).toBe(3);
+  });
+
   it('focus baut die Runde synchron aus ctx.task (Korrektur zuerst, Mini-Drill)', () => {
-    const r = blocks[0]!.start({ ...ctx, block: 4 });
+    const r = of('focus').start({ ...ctx, block: 4 });
     expect(r).toEqual({ name: 'unitFocus' });
     const s = useFocus.getState();
     expect(s.active && s.block).toBe(4);
@@ -38,7 +63,7 @@ describe('Block-Anbieter focus/again', () => {
   });
 
   it('again nimmt die bessere Fassung aus Block 3', () => {
-    const r = blocks[1]!.start({ ...ctx, block: 5 });
+    const r = of('again').start({ ...ctx, block: 5 });
     expect(r).toEqual({ name: 'unitAgain' });
     const s = useAgain.getState();
     expect(s.block).toBe(5);

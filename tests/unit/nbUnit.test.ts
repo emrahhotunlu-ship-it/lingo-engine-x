@@ -38,26 +38,32 @@ const input = (plan: StoredPlan, keys: string[], over: Partial<PflichtInput> = {
 });
 
 describe('Tagesplan der Einheit (gespeichertes Format)', () => {
-  it('Montag voll: 5 Blöcke, Pflicht review + ch:u-*, Umfang von Block 1 eingefroren', () => {
+  it('Montag voll: 4 Blöcke (Wortschatz · Grammatik · Satzbau · Fehler korrigieren), Pflicht review + ch:u-*, Umfang von Block 1 eingefroren', () => {
     const p = build(MON);
-    expect(p.duty).toEqual(['review', 'ch:u-in', 'ch:u-task', 'ch:u-focus', 'ch:u-again']);
+    expect(p.duty).toEqual(['review', 'ch:u-focus', 'ch:u-task', 'ch:u-again']);
     expect(p.goal).toMatchObject({ review: 12, due: 8, new: 3 });
     expect(p.lesson).toBeNull();
-    expect(p.u?.b.map((b) => b[1])).toEqual(['review', 'input.read', 'task.say', 'focus', 'again']);
-    expect(p.u?.min).toBe(27);
+    expect(p.u?.b).toEqual([
+      [1, 'review', 8],
+      [2, 'grammar', 7],
+      [3, 'task.order', 5],
+      [5, 'again', 3],
+    ]);
+    expect(p.u?.min).toBe(23);
     // Rückweg-sicher gelesen (readPlan behält `u`), unverändert nach JSON.
     expect(readPlan(JSON.parse(JSON.stringify(p)), MON)).toEqual(p);
   });
 
-  it('Kurz-Einheit (Tagesziel ≤ 20): 3 Blöcke; Samstag 4; Sonntag 2 (Wiederholen + Wochen-Check)', () => {
-    expect(build(TUE, 15).duty).toEqual(['review', 'ch:u-task', 'ch:u-again']);
-    expect(build(SAT).duty).toEqual(['review', 'ch:u-task', 'ch:u-focus', 'ch:u-again']);
+  it('Kurz-Einheit (Tagesziel ≤ 20): 3 Blöcke mit Grammatik; Samstag wie Werktag; Sonntag 2 (Wiederholen + Wochen-Check)', () => {
+    expect(build(TUE, 15).duty).toEqual(['review', 'ch:u-focus', 'ch:u-again']);
+    expect(build(TUE, 15).u?.b.map((b) => b[1])).toEqual(['review', 'grammar', 'again']);
+    expect(build(SAT).duty).toEqual(['review', 'ch:u-focus', 'ch:u-task', 'ch:u-again']);
     expect(build(SUN).duty).toEqual(['review', 'ch:u-check']);
   });
 
   it('Block 1 entfällt ohne Karten (M2); „x von n“ aus duty.length', () => {
     const p = build(MON, 25, { goal: 0, due: 0, fresh: 0, repairs: 0 });
-    expect(p.duty).toEqual(['ch:u-in', 'ch:u-task', 'ch:u-focus', 'ch:u-again']);
+    expect(p.duty).toEqual(['ch:u-focus', 'ch:u-task', 'ch:u-again']);
     const st = deriveToday({ day: MON, plan: p, entries: [], minutes: 0, act: {} });
     expect(st.duties.total).toBe(p.duty.length);
   });
@@ -137,10 +143,11 @@ describe('Pflicht und Serie ohne Datenumbau (pflichtFor unverändert)', () => {
 
   it('Blockliste: Zustand je Block, „jetzt“ = erster offener, Restminuten', () => {
     const p = build(MON);
-    const st = deriveToday({ day: MON, plan: p, entries: [], minutes: 0, act: { [MON]: { 'u-in': 1 } }, exhausted: true });
+    const st = deriveToday({ day: MON, plan: p, entries: [], minutes: 0, act: { [MON]: { 'u-focus': 1 } }, exhausted: true });
     const rows = unitRows(p, st.duties.items) ?? [];
-    expect(rows.map((r) => r.state)).toEqual(['done', 'done', 'now', 'open', 'open']);
-    expect(minutesLeft(rows)).toBe(9 + 3 + 2);
+    expect(rows.map((r) => r.state)).toEqual(['done', 'done', 'now', 'open']);
+    // Satzbau 5 + Fehler korrigieren 3
+    expect(minutesLeft(rows)).toBe(5 + 3);
   });
 });
 

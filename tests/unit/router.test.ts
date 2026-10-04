@@ -37,8 +37,8 @@ const top = (c: Core): Route => c.overlay?.route ?? (c.stacks[c.tab].at(-1) as R
 beforeAll(() => installAreas(AREAS));
 
 describe('Register', () => {
-  it('sechs Reiter mit Wurzeln (zuletzt „Fortschritt“ = Dein Stand); `learn` bleibt die Test-ID von „Üben“', () => {
-    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'read', 'speak', 'progress']);
+  it('vier Reiter mit Wurzeln (Fokus Vokabeln und Grammatik, 04.10.2026; zuletzt „Fortschritt“ = Dein Stand); `learn` bleibt die Test-ID von „Grammatik“', () => {
+    expect(TABS.map((t) => t.id)).toEqual(['today', 'vocab', 'learn', 'progress']);
     expect(TABS.find((t) => t.id === 'progress')?.root.name).toBe('overview');
   });
 
@@ -98,10 +98,19 @@ describe('Router: Reiter-Stapel und Übungsebene', () => {
 
   it('Reiter-Wurzel wechselt den Reiter, setzt Wurzelparameter und schließt die Übung', () => {
     let c = navigate(start(), { name: 'say' });
-    c = navigate(c, { name: 'speak', seg: 'business' });
-    expect(c.tab).toBe('speak');
+    c = navigate(c, { name: 'overview', tab: 'errors' });
+    expect(c.tab).toBe('progress');
     expect(c.overlay).toBeNull();
+    expect(top(c)).toEqual({ name: 'overview', tab: 'errors' });
+  });
+
+  it('Sprechen und Bibliothek sind seit 04.10.2026 Seiten: kein Reiterwechsel, Seite auf dem aktuellen Stapel', () => {
+    let c = navigate(start(), { name: 'speak', seg: 'business' });
+    expect(c.tab).toBe('today');
     expect(top(c)).toEqual({ name: 'speak', seg: 'business' });
+    c = navigate(start(), { name: 'library' });
+    expect(c.tab).toBe('today');
+    expect(top(c)).toEqual({ name: 'library' });
   });
 
   it('andere Reiter behalten ihren Stapel; auf der Wurzel tut back() nichts', () => {

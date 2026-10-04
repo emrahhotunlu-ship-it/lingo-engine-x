@@ -19,6 +19,7 @@ import {
   unitPlanFor,
   weekTargets,
   withTheme,
+  type UnitBlock,
   type UnitEnv,
   type WeekDoc,
 } from '../../src/domain/week';
@@ -99,22 +100,29 @@ describe('Wochenthema', () => {
 });
 
 describe('unitPlanFor: Wochenplan (N12, M2, M3, M5, M7, S5)', () => {
+  // Seit 04.10.2026 (Emrahs Vorgabe „Fokus nur noch Vokabeln und Grammatik“): Mo–Sa Wortschatz · Grammatik ·
+  // Satzbau · Fehler korrigieren, Sonntag unverändert Wiederholen + Wochen-Check.
   const week: WeekDoc = { v: 1, cur: { wk: '2026-W40', theme: 't03', by: 'user' } };
+  const VG_DUTY = ['review', 'ch:u-focus', 'ch:u-task', 'ch:u-again'];
 
   it('volle Woche: Blöcke, Minuten, duty je Tag', () => {
     const plans = W40.map((d) => unitPlanFor(d, week, { goalMin: 30 }));
-    expect(plans.map((p) => p.blocks.length)).toEqual([5, 5, 5, 5, 5, 4, 2]);
-    expect(plans[0]?.duty).toEqual(['review', 'ch:u-in', 'ch:u-task', 'ch:u-focus', 'ch:u-again']);
-    expect(plans[5]?.duty).toEqual(['review', 'ch:u-task', 'ch:u-focus', 'ch:u-again']);
+    expect(plans.map((p) => p.blocks.length)).toEqual([4, 4, 4, 4, 4, 4, 2]);
+    expect(plans.map((p) => p.shape)).toEqual(['full', 'full', 'full', 'full', 'full', 'sat', 'sun']);
+    for (const p of plans.slice(0, 6)) {
+      expect(p.duty).toEqual(VG_DUTY);
+      expect(p.blocks.map((b) => b.block)).toEqual([1, 2, 3, 5]);
+      expect(p.blocks.map((b) => b.min)).toEqual([8, 7, 5, 3]);
+      expect(p.minutes).toBe(23);
+    }
     expect(plans[6]?.duty).toEqual(['review', 'ch:u-check']);
-    expect(plans[0]?.minutes).toBe(27);
     expect(plans.map((p) => p.blocks.find((b) => b.block === 3)?.kind)).toEqual([
-      'task.say',
-      'task.fluency',
-      'task.tones', // gerade Woche
-      'task.objection',
-      'task.fluency',
-      'task.roleplay',
+      'task.order',
+      'task.order',
+      'task.order',
+      'task.order',
+      'task.order',
+      'task.order',
       'task.check',
     ]);
     expect(plans[0]?.reviewSec).toBe(480);
@@ -123,41 +131,47 @@ describe('unitPlanFor: Wochenplan (N12, M2, M3, M5, M7, S5)', () => {
     expect(plans.every((p) => p.theme === 't03' && !p.confirmTheme)).toBe(true);
   });
 
-  it('Block-2-Quellen je Tag (M7) und Hörtext 150–180 Wörter (S1)', () => {
-    const src = W40.slice(0, 5).map((d) => unitPlanFor(d, week, { goalMin: 30 }).blocks.find((b) => b.block === 2)?.opts.src);
-    expect(src).toEqual(['theme-text', 'theme-listen', 'feed', 'dialog', 'feed-life']);
-    const tue = unitPlanFor(W40[1] ?? '', week, { goalMin: 30 }).blocks.find((b) => b.block === 2);
-    expect(tue?.opts.words).toEqual([150, 180]);
-    expect(tue?.steps).toEqual(['input.listen', 'pron.shadow']);
-    const lifeWeek: WeekDoc = { v: 1, cur: { wk: '2026-W40', theme: 't13', by: 'user' } };
-    expect(unitPlanFor(W40[4] ?? '', lifeWeek, { goalMin: 30 }).blocks.find((b) => b.block === 2)?.opts.src).toBe('feed');
+  it('Block 2 ist an jedem Werktag der Grammatik-Block (grammar, 6 Hauptaufgaben); kein Input-Block mehr', () => {
+    for (const d of [...W40.slice(0, 6), W41_WED]) {
+      const b2 = unitPlanFor(d, week, { goalMin: 30 }).blocks.find((b) => b.block === 2);
+      expect(b2, d).toEqual({ block: 2, kind: 'grammar', steps: ['grammar'], opts: { n: 6 }, min: 7, channel: 'ch:u-focus' });
+    }
+    for (const goalMin of [10, 20, 30])
+      for (const d of [...W40, W41_WED]) {
+        const kinds = unitPlanFor(d, week, { goalMin }).blocks.map((b) => b.kind);
+        expect(kinds.some((k) => k.startsWith('input.') || k === 'pron.shadow'), `${d} ${goalMin}`).toBe(false);
+      }
   });
 
-  it('Mittwoch in ungerader Woche: Mail lesen (Block 2), antworten (Block 3)', () => {
+  it('Mittwoch in ungerader Woche: kein Posteingang mehr, derselbe Plan wie an anderen Werktagen', () => {
     const p = unitPlanFor(W41_WED, null, { goalMin: 30 });
-    expect(p.blocks.find((b) => b.block === 2)).toMatchObject({ kind: 'task.inbox', opts: { part: 'read' } });
-    expect(p.blocks.find((b) => b.block === 3)).toMatchObject({ kind: 'task.inbox', opts: { part: 'reply' } });
+    expect(p.duty).toEqual(VG_DUTY);
+    expect(p.blocks.some((b) => b.kind === 'task.inbox')).toBe(false);
     const short = unitPlanFor(W41_WED, null, { goalMin: 15 });
-    expect(short.blocks.find((b) => b.block === 3)).toMatchObject({ kind: 'task.inbox', opts: { part: 'full' } });
+    expect(short.blocks.map((b) => b.kind)).toEqual(['review', 'grammar', 'again']);
   });
 
-  it('Donnerstag: Generalprobe nur bei Termin in 0–3 Tagen', () => {
+  it('Donnerstag: ein naher Termin ändert den Plan nicht mehr (Satzbau statt Generalprobe)', () => {
     const thu = W40[3] ?? '';
-    expect(unitPlanFor(thu, week, { goalMin: 30, meetingInDays: 2 }).blocks.find((b) => b.block === 3)?.kind).toBe('task.meeting');
-    expect(unitPlanFor(thu, week, { goalMin: 30, meetingInDays: 5 }).blocks.find((b) => b.block === 3)?.kind).toBe('task.objection');
+    expect(unitPlanFor(thu, week, { goalMin: 30, meetingInDays: 2 }).blocks.find((b) => b.block === 3)?.kind).toBe('task.order');
+    expect(unitPlanFor(thu, week, { goalMin: 30, meetingInDays: 2 })).toEqual(unitPlanFor(thu, week, { goalMin: 30, meetingInDays: 5 }));
   });
 
-  it('Kurz-Einheit bei Tagesziel ≤ 20 (M3): Blöcke 1, 3, 5 mit festen Minuten', () => {
+  it('Kurz-Einheit bei Tagesziel ≤ 20 (M3): Blöcke 1, 2 (Grammatik), 5 mit festen Minuten', () => {
     const t10 = unitPlanFor(W40[0] ?? '', week, { goalMin: 10 });
-    expect(t10.duty).toEqual(['review', 'ch:u-task', 'ch:u-again']);
-    expect(t10.blocks.map((b) => b.min)).toEqual([3, 5, 2]);
+    expect(t10.duty).toEqual(['review', 'ch:u-focus', 'ch:u-again']);
+    expect(t10.blocks.map((b) => b.min)).toEqual([3, 4, 2]);
+    expect(t10.blocks.find((b) => b.block === 2)?.opts).toEqual({ n: 3 });
     expect(t10.reviewSec).toBe(180);
     const t20 = unitPlanFor(W40[0] ?? '', week, { goalMin: 20 });
-    expect(t20.blocks.map((b) => b.min)).toEqual([5, 7, 3]);
+    expect(t20.blocks.map((b) => b.min)).toEqual([5, 5, 2]);
+    expect(t20.blocks.find((b) => b.block === 2)?.opts).toEqual({ n: 4 });
     expect(t20.reviewSec).toBe(300);
     expect(unitPlanFor(W40[0] ?? '', week, { goalMin: 25 }).short).toBe(false);
+    // Samstag kurz wie die anderen Werktage (keine eigene Samstagsaufgabe mehr).
     const sat = unitPlanFor(W40[5] ?? '', week, { goalMin: 15 });
-    expect(sat.blocks.find((b) => b.block === 3)).toMatchObject({ kind: 'task.objection', opts: { short: true } });
+    expect(sat.duty).toEqual(['review', 'ch:u-focus', 'ch:u-again']);
+    expect(sat.blocks.find((b) => b.block === 3)).toBeUndefined();
     const sun = unitPlanFor(W40[6] ?? '', week, { goalMin: 10 });
     expect(sun.duty).toEqual(['review', 'ch:u-check']);
     expect(sun.reviewSec).toBe(300);
@@ -165,13 +179,14 @@ describe('unitPlanFor: Wochenplan (N12, M2, M3, M5, M7, S5)', () => {
 
   it('goal.review = 0 → Block 1 entfällt, duty bleibt stimmig (M2)', () => {
     const p = unitPlanFor(W40[0] ?? '', week, { goalMin: 30, reviewCount: 0 });
-    expect(p.duty).toEqual(['ch:u-in', 'ch:u-task', 'ch:u-focus', 'ch:u-again']);
+    expect(p.duty).toEqual(['ch:u-focus', 'ch:u-task', 'ch:u-again']);
     expect(p.blocks.length).toBe(p.duty.length);
+    expect(p.minutes).toBe(15);
     expect(unitPlanFor(W40[6] ?? '', week, { reviewCount: 0 }).duty).toEqual(['ch:u-check']);
   });
 
-  it('7 Tage × KI an/aus × Sprachausgabe an/aus × Kurz: duty unabhängig von env, jeder Block ausführbar (M5, N12)', () => {
-    const kinds = new Set(['review', 'input.read', 'input.listen', 'pron.shadow', 'task.say', 'task.fluency', 'task.tones', 'task.inbox', 'task.objection', 'task.meeting', 'task.roleplay', 'task.check', 'focus', 'focus.colloc', 'again']);
+  it('7 Tage × KI an/aus × Sprachausgabe an/aus × Kurz: duty unabhängig von env, jeder Block ausführbar ohne Rückfall (M5, N12)', () => {
+    const kinds = new Set(['review', 'grammar', 'task.order', 'task.check', 'again']);
     for (const goalMin of [10, 20, 30]) {
       for (const d of [...W40, W41_WED]) {
         const plan = unitPlanFor(d, week, { goalMin, meetingInDays: 1 });
@@ -182,33 +197,29 @@ describe('unitPlanFor: Wochenplan (N12, M2, M3, M5, M7, S5)', () => {
           for (const b of plan.blocks) {
             const r = resolveBlock(b, env);
             expect(kinds.has(r.kind)).toBe(true);
-            expect(r.steps.length).toBeGreaterThan(0);
-            if (!env.ai) expect(['task.roleplay', 'task.meeting', 'task.tones']).not.toContain(r.kind);
-            if (!env.tts) {
-              expect(r.steps).not.toContain('pron.shadow');
-              expect(r.steps).not.toContain('input.listen');
-            }
+            // Wortschatz, Grammatik, Satzbau und Korrektur gehen ohne KI und ohne Sprachausgabe.
+            expect(r).toMatchObject({ kind: b.kind, steps: b.steps, fallback: false });
           }
         }
       }
     }
   });
 
-  it('Rückfälle beim Blockstart (M4a, M7)', () => {
-    const tue = unitPlanFor(W40[1] ?? '', week, { goalMin: 30 }).blocks.find((b) => b.block === 2);
-    if (!tue) throw new Error('Block 2 fehlt');
+  it('Rückfälle beim Blockstart für ältere gespeicherte Pläne (M4a, M7)', () => {
+    // Blöcke im Format der Pläne vor dem 04.10.2026: `resolveBlock` muss sie weiter auflösen.
+    const tue: UnitBlock = { block: 2, kind: 'input.listen', steps: ['input.listen', 'pron.shadow'], opts: { src: 'theme-listen', ladder: true, words: [150, 180] }, min: 5, channel: 'ch:u-in' };
     expect(resolveBlock(tue, { ai: false, tts: true })).toMatchObject({ kind: 'input.listen', opts: { src: 'theme-text', summary: true }, fallback: true });
+    expect(resolveBlock(tue, { ai: false, tts: true }).opts.words).toBeUndefined();
     expect(resolveBlock(tue, { ai: true, tts: false })).toMatchObject({ kind: 'input.read', steps: ['input.read'], fallback: true });
-    expect(resolveBlock(tue, { ai: true, tts: true })).toMatchObject({ kind: 'input.listen', fallback: false });
-    const thu = unitPlanFor(W40[3] ?? '', week, { goalMin: 30 }).blocks.find((b) => b.block === 2);
-    if (!thu) throw new Error('Block 2 fehlt');
+    expect(resolveBlock(tue, { ai: true, tts: true })).toMatchObject({ kind: 'input.listen', steps: ['input.listen', 'pron.shadow'], fallback: false });
+    const thu: UnitBlock = { block: 2, kind: 'input.listen', steps: ['input.listen', 'pron.shadow'], opts: { src: 'dialog' }, min: 5, channel: 'ch:u-in' };
     expect(resolveBlock(thu, { ai: false, tts: true }).opts.src).toBe('feed');
-    const sat = unitPlanFor(W40[5] ?? '', week, { goalMin: 30 }).blocks.find((b) => b.block === 3);
-    if (!sat) throw new Error('Block 3 fehlt');
+    const sat: UnitBlock = { block: 3, kind: 'task.roleplay', steps: ['task.roleplay'], opts: {}, min: 12, channel: 'ch:u-task' };
     expect(resolveBlock(sat, { ai: false, tts: true })).toMatchObject({ kind: 'task.objection', offline: true });
-    const wed = unitPlanFor(W40[2] ?? '', week, { goalMin: 30 }).blocks.find((b) => b.block === 3);
-    if (!wed) throw new Error('Block 3 fehlt');
+    const wed: UnitBlock = { block: 3, kind: 'task.tones', steps: ['task.tones'], opts: {}, min: 9, channel: 'ch:u-task' };
     expect(resolveBlock(wed, { ai: false, tts: true })).toMatchObject({ kind: 'task.inbox', opts: { part: 'full' } });
+    const meet: UnitBlock = { block: 3, kind: 'task.meeting', steps: ['task.meeting'], opts: {}, min: 9, channel: 'ch:u-task' };
+    expect(resolveBlock(meet, { ai: false, tts: true })).toMatchObject({ kind: 'task.objection', fallback: true });
   });
 
   it('Montag ohne gespeichertes Thema: Bestätigungskarte, Thema aus dem Vorschlag', () => {
