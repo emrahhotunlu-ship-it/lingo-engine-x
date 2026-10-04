@@ -39,7 +39,7 @@ export const applyEn = {
   apComboRuleMark: 'Rule',
   apComboWordMissing: 'The word “{word}” is not in your sentence. Try again with it.',
   apComboRetry: 'Try again',
-  apComboNotice: 'Checked by Claude, may contain mistakes. A wrong sentence comes back later under “Fix mistakes”.',
+  apComboNotice: 'Checked by Claude, may contain mistakes.',
   apComboRepairNote: 'This sentence is saved as a repair sentence and comes back tomorrow under “Fix mistakes”.',
   apComboUnavailable: 'This exercise needs Claude and a few known words.',
   apRoleplaySub: 'Speak freely with fixed scenes',

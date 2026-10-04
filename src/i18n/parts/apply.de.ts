@@ -39,7 +39,7 @@ export const applyDe = {
   apComboRuleMark: 'Regel',
   apComboWordMissing: 'Das Wort „{word}“ steht nicht in deinem Satz. Versuch es noch einmal damit.',
   apComboRetry: 'Nochmal versuchen',
-  apComboNotice: 'Von Claude geprüft, kann Fehler enthalten. Ein falscher Satz kommt später unter „Fehler korrigieren“ wieder.',
+  apComboNotice: 'Von Claude geprüft, kann Fehler enthalten.',
   apComboRepairNote: 'Dieser Satz ist als Reparatur-Satz gemerkt und kommt morgen unter „Fehler korrigieren“ wieder.',
   apComboUnavailable: 'Diese Übung braucht Claude und ein paar bekannte Wörter.',
   apRoleplaySub: 'Frei sprechen mit festen Szenen',

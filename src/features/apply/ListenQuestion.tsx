@@ -111,6 +111,19 @@ export function ListenQuestionScreen() {
     setEndedAt(performance.now());
   };
 
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (!cur || ev.metaKey || ev.ctrlKey || ev.altKey || (ev.target as HTMLElement | null)?.tagName === 'BUTTON') return;
+      if (res && ev.key === 'Enter') {
+        ev.preventDefault();
+        next();
+      } else if (!res && heard > 0 && ['1', '2', '3'].includes(ev.key)) pick(Number(ev.key) - 1);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cur, res, heard]);
+
   const quoteIn = (text: string, quote: string): [string, string, string] | null => {
     const i = text.toLowerCase().indexOf(quote.toLowerCase());
     if (i >= 0) return [text.slice(0, i), text.slice(i, i + quote.length), text.slice(i + quote.length)];

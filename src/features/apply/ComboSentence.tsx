@@ -157,6 +157,12 @@ export function ComboSentenceScreen() {
               autoCorrect="off"
               spellCheck={false}
               data-testid="combo-input"
+              onKeyDown={(ev) => {
+                if (ev.key === 'Enter' && !ev.shiftKey && !ev.nativeEvent.isComposing) {
+                  ev.preventDefault();
+                  void check();
+                }
+              }}
             />
             {busy && <AiRunPanel phase={ask.phase} error={null} onStop={ask.stop} skeleton={false} />}
             {!busy && !res && ask.error && <AiRunPanel phase="error" error={ask.error} onRetry={() => void check()} skeleton={false} />}
