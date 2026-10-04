@@ -82,8 +82,8 @@
 "was tasting"
 ],
 "answer": "tastes",
-"expl": "Verben der Sinneswahrnehmung (taste, smell, sound, look) beschreiben einen Zustand → Present Simple, auch wenn es um jetzt geht.",
-"expl_en": "Verbs of perception (taste, smell, sound, look) describe a state → Present Simple, even when it is about now."
+"expl": "Verben der Sinneswahrnehmung (taste, smell, sound, look) beschreiben einen Zustand → Present Simple, auch wenn es um jetzt geht. „is tasting“ wäre falsch: Es würde heißen, dass jemand die Suppe gerade probiert.",
+"expl_en": "Verbs of perception (taste, smell, sound, look) describe a state → Present Simple, even when it is about now. \"is tasting\" would be wrong: it would mean someone is tasting the soup right now."
 },
 {
 "topic": "pres-simple-cont",
@@ -159,13 +159,15 @@
 {
 "topic": "pres-simple-cont",
 "type": "transform",
-"prompt": "Anna normally lives in Hamburg. Just for this summer, she has a flat in Munich. → This summer, Anna ___ in Munich.",
+"prompt": "Anna normally lives in Hamburg. Just for this summer, she has an apartment in Munich. → This summer, Anna ___ in Munich.",
 "answer": "is living",
 "accepted": [
-"'s living"
+"'s living",
+"is staying",
+"'s staying"
 ],
-"expl": "Vorübergehende Situation („just for this summer“) → Present Continuous.",
-"expl_en": "A temporary situation (\"just for this summer\") → Present Continuous."
+"expl": "Vorübergehende Situation („just for this summer“) → Present Continuous (is living; auch möglich: is staying).",
+"expl_en": "A temporary situation (\"just for this summer\") → Present Continuous (is living; is staying also works)."
 },
 {
 "topic": "pres-simple-cont",
@@ -315,11 +317,13 @@
 "prompt": "This is the first time I ___ a keynote in English.",
 "answer": "have given",
 "accepted": [
-"'ve given"
+"'ve given",
+"am giving",
+"'m giving"
 ],
 "hint": "(give)",
-"expl": "Nach „This is the first time …“ steht das Present Perfect (Erfahrung bis jetzt).",
-"expl_en": "After \"This is the first time …\" we use the Present Perfect (experience up to now)."
+"expl": "Nach „This is the first time …“ steht das Present Perfect (Erfahrung bis jetzt). Passiert es gerade jetzt, geht auch I'm giving.",
+"expl_en": "After \"This is the first time …\" we use the Present Perfect (experience up to now). If it is happening right now, I'm giving also works."
 },
 {
 "topic": "past-simple-perfect",
@@ -329,7 +333,9 @@
 "accepted": [
 "'ve worked",
 "have been working",
-"'ve been working"
+"'ve been working",
+"have been",
+"'ve been"
 ],
 "expl": "Die Situation dauert bis jetzt an („since 2020“) → Present Perfect.",
 "expl_en": "The situation continues until now (\"since 2020\") → Present Perfect."
@@ -400,8 +406,8 @@
 "has been working"
 ],
 "answer": "has been working",
-"expl": "„since January“ und die Arbeit läuft noch → Present Perfect Continuous (has been + -ing).",
-"expl_en": "\"since January\" and the work is still going → Present Perfect Continuous (has been + -ing)."
+"expl": "„since January“ und die Arbeit läuft noch → Present Perfect Continuous (has been + -ing). „works“ und „is working“ passen nicht zu „since“.",
+"expl_en": "\"since January\" and the work is still going → Present Perfect Continuous (has been + -ing). \"works\" and \"is working\" do not go with \"since\"."
 },
 {
 "topic": "pres-perf-cont",
@@ -442,8 +448,8 @@
 "have been playing"
 ],
 "answer": "have been playing",
-"expl": "„since 6 p.m.“ und die Musik läuft noch → Present Perfect Continuous.",
-"expl_en": "\"since 6 p.m.\" and the music is still on → Present Perfect Continuous."
+"expl": "„since 6 p.m.“ und die Musik läuft noch → Present Perfect Continuous. „play“ und „are playing“ passen nicht zu „since“; „played“ wäre abgeschlossen, die Musik läuft aber noch.",
+"expl_en": "\"since 6 p.m.\" and the music is still on → Present Perfect Continuous. \"play\" and \"are playing\" do not go with \"since\"; \"played\" would be finished, but the music is still on."
 },
 {
 "topic": "pres-perf-cont",
@@ -498,13 +504,13 @@
 "have not made"
 ],
 "hint": "(not / make)",
-"expl": "„lately“ + Entwicklung bis jetzt → Present Perfect Continuous; Verneinung: haven't been making.",
-"expl_en": "\"lately\" + a development up to now → Present Perfect Continuous; negative: haven't been making."
+"expl": "„lately“ + Entwicklung bis jetzt → Present Perfect Continuous; Verneinung: haven't been making. Das einfache Present Perfect (haven't made) ist auch möglich.",
+"expl_en": "\"lately\" + a development up to now → Present Perfect Continuous; negative: haven't been making. The simple Present Perfect (haven't made) is also possible."
 },
 {
 "topic": "pres-perf-cont",
 "type": "gap",
-"prompt": "My cousin ___ for a flat in Hamburg for months, but the prices are crazy.",
+"prompt": "My cousin ___ for an apartment in Hamburg for months, but the prices are crazy.",
 "answer": "has been looking",
 "accepted": [
 "'s been looking",
@@ -574,8 +580,8 @@
 "would already leave"
 ],
 "answer": "had already left",
-"expl": "„By the time“ + Vergangenheit: Das frühere Ereignis (der Kunde geht) steht im Past Perfect (had left).",
-"expl_en": "\"By the time\" + past: the earlier event (the client leaving) goes in the Past Perfect (had left)."
+"expl": "„By the time“ + Vergangenheit: Das frühere Ereignis (der Kunde geht) steht im Past Perfect (had left). „has already left“ passt nicht: „joined“ steht in der Vergangenheit, der Kunde war schon vorher gegangen.",
+"expl_en": "\"By the time\" + past: the earlier event (the client leaving) goes in the Past Perfect (had left). \"has already left\" does not fit: \"joined\" is past, and the client had left even earlier."
 },
 {
 "topic": "past-perfect",
@@ -588,8 +594,8 @@
 "were negotiating"
 ],
 "answer": "had been negotiating",
-"expl": "Dauer VOR einem Zeitpunkt in der Vergangenheit („by the time the client signed“) → had been + -ing.",
-"expl_en": "Duration BEFORE a point in the past (\"by the time the client signed\") → had been + -ing."
+"expl": "Dauer VOR einem Zeitpunkt in der Vergangenheit („by the time the client signed“) → had been + -ing. „negotiated“ nennt nur die Handlung, nicht die Dauer bis zum Unterschreiben.",
+"expl_en": "Duration BEFORE a point in the past (\"by the time the client signed\") → had been + -ing. \"negotiated\" names only the action, not the duration up to the signing."
 },
 {
 "topic": "past-perfect",
@@ -602,8 +608,8 @@
 "would handle"
 ],
 "answer": "had handled",
-"expl": "Nach „It was the first time …“ steht das Past Perfect, weil die Erfahrung vor dem Zeitpunkt in der Vergangenheit liegt.",
-"expl_en": "After \"It was the first time …\" we use the Past Perfect, because the experience comes before the past moment."
+"expl": "Nach „It was the first time …“ steht das Past Perfect, weil die Erfahrung vor dem Zeitpunkt in der Vergangenheit liegt. „has handled“ gehört zur Gegenwart („It is the first time she has handled …“); in einer Vergangenheitsgeschichte muss es eine Stufe zurück.",
+"expl_en": "After \"It was the first time …\" we use the Past Perfect, because the experience comes before the past moment. \"has handled\" belongs to the present (\"It is the first time she has handled …\"); in a story in the past it has to go one step back."
 },
 {
 "topic": "past-perfect",
@@ -630,8 +636,8 @@
 "works"
 ],
 "answer": "had been working",
-"expl": "„since 5 a.m.“ + Dauer vor einem Zeitpunkt in der Vergangenheit (Anruf um Mittag) → had been + -ing.",
-"expl_en": "\"since 5 a.m.\" + duration before a past moment (the call at noon) → had been + -ing."
+"expl": "„since 5 a.m.“ + Dauer vor einem Zeitpunkt in der Vergangenheit (Anruf um Mittag) → had been + -ing. „was working“ beschreibt nur den Moment des Anrufs, nicht die Dauer seit 5 Uhr.",
+"expl_en": "\"since 5 a.m.\" + duration before a past moment (the call at noon) → had been + -ing. \"was working\" describes only the moment of the call, not the duration since 5 a.m."
 },
 {
 "topic": "past-perfect",
@@ -644,8 +650,8 @@
 "would move"
 ],
 "answer": "had moved",
-"expl": "„the month before“ verweist auf einen früheren Zeitpunkt in der Vergangenheit → Past Perfect (had moved).",
-"expl_en": "\"the month before\" points to an earlier time in the past → Past Perfect (had moved)."
+"expl": "„the month before“ verweist auf einen früheren Zeitpunkt in der Vergangenheit → Past Perfect (had moved). „has moved“ (Present Perfect) passt nicht zu „the month before“, das auf einen früheren Zeitpunkt der Vergangenheit zeigt.",
+"expl_en": "\"the month before\" points to an earlier time in the past → Past Perfect (had moved). \"has moved\" (Present Perfect) does not fit \"the month before\", which points to an earlier time in the past."
 },
 {
 "topic": "past-perfect",
@@ -706,8 +712,8 @@
 "answer": "had gone",
 "accepted": [
 "'d gone",
-"had left",
-"'d left"
+"had already gone",
+"'d already gone"
 ],
 "hint": "(go)",
 "expl": "„By the time“ + Vergangenheit → das frühere Ereignis im Past Perfect (go – went – gone).",
@@ -752,13 +758,15 @@
 {
 "topic": "past-perfect",
 "type": "correct",
-"prompt": "She told me she has never used the software before that day.",
-"answer": "She told me she had never used the software before that day.",
+"prompt": "My boss told me that he will call me the next day.",
+"answer": "My boss told me that he would call me the next day.",
 "accepted": [
-"She told me she'd never used the software before that day."
+"My boss told me he would call me the next day.",
+"My boss told me that he'd call me the next day.",
+"My boss told me he'd call me the next day."
 ],
-"expl": "In der indirekten Rede nach „told“ geht Present Perfect einen Schritt zurück → Past Perfect (had never used).",
-"expl_en": "In reported speech after \"told\", the Present Perfect moves one step back → Past Perfect (had never used)."
+"expl": "„the next day“ gehört zur indirekten Rede in der Vergangenheit (told) → eine Stufe zurück: will → would.",
+"expl_en": "\"the next day\" belongs to reported speech in the past (told) → one step back: will → would."
 },
 {
 "topic": "future-forms",
@@ -772,7 +780,7 @@
 ],
 "answer": "ends",
 "expl": "Nach „as soon as“ steht für die Zukunft das Present Simple, nie „will“. Das ist ein typischer Fehler im Deutschen („sobald das Meeting enden wird“).",
-"expl_en": "After \"as soon as\" we use the Present Simple for the future, never \"will\"."
+"expl_en": "After \"as soon as\" we use the Present Simple for the future, never \"will\". German \"sobald das Meeting enden wird\" tempts you into \"will end\"."
 },
 {
 "topic": "future-forms",
@@ -785,8 +793,8 @@
 "Am"
 ],
 "answer": "Shall",
-"expl": "Für Angebote und Vorschläge mit „I/we“ nutzt man „Shall I …?“. „Will I send“ würde fragen, was in der Zukunft passiert.",
-"expl_en": "For offers and suggestions with \"I/we\" we use \"Shall I …?\". \"Will I send\" would ask what is going to happen."
+"expl": "Für Angebote und Vorschläge mit „I/we“ nutzt man „Shall I …?“. „Will I send“ würde fragen, was in der Zukunft passiert. Im amerikanischen Englisch klingt „Should I …?“ alltäglicher, „Shall I …?“ ist höflicher und formeller.",
+"expl_en": "For offers and suggestions with \"I/we\" we use \"Shall I …?\". \"Will I send\" would ask what is going to happen. In American English \"Should I …?\" sounds more everyday; \"Shall I …?\" is more polite and formal."
 },
 {
 "topic": "future-forms",
@@ -796,7 +804,7 @@
 "don't tell",
 "am not telling",
 "won't tell",
-"haven't told"
+"hadn't told"
 ],
 "answer": "won't tell",
 "expl": "Ein Versprechen → will (verneint: won't). Present Simple oder Continuous drücken kein Versprechen aus.",
@@ -813,8 +821,8 @@
 "starts about"
 ],
 "answer": "is about to",
-"expl": "„be about to + Infinitiv“ = gleich passiert etwas, unmittelbar bevorstehend.",
-"expl_en": "\"be about to + infinitive\" = something is going to happen very soon."
+"expl": "„be about to + Infinitiv“ = gleich passiert etwas, unmittelbar bevorstehend. Die anderen Optionen gehen mit „start“ nicht (is going to start und will start wären richtig).",
+"expl_en": "\"be about to + infinitive\" = something is going to happen very soon. The other options do not work with \"start\" (is going to start and will start would be correct)."
 },
 {
 "topic": "future-forms",
@@ -851,7 +859,11 @@
 "answer": "approves",
 "hint": "(approve)",
 "expl": "Nach „as soon as“ steht das Present Simple, nicht „will approve“.",
-"expl_en": "After \"as soon as\" we use the Present Simple, not \"will approve\"."
+"expl_en": "After \"as soon as\" we use the Present Simple, not \"will approve\".",
+"accepted": [
+"has approved",
+"'s approved"
+]
 },
 {
 "topic": "future-forms",
@@ -872,7 +884,8 @@
 "answer": "leaves",
 "accepted": [
 "is leaving",
-"will leave"
+"will leave",
+"'s leaving"
 ],
 "hint": "(leave)",
 "expl": "Flug- und Fahrpläne stehen im Present Simple.",
@@ -914,7 +927,11 @@
 "accepted": [
 "'m going to visit",
 "am visiting",
-"'m visiting"
+"'m visiting",
+"am planning to visit",
+"'m planning to visit",
+"will visit",
+"'ll visit"
 ],
 "expl": "Ein Plan oder eine Absicht → going to (Present Continuous ist bei fester Verabredung auch möglich).",
 "expl_en": "A plan or intention → going to (the Present Continuous is also possible for a fixed arrangement)."
@@ -930,7 +947,8 @@
 "had intended to",
 "intended to",
 "planned to",
-"meant to"
+"meant to",
+"had meant to"
 ],
 "expl": "Ein Plan in der Vergangenheit, der nicht ausgeführt wurde → was going to.",
 "expl_en": "A plan in the past that did not happen → was going to."
@@ -979,8 +997,8 @@
 "presented"
 ],
 "answer": "will be presenting",
-"expl": "Um 3 Uhr bin ich mitten in der Präsentation → Future Continuous (will be + -ing).",
-"expl_en": "At 3 o'clock I'll be in the middle of the presentation → Future Continuous (will be + -ing)."
+"expl": "Um 3 Uhr bin ich mitten in der Präsentation → Future Continuous (will be + -ing). „will have presented“ wäre schon fertig – um 3 Uhr bin ich aber mittendrin.",
+"expl_en": "At 3 o'clock I'll be in the middle of the presentation → Future Continuous (will be + -ing). \"will have presented\" would already be finished – at 3 o'clock I'll be in the middle of it."
 },
 {
 "topic": "future-perf-cont",
@@ -993,8 +1011,8 @@
 "am working"
 ],
 "answer": "will have been working",
-"expl": "Dauer bis zu einem Zeitpunkt in der Zukunft („ten years“) → will have been + -ing.",
-"expl_en": "Duration up to a point in the future (\"ten years\") → will have been + -ing."
+"expl": "Dauer bis zu einem Zeitpunkt in der Zukunft („ten years“) → will have been + -ing. „will work“ und „will be working“ sagen nichts über die zehn Jahre bis dahin.",
+"expl_en": "Duration up to a point in the future (\"ten years\") → will have been + -ing. \"will work\" and \"will be working\" say nothing about the ten years up to then."
 },
 {
 "topic": "future-perf-cont",
@@ -1007,8 +1025,8 @@
 "clean"
 ],
 "answer": "will have cleaned",
-"expl": "„By the time you arrive“ → bis dahin ist die Arbeit fertig → will have + Partizip.",
-"expl_en": "\"By the time you arrive\" → the job will be finished by then → will have + past participle."
+"expl": "„By the time you arrive“ → bis dahin ist die Arbeit fertig → will have + Partizip. „will clean“ sagt nur, dass sie putzen werden, nicht dass sie dann fertig sind.",
+"expl_en": "\"By the time you arrive\" → the job will be finished by then → will have + past participle. \"will clean\" only says they will clean, not that they will be done by then."
 },
 {
 "topic": "future-perf-cont",
@@ -1021,8 +1039,8 @@
 "Have you used"
 ],
 "answer": "Will you be using",
-"expl": "Höfliche Frage nach den Plänen des anderen → Future Continuous (Will you be using …?).",
-"expl_en": "A polite question about the other person's plans → Future Continuous (Will you be using …?)."
+"expl": "Höfliche Frage nach den Plänen des anderen → Future Continuous (Will you be using …?). „Will you have used“ würde fragen, ob du es bis dahin schon benutzt hast.",
+"expl_en": "A polite question about the other person's plans → Future Continuous (Will you be using …?). \"Will you have used\" would ask whether you will already have used it by then."
 },
 {
 "topic": "future-perf-cont",
@@ -1035,8 +1053,8 @@
 "have watched"
 ],
 "answer": "will have watched",
-"expl": "„by next weekend“ + abgeschlossen („all three seasons“) → will have + Partizip.",
-"expl_en": "\"by next weekend\" + completed (\"all three seasons\") → will have + past participle."
+"expl": "„by next weekend“ + abgeschlossen („all three seasons“) → will have + Partizip. „watch“ und „have watched“ passen nicht zur Zukunft; „will be watched“ wäre Passiv.",
+"expl_en": "\"by next weekend\" + completed (\"all three seasons\") → will have + past participle. \"watch\" and \"have watched\" do not fit the future; \"will be watched\" would be passive."
 },
 {
 "topic": "future-perf-cont",
@@ -1096,7 +1114,9 @@
 "accepted": [
 "'ll be working",
 "will work",
-"'ll work"
+"'ll work",
+"are going to work",
+"are going to be working"
 ],
 "hint": "(work)",
 "expl": "Eine Vorhersage über eine Situation, die dann im Gange sein wird → Future Continuous (einfaches will ist auch möglich).",
@@ -1108,7 +1128,9 @@
 "prompt": "I'll finish the report before the meeting at 4. → By 4 o'clock, I ___ the report.",
 "answer": "will have finished",
 "accepted": [
-"'ll have finished"
+"'ll have finished",
+"will have completed",
+"'ll have completed"
 ],
 "expl": "„By 4 o'clock“ = bis dahin abgeschlossen → will have + Partizip.",
 "expl_en": "\"By 4 o'clock\" = completed by then → will have + past participle."
@@ -1123,7 +1145,11 @@
 "will be traveling",
 "'ll be traveling",
 "will be heading",
-"'ll be heading"
+"'ll be heading",
+"will be going",
+"'ll be going",
+"will be on my way",
+"'ll be on my way"
 ],
 "expl": "Um 3 Uhr bin ich gerade unterwegs → Future Continuous (will be + -ing).",
 "expl_en": "At 3 p.m. I'll be in the middle of the trip → Future Continuous (will be + -ing)."
@@ -1177,8 +1203,8 @@
 "use to"
 ],
 "answer": "get used to",
-"expl": "Der Prozess des Gewöhnens → get used to (nach couldn't steht die Grundform get).",
-"expl_en": "The process of becoming accustomed → get used to (after couldn't we need the base form get)."
+"expl": "Der Prozess des Gewöhnens → get used to (nach couldn't steht die Grundform get). „be used to“ heißt „gewöhnt sein“ (Zustand), nicht „sich gewöhnen“ (Vorgang).",
+"expl_en": "The process of becoming accustomed → get used to (after couldn't we need the base form get). \"be used to\" means \"be accustomed\" (a state), not \"become accustomed\" (a process)."
 },
 {
 "topic": "used-to",
@@ -1242,7 +1268,8 @@
 "prompt": "Before we switched to Slack, we ___ send hundreds of internal emails every day.",
 "answer": "used to",
 "accepted": [
-"would"
+"would",
+"'d"
 ],
 "hint": "(used to)",
 "expl": "Eine frühere, wiederholte Handlung, die heute nicht mehr stattfindet → used to (would ist auch möglich).",
@@ -1255,7 +1282,10 @@
 "answer": "used to",
 "hint": "(be used to)",
 "expl": "„be used to + -ing“ = gewöhnt sein an etwas.",
-"expl_en": "\"be used to + -ing\" = to be accustomed to something."
+"expl_en": "\"be used to + -ing\" = to be accustomed to something.",
+"accepted": [
+"accustomed to"
+]
 },
 {
 "topic": "used-to",
@@ -1264,7 +1294,9 @@
 "answer": "gotten used to",
 "accepted": [
 "got used to",
-"become used to"
+"become used to",
+"grown used to",
+"become accustomed to"
 ],
 "hint": "(get used to)",
 "expl": "„get used to + -ing“ = sich an etwas gewöhnen. Present Perfect im amerikanischen Englisch: gotten.",
@@ -1305,7 +1337,9 @@
 "prompt": "Working night shifts is normal for me now; I've done it for years. → I'm ___ night shifts.",
 "answer": "used to working",
 "accepted": [
-"accustomed to working"
+"accustomed to working",
+"used to doing",
+"accustomed to doing"
 ],
 "expl": "„be used to + -ing“ = an etwas gewöhnt sein.",
 "expl_en": "\"be used to + -ing\" = to be accustomed to something."
@@ -1313,10 +1347,10 @@
 {
 "topic": "used-to",
 "type": "correct",
-"prompt": "We used to had a strict dress code, but it's more relaxed now.",
+"prompt": "We used to having a strict dress code, but it's more relaxed now.",
 "answer": "We used to have a strict dress code, but it's more relaxed now.",
-"expl": "„used to“ wird von der Grundform gefolgt (have), nicht von der Vergangenheitsform.",
-"expl_en": "\"used to\" is followed by the base form (have), not the past form."
+"expl": "„used to“ wird von der Grundform gefolgt (have), nicht von der -ing-Form: Das war früher so, jetzt nicht mehr. („be used to having“ wäre etwas anderes: gewöhnt sein.)",
+"expl_en": "\"used to\" is followed by the base form (have), not the -ing form: that was true in the past but not any more. (\"be used to having\" would be something else: being accustomed.)"
 },
 {
 "topic": "used-to",
@@ -1407,8 +1441,8 @@
 "would know"
 ],
 "answer": "had known",
-"expl": "Third Conditional (Vergangenheit): If + Past Perfect (had known), would have + Partizip.",
-"expl_en": "Third conditional (past): if + Past Perfect (had known), would have + past participle."
+"expl": "Third Conditional (Vergangenheit): If + Past Perfect (had known), would have + Partizip. „knew“ (Second Conditional) passt nicht, weil es um etwas Vergangenes geht (would have baked).",
+"expl_en": "Third conditional (past): if + Past Perfect (had known), would have + past participle. \"knew\" (second conditional) does not fit, because it is about the past (would have baked)."
 },
 {
 "topic": "conditionals",
@@ -1436,7 +1470,7 @@
 {
 "topic": "conditionals",
 "type": "gap",
-"prompt": "If I ___ more experience, I would have applied for the manager position last year.",
+"prompt": "If I ___ more experience at the time, I would have applied for the manager position last year.",
 "answer": "had had",
 "accepted": [
 "'d had"
@@ -1452,7 +1486,10 @@
 "answer": "registers",
 "hint": "(register)",
 "expl": "Zero Conditional: Eine allgemeine Regel („automatically“) → If + Present Simple, Present Simple.",
-"expl_en": "Zero conditional: a general rule (\"automatically\") → if + Present Simple, Present Simple."
+"expl_en": "Zero conditional: a general rule (\"automatically\") → if + Present Simple, Present Simple.",
+"accepted": [
+"has registered"
+]
 },
 {
 "topic": "conditionals",
@@ -1518,8 +1555,8 @@
 "have bought"
 ],
 "answer": "bought",
-"expl": "Nach „It's (high) time“ steht das Past Simple, obwohl es um jetzt geht: Es ist höchste Zeit, dass wir (jetzt) etwas tun.",
-"expl_en": "After \"It's (high) time\" we use the Past Simple, even though it is about now: it is high time that we do something."
+"expl": "Nach „It's (high) time“ steht das Past Simple, obwohl es um jetzt geht: Es ist höchste Zeit, dass wir (jetzt) etwas tun. „buy“ und „would buy“ passen nicht: Nach „It's high time“ steht immer die Vergangenheitsform.",
+"expl_en": "After \"It's (high) time\" we use the Past Simple, even though it is about now: it is high time that we do something. \"buy\" and \"would buy\" do not fit: after \"It's high time\" the past form is always used."
 },
 {
 "topic": "mixed-cond",
@@ -1532,8 +1569,8 @@
 "has sent"
 ],
 "answer": "had sent",
-"expl": "„last week“ + Bedauern über die Vergangenheit → wish + Past Perfect (had sent).",
-"expl_en": "\"last week\" + regret about the past → wish + Past Perfect (had sent)."
+"expl": "„last week“ + Bedauern über die Vergangenheit → wish + Past Perfect (had sent). „sent“ würde nur eine Tatsache berichten; für Bedauern über die Vergangenheit braucht wish die Stufe davor.",
+"expl_en": "\"last week\" + regret about the past → wish + Past Perfect (had sent). \"sent\" would only report a fact; to regret something in the past, wish needs the step before."
 },
 {
 "topic": "mixed-cond",
@@ -1546,8 +1583,8 @@
 "will stop"
 ],
 "answer": "would stop",
-"expl": "„wish … would“ drückt Ärger über eine nervige Gewohnheit aus, die man ändern möchte.",
-"expl_en": "\"wish … would\" expresses annoyance at an irritating habit you want to change."
+"expl": "„wish … would“ drückt Ärger über eine nervige Gewohnheit aus, die man ändern möchte. „had stopped“ wäre Bedauern über die Vergangenheit, „will stop“ gibt es nach wish nicht.",
+"expl_en": "\"wish … would\" expresses annoyance at an irritating habit you want to change. \"had stopped\" would be regret about the past; \"will stop\" does not exist after wish."
 },
 {
 "topic": "mixed-cond",
@@ -1560,8 +1597,8 @@
 "haven't offered"
 ],
 "answer": "hadn't offered",
-"expl": "Mixed Conditional: If + Past Perfect (Bedingung in der Vergangenheit), would + Infinitiv (Folge jetzt).",
-"expl_en": "Mixed conditional: if + Past Perfect (condition in the past), would + infinitive (result now)."
+"expl": "Mixed Conditional: If + Past Perfect (Bedingung in der Vergangenheit), would + Infinitiv (Folge jetzt). „didn't offer“ wäre eine Bedingung in der Gegenwart, aber „last quarter“ liegt in der Vergangenheit.",
+"expl_en": "Mixed conditional: if + Past Perfect (condition in the past), would + infinitive (result now). \"didn't offer\" would be a condition in the present, but \"last quarter\" is in the past."
 },
 {
 "topic": "mixed-cond",
@@ -1574,8 +1611,8 @@
 "will work"
 ],
 "answer": "would work",
-"expl": "Bedingung in der Vergangenheit (hadn't accepted), Folge in der Gegenwart („today“) → would + Infinitiv.",
-"expl_en": "Condition in the past (hadn't accepted), result in the present (\"today\") → would + infinitive."
+"expl": "Bedingung in der Vergangenheit (hadn't accepted), Folge in der Gegenwart („today“) → would + Infinitiv. „would have worked“ wäre auch Vergangenheit; „today“ verlangt die Gegenwart.",
+"expl_en": "Condition in the past (hadn't accepted), result in the present (\"today\") → would + infinitive. \"would have worked\" would also be the past; \"today\" calls for the present."
 },
 {
 "topic": "mixed-cond",
@@ -1588,8 +1625,8 @@
 "would be"
 ],
 "answer": "were",
-"expl": "Wunsch über die Gegenwart → wish + Past Simple (were).",
-"expl_en": "A wish about the present → wish + Past Simple (were)."
+"expl": "Wunsch über die Gegenwart → wish + Past Simple (were). „am“ geht nach wish nicht; „had been“ wäre Bedauern über die Vergangenheit.",
+"expl_en": "A wish about the present → wish + Past Simple (were). \"am\" does not work after wish; \"had been\" would be regret about the past."
 },
 {
 "topic": "mixed-cond",
@@ -1721,8 +1758,8 @@
 "were processed"
 ],
 "answer": "are processed",
-"expl": "Die Rechnungen werden bearbeitet; „every Friday“ = Gewohnheit → Present Simple Passiv (are + Partizip).",
-"expl_en": "The invoices get processed; \"every Friday\" = habit → Present Simple passive (are + past participle)."
+"expl": "Die Rechnungen werden bearbeitet; „every Friday“ = Gewohnheit → Present Simple Passiv (are + Partizip). „process“ würde heißen, dass die Rechnungen selbst bearbeiten; „were processed“ wäre einmalig in der Vergangenheit.",
+"expl_en": "The invoices get processed; \"every Friday\" = habit → Present Simple passive (are + past participle). \"process\" would mean the invoices do the processing themselves; \"were processed\" would be a one-time event in the past."
 },
 {
 "topic": "passive",
@@ -1735,8 +1772,8 @@
 "wasn't informing"
 ],
 "answer": "wasn't informed",
-"expl": "Ich habe nichts informiert, sondern niemand hat mich informiert → Passiv im Past Simple (wasn't informed).",
-"expl_en": "I didn't inform anyone; nobody informed me → Past Simple passive (wasn't informed)."
+"expl": "Niemand hat mich informiert – mit mir ist etwas geschehen → Passiv im Past Simple (wasn't informed). „didn't inform“ hieße: Ich habe niemanden informiert.",
+"expl_en": "Nobody informed me – something happened to me → Past Simple passive (wasn't informed). \"didn't inform\" would mean: I did not inform anyone."
 },
 {
 "topic": "passive",
@@ -1749,8 +1786,8 @@
 "has maintained"
 ],
 "answer": "is being maintained",
-"expl": "„at the moment“ → Present Continuous Passiv: is/are being + Partizip.",
-"expl_en": "\"at the moment\" → Present Continuous passive: is/are being + past participle."
+"expl": "„at the moment“ → Present Continuous Passiv: is/are being + Partizip. „is maintained“ beschreibt einen Dauerzustand, nicht das, was jetzt gerade passiert.",
+"expl_en": "\"at the moment\" → Present Continuous passive: is/are being + past participle. \"is maintained\" describes a standing situation, not what is happening right now."
 },
 {
 "topic": "passive",
@@ -1763,8 +1800,8 @@
 "was offering"
 ],
 "answer": "was offered",
-"expl": "Die Handlung geht vom Vorstand aus („by the board“), sie ist die Empfängerin → Passiv: was offered.",
-"expl_en": "The action comes from the board (\"by the board\"), she is the receiver → passive: was offered."
+"expl": "Die Handlung geht vom Vorstand aus („by the board“), sie ist die Empfängerin → Passiv: was offered. „offered“ würde bedeuten, dass sie dem Vorstand etwas angeboten hat.",
+"expl_en": "The action comes from the board (\"by the board\"), she is the receiver → passive: was offered. \"offered\" would mean that she offered something to the board."
 },
 {
 "topic": "passive",
@@ -1777,8 +1814,8 @@
 "owns"
 ],
 "answer": "has been owned",
-"expl": "„since 1985“ + es gilt bis heute → Present Perfect Passiv (has been + Partizip).",
-"expl_en": "\"since 1985\" + still true today → Present Perfect passive (has been + past participle)."
+"expl": "„since 1985“ + es gilt bis heute → Present Perfect Passiv (has been + Partizip). „is owned“ und „was owned“ passen nicht zu „since 1985“ (Zeitraum bis jetzt).",
+"expl_en": "\"since 1985\" + still true today → Present Perfect passive (has been + past participle). \"is owned\" and \"was owned\" do not go with \"since 1985\" (a period up to now)."
 },
 {
 "topic": "passive",
@@ -1805,7 +1842,8 @@
 "answer": "will be presented",
 "accepted": [
 "is going to be presented",
-"is being presented"
+"is being presented",
+"'ll be presented"
 ],
 "hint": "(present)",
 "expl": "Zukunft im Passiv: will be + Partizip.",
@@ -1910,8 +1948,8 @@
 "the day before"
 ],
 "answer": "the following day",
-"expl": "In der indirekten Rede verschieben sich Zeitangaben: tomorrow → the following day / the next day.",
-"expl_en": "Time expressions shift in reported speech: tomorrow → the following day / the next day."
+"expl": "In der indirekten Rede verschieben sich Zeitangaben: tomorrow → the following day / the next day. „the day before“ und „yesterday“ zeigen in die falsche Richtung; „tomorrow“ würde nur passen, wenn heute der Tag davor wäre.",
+"expl_en": "Time expressions shift in reported speech: tomorrow → the following day / the next day. \"the day before\" and \"yesterday\" point the wrong way; \"tomorrow\" would only fit if today were the day before."
 },
 {
 "topic": "reported",
@@ -1924,8 +1962,8 @@
 "did"
 ],
 "answer": "if",
-"expl": "Ja/Nein-Fragen werden in der indirekten Rede mit „if“ oder „whether“ angeschlossen.",
-"expl_en": "Yes/no questions are introduced with \"if\" or \"whether\" in reported speech."
+"expl": "Ja/Nein-Fragen werden in der indirekten Rede mit „if“ oder „whether“ angeschlossen. „that“ passt nur bei Aussagen, „did“ wäre die direkte Frage.",
+"expl_en": "Yes/no questions are introduced with \"if\" or \"whether\" in reported speech. \"that\" is only for statements; \"did\" would be the direct question."
 },
 {
 "topic": "reported",
@@ -1938,8 +1976,8 @@
 "that I send"
 ],
 "answer": "to send",
-"expl": "Aufforderungen in der indirekten Rede: ask/tell + Person + to + Infinitiv.",
-"expl_en": "Requests in reported speech: ask/tell + person + to + infinitive."
+"expl": "Aufforderungen in der indirekten Rede: ask/tell + Person + to + Infinitiv. Nach „ask“ geht weder „asked me send“ noch „asked me sending“.",
+"expl_en": "Requests in reported speech: ask/tell + person + to + infinitive. After \"ask\" neither \"asked me send\" nor \"asked me sending\" works."
 },
 {
 "topic": "reported",
@@ -1952,8 +1990,8 @@
 "is signing"
 ],
 "answer": "would sign",
-"expl": "„will“ wird in der indirekten Rede nach einem Verb der Vergangenheit zu „would“ (Zukunft in der Vergangenheit).",
-"expl_en": "\"will\" becomes \"would\" in reported speech after a past reporting verb (future in the past)."
+"expl": "„will“ wird in der indirekten Rede nach einem Verb der Vergangenheit zu „would“ (Zukunft in der Vergangenheit). „signs“ und „is signing“ passen nicht zur Vergangenheit; „has signed“ würde sagen, dass der Vertrag schon unterschrieben ist.",
+"expl_en": "\"will\" becomes \"would\" in reported speech after a past reporting verb (future in the past). \"signs\" and \"is signing\" do not fit the past; \"has signed\" would say the contract is already signed."
 },
 {
 "topic": "reported",
@@ -1991,7 +2029,7 @@
 {
 "topic": "reported",
 "type": "gap",
-"prompt": "On Tuesday, he asked whether we ___ the new price list.",
+"prompt": "On Tuesday, he asked, \"Have you seen the new price list?\" → He asked whether we ___ the new price list.",
 "answer": "had seen",
 "accepted": [
 "'d seen",
@@ -2172,7 +2210,8 @@
 "prompt": "The reason ___ we lost the bid was our high price.",
 "answer": "why",
 "accepted": [
-"that"
+"that",
+"for which"
 ],
 "expl": "Nach „reason“ steht why (oder that).",
 "expl_en": "After \"reason\" we use why (or that)."
@@ -2216,22 +2255,21 @@
 {
 "topic": "relative",
 "type": "correct",
-"prompt": "The report what you wrote was very clear.",
-"answer": "The report that you wrote was very clear.",
+"prompt": "The colleague which sits next to me is from Spain.",
+"answer": "The colleague who sits next to me is from Spain.",
 "accepted": [
-"The report which you wrote was very clear.",
-"The report you wrote was very clear."
+"The colleague that sits next to me is from Spain."
 ],
-"expl": "Nach einem Nomen steht that/which, nie „what“.",
-"expl_en": "After a noun we use that/which, never \"what\"."
+"expl": "Für Personen steht who (oder that), nie „which“. „which“ ist nur für Dinge.",
+"expl_en": "For people we use who (or that), never \"which\". \"which\" is only for things."
 },
 {
 "topic": "relative",
 "type": "correct",
-"prompt": "My boss, who's car is a Tesla, never takes the train.",
-"answer": "My boss, whose car is a Tesla, never takes the train.",
-"expl": "„who's“ = who is/has. Für Besitz braucht man „whose“.",
-"expl_en": "\"who's\" = who is/has. For possession you need \"whose\"."
+"prompt": "I know a company that main office is in Dublin.",
+"answer": "I know a company whose main office is in Dublin.",
+"expl": "„that“ zeigt keinen Besitz an. Für „deren Hauptsitz“ braucht man „whose“ direkt vor dem Nomen.",
+"expl_en": "\"that\" does not show possession. For \"whose main office\" you need \"whose\" directly before the noun."
 },
 {
 "topic": "modals-deduction",
@@ -2258,8 +2296,8 @@
 "should"
 ],
 "answer": "can't",
-"expl": "Anna war bei mir → es ist unmöglich, dass sie die E-Mail geschickt hat → can't have + Partizip.",
-"expl_en": "Anna was with me → it is impossible that she sent the email → can't have + past participle."
+"expl": "Anna war bei mir → es ist unmöglich, dass sie die E-Mail geschickt hat → can't have + Partizip. „must have“ wäre das Gegenteil: sicher, dass sie es war.",
+"expl_en": "Anna was with me → it is impossible that she sent the email → can't have + past participle. \"must have\" would be the opposite: sure that it was her."
 },
 {
 "topic": "modals-deduction",
@@ -2314,8 +2352,8 @@
 "needs to"
 ],
 "answer": "must",
-"expl": "Beweis (nasse Straßen) → fast sicher → must have + Partizip (rained).",
-"expl_en": "Evidence (wet streets) → almost certain → must have + past participle (rained)."
+"expl": "Beweis (nasse Straßen) → fast sicher → must have + Partizip (rained). „can't have“ wäre das Gegenteil (unmöglich), „should have“ wäre ein Vorwurf.",
+"expl_en": "Evidence (wet streets) → almost certain → must have + past participle (rained). \"can't have\" would be the opposite (impossible), \"should have\" would be criticism."
 },
 {
 "topic": "modals-deduction",
@@ -2470,8 +2508,8 @@
 "to closing"
 ],
 "answer": "closing",
-"expl": "forget + -ing = die Erinnerung an etwas Vergangenes. forget + to = vergessen, etwas zu tun.",
-"expl_en": "forget + -ing = the memory of something that happened. forget + to = fail to do something."
+"expl": "forget + -ing = die Erinnerung an etwas Vergangenes. forget + to = vergessen, etwas zu tun. „to close“ hieße: Ich werde nie vergessen, es noch zu tun (eine Aufgabe).",
+"expl_en": "forget + -ing = the memory of something that happened. forget + to = fail to do something. \"to close\" would mean: I will never forget to do it (a task)."
 },
 {
 "topic": "gerund-inf",
@@ -2484,8 +2522,8 @@
 "to opening"
 ],
 "answer": "opening",
-"expl": "consider + -ing. Nach consider, avoid, enjoy, finish, mind, suggest steht die -ing-Form.",
-"expl_en": "consider + -ing. After consider, avoid, enjoy, finish, mind, suggest we use the -ing form."
+"expl": "consider + -ing. Nach consider, avoid, enjoy, finish, mind, suggest steht die -ing-Form. „to open“ geht nach consider nicht, und „open“ ohne -ing auch nicht.",
+"expl_en": "consider + -ing. After consider, avoid, enjoy, finish, mind, suggest we use the -ing form. \"to open\" does not work after consider, and neither does \"open\" without -ing."
 },
 {
 "topic": "gerund-inf",
@@ -2504,7 +2542,7 @@
 {
 "topic": "gerund-inf",
 "type": "gap",
-"prompt": "I regret ___ you that the project has been cancelled.",
+"prompt": "I regret ___ you that the project has been canceled.",
 "answer": "to inform",
 "hint": "(inform)",
 "expl": "regret + to-Infinitiv = bedauern, etwas (jetzt) mitteilen zu müssen. regret + -ing = bereuen, etwas getan zu haben.",
@@ -2635,27 +2673,27 @@
 "prompt": "We've been working ___ this project since March.",
 "options": [
 "in",
-"at",
+"over",
 "on",
-"for"
+"to"
 ],
 "answer": "on",
-"expl": "work on a project – „on“ für das Thema, an dem man arbeitet.",
-"expl_en": "work on a project – \"on\" for the thing you are working on."
+"expl": "work on a project – „on“ für das Thema, an dem man arbeitet. „work in / over / to a project“ sagt man nicht.",
+"expl_en": "work on a project – \"on\" for the thing you are working on. \"work in / over / to a project\" is not used."
 },
 {
 "topic": "prepositions",
 "type": "mc",
-"prompt": "I'm waiting ___ your confirmation.",
+"prompt": "I'm interested ___ your proposal.",
 "options": [
+"in",
 "on",
 "for",
-"at",
-"to"
+"at"
 ],
-"answer": "for",
-"expl": "wait for – nicht „on“. Deutsch „warten auf“ verleitet zu „wait on“.",
-"expl_en": "wait for – not \"on\". German \"warten auf\" tempts you into \"wait on\"."
+"answer": "in",
+"expl": "interested in – nicht „at“ oder „on“. Deutsch „interessiert an“ verleitet zu „interested at“.",
+"expl_en": "interested in – not \"at\" or \"on\". German \"interessiert an\" tempts you into \"interested at\"."
 },
 {
 "topic": "prepositions",
@@ -2685,7 +2723,10 @@
 "prompt": "The client insisted ___ a written confirmation.",
 "answer": "on",
 "expl": "insist on – nicht „at“ oder „for“.",
-"expl_en": "insist on – not \"at\" or \"for\"."
+"expl_en": "insist on – not \"at\" or \"for\".",
+"accepted": [
+"upon"
+]
 },
 {
 "topic": "prepositions",
@@ -2757,8 +2798,8 @@
 "An"
 ],
 "answer": "The",
-"expl": "Beide Vorschläge sind bekannt, und „first“ macht es eindeutig → the.",
-"expl_en": "Both proposals are known, and \"first\" makes it specific → the."
+"expl": "Beide Vorschläge sind bekannt, und „first“ macht es eindeutig → the. „A“ wäre ein neuer, unbekannter Vorschlag; hier sind beide schon genannt.",
+"expl_en": "Both proposals are known, and \"first\" makes it specific → the. \"A\" would be a new, unknown proposal; here both have already been mentioned."
 },
 {
 "topic": "articles",
@@ -2771,8 +2812,8 @@
 "–"
 ],
 "answer": "a",
-"expl": "Neu eingeführt, einer von vielen → a/an. „a“, weil „new“ mit Konsonantenlaut beginnt.",
-"expl_en": "Newly introduced, one of many → a/an. \"a\" because \"new\" starts with a consonant sound."
+"expl": "Neu eingeführt, einer von vielen → a/an. „a“, weil „new“ mit Konsonantenlaut beginnt. „the“ passt nicht, weil die Stelle neu ist und noch niemand weiß, wer gemeint ist.",
+"expl_en": "Newly introduced, one of many → a/an. \"a\" because \"new\" starts with a consonant sound. \"the\" does not fit, because the position is new and nobody knows yet which one is meant."
 },
 {
 "topic": "articles",
@@ -2799,8 +2840,8 @@
 "an"
 ],
 "answer": "the",
-"expl": "Superlative (best) stehen mit „the“.",
-"expl_en": "Superlatives (best) take \"the\"."
+"expl": "Superlative (best) stehen mit „the“. „a“ geht bei Superlativen nicht: Das Beste ist einzigartig.",
+"expl_en": "Superlatives (best) take \"the\". \"a\" does not work with superlatives: the best one is unique."
 },
 {
 "topic": "articles",
@@ -2813,8 +2854,8 @@
 "–"
 ],
 "answer": "an",
-"expl": "Nach dem Klang entscheidet es: „MBA“ beginnt mit dem Vokallaut /em/ → an.",
-"expl_en": "It depends on the sound: \"MBA\" starts with the vowel sound /em/ → an."
+"expl": "Nach dem Klang entscheidet es: „MBA“ beginnt mit dem Vokallaut /em/ → an. „a“ wäre falsch, obwohl „M“ ein Konsonantenbuchstabe ist: Es zählt der Laut.",
+"expl_en": "It depends on the sound: \"MBA\" starts with the vowel sound /em/ → an. \"a\" would be wrong, although \"M\" is a consonant letter: the sound counts."
 },
 {
 "topic": "articles",
@@ -2836,7 +2877,11 @@
 "prompt": "A: Did you get my email? B: Yes, but ___ attachment was empty.",
 "answer": "the",
 "expl": "Der Anhang gehört zu dieser bekannten E-Mail → the.",
-"expl_en": "The attachment belongs to that known email → the."
+"expl_en": "The attachment belongs to that known email → the.",
+"accepted": [
+"your",
+"that"
+]
 },
 {
 "topic": "articles",

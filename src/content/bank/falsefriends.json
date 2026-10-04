@@ -3,7 +3,7 @@
 "de": "aktuell",
 "wrong": "actual",
 "right": "current",
-"prompt": "Our ___ pricing model is valid until the end of the year.",
+"prompt": "Is this the ___ version of the contract, or is there a newer one?",
 "answer": "current",
 "options": [
 "current",
@@ -17,7 +17,7 @@
 "de": "eventuell",
 "wrong": "eventually",
 "right": "possibly",
-"prompt": "We ___ need a second developer, but nothing is decided yet.",
+"prompt": "I might ___ be a bit late tomorrow, but I'm not sure yet.",
 "answer": "possibly",
 "options": [
 "possibly",
@@ -227,7 +227,7 @@
 "de": "brav",
 "wrong": "brave",
 "right": "well-behaved",
-"prompt": "Our daughter was very ___ at the restaurant.",
+"prompt": "Our two kids were very ___ during the long dinner – they sat quietly the whole time.",
 "answer": "well-behaved",
 "options": [
 "well-behaved",
@@ -339,7 +339,7 @@
 "de": "Rente",
 "wrong": "rent",
 "right": "pension",
-"prompt": "He retired last year and now lives on his ___.",
+"prompt": "He retired last year and now lives on a small ___ from the company.",
 "answer": "pension",
 "options": [
 "pension",
@@ -347,7 +347,7 @@
 "rental"
 ],
 "expl": "„rent“ ist die Miete. Die Rente ist the pension.",
-"expl_en": "\"rent\" is what you pay for a flat. The Rente is the pension."
+"expl_en": "\"rent\" is what you pay for an apartment. The Rente is the pension."
 },
 {
 "de": "genial",
@@ -556,7 +556,7 @@
 "gymnasium",
 "gym"
 ],
-"expl": "„gymnasium“ ist eine Sporthalle. Das Gymnasium ist (in den USA) high school.",
-"expl_en": "\"gymnasium\" is a sports hall. A German Gymnasium is a high school (in the US)."
+"expl": "„gymnasium“ ist im Englischen eine Sporthalle (als Schulform nur ein Fachwort). Das deutsche Gymnasium heißt in den USA high school.",
+"expl_en": "\"gymnasium\" is a sports hall in English (as a type of school it is only a technical term). A German Gymnasium is called a high school in the US."
 }
 ]
