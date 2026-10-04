@@ -309,6 +309,11 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
   - Er liest nur `coach/summary` und schreibt `input/<morgen>` mit zwei Beiträgen auf dem Test-Link.
   - Er ist **pausiert**, bis Emrah ihn einschaltet (seine Antwort „ja“ zum Pausieren).
 
+**05.10.2026 – Fertigbau mit Helfern (Emrahs ausdrückliche Erlaubnis)**
+- Emrah will die App **komplett fertig** mit allen Bausteinen und erlaubt Helfer-Agenten und eigene Kontextfenster. Das hebt die Regel „keine Helfer-Agenten“ vom 04.10. für diese Runde auf.
+- Dazu ein **Test-Link ohne lange Einstufung**: Testwerkzeuge nur im Test-Build (`LX_TEST=1`), nie in der Fassung für `JLL8…`.
+- Karten liegen in **32** Teilstücken (`coach/cards-0…31`). Bei 14.000 Karten sind das ~110 KiB je Dokument, Grenze 256 KiB. Steht dieselbe Karte in zwei Teilstücken, gewinnt die zuletzt geübte.
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.

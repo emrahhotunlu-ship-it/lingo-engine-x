@@ -7,7 +7,8 @@ import type { FsrsStored } from '../data/schemas';
 //   coach/days-JJJJ      Tageswerte ({d: {JJJJ-MM-TT: DayRec}})
 // Die Dokumente der alten App werden nur gelesen, nie geändert.
 
-export const CARD_SHARDS = 8;
+// 32 Teilstücke: auch bei 14.000 Karten bleibt jedes Dokument bei ~110 KiB (Grenze 256 KiB, db.d.ts).
+export const CARD_SHARDS = 32;
 
 export type CardSource = 'bank' | 'legacy' | 'user';
 

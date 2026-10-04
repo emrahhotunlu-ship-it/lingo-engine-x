@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { hash32 } from '../../src/domain/random';
+import { shardOf } from '../../src/coach/store';
 import { boot, layoutProblems, placedProfile, playSession } from './fixtures';
 
 // Kernabläufe des neuen Trainers (docs/neustart.md) gegen den echten Produktions-Build.
@@ -81,7 +81,7 @@ test('Lücke: richtige Antwort wird als richtig gewertet', async ({ page }) => {
     f: { v: 1, due, stability: 3, difficulty: 5, state: 2, reps: 3, lapses: 0, last: due - 3 * 86_400_000, scheduledDays: 3, learningSteps: 0, src: 'lx' },
   };
   await boot(page, {
-    fake: { seed: 'empty', patch: { 'coach/profile': placedProfile({ newPerDay: 5 }), [`coach/cards-${hash32('negotiate') % 8}`]: { c: { negotiate: card } } } },
+    fake: { seed: 'empty', patch: { 'coach/profile': placedProfile({ newPerDay: 5 }), [shardOf('negotiate')]: { c: { negotiate: card } } } },
   });
   await page.getByTestId('start-training').click();
   const exercise = page.getByTestId('exercise');

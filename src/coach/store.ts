@@ -102,8 +102,12 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
       if (!c || typeof c !== 'object') continue;
       for (const [cid, raw] of Object.entries(c as Record<string, unknown>)) {
         const r = cardSchema.safeParse(raw);
-        if (r.success) cards.set(cid, r.data);
-        else invalid.push(`${path}#${cid}`);
+        if (!r.success) invalid.push(`${path}#${cid}`);
+        else {
+          // Dieselbe Karte in zwei Teilstücken (alte Aufteilung): die zuletzt geübte gewinnt.
+          const old = cards.get(cid);
+          if (!old || (r.data.f.last ?? 0) >= (old.f.last ?? 0)) cards.set(cid, r.data);
+        }
       }
     } else if (id === 'grammar') {
       const t: Record<string, TopicState> = {};
