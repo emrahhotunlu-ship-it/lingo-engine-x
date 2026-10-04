@@ -7,7 +7,6 @@ export const aiDe = {
   aiSlow: 'Das dauert länger als üblich. Du kannst warten oder abbrechen.',
   aiStop: 'Stopp',
   aiRetry: 'Erneut versuchen',
-  aiRetryIn: 'Erneut versuchen in {n} s',
   aiUnavailable: 'Claude ist in dieser Ansicht nicht verfügbar.',
   aiBusy: 'Claude ist gerade ausgelastet. Versuch es in einer Minute noch einmal.',
   aiSignin: 'Deine Anmeldung bei claude.ai ist abgelaufen. Melde dich neu an und versuch es dann noch einmal.',

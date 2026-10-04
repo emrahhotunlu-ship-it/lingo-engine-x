@@ -15,7 +15,6 @@ import { engineDe } from './parts/engine.de';
 import { hintDe } from './parts/hint.de';
 import { sayDe } from './parts/say.de';
 import { fluencyDe } from './parts/fluency.de';
-import { meetingDe } from './parts/meeting.de';
 import { c1De } from './parts/c1.de';
 import { tonesDe } from './parts/tones.de';
 import { repairDe } from './parts/repair.de';
@@ -26,7 +25,6 @@ import { nbShDe } from './parts/nbSh.de';
 import { nbHeuteDe } from './parts/nbHeute.de';
 import { nbLernenDe } from './parts/nbLernen.de';
 import { nbWsDe } from './parts/nbWs.de';
-import { nbLesenDe } from './parts/nbLesen.de';
 import { nbSprechenDe } from './parts/nbSprechen.de';
 import { nbProfilDe } from './parts/nbProfil.de';
 import { nbTrainingDe } from './parts/nbTraining.de';
@@ -56,7 +54,6 @@ export const de = {
   ...sayDe,
   // Lernberatung 27.09.: Flüssigkeit 90 – 60 – 45, „Mein nächster Termin“
   ...fluencyDe,
-  ...meetingDe,
   // Lernberatung 27.09.: C1-Werkzeugkasten, Eine Botschaft – drei Tonlagen
   ...c1De,
   ...tonesDe,
@@ -73,7 +70,6 @@ export const de = {
   ...nbHeuteDe,
   ...nbLernenDe,
   ...nbWsDe,
-  ...nbLesenDe,
   ...nbSprechenDe,
   ...nbProfilDe,
   ...nbTrainingDe,

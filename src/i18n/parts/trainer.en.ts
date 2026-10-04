@@ -26,7 +26,6 @@ export const trainerEn: Record<keyof typeof trainerDe, string> = {
   trReplay: 'Listen again',
   trTilesLine: 'Your answer',
   trTilesPool: 'Pieces',
-  trSpotMeaning: 'Meaning: {meaning}',
   trSpotLabel: 'Sentence – tap a word',
   trSpeedBar: 'Time left',
   trTimeUp: 'Time is up',

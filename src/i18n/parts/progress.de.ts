@@ -11,27 +11,14 @@ export const progressDe = {
   actVocabReview: 'Karten wiederholen',
   actVocabLeech: 'Hartnäckige Wörter',
   actChunks: 'Wendungen',
-  actWrite: 'Schreiben',
-  actRead: 'Lesen',
-  actListen: 'Hören',
-  actDictate: 'Diktat',
   actCloze: 'Lückenjagd',
   actOrder: 'Satzbau',
-  actSprint: 'Sprint',
-  actDiscover: 'Entdecken',
-  actSpeak: 'Rollenspiel',
-  actBizEmail: 'E-Mail-Refiner',
-  actBizNego: 'Verhandlungs-Baukasten',
-  actBizPresent: 'Präsentations-Coach',
   actLesson: 'Lektion: {title}',
   actPractice: 'Üben',
 
   // Dein Stand
-  progLead: 'Claudes Urteil über dein Niveau, deine Fehler, dein Weg nach C1 und dein Verlauf.',
   progTabs: 'Bereiche',
   progJudge: 'Urteil',
-  progErrors: 'Fehler',
-  progPath: 'Ziel C1',
   progHistory: 'Verlauf',
 
   // Urteil (Kap. 5)
@@ -95,24 +82,8 @@ export const progressDe = {
   src_s: 'Sprint',
   src_k: 'Rollenspiel',
   src_b: 'Business',
-  rc_tense: 'Zeitformen',
-  rc_cond: 'Bedingungssätze',
-  rc_verbform: 'Verbformen',
-  rc_pattern: 'Verbmuster',
-  rc_modals: 'Modalverben',
-  rc_passive: 'Passiv',
-  rc_reported: 'Indirekte Rede',
-  rc_relative: 'Relativsätze',
-  rc_articles: 'Artikel',
-  rc_prep: 'Präpositionen',
-  rc_order: 'Wortstellung',
-  rc_wordchoice: 'Wortwahl',
-  rc_register: 'Register',
-  rc_spelling: 'Rechtschreibung',
-
   // Weg nach C1
   canDoTitle: 'Was du auf dem Weg nach C1 können sollst',
-  canDoCount: '{done} von {total} geschafft',
   canDoMore_one: '{n} weiterer offener Punkt',
   canDoMore_other: '{n} weitere offene Punkte',
   canDoReached_one: '{n} erreicht',
@@ -131,9 +102,6 @@ export const progressDe = {
   vgPace: 'bei {n} neuen Wörtern pro Woche',
 
   // Verlauf
-  vtestStart: 'Wortschatztest starten · etwa 8 Min.',
-  vtestDue: 'Dein letzter Test ist über 8 Wochen alt – Zeit für eine neue Messung.',
-  vtestLast: 'Letzter Test am {date}: passiv etwa {p} Wörter',
   weeklyTitle: 'Was du letzte Woche wirklich dazugelernt hast',
   weeklyRange: 'Woche vom {from} bis {to}',
   weeklyEmpty: 'In dieser Woche wurde noch nichts festgehalten.',
@@ -183,8 +151,6 @@ export const progressDe = {
   msBkt: 'Grammatik (Beherrschung)',
   msLast10: 'Letzte 10',
   msDue: 'Fällig',
-  msLoading: 'Messwerte werden geladen',
-
   // Wortschatztest (Plan §8)
   vtTitle: 'Wortschatztest',
   vtIntro: 'Drei kurze Teile: Kennst du das Wort? · Was bedeutet es? · Schreib es selbst. Einige Wörter sind erfunden – sag dort ehrlich „Kenne ich nicht".',
@@ -216,7 +182,6 @@ export const progressDe = {
   vtCancelled: 'Test abgebrochen – es wurde nichts gespeichert.',
 
   // Einstellungen (Kap. 6.14)
-  settingsLearning: 'Lernen',
   setNewPerDay: 'Neue Wörter pro Tag',
   setNewPerDayHint: 'Höchstens so viele. Ist viel zu wiederholen, kommen weniger neue Wörter, mindestens 2 am Tag.',
   setGoalMin: 'Tagesziel in Minuten',

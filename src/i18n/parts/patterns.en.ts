@@ -28,7 +28,6 @@ export const patternsEn = {
   ptClose: 'Back to “Your progress”',
   ptDrillTitle: 'Quick drill',
   ptDrillStatus: 'Task {n} of {total}',
-  ptDrillStart: 'Start quick drill',
   ptFreeKind: 'New sentence',
   ptFreeTask: 'Write a sentence of your own – without falling into the trap.',
   ptFreePurpose: 'A form only sticks once you use it freely yourself. The task deliberately sets up the trap.',

@@ -3,7 +3,6 @@
 export const standEn = {
   // Weekly check (M10)
   ckTitle: 'Weekly check',
-  ckLead: '12 mixed tasks without hints – words, phrases and grammar. Optional, once a week; it never counts toward today’s required tasks.',
   ckOfferSub: '12 tasks without hints · once a week',
   ckStart: 'Start check',
   ckClose: 'End check',
@@ -66,8 +65,6 @@ export const standEn = {
   wkFuture: 'still to come',
   lvTitle: 'Level',
   lvCaption: 'Claude’s level {level} · {conf}',
-  lvNone: 'Your level appears here after Claude’s first assessment.',
-
   // Settings: color theme (M21) and work context (M22)
   setPalette: 'Color theme',
   palette_sage: 'Sage',
@@ -89,30 +86,15 @@ export const standEn = {
   lateTodayOpen: 'View',
 
   // M13: busy dot on the tab
-  tabBusy: 'Claude is correcting in the background',
-
   // M20: what's new
-  wnTitle: 'New:',
-  wnLead: 'weekly check, week strip, color themes and more.',
-  wnMore: 'More',
-  wnLess: 'Less',
-  wnClose: 'Close notice',
-  wnCheck: 'Weekly check: 12 tasks without hints, once a week – under “Where you stand” › History and on Today once your required tasks are done.',
-  wnWeek: '“Where you stand” now shows your week as seven rings and Claude’s level on a scale; History also lists your old weekly checks.',
-  wnSettings: 'In the settings: color theme (Sage, Ocean, Plum, Graphite) and your work context.',
-  wnTeacher: 'New: add teacher feedback – your notes become flashcards and a practice round.',
-
   // UX review no. 6, 10, 11: standing, vocabulary, settings
   ckTableToggle: 'Previous checks ({n})',
   feedRows_one: '{n} entry',
   feedRows_other: '{n} entries',
   vtestTitle: 'Vocabulary test',
   vtestNever: 'Not measured yet.',
-  vtestGo: 'Start · 8 min',
   histTraceTitle: 'Assessments and milestones',
   setGroupLearn: 'Learning',
-  setGroupLook: 'Look and sound',
-  setGroupData: 'Data and tech',
   diagVersion: 'Version {v}',
   vcSortToggle: 'Change sort order, now: {sort}',
 } as const;

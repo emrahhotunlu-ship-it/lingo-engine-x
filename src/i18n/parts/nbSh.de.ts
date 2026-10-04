@@ -4,12 +4,9 @@
 export const nbShDe = {
   nbShTabToday: 'Heute',
   nbShTabVocab: 'Wortschatz',
-  nbShTabRead: 'Lesen',
-  nbShTabSpeak: 'Sprechen',
   nbShTabLearn: 'Grammatik',
   nbShTabProgress: 'Fortschritt',
   nbShProfile: 'Profil und Stand',
-  nbShReviewSub: 'Deine fälligen Karten',
   nbShFbOk: 'Richtig',
   nbShFbClose: 'Fast richtig',
   nbShFbWrong: 'Noch nicht richtig',
@@ -46,12 +43,6 @@ export const nbShDe = {
   nbShBack: 'Zurück',
   nbShBackTo: 'Zurück zu {title}',
   nbShSaved: 'Gespeichert. Du kannst jederzeit weitermachen.',
-  nbShDuty: 'Pflicht',
-  nbShExtra: 'Extra',
-  nbShStepDone: 'erledigt',
-  nbShStepNow: 'jetzt',
-  nbShStepOpen: 'offen',
-  nbShGrades: 'Wie gut wusstest du es?',
   // WP0b: Fehlergrenzen und Aktionen
   nbShErrRoot: 'Etwas ist schiefgelaufen.',
   nbShErrRootSub: 'Dein Lernstand ist gespeichert. Nach dem Neuladen geht es an derselben Stelle weiter.',
@@ -66,7 +57,6 @@ export const nbShDe = {
   nbShErrSkip: 'Diese Aufgabe überspringen',
   nbShErrEnd: 'Übung beenden',
   nbShErrStep: 'Diese Aufgabe konnte nicht angezeigt werden.',
-  nbShActionFailed: 'Das hat nicht geklappt. Bitte noch einmal versuchen.',
   // WP0b: Fortsetzen
   nbShResume: 'Weitermachen: {label}',
   nbShResumeOther: 'In einem anderen Fenster geöffnet – hier weitermachen?',

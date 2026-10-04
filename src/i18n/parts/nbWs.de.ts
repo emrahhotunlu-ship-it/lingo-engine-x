@@ -24,8 +24,6 @@ export const nbWsDe = {
   nbWsCalib: 'Bei „Leicht“ lagst du zuletzt {hits} von {pairs} Mal richtig. Im Zweifel „Gut“.',
   nbWsCollocations: 'Typische Verbindungen',
   nbWsGapLabel: 'Lücke mit {n} Buchstaben',
-  nbWsMeaning: 'Bedeutung',
-  nbWsInSentence: 'Im Satz',
   // Wortschatz-Wurzel
   nbWsTitle: 'Wortschatz',
   nbWsSearch: 'Wort oder Wendung suchen',
@@ -52,7 +50,6 @@ export const nbWsDe = {
   nbWsModeFlip: 'Aufdecken',
   nbWsModeType: 'Tippen',
   nbWsReview: 'Wiederholen',
-  nbWsReviewDuty: 'Zählt zur Tagesaufgabe',
   nbWsNothingDue: 'Für heute ist alles wiederholt.',
   nbWsForecast: 'Die nächsten 7 Tage',
   nbWsTomorrow: 'Morgen',
@@ -89,7 +86,6 @@ export const nbWsDe = {
   nbWsStateIn: 'in {n} T.',
   // Stapel-Seite
   nbWsStart: 'Lernen',
-  nbWsStartN: 'Lernen · {n}',
   nbWsDeckCards_one: '{n} Karte',
   nbWsDeckCards_other: '{n} Karten',
   nbWsDeckEmpty: 'Keine Karten in diesem Stapel.',
@@ -109,7 +105,6 @@ export const nbWsDe = {
   nbWsKindVocab: 'Wörter',
   nbWsKindChunk: 'Wendungen',
   nbWsFilterHard: 'Nur schwierige',
-  nbWsFilterDue: 'Nur fällige und neue',
   nbWsFilterQuery: 'Enthält (Wort oder Bedeutung)',
   nbWsSrc_lookup: 'Nachgeschlagen',
   nbWsSrc_read: 'Lesen',
@@ -206,8 +201,6 @@ export const nbWsDe = {
   // Fortsetzen
   nbWsResume: '{deck} · Karte {n} von {total}',
   // Karten-Fehler (Fehlergrenze)
-  nbWsCardBroken: 'Diese Karte konnte nicht angezeigt werden.',
-  nbWsSkip: 'Überspringen',
   // Rückgängig (B4)
   nbWsUndo: 'Rückgängig',
   nbWsUndoRated: 'Bewertet:',

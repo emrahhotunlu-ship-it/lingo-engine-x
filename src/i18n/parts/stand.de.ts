@@ -4,7 +4,6 @@
 export const standDe = {
   // Wochen-Check (M10)
   ckTitle: 'Wochen-Check',
-  ckLead: '12 gemischte Aufgaben ohne Tipps – Wörter, Wendungen und Grammatik. Freiwillig, einmal pro Woche; zählt nicht zur Pflicht.',
   ckOfferSub: '12 Aufgaben ohne Tipps · einmal pro Woche',
   ckStart: 'Check starten',
   ckClose: 'Check beenden',
@@ -67,8 +66,6 @@ export const standDe = {
   wkFuture: 'kommt noch',
   lvTitle: 'Niveau',
   lvCaption: 'Claudes Stufe {level} · {conf}',
-  lvNone: 'Das Niveau erscheint hier nach Claudes erster Einschätzung.',
-
   // Einstellungen: Farbthema (M21) und beruflicher Kontext (M22)
   setPalette: 'Farbthema',
   palette_sage: 'Salbei',
@@ -90,30 +87,15 @@ export const standDe = {
   lateTodayOpen: 'Ansehen',
 
   // M13: Ladepunkt am Reiter
-  tabBusy: 'Claude korrigiert gerade im Hintergrund',
-
   // M20: Was ist neu
-  wnTitle: 'Neu:',
-  wnLead: 'Wochen-Check, Wochenstreifen, Farbthemen und mehr.',
-  wnMore: 'Mehr',
-  wnLess: 'Weniger',
-  wnClose: 'Hinweis schließen',
-  wnCheck: 'Wochen-Check: 12 Aufgaben ohne Tipps, einmal pro Woche – unter „Dein Stand" › Verlauf und nach der Pflicht auf „Heute".',
-  wnWeek: '„Dein Stand" zeigt oben deine Woche als sieben Ringe und Claudes Niveau auf einer Skala; im Verlauf stehen jetzt auch die alten Wochen-Checks.',
-  wnSettings: 'In den Einstellungen: Farbthema (Salbei, Ozean, Pflaume, Graphit) und dein beruflicher Kontext.',
-  wnTeacher: 'Neu: Lehrer-Feedback einfügen – aus den Notizen deines Lehrers werden Karten und eine Übung.',
-
   // UX-Beratung Nr. 6, 10, 11: Stand, Wortschatz, Einstellungen
   ckTableToggle: 'Bisherige Checks ({n})',
   feedRows_one: '{n} Eintrag',
   feedRows_other: '{n} Einträge',
   vtestTitle: 'Wortschatztest',
   vtestNever: 'Noch nicht gemessen.',
-  vtestGo: 'Starten · 8 Min.',
   histTraceTitle: 'Einschätzungen und Meilensteine',
   setGroupLearn: 'Lernen',
-  setGroupLook: 'Aussehen und Ton',
-  setGroupData: 'Daten und Technik',
   diagVersion: 'Version {v}',
   vcSortToggle: 'Sortierung wechseln, jetzt: {sort}',
 } as const;

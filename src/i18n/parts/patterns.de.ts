@@ -28,7 +28,6 @@ export const patternsDe = {
   ptClose: 'Zurück zu „Dein Stand“',
   ptDrillTitle: 'Kurzdrill',
   ptDrillStatus: 'Aufgabe {n} von {total}',
-  ptDrillStart: 'Kurzdrill starten',
   ptFreeKind: 'Neuer Satz',
   ptFreeTask: 'Bilde einen eigenen Satz – ohne in die Falle zu tappen.',
   ptFreePurpose: 'Erst wenn du die richtige Form selbst frei benutzt, sitzt sie. Die Aufgabe lockt die Falle bewusst hervor.',

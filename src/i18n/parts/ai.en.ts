@@ -8,7 +8,6 @@ export const aiEn: Record<AiMessageKey, string> = {
   aiSlow: 'This is taking longer than usual. You can wait or stop.',
   aiStop: 'Stop',
   aiRetry: 'Try again',
-  aiRetryIn: 'Try again in {n} s',
   aiUnavailable: 'Claude is not available in this view.',
   aiBusy: 'Claude is busy right now. Try again in a minute.',
   aiSignin: 'Your claude.ai session has expired. Sign in again, then try once more.',

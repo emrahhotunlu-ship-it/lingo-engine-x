@@ -24,7 +24,6 @@ export const trainerDe = {
   trReplay: 'Nochmal hören',
   trTilesLine: 'Deine Antwort',
   trTilesPool: 'Bausteine',
-  trSpotMeaning: 'Bedeutung: {meaning}',
   trSpotLabel: 'Satz – tippe auf ein Wort',
   trSpeedBar: 'Verbleibende Zeit',
   trTimeUp: 'Zeit abgelaufen',

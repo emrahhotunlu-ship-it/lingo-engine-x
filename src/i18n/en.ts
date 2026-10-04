@@ -13,7 +13,6 @@ import { engineEn } from './parts/engine.en';
 import { hintEn } from './parts/hint.en';
 import { sayEn } from './parts/say.en';
 import { fluencyEn } from './parts/fluency.en';
-import { meetingEn } from './parts/meeting.en';
 import { c1En } from './parts/c1.en';
 import { tonesEn } from './parts/tones.en';
 import { repairEn } from './parts/repair.en';
@@ -24,7 +23,6 @@ import { nbShEn } from './parts/nbSh.en';
 import { nbHeuteEn } from './parts/nbHeute.en';
 import { nbLernenEn } from './parts/nbLernen.en';
 import { nbWsEn } from './parts/nbWs.en';
-import { nbLesenEn } from './parts/nbLesen.en';
 import { nbSprechenEn } from './parts/nbSprechen.en';
 import { nbProfilEn } from './parts/nbProfil.en';
 import { nbTrainingEn } from './parts/nbTraining.en';
@@ -55,7 +53,6 @@ export const en: Record<MessageKey, string> = {
   ...sayEn,
   // Learning review 09/27: Fluency 90 – 60 – 45, "My next meeting"
   ...fluencyEn,
-  ...meetingEn,
   // Learning review 09/27: C1 toolkit, one message – three tones
   ...c1En,
   ...tonesEn,
@@ -71,7 +68,6 @@ export const en: Record<MessageKey, string> = {
   ...nbHeuteEn,
   ...nbLernenEn,
   ...nbWsEn,
-  ...nbLesenEn,
   ...nbSprechenEn,
   ...nbProfilEn,
   ...nbTrainingEn,
