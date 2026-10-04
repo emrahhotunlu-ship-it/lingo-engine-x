@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect } from 'react';
 import { useNav } from '../../app/nav';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
+import { Button } from '../../ui/Button';
 import { useT, type MessageKey } from '../../i18n';
 import { stopSpeech } from '../../platform/speech';
 import { Icon } from '../../ui/Icon';
@@ -11,7 +12,7 @@ import { flush } from '../progress/persist';
 import { RoundTop, SummaryActions } from '../learn/ui';
 import { ClozeItemView, DictationItem, OrderItemView } from './DrillItems';
 import { ensureDrill } from './resume';
-import { skipDrill, commitDrill, itemsOf, leaveDrill, touchDrill, useDrill } from './session';
+import { skipDrill, commitDrill, itemsOf, leaveDrill, reportDrillDone, touchDrill, useDrill } from './session';
 import { SprintView } from './SprintView';
 import { StepBoundary } from '../../app/shell/Boundary';
 import { useCompanionSee } from '../companion/seeing';
@@ -97,7 +98,15 @@ export function DrillScreen() {
                   ))}
                 </ul>
               )}
-              <SummaryActions onBack={leaveDrill} backTo={{ name: 'learn' }} backLabel={t('lrBackToLearn')} />
+              {s.block ? (
+                <div>
+                  <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={reportDrillDone} data-testid="summary-next">
+                    {t('nbShNext')}
+                  </Button>
+                </div>
+              ) : (
+                <SummaryActions onBack={leaveDrill} backTo={{ name: 'learn' }} backLabel={t('lrBackToLearn')} />
+              )}
             </article>
           )}
         </motion.div>

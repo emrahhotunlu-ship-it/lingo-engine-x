@@ -60,8 +60,8 @@ export function runningTabs(tasks: Readonly<Record<string, AiTask>>): Set<TabNam
   for (const t of Object.values(tasks)) {
     if (t.status !== 'running') continue;
     const r = t.route;
+    // Ohne Reiter „Lesen“ (seit 04.10.2026) zeigt nur noch „Heute“ den Ladepunkt.
     if ('ctx' in r && r.ctx === 'duty') out.add('today');
-    else out.add('read');
   }
   return out;
 }

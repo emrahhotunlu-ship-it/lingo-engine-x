@@ -1,4 +1,3 @@
-import { isoWeek } from '../date';
 import { themeFor } from './theme';
 import type {
   UnitBlock,
@@ -11,7 +10,6 @@ import type {
   UnitShape,
   UnitStep,
   WeekDoc,
-  WeekTheme,
 } from './types';
 
 // Wochenplan der Tageseinheit (Plan §1.5, N10/N12; Prüfung Tageseinheit M2, M3, M5, M7, M10, S1, S2, S5).
@@ -26,6 +24,13 @@ export const FULL_MIN = { review: 8, input: 5, task: 9, roleplay: 12, focus: 3, 
 /** Kurz-Einheit (M3): Tagesziel 10 → 3/5/2, Tagesziel 15–20 → 5/7/3. */
 export const SHORT_MIN = { tiny: { review: 3, task: 5, again: 2 }, short: { review: 5, task: 7, again: 3 } } as const;
 export const SUNDAY_MIN = { review: 5, check: 5 } as const;
+/**
+ * Vokabeln und Grammatik (Emrahs Vorgabe 04.10.2026): Wortschatz · Grammatik (Fehlerthemen, fällige Themen, Deutsch-Fallen)
+ * · Satzbau · Korrektur eigener falscher Sätze. Lesen, Hören, Sprech- und Schreibaufgaben sind nicht mehr Teil der Einheit.
+ */
+export const VG_MIN = { full: { review: 8, grammar: 7, order: 5, again: 3 }, short: { review: 5, grammar: 5, again: 2 }, tiny: { review: 3, grammar: 4, again: 2 } } as const;
+/** Hauptaufgaben im Grammatik-Block (Block 2). */
+export const GRAMMAR_N = { full: 6, short: 4, tiny: 3 } as const;
 /** Mehr als so viele Minuten plant Block 1 auch bei großem Rückstand nie (`domain/unit/backlog.ts`). */
 export const REVIEW_MIN_MAX = 15;
 export const LISTEN_WORDS: readonly [number, number] = [150, 180];
@@ -45,7 +50,6 @@ export function dowOf(day: string): number {
   return wd === 0 ? 7 : wd;
 }
 
-const isoWeekNo = (day: string): number => Number(isoWeek(day).slice(-2));
 
 const step = (kind: UnitBlockKind, opts: UnitBlockOpts = {}, then: readonly UnitBlockKind[] = []): UnitStep => ({
   kind,
@@ -55,48 +59,6 @@ const step = (kind: UnitBlockKind, opts: UnitBlockOpts = {}, then: readonly Unit
 
 function block(n: 1 | 2 | 3 | 4 | 5, s: UnitStep, min: number, channel: UnitChannel = CHANNEL[n]): UnitBlock {
   return { block: n, kind: s.kind, steps: s.steps, opts: s.opts, min, channel };
-}
-
-/** Block 2 laut Wochenplan (M7); null an Tagen ohne Input (Sa, So). */
-function inputStep(dow: number, day: string, theme: WeekTheme): UnitStep | null {
-  switch (dow) {
-    case 1:
-      return step('input.read', { src: 'theme-text' }, ['pron.shadow']);
-    case 2:
-      return step('input.listen', { src: 'theme-listen', words: LISTEN_WORDS, ladder: true }, ['pron.shadow']);
-    case 3:
-      // Ungerade Kalenderwoche: die Mail ist der Input. Gerade: Lesen (neuer Text statt Themen-Text vom Montag).
-      return isoWeekNo(day) % 2 === 1 ? step('task.inbox', { src: 'inbox', part: 'read' }) : step('input.read', { src: 'feed' }, ['pron.shadow']);
-    case 4:
-      return step('input.listen', { src: 'dialog', words: LISTEN_WORDS, ladder: true }, ['pron.shadow']);
-    case 5:
-      // In Berufswochen Alltags-Input (Mischung Beruf/Alltag, M7).
-      return step('input.read', { src: theme.kind === 'job' ? 'feed-life' : 'feed' }, ['pron.shadow']);
-    default:
-      return null;
-  }
-}
-
-/** Block 3 laut Wochenplan. `withInput`: Gibt es heute Block 2? (Posteingang sonst komplett in Block 3). */
-function taskStep(dow: number, day: string, theme: WeekTheme, prefs: UnitPrefs, short: boolean, withInput: boolean): UnitStep {
-  switch (dow) {
-    case 1:
-      return step('task.say', { aloud: true });
-    case 2:
-      return step('task.fluency', { question: theme.fluencyQ });
-    case 3:
-      return isoWeekNo(day) % 2 === 1 ? step('task.inbox', { src: 'inbox', part: withInput ? 'reply' : 'full' }) : step('task.tones');
-    case 4: {
-      const m = prefs.meetingInDays;
-      return typeof m === 'number' && m >= 0 && m <= 3 ? step('task.meeting', { rehearsal: true }) : step('task.objection');
-    }
-    case 5:
-      return step('task.fluency', { question: theme.fluencyQ, compare: 'tue' });
-    case 6:
-      return short ? step('task.objection', { short: true }) : step('task.roleplay', { scene: theme.scene });
-    default:
-      return step('task.check');
-  }
 }
 
 function normalGoal(v: unknown): number {
@@ -109,7 +71,6 @@ function normalGoal(v: unknown): number {
  */
 export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs: UnitPrefs = {}): UnitPlan {
   const pick = themeFor(day, week, prefs.themeHint);
-  const theme = pick.theme;
   const dow = dowOf(day);
   const goalMin = normalGoal(prefs.goalMin);
   const short = goalMin <= SHORT_GOAL_MAX;
@@ -126,21 +87,20 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
     blocks.push(block(1, step('review'), reviewMin(SUNDAY_MIN.review)));
     blocks.push(block(3, step('task.check'), SUNDAY_MIN.check, 'ch:u-check'));
   } else if (short) {
-    const m = goalMin <= 10 ? SHORT_MIN.tiny : SHORT_MIN.short;
+    const tiny = goalMin <= 10;
+    const m = tiny ? VG_MIN.tiny : VG_MIN.short;
     shape = 'short';
-    reviewSec = goalMin <= 10 ? REVIEW_SEC.tiny : REVIEW_SEC.short;
+    reviewSec = tiny ? REVIEW_SEC.tiny : REVIEW_SEC.short;
     blocks.push(block(1, step('review'), reviewMin(m.review)));
-    blocks.push(block(3, taskStep(dow, day, theme, prefs, true, false), m.task));
+    blocks.push(block(2, step('focus', { n: tiny ? GRAMMAR_N.tiny : GRAMMAR_N.short }), m.grammar, 'ch:u-focus'));
     blocks.push(block(5, step('again'), m.again));
   } else {
     shape = dow === 6 ? 'sat' : 'full';
     reviewSec = REVIEW_SEC.full;
-    blocks.push(block(1, step('review'), reviewMin(FULL_MIN.review)));
-    const input = inputStep(dow, day, theme);
-    if (input) blocks.push(block(2, input, FULL_MIN.input));
-    blocks.push(block(3, taskStep(dow, day, theme, prefs, false, !!input), dow === 6 ? FULL_MIN.roleplay : FULL_MIN.task));
-    blocks.push(block(4, step('focus'), FULL_MIN.focus));
-    blocks.push(block(5, step('again'), FULL_MIN.again));
+    blocks.push(block(1, step('review'), reviewMin(VG_MIN.full.review)));
+    blocks.push(block(2, step('focus', { n: GRAMMAR_N.full }), VG_MIN.full.grammar, 'ch:u-focus'));
+    blocks.push(block(3, step('task.order'), VG_MIN.full.order));
+    blocks.push(block(5, step('again'), VG_MIN.full.again));
   }
 
   // M2: Ist `goal.review` = 0, entfällt Block 1.

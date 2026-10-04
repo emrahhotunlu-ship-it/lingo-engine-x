@@ -18,6 +18,7 @@ export type UnitBlockKind =
   | 'task.meeting'
   | 'task.roleplay'
   | 'task.check'
+  | 'task.order'
   | 'focus'
   | 'focus.colloc'
   | 'again';
@@ -57,6 +58,8 @@ export type UnitBlockOpts = {
   short?: boolean;
   /** Business-Szene zum Thema (Rollenspiel). */
   scene?: string;
+  /** Grammatik-Block (Fokus als Block 2): Zahl der Hauptaufgaben. */
+  n?: number;
 };
 
 export type UnitChannel = 'review' | 'ch:u-in' | 'ch:u-task' | 'ch:u-focus' | 'ch:u-again' | 'ch:u-check';

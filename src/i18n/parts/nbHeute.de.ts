@@ -18,8 +18,10 @@ export const nbHeuteDe = {
   nbHeuteBlock_input: 'Input',
   nbHeuteBlock_task: 'Aufgabe',
   nbHeuteBlock_focus: 'Fokus',
-  nbHeuteBlock_again: 'Nochmal, aber besser',
+  nbHeuteBlock_again: 'Fehler korrigieren',
   nbHeuteBlock_check: 'Wochen-Check',
+  nbHeuteBlock_grammar: 'Grammatik',
+  nbHeuteBlock_order: 'Satzbau',
   // Grund je Block (eine kurze Zeile)
   nbHeuteWhy_review: '{n} Karten · Wochenthema zuerst',
   nbHeuteWhy_reviewBehind: '{n} Karten · Rückstand, der Rest morgen',
@@ -38,8 +40,10 @@ export const nbHeuteDe = {
   nbHeuteWhy_roleplay: 'Rollenspiel zum Thema',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
+  nbHeuteWhy_grammar: 'Deine Fehlerthemen, fällige Grammatik und typische Deutsch-Fallen',
+  nbHeuteWhy_order: 'Wörter und Grammatik im ganzen Satz anwenden',
   nbHeuteWhy_colloc: 'Kollokationen zum Thema selbst tippen',
-  nbHeuteWhy_again: 'Einen Satz aus dem Kopf besser formulieren',
+  nbHeuteWhy_again: 'Deine falschen Sätze von früher richtig schreiben',
   // Fertig-Zustand (N15)
   nbHeuteDoneTitle: 'Fertig für heute',
   nbHeuteDoneStats: '{min} Min. · {blocks} von {blocks} Blöcken · {answers} Antworten, {pct} % richtig',
@@ -140,4 +144,5 @@ export const nbHeuteDe = {
   nbHeuteDay5: 'Fr',
   nbHeuteDay6: 'Sa',
   nbHeuteDay7: 'So',
+  nbHeuteSpeakExtra: 'Sprechen üben (freiwillig)',
 } as const;

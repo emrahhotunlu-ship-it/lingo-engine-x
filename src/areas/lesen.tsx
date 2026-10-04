@@ -39,7 +39,8 @@ function InputRoute({ route }: { route: InputRouteT }) {
 export const lesen = defineArea({
   id: 'lesen',
   screens: {
-    library: { kind: 'tab', component: LibraryScreen, title: 'nbShTabRead', keepScroll: true },
+    // Seit 04.10.2026 kein Reiter mehr (Fokus Vokabeln und Grammatik): nur noch als Seite erreichbar.
+    library: { kind: 'page', component: LibraryScreen, title: 'nbShTabRead', keepScroll: true, chrome: 'shell' },
     discover: { kind: 'page', component: InputRoute, title: 'ch_discover', keepScroll: true },
     history: { kind: 'page', component: InputRoute, params: z.object({ kind: z.enum(['read', 'listen', 'write', 'discover']) }) },
     read: { kind: 'exercise', component: InputRoute, params: z.object({ ctx, id: z.string().min(1).optional(), mode: z.enum(['own', 'gen']).optional() }) },

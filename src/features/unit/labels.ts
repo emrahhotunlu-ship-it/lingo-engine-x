@@ -43,7 +43,9 @@ export function blockWhy(b: Pick<UnitBlock, 'block' | 'kind' | 'opts'>, t: T, re
     case 'focus.colloc':
       return b.block === 3 ? t('nbHeuteWhy_colloc') : t('nbHeuteWhy_focus');
     case 'focus':
-      return t('nbHeuteWhy_focus');
+      return b.block === 2 ? t('nbHeuteWhy_grammar') : t('nbHeuteWhy_focus');
+    case 'task.order':
+      return t('nbHeuteWhy_order');
     case 'again':
       return t('nbHeuteWhy_again');
   }

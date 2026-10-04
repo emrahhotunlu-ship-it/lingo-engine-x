@@ -64,10 +64,11 @@ export type FocusFirst = 'typed' | 'choice' | null;
 const inputOf = (t: FocusTask | undefined): FocusFirst => (!t ? null : t.kind !== 'grammar' ? null : t.task.type === 'mc' ? 'choice' : wholeSentence(t.task) ? null : 'typed');
 
 /** Aufgaben aus den Live-Daten von heute (auch für das Herstellen auf einem zweiten Gerät). */
-export function focusTasks(day: string, task: TaskLike | null, weekTraps: readonly string[] = []): FocusTask[] {
+export function focusTasks(day: string, task: TaskLike | null, weekTraps: readonly string[] = [], main?: number): FocusTask[] {
   const live = useLive.getState();
   return buildFocus({
     day,
+    ...(main ? { main } : {}),
     task,
     repairDoc: live.docs['app/repair'] ?? null,
     due: dueErrors(live.collections.grammar ?? new Map(), useClock.getState().now),
@@ -77,10 +78,10 @@ export function focusTasks(day: string, task: TaskLike | null, weekTraps: readon
 }
 
 /** Block 4 starten (synchron im Klick). `ctx` = aus der Tageseinheit; ohne `ctx` aus den Daten von heute. */
-export function startFocus(ctx: Pick<UnitCtx, 'day' | 'block' | 'task' | 'targets'> | null): FocusFirst {
+export function startFocus(ctx: Pick<UnitCtx, 'day' | 'block' | 'task' | 'targets' | 'opts'> | null): FocusFirst {
   const day = ctx?.day ?? useClock.getState().today;
   const task: TaskLike | null = ctx?.task ? { text: ctx.task.text, ...(ctx.task.better ? { better: ctx.task.better } : {}), fixes: ctx.task.fixes } : null;
-  const tasks = focusTasks(day, task, ctx?.targets.traps ?? []);
+  const tasks = focusTasks(day, task, ctx?.targets.traps ?? [], ctx?.opts?.n);
   useFocus.setState({
     ...initial(),
     active: true,

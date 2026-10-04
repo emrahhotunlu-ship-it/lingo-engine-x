@@ -47,7 +47,8 @@ const unitParam = z.object({ unit: z.number().int().min(1).max(5).optional() });
 export const sprechen = defineArea({
   id: 'sprechen',
   screens: {
-    speak: { kind: 'tab', component: SpeakRoot, title: 'tabSpeak', keepScroll: true, params: z.object({ seg: z.enum(['talk', 'write', 'preply', 'scenes', 'business']).optional() }) },
+    // Seit 04.10.2026 kein Reiter mehr: freiwilliges Extra, Einstieg auf Heute (Emrahs Wahl).
+    speak: { kind: 'page', chrome: 'shell', component: SpeakRoot, title: 'tabSpeak', keepScroll: true, params: z.object({ seg: z.enum(['talk', 'write', 'preply', 'scenes', 'business']).optional() }) },
     meeting: { kind: 'page', component: MeetingScreen, title: 'mtTitle', params: optId },
     playbook: { kind: 'page', component: PlaybookScreen, params: optId },
     roleplay: {

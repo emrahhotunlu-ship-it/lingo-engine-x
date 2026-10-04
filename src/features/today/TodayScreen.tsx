@@ -41,7 +41,7 @@ import { firstOpenDuty, useToday, type TodayView } from './state';
 import { feasibleData, healToday, retryPlan } from './store';
 import { TabTitle } from '../system/Chrome';
 import { unitRows, minutesLeft, type UnitRow } from '../../domain/unit/rows';
-import { isUnitPlan, LAP_GOAL, lapThisWeek, unitPlanOf } from '../../domain/unit/plan';
+import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import { unitPlanFor } from '../../domain/week';
 import type { UnitBlock, UnitPlan } from '../../domain/week/types';
 import { assessPlanInput } from '../../domain/assessment/planInput';
@@ -457,24 +457,19 @@ function PhoneHint({ plan, up }: { plan: StoredPlan; up: UnitPlan | null }) {
 }
 
 /**
- * Wochenbilanz der Aufgabe des Tages am Laptop (Emrah 02.10.2026): ruhig, ohne Farbe und ohne Serienbezug.
- * Am Laptop bietet sie, wenn die Aufgabe von heute schon erledigt ist und die Woche noch unter dem Ziel liegt,
- * „Sag es“ als freiwilliges Extra an (nie Pflicht, Kap. 2.6).
+ * Sprechen als freiwilliges Extra (Emrahs Wahl 04.10.2026): seit dem Fokus auf Vokabeln und Grammatik kein Reiter und kein
+ * Teil der Pflicht mehr, aber über diese ruhige Zeile erreichbar (zählt nie zum Tagesziel, Kap. 2.6).
  */
-function LapStrip({ today, taskDone }: { today: string; taskDone: boolean }) {
+function SpeakExtra() {
   const { t } = useT();
   const go = useNav((s) => s.go);
-  const profile = useLive((s) => s.docs['app/profile']);
-  const n = lapThisWeek(profile ? obj(profile) : null, today);
-  if (dowOf(today) === 7) return null;
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-subtle" data-testid="today-lap">
-      <span data-n={n}>{t('nbHeuteLap', { n: Math.min(n, LAP_GOAL), total: LAP_GOAL })}</span>
-      {n < LAP_GOAL && taskDone && !phoneActive() && (
-        <button type="button" className="min-h-11 underline" onClick={() => go({ name: 'say' })} data-testid="today-lap-more">
-          {t('nbHeuteLapMore')}
-        </button>
-      )}
+    <div>
+      <button type="button" onClick={() => go({ name: 'speak' })} data-testid="today-speak" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-accent-text hover:underline">
+        <Icon name="chat" size={16} />
+        {t('nbHeuteSpeakExtra')}
+        <Icon name="arrowRight" size={16} />
+      </button>
     </div>
   );
 }
@@ -625,7 +620,7 @@ export function TodayScreen() {
       )}
 
       {ok && unit && <PhoneHint plan={unit} up={up} />}
-      {ok && unit && <LapStrip today={today} taskDone={view.duties.items.some((d) => d.id === 'ch:u-task' && d.state === 'done')} />}
+      {ok && <SpeakExtra />}
 
       {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Speicher- und Planfehler (P1). */}
       {ok && <MissedCheck today={today} />}

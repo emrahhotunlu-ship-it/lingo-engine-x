@@ -19,7 +19,8 @@ import type { StoredPlan } from './types';
 export const PHONE_TASK_MIN = 6;
 
 /** Wird dieser Block am Handy ersetzt? */
-export const phoneReplaces = (block: number, kind: string): boolean => block === 3 && kind !== 'task.check';
+/** Satzbau (seit 04.10.2026 Block 3) geht am Handy gut und bleibt; ersetzt werden nur alte Sprech- und Schreibaufgaben. */
+export const phoneReplaces = (block: number, kind: string): boolean => block === 3 && kind !== 'task.check' && kind !== 'task.order';
 
 /** Handy-Übung für den Wochentag (1 = Montag … 7 = Sonntag). */
 export const phoneKindFor = (dow: number): UnitBlockKind => (dow <= 3 ? 'focus.colloc' : 'task.objection');

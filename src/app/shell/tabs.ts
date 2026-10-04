@@ -31,12 +31,13 @@ export type TabDef = {
 // Emrahs Wunsch vom 01.10.2026 („Fortschritt ist zu versteckt“), Fortschritt = die Seite „Dein Stand“
 // (Route `overview`), die vorher nur über das Profil-Blatt erreichbar war.
 // Die Test-IDs `tab-learn`, `learn-hub` und `hub-*` bleiben.
+// Seit 04.10.2026 (Emrahs Vorgabe „Fokus komplett auf Vokabeln und Grammatik“) nur noch vier Reiter:
+// Heute · Wortschatz · Grammatik (bisher „Üben“) · Fortschritt. Lesen und Sprechen sind keine Reiter mehr;
+// Sprechen ist als freiwilliges Extra über Heute erreichbar (Seite `speak`).
 export const TABS = [
   { id: 'today', label: 'nbShTabToday', icon: 'sun', root: { name: 'today' }, places: ['today'], badge: 'openDuties' },
   { id: 'vocab', label: 'nbShTabVocab', icon: 'cards', root: { name: 'vocab' }, places: ['vocab'] },
   { id: 'learn', label: 'nbShTabLearn', icon: 'layers', root: { name: 'learn' }, places: ['learn'] },
-  { id: 'read', label: 'nbShTabRead', icon: 'book', root: { name: 'library' }, places: ['read'] },
-  { id: 'speak', label: 'nbShTabSpeak', icon: 'chat', root: { name: 'speak' }, places: ['speak', 'write'] },
   { id: 'progress', label: 'nbShTabProgress', icon: 'chart', root: { name: 'overview' }, places: [] },
 ] as const satisfies readonly TabDef[];
 

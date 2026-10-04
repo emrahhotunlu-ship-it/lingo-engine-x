@@ -38,6 +38,8 @@ export type FocusTask =
 
 export type FocusInput = {
   day: string;
+  /** Zahl der Hauptaufgaben (Standard `FOCUS_MAIN`). */
+  main?: number;
   task: TaskLike | null;
   /** `app/repair` (roh) – Ersatz für `task.fixes` auf einem zweiten Gerät. */
   repairDoc?: Readonly<Record<string, unknown>> | null;
@@ -108,6 +110,8 @@ function drillOf(trap: Trap, drill: boolean, from = 0): FocusTask[] {
 
 /** Aufgaben für Block 4: 3 Hauptaufgaben, dazu höchstens ein Mini-Drill (3 Sätze) direkt nach der ersten Fallen-Korrektur. */
 export function buildFocus(i: FocusInput): FocusTask[] {
+  // Als Grammatik-Block 2 (seit 04.10.2026) mit mehr Hauptaufgaben (`main`), sonst 3.
+  const MAIN = i.main ?? FOCUS_MAIN;
   const traps = i.traps ?? TRAPS;
   const main: FocusTask[] = [];
   const trapIds: string[] = [];
@@ -119,7 +123,7 @@ export function buildFocus(i: FocusInput): FocusTask[] {
   // Ohne Korrekturen (Block 3 ungeprüft gespeichert, M4b): Fallen im eigenen Text.
   if (!main.length && i.task?.text.trim()) {
     for (const hit of matchTraps(i.task.text, traps)) {
-      if (main.length >= FOCUS_MAIN || trapIds.includes(hit.id)) continue;
+      if (main.length >= MAIN || trapIds.includes(hit.id)) continue;
       trapIds.push(hit.id);
       main.push({ kind: 'own', id: `own:${hit.id}`, sentence: sentenceAt(i.task.text, hit.at) || hit.match, match: hit.match, trapId: hit.id });
     }
@@ -132,22 +136,22 @@ export function buildFocus(i: FocusInput): FocusTask[] {
   };
   const due = [...i.due].sort((a, b) => sameTrap(a) - sameTrap(b) || a.due - b.due);
   for (const d of due) {
-    if (main.length >= FOCUS_MAIN) break;
+    if (main.length >= MAIN) break;
     main.push({ kind: 'grammar', id: `due:${d.task.key}`, task: d.task, reason: 'due' });
   }
   for (const t of i.daily ?? []) {
-    if (main.length >= FOCUS_MAIN) break;
+    if (main.length >= MAIN) break;
     if (main.some((m) => m.kind === 'grammar' && m.task.key === t.key)) continue;
     main.push({ kind: 'grammar', id: `daily:${t.key}`, task: t, reason: 'daily' });
   }
   // Dann Fallensätze der Woche (ohne KI immer vorhanden); fehlen sie, rotiert der Startsatz je Tag.
-  if (main.length < FOCUS_MAIN) {
+  if (main.length < MAIN) {
     const week = (i.weekTraps ?? []).map((id) => trapIn(traps, id)).filter((t): t is Trap => !!t);
     const start = traps.length ? hash32(i.day) % traps.length : 0;
     const pool = week.length ? week : [...traps.slice(start), ...traps.slice(0, start)];
     let k = 0;
     const used = new Set<string>();
-    while (main.length < FOCUS_MAIN && pool.length && k < pool.length * MINI_DRILL) {
+    while (main.length < MAIN && pool.length && k < pool.length * MINI_DRILL) {
       const trap = pool[k % pool.length]!;
       const idx = (Math.floor(k / pool.length) + hash32(`${i.day}|${trap.id}`)) % Math.max(1, trap.drills.length);
       const d = trap.drills[idx];

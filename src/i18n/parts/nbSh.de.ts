@@ -6,7 +6,7 @@ export const nbShDe = {
   nbShTabVocab: 'Wortschatz',
   nbShTabRead: 'Lesen',
   nbShTabSpeak: 'Sprechen',
-  nbShTabLearn: 'Üben',
+  nbShTabLearn: 'Grammatik',
   nbShTabProgress: 'Fortschritt',
   nbShProfile: 'Profil und Stand',
   nbShReviewSub: 'Deine fälligen Karten',

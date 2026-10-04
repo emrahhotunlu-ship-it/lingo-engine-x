@@ -15,6 +15,8 @@ import type { Lang, TrainCard } from '../../domain/srs/types';
 import { learnRecorder } from '../progress/persist';
 import { recentLessonLines, useLearnInputs } from '../learn/inputs';
 import { roundCtx } from '../today/state';
+import { unitDone } from '../../app/unit/done';
+import type { UnitBlockNo } from '../../app/unit/types';
 import { noteResult, noteSeen, prefetchOrder, seenSentences, takeStock, wrongTopics } from './orderGen';
 
 // Übungen ohne KI (phase2-plan §5.4–5.7): Diktat, Lückenjagd, Satzbau, Sprint. Die Runde wird
@@ -44,6 +46,8 @@ type State = {
   results: DrillRow[];
   activeMs: number;
   lastInteract: number;
+  /** Block der Tageseinheit (Satzbau als Block 3 seit 04.10.2026), sonst `null`. */
+  block: UnitBlockNo | null;
 };
 
 export const DICTATE_ROUND = 8;
@@ -66,6 +70,7 @@ export const useDrill = create<State>(() => ({
   results: [],
   activeMs: 0,
   lastInteract: 0,
+  block: null,
 }));
 
 const IDLE_CAP_MS = 60_000;
@@ -114,12 +119,12 @@ const contextWords = (cards: readonly TrainCard[]): string[] =>
 export const orderTopic = (it: OrderItem): string | null => /\|(?:rules|grammar)\/([a-z0-9-]+)$/.exec(it.key)?.[1] ?? null;
 
 /** Runde bauen. Rückgabe: Eingabeart der ersten Aufgabe (für den Fokus im selben Handler). */
-export function startDrill(kind: DrillKind, day?: string): 'typed' | 'choice' | null {
+export function startDrill(kind: DrillKind, day?: string, block: UnitBlockNo | null = null): 'typed' | 'choice' | null {
   const nowMs = useClock.getState().now;
   const d = day ?? useClock.getState().today;
   const lang = useSettings.getState().lang;
   const cards = drillCards(nowMs);
-  const ctx: Ctx = kind === 'cloze' || kind === 'order' ? roundCtx(kind, d) : 'xtra';
+  const ctx: Ctx = block ? 'duty' : kind === 'cloze' || kind === 'order' ? roundCtx(kind, d) : 'xtra';
   roundNo++;
   // Satzbau: nach einem Neuladen beginnt `roundNo` wieder bei 1; die Startzeit sorgt für andere Sätze als in der Runde davor.
   const seed = kind === 'order' ? `${d}|${kind}|${roundNo}|${nowMs}` : `${d}|${kind}|${roundNo}`;
@@ -143,6 +148,7 @@ export function startDrill(kind: DrillKind, day?: string): 'typed' | 'choice' | 
     results: [],
     activeMs: 0,
     lastInteract: performance.now(),
+    block,
   };
   if (kind === 'dictate') base.dictate = dictationItems(cards, lang, seed);
   else if (kind === 'cloze') base.cloze = buildCloze({ cards, seed, n: ctx === 'duty' ? DUTY_ROUND.cloze : CLOZE_ROUND });
@@ -216,6 +222,12 @@ export function finishSprint(entry: SprintEntry, rows: DrillRow[], radar: readon
   if (radar.length) learnRecorder.radar(radar);
   if (rows.length) roundEnd({ ...next, activeMs: useDrill.getState().activeMs }, false, entry);
   useDrill.setState(next);
+}
+
+/** Block der Tageseinheit abschließen (Knopf „Weiter“ in der Zusammenfassung). */
+export function reportDrillDone(): void {
+  const s = useDrill.getState();
+  if (s.block) unitDone(s.block);
 }
 
 export function leaveDrill(): void {

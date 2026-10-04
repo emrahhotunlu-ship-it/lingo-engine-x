@@ -81,7 +81,7 @@ export function ctxFor(u: UnitNow, block: UnitBlock): UnitCtx {
     // Dazu bis zu zwei schwache Wörter oder Wendungen: Block 3 wiederholt sie mit einer zweiten Methode (Produktion).
     phrases = unitPhrases(cards, u.day, targets, weakWords([...cards, ...chunks]));
   }
-  const ctx: UnitCtx = { day: u.day, block: block.block, theme: pick.theme, targets, minutes: block.min, phrases };
+  const ctx: UnitCtx = { day: u.day, block: block.block, theme: pick.theme, targets, minutes: block.min, phrases, opts: block.opts };
   if (same && run.sentences.length) ctx.sentences = run.sentences;
   if (same && run.task) ctx.task = run.task;
   return ctx;

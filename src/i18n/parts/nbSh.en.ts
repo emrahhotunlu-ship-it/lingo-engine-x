@@ -8,7 +8,7 @@ export const nbShEn: Record<keyof typeof nbShDe, string> = {
   nbShTabVocab: 'Vocab',
   nbShTabRead: 'Read',
   nbShTabSpeak: 'Speak',
-  nbShTabLearn: 'Practice',
+  nbShTabLearn: 'Grammar',
   nbShTabProgress: 'Progress',
   nbShProfile: 'Profile and progress',
   nbShReviewSub: 'Your due cards',

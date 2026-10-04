@@ -1,4 +1,4 @@
-import type { UnitBlockKind, UnitEnv, WeekTargets, WeekTheme } from '../../domain/week/types';
+import type { UnitBlockKind, UnitBlockOpts, UnitEnv, WeekTargets, WeekTheme } from '../../domain/week/types';
 import type { Fix } from '../../ui/feedback/types';
 import type { Route } from '../router/types';
 
@@ -38,6 +38,8 @@ export type UnitCtx = {
   phrases?: string[];
   /** Von `task.*` für `focus`/`again`. */
   task?: UnitTaskResult;
+  /** Einstellungen des Blocks aus dem Plan (z. B. `n` im Grammatik-Block). */
+  opts?: UnitBlockOpts;
 };
 
 export type UnitBlockProvider = {

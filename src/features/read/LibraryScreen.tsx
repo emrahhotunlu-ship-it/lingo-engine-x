@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useNav, type Route } from '../../app/nav';
 import { HubSections } from '../../app/shell/Hub';
-import { placesOf } from '../../app/shell/tabs';
 import { useWeek } from '../../app/useWeek';
 import { themeTextFor } from '../../content/nb/load';
 import { useLive } from '../../data/live';
@@ -268,7 +267,7 @@ export function LibraryScreen() {
       <List>
         <Row icon="history" channel="read" title={t('nbLesenHistory')} sub={t('nbLesenHistorySub')} onClick={() => go({ name: 'history', kind: 'read' })} testId="lib-history" />
       </List>
-      <HubSections places={placesOf('read')} />
+      <HubSections places={['read']} />
     </div>
   );
 }

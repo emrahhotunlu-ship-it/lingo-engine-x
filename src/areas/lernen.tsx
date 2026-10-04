@@ -18,6 +18,7 @@ import { againResume, ensureAgain } from '../features/repair/again/resume';
 import { startAgain } from '../features/repair/again/session';
 import { ensureGrammar, grammarResume } from '../features/grammar/resume';
 import { drillResume, ensureDrill } from '../features/drills/resume';
+import { startDrill } from '../features/drills/session';
 import { ensureLesson, lessonResume } from '../features/course/resume';
 import { patternResume } from '../features/patterns/run';
 
@@ -89,6 +90,15 @@ export const lernen = defineArea({
       start: (ctx) => {
         startFocus(ctx);
         return { name: 'unitFocus' };
+      },
+    },
+    {
+      // Satzbau als Block 3 (Vokabeln und Grammatik, Emrahs Vorgabe 04.10.2026): fester Satz-Pool, ohne KI erfüllbar.
+      kind: 'task.order',
+      feasible: () => true,
+      start: (ctx) => {
+        startDrill('order', ctx.day, ctx.block);
+        return { name: 'drill', kind: 'order', ctx: 'duty' };
       },
     },
     {
