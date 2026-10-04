@@ -17,6 +17,12 @@ export const nbProfilDe = {
   // Profil-Blatt: Gruppen und Zeilen
   nbProfilGroupStand: 'Dein Stand',
   nbProfilGroupTests: 'Tests',
+  nbProfilSegWords: 'Wörter',
+  nbProfilSegGrammar: 'Grammatik',
+  nbProfilSegReview: 'Rückblick',
+  nbProfilSubWords: 'Ziel C1, Karten, Zahlen',
+  nbProfilSubGrammar: 'Fehler-Radar der letzten 30 Tage',
+  nbProfilSubReview: 'Niveau, Urteil, Verlauf',
   nbProfilSubJudge: 'Niveau, Fertigkeiten, Fokus',
   nbProfilSubErrors: 'Fehler-Radar der letzten 30 Tage',
   nbProfilSubPath: 'Can-Do mit Belegen, Wortschatzziel',

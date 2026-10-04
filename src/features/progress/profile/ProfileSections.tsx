@@ -132,11 +132,9 @@ export function ProfileHead() {
 }
 
 const STAND_ROWS: ReadonlyArray<{ tab: ProgressTab; icon: IconName; label: MessageKey; sub: MessageKey }> = [
-  { tab: 'judge', icon: 'sparkle', label: 'nbProfilTabJudge', sub: 'nbProfilSubJudge' },
-  { tab: 'errors', icon: 'alert', label: 'nbProfilTabErrors', sub: 'nbProfilSubErrors' },
-  { tab: 'path', icon: 'target', label: 'nbProfilTabPath', sub: 'nbProfilSubPath' },
-  { tab: 'stats', icon: 'chart', label: 'nbProfilTabStats', sub: 'nbProfilSubStats' },
-  { tab: 'history', icon: 'history', label: 'nbProfilTabHistory', sub: 'nbProfilSubHistory' },
+  { tab: 'words', icon: 'chart', label: 'nbProfilSegWords', sub: 'nbProfilSubWords' },
+  { tab: 'grammar', icon: 'alert', label: 'nbProfilSegGrammar', sub: 'nbProfilSubGrammar' },
+  { tab: 'review', icon: 'history', label: 'nbProfilSegReview', sub: 'nbProfilSubReview' },
 ];
 
 /** Stand: jede Zeile öffnet „Dein Stand“ direkt auf ihrem Reiter. */

@@ -20,23 +20,26 @@ import { PathTab } from './PathTab';
 import { LevelScale } from './StandHeader';
 import { StatsTab } from './StatsTab';
 
-// „Dein Stand" (Kap. 6.13, Neubau plan.md §1.3; Fokus-Umbau: ohne Kurs): Kopf Wörter · Niveau-Skala, darunter fünf
-// Reiter Urteil · Fehler · Ziel C1 · Statistik · Verlauf – kein endloses Scrollen am Handy, nichts
+// „Dein Stand" (Kap. 6.13, Neubau plan.md §1.3; Fokus-Umbau: ohne Kurs): Kopf Wörter · Niveau-Skala, darunter drei
+// Segmente Wörter · Grammatik · Rückblick – kein endloses Scrollen am Handy, nichts
 // doppelt. Serie und Wochenstreifen stehen im Profil-Blatt, die Tests und der Wochenbericht dort als
 // Zeilen. Das Profil-Blatt öffnet die Seite direkt auf einem Reiter (`route.tab`); sonst gilt der
 // zuletzt offene Reiter aus localStorage (Bequemlichkeit). Das Öffnen ist einer der beiden Auslöser
 // der Einschätzung (Plan W1).
 
-export type ProgressTab = 'judge' | 'errors' | 'path' | 'stats' | 'history';
+// Drei Segmente (Gesamtkonzept 3.5): Wörter · Grammatik · Rückblick. Die alten Reiter-Namen bleiben als Routen gültig
+// (Rückweg, Verknüpfungen) und führen auf das Segment, in dem ihr Inhalt jetzt steht.
+export type Segment = 'words' | 'grammar' | 'review';
+export type ProgressTab = Segment | 'judge' | 'errors' | 'path' | 'stats' | 'history';
+const LEGACY: Record<string, Segment> = { judge: 'review', history: 'review', errors: 'grammar', path: 'words', stats: 'words' };
+export const segmentOf = (tab: ProgressTab): Segment => LEGACY[tab] ?? (tab as Segment);
 const TAB_KEY = 'lx:progress-tab';
-const TABS: ReadonlyArray<{ id: ProgressTab; label: MessageKey }> = [
-  { id: 'judge', label: 'nbProfilTabJudge' },
-  { id: 'errors', label: 'nbProfilTabErrors' },
-  { id: 'path', label: 'nbProfilTabPath' },
-  { id: 'stats', label: 'nbProfilTabStats' },
-  { id: 'history', label: 'nbProfilTabHistory' },
+const TABS: ReadonlyArray<{ id: Segment; label: MessageKey }> = [
+  { id: 'words', label: 'nbProfilSegWords' },
+  { id: 'grammar', label: 'nbProfilSegGrammar' },
+  { id: 'review', label: 'nbProfilSegReview' },
 ];
-const isTab = (v: unknown): v is ProgressTab => TABS.some((x) => x.id === v);
+const isTab = (v: unknown): v is ProgressTab => typeof v === 'string' && (v in LEGACY || TABS.some((x) => x.id === v));
 const EMPTY = new Map<string, Record<string, unknown>>();
 
 const item = {
@@ -67,13 +70,13 @@ export function ProgressScreen() {
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
   const archive = useLive((s) => s.collections.archive) ?? EMPTY;
-  const [tab, setTab] = useState<ProgressTab>(() => {
+  const [tab, setTab] = useState<Segment>(() => {
     const fromRoute = route.name === 'overview' ? route.tab : undefined;
-    if (fromRoute) return fromRoute;
+    if (fromRoute) return segmentOf(fromRoute);
     const saved = local.get(TAB_KEY);
-    return isTab(saved) ? saved : 'judge';
+    return isTab(saved) ? segmentOf(saved) : 'review';
   });
-  const choose = (id: ProgressTab) => {
+  const choose = (id: Segment) => {
     setTab(id);
     local.set(TAB_KEY, id);
   };
@@ -82,7 +85,7 @@ export function ProgressScreen() {
   const [seenRouteTab, setSeenRouteTab] = useState(routeTab);
   if (routeTab !== seenRouteTab) {
     setSeenRouteTab(routeTab);
-    if (routeTab) setTab(routeTab);
+    if (routeTab) setTab(segmentOf(routeTab));
   }
 
   // Auslöser der Einschätzung (Plan W1): Reiter „Dein Stand" geöffnet – höchstens einmal je Tag.
@@ -95,7 +98,7 @@ export function ProgressScreen() {
     [now, docs, vocab, grammar, archive],
   );
   const assess = useMemo(() => readAssess(docs['app/assess']), [docs]);
-  const tabLabel = t(TABS.find((x) => x.id === tab)?.label ?? 'progJudge');
+  const tabLabel = t(TABS.find((x) => x.id === tab)?.label ?? 'nbProfilSegReview');
   useCompanionSee({
     area: 'overview',
     label: `${t('ovTitle')} · ${tabLabel}`.slice(0, 60),
@@ -128,11 +131,19 @@ export function ProgressScreen() {
 
       <motion.div variants={item}>
         <Tabs label={t('progTabs')} items={TABS.map((x) => ({ id: x.id, label: t(x.label), testId: `tab-${x.id}` }))} value={tab} onChange={choose} testId="progress-tabs">
-          {tab === 'judge' && <JudgeTab />}
-          {tab === 'errors' && <ErrorsTab />}
-          {tab === 'path' && <PathTab />}
-          {tab === 'stats' && <StatsTab />}
-          {tab === 'history' && <HistoryTab />}
+          {tab === 'words' && (
+            <div className="flex flex-col gap-6">
+              <PathTab />
+              <StatsTab />
+            </div>
+          )}
+          {tab === 'grammar' && <ErrorsTab />}
+          {tab === 'review' && (
+            <div className="flex flex-col gap-6">
+              <JudgeTab />
+              <HistoryTab />
+            </div>
+          )}
         </Tabs>
       </motion.div>
 

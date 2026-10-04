@@ -140,7 +140,7 @@ test.describe('Desktop 1440', () => {
     for (const { id } of TABS) {
       await page.getByTestId(`tab-${id}`).click();
       await openProfileContent(page);
-      await expect(page.getByTestId('profile-stats')).toBeVisible();
+      await expect(page.getByTestId('profile-words')).toBeVisible();
       await closeProfile(page);
     }
   });

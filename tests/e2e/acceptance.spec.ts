@@ -41,7 +41,7 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
     expect(await duplicates(page), name).toEqual([]);
   }
   for (const id of ['errors', 'path', 'history'] as const) {
-    await page.getByTestId(`tab-${id}`).click();
+    await page.getByTestId(`tab-${({ errors: 'grammar', path: 'words', history: 'review' } as const)[id]}`).click();
     await page.waitForTimeout(300);
     expect(await duplicates(page), id).toEqual([]);
   }
@@ -75,7 +75,7 @@ test('Kap. 14/9: der Tagesauftrag funktioniert unverändert – daily/* und feed
   // Der Tagesauftrag schreibt `feed/*` trotzdem weiter; die Daten bleiben unberührt (Prüfung unten).
   await expect(page.getByTestId('tab-read')).toHaveCount(0);
   await openOverview(page);
-  await page.getByTestId('tab-history').click();
+  await page.getByTestId('tab-review').click();
   await expect(page.getByTestId('history')).toBeVisible();
   // Der Wochenbericht ist im Neubau eine eigene Seite (Profil › Wochenbericht), nicht mehr im Verlauf.
   await openWeekly(page);

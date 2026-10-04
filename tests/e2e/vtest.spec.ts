@@ -46,7 +46,7 @@ test('Durchlauf per Tastatur: J/N, Ziffern, Enter; vtests ergänzt, Wortschatzzi
   expect(list.at(-1)).toMatchObject({ v: 'lx1', passive, faN: 12, pseudoN: 12, d: '2026-09-20' });
   expect((p.act as Record<string, Record<string, number>>)['2026-09-20']?.vtest).toBe(1);
   await page.getByTestId('vt-done').click();
-  await expect(page.getByTestId('tab-path')).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByTestId('tab-words')).toHaveAttribute('aria-selected', 'true');
   expect(Number(await page.getByTestId('vocab-goal').getAttribute('data-now'))).toBeGreaterThanOrEqual(passive);
   expect(errors).toEqual([]);
 });

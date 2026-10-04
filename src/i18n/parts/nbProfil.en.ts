@@ -18,6 +18,12 @@ export const nbProfilEn: Record<keyof typeof nbProfilDe, string> = {
   // Profile sheet: groups and rows
   nbProfilGroupStand: 'Your progress',
   nbProfilGroupTests: 'Tests',
+  nbProfilSegWords: 'Words',
+  nbProfilSegGrammar: 'Grammar',
+  nbProfilSegReview: 'Review',
+  nbProfilSubWords: 'C1 goal, cards, numbers',
+  nbProfilSubGrammar: 'Error radar, last 30 days',
+  nbProfilSubReview: 'Level, verdict, history',
   nbProfilSubJudge: 'Level, skills, focus',
   nbProfilSubErrors: 'Error radar, last 30 days',
   nbProfilSubPath: 'Can-dos with evidence, vocabulary goal',

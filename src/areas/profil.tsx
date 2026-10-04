@@ -20,7 +20,7 @@ import { MemorySection } from '../features/settings/MemorySection';
 
 declare module '../app/router/types' {
   interface RouteParams {
-    overview: { tab?: 'judge' | 'errors' | 'path' | 'stats' | 'history' };
+    overview: { tab?: 'words' | 'grammar' | 'review' | 'judge' | 'errors' | 'path' | 'stats' | 'history' };
     vtest: NoParams;
     checks: NoParams;
     weekly: NoParams;
@@ -43,7 +43,7 @@ export const profil = defineArea({
       component: OverviewPage,
       title: 'ovTitle',
       keepScroll: true,
-      params: z.object({ tab: z.enum(['judge', 'errors', 'path', 'stats', 'history']).optional() }),
+      params: z.object({ tab: z.enum(['words', 'grammar', 'review', 'judge', 'errors', 'path', 'stats', 'history']).optional() }),
     },
     checks: { kind: 'page', component: ChecksPage, title: 'ckTitle', keepScroll: true, chrome: 'shell' },
     weekly: { kind: 'page', component: WeeklyPage, title: 'nbProfilWeekly', keepScroll: true, chrome: 'shell' },

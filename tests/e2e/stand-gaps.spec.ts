@@ -17,7 +17,7 @@ const profileOf = async (page: Page): Promise<Doc> => (await dump(page))['app/pr
 
 async function openHistory(page: Page): Promise<void> {
   await openOverview(page);
-  await page.getByTestId('tab-history').click();
+  await page.getByTestId('tab-review').click();
   await expect(page.getByTestId('history')).toBeVisible();
 }
 

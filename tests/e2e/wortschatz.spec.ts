@@ -142,7 +142,7 @@ test('Dein Stand: Abschnitt „Wortschatz-Statistik“ (Platz stand); ohne KI bl
   const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/decks': { v: 1, prefs: { mode: 'flip' } } } } });
   // Platz `stand` liegt im Reiter „Statistik“ von „Dein Stand“ (Neubau plan.md §1.3).
   await openOverview(page);
-  await page.getByTestId('tab-stats').click();
+  await page.getByTestId('tab-words').click();
   const stats = page.getByTestId('ws-stats');
   await stats.scrollIntoViewIfNeeded();
   await expect(stats).toBeVisible();

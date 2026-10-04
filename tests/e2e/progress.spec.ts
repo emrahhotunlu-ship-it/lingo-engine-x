@@ -14,13 +14,15 @@ const calls = (page: Page, id: string) =>
 test.use({ viewport: { width: 1440, height: 900 } });
 
 async function tab(page: Page, id: 'judge' | 'errors' | 'path' | 'stats' | 'history') {
-  await page.getByTestId(`tab-${id}`).click();
-  await expect(page.getByTestId(`tab-${id}`)).toHaveAttribute('aria-selected', 'true');
+  // Drei Segmente: die alten Reiter-Namen führen auf das Segment mit ihrem Inhalt.
+  const seg = { judge: 'review', history: 'review', errors: 'grammar', path: 'words', stats: 'words' }[id];
+  await page.getByTestId(`tab-${seg}`).click();
+  await expect(page.getByTestId(`tab-${seg}`)).toHaveAttribute('aria-selected', 'true');
 }
 
 for (const lang of ['de', 'en'] as Lang[]) {
   for (const width of [390, 1440]) {
-    test(`fünf Reiter ohne undefined/NaN/{0} und ohne Querscrollen · ${lang} · ${width}px`, async ({ page }) => {
+    test(`drei Segmente ohne undefined/NaN/{0} und ohne Querscrollen · ${lang} · ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 });
       const { errors, external } = await boot(page, { migrated: true, lang });
       await openOverview(page);
@@ -231,7 +233,7 @@ test('der zuletzt offene Reiter bleibt beim nächsten Öffnen', async ({ page })
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
   await openOverview(page);
-  await expect(page.getByTestId('tab-path')).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByTestId('tab-words')).toHaveAttribute('aria-selected', 'true');
 });
 
 test('Abo-Höchststand bleibt über einen Durchlauf aller Reiter ≤ 32', async ({ page }) => {

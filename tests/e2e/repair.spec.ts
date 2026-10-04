@@ -86,7 +86,7 @@ for (const size of SIZES) {
 
     // „Dein Stand“: eine Zeile.
     await openOverview(page);
-    await page.getByTestId('tab-errors').click();
+    await page.getByTestId('tab-grammar').click();
     await expect(page.getByTestId('repair-stand')).toHaveText('Reparatur-Sätze: 2 offen, 0 sicher');
     expect(errors).toEqual([]);
     expect(external).toEqual([]);

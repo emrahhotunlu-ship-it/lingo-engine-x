@@ -77,7 +77,7 @@ const patternsDoc = async (page: Page) => (await dump(page))['app/patterns'] as 
 async function openPatterns(page: Page, opts: BootOptions) {
   const booted = await boot(page, { migrated: true, ...opts });
   await openOverview(page);
-  await page.getByTestId('tab-errors').click();
+  await page.getByTestId('tab-grammar').click();
   await expect(page.getByTestId('patterns-stand')).toBeVisible();
   await page.getByTestId('patterns-open').click();
   await page.locator('[data-screen="patterns"]').waitFor({ state: 'visible' });
@@ -207,7 +207,7 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
   test('Dein Stand, Sprachtreue, Wochenbericht und Wochenfokus', async ({ page }) => {
     const { errors, external } = await boot(page, { migrated: true, lang: 'en', fake: { patch: { 'app/patterns': PRESET, 'say/2026-09': SAY_DOC } } });
     await openOverview(page);
-    await page.getByTestId('tab-errors').click();
+    await page.getByTestId('tab-grammar').click();
     const card = page.getByTestId('patterns-stand');
     await expect(card).toContainText('Your German traps');
     await expect(page.getByTestId('patterns-stand-item')).toHaveCount(2);
@@ -216,7 +216,7 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     expect(await layoutProblems(page)).toEqual([]);
 
     // Wochenbericht: letzte abgeschlossene Woche (KW 37) gegen KW 36.
-    await page.getByTestId('tab-history').click();
+    await page.getByTestId('tab-review').click();
     const weekly = page.getByTestId('weekly-patterns');
     await expect(weekly).toHaveAttribute('data-week', '2026-W37');
     await expect(weekly.locator('[data-testid="weekly-pattern"][data-id="since-present"]')).toHaveAttribute('data-trend', 'more');
@@ -224,7 +224,7 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
 
     // Liste: die Regel liegt nur auf Deutsch vor → Hinweis statt gemischter Sprache.
     // Der Einstieg steht auf der Karte „Deine Deutsch-Fallen“ im Reiter Fehler (Neubau: Stand-Reiter).
-    await page.getByTestId('tab-errors').click();
+    await page.getByTestId('tab-grammar').click();
     await page.getByTestId('patterns-open').click();
     await page.locator('[data-screen="patterns"]').waitFor({ state: 'visible' });
     await expect(page.getByTestId('pattern-rule')).toHaveCount(0);

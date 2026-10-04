@@ -3,7 +3,7 @@ import { openProfile, screen } from './fixtures';
 
 // E2E-Helfer des Bereichs „Profil, Stand & Claude“ – Besitz: Paket P6 (docs/neubau/architektur.md §5.3).
 // Gemeinsame Navigation (openTab, openEntry, openProfile, bootAt …) steht in `fixtures.ts` (WP0).
-// Profil-Zeilen (Test-IDs): profile-judge|errors|path|stats|history, profile-check, profile-vtest,
+// Profil-Zeilen (Test-IDs): profile-words|grammar|review, profile-check, profile-vtest,
 // profile-weekly, profile-settings, profile-rescue-row.
 
 /** Profil öffnen (Blatt bzw. bis WP0b die Seite mit den Profil-Abschnitten) und warten, bis der Kopf steht. */
@@ -27,9 +27,10 @@ export async function openProfileRow(page: Page, testId: string): Promise<void> 
 
 /** „Dein Stand“ direkt auf einem Reiter (über das Profil). */
 export async function openStandTab(page: Page, tab: 'judge' | 'errors' | 'path' | 'stats' | 'history'): Promise<void> {
-  await openProfileRow(page, `profile-${tab}`);
+  const seg = { judge: 'review', history: 'review', errors: 'grammar', path: 'words', stats: 'words' }[tab];
+  await openProfileRow(page, `profile-${seg}`);
   await screen(page, 'overview');
-  await expect(page.getByTestId(`tab-${tab}`)).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByTestId(`tab-${seg}`)).toHaveAttribute('aria-selected', 'true');
 }
 
 /** Seite „Wochen-Check“ (Start und bisherige Checks). */
