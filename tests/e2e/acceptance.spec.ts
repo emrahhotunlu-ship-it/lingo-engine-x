@@ -70,10 +70,9 @@ test('Kap. 14/9: der Tagesauftrag funktioniert unverändert – daily/* und feed
   await boot(page, { migrated: true });
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toBeVisible();
-  // Entdecken liegt im Reiter „Lesen“ (Neubau-Rahmen).
-  await openTab(page, 'read');
-  await page.locator('[data-testid="module"][data-module="discover"]').click();
-  await page.locator('[data-screen="discover"]').waitFor();
+  // Entdecken ist seit 04.10.2026 (Fokus Vokabeln und Grammatik) ausgeblendet: kein Reiter, kein Einstieg.
+  // Der Tagesauftrag schreibt `feed/*` trotzdem weiter; die Daten bleiben unberührt (Prüfung unten).
+  await expect(page.getByTestId('tab-read')).toHaveCount(0);
   await openOverview(page);
   await page.getByTestId('tab-history').click();
   await expect(page.getByTestId('history')).toBeVisible();

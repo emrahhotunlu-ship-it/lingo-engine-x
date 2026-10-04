@@ -108,7 +108,9 @@ test('Block 4 ohne Korrekturen und ohne KI: immer 3 Aufgaben', async ({ page }) 
 
 test('Block 5: aus dem Kopf neu formulieren, danach beide Fassungen nebeneinander und Korrektur „jetzt drin“', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { 'app/repair': { items: [TRAP_REPAIR] } } } });
+  // Seit 04.10.2026 nimmt „Fehler korrigieren“ fällige ältere Sätze (verteilt statt massiert): derselbe Satz, drei Tage alt und fällig.
+  const old = { ...TRAP_REPAIR, t: TODAY_T - 3 * 86_400_000, due: TODAY_T - 2 * 86_400_000 };
+  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { 'app/repair': { items: [old] } } } });
   await screen(page, 'unitAgain');
   await expect(page.getByTestId('again-remember')).toContainText('tatsächlich');
   await page.getByTestId('again-input').fill('Please send me the current version of the contract today.');
@@ -116,6 +118,17 @@ test('Block 5: aus dem Kopf neu formulieren, danach beide Fassungen nebeneinande
   await expect(page.getByTestId('again-new')).toContainText('current version of the contract today');
   await expect(page.getByTestId('again-better')).toContainText(TRAP_REPAIR.right);
   await expect(page.getByTestId('feedback')).toHaveAttribute('data-verdict', 'ok');
+  expect(await layoutProblems(page)).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('Block 5: Sätze von heute kommen nicht am selben Tag wieder – ohne fällige ältere Sätze ruhiger Leerzustand', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { 'app/repair': { items: [TRAP_REPAIR] } } } });
+  await screen(page, 'unitAgain');
+  await expect(page.getByTestId('again-empty')).toBeVisible();
+  await expect(page.getByTestId('again-done')).toBeVisible();
+  await expect(page.getByTestId('again-input')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
 });

@@ -1,7 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, bootAt, openSettings, layoutProblems, openOverview, screen } from './fixtures';
 import { typeInGap } from './learnHelpers';
-import { openModule } from './inputHelpers';
 import { answerCheckItem, playCheck } from './progressHelpers';
 import { dump, planPatch } from './trainerHelpers';
 import { openChecks, openProfileContent } from './profilHelpers';
@@ -225,8 +224,10 @@ test('W5: ohne Kopien der alten App kein Hinweis auf Heute', async ({ page }) =>
 
 test('M13: Ladepunkt am Reiter, solange eine KI-Korrektur im Hintergrund läuft', async ({ page }) => {
   test.setTimeout(60_000);
-  await boot(page, { migrated: true, fake: { sampleDelayMs: 1500 } });
-  await openModule(page, 'write');
+  // Seit 04.10.2026 gibt es keinen Reiter „Lesen“ mehr: eine Pflicht-Schreibaufgabe (ctx duty, z. B. aus einem älteren
+  // gespeicherten Plan) zeigt den Ladepunkt an „Heute“.
+  await bootAt(page, { name: 'write', ctx: 'duty' }, { fake: { sampleDelayMs: 1500 } });
+  await screen(page, 'write');
   await expect(page.getByTestId('tab-busy')).toHaveCount(0);
   await page
     .getByTestId('draft')
@@ -235,9 +236,10 @@ test('M13: Ladepunkt am Reiter, solange eine KI-Korrektur im Hintergrund läuft'
   await page.getByTestId('submit').click();
   await expect(page.getByTestId('ai-phase')).toBeVisible();
   await page.getByTestId('unit-close').click();
-  const dot = page.getByTestId('tab-read').getByTestId('tab-busy');
+  await expect(page.getByTestId('tab-read')).toHaveCount(0);
+  const dot = page.getByTestId('tab-today').getByTestId('tab-busy');
   await expect(dot).toBeVisible();
-  await expect(page.getByTestId('tab-read')).toContainText('Claude korrigiert gerade im Hintergrund');
+  await expect(page.getByTestId('tab-today')).toContainText('Claude korrigiert gerade im Hintergrund');
   await expect(page.getByTestId('ai-task-notice')).toHaveAttribute('data-status', 'done', { timeout: 15_000 });
   await expect(page.getByTestId('tab-busy')).toHaveCount(0);
 });

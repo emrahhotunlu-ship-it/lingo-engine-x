@@ -36,7 +36,35 @@ const MON_BLOCKS: Array<[number, string, number]> = [
   [5, 'again', 2],
 ];
 
-/** Gespeicherter Tagesplan der Einheit für einen Montag mit `goal.review = 2`. */
+/** Blöcke der Tageseinheit Mo–Sa seit 04.10.2026 (Fokus Vokabeln und Grammatik): Wortschatz · Grammatik · Satzbau · Fehler korrigieren. */
+export const VG_BLOCKS: Array<[number, string, number]> = [
+  [1, 'review', 8],
+  [2, 'grammar', 7],
+  [3, 'task.order', 5],
+  [5, 'again', 3],
+];
+/** Pflichtpunkte dazu: Grammatik auf `ch:u-focus`, Satzbau auf `ch:u-task`. */
+export const VG_DUTY = ['review', 'ch:u-focus', 'ch:u-task', 'ch:u-again'];
+
+/** Gespeicherter Tagesplan der Einheit (neue Blockfolge, Mo–Sa) mit `goal.review = 2`. */
+export function vgPlan(day = MON): Doc {
+  return {
+    d: day,
+    v: 1,
+    ids: [],
+    why: [],
+    duty: VG_DUTY,
+    goal: { review: 2, due: 2, new: 0, ahead: 0 },
+    lesson: null,
+    at: 1,
+    u: { v: 1, shape: 'full', goalMin: 25, theme: 't01', min: 23, b: VG_BLOCKS },
+  };
+}
+
+/**
+ * Gespeicherter Tagesplan der Einheit für einen Montag mit `goal.review = 2` – ALTE Blockfolge (bis 03.10.2026:
+ * Input · Aufgabe · Fokus). Solche Pläne liegen noch in der Datenbank und gelten unverändert weiter (nie umgewürfelt).
+ */
 export function mondayPlan(day = MON): Doc {
   return {
     d: day,

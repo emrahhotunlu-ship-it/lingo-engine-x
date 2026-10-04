@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openEntry, openTab, screen } from './fixtures';
+import { boot, layoutProblems, openEntry, openSpeak, screen } from './fixtures';
 import { nbLog } from './trainingHelpers';
 
 // Neubau N79 + B9 (Lehrer I7, I8, W10, S9, Markt DU5): kurze Sprechaufgaben unter Sprechen ›
@@ -18,7 +18,7 @@ async function answer(page: Page, text: string): Promise<void> {
 
 test('Einstiege unter Sprechen › Training, Pitch 30/60/120 mit Muster, Zeitbalken und Rückmeldung', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
-  await openTab(page, 'speak');
+  await openSpeak(page);
   for (const id of ['training-pitch3', 'training-chart', 'training-circum', 'training-back']) await expect(page.getByTestId('speak-training').getByTestId(id)).toBeVisible();
   await page.getByTestId('training-pitch3').click();
   await screen(page, 'sptask');
@@ -89,7 +89,7 @@ test('Rückübersetzung: lesen → verdecken → aus dem Deutschen wieder Englis
 
 test('Anruf-Modus: Figur spricht, Text verdeckt bis Tipp, Hinweis auf die Diktiertaste', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
-  await openTab(page, 'speak');
+  await openSpeak(page);
   await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
   await page.getByTestId('briefing-start').click();
   await screen(page, 'roleplay');

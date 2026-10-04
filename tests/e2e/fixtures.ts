@@ -129,7 +129,7 @@ export async function openTab(page: Page, id: TabId): Promise<void> {
 /**
  * Einstieg per Test-ID öffnen (`hub-course`, `hub-grammar`, `hub-drill-*` …): probiert die Reiter
  * aus der Reiterleiste der Reihe nach, bis der Einstieg sichtbar ist – unabhängig von der Zahl der
- * Reiter. Einstiege, die erst nach dem Laden erscheinen, wartet der letzte Reiter ab.
+ * Reiter –, danach die Seite Sprechen (über Heute). Einstiege, die erst nach dem Laden erscheinen, wartet der letzte Reiter ab.
  */
 export async function openEntry(page: Page, testId: string): Promise<void> {
   await page.getByTestId('tabbar').waitFor();
@@ -141,8 +141,9 @@ export async function openEntry(page: Page, testId: string): Promise<void> {
       return;
     }
   }
-  // Einstiege am Platz `write` liegen im Reiter Sprechen hinter einem Segment.
-  for (const seg of ['write'] as const) {
+  // Sprechen ist seit 04.10.2026 kein Reiter mehr (Seite über Heute); Einstiege am Platz `speak` stehen unter
+  // „Gespräche“, die am Platz `write` hinter dem Segment „Schreiben“.
+  for (const seg of ['talk', 'write'] as const) {
     await openSpeak(page, seg);
     const el = page.getByTestId(testId).first();
     if (await el.isVisible()) {
@@ -210,7 +211,12 @@ export const crashOnce = (route: string): Record<string, string> => ({ 'lx:crash
  * (bis 28.09.2026) führt zu Gespräche. Der Helfer nimmt beide Namen und wählt, was die App gerade anbietet.
  */
 export async function openSpeak(page: Page, seg: 'talk' | 'write' | 'scenes' | 'business' = 'talk'): Promise<void> {
-  await openTab(page, 'speak');
+  // Seit 04.10.2026 (Fokus Vokabeln und Grammatik) kein Reiter mehr: freiwilliges Extra über „Heute“ (`today-speak`).
+  if (!(await page.getByTestId('speak-hub').isVisible())) {
+    await openTab(page, 'today');
+    await page.getByTestId('today-speak').click();
+    await screen(page, 'speak');
+  }
   const hub = page.getByTestId('speak-hub');
   await hub.waitFor();
   const alias: Record<string, string[]> = { talk: ['talk', 'scenes'], scenes: ['scenes', 'talk'], write: ['write', 'business'], business: ['business', 'write'] };
@@ -224,6 +230,16 @@ export async function openSpeak(page: Page, seg: 'talk' | 'write' | 'scenes' | '
   }
   if ((await hub.getAttribute('data-seg')) !== target) await page.getByTestId(`speak-seg-${target}`).click();
   await page.locator(`[data-testid="speak-hub"][data-seg="${target}"]`).waitFor();
+}
+
+/**
+ * „Lesen“ (Bibliothek: Lesen, Hören, Entdecken; Route `library`). Seit 04.10.2026 kein Reiter und kein Einstieg
+ * mehr in der Oberfläche – nur noch per Deep-Link beim Start erreichbar.
+ */
+export async function bootLibrary(page: Page, opts: BootOptions = {}): Promise<Booted> {
+  const b = await bootAt(page, { name: 'library' }, opts);
+  await screen(page, 'library');
+  return b;
 }
 
 /** Prüfungen, die auf jedem Bildschirm gelten (Kap. 12). */

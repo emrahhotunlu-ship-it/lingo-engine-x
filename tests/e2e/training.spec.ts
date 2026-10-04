@@ -11,12 +11,13 @@ import { dump } from './trainerHelpers';
 
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-test('Einstiege: jede Übung 1 Tipp ab ihrem Reiter', async ({ page }) => {
+test('Einstiege: jede Übung 1 Tipp ab ihrem Reiter (Sprechen: ab Heute)', async ({ page }) => {
   await boot(page, { migrated: true });
   await openTab(page, 'learn');
   await expect(page.getByTestId('training-colloc')).toBeVisible();
   await expect(page.getByTestId('training-transform')).toBeVisible();
-  await openTab(page, 'speak');
+  // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
+  await openSpeak(page);
   await expect(page.getByTestId('training-objection')).toBeVisible();
   await expect(page.getByTestId('training-shadow')).toBeVisible();
   await openSpeak(page, 'write');

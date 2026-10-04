@@ -1,14 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { boot, bootAt, openTab, screen } from './fixtures';
+import { bootAt, bootLibrary, screen } from './fixtures';
 import { ARTICLE_Q, dump, entriesOf, DAY } from './inputHelpers';
 
-// Neubau P4 (plan.md §4.5): Reiter „Lesen“, Leser, „Wörter aus diesem Text üben“, Fortsetzen,
+// Neubau P4 (plan.md §4.5): „Lesen“ (seit 04.10.2026 kein Reiter mehr, nur Deep-Link `library`), Leser, „Wörter aus diesem Text üben“, Fortsetzen,
 // Block 2 der Tageseinheit ohne KI.
 
 test.describe('Lesen (Neubau P4)', () => {
   test('Bibliothek: Chips, Heute neu mit Themen-Text, „x % neu“, Artikel in 1 Tipp', async ({ page }) => {
-    const { errors, external } = await boot(page, { migrated: true });
-    await openTab(page, 'read');
+    const { errors, external } = await bootLibrary(page);
     await expect(page.getByTestId('lib-chips').getByTestId('lib-chip')).toHaveCount(5);
     await expect(page.getByTestId('lib-theme')).toBeVisible();
     // „% neu“ erscheint nach dem ersten Bild (Wörterbuch lazy).
@@ -37,8 +36,7 @@ test.describe('Lesen (Neubau P4)', () => {
   });
 
   test('Wort antippen → „+ Wortschatz“ → Eingangskorb mit Ursprungssatz; Wortstatus danach markiert', async ({ page }) => {
-    const { errors } = await boot(page, { migrated: true });
-    await openTab(page, 'read');
+    const { errors } = await bootLibrary(page);
     await page.locator(`[data-testid="lib-item"][data-key="a:${ARTICLE_Q}"]`).click();
     await screen(page, 'read');
     const word = page.getByTestId('article').locator('button.lx-word[data-lookup="benefit"]').first();
@@ -56,8 +54,7 @@ test.describe('Lesen (Neubau P4)', () => {
   });
 
   test('„Wörter aus diesem Text üben (n)“ startet genau diese Karten', async ({ page }) => {
-    const { errors } = await boot(page, { migrated: true });
-    await openTab(page, 'read');
+    const { errors } = await bootLibrary(page);
     await page.locator(`[data-testid="lib-item"][data-key="a:${ARTICLE_Q}"]`).click();
     await screen(page, 'read');
     const btn = page.getByTestId('practice-text');
@@ -98,8 +95,7 @@ test.describe('Lesen (Neubau P4)', () => {
 
   // Offen (2 Versuche, A2): Text wird hergestellt, der Absatz-Sprung greift noch nicht (Bildlauf der Übungsebene).
   test.fixme('reload() im Leser: gleicher Text, gleicher Absatz (G3)', async ({ page }) => {
-    const { errors } = await boot(page, { migrated: true });
-    await openTab(page, 'read');
+    const { errors } = await bootLibrary(page);
     await page.locator(`[data-testid="lib-item"][data-key="a:${ARTICLE_Q}"]`).click();
     await screen(page, 'read');
     await page.locator('[data-para="2"]').scrollIntoViewIfNeeded();

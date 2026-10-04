@@ -52,11 +52,15 @@ const BASE = {
   write: { text: 'Dear Anna, the delivery is late. Sorry for this. Best regards', m: { words: 12, traps: 0, per100: 0, phrases: [] } },
 };
 
-test('B1: Angebot in der letzten Monatswoche, dieselbe Aufgabe, beide Fassungen nebeneinander, Claude beschreibt den Fortschritt, Anzeige im Stand', async ({ page }) => {
+test('B1: Angebot in der letzten Monatswoche (nur noch im Stand, nicht auf Heute), dieselbe Aufgabe, beide Fassungen nebeneinander, Claude beschreibt den Fortschritt', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, now: '2026-09-26T10:00:00+02:00', fake: { patch: { 'app/compare': { v: 1, items: [BASE] } } } });
   await screen(page, 'today');
-  await expect(page.getByTestId('today-compare')).toContainText('August');
-  await page.getByTestId('today-compare-open').tap();
+  // Seit 04.10.2026 (Fokus Vokabeln und Grammatik) keine Vergleichszeile mehr auf Heute; das Angebot steht im Stand › Verlauf.
+  await expect(page.getByTestId('today-status')).toBeVisible();
+  await expect(page.getByTestId('today-compare')).toHaveCount(0);
+  await openStandTab(page, 'history');
+  await expect(page.getByTestId('compare-card')).toHaveAttribute('data-n', '1');
+  await page.getByTestId('compare-card-start').tap();
   await screen(page, 'compare');
   await expect(page.getByTestId('compare')).toHaveAttribute('data-base', '2026-08');
   await expect(page.getByTestId('exercise-bar').getByTestId('open-settings')).toBeVisible();
@@ -74,11 +78,11 @@ test('B1: Angebot in der letzten Monatswoche, dieselbe Aufgabe, beide Fassungen 
   expect(saved[1]).toMatchObject({ month: '2026-09', task: 'ct1', base: '2026-08' });
   expect(await calls(page, 'compare')).toHaveLength(1);
   await page.getByTestId('cmp-close-end').tap();
-  await screen(page, 'today');
-  // Erledigt heißt erledigt: kein Angebot mehr in diesem Monat.
-  await expect(page.getByTestId('today-compare')).toHaveCount(0);
-  await openStandTab(page, 'history');
+  // ✕ führt zur Herkunft zurück (Stand › Verlauf).
+  await screen(page, 'overview');
   await expect(page.getByTestId('compare-card')).toHaveAttribute('data-n', '2');
+  // Erledigt heißt erledigt: kein Angebot mehr in diesem Monat.
+  await expect(page.getByTestId('compare-card-start')).toHaveCount(0);
   await expect(page.getByTestId('compare-card').getByTestId('cmp-verdict')).toBeVisible();
   expect(errors).toEqual([]);
 });

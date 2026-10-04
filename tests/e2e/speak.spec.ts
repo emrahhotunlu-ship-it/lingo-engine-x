@@ -1,7 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen, type Lang, type Theme } from './fixtures';
+import { boot, layoutProblems, openSpeak, screen, type Lang, type Theme } from './fixtures';
 import { DAY, dump } from './trainerHelpers';
 
 // Sprechen (Phase 3, Plan §9.2): Übersicht, Einweisung, Rollenspiel mit Analysen, Mitnehmen,
@@ -15,8 +15,8 @@ type Doc = Record<string, unknown>;
 
 async function openHub(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
+  // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
+  await openSpeak(page);
   await expect(page.getByTestId('scene-card').first()).toBeVisible();
   // Der Abschnitt blendet ein (Segment-Übergang): erst voll sichtbar prüfen (axe misst sonst Mischfarben).
   await page.waitForFunction(() => {
@@ -148,9 +148,8 @@ test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen
   await expect(page.getByTestId('today-status')).toHaveText(/^0 von 2 · noch ca\. (10|11|12|13) Min\.$/);
   await expect(page.locator('[data-testid="duty"][data-duty="review"]')).toHaveAttribute('data-state', 'open');
   await expect(page.getByTestId('extra')).toHaveCount(0);
-  // Reiter „Sprechen“: erledigt ist Zustand, kein Knopf (Kap. 2.2).
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
+  // Sprechen (Seite über Heute): erledigt ist Zustand, kein Knopf (Kap. 2.2).
+  await openSpeak(page);
   await expect(page.getByTestId('speak-status')).toHaveCount(0);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);

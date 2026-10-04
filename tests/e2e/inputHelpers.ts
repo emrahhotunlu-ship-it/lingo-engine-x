@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 import { routeToString } from '../../src/app/router/deeplink';
-import { openSpeak, openTab, ORIGIN } from './fixtures';
+import { openSpeak, ORIGIN } from './fixtures';
 
 // Hilfen für die E2E-Tests von Phase 4 (Lesen, Hören, Schreiben, Entdecken).
 
@@ -42,19 +42,23 @@ export async function settledPaths(page: Page): Promise<string[]> {
   return prev;
 }
 
-/** Reiter „Lesen“ öffnen (Lesen, Hören, Schreiben, Entdecken; Neubau-Rahmen, Wurzel `library`). */
+/**
+ * „Lesen“ öffnen (Lesen, Hören, Entdecken; Route `library`). Seit 04.10.2026 (Fokus Vokabeln und Grammatik) gibt es
+ * dafür keinen Reiter und keinen Einstieg mehr – nur den Deep-Link, der beim Start gelesen wird. Der Helfer lädt die
+ * Seite deshalb mit `#go=library` neu (der Testbestand wird dabei wie beim Start neu eingespielt).
+ */
 export async function openLearn(page: Page): Promise<void> {
   // Nach dem Schließen einer Einheit steht man schon wieder in „Lesen“ (Rückweg zur Herkunft).
   if (!(await page.locator('[data-screen="library"]').isVisible())) {
-    await page.getByTestId('tabbar').waitFor();
-    await openTab(page, 'read');
+    await page.goto(`${ORIGIN}/#go=${encodeURIComponent(routeToString({ name: 'library' }))}`);
+    await page.reload();
   }
   await page.locator('[data-screen="library"]').waitFor({ state: 'visible' });
 }
 
 /**
- * Ein Modul öffnen: Lesen, Hören (Text/Hörtext des Tages) und Entdecken („Alle Beiträge“) über den
- * Reiter „Lesen“; Schreiben liegt im Neubau unter „Sprechen · Schreiben“ (Einstieg `hub-write`).
+ * Ein Modul öffnen: Lesen, Hören (Text/Hörtext des Tages) und Entdecken („Alle Beiträge“) über die
+ * Seite „Lesen“ (Deep-Link, siehe `openLearn`); Schreiben liegt im Neubau unter „Sprechen · Schreiben“ (Einstieg `hub-write`).
  */
 export async function openModule(page: Page, id: 'read' | 'listen' | 'write' | 'discover'): Promise<void> {
   if (id === 'write') {
@@ -108,7 +112,13 @@ export async function backToToday(page: Page): Promise<void> {
     if (cur === 'today') return;
     const close = page.locator(`main [data-screen="${cur}"] [data-testid="unit-close"]`).first();
     if (await close.count()) await close.click();
-    else await page.getByTestId('tab-today').click();
+    else {
+      // Seiten ohne Reiter (Lesen, Sprechen; seit 04.10.2026) haben oben „‹ Zurück“ – die Reiterleiste unten kann am
+      // Handy noch von einer Meldung („Gespeichert …“) überdeckt sein.
+      const back = page.locator(`main [data-screen="${cur}"] [data-testid="page-back"]`).first();
+      if (await back.count()) await back.click();
+      else await page.getByTestId('tab-today').click();
+    }
     await expect.poll(async () => (await screens()).join(',')).not.toBe(cur);
   }
   await page.locator('[data-screen="today"]').waitFor({ state: 'visible' });

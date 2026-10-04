@@ -3,15 +3,16 @@ import { boot, layoutProblems, screen, type Lang } from './fixtures';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
 // „Sag es“ (Lernberatung 27.09., V1/V2):
-// - Plan (Neubau, Wochenplan plan.md §1.5): montags ist „Sag es“ Block 3 der Tageseinheit (Pflicht),
-//   mit und ohne Claude derselbe Plan (M5) – ohne Claude wird ungeprüft gespeichert.
+// - Plan: Seit 04.10.2026 (Fokus Vokabeln und Grammatik) ist „Sag es“ kein Block der Tageseinheit mehr –
+//   montags ist Block 3 Satzbau, mit und ohne Claude derselbe Plan (M5). „Sag es“ bleibt als freiwillige Übung
+//   (Sprechen › Schreiben) und gilt in älteren gespeicherten Plänen (`ch:say`) weiter als Pflicht.
 // - Ablauf: Situation → Antwort → Prüfen → drei Schichten → „Nochmal, aber besser“ → zweite Prüfung
 //   → beide Fassungen. Korrekturen des ersten Durchgangs landen in `app/repair`, der Eintrag in
 //   `say/<Monat>`, `act.say` erfüllt die Pflicht (erst nach dem zweiten Durchgang).
 // - Ohne Claude blockiert der Baustein die Pflicht nicht: Speichern ohne Prüfung.
 
 type Doc = Record<string, unknown>;
-/** Montag nach dem Stichtag (KW 39): Block 3 laut Wochenplan = „Sag es“. */
+/** Montag nach dem Stichtag (KW 39): bis 03.10.2026 war Block 3 dort „Sag es“, jetzt Satzbau. */
 const SAY_DAY = '2026-09-21';
 
 const FIRST =
@@ -40,21 +41,24 @@ const TEXT: Record<Lang, { title: string; task: string; before: string; min: str
 test.describe('Tagesplan', () => {
   test.use({ viewport: DESKTOP });
 
-  test('am Sag-es-Tag (Montag) ist „Sag es“ Block 3 der Pflicht; ohne Claude derselbe Plan', async ({ page, browser }) => {
+  test('am früheren Sag-es-Tag (Montag) ist Block 3 jetzt Satzbau, „Sag es“ ist keine Pflicht; ohne Claude derselbe Plan', async ({ page, browser }) => {
     const { errors, external } = await boot(page, { migrated: true, now: `${SAY_DAY}T20:00:00+02:00` });
     await screen(page, 'today');
     await expect.poll(async () => (await planOf(page))?.d).toBe(SAY_DAY);
     const plan = (await planOf(page))!;
-    expect(plan.u?.b.find((b) => b[0] === 3)?.[1]).toBe('task.say');
+    expect(plan.u?.b.find((b) => b[0] === 3)?.[1]).toBe('task.order');
+    expect(plan.u?.b.some((b) => b[1] === 'task.say')).toBe(false);
     expect(plan.duty).toContain('ch:u-task');
+    expect(plan.duty).not.toContain('ch:say');
     const row = page.locator('[data-testid="duty"][data-duty="ch:u-task"]');
     await expect(row).toHaveAttribute('data-state', 'open');
-    await expect(row).toContainText('Sag es');
-    await expect(row.getByTestId('reason')).toHaveAttribute('data-why', 'task.say');
+    await expect(row).toContainText('Satzbau');
+    await expect(row).not.toContainText('Sag es');
+    await expect(row.getByTestId('reason')).toHaveAttribute('data-why', 'task.order');
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
 
-    // Ohne Claude: Blockzahl, Blöcke und Pflicht unverändert (M5) – „Sag es“ speichert dann ungeprüft.
+    // Ohne Claude: Blockzahl, Blöcke und Pflicht unverändert (M5) – Satzbau braucht keine KI.
     const ctx = await browser.newContext({ viewport: DESKTOP, timezoneId: 'Europe/Berlin', locale: 'de-DE' });
     const p2 = await ctx.newPage();
     await boot(p2, { migrated: true, now: `${SAY_DAY}T20:00:00+02:00`, fake: { capabilities: { sample: false } } });
@@ -63,7 +67,7 @@ test.describe('Tagesplan', () => {
     const without = (await planOf(p2))!;
     expect(without.u?.b).toEqual(plan.u?.b);
     expect(without.duty).toEqual(plan.duty);
-    await expect(p2.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Sag es');
+    await expect(p2.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Satzbau');
     await ctx.close();
   });
 });

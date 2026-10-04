@@ -1,20 +1,21 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, bootAt, openTab, screen } from './fixtures';
+import { bootAt, bootLibrary, screen, type Booted } from './fixtures';
 import { ARTICLE_Q, dump } from './inputHelpers';
 
 // Paket B, Lesen/Hören/Schreiben: Wendung markieren (N57), Wort-Markierung beim Vorlesen (N58),
 // Meeting mit mehreren Stimmen → Stichworte → Follow-up-Mail (B6), Ton-Erkennung im eigenen Text (B9).
 
-async function openArticle(page: Page) {
-  await openTab(page, 'read');
+/** „Lesen“ gibt es seit 04.10.2026 nur noch per Deep-Link (kein Reiter); dort den Artikel öffnen. */
+async function openArticle(page: Page): Promise<Booted> {
+  const booted = await bootLibrary(page);
   await page.locator(`[data-testid="lib-item"][data-key="a:${ARTICLE_Q}"]`).click();
   await screen(page, 'read');
+  return booted;
 }
 
 test.describe('Lesen & Hören, Paket B', () => {
   test('N57: erstes + letztes Wort antippen → Wortblatt für die ganze Wendung', async ({ page }) => {
-    const { errors } = await boot(page, { migrated: true });
-    await openArticle(page);
+    const { errors } = await openArticle(page);
     await page.getByTestId('phrase-mode').click();
     await expect(page.getByTestId('phrase-hint')).toHaveAttribute('data-step', 'first');
     const words = page.locator('[data-para="0"] button.lx-word');
@@ -36,8 +37,7 @@ test.describe('Lesen & Hören, Paket B', () => {
   });
 
   test('N58: Vorlesen markiert das gesprochene Wort (wo boundary feuert) und lässt sich anhalten', async ({ page }) => {
-    const { errors } = await boot(page, { migrated: true });
-    await openArticle(page);
+    const { errors } = await openArticle(page);
     await page.getByTestId('read-aloud').click();
     await expect(page.locator('[data-reading="true"]').first()).toBeVisible();
     await expect(page.locator('[data-reading="true"] mark.lx-mark').first()).toBeVisible({ timeout: 10_000 });
@@ -48,8 +48,7 @@ test.describe('Lesen & Hören, Paket B', () => {
 
   test('B6: Meeting mit mehreren Stimmen → Stichworte → Follow-up-Mail → Vereinbarungen geprüft', async ({ page }) => {
     test.setTimeout(90_000);
-    const { errors, external } = await boot(page, { migrated: true });
-    await openTab(page, 'read');
+    const { errors, external } = await bootLibrary(page);
     await page.getByTestId('lib-dialog').click();
     await screen(page, 'listenDialog');
     await expect(page.getByTestId('dialog-speaker')).toHaveCount(3);

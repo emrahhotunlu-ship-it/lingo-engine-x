@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, layoutProblems, openOverview, openSpeak, screen } from './fixtures';
 import { openModule } from './inputHelpers';
 import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
 
@@ -128,8 +128,8 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
+  // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
+  await openSpeak(page);
   await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
   await page.getByTestId('briefing-start').click();
   await screen(page, 'roleplay');

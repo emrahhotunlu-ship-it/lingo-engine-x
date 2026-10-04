@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen, openEntry } from './fixtures';
+import { boot, layoutProblems, screen, openEntry, openSpeak } from './fixtures';
 import { dump, forcedPatch, planPatch } from './trainerHelpers';
 import type { InstallOptions } from '../../src/platform/dev/install';
 
@@ -193,14 +193,14 @@ test.describe('Desktop 1440', () => {
     await expect(page.getByTestId('companion')).toHaveCount(0);
     await expect.poll(() => subs(page)).toBe(base);
     // C-10: Grundstock auf „Heute“ – je Dokument bzw. Sammlung genau EIN Abo (Kap. 3.4), keine Dopplung.
-    // Neubau: 6 Live-Dokumente (profile, course, assess, schema, repair, memory – „Claude merkt sich“
-    // liest app/memory synchron aus dem Live-Stand, prompts/work.ts) + 4 Sammlungen (vocab, grammar,
-    // archive, chunk) + Tagesprotokoll log/<heute> + app/week (Wochenplan) + app/decks (Stapel) = 13,
-    // weit unter der Vertragsgrenze von 64 je Ansicht (db.d.ts). Früher (Phase 5) waren es ≤ 10.
+    // Neubau: 7 Live-Dokumente (profile, course, assess, schema, repair, memory – „Claude merkt sich“
+    // liest app/memory synchron aus dem Live-Stand, prompts/work.ts –, levels – Lernpfad der Einwände, LIVE_DOCS)
+    // + 4 Sammlungen (vocab, grammar, archive, chunk) + Tagesprotokoll log/<heute> + app/week (Wochenplan)
+    // + app/decks (Stapel) = 14, weit unter der Vertragsgrenze von 64 je Ansicht (db.d.ts). Früher (Phase 5) waren es ≤ 10.
     const paths = await subPaths(page);
     expect(paths).toHaveLength(base);
     expect(paths.filter((p, i) => paths.indexOf(p) !== i), 'doppelte Abos').toEqual([]);
-    expect(base).toBeLessThanOrEqual(13);
+    expect(base, paths.join(', ')).toBeLessThanOrEqual(14);
     await expect.poll(async () => (await chatDoc(page)).msgs.length, { timeout: 15_000 }).toBe(6);
     expect((await chatDoc(page)).msgs.at(-1)?.stopped).toBeUndefined();
   });
@@ -329,7 +329,8 @@ test.describe('Handy 390: Begleiter sieht Phase-2–4-Bildschirme (Prüfbericht 
     await page.keyboard.press('Escape');
     await page.getByTestId('round-close').click();
 
-    await page.getByTestId('tab-speak').click();
+    // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
+    await openSpeak(page);
     await expect(page.getByTestId('scene-card').first()).toBeVisible();
     expect(await seeing(page)).toMatchObject({ area: 'speak', text: 'sieht gerade: Sprechen' });
     await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();

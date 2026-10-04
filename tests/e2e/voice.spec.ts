@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, screen } from './fixtures';
+import { boot, openSettings, openSpeak, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Stimme und Spracheingabe (Phase 3, Plan §9.2).
@@ -9,8 +9,8 @@ const spoken = (page: Page): Promise<string[]> => page.evaluate(() => [...(windo
 
 async function startRoleplay(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
+  // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
+  await openSpeak(page);
   await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
   await page.getByTestId('briefing-start').click();
   await screen(page, 'roleplay');
