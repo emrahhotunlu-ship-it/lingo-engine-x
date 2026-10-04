@@ -295,6 +295,17 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - **Preply:** weiter 2–4 Stunden pro Woche. Sprechen läuft vor allem dort, die App bereitet vor.
 - Tagesrahmen 30 Min. Kern plus bis zu 30 Min. Extra, Ziel C1 in spätestens 12 Monaten.
 
+**04.10.2026 – Kontingent (Emrahs Vorgabe)**
+- Das Wochenlimit ist knapp. Arbeitsweise ab jetzt:
+  - Keine Helfer-Agenten, außer ein Inhalt muss einmalig erzeugt werden; dann ein Agent mit Sonnet.
+  - Keine Bildschirmfotos.
+  - Die Testsuite läuft genau einmal vor der Auslieferung.
+  - Berichte kurz.
+- **Modell:** Folgesitzungen laufen mit **Sonnet 5.5, mittlerer Aufwand**. Opus nur für große Umbauten (z. B. Umzug auf `JLL8…`).
+- **Tagesauftrag:** neu und schlank („Englisch – Input des Tages (schlank)“).
+  - Er liest nur `coach/summary` und schreibt `input/<morgen>` mit zwei Beiträgen auf dem Test-Link.
+  - Er ist **pausiert**, bis Emrah ihn einschaltet (seine Antwort „ja“ zum Pausieren).
+
 **26.09.2026 – eigene Festlegungen**
 - **Tageswechsel um 04:00 Uhr Ortszeit** des Geräts. Eine Einheit nach Mitternacht zählt noch zum Vortag. Der Datumsschlüssel `JJJJ-MM-TT` wird überall mit derselben Funktion berechnet.
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
