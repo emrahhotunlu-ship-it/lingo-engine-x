@@ -5,7 +5,7 @@ import { ExerciseBar } from '../ui/ExerciseBar';
 import { Icon } from '../ui/Icon';
 import { useClock } from '../app/clock';
 import { go, setAskContext } from '../app/route';
-import { emptyDay, saveCards, saveDay, saveGrammar, saveSeen, useCoach } from '../coach/store';
+import { emptyDay, saveCards, saveDay, saveGrammar, saveRepair, saveSeen, useCoach } from '../coach/store';
 import { applyAnswer, daysUntil, introducedCard, knownCard, Session, type AnswerFacts, type Format, type Step } from '../coach/session';
 import { distractors, viewOf, type CardView } from '../coach/cardView';
 import type { DayRec } from '../coach/types';
@@ -13,18 +13,21 @@ import { inputOf, isCore, pct, stageOf } from '../coach/derived';
 import { grammarBlock, taskKey, topicState, updateTopic } from '../coach/grammarModel';
 import { mixForDay, type MixItem } from '../coach/mix';
 import { topicById, type GrammarTask } from '../coach/grammar';
+import { answerRepair, dueRepairs, grammarKey, planAdd, repairFromGrammar } from '../coach/repair';
 import { hash32, mulberry32, shuffle } from '../domain/random';
 import { Exercise, StepHead } from './Exercise';
 import { GrammarItem, MixTask, RuleCard } from './GrammarTask';
+import { RepairTask } from './RepairTask';
 import { Speak, WordDetails } from './parts';
 
 // Trainingseinheit (docs/neustart.md §4–§6): der Trainer stellt sie selbst zusammen.
 // 1. Wörter (Wiederholungen und neue Wörter), 2. Mix (feste Verbindung, falscher Freund),
-// 3. Grammatik (Regel des Fokus-Themas, vier Aufgaben dazu, zwei aus anderen Themen).
+// 3. Grammatik (Regel des Fokus-Themas, vier Aufgaben dazu, zwei aus anderen Themen),
+// 4. Reparatur: höchstens drei fällige Sätze aus früheren Fehlern (Teil der Pflicht, nur wenn welche fällig sind).
 // Jede Antwort wird sofort gespeichert, Abbrechen verliert nichts.
 
 type Totals = { ans: number; ok: number; nw: number; kn: number; ms: number };
-type Post = { kind: 'mix'; item: MixItem } | { kind: 'rule'; topic: string } | { kind: 'grammar'; task: GrammarTask };
+type Post = { kind: 'mix'; item: MixItem } | { kind: 'rule'; topic: string } | { kind: 'grammar'; task: GrammarTask } | { kind: 'repair'; slot: string };
 type Current = { kind: 'word'; step: Step } | Post;
 type GrammarScore = { topic: string; ok: number; n: number };
 
@@ -43,7 +46,11 @@ function postSteps(today: string): Post[] {
   const stage = stageOf(st.profile?.planStart, today);
   const block = grammarBlock(st.grammar, st.profile?.placement, stage, Date.now(), today);
   const mix = mixForDay(today, st.grammar?.seen ?? {});
-  return [...mix.map((item): Post => ({ kind: 'mix', item })), { kind: 'rule', topic: block.focus }, ...block.tasks.map((task): Post => ({ kind: 'grammar', task }))];
+  // Dieselbe Aufgabe nicht zweimal in einer Einheit: Steht sie schon im Grammatik-Block, wartet die Reparatur.
+  const inBlock = new Set(block.tasks.map(grammarKey));
+  const open = Object.fromEntries(Object.entries(st.repair).filter(([, r]) => !inBlock.has(r.k)));
+  const repairs = dueRepairs(open, Date.now()).map(([slot]): Post => ({ kind: 'repair', slot }));
+  return [...mix.map((item): Post => ({ kind: 'mix', item })), { kind: 'rule', topic: block.focus }, ...block.tasks.map((task): Post => ({ kind: 'grammar', task })), ...repairs];
 }
 
 function startSession(today: string, extra: boolean) {
@@ -158,10 +165,21 @@ export function SessionScreen({ extra }: { extra: boolean }) {
     const now = Date.now();
     const state = updateTopic(topicState(st.grammar, task.topic, st.profile?.placement), ok, now);
     void saveGrammar(task.topic, state, taskKey(task), now);
+    // Falsch beantwortete getippte Aufgaben kommen als Reparatur zurück (morgen zum ersten Mal).
+    const wrong = ok ? null : repairFromGrammar(task, now);
+    if (wrong) void saveRepair(planAdd(useCoach.getState().repair, [wrong]));
     bump({ ans: 1, ok: ok ? 1 : 0, ms: Math.min(ms, 90_000) });
     setDoneCount((n) => n + 1);
     const focus = post.find((p) => p.kind === 'rule');
     if (focus?.kind === 'rule' && focus.topic === task.topic) setScore((s) => ({ topic: task.topic, ok: (s?.ok ?? 0) + (ok ? 1 : 0), n: (s?.n ?? 0) + 1 }));
+    advance();
+  };
+
+  const onRepair = (slot: string, ok: boolean, ms: number) => {
+    const rec = useCoach.getState().repair[slot];
+    if (rec) void saveRepair({ [slot]: answerRepair(rec, ok, Date.now()) });
+    bump({ ans: 1, ok: ok ? 1 : 0, ms: Math.min(ms, 90_000) });
+    setDoneCount((n) => n + 1);
     advance();
   };
 
@@ -259,6 +277,7 @@ export function SessionScreen({ extra }: { extra: boolean }) {
           <RuleCard key={`r-${stepNo}`} topic={cur.topic} sure={topicState(useCoach.getState().grammar, cur.topic, useCoach.getState().profile?.placement).p} onGo={advance} />
         )}
         {cur.kind === 'grammar' && <GrammarItem key={`g-${stepNo}`} task={cur.task} bare onDone={(ok) => onGrammar(cur.task, ok, elapsed())} />}
+        {cur.kind === 'repair' && <RepairTask key={`p-${stepNo}`} slot={cur.slot} onDone={(ok) => onRepair(cur.slot, ok, elapsed())} />}
       </div>
     </div>
   );

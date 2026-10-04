@@ -10,10 +10,12 @@ import { initSpeech } from '../platform/speech';
 import { useClockTicker } from './clock';
 import { InputScreen } from '../screens/InputScreen';
 import { BlitzScreen } from '../screens/BlitzScreen';
+import { WriteScreen } from '../screens/WriteScreen';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { closeSheet, go, openSheet, useRoute } from './route';
 import { markNoDb, saveCards, saveProfile, saveSummary, startCoach, startInput, useCoach } from '../coach/store';
 import { buildSummary } from '../coach/summary';
+import { stumbleStats, weakCatsOf } from '../coach/stumble';
 import { addDays } from '../domain/date';
 import { useClock } from './clock';
 import { useDesktop } from './useDesktop';
@@ -81,10 +83,12 @@ function useBoot(): void {
   const profile = useCoach((s) => s.profile);
   const cards = useCoach((s) => s.cards);
   const inlog = useCoach((s) => s.inlog);
+  const writing = useCoach((s) => s.writing);
+  const repair = useCoach((s) => s.repair);
   const lastSummary = useRef('');
   useEffect(() => {
     if (status !== 'ready' || !profile?.placement) return;
-    const summary = buildSummary(profile, cards, inlog, today);
+    const summary = buildSummary(profile, cards, inlog, today, weakCatsOf(stumbleStats(writing, repair, today), 3));
     const key = JSON.stringify(summary);
     if (key === lastSummary.current) return;
     const timer = window.setTimeout(() => {
@@ -92,7 +96,7 @@ function useBoot(): void {
       void saveSummary(summary);
     }, 3000);
     return () => window.clearTimeout(timer);
-  }, [status, profile, cards, inlog, today]);
+  }, [status, profile, cards, inlog, writing, repair, today]);
 
   // Sprache und Darstellung: gespeichert im Profil, lokal nur als Kopie für den ersten Bildaufbau.
   const ui = useCoach((s) => s.profile?.ui);
@@ -121,7 +125,7 @@ const TABS: ReadonlyArray<{ route: 'home' | 'input' | 'plan'; icon: IconName; ke
   { route: 'plan', icon: 'chart', key: 'cTabPlan' },
 ];
 
-const isFlow = (route: string): boolean => route === 'session' || route === 'placement' || route === 'check' || route === 'blitz';
+const isFlow = (route: string): boolean => route === 'session' || route === 'placement' || route === 'check' || route === 'blitz' || route === 'write';
 
 /** Desktop (ab 1024 px): die Reiter stehen oben in der Kopfleiste, neben dem Namen. */
 function DesktopNav() {
@@ -248,6 +252,7 @@ function Screen() {
         {route.name === 'plan' && <PlanScreen />}
         {route.name === 'input' && <InputScreen />}
         {route.name === 'blitz' && <BlitzScreen />}
+        {route.name === 'write' && <WriteScreen from={route.from} />}
         {route.name === 'placement' && <PlacementScreen />}
         {route.name === 'check' && <PlacementScreen mode="check" />}
         {route.name === 'session' && <SessionScreen extra={!!route.extra} />}

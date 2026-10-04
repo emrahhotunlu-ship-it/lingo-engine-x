@@ -5,12 +5,12 @@ import { Icon } from '../ui/Icon';
 import { TYPE_INSTR, topicById, type GrammarTask } from '../coach/grammar';
 import { checkTyped } from '../domain/answer/check';
 import type { MixItem } from '../coach/mix';
-import { StepHead } from './Exercise';
+import { StepHead, type StepKind } from './Exercise';
 
 // Grammatik- und Mix-Aufgaben (Einstufung und Training). Nach jeder Antwort: richtig oder die
 // Lösung, dazu immer das Warum (Kap. 2.4), auch bei richtiger Antwort.
 
-export function GrammarItem({ task, onDone, bare = false }: { task: GrammarTask; onDone: (ok: boolean) => void; bare?: boolean }) {
+export function GrammarItem({ task, onDone, bare = false, kind = 'grammar', revealOnSkip = false }: { task: GrammarTask; onDone: (ok: boolean) => void; bare?: boolean; kind?: StepKind; revealOnSkip?: boolean }) {
   const { t, lang } = useT();
   const [value, setValue] = useState('');
   const [verdict, setVerdict] = useState<null | boolean>(null);
@@ -25,7 +25,7 @@ export function GrammarItem({ task, onDone, bare = false }: { task: GrammarTask;
 
   return (
     <div className={bare ? '' : 'lx-glass mt-6 rounded-[var(--radius-card)] p-6'} data-testid="grammar-item">
-      {bare && <StepHead kind="grammar" lv={null} />}
+      {bare && <StepHead kind={kind} lv={null} />}
       <p className="text-2xs text-muted">
         {topic ? (lang === 'de' ? topic.name : topic.name_en) : ''} · {TYPE_INSTR[lang][task.type]}
       </p>
@@ -85,7 +85,7 @@ export function GrammarItem({ task, onDone, bare = false }: { task: GrammarTask;
       )}
       <div className="mt-5 flex gap-2">
         {verdict === null ? (
-          <Button variant="ghost" onClick={() => onDone(false)} data-testid="grammar-skip">
+          <Button variant="ghost" onClick={() => (revealOnSkip ? setVerdict(false) : onDone(false))} data-testid="grammar-skip">
             {t('cPlDontKnow')}
           </Button>
         ) : (

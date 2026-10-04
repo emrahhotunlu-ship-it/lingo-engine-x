@@ -8,6 +8,8 @@ import { forecastDays, grammarSolid, inputHours, INPUT_HOURS_TARGET, learnedSinc
 import { topicById } from '../coach/grammar';
 import { dayKeyNoon } from '../domain/date';
 import { BriefCard, CheckCard, CurveCard } from './PlanParts';
+import { PlanStumble } from './PlanStumble';
+import { PlanWriting } from './PlanWriting';
 
 // Fahrplan zu C1 (docs/neustart.md §7): vier Etappen à drei Monate, Messwerte je Säule, Prognose.
 
@@ -109,6 +111,8 @@ export function PlanScreen() {
         </div>
         <div>
           <CurveCard />
+          <PlanStumble />
+          <PlanWriting />
           <CheckCard />
         </div>
       </div>

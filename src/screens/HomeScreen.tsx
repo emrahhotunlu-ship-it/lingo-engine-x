@@ -12,6 +12,7 @@ import { viewOf } from '../coach/cardView';
 import { STAGE_KEYS } from './PlanScreen';
 import { TEST_BUILD } from '../app/testBuild';
 import { TestSkipButton } from './TestTools';
+import { dueRepairs } from '../coach/repair';
 
 // Heute (docs/neustart.md §4, Kap. 2.1): ein Satz vom Trainer, EIN großer Knopf, darunter der Weg
 // zu C1. Erledigt heißt erledigt: Nach dem Kern-Training ist der Knopf ein Zustand, kein Auftrag.
@@ -49,6 +50,7 @@ export function HomeScreen() {
   const placed = !!profile?.placement;
   const plan = todayPlan(cards, profile, day, now);
   const streak = streakOf(days, profile?.imported?.days ?? [], today);
+  const repair = useCoach((s) => s.repair);
   const input = useCoach((s) => s.input);
   const inlog = useCoach((s) => s.inlog);
   const todaysInput = inputOf(input, today);
@@ -71,6 +73,8 @@ export function HomeScreen() {
     else if (plan.due === 0) brief.push(t('cBriefPlanNew', { new: plan.fresh, min: plan.minutes }));
     else brief.push(t('cBriefPlan', { due: plan.due, new: plan.fresh, min: plan.minutes }));
     if (hard) brief.push(t('cBriefStubborn', { words: hard }));
+    const repairs = dueRepairs(repair, now).length;
+    if (repairs > 0) brief.push(tn('schBriefRepair', repairs));
   }
 
   const stage = stageOf(profile?.planStart, today);
@@ -102,6 +106,9 @@ export function HomeScreen() {
                 </Button>
                 <Button variant="secondary" icon="bolt" onClick={() => go({ name: 'blitz' })} data-testid="open-blitz">
                   {t('cBlitz')}
+                </Button>
+                <Button variant="secondary" icon="edit" onClick={() => go({ name: 'write' })} data-testid="open-write">
+                  {t('schHomeWrite')}
                 </Button>
                 {openInput && (
                   <Button variant="ghost" icon="book" onClick={() => go({ name: 'input' })}>

@@ -1,10 +1,12 @@
 import type { SampleFn, SampleOptions, SampleResult } from '../types';
 import { registerCannedReply } from './fakeSample';
+import { cannedWriteReview } from './cannedWrite';
 
 // Feste Antworten des Entwicklungs-Adapters für die Vorlagen des Trainers (src/prompts/coach.ts).
 export function registerCannedReplies(): void {
   registerCannedReply('coach-translate', 'We need to negotiate a better price.');
   registerCannedReply('coach-brief', 'Diese Woche lief stabil: 5 Tage trainiert, 82 % richtig. Bremsen tun dich die Artikel. Fokus nächste Woche: Artikel und Present Perfect.');
+  registerCannedReply('write-review', (input) => cannedWriteReview(input));
   registerCannedReply('coach-ask', '"Negotiate" heißt verhandeln. Beispiel: We negotiated a two-year contract.');
 }
 

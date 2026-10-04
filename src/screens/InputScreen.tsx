@@ -4,7 +4,7 @@ import { Button } from '../ui/Button';
 import { Icon } from '../ui/Icon';
 import { ExternalLink } from '../ui/ExternalLink';
 import { useClock } from '../app/clock';
-import { openWord, setAskContext } from '../app/route';
+import { go, openWord, setAskContext } from '../app/route';
 import { emptyDay, saveDay, saveInLog, useCoach } from '../coach/store';
 import { inputOf, isCore } from '../coach/derived';
 import type { InLogEntry, InputItem } from '../coach/types';
@@ -154,6 +154,13 @@ export function InputCard({ item, day }: { item: InputItem; day: string }) {
         </div>
       )}
       {done && <p className="mt-3 text-xs text-muted">{t('cInSaved')}</p>}
+      {done && (
+        <div className="mt-3">
+          <Button variant="secondary" icon="edit" onClick={() => go({ name: 'write', from: { day, id: item.id } })} data-testid="input-write">
+            {t('schInputWrite')}
+          </Button>
+        </div>
+      )}
     </article>
   );
 }
