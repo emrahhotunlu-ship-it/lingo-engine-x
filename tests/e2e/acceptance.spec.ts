@@ -62,7 +62,8 @@ test('Kap. 14: alle bisherigen Daten sichtbar, Serie läuft weiter', async ({ pa
   await boot(page, { migrated: true });
   await expectStreak(page, '12');
   await openOverview(page);
-  await expect(page.getByTestId('course-done')).toHaveText('6');
+  // Kurs x/24 steht nicht mehr im Kopf (Fokus-Umbau); die Kursdaten bleiben in der Datenbank.
+  await expect(page.getByTestId('course-done')).toHaveCount(0);
   await expect(page.getByTestId('vocab-total')).toHaveText('146');
 });
 

@@ -4,23 +4,24 @@ import { boot, screen } from './fixtures';
 import { DAY, dump, writes } from './trainerHelpers';
 
 // Heute mit Tagesplan v2 (phase2-plan §6, §9.3): Zähler, Häkchen, Statuszeile, Heldenkarte und
-// Reiter-Zahl sagen bei 0, 1, 2 und 3 von 3 dasselbe (Kap. 2.2); Erledigtes ist Zustand ohne
+// Reiter-Zahl sagen bei 0, 1 und 2 von 2 dasselbe (Kap. 2.2); Erledigtes ist Zustand ohne
 // bedienbares Kind; Wechsel um 04:00; ein schon gespeicherter Plan von heute bleibt unverändert.
 
 type Doc = Record<string, unknown>;
 const SEED = JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Doc>;
-const LABEL: Record<string, string> = { review: 'Wiederholen', lesson: 'Lektion', 'ch:order': 'Satzbau' };
-const DUTIES = ['review', 'lesson', 'ch:order'] as const;
+const LABEL: Record<string, string> = { review: 'Wiederholen', 'ch:order': 'Satzbau' };
+// Seit dem Fokus-Umbau gibt es die Lektion nicht mehr als Pflichtpunkt: zwei Punkte.
+const DUTIES = ['review', 'ch:order'] as const;
 
-/** Plan v2 von heute mit fester Zielmenge (2 Karten), Lektion l08, Pflichtkanal Satzbau. */
+/** Plan v2 von heute mit fester Zielmenge (2 Karten), Pflichtkanal Satzbau. */
 const PLAN = {
   d: DAY,
   v: 1,
-  ids: ['order', 'cloze', 'gram'],
-  why: [[['agoNever']], [['whyThin']], [['whyRotation']]],
+  ids: ['order', 'cloze'],
+  why: [[['agoNever']], [['whyRotation']]],
   duty: [...DUTIES],
   goal: { review: 2, due: 2, new: 0, ahead: 0, ch: 6 },
-  lesson: 'l08',
+  lesson: null,
   at: 1,
 };
 
@@ -32,9 +33,6 @@ function statePatch(done: ReadonlySet<string>): Record<string, Doc> {
   delete dayAct.order;
   if (done.has('ch:order')) dayAct.order = 1;
   act[DAY] = dayAct;
-  const course = SEED['app/course'] as Doc;
-  const courseDone = { ...(course.done as Record<string, Doc>) };
-  if (done.has('lesson')) courseDone.l08 = { d: DAY, n: 12, ok: 10, t: Date.parse('2026-09-20T19:00:00+02:00') };
   const entries = done.has('review')
     ? [
         { t: 1, ok: true, lang: 'de', k: 'v', id: 'avoid', m: 'tr-type', given: 'avoid', ans: 'avoid', g: 3, ms: 1000, ctx: 'rev' },
@@ -43,7 +41,7 @@ function statePatch(done: ReadonlySet<string>): Record<string, Doc> {
     : [];
   const p: Doc = { plan: PLAN, act };
   if (profile.pflicht && typeof profile.pflicht === 'object') p.pflicht = { ...(profile.pflicht as Doc), [DAY]: undefined };
-  return { 'app/profile': p, 'app/course': { done: courseDone }, [`log/${DAY}`]: { date: DAY, entries } };
+  return { 'app/profile': p, [`log/${DAY}`]: { date: DAY, entries } };
 }
 
 async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<void> {
@@ -51,19 +49,19 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
   const open = DUTIES.filter((d) => !done.has(d));
   const status = page.getByTestId('today-status');
   await expect(status).toHaveAttribute('data-done', String(n));
-  await expect(status).toHaveAttribute('data-total', '3');
-  if (n === 3) {
+  await expect(status).toHaveAttribute('data-total', '2');
+  if (n === 2) {
     await expect(status).toHaveText('Fertig für heute');
     await expect(status).toHaveAttribute('data-status', 'allDone');
     // Fertig ist Zustand: keine Blockliste, kein Knopf in der Karte (Kap. 2.2).
     await expect(page.getByTestId('duty')).toHaveCount(0);
     await expect(page.getByTestId('today-card').locator('button')).toHaveCount(0);
   } else {
-    await expect(status).toHaveText(new RegExp(`^${n} von 3 · noch ca\\. \\d+ Min\\.$`));
+    await expect(status).toHaveText(new RegExp(`^${n} von 2 · noch ca\\. \\d+ Min\\.$`));
     await expect(status).toHaveAttribute('data-status', 'open');
     // Häkchen: genau die erledigten Punkte, in Plan-Reihenfolge.
     const items = page.getByTestId('duty');
-    await expect(items).toHaveCount(3);
+    await expect(items).toHaveCount(2);
     expect(await items.evaluateAll((els) => els.map((e) => [e.getAttribute('data-duty'), e.getAttribute('data-state')]))).toEqual(DUTIES.map((d) => [d, done.has(d) ? 'done' : 'open']));
     // Erledigt ist Zustand: keine Zeile hat ein bedienbares Kind; bedienbar ist nur der eine Startknopf.
     await expect(page.locator('[data-testid="duty"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(0);
@@ -90,11 +88,10 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
 }
 
 const CASES: Array<{ name: string; done: string[] }> = [
-  { name: '0 von 3', done: [] },
-  { name: '1 von 3 (Wiederholen)', done: ['review'] },
-  { name: '1 von 3 (nur Satzbau)', done: ['ch:order'] },
-  { name: '2 von 3', done: ['review', 'lesson'] },
-  { name: '3 von 3', done: ['review', 'lesson', 'ch:order'] },
+  { name: '0 von 2', done: [] },
+  { name: '1 von 2 (Wiederholen)', done: ['review'] },
+  { name: '1 von 2 (nur Satzbau)', done: ['ch:order'] },
+  { name: '2 von 2', done: ['review', 'ch:order'] },
 ];
 
 for (const c of CASES) {
@@ -107,7 +104,7 @@ for (const c of CASES) {
     await page.waitForTimeout(300);
     expect((await dump(page))['app/profile']?.plan).toEqual(PLAN);
     // Pflicht erledigt → pflicht[heute] = 1 (Regel 1); sonst nie gesetzt.
-    if (done.size === 3) await expect.poll(async () => ((await dump(page))['app/profile']?.pflicht as Doc | undefined)?.[DAY]).toBe(1);
+    if (done.size === 2) await expect.poll(async () => ((await dump(page))['app/profile']?.pflicht as Doc | undefined)?.[DAY]).toBe(1);
     else expect(((await dump(page))['app/profile']?.pflicht as Doc | undefined)?.[DAY]).toBeUndefined();
     expect(errors).toEqual([]);
     expect(external).toEqual([]);

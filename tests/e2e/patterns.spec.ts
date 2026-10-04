@@ -237,23 +237,3 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     expect(external).toEqual([]);
   });
 });
-
-test('„Sag es“ bekommt die Top-3-Muster als Hinweis im Prompt (Handy)', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  const plan = { d: '2026-09-20', v: 1, ids: ['say', 'gram', 'cloze'], why: [[['whySay']], [['whyRotation']], [['whyRotation']]], duty: ['ch:say'], goal: { review: 0, ch: 1 }, lesson: null, at: 1 };
-  await boot(page, { migrated: true, fake: { patch: { 'app/patterns': PRESET, 'app/profile': { plan } } } });
-  await screen(page, 'today');
-  await page.getByTestId('start').click();
-  // Neubau N71 „Laut zuerst“: erst laut sprechen, dann aufschreiben.
-  await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'aloud');
-  await page.getByTestId('say-aloud-done').click();
-  await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'write1');
-  await page
-    .getByTestId('say-draft')
-    .fill('Thank you for your honest feedback. We work together since 2019 and they save many hours every month. Our actual price list is attached, so you can compare it with your costs.');
-  await page.getByTestId('say-check').click();
-  await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'feedback');
-  const sc = (await calls(page)).filter((c) => c.id === 'say-check');
-  expect(sc[0]!.input).toContain('pay special attention to these): “since” with the present tense; “actual” used for “current”');
-  expect(sc[0]!.input.split('\n')[0]).toBe('[say-check@2]');
-});

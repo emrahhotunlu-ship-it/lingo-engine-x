@@ -22,7 +22,7 @@ async function openHistory(page: Page): Promise<void> {
 }
 
 
-test('Kap. 9/14: alte Wochen-Checks und „Letzte Fortschritte" sind im Verlauf sichtbar (nur lesen)', async ({ page }) => {
+test('Kap. 9/14: alte Wochen-Checks sind sichtbar, die „Letzten Fortschritte“ der alten App nicht mehr (nur lesen, Daten bleiben)', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
   await openChecks(page);
   const card = page.getByTestId('checks-card');
@@ -32,14 +32,9 @@ test('Kap. 9/14: alte Wochen-Checks und „Letzte Fortschritte" sind im Verlauf 
   await expect(card.getByTestId('check-row').first()).toContainText('4/5');
   await expect(card.getByTestId('check-last')).toContainText('75 %');
   await expect(card.getByTestId('check-last')).toContainText('67 %');
+  // Fokus-Umbau: die Tabelle „Letzte Fortschritte“ (Entdecken, Preply …) ist nicht mehr in der Oberfläche; `profile.feed` bleibt.
   await openHistory(page);
-  const feed = page.getByTestId('legacy-feed');
-  await feed.getByTestId('feed-toggle').click();
-  await expect(feed.getByTestId('feed-row')).toHaveCount(6);
-  await feed.getByRole('button', { name: /ältere Zeilen/ }).click();
-  await expect(feed.getByTestId('feed-row')).toHaveCount(8);
-  // Keine Punktestände (Kap. 2.3).
-  await expect(feed).not.toContainText('XP');
+  await expect(page.getByTestId('legacy-feed')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   // Nur lesen: das Öffnen schreibt nichts an checks/feed.
   const p = await profileOf(page);

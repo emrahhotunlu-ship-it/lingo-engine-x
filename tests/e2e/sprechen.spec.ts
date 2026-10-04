@@ -18,7 +18,7 @@ async function send(page: Page, text: string): Promise<void> {
 
 test.use({ viewport: MOBILE });
 
-test('Seite: Szenen und Einwand-Training, Gespräch in 2 Tipps, Ziel-Haken, Neuladen nach Zug 3, Bericht mit Raster', async ({ page }) => {
+test('Seite: Szenen und Einwand-Training, Gespräch in 2 Tipps, Ziel-Haken, Neuladen nach Zug 3, Bericht', async ({ page }) => {
   await installGoalCheckReply(page);
   const { errors, external } = await boot(page, { migrated: true, fake: { persist: true } });
   await screen(page, 'today');
@@ -59,8 +59,8 @@ test('Seite: Szenen und Einwand-Training, Gespräch in 2 Tipps, Ziel-Haken, Neul
   await page.getByTestId('rp-end').click();
   await expect(page.getByTestId('report')).toHaveAttribute('data-state', 'saved');
   await expect(page.getByTestId('report-goal-list').locator('[data-state="met"]')).toHaveCount(1);
-  await expect(page.getByTestId('report-criteria')).toHaveAttribute('data-state', 'done');
-  expect(await page.getByTestId('criterion').count()).toBeGreaterThanOrEqual(3);
+  // Das Kriterien-Raster gab es nur bei Business-Szenen (entfernt); die übrigen Szenen haben keines.
+  await expect(page.getByTestId('report-criteria')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);

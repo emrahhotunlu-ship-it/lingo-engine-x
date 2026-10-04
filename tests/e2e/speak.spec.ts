@@ -43,34 +43,6 @@ async function say(page: Page, text: string): Promise<void> {
 
 const SENTENCES = ['That depends on your test team and the exposure.', 'I think the budget is not the problem here.', 'We must delay the start by two weeks.', 'The penalty risk is real for your company.'];
 
-test('Übersicht: Szenen aus Inhalt und Datenbank, KI-Szene, unvollständige Szene ohne Start', async ({ page }) => {
-  const { errors, external } = await boot(page, { migrated: true });
-  await openHub(page);
-  // Neubau I15: Sprech-Status nur, wenn Block 3 heute ein Gespräch ist (Sonntag: Wochen-Check).
-  await expect(page.getByTestId('speak-status')).toHaveCount(0);
-  await expect(page.getByTestId('scenes-own').getByTestId('scene-card')).toHaveCount(7);
-  // Neubau N70: Business-Szenen aus P7a (erste 4, „Alle zeigen“), Szene zum Wochenthema oben.
-  await expect(page.getByTestId('scenes-biz').getByTestId('scene-card')).toHaveCount(4);
-  await expect(page.getByTestId('speak-theme-scene')).toBeVisible();
-  await expect(page.locator('[data-testid="scene-card"][data-src="ai"]')).toHaveCount(1);
-  // Vier Szenen der alten App plus die festen „Preisverhandlung“ und „Partner-Pitch“ (Kap. 6.5).
-  await expect(page.getByTestId('scenes-own').locator('[data-testid="scene-card"][data-src="legacy"]')).toHaveCount(6);
-  await expect(page.locator('[data-testid="scene-card"][data-scene="sc-price"]')).toContainText('Preis');
-  await expect(page.locator('[data-testid="scene-card"][data-scene="sc-pitch"]')).toContainText('Vertriebspartnerschaft');
-  // Unvollständige Szenen stehen nicht in der Liste, sondern zugeklappt darunter (UX-Beratung Nr. 7).
-  await expect(page.locator('[data-testid="scene-card"][data-scene="sc-broken"]')).toBeHidden();
-  await page.getByTestId('scenes-incomplete').locator('summary').click();
-  await page.locator('[data-testid="scene-card"][data-scene="sc-broken"]').click();
-  await expect(page.getByTestId('briefing')).toBeVisible();
-  await expect(page.getByTestId('briefing-start')).toHaveCount(0);
-  await page.keyboard.press('Escape');
-  await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
-  await expect(page.getByTestId('useful-phrase')).toHaveCount(5);
-  await expect(page.getByTestId('scene-create')).toBeVisible();
-  expect(errors).toEqual([]);
-  expect(external).toEqual([]);
-});
-
 test('Gespräch: 4 Züge, Analysen der Reihe nach, drei Schichten, Wort-Antippen, Mitnehmen, Bericht, gespeichert', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors, external } = await boot(page, { migrated: true });
@@ -257,46 +229,6 @@ test('Scrollen: hochgescrollt + neue Antwort → keine Bewegung, Pille „Neue A
   expect(await page.evaluate(() => window.scrollY)).toBeLessThan(50);
   await page.getByTestId('rp-newer').click();
   await expect.poll(() => page.evaluate(() => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60)).toBe(true);
-});
-
-test('Neue Szene: KI-Karte erscheint, scene/sc-ai… ist gespeichert', async ({ page }) => {
-  await boot(page, { migrated: true });
-  await openHub(page);
-  await page.getByTestId('scene-create').click();
-  await page.getByTestId('scene-create-wish').fill('Budget talk with my finance director');
-  await page.getByTestId('scene-create-submit').click();
-  await expect(page.getByTestId('briefing')).toBeVisible();
-  await expect(page.getByTestId('briefing')).toContainText('Thomas Brandt');
-  await page.keyboard.press('Escape');
-  await expect(page.locator('[data-testid="scene-card"][data-src="ai"]')).toHaveCount(2);
-  const ids = Object.keys(await dump(page)).filter((p) => p.startsWith('scene/sc-ai'));
-  expect(ids).toHaveLength(2);
-});
-
-test('Übung „aus der Situation“: Runde bis zum Ende speichert Aktivität und Minuten', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true });
-  await openHub(page);
-  const before = (await dump(page))['app/profile'] as { act?: Record<string, Record<string, number>>; minutes?: Record<string, number> };
-  const actOf = (p: typeof before) => p.act?.[DAY]?.speak ?? 0;
-  const minOf = (p: typeof before) => p.minutes?.[DAY] ?? 0;
-  await page.getByTestId('situation-start').click();
-  const drill = page.getByTestId('situation-drill');
-  for (let i = 0; i < 12; i++) {
-    await expect(drill).toHaveAttribute('data-state', /asking|done/);
-    if ((await drill.getAttribute('data-state')) === 'done') break;
-    await page.getByTestId('situation-input').fill('I see what you mean');
-    await page.getByTestId('situation-check').click();
-    await expect(drill).toHaveAttribute('data-state', 'checked');
-    await page.getByTestId('situation-next').click();
-  }
-  await expect(page.getByTestId('situation-result')).toBeVisible();
-  await expect.poll(async () => actOf((await dump(page))['app/profile'] as typeof before)).toBe(actOf(before) + 1);
-  expect(minOf((await dump(page))['app/profile'] as typeof before)).toBeGreaterThanOrEqual(minOf(before) + 1);
-  // Schließen nach dem Ende speichert nicht ein zweites Mal.
-  await drill.getByRole('button').last().click();
-  await page.waitForTimeout(300);
-  expect(actOf((await dump(page))['app/profile'] as typeof before)).toBe(actOf(before) + 1);
-  expect(errors).toEqual([]);
 });
 
 const LOOKS: Array<{ width: number; theme: Theme; lang: Lang }> = [

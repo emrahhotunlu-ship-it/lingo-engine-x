@@ -45,3 +45,5 @@ Reihenfolge: 1 `features/input/AiRunPanel` → `ui/` · 2 `aiTasks`/`AiTaskNotic
 3. Der Reiter heißt noch „Wortschatz“ (W4), `Kurs`-Bereich (Üben-Hub) und `features/learn` bestehen noch.
 4. Die Namen der Datenbereiche auf dem Umstellungs-Bildschirm (`col*`, `mig*`) nennen Preply/Entdecken beim Namen (Textscan-Ausnahme: sie zeigen, was in der Datenbank unangetastet bleibt).
 **Nächste Schritte:** E2E-Gesamtlauf durch die Koordination, danach `verify`, `platform-guard`, Test-Link T1.
+
+**E2E-Stand W2 Teil 2:** 14 betroffene Specs (205 Tests) gelaufen: 190 grün, 15 rot. Ursache der 15: Erwartungen an entfernte Oberflächen (Kurs-Zahl, Heatmap, Feed-Tabelle, Lektion als Pflicht, Business-Szenen/Szene erstellen/Situation, „Sag es“-Prompt, Wochenthema). Alle angepasst bzw. entfernte Tests gelöscht; danach grün (today-duties, acceptance, stand-gaps, profil, patterns, speak, sprechen, progress, heute, rahmen). Den E2E-Gesamtlauf macht die Koordination.
