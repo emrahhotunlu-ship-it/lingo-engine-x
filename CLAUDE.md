@@ -10,6 +10,7 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 ## A1. Auftrag in Kürze
 - **Was:** Neubau von null (Greenfield) einer persönlichen High-End-Englisch-App (B2 → C1) für Emrah. Sie läuft als **veröffentlichtes Claude-Artefakt**: eine einzige HTML-Datei, Datenbank und KI ausschließlich über `claude.use("db")` / `claude.use("sample")`.
 - **Vorgänger-App:** Von ihr werden nur **die Daten und die Funktionsideen** übernommen, **kein Code**.
+- **Fokus seit 04.10.2026 (Umbau):** Die App trainiert nur noch **Wörter und Grammatik** (dazu freiwillig Sprechen mit Rollenspiel und Einwand-Training, Übersetzer, Claude). Kap. 2 Nr. 5 (kombinierte Aufgaben), Kap. 6 (Funktionsumfang) und Kap. 14 („alle Module“) des Auftrags gelten nur dafür. Maßgeblich sind `docs/umbau/gesamtkonzept.md`, `docs/umbau/uebergabe.md` und der Merkzettel `docs/umbau/stand.md`; Arbeits-Branch `claude/umbau-fokus`, Rückweg Marke `pre-fokus` (Commit `6aaf4af`).
 - **Vollständiger Auftrag:** `docs/auftrag.md` (Kapitel 0–15). Vor jeder Phase die betroffenen Kapitel dort vollständig lesen, besonders Kap. 4 (Interaktions-Engine), 5 (Lernwissenschaft), 6 (Funktionsumfang), 7 (Motivation), 8 (Design-System), 9 (Daten), 10 (KI-Schicht), 12 (Tests), 13 (Phasenplan).
 - **Maßgebliche Laufzeit-Verträge:** `contract/*.d.ts` (Version 0.2.49). **Vor jedem Daten- oder KI-Code** `contract/claude.d.ts`, `contract/db.d.ts` und `contract/sample.d.ts` vollständig lesen, nichts aus dem Gedächtnis raten. Widerspricht der Auftragstext einem Vertrag, gilt der Vertrag (Kap. 3.1: „maßgeblich").
 - **Bestehende Datenstruktur:** `docs/datenstruktur.json` (Anhang B). Sie ist die Referenz für jeden Dokumentpfad und jedes Feld der alten Datenbank.
@@ -57,6 +58,9 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] Vorarbeiten fertig, noch nicht gemergt: WP1 KI-Tor/Sprachausgabe (`1651f78`), WP3 Wörterbuch/Lautschrift (`779bdd0`)
   - [x] Trainer-Umbau nach Emrahs Rückmeldung, Wort-Antippen, Lautschrift, Aussprache, KI-Tor – produktiv (c29b3dd)
   - [ ] Pflicht/`pflichtSince` und Wendungen im Trainer kommen mit Phase 2
+- [ ] **Umbau „Fokus Wörter und Grammatik“** (Wellen W0–W6, Stand in `docs/umbau/stand.md`; Branch `claude/umbau-fokus`; Test-Link nach W2, Live nur mit „Ja live nehmen“)
+  - [x] W0 Vorbereitung (Marke, Messbasis `docs/umbau/09-messbasis.md`, A1/A4 angepasst)
+  - [ ] W1 Entkoppeln · [ ] W2 Aufräumen (T1) · [ ] W3 Heute (T2) · [ ] W4 Wörter/Atlas (T3) · [ ] W5 Grammatik/Fortschritt (T4) · [ ] W6 Politur (T5)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
 - [ ] Phase 4 – Input und Output: Lesen, Hören, Schreiben, Entdecken
