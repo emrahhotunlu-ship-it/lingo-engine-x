@@ -48,6 +48,9 @@ devMarkers.push('zzlong', 'zzen', 'zzsame', 'zzempty', '[no-solution]', 'registe
 devMarkers.push('Heads-Up Before the Client Call', 'Four-Day Week Really Work');
 // Phase 6/7: Fehlerpfade und Messhilfen des Adapters.
 devMarkers.push('assessBad', 'peakSubscriptions', 'setAssessBad');
+// Umbau „Fokus Wörter und Grammatik“: Kennungen entfernter KI-Vorlagen dürfen nicht mehr im Build stehen.
+const removedTemplates = ['listening-text@', 'reading-text@', 'reading-check@', 'writing-prompt@', 'writing-review@', 'apply-check@', 'mail-refine@', 'pitch-script@', 'pitch-feedback@', 'say-check@', 'fluency-check@', 'tone-check@', 'meeting-prep@', 'meeting-debrief@', 'phrase-adapt@', 'scene-gen@', 'compare@'];
+for (const m of removedTemplates) if (html.includes(m)) problems.push(`Kennung einer entfernten Vorlage im Build: "${m}"`);
 for (const m of devMarkers) if (html.includes(m)) problems.push(`Entwicklungs-Adapter oder Testdaten im Build: "${m}"`);
 
 // Kopf

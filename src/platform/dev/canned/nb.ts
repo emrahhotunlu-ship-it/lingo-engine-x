@@ -67,42 +67,6 @@ export function claudeDrillReply(input: string): string {
   return JSON.stringify(DRILL[en ? 'en' : 'de']);
 }
 
-// ---------------------------------------------------------------- unit-listen@1
-
-const LISTEN_TEXT = [
-  "Hi Daniel, it's Maria from the procurement team. I'm calling about the proposal you sent on Friday.",
-  'First of all, thanks for turning it around so quickly. The team liked the overall approach, and the rollout plan looks realistic to us.',
-  'That said, we have one open point before we can move forward. Our finance director wants to see a clear breakdown of the onboarding costs, because last year we had some unpleasant surprises with another vendor.',
-  "So could you send us a short overview by Wednesday? It doesn't have to be fancy. A simple table with the main items and the expected hours would be perfect.",
-  "If that works out, I'd like to set up a call with our IT lead next week to walk through the technical details. She has a few questions about data security, but nothing that should hold us up.",
-  "Anyway, give me a call back when you get a chance. I'm in the office until five today. Thanks again, and talk soon.",
-].join('\n\n');
-
-const LISTEN = {
-  title: 'A quick call about the proposal',
-  text: LISTEN_TEXT,
-  core: {
-    q_de: 'Was braucht Maria, bevor es weitergehen kann?',
-    q_en: 'What does Maria need before they can move forward?',
-    options: ['A breakdown of the onboarding costs', 'A new rollout plan', 'A discount on the license', 'A call with the finance director'],
-    answer: 0,
-    quote: 'wants to see a clear breakdown of the onboarding costs',
-    why_de: 'Maria sagt, der Finanzchef möchte eine klare Aufstellung der Einführungskosten sehen.',
-    why_en: 'Maria says the finance director wants a clear breakdown of the onboarding costs.',
-  },
-  between: {
-    q_de: 'Warum ist die Firma bei den Kosten vorsichtig?',
-    q_en: 'Why is the company careful about costs?',
-    options: ['They have a small budget this year', 'They had bad experiences with hidden costs before', 'They do not trust Daniel', 'Their IT lead is against the project'],
-    answer: 1,
-    quote: 'last year we had some unpleasant surprises with another vendor',
-    why_de: 'Die unangenehmen Überraschungen im letzten Jahr deuten auf versteckte Kosten hin.',
-    why_en: 'The unpleasant surprises last year point to hidden costs they want to avoid.',
-  },
-  notice: ['turning it around so quickly', 'move forward', 'hold us up'],
-  shadow: ["It doesn't have to be fancy.", "I'm in the office until five today.", 'The rollout plan looks realistic to us.'],
-};
-
 // ---------------------------------------------------------------- text-cards@1
 
 const CARD_WORDS: ReadonlyArray<{ word: string; pos: string; de: string; def: string }> = [

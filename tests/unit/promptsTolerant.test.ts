@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call -- Testdaten: freie, realistische KI-Antworten werden gezielt verändert (JSON ohne festen Typ). */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- Testdaten: freie, realistische KI-Antworten werden gezielt verändert (JSON ohne festen Typ). */
 import { describe, expect, it } from 'vitest';
 import { reportExample, reportSchema } from '../../src/prompts/roleplayReport';
 import { cleanFigureText } from '../../src/prompts/roleplayTurn';
