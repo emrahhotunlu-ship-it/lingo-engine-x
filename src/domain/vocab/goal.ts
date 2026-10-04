@@ -6,6 +6,11 @@ import { addDays } from '../date';
 // Dazu die seit der Messung gefestigten Karten (Einführung ab Messtag, Stabilität ≥ 7 Tage).
 
 export const VOCAB_TARGET = 8000;
+/** C1-Marke im Atlas (Gesamtkonzept 3.3): keine offizielle Grenze, eine Orientierung. */
+export const C1_MARK = 4500;
+/** „Fest“: Stufe ≥ 4 und Stabilität ≥ 21 Tage. */
+export const FEST_STAGE = 4;
+export const FEST_DAYS = 21;
 
 export type VocabGoal = {
   target: number;
@@ -16,6 +21,8 @@ export type VocabGoal = {
   weeks: number | null;
   reached: boolean;
   measured: boolean;
+  /** Karten, die fest sitzen (eine Quelle für Heute, Wörter und Fortschritt). */
+  fest: number;
 };
 
 type Doc = Readonly<Record<string, unknown>>;
@@ -53,5 +60,6 @@ export function vocabGoal(i: { profile: Doc | null | undefined; cards: readonly 
   const now = v0 === null ? null : Math.round(v0 + learned);
   const reached = now !== null && now >= VOCAB_TARGET;
   const weeks = now === null || reached || perWeek < 1 ? null : Math.ceil((VOCAB_TARGET - now) / perWeek);
-  return { target: VOCAB_TARGET, now, band, measuredOn, perWeek, weeks, reached, measured: v0 !== null };
+  const fest = vocab.filter((c) => c.stage >= FEST_STAGE && c.fsrs.stability >= FEST_DAYS).length;
+  return { fest, target: VOCAB_TARGET, now, band, measuredOn, perWeek, weeks, reached, measured: v0 !== null };
 }

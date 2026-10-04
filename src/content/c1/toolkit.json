@@ -142,8 +142,8 @@
    "p0": 0.45,
    "name": "Passiv erweitert – Modalverben, Perfekt, -ing, „is said to“",
    "name_en": "Passive extended: modals, perfect, -ing, “is said to”",
-   "rule": "Das Passiv gibt es auch mit Modalverben (must be signed), im Perfekt (has been signed), als Gerundium (being asked) und als persönliche Konstruktion („The CEO is said to resign“). So bleibt der Handelnde unwichtig oder unbekannt.",
-   "rule_en": "The passive also works with modals (must be signed), in the perfect (has been signed), as a gerund (being asked) and in personal constructions (“The CEO is said to resign”). The doer stays unimportant or unknown.",
+   "rule": "Das Passiv gibt es auch mit Modalverben (must be signed), im Perfekt (has been signed), als Gerundium (being asked) und als persönliche Konstruktion („The CEO is said to have resigned“). So bleibt der Handelnde unwichtig oder unbekannt.",
+   "rule_en": "The passive also works with modals (must be signed), in the perfect (has been signed), as a gerund (being asked) and in personal constructions (“The CEO is said to have resigned”). The doer stays unimportant or unknown.",
    "ex": [
     "The contract must be signed before Friday.",
     "The company is said to have lost millions last year."
@@ -1223,8 +1223,8 @@
   },
   "report-verbs": {
    "core": [
-    "Berichtsverben verlangen feste Konstruktionen: suggest / recommend / admit / deny + -ing, insist on + -ing, advise / warn / offer + (Person) + to-Infinitiv.",
-    "Reporting verbs need fixed patterns: suggest / recommend / admit / deny + -ing, insist on + -ing, advise / warn / offer + (person) + to-infinitive."
+    "Berichtsverben verlangen feste Konstruktionen: suggest / recommend / admit / deny + -ing, insist on + -ing, advise / warn + Person + to-Infinitiv; offer + to-Infinitiv (ohne Person).",
+    "Reporting verbs need fixed patterns: suggest / recommend / admit / deny + -ing, insist on + -ing, advise / warn + person + to-infinitive; offer + to-infinitive (no person)."
    ],
    "why": [
     "Im Beruf berichtet man ständig, was jemand empfohlen, zugegeben oder verlangt hat. Das richtige Muster zeigt Präzision und vermeidet typische Fehlkonstruktionen.",
@@ -1470,8 +1470,8 @@
       "Nicht nötig",
       "Not necessary"
      ],
-     "don't have to / needn't + base form",
-     "You needn't bring a laptop."
+     "don't have to / don't need to + base form",
+     "You don't have to bring a laptop."
     ]
    ],
    "signals": [
@@ -1615,8 +1615,8 @@
     "The mandative sounds formal and precise, especially in contracts, policies and reports. It shows a requirement rather than a fact."
    ],
    "contrast": [
-    "Das Deutsche nutzt Konjunktiv I oder „soll“. Im US-Englisch bleibt das Verb einfach in der Grundform; im britischen Englisch steht oft „should“. Beides ist korrekt, aber „he resigns“ ist hier falsch.",
-    "German uses subjunctive I or “soll”. US English simply uses the base form; British English often uses “should”. Both are correct, but “he resigns” is wrong here."
+    "Das Deutsche nutzt Konjunktiv I oder „soll“. Im US-Englisch bleibt das Verb in der Grundform (formell, Standard in Verträgen und Vorschriften); im britischen Englisch steht oft „should“. Beides ist korrekt, aber „that he will resign“ ist hier falsch.",
+    "German uses subjunctive I or “soll”. US English keeps the base form (formal, standard in contracts and regulations); British English often uses “should”. Both are correct, but “that he will resign” is wrong here."
    ],
    "steps": [
     [
@@ -1684,19 +1684,19 @@
    ],
    "traps": [
     {
-     "bad": "The committee demands that he resigns immediately.",
+     "bad": "The committee demands that he will resign immediately.",
      "good": "The committee demands that he resign immediately.",
      "why": [
-      "Nach „demand that“ steht die Grundform ohne -s.",
-      "After “demand that” use the base form without -s."
+      "Nach „demand that“ steht die Grundform, kein „will“.",
+      "After “demand that” use the base form, not “will”."
      ]
     },
     {
-     "bad": "It is important that she is present at the meeting.",
-     "good": "It is important that she be present at the meeting.",
+     "bad": "The board requires that the report will be submitted by Friday.",
+     "good": "The board requires that the report be submitted by Friday.",
      "why": [
-      "Nach „It is important that“ steht in formellem Englisch „be“.",
-      "After “It is important that” formal English uses “be”."
+      "Nach „require that“ steht in formellem Englisch „be“, kein „will be“.",
+      "After “require that” formal English uses “be”, not “will be”."
      ]
     }
    ]
@@ -1757,13 +1757,17 @@
    "signals": [
     [
      "advice, information, feedback",
-     "immer unzählbar",
-     "always uncountable"
+     [
+      "immer unzählbar",
+      "always uncountable"
+     ]
     ],
     [
      "equipment, furniture, luggage",
-     "Sammelbegriffe, kein Plural",
-     "collective nouns, no plural"
+     [
+      "Sammelbegriffe, kein Plural",
+      "collective nouns, no plural"
+     ]
     ]
    ],
    "traps": [
@@ -1841,13 +1845,17 @@
    "signals": [
     [
      "increase / decrease / rise in",
-     "Veränderung in einem Bereich",
-     "change within an area"
+     [
+      "Veränderung in einem Bereich",
+      "change within an area"
+     ]
     ],
     [
      "solution to / answer to",
-     "Lösung zu einem Problem",
-     "solution to a problem"
+     [
+      "Lösung zu einem Problem",
+      "solution to a problem"
+     ]
     ]
    ],
    "traps": [
@@ -1855,8 +1863,8 @@
      "bad": "We need a solution of this problem.",
      "good": "We need a solution to this problem.",
      "why": [
-      "Nach „solution“ steht „to“, nicht „of“ oder „for“.",
-      "“Solution” takes “to”, not “of” or “for”."
+      "Meist „solution to“ + Problem; „solution for“ + Zweck oder Kunde ist auch möglich, „solution of“ ist falsch.",
+      "Usually “solution to” + problem; “solution for” + purpose or client is also possible, “solution of” is wrong."
      ]
     },
     {
@@ -1925,13 +1933,17 @@
    "signals": [
     [
      "by / until",
-     "Frist oder Endpunkt",
-     "deadline or end point"
+     [
+      "Frist oder Endpunkt",
+      "deadline or end point"
+     ]
     ],
     [
      "for / since",
-     "Dauer oder Beginn",
-     "duration or start"
+     [
+      "Dauer oder Beginn",
+      "duration or start"
+     ]
     ]
    ],
    "traps": [
@@ -2009,13 +2021,17 @@
    "signals": [
     [
      "a 3-hour / three-year / 10-page",
-     "Zahl + Singular",
-     "number + singular"
+     [
+      "Zahl + Singular",
+      "number + singular"
+     ]
     ],
     [
      "well-known / long-term / last-minute",
-     "feste Komposita",
-     "fixed compounds"
+     [
+      "feste Komposita",
+      "fixed compounds"
+     ]
     ]
    ],
    "traps": [
@@ -2093,13 +2109,17 @@
    "signals": [
     [
      "it / them / him",
-     "immer zwischen Verb und Partikel",
-     "always between verb and particle"
+     [
+      "immer zwischen Verb und Partikel",
+      "always between verb and particle"
+     ]
     ],
     [
      "up with / out of / look forward to",
-     "bleiben zusammen",
-     "stay together"
+     [
+      "bleiben zusammen",
+      "stay together"
+     ]
     ]
    ],
    "traps": [
@@ -2177,13 +2197,17 @@
    "signals": [
     [
      "never / rarely / seldom am Anfang",
-     "löst Inversion aus",
-     "triggers inversion"
+     [
+      "löst Inversion aus",
+      "triggers inversion"
+     ]
     ],
     [
      "not only / no sooner / hardly",
-     "Inversion plus „but / than / when“",
-     "inversion plus but / than / when"
+     [
+      "Inversion plus „but / than / when“",
+      "inversion plus but / than / when"
+     ]
     ]
    ],
    "traps": [
@@ -2261,13 +2285,17 @@
    "signals": [
     [
      "although / though",
-     "leitet einen Nebensatz ein",
-     "introduces a subordinate clause"
+     [
+      "leitet einen Nebensatz ein",
+      "introduces a subordinate clause"
+     ]
     ],
     [
      "however / nevertheless",
-     "brauchen Satzzeichen davor",
-     "need punctuation before"
+     [
+      "brauchen Satzzeichen davor",
+      "need punctuation before"
+     ]
     ]
    ],
    "traps": [
@@ -2345,13 +2373,17 @@
    "signals": [
     [
      "far / much / a lot",
-     "starke Verstärkung",
-     "strong emphasis"
+     [
+      "starke Verstärkung",
+      "strong emphasis"
+     ]
     ],
     [
      "slightly / a bit",
-     "sanfte Abschwächung",
-     "gentle softening"
+     [
+      "sanfte Abschwächung",
+      "gentle softening"
+     ]
     ]
    ],
    "traps": [
@@ -3345,7 +3377,9 @@
    "answer": "has arrived",
    "accepted": [
     "arrives",
-    "is here",
+    "is",
+    "gets",
+    "has gotten",
     "has come"
    ],
    "hint": "(arrive)",
@@ -3711,7 +3745,10 @@
    "prompt": "The plant is believed closing next year.",
    "answer": "The plant is believed to be closing next year.",
    "expl": "Persönliches Passiv: believed + to-Infinitiv.",
-   "expl_en": "Personal passive: believed + to-infinitive."
+   "expl_en": "Personal passive: believed + to-infinitive.",
+   "accepted": [
+    "The plant is believed to close next year."
+   ]
   },
   {
    "topic": "passive-plus",
@@ -3786,7 +3823,8 @@
    "prompt": "She suggested ___ the deadline to Thursday.",
    "answer": "moving",
    "accepted": [
-    "pushing"
+    "pushing",
+    "shifting"
    ],
    "hint": "(move)",
    "expl": "Nach „suggest“ steht -ing.",
@@ -3798,7 +3836,7 @@
    "prompt": "The doctor advised him ___ more rest.",
    "answer": "to get",
    "accepted": [
-    "to take"
+    "to have"
    ],
    "hint": "(get)",
    "expl": "„Advise“ + Person + to-Infinitiv.",
@@ -3824,7 +3862,11 @@
    "prompt": "'I'll cover the costs,' he said. → He offered ___ the costs.",
    "answer": "to cover",
    "expl": "„Offer“ + to-Infinitiv.",
-   "expl_en": "“Offer” + to-infinitive."
+   "expl_en": "“Offer” + to-infinitive.",
+   "accepted": [
+    "to pay",
+    "to take care of"
+   ]
   },
   {
    "topic": "report-verbs",
@@ -3928,7 +3970,11 @@
    "answer": "starts",
    "accepted": [
     "begins",
-    "is"
+    "is",
+    "will start",
+    "will begin",
+    "is going to start",
+    "is starting"
    ],
    "hint": "(start)",
    "expl": "Indirekte Frage: Aussageform, Verb in der dritten Person.",
@@ -4067,18 +4113,24 @@
    "type": "gap",
    "prompt": "We ___ to finish by Friday if we want to keep the client happy.",
    "answer": "ought",
-   "hint": "(Modal + to)",
+   "hint": "(Pflicht oder Rat: Modal + to)",
    "expl": "„Ought to“ + Grundform gibt einen Rat.",
-   "expl_en": "“Ought to” + base form gives advice."
+   "expl_en": "“Ought to” + base form gives advice.",
+   "accepted": [
+    "have",
+    "need"
+   ]
   },
   {
    "topic": "modals-advice",
    "type": "gap",
    "prompt": "You ___ bring a laptop; we'll provide one.",
-   "answer": "needn't",
+   "answer": "don't have to",
    "accepted": [
-    "don't have to",
     "do not have to",
+    "don't need to",
+    "do not need to",
+    "needn't",
     "need not"
    ],
    "hint": "(nicht nötig)",
@@ -4241,6 +4293,7 @@
    "prompt": "I'm sorry that I have to tell you that the shipment is late. → I regret ___ you that the shipment is late.",
    "answer": "to tell",
    "accepted": [
+    "to inform",
     "having to tell"
    ],
    "expl": "„Regret + to“ kündigt eine schlechte Nachricht an.",
@@ -4392,7 +4445,7 @@
   {
    "topic": "mandative",
    "type": "correct",
-   "prompt": "The committee demands that he resigns immediately.",
+   "prompt": "The committee demands that he will resign immediately.",
    "answer": "The committee demands that he resign immediately.",
    "accepted": [
     "The committee demands that he should resign immediately."
@@ -4403,11 +4456,9 @@
   {
    "topic": "mandative",
    "type": "correct",
-   "prompt": "It is important that she is present at the meeting.",
-   "answer": "It is important that she be present at the meeting.",
-   "accepted": [
-    "It is important that she should be present at the meeting."
-   ],
+   "prompt": "The board requires that the report will be submitted by Friday.",
+   "answer": "The board requires that the report be submitted by Friday.",
+   "accepted": [],
    "expl": "Formell steht nach „important that“ die Grundform „be“.",
    "expl_en": "In formal English the base form “be” follows “important that”."
   },
@@ -4529,9 +4580,7 @@
    "type": "transform",
    "prompt": "There isn't much furniture in the new office. → The new office has only ___ furniture.",
    "answer": "a little",
-   "accepted": [
-    "little"
-   ],
+   "accepted": [],
    "expl": "„furniture“ ist unzählbar, deshalb „a little“.",
    "expl_en": "“Furniture” is uncountable, so “a little”."
   },
@@ -4665,7 +4714,8 @@
    "prompt": "We discussed the problem with the supplier. → We had a discussion ___ the problem with the supplier.",
    "answer": "about",
    "accepted": [
-    "on"
+    "on",
+    "of"
    ],
    "expl": "„discussion about/on“ für das Thema.",
    "expl_en": "“Discussion about/on” introduces the topic."
@@ -4675,7 +4725,9 @@
    "type": "correct",
    "prompt": "She has a lot of experience on project management.",
    "answer": "She has a lot of experience in project management.",
-   "accepted": [],
+   "accepted": [
+    "She has a lot of experience with project management."
+   ],
    "expl": "„experience in“ bei Fachgebieten.",
    "expl_en": "“Experience in” for fields of work."
   },
@@ -4684,7 +4736,9 @@
    "type": "correct",
    "prompt": "We need to find a solution of this problem as soon as possible.",
    "answer": "We need to find a solution to this problem as soon as possible.",
-   "accepted": [],
+   "accepted": [
+    "We need to find a solution for this problem as soon as possible."
+   ],
    "expl": "„solution to“ ist die feste Verbindung.",
    "expl_en": "“Solution to” is the fixed combination."
   },
@@ -4847,14 +4901,14 @@
   {
    "topic": "compound-mod",
    "type": "mc",
-   "prompt": "She bought a ___ laptop for the office.",
+   "prompt": "She bought a ___ camera for the office.",
    "options": [
-    "new black German",
-    "black German new",
-    "black new German",
-    "German new black"
+    "new black Japanese",
+    "black Japanese new",
+    "black new Japanese",
+    "Japanese new black"
    ],
-   "answer": "new black German",
+   "answer": "new black Japanese",
    "expl": "Reihenfolge: Alter, Farbe, Herkunft.",
    "expl_en": "Order: age, color, origin."
   },
@@ -4975,7 +5029,7 @@
    "prompt": "I've drafted the proposal. Could you ___?",
    "options": [
     "look it over",
-    "look at it",
+    "look after it",
     "look over it",
     "over look it"
    ],
@@ -5062,7 +5116,11 @@
    "type": "transform",
    "prompt": "I'll investigate the problem tomorrow. → I'll ___ into the problem tomorrow.",
    "answer": "look",
-   "accepted": [],
+   "accepted": [
+    "dig",
+    "delve",
+    "go"
+   ],
    "expl": "„look into“ bedeutet „untersuchen“.",
    "expl_en": "“Look into” means to investigate."
   },
@@ -5125,8 +5183,8 @@
    "options": [
     "in Munich tomorrow",
     "in tomorrow Munich",
-    "Munich tomorrow in",
-    "tomorrow in Munich"
+    "Munich in tomorrow",
+    "tomorrow Munich in"
    ],
    "answer": "in Munich tomorrow",
    "expl": "Ort steht vor Zeit.",
@@ -5227,7 +5285,8 @@
    "prompt": "He explained clearly the plan to the team.",
    "answer": "He explained the plan clearly to the team.",
    "accepted": [
-    "He clearly explained the plan to the team."
+    "He clearly explained the plan to the team.",
+    "He explained the plan to the team clearly."
    ],
    "expl": "Zwischen Verb und Objekt steht kein Adverb.",
    "expl_en": "No adverb goes between verb and object."
@@ -5460,12 +5519,12 @@
   {
    "topic": "comparison",
    "type": "gap",
-   "prompt": "Our competitor's prices are far ___ than ours, so we lose customers.",
-   "answer": "higher",
+   "prompt": "Our competitor's prices are far ___ than ours, so we win customers.",
+   "answer": "lower",
    "accepted": [
-    "greater"
+    "cheaper"
    ],
-   "hint": "(Komparativ von high)",
+   "hint": "(Komparativ von low)",
    "expl": "Nach „far“ folgt ein Komparativ mit „than“.",
    "expl_en": "After “far” comes a comparative with “than”."
   },
@@ -5496,7 +5555,9 @@
    "prompt": "If we work more, we finish earlier. → The more we work, the ___ we finish.",
    "answer": "earlier",
    "accepted": [
-    "sooner"
+    "sooner",
+    "faster",
+    "quicker"
    ],
    "expl": "Nach „the more …“ folgt „the“ plus Komparativ.",
    "expl_en": "After “the more …” comes “the” plus a comparative."

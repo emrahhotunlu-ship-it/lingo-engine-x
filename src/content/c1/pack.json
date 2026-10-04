@@ -2729,7 +2729,7 @@
    "def": "to begin an organized series of activities",
    "ex": "We will launch a campaign for the new product in March.",
    "register": "neutral",
-   "why": "Kampagne heißt campaign; Vorsicht, company bedeutet „Firma“."
+   "why": "Man sagt launch a campaign oder run a campaign; start a campaign klingt im formellen Text schwächer."
   },
   {
    "id": "colloc-130",
@@ -2745,11 +2745,11 @@
    "id": "colloc-135",
    "cat": "colloc",
    "en": "ease tensions",
-   "de": "Spannungen entschärfen",
+   "de": "Spannungen abbauen, entspannen",
    "def": "to make a difficult situation calmer",
    "ex": "A short break helped ease tensions during the negotiation.",
    "register": "neutral",
-   "why": "Spannungen „entschärfen“ heißt meist ease tensions; defuse tensions ist die schärfere Variante."
+   "why": "ease tensions bedeutet abbauen; defuse tensions ist die schärfere Variante im Sinn von entschärfen."
   },
   {
    "id": "colloc-137",
@@ -2945,11 +2945,11 @@
    "id": "frame-61",
    "cat": "frame",
    "en": "for the sake of argument",
-   "de": "angenommen, um zu diskutieren",
+   "de": "rein theoretisch angenommen, nur um der Diskussion willen",
    "def": "used to accept an idea temporarily in a discussion",
    "ex": "For the sake of argument, let us assume the costs double.",
    "register": "neutral",
-   "why": "For the sake of argument heißt „nur zum Argument“, nicht „für die Sache“."
+   "why": "sake bedeutet hier „um … willen“, nicht „Sache“."
   },
   {
    "id": "frame-63",
@@ -3009,7 +3009,7 @@
    "def": "used in emails to refer to an earlier conversation",
    "ex": "Further to our call, I have attached the revised offer.",
    "register": "formal",
-   "why": "Bezugnehmend auf heißt further to, nicht „referring on“."
+   "why": "Formell und eher britisch; im US-Business üblicher: following up on our call oder as discussed on our call."
   },
   {
    "id": "frame-69",
@@ -3229,7 +3229,7 @@
    "def": "used to add a side remark",
    "ex": "By the way, the printer on the second floor is fixed.",
    "register": "informal",
-   "why": "By the way ist beiläufig; für wichtige Punkte besser incidentally."
+   "why": "Für Randbemerkungen, nicht für Wichtiges; dafür besser on a related note oder one more thing."
   },
   {
    "id": "frame-92",
@@ -3269,7 +3269,7 @@
    "def": "to leave an important position",
    "ex": "The chairman will step down at the end of the year.",
    "register": "neutral",
-   "why": "Step down = zurücktreten, nicht „step down from the stairs“ im übertragenen Sinn."
+   "why": "Step down heißt von einem Amt zurücktreten; „abtreten“ oder „absteigen“ passt hier nicht."
   },
   {
    "id": "phrasal-37",
@@ -3309,7 +3309,7 @@
    "def": "to prepare something by collecting information",
    "ex": "Could you pull together a short summary before noon?",
    "register": "informal",
-   "why": "Pull together = zügig zusammenstellen; nicht pull up together."
+   "why": "Pull together heißt zügig zusammenstellen (oder an einem Strang ziehen); nicht mit „zusammenziehen“ übersetzen."
   },
   {
    "id": "phrasal-45",
@@ -3379,7 +3379,7 @@
    "def": "to form a part of a total, or to explain",
    "ex": "Exports account for sixty percent of our revenue.",
    "register": "neutral",
-   "why": "Account for = ausmachen (Anteil); nicht account about."
+   "why": "Account for steht für „ausmachen“ (Anteil) und „erklären“; „account of“ oder „account about“ ist falsch."
   },
   {
    "id": "phrasal-60",
@@ -4100,7 +4100,7 @@
    "ex": "Our biggest innovation this year is a faster checkout process.",
    "register": "neutral",
    "pos": "noun",
-   "why": "Das Nomen hat nur ein n: innovation; „innovativ“ heißt innovative."
+   "why": "Betonung auf der ersten Silbe: INnovation; dazu das Verb innovate und das Adjektiv innovative."
   },
   {
    "id": "family-15",
@@ -4144,7 +4144,7 @@
    "ex": "We value the commitment of our long-serving employees.",
    "register": "neutral",
    "pos": "noun",
-   "why": "Bei commitment wird das t verdoppelt (committed), aber im Nomen nur ein m."
+   "why": "Verb commit wird zu committed (t verdoppelt), aber commitment hat nur ein t und zwei m."
   },
   {
    "id": "family-19",
@@ -4243,7 +4243,7 @@
    "ex": "The evaluation of the pilot will be ready next week.",
    "register": "formal",
    "pos": "noun",
-   "why": "Evaluation ist keine „Evaluierung“ im Sinn von Berechnung, sondern Beurteilung."
+   "why": "Typische Verbindung: carry out an evaluation of …; das Verb evaluate bedeutet bewerten, nicht berechnen."
   },
   {
    "id": "family-28",
@@ -4276,7 +4276,7 @@
    "ex": "The report received strong criticism from the unions.",
    "register": "neutral",
    "pos": "noun",
-   "why": "Das Nomen criticism ist unzählbar; critical heißt auch „kritisch“ im Sinn von „entscheidend“."
+   "why": "Meist unzählbar (strong criticism), zählbar bei einzelnen Einwänden (two criticisms)."
   },
   {
    "id": "family-31",
@@ -4319,7 +4319,7 @@
    "def": "to get straight to the main point",
    "ex": "Let me cut to the chase: we need more budget.",
    "register": "informal",
-   "why": "Zur Sache kommen heißt cut to the chase, nicht cut to the hunt."
+   "why": "Zur Sache kommen heißt cut to the chase; das Bild bleibt fest, einzelne Wörter nicht austauschen."
   },
   {
    "id": "idiom-18",
@@ -4339,7 +4339,7 @@
    "def": "to think in a new and creative way",
    "ex": "We need to think outside the box to solve this problem.",
    "register": "informal",
-   "why": "Unkonventionell denken heißt think outside the box, nicht think out of the box."
+   "why": "Unkonventionell denken heißt think outside the box; „out of the box“ meint dagegen „fertig, ohne Einrichtung“."
   },
   {
    "id": "idiom-20",
@@ -4359,7 +4359,7 @@
    "def": "a situation in which everyone has the same chances",
    "ex": "The new law creates a level playing field for all providers.",
    "register": "neutral",
-   "why": "Gleiche Bedingungen heißt a level playing field, nicht a flat field."
+   "why": "Gleiche Bedingungen heißt a level playing field; level (eben) ist hier festes Teil der Wendung."
   },
   {
    "id": "idiom-23",
@@ -4395,7 +4395,7 @@
    "id": "idiom-27",
    "cat": "idiom",
    "en": "ahead of the curve",
-   "de": "dem Markt voraus",
+   "de": "dem Trend voraus",
    "def": "more advanced than most others",
    "ex": "Early investment keeps us ahead of the curve.",
    "register": "neutral",
@@ -4439,7 +4439,7 @@
    "def": "to deal with a problem only when it actually happens",
    "ex": "What if the client refuses? We will cross that bridge when we come to it.",
    "register": "informal",
-   "why": "Das sehen wir dann heißt cross that bridge when we come to it, mit Zeitform wie im Original."
+   "why": "Das sehen wir dann heißt cross that bridge when we come to it; der Satz bleibt im Präsens, auch für die Zukunft."
   },
   {
    "id": "idiom-33",

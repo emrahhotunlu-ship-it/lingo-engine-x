@@ -10,7 +10,7 @@ import { topicP } from '../../domain/grammar/bkt';
 import { canDoEvidence, canDoStatus, canDoSummary, CANDO_DIMS, FOCUS_CANDO_ITEMS, type CanDoEnv, type CanDoItem, type CanDoStatus } from '../../domain/progress/cando';
 import { radarTotals } from '../../domain/progress/radar';
 import { buildTrainCards } from '../../domain/srs/cards';
-import { vocabGoal } from '../../domain/vocab/goal';
+import { C1_MARK, vocabGoal } from '../../domain/vocab/goal';
 import { useT, type MessageKey } from '../../i18n';
 import { Card } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';
@@ -120,6 +120,18 @@ export function PathTab() {
           </p>
           <p className="mt-2 text-base font-medium" data-testid="vocab-goal" data-now={goal.now ?? ''}>
             {goalText}
+          </p>
+          {goal.now !== null && (
+            <div className="mt-3" data-testid="vocab-bar">
+              <div className="relative h-2 rounded-full bg-surface" role="img" aria-label={t('vgBarLabel', { now: goal.now, mark: C1_MARK })}>
+                <div className="h-2 rounded-full bg-accent" style={{ width: `${Math.min(100, Math.round((goal.now / goal.target) * 100))}%` }} />
+                <span className="absolute top-[-3px] h-3.5 w-0.5 bg-fg" style={{ left: `${(C1_MARK / goal.target) * 100}%` }} aria-hidden="true" />
+              </div>
+              <p className="lx-tnum mt-1 text-xs text-muted">{t('vgMark', { mark: C1_MARK })}</p>
+            </div>
+          )}
+          <p className="lx-tnum mt-1 text-sm text-muted" data-testid="vocab-fest">
+            {t('vgFest', { n: goal.fest })}
           </p>
           {goal.measured && !goal.reached && goal.perWeek >= 1 && <p className="lx-tnum mt-1 text-sm text-muted">{t('vgPace', { n: goal.perWeek })}</p>}
         </div>

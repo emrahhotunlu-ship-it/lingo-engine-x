@@ -92,6 +92,9 @@ export const progressDe = {
   vgLineNoPace: 'Ziel C1: 8.000 Wörter · jetzt etwa {now} · Tempo noch unklar',
   vgReached: 'Ziel C1 erreicht: etwa {now} Wörter',
   vgUnmeasured: 'Ziel C1: 8.000 Wörter · noch nicht gemessen',
+  vgBarLabel: '{now} von 8.000 Wörtern, C1-Marke bei {mark}',
+  vgMark: 'Strich = C1-Marke bei {mark} (eine Orientierung, keine offizielle Grenze)',
+  vgFest: 'Fest gelernte Karten: {n}',
   vgPace: 'bei {n} neuen Wörtern pro Woche',
 
   // Verlauf

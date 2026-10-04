@@ -87,6 +87,9 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   vgLineNoPace: 'C1 goal: 8,000 words · now about {now} · pace still unclear',
   vgReached: 'C1 goal reached: about {now} words',
   vgUnmeasured: 'C1 goal: 8,000 words · not measured yet',
+  vgBarLabel: '{now} of 8,000 words, C1 mark at {mark}',
+  vgMark: 'Line = C1 mark at {mark} (a guide, not an official threshold)',
+  vgFest: 'Firmly learned cards: {n}',
   vgPace: 'at {n} new words per week',
 
   weeklyTitle: 'What you really learned last week',
