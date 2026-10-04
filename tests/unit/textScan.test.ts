@@ -17,8 +17,9 @@ const ALLOWED: ReadonlyArray<RegExp> = [
   /^(sp[A-Z]|tab(Speak)|mic[A-Z]|nbSprechen)/,
   // Umstellungs-Bildschirm der alten Daten: nennt die alten Datenbereiche beim Namen, die unangetastet bleiben (Kap. 9).
   /^(col[A-Z]|mig[A-Z])/,
-  // OFFEN (Entscheidung Koordination, W4/W5): Hör-Modus der Karten, Hörschleife und Diktat sind noch gebaut. Das Gesamtkonzept
-  // (Standardwert „Diktat/Sprint/Hören entfallen“) sieht sie nicht mehr vor; ihr Entfernen ist eine Funktions-, keine Textänderung.
+  // Emrahs Entscheidung „Go Anwenden“ (04.10.2026): Diktat, Hörschleife und Hör-Modus der Karten bleiben im Reiter „Anwenden“
+  // (sie ersetzen den Standardwert „Hören entfällt“ des Gesamtkonzepts). Der Reiter und seine Texte (`ap*`) dürfen Hören nennen.
+  /^(ap[A-Z]|lrBackToApply|nbShTabApply)/,
   /^(nbWsModeListen|nbWsListenHint|nbWsListenNoTts|nbWsLoop|exName_listen_mc|exMode_listen|purposeListen|purposeDictate|lhDictateSub|drDictate)/,
   // Fehlerprotokoll (Diagnose) zeigt Schreibzugriffe der Datenbank, keine Fertigkeit.
   /^diagMsg_/,

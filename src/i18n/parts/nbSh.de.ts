@@ -5,6 +5,7 @@ export const nbShDe = {
   nbShTabToday: 'Heute',
   nbShTabVocab: 'Wortschatz',
   nbShTabLearn: 'Grammatik',
+  nbShTabApply: 'Anwenden',
   nbShTabProgress: 'Fortschritt',
   nbShProfile: 'Profil und Stand',
   nbShFbOk: 'Richtig',

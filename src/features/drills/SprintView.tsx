@@ -133,7 +133,7 @@ export function SprintView() {
     return (
       <article className="lx-glass flex flex-col gap-4 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="drill-empty">
         <p className="text-base text-muted">{t('drSprintEmpty')}</p>
-        <SummaryActions onBack={leaveDrill} backTo={{ name: 'learn' }} backLabel={t('lrBackToLearn')} />
+        <SummaryActions onBack={leaveDrill} backTo={{ name: 'apply' }} backLabel={t('lrBackToApply')} />
       </article>
     );
 
@@ -176,7 +176,7 @@ export function SprintView() {
             {t('drSprintOnce')}
           </Button>
         </div>
-        <SummaryActions onBack={leaveDrill} backTo={{ name: 'learn' }} backLabel={t('lrBackToLearn')} />
+        <SummaryActions onBack={leaveDrill} backTo={{ name: 'apply' }} backLabel={t('lrBackToApply')} />
       </article>
     );
   }

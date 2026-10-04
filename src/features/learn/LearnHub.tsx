@@ -10,15 +10,11 @@ import { dueErrors } from '../../domain/grammar/errors';
 import { repairStats } from '../../domain/repair/daily';
 import { entriesFor } from '../../app/registry';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { useT, type MessageKey } from '../../i18n';
-import { useSpeech, unlockSpeech } from '../../platform/speech';
+import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
-import { ChannelIcon, type Channel } from '../../ui/Card';
-import { Icon, type IconName } from '../../ui/Icon';
+import { ChannelIcon } from '../../ui/Card';
+import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
-import { startDrill, drillCards, type DrillKind } from '../drills/session';
-import { feasible } from '../../domain/plan/channels';
-import { feasibleData } from '../today/store';
 import { loadLearnInputs, useLearnInputs } from './inputs';
 import { TabTitle } from '../system/Chrome';
 import { startGrammar } from '../grammar/session';
@@ -33,13 +29,6 @@ const item = {
   hidden: { opacity: 0, y: 8 },
   show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE_OUT } },
 };
-
-const DRILLS: Array<{ kind: DrillKind; icon: IconName; title: MessageKey; sub: MessageKey; channel: Channel }> = [
-  { kind: 'cloze', icon: 'link', title: 'drCloze', sub: 'lhClozeSub', channel: 'cards' },
-  { kind: 'order', icon: 'grid', title: 'drOrder', sub: 'lhOrderSub', channel: 'grammar' },
-  { kind: 'dictate', icon: 'headphones', title: 'drDictate', sub: 'lhDictateSub', channel: 'listen' },
-  { kind: 'sprint', icon: 'bolt', title: 'drSprint', sub: 'lhSprintSub', channel: 'write' },
-];
 
 /** Eine Zeilenform für „öffnen" (visuelle Regel 6): Symbol links, Titel + Nebenzeile, Pfeil rechts. */
 function Row({ icon, title, sub, onClick, testId, badge, note, module }: { icon: ReactNode; title: string; sub: string; onClick: () => void; testId: string; badge?: string | null; note?: ReactNode; module?: string }) {
@@ -116,9 +105,6 @@ export function LearnHub() {
   const assess = useLive((s) => s.docs['app/assess']);
   const grammar = useLive((s) => s.collections.grammar);
   const repairDoc = useLive((s) => s.docs['app/repair']);
-  const vocab = useLive((s) => s.collections.vocab);
-  const tts = useSpeech((s) => s.status === 'ready');
-  const inputs = useLearnInputs((s) => s.status);
 
   useEffect(() => {
     if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
@@ -139,27 +125,12 @@ export function LearnHub() {
   }, [course, lessons]);
   const nErr = useMemo(() => dueErrors(grammar ?? new Map(), now).length, [grammar, now]);
   const rep = useMemo(() => repairStats(repairDoc), [repairDoc]);
-  const data = useMemo(() => {
-    const cards = drillCards(now);
-    return feasibleData(cards, lang, now);
-    // `inputs` und `vocab`: neu rechnen, sobald Pool/Lektionen bzw. Karten da sind.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [now, lang, inputs, vocab]);
-
-  const startDrillRound = (kind: DrillKind) => {
-    unlockSpeech();
-    const first = startDrill(kind);
-    if (first === 'typed') api.focusNow();
-    else api.blur();
-    go({ name: 'drill', kind, ctx: 'xtra' });
-  };
   const startErrors = () => {
     const first = startGrammar({ mode: 'errors' });
     if (first === 'typed') api.focusNow();
     go({ name: 'grammarSession', mode: 'errors' });
   };
 
-  const drills = DRILLS.filter((d) => feasible(d.kind, data, { tts }));
   return (
     <motion.div className="flex flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
       <motion.div variants={item}>
@@ -226,25 +197,6 @@ export function LearnHub() {
 
       {/* 4. Training: Kurzübungen (nur machbare, G5) und die neuen Übungen anderer Bereiche (P7). */}
       <Section id="lh-drills" title={t('nbLernenHubTraining')}>
-        {drills.length > 0 && (
-          <div className="grid grid-cols-2 gap-3">
-            {drills.map((d) => (
-              <button
-                key={d.kind}
-                type="button"
-                onClick={() => startDrillRound(d.kind)}
-                data-testid={`hub-drill-${d.kind}`}
-                className="lx-glass flex min-h-28 flex-col items-start gap-2 rounded-[var(--radius-card)] p-4 text-left transition-colors hover:bg-surface-strong"
-              >
-                <ChannelIcon channel={d.channel}>
-                  <Icon name={d.icon} />
-                </ChannelIcon>
-                <span className="font-medium">{t(d.title)}</span>
-                <span className="text-xs text-muted">{t(d.sub)}</span>
-              </button>
-            ))}
-          </div>
-        )}
         {entriesFor('learn').some((e) => !e.group || !(LEARN_GROUPS as readonly string[]).includes(e.group) || e.group === 'training') && (
           <List label={t('nbLernenHubTraining')}>
             <ForeignRows group="training" />

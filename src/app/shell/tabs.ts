@@ -13,7 +13,7 @@ import type { Route } from '../router/types';
  * Plätze, an die Bereiche ihre Hub-Abschnitte und Einstiege hängen. Außerhalb der Leiste:
  * `profile` (Profil-Blatt) und `stand` (Seite „Dein Stand“, Reiter Statistik).
  */
-export type Place = 'today' | 'learn' | 'vocab' | 'read' | 'speak' | 'write' | 'profile' | 'stand';
+export type Place = 'today' | 'learn' | 'apply' | 'vocab' | 'read' | 'speak' | 'write' | 'profile' | 'stand';
 
 /** Name eines Reiter-Abzeichens; die Zahl liefert ein Bereich über `badge` in `defineArea`. */
 export type BadgeId = 'openDuties';
@@ -32,12 +32,14 @@ export type TabDef = {
 // (Route `overview`), die vorher nur über das Profil-Blatt erreichbar war.
 // Die Test-IDs `tab-learn`, `learn-hub` und `hub-*` bleiben.
 // Seit 04.10.2026 (Emrahs Vorgabe „Fokus komplett auf Vokabeln und Grammatik“) nur noch vier Reiter:
-// Heute · Wortschatz · Grammatik (bisher „Üben“) · Fortschritt. Lesen und Sprechen sind keine Reiter mehr;
+// Heute · Wortschatz · Grammatik (bisher „Üben“) · Fortschritt; dazu seit „Go Anwenden“ (04.10.2026) der Reiter
+// „Anwenden“ (Diktat, Hörschleife, Lücke, Satzbau, Rollenspiel – freiwillig). Lesen und Sprechen sind keine Reiter mehr;
 // Sprechen ist als freiwilliges Extra über Heute erreichbar (Seite `speak`).
 export const TABS = [
   { id: 'today', label: 'nbShTabToday', icon: 'sun', root: { name: 'today' }, places: ['today'], badge: 'openDuties' },
   { id: 'vocab', label: 'nbShTabVocab', icon: 'cards', root: { name: 'vocab' }, places: ['vocab'] },
   { id: 'learn', label: 'nbShTabLearn', icon: 'layers', root: { name: 'learn' }, places: ['learn'] },
+  { id: 'apply', label: 'nbShTabApply', icon: 'bolt', root: { name: 'apply' }, places: ['apply'] },
   { id: 'progress', label: 'nbShTabProgress', icon: 'chart', root: { name: 'overview' }, places: [] },
 ] as const satisfies readonly TabDef[];
 

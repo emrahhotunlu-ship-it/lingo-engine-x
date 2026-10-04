@@ -105,7 +105,7 @@ export function DrillScreen() {
                   </Button>
                 </div>
               ) : (
-                <SummaryActions onBack={leaveDrill} backTo={{ name: 'learn' }} backLabel={t('lrBackToLearn')} />
+                <SummaryActions onBack={leaveDrill} backTo={{ name: 'apply' }} backLabel={t('lrBackToApply')} />
               )}
             </article>
           )}

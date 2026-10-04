@@ -110,6 +110,10 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**04.10.2026 – „Go Anwenden“: vierter Reiter neben Wörtern und Grammatik (Emrahs Wunsch)**
+- Emrah: „lieber neben Wortschatz und Grammatik einen Kombinationsübungsbereich … Diktat und Hörübung und sowas“. Reiter: Heute · Wörter · Grammatik · **Anwenden** · Fortschritt. Freiwillig, nie Pflicht, keine eigene Fortschrittsnote.
+- Diktat, Hörschleife, Hör-Modus, Lücke, Satzbau und Rollenspiel/Einwand-Training liegen dort. Der Standardwert „Diktat/Sprint/Hören entfallen“ gilt nicht mehr (Sprint entfällt weiter). Zweite Stufe (Hörübung mit Frage, Kombi-Aufgaben) wird mit Lernwissenschaft und Englischlehrer geplant; Stand in `docs/umbau/stand.md`.
+
 **04.10.2026, nachmittags – Gesamtkonzept für den Umbau, Umsetzung in einem eigenen Fenster (Emrahs Auftrag)**
 - Emrah: „du hast wieder nur halbe Sachen gemacht … der Fortschritt für Lesen, Sprechen etc. ist weiterhin drin … mache ein Gesamtkonzept, wie die komplette App überdacht werden kann in allen Facetten … Umsetzungen finden in anderen Chatfenstern statt.“ Ehrlich festgehalten: Bisher waren nur die **Einstiege** ausgeblendet, der Fortschritt zeigte weiter alle 6 Fertigkeiten (mein Satz „taucht nirgends mehr auf“ war falsch).
 - **Ergebnis:** `docs/umbau/gesamtkonzept.md` (Teil A in einfachen Worten, Teil B für die Umsetzung) mit acht Berichten (`00` bis `08`, Verzeichnis dort Kap. 12), Auftrag an das Programmier-Fenster `docs/umbau/uebergabe.md`, Merkzettel `docs/umbau/stand.md`. Visuelle Fassung: Design-Fläche „Lingo-Engine X Gesamtkonzept“ (`https://claude.ai/artifact/HDdxuD2T2LRJSbHmnDsd1c`, 20 klickbare Handy-Bildschirme, nur Entwurf, Beispielwerte).

@@ -36,7 +36,8 @@ test('Üben: vier Abschnitte, Einstiege je 1 Tipp, kein waagrechter Bildlauf (39
     await page.getByTestId(id).click();
     await expect(page.getByTestId(target)).toBeVisible();
   }
-  await openTab(page, 'learn');
+  // Kurzübungen stehen seit „Go Anwenden“ im Reiter „Anwenden“.
+  await openTab(page, 'apply');
   await page.getByTestId('hub-drill-cloze').click();
   await expect(page.getByTestId('drill-item')).toBeVisible();
   await page.getByTestId('round-close').click();
@@ -235,5 +236,19 @@ test('Neuladen in der Lektion, Schritt 3 (Grammatik) bei Aufgabe 2: dort geht es
     },
   });
   expect(reloaded).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('Reiter „Anwenden“: Diktat, Lücke, Satzbau und Rollenspiel stehen dort, nicht mehr bei Grammatik; nichts davon ist Pflicht', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'apply');
+  await expect(page.getByTestId('apply-hub')).toBeVisible();
+  await expect(page.getByTestId('hub-drill-cloze')).toBeVisible();
+  await expect(page.getByTestId('hub-drill-order')).toBeVisible();
+  await expect(page.getByTestId('hub-speak')).toBeVisible();
+  await openTab(page, 'learn');
+  await expect(page.getByTestId('hub-drill-cloze')).toHaveCount(0);
+  await expect(page.getByTestId('hub-drill-order')).toHaveCount(0);
   expect(errors).toEqual([]);
 });

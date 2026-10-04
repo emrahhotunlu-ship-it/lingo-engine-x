@@ -1,4 +1,4 @@
-import { openLearnPage } from './fixtures';
+import { openLearnPage, openTab } from './fixtures';
 import { readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
 
@@ -440,7 +440,8 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
   await settle();
   await visit('wortschatz');
   for (const [kind, name] of [['cloze', 'lueckenjagd'], ['order', 'satzbau']] as const) {
-    await hub();
+    await openTab(page, 'apply');
+    await settle();
     await page.getByTestId(`hub-drill-${kind}`).click();
     await expect(page.getByTestId('drill-item')).toBeVisible();
     await settle();

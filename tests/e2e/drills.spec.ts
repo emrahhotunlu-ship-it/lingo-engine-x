@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { boot, screen, openEntry } from './fixtures';
-import { clozeSolution, orderSolution, orderSolutions, shiftPerf, typeInGap } from './learnHelpers';
+import { clozeSolution, orderSolution, orderSolutions, typeInGap } from './learnHelpers';
 import { DAY, dump, writes, type Dump } from './trainerHelpers';
 
 // Übungen ohne KI (phase2-plan §5.4–5.7, §9.3): je Übung eine vollständige Runde. Diktat mit
@@ -194,7 +194,7 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
   await noCardOrTopicWrites(page);
   // Heute: der einzige Pflichtkanal ist erledigt → Fertig-Karte (Zustand, kein Knopf; Neubau N15).
   await page.getByTestId('summary-back').click();
-  await expect(page.getByTestId('learn-hub')).toBeVisible();
+  await expect(page.getByTestId('apply-hub')).toBeVisible();
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
   const status = page.getByTestId('today-status');
@@ -388,45 +388,9 @@ test('Satzbau: Claude antwortet ungültig oder nicht → fester Pool, kein Fehle
   expect(errors).toEqual([]);
 });
 
-test('Sprint: 90 Sekunden bis zum Ende; nur sprints, act und Radar, kein Log', async ({ page }) => {
-  const { errors, external } = await boot(page, { migrated: true });
-  await screen(page, 'today');
-  const before = await dump(page);
-  await openDrill(page, 'sprint');
-  await expect(page.getByTestId('sprint-timer')).toHaveAttribute('data-left-ms', '90000');
-  await page.getByTestId('sprint-start').click();
-  for (let i = 0; i < 5; i++) {
-    const it = page.getByTestId('sprint-item');
-    await expect(it).toBeVisible();
-    if ((await it.getByTestId('choice').count()) > 0) await it.getByTestId('choice').first().click();
-    else {
-      await typeInGap(page, 'zzzz');
-      await page.keyboard.press('Enter');
-    }
-  }
-  const left = Number(await page.getByTestId('sprint-timer').getAttribute('data-left-ms'));
-  expect(left).toBeGreaterThan(0);
-  expect(left).toBeLessThan(90_000);
-  // Testuhr: 91 s vorspulen (der Sprint misst mit performance.now()).
-  await shiftPerf(page, 91_000);
-  await expect(page.getByTestId('sprint-summary')).toBeVisible();
-  await expect(page.getByTestId('sprint-tempo')).toBeVisible();
-  await expect(page.getByTestId('sprint-list')).toBeVisible();
-  const nBefore = ((before['app/profile']?.sprints as unknown[] | undefined) ?? []).length;
-  await expect.poll(async () => (((await dump(page))['app/profile']?.sprints as unknown[] | undefined) ?? []).length).toBe(Math.min(60, nBefore + 1));
-  const last = ((await dump(page))['app/profile']?.sprints as Doc[]).at(-1) as Doc;
-  expect(last).toMatchObject({ n: 5 });
-  await expect.poll(async () => actOf(await dump(page), 'sprint')).toBe(actOf(before, 'sprint') + 1);
-  // Sprint schreibt keine Log-Einträge (wie die alte App).
-  expect(((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined)?.length ?? 0).toBe(((before[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).length);
-  await noCardOrTopicWrites(page);
-  expect(errors).toEqual([]);
-  expect(external).toEqual([]);
-});
-
 test('ohne KI (?fake=nosample): alle Übungen öffnen ohne Absturz, keine KI-Knöpfe', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
-  for (const kind of ['cloze', 'order', 'dictate', 'sprint'] as const) {
+  for (const kind of ['cloze', 'order', 'dictate'] as const) {
     await openDrill(page, kind);
     await expect(page.getByTestId('drill-item')).toBeVisible();
     await expect(page.locator('[data-ai]')).toHaveCount(0);

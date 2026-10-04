@@ -26,13 +26,14 @@ test('Einstieg: Kopf wie v1 (Profil + Serie links, Übersetzen + Claude rechts),
   // Genau ein Claude-Knopf auf der Wurzel (die Seite zeichnet keinen zweiten).
   await expect(page.getByTestId('open-companion')).toHaveCount(1);
   const tabs = page.getByTestId('tabbar').locator('button');
-  // Seit 04.10.2026 (Fokus Vokabeln und Grammatik): Heute · Wortschatz · Grammatik · Fortschritt – kein Lesen, kein Sprechen.
-  await expect(tabs).toHaveCount(4);
+  // Seit 04.10.2026 (Fokus Vokabeln und Grammatik): Heute · Wortschatz · Grammatik · Anwenden („Go Anwenden“) · Fortschritt – kein Lesen-Reiter.
+  await expect(tabs).toHaveCount(5);
+  await expect(page.getByTestId('tab-apply')).toHaveText('Anwenden');
   await expect(page.getByTestId('tab-read')).toHaveCount(0);
   await expect(page.getByTestId('tab-speak')).toHaveCount(0);
   await expect(page.getByTestId('tab-learn')).toHaveText('Grammatik');
   for (const b of await tabs.all()) expect((await b.boundingBox())?.height ?? 99).toBeLessThan(64);
-  for (const id of ['vocab', 'learn', 'progress', 'today'] as const) {
+  for (const id of ['vocab', 'learn', 'apply', 'progress', 'today'] as const) {
     await openTab(page, id);
     await expect(page.getByTestId('topbar')).toBeVisible();
     expect(await layoutProblems(page), id).toEqual([]);

@@ -11,6 +11,7 @@ import { trainerEn } from './parts/trainer.en';
 import { standEn } from './parts/stand.en';
 import { engineEn } from './parts/engine.en';
 import { hintEn } from './parts/hint.en';
+import { applyEn } from './parts/apply.en';
 import { sayEn } from './parts/say.en';
 import { fluencyEn } from './parts/fluency.en';
 import { c1En } from './parts/c1.en';
@@ -51,6 +52,7 @@ export const en: Record<MessageKey, string> = {
   ...hintEn,
   // Learning review 09/27: "Say it"
   ...sayEn,
+  ...applyEn,
   // Learning review 09/27: Fluency 90 – 60 – 45, "My next meeting"
   ...fluencyEn,
   // Learning review 09/27: C1 toolkit, one message – three tones

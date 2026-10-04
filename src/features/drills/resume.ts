@@ -8,7 +8,7 @@ import { drillSnapshot, itemsOf, restoreDrill, startDrill, useDrill, type DrillS
 export const drillResume: Resumable<DrillSnap> = {
   id: 'drill',
   version: 1,
-  origin: 'learn',
+  origin: 'apply',
   snapshot: drillSnapshot,
   subscribe: (cb) => useDrill.subscribe(cb),
   restore: restoreDrill,

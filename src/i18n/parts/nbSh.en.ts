@@ -7,6 +7,7 @@ export const nbShEn: Record<keyof typeof nbShDe, string> = {
   nbShTabToday: 'Today',
   nbShTabVocab: 'Vocab',
   nbShTabLearn: 'Grammar',
+  nbShTabApply: 'Apply',
   nbShTabProgress: 'Progress',
   nbShProfile: 'Profile and progress',
   nbShFbOk: 'Correct',
