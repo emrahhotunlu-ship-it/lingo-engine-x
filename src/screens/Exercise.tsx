@@ -11,6 +11,7 @@ import { hash32, mulberry32, shuffle } from '../domain/random';
 import { speak } from '../platform/speech';
 import { setAskContext } from '../app/route';
 import { distractors, familyTask, gapIn, synonymTask, type CardView } from '../coach/cardView';
+import { placeholderForms } from '../coach/phrases';
 import type { AnswerFacts, Format } from '../coach/session';
 import { Certainty, PosLabel, Speak, TapText, WordDetails } from './parts';
 
@@ -238,7 +239,7 @@ function Typed({
   const { t } = useT();
   const api = useHiddenInput();
   const solution = fmt === 'gap' ? gap!.answer : fmt === 'listen' && gap ? gap.answer : fmt === 'family' && family ? family.word : view.word;
-  const accepted = fmt === 'listen' ? [solution, view.word] : [solution];
+  const accepted = (fmt === 'listen' ? [solution, view.word] : [solution]).flatMap(placeholderForms);
   // Lücke mit Hilfe (Stufe ≤ 1): Platzhalter und erster Buchstabe. Frei: erst „Tipp" zeigt sie.
   const helped = fmt === 'gap' && lv <= 1;
   const [revealed, setRevealed] = useState(helped ? 1 : 0);

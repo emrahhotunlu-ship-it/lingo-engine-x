@@ -16,11 +16,11 @@ const SECONDS = 60;
 
 type Q = { view: CardView; options: string[]; answer: string };
 
-function questions(day: string): Q[] {
+export function questions(day: string): Q[] {
   const cards = useCoach.getState().cards;
   const rng = mulberry32(hash32(`blitz-${day}-${cards.size}`));
   const ids = shuffle(
-    [...cards].filter(([, c]) => c.lv >= 2 || c.known === 1).map(([id]) => id),
+    [...cards].filter(([, c]) => !c.hide && (c.lv >= 2 || c.known === 1)).map(([id]) => id),
     rng,
   ).slice(0, 80);
   const out: Q[] = [];

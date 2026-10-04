@@ -7,6 +7,7 @@ import { useCoach } from '../coach/store';
 import { forecastDays, grammarSolid, inputHours, INPUT_HOURS_TARGET, learnedSince, stageOf, vocabNow, VOCAB_C1 } from '../coach/derived';
 import { topicById } from '../coach/grammar';
 import { dayKeyNoon } from '../domain/date';
+import { weekStats } from '../coach/preply';
 import { BriefCard, CheckCard, CurveCard } from './PlanParts';
 
 // Fahrplan zu C1 (docs/neustart.md §7): vier Etappen à drei Monate, Messwerte je Säule, Prognose.
@@ -29,7 +30,7 @@ function Meter({ label, value, max, text, testId }: { label: string; value: numb
 }
 
 export function PlanScreen() {
-  const { t, num, lang } = useT();
+  const { t, tn, num, lang } = useT();
   const today = useClock((s) => s.today);
   const now = useClock((s) => s.now);
   const profile = useCoach((s) => s.profile);
@@ -37,6 +38,7 @@ export function PlanScreen() {
   const days = useCoach((s) => s.days);
   const inlog = useCoach((s) => s.inlog);
   const grammar = useCoach((s) => s.grammar);
+  const preply = useCoach((s) => s.preply);
   useEffect(() => setAskContext(''), []);
 
   const p = profile?.placement;
@@ -58,6 +60,7 @@ export function PlanScreen() {
   const vocab = vocabNow(profile, cards);
   const g = grammarSolid(profile, grammar?.t);
   const fc = forecastDays(profile, cards, days, today);
+  const week = weekStats(preply, today);
   const fmtMonth = (ms: number) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { month: 'long', year: 'numeric' }).format(ms);
   const start = profile?.planStart ? new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(dayKeyNoon(profile.planStart)) : '';
 
@@ -78,9 +81,9 @@ export function PlanScreen() {
         />
         <Meter
           label={t('cRmInput')}
-          value={inputHours(inlog, today)}
+          value={inputHours(inlog, today, preply)}
           max={INPUT_HOURS_TARGET}
-          text={t('cRmInputText', { h: inputHours(inlog, today), target: INPUT_HOURS_TARGET })}
+          text={t('cRmInputText', { h: inputHours(inlog, today, preply), target: INPUT_HOURS_TARGET })}
           testId="meter-input"
         />
         <Meter label={t('cRmGrammar')} value={g.solid} max={g.total} text={t('cRmGrammarText', { n: g.solid, total: g.total })} testId="meter-grammar" />
@@ -102,6 +105,18 @@ export function PlanScreen() {
         <p className="text-sm text-fg" data-testid="forecast">
           {fc === null ? t('cRmForecastNone') : t('cRmForecast', { when: fmtMonth(now + fc * 86_400_000) })}
         </p>
+      </section>
+
+      <section className="lx-glass mt-5 rounded-[var(--radius-card)] p-5" data-testid="plan-preply">
+        <h2 className="text-sm font-semibold">{t('brgPlanTitle')}</h2>
+        <p className="mt-1 text-sm text-muted" data-testid="plan-preply-week">
+          {week.count > 0 ? tn('brgWeek', week.count, { min: week.min }) : t('brgPlanText')}
+        </p>
+        <div className="mt-3">
+          <Button variant="secondary" icon="chat" onClick={() => go({ name: 'preply' })} data-testid="plan-open-preply">
+            {t('brgEntry')}
+          </Button>
+        </div>
       </section>
 
       <BriefCard />

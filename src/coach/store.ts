@@ -5,7 +5,7 @@ import { createWriter, type Writer } from '../data/writer';
 import { hash32 } from '../domain/random';
 import { logError, logWarn } from '../platform/diagnostics';
 import type { Db } from '../platform/types';
-import { CARD_SHARDS, DEFAULT_NEW_PER_DAY, type BriefRec, type CardRec, type CheckRec, type DayRec, type InLog, type InLogEntry, type InputItem, type ProfileDoc } from './types';
+import { CARD_SHARDS, DEFAULT_NEW_PER_DAY, type BriefRec, type CardRec, type CheckRec, type DayRec, type InLog, type InLogEntry, type InputItem, type PreplyRec, type ProfileDoc } from './types';
 import type { GrammarDoc, TopicState } from './grammarModel';
 
 // Datenzugang des Trainers: EIN Abo auf die Sammlung `coach` (wenige Dokumente), ein Schreibpfad
@@ -22,6 +22,7 @@ const cardSchema = z.looseObject({
   lv: num,
   add: num,
   known: z.union([z.literal(0), z.literal(1)]).optional(),
+  hide: z.union([z.literal(0), z.literal(1)]).optional(),
   ok: num.optional(),
   bad: num.optional(),
 });
@@ -46,6 +47,7 @@ const inputItemSchema = z.looseObject({
 });
 const checkSchema = z.looseObject({ at: num, size: num, level: z.string(), gOk: num, gN: num });
 const briefSchema = z.looseObject({ at: num, lang: z.enum(['de', 'en']), text: z.string().min(1) });
+const preplySchema = z.looseObject({ d: z.string(), min: num, n: num });
 const profileSchema = z.looseObject({ v: z.literal(1), created: num, newPerDay: num });
 
 export type CoachStatus = 'loading' | 'ready' | 'nodb' | 'error';
@@ -67,11 +69,13 @@ type CoachState = {
   checks: Readonly<Record<string, CheckRec>>;
   /** Trainer-Briefe, Schlüssel JJJJ-Www. */
   briefs: Readonly<Record<string, BriefRec>>;
+  /** Gehaltene Preply-Stunden (coach/preply), ein Eintrag je Stunde. */
+  preply: Readonly<Record<string, PreplyRec>>;
 };
 
 const emptyLog = (): InLog => ({ it: {}, own: {} });
 
-export const useCoach = create<CoachState>(() => ({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {} }));
+export const useCoach = create<CoachState>(() => ({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {}, preply: {} }));
 
 let writer: Writer | null = null;
 /** Stand je Dokument, wie zuletzt gelesen oder geschrieben (Hinweis für „ändert sich nichts"). */
@@ -80,7 +84,7 @@ const docs = new Map<string, Record<string, unknown>>();
 export const shardOf = (id: string): string => `coach/cards-${hash32(id) % CARD_SHARDS}`;
 export const daysDocOf = (day: string): string => `coach/days-${day.slice(0, 4)}`;
 
-type Parsed = Pick<CoachState, 'profile' | 'cards' | 'days' | 'invalid' | 'grammar' | 'inlog' | 'checks' | 'briefs'>;
+type Parsed = Pick<CoachState, 'profile' | 'cards' | 'days' | 'invalid' | 'grammar' | 'inlog' | 'checks' | 'briefs' | 'preply'>;
 
 function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
   const cards = new Map<string, CardRec>();
@@ -91,6 +95,7 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
   const inlog = emptyLog();
   const checks: Record<string, CheckRec> = {};
   const briefs: Record<string, BriefRec> = {};
+  const preply: Record<string, PreplyRec> = {};
   for (const [path, data] of all) {
     const id = path.slice('coach/'.length);
     if (id === 'profile') {
@@ -130,6 +135,11 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
           if (r.success) briefs[k] = r.data;
         }
       }
+    } else if (id === 'preply') {
+      for (const [k, raw] of Object.entries((data.s ?? {}) as Record<string, unknown>)) {
+        const r = preplySchema.safeParse(raw);
+        if (r.success) preply[k] = r.data;
+      }
     } else if (id.startsWith('inlog-')) {
       for (const [k, raw] of Object.entries((data.it ?? {}) as Record<string, unknown>)) {
         const r = inlogEntrySchema.safeParse(raw);
@@ -145,7 +155,7 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
       }
     }
   }
-  return { profile, cards, days, invalid, grammar, inlog, checks, briefs };
+  return { profile, cards, days, invalid, grammar, inlog, checks, briefs, preply };
 }
 
 /** Abo starten (einmal je Ansicht). Liefert das Abmelden. */
@@ -212,7 +222,7 @@ export function markNoDb(): void {
 export function resetCoach(state?: Partial<CoachState>): void {
   docs.clear();
   writer = null;
-  useCoach.setState({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {}, ...state });
+  useCoach.setState({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {}, preply: {}, ...state });
 }
 
 export function setWriterForTests(w: Writer | null): void {
@@ -301,4 +311,10 @@ export async function saveCheck(month: string, rec: CheckRec): Promise<void> {
 export async function saveBrief(week: string, rec: BriefRec): Promise<void> {
   useCoach.setState((s) => ({ briefs: { ...s.briefs, [week]: rec } }));
   await patchDoc('coach/briefs', { w: { [week]: rec } });
+}
+
+/** Gehaltene Preply-Stunde verbuchen (ein Eintrag je Stunde, nur ergänzt, nie gelöscht). */
+export async function savePreply(key: string, rec: PreplyRec): Promise<void> {
+  useCoach.setState((s) => ({ preply: { ...s.preply, [key]: rec } }));
+  await patchDoc('coach/preply', { s: { [key]: rec } });
 }

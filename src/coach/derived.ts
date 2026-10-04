@@ -41,7 +41,7 @@ export function todayPlan(cards: ReadonlyMap<string, CardRec>, profile: ProfileD
 /** Wörter, die zuletzt oft danebengingen (für den Satz des Trainers). */
 export function stubborn(cards: ReadonlyMap<string, CardRec>, n = 3): string[] {
   return [...cards]
-    .filter(([, c]) => (c.bad ?? 0) >= 2 && c.lv <= 1)
+    .filter(([, c]) => (c.bad ?? 0) >= 2 && c.lv <= 1 && !c.hide)
     .sort((a, b) => (b[1].bad ?? 0) - (a[1].bad ?? 0) || b[1].f.lapses - a[1].f.lapses)
     .slice(0, n)
     .map(([id]) => id);
@@ -113,11 +113,19 @@ export function isCore(day: DayRec, hasInput: boolean): boolean {
 
 export const INPUT_HOURS_TARGET = 150;
 
-/** Input-Stunden der letzten 365 Tage: bewertete Beiträge plus eigene Zeit. */
-export function inputHours(inlog: { it: Record<string, { d: string; m: number }>; own: Record<string, number> }, today: string): number {
+/**
+ * Input-Stunden der letzten 365 Tage: bewertete Beiträge plus eigene Zeit, dazu gehaltene
+ * Preply-Stunden (nur als Extra für den Fahrplan, nie als Pflicht oder für die Serie).
+ */
+export function inputHours(
+  inlog: { it: Record<string, { d: string; m: number }>; own: Record<string, number> },
+  today: string,
+  preply?: Readonly<Record<string, { d: string; min: number }>>,
+): number {
   const from = addDays(today, -365);
   let mins = 0;
   for (const e of Object.values(inlog.it)) if (e.d > from) mins += e.m;
   for (const [d, m] of Object.entries(inlog.own)) if (d > from) mins += m;
+  for (const p of Object.values(preply ?? {})) if (p.d > from) mins += p.min;
   return Math.round(mins / 6) / 10;
 }

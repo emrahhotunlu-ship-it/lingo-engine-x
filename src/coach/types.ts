@@ -26,6 +26,8 @@ export type CardRec = {
   add: number;
   /** 1 = beim Sortieren als bekannt bestätigt (keine Einführung nötig). */
   known?: 0 | 1;
+  /** 1 = „Nicht mehr üben": die Karte bleibt im Wortschatz, kommt aber nie in Training und Blitzrunde. */
+  hide?: 0 | 1;
   /** Richtig / falsch insgesamt. */
   ok?: number;
   bad?: number;
@@ -104,6 +106,9 @@ export type CheckRec = {
 
 /** Trainer-Brief einer Woche (coach/briefs, Schlüssel JJJJ-Www): genau eine KI-Anfrage je Woche. */
 export type BriefRec = { at: number; lang: 'de' | 'en'; text: string };
+
+/** Eine gehaltene Preply-Stunde (coach/preply, Schlüssel je Stunde): Lerntag, Minuten, neu angelegte Wörter. */
+export type PreplyRec = { d: string; min: number; n: number };
 
 export const INTERESTS = ['economy', 'tech', 'business', 'sport', 'science'] as const;
 export const FORMATS = ['video', 'article'] as const;

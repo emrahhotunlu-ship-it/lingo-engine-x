@@ -19,6 +19,8 @@ import { useClock } from './clock';
 import { importLegacy } from '../coach/legacy';
 import { HomeScreen } from '../screens/HomeScreen';
 import { PlanScreen } from '../screens/PlanScreen';
+import { VocabScreen } from '../screens/VocabScreen';
+import { PreplyScreen } from '../screens/PreplyScreen';
 import { PlacementScreen } from '../screens/PlacementScreen';
 import { SessionScreen } from '../screens/SessionScreen';
 import { SettingsSheet } from '../screens/SettingsSheet';
@@ -114,10 +116,11 @@ function useBoot(): void {
   }, [lang, theme]);
 }
 
-const TABS: ReadonlyArray<{ route: 'home' | 'input' | 'plan'; icon: IconName; key: 'cTabHome' | 'cTabInput' | 'cTabPlan' }> = [
+const TABS: ReadonlyArray<{ route: 'home' | 'input' | 'plan' | 'vocab'; icon: IconName; key: 'cTabHome' | 'cTabInput' | 'cTabPlan' | 'mwTab' }> = [
   { route: 'home', icon: 'target', key: 'cTabHome' },
   { route: 'input', icon: 'book', key: 'cTabInput' },
   { route: 'plan', icon: 'chart', key: 'cTabPlan' },
+  { route: 'vocab', icon: 'cards', key: 'mwTab' },
 ];
 
 function TopBar() {
@@ -214,6 +217,8 @@ function Screen() {
         {route.name === 'home' && <HomeScreen />}
         {route.name === 'plan' && <PlanScreen />}
         {route.name === 'input' && <InputScreen />}
+        {route.name === 'vocab' && <VocabScreen />}
+        {route.name === 'preply' && <PreplyScreen />}
         {route.name === 'blitz' && <BlitzScreen />}
         {route.name === 'placement' && <PlacementScreen />}
         {route.name === 'check' && <PlacementScreen mode="check" />}

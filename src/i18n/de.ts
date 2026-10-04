@@ -21,6 +21,7 @@ import { tonesDe } from './parts/tones.de';
 import { repairDe } from './parts/repair.de';
 import { navDe } from './parts/nav.de';
 import { patternsDe } from './parts/patterns.de';
+import { wortschatzDe } from './parts/wortschatz.de';
 
 import { coachDe } from './parts/coach.de';
 export const de = {
@@ -59,6 +60,8 @@ export const de = {
   ...navDe,
   // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
   ...patternsDe,
+  // Paket B: Mein Wortschatz, Wendungen, Preply-Brücke
+  ...wortschatzDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',
