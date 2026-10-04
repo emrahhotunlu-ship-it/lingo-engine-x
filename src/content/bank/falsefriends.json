@@ -1,1 +1,562 @@
-[]
+[
+{
+"de": "aktuell",
+"wrong": "actual",
+"right": "current",
+"prompt": "Our ___ pricing model is valid until the end of the year.",
+"answer": "current",
+"options": [
+"current",
+"actual",
+"topical"
+],
+"expl": "„actual“ heißt „tatsächlich, wirklich“, nicht „aktuell“. Für „aktuell“ sagt man current (oder up to date).",
+"expl_en": "\"actual\" means \"real, true\", not \"aktuell\". For \"aktuell\" say current (or up to date)."
+},
+{
+"de": "eventuell",
+"wrong": "eventually",
+"right": "possibly",
+"prompt": "We ___ need a second developer, but nothing is decided yet.",
+"answer": "possibly",
+"options": [
+"possibly",
+"eventually",
+"normally"
+],
+"expl": "„eventually“ heißt „schließlich, irgendwann“, nicht „eventuell“. Für „eventuell“ sagt man possibly, perhaps oder maybe.",
+"expl_en": "\"eventually\" means \"in the end, after a long time\", not \"eventuell\". For \"eventuell\" say possibly, perhaps or maybe."
+},
+{
+"de": "bekommen",
+"wrong": "became",
+"right": "received",
+"prompt": "I ___ your invoice this morning, thank you.",
+"answer": "received",
+"options": [
+"received",
+"became",
+"bought"
+],
+"expl": "„become“ heißt „werden“, nicht „bekommen“. Für „bekommen“ sagt man get oder receive.",
+"expl_en": "\"become\" means \"werden\", not \"bekommen\". For \"bekommen\" say get or receive."
+},
+{
+"de": "Chef",
+"wrong": "chef",
+"right": "boss",
+"prompt": "My ___ approved the budget yesterday.",
+"answer": "boss",
+"options": [
+"boss",
+"chef",
+"chief"
+],
+"expl": "„chef“ ist ein Koch. Der Chef im Büro ist the boss (oder manager).",
+"expl_en": "\"chef\" is a cook. The Chef in the office is the boss (or manager)."
+},
+{
+"de": "sensibel",
+"wrong": "sensible",
+"right": "sensitive",
+"prompt": "Be careful with this client; he is very ___ about criticism.",
+"answer": "sensitive",
+"options": [
+"sensitive",
+"sensible",
+"sensational"
+],
+"expl": "„sensible“ heißt „vernünftig“. „Sensibel, empfindlich“ heißt sensitive.",
+"expl_en": "\"sensible\" means \"reasonable, practical\". \"Sensibel\" is sensitive."
+},
+{
+"de": "Konsequenz (= Beharrlichkeit)",
+"wrong": "consequence",
+"right": "consistency",
+"prompt": "The team's ___ in following up with leads is the reason for our success.",
+"answer": "consistency",
+"options": [
+"consistency",
+"consequence",
+"consensus"
+],
+"expl": "„consequence“ heißt „Folge, Auswirkung“. Konsequenz im Sinn von „konsequentes Handeln“ ist consistency.",
+"expl_en": "\"consequence\" means \"result, effect\". Konsequenz in the sense of \"acting consistently\" is consistency."
+},
+{
+"de": "Provision",
+"wrong": "provision",
+"right": "commission",
+"prompt": "Our sales reps earn a 5% ___ on every deal they close.",
+"answer": "commission",
+"options": [
+"commission",
+"provision",
+"profit"
+],
+"expl": "„provision“ heißt „Vorkehrung, Bestimmung“ oder „Rückstellung“. Die Verkaufsprovision ist commission.",
+"expl_en": "\"provision\" means \"arrangement, clause\" or \"reserve\". A sales Provision is a commission."
+},
+{
+"de": "Handy",
+"wrong": "handy",
+"right": "cell phone",
+"prompt": "Please turn off your ___ during the meeting.",
+"answer": "cell phone",
+"options": [
+"cell phone",
+"handy",
+"landline"
+],
+"expl": "„handy“ heißt „praktisch, nützlich“. Das Handy heißt in den USA cell phone (britisch: mobile).",
+"expl_en": "\"handy\" means \"useful, practical\". The German Handy is a cell phone (British: mobile)."
+},
+{
+"de": "Gift",
+"wrong": "gift",
+"right": "poison",
+"prompt": "Don't touch that bottle in the lab – it's ___.",
+"answer": "poison",
+"options": [
+"poison",
+"gift",
+"juice"
+],
+"expl": "„gift“ heißt „Geschenk“. Das deutsche „Gift“ ist poison.",
+"expl_en": "\"gift\" means \"present\". The German \"Gift\" is poison."
+},
+{
+"de": "Kritik",
+"wrong": "critic",
+"right": "criticism",
+"prompt": "She took the ___ from her boss very well.",
+"answer": "criticism",
+"options": [
+"criticism",
+"critic",
+"crisis"
+],
+"expl": "„critic“ ist die Person, die kritisiert (der Kritiker). Die Kritik selbst ist criticism.",
+"expl_en": "\"critic\" is the person who criticizes. The Kritik itself is criticism."
+},
+{
+"de": "Rezept (Kochen)",
+"wrong": "receipt",
+"right": "recipe",
+"prompt": "I'm looking for a good ___ for apple pie.",
+"answer": "recipe",
+"options": [
+"recipe",
+"receipt",
+"prescription"
+],
+"expl": "„receipt“ ist die Quittung oder der Kassenbon. Ein Kochrezept ist a recipe, ein Arztrezept a prescription.",
+"expl_en": "\"receipt\" is the proof of payment. A cooking Rezept is a recipe, a doctor's Rezept a prescription."
+},
+{
+"de": "Fabrik",
+"wrong": "fabric",
+"right": "factory",
+"prompt": "Our ___ in Poland produces 10,000 units a week.",
+"answer": "factory",
+"options": [
+"factory",
+"fabric",
+"fabrication"
+],
+"expl": "„fabric“ heißt „Stoff, Gewebe“. Eine Fabrik ist a factory (oder a plant).",
+"expl_en": "\"fabric\" means \"cloth, material\". A Fabrik is a factory (or a plant)."
+},
+{
+"de": "Termin",
+"wrong": "term",
+"right": "appointment",
+"prompt": "I have a dentist ___ at 4 p.m. tomorrow.",
+"answer": "appointment",
+"options": [
+"appointment",
+"term",
+"termination"
+],
+"expl": "„term“ heißt „Begriff, Zeitraum, Bedingung“. Ein Termin beim Arzt oder Kunden ist an appointment.",
+"expl_en": "\"term\" means \"word, period, condition\". A Termin with a doctor or client is an appointment."
+},
+{
+"de": "Meinung",
+"wrong": "meaning",
+"right": "opinion",
+"prompt": "What's your ___ about the new logo?",
+"answer": "opinion",
+"options": [
+"opinion",
+"meaning",
+"intention"
+],
+"expl": "„meaning“ heißt „Bedeutung“. Die Meinung ist the opinion (oder the view).",
+"expl_en": "\"meaning\" is the sense of a word. The Meinung is the opinion (or the view)."
+},
+{
+"de": "Mappe",
+"wrong": "map",
+"right": "folder",
+"prompt": "Please put all the documents into a ___ for the client.",
+"answer": "folder",
+"options": [
+"folder",
+"map",
+"cabinet"
+],
+"expl": "„map“ ist die Landkarte. Eine Mappe für Dokumente ist a folder (oder a binder).",
+"expl_en": "\"map\" is a chart of an area. A Mappe for documents is a folder (or a binder)."
+},
+{
+"de": "also",
+"wrong": "also",
+"right": "so",
+"prompt": "We missed the deadline, ___ the client was upset.",
+"answer": "so",
+"options": [
+"so",
+"also",
+"unless"
+],
+"expl": "„also“ heißt „auch“. Deutsch „also“ im Sinn von „daher, folglich“ ist so oder therefore.",
+"expl_en": "\"also\" means \"too, as well\". German \"also\" in the sense of \"therefore\" is so or therefore."
+},
+{
+"de": "brav",
+"wrong": "brave",
+"right": "well-behaved",
+"prompt": "Our daughter was very ___ at the restaurant.",
+"answer": "well-behaved",
+"options": [
+"well-behaved",
+"brave",
+"brief"
+],
+"expl": "„brave“ heißt „mutig“. „Brav“ im Sinn von „artig“ ist well-behaved oder good.",
+"expl_en": "\"brave\" means \"courageous\". \"Brav\" in the sense of \"obedient\" is well-behaved or good."
+},
+{
+"de": "sympathisch",
+"wrong": "sympathetic",
+"right": "nice",
+"prompt": "Our new manager is really ___ – everyone likes her.",
+"answer": "nice",
+"options": [
+"nice",
+"sympathetic",
+"sympathize"
+],
+"expl": "„sympathetic“ heißt „mitfühlend, verständnisvoll“. „Sympathisch“ heißt nice, likeable oder pleasant.",
+"expl_en": "\"sympathetic\" means \"showing understanding for someone's feelings\". \"Sympathisch\" is nice, likeable or pleasant."
+},
+{
+"de": "ordinär",
+"wrong": "ordinary",
+"right": "vulgar",
+"prompt": "His ___ jokes embarrassed the clients.",
+"answer": "vulgar",
+"options": [
+"vulgar",
+"ordinary",
+"polite"
+],
+"expl": "„ordinary“ heißt „gewöhnlich, normal“. „Ordinär“ im Sinn von „derb, unanständig“ ist vulgar.",
+"expl_en": "\"ordinary\" means \"normal, average\". \"Ordinär\" in the sense of \"rude, coarse\" is vulgar."
+},
+{
+"de": "konkurrieren",
+"wrong": "concur",
+"right": "compete",
+"prompt": "Small startups often have to ___ with large corporations.",
+"answer": "compete",
+"options": [
+"compete",
+"concur",
+"conquer"
+],
+"expl": "„concur“ heißt „zustimmen“. „Konkurrieren“ ist compete (der Konkurrent: the competitor).",
+"expl_en": "\"concur\" means \"agree\". \"Konkurrieren\" is compete (the Konkurrent: the competitor)."
+},
+{
+"de": "spenden",
+"wrong": "spend",
+"right": "donate",
+"prompt": "Our company wants to ___ 10,000 dollars to the local hospital.",
+"answer": "donate",
+"options": [
+"donate",
+"spend",
+"sponsor"
+],
+"expl": "„spend“ heißt „ausgeben“ (Geld) oder „verbringen“ (Zeit). „Spenden“ ist donate.",
+"expl_en": "\"spend\" means \"use money\" or \"pass time\". \"Spenden\" is donate."
+},
+{
+"de": "Billion",
+"wrong": "billion",
+"right": "trillion",
+"prompt": "Apple's market value reached three ___ dollars, that is 3,000,000,000,000.",
+"answer": "trillion",
+"options": [
+"trillion",
+"billion",
+"million"
+],
+"expl": "Die deutsche „Billion“ ist eine Million Millionen (10^12) = trillion. Die englische billion ist die deutsche „Milliarde“ (10^9).",
+"expl_en": "The German \"Billion\" is a million millions (10^12) = trillion. The English billion is the German \"Milliarde\" (10^9)."
+},
+{
+"de": "bald",
+"wrong": "bald",
+"right": "soon",
+"prompt": "I'll send you the proposal ___.",
+"answer": "soon",
+"options": [
+"soon",
+"bald",
+"hardly"
+],
+"expl": "„bald“ (englisch) heißt „kahl, glatzköpfig“. Deutsch „bald“ ist soon.",
+"expl_en": "English \"bald\" means \"without hair\". German \"bald\" is soon."
+},
+{
+"de": "Praktikum",
+"wrong": "practice",
+"right": "internship",
+"prompt": "She did a three-month ___ at a software company before she started her degree.",
+"answer": "internship",
+"options": [
+"internship",
+"practice",
+"practical"
+],
+"expl": "„practice“ heißt „Übung, Praxis“. Ein Praktikum ist an internship.",
+"expl_en": "\"practice\" means \"training, doing something regularly\". A Praktikum is an internship."
+},
+{
+"de": "Rente",
+"wrong": "rent",
+"right": "pension",
+"prompt": "He retired last year and now lives on his ___.",
+"answer": "pension",
+"options": [
+"pension",
+"rent",
+"rental"
+],
+"expl": "„rent“ ist die Miete. Die Rente ist the pension.",
+"expl_en": "\"rent\" is what you pay for a flat. The Rente is the pension."
+},
+{
+"de": "genial",
+"wrong": "genial",
+"right": "brilliant",
+"prompt": "That was a really ___ idea for the campaign!",
+"answer": "brilliant",
+"options": [
+"brilliant",
+"genial",
+"gentle"
+],
+"expl": "„genial“ (englisch) heißt „freundlich, herzlich“. Deutsch „genial“ ist brilliant (oder genius).",
+"expl_en": "English \"genial\" means \"friendly, warm\". German \"genial\" is brilliant (or genius)."
+},
+{
+"de": "Lektüre",
+"wrong": "lecture",
+"right": "reading",
+"prompt": "I'll bring some light ___ for the flight.",
+"answer": "reading",
+"options": [
+"reading",
+"lecture",
+"lesson"
+],
+"expl": "„lecture“ ist ein Vortrag an der Uni. Die Lektüre (etwas zum Lesen) ist reading.",
+"expl_en": "\"lecture\" is a talk at a university. The Lektüre (something to read) is reading."
+},
+{
+"de": "Beamer",
+"wrong": "beamer",
+"right": "projector",
+"prompt": "Could you set up the ___ before the presentation starts?",
+"answer": "projector",
+"options": [
+"projector",
+"beamer",
+"beam"
+],
+"expl": "„beamer“ ist kein englisches Wort für das Gerät. Der Beamer im Meetingraum ist the projector.",
+"expl_en": "\"beamer\" is not the English word for the device. The Beamer in the meeting room is the projector."
+},
+{
+"de": "Home Office",
+"wrong": "in home office",
+"right": "from home",
+"prompt": "I usually work ___ on Fridays.",
+"answer": "from home",
+"options": [
+"from home",
+"in home office",
+"by home"
+],
+"expl": "„Home office“ ist im Englischen ein Arbeitszimmer. Wer zu Hause arbeitet, sagt: I work from home (oder remotely).",
+"expl_en": "\"Home office\" in English is a room used for work. To say you work at home: I work from home (or remotely)."
+},
+{
+"de": "Mobbing",
+"wrong": "mobbing",
+"right": "bullying",
+"prompt": "He was a victim of ___ at his previous job.",
+"answer": "bullying",
+"options": [
+"bullying",
+"mobbing",
+"moping"
+],
+"expl": "„mobbing“ ist im Englischen kaum gebräuchlich. „Mobbing“ heißt bullying (am Arbeitsplatz: workplace bullying).",
+"expl_en": "\"mobbing\" is hardly used in English. \"Mobbing\" is bullying (at work: workplace bullying)."
+},
+{
+"de": "Shooting (Fotos)",
+"wrong": "shooting",
+"right": "shoot",
+"prompt": "We have a photo ___ for the new website tomorrow.",
+"answer": "shoot",
+"options": [
+"shoot",
+"shooting",
+"shot"
+],
+"expl": "„shooting“ heißt „Schießerei“. Ein Fotoshooting ist a photo shoot.",
+"expl_en": "\"shooting\" means firing a gun. A Fotoshooting is a photo shoot."
+},
+{
+"de": "Prospekt",
+"wrong": "prospect",
+"right": "brochure",
+"prompt": "Please send me your product ___ by email.",
+"answer": "brochure",
+"options": [
+"brochure",
+"prospect",
+"prospectus"
+],
+"expl": "„prospect“ ist im Vertrieb ein potenzieller Kunde. Ein Prospekt ist a brochure (oder a flyer).",
+"expl_en": "In sales, a \"prospect\" is a potential customer. A Prospekt is a brochure (or a flyer)."
+},
+{
+"de": "Aktie",
+"wrong": "actions",
+"right": "shares",
+"prompt": "I bought 100 ___ of a software company last year.",
+"answer": "shares",
+"options": [
+"shares",
+"actions",
+"acts"
+],
+"expl": "„action“ heißt „Handlung, Aktion“. Eine Aktie ist a share (amerikanisch auch: stock).",
+"expl_en": "\"action\" means \"something you do\". An Aktie is a share (in American English also: stock)."
+},
+{
+"de": "resignieren",
+"wrong": "resign",
+"right": "give up",
+"prompt": "After three rejections he didn't ___ – he kept calling.",
+"answer": "give up",
+"options": [
+"give up",
+"resign",
+"resist"
+],
+"expl": "„resign“ heißt „kündigen, zurücktreten“. „Resignieren“ im Sinn von „aufgeben“ ist give up.",
+"expl_en": "\"resign\" means \"quit a job\". \"Resignieren\" in the sense of \"stop trying\" is give up."
+},
+{
+"de": "fast",
+"wrong": "fast",
+"right": "almost",
+"prompt": "We're ___ done with the report.",
+"answer": "almost",
+"options": [
+"almost",
+"fast",
+"quick"
+],
+"expl": "„fast“ (englisch) heißt „schnell“. Deutsch „fast“ im Sinn von „beinahe“ ist almost (oder nearly).",
+"expl_en": "English \"fast\" means \"quick\". German \"fast\" in the sense of \"nearly\" is almost (or nearly)."
+},
+{
+"de": "realisieren (= umsetzen)",
+"wrong": "realize",
+"right": "implement",
+"prompt": "We want to ___ the new process by June.",
+"answer": "implement",
+"options": [
+"implement",
+"realize",
+"relocate"
+],
+"expl": "„realize“ heißt „erkennen, merken“. „Ein Projekt realisieren“ im Sinn von „umsetzen“ ist implement oder carry out.",
+"expl_en": "\"realize\" means \"become aware\". \"Ein Projekt realisieren\" in the sense of \"put into practice\" is implement or carry out."
+},
+{
+"de": "bemerken",
+"wrong": "remark",
+"right": "notice",
+"prompt": "Did you ___ the typo on slide 5?",
+"answer": "notice",
+"options": [
+"notice",
+"remark",
+"remind"
+],
+"expl": "„remark“ heißt „eine Bemerkung machen“ (sagen). „Etwas bemerken“ (wahrnehmen) ist notice.",
+"expl_en": "\"remark\" means \"say something\". \"Etwas bemerken\" (become aware of it) is notice."
+},
+{
+"de": "Kaution",
+"wrong": "caution",
+"right": "deposit",
+"prompt": "We have to pay a ___ of two months' rent for the new office.",
+"answer": "deposit",
+"options": [
+"deposit",
+"caution",
+"coupon"
+],
+"expl": "„caution“ heißt „Vorsicht“. Eine Kaution ist a deposit (oder a security deposit).",
+"expl_en": "\"caution\" means \"care, warning\". A Kaution is a deposit (or a security deposit)."
+},
+{
+"de": "Prämie",
+"wrong": "premium",
+"right": "bonus",
+"prompt": "She received a ___ for exceeding her sales targets.",
+"answer": "bonus",
+"options": [
+"bonus",
+"premium",
+"prime"
+],
+"expl": "„premium“ ist ein Versicherungsbeitrag oder ein Aufpreis. Die Prämie als Belohnung ist a bonus.",
+"expl_en": "\"premium\" is an insurance payment or an extra charge. A Prämie as a reward is a bonus."
+},
+{
+"de": "Gymnasium",
+"wrong": "gymnasium",
+"right": "high school",
+"prompt": "She finished ___ in Cologne in 2010 and then studied economics.",
+"answer": "high school",
+"options": [
+"high school",
+"gymnasium",
+"gym"
+],
+"expl": "„gymnasium“ ist eine Sporthalle. Das Gymnasium ist (in den USA) high school.",
+"expl_en": "\"gymnasium\" is a sports hall. A German Gymnasium is a high school (in the US)."
+}
+]
