@@ -5,7 +5,7 @@ import { createWriter, type Writer } from '../data/writer';
 import { hash32 } from '../domain/random';
 import { logError, logWarn } from '../platform/diagnostics';
 import type { Db } from '../platform/types';
-import { CARD_SHARDS, DEFAULT_NEW_PER_DAY, type CardRec, type DayRec, type InLog, type InLogEntry, type InputItem, type ProfileDoc } from './types';
+import { CARD_SHARDS, DEFAULT_NEW_PER_DAY, type BriefRec, type CardRec, type CheckRec, type DayRec, type InLog, type InLogEntry, type InputItem, type ProfileDoc } from './types';
 import type { GrammarDoc, TopicState } from './grammarModel';
 
 // Datenzugang des Trainers: EIN Abo auf die Sammlung `coach` (wenige Dokumente), ein Schreibpfad
@@ -44,6 +44,8 @@ const inputItemSchema = z.looseObject({
   tip_en: z.string().optional(),
   words: z.array(z.looseObject({ en: z.string(), de: z.string() })).max(12).optional(),
 });
+const checkSchema = z.looseObject({ at: num, size: num, level: z.string(), gOk: num, gN: num });
+const briefSchema = z.looseObject({ at: num, lang: z.enum(['de', 'en']), text: z.string().min(1) });
 const profileSchema = z.looseObject({ v: z.literal(1), created: num, newPerDay: num });
 
 export type CoachStatus = 'loading' | 'ready' | 'nodb' | 'error';
@@ -61,11 +63,15 @@ type CoachState = {
   inlog: InLog;
   /** Input der letzten Tage (input/<Tag>), neueste zuerst. */
   input: ReadonlyArray<{ d: string; items: InputItem[] }>;
+  /** Monats-Checks, Schlüssel JJJJ-MM. */
+  checks: Readonly<Record<string, CheckRec>>;
+  /** Trainer-Briefe, Schlüssel JJJJ-Www. */
+  briefs: Readonly<Record<string, BriefRec>>;
 };
 
 const emptyLog = (): InLog => ({ it: {}, own: {} });
 
-export const useCoach = create<CoachState>(() => ({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [] }));
+export const useCoach = create<CoachState>(() => ({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {} }));
 
 let writer: Writer | null = null;
 /** Stand je Dokument, wie zuletzt gelesen oder geschrieben (Hinweis für „ändert sich nichts"). */
@@ -74,7 +80,7 @@ const docs = new Map<string, Record<string, unknown>>();
 export const shardOf = (id: string): string => `coach/cards-${hash32(id) % CARD_SHARDS}`;
 export const daysDocOf = (day: string): string => `coach/days-${day.slice(0, 4)}`;
 
-type Parsed = Pick<CoachState, 'profile' | 'cards' | 'days' | 'invalid' | 'grammar' | 'inlog'>;
+type Parsed = Pick<CoachState, 'profile' | 'cards' | 'days' | 'invalid' | 'grammar' | 'inlog' | 'checks' | 'briefs'>;
 
 function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
   const cards = new Map<string, CardRec>();
@@ -83,6 +89,8 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
   let profile: ProfileDoc | null = null;
   let grammar: GrammarDoc | null = null;
   const inlog = emptyLog();
+  const checks: Record<string, CheckRec> = {};
+  const briefs: Record<string, BriefRec> = {};
   for (const [path, data] of all) {
     const id = path.slice('coach/'.length);
     if (id === 'profile') {
@@ -106,6 +114,18 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
       const seen: Record<string, number> = {};
       for (const [k, v] of Object.entries((data.seen ?? {}) as Record<string, unknown>)) if (typeof v === 'number') seen[k] = v;
       grammar = { t, seen };
+    } else if (id === 'checks' || id === 'briefs') {
+      const bag = (id === 'checks' ? data.c : data.w);
+      if (!bag || typeof bag !== 'object') continue;
+      for (const [k, raw] of Object.entries(bag as Record<string, unknown>)) {
+        if (id === 'checks') {
+          const r = checkSchema.safeParse(raw);
+          if (r.success) checks[k] = r.data;
+        } else {
+          const r = briefSchema.safeParse(raw);
+          if (r.success) briefs[k] = r.data;
+        }
+      }
     } else if (id.startsWith('inlog-')) {
       for (const [k, raw] of Object.entries((data.it ?? {}) as Record<string, unknown>)) {
         const r = inlogEntrySchema.safeParse(raw);
@@ -121,7 +141,7 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
       }
     }
   }
-  return { profile, cards, days, invalid, grammar, inlog };
+  return { profile, cards, days, invalid, grammar, inlog, checks, briefs };
 }
 
 /** Abo starten (einmal je Ansicht). Liefert das Abmelden. */
@@ -188,7 +208,7 @@ export function markNoDb(): void {
 export function resetCoach(state?: Partial<CoachState>): void {
   docs.clear();
   writer = null;
-  useCoach.setState({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], ...state });
+  useCoach.setState({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {}, ...state });
 }
 
 export function setWriterForTests(w: Writer | null): void {
@@ -263,4 +283,18 @@ export async function saveInLog(day: string, patch: { it?: Record<string, InLogE
 /** Zusammenfassung für den Tagesauftrag (klein, nur bei Änderung geschrieben). */
 export async function saveSummary(summary: Record<string, unknown>): Promise<void> {
   await patchDoc('coach/summary', summary);
+}
+
+export const monthOf = (day: string): string => day.slice(0, 7);
+
+/** Monats-Check verbuchen (ein Eintrag je Monat, die Einstufung bleibt unverändert). */
+export async function saveCheck(month: string, rec: CheckRec): Promise<void> {
+  useCoach.setState((s) => ({ checks: { ...s.checks, [month]: rec } }));
+  await patchDoc('coach/checks', { c: { [month]: rec } });
+}
+
+/** Trainer-Brief der Woche speichern. */
+export async function saveBrief(week: string, rec: BriefRec): Promise<void> {
+  useCoach.setState((s) => ({ briefs: { ...s.briefs, [week]: rec } }));
+  await patchDoc('coach/briefs', { w: { [week]: rec } });
 }

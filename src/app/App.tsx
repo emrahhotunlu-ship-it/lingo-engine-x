@@ -128,7 +128,7 @@ function TopBar() {
     { icon: 'chat', label: t('cAsk'), run: () => openSheet('ask'), testId: 'open-ask' },
     { icon: 'gear', label: t('cSettings'), run: () => openSheet('settings'), testId: 'open-settings' },
   ];
-  const inFlow = route === 'session' || route === 'placement' || route === 'blitz';
+  const inFlow = route === 'session' || route === 'placement' || route === 'check' || route === 'blitz';
   return (
     <header className="sticky top-0 z-20 border-b border-line/60 bg-bg/80 backdrop-blur-xl [-webkit-backdrop-filter:blur(20px)] pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex h-14 max-w-3xl items-center gap-2 px-4">
@@ -154,7 +154,7 @@ function TopBar() {
 function TabBar() {
   const { t } = useT();
   const route = useRoute((s) => s.route.name);
-  if (route === 'session' || route === 'placement' || route === 'blitz') return null;
+  if (route === 'session' || route === 'placement' || route === 'check' || route === 'blitz') return null;
   return (
     <nav
       aria-label="Navigation"
@@ -216,6 +216,7 @@ function Screen() {
         {route.name === 'input' && <InputScreen />}
         {route.name === 'blitz' && <BlitzScreen />}
         {route.name === 'placement' && <PlacementScreen />}
+        {route.name === 'check' && <PlacementScreen mode="check" />}
         {route.name === 'session' && <SessionScreen extra={!!route.extra} />}
       </motion.div>
     </AnimatePresence>

@@ -71,7 +71,8 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] Schritt 1 – Fundament: Lernstoff-Bank (8.342 Wörter, 588 Phrasal Verbs, geprüft), Datenübernahme, Einstufungstest, Heute, Wort-Training (Sortieren, Einführen, 4 Abfragearten, FSRS, automatische Note), Fahrplan, Übersetzer, Claude fragen, Einstellungen. Auf dem Test-Link `AXHkh6…` Version `1791069842-9340` (Code `ab068f2`); `main` bleibt bis zum Umzug beim alten Stand.
   - [x] Schritt 2 – Training: Tageseinheit Wörter → Mix (Kollokationen, falsche Freunde) → Grammatik (Fokus-Thema mit Regelkarte, `coach/grammar`), Wortfamilie/Synonym, Blitzrunde; 240 neue Grammatik-Aufgaben.
   - [x] Schritt 3 – Input: Reiter Input (`input/<Tag>`, Bewertung in `coach/inlog-JJJJ-MM`, eigene Zeit), `coach/summary`, schlanker Tagesauftrag (pausiert). Test-Link Version `1791073837-c5b0` (Code `97402d5`).
-  - [ ] Schritt 4 – Fahrplan (Trainer-Brief, Monats-Check) · [ ] Schritt 5 – Umzug (nur mit OK)
+  - [x] Schritt 4 – Fahrplan: Trainer-Brief (`coach/briefs`, eine KI-Anfrage je Woche, nur Knopf), Monats-Check (`coach/checks`, Aufbau wie Einstufung, ändert die Einstufung nicht), Kurve des gemessenen Wortschatzes. Datenübernahme liest Sammlungen über 1.000 Dokumente seitenweise (vorher still gekappt). verify grün.
+  - [ ] Schritt 5 – Umzug (nur mit OK)
 
 ## A5. Subagents (`.claude/agents/`)
 | Subagent | Wann einsetzen | Rechte |

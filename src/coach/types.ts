@@ -91,6 +91,19 @@ export type ProfileDoc = {
   formats?: string[];
 };
 
+/** Monats-Check (coach/checks, ein Eintrag je Monat JJJJ-MM): gleicher Aufbau wie die Einstufung. */
+export type CheckRec = {
+  at: number;
+  size: number;
+  level: string;
+  /** Grammatik: richtig / Aufgaben. */
+  gOk: number;
+  gN: number;
+};
+
+/** Trainer-Brief einer Woche (coach/briefs, Schlüssel JJJJ-Www): genau eine KI-Anfrage je Woche. */
+export type BriefRec = { at: number; lang: 'de' | 'en'; text: string };
+
 export const INTERESTS = ['economy', 'tech', 'business', 'sport', 'science'] as const;
 export const FORMATS = ['video', 'article'] as const;
 

@@ -7,6 +7,7 @@ import { useCoach } from '../coach/store';
 import { forecastDays, grammarSolid, inputHours, INPUT_HOURS_TARGET, learnedSince, stageOf, vocabNow, VOCAB_C1 } from '../coach/derived';
 import { topicById } from '../coach/grammar';
 import { dayKeyNoon } from '../domain/date';
+import { BriefCard, CheckCard, CurveCard } from './PlanParts';
 
 // Fahrplan zu C1 (docs/neustart.md §7): vier Etappen à drei Monate, Messwerte je Säule, Prognose.
 
@@ -102,6 +103,10 @@ export function PlanScreen() {
           {fc === null ? t('cRmForecastNone') : t('cRmForecast', { when: fmtMonth(now + fc * 86_400_000) })}
         </p>
       </section>
+
+      <BriefCard />
+      <CurveCard />
+      <CheckCard />
 
       <ol className="mt-6 space-y-3" aria-label={t('cRmTitle')}>
         {STAGE_KEYS.map((key, i) => {

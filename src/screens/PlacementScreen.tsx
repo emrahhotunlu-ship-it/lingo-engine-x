@@ -3,7 +3,7 @@ import { useT } from '../i18n';
 import { Button } from '../ui/Button';
 import { useClock } from '../app/clock';
 import { go, setAskContext } from '../app/route';
-import { saveProfile, useCoach } from '../coach/store';
+import { monthOf, saveCheck, saveProfile, useCoach } from '../coach/store';
 import {
   buildGrammarCheck,
   buildVocabTest,
@@ -37,11 +37,13 @@ function ProgressLine({ i, n }: { i: number; n: number }) {
   );
 }
 
-export function PlacementScreen() {
+export function PlacementScreen({ mode = 'placement' }: { mode?: 'placement' | 'check' }) {
   const { t, lang, num } = useT();
   const today = useClock((s) => s.today);
   const profile = useCoach((s) => s.profile);
-  const seed = seedFor(`placement-${today}`);
+  const check = mode === 'check';
+  const checks = useCoach((s) => s.checks);
+  const seed = seedFor(`${mode}-${check ? monthOf(today) : today}`);
   const vocabItems = useMemo(() => buildVocabTest(seed), [seed]);
   const grammarItems = useMemo(() => buildGrammarCheck(seed), [seed]);
   const [phase, setPhase] = useState<Phase>('intro');
@@ -83,32 +85,38 @@ export function PlacementScreen() {
   const result = useMemo(() => {
     if (phase !== 'result') return null;
     const v = scoreVocab(answers);
-    const grammar = scoreGrammar(gResults, profile?.imported?.grammar ?? {});
+    const grammar = scoreGrammar(gResults, check ? {} : (profile?.imported?.grammar ?? {}));
     const vl = cefrFromVocab(v.xlex);
     const gl = cefrFromGrammar(grammar);
     const placement: Placement = { at: 0, size: v.size, bands: v.bands, falseAlarm: v.falseAlarm, grammar, level: overallCefr(vl, gl) };
     return { placement, vl, gl };
-  }, [phase, answers, gResults, profile]);
+  }, [phase, answers, gResults, profile, check]);
 
   async function finish() {
     if (!result) return;
     setSaving(true);
+    if (check) {
+      const gOk = Object.values(gResults).filter(Boolean).length;
+      await saveCheck(monthOf(today), { at: Date.now(), size: result.placement.size, level: result.placement.level, gOk, gN: grammarItems.length });
+      go({ name: 'plan' });
+      return;
+    }
     await saveProfile({ placement: { ...result.placement, at: Date.now() }, planStart: profile?.planStart ?? today });
     go({ name: 'home' });
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 pt-6" data-testid="placement">
+    <div className="mx-auto max-w-2xl px-4 pt-6" data-testid={check ? 'check' : 'placement'}>
       <div className="mb-5 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">{t('cPlTitle')}</h1>
-        <Button variant="ghost" onClick={() => go({ name: 'home' })} data-testid="placement-close">
+        <h1 className="text-lg font-semibold">{check ? t('cCkTitle') : t('cPlTitle')}</h1>
+        <Button variant="ghost" onClick={() => go({ name: check ? 'plan' : 'home' })} data-testid="placement-close">
           {t('cClose')}
         </Button>
       </div>
 
       {phase === 'intro' && (
         <section className="lx-glass rounded-[var(--radius-card)] p-6">
-          <p className="text-base leading-relaxed">{t('cPlIntro', { n: grammarItems.length })}</p>
+          <p className="text-base leading-relaxed">{check ? t('cCkIntro', { n: grammarItems.length }) : t('cPlIntro', { n: grammarItems.length })}</p>
           <div className="mt-6">
             <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => setPhase('vocab')} data-testid="placement-start">
               {t('cPlStart')}
@@ -168,7 +176,7 @@ export function PlacementScreen() {
 
       {phase === 'result' && result && (
         <section className="lx-glass rounded-[var(--radius-card)] p-6" data-testid="placement-result">
-          <h2 className="text-lg font-semibold">{t('cPlResultTitle')}</h2>
+          <h2 className="text-lg font-semibold">{check ? t('cCkResultTitle') : t('cPlResultTitle')}</h2>
           <p className="mt-4 text-3xl font-semibold tracking-tight text-accent-text" data-testid="placement-level">
             {result.placement.level}
           </p>
@@ -177,16 +185,34 @@ export function PlacementScreen() {
             <li className="text-muted">{t('cPlVocabLevel', { level: result.vl })}</li>
             <li className="text-muted">{t('cPlGrammarLevel', { level: result.gl })}</li>
           </ul>
+          {check && <CheckDelta size={result.placement.size} prev={previousSize(checks, profile?.placement?.size, monthOf(today))} />}
           <TopicLists grammar={result.placement.grammar} lang={lang} />
           {result.placement.falseAlarm >= 0.15 && <p className="mt-4 text-xs text-muted">{t('cPlFalseAlarm', { pct: Math.round(result.placement.falseAlarm * 100) })}</p>}
           <div className="mt-6">
             <Button variant="primary" size="lg" busy={saving} busyLabel={t('cPlSaving')} onClick={() => void finish()} data-testid="placement-done">
-              {t('cPlDone')}
+              {check ? t('cCkDone') : t('cPlDone')}
             </Button>
           </div>
         </section>
       )}
     </div>
+  );
+}
+
+/** Größe der letzten Messung vor diesem Monat (Check oder Einstufung). */
+function previousSize(checks: Readonly<Record<string, { size: number }>>, start: number | undefined, month: string): number | null {
+  const prev = Object.keys(checks).filter((k) => k < month).sort().pop();
+  return prev ? checks[prev]!.size : (start ?? null);
+}
+
+function CheckDelta({ size, prev }: { size: number; prev: number | null }) {
+  const { t, num } = useT();
+  if (prev === null) return null;
+  const diff = size - prev;
+  return (
+    <p className="mt-3 text-sm" data-testid="check-delta">
+      {t(diff >= 0 ? 'cCkUp' : 'cCkDown', { n: num(Math.abs(diff)) })}
+    </p>
   );
 }
 

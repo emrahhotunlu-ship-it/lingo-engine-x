@@ -24,16 +24,50 @@ export type LegacyData = {
   truncated: string[];
 };
 
+/** Feld, nach dem eine große Sammlung seitenweise gelesen wird (get() liefert höchstens 1.000 Dokumente). */
+const PAGE_FIELD: Readonly<Record<string, string>> = { vocab: 'word', chunk: 'en' };
+const MAX_PAGES = 30;
+
+type DocsSnap = Awaited<ReturnType<ReturnType<Db['collection']>['get']>>;
+
 async function readCollection(db: Db, name: string, truncated: string[]): Promise<Map<string, Doc>> {
   const out = new Map<string, Doc>();
+  const add = (q: DocsSnap): number => {
+    let fresh = 0;
+    for (const d of q.docs) {
+      const data = d.exists ? d.data() : undefined;
+      if (!data || out.has(d.id)) continue;
+      const v = validateDoc(`${name}/${d.id}`, data);
+      if (v.ok) {
+        out.set(d.id, v.value);
+        fresh++;
+      }
+    }
+    return fresh;
+  };
   const q = await readOnce(name, () => db.collection(name).get());
-  if (q.size === 1000) truncated.push(name);
-  for (const d of q.docs) {
-    const data = d.exists ? d.data() : undefined;
-    if (!data) continue;
-    const v = validateDoc(`${name}/${d.id}`, data);
-    if (v.ok) out.set(d.id, v.value);
+  add(q);
+  if (q.size < 1000) return out;
+  // Genau 1.000 Treffer sehen nach einer Kappung aus: seitenweise nach einem Feld nachlesen.
+  const field = PAGE_FIELD[name];
+  if (!field) {
+    truncated.push(name);
+    return out;
   }
+  let last: string | null = null;
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const from = last;
+    const base = db.collection(name);
+    const query = (from === null ? base : base.where(field, '>=', from)).orderBy(field).limit(1000);
+    const snap = await readOnce(`${name}@${page}`, () => query.get());
+    const fresh = add(snap);
+    const lastDoc = snap.docs[snap.docs.length - 1];
+    const next: unknown = lastDoc?.exists ? lastDoc.data()?.[field] : undefined;
+    if (snap.size < 1000) return out;
+    if ((fresh === 0 && page > 0) || typeof next !== 'string') break;
+    last = next;
+  }
+  truncated.push(name);
   return out;
 }
 

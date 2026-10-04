@@ -166,3 +166,39 @@ test('Input des Tages: Beitrag lesen, bewerten, Teil 2 erledigt', async ({ page 
   // Zusammenfassung für den Tagesauftrag enthält die Bewertung.
   await expect.poll(() => page.evaluate(() => JSON.stringify(window.__LINGO_FAKE__!.db.dump()['coach/summary'] ?? {})), { timeout: 8000 }).toContain('"tech":1');
 });
+
+test('Fahrplan: Trainer-Brief nur auf Knopfdruck, einmal je Woche', async ({ page }) => {
+  const days = { '2026-09-18': { min: 25, ans: 40, ok: 32, nw: 10, core: 1 }, '2026-09-19': { min: 20, ans: 30, ok: 27, nw: 10, core: 1 } };
+  await boot(page, { fake: { seed: 'empty', patch: { 'coach/profile': placedProfile(), 'coach/days-2026': { d: days } } } });
+  await page.getByTestId('tab-plan').click();
+  await expect(page.getByTestId('brief-text')).toHaveCount(0);
+  await page.getByTestId('brief-write').click();
+  await expect(page.getByTestId('brief-text')).toContainText('Diese Woche lief stabil');
+  await expect(page.getByTestId('brief-write')).toHaveCount(0);
+  await expect(page.getByTestId('curve')).toBeVisible();
+  expect(await layoutProblems(page)).toEqual([]);
+});
+
+test('Monats-Check: gleicher Aufbau, Kurve bekommt einen zweiten Punkt', async ({ page }) => {
+  await boot(page, { fake: { seed: 'empty', patch: { 'coach/profile': placedProfile() } } });
+  await page.getByTestId('tab-plan').click();
+  await page.getByTestId('check-start').click();
+  await page.getByTestId('placement-start').click();
+  for (let i = 0; i < 200; i++) {
+    if (await page.getByTestId('grammar-test').isVisible()) break;
+    const verify = page.getByTestId('vocab-verify');
+    if (await verify.isVisible()) {
+      await verify.getByRole('button').first().click();
+      continue;
+    }
+    await page.getByTestId(i % 2 ? 'vocab-no' : 'vocab-yes').click();
+  }
+  for (let i = 0; i < 40; i++) {
+    if (await page.getByTestId('placement-result').isVisible()) break;
+    await page.getByTestId('grammar-skip').click();
+  }
+  await expect(page.getByTestId('check-delta')).toBeVisible();
+  await page.getByTestId('placement-done').click();
+  await expect(page.getByTestId('curve-text')).toContainText('1 Messungen');
+  await expect(page.getByTestId('check-card')).toContainText('erledigt');
+});
