@@ -1,9 +1,12 @@
 import { z } from 'zod';
 import { fsrsSchema } from '../../data/schemas';
 import { validateDoc } from '../../data/validate';
+import { dayKey } from '../date';
+import { flipStage } from './flip';
 import { stageOf, nextStage } from './ladder';
 import { exerciseDef } from './modes';
 import { readFsrs, reviewFsrs, isFutureFsrs } from './scheduler';
+import { noteWeight } from './weight';
 import type { AnswerEvent, ExerciseId, LegacyMode } from './types';
 
 // Schreiben je bewerteter Antwort (Daten-Entwurf §1.3/1.4): rein, ohne Seiteneffekte.
@@ -120,12 +123,38 @@ function skillPatch(cur: Doc, mode: LegacyMode, grade: number, colIndex: number 
   return out;
 }
 
+/**
+ * Neue Stufe: Aufdecken (`flip`) nach der Stufenregel aus anki-regeln.md §3 (höchstens bis 2, je
+ * Antwort höchstens eine Stufe, nie unter 1), sonst die Leiter (`nextStage`).
+ */
+function stageAfter(cur: Doc, a: AnswerEvent): number {
+  const now = stageOf(cur);
+  const next = a.ex === 'flip' ? flipStage(now, a.grade) : nextStage(now, levelFor(a.ex, now), a.grade);
+  // Tagesbremse (phase1-plan §4, Prüfung Lernwissenschaft 02.10.2026): höchstens EIN Aufstieg je Karte und Lerntag. Wiederholungen
+  // am selben Tag (Lernschritte, „Nochmal“-Wiedervorlage) beweisen nichts über das Gedächtnis von morgen und heben die Stufe nicht.
+  // Abstieg bleibt immer möglich.
+  return next > now && answeredOn(cur, a.day) ? now : next;
+}
+
+/** Wurde die Karte an diesem Lerntag schon beantwortet? (`last` = Zeitpunkt der letzten Antwort.) */
+const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'number' && Number.isFinite(cur.last) && cur.last > 0 && dayKey(cur.last) === day;
+
+/**
+ * Stufe, als die eine Übung zählt. Hör-Lücke (`dictation`, N35 Hör-Modus): höchstens eine Stufe über
+ * der eigenen – sie prüft Gehör und Schreibung, nicht die Bedeutung. Auf Stufe 4–5 (Leiter) ändert
+ * das nichts; im Hör-Modus hebt eine junge Karte so je Antwort nur um eine Stufe und fällt nie tiefer.
+ */
+export function levelFor(ex: ExerciseId, stage: number): number {
+  const level = exerciseDef(ex).level;
+  return ex === 'dictation' ? Math.min(level, Math.max(1, stage) + 1) : level;
+}
+
 /** Patch für eine Karte, deren Dokument vorliegt (bzw. aus der Voreinstellung angelegt wird). */
 export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
   if (a.kind === 'chunk') return chunkPatch(cur, a);
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t);
+  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true));
   const modes = isObj(cur.modes) ? cur.modes : {};
   const prevMode = isObj(modes[def.mode]) ? (modes[def.mode] as Doc) : {};
   const xs = isObj(cur.xs) ? cur.xs : {};
@@ -142,7 +171,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
     lapses: Math.max(0, Math.round(num(cur.lapses))) + (a.grade === 1 && !wasNew ? 1 : 0),
-    stage: nextStage(stageOf(cur), def.level, a.grade),
+    stage: stageAfter(cur, a),
     modes: { [def.mode]: { c: Math.round(num(prevMode.c)) + ok, w: Math.round(num(prevMode.w)) + (1 - ok) } },
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, { t: a.t, m: def.mode, g: a.grade, x: a.ex }].slice(-HIST_MAX),
@@ -157,7 +186,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
 export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
   const def = exerciseDef(a.ex);
   const wasNew = cur.state === 'new';
-  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t);
+  const f = reviewFsrs(readFsrs(cur, a.t), a.grade, a.t, noteWeight(a.ex, a.hint ?? 0, a.catchUp === true));
   const xs = isObj(cur.xs) ? cur.xs : {};
   const prevXs = isObj(xs[a.ex]) ? (xs[a.ex] as Doc) : {};
   const ok = a.grade > 1 ? 1 : 0;
@@ -171,7 +200,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     state: f.state === 2 ? 'review' : 'learning',
     reps: Math.max(0, Math.round(num(cur.reps))) + 1,
     lapses: Math.max(0, Math.round(num(cur.lapses))) + (a.grade === 1 && !wasNew ? 1 : 0),
-    stage: nextStage(stageOf(cur), def.level, a.grade),
+    stage: stageAfter(cur, a),
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
     hist: [...hist, { t: a.t, m: def.mode, g: a.grade, x: a.ex }].slice(-HIST_MAX),
   };

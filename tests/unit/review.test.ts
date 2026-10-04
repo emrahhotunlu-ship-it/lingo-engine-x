@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyUpdate, cardPatchSchema, reviewWrite } from '../../src/domain/srs/applyReview';
+import { applyUpdate, cardPatch, cardPatchSchema, reviewWrite } from '../../src/domain/srs/applyReview';
 import { nextStage, stageOf } from '../../src/domain/srs/ladder';
 import { previewIntervals, readFsrs, reviewFsrs } from '../../src/domain/srs/scheduler';
 import { CATALOG } from '../../src/domain/srs/modes';
@@ -119,10 +119,63 @@ describe('Leiter (Formeln der alten App)', () => {
 
   it('nextStage: Aufstieg nur mit Übung ≥ eigener Stufe, Leicht +1, Nochmal zurück', () => {
     expect(nextStage(0, 1, 3)).toBe(2);
-    expect(nextStage(1, 1, 4)).toBe(3);
+    expect(nextStage(1, 1, 4)).toBe(2); // „Leicht“ ohne freie Eingabe: kein Bonus
+    expect(nextStage(3, 4, 4)).toBe(4); // „Leicht“ nie über eine Stufe hinaus
+    expect(nextStage(5, 4, 1)).toBe(4); // ab Stufe 4 höchstens eine Stufe tiefer
     expect(nextStage(4, 2, 3)).toBe(4);
     expect(nextStage(4, 4, 1)).toBe(3);
     expect(nextStage(3, 4, 2)).toBe(3);
     expect(nextStage(5, 4, 4)).toBe(5);
+  });
+});
+
+describe('Tagesbremse: höchstens ein Aufstieg je Karte und Lerntag (phase1-plan §4)', () => {
+  const doc = (over: Record<string, unknown> = {}): Record<string, unknown> => ({ id: 'x', word: 'leverage', de: 'Hebel', def: 'power', ex: 'We use [leverage] daily.', state: 'review', S: 5, D: 5, last: T - 3 * DAY, due: T - DAY, reps: 4, lapses: 0, stage: 2, hist: [], modes: {}, ...over });
+  const at = (t: number, day: string, ex: ExerciseId, grade: Grade): AnswerEvent => ({ ...answer('x', ex, grade, t), day });
+  const step = (d: Record<string, unknown>, a: AnswerEvent): Record<string, unknown> => applyUpdate(d, cardPatch(d, a));
+
+  it('erste richtige Antwort des Tages hebt die Stufe, weitere am selben Tag nicht, am nächsten Tag wieder', () => {
+    let d = step(doc(), at(T, '2026-09-20', 'cloze_hint', 3));
+    expect(d.stage).toBe(3);
+    d = step(d, at(T + 5 * 60_000, '2026-09-20', 'cloze', 3));
+    expect(d.stage).toBe(3); // ohne Bremse: 4
+    d = step(d, at(T + 20 * 60_000, '2026-09-20', 'speed', 4));
+    expect(d.stage).toBe(3); // ohne Bremse: 5
+    d = step(d, at(T + DAY, '2026-09-21', 'cloze', 3));
+    expect(d.stage).toBe(4);
+  });
+
+  it('neue Karte: erste Antwort hebt, Wiederholungen am selben Tag nicht', () => {
+    let d = step(doc({ state: 'new', reps: 0, S: 0, last: 0, due: 0, stage: 0 }), at(T, '2026-09-20', 'mc_en', 3));
+    expect(d.stage).toBe(2);
+    d = step(d, at(T + 10 * 60_000, '2026-09-20', 'mc_de', 3));
+    expect(d.stage).toBe(2);
+    d = step(d, at(T + DAY, '2026-09-21', 'cloze_hint', 3));
+    expect(d.stage).toBe(3);
+  });
+
+  it('Abstieg bleibt am selben Tag möglich', () => {
+    let d = step(doc(), at(T, '2026-09-20', 'cloze_hint', 3));
+    expect(d.stage).toBe(3);
+    d = step(d, at(T + 60_000, '2026-09-20', 'cloze_hint', 1));
+    expect(d.stage).toBe(2);
+  });
+
+  it('die Nachtgrenze gilt (04:00): eine Antwort um 03:00 und eine um 05:00 sind verschiedene Lerntage', () => {
+    const night = berlin('2026-09-21', 3);
+    const morning = berlin('2026-09-21', 5);
+    let d = step(doc(), at(night, '2026-09-20', 'cloze_hint', 3));
+    expect(d.stage).toBe(3);
+    d = step(d, at(morning, '2026-09-21', 'cloze', 3));
+    expect(d.stage).toBe(4);
+  });
+
+  it('Aufdecken (flip) folgt derselben Regel', () => {
+    let d = step(doc({ state: 'new', reps: 0, S: 0, last: 0, due: 0, stage: 0 }), at(T, '2026-09-20', 'flip', 3));
+    expect(d.stage).toBe(1);
+    d = step(d, at(T + 10 * 60_000, '2026-09-20', 'flip', 3));
+    expect(d.stage).toBe(1);
+    d = step(d, at(T + DAY, '2026-09-21', 'flip', 3));
+    expect(d.stage).toBe(2);
   });
 });

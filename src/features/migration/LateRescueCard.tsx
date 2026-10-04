@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
+import { create } from 'zustand';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
@@ -24,16 +25,31 @@ const NOTE_LABEL: Record<RescueNote['reason'], MessageKey> = {
  * Eine Textzeile unten, keine Karte und kein Primärknopf – die rote Linie bleibt der Pflichtknopf
  * (Kap. 2.1). Das Nachtragen selbst geschieht auf „Dein Stand".
  */
+// Genau EINE Zeile je Bildschirm (Kap. 15 „nichts doppelt“): Die Zeile hängt als Abschnitt am
+// Platz `today` (P6); solange „Heute“ sie zusätzlich selbst zeichnet, gewinnt die zuerst
+// eingehängte Stelle, die andere bleibt leer.
+const useHintOwners = create<{ ids: readonly string[] }>(() => ({ ids: [] }));
+
+function useSingleHint(): boolean {
+  const id = useId();
+  useEffect(() => {
+    useHintOwners.setState((s) => ({ ids: [...s.ids, id] }));
+    return () => useHintOwners.setState((s) => ({ ids: s.ids.filter((x) => x !== id) }));
+  }, [id]);
+  return useHintOwners((s) => s.ids[0] === id);
+}
+
 export function LateRescueHint() {
   const { tn, t } = useT();
   const db = useCapabilities((s) => s.db);
   const go = useNav((s) => s.go);
   const state = useLateRescue();
+  const owner = useSingleHint();
   const { check } = state;
   useEffect(() => {
     if (db === 'ready') void check();
   }, [db, check]);
-  if (state.phase !== 'pending' && state.phase !== 'failed') return null;
+  if (!owner || (state.phase !== 'pending' && state.phase !== 'failed')) return null;
   const n = state.items.length + state.notes.length;
   return (
     <p className="flex flex-wrap items-center gap-x-2 text-xs text-subtle" data-testid="late-rescue-hint">

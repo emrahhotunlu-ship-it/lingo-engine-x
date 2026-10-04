@@ -30,6 +30,7 @@ export function LearningSection() {
         options={NEW_PER_DAY_OPTIONS.map((n) => ({ value: String(n), label: String(n) }))}
         onChange={(v) => void changeNewPerDay(Number(v))}
       />
+      <p className="text-sm text-muted">{t('setNewPerDayHint')}</p>
       <p className="mt-2 text-sm font-medium">{t('setGoalMin')}</p>
       <Segmented
         label={t('setGoalMin')}

@@ -21,6 +21,15 @@ import { tonesDe } from './parts/tones.de';
 import { repairDe } from './parts/repair.de';
 import { navDe } from './parts/nav.de';
 import { patternsDe } from './parts/patterns.de';
+import { teacherDe } from './parts/teacher.de';
+import { nbShDe } from './parts/nbSh.de';
+import { nbHeuteDe } from './parts/nbHeute.de';
+import { nbLernenDe } from './parts/nbLernen.de';
+import { nbWsDe } from './parts/nbWs.de';
+import { nbLesenDe } from './parts/nbLesen.de';
+import { nbSprechenDe } from './parts/nbSprechen.de';
+import { nbProfilDe } from './parts/nbProfil.de';
+import { nbTrainingDe } from './parts/nbTraining.de';
 
 export const de = {
   ...aiDe,
@@ -57,6 +66,17 @@ export const de = {
   ...navDe,
   // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
   ...patternsDe,
+  // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke)
+  ...teacherDe,
+  // Neubau (docs/neubau/architektur.md §2.8): je Bereich ein Teil, nur mit eigenem Präfix
+  ...nbShDe,
+  ...nbHeuteDe,
+  ...nbLernenDe,
+  ...nbWsDe,
+  ...nbLesenDe,
+  ...nbSprechenDe,
+  ...nbProfilDe,
+  ...nbTrainingDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',
@@ -364,6 +384,21 @@ export const de = {
   trAgainIn: 'Wieder {when}',
   trTip: 'Tipp',
   trTipLetter: 'Erster Buchstabe',
+  trTilesTypeLabel: 'Bausteine tippen',
+  trTilesTypeHint: 'Oder tippe die Wörter: Wort, Leertaste · Enter prüft',
+  trTilesTypeMiss: '„{word}“ ist kein freier Baustein.',
+  trTipRemove: 'Falsche Option streichen',
+  trTipPos: 'Wortart',
+  trMore: 'Mehr Infos',
+  trMoreLess: 'Weniger',
+  trMoreMeaning: 'Bedeutung',
+  trMoreDef: 'Erklärung',
+  trMorePos: 'Wortart',
+  trMoreCol: 'Typische Verbindungen',
+  trMoreRegister: 'Stil',
+  trTrans: 'Deutsch',
+  trTransBusy: 'Übersetzt …',
+  trTransFail: 'Übersetzung gerade nicht möglich. Tippe noch einmal.',
   trVerdictTypo: 'Fast richtig – Tippfehler',
   trVerdictForm: 'Fast richtig – andere Form',
   trVerdictSynonym: 'Auch möglich – gesucht war „{solution}“',

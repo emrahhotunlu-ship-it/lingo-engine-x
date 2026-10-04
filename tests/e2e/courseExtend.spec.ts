@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, screen, openEntry } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Kurs-Erweiterung (Kap. 6.2): Sind alle 24 Lektionen erledigt, erzeugt Claude auf Knopfdruck
@@ -14,9 +14,7 @@ const allDone = (): Doc => ({ done: Object.fromEntries(ALL.map((id, i) => [id, {
 
 async function openCourse(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await expect(page.getByTestId('learn-hub')).toBeVisible();
-  await page.getByTestId('hub-course').click();
+  await openEntry(page, 'hub-course');
   await expect(page.getByTestId('course')).toBeVisible();
 }
 

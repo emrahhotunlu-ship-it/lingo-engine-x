@@ -14,9 +14,9 @@ import { HistoryScreen } from './HistoryScreen';
 export function InputRoutes({ route }: { route: Route }) {
   switch (route.name) {
     case 'read':
-      return <ReadScreen ctx={route.ctx} />;
+      return <ReadScreen key={`${route.id ?? ''}|${route.mode ?? ''}`} ctx={route.ctx} id={route.id} mode={route.mode} />;
     case 'listen':
-      return <ListenScreen ctx={route.ctx} />;
+      return <ListenScreen key={`${route.id ?? ''}|${route.mode ?? ''}`} ctx={route.ctx} id={route.id} mode={route.mode} />;
     case 'write':
       return <WriteScreen ctx={route.ctx} />;
     case 'discover':

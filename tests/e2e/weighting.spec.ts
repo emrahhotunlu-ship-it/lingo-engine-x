@@ -28,7 +28,7 @@ test('jede offene Pflichtzeile nennt ihren Grund; neu geladen ergibt der gespeic
   }
   // Neuzeichnen: Reiter wechseln und zurück – der Plan bleibt.
   for (let k = 0; k < 3; k++) {
-    await page.getByTestId('tab-learn').click();
+    await page.getByTestId('tab-vocab').click();
     await page.getByTestId('tab-today').click();
     await screen(page, 'today');
     expect(await planOf(page)).toEqual(first);
@@ -46,36 +46,38 @@ test('jede offene Pflichtzeile nennt ihren Grund; neu geladen ergibt der gespeic
   await ctx.close();
 });
 
-test('Claudes Fokus (Mixed Conditionals, gültig bis 20.09.) steht im Plan vom 20.09. mit Kennung und Grund', async ({ page }) => {
-  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+/** Plan von heute ohne offene Pflicht: „Lohnt sich jetzt“ erscheint sofort (B6/B10: die Gewichtung wählt die Zeile). */
+const donePlan = (d: string) => ({ plan: { d, v: 1, ids: [], why: [], duty: [], goal: { review: 0 }, lesson: null, at: 1 } });
+const offerWhy = async (page: Page): Promise<{ channel: string | null; why: string | null }> => {
+  const offer = page.getByTestId('offer');
+  await expect(offer).toHaveCount(1);
+  return { channel: await offer.getAttribute('data-channel'), why: await offer.getByTestId('reason').getAttribute('data-why') };
+};
+
+test('Claudes Fokus (Mixed Conditionals, gültig bis 20.09.) wirkt auf „Lohnt sich jetzt“ mit Grund', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/profile': donePlan('2026-09-20') } } });
   await screen(page, 'today');
-  await expect.poll(async () => (await planOf(page))?.d).toBe('2026-09-20');
-  const plan = await planOf(page);
-  expect(JSON.stringify(plan.why)).toContain('["whyFocus",0,"grammar:mixed-cond"]');
-  // Satzbau ist seit der Lernberatung (27.09.) nur noch Angebot; Pflicht ist Grammatik oder Lückenjagd.
-  const ch = plan.duty.find((d) => d.startsWith('ch:'));
-  expect(['ch:gram', 'ch:cloze']).toContain(ch);
+  const o = await offerWhy(page);
+  // Der Fokus hebt seinen Kanal an; die eine Zeile nennt ihn als Grund.
+  expect(o.why).toContain('whyFocus');
 });
 
 test('am nächsten Tag: abgelaufener Fokus wirkt nicht mehr, eine neue Einschätzung wirkt', async ({ browser }) => {
   const at = '2026-09-21T09:00:00+02:00';
   const ctx1 = await browser.newContext({ timezoneId: 'Europe/Berlin', locale: 'de-DE' });
   const p1 = await ctx1.newPage();
-  await boot(p1, { migrated: true, now: at, fake: { capabilities: { sample: false } } });
+  await boot(p1, { migrated: true, now: at, fake: { capabilities: { sample: false }, patch: { 'app/profile': donePlan('2026-09-21') } } });
   await screen(p1, 'today');
-  await expect.poll(async () => (await planOf(p1))?.d).toBe('2026-09-21');
-  expect(JSON.stringify((await planOf(p1)).why)).not.toContain('whyFocus');
+  expect((await offerWhy(p1)).why ?? '').not.toContain('whyFocus');
   await ctx1.close();
 
   const ctx2 = await browser.newContext({ timezoneId: 'Europe/Berlin', locale: 'de-DE' });
   const p2 = await ctx2.newPage();
-  const focus = { title: 'Satzbau', why: 'Wortstellung bei Nebensätzen.', action: 'order', days: 3, channels: ['order'] };
-  await boot(p2, { migrated: true, now: at, fake: { capabilities: { sample: false }, patch: { 'app/assess': { d: '2026-09-20', data: { ...(SEED['app/assess']?.data as Record<string, unknown>), focus } } } } });
+  const focus = { title: 'Lückenjagd', why: 'Kollokationen.', action: 'cloze', days: 3, channels: ['cloze'] };
+  await boot(p2, { migrated: true, now: at, fake: { capabilities: { sample: false }, patch: { 'app/profile': donePlan('2026-09-21'), 'app/assess': { d: '2026-09-20', data: { ...(SEED['app/assess']?.data as Record<string, unknown>), focus } } } } });
   await screen(p2, 'today');
-  await expect.poll(async () => (await planOf(p2))?.d).toBe('2026-09-21');
-  const plan = await planOf(p2);
-  const orderIdx = plan.ids.indexOf('order');
-  expect(orderIdx).toBeGreaterThanOrEqual(0);
-  expect(JSON.stringify(plan.why[orderIdx])).toContain('["whyFocus",0,"order"]');
+  const o = await offerWhy(p2);
+  expect(o.channel).toBe('cloze');
+  expect(o.why).toContain('whyFocus');
   await ctx2.close();
 });

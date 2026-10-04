@@ -1,8 +1,10 @@
 import { getWriter } from '../../../data';
-import { useLive } from '../../../data/live';
+import { invalidIdsOf, useLive } from '../../../data/live';
+import { keysOf, knownRows, newestWords, wordKey } from '../../../domain/srs/known';
 import { hiddenOp, knownOp, resetOp, type CardOp } from '../../../domain/srs/vocabList';
 import { newVocabDoc, saveCardOp } from '../../../domain/srs/newCard';
-import type { GenWord } from '../../../prompts/wordGen';
+import { editOp, tomorrowOp } from '../../../domain/srs/cardOps';
+import { GEN_KNOWN_MAX, type GenWord } from '../../../prompts/wordGen';
 import type { TrainCard } from '../../../domain/srs/types';
 import { logError } from '../../../platform/diagnostics';
 
@@ -29,11 +31,46 @@ export const resetCard = (card: TrainCard): Promise<boolean> => run(card.path, (
 
 export const markKnown = (card: TrainCard, day: string): Promise<boolean> => run(card.path, (cur) => knownOp(cur, card.path, card.inDb ? null : { ...card.doc }, Date.now(), day), 'vocab:known');
 
+/** „Morgen wieder“ (N25): am nächsten Lerntag fällig, nur `due`/`fsrs` (A6.14). */
+export const againTomorrow = (card: TrainCard): Promise<boolean> => run(card.path, (cur) => tomorrowOp(cur, card.path, Date.now()), 'vocab:tomorrow');
+
+/** Karte bearbeiten (N31): Bedeutung und Ursprungssatz, per `transform`. */
+export async function editCard(card: TrainCard, lang: 'de' | 'en', e: { meaning: string; sentence: string }): Promise<'ok' | 'sentence' | 'meaning' | 'failed'> {
+  const writer = getWriter();
+  if (!writer) return 'failed';
+  let err: 'sentence' | 'meaning' | undefined;
+  try {
+    await writer.transform(card.path, (cur) => {
+      const r = editOp(cur, card.path, lang, e);
+      err = r.error;
+      return r.op;
+    });
+    return err ?? 'ok';
+  } catch (x) {
+    logError('vocab:edit', x, card.path);
+    return 'failed';
+  }
+}
+
 export type AddOutcome = 'created' | 'extended' | 'exists' | 'invalid' | 'failed';
 
-/** Neue Karte (eigenes Wort oder von Claude). Ohne Satz mit dem Wort gibt es keine Karte (Kap. 15). */
-export async function addWord(w: { word: string; de: string; pos?: string | null; def?: string | null; ex: string; level?: string | null }, src: 'user' | 'ai' | 'job', today: string): Promise<AddOutcome> {
-  const made = newVocabDoc({ word: w.word, de: w.de, pos: w.pos ?? null, def: w.def ?? null, level: w.level ?? null, ex: w.ex, surface: null, src, origin: { v: 1, kind: src === 'user' ? 'user' : 'ai', t: Date.now() }, today });
+/**
+ * Neue Karte (eigenes Wort, von Claude oder aus dem Lehrer-Feedback). Ohne Satz mit dem Wort gibt
+ * es keine Karte (Kap. 15). `teacher` (28.09.2026, ersetzt die Preply-Brücke): Stapel „Lehrer“.
+ */
+export async function addWord(w: { word: string; de: string; pos?: string | null; def?: string | null; ex: string; level?: string | null }, src: 'user' | 'ai' | 'job' | 'teacher', today: string): Promise<AddOutcome> {
+  const made = newVocabDoc({
+    word: w.word,
+    de: w.de,
+    pos: w.pos ?? null,
+    def: w.def ?? null,
+    level: w.level ?? null,
+    ex: w.ex,
+    surface: null,
+    src,
+    origin: { v: 1, kind: src === 'user' ? 'user' : src === 'teacher' ? 'teacher' : 'ai', t: Date.now() },
+    today,
+  });
   if (!made) return 'invalid';
   const writer = getWriter();
   if (!writer) return 'failed';
@@ -54,12 +91,15 @@ export async function addWord(w: { word: string; de: string; pos?: string | null
 
 export const addGenerated = (w: GenWord, src: 'ai' | 'job', today: string): Promise<AddOutcome> => addWord(w, src, today);
 
-/** Bekannte Wörter für „nicht vorschlagen" (≤ 200, zuletzt hinzugefügte zuerst). */
-export function knownWords(): string[] {
-  const vocab = useLive.getState().collections.vocab ?? new Map<string, Doc>();
-  return [...vocab.values()]
-    .map((d) => (typeof d.word === 'string' ? d.word : ''))
-    .filter(Boolean)
-    .reverse()
-    .slice(0, 200);
+function rows() {
+  const live = useLive.getState();
+  return knownRows(live.collections.vocab ?? new Map<string, Doc>(), live.collections.chunk ?? new Map<string, Doc>(), invalidIdsOf(live.invalid, 'vocab'));
 }
+
+/** Bekannte Wörter für „nicht vorschlagen“: die zuletzt hinzugefügten zuerst, höchstens `GEN_KNOWN_MAX` (`domain/srs/known.ts`). */
+export const knownWords = (max: number = GEN_KNOWN_MAX): string[] => newestWords(rows(), max);
+
+/** Schlüssel aller bekannten Wörter (ohne Obergrenze): damit lässt sich Vorgeschlagenes, das schon da ist, ausblenden. */
+export const knownKeys = (): Set<string> => keysOf(rows());
+
+export { wordKey };

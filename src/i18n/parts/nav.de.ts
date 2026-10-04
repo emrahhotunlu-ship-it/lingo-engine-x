@@ -23,7 +23,6 @@ export const navDe = {
   spSegLabel: 'Bereich',
   spSegScenes: 'Szenen',
   spSegBusiness: 'Business',
-  spSegPreply: 'Preply',
   spIncomplete_one: '{n} unvollständige Szene',
   spIncomplete_other: '{n} unvollständige Szenen',
   grLookup: 'Regel oder Falle suchen',

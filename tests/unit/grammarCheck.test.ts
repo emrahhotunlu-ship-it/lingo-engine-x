@@ -102,8 +102,14 @@ describe('learnGrade (keine Selbstbewertung)', () => {
     expect(learnGrade('gap', 'correct', { submitMs: 9000, firstKeyMs: 9000 }, { level: 0 })).toBe(2);
     expect(learnGrade('mc', 'correct', { submitMs: 500 }, { level: 0 })).toBe(3);
     expect(learnGrade('transform', 'correct', { submitMs: 7000 }, { level: 0 })).toBe(4);
-    expect(learnGrade('order', 'correct', { submitMs: 13000, units: 8 }, { level: 0 })).toBe(3);
-    expect(learnGrade('order', 'correct', { submitMs: 15000, units: 8 }, { level: 0 })).toBe(2);
+    // Satzbau: Gut bis 13 s + 0,6 s je Baustein (die deutsche Bedeutung wird mitgelesen), nie Leicht.
+    expect(learnGrade('order', 'correct', { submitMs: 17000, units: 8 }, { level: 0 })).toBe(3);
+    expect(learnGrade('order', 'correct', { submitMs: 19000, units: 8 }, { level: 0 })).toBe(2);
+    expect(learnGrade('order', 'correct', { submitMs: 500, units: 8 }, { level: 0 })).toBe(3);
+    expect(learnGrade('order', 'correct', { submitMs: 5000, units: 8 }, { level: 1 })).toBe(3);
+    expect(learnGrade('order', 'correct', { submitMs: 5000, units: 8 }, { level: 2 })).toBe(2);
+    expect(learnGrade('order', 'near', { submitMs: 5000, units: 8 }, { level: 0 })).toBe(2);
+    expect(learnGrade('order', 'wrong', { submitMs: 5000, units: 8 }, { level: 0 })).toBe(1);
   });
 
   it('C-03: nach Tipp höchstens 3, nach zweitem Tipp höchstens 2; Diktat: mehr als 2× hören = Hilfe', () => {

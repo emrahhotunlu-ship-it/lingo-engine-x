@@ -21,6 +21,7 @@ import { useCompanionSee } from '../companion/seeing';
 import { AiRunPanel, isBusy } from '../input/AiRunPanel';
 import { createSceneDoc, takeChunk } from '../speak/persist';
 import { TakeChunkButton, type TakeInput } from '../speak/TakeChunkButton';
+import { TitleActions } from '../system/Chrome';
 import { workContext } from '../speak/useSceneLibrary';
 import { addMeetingDebrief, saveMeeting, setMeetingPrep, setMeetingScene } from './persist';
 
@@ -108,6 +109,7 @@ export function MeetingScreen() {
           <h1 id={`${infoId}-title`} className="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight">
             {t('mtTitle')}
           </h1>
+          <TitleActions />
         </div>
         <div className="flex items-start justify-between gap-3">
           <p className="text-base font-medium" data-testid="task">

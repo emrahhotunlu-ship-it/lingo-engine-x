@@ -1,7 +1,8 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, screen, openEntry } from './fixtures';
 import { answerGrammar, grammarKey, shownPrompt, typeInGap } from './learnHelpers';
 import { DAY, dump, expected, planPatch } from './trainerHelpers';
+import { TYPE_MODE } from './trainerHelpers';
 
 // „Erst ein Hinweis, dann die Lösung" (Lernberatung Vorschlag 4): Falsch getippt → gezielter
 // Hinweis unter der Lücke, Eingabe bleibt stehen, Fokus bleibt in der Lücke, zweiter Versuch.
@@ -16,7 +17,7 @@ const OVERCOME = { 'vocab/overcome': { state: 'learning', stage: 4, S: 1, D: 5, 
 const entriesFor = async (page: Page, id: string) => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.id === id);
 
 async function startCloze(page: Page) {
-  const booted = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(1), ...OVERCOME } } });
+  const booted = await boot(page, { migrated: true, fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...OVERCOME } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
@@ -111,8 +112,7 @@ test.describe('Desktop', () => {
   test('Grammatik: getippte Aufgabe falsch → Hinweis, zweiter Versuch richtig → „Schwer", kein Fehlereintrag', async ({ page }) => {
     const { errors } = await boot(page, { migrated: true });
     await screen(page, 'today');
-    await page.getByTestId('tab-learn').click();
-    await page.getByTestId('hub-grammar').click();
+    await openEntry(page, 'hub-grammar');
     await page.getByTestId('gr-start').click();
     const item = page.getByTestId('gr-item');
     // Auswahlaufgaben richtig beantworten, bis eine getippte Aufgabe kommt.

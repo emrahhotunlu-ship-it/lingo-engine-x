@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react';
+import { pitchResume } from '../speak/resumable';
 import { useEffect, useRef, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { TitleActions } from '../system/Chrome';
@@ -41,7 +42,8 @@ export function PitchCoach() {
   const scope = useAiScope();
   const [snap, send] = useMachine(pitchMachine);
   useCompanionSee({ area: 'business', label: `${t('bizTitle')} · ${t('bizPitch')}`, phase: 'idle' });
-  const [slide, setSlide] = useState(() => local.get(DRAFT_KEY) ?? '');
+  // Fortsetzen (G3): Folientext aus der Momentaufnahme, sonst aus `lx:draft:pitch`.
+  const [slide, setSlide] = useState(() => pitchResume.take()?.text ?? local.get(DRAFT_KEY) ?? '');
   const [audience, setAudience] = useState<Audience>('clients');
   const [minutes, setMinutes] = useState(2);
   const [attempt, setAttempt] = useState('');
@@ -51,6 +53,10 @@ export function PitchCoach() {
   const started = useRef(0);
   const c = snap.context;
   const state = snap.value;
+  useEffect(() => {
+    if (state === 'result') pitchResume.clear();
+    else if (slide.trim()) pitchResume.set({ step: String(state), text: slide.slice(0, 4000) });
+  }, [state, slide]);
 
   useEffect(() => () => stopSpeech(), []);
 

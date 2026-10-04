@@ -58,6 +58,9 @@ export const assessSchema = assessDataSchema.extend({
 
 /** Neu ab Phase 6 (Plan §6.2): Wochenberichte `{items: [{w, lang, t, pv, facts, text}]}`, höchstens 26. */
 /** Neu (Lernberatung 27.09., V2): Reparatur-Sätze – eigene falsche Sätze aus freiem Formulieren. */
+/** Neu (03.10.2026, Lernpfad): Stufe je Aufgabenart `{v, k: {<art>: {l, w, n, ch}}}`, tolerant gelesen. */
+export const levelsSchema = z.looseObject({ v: num, k: z.record(z.string(), z.unknown()).nullish() });
+
 export const repairSchema = z.looseObject({
   items: z
     .array(z.looseObject({ id: str, wrong: str, right: str, why: str, src: str, ctx: str, t: num, box: num, due: num, done: bool, last: num, fix: strArr }))
@@ -292,6 +295,8 @@ export const vocabSchema = z.looseObject({
   origin: z.looseObject({ v: num, kind: str, ref: str, title: str, t: num }).nullish(),
   /** Neu: von Claude ergänzte Beispielsätze `[{en, t}]` (nur Englisch, ≤ 3), tolerant gelesen; nur ergänzt, nie ersetzt. */
   xEx: z.array(z.unknown()).nullish(),
+  /** Neu (02.10.2026): deutsche Übersetzungen der Beispielsätze `{<Schlüssel>: text}`, einmal von Claude erzeugt, nur ergänzt. */
+  exDe: z.record(z.string(), z.unknown()).nullish(),
   /** Neu (Phase 2, M3): Merkhilfe von Claude für hartnäckige Wörter `{text, lang, t}`, einmal erzeugt. */
   mnemo: z.looseObject({ text: str, lang: str, t: num }).nullish(),
   ...schedulingFields,
@@ -762,3 +767,131 @@ export type Chunk = z.infer<typeof chunkSchema>;
 export type Grammar = z.infer<typeof grammarSchema>;
 export type SchemaDoc = z.infer<typeof schemaDocSchema>;
 export type FsrsStored = z.infer<typeof fsrsSchema>;
+
+// ---------------------------------------------------------------- Neubau (docs/neubau/plan.md §4.10)
+// Tolerant (A6.6, A6.16): Die Pakete schreiben nur über `writer.transform`, feldweise.
+
+const deckFilterSchema = z.looseObject({
+  kinds: strArr,
+  src: strArr,
+  stage: z.looseObject({ min: num, max: num }).nullish(),
+  due: bool,
+  hard: bool,
+  query: str,
+  ids: strArr,
+});
+
+/** Stapel = gespeicherte Filter (`app/decks`, architektur.md §4.4; ≤ 40 Stapel, ≤ 500 IDs, < 64 KiB). Schreibt P3. */
+export const decksSchema = z.looseObject({
+  v: num,
+  decks: z
+    .record(
+      z.string(),
+      z.looseObject({
+        name: str,
+        order: num,
+        created: str,
+        mode: str,
+        size: num,
+        hidden: bool,
+        filter: deckFilterSchema.nullish(),
+      }),
+    )
+    .nullish(),
+  builtin: z.record(z.string(), z.looseObject({ mode: str, size: num })).nullish(),
+  prefs: z.looseObject({ dir: str, grades: num, mode: str }).nullish(),
+  flagged: strArr,
+});
+
+/**
+ * Wochenthema und Wochenziele (`app/week`; ≤ 26 Wochen in `hist`, < 8 KiB). Schreibt P1,
+ * `preplyNext` und `hint` P5 (`hint`: Termin-/Preply-Thema mit Vorrang beim Vorschlag, N17; ein Eintrag).
+ */
+export const weekSchema = z.looseObject({
+  v: num,
+  cur: z.looseObject({ wk: str, theme: str, by: str, at: num }).nullish(),
+  hist: z.array(z.looseObject({ wk: str, theme: str, by: str })).nullish(),
+  preplyNext: str,
+  targets: z.looseObject({ wk: str, traps: strArr, tool: str, preply: str }).nullish(),
+  hint: z.looseObject({ wk: str, theme: str, src: str }).nullish(),
+});
+
+/**
+ * „Claude merkt sich“ (Backlog B5): `{v, items: [{id, text, src, t, lang}]}`, höchstens 40 Fakten
+ * zu je ≤ 160 Zeichen, ≤ 5 je Gespräch/Termin (gekappt beim Schreiben, domain/memory). Tolerant.
+ */
+export const memorySchema = z.looseObject({
+  v: num,
+  items: z.array(z.looseObject({ id: str, text: str, src: str, t: num, lang: str })).nullish(),
+});
+
+const compareSide = z.looseObject({
+  text: str,
+  sec: num,
+  m: z.looseObject({ words: num, traps: num, per100: num, wpm: num, phrases: strArr }).nullish(),
+});
+
+/**
+ * Monatliche Vergleichsaufgabe (Backlog B1): `{v, items: [{month, day, t, task, speak, write, base,
+ * verdict}]}`, höchstens 12 Läufe, Texte ≤ 1.500 Zeichen (gekappt beim Schreiben, domain/compare). Tolerant.
+ */
+export const compareSchema = z.looseObject({
+  v: num,
+  items: z
+    .array(
+      z.looseObject({
+        month: str,
+        day: str,
+        t: num,
+        task: str,
+        base: str,
+        speak: compareSide.nullish(),
+        write: compareSide.nullish(),
+        verdict: z.looseObject({ summary: str, better: strArr, next: str, level: str, lang: str, pv: str }).nullish(),
+      }),
+    )
+    .nullish(),
+});
+
+/**
+ * Lehrer-Feedback je Monat (`teacher/<JJJJ-MM>`, 28.09.2026, ersetzt die Preply-Brücke): der
+ * eingefügte Text und das Ergebnis, je Verarbeitung ein Eintrag. Grenzen wie `out/<Monat>`
+ * (Kap. 9, Regel 6): ≤ 200 Einträge, `raw` ≤ 4 KB, das Dokument bleibt unter 200 KiB.
+ */
+export const teacherSchema = z.looseObject({
+  v: num,
+  items: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        t: num,
+        lang: str,
+        raw: str,
+        title: str,
+        summary: str,
+        corrections: looseArr,
+        words: looseArr,
+        tasks: strArr,
+      }),
+    )
+    .nullish(),
+});
+
+/** Ergebnisse der neuen Übungen je Monat (`out/<JJJJ-MM>`; ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB). Schreibt P7. */
+export const outSchema = z.looseObject({
+  v: num,
+  items: z
+    .array(
+      z.looseObject({
+        id: z.string(),
+        k: z.string(),
+        d: z.string(),
+        theme: str,
+        ok: bool,
+        text: str,
+        fb: loose,
+        ms: num,
+      }),
+    )
+    .nullish(),
+});

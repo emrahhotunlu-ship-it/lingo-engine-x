@@ -31,8 +31,18 @@ const asObj = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray
 export const STEPS = ['intro', 'words', 'dialog', 'grammar', 'output', 'summary'] as const;
 export type Step = (typeof STEPS)[number];
 
+/** Stand IM Schritt (Fortsetzen, plan.md §4.3 Muss 2): Wörter-Warteschlange, Dialog-Antworten, Grammatik-Aufgabe. */
+export type LessonInner = {
+  words?: { queue: Array<{ key: string; phase: 'intro' | 'quiz'; ex?: string; again?: boolean }>; pos: number; wrong: string[]; again: boolean };
+  dialog?: Record<number, string>;
+  grammar?: number;
+};
+
 type RunState = {
   lid: string | null;
+  /** Aktueller Schritt (für die Momentaufnahme). */
+  step: Step;
+  inner: LessonInner;
   meta: LessonMeta | null;
   status: 'idle' | 'loading' | 'choose' | 'ready' | 'error';
   content: LessonContent | null;
@@ -47,7 +57,7 @@ type RunState = {
   finished: boolean;
 };
 
-const initial = (): RunState => ({ lid: null, meta: null, status: 'idle', content: null, ctx: 'xtra', day: '', lang: 'de', n: 0, ok: 0, lessonAi: false, activeMs: 0, lastInteract: 0, finished: false });
+const initial = (): RunState => ({ lid: null, step: 'intro', inner: {}, meta: null, status: 'idle', content: null, ctx: 'xtra', day: '', lang: 'de', n: 0, ok: 0, lessonAi: false, activeMs: 0, lastInteract: 0, finished: false });
 export const useLessonRun = create<RunState>(initial);
 
 const IDLE_CAP_MS = 60_000;
@@ -77,7 +87,9 @@ export async function openLesson(lid: string): Promise<void> {
     useLessonRun.setState({ ...initial(), lid, status: 'error' });
     return;
   }
-  useLessonRun.setState({ ...initial(), lid, meta, status: 'loading', day, lang, ctx: roundCtx('lesson', day), lastInteract: performance.now() });
+  const pend = pendingInner?.lid === lid ? pendingInner : null;
+  pendingInner = null;
+  useLessonRun.setState({ ...initial(), lid, meta, inner: pend?.inner ?? {}, step: pend?.step ?? savedStep(lid) ?? 'intro', status: 'loading', day, lang, ctx: roundCtx('lesson', day), lastInteract: performance.now() });
   let doc: Doc | null = useLearnInputs.getState().lessons.get(lid) ?? null;
   if (!doc) {
     const db = getDb();
@@ -180,4 +192,36 @@ export function leaveLesson(): void {
     void learnRecorder.roundEnd({ day: s.day, act: 'lesson', ctx: s.ctx, partial: true, n: s.n, right: s.ok, activeMs: s.activeMs });
   }
   useLessonRun.setState(initial());
+}
+
+// ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2, G3)
+
+let pendingInner: { lid: string; step: Step; inner: LessonInner } | null = null;
+
+/** Stand im Schritt merken (die Schritte rufen es bei jeder Änderung). */
+export function setLessonInner(patch: Partial<LessonInner>): void {
+  const s = useLessonRun.getState();
+  if (!s.lid) return;
+  useLessonRun.setState({ inner: { ...s.inner, ...patch } });
+}
+
+export function setLessonStep(step: Step): void {
+  if (useLessonRun.getState().step !== step) useLessonRun.setState({ step });
+}
+
+export type LessonSnap = { lid: string; step: Step; inner: LessonInner };
+
+export function lessonSnapshot(): LessonSnap | null {
+  const s = useLessonRun.getState();
+  if (!s.lid || s.finished || s.step === 'summary' || s.status === 'error') return null;
+  return { lid: s.lid, step: s.step, inner: s.inner };
+}
+
+/** Synchron: Schritt und Stand im Schritt vormerken; die Lektion lädt ihren Inhalt beim Öffnen. */
+export function restoreLesson(snap: LessonSnap): boolean {
+  if (!snap || typeof snap.lid !== 'string' || !(STEPS as readonly string[]).includes(snap.step)) return false;
+  saveStep(snap.lid, snap.step);
+  pendingInner = { lid: snap.lid, step: snap.step, inner: snap.inner && typeof snap.inner === 'object' ? snap.inner : {} };
+  if (useLessonRun.getState().lid === snap.lid) useLessonRun.setState({ lid: null });
+  return true;
 }

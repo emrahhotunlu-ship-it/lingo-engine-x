@@ -1,0 +1,1192 @@
+[
+ {
+  "id": "c01",
+  "noun": "deal",
+  "de": "Geschäft, Abschluss",
+  "verbs": [
+   {
+    "v": "close",
+    "de": "abschließen",
+    "ex": "We hope to close the deal before the end of the quarter."
+   },
+   {
+    "v": "strike",
+    "de": "aushandeln",
+    "ex": "They finally struck a deal after three rounds of talks."
+   },
+   {
+    "v": "seal",
+    "de": "besiegeln",
+    "ex": "A quick call with the CFO sealed the deal."
+   }
+  ],
+  "wrong": {
+   "phrase": "finish a deal",
+   "right": "close a deal",
+   "note": {
+    "de": "„Einen Deal abschließen“ heißt close a deal, nicht finish.",
+    "en": "\"Close\" is the verb for completing a deal, not \"finish\"."
+   }
+  }
+ },
+ {
+  "id": "c02",
+  "noun": "deadline",
+  "de": "Frist",
+  "verbs": [
+   {
+    "v": "meet",
+    "de": "einhalten",
+    "ex": "We met the deadline with two days to spare."
+   },
+   {
+    "v": "miss",
+    "de": "verpassen",
+    "ex": "If we miss the deadline, we lose the discount."
+   },
+   {
+    "v": "extend",
+    "de": "verlängern",
+    "ex": "Could you extend the deadline to Friday?"
+   }
+  ],
+  "wrong": {
+   "phrase": "keep a deadline",
+   "right": "meet a deadline",
+   "note": {
+    "de": "„Eine Frist einhalten“ heißt meet a deadline.",
+    "en": "You meet a deadline; you do not \"keep\" it."
+   }
+  }
+ },
+ {
+  "id": "c03",
+  "noun": "decision",
+  "de": "Entscheidung",
+  "verbs": [
+   {
+    "v": "make",
+    "de": "treffen",
+    "ex": "We need to make a decision by Monday."
+   },
+   {
+    "v": "reach",
+    "de": "zu einer Entscheidung kommen",
+    "ex": "The board reached a decision after a long discussion."
+   },
+   {
+    "v": "postpone",
+    "de": "verschieben",
+    "ex": "They postponed the decision until next quarter."
+   }
+  ],
+  "wrong": {
+   "phrase": "meet a decision",
+   "right": "make a decision",
+   "note": {
+    "de": "„Eine Entscheidung treffen“ heißt make a decision.",
+    "en": "You make a decision; \"meet\" is a literal translation of \"treffen\"."
+   }
+  }
+ },
+ {
+  "id": "c04",
+  "noun": "meeting",
+  "de": "Besprechung",
+  "verbs": [
+   {
+    "v": "hold",
+    "de": "abhalten",
+    "ex": "We hold a team meeting every Monday."
+   },
+   {
+    "v": "run",
+    "de": "leiten",
+    "ex": "Who is going to run the meeting today?"
+   },
+   {
+    "v": "schedule",
+    "de": "ansetzen",
+    "ex": "Let's schedule a meeting for next week."
+   },
+   {
+    "v": "attend",
+    "de": "teilnehmen an",
+    "ex": "The CFO will attend the meeting in person."
+   }
+  ],
+  "wrong": {
+   "phrase": "make a meeting",
+   "right": "have a meeting",
+   "note": {
+    "de": "Meetings hat, hält oder leitet man: have, hold, run.",
+    "en": "You have, hold, or run a meeting; you do not \"make\" one."
+   }
+  }
+ },
+ {
+  "id": "c05",
+  "noun": "presentation",
+  "de": "Präsentation",
+  "verbs": [
+   {
+    "v": "give",
+    "de": "halten",
+    "ex": "I am giving a presentation to the board tomorrow."
+   },
+   {
+    "v": "deliver",
+    "de": "halten, vortragen",
+    "ex": "She delivered a clear presentation in ten minutes."
+   },
+   {
+    "v": "prepare",
+    "de": "vorbereiten",
+    "ex": "I need the numbers to prepare the presentation."
+   }
+  ],
+  "wrong": {
+   "phrase": "hold a presentation",
+   "right": "give a presentation",
+   "note": {
+    "de": "„Eine Präsentation halten“ heißt give a presentation.",
+    "en": "You give or deliver a presentation; \"hold\" is a German pattern."
+   }
+  }
+ },
+ {
+  "id": "c06",
+  "noun": "question",
+  "de": "Frage",
+  "verbs": [
+   {
+    "v": "ask",
+    "de": "stellen",
+    "ex": "Can I ask a question about the price?"
+   },
+   {
+    "v": "raise",
+    "de": "aufwerfen",
+    "ex": "The audit raised a few questions about our archive."
+   },
+   {
+    "v": "answer",
+    "de": "beantworten",
+    "ex": "I will answer your question after the demo."
+   }
+  ],
+  "wrong": {
+   "phrase": "make a question",
+   "right": "ask a question",
+   "note": {
+    "de": "„Eine Frage stellen“ heißt ask a question.",
+    "en": "You ask a question; you do not \"make\" one."
+   }
+  }
+ },
+ {
+  "id": "c07",
+  "noun": "mistake",
+  "de": "Fehler",
+  "verbs": [
+   {
+    "v": "make",
+    "de": "machen",
+    "ex": "Everyone makes mistakes in a new system."
+   },
+   {
+    "v": "correct",
+    "de": "korrigieren",
+    "ex": "We corrected the mistake in the invoice right away."
+   },
+   {
+    "v": "admit",
+    "de": "zugeben",
+    "ex": "It takes courage to admit a mistake to a customer."
+   }
+  ],
+  "wrong": {
+   "phrase": "do a mistake",
+   "right": "make a mistake",
+   "note": {
+    "de": "Fehler macht man mit make, nicht do.",
+    "en": "Mistakes take \"make\", not \"do\"."
+   }
+  }
+ },
+ {
+  "id": "c08",
+  "noun": "discount",
+  "de": "Rabatt",
+  "verbs": [
+   {
+    "v": "give",
+    "de": "geben",
+    "ex": "We can give you a discount for a three-year contract."
+   },
+   {
+    "v": "offer",
+    "de": "anbieten",
+    "ex": "They offered a ten percent discount."
+   },
+   {
+    "v": "negotiate",
+    "de": "aushandeln",
+    "ex": "Procurement negotiated a small discount."
+   }
+  ],
+  "wrong": {
+   "phrase": "make a discount",
+   "right": "give a discount",
+   "note": {
+    "de": "„Einen Rabatt machen“ heißt give oder offer a discount.",
+    "en": "You give or offer a discount; \"make\" is a German pattern."
+   }
+  }
+ },
+ {
+  "id": "c09",
+  "noun": "price",
+  "de": "Preis",
+  "verbs": [
+   {
+    "v": "lower",
+    "de": "senken",
+    "ex": "We cannot lower the price without changing the scope."
+   },
+   {
+    "v": "raise",
+    "de": "erhöhen",
+    "ex": "Many vendors raised their prices this year."
+   },
+   {
+    "v": "negotiate",
+    "de": "verhandeln",
+    "ex": "Let's negotiate the price after the pilot."
+   }
+  ],
+  "wrong": {
+   "phrase": "sink the price",
+   "right": "lower the price",
+   "note": {
+    "de": "„Den Preis senken“ heißt lower oder reduce the price.",
+    "en": "You lower or reduce a price; \"sink\" does not work here."
+   }
+  }
+ },
+ {
+  "id": "c10",
+  "noun": "contract",
+  "de": "Vertrag",
+  "verbs": [
+   {
+    "v": "sign",
+    "de": "unterschreiben",
+    "ex": "They signed the contract on Friday."
+   },
+   {
+    "v": "renew",
+    "de": "verlängern",
+    "ex": "Most customers renew their contract after the first year."
+   },
+   {
+    "v": "terminate",
+    "de": "kündigen",
+    "ex": "You can terminate the contract with three months’ notice."
+   }
+  ],
+  "wrong": {
+   "phrase": "quit a contract",
+   "right": "terminate a contract",
+   "note": {
+    "de": "„Einen Vertrag kündigen“ heißt terminate oder cancel; quit sagt man beim Job.",
+    "en": "To end a contract, use terminate or cancel; you quit a job."
+   }
+  }
+ },
+ {
+  "id": "c11",
+  "noun": "photo",
+  "de": "Foto",
+  "verbs": [
+   {
+    "v": "take",
+    "de": "machen",
+    "ex": "Could you take a photo of our booth?"
+   },
+   {
+    "v": "share",
+    "de": "teilen",
+    "ex": "I shared a photo of the team on LinkedIn."
+   },
+   {
+    "v": "post",
+    "de": "posten",
+    "ex": "We posted a photo from the trade show."
+   }
+  ],
+  "wrong": {
+   "phrase": "make a photo",
+   "right": "take a photo",
+   "note": {
+    "de": "Fotos macht man mit take.",
+    "en": "Photos take \"take\", not \"make\"."
+   }
+  }
+ },
+ {
+  "id": "c12",
+  "noun": "research",
+  "de": "Recherche, Forschung",
+  "verbs": [
+   {
+    "v": "do",
+    "de": "machen, betreiben",
+    "ex": "I did some research on their company before the call."
+   },
+   {
+    "v": "conduct",
+    "de": "durchführen",
+    "ex": "The analysts conducted research with 200 companies."
+   }
+  ],
+  "wrong": {
+   "phrase": "make research",
+   "right": "do research",
+   "note": {
+    "de": "Recherche macht man mit do oder conduct.",
+    "en": "Research takes \"do\" or \"conduct\", not \"make\"."
+   }
+  }
+ },
+ {
+  "id": "c13",
+  "noun": "progress",
+  "de": "Fortschritt",
+  "verbs": [
+   {
+    "v": "make",
+    "de": "machen",
+    "ex": "We made good progress in the pilot this week."
+   },
+   {
+    "v": "track",
+    "de": "verfolgen",
+    "ex": "The dashboard helps you track progress every day."
+   }
+  ],
+  "wrong": {
+   "phrase": "do progress",
+   "right": "make progress",
+   "note": {
+    "de": "Fortschritte macht man mit make.",
+    "en": "Progress takes \"make\", not \"do\"."
+   }
+  }
+ },
+ {
+  "id": "c14",
+  "noun": "effort",
+  "de": "Mühe, Einsatz",
+  "verbs": [
+   {
+    "v": "make",
+    "de": "sich bemühen",
+    "ex": "The team made a real effort to finish on time."
+   },
+   {
+    "v": "put in",
+    "de": "hineinstecken",
+    "ex": "She put in a lot of effort to prepare the workshop."
+   },
+   {
+    "v": "appreciate",
+    "de": "schätzen",
+    "ex": "We really appreciate your effort."
+   }
+  ],
+  "wrong": {
+   "phrase": "do an effort",
+   "right": "make an effort",
+   "note": {
+    "de": "„Sich Mühe geben“ heißt make an effort.",
+    "en": "You make an effort; \"do\" does not work here."
+   }
+  }
+ },
+ {
+  "id": "c15",
+  "noun": "business",
+  "de": "Geschäft",
+  "verbs": [
+   {
+    "v": "do",
+    "de": "machen",
+    "ex": "We have done business with them for ten years."
+   },
+   {
+    "v": "grow",
+    "de": "ausbauen",
+    "ex": "Partners help us grow our business in the UK."
+   },
+   {
+    "v": "run",
+    "de": "führen",
+    "ex": "He runs a small business near Munich."
+   }
+  ],
+  "wrong": {
+   "phrase": "make business",
+   "right": "do business",
+   "note": {
+    "de": "„Geschäfte machen“ heißt do business.",
+    "en": "You do business with someone; you do not \"make\" business."
+   }
+  }
+ },
+ {
+  "id": "c16",
+  "noun": "exception",
+  "de": "Ausnahme",
+  "verbs": [
+   {
+    "v": "make",
+    "de": "machen",
+    "ex": "We can make an exception for a pilot customer."
+   },
+   {
+    "v": "grant",
+    "de": "gewähren",
+    "ex": "Finance granted an exception for this contract."
+   }
+  ],
+  "wrong": {
+   "phrase": "do an exception",
+   "right": "make an exception",
+   "note": {
+    "de": "Ausnahmen macht man mit make.",
+    "en": "Exceptions take \"make\", not \"do\"."
+   }
+  }
+ },
+ {
+  "id": "c17",
+  "noun": "experience",
+  "de": "Erfahrung",
+  "verbs": [
+   {
+    "v": "gain",
+    "de": "sammeln",
+    "ex": "She gained a lot of experience in public sector sales."
+   },
+   {
+    "v": "share",
+    "de": "teilen",
+    "ex": "Could you share your experience with the new archive?"
+   },
+   {
+    "v": "draw on",
+    "de": "zurückgreifen auf",
+    "ex": "We can draw on our experience from 300 projects."
+   }
+  ],
+  "wrong": {
+   "phrase": "make experiences",
+   "right": "gain experience",
+   "note": {
+    "de": "„Erfahrungen machen“ heißt gain experience oder learn from experience.",
+    "en": "You gain experience; \"make experiences\" is a literal translation."
+   }
+  }
+ },
+ {
+  "id": "c18",
+  "noun": "conversation",
+  "de": "Gespräch",
+  "verbs": [
+   {
+    "v": "have",
+    "de": "führen",
+    "ex": "I had a good conversation with their CFO."
+   },
+   {
+    "v": "start",
+    "de": "beginnen",
+    "ex": "A good question is the easiest way to start a conversation."
+   },
+   {
+    "v": "hold",
+    "de": "führen",
+    "ex": "It is hard to hold a conversation at a busy booth."
+   }
+  ],
+  "wrong": {
+   "phrase": "lead a conversation",
+   "right": "have a conversation",
+   "note": {
+    "de": "„Ein Gespräch führen“ heißt have a conversation. Richtig ist aber „lead the conversation“ = das Gespräch steuern.",
+    "en": "You have a conversation; \"lead\" is a literal translation of \"führen\". But \"lead the conversation\" (steer it) is correct."
+   }
+  }
+ },
+ {
+  "id": "c19",
+  "noun": "order",
+  "de": "Bestellung",
+  "verbs": [
+   {
+    "v": "place",
+    "de": "aufgeben",
+    "ex": "The customer placed an order for 50 licenses."
+   },
+   {
+    "v": "cancel",
+    "de": "stornieren",
+    "ex": "They canceled the order after the budget cut."
+   },
+   {
+    "v": "process",
+    "de": "bearbeiten",
+    "ex": "We process orders within two days."
+   }
+  ],
+  "wrong": {
+   "phrase": "give an order",
+   "right": "place an order",
+   "note": {
+    "de": "„Eine Bestellung aufgeben“ heißt place an order. Give an order ist ein Befehl.",
+    "en": "You place an order; \"give an order\" means to command someone."
+   }
+  }
+ },
+ {
+  "id": "c20",
+  "noun": "invoice",
+  "de": "Rechnung",
+  "verbs": [
+   {
+    "v": "issue",
+    "de": "ausstellen",
+    "ex": "We issue the invoice at the end of the month."
+   },
+   {
+    "v": "send",
+    "de": "schicken",
+    "ex": "Please send the invoice to our accounts payable team."
+   },
+   {
+    "v": "approve",
+    "de": "freigeben",
+    "ex": "Two managers have to approve every invoice."
+   },
+   {
+    "v": "pay",
+    "de": "bezahlen",
+    "ex": "They pay invoices within 30 days."
+   }
+  ],
+  "wrong": {
+   "phrase": "put an invoice",
+   "right": "issue an invoice",
+   "note": {
+    "de": "„Eine Rechnung stellen“ heißt issue oder send an invoice.",
+    "en": "You issue or send an invoice; \"put\" is a literal translation of \"stellen\"."
+   }
+  }
+ },
+ {
+  "id": "c21",
+  "noun": "risk",
+  "de": "Risiko",
+  "verbs": [
+   {
+    "v": "take",
+    "de": "eingehen",
+    "ex": "We cannot take the risk of losing data."
+   },
+   {
+    "v": "run",
+    "de": "(Gefahr) laufen",
+    "ex": "Without backups, you run the risk of a long outage."
+   },
+   {
+    "v": "reduce",
+    "de": "verringern",
+    "ex": "A pilot reduces the risk for both sides."
+   }
+  ],
+  "wrong": {
+   "phrase": "go a risk",
+   "right": "take a risk",
+   "note": {
+    "de": "„Ein Risiko eingehen“ heißt take a risk.",
+    "en": "You take a risk; \"go\" is a literal translation of \"eingehen\"."
+   }
+  }
+ },
+ {
+  "id": "c22",
+  "noun": "target",
+  "de": "Ziel, Vorgabe",
+  "verbs": [
+   {
+    "v": "meet",
+    "de": "erreichen",
+    "ex": "The team met its sales target for the third quarter."
+   },
+   {
+    "v": "hit",
+    "de": "erreichen",
+    "ex": "We hit our target two weeks early."
+   },
+   {
+    "v": "set",
+    "de": "festlegen",
+    "ex": "Let's set a realistic target for the pilot."
+   }
+  ],
+  "wrong": {
+   "phrase": "fulfill a target",
+   "right": "meet a target",
+   "note": {
+    "de": "„Ein Ziel erfüllen“ heißt meet oder hit a target.",
+    "en": "You meet or hit a target; \"fulfill\" does not go with target."
+   }
+  }
+ },
+ {
+  "id": "c23",
+  "noun": "budget",
+  "de": "Budget",
+  "verbs": [
+   {
+    "v": "approve",
+    "de": "genehmigen",
+    "ex": "The board approved the budget for next year."
+   },
+   {
+    "v": "cut",
+    "de": "kürzen",
+    "ex": "They cut the IT budget by ten percent."
+   },
+   {
+    "v": "stay within",
+    "de": "einhalten",
+    "ex": "We managed to stay within the budget."
+   }
+  ],
+  "wrong": {
+   "phrase": "overdraw a budget",
+   "right": "go over budget",
+   "note": {
+    "de": "„Das Budget überziehen“ heißt go over budget oder exceed the budget.",
+    "en": "You go over or exceed a budget; \"overdraw\" is for bank accounts."
+   }
+  }
+ },
+ {
+  "id": "c24",
+  "noun": "appointment",
+  "de": "Termin",
+  "verbs": [
+   {
+    "v": "make",
+    "de": "vereinbaren",
+    "ex": "I made an appointment with the doctor for Monday."
+   },
+   {
+    "v": "schedule",
+    "de": "ansetzen",
+    "ex": "Could we schedule an appointment for next week?"
+   },
+   {
+    "v": "cancel",
+    "de": "absagen",
+    "ex": "I had to cancel my appointment because of the trip."
+   }
+  ],
+  "wrong": {
+   "phrase": "agree an appointment",
+   "right": "make an appointment",
+   "note": {
+    "de": "„Einen Termin vereinbaren“ heißt make oder schedule an appointment.",
+    "en": "You make or schedule an appointment; \"agree an appointment\" sounds foreign."
+   }
+  }
+ },
+ {
+  "id": "c25",
+  "noun": "relationship",
+  "de": "Beziehung",
+  "verbs": [
+   {
+    "v": "build",
+    "de": "aufbauen",
+    "ex": "It takes time to build a relationship with a new partner."
+   },
+   {
+    "v": "maintain",
+    "de": "pflegen",
+    "ex": "Regular calls help us maintain the relationship."
+   },
+   {
+    "v": "strengthen",
+    "de": "stärken",
+    "ex": "A joint event strengthened our relationship."
+   }
+  ],
+  "wrong": {
+   "phrase": "care a relationship",
+   "right": "maintain a relationship",
+   "note": {
+    "de": "„Eine Beziehung pflegen“ heißt maintain oder nurture a relationship.",
+    "en": "You maintain or nurture a relationship; \"care\" does not work here."
+   }
+  }
+ },
+ {
+  "id": "c26",
+  "noun": "contact",
+  "de": "Kontakt",
+  "verbs": [
+   {
+    "v": "make",
+    "de": "aufnehmen",
+    "ex": "I made contact with their IT manager at the trade show."
+   },
+   {
+    "v": "establish",
+    "de": "herstellen",
+    "ex": "We established contact with three new resellers."
+   },
+   {
+    "v": "stay in",
+    "de": "in Kontakt bleiben",
+    "ex": "Let's stay in contact after the project."
+   }
+  ],
+  "wrong": {
+   "phrase": "take up contact",
+   "right": "make contact",
+   "note": {
+    "de": "„Kontakt aufnehmen“ heißt make contact oder get in touch.",
+    "en": "You make contact or get in touch; \"take up contact\" is a literal translation."
+   }
+  }
+ },
+ {
+  "id": "c27",
+  "noun": "concern",
+  "de": "Bedenken",
+  "verbs": [
+   {
+    "v": "address",
+    "de": "eingehen auf",
+    "ex": "The security paper addresses the main concerns of IT."
+   },
+   {
+    "v": "raise",
+    "de": "äußern",
+    "ex": "The works council raised a concern about monitoring."
+   },
+   {
+    "v": "share",
+    "de": "teilen",
+    "ex": "I share your concern about the timeline."
+   }
+  ],
+  "wrong": {
+   "phrase": "clear out a concern",
+   "right": "address a concern",
+   "note": {
+    "de": "„Bedenken ausräumen“ heißt address oder resolve a concern.",
+    "en": "You address or resolve a concern; \"clear out\" is a literal translation."
+   }
+  }
+ },
+ {
+  "id": "c28",
+  "noun": "objection",
+  "de": "Einwand",
+  "verbs": [
+   {
+    "v": "handle",
+    "de": "behandeln",
+    "ex": "Good sellers handle objections calmly."
+   },
+   {
+    "v": "overcome",
+    "de": "entkräften",
+    "ex": "A pilot helped us overcome the last objection."
+   },
+   {
+    "v": "raise",
+    "de": "vorbringen",
+    "ex": "The CFO raised an objection about the price."
+   }
+  ],
+  "wrong": {
+   "phrase": "invalidate an objection",
+   "right": "overcome an objection",
+   "note": {
+    "de": "„Einen Einwand entkräften“ heißt overcome oder address an objection.",
+    "en": "You overcome or address an objection; \"invalidate\" sounds like a court ruling."
+   }
+  }
+ },
+ {
+  "id": "c29",
+  "noun": "compromise",
+  "de": "Kompromiss",
+  "verbs": [
+   {
+    "v": "reach",
+    "de": "erzielen",
+    "ex": "After two hours, we reached a compromise."
+   },
+   {
+    "v": "find",
+    "de": "finden",
+    "ex": "Let's find a compromise that works for both sides."
+   },
+   {
+    "v": "agree on",
+    "de": "sich einigen auf",
+    "ex": "They agreed on a compromise: 60 days."
+   }
+  ],
+  "wrong": {
+   "phrase": "close a compromise",
+   "right": "reach a compromise",
+   "note": {
+    "de": "„Einen Kompromiss schließen“ heißt reach a compromise.",
+    "en": "You reach a compromise; \"close\" is a literal translation of \"schließen\"."
+   }
+  }
+ },
+ {
+  "id": "c30",
+  "noun": "account",
+  "de": "Kunde, Kundenkonto",
+  "verbs": [
+   {
+    "v": "manage",
+    "de": "betreuen",
+    "ex": "She manages our biggest accounts in southern Germany."
+   },
+   {
+    "v": "win",
+    "de": "gewinnen",
+    "ex": "We won three new accounts this quarter."
+   },
+   {
+    "v": "lose",
+    "de": "verlieren",
+    "ex": "We cannot afford to lose this account."
+   }
+  ],
+  "wrong": {
+   "phrase": "care for an account",
+   "right": "manage an account",
+   "note": {
+    "de": "„Einen Kunden betreuen“ heißt manage an account.",
+    "en": "You manage an account; \"care for\" is used for people and plants."
+   }
+  }
+ },
+ {
+  "id": "c31",
+  "noun": "project",
+  "de": "Projekt",
+  "verbs": [
+   {
+    "v": "launch",
+    "de": "starten",
+    "ex": "We launched the project in January."
+   },
+   {
+    "v": "run",
+    "de": "durchführen",
+    "ex": "We ran the project with a small team."
+   },
+   {
+    "v": "manage",
+    "de": "leiten",
+    "ex": "Who is going to manage the project on your side?"
+   },
+   {
+    "v": "complete",
+    "de": "abschließen",
+    "ex": "The project was completed on time and on budget."
+   }
+  ],
+  "wrong": {
+   "phrase": "make a project",
+   "right": "run a project",
+   "note": {
+    "de": "„Ein Projekt durchführen“ heißt run oder carry out a project.",
+    "en": "You run or carry out a project; \"make a project\" is a literal translation."
+   }
+  }
+ },
+ {
+  "id": "c32",
+  "noun": "training",
+  "de": "Schulung",
+  "verbs": [
+   {
+    "v": "provide",
+    "de": "anbieten",
+    "ex": "We provide training for all new users."
+   },
+   {
+    "v": "run",
+    "de": "durchführen",
+    "ex": "Our consultant will run the training session on site."
+   },
+   {
+    "v": "attend",
+    "de": "teilnehmen an",
+    "ex": "All team leads attended the training."
+   }
+  ],
+  "wrong": {
+   "phrase": "make a training",
+   "right": "run a training session",
+   "note": {
+    "de": "„Eine Schulung machen“ heißt run a training session oder do some training. training ist unzählbar: nicht „a training“.",
+    "en": "Say run a training session or do some training. Training is uncountable, so not \"a training\"."
+   }
+  }
+ },
+ {
+  "id": "c33",
+  "noun": "interest",
+  "de": "Interesse",
+  "verbs": [
+   {
+    "v": "show",
+    "de": "zeigen",
+    "ex": "Two partners showed interest in the program."
+   },
+   {
+    "v": "generate",
+    "de": "wecken",
+    "ex": "The webinar generated a lot of interest."
+   },
+   {
+    "v": "lose",
+    "de": "verlieren",
+    "ex": "If the demo is too long, people lose interest."
+   }
+  ],
+  "wrong": {
+   "phrase": "wake interest",
+   "right": "generate interest",
+   "note": {
+    "de": "„Interesse wecken“ heißt generate, spark oder attract interest.",
+    "en": "You generate, spark, or attract interest; \"wake\" is a literal translation of \"wecken\"."
+   }
+  }
+ },
+ {
+  "id": "c34",
+  "noun": "need",
+  "de": "Bedarf",
+  "verbs": [
+   {
+    "v": "identify",
+    "de": "ermitteln",
+    "ex": "The first call helps us identify the customer’s needs."
+   },
+   {
+    "v": "meet",
+    "de": "decken",
+    "ex": "Our standard package meets the needs of most teams."
+   },
+   {
+    "v": "assess",
+    "de": "einschätzen",
+    "ex": "We assess your needs in a short workshop."
+   }
+  ],
+  "wrong": {
+   "phrase": "ask the need",
+   "right": "identify the need",
+   "note": {
+    "de": "„Den Bedarf abfragen“ heißt identify oder assess the need. „Does this cover your needs?“ ist dagegen richtig.",
+    "en": "To find out what a customer needs, you identify or assess the need. \"Does this cover your needs?\" is correct."
+   }
+  }
+ },
+ {
+  "id": "c35",
+  "noun": "impression",
+  "de": "Eindruck",
+  "verbs": [
+   {
+    "v": "make",
+    "de": "machen",
+    "ex": "The demo made a good impression on the board."
+   },
+   {
+    "v": "leave",
+    "de": "hinterlassen",
+    "ex": "A short follow-up email leaves a professional impression."
+   }
+  ],
+  "wrong": {
+   "phrase": "do an impression",
+   "right": "make an impression",
+   "note": {
+    "de": "„Einen Eindruck machen“ heißt make an impression. Do an impression heißt jemanden nachmachen.",
+    "en": "You make an impression; \"do an impression\" means imitating someone."
+   }
+  }
+ },
+ {
+  "id": "c36",
+  "noun": "example",
+  "de": "Beispiel",
+  "verbs": [
+   {
+    "v": "give",
+    "de": "nennen, geben",
+    "ex": "Could you give me an example from your industry?"
+   },
+   {
+    "v": "set",
+    "de": "mit gutem Beispiel vorangehen",
+    "ex": "Managers should set an example for their teams."
+   }
+  ],
+  "wrong": {
+   "phrase": "bring an example",
+   "right": "give an example",
+   "note": {
+    "de": "„Ein Beispiel bringen“ heißt give an example.",
+    "en": "You give an example; \"bring\" is a literal translation of \"bringen\"."
+   }
+  }
+ },
+ {
+  "id": "c37",
+  "noun": "step",
+  "de": "Schritt",
+  "verbs": [
+   {
+    "v": "take",
+    "de": "machen",
+    "ex": "A pilot is a good first step to take."
+   },
+   {
+    "v": "agree on",
+    "de": "vereinbaren",
+    "ex": "Let's agree on the next steps before we hang up."
+   },
+   {
+    "v": "skip",
+    "de": "überspringen",
+    "ex": "Please do not skip this step in the setup."
+   }
+  ],
+  "wrong": {
+   "phrase": "make a step",
+   "right": "take a step",
+   "note": {
+    "de": "„Einen Schritt machen“ heißt take a step.",
+    "en": "You take a step; \"make\" does not work here."
+   }
+  }
+ },
+ {
+  "id": "c38",
+  "noun": "complaint",
+  "de": "Beschwerde, Reklamation",
+  "verbs": [
+   {
+    "v": "handle",
+    "de": "bearbeiten",
+    "ex": "Our support team handles complaints within 24 hours."
+   },
+   {
+    "v": "file",
+    "de": "einreichen",
+    "ex": "The customer filed a complaint about the delay."
+   },
+   {
+    "v": "resolve",
+    "de": "lösen",
+    "ex": "We resolved the complaint with a phone call."
+   }
+  ],
+  "wrong": {
+   "phrase": "make a reclamation",
+   "right": "make a complaint",
+   "note": {
+    "de": "„Reklamation“ heißt complaint. Reclamation bedeutet Landgewinnung.",
+    "en": "The German \"Reklamation\" is a complaint; \"reclamation\" means reclaiming land."
+   }
+  }
+ },
+ {
+  "id": "c39",
+  "noun": "license",
+  "de": "Lizenz",
+  "verbs": [
+   {
+    "v": "renew",
+    "de": "verlängern",
+    "ex": "We need to renew the license before March."
+   },
+   {
+    "v": "extend",
+    "de": "erweitern, verlängern",
+    "ex": "Can we extend the license to the HR team?"
+   },
+   {
+    "v": "purchase",
+    "de": "kaufen",
+    "ex": "They purchased 200 licenses last year."
+   }
+  ],
+  "wrong": {
+   "phrase": "prolong a license",
+   "right": "renew a license",
+   "note": {
+    "de": "„Eine Lizenz verlängern“ heißt renew oder extend a license.",
+    "en": "You renew or extend a license; \"prolong\" is rarely used for contracts."
+   }
+  }
+ },
+ {
+  "id": "c40",
+  "noun": "email",
+  "de": "E-Mail",
+  "verbs": [
+   {
+    "v": "send",
+    "de": "schicken",
+    "ex": "I will send you an email with the details."
+   },
+   {
+    "v": "answer",
+    "de": "beantworten",
+    "ex": "Sorry for not answering your email sooner."
+   },
+   {
+    "v": "forward",
+    "de": "weiterleiten",
+    "ex": "Could you forward the email to your IT manager?"
+   }
+  ],
+  "wrong": {
+   "phrase": "answer on an email",
+   "right": "answer an email",
+   "note": {
+    "de": "„Auf eine Mail antworten“ heißt answer an email oder reply to an email.",
+    "en": "You answer an email or reply to it; \"answer on\" is a literal translation."
+   }
+  }
+ }
+]

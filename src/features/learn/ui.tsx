@@ -16,6 +16,10 @@ import { useT, type MessageKey } from '../../i18n';
 import { Button, IconButton } from '../../ui/Button';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ExerciseBar } from '../../ui/ExerciseBar';
+import { toast } from '../../ui/Toast';
+import { holdResume } from '../../app/resume';
+import { usePlayer } from '../../app/shell/playerContext';
+import { BackLink } from '../../app/shell/TopBar';
 import { ExerciseActions, TitleActions } from '../system/Chrome';
 import { firstOpenDuty, useToday } from '../today/state';
 import { startDuty } from './flow';
@@ -54,18 +58,39 @@ export function LearnStatus({ p, n, recent, kind, kindId, extra }: { p: number |
  * rechts eigene Knöpfe und das Claude-Symbol (UX-Beratung Nr. 3/7). Reiter-Startseiten nutzen
  * `TabTitle` ohne Zurück-Pfeil.
  */
-export function ScreenHeader({ eyebrow, title, lead, back, right }: { eyebrow?: string; title: string; lead?: ReactNode; back?: () => void; right?: ReactNode }) {
-  const { t } = useT();
+export function ScreenHeader({
+  eyebrow,
+  title,
+  lead,
+  back,
+  right,
+  titleAction,
+}: {
+  eyebrow?: string;
+  title: string;
+  lead?: ReactNode;
+  back?: () => void;
+  right?: ReactNode;
+  /** Knopf der Seite in der Titelzeile (rechts neben dem Titel) – wenn oben neben „‹ Herkunft“ und den drei Symbolen kein Platz ist (390 px). */
+  titleAction?: ReactNode;
+}) {
+  // Neubau (WP0b, Prototyp v1): links „‹ Herkunft“, rechts Übersetzen, Claude, Zahnrad; darunter der Titel.
+  const h1 = <h1 className="min-w-0 text-[1.75rem] leading-tight font-bold tracking-[-0.02em] sm:text-3xl">{title}</h1>;
   return (
     <header className="flex flex-col gap-2">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-2">
-          {back && <IconButton icon="arrowLeft" label={t('lrBack')} onClick={back} data-testid="back" className="-ml-2" />}
-          {eyebrow && <p className="lx-eyebrow">{eyebrow}</p>}
-        </div>
+      <div className="flex min-h-11 items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2">{back && <BackLink onClick={back} testId="back" />}</div>
         <TitleActions>{right}</TitleActions>
       </div>
-      <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
+      {eyebrow && <p className="lx-eyebrow m-0 text-subtle">{eyebrow}</p>}
+      {titleAction ? (
+        <div className="flex items-center justify-between gap-3">
+          {h1}
+          <div className="flex-none">{titleAction}</div>
+        </div>
+      ) : (
+        h1
+      )}
       {lead && <div className="max-w-2xl text-base text-muted">{lead}</div>}
     </header>
   );
@@ -97,6 +122,7 @@ export function ExerciseTop({
   progressTestId,
   ctx = null,
   duty = null,
+  middleOverlay = null,
 }: {
   onClose: () => void;
   closeLabel?: string;
@@ -105,13 +131,24 @@ export function ExerciseTop({
   progressTestId?: string;
   ctx?: Ctx | 'extra' | null;
   duty?: DutyId | null;
+  /** Siehe `ExerciseBar`: ersetzt nur den Fortschrittsbalken, nie ✕ oder `end`. */
+  middleOverlay?: ReactNode;
 }) {
   const { t } = useT();
-  const note = ctx === 'duty' ? <DutyBar ctx="duty" duty={duty} /> : ctx ? t('trExtraBadge') : null;
+  const player = usePlayer();
+  // Player-Kontext (WP0b, §2.7): Beitrag der Bereiche („Tageseinheit · Block 2 von 5“) vor „Pflicht“/„Extra“.
+  const note = player.note ? <span data-testid="player-note">{player.note}</span> : ctx === 'duty' ? <DutyBar ctx="duty" duty={duty} /> : ctx ? t('trExtraBadge') : null;
   const has = !!progress && progress.total > 0;
+  // ✕ fragt nie nach (N02): Fortsetz-Stand sichern, schließen, und – wenn etwas gesichert wurde –
+  // ruhig bestätigen.
+  const close = () => {
+    const kept = holdResume();
+    onClose();
+    if (kept) toast(t('nbShSaved'));
+  };
   return (
     <ExerciseBar
-      onClose={onClose}
+      onClose={close}
       closeLabel={closeLabel ?? t('trClose')}
       closeTestId={closeTestId ?? 'round-close'}
       progress={progress}
@@ -119,6 +156,7 @@ export function ExerciseTop({
       progressTestId={progressTestId ?? 'round-progress'}
       note={note}
       end={<ExerciseActions />}
+      middleOverlay={middleOverlay}
     />
   );
 }
@@ -339,7 +377,15 @@ export function TaskLine({ task, purpose }: { task: string; purpose: string }) {
   );
 }
 
-const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson: 'lrDutyLesson', 'ch:gram': 'drGram', 'ch:cloze': 'drCloze', 'ch:order': 'drOrder', 'ch:say': 'sayTitle' };
+const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson: 'lrDutyLesson', 'ch:gram': 'drGram', 'ch:cloze': 'drCloze', 'ch:order': 'drOrder', 'ch:say': 'sayTitle',
+  // Tageseinheit (Neubau): Pflichtpunkte `ch:u-*` heißen wie die Blöcke auf der Tageskarte.
+  'ch:u-in': 'nbHeuteBlock_input',
+  // Seit 04.10.2026 (Vokabeln und Grammatik): Block 2 Grammatik auf `ch:u-focus`, Block 3 Satzbau auf `ch:u-task`.
+  'ch:u-task': 'nbHeuteBlock_order',
+  'ch:u-focus': 'nbHeuteBlock_grammar',
+  'ch:u-again': 'nbHeuteBlock_again',
+  'ch:u-check': 'nbHeuteBlock_check',
+};
 
 export function dutyLabel(id: DutyId, t: (k: MessageKey) => string): string {
   const k = DUTY_LABEL[id];

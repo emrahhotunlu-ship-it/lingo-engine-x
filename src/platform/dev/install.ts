@@ -6,6 +6,9 @@ import type { SpeechVoiceLike } from '../speech';
 import { installFakeStt, type FakeSttMode } from './fakeStt';
 
 const FAKE_DE_VOICE: SpeechVoiceLike = Object.freeze({ name: 'Anna', lang: 'de-DE', localService: true, default: false, voiceURI: 'com.apple.voice.compact.de-DE.Anna' });
+// Befund 29.09. (Emrah, „weiterhin komplett nutzlose Stimmen"): die Stimmenwahl zeigt nur noch
+// en-US (A7.3). Für die Prüfung des Umschaltens braucht es also eine zweite en-US-Stimme.
+const FAKE_US_VOICE2: SpeechVoiceLike = Object.freeze({ name: 'Zoe', lang: 'en-US', localService: true, default: false, voiceURI: 'com.apple.voice.compact.en-US.Zoe' });
 
 // Spielt die nachgebildete Laufzeit ein – aber nur, wenn es keine echte gibt.
 
@@ -84,7 +87,7 @@ export function installFakeRuntime(opts: InstallOptions = {}): FakeControl | nul
   const fake = createFakeClaude(resolved);
   Object.defineProperty(window, 'claude', { value: fake.claude, configurable: true, writable: false });
   // Phase 3 (Plan §9.5): zusätzlich eine deutsche Stimme – die Stimmenwahl zeigt nur englische.
-  if (speech !== false) installFakeSpeech(window, { spoken: fake.control.spoken, voices: [...FAKE_VOICES, FAKE_DE_VOICE] });
+  if (speech !== false) installFakeSpeech(window, { spoken: fake.control.spoken, voices: [...FAKE_VOICES, FAKE_DE_VOICE, FAKE_US_VOICE2] });
   const sttHandle = installFakeStt(window, stt ?? 'absent');
   fake.control.sttSay = (text: string) => sttHandle.say(text);
   window.__LINGO_FAKE__ = fake.control;

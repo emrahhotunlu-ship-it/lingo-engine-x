@@ -16,7 +16,7 @@ export type SeeingArea =
   | 'listen'
   | 'write'
   | 'discover'
-  | 'preply'
+  | 'teacher'
   | 'settings';
 
 export type Seeing = {

@@ -23,6 +23,7 @@ import { nextT, recordChannelEntries, recordProfileFields, recordRadar, recordUn
 import { listeningText } from '../../prompts/listeningText';
 import { readingText } from '../../prompts/readingText';
 import { writingReview } from '../../prompts/writingReview';
+import { unitListen, type UnitListenOut } from '../../prompts/nb/p4/unitListen';
 import { mergeLocal, putLocal } from './library';
 
 /** Vorlage und Version eines KI-Ergebnisses (folgt der Vorlage, nie von Hand). */
@@ -106,6 +107,36 @@ export async function saveGeneratedListening(l: GeneratedListening, i: { level: 
     await writer().createIfMissing(`lpool/${id}`, doc);
   } catch (err) {
     logError('listen:save', err, `lpool/${id}`);
+    throw err;
+  }
+  putLocal('lpool', id, doc);
+  await patchProfile('listen:gen', (cur) => genPatch(cur.gen, 'lp', i.day)).catch((err: unknown) => logWarn('listen:gen', err));
+  return id;
+}
+
+/**
+ * Hörtext für Block 2 der Tageseinheit (Neubau N53, `unit-listen@1`): `lpool/ai<t>` im Altformat
+ * (Fragen, damit er auch unter „Hören“ spielbar ist) plus `unit` mit Kern-/Zwischenfrage samt
+ * Beleg, Wendungen und Nachsprech-Sätzen. Gespeichert, damit ein zweites Gerät denselben Text hat.
+ */
+export async function saveUnitListen(
+  u: UnitListenOut,
+  i: { day: string; theme: string; src: 'theme-listen' | 'dialog'; level: Cefr; domain: Domain; lang: 'de' | 'en' },
+): Promise<string> {
+  const t = nextT();
+  const id = `ai${t}`;
+  const oldQ = (q: UnitListenOut['core'], type: 'gist' | 'inference') => ({ q: q.q_en, options: [...q.options], answer: q.options[q.answer] ?? '', type, explain_de: q.why_de, explain_en: q.why_en });
+  const doc: Doc = {
+    ...lpoolDoc(
+      { title: u.title, genre: i.src === 'dialog' ? 'update' : 'briefing', topic_de: '', topic_en: '', text: u.text, questions: [oldQ(u.core, 'gist'), oldQ(u.between, 'inference')], vocab: [] },
+      { t, level: i.level, domain: i.domain, pv: pvOf(unitListen) },
+    ),
+    unit: { day: i.day, theme: i.theme, src: i.src, core: { ...u.core, options: [...u.core.options] }, between: { ...u.between, options: [...u.between.options] }, notice: [...u.notice], shadow: [...u.shadow] },
+  };
+  try {
+    await writer().createIfMissing(`lpool/${id}`, doc);
+  } catch (err) {
+    logError('listen:unit', err, `lpool/${id}`);
     throw err;
   }
   putLocal('lpool', id, doc);

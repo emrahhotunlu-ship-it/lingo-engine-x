@@ -12,7 +12,8 @@ type Doc = Record<string, unknown>;
 export type ChunkSource =
   | { kind: 'scene'; scene: string; sceneTitle: string; utterance: string; upgraded: string; turn: number }
   // `fluency` / `meeting`: Flüssigkeit 90 – 60 – 45 und „Mein nächster Termin“ (Lernberatung V6/V4).
-  | { kind: 'mail' | 'pitch' | 'biz' | 'say' | 'fluency' | 'meeting'; ref: string; title: string; utterance: string; upgraded: string };
+  // `pack`: C1-Paket (`domain/c1pack`, 02.10.2026): fertige, geprüfte Einträge; `utterance` bleibt leer (Emrah hat es nicht gesagt).
+  | { kind: 'mail' | 'pitch' | 'biz' | 'say' | 'fluency' | 'meeting' | 'pack'; ref: string; title: string; utterance: string; upgraded: string };
 
 export type NewChunkInput = {
   en: string;

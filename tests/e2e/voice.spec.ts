@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, screen } from './fixtures';
+import { boot, openSettings, openSpeak, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Stimme und Spracheingabe (Phase 3, Plan §9.2).
@@ -9,8 +9,8 @@ const spoken = (page: Page): Promise<string[]> => page.evaluate(() => [...(windo
 
 async function startRoleplay(page: Page): Promise<void> {
   await screen(page, 'today');
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
+  // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
+  await openSpeak(page);
   await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
   await page.getByTestId('briefing-start').click();
   await screen(page, 'roleplay');
@@ -21,13 +21,13 @@ test('Einstellungen: englische Stimmen, Probehören, Tempo wird in app/profile.r
   await screen(page, 'today');
   await openSettings(page);
   const list = page.getByTestId('voice-select');
-  await expect(list.getByRole('radio')).toHaveCount(2);
+  await expect(list.getByRole('radio')).toHaveCount(3);
   await expect(list.getByRole('radio').first()).toContainText('Samantha');
   await expect(list).not.toContainText('Anna');
   await page.getByTestId('voice-preview').nth(1).click();
   await expect.poll(() => spoken(page)).toContain('This is how I sound.');
   await list.getByRole('radio').nth(1).click();
-  await expect.poll(async () => ((await dump(page))['app/profile'] as Doc).voice).toBe('Daniel');
+  await expect.poll(async () => ((await dump(page))['app/profile'] as Doc).voice).toBe('Zoe');
   const rate = page.getByTestId('voice-rate');
   await rate.focus();
   await page.keyboard.press('ArrowLeft');

@@ -8,7 +8,18 @@ import { applyUpdate, cardPatch } from '../../domain/srs/applyReview';
 import { buildTrainCards, toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
 import { buildExercise, type SceneLookup } from '../../domain/srs/exercise';
-import { chooseExercise, type ExerciseEnv } from '../../domain/srs/modes';
+import { chooseExercise, supports, type ExerciseEnv } from '../../domain/srs/modes';
+import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
+import { againPos, calibration, controlAllowed, controlCounts, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
+import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
+import { listenExercise } from '../../domain/srs/listen';
+import { isThemeCard } from '../../domain/week/cards';
+import { REPAIR_MAX } from '../../domain/week/review';
+import type { WeekTheme } from '../../domain/week/types';
+import { unitDone } from '../../app/unit/done';
+import { clearResume } from '../../app/resume';
+import { useDecks } from './decksStore';
+import { cardGo } from './cardMark';
 import { entryCardKey } from '../../domain/progress/logPatch';
 import { sceneView } from '../../domain/speak/library';
 import { selectAiAvailable } from '../../ai/scope';
@@ -20,8 +31,8 @@ import { buildQueue, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/qu
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
-import { inDeck, type Deck } from '../../domain/srs/vocabList';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './persist';
+import { flushOnHide } from '../progress/persist';
 import { pickDailyRepairs, repairsDoneToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
 import { commitRepairAnswer } from '../repair/review';
@@ -60,11 +71,36 @@ type SessionState = {
   /** Lernberatung V2: fällige Reparatur-Sätze vor den Karten (höchstens 4 je Tag). */
   repairs: RepairItem[];
   repairPos: number;
+  /** Anki (anki-regeln.md): gewünschter Modus, Richtung der Aufdeck-Karten, Stapel. */
+  mode: RequestedMode;
+  dir: FlipDir;
+  deck: string;
+  /** Anzeige-Name der Runde (Stapel) für „Weiter, wo du warst“. */
+  label: string | null;
+  /** Kontrollen dieser Sitzung und (beim Start gezählt) dieser Woche/dieses Tages (§4). */
+  controls: number;
+  ctlWeek: number;
+  ctlDay: number;
+  /** Schwache Kalibrierung: strenge Leicht-Grenze (§4). */
+  strict: boolean;
+  /** Block 1 der Tageseinheit (Abschluss → `unitDone(1)`). */
+  unit: boolean;
+  /** Ausgewählte Karten (nur `only`): fürs Fortsetzen. */
+  only: string[] | null;
+  /** Aufholmodus dieser Runde (viele überfällige Karten, Modus `auto`). */
+  catchUp: boolean;
+  /** Eigene Sätze (`produce`) in dieser Runde (Deckel `PRODUCE_MAX`). */
+  produced: number;
 };
 
 const EXTRA_TARGET = 10;
 const AGAIN_WINDOW_MS = 20 * 60_000;
 const MAX_SHOWN = 3;
+/** Eigene Sätze je Runde (teuerste Übung). */
+const PRODUCE_MAX = 2;
+/** Wartung reifer Karten: ab dieser Stabilität (Tage) und nur jede so vielte Wiederholung in voller Form. */
+const MAINTENANCE_S = 21;
+const MAINTENANCE_EVERY = 3;
 const IDLE_CAP_MS = 60_000;
 const ROUND_MIN = 10;
 
@@ -91,6 +127,18 @@ export const useSession = create<SessionState>(() => ({
   lastInteract: 0,
   repairs: [],
   repairPos: 0,
+  mode: 'type',
+  dir: 'de-en',
+  deck: 'all',
+  label: null,
+  controls: 0,
+  ctlWeek: 0,
+  ctlDay: 0,
+  strict: false,
+  unit: false,
+  only: null,
+  catchUp: false,
+  produced: 0,
 }));
 
 /** Heutige Einträge: Datenbank und noch nicht gespeicherter Puffer. */
@@ -119,12 +167,109 @@ function sceneLookup(lang: Lang): SceneLookup {
   };
 }
 
-function exerciseFor(s: Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env'>, item: QueueItem): Exercise | null {
+type ExCtx = Pick<SessionState, 'cards' | 'pool' | 'lang' | 'day' | 'shown' | 'recentEx' | 'env' | 'mode' | 'dir' | 'controls' | 'ctlWeek' | 'ctlDay' | 'catchUp' | 'produced'>;
+
+/** Modus je Karte nach anki-regeln §1 (`pickMode`, die Regel steht nur in domain/srs/flip.ts). */
+export function modeFor(s: ExCtx, card: TrainCard, item: QueueItem): PickedMode {
+  return pickMode({
+    card,
+    requested: s.mode,
+    day: s.day,
+    lang: s.lang,
+    due: item.reason === 'due',
+    controlAllowed: controlAllowed({ week: s.ctlWeek, day: s.ctlDay, session: s.controls }),
+    catchUp: s.catchUp && s.mode === 'auto',
+    key: card.key,
+  });
+}
+
+/** `origin`: Prüfabfrage und Kontrolle bleiben beim Ursprungssatz (sonst wechselt der Satz ab Stufe 3, `domain/srs/rotate.ts`). */
+function build(s: ExCtx, card: TrainCard, ex: ExerciseId, origin = false): Exercise {
+  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[card.key] ?? 0}`, { sceneOf: sceneLookup(s.lang), origin });
+}
+
+function exerciseFor(s: ExCtx, item: QueueItem): Exercise | null {
   const card = s.cards.get(item.key);
   if (!card || item.phase !== 'quiz') return null;
+  const hit = takePrebuilt(s, item);
+  if (hit) return hit;
+  // N35 Hör-Modus: die Sprachausgabe spricht, getippt wird in die Lücke (sonst die Leiter).
+  if (s.mode === 'listen') {
+    const lx = listenExercise(card, s.lang, s.pool.length - 1, s.env);
+    if (lx) return build(s, card, lx);
+  }
+  const picked = modeFor(s, card, item);
+  if (picked === 'flip') return { ...build(s, card, 'flip'), dir: dirFor(card.key, s.dir, s.day) };
+  if (picked === 'control') {
+    // Kontrolle (§4): frei im Ursprungssatz (`cloze`), ohne Satz `type`; die App bewertet.
+    const n = s.pool.length - 1;
+    const ex: ExerciseId | null = supports(card, 'cloze', s.lang, n, s.env) ? 'cloze' : supports(card, 'type', s.lang, n, s.env) ? 'type' : null;
+    if (ex) return { ...build(s, card, ex, true), check: 'control' };
+  }
+  if (picked === 'probe') {
+    // Prüfabfrage (§1 Regel 6): tippen mit Stütze, Leiter auf Stufe 3 (cloze_hint/tiles).
+    const ex = chooseExercise({ ...card, stage: 3 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
+    if (ex) return { ...build(s, card, ex, true), check: 'probe' };
+  }
+  const lighter = item.reason === 'due' ? lighterExercise(s, card) : null;
+  if (lighter) return build(s, card, lighter);
   const ex = chooseExercise(card, s.lang, s.pool.length - 1, s.recentEx, s.env);
   if (!ex) return null;
-  return buildExercise(card, ex, s.lang, s.pool, `${s.day}|${s.shown[item.key] ?? 0}`, { sceneOf: sceneLookup(s.lang) });
+  if (ex === 'produce' && s.produced >= PRODUCE_MAX) {
+    const other = chooseExercise({ ...card, stage: 4 }, s.lang, s.pool.length - 1, s.recentEx, s.env);
+    if (other && FREE_TYPED.has(other)) return build(s, card, other);
+  }
+  return build(s, card, ex);
+}
+
+/** Frei getippte Arten (Stufe 4) – ohne Auswahl und ohne Stütze. */
+const FREE_TYPED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['type', 'cloze', 'situation']);
+
+/**
+ * Billigere, aber gleichwertige Abfrage in zwei Fällen (Methodenplan Lernwissenschaft 02.10.2026), nur im Modus `auto`:
+ * - L5: Nach einer bestandenen Stützen-Abfrage an einem früheren Tag (Stufe 3, Lücke mit Hilfe oder Bausteine) kommt der nächste
+ *   getippte Termin FREI (ohne Anfangsbuchstaben) – sonst läuft Stufe 3 zweimal mit Hilfe und der erste freie Abruf käme erst am 4. Termin.
+ * - L4: Reife Karten (Stufe 5, Stabilität ≥ 21 Tage) bekommen die volle „Sicher anwenden“-Form nur bei jeder dritten Wiederholung;
+ *   sonst genügt freies Tippen (Stufe 4).
+ */
+function lighterExercise(s: ExCtx, card: TrainCard): ExerciseId | null {
+  if (s.mode !== 'auto') return null;
+  const n = s.pool.length - 1;
+  const freeOne = (): ExerciseId | null => {
+    const ex = chooseExercise({ ...card, stage: 4 }, s.lang, n, s.recentEx, s.env);
+    return ex && FREE_TYPED.has(ex) ? ex : null;
+  };
+  if (card.stage === 3) {
+    const last = lastRating(card.doc);
+    if (last && (last.x === 'cloze_hint' || last.x === 'tiles') && (last.g ?? 0) >= 3 && dayKey(last.t) !== s.day) return freeOne();
+  }
+  const reps = typeof card.doc.reps === 'number' ? card.doc.reps : 0;
+  if (card.stage >= 5 && card.fsrs.stability >= MAINTENANCE_S && reps % MAINTENANCE_EVERY !== 0) return freeOne();
+  return null;
+}
+
+// n+1 vorberechnen (leistung.md §4 Nr. 4): nach dem Prüfen im Leerlauf, beim „Weiter“ nur noch tauschen.
+let prebuilt: { sig: string; ex: Exercise } | null = null;
+const sigOf = (s: ExCtx, item: QueueItem, recent: readonly ExerciseId[]) => `${item.key}|${s.shown[item.key] ?? 0}|${recent.join(',')}|${s.controls}|${s.mode}|${s.dir}|${s.day}`;
+
+function takePrebuilt(s: ExCtx, item: QueueItem): Exercise | null {
+  const p = prebuilt;
+  prebuilt = null;
+  if (!p || p.sig !== sigOf(s, item, s.recentEx)) return null;
+  return p.ex.card === s.cards.get(item.key) ? p.ex : null;
+}
+
+/** Nächste Karte vorbereiten (aus der Übung nach dem Prüfen, im Leerlauf). Rein lesend. */
+export function prepareNext(): void {
+  const s = useSession.getState();
+  if (!s.active || s.status !== 'running' || !s.exercise) return;
+  const item = s.queue[s.pos + 1];
+  if (!item || item.phase !== 'quiz' || item.key === s.exercise.card.key) return;
+  const recent = [...s.recentEx, s.exercise.ex].slice(-2);
+  const ctx: ExCtx = { ...s, recentEx: recent, produced: s.produced + (s.exercise.ex === 'produce' ? 1 : 0) };
+  prebuilt = null;
+  const ex = exerciseFor(ctx, item);
+  if (ex) prebuilt = { sig: sigOf(ctx, item, recent), ex };
 }
 
 /** Alle Karten der Runde: Vokabeln und Wendungen (`chunk/*`) mit derselben Planung. */
@@ -151,11 +296,45 @@ export type FirstKind = 'typed' | 'choice' | 'intro' | null;
 /** Tastatur nur für die Lücke (getippt); alles andere schließt sie (iPhone: im selben Handler). */
 export const firstKindOf = (e: Exercise | null): FirstKind => (!e ? null : e.input === 'typed' ? 'typed' : 'choice');
 
-/** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
-/** Freie Runde (M9): Stapel und Größe; `only` = genau diese Karten („Jetzt üben" am Wortblatt). */
-export type SessionOpts = { deck?: Deck; size?: number; only?: readonly string[] };
+/** Karte im Aufdecken-Modus? */
+export const isFlip = (e: Exercise | null): boolean => e?.ex === 'flip';
 
+/**
+ * Optionen der Runde. `deck`: `all`, ein eingebauter Stapel (`hard`, `job`, `phrases`, `inbox` …)
+ * oder die Kennung eines eigenen Stapels (`app/decks`). `only` = genau diese Karten („Jetzt üben“).
+ * `pick` = zeitweilige Auswahl (Blatt Extra-Runde, kein neues Dokument). `mode`/`dir` wie anki-regeln
+ * §1/§8; ohne Angabe gilt der gemerkte Modus des Stapels bzw. der Standard-Modus.
+ */
+export type SessionOpts = {
+  deck?: string;
+  size?: number;
+  only?: readonly string[];
+  mode?: RequestedMode;
+  dir?: FlipDir;
+  pick?: (c: TrainCard) => boolean;
+  /** Neue Karten (aus dem Rest-Kontingent) zulassen – Standard: ja, außer bei `pick`. */
+  allowNew?: boolean;
+  label?: string;
+  /** Block 1 der Tageseinheit. */
+  unit?: boolean;
+  /** Wochenthema (Block 1: Themenkarten zuerst; Korb-Stufe 4). */
+  theme?: WeekTheme | null;
+};
+
+/** Modus und Richtung ohne ausdrückliche Angabe: Stapel-Merker, sonst Standard (Einstellungen „Wortschatz“). */
+export function defaultsFor(round: Round, deck: string): { mode: RequestedMode; dir: FlipDir } {
+  const d = useDecks.getState().decks;
+  const std = d.prefs.mode;
+  // Tageseinheit und „Alle fälligen“: immer Deutsch → Englisch (§8), Modus `auto` bzw. der Standard.
+  if (round === 'pflicht' || deck === 'all') return { mode: std ?? 'auto', dir: 'de-en' };
+  const own = isBuiltinDeck(deck) ? d.builtin[deck] : d.decks[deck];
+  // Stapel: gemerkter Modus, sonst Aufdecken (Emrahs Wunsch); ist der Standard „Tippen“, gilt er auch hier.
+  return { mode: own?.mode ?? (std === 'type' ? 'type' : 'flip'), dir: own?.dir ?? d.prefs.dir ?? 'de-en' };
+}
+
+/** Runde bauen (synchron). Rückgabe: Art der ersten Übung (für den Fokus im selben Handler). */
 export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
+  commitHeld();
   const live = useLive.getState();
   const now = useClock.getState().now;
   const day = dayKey(Date.now());
@@ -182,15 +361,28 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const plannedNew = plan?.goal.new;
   const newQuotaLeft = round === 'pflicht' && plannedNew !== undefined ? Math.min(quota, Math.max(0, plannedNew - Math.max(0, introducedToday - introducedLessonToday))) : quota;
   const deck = opts.deck ?? 'all';
+  const defaults = defaultsFor(round, deck);
+  const mode = opts.mode ?? defaults.mode;
+  // §8: Tageseinheit und „Alle fälligen“ immer Deutsch → Englisch.
+  const dir: FlipDir = round === 'pflicht' || deck === 'all' ? 'de-en' : (opts.dir ?? defaults.dir);
+  const theme = opts.theme ?? null;
+  const isTheme = theme ? (c: TrainCard) => isThemeCard(c, theme) : undefined;
+  const ctx: DeckCtx = { nowMs: now, weekStartMs: weekStartMs(now), isTheme };
   // Lernberatung V2: fällige Reparatur-Sätze zählen zur Runde (Pflicht bzw. freie Runde „alle“).
-  const repairs = !opts.only && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), target) : [];
+  const repairs = !opts.only && !opts.pick && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), Math.min(target, REPAIR_MAX)) : [];
   const cardTarget = Math.max(0, target - repairs.length);
+  const deckPool = round === 'extra' && deck !== 'all' ? deckCards(cards, deck, useDecks.getState().decks, ctx) : cards;
+  const chosen = opts.pick ? deckPool.filter(opts.pick) : deckPool;
+  // anki-regeln §5: EIN Kontingent für alle Wege; Stapel bekommen neue Karten aus dem Rest, nur passende.
+  const allowNew = opts.allowNew ?? !opts.pick;
   const queue = opts.only
     ? opts.only
         .map((k) => byKey.get(k))
         .filter((c): c is TrainCard => !!c && !c.hidden)
         .map((c): QueueItem => ({ key: c.key, reason: c.isNew ? 'new' : 'due', phase: c.stage === 0 ? 'intro' : 'quiz' }))
-    : buildQueue({ cards: round === 'extra' && deck !== 'all' ? cards.filter((c) => inDeck(c, deck)) : cards, nowMs: now, target: cardTarget, newQuotaLeft: round === 'extra' && deck !== 'all' ? 0 : newQuotaLeft, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
+    : buildQueue({ cards: chosen, nowMs: now, target: cardTarget, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, isTheme });
+  const docs = pool.map((c) => c.doc);
+  const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
   const base: SessionState = {
     active: true,
     status: 'running',
@@ -214,7 +406,20 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
     lastInteract: performance.now(),
     repairs,
     repairPos: 0,
+    mode,
+    dir,
+    deck,
+    label: opts.label ?? null,
+    controls: 0,
+    ctlWeek: ctl.week,
+    ctlDay: ctl.day,
+    strict: mode !== 'type' && calibration(docs, now).strict,
+    unit: opts.unit === true,
+    only: opts.only ? [...opts.only] : null,
+    catchUp: mode === 'auto' && catchUpOn(overdueCount(pool, now)),
+    produced: 0,
   };
+  prebuilt = null;
   const next = { ...base, ...settle(base, 0) };
   if (next.pos >= next.queue.length && !repairs.length) next.status = 'summary';
   // H1: Pflichtrunde ohne abfragbare Karte (z. B. nach dem Neuladen) – „Wiederholen" ist erschöpft.
@@ -297,8 +502,12 @@ export function pauseActivity(hidden: boolean): void {
   }
 }
 
+export const TRAINER_RESUME_ID = 'trainer';
+
 function finish(s: SessionState, aborted: boolean): void {
   const n = s.results.length;
+  // Reguläres Ende löscht die Momentaufnahme; ✕ behält sie (architektur.md §3.2).
+  if (!aborted) clearResume(TRAINER_RESUME_ID);
   // Regel 1b: Die Pflichtrunde hatte nichts mehr abzufragen, obwohl das Ziel nicht erreicht ist.
   if (!aborted && s.round === 'pflicht' && s.doneBefore + new Set(s.answered).size < s.doneBefore + s.target) markExhausted(s.day);
   const rest = s.queue.length - s.pos;
@@ -310,11 +519,13 @@ function finish(s: SessionState, aborted: boolean): void {
     right: s.results.filter((r) => r.ok).length,
     activeMs: s.activeMs,
   });
+  if (!aborted && s.unit) unitDone(1);
 }
 
 /** Einführung einer neuen Karte gesehen: die erste Abfrage folgt zwei Karten später. */
 export function continueIntro(): FirstKind {
   touch();
+  commitHeld();
   const s = useSession.getState();
   const item = s.queue[s.pos];
   if (!item) return null;
@@ -323,30 +534,51 @@ export function continueIntro(): FirstKind {
   return advanceFrom({ ...s, queue });
 }
 
-function advanceFrom(s: SessionState): FirstKind {
+/** Nächster Zustand ohne Seiteneffekte (Ende → `summary`). */
+function advanceState(s: SessionState): SessionState {
   const next = { ...s, ...settle(s, s.pos + 1) };
-  if (next.pos >= next.queue.length) {
-    next.status = 'summary';
-    finish(next, false);
-  }
+  if (next.pos >= next.queue.length) next.status = 'summary';
+  return next;
+}
+
+/** Zustand übernehmen; am Rundenende `finish`. */
+function applyAdvance(next: SessionState): FirstKind {
+  if (next.status === 'summary') finish(next, false);
   useSession.setState(next);
   const item = next.queue[next.pos];
   if (!item || next.status === 'summary') return null;
   return item.phase === 'intro' ? 'intro' : firstKindOf(next.exercise);
 }
 
-export type Answer = { grade: Grade; given: string; ms: number; ok: boolean; override?: boolean };
+function advanceFrom(s: SessionState): FirstKind {
+  return applyAdvance(advanceState(s));
+}
+
+export type Answer = {
+  grade: Grade;
+  given: string;
+  ms: number;
+  ok: boolean;
+  override?: boolean;
+  /** Genutzte Hilfe der Antwort (`weight.ts`). */
+  hint?: 0 | 1 | 2;
+  /** Aufdecken: beim Aufdecken reservierter Zeitstempel (gleich für Vorschau und Speichern, architektur.md §4.3). */
+  t?: number;
+};
 
 /** Bewertete Antwort übernehmen: Karte sofort speichern, Protokoll und Zähler vormerken, weiter. */
 export function commitAnswer(ans: Answer): FirstKind {
   touch();
+  cardGo();
+  // B4: eine zurückgehaltene Aufdeck-Bewertung gilt, sobald die nächste Antwort kommt.
+  commitHeld();
   const s = useSession.getState();
   const e = s.exercise;
   const item = s.queue[s.pos];
   if (!e || !item) return null;
   const card = e.card;
   const a: AnswerEvent = {
-    t: nextT(),
+    t: ans.t ?? nextT(),
     day: s.day,
     kind: card.kind === 'chunk' ? 'chunk' : 'v',
     id: card.id,
@@ -361,36 +593,277 @@ export function commitAnswer(ans: Answer): FirstKind {
   if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
+  if (ans.hint) a.hint = ans.hint;
+  if (e.check) a.check = e.check;
+  if (e.ex === 'flip' && s.catchUp && card.stage >= 3) a.catchUp = true;
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
   const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
   const updated = (card.kind === 'chunk' ? toChunkCard(card.id, nextDoc, a.t) : toTrainCard(card.id, nextDoc, true, a.t)) ?? card;
   const cards = new Map(s.cards);
   cards.set(card.key, updated);
-  void saveCard(a, card.inDb || card.kind === 'chunk' ? null : { ...card.doc });
-  recordAnswer(a, s.results.length === 0);
+  const seed = card.inDb || card.kind === 'chunk' ? null : { ...card.doc };
+  const immediate = s.results.length === 0;
 
   const shown = { ...s.shown, [card.key]: (s.shown[card.key] ?? 0) + 1 };
   const queue = [...s.queue];
   const again = isLearningState(updated.fsrs) && updated.fsrs.due - a.t <= AGAIN_WINDOW_MS && (shown[card.key] ?? 0) < MAX_SHOWN;
-  if (again) queue.splice(Math.min(queue.length, s.pos + 4), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  // anki-regeln §2: Aufdecken nach 5 anderen Karten (pos + 6), Tippen nach 3 (pos + 4).
+  if (again) queue.splice(againPos(s.pos, queue.length, e.ex === 'flip', ans.grade >= 3), 0, { key: card.key, reason: 'again', phase: 'quiz' });
+  const control = e.check === 'control' ? 1 : 0;
   const answered = s.answered.includes(card.key) ? s.answered : [...s.answered, card.key];
-  return advanceFrom({
+  const next = advanceState({
     ...s,
     cards,
     queue,
     shown,
     answered,
+    controls: s.controls + control,
+    ctlDay: s.ctlDay + control,
+    ctlWeek: s.ctlWeek + control,
     recentEx: [...s.recentEx, e.ex].slice(-2),
+    produced: s.produced + (e.ex === 'produce' ? 1 : 0),
     results: [...s.results, { key: card.key, word: card.word, grade: ans.grade, ok: ans.ok }],
   });
+  // B4: Aufdecken-Bewertungen 5 s zurückhalten (Karte, Protokoll, Zähler), solange die Runde
+  // weiterläuft. Die letzte Antwort einer Runde gilt sofort: Rundenende, Pflicht, act/Serie und der
+  // Einheits-Ablauf bleiben so unverändert (keine zurückgenommenen Zähler, die nie sinken dürfen).
+  if (e.ex === 'flip' && next.status !== 'summary') {
+    holdAnswer({ a, seed, immediate, before: s, step: next.step, word: card.word });
+    return applyAdvance(next);
+  }
+  void saveCard(a, seed);
+  recordAnswer(a, immediate);
+  return applyAdvance(next);
+}
+
+// ------------------------------------------------------------------ Rückgängig (B4, markt AN2)
+
+/** So lange bleibt eine Aufdeck-Bewertung rückgängig machbar. */
+export const UNDO_MS = 5000;
+
+type Held = {
+  a: AnswerEvent;
+  seed: Doc | null;
+  immediate: boolean;
+  /** Sitzung vor der Bewertung (wird bei „Rückgängig“ wiederhergestellt). */
+  before: SessionState;
+  /** `step` der Ansicht direkt nach der Bewertung: nur dort gilt „Rückgängig“. */
+  step: number;
+  word: string;
+  timer: ReturnType<typeof setTimeout> | null;
+};
+
+/**
+ * Die letzte Aufdeck-Bewertung – bis zum Festschreiben ist NICHTS gespeichert: keine Karte, kein
+ * Protokolleintrag, kein Zähler. „Rückgängig“ muss deshalb nie ein Dokument
+ * zurückschreiben (der Schreibpfad kennt kein Löschen von Feldern) und kann nie Neueres überschreiben.
+ */
+let held: Held | null = null;
+
+/** Für die Anzeige: gibt es gerade etwas rückgängig zu machen? */
+export const useUndo = create<{ t: number | null; word: string }>(() => ({ t: null, word: '' }));
+
+let guarded = false;
+/** Seite wird verborgen oder verlassen: sofort festschreiben und gesammelt speichern. */
+function installHeldGuard(): void {
+  if (guarded || typeof window === 'undefined') return;
+  guarded = true;
+  const onHide = () => {
+    if (!held) return;
+    commitHeld();
+    void flushOnHide();
+  };
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') onHide();
+  });
+  window.addEventListener('pagehide', onHide);
+}
+
+function holdAnswer(h: Omit<Held, 'timer'>): void {
+  commitHeld();
+  installHeldGuard();
+  // Fenster abgelaufen: festschreiben und gleich gesammelt speichern (Emrah ist gerade nicht am Antworten).
+  held = { ...h, timer: setTimeout(() => commitHeld(true), UNDO_MS) };
+  useUndo.setState({ t: h.a.t, word: h.word });
+}
+
+/**
+ * Zurückgehaltene Bewertung festschreiben (Zeitablauf, nächste Antwort, Weitergehen, Verlassen, neue
+ * Runde) – genau einmal, über denselben Weg wie jede andere Antwort (`saveCard` → `transform`).
+ */
+export function commitHeld(flushNow = false): void {
+  const h = held;
+  if (!h) return;
+  held = null;
+  if (h.timer !== null) clearTimeout(h.timer);
+  useUndo.setState({ t: null, word: '' });
+  void saveCard(h.a, h.seed);
+  recordAnswer(h.a, h.immediate || flushNow);
+}
+
+/**
+ * „Rückgängig“: Die letzte Aufdeck-Bewertung verwerfen und dieselbe Karte wieder von vorn zeigen.
+ * Nur solange die Ansicht direkt danach steht (sonst `false`). Die Runde (Zähler, Warteschlange,
+ * Wiedervorlage, Kontrollen) ist danach genau wie vor der Bewertung; aktive Zeit zählt weiter.
+ */
+export function undoLast(): FirstKind | false {
+  const h = held;
+  const s = useSession.getState();
+  if (!h || !s.active || s.step !== h.step) return false;
+  held = null;
+  if (h.timer !== null) clearTimeout(h.timer);
+  useUndo.setState({ t: null, word: '' });
+  prebuilt = null;
+  touch();
+  const cur = useSession.getState();
+  useSession.setState({ ...h.before, step: cur.step + 1, activeMs: cur.activeMs, lastInteract: cur.lastInteract });
+  return firstKindOf(h.before.exercise);
 }
 
 /** Runde verlassen (alles Beantwortete ist gespeichert bzw. vorgemerkt). */
 export function leaveSession(): void {
+  commitHeld();
   const s = useSession.getState();
   if (!s.active) return;
   if (s.status === 'running' && s.results.length > 0) finish(s, true);
   useSession.setState({ active: false, exercise: null });
 }
 
+
+/**
+ * Karte ohne Bewertung überspringen (Fehlergrenze „Diese Aufgabe überspringen“, architektur.md §3.1):
+ * nichts wird geschrieben, die Runde läuft mit der nächsten Karte weiter.
+ */
+export function skipCurrent(): FirstKind {
+  commitHeld();
+  const s = useSession.getState();
+  if (!s.active || s.status !== 'running') return null;
+  if (currentRepair(s)) return nextRepair();
+  return advanceFrom(s);
+}
+
+// ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2)
+
+export type TrainerSnapshot = {
+  round: Round;
+  mode: RequestedMode;
+  dir: FlipDir;
+  deck: string;
+  label: string | null;
+  day: string;
+  /** Zeitpunkt der Momentaufnahme: Karten mit `last` ≥ `at` gelten als inzwischen beantwortet. */
+  at: number;
+  queue: QueueItem[];
+  pos: number;
+  shown: Record<string, number>;
+  answered: string[];
+  results: ResultRow[];
+  repairs: string[];
+  repairPos: number;
+  target: number;
+  doneBefore: number;
+  unit: boolean;
+  controls: number;
+};
+
+const RESULTS_MAX = 100;
+
+/** Reiner Lesezugriff (JSON, nur Schlüssel und Positionen – nie Karteninhalte). */
+export function trainerSnapshot(): TrainerSnapshot | null {
+  const s = useSession.getState();
+  if (!s.active || s.status !== 'running') return null;
+  return {
+    round: s.round,
+    mode: s.mode,
+    dir: s.dir,
+    deck: s.deck,
+    label: s.label,
+    day: s.day,
+    at: Date.now(),
+    queue: s.queue.map((q) => ({ key: q.key, reason: q.reason, phase: q.phase })),
+    pos: s.pos,
+    shown: s.shown,
+    answered: s.answered,
+    results: s.results.slice(-RESULTS_MAX),
+    repairs: s.repairs.map((r) => r.id),
+    repairPos: s.repairPos,
+    target: s.target,
+    doneBefore: s.doneBefore,
+    unit: s.unit,
+    controls: s.controls,
+  };
+}
+
+const lastOf = (c: TrainCard): number => (typeof c.doc.last === 'number' ? c.doc.last : 0);
+
+/**
+ * Sitzung SYNCHRON herstellen (Klick-Handler, iPhone-Tastatur); schreibt nie in die db. Karten werden
+ * aus den Live-Daten neu gebaut. Übersprungen: fehlende Karten und offene Karten, die seit der
+ * Momentaufnahme beantwortet wurden (`last` ≥ `at`). Ein offener Prüf-Zustand wird nicht nachgebaut.
+ */
+export function restoreTrainer(snap: TrainerSnapshot): boolean {
+  if (!snap || !Array.isArray(snap.queue) || typeof snap.pos !== 'number') return false;
+  commitHeld();
+  const now = useClock.getState().now;
+  const day = dayKey(Date.now());
+  if (snap.day !== day) return false;
+  const cards = allTrainCards(now);
+  const byKey = new Map(cards.map((c) => [c.key, c]));
+  const pool = cards.filter((c) => !c.hidden);
+  const live = useLive.getState();
+  const repairsAll = pickDailyRepairs(live.docs['app/repair'], now, new Set(), 50);
+  const repairs = (snap.repairs ?? []).map((id) => repairsAll.find((r) => r.id === id)).filter((r): r is RepairItem => !!r);
+  const keep = snap.queue.map((q, i) => {
+    const c = byKey.get(q.key);
+    if (!c || c.hidden) return false;
+    return !(i >= snap.pos && lastOf(c) >= snap.at);
+  });
+  const queue = snap.queue.filter((_, i) => keep[i]);
+  const removedBefore = keep.slice(0, snap.pos).filter((k) => !k).length;
+  const pos = Math.max(0, Math.min(queue.length, snap.pos - removedBefore));
+  const docs = pool.map((c) => c.doc);
+  const ctl = snap.mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
+  const base: SessionState = {
+    active: true,
+    status: 'running',
+    round: snap.round,
+    day,
+    lang: useSettings.getState().lang,
+    env: currentEnv(),
+    cards: byKey,
+    pool,
+    queue,
+    pos,
+    exercise: null,
+    step: useSession.getState().step,
+    shown: snap.shown ?? {},
+    recentEx: [],
+    answered: snap.answered ?? [],
+    results: snap.results ?? [],
+    target: snap.target,
+    doneBefore: snap.doneBefore,
+    // Nur die neuen aktiven Minuten zählen (§3.2).
+    activeMs: 0,
+    lastInteract: performance.now(),
+    repairs,
+    repairPos: Math.min(snap.repairPos ?? 0, repairs.length),
+    mode: snap.mode,
+    dir: snap.dir,
+    deck: snap.deck,
+    label: snap.label,
+    controls: snap.controls ?? 0,
+    ctlWeek: ctl.week,
+    ctlDay: ctl.day,
+    strict: snap.mode !== 'type' && calibration(docs, now).strict,
+    unit: snap.unit === true,
+    only: null,
+    catchUp: false,
+    produced: 0,
+  };
+  prebuilt = null;
+  const next = { ...base, ...settle(base, pos) };
+  if (next.pos >= next.queue.length && next.repairPos >= repairs.length) return false;
+  useSession.setState(next);
+  return true;
+}

@@ -1,6 +1,6 @@
 import { lessonDoneOn } from '../course/courseDone';
 import { addDays, dayKey, isDayKey, legacyDayKey } from '../date';
-import { isDutyChannel } from './channels';
+import { isDutyChannel, isUnitDutyChannel } from './channels';
 import { isPhase2Plan } from './buildPlan';
 import type { DutyId, StoredPlan } from './types';
 
@@ -67,6 +67,9 @@ export function dutiesFeasible(plan: StoredPlan | null, env: { tts: boolean; ai:
     if (d === 'review' || d === 'lesson') return true;
     const ch = d.slice(3);
     if (!isDutyChannel(ch)) return false;
+    // Neubau (P1, Prüfbefunde M4/M5): Jeder Block der Tageseinheit hat einen Rückfall ohne KI und
+    // ohne Sprachausgabe (`resolveBlock` beim Blockstart, Ersatzblöcke), bleibt also erfüllbar.
+    if (isUnitDutyChannel(ch)) return true;
     if (!data) return true;
     // „Sag es“ ist auch ohne Claude erfüllbar: dann wird die Antwort ohne Prüfung gespeichert.
     return ch === 'gram' || ch === 'say' || (ch === 'cloze' && data.cloze >= 8) || (ch === 'order' && data.order >= 6);

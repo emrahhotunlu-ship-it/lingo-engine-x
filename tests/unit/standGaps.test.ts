@@ -269,9 +269,12 @@ describe('Ladepunkt am Reiter (M13)', () => {
   const task = (over: Partial<AiTask>): AiTask => ({ key: 'k', kind: 'write', route: { name: 'write', ctx: 'extra' }, phase: 'thinking', status: 'running', error: null, seen: false, startedAt: 1, ...over });
   it('nur laufende Korrekturen, am passenden Reiter', () => {
     expect([...runningTabs({})]).toEqual([]);
-    expect([...runningTabs({ a: task({}) })]).toEqual(['learn']);
+    // Seit 04.10.2026 gibt es keinen Reiter „Lesen“ mehr: freiwillige Einheiten zeigen keinen Ladepunkt am Reiter.
+    expect([...runningTabs({ a: task({}) })]).toEqual([]);
     expect([...runningTabs({ a: task({ route: { name: 'write', ctx: 'duty' } }) })]).toEqual(['today']);
-    expect([...runningTabs({ a: task({ kind: 'discover', route: { name: 'discoverItem', feedId: 'f', itemId: 'i', ctx: 'extra' } }) })]).toEqual(['learn']);
+    expect([...runningTabs({ a: task({ kind: 'discover', route: { name: 'discoverItem', feedId: 'f', itemId: 'i', ctx: 'extra' } }) })]).toEqual([]);
+    // Pflicht und Extra gemischt: nur „Heute“.
+    expect([...runningTabs({ a: task({}), b: task({ key: 'b', route: { name: 'write', ctx: 'duty' } }) })]).toEqual(['today']);
     expect([...runningTabs({ a: task({ status: 'done' }), b: task({ key: 'b', status: 'error' }) })]).toEqual([]);
   });
 });

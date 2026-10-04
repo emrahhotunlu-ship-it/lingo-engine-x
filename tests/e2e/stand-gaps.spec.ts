@@ -1,13 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, bootAt, openSettings, layoutProblems, openOverview, screen } from './fixtures';
 import { typeInGap } from './learnHelpers';
-import { openModule } from './inputHelpers';
 import { answerCheckItem, playCheck } from './progressHelpers';
 import { dump, planPatch } from './trainerHelpers';
+import { openChecks, openProfileContent } from './profilHelpers';
 
 // Lücken aus dem Abgleich (Kap. 9/14, M7, M10, M13, M18, M20, M21, M22, W5, Kap. 4.1):
 // alte Daten sichtbar, Wochen-Check, Wochenstreifen und Niveau-Leiste, Farbthema und beruflicher
-// Kontext, „Als Preply-Stunde", Nachtragen-Hinweis auf Heute, Ladepunkt, „Was ist neu" und die
+// Kontext, Nachtragen-Hinweis auf Heute, Ladepunkt, „Was ist neu" und die
 // Lücke über der iPhone-Tastatur. Gegen den Produktions-Build mit eingespieltem Adapter.
 
 test.use({ viewport: { width: 1440, height: 900 } });
@@ -24,7 +24,7 @@ async function openHistory(page: Page): Promise<void> {
 
 test('Kap. 9/14: alte Wochen-Checks und „Letzte Fortschritte" sind im Verlauf sichtbar (nur lesen)', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
-  await openHistory(page);
+  await openChecks(page);
   const card = page.getByTestId('checks-card');
   await card.getByTestId('checks-toggle').click();
   await expect(card.getByTestId('check-row')).toHaveCount(2);
@@ -32,6 +32,7 @@ test('Kap. 9/14: alte Wochen-Checks und „Letzte Fortschritte" sind im Verlauf 
   await expect(card.getByTestId('check-row').first()).toContainText('4/5');
   await expect(card.getByTestId('check-last')).toContainText('75 %');
   await expect(card.getByTestId('check-last')).toContainText('67 %');
+  await openHistory(page);
   const feed = page.getByTestId('legacy-feed');
   await feed.getByTestId('feed-toggle').click();
   await expect(feed.getByTestId('feed-row')).toHaveCount(6);
@@ -56,9 +57,7 @@ test('M10: Wochen-Check – 12 Aufgaben ohne Tipps, Ergebnis im alten Format, Ve
   const seedProfile = await profileOf(page);
   const gramBefore = ((seedProfile.act as Record<string, Doc>)['2026-09-20'] ?? {}).gram;
 
-  await page.getByTestId('tab-overview').click();
-  await screen(page, 'overview');
-  await page.getByTestId('tab-history').click();
+  await openChecks(page);
   await page.getByTestId('check-start').click();
   await expect(page.locator('[data-screen="check"]')).toBeVisible();
   await expect(page.getByTestId('check-screen')).toContainText('Extra');
@@ -104,20 +103,22 @@ test('M10: Wochen-Check – 12 Aufgaben ohne Tipps, Ergebnis im alten Format, Ve
   expect(external).toEqual([]);
 });
 
-test('M10: Angebot auf Heute erst nach der Pflicht; Abbruch vor 6 Antworten speichert kein Ergebnis', async ({ page }) => {
+test('M10: kein Angebot auf Heute, Einstieg über Profil → Wochen-Check; Abbruch vor 6 Antworten speichert kein Ergebnis', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(0) } } });
   await screen(page, 'today');
+  // Neubau (plan.md B12, §1.4): Heute beherbergt nichts doppelt – nach der Pflicht nur „Lohnt sich jetzt“,
+  // der Wochen-Check liegt im Profil unter Tests (Extra).
   await expect(page.getByTestId('extra')).toBeVisible();
-  const offer = page.getByTestId('check-offer');
-  await expect(offer).toBeVisible();
-  await offer.getByTestId('check-offer-start').click();
+  await expect(page.getByTestId('check-offer')).toHaveCount(0);
+  await openChecks(page);
+  await page.getByTestId('check-start').click();
   await expect(page.locator('[data-screen="check"]')).toBeVisible();
+  await expect(page.getByTestId('check-screen')).toContainText('Extra');
   await answerCheckItem(page, 1, 12);
   await answerCheckItem(page, 2, 12);
-  // ✕ führt dorthin zurück, woher der Check kam: nach Heute (UX-Beratung Nr. 3); in „Stand → Verlauf“ bleibt er erreichbar.
+  // ✕ führt dorthin zurück, woher der Check kam (UX-Beratung Nr. 3): zur Seite Wochen-Check, Start wieder da.
   await page.getByTestId('round-close').click();
-  await screen(page, 'today');
-  await openHistory(page);
+  await screen(page, 'checks');
   await expect(page.getByTestId('check-start')).toBeVisible();
   expect(((await profileOf(page)).checks as unknown[]).length).toBe(2);
   expect(errors).toEqual([]);
@@ -133,14 +134,15 @@ test('M10: ist diese Woche schon ein Check gespeichert, gibt es kein Angebot', a
   await screen(page, 'today');
   await expect(page.getByTestId('extra')).toBeVisible();
   await expect(page.getByTestId('check-offer')).toHaveCount(0);
-  await openHistory(page);
+  await openChecks(page);
   await expect(page.getByTestId('check-week-done')).toBeVisible();
   await expect(page.getByTestId('check-last')).toContainText('83 %');
 });
 
 test('M7: Wochenstreifen (7 Tagesringe, dieselbe Regel wie die Serie) und Niveau-Leiste in der Kopfzeile', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
-  await openOverview(page);
+  // Neubau: Serie und Wochenstreifen stehen im Profil (Pflicht · nur Extra · Ruhetag · offen).
+  await openProfileContent(page);
   const strip = page.getByTestId('week-strip');
   await expect(strip.getByTestId('week-day')).toHaveCount(7);
   await expect(strip.getByTestId('week-day').last()).toHaveAttribute('data-today', '');
@@ -148,10 +150,14 @@ test('M7: Wochenstreifen (7 Tagesringe, dieselbe Regel wie die Serie) und Niveau
   // Nie nur Farbe: jeder Ring hat eine Beschriftung für Vorleseprogramme.
   await expect(strip.getByTestId('week-day').first()).toContainText('Montag, 14. September');
   const states = await strip.getByTestId('week-day').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
-  expect(states.every((s) => s && ['done', 'rest', 'open'].includes(s))).toBe(true);
+  expect(states.every((s) => s && ['done', 'extra', 'rest', 'open'].includes(s))).toBe(true);
   // Serie 12 nach alter Regel: die ganze Woche zählt.
   expect(states).toEqual(['done', 'done', 'done', 'done', 'done', 'done', 'done']);
-  await expect(page.getByTestId('week-summary')).toHaveText('7 Tage erledigt');
+  await expect(page.getByTestId('profile-sheet-streak')).toContainText('12');
+  // Das Profil-Blatt ist schon offen: „Dein Stand ›“ direkt darin (ein zweiter Profil-Tipp träfe den Hintergrund).
+  await page.getByTestId('profile-overview').click();
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
+  await screen(page, 'overview');
 
   const scale = page.getByTestId('level-scale');
   await expect(scale).toBeVisible();
@@ -189,47 +195,6 @@ test('M21 + M22: Farbthema aus theme.p, umschaltbar; beruflicher Kontext wird in
   expect(errors).toEqual([]);
 });
 
-test('M18: „Als Preply-Stunde" im Text, an der Szene und im Wochenbericht', async ({ page }) => {
-  test.setTimeout(60_000);
-  const { errors } = await boot(page, { migrated: true });
-  // Lesen
-  await openModule(page, 'read');
-  await expect(page.getByTestId('as-preply')).toBeVisible();
-  await page.getByTestId('unit-close').click();
-  await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
-  // Szene (Einweisung)
-  await page.getByTestId('tab-speak').click();
-  await page.getByTestId('scene-card').first().click();
-  await expect(page.getByTestId('briefing').getByTestId('as-preply')).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(page.getByTestId('briefing')).toHaveCount(0);
-  // Wochenbericht
-  await page.getByTestId('tab-overview').click();
-  await screen(page, 'overview');
-  await page.getByTestId('tab-history').click();
-  await page.getByTestId('weekly').getByTestId('as-preply').click();
-  await expect(page.getByTestId('preply')).toBeVisible();
-  await expect(page.locator('[data-testid="pp-ctx"] [data-value="about"]')).toHaveAttribute('aria-checked', 'true');
-  expect(errors).toEqual([]);
-});
-
-test('M18: vom Regelblatt zu „Vorbereiten" mit Anlass „Zu: Passiv"', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true });
-  await screen(page, 'today');
-  await page.getByTestId('tab-learn').click();
-  await page.getByTestId('hub-grammar').click();
-  await page.locator('[data-testid="topic"][data-topic="passive"]').click();
-  const sheet = page.getByTestId('rule-sheet');
-  await expect(sheet).toBeVisible();
-  await sheet.getByTestId('as-preply').click();
-  await expect(page.getByTestId('preply')).toBeVisible();
-  await expect(page.getByTestId('rule-sheet')).toHaveCount(0);
-  const about = page.locator('[data-testid="pp-ctx"] [data-value="about"]');
-  await expect(about).toHaveAttribute('aria-checked', 'true');
-  await expect(about).toContainText('Passiv');
-  expect(errors).toEqual([]);
-});
-
 test('W5: Nachtragen-Hinweis auch auf Heute – leise Zeile, führt zu „Dein Stand"', async ({ page }) => {
   const { errors } = await boot(page, {
     migrated: true,
@@ -259,8 +224,10 @@ test('W5: ohne Kopien der alten App kein Hinweis auf Heute', async ({ page }) =>
 
 test('M13: Ladepunkt am Reiter, solange eine KI-Korrektur im Hintergrund läuft', async ({ page }) => {
   test.setTimeout(60_000);
-  await boot(page, { migrated: true, fake: { sampleDelayMs: 1500 } });
-  await openModule(page, 'write');
+  // Seit 04.10.2026 gibt es keinen Reiter „Lesen“ mehr: eine Pflicht-Schreibaufgabe (ctx duty, z. B. aus einem älteren
+  // gespeicherten Plan) zeigt den Ladepunkt an „Heute“.
+  await bootAt(page, { name: 'write', ctx: 'duty' }, { fake: { sampleDelayMs: 1500 } });
+  await screen(page, 'write');
   await expect(page.getByTestId('tab-busy')).toHaveCount(0);
   await page
     .getByTestId('draft')
@@ -269,9 +236,10 @@ test('M13: Ladepunkt am Reiter, solange eine KI-Korrektur im Hintergrund läuft'
   await page.getByTestId('submit').click();
   await expect(page.getByTestId('ai-phase')).toBeVisible();
   await page.getByTestId('unit-close').click();
-  const dot = page.getByTestId('tab-learn').getByTestId('tab-busy');
+  await expect(page.getByTestId('tab-read')).toHaveCount(0);
+  const dot = page.getByTestId('tab-today').getByTestId('tab-busy');
   await expect(dot).toBeVisible();
-  await expect(page.getByTestId('tab-learn')).toContainText('Claude korrigiert gerade im Hintergrund');
+  await expect(page.getByTestId('tab-today')).toContainText('Claude korrigiert gerade im Hintergrund');
   await expect(page.getByTestId('ai-task-notice')).toHaveAttribute('data-status', 'done', { timeout: 15_000 });
   await expect(page.getByTestId('tab-busy')).toHaveCount(0);
 });

@@ -234,45 +234,18 @@ export function patternHintsOf(doc: PatternsDoc | null, today: string): string[]
 // ------------------------------------------------------------------ Wochenfokus (V8/Nr. 9)
 
 export type FocusPoint = { id: string; de: string; en: string; patternId: string | null };
-export type ImportLike = { corrections: ReadonlyArray<{ wrong: string; right: string; topic?: string }> } | null;
 
 /**
- * Wochenfokus mit höchstens 3 Punkten aus den Top-Mustern und dem letzten Preply-Import:
- * Muster, die auch im letzten Import vorkamen, zuerst; dann nach Häufigkeit. Fehlen Muster,
- * füllen Themen der Import-Korrekturen auf (`topicName` liefert beide Sprachen).
+ * Wochenfokus mit höchstens 3 Punkten aus den Top-Mustern (nach Häufigkeit). Seit dem 28.09.2026
+ * ohne Preply-Import (der Preply-Bereich ist entfernt).
  */
-export function weekFocus(doc: PatternsDoc | null, imp: ImportLike, today: string, topicName: (id: string) => { de: string; en: string } | null): FocusPoint[] {
+export function weekFocus(doc: PatternsDoc | null, today: string): FocusPoint[] {
   const items = doc?.items ?? [];
-  const inImport = new Map<string, number>();
-  for (const c of imp?.corrections ?? []) {
-    const id = matchPattern(c, items);
-    if (id) inImport.set(id, (inImport.get(id) ?? 0) + 1);
-  }
-  const ranked = items
-    .map((p, i) => ({ p, i, w: (inImport.get(p.id) ?? 0) * 100 + (doc ? weight(p, doc.history, today) : 0) }))
+  return items
+    .map((p, i) => ({ p, i, w: doc ? weight(p, doc.history, today) : 0 }))
     .sort((a, b) => b.w - a.w || a.i - b.i)
-    .map((x) => x.p);
-  const out: FocusPoint[] = ranked.slice(0, FOCUS_MAX).map((p) => ({ id: p.id, de: p.title_de, en: p.title_en, patternId: p.id }));
-  for (const c of imp?.corrections ?? []) {
-    if (out.length >= FOCUS_MAX) break;
-    if (matchPattern(c, items)) continue;
-    const name = c.topic ? topicName(c.topic) : null;
-    if (!name || out.some((o) => o.id === `topic:${c.topic}`)) continue;
-    out.push({ id: `topic:${c.topic}`, de: name.de, en: name.en, patternId: null });
-  }
-  return out;
-}
-
-/** Zeile für die Nachricht an den Lehrer (immer Englisch). */
-export function focusLine(points: readonly FocusPoint[]): string {
-  return points.length ? `Please pay attention to: ${points.map((p) => p.en).join('; ')}.` : '';
-}
-
-/** Die Zeile an die Nachricht anhängen – nie doppelt. */
-export function withFocusLine(message: string, points: readonly FocusPoint[]): string {
-  const line = focusLine(points);
-  if (!line || message.includes('Please pay attention to:')) return message;
-  return message.trim() ? `${message.trim()}\n\n${line}` : line;
+    .slice(0, FOCUS_MAX)
+    .map(({ p }) => ({ id: p.id, de: p.title_de, en: p.title_en, patternId: p.id }));
 }
 
 /** Soll „Dein Stand“ die Muster neu erkennen lassen? Höchstens einmal je ISO-Woche. */

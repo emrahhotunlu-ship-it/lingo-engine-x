@@ -432,7 +432,8 @@ async function sendFields(writer: Writer): Promise<boolean> {
         try {
           const p = f.compute(next);
           if (!p) continue;
-          patch = { ...patch, ...p };
+          // Tief zusammenführen wie `update`: Patches verschiedener Tage (z. B. `act`) bleiben erhalten.
+          patch = applyUpdate(patch, p);
           next = applyUpdate(next, p);
         } catch (err) {
           logError(f.scope, err, 'app/profile');

@@ -14,9 +14,13 @@ import { courseExtendReply } from './canned/courseExtend';
 import { repairCheckReply } from './canned/repairCheck';
 import { registerFluencyMeetingReplies } from './canned/fluencyMeeting';
 import { patternCheckReply, patternsReply } from './canned/patterns';
+import { registerP7Replies } from './canned/p7';
+import { registerNbReplies } from './canned/nb';
+import { registerP5TaskReplies } from './canned/p5tasks';
+import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
-// produce-check@1, card-examples@1, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
+// produce-check@1, card-examples@2, lesson-content@2 und grammar-judge@1 (erkannt an der Kopfzeile). Sie lesen nur die festen Datenzeilen des Prompts.
 // Sonderwörter für Fehlerpfade:
 // - `zzqx`: erste Antwort verletzt das Schema, der Neuversuch („did not match") ist gültig,
 // - `zzjson`: gar kein JSON (→ `invalid_json`).
@@ -195,19 +199,43 @@ export function produceCheckReply(input: string): string {
   return JSON.stringify({ verdict, usesTarget: uses, fixed, why: WHY[verdict][lang], better: '' });
 }
 
-// ---------------------------------------------------------------- card-examples@1
+// ---------------------------------------------------------------- card-examples@2
 
 /** Drei Sätze mit dem Wort (Grundform, ohne „to "). `zzjson` im Wort → kein JSON. */
 export function cardExamplesReply(input: string): string {
   const word = line(input, 'Word').replace(/^to\s+/i, '').trim() || 'word';
   if (/zzjson/i.test(word)) return NOT_JSON;
+  // Ein gültiger Wortpartner nur, wenn das Wort `colq` enthält (E2E „Wortpartner von Claude“); sonst wie bisher keiner.
+  const collocations = /colq/i.test(word) ? [{ p: `${word} the plan`, de: 'den Plan voranbringen', gap: 'plan', opts: ['table', 'price', 'story'], ex: `We [${word} the plan] together every week.` }] : [];
   return JSON.stringify({
     examples: [
       `Our team tried to ${word} the new plan before the deadline.`,
       `It is not always easy to ${word} people in a short meeting.`,
       `She had to ${word} her manager with clear numbers and examples.`,
     ],
+    collocations,
   });
+}
+
+// ---------------------------------------------------------------- order-gen@1
+
+/**
+ * Sechs neue, gültige Satzbau-Sätze mit dem Marker „Quokka“ (E2E erkennt daran, dass ein erzeugter Satz erscheint).
+ * `zzjson` im Wortschatz → kein JSON. `zzbad` → lauter ungültige Sätze (Prüfung verwirft alle).
+ */
+export function orderGenReply(input: string): string {
+  const vocab = line(input, 'Learner vocabulary');
+  if (/zzjson/i.test(vocab)) return NOT_JSON;
+  const good = [
+    { topic: 'c1-emphasis', en: 'Never have we seen the Quokka project run so smoothly.', de: 'Noch nie haben wir das Quokka-Projekt so reibungslos laufen sehen.', chunks: ['never have', 'we', 'seen', 'the Quokka project', 'run so smoothly'], single: 'Inversion after never fixes the order: never have we.', why: ['Nach never rückt das Hilfsverb vor das Subjekt: never have we.', 'After never, the auxiliary comes before the subject: never have we.'] },
+    { topic: 'c1-discourse', en: 'That said, the Quokka timeline is still tight for the first release.', de: 'Allerdings ist der Quokka-Zeitplan für die erste Version noch knapp.', chunks: ['that said', 'the Quokka timeline', 'is', 'still tight', 'for the first release'], single: 'The framing phrase leads and the rest keeps one natural order.', why: ['That said steht vorn und wird durch ein Komma vom Rest getrennt.', 'That said opens the sentence and is separated from the rest by a comma.'] },
+    { topic: 'c1-hedging', en: 'The Quokka rollout could take slightly longer than planned.', de: 'Der Quokka-Rollout könnte etwas länger dauern als geplant. (vorsichtig)', chunks: ['the Quokka rollout', 'could', 'take', 'slightly longer', 'than planned'], single: 'Modal verb and softener stay in one fixed order here.', why: ['Slightly steht vor longer und schwächt die Aussage ab, wie das deutsche etwas.', 'Slightly goes before longer and softens the statement, like German etwas.'] },
+    { topic: 'c1-diplomacy', en: 'Would it be possible to move the Quokka call to Friday?', de: 'Wäre es möglich, den Quokka-Termin auf Freitag zu verschieben? (höflich)', chunks: ['would', 'it', 'be possible', 'to move', 'the Quokka call', 'to Friday'], single: 'The polite frame stays first and the object comes before the time.', why: ['Die höfliche Frage beginnt mit would it be possible, nicht mit can you.', 'The polite question starts with would it be possible, not with can you.'] },
+    { topic: 'c1-precision', en: 'We can set up the Quokka test within two weeks.', de: 'Wir können den Quokka-Test innerhalb von zwei Wochen einrichten.', chunks: ['we', 'can', 'set up', 'the Quokka test', 'within two weeks'], alt: ['Within two weeks, we can set up the Quokka test.'], why: ['Within two weeks heißt binnen zwei Wochen und passt nicht mit in zusammen.', 'Within two weeks means inside that period and does not combine with in.'] },
+    { topic: 'c1-participle', en: 'Having seen the Quokka demo, the team asked about pricing.', de: 'Nachdem das Team die Quokka-Demo gesehen hatte, fragte es nach den Preisen.', chunks: ['having', 'seen', 'the Quokka demo', 'the team', 'asked', 'about pricing'], alt: ['The team asked about pricing, having seen the Quokka demo.'], why: ['Das Subjekt der Partizipgruppe ist das Subjekt des Hauptsatzes: the team.', 'The subject of the participle clause is the subject of the main clause: the team.'] },
+  ];
+  if (/zzbad/i.test(vocab)) return JSON.stringify({ items: good.map((g) => ({ ...g, chunks: g.chunks.slice(0, 3) })) });
+  return JSON.stringify({ items: good });
 }
 
 // ---------------------------------------------------------------- lesson-content@2
@@ -286,6 +314,7 @@ export function registerCannedReplies(): void {
   registerCannedReply('word-lookup', wordLookupReply);
   registerCannedReply('produce-check', produceCheckReply);
   registerCannedReply('card-examples', cardExamplesReply);
+  registerCannedReply('order-gen', orderGenReply);
   registerCannedReply('lesson-content', lessonContentReply);
   registerCannedReply('grammar-judge', grammarJudgeReply);
   // Phase 3 – Sprechen und Business
@@ -297,8 +326,10 @@ export function registerCannedReplies(): void {
   registerCannedReply('phrase-adapt', phraseAdaptReply);
   registerCannedReply('pitch-script', pitchScriptReply);
   registerCannedReply('pitch-feedback', pitchFeedbackReply);
-  // Phase 5: companion-chat, translate, preply-prep, preply-import
+  // Phase 5: companion-chat, translate
   registerCompanionReplies();
+  // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke)
+  registerTeacherFeedbackReply();
   // Phase 4: reading-text, listening-text, writing-prompt, writing-review, reading-check, apply-check
   registerInputReplies();
   // Phase 6
@@ -310,6 +341,8 @@ export function registerCannedReplies(): void {
   registerCannedReply('repair-check', repairCheckReply);
   // Lernberatung 27.09., V6/V4: fluency-check, meeting-prep, meeting-debrief
   registerFluencyMeetingReplies();
+  // Neubau P7: pressure-check, inbox-check
+  registerP7Replies();
   // Lernberatung 27.09., V3 – Deutsch-Fallen
   registerCannedReply('patterns', patternsReply);
   registerCannedReply('pattern-check', patternCheckReply);
@@ -319,6 +352,10 @@ export function registerCannedReplies(): void {
   registerSayReplies();
   // Lernberatung 27.09., Vorschlag 8: tone-check („Eine Botschaft, drei Tonlagen“)
   registerToneReplies();
+  // Neubau: goal-check, claude-drill, unit-listen, text-level, alternatives, text-cards
+  registerNbReplies();
+  // Neubau P5: speak-task-check (Pitch 30/60/120, Diagramm, Umschreiben, Rückübersetzung)
+  registerP5TaskReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

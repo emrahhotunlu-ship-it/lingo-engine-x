@@ -86,23 +86,44 @@ Nur neue Felder und Sammlungen; alte Felder bleiben unverändert, gelöscht wird
 
 Browser-Speicher (nur Bequemlichkeit): `lx:roleplay:<szene>` (Fortsetzen, ≤ 40 KB), `lx:draft:speak:<szene>`, `lx:draft:mail`, `lx:draft:pitch`, `lx:speak-autoplay`, `lx:stt-blocked`.
 
-## Phase 5: Begleiter und Preply-Brücke (nur neue, optionale Felder)
+## Phase 5: Begleiter und Übersetzer (nur neue, optionale Felder)
 
 Plan: `docs/phase5-plan.md` §5, E5-22. Alte Felder und Formen bleiben unverändert, es wird nichts gelöscht.
 
 | Dokument | Neu | Schreibweg |
 |---|---|---|
 | `app/chat` | `since` (Beginn des laufenden Gesprächs); je Nachricht `t`, `lang`, `ctx`, `stopped` | `features/companion/persistChat.ts` (`transform`, ≤ 40 Nachrichten, ≤ 180 KB) |
-| `preply/pp<ms>` | `pv`, `heldDay`, `heldMin`; `ctx.kind: 'held'` für „Stunde ohne Plan" | `features/preply/actions.ts` (`createIfMissing`, gehalten per `transform`) |
-| `preply/pi<ms>` | `t`, `lang`, `pv`, `items` (Übungen, `tasks` bleibt Liste von Texten), `sel`, `res`, `hwDone` | `features/preply/actions.ts` (`applied:false` vor der Übernahme) |
-| `app/pool.items[]` | `id` (`pi<ms>-t<i>`) | Übernahme, kein Verdrängen bei 90 |
-| `vocab/<id>` | `src: 'preply' \| 'translate'`, `origin.kind: 'preply' \| 'translate' \| 'companion'` | über `saveCardOp` (nur anlegen oder Satz ergänzen) |
-| `grammar/<topic>.errors[]` | Einträge mit `src: 'preply'` (Box 0, fällig +1 Tag) | Deckel 10: erst erledigte, dann älteste |
-| `app/radar.events[]` | Einträge mit `s: 'g'` aus Lehrer-Korrekturen, Kategorie der alten App | Sammel-Warteschlange (`learnRecorder.radar`), Deckel 400, nach Zeit |
-| `app/profile` | `act[tag].preply`, `minutes[tag]` (keine `days`/`xpDays`/Pflicht), `lxSeq` gegen Doppelzählung | Sammel-Warteschlange (`recordRoundEnd`, `act:'preply'`) |
 
-Browser-Speicher (nur Bequemlichkeit): `lx:draft:chat`, `lx:draft:preply-import`, `lx:translate-history` (≤ 20), `lx:companion-tab`, `lx:companion-tier`.
-Abos: `app/chat` nur bei offenem Begleiter, `preply` nur bei offenem Preply-Bildschirm (`src/data/watch.ts`).
+Browser-Speicher (nur Bequemlichkeit): `lx:draft:chat`, `lx:translate-history` (≤ 20), `lx:companion-tab`, `lx:companion-tier`.
+Abos: `app/chat` nur bei offenem Begleiter (`src/data/watch.ts`).
+
+### Preply-Brücke (bis 28.09.2026) – entfernt, Daten bleiben
+
+Emrahs Vorgabe vom 28.09.2026: der Preply-Bereich (Vorbereiten, Import, Verlauf, „Als Preply-
+Stunde", „Mit Lehrer besprechen") ist vollständig aus der Oberfläche entfernt. Die Dokumente
+`preply/pp<ms>` und `preply/pi<ms>` (Plan, Import, Übungen, `hwDone`), `app/decks.flagged` und
+`app/week.preplyNext`/`app/week.hint.src:'preply'` bleiben unangetastet in der Datenbank stehen
+(Kap. 9, Regel 6: nichts wird gelöscht) und werden weiterhin tolerant gelesen, u. a. für „Dein
+Stand" (Deutsch-Fallen, Einschätzung) und den Eingangskorb-Stapel `src:preply`. Neu geschrieben
+wird dorthin nichts mehr. An ihre Stelle tritt „Lehrer-Feedback einfügen" (siehe unten).
+
+## Lehrer-Feedback einfügen (ab 28.09.2026, ersetzt die Preply-Brücke)
+
+`docs/neubau/plan.md` Abschnitt L. Emrah fügt das Feedback seines Lehrers als Text ein; die Vorlage
+`teacher-feedback@1` (`src/prompts/teacherFeedback.ts`) zerlegt ihn in Wörter/Wendungen,
+Korrekturen und Übungsideen. Nur auf Tipp, kein eigener Timer, keine automatische Wiederholung
+(A6.2/A6.3).
+
+| Dokument | Felder | Schreibweg |
+|---|---|---|
+| `teacher/<JJJJ-MM>` | `{v: 1, items: [{id, t, lang, raw, title, summary, corrections: [{wrong, right, why}], words: [{en, de, pos, ex, fromLesson}], tasks: string[]}]}` | `src/features/teacher/actions.ts::saveTeacherFeedback` (`writer.transform`, `src/domain/teacher/store.ts`: ≤ 200 Einträge, `raw` ≤ 4 KB, Dokument < 200 KiB, wie `out/<Monat>`) |
+| `vocab/<id>` | Kartenvorschlag übernehmen: `src: 'teacher'`, `origin.kind: 'teacher'` | über `addWord`/`saveCardOp` (Ursprungssatz Pflicht, Kap. 15) |
+| `app/repair` | Korrektur übernehmen: Reparatur-Satz mit `src: 'teacher'` | `domain/repair/sources.ts::repairsFromTeacher` → `saveRepairs` |
+
+„Jetzt üben" startet die vorhandene Übung „Mach mir eine Übung dazu" (`claude-drill@1`,
+`src/features/companion/drill.ts`) mit dem Feedback als Kontext – keine neue Übungs-Engine.
+Ohne Claude (`not_granted`): Hinweis und ein reiner Zeilen-Rückfall (`src/domain/teacher/fallback.ts`,
+Muster „Wort – Bedeutung"), ohne Speicherweg (kein Ursprungssatz, Kap. 15).
 ## Phase 4: Lesen, Hören, Schreiben, Entdecken
 
 Alle Formate bleiben Altformat; neue Felder sind nur zusätzlich und tolerant gelesen (`nullish`). Geschrieben wird nur auf eine Handlung hin, über den einen Writer; alles in `app/profile`, `log/<tag>` und `app/radar` nur über die gemeinsame Sammel-Warteschlange (`features/progress/persist.ts`: `recordUnitEnd`, `recordChannelEntries`, `recordRadar`, `recordProfileFields`). `feed/*` und `daily/*` werden nie geschrieben.
@@ -138,3 +159,22 @@ Alle Formate bleiben Altformat; neue Felder sind nur zusätzlich und tolerant ge
 | `lesson/l25…` | Kurs-Erweiterung (Kap. 6.2): `plan {pv: 'course-extend@1', unit {id: 'u7', n, en, de, goal_en, goal_de, kind}, en, de, cando_en, cando_de, situation, grammar, level, words[[en, de]]}`, `lx {pv, lang, ext: true}`, zunächst ohne Inhalt; „Lektion vorbereiten“ ergänzt nur leere Felder (ohne `lx.regen`) | `saveExtension` → `writer.createIfMissing` je Lektion (nie überschrieben), Kennungen nach frischem Lesen aller `lesson/*` |
 | `app/profile.haptic` | Vibration beim Prüfen (Kap. 4.3), Standard an; nur `false` schaltet ab | `changeHaptic` über `app/actions` (optimistisch) |
 | `scene/sc-price`, `scene/sc-pitch` | feste Szenen als Inhalt (`content/speak/scenes.json`); das Dokument entsteht wie bei den alten Szenen erst mit dem ersten Lauf | `saveRun` → `sceneRunOp` |
+
+## Ergänzungen Neubau (docs/neubau/plan.md §4.10, additiv, nichts gelöscht)
+
+Deklariert in WP0a (`src/data/{paths,schemas}.ts`, tolerant/`looseObject`); geschrieben wird nur über `writer.transform`, feldweise. Beide `app/*`-Dokumente sind **keine** Live-Abos: Sie werden nur in ihrem Bereich per `useDocWatch` gelesen. Sicherung und Export enthalten sie automatisch (`APP_DOC_PATHS`, `COLLECTION_NAMES`).
+
+| Pfad | Neu | Grenze | Schreibweg |
+|---|---|---|---|
+| `app/decks` | `{v: 1, decks: {<id>: {name, order, created, mode?: 'type'\|'flip', dir?: 'de-en'\|'en-de'\|'mix', size?, hidden?, filter {kinds?, src?, stage {min?, max?}?, due?, hard?, query?, ids? (≤ 500)}}}, builtin?: {<id>: {mode?, dir?, size?}}, prefs?: {dir?: 'de-en'\|'en-de'\|'mix', grades?: 4\|2, mode?: 'auto'\|'type'\|'flip'}, flagged?: string[] (≤ 200)}` – eigene Stapel als gespeicherte Filter; Karten bekommen **kein** neues Feld, die Zugehörigkeit ergibt `matchDeck(card, filter)`. Löschen eines Stapels = `hidden: true` (zählt in die 40). Grenzen werden vor jedem Schreiben geprüft (`domain/srs/decks.ts`), verletzt → Hinweis statt Schreiben | ≤ 40 Stapel, ≤ 500 IDs je Stapel, ≤ 2.000 IDs gesamt, `flagged` ≤ 200, `jsonBytes` ≤ 64 KiB | P3 → `writer.transform` |
+| `app/week` | `{v: 1, cur?: {wk: 'JJJJ-Www', theme: 't01'…'t16', by: 'auto'\|'user', at}, hist?: [{wk, theme, by}], targets?: {wk, traps: string[], tool: string}, hint?: {wk, theme, src: 'meeting'}}` – Wochenthema und Wochenziele; `hint` = Terminthema mit Vorrang beim Vorschlag (N17). Frühere Felder `preplyNext` und `targets.preply` sowie `hint.src:'preply'` (bis 28.09.2026) werden, falls noch vorhanden, tolerant gelesen und nicht mehr ausgewertet oder geschrieben | ≤ 26 Wochen in `hist`, < 8 KiB | P1 → `writer.transform` |
+| `out/<JJJJ-MM>` | `{v: 1, items: [{id, k, d, theme?, ok?, text?, fb?, ms?}]}` – Ergebnisse der neuen Übungen (Kollokationen, Einwände, Posteingang, Nachsprechen …) als Monatsdokument (A6.6) | ≤ 400 Einträge, `text`/`fb` je ≤ 2 KB | P7 → `writer.transform`, idempotent über `item.id`; Antworten zusätzlich ins Tagesprotokoll über `recordChannelEntries` |
+
+## Ergänzungen Paket B (docs/backlog.md §1, additiv, nichts gelöscht)
+
+| Pfad | Neu | Grenze | Schreibweg |
+|---|---|---|---|
+| `app/memory` | `{v: 1, items: [{id, text, src: 'chat:<t>'\|'meeting:<id>', t, lang?: 'de'\|'en'}]}` – „Claude merkt sich“ (B5): Fakten aus Gesprächen, in den Einstellungen sichtbar und einzeln löschbar (Löschen entfernt nur den einen Eintrag, nie das Dokument); eine erneute Aufnahme derselben Quelle ersetzt deren Fakten. **Live-Abo** (`LIVE_DOCS`), weil die Vorlagen die Fakten synchron im Klick lesen | ≤ 5 je Quelle, ≤ 40 gesamt (älteste fallen heraus), ≤ 160 Zeichen je Fakt, < 16 KiB | `features/companion/memory.ts` → `writer.transform`; unerwarteter Aufbau → nichts geschrieben |
+| `app/compare` | `{v: 1, items: [{month: 'JJJJ-MM', day, t, task: 'ct1'…, speak {text, sec, m {words, traps, per100, wpm, phrases[]}}, write {text, m}, base?: 'JJJJ-MM', verdict? {summary, better[] ≤ 3, next, level, lang, pv}}]}` – monatliche Vergleichsaufgabe (B1); derselbe Monat wird ersetzt. Kein Live-Abo (`useDocWatch` auf Heute nur in der letzten Monatswoche, im Stand und in der Übung) | ≤ 12 Läufe, Texte ≤ 1.500 Zeichen, Urteil ≤ 1.200 Zeichen, < 120 KiB | `features/progress/compare/store.ts` → `writer.transform`; unerwarteter Aufbau → nichts geschrieben |
+
+**Lokal** (`platform/storage`, nur Bequemlichkeit): `lx:plan:<tag>` (P1), `lx:resume` und `lx:resume:<id>` (Hülle `{v, id, day, savedAt, tabId, route, data}`, ≤ 50 KB; `src/app/resume.ts`).

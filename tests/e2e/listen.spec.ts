@@ -17,7 +17,7 @@ test('Hören: abspielen, Fragen, Beleg anhören, Transkript mit Mitsprechen, Sch
   await expect(page.getByTestId('listen-prep').getByTestId('chunk-row')).toHaveCount(5);
   await page.getByTestId('listen-start').click();
   await expect(unit).toHaveAttribute('data-state', 'listening');
-  await expect(page.getByTestId('audio-bar')).toBeVisible();
+  await expect(page.getByTestId('tempo-player')).toBeVisible();
   // Kein Text vor den Fragen im DOM (F14).
   await expect(page.getByTestId('transcript')).toHaveCount(0);
   await expect(page.getByTestId('listen-text')).toHaveCount(0);
@@ -25,12 +25,12 @@ test('Hören: abspielen, Fragen, Beleg anhören, Transkript mit Mitsprechen, Sch
   await expect(page.getByTestId('to-questions')).toBeDisabled();
   expect(await layoutProblems(page)).toEqual([]);
 
-  await page.getByTestId('audio-play').click();
-  await expect(page.getByTestId('audio-stop')).toBeVisible();
-  await expect.poll(async () => Number(await page.getByTestId('audio-progress').getAttribute('data-i'))).toBeGreaterThan(1);
-  const n = Number(await page.getByTestId('audio-progress').getAttribute('data-n'));
+  await page.getByTestId('tempo-play').click();
+  await expect(page.getByTestId('tempo-stop')).toBeVisible();
+  await expect.poll(async () => Number(await page.getByTestId('tempo-pos').getAttribute('data-i'))).toBeGreaterThan(1);
+  const n = Number(await page.getByTestId('tempo-pos').getAttribute('data-n'));
   expect(n).toBeGreaterThan(3);
-  await expect(page.getByTestId('audio-play')).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByTestId('tempo-play')).toBeVisible({ timeout: 20_000 });
   await expect(page.getByTestId('to-questions')).toBeEnabled();
   await page.getByTestId('to-questions').click();
 
@@ -75,7 +75,7 @@ test('Hören ohne Stimme: Hinweis, Text als Lesetext, trotzdem abschließbar (he
   await page.getByTestId('listen-start').click();
   await expect(page.getByTestId('audio-off')).toBeVisible();
   await expect(page.getByTestId('listen-text')).toBeVisible();
-  await expect(page.getByTestId('audio-bar')).toHaveCount(0);
+  await expect(page.getByTestId('tempo-player')).toHaveCount(0);
   await page.getByTestId('to-questions').click();
   await answerAll(page, 4);
   await expect(page.getByTestId('transcript')).toBeVisible();

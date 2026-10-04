@@ -1,6 +1,7 @@
 import { buildChatInput } from '../domain/companion/turns';
 import { maskText, redact, type Seeing } from '../domain/companion/seeing';
 import { block, clip, header, langName } from './common';
+import { memoryLine } from './work';
 import type { ChatTemplate, TurnInput, UiLang } from './types';
 
 // companion-chat@1: der Claude-Begleiter (Phase 5 §6.1, Kap. 6.12). Freitext in schlichtem
@@ -22,12 +23,15 @@ export type CompanionVars = {
   history: TurnInput;
   /** Die neue Nachricht, ≤ 2.000 Zeichen. */
   message: string;
+  /** „Claude merkt sich“ (B5): Fakten aus früheren Gesprächen (`app/memory`), neueste zuerst. */
+  memory?: readonly string[];
 };
 
 export const MESSAGE_MAX = 2_000;
 export const LEARNER_MAX = 2_500;
 const ID = 'companion-chat';
-const VERSION = 2;
+// v3 (B5): Zeile „What you already know about the learner …“ aus prompts/work.ts.
+const VERSION = 3;
 
 /** Schutzregel, solange die Übung nicht geprüft ist (E5-05). Wörtlich getestet. */
 export const NO_SOLUTION_RULE =
@@ -49,6 +53,8 @@ export function buildLead(vars: CompanionVars): string {
   ];
   if (seeing?.phase === 'question') lines.push(`- ${NO_SOLUTION_RULE}`);
   lines.push('', 'Learner profile:', block(vars.learner, LEARNER_MAX) || '(no data)');
+  const memory = memoryLine(vars.memory);
+  if (memory) lines.push('', memory);
   if (seeing) {
     lines.push('', `Currently on screen: ${clip(seeing.label, 60)}`);
     if (seeing.detail) lines.push(block(seeing.detail, 1_500));

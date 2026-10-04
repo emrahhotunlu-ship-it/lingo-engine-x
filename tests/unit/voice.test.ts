@@ -46,6 +46,22 @@ describe('Stimmen', () => {
     expect(list[0]).toEqual({ name: 'Alex', lang: 'en-US', local: false, us: true });
   });
 
+  it('listVoices: iOS-Spaß-Stimmen (Zarvox, Bad News, Fred, Kathy, Monster, …) tauchen nicht auf (Befund 29.09.)', () => {
+    const zarvox: SpeechVoiceLike = { name: 'Zarvox', lang: 'en-US', localService: true, default: false, voiceURI: 'z' };
+    const badNews: SpeechVoiceLike = { name: 'Bad News', lang: 'en-US', localService: true, default: false, voiceURI: 'bn' };
+    const fred: SpeechVoiceLike = { name: 'Fred', lang: 'en-US', localService: true, default: false, voiceURI: 'fred' };
+    const kathy: SpeechVoiceLike = { name: 'Kathy', lang: 'en-US', localService: true, default: false, voiceURI: 'kathy' };
+    const monster: SpeechVoiceLike = { name: 'Monster', lang: 'en-US', localService: true, default: false, voiceURI: 'monster' };
+    const list = listVoices([...FAKE_VOICES, zarvox, badNews, fred, kathy, monster]);
+    expect(list.map((v) => v.name)).toEqual(['Samantha', 'Daniel']);
+  });
+
+  it('listVoices: Spaß-Stimme mit übersetztem Namen (Gerät auf Deutsch, Befund 30.09.) fällt über die unübersetzte voiceURI auf', () => {
+    const schlechteNeuigkeiten: SpeechVoiceLike = { name: 'Schlechte Neuigkeiten', lang: 'en-US', localService: true, default: false, voiceURI: 'com.apple.voice.compact.de-DE.Bad-News' };
+    const list = listVoices([...FAKE_VOICES, schlechteNeuigkeiten]);
+    expect(list.map((v) => v.name)).toEqual(['Samantha', 'Daniel']);
+  });
+
   it('useSpeech.voices wird befüllt; Probehören spricht mit genau dieser Stimme, ohne die Wahl zu ändern', async () => {
     const fake = installFakeSpeech(win.window as object);
     initSpeech({ voice: 'Samantha' });

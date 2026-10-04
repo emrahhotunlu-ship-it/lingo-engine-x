@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createWriter, type Writer } from '../../src/data/writer';
 import { createMemoryDb, type MemoryDbHandle } from '../../src/platform/dev/memoryDb';
 import type { AnswerEvent } from '../../src/domain/srs/types';
+import { unitDonePatch } from '../../src/domain/unit/plan';
 import { answer } from './learnHelpers';
 
 // Die EINE Sammel-Warteschlange gegen die Speicher-Datenbank. `getWriter` zeigt auf einen
@@ -171,5 +172,14 @@ describe('Phase 4 in derselben Warteschlange', () => {
     expect(h.writes().length).toBe(writes);
     holder.writer = null;
     expect(await persist.recordProfileFields('discover:step', compute)).toBe(false);
+  });
+
+  it('Feld-Patches verschiedener Tage im selben Stapel: act tief zusammengeführt, keiner geht verloren', async () => {
+    const prev = '2026-09-27';
+    // Beide landen im selben Stapel (sendFields läuft erst nach den übrigen Schreibvorgängen).
+    const p1 = persist.recordProfileFields('unit:done', (cur) => unitDonePatch(cur, prev, 'u-task'));
+    const p2 = persist.recordProfileFields('unit:done', (cur) => unitDonePatch(cur, day, 'u-in'));
+    expect(await Promise.all([p1, p2])).toEqual([true, true]);
+    expect(profile().act).toEqual({ [prev]: { 'u-task': 1 }, [day]: { 'u-in': 1 } });
   });
 });

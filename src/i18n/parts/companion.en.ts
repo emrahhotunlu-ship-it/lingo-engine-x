@@ -12,7 +12,6 @@ export const companionEn: Record<CompanionMessageKey, string> = {
   cmpSeeing: 'currently seeing: {label}',
   cmpSeeToday: 'Today',
   cmpSeeOverview: 'Your progress',
-  cmpSeePreply: 'Preply',
   cmpSeeTrainer: 'Exercise',
   cmpAbout: 'About: {word}',
   cmpAttachRemove: 'Remove reference',
@@ -45,7 +44,6 @@ export const companionEn: Record<CompanionMessageKey, string> = {
   cmpTierDeep: 'Thorough',
   cmpActPractice: 'Keep practicing',
   cmpActBack: 'Back to the exercise',
-  cmpActPreply: 'As a Preply lesson',
   cmpPausedUntil: 'available again at {time}',
   cmpCopy: 'Copy',
   cmpCopied: 'Copied ✓',
@@ -179,5 +177,4 @@ export const companionEn: Record<CompanionMessageKey, string> = {
 
   diagChat: 'Chat history',
   diagChatValue: '{n} messages · {kb} KB',
-  diagPreply: 'Preply documents',
 };

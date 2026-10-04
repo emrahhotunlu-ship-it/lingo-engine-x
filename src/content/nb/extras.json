@@ -1,0 +1,2640 @@
+{
+ "wordFormation": [
+  {
+   "id": "w01",
+   "base": "comply",
+   "family": [
+    "compliance",
+    "compliant",
+    "non-compliant"
+   ],
+   "gap": "Our archive helps you stay ___ with GoBD.",
+   "answers": [
+    "compliant"
+   ],
+   "pos": "adjective",
+   "why": {
+    "de": "Nach „stay“ steht ein Adjektiv: compliant (-ant).",
+    "en": "After \"stay\", use an adjective: compliant (-ant)."
+   }
+  },
+  {
+   "id": "w02",
+   "base": "comply",
+   "family": [
+    "compliance",
+    "compliant",
+    "non-compliant"
+   ],
+   "gap": "Full ___ with the new rules is mandatory from 2027.",
+   "answers": [
+    "compliance"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach „full“ und vor „with“ steht ein Nomen: compliance (-ance).",
+    "en": "After \"full\" and before \"with\", use a noun: compliance (-ance)."
+   }
+  },
+  {
+   "id": "w03",
+   "base": "analyze",
+   "family": [
+    "analysis",
+    "analyst",
+    "analytical",
+    "analytics"
+   ],
+   "gap": "A quick ___ of your invoices shows that they wait nine days on average.",
+   "answers": [
+    "analysis"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach „our“ steht ein Nomen für das Ergebnis: analysis.",
+    "en": "After \"our\", use a noun for the result: analysis."
+   }
+  },
+  {
+   "id": "w04",
+   "base": "analyze",
+   "family": [
+    "analysis",
+    "analyst",
+    "analytical",
+    "analytics"
+   ],
+   "gap": "She has a very ___ approach to sales.",
+   "answers": [
+    "analytical",
+    "analytic"
+   ],
+   "pos": "adjective",
+   "why": {
+    "de": "Vor „approach“ steht ein Adjektiv: analytical (-ical).",
+    "en": "Before \"approach\", use an adjective: analytical (-ical)."
+   }
+  },
+  {
+   "id": "w05",
+   "base": "rely",
+   "family": [
+    "reliable",
+    "reliability",
+    "unreliable",
+    "reliance"
+   ],
+   "gap": "Customers choose us because of the ___ of our service.",
+   "answers": [
+    "reliability"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach „the“ und vor „of“ steht ein Nomen: reliability (-ity).",
+    "en": "After \"the\" and before \"of\", use a noun: reliability (-ity)."
+   }
+  },
+  {
+   "id": "w06",
+   "base": "rely",
+   "family": [
+    "reliable",
+    "reliability",
+    "unreliable",
+    "reliance"
+   ],
+   "gap": "Their old system was slow and ___.",
+   "answers": [
+    "unreliable"
+   ],
+   "pos": "adjective",
+   "why": {
+    "de": "Negatives Adjektiv mit un-: unreliable.",
+    "en": "A negative adjective with un-: unreliable."
+   }
+  },
+  {
+   "id": "w07",
+   "base": "efficient",
+   "family": [
+    "efficiency",
+    "efficiently",
+    "inefficient"
+   ],
+   "gap": "Automation improves the ___ of your accounting team.",
+   "answers": [
+    "efficiency"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach „the“ steht ein Nomen: efficiency (-ency).",
+    "en": "After \"the\", use a noun: efficiency (-ency)."
+   }
+  },
+  {
+   "id": "w08",
+   "base": "efficient",
+   "family": [
+    "efficiency",
+    "efficiently",
+    "inefficient"
+   ],
+   "gap": "The new workflow lets the team work more ___.",
+   "answers": [
+    "efficiently"
+   ],
+   "pos": "adverb",
+   "why": {
+    "de": "Das Adverb beschreibt „work“: efficiently (-ly).",
+    "en": "The adverb describes \"work\": efficiently (-ly)."
+   }
+  },
+  {
+   "id": "w09",
+   "base": "decide",
+   "family": [
+    "decision",
+    "decisive",
+    "undecided",
+    "decision-maker"
+   ],
+   "gap": "We are still waiting for a ___ from the board.",
+   "answers": [
+    "decision"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach „a“ steht ein Nomen: decision (-sion).",
+    "en": "After \"a\", use a noun: decision (-sion)."
+   }
+  },
+  {
+   "id": "w10",
+   "base": "decide",
+   "family": [
+    "decision",
+    "decisive",
+    "undecided",
+    "decision-maker"
+   ],
+   "gap": "The CFO is still ___ about the offer.",
+   "answers": [
+    "undecided"
+   ],
+   "pos": "adjective",
+   "why": {
+    "de": "Adjektiv mit un- für „noch nicht entschieden“: undecided.",
+    "en": "An adjective with un- for \"not decided yet\": undecided."
+   }
+  },
+  {
+   "id": "w11",
+   "base": "implement",
+   "family": [
+    "implementation",
+    "implemented"
+   ],
+   "gap": "The ___ will take about six weeks.",
+   "answers": [
+    "implementation"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach „the“ steht ein Nomen: implementation (-ation).",
+    "en": "After \"the\", use a noun: implementation (-ation)."
+   }
+  },
+  {
+   "id": "w12",
+   "base": "secure",
+   "family": [
+    "security",
+    "securely",
+    "insecure"
+   ],
+   "gap": "All documents are stored ___ in EU data centers.",
+   "answers": [
+    "securely"
+   ],
+   "pos": "adverb",
+   "why": {
+    "de": "Das Adverb beschreibt „stored“: securely.",
+    "en": "The adverb describes \"stored\": securely."
+   }
+  },
+  {
+   "id": "w13",
+   "base": "available",
+   "family": [
+    "availability",
+    "unavailable"
+   ],
+   "gap": "We guarantee 99.9 percent ___.",
+   "answers": [
+    "availability"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach der Zahl steht ein Nomen: availability (-ity).",
+    "en": "After the number, use a noun: availability (-ity)."
+   }
+  },
+  {
+   "id": "w14",
+   "base": "responsible",
+   "family": [
+    "responsibility",
+    "responsibly",
+    "irresponsible"
+   ],
+   "gap": "Who has ___ for the migration?",
+   "answers": [
+    "responsibility"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach „has“ steht ein Nomen: responsibility.",
+    "en": "After \"has\", use a noun: responsibility."
+   }
+  },
+  {
+   "id": "w15",
+   "base": "profit",
+   "family": [
+    "profitable",
+    "profitability",
+    "unprofitable"
+   ],
+   "gap": "The pilot showed that the project is ___.",
+   "answers": [
+    "profitable"
+   ],
+   "pos": "adjective",
+   "why": {
+    "de": "Nach „is“ steht ein Adjektiv: profitable (-able).",
+    "en": "After \"is\", use an adjective: profitable (-able)."
+   }
+  },
+  {
+   "id": "w16",
+   "base": "require",
+   "family": [
+    "requirement",
+    "required"
+   ],
+   "gap": "Please send us your technical ___ by Friday.",
+   "answers": [
+    "requirements"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Nach „your technical“ steht ein Nomen, hier im Plural: requirements.",
+    "en": "After \"your technical\", use a noun, here in the plural: requirements."
+   }
+  },
+  {
+   "id": "w17",
+   "base": "negotiate",
+   "family": [
+    "negotiation",
+    "negotiable",
+    "negotiator"
+   ],
+   "gap": "Is the price ___?",
+   "answers": [
+    "negotiable"
+   ],
+   "pos": "adjective",
+   "why": {
+    "de": "Nach „is“ ein Adjektiv mit -able: negotiable.",
+    "en": "After \"is\", an adjective with -able: negotiable."
+   }
+  },
+  {
+   "id": "w18",
+   "base": "compete",
+   "family": [
+    "competition",
+    "competitor",
+    "competitive"
+   ],
+   "gap": "We offer very ___ prices for partners.",
+   "answers": [
+    "competitive"
+   ],
+   "pos": "adjective",
+   "why": {
+    "de": "Vor „prices“ steht ein Adjektiv: competitive (-ive).",
+    "en": "Before \"prices\", use an adjective: competitive (-ive)."
+   }
+  },
+  {
+   "id": "w19",
+   "base": "compete",
+   "family": [
+    "competition",
+    "competitor",
+    "competitive"
+   ],
+   "gap": "Most of our ___ are based in Germany.",
+   "answers": [
+    "competitors"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Eine Firma oder Person ist ein competitor (-or).",
+    "en": "A company or person is a competitor (-or)."
+   }
+  },
+  {
+   "id": "w20",
+   "base": "satisfy",
+   "family": [
+    "satisfaction",
+    "satisfied",
+    "dissatisfied",
+    "satisfactory"
+   ],
+   "gap": "Customer ___ has increased since the launch.",
+   "answers": [
+    "satisfaction"
+   ],
+   "pos": "noun",
+   "why": {
+    "de": "Vor „has“ steht ein Nomen: satisfaction (-tion).",
+    "en": "Before \"has\", use a noun: satisfaction (-tion)."
+   }
+  }
+ ],
+ "register": [
+  {
+   "id": "r01",
+   "levels": {
+    "casual": "get",
+    "neutral": "receive",
+    "formal": "obtain"
+   },
+   "de": "bekommen",
+   "sentence": "I got the documents yesterday.",
+   "from": "casual",
+   "to": "neutral",
+   "answers": [
+    "I received the documents yesterday."
+   ]
+  },
+  {
+   "id": "r02",
+   "levels": {
+    "casual": "big",
+    "neutral": "significant",
+    "formal": "substantial"
+   },
+   "de": "groß, erheblich",
+   "sentence": "That's a big improvement.",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "That is a substantial improvement.",
+    "That's a substantial improvement."
+   ]
+  },
+  {
+   "id": "r03",
+   "levels": {
+    "casual": "help",
+    "neutral": "support",
+    "formal": "assist"
+   },
+   "de": "helfen",
+   "sentence": "Can you help me with the setup?",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "Could you assist me with the setup?",
+    "Can you assist me with the setup?"
+   ]
+  },
+  {
+   "id": "r04",
+   "levels": {
+    "casual": "ask for",
+    "neutral": "request",
+    "formal": "solicit"
+   },
+   "de": "anfragen",
+   "sentence": "We asked for a quote last week.",
+   "from": "casual",
+   "to": "neutral",
+   "answers": [
+    "We requested a quote last week."
+   ]
+  },
+  {
+   "id": "r05",
+   "levels": {
+    "casual": "tell",
+    "neutral": "inform",
+    "formal": "notify"
+   },
+   "de": "mitteilen",
+   "sentence": "Please tell us if anything changes.",
+   "from": "casual",
+   "to": "neutral",
+   "answers": [
+    "Please inform us if anything changes.",
+    "Please notify us if anything changes."
+   ]
+  },
+  {
+   "id": "r06",
+   "levels": {
+    "casual": "need",
+    "neutral": "require",
+    "formal": "necessitate"
+   },
+   "de": "brauchen",
+   "sentence": "The system needs a stable connection.",
+   "from": "casual",
+   "to": "neutral",
+   "answers": [
+    "The system requires a stable connection."
+   ]
+  },
+  {
+   "id": "r07",
+   "levels": {
+    "casual": "start",
+    "neutral": "begin",
+    "formal": "commence"
+   },
+   "de": "beginnen",
+   "sentence": "The project starts in May.",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "The project commences in May.",
+    "The project will commence in May."
+   ]
+  },
+  {
+   "id": "r08",
+   "levels": {
+    "casual": "wrap up",
+    "neutral": "finish",
+    "formal": "conclude"
+   },
+   "de": "abschließen",
+   "sentence": "Let's wrap up the meeting here.",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "Let's conclude the meeting here.",
+    "Let us conclude the meeting here."
+   ]
+  },
+  {
+   "id": "r09",
+   "levels": {
+    "casual": "buy",
+    "neutral": "purchase",
+    "formal": "acquire"
+   },
+   "de": "kaufen",
+   "sentence": "We want to buy 50 licenses.",
+   "from": "casual",
+   "to": "neutral",
+   "answers": [
+    "We would like to purchase 50 licenses.",
+    "We want to purchase 50 licenses."
+   ]
+  },
+  {
+   "id": "r10",
+   "levels": {
+    "casual": "check",
+    "neutral": "review",
+    "formal": "verify"
+   },
+   "de": "prüfen",
+   "sentence": "Could you check the numbers?",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "Could you verify the numbers?"
+   ]
+  },
+  {
+   "id": "r11",
+   "levels": {
+    "casual": "enough",
+    "neutral": "adequate",
+    "formal": "sufficient"
+   },
+   "de": "ausreichend",
+   "sentence": "Is the budget enough?",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "Is the budget sufficient?"
+   ]
+  },
+  {
+   "id": "r12",
+   "levels": {
+    "casual": "fix",
+    "neutral": "solve",
+    "formal": "resolve"
+   },
+   "de": "beheben",
+   "sentence": "We'll fix the issue by Friday.",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "We will resolve the issue by Friday.",
+    "We'll resolve the issue by Friday."
+   ]
+  },
+  {
+   "id": "r13",
+   "levels": {
+    "casual": "show",
+    "neutral": "present",
+    "formal": "demonstrate"
+   },
+   "de": "zeigen",
+   "sentence": "Let me show you how it works.",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "Let me demonstrate how it works.",
+    "Allow me to demonstrate how it works."
+   ]
+  },
+  {
+   "id": "r14",
+   "levels": {
+    "casual": "about",
+    "neutral": "around",
+    "formal": "approximately"
+   },
+   "de": "ungefähr",
+   "sentence": "It costs about 5,000 euros.",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "It costs approximately 5,000 euros."
+   ]
+  },
+  {
+   "id": "r15",
+   "levels": {
+    "casual": "go down",
+    "neutral": "fall",
+    "formal": "decline"
+   },
+   "de": "sinken",
+   "sentence": "Sales went down last year.",
+   "from": "casual",
+   "to": "formal",
+   "answers": [
+    "Sales declined last year."
+   ]
+  },
+  {
+   "id": "r16",
+   "levels": {
+    "casual": "sorry",
+    "neutral": "we apologize",
+    "formal": "we regret"
+   },
+   "de": "Entschuldigung",
+   "sentence": "Sorry for the delay.",
+   "from": "casual",
+   "to": "neutral",
+   "answers": [
+    "We apologize for the delay.",
+    "I apologize for the delay."
+   ]
+  },
+  {
+   "id": "r17",
+   "levels": {
+    "casual": "soon",
+    "neutral": "shortly",
+    "formal": "in due course"
+   },
+   "de": "bald",
+   "sentence": "I'll get back to you soon.",
+   "from": "casual",
+   "to": "neutral",
+   "answers": [
+    "I will get back to you shortly.",
+    "I'll get back to you shortly."
+   ]
+  },
+  {
+   "id": "r18",
+   "levels": {
+    "casual": "start",
+    "neutral": "begin",
+    "formal": "commence"
+   },
+   "de": "beginnen",
+   "sentence": "The workshop will commence at 9 a.m.",
+   "from": "formal",
+   "to": "neutral",
+   "answers": [
+    "The workshop will begin at 9 a.m.",
+    "The workshop will start at 9 a.m."
+   ]
+  },
+  {
+   "id": "r19",
+   "levels": {
+    "casual": "here are",
+    "neutral": "I've attached",
+    "formal": "please find attached"
+   },
+   "de": "anbei",
+   "sentence": "Please find attached the requested documents.",
+   "from": "formal",
+   "to": "neutral",
+   "answers": [
+    "I've attached the documents you asked for.",
+    "I have attached the documents you asked for.",
+    "I've attached the documents you requested."
+   ]
+  },
+  {
+   "id": "r20",
+   "levels": {
+    "casual": "let us know you got it",
+    "neutral": "confirm you received it",
+    "formal": "confirm receipt"
+   },
+   "de": "den Empfang bestätigen",
+   "sentence": "We would be grateful if you could confirm receipt.",
+   "from": "formal",
+   "to": "neutral",
+   "answers": [
+    "Could you confirm that you received it?",
+    "Could you let us know that you received it?",
+    "Could you confirm you received it?"
+   ]
+  }
+ ],
+ "phrasalVerbs": [
+  {
+   "id": "p01",
+   "formal": "postpone",
+   "phrasal": "push back",
+   "de": "verschieben",
+   "mail": [
+    "We need to postpone the launch by two weeks."
+   ],
+   "call": [
+    "We need to push back the launch by two weeks.",
+    "We need to push the launch back by two weeks."
+   ]
+  },
+  {
+   "id": "p02",
+   "formal": "investigate",
+   "phrasal": "look into",
+   "de": "untersuchen, prüfen",
+   "mail": [
+    "We are investigating the issue."
+   ],
+   "call": [
+    "We're looking into the issue.",
+    "We are looking into the issue."
+   ]
+  },
+  {
+   "id": "p03",
+   "formal": "reject",
+   "phrasal": "turn down",
+   "de": "ablehnen",
+   "mail": [
+    "The client rejected our proposal."
+   ],
+   "call": [
+    "The client turned down our proposal.",
+    "The client turned our proposal down."
+   ]
+  },
+  {
+   "id": "p04",
+   "formal": "finalize",
+   "phrasal": "wrap up",
+   "de": "abschließen",
+   "mail": [
+    "We will finalize the negotiations on Friday."
+   ],
+   "call": [
+    "We'll wrap up the negotiations on Friday.",
+    "We will wrap up the negotiations on Friday."
+   ]
+  },
+  {
+   "id": "p05",
+   "formal": "contact",
+   "phrasal": "reach out to",
+   "de": "kontaktieren",
+   "mail": [
+    "I will contact the IT team."
+   ],
+   "call": [
+    "I'll reach out to the IT team.",
+    "I will reach out to the IT team."
+   ]
+  },
+  {
+   "id": "p06",
+   "formal": "cancel",
+   "phrasal": "call off",
+   "de": "absagen",
+   "mail": [
+    "They canceled the meeting."
+   ],
+   "call": [
+    "They called off the meeting.",
+    "They called the meeting off."
+   ]
+  },
+  {
+   "id": "p07",
+   "formal": "continue",
+   "phrasal": "go on",
+   "de": "weitermachen",
+   "mail": [
+    "Please continue with the presentation."
+   ],
+   "call": [
+    "Please go on with the presentation.",
+    "Please carry on with the presentation."
+   ]
+  },
+  {
+   "id": "p08",
+   "formal": "discover",
+   "phrasal": "find out",
+   "de": "herausfinden",
+   "mail": [
+    "We discovered that the data was incomplete."
+   ],
+   "call": [
+    "We found out that the data was incomplete."
+   ]
+  },
+  {
+   "id": "p09",
+   "formal": "reduce",
+   "phrasal": "cut back on",
+   "de": "reduzieren",
+   "mail": [
+    "We need to reduce our travel costs."
+   ],
+   "call": [
+    "We need to cut back on our travel costs.",
+    "We need to cut down on our travel costs."
+   ]
+  },
+  {
+   "id": "p10",
+   "formal": "arrange",
+   "phrasal": "set up",
+   "de": "organisieren, einrichten",
+   "mail": [
+    "I will arrange a call with our CEO."
+   ],
+   "call": [
+    "I'll set up a call with our CEO.",
+    "I will set up a call with our CEO."
+   ]
+  },
+  {
+   "id": "p11",
+   "formal": "review",
+   "phrasal": "go over",
+   "de": "durchgehen",
+   "mail": [
+    "We will review the numbers."
+   ],
+   "call": [
+    "Let's go over the numbers.",
+    "Let's go through the numbers."
+   ]
+  },
+  {
+   "id": "p12",
+   "formal": "tolerate",
+   "phrasal": "put up with",
+   "de": "hinnehmen",
+   "mail": [
+    "We cannot tolerate further delays."
+   ],
+   "call": [
+    "We can't put up with any more delays.",
+    "We cannot put up with any more delays."
+   ]
+  },
+  {
+   "id": "p13",
+   "formal": "submit",
+   "phrasal": "send in",
+   "de": "einreichen",
+   "mail": [
+    "Please submit the form by Monday."
+   ],
+   "call": [
+    "Please send in the form by Monday.",
+    "Please send the form in by Monday.",
+    "Please hand in the form by Monday."
+   ]
+  },
+  {
+   "id": "p14",
+   "formal": "increase",
+   "phrasal": "go up",
+   "de": "steigen",
+   "mail": [
+    "Prices will increase next year."
+   ],
+   "call": [
+    "Prices will go up next year."
+   ]
+  },
+  {
+   "id": "p15",
+   "formal": "decrease",
+   "phrasal": "go down",
+   "de": "sinken",
+   "mail": [
+    "The number of errors decreased."
+   ],
+   "call": [
+    "The number of errors went down."
+   ]
+  },
+  {
+   "id": "p16",
+   "formal": "resolve",
+   "phrasal": "sort out",
+   "de": "klären, lösen",
+   "mail": [
+    "We will resolve the problem today."
+   ],
+   "call": [
+    "We'll sort out the problem today.",
+    "We'll sort the problem out today.",
+    "We will sort out the problem today."
+   ]
+  },
+  {
+   "id": "p17",
+   "formal": "recover",
+   "phrasal": "bounce back",
+   "de": "sich erholen",
+   "mail": [
+    "Sales recovered in the second quarter."
+   ],
+   "call": [
+    "Sales bounced back in the second quarter."
+   ]
+  },
+  {
+   "id": "p18",
+   "formal": "complete",
+   "phrasal": "fill out",
+   "de": "ausfüllen",
+   "mail": [
+    "Please complete the attached form."
+   ],
+   "call": [
+    "Please fill out the attached form.",
+    "Please fill in the attached form."
+   ]
+  },
+  {
+   "id": "p19",
+   "formal": "explain in detail",
+   "phrasal": "spell out",
+   "de": "genau erklären",
+   "mail": [
+    "Could you explain the conditions in detail?"
+   ],
+   "call": [
+    "Could you spell out the conditions?"
+   ]
+  },
+  {
+   "id": "p20",
+   "formal": "consider",
+   "phrasal": "think over",
+   "de": "überdenken",
+   "mail": [
+    "We will consider your offer."
+   ],
+   "call": [
+    "We'll think over your offer.",
+    "We'll think your offer over.",
+    "We will think over your offer."
+   ]
+  },
+  {
+   "id": "p21",
+   "formal": "visit",
+   "phrasal": "drop by",
+   "de": "vorbeikommen",
+   "mail": [
+    "I will visit your office on Tuesday."
+   ],
+   "call": [
+    "I'll drop by your office on Tuesday.",
+    "I will drop by your office on Tuesday."
+   ]
+  },
+  {
+   "id": "p22",
+   "formal": "remove",
+   "phrasal": "take out",
+   "de": "herausnehmen",
+   "mail": [
+    "Please remove the old clause."
+   ],
+   "call": [
+    "Please take out the old clause.",
+    "Please take the old clause out."
+   ]
+  },
+  {
+   "id": "p23",
+   "formal": "withdraw from",
+   "phrasal": "back out of",
+   "de": "aussteigen, zurückziehen",
+   "mail": [
+    "The partner withdrew from the deal."
+   ],
+   "call": [
+    "The partner backed out of the deal."
+   ]
+  },
+  {
+   "id": "p24",
+   "formal": "raise",
+   "phrasal": "bring up",
+   "de": "ansprechen",
+   "mail": [
+    "She raised the issue of pricing."
+   ],
+   "call": [
+    "She brought up the issue of pricing.",
+    "She brought the issue of pricing up."
+   ]
+  },
+  {
+   "id": "p25",
+   "formal": "rely on",
+   "phrasal": "count on",
+   "de": "sich verlassen auf",
+   "mail": [
+    "We rely on your support."
+   ],
+   "call": [
+    "We're counting on your support.",
+    "We are counting on your support.",
+    "We count on your support."
+   ]
+  }
+ ],
+ "transitions": [
+  {
+   "id": "d01",
+   "theme": "t02",
+   "text": "___, we help companies find documents faster. ___, one of our customers now finds any invoice in seconds. ___, the cloud version needs no servers at all.",
+   "gaps": [
+    {
+     "answers": [
+      "In a nutshell",
+      "In short"
+     ],
+     "fn": {
+      "de": "Kurzfassung",
+      "en": "short summary"
+     }
+    },
+    {
+     "answers": [
+      "For example",
+      "For instance"
+     ],
+     "fn": {
+      "de": "Beispiel",
+      "en": "example"
+     }
+    },
+    {
+     "answers": [
+      "On top of that",
+      "In addition",
+      "What's more"
+     ],
+     "fn": {
+      "de": "Zusatz",
+      "en": "addition"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d02",
+   "theme": "t03",
+   "text": "Our license fee is higher than our competitor’s. ___, the total cost is lower over three years. ___, you do not need your own servers. ___, the system usually pays for itself within 18 months.",
+   "gaps": [
+    {
+     "answers": [
+      "That said",
+      "Having said that",
+      "However"
+     ],
+     "fn": {
+      "de": "Einschränkung",
+      "en": "contrast"
+     }
+    },
+    {
+     "answers": [
+      "For one thing",
+      "First of all",
+      "First"
+     ],
+     "fn": {
+      "de": "erster Punkt",
+      "en": "first point"
+     }
+    },
+    {
+     "answers": [
+      "Bottom line",
+      "The bottom line is",
+      "All in all"
+     ],
+     "fn": {
+      "de": "Fazit",
+      "en": "conclusion"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d03",
+   "theme": "t06",
+   "text": "Good morning, everyone. ___ where your documents are today. ___ the second slide, which shows the numbers from last year. ___, what really matters is the time your team saves.",
+   "gaps": [
+    {
+     "answers": [
+      "Let me start with",
+      "I will start with",
+      "I'll start with"
+     ],
+     "fn": {
+      "de": "Einstieg",
+      "en": "opening"
+     }
+    },
+    {
+     "answers": [
+      "This brings me to",
+      "Moving on to",
+      "Let's move on to"
+     ],
+     "fn": {
+      "de": "Übergang",
+      "en": "moving on"
+     }
+    },
+    {
+     "answers": [
+      "To sum up",
+      "To wrap up",
+      "In short"
+     ],
+     "fn": {
+      "de": "Zusammenfassung",
+      "en": "summary"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d04",
+   "theme": "t10",
+   "text": "___, let's look at the forecast. ___ what Julia said: the demo on Thursday is key. ___ the price list, we'll take that offline.",
+   "gaps": [
+    {
+     "answers": [
+      "First of all",
+      "First",
+      "To start with"
+     ],
+     "fn": {
+      "de": "erster Punkt",
+      "en": "first point"
+     }
+    },
+    {
+     "answers": [
+      "To build on",
+      "Building on",
+      "Coming back to"
+     ],
+     "fn": {
+      "de": "anknüpfen",
+      "en": "building on a point"
+     }
+    },
+    {
+     "answers": [
+      "As for",
+      "Regarding",
+      "When it comes to"
+     ],
+     "fn": {
+      "de": "Themenwechsel",
+      "en": "changing topic"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d05",
+   "theme": "t15",
+   "text": "AI will change sales, no doubt. ___, it will not replace trust. ___, a customer who spends half a million euros wants a person, not a chatbot. ___, AI is a tool, not a replacement.",
+   "gaps": [
+    {
+     "answers": [
+      "That said",
+      "However",
+      "Having said that"
+     ],
+     "fn": {
+      "de": "Einschränkung",
+      "en": "contrast"
+     }
+    },
+    {
+     "answers": [
+      "In other words",
+      "Put simply",
+      "For example"
+     ],
+     "fn": {
+      "de": "Erklärung oder Beispiel",
+      "en": "explanation or example"
+     }
+    },
+    {
+     "answers": [
+      "All in all",
+      "In the end",
+      "Overall"
+     ],
+     "fn": {
+      "de": "Fazit",
+      "en": "conclusion"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d06",
+   "theme": "t09",
+   "text": "We missed the deadline, and I am sorry. ___, we have identified the root cause. ___, two more engineers have joined the project. ___, the migration will be complete by October 2.",
+   "gaps": [
+    {
+     "answers": [
+      "The good news is that",
+      "On the positive side",
+      "Fortunately"
+     ],
+     "fn": {
+      "de": "positive Wendung",
+      "en": "positive turn"
+     }
+    },
+    {
+     "answers": [
+      "On top of that",
+      "In addition",
+      "What is more"
+     ],
+     "fn": {
+      "de": "Zusatz",
+      "en": "addition"
+     }
+    },
+    {
+     "answers": [
+      "As a result",
+      "Because of that",
+      "So"
+     ],
+     "fn": {
+      "de": "Folge",
+      "en": "result"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d07",
+   "theme": "t05",
+   "text": "Receiving e-invoices is already mandatory. ___, sending them will be required from 2027. ___, many companies are still waiting. ___, waiting will make the project more expensive.",
+   "gaps": [
+    {
+     "answers": [
+      "On top of that",
+      "In addition",
+      "What is more"
+     ],
+     "fn": {
+      "de": "Zusatz",
+      "en": "addition"
+     }
+    },
+    {
+     "answers": [
+      "However",
+      "Even so",
+      "Nevertheless"
+     ],
+     "fn": {
+      "de": "Gegensatz",
+      "en": "contrast"
+     }
+    },
+    {
+     "answers": [
+      "In my view",
+      "The problem is that",
+      "Unfortunately"
+     ],
+     "fn": {
+      "de": "Bewertung",
+      "en": "evaluation"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d08",
+   "theme": "t08",
+   "text": "Your clients already trust you with their IT. ___, adding our platform is a small step. ___, you earn recurring revenue on every license. ___, we support you with training and marketing.",
+   "gaps": [
+    {
+     "answers": [
+      "Because of that",
+      "As a result",
+      "So"
+     ],
+     "fn": {
+      "de": "Folge",
+      "en": "result"
+     }
+    },
+    {
+     "answers": [
+      "More importantly",
+      "What is more",
+      "On top of that"
+     ],
+     "fn": {
+      "de": "Steigerung",
+      "en": "stronger point"
+     }
+    },
+    {
+     "answers": [
+      "Last but not least",
+      "Finally",
+      "And finally"
+     ],
+     "fn": {
+      "de": "letzter Punkt",
+      "en": "final point"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d09",
+   "theme": "t04",
+   "text": "All data is hosted in the EU. ___, it is encrypted at rest and in transit. ___ your question about the AI module, I will double-check and get back to you. ___, your data is safe with us.",
+   "gaps": [
+    {
+     "answers": [
+      "On top of that",
+      "In addition",
+      "Moreover"
+     ],
+     "fn": {
+      "de": "Zusatz",
+      "en": "addition"
+     }
+    },
+    {
+     "answers": [
+      "Coming back to",
+      "As for",
+      "Regarding"
+     ],
+     "fn": {
+      "de": "zurückkommen",
+      "en": "coming back to a point"
+     }
+    },
+    {
+     "answers": [
+      "Bottom line",
+      "In short",
+      "To sum up"
+     ],
+     "fn": {
+      "de": "Fazit",
+      "en": "conclusion"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d10",
+   "theme": "t14",
+   "text": "___, lost on a muddy forest road with no signal. ___, a farmer showed up on his tractor. ___ we had driven past the cabin an hour earlier.",
+   "gaps": [
+    {
+     "answers": [
+      "So there we were",
+      "So there I was"
+     ],
+     "fn": {
+      "de": "Erzählbeginn",
+      "en": "story start"
+     }
+    },
+    {
+     "answers": [
+      "Luckily",
+      "Fortunately",
+      "Then"
+     ],
+     "fn": {
+      "de": "Wendepunkt",
+      "en": "turning point"
+     }
+    },
+    {
+     "answers": [
+      "It turned out that"
+     ],
+     "fn": {
+      "de": "Auflösung",
+      "en": "reveal"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d11",
+   "theme": "t07",
+   "text": "We cannot give 20 percent on a one-year contract. ___, if you could commit to three years, we could reduce the price per user. ___ the setup fee, let's park that for now. ___, we are close to an agreement.",
+   "gaps": [
+    {
+     "answers": [
+      "That said",
+      "However",
+      "Having said that"
+     ],
+     "fn": {
+      "de": "Einschränkung",
+      "en": "contrast"
+     }
+    },
+    {
+     "answers": [
+      "As for",
+      "Regarding",
+      "When it comes to"
+     ],
+     "fn": {
+      "de": "Themenwechsel",
+      "en": "changing topic"
+     }
+    },
+    {
+     "answers": [
+      "Overall",
+      "All in all",
+      "In short"
+     ],
+     "fn": {
+      "de": "Fazit",
+      "en": "conclusion"
+     }
+    }
+   ]
+  },
+  {
+   "id": "d12",
+   "theme": "t11",
+   "text": "Your team has cut the approval time by two thirds this year. ___, approval now takes three days instead of nine. ___, HR is still working with paper. ___, a short workshop could show whether it makes sense.",
+   "gaps": [
+    {
+     "answers": [
+      "In other words",
+      "Put simply",
+      "That means"
+     ],
+     "fn": {
+      "de": "Umformulierung",
+      "en": "rephrasing"
+     }
+    },
+    {
+     "answers": [
+      "At the same time",
+      "On the other hand",
+      "However"
+     ],
+     "fn": {
+      "de": "Gegensatz",
+      "en": "contrast"
+     }
+    },
+    {
+     "answers": [
+      "As a next step",
+      "So",
+      "Going forward"
+     ],
+     "fn": {
+      "de": "nächster Schritt",
+      "en": "next step"
+     }
+    }
+   ]
+  }
+ ],
+ "hotSeat": [
+  {
+   "id": "h01",
+   "theme": "t06",
+   "q": "Why should we trust a company that's smaller than our IT department?",
+   "de": "Warum sollten wir einer Firma trauen, die kleiner ist als unsere IT-Abteilung?",
+   "model": "That's a fair question. Size matters less than track record: we have run over 300 projects like yours, and I can connect you with two customers of your size.",
+   "tip": {
+    "de": "Die Sorge anerkennen, dann mit Belegen antworten.",
+    "en": "Acknowledge the concern, then answer with evidence."
+   }
+  },
+  {
+   "id": "h02",
+   "theme": "t06",
+   "q": "What happens to our data if your company goes bankrupt?",
+   "de": "Was passiert mit unseren Daten, wenn Ihre Firma pleitegeht?",
+   "model": "Good question. Your data always belongs to you: you can export everything in standard formats at any time, and our contract includes a clear exit plan.",
+   "tip": {
+    "de": "Sachlich bleiben und die Absicherung nennen.",
+    "en": "Stay factual and name the safeguard."
+   }
+  },
+  {
+   "id": "h03",
+   "theme": "t06",
+   "q": "Your numbers look too good. Where do they come from?",
+   "de": "Ihre Zahlen sehen zu gut aus. Woher kommen sie?",
+   "model": "I'm glad you asked. They come from a customer project with Hartmann Foods, and I'd suggest we check them with your own data in a pilot.",
+   "tip": {
+    "de": "Quelle nennen und einen Test anbieten.",
+    "en": "Name the source and offer a test."
+   }
+  },
+  {
+   "id": "h04",
+   "theme": "t03",
+   "q": "Why is your solution more expensive than the others?",
+   "de": "Warum ist Ihre Lösung teurer als die anderen?",
+   "model": "Let me put it this way: our price includes hosting, updates, and support. When you compare the total cost over three years, we are usually lower.",
+   "tip": {
+    "de": "Den Vergleich auf die Gesamtkosten lenken.",
+    "en": "Move the comparison to total cost."
+   }
+  },
+  {
+   "id": "h05",
+   "theme": "t04",
+   "q": "Can your employees read our documents?",
+   "de": "Können Ihre Mitarbeiter unsere Dokumente lesen?",
+   "model": "Not without your permission. Documents are encrypted, every access is logged, and only if you open a support case can an administrator see what you share with them.",
+   "tip": {
+    "de": "Kurz und klar antworten, dann erklären.",
+    "en": "Answer short and clear, then explain."
+   }
+  },
+  {
+   "id": "h06",
+   "theme": "t05",
+   "q": "Why should we act now if the deadline is in 2027?",
+   "de": "Warum sollten wir jetzt handeln, wenn die Frist erst 2027 ist?",
+   "model": "That's a great question. Most projects take six to nine months, and partners will be fully booked close to the deadline, so starting now saves time and money.",
+   "tip": {
+    "de": "Mit Fakten zur Projektdauer antworten.",
+    "en": "Answer with facts about project time."
+   }
+  },
+  {
+   "id": "h07",
+   "theme": "t02",
+   "q": "Honestly, what is the difference between you and a shared drive?",
+   "de": "Ehrlich, was ist der Unterschied zwischen Ihnen und einem Netzlaufwerk?",
+   "model": "Fair point, both store files. The difference is what happens next: search, approvals, retention rules, and an audit trail. A shared drive stores; we manage.",
+   "tip": {
+    "de": "Die Gemeinsamkeit zugeben, dann den Unterschied zuspitzen.",
+    "en": "Admit what is similar, then sharpen the difference."
+   }
+  },
+  {
+   "id": "h08",
+   "theme": "t06",
+   "q": "How long will the rollout really take?",
+   "de": "Wie lange dauert die Einführung wirklich?",
+   "model": "Let me be realistic: the pilot takes six weeks, and a full rollout usually takes four to six months, depending on how many departments are involved.",
+   "tip": {
+    "de": "Realistisch bleiben, eine Spanne nennen.",
+    "en": "Stay realistic and give a range."
+   }
+  },
+  {
+   "id": "h09",
+   "theme": "t10",
+   "q": "Why is the forecast lower than last quarter?",
+   "de": "Warum ist die Prognose niedriger als im letzten Quartal?",
+   "model": "Good question. Two large deals moved into the next quarter, but both are still active, and we expect to close them in January.",
+   "tip": {
+    "de": "Ursache nennen und Ausblick geben.",
+    "en": "Name the cause and give an outlook."
+   }
+  },
+  {
+   "id": "h10",
+   "theme": "t07",
+   "q": "What's your final price?",
+   "de": "Was ist Ihr letzter Preis?",
+   "model": "Let me think about that for a second. It depends on the contract length: for three years, I can offer ten percent less per user.",
+   "tip": {
+    "de": "Nicht sofort eine Zahl nennen, sondern eine Bedingung.",
+    "en": "Do not name a number right away; name a condition."
+   }
+  },
+  {
+   "id": "h11",
+   "theme": "t08",
+   "q": "Why would our consultants want to learn yet another product?",
+   "de": "Warum sollten unsere Berater noch ein Produkt lernen wollen?",
+   "model": "That's a fair concern. The training takes two days, and after that, most partners see it as an easy add-on that clients are already asking for.",
+   "tip": {
+    "de": "Aufwand ehrlich nennen, Nutzen dagegenstellen.",
+    "en": "Name the effort honestly and set the benefit against it."
+   }
+  },
+  {
+   "id": "h12",
+   "theme": "t09",
+   "q": "How can you promise October 2 when you already missed one deadline?",
+   "de": "Wie können Sie den 2. Oktober versprechen, wenn Sie schon eine Frist verpasst haben?",
+   "model": "You're right to ask. This time the date is based on files we've already tested, and you'll get an update from me every Friday, so you'll see early if anything changes.",
+   "tip": {
+    "de": "Recht geben, dann erklären, warum es diesmal anders ist.",
+    "en": "Agree, then explain why this time is different."
+   }
+  },
+  {
+   "id": "h13",
+   "theme": "t15",
+   "q": "Isn't AI going to make your product unnecessary?",
+   "de": "Macht KI Ihr Produkt nicht bald überflüssig?",
+   "model": "It's a bit more nuanced than that. AI needs clean, well-organized documents to work, and that is exactly what our system provides.",
+   "tip": {
+    "de": "Die Frage umdrehen: KI braucht die Grundlage.",
+    "en": "Turn the question around: AI needs the foundation."
+   }
+  },
+  {
+   "id": "h14",
+   "theme": "t11",
+   "q": "Why should we pay more for the new version?",
+   "de": "Warum sollten wir für die neue Version mehr bezahlen?",
+   "model": "That's a fair question. You only pay more if you use the new modules; your current package stays at the same price.",
+   "tip": {
+    "de": "Klarstellen, was sich wirklich ändert.",
+    "en": "Make clear what really changes."
+   }
+  },
+  {
+   "id": "h15",
+   "theme": "t01",
+   "q": "Who else are you talking to in our company?",
+   "de": "Mit wem sprechen Sie sonst noch in unserem Unternehmen?",
+   "model": "Good question, and I'm happy to be transparent. So far, only with you and your IT manager. Who else should be involved?",
+   "tip": {
+    "de": "Offen antworten und die Frage zurückgeben.",
+    "en": "Answer openly and hand the question back."
+   }
+  }
+ ],
+ "buyTime": [
+  {
+   "id": "g01",
+   "q": "What exactly makes you better than your competitors?",
+   "de": "Was genau macht Sie besser als Ihre Wettbewerber?",
+   "starters": [
+    "That's a fair question.",
+    "Let me put it this way …",
+    "There are a few things I would point to."
+   ]
+  },
+  {
+   "id": "g02",
+   "q": "Can you give me a discount right now?",
+   "de": "Können Sie mir sofort einen Rabatt geben?",
+   "starters": [
+    "Let me think about that for a second.",
+    "That depends on a few things.",
+    "Before I answer that, can I ask …"
+   ]
+  },
+  {
+   "id": "g03",
+   "q": "Why did the project fail last year?",
+   "de": "Warum ist das Projekt letztes Jahr gescheitert?",
+   "starters": [
+    "That's a good question, and there's no short answer.",
+    "Let me give you some background first.",
+    "Looking back, I would say …"
+   ]
+  },
+  {
+   "id": "g04",
+   "q": "What will the price be in three years?",
+   "de": "Wie hoch wird der Preis in drei Jahren sein?",
+   "starters": [
+    "I can't predict that exactly, but …",
+    "That's hard to say, but what I can tell you is …",
+    "Let me be honest with you …"
+   ]
+  },
+  {
+   "id": "g05",
+   "q": "Is your cloud really safe?",
+   "de": "Ist Ihre Cloud wirklich sicher?",
+   "starters": [
+    "I'm glad you asked.",
+    "Let me answer that in two parts.",
+    "That depends on what you mean by safe."
+   ]
+  },
+  {
+   "id": "g06",
+   "q": "Why should I talk to you instead of my IT partner?",
+   "de": "Warum sollte ich mit Ihnen reden statt mit meinem IT-Partner?",
+   "starters": [
+    "That's a great question.",
+    "Actually, you don’t have to choose.",
+    "Let me put it this way …"
+   ]
+  },
+  {
+   "id": "g07",
+   "q": "What do you personally think about AI?",
+   "de": "Was halten Sie persönlich von KI?",
+   "starters": [
+    "That's an interesting question.",
+    "Honestly, I have mixed feelings.",
+    "It's a bit more nuanced than yes or no."
+   ]
+  },
+  {
+   "id": "g08",
+   "q": "Why are you calling me?",
+   "de": "Warum rufen Sie mich an?",
+   "starters": [
+    "Fair question, I'll be brief.",
+    "I will get straight to the point.",
+    "The short answer is …"
+   ]
+  },
+  {
+   "id": "g09",
+   "q": "How many customers have you lost this year?",
+   "de": "Wie viele Kunden haben Sie dieses Jahr verloren?",
+   "starters": [
+    "I'll be open with you.",
+    "Let me check the exact number, but …",
+    "That's a fair thing to ask."
+   ]
+  },
+  {
+   "id": "g10",
+   "q": "What would you do differently next time?",
+   "de": "Was würden Sie nächstes Mal anders machen?",
+   "starters": [
+    "Good question. Looking back …",
+    "If I had to pick one thing …",
+    "Let me think about that for a moment."
+   ]
+  },
+  {
+   "id": "g11",
+   "q": "Can you guarantee the go-live date?",
+   "de": "Können Sie den Starttermin garantieren?",
+   "starters": [
+    "Let me be realistic here.",
+    "What I can promise is …",
+    "That depends on two things."
+   ]
+  },
+  {
+   "id": "g12",
+   "q": "Why haven't you replied to my email?",
+   "de": "Warum haben Sie nicht auf meine Mail geantwortet?",
+   "starters": [
+    "You're right, and I'm sorry about that.",
+    "Fair point. Let me explain.",
+    "I owe you an apology."
+   ]
+  },
+  {
+   "id": "g13",
+   "q": "Is this really the best you can offer?",
+   "de": "Ist das wirklich das Beste, was Sie anbieten können?",
+   "starters": [
+    "I understand why you're asking.",
+    "Let me explain how we got to this price.",
+    "Where do you have some flexibility?"
+   ]
+  },
+  {
+   "id": "g14",
+   "q": "What do you think of our current system?",
+   "de": "Was halten Sie von unserem jetzigen System?",
+   "starters": [
+    "From what I have seen so far …",
+    "That's a tricky one.",
+    "It clearly does some things well."
+   ]
+  },
+  {
+   "id": "g15",
+   "q": "Why should your company get the contract and not the cheaper one?",
+   "de": "Warum sollte Ihre Firma den Auftrag bekommen und nicht die günstigere?",
+   "starters": [
+    "That's the key question, isn't it?",
+    "Let me put it this way …",
+    "There are three reasons."
+   ]
+  }
+ ],
+ "stress": [
+  {
+   "id": "s01",
+   "word": "document",
+   "syll": [
+    "doc",
+    "u",
+    "ment"
+   ],
+   "stress": 0,
+   "de": "Dokument"
+  },
+  {
+   "id": "s02",
+   "word": "archive",
+   "syll": [
+    "ar",
+    "chive"
+   ],
+   "stress": 0,
+   "de": "Archiv"
+  },
+  {
+   "id": "s03",
+   "word": "strategy",
+   "syll": [
+    "strat",
+    "e",
+    "gy"
+   ],
+   "stress": 0,
+   "de": "Strategie"
+  },
+  {
+   "id": "s04",
+   "word": "strategic",
+   "syll": [
+    "stra",
+    "te",
+    "gic"
+   ],
+   "stress": 1,
+   "de": "strategisch"
+  },
+  {
+   "id": "s05",
+   "word": "technology",
+   "syll": [
+    "tech",
+    "nol",
+    "o",
+    "gy"
+   ],
+   "stress": 1,
+   "de": "Technologie"
+  },
+  {
+   "id": "s06",
+   "word": "industry",
+   "syll": [
+    "in",
+    "dus",
+    "try"
+   ],
+   "stress": 0,
+   "de": "Industrie"
+  },
+  {
+   "id": "s07",
+   "word": "category",
+   "syll": [
+    "cat",
+    "e",
+    "go",
+    "ry"
+   ],
+   "stress": 0,
+   "de": "Kategorie"
+  },
+  {
+   "id": "s08",
+   "word": "analyze",
+   "syll": [
+    "an",
+    "a",
+    "lyze"
+   ],
+   "stress": 0,
+   "de": "analysieren"
+  },
+  {
+   "id": "s09",
+   "word": "analysis",
+   "syll": [
+    "a",
+    "nal",
+    "y",
+    "sis"
+   ],
+   "stress": 1,
+   "de": "Analyse"
+  },
+  {
+   "id": "s10",
+   "word": "analyst",
+   "syll": [
+    "an",
+    "a",
+    "lyst"
+   ],
+   "stress": 0,
+   "de": "Analyst"
+  },
+  {
+   "id": "s11",
+   "word": "economy",
+   "syll": [
+    "e",
+    "con",
+    "o",
+    "my"
+   ],
+   "stress": 1,
+   "de": "Wirtschaft"
+  },
+  {
+   "id": "s12",
+   "word": "economic",
+   "syll": [
+    "ec",
+    "o",
+    "nom",
+    "ic"
+   ],
+   "stress": 2,
+   "de": "wirtschaftlich"
+  },
+  {
+   "id": "s13",
+   "word": "photograph",
+   "syll": [
+    "pho",
+    "to",
+    "graph"
+   ],
+   "stress": 0,
+   "de": "Foto"
+  },
+  {
+   "id": "s14",
+   "word": "photographer",
+   "syll": [
+    "pho",
+    "tog",
+    "ra",
+    "pher"
+   ],
+   "stress": 1,
+   "de": "Fotograf"
+  },
+  {
+   "id": "s15",
+   "word": "development",
+   "syll": [
+    "de",
+    "vel",
+    "op",
+    "ment"
+   ],
+   "stress": 1,
+   "de": "Entwicklung"
+  },
+  {
+   "id": "s16",
+   "word": "contract",
+   "syll": [
+    "con",
+    "tract"
+   ],
+   "stress": 0,
+   "de": "Vertrag",
+   "pos": "noun"
+  },
+  {
+   "id": "s17",
+   "word": "record",
+   "syll": [
+    "re",
+    "cord"
+   ],
+   "stress": 1,
+   "de": "aufnehmen, erfassen",
+   "pos": "verb"
+  },
+  {
+   "id": "s18",
+   "word": "increase",
+   "syll": [
+    "in",
+    "crease"
+   ],
+   "stress": 1,
+   "de": "steigern",
+   "pos": "verb"
+  },
+  {
+   "id": "s19",
+   "word": "efficiency",
+   "syll": [
+    "ef",
+    "fi",
+    "cien",
+    "cy"
+   ],
+   "stress": 1,
+   "de": "Effizienz"
+  },
+  {
+   "id": "s20",
+   "word": "integrate",
+   "syll": [
+    "in",
+    "te",
+    "grate"
+   ],
+   "stress": 0,
+   "de": "integrieren"
+  },
+  {
+   "id": "s21",
+   "word": "integration",
+   "syll": [
+    "in",
+    "te",
+    "gra",
+    "tion"
+   ],
+   "stress": 2,
+   "de": "Integration"
+  },
+  {
+   "id": "s22",
+   "word": "negotiate",
+   "syll": [
+    "ne",
+    "go",
+    "ti",
+    "ate"
+   ],
+   "stress": 1,
+   "de": "verhandeln"
+  },
+  {
+   "id": "s23",
+   "word": "negotiation",
+   "syll": [
+    "ne",
+    "go",
+    "ti",
+    "a",
+    "tion"
+   ],
+   "stress": 3,
+   "de": "Verhandlung"
+  },
+  {
+   "id": "s24",
+   "word": "comfortable",
+   "syll": [
+    "com",
+    "fort",
+    "a",
+    "ble"
+   ],
+   "stress": 0,
+   "de": "bequem"
+  },
+  {
+   "id": "s25",
+   "word": "colleague",
+   "syll": [
+    "col",
+    "league"
+   ],
+   "stress": 0,
+   "de": "Kollege"
+  },
+  {
+   "id": "s26",
+   "word": "purchase",
+   "syll": [
+    "pur",
+    "chase"
+   ],
+   "stress": 0,
+   "de": "Kauf, kaufen"
+  },
+  {
+   "id": "s27",
+   "word": "address",
+   "syll": [
+    "ad",
+    "dress"
+   ],
+   "stress": 0,
+   "de": "Adresse",
+   "pos": "noun"
+  },
+  {
+   "id": "s28",
+   "word": "consequence",
+   "syll": [
+    "con",
+    "se",
+    "quence"
+   ],
+   "stress": 0,
+   "de": "Konsequenz"
+  },
+  {
+   "id": "s29",
+   "word": "program",
+   "syll": [
+    "pro",
+    "gram"
+   ],
+   "stress": 0,
+   "de": "Programm"
+  },
+  {
+   "id": "s30",
+   "word": "calendar",
+   "syll": [
+    "cal",
+    "en",
+    "dar"
+   ],
+   "stress": 0,
+   "de": "Kalender"
+  },
+  {
+   "id": "s31",
+   "word": "career",
+   "syll": [
+    "ca",
+    "reer"
+   ],
+   "stress": 1,
+   "de": "Karriere"
+  },
+  {
+   "id": "s32",
+   "word": "personnel",
+   "syll": [
+    "per",
+    "son",
+    "nel"
+   ],
+   "stress": 2,
+   "de": "Personal"
+  },
+  {
+   "id": "s33",
+   "word": "productivity",
+   "syll": [
+    "pro",
+    "duc",
+    "tiv",
+    "i",
+    "ty"
+   ],
+   "stress": 2,
+   "de": "Produktivität"
+  },
+  {
+   "id": "s34",
+   "word": "competition",
+   "syll": [
+    "com",
+    "pe",
+    "ti",
+    "tion"
+   ],
+   "stress": 2,
+   "de": "Wettbewerb"
+  },
+  {
+   "id": "s35",
+   "word": "certificate",
+   "syll": [
+    "cer",
+    "tif",
+    "i",
+    "cate"
+   ],
+   "stress": 1,
+   "de": "Zertifikat"
+  },
+  {
+   "id": "s36",
+   "word": "architecture",
+   "syll": [
+    "ar",
+    "chi",
+    "tec",
+    "ture"
+   ],
+   "stress": 0,
+   "de": "Architektur"
+  },
+  {
+   "id": "s37",
+   "word": "algorithm",
+   "syll": [
+    "al",
+    "go",
+    "rithm"
+   ],
+   "stress": 0,
+   "de": "Algorithmus"
+  },
+  {
+   "id": "s38",
+   "word": "process",
+   "syll": [
+    "proc",
+    "ess"
+   ],
+   "stress": 0,
+   "de": "Prozess"
+  },
+  {
+   "id": "s39",
+   "word": "project",
+   "syll": [
+    "proj",
+    "ect"
+   ],
+   "stress": 0,
+   "de": "Projekt",
+   "pos": "noun"
+  },
+  {
+   "id": "s40",
+   "word": "automation",
+   "syll": [
+    "au",
+    "to",
+    "ma",
+    "tion"
+   ],
+   "stress": 2,
+   "de": "Automatisierung"
+  }
+ ],
+ "numbers": [
+  {
+   "id": "z01",
+   "kind": "money",
+   "show": "€1.5bn",
+   "say": [
+    "one point five billion euros"
+   ],
+   "note": {
+    "de": "Milliarde = billion, Dezimalpunkt.",
+    "en": "German \"Milliarde\" is billion; use a decimal point."
+   }
+  },
+  {
+   "id": "z02",
+   "kind": "money",
+   "show": "2,4 Mio. €",
+   "say": [
+    "two point four million euros"
+   ],
+   "note": {
+    "de": "Komma wird im Englischen zum Punkt: 2.4 million.",
+    "en": "The German comma becomes a point in English: 2.4 million."
+   }
+  },
+  {
+   "id": "z03",
+   "kind": "percent",
+   "show": "15 %",
+   "say": [
+    "fifteen percent"
+   ],
+   "note": {
+    "de": "percent ist im US-Englisch ein Wort und bekommt nie ein -s.",
+    "en": "In US English, percent is one word and never takes -s."
+   }
+  },
+  {
+   "id": "z04",
+   "kind": "date",
+   "show": "03/15/2027",
+   "say": [
+    "March fifteenth, twenty twenty-seven",
+    "March fifteen, twenty twenty-seven"
+   ],
+   "note": {
+    "de": "US-Datum: erst Monat, dann Tag.",
+    "en": "US dates: month first, then day."
+   }
+  },
+  {
+   "id": "z05",
+   "kind": "quarter",
+   "show": "Q3",
+   "say": [
+    "the third quarter",
+    "Q three"
+   ],
+   "note": {
+    "de": "Quartal = quarter.",
+    "en": "\"Quartal\" is quarter."
+   }
+  },
+  {
+   "id": "z06",
+   "kind": "number",
+   "show": "1.250.000",
+   "say": [
+    "one point two five million",
+    "one million two hundred fifty thousand"
+   ],
+   "note": {
+    "de": "Deutsche Tausenderpunkte sind im Englischen Kommas: 1,250,000.",
+    "en": "German thousands points are commas in English: 1,250,000."
+   }
+  },
+  {
+   "id": "z07",
+   "kind": "percent",
+   "show": "0,5 %",
+   "say": [
+    "zero point five percent",
+    "half a percent",
+    "point five percent"
+   ],
+   "note": {
+    "de": "Komma → point; „half a percent“ klingt natürlich.",
+    "en": "Comma becomes point; \"half a percent\" sounds natural."
+   }
+  },
+  {
+   "id": "z08",
+   "kind": "money",
+   "show": "$3.2M",
+   "say": [
+    "three point two million dollars"
+   ],
+   "note": {
+    "de": "Die Währung spricht man am Ende.",
+    "en": "Say the currency at the end."
+   }
+  },
+  {
+   "id": "z09",
+   "kind": "money",
+   "show": "4 Mrd. €",
+   "say": [
+    "four billion euros"
+   ],
+   "note": {
+    "de": "Mrd. = billion, kein -s nach der Zahl.",
+    "en": "Mrd. is billion, with no -s after a number."
+   }
+  },
+  {
+   "id": "z10",
+   "kind": "date",
+   "show": "12/01",
+   "say": [
+    "December first"
+   ],
+   "note": {
+    "de": "US: 12/01 ist der 1. Dezember, nicht der 12. Januar.",
+    "en": "In the US, 12/01 is December 1, not January 12."
+   }
+  },
+  {
+   "id": "z11",
+   "kind": "date",
+   "show": "01.12.",
+   "say": [
+    "December first",
+    "the first of December"
+   ],
+   "note": {
+    "de": "Deutsch: Tag.Monat. Englisch: December first.",
+    "en": "German writes day.month; say December first."
+   }
+  },
+  {
+   "id": "z12",
+   "kind": "time",
+   "show": "2:30 p.m.",
+   "say": [
+    "two thirty p.m.",
+    "two thirty in the afternoon"
+   ],
+   "note": {
+    "de": "US: 12-Stunden-Uhr mit a.m./p.m.",
+    "en": "US English uses the 12-hour clock with a.m./p.m."
+   }
+  },
+  {
+   "id": "z13",
+   "kind": "time",
+   "show": "14:45 Uhr",
+   "say": [
+    "two forty-five p.m.",
+    "a quarter to three",
+    "quarter to three"
+   ],
+   "note": {
+    "de": "14:45 = 2:45 p.m.",
+    "en": "14:45 is 2:45 p.m."
+   }
+  },
+  {
+   "id": "z14",
+   "kind": "fraction",
+   "show": "1/3",
+   "say": [
+    "a third",
+    "one third"
+   ],
+   "note": {
+    "de": "Brüche: a third, a quarter, half.",
+    "en": "Fractions: a third, a quarter, half."
+   }
+  },
+  {
+   "id": "z15",
+   "kind": "fraction",
+   "show": "3/4",
+   "say": [
+    "three quarters",
+    "three fourths"
+   ],
+   "note": {
+    "de": "Mehrzahl: three quarters.",
+    "en": "Plural: three quarters."
+   }
+  },
+  {
+   "id": "z16",
+   "kind": "money",
+   "show": "€49.90",
+   "say": [
+    "forty-nine euros ninety",
+    "forty-nine ninety"
+   ],
+   "note": {
+    "de": "Cent werden meist ohne „cents“ gesprochen.",
+    "en": "Cents are usually said without the word cents."
+   }
+  },
+  {
+   "id": "z17",
+   "kind": "year",
+   "show": "2027",
+   "say": [
+    "twenty twenty-seven"
+   ],
+   "note": {
+    "de": "Jahreszahlen in Paaren: twenty twenty-seven.",
+    "en": "Say years in pairs: twenty twenty-seven."
+   }
+  },
+  {
+   "id": "z18",
+   "kind": "year",
+   "show": "1998",
+   "say": [
+    "nineteen ninety-eight"
+   ],
+   "note": {
+    "de": "Jahreszahlen in Paaren.",
+    "en": "Say years in pairs."
+   }
+  },
+  {
+   "id": "z19",
+   "kind": "number",
+   "show": "10.000 Nutzer",
+   "say": [
+    "ten thousand users"
+   ],
+   "note": {
+    "de": "thousand ohne -s nach einer Zahl.",
+    "en": "Thousand takes no -s after a number."
+   }
+  },
+  {
+   "id": "z20",
+   "kind": "percent",
+   "show": "+7,5 %",
+   "say": [
+    "up seven point five percent",
+    "an increase of seven point five percent"
+   ],
+   "note": {
+    "de": "Plus bei Veränderungen: up oder an increase of.",
+    "en": "For changes, say up or an increase of."
+   }
+  },
+  {
+   "id": "z21",
+   "kind": "percent",
+   "show": "−12 %",
+   "say": [
+    "down twelve percent",
+    "a decrease of twelve percent"
+   ],
+   "note": {
+    "de": "Minus bei Veränderungen: down.",
+    "en": "For a drop, say down."
+   }
+  },
+  {
+   "id": "z22",
+   "kind": "money",
+   "show": "€250k",
+   "say": [
+    "two hundred fifty thousand euros",
+    "two hundred and fifty thousand euros"
+   ],
+   "note": {
+    "de": "k = thousand; im US-Englisch meist ohne „and“.",
+    "en": "k means thousand; US English usually leaves out \"and\"."
+   }
+  },
+  {
+   "id": "z23",
+   "kind": "date",
+   "show": "Oct. 1",
+   "say": [
+    "October first"
+   ],
+   "note": {
+    "de": "Datum mit Ordnungszahl sprechen: first, second, third.",
+    "en": "Say dates with ordinal numbers: first, second, third."
+   }
+  },
+  {
+   "id": "z24",
+   "kind": "number",
+   "show": "24/7",
+   "say": [
+    "twenty-four seven"
+   ],
+   "note": {
+    "de": "Rund um die Uhr: twenty-four seven.",
+    "en": "Around the clock: twenty-four seven."
+   }
+  },
+  {
+   "id": "z25",
+   "kind": "percent",
+   "show": "99,9 %",
+   "say": [
+    "ninety-nine point nine percent"
+   ],
+   "note": {
+    "de": "Verfügbarkeit: point, nicht comma.",
+    "en": "Uptime: say point, not comma."
+   }
+  },
+  {
+   "id": "z26",
+   "kind": "number",
+   "show": "3x",
+   "say": [
+    "three times"
+   ],
+   "note": {
+    "de": "„3x schneller“ = three times faster.",
+    "en": "\"3x faster\" is three times faster."
+   }
+  },
+  {
+   "id": "z27",
+   "kind": "number",
+   "show": "1.000.000.000",
+   "say": [
+    "one billion"
+   ],
+   "note": {
+    "de": "Eine Milliarde = one billion, nicht one milliard.",
+    "en": "One Milliarde is one billion, not \"one milliard\"."
+   }
+  },
+  {
+   "id": "z28",
+   "kind": "number",
+   "show": "5 Mio. Dokumente",
+   "say": [
+    "five million documents"
+   ],
+   "note": {
+    "de": "million ohne -s nach einer Zahl.",
+    "en": "Million takes no -s after a number."
+   }
+  },
+  {
+   "id": "z29",
+   "kind": "number",
+   "show": "18 Monate",
+   "say": [
+    "eighteen months"
+   ],
+   "note": {
+    "de": "Achte auf die Endung: eighteen (-teen) vs. eighty (-ty).",
+    "en": "Watch the ending: eighteen (-teen) vs. eighty (-ty)."
+   }
+  },
+  {
+   "id": "z30",
+   "kind": "quarter",
+   "show": "2. Quartal 2026",
+   "say": [
+    "the second quarter of twenty twenty-six",
+    "Q two twenty twenty-six"
+   ],
+   "note": {
+    "de": "Quartal mit Ordnungszahl: the second quarter.",
+    "en": "Quarters take ordinal numbers: the second quarter."
+   }
+  }
+ ]
+}

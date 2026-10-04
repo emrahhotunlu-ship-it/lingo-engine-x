@@ -16,7 +16,7 @@ export type WordGenMode = 'general' | 'job' | 'fill';
 export type WordGenVars = {
   mode: WordGenMode;
   count: number;
-  /** Bekannte Wörter (≤ 200), die nicht vorkommen dürfen. */
+  /** Bekannte Wörter (die zuletzt hinzugefügten, ≤ `GEN_KNOWN_MAX`), die nicht vorkommen dürfen. */
   known: readonly string[];
   /** Nur bei `fill`: das Wort, das ergänzt werden soll. */
   word?: string;
@@ -24,7 +24,8 @@ export type WordGenVars = {
 export type GenWord = { word: string; pos: string; de: string; def: string; ex: string; level: string };
 export type WordGenOut = { words: GenWord[] };
 
-export const GEN_KNOWN_MAX = 200;
+/** Rund 6 KB Prompt – weit unter der Grenze von 64 KiB je Anfrage (A6.6). */
+export const GEN_KNOWN_MAX = 600;
 export const GEN_WORD_MAX = 60;
 
 export const WORD_GEN_EXAMPLE =

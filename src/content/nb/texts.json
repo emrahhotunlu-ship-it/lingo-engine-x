@@ -1,0 +1,866 @@
+[
+ {
+  "id": "x-t01",
+  "theme": "t01",
+  "genre": "memo",
+  "title": "Before your next discovery call",
+  "text": "Most first calls with a prospect go wrong in the first five minutes. We start talking about features, and the customer politely waits for the call to end. This quarter, let's try something different: the customer should do most of the talking.\n\nOpen with a simple request: “Walk me through your current process.” Then listen. Ask how many people touch an invoice before it is paid, and find out where documents get stuck. Keep your questions open. Instead of asking whether they use shared drives, ask them how they find a contract today.\n\nTwo questions tell you more than any others. The first is about timing: “What's prompting you to look at this now?” A new regulation, a failed audit, or a new CFO usually means there is real pressure. The second is about the goal: “What would success look like for you?” If they can't answer, the project probably has no budget yet.\n\nHaving listened carefully, summarize what you heard before you hang up. Start with “So if I'm hearing you correctly,” and repeat their three main problems in their own words. Finally, don't forget to ask who else is involved in the decision. Deals rarely die because of price. They die because we never met the person who signs.",
+  "core": {
+   "q": {
+    "de": "Was soll laut Memo in einem guten Erstgespräch passieren?",
+    "en": "According to the memo, what should happen in a good first call?"
+   },
+   "options": [
+    "The customer does most of the talking.",
+    "The seller shows every feature.",
+    "The customer agrees on a budget.",
+    "Both sides compare prices."
+   ],
+   "answer": 0,
+   "quote": "the customer should do most of the talking",
+   "why": {
+    "de": "Das Memo sagt direkt, dass der Kunde den größten Teil des Gesprächs führen soll.",
+    "en": "The memo says directly that the customer should do most of the talking."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Was passiert laut Autor heute meistens in Erstgesprächen?",
+    "en": "What usually happens in first calls today, according to the writer?"
+   },
+   "options": [
+    "Sellers talk about features, and customers lose interest.",
+    "Customers ask too many questions.",
+    "Sellers forget to mention the price.",
+    "Customers end the call after one minute."
+   ],
+   "answer": 0,
+   "quote": "We start talking about features, and the customer politely waits for the call to end.",
+   "why": {
+    "de": "Es steht nicht wörtlich da: „politely waits for the call to end“ heißt, dass der Kunde das Interesse verloren hat.",
+    "en": "The text doesn't say it directly: \"politely waits for the call to end\" means the customer has lost interest."
+   }
+  },
+  "notice": [
+   "walk me through your current process",
+   "What would success look like for you?",
+   "who else is involved in the decision"
+  ],
+  "shadow": [
+   "Most first calls with a prospect go wrong in the first five minutes.",
+   "Deals rarely die because of price.",
+   "They die because we never met the person who signs."
+  ],
+  "toolIn": "ask them how they find a contract today"
+ },
+ {
+  "id": "x-t02",
+  "theme": "t02",
+  "genre": "post",
+  "title": "How I explained my job to my neighbor",
+  "text": "Last week, my neighbor asked me what I actually do. “I sell cloud software for documents,” I said, and I watched him lose interest. So I tried again, without any technical words.\n\nIn a nutshell, we help companies find the right document in seconds instead of digging through folders. Think about a mid-sized manufacturer. Invoices arrive by email, contracts sit in three different places, and nobody knows which version is the latest. What that means for you is simple: less time searching, fewer mistakes, and no panic when the auditor calls.\n\nThe key idea is a single source of truth. Every contract, invoice, and delivery note lives in one place, with a clear history of who changed what. Access is controlled, so people only see what they need.\n\nHaving nodded politely, my neighbor asked the question every customer asks: how long does it take to get started? That is where the cloud really helps. There is no server to install, and the team can work with the system from day one.\n\nHe still doesn't find my job exciting. But for the first time, he understood it.",
+  "core": {
+   "q": {
+    "de": "Welchen Hauptnutzen beschreibt der Autor?",
+    "en": "What main benefit does the writer describe?"
+   },
+   "options": [
+    "Finding the right document quickly",
+    "Cheaper servers",
+    "More storage space",
+    "Faster email"
+   ],
+   "answer": 0,
+   "quote": "we help companies find the right document in seconds instead of digging through folders",
+   "why": {
+    "de": "Der Kernsatz nennt den Nutzen: das richtige Dokument in Sekunden finden.",
+    "en": "The key sentence names the benefit: finding the right document in seconds."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Wie fühlt sich der Autor am Ende?",
+    "en": "How does the writer feel at the end?"
+   },
+   "options": [
+    "Pleased that the simple explanation worked",
+    "Annoyed that his neighbor was bored",
+    "Worried that his neighbor will not buy",
+    "Surprised that his neighbor knew the product"
+   ],
+   "answer": 0,
+   "quote": "But for the first time, he understood it.",
+   "why": {
+    "de": "Er gibt zu, dass sein Job langweilig wirkt, freut sich aber, dass die einfache Erklärung ankam.",
+    "en": "He admits his job sounds boring, but he is pleased that the simple explanation got through."
+   }
+  },
+  "notice": [
+   "In a nutshell",
+   "a single source of truth",
+   "from day one"
+  ],
+  "shadow": [
+   "In a nutshell, we help companies find the right document in seconds instead of digging through folders.",
+   "The key idea is a single source of truth.",
+   "There is no server to install, and the team can work with the system from day one."
+  ],
+  "toolIn": "In a nutshell"
+ },
+ {
+  "id": "x-t03",
+  "theme": "t03",
+  "genre": "email",
+  "title": "Your question about the price",
+  "text": "Subject: Your question about the price\n\nDear Dr. Keller,\n\nThank you for your time on Tuesday. You mentioned that our offer is higher than the quote from your current provider. I understand it may seem high at first glance, so I would like to put the numbers into context.\n\nYour team currently spends roughly a third of its week searching for invoices and contracts. Based on the figures you shared, that is about 1,400 hours per year. If our system cuts that time in half, it should save you around 35,000 euros a year.\n\nWhen we look at the total cost of ownership, the picture changes. Your current solution needs its own servers, regular updates, and an external consultant for every change. Not only does our price include hosting and updates, but it also covers support. Over a three-year period, we estimate that your costs would be about 15 percent lower, even though the license itself is more expensive.\n\nIn similar projects, the system usually pays for itself within 18 months. Of course, every company is different, so I would suggest a short pilot with your accounts payable team. That way, you can check the numbers with your own data before you commit.\n\nBest regards",
+  "core": {
+   "q": {
+    "de": "Was schlägt der Autor vor, bevor Frau Dr. Keller sich festlegt?",
+    "en": "What does the writer suggest before Dr. Keller commits?"
+   },
+   "options": [
+    "A short pilot with her own data",
+    "A bigger discount",
+    "A meeting with the CEO",
+    "A new server"
+   ],
+   "answer": 0,
+   "quote": "I would suggest a short pilot with your accounts payable team",
+   "why": {
+    "de": "Im letzten Absatz steht der Vorschlag: ein kurzer Pilot, um die Zahlen mit eigenen Daten zu prüfen.",
+    "en": "The last paragraph makes the suggestion: a short pilot to check the numbers with her own data."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum erwähnt der Autor den externen Berater?",
+    "en": "Why does the writer mention the external consultant?"
+   },
+   "options": [
+    "To show hidden costs of the current solution",
+    "To recommend a consultant",
+    "To criticize Dr. Keller’s team",
+    "To explain the pilot"
+   ],
+   "answer": 0,
+   "quote": "an external consultant for every change",
+   "why": {
+    "de": "Er sagt es nicht direkt, aber der Berater ist ein versteckter Kostenpunkt der alten Lösung – deshalb sinken die Gesamtkosten.",
+    "en": "He does not say it directly, but the consultant is a hidden cost of the old solution, which is why the total cost goes down."
+   }
+  },
+  "notice": [
+   "total cost of ownership",
+   "pays for itself within 18 months",
+   "over a three-year period"
+  ],
+  "shadow": [
+   "I understand it may seem high at first glance, so I would like to put the numbers into context.",
+   "When we look at the total cost of ownership, the picture changes.",
+   "In similar projects, the system usually pays for itself within 18 months."
+  ],
+  "toolIn": "it should save you around 35,000 euros a year"
+ },
+ {
+  "id": "x-t04",
+  "theme": "t04",
+  "genre": "email",
+  "title": "Answers to your security questions",
+  "text": "Subject: Answers to your security questions\n\nHi Mr. Brandt,\n\nThanks again for the detailed list of questions. Here are the answers our security team and I can give you today.\n\nAll customer data is hosted in EU data centers in Frankfurt and Amsterdam. No data is transferred outside the EU, and our subprocessors are listed in the data processing agreement. Documents are encrypted at rest and in transit, and the keys are managed separately from the storage.\n\nWe use role-based access: your administrators decide which groups can see, edit, or delete documents, and every action is logged. For tax-relevant records, we offer audit-proof archiving in line with GoBD. Once archived, a document cannot be changed or deleted before the end of the retention period.\n\nYou also asked about backups. Backups are created every night and are stored in a second data center. In the unlikely event of an outage, your data can be restored within four hours.\n\nOne question I can't answer with certainty yet: whether our certificate covers the new AI search module. Let me double-check that and get back to you by Friday. I would rather give you a precise answer than a quick one.\n\nBest regards",
+  "core": {
+   "q": {
+    "de": "Wo liegen die Kundendaten?",
+    "en": "Where is the customer data stored?"
+   },
+   "options": [
+    "In EU data centers",
+    "In the customer's office",
+    "In the United States",
+    "On the seller's laptop"
+   ],
+   "answer": 0,
+   "quote": "All customer data is hosted in EU data centers in Frankfurt and Amsterdam.",
+   "why": {
+    "de": "Der erste Absatz nennt die Standorte: Rechenzentren in Frankfurt und Amsterdam, also in der EU.",
+    "en": "The first paragraph names the locations: data centers in Frankfurt and Amsterdam, both in the EU."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum beantwortet der Autor die Frage zum KI-Modul nicht sofort?",
+    "en": "Why does the writer not answer the question about the AI module right away?"
+   },
+   "options": [
+    "He does not want to promise something he is not sure about.",
+    "The AI module does not exist.",
+    "Mr. Brandt did not ask about it.",
+    "The security team is on vacation."
+   ],
+   "answer": 0,
+   "quote": "I would rather give you a precise answer than a quick one.",
+   "why": {
+    "de": "Er will einem skeptischen IT-Leiter nichts versprechen, was er nicht sicher weiß – das schafft Vertrauen.",
+    "en": "He does not want to promise a skeptical head of IT anything he is not sure about, which builds trust."
+   }
+  },
+  "notice": [
+   "encrypted at rest and in transit",
+   "role-based access",
+   "Let me double-check that and get back to you"
+  ],
+  "shadow": [
+   "All customer data is hosted in EU data centers in Frankfurt and Amsterdam.",
+   "Documents are encrypted at rest and in transit.",
+   "Let me double-check that and get back to you by Friday."
+  ],
+  "toolIn": "your data can be restored within four hours"
+ },
+ {
+  "id": "x-t05",
+  "theme": "t05",
+  "genre": "article",
+  "title": "E-invoicing in Germany: why waiting is the expensive option",
+  "text": "E-invoicing in Germany: why waiting is the expensive option\n\nAs of January 1, 2025, every German company must be able to receive electronic invoices. For sending, the mandate is being phased in: larger companies will have to issue e-invoices from 2027, and smaller ones from 2028. On top of that, the EU's ViDA package, adopted in 2025, is going to link invoices to digital tax reporting from 2030.\n\nMany managing directors are still waiting. Their logic sounds reasonable: the deadline is still some time away, and the software market is changing. But for most companies, it's not a question of if, but when. And the later they start, the more expensive the project gets, because consultants and IT partners will be fully booked at the end of 2026 and in 2027.\n\nCompanies that get ahead of the deadline have a clear advantage. They can test the process with a few suppliers, train their accounting team, and fix problems while volumes are still low. At the same time, they start saving money right away, because digital invoices are processed faster and with fewer errors.\n\nRarely has a regulation offered such a clear reason to modernize. The message for decision makers is simple. The rules will not go away. The question is whether you want to stay compliant under pressure or on your own schedule.",
+  "core": {
+   "q": {
+    "de": "Was muss jedes deutsche Unternehmen seit dem 1. Januar 2025 können?",
+    "en": "What does every German company have to be able to do as of January 1, 2025?"
+   },
+   "options": [
+    "Receive electronic invoices",
+    "Send only paper invoices",
+    "Report taxes in real time",
+    "Use a cloud archive"
+   ],
+   "answer": 0,
+   "quote": "every German company must be able to receive electronic invoices",
+   "why": {
+    "de": "Der erste Satz nennt die Pflicht: E-Rechnungen empfangen können. Das Senden kommt schrittweise später.",
+    "en": "The first sentence names the rule: being able to receive e-invoices. Sending comes later, step by step."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum wird Warten laut Autor teurer?",
+    "en": "Why will waiting cost more, according to the writer?"
+   },
+   "options": [
+    "Consultants and IT partners will be busy later.",
+    "The software will be banned.",
+    "Invoices will get more expensive.",
+    "The EU will charge a fee."
+   ],
+   "answer": 0,
+   "quote": "consultants and IT partners will be fully booked at the end of 2026 and in 2027",
+   "why": {
+    "de": "Er deutet an: Wenn alle gleichzeitig starten, werden Berater knapp und teuer.",
+    "en": "He implies that when everyone starts at the same time, consultants become scarce and expensive."
+   }
+  },
+  "notice": [
+   "the mandate is being phased in",
+   "get ahead of the deadline",
+   "stay compliant"
+  ],
+  "shadow": [
+   "As of January 1, 2025, every German company must be able to receive electronic invoices.",
+   "But for most companies, it's not a question of if, but when.",
+   "The rules will not go away."
+  ],
+  "toolIn": "larger companies will have to issue e-invoices from 2027"
+ },
+ {
+  "id": "x-t06",
+  "theme": "t06",
+  "genre": "briefing",
+  "title": "Three slides for the board",
+  "text": "Good morning, everyone, and thank you for making time for this. Let me walk you through three slides, and then we'll have plenty of time for questions.\n\nThe first slide shows where your documents are today. Right now, your teams work with four different systems. What really matters here is not the number of systems, but the time people lose switching between them.\n\nThis brings me to the second slide. The chart shows the number of invoices that our customer Hartmann Foods processed digitally over the last two years. In the first quarter, it was around 20,000 invoices. By the end of last year, the number had more than doubled, to 45,000, while the team stayed the same size. It was automation, not extra staff, that made the difference.\n\nStarting with a pilot in accounting, the plan on the third slide then moves on to purchasing and HR. The total investment is 2.5 million euros over five years.\n\nYes, Mr. Weber? You're asking about the integration with your ERP system. That's a great question, and I'll come back to that in a minute, because it is exactly what the pilot is designed to test.",
+  "core": {
+   "q": {
+    "de": "Wie viele Rechnungen hat Hartmann Foods Ende letzten Jahres digital verarbeitet?",
+    "en": "How many invoices did Hartmann Foods process digitally at the end of last year?"
+   },
+   "options": [
+    "45,000",
+    "20,000",
+    "2.5 million",
+    "4"
+   ],
+   "answer": 0,
+   "quote": "the number had more than doubled, to 45,000",
+   "why": {
+    "de": "Die Grafik auf Folie 2 zeigt den Anstieg von etwa 20.000 auf 45.000. Achtung: Im Englischen trennt das Komma die Tausender.",
+    "en": "The chart on slide 2 shows the rise from about 20,000 to 45,000. In English, the comma separates thousands."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Was sollen die Zuhörer über das Wachstum glauben?",
+    "en": "What does the speaker want the audience to believe about the growth?"
+   },
+   "options": [
+    "It came from automation, not more people.",
+    "It came from hiring more staff.",
+    "It was a lucky year.",
+    "It happened only in HR."
+   ],
+   "answer": 0,
+   "quote": "It was automation, not extra staff, that made the difference.",
+   "why": {
+    "de": "Der betonte Satzbau („It was …, that …“) hebt genau diesen Punkt hervor: Die Automatisierung war der Grund.",
+    "en": "The cleft sentence (It was … that …) puts the stress on exactly this point: automation was the reason."
+   }
+  },
+  "notice": [
+   "Let me walk you through",
+   "This brings me to",
+   "more than doubled"
+  ],
+  "shadow": [
+   "Let me walk you through three slides, and then we'll have plenty of time for questions.",
+   "What really matters here is not the number of systems, but the time people lose switching between them.",
+   "It was automation, not extra staff, that made the difference."
+  ],
+  "toolIn": "What really matters here is not the number of systems"
+ },
+ {
+  "id": "x-t07",
+  "theme": "t07",
+  "genre": "memo",
+  "title": "Notes from today’s negotiation",
+  "text": "Subject: Notes from today's negotiation with Lindner Group\n\nTeam,\n\nHere is a short summary of today's call with Ms. Roth from procurement. She opened with a clear demand: a 20 percent discount, or they would stay with their current provider. Having heard the number, I didn't react right away. Instead, I asked, “Where do you have some flexibility?” It turned out that the budget is fixed for this year, but the contract length is open.\n\nThat gave us room to move. I told her, “If you could commit to three years, we could offer a lower price per user.” We also discussed payment terms. She asked for 90 days, which we normally don't accept. I said, “That's not something I can agree to today, but I will check it with our finance team.”\n\nIn the end, we agreed on 10 percent for a three-year contract, with the option to add more users at the same price. The question of the setup fee is still open. We decided to park it and discuss it next week.\n\nIf finance approves the payment terms, we should be able to sign before the end of the quarter.\n\nBest",
+  "core": {
+   "q": {
+    "de": "Was hat der Einkauf am Anfang verlangt?",
+    "en": "What did procurement ask for at the start?"
+   },
+   "options": [
+    "A 20 percent discount",
+    "A longer contract",
+    "More users",
+    "A free pilot"
+   ],
+   "answer": 0,
+   "quote": "She opened with a clear demand: a 20 percent discount",
+   "why": {
+    "de": "Frau Roth eröffnet mit einer klaren Forderung: 20 Prozent Rabatt.",
+    "en": "Ms. Roth opens with a clear demand: a 20 percent discount."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum war die Vertragslaufzeit für den Verkäufer nützlich?",
+    "en": "Why was the contract length useful for the seller?"
+   },
+   "options": [
+    "It let him ask for something in return for the discount.",
+    "It made the deal smaller.",
+    "It ended the negotiation.",
+    "It was required by law."
+   ],
+   "answer": 0,
+   "quote": "That gave us room to move.",
+   "why": {
+    "de": "Ein Zugeständnis beim Preis gibt es nur gegen eine Gegenleistung – die längere Laufzeit ist diese Gegenleistung.",
+    "en": "A price concession only comes in exchange for something, and the longer contract is that something."
+   }
+  },
+  "notice": [
+   "Where do you have some flexibility?",
+   "If you could commit to three years, we could",
+   "That's not something I can agree to today"
+  ],
+  "shadow": [
+   "Where do you have some flexibility?",
+   "If you could commit to three years, we could offer a lower price per user.",
+   "That's not something I can agree to today, but I will check it with our finance team."
+  ],
+  "toolIn": "If you could commit to three years, we could offer a lower price per user"
+ },
+ {
+  "id": "x-t08",
+  "theme": "t08",
+  "genre": "email",
+  "title": "Partnership idea for Brightline IT",
+  "text": "Subject: Partnership idea for Brightline IT\n\nDear Mr. Clarke,\n\nWe met briefly at the partner event in Manchester last month, where you mentioned that many of your clients are asking about document management in the cloud. I've been thinking about our conversation, and I believe there could be a mutually beneficial partnership between our companies.\n\nManaging the IT of more than 200 mid-sized companies, your team already has the client relationships. If you added our platform to your portfolio, you could offer those clients a complete solution for invoices, contracts, and archiving. What's in it for you is recurring revenue: partners earn a commission of 20 percent on every license, every year, as long as the customer stays.\n\nYou wouldn't be on your own with the product. Our program includes enablement and co-marketing, which means technical training for your consultants, ready-made campaigns, and joint events with our sales team. If a project were too big for your team, our experts would support you on site.\n\nI realize you probably receive offers like this every week, so I will keep it short. Would you be open to a quick call next Tuesday or Wednesday? It might be worth spending twenty minutes to see whether it makes sense for both sides.\n\nKind regards",
+  "core": {
+   "q": {
+    "de": "Wie viel Provision bekommen Partner?",
+    "en": "How much commission do partners earn?"
+   },
+   "options": [
+    "20 percent on every license, every year",
+    "20 percent once",
+    "200 euros per client",
+    "Nothing in the first year"
+   ],
+   "answer": 0,
+   "quote": "partners earn a commission of 20 percent on every license, every year",
+   "why": {
+    "de": "Der zweite Absatz nennt die Provision: 20 Prozent je Lizenz, jedes Jahr – das ist der wiederkehrende Umsatz.",
+    "en": "The second paragraph names the commission: 20 percent per license, every year, which is the recurring revenue."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum verspricht der Autor, sich kurz zu fassen?",
+    "en": "Why does the writer promise to keep it short?"
+   },
+   "options": [
+    "He knows Mr. Clarke is busy and gets many offers.",
+    "He has little to say.",
+    "He does not want a partnership.",
+    "He is not sure about the price."
+   ],
+   "answer": 0,
+   "quote": "I realize you probably receive offers like this every week",
+   "why": {
+    "de": "Er zeigt Verständnis für die Lage des Partners und senkt die Hürde für ein Ja.",
+    "en": "He shows that he understands the partner’s situation and makes it easier to say yes."
+   }
+  },
+  "notice": [
+   "recurring revenue",
+   "a mutually beneficial partnership",
+   "Would you be open to a quick call?"
+  ],
+  "shadow": [
+   "What's in it for you is recurring revenue.",
+   "Our program includes enablement and co-marketing.",
+   "It might be worth spending twenty minutes to see whether it makes sense for both sides."
+  ],
+  "toolIn": "worth spending twenty minutes"
+ },
+ {
+  "id": "x-t09",
+  "theme": "t09",
+  "genre": "email",
+  "title": "Delay in your migration project",
+  "text": "Subject: Delay in your migration project\n\nDear Mr. Schulz,\n\nFirst of all, I owe you an apology. We promised that your old archive would be fully migrated by September 15, and we have missed that date. I know your team has been waiting for almost two weeks, and I understand how frustrating that is.\n\nHere is where we stand. We've identified the root cause: about 80,000 of your older files use a format that our import tool did not recognize. Having already converted half of them, our engineers have tested the rest on a smaller sample. So far, no data has been lost.\n\nHere's what we're doing about it. Two additional engineers have joined the project this week, and they are working on the remaining files every day. We expect the migration to be complete by October 2. Until then, your team can still access all documents in the old system.\n\nTo make up for it, we will not charge you for the extra migration work, and we will extend your support package by three months at no cost.\n\nI'll keep you posted with a short update every Friday. If you would like to discuss this by phone, I'm available anytime this week.\n\nBest regards",
+  "core": {
+   "q": {
+    "de": "Warum hat sich die Umstellung verzögert?",
+    "en": "Why was the migration delayed?"
+   },
+   "options": [
+    "Many older files used a format the tool did not recognize.",
+    "The customer sent the files late.",
+    "The engineers were sick.",
+    "The servers were down."
+   ],
+   "answer": 0,
+   "quote": "about 80,000 of your older files use a format that our import tool did not recognize",
+   "why": {
+    "de": "Die Ursache steht direkt nach „We’ve identified the root cause“: ein Dateiformat, das das Werkzeug nicht erkannte.",
+    "en": "The cause comes right after \"We've identified the root cause\": a file format the tool did not recognize."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Was soll Herr Schulz nach dem Lesen denken?",
+    "en": "What should Mr. Schulz think after reading the email?"
+   },
+   "options": [
+    "The problem is under control, and he is taken seriously.",
+    "The customer caused the problem.",
+    "The project will be canceled.",
+    "He should find a new provider."
+   ],
+   "answer": 0,
+   "quote": "So far, no data has been lost.",
+   "why": {
+    "de": "Die Mail entschuldigt sich, nennt Ursache, Maßnahmen, Ausgleich und feste Updates – alles, um Vertrauen zurückzugewinnen.",
+    "en": "The email apologizes and names the cause, the fix, the compensation, and regular updates, all to win back trust."
+   }
+  },
+  "notice": [
+   "I owe you an apology",
+   "We've identified the root cause",
+   "I'll keep you posted"
+  ],
+  "shadow": [
+   "First of all, I owe you an apology.",
+   "We've identified the root cause.",
+   "I'll keep you posted with a short update every Friday."
+  ],
+  "toolIn": "and we have missed that date"
+ },
+ {
+  "id": "x-t10",
+  "theme": "t10",
+  "genre": "story",
+  "title": "Thirty minutes of pipeline review",
+  "text": "Every Monday at nine, I run a 30-minute pipeline review with my team. Last week, it almost got out of control.\n\n“Let's get started,” I said at 9:02, and shared the forecast. We had 14 open deals worth 1.8 million euros, and six of them were due to close by the end of the quarter on September 30. I asked each account manager for a one-sentence update.\n\nAsked first, Julia began, but after two minutes she was still talking about a customer's new office building. “Can I just jump in here?” I asked. “What's the next step, and when is it?” She laughed and said, “A demo on Thursday at 2 p.m.”\n\nThen Tobias started a long discussion about our price list for public sector customers. It's an important topic, but not for this meeting. “Let's take that offline,” I suggested, and we scheduled a separate call for Wednesday.\n\nNear the end, we found a problem: nobody had followed up with a prospect in Vienna for three weeks. “Who's going to own this?” I asked. Tobias volunteered and promised to call them by Tuesday noon.\n\nTo wrap up, I summarized the three action items, with names and dates. We finished at 9:29, one minute early.",
+  "core": {
+   "q": {
+    "de": "Was hat Tobias übernommen?",
+    "en": "What did Tobias agree to do?"
+   },
+   "options": [
+    "Call the prospect in Vienna by Tuesday noon",
+    "Prepare the demo on Thursday",
+    "Update the price list",
+    "Share the forecast"
+   ],
+   "answer": 0,
+   "quote": "Tobias volunteered and promised to call them by Tuesday noon.",
+   "why": {
+    "de": "Auf die Frage „Who’s going to own this?“ meldet sich Tobias – mit genauer Frist.",
+    "en": "When the writer asks who is going to own this, Tobias volunteers, with an exact deadline."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum unterbricht der Autor Julia?",
+    "en": "Why does the writer interrupt Julia?"
+   },
+   "options": [
+    "Her details did not help the forecast.",
+    "She was wrong about the numbers.",
+    "She was late.",
+    "She wanted to end the meeting."
+   ],
+   "answer": 0,
+   "quote": "she was still talking about a customer's new office building",
+   "why": {
+    "de": "Er sagt es nicht offen, aber das neue Bürogebäude hat mit dem nächsten Schritt im Deal nichts zu tun.",
+    "en": "He does not say it openly, but the new office building has nothing to do with the next step in the deal."
+   }
+  },
+  "notice": [
+   "Can I just jump in here?",
+   "Let's take that offline",
+   "Who's going to own this?"
+  ],
+  "shadow": [
+   "Can I just jump in here?",
+   "What's the next step, and when is it?",
+   "To wrap up, I summarized the three action items, with names and dates."
+  ],
+  "toolIn": "six of them were due to close by the end of the quarter on September 30"
+ },
+ {
+  "id": "x-t11",
+  "theme": "t11",
+  "genre": "email",
+  "title": "One year with the new archive",
+  "text": "Subject: One year with the new archive\n\nHi Anna,\n\nNow that you've been using it for a year, I wanted to check in and hear your honest opinion. How has it been working for your team? From our side, the numbers look good: your accounting team has processed more than 30,000 invoices in the system, and the average approval time has dropped from nine days to three. Rarely have we seen a team adopt the system so quickly.\n\nYour contract renews on November 1, and I was wondering if we could use that opportunity to look ahead. In our last call, you mentioned that the HR department is still working with paper files. I'd love to explore whether the same approach could work for employee records. We could start with a short workshop and see if it makes sense.\n\nI also have a small favor to ask. We are preparing a case study for other companies in the food industry, and your project is one of our best examples. Would you be open to being a reference? It would only mean a 30-minute interview and your approval of the final text. No pressure at all, of course. If the timing isn't right, I completely understand.\n\nWould a call next week work for you?\n\nBest regards",
+  "core": {
+   "q": {
+    "de": "Wie viel schneller geht die Freigabe von Rechnungen jetzt?",
+    "en": "How much faster is invoice approval now?"
+   },
+   "options": [
+    "From nine days to three",
+    "From three days to one",
+    "It is slower than before",
+    "It has not changed"
+   ],
+   "answer": 0,
+   "quote": "the average approval time has dropped from nine days to three",
+   "why": {
+    "de": "Der erste Absatz nennt die Zahl: von neun auf drei Tage.",
+    "en": "The first paragraph gives the number: from nine days to three."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum sagt der Autor, dass er ein Nein völlig verstehen würde?",
+    "en": "Why does the writer say he would completely understand a no?"
+   },
+   "options": [
+    "He wants to make it easy for Anna to say no.",
+    "He expects Anna to refuse.",
+    "He is not really interested.",
+    "He wants to end the contract."
+   ],
+   "answer": 0,
+   "quote": "If the timing isn't right, I completely understand.",
+   "why": {
+    "de": "Eine Bitte um eine Referenz ist ein Gefallen. Wer das Nein leicht macht, bekommt eher ein Ja.",
+    "en": "Asking for a reference is a favor. Making it easy to say no makes a yes more likely."
+   }
+  },
+  "notice": [
+   "How has it been working for your team?",
+   "I'd love to explore whether",
+   "Would you be open to being a reference?"
+  ],
+  "shadow": [
+   "Now that you've been using it for a year, I wanted to check in and hear your honest opinion.",
+   "I'd love to explore whether the same approach could work for employee records.",
+   "No pressure at all, of course."
+  ],
+  "toolIn": "I was wondering if we could use that opportunity to look ahead"
+ },
+ {
+  "id": "x-t12",
+  "theme": "t12",
+  "genre": "story",
+  "title": "Five minutes at the booth",
+  "text": "It's the second day of the trade show in Stuttgart, and our booth is busy. Seeing a man in a gray jacket study our poster about e-invoicing, I walk over and say hello. “What brings you to the show?” He tells me he works for a logistics company near Hamburg and is looking for ideas for their archive.\n\nI ask him a follow-up question: “How's business on your end?” He laughs and says they are hiring right now, because two big customers are moving their warehouses to northern Germany. That explains his visit: more customers mean more paper.\n\nWe talk for about five minutes. I don't pitch the product. Instead, I ask how they handle delivery notes today, and I tell him a short story about a customer with the same problem. Then I notice that his colleague is waving at him from the next booth. “I'll let you get back to it,” I say, and we exchange cards.\n\nThe next morning, I send him a LinkedIn message: “Great connecting with you at the trade show in Stuttgart. Here is the case study I mentioned. Let's stay in touch.” Two weeks later, he asks for a demo.",
+  "core": {
+   "q": {
+    "de": "Warum kommt der Mann an den Stand?",
+    "en": "Why is the man at the booth?"
+   },
+   "options": [
+    "He is looking for ideas for their archive.",
+    "He wants a job.",
+    "He is selling logistics services.",
+    "He is meeting a colleague for lunch."
+   ],
+   "answer": 0,
+   "quote": "is looking for ideas for their archive",
+   "why": {
+    "de": "Er sagt es selbst: Er sucht Ideen für das Archiv seiner Firma.",
+    "en": "He says it himself: he is looking for ideas for his company’s archive."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum stellt der Autor das Produkt nicht vor?",
+    "en": "Why does the writer not pitch the product?"
+   },
+   "options": [
+    "He wants to build a relationship first.",
+    "He does not know the product well.",
+    "The man is not a potential customer.",
+    "The booth is closing."
+   ],
+   "answer": 0,
+   "quote": "I don't pitch the product.",
+   "why": {
+    "de": "Er fragt lieber nach und erzählt eine passende Geschichte. Dass zwei Wochen später eine Demo-Anfrage kommt, zeigt, dass es wirkt.",
+    "en": "He asks questions and tells a relevant story instead. The demo request two weeks later shows that it works."
+   }
+  },
+  "notice": [
+   "What brings you to the show?",
+   "How's business on your end?",
+   "Let's stay in touch"
+  ],
+  "shadow": [
+   "What brings you to the show?",
+   "How's business on your end?",
+   "Two weeks later, he asks for a demo."
+  ],
+  "toolIn": "they are hiring right now"
+ },
+ {
+  "id": "x-t13",
+  "theme": "t13",
+  "genre": "story",
+  "title": "Polite but firm",
+  "text": "The trip to the trade show in Chicago started badly. My flight from Frankfurt was two hours late, so I missed my connection in New York. At the transfer desk, I stayed calm and asked, “Could you rebook me on the next flight?” The agent typed for a long time and finally found a seat on an evening flight.\n\nWhen I arrived at the hotel close to midnight, the receptionist gave me a small room next to the elevator. “That's not what I booked,” I told her politely. I had reserved a quiet room with a desk, because I needed to prepare a presentation. She checked her screen. “There must have been a mix-up with the booking system,” she said. It couldn't have been my mistake, because I had the confirmation on my phone.\n\nTired as I was, I didn't raise my voice. “I was wondering if there's anything you could do tonight,” I said. “I'd appreciate it if you could at least move me tomorrow morning.” The next morning, she moved me to a corner room on the twelfth floor, with a desk and a view of the lake.\n\nThe lesson? Polite but firm works better than angry.",
+  "core": {
+   "q": {
+    "de": "Warum hat der Autor den Anschluss in New York verpasst?",
+    "en": "Why did the writer miss his connection in New York?"
+   },
+   "options": [
+    "His flight from Frankfurt was late.",
+    "The hotel lost his booking.",
+    "He was at the wrong gate.",
+    "The trade show started early."
+   ],
+   "answer": 0,
+   "quote": "My flight from Frankfurt was two hours late, so I missed my connection in New York.",
+   "why": {
+    "de": "Der erste Absatz nennt den Grund: zwei Stunden Verspätung ab Frankfurt.",
+    "en": "The first paragraph gives the reason: a two-hour delay from Frankfurt."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum hat er wohl das bessere Zimmer bekommen?",
+    "en": "Why did he probably get the better room?"
+   },
+   "options": [
+    "He stayed polite but firm.",
+    "He threatened to leave.",
+    "The hotel was empty.",
+    "He paid extra."
+   ],
+   "answer": 0,
+   "quote": "Polite but firm works better than angry.",
+   "why": {
+    "de": "Er zieht selbst den Schluss: Höflich, aber bestimmt bringt mehr als Ärger.",
+    "en": "He draws the conclusion himself: polite but firm gets better results than anger."
+   }
+  },
+  "notice": [
+   "Could you rebook me on the next flight?",
+   "That's not what I booked",
+   "I'd appreciate it if"
+  ],
+  "shadow": [
+   "Could you rebook me on the next flight?",
+   "There must have been a mix-up with the booking system",
+   "Polite but firm works better than angry."
+  ],
+  "toolIn": "There must have been a mix-up with the booking system"
+ },
+ {
+  "id": "x-t14",
+  "theme": "t14",
+  "genre": "story",
+  "title": "The shortcut",
+  "text": "Last spring, my friend Tom and I planned a weekend in the mountains. We had booked a small cabin weeks before, so on Saturday we packed the car and left early. Everything was going well until the GPS sent us up a narrow forest road.\n\nSo there I was, in a rented minivan, on a muddy road with no cell phone signal and a very hungry friend next to me. It was getting dark, and I had no idea where we were. After twenty minutes, we saw a farmer who was fixing a fence. I explained our problem, and he laughed.\n\nIt turned out that we had driven past the cabin an hour earlier. The owner had changed the address online, but our GPS was still using the old map. Driving ahead of us with his tractor, the farmer led us all the way back to the main road.\n\nThe funny thing is, Tom still says it was the best part of the trip. Long story short, we arrived late, ate cold pizza, and slept like logs. In the end, the weekend turned out perfect, and now I always download offline maps before a trip.",
+  "core": {
+   "q": {
+    "de": "Warum hat das Navi sie falsch geleitet?",
+    "en": "Why did the GPS send them the wrong way?"
+   },
+   "options": [
+    "It was still using the old map.",
+    "The phone battery was empty.",
+    "The farmer gave wrong directions.",
+    "The cabin had closed."
+   ],
+   "answer": 0,
+   "quote": "our GPS was still using the old map",
+   "why": {
+    "de": "Der Besitzer hatte die Adresse geändert, das Navi kannte nur die alte Karte.",
+    "en": "The owner had changed the address, but the GPS only knew the old map."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Wie sieht der Autor die Reise heute?",
+    "en": "How does the writer see the trip today?"
+   },
+   "options": [
+    "As a good memory",
+    "As a mistake he regrets",
+    "As a reason to be angry at the farmer",
+    "As his last trip"
+   ],
+   "answer": 0,
+   "quote": "In the end, the weekend turned out perfect",
+   "why": {
+    "de": "Er erzählt mit Humor und sagt, dass das Wochenende am Ende perfekt war.",
+    "en": "He tells the story with humor and says the weekend turned out perfect in the end."
+   }
+  },
+  "notice": [
+   "So there I was",
+   "It turned out that",
+   "Long story short"
+  ],
+  "shadow": [
+   "It turned out that we had driven past the cabin an hour earlier.",
+   "Long story short, we arrived late, ate cold pizza, and slept like logs.",
+   "In the end, the weekend turned out perfect."
+  ],
+  "toolIn": "we had driven past the cabin an hour earlier"
+ },
+ {
+  "id": "x-t15",
+  "theme": "t15",
+  "genre": "story",
+  "title": "Will AI replace salespeople?",
+  "text": "At lunch today, my colleague Mark claimed that AI will replace most sales jobs within five years. Having just read an article about chatbots that write offers and answer customer questions on their own, he sounded very sure.\n\n“I see where you're coming from, but I don't think it's that simple,” I said. “I'd argue that AI will probably change the job more than it replaces it. Tools that summarize calls or draft emails are already saving us time. But a customer who is about to spend half a million euros still wants to talk to a person they trust.”\n\nMark wasn't convinced. “Customers don't care who writes the offer,” he said, “as long as it's fast and cheap.” “That's a fair point for small, simple deals,” I admitted. “If you only sell a few licenses, a website and a chatbot might be enough.”\n\nIt's a bit more nuanced than that for complex projects, though. Someone has to understand the politics inside a company, notice when the CFO is nervous, and find a compromise that works for everyone. At least for now, that is hard to automate.\n\nIn the end, we agreed on one thing: salespeople who use AI well will likely replace those who don't. Whether Mark is right about the rest, time will tell.",
+  "core": {
+   "q": {
+    "de": "Was glaubt Mark?",
+    "en": "What does Mark believe?"
+   },
+   "options": [
+    "AI will replace most sales jobs within five years.",
+    "AI is useless for sales.",
+    "Chatbots are too expensive.",
+    "Customers prefer email."
+   ],
+   "answer": 0,
+   "quote": "AI will replace most sales jobs within five years",
+   "why": {
+    "de": "Der erste Satz nennt Marks Behauptung.",
+    "en": "The first sentence states Mark’s claim."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Welchen Punkt gesteht der Autor Mark zu?",
+    "en": "Which point does the writer accept from Mark?"
+   },
+   "options": [
+    "For small, simple deals, a chatbot might be enough.",
+    "Big projects can be automated.",
+    "CFOs never get nervous.",
+    "Offers should be written by hand."
+   ],
+   "answer": 0,
+   "quote": "That's a fair point for small, simple deals",
+   "why": {
+    "de": "Mit „That’s a fair point“ stimmt er teilweise zu – aber nur für kleine Deals.",
+    "en": "With \"That's a fair point,\" he partly agrees, but only for small deals."
+   }
+  },
+  "notice": [
+   "I see where you're coming from, but",
+   "I'd argue that",
+   "It's a bit more nuanced than that"
+  ],
+  "shadow": [
+   "I'd argue that AI will probably change the job more than it replaces it.",
+   "That's a fair point for small, simple deals.",
+   "Whether Mark is right about the rest, time will tell."
+  ],
+  "toolIn": "AI will probably change the job more than it replaces it"
+ },
+ {
+  "id": "x-t16",
+  "theme": "t16",
+  "genre": "email",
+  "title": "Heating problem in apartment 4B",
+  "text": "Subject: Heating problem in apartment 4B\n\nDear Mr. Novak,\n\nI'm writing because I've been having trouble with the heating in my apartment. The radiator in the living room, the one that is next to the balcony door, only gets warm for about an hour in the morning. After that, it stays cold, even when I turn it up all the way.\n\nIt's been going on for about a week, and the nights are getting colder. I also noticed a small leak at the pipe that connects the radiator to the wall. There is a little water on the floor every morning, and I'm worried that it will damage the wooden floor.\n\nCould you take a look at it, or send someone who can repair it? I work from home on Mondays and Fridays, so those days would be best for me. Would it be possible to arrange a visit before the weekend?\n\nShould the repair take longer, what are my options? My neighbor told me that tenants can sometimes pay less rent while the heating doesn't work, but I would much rather have the problem fixed.\n\nThank you in advance for your help.\n\nBest regards",
+  "core": {
+   "q": {
+    "de": "Was ist das Hauptproblem?",
+    "en": "What is the main problem?"
+   },
+   "options": [
+    "The radiator stays cold most of the day.",
+    "The rent is too high.",
+    "The balcony door is broken.",
+    "The neighbor is too loud."
+   ],
+   "answer": 0,
+   "quote": "After that, it stays cold, even when I turn it up all the way.",
+   "why": {
+    "de": "Der Heizkörper wird nur morgens eine Stunde warm und bleibt danach kalt.",
+    "en": "The radiator only gets warm for an hour in the morning and stays cold after that."
+   }
+  },
+  "between": {
+   "q": {
+    "de": "Warum erwähnt der Autor die Mietminderung?",
+    "en": "Why does the writer mention paying less rent?"
+   },
+   "options": [
+    "To show politely that he knows his rights",
+    "Because he wants to move out",
+    "Because he can't pay the rent",
+    "To complain about the neighbor"
+   ],
+   "answer": 0,
+   "quote": "but I would much rather have the problem fixed",
+   "why": {
+    "de": "Er droht nicht direkt, macht aber höflich klar, dass er seine Rechte kennt – und dass ihm die Reparatur lieber ist.",
+    "en": "He does not threaten directly, but he makes it politely clear that he knows his rights and would prefer a repair."
+   }
+  },
+  "notice": [
+   "I've been having trouble with",
+   "It's been going on for about a week",
+   "Would it be possible to"
+  ],
+  "shadow": [
+   "I'm writing because I've been having trouble with the heating in my apartment.",
+   "It's been going on for about a week, and the nights are getting colder.",
+   "Would it be possible to arrange a visit before the weekend?"
+  ],
+  "toolIn": "send someone who can repair it"
+ }
+]

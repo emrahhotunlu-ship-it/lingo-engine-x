@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useClock } from '../../../app/clock';
+import { useNav } from '../../../app/nav';
 import { useAiAvailable } from '../../../ai/scope';
 import { useAsk } from '../../../ai/useAsk';
 import { useT, type MessageKey } from '../../../i18n';
@@ -8,7 +9,8 @@ import { Button } from '../../../ui/Button';
 import { Sheet } from '../../../ui/Sheet';
 import { toast } from '../../../ui/Toast';
 import { EnglishText } from '../../../engine/EnglishText';
-import { addGenerated, addWord, knownWords, type AddOutcome } from './actions';
+import { addGenerated, addWord, knownKeys, knownWords, wordKey, type AddOutcome } from './actions';
+import { FromText } from './FromText';
 
 // Wörter hinzufügen (Funktionsabgleich M2): eigenes Wort (Englisch, Deutsch, Satz – ohne Satz
 // keine Karte, Kap. 15; mit Claude lässt sich alles auf Knopfdruck ergänzen), „Neue Wörter von
@@ -26,13 +28,14 @@ export function AddWordSheet({ open, onClose }: { open: boolean; onClose: () => 
   const { t } = useT();
   return (
     <Sheet open={open} onClose={onClose} title={t('vcAddTitle')} closeLabel={t('close')}>
-      {open && <AddBody />}
+      {open && <AddBody onClose={onClose} />}
     </Sheet>
   );
 }
 
-function AddBody() {
+function AddBody({ onClose }: { onClose: () => void }) {
   const { t } = useT();
+  const go = useNav((s) => s.go);
   const ai = useAiAvailable();
   const today = useClock((s) => s.today);
   const fill = useAsk(wordGen);
@@ -43,6 +46,8 @@ function AddBody() {
   const [extra, setExtra] = useState<{ pos: string; def: string; level: string }>({ pos: '', def: '', level: '' });
   const [genSrc, setGenSrc] = useState<'ai' | 'job'>('ai');
   const [added, setAdded] = useState<string[]>([]);
+  // Schlüssel der Wörter, die schon im Wortschatz waren, als Claude gefragt wurde: Vorschläge davon werden nicht gezeigt.
+  const [have, setHave] = useState<ReadonlySet<string>>(new Set());
   const [saving, setSaving] = useState(false);
   const busy = (p: string) => p === 'queued' || p === 'thinking' || p === 'streaming' || p === 'slow';
 
@@ -74,6 +79,7 @@ function AddBody() {
   const generate = async (mode: 'general' | 'job') => {
     setGenSrc(mode === 'job' ? 'job' : 'ai');
     setAdded([]);
+    setHave(knownKeys());
     await gen.run({ mode, count: 8, known: knownWords() });
   };
 
@@ -83,8 +89,10 @@ function AddBody() {
     else toast(t(OUTCOME[res]), 'error');
   };
 
+  // Nur Neues zeigen (höchstens 8): Claude kennt zwar die zuletzt hinzugefügten Wörter, aber nicht alle.
+  const fresh = (gen.data?.words ?? []).filter((w) => !have.has(wordKey(w.word))).slice(0, 8);
   const addAll = async () => {
-    for (const w of gen.data?.words ?? []) if (!added.includes(w.word)) await addOne(w);
+    for (const w of fresh) if (!added.includes(w.word)) await addOne(w);
     toast(t('vcAllAdded'));
   };
 
@@ -157,7 +165,7 @@ function AddBody() {
           {gen.data && (
             <>
               <ul className="flex flex-col gap-3" data-testid="gen-list">
-                {gen.data.words.map((w) => {
+                {fresh.map((w) => {
                   const done = added.includes(w.word);
                   return (
                     <li key={w.word} className="flex flex-col gap-1 rounded-xl bg-surface p-3" data-testid="gen-word" data-word={w.word}>
@@ -188,6 +196,23 @@ function AddBody() {
           )}
         </section>
       )}
+      {ai && <FromText />}
+      <section className="flex flex-col gap-2">
+        <h3 className="lx-eyebrow">{t('vcFromTeacher')}</h3>
+        <div>
+          <Button
+            variant="secondary"
+            icon="chat"
+            onClick={() => {
+              onClose();
+              go({ name: 'teacherFeedback' });
+            }}
+            data-testid="add-teacher-feedback"
+          >
+            {t('vcFromTeacherGo')}
+          </Button>
+        </div>
+      </section>
     </div>
   );
 }

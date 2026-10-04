@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen, type BootOptions, openSpeak } from './fixtures';
+import { boot, layoutProblems, openOverview, screen, type BootOptions } from './fixtures';
 import { dump } from './trainerHelpers';
 
 // Persönliche „Deutsch-Fallen“ (Lernberatung 27.09., V3) und Wochenfokus Preply ↔ App (V8/Nr. 9):
@@ -8,8 +8,7 @@ import { dump } from './trainerHelpers';
 //   eigenem Beispiel und Verlauf; `app/patterns` gespeichert (gekappt, Verlauf je ISO-Woche).
 // - Kurzdrill: eigene Sätze als Reparatur-Sätze (src `pattern`), neue Sätze mit pattern-check@1.
 // - Vorhandene Muster: Karte auf „Dein Stand“ mit Wochenfokus, kein automatischer Aufruf in
-//   derselben Woche; Wochenbericht mit seltener/gleich/häufiger; Preply-Vorbereitung mit Fokus
-//   und „Please pay attention to: …“ in der Nachricht; Hinweis im Prompt von „Sag es“.
+//   derselben Woche; Wochenbericht mit seltener/gleich/häufiger; Hinweis im Prompt von „Sag es“.
 // Handy (390) und Desktop.
 
 type Doc = Record<string, unknown>;
@@ -78,6 +77,7 @@ const patternsDoc = async (page: Page) => (await dump(page))['app/patterns'] as 
 async function openPatterns(page: Page, opts: BootOptions) {
   const booted = await boot(page, { migrated: true, ...opts });
   await openOverview(page);
+  await page.getByTestId('tab-errors').click();
   await expect(page.getByTestId('patterns-stand')).toBeVisible();
   await page.getByTestId('patterns-open').click();
   await page.locator('[data-screen="patterns"]').waitFor({ state: 'visible' });
@@ -132,13 +132,22 @@ for (const size of SIZES) {
     await expect(drill).toHaveAttribute('data-id', 'since-present');
     let fixes = 0;
     let frees = 0;
-    for (let i = 0; i < 8; i++) {
+    let starts = 0;
+    for (let i = 0; i < 12; i++) {
       if ((await drill.getAttribute('data-state')) === 'done') break;
       // Nur die offene Aufgabe (die beantwortete blendet noch aus).
       const repair = page.locator('[data-testid="repair-item"][data-state="open"]');
       const free = page.locator('[data-testid="pattern-free"][data-state="open"]');
-      await expect(repair.or(free)).toBeVisible();
-      if (await repair.isVisible()) {
+      // N43: 3 Sätze aus dem Startsatz der Fallen sind eingestreut (zählen nicht in den Trend).
+      const start = page.locator('[data-testid="focus-item"][data-state="open"]');
+      await expect(repair.or(free).or(start)).toBeVisible();
+      if (await start.isVisible()) {
+        await expect(page.getByTestId('focus-hint')).toBeVisible();
+        await page.getByTestId('focus-dont-know').click();
+        await expect(page.getByTestId('feedback-solution')).toBeVisible();
+        starts++;
+        await page.getByTestId('next').click();
+      } else if (await repair.isVisible()) {
         await expect(repair).toContainText('aus deinen Deutsch-Fallen');
         await expect(page.getByTestId('repair-right')).toHaveCount(0);
         await page.getByTestId('repair-input').fill('We have been partners for many years now.');
@@ -176,6 +185,7 @@ for (const size of SIZES) {
     expect(fixes).toBeGreaterThanOrEqual(1);
     expect(frees).toBeGreaterThanOrEqual(2);
     expect(fixes + frees).toBeLessThanOrEqual(7);
+    expect(starts).toBe(3);
     const end = page.getByTestId('pattern-drill-end');
     await expect(end).toHaveAttribute('data-ok', String(fixes + frees - 1));
     // Eigene Sätze sind jetzt Reparatur-Sätze mit Quelle „pattern“ (oder waren es schon).
@@ -194,9 +204,10 @@ for (const size of SIZES) {
 test.describe('Vorhandene Muster (Desktop, EN)', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
-  test('Dein Stand, Sprachtreue, Wochenbericht und Preply-Wochenfokus', async ({ page }) => {
+  test('Dein Stand, Sprachtreue, Wochenbericht und Wochenfokus', async ({ page }) => {
     const { errors, external } = await boot(page, { migrated: true, lang: 'en', fake: { patch: { 'app/patterns': PRESET, 'say/2026-09': SAY_DOC } } });
     await openOverview(page);
+    await page.getByTestId('tab-errors').click();
     const card = page.getByTestId('patterns-stand');
     await expect(card).toContainText('Your German traps');
     await expect(page.getByTestId('patterns-stand-item')).toHaveCount(2);
@@ -212,6 +223,8 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     await expect(weekly).toContainText('German traps');
 
     // Liste: die Regel liegt nur auf Deutsch vor → Hinweis statt gemischter Sprache.
+    // Der Einstieg steht auf der Karte „Deine Deutsch-Fallen“ im Reiter Fehler (Neubau: Stand-Reiter).
+    await page.getByTestId('tab-errors').click();
     await page.getByTestId('patterns-open').click();
     await page.locator('[data-screen="patterns"]').waitFor({ state: 'visible' });
     await expect(page.getByTestId('pattern-rule')).toHaveCount(0);
@@ -219,23 +232,6 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     await expect(page.getByTestId('patterns-focus')).toContainText('Weekly focus');
     // Diese Woche schon erkannt: kein automatischer Aufruf.
     expect((await calls(page)).filter((c) => c.id === 'patterns')).toEqual([]);
-
-    // Preply: Wochenfokus in der Vorbereitung und in der Nachricht an den Lehrer.
-    await page.getByTestId('patterns-close').click();
-    await screen(page, 'overview');
-    // Preply liegt seit der neuen Struktur unter Sprechen → Preply.
-    await openSpeak(page, 'preply');
-    await expect(page.getByTestId('pp-focus')).toContainText('“since” with the present tense');
-    await page.getByTestId('pp-create').click();
-    await expect(page.getByTestId('pp-plan')).toBeVisible();
-    await expect(page.getByTestId('pp-plan-focus')).toContainText('“actual” used for “current”');
-    await expect(page.getByTestId('pp-message')).toContainText('Please pay attention to: “since” with the present tense; “actual” used for “current”');
-    const pp = Object.entries(await dump(page)).find(([k]) => k.startsWith('preply/pp') && k !== 'preply/pp1789581600000')![1];
-    expect(pp.message).toContain('Please pay attention to:');
-    expect((pp.focus as Doc[]).slice(0, 2)).toEqual([
-      { de: SINCE.title_de, en: SINCE.title_en },
-      { de: ACTUAL.title_de, en: ACTUAL.title_en },
-    ]);
     expect(await layoutProblems(page)).toEqual([]);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
@@ -248,6 +244,9 @@ test('„Sag es“ bekommt die Top-3-Muster als Hinweis im Prompt (Handy)', asyn
   await boot(page, { migrated: true, fake: { patch: { 'app/patterns': PRESET, 'app/profile': { plan } } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
+  // Neubau N71 „Laut zuerst“: erst laut sprechen, dann aufschreiben.
+  await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'aloud');
+  await page.getByTestId('say-aloud-done').click();
   await expect(page.getByTestId('say')).toHaveAttribute('data-phase', 'write1');
   await page
     .getByTestId('say-draft')

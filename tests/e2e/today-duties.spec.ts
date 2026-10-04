@@ -55,23 +55,27 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
   if (n === 3) {
     await expect(status).toHaveText('Fertig für heute');
     await expect(status).toHaveAttribute('data-status', 'allDone');
+    // Fertig ist Zustand: keine Blockliste, kein Knopf in der Karte (Kap. 2.2).
+    await expect(page.getByTestId('duty')).toHaveCount(0);
+    await expect(page.getByTestId('today-card').locator('button')).toHaveCount(0);
   } else {
-    await expect(status).toHaveText(`Heute · ${n} von 3`);
+    await expect(status).toHaveText(new RegExp(`^${n} von 3 · noch ca\\. \\d+ Min\\.$`));
     await expect(status).toHaveAttribute('data-status', 'open');
+    // Häkchen: genau die erledigten Punkte, in Plan-Reihenfolge.
+    const items = page.getByTestId('duty');
+    await expect(items).toHaveCount(3);
+    expect(await items.evaluateAll((els) => els.map((e) => [e.getAttribute('data-duty'), e.getAttribute('data-state')]))).toEqual(DUTIES.map((d) => [d, done.has(d) ? 'done' : 'open']));
+    // Erledigt ist Zustand: keine Zeile hat ein bedienbares Kind; bedienbar ist nur der eine Startknopf.
+    await expect(page.locator('[data-testid="duty"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(0);
+    for (const d of open) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText(LABEL[d] ?? d);
+    for (const d of DUTIES) if (done.has(d)) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText('erledigt');
+    await expect(page.locator(`[data-testid="duty"][data-duty="${open[0] ?? ''}"]`)).toHaveAttribute('data-now', 'true');
   }
-  // Häkchen: genau die erledigten Punkte, in Plan-Reihenfolge; keiner hat ein bedienbares Kind.
-  const items = page.getByTestId('duty');
-  await expect(items).toHaveCount(3);
-  expect(await items.evaluateAll((els) => els.map((e) => [e.getAttribute('data-duty'), e.getAttribute('data-state')]))).toEqual(DUTIES.map((d) => [d, done.has(d) ? 'done' : 'open']));
-  // Erledigt ist Zustand (Kap. 2.2): kein erledigter Punkt hat ein bedienbares Kind; bedienbar ist nur der eine Startknopf.
-  await expect(page.locator('[data-testid="duty"][data-state="done"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(0);
-  await expect(page.locator('[data-testid="duty"] :is(button, a, input, select, textarea, [tabindex])')).toHaveCount(open.length ? 1 : 0);
-  for (const d of open) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText(LABEL[d] ?? d);
-  for (const d of DUTIES) await expect(page.locator(`[data-testid="duty"][data-duty="${d}"]`)).toContainText(done.has(d) ? 'erledigt' : 'offen');
-  // Heldenkarte = erster offener Punkt, genau ein Primärknopf; alles erledigt → kein Knopf, Extra sichtbar.
+  // Tageskarte = erster offener Punkt, genau ein Primärknopf; alles erledigt → kein Knopf, Extra sichtbar.
   if (open.length) {
     await expect(page.getByTestId('hero')).toHaveAttribute('data-duty', open[0] ?? '');
     await expect(page.getByTestId('start')).toHaveCount(1);
+    await expect(page.getByTestId('start')).toHaveAttribute('data-duty', open[0] ?? '');
     await expect(page.getByTestId('tab-badge')).toHaveText(String(open.length));
     await expect(page.getByTestId('extra')).toHaveCount(0);
   } else {
@@ -79,10 +83,9 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
     await expect(page.getByTestId('start')).toHaveCount(0);
     await expect(page.getByTestId('tab-badge')).toHaveCount(0);
     await expect(page.getByTestId('extra')).toBeVisible();
-    // Angebote erst jetzt, jeweils mit Grund (Kap. 2.6).
-    const offers = page.getByTestId('offer');
-    expect(await offers.count()).toBeGreaterThanOrEqual(1);
-    for (const o of await offers.all()) await expect(o.getByTestId('offer-why')).not.toBeEmpty();
+    // „Lohnt sich jetzt“: genau eine Zeile, mit Grund (Kap. 2.6).
+    await expect(page.getByTestId('offer')).toHaveCount(1);
+    await expect(page.getByTestId('offer-why')).not.toBeEmpty();
   }
 }
 
@@ -129,8 +132,8 @@ test('Plan von heute bleibt nach dem Update gleich: Phase-1-Plan gilt bis 04:00,
   const phase1 = { d: DAY, v: 1, ids: [], why: [], duty: ['review'], goal: { review: 12 }, lesson: null, at: 1 };
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': { plan: phase1 } } } });
   await screen(page, 'today');
-  await expect(page.getByTestId('today-status')).toHaveText('Noch 12 Karten');
-  await expect(page.getByTestId('duty')).toHaveCount(0);
+  await expect(page.getByTestId('today-status')).toHaveAttribute('data-total', '1');
+  await expect(page.getByTestId('duty')).toHaveCount(1);
   await expect(page.getByTestId('hero')).toHaveAttribute('data-duty', 'review');
   await page.waitForTimeout(500);
   const d = await dump(page);

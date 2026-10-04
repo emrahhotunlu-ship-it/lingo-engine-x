@@ -8,20 +8,29 @@ import { IconButton } from '../../../ui/Button';
 import { dayKey } from '../../../domain/date';
 import { toast } from '../../../ui/Toast';
 import { saveLookupCard } from '../../lookup/store';
-import { CopyButton } from '../../preply/CopyBox';
+import { CopyButton } from '../../../ui/CopyBox';
 import { useCompanion } from '../store';
-import { cardFromResult, fillFromHistory, fromOf, isTranslating, requestFrom, runTranslate, setRegister, setTranslateText, stopTranslate, setDirection, useTranslate } from './store';
+import { saveTargets, type SaveTarget } from '../../../domain/companion/saveTargets';
+import { fillFromHistory, fromOf, isTranslating, requestFrom, runTranslate, setRegister, setTranslateText, stopTranslate, setDirection, useTranslate } from './store';
 
 // Übersetzer im Begleiter (Phase 5 §8.2, Kap. 6.12): Eingabe, Richtung ⇄, Ton (Formell/Neutral/
 // Locker), „Übersetzen". Ergebnis: Hauptfassung (englisch antippbar, 🔊, Kopieren), Alternativen mit
 // Ton-Chip, Hinweise, Begriffe. Verlauf der letzten 5 lokal. Englische Wörter lassen sich über
 // das Wort-Antippen als Karte speichern (`src: 'translate'`, Ursprungssatz = Übersetzung).
+// Neubau N93 (Emrahs Kritik „Übersetzer → Wortschatz umständlich“): „+ Wortschatz“ mit EINEM Tipp
+// am ganzen Ergebnis (Wendung oder Satz) und an jedem Begriff – immer mit Ursprungssatz.
 
 const REG_KEY: Record<Register, MessageKey> = { formal: 'tlRegFormal', neutral: 'tlRegNeutral', casual: 'tlRegCasual' };
 
 const DIRS = [null, 'de', 'en'] as const;
 
 const short = (s: string, max = 70): string => (Array.from(s).length <= max ? s : `${Array.from(s).slice(0, max - 1).join('')}…`);
+
+/** Eine Karte aus Übersetzen: Quelle `translate`, Ursprungssatz aus dem Ergebnis. */
+function storeTarget(x: SaveTarget) {
+  const now = Date.now();
+  return saveLookupCard({ word: x.word, de: x.de, ex: x.ex, surface: null, src: 'translate', origin: { v: 1, kind: 'translate', t: now }, today: dayKey(now) });
+}
 
 export function TranslatePane({ focusSeq }: { focusSeq: number }) {
   const { t, lang } = useT();
@@ -35,7 +44,7 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
   const to = from === 'de' ? 'en' : 'de';
   const dirKnown = requestFrom(s) !== 'auto';
   const busy = isTranslating();
-  const [saved, setSaved] = useState<{ key: string; state: 'busy' | 'done' | 'failed' } | null>(null);
+  const [saved, setSaved] = useState<Record<string, 'busy' | 'done' | 'failed'>>({});
 
   useEffect(() => {
     if (focusSeq > 0) input.current?.focus({ preventScroll: true });
@@ -55,20 +64,38 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
   };
 
   const r = s.result;
-  const card = r ? cardFromResult(r) : null;
-  const cardKey = card ? `${card.word}|${card.de}` : '';
-  const saveState = saved && saved.key === cardKey ? saved.state : null;
-  const saveCard = async () => {
-    if (!card || saveState === 'busy' || saveState === 'done') return;
-    setSaved({ key: cardKey, state: 'busy' });
-    const out = await saveLookupCard({ word: card.word, de: card.de, ex: card.ex, surface: null, src: 'translate', origin: { v: 1, kind: 'translate', t: Date.now() }, today: dayKey(Date.now()) });
+  const targets = r ? saveTargets(r) : [];
+  const resultTarget = targets.find((x) => x.kind === 'result') ?? null;
+  const termTarget = (en: string) => targets.find((x) => x.kind === 'term' && x.word === en) ?? null;
+  const saveTarget = async (x: SaveTarget) => {
+    const st = saved[x.key];
+    if (st === 'busy' || st === 'done') return;
+    setSaved((m) => ({ ...m, [x.key]: 'busy' }));
+    const out = await storeTarget(x);
     if (out === 'invalid' || out === 'failed') {
-      setSaved({ key: cardKey, state: 'failed' });
+      setSaved((m) => ({ ...m, [x.key]: 'failed' }));
       return;
     }
-    setSaved({ key: cardKey, state: 'done' });
+    setSaved((m) => ({ ...m, [x.key]: 'done' }));
     toast(t(out === 'saved' ? 'lkSavedToast' : out === 'added' ? 'lkAddedToast' : 'lkExistsToast'));
   };
+  const plus = (x: SaveTarget, testId: string, doneTestId: string) =>
+    saved[x.key] === 'done' ? (
+      <span className="inline-flex min-h-11 items-center text-sm font-semibold text-accent-text" data-testid={doneTestId}>
+        ✓ {t('nbProfilInVocab')}
+      </span>
+    ) : (
+      <button
+        type="button"
+        onClick={() => void saveTarget(x)}
+        disabled={saved[x.key] === 'busy'}
+        className="inline-flex min-h-11 flex-none items-center gap-1 rounded-xl bg-surface-strong px-3 text-sm font-semibold disabled:opacity-50"
+        data-testid={testId}
+        data-word={x.word}
+      >
+        + {t('nbProfilToVocab')}
+      </button>
+    );
   const resultIsEn = r ? r.from === 'de' : false;
   const langName = (l: 'de' | 'en') => (l === 'en' ? t('cmpLangEn') : t('cmpLangDe'));
   const english = (text: string, testId?: string) => <EnglishText as="span" text={text} area="translate" source={null} title={null} {...(testId ? { testId } : {})} />;
@@ -201,27 +228,13 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
                 )}
                 <CopyButton text={r.translation} target={() => mainRef.current} testId="tr-copy" />
               </div>
-              {card && (
+              {resultTarget && (
                 <div className="flex flex-wrap items-center gap-3 border-t border-line pt-2">
-                  {saveState === 'done' ? (
-                    <span className="inline-flex min-h-11 items-center text-sm font-semibold text-accent-text" data-testid="tr-card-done">
-                      ✓ {t('tlInTrainer')}
-                    </span>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => void saveCard()}
-                      disabled={saveState === 'busy'}
-                      className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-surface-strong px-4 text-sm font-semibold disabled:opacity-50"
-                      data-testid="tr-card"
-                    >
-                      + {t('tlToTrainer')}
-                    </button>
-                  )}
-                  <span className="text-sm text-muted" lang="en">
-                    {card.word} – <span lang="de">{card.de}</span>
+                  {plus(resultTarget, 'tr-card', 'tr-card-done')}
+                  <span className="min-w-0 text-sm text-muted" lang="en">
+                    {short(resultTarget.word, 60)} – <span lang="de">{short(resultTarget.de, 60)}</span>
                   </span>
-                  {saveState === 'failed' && (
+                  {saved[resultTarget.key] === 'failed' && (
                     <p className="w-full text-sm text-danger-text" role="alert">
                       {t('tlSaveFailed')}
                     </p>
@@ -261,15 +274,21 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
               <div className="flex flex-col gap-1.5">
                 <p className="lx-eyebrow">{t('tlTerms')}</p>
                 <ul className="flex flex-wrap gap-2">
-                  {r.terms.map((x, i) => (
-                    <li key={i} className="rounded-full border border-line px-3 py-1 text-sm" data-testid="tr-term">
-                      {english(x.en)}
-                      <span className="text-muted" lang="de">
-                        {' '}
-                        – {x.de}
-                      </span>
-                    </li>
-                  ))}
+                  {r.terms.map((x, i) => {
+                    const target = termTarget(x.en);
+                    return (
+                      <li key={i} className="flex flex-wrap items-center gap-2 rounded-2xl border border-line py-1 pr-1 pl-3 text-sm" data-testid="tr-term">
+                        <span>
+                          {english(x.en)}
+                          <span className="text-muted" lang="de">
+                            {' '}
+                            – {x.de}
+                          </span>
+                        </span>
+                        {target && plus(target, 'tr-term-save', 'tr-term-done')}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             )}

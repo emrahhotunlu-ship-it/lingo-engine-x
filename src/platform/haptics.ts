@@ -21,11 +21,14 @@ function vibrator(): VibrateNavigator | null {
 
 let reported = false;
 let enabled = true;
-let blocked = false;
+/** Zuletzt gemeldetes Ergebnis, solange die Sperrzeit läuft (`null` = frei). */
+let blocked: 'correct' | 'near' | 'wrong' | null = null;
 let unblock: ReturnType<typeof setTimeout> | null = null;
 /**
  * Zwei Meldungen desselben Prüfens (Lücke + Ergebniszeile) ergeben nur eine Vibration. Gesperrt
- * wird per Zeitgeber statt per Uhrzeit (eine feste Testuhr hält `performance.now` an).
+ * wird per Zeitgeber statt per Uhrzeit (eine feste Testuhr hält `performance.now` an) und nur für
+ * DASSELBE Ergebnis: Ein anderes Ergebnis ist ein neues Prüfen und vibriert sofort, auch wenn der
+ * Zeitgeber (bei ausgelastetem Hauptthread) noch nicht gelaufen ist.
  */
 const DEDUPE_MS = 300;
 
@@ -58,10 +61,11 @@ export function haptic(kind: HapticKind): boolean {
 
 /** Rückmeldung beim Prüfen (Kap. 4.3): richtig = leicht, fast richtig = kurz, falsch = deutlicher. */
 export function verdictHaptic(verdict: 'correct' | 'near' | 'wrong'): boolean {
-  if (!enabled || blocked || !vibrator()) return false;
-  blocked = true;
+  if (!enabled || blocked === verdict || !vibrator()) return false;
+  blocked = verdict;
+  if (unblock) clearTimeout(unblock);
   unblock = setTimeout(() => {
-    blocked = false;
+    blocked = null;
     unblock = null;
   }, DEDUPE_MS);
   return haptic(verdict === 'correct' ? 'success' : verdict === 'near' ? 'tap' : 'error');
@@ -71,6 +75,6 @@ export function verdictHaptic(verdict: 'correct' | 'near' | 'wrong'): boolean {
 export function resetHaptics(): void {
   if (unblock) clearTimeout(unblock);
   unblock = null;
-  blocked = false;
+  blocked = null;
   enabled = true;
 }

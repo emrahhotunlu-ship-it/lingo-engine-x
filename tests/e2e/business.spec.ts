@@ -11,11 +11,11 @@ const SHOTS = 'test-results/screens';
 mkdirSync(SHOTS, { recursive: true });
 type Doc = Record<string, unknown>;
 
-async function openHub(page: Page): Promise<void> {
+/** Neubau §1.3: „E-Mail verbessern“ liegt unter Schreiben, Pitch und Baukasten unter Gespräche › Training. */
+async function openHub(page: Page, seg: 'write' | 'talk' = 'write'): Promise<void> {
   await screen(page, 'today');
-  // Business ist ein Bereich von „Sprechen“ (UX-Beratung Nr. 7), kein eigener Hub mehr.
-  await openSpeak(page, 'business');
-  await expect(page.getByTestId('biz-hub')).toBeVisible();
+  await openSpeak(page, seg);
+  await expect(page.getByTestId(seg === 'write' ? 'speak-write' : 'speak-training')).toBeVisible();
 }
 
 const MAIL = 'Dear Mr Walker,\n\nThe scanners come two weeks later because our supplier has problems. We must delay the training too.\n\nBest regards\nEmrah';
@@ -65,6 +65,7 @@ test('Baukasten ohne Claude: bis zu den Wendungen, Mitnehmen, Drill mit 6 Fragen
   const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openHub(page);
   await expect(page.getByTestId('biz-mail')).toBeDisabled();
+  await openSpeak(page, 'talk');
   await expect(page.getByTestId('biz-pitch')).toBeDisabled();
   await page.getByTestId('biz-playbook').click();
   await screen(page, 'playbook');
@@ -101,7 +102,7 @@ test('Baukasten ohne Claude: bis zu den Wendungen, Mitnehmen, Drill mit 6 Fragen
 
 test('Präsentations-Coach: Folie → Sprechfassung → Versuch → Abdeckung und drei Schichten', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
-  await openHub(page);
+  await openHub(page, 'talk');
   await page.getByTestId('biz-pitch').click();
   await screen(page, 'pitch');
   await page.getByTestId('pitch-input').fill('Cloud archive for small businesses. Setup in one day. Retention rules built in.');

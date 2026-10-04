@@ -16,6 +16,8 @@ export type Palette = (typeof PALETTES)[number];
 const LANG_KEY = `${KEY_PREFIX}lang`;
 const THEME_KEY = `${KEY_PREFIX}theme`;
 const PALETTE_KEY = `${KEY_PREFIX}palette`;
+/** Handy-Modus (Emrah 01.10.2026): je Gerät, Standard an (`'0'` = aus). */
+export const PHONE_MODE_KEY = `${KEY_PREFIX}phone-mode`;
 
 export const isLang = (v: unknown): v is Lang => v === 'de' || v === 'en';
 export const isThemeMode = (v: unknown): v is ThemeMode => v === 'dark' || v === 'dim' || v === 'light' || v === 'auto';
@@ -25,9 +27,12 @@ type SettingsState = {
   lang: Lang;
   theme: ThemeMode;
   palette: Palette;
+  /** Am Handy gehört die Sprech-/Schreibaufgabe des Tages nicht zur Pflicht (nur Ansicht, `domain/plan/phone`). */
+  phoneMode: boolean;
   setLangLocal(lang: Lang): void;
   setThemeLocal(theme: ThemeMode): void;
   setPaletteLocal(palette: Palette): void;
+  setPhoneModeLocal(on: boolean): void;
 };
 
 const initialLang = (): Lang => {
@@ -43,10 +48,17 @@ const initialPalette = (): Palette => {
   return isPalette(v) ? v : 'sage';
 };
 
+const initialPhoneMode = (): boolean => local.get(PHONE_MODE_KEY) !== '0';
+
 export const useSettings = create<SettingsState>((set) => ({
   lang: initialLang(),
   theme: initialTheme(),
   palette: initialPalette(),
+  phoneMode: initialPhoneMode(),
+  setPhoneModeLocal(on) {
+    local.set(PHONE_MODE_KEY, on ? '1' : '0');
+    set({ phoneMode: on });
+  },
   setLangLocal(lang) {
     local.set(LANG_KEY, lang);
     set({ lang });

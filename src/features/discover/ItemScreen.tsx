@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react';
+import { reportPos } from '../input/resume';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useNav, type UnitCtx } from '../../app/nav';
@@ -21,7 +22,6 @@ import { UnitShell } from '../input/UnitShell';
 import { useFeedItems, useFeedSubscription } from './feedStore';
 import { discoverMachine } from './machine';
 import { PrepStep, TakeStep, UseStep, DoneStep, loadSent, saveSent } from './steps';
-import { AsPreplyLesson } from '../preply/AsPreplyLesson';
 
 // Ein Beitrag als Lektion (Kap. 6.9, Plan §4.4 Nr. 2–6): Schritte nach `stepsFor`, Wiedereinstieg
 // im ersten offenen Schritt; jeder abgeschlossene Schritt ist Zustand (Häkchen), kein Knopf.
@@ -84,6 +84,9 @@ function ItemUnit({ item, ctx, steps, startAt, savedDone }: { item: FeedItem; ct
 
   const [state, send] = useMachine(discoverMachine, { input: { steps, startAt, total: questions.length, mark, finish } });
   const stateName = typeof state.value === 'string' ? state.value : (Object.keys(state.value)[0] ?? 'prep');
+  useEffect(() => {
+    reportPos('discover', stateName === 'done' ? null : { route: { name: 'discoverItem', feedId: item.feedId, itemId: item.itemId, ctx: 'extra' }, title: item.title, step: stateName });
+  }, [stateName, item.feedId, item.itemId, item.title]);
   // Der abgegebene Text liegt nur in diesem Browser (gelesen, sobald der Beitrag fertig ist).
   const sent = useMemo(() => (stateName === 'done' ? loadSent(item.itemId) : ''), [stateName, item.itemId]);
 
@@ -152,10 +155,6 @@ function ItemUnit({ item, ctx, steps, startAt, savedDone }: { item: FeedItem; ct
     >
       <div className="flex max-w-3xl flex-col gap-5">
         {body}
-        {/* M18: aus dem Beitrag eine Preply-Stunde machen. */}
-        <div className="border-t border-line pt-3">
-          <AsPreplyLesson title={item.title} />
-        </div>
       </div>
     </UnitShell>
   );

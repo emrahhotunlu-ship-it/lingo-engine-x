@@ -1,16 +1,17 @@
 import { cardExamples } from './cardExamples';
+import { orderGen } from './orderGen';
 import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
 import { lessonContent } from './lessonContent';
 import { lessonProduction } from './lessonProduction';
 import { mnemonic } from './mnemonic';
 import { INPUT_TEMPLATES } from './inputRegistry';
+import { NB_TEMPLATES } from './nb';
 import { produceCheck } from './produceCheck';
 import { wordGen } from './wordGen';
 import { companionChat } from './companionChat';
-import { preplyImport } from './preplyImport';
-import { preplyPrep } from './preplyPrep';
 import { translate } from './translate';
+import { teacherFeedback } from './teacherFeedback';
 import type { ChatTemplate, PromptTemplate } from './types';
 import { wordLookup } from './wordLookup';
 import { turnAnalysis } from './turnAnalysis';
@@ -32,6 +33,8 @@ import { meetingDebrief } from './meetingDebrief';
 import { patterns } from './patterns';
 import { patternCheck } from './patternCheck';
 import { toneCheck } from './toneCheck';
+import { memoryExtract } from './memoryExtract';
+import { compare } from './compare';
 
 // Alle Vorlagen an einem Ort. Ein Test prüft eindeutige Kennungen und die Kopfzeile.
 
@@ -39,6 +42,7 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   wordLookup,
   produceCheck,
   cardExamples,
+  orderGen,
   // Phase 2 (docs/phase2-plan.md §7)
   lessonContent,
   lessonProduction,
@@ -55,10 +59,10 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   phraseAdapt,
   pitchScript,
   pitchFeedback,
-  // Phase 5 – Übersetzer, Preply-Brücke
+  // Phase 5 – Übersetzer
   translate,
-  preplyPrep,
-  preplyImport,
+  // Lehrer-Feedback (28.09.2026, ersetzt die Preply-Brücke)
+  teacherFeedback,
   // Phase 4 – Lesen, Hören, Schreiben, Entdecken
   ...INPUT_TEMPLATES,
   // Phase 6 – Urteil
@@ -79,6 +83,12 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   patternCheck,
   // Lernberatung 27.09., Vorschlag 8 – Eine Botschaft, drei Tonlagen
   toneCheck,
+  // Neubau (docs/neubau/plan.md §3.2): neue Vorlagen der Pakete P1–P7
+  ...NB_TEMPLATES,
+  // Paket B: „Claude merkt sich“ (B5)
+  memoryExtract,
+  // Paket B: monatliche Vergleichsaufgabe (B1)
+  compare,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

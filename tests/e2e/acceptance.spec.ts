@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
+import { TABS } from '../../src/app/shell/tabs';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen, openTab } from './fixtures';
+import { openProfileRow, openWeekly } from './profilHelpers';
 
 // Abschlussprüfung (P7-4, docs/abnahme.md): Kap. 14 und 15 als durchlaufende Prüfungen gegen den
 // Produktions-Build. Weitere Kriterien belegen die dort genannten Specs und Unit-Tests.
@@ -30,21 +32,24 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
   test.setTimeout(90_000);
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  for (const tab of ['today', 'learn', 'speak', 'overview'] as const) {
-    await page.getByTestId(`tab-${tab}`).click();
-    await page.locator(`[data-screen="${tab}"]`).waitFor();
+  // Neubau (§5.5): alle Reiter aus `TABS`, dazu die Seite „Dein Stand“.
+  const stops: Array<[string, () => Promise<void>]> = [...TABS.map((t): [string, () => Promise<void>] => [t.id, () => openTab(page, t.id)]), ['overview', () => openOverview(page)]];
+  for (const [name, open] of stops) {
+    await open();
     await page.waitForTimeout(300);
-    expect(await layoutProblems(page), tab).toEqual([]);
-    expect(await duplicates(page), tab).toEqual([]);
+    expect(await layoutProblems(page), name).toEqual([]);
+    expect(await duplicates(page), name).toEqual([]);
   }
   for (const id of ['errors', 'path', 'history'] as const) {
     await page.getByTestId(`tab-${id}`).click();
     await page.waitForTimeout(300);
     expect(await duplicates(page), id).toEqual([]);
   }
-  await page.getByTestId('vtest-start').click();
+  // Vokabeltest über die Profil-Zeile (Neubau).
+  await openProfileRow(page, 'profile-vtest');
   await screen(page, 'vtest');
-  // In Übungen gibt es keine Reiter und kein Zahnrad (UX-Beratung Nr. 4): ✕ führt zurück zu „Stand“.
+  // In Übungen gibt es keine Reiter (UX-Beratung Nr. 4); das Zahnrad steht in der Übungsleiste (A7 Paket 2). ✕ führt zurück zur Herkunft.
+  // Der Vokabeltest wurde auf dem Reiter „Fortschritt“ gestartet; ✕ führt dorthin zurück (Herkunft).
   await page.getByTestId('vt-close').click();
   await screen(page, 'overview');
   await openSettings(page);
@@ -55,8 +60,8 @@ test('Kap. 14: alle Bereiche öffnen sich ohne Fehler, ohne Querscrollen und ohn
 
 test('Kap. 14: alle bisherigen Daten sichtbar, Serie läuft weiter', async ({ page }) => {
   await boot(page, { migrated: true });
+  await expectStreak(page, '12');
   await openOverview(page);
-  await expect(page.getByTestId('streak-count')).toHaveText('12');
   await expect(page.getByTestId('course-done')).toHaveText('6');
   await expect(page.getByTestId('vocab-total')).toHaveText('146');
 });
@@ -65,13 +70,14 @@ test('Kap. 14/9: der Tagesauftrag funktioniert unverändert – daily/* und feed
   await boot(page, { migrated: true });
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toBeVisible();
-  // Entdecken liegt seit der UX-Beratung 27.09. im Reiter „Üben“.
-  await page.getByTestId('tab-learn').click();
-  await page.locator('[data-testid="module"][data-module="discover"]').click();
-  await page.locator('[data-screen="discover"]').waitFor();
-  await page.getByTestId('tab-overview').click();
-  await screen(page, 'overview');
+  // Entdecken ist seit 04.10.2026 (Fokus Vokabeln und Grammatik) ausgeblendet: kein Reiter, kein Einstieg.
+  // Der Tagesauftrag schreibt `feed/*` trotzdem weiter; die Daten bleiben unberührt (Prüfung unten).
+  await expect(page.getByTestId('tab-read')).toHaveCount(0);
+  await openOverview(page);
   await page.getByTestId('tab-history').click();
+  await expect(page.getByTestId('history')).toBeVisible();
+  // Der Wochenbericht ist im Neubau eine eigene Seite (Profil › Wochenbericht), nicht mehr im Verlauf.
+  await openWeekly(page);
   await expect(page.getByTestId('weekly')).toBeVisible();
   await page.waitForTimeout(800);
   const db = await dump(page);

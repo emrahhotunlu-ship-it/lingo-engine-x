@@ -1,7 +1,10 @@
 import { readFileSync } from 'node:fs';
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import type { InstallOptions } from '../../src/platform/dev/install';
 import { WHATS_NEW_KEY, WHATS_NEW_VERSION } from '../../src/features/system/whatsNew';
+import { routeToString } from '../../src/app/router/deeplink';
+import type { Route } from '../../src/app/router/types';
+import { TABS, type TabId } from '../../src/app/shell/tabs';
 
 // Lädt den Produktions-Build dist/index.html unter einer https-Adresse und spielt den
 // Entwicklungs-Adapter von außen ein (CLAUDE.md A7). Jede andere Anfrage wird
@@ -9,6 +12,8 @@ import { WHATS_NEW_KEY, WHATS_NEW_VERSION } from '../../src/features/system/what
 // die App nichts von fremden Hosts lädt (Kap. 12, Plattform-Test).
 
 export const ORIGIN = 'https://lingo.artifact.test';
+/** Schalter „Am Handy …“ (`PHONE_MODE_KEY` in src/app/settings.ts, dort nicht importierbar: legt beim Laden einen Speicher an). */
+export const PHONE_MODE_KEY = 'lx:phone-mode';
 const HTML = readFileSync(new URL('../../dist/index.html', import.meta.url), 'utf8');
 const RUNTIME = readFileSync(new URL('../.runtime/fake-claude.js', import.meta.url), 'utf8');
 
@@ -30,6 +35,13 @@ export type BootOptions = {
   localStorage?: Record<string, string>;
   /** `true` = der Hinweis „Was ist neu" (M20) erscheint wie nach einem Update. */
   whatsNew?: boolean;
+  /**
+   * `true` = der Handy-Modus gilt (Standard der App, wirkt nur auf Handys: Touch + kurze Bildschirmseite < 500 px).
+   * Sonst ist er ausgeschaltet: Handy-simulierende Tests (`isMobile`) behalten so die volle Pflichtliste.
+   */
+  phoneMode?: boolean;
+  /** Adress-Anker beim Start (ohne `#`), z. B. `go=trainer%3Fround%3Dextra` (siehe `bootAt`). */
+  hash?: string;
 };
 
 export type Booted = { external: string[]; errors: string[] };
@@ -55,6 +67,11 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
   if (!opts.whatsNew) {
     await page.addInitScript(([k, v]: [string, string]) => window.localStorage.setItem(k, v), [WHATS_NEW_KEY, WHATS_NEW_VERSION] as [string, string]);
   }
+  if (!opts.phoneMode) {
+    await page.addInitScript(([k, v]: [string, string]) => {
+      if (window.localStorage.getItem(k) === null) window.localStorage.setItem(k, v);
+    }, [PHONE_MODE_KEY, '0'] as [string, string]);
+  }
   if (opts.localStorage) {
     await page.addInitScript((entries: Record<string, string>) => {
       for (const [k, v] of Object.entries(entries)) window.localStorage.setItem(k, v);
@@ -73,12 +90,20 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
     }, fake);
     await page.addInitScript({ content: RUNTIME });
   }
-  await page.goto(`${ORIGIN}/`);
+  await page.goto(`${ORIGIN}/${opts.hash ? `#${opts.hash}` : ''}`);
   return { external, errors };
 }
 
-/** Wartet, bis ein Bildschirm fertig eingeblendet ist. */
-export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | 'overview' | 'today' | 'trainer' | 'speak' | 'roleplay' | 'mail' | 'playbook' | 'pitch' | 'grammarSession' | 'vtest' | 'learn'): Promise<void> {
+/**
+ * Start direkt an einer Route (Neubau §2.3): `#go=<route>` wird einmal beim Start gelesen, nie
+ * geschrieben. Übungen mit im Klick gebauter Sitzung kehren ohne Sitzung zur Herkunft zurück.
+ */
+export async function bootAt(page: Page, route: Route, opts: BootOptions = {}): Promise<Booted> {
+  return boot(page, { migrated: true, ...opts, hash: `go=${encodeURIComponent(routeToString(route))}` });
+}
+
+/** Wartet, bis ein Bildschirm fertig eingeblendet ist (Routenname oder Systemzustand). */
+export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 'migration' | Route['name']): Promise<void> {
   await page.locator(`[data-screen="${name}"]`).waitFor({ state: 'visible' });
   await page.waitForFunction((n) => {
     const el = document.querySelector(`[data-screen="${n}"]`);
@@ -86,32 +111,135 @@ export async function screen(page: Page, name: 'loading' | 'nodb' | 'offline' | 
   }, name);
 }
 
-/** Start ist „Heute"; „Dein Stand" liegt eine Navigation weiter. */
+/** Wurzel-Bildschirm eines Reiters (aus `src/app/shell/tabs.ts`). */
+export const tabRoot = (id: TabId): Route['name'] => (TABS.find((t) => t.id === id) ?? TABS[0]).root.name;
+
+/**
+ * Reiter öffnen und auf seiner Wurzel stehen (Neubau §2.4). Ein fremder Reiter zeigt seinen
+ * Stapel; ein zweiter Tipp auf den nun aktiven Reiter führt zur Wurzel.
+ */
+export async function openTab(page: Page, id: TabId): Promise<void> {
+  const root = tabRoot(id);
+  const btn = page.getByTestId(`tab-${id}`);
+  await btn.click();
+  if ((await btn.getAttribute('aria-current')) === 'page' && !(await page.locator(`[data-screen="${root}"]`).isVisible())) await btn.click();
+  await screen(page, root);
+}
+
+/**
+ * Einstieg per Test-ID öffnen (`hub-course`, `hub-grammar`, `hub-drill-*` …): probiert die Reiter
+ * aus der Reiterleiste der Reihe nach, bis der Einstieg sichtbar ist – unabhängig von der Zahl der
+ * Reiter –, danach die Seite Sprechen (über Heute). Einstiege, die erst nach dem Laden erscheinen, wartet der letzte Reiter ab.
+ */
+export async function openEntry(page: Page, testId: string): Promise<void> {
+  await page.getByTestId('tabbar').waitFor();
+  for (const t of TABS) {
+    await openTab(page, t.id);
+    const el = page.getByTestId(testId).first();
+    if (await el.isVisible()) {
+      await el.click();
+      return;
+    }
+  }
+  // Sprechen ist seit 04.10.2026 kein Reiter mehr (Seite über Heute); Einstiege am Platz `speak` stehen unter
+  // „Gespräche“, die am Platz `write` hinter dem Segment „Schreiben“.
+  for (const seg of ['talk', 'write'] as const) {
+    await openSpeak(page, seg);
+    const el = page.getByTestId(testId).first();
+    if (await el.isVisible()) {
+      await el.click();
+      return;
+    }
+  }
+  // Nichts gefunden: Einstiege, die auf Daten warten (z. B. Kurzübungen), erscheinen auf „Üben“.
+  await openTab(page, 'learn');
+  await page.getByTestId(testId).first().click();
+}
+
+/** Reiter „Üben“ (Kurs, Grammatik, Kurzübungen, freie Runde …; Test-ID `learn-hub`). */
+export async function openLearnPage(page: Page): Promise<void> {
+  await openTab(page, 'learn');
+}
+
+/** Profil-Blatt öffnen (WP0b): Profil-Knopf oben links auf jeder Reiter-Wurzel. */
+export async function openProfile(page: Page): Promise<void> {
+  const btn = page.getByTestId('open-profile');
+  await page.getByTestId('tabbar').waitFor();
+  for (let i = 0; i < 2 && !(await btn.isVisible()); i++) await page.getByTestId('tab-today').click();
+  await btn.click();
+  await page.getByTestId('profile-sheet').waitFor();
+}
+
+/** Serie im Profil-Blatt prüfen (die Zahl stand früher auf „Dein Stand“), danach Blatt schließen. */
+export async function expectStreak(page: Page, n: string): Promise<void> {
+  await openProfile(page);
+  await expect(page.getByTestId('profile-sheet-streak')).toContainText(n);
+  await page.keyboard.press('Escape');
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
+}
+
+/** „Dein Stand“: Profil-Blatt → „Dein Stand ›“ (war ein Reiter). */
 export async function openOverview(page: Page): Promise<void> {
-  await screen(page, 'today');
-  await page.getByTestId('tab-overview').click();
+  await openProfile(page);
+  await page.getByTestId('profile-overview').click();
+  // Das Profil-Blatt blendet aus; erst danach zählt der Bildschirm (axe, Dialog-Zählung).
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
   await screen(page, 'overview');
 }
 
 /**
- * Einstellungen öffnen (UX-Beratung 27.09.): das Zahnrad sitzt auf „Stand" (und auf den
- * System-Bildschirmen ohne Reiter). Steht es nicht im Bild, erst zum Reiter „Stand".
+ * Einstellungen öffnen: Das Zahnrad steht im Kopf, auf jeder Seite, in jeder Übung und auf den
+ * System-Bildschirmen. Sonst über das Profil-Blatt („Einstellungen ›“).
  */
 export async function openSettings(page: Page): Promise<void> {
-  const gear = page.getByTestId('open-settings');
-  if (!(await gear.isVisible())) {
-    await page.getByTestId('tab-overview').click();
-    await screen(page, 'overview');
+  const gear = page.getByTestId('open-settings').first();
+  if (await gear.isVisible()) {
+    await gear.click();
+    return;
   }
-  await gear.click();
+  await openProfile(page);
+  await page.getByTestId('profile-settings').click();
+  await page.getByTestId('profile-sheet').waitFor({ state: 'detached' });
 }
 
-/** Reiter „Sprechen" mit einem Bereich öffnen: Szenen · Business · Preply (UX-Beratung Nr. 7). */
-export async function openSpeak(page: Page, seg: 'scenes' | 'business' | 'preply' = 'scenes'): Promise<void> {
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
-  if (seg !== 'scenes' || (await page.getByTestId('speak-hub').getAttribute('data-seg')) !== 'scenes') await page.getByTestId(`speak-seg-${seg}`).click();
-  await page.locator(`[data-testid="speak-hub"][data-seg="${seg}"]`).waitFor();
+/** Fehlergrenze testen (G4): der Bildschirm `route` wirft beim nächsten Zeichnen genau einmal. */
+export const crashOnce = (route: string): Record<string, string> => ({ 'lx:crash-once': route });
+
+/**
+ * Reiter „Sprechen“ mit einem Bereich öffnen. Neubau (plan.md §1.3): Gespräche · Schreiben
+ * (`talk`/`write`); bis P5 umbaut, heißen die Bereiche Szenen · Business. Der frühere Preply-Bereich
+ * (bis 28.09.2026) führt zu Gespräche. Der Helfer nimmt beide Namen und wählt, was die App gerade anbietet.
+ */
+export async function openSpeak(page: Page, seg: 'talk' | 'write' | 'scenes' | 'business' = 'talk'): Promise<void> {
+  // Seit 04.10.2026 (Fokus Vokabeln und Grammatik) kein Reiter mehr: freiwilliges Extra über „Heute“ (`today-speak`).
+  if (!(await page.getByTestId('speak-hub').isVisible())) {
+    await openTab(page, 'today');
+    await page.getByTestId('today-speak').click();
+    await screen(page, 'speak');
+  }
+  const hub = page.getByTestId('speak-hub');
+  await hub.waitFor();
+  const alias: Record<string, string[]> = { talk: ['talk', 'scenes'], scenes: ['scenes', 'talk'], write: ['write', 'business'], business: ['business', 'write'] };
+  const names = alias[seg] ?? [seg];
+  let target = names[0] ?? seg;
+  for (const n of names) {
+    if (await page.getByTestId(`speak-seg-${n}`).count()) {
+      target = n;
+      break;
+    }
+  }
+  if ((await hub.getAttribute('data-seg')) !== target) await page.getByTestId(`speak-seg-${target}`).click();
+  await page.locator(`[data-testid="speak-hub"][data-seg="${target}"]`).waitFor();
+}
+
+/**
+ * „Lesen“ (Bibliothek: Lesen, Hören, Entdecken; Route `library`). Seit 04.10.2026 kein Reiter und kein Einstieg
+ * mehr in der Oberfläche – nur noch per Deep-Link beim Start erreichbar.
+ */
+export async function bootLibrary(page: Page, opts: BootOptions = {}): Promise<Booted> {
+  const b = await bootAt(page, { name: 'library' }, opts);
+  await screen(page, 'library');
+  return b;
 }
 
 /** Prüfungen, die auf jedem Bildschirm gelten (Kap. 12). */

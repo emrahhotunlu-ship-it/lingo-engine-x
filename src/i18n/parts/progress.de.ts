@@ -218,6 +218,7 @@ export const progressDe = {
   // Einstellungen (Kap. 6.14)
   settingsLearning: 'Lernen',
   setNewPerDay: 'Neue Wörter pro Tag',
+  setNewPerDayHint: 'Höchstens so viele. Ist viel zu wiederholen, kommen weniger neue Wörter, mindestens 2 am Tag.',
   setGoalMin: 'Tagesziel in Minuten',
   setGoalMinHint: 'Bestimmt, wie viel der Tagesplan einplant – ab dem nächsten Plan.',
   setSoundTitle: 'Ton',

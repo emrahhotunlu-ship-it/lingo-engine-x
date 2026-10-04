@@ -13,6 +13,7 @@ import { ExerciseFrame } from '../../engine/ExerciseFrame';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { Tiles } from '../../engine/Tiles';
+import { hasFinePointer, TilesKeyboard } from '../../engine/TilesKeyboard';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
 import { checkTyped, checkWithHint } from '../../domain/answer/check';
@@ -26,12 +27,13 @@ import { scoreDictation } from '../../domain/drills/dictation';
 import { tokenize } from '../../domain/text/tokenize';
 import { chunkWhy } from '../../domain/srs/chunkCards';
 import { CONFIDENCE_KEYS, confidenceDots, confidenceOf, type Confidence } from '../../domain/srs/confidence';
-import { cardExamples, EXAMPLES_MIN, storedExamples } from '../../domain/srs/examples';
+import { cardExamples, EXAMPLES_MIN, wantsEnrichment } from '../../domain/srs/examples';
 import { posKey } from '../../domain/srs/explain';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
 import { exerciseDef } from '../../domain/srs/modes';
 import { selfCheckProduce, type SelfCheck } from '../../domain/srs/produce';
 import { reviewFsrs } from '../../domain/srs/scheduler';
+import { noteWeight } from '../../domain/srs/weight';
 import { locate } from '../../domain/srs/context';
 import { choiceVerdict, tilesAnswer } from '../../domain/srs/exercise';
 import { locateChunk } from '../../domain/srs/chunkCards';
@@ -39,10 +41,12 @@ import type { CheckResult, ContextSpan, Exercise, ExerciseId, Grade, Option, Tra
 import { speak, stopSpeech, useSpeech } from '../../platform/speech';
 import { produceCheck, type ProduceCheckOut } from '../../prompts/produceCheck';
 import { requestExamples, useExamples } from './examples';
-import { commitAnswer, type Answer, type FirstKind } from './session';
+import { commitAnswer, prepareNext, type Answer, type FirstKind } from './session';
 import { CopyOnce, NextButton, OverrideButton } from '../learn/ui';
 import { AiRunPanel } from '../input/AiRunPanel';
 import { MnemonicBlock } from './mnemonic';
+import { ExampleTranslation } from './ExampleTranslation';
+import { MoreInfo } from './MoreInfo';
 import { RetryHintLine } from '../learn/RetryHint';
 import { useCompanionSee } from '../companion/seeing';
 import { companionOpenedSince, companionOpenMs } from '../companion/store';
@@ -67,6 +71,8 @@ type Feedback = {
   ms: number;
   /** Einspruch „Ich lag richtig" (M4). */
   override: boolean;
+  /** Genutzte Hilfe (Tipp, zweiter Versuch, Begleiter): gewichtet die Antwort geringer. */
+  hint: 0 | 1 | 2;
   /** spot: angetippte Stelle. */
   picked?: { start: number; end: number } | null;
   /** speed: Zeit abgelaufen. */
@@ -78,8 +84,18 @@ type Feedback = {
 const PURPOSE: Record<number, MessageKey> = { 1: 'purpose1', 2: 'purpose2', 3: 'purpose3', 4: 'purpose4', 5: 'purpose5' };
 /** Freie Tipp-Arten: „Tipp" deckt Platzhalter bzw. den ersten Buchstaben auf (zählt als Hilfe). */
 const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'type', 'situation']);
-/** Arten, deren Frage schon die Bedeutung ist bzw. die sie als Stütze zeigen – im Ergebnis nicht noch einmal (H3). */
-const MEANING_ASKED: ReadonlySet<ExerciseId> = new Set(['mc_en', 'listen_mc', 'mc_de', 'type', 'spot', 'match', 'tiles', 'situation']);
+/**
+ * Arten, deren Frage die deutsche Bedeutung nach der Antwort noch zeigt – im Ergebnis nicht noch einmal (H3, Kap. 15).
+ * Bei allen übrigen (mc_en, listen_mc, spot, tiles, Lücken, Diktat …) steht sie nach der Antwort immer da (Emrah 02.10.2026).
+ */
+const MEANING_VISIBLE: ReadonlySet<ExerciseId> = new Set(['mc_de', 'type', 'match', 'situation']);
+/** Arten ohne Tipp (Zeitbalken: Tempo misst, statt zu helfen). */
+const NO_TIP: ReadonlySet<ExerciseId> = new Set(['speed']);
+/** Arten, deren Lösung die deutsche Bedeutung ist: der Tipp darf sie nicht verraten (englische Erklärung stattdessen). */
+const ANSWER_IS_DE: ReadonlySet<ExerciseId> = new Set(['mc_en', 'listen_mc']);
+/** Höchste Tipp-Stufe: getippte freie Arten und Auswahl 2 (Info, dann Buchstabe bzw. Option streichen), alle übrigen 1 (Info). */
+const maxTipOf = (ex: ExerciseId, input: Exercise['input']): 0 | 1 | 2 => (NO_TIP.has(ex) ? 0 : FREE_TYPED.has(ex) || input === 'choice' ? 2 : 1);
+const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 /** Arten, die den Satz vor dem Prüfen zeigen (Beispiele wiederholen ihn nicht). */
 const SHOWS_SENTENCE: ReadonlySet<ExerciseId> = new Set(['colloc', 'mc_en', 'spot', 'match', 'tiles', 'listen_mc']);
 const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
@@ -135,6 +151,13 @@ export function ExerciseView({
   const audioEnd = useRef<number | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const prodInput = useRef<HTMLTextAreaElement>(null);
+  // n+1 vorberechnen, sobald das Ergebnis steht (nur Trainer-Runde, im Leerlauf).
+  const hasResult = fb !== null;
+  useEffect(() => {
+    if (!hasResult || onCommit) return;
+    const id = window.setTimeout(prepareNext, 30);
+    return () => window.clearTimeout(id);
+  }, [hasResult, onCommit]);
 
   const play = () => {
     if (!e.speak) return;
@@ -165,6 +188,22 @@ export function ExerciseView({
   const hintShown = e.ex === 'cloze_hint' || (FREE_TYPED.has(e.ex) && tip >= 2) || retry?.kind === 'start';
   const meaningText = lang === 'de' ? card.de : card.def;
 
+  // Tipp für alle Arten (Emrah 02.10.2026): Stufe 1 Wortart und Bedeutung bzw. Erklärung (nie die Lösung),
+  // Stufe 2 der erste Buchstabe (getippt) bzw. eine falsche Option weniger (Auswahl). Zählt als Hilfe (`hintLevel`).
+  const maxTip: 0 | 1 | 2 = noHelp ? 0 : maxTipOf(e.ex, e.input);
+  const maskWord = (s: string): string => [card.word, card.lemma].filter(Boolean).reduce((acc, w) => acc.replace(new RegExp(escapeRe(w), 'gi'), '…'), s);
+  const tipBase: string | null = (() => {
+    const pk = posKey(card.pos);
+    const def = card.def ? maskWord(card.def) : null;
+    const de = lang === 'de' ? card.de : null;
+    // Zeigt die Frage die Bedeutung schon (e.meaning), kommt die Erklärung; sonst die Bedeutung.
+    const mean = ANSWER_IS_DE.has(e.ex) ? def : e.meaning ? (def ?? de) : (de ?? def);
+    return [pk ? t(pk as MessageKey) : null, mean].filter(Boolean).join(' · ') || null;
+  })();
+  const tipAvailable = maxTip > 0 && (FREE_TYPED.has(e.ex) || !!tipBase);
+  const removedId = tip >= 2 && e.input === 'choice' ? (e.options.find((o) => !o.correct)?.id ?? null) : null;
+  const visibleOptions = removedId ? e.options.filter((o) => o.id !== removedId) : e.options;
+
   /** Antwortzeit ohne offenes Nachschlagen und Begleiter; Hören ab Tonende. */
   const measure = () => {
     const nowPerf = performance.now();
@@ -189,7 +228,7 @@ export function ExerciseView({
         // Zweiter Versuch nach dem Hinweis zählt wie „Tipp" Stufe 2: höchstens „Schwer". Die Zeit ist
         // die Gesamtzeit ab dem Einblenden (beide Versuche); durch die Deckelung entscheidet sie
         // nicht mehr über die Note, bleibt aber als ehrliche Antwortzeit gespeichert.
-        hintLevel: companionHelp || retry ? 2 : FREE_TYPED.has(e.ex) ? tip : 0,
+        hintLevel: companionHelp || retry ? 2 : tip,
         tiles: e.tiles?.length ?? 0,
         replays: Math.max(0, plays.current - 1),
         ...(e.limitMs ? { limitMs: e.limitMs } : {}),
@@ -199,12 +238,13 @@ export function ExerciseView({
     const g2: Grade = retry?.kind === 'start' && forced === undefined ? 1 : g;
     const grade = forced !== undefined && companionHelp ? (Math.min(forced, 2) as Grade) : g2;
     const t0 = Date.now();
-    const after = reviewFsrs(card.fsrs, grade, t0);
+    const hintUsed: 0 | 1 | 2 = companionHelp || retry ? 2 : tip;
+    const after = reviewFsrs(card.fsrs, grade, t0, noteWeight(e.ex, hintUsed));
     const dueInMs = Math.max(0, after.due - t0);
     const confidence = confidenceOf({ isNew: false, stage: Math.max(1, card.stage) as TrainCard['stage'], fsrs: after }, t0);
-    setFb({ result, given, chosen, grade, dueInMs, ms, confidence, override: false, ...extraFb });
+    setFb({ result, given, chosen, grade, dueInMs, ms, confidence, override: false, hint: hintUsed, ...extraFb });
     // Fehlen Beispiele, ergänzt Claude sie einmal (ausgelöst durch „Prüfen").
-    if (ai && storedExamples(card.doc).length === 0 && cardExamples(card, shownSentence).length < EXAMPLES_MIN) requestExamples(card);
+    if (ai && wantsEnrichment(card, shownSentence, Date.now())) requestExamples(card);
     // Touch: Tastatur schließen, damit Ergebnis und Beispiele sichtbar sind.
     if (e.input === 'typed' && window.matchMedia('(pointer: coarse)').matches) api.blur();
     if (LISTEN.has(e.ex)) stopSpeech();
@@ -322,7 +362,7 @@ export function ExerciseView({
 
   const next = () => {
     if (!fb) return;
-    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1 };
+    const ans: Answer = fb.override ? { grade: 3, given: fb.given, ms: fb.ms, ok: true, override: true } : { grade: fb.grade, given: fb.given, ms: fb.ms, ok: fb.grade > 1, hint: fb.hint };
     const kind = (onCommit ?? commitAnswer)(ans);
     // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
     if (kind === 'typed') api.focusNow();
@@ -332,7 +372,7 @@ export function ExerciseView({
 
   const showTip = () => {
     setTip((v) => (v === 0 ? 1 : 2));
-    api.focusNow();
+    if (e.input === 'typed') api.focusNow();
   };
 
   useHotkeys(
@@ -345,7 +385,7 @@ export function ExerciseView({
       },
       digit: (n) => {
         if (fb || e.input !== 'choice' || useLookup.getState().req) return;
-        const o = e.options[n - 1];
+        const o = visibleOptions[n - 1];
         if (o) check(o);
       },
     },
@@ -499,8 +539,9 @@ export function ExerciseView({
     );
   } else if (e.input === 'tiles') {
     const current = tilesAnswer(e.tiles ?? [], placed, /\s/.test(solution) ? 'words' : 'letters');
+    // Feste Mindestbreite: die Lücke wächst beim Legen nicht, der Satz bricht nicht neu um und nichts springt unter den Finger.
     const slot = (
-      <span className="lx-gap" data-testid="gap" data-state={!fb ? 'input' : fb.result.verdict} style={{ width: 'auto', minWidth: '3.5em' }} lang="en">
+      <span className="lx-gap" data-testid="gap" data-state={!fb ? 'input' : fb.result.verdict} style={{ width: 'auto', minWidth: `${Math.max(3.5, solution.length * 0.62 + 1)}em` }} lang="en">
         {fb ? (fb.result.verdict === 'correct' ? fb.given : solution) : current || ' '}
       </span>
     );
@@ -518,6 +559,22 @@ export function ExerciseView({
           if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
           setPlaced(p);
         }} locked={!!fb} labels={{ line: t('trTilesLine'), pool: t('trTilesPool') }} />
+        {!fb && hasFinePointer() && (
+          <TilesKeyboard
+            tiles={e.tiles ?? []}
+            placed={placed}
+            onChange={(p) => {
+              if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
+              setPlaced(p);
+            }}
+            onSubmit={() => check(null)}
+            locked={!!fb}
+            mode={/\s/.test(solution) ? 'words' : 'letters'}
+            label={t('trTilesTypeLabel')}
+            hint={t('trTilesTypeHint')}
+            unknown={(tok) => t('trTilesTypeMiss', { word: tok })}
+          />
+        )}
       </>
     );
   } else if (e.input === 'produce') {
@@ -600,7 +657,7 @@ export function ExerciseView({
           ))}
         {(e.ex === 'colloc' || e.ex === 'match') && e.sentence && sentence(e.sentence, gapSlot)}
         {e.ex === 'match' && e.sentence && cue(e.meaning)}
-        <Choices items={e.options} chosen={fb?.chosen?.id ?? null} onChoose={(id) => check(e.options.find((o) => o.id === id) ?? null)} label={t('trChoicesLabel')} />
+        <Choices items={visibleOptions} chosen={fb?.chosen?.id ?? null} onChoose={(id) => check(e.options.find((o) => o.id === id) ?? null)} label={t('trChoicesLabel')} />
       </>
     );
   }
@@ -643,7 +700,7 @@ export function ExerciseView({
     const chars = nearChars ? charDiff(bare(fb.given), bare(solution)) : [];
     const diff = writes && !nearChars ? answerDiff(bare(fb.given), bare(solution)) : [];
     // Bedeutung nur, wo sie nicht schon die Frage war (H3).
-    const meaning = MEANING_ASKED.has(e.ex) || (e.ex === 'speed' && !e.sentence) ? null : meaningText;
+    const meaning = MEANING_VISIBLE.has(e.ex) || (e.ex === 'speed' && !e.sentence) ? null : meaningText;
     const pk = posKey(card.pos);
     const fk = e.input === 'typed' && card.kind === 'vocab' && v.verdict !== 'correct' ? formKind(solution, card.lemma, card.pos) : null;
     const col = e.ex === 'colloc' && e.colloc ? e.colloc : null;
@@ -735,6 +792,11 @@ export function ExerciseView({
             </p>
           )
         )}
+        {col?.ai && (
+          <p className="text-xs text-subtle" data-testid="colloc-ai-note">
+            {t('nbWsColAiNote')}
+          </p>
+        )}
         {why && (
           <p className="text-sm text-muted" lang={lang} data-testid="chunk-why">
             {why}
@@ -758,6 +820,7 @@ export function ExerciseView({
               {examples.map((x) => (
                 <li key={x.en} className="text-[0.95rem] leading-relaxed" data-testid="example" data-src={x.src}>
                   <EnglishText as="span" text={x.en} {...src} highlight={target(x.en)} />
+                  <ExampleTranslation card={card} en={x.en} />
                 </li>
               ))}
             </ul>
@@ -768,8 +831,10 @@ export function ExerciseView({
             )}
           </div>
         )}
+        <MoreInfo card={card} />
         <MnemonicBlock card={card} />
-        {v.verdict === 'wrong' && e.input === 'typed' && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
+        {/* Einspruch „Ich lag richtig“: beim Tippen immer, bei einem Wortpartner von Claude auch (ein Ablenker kann zufällig stimmen). */}
+        {v.verdict === 'wrong' && (e.input === 'typed' || col?.ai) && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
         {v.verdict === 'wrong' && e.input === 'typed' && <CopyOnce solution={solution} />}
         <div className="flex items-center justify-between gap-3 pt-1">
           <span className="text-xs text-subtle" data-testid="due-in" data-grade={fb.override ? 3 : fb.grade}>
@@ -785,22 +850,39 @@ export function ExerciseView({
   const confidence: Confidence = fb ? fb.confidence : confidenceBefore;
   const purposeKey: MessageKey =
     e.ex === 'colloc' ? 'purposeColloc' : e.ex === 'situation' ? 'purposeSituation' : LISTEN.has(e.ex) && def.stage < 5 ? 'purposeListen' : (PURPOSE[def.stage] ?? 'purpose1');
-  const actions =
+  const tipButton =
+    !fb && tipAvailable && tip < maxTip && !retry ? (
+      <Button variant="ghost" icon="lightbulb" onClick={showTip} data-testid="hint" data-level={tip}>
+        {tip === 0 ? t('trTip') : e.input === 'choice' ? t('trTipRemove') : t('trTipLetter')}
+      </Button>
+    ) : null;
+  const tipLine =
+    !fb && tip >= 1 && tipBase ? (
+      <p className="text-sm text-muted" data-testid="tip-info" lang={ANSWER_IS_DE.has(e.ex) ? 'en' : lang}>
+        {tipBase}
+      </p>
+    ) : null;
+  const checkButton =
     !fb && (e.input === 'typed' || e.input === 'tiles' || e.input === 'produce') ? (
-      <div className="flex flex-wrap items-center gap-2">
-        <Button
-          variant="primary"
-          onClick={() => (e.input === 'produce' ? void checkProduce() : check(null))}
-          disabled={(e.input === 'tiles' && !placed.length) || (e.input === 'produce' && (!prodText.trim() || produceBusy))}
-          data-testid="check"
-        >
-          {t('trCheck')}
-        </Button>
-        {FREE_TYPED.has(e.ex) && tip < 2 && !noHelp && !retry && (
-          <Button variant="ghost" icon="lightbulb" onClick={showTip} data-testid="hint" data-level={tip}>
-            {tip === 0 ? t('trTip') : t('trTipLetter')}
-          </Button>
+      <Button
+        variant="primary"
+        onClick={() => (e.input === 'produce' ? void checkProduce() : check(null))}
+        disabled={(e.input === 'tiles' && !placed.length) || (e.input === 'produce' && (!prodText.trim() || produceBusy))}
+        data-testid="check"
+      >
+        {t('trCheck')}
+      </Button>
+    ) : null;
+  const actions =
+    checkButton || tipButton || tipLine ? (
+      <div className="flex flex-col gap-2">
+        {(checkButton || tipButton) && (
+          <div className="flex flex-wrap items-center gap-2">
+            {checkButton}
+            {tipButton}
+          </div>
         )}
+        {tipLine}
       </div>
     ) : undefined;
   return (
@@ -813,7 +895,7 @@ export function ExerciseView({
             word={t(CONFIDENCE_KEYS[confidence])}
             label={t('confLabel', { level: t(CONFIDENCE_KEYS[confidence]) })}
             again={again ? t('trAgainBadge') : null}
-            kind={t(`exName_${e.ex}` as MessageKey)}
+            kind={e.check === 'control' ? t('nbWsControl') : e.check === 'probe' ? `${t('nbWsProbe')} · ${t(`exName_${e.ex}` as MessageKey)}` : t(`exName_${e.ex}` as MessageKey)}
             kindLabel={t('exKindLabel', { name: '' }).trim()}
           />
         }

@@ -52,7 +52,7 @@ test('Einstellung „Vibration“ aus: keine Vibration; wieder an wird gespeiche
   const { errors } = await startTrainer(page, { haptic: false });
   await answerCurrent(page);
   expect(await vibs(page)).toEqual([]);
-  // In Übungen gibt es kein Zahnrad (UX-Beratung Nr. 4): Runde schließen, dann über „Stand“.
+  // Runde schließen, dann über den Kopf (das Zahnrad der Übungsleiste prüft einstellungen-ueberall.spec).
   await page.getByTestId('trainer-close').click();
   await screen(page, 'today');
   await openSettings(page);

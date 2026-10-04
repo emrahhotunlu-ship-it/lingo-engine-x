@@ -20,6 +20,9 @@ import { AiRunPanel } from '../input/AiRunPanel';
 // Zweck (Info-Symbol), Was hatte ich / was ist richtig und Warum (Ergebnis).
 
 export type RepairView = Pick<Repair, 'id' | 'wrong' | 'right' | 'why' | 'src' | 'fix'>;
+const PREFILL_WORDS = 9;
+const wordCount = (s: string): number => s.trim().split(/\s+/).filter(Boolean).length;
+
 export type RepairVerdict = 'exact' | 'close' | 'ok' | 'no';
 
 type Props = {
@@ -42,7 +45,10 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
   const { t, lang } = useT();
   const ai = useAiAvailable();
   const ask = useAsk(repairCheck);
-  const [text, setText] = useState('');
+  // Lange Sätze (Emrah 02.10.2026): Der alte Satz steht schon im Feld, korrigiert wird nur die falsche Stelle –
+  // kein halber Roman auf dem Handy. Kurze Sätze bleiben leer (aus dem Kopf abrufen).
+  const prefill = wordCount(item.wrong) >= PREFILL_WORDS;
+  const [text, setText] = useState(() => (prefill ? item.wrong.trim() : ''));
   const [res, setRes] = useState<{ verdict: RepairVerdict; note: string | null; given: string } | null>(null);
   const [info, setInfo] = useState(false);
   const infoId = useId();
@@ -144,13 +150,18 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
           spellCheck={false}
           data-testid="repair-input"
         />
+        {prefill && !res && (
+          <p className="text-xs text-subtle" data-testid="repair-edit-hint">
+            {t('rxEditHint')}
+          </p>
+        )}
         {busy && <AiRunPanel phase={ask.phase} error={null} onStop={ask.stop} skeleton={false} />}
         {!busy && !res && ask.error && <AiRunPanel phase="error" error={ask.error} onRetry={() => void check()} skeleton={false} />}
       </div>
 
       {!res && (
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary" disabled={!text.trim() || busy} onClick={() => void check()} data-testid="repair-check">
+          <Button variant="primary" disabled={!text.trim() || busy || (prefill && text.trim() === item.wrong.trim())} onClick={() => void check()} data-testid="repair-check">
             {t('rxCheck')}
           </Button>
           {onSkip && (

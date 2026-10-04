@@ -1,5 +1,6 @@
 import { expect, type Page } from '@playwright/test';
-import { screen } from './fixtures';
+import { routeToString } from '../../src/app/router/deeplink';
+import { openSpeak, ORIGIN } from './fixtures';
 
 // Hilfen für die E2E-Tests von Phase 4 (Lesen, Hören, Schreiben, Entdecken).
 
@@ -25,18 +26,62 @@ export const sampleCalls = (page: Page): Promise<Array<{ id: string | null; tier
 export const activeSubscriptions = (page: Page): Promise<number> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { activeSubscriptions(): number } } }).__LINGO_FAKE__.db.activeSubscriptions());
 
-/** Reiter „Üben" öffnen (Lesen, Hören, Schreiben, Entdecken; UX-Beratung 27.09.). */
-export async function openLearn(page: Page): Promise<void> {
-  // Nach dem Schließen einer Einheit steht man schon wieder in „Üben“ (Rückweg zur Herkunft).
-  if (!(await page.locator('[data-screen="learn"]').isVisible())) {
-    if (!(await page.getByTestId('tab-learn').isVisible())) await screen(page, 'today');
-    await page.getByTestId('tab-learn').click();
+/** Laufende Abos je Ziel (Dokumentpfad bzw. `<Sammlung>/*`), sortiert. */
+export const activePaths = (page: Page): Promise<string[]> =>
+  page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { activePaths(): string[] } } }).__LINGO_FAKE__.db.activePaths());
+
+/** Abos, sobald sie sich nicht mehr ändern (zwei gleiche Lesungen im Abstand von 300 ms). */
+export async function settledPaths(page: Page): Promise<string[]> {
+  let prev = await activePaths(page);
+  for (let i = 0; i < 20; i++) {
+    await page.waitForTimeout(300);
+    const cur = await activePaths(page);
+    if (JSON.stringify(cur) === JSON.stringify(prev)) return cur;
+    prev = cur;
   }
-  await page.locator('[data-screen="learn"]').waitFor({ state: 'visible' });
+  return prev;
 }
 
-/** Ein Modul öffnen: Lesen, Hören, Schreiben und Entdecken über den Reiter „Üben". */
+/**
+ * „Lesen“ öffnen (Lesen, Hören, Entdecken; Route `library`). Seit 04.10.2026 (Fokus Vokabeln und Grammatik) gibt es
+ * dafür keinen Reiter und keinen Einstieg mehr – nur den Deep-Link, der beim Start gelesen wird. Der Helfer lädt die
+ * Seite deshalb mit `#go=library` neu (der Testbestand wird dabei wie beim Start neu eingespielt).
+ */
+export async function openLearn(page: Page): Promise<void> {
+  // Nach dem Schließen einer Einheit steht man schon wieder in „Lesen“ (Rückweg zur Herkunft).
+  if (!(await page.locator('[data-screen="library"]').isVisible())) {
+    await page.goto(`${ORIGIN}/#go=${encodeURIComponent(routeToString({ name: 'library' }))}`);
+    await page.reload();
+  }
+  await page.locator('[data-screen="library"]').waitFor({ state: 'visible' });
+}
+
+/**
+ * Ein Modul öffnen: Lesen, Hören (Text/Hörtext des Tages) und Entdecken („Alle Beiträge“) über die
+ * Seite „Lesen“ (Deep-Link, siehe `openLearn`); Schreiben liegt im Neubau unter „Sprechen · Schreiben“ (Einstieg `hub-write`).
+ */
 export async function openModule(page: Page, id: 'read' | 'listen' | 'write' | 'discover'): Promise<void> {
+  if (id === 'write') {
+    // Nach einem Neuladen mit Deep-Link öffnet die App die Schreibaufgabe selbst.
+    if (page.url().includes('#go=write')) {
+      const open = await page
+        .locator('[data-screen="write"]')
+        .waitFor({ state: 'visible', timeout: 5000 })
+        .then(() => true)
+        .catch(() => false);
+      if (open) return;
+    }
+    await openSpeak(page, 'write');
+    const entry = page.getByTestId('hub-write').first();
+    if (await entry.count()) await entry.click();
+    // Bis P5 die Einstiege des Platzes `write` zeigt: Deep-Link (wird nur beim Start gelesen).
+    else {
+      await page.goto(`${ORIGIN}/#go=${encodeURIComponent(routeToString({ name: 'write', ctx: 'extra' }))}`);
+      await page.reload();
+    }
+    await page.locator('[data-screen="write"]').waitFor({ state: 'visible' });
+    return;
+  }
   await openLearn(page);
   await page.locator(`[data-testid="module"][data-module="${id}"]`).click();
   await page.locator(`[data-screen="${id}"]`).waitFor({ state: 'visible' });
@@ -67,7 +112,13 @@ export async function backToToday(page: Page): Promise<void> {
     if (cur === 'today') return;
     const close = page.locator(`main [data-screen="${cur}"] [data-testid="unit-close"]`).first();
     if (await close.count()) await close.click();
-    else await page.getByTestId('tab-today').click();
+    else {
+      // Seiten ohne Reiter (Lesen, Sprechen; seit 04.10.2026) haben oben „‹ Zurück“ – die Reiterleiste unten kann am
+      // Handy noch von einer Meldung („Gespeichert …“) überdeckt sein.
+      const back = page.locator(`main [data-screen="${cur}"] [data-testid="page-back"]`).first();
+      if (await back.count()) await back.click();
+      else await page.getByTestId('tab-today').click();
+    }
     await expect.poll(async () => (await screens()).join(',')).not.toBe(cur);
   }
   await page.locator('[data-screen="today"]').waitFor({ state: 'visible' });

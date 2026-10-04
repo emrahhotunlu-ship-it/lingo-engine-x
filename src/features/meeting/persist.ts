@@ -1,6 +1,7 @@
 import { getWriter } from '../../data';
 import { meetingPath, patchMeetingItem, upsertMeetingItem, withDebrief, type DebriefEntry, type MeetingItem, type MeetingPrep } from '../../domain/meeting/meetingDoc';
 import { logError } from '../../platform/diagnostics';
+import { noteWeekHint } from '../week/weekHint';
 
 // Schreibwege von „Mein nächster Termin“ (Lernberatung 27.09., V4): nur über den einen Writer,
 // nur auf Handlungen hin (Vorbereitung erstellt, Generalprobe gestartet, Nachbesprechung).
@@ -11,6 +12,8 @@ export async function saveMeeting(item: MeetingItem): Promise<boolean> {
   if (!writer) return false;
   try {
     await writer.transform(meetingPath(item.day), (cur) => upsertMeetingItem(cur, item));
+    // N17: Das Thema des Termins hat Vorrang beim Wochenthema-Vorschlag (Woche des Termins).
+    void noteWeekHint('meeting', [item.topic, item.tricky, item.notes].join(' '), item.when || item.day);
     return true;
   } catch (err) {
     logError('meeting:save', err, item.id);

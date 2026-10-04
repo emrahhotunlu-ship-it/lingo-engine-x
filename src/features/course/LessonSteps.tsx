@@ -37,7 +37,7 @@ import type { Answer, FirstKind } from '../vocab/session';
 import { GrammarItem } from '../grammar/GrammarItem';
 import { VerdictLine } from '../learn/ui';
 import { perfNow } from '../learn/time';
-import { countAnswer, markLessonAi, touchLesson, useLessonRun } from './lessonRun';
+import { countAnswer, markLessonAi, setLessonInner, touchLesson, useLessonRun } from './lessonRun';
 
 // Die vier Schritte einer Lektion (phase2-plan §5.1): Wörter (Einführung + Bedeutung wählen,
 // dann Lücke mit Hilfe; falsche am Ende noch einmal), Dialog (hören, lesen, Fragen), Grammatik
@@ -98,7 +98,15 @@ export function WordsStep({ meta, content, onComplete }: StepProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meta.id, content]);
   type WState = { queue: WItem[]; pos: number; cards: Map<string, TrainCard>; wrong: string[]; again: boolean };
-  const [ws, setWs] = useState<WState>(() => ({ queue: [...data.queue], pos: 0, cards: new Map(data.cards), wrong: [], again: false }));
+  const [ws, setWs] = useState<WState>(() => {
+    // Fortsetzen: Warteschlange und Position aus dem Stand im Schritt (Karten frisch aus den Daten).
+    const saved = useLessonRun.getState().inner.words;
+    if (saved && saved.pos <= saved.queue.length) return { queue: saved.queue as WItem[], pos: saved.pos, cards: new Map(data.cards), wrong: saved.wrong, again: saved.again };
+    return { queue: [...data.queue], pos: 0, cards: new Map(data.cards), wrong: [], again: false };
+  });
+  useEffect(() => {
+    setLessonInner({ words: { queue: ws.queue, pos: ws.pos, wrong: ws.wrong, again: ws.again } });
+  }, [ws]);
   const done = ws.pos >= ws.queue.length;
   const item = ws.queue[ws.pos];
 
@@ -235,7 +243,10 @@ export function DialogStep({ meta, content, onComplete }: StepProps) {
   const base = content.source === 'base';
   const [mode, setMode] = useState<'listen' | 'read'>(tts && !base ? 'listen' : 'read');
   const [trans, setTrans] = useState(false);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<Record<number, string>>(() => useLessonRun.getState().inner.dialog ?? {});
+  useEffect(() => {
+    setLessonInner({ dialog: answers });
+  }, [answers]);
   const shownAt = useRef(0);
   useEffect(() => {
     shownAt.current = performance.now();
@@ -345,7 +356,10 @@ export function GrammarStep({ meta, content, onComplete }: StepProps) {
   const day = useLessonRun((s) => s.day);
   const ctx = useLessonRun((s) => s.ctx);
   const tasks: GrammarTask[] = useMemo(() => content.tasks.slice(0, 4).map((x) => ({ ...x, src: 'lesson' as const, ref: `lesson/${meta.id}` })), [content, meta.id]);
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState(() => Math.min(useLessonRun.getState().inner.grammar ?? 0, 4));
+  useEffect(() => {
+    setLessonInner({ grammar: idx });
+  }, [idx]);
   const rule = ruleOf(meta.grammar, lang);
   const trap = rule?.traps[0];
   const tp = topicById(meta.grammar);

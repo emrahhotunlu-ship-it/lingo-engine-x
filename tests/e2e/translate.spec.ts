@@ -40,8 +40,8 @@ test.describe('Desktop 1440 DE', () => {
     expect(c).toHaveLength(1);
     expect(c[0]).toMatchObject({ tier: 'quick', cache: { gcTime: 86_400_000 } });
     await expect(page.getByTestId('tr-history')).toBeVisible();
-    // Ganzer Satz: kein Knopf „In den Vokabeltrainer“ (nur Wort-Antippen).
-    await expect(page.getByTestId('tr-card')).toHaveCount(0);
+    // Neubau N93: auch der ganze Satz kommt mit einem Tipp in den Wortschatz (Satz = Ursprung).
+    await expect(page.getByTestId('tr-card')).toHaveAttribute('data-word', 'We need to approve the budget.');
     expect(await layoutProblems(page)).toEqual([]);
 
     // Englisches Wort der Übersetzung antippen und als Karte speichern.

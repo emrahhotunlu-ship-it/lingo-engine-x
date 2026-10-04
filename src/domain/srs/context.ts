@@ -16,11 +16,80 @@ export function lemmaOf(word: string): string {
     .trim();
 }
 
-/** Regelmäßige Formen eines einzelnen Worts (Endungen, e-Wegfall, y → ies/ied, Doppelkonsonant). */
+// Unregelmäßige Verben, deren Stammformen keine Endungsregel trifft (Befund 28.09.2026: „catch on“
+// im Beispielsatz als „caught on“ – die Karte ließ sich nicht anlegen, weil `locate()` die Form
+// nicht fand). Nur das erste bzw. letzte Wort einer Wendung wird gebeugt gesucht (targetRe), deshalb
+// reicht eine flache Stammform-Liste der gebräuchlichsten Business-Englisch-Verben.
+const IRREGULAR: Readonly<Record<string, readonly string[]>> = {
+  be: ['am', 'is', 'are', 'was', 'were', 'been', 'being'],
+  become: ['became', 'become'],
+  begin: ['began', 'begun'],
+  break: ['broke', 'broken'],
+  bring: ['brought'],
+  build: ['built'],
+  buy: ['bought'],
+  catch: ['caught'],
+  choose: ['chose', 'chosen'],
+  come: ['came'],
+  cut: ['cut'],
+  deal: ['dealt'],
+  do: ['did', 'done'],
+  draw: ['drew', 'drawn'],
+  drive: ['drove', 'driven'],
+  eat: ['ate', 'eaten'],
+  fall: ['fell', 'fallen'],
+  feel: ['felt'],
+  find: ['found'],
+  fly: ['flew', 'flown'],
+  forget: ['forgot', 'forgotten'],
+  get: ['got', 'gotten'],
+  give: ['gave', 'given'],
+  go: ['went', 'gone'],
+  grow: ['grew', 'grown'],
+  have: ['has', 'had'],
+  hear: ['heard'],
+  hold: ['held'],
+  keep: ['kept'],
+  know: ['knew', 'known'],
+  lay: ['laid'],
+  lead: ['led'],
+  leave: ['left'],
+  lose: ['lost'],
+  make: ['made'],
+  mean: ['meant'],
+  meet: ['met'],
+  pay: ['paid'],
+  put: ['put'],
+  read: ['read'],
+  rise: ['rose', 'risen'],
+  run: ['ran'],
+  say: ['said'],
+  see: ['saw', 'seen'],
+  sell: ['sold'],
+  send: ['sent'],
+  set: ['set'],
+  show: ['showed', 'shown'],
+  shut: ['shut'],
+  sit: ['sat'],
+  speak: ['spoke', 'spoken'],
+  spend: ['spent'],
+  stand: ['stood'],
+  take: ['took', 'taken'],
+  teach: ['taught'],
+  tell: ['told'],
+  think: ['thought'],
+  understand: ['understood'],
+  wear: ['wore', 'worn'],
+  win: ['won'],
+  write: ['wrote', 'written'],
+};
+
+/** Regelmäßige Formen eines einzelnen Worts (Endungen, e-Wegfall, y → ies/ied, Doppelkonsonant, Unregelmäßige). */
 export function formsOf(w: string): string[] {
   const out = new Set<string>([w]);
   const lower = w.toLowerCase();
   for (const suf of ['s', 'es', 'ed', 'd', 'ing', 'er', 'est']) out.add(lower + suf);
+  for (const form of IRREGULAR[lower] ?? []) out.add(form);
   if (lower.endsWith('e')) {
     out.add(lower.slice(0, -1) + 'ing');
     out.add(lower.slice(0, -1) + 'ed');
@@ -64,10 +133,14 @@ function targetRe(words: readonly string[]): RegExp {
 export function locate(sentence: string, target: string): { start: number; end: number } | null {
   const words = target.split(/\s+/).filter(Boolean);
   if (!words.length) return null;
-  // P7-1: Jede Form des ersten Worts beginnt mit seinem Stamm ohne letzten Buchstaben (try → tries,
-  // make → making, stop → stopped). Fehlt er im Satz, gibt es keinen Treffer – ohne Regex-Bau.
+  // P7-1: Jede regelmäßige Form des ersten Worts beginnt mit seinem Stamm ohne letzten Buchstaben
+  // (try → tries, make → making, stop → stopped). Fehlt er im Satz UND keine unregelmäßige Form
+  // (catch → caught), gibt es keinen Treffer – ohne Regex-Bau.
   const first = (words[0] ?? '').toLowerCase();
-  if (!sentence.toLowerCase().includes(first.length > 1 ? first.slice(0, -1) : first)) return null;
+  const stem = first.length > 1 ? first.slice(0, -1) : first;
+  const low = sentence.toLowerCase();
+  const hasIrregular = (IRREGULAR[first] ?? []).some((f) => low.includes(f));
+  if (!low.includes(stem) && !hasIrregular) return null;
   const m = targetRe(words).exec(sentence);
   if (!m) return null;
   const start = m.index + (m[1]?.length ?? 0);
@@ -114,7 +187,7 @@ export function parseCollocs(col: unknown): Colloc[] {
       const hit = locate(inner, gap);
       if (hit) ctx = { sentence, start: offset + hit.start, end: offset + hit.end, gap: inner.slice(hit.start, hit.end) };
     }
-    out.push({ index, p: str(c.p), de: str(c.de), gap, opts, ctx });
+    out.push({ index, p: str(c.p), de: str(c.de), gap, opts, ctx, ...(c.ai === 1 || c.ai === true ? { ai: true } : {}) });
   });
   return out;
 }

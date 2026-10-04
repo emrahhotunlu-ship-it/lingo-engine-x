@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openOverview, screen } from './fixtures';
+import { boot } from './fixtures';
+import { startVtest } from './profilHelpers';
 
 // Phase 6 (Plan §8, §13): Wortschatztest per Tastatur und Touch; Ergebnis in profile.vtests,
 // Wortschatzziel aktualisiert; Abbruch speichert nichts.
@@ -8,11 +9,7 @@ type Dump = Record<string, Record<string, unknown>>;
 const dump = (page: Page) => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Dump } } }).__LINGO_FAKE__.db.dump());
 
 async function openTest(page: Page) {
-  await openOverview(page);
-  await page.getByTestId('tab-history').click();
-  await page.getByTestId('vtest-start').click();
-  await screen(page, 'vtest');
-  await page.getByTestId('vt-start').click();
+  await startVtest(page);
 }
 
 test('Durchlauf per Tastatur: J/N, Ziffern, Enter; vtests ergänzt, Wortschatzziel neu', async ({ page }) => {

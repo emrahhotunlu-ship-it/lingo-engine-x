@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, layoutProblems, openOverview, openSpeak, screen } from './fixtures';
 import { openModule } from './inputHelpers';
 import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
 
@@ -87,20 +87,23 @@ for (const size of SIZES) {
 
     // „Dein Stand“: eine Zeile.
     await openOverview(page);
+    await page.getByTestId('tab-errors').click();
     await expect(page.getByTestId('repair-stand')).toHaveText('Reparatur-Sätze: 2 offen, 0 sicher');
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
 }
 
-test('Wiederholung ohne KI: die lokale Prüfung zählt; höchstens 4 je Tag', async ({ page }) => {
+// Neubau (Block 1 „Wiederholen“, domain/week/review.ts REPAIR_MAX): höchstens 3 Reparatur-Sätze je
+// Runde, der Rest bleibt fällig. Die Tagesgrenze von 4 (REPAIR_PER_DAY) prüft tests/unit/repairFlow.test.ts.
+test('Wiederholung ohne KI: die lokale Prüfung zählt; höchstens 3 je Runde, der Rest bleibt fällig', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const many = Array.from({ length: 5 }, (_, i) => ({ ...B, id: `rm${i}`, wrong: `It depends of the budget number ${i + 1}.`, right: `It depends on the budget number ${i + 1}.`, due: DUE + i }));
   const { errors, external } = await boot(page, { migrated: true, fake: { capabilities: { sample: false }, patch: { 'app/profile': planPatch(8), 'app/repair': { items: many } } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
   await screen(page, 'trainer');
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 3; i++) {
     await expect(page.getByTestId('repair-item')).toHaveAttribute('data-id', `rm${i}`);
     await page.getByTestId('repair-input').fill(i === 0 ? 'It depends of the budget number 1.' : `It depends on the budget number ${i + 1}`);
     await page.getByTestId('repair-check').click();
@@ -108,9 +111,14 @@ test('Wiederholung ohne KI: die lokale Prüfung zählt; höchstens 4 je Tag', as
     await expect(page.getByTestId('ai-phase')).toHaveCount(0);
     await page.getByTestId('repair-next').click();
   }
-  // Der fünfte bleibt für morgen; weiter geht es mit Karten.
+  // Der vierte und fünfte bleiben fällig (unverändert); weiter geht es mit Karten.
   await expect(page.getByTestId('exercise')).toBeVisible();
   await expect(page.getByTestId('repair-item')).toHaveCount(0);
+  const rest = (await repairs(page)).filter((r) => r.id === 'rm3' || r.id === 'rm4');
+  expect(rest.map((r) => [r.id, r.box, r.due])).toEqual([
+    ['rm3', 0, DUE + 3],
+    ['rm4', 0, DUE + 4],
+  ]);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
@@ -120,8 +128,8 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await page.getByTestId('tab-speak').click();
-  await screen(page, 'speak');
+  // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
+  await openSpeak(page);
   await page.locator('[data-testid="scene-card"][data-scene="sc-vida"]').click();
   await page.getByTestId('briefing-start').click();
   await screen(page, 'roleplay');

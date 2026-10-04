@@ -6,15 +6,64 @@ import { useHiddenInput } from '../../engine/HiddenInput';
 import { usePending, retryFailed } from './persist';
 import { useSession } from './session';
 import { SummaryActions } from '../learn/ui';
+import { useClock } from '../../app/clock';
+import { learningDayEnd } from '../../domain/date';
+import { calibration, CONTROL } from '../../domain/srs/flip';
+import { local } from '../../platform/storage';
+import { useMemo, useState } from 'react';
+import { startExtra } from './start';
+
+const CALIB_KEY = 'lx:calib-hint';
+
+/**
+ * Kalibrierung (anki-regeln §4): ruhiger Satz, wenn „Leicht“ zuletzt zu oft danebenlag – höchstens
+ * alle 14 Tage (Merker lokal, reine Bequemlichkeit). Kein Zwang, keine Sperre.
+ */
+function CalibHint() {
+  const { t } = useT();
+  const now = useClock((s) => s.now);
+  const strict = useSession((s) => s.strict);
+  const pool = useSession((s) => s.pool);
+  const [show] = useState(() => {
+    if (!strict) return null;
+    const last = Number(local.get(CALIB_KEY)) || 0;
+    if (now - last < CONTROL.hintEveryDays * 86_400_000) return null;
+    const c = calibration(pool.map((x) => x.doc), now);
+    if (!c.strict) return null;
+    local.set(CALIB_KEY, String(now));
+    return c;
+  });
+  if (!show) return null;
+  return (
+    <p className="text-sm text-muted" data-testid="calib-hint">
+      {t('nbWsCalib', { hits: show.hits, pairs: show.pairs })}
+    </p>
+  );
+}
 
 // Zusammenfassung am Rundenende: Anzahl, Trefferquote, nicht Gespeichertes mit „Erneut speichern".
+
+/** Eine weitere freie Runde über alle Fälligen (wie „Wiederholen“ im Wortschatz, nach der Pflicht). */
+const MORE_ROUND = 20;
 
 export function Summary({ onBack }: { onBack: () => void }) {
   const { t, tn } = useT();
   const api = useHiddenInput();
   const results = useSession((s) => s.results);
   const round = useSession((s) => s.round);
+  const deck = useSession((s) => s.deck);
   const cards = useSession((s) => s.cards);
+  const pool = useSession((s) => s.pool);
+  const answered = useSession((s) => s.answered);
+  const now = useClock((s) => s.now);
+  // Noch Fälliges nach dieser Runde (Emrah 02.10.2026: „Alle fälligen 60 Karten“, aber eine Runde hat weniger): nicht
+  // beantwortete, fällige Karten dieser Sitzung. Nur nach der Pflicht-Runde und nach freien Runden über alle Fälligen.
+  const left = useMemo(() => {
+    if (round !== 'pflicht' && deck !== 'all') return 0;
+    const end = learningDayEnd(now);
+    const done = new Set(answered);
+    return pool.filter((c) => !c.isNew && !done.has(c.key) && c.fsrs.due < end).length;
+  }, [round, deck, pool, answered, now]);
   const failedCards = usePending((s) => s.failedCards);
   const failed = usePending((s) => s.failed);
   useHotkeys({ enter: onBack }, api.isInput);
@@ -49,6 +98,24 @@ export function Summary({ onBack }: { onBack: () => void }) {
             </li>
           ))}
         </ul>
+      )}
+      <CalibHint />
+      {n > 0 && left > 0 && (
+        <div className="flex flex-wrap items-center gap-3" data-testid="summary-more-row">
+          <p className="lx-tnum m-0 text-sm text-muted" data-testid="summary-left" data-n={left}>
+            {tn('nbWsSumMoreDue', left)}
+          </p>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              onBack();
+              startExtra(api, { deck: 'all', size: MORE_ROUND });
+            }}
+            data-testid="summary-more"
+          >
+            {t('nbWsSumMoreRound')}
+          </Button>
+        </div>
       )}
       {(failedCards.length > 0 || failed) && (
         <div className="flex flex-col gap-2 rounded-xl bg-danger-soft p-3" role="alert">

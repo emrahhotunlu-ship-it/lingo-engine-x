@@ -6,7 +6,8 @@ import { logWarn } from './diagnostics';
 // - Stimmen kommen verzögert: getVoices() sofort und nach 250/500/1000/2000 ms, dazu `voiceschanged`.
 // - Stücke ≤ 150 Zeichen, an Satzgrenzen getrennt, nacheinander gesprochen.
 // - Nach cancel() 60 ms warten, sonst verschluckt Safari die nächste Äußerung.
-// - Wecker: alle 5 s resume(), solange gesprochen wird (gegen stilles Pausieren).
+// - Wecker: alle 5 s resume(), solange gesprochen wird (gegen Chromes stilles Pausieren) –
+//   nicht auf iPhone/iPad, dort verursacht resume() während echtem Sprechen selbst ein Stottern.
 // - unlockSpeech() synchron im ersten Klick, damit später automatisch gesprochen werden darf.
 
 /** Das, was die App von einer Stimme braucht (Teil von `SpeechSynthesisVoice`). */
@@ -39,7 +40,12 @@ type UtteranceLike = {
   volume: number;
   onend: ((ev: unknown) => void) | null;
   onerror: ((ev: { error?: string }) => void) | null;
+  /** Wortgrenzen (N58); feuert nicht in jedem Browser und nicht mit jeder Stimme. */
+  onboundary?: ((ev: { name?: string; charIndex?: number; charLength?: number }) => void) | null;
 };
+
+/** Wortgrenze beim Vorlesen: Stück-Index, Zeichen-Index im Stück, Länge (falls gemeldet). */
+export type BoundaryListener = (chunk: number, charIndex: number, charLength: number | null) => void;
 
 type SynthLike = {
   readonly speaking: boolean;
@@ -82,17 +88,81 @@ const isEnglish = (v: SpeechVoiceLike): boolean => normLang(v.lang).startsWith('
 const isUS = (v: SpeechVoiceLike): boolean => normLang(v.lang) === 'en-us';
 
 /**
- * Wählt die Stimme: gespeicherte Stimme (genauer Name, englisch) → en-US „Premium"/„Enhanced"
- * → en-US lokal → en-US → irgendein en-*. Liefert den Index oder −1.
+ * iOS/macOS „Spaß"-Stimmen (Bad News, Zarvox, Whisper, Cellos, …): technisch als en-US gemeldet,
+ * aber absichtlich kaum verständlich (Roboter, Flüstern, Instrumente). Befund 29.09. (Emrahs
+ * Kommentar „die meisten vorgeschlagenen Stimmen sind gar nicht verständlich"): es gibt auf dem
+ * iPhone mehr solcher Spaß-Stimmen als brauchbare Stimmen, sie wurden bisher mitgezählt.
+ *
+ * Befund 30.09. (Screenshot, Emrahs iPhone auf Deutsch): Der erste Versuch griff nicht, weil Apple
+ * den angezeigten Namen je nach Gerätesprache übersetzt – „Bad News" zeigt sich dort als
+ * „Schlechte Neuigkeiten", „Bubbles" als „Seifenblasen" usw. Nur `name` ist übersetzt, `voiceURI`
+ * (die interne Kennung) bleibt englisch – deshalb zählt unten zusätzlich ein Treffer in der
+ * `voiceURI`, sprachunabhängig. Dabei fehlten auch drei echte Spaß-Stimmen in der ersten Liste
+ * (Fred, Kathy/„Katrin", Monster), die jetzt ergänzt sind.
+ */
+const NOVELTY_NAMES = [
+  'Albert',
+  'Bad News',
+  'Bahh',
+  'Bells',
+  'Boing',
+  'Bubbles',
+  'Cellos',
+  'Deranged',
+  'Fred',
+  'Good News',
+  'Hysterical',
+  'Jester',
+  'Junior',
+  'Kathy',
+  'Monster',
+  'Organ',
+  'Pipe Organ',
+  'Princess',
+  'Ralph',
+  'Superstar',
+  'Trinoids',
+  'Whisper',
+  'Wobble',
+  'Zarvox',
+  // deutsche Anzeigenamen (Emrahs Gerät, A6.5 „Emrah ist der einzige Nutzer")
+  'Flüstern',
+  'Glocken',
+  'Gute Neuigkeiten',
+  'Katrin',
+  'Orgel',
+  'Schlechte Neuigkeiten',
+  'Seifenblasen',
+];
+const normalizeId = (s: string) => s.toLowerCase().replace(/[^a-z]/g, '');
+const NOVELTY_IDS = [...new Set(NOVELTY_NAMES.map(normalizeId))];
+const isNovelty = (v: SpeechVoiceLike): boolean => {
+  if (NOVELTY_IDS.includes(normalizeId(v.name))) return true;
+  const uri = normalizeId(v.voiceURI ?? '');
+  return uri.length > 0 && NOVELTY_IDS.some((id) => id.length >= 4 && uri.includes(id));
+};
+
+/**
+ * Wählt die Stimme: gespeicherte Stimme (genauer Name, englisch, keine Spaß-Stimme) → normale
+ * (nicht „Premium"/„Enhanced") en-US-Stimme des Geräts → irgendeine lokale en-US-Stimme → en-US
+ * → irgendein en-*. Liefert den Index oder −1.
+ *
+ * Befund 29.09. (Emrah: Audio weiterhin abgehackt, „fundamental falsche Klasse/Vorgehen"): die
+ * „Premium"/„Enhanced"-Stimmen (hochwertigere, größere Sprachmodelle) galten bisher als erste Wahl.
+ * Genau diese Stimmen sind unter der Web-Speech-API auf dem iPhone bekanntermaßen anfällig für
+ * Stottern bei schnell aufeinanderfolgenden Äußerungen (anders als über die Systemfunktionen, wo sie
+ * einwandfrei laufen) – die normale Gerätestimme (z. B. „Samantha") ist dafür gebaut und zuverlässig.
+ * Eine Premium/Enhanced-Stimme kommt jetzt nur noch zum Zug, wenn gar keine normale lokale
+ * en-US-Stimme verfügbar ist.
  */
 export function pickVoice(voices: readonly SpeechVoiceLike[], preferred?: string | null): number {
   const find = (fn: (v: SpeechVoiceLike) => boolean) => voices.findIndex(fn);
   const steps: Array<(v: SpeechVoiceLike) => boolean> = [
-    (v) => !!preferred && v.name === preferred && isEnglish(v),
-    (v) => isUS(v) && /premium|enhanced/i.test(v.name),
-    (v) => isUS(v) && v.localService,
-    isUS,
-    isEnglish,
+    (v) => !!preferred && v.name === preferred && isEnglish(v) && !isNovelty(v),
+    (v) => isUS(v) && v.localService && !isNovelty(v) && !/premium|enhanced/i.test(v.name),
+    (v) => isUS(v) && v.localService && !isNovelty(v),
+    (v) => isUS(v) && !isNovelty(v),
+    (v) => isEnglish(v) && !isNovelty(v),
   ];
   for (const step of steps) {
     const i = find(step);
@@ -165,16 +235,23 @@ let unlocked = false;
 let session = 0;
 let lastCancelAt = -Infinity;
 type ChunkListener = (i: number, total: number, chunk: string) => void;
-let current: { id: number; utterance: UtteranceLike | null; finish: (o: SpeakOutcome) => void; onChunk?: ChunkListener | undefined } | null = null;
+let current: { id: number; utterance: UtteranceLike | null; finish: (o: SpeakOutcome) => void; onChunk?: ChunkListener | undefined; onBoundary?: BoundaryListener | undefined } | null = null;
 let wakeTimer: ReturnType<typeof setInterval> | null = null;
 let startTimer: ReturnType<typeof setTimeout> | null = null;
 const voiceTimers: Array<ReturnType<typeof setTimeout>> = [];
 
-/** Englische Stimmen, en-US zuerst, dann nach Region und Name (Plan §7). */
+/**
+ * Englische Stimmen ohne Spaß-Stimmen, en-US zuerst, dann nach Region und Name (Plan §7).
+ *
+ * Liefert bewusst alle englischen Sprachvarianten (auch en-GB/-IN/-AU): das Hör-Meeting
+ * (`dialogVoices.ts`) braucht sie für passende Sprecher-Akzente. Die Stimmen-Auswahl in den
+ * Einstellungen (nur en-US, A7.3) filtert selbst weiter (`VoiceSection.tsx`).
+ */
 export function listVoices(list: readonly SpeechVoiceLike[] = voices): VoiceInfo[] {
   const seen = new Set<string>();
   return list
     .filter(isEnglish)
+    .filter((v) => !isNovelty(v))
     .filter((v) => (seen.has(v.name) ? false : (seen.add(v.name), true)))
     .map((v) => ({ name: v.name, lang: v.lang.replace('_', '-'), local: v.localService, us: isUS(v) }))
     .sort((a, b) => Number(b.us) - Number(a.us) || a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name));
@@ -255,13 +332,29 @@ export function setSpeechPrefs(p: SpeechPrefs): void {
   applyVoice();
 }
 
+/**
+ * iPhone/iPad, auch iPadOS ≥ 13 (meldet sich als „MacIntel", aber mit Touch).
+ * Befund 29.09. (Emrahs Kommentar „am Handy immer abgehackt, am Laptop nie"): der Wecker unten
+ * ist gegen Chromes stilles Pausieren nach etwa 15 s Inaktivität gedacht. Genau dieses `resume()`
+ * ist auf iOS/Safari selbst die Ursache für ein Stottern, wenn die Äußerung in Wirklichkeit gar
+ * nicht pausiert war (bekanntes WebKit-Verhalten) – bei längeren Sätzen (langsameres Tempo der
+ * Tempo-Leiter) griff der Wecker mitten im Satz. Auf iOS gibt es das Chrome-Pausieren nicht,
+ * deshalb bleibt der Wecker dort ganz aus.
+ */
+function isIOS(): boolean {
+  const n = typeof navigator === 'undefined' ? null : navigator;
+  if (!n) return false;
+  if (/iPad|iPhone|iPod/.test(n.userAgent ?? '')) return true;
+  return n.platform === 'MacIntel' && (n.maxTouchPoints ?? 0) > 1;
+}
+
 function stopWake(): void {
   if (wakeTimer !== null) clearInterval(wakeTimer);
   wakeTimer = null;
 }
 
 function startWake(e: Env): void {
-  if (wakeTimer !== null) return;
+  if (wakeTimer !== null || isIOS()) return;
   wakeTimer = setInterval(() => {
     if (e.synth.speaking) e.synth.resume();
   }, WAKE_MS);
@@ -307,6 +400,21 @@ function speakChunk(e: Env, chunks: readonly string[], i: number, id: number, ra
     if (id !== session) return;
     speakChunk(e, chunks, i + 1, id, rate);
   };
+  const onBoundary = current.onBoundary;
+  if (onBoundary) {
+    // Wort-Markierung beim Vorlesen (N58): nur, wo der Browser Wortgrenzen meldet.
+    u.onboundary = (ev) => {
+      if (id !== session) return;
+      if (ev?.name && ev.name !== 'word') return;
+      const at = typeof ev?.charIndex === 'number' ? ev.charIndex : -1;
+      if (at < 0) return;
+      try {
+        onBoundary(i, at, typeof ev?.charLength === 'number' && ev.charLength > 0 ? ev.charLength : null);
+      } catch (err) {
+        logWarn('speech:onBoundary', err);
+      }
+    };
+  }
   u.onerror = (ev) => {
     if (id !== session) return;
     const code = ev?.error;
@@ -340,6 +448,8 @@ export type SpeakOptions = {
   startAt?: number;
   /** Wird vor jedem Stück aufgerufen: Index, Anzahl, Text. */
   onChunk?: ChunkListener;
+  /** Wird an jeder gemeldeten Wortgrenze aufgerufen (N58); bleibt still, wo der Browser keine meldet. */
+  onBoundary?: BoundaryListener;
 };
 
 /** Die Stücke, in die `speak` einen Text zerlegt (für Satz-Navigation und Anzeige). */
@@ -366,6 +476,7 @@ export function speak(text: string, opts: SpeakOptions = {}): Promise<SpeakOutco
       id,
       utterance: null,
       onChunk: opts.onChunk,
+      onBoundary: opts.onBoundary,
       finish: (o) => {
         if (settled) return;
         settled = true;

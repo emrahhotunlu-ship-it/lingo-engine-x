@@ -44,6 +44,8 @@ type State = {
   /** Letzter gespeicherter Check vor diesem (Vergleich). */
   prev: CheckRecord | null;
   saved: 'idle' | 'saving' | 'saved' | 'failed';
+  /** Neubau (P1): Block der Tageseinheit am Sonntag – Antworten zählen als Pflicht (`ctx:'duty'`). */
+  unit: boolean;
 };
 
 const initial = (): State => ({
@@ -62,6 +64,7 @@ const initial = (): State => ({
   record: null,
   prev: null,
   saved: 'idle',
+  unit: false,
 });
 
 export const useCheck = create<State>(initial);
@@ -93,7 +96,7 @@ function kindOf(s: Pick<State, 'items'>, pos: number, ex: Exercise | null): Chec
 }
 
 /** Aufgaben synchron im Klick zusammenstellen (Tastatur am iPhone). Rückgabe: Eingabeart der ersten Aufgabe. */
-export function startCheck(): CheckKind | 'empty' {
+export function startCheck(opts: { unit?: boolean } = {}): CheckKind | 'empty' {
   const live = useLive.getState();
   const now = useClock.getState().now;
   const day = useClock.getState().today;
@@ -122,6 +125,7 @@ export function startCheck(): CheckKind | 'empty' {
     ...base,
     active: true,
     status: 'running',
+    unit: !!opts.unit,
     day,
     step: useCheck.getState().step + 1,
     exercise,
@@ -160,7 +164,7 @@ export function commitCheckWord(ans: Answer, step: number): FirstKind {
     ans: e.accepted[0] ?? card.word,
     ms: ans.ms,
     lang: s.lang,
-    ctx: 'xtra',
+    ctx: s.unit ? 'duty' : 'xtra',
   };
   if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
   if (ans.override) a.override = true;

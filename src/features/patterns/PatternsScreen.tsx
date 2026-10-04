@@ -13,10 +13,12 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { Skeleton } from '../../ui/Skeleton';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { AiRunPanel } from '../input/AiRunPanel';
+import { TitleActions } from '../system/Chrome';
 import { FocusList, TrendLine } from './parts';
 import { PatternDrill } from './PatternDrill';
 import { isRunning, recognizePatterns, stopPatterns, usePatternsRun } from './store';
 import { usePatternData } from './usePatternData';
+import { TRAPS, trapById } from '../../content/nb/traps';
 
 // „Deine Deutsch-Fallen“ (Lernberatung 27.09., V3): Wochenfokus, höchstens 8 Muster mit Regel,
 // eigenem Beispiel und Verlauf („letzte Woche 3× → diese Woche 1×“, lokal gezählt), je Muster
@@ -38,8 +40,10 @@ export function PatternsScreen() {
   const doc = data.doc;
   const items = doc?.items ?? [];
   const active = id ? items.find((p) => p.id === id) : undefined;
+  // Startsatz-Falle (N43): ohne eigene Muster und ohne KI übbar.
+  const startTrap = id && !active ? trapById(id) : null;
   const running = isRunning(run.phase);
-  const close = () => (active ? go({ name: 'patterns' }) : go({ name: 'overview' }));
+  const close = () => (active || startTrap ? go({ name: 'patterns' }) : go({ name: 'overview' }));
   useHotkeys({ escape: close }, () => false);
 
   const recognize = () => void recognizePatterns({ refresh: run.phase === 'error' });
@@ -48,7 +52,7 @@ export function PatternsScreen() {
     <motion.section
       className="flex flex-col gap-5 py-4 sm:py-8"
       data-testid="patterns"
-      data-view={active ? 'drill' : 'list'}
+      data-view={active || startTrap ? 'drill' : 'list'}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: DURATION.base, ease: EASE_OUT }}
@@ -56,10 +60,10 @@ export function PatternsScreen() {
     >
       <header className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
-          <IconButton icon={active ? 'arrowLeft' : 'close'} label={active ? t('ptDrillBack') : t('ptClose')} onClick={close} data-testid="patterns-close" className="-ml-2" />
+          <IconButton icon={active || startTrap ? 'arrowLeft' : 'close'} label={active || startTrap ? t('ptDrillBack') : t('ptClose')} onClick={close} data-testid="patterns-close" className="-ml-2" />
           <span className="inline-block h-4 w-0.5 rounded-full" style={{ background: 'var(--lx-ch-grammar)' }} aria-hidden="true" />
           <h1 id={`${infoId}-title`} className="min-w-0 flex-1 truncate text-lg font-semibold tracking-tight">
-            {active ? (lang === 'en' ? active.title_en : active.title_de) : t('ptTitle')}
+            {active ? (lang === 'en' ? active.title_en : active.title_de) : startTrap ? startTrap.title[lang] : t('ptTitle')}
           </h1>
           <button
             type="button"
@@ -72,8 +76,9 @@ export function PatternsScreen() {
           >
             <Icon name="info" size={18} />
           </button>
+          <TitleActions />
         </div>
-        {active ? (
+        {active || startTrap ? (
           <p className="lx-tnum text-xs font-medium text-muted">
             {t('ptKind')} · {t('ptDrillTitle')}
           </p>
@@ -88,7 +93,9 @@ export function PatternsScreen() {
       </header>
 
       <div className="flex max-w-3xl flex-col gap-4">
-        {active && doc ? (
+        {startTrap ? (
+          <PatternDrill key={startTrap.id} pattern={null} trapId={startTrap.id} all={items} mistakes={data.mistakes} rule={startTrap.why[lang]} onDone={() => go({ name: 'patterns' })} />
+        ) : active && doc ? (
           <PatternDrill key={active.id} pattern={active} all={items} mistakes={data.mistakes} rule={ruleOf(doc, active, lang)} onDone={() => go({ name: 'patterns' })} />
         ) : data.status === 'loading' && !doc ? (
           <div className="flex flex-col gap-3" aria-busy="true">
@@ -147,6 +154,28 @@ export function PatternsScreen() {
                   );
                 })}
               </ul>
+            )}
+
+            {!running && (
+              <section className="flex flex-col gap-2" data-testid="patterns-start" aria-labelledby={`${infoId}-start`}>
+                <h2 id={`${infoId}-start`} className="lx-eyebrow">
+                  {t('nbLernenStartSet')}
+                </h2>
+                <p className="text-sm text-muted">{t('nbLernenStartSetLead')}</p>
+                <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]">
+                  {TRAPS.map((tr) => (
+                    <li key={tr.id}>
+                      <button type="button" onClick={() => go({ name: 'patterns', id: tr.id })} data-testid={`pattern-start-${tr.id}`} className="flex min-h-12 w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-surface-strong">
+                        <span className="flex min-w-0 flex-1 flex-col">
+                          <span className="font-medium">{tr.title[lang]}</span>
+                          <span className="text-sm text-muted">{tr.why[lang]}</span>
+                        </span>
+                        <Icon name="arrowRight" size={16} className="flex-none text-subtle" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
             )}
 
             {!running && (!doc || !items.length) && (

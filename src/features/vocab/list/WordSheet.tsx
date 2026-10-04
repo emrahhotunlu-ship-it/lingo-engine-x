@@ -23,7 +23,13 @@ import { nextT, recordAnswer } from '../../progress/persist';
 import { Dots } from '../../grammar/GrammarScreen';
 import { isLeech, MnemonicBlock } from '../mnemonic';
 import { startSession } from '../session';
-import { markKnown, resetCard, setHidden } from './actions';
+import { againTomorrow, editCard, markKnown, resetCard, setHidden } from './actions';
+import { addIdsOp, failures, isLeechCard, visibleDecks } from '../../../domain/srs/decks';
+import { histOf } from '../../../domain/srs/flip';
+import { useDecks, writeDecks } from '../decksStore';
+import { decksErrorKey } from '../hub/errors';
+import { requestExamples, useExamples } from '../examples';
+import { useAiAvailable } from '../../../ai/scope';
 
 // Wortblatt (M1): oben Status (Sicherheit, Stufe, nächste Wiederholung), dann Ursprungssatz und
 // Beispiele (jedes Wort antippbar), Wortpartner, Bilanz je Abfrageart, Merkhilfe (M3) und die
@@ -75,10 +81,10 @@ function ChunkOrigin({ card }: { card: TrainCard }) {
 }
 const STAGE_KEYS: MessageKey[] = ['stage0', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
 
-export function WordSheet({ card, onClose, layoutId }: { card: TrainCard | null; onClose: () => void; layoutId?: string }) {
+export function WordSheet({ card, onClose }: { card: TrainCard | null; onClose: () => void }) {
   const { t } = useT();
   return (
-    <Sheet open={!!card} onClose={onClose} title={card?.word ?? t('lhVocab')} closeLabel={t('close')} titleLayoutId={layoutId}>
+    <Sheet open={!!card} onClose={onClose} title={card?.word ?? t('lhVocab')} closeLabel={t('close')}>
       {card && <WordBody key={card.key} card={card} onClose={onClose} />}
     </Sheet>
   );
@@ -113,6 +119,21 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
   const examples = cardExamples(card, card.kind === 'chunk' ? (card.context?.sentence ?? card.chunk?.upgraded ?? null) : null);
   const balance = exerciseBalance(card);
   const src = { area: 'lookup' as const, source: card.path, title: card.word };
+  const ai = useAiAvailable();
+  const decks = useDecks((s) => s.decks);
+  const own = visibleDecks(decks);
+  const extra = useExamples((s) => s.byCard[card.id]);
+  const leech = isLeechCard(card);
+  const history = histOf(card.doc).slice(-12);
+  const decksWrite = (build: Parameters<typeof writeDecks>[0], okMsg: string) =>
+    void writeDecks(build).then((r) => toast(r.ok ? okMsg : t(decksErrorKey(r.error)), r.ok ? 'info' : 'error'));
+  const tomorrow = async () => {
+    setBusy(true);
+    const ok = await againTomorrow(card);
+    setBusy(false);
+    toast(ok ? t('nbWsTomorrowToast') : t('saveFailed'), ok ? 'info' : 'error');
+    if (ok) onClose();
+  };
 
   const practice = () => {
     const first = startSession('extra', { only: [card.key] });
@@ -231,7 +252,44 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
           </ul>
         </section>
       )}
-      {(isLeech(card.doc) || !!card.doc.mnemo) && <MnemonicBlock card={card} always />}
+      {leech && (
+        <section className="flex flex-col gap-2 rounded-xl bg-gold-soft p-3" data-testid="word-leech">
+          <p className="text-sm font-semibold">{t('nbWsLeechTitle')}</p>
+          <p className="text-sm">{t('nbWsLeechSub', { n: failures(card) })}</p>
+          {ai && !extra && (
+            <div>
+              <Button variant="secondary" icon="sparkle" onClick={() => requestExamples(card)} data-testid="word-new-example">
+                {t('nbWsNewExample')}
+              </Button>
+            </div>
+          )}
+          {extra?.items.map((x) => (
+            <p key={x.en} className="text-sm" data-testid="word-leech-example">
+              <EnglishText as="span" text={x.en} {...src} />
+            </p>
+          ))}
+        </section>
+      )}
+      {(isLeech(card.doc) || leech || !!card.doc.mnemo) && <MnemonicBlock card={card} always />}
+      <section className="flex flex-col gap-1.5" data-testid="word-history">
+        <p className="lx-eyebrow">{t('nbWsHistory')}</p>
+        {history.length === 0 ? (
+          <p className="text-sm text-muted">{t('nbWsHistoryEmpty')}</p>
+        ) : (
+          <ol className="flex flex-wrap gap-1.5">
+            {history.map((h) => (
+              <li
+                key={h.t}
+                className={`inline-flex size-6 items-center justify-center rounded-full text-xs font-semibold ${h.g !== null && h.g >= 2 ? 'bg-accent-soft text-accent-text' : 'bg-danger-soft text-danger-text'}`}
+                title={new Date(h.t).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US')}
+                data-ok={h.g !== null && h.g >= 2 ? '' : undefined}
+              >
+                {h.g !== null && h.g >= 2 ? '✓' : '✗'}
+              </li>
+            ))}
+          </ol>
+        )}
+      </section>
 
       {probe !== 'idle' && (
         <section className="flex flex-col gap-2 rounded-xl bg-surface p-3" data-testid="probe">
@@ -283,7 +341,12 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
         )}
         {!card.hidden && card.kind === 'vocab' && card.stage < 4 && probe === 'idle' && (
           <Button variant="secondary" icon="check" onClick={() => setProbe('asking')} data-testid="word-known">
-            {t('vcKnown')}
+            {t('nbWsKnowSure')}
+          </Button>
+        )}
+        {!card.hidden && !card.isNew && card.inDb && (
+          <Button variant="secondary" icon="undo" onClick={() => void tomorrow()} busy={busy} data-testid="word-tomorrow">
+            {t('nbWsAgainTomorrow')}
           </Button>
         )}
         {card.hidden ? (
@@ -297,11 +360,22 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
         )}
         {card.inDb && !card.hidden && !card.isNew && (
           <Button variant="ghost" icon="undo" onClick={() => (confirmReset ? void reset() : setConfirmReset(true))} busy={busy} data-testid="word-reset">
-            {confirmReset ? t('vcResetConfirm') : t('vcReset')}
+            {confirmReset ? t('vcResetConfirm') : t('nbWsFromScratch')}
           </Button>
+        )}
+        {!card.hidden && own.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2" data-testid="word-add-deck">
+            <span className="text-sm text-muted">{t('nbWsAddToDeck')}:</span>
+            {own.map((d) => (
+              <button key={d.id} type="button" className="lx-chip" onClick={() => decksWrite((cur) => addIdsOp(cur, d.id, [card.key]), t('nbWsAddedToDeck', { name: d.name }))} data-deck={d.id}>
+                + {d.name}
+              </button>
+            ))}
+          </div>
         )}
       </section>
 
+      {card.kind === 'vocab' && card.inDb && !card.hidden && <EditCard card={card} />}
       <Disclosure label={t('grRaw')}>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm" data-testid="word-raw">
           <dt className="text-muted">{t('vcRawR')}</dt>
@@ -317,5 +391,46 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
         </dl>
       </Disclosure>
     </div>
+  );
+}
+
+/** Karte bearbeiten (N31): Bedeutung und Ursprungssatz; der Satz muss das Wort enthalten. */
+function EditCard({ card }: { card: TrainCard }) {
+  const { t, lang } = useT();
+  const [meaning, setMeaning] = useState(meaningOf(card, lang) ?? '');
+  const [sentence, setSentence] = useState(card.context?.sentence ?? '');
+  const [busy, setBusy] = useState(false);
+  const save = async () => {
+    setBusy(true);
+    const r = await editCard(card, lang, { meaning, sentence });
+    setBusy(false);
+    if (r === 'ok') toast(t('nbWsSaved'), 'info');
+    else toast(t(r === 'sentence' ? 'nbWsEditErrSentence' : r === 'meaning' ? 'nbWsEditErrMeaning' : 'saveFailed'), 'error');
+  };
+  return (
+    <Disclosure label={t('nbWsEdit')}>
+      <form
+        className="flex flex-col gap-3"
+        data-testid="word-edit"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void save();
+        }}
+      >
+        <label className="flex flex-col gap-1">
+          <span className="text-sm text-muted">{t('nbWsEditMeaning')}</span>
+          <input className="lx-field" lang={lang} value={meaning} onChange={(e) => setMeaning(e.target.value)} data-testid="word-edit-meaning" />
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="text-sm text-muted">{t('nbWsEditSentence')}</span>
+          <textarea className="lx-field min-h-20" lang="en" value={sentence} onChange={(e) => setSentence(e.target.value)} data-testid="word-edit-sentence" />
+        </label>
+        <div>
+          <Button type="submit" variant="secondary" busy={busy} data-testid="word-edit-save">
+            {t('nbWsSave')}
+          </Button>
+        </div>
+      </form>
+    </Disclosure>
   );
 }

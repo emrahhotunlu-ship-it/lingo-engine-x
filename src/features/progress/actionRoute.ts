@@ -10,6 +10,7 @@ import { startSession } from '../vocab/session';
 
 // „Üben"-Ziele der Einschätzung und des Radars (Plan §0.1, §4.6): Aktion → Bildschirm. Gibt es
 // kein Ziel, fehlt der Knopf (`actionRoute` = null) – nie ein Knopf ins Leere.
+// Seit 04.10.2026 (Fokus Vokabeln und Grammatik) führt kein Knopf mehr zu Lesen, Hören, Schreiben oder Entdecken.
 
 type FocusApi = { focusNow(): void; blur(): void };
 type T = (k: MessageKey, v?: Record<string, string | number>) => string;
@@ -18,14 +19,10 @@ const FIXED: Readonly<Record<string, { route: Route; label: MessageKey }>> = {
   'vocab:review': { route: { name: 'trainer', round: 'extra' }, label: 'actVocabReview' },
   'vocab:leech': { route: { name: 'trainer', round: 'extra' }, label: 'actVocabLeech' },
   chunks: { route: { name: 'trainer', round: 'extra' }, label: 'actChunks' },
-  write: { route: { name: 'write', ctx: 'extra' }, label: 'actWrite' },
-  read: { route: { name: 'read', ctx: 'extra' }, label: 'actRead' },
-  listen: { route: { name: 'listen', ctx: 'extra' }, label: 'actListen' },
   dictate: { route: { name: 'drill', kind: 'dictate', ctx: 'xtra' }, label: 'actDictate' },
   cloze: { route: { name: 'drill', kind: 'cloze', ctx: 'xtra' }, label: 'actCloze' },
   order: { route: { name: 'drill', kind: 'order', ctx: 'xtra' }, label: 'actOrder' },
   sprint: { route: { name: 'drill', kind: 'sprint', ctx: 'xtra' }, label: 'actSprint' },
-  discover: { route: { name: 'discover' }, label: 'actDiscover' },
   speak: { route: { name: 'speak' }, label: 'actSpeak' },
   'business:email': { route: { name: 'mail' }, label: 'actBizEmail' },
   'business:nego': { route: { name: 'playbook' }, label: 'actBizNego' },
