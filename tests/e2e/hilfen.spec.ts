@@ -178,3 +178,23 @@ test('Bausteine am Handy: kein Tastaturfeld (nur Tippen auf die Bausteine)', asy
   await expect(page.getByTestId('tiles-type')).toHaveCount(0);
   await context.close();
 });
+
+test.describe('Handy 390 px', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test('Bausteine: beim Antippen springt nichts – „Prüfen“ und die übrigen Bausteine bleiben an ihrem Platz (Emrahs Meldung „kein t“)', async ({ page }) => {
+    const { errors } = await openOrder(page);
+    const item = page.getByTestId('drill-item');
+    const pos = async () => (await item.getByTestId('check').boundingBox())?.y ?? -1;
+    const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
+    const lastTile = item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${(texts[texts.length - 1] ?? '').replace(/"/g, '\\"')}"]`).first();
+    const y0 = await pos();
+    const t0 = (await lastTile.boundingBox())?.y ?? -1;
+    for (const text of texts.slice(0, -1)) {
+      await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${text.replace(/"/g, '\\"')}"]`).first().tap();
+      expect(await pos()).toBe(y0);
+      expect((await lastTile.boundingBox())?.y).toBe(t0);
+    }
+    expect(errors).toEqual([]);
+  });
+});

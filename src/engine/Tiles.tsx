@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import type { Tile } from '../domain/drills/order';
 
 // Bausteine (Kap. 4.3): Tippen legt einen Baustein ans Ende der Satzzeile bzw. nimmt ihn zurück;
@@ -34,7 +34,20 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
   const [over, setOver] = useState(false);
   const justDragged = useRef(false);
   const byId = new Map(tiles.map((t) => [t.id, t]));
-  const pool = tiles.filter((t) => !placed.includes(t.id));
+  // Feste Fläche (Emrahs Meldung 03.10.2026, „kein t im Buchstabenvorrat“): Ein gelegter Baustein lässt im Vorrat einen
+  // unsichtbaren Platzhalter zurück, und die Satzzeile ist von Anfang an so hoch wie der volle Vorrat. So springt beim
+  // Antippen nichts nach oben – vorher rutschte der Knopf „Prüfen“ unter den Finger und prüfte nach 1–2 Buchstaben.
+  const poolRef = useRef<HTMLDivElement>(null);
+  const [lineMin, setLineMin] = useState<number | null>(null);
+  useLayoutEffect(() => {
+    const h = poolRef.current?.getBoundingClientRect().height ?? 0;
+    const el = line.current;
+    if (!(h > 0) || !el) return;
+    // border-box: Innenabstand und Rahmen der Zeile kommen dazu.
+    const cs = window.getComputedStyle(el);
+    const extra = ['paddingTop', 'paddingBottom', 'borderTopWidth', 'borderBottomWidth'].reduce((n, k) => n + (parseFloat(cs.getPropertyValue(k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`))) || 0), 0);
+    setLineMin(Math.ceil(h + extra));
+  }, [tiles]);
 
   const toggle = (id: number) => {
     if (locked) return;
@@ -145,11 +158,19 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
 
   return (
     <div className="flex flex-col gap-4">
-      <div ref={line} className="lx-tile-line" role="group" aria-label={labels.line} data-testid="tile-line" data-over={over || undefined}>
+      <div ref={line} className="lx-tile-line" role="group" aria-label={labels.line} data-testid="tile-line" data-over={over || undefined} style={lineMin ? { minHeight: lineMin } : undefined}>
         {placed.map((id) => tileButton(id, 'line'))}
       </div>
-      <div className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool">
-        {pool.map((t) => tileButton(t.id, 'pool'))}
+      <div ref={poolRef} className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool">
+        {tiles.map((t) =>
+          placed.includes(t.id) ? (
+            <span key={t.id} className="lx-tile invisible" aria-hidden="true" data-testid="tile-ghost">
+              {t.text}
+            </span>
+          ) : (
+            tileButton(t.id, 'pool')
+          ),
+        )}
       </div>
     </div>
   );

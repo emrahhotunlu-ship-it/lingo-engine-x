@@ -539,8 +539,9 @@ export function ExerciseView({
     );
   } else if (e.input === 'tiles') {
     const current = tilesAnswer(e.tiles ?? [], placed, /\s/.test(solution) ? 'words' : 'letters');
+    // Feste Mindestbreite: die Lücke wächst beim Legen nicht, der Satz bricht nicht neu um und nichts springt unter den Finger.
     const slot = (
-      <span className="lx-gap" data-testid="gap" data-state={!fb ? 'input' : fb.result.verdict} style={{ width: 'auto', minWidth: '3.5em' }} lang="en">
+      <span className="lx-gap" data-testid="gap" data-state={!fb ? 'input' : fb.result.verdict} style={{ width: 'auto', minWidth: `${Math.max(3.5, solution.length * 0.62 + 1)}em` }} lang="en">
         {fb ? (fb.result.verdict === 'correct' ? fb.given : solution) : current || ' '}
       </span>
     );
