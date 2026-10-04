@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
 import { grammarKey, L07_OUTPUT, lessonMeta, playLesson, storedL07 } from './learnHelpers';
+import { writes } from './trainerHelpers';
 
 // Paket P2 (docs/neubau/plan.md §4.3): Üben-Hub mit vier Abschnitten, jede Übung ≤ 2 Tipps ab
 // Üben, Tageseinheit Block 4 (Fokus, Mini-Drill bei Fallen-Korrektur) und Block 5 (beide
@@ -254,4 +255,38 @@ test('Reiter „Anwenden“: Diktat, Lücke, Satzbau und Rollenspiel stehen dort
   await expect(page.getByTestId('hub-drill-order')).toHaveCount(0);
   await expect(page.getByTestId('training-colloc')).toHaveCount(0);
   expect(errors).toEqual([]);
+});
+
+test('Anwenden › Hörübung mit Frage: Text verdeckt, erst Hören, dann Frage, danach Text mit Belegstelle; schreibt nichts', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'apply');
+  await page.getByTestId('hub-listen-q').click();
+  await expect(page.getByTestId('listen-q-item')).toBeVisible();
+  // Vor dem Hören: weder Frage noch Text.
+  await expect(page.getByTestId('listen-q-question')).toHaveCount(0);
+  await expect(page.getByTestId('listen-q-text')).toHaveCount(0);
+  const before = (await writes(page)).length;
+  for (let i = 0; i < 3; i++) {
+    await page.getByTestId('listen-q-play').click();
+    await expect(page.getByTestId('listen-q-question')).toBeVisible();
+    await expect(page.getByTestId('listen-q-text')).toHaveCount(0);
+    await page.getByTestId('listen-q-option').filter({ hasText: 'The client asked for it.' }).click();
+    await expect(page.getByTestId('listen-q-result')).toBeVisible();
+    await expect(page.getByTestId('listen-q-quote')).toContainText('because the client asked for it');
+    await expect(page.getByTestId('listen-q-why')).toBeVisible();
+    await page.getByTestId('listen-q-next').click();
+  }
+  await expect(page.getByTestId('session-end')).toHaveAttribute('data-right', '3');
+  expect((await writes(page)).length).toBe(before);
+  expect(errors).toEqual([]);
+});
+
+test('Anwenden › Hörübung: ohne Claude gibt es keine Kachel', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await screen(page, 'today');
+  await openTab(page, 'apply');
+  await expect(page.getByTestId('apply-hub')).toBeVisible();
+  await expect(page.getByTestId('hub-listen-q')).toHaveCount(0);
 });

@@ -1,4 +1,5 @@
 import { cardExamples } from './cardExamples';
+import { listenQ } from './listenQ';
 import { orderGen } from './orderGen';
 import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
@@ -31,6 +32,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   produceCheck,
   cardExamples,
   orderGen,
+  // Anwenden, Stufe 2: Hörübung mit Frage
+  listenQ,
   // Phase 2 (docs/phase2-plan.md §7)
   lessonContent,
   lessonProduction,

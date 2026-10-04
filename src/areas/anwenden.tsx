@@ -2,6 +2,7 @@ import { defineArea } from '../app/registry';
 import { HubSections } from '../app/shell/Hub';
 import { placesOf } from '../app/shell/tabs';
 import { ApplyHub } from '../features/apply/ApplyHub';
+import { ListenQuestionScreen } from '../features/apply/ListenQuestion';
 import { RepairRoundScreen } from '../features/apply/RepairRound';
 
 // Bereich „Anwenden“ (Emrahs Wunsch 04.10.2026, „Go Anwenden“): vierter Lernreiter neben Wortschatz und Grammatik.
@@ -12,6 +13,8 @@ declare module '../app/router/types' {
     apply: NoParams;
     /** „Fehler korrigieren“: freiwillige Runde mit fälligen Reparatur-Sätzen. */
     repairRound: NoParams;
+    /** Hörübung mit Frage zu eigenen Wörtern (Sprachausgabe, Claude schreibt die Texte). */
+    listenQ: NoParams;
   }
 }
 
@@ -30,5 +33,6 @@ export const anwenden = defineArea({
   screens: {
     apply: { kind: 'tab', component: ApplyRoot, title: 'apTitle', keepScroll: true },
     repairRound: { kind: 'exercise', component: RepairRoundScreen, title: 'apRepair' },
+    listenQ: { kind: 'exercise', component: ListenQuestionScreen, title: 'apListenQ' },
   },
 });

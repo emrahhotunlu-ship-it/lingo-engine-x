@@ -4,6 +4,7 @@ import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { entriesFor } from '../../app/registry';
 import { useLive } from '../../data/live';
+import { useAiAvailable } from '../../ai/scope';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
 import { feasible } from '../../domain/plan/channels';
@@ -67,6 +68,7 @@ export function ApplyHub() {
   const inputs = useLearnInputs((s) => s.status);
   const openRepairs = useOpenRepairs();
   const combo = entriesFor('apply');
+  const ai = useAiAvailable();
 
   useEffect(() => {
     if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
@@ -102,6 +104,7 @@ export function ApplyHub() {
       <Section id="ap-listen" title={t('apListenWrite')}>
         <div className="grid grid-cols-2 gap-3">
           {listenWrite}
+          {tts && ai && <Tile icon="headphones" channel="listen" title={t('apListenQ')} sub={t('apListenQSub')} onClick={() => { unlockSpeech(); go({ name: 'listenQ' }); }} testId="hub-listen-q" />}
           {tts && <Tile icon="speaker" channel="listen" title={t('nbWsLoopTitle')} sub={t('nbWsLoopSub')} onClick={() => { unlockSpeech(); go({ name: 'listenLoop' }); }} testId="hub-listen-loop" />}
         </div>
       </Section>

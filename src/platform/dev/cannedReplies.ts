@@ -7,6 +7,7 @@ import { assessReply } from './canned/assess';
 import { weeklyReply } from './canned/weekly';
 import { registerLearnReplies } from './cannedLearn';
 import { courseExtendReply } from './canned/courseExtend';
+import { listenQReply } from './canned/listenQ';
 import { repairCheckReply } from './canned/repairCheck';
 import { patternCheckReply, patternsReply } from './canned/patterns';
 import { registerP7Replies } from './canned/p7';
@@ -326,6 +327,7 @@ export function registerCannedReplies(): void {
   registerCannedReply('course-extend', courseExtendReply);
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   registerCannedReply('repair-check', repairCheckReply);
+  registerCannedReply('listen-q', listenQReply);
   // Neubau P7: pressure-check
   registerP7Replies();
   // Lernberatung 27.09., V3 – Deutsch-Fallen
