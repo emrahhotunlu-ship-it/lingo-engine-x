@@ -26,6 +26,9 @@ export const applyEn = {
   apListenQNotice: 'Written by Claude, may contain mistakes. This is listening with speech output, not a measure of your listening skill.',
   apListenQEmpty: 'Claude did not return any usable texts just now.',
   apListenQUnavailable: 'This exercise needs speech output, Claude and a few known words.',
+  apListenQDeviceHint: 'Your device could not play the speech. That is not a mistake on your part.',
+  apListenQSkip: 'Skip (does not count)',
+  apListenQEndNotice: 'This was listening with speech output, not a measure of your listening skill.',
   apComboOwn: 'Your own sentence',
   apComboOwnSub: 'One word and one rule in one sentence',
   apComboTask: 'Write a sentence with “{word}” – rule: {topic}.',
@@ -37,6 +40,7 @@ export const applyEn = {
   apComboWordMissing: 'The word “{word}” is not in your sentence. Try again with it.',
   apComboRetry: 'Try again',
   apComboNotice: 'Checked by Claude, may contain mistakes. A wrong sentence comes back later under “Fix mistakes”.',
+  apComboRepairNote: 'This sentence is saved as a repair sentence and comes back tomorrow under “Fix mistakes”.',
   apComboUnavailable: 'This exercise needs Claude and a few known words.',
   apRoleplaySub: 'Speak freely with fixed scenes',
 };

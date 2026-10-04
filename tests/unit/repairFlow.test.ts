@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { validateDoc } from '../../src/data/validate';
 import { entryCardKey, repairLogEntry } from '../../src/domain/progress/logPatch';
 import { checkRepairLocal, wordDistance } from '../../src/domain/repair/check';
-import { pickDailyRepairs, repairsDoneToday, repairStats, REPAIR_PER_DAY } from '../../src/domain/repair/daily';
+import { pickDailyRepairs, repairsDoneToday, repairsDutyToday, repairStats, REPAIR_PER_DAY } from '../../src/domain/repair/daily';
 import { addRepairs, repairId, reviewRepair, type RepairItem } from '../../src/domain/repair/repair';
 import { repairsFromPreply, repairsFromTalk, repairsFromText, repairsFromWriting, splitSentences } from '../../src/domain/repair/sources';
 import { repairCheckReply } from '../../src/platform/dev/canned/repairCheck';
@@ -113,6 +113,15 @@ describe('Reparatur-Sätze: tägliche Wiederholung und Stand', () => {
     expect(pickDailyRepairs(doc, T + DAY, new Set(), 2)).toHaveLength(2);
     expect(pickDailyRepairs(doc, T - 1, new Set())).toHaveLength(0);
     expect(pickDailyRepairs(null, T, new Set())).toEqual([]);
+  });
+  it('freiwillige Runde (xtra) verbraucht den Pflicht-Platz nicht', () => {
+    const doc = { items: list };
+    const xtra = list.slice(0, 5).map((e) => repairLogEntry({ t: T, ok: true, lang: 'de', id: e.id, q: 'a', given: 'b', ans: 'c', g: 3, ms: 1, ctx: 'xtra' }));
+    expect(repairsDutyToday(xtra).size).toBe(0);
+    expect(repairsDoneToday(xtra).size).toBe(5);
+    // geübte Sätze kommen nicht doppelt, Platz bleibt aber voll
+    const picked = pickDailyRepairs(doc, T + DAY, repairsDoneToday(xtra), REPAIR_PER_DAY, repairsDutyToday(xtra));
+    expect(picked.map((e) => e.id)).toEqual([list[5]!.id]);
   });
   it('Protokoll: zählt als Karte „repair/<id>“ zu Wiederholen', () => {
     const e = repairLogEntry({ t: T, ok: true, lang: 'de', id: 'rabc', q: 'old', given: 'new', ans: 'better', g: 3, ms: 1200, ctx: 'rev' });

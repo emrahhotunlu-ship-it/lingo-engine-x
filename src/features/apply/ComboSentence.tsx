@@ -8,6 +8,7 @@ import { useLive } from '../../data/live';
 import { pickPairs, type ComboPair } from '../../domain/apply/combo';
 import { topicById, TOPICS } from '../../domain/content';
 import { errorsOf } from '../../domain/grammar/errors';
+import { normText } from '../../domain/text/normText';
 import { usesChunk } from '../../domain/text/chunkMatch';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
@@ -27,6 +28,12 @@ import { useVocabCards } from '../vocab/hub/data';
 // Claude – zwei getrennte Urteile. Freiwillig: kein FSRS-Termin, keine Beherrschungs-Buchung. Ein falscher Satz wird als
 // Reparatur-Satz gespeichert (kommt in „Fehler korrigieren“ wieder, nie als Rückstand). Von Claude geprüft, kann Fehler
 // enthalten: gekennzeichnet.
+
+/** Nur ein belegt besserer, anderer Satz wird zum Reparatur-Satz (kommt morgen in „Fehler korrigieren“). */
+export function willRepair(out: ComboCheckOut, given: string): boolean {
+  const fixed = out.fixed.trim();
+  return !out.correct && !!fixed && normText(fixed) !== normText(given);
+}
 
 type Done = { word: boolean; rule: boolean | null; correct: boolean | null };
 
@@ -89,12 +96,14 @@ export function ComboSentenceScreen() {
     setRes({ ...done, out });
     setResults((l) => [...l, done]);
     // Ein falscher Satz wird zum Reparatur-Satz (nur mit belegter Korrektur, nie als Rückstand).
-    if (!out.correct && out.fixed.trim()) void saveRepairs([{ wrong: given, right: out.fixed.trim(), why: out.why, src: 'write' }]);
+    if (willRepair(out, given)) void saveRepairs([{ wrong: given, right: out.fixed.trim(), why: out.why, src: 'write' }]);
   };
   const retry = () => {
     setRes(null);
   };
   const next = () => {
+    // Nur echte Versuche zählen: übersprungene Sätze nie; ein fehlendes Wort zählt als Versuch (einmal, beim Weiter).
+    if (res && res.out === null) setResults((l) => [...l, { word: res.word, rule: res.rule, correct: res.correct }]);
     setPos((p) => p + 1);
     setText('');
     setRes(null);
@@ -110,7 +119,7 @@ export function ComboSentenceScreen() {
           {t('apComboUnavailable')}
         </p>
       ) : finished ? (
-        <SessionEnd right={right} total={fixed.length} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: close }} />
+        <SessionEnd right={right} total={Math.max(1, results.length)} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: close }} />
       ) : (
         cur && (
           <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="combo-item" data-word={cur.word} data-topic={cur.topicId}>
@@ -189,6 +198,11 @@ export function ComboSentenceScreen() {
                     <p className="text-sm text-muted" data-testid="combo-why">
                       {t('rxWhy')}: {res.out.why}
                     </p>
+                    {willRepair(res.out, text) && (
+                      <p className="text-sm text-muted" data-testid="combo-repair-note">
+                        {t('apComboRepairNote')}
+                      </p>
+                    )}
                     <p className="text-xs text-subtle">{t('apComboNotice')}</p>
                   </>
                 )}

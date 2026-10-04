@@ -19,8 +19,11 @@ export type ListenQOut = { items: unknown[] };
 
 export const LISTEN_Q_MAX_ITEMS = 4;
 
-export const LISTEN_Q_EXAMPLE =
-  '{"items":[{"word":"deadline","text":"Thanks for the update. We will not meet the deadline on Friday, because the supplier is late. Could we move it to Tuesday?","question":"Why can the team not meet the deadline?","options":["The supplier is late.","The budget is too small.","The client changed the plan."],"answer":0,"quote":"because the supplier is late","why":"Der Grund steht direkt nach because."}]}';
+const exampleOf = (why: string): string =>
+  `{"items":[{"word":"deadline","text":"Thanks for the update. We will not meet the deadline on Friday, because the supplier is late. Could we move it to Tuesday?","question":"Why can the team not meet the deadline?","options":["The supplier is late.","The budget is too small.","The client changed the plan."],"answer":0,"quote":"because the supplier is late","why":"${why}"}]}`;
+
+export const LISTEN_Q_EXAMPLE = exampleOf('Der Grund steht direkt nach because.');
+export const LISTEN_Q_EXAMPLE_EN = exampleOf('The reason comes right after because.');
 
 const ID = 'listen-q';
 const VERSION = 1;
@@ -53,7 +56,7 @@ export const listenQ: PromptTemplate<ListenQVars, ListenQOut> = {
       `Do not repeat these texts: ${avoid.join(' | ') || '(none)'}`,
       `Explanation language: ${langName(v.uiLang)}`,
       'Reply with only one JSON object, no other text, exactly this shape:',
-      LISTEN_Q_EXAMPLE,
+      v.uiLang === 'en' ? LISTEN_Q_EXAMPLE_EN : LISTEN_Q_EXAMPLE,
       'Rules:',
       '- word: the vocabulary word the text is about; it must appear in the text exactly as written in the vocabulary list or in a normal inflected form.',
       '- text: 3 to 5 short sentences, 35–70 words in total, a realistic work situation (a call, a short voicemail, a meeting remark) or an everyday situation. Natural spoken English, no lists, no brackets.',

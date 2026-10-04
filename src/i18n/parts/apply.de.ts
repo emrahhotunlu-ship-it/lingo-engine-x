@@ -26,6 +26,9 @@ export const applyDe = {
   apListenQNotice: 'Von Claude geschrieben, kann Fehler enthalten. Das ist Hören mit Sprachausgabe, keine Messung deines Hörverstehens.',
   apListenQEmpty: 'Claude hat gerade keine brauchbaren Texte geliefert.',
   apListenQUnavailable: 'Diese Übung braucht Sprachausgabe, Claude und ein paar bekannte Wörter.',
+  apListenQDeviceHint: 'Die Sprachausgabe deines Geräts hat nicht geklappt. Das ist kein Fehler von dir.',
+  apListenQSkip: 'Überspringen (zählt nicht)',
+  apListenQEndNotice: 'Das war Hören mit Sprachausgabe, keine Messung deines Hörverstehens.',
   apComboOwn: 'Eigener Satz',
   apComboOwnSub: 'Ein Wort und eine Regel in einem Satz',
   apComboTask: 'Schreibe einen Satz mit „{word}“ – Regel: {topic}.',
@@ -37,6 +40,7 @@ export const applyDe = {
   apComboWordMissing: 'Das Wort „{word}“ steht nicht in deinem Satz. Versuch es noch einmal damit.',
   apComboRetry: 'Nochmal versuchen',
   apComboNotice: 'Von Claude geprüft, kann Fehler enthalten. Ein falscher Satz kommt später unter „Fehler korrigieren“ wieder.',
+  apComboRepairNote: 'Dieser Satz ist als Reparatur-Satz gemerkt und kommt morgen unter „Fehler korrigieren“ wieder.',
   apComboUnavailable: 'Diese Übung braucht Claude und ein paar bekannte Wörter.',
   apRoleplaySub: 'Frei sprechen mit festen Szenen',
 };

@@ -31,7 +31,7 @@ import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCa
 import { markExhausted, useTodayPlan } from '../today/store';
 import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
-import { pickDailyRepairs, repairsDoneToday } from '../../domain/repair/daily';
+import { pickDailyRepairs, repairsDoneToday, repairsDutyToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
 import { commitRepairAnswer } from '../repair/review';
 
@@ -363,7 +363,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const dir: FlipDir = round === 'pflicht' || deck === 'all' ? 'de-en' : (opts.dir ?? defaults.dir);
   const ctx: DeckCtx = { nowMs: now, weekStartMs: weekStartMs(now) };
   // Lernberatung V2: fällige Reparatur-Sätze zählen zur Runde (Pflicht bzw. freie Runde „alle“).
-  const repairs = !opts.only && !opts.pick && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), Math.min(target, REPAIR_MAX)) : [];
+  const repairs = !opts.only && !opts.pick && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), Math.min(target, REPAIR_MAX), repairsDutyToday(entries)) : [];
   const cardTarget = Math.max(0, target - repairs.length);
   const deckPool = round === 'extra' && deck !== 'all' ? deckCards(cards, deck, useDecks.getState().decks, ctx) : cards;
   const chosen = opts.pick ? deckPool.filter(opts.pick) : deckPool;

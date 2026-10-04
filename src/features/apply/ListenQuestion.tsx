@@ -48,6 +48,8 @@ export function ListenQuestionScreen() {
   const [pos, setPos] = useState(0);
   const [heard, setHeard] = useState(0);
   const [speaking, setSpeaking] = useState(false);
+  const [deviceFail, setDeviceFail] = useState(false);
+  const [skipped, setSkipped] = useState(0);
   const [res, setRes] = useState<Result | null>(null);
   const [results, setResults] = useState<Result[]>([]);
   const [startedAt] = useState(() => performance.now());
@@ -85,7 +87,10 @@ export function ListenQuestionScreen() {
     const o = await speak(cur.text);
     setSpeaking(false);
     // Nur ein vollständiges Vorlesen zählt; Geräteprobleme verbrauchen keinen Versuch.
-    if (o === 'done') setHeard((h) => h + 1);
+    if (o === 'done') {
+      setHeard((h) => h + 1);
+      setDeviceFail(false);
+    } else if (o === 'error' || o === 'unavailable') setDeviceFail(true);
   };
   const pick = (i: number) => {
     if (!cur || res) return;
@@ -94,10 +99,15 @@ export function ListenQuestionScreen() {
     setRes(r);
     setResults((l) => [...l, r]);
   };
+  const skip = () => {
+    setSkipped((n) => n + 1);
+    next();
+  };
   const next = () => {
     setPos((p) => p + 1);
     setHeard(0);
     setRes(null);
+    setDeviceFail(false);
     setEndedAt(performance.now());
   };
 
@@ -124,7 +134,10 @@ export function ListenQuestionScreen() {
       ) : !items ? (
         <AiRunPanel phase={ask.phase} error={ask.error} onStop={ask.stop} onRetry={() => void load()} />
       ) : finished ? (
-        <SessionEnd right={results.filter((r) => r.ok).length} total={items.length} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: close }} />
+        <>
+        <SessionEnd right={results.filter((r) => r.ok).length} total={Math.max(1, items.length - skipped)} ms={Math.max(1, endedAt - startedAt)} next={{ label: t('lrBackToApply'), run: close }} />
+        <p className="text-xs text-subtle" data-testid="listen-q-endnotice">{t('apListenQEndNotice')}</p>
+        </>
       ) : (
         cur && (
           <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="listen-q-item" data-id={cur.id} data-state={res ? (res.ok ? 'ok' : 'wrong') : heard ? 'asking' : 'listening'}>
@@ -137,6 +150,16 @@ export function ListenQuestionScreen() {
                 {t('apListenQPlays', { n: Math.min(heard, LISTEN_PLAYS_MAX), max: LISTEN_PLAYS_MAX })}
               </span>
             </div>
+            {deviceFail && !res && heard === 0 && (
+              <div className="flex flex-wrap items-center gap-3" data-testid="listen-q-devicefail">
+                <p className="text-sm text-muted" role="status">
+                  {t('apListenQDeviceHint')}
+                </p>
+                <Button variant="secondary" onClick={skip} data-testid="listen-q-skip">
+                  {t('apListenQSkip')}
+                </Button>
+              </div>
+            )}
             {(heard > 0 || res) && (
               <div className="flex flex-col gap-3">
                 <p className="text-base font-medium" lang="en" data-testid="listen-q-question">

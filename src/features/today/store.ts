@@ -11,7 +11,7 @@ import { readPlan } from '../../domain/plan/buildPlan';
 import { type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
-import { repairsDoneToday, pickDailyRepairs } from '../../domain/repair/daily';
+import { repairsDoneToday, repairsDutyToday, pickDailyRepairs } from '../../domain/repair/daily';
 import { buildTrainCards } from '../../domain/srs/cards';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
@@ -187,7 +187,7 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     const all = [...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'chunk'))];
     const introduced = cards.filter((c) => c.intro === today);
     const entries = live.day?.key === today && Array.isArray(live.day.doc?.entries) ? (live.day.doc.entries as Array<{ type?: unknown; id?: unknown }>) : [];
-    const repairs = pickDailyRepairs(live.docs['app/repair'], nowMs, repairsDoneToday(entries), REPAIR_MAX).length;
+    const repairs = pickDailyRepairs(live.docs['app/repair'], nowMs, repairsDoneToday(entries), REPAIR_MAX, repairsDutyToday(entries)).length;
     review = unitReviewGoal({
       cards: all,
       repairs,
