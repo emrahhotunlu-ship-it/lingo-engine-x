@@ -35,12 +35,8 @@ function evidenceFromSeed(over: Partial<Parameters<typeof buildEvidence>[0]> = {
     profile: seed['app/profile']!,
     grammar: collection('grammar'),
     radar: seed['app/radar'] ?? null,
-    writing: collection('writing'),
     vocab: collection('vocab'),
     logs,
-    reading: collection('reading'),
-    talk: collection('talk'),
-    preply: collection('preply'),
     prev: readAssess(seed['app/assess']),
     ...over,
   });
@@ -53,10 +49,6 @@ const counts = (o: Partial<EvidenceCounts> = {}): EvidenceCounts => ({
   vocabReviews30: 0,
   vtestDays: null,
   vtestD: null,
-  reading: 0,
-  listening: 0,
-  writing: 0,
-  speaking: 0,
   ...o,
 });
 
@@ -94,7 +86,7 @@ describe('app/assess: beide Formen lesen, Hülle schreiben (A6.10)', () => {
     for (const k of ['level', 'cefr', 'levelWhy', 'trend', 'trendWhy', 'today', 'c1gap', 'strengths', 'blockers', 'dims', 'focus']) expect(k in d).toBe(true);
     expect(d.trend).toBeNull();
     expect(d.focus).toBeNull();
-    expect(upd.pv).toBe('assess@2');
+    expect(upd.pv).toBe('assess@3');
     expect(upd.v).toBe(2);
   });
 
@@ -150,7 +142,7 @@ describe('app/assess: beide Formen lesen, Hülle schreiben (A6.10)', () => {
 
 describe('assessDue (Plan §4.4)', () => {
   const a = readAssess({ ...seed['app/assess'], d: '2026-09-19', answers: 1000, writings: 2 })!;
-  const base = { assess: a, uiLang: 'de' as const, today, profileAnswers: 1100, writings: 2, newAnalyses: 0, lastAutoDay: null };
+  const base = { assess: a, uiLang: 'de' as const, today, profileAnswers: 1100, lastAutoDay: null };
   it('alle Gründe in ihrer Reihenfolge', () => {
     expect(assessDue({ ...base, lastAutoDay: today })).toBe('none');
     expect(assessDue({ ...base, assess: null, profileAnswers: 99 })).toBe('none');
@@ -159,8 +151,6 @@ describe('assessDue (Plan §4.4)', () => {
     expect(assessDue({ ...base, assess: { ...a, d: today } })).toBe('none');
     expect(assessDue({ ...base, assess: { ...a, d: '2026-09-17' } })).toBe('age');
     expect(assessDue({ ...base, profileAnswers: 1300 })).toBe('answers');
-    expect(assessDue({ ...base, writings: 3 })).toBe('text');
-    expect(assessDue({ ...base, newAnalyses: 2 })).toBe('speak');
     expect(assessDue(base)).toBe('none');
   });
   it('Sprachwechsel wirkt auch am selben Tag, aber nur einmal je Tag automatisch', () => {
@@ -177,8 +167,6 @@ describe('Belegstärke und Nachprüfung (Plan §4.3)', () => {
     expect(dimStrength('grammar', counts({ grammarN: 250, grammarTopics: 8 }))).toBe('good');
     expect(dimStrength('vocabulary', counts({ vtestDays: 20, vocabReviews30: 400 }))).toBe('good');
     expect(dimStrength('vocabulary', counts({ vtestDays: 120, vocabReviews30: 400 }))).toBe('fair');
-    expect(dimStrength('speaking', counts({ speaking: 1 }))).toBe('thin');
-    expect(dimStrength('listening', counts({ listening: 6 }))).toBe('good');
   });
   it('Belastbarkeit = min(KI, Code); ohne Belege keine Stufe und kein KI-Text', () => {
     expect(capConfidence('good', 'fair')).toBe('fair');
@@ -187,9 +175,10 @@ describe('Belegstärke und Nachprüfung (Plan §4.3)', () => {
     const out = finalizeAssess(d, { ...allStrengths(counts({ grammarN: 60 })) });
     const g = out.dims.find((x) => x.id === 'grammar')!;
     expect(g).toMatchObject({ level: 'C1', confidence: 'fair' });
-    const s = out.dims.find((x) => x.id === 'speaking')!;
-    expect(s).toEqual({ id: 'speaking', level: null, confidence: 'thin', why: null });
-    expect(out.dims).toHaveLength(6);
+    // Seit assess@3 nur noch Grammatik und Wortschatz; ohne Belege (Wortschatz) keine Stufe.
+    const v = out.dims.find((x) => x.id === 'vocabulary')!;
+    expect(v).toEqual({ id: 'vocabulary', level: null, confidence: 'thin', why: null });
+    expect(out.dims.map((x) => x.id)).toEqual(['grammar', 'vocabulary']);
     expect(out.focus?.channels).toEqual(['write']);
   });
 });
@@ -215,7 +204,7 @@ describe('Belegpaket (Plan §4.2)', () => {
     expect(new Set(pack.ids).size).toBe(pack.ids.length);
     expect(pack.ids).toContain('p:14d');
     expect(pack.ids.some((i) => i.startsWith('g:'))).toBe(true);
-    expect(pack.ids.some((i) => i.startsWith('w:'))).toBe(true);
+    expect(pack.ids.some((i) => /^(w|rd|li|s|pp):/.test(i))).toBe(false);
     expect(pack.ids.some((i) => i.startsWith('r:'))).toBe(true);
     expect(sectionBytes(pack.sections)).toBeLessThanOrEqual(EVIDENCE_BUDGET);
     expect(evidenceText(pack)).toMatch(/^## Activity/);
@@ -223,7 +212,7 @@ describe('Belegpaket (Plan §4.2)', () => {
 
   it('fehlende Quellen ergeben leere Abschnitte, nie einen Fehler', () => {
     const empty = new Map<string, Doc>();
-    const pack = buildEvidence({ nowMs, today, profile: {}, grammar: empty, radar: null, writing: empty, vocab: empty, logs: empty, reading: empty, talk: empty, preply: empty, prev: null });
+    const pack = buildEvidence({ nowMs, today, profile: {}, grammar: empty, radar: null, vocab: empty, logs: empty, prev: null });
     expect(pack.ids).toEqual(['p:14d', 'v:cards']);
     expect(pack.counts.grammarN).toBe(0);
   });
@@ -235,36 +224,33 @@ describe('Belegpaket (Plan §4.2)', () => {
     expect(all.some((e) => e.wrong === 'save costs for servers' && e.right === 'save on server costs')).toBe(true);
   });
 
-  it('Großdatensatz: ≤ 46 KB, gekürzt in der Reihenfolge Preply, Hören, Lesen, Radar; Prompt ≤ 60.000 B', () => {
+  it('Großdatensatz: ≤ 46 KB; Prompt ≤ 60.000 B', () => {
     const big = (s: string) => s.repeat(40);
     const radar = { events: Array.from({ length: 400 }, (_, i) => ({ c: 'tense', s: 'g', t: nowMs - i * 1000, q: big('long sentence '), g: big('x'), a: big('y') })) };
-    const preply = new Map<string, Doc>(Array.from({ length: 10 }, (_, i) => [`pi${i}`, { t: i, corrections: Array.from({ length: 6 }, () => ({ wrong: big('w '), right: big('r ') })) }]));
-    const reading = new Map<string, Doc>(Array.from({ length: 10 }, (_, i) => [`r${i}`, { t: nowMs - i, res: { score: 70, misunderstood: [big('m '), big('n ')] } }]));
-    const pack = evidenceFromSeed({ radar, preply, reading });
+    const pack = evidenceFromSeed({ radar });
     expect(sectionBytes(pack.sections)).toBeLessThanOrEqual(EVIDENCE_BUDGET);
     const vars = { lang: 'de' as const, evidence: evidenceText(pack), ids: pack.ids, allowed: allowedActions({ errorTopics: [], nextLesson: 'l07' }), prev: null, today };
     expect(promptBytes(assess.build(vars))).toBeLessThanOrEqual(PROMPT_MAX_BYTES);
   });
 
-  it('fitBudget kürzt zuerst pp, dann li, rd, r', () => {
+  it('fitBudget kürzt zuerst r, dann l, dann g', () => {
     const line = (id: string) => ({ id, text: 'x'.repeat(90) });
-    const secs = (['pp', 'li', 'rd', 'r', 'g'] as const).map((key) => ({ key, title: key, lines: Array.from({ length: 5 }, (_, i) => line(`${key}:${i}`)) }));
+    const secs = (['r', 'l', 'g'] as const).map((key) => ({ key, title: key, lines: Array.from({ length: 5 }, (_, i) => line(`${key}:${i}`)) }));
     const total = sectionBytes(secs);
     const out = fitBudget(secs, total - 400);
-    expect(out.find((s) => s.key === 'pp')?.lines.length ?? 0).toBeLessThan(5);
+    expect(out.find((s) => s.key === 'r')?.lines.length ?? 0).toBeLessThan(5);
     expect(out.find((s) => s.key === 'g')?.lines).toHaveLength(5);
-    expect(out.find((s) => s.key === 'r')?.lines).toHaveLength(5);
   });
 });
 
-describe('assess@2: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")', () => {
+describe('assess@3: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")', () => {
   const pack = evidenceFromSeed();
   const allowed = allowedActions({ errorTopics: ['passive'], nextLesson: 'l07' });
   const vars = { lang: 'de' as const, evidence: evidenceText(pack), ids: pack.ids, allowed, prev: null, today };
   const ok = () => structuredClone(assessExample(vars));
 
   it('Kopfzeile, complex, kein Zwischenspeicher, text-json', () => {
-    expect(assess.build(vars).split('\n')[0]).toBe('[assess@2]');
+    expect(assess.build(vars).split('\n')[0]).toBe('[assess@3]');
     expect(assess.tier).toBe('complex');
     expect(assess.cache).toBe(false);
     expect(assess.verb).toBe('text-json');
@@ -304,16 +290,19 @@ describe('assess@2: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")'
     expect(ok().blockers.every((b) => !/^(Mixed|Present)/.test(b.title))).toBe(true);
   });
 
-  it('genau 6 eindeutige Fertigkeiten: doppelte fallen weg, fehlende kommen als „thin" ohne Stufe dazu (W6)', () => {
+  it('genau 2 eindeutige Fertigkeiten: doppelte und fremde fallen weg, fehlende kommen als „thin" ohne Stufe dazu (W6)', () => {
     const dup = ok();
-    dup.dims[5] = { ...dup.dims[0]! };
+    dup.dims[1] = { ...dup.dims[0]! };
     const d1 = assessSchema(vars).parse(dup).dims;
-    expect(d1.map((d) => d.id)).toEqual(['grammar', 'vocabulary', 'reading', 'listening', 'writing', 'speaking']);
-    expect(d1[5]).toEqual({ id: 'speaking', level: null, confidence: 'thin', why: null });
+    expect(d1.map((d) => d.id)).toEqual(['grammar', 'vocabulary']);
+    expect(d1[1]).toEqual({ id: 'vocabulary', level: null, confidence: 'thin', why: null });
+    const extra = ok();
+    extra.dims.push({ id: 'speaking' as never, level: 'B2', confidence: 'fair', why: 'x' });
+    expect(assessSchema(vars).parse(extra).dims.map((d) => d.id)).toEqual(['grammar', 'vocabulary']);
     const five = ok();
     five.dims.shift();
     const d2 = assessSchema(vars).parse(five).dims;
-    expect(d2).toHaveLength(6);
+    expect(d2).toHaveLength(2);
     expect(d2[0]).toEqual({ id: 'grammar', level: null, confidence: 'thin', why: null });
   });
 
@@ -339,7 +328,7 @@ describe('assess@2: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")'
     set(r.focus, 'days', '3');
     set(r.dims[0]!, 'level', 'B2-');
     set(r.dims[0]!, 'confidence', 'medium');
-    set(r.dims[5]!, 'why', null);
+    set(r.dims[1]!, 'why', null);
     const res = s.safeParse(r);
     expect(res.error?.issues ?? []).toEqual([]);
     const o = res.data!;
@@ -353,7 +342,7 @@ describe('assess@2: Vorlage und Schema (Kap. 12 „Einschätzungs-Validierung")'
     expect(o.blockers[0]!.action).toBe('grammar:mixed-cond');
     expect(o.focus).toMatchObject({ action: 'grammar:passive', days: 3 });
     expect(o.dims[0]).toMatchObject({ level: 'B2', confidence: 'fair' });
-    expect(o.dims[5]!.why).toBeNull();
+    expect(o.dims[1]!.why).toBeNull();
   });
 
   it('feste Antwort des Adapters besteht das Schema; im Fehlermodus erst beim Neuversuch', () => {
@@ -419,8 +408,8 @@ describe('Ablauf der Einschätzung (Plan §4.5)', () => {
     expect(m.fake.control.sampleCalls[0]?.tier).toBe('complex');
     expect(m.fake.control.sampleCalls[0]?.cache).toBe(false);
     const doc = m.fake.control.db.dump()['app/assess']!;
-    expect(doc).toMatchObject({ v: 2, pv: 'assess@2', tier: 'complex', lang: 'de', d: today });
-    expect((doc.data as Doc).dims).toHaveLength(6);
+    expect(doc).toMatchObject({ v: 2, pv: 'assess@3', tier: 'complex', lang: 'de', d: today });
+    expect((doc.data as Doc).dims).toHaveLength(2);
     expect((doc.hist as Doc[]).length).toBeGreaterThanOrEqual(1);
     const read = readAssess(doc)!;
     expect(read.data.strengths.every((s) => s.ev.length > 0)).toBe(true);

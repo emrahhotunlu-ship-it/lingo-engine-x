@@ -32,27 +32,6 @@ export const standDe = {
   ckColResult: 'Ergebnis',
 
   // Letzte Fortschritte der alten App (profile.feed)
-  feedTitle: 'Letzte Fortschritte aus der alten App',
-  feedLead: 'So hat die alte App deine Einheiten festgehalten. Nur zum Nachlesen.',
-  feedColArea: 'Bereich',
-  feedColWords: 'Wörter',
-  feedAct_lesson: 'Lektion',
-  feedAct_cards: 'Vokabeln',
-  feedAct_review: 'Wiederholen',
-  feedAct_gram: 'Grammatik',
-  feedAct_read: 'Lesen',
-  feedAct_listen: 'Hören',
-  feedAct_write: 'Schreiben',
-  feedAct_sprint: 'Sprint',
-  feedAct_speak: 'Sprechen',
-  feedAct_discover: 'Entdecken',
-  feedAct_chunks: 'Wendungen',
-  feedAct_dictate: 'Diktat',
-  feedAct_cloze: 'Lückenjagd',
-  feedAct_order: 'Satzbau',
-  feedAct_vtest: 'Wortschatztest',
-  feedAct_preply: 'Preply',
-  feedAct_misc: 'Übung',
 
   // Wochenstreifen und Niveau-Leiste (M7)
   wkTitle: 'Diese Woche',
@@ -73,7 +52,7 @@ export const standDe = {
   palette_plum: 'Pflaume',
   palette_graphite: 'Graphit',
   ctxTitle: 'Beruflicher Kontext',
-  ctxHint: 'Worum geht es in deiner Arbeit? Claude nutzt das für Fachwörter, Lese- und Hörtexte, Schreibaufgaben und Rollenspiele.',
+  ctxHint: 'Worum geht es in deiner Arbeit? Claude nutzt das für Fachwörter, Beispielsätze und Rollenspiele.',
   ctxPlaceholder: 'z. B. Projektleiter für Cloud-Software im Mittelstand, viele Kundentermine',
   ctxCount: '{n} von {max} Zeichen',
   ctxSave: 'Speichern',
@@ -90,8 +69,6 @@ export const standDe = {
   // M20: Was ist neu
   // UX-Beratung Nr. 6, 10, 11: Stand, Wortschatz, Einstellungen
   ckTableToggle: 'Bisherige Checks ({n})',
-  feedRows_one: '{n} Eintrag',
-  feedRows_other: '{n} Einträge',
   vtestTitle: 'Wortschatztest',
   vtestNever: 'Noch nicht gemessen.',
   histTraceTitle: 'Einschätzungen und Meilensteine',

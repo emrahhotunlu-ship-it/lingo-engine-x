@@ -16,10 +16,8 @@ import { AnalysisCard } from './AnalysisCard';
 import { setCallMode, useCallMode } from '../../app/voice/autoplay';
 import { GoalChecklist } from './GoalChecklist';
 import { roleplayResume } from './resumable';
-import { TargetBar } from './TargetBar';
-import { TrapWatch, TurnTimer } from './TurnAids';
-import { roleplayUnitKind, unitBlockOf } from './unit';
-import { useUnitCtx } from './useUnit';
+import { TurnTimer } from './TurnAids';
+import { unitBlockOf } from './unit';
 import { sceneGoals } from '../../domain/speak/bizScenes';
 import { ChatLog } from './ChatLog';
 import { Composer } from './Composer';
@@ -99,7 +97,6 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
   const restore = useMemo(() => ({ text: c.draft, chip: c.draftChip, n: c.restoreN }), [c.draft, c.draftChip, c.restoreN]);
   const goalList = useMemo(() => sceneGoals(scene), [scene]);
   const unit = useNav((s) => (s.route.name === 'roleplay' ? unitBlockOf(s.route.unit) : null));
-  const unitCtx = useUnitCtx(roleplayUnitKind(rp.day), unit);
   const myText = useMemo(() => c.turns.filter((x) => x.role === 'me').map((x) => x.text).join('\n'), [c.turns]);
   // Fortsetzen (G3): Hülle um die vorhandene Kopie `lx:roleplay:<szene>`; der Bericht beendet es.
   const hasMine = myText.length > 0;
@@ -173,7 +170,6 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
       <div className="lx-glass rounded-2xl px-4 py-3" data-testid="rp-goals-box">
         <GoalChecklist goals={goalList} marks={rp.goals} testId="rp-goals" />
         <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-          <TrapWatch />
           <button
             type="button"
             className="ml-auto inline-flex min-h-8 items-center gap-1 rounded-full px-1 text-xs text-muted hover:text-fg"
@@ -191,7 +187,6 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
           </p>
         )}
       </div>
-      {unit && <TargetBar text={myText} ctx={unitCtx} />}
       <AnimatePresence initial={false}>
         {goalOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: DURATION.base }} className="overflow-hidden">

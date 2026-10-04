@@ -8,16 +8,12 @@ import { placesOf } from '../app/shell/tabs';
 import { setUnitDoneHandler } from '../app/unit/done';
 import { CheckScreen } from '../features/check/CheckScreen';
 import { checkResumable, ensureCheck } from '../features/check/resume';
-import { PhoneModeSection } from '../features/settings/PhoneModeSection';
 import { TodayScreen } from '../features/today/TodayScreen';
 import { todayNow, useToday } from '../features/today/state';
 import { UnitCardScreen } from '../features/unit/UnitCard';
 import { UnitStepScreen } from '../features/unit/UnitStep';
 import { handleUnitDone, installUnitWatch } from '../features/unit/run';
 import { EMPTY_RUN, useUnitRun, type UnitRun } from '../features/unit/runStore';
-import { WeekPage } from '../features/week/WeekPage';
-import { startWeekWatch } from '../features/week/store';
-import { useCapabilities } from '../platform/capabilities';
 import { useT } from '../i18n';
 
 // Bereich „Heute“ – Besitz: Paket P1 (plan.md §4.2): Heute-Wurzel mit der Tageskarte, die
@@ -28,9 +24,8 @@ declare module '../app/router/types' {
   interface RouteParams {
     today: NoParams;
     check: NoParams;
-    week: NoParams;
-    unitCard: { step: 'confirm' | 'next' };
-    unitStep: { step: 'input' | 'again' | 'check'; block: number };
+    unitCard: { step: 'next' };
+    unitStep: { step: 'again' | 'check'; block: number };
   }
 }
 
@@ -65,7 +60,7 @@ function useUnitNote(route: Route): string | null {
   return n > 0 ? t('nbHeuteNote', { n, total: duties.length }) : null;
 }
 
-type UnitSnap = Pick<UnitRun, 'day' | 'block' | 'duty' | 'kind' | 'via' | 'watch' | 'routeName' | 'route' | 'sentences' | 'phrases' | 'task' | 'confirmed' | 'offline' | 'at' | 'draft'>;
+type UnitSnap = Pick<UnitRun, 'day' | 'block' | 'duty' | 'kind' | 'via' | 'watch' | 'routeName' | 'route' | 'sentences' | 'phrases' | 'task' | 'offline' | 'at' | 'draft'>;
 
 /** Fortsetzen der Einheit (G3): Block, Ersatzweg, Ergebnisse für Block 4/5, Entwurf. */
 export const unitResumable: Resumable<UnitSnap> = {
@@ -78,8 +73,8 @@ export const unitResumable: Resumable<UnitSnap> = {
     // Einheit fertig: nichts mehr fortzusetzen (erledigt ist Zustand).
     const st = todayNow();
     if (st.day === s.day && st.status === 'allDone') return null;
-    const { day, block, duty, kind, via, watch, routeName, route, sentences, phrases, task, confirmed, offline, at, draft } = s;
-    return { day, block, duty, kind, via, watch, routeName, route, sentences, phrases, task, confirmed, offline, at, draft };
+    const { day, block, duty, kind, via, watch, routeName, route, sentences, phrases, task, offline, at, draft } = s;
+    return { day, block, duty, kind, via, watch, routeName, route, sentences, phrases, task, offline, at, draft };
   },
   subscribe: (cb) => useUnitRun.subscribe(cb),
   restore(s) {
@@ -102,12 +97,9 @@ export const heute = defineArea({
   screens: {
     today: { kind: 'tab', component: TodayRoot, title: 'navToday' },
     check: { kind: 'exercise', component: CheckScreen, title: 'ckTitle', ensure: ensureCheck },
-    week: { kind: 'page', component: WeekPage, title: 'nbHeuteWeekTitle', keepScroll: true },
-    unitCard: { kind: 'exercise', component: UnitCardScreen, title: 'nbHeuteUnit', params: z.object({ step: z.enum(['confirm', 'next']) }) },
-    unitStep: { kind: 'exercise', component: UnitStepScreen, title: 'nbHeuteUnit', params: z.object({ step: z.enum(['input', 'again', 'check']), block: z.coerce.number().int().min(1).max(5) }) },
+    unitCard: { kind: 'exercise', component: UnitCardScreen, title: 'nbHeuteUnit', params: z.object({ step: z.enum(['next']) }) },
+    unitStep: { kind: 'exercise', component: UnitStepScreen, title: 'nbHeuteUnit', params: z.object({ step: z.enum(['again', 'check']), block: z.coerce.number().int().min(1).max(5) }) },
   },
-  entries: [{ id: 'hub-week', place: 'learn', group: 'path', order: 5, label: 'nbHeuteWeekEntry', sub: 'nbHeuteWeekEntrySub', icon: 'target', route: { name: 'week' } }],
-  settings: [{ id: 'phone-mode', group: 'learn', order: 20, component: PhoneModeSection }],
   badge: { id: 'openDuties', use: useOpenDuties },
   playerNote: { use: useUnitNote },
   resumables: [unitResumable, checkResumable],
@@ -123,14 +115,5 @@ export const heute = defineArea({
       return !!u && u.day === p.env.day && JSON.stringify(r) === JSON.stringify(p.env.route);
     });
     installUnitWatch();
-    // Ein Abo auf `app/week`, sobald die Datenbank bereit ist (parallel zu den Live-Abos, N14).
-    if (useCapabilities.getState().db === 'ready') startWeekWatch();
-    else {
-      const unsub = useCapabilities.subscribe((s) => {
-        if (s.db !== 'ready') return;
-        unsub();
-        startWeekWatch();
-      });
-    }
   },
 });

@@ -2,43 +2,19 @@ import { useMemo, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
-import { checkDoneThisWeek, checkPct, compareLast, readChecks, readFeed, type CheckRecord, type FeedEntry, type Pair } from '../../domain/check/record';
+import { checkDoneThisWeek, checkPct, compareLast, readChecks, type CheckRecord, type Pair } from '../../domain/check/record';
 import { dayKey } from '../../domain/date';
 import { useHiddenInput } from '../../engine/HiddenInput';
-import { useT, type MessageKey } from '../../i18n';
+import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
-import { Fold } from '../../ui/Fold';
 import { toast } from '../../ui/Toast';
 import { startCheck } from '../check/session';
 
 // Reiter „Verlauf" (Kap. 9/14 „alle bisherigen Daten sichtbar", M10): Wochen-Checks – alte aus
-// `profile.checks[]` und neue – mit Einstieg in den Check (Extra, einmal je Kalenderwoche), dazu
-// „Letzte Fortschritte" der alten App aus `profile.feed[]`. Nur lesen; XP bleibt weg (Kap. 2.3).
+// `profile.checks[]` und neue – mit Einstieg in den Check (Extra, einmal je Kalenderwoche).
 
 const SHOWN = 6;
-const FEED_ACT: Record<string, MessageKey> = {
-  lesson: 'feedAct_lesson',
-  cards: 'feedAct_cards',
-  vocab: 'feedAct_cards',
-  review: 'feedAct_review',
-  gram: 'feedAct_gram',
-  session: 'feedAct_gram',
-  read: 'feedAct_read',
-  listen: 'feedAct_listen',
-  shadow: 'feedAct_listen',
-  write: 'feedAct_write',
-  sprint: 'feedAct_sprint',
-  speak: 'feedAct_speak',
-  discover: 'feedAct_discover',
-  chunks: 'feedAct_chunks',
-  dictate: 'feedAct_dictate',
-  cloze: 'feedAct_cloze',
-  order: 'feedAct_order',
-  vtest: 'feedAct_vtest',
-  preply: 'feedAct_preply',
-};
-
 function useShortDate(): (ms: number) => string {
   const { lang } = useT();
   return useMemo(() => {
@@ -160,57 +136,5 @@ export function ChecksRow() {
         </Disclosure>
       )}
     </div>
-  );
-}
-
-export function LegacyFeedFold() {
-  const { t, tn, num } = useT();
-  const profile = useLive((s) => s.docs['app/profile']);
-  const feed = useMemo(() => readFeed(profile, 40), [profile]);
-  const fmt = useShortDate();
-  if (!feed.length) return null;
-  const signed = (n: number) => (n > 0 ? `+${num(n)}` : num(n));
-  const rows = feed.map((e: FeedEntry, i) => (
-    <tr key={`${e.t}-${i}`} className="border-t border-line" data-testid="feed-row">
-      <th scope="row" className="lx-tnum py-1.5 pr-2 font-normal text-muted">
-        {fmt(e.t)}
-      </th>
-      <td className="py-1.5 pr-2">{t(FEED_ACT[e.act] ?? 'feedAct_misc')}</td>
-      <td className="lx-tnum py-1.5 pr-2 text-right text-muted">{e.vocab ? signed(e.vocab) : '–'}</td>
-      <td className="lx-tnum py-1.5 text-right text-muted">{e.grammar ? `${signed(e.grammar)} %` : '–'}</td>
-    </tr>
-  ));
-  return (
-    <Fold title={t('feedTitle')} meta={tn('feedRows', feed.length)} testId="legacy-feed" toggleTestId="feed-toggle">
-      <p className="text-sm text-muted">{t('feedLead')}</p>
-      <div className="mt-3">
-        <SplitTable
-          testId="feed-table"
-          more={tn('ckMore', rows.length - SHOWN)}
-          rows={rows}
-          head={
-            <>
-              <caption className="sr-only">{t('feedTitle')}</caption>
-              <thead>
-                <tr className="text-subtle">
-                  <th scope="col" className="py-1 pr-2 font-medium">
-                    {t('colDate')}
-                  </th>
-                  <th scope="col" className="py-1 pr-2 font-medium">
-                    {t('feedColArea')}
-                  </th>
-                  <th scope="col" className="py-1 pr-2 text-right font-medium">
-                    {t('feedColWords')}
-                  </th>
-                  <th scope="col" className="py-1 text-right font-medium">
-                    {t('ckAreaGram')}
-                  </th>
-                </tr>
-              </thead>
-            </>
-          }
-        />
-      </div>
-    </Fold>
   );
 }

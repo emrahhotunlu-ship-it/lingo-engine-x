@@ -3,7 +3,7 @@ import { boot, layoutProblems, openOverview, screen, type Lang } from './fixture
 import { openWeekly } from './profilHelpers';
 
 // Phase 6 (Plan §13): „Dein Stand" mit Urteil · Fehler · Weg nach C1 · Verlauf gegen den
-// Produktions-Build. Feste Antworten des Adapters: assess@2 und weekly-report@2 in DE und EN.
+// Produktions-Build. Feste Antworten des Adapters: assess@3 und weekly-report@2 in DE und EN.
 
 type Dump = Record<string, Record<string, unknown>>;
 type Call = { id: string | null; tier: string; cache?: unknown; input: string };
@@ -40,17 +40,19 @@ test('Öffnen löst genau eine Einschätzung aus (complex, ohne Zwischenspeicher
   await openOverview(page);
   await expect.poll(async () => (await dump(page))['app/assess']?.d).toBe('2026-09-20');
   const doc = (await dump(page))['app/assess']!;
-  expect(doc).toMatchObject({ v: 2, pv: 'assess@2', tier: 'complex', lang: 'de' });
+  expect(doc).toMatchObject({ v: 2, pv: 'assess@3', tier: 'complex', lang: 'de' });
   expect((doc.run as Record<string, unknown>).d).toBe('2026-09-20');
   // Befund H3: Die Einschätzung der alten App (Seed, 18.09., ohne hist) ist erster Verlaufseintrag.
   const hist = doc.hist as Array<Record<string, unknown>>;
   expect(hist.map((h) => h.d)).toEqual(['2026-09-18', '2026-09-20']);
   expect(Object.keys(hist[0]!.dims as object)).toHaveLength(6);
-  expect(((doc.data as Record<string, unknown>).dims as unknown[]).length).toBe(6);
+  // Seit assess@3 nur noch Grammatik und Wortschatz (der Verlaufseintrag der alten App behält seine sechs Fertigkeiten).
+  expect(((doc.data as Record<string, unknown>).dims as unknown[]).length).toBe(2);
   expect(await calls(page, 'assess')).toEqual([{ id: 'assess', tier: 'complex', cache: false }]);
   await expect(page.getByTestId('assess-cefr')).toHaveAttribute('data-cefr', 'B2');
   await expect(page.getByTestId('assess-stamp')).toContainText('20. September 2026');
-  await expect(page.getByTestId('dim')).toHaveCount(6);
+  await expect(page.getByTestId('dim')).toHaveCount(2);
+  expect(await page.getByTestId('dim').evaluateAll((els) => els.map((e) => e.getAttribute('data-id')))).toEqual(['grammar', 'vocabulary']);
   // Tagessperre: Reiterwechsel und Rückkehr lösen keinen zweiten Lauf aus.
   await page.getByTestId('tab-today').click();
   await screen(page, 'today');
@@ -168,7 +170,8 @@ test('Weg nach C1: Status je Punkt, „Kann ich" wird in profile.canDo gespeiche
   // Kurz gehalten (UX-Beratung Nr. 6): je Stufe höchstens 4 offene Punkte sichtbar, der Rest zugeklappt.
   for (const level of await page.getByTestId('cando-level').all()) expect(await level.locator('[data-testid="cando"]:not([data-status="reached"])').count()).toBeLessThanOrEqual(4);
   for (const toggle of await page.locator('[data-testid="cando-more"], [data-testid="cando-reached"]').all()) await toggle.click();
-  await expect(page.getByTestId('cando')).toHaveCount(40);
+  // Nur Punkte zu Grammatik und Wortschatz (Fokus-Umbau, Gesamtkonzept 3.5).
+  await expect(page.getByTestId('cando')).toHaveCount(10);
   await expect(page.getByTestId('vocab-goal')).toContainText('8.000');
   const item = page.locator('[data-testid="cando"][data-status="open"]').first();
   const id = await item.getAttribute('data-id');
@@ -179,7 +182,7 @@ test('Weg nach C1: Status je Punkt, „Kann ich" wird in profile.canDo gespeiche
   await expect.poll(async () => ((await dump(page))['app/profile']?.canDo as Record<string, unknown>)[id ?? '']).toBeNull();
 });
 
-test('Wochenbericht mit Fakten und gespeichertem KI-Text; Verlauf mit Diagramm und Messwerten; Statistik mit Heatmap', async ({ page }) => {
+test('Wochenbericht mit Fakten und gespeichertem KI-Text; Verlauf mit Diagramm und Messwerten; Statistik mit Karten-Messwerten', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await openWeekly(page);
   await expect(page.getByTestId('weekly')).toHaveAttribute('data-week', '2026-W37');
@@ -195,9 +198,10 @@ test('Wochenbericht mit Fakten und gespeichertem KI-Text; Verlauf mit Diagramm u
   await expect(page.getByTestId('history-chart')).toBeVisible();
   await page.getByTestId('measures').getByRole('button').click();
   await expect(page.getByTestId('measures').locator('table')).toHaveCount(1);
-  // Statistik: Heatmap offen, darunter die Karten-Messwerte (bis P3 den Platz `stand` füllt).
+  // Statistik: die Karten-Messwerte (bis P3 den Platz `stand` füllt); keine Aktivitäts-Heatmap mehr (Fokus-Umbau).
   await tab(page, 'stats');
-  await expect(page.getByTestId('heatmap')).toBeVisible();
+  await expect(page.getByTestId('heatmap')).toHaveCount(0);
+  await expect(page.getByTestId('stats')).toBeVisible();
   // Zweites Öffnen: der Bericht liegt schon vor, kein weiterer Aufruf.
   await openWeekly(page);
   await expect(page.getByTestId('weekly-text')).toBeVisible();

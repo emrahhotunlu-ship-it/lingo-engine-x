@@ -1,6 +1,9 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { APP_DOC_PATHS, COLLECTION_NAMES } from '../../src/data/paths';
+import { de } from '../../src/i18n/de';
+import { en } from '../../src/i18n/en';
 
 // Entfernungs-Audit (Umbau „Fokus Wörter und Grammatik“, Gesamtkonzept Kap. 6): Die entfallenen
 // Bereiche sind weg und kommen nicht zurück. Daten bleiben (`src/data/**` ist ausgenommen).
@@ -36,11 +39,45 @@ describe('Entfernungs-Audit', () => {
   });
 
   it('keine Routen der entfallenen Bildschirme', () => {
-    const re = /name: '(library|discover|history|read|listen|write|mail|pitch|say|fluency|tones|meeting|playbook|sptask|inbox|pron|compare|listenDialog|inputUnit|discoverItem)'/;
+    const re = /name: '(library|discover|history|read|listen|write|mail|pitch|say|fluency|tones|meeting|playbook|sptask|inbox|pron|compare|listenDialog|inputUnit|discoverItem|week)'/;
     const hits = FILES.filter((f) => f.includes('/src/') && re.test(read(f))).map((f) => f.replace(ROOT, ''));
     expect(hits).toEqual([]);
   });
+
+  // Wochenthema und Handy-Modus (W2 Teil 2): keine Oberfläche, kein Abo, kein Schalter mehr.
+  it('keine Oberfläche zum Wochenthema und zum Handy-Modus', () => {
+    const found = ['src/features/week', 'src/features/settings/PhoneModeSection.tsx', 'src/app/useWeek.ts', 'src/platform/device.ts'].filter((p) => existsPath(join(ROOT, p)));
+    expect(found).toEqual([]);
+    const hits = FILES.filter((f) => f.includes('/src/') && /\bphoneMode\b|setPhoneModeLocal|useWeekState|chooseTheme|startWeekWatch/.test(read(f))).map((f) => f.replace(ROOT, ''));
+    expect(hits).toEqual([]);
+  });
+
+  // (a) Daten bleiben vollständig (Gesamtkonzept „Daten bleiben“, Kap. 9 des Auftrags): das Register der Pfade ist Stand `pre-fokus`.
+  it('Datenregister unverändert: alle Sammlungen und App-Dokumente sind noch eingetragen', () => {
+    expect([...COLLECTION_NAMES].sort()).toEqual(
+      ['archive', 'articles', 'biz', 'chunk', 'daily', 'feed', 'fluency', 'grammar', 'lesson', 'log', 'lpool', 'meeting', 'out', 'preply', 'reading', 'say', 'scene', 'talk', 'teacher', 'tones', 'vocab', 'writing', 'wprompt'].sort(),
+    );
+    expect([...APP_DOC_PATHS].sort()).toEqual(
+      ['app/assess', 'app/chat', 'app/compare', 'app/course', 'app/decks', 'app/levels', 'app/lookup', 'app/memory', 'app/patterns', 'app/pool', 'app/profile', 'app/radar', 'app/repair', 'app/schema', 'app/week', 'app/weekly'].sort(),
+    );
+  });
+
+  // (b) Keine Textschlüssel der gelöschten Bereiche (Präfixe der 2026-10-04 entfernten Texte).
+  it('keine i18n-Schlüssel der gelöschten Bereiche', () => {
+    const gone = /^(nbLesen|wrScore|rdOwn|rdSummary|mtDebrief|mtTake|mtRehearsal|mtOwn|ppHeld|ppCtx|ppTab|inAi|inOffer|inSaved|inSave|inHistory|mailInt|mailSt|mailRcp|pitchAud|piTarget|piTo|piApplied|fluCol|fluTask|tnReg|tnVerdict|tnRepairs|sayRepairs|pbAdapt|dcStep|lsShadow|tdBiz|nbHeuteWeek|nbHeuteConfirm|nbHeuteInput|nbHeuteTheme|nbHeutePhone|feedAct_|heat[A-Z])/;
+    const hits = [...Object.keys(de), ...Object.keys(en)].filter((k) => gone.test(k));
+    expect([...new Set(hits)]).toEqual([]);
+  });
 });
+
+function existsPath(p: string): boolean {
+  try {
+    statSync(p);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function existsDir(p: string): boolean {
   try {

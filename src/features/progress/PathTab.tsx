@@ -4,10 +4,10 @@ import { toggleCanDo, useOptimistic } from '../../app/actions';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { useDocWatch } from '../../data/watch';
 import { readAssess } from '../../domain/assessment/envelope';
-import { lastVtest, listenSources, writingSources } from '../../domain/assessment/sources';
+import { lastVtest } from '../../domain/assessment/sources';
 import { TOPICS } from '../../domain/content';
 import { topicP } from '../../domain/grammar/bkt';
-import { canDoEvidence, canDoStatus, canDoSummary, CANDO_DIMS, CANDO_ITEMS, type CanDoEnv, type CanDoItem, type CanDoStatus } from '../../domain/progress/cando';
+import { canDoEvidence, canDoStatus, canDoSummary, CANDO_DIMS, FOCUS_CANDO_ITEMS, type CanDoEnv, type CanDoItem, type CanDoStatus } from '../../domain/progress/cando';
 import { radarTotals } from '../../domain/progress/radar';
 import { buildTrainCards } from '../../domain/srs/cards';
 import { vocabGoal } from '../../domain/vocab/goal';
@@ -15,8 +15,6 @@ import { useT, type MessageKey } from '../../i18n';
 import { Card } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';
 import { Icon, type IconName } from '../../ui/Icon';
-import { Skeleton } from '../../ui/Skeleton';
-import { useCollectionsOnce } from './useOnce';
 
 // Reiter „Weg nach C1" (Plan §7.2, E16): Can-Do-Liste mit Status je Punkt, dazu Claudes
 // „was noch fehlt" (nur in der eigenen Sprache) und das Wortschatzziel 8.000. Kurz gehalten
@@ -42,7 +40,6 @@ export function PathTab() {
   const invalid = useLive((s) => s.invalid);
   const optimistic = useOptimistic((s) => s.canDo);
   const radar = useDocWatch('app/radar');
-  const once = useCollectionsOnce(['writing']);
   const assess = useMemo(() => readAssess(assessDoc), [assessDoc]);
 
   const env: CanDoEnv = useMemo(() => {
@@ -50,27 +47,25 @@ export function PathTab() {
     const ema = obj(p.ema);
     const n = obj(p.n);
     const vt = lastVtest(p);
-    const sp = assess?.data.dims.find((d) => d.id === 'speaking');
     const vtests = (Array.isArray(p.vtests) ? p.vtests : [])
       .map(obj)
       .filter((v) => typeof v.passive === 'number')
       .map((v) => ({ passive: v.passive as number, active: typeof v.active === 'number' ? v.active : 0 }));
     return {
       vtests,
-      speakingConf: sp && sp.level && sp.confidence !== 'thin' ? sp.confidence : null,
       grammar: new Map(TOPICS.map((tp) => [tp.id, { p: topicP(tp.id, grammar.get(tp.id), now), n: typeof grammar.get(tp.id)?.n === 'number' ? (grammar.get(tp.id)?.n as number) : 0 }])),
       vtest: vt ? { passive: vt.passive, active: vt.active } : null,
       colloc: { ema: typeof ema.colloc === 'number' ? ema.colloc : null, n: typeof n.colloc === 'number' ? n.colloc : 0 },
       radar: radarTotals(radar.data?.events, now),
-      writing: writingSources(once.value.writing ?? EMPTY).map((w) => ({ cefr: w.cefr, register: typeof w.scores.register === 'number' ? w.scores.register : null })),
-      listening: listenSources(p),
-      speaking: sp && sp.level && sp.confidence !== 'thin' ? sp.level : null,
+      writing: [],
+      listening: [],
+      speaking: null,
       self: { ...obj(p.canDo), ...(optimistic ?? {}) },
     };
-  }, [profile, grammar, now, radar.data, once.value, assess, optimistic]);
+  }, [profile, grammar, now, radar.data, optimistic]);
 
   const statusOf = (i: CanDoItem) => canDoStatus(i, env);
-  const summary = canDoSummary(CANDO_ITEMS, statusOf);
+  const summary = canDoSummary(FOCUS_CANDO_ITEMS, statusOf);
   const goal = useMemo(() => vocabGoal({ profile, cards: buildTrainCards(vocab, now, invalidIdsOf(invalid, 'vocab')), today }), [profile, vocab, now, invalid, today]);
   const gap = assess && assess.lang === lang ? assess.data.c1gap : [];
 
@@ -147,9 +142,8 @@ export function PathTab() {
         <h2 id="cando-title" className="text-lg font-semibold">
           {t('canDoTitle')}
         </h2>
-        {once.status === 'loading' && <Skeleton className="h-6 w-48" />}
         {summary.map((s) => {
-          const all = CANDO_ITEMS.filter((i) => i.level === s.level);
+          const all = FOCUS_CANDO_ITEMS.filter((i) => i.level === s.level);
           const todo = all.filter((i) => statusOf(i) !== 'reached');
           const reached = all.filter((i) => statusOf(i) === 'reached');
           return (

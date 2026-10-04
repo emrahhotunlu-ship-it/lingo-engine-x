@@ -1,6 +1,5 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { weekFor } from '../../src/app/useWeek';
 import { schemaForPath } from '../../src/data/paths';
 import { topFixes, topUpgrades, type Fix } from '../../src/ui/feedback/types';
 import { TEMPLATES } from '../../src/prompts/registry';
@@ -17,22 +16,6 @@ describe('FeedbackPanel-Vertrag', () => {
     expect(out.map((f) => f.kind)).toEqual(['meaning', 'trap', 'goal']);
     expect(topUpgrades([{ to: 'a' }, { to: 'b' }, { to: 'c' }])).toHaveLength(2);
     expect(topUpgrades(undefined)).toEqual([]);
-  });
-});
-
-describe('useWeek (liest app/week, rechnet mit domain/week)', () => {
-  it('ohne Dokument: Thema-Vorschlag, Ziele und Plan des Lerntags; nie leer', () => {
-    const w = weekFor('2026-09-21', null);
-    expect(w.theme?.id).toMatch(/^t\d\d$/);
-    expect(w.plan?.day).toBe('2026-09-21');
-    expect(w.plan?.blocks.length).toBeGreaterThan(0);
-    expect(w.targets.traps.length).toBeLessThanOrEqual(3);
-  });
-
-  it('gespeichertes Thema der Woche gilt; kaputte Felder werden toleriert', () => {
-    const w = weekFor('2026-09-20', { v: 1, cur: { wk: '2026-W38', theme: 't02', by: 'user', at: 1 }, hist: 'kaputt' });
-    expect(w.theme?.id).toBe('t02');
-    expect(w.plan?.theme).toBe('t02');
   });
 });
 

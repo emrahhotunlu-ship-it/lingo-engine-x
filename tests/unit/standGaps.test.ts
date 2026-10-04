@@ -276,7 +276,7 @@ describe('Beruflicher Kontext (M22)', () => {
 describe('Wochen-Check als Beleg der Einschätzung (M10)', () => {
   it('die letzten Checks stehen im Belegpaket', () => {
     const empty = new Map<string, Doc>();
-    const pack = buildEvidence({ nowMs, today: SEED_ANCHOR, profile, grammar: empty, radar: null, writing: empty, vocab: empty, logs: empty, reading: empty, talk: empty, preply: empty, prev: null });
+    const pack = buildEvidence({ nowMs, today: SEED_ANCHOR, profile, grammar: empty, radar: null, vocab: empty, logs: empty, prev: null });
     const line = pack.sections.flatMap((s) => s.lines).find((l) => l.id === 'v:check');
     expect(line?.text).toContain('2026-09-12 9/12');
     expect(pack.ids).toContain('v:check');

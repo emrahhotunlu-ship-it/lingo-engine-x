@@ -13,9 +13,7 @@ import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
 import { againPos, calibration, controlAllowed, controlCounts, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
 import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
 import { listenExercise } from '../../domain/srs/listen';
-import { isThemeCard } from '../../domain/week/cards';
 import { REPAIR_MAX } from '../../domain/week/review';
-import type { WeekTheme } from '../../domain/week/types';
 import { unitDone } from '../../app/unit/done';
 import { clearResume } from '../../app/resume';
 import { useDecks } from './decksStore';
@@ -317,8 +315,6 @@ export type SessionOpts = {
   label?: string;
   /** Block 1 der Tageseinheit. */
   unit?: boolean;
-  /** Wochenthema (Block 1: Themenkarten zuerst; Korb-Stufe 4). */
-  theme?: WeekTheme | null;
 };
 
 /** Modus und Richtung ohne ausdrückliche Angabe: Stapel-Merker, sonst Standard (Einstellungen „Wortschatz“). */
@@ -365,9 +361,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const mode = opts.mode ?? defaults.mode;
   // §8: Tageseinheit und „Alle fälligen“ immer Deutsch → Englisch.
   const dir: FlipDir = round === 'pflicht' || deck === 'all' ? 'de-en' : (opts.dir ?? defaults.dir);
-  const theme = opts.theme ?? null;
-  const isTheme = theme ? (c: TrainCard) => isThemeCard(c, theme) : undefined;
-  const ctx: DeckCtx = { nowMs: now, weekStartMs: weekStartMs(now), isTheme };
+  const ctx: DeckCtx = { nowMs: now, weekStartMs: weekStartMs(now) };
   // Lernberatung V2: fällige Reparatur-Sätze zählen zur Runde (Pflicht bzw. freie Runde „alle“).
   const repairs = !opts.only && !opts.pick && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), Math.min(target, REPAIR_MAX)) : [];
   const cardTarget = Math.max(0, target - repairs.length);
@@ -380,7 +374,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
         .map((k) => byKey.get(k))
         .filter((c): c is TrainCard => !!c && !c.hidden)
         .map((c): QueueItem => ({ key: c.key, reason: c.isNew ? 'new' : 'due', phase: c.stage === 0 ? 'intro' : 'quiz' }))
-    : buildQueue({ cards: chosen, nowMs: now, target: cardTarget, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, isTheme });
+    : buildQueue({ cards: chosen, nowMs: now, target: cardTarget, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
   const docs = pool.map((c) => c.doc);
   const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
   const base: SessionState = {

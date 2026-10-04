@@ -4,12 +4,11 @@ import { isAiFailure, type AiMessageKey } from '../../ai/types';
 import { useSettings } from '../../app/settings';
 import { getWriter } from '../../data';
 import { useLive } from '../../data/live';
-import { readCollection, readDoc } from '../../data/reads';
+import { readDoc } from '../../data/reads';
 import { allowedActions } from '../../domain/assessment/actions';
 import { assessDue, type DueReason } from '../../domain/assessment/due';
 import { assessWrite, readAssess, readAssessData, type AssessResult } from '../../domain/assessment/envelope';
 import { buildEvidence, evidenceText } from '../../domain/assessment/evidence';
-import { speakSources } from '../../domain/assessment/sources';
 import { allStrengths } from '../../domain/assessment/strength';
 import { finalizeAssess } from '../../domain/assessment/validate';
 import { pickLesson } from '../../domain/course/next';
@@ -74,16 +73,6 @@ async function inPool<T, R>(items: readonly T[], n: number, fn: (x: T) => Promis
   return out;
 }
 
-/** Sammlungen, die fehlen dürfen: ein Lesefehler ergibt eine leere Quelle (Plan §4.2). */
-async function safeCollection(db: Db, name: string): Promise<Map<string, Doc>> {
-  try {
-    return (await readCollection(db, name)).valid;
-  } catch (err) {
-    logWarn('assess:read', err, name);
-    return new Map();
-  }
-}
-
 async function safeDoc(db: Db, path: string): Promise<Doc | null> {
   try {
     const r = await readDoc(db, path);
@@ -100,13 +89,8 @@ export function aiUsable(): boolean {
   return c.sample === 'ready' && !c.sampleRevoked && !!getSample();
 }
 
-/** Anzahl der Rollenspiel-Analysen neuer als `t` (für `assessDue`, Grund `speak`). */
-export function analysesSince(talk: ReadonlyMap<string, Doc>, t: number): number {
-  return speakSources(talk).filter((s) => s.t > t).length;
-}
-
 /** Grund für einen automatischen Lauf jetzt (ohne Lesen weiterer Dokumente). */
-export function dueNow(nowMs: number, extra: { writings?: number; newAnalyses?: number } = {}): DueReason {
+export function dueNow(nowMs: number): DueReason {
   const live = useLive.getState();
   const profile = live.docs['app/profile'] ?? {};
   const a = readAssess(live.docs['app/assess']);
@@ -116,34 +100,20 @@ export function dueNow(nowMs: number, extra: { writings?: number; newAnalyses?: 
     uiLang: useSettings.getState().lang,
     today,
     profileAnswers: typeof profile.answers === 'number' ? profile.answers : 0,
-    writings: extra.writings ?? a?.writings ?? 0,
-    newAnalyses: extra.newAnalyses ?? 0,
     lastAutoDay: useAssessRun.getState().autoDay === today ? today : (a?.runDay ?? null),
   });
 }
 
 /**
  * Automatischer Auslöser (Reiter „Dein Stand" geöffnet, Pflicht erledigt): höchstens einmal je
- * Lerntag und Tab, nur wenn `assessDue` einen Grund nennt. Liest dafür `writing` und `talk` einmal.
+ * Lerntag und Tab, nur wenn `assessDue` einen Grund nennt.
  */
 export async function maybeAutoAssess(nowMs: number): Promise<void> {
   const today = dayKey(nowMs);
   const s = useAssessRun.getState();
   if (s.autoDay === today || isRunning(s.phase) || !aiUsable()) return;
   if (useLive.getState().status !== 'ready') return;
-  const quick = dueNow(nowMs);
-  if (quick === 'none') {
-    // Zählt neue Texte und Gespräche nur, wenn die schnellen Gründe nichts ergeben.
-    const db = getDb();
-    const a = readAssess(useLive.getState().docs['app/assess']);
-    if (!db || !a || a.runDay === today || a.d === today) return;
-    useAssessRun.setState({ autoDay: today });
-    const [writing, talk] = await Promise.all([safeCollection(db, 'writing'), safeCollection(db, 'talk')]);
-    const reason = dueNow(nowMs, { writings: writing.size, newAnalyses: analysesSince(talk, a.t) });
-    if (reason === 'none') return;
-    await runAssess('auto', nowMs);
-    return;
-  }
+  if (dueNow(nowMs) === 'none') return;
   await runAssess('auto', nowMs);
 }
 
@@ -199,13 +169,7 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
     const grammar = live.collections.grammar ?? new Map<string, Doc>();
     const vocab = mergedVocab(live.collections.vocab ?? new Map());
     const days = Array.from({ length: LOG_DAYS }, (_, k) => addDays(today, -k));
-    const [writing, reading, talk, preply, radar] = await Promise.all([
-      safeCollection(db, 'writing'),
-      safeCollection(db, 'reading'),
-      safeCollection(db, 'talk'),
-      safeCollection(db, 'preply'),
-      safeDoc(db, 'app/radar'),
-    ]);
+    const radar = await safeDoc(db, 'app/radar');
     const logDocs = await inPool(days, 4, (d) => safeDoc(db, `log/${d}`));
     const logs = new Map<string, Doc>();
     days.forEach((d, k) => {
@@ -213,7 +177,7 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
       if (doc) logs.set(d, doc);
     });
     const prev = readAssess(live.docs['app/assess']);
-    const pack = buildEvidence({ nowMs, today, profile, grammar, radar, writing, vocab, logs, reading, talk, preply, prev });
+    const pack = buildEvidence({ nowMs, today, profile, grammar, radar, vocab, logs, prev });
     const errorTopics = [...grammar.entries()].filter(([, d]) => errorsOf(d).some((e) => e.done !== true)).map(([id]) => id);
     const next = pickLesson({ course: live.docs['app/course'], assess: live.docs['app/assess'], lang });
     const allowed = allowedActions({ errorTopics, nextLesson: next?.lid ?? null });
@@ -245,15 +209,12 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
       t: Date.now(),
       lang,
       answers,
-      writings: writing.size,
+      // Zähler der alten Hülle (Texte): nicht mehr gezählt, der bisherige Wert bleibt stehen (Kap. 9).
+      writings: prev?.writings ?? 0,
       tier: res.tierApplied,
       basis: {
         answers14: pack.counts.answers14,
         grammarN: pack.counts.grammarN,
-        writing: pack.counts.writing,
-        reading: pack.counts.reading,
-        listening: pack.counts.listening,
-        speaking: pack.counts.speaking,
         vtestD: pack.counts.vtestD,
       },
       data,

@@ -1,37 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useWeek } from '../../app/useWeek';
-import { TRAPS } from '../../content/nb/traps';
 import { useT } from '../../i18n';
 import { KEY_PREFIX, local } from '../../platform/storage';
-import { Icon } from '../../ui/Icon';
 
-// Neubau N77 (Soll, Lehrer I4): im Rollenspiel die Top-3-Fallen der Woche im Blick und ein
-// Zeitlimit je Zug (45 s, abschaltbar, nur Anzeige – bricht nichts ab, Kap. 3.1 / A6.2).
+// Neubau N77 (Soll, Lehrer I4): im Rollenspiel ein Zeitlimit je Zug (45 s, abschaltbar, nur Anzeige – bricht nichts ab, Kap. 3.1 / A6.2).
 
 export const TURN_SEC = 45;
 const KEY = `${KEY_PREFIX}rp-turn-timer`;
 
 export function turnTimerOn(): boolean {
   return local.get(KEY) !== '0';
-}
-
-/** „Fallen im Blick“: die Fallen der Woche (eigene zuerst), höchstens 3. */
-export function TrapWatch() {
-  const { t, lang } = useT();
-  const { targets } = useWeek();
-  const traps = targets.traps.map((id) => TRAPS.find((x) => x.id === id)).filter((x): x is (typeof TRAPS)[number] => !!x).slice(0, 3);
-  if (!traps.length) return null;
-  return (
-    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted" data-testid="rp-traps">
-      <Icon name="flag" size={14} aria-hidden="true" />
-      <span>{t('nbSprechenTraps')}</span>
-      {traps.map((x) => (
-        <span key={x.id} className="lx-chip" data-trap={x.id}>
-          {lang === 'de' ? x.title.de : x.title.en}
-        </span>
-      ))}
-    </p>
-  );
 }
 
 /** Zeitbalken je Zug: läuft ab der letzten Antwort der Figur (neuer `key` je Zug beim Aufrufer). */

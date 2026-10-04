@@ -10,7 +10,7 @@ Dieses Dokument pflegt das Programmier-Fenster nach **jeder** Welle. Ein neues F
 |---|---|---|---|
 | W0 Vorbereitung | Marke, Messbasis, CLAUDE.md fertig; wartet auf Emrahs Zahl | siehe Git-Verlauf | – |
 | W1 Entkoppeln | fertig (Unit 1.755 grün, E2E 564 grün + 4 Lastausreißer einzeln grün, dist +72 Byte) | siehe Git-Verlauf „W1:“ | – |
-| W2 Aufräumen (T1) | offen | – | – |
+| W2 Aufräumen (T1) | Teil 1 (Löschen der Bereiche) und Teil 2 (Fortschritt, Handy-Modus, Wochenthema, Textscan, Audit) gebaut; Gesamtlauf E2E und Test-Link stehen aus | siehe Git-Verlauf „W2“ | – |
 | W3 Vertrauen und Heute (T2) | offen | – | – |
 | W4 Wörter und Atlas (T3) | offen | – | – |
 | W5 Grammatik und Fortschritt (T4) | offen | – | – |
@@ -30,3 +30,18 @@ Dieses Dokument pflegt das Programmier-Fenster nach **jeder** Welle. Ein neues F
 Nur Importpfade, kein Verhalten, Bundle ±1 %. Nach jedem Schritt `typecheck` + `npm test`; am Ende ein `verify`.
 Reihenfolge: 1 `features/input/AiRunPanel` → `ui/` · 2 `aiTasks`/`AiTaskNotice` → `app/shell/` · 3 `domain/speak/talkDoc` teilen: Hilfen → `domain/monthDoc.ts`, `TalkRun/upsertRun/compactRuns` bleiben (Rollenspiel) · 4 `textStats`, `chunkMatch` → `domain/text/`; `ErrorCat/TextError` → `domain/radar/types.ts` · 5 `week/text` → `domain/text/normText`, `week/traps` → `domain/patterns/traps` (`week/index.ts` re-exportiert) · 6 `speak/autoplay` → `app/voice/`, `legacySceneDoc` → `domain/chunks/legacyScene`, `cardSrc` → `domain/lookup/` · 7 toten Export `InputSections` samt `useChannelState` löschen · 8 `LEGACY_PROMPTS` → `domain/progress/legacyPrompts` · 9 `domain/plan/retire.ts` (nicht eingehängt) + `planRetire.test.ts`; `domain/metrics/` Gerüst.
 **Nicht in W1** (ändern Verhalten, kommen in W2): `sayDoc`, `discover/steps` (`discCount` in Einstellungen), `nbdrill/unitBlocks`. `features/learn`, `features/week`, `domain/week/*` bleiben (bleibende Nutzer).
+
+
+## W2 Teil 2 (Bau-Fenster, 04.10.2026)
+**Gebaut:**
+- **Fortschritt nur Wörter und Grammatik:** neue Vorlage `assess@3` (die Kennung `assess@2` war schon vergeben; `@3` ist die nächste freie). Sie beurteilt nur `grammar` und `vocabulary`; das Belegpaket enthält keine Texte, Lese-, Hör-, Sprech- und Lehrer-Belege mehr (`domain/assessment/evidence.ts`). Alte Einschätzungen (`assess@2`, sechs Fertigkeiten) bleiben lesbar und werden nie gelöscht (`FOCUS_DIMS` filtert nur die Anzeige). Erlaubte „Üben“-Aktionen der KI: nur noch Wiederholen, Wendungen, Lücke, Satzbau, Grammatik-Thema, Fehler-Thema, Lektion. Auslöser „neuer Text“/„neue Rollenspiel-Analysen“ für die automatische Einschätzung entfallen.
+- Can-Do-Liste auf Grammatik und Wortschatz gekürzt (10 Punkte, `FOCUS_CANDO_ITEMS`); „Kurs x/24“, Aktivitäts-Heatmap (Minuten), Minuten-Zeile im Wochenbericht, Kurs-Meilensteine und die alte „Letzte Fortschritte“-Tabelle (Entdecken, Preply …) sind aus der Oberfläche raus (Daten bleiben).
+- **Handy-Modus entfernt** (`PhoneModeSection`, `settings.phoneMode`, `platform/device.ts`); die Wochenbilanz „Aufgabe am Laptop“ (`lapPatch`/`lapThisWeek`) ist raus, `app/profile.lap` bleibt unberührt in der Datenbank.
+- **Wochenthema entkoppelt:** Tagesplan wird ohne `app/week` gebaut (kein Warten, kein Thema in der Wiederholungs-Reihenfolge); keine Themenzeile auf Heute, keine Bestätigungskarte (`unitCard` kennt nur noch `next`), keine Seite „Deine Woche“, kein Hub-Eintrag, kein Stapel „Wochenthema“ als Quelle, keine Wochenziele/Fallen im Rollenspiel (`TargetBar`, `TrapWatch`), kein Input-Ersatzschritt mit Kundenmail. `app/week` wird nirgends mehr gelesen oder geschrieben; Datenschema und Pfad bleiben.
+- **Textscan** `tests/unit/textScan.test.ts` (DE und EN, alle Texte): grün, mit drei ausdrücklichen Ausnahmen (siehe offene Befunde). **Entfernungs-Audit** erweitert: Datenregister unverändert, keine Textschlüssel gelöschter Bereiche, kein Wochenthema/Handy-Modus-Code; ESLint-Regel `no-restricted-imports` gegen die gelöschten Ordner.
+**Offene Befunde / Entscheidungen:**
+1. **Hör-Modus der Karten, Hörschleife und Diktat** sind noch gebaut (Textscan-Ausnahme `ALLOWED`). Das Gesamtkonzept sieht sie als entfallen vor (Standardwert); Entfernen ist eine Funktionsänderung (Wörter-Hub, Üben-Hub) → W4/W5 oder Entscheidung der Koordination.
+2. **Tote Reste ohne Oberfläche, bewusst stehen gelassen:** `domain/week/*` (Thema, Ziele, Karten-Erkennung), `UnitPlan.theme/confirmTheme` in neuen Plänen (werden aus dem Vorschlag gefüllt, nie angezeigt), optionaler `isTheme`-Parameter in `domain/srs/queue`/`decks`, Stapel-Kennung `theme`. Aufräumen zusammen mit dem Plan-Umbau in W3.
+3. Der Reiter heißt noch „Wortschatz“ (W4), `Kurs`-Bereich (Üben-Hub) und `features/learn` bestehen noch.
+4. Die Namen der Datenbereiche auf dem Umstellungs-Bildschirm (`col*`, `mig*`) nennen Preply/Entdecken beim Namen (Textscan-Ausnahme: sie zeigen, was in der Datenbank unangetastet bleibt).
+**Nächste Schritte:** E2E-Gesamtlauf durch die Koordination, danach `verify`, `platform-guard`, Test-Link T1.

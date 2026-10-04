@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useClock } from '../../../app/clock';
-import { useWeek } from '../../../app/useWeek';
 import { invalidIdsOf, useLive } from '../../../data/live';
 import { buildTrainCards } from '../../../domain/srs/cards';
 import { buildChunkCards } from '../../../domain/srs/chunkCards';
@@ -8,7 +7,6 @@ import type { DeckCtx } from '../../../domain/srs/decks';
 import { weekStartMs } from '../../../domain/srs/flip';
 import { newQuotaLeft } from '../../../domain/srs/queue';
 import type { TrainCard } from '../../../domain/srs/types';
-import { isThemeCard } from '../../../domain/week/cards';
 
 // Karten des Wortschatz-Bereichs (Vokabeln + Wendungen) – einmal je Datenstand gebaut. Die Hubs
 // abonnieren nur die beiden Sammlungen und leiten Zahlen ab (architektur.md §3.4 „Selektoren“).
@@ -47,6 +45,5 @@ export function useQuota(cards: readonly TrainCard[]): { left: number; perDay: u
 
 export function useDeckCtx(): DeckCtx {
   const now = useClock((s) => s.now);
-  const { theme } = useWeek();
-  return useMemo(() => ({ nowMs: now, weekStartMs: weekStartMs(now), isTheme: theme ? (c: TrainCard) => isThemeCard(c, theme) : undefined }), [now, theme]);
+  return useMemo(() => ({ nowMs: now, weekStartMs: weekStartMs(now) }), [now]);
 }

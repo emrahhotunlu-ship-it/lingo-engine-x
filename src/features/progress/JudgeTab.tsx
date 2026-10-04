@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useLive } from '../../data/live';
 import { readAssess } from '../../domain/assessment/envelope';
-import { DIMS, type Confidence } from '../../domain/assessment/types';
+import { FOCUS_DIMS, type Confidence } from '../../domain/assessment/types';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
@@ -174,7 +174,7 @@ export function JudgeTab() {
           {t('assessDims')}
         </h2>
         <ul className="mt-2 grid sm:grid-cols-2 sm:gap-x-6">
-          {DIMS.map((id) => {
+          {FOCUS_DIMS.map((id) => {
             const x = d.dims.find((y) => y.id === id) ?? { id, level: null, confidence: 'thin' as Confidence, why: null };
             return (
               <li key={id} className="flex flex-col gap-1 border-t border-line py-3" data-testid="dim" data-id={id} data-level={x.level ?? ''} data-confidence={x.confidence}>

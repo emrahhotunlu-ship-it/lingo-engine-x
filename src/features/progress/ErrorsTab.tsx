@@ -25,7 +25,9 @@ export function radarName(r: Pick<RadarRow, 'c' | 'kind'>, t: (k: MessageKey) =>
 }
 
 /** Quellen mit Beschriftung: g/w/r/v/s aus der alten App (s = Sprint), k = Rollenspiel, b = Business. */
+/** Quellen, die es noch gibt; Fehler aus entfallenen Bereichen (Schreiben, Lesen, Sprint, Business …) erscheinen als „Frühere Übung“. */
 const SOURCES: ReadonlySet<string> = new Set(['g', 'w', 'r', 'v', 's', 'k', 'b']);
+const LIVE_SOURCES: ReadonlySet<string> = new Set(['g', 'v', 'k']);
 
 export function ErrorsTab() {
   const { t, tn, lang, num } = useT();
@@ -66,7 +68,7 @@ export function ErrorsTab() {
                     {r.nPrev30 > 0 && <p className="text-sm text-muted">{t(`radarTrend_${r.trend}`, { n: r.nPrev30 })}</p>}
                     {r.sources.some((s) => SOURCES.has(s)) && (
                       <p className="text-xs text-subtle" data-label="">
-                        {t('radarSources')}: {r.sources.filter((s) => SOURCES.has(s)).map((s) => t(`src_${s}` as MessageKey)).join(' · ')}
+                        {t('radarSources')}: {[...new Set(r.sources.filter((s) => SOURCES.has(s)).map((s) => (LIVE_SOURCES.has(s) ? s : 'earlier')))].map((s) => t(`src_${s}` as MessageKey)).join(' · ')}
                       </p>
                     )}
                   </div>

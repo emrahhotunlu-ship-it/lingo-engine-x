@@ -2,5 +2,5 @@
 // Werden in de.ts per Spread eingebunden.
 
 export const tonesDe = {
-  rxSrc_tone: 'aus „Drei Tonlagen“',
+  rxSrc_tone: 'aus einer früheren Übung',
 };

@@ -48,10 +48,9 @@ import { dueCards } from '../../domain/srs/queue';
 import { buildTrainCards } from '../../domain/srs/cards';
 import { startUnit } from '../unit/run';
 import { blockName, blockWhy } from '../unit/labels';
-import { useWeekState } from '../week/useWeekState';
 import { lessonMeta } from '../../domain/course/catalog';
 
-// „Heute" (plan.md §1.3): die rote Linie. Unterzeile mit Datum und Wochenthema, darunter EINE
+// „Heute" (plan.md §1.3): die rote Linie. Unterzeile mit Datum und Serie, darunter EINE
 // Tageskarte – „Deine Tageseinheit“ mit Ring „2 von 5 · noch ca. 18 Min.“, Kernaufgabe der Woche,
 // Blockliste (Name, Grund, Minuten, Zustand) und EIN Knopf. Erledigtes ist Zustand (Kap. 2.2).
 // Nach der Pflicht: Fertig-Karte mit Bilanz (Zustand, kein Knopf), EINE Zeile „Lohnt sich jetzt“
@@ -77,7 +76,6 @@ const CHANNEL_KEY: Record<string, MessageKey> = {
   sprint: 'drSprint',
   dictate: 'drDictate',
   vocab: 'tdOfferVocab',
-  say: 'sayTitle',
 };
 const CHANNEL_ICON: Record<string, IconName> = {
   gram: 'grammar',
@@ -86,7 +84,6 @@ const CHANNEL_ICON: Record<string, IconName> = {
   sprint: 'bolt',
   dictate: 'headphones',
   vocab: 'cards',
-  say: 'chat',
 };
 const CHANNEL_TONE: Record<string, Channel> = {
   gram: 'grammar',
@@ -95,7 +92,6 @@ const CHANNEL_TONE: Record<string, Channel> = {
   sprint: 'write',
   dictate: 'listen',
   vocab: 'cards',
-  say: 'speak',
 };
 
 type T = (k: MessageKey, v?: Record<string, string | number>) => string;
@@ -166,13 +162,11 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
 }
 
 function TodaySubline({ today, lang }: { today: string; lang: Lang }) {
-  const { t, tn } = useT();
-  const go = useNav((s) => s.go);
+  const { tn } = useT();
   const now = useClock((s) => s.now);
   const profile = useLive((s) => s.docs['app/profile']);
   const schema = useLive((s) => s.docs['app/schema']);
   const archive = useLive((s) => s.collections.archive) ?? EMPTY_ARCHIVE;
-  const { pick } = useWeekState();
   const streak = useMemo(() => {
     // Phase 7 (Plan §12.3): ausgelagerte Jahre zählen mit.
     const p = obj(mergeArchives(profile ? obj(profile) : null, archive.values()));
@@ -203,17 +197,6 @@ function TodaySubline({ today, lang }: { today: string; lang: Lang }) {
           {tn('tdStreak', streak.count)}
         </span>
       </p>
-      <button
-        type="button"
-        onClick={() => go({ name: 'week' })}
-        data-testid="today-theme"
-        data-theme-id={pick.id}
-        className="inline-flex min-h-8 items-center gap-1 self-start text-left font-medium text-fg hover:underline"
-        aria-label={t('nbHeuteThemeOpen')}
-      >
-        {t('nbHeuteThemeLine', { theme: pick.theme.title[lang] })}
-        <Icon name="arrowRight" size={14} className="flex-none text-subtle" />
-      </button>
     </div>
   );
 }
@@ -488,7 +471,6 @@ export function TodayScreen() {
   const view = useToday((s) => s);
   const profile = useLive((s) => s.docs['app/profile']);
   const saveFailed = usePending((s) => s.failed);
-  const { week, pick } = useWeekState();
   const { ready, dayLoaded, planStatus, plan } = view;
 
   // Selbstheilung (Regel 1): alles erledigt, aber `pflicht[heute]` fehlt noch.
@@ -521,7 +503,7 @@ export function TodayScreen() {
   }, [ready, dayLoaded, view.status]);
 
   const unit = isUnitPlan(plan) ? plan : null;
-  const up = useMemo(() => (unit ? unitPlanOf(unit, week) : null), [unit, week]);
+  const up = useMemo(() => (unit ? unitPlanOf(unit, null) : null), [unit]);
   const rows: CardRow[] = useMemo(() => {
     if (!plan) return [];
     const ur = unitRows(plan, view.duties.items);
@@ -548,15 +530,15 @@ export function TodayScreen() {
   // „Morgen: …“ aus dem Wochenplan von morgen (rein, ohne `env`).
   const tomorrow = useMemo(() => {
     const next = addDays(today, 1);
-    const p = unitPlanFor(next, week, { goalMin: unit?.u.goalMin });
+    const p = unitPlanFor(next, null, { goalMin: unit?.u.goalMin });
     const task = p.blocks.find((b) => b.block === 3);
     if (!task || p.shape === 'sun') return p.shape === 'sun' ? `${t('nbHeuteBlock_check')} · ${t('nbHeuteWhy_check')}` : '';
     return t('nbHeuteTomorrow', { what: blockWhy(task, t) });
-  }, [today, week, unit, t]);
+  }, [today, unit, t]);
 
   const ok = ready && dayLoaded;
   const done = view.status === 'allDone' || view.status === 'nothing';
-  const title = unit ? pick.theme.title[lang] : t('nbHeuteUnit');
+  const title = t('nbHeuteUnit');
 
   return (
     <motion.div className="mx-auto flex w-full max-w-3xl flex-col gap-5 py-4 sm:py-8" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>

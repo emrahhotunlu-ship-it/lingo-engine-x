@@ -4,6 +4,7 @@ import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
 import { readAssess } from '../../domain/assessment/envelope';
+import { FOCUS_DIMS } from '../../domain/assessment/types';
 import { buildOverview } from '../../domain/overview';
 import { useT, type MessageKey } from '../../i18n';
 import { local } from '../../platform/storage';
@@ -19,7 +20,7 @@ import { PathTab } from './PathTab';
 import { LevelScale } from './StandHeader';
 import { StatsTab } from './StatsTab';
 
-// „Dein Stand" (Kap. 6.13, Neubau plan.md §1.3): Kopf Kurs · Wörter · Niveau-Skala, darunter fünf
+// „Dein Stand" (Kap. 6.13, Neubau plan.md §1.3; Fokus-Umbau: ohne Kurs): Kopf Wörter · Niveau-Skala, darunter fünf
 // Reiter Urteil · Fehler · Ziel C1 · Statistik · Verlauf – kein endloses Scrollen am Handy, nichts
 // doppelt. Serie und Wochenstreifen stehen im Profil-Blatt, die Tests und der Wochenbericht dort als
 // Zeilen. Das Profil-Blatt öffnet die Seite direkt auf einem Reiter (`route.tab`); sonst gilt der
@@ -100,7 +101,7 @@ export function ProgressScreen() {
     label: `${t('ovTitle')} · ${tabLabel}`.slice(0, 60),
     phase: 'idle',
     detail: assess
-      ? `Level ${assess.data.cefr ?? '?'}; skills ${assess.data.dims.map((d) => `${d.id}=${d.level ?? 'thin'}`).join(', ')}${assess.data.focus ? `; focus: ${assess.data.focus.action ?? assess.data.focus.title}` : ''}`
+      ? `Level ${assess.data.cefr ?? '?'}; skills ${assess.data.dims.filter((d) => (FOCUS_DIMS as readonly string[]).includes(d.id)).map((d) => `${d.id}=${d.level ?? 'thin'}`).join(', ')}${assess.data.focus ? `; focus: ${assess.data.focus.action ?? assess.data.focus.title}` : ''}`
       : undefined,
   });
 
@@ -110,16 +111,15 @@ export function ProgressScreen() {
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t('ovTitle')}</h1>
       </motion.header>
 
-      {/* plan.md §1.3: EINE Kopfkarte – Kurs · Wörter · Niveau, darunter die Niveau-Skala. */}
+      {/* plan.md §1.3: EINE Kopfkarte – Wörter · Niveau, darunter die Niveau-Skala. */}
       <motion.section variants={item} aria-label={t('ovTitle')} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
-        <div className="grid grid-cols-3 gap-3 sm:gap-6">
-          <Stat label={t('courseLabel')} value={num(ov.course.done)} unit={t('courseUnit', { total: ov.course.total })} testId="course-done" />
+        <div className="grid grid-cols-2 gap-3 sm:gap-6">
           <Stat label={t('vocabLabel')} value={num(ov.vocab.total)} unit={t(ov.vocab.total === 1 ? 'vocabUnit_one' : 'vocabUnit_other')} testId="vocab-total" />
           <Stat label={t('nbProfilLevel')} value={assess?.data.cefr ?? '–'} unit={assess?.data.cefr ? t('nbProfilLevelUnit') : t('nbProfilLevelNone')} testId="stand-level" />
         </div>
         {assess?.data.cefr && (
           <div className="border-t border-line pt-4">
-            <LevelScale data={assess.data} />
+            <LevelScale data={{ cefr: assess.data.cefr, dims: assess.data.dims.filter((d) => (FOCUS_DIMS as readonly string[]).includes(d.id)) }} />
           </div>
         )}
       </motion.section>

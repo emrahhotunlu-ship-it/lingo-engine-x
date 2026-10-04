@@ -19,7 +19,7 @@ import type { Lang, TrainCard } from '../../domain/srs/types';
 import { buildUnitStored, unitDraft, type ReviewGoal } from '../../domain/unit/plan';
 import { unitReviewGoal } from '../../domain/unit/review';
 import { packTopUp } from './pack';
-import { REPAIR_MAX, themeFor } from '../../domain/week';
+import { REPAIR_MAX } from '../../domain/week';
 import { getDb } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';
@@ -34,7 +34,6 @@ import { normGoalMin } from '../../domain/progress/settings';
 import { historyPatch, historySnapshot } from '../../domain/progress/history';
 import { vocabGoal } from '../../domain/vocab/goal';
 import { recordProfileFields } from '../progress/persist';
-import { startWeekWatch, useWeekDoc, weekDocNow, weekLoaded } from '../week/store';
 
 // Tagesplan = Tageseinheit (plan.md §1.5, N10/N12): einmal je Lerntag festgelegt und in
 // app/profile.plan gespeichert, nie neu gewürfelt (Kap. 15). Ein schon gespeicherter Plan von heute
@@ -61,8 +60,6 @@ let intakeDay: string | null = null;
 /** H4: Lerntag, an dem nach 20 Uhr schon einmal neu abgeglichen wurde. */
 let lateIntakeDay: string | null = null;
 const LATE_INTAKE_HOUR = 20;
-/** Höchstens so lange wartet ein NEUER Plan auf `app/week` (Thema der Woche). */
-const WEEK_WAIT_MS = 400;
 
 // ------------------------------------------------------------------ lokale Kopie `lx:plan:<tag>`
 
@@ -176,30 +173,13 @@ function afterPaint(fn: () => void): void {
   else window.setTimeout(fn, 60);
 }
 
-/** Wartet kurz auf `app/week` (nur für einen NEUEN Plan; nie länger als `WEEK_WAIT_MS`). */
-function weekReady(): Promise<void> {
-  if (weekLoaded()) return Promise.resolve();
-  return new Promise((resolve) => {
-    const done = () => {
-      unsub();
-      window.clearTimeout(timer);
-      resolve();
-    };
-    const unsub = useWeekDoc.subscribe(() => {
-      if (weekLoaded()) done();
-    });
-    const timer = window.setTimeout(done, WEEK_WAIT_MS);
-  });
-}
-
 /** Neuer Tagesplan der Einheit aus den Live-Daten (rein rechnend, schreibt nichts). */
 export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const live = useLive.getState();
   const profile = live.docs['app/profile'];
   const lang = useSettings.getState().lang;
-  const week = weekDocNow();
   const goalMin = normGoalMin(profile?.goalMin);
-  const draft = unitDraft({ day: today, week, goalMin });
+  const draft = unitDraft({ day: today, week: null, goalMin });
   let review: ReviewGoal = { goal: 0, due: 0, fresh: 0, repairs: 0 };
   if (draft.duty.includes('review')) {
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
@@ -215,10 +195,9 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
       lang,
       budgetSec: draft.reviewSec,
       quotaLeft: newQuotaLeft(profile?.newPerDay, introduced.length, introduced.filter((c) => c.src === 'lesson').length),
-      theme: themeFor(today, week).theme,
     });
   }
-  return buildUnitStored({ day: today, nowMs, week, goalMin, review });
+  return buildUnitStored({ day: today, nowMs, week: null, goalMin, review });
 }
 
 /** Plan in `app/profile.plan` speichern – außer ein anderes Gerät hat für heute schon einen (der gilt). */
@@ -256,9 +235,10 @@ async function storePlan(today: string, plan: StoredPlan): Promise<void> {
   }
 }
 
+// Bleibt `async` (Aufrufer und Tests erwarten ein Promise), seit dem Fokus-Umbau ohne Warten auf `app/week`.
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function ensureDay(nowMs: number): Promise<void> {
   const today = dayKey(nowMs);
-  startWeekWatch();
   const cur = useTodayPlan.getState();
   if (cur.day === today && cur.status !== 'idle') {
     // Plan steht: nur Selbstheilung (z. B. beim Sichtbarwerden der Seite).
@@ -283,9 +263,7 @@ export async function ensureDay(nowMs: number): Promise<void> {
     afterPaint(() => void followUp(today, nowMs, localPlan));
     return;
   }
-  // 3) Neuer Plan: nur kurz auf `app/week` warten (Thema), nie auf KI oder Schreiben.
-  await weekReady();
-  if (useTodayPlan.getState().day !== today) return;
+  // 3) Neuer Plan (seit dem Fokus-Umbau ohne Wochenthema: nie Warten auf `app/week`, KI oder Schreiben).
   let built: StoredPlan;
   try {
     const again = readPlan(useLive.getState().docs['app/profile']?.plan, today);

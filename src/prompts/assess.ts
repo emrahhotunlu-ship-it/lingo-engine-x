@@ -1,12 +1,12 @@
 import { z } from 'zod';
 import { isWrongLang } from '../domain/lang/detect';
-import { DIMS, LEVELS, TRENDS } from '../domain/assessment/types';
+import { FOCUS_DIMS, LEVELS, TRENDS } from '../domain/assessment/types';
 import { header, langName, langOf } from './common';
 import { clipped, firstCefr, intIn, sliced } from './tolerant';
 import type { PromptTemplate, UiLang } from './types';
 
-// assess@2 (Plan §4.6): Claude urteilt wie eine Prüferin über das Niveau – nur aus den
-// nummerierten Belegen. `complex`, nie zwischengespeichert, per `sample()` mit eigenem Lesen
+// assess@3 (Plan §4.6, Fokus-Umbau 04.10.2026): Claude urteilt wie eine Prüferin über das Niveau – nur aus den
+// nummerierten Belegen und nur für Grammatik und Wortschatz (assess@2 beurteilte sechs Fertigkeiten; alte Antworten bleiben lesbar). `complex`, nie zwischengespeichert, per `sample()` mit eigenem Lesen
 // (`verb: 'text-json'`), damit die tatsächlich antwortende Stufe bekannt ist (Plan W4).
 
 export type AssessVars = {
@@ -29,14 +29,14 @@ export type AssessOut = {
   c1gap: string[];
   strengths: Array<{ title: string; why: string; ev: string[] }>;
   blockers: Array<{ title: string; why: string; fix: string; action: string; ev: string[] }>;
-  dims: Array<{ id: (typeof DIMS)[number]; level: (typeof LEVELS)[number] | null; confidence: 'thin' | 'fair' | 'good'; why: string | null }>;
+  dims: Array<{ id: (typeof FOCUS_DIMS)[number]; level: (typeof LEVELS)[number] | null; confidence: 'thin' | 'fair' | 'good'; why: string | null }>;
   focus: { title: string; why: string; action: string; days: number };
 };
 
 const ID = 'assess';
 /** Höchstzahl der Beleg-Kennungen je Stärke/Blocker – Anweisung und Schema gleich (Befund H7). */
 export const EV_MAX = 3;
-const VERSION = 2;
+const VERSION = 3;
 
 // Tolerant gelesen (Prüfbefund W6): Texte werden gekürzt statt abgelehnt, Listen gekappt,
 // Beleg-Kennungen bereinigt und gefiltert, Stufen („B2-", „B2/C1"), Trend und Belastbarkeit
@@ -98,16 +98,16 @@ export function cleanAction(v: unknown, allowed: readonly string[]): unknown {
   return allowed.find((x) => x.includes(':') && x.slice(x.indexOf(':') + 1) === lower) ?? v;
 }
 
-/** Fertigkeiten: unbekannte und doppelte fallen weg, fehlende kommen als „thin" ohne Stufe dazu. */
+/** Fertigkeiten (nur Grammatik und Wortschatz): unbekannte und doppelte fallen weg, fehlende kommen als „thin" ohne Stufe dazu. */
 function fillDims(v: unknown): unknown {
   if (!Array.isArray(v)) return v;
   const seen = new Map<string, unknown>();
   for (const x of v) {
     const id = x && typeof x === 'object' ? (x as { id?: unknown }).id : undefined;
     const key = typeof id === 'string' ? id.trim().toLowerCase() : '';
-    if ((DIMS as readonly string[]).includes(key) && !seen.has(key)) seen.set(key, { ...(x as object), id: key });
+    if ((FOCUS_DIMS as readonly string[]).includes(key) && !seen.has(key)) seen.set(key, { ...(x as object), id: key });
   }
-  return DIMS.map((id) => seen.get(id) ?? { id, level: null, confidence: 'thin', why: null });
+  return FOCUS_DIMS.map((id) => seen.get(id) ?? { id, level: null, confidence: 'thin', why: null });
 }
 
 export function assessSchema(v: Pick<AssessVars, 'lang' | 'ids' | 'allowed'>): z.ZodType<AssessOut> {
@@ -140,14 +140,14 @@ export function assessSchema(v: Pick<AssessVars, 'lang' | 'ids' | 'allowed'>): z
           .array(
             z
               .object({
-                id: z.enum(DIMS),
+                id: z.enum(FOCUS_DIMS),
                 level: dimLevel,
                 confidence: z.preprocess(alias(CONF_ALIASES), z.enum(['thin', 'fair', 'good'])),
                 why: z.preprocess((w) => (typeof w === 'string' && w.trim() ? w : null), clipped(1, 200).nullable()),
               })
               .superRefine(langOf(['why'], v.lang)),
           )
-          .length(6),
+          .length(2),
       ),
       focus: z.object({ title: t(60), why: t(240), action, days: intIn(1, 7) }).superRefine(langOf(['title', 'why'], v.lang)),
     })
@@ -181,7 +181,7 @@ export function assessExample(v: Pick<AssessVars, 'lang' | 'ids' | 'allowed'>): 
       { title: de ? 'Gemischte Bedingungssätze' : 'Mixed conditionals', why: de ? 'Auf C1 erwartet man, Vergangenheit und Gegenwart sauber zu verknüpfen.' : 'At C1 you are expected to link past and present cleanly.', fix: 'If we had tested earlier, we would not be in this situation now.', action: a0, ev: e },
       { title: de ? 'Verlaufsform im Present Perfect' : 'Present perfect continuous', why: de ? 'Laufende Entwicklungen klingen im Present Simple unnatürlich.' : 'Ongoing developments sound unnatural in the present simple.', fix: 'We have been working on the migration since March.', action: a1, ev: e },
     ],
-    dims: DIMS.map((id) => ({ id, level: id === 'speaking' ? null : 'B2', confidence: id === 'speaking' ? 'thin' : 'fair', why: de ? 'Mehrere Belege der letzten Wochen.' : 'Several pieces of evidence from recent weeks.' })),
+    dims: FOCUS_DIMS.map((id) => ({ id, level: 'B2', confidence: 'fair', why: de ? 'Mehrere Belege der letzten Wochen.' : 'Several pieces of evidence from recent weeks.' })),
     focus: { title: de ? 'Gemischte Bedingungssätze' : 'Mixed conditionals', why: de ? 'Größter Abstand zu C1 bei hoher Bedeutung für Verhandlungen.' : 'Biggest gap to C1 and highly relevant for negotiations.', action: a0, days: 3 },
   };
 }
@@ -218,7 +218,7 @@ export const assess: PromptTemplate<AssessVars, AssessOut> = {
       v.evidence,
       `Allowed actions: ${v.allowed.join(', ')}`,
       'Length limits: level 20–220 characters, levelWhy ≤ 400, trendWhy ≤ 300, today ≤ 160, each c1gap item ≤ 90 (2–4 items), titles ≤ 60, why ≤ 240, fix ≤ 200, dims.why ≤ 200.',
-      'Exactly 2 strengths, 2–3 blockers, and all six skills in dims (grammar, vocabulary, reading, listening, writing, speaking).',
+      'Exactly 2 strengths, 2–3 blockers, and both skills in dims (grammar, vocabulary). Judge only grammar and vocabulary; do not rate reading, listening, writing or speaking.',
       'Reply with only one JSON object, no other text, exactly this shape:',
       JSON.stringify(assessExample(v)),
     ].join('\n');

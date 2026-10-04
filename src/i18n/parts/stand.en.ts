@@ -31,27 +31,6 @@ export const standEn = {
   ckColResult: 'Result',
 
   // Recent progress from the old app (profile.feed)
-  feedTitle: 'Recent progress from the old app',
-  feedLead: 'This is how the old app recorded your sessions. For reference only.',
-  feedColArea: 'Area',
-  feedColWords: 'Words',
-  feedAct_lesson: 'Lesson',
-  feedAct_cards: 'Vocabulary',
-  feedAct_review: 'Review',
-  feedAct_gram: 'Grammar',
-  feedAct_read: 'Reading',
-  feedAct_listen: 'Listening',
-  feedAct_write: 'Writing',
-  feedAct_sprint: 'Sprint',
-  feedAct_speak: 'Speaking',
-  feedAct_discover: 'Discover',
-  feedAct_chunks: 'Phrases',
-  feedAct_dictate: 'Dictation',
-  feedAct_cloze: 'Gap hunt',
-  feedAct_order: 'Sentence building',
-  feedAct_vtest: 'Vocabulary test',
-  feedAct_preply: 'Preply',
-  feedAct_misc: 'Practice',
 
   // Week strip and level scale (M7)
   wkTitle: 'This week',
@@ -72,7 +51,7 @@ export const standEn = {
   palette_plum: 'Plum',
   palette_graphite: 'Graphite',
   ctxTitle: 'Work context',
-  ctxHint: 'What is your work about? Claude uses this for technical terms, reading and listening texts, writing tasks and role plays.',
+  ctxHint: 'What is your work about? Claude uses this for technical terms, example sentences and role plays.',
   ctxPlaceholder: 'e.g. project lead for cloud software at a mid-sized company, lots of client meetings',
   ctxCount: '{n} of {max} characters',
   ctxSave: 'Save',
@@ -89,8 +68,6 @@ export const standEn = {
   // M20: what's new
   // UX review no. 6, 10, 11: standing, vocabulary, settings
   ckTableToggle: 'Previous checks ({n})',
-  feedRows_one: '{n} entry',
-  feedRows_other: '{n} entries',
   vtestTitle: 'Vocabulary test',
   vtestNever: 'Not measured yet.',
   histTraceTitle: 'Assessments and milestones',

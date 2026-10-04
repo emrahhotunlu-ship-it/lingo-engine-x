@@ -68,7 +68,7 @@ function simulate(days: number, opts: { control: boolean; pause?: [number, numbe
     let planNew: number;
     let planSec: number;
     if (opts.control) {
-      const g = unitReviewGoal({ cards, repairs: 1, nowMs: now, lang: 'de', budgetSec: budget, quotaLeft: quota, theme: null });
+      const g = unitReviewGoal({ cards, repairs: 1, nowMs: now, lang: 'de', budgetSec: budget, quotaLeft: quota });
       goal = g.goal;
       planNew = g.fresh;
       planSec = g.sec ?? 0;

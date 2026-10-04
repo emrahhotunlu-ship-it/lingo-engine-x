@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useClock } from '../../app/clock';
 import { useLive } from '../../data/live';
 import { readAssess } from '../../domain/assessment/envelope';
-import { LESSONS, UNITS } from '../../domain/content';
 import { addDays } from '../../domain/date';
 import { historySeries, type SeriesKey } from '../../domain/progress/history';
 import { bktMeasures } from '../../domain/progress/measures';
@@ -10,22 +9,17 @@ import { lastWeekOf } from '../../domain/progress/weekly';
 import { useT, type MessageKey } from '../../i18n';
 import { Fold, FoldGroup } from '../../ui/Fold';
 import { LineChart } from '../../ui/charts/LineChart';
-import { LegacyFeedFold } from './ChecksCard';
 import { PatternsWeekly } from '../patterns/WeeklyTrend';
 
 // Reiter „Verlauf" (plan.md §1.3, O14/O16/O17/O19): Fallen-Wochenzeile, Verlauf der letzten 120 Tage,
-// Einschätzungen und Meilensteine, alte Fortschritte und die Grammatik-Messwerte (BKT) als
-// zugeklappte Zeilen. Tests und Wochenbericht liegen im Profil-Blatt, die Aktivitäts-Heatmap und
+// Einschätzungen und die Grammatik-Messwerte (BKT) als zugeklappte Zeilen (Fokus-Umbau: nur Wörter und Grammatik). Tests und Wochenbericht liegen im Profil-Blatt, die Aktivitäts-Heatmap und
 // die Karten-Messwerte (FSRS) im Reiter „Statistik“.
 
 type Doc = Record<string, unknown>;
 const EMPTY = new Map<string, Doc>();
-const obj = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Doc) : {});
 const SERIES: ReadonlyArray<{ key: SeriesKey; label: MessageKey; color: string }> = [
   { key: 'gr', label: 'hs_gr', color: 'var(--lx-ch-grammar)' },
   { key: 'vo', label: 'hs_vo', color: 'var(--lx-ch-cards)' },
-  { key: 'li', label: 'hs_li', color: 'var(--lx-ch-listen)' },
-  { key: 'wr', label: 'hs_wr', color: 'var(--lx-ch-write)' },
 ];
 const dayMs = (d: string) => Date.parse(`${d}T12:00:00`);
 
@@ -71,10 +65,9 @@ function BktMeasures() {
 }
 
 export function HistoryTab() {
-  const { t, date, lang } = useT();
+  const { t, lang } = useT();
   const today = useClock((s) => s.today);
   const profile = useLive((s) => s.docs['app/profile']);
-  const course = useLive((s) => s.docs['app/course']);
   const assessDoc = useLive((s) => s.docs['app/assess']);
   const { series, seam } = useMemo(() => historySeries(profile, today), [profile, today]);
   const lastWeek = useMemo(() => lastWeekOf(today), [today]);
@@ -82,15 +75,6 @@ export function HistoryTab() {
   const from = addDays(today, -119);
   const fmt = (d: string) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'short' }).format(dayMs(d));
   const hasLines = SERIES.some((s) => series[s.key].length > 1);
-
-  const milestones = useMemo(() => {
-    const done = obj(obj(course).done);
-    return UNITS.map((u) => {
-      const ls = LESSONS.filter((l) => l.unit === u.id);
-      const ds = ls.map((l) => obj(done[l.id]).d).filter((d): d is string => typeof d === 'string');
-      return ds.length === ls.length && ls.length ? { id: u.id, de: u.de, en: u.en, d: ds.sort().at(-1) ?? '' } : null;
-    }).filter((x): x is { id: string; de: string; en: string; d: string } => !!x);
-  }, [course]);
 
   return (
     <div className="flex flex-col gap-4" data-testid="history">
@@ -120,36 +104,18 @@ export function HistoryTab() {
           )}
         </Fold>
 
-        {(hist.length > 0 || milestones.length > 0) && (
-          <Fold title={t('histTraceTitle')} meta={hist.length > 0 ? hist.map((h) => h.cefr ?? '–').slice(-4).join(' → ') : undefined} toggleTestId="trace-toggle">
-            <div className="grid gap-6 sm:grid-cols-2">
-              <div>
-                <h3 className="text-sm font-semibold">{t('assessTrace')}</h3>
-                <ol className="mt-2 flex flex-wrap gap-x-4 gap-y-1" data-testid="assess-trace">
-                  {hist.slice(-12).map((h) => (
-                    <li key={h.d} className="lx-tnum text-sm">
-                      <span className="text-subtle">{fmt(h.d)}</span> <span className="font-semibold">{h.cefr ?? '–'}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold">{t('milestones')}</h3>
-                {milestones.length === 0 ? (
-                  <p className="mt-2 text-sm text-muted">{t('milestonesNone')}</p>
-                ) : (
-                  <ul className="mt-2 flex flex-col gap-1 text-sm text-muted">
-                    {milestones.map((m) => (
-                      <li key={m.id}>{t('milestoneUnit', { unit: lang === 'en' ? m.en : m.de, date: date(dayMs(m.d)) })}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
+        {hist.length > 0 && (
+          <Fold title={t('histTraceTitle')} meta={hist.map((h) => h.cefr ?? '–').slice(-4).join(' → ')} toggleTestId="trace-toggle">
+            <h3 className="text-sm font-semibold">{t('assessTrace')}</h3>
+            <ol className="mt-2 flex flex-wrap gap-x-4 gap-y-1" data-testid="assess-trace">
+              {hist.slice(-12).map((h) => (
+                <li key={h.d} className="lx-tnum text-sm">
+                  <span className="text-subtle">{fmt(h.d)}</span> <span className="font-semibold">{h.cefr ?? '–'}</span>
+                </li>
+              ))}
+            </ol>
           </Fold>
         )}
-
-        <LegacyFeedFold />
 
         <Fold title={t('measuresToggle')} testId="measures" toggleTestId="measures-toggle">
           <BktMeasures />

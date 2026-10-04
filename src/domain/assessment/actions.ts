@@ -4,7 +4,7 @@ import { TOPICS } from '../content';
 // Nur Aktionen mit einem Ziel in der App stehen in der Liste (features/progress/actionRoute.ts);
 // die KI darf nur daraus wählen (zod), sonst gäbe es einen Knopf ins Leere.
 
-export const FIXED_ACTIONS = ['vocab:review', 'vocab:leech', 'chunks', 'write', 'read', 'listen', 'dictate', 'cloze', 'order', 'sprint', 'discover', 'speak', 'business:email', 'business:nego', 'business:present'] as const;
+export const FIXED_ACTIONS = ['vocab:review', 'vocab:leech', 'chunks', 'cloze', 'order'] as const;
 
 const TOPIC_IDS: ReadonlySet<string> = new Set(TOPICS.map((t) => t.id));
 

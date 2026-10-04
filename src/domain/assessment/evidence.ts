@@ -7,31 +7,24 @@ import {
   canDoSelf,
   grammarSources,
   lastVtest,
-  listenSources,
   logSources,
   num,
   obj,
-  preplySources,
   profileWindow,
   radarSources,
-  readingSources,
-  speakSources,
   vocabSource,
-  writingSources,
 } from './sources';
 import type { AssessRead, EvidenceCounts, EvidenceKey, EvidenceLine, EvidencePack, EvidenceSection } from './types';
 
 // Belegpaket der Einschätzung (Plan §4.2): nummerierte Zeilen `[id] …` je Quelle, mit festen
 // Deckeln je Abschnitt und einem Byte-Budget von 46.000 B. Gekürzt wird nach Priorität
-// (Preply, Hören, Lesen, dann Radar). Die Kennungen sind die einzigen, die die KI in `ev` nennen darf.
+// (Radar, Tagesprotokolle, Grammatik). Die Kennungen sind die einzigen, die die KI in `ev` nennen darf.
 
 type Doc = Readonly<Record<string, unknown>>;
 
 export const EVIDENCE_BUDGET = 46_000;
 const encoder = new TextEncoder();
 const bytes = (s: string): number => encoder.encode(s).length;
-const DAY = 86_400_000;
-const WINDOW_MS = 60 * DAY;
 
 export const CEFR_IDS: ReadonlySet<string> = new Set((cefr.items as Array<{ id: string }>).map((i) => i.id));
 
@@ -41,12 +34,8 @@ export type EvidenceInput = {
   profile: Doc;
   grammar: ReadonlyMap<string, Doc>;
   radar: Doc | null;
-  writing: ReadonlyMap<string, Doc>;
   vocab: ReadonlyMap<string, Doc>;
   logs: ReadonlyMap<string, Doc>;
-  reading: ReadonlyMap<string, Doc>;
-  talk: ReadonlyMap<string, Doc>;
-  preply: ReadonlyMap<string, Doc>;
   prev: AssessRead | null;
 };
 
@@ -54,9 +43,9 @@ const pct = (ok: number, n: number): string => (n > 0 ? `${Math.round((ok / n) *
 const r2 = (x: number): number => Math.round(x * 100) / 100;
 
 /** Deckel je Abschnitt in Bytes (Plan §4.2). */
-const CAPS: Record<EvidenceKey, number> = { p: 1500, g: 16 * 700, r: 8000, w: 5 * 1500, v: 3000, l: 3000, rd: 3000, li: 1500, s: 5 * 1500, pp: 3000, cd: 500, a: 500 };
+const CAPS: Record<EvidenceKey, number> = { p: 1500, g: 16 * 700, r: 8000, v: 3000, l: 3000, cd: 500, a: 500 };
 /** Reihenfolge, in der bei zu großem Paket gekürzt wird. */
-const CUT_ORDER: readonly EvidenceKey[] = ['pp', 'li', 'rd', 'r', 's', 'l', 'w', 'g'];
+const CUT_ORDER: readonly EvidenceKey[] = ['r', 'l', 'g'];
 
 function capped(key: EvidenceKey, title: string, lines: EvidenceLine[]): EvidenceSection {
   const out: EvidenceLine[] = [];
@@ -95,7 +84,6 @@ export function fitBudget(sections: EvidenceSection[], budget = EVIDENCE_BUDGET)
 }
 
 export function buildEvidence(i: EvidenceInput): EvidencePack {
-  const since = i.nowMs - WINDOW_MS;
   const sections: EvidenceSection[] = [];
 
   // p: Aktivität der letzten 14 Tage
@@ -149,24 +137,6 @@ export function buildEvidence(i: EvidenceInput): EvidencePack {
     ),
   );
 
-  // w: Texte (5 neueste)
-  const ws = writingSources(i.writing).slice(0, 5);
-  sections.push(
-    capped(
-      'w',
-      'Corrected own texts (CEFR of the text, scores 1–5, mistakes)',
-      ws.map((w) => ({
-        id: `w:${w.id}`,
-        text: clip(
-          `cefr=${w.cefr || '–'} ${Object.entries(w.scores)
-            .map(([k, v]) => `${k}=${v}`)
-            .join(' ')}${w.errors.map((e) => `; [${e.cat || 'other'}] "${e.wrong}" → "${e.right}"`).join('')}`,
-          1400,
-        ),
-      })),
-    ),
-  );
-
   // v: Wortschatz
   const vs = vocabSource(i.vocab, i.nowMs);
   const vt = lastVtest(i.profile);
@@ -199,46 +169,6 @@ export function buildEvidence(i: EvidenceInput): EvidencePack {
   if (oft.length) lLines.unshift({ id: 'l:forgot', text: clip(`cards missed on several days: ${oft.map(([id]) => (typeof i.vocab.get(id)?.word === 'string' ? String(i.vocab.get(id)?.word) : id)).join(', ')}`, 400) });
   sections.push(capped('l', 'Daily logs (accuracy per exercise type)', lLines));
 
-  // rd: Lesen
-  const rds = readingSources(i.reading).slice(0, 5);
-  sections.push(
-    capped(
-      'rd',
-      'Reading results',
-      rds.map((r) => ({ id: `rd:${r.id}`, text: clip(`score ${r.score ?? '–'}${r.cefr ? `, summary language ${r.cefr}` : ''}${r.misunderstood.length ? `; misunderstood: ${r.misunderstood.join(' / ')}` : ''}`, 500) })),
-    ),
-  );
-
-  // li: Hören und Diktat
-  const lis = listenSources(i.profile).slice(0, 8);
-  const dictDays = Object.entries(obj(i.profile.act)).filter(([d, v]) => num(obj(v).dictate) > 0 && daysBetween(d, i.today) <= 60 && daysBetween(d, i.today) >= 0).length;
-  const liLines: EvidenceLine[] = lis.map((l) => ({ id: `li:${l.id}`, text: `${l.level || '?'} at rate ${l.rate}: ${l.ok}/${l.n} correct` }));
-  if (dictDays) liLines.push({ id: 'li:dictate', text: `dictation rounds on ${dictDays} days in the last 60 days` });
-  sections.push(capped('li', 'Listening', liLines));
-
-  // s: Rollenspiel-Analysen
-  const ss = speakSources(i.talk).slice(0, 5);
-  sections.push(
-    capped(
-      's',
-      'Role-play analyses (goal reached?, clean turns, focus points)',
-      ss.map((s) => ({
-        id: `s:${s.id}`,
-        text: clip(`"${s.title}" goal=${s.goal || '–'} turns=${s.turns}${s.clean === null ? '' : ` clean=${s.clean}`}${s.focus.map((f) => `; [${f.cat}] said "${f.said}" → better "${f.better}"`).join('')}`, 1400),
-      })),
-    ),
-  );
-
-  // pp: Preply-Korrekturen
-  const pps = preplySources(i.preply).slice(0, 4);
-  sections.push(
-    capped(
-      'pp',
-      'Corrections from the human teacher',
-      pps.map((p) => ({ id: `pp:${p.id}`, text: clip(p.corrections.map((c) => `"${c.wrong}" → "${c.right}"${c.topic ? ` (${c.topic})` : ''}`).join('; '), 700) })),
-    ),
-  );
-
   // cd: selbst markierte Can-Do-Punkte
   const cds = canDoSelf(i.profile, CEFR_IDS);
   const items = cefr.items as Array<{ id: string; en: string; level: string }>;
@@ -253,7 +183,6 @@ export function buildEvidence(i: EvidenceInput): EvidencePack {
   const fitted = fitBudget(sections);
   const ids = fitted.flatMap((s) => s.lines.map((l) => l.id));
 
-  const recent = <T extends { t: number }>(xs: readonly T[]) => xs.filter((x) => x.t === 0 || x.t >= since).length;
   const counts: EvidenceCounts = {
     answers14: w14.answers,
     grammarN: gs.reduce((a, g) => a + g.n, 0),
@@ -261,10 +190,6 @@ export function buildEvidence(i: EvidenceInput): EvidencePack {
     vocabReviews30: vs.reviews30,
     vtestDays: vt?.d ? daysBetween(vt.d, i.today) : null,
     vtestD: vt?.d ?? null,
-    reading: recent(readingSources(i.reading)),
-    listening: recent(listenSources(i.profile)) + dictDays,
-    writing: recent(writingSources(i.writing)),
-    speaking: recent(speakSources(i.talk)),
   };
   return { sections: fitted, ids, counts };
 }

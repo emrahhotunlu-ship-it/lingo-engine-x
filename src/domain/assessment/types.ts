@@ -19,6 +19,9 @@ export type Trend = (typeof TRENDS)[number];
 
 export const DIMS = ['grammar', 'vocabulary', 'reading', 'listening', 'writing', 'speaking'] as const;
 export type Dim = (typeof DIMS)[number];
+/** Seit dem Fokus-Umbau (04.10.2026) beurteilt und zeigt die App nur Grammatik und Wortschatz; `DIMS` bleibt für alte Einschätzungen lesbar. */
+export const FOCUS_DIMS = ['grammar', 'vocabulary'] as const;
+export type FocusDim = (typeof FOCUS_DIMS)[number];
 
 export type AssessDim = { id: Dim; level: Level | null; confidence: Confidence; why: string | null };
 export type AssessItem = { title: string; why: string; ev: string[] };
@@ -59,7 +62,7 @@ export type AssessRead = {
 /** Ein Abschnitt des Belegpakets: Zeilen der Form `[id] text`. */
 export type EvidenceLine = { id: string; text: string };
 export type EvidenceSection = { key: EvidenceKey; title: string; lines: EvidenceLine[] };
-export type EvidenceKey = 'p' | 'g' | 'r' | 'w' | 'v' | 'l' | 'rd' | 'li' | 's' | 'pp' | 'cd' | 'a';
+export type EvidenceKey = 'p' | 'g' | 'r' | 'v' | 'l' | 'cd' | 'a';
 
 export type EvidencePack = {
   sections: EvidenceSection[];
@@ -75,8 +78,4 @@ export type EvidenceCounts = {
   vocabReviews30: number;
   vtestDays: number | null;
   vtestD: string | null;
-  reading: number;
-  listening: number;
-  writing: number;
-  speaking: number;
 };

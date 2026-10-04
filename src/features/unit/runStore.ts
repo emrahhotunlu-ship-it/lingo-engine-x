@@ -26,8 +26,6 @@ export type UnitRun = {
   sentences: string[];
   phrases: string[];
   task: UnitTaskResult | null;
-  /** Lerntag, an dem das Wochenthema auf der Bestätigungskarte bestätigt wurde. */
-  confirmed: string | null;
   /** Ohne KI oder KI verzögert (M4d): Block wird lokal/ungeprüft ausgeführt. */
   offline: boolean;
   /** Zeitpunkt des Blockstarts (ms). */
@@ -48,7 +46,6 @@ export const EMPTY_RUN: UnitRun = {
   sentences: [],
   phrases: [],
   task: null,
-  confirmed: null,
   offline: false,
   at: 0,
   draft: '',

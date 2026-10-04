@@ -11,13 +11,12 @@ import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Skeleton } from '../../ui/Skeleton';
 import { aiUsable } from './assessRun';
-import { useCollectionsOnce } from './useOnce';
 import { ensureWeeklyText, storedWeekly, WEEKLY_MIN_FACTS } from './weeklyRun';
 
 // Wochenbericht (Plan §7.3, O13): eigene Seite `weekly`, erreichbar über das Profil-Blatt und
 // montags über eine ruhige Zeile auf Heute (plan.md §1.2/§1.3). Inhalt unverändert aus dem
-// bisherigen Reiter „Verlauf“: belegte Fakten der letzten Woche, Claudes Text (einmal je Woche und
-// Sprache), „Als Preply-Stunde“. Die Fallen-Wochenzeile steht im Verlauf (O19).
+// bisherigen Reiter „Verlauf“: belegte Fakten der letzten Woche (Wörter, Grammatik; Fokus-Umbau: keine
+// Minuten als Leistung) und Claudes Text (einmal je Woche und Sprache). Die Fallen-Wochenzeile steht im Verlauf (O19).
 
 type Doc = Record<string, unknown>;
 const EMPTY = new Map<string, Doc>();
@@ -58,17 +57,16 @@ export function WeeklyCard() {
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
   const schema = useLive((s) => s.docs['app/schema']);
-  const once = useCollectionsOnce(['writing', 'talk', 'wprompt']);
   const weekly = useDocWatch('app/weekly');
   const ai = useAiAvailable();
   const scope = useAiScope();
   const week = useMemo(() => lastWeekOf(today), [today]);
   const facts = useMemo(
-    () => (once.status === 'ready' ? weekFacts({ days: week.days, vocab, grammar, writing: once.value.writing ?? EMPTY, talk: once.value.talk ?? EMPTY, prompts: once.value.wprompt ?? EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null }) : []),
-    [once.status, once.value, week, vocab, grammar, profile, schema],
+    () => weekFacts({ days: week.days, vocab, grammar, writing: EMPTY, talk: EMPTY, profile: obj(profile), pflichtSince: typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null }).filter((f) => f.kind !== 'time'),
+    [week, vocab, grammar, profile, schema],
   );
   const stored = weekly.status === 'ready' ? storedWeekly(weekly.data, week.w, lang) : null;
-  const wants = ai && weekly.status === 'ready' && once.status === 'ready' && !stored && citableFacts(facts).length >= WEEKLY_MIN_FACTS;
+  const wants = ai && weekly.status === 'ready' && !stored && citableFacts(facts).length >= WEEKLY_MIN_FACTS;
 
   // Einmal je Woche und Sprache beim Öffnen des Reiters (Plan E15); nie automatisch wiederholt.
   // Ändern sich die Fakten (Live-Daten), startet KEIN neuer Aufruf: `tried` merkt sich Woche und
@@ -105,7 +103,7 @@ export function WeeklyCard() {
         {t('weeklyTitle')}
       </h2>
       <p className="text-xs text-subtle">{t('weeklyRange', { from: date(dayMs(first)), to: date(dayMs(last)) })}</p>
-      {once.status === 'loading' ? (
+      {weekly.status === 'loading' ? (
         <Skeleton className="mt-3 h-16 w-full" />
       ) : (
         <>

@@ -12,8 +12,6 @@ import { TABS, type TabId } from '../../src/app/shell/tabs';
 // die App nichts von fremden Hosts lädt (Kap. 12, Plattform-Test).
 
 export const ORIGIN = 'https://lingo.artifact.test';
-/** Schalter „Am Handy …“ (`PHONE_MODE_KEY` in src/app/settings.ts, dort nicht importierbar: legt beim Laden einen Speicher an). */
-export const PHONE_MODE_KEY = 'lx:phone-mode';
 const HTML = readFileSync(new URL('../../dist/index.html', import.meta.url), 'utf8');
 const RUNTIME = readFileSync(new URL('../.runtime/fake-claude.js', import.meta.url), 'utf8');
 
@@ -35,11 +33,6 @@ export type BootOptions = {
   localStorage?: Record<string, string>;
   /** `true` = der Hinweis „Was ist neu" (M20) erscheint wie nach einem Update. */
   whatsNew?: boolean;
-  /**
-   * `true` = der Handy-Modus gilt (Standard der App, wirkt nur auf Handys: Touch + kurze Bildschirmseite < 500 px).
-   * Sonst ist er ausgeschaltet: Handy-simulierende Tests (`isMobile`) behalten so die volle Pflichtliste.
-   */
-  phoneMode?: boolean;
   /** Adress-Anker beim Start (ohne `#`), z. B. `go=trainer%3Fround%3Dextra` (siehe `bootAt`). */
   hash?: string;
 };
@@ -66,11 +59,6 @@ export async function boot(page: Page, opts: BootOptions = {}): Promise<Booted> 
   // „Was ist neu" (M20) gilt in Tests als gesehen – außer ein Test prüft ihn ausdrücklich.
   if (!opts.whatsNew) {
     await page.addInitScript(([k, v]: [string, string]) => window.localStorage.setItem(k, v), [WHATS_NEW_KEY, WHATS_NEW_VERSION] as [string, string]);
-  }
-  if (!opts.phoneMode) {
-    await page.addInitScript(([k, v]: [string, string]) => {
-      if (window.localStorage.getItem(k) === null) window.localStorage.setItem(k, v);
-    }, [PHONE_MODE_KEY, '0'] as [string, string]);
   }
   if (opts.localStorage) {
     await page.addInitScript((entries: Record<string, string>) => {

@@ -7,7 +7,6 @@ import { meaningOf } from '../../../domain/srs/cards';
 import { builtinPrefOp, deckCards, deckCounts, isBuiltinDeck, updateDeckOp, type DeckMode } from '../../../domain/srs/decks';
 import type { FlipDir } from '../../../domain/srs/flip';
 import { useHiddenInput } from '../../../engine/HiddenInput';
-import { useWeek } from '../../../app/useWeek';
 import { useT } from '../../../i18n';
 import { Button } from '../../../ui/Button';
 import { Segmented } from '../../../ui/Segmented';
@@ -37,7 +36,6 @@ export function DeckScreen({ route }: ScreenProps<'deck'>) {
   const quota = useQuota(cards);
   const ctx = useDeckCtx();
   const tts = useSpeech((s) => s.status === 'ready');
-  const { theme } = useWeek();
   const id = route.id;
   const builtin = isBuiltinDeck(id);
   const own = builtin ? null : (decks.decks[id] ?? null);
@@ -111,7 +109,7 @@ export function DeckScreen({ route }: ScreenProps<'deck'>) {
           size="lg"
           iconAfter="arrowRight"
           disabled={list.length === 0}
-          onClick={() => startExtra(api, { deck: id, size: Number(size), mode, dir, label: title, theme })}
+          onClick={() => startExtra(api, { deck: id, size: Number(size), mode, dir, label: title })}
           data-testid="deck-start"
         >
           {t('nbWsStart')}

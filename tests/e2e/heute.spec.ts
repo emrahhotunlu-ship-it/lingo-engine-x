@@ -29,7 +29,7 @@ test('Morgen-Journey: Tageskarte mit 4 Blöcken (Wortschatz · Grammatik · Satz
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-task"]')).toContainText('Satzbau');
   await expect(page.locator('[data-testid="duty"][data-duty="ch:u-again"]')).toContainText('Fehler korrigieren');
   await expect(page.getByTestId('duty').first()).toHaveAttribute('data-now', 'true');
-  await expect(page.getByTestId('today-theme')).toHaveAttribute('data-theme-id', 't01');
+  await expect(page.getByTestId('today-theme')).toHaveCount(0);
   await expect(page.getByTestId('start')).toBeInViewport();
   await expect(page.locator('main button.bg-accent')).toHaveCount(1);
   expect(await layoutProblems(page)).toEqual([]);
@@ -51,7 +51,7 @@ test('Morgen-Journey: Tageskarte mit 4 Blöcken (Wortschatz · Grammatik · Satz
   expect(external).toEqual([]);
 });
 
-test('Montag: Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne KI und ohne Sprachausgabe', async ({ page }) => {
+test('Montag: ohne Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne KI und ohne Sprachausgabe', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, {
     migrated: true,
@@ -65,12 +65,8 @@ test('Montag: Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne KI un
   // Mit dem gespeicherten Plan der Einheit gilt ab heute die Pflicht-Regel (pflichtSince, nie rückwirkend).
   await expect.poll(async () => (await dump(page))['app/schema']?.pflichtSince).toBe(MON);
   // Am Tag von pflichtSince zählt noch die alte Regel (Regel 2: nie rückwirkend); Sonntag stand die Serie bei 12.
-  // Erster Lerntag der Woche ohne Thema → Bestätigungskarte vor dem nächsten Block (M10).
+  // Seit dem Fokus-Umbau gibt es auch am ersten Lerntag der Woche keine Bestätigungskarte: der Tipp startet den Block.
   await page.getByTestId('start').click();
-  await screen(page, 'unitCard');
-  // Vorschlag = nächstes Thema der Reihenfolge nach KW 38 (t02 → t13, lehrer.md §3).
-  await expect(page.getByTestId('unit-confirm')).toHaveAttribute('data-theme-id', 't13');
-  await page.getByTestId('unit-confirm-ok').click();
   // Block 5 „Fehler korrigieren“ (Anbieter `again`, Übung `unitAgain`): ohne Aufgabe des Tages die ältesten fälligen
   // Reparatur-Sätze – geräteübergreifend aus `app/repair`, ohne KI lokal verglichen.
   await screen(page, 'unitAgain');
@@ -88,8 +84,8 @@ test('Montag: Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne KI un
   await expect.poll(async () => ((await dump(page))['app/profile']?.pflicht as Doc | undefined)?.[MON]).toBe(1);
   const act = ((await dump(page))['app/profile']?.act as Record<string, Doc>)[MON];
   expect(act).toMatchObject({ 'u-focus': 1, 'u-task': 1, 'u-again': 1 });
-  expect((await dump(page))['app/week']?.cur).toMatchObject({ wk: '2026-W39', theme: 't13', by: 'auto' });
-  expect(((await dump(page))['app/week']?.hist as Doc[]).map((h) => h.wk)).toEqual(['2026-W37', '2026-W38']);
+  // `app/week` bleibt unberührt (kein Wochenthema mehr, nichts wird geschrieben).
+  expect((await dump(page))['app/week']).toMatchObject({ cur: { wk: '2026-W38' } });
   await expect(page.getByTestId('today-streak')).toHaveText('Serie: 13 Tage');
   expect(errors).toEqual([]);
 });
@@ -134,19 +130,16 @@ test('Kurz-Einheit (Tagesziel 15): 3 Blöcke', async ({ page }) => {
   expect(await page.getByTestId('duty').evaluateAll((els) => els.map((e) => e.getAttribute('data-duty')))).toEqual(['review', 'ch:u-focus', 'ch:u-again']);
 });
 
-test('„Deine Woche“ über die Unterzeile von Heute, Thema wechseln schreibt app/week', async ({ page }) => {
+test('Kein Wochenthema mehr auf Heute: keine Themenzeile, keine Bestätigungskarte, app/week bleibt unberührt', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39 } } });
   await screen(page, 'today');
-  // Einstieg `hub-week` hängt am Platz `learn` (Gruppe `path`); P2 zeigt ihn in „Dein Weg“.
-  await page.getByTestId('today-theme').click();
-  await screen(page, 'week');
-  await expect(page.getByTestId('week-page')).toHaveAttribute('data-theme-id', 't01');
-  await page.getByTestId('week-change').click();
-  await page.locator('[data-testid="week-theme"][data-theme-id="t02"]').click();
-  await expect(page.getByTestId('week-page')).toHaveAttribute('data-theme-id', 't02');
-  await expect.poll(async () => ((await dump(page))['app/week']?.cur as Doc | undefined)?.theme).toBe('t02');
-  // Gleiche Woche: kein neuer Verlaufseintrag; der Seed-Verlauf (KW 37) bleibt unverändert.
-  expect(((await dump(page))['app/week']?.hist as Doc[]).map((h) => h.wk)).toEqual(['2026-W37']);
+  await expect(page.getByTestId('today-theme')).toHaveCount(0);
+  const before = JSON.stringify((await dump(page))['app/week']);
+  // Der erste Block startet direkt, ohne Bestätigungskarte „Neue Woche“.
+  await page.getByTestId('start').click();
+  await expect(page.getByTestId('unit-confirm')).toHaveCount(0);
+  await expect.poll(async () => (await page.getByTestId('trainer').count()) + (await page.getByTestId('unit-card').count())).toBeGreaterThan(0);
+  expect(JSON.stringify((await dump(page))['app/week'])).toBe(before);
   expect(errors).toEqual([]);
 });
 

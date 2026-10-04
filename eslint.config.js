@@ -21,22 +21,18 @@ const STORE_SYNTAX = [
 /** Dauerhaft erlaubte Layout-Animationen (architektur.md §3.3). */
 const LAYOUT_OK = ['src/ui/Segmented.tsx', 'src/ui/Switch.tsx', 'src/ui/Sheet.tsx', 'src/engine/Tiles.tsx'];
 /** Befristet: Listen-Flüge der Besitzer-Pakete (P3 Wortliste, P4 Entdecken, P5 Szenen/Bausteine). */
-const LAYOUT_TEMP = [
-  'src/features/vocab/list/VocabScreen.tsx',
-  'src/features/speak/SceneCard.tsx',
-  'src/features/business/TilePicker.tsx',
-  'src/features/discover/DiscoverScreen.tsx',
-  'src/features/discover/ItemScreen.tsx',
-];
+const LAYOUT_TEMP = ['src/features/vocab/list/VocabScreen.tsx', 'src/features/speak/SceneCard.tsx'];
 /** Befristet: `useToday()`/`usePending()` ohne Selektor (P1 stellt um). */
 const STORE_TEMP = [
   'src/features/today/state.ts',
   'src/features/today/TodayScreen.tsx',
   'src/features/learn/ui.tsx',
-  'src/features/say/SayScreen.tsx',
   'src/areas/heute.tsx',
   'src/areas/wortschatz.tsx',
 ];
+
+/** Ordner der Bereiche, die der Umbau „Fokus Wörter und Grammatik“ gelöscht hat (Entfernungs-Audit, tests/unit/removalAudit.test.ts). */
+const GONE_AREAS = 'input|read|listen|discover|write|business|pron|inbox|fluency|meeting|tones|say|compare';
 
 export default defineConfig(
   {
@@ -90,6 +86,16 @@ export default defineConfig(
     rules: {
       '@typescript-eslint/only-throw-error': 'off',
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
+    },
+  },
+  {
+    // Entfernungs-Audit: Importe aus den gelöschten Bereichen sind verboten (sonst käme der Code unbemerkt zurück).
+    files: ['src/**/*.{ts,tsx}', 'tests/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }] },
+      ],
     },
   },
   {

@@ -208,7 +208,7 @@ function install(): void {
   useLive.subscribe(refresh);
   usePending.subscribe(refresh);
   useUnitMarks.subscribe(refresh);
-  // Schalter „Am Handy …“ in den Einstellungen: die Ansicht sofort nachziehen (ohne Wirkung bei Sprache/Thema).
+  // Einstellungen (z. B. Sprache): die Ansicht sofort nachziehen.
   useSettings.subscribe(refresh);
 }
 

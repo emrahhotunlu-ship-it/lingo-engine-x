@@ -47,15 +47,18 @@ test('Einstieg: Kopf wie v1 (Profil + Serie links, Übersetzen + Claude rechts),
   expect(external).toEqual([]);
 });
 
-test('Rückweg zur Herkunft: Seite „‹ Heute“, Übung ✕ zurück zur Herkunft, Bildlauf bleibt; aktiver Reiter → Wurzel', async ({ page }) => {
+test('Rückweg zur Herkunft: Seite „‹ Wortschatz“, Übung ✕ zurück zur Herkunft, Bildlauf bleibt; aktiver Reiter → Wurzel', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
-  await page.getByTestId('today-theme').click();
-  await screen(page, 'week');
-  await expect(page.getByTestId('back').first()).toContainText('Heute');
+  // Seite aus dem Reiter „Wortschatz“ (Wortliste): „‹ Wortschatz“ führt zur Wurzel des Reiters zurück.
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-all').click();
+  await screen(page, 'vocabList');
+  await expect(page.getByTestId('back').first()).toContainText('Wortschatz');
   await expect(page.getByTestId('tabbar')).toBeVisible();
   await page.getByTestId('back').first().click();
-  await screen(page, 'today');
+  await screen(page, 'vocab');
+  await openTab(page, 'today');
   // Übung (aus dem Profil-Blatt): keine Reiterleiste, ✕ führt zurück zur Herkunft.
   await openVtest(page);
   await expect(page.getByTestId('tabbar')).toHaveCount(0);

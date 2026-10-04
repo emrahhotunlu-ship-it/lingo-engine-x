@@ -30,7 +30,7 @@ function cards(late: number, today: number, fresh: number): TrainCard[] {
   for (let k = 0; k < fresh; k++) out.push(toTrainCard(`n${k}`, freshDoc(k), true, NOW)!);
   return out;
 }
-const goal = (cs: TrainCard[], budgetSec: number = REVIEW_SEC.full, quotaLeft = 5) => unitReviewGoal({ cards: cs, repairs: 1, nowMs: NOW, lang: 'de', budgetSec, quotaLeft, theme: null });
+const goal = (cs: TrainCard[], budgetSec: number = REVIEW_SEC.full, quotaLeft = 5) => unitReviewGoal({ cards: cs, repairs: 1, nowMs: NOW, lang: 'de', budgetSec, quotaLeft });
 
 describe('Rückstand: Zählen, Zeit, Bremse', () => {
   it('überfällig = gestern oder früher fällig; neue und ausgeblendete Karten zählen nie', () => {

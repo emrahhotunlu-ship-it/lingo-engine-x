@@ -192,27 +192,3 @@ describe('Fortsetzen (resume.ts)', () => {
     expect(r.loadResume('fake')).toBeNull();
   });
 });
-
-describe('useWeek: genau ein Abo auf app/week (Referenzzählung)', () => {
-  it('mehrere Nutzer teilen ein onSnapshot; das letzte Abmelden beendet es nach der Nachfrist', async () => {
-    vi.useFakeTimers();
-    const { watchWeek, resetWeekWatch } = await import('../../src/app/useWeek');
-    resetWeekWatch();
-    snapCount.n = 0;
-    const a = watchWeek();
-    const b = watchWeek();
-    const c = watchWeek();
-    expect(snapCount.n).toBe(1);
-    a();
-    b();
-    c();
-    expect(snapCount.n).toBe(1);
-    const d = watchWeek();
-    vi.advanceTimersByTime(1000);
-    expect(snapCount.n).toBe(1);
-    d();
-    vi.advanceTimersByTime(1000);
-    expect(snapCount.n).toBe(0);
-    vi.useRealTimers();
-  });
-});

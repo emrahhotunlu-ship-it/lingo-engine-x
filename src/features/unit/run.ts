@@ -11,7 +11,7 @@ import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { isUnitPlan, unitActKey, unitDonePatch, unitPlanOf } from '../../domain/unit/plan';
 import { unitPhrases, weakWords } from '../../domain/unit/phrases';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
-import { resolveBlock, themeFor, weekTargets } from '../../domain/week';
+import { EMPTY_TARGETS, resolveBlock } from '../../domain/week';
 import type { UnitBlock, UnitEnv, UnitPlan } from '../../domain/week/types';
 import { selectAiAvailable } from '../../ai/scope';
 import { useCapabilities } from '../../platform/capabilities';
@@ -24,7 +24,6 @@ import { markUnitLocal } from '../today/marks';
 import { todayNow } from '../today/state';
 import { healDay } from '../today/store';
 import { startSession } from '../vocab/session';
-import { weekDocNow } from '../week/store';
 import { EMPTY_RUN, useUnitRun, type UnitRun, type UnitVia } from './runStore';
 
 // Die Tageseinheit als Kette im Player (plan.md §1.5, N10; architektur.md §2.7):
@@ -46,7 +45,7 @@ export function unitNow(): UnitNow | null {
   const plan = st.plan;
   if (!st.ready || !isUnitPlan(plan)) return null;
   const rows = unitRows(plan, st.duties.items) ?? [];
-  return { day: st.day, plan, up: unitPlanOf(plan, weekDocNow()), rows };
+  return { day: st.day, plan, up: unitPlanOf(plan, null), rows };
 }
 
 /** Umgebung beim Blockstart: KI nur, wenn sie JETZT bereit ist (M4d); Sprachausgabe mit Stimme. */
@@ -56,18 +55,10 @@ export function envNow(): UnitEnv {
 
 const firstOpen = (rows: readonly UnitRow[]): UnitRow | null => rows.find((r) => r.state !== 'done') ?? null;
 
-/** Muss vor dem nächsten Block das Wochenthema bestätigt werden? (M10: erster Lerntag der Woche ohne gespeichertes Thema.) */
-export function needsConfirm(u: UnitNow): boolean {
-  if (useUnitRun.getState().confirmed === u.day) return false;
-  return u.up.confirmTheme;
-}
-
-/** Kontext eines Blocks (Thema, Ziele, Wendungen; Ergebnis von Block 3 für 4/5). */
+/** Kontext eines Blocks (Wendungen; Ergebnis von Block 3 für 4/5). Seit dem Fokus-Umbau ohne Wochenthema und Wochenziele. */
 export function ctxFor(u: UnitNow, block: UnitBlock): UnitCtx {
   const run = useUnitRun.getState();
-  const week = weekDocNow();
-  const pick = themeFor(u.day, week);
-  const targets = weekTargets(pick.theme, { day: u.day, week });
+  const targets = EMPTY_TARGETS;
   const same = run.day === u.day;
   let phrases = same && run.phrases.length ? run.phrases : [];
   if (!phrases.length) {
@@ -78,7 +69,7 @@ export function ctxFor(u: UnitNow, block: UnitBlock): UnitCtx {
     // Dazu bis zu zwei schwache Wörter oder Wendungen: Block 3 wiederholt sie mit einer zweiten Methode (Produktion).
     phrases = unitPhrases(cards, u.day, targets, weakWords([...cards, ...chunks]));
   }
-  const ctx: UnitCtx = { day: u.day, block: block.block, theme: pick.theme, targets, minutes: block.min, phrases, opts: block.opts };
+  const ctx: UnitCtx = { day: u.day, block: block.block, theme: null, targets, minutes: block.min, phrases, opts: block.opts };
   if (same && run.sentences.length) ctx.sentences = run.sentences;
   if (same && run.task) ctx.task = run.task;
   return ctx;
@@ -157,7 +148,7 @@ function resumeRow(u: UnitNow, row: UnitRow): boolean {
       logWarn('unit:resume', err, r.id);
     }
     if (!ok) continue;
-    if (run !== mem) useUnitRun.setState({ ...EMPTY_RUN, ...run, confirmed: mem.confirmed ?? run.confirmed ?? null }, true);
+    if (run !== mem) useUnitRun.setState({ ...EMPTY_RUN, ...run }, true);
     useNav.getState().go(route);
     return true;
   }
@@ -191,7 +182,7 @@ export function startRow(u: UnitNow, row: UnitRow, api: FocusApi): void {
 }
 
 /**
- * Tipp auf der Tageskarte: Bestätigungskarte (erster Lerntag der Woche) oder der erste offene Block.
+ * Tipp auf der Tageskarte: der erste offene Block.
  * Ohne Plan der Einheit (Plan von Phase 1/2 von heute): `false` – dann startet der alte Weg.
  */
 export function startUnit(api: FocusApi): boolean {
@@ -199,11 +190,6 @@ export function startUnit(api: FocusApi): boolean {
   if (!u) return false;
   const row = firstOpen(u.rows);
   if (!row) return true;
-  if (needsConfirm(u)) {
-    api.blur();
-    useNav.getState().go({ name: 'unitCard', step: 'confirm' });
-    return true;
-  }
   startRow(u, row, api);
   return true;
 }
@@ -234,11 +220,6 @@ export function continueUnit(api: FocusApi): void {
     return;
   }
   startRow(u, row, api);
-}
-
-/** Wochenthema bestätigt (oder gewählt): die Karte erscheint heute nicht noch einmal. */
-export function markConfirmed(day: string): void {
-  setRun({ confirmed: day });
 }
 
 // ------------------------------------------------------------------ Abschluss
@@ -310,11 +291,6 @@ function startNextStep(block: UnitBlockNo): boolean {
   setRun({ kind: next, via: 'provider', watch: null, routeName: route.name, route, at: Date.now() });
   useNav.getState().go(route);
   return true;
-}
-
-/** Ergebnis von `input.*` (Sätze, Wendungen) für die Folgeblöcke merken. */
-export function rememberInput(sentences: readonly string[], phrases: readonly string[]): void {
-  setRun({ sentences: [...sentences].slice(0, 6), phrases: [...phrases].slice(0, 5) });
 }
 
 // ------------------------------------------------------------------ Ersatzblöcke: Abschluss über das Rundenende

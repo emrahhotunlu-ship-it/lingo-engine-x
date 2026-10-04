@@ -1,4 +1,3 @@
-import { isoWeek } from '../date';
 import { unitPlanFor } from '../week';
 import type { UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs, WeekDoc } from '../week/types';
 import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
@@ -104,27 +103,4 @@ export function unitDonePatch(cur: Readonly<Record<string, unknown>>, day: strin
   const units: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(dayAct)) if (k.startsWith('u-') && typeof v === 'number') units[k] = v;
   return { act: { [day]: { ...units, [key]: 1 } } };
-}
-
-// ------------------------------------------------------------------ Aufgabe des Tages am Laptop (Wochenbilanz)
-
-/** Ziel je Woche: Aufgaben des Tages (Sprechen, längeres Schreiben), die am Laptop erledigt wurden. */
-export const LAP_GOAL = 2;
-
-/**
- * Profil-Patch „Aufgabe des Tages am Laptop erledigt“: `lap[tag] = 1` (idempotent). Eigenes Feld, damit die
- * Wochenbilanz auch dann stimmt, wenn dieselbe Pflicht an anderen Tagen am Handy als kurze Übung zählt.
- */
-export function lapPatch(cur: Readonly<Record<string, unknown>>, day: string): Record<string, unknown> | null {
-  const lap = cur.lap && typeof cur.lap === 'object' && !Array.isArray(cur.lap) ? (cur.lap as Record<string, unknown>) : {};
-  if (lap[day] === 1) return null;
-  return { lap: { [day]: 1 } };
-}
-
-/** Wie viele Laptop-Aufgaben stehen diese Woche (Mo–So, bis heute) im Profil? */
-export function lapThisWeek(profile: Readonly<Record<string, unknown>> | null | undefined, today: string): number {
-  const lap = profile?.lap;
-  if (!lap || typeof lap !== 'object' || Array.isArray(lap)) return 0;
-  const wk = isoWeek(today);
-  return Object.entries(lap as Record<string, unknown>).filter(([k, v]) => v === 1 && k <= today && isoWeek(k) === wk).length;
 }

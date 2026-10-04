@@ -29,7 +29,7 @@ export type FakeOptions = {
   sampleTickMs?: number;
   /** Phase 5: `sample` scheitert für diese Vorlagen mit dem Code (einmal je Eintrag, dann normal). */
   sampleFailOnce?: Record<string, Claude.sample.SampleErrorCode>;
-  /** Phase 6: erste Antwort von assess@1 verletzt das Schema (`?fake=assessbad`). */
+  /** Phase 6: erste Antwort von assess@3 verletzt das Schema (`?fake=assessbad`). */
   assessBad?: boolean;
   /** Phase 6: `sample()` meldet diese Stufe als `modelTierApplied` (einfacheres Modell nachbilden). */
   tierApplied?: Claude.sample.ModelTier;

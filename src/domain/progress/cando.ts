@@ -13,6 +13,8 @@ export type CanDoItem = { id: string; level: string; dim: string; de: string; en
 export type CanDoStatus = 'reached' | 'self' | 'open' | 'thin';
 
 export const CANDO_ITEMS = cefr.items as CanDoItem[];
+/** Seit dem Fokus-Umbau zeigt der Fortschritt nur noch Can-Do-Punkte zu Grammatik und Wortschatz (Gesamtkonzept 3.5). */
+export const FOCUS_CANDO_ITEMS: readonly CanDoItem[] = CANDO_ITEMS.filter((i) => i.dim === 'grammar' || i.dim === 'vocabulary');
 export const CANDO_DIMS = cefr.dims as Array<{ id: string; de: string; en: string }>;
 
 export type CanDoEnv = {

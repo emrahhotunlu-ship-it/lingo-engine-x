@@ -61,12 +61,12 @@ const trainerResume: Resumable<TrainerSnapshot> = {
   },
 };
 
-/** Block 1 der Tageseinheit (plan.md §1.5): Reparatur-Sätze, dann Wochenthema, dann Fällige; `auto`, DE→EN. */
+/** Block 1 der Tageseinheit (plan.md §1.5): Reparatur-Sätze, dann Fällige; `auto`, DE→EN. */
 const reviewBlock: UnitBlockProvider = {
   kind: 'review',
   feasible: () => true,
-  start: (ctx) => {
-    startSession('pflicht', { mode: 'auto', unit: true, theme: ctx.theme });
+  start: () => {
+    startSession('pflicht', { mode: 'auto', unit: true });
     const s = useSession.getState();
     return s.active ? { name: 'trainer', round: 'pflicht' } : false;
   },
