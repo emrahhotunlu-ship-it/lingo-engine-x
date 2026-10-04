@@ -119,8 +119,8 @@ describe('drei Schichten (Verfeinerungen 1–8)', () => {
     expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('should postpone', 'need to push back')] }).success).toBe(false);
   });
 
-  it('3: Kategorie aus den 16 Themen, dem C1-Werkzeugkasten (7) oder der Zusatzliste', () => {
-    expect(ERROR_CATS).toHaveLength(29);
+  it('3: Kategorie aus den 16 Themen, dem C1-Werkzeugkasten (7), dem Grammatik-Pfad (16) oder der Zusatzliste', () => {
+    expect(ERROR_CATS).toHaveLength(45);
     expect(ERROR_CATS).toContain('c1-hedging');
     expect(layers().safeParse({ ...base, verdict: 'errors', errors: [err('must delay', 'need to push back', 'modals-deduction')] }).success).toBe(true);
     // Unbekannte Kategorie → nächste bekannte oder „other“ (statt abgelehnt).

@@ -69,7 +69,7 @@ describe('Pflicht Sprechen und Tagesbilanz', () => {
     const entries = mergeEntries([vocab('a'), speakE(6), { t: 9, id: 'mail', type: 'biz', ok: true, ctx: 'biz' }], []);
     const s = deriveToday({ day: '2026-09-20', plan, entries, minutes: 12 });
     expect(s.review).toEqual({ done: 1, total: 2 });
-    expect(s.balance).toEqual({ answers: 1, correct: 1, minutes: 12, talks: 1, biz: 1 });
+    expect(s.balance).toEqual({ answers: 1, correct: 1, minutes: 12, talks: 1, biz: 1, repaired: 0 });
     expect(s.status).toBe('open');
     // Ein Sprech-Eintrag mit ctx:'rev' (darf nie entstehen) zählt trotzdem nicht als Vokabel.
     const bad = deriveToday({ day: '2026-09-20', plan, entries: [{ t: 1, id: 'sc-vida', type: 'speak', ctx: 'rev' }], minutes: 0 });

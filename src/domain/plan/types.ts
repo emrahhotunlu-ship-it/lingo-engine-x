@@ -50,5 +50,5 @@ export type TodayState = {
   review: { done: number; total: number };
   extra: number;
   /** `talks`/`biz`: Gespräche und Business-Einheiten (Phase 3), nicht in `answers` enthalten. */
-  balance: { answers: number; correct: number; minutes: number; talks: number; biz: number };
+  balance: { answers: number; correct: number; minutes: number; talks: number; biz: number; repaired: number };
 };

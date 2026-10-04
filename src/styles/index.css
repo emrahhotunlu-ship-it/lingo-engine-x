@@ -859,7 +859,7 @@ h3 {
     background: var(--lx-accent-fg);
     opacity: 0.55;
     transform-origin: left center;
-    animation: lx-autonext 1.2s linear forwards;
+    animation: lx-autonext 4s linear forwards;
   }
 
   /* Zeitbalken im Sprint. */

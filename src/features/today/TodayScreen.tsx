@@ -308,6 +308,11 @@ function DoneCard({ view, tomorrow }: { view: TodayView; tomorrow: string }) {
           </span>
         }
       >
+        {view.balance.repaired > 0 && (
+          <p className="text-sm text-muted" data-testid="today-truth">
+            {tn('nbHeuteTruthRepaired', view.balance.repaired)}
+          </p>
+        )}
         <p className="text-sm text-muted" data-testid="today-tomorrow">
           {tomorrow}
         </p>

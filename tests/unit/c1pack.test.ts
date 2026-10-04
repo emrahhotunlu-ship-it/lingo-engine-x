@@ -145,7 +145,7 @@ describe('Auswahl nach Soll-Mix', () => {
     const have = new Set<string>();
     const mine: Record<PackCat, number> = { colloc: 0, frame: 0, phrasal: 0, word: 0, tech: 0, family: 0, idiom: 0 };
     const picked: PackEntry[] = [];
-    for (let day = 0; day < 130; day++) {
+    for (let day = 0; day < 230; day++) {
       const next = nextPackEntries({ have, mine, unused: 0, addedToday: 0 }, 5);
       for (const e of next) {
         have.add(e.id);

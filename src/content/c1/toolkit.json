@@ -1,10 +1,12 @@
 {
  "_note": "C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7 / V5): 7 zusätzliche Themen im Format der 16 Themen der alten App (grammar.json), Regelblätter im Format von rules.json und Startaufgaben im Format von seedGrammar. Kennungen mit Präfix c1-, nie ändern: sie stehen in grammar/<id>. Der Claude-Tagesauftrag nutzt weiter nur die 16 alten Kennungen.",
  "groups": [
-  "C1-Werkzeugkasten"
+  "C1-Werkzeugkasten",
+  "Grammatik-Pfad"
  ],
  "groupEn": {
-  "C1-Werkzeugkasten": "C1 toolkit"
+  "C1-Werkzeugkasten": "C1 toolkit",
+  "Grammatik-Pfad": "Grammar path"
  },
  "topics": [
   {
@@ -103,6 +105,230 @@
    "ex": [
     "Roughly 40% of the invoices arrive as PDFs.",
     "We need your decision by the end of Q3."
+   ]
+  },
+  {
+   "id": "time-clauses",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Zeitsätze – when, as soon as, until, by the time",
+   "name_en": "Time clauses: when, as soon as, until, by the time",
+   "rule": "Nach when, as soon as, until, before, after und by the time steht bei Zukünftigem das Präsens (oder das Present Perfect), nie „will“. „By the time“ führt oft zu will have + Partizip im Hauptsatz.",
+   "rule_en": "After when, as soon as, until, before, after and by the time, use the present tense (or present perfect) for future meaning, never will. “By the time” often goes with will have + participle in the main clause.",
+   "ex": [
+    "I'll call you as soon as the shipment arrives.",
+    "We won't sign until the legal team has approved the draft."
+   ]
+  },
+  {
+   "id": "cond-alt",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Bedingungen mit unless, as long as, provided that",
+   "name_en": "Conditionals beyond if: unless, as long as, provided that",
+   "rule": "„Unless“ heißt „wenn nicht“, „as long as“ und „provided that“ heißen „solange / unter der Bedingung, dass“. „Otherwise“ nennt die Folge, wenn die Bedingung fehlt; „but for“ meint „ohne“ im Rückblick. Nach diesen Wörtern steht kein „will“.",
+   "rule_en": "“Unless” means “if not”, “as long as” and “provided that” mean “on condition that”. “Otherwise” names the result if the condition fails; “but for” means “without” in hindsight. No will after these words.",
+   "ex": [
+    "We'll miss the deadline unless we hire extra staff.",
+    "You can use the car as long as you return it by Friday."
+   ]
+  },
+  {
+   "id": "passive-plus",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Passiv erweitert – Modalverben, Perfekt, -ing, „is said to“",
+   "name_en": "Passive extended: modals, perfect, -ing, “is said to”",
+   "rule": "Das Passiv gibt es auch mit Modalverben (must be signed), im Perfekt (has been signed), als Gerundium (being asked) und als persönliche Konstruktion („The CEO is said to resign“). So bleibt der Handelnde unwichtig oder unbekannt.",
+   "rule_en": "The passive also works with modals (must be signed), in the perfect (has been signed), as a gerund (being asked) and in personal constructions (“The CEO is said to resign”). The doer stays unimportant or unknown.",
+   "ex": [
+    "The contract must be signed before Friday.",
+    "The company is said to have lost millions last year."
+   ]
+  },
+  {
+   "id": "report-verbs",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Berichtsverben – suggest, admit, insist, advise, recommend",
+   "name_en": "Reporting verbs: suggest, admit, insist, advise, recommend",
+   "rule": "Jedes Berichtsverb hat sein festes Muster: suggest / recommend + -ing oder that-Satz, admit / deny + -ing, insist on + -ing, advise / warn + Person + to-Infinitiv. Man darf die Muster nicht mischen.",
+   "rule_en": "Each reporting verb has its own pattern: suggest / recommend + -ing or that-clause, admit / deny + -ing, insist on + -ing, advise / warn + person + to-infinitive. The patterns cannot be mixed.",
+   "ex": [
+    "She suggested moving the meeting to Thursday.",
+    "My lawyer advised me not to sign the document."
+   ]
+  },
+  {
+   "id": "questions",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Fragen – indirekte Fragen, Frageanhängsel, Subjektfragen",
+   "name_en": "Questions: indirect questions, question tags, subject questions",
+   "rule": "In indirekten Fragen steht normale Satzstellung (Could you tell me where the room is?). Frageanhängsel kehren die Polarität um (isn't it?). Fragt man nach dem Subjekt, steht kein „do“ (Who called?).",
+   "rule_en": "In indirect questions use normal word order (Could you tell me where the room is?). Question tags reverse the polarity (isn't it?). Subject questions use no do (Who called?).",
+   "ex": [
+    "Could you tell me where the finance department is?",
+    "Who called me while I was in the meeting?"
+   ]
+  },
+  {
+   "id": "modals-advice",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Modalverben für Ratschläge – should, ought to, had better, need to",
+   "name_en": "Modals for advice: should, ought to, had better, need to",
+   "rule": "„Should“ und „ought to“ raten freundlich, „had better“ warnt mit Folgen, „must“ und „have to“ drücken Pflicht aus, „don't have to“ heißt „nicht nötig“. Im Beruf wählt man die Stärke nach Rolle und Höflichkeit.",
+   "rule_en": "“Should” and “ought to” advise gently, “had better” warns with consequences, “must” and “have to” express obligation, “don't have to” means “not necessary”. At work you choose strength by role and politeness.",
+   "ex": [
+    "You should call the client before noon.",
+    "You had better tell your manager today."
+   ]
+  },
+  {
+   "id": "verb-patterns",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Verb + to-Infinitiv oder -ing",
+   "name_en": "Verb patterns: to-infinitive or -ing",
+   "rule": "Manche Verben ändern ihre Bedeutung je nach Form: remember doing = sich erinnern, dass man etwas tat; remember to do = daran denken. Ebenso stop, try und regret. Nach look forward to, avoid und mind steht immer -ing.",
+   "rule_en": "Some verbs change meaning with the form: remember doing = recall having done; remember to do = not forget. The same holds for stop, try and regret. After look forward to, avoid and mind always use -ing.",
+   "ex": [
+    "Please remember to send the report before you leave.",
+    "I look forward to meeting you at the conference."
+   ]
+  },
+  {
+   "id": "mandative",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Mandativ-Subjunctiv – suggest that he be …",
+   "name_en": "The mandative subjunctive: insist that he be …",
+   "rule": "Nach Verben wie suggest, insist, demand, recommend und Ausdrücken wie „It is essential / vital / important that“ steht im formellen (US-)Englisch die Grundform: „I suggest that she call“, „It is essential that he be present“.",
+   "rule_en": "After verbs like suggest, insist, demand, recommend and phrases like “It is essential / vital / important that”, formal (US) English uses the base form: “I suggest that she call”, “It is essential that he be present”.",
+   "ex": [
+    "The board insists that he leave the project immediately.",
+    "It is essential that every employee complete the training."
+   ]
+  },
+  {
+   "id": "countable",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Zählbar und unzählbar",
+   "name_en": "Countable and uncountable nouns",
+   "rule": "„advice“, „information“, „feedback“ und „furniture“ sind unzählbar: kein „-s“, kein „a/an“, dazu „much“, „a little“, „some“. Zählbares nimmt „many“ und „a few“.",
+   "rule_en": "“Advice”, “information”, “feedback” and “furniture” are uncountable: no -s, no a/an, but much, a little, some. Countable nouns take many and a few.",
+   "ex": [
+    "I need some information about the contract.",
+    "How many meetings do we have this week?"
+   ]
+  },
+  {
+   "id": "prep-noun",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Präpositionen nach Nomen und Adjektiv",
+   "name_en": "Prepositions after nouns and adjectives",
+   "rule": "Viele Nomen und Adjektive haben eine feste Präposition: „reason for“, „increase in“, „interested in“, „responsible for“. Sie lässt sich selten wörtlich aus dem Deutschen ableiten.",
+   "rule_en": "Many nouns and adjectives take a fixed preposition: reason for, increase in, interested in, responsible for. It can rarely be translated literally from German.",
+   "ex": [
+    "There was a sharp increase in demand.",
+    "She is responsible for the Munich office."
+   ]
+  },
+  {
+   "id": "prep-time",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Zeitpräpositionen",
+   "name_en": "Prepositions of time",
+   "rule": "„at“ für Uhrzeiten, „on“ für Tage, „in“ für Monate und Jahre. „for“ nennt die Dauer, „since“ den Beginn; „by“ ist die Frist, „until“ der Endpunkt, „within“ der Zeitrahmen.",
+   "rule_en": "“At” for clock times, “on” for days, “in” for months and years. “For” gives the duration, “since” the start; “by” is a deadline, “until” an end point, “within” a time frame.",
+   "ex": [
+    "Please reply by Friday at the latest.",
+    "We've worked together since 2020."
+   ]
+  },
+  {
+   "id": "compound-mod",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Zusammengesetzte Modifikatoren und Adjektivreihenfolge",
+   "name_en": "Compound modifiers and adjective order",
+   "rule": "Vor dem Nomen stehen Maße im Singular mit Bindestrich: „a 10-page report“. Mehrere Adjektive folgen einer festen Reihenfolge: Meinung, Größe, Alter, Farbe, Herkunft, Stoff.",
+   "rule_en": "Before a noun, measurements stay singular with a hyphen: “a 10-page report”. Several adjectives follow a fixed order: opinion, size, age, color, origin, material.",
+   "ex": [
+    "We signed a three-year contract.",
+    "She bought a new black German laptop."
+   ]
+  },
+  {
+   "id": "phrasal-syntax",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Phrasal Verbs: Stellung",
+   "name_en": "Phrasal verbs: word order",
+   "rule": "Bei trennbaren Phrasal Verbs steht ein Pronomen immer in der Mitte: „look it over“. Untrennbare und Drei-Wort-Verben bleiben zusammen: „look forward to“, „put up with“.",
+   "rule_en": "With separable phrasal verbs, a pronoun always goes in the middle: “look it over”. Inseparable and three-word verbs stay together: “look forward to”, “put up with”.",
+   "ex": [
+    "Could you look it over before we send it?",
+    "I can't put up with these delays."
+   ]
+  },
+  {
+   "id": "word-order",
+   "group": "Grammatik-Pfad",
+   "level": "C1",
+   "p0": 0.45,
+   "name": "Satzstellung und Inversion",
+   "name_en": "Word order and inversion",
+   "rule": "Ort steht meist vor Zeit („in Munich tomorrow“). Nach verneinenden Einleitungen wie „never“, „rarely“, „not only“ folgt die Frage-Stellung: „Rarely have we seen …“.",
+   "rule_en": "Place usually comes before time (“in Munich tomorrow”). After negative openers like never, rarely and not only, question word order follows: “Rarely have we seen …”.",
+   "ex": [
+    "Never have we seen such a strong response.",
+    "We will meet in Berlin next week."
+   ]
+  },
+  {
+   "id": "linkers",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Konnektoren: Satzbau und Zeichensetzung",
+   "name_en": "Linkers: structure and punctuation",
+   "rule": "„although“ steht vor einem Satz, „despite/in spite of“ vor Nomen oder -ing. „however“ und „therefore“ brauchen Punkt oder Semikolon davor und Komma danach, „whereas“ und „while“ verbinden Gegensätze.",
+   "rule_en": "“Although” goes before a clause, “despite/in spite of” before a noun or -ing. “However” and “therefore” need a period or semicolon before and a comma after; “whereas” and “while” link contrasts.",
+   "ex": [
+    "Although it was late, we kept working.",
+    "Sales rose; however, profits fell."
+   ]
+  },
+  {
+   "id": "comparison",
+   "group": "Grammatik-Pfad",
+   "level": "B2",
+   "p0": 0.45,
+   "name": "Vergleiche",
+   "name_en": "Comparisons",
+   "rule": "„the more … the more“ verknüpft zwei Entwicklungen. „as … as“ drückt Gleichheit aus, „than“ den Unterschied. „far“, „much“ und „slightly“ verstärken oder mildern den Komparativ.",
+   "rule_en": "“The more … the more” links two developments. “As … as” expresses equality, “than” a difference. “Far”, “much” and “slightly” strengthen or soften the comparative.",
+   "ex": [
+    "The more we practice, the better we get.",
+    "Their offer is slightly cheaper than ours."
    ]
   }
  ],
@@ -706,6 +932,1446 @@
      ]
     }
    ]
+  },
+  "time-clauses": {
+   "core": [
+    "Zeitsätze mit when, as soon as, until, before, after und by the time stehen im Präsens oder Present Perfect, auch wenn es um die Zukunft geht.",
+    "Time clauses with when, as soon as, until, before, after and by the time take the present simple or present perfect, even when the meaning is future."
+   ],
+   "why": [
+    "Im Deutschen sagt man „Wenn ich ankomme, rufe ich an“ ohne Futur. Im Englischen ist „will“ im Zeitsatz ein klarer Fehler, der im Berufsalltag sofort auffällt.",
+    "German says “Wenn ich ankomme, rufe ich an” without a future form. In English, will inside the time clause is a clear error that stands out at work."
+   ],
+   "contrast": [
+    "Das Deutsche macht den Fehler leicht: „Ich rufe an, wenn ich ankommen werde“ klingt gestelzt, wird aber manchmal wörtlich übersetzt. Auf Englisch ist nur das Präsens richtig.",
+    "German makes the slip easy: “wenn ich ankommen werde” sounds stilted but is sometimes translated word for word. In English only the present is correct."
+   ],
+   "steps": [
+    [
+     "Future-Signal erkennen: when, as soon as, until, before, after, by the time.",
+     "Den Zeitsatz ins Präsens setzen: „as soon as it arrives“.",
+     "Ist die Handlung dann schon abgeschlossen, Present Perfect wählen: „after we have finished“.",
+     "„Will“ gehört nur in den Hauptsatz."
+    ],
+    [
+     "Spot the time word: when, as soon as, until, before, after, by the time.",
+     "Put the time clause in the present: “as soon as it arrives”.",
+     "If the action will already be complete, use present perfect: “after we have finished”.",
+     "Will belongs only in the main clause."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Präsens",
+      "Present simple"
+     ],
+     "when / as soon as + present simple",
+     "I'll text you when I get home."
+    ],
+    [
+     [
+      "Present Perfect",
+      "Present perfect"
+     ],
+     "after / once / until + present perfect",
+     "We'll start once everyone has arrived."
+    ],
+    [
+     [
+      "Abgeschlossen",
+      "Completed"
+     ],
+     "By the time + present, will have + participle",
+     "By the time you read this, I'll have left."
+    ],
+    [
+     [
+      "Verneint",
+      "Negated"
+     ],
+     "won't … until + present",
+     "We won't sign until they send the draft."
+    ]
+   ],
+   "signals": [
+    [
+     "as soon as / when",
+     [
+      "sobald / wenn",
+      "as soon as / when"
+     ]
+    ],
+    [
+     "until / by the time",
+     [
+      "bis / bis dahin",
+      "until / by then"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "I'll call you when I will arrive at the airport.",
+     "good": "I'll call you when I arrive at the airport.",
+     "why": [
+      "Nach „when“ steht das Präsens, nicht „will“.",
+      "After “when”, use the present, not will."
+     ]
+    },
+    {
+     "bad": "We'll start as soon as the meeting will be over.",
+     "good": "We'll start as soon as the meeting is over.",
+     "why": [
+      "Auch nach „as soon as“ steht das Präsens.",
+      "After “as soon as” the present is also required."
+     ]
+    }
+   ]
+  },
+  "cond-alt": {
+   "core": [
+    "unless = if … not, as long as / provided that = nur wenn, otherwise = sonst, but for = ohne (mit Blick zurück). Nach den Bindewörtern steht das Präsens.",
+    "unless = if … not, as long as / provided that = only if, otherwise = or else, but for = without (looking back). After the conjunctions, use the present."
+   ],
+   "why": [
+    "Diese Wörter machen Bedingungen präziser als „if“: Sie zeigen, ob etwas Pflicht, Ausnahme oder Dank ist. Das klingt in Verträgen und Absprachen professionell.",
+    "These words make conditions more precise than “if”: they show whether something is a requirement, an exception or a credit. That sounds professional in contracts and agreements."
+   ],
+   "contrast": [
+    "„Unless“ hat die Verneinung schon in sich. Deutsche setzen oft ein zweites „not“: „Unless you don't sign“ meint dann das Gegenteil dessen, was gemeint ist.",
+    "“Unless” already contains the negation. Germans often add a second “not”: “Unless you don't sign” then says the opposite of what was meant."
+   ],
+   "steps": [
+    [
+     "Die Bedingung als Wunsch oder Ausnahme erkennen.",
+     "Passendes Wort wählen: unless (Ausnahme), as long as / provided that (Bedingung), otherwise (Folge), but for (Dank).",
+     "Nach unless, as long as, provided that das Präsens verwenden.",
+     "Bei „unless“ keine zusätzliche Verneinung setzen."
+    ],
+    [
+     "Decide whether the condition is an exception, a requirement or a credit.",
+     "Choose the word: unless (exception), as long as / provided that (condition), otherwise (result), but for (credit).",
+     "Use the present after unless, as long as and provided that.",
+     "Do not add a second negation after unless."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Ausnahme",
+      "Exception"
+     ],
+     "unless + present",
+     "We'll cancel unless enough people sign up."
+    ],
+    [
+     [
+      "Bedingung",
+      "Condition"
+     ],
+     "as long as / provided (that) + present",
+     "You can leave early provided that you finish the report."
+    ],
+    [
+     [
+      "Folge",
+      "Consequence"
+     ],
+     "…. Otherwise, + clause",
+     "Send it today. Otherwise, we can't pay you this month."
+    ],
+    [
+     [
+      "Dank",
+      "Credit"
+     ],
+     "But for + noun, would have + participle",
+     "But for your help, we would have failed."
+    ]
+   ],
+   "signals": [
+    [
+     "unless",
+     [
+      "wenn nicht",
+      "if … not"
+     ]
+    ],
+    [
+     "provided that / as long as",
+     [
+      "unter der Bedingung, dass / solange",
+      "on condition that / for as long as"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Unless you don't sign today, the offer expires.",
+     "good": "Unless you sign today, the offer expires.",
+     "why": [
+      "„Unless“ bedeutet schon „wenn nicht“. Eine zweite Verneinung dreht den Sinn um.",
+      "“Unless” already means “if not”. A second negation reverses the meaning."
+     ]
+    },
+    {
+     "bad": "As long as it will not rain, we'll hold the event outside.",
+     "good": "As long as it doesn't rain, we'll hold the event outside.",
+     "why": [
+      "Nach „as long as“ steht das Präsens, nicht „will“.",
+      "After “as long as” use the present, not will."
+     ]
+    }
+   ]
+  },
+  "passive-plus": {
+   "core": [
+    "Passiv erweitert: modal + be + Partizip, have been + Partizip, being + Partizip und „is said / believed / thought to …“.",
+    "Extended passive: modal + be + participle, have been + participle, being + participle and “is said / believed / thought to …”."
+   ],
+   "why": [
+    "Im Beruf zählt oft das Ergebnis, nicht die Person: „The invoices must be sent by noon.“ Persönliche Passive wie „is said to“ klingen sachlich und vorsichtig bei Gerüchten.",
+    "At work the result often matters more than the person: “The invoices must be sent by noon.” Personal passives like “is said to” sound neutral and careful with rumors."
+   ],
+   "contrast": [
+    "Das deutsche „man sagt, dass …“ wird im Englischen gern zu „It is said that …“ oder knapper zu „X is said to …“. Das Passiv mit „werden“ deckt im Englischen mehrere Formen ab.",
+    "German “man sagt, dass …” becomes “It is said that …” or, more tightly, “X is said to …”. The German “werden” passive covers several English forms."
+   ],
+   "steps": [
+    [
+     "Aktiven Satz mit Modal, Perfekt oder -ing erkennen.",
+     "Objekt nach vorn, Form von be anpassen: must be / has been / being.",
+     "Das Verb als dritte Form (Partizip) setzen: sent, signed, written.",
+     "Bei Gerüchten: Subjekt + is said / believed to + Infinitiv (bei Vergangenem to have + Partizip)."
+    ],
+    [
+     "Spot the active sentence with a modal, perfect or -ing.",
+     "Move the object first and adapt be: must be / has been / being.",
+     "Add the past participle: sent, signed, written.",
+     "For rumors: subject + is said / believed to + infinitive (for the past, to have + participle)."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Modal",
+      "Modal"
+     ],
+     "modal + be + participle",
+     "The files must be sent today."
+    ],
+    [
+     [
+      "Perfekt",
+      "Perfect"
+     ],
+     "has / have been + participle",
+     "The offer has been accepted."
+    ],
+    [
+     [
+      "Gerundium",
+      "Gerund"
+     ],
+     "being + participle",
+     "I dislike being interrupted."
+    ],
+    [
+     [
+      "Persönlich",
+      "Personal"
+     ],
+     "is said / believed to + infinitive",
+     "He is believed to be planning a merger."
+    ]
+   ],
+   "signals": [
+    [
+     "is said / believed to",
+     [
+      "angeblich, man sagt",
+      "reportedly, people say"
+     ]
+    ],
+    [
+     "must be / has to be + Partizip",
+     [
+      "muss … werden",
+      "has to be done"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "The documents must be send to the client by noon.",
+     "good": "The documents must be sent to the client by noon.",
+     "why": [
+      "Das Passiv braucht das Partizip: „sent“, nicht „send“.",
+      "The passive needs the participle: “sent”, not “send”."
+     ]
+    },
+    {
+     "bad": "Our offer has been accepted yesterday.",
+     "good": "Our offer was accepted yesterday.",
+     "why": [
+      "Mit „yesterday“ steht die Vergangenheit (was accepted), nicht das Perfekt.",
+      "With “yesterday” use the simple past (was accepted), not the perfect."
+     ]
+    }
+   ]
+  },
+  "report-verbs": {
+   "core": [
+    "Berichtsverben verlangen feste Konstruktionen: suggest / recommend / admit / deny + -ing, insist on + -ing, advise / warn / offer + (Person) + to-Infinitiv.",
+    "Reporting verbs need fixed patterns: suggest / recommend / admit / deny + -ing, insist on + -ing, advise / warn / offer + (person) + to-infinitive."
+   ],
+   "why": [
+    "Im Beruf berichtet man ständig, was jemand empfohlen, zugegeben oder verlangt hat. Das richtige Muster zeigt Präzision und vermeidet typische Fehlkonstruktionen.",
+    "At work you constantly report what someone recommended, admitted or demanded. The right pattern shows precision and avoids typical faulty constructions."
+   ],
+   "contrast": [
+    "Deutsch erlaubt „Er schlug mir vor, zu gehen“. Englisch sagt nicht „suggested me to go“, sondern „suggested that I go“ oder „suggested going“.",
+    "German allows “Er schlug mir vor, zu gehen”. English does not say “suggested me to go”, but “suggested that I go” or “suggested going”."
+   ],
+   "steps": [
+    [
+     "Das Verb bestimmen: suggest, admit, insist, advise, recommend.",
+     "Muster wählen: -ing (suggest, admit, deny), on + -ing (insist), Person + to (advise, warn, tell).",
+     "Bei Verneinung: not vor to (not to sign) oder not vor -ing (not signing).",
+     "Bei suggest + Person immer einen that-Satz bauen."
+    ],
+    [
+     "Identify the verb: suggest, admit, insist, advise, recommend.",
+     "Choose the pattern: -ing (suggest, admit, deny), on + -ing (insist), person + to (advise, warn, tell).",
+     "For negatives: not before to (not to sign) or not before -ing (not signing).",
+     "With suggest + a person, always build a that-clause."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Vorschlagen",
+      "Suggest"
+     ],
+     "suggest + -ing / that + subject + base form",
+     "He suggested postponing the launch."
+    ],
+    [
+     [
+      "Zugeben",
+      "Admit"
+     ],
+     "admit + -ing",
+     "She admitted being late."
+    ],
+    [
+     [
+      "Bestehen",
+      "Insist"
+     ],
+     "insist on + -ing",
+     "They insisted on seeing the contract."
+    ],
+    [
+     [
+      "Raten",
+      "Advise"
+     ],
+     "advise + person + (not) to + verb",
+     "She advised us not to wait."
+    ]
+   ],
+   "signals": [
+    [
+     "suggest / recommend",
+     [
+      "vorschlagen / empfehlen",
+      "propose / advise"
+     ]
+    ],
+    [
+     "advise + Person + to",
+     [
+      "jemandem raten zu",
+      "tell someone to"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "He suggested me to take a different route.",
+     "good": "He suggested that I take a different route.",
+     "why": [
+      "Nach „suggest“ steht nie „Person + to“, sondern ein that-Satz oder -ing.",
+      "After “suggest” there is never “person + to”, but a that-clause or -ing."
+     ]
+    },
+    {
+     "bad": "She admitted to be late for the meeting.",
+     "good": "She admitted being late for the meeting.",
+     "why": [
+      "Nach „admit“ steht -ing, kein to-Infinitiv.",
+      "After “admit” use -ing, not a to-infinitive."
+     ]
+    }
+   ]
+  },
+  "questions": {
+   "core": [
+    "Indirekte Frage: Einleitung + Wort + Subjekt + Verb ohne do. Tag: Gegenteil von Aussage. Subjektfrage: Fragewort + Verb, kein do.",
+    "Indirect question: lead-in + wh-word + subject + verb with no do. Tag: opposite of the statement. Subject question: wh-word + verb, no do."
+   ],
+   "why": [
+    "Höfliche Anfragen im Beruf beginnen mit „Could you tell me …“. Dann braucht man normale Satzstellung. Tags laden zur Bestätigung ein und lockern das Gespräch auf.",
+    "Polite requests at work start with “Could you tell me …”. This needs normal word order. Tags invite confirmation and relax the conversation."
+   ],
+   "contrast": [
+    "Deutsch erlaubt „Weißt du, wo ist das Büro?“ nur umgangssprachlich; Englisch verlangt „where the office is“. Das deutsche „nicht wahr?“ ist im Englischen je nach Satz is it, don't you, shall we.",
+    "German allows “Weißt du, wo ist das Büro?” only colloquially; English requires “where the office is”. German “nicht wahr?” varies in English: is it, don't you, shall we."
+   ],
+   "steps": [
+    [
+     "Direkte Frage in Aussageform umbauen: where the office is.",
+     "Mit Could you tell me / Do you know / I wonder einleiten.",
+     "Für ja/nein-Fragen if oder whether nutzen.",
+     "Beim Tag Hilfsverb und Polarität spiegeln; bei Let's: shall we?"
+    ],
+    [
+     "Rebuild the direct question as a statement: where the office is.",
+     "Introduce it with Could you tell me / Do you know / I wonder.",
+     "For yes/no questions use if or whether.",
+     "For tags mirror the auxiliary and flip polarity; after Let's use shall we?"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Indirekt",
+      "Indirect"
+     ],
+     "Could you tell me + wh-word + subject + verb",
+     "Could you tell me where the meeting is?"
+    ],
+    [
+     [
+      "Ja/Nein",
+      "Yes/no"
+     ],
+     "I wonder if / whether + subject + verb",
+     "I wonder whether the client has replied."
+    ],
+    [
+     [
+      "Tag",
+      "Tag"
+     ],
+     "positive statement, negative tag (and vice versa)",
+     "You haven't seen my notes, have you?"
+    ],
+    [
+     [
+      "Subjektfrage",
+      "Subject question"
+     ],
+     "Who / What + verb (no do)",
+     "Who approved the budget?"
+    ]
+   ],
+   "signals": [
+    [
+     "Could you tell me …?",
+     [
+      "höfliche Frage",
+      "polite question"
+     ]
+    ],
+    [
+     "…, isn't it? / …, do you?",
+     [
+      "Bestätigung erfragen",
+      "asking for confirmation"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Can you tell me where is the finance department?",
+     "good": "Can you tell me where the finance department is?",
+     "why": [
+      "In der indirekten Frage steht das Subjekt vor dem Verb.",
+      "In an indirect question the subject comes before the verb."
+     ]
+    },
+    {
+     "bad": "Who did call me while I was in the meeting?",
+     "good": "Who called me while I was in the meeting?",
+     "why": [
+      "Bei Fragen nach dem Subjekt steht kein „did“.",
+      "In questions about the subject, there is no “did”."
+     ]
+    }
+   ]
+  },
+  "modals-advice": {
+   "core": [
+    "should / ought to = Rat, had better = Rat mit Warnung, must / have to = Pflicht, mustn't = Verbot, don't have to / needn't = nicht nötig.",
+    "should / ought to = advice, had better = advice with a warning, must / have to = obligation, mustn't = prohibition, don't have to / needn't = not necessary."
+   ],
+   "why": [
+    "Die falsche Stärke wirkt im Beruf schnell unhöflich oder unklar. „You must“ klingt wie ein Befehl, „you could“ wie eine Option.",
+    "The wrong strength quickly sounds rude or unclear at work. “You must” sounds like an order, “you could” like an option."
+   ],
+   "contrast": [
+    "Deutsch nutzt „müssen“ und „sollen“ für fast alles. Aber „mustn't“ ist ein Verbot, „don't have to“ nur „nicht nötig“. Das ist eine häufige Falle.",
+    "German uses “müssen” and “sollen” for almost everything. But “mustn't” is a prohibition while “don't have to” only means “not necessary”. That is a common trap."
+   ],
+   "steps": [
+    [
+     "Entscheiden: Rat, Warnung, Pflicht oder Verbot?",
+     "Stärke wählen: could (Option) < should / ought to (Rat) < had better (Warnung) < must (Pflicht).",
+     "Nach allen Modalverben steht die Grundform ohne to (außer ought to).",
+     "Bei hoher Stellung des Gegenübers abschwächen: Perhaps you could …"
+    ],
+    [
+     "Decide: advice, warning, obligation or prohibition?",
+     "Choose the strength: could (option) < should / ought to (advice) < had better (warning) < must (obligation).",
+     "After all modals use the base form without to (except ought to).",
+     "With senior colleagues soften: Perhaps you could …"
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Rat",
+      "Advice"
+     ],
+     "should / ought to + base form",
+     "You should double-check the figures."
+    ],
+    [
+     [
+      "Warnung",
+      "Warning"
+     ],
+     "had better (not) + base form",
+     "You'd better call him now."
+    ],
+    [
+     [
+      "Pflicht",
+      "Obligation"
+     ],
+     "must / have to + base form",
+     "Visitors must wear a badge."
+    ],
+    [
+     [
+      "Nicht nötig",
+      "Not necessary"
+     ],
+     "don't have to / needn't + base form",
+     "You needn't bring a laptop."
+    ]
+   ],
+   "signals": [
+    [
+     "had better",
+     [
+      "besser du … sonst",
+      "you'd better … or else"
+     ]
+    ],
+    [
+     "don't have to / needn't",
+     [
+      "muss nicht",
+      "not necessary"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "You should to call the client before noon.",
+     "good": "You should call the client before noon.",
+     "why": [
+      "Nach „should“ steht die Grundform ohne to.",
+      "After “should” use the base form without to."
+     ]
+    },
+    {
+     "bad": "You mustn't come to the meeting if you don't want to; it's optional.",
+     "good": "You don't have to come to the meeting if you don't want to; it's optional.",
+     "why": [
+      "„Mustn't“ ist ein Verbot. „Nicht nötig“ heißt „don't have to“.",
+      "“Mustn't” is a prohibition. “Not necessary” is “don't have to”."
+     ]
+    }
+   ]
+  },
+  "verb-patterns": {
+   "core": [
+    "Manche Verben verlangen -ing (avoid, mind, look forward to), andere to (decide, hope); bei remember, stop, try, regret ändert die Form die Bedeutung.",
+    "Some verbs require -ing (avoid, mind, look forward to), others to (decide, hope); with remember, stop, try, regret the form changes the meaning."
+   ],
+   "why": [
+    "Die falsche Form verändert den Sinn: „I stopped to call“ (ich hielt an) ist etwas anderes als „I stopped calling“ (ich hörte auf). Im Beruf kann das Missverständnisse auslösen.",
+    "The wrong form changes the sense: “I stopped to call” (I paused in order to call) differs from “I stopped calling” (I quit). At work that can cause confusion."
+   ],
+   "contrast": [
+    "Deutsch hat meist „zu + Infinitiv“. Englisch trennt: „I'm looking forward to meeting you“ (to ist hier eine Präposition), nicht „to meet“.",
+    "German mostly uses “zu + Infinitiv”. English separates them: “I'm looking forward to meeting you” (to is a preposition here), not “to meet”."
+   ],
+   "steps": [
+    [
+     "Verb prüfen: feste -ing-Verben (avoid, mind, enjoy, look forward to) oder feste to-Verben (decide, plan, hope).",
+     "Bei remember, stop, try, regret die Bedeutung prüfen.",
+     "Vergangenes Erinnern = remember + -ing, Pflicht in der Zukunft = remember + to.",
+     "Nach Präpositionen steht immer -ing."
+    ],
+    [
+     "Check the verb: fixed -ing verbs (avoid, mind, enjoy, look forward to) or fixed to-verbs (decide, plan, hope).",
+     "With remember, stop, try, regret check the meaning.",
+     "Remembering the past = remember + -ing, a future duty = remember + to.",
+     "After prepositions always use -ing."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Erinnern",
+      "Remember"
+     ],
+     "remember + -ing / remember + to + verb",
+     "I remember locking the door."
+    ],
+    [
+     [
+      "Aufhören",
+      "Stop"
+     ],
+     "stop + -ing / stop + to + verb",
+     "She stopped checking emails on holiday."
+    ],
+    [
+     [
+      "Ausprobieren",
+      "Try"
+     ],
+     "try + -ing / try + to + verb",
+     "Try turning it off and on again."
+    ],
+    [
+     [
+      "Bedauern",
+      "Regret"
+     ],
+     "regret + -ing / regret + to + verb",
+     "We regret to inform you …"
+    ]
+   ],
+   "signals": [
+    [
+     "look forward to + -ing",
+     [
+      "sich freuen auf",
+      "to anticipate"
+     ]
+    ],
+    [
+     "remember + to / -ing",
+     [
+      "daran denken / sich erinnern",
+      "not forget / recall"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "I'm looking forward to meet you next week.",
+     "good": "I'm looking forward to meeting you next week.",
+     "why": [
+      "„To“ ist hier eine Präposition, danach folgt -ing.",
+      "“To” is a preposition here, so -ing follows."
+     ]
+    },
+    {
+     "bad": "We decided discussing the budget next week.",
+     "good": "We decided to discuss the budget next week.",
+     "why": [
+      "Nach „decide“ steht der to-Infinitiv.",
+      "After “decide” the to-infinitive is needed."
+     ]
+    }
+   ]
+  },
+  "mandative": {
+   "core": [
+    "Nach demand, insist, suggest, recommend und it is essential / vital / important that steht die Grundform (be, call, sign), ohne -s und ohne Zeitform.",
+    "After demand, insist, suggest, recommend and it is essential / vital / important that use the base form (be, call, sign), with no -s and no tense."
+   ],
+   "why": [
+    "Der Mandativ klingt formell und präzise, besonders in Verträgen, Richtlinien und Berichten. Er zeigt, dass eine Forderung besteht, kein Faktum.",
+    "The mandative sounds formal and precise, especially in contracts, policies and reports. It shows a requirement rather than a fact."
+   ],
+   "contrast": [
+    "Das Deutsche nutzt Konjunktiv I oder „soll“. Im US-Englisch bleibt das Verb einfach in der Grundform; im britischen Englisch steht oft „should“. Beides ist korrekt, aber „he resigns“ ist hier falsch.",
+    "German uses subjunctive I or “soll”. US English simply uses the base form; British English often uses “should”. Both are correct, but “he resigns” is wrong here."
+   ],
+   "steps": [
+    [
+     "Auslöser erkennen: demand, insist, suggest, recommend, essential, vital, important.",
+     "Nach „that“ die Grundform setzen: leave, call, be.",
+     "Bei Verneinung: not vor dem Verb („that he not sign“), nicht „doesn't“.",
+     "Zeitform und -s weglassen: she call, he be."
+    ],
+    [
+     "Spot the trigger: demand, insist, suggest, recommend, essential, vital, important.",
+     "After “that” use the base form: leave, call, be.",
+     "For negatives: not before the verb (“that he not sign”), not “doesn't”.",
+     "Drop tense and -s: she call, he be."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Grundform",
+      "Base form"
+     ],
+     "demand / insist / suggest that + subject + base form",
+     "She insisted that he leave."
+    ],
+    [
+     [
+      "Mit be",
+      "With be"
+     ],
+     "It is essential that + subject + be",
+     "It is essential that she be present."
+    ],
+    [
+     [
+      "Passiv",
+      "Passive"
+     ],
+     "that + subject + be + participle",
+     "He demanded that the report be corrected."
+    ],
+    [
+     [
+      "Verneint",
+      "Negated"
+     ],
+     "that + subject + not + base form",
+     "We recommend that he not attend."
+    ]
+   ],
+   "signals": [
+    [
+     "It is essential that … be",
+     [
+      "Es ist wesentlich, dass …",
+      "formal requirement"
+     ]
+    ],
+    [
+     "suggest / demand that … + Grundform",
+     [
+      "vorschlagen / verlangen, dass",
+      "propose / require that"
+     ]
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "The committee demands that he resigns immediately.",
+     "good": "The committee demands that he resign immediately.",
+     "why": [
+      "Nach „demand that“ steht die Grundform ohne -s.",
+      "After “demand that” use the base form without -s."
+     ]
+    },
+    {
+     "bad": "It is important that she is present at the meeting.",
+     "good": "It is important that she be present at the meeting.",
+     "why": [
+      "Nach „It is important that“ steht in formellem Englisch „be“.",
+      "After “It is important that” formal English uses “be”."
+     ]
+    }
+   ]
+  },
+  "countable": {
+   "core": [
+    "Unzählbare Nomen (advice, information, feedback, equipment) haben keinen Plural und kein „a“; mit „much/a little“ statt „many/a few“.",
+    "Uncountable nouns (advice, information, feedback, equipment) have no plural and no “a”; use much/a little instead of many/a few."
+   ],
+   "why": [
+    "Im Deutschen sind „Rat“, „Information“ und „Möbel“ zählbar. Im Englischen sind sie es nicht – das führt zu „advices“ und „informations“.",
+    "In German, “Rat”, “Information” and “Möbel” are countable. In English they are not, which leads to “advices” and “informations”."
+   ],
+   "contrast": [
+    "Im Deutschen sagt man „ein Rat, zwei Informationen“. Englisch braucht dafür ein Mengenwort: „a piece of advice“.",
+    "German says “ein Rat, zwei Informationen”. English needs a unit word: “a piece of advice”."
+   ],
+   "steps": [
+    [
+     "Ist das Nomen zählbar? Kann ich „two …“ davor sagen?",
+     "Wenn nicht: kein „-s“, kein „a/an“, Verb im Singular.",
+     "Menge mit „much“, „a little“, „some“ ausdrücken.",
+     "Einzelstück: „a piece of …“."
+    ],
+    [
+     "Is the noun countable? Can I say “two …” before it?",
+     "If not: no -s, no a/an, singular verb.",
+     "Express quantity with much, a little, some.",
+     "Single item: “a piece of …”."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Zählbar",
+      "Countable"
+     ],
+     "many / a few / several + plural",
+     "How many people attended?"
+    ],
+    [
+     [
+      "Unzählbar",
+      "Uncountable"
+     ],
+     "much / a little / some + singular",
+     "We have little information."
+    ],
+    [
+     [
+      "Einzelstück",
+      "Single item"
+     ],
+     "a piece of + uncountable",
+     "Let me give you a piece of advice."
+    ]
+   ],
+   "signals": [
+    [
+     "advice, information, feedback",
+     "immer unzählbar",
+     "always uncountable"
+    ],
+    [
+     "equipment, furniture, luggage",
+     "Sammelbegriffe, kein Plural",
+     "collective nouns, no plural"
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "She gave me some good advices.",
+     "good": "She gave me some good advice.",
+     "why": [
+      "„advice“ hat keinen Plural.",
+      "“Advice” has no plural."
+     ]
+    },
+    {
+     "bad": "The informations are on our website.",
+     "good": "The information is on our website.",
+     "why": [
+      "„information“ ist unzählbar, das Verb steht im Singular.",
+      "“Information” is uncountable, so the verb is singular."
+     ]
+    }
+   ]
+  },
+  "prep-noun": {
+   "core": [
+    "Nomen und Adjektive hängen an festen Präpositionen: reason for, increase/decrease in, solution to, interested in, responsible for, good at.",
+    "Nouns and adjectives go with fixed prepositions: reason for, increase/decrease in, solution to, interested in, responsible for, good at."
+   ],
+   "why": [
+    "Die falsche Präposition fällt in Berichten und E-Mails sofort auf und wirkt unsicher. Feste Paare sparen Nachdenken.",
+    "The wrong preposition stands out in reports and emails and sounds unsure. Fixed pairs save thinking time."
+   ],
+   "contrast": [
+    "Deutsch sagt „Lösung für“, „Interesse an“, „gut in“. Englisch: „solution to“, „interested in“, „good at“.",
+    "German says “Lösung für”, “Interesse an”, “gut in”. English: “solution to”, “interested in”, “good at”."
+   ],
+   "steps": [
+    [
+     "Welches Nomen oder Adjektiv steht da?",
+     "Feste Präposition aus dem Gedächtnis abrufen, nicht übersetzen.",
+     "Nach der Präposition folgt Nomen oder -ing-Form.",
+     "Neue Paare immer als Block lernen."
+    ],
+    [
+     "Which noun or adjective is it?",
+     "Recall the fixed preposition; don't translate.",
+     "A noun or -ing form follows the preposition.",
+     "Always learn new pairs as a block."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Nomen",
+      "Noun"
+     ],
+     "reason for · increase in · solution to",
+     "What is the reason for the delay?"
+    ],
+    [
+     [
+      "Adjektiv",
+      "Adjective"
+     ],
+     "interested in · responsible for · good at",
+     "He is good at negotiating."
+    ],
+    [
+     [
+      "Mit",
+      "With"
+     ],
+     "familiar with · satisfied with",
+     "I'm familiar with this tool."
+    ]
+   ],
+   "signals": [
+    [
+     "increase / decrease / rise in",
+     "Veränderung in einem Bereich",
+     "change within an area"
+    ],
+    [
+     "solution to / answer to",
+     "Lösung zu einem Problem",
+     "solution to a problem"
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "We need a solution of this problem.",
+     "good": "We need a solution to this problem.",
+     "why": [
+      "Nach „solution“ steht „to“, nicht „of“ oder „for“.",
+      "“Solution” takes “to”, not “of” or “for”."
+     ]
+    },
+    {
+     "bad": "She has a lot of experience on project management.",
+     "good": "She has a lot of experience in project management.",
+     "why": [
+      "„experience in“ für Fachgebiete.",
+      "“Experience in” for fields of work."
+     ]
+    }
+   ]
+  },
+  "prep-time": {
+   "core": [
+    "at + Uhrzeit, on + Tag/Datum, in + Monat/Jahr; for + Dauer, since + Beginn; by = spätestens, until = bis dahin, within = innerhalb.",
+    "at + clock time, on + day/date, in + month/year; for + duration, since + start; by = no later than, until = up to that point, within = inside a period."
+   ],
+   "why": [
+    "Bei Fristen und Terminen entscheidet die Präposition über den Sinn: „by Friday“ und „until Friday“ sind nicht dasselbe.",
+    "In deadlines and appointments the preposition changes the meaning: “by Friday” and “until Friday” are not the same."
+   ],
+   "contrast": [
+    "Deutsch sagt „seit fünf Jahren“ mit Präsens. Englisch: „for five years“ mit Perfekt: „I have worked here for five years.“",
+    "German says “seit fünf Jahren” with the present tense. English uses the perfect: “I have worked here for five years.”"
+   ],
+   "steps": [
+    [
+     "Uhrzeit, Tag oder Monat? at, on oder in wählen.",
+     "Dauer („for“) oder Startpunkt („since“)?",
+     "Frist („by“), Endpunkt („until“) oder Zeitrahmen („within“)?",
+     "Bei „for/since“ meist Present Perfect."
+    ],
+    [
+     "Clock time, day or month? Choose at, on or in.",
+     "Duration (for) or starting point (since)?",
+     "Deadline (by), end point (until) or time frame (within)?",
+     "With for/since, usually the present perfect."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Punkt",
+      "Point"
+     ],
+     "at 9:30 · on Monday · in July",
+     "The call is on Monday at 9:30."
+    ],
+    [
+     [
+      "Dauer",
+      "Duration"
+     ],
+     "for + Dauer · since + Beginn",
+     "We have waited for two weeks."
+    ],
+    [
+     [
+      "Frist",
+      "Deadline"
+     ],
+     "by + Zeitpunkt · within + Frist",
+     "We will reply within 24 hours."
+    ]
+   ],
+   "signals": [
+    [
+     "by / until",
+     "Frist oder Endpunkt",
+     "deadline or end point"
+    ],
+    [
+     "for / since",
+     "Dauer oder Beginn",
+     "duration or start"
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "We have a team meeting at Monday morning.",
+     "good": "We have a team meeting on Monday morning.",
+     "why": [
+      "Mit Wochentagen steht „on“.",
+      "Days take “on”."
+     ]
+    },
+    {
+     "bad": "I'll be on vacation on August.",
+     "good": "I'll be on vacation in August.",
+     "why": [
+      "Mit Monaten steht „in“.",
+      "Months take “in”."
+     ]
+    }
+   ]
+  },
+  "compound-mod": {
+   "core": [
+    "Maßangaben vor dem Nomen: Zahl-Singular-Nomen mit Bindestrich („a five-minute break“). Adjektive: Meinung, Größe, Alter, Farbe, Herkunft, Stoff.",
+    "Measurements before a noun: number-singular noun with a hyphen (“a five-minute break”). Adjectives: opinion, size, age, color, origin, material."
+   ],
+   "why": [
+    "Wer diese Muster beherrscht, klingt präzise und professionell, besonders in Berichten, Angeboten und Verträgen.",
+    "Mastering these patterns sounds precise and professional, especially in reports, offers and contracts."
+   ],
+   "contrast": [
+    "Deutsch sagt „ein Bericht mit zehn Seiten“ oder „ein zehnseitiger Bericht“. Englisch: „a 10-page report“ – nie „a 10-pages report“.",
+    "German says “ein zehnseitiger Bericht”. English: “a 10-page report” – never “a 10-pages report”."
+   ],
+   "steps": [
+    [
+     "Steht eine Maßangabe vor dem Nomen? Dann Singular und Bindestrich.",
+     "Steht sie nach dem Verb? Dann normal: „The report is 10 pages long.“",
+     "Mehrere Adjektive: Meinung vor Größe vor Alter vor Farbe vor Herkunft.",
+     "Nach dem Verb „be“ steht kein Bindestrich: „well known“."
+    ],
+    [
+     "Is a measurement before the noun? Singular and hyphen.",
+     "After the verb? Normal: “The report is 10 pages long.”",
+     "Several adjectives: opinion before size before age before color before origin.",
+     "After “be” no hyphen: “well known”."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Maß",
+      "Measure"
+     ],
+     "Zahl + Singular-Nomen mit Bindestrich",
+     "a two-hour workshop"
+    ],
+    [
+     [
+      "Partizip",
+      "Participle"
+     ],
+     "well-/highly-/user- + Partizip",
+     "a highly skilled engineer"
+    ],
+    [
+     [
+      "Reihenfolge",
+      "Order"
+     ],
+     "Meinung, Größe, Alter, Farbe, Herkunft",
+     "a small modern office"
+    ]
+   ],
+   "signals": [
+    [
+     "a 3-hour / three-year / 10-page",
+     "Zahl + Singular",
+     "number + singular"
+    ],
+    [
+     "well-known / long-term / last-minute",
+     "feste Komposita",
+     "fixed compounds"
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "She presented a five-pages proposal to the board.",
+     "good": "She presented a five-page proposal to the board.",
+     "why": [
+      "Vor dem Nomen bleibt das Maßnomen im Singular.",
+      "Before the noun the measure word stays singular."
+     ]
+    },
+    {
+     "bad": "They rent a modern small office downtown.",
+     "good": "They rent a small modern office downtown.",
+     "why": [
+      "Größe steht vor Alter und Stil.",
+      "Size comes before age and style."
+     ]
+    }
+   ]
+  },
+  "phrasal-syntax": {
+   "core": [
+    "Trennbar: Nomen in der Mitte oder dahinter, Pronomen nur in der Mitte („pick it up“). Drei-Wort-Verben bleiben zusammen und haben ein Objekt danach.",
+    "Separable: noun in the middle or after, pronoun only in the middle (“pick it up”). Three-word verbs stay together and take an object after them."
+   ],
+   "why": [
+    "Phrasal Verbs sind im Berufsalltag allgegenwärtig. Die falsche Stellung klingt sofort unnatürlich.",
+    "Phrasal verbs are everywhere at work. The wrong position sounds unnatural immediately."
+   ],
+   "contrast": [
+    "Deutsch trennt Verben im Hauptsatz auch („ich rufe an“). Englisch trennt nur bestimmte Verben, und nur das Pronomen erzwingt es.",
+    "German also splits verbs in main clauses (“ich rufe an”). English splits only certain verbs, and only a pronoun forces it."
+   ],
+   "steps": [
+    [
+     "Ist das Verb trennbar? Wörterbuch prüfen.",
+     "Ist das Objekt ein Pronomen? Dann in die Mitte: „hand it in“.",
+     "Drei-Wort-Verben (put up with, run out of) bleiben zusammen.",
+     "Zusammen mit dem Objekt als Block lernen."
+    ],
+    [
+     "Is the verb separable? Check a dictionary.",
+     "Is the object a pronoun? Put it in the middle: “hand it in”.",
+     "Three-word verbs (put up with, run out of) stay together.",
+     "Learn them as a block with the object."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Trennbar",
+      "Separable"
+     ],
+     "verb + Nomen + Partikel oder verb + Partikel + Nomen",
+     "turn down the offer / turn the offer down"
+    ],
+    [
+     [
+      "Pronomen",
+      "Pronoun"
+     ],
+     "verb + Pronomen + Partikel",
+     "turn it down"
+    ],
+    [
+     [
+      "Drei Wörter",
+      "Three words"
+     ],
+     "verb + Partikel + Präposition + Objekt",
+     "run out of stock"
+    ]
+   ],
+   "signals": [
+    [
+     "it / them / him",
+     "immer zwischen Verb und Partikel",
+     "always between verb and particle"
+    ],
+    [
+     "up with / out of / look forward to",
+     "bleiben zusammen",
+     "stay together"
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Your package is at reception, so please pick up it after lunch.",
+     "good": "Your package is at reception, so please pick it up after lunch.",
+     "why": [
+      "Das Pronomen steht zwischen Verb und Partikel.",
+      "The pronoun goes between verb and particle."
+     ]
+    },
+    {
+     "bad": "I'm looking forward to see you at the conference.",
+     "good": "I'm looking forward to seeing you at the conference.",
+     "why": [
+      "Nach „look forward to“ folgt eine -ing-Form.",
+      "“Look forward to” is followed by an -ing form."
+     ]
+    }
+   ]
+  },
+  "word-order": {
+   "core": [
+    "Adverb nie zwischen Verb und Objekt; Ort vor Zeit. Nach never, rarely, seldom, hardly, not only, no sooner steht Hilfsverb vor Subjekt (Inversion).",
+    "Never put an adverb between verb and object; place before time. After never, rarely, seldom, hardly, not only, no sooner the auxiliary comes before the subject (inversion)."
+   ],
+   "why": [
+    "Inversion gibt Sätzen Nachdruck und gehört zum gehobenen Stil, etwa in Präsentationen und Berichten.",
+    "Inversion adds emphasis and belongs to a formal style, for example in presentations and reports."
+   ],
+   "contrast": [
+    "Deutsch erlaubt „Er erklärte klar den Plan“. Englisch trennt Verb und Objekt nicht: „He explained the plan clearly.“",
+    "German allows “Er erklärte klar den Plan”. English does not separate verb and object: “He explained the plan clearly.”"
+   ],
+   "steps": [
+    [
+     "Steht ein verneinendes Adverb am Satzanfang? Dann Inversion.",
+     "Hilfsverb vor das Subjekt; fehlt eines, „do/does/did“ ergänzen.",
+     "Verb und Objekt zusammenlassen, Adverb davor oder dahinter.",
+     "Reihenfolge am Satzende: Art und Weise, Ort, Zeit."
+    ],
+    [
+     "Does a negative adverb open the sentence? Use inversion.",
+     "Auxiliary before the subject; if there is none, add do/does/did.",
+     "Keep verb and object together, adverb before or after.",
+     "Order at the end: manner, place, time."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Inversion",
+      "Inversion"
+     ],
+     "Never/Rarely + Hilfsverb + Subjekt",
+     "Rarely do we get such feedback."
+    ],
+    [
+     [
+      "Doppelt",
+      "Paired"
+     ],
+     "Not only did … but … / No sooner had … than …",
+     "No sooner had we left than it rained."
+    ],
+    [
+     [
+      "Ort und Zeit",
+      "Place and time"
+     ],
+     "Ort vor Zeit",
+     "We meet in Munich tomorrow."
+    ]
+   ],
+   "signals": [
+    [
+     "never / rarely / seldom am Anfang",
+     "löst Inversion aus",
+     "triggers inversion"
+    ],
+    [
+     "not only / no sooner / hardly",
+     "Inversion plus „but / than / when“",
+     "inversion plus but / than / when"
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Rarely we get such positive feedback from clients.",
+     "good": "Rarely do we get such positive feedback from clients.",
+     "why": [
+      "Nach „rarely“ am Satzanfang folgt Inversion mit „do“.",
+      "After sentence-initial “rarely” comes inversion with “do”."
+     ]
+    },
+    {
+     "bad": "He explained clearly the plan to the team.",
+     "good": "He explained the plan clearly to the team.",
+     "why": [
+      "Verb und Objekt werden nicht durch ein Adverb getrennt.",
+      "A verb and its object are not separated by an adverb."
+     ]
+    }
+   ]
+  },
+  "linkers": {
+   "core": [
+    "although + Satz; despite / in spite of + Nomen/-ing; however, therefore, nevertheless trennen Sätze (Punkt/Semikolon davor, Komma danach); whereas/while = Gegensatz.",
+    "although + clause; despite / in spite of + noun/-ing; however, therefore, nevertheless separate sentences (period/semicolon before, comma after); whereas/while = contrast."
+   ],
+   "why": [
+    "Richtige Konnektoren machen Argumente logisch und lesbar. Ein falsches Satzzeichen wirkt in E-Mails und Berichten schnell nachlässig.",
+    "The right linkers make arguments logical and readable. A wrong punctuation mark looks careless in emails and reports."
+   ],
+   "contrast": [
+    "Deutsch sagt „obwohl“ und „trotz“ mit Nebensatz oder Nomen. Englisch: „although + Satz“, aber „despite + Nomen“ – nie „despite we were“.",
+    "German has “obwohl” (clause) and “trotz” (noun). English: “although + clause”, but “despite + noun” – never “despite we were”."
+   ],
+   "steps": [
+    [
+     "Folgt ein ganzer Satz oder ein Nomen? Satz: although. Nomen: despite.",
+     "Gegensatz zweier Sätze? Mit „however“ neuen Satz beginnen oder Semikolon.",
+     "Folge: „therefore“; Gegensatz trotzdem: „nevertheless“.",
+     "Nach „however“ und „therefore“ steht ein Komma."
+    ],
+    [
+     "A full clause or a noun? Clause: although. Noun: despite.",
+     "Contrast between two sentences? Start a new sentence with however, or use a semicolon.",
+     "Result: therefore; contrast anyway: nevertheless.",
+     "A comma follows however and therefore."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Satz",
+      "Clause"
+     ],
+     "although / while / whereas + Subjekt + Verb",
+     "Although it rained, we went."
+    ],
+    [
+     [
+      "Nomen",
+      "Noun"
+     ],
+     "despite / in spite of + Nomen oder -ing",
+     "Despite the rain, we went."
+    ],
+    [
+     [
+      "Satzverbinder",
+      "Sentence link"
+     ],
+     "; however, / . Therefore,",
+     "Costs rose; therefore, we reacted."
+    ]
+   ],
+   "signals": [
+    [
+     "although / though",
+     "leitet einen Nebensatz ein",
+     "introduces a subordinate clause"
+    ],
+    [
+     "however / nevertheless",
+     "brauchen Satzzeichen davor",
+     "need punctuation before"
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "Despite we were short on time, we completed the audit.",
+     "good": "Although we were short on time, we completed the audit.",
+     "why": [
+      "Vor einem ganzen Satz steht „although“, nicht „despite“.",
+      "A full clause takes “although”, not “despite”."
+     ]
+    },
+    {
+     "bad": "In spite the delay, the project was a success.",
+     "good": "In spite of the delay, the project was a success.",
+     "why": [
+      "„in spite“ braucht immer „of“.",
+      "“In spite” always needs “of”."
+     ]
+    }
+   ]
+  },
+  "comparison": {
+   "core": [
+    "the + Komparativ …, the + Komparativ …; as + Adjektiv + as (gleich); Komparativ + than (Unterschied); far/much/slightly + Komparativ.",
+    "the + comparative …, the + comparative …; as + adjective + as (equal); comparative + than (difference); far/much/slightly + comparative."
+   ],
+   "why": [
+    "Genaue Vergleiche machen Angebote, Berichte und Argumente überzeugend. Ob etwas „far“ oder nur „slightly“ besser ist, ändert die Aussage.",
+    "Precise comparisons make offers, reports and arguments convincing. Whether something is far or only slightly better changes the message."
+   ],
+   "contrast": [
+    "Deutsch vergleicht mit „als“ und „wie“. Englisch trennt streng: „higher than“, aber „as high as“ – nie „higher as“.",
+    "German uses “als” and “wie” for comparisons. English separates them strictly: “higher than”, but “as high as” – never “higher as”."
+   ],
+   "steps": [
+    [
+     "Gleich oder verschieden? Gleich: as … as, verschieden: Komparativ + than.",
+     "Kurze Adjektive: -er; lange Adjektive: more + Adjektiv.",
+     "Entwicklung? „The more …, the more …“ mit „the“ vor beiden Teilen.",
+     "Stärke mit far/much, Mildern mit slightly/a bit."
+    ],
+    [
+     "Equal or different? Equal: as … as, different: comparative + than.",
+     "Short adjectives: -er; long adjectives: more + adjective.",
+     "A development? “The more …, the more …” with “the” before both parts.",
+     "Strengthen with far/much, soften with slightly/a bit."
+    ]
+   ],
+   "forms": [
+    [
+     [
+      "Gleich",
+      "Equal"
+     ],
+     "as + Adjektiv + as",
+     "This is as fast as that."
+    ],
+    [
+     [
+      "Unterschied",
+      "Difference"
+     ],
+     "Komparativ + than",
+     "It is faster than that."
+    ],
+    [
+     [
+      "Je … desto",
+      "The … the"
+     ],
+     "the + Komparativ, the + Komparativ",
+     "The sooner, the better."
+    ]
+   ],
+   "signals": [
+    [
+     "far / much / a lot",
+     "starke Verstärkung",
+     "strong emphasis"
+    ],
+    [
+     "slightly / a bit",
+     "sanfte Abschwächung",
+     "gentle softening"
+    ]
+   ],
+   "traps": [
+    {
+     "bad": "This solution is more cheaper than the previous one.",
+     "good": "This solution is cheaper than the previous one.",
+     "why": [
+      "Kurze Adjektive: „cheaper“, nicht „more cheaper“.",
+      "Short adjectives: “cheaper”, not “more cheaper”."
+     ]
+    },
+    {
+     "bad": "Our sales are higher as last year.",
+     "good": "Our sales are higher than last year.",
+     "why": [
+      "Nach dem Komparativ steht „than“.",
+      "After the comparative comes “than”."
+     ]
+    }
+   ]
   }
  },
  "tasks": [
@@ -792,7 +2458,6 @@
     "somewhat",
     "a little"
    ],
-   "hint": "(slightly / hugely)",
    "expl": "„slightly“ schwächt die schlechte Nachricht ab; „hugely“ würde sie verstärken.",
    "expl_en": "“Slightly” softens the bad news; “hugely” would make it stronger."
   },
@@ -994,7 +2659,6 @@
    "type": "gap",
    "prompt": "What we really need ___ a clear timeline.",
    "answer": "is",
-   "hint": "(is / are)",
    "expl": "Der What-Satz zählt als eine Sache: is.",
    "expl_en": "The what-clause counts as one thing: is."
   },
@@ -1015,7 +2679,6 @@
    "accepted": [
     "that"
    ],
-   "hint": "(who / which)",
    "expl": "It-Cleft mit Person: who (oder that).",
    "expl_en": "It-cleft with a person: who (or that)."
   },
@@ -1024,7 +2687,6 @@
    "type": "gap",
    "prompt": "Rarely ___ we seen such a fast rollout.",
    "answer": "have",
-   "hint": "(have)",
    "expl": "Nach „Rarely“ am Satzanfang: Hilfsverb vor das Subjekt – have we seen.",
    "expl_en": "After “Rarely” at the start: auxiliary before the subject – have we seen."
   },
@@ -1182,7 +2844,6 @@
    "type": "gap",
    "prompt": "Coming back ___ your question about pricing, the licenses are per user.",
    "answer": "to",
-   "hint": "(to / on / at)",
    "expl": "Feste Verbindung: „coming back to“.",
    "expl_en": "Fixed phrase: coming back to."
   },
@@ -1194,7 +2855,6 @@
    "accepted": [
     "upon"
    ],
-   "hint": "(on / at / to)",
    "expl": "Feste Verbindung: „build on something“.",
    "expl_en": "Fixed phrase: build on something."
   },
@@ -1212,7 +2872,6 @@
    "type": "gap",
    "prompt": "All ___ all, the migration went smoothly.",
    "answer": "in",
-   "hint": "(in / at / for)",
    "expl": "Feste Wendung zum Zusammenfassen: All in all.",
    "expl_en": "Fixed phrase for summing up: All in all."
   },
@@ -1498,7 +3157,6 @@
    "type": "gap",
    "prompt": "We need your decision ___ the end of Q3.",
    "answer": "by",
-   "hint": "(by / until)",
    "expl": "Frist, spätestens: by.",
    "expl_en": "A deadline, at the latest: by."
   },
@@ -1507,7 +3165,6 @@
    "type": "gap",
    "prompt": "The trial runs ___ June 30, then it ends automatically.",
    "answer": "until",
-   "hint": "(by / until)",
    "expl": "Dauer bis zu einem Zeitpunkt: until.",
    "expl_en": "Duration up to a point in time: until."
   },
@@ -1516,7 +3173,6 @@
    "type": "gap",
    "prompt": "We can set up the test system ___ two weeks.",
    "answer": "within",
-   "hint": "(within / during)",
    "expl": "Innerhalb eines Zeitraums: within.",
    "expl_en": "Inside a period of time: within."
   },
@@ -1525,7 +3181,6 @@
    "type": "gap",
    "prompt": "___ June 1, all invoices must be archived electronically.",
    "answer": "As of",
-   "hint": "(As of / Since)",
    "expl": "Ab einem Stichtag: As of.",
    "expl_en": "From a key date onward: As of."
   },
@@ -1626,6 +3281,2252 @@
    ],
    "expl": "Vergleich: „twice as“ + Adjektiv + „as“.",
    "expl_en": "Comparison: twice as + adjective + as."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "mc",
+   "prompt": "Please call me as soon as the shipment ___ at the warehouse.",
+   "options": [
+    "will arrive",
+    "arrives",
+    "is arriving",
+    "would arrive"
+   ],
+   "answer": "arrives",
+   "expl": "Nach „as soon as“ steht bei Zukünftigem das Präsens, nicht „will“.",
+   "expl_en": "After “as soon as”, future meaning takes the present simple, not will."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "mc",
+   "prompt": "We won't sign the contract until the legal team ___ the final draft.",
+   "options": [
+    "approving",
+    "will approve",
+    "would approve",
+    "approves"
+   ],
+   "answer": "approves",
+   "expl": "Nach „until“ steht das Präsens; „will“ gehört nur in den Hauptsatz.",
+   "expl_en": "After “until” use the present; will belongs only in the main clause."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "mc",
+   "prompt": "By the time you read this email, I ___ the presentation.",
+   "options": [
+    "will have finished",
+    "would finish",
+    "finish",
+    "am finishing"
+   ],
+   "answer": "will have finished",
+   "expl": "„By the time“ meint einen Zeitpunkt, bis zu dem etwas abgeschlossen ist: will have + Partizip.",
+   "expl_en": "“By the time” points to a moment by which something is complete: will have + participle."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "mc",
+   "prompt": "I'll text you when I ___ home tonight.",
+   "options": [
+    "am going to get",
+    "get",
+    "will get",
+    "would get"
+   ],
+   "answer": "get",
+   "expl": "Nach „when“ steht das Präsens, auch bei Zukunftsbezug.",
+   "expl_en": "After “when” the present is used, even for future meaning."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "gap",
+   "prompt": "Let's start the meeting as soon as everyone ___ here.",
+   "answer": "has arrived",
+   "accepted": [
+    "arrives",
+    "is here",
+    "has come"
+   ],
+   "hint": "(arrive)",
+   "expl": "Im Zeitsatz steht Present Perfect oder Präsens, nicht „will have“.",
+   "expl_en": "In the time clause use present perfect or present simple, not will have."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "gap",
+   "prompt": "I'll send you the report after I ___ the numbers.",
+   "answer": "have checked",
+   "accepted": [
+    "check",
+    "have verified"
+   ],
+   "hint": "(check)",
+   "expl": "Nach „after“ bei Zukünftigem: Present Perfect (oder Präsens).",
+   "expl_en": "After “after” with future meaning: present perfect (or present simple)."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "gap",
+   "prompt": "Don't switch off the server until the backup ___ completed.",
+   "answer": "has been",
+   "accepted": [
+    "is"
+   ],
+   "hint": "(be)",
+   "expl": "Nach „until“ steht das Präsens oder Present Perfect: „has been completed“.",
+   "expl_en": "After “until” use present simple or present perfect: “has been completed”."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "transform",
+   "prompt": "The call will end soon. Then I'll email you. → I'll email you as soon as the call ___.",
+   "answer": "ends",
+   "accepted": [
+    "has ended",
+    "is over",
+    "finishes"
+   ],
+   "expl": "Der Zeitsatz mit „as soon as“ steht im Präsens.",
+   "expl_en": "The “as soon as” clause stays in the present."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "transform",
+   "prompt": "We will wait for the approval. Then we will start. → We won't start until the approval ___.",
+   "answer": "arrives",
+   "accepted": [
+    "comes",
+    "has arrived",
+    "has come",
+    "is received"
+   ],
+   "expl": "Nach „until“ steht das Präsens oder Present Perfect.",
+   "expl_en": "After “until” use the present simple or present perfect."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "correct",
+   "prompt": "I will call you when I will arrive at the airport.",
+   "answer": "I will call you when I arrive at the airport.",
+   "accepted": [
+    "I'll call you when I arrive at the airport.",
+    "I will call you when I get to the airport."
+   ],
+   "expl": "Nach „when“ steht das Präsens, nicht „will“.",
+   "expl_en": "After “when” the present is needed, not will."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "correct",
+   "prompt": "We'll go home as soon as the meeting will be over.",
+   "answer": "We'll go home as soon as the meeting is over.",
+   "accepted": [
+    "We will go home as soon as the meeting is over."
+   ],
+   "expl": "Nach „as soon as“ ist „will“ falsch, es steht das Präsens.",
+   "expl_en": "After “as soon as”, will is wrong; use the present."
+  },
+  {
+   "topic": "time-clauses",
+   "type": "correct",
+   "prompt": "Please wait here until the manager will come back.",
+   "answer": "Please wait here until the manager comes back.",
+   "accepted": [
+    "Please wait here until the manager has come back."
+   ],
+   "expl": "Nach „until“ steht das Präsens statt „will come“.",
+   "expl_en": "After “until” use the present instead of will come."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "mc",
+   "prompt": "We'll miss the deadline ___ we hire extra staff.",
+   "options": [
+    "otherwise",
+    "unless",
+    "provided",
+    "but for"
+   ],
+   "answer": "unless",
+   "expl": "„Unless“ = „wenn nicht“: ohne zusätzliches Personal verpassen wir die Frist.",
+   "expl_en": "“Unless” = “if not”: without extra staff we'll miss the deadline."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "mc",
+   "prompt": "You can use the company car ___ you return it by Friday.",
+   "options": [
+    "but for",
+    "as long as",
+    "unless",
+    "otherwise"
+   ],
+   "answer": "as long as",
+   "expl": "„As long as“ nennt die Bedingung, unter der etwas erlaubt ist.",
+   "expl_en": "“As long as” states the condition under which something is allowed."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "mc",
+   "prompt": "Send me the invoice today. ___, we can't process the payment this month.",
+   "options": [
+    "Provided that",
+    "As long as",
+    "Unless",
+    "Otherwise"
+   ],
+   "answer": "Otherwise",
+   "expl": "„Otherwise“ steht im neuen Satz und nennt die Folge, wenn die Bedingung fehlt.",
+   "expl_en": "“Otherwise” starts a new sentence and names the result if the condition isn't met."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "mc",
+   "prompt": "___ your support, the project would never have launched on time.",
+   "options": [
+    "Otherwise",
+    "But for",
+    "Provided",
+    "Unless"
+   ],
+   "answer": "But for",
+   "expl": "„But for“ + Nomen heißt „ohne“ und passt zu would have + Partizip.",
+   "expl_en": "“But for” + noun means “without” and fits would have + participle."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "gap",
+   "prompt": "The client will renew ___ that we improve our support.",
+   "answer": "provided",
+   "accepted": [
+    "providing"
+   ],
+   "hint": "(Bedingung)",
+   "expl": "„Provided that“ nennt die Bedingung; „providing“ ist ebenfalls möglich.",
+   "expl_en": "“Provided that” names the condition; “providing” is also possible."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "gap",
+   "prompt": "We'll cancel the event ___ enough people sign up by Monday.",
+   "answer": "unless",
+   "hint": "(= if … not)",
+   "expl": "„Unless“ = wir sagen ab, wenn sich nicht genug Leute anmelden.",
+   "expl_en": "“Unless” = we'll cancel if not enough people sign up."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "gap",
+   "prompt": "You may work remotely as ___ as you stay reachable.",
+   "answer": "long",
+   "hint": "(as … as)",
+   "expl": "„As long as“ heißt „solange / sofern“.",
+   "expl_en": "“As long as” means “provided that”."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "transform",
+   "prompt": "If we don't get the budget, we can't hire anyone. → We can't hire anyone ___ we get the budget.",
+   "answer": "unless",
+   "expl": "„Unless“ ersetzt „if … not“.",
+   "expl_en": "“Unless” replaces “if … not”."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "transform",
+   "prompt": "Without your help, we would have failed. → ___ your help, we would have failed.",
+   "answer": "But for",
+   "accepted": [
+    "but for"
+   ],
+   "expl": "„But for“ + Nomen = „ohne“ im Rückblick.",
+   "expl_en": "“But for” + noun = “without” in hindsight."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "correct",
+   "prompt": "Unless you don't sign today, the offer expires.",
+   "answer": "Unless you sign today, the offer expires.",
+   "accepted": [
+    "Unless you sign today the offer expires."
+   ],
+   "expl": "„Unless“ enthält die Verneinung schon; kein zweites „don't“.",
+   "expl_en": "“Unless” already carries the negation; no second “don't”."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "correct",
+   "prompt": "I'll attend the workshop as long as it will not overlap with my client call.",
+   "answer": "I'll attend the workshop as long as it doesn't overlap with my client call.",
+   "accepted": [
+    "I'll attend the workshop as long as it does not overlap with my client call."
+   ],
+   "expl": "Nach „as long as“ steht das Präsens, nicht „will“.",
+   "expl_en": "After “as long as” use the present, not will."
+  },
+  {
+   "topic": "cond-alt",
+   "type": "correct",
+   "prompt": "You can borrow my laptop provided you will return it tomorrow.",
+   "answer": "You can borrow my laptop provided you return it tomorrow.",
+   "accepted": [
+    "You can borrow my laptop provided that you return it tomorrow."
+   ],
+   "expl": "Nach „provided“ steht das Präsens.",
+   "expl_en": "After “provided” the present is used."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "mc",
+   "prompt": "The new software ___ by the end of the month.",
+   "options": [
+    "must be installed",
+    "must install",
+    "must been installed",
+    "must be installing"
+   ],
+   "answer": "must be installed",
+   "expl": "Modalverb + be + Partizip bildet das Passiv.",
+   "expl_en": "Modal + be + participle forms the passive."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "mc",
+   "prompt": "The office ___ by the time we arrived.",
+   "options": [
+    "has been cleaned",
+    "had cleaned",
+    "was cleaning",
+    "had been cleaned"
+   ],
+   "answer": "had been cleaned",
+   "expl": "Vorzeitigkeit im Passiv: had been + Partizip.",
+   "expl_en": "Earlier past in the passive: had been + participle."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "mc",
+   "prompt": "The CEO ___ to be planning a merger.",
+   "options": [
+    "says",
+    "is said",
+    "is saying",
+    "has said"
+   ],
+   "answer": "is said",
+   "expl": "„Is said to“ gibt ein Gerücht sachlich wieder.",
+   "expl_en": "“Is said to” reports a rumor in a neutral way."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "mc",
+   "prompt": "I don't like ___ by customers while I'm in meetings.",
+   "options": [
+    "be disturbed",
+    "to disturb",
+    "being disturbed",
+    "disturbing"
+   ],
+   "answer": "being disturbed",
+   "expl": "Nach „like“ steht das Passiv als Gerundium: being + Partizip.",
+   "expl_en": "After “like” the passive appears as a gerund: being + participle."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "gap",
+   "prompt": "The contract has to ___ before Friday.",
+   "answer": "be signed",
+   "accepted": [
+    "be signed off"
+   ],
+   "hint": "(sign)",
+   "expl": "Modal oder „has to“ + be + Partizip.",
+   "expl_en": "Modal or “has to” + be + participle."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "gap",
+   "prompt": "The company is ___ to have lost millions last year.",
+   "answer": "said",
+   "accepted": [
+    "reported",
+    "believed",
+    "thought",
+    "rumored",
+    "alleged",
+    "understood"
+   ],
+   "hint": "(say / report / believe)",
+   "expl": "Persönliches Passiv: is said / reported / believed to have + Partizip.",
+   "expl_en": "Personal passive: is said / reported / believed to have + participle."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "gap",
+   "prompt": "I hate ___ interrupted when I'm presenting.",
+   "answer": "being",
+   "hint": "(Passiv mit -ing)",
+   "expl": "Nach „hate“ steht „being“ + Partizip.",
+   "expl_en": "After “hate” use “being” + participle."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "transform",
+   "prompt": "People say that the new manager is very strict. → The new manager ___ to be very strict.",
+   "answer": "is said",
+   "accepted": [
+    "is thought",
+    "is believed",
+    "is known",
+    "is considered",
+    "is reported"
+   ],
+   "expl": "„People say that …“ wird zu „X is said to …“.",
+   "expl_en": "“People say that …” becomes “X is said to …”."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "transform",
+   "prompt": "Someone must repair the printer today. → The printer ___ today.",
+   "answer": "must be repaired",
+   "accepted": [
+    "has to be repaired",
+    "needs to be repaired"
+   ],
+   "expl": "Modal + be + Partizip.",
+   "expl_en": "Modal + be + participle."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "correct",
+   "prompt": "The documents must be send to the client by noon.",
+   "answer": "The documents must be sent to the client by noon.",
+   "expl": "Nach „be“ steht das Partizip „sent“.",
+   "expl_en": "After “be” the participle “sent” is required."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "correct",
+   "prompt": "The plant is believed closing next year.",
+   "answer": "The plant is believed to be closing next year.",
+   "expl": "Persönliches Passiv: believed + to-Infinitiv.",
+   "expl_en": "Personal passive: believed + to-infinitive."
+  },
+  {
+   "topic": "passive-plus",
+   "type": "correct",
+   "prompt": "Our offer has been accepted by the client yesterday.",
+   "answer": "Our offer was accepted by the client yesterday.",
+   "accepted": [
+    "Our offer was accepted yesterday by the client."
+   ],
+   "expl": "Mit „yesterday“ steht das Simple Past, nicht das Present Perfect.",
+   "expl_en": "With “yesterday” use the simple past, not the present perfect."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "mc",
+   "prompt": "She admitted ___ the wrong figures to the board.",
+   "options": [
+    "send",
+    "to send",
+    "sending",
+    "that sending"
+   ],
+   "answer": "sending",
+   "expl": "Nach „admit“ steht die -ing-Form.",
+   "expl_en": "After “admit” the -ing form follows."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "mc",
+   "prompt": "My lawyer advised me ___ the document yet.",
+   "options": [
+    "don't sign",
+    "not signing",
+    "to not signing",
+    "not to sign"
+   ],
+   "answer": "not to sign",
+   "expl": "„Advise“ + Person + to-Infinitiv; die Verneinung steht vor „to“.",
+   "expl_en": "“Advise” + person + to-infinitive; the negation goes before “to”."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "mc",
+   "prompt": "He insisted ___ for the dinner.",
+   "options": [
+    "on to pay",
+    "on paying",
+    "to pay",
+    "paying"
+   ],
+   "answer": "on paying",
+   "expl": "„Insist“ verlangt die Präposition „on“ + -ing.",
+   "expl_en": "“Insist” takes the preposition “on” + -ing."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "mc",
+   "prompt": "The consultant recommended ___ the pilot in March.",
+   "options": [
+    "us to start",
+    "to start us",
+    "that us start",
+    "starting"
+   ],
+   "answer": "starting",
+   "expl": "„Recommend“ steht mit -ing oder that-Satz, nicht mit Person + to.",
+   "expl_en": "“Recommend” takes -ing or a that-clause, not person + to."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "gap",
+   "prompt": "She suggested ___ the deadline to Thursday.",
+   "answer": "moving",
+   "accepted": [
+    "pushing"
+   ],
+   "hint": "(move)",
+   "expl": "Nach „suggest“ steht -ing.",
+   "expl_en": "After “suggest” use -ing."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "gap",
+   "prompt": "The doctor advised him ___ more rest.",
+   "answer": "to get",
+   "accepted": [
+    "to take"
+   ],
+   "hint": "(get)",
+   "expl": "„Advise“ + Person + to-Infinitiv.",
+   "expl_en": "“Advise” + person + to-infinitive."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "gap",
+   "prompt": "The manager denied ___ the error.",
+   "answer": "making",
+   "accepted": [
+    "having made",
+    "causing",
+    "having caused"
+   ],
+   "hint": "(make)",
+   "expl": "Nach „deny“ steht -ing.",
+   "expl_en": "After “deny” use -ing."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "transform",
+   "prompt": "'I'll cover the costs,' he said. → He offered ___ the costs.",
+   "answer": "to cover",
+   "expl": "„Offer“ + to-Infinitiv.",
+   "expl_en": "“Offer” + to-infinitive."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "transform",
+   "prompt": "'Don't discuss the deal with anyone,' she told me. → She warned me ___ the deal with anyone.",
+   "answer": "not to discuss",
+   "expl": "„Warn“ + Person + not to + Verb.",
+   "expl_en": "“Warn” + person + not to + verb."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "correct",
+   "prompt": "He suggested me to take a different route.",
+   "answer": "He suggested that I take a different route.",
+   "accepted": [
+    "He suggested that I should take a different route.",
+    "He suggested I take a different route."
+   ],
+   "expl": "Nach „suggest“ folgt ein that-Satz, nicht „Person + to“.",
+   "expl_en": "After “suggest” a that-clause is used, not “person + to”."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "correct",
+   "prompt": "She admitted to be late for the meeting.",
+   "answer": "She admitted being late for the meeting.",
+   "accepted": [
+    "She admitted to being late for the meeting."
+   ],
+   "expl": "„Admit“ verlangt -ing.",
+   "expl_en": "“Admit” requires -ing."
+  },
+  {
+   "topic": "report-verbs",
+   "type": "correct",
+   "prompt": "They insisted to see the contract before signing.",
+   "answer": "They insisted on seeing the contract before signing.",
+   "expl": "„Insist“ braucht „on“ + -ing.",
+   "expl_en": "“Insist” needs “on” + -ing."
+  },
+  {
+   "topic": "questions",
+   "type": "mc",
+   "prompt": "Could you tell me where ___?",
+   "options": [
+    "the meeting room",
+    "does the meeting room is",
+    "is the meeting room",
+    "the meeting room is"
+   ],
+   "answer": "the meeting room is",
+   "expl": "Indirekte Frage: normale Satzstellung, Subjekt vor dem Verb.",
+   "expl_en": "Indirect question: normal word order, subject before the verb."
+  },
+  {
+   "topic": "questions",
+   "type": "mc",
+   "prompt": "You haven't seen my notes, ___?",
+   "options": [
+    "did you",
+    "haven't you",
+    "have you",
+    "do you"
+   ],
+   "answer": "have you",
+   "expl": "Nach verneinter Aussage steht ein bejahtes Tag mit demselben Hilfsverb.",
+   "expl_en": "After a negative statement use a positive tag with the same auxiliary."
+  },
+  {
+   "topic": "questions",
+   "type": "mc",
+   "prompt": "Who ___ the proposal last week?",
+   "options": [
+    "did approve",
+    "does approve",
+    "has approved",
+    "approved"
+   ],
+   "answer": "approved",
+   "expl": "Subjektfrage: Fragewort + Verb, ohne „did“.",
+   "expl_en": "Subject question: wh-word + verb, no “did”."
+  },
+  {
+   "topic": "questions",
+   "type": "mc",
+   "prompt": "I wonder ___ the client has already replied.",
+   "options": [
+    "whether",
+    "that",
+    "what",
+    "does"
+   ],
+   "answer": "whether",
+   "expl": "Bei einer ja/nein-Frage im Nebensatz nutzt man if oder whether.",
+   "expl_en": "For a yes/no question in a clause use if or whether."
+  },
+  {
+   "topic": "questions",
+   "type": "gap",
+   "prompt": "Do you know what time the call ___?",
+   "answer": "starts",
+   "accepted": [
+    "begins",
+    "is"
+   ],
+   "hint": "(start)",
+   "expl": "Indirekte Frage: Aussageform, Verb in der dritten Person.",
+   "expl_en": "Indirect question: statement form, third-person verb."
+  },
+  {
+   "topic": "questions",
+   "type": "gap",
+   "prompt": "Let's grab a coffee after the meeting, ___ we?",
+   "answer": "shall",
+   "hint": "(Modalverb)",
+   "expl": "Nach „Let's“ lautet das Tag „shall we?“.",
+   "expl_en": "After “Let's” the tag is “shall we?”."
+  },
+  {
+   "topic": "questions",
+   "type": "gap",
+   "prompt": "Who ___ the last email to the client?",
+   "answer": "sent",
+   "hint": "(send, Past)",
+   "expl": "Subjektfrage im Simple Past: Verb ohne did.",
+   "expl_en": "Subject question in the simple past: verb without did."
+  },
+  {
+   "topic": "questions",
+   "type": "transform",
+   "prompt": "Where is the nearest printer? → Do you know where the nearest printer ___?",
+   "answer": "is",
+   "expl": "Indirekte Frage: Subjekt vor Verb.",
+   "expl_en": "Indirect question: subject before verb."
+  },
+  {
+   "topic": "questions",
+   "type": "transform",
+   "prompt": "'Did the client sign the contract?' she asked me. → She asked me ___ the client had signed the contract.",
+   "answer": "if",
+   "accepted": [
+    "whether"
+   ],
+   "expl": "Ja/Nein-Fragen werden mit if oder whether eingeleitet.",
+   "expl_en": "Yes/no questions are introduced with if or whether."
+  },
+  {
+   "topic": "questions",
+   "type": "correct",
+   "prompt": "Can you tell me where is the finance department?",
+   "answer": "Can you tell me where the finance department is?",
+   "accepted": [
+    "Could you tell me where the finance department is?"
+   ],
+   "expl": "In der indirekten Frage folgt das Subjekt auf das Fragewort.",
+   "expl_en": "In an indirect question the subject follows the wh-word."
+  },
+  {
+   "topic": "questions",
+   "type": "correct",
+   "prompt": "Who did call me while I was in the meeting?",
+   "answer": "Who called me while I was in the meeting?",
+   "expl": "Fragen nach dem Subjekt brauchen kein „did“.",
+   "expl_en": "Questions about the subject need no “did”."
+  },
+  {
+   "topic": "questions",
+   "type": "correct",
+   "prompt": "Let's start the meeting now, don't we?",
+   "answer": "Let's start the meeting now, shall we?",
+   "expl": "Nach „Let's“ steht „shall we?“.",
+   "expl_en": "After “Let's” comes “shall we?”."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "mc",
+   "prompt": "You ___ tell your manager today, or she'll hear it from the client.",
+   "options": [
+    "could",
+    "ought",
+    "had better",
+    "would better"
+   ],
+   "answer": "had better",
+   "expl": "„Had better“ rät mit einer drohenden Folge.",
+   "expl_en": "“Had better” advises with a looming consequence."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "mc",
+   "prompt": "You ___ attend the optional training; it's up to you.",
+   "options": [
+    "don't have to",
+    "mustn't",
+    "can't",
+    "shouldn't"
+   ],
+   "answer": "don't have to",
+   "expl": "„Don't have to“ heißt „nicht nötig“; „mustn't“ wäre ein Verbot.",
+   "expl_en": "“Don't have to” means “not necessary”; “mustn't” would be a prohibition."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "mc",
+   "prompt": "I think you ___ double-check the figures before the board meeting.",
+   "options": [
+    "had",
+    "would to",
+    "ought to",
+    "should to"
+   ],
+   "answer": "ought to",
+   "expl": "„Ought to“ ist ein freundlicher Rat; danach folgt die Grundform.",
+   "expl_en": "“Ought to” is friendly advice; the base form follows."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "mc",
+   "prompt": "Which is the most polite way to give advice to a senior colleague?",
+   "options": [
+    "You had better change the slides.",
+    "You must change the slides.",
+    "Change the slides.",
+    "Perhaps you could change the slides."
+   ],
+   "answer": "Perhaps you could change the slides.",
+   "expl": "„Perhaps you could“ lässt Entscheidungsspielraum und ist am höflichsten.",
+   "expl_en": "“Perhaps you could” leaves room for choice and is the most polite."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "gap",
+   "prompt": "You ___ better call the client now; the deadline is today.",
+   "answer": "had",
+   "expl": "„Had better“ + Grundform warnt vor Folgen.",
+   "expl_en": "“Had better” + base form warns of consequences."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "gap",
+   "prompt": "We ___ to finish by Friday if we want to keep the client happy.",
+   "answer": "ought",
+   "hint": "(Modal + to)",
+   "expl": "„Ought to“ + Grundform gibt einen Rat.",
+   "expl_en": "“Ought to” + base form gives advice."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "gap",
+   "prompt": "You ___ bring a laptop; we'll provide one.",
+   "answer": "needn't",
+   "accepted": [
+    "don't have to",
+    "do not have to",
+    "need not"
+   ],
+   "hint": "(nicht nötig)",
+   "expl": "„Needn't“ oder „don't have to“ heißt „nicht nötig“.",
+   "expl_en": "“Needn't” or “don't have to” means “not necessary”."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "transform",
+   "prompt": "It would be wise to back up the data. → You ___ back up the data.",
+   "answer": "should",
+   "accepted": [
+    "ought to",
+    "had better"
+   ],
+   "expl": "„Should“ gibt einen Rat.",
+   "expl_en": "“Should” gives advice."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "transform",
+   "prompt": "Don't send that email while you're angry. → You ___ send that email while you're angry.",
+   "answer": "shouldn't",
+   "accepted": [
+    "should not",
+    "ought not to",
+    "had better not",
+    "oughtn't to"
+   ],
+   "expl": "„Shouldn't“ rät von etwas ab.",
+   "expl_en": "“Shouldn't” advises against something."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "correct",
+   "prompt": "You should to call the client before noon.",
+   "answer": "You should call the client before noon.",
+   "expl": "Nach „should“ steht kein „to“.",
+   "expl_en": "After “should” no “to” is used."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "correct",
+   "prompt": "You had better to ask your manager before you sign.",
+   "answer": "You had better ask your manager before you sign.",
+   "accepted": [
+    "You'd better ask your manager before you sign."
+   ],
+   "expl": "Nach „had better“ steht die Grundform ohne to.",
+   "expl_en": "After “had better” use the base form without to."
+  },
+  {
+   "topic": "modals-advice",
+   "type": "correct",
+   "prompt": "You mustn't come to the workshop if you don't want to; it's optional.",
+   "answer": "You don't have to come to the workshop if you don't want to; it's optional.",
+   "accepted": [
+    "You needn't come to the workshop if you don't want to; it's optional."
+   ],
+   "expl": "„Mustn't“ verbietet; „nicht nötig“ ist „don't have to“.",
+   "expl_en": "“Mustn't” forbids; “not necessary” is “don't have to”."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "mc",
+   "prompt": "I remember ___ the door, so it can't be my fault.",
+   "options": [
+    "to have locking",
+    "lock",
+    "locking",
+    "to lock"
+   ],
+   "answer": "locking",
+   "expl": "„Remember + -ing“ erinnert an etwas Vergangenes.",
+   "expl_en": "“Remember + -ing” recalls something in the past."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "mc",
+   "prompt": "Please remember ___ the report before you leave.",
+   "options": [
+    "having sent",
+    "send",
+    "to send",
+    "sending"
+   ],
+   "answer": "to send",
+   "expl": "„Remember + to“ meint: nicht vergessen, etwas zu tun.",
+   "expl_en": "“Remember + to” means: don't forget to do it."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "mc",
+   "prompt": "We regret ___ you that the position has been filled.",
+   "options": [
+    "to informing",
+    "to inform",
+    "informing",
+    "inform"
+   ],
+   "answer": "to inform",
+   "expl": "„Regret + to“ kündigt eine bedauerliche Nachricht an.",
+   "expl_en": "“Regret + to” announces unwelcome news."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "mc",
+   "prompt": "I look forward to ___ you at the conference.",
+   "options": [
+    "to meet",
+    "have met",
+    "meet",
+    "meeting"
+   ],
+   "answer": "meeting",
+   "expl": "Nach „look forward to“ steht -ing, weil „to“ Präposition ist.",
+   "expl_en": "After “look forward to” use -ing, because “to” is a preposition."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "gap",
+   "prompt": "He stopped ___ work emails as soon as he went on leave.",
+   "answer": "checking",
+   "accepted": [
+    "answering",
+    "reading"
+   ],
+   "hint": "(check)",
+   "expl": "„Stop + -ing“ heißt aufhören mit etwas.",
+   "expl_en": "“Stop + -ing” means quitting something."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "gap",
+   "prompt": "Try ___ the router off and on; that often solves the problem.",
+   "answer": "turning",
+   "accepted": [
+    "switching"
+   ],
+   "hint": "(turn)",
+   "expl": "„Try + -ing“ heißt etwas ausprobieren.",
+   "expl_en": "“Try + -ing” means to experiment with something."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "gap",
+   "prompt": "She avoided ___ the issue in the meeting.",
+   "answer": "mentioning",
+   "accepted": [
+    "raising",
+    "discussing"
+   ],
+   "hint": "(mention)",
+   "expl": "Nach „avoid“ steht immer -ing.",
+   "expl_en": "After “avoid” always use -ing."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "transform",
+   "prompt": "I'm sorry that I have to tell you that the shipment is late. → I regret ___ you that the shipment is late.",
+   "answer": "to tell",
+   "accepted": [
+    "having to tell"
+   ],
+   "expl": "„Regret + to“ kündigt eine schlechte Nachricht an.",
+   "expl_en": "“Regret + to” introduces bad news."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "transform",
+   "prompt": "He didn't remember that he had met her before. → He didn't remember ___ her before.",
+   "answer": "meeting",
+   "accepted": [
+    "having met"
+   ],
+   "expl": "„Remember + -ing“ bezieht sich auf Vergangenes.",
+   "expl_en": "“Remember + -ing” refers to the past."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "correct",
+   "prompt": "I'm looking forward to meet you next week.",
+   "answer": "I'm looking forward to meeting you next week.",
+   "expl": "Nach „look forward to“ folgt -ing.",
+   "expl_en": "After “look forward to” use -ing."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "correct",
+   "prompt": "We decided discussing the budget next week.",
+   "answer": "We decided to discuss the budget next week.",
+   "expl": "„Decide“ verlangt den to-Infinitiv.",
+   "expl_en": "“Decide” requires the to-infinitive."
+  },
+  {
+   "topic": "verb-patterns",
+   "type": "correct",
+   "prompt": "Don't forget calling the supplier before noon.",
+   "answer": "Don't forget to call the supplier before noon.",
+   "expl": "„Forget + to“ meint die Aufgabe in der Zukunft.",
+   "expl_en": "“Forget + to” refers to a future task."
+  },
+  {
+   "topic": "mandative",
+   "type": "mc",
+   "prompt": "The board insists that he ___ the project immediately.",
+   "options": [
+    "leave",
+    "will leave",
+    "left",
+    "leaves"
+   ],
+   "answer": "leave",
+   "expl": "Nach „insist that“ steht die Grundform ohne -s.",
+   "expl_en": "After “insist that” use the base form without -s."
+  },
+  {
+   "topic": "mandative",
+   "type": "mc",
+   "prompt": "It is essential that every employee ___ the training.",
+   "options": [
+    "is completing",
+    "completes",
+    "completed",
+    "complete"
+   ],
+   "answer": "complete",
+   "expl": "Nach „essential that“ steht die Grundform.",
+   "expl_en": "After “essential that” use the base form."
+  },
+  {
+   "topic": "mandative",
+   "type": "mc",
+   "prompt": "The auditor demanded that the report ___ corrected.",
+   "options": [
+    "would be",
+    "was",
+    "be",
+    "is"
+   ],
+   "answer": "be",
+   "expl": "Das Passiv im Mandativ lautet „be + Partizip“.",
+   "expl_en": "The mandative passive is “be + participle”."
+  },
+  {
+   "topic": "mandative",
+   "type": "mc",
+   "prompt": "I suggest that she ___ the client herself.",
+   "options": [
+    "is calling",
+    "call",
+    "called",
+    "calls"
+   ],
+   "answer": "call",
+   "expl": "Nach „suggest that“ steht die Grundform, auch bei „she“.",
+   "expl_en": "After “suggest that” use the base form, even with “she”."
+  },
+  {
+   "topic": "mandative",
+   "type": "gap",
+   "prompt": "It's vital that the data ___ stored securely.",
+   "answer": "be",
+   "hint": "(Grundform von „sein“)",
+   "expl": "Nach „vital that“ steht „be“, nicht „is“.",
+   "expl_en": "After “vital that” use “be”, not “is”."
+  },
+  {
+   "topic": "mandative",
+   "type": "gap",
+   "prompt": "The court ordered that the company ___ the fine within 30 days.",
+   "answer": "pay",
+   "accepted": [
+    "should pay"
+   ],
+   "expl": "Nach „order that“ steht die Grundform: „pay“.",
+   "expl_en": "After “order that” use the base form: “pay”."
+  },
+  {
+   "topic": "mandative",
+   "type": "gap",
+   "prompt": "We recommend that he ___ attend the workshop.",
+   "answer": "not",
+   "accepted": [
+    "should not",
+    "shouldn't"
+   ],
+   "hint": "(Verneinung)",
+   "expl": "Im Mandativ steht „not“ direkt vor dem Verb.",
+   "expl_en": "In the mandative, “not” goes directly before the verb."
+  },
+  {
+   "topic": "mandative",
+   "type": "transform",
+   "prompt": "He should be informed immediately. It is essential. → It is essential that he ___ informed immediately.",
+   "answer": "be",
+   "expl": "Nach „essential that“ steht „be“ + Partizip.",
+   "expl_en": "After “essential that” use “be” + participle."
+  },
+  {
+   "topic": "mandative",
+   "type": "transform",
+   "prompt": "'You must submit the form,' the manager insisted. → The manager insisted that I ___ the form.",
+   "answer": "submit",
+   "accepted": [
+    "should submit"
+   ],
+   "expl": "Nach „insist that“ steht die Grundform.",
+   "expl_en": "After “insist that” the base form is used."
+  },
+  {
+   "topic": "mandative",
+   "type": "correct",
+   "prompt": "The committee demands that he resigns immediately.",
+   "answer": "The committee demands that he resign immediately.",
+   "accepted": [
+    "The committee demands that he should resign immediately."
+   ],
+   "expl": "Nach „demand that“ keine -s-Form.",
+   "expl_en": "No -s form after “demand that”."
+  },
+  {
+   "topic": "mandative",
+   "type": "correct",
+   "prompt": "It is important that she is present at the meeting.",
+   "answer": "It is important that she be present at the meeting.",
+   "accepted": [
+    "It is important that she should be present at the meeting."
+   ],
+   "expl": "Formell steht nach „important that“ die Grundform „be“.",
+   "expl_en": "In formal English the base form “be” follows “important that”."
+  },
+  {
+   "topic": "mandative",
+   "type": "correct",
+   "prompt": "I suggest that he doesn't sign the contract yet.",
+   "answer": "I suggest that he not sign the contract yet.",
+   "accepted": [
+    "I suggest that he should not sign the contract yet.",
+    "I suggest that he shouldn't sign the contract yet."
+   ],
+   "expl": "Im Mandativ steht „not“ + Grundform, kein „doesn't“.",
+   "expl_en": "In the mandative use “not” + base form, not “doesn't”."
+  },
+  {
+   "topic": "countable",
+   "type": "mc",
+   "prompt": "Our manager gave me some useful ___ after the presentation.",
+   "options": [
+    "advice",
+    "many advices",
+    "an advice",
+    "advices"
+   ],
+   "answer": "advice",
+   "expl": "„advice“ ist unzählbar und hat deshalb weder „-s“ noch „an“.",
+   "expl_en": "“Advice” is uncountable, so it takes neither -s nor “an”."
+  },
+  {
+   "topic": "countable",
+   "type": "mc",
+   "prompt": "How ___ people attended the training session yesterday?",
+   "options": [
+    "less",
+    "many",
+    "much",
+    "a little"
+   ],
+   "answer": "many",
+   "expl": "„people“ ist zählbar (Plural), deshalb „many“.",
+   "expl_en": "“People” is countable (plural), so we use “many”."
+  },
+  {
+   "topic": "countable",
+   "type": "mc",
+   "prompt": "We only have ___ information about the new supplier.",
+   "options": [
+    "several",
+    "a little",
+    "a few",
+    "many"
+   ],
+   "answer": "a little",
+   "expl": "„information“ ist unzählbar, deshalb „a little“ statt „a few“.",
+   "expl_en": "“Information” is uncountable, so “a little” rather than “a few”."
+  },
+  {
+   "topic": "countable",
+   "type": "mc",
+   "prompt": "Could you send me ___ about the delivery dates?",
+   "options": [
+    "a information",
+    "an information",
+    "some information",
+    "some informations"
+   ],
+   "answer": "some information",
+   "expl": "Unzählbar: „some information“, ohne „a“ und ohne „-s“.",
+   "expl_en": "Uncountable: “some information”, with no “a” and no -s."
+  },
+  {
+   "topic": "countable",
+   "type": "gap",
+   "prompt": "I'd appreciate your ___ on the draft by Friday.",
+   "answer": "feedback",
+   "accepted": [
+    "input"
+   ],
+   "hint": "(Rückmeldung, ohne -s)",
+   "expl": "„feedback“ ist unzählbar und bekommt kein „-s“.",
+   "expl_en": "“Feedback” is uncountable and takes no -s."
+  },
+  {
+   "topic": "countable",
+   "type": "gap",
+   "prompt": "There ___ too much traffic on the highway this morning, so I was late.",
+   "answer": "was",
+   "accepted": [],
+   "hint": "(be, Vergangenheit)",
+   "expl": "„traffic“ ist unzählbar, deshalb Singular: „was“.",
+   "expl_en": "“Traffic” is uncountable, so the verb is singular: “was”."
+  },
+  {
+   "topic": "countable",
+   "type": "gap",
+   "prompt": "Please make sure you have enough ___ for the trip.",
+   "answer": "luggage",
+   "accepted": [
+    "baggage"
+   ],
+   "hint": "(Gepäck)",
+   "expl": "„luggage“ ist unzählbar; „enough“ passt zu beiden Arten.",
+   "expl_en": "“Luggage” is uncountable; “enough” works with both kinds."
+  },
+  {
+   "topic": "countable",
+   "type": "transform",
+   "prompt": "We have few options left. → We don't have ___ options left.",
+   "answer": "many",
+   "accepted": [
+    "a lot of"
+   ],
+   "expl": "„few“ entspricht in der Verneinung „not many“ (zählbar).",
+   "expl_en": "“Few” corresponds to “not many” in the negative (countable)."
+  },
+  {
+   "topic": "countable",
+   "type": "transform",
+   "prompt": "There isn't much furniture in the new office. → The new office has only ___ furniture.",
+   "answer": "a little",
+   "accepted": [
+    "little"
+   ],
+   "expl": "„furniture“ ist unzählbar, deshalb „a little“.",
+   "expl_en": "“Furniture” is uncountable, so “a little”."
+  },
+  {
+   "topic": "countable",
+   "type": "correct",
+   "prompt": "She gave me a lot of useful advices for my interview.",
+   "answer": "She gave me a lot of useful advice for my interview.",
+   "accepted": [],
+   "expl": "„advice“ hat keinen Plural.",
+   "expl_en": "“Advice” has no plural."
+  },
+  {
+   "topic": "countable",
+   "type": "correct",
+   "prompt": "The staff are very friendly, but the informations on the website are outdated.",
+   "answer": "The staff are very friendly, but the information on the website is outdated.",
+   "accepted": [],
+   "expl": "„information“ ist unzählbar: kein „-s“, Verb im Singular.",
+   "expl_en": "“Information” is uncountable: no -s, singular verb."
+  },
+  {
+   "topic": "countable",
+   "type": "correct",
+   "prompt": "How much meetings do we have scheduled for next week?",
+   "answer": "How many meetings do we have scheduled for next week?",
+   "accepted": [],
+   "expl": "„meetings“ ist zählbar, deshalb „many“.",
+   "expl_en": "“Meetings” is countable, so “many”."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "mc",
+   "prompt": "What was the main reason ___ the delay?",
+   "options": [
+    "of",
+    "to",
+    "for",
+    "with"
+   ],
+   "answer": "for",
+   "expl": "„reason for“ ist die feste Verbindung.",
+   "expl_en": "“Reason for” is the fixed combination."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "mc",
+   "prompt": "We expect a significant increase ___ sales this quarter.",
+   "options": [
+    "to",
+    "in",
+    "of",
+    "at"
+   ],
+   "answer": "in",
+   "expl": "Veränderungen werden mit „increase in“ angeschlossen.",
+   "expl_en": "Changes are linked with “increase in”."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "mc",
+   "prompt": "Anna is responsible ___ the budget.",
+   "options": [
+    "of",
+    "for",
+    "about",
+    "on"
+   ],
+   "answer": "for",
+   "expl": "„responsible for“ ist fest.",
+   "expl_en": "“Responsible for” is fixed."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "mc",
+   "prompt": "I'm not familiar ___ this software.",
+   "options": [
+    "for",
+    "to",
+    "of",
+    "with"
+   ],
+   "answer": "with",
+   "expl": "„familiar with“ ist die feste Verbindung.",
+   "expl_en": "“Familiar with” is the fixed combination."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "gap",
+   "prompt": "Our customers are very interested ___ the new product line.",
+   "answer": "in",
+   "accepted": [],
+   "hint": "(Präposition)",
+   "expl": "„interested in“ ist fest.",
+   "expl_en": "“Interested in” is fixed."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "gap",
+   "prompt": "There is a growing demand ___ sustainable packaging.",
+   "answer": "for",
+   "accepted": [],
+   "hint": "(Präposition)",
+   "expl": "„demand for“ ist die feste Verbindung.",
+   "expl_en": "“Demand for” is the fixed combination."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "gap",
+   "prompt": "She's very proud ___ her team's results.",
+   "answer": "of",
+   "accepted": [],
+   "hint": "(Präposition)",
+   "expl": "„proud of“ ist fest.",
+   "expl_en": "“Proud of” is fixed."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "transform",
+   "prompt": "The prices rose by 5%. → There was a 5% ___ in prices.",
+   "answer": "increase",
+   "accepted": [
+    "rise"
+   ],
+   "expl": "Nach „increase“ oder „rise“ folgt „in“.",
+   "expl_en": "“Increase” or “rise” is followed by “in”."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "transform",
+   "prompt": "We discussed the problem with the supplier. → We had a discussion ___ the problem with the supplier.",
+   "answer": "about",
+   "accepted": [
+    "on"
+   ],
+   "expl": "„discussion about/on“ für das Thema.",
+   "expl_en": "“Discussion about/on” introduces the topic."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "correct",
+   "prompt": "She has a lot of experience on project management.",
+   "answer": "She has a lot of experience in project management.",
+   "accepted": [],
+   "expl": "„experience in“ bei Fachgebieten.",
+   "expl_en": "“Experience in” for fields of work."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "correct",
+   "prompt": "We need to find a solution of this problem as soon as possible.",
+   "answer": "We need to find a solution to this problem as soon as possible.",
+   "accepted": [],
+   "expl": "„solution to“ ist die feste Verbindung.",
+   "expl_en": "“Solution to” is the fixed combination."
+  },
+  {
+   "topic": "prep-noun",
+   "type": "correct",
+   "prompt": "He is very good in negotiating with clients.",
+   "answer": "He is very good at negotiating with clients.",
+   "accepted": [],
+   "expl": "„good at“ plus -ing-Form.",
+   "expl_en": "“Good at” plus -ing form."
+  },
+  {
+   "topic": "prep-time",
+   "type": "mc",
+   "prompt": "The meeting starts ___ 9:30 on Monday morning.",
+   "options": [
+    "at",
+    "on",
+    "in",
+    "by"
+   ],
+   "answer": "at",
+   "expl": "Uhrzeiten stehen mit „at“.",
+   "expl_en": "Clock times take “at”."
+  },
+  {
+   "topic": "prep-time",
+   "type": "mc",
+   "prompt": "I have worked at this company ___ 2019.",
+   "options": [
+    "since",
+    "from",
+    "during",
+    "for"
+   ],
+   "answer": "since",
+   "expl": "„since“ nennt den Beginn eines Zeitraums.",
+   "expl_en": "“Since” gives the starting point of a period."
+  },
+  {
+   "topic": "prep-time",
+   "type": "mc",
+   "prompt": "Please submit the report ___ Friday at the latest.",
+   "options": [
+    "until",
+    "during",
+    "by",
+    "within"
+   ],
+   "answer": "by",
+   "expl": "„by“ bedeutet „spätestens bis“ und passt zu Fristen.",
+   "expl_en": "“By” means “no later than” and fits deadlines."
+  },
+  {
+   "topic": "prep-time",
+   "type": "mc",
+   "prompt": "We will respond to your request ___ 24 hours.",
+   "options": [
+    "during",
+    "within",
+    "by",
+    "since"
+   ],
+   "answer": "within",
+   "expl": "„within“ nennt einen Zeitrahmen.",
+   "expl_en": "“Within” names a time frame."
+  },
+  {
+   "topic": "prep-time",
+   "type": "gap",
+   "prompt": "The conference takes place ___ July, so book your flights early.",
+   "answer": "in",
+   "accepted": [],
+   "hint": "(Präposition)",
+   "expl": "Monate stehen mit „in“.",
+   "expl_en": "Months take “in”."
+  },
+  {
+   "topic": "prep-time",
+   "type": "gap",
+   "prompt": "We've been waiting for the delivery ___ three weeks.",
+   "answer": "for",
+   "accepted": [],
+   "hint": "(Präposition)",
+   "expl": "„for“ nennt die Dauer.",
+   "expl_en": "“For” gives the duration."
+  },
+  {
+   "topic": "prep-time",
+   "type": "gap",
+   "prompt": "I was on a call with a client ___ the lunch break.",
+   "answer": "during",
+   "accepted": [],
+   "hint": "(Präposition)",
+   "expl": "„during“ steht vor einem Ereignis oder einer Phase.",
+   "expl_en": "“During” goes before an event or a phase."
+  },
+  {
+   "topic": "prep-time",
+   "type": "transform",
+   "prompt": "The project started in March and is still running. → The project has been running ___ March.",
+   "answer": "since",
+   "accepted": [],
+   "expl": "„since“ nennt den Startpunkt.",
+   "expl_en": "“Since” names the starting point."
+  },
+  {
+   "topic": "prep-time",
+   "type": "transform",
+   "prompt": "Please finish the draft before Thursday. → Please finish the draft ___ Thursday.",
+   "answer": "by",
+   "accepted": [],
+   "expl": "„by“ nennt die Frist.",
+   "expl_en": "“By” names the deadline."
+  },
+  {
+   "topic": "prep-time",
+   "type": "correct",
+   "prompt": "We have a team meeting at Monday morning.",
+   "answer": "We have a team meeting on Monday morning.",
+   "accepted": [],
+   "expl": "Wochentage stehen mit „on“.",
+   "expl_en": "Days take “on”."
+  },
+  {
+   "topic": "prep-time",
+   "type": "correct",
+   "prompt": "We usually have lunch in noon.",
+   "answer": "We usually have lunch at noon.",
+   "accepted": [],
+   "expl": "„at noon“ ist fest.",
+   "expl_en": "“At noon” is fixed."
+  },
+  {
+   "topic": "prep-time",
+   "type": "correct",
+   "prompt": "He has been working on this project during three months.",
+   "answer": "He has been working on this project for three months.",
+   "accepted": [
+    "He has been working on this project for the past three months."
+   ],
+   "expl": "Die Dauer wird mit „for“ angegeben, nicht mit „during“.",
+   "expl_en": "Duration is given with “for”, not “during”."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "mc",
+   "prompt": "Please read the ___ report before tomorrow's meeting.",
+   "options": [
+    "10-page",
+    "10 pages",
+    "10-pages",
+    "10-pages'"
+   ],
+   "answer": "10-page",
+   "expl": "Vor dem Nomen: Zahl, Singular, Bindestrich.",
+   "expl_en": "Before the noun: number, singular, hyphen."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "mc",
+   "prompt": "She bought a ___ laptop for the office.",
+   "options": [
+    "new black German",
+    "black German new",
+    "black new German",
+    "German new black"
+   ],
+   "answer": "new black German",
+   "expl": "Reihenfolge: Alter, Farbe, Herkunft.",
+   "expl_en": "Order: age, color, origin."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "mc",
+   "prompt": "The company signed a ___ contract with its main supplier.",
+   "options": [
+    "three-years",
+    "three-yearly",
+    "three-year",
+    "three years"
+   ],
+   "answer": "three-year",
+   "expl": "Das Maßnomen bleibt vor dem Nomen im Singular.",
+   "expl_en": "The measure noun stays singular before the noun."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "mc",
+   "prompt": "It was a ___ decision, so we had to act quickly.",
+   "options": [
+    "last minutes",
+    "last-minutes",
+    "last-minute",
+    "lasting-minute"
+   ],
+   "answer": "last-minute",
+   "expl": "„last-minute“ ist ein fester Komposit-Modifikator.",
+   "expl_en": "“Last-minute” is a fixed compound modifier."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "gap",
+   "prompt": "We attended a two-___ workshop that ran from Monday to Tuesday.",
+   "answer": "day",
+   "accepted": [],
+   "hint": "(Singular)",
+   "expl": "Maßnomen im Modifikator stehen im Singular: „two-day“.",
+   "expl_en": "Measure nouns in modifiers stay singular: “two-day”."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "gap",
+   "prompt": "He is a highly ___ engineer with 20 years of experience.",
+   "answer": "skilled",
+   "accepted": [
+    "experienced",
+    "qualified",
+    "respected"
+   ],
+   "hint": "(highly + Partizip)",
+   "expl": "„highly“ verbindet sich mit einem Partizip als Modifikator.",
+   "expl_en": "“Highly” combines with a participle as a modifier."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "gap",
+   "prompt": "We need a ___-term plan that covers the next ten years.",
+   "answer": "long",
+   "accepted": [],
+   "hint": "(Kompositum mit term)",
+   "expl": "„long-term“ beschreibt einen langen Zeitraum.",
+   "expl_en": "“Long-term” describes a long period."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "transform",
+   "prompt": "The report has 15 pages. → It is a 15-___ report.",
+   "answer": "page",
+   "accepted": [],
+   "expl": "Im Modifikator bleibt das Nomen im Singular.",
+   "expl_en": "In the modifier the noun stays singular."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "transform",
+   "prompt": "Our software is easy to use. → We offer ___ software.",
+   "answer": "user-friendly",
+   "accepted": [
+    "easy-to-use"
+   ],
+   "expl": "Zusammengesetzte Modifikatoren werden mit Bindestrich geschrieben.",
+   "expl_en": "Compound modifiers are written with a hyphen."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "correct",
+   "prompt": "She presented a five-pages proposal to the board.",
+   "answer": "She presented a five-page proposal to the board.",
+   "accepted": [],
+   "expl": "Vor dem Nomen steht das Maßnomen im Singular.",
+   "expl_en": "Before the noun the measure noun is singular."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "correct",
+   "prompt": "They rent a modern small office downtown.",
+   "answer": "They rent a small modern office downtown.",
+   "accepted": [],
+   "expl": "Größe kommt vor Alter und Stil.",
+   "expl_en": "Size comes before age and style."
+  },
+  {
+   "topic": "compound-mod",
+   "type": "correct",
+   "prompt": "It was a 3 hours meeting that achieved nothing.",
+   "answer": "It was a three-hour meeting that achieved nothing.",
+   "accepted": [
+    "It was a 3-hour meeting that achieved nothing."
+   ],
+   "expl": "Maßangabe vor dem Nomen: Singular mit Bindestrich.",
+   "expl_en": "A measure before the noun: singular with a hyphen."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "mc",
+   "prompt": "I've drafted the proposal. Could you ___?",
+   "options": [
+    "look it over",
+    "look at it",
+    "look over it",
+    "over look it"
+   ],
+   "answer": "look it over",
+   "expl": "Das Pronomen „it“ steht bei „look over“ in der Mitte.",
+   "expl_en": "The pronoun “it” goes in the middle of “look over”."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "mc",
+   "prompt": "Sorry, I'm still catching ___ on emails after my vacation.",
+   "options": [
+    "up",
+    "on",
+    "out",
+    "in"
+   ],
+   "answer": "up",
+   "expl": "„catch up on“ bedeutet „etwas nachholen“.",
+   "expl_en": "“Catch up on” means to deal with something that has built up."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "mc",
+   "prompt": "The new manager wants to ___ the quarterly figures with the whole team.",
+   "options": [
+    "go in",
+    "go at",
+    "go over",
+    "go on"
+   ],
+   "answer": "go over",
+   "expl": "„go over“ bedeutet „durchgehen“.",
+   "expl_en": "“Go over” means to review."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "mc",
+   "prompt": "The meeting was called ___ because the CEO was ill.",
+   "options": [
+    "out",
+    "up",
+    "away",
+    "off"
+   ],
+   "answer": "off",
+   "expl": "„call off“ bedeutet „absagen“.",
+   "expl_en": "“Call off” means to cancel."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "gap",
+   "prompt": "I can't ___ up with the constant interruptions any longer.",
+   "answer": "put",
+   "accepted": [],
+   "hint": "(ertragen)",
+   "expl": "„put up with“ bleibt als Drei-Wort-Verb zusammen.",
+   "expl_en": "“Put up with” stays together as a three-word verb."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "gap",
+   "prompt": "The deal fell ___ at the last minute because of a legal issue.",
+   "answer": "through",
+   "accepted": [],
+   "hint": "(scheitern)",
+   "expl": "„fall through“ bedeutet „scheitern“.",
+   "expl_en": "“Fall through” means to fail."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "gap",
+   "prompt": "Please fill ___ this form and send it back to HR.",
+   "answer": "in",
+   "accepted": [
+    "out"
+   ],
+   "hint": "(ausfüllen)",
+   "expl": "„fill in“ oder „fill out“ heißt „ausfüllen“.",
+   "expl_en": "“Fill in” or “fill out” means to complete."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "transform",
+   "prompt": "I'll investigate the problem tomorrow. → I'll ___ into the problem tomorrow.",
+   "answer": "look",
+   "accepted": [],
+   "expl": "„look into“ bedeutet „untersuchen“.",
+   "expl_en": "“Look into” means to investigate."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "transform",
+   "prompt": "We have no more coffee left. → We have ___ out of coffee.",
+   "answer": "run",
+   "accepted": [],
+   "expl": "„run out of“ ist ein Drei-Wort-Verb.",
+   "expl_en": "“Run out of” is a three-word verb."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "correct",
+   "prompt": "Your package is at reception, so please pick up it after lunch.",
+   "answer": "Your package is at reception, so please pick it up after lunch.",
+   "accepted": [],
+   "expl": "Ein Pronomen steht bei trennbaren Verben in der Mitte.",
+   "expl_en": "With separable verbs a pronoun goes in the middle."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "correct",
+   "prompt": "I'm looking forward to see you at the conference.",
+   "answer": "I'm looking forward to seeing you at the conference.",
+   "accepted": [],
+   "expl": "„to“ ist hier eine Präposition und braucht die -ing-Form.",
+   "expl_en": "“To” is a preposition here and needs the -ing form."
+  },
+  {
+   "topic": "phrasal-syntax",
+   "type": "correct",
+   "prompt": "She quickly got on well her new team.",
+   "answer": "She quickly got on well with her new team.",
+   "accepted": [
+    "She quickly got along well with her new team."
+   ],
+   "expl": "„get on with“ braucht die Präposition „with“.",
+   "expl_en": "“Get on with” needs the preposition “with”."
+  },
+  {
+   "topic": "word-order",
+   "type": "mc",
+   "prompt": "Rarely ___ such a strong response from customers.",
+   "options": [
+    "we have seen",
+    "we did see",
+    "we saw",
+    "have we seen"
+   ],
+   "answer": "have we seen",
+   "expl": "Nach „rarely“ am Satzanfang steht das Hilfsverb vor dem Subjekt.",
+   "expl_en": "After sentence-initial “rarely” the auxiliary comes before the subject."
+  },
+  {
+   "topic": "word-order",
+   "type": "mc",
+   "prompt": "We are holding the workshop ___.",
+   "options": [
+    "in Munich tomorrow",
+    "in tomorrow Munich",
+    "Munich tomorrow in",
+    "tomorrow in Munich"
+   ],
+   "answer": "in Munich tomorrow",
+   "expl": "Ort steht vor Zeit.",
+   "expl_en": "Place comes before time."
+  },
+  {
+   "topic": "word-order",
+   "type": "mc",
+   "prompt": "Not only ___ the deadline, but they also exceeded the budget.",
+   "options": [
+    "they did miss",
+    "they missed",
+    "missed they",
+    "did they miss"
+   ],
+   "answer": "did they miss",
+   "expl": "Nach „not only“ steht Inversion mit „do“.",
+   "expl_en": "After “not only” comes inversion with “do”."
+  },
+  {
+   "topic": "word-order",
+   "type": "mc",
+   "prompt": "Under no circumstances ___ share the password with anyone.",
+   "options": [
+    "you should",
+    "do you should",
+    "you shall",
+    "should you"
+   ],
+   "answer": "should you",
+   "expl": "Nach „under no circumstances“ folgt Inversion.",
+   "expl_en": "“Under no circumstances” triggers inversion."
+  },
+  {
+   "topic": "word-order",
+   "type": "gap",
+   "prompt": "Never ___ I seen such a well-organized conference.",
+   "answer": "have",
+   "accepted": [],
+   "hint": "(Hilfsverb)",
+   "expl": "Nach „never“ steht das Hilfsverb vor dem Subjekt.",
+   "expl_en": "After “never” the auxiliary comes before the subject."
+  },
+  {
+   "topic": "word-order",
+   "type": "gap",
+   "prompt": "Hardly had we started the meeting ___ the fire alarm went off.",
+   "answer": "when",
+   "accepted": [
+    "before"
+   ],
+   "hint": "(Konjunktion)",
+   "expl": "„hardly … when“ ist die feste Paarung.",
+   "expl_en": "“Hardly … when” is the fixed pair."
+  },
+  {
+   "topic": "word-order",
+   "type": "gap",
+   "prompt": "Seldom ___ a company respond so quickly to a complaint.",
+   "answer": "does",
+   "accepted": [
+    "did"
+   ],
+   "hint": "(Hilfsverb)",
+   "expl": "Nach „seldom“ folgt Inversion mit „do“.",
+   "expl_en": "After “seldom” comes inversion with “do”."
+  },
+  {
+   "topic": "word-order",
+   "type": "transform",
+   "prompt": "We had never seen such a mess. → Never ___ we seen such a mess.",
+   "answer": "had",
+   "accepted": [],
+   "expl": "Nach „never“ steht das Hilfsverb vor dem Subjekt.",
+   "expl_en": "After “never” the auxiliary comes before the subject."
+  },
+  {
+   "topic": "word-order",
+   "type": "transform",
+   "prompt": "She not only wrote the report, she also presented it. → Not only ___ she write the report, but she also presented it.",
+   "answer": "did",
+   "accepted": [],
+   "expl": "Nach „not only“ folgt „did“ plus Grundform.",
+   "expl_en": "After “not only” comes “did” plus the base form."
+  },
+  {
+   "topic": "word-order",
+   "type": "correct",
+   "prompt": "Rarely we get such positive feedback from clients.",
+   "answer": "Rarely do we get such positive feedback from clients.",
+   "accepted": [],
+   "expl": "Inversion nach „rarely“.",
+   "expl_en": "Inversion after “rarely”."
+  },
+  {
+   "topic": "word-order",
+   "type": "correct",
+   "prompt": "He explained clearly the plan to the team.",
+   "answer": "He explained the plan clearly to the team.",
+   "accepted": [
+    "He clearly explained the plan to the team."
+   ],
+   "expl": "Zwischen Verb und Objekt steht kein Adverb.",
+   "expl_en": "No adverb goes between verb and object."
+  },
+  {
+   "topic": "word-order",
+   "type": "correct",
+   "prompt": "No sooner we had signed the contract than the prices rose.",
+   "answer": "No sooner had we signed the contract than the prices rose.",
+   "accepted": [],
+   "expl": "Inversion nach „no sooner“.",
+   "expl_en": "Inversion after “no sooner”."
+  },
+  {
+   "topic": "linkers",
+   "type": "mc",
+   "prompt": "___ the heavy traffic, we arrived on time.",
+   "options": [
+    "Whereas",
+    "Although",
+    "However",
+    "Despite"
+   ],
+   "answer": "Despite",
+   "expl": "Vor einem Nomen („the heavy traffic“) steht „despite“.",
+   "expl_en": "Before a noun (“the heavy traffic”) comes “despite”."
+  },
+  {
+   "topic": "linkers",
+   "type": "mc",
+   "prompt": "The sales team hit its target, ___ the support team missed theirs.",
+   "options": [
+    "in spite",
+    "therefore",
+    "whereas",
+    "despite"
+   ],
+   "answer": "whereas",
+   "expl": "„whereas“ verbindet zwei gegensätzliche Aussagen.",
+   "expl_en": "“Whereas” links two contrasting statements."
+  },
+  {
+   "topic": "linkers",
+   "type": "mc",
+   "prompt": "The server crashed twice last week; ___, we are moving to a new provider.",
+   "options": [
+    "whereas",
+    "although",
+    "nevertheless",
+    "therefore"
+   ],
+   "answer": "therefore",
+   "expl": "„therefore“ zeigt die Folge; davor Semikolon, danach Komma.",
+   "expl_en": "“Therefore” shows the result; semicolon before, comma after."
+  },
+  {
+   "topic": "linkers",
+   "type": "mc",
+   "prompt": "___ the offer was generous, he turned it down.",
+   "options": [
+    "Although",
+    "Nevertheless",
+    "In spite",
+    "Despite"
+   ],
+   "answer": "Although",
+   "expl": "Vor einem ganzen Satz steht „although“.",
+   "expl_en": "A full clause takes “although”."
+  },
+  {
+   "topic": "linkers",
+   "type": "gap",
+   "prompt": "She got the job ___ her lack of experience.",
+   "answer": "despite",
+   "accepted": [
+    "in spite of"
+   ],
+   "hint": "(trotz + Nomen)",
+   "expl": "Vor einem Nomen steht „despite“ oder „in spite of“.",
+   "expl_en": "Before a noun comes “despite” or “in spite of”."
+  },
+  {
+   "topic": "linkers",
+   "type": "gap",
+   "prompt": "The prototype looks great; ___, it still needs a lot of testing.",
+   "answer": "however",
+   "accepted": [
+    "nevertheless",
+    "nonetheless"
+   ],
+   "hint": "(Gegensatz, nach Semikolon)",
+   "expl": "„however“ steht nach Semikolon und bekommt ein Komma.",
+   "expl_en": "“However” follows a semicolon and takes a comma."
+  },
+  {
+   "topic": "linkers",
+   "type": "gap",
+   "prompt": "Prices are rising, ___ wages are staying flat.",
+   "answer": "while",
+   "accepted": [
+    "whereas"
+   ],
+   "hint": "(Kontrast, Konjunktion)",
+   "expl": "„while“ oder „whereas“ stellt zwei Dinge gegenüber.",
+   "expl_en": "“While” or “whereas” contrasts two things."
+  },
+  {
+   "topic": "linkers",
+   "type": "transform",
+   "prompt": "It was raining, but we held the outdoor event. → We held the outdoor event in ___ of the rain.",
+   "answer": "spite",
+   "accepted": [],
+   "expl": "„in spite of“ steht vor einem Nomen.",
+   "expl_en": "“In spite of” goes before a noun."
+  },
+  {
+   "topic": "linkers",
+   "type": "transform",
+   "prompt": "He was tired. He finished the presentation. → ___ he was tired, he finished the presentation.",
+   "answer": "Although",
+   "accepted": [
+    "Though",
+    "Even though"
+   ],
+   "expl": "„although“ leitet einen Nebensatz des Gegensatzes ein.",
+   "expl_en": "“Although” introduces a clause of contrast."
+  },
+  {
+   "topic": "linkers",
+   "type": "correct",
+   "prompt": "Despite we were short on time, we completed the audit.",
+   "answer": "Although we were short on time, we completed the audit.",
+   "accepted": [
+    "Despite being short on time, we completed the audit.",
+    "Despite the lack of time, we completed the audit."
+   ],
+   "expl": "Vor einem Satz steht „although“; „despite“ braucht Nomen oder -ing.",
+   "expl_en": "A clause takes “although”; “despite” needs a noun or -ing."
+  },
+  {
+   "topic": "linkers",
+   "type": "correct",
+   "prompt": "In spite the delay, the project was a success.",
+   "answer": "In spite of the delay, the project was a success.",
+   "accepted": [],
+   "expl": "„in spite“ braucht „of“.",
+   "expl_en": "“In spite” needs “of”."
+  },
+  {
+   "topic": "linkers",
+   "type": "correct",
+   "prompt": "The budget was approved, however the project is still on hold.",
+   "answer": "The budget was approved; however, the project is still on hold.",
+   "accepted": [
+    "The budget was approved. However, the project is still on hold.",
+    "The budget was approved, but the project is still on hold."
+   ],
+   "expl": "„however“ verbindet keine Sätze mit bloßem Komma.",
+   "expl_en": "“However” cannot join clauses with just a comma."
+  },
+  {
+   "topic": "comparison",
+   "type": "mc",
+   "prompt": "The ___ we prepare, the more confident we feel.",
+   "options": [
+    "most",
+    "more",
+    "many",
+    "very"
+   ],
+   "answer": "more",
+   "expl": "„the more …, the more …“ drückt eine parallele Entwicklung aus.",
+   "expl_en": "“The more …, the more …” expresses a parallel development."
+  },
+  {
+   "topic": "comparison",
+   "type": "mc",
+   "prompt": "This year's results are ___ better than last year's.",
+   "options": [
+    "more",
+    "very",
+    "most",
+    "far"
+   ],
+   "answer": "far",
+   "expl": "Vor einem Komparativ steht „far“ oder „much“, nicht „very“.",
+   "expl_en": "Before a comparative, use “far” or “much”, not “very”."
+  },
+  {
+   "topic": "comparison",
+   "type": "mc",
+   "prompt": "The new tool isn't as complicated ___ the old one.",
+   "options": [
+    "than",
+    "like",
+    "as",
+    "that"
+   ],
+   "answer": "as",
+   "expl": "„as … as“ ist die feste Gleichheitsform.",
+   "expl_en": "“As … as” is the fixed equality form."
+  },
+  {
+   "topic": "comparison",
+   "type": "mc",
+   "prompt": "Our office is ___ than theirs.",
+   "options": [
+    "more bigger",
+    "more big",
+    "biggest",
+    "bigger"
+   ],
+   "answer": "bigger",
+   "expl": "Kurze Adjektive bilden den Komparativ mit „-er“.",
+   "expl_en": "Short adjectives form the comparative with “-er”."
+  },
+  {
+   "topic": "comparison",
+   "type": "gap",
+   "prompt": "The ___ the deadline, the more stressed the team gets.",
+   "answer": "closer",
+   "accepted": [
+    "nearer",
+    "tighter"
+   ],
+   "hint": "(Komparativ von close)",
+   "expl": "„the + Komparativ“ steht vor beiden Satzteilen.",
+   "expl_en": "“The + comparative” stands before both clauses."
+  },
+  {
+   "topic": "comparison",
+   "type": "gap",
+   "prompt": "Our competitor's prices are far ___ than ours, so we lose customers.",
+   "answer": "higher",
+   "accepted": [
+    "greater"
+   ],
+   "hint": "(Komparativ von high)",
+   "expl": "Nach „far“ folgt ein Komparativ mit „than“.",
+   "expl_en": "After “far” comes a comparative with “than”."
+  },
+  {
+   "topic": "comparison",
+   "type": "gap",
+   "prompt": "This quarter's profit is twice ___ high as last quarter's.",
+   "answer": "as",
+   "accepted": [],
+   "hint": "(Vergleichswort)",
+   "expl": "Vielfache bilden „twice as … as“.",
+   "expl_en": "Multiples use “twice as … as”."
+  },
+  {
+   "topic": "comparison",
+   "type": "transform",
+   "prompt": "The train is faster than the bus. → The bus is not ___ fast as the train.",
+   "answer": "as",
+   "accepted": [
+    "so"
+   ],
+   "expl": "„not as … as“ drückt den Unterschied umgekehrt aus.",
+   "expl_en": "“Not as … as” expresses the difference the other way around."
+  },
+  {
+   "topic": "comparison",
+   "type": "transform",
+   "prompt": "If we work more, we finish earlier. → The more we work, the ___ we finish.",
+   "answer": "earlier",
+   "accepted": [
+    "sooner"
+   ],
+   "expl": "Nach „the more …“ folgt „the“ plus Komparativ.",
+   "expl_en": "After “the more …” comes “the” plus a comparative."
+  },
+  {
+   "topic": "comparison",
+   "type": "correct",
+   "prompt": "This solution is more cheaper than the previous one.",
+   "answer": "This solution is cheaper than the previous one.",
+   "accepted": [],
+   "expl": "Kein „more“ vor einem „-er“-Komparativ.",
+   "expl_en": "No “more” before an “-er” comparative."
+  },
+  {
+   "topic": "comparison",
+   "type": "correct",
+   "prompt": "Our sales are higher as last year.",
+   "answer": "Our sales are higher than last year.",
+   "accepted": [],
+   "expl": "Nach dem Komparativ steht „than“.",
+   "expl_en": "After the comparative comes “than”."
+  },
+  {
+   "topic": "comparison",
+   "type": "correct",
+   "prompt": "More we practice, better we get.",
+   "answer": "The more we practice, the better we get.",
+   "accepted": [],
+   "expl": "„the more …, the better …“ braucht zweimal „the“.",
+   "expl_en": "“The more …, the better …” needs “the” twice."
   }
  ]
 }

@@ -200,6 +200,7 @@ export function deriveToday(i: DeriveInput): TodayState {
   let answers = 0;
   let talks = 0;
   let biz = 0;
+  let repaired = 0;
   for (const e of i.entries) {
     // Phase 3 (Plan §3.7): Gespräche und Business-Einheiten sind keine Antworten der Trefferquote.
     if (e.type === 'speak') {
@@ -216,11 +217,12 @@ export function deriveToday(i: DeriveInput): TodayState {
     if (e.type === 'tones') continue;
     answers++;
     if (e.ok === true) correct++;
+    if (e.type === 'repair' && e.ok === true) repaired++;
     const cardKey = entryCardKey(e);
     if (e.ctx === 'rev' && cardKey) reviewed.add(cardKey);
     if (e.ctx === 'xtra') extra++;
   }
-  const balance = { answers, correct, minutes: Math.max(0, Math.round(i.minutes)), talks, biz };
+  const balance = { answers, correct, minutes: Math.max(0, Math.round(i.minutes)), talks, biz, repaired };
   const noDuties = { done: 0, total: 0, missing: [] as DutyId[], items: [] as DutyState[] };
   if (!i.plan) return { day: i.day, status: 'noPlan', duties: noDuties, review: { done: 0, total: 0 }, extra, balance };
 

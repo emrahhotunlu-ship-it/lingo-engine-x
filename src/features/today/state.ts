@@ -181,7 +181,7 @@ const EMPTY_VIEW: TodayView = {
   duties: { done: 0, total: 0, missing: [], items: [] },
   review: { done: 0, total: 0 },
   extra: 0,
-  balance: { answers: 0, correct: 0, minutes: 0, talks: 0, biz: 0 },
+  balance: { answers: 0, correct: 0, minutes: 0, talks: 0, biz: 0, repaired: 0 },
   ready: false,
   dayLoaded: false,
   plan: null,

@@ -33,6 +33,8 @@ export const nbHeuteDe = {
   nbHeuteWhy_again: 'Deine falschen Sätze von früher richtig schreiben',
   // Fertig-Zustand (N15)
   nbHeuteDoneTitle: 'Fertig für heute',
+  nbHeuteTruthRepaired_one: 'Fehlersatz korrigiert: {n}',
+  nbHeuteTruthRepaired_other: 'Fehlersätze korrigiert: {n}',
   nbHeuteDoneStats: '{min} Min. · {blocks} von {blocks} Blöcken · {answers} Antworten, {pct} % richtig',
   nbHeuteDoneStatsNoAnswers: '{min} Min. · {blocks} von {blocks} Blöcken',
   nbHeuteTomorrow: 'Morgen: {what}',

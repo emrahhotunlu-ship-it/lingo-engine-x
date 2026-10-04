@@ -31,6 +31,8 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteWhy_order: 'Practice word order in whole sentences',
   nbHeuteWhy_again: 'Write your earlier wrong sentences correctly',
   nbHeuteDoneTitle: 'Done for today',
+  nbHeuteTruthRepaired_one: 'Mistake sentence fixed: {n}',
+  nbHeuteTruthRepaired_other: 'Mistake sentences fixed: {n}',
   nbHeuteDoneStats: '{min} min · {blocks} of {blocks} blocks · {answers} answers, {pct}% correct',
   nbHeuteDoneStatsNoAnswers: '{min} min · {blocks} of {blocks} blocks',
   nbHeuteTomorrow: 'Tomorrow: {what}',

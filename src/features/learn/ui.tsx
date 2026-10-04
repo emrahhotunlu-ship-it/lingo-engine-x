@@ -172,7 +172,7 @@ export function useAutoNextPref(): boolean {
 }
 
 /**
- * „Weiter" mit optionalem Ablaufbalken (M6): nach etwa 1,2 s weiter. Ein Tippen oder eine
+ * „Weiter" mit optionalem Ablaufbalken (M6): nach 4 s weiter (Gesamtkonzept R6: nie unter 4 s, damit das „Warum“ lesbar bleibt). Ein Tippen oder eine
  * Taste irgendwo hält an. Reduzierte Bewegung: Balken ohne Animation (globale Regel).
  */
 export function NextButton({ onNext, auto, label, testId = 'next' }: { onNext: () => void; auto: boolean; label?: string; testId?: string }) {
@@ -195,7 +195,7 @@ export function NextButton({ onNext, auto, label, testId = 'next' }: { onNext: (
       if (fired.current) return;
       fired.current = true;
       cb.current();
-    }, 1200);
+    }, 4000);
     window.addEventListener('pointerdown', stop, true);
     window.addEventListener('keydown', stop, true);
     return () => {
