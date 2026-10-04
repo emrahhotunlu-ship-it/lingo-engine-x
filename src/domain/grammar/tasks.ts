@@ -1,3 +1,4 @@
+import bankJson from '../../content/grammar-bank.json';
 import extraJson from '../../content/grammar-extra.json';
 import { TOPICS, topicById } from '../content';
 import type { GrammarTask, GrammarTaskType, TaskSrc } from '../learn/types';
@@ -104,7 +105,7 @@ function ruleTraps(): Record<string, { traps?: RuleTrap[] }> {
 let seedCache: GrammarTask[] | null = null;
 /**
  * Startaufgaben ohne KI: die 48 Aufgaben der alten App plus je Falle aus dem Regelwerk eine
- * Satzkorrektur (`bad` → `good`), wenige ergänzte Aufgaben (content/grammar-extra.json) und die
+ * Satzkorrektur (`bad` → `good`), wenige ergänzte Aufgaben (content/grammar-extra.json), die Grammatik-Bank (content/grammar-bank.json) und die
  * Aufgaben des C1-Werkzeugkastens (content/c1/toolkit.json). So hat
  * jedes Thema mindestens vier Aufgaben (Grundfassung, D11).
  */
@@ -120,6 +121,8 @@ export function seedTasks(): readonly GrammarTask[] {
   };
   for (const g of asList(grammarJson().seedGrammar)) push(normalizeTask(g, 'seed'));
   for (const g of extraJson.tasks as unknown[]) push(normalizeTask(g, 'seed', 'content/grammar-extra'));
+  // Grammatik-Bank (Ernte 03.10.2026, Umbau „Fokus“): 15 Aufgaben je Kernthema, Optionen fest gemischt.
+  for (const g of bankJson.tasks as unknown[]) push(normalizeTask(g, 'seed', 'content/grammar-bank'));
   // C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): je Thema mindestens 12 Startaufgaben.
   for (const g of asList(toolkitJson().tasks)) push(normalizeTask(g, 'seed', 'content/c1'));
   const RULES = ruleTraps();

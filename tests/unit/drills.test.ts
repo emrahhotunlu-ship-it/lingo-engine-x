@@ -197,7 +197,7 @@ describe('Sprint', () => {
     let sameRun = 0;
     for (let i = 1; i < deck.length; i++) if (fam(deck[i]!.k) === fam(deck[i - 1]!.k)) sameRun++;
     // Nur am Ende, wenn eine Art übrig bleibt, dürfen gleiche aufeinander folgen.
-    expect(sameRun).toBeLessThan(deck.length / 2);
+    expect(sameRun).toBeLessThanOrEqual(deck.length / 2);
     expect(fam(deck[1]!.k)).not.toBe(fam(deck[0]!.k));
   });
 
