@@ -25,22 +25,6 @@ export function pressureCheckReply(input: string): string {
   return JSON.stringify(out);
 }
 
-export function inboxCheckReply(input: string): string {
-  if (/\bzzjson\b/i.test(input)) return NOT_JSON;
-  const en = isEn(input);
-  const must = (input.match(/^\d+\. /gm) ?? []).map((_, i) => i % 2 === 0);
-  return JSON.stringify({
-    gist: true,
-    gistNote: en ? 'You spotted the real concern.' : 'Du hast das eigentliche Anliegen erkannt.',
-    must,
-    tone: 'fits',
-    effect: en ? 'Polite and clear; the next step could be more concrete.' : 'Höflich und klar; der nächste Schritt könnte konkreter sein.',
-    fixes: [{ mine: 'I send you', right: "I'll send you", why: en ? 'Use will for a promise.' : 'Für ein Versprechen steht will.' }],
-    better: "Hi Laura,\n\nThanks for your reply, and good luck with the year-end closing. I've attached a one-page overview with our prices. Would it make sense to talk again in late February?\n\nBest regards",
-  });
-}
-
 export function registerP7Replies(): void {
   registerCannedReply('pressure-check', pressureCheckReply);
-  registerCannedReply('inbox-check', inboxCheckReply);
 }

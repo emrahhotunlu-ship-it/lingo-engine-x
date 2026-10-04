@@ -139,7 +139,7 @@ describe('Deep-Links', () => {
 
   it('#go= aus dem Adress-Anker', () => {
     expect(routeFromHash(`#go=${encodeURIComponent('overview?tab=history')}`, lookup)).toEqual({ name: 'overview', tab: 'history' });
-    expect(routeFromHash('#go=trainer&round=extra', lookup)).toEqual({ name: 'trainer', round: 'extra' });
+    expect(routeFromHash('#go=trainer?round=extra', lookup)).toEqual({ name: 'trainer', round: 'extra' });
     expect(routeFromHash('#main', lookup)).toBeNull();
   });
 });

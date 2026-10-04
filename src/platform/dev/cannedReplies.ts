@@ -1,22 +1,16 @@
 import type { SampleFn, SampleOptions, SampleResult } from '../types';
 import { coreWord } from '../../domain/course/baseLesson';
 import { registerCannedReply } from './fakeSample';
-import { roleplayReportReply, roleplayTurnReply, sceneGenReply, turnAnalysisReply } from './cannedSpeak';
-import { mailRefineReply, phraseAdaptReply, pitchFeedbackReply, pitchScriptReply } from './cannedBiz';
+import { roleplayReportReply, roleplayTurnReply, turnAnalysisReply } from './cannedSpeak';
 import { registerCompanionReplies } from './cannedCompanion';
-import { registerInputReplies } from './cannedReplies.input';
 import { assessReply } from './canned/assess';
 import { weeklyReply } from './canned/weekly';
 import { registerLearnReplies } from './cannedLearn';
-import { registerSayReplies } from './cannedSay';
-import { registerToneReplies } from './cannedTones';
 import { courseExtendReply } from './canned/courseExtend';
 import { repairCheckReply } from './canned/repairCheck';
-import { registerFluencyMeetingReplies } from './canned/fluencyMeeting';
 import { patternCheckReply, patternsReply } from './canned/patterns';
 import { registerP7Replies } from './canned/p7';
 import { registerNbReplies } from './canned/nb';
-import { registerP5TaskReplies } from './canned/p5tasks';
 import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
@@ -321,17 +315,10 @@ export function registerCannedReplies(): void {
   registerCannedReply('roleplay-turn', roleplayTurnReply);
   registerCannedReply('turn-analysis', turnAnalysisReply);
   registerCannedReply('roleplay-report', roleplayReportReply);
-  registerCannedReply('scene-gen', sceneGenReply);
-  registerCannedReply('mail-refine', mailRefineReply);
-  registerCannedReply('phrase-adapt', phraseAdaptReply);
-  registerCannedReply('pitch-script', pitchScriptReply);
-  registerCannedReply('pitch-feedback', pitchFeedbackReply);
   // Phase 5: companion-chat, translate
   registerCompanionReplies();
   // Lehrer-Feedback einfügen (28.09.2026, ersetzt die Preply-Brücke)
   registerTeacherFeedbackReply();
-  // Phase 4: reading-text, listening-text, writing-prompt, writing-review, reading-check, apply-check
-  registerInputReplies();
   // Phase 6
   registerCannedReply('assess', assessReply);
   registerCannedReply('weekly-report', weeklyReply);
@@ -339,23 +326,15 @@ export function registerCannedReplies(): void {
   registerCannedReply('course-extend', courseExtendReply);
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   registerCannedReply('repair-check', repairCheckReply);
-  // Lernberatung 27.09., V6/V4: fluency-check, meeting-prep, meeting-debrief
-  registerFluencyMeetingReplies();
-  // Neubau P7: pressure-check, inbox-check
+  // Neubau P7: pressure-check
   registerP7Replies();
   // Lernberatung 27.09., V3 – Deutsch-Fallen
   registerCannedReply('patterns', patternsReply);
   registerCannedReply('pattern-check', patternCheckReply);
   // Prüfbericht: word-gen, lesson-production, grammar-items, mnemonic
   registerLearnReplies();
-  // Lernberatung 27.09.: say-check („Sag es“)
-  registerSayReplies();
-  // Lernberatung 27.09., Vorschlag 8: tone-check („Eine Botschaft, drei Tonlagen“)
-  registerToneReplies();
-  // Neubau: goal-check, claude-drill, unit-listen, text-level, alternatives, text-cards
+  // Neubau: goal-check, claude-drill, text-cards
   registerNbReplies();
-  // Neubau P5: speak-task-check (Pitch 30/60/120, Diagramm, Umschreiben, Rückübersetzung)
-  registerP5TaskReplies();
 }
 
 // ---------------------------------------------------------------- Aufrufprotokoll

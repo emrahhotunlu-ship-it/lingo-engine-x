@@ -143,7 +143,8 @@ describe('Wochenbericht (Plan §7.3)', () => {
     const base = { days, vocab: new Map(), grammar, writing, talk: new Map(), profile, prompts };
     const facts = weekFacts(base);
     expect(facts.filter((f) => f.kind === 'topic').map((f) => f.id)).toEqual(['gt:modals']);
-    expect(facts.find((f) => f.kind === 'text')).toMatchObject({ titles: { de: 'Kurzbericht: Quartal', en: 'Short report: quarter' } });
+    // Umbau Fokus: Texte (Schreiben) und Gespräche sind keine Fakten des Wochenberichts mehr.
+    expect(facts.some((f) => (f.kind as string) === 'text' || (f.kind as string) === 'talk')).toBe(false);
     expect(facts.find((f) => f.kind === 'time')).toMatchObject({ minutes: 30, activeDays: 2, pflichtDays: null });
     expect(weekFacts({ ...base, pflichtSince: '2026-09-25' }).find((f) => f.kind === 'time')).toMatchObject({ pflichtDays: null });
     const since = weekFacts({ ...base, pflichtSince: '2026-09-17', profile: { ...profile, pflicht: { '2026-09-15': 1, '2026-09-18': 1 } } });

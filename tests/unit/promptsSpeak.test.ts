@@ -41,7 +41,9 @@ describe('Verzeichnis', () => {
   it('alle Vorlagen mit eindeutiger Kennung; Gesprächsvorlage getrennt', () => {
     const ids = [...TEMPLATES.map((t) => t.id), ...CHAT_TEMPLATES.map((t) => t.id)];
     expect(new Set(ids).size).toBe(ids.length);
-    for (const id of ['turn-analysis', 'roleplay-report', 'scene-gen', 'mail-refine', 'phrase-adapt', 'pitch-script', 'pitch-feedback', 'roleplay-turn']) expect(ids).toContain(id);
+    for (const id of ['turn-analysis', 'roleplay-report', 'roleplay-turn']) expect(ids).toContain(id);
+    // Umbau Fokus: Vorlagen der entfallenen Bereiche sind nicht mehr registriert.
+    for (const id of ['scene-gen', 'mail-refine', 'phrase-adapt', 'pitch-script', 'pitch-feedback', 'say-check', 'fluency-check', 'tone-check', 'meeting-prep', 'meeting-debrief', 'compare']) expect(ids).not.toContain(id);
     for (const id of ids) expect(id).toMatch(TEMPLATE_ID);
   });
 });

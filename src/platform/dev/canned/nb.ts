@@ -1,5 +1,4 @@
 import { registerCannedReply } from '../fakeSample';
-import { registerP4bReplies } from './p4b';
 
 // Feste Antworten für die Neubau-Vorlagen goal-check@1 (P5), claude-drill@1 (P6),
 // unit-listen@1, text-level@1, alternatives@1 (P4) und text-cards@1 (P3). Sie lesen nur die
@@ -104,38 +103,6 @@ const LISTEN = {
   shadow: ["It doesn't have to be fancy.", "I'm in the office until five today.", 'The rollout plan looks realistic to us.'],
 };
 
-export function unitListenReply(input: string): string {
-  if (/\bzzjson\b/i.test(between(input, /^Learner context: (.*)$/m))) return NOT_JSON;
-  return JSON.stringify(LISTEN);
-}
-
-// ---------------------------------------------------------------- text-level@1
-
-export function textLevelReply(input: string): string {
-  const text = between(input, /\nText:\n([\s\S]*?)\nReply with only one JSON object/);
-  if (/\bzzjson\b/i.test(text)) return NOT_JSON;
-  const easier = /Make it easier/.test(input);
-  const out = easier
-    ? text.replace(/\bhowever\b/gi, 'but').replace(/\btherefore\b/gi, 'so').replace(/\bapproximately\b/gi, 'about') + ' In short, this is the main point.'
-    : text.replace(/\bbut\b/g, 'yet').replace(/\bshow\b/g, 'demonstrate').replace(/\babout\b/g, 'roughly') + ' This, in essence, is the crux of the matter.';
-  return JSON.stringify({ text: out });
-}
-
-// ---------------------------------------------------------------- alternatives@1
-
-export function alternativesReply(input: string): string {
-  const sentence = between(input, /\nSentence:\n([\s\S]*?)\nSurrounding text/);
-  if (/\bzzjson\b/i.test(sentence)) return NOT_JSON;
-  const en = /in one short English sentence/.test(input);
-  return JSON.stringify({
-    alts: [
-      { text: 'I would like to follow up on our conversation from last week.', note: en ? 'More polite and a little more formal.' : 'Höflicher und etwas förmlicher.', de: 'an etwas anknüpfen' },
-      { text: "I'm following up on last week's call.", note: en ? 'Short and direct, typical for email.' : 'Kurz und direkt, typisch für E-Mails.', de: 'nachfassen' },
-      { text: 'Just circling back on what we discussed last week.', note: en ? 'Casual; fine with people you know well.' : 'Locker; gut bei Leuten, die du kennst.', de: 'auf etwas zurückkommen' },
-    ],
-  });
-}
-
 // ---------------------------------------------------------------- text-cards@1
 
 const CARD_WORDS: ReadonlyArray<{ word: string; pos: string; de: string; def: string }> = [
@@ -172,9 +139,5 @@ export function textCardsReply(input: string): string {
 export function registerNbReplies(): void {
   registerCannedReply('goal-check', goalCheckReply);
   registerCannedReply('claude-drill', claudeDrillReply);
-  registerCannedReply('unit-listen', unitListenReply);
-  registerCannedReply('text-level', textLevelReply);
-  registerCannedReply('alternatives', alternativesReply);
   registerCannedReply('text-cards', textCardsReply);
-  registerP4bReplies();
 }

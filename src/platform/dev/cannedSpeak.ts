@@ -149,30 +149,3 @@ export function roleplayReportReply(input: string): string {
     ],
   });
 }
-
-// ---------------------------------------------------------------- scene-gen@1
-
-export function sceneGenReply(input: string): string {
-  const wish = line(input, 'Learner wish');
-  if (/zzjson/i.test(wish)) return NOT_JSON;
-  if (/zzqx/i.test(wish) && !isRetry(input)) return JSON.stringify({ title: 'x' });
-  return JSON.stringify({
-    title: 'Securing budget for the archive migration',
-    title_de: 'Budget für die Archiv-Migration sichern',
-    situation: 'Your finance director wants to postpone the archive migration to next year to save money. The old system runs out of support in December, and you have ten minutes in his office before the budget meeting.',
-    situation_de: 'Dein Finanzchef will die Archiv-Migration auf nächstes Jahr schieben, um Geld zu sparen. Der Support für das alte System endet im Dezember, und du hast zehn Minuten in seinem Büro vor der Budgetrunde.',
-    goal: 'Keep the migration in this year’s budget.',
-    goal_de: 'Die Migration im Budget dieses Jahres halten.',
-    persona: { name: 'Thomas Brandt', role: 'Finance Director', org: 'your own company', traits: 'Calm, skeptical of IT projects, wants every risk expressed in money.' },
-    stake: 'He needs to cut five percent from next quarter’s spending.',
-    objection: 'He believes the old system can run another year without support.',
-    opening: 'I have ten minutes. Tell me why this cannot wait until next year.',
-    useful: [
-      { en: 'the risk is concrete', de: 'das Risiko ist konkret' },
-      { en: 'in financial terms', de: 'in Zahlen ausgedrückt' },
-      { en: 'if we wait, we pay twice', de: 'wenn wir warten, zahlen wir doppelt' },
-      { en: 'I can phase the cost', de: 'ich kann die Kosten staffeln' },
-    ],
-    level: 'C1',
-  });
-}
