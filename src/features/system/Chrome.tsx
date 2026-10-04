@@ -72,7 +72,9 @@ export function TabTitle({ title, sub, actions, testId }: { title: ReactNode; su
         <h1 className="min-w-0 text-[1.75rem] leading-tight font-bold tracking-[-0.02em] sm:text-3xl" data-testid={testId}>
           {title}
         </h1>
-        <TitleActions>{actions}</TitleActions>
+        {/* Nur eigene Knöpfe: Übersetzer, Claude und Zahnrad zeigt schon der Kopf (Reiter-Wurzel) bzw. die Seitenleiste
+            (`speak`/`library` sind seit 04.10.2026 Seiten mit Rahmen-Kopf) – sonst stünden sie doppelt da. */}
+        {actions ? <div className="flex flex-none items-center gap-1">{actions}</div> : null}
       </div>
       {sub}
     </header>
