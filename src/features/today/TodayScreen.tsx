@@ -550,7 +550,7 @@ export function TodayScreen() {
 
       {ok && !done && comeback !== 'none' && (
         <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band={comeback}>
-          {t(comeback === 'short' ? 'tdComebackShort' : 'tdComebackLong')}
+          {t(comeback === 'short' ? 'nbHeuteComebackShort' : 'nbHeuteComebackLong')}
         </motion.p>
       )}
 
