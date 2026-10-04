@@ -22,7 +22,7 @@ export const nbHeuteDe = {
   nbHeuteBlock_order: 'Satzbau',
   // Grund je Block (eine kurze Zeile)
   nbHeuteWhy_review: '{n} Karten · Fällige zuerst',
-  nbHeuteWhy_reviewBehind: '{n} Karten · Rückstand, der Rest morgen',
+  nbHeuteWhy_reviewBehind: '{n} Karten · überfällig, der Rest morgen',
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',

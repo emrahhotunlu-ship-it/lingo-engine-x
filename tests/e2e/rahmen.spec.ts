@@ -55,7 +55,7 @@ test('Rückweg zur Herkunft: Seite „‹ Wortschatz“, Übung ✕ zurück zur 
   await openTab(page, 'vocab');
   await page.getByTestId('ws-all').click();
   await screen(page, 'vocabList');
-  await expect(page.getByTestId('back').first()).toContainText('Wortschatz');
+  await expect(page.getByTestId('back').first()).toContainText('Wörter');
   await expect(page.getByTestId('tabbar')).toBeVisible();
   await page.getByTestId('back').first().click();
   await screen(page, 'vocab');
@@ -145,7 +145,7 @@ for (const [theme, lang] of [
     const { errors } = await boot(page, { migrated: true, theme, lang });
     await screen(page, 'today');
     await expect(page.getByTestId('profile-streak')).toHaveText(lang === 'de' ? 'Serie 12' : 'Streak 12');
-    await expect(page.getByTestId('tab-vocab')).toHaveText(lang === 'de' ? 'Wortschatz' : 'Vocab');
+    await expect(page.getByTestId('tab-vocab')).toHaveText(lang === 'de' ? 'Wörter' : 'Words');
     expect(await layoutProblems(page)).toEqual([]);
     await openProfile(page);
     await expect(page.getByTestId('profile-overview')).toContainText(lang === 'de' ? 'Dein Stand' : 'Your progress');

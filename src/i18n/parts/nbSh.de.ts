@@ -3,7 +3,7 @@
 
 export const nbShDe = {
   nbShTabToday: 'Heute',
-  nbShTabVocab: 'Wortschatz',
+  nbShTabVocab: 'Wörter',
   nbShTabLearn: 'Grammatik',
   nbShTabApply: 'Anwenden',
   nbShTabProgress: 'Fortschritt',

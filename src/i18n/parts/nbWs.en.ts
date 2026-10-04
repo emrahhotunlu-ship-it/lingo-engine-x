@@ -24,7 +24,7 @@ export const nbWsEn: Record<keyof typeof nbWsDe, string> = {
   nbWsCalib: 'When you chose "Easy", you were right {hits} of {pairs} times recently. When in doubt, choose "Good".',
   nbWsCollocations: 'Typical combinations',
   nbWsGapLabel: 'Gap with {n} letters',
-  nbWsTitle: 'Vocabulary',
+  nbWsTitle: 'Words',
   nbWsSearch: 'Search a word or phrase',
   nbWsDueEyebrow: 'All due',
   nbWsDueHeadline_one: '{n} card',

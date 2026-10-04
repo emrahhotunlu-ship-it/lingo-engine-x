@@ -5,7 +5,7 @@ import type { nbShDe } from './nbSh.de';
 
 export const nbShEn: Record<keyof typeof nbShDe, string> = {
   nbShTabToday: 'Today',
-  nbShTabVocab: 'Vocab',
+  nbShTabVocab: 'Words',
   nbShTabLearn: 'Grammar',
   nbShTabApply: 'Apply',
   nbShTabProgress: 'Progress',

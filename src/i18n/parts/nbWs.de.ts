@@ -25,7 +25,7 @@ export const nbWsDe = {
   nbWsCollocations: 'Typische Verbindungen',
   nbWsGapLabel: 'Lücke mit {n} Buchstaben',
   // Wortschatz-Wurzel
-  nbWsTitle: 'Wortschatz',
+  nbWsTitle: 'Wörter',
   nbWsSearch: 'Wort oder Wendung suchen',
   nbWsDueEyebrow: 'Alle fälligen',
   nbWsDueHeadline_one: '{n} Karte',
