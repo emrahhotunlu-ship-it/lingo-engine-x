@@ -72,6 +72,7 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] Schritt 2 – Training: Tageseinheit Wörter → Mix (Kollokationen, falsche Freunde) → Grammatik (Fokus-Thema mit Regelkarte, `coach/grammar`), Wortfamilie/Synonym, Blitzrunde; 240 neue Grammatik-Aufgaben.
   - [x] Schritt 3 – Input: Reiter Input (`input/<Tag>`, Bewertung in `coach/inlog-JJJJ-MM`, eigene Zeit), `coach/summary`, schlanker Tagesauftrag (pausiert). Test-Link Version `1791073837-c5b0` (Code `97402d5`).
   - [x] Schritt 4 – Fahrplan: Trainer-Brief (`coach/briefs`, eine KI-Anfrage je Woche, nur Knopf), Monats-Check (`coach/checks`, Aufbau wie Einstufung, ändert die Einstufung nicht), Kurve des gemessenen Wortschatzes. Datenübernahme liest Sammlungen über 1.000 Dokumente seitenweise (vorher still gekappt). verify grün (Code `095e1e5`). Test-Link `AXHkh6…` Version `1791074620-80ac`.
+  - [x] Fertigbau, 05.10.2026: Pakete A–D zusammengeführt. A: Schreibaufgabe mit KI-Korrektur, Reparatur-Aufgaben, Stolpersteine. B: Wortschatz-Reiter, Wendungen, Preply-Brücke, Feld `hide`. C: Test-Build (`LX_TEST=1`) mit Testwerkzeugen, Desktop-Layout, neuer `verify`-Ablauf. D: korrigierte Grammatik-Aufgaben, falsche Freunde, Kollokationen. Grammatik-Formen werden exakt geprüft (`src/coach/gradeGrammar.ts`). Reiter: Heute · Input · Wortschatz · Fahrplan. verify grün (318 Unit, E2E grün), data-guard ohne Blocker. Stand `dist/index.html` = Test-Build (Code `48367a7`, Commit siehe Git).
   - [ ] Schritt 5 – Umzug (nur mit OK)
 
 ## A5. Subagents (`.claude/agents/`)
@@ -319,6 +320,8 @@ Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktent
 - **E2E-Tests laufen gegen den echten Produktions-Build** `dist/index.html`. Der Entwicklungs-Adapter wird dabei **von außen** als nachgebildete `window.claude`-Laufzeit eingespielt (Playwright `addInitScript`). So wird der Produktionspfad mitgetestet, und der Adapter ist nie Teil des Builds.
 
 ## A8. Befehle und Projektstruktur
+**Stand `dist/index.html` = Test-Build** (mit Testwerkzeugen, `npm run build:test`). Die Hauptfassung ohne Testwerkzeuge (`npm run build`) wird erst beim Umzug neu gebaut.
+
 Alles läuft in der Cloud-Umgebung. Chromium liegt unter `/opt/pw-browsers`, **nie `playwright install`** ausführen. `@playwright/test` und `playwright-core` sind auf 1.56.1 festgelegt, passend zum vorinstallierten Browser.
 
 | Befehl | Zweck |
@@ -455,3 +458,5 @@ Außerhalb von claude.ai gibt es `claude.use` nicht. Deshalb:
 - stille Fehler durch leere `catch`-Blöcke
 - Sprachausgabe am Handy abgehackt
 - über die laufende App veröffentlichen, um etwas zu zeigen
+
+**05.10.2026 – Fertigbau zusammengeführt:** Pakete A–D auf dem Arbeits-Branch. data-guard-Hinweise (offen, nicht blockierend): Brieftext und Reparatur-Einträge ohne Bytegrenze, zwei Tabs ersetzen Karte/Tag/Reparatur-Platz als Ganzes, `saveInputDay` nur über die Oberfläche auf den Test-Build begrenzt, ungültige `checks`/`briefs` nicht in `invalid`.
