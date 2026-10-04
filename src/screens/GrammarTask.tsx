@@ -3,7 +3,7 @@ import { useT } from '../i18n';
 import { Button } from '../ui/Button';
 import { Icon } from '../ui/Icon';
 import { TYPE_INSTR, topicById, type GrammarTask } from '../coach/grammar';
-import { checkTyped } from '../domain/answer/check';
+import { gradeGrammar } from '../coach/gradeGrammar';
 import type { MixItem } from '../coach/mix';
 import { StepHead, type StepKind } from './Exercise';
 
@@ -15,12 +15,10 @@ export function GrammarItem({ task, onDone, bare = false, kind = 'grammar', reve
   const [value, setValue] = useState('');
   const [verdict, setVerdict] = useState<null | boolean>(null);
   const input = useRef<HTMLInputElement>(null);
-  const accepted = [task.answer, ...(task.accepted ?? [])];
   const topic = topicById(task.topic);
 
   function check(given: string) {
-    const r = checkTyped(given, accepted, { lemma: '' });
-    setVerdict(r.verdict !== 'wrong');
+    setVerdict(gradeGrammar(given, task));
   }
 
   return (

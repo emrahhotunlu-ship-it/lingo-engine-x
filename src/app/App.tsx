@@ -124,8 +124,8 @@ function useBoot(): void {
 const TABS: ReadonlyArray<{ route: 'home' | 'input' | 'plan' | 'vocab'; icon: IconName; key: 'cTabHome' | 'cTabInput' | 'cTabPlan' | 'mwTab' }> = [
   { route: 'home', icon: 'target', key: 'cTabHome' },
   { route: 'input', icon: 'book', key: 'cTabInput' },
-  { route: 'plan', icon: 'chart', key: 'cTabPlan' },
   { route: 'vocab', icon: 'cards', key: 'mwTab' },
+  { route: 'plan', icon: 'chart', key: 'cTabPlan' },
 ];
 
 const isFlow = (route: string): boolean => route === 'session' || route === 'placement' || route === 'check' || route === 'blitz' || route === 'write';
