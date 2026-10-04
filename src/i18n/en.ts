@@ -19,6 +19,7 @@ import { tonesEn } from './parts/tones.en';
 import { repairEn } from './parts/repair.en';
 import { navEn } from './parts/nav.en';
 import { patternsEn } from './parts/patterns.en';
+import { writeEn } from './parts/write.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -58,6 +59,8 @@ export const en: Record<MessageKey, string> = {
   ...navEn,
   // Lernberatung 27.09., V3 – Deutsch-Fallen, V8 – Wochenfokus
   ...patternsEn,
+  // Paket A: Schreiben, Reparatur, Stolpersteine
+  ...writeEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

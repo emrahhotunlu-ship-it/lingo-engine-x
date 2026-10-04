@@ -17,7 +17,7 @@ import { Certainty, PosLabel, Speak, TapText, WordDetails } from './parts';
 // Eine Abfrage (docs/neustart.md §5): Bedeutung wählen, Lücke im echten Satz, frei abrufen,
 // hören und schreiben. Danach echte Hilfe statt Erklärtext: Bedeutung, Aussprache, Beispiele.
 
-export type StepKind = Format | 'meet' | 'sort' | 'grammar' | 'colloc' | 'ff';
+export type StepKind = Format | 'meet' | 'sort' | 'grammar' | 'colloc' | 'ff' | 'write' | 'repair';
 
 export const FORMAT_LABEL: Record<StepKind, MessageKey> = {
   choose: 'cFmtChoose',
@@ -31,6 +31,8 @@ export const FORMAT_LABEL: Record<StepKind, MessageKey> = {
   grammar: 'cFmtGrammar',
   colloc: 'cFmtColloc',
   ff: 'cFmtFF',
+  write: 'schFmtWrite',
+  repair: 'schFmtRepair',
 };
 const WHY: Record<StepKind, MessageKey> = {
   choose: 'cWhyChoose',
@@ -44,6 +46,8 @@ const WHY: Record<StepKind, MessageKey> = {
   grammar: 'cWhyGrammar',
   colloc: 'cWhyColloc',
   ff: 'cWhyFF',
+  write: 'schWhyWrite',
+  repair: 'schWhyRepair',
 };
 
 /** Kopfzeile jeder Abfrage: Sicherheit, Abfrageart, Zweck hinter dem Info-Symbol. */

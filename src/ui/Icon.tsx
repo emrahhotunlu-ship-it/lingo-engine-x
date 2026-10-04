@@ -41,6 +41,8 @@ const paths = {
   chat: 'M5 5h14v10H10l-4 4v-4H5z',
   briefcase: 'M4 8h16v11H4zM9 8V5h6v3M4 13h16',
   arrowDown: 'M12 5v14M6 13l6 6 6-6',
+  arrowUp: 'M12 19V5M6 11l6-6 6 6',
+  edit: 'M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4',
   target: 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 16a4 4 0 100-8 4 4 0 000 8zM12 12.01V12',
   // UX-Beratung 27.09.: Reiter mit Symbol (Heute · Üben · Sprechen · Stand) und Zahnrad
   sun: 'M12 16a4 4 0 100-8 4 4 0 000 8zM12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4',

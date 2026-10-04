@@ -10,10 +10,12 @@ import { initSpeech } from '../platform/speech';
 import { useClockTicker } from './clock';
 import { InputScreen } from '../screens/InputScreen';
 import { BlitzScreen } from '../screens/BlitzScreen';
+import { WriteScreen } from '../screens/WriteScreen';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
 import { closeSheet, go, openSheet, useRoute } from './route';
 import { markNoDb, saveCards, saveProfile, saveSummary, startCoach, startInput, useCoach } from '../coach/store';
 import { buildSummary } from '../coach/summary';
+import { stumbleStats, weakCatsOf } from '../coach/stumble';
 import { addDays } from '../domain/date';
 import { useClock } from './clock';
 import { importLegacy } from '../coach/legacy';
@@ -80,10 +82,12 @@ function useBoot(): void {
   const profile = useCoach((s) => s.profile);
   const cards = useCoach((s) => s.cards);
   const inlog = useCoach((s) => s.inlog);
+  const writing = useCoach((s) => s.writing);
+  const repair = useCoach((s) => s.repair);
   const lastSummary = useRef('');
   useEffect(() => {
     if (status !== 'ready' || !profile?.placement) return;
-    const summary = buildSummary(profile, cards, inlog, today);
+    const summary = buildSummary(profile, cards, inlog, today, weakCatsOf(stumbleStats(writing, repair, today), 3));
     const key = JSON.stringify(summary);
     if (key === lastSummary.current) return;
     const timer = window.setTimeout(() => {
@@ -91,7 +95,7 @@ function useBoot(): void {
       void saveSummary(summary);
     }, 3000);
     return () => window.clearTimeout(timer);
-  }, [status, profile, cards, inlog, today]);
+  }, [status, profile, cards, inlog, writing, repair, today]);
 
   // Sprache und Darstellung: gespeichert im Profil, lokal nur als Kopie für den ersten Bildaufbau.
   const ui = useCoach((s) => s.profile?.ui);
@@ -128,7 +132,7 @@ function TopBar() {
     { icon: 'chat', label: t('cAsk'), run: () => openSheet('ask'), testId: 'open-ask' },
     { icon: 'gear', label: t('cSettings'), run: () => openSheet('settings'), testId: 'open-settings' },
   ];
-  const inFlow = route === 'session' || route === 'placement' || route === 'check' || route === 'blitz';
+  const inFlow = route === 'session' || route === 'placement' || route === 'check' || route === 'blitz' || route === 'write';
   return (
     <header className="sticky top-0 z-20 border-b border-line/60 bg-bg/80 backdrop-blur-xl [-webkit-backdrop-filter:blur(20px)] pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex h-14 max-w-3xl items-center gap-2 px-4">
@@ -154,7 +158,7 @@ function TopBar() {
 function TabBar() {
   const { t } = useT();
   const route = useRoute((s) => s.route.name);
-  if (route === 'session' || route === 'placement' || route === 'check' || route === 'blitz') return null;
+  if (route === 'session' || route === 'placement' || route === 'check' || route === 'blitz' || route === 'write') return null;
   return (
     <nav
       aria-label="Navigation"
@@ -215,6 +219,7 @@ function Screen() {
         {route.name === 'plan' && <PlanScreen />}
         {route.name === 'input' && <InputScreen />}
         {route.name === 'blitz' && <BlitzScreen />}
+        {route.name === 'write' && <WriteScreen from={route.from} />}
         {route.name === 'placement' && <PlacementScreen />}
         {route.name === 'check' && <PlacementScreen mode="check" />}
         {route.name === 'session' && <SessionScreen extra={!!route.extra} />}

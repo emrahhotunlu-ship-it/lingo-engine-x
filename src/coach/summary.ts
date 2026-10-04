@@ -6,7 +6,8 @@ import type { CardRec, InLog, ProfileDoc } from './types';
 // Zusammenfassung für den schlanken Tagesauftrag (docs/neustart.md §8): EIN kleines Dokument statt
 // der ganzen Datenbank. Daraus wählt der Tagesauftrag Themen, Formate und Niveau des Inputs.
 
-export function buildSummary(profile: ProfileDoc | null, cards: ReadonlyMap<string, CardRec>, inlog: InLog, today: string): Record<string, unknown> {
+/** `weakCats`: die häufigsten Fehlerarten der letzten 30 Tage (englisch, höchstens 3; aus coach/stumble). */
+export function buildSummary(profile: ProfileDoc | null, cards: ReadonlyMap<string, CardRec>, inlog: InLog, today: string, weakCats: readonly string[] = []): Record<string, unknown> {
   const entries = Object.values(inlog.it).sort((a, b) => b.d.localeCompare(a.d));
   const liked: Record<string, number> = {};
   const disliked: Record<string, number> = {};
@@ -35,5 +36,6 @@ export function buildSummary(profile: ProfileDoc | null, cards: ReadonlyMap<stri
     levelVotes,
     recent: entries.slice(0, 20).map((e) => e.t),
     weakGrammar: g.weakest.map(name),
+    weakCats: weakCats.slice(0, 3),
   };
 }

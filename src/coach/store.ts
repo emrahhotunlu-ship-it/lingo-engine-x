@@ -7,6 +7,8 @@ import { logError, logWarn } from '../platform/diagnostics';
 import type { Db } from '../platform/types';
 import { CARD_SHARDS, DEFAULT_NEW_PER_DAY, type BriefRec, type CardRec, type CheckRec, type DayRec, type InLog, type InLogEntry, type InputItem, type ProfileDoc } from './types';
 import type { GrammarDoc, TopicState } from './grammarModel';
+import { parseRepairDoc, type RepairDoc, type RepairRec } from './repairDoc';
+import { parseWritingMonth, writingDocOf, type WritingEntry, type WritingMonths } from './writing';
 
 // Datenzugang des Trainers: EIN Abo auf die Sammlung `coach` (wenige Dokumente), ein Schreibpfad
 // über den bestehenden Writer (Warteschlange je Dokument, schreibt nur bei Änderung, löscht nie).
@@ -67,11 +69,14 @@ type CoachState = {
   checks: Readonly<Record<string, CheckRec>>;
   /** Trainer-Briefe, Schlüssel JJJJ-Www. */
   briefs: Readonly<Record<string, BriefRec>>;
+  /** Geschriebene Texte je Monat (coach/writing-JJJJ-MM) und Reparatur-Einträge (coach/repair). */
+  writing: WritingMonths;
+  repair: RepairDoc;
 };
 
 const emptyLog = (): InLog => ({ it: {}, own: {} });
 
-export const useCoach = create<CoachState>(() => ({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {} }));
+export const useCoach = create<CoachState>(() => ({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {}, writing: {}, repair: {} }));
 
 let writer: Writer | null = null;
 /** Stand je Dokument, wie zuletzt gelesen oder geschrieben (Hinweis für „ändert sich nichts"). */
@@ -80,7 +85,7 @@ const docs = new Map<string, Record<string, unknown>>();
 export const shardOf = (id: string): string => `coach/cards-${hash32(id) % CARD_SHARDS}`;
 export const daysDocOf = (day: string): string => `coach/days-${day.slice(0, 4)}`;
 
-type Parsed = Pick<CoachState, 'profile' | 'cards' | 'days' | 'invalid' | 'grammar' | 'inlog' | 'checks' | 'briefs'>;
+type Parsed = Pick<CoachState, 'profile' | 'cards' | 'days' | 'invalid' | 'grammar' | 'inlog' | 'checks' | 'briefs' | 'writing' | 'repair'>;
 
 function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
   const cards = new Map<string, CardRec>();
@@ -91,6 +96,8 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
   const inlog = emptyLog();
   const checks: Record<string, CheckRec> = {};
   const briefs: Record<string, BriefRec> = {};
+  const writing: Record<string, Record<string, WritingEntry>> = {};
+  let repair: Record<string, RepairRec> = {};
   for (const [path, data] of all) {
     const id = path.slice('coach/'.length);
     if (id === 'profile') {
@@ -130,6 +137,14 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
           if (r.success) briefs[k] = r.data;
         }
       }
+    } else if (id.startsWith('writing-')) {
+      const r = parseWritingMonth(data);
+      writing[id.slice('writing-'.length)] = r.slots;
+      for (const slot of r.invalid) invalid.push(`${path}#${slot}`);
+    } else if (id === 'repair') {
+      const r = parseRepairDoc(data);
+      repair = r.slots;
+      for (const slot of r.invalid) invalid.push(`${path}#${slot}`);
     } else if (id.startsWith('inlog-')) {
       for (const [k, raw] of Object.entries((data.it ?? {}) as Record<string, unknown>)) {
         const r = inlogEntrySchema.safeParse(raw);
@@ -145,7 +160,7 @@ function parseAll(all: ReadonlyMap<string, Record<string, unknown>>): Parsed {
       }
     }
   }
-  return { profile, cards, days, invalid, grammar, inlog, checks, briefs };
+  return { profile, cards, days, invalid, grammar, inlog, checks, briefs, writing, repair };
 }
 
 /** Abo starten (einmal je Ansicht). Liefert das Abmelden. */
@@ -212,7 +227,7 @@ export function markNoDb(): void {
 export function resetCoach(state?: Partial<CoachState>): void {
   docs.clear();
   writer = null;
-  useCoach.setState({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {}, ...state });
+  useCoach.setState({ status: 'loading', profile: null, cards: new Map(), days: {}, invalid: [], grammar: null, inlog: emptyLog(), input: [], checks: {}, briefs: {}, writing: {}, repair: {}, ...state });
 }
 
 export function setWriterForTests(w: Writer | null): void {
@@ -301,4 +316,21 @@ export async function saveCheck(month: string, rec: CheckRec): Promise<void> {
 export async function saveBrief(week: string, rec: BriefRec): Promise<void> {
   useCoach.setState((s) => ({ briefs: { ...s.briefs, [week]: rec } }));
   await patchDoc('coach/briefs', { w: { [week]: rec } });
+}
+
+/**
+ * Geschriebenen Text speichern: nur die Plätze, die `planWritingSave` bestimmt hat (neuer Text,
+ * ggf. verdichtete ältere). Ein Monatsdokument je Lerntag-Monat, nichts wird gelöscht.
+ */
+export async function saveWriting(day: string, slots: Record<string, WritingEntry>): Promise<void> {
+  const month = monthOf(day);
+  useCoach.setState((s) => ({ writing: { ...s.writing, [month]: { ...(s.writing[month] ?? {}), ...slots } } }));
+  await patchDoc(writingDocOf(day), { e: slots });
+}
+
+/** Reparatur-Einträge schreiben (Plätze aus `planAdd`) oder nach einer Antwort fortschreiben. */
+export async function saveRepair(slots: Record<string, RepairRec>): Promise<void> {
+  if (!Object.keys(slots).length) return;
+  useCoach.setState((s) => ({ repair: { ...s.repair, ...slots } }));
+  await patchDoc('coach/repair', { e: slots });
 }
