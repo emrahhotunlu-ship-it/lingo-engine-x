@@ -184,7 +184,7 @@ export function SessionScreen({ extra }: { extra: boolean }) {
   if (cur === null) {
     const tp = score ? topicById(score.topic) : undefined;
     return (
-      <div className="mx-auto max-w-2xl px-4 pt-6" data-testid="session-done">
+      <div className="mx-auto max-w-2xl px-4 pt-6 lg:max-w-3xl lg:pt-12" data-testid="session-done">
         <div className="lx-glass rounded-[var(--radius-card)] p-6 text-center">
           <Icon name="check" size={32} className="mx-auto text-accent-text" />
           <h1 className="mt-3 text-xl font-semibold">{totals.ans ? t('cSessDoneTitle') : t('cNothingDue')}</h1>
@@ -207,7 +207,7 @@ export function SessionScreen({ extra }: { extra: boolean }) {
   if (word && !view) return null;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 pt-3" data-testid="session">
+    <div className="mx-auto max-w-2xl px-4 pt-3 lg:max-w-3xl lg:pt-8" data-testid="session">
       <ExerciseBar
         onClose={() => go({ name: 'home' })}
         closeLabel={t('cSessQuit')}

@@ -3,7 +3,12 @@
 // - keine Ladeziele außerhalb der Datei (Skripte, Stylesheets, Schriften, Bilder, Netz-APIs)
 // - kein Entwicklungs-Adapter und keine Testdaten im Build
 // - Viewport mit viewport-fit=cover, lang-Attribut, Titel
-// Aufruf nach `npm run build`: npm run check:platform
+// - Testwerkzeuge (nur im Test-Build für den Test-Link):
+//     --prod  Fassung für die Produktivadresse (`npm run build`): die Kennzeichnung `lx-test-tools` und die
+//             Texte der Testwerkzeuge dürfen NICHT in dist/index.html stehen
+//     --test  Test-Build (`npm run build:test`): die Kennzeichnung MUSS drinstehen
+//     ohne Schalter: nur die gemeinsamen Prüfungen
+// Aufruf nach dem Bauen: npm run check:platform -- --prod   (oder --test)
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 
@@ -11,6 +16,10 @@ const MAX_BYTES = 16 * 1024 * 1024;
 const WARN_BYTES = 8 * 1024 * 1024;
 const problems = [];
 const notes = [];
+const mode = process.argv.includes('--prod') ? 'prod' : process.argv.includes('--test') ? 'test' : 'base';
+// Kennzeichnung des Test-Panels (data-testid) und wörtliche Texte der Testwerkzeuge.
+const TEST_TOOLS_MARKER = 'lx-test-tools';
+const TEST_TOOLS_TEXTS = ['Test-Profil setzen', 'Einstufung überspringen', 'Beispiel-Fortschritt'];
 
 const files = readdirSync(new URL('../dist/', import.meta.url));
 if (files.length !== 1 || files[0] !== 'index.html') problems.push(`dist/ muss genau index.html enthalten, gefunden: ${files.join(', ')}`);
@@ -50,13 +59,20 @@ devMarkers.push('Heads-Up Before the Client Call', 'Four-Day Week Really Work');
 devMarkers.push('assessBad', 'peakSubscriptions', 'setAssessBad');
 for (const m of devMarkers) if (html.includes(m)) problems.push(`Entwicklungs-Adapter oder Testdaten im Build: "${m}"`);
 
+// Testwerkzeuge: nur im Test-Build, nie in der Fassung für die Produktivadresse.
+if (mode === 'prod') {
+  if (html.includes(TEST_TOOLS_MARKER)) problems.push(`Testwerkzeuge im normalen Build: "${TEST_TOOLS_MARKER}" steht in dist/index.html`);
+  for (const t of TEST_TOOLS_TEXTS) if (html.includes(t)) problems.push(`Text der Testwerkzeuge im normalen Build: "${t}"`);
+}
+if (mode === 'test' && !html.includes(TEST_TOOLS_MARKER)) problems.push(`Test-Build ohne Testwerkzeuge: "${TEST_TOOLS_MARKER}" fehlt in dist/index.html`);
+
 // Kopf
 if (!/<meta[^>]+name="viewport"[^>]+viewport-fit=cover/i.test(html)) problems.push('Viewport ohne viewport-fit=cover');
 if (!/<html[^>]+lang="/i.test(html)) problems.push('<html> ohne lang-Attribut');
 if (!/<title>[^<]+<\/title>/i.test(html)) problems.push('<title> fehlt');
 if (!html.includes('data:font/woff2')) problems.push('Schrift nicht eingebettet (data:font/woff2 fehlt)');
 
-console.log(`dist/index.html: ${size} Bytes (${(size / 1048576).toFixed(2)} MB)`);
+console.log(`dist/index.html: ${size} Bytes (${(size / 1048576).toFixed(2)} MB) · Modus: ${mode === 'prod' ? 'normaler Build' : mode === 'test' ? 'Test-Build' : 'gemeinsame Prüfungen'}`);
 notes.forEach((n) => console.log(n));
 if (problems.length) {
   console.error(`PLATTFORM-PRÜFUNG: BLOCKIERT (${problems.length})`);

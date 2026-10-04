@@ -10,6 +10,8 @@ import { getLog, subscribeLog } from '../platform/diagnostics';
 import { DEFAULT_NEW_PER_DAY, FORMATS, INTERESTS } from '../coach/types';
 import { DEFAULT_FORMATS, DEFAULT_INTERESTS } from '../coach/defaults';
 import { TOPIC_KEY } from './InputScreen';
+import { TEST_BUILD } from '../app/testBuild';
+import { TestTools } from './TestTools';
 
 // Einstellungen: Sprache, Hell/Dunkel, neue Wörter pro Tag, KI-Anfragen heute, Quellen, Version.
 
@@ -49,6 +51,7 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
   return (
     <Sheet open={open} onClose={onClose} title={t('cSettings')} closeLabel={t('cClose')}>
       <div className="space-y-6" data-testid="settings">
+        {TEST_BUILD && <TestTools />}
         <Segmented<Lang>
           label={t('cSetLang')}
           value={lang}

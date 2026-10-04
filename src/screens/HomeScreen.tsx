@@ -10,6 +10,8 @@ import { inputOf, isCore, pct, stageOf, streakOf, stubborn, todayPlan, vocabNow,
 import { logKey } from './InputScreen';
 import { viewOf } from '../coach/cardView';
 import { STAGE_KEYS } from './PlanScreen';
+import { TEST_BUILD } from '../app/testBuild';
+import { TestSkipButton } from './TestTools';
 
 // Heute (docs/neustart.md §4, Kap. 2.1): ein Satz vom Trainer, EIN großer Knopf, darunter der Weg
 // zu C1. Erledigt heißt erledigt: Nach dem Kern-Training ist der Knopf ein Zustand, kein Auftrag.
@@ -75,7 +77,7 @@ export function HomeScreen() {
   const vocab = vocabNow(profile, cards);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pt-6" data-testid="home">
+    <div className="mx-auto max-w-3xl px-4 pt-6 lg:max-w-5xl lg:pt-10" data-testid="home">
       <div className="flex items-baseline justify-between gap-3">
         <h1 className="text-xl font-semibold tracking-tight">{t(hello(now))}</h1>
         {streak.count > 0 && (
@@ -86,83 +88,90 @@ export function HomeScreen() {
         )}
       </div>
 
-      <section className="lx-glass mt-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="today-card">
-        {done ? (
-          <div data-testid="today-done">
-            <p className="flex items-center gap-2 text-lg font-semibold text-accent-text">
-              <Icon name="check" size={22} /> {t('cDoneTitle')}
-            </p>
-            <p className="mt-2 text-sm text-muted">{t('cDoneText', { ans: day.ans, pct: pct(day.ok, day.ans), min: day.min })}</p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              <Button variant="secondary" icon="plus" onClick={() => go({ name: 'session', extra: true })} data-testid="extra-new">
-                {t('cExtraNew')}
-              </Button>
-              <Button variant="secondary" icon="bolt" onClick={() => go({ name: 'blitz' })} data-testid="open-blitz">
-                {t('cBlitz')}
-              </Button>
-              {openInput && (
-                <Button variant="ghost" icon="book" onClick={() => go({ name: 'input' })}>
-                  {t('cCtaInput')}
+      <div className={placed ? 'lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start lg:gap-6' : 'lg:max-w-3xl'}>
+        <section className="lx-glass mt-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="today-card">
+          {done ? (
+            <div data-testid="today-done">
+              <p className="flex items-center gap-2 text-lg font-semibold text-accent-text">
+                <Icon name="check" size={22} /> {t('cDoneTitle')}
+              </p>
+              <p className="mt-2 text-sm text-muted">{t('cDoneText', { ans: day.ans, pct: pct(day.ok, day.ans), min: day.min })}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button variant="secondary" icon="plus" onClick={() => go({ name: 'session', extra: true })} data-testid="extra-new">
+                  {t('cExtraNew')}
                 </Button>
+                <Button variant="secondary" icon="bolt" onClick={() => go({ name: 'blitz' })} data-testid="open-blitz">
+                  {t('cBlitz')}
+                </Button>
+                {openInput && (
+                  <Button variant="ghost" icon="book" onClick={() => go({ name: 'input' })}>
+                    {t('cCtaInput')}
+                  </Button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="space-y-2 text-base leading-relaxed text-fg" data-testid="brief">
+                {brief.map((b) => (
+                  <p key={b}>{b}</p>
+                ))}
+                {!imported && <p className="text-sm text-muted">{t('cImporting')}</p>}
+              </div>
+              {placed && (
+                <ol className="mt-5 space-y-2" data-testid="parts">
+                  <Part n={1} done={trainingDone} title={t('cPartTraining')} sub={t('cPartTrainingSub', { min: plan.minutes + 7 })} testId="part-training" />
+                  <Part
+                    n={2}
+                    done={inputDone}
+                    title={t('cPartInput')}
+                    sub={openInput ? t('cPartInputSub', { title: openInput.title, min: openInput.mins }) : todaysInput.length ? '' : t('cPartInputNone')}
+                    testId="part-input"
+                  />
+                </ol>
               )}
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="space-y-2 text-base leading-relaxed text-fg" data-testid="brief">
-              {brief.map((b) => (
-                <p key={b}>{b}</p>
-              ))}
-              {!imported && <p className="text-sm text-muted">{t('cImporting')}</p>}
-            </div>
-            {placed && (
-              <ol className="mt-5 space-y-2" data-testid="parts">
-                <Part n={1} done={trainingDone} title={t('cPartTraining')} sub={t('cPartTrainingSub', { min: plan.minutes + 7 })} testId="part-training" />
-                <Part
-                  n={2}
-                  done={inputDone}
-                  title={t('cPartInput')}
-                  sub={openInput ? t('cPartInputSub', { title: openInput.title, min: openInput.mins }) : todaysInput.length ? '' : t('cPartInputNone')}
-                  testId="part-input"
-                />
-              </ol>
-            )}
-            <div className="mt-6">
-              {placed && !trainingDone ? (
-                <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'session' })} data-testid="start-training">
-                  {day.ans > 0 ? t('cCtaContinue') : t('cCtaTrain')}
-                </Button>
-              ) : placed ? (
-                <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'input' })} data-testid="start-input">
-                  {t('cCtaInput')}
-                </Button>
-              ) : (
-                <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'placement' })} disabled={!imported} data-testid="start-placement">
-                  {t('cCtaPlace')}
-                </Button>
+              <div className="mt-6">
+                {placed && !trainingDone ? (
+                  <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'session' })} data-testid="start-training">
+                    {day.ans > 0 ? t('cCtaContinue') : t('cCtaTrain')}
+                  </Button>
+                ) : placed ? (
+                  <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'input' })} data-testid="start-input">
+                    {t('cCtaInput')}
+                  </Button>
+                ) : (
+                  <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'placement' })} disabled={!imported} data-testid="start-placement">
+                    {t('cCtaPlace')}
+                  </Button>
+                )}
+              </div>
+              {TEST_BUILD && !placed && (
+                <div className="mt-3">
+                  <TestSkipButton />
+                </div>
               )}
-            </div>
-          </>
-        )}
-      </section>
+            </>
+          )}
+        </section>
 
-      {placed && (
-        <button
-          type="button"
-          onClick={() => go({ name: 'plan' })}
-          className="mt-4 block w-full rounded-[var(--radius-card)] border border-line/70 p-5 text-left transition-colors hover:bg-surface"
-          data-testid="home-way"
-        >
-          <div className="flex items-center justify-between text-xs text-muted">
-            <span className="lx-eyebrow">{t('cHomeWay')}</span>
-            <span>{t('cHomeStage', { n: stage, name: t(STAGE_KEYS[stage - 1]!) })}</span>
-          </div>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-track" role="progressbar" aria-valuemin={0} aria-valuemax={VOCAB_C1} aria-valuenow={vocab} aria-label={t('cRmVocab')}>
-            <div className="h-full rounded-full bg-accent" style={{ width: `${Math.min(100, (vocab / VOCAB_C1) * 100)}%` }} />
-          </div>
-          <p className="mt-2 text-sm text-muted">{t('cRmVocabText', { now: num(vocab), target: num(VOCAB_C1) })}</p>
-        </button>
-      )}
+        {placed && (
+          <button
+            type="button"
+            onClick={() => go({ name: 'plan' })}
+            className="mt-4 block w-full rounded-[var(--radius-card)] border border-line/70 p-5 text-left transition-colors hover:bg-surface lg:mt-5"
+            data-testid="home-way"
+          >
+            <div className="flex items-center justify-between text-xs text-muted">
+              <span className="lx-eyebrow">{t('cHomeWay')}</span>
+              <span>{t('cHomeStage', { n: stage, name: t(STAGE_KEYS[stage - 1]!) })}</span>
+            </div>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-track" role="progressbar" aria-valuemin={0} aria-valuemax={VOCAB_C1} aria-valuenow={vocab} aria-label={t('cRmVocab')}>
+              <div className="h-full rounded-full bg-accent" style={{ width: `${Math.min(100, (vocab / VOCAB_C1) * 100)}%` }} />
+            </div>
+            <p className="mt-2 text-sm text-muted">{t('cRmVocabText', { now: num(vocab), target: num(VOCAB_C1) })}</p>
+          </button>
+        )}
+      </div>
     </div>
   );
 }
