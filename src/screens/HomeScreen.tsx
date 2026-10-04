@@ -6,7 +6,8 @@ import { useClock } from '../app/clock';
 import { go, setAskContext } from '../app/route';
 import { useCoach, emptyDay } from '../coach/store';
 import { addDays } from '../domain/date';
-import { pct, stageOf, streakOf, stubborn, todayPlan, vocabNow, VOCAB_C1 } from '../coach/derived';
+import { inputOf, isCore, pct, stageOf, streakOf, stubborn, todayPlan, vocabNow, VOCAB_C1 } from '../coach/derived';
+import { logKey } from './InputScreen';
 import { viewOf } from '../coach/cardView';
 import { STAGE_KEYS } from './PlanScreen';
 
@@ -16,6 +17,20 @@ import { STAGE_KEYS } from './PlanScreen';
 function hello(now: number): 'cHelloMorning' | 'cHelloDay' | 'cHelloEvening' {
   const h = new Date(now).getHours();
   return h < 11 ? 'cHelloMorning' : h < 18 ? 'cHelloDay' : 'cHelloEvening';
+}
+
+function Part({ n, done, title, sub, testId }: { n: number; done: boolean; title: string; sub: string; testId: string }) {
+  return (
+    <li className="flex items-start gap-3" data-testid={testId} data-done={done ? '1' : '0'}>
+      <span className={`mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full text-2xs font-semibold ${done ? 'bg-accent text-accent-fg' : 'border border-line text-muted'}`}>
+        {done ? <Icon name="check" size={14} /> : n}
+      </span>
+      <span className="min-w-0">
+        <span className={`block text-sm font-semibold ${done ? 'text-muted line-through decoration-1' : ''}`}>{title}</span>
+        {sub && !done && <span className="block truncate text-xs text-muted">{sub}</span>}
+      </span>
+    </li>
+  );
 }
 
 export function HomeScreen() {
@@ -32,7 +47,13 @@ export function HomeScreen() {
   const placed = !!profile?.placement;
   const plan = todayPlan(cards, profile, day, now);
   const streak = streakOf(days, profile?.imported?.days ?? [], today);
-  const done = day.core === 1;
+  const input = useCoach((s) => s.input);
+  const inlog = useCoach((s) => s.inlog);
+  const todaysInput = inputOf(input, today);
+  const openInput = todaysInput.find((it) => !inlog.it[logKey(today, it)]);
+  const done = isCore(day, todaysInput.length > 0);
+  const trainingDone = day.w === 1 && day.g === 1;
+  const inputDone = day.i === 1 || (todaysInput.length > 0 && !openInput);
   const hard = stubborn(cards)
     .map((id) => viewOf(id, cards.get(id))?.word)
     .filter(Boolean)
@@ -72,10 +93,18 @@ export function HomeScreen() {
               <Icon name="check" size={22} /> {t('cDoneTitle')}
             </p>
             <p className="mt-2 text-sm text-muted">{t('cDoneText', { ans: day.ans, pct: pct(day.ok, day.ans), min: day.min })}</p>
-            <div className="mt-5">
+            <div className="mt-5 flex flex-wrap gap-2">
               <Button variant="secondary" icon="plus" onClick={() => go({ name: 'session', extra: true })} data-testid="extra-new">
                 {t('cExtraNew')}
               </Button>
+              <Button variant="secondary" icon="bolt" onClick={() => go({ name: 'blitz' })} data-testid="open-blitz">
+                {t('cBlitz')}
+              </Button>
+              {openInput && (
+                <Button variant="ghost" icon="book" onClick={() => go({ name: 'input' })}>
+                  {t('cCtaInput')}
+                </Button>
+              )}
             </div>
           </div>
         ) : (
@@ -86,10 +115,26 @@ export function HomeScreen() {
               ))}
               {!imported && <p className="text-sm text-muted">{t('cImporting')}</p>}
             </div>
+            {placed && (
+              <ol className="mt-5 space-y-2" data-testid="parts">
+                <Part n={1} done={trainingDone} title={t('cPartTraining')} sub={t('cPartTrainingSub', { min: plan.minutes + 7 })} testId="part-training" />
+                <Part
+                  n={2}
+                  done={inputDone}
+                  title={t('cPartInput')}
+                  sub={openInput ? t('cPartInputSub', { title: openInput.title, min: openInput.mins }) : todaysInput.length ? '' : t('cPartInputNone')}
+                  testId="part-input"
+                />
+              </ol>
+            )}
             <div className="mt-6">
-              {placed ? (
+              {placed && !trainingDone ? (
                 <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'session' })} data-testid="start-training">
                   {day.ans > 0 ? t('cCtaContinue') : t('cCtaTrain')}
+                </Button>
+              ) : placed ? (
+                <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'input' })} data-testid="start-input">
+                  {t('cCtaInput')}
                 </Button>
               ) : (
                 <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => go({ name: 'placement' })} disabled={!imported} data-testid="start-placement">

@@ -10,32 +10,44 @@ import type { CheckResult } from '../domain/srs/types';
 import { hash32, mulberry32, shuffle } from '../domain/random';
 import { speak } from '../platform/speech';
 import { setAskContext } from '../app/route';
-import { distractors, gapIn, type CardView } from '../coach/cardView';
+import { distractors, familyTask, gapIn, synonymTask, type CardView } from '../coach/cardView';
 import type { AnswerFacts, Format } from '../coach/session';
 import { Certainty, PosLabel, Speak, TapText, WordDetails } from './parts';
 
 // Eine Abfrage (docs/neustart.md §5): Bedeutung wählen, Lücke im echten Satz, frei abrufen,
 // hören und schreiben. Danach echte Hilfe statt Erklärtext: Bedeutung, Aussprache, Beispiele.
 
-export const FORMAT_LABEL: Record<Format | 'meet' | 'sort', MessageKey> = {
+export type StepKind = Format | 'meet' | 'sort' | 'grammar' | 'colloc' | 'ff';
+
+export const FORMAT_LABEL: Record<StepKind, MessageKey> = {
   choose: 'cFmtChoose',
   gap: 'cFmtGap',
   recall: 'cFmtRecall',
   listen: 'cFmtListen',
+  family: 'cFmtFamily',
+  synonym: 'cFmtSynonym',
   meet: 'cFmtMeet',
   sort: 'cFmtSort',
+  grammar: 'cFmtGrammar',
+  colloc: 'cFmtColloc',
+  ff: 'cFmtFF',
 };
-const WHY: Record<Format | 'meet' | 'sort', MessageKey> = {
+const WHY: Record<StepKind, MessageKey> = {
   choose: 'cWhyChoose',
   gap: 'cWhyGap',
   recall: 'cWhyRecall',
   listen: 'cWhyListen',
+  family: 'cWhyFamily',
+  synonym: 'cWhySynonym',
   meet: 'cWhyMeet',
   sort: 'cWhySort',
+  grammar: 'cWhyGrammar',
+  colloc: 'cWhyColloc',
+  ff: 'cWhyFF',
 };
 
 /** Kopfzeile jeder Abfrage: Sicherheit, Abfrageart, Zweck hinter dem Info-Symbol. */
-export function StepHead({ kind, lv }: { kind: Format | 'meet' | 'sort'; lv: number | null }) {
+export function StepHead({ kind, lv }: { kind: StepKind; lv: number | null }) {
   const { t } = useT();
   const [why, setWhy] = useState(false);
   return (
@@ -131,7 +143,9 @@ export function Exercise({ view, format, lv, reps, onAnswer, onNext }: ExerciseP
   const [verdict, setVerdict] = useState<Verdict | null>(null);
   const [dueText, setDueText] = useState('');
   const gap = useMemo(() => (format === 'gap' || format === 'listen' ? gapIn(view, reps) : null), [view, format, reps]);
-  const fmt: Format = format === 'gap' && !gap ? 'recall' : format;
+  const family = useMemo(() => (format === 'family' ? familyTask(view) : null), [view, format]);
+  const synonym = useMemo(() => (format === 'synonym' ? synonymTask(view) : null), [view, format]);
+  const fmt: Format = (format === 'gap' && !gap) || (format === 'family' && !family) || (format === 'synonym' && !synonym) ? 'recall' : format;
 
   useEffect(() => {
     setAskContext(`${view.word} (${view.de})${gap ? ` – ${gap.before}${gap.answer}${gap.after}` : ''}`);
@@ -147,20 +161,33 @@ export function Exercise({ view, format, lv, reps, onAnswer, onNext }: ExerciseP
     <div data-testid="exercise" data-format={fmt}>
       <StepHead kind={fmt} lv={lv} />
       {fmt === 'choose' && <Choose view={view} done={verdict} onDone={finish} />}
-      {(fmt === 'gap' || fmt === 'recall' || fmt === 'listen') && <Typed key={view.id + fmt} view={view} fmt={fmt} gap={gap} lv={lv} done={verdict} onDone={finish} />}
+      {fmt === 'synonym' && synonym && <Choose view={view} done={verdict} onDone={finish} synonym={synonym} />}
+      {(fmt === 'gap' || fmt === 'recall' || fmt === 'listen' || fmt === 'family') && (
+        <Typed key={view.id + fmt} view={view} fmt={fmt} gap={gap} family={family} lv={lv} done={verdict} onDone={finish} />
+      )}
       {verdict && <Feedback view={view} v={verdict} dueText={dueText} onNext={onNext} form={gap?.answer ?? null} />}
     </div>
   );
 }
 
-function Choose({ view, done, onDone }: { view: CardView; done: Verdict | null; onDone: (v: Omit<Verdict, 'ms'>) => void }) {
+function Choose({
+  view,
+  done,
+  onDone,
+  synonym,
+}: {
+  view: CardView;
+  done: Verdict | null;
+  onDone: (v: Omit<Verdict, 'ms'>) => void;
+  synonym?: { answer: string; options: string[] };
+}) {
   const { t } = useT();
-  const main = view.de.split(', ')[0] ?? view.de;
-  const options = useMemo(() => shuffle([main, ...distractors(view)], mulberry32(hash32(view.id))), [view, main]);
+  const main = synonym ? synonym.answer : (view.de.split(', ')[0] ?? view.de);
+  const options = useMemo(() => synonym?.options ?? shuffle([main, ...distractors(view)], mulberry32(hash32(view.id))), [view, main, synonym]);
   const [picked, setPicked] = useState<string | null>(null);
   return (
     <div>
-      <p className="text-sm text-muted">{t('cTaskChoose')}</p>
+      <p className="text-sm text-muted">{synonym ? t('cTaskSynonym') : t('cTaskChoose')}</p>
       <div className="mt-3 flex items-center gap-2">
         <p className="text-3xl font-semibold tracking-tight" lang="en" data-testid="prompt-word">
           {view.word}
@@ -195,20 +222,22 @@ function Typed({
   view,
   fmt,
   gap,
+  family,
   lv,
   done,
   onDone,
 }: {
   view: CardView;
-  fmt: 'gap' | 'recall' | 'listen';
+  fmt: 'gap' | 'recall' | 'listen' | 'family';
   gap: ReturnType<typeof gapIn>;
+  family: ReturnType<typeof familyTask>;
   lv: number;
   done: Verdict | null;
   onDone: (v: Omit<Verdict, 'ms'>) => void;
 }) {
   const { t } = useT();
   const api = useHiddenInput();
-  const solution = fmt === 'gap' ? gap!.answer : fmt === 'listen' && gap ? gap.answer : view.word;
+  const solution = fmt === 'gap' ? gap!.answer : fmt === 'listen' && gap ? gap.answer : fmt === 'family' && family ? family.word : view.word;
   const accepted = fmt === 'listen' ? [solution, view.word] : [solution];
   // Lücke mit Hilfe (Stufe ≤ 1): Platzhalter und erster Buchstabe. Frei: erst „Tipp" zeigt sie.
   const helped = fmt === 'gap' && lv <= 1;
@@ -266,7 +295,18 @@ function Typed({
 
   return (
     <div>
-      <p className="text-sm text-muted">{fmt === 'gap' ? t('cTaskGap') : fmt === 'listen' ? t('cTaskListen') : t('cTaskRecall')}</p>
+      <p className="text-sm text-muted">{fmt === 'gap' ? t('cTaskGap') : fmt === 'listen' ? t('cTaskListen') : fmt === 'family' ? t('cTaskFamily') : t('cTaskRecall')}</p>
+      {fmt === 'family' && family && (
+        <div className="mt-3">
+          <p className="flex flex-wrap items-baseline gap-2 text-2xl font-semibold tracking-tight" data-testid="prompt-family">
+            <span lang="en">{view.word}</span>
+            <span className="text-base text-muted">→</span>
+            <PosLabel pos={family.pos} />
+          </p>
+          <p className="mt-1 text-sm text-muted">{family.de}</p>
+          <div className="mt-6 text-2xl">{gapEl}</div>
+        </div>
+      )}
       {fmt === 'recall' && (
         <div className="mt-3">
           <p className="text-2xl font-semibold tracking-tight" data-testid="prompt-meaning">

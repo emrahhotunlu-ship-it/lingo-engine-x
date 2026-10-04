@@ -101,34 +101,31 @@ export async function layoutProblems(page: Page): Promise<string[]> {
  * Eine Trainingseinheit durchspielen, egal welche Abfrage kommt. Liefert die Zahl der Schritte.
  * `answer` bestimmt, was in Lücken getippt wird (Standard: absichtlich falsch → Lösung wird gezeigt).
  */
-export async function playSession(page: Page, maxSteps = 120): Promise<number> {
+export async function playSession(page: Page, maxSteps = 160): Promise<number> {
   for (let i = 0; i < maxSteps; i++) {
     const done = page.getByTestId('session-done');
-    const sortKnow = page.getByTestId('sort-new');
+    const sortNew = page.getByTestId('sort-new');
     const meet = page.getByTestId('meet-done');
     const choices = page.getByTestId('choices');
     const check = page.getByTestId('check');
     const next = page.getByTestId('next');
-    await done.or(sortKnow).or(meet).or(choices).or(check).or(next).first().waitFor();
+    const rule = page.getByTestId('rule-go');
+    const mix = page.getByTestId('mix-options');
+    const gskip = page.getByTestId('grammar-skip');
+    await done.or(sortNew).or(meet).or(choices).or(check).or(next).or(rule).or(mix).or(gskip).first().waitFor();
     if (await done.isVisible()) return i;
-    if (await next.isVisible()) {
-      await next.click();
-      continue;
-    }
-    if (await sortKnow.isVisible()) {
-      await sortKnow.click();
-      continue;
-    }
-    if (await meet.isVisible()) {
-      await meet.click();
-      continue;
-    }
-    if (await choices.isVisible()) {
+    if (await next.isVisible()) await next.click();
+    else if (await sortNew.isVisible()) await sortNew.click();
+    else if (await meet.isVisible()) await meet.click();
+    else if (await rule.isVisible()) await rule.click();
+    else if (await gskip.isVisible()) await gskip.click();
+    else if (await mix.isVisible()) {
+      await mix.getByRole('button').first().click();
+      await next.waitFor();
+    } else if (await choices.isVisible()) {
       await choices.getByRole('button').first().click();
       await next.waitFor();
-      continue;
-    }
-    if (await check.isVisible()) {
+    } else if (await check.isVisible()) {
       await page.locator('.lx-hidden-input').click();
       await page.keyboard.type('xyz');
       await check.click();

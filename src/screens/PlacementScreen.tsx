@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useT } from '../i18n';
 import { Button } from '../ui/Button';
-import { Icon } from '../ui/Icon';
 import { useClock } from '../app/clock';
 import { go, setAskContext } from '../app/route';
 import { saveProfile, useCoach } from '../coach/store';
@@ -17,8 +16,8 @@ import {
   verifyThis,
   type VocabAnswer,
 } from '../coach/placement';
-import { TYPE_INSTR, topicById, type GrammarTask } from '../coach/grammar';
-import { checkTyped } from '../domain/answer/check';
+import { topicById, type GrammarTask } from '../coach/grammar';
+import { GrammarItem } from './GrammarTask';
 import type { Placement } from '../coach/types';
 
 // Einstufung (docs/neustart.md §6): Wortschatz Ja/Nein mit Kontrollwörtern und Stichproben,
@@ -216,93 +215,6 @@ function TopicLists({ grammar, lang }: { grammar: Readonly<Record<string, number
           <p className="mt-1 text-sm">{weak.join(' · ')}</p>
         </div>
       )}
-    </div>
-  );
-}
-
-function GrammarItem({ task, onDone }: { task: GrammarTask; onDone: (ok: boolean) => void }) {
-  const { t, lang } = useT();
-  const [value, setValue] = useState('');
-  const [verdict, setVerdict] = useState<null | boolean>(null);
-  const input = useRef<HTMLInputElement>(null);
-  const accepted = [task.answer, ...(task.accepted ?? [])];
-  const topic = topicById(task.topic);
-
-  function check(given: string) {
-    const r = checkTyped(given, accepted, { lemma: '' });
-    setVerdict(r.verdict !== 'wrong');
-  }
-
-  return (
-    <div className="lx-glass mt-6 rounded-[var(--radius-card)] p-6">
-      <p className="text-2xs text-muted">
-        {topic ? (lang === 'de' ? topic.name : topic.name_en) : ''} · {TYPE_INSTR[lang][task.type]}
-      </p>
-      <p className="mt-3 text-lg leading-relaxed" lang="en" data-testid="grammar-prompt">
-        {task.prompt}
-        {task.hint ? <span className="ml-2 text-muted">{task.hint}</span> : null}
-      </p>
-      {task.type === 'mc' && task.options ? (
-        <div className="mt-5 grid gap-2" data-testid="grammar-options">
-          {task.options.map((o) => {
-            const isAnswer = o === task.answer;
-            const tone = verdict === null ? '' : isAnswer ? 'ring-2 ring-accent' : '';
-            return (
-              <Button key={o} variant="secondary" className={tone} disabled={verdict !== null} onClick={() => setVerdict(isAnswer)}>
-                <span lang="en">{o}</span>
-              </Button>
-            );
-          })}
-        </div>
-      ) : (
-        <form
-          className="mt-5 flex gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (verdict === null && value.trim()) check(value);
-          }}
-        >
-          <input
-            ref={input}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            disabled={verdict !== null}
-            autoCapitalize="off"
-            autoCorrect="off"
-            spellCheck={false}
-            lang="en"
-            aria-label={TYPE_INSTR[lang][task.type]}
-            className="min-h-11 flex-1 rounded-[var(--radius-control)] border border-line bg-surface px-3 text-base text-fg outline-none focus:border-accent"
-            data-testid="grammar-input"
-          />
-          {verdict === null && (
-            <Button type="submit" variant="primary" disabled={!value.trim()}>
-              {t('cCheck')}
-            </Button>
-          )}
-        </form>
-      )}
-      {verdict !== null && (
-        <div className="mt-4 text-sm" data-testid="grammar-feedback">
-          <p className={`flex items-center gap-2 font-semibold ${verdict ? 'text-accent-text' : 'text-gold-text'}`}>
-            <Icon name={verdict ? 'check' : 'info'} size={16} />
-            {verdict ? t('cFbRight') : `${t('cFbWrong')}: `}
-            {!verdict && <span lang="en">{task.answer}</span>}
-          </p>
-          <p className="mt-1.5 text-muted">{lang === 'de' ? task.expl : task.expl_en}</p>
-        </div>
-      )}
-      <div className="mt-5 flex gap-2">
-        {verdict === null ? (
-          <Button variant="ghost" onClick={() => onDone(false)} data-testid="grammar-skip">
-            {t('cPlDontKnow')}
-          </Button>
-        ) : (
-          <Button variant="primary" iconAfter="arrowRight" onClick={() => onDone(verdict)} data-testid="grammar-next">
-            {t('cNext')}
-          </Button>
-        )}
-      </div>
     </div>
   );
 }

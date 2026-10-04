@@ -8,9 +8,14 @@ import { getDb, initCapabilities, useCapabilities } from '../platform/capabiliti
 import { HiddenInputProvider } from '../engine/HiddenInput';
 import { initSpeech } from '../platform/speech';
 import { useClockTicker } from './clock';
+import { InputScreen } from '../screens/InputScreen';
+import { BlitzScreen } from '../screens/BlitzScreen';
 import { applyDocumentSettings, isLang, isThemeMode, resolveTheme, useSettings } from './settings';
-import { closeSheet, go, openSheet, useRoute, type Route } from './route';
-import { markNoDb, saveCards, saveProfile, startCoach, useCoach } from '../coach/store';
+import { closeSheet, go, openSheet, useRoute } from './route';
+import { markNoDb, saveCards, saveProfile, saveSummary, startCoach, startInput, useCoach } from '../coach/store';
+import { buildSummary } from '../coach/summary';
+import { addDays } from '../domain/date';
+import { useClock } from './clock';
 import { importLegacy } from '../coach/legacy';
 import { HomeScreen } from '../screens/HomeScreen';
 import { PlanScreen } from '../screens/PlanScreen';
@@ -42,6 +47,15 @@ function useBoot(): void {
     return startCoach(db);
   }, [dbStatus]);
 
+  // Input der letzten sieben Tage (vom Tagesauftrag), neu je Lerntag.
+  const today = useClock((s) => s.today);
+  useEffect(() => {
+    if (dbStatus !== 'ready') return;
+    const db = getDb();
+    if (!db) return;
+    return startInput(db, addDays(today, -6));
+  }, [dbStatus, today]);
+
   // Einmalige Übernahme der alten Daten (Karten, Serie, Grammatik, Einschätzung).
   const status = useCoach((s) => s.status);
   const imported = useCoach((s) => !!s.profile?.imported);
@@ -61,6 +75,23 @@ function useBoot(): void {
       if (!plan) useCoach.setState({ importFailed: true });
     });
   }, [status, imported, t]);
+
+  // Zusammenfassung für den Tagesauftrag: nur schreiben, wenn sie sich geändert hat.
+  const profile = useCoach((s) => s.profile);
+  const cards = useCoach((s) => s.cards);
+  const inlog = useCoach((s) => s.inlog);
+  const lastSummary = useRef('');
+  useEffect(() => {
+    if (status !== 'ready' || !profile?.placement) return;
+    const summary = buildSummary(profile, cards, inlog, today);
+    const key = JSON.stringify(summary);
+    if (key === lastSummary.current) return;
+    const timer = window.setTimeout(() => {
+      lastSummary.current = key;
+      void saveSummary(summary);
+    }, 3000);
+    return () => window.clearTimeout(timer);
+  }, [status, profile, cards, inlog, today]);
 
   // Sprache und Darstellung: gespeichert im Profil, lokal nur als Kopie für den ersten Bildaufbau.
   const ui = useCoach((s) => s.profile?.ui);
@@ -83,8 +114,9 @@ function useBoot(): void {
   }, [lang, theme]);
 }
 
-const TABS: ReadonlyArray<{ route: Route['name']; icon: IconName; key: 'cTabHome' | 'cTabPlan' }> = [
+const TABS: ReadonlyArray<{ route: 'home' | 'input' | 'plan'; icon: IconName; key: 'cTabHome' | 'cTabInput' | 'cTabPlan' }> = [
   { route: 'home', icon: 'target', key: 'cTabHome' },
+  { route: 'input', icon: 'book', key: 'cTabInput' },
   { route: 'plan', icon: 'chart', key: 'cTabPlan' },
 ];
 
@@ -96,7 +128,7 @@ function TopBar() {
     { icon: 'chat', label: t('cAsk'), run: () => openSheet('ask'), testId: 'open-ask' },
     { icon: 'gear', label: t('cSettings'), run: () => openSheet('settings'), testId: 'open-settings' },
   ];
-  const inFlow = route === 'session' || route === 'placement';
+  const inFlow = route === 'session' || route === 'placement' || route === 'blitz';
   return (
     <header className="sticky top-0 z-20 border-b border-line/60 bg-bg/80 backdrop-blur-xl [-webkit-backdrop-filter:blur(20px)] pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex h-14 max-w-3xl items-center gap-2 px-4">
@@ -122,7 +154,7 @@ function TopBar() {
 function TabBar() {
   const { t } = useT();
   const route = useRoute((s) => s.route.name);
-  if (route === 'session' || route === 'placement') return null;
+  if (route === 'session' || route === 'placement' || route === 'blitz') return null;
   return (
     <nav
       aria-label="Navigation"
@@ -181,6 +213,8 @@ function Screen() {
       >
         {route.name === 'home' && <HomeScreen />}
         {route.name === 'plan' && <PlanScreen />}
+        {route.name === 'input' && <InputScreen />}
+        {route.name === 'blitz' && <BlitzScreen />}
         {route.name === 'placement' && <PlacementScreen />}
         {route.name === 'session' && <SessionScreen extra={!!route.extra} />}
       </motion.div>

@@ -235,3 +235,34 @@ describe('Übernahme der alten Daten', () => {
     expect(plan.cards.map(([id]) => id)).not.toContain('negotiate');
   });
 });
+
+describe('Grammatik-Modell, Mix und Zusammenfassung', () => {
+  it('Fokus ist das schwächste fällige Thema; C1-Themen erst ab Etappe 3', async () => {
+    const { todaysTopics, updateTopic, grammarBlock } = await import('../../src/coach/grammarModel');
+    const placement: Placement = { at: NOW, size: 4000, bands: [], falseAlarm: 0, grammar: { articles: 0.3, passive: 0.9 }, level: 'B2' };
+    const { focus, mix } = todaysTopics(null, placement, 1, NOW, '2026-10-03');
+    expect(focus).toBe('articles');
+    expect(mix.every((m) => !m.startsWith('c1-'))).toBe(true);
+    const block = grammarBlock(null, placement, 1, NOW, '2026-10-03');
+    expect(block.tasks.filter((t) => t.topic === 'articles').length).toBeGreaterThanOrEqual(3);
+    const up = updateTopic({ p: 0.3, n: 0, c: 0, last: 0, due: 0 }, true, NOW);
+    expect(up.p).toBeCloseTo(0.475);
+    expect(up.due).toBe(NOW + DAY);
+  });
+
+  it('Mix: je eine feste Verbindung, Lösung immer unter den Optionen', async () => {
+    const { mixForDay, COLLOC } = await import('../../src/coach/mix');
+    expect(COLLOC.length).toBeGreaterThan(60);
+    for (const c of COLLOC) expect(c.options).toContain(c.answer);
+    const m = mixForDay('2026-10-03', {});
+    expect(m[0]?.type).toBe('colloc');
+  });
+
+  it('Zusammenfassung für den Tagesauftrag zählt Bewertungen je Thema', async () => {
+    const { buildSummary } = await import('../../src/coach/summary');
+    const s = buildSummary(null, new Map(), { it: { a: { d: '2026-10-02', r: 'great', l: 'hard', m: 8, t: 'X', topic: 'tech' } }, own: {} }, '2026-10-03');
+    expect(s.liked).toEqual({ tech: 1 });
+    expect(s.levelVotes).toEqual({ easy: 0, right: 0, hard: 1 });
+    expect(s.recent).toEqual(['X']);
+  });
+});

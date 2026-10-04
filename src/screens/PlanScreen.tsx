@@ -4,7 +4,7 @@ import { Button } from '../ui/Button';
 import { useClock } from '../app/clock';
 import { go, setAskContext } from '../app/route';
 import { useCoach } from '../coach/store';
-import { forecastDays, grammarSolid, learnedSince, stageOf, vocabNow, VOCAB_C1 } from '../coach/derived';
+import { forecastDays, grammarSolid, inputHours, INPUT_HOURS_TARGET, learnedSince, stageOf, vocabNow, VOCAB_C1 } from '../coach/derived';
 import { topicById } from '../coach/grammar';
 import { dayKeyNoon } from '../domain/date';
 
@@ -34,6 +34,7 @@ export function PlanScreen() {
   const profile = useCoach((s) => s.profile);
   const cards = useCoach((s) => s.cards);
   const days = useCoach((s) => s.days);
+  const inlog = useCoach((s) => s.inlog);
   useEffect(() => setAskContext(''), []);
 
   const p = profile?.placement;
@@ -53,7 +54,8 @@ export function PlanScreen() {
 
   const stage = stageOf(profile?.planStart, today);
   const vocab = vocabNow(profile, cards);
-  const g = grammarSolid(profile);
+  const grammar = useCoach((s) => s.grammar);
+  const g = grammarSolid(profile, grammar?.t);
   const fc = forecastDays(profile, cards, days, today);
   const fmtMonth = (ms: number) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { month: 'long', year: 'numeric' }).format(ms);
   const start = profile?.planStart ? new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }).format(dayKeyNoon(profile.planStart)) : '';
@@ -72,6 +74,13 @@ export function PlanScreen() {
           max={VOCAB_C1}
           text={`${t('cRmVocabText', { now: num(vocab), target: num(VOCAB_C1) })} · ${t('cRmLearned', { n: learnedSince(cards, p.at) })}`}
           testId="meter-vocab"
+        />
+        <Meter
+          label={t('cRmInput')}
+          value={inputHours(inlog, today)}
+          max={INPUT_HOURS_TARGET}
+          text={t('cRmInputText', { h: inputHours(inlog, today), target: INPUT_HOURS_TARGET })}
+          testId="meter-input"
         />
         <Meter label={t('cRmGrammar')} value={g.solid} max={g.total} text={t('cRmGrammarText', { n: g.solid, total: g.total })} testId="meter-grammar" />
         {g.weakest.length > 0 && (

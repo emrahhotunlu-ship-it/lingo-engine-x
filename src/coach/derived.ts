@@ -1,7 +1,7 @@
 import { addDays, daysBetween, isoWeek } from '../domain/date';
 import { GRAMMAR_TOPICS } from './grammar';
 import { dueIds, isSolid, newQuota } from './session';
-import type { CardRec, DayRec, ProfileDoc } from './types';
+import type { CardRec, DayRec, InputItem, ProfileDoc } from './types';
 
 // Abgeleitete Werte für Heute und Fahrplan. Alles lokal berechnet, ohne KI.
 
@@ -59,9 +59,9 @@ export function vocabNow(profile: ProfileDoc | null, cards: ReadonlyMap<string, 
   return p.size + learnedSince(cards, p.at);
 }
 
-export function grammarSolid(profile: ProfileDoc | null): { solid: number; total: number; weakest: string[] } {
+export function grammarSolid(profile: ProfileDoc | null, live?: Readonly<Record<string, { p: number }>>): { solid: number; total: number; weakest: string[] } {
   const g = profile?.placement?.grammar ?? {};
-  const scored = GRAMMAR_TOPICS.map((t) => ({ id: t.id, v: g[t.id] ?? 0 }));
+  const scored = GRAMMAR_TOPICS.map((t) => ({ id: t.id, v: live?.[t.id]?.p ?? g[t.id] ?? 0 }));
   return {
     solid: scored.filter((s) => s.v >= SOLID_TOPIC).length,
     total: GRAMMAR_TOPICS.length,
@@ -99,4 +99,25 @@ export function forecastDays(profile: ProfileDoc | null, cards: ReadonlyMap<stri
   if (gap <= 0) return 0;
   if (perDay <= 0) return null;
   return Math.round(gap / perDay);
+}
+
+/** Beiträge des Tages (vom Tagesauftrag). */
+export function inputOf(input: ReadonlyArray<{ d: string; items: InputItem[] }>, day: string): InputItem[] {
+  return input.find((x) => x.d === day)?.items ?? [];
+}
+
+/** Pflicht erledigt: Wörter und Grammatik, dazu der Input, wenn es heute einen gibt. */
+export function isCore(day: DayRec, hasInput: boolean): boolean {
+  return day.core === 1 || (day.w === 1 && day.g === 1 && (day.i === 1 || !hasInput));
+}
+
+export const INPUT_HOURS_TARGET = 150;
+
+/** Input-Stunden der letzten 365 Tage: bewertete Beiträge plus eigene Zeit. */
+export function inputHours(inlog: { it: Record<string, { d: string; m: number }>; own: Record<string, number> }, today: string): number {
+  const from = addDays(today, -365);
+  let mins = 0;
+  for (const e of Object.values(inlog.it)) if (e.d > from) mins += e.m;
+  for (const [d, m] of Object.entries(inlog.own)) if (d > from) mins += m;
+  return Math.round(mins / 6) / 10;
 }

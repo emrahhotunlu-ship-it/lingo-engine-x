@@ -7,12 +7,22 @@ import { useClock } from '../app/clock';
 import { saveProfile, useCoach } from '../coach/store';
 import { bank } from '../bank/words';
 import { getLog, subscribeLog } from '../platform/diagnostics';
-import { DEFAULT_NEW_PER_DAY } from '../coach/types';
+import { DEFAULT_NEW_PER_DAY, FORMATS, INTERESTS } from '../coach/types';
+import { DEFAULT_FORMATS, DEFAULT_INTERESTS } from '../coach/defaults';
+import { TOPIC_KEY } from './InputScreen';
 
 // Einstellungen: Sprache, Hell/Dunkel, neue Wörter pro Tag, KI-Anfragen heute, Quellen, Version.
 
 type ThemeChoice = 'dark' | 'light' | 'auto';
 const NEW_OPTIONS = ['5', '10', '15', '20'] as const;
+
+function Chip({ on, onClick, label }: { on: boolean; onClick: () => void; label: string }) {
+  return (
+    <button type="button" aria-pressed={on} onClick={onClick} className={`min-h-10 rounded-full border px-4 text-sm ${on ? 'border-accent bg-accent-soft text-fg' : 'border-line text-muted'}`}>
+      {label}
+    </button>
+  );
+}
 
 export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t } = useT();
@@ -21,6 +31,9 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
   const today = useClock((s) => s.today);
   const newPerDay = useCoach((s) => s.profile?.newPerDay ?? DEFAULT_NEW_PER_DAY);
   const aiToday = useCoach((s) => s.days[today]?.ai ?? 0);
+  const interests = useCoach((s) => s.profile?.interests) ?? [...DEFAULT_INTERESTS];
+  const formats = useCoach((s) => s.profile?.formats) ?? [...DEFAULT_FORMATS];
+  const toggle = (list: string[], v: string) => (list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
   const log = useSyncExternalStore(subscribeLog, getLog);
   const errors = log.filter((e) => e.level === 'error');
 
@@ -64,6 +77,22 @@ export function SettingsSheet({ open, onClose }: { open: boolean; onClose: () =>
           onChange={(v) => void saveProfile({ newPerDay: Number(v) })}
           testId="set-new"
         />
+        <div data-testid="set-interests">
+          <h3 className="lx-eyebrow text-muted">{t('cSetInterests')}</h3>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {INTERESTS.map((v) => (
+              <Chip key={v} on={interests.includes(v)} onClick={() => void saveProfile({ interests: toggle(interests, v) })} label={t(TOPIC_KEY[v]!)} />
+            ))}
+          </div>
+        </div>
+        <div data-testid="set-formats">
+          <h3 className="lx-eyebrow text-muted">{t('cSetFormats')}</h3>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {FORMATS.map((v) => (
+              <Chip key={v} on={formats.includes(v)} onClick={() => void saveProfile({ formats: toggle(formats, v) })} label={v === 'video' ? t('cInVideo') : t('cInArticle')} />
+            ))}
+          </div>
+        </div>
         <p className="text-sm text-muted" data-testid="ai-today">
           {t('cSetAi', { n: aiToday })}
         </p>

@@ -1,6 +1,7 @@
 import legacyGrammar from '../content/legacy/grammar.json';
 import c1Toolkit from '../content/c1/toolkit.json';
 import grammarExtra from '../content/grammar-extra.json';
+import grammarBank from '../content/grammar-bank.json';
 
 // Grammatik-Themen und Aufgaben, die schon in der App liegen (16 Themen der alten App, 7 Themen des
 // C1-Werkzeugkastens). Die Kennungen bleiben unverändert: Sie stehen in den alten Daten.
@@ -34,6 +35,8 @@ export const GRAMMAR_TASKS: readonly GrammarTask[] = [
   ...(legacyGrammar.seedGrammar as GrammarTask[]),
   ...(c1Toolkit.tasks as GrammarTask[]),
   ...(grammarExtra.tasks as GrammarTask[]),
+  // Erweiterung zum Neustart (03.10.2026): 15 Aufgaben je Kernthema, einmalig erstellt und geprüft.
+  ...(grammarBank.tasks as GrammarTask[]),
 ];
 
 export const topicById = (id: string): GrammarTopic | undefined => GRAMMAR_TOPICS.find((t) => t.id === id);

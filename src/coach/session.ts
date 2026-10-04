@@ -3,7 +3,7 @@ import { hash32, mulberry32 } from '../domain/random';
 import { legacyToFsrs } from '../domain/srs/legacyFsrs';
 import { reviewFsrs } from '../domain/srs/scheduler';
 import type { Grade } from '../domain/srs/types';
-import { gapIn, viewOf } from './cardView';
+import { familyTask, gapIn, synonymTask, viewOf } from './cardView';
 import type { CardRec, DayRec, Placement } from './types';
 
 // Die tägliche Wort-Einheit (docs/neustart.md §4–§6). Der Trainer wählt selbst:
@@ -19,7 +19,7 @@ export const REVIEW_CAP = 60;
 export const MAX_SORTS = 20;
 const SORT_FROM = 0.6;
 
-export type Format = 'choose' | 'gap' | 'recall' | 'listen';
+export type Format = 'choose' | 'gap' | 'recall' | 'listen' | 'family' | 'synonym';
 export type Step =
   | { kind: 'review'; id: string; format: Format }
   | { kind: 'meet'; id: string }
@@ -36,7 +36,7 @@ export function freshFsrs(nowMs: number) {
 export function gradeOf(format: Format, a: AnswerFacts, lv: number): Grade {
   if (!a.correct && !a.near) return 1;
   if (a.near || a.help) return 2;
-  if (format === 'choose') return a.ms > 9000 ? 2 : 3;
+  if (format === 'choose' || format === 'synonym') return a.ms > 9000 ? 2 : 3;
   if (a.ms > 20_000) return 2;
   return lv >= 3 && a.ms < 6000 ? 4 : 3;
 }
@@ -57,10 +57,14 @@ export function formatFor(id: string, rec: CardRec): Format {
       return 'recall';
     case 3: {
       const r = rng();
-      return r < 0.4 ? 'recall' : r < 0.7 && canGap ? 'gap' : 'listen';
+      if (r < 0.2 && view && synonymTask(view)) return 'synonym';
+      return r < 0.5 ? 'recall' : r < 0.75 && canGap ? 'gap' : 'listen';
     }
-    default:
-      return rng() < 0.5 ? 'listen' : 'recall';
+    default: {
+      const r = rng();
+      if (r < 0.3 && view && familyTask(view)) return 'family';
+      return r < 0.65 ? 'listen' : 'recall';
+    }
   }
 }
 

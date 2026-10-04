@@ -88,3 +88,35 @@ export function distractors(view: CardView, n = 3): string[] {
   }
   return out;
 }
+
+export type FamilyTask = { word: string; pos: string; de: string };
+
+/** Wortfamilie: ein verwandtes Wort mit anderer Wortart aus der Bank (decide → decision). */
+export function familyTask(view: CardView): FamilyTask | null {
+  const b = bank().byId;
+  for (const f of view.fam) {
+    const w = b.get(f);
+    if (w && w.p !== view.pos && ['n', 'v', 'adj', 'adv'].includes(w.p) && w.de) return { word: w.w, pos: w.p, de: w.de.split(', ')[0] ?? w.de };
+  }
+  return null;
+}
+
+/** Ähnliche Bedeutung: ein Synonym aus der Bank plus drei englische Ablenker gleicher Wortart. */
+export function synonymTask(view: CardView): { answer: string; options: string[] } | null {
+  const b = bank();
+  const syn = view.syn.find((s) => b.byId.has(s));
+  if (!syn) return null;
+  const target = b.byId.get(view.id)?.r ?? 3000;
+  const blocked = new Set([view.word, syn, ...view.syn, ...view.fam]);
+  const pool = b.words.filter((w) => w.p === view.pos && !blocked.has(w.w) && Math.abs(w.r - target) < 2000);
+  let h = 7;
+  for (const ch of view.id) h = (h * 33 + ch.charCodeAt(0)) >>> 0;
+  const others: string[] = [];
+  for (let k = 0; others.length < 3 && k < pool.length * 2; k++) {
+    h = (h * 1103515245 + 12345) >>> 0;
+    const w = pool[h % pool.length]?.w;
+    if (w && !others.includes(w)) others.push(w);
+  }
+  const options = [syn, ...others].sort();
+  return { answer: syn, options };
+}

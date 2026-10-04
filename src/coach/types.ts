@@ -44,6 +44,12 @@ export type DayRec = {
   core?: 0 | 1;
   /** KI-Anfragen an diesem Tag (Anzeige in den Einstellungen). */
   ai?: number;
+  /** Teile des Tages erledigt: Wörter, Grammatik, Input. */
+  w?: 0 | 1;
+  g?: 0 | 1;
+  i?: 0 | 1;
+  /** Bestes Ergebnis der Blitzrunde. */
+  bz?: number;
 };
 
 export type Placement = {
@@ -80,6 +86,44 @@ export type ProfileDoc = {
   placement?: Placement;
   imported?: LegacyImport;
   ui?: { lang?: 'de' | 'en'; theme?: 'dark' | 'light' | 'auto' };
+  /** Themen und Formate für den Input des Tages (Emrahs Antworten vom 03.10.2026 als Start). */
+  interests?: string[];
+  formats?: string[];
 };
+
+export const INTERESTS = ['economy', 'tech', 'business', 'sport', 'science'] as const;
+export const FORMATS = ['video', 'article'] as const;
+
+/** Ein Input-Beitrag, geschrieben vom Tagesauftrag nach input/<JJJJ-MM-TT>. */
+export type InputItem = {
+  id: string;
+  kind: 'article' | 'video';
+  title: string;
+  source: string;
+  url: string;
+  mins: number;
+  level?: string;
+  topic?: string;
+  why_de?: string;
+  why_en?: string;
+  tip_de?: string;
+  tip_en?: string;
+  words?: Array<{ en: string; de: string }>;
+};
+
+/** Gelesen/gesehen und bewertet (coach/inlog-JJJJ-MM). */
+export type InLogEntry = {
+  d: string;
+  /** Interesse: spannend, okay, langweilig. */
+  r?: 'great' | 'ok' | 'boring';
+  /** Schwierigkeit: zu leicht, passend, zu schwer. */
+  l?: 'easy' | 'right' | 'hard';
+  m: number;
+  t: string;
+  s?: string;
+  k?: string;
+  topic?: string;
+};
+export type InLog = { it: Record<string, InLogEntry>; own: Record<string, number> };
 
 export const DEFAULT_NEW_PER_DAY = 10;
