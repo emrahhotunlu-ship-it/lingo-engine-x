@@ -19,14 +19,8 @@ const FIXED: Readonly<Record<string, { route: Route; label: MessageKey }>> = {
   'vocab:review': { route: { name: 'trainer', round: 'extra' }, label: 'actVocabReview' },
   'vocab:leech': { route: { name: 'trainer', round: 'extra' }, label: 'actVocabLeech' },
   chunks: { route: { name: 'trainer', round: 'extra' }, label: 'actChunks' },
-  dictate: { route: { name: 'drill', kind: 'dictate', ctx: 'xtra' }, label: 'actDictate' },
   cloze: { route: { name: 'drill', kind: 'cloze', ctx: 'xtra' }, label: 'actCloze' },
   order: { route: { name: 'drill', kind: 'order', ctx: 'xtra' }, label: 'actOrder' },
-  sprint: { route: { name: 'drill', kind: 'sprint', ctx: 'xtra' }, label: 'actSprint' },
-  speak: { route: { name: 'speak' }, label: 'actSpeak' },
-  'business:email': { route: { name: 'mail' }, label: 'actBizEmail' },
-  'business:nego': { route: { name: 'playbook' }, label: 'actBizNego' },
-  'business:present': { route: { name: 'pitch' }, label: 'actBizPresent' },
 };
 
 /** Ziel einer Aktion oder `null` (dann gibt es keinen „Üben"-Knopf). */

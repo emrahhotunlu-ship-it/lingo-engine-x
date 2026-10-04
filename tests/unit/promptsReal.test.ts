@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import course from '../../src/content/legacy/course.json';
 import { containsPhrase } from '../../src/domain/chunks/newChunk';
 import type { LessonMeta } from '../../src/domain/learn/types';
-import { applyCheck } from '../../src/prompts/applyCheck';
 import { cardExamples } from '../../src/prompts/cardExamples';
 import { shortenText } from '../../src/prompts/common';
 import { grammarItems } from '../../src/prompts/grammarItems';
@@ -10,7 +9,6 @@ import { grammarJudge } from '../../src/prompts/grammarJudge';
 import { lessonContent } from '../../src/prompts/lessonContent';
 import { lessonProduction } from '../../src/prompts/lessonProduction';
 import { mnemonic } from '../../src/prompts/mnemonic';
-import { phraseAdapt } from '../../src/prompts/phraseAdapt';
 import { threeLayersSchema } from '../../src/prompts/threeLayers';
 import { translate } from '../../src/prompts/translate';
 import { spellingCorrection, wordGen } from '../../src/prompts/wordGen';
@@ -362,37 +360,5 @@ describe('Wendungen vergleichen (W7)', () => {
     expect(containsPhrase('We cannot sign off on this.', 'sign off in')).toBe(false);
     expect(containsPhrase('Meet the client halfway.', 'meet sb halfway through')).toBe(false);
   });
-
-  it('phrase-adapt: echte Antworten mit Kurzformen und Platzhaltern bestehen; vier Vorschläge → drei', () => {
-    const s = phraseAdapt.schema({ question: 'Saying no to a customer', phrases: ['I am afraid we cannot'], situation: 'Rabatt', uiLang: 'de' });
-    const p = (o: object = {}) => ({ en: 'what we can offer instead is', de: 'was wir stattdessen anbieten können, ist', def: 'introduces an alternative offer', ex: 'What we can offer instead is a 10% discount on a two-year contract.', why: 'Lenkt sofort auf eine Lösung.', ...o });
-    ok(s, { phrases: [p(), p(), p({ en: 'I can go up to [X]%', ex: 'I can go up to 10% if you sign today.' })] });
-    ok(s, { phrases: [p(), p(), p({ en: "we're not in a position to", ex: 'We are not in a position to offer 30%.' })] });
-    ok(s, { phrases: [p(), p(), p({ en: 'I understand where you are coming from', ex: "I understand where you're coming from, but 30% isn't possible." })] });
-    ok(s, { phrases: [p(), p(), p({ why: 'Klingt fair: the customer hears a yes to something.' })] });
-    expect(ok<{ phrases: unknown[] }>(s, { phrases: [p(), p(), p(), p()] }).phrases).toHaveLength(3);
-  });
 });
 
-describe('apply-check (Hinweise)', () => {
-  const v = { task_en: 'Write 3 sentences', chunks: ['price stability', 'interest rates'], gist: 'Central bank...', text: 'The inflation are high.', uiLang: 'de', topics: ['articles'] } as const;
-  const base = {
-    verdict: 'ok',
-    chunks: [{ chunk: 'price stability', used: true, natural: true, note: 'Passt gut.' }],
-    errors: [{ orig: 'The inflation are high', fix: 'Inflation is high', cat: 'grammar', topic: 'articles', why: 'Inflation ist unzählbar: kein Artikel, Verb im Singular.' }],
-    improved: 'Inflation is high, so I think the central bank needs to raise interest rates.',
-    tip: 'Achte auf unzählbare Nomen.',
-  };
-  const s = applyCheck.schema(v);
-
-  it('Thema fehlt oder leer → null, Stelle bis 200 Zeichen, unbekannte Kategorie → other', () => {
-    const e = (x: object) => ok<{ errors: Array<{ topic: string | null; cat: string }> }>(s, { ...base, errors: [{ ...base.errors[0], ...x }] }).errors[0];
-    const { topic: _t, ...noTopic } = base.errors[0]!;
-    void _t;
-    expect(ok<{ errors: Array<{ topic: string | null }> }>(s, { ...base, errors: [noTopic] }).errors[0]?.topic).toBeNull();
-    expect(e({ topic: '' })?.topic).toBeNull();
-    expect(e({ cat: 'word choice' })?.cat).toBe('other');
-    expect(e({ cat: 'Word Order' })?.cat).toBe('word-order');
-    ok(s, { ...base, errors: [{ ...base.errors[0], orig: 'I think the central bank must raise interest rates for price stability because the inflation are high since many months and nobody knows when it will be lower again' }] });
-  });
-});

@@ -22,7 +22,6 @@ import { VoiceSection } from './VoiceSection';
 import { LearningSection, SoundSection } from './LearningSection';
 import { Fold } from '../../ui/Fold';
 import { HapticSection } from './HapticSection';
-import { discCount } from '../../domain/discover/steps';
 import { diagText } from './diagText';
 import { perfText, readPerfMarks, type PerfName } from './perfMarks';
 
@@ -210,7 +209,6 @@ function Diagnostics({ open }: { open: boolean }) {
   const caps = useCapabilities();
   const time = (ms: number) => new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { timeStyle: 'medium' }).format(ms);
   const schema = useLive((s) => s.docs['app/schema']);
-  const disc = useLive((s) => s.docs['app/profile']?.disc);
   const profile = useLive((s) => s.docs['app/profile']);
   const today = useClock((s) => s.today);
   const size = useMemo(() => profileSize(profile, today), [profile, today]);
@@ -270,7 +268,6 @@ function Diagnostics({ open }: { open: boolean }) {
         ? `${num(schema.version)}${typeof schema.migratedAt === 'number' ? ` · ${date(schema.migratedAt)}` : ''}`
         : t('diagSchemaNone'),
     ],
-    [t('diagDisc'), num(discCount(disc))],
   ];
 
   // N95: die vier Messpunkte, beim Öffnen gelesen und kopierbar.

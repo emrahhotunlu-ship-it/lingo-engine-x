@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-import { runningTabs, useAiTasks } from './aiTasks';
 import { useT } from '../../i18n';
 import { Icon } from '../../ui/Icon';
 import { markNavStart } from '../perf';
@@ -27,7 +25,7 @@ function BadgeCount({ badge }: { badge: BadgeDef }) {
   );
 }
 
-function TabButton({ tab, active, busy }: { tab: TabDef; active: boolean; busy: boolean }) {
+function TabButton({ tab, active }: { tab: TabDef; active: boolean }) {
   const { t } = useT();
   const switchTab = useNav((s) => s.switchTab);
   const badge = tab.badge ? badgeOf(tab.badge) : null;
@@ -53,13 +51,6 @@ function TabButton({ tab, active, busy }: { tab: TabDef; active: boolean; busy: 
         {badge && <BadgeCount badge={badge} />}
       </span>
       <span className="whitespace-nowrap">{t(tab.label)}</span>
-      {/* M13: Ladepunkt, solange eine KI-Korrektur im Hintergrund läuft (Text für Vorleseprogramme). */}
-      {busy && (
-        <span className="absolute top-1 right-1" data-testid="tab-busy">
-          <span className="lx-busy-dot block" aria-hidden="true" />
-          <span className="sr-only">{t('tabBusy')}</span>
-        </span>
-      )}
     </button>
   );
 }
@@ -67,8 +58,6 @@ function TabButton({ tab, active, busy }: { tab: TabDef; active: boolean; busy: 
 export function TabBar() {
   const { t } = useT();
   const tab = useNav((s) => s.tab);
-  const tasks = useAiTasks((s) => s.tasks);
-  const busy = useMemo(() => runningTabs(tasks), [tasks]);
   return (
     <nav
       aria-label={t('navLabel')}
@@ -76,7 +65,7 @@ export function TabBar() {
       data-testid="tabbar"
     >
       {TABS.map((d) => (
-        <TabButton key={d.id} tab={d} active={tab === d.id} busy={busy.has(d.id)} />
+        <TabButton key={d.id} tab={d} active={tab === d.id} />
       ))}
     </nav>
   );

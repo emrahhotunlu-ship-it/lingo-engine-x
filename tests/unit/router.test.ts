@@ -16,8 +16,7 @@ const AREAS: AreaDef[] = [
     screens: {
       today: { kind: 'tab', component: Empty },
       vocab: { kind: 'tab', component: Empty },
-      library: { kind: 'tab', component: Empty },
-      speak: { kind: 'tab', component: Empty, params: z.object({ seg: z.enum(['scenes', 'business', 'preply']).optional() }) },
+      speak: { kind: 'tab', component: Empty },
       learn: { kind: 'tab', component: Empty },
       grammar: { kind: 'page', component: Empty },
       course: { kind: 'page', component: Empty },
@@ -25,7 +24,6 @@ const AREAS: AreaDef[] = [
       lesson: { kind: 'exercise', component: Empty, params: z.object({ id: z.string().min(1) }) },
       trainer: { kind: 'exercise', component: Empty, params: z.object({ round: z.enum(['pflicht', 'extra']) }) },
       roleplay: { kind: 'exercise', component: Empty, params: z.object({ sceneId: z.string(), resume: z.boolean().optional(), n: z.number().optional() }) },
-      say: { kind: 'exercise', component: Empty },
     },
   },
 ];
@@ -97,20 +95,17 @@ describe('Router: Reiter-Stapel und Übungsebene', () => {
   });
 
   it('Reiter-Wurzel wechselt den Reiter, setzt Wurzelparameter und schließt die Übung', () => {
-    let c = navigate(start(), { name: 'say' });
+    let c = navigate(start(), { name: 'trainer', round: 'extra' });
     c = navigate(c, { name: 'overview', tab: 'errors' });
     expect(c.tab).toBe('progress');
     expect(c.overlay).toBeNull();
     expect(top(c)).toEqual({ name: 'overview', tab: 'errors' });
   });
 
-  it('Sprechen und Bibliothek sind seit 04.10.2026 Seiten: kein Reiterwechsel, Seite auf dem aktuellen Stapel', () => {
-    let c = navigate(start(), { name: 'speak', seg: 'business' });
+  it('Sprechen ist seit 04.10.2026 eine Seite: kein Reiterwechsel, Seite auf dem aktuellen Stapel', () => {
+    const c = navigate(start(), { name: 'speak' });
     expect(c.tab).toBe('today');
-    expect(top(c)).toEqual({ name: 'speak', seg: 'business' });
-    c = navigate(start(), { name: 'library' });
-    expect(c.tab).toBe('today');
-    expect(top(c)).toEqual({ name: 'library' });
+    expect(top(c)).toEqual({ name: 'speak' });
   });
 
   it('andere Reiter behalten ihren Stapel; auf der Wurzel tut back() nichts', () => {
@@ -144,7 +139,7 @@ describe('Deep-Links', () => {
 
   it('#go= aus dem Adress-Anker', () => {
     expect(routeFromHash(`#go=${encodeURIComponent('overview?tab=history')}`, lookup)).toEqual({ name: 'overview', tab: 'history' });
-    expect(routeFromHash('#go=say', lookup)).toEqual({ name: 'say' });
+    expect(routeFromHash('#go=trainer&round=extra', lookup)).toEqual({ name: 'trainer', round: 'extra' });
     expect(routeFromHash('#main', lookup)).toBeNull();
   });
 });

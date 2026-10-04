@@ -5,25 +5,22 @@ import { loadResume } from '../../app/resume';
 import type { Route } from '../../app/router/types';
 import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types';
 import { invalidIdsOf, useLive } from '../../data/live';
-import { readOnce } from '../../data/snapshot';
 import type { DutyId, StoredPlan, UnitMeta } from '../../domain/plan/types';
-import { sayPath, type SayItem } from '../../domain/say/sayDoc';
 import { buildTrainCards } from '../../domain/srs/cards';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
-import { isUnitPlan, lapPatch, unitActKey, unitDonePatch, unitPlanOf } from '../../domain/unit/plan';
+import { isUnitPlan, unitActKey, unitDonePatch, unitPlanOf } from '../../domain/unit/plan';
 import { unitPhrases, weakWords } from '../../domain/unit/phrases';
 import { unitRows, type UnitRow } from '../../domain/unit/rows';
 import { resolveBlock, themeFor, weekTargets } from '../../domain/week';
 import type { UnitBlock, UnitEnv, UnitPlan } from '../../domain/week/types';
 import { selectAiAvailable } from '../../ai/scope';
-import { getDb, useCapabilities } from '../../platform/capabilities';
+import { useCapabilities } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { unlockSpeech, useSpeech } from '../../platform/speech';
 import { startCheck } from '../check/session';
 import { startGrammar } from '../grammar/session';
 import { recordProfileFields, usePending } from '../progress/persist';
 import { markUnitLocal } from '../today/marks';
-import { phoneActive } from '../today/device';
 import { todayNow } from '../today/state';
 import { healDay } from '../today/store';
 import { startSession } from '../vocab/session';
@@ -54,7 +51,7 @@ export function unitNow(): UnitNow | null {
 
 /** Umgebung beim Blockstart: KI nur, wenn sie JETZT bereit ist (M4d); Sprachausgabe mit Stimme. */
 export function envNow(): UnitEnv {
-  return { ai: selectAiAvailable(useCapabilities.getState()), tts: useSpeech.getState().status === 'ready', phone: phoneActive() };
+  return { ai: selectAiAvailable(useCapabilities.getState()), tts: useSpeech.getState().status === 'ready' };
 }
 
 const firstOpen = (rows: readonly UnitRow[]): UnitRow | null => rows.find((r) => r.state !== 'done') ?? null;
@@ -119,17 +116,8 @@ function fallback(block: UnitBlock, kind: UnitBlock['kind'], api: FocusApi): { r
     if (first === 'empty') return { route: { name: 'unitStep', step: 'check', block: block.block }, via: 'own', watch: null };
     return { route: { name: 'check' }, via: 'check', watch: 'check' };
   }
-  if (block.block === 2) {
-    api.blur();
-    return { route: { name: 'unitStep', step: 'input', block: 2 }, via: 'own', watch: null };
-  }
-  if (block.block === 3) {
-    // „Sag es“ ist ohne KI erfüllbar (ungeprüft speichern) und deckt jede Aufgabe ab, bis ihr Anbieter kommt.
-    api.blur();
-    return { route: { name: 'say' }, via: 'say', watch: 'say' };
-  }
-  if (block.block === 4) {
-    // Fokus: Grammatikrunde (fällige Fehler und Kanal der Woche), als Pflicht (roundCtx).
+  if (block.block === 2 || block.block === 3 || block.block === 4) {
+    // Grammatikrunde (fällige Fehler und Kanal der Woche), als Pflicht (roundCtx).
     setRun({ day, watch: 'gram' });
     const first = startGrammar({ mode: 'duty', day });
     if (first === 'typed') api.focusNow();
@@ -269,10 +257,6 @@ export function markBlockDone(day: string, duty: string): void {
       return healDay(day);
     })
     .catch((err: unknown) => logError('unit:done', err, key));
-  // Aufgabe des Tages am Laptop (nicht die Handy-Übung): für die Wochenbilanz „x von 2“ auf Heute.
-  if (duty === 'ch:u-task' && !phoneActive()) {
-    fieldsChain = fieldsChain.then(() => recordProfileFields('unit:lap', (cur) => lapPatch(cur, day))).catch((err: unknown) => logError('unit:lap', err, day));
-  }
 }
 
 /**
@@ -348,42 +332,9 @@ export function installUnitWatch(): void {
     if (!added.some((r) => r.day === run.day && r.act === run.watch && !r.partial)) return;
     const duty = run.duty;
     const day = run.day;
-    const via = run.via;
     setRun({ watch: null });
     markBlockDone(day, duty);
-    if (via === 'say') void loadSayTask(day);
   });
-}
-
-/** Ergebnis von „Sag es“ (Ersatz für Block 3) aus `say/<Monat>` für Block 4/5 – geräteübergreifend. */
-export async function loadSayTask(day: string): Promise<UnitTaskResult | null> {
-  const db = getDb();
-  if (!db) return null;
-  const path = sayPath(day);
-  try {
-    const snap = await readOnce(path, () => db.doc(path).get());
-    const doc = snap.exists ? (snap.data()) : undefined;
-    const items = Array.isArray(doc?.items) ? (doc.items as unknown[]) : [];
-    const mine = items
-      .filter((x): x is SayItem => !!x && typeof x === 'object' && (x as SayItem).day === day && typeof (x as SayItem).a1 === 'string' && (x as SayItem).a1.length > 0)
-      .sort((a, b) => (a.t ?? 0) - (b.t ?? 0))
-      .at(-1);
-    if (!mine) return null;
-    const fb = mine.fb1;
-    const task: UnitTaskResult = {
-      kind: 'task.say',
-      ref: `${path}#${mine.id}`,
-      text: mine.a1,
-      fixes: (fb?.corrections ?? []).slice(0, 3).map((c) => ({ kind: 'form' as const, mine: c.wrong, right: c.right, why: c.why })),
-    };
-    if (fb?.better) task.better = fb.better;
-    if (mine.a2) task.better = task.better ?? mine.a2;
-    if (useUnitRun.getState().day === day) setRun({ task });
-    return task;
-  } catch (err) {
-    logWarn('unit:task', err, path);
-    return null;
-  }
 }
 
 /** Nur für Tests. */

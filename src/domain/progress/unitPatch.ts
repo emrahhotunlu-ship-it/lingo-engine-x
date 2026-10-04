@@ -1,5 +1,4 @@
 import { validateDoc } from '../../data/validate';
-import type { Domain, InputKind } from '../input/types';
 import { EMA_ALPHA } from './profilePatch';
 
 // Abschluss einer Einheit aus Lesen, Hören, Schreiben oder Entdecken (Phase 4, Plan §3.2, F5–F9).
@@ -8,6 +7,9 @@ import { EMA_ALPHA } from './profilePatch';
 // geschützt durch dieselbe Folgenummer `lxSeq[gerät]` (zweimal angewendet wirkt wie einmal).
 
 type Doc = Record<string, unknown>;
+
+export type Domain = 'work' | 'life';
+export type InputKind = 'read' | 'listen' | 'write' | 'discover';
 
 export type ListenRecord = { id: string; level: string; n: number; ok: number; plays: number; rate: number; help: boolean; t: number };
 

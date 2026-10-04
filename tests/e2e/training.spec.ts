@@ -4,10 +4,8 @@ import { boot, bootAt, crashOnce, layoutProblems, openEntry, openSpeak, openTab,
 import { nbLog, outItems, typeGap } from './trainingHelpers';
 import { dump } from './trainerHelpers';
 
-// Paket P7b (docs/neubau/plan.md §4.8, N101–N106): Kollokationen, Satz-Umformung, Einwand-Training,
-// Posteingang, Nachsprechen. Paketkriterien: 5 Kollokationen mit Lehnübersetzung → Hinweis →
-// Lösung; Einwand-Serie mit Zeitbalken, ohne KI Selbstcheck; Posteingang in 3 Schritten, Neuladen
-// im Antwortfeld behält den Entwurf; Nachsprechen mit 3 Durchgängen; jede Übung ≤ 2 Tipps ab Reiter.
+// Training: Kollokationen, Satz-Umformung, Register, Überleitungen/Wortbildung und das Einwand-Training
+// (freiwilliges Extra). Posteingang, Nachsprechen und Aussprache entfallen seit dem Umbau (04.10.2026).
 
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
@@ -19,9 +17,6 @@ test('Einstiege: jede Übung 1 Tipp ab ihrem Reiter (Sprechen: ab Heute)', async
   // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
   await openSpeak(page);
   await expect(page.getByTestId('training-objection')).toBeVisible();
-  await expect(page.getByTestId('training-shadow')).toBeVisible();
-  await openSpeak(page, 'write');
-  await expect(page.getByTestId('training-inbox')).toBeVisible();
   expect(await layoutProblems(page)).toEqual([]);
 });
 
@@ -167,63 +162,6 @@ test('Einwand-Training mit KI, Stufe 5: Bedenkzeit, Zeitziel, Claude prüft das 
   await expect(page.getByTestId('round-progress')).toHaveText('2 / 5');
 });
 
-test('Posteingang: 3 Schritte, Neuladen im Antwortfeld behält den Entwurf, Rückmeldung', async ({ page }) => {
-  await bootAt(page, { name: 'inbox' }, { fake: { persist: true } });
-  await screen(page, 'inbox');
-  await expect(page.getByTestId('inbox')).toHaveAttribute('data-step', 'read');
-  await expect(page.getByTestId('inbox-mail')).toBeVisible();
-  await page.getByTestId('inbox-next').click();
-  await page.getByTestId('inbox-gist').fill('Sie hat keine Zeit und der Chef entscheidet.');
-  await page.getByTestId('inbox-next').click();
-  await expect(page.getByTestId('inbox')).toHaveAttribute('data-step', 'reply');
-  const draft = 'Hi Laura, thanks for your reply. I send you a short overview for your managing director.';
-  await page.getByTestId('inbox-reply').fill(draft);
-  await page.waitForTimeout(500);
-  await page.reload();
-  await screen(page, 'inbox');
-  await expect(page.getByTestId('inbox')).toHaveAttribute('data-step', 'reply');
-  await expect(page.getByTestId('inbox-reply')).toHaveValue(draft);
-  await page.getByTestId('inbox-check').click();
-  await expect(page.getByTestId('inbox-review')).toHaveAttribute('data-mode', 'ai');
-  await expect(page.getByTestId('inbox-gist-verdict')).toBeVisible();
-  await expect(page.getByTestId('feedback-fixes')).toContainText("I'll send you");
-  await page.getByTestId('next').click();
-  await expect.poll(async () => (await outItems(page)).filter((x) => x.k === 'inbox').length).toBe(1);
-});
-
-test('Posteingang ohne KI: Selbstvergleich mit Anliegen, Punkten und Musterantwort', async ({ page }) => {
-  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
-  await openEntry(page, 'training-inbox');
-  await screen(page, 'inbox');
-  await page.getByTestId('inbox-next').click();
-  await page.getByTestId('inbox-gist').fill('Keine Zeit.');
-  await page.getByTestId('inbox-next').click();
-  await page.getByTestId('inbox-reply').fill('Thanks for your message. Let us talk again next month.');
-  await page.getByTestId('inbox-check').click();
-  await expect(page.getByTestId('inbox-review')).toHaveAttribute('data-mode', 'self');
-  await expect(page.getByTestId('inbox-hidden')).toBeVisible();
-  await expect(page.getByTestId('inbox-model')).toBeVisible();
-  await page.getByTestId('inbox-must-0').check();
-  await expect(page.getByTestId('feedback')).toHaveAttribute('data-verdict', 'unchecked');
-});
-
-test('Nachsprechen: 3 Durchgänge mit 0,9 / 1,0 / 1,1, keine Wertung', async ({ page }) => {
-  test.setTimeout(90_000);
-  await boot(page, { migrated: true });
-  await openEntry(page, 'training-shadow');
-  await screen(page, 'pron');
-  const item = page.getByTestId('shadow-item');
-  await expect(item).toHaveAttribute('data-rate', '0.9');
-  await page.getByTestId('shadow-start').click();
-  await expect(page.getByTestId('shadow-you')).toBeVisible();
-  await expect(item).toHaveAttribute('data-pass', '2', { timeout: 30_000 });
-  await expect(item).toHaveAttribute('data-rate', '1');
-  await expect(item).toHaveAttribute('data-pass', '3', { timeout: 30_000 });
-  await expect(item).toHaveAttribute('data-rate', '1.1');
-  await expect(page.getByTestId('session-end')).toBeVisible({ timeout: 30_000 });
-  await expect.poll(async () => (await outItems(page)).filter((x) => x.k === 'shadow').length).toBe(1);
-});
-
 test('Deep-Link öffnet die Übung direkt (neue Runde als Extra)', async ({ page }) => {
   await bootAt(page, { name: 'nbdrill', set: 'colloc' });
   await screen(page, 'nbdrill');
@@ -263,58 +201,13 @@ test('Soll N107: Überleitungen und Wortbildung erreichbar', async ({ page }) =>
   await expect(page.getByTestId('wordform-item')).toHaveAttribute('data-state', 'ok');
 });
 
-test('Soll N108: Heißer Stuhl und Zeit gewinnen mit Zeitbalken und Muster zum Vergleich', async ({ page }) => {
-  await boot(page, { migrated: true });
-  await openEntry(page, 'training-hotseat');
-  await screen(page, 'pressure');
-  await expect(page.getByTestId('hotseat-item')).toBeVisible();
-  await expect(page.getByTestId('pressure-think')).toBeVisible();
-  await page.getByTestId('pressure-start').click();
-  await page.getByTestId('pressure-input').fill("That's a fair question. We have run many projects like yours.");
-  await page.getByTestId('pressure-check').click();
-  await expect(page.getByTestId('pressure-review')).toHaveAttribute('data-mode', 'self');
-  await expect(page.getByTestId('feedback-solution')).toBeVisible();
-  await page.getByTestId('round-close').click();
-  await openEntry(page, 'training-buytime');
-  await screen(page, 'pressure');
-  await expect(page.getByTestId('buytime-item')).toBeVisible();
-  // Zeit gewinnen: keine Bedenkzeit, sofort Antwortzeit.
-  await expect(page.getByTestId('pressure-answer')).toBeVisible();
-  await page.getByTestId('pressure-input').fill("That's a fair question.");
-  await page.getByTestId('pressure-check').click();
-  await expect(page.getByTestId('pressure-starters')).toBeVisible();
-});
-
-test('Soll N109: Wortbetonung und Zahlen ohne KI', async ({ page }) => {
-  await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
-  await openEntry(page, 'training-stress');
-  await screen(page, 'pron');
-  await expect(page.getByTestId('stress-item')).toHaveAttribute('data-id', 's01');
-  await page.getByTestId('syll-1').click();
-  await expect(page.getByTestId('stress-item')).toHaveAttribute('data-state', 'wrong');
-  await expect(page.getByTestId('feedback-solution')).toHaveText(/DOC·u·ment/);
-  await page.getByTestId('next').click();
-  await expect(page.getByTestId('round-progress')).toHaveText('2 / 8');
-  await page.getByTestId('round-close').click();
-  await openEntry(page, 'training-numbers');
-  await screen(page, 'pron');
-  await expect(page.getByTestId('number-show')).toHaveText('€1.5bn');
-  await page.getByTestId('number-reveal').click();
-  await expect(page.getByTestId('feedback-solution')).toContainText('one point five billion euros');
-});
-
 for (const theme of ['dark', 'dim', 'light'] as const) {
-  test(`Barrierefreiheit (${theme}): Kollokation und Posteingang ohne ernste axe-Verstöße`, async ({ page }) => {
+  test(`Barrierefreiheit (${theme}): Kollokation ohne ernste axe-Verstöße`, async ({ page }) => {
     await boot(page, { migrated: true, theme, lang: theme === 'light' ? 'en' : 'de' });
     await openEntry(page, 'training-colloc');
     await screen(page, 'nbdrill');
     const a = await new AxeBuilder({ page }).include('[data-testid="nbdrill"]').analyze();
     expect(a.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
-    await page.getByTestId('round-close').click();
-    await openEntry(page, 'training-inbox');
-    await screen(page, 'inbox');
-    const b = await new AxeBuilder({ page }).include('[data-testid="inbox"]').analyze();
-    expect(b.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical').map((v) => v.id)).toEqual([]);
     expect(await layoutProblems(page)).toEqual([]);
   });
 }

@@ -1,7 +1,6 @@
 import { isoWeek } from '../date';
 import { unitPlanFor } from '../week';
 import type { UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs, WeekDoc } from '../week/types';
-import { isPhoneView, phoneUnitPlan, rawPlan } from '../plan/phone';
 import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
 
 // Tageseinheit als gespeicherter Tagesplan (plan.md §1.5, N10/N12; Prüfung M2, M5). Rein.
@@ -65,10 +64,8 @@ export const isUnitPlan = (p: StoredPlan | null | undefined): p is StoredPlan & 
  * eingefrorene Plan mit schlichten Blöcken – nie neu gewürfelt (Kap. 15).
  */
 export function unitPlanOf(view: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
-  // Die Handy-Ansicht (`domain/plan/phone`) ersetzt Block 3; die Einheit selbst wird immer aus dem
-  // gespeicherten Plan abgeleitet und erst danach für das Handy angepasst (Blöcke bleiben über den Kanal auffindbar).
-  const up = storedUnitPlan(rawPlan(view) as StoredPlan & { u: UnitMeta }, week);
-  return isPhoneView(view) ? phoneUnitPlan(up) : up;
+  // `view` ist die Ansicht des Umbaus (`domain/plan/retire`): entfallene Blöcke sind schon herausgekürzt.
+  return storedUnitPlan(view, week);
 }
 
 function storedUnitPlan(p: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {

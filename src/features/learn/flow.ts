@@ -54,12 +54,6 @@ export function startDuty(id: DutyId, api: FocusApi): void {
     go({ name: 'grammarSession', mode: 'duty' });
     return;
   }
-  if (ch === 'say') {
-    // „Sag es“: erst die Situation lesen – die Tastatur öffnet Emrah selbst im Feld.
-    api.blur();
-    go({ name: 'say' });
-    return;
-  }
   if (ch === 'cloze' || ch === 'order') {
     const first = startDrill(ch, day);
     if (first === 'typed') api.focusNow();

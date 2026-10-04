@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { keepsScroll, kindOf } from './registry';
-import type { Route, RouteName, RouteOf, UnitCtx } from './router/types';
+import type { Route, RouteName, UnitCtx } from './router/types';
 import { START_TAB, TABS, tabOfRoot, type TabId } from './shell/tabs';
 
 // Navigation ohne Router und ohne History-API (im iframe teilt sich der Verlauf mit claude.ai).
@@ -18,10 +18,7 @@ import { START_TAB, TABS, tabOfRoot, type TabId } from './shell/tabs';
 // Die Bildschirm-Ebene (`tab`/`page`/`exercise`) meldet jeder Bereich in `src/areas/*.tsx` an.
 
 export type { Route, RouteName, UnitCtx };
-export type { SpeakSeg } from './router/types';
 
-/** Routen von Phase 4 (Lesen, Hören, Schreiben, Entdecken). `ctx` bestimmt nur `log.ctx`, nie die Zählung. */
-export type InputRoute = RouteOf<'read' | 'listen' | 'write' | 'discover' | 'discoverItem' | 'history'>;
 
 /** Reiter der Navigation (Daten in `shell/tabs.ts`). */
 export type TabName = TabId;

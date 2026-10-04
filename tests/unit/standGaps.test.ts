@@ -10,7 +10,6 @@ import { buildTrainCards } from '../../src/domain/srs/cards';
 import { deriveToday } from '../../src/domain/plan/buildPlan';
 import { profilePatch, roundBonus, type RoundEnd } from '../../src/domain/progress/profilePatch';
 import { keepVisibleDelta, keyboardCovers } from '../../src/ui/chat/keyboard';
-import { runningTabs, type AiTask } from '../../src/app/shell/aiTasks';
 import { normCtx } from '../../src/app/actions';
 import { WORK_MAX, workContext } from '../../src/prompts/work';
 import { buildEvidence } from '../../src/domain/assessment/evidence';
@@ -262,20 +261,6 @@ describe('Lücke über der iPhone-Tastatur (Kap. 4.1, H5)', () => {
   it('Tastatur gilt erst ab 80 px verdeckter Höhe als offen', () => {
     expect(keyboardCovers(844, 800)).toBe(false);
     expect(keyboardCovers(844, 500)).toBe(true);
-  });
-});
-
-describe('Ladepunkt am Reiter (M13)', () => {
-  const task = (over: Partial<AiTask>): AiTask => ({ key: 'k', kind: 'write', route: { name: 'write', ctx: 'extra' }, phase: 'thinking', status: 'running', error: null, seen: false, startedAt: 1, ...over });
-  it('nur laufende Korrekturen, am passenden Reiter', () => {
-    expect([...runningTabs({})]).toEqual([]);
-    // Seit 04.10.2026 gibt es keinen Reiter „Lesen“ mehr: freiwillige Einheiten zeigen keinen Ladepunkt am Reiter.
-    expect([...runningTabs({ a: task({}) })]).toEqual([]);
-    expect([...runningTabs({ a: task({ route: { name: 'write', ctx: 'duty' } }) })]).toEqual(['today']);
-    expect([...runningTabs({ a: task({ kind: 'discover', route: { name: 'discoverItem', feedId: 'f', itemId: 'i', ctx: 'extra' } }) })]).toEqual([]);
-    // Pflicht und Extra gemischt: nur „Heute“.
-    expect([...runningTabs({ a: task({}), b: task({ key: 'b', route: { name: 'write', ctx: 'duty' } }) })]).toEqual(['today']);
-    expect([...runningTabs({ a: task({ status: 'done' }), b: task({ key: 'b', status: 'error' }) })]).toEqual([]);
   });
 });
 

@@ -11,7 +11,6 @@ import { HomeSkeleton } from '../../features/system/HomeSkeleton';
 import { ConnectionLost, NoDbNotice } from '../../features/system/NoDbNotice';
 import { CompanionLayer } from '../../features/companion/CompanionOverlay';
 import { useCompanion } from '../../features/companion/store';
-import { AiTaskNotice } from './AiTaskNotice';
 import { tabId } from '../../features/progress/persist';
 import { dayKey } from '../../domain/date';
 import { setLogContext } from '../../platform/diagnostics';
@@ -120,7 +119,6 @@ function Frame() {
       <SheetHost />
       <Toaster />
       <CompanionLayer />
-      <AiTaskNotice />
       <LookupLayer />
     </>
   );

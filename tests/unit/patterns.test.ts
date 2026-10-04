@@ -25,7 +25,6 @@ import { createFakeSample } from '../../src/platform/dev/fakeSample';
 import { promptBytes, PROMPT_MAX_BYTES } from '../../src/prompts/common';
 import { patternCheck } from '../../src/prompts/patternCheck';
 import { mistakeLines, patterns as patternsTemplate, patternsSchema, type PatternsVars } from '../../src/prompts/patterns';
-import { sayCheck } from '../../src/prompts/sayCheck';
 import { turnAnalysis } from '../../src/prompts/turnAnalysis';
 
 // Persönliche „Deutsch-Fallen“ (Lernberatung 27.09., V3) und Wochenfokus (V8/Nr. 9):
@@ -268,13 +267,10 @@ describe('patterns@1 und pattern-check@1', () => {
   });
 });
 
-describe('Hinweis auf die Top-3-Muster in Rollenspiel-Analyse und „Sag es“', () => {
-  it('turn-analysis@2 und say-check@2 nennen die Muster, sonst „(none)“', () => {
+describe('Hinweis auf die Top-3-Muster in Rollenspiel-Analyse', () => {
+  it('turn-analysis@2 nennt die Muster, sonst „(none)“', () => {
     const ta = { goal: 'Keep Q2.', role: 'CFO', personaLine: 'Why?', history: [], sentence: 'We work since 2019 with them.', focusWords: [], uiLang: 'de' as const };
     expect(turnAnalysis.build({ ...ta, watch: ['“since” with the present tense', 'make/do'] })).toContain('pay special attention to these): “since” with the present tense; make/do');
     expect(turnAnalysis.build(ta)).toContain('pay special attention to these): (none)');
-    const sc = { situation: 'A client asks.', kind: 'job' as const, text: 'We work with them since 2019 and it is good.', uiLang: 'en' as const };
-    expect(sayCheck.build({ ...sc, watch: ['a', 'b', 'c', 'd'] })).toContain('pay special attention to these): a; b; c\n');
-    expect(sayCheck.build(sc)).toContain('pay special attention to these): (none)');
   });
 });

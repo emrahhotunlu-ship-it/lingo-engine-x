@@ -28,7 +28,6 @@ import { Button } from '../../ui/Button';
 import { FeedbackPanel } from '../../ui/FeedbackPanel';
 import type { Feedback } from '../../ui/feedback/types';
 import { Icon } from '../../ui/Icon';
-import { phoneActive } from '../today/device';
 import { SessionEnd } from '../../ui/SessionEnd';
 import { AiRunPanel } from '../../ui/AiRunPanel';
 import { saveLookupCard } from '../lookup/store';
@@ -134,8 +133,6 @@ function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
   const lv = levelAt(s);
   // Stufe 5 (und alte Runden ohne Stufe): Bedenkzeit, dann Zeitziel. Die Uhr gibt nie selbst ab (Lernpfad 03.10.2026).
   const total = staged ? PRESSURE_ANSWER_MS : ANSWER_MS;
-  // Am Handy nie Tippen gegen die Uhr (Lernpfad): dort ohne Zeitbalken.
-  const [clock] = useState(() => !phoneActive());
   const thinkLeft = useCountdown(THINK_MS, s.phase === 'think', beginAnswer, `t${s.pos}`);
   const answerLeft = useCountdown(total, s.phase === 'answer' && lv === 5, noop, `a${s.pos}`);
   const answer = s.answers.find((a) => a.id === o.id) ?? null;
@@ -170,7 +167,6 @@ function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
       {s.phase !== 'review' && lv >= 4 && (
         <div className="flex flex-col gap-3">
           {lv === 5 &&
-            clock &&
             (s.phase === 'think' ? (
               <TimeBar left={thinkLeft} total={THINK_MS} label={t('nbTrainingThink')} testId="pressure-think" />
             ) : (

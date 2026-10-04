@@ -1,6 +1,5 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AreaDef } from '../../src/app/registry';
-import type { UnitCtx } from '../../src/app/unit/types';
 import { createWriter, type Writer } from '../../src/data/writer';
 import type { StoredPlan } from '../../src/domain/plan/types';
 import type * as PlanModule from '../../src/domain/week/plan';
@@ -60,7 +59,6 @@ vi.mock('../../src/domain/week/plan', async (importOriginal) => {
 const { installAreas } = await import('../../src/app/registry');
 const { useClock } = await import('../../src/app/clock');
 const { useNav } = await import('../../src/app/nav');
-const { saveResume, clearResume } = await import('../../src/app/resume');
 const { useLive } = await import('../../src/data/live');
 const { buildUnitStored } = await import('../../src/domain/unit/plan');
 const persist = await import('../../src/features/progress/persist');
@@ -69,40 +67,11 @@ const run = await import('../../src/features/unit/run');
 const { EMPTY_RUN, useUnitRun } = await import('../../src/features/unit/runStore');
 
 const Empty = () => null;
-const sayStart = vi.fn((ctx: UnitCtx) => ({ name: 'say' as const, unit: ctx.block }));
-const shadowStart = vi.fn((ctx: UnitCtx) => {
-  void ctx;
-  return { name: 'pron' as const, kind: 'shadow' as const };
-});
-const restored: unknown[] = [];
-
 const AREA: AreaDef = {
   id: 'test',
   screens: {
     unitCard: { kind: 'exercise', component: Empty },
-    say: { kind: 'exercise', component: Empty },
-    pron: { kind: 'exercise', component: Empty },
-    inputUnit: { kind: 'exercise', component: Empty },
   },
-  unitBlocks: [
-    { kind: 'task.say', feasible: () => true, start: sayStart },
-    { kind: 'pron.shadow', feasible: () => true, start: shadowStart },
-  ],
-  resumables: [
-    {
-      id: 'fakeSay',
-      version: 1,
-      origin: 'speak',
-      snapshot: () => null,
-      subscribe: () => () => undefined,
-      restore: (s: unknown) => {
-        restored.push(s);
-        return true;
-      },
-      route: () => ({ name: 'say' }),
-      label: () => '',
-    },
-  ],
 };
 
 const plan = (d: string, duty: StoredPlan['duty']): StoredPlan => ({ d, ids: [], why: [], v: 1, duty, goal: { review: 0 }, lesson: null, at: 0 });
@@ -123,9 +92,6 @@ beforeAll(() => {
 
 beforeEach(() => {
   storage.clear();
-  restored.length = 0;
-  sayStart.mockClear();
-  shadowStart.mockClear();
   persist.resetPersistForTests();
   store.resetTodayForTests();
   run.resetUnitRunForTests();
@@ -149,7 +115,7 @@ describe('Befund 1: Block über 04:00 zählt für den Lerntag, an dem er begann'
     // 04:20: neuer Lerntag mit eigenem Plan (noch ohne Einheit).
     store.useTodayPlan.setState({ day: D2, plan: plan(D2, ['ch:u-task']), status: 'ready', exhausted: null });
     useClock.setState({ today: D2, now: berlin(D2, 4, 20) });
-    useUnitRun.setState({ ...EMPTY_RUN, day: D, block: 3, duty: 'ch:u-task', kind: 'task.say', via: 'say', routeName: 'say', route: { name: 'say' } }, true);
+    useUnitRun.setState({ ...EMPTY_RUN, day: D, block: 3, duty: 'ch:u-task', kind: 'task.order' }, true);
     run.handleUnitDone(3);
     await vi.waitFor(() => expect((profile().pflicht as Doc | undefined)?.[D]).toBe(1));
     expect(actOf(D)).toEqual({ 'u-task': 1 });
@@ -157,64 +123,25 @@ describe('Befund 1: Block über 04:00 zählt für den Lerntag, an dem er begann'
   });
 });
 
-describe('Tageseinheit mit gespeichertem Plan (älteres Format mit Sprechaufgabe und Input-Block)', () => {
+describe('Älterer gespeicherter Plan (Sprechaufgabe in Block 3, Block 2 = Input)', () => {
   const MON = '2026-09-28';
-  const unitPlan = () => buildUnitStored({ day: MON, nowMs: berlin(MON, 9), week: null, goalMin: 25, review: { goal: 12, due: 8, fresh: 3, repairs: 1 } });
 
   afterEach(() => {
     holder.legacyPlan = false;
   });
 
-  beforeEach(() => {
+  it('entfallene Blöcke fallen aus der Ansicht, Pflicht und Zähler zählen nur noch die übrigen (Umbau 04.10.2026)', () => {
     holder.legacyPlan = true;
     setup({ 'app/profile': { ...baseProfile(), days: { [MON]: 8 } } });
     useClock.setState({ today: MON, now: berlin(MON, 9) });
-    store.useTodayPlan.setState({ day: MON, plan: unitPlan(), status: 'ready', exhausted: null });
-  });
-
-  it('Befund 2: unterbrochener Block wird fortgesetzt (Stand der Übung), ohne gesicherten Stand neu gestartet', () => {
+    const old = buildUnitStored({ day: MON, nowMs: berlin(MON, 9), week: null, goalMin: 25, review: { goal: 12, due: 8, fresh: 3, repairs: 1 } });
+    expect(old.duty).toEqual(['review', 'ch:u-in', 'ch:u-task', 'ch:u-focus', 'ch:u-again']);
+    store.useTodayPlan.setState({ day: MON, plan: old, status: 'ready', exhausted: null });
     const u = run.unitNow();
-    const row = u?.rows.find((r) => r.id === 'ch:u-task');
-    expect(u && row).toBeTruthy();
-    if (!u || !row) return;
-    const api = { focusNow: () => undefined, blur: () => undefined };
-    // Block 3 lief (Anbieter), dann ✕: Stand der Übung und der Einheit liegen lokal.
-    const route = { name: 'say' as const, unit: 3 };
-    useUnitRun.setState({ ...EMPTY_RUN, day: MON, block: 3, duty: 'ch:u-task', kind: 'task.say', via: 'provider', routeName: 'say', route, at: 1000 }, true);
-    saveResume({ v: 1, id: 'fakeSay', day: MON, savedAt: 2000, tabId: 't', route, data: { pos: 3, draft: 'I would' } });
-    run.startRow(u, row, api);
-    expect(restored).toEqual([{ pos: 3, draft: 'I would' }]);
-    expect(sayStart).not.toHaveBeenCalled();
-    expect(useNav.getState().route).toMatchObject({ name: 'say' });
-    // Auch nach dem Neuladen (Lauf nur noch in `lx:resume:unit`).
-    restored.length = 0;
-    saveResume({ v: 1, id: 'unit', day: MON, savedAt: 2000, tabId: 't', route, data: { ...useUnitRun.getState() } });
-    run.resetUnitRunForTests();
-    run.startRow(u, row, api);
-    expect(restored).toHaveLength(1);
-    expect(sayStart).not.toHaveBeenCalled();
-    expect(useUnitRun.getState()).toMatchObject({ day: MON, duty: 'ch:u-task', via: 'provider' });
-    // Ohne gesicherten Stand der Übung: neu starten.
-    clearResume('fakeSay');
-    run.startRow(u, row, api);
-    expect(sayStart).toHaveBeenCalledTimes(1);
-  });
-
-  it('Befund 3: Block 2 – nach dem Input startet das Nachsprechen, erst danach zählt der Block', async () => {
-    useUnitRun.setState({ ...EMPTY_RUN, day: MON, block: 2, duty: 'ch:u-in', kind: 'input.read', via: 'provider', routeName: 'inputUnit', route: { name: 'inputUnit', day: MON, kind: 'read', ref: 'theme:x-t01' }, at: 1 }, true);
-    run.rememberInput(['First sentence.', 'Second sentence.', 'Third sentence.'], ['walk me through']);
-    run.handleUnitDone(2);
-    expect(shadowStart).toHaveBeenCalledTimes(1);
-    expect(shadowStart.mock.calls[0]?.[0].sentences).toEqual(['First sentence.', 'Second sentence.', 'Third sentence.']);
-    expect(useUnitRun.getState().kind).toBe('pron.shadow');
-    expect(useNav.getState().route).toMatchObject({ name: 'pron' });
-    await persist.flush();
-    expect(actOf(MON)?.['u-in']).toBeUndefined();
-    // Nachsprechen fertig → Block zählt, Zwischenkarte.
-    run.handleUnitDone(2);
-    expect(shadowStart).toHaveBeenCalledTimes(1);
-    expect(useNav.getState().route).toMatchObject({ name: 'unitCard', step: 'next' });
-    await vi.waitFor(() => expect(actOf(MON)?.['u-in']).toBe(1));
+    expect(u?.rows.map((r) => r.id)).toEqual(['review', 'ch:u-focus', 'ch:u-again']);
+    expect(u?.plan.duty).toEqual(['review', 'ch:u-focus', 'ch:u-again']);
+    // Der gespeicherte Plan bleibt unberührt.
+    expect(old.duty).toHaveLength(5);
   });
 });
 
@@ -231,7 +158,6 @@ describe('Tageseinheit seit 04.10.2026 (Vokabeln und Grammatik)', () => {
     expect(u?.up.blocks.find((b) => b.block === 3)?.kind).toBe('task.order');
     useUnitRun.setState({ ...EMPTY_RUN, day: MON, block: 2, duty: 'ch:u-focus', kind: 'grammar', via: 'provider', routeName: 'unitFocus', route: { name: 'unitFocus' }, at: 1 }, true);
     run.handleUnitDone(2);
-    expect(shadowStart).not.toHaveBeenCalled();
     expect(useNav.getState().route).toMatchObject({ name: 'unitCard', step: 'next' });
     await vi.waitFor(() => expect(actOf(MON)?.['u-focus']).toBe(1));
   });

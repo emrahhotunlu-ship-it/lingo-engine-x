@@ -3,9 +3,6 @@ import { registerCannedReplies } from '../../src/platform/dev/cannedReplies';
 import { createFakeSample } from '../../src/platform/dev/fakeSample';
 import { goalCheck } from '../../src/prompts/nb/p5/goalCheck';
 import { claudeDrill } from '../../src/prompts/nb/p6/claudeDrill';
-import { unitListen } from '../../src/prompts/nb/p4/unitListen';
-import { textLevel } from '../../src/prompts/nb/p4/textLevel';
-import { alternatives } from '../../src/prompts/nb/p4/alternatives';
 import { textCards } from '../../src/prompts/nb/p3/textCards';
 import type { PromptTemplate } from '../../src/prompts/types';
 
@@ -40,17 +37,6 @@ describe('Neubau-Vorlagen: feste Antworten erfüllen das Schema', () => {
   });
   it('claude-drill', async () => {
     for (const uiLang of ['de', 'en'] as const) expect((await answer(claudeDrill, { context: 'since vs. for', uiLang })).items).toHaveLength(5);
-  });
-  it('unit-listen', async () => {
-    const out = await answer(unitListen, { level: 'B2', kind: 'theme', domain: 'work', themeTitle: 'Proposals', themeTask: 'Follow up', phrases: ['move forward'], context: '' });
-    expect(out.notice.length).toBeGreaterThanOrEqual(2);
-    expect(out.shadow.length).toBeGreaterThanOrEqual(2);
-  });
-  it('text-level (leichter und schwerer)', async () => {
-    for (const direction of ['easier', 'harder'] as const) expect((await answer(textLevel, { text: TEXT, direction })).text.length).toBeGreaterThan(80);
-  });
-  it('alternatives', async () => {
-    for (const uiLang of ['de', 'en'] as const) expect((await answer(alternatives, { sentence: 'I want to follow up our talk.', context: '', uiLang })).alts).toHaveLength(3);
   });
   it('text-cards', async () => {
     expect((await answer(textCards, { text: TEXT, known: [] })).cards.length).toBeGreaterThanOrEqual(5);

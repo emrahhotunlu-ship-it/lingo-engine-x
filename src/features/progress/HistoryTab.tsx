@@ -12,7 +12,6 @@ import { Fold, FoldGroup } from '../../ui/Fold';
 import { LineChart } from '../../ui/charts/LineChart';
 import { LegacyFeedFold } from './ChecksCard';
 import { PatternsWeekly } from '../patterns/WeeklyTrend';
-import { CompareCard } from './compare/CompareView';
 
 // Reiter „Verlauf" (plan.md §1.3, O14/O16/O17/O19): Fallen-Wochenzeile, Verlauf der letzten 120 Tage,
 // Einschätzungen und Meilensteine, alte Fortschritte und die Grammatik-Messwerte (BKT) als
@@ -98,7 +97,6 @@ export function HistoryTab() {
       {/* O19: Deutsch-Fallen der letzten Woche – seltener, gleich oder häufiger. */}
       <PatternsWeekly firstDay={lastWeek.days[0] ?? today} />
       {/* Backlog B1: monatliche Vergleichsaufgabe – beide Fassungen und Claudes Worte. */}
-      <CompareCard />
 
       {/* Der Rest zugeklappt – nichts geht verloren, alles bleibt per Aufklappen erreichbar. */}
       <FoldGroup label={t('progHistory')}>

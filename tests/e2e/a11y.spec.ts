@@ -3,7 +3,6 @@ import { expect, test } from '@playwright/test';
 import { boot, openSettings, openOverview, screen, type Theme } from './fixtures';
 import { learnTour } from './learnHelpers';
 import { openChecks } from './profilHelpers';
-import { ARTICLE_OWN, inputTour, openModule } from './inputHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
 import { tourPatch, trainerTour } from './trainerHelpers';
 
@@ -65,31 +64,6 @@ for (const theme of THEMES) {
   }
 }
 
-// Phase 4: Lesen, Hören, Schreiben, Entdecken, Beitrag, Verlauf – dazu eine Frage nach der Wahl.
-for (const theme of THEMES) {
-  for (const width of [390, 1440]) {
-    test(`axe · Lesen, Hören, Schreiben, Entdecken · ${theme} · ${width}px`, async ({ page }) => {
-      test.setTimeout(90_000);
-      await page.setViewportSize({ width, height: 900 });
-      await page.emulateMedia({ reducedMotion: 'reduce' });
-      // Ohne den eigenen Text (keine Fragen): die Tageswahl ist der Artikel mit Fragen.
-      await boot(page, { theme, migrated: true, fake: { patch: { [`articles/${ARTICLE_OWN}`]: null } } });
-      await screen(page, 'today');
-      const found: string[] = [];
-      const scan = async (name: string) => {
-        const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
-        found.push(...res.violations.map((v) => `${name} ${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`));
-      };
-      await inputTour(page, scan);
-      await openModule(page, 'read');
-      await page.getByTestId('read-done').click();
-      await page.getByTestId('option').first().click();
-      await page.getByTestId('evidence').waitFor();
-      await scan('frage');
-      expect(found).toEqual([]);
-    });
-  }
-}
 
 test('axe · Einstellungen offen (alle Modi)', async ({ browser }) => {
   for (const theme of THEMES) {

@@ -1,7 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openOverview, openSpeak, screen } from './fixtures';
-import { openModule } from './inputHelpers';
 import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Wiederholung in der
@@ -165,48 +164,6 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
   await page.waitForTimeout(300);
   expect((await repairs(page))[0]?.box).toBe(0);
   expect((await repairs(page))[0]).toMatchObject({ ctx: expect.any(String), fix: ['need to delay'] });
-  expect(errors).toEqual([]);
-  expect(external).toEqual([]);
-});
-
-test('Schreiben: Schritt nach der Korrektur, Überspringen ohne Vorwurf (Desktop)', async ({ page }) => {
-  test.setTimeout(90_000);
-  await page.setViewportSize({ width: 1280, height: 900 });
-  const TEXT =
-    'Dear Mr. Walker, thank you for your patience. Unfortunately the new scanning feature will be released three weeks later than planned. It depends of the final tests with your data. I will summarise the results for you next week and I look forward to hear from you soon.';
-  const { errors, external } = await boot(page, { migrated: true });
-  await openModule(page, 'write');
-  await page.getByTestId('draft').fill(TEXT);
-  await page.getByTestId('submit').click();
-  await expect(page.getByTestId('review')).toBeVisible({ timeout: 15_000 });
-
-  const step = page.getByTestId('repair-step');
-  await expect(step).toBeVisible();
-  await step.getByTestId('repair-step-start').click();
-  // Solange der Schritt läuft, ist die Korrektur ausgeblendet (abrufen statt abschreiben).
-  await expect(page.getByTestId('review')).toHaveCount(0);
-  await expect(step.getByTestId('repair-item')).toContainText('Satz 1 von 2');
-  await expect(step.getByTestId('repair-wrong')).toContainText('It depends of the final tests with your data.');
-  await expect.poll(async () => (await repairs(page)).map((e) => e.src)).toEqual(['write', 'write']);
-  const items = await repairs(page);
-  expect(items.map((e) => e.right)).toEqual(['It depends on the final tests with your data.', 'I will summarise the results for you next week and I look forward to hearing from you soon.']);
-
-  // Erster Satz: ein Wort anders, korrigierte Stelle stimmt → richtig.
-  await step.getByTestId('repair-input').fill('It depends on the final tests with our data.');
-  await step.getByTestId('repair-check').click();
-  await expect(step.getByTestId('repair-verdict')).toHaveAttribute('data-verdict', 'close');
-  await step.getByTestId('repair-next').click();
-  // Zweiter Satz: überspringen – keine Wiederholung eingetragen, kein Vorwurf.
-  await expect(step.getByTestId('repair-item')).toContainText('Satz 2 von 2');
-  await step.getByTestId('repair-skip').click();
-  await expect(step).toHaveAttribute('data-state', 'done');
-  await expect(step.getByTestId('repair-step-end')).toHaveText('Fertig. Diese Sätze kommen in der Wiederholung wieder.');
-  await expect(page.getByTestId('review')).toBeVisible();
-  await page.waitForTimeout(300);
-  expect((await repairs(page)).map((e) => e.box)).toEqual([0, 0]);
-  expect((await repairs(page))[1]?.last).toBeUndefined();
-  expect(await layoutProblems(page)).toEqual([]);
-  await page.screenshot({ path: 'test-results/screens/reparatur-schreiben-1280.png', fullPage: true });
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });

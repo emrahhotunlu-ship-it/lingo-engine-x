@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, bootAt, openSettings, layoutProblems, openOverview, screen } from './fixtures';
+import { boot, openSettings, layoutProblems, openOverview, screen } from './fixtures';
 import { typeInGap } from './learnHelpers';
 import { answerCheckItem, playCheck } from './progressHelpers';
 import { dump, planPatch } from './trainerHelpers';
@@ -220,28 +220,6 @@ test('W5: ohne Kopien der alten App kein Hinweis auf Heute', async ({ page }) =>
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toBeVisible();
   await expect(page.getByTestId('late-rescue-hint')).toHaveCount(0);
-});
-
-test('M13: Ladepunkt am Reiter, solange eine KI-Korrektur im Hintergrund läuft', async ({ page }) => {
-  test.setTimeout(60_000);
-  // Seit 04.10.2026 gibt es keinen Reiter „Lesen“ mehr: eine Pflicht-Schreibaufgabe (ctx duty, z. B. aus einem älteren
-  // gespeicherten Plan) zeigt den Ladepunkt an „Heute“.
-  await bootAt(page, { name: 'write', ctx: 'duty' }, { fake: { sampleDelayMs: 1500 } });
-  await screen(page, 'write');
-  await expect(page.getByTestId('tab-busy')).toHaveCount(0);
-  await page
-    .getByTestId('draft')
-    .fill('Dear Mr. Walker, thank you for your patience. Unfortunately the new scanning feature will be released three weeks later than planned. It depends of the final tests with your data. I will summarise the results for you next week and I look forward to hear from you soon.');
-  await expect(page.getByTestId('submit')).toBeEnabled();
-  await page.getByTestId('submit').click();
-  await expect(page.getByTestId('ai-phase')).toBeVisible();
-  await page.getByTestId('unit-close').click();
-  await expect(page.getByTestId('tab-read')).toHaveCount(0);
-  const dot = page.getByTestId('tab-today').getByTestId('tab-busy');
-  await expect(dot).toBeVisible();
-  await expect(page.getByTestId('tab-today')).toContainText('Claude korrigiert gerade im Hintergrund');
-  await expect(page.getByTestId('ai-task-notice')).toHaveAttribute('data-status', 'done', { timeout: 15_000 });
-  await expect(page.getByTestId('tab-busy')).toHaveCount(0);
 });
 
 test('„Was ist neu“ ist entfernt (Emrahs Wunsch 27.09.) – auch nach einem Update kein Hinweis', async ({ page }) => {

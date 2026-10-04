@@ -1,5 +1,4 @@
 import type { PromptTemplate } from '../types';
-import { inboxCheck } from './p7/inboxCheck';
 import { pressureCheck } from './p7/pressureCheck';
 
 // Neubau – Vorlagen von Paket P7 (Neue Übungen & Inhalte); Besitz: P7 (docs/neubau/plan.md §3.2).
@@ -8,5 +7,4 @@ import { pressureCheck } from './p7/pressureCheck';
 
 export const P7_TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   pressureCheck,
-  inboxCheck,
 ];

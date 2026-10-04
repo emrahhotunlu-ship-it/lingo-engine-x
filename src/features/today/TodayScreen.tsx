@@ -19,8 +19,6 @@ import { invalidIdsOf } from '../../data/live';
 import { dayKeyNoon, legacyDayKey, addDays } from '../../domain/date';
 import { dutyChannelMinutes, dutyMinutes } from '../../domain/plan/buildPlan';
 import { feasible, rankChannels } from '../../domain/plan/channels';
-import { phoneUnitPlan, replacedKind } from '../../domain/plan/phone';
-import { phoneActive } from './device';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
 import type { Lang } from '../../app/settings';
@@ -43,7 +41,7 @@ import { TabTitle } from '../system/Chrome';
 import { unitRows, minutesLeft, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import { unitPlanFor } from '../../domain/week';
-import type { UnitBlock, UnitPlan } from '../../domain/week/types';
+import type { UnitBlock } from '../../domain/week/types';
 import { assessPlanInput } from '../../domain/assessment/planInput';
 import { dueErrors } from '../../domain/grammar/errors';
 import { dueCards } from '../../domain/srs/queue';
@@ -441,22 +439,6 @@ function WorthNow({ today, lang }: { today: string; lang: Lang }) {
 }
 
 /**
- * Handy-Modus (Emrah 01.10./02.10.2026): Eine ruhige Zeile sagt, was am Handy statt der Aufgabe des Tages
- * dran ist (Zustand, kein Knopf, Kap. 2.2). Gleiche Texte wie die Tageskarte (`blockWhy`).
- */
-function PhoneHint({ plan, up }: { plan: StoredPlan; up: UnitPlan | null }) {
-  const { t } = useT();
-  const from = replacedKind(plan);
-  const swap = up?.blocks.find((b) => b.channel === 'ch:u-task');
-  if (!from || !swap) return null;
-  return (
-    <p className="text-xs text-subtle" data-testid="today-phone-hint">
-      {t('nbHeutePhoneHint', { from: blockWhy({ block: 3, kind: from, opts: {} }, t), to: blockWhy(swap, t) })}
-    </p>
-  );
-}
-
-/**
  * Sprechen als freiwilliges Extra (Emrahs Wahl 04.10.2026): seit dem Fokus auf Vokabeln und Grammatik kein Reiter und kein
  * Teil der Pflicht mehr, aber über diese ruhige Zeile erreichbar (zählt nie zum Tagesziel, Kap. 2.6).
  */
@@ -566,8 +548,7 @@ export function TodayScreen() {
   // „Morgen: …“ aus dem Wochenplan von morgen (rein, ohne `env`).
   const tomorrow = useMemo(() => {
     const next = addDays(today, 1);
-    const p0 = unitPlanFor(next, week, { goalMin: unit?.u.goalMin });
-    const p = phoneActive() ? phoneUnitPlan(p0) : p0;
+    const p = unitPlanFor(next, week, { goalMin: unit?.u.goalMin });
     const task = p.blocks.find((b) => b.block === 3);
     if (!task || p.shape === 'sun') return p.shape === 'sun' ? `${t('nbHeuteBlock_check')} · ${t('nbHeuteWhy_check')}` : '';
     return t('nbHeuteTomorrow', { what: blockWhy(task, t) });
@@ -619,7 +600,6 @@ export function TodayScreen() {
         </p>
       )}
 
-      {ok && unit && <PhoneHint plan={unit} up={up} />}
       {ok && <SpeakExtra />}
 
       {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Speicher- und Planfehler (P1). */}

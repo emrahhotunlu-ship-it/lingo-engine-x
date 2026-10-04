@@ -1,6 +1,5 @@
 import { TOPICS } from '../content';
 import { addDays, isoWeek } from '../date';
-import { LEGACY_PROMPTS } from '../input/items';
 
 // Wochenbericht „was du diese Woche wirklich dazugelernt hast" (Kap. 6.13, Plan §7.3): Fakten
 // deterministisch, jeder mit Kennung, damit ein KI-Text (weekly-report@1) sie nur zitieren kann.
@@ -87,21 +86,8 @@ export function weekFacts(i: {
     if (fixed) facts.push({ id: `ge:${id}`, kind: 'fixed', topic: id, n: fixed });
   }
 
-  // Texte und Gespräche.
-  const titles = new Map<string, { de: string; en: string }>();
-  for (const p of LEGACY_PROMPTS) titles.set(p.id, p.title);
-  // Gespeicherte Aufgaben: nur die tatsächlich vorhandenen Titel (keine Übernahme aus der anderen Sprache).
-  for (const d of i.prompts?.values() ?? []) {
-    const p = obj(d.p);
-    if (str(p.id) && (str(p.title_de) || str(p.title_en))) titles.set(str(p.id), { de: str(p.title_de), en: str(p.title_en) });
-  }
-  for (const [id, d] of i.writing) {
-    const day = str(d.date) || dayOf(num(d.t));
-    if (set.has(day)) facts.push({ id: `wt:${id}`, kind: 'text', title: str(d.title) || str(d.task).slice(0, 60), titles: titles.get(str(d.promptId)) ?? null, lesson: str(d.lesson) || null });
-  }
-  for (const d of i.talk.values()) {
-    for (const r of arr(d.runs)) if (set.has(str(r.day))) facts.push({ id: `rp:${str(r.id)}`, kind: 'talk', title: str(r.title) });
-  }
+  // Seit dem Umbau „Fokus Wörter und Grammatik“ (04.10.2026) gibt es im Wochenbericht keine Texte und
+  // Gespräche mehr; die Daten dazu bleiben in der Datenbank.
 
   // Zeit und Pflicht.
   const minutes = obj(i.profile.minutes);

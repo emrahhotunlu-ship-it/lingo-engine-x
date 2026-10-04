@@ -1,15 +1,7 @@
-import { useClock } from '../../app/clock';
 import { unitDone } from '../../app/unit/done';
-import type { UnitBlockKind, UnitBlockNo, UnitBlockProvider, UnitCtx, UnitTaskResult } from '../../app/unit/types';
-import type { Route } from '../../app/router/types';
-import { useWatched } from '../../data/watch';
-import { nextMeeting } from '../../domain/meeting/next';
+import type { UnitBlockKind, UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types';
 import { logWarn } from '../../platform/diagnostics';
-import { unlockSpeech } from '../../platform/speech';
 import { KEY_PREFIX, local } from '../../platform/storage';
-import { queueOpening, speakRepliesOn } from '../../app/voice/autoplay';
-import { readResume } from './resume';
-import { legacySceneDoc } from './useSceneLibrary';
 
 // Block 3 der Tageseinheit aus Paket P5 (Neubau N75, plan.md §1.5, §4.10): Sag es, 90/60/45,
 // Drei Tonlagen, Generalprobe (Termin) und Rollenspiel. Jeder Anbieter baut SYNCHRON im Klick
@@ -69,81 +61,6 @@ export function finishUnit(kind: P5UnitKind, block: UnitBlockNo, result: UnitTas
 export function unitBlockOf(v: unknown): UnitBlockNo | null {
   return v === 1 || v === 2 || v === 3 || v === 4 || v === 5 ? v : null;
 }
-
-// ---------------------------------------------------------------- Anbieter
-
-/** Szene zum Wochenthema (Rollenspiel am Samstag). */
-function themeSceneId(ctx: UnitCtx): string | null {
-  const id = ctx.theme?.scene ?? null;
-  return id && legacySceneDoc(id) ? id : null;
-}
-
-/** Generalprobe: die Szene des nächsten Termins, sonst die Szene zum Wochenthema. */
-function rehearsalSceneId(ctx: UnitCtx): string | null {
-  // Nur wenn die Termine schon geladen sind (Sprechen war offen); sonst die Szene zum Wochenthema.
-  const docs = useWatched.getState().docs.meeting;
-  const next = nextMeeting(docs, ctx.day);
-  return next?.sceneId ?? themeSceneId(ctx);
-}
-
-/** Rollenspiel synchron starten wie aus der Einweisung (Sprachausgabe im Tipp freischalten). */
-function roleplayRoute(sceneId: string, ctx: UnitCtx): Route {
-  unlockSpeech();
-  const resume = !!readResume(sceneId, useClock.getState().today);
-  const scene = legacySceneDoc(sceneId);
-  const opening = typeof scene?.opening === 'string' ? scene.opening : null;
-  queueOpening(!resume && speakRepliesOn() ? opening : null);
-  return { name: 'roleplay', sceneId, resume, unit: ctx.block };
-}
-
-export const P5_UNIT_BLOCKS: readonly UnitBlockProvider[] = [
-  {
-    kind: 'task.say',
-    // Ohne KI wird die Antwort ungeprüft gespeichert und zählt (G6, M4).
-    feasible: () => true,
-    start(ctx) {
-      beginUnit('task.say', ctx);
-      return { name: 'say', unit: ctx.block };
-    },
-  },
-  {
-    kind: 'task.fluency',
-    // Ohne KI: tippen, Wörter pro Minute und Kennzahlen lokal (N73).
-    feasible: () => true,
-    start(ctx) {
-      beginUnit('task.fluency', ctx);
-      return { name: 'fluency', unit: ctx.block };
-    },
-  },
-  {
-    kind: 'task.tones',
-    feasible: (env) => env.ai,
-    start(ctx) {
-      beginUnit('task.tones', ctx);
-      return { name: 'tones', unit: ctx.block };
-    },
-  },
-  {
-    kind: 'task.meeting',
-    feasible: (env) => env.ai,
-    start(ctx) {
-      const id = rehearsalSceneId(ctx);
-      if (!id) return false;
-      beginUnit('task.meeting', ctx);
-      return roleplayRoute(id, ctx);
-    },
-  },
-  {
-    kind: 'task.roleplay',
-    feasible: (env) => env.ai,
-    start(ctx) {
-      const id = themeSceneId(ctx);
-      if (!id) return false;
-      beginUnit('task.roleplay', ctx);
-      return roleplayRoute(id, ctx);
-    },
-  },
-];
 
 /** Welcher Block läuft im Rollenspiel: Generalprobe oder Rollenspiel (für `UnitTaskResult.kind`). */
 export function roleplayUnitKind(day: string): 'task.meeting' | 'task.roleplay' {

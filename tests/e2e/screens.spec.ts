@@ -4,7 +4,6 @@ import { boot, openSettings, layoutProblems, openOverview, expectStreak, screen,
 import { TABS } from '../../src/app/shell/tabs';
 import { learnTour } from './learnHelpers';
 import { openChecks } from './profilHelpers';
-import { inputTour } from './inputHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
 import { tourPatch, trainerTour } from './trainerHelpers';
 
@@ -96,51 +95,6 @@ for (const vp of VIEWPORTS) {
           if (lang === 'en') expect(GERMAN_IN_EN.exec(text)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
           else expect(ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
           await page.screenshot({ path: `${SHOTS}/${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
-        });
-        expect(errors).toEqual([]);
-        expect(external).toEqual([]);
-        await context.close();
-      });
-    }
-  }
-}
-
-// Phase 4 (Plan §8.3): Lesen, Hören, Schreiben, Entdecken, Beitrag, Verlauf in allen Breiten, Modi
-// und Sprachen. Englische Inhalte (lang="en") zählen in der DE-Oberfläche nicht als Mischsprache.
-const P4_GERMAN_IN_EN = /[äöüÄÖÜß]|\b(und|nicht|wird|Karten|Tage|Lesen|Hören|Schreiben|Entdecken|Verlauf|Weiter)\b/;
-const P4_ENGLISH_UI_IN_DE = /\b(Reading|Listening|Writing|Discover|History|Next|Submit|Done reading)\b/;
-
-for (const vp of VIEWPORTS) {
-  for (const theme of THEMES) {
-    for (const lang of LANGS) {
-      test(`input-${vp.name}-${theme}-${lang}`, async ({ browser }) => {
-        test.setTimeout(90_000);
-        const context = await browser.newContext({
-          viewport: { width: vp.width, height: vp.height },
-          isMobile: vp.mobile,
-          hasTouch: vp.mobile,
-          deviceScaleFactor: vp.mobile ? 2 : 1,
-          timezoneId: 'Europe/Berlin',
-          locale: lang === 'de' ? 'de-DE' : 'en-US',
-          reducedMotion: 'reduce',
-        });
-        const page = await context.newPage();
-        const { errors, external } = await boot(page, { theme, lang, migrated: true });
-        await screen(page, 'today');
-        await inputTour(page, async (name) => {
-          expect(await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor), name).toBe(BG[theme]);
-          expect(await layoutProblems(page), name).toEqual([]);
-          const text = await page.evaluate(() => {
-            const clone = document.querySelector('main')?.cloneNode(true) as HTMLElement | undefined;
-            if (!clone) return '';
-            clone.querySelectorAll('[lang]').forEach((n) => {
-              if (n.getAttribute('lang') !== document.documentElement.lang) n.remove();
-            });
-            return clone.innerText;
-          });
-          if (lang === 'en') expect(P4_GERMAN_IN_EN.exec(text)?.[0] ?? null, `${name}: Deutsch in der englischen Oberfläche`).toBeNull();
-          else expect(P4_ENGLISH_UI_IN_DE.exec(text)?.[0] ?? null, `${name}: Englische Bedienelemente in der deutschen Oberfläche`).toBeNull();
-          if (theme !== 'dim') await page.screenshot({ path: `${SHOTS}/input-${name}-${vp.name}-${theme}-${lang}.png`, fullPage: true });
         });
         expect(errors).toEqual([]);
         expect(external).toEqual([]);

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNav } from '../../app/nav';
 import { StepBoundary } from '../../app/shell/Boundary';
 import type { ScreenProps } from '../../app/registry';
@@ -14,7 +14,7 @@ import { toast } from '../../ui/Toast';
 import { ExerciseTop, TaskLine } from '../learn/ui';
 import { useToday } from '../today/state';
 import { useWeekState } from '../week/useWeekState';
-import { loadSayTask, rememberInput } from './run';
+import { rememberInput } from './run';
 import { useUnitRun } from './runStore';
 
 // Eigene Ersatzschritte der Tageseinheit (Route `unitStep`), solange die Anbieter der Pakete fehlen
@@ -172,9 +172,6 @@ function AgainStep() {
   const draft = useUnitRun((s) => s.draft);
   const { targets } = useWeekState();
   const [shown, setShown] = useState(false);
-  useEffect(() => {
-    if (!task && day) void loadSayTask(day);
-  }, [task, day]);
   const text = draft.slice(0, DRAFT_MAX);
   const norm = normText(text);
   const used = useMemo(() => targets.phrases.filter((p) => norm.includes(normText(phraseCore(p)))).length, [targets.phrases, norm]);

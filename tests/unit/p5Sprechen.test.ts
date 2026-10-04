@@ -1,15 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { bizScenes } from '../../src/content/nb/load';
 import { THEMES } from '../../src/content/nb/themes';
-import { tuesdayOf, tuesdayWpm, wpm45, wpmOf } from '../../src/domain/fluency/wpm';
-import { MEETING_OPEN_DAYS, daysUntil, nextMeeting } from '../../src/domain/meeting/next';
 import { bizRunMarker, bizSceneDoc, isBizId, sceneCriteria, sceneGoals, themeScene } from '../../src/domain/speak/bizScenes';
 import { mergeGoalMarks, metCount, readGoalMarks } from '../../src/domain/speak/goals';
 import { mergeScenes } from '../../src/domain/speak/library';
 import { fixesOf, unitResult } from '../../src/domain/speak/unitResult';
 import { goalCheck, stateOf, transcript } from '../../src/prompts/nb/p5/goalCheck';
-import { normSeg } from '../../src/features/speak/SpeakHub';
-import { fluencyResume, roleplayResume, sayResume } from '../../src/features/speak/resumable';
+import { roleplayResume } from '../../src/features/speak/resumable';
 
 // Paket P5 (Neubau): reine Logik von Sprechen, Business & Preply.
 
@@ -92,35 +89,6 @@ describe('Ziel-Checkliste (N72)', () => {
   });
 });
 
-describe('Termin und Tempo', () => {
-  const meetingDocs = (items: Doc[]) => new Map<string, Doc>([['meeting/2026-09', { items }]]);
-  const m = (id: string, day: string, when: string, t: number, debrief: unknown[] = []): Doc => ({ id, day, when, t, who: 'CFO', topic: 'Price', tricky: '', notes: '', prep: null, sceneId: null, debrief, lang: 'de' });
-
-  it('nächster Termin: frühester mit Datum ab heute, sonst jüngster ohne Datum', () => {
-    const docs = meetingDocs([m('a', '2026-09-20', '2026-10-02', 1), m('b', '2026-09-21', '2026-09-30', 2), m('c', '2026-09-10', '2026-09-15', 3)]);
-    expect(nextMeeting(docs, '2026-09-28')?.id).toBe('b');
-    expect(daysUntil(nextMeeting(docs, '2026-09-28'), '2026-09-28')).toBe(2);
-    const undated = meetingDocs([m('x', '2026-09-20', '', 5), m('y', '2026-09-01', '', 9)]);
-    expect(nextMeeting(undated, '2026-09-28')?.id).toBe('x');
-    expect(nextMeeting(undated, '2026-10-20')).toBeNull();
-    expect(MEETING_OPEN_DAYS).toBe(14);
-    expect(nextMeeting(meetingDocs([m('d', '2026-09-20', '2026-09-30', 1, [{ t: 1, want: 'w', en: 'e', phrase: 'p', de: 'd', def: 'x', why: 'y' }])]), '2026-09-28')).toBeNull();
-  });
-
-  it('Wörter pro Minute: 45-s-Runde, Freitag gegen Dienstag derselben Woche (N73)', () => {
-    expect(wpmOf(90, 45_000)).toBe(120);
-    expect(wpmOf(0, 45_000)).toBe(0);
-    expect(tuesdayOf('2026-10-02')).toBe('2026-09-29');
-    expect(tuesdayOf('2026-09-29')).toBeNull();
-    const item = (day: string, q: string, wpm: number, t: number): Doc => ({ day, q, t, rounds: [{ sec: 90, wpm: 80 }, { sec: 60, wpm: 90 }, { sec: 45, wpm }] });
-    expect(wpm45(item('2026-09-29', 'price', 111, 1))).toBe(111);
-    const docs = [{ items: [item('2026-09-29', 'other', 90, 3), item('2026-09-29', 'price', 111, 1), item('2026-09-22', 'price', 70, 0)] }];
-    expect(tuesdayWpm(docs, '2026-10-02', 'price')).toBe(111);
-    expect(tuesdayWpm(docs, '2026-10-02', 'none')).toBe(90);
-    expect(tuesdayWpm(docs, '2026-10-06', 'price')).toBeNull();
-  });
-});
-
 describe('Block 3 → Fokus/Nochmal (N75)', () => {
   it('Korrekturen werden Fixes, Deutsch-Fallen mit trapId', () => {
     const fixes = fixesOf([
@@ -142,29 +110,8 @@ describe('Block 3 → Fokus/Nochmal (N75)', () => {
   });
 });
 
-describe('Sprechen-Wurzel und Fortsetzen', () => {
-  it('alte Bereichsnamen werden abgebildet', () => {
-    expect(normSeg('scenes')).toBe('talk');
-    expect(normSeg('business')).toBe('write');
-    // Der frühere Preply-Bereich (bis 28.09.2026) führt jetzt zu „Gespräche“.
-    expect(normSeg('preply')).toBe('talk');
-    expect(normSeg(undefined)).toBeNull();
-  });
-
+describe('Rollenspiel: Fortsetzen', () => {
   it('Momentaufnahme → herstellen → gleiche Position (G3)', () => {
-    sayResume.set({ phase: 'write2', sit: 'cfo-price', t0: 5, unit: 3 });
-    const snap = sayResume.snapshot();
-    sayResume.clear();
-    expect(sayResume.restore(snap!)).toBe(true);
-    expect(sayResume.route(snap!)).toEqual({ name: 'say', unit: 3 });
-    expect(sayResume.take()).toEqual({ phase: 'write2', sit: 'cfo-price', t0: 5, unit: 3 });
-    expect(sayResume.take()).toBeNull();
-    expect(sayResume.restore({ phase: 'final', sit: 'x', t0: 1 } as never)).toBe(false);
-
-    expect(fluencyResume.restore({ q: 'price', round: 2, t0: 1, rounds: [{ sec: 90, text: 'a' }, { sec: 60, text: 'b' }] })).toBe(true);
-    expect(fluencyResume.take()?.round).toBe(2);
-    expect(fluencyResume.restore({ q: 'price', round: 3, t0: 1, rounds: [] })).toBe(false);
-
     expect(roleplayResume.route({ sceneId: 'b03', unit: 3 })).toEqual({ name: 'roleplay', sceneId: 'b03', resume: true, unit: 3 });
     expect(roleplayResume.restore({ sceneId: '' })).toBe(false);
   });

@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { roleplayReportReply, roleplayTurnReply, sceneGenReply, turnAnalysisReply } from '../../src/platform/dev/cannedSpeak';
+import { roleplayReportReply, roleplayTurnReply, turnAnalysisReply } from '../../src/platform/dev/cannedSpeak';
 import { templateIdOf } from '../../src/platform/dev/cannedReplies';
 import { PROMPT_MAX_BYTES, promptBytes } from '../../src/prompts/common';
 import { CHAT_TEMPLATES, TEMPLATES, TEMPLATE_ID } from '../../src/prompts/registry';
 import { reportExample, reportSchema, roleplayReport, type RoleplayReportVars } from '../../src/prompts/roleplayReport';
 import { cleanFigureText, FIGURE_TIER, roleplayTurn, RP_HISTORY_MAX, type RoleplayTurnVars } from '../../src/prompts/roleplayTurn';
-import { SCENE_GEN_EXAMPLE, sceneGen, sceneGenSchema } from '../../src/prompts/sceneGen';
 import { ERROR_CATS, EXAMPLE_SENTENCE, threeLayersExample, threeLayersSchema } from '../../src/prompts/threeLayers';
 import { turnAnalysis, type TurnAnalysisVars } from '../../src/prompts/turnAnalysis';
 import type { Turn } from '../../src/domain/speak/types';
@@ -262,20 +261,3 @@ describe('roleplay-report@3', () => {
   });
 });
 
-describe('scene-gen@2', () => {
-  it('Kopfzeile, default, nie zwischengespeichert; Beispiel und feste Antwort bestehen das Schema', () => {
-    const p = sceneGen.build({ ctx: 'DMS sales', level: 'C1', wish: 'budget talk', grammar: 'Conditionals', words: ['leverage'], existingTitles: ['A'] });
-    expect(p.split('\n')[0]).toBe('[scene-gen@2]');
-    expect(sceneGen.cache).toBe(false);
-    expect(sceneGenSchema.safeParse(JSON.parse(SCENE_GEN_EXAMPLE)).success).toBe(true);
-    expect(sceneGenSchema.safeParse(JSON.parse(sceneGenReply(p))).success).toBe(true);
-  });
-
-  it('*_de deutsch, sonst englisch; Eröffnung 1–3 Sätze; Name nicht leer', () => {
-    const ok = JSON.parse(SCENE_GEN_EXAMPLE) as Record<string, unknown>;
-    expect(sceneGenSchema.safeParse({ ...ok, title_de: 'Renegotiating the support contract with the reseller' }).success).toBe(false);
-    expect(sceneGenSchema.safeParse({ ...ok, goal: 'Die Gebühr halten und nicht nachgeben, das ist wichtig.' }).success).toBe(false);
-    expect(sceneGenSchema.safeParse({ ...ok, opening: 'One. Two. Three. Four sentences here.' }).success).toBe(false);
-    expect(sceneGenSchema.safeParse({ ...ok, persona: { ...(ok.persona as object), name: '' } }).success).toBe(false);
-  });
-});
