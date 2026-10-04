@@ -25,3 +25,8 @@ Dieses Dokument pflegt das Programmier-Fenster nach **jeder** Welle. Ein neues F
 **Offene Messungen:** echte Dokumentzahl der Datenbank; ob das Live-Abo von `vocab`/`chunk` bei mehr als 1.000 Dokumenten vollständig oder gekappt liefert (W0, vor W4).
 
 **Entscheidungen, die während des Baus fallen:** hier mit Datum eintragen, wichtige zusätzlich in `CLAUDE.md` A7.
+
+## Plan W1 „Entkoppeln“ (architect, 04.10.2026)
+Nur Importpfade, kein Verhalten, Bundle ±1 %. Nach jedem Schritt `typecheck` + `npm test`; am Ende ein `verify`.
+Reihenfolge: 1 `features/input/AiRunPanel` → `ui/` · 2 `aiTasks`/`AiTaskNotice` → `app/shell/` · 3 `domain/speak/talkDoc` teilen: Hilfen → `domain/monthDoc.ts`, `TalkRun/upsertRun/compactRuns` bleiben (Rollenspiel) · 4 `textStats`, `chunkMatch` → `domain/text/`; `ErrorCat/TextError` → `domain/radar/types.ts` · 5 `week/text` → `domain/text/normText`, `week/traps` → `domain/patterns/traps` (`week/index.ts` re-exportiert) · 6 `speak/autoplay` → `app/voice/`, `legacySceneDoc` → `domain/chunks/legacyScene`, `cardSrc` → `domain/lookup/` · 7 toten Export `InputSections` samt `useChannelState` löschen · 8 `LEGACY_PROMPTS` → `domain/progress/legacyPrompts` · 9 `domain/plan/retire.ts` (nicht eingehängt) + `planRetire.test.ts`; `domain/metrics/` Gerüst.
+**Nicht in W1** (ändern Verhalten, kommen in W2): `sayDoc`, `discover/steps` (`discCount` in Einstellungen), `nbdrill/unitBlocks`. `features/learn`, `features/week`, `domain/week/*` bleiben (bleibende Nutzer).
