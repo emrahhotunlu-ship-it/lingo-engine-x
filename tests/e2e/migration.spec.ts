@@ -31,7 +31,8 @@ test('Trockenlauf zeigt alles, schreibt nichts; nach Bestätigung ist die Umstel
   await page.getByRole('button', { name: 'Umstellung ausführen' }).click();
   await expectStreak(page, '12');
   await openOverview(page);
-  await expect(page.getByTestId('course-done')).toHaveText('6');
+  // Kurs x/24 steht nicht mehr im Kopf (Fokus-Umbau); die Kursdaten bleiben in der Datenbank.
+  await expect(page.getByTestId('course-done')).toHaveCount(0);
   await expect(page.getByTestId('vocab-total')).toHaveText('146');
   await expect(page.getByText('Umgestellt am 20. September 2026')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Umstellung ausführen' })).toHaveCount(0);
@@ -110,7 +111,7 @@ test('zweiter Browser: noch nicht übertragene Kopien der alten App werden nach 
   await expect(card).toContainText('In diesem Browser liegen noch 2 Änderungen der alten App');
   await card.getByRole('button', { name: 'Nachtragen' }).click();
   await expect(card).toHaveCount(0);
-  await expect(page.getByTestId('course-done')).toHaveText('7');
+  await expect(page.getByTestId('course-done')).toHaveCount(0);
   const dump = await page.evaluate(() => (window as FakeWindow).__LINGO_FAKE__?.db.dump() ?? {});
   expect(dump['vocab/vom-handy']).toMatchObject({ word: 'from the phone' });
   expect(Object.keys((dump['app/course'] as { done: object }).done)).toEqual(['l01', 'l02', 'l03', 'l04', 'l05', 'l06', 'l07']);
