@@ -12,6 +12,8 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteBlockNow: 'now',
   nbHeuteBlockOpen: 'open',
   nbHeuteMin: '{min} min',
+  tdComebackShort: 'Welcome back. Today, the due items come first.',
+  tdComebackLong: 'Welcome back. We start gently: the due items first, the rest comes step by step.',
   nbHeuteBlock_review: 'Review',
   nbHeuteBlock_input: 'Input',
   nbHeuteBlock_task: 'Task',

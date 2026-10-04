@@ -12,6 +12,8 @@ export const nbHeuteDe = {
   nbHeuteBlockNow: 'jetzt',
   nbHeuteBlockOpen: 'offen',
   nbHeuteMin: '{min} Min.',
+  tdComebackShort: 'Willkommen zurück. Heute zuerst das Fällige.',
+  tdComebackLong: 'Willkommen zurück. Wir fangen ruhig an: erst das Fällige, der Rest kommt nach und nach.',
   nbHeuteBlock_review: 'Wiederholen',
   nbHeuteBlock_input: 'Input',
   nbHeuteBlock_task: 'Aufgabe',

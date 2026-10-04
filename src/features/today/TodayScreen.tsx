@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { checkAvailable, startCheck } from '../check/session';
+import { comebackBand, comebackGap } from '../../domain/plan/comeback';
 import { dowOf } from '../../domain/week';
 import { toast } from '../../ui/Toast';
 import { useEffect, useMemo, useRef } from 'react';
@@ -537,6 +538,7 @@ export function TodayScreen() {
   }, [today, unit, t]);
 
   const ok = ready && dayLoaded;
+  const comeback = useMemo(() => comebackBand(comebackGap(obj(profile), today)), [profile, today]);
   const done = view.status === 'allDone' || view.status === 'nothing';
   const title = t('nbHeuteUnit');
 
@@ -545,6 +547,12 @@ export function TodayScreen() {
       <motion.div variants={item}>
         <TabTitle title={t('navToday')} sub={<TodaySubline today={today} lang={lang} />} />
       </motion.div>
+
+      {ok && !done && comeback !== 'none' && (
+        <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band={comeback}>
+          {t(comeback === 'short' ? 'tdComebackShort' : 'tdComebackLong')}
+        </motion.p>
+      )}
 
       {planStatus === 'error' && (
         <div role="alert" className="flex flex-col items-start gap-3" data-testid="plan-error">

@@ -239,3 +239,23 @@ test('Block 2 Grammatik aus Heute: Grammatikrunde als Pflicht mit 6 Aufgaben, �
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
+
+test('Wiedereinstieg: nach 3–6 Tagen Pause ein ruhiges Band, nach 7+ ein längeres, nie ein Vorwurf; ohne Pause kein Band', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, now: '2026-09-21T09:00:00+02:00' });
+  await screen(page, 'today');
+  await expect(page.getByTestId('comeback-band')).toHaveCount(0);
+  await page.close();
+  for (const [now, band, text] of [
+    ['2026-09-24T09:00:00+02:00', 'short', 'Willkommen zurück. Heute zuerst das Fällige.'],
+    ['2026-10-02T09:00:00+02:00', 'long', 'Wir fangen ruhig an'],
+  ] as const) {
+    const p = await page.context().newPage();
+    await boot(p, { migrated: true, now });
+    await screen(p, 'today');
+    await expect(p.getByTestId('comeback-band')).toHaveAttribute('data-band', band);
+    await expect(p.getByTestId('comeback-band')).toContainText(text);
+    await expect(p.getByTestId('comeback-band')).not.toContainText(/Serie|verpasst|Rückstand/);
+    await p.close();
+  }
+  expect(errors).toEqual([]);
+});
