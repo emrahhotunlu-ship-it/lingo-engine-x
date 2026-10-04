@@ -233,7 +233,7 @@ function isSession(x: unknown): x is DrillSession {
 export const drillResume: Resumable<DrillSession> = {
   id: 'nbdrill',
   version: 1,
-  origin: 'learn',
+  origin: 'apply',
   snapshot: () => {
     const s = useDrill.getState().s;
     return s && !s.done ? s : null;

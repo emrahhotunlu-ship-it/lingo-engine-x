@@ -44,15 +44,16 @@ export const training = defineArea({
     },
     pressure: { kind: 'exercise', component: PressureScreen, ensure: (r) => ensurePressure(r, lang()), params: z.object({ set: z.enum(['objection', 'hotseat', 'buytime']).optional() }) },
   },
-  // Keine eigenen Abschnitte: Die Reiter-Wurzeln (Üben, Sprechen/Schreiben) zeigen die Einstiege
+  // Seit „Go Kombi“ (04.10.2026) hängen die sechs Wort-und-Regel-Übungen am Platz `apply` (Reiter „Anwenden“).
+  // Keine eigenen Abschnitte: Die Reiter-Wurzeln zeigen die Einstiege
   // aller Bereiche selbst – ein zusätzlicher Abschnitt hätte jeden Einstieg doppelt gezeigt (Kap. 15).
   entries: [
-    { id: 'training-colloc', place: 'learn', group: 'nb-learn', order: 50, label: 'nbTrainingColloc', sub: 'nbTrainingCollocSub', icon: 'grid', start: drillStart('colloc') },
-    { id: 'training-transform', place: 'learn', group: 'nb-learn', order: 51, label: 'nbTrainingTransform', sub: 'nbTrainingTransformSub', icon: 'refresh', start: drillStart('transform') },
-    { id: 'training-wordform', place: 'learn', group: 'nb-learn', order: 52, label: 'nbTrainingWordform', sub: 'nbTrainingWordformSub', icon: 'layers', start: drillStart('wordform') },
-    { id: 'training-register', place: 'learn', group: 'nb-learn', order: 53, label: 'nbTrainingRegister', sub: 'nbTrainingRegisterSub', icon: 'sliders', start: drillStart('register') },
-    { id: 'training-phrasal', place: 'learn', group: 'nb-learn', order: 54, label: 'nbTrainingPhrasal', sub: 'nbTrainingPhrasalSub', icon: 'chat', start: drillStart('phrasal') },
-    { id: 'training-transition', place: 'learn', group: 'nb-learn', order: 55, label: 'nbTrainingTransition', sub: 'nbTrainingTransitionSub', icon: 'link', start: drillStart('transition') },
+    { id: 'training-colloc', place: 'apply', group: 'nb-apply', order: 50, label: 'nbTrainingColloc', sub: 'nbTrainingCollocSub', icon: 'grid', start: drillStart('colloc') },
+    { id: 'training-transform', place: 'apply', group: 'nb-apply', order: 51, label: 'nbTrainingTransform', sub: 'nbTrainingTransformSub', icon: 'refresh', start: drillStart('transform') },
+    { id: 'training-wordform', place: 'apply', group: 'nb-apply', order: 52, label: 'nbTrainingWordform', sub: 'nbTrainingWordformSub', icon: 'layers', start: drillStart('wordform') },
+    { id: 'training-register', place: 'apply', group: 'nb-apply', order: 53, label: 'nbTrainingRegister', sub: 'nbTrainingRegisterSub', icon: 'sliders', start: drillStart('register') },
+    { id: 'training-phrasal', place: 'apply', group: 'nb-apply', order: 54, label: 'nbTrainingPhrasal', sub: 'nbTrainingPhrasalSub', icon: 'chat', start: drillStart('phrasal') },
+    { id: 'training-transition', place: 'apply', group: 'nb-apply', order: 55, label: 'nbTrainingTransition', sub: 'nbTrainingTransitionSub', icon: 'link', start: drillStart('transition') },
     {
       id: 'training-objection',
       place: 'speak',

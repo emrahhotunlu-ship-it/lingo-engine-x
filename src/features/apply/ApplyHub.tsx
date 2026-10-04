@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useEffect, useMemo, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
+import { entriesFor } from '../../app/registry';
 import { useLive } from '../../data/live';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
@@ -65,6 +66,7 @@ export function ApplyHub() {
   const tts = useSpeech((s) => s.status === 'ready');
   const inputs = useLearnInputs((s) => s.status);
   const openRepairs = useOpenRepairs();
+  const combo = entriesFor('apply');
 
   useEffect(() => {
     if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
@@ -107,6 +109,17 @@ export function ApplyHub() {
       {build.length > 0 && (
         <Section id="ap-build" title={t('apBuild')}>
           <div className="grid grid-cols-2 gap-3">{build}</div>
+        </Section>
+      )}
+
+      {combo.length > 0 && (
+        <Section id="ap-combo" title={t('apCombo')}>
+          <p className="-mt-1 text-sm text-muted">{t('apComboLead')}</p>
+          <div className="grid grid-cols-2 gap-3">
+            {combo.map((e) => (
+              <Tile key={e.id} icon={e.icon} channel="grammar" title={t(e.label)} sub={e.sub ? t(e.sub) : ''} onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)} testId={e.id} />
+            ))}
+          </div>
         </Section>
       )}
 

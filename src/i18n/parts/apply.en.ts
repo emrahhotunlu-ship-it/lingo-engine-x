@@ -8,6 +8,8 @@ export const applyEn = {
   apSpeak: 'Speaking',
   apRoleplay: 'Role play and objections',
   lrBackToApply: 'Back to Apply',
+  apCombo: 'Combine word and rule',
+  apComboLead: 'Word partners, rephrasing and word forms: one word, one rule, one sentence.',
   apRepair: 'Fix mistakes',
   apRepairSub: '{n} sentences are waiting',
   apRepairNone: 'No sentences due – all safe. New mistakes are added automatically.',

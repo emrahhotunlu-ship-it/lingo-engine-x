@@ -9,9 +9,9 @@ import { dump } from './trainerHelpers';
 
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
-test('Einstiege: jede Übung 1 Tipp ab ihrem Reiter (Sprechen: ab Heute)', async ({ page }) => {
+test('Einstiege: jede Übung 1 Tipp ab ihrem Reiter „Anwenden“ (Sprechen: ab Heute)', async ({ page }) => {
   await boot(page, { migrated: true });
-  await openTab(page, 'learn');
+  await openTab(page, 'apply');
   await expect(page.getByTestId('training-colloc')).toBeVisible();
   await expect(page.getByTestId('training-transform')).toBeVisible();
   // Sprechen ist seit 04.10.2026 kein Reiter mehr: Heute › „Sprechen (freiwillig)“.
@@ -60,7 +60,7 @@ test('Kollokationen: 5 Aufgaben, Lehnübersetzung → Hinweis → Lösung, Ergeb
   await expect.poll(async () => (await outItems(page)).filter((x) => x.k === 'colloc').length).toBe(1);
   await expect.poll(async () => (await nbLog(page)).filter((x) => x.type === 'nb-colloc' && x.ctx === 'xtra').length).toBe(5);
   await page.getByTestId('session-end-next').click();
-  await screen(page, 'learn');
+  await screen(page, 'apply');
 });
 
 test('Satz-Umformung: Hinweis, zweiter Versuch, Neuladen setzt an derselben Aufgabe fort', async ({ page }) => {

@@ -8,6 +8,8 @@ export const applyDe = {
   apSpeak: 'Sprechen',
   apRoleplay: 'Rollenspiel und Einwände',
   lrBackToApply: 'Zurück zu Anwenden',
+  apCombo: 'Wort und Regel kombinieren',
+  apComboLead: 'Wortverbindungen, Umformen und Wortbildung: ein Wort, eine Regel, ein Satz.',
   apRepair: 'Fehler korrigieren',
   apRepairSub: '{n} Sätze warten auf dich',
   apRepairNone: 'Keine Sätze fällig – alle sicher. Neue Fehler kommen automatisch dazu.',

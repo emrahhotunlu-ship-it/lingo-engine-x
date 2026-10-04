@@ -195,14 +195,14 @@ export function LearnHub() {
         </List>
       </Section>
 
-      {/* 4. Training: Kurzübungen (nur machbare, G5) und die neuen Übungen anderer Bereiche (P7). */}
-      <Section id="lh-drills" title={t('nbLernenHubTraining')}>
-        {entriesFor('learn').some((e) => !e.group || !(LEARN_GROUPS as readonly string[]).includes(e.group) || e.group === 'training') && (
+      {/* 4. Training: nur noch Einstiege anderer Bereiche ohne feste Gruppe (die Wort-und-Regel-Übungen stehen seit „Go Kombi“ unter „Anwenden“). */}
+      {entriesFor('learn').some((e) => !e.group || !(LEARN_GROUPS as readonly string[]).includes(e.group) || e.group === 'training') && (
+        <Section id="lh-drills" title={t('nbLernenHubTraining')}>
           <List label={t('nbLernenHubTraining')}>
             <ForeignRows group="training" />
           </List>
-        )}
-      </Section>
+        </Section>
+      )}
     </motion.div>
   );
 }

@@ -20,11 +20,11 @@ test('Üben: vier Abschnitte, Einstiege je 1 Tipp, kein waagrechter Bildlauf (39
   await screen(page, 'today');
   await openTab(page, 'learn');
   const hub = page.getByTestId('learn-hub');
-  for (const h of ['Dein Weg', 'Aus deinen Fehlern', 'Grammatik & Fallen', 'Training']) await expect(hub.getByRole('heading', { name: h })).toBeVisible();
+  for (const h of ['Dein Weg', 'Aus deinen Fehlern', 'Grammatik & Fallen']) await expect(hub.getByRole('heading', { name: h })).toBeVisible();
   expect(await layoutProblems(page)).toEqual([]);
   // Reihenfolge laut Ü1: Fehler direkt unter „Dein Weg“.
   const titles = await hub.locator('h2.lx-eyebrow').allTextContents();
-  expect(titles.slice(0, 4)).toEqual(['Dein Weg', 'Aus deinen Fehlern', 'Grammatik & Fallen', 'Training']);
+  expect(titles.slice(0, 3)).toEqual(['Dein Weg', 'Aus deinen Fehlern', 'Grammatik & Fallen']);
 
   for (const [id, target] of [
     ['hub-grammar', 'grammar'],
@@ -247,8 +247,11 @@ test('Reiter „Anwenden“: Diktat, Lücke, Satzbau und Rollenspiel stehen dort
   await expect(page.getByTestId('hub-drill-cloze')).toBeVisible();
   await expect(page.getByTestId('hub-drill-order')).toBeVisible();
   await expect(page.getByTestId('hub-speak')).toBeVisible();
+  // Wort-und-Regel-Übungen (Kollokationen, Umformung, Wortbildung …) stehen seit „Go Kombi“ hier.
+  for (const id of ['training-colloc', 'training-transform', 'training-wordform']) await expect(page.getByTestId(id)).toBeVisible();
   await openTab(page, 'learn');
   await expect(page.getByTestId('hub-drill-cloze')).toHaveCount(0);
   await expect(page.getByTestId('hub-drill-order')).toHaveCount(0);
+  await expect(page.getByTestId('training-colloc')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
