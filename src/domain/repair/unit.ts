@@ -242,12 +242,14 @@ export const AGAIN_OLD = 3;
 export function againSource(i: Pick<FocusInput, 'task' | 'repairDoc' | 'day' | 'traps'> & { now?: number }): AgainSource {
   const traps = i.traps ?? TRAPS;
   const today = todaysRepairs(i.repairDoc, i.day);
-  // Keine Aufgabe und keine Sätze von heute (Handy-Tag, zweites Gerät): die ältesten fälligen Sätze.
-  const old = !i.task && !today.length && i.now !== undefined ? dueRepairs(readRepairs(i.repairDoc ?? undefined), i.now).slice(0, AGAIN_OLD) : [];
+  // Ohne Aufgabe (seit 04.10.2026 der Normalfall, Lernwissenschaft B2): immer die ältesten fälligen Sätze. Sätze von heute
+  // werden nicht am selben Tag wiederholt (verteilt statt massiert) – sie kommen laut Box-Plan frühestens morgen.
+  const old = !i.task && i.now !== undefined ? dueRepairs(readRepairs(i.repairDoc ?? undefined), i.now).slice(0, AGAIN_OLD) : [];
   if (old.length) {
     const fixes = old.map((r): FixLike => ({ kind: 'form', mine: r.wrong, right: r.right, why: r.why ?? '' }));
     return { before: old.map((r) => r.wrong).join(' '), better: old.map((r) => r.right).join(' '), betterFrom: 'task', fixes, olds: old.map((r) => ({ id: r.id, wrong: r.wrong, right: r.right })) };
   }
+  if (!i.task && i.now !== undefined) return { before: '', better: null, betterFrom: null, fixes: [] };
   const fixes = corrections(i);
   const before = i.task?.text.trim() || today.map((r) => r.wrong).join(' ');
   if (i.task?.better?.trim()) return { before, better: i.task.better.trim(), betterFrom: 'task', fixes };

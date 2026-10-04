@@ -4,6 +4,7 @@ import { useNav } from '../../app/nav';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
+import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { flush } from '../progress/persist';
@@ -12,7 +13,7 @@ import { GrammarItem } from './GrammarItem';
 import { StepBoundary } from '../../app/shell/Boundary';
 import { topicName } from './GrammarScreen';
 import { ensureGrammar } from './resume';
-import { skipGrammar, inRepeat, commitGrammar, leaveGrammar, touchGrammar, useGrammarSession } from './session';
+import { skipGrammar, inRepeat, commitGrammar, leaveGrammar, reportGrammarDone, touchGrammar, useGrammarSession } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
@@ -88,7 +89,15 @@ export function GrammarSessionScreen() {
                 ))}
               </ul>
             )}
-            <SummaryActions onBack={leaveGrammar} />
+            {s.block ? (
+              <div>
+                <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={reportGrammarDone} data-testid="summary-next">
+                  {t('nbShNext')}
+                </Button>
+              </div>
+            ) : (
+              <SummaryActions onBack={leaveGrammar} />
+            )}
           </article>
         )}
       </motion.div>

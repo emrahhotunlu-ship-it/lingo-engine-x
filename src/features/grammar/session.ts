@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { unitDone } from '../../app/unit/done';
+import type { UnitBlockNo } from '../../app/unit/types';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { useLive } from '../../data/live';
@@ -36,6 +38,8 @@ type State = {
   startedAt: number;
   activeMs: number;
   lastInteract: number;
+  /** Block der Tageseinheit (Grammatik als Block 2 seit 04.10.2026), sonst `null`. */
+  block: UnitBlockNo | null;
 };
 
 export const useGrammarSession = create<State>(() => ({
@@ -54,6 +58,7 @@ export const useGrammarSession = create<State>(() => ({
   startedAt: 0,
   activeMs: 0,
   lastInteract: 0,
+  block: null,
 }));
 
 const IDLE_CAP_MS = 60_000;
@@ -65,7 +70,8 @@ export function setExtraTasks(tasks: readonly GrammarTask[]): void {
   extraTasks = [...tasks];
 }
 
-export type StartOpts = { mode: RoundMode; topic?: string | null; day?: string };
+/** `block`/`size`: als Block der Tageseinheit (immer Pflicht, Rundengröße aus dem Plan). */
+export type StartOpts = { mode: RoundMode; topic?: string | null; day?: string; block?: UnitBlockNo | null; size?: number };
 
 /** Runde bauen. Rückgabe: Eingabeart der ersten Aufgabe (für den Fokus im selben Handler). */
 export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
@@ -75,7 +81,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   const lang = useSettings.getState().lang;
   const inputs = useLearnInputs.getState();
   // D9: Eine Grammatikrunde, solange „Grammatik" heute Pflicht und offen ist, zählt als Pflicht.
-  const ctx: Ctx = roundCtx('gram', day);
+  const ctx: Ctx = o.block ? 'duty' : roundCtx('gram', day);
   let mode: RoundMode = o.mode;
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
   if (mode === 'duty' && ctx !== 'duty') mode = 'xtra';
@@ -95,7 +101,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     pool: inputs.pool,
     lessonTasks: doneLessonTasks(lang),
     nowMs,
-    size: ROUND_SIZE[mode],
+    size: o.size ?? ROUND_SIZE[mode],
     seed: `${day}|${mode}|${o.topic ?? ''}|${roundNo}`,
   });
   extraTasks = [];
@@ -115,10 +121,17 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     startedAt: performance.now(),
     activeMs: 0,
     lastInteract: performance.now(),
+    block: o.block ?? null,
   });
   const first = tasks[0];
   if (!first) return null;
   return first.type === 'mc' ? 'choice' : wholeSentence(first) ? null : 'typed';
+}
+
+/** Block der Tageseinheit abschließen (Knopf „Weiter“ in der Zusammenfassung). */
+export function reportGrammarDone(): void {
+  const s = useGrammarSession.getState();
+  if (s.block) unitDone(s.block);
 }
 
 export function touchGrammar(): void {

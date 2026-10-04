@@ -47,7 +47,7 @@ export function blockNameKey(kind: UnitBlockKind, block: number): string {
   if (block === 1 || kind === 'review') return 'review';
   if (kind === 'task.check') return 'check';
   if (kind === 'task.order') return 'order';
-  if (kind === 'focus' && block === 2) return 'grammar';
+  if (kind === 'grammar' || (kind === 'focus' && block === 2)) return 'grammar';
   if (block === 2) return 'input';
   if (block === 3) return 'task';
   if (block === 4) return 'focus';

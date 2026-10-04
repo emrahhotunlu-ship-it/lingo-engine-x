@@ -380,8 +380,9 @@ export function TaskLine({ task, purpose }: { task: string; purpose: string }) {
 const DUTY_LABEL: Record<string, MessageKey> = { review: 'tdReviewTitle', lesson: 'lrDutyLesson', 'ch:gram': 'drGram', 'ch:cloze': 'drCloze', 'ch:order': 'drOrder', 'ch:say': 'sayTitle',
   // Tageseinheit (Neubau): Pflichtpunkte `ch:u-*` heißen wie die Blöcke auf der Tageskarte.
   'ch:u-in': 'nbHeuteBlock_input',
-  'ch:u-task': 'nbHeuteBlock_task',
-  'ch:u-focus': 'nbHeuteBlock_focus',
+  // Seit 04.10.2026 (Vokabeln und Grammatik): Block 2 Grammatik auf `ch:u-focus`, Block 3 Satzbau auf `ch:u-task`.
+  'ch:u-task': 'nbHeuteBlock_order',
+  'ch:u-focus': 'nbHeuteBlock_grammar',
   'ch:u-again': 'nbHeuteBlock_again',
   'ch:u-check': 'nbHeuteBlock_check',
 };

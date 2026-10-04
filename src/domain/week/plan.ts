@@ -25,7 +25,7 @@ export const FULL_MIN = { review: 8, input: 5, task: 9, roleplay: 12, focus: 3, 
 export const SHORT_MIN = { tiny: { review: 3, task: 5, again: 2 }, short: { review: 5, task: 7, again: 3 } } as const;
 export const SUNDAY_MIN = { review: 5, check: 5 } as const;
 /**
- * Vokabeln und Grammatik (Emrahs Vorgabe 04.10.2026): Wortschatz · Grammatik (Fehlerthemen, fällige Themen, Deutsch-Fallen)
+ * Vokabeln und Grammatik (Emrahs Vorgabe 04.10.2026): Wortschatz · Grammatik (die Grammatikrunde: Fehler, fällige und neue Themen)
  * · Satzbau · Korrektur eigener falscher Sätze. Lesen, Hören, Sprech- und Schreibaufgaben sind nicht mehr Teil der Einheit.
  */
 export const VG_MIN = { full: { review: 8, grammar: 7, order: 5, again: 3 }, short: { review: 5, grammar: 5, again: 2 }, tiny: { review: 3, grammar: 4, again: 2 } } as const;
@@ -92,13 +92,13 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
     shape = 'short';
     reviewSec = tiny ? REVIEW_SEC.tiny : REVIEW_SEC.short;
     blocks.push(block(1, step('review'), reviewMin(m.review)));
-    blocks.push(block(2, step('focus', { n: tiny ? GRAMMAR_N.tiny : GRAMMAR_N.short }), m.grammar, 'ch:u-focus'));
+    blocks.push(block(2, step('grammar', { n: tiny ? GRAMMAR_N.tiny : GRAMMAR_N.short }), m.grammar, 'ch:u-focus'));
     blocks.push(block(5, step('again'), m.again));
   } else {
     shape = dow === 6 ? 'sat' : 'full';
     reviewSec = REVIEW_SEC.full;
     blocks.push(block(1, step('review'), reviewMin(VG_MIN.full.review)));
-    blocks.push(block(2, step('focus', { n: GRAMMAR_N.full }), VG_MIN.full.grammar, 'ch:u-focus'));
+    blocks.push(block(2, step('grammar', { n: GRAMMAR_N.full }), VG_MIN.full.grammar, 'ch:u-focus'));
     blocks.push(block(3, step('task.order'), VG_MIN.full.order));
     blocks.push(block(5, step('again'), VG_MIN.full.again));
   }

@@ -19,6 +19,7 @@ export type UnitBlockKind =
   | 'task.roleplay'
   | 'task.check'
   | 'task.order'
+  | 'grammar'
   | 'focus'
   | 'focus.colloc'
   | 'again';

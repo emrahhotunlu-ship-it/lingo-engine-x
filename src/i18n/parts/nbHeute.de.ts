@@ -23,7 +23,7 @@ export const nbHeuteDe = {
   nbHeuteBlock_grammar: 'Grammatik',
   nbHeuteBlock_order: 'Satzbau',
   // Grund je Block (eine kurze Zeile)
-  nbHeuteWhy_review: '{n} Karten · Wochenthema zuerst',
+  nbHeuteWhy_review: '{n} Karten · Fällige zuerst',
   nbHeuteWhy_reviewBehind: '{n} Karten · Rückstand, der Rest morgen',
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_inputRead: 'Kurzer Text zum Thema',
@@ -40,8 +40,8 @@ export const nbHeuteDe = {
   nbHeuteWhy_roleplay: 'Rollenspiel zum Thema',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
-  nbHeuteWhy_grammar: 'Deine Fehlerthemen, fällige Grammatik und typische Deutsch-Fallen',
-  nbHeuteWhy_order: 'Wörter und Grammatik im ganzen Satz anwenden',
+  nbHeuteWhy_grammar: 'Deine Fehlerthemen, fällige und neue Grammatik, gemischt',
+  nbHeuteWhy_order: 'Wortstellung im ganzen Satz üben',
   nbHeuteWhy_colloc: 'Kollokationen zum Thema selbst tippen',
   nbHeuteWhy_again: 'Deine falschen Sätze von früher richtig schreiben',
   // Fertig-Zustand (N15)

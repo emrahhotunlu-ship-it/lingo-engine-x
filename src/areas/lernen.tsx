@@ -19,6 +19,7 @@ import { startAgain } from '../features/repair/again/session';
 import { ensureGrammar, grammarResume } from '../features/grammar/resume';
 import { drillResume, ensureDrill } from '../features/drills/resume';
 import { startDrill } from '../features/drills/session';
+import { startGrammar } from '../features/grammar/session';
 import { ensureLesson, lessonResume } from '../features/course/resume';
 import { patternResume } from '../features/patterns/run';
 
@@ -90,6 +91,16 @@ export const lernen = defineArea({
       start: (ctx) => {
         startFocus(ctx);
         return { name: 'unitFocus' };
+      },
+    },
+    {
+      // Grammatik als Block 2 (Lernwissenschaft 04.10.2026): die vorhandene Grammatikrunde – fällige und schwache Themen,
+      // neue Varianten, höchstens 3 Fehlersätze, verschachtelt (`selectRound`), Rundengröße aus dem Plan.
+      kind: 'grammar',
+      feasible: () => true,
+      start: (ctx) => {
+        startGrammar({ mode: 'duty', day: ctx.day, block: ctx.block, ...(ctx.opts?.n ? { size: ctx.opts.n } : {}) });
+        return { name: 'grammarSession', mode: 'duty' };
       },
     },
     {
