@@ -143,7 +143,7 @@ test('Werkzeug der Woche: grammar?topic=c1-hedging öffnet das Themenblatt', asy
   await expect(page.locator('ul[data-set="c1"] [data-testid="topic"]')).toHaveCount(7);
   await page.getByTestId('gr-set-b2').click();
   await expect(page.locator('[data-testid="topic"][data-topic^="c1-"]')).toHaveCount(0);
-  await expect(page.locator('[data-testid="topic"]')).toHaveCount(16);
+  await expect(page.locator('[data-testid="topic"]')).toHaveCount(32);
   expect(errors).toEqual([]);
 });
 

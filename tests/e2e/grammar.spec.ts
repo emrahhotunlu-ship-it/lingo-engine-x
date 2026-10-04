@@ -214,8 +214,9 @@ test('Themenliste: Reihenfolge passt zum Stufenwort; Englisch: Formmuster ohne d
   const { errors } = await boot(page, { migrated: true, lang: 'en' });
   await openGrammar(page);
   const levels = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
-  // 16 Themen der alten App; die 7 des C1-Werkzeugkastens hinter dem Umschalter (P2, plan.md §1.3).
-  expect(levels.length).toBe(16);
+  // 16 alte + 16 neue Themen des Grammatik-Pfads; die 7 des C1-Werkzeugkastens hinter dem Umschalter (P2, plan.md §1.3).
+  expect(levels.length).toBe(32);
+
   expect([...levels].sort((a, b) => a - b)).toEqual(levels);
   await page.getByTestId('gr-set-c1').click();
   const c1 = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
