@@ -14,6 +14,7 @@ import { drillCards, startDrill, type DrillKind } from '../drills/session';
 import { loadLearnInputs, useLearnInputs } from '../learn/inputs';
 import { TabTitle } from '../system/Chrome';
 import { feasibleData } from '../today/store';
+import { useOpenRepairs } from './RepairRound';
 
 // Reiter „Anwenden“ (Emrahs Wunsch 04.10.2026): Wörter und Grammatik zusammen benutzen – Hören und
 // Aufschreiben, Sätze bauen, freies Sprechen. Alles hier ist freiwillig und zählt nie zur Pflicht (Kap. 2.6);
@@ -63,6 +64,7 @@ export function ApplyHub() {
   const vocab = useLive((s) => s.collections.vocab);
   const tts = useSpeech((s) => s.status === 'ready');
   const inputs = useLearnInputs((s) => s.status);
+  const openRepairs = useOpenRepairs();
 
   useEffect(() => {
     if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
@@ -105,6 +107,14 @@ export function ApplyHub() {
       {build.length > 0 && (
         <Section id="ap-build" title={t('apBuild')}>
           <div className="grid grid-cols-2 gap-3">{build}</div>
+        </Section>
+      )}
+
+      {openRepairs.length > 0 && (
+        <Section id="ap-repair" title={t('apRepair')}>
+          <div className="grid grid-cols-2 gap-3">
+            <Tile icon="refresh" channel="grammar" title={t('apRepair')} sub={t('apRepairSub', { n: openRepairs.length })} onClick={() => go({ name: 'repairRound' })} testId="hub-repair-round" />
+          </div>
         </Section>
       )}
 

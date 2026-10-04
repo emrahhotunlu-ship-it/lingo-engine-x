@@ -8,5 +8,8 @@ export const applyDe = {
   apSpeak: 'Sprechen',
   apRoleplay: 'Rollenspiel und Einwände',
   lrBackToApply: 'Zurück zu Anwenden',
+  apRepair: 'Fehler korrigieren',
+  apRepairSub: '{n} Sätze warten auf dich',
+  apRepairNone: 'Keine Sätze fällig – alle sicher. Neue Fehler kommen automatisch dazu.',
   apRoleplaySub: 'Frei sprechen mit festen Szenen',
 };

@@ -8,5 +8,8 @@ export const applyEn = {
   apSpeak: 'Speaking',
   apRoleplay: 'Role play and objections',
   lrBackToApply: 'Back to Apply',
+  apRepair: 'Fix mistakes',
+  apRepairSub: '{n} sentences are waiting',
+  apRepairNone: 'No sentences due – all safe. New mistakes are added automatically.',
   apRoleplaySub: 'Speak freely with fixed scenes',
 };

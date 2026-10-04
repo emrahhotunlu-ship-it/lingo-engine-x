@@ -2,6 +2,7 @@ import { defineArea } from '../app/registry';
 import { HubSections } from '../app/shell/Hub';
 import { placesOf } from '../app/shell/tabs';
 import { ApplyHub } from '../features/apply/ApplyHub';
+import { RepairRoundScreen } from '../features/apply/RepairRound';
 
 // Bereich „Anwenden“ (Emrahs Wunsch 04.10.2026, „Go Anwenden“): vierter Lernreiter neben Wortschatz und Grammatik.
 // Hier wird das Gelernte kombiniert benutzt – Diktat, Hörschleife, Lücke, Satzbau, Rollenspiel. Freiwillig, nie Pflicht.
@@ -9,6 +10,8 @@ import { ApplyHub } from '../features/apply/ApplyHub';
 declare module '../app/router/types' {
   interface RouteParams {
     apply: NoParams;
+    /** „Fehler korrigieren“: freiwillige Runde mit fälligen Reparatur-Sätzen. */
+    repairRound: NoParams;
   }
 }
 
@@ -26,5 +29,6 @@ export const anwenden = defineArea({
   id: 'anwenden',
   screens: {
     apply: { kind: 'tab', component: ApplyRoot, title: 'apTitle', keepScroll: true },
+    repairRound: { kind: 'exercise', component: RepairRoundScreen, title: 'apRepair' },
   },
 });

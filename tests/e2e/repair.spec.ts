@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, openOverview, openSpeak, screen } from './fixtures';
+import { boot, layoutProblems, openOverview, openSpeak, openTab, screen } from './fixtures';
 import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Wiederholung in der
@@ -166,4 +166,40 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
   expect((await repairs(page))[0]).toMatchObject({ ctx: expect.any(String), fix: ['need to delay'] });
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
+});
+
+test('Anwenden › Fehler korrigieren: freiwillige Runde über die fälligen Sätze, ctx xtra, Box wächst, Pflicht unberührt', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/repair': { items: [A, B] } } } });
+  await screen(page, 'today');
+  const planBefore = (await dump(page))['app/profile']?.plan;
+  await openTab(page, 'apply');
+  await expect(page.getByTestId('hub-repair-round')).toBeVisible();
+  await page.getByTestId('hub-repair-round').click();
+  await expect(page.getByTestId('repair-round')).toBeVisible();
+  await expect(page.getByTestId('repair-item')).toHaveAttribute('data-id', 'ra1');
+  await page.getByTestId('repair-input').fill("We've been working on it for two years now");
+  await page.getByTestId('repair-check').click();
+  await expect(page.getByTestId('repair-verdict')).toBeVisible();
+  await page.getByTestId('repair-next').click();
+  await page.getByTestId('repair-input').fill('It depends on the budget.');
+  await page.getByTestId('repair-check').click();
+  await page.getByTestId('repair-next').click();
+  await expect(page.getByTestId('session-end')).toBeVisible();
+  await expect.poll(async () => (await repairs(page)).filter((e) => Number(e.box) >= 1).length).toBe(2);
+  const logOf = async () => (((await dump(page))[`log/${DAY}`] as { entries?: Doc[] } | undefined)?.entries ?? []).filter((e) => e.type === 'repair');
+  await page.getByTestId('session-end-next').click();
+  await expect.poll(async () => (await logOf()).length).toBe(2);
+  const log = await logOf();
+  expect(log.every((e) => e.ctx === 'xtra')).toBe(true);
+  expect((await dump(page))['app/profile']?.plan).toEqual(planBefore);
+  expect(errors).toEqual([]);
+});
+
+test('Anwenden: ohne fällige Sätze gibt es keinen Knopf „Fehler korrigieren“', async ({ page }) => {
+  await boot(page, { migrated: true, fake: { patch: { 'app/repair': { items: [] } } } });
+  await screen(page, 'today');
+  await openTab(page, 'apply');
+  await expect(page.getByTestId('apply-hub')).toBeVisible();
+  await expect(page.getByTestId('hub-repair-round')).toHaveCount(0);
 });
