@@ -3,13 +3,13 @@ import { openOverview, screen } from './fixtures';
 import { openProfileRow } from './profilHelpers';
 import { typeInGap } from './learnHelpers';
 
-// Rundgang durch die Phase-6-Bildschirme (Plan §13): die vier Reiter von „Dein Stand", der
+// Rundgang durch die Phase-6-Bildschirme (Plan §13): die drei Segmente von „Dein Stand", der
 // Wochen-Check (erste Aufgabe, M10) und der Wortschatztest (Einstieg, Ja/Nein, Bedeutung).
 // `visit(name)` prüft bzw. fotografiert je Station.
 
 export async function progressTour(page: Page, visit: (name: string) => Promise<void>): Promise<void> {
   await openOverview(page);
-  for (const id of ['judge', 'errors', 'path', 'stats', 'history'] as const) {
+  for (const id of ['words', 'grammar', 'review'] as const) {
     await page.getByTestId(`tab-${id}`).click();
     await expect(page.getByTestId(`tab-${id}`)).toHaveAttribute('aria-selected', 'true');
     await page.waitForTimeout(250);
