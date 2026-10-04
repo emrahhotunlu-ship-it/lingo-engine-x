@@ -290,3 +290,35 @@ test('Anwenden › Hörübung: ohne Claude gibt es keine Kachel', async ({ page 
   await expect(page.getByTestId('apply-hub')).toBeVisible();
   await expect(page.getByTestId('hub-listen-q')).toHaveCount(0);
 });
+
+test('Anwenden › Eigener Satz: Wort fehlt → lokal, keine KI; richtiger Satz → zwei Häkchen; falscher Satz → Korrektur und Reparatur-Satz', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'apply');
+  await page.getByTestId('hub-combo-own').click();
+  const item = page.getByTestId('combo-item');
+  await expect(item).toBeVisible();
+  const word = (await item.getAttribute('data-word')) ?? '';
+  expect(word).not.toBe('');
+  // 1) Wort fehlt: lokal erkannt, kein Claude-Aufruf.
+  await page.getByTestId('combo-input').fill('This sentence has nothing to do with it at all.');
+  await page.getByTestId('combo-check').click();
+  await expect(page.getByTestId('combo-word-missing')).toBeVisible();
+  await expect(page.getByTestId('combo-word-mark')).toHaveAttribute('data-ok', 'false');
+  await page.getByTestId('combo-retry').click();
+  // 2) Richtig: beide Häkchen.
+  await page.getByTestId('combo-input').fill(`We talked about the ${word} yesterday.`);
+  await page.getByTestId('combo-check').click();
+  await expect(page.getByTestId('combo-word-mark')).toHaveAttribute('data-ok', 'true');
+  await expect(page.getByTestId('combo-rule-mark')).toHaveAttribute('data-ok', 'true');
+  await page.getByTestId('combo-next').click();
+  // 3) Falsch: Korrektur sichtbar, Satz als Reparatur-Satz gespeichert.
+  const wrong = `zzrule we talk about ${(await item.getAttribute('data-word')) ?? ''} tomorrow`;
+  await page.getByTestId('combo-input').fill(wrong);
+  await page.getByTestId('combo-check').click();
+  await expect(page.getByTestId('combo-fixed')).toBeVisible();
+  await expect(page.getByTestId('combo-rule-mark')).toHaveAttribute('data-ok', 'false');
+  await expect.poll(async () => (((await dump(page))['app/repair'] as { items?: Array<Record<string, unknown>> } | undefined)?.items ?? []).some((e) => e.wrong === wrong)).toBe(true);
+  expect(errors).toEqual([]);
+});

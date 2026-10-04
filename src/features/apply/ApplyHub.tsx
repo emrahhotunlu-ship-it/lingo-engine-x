@@ -16,6 +16,7 @@ import { drillCards, startDrill, type DrillKind } from '../drills/session';
 import { loadLearnInputs, useLearnInputs } from '../learn/inputs';
 import { TabTitle } from '../system/Chrome';
 import { feasibleData } from '../today/store';
+import { useComboPairs } from './ComboSentence';
 import { useOpenRepairs } from './RepairRound';
 
 // Reiter „Anwenden“ (Emrahs Wunsch 04.10.2026): Wörter und Grammatik zusammen benutzen – Hören und
@@ -69,6 +70,7 @@ export function ApplyHub() {
   const openRepairs = useOpenRepairs();
   const combo = entriesFor('apply');
   const ai = useAiAvailable();
+  const comboPairs = useComboPairs();
 
   useEffect(() => {
     if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
@@ -115,10 +117,11 @@ export function ApplyHub() {
         </Section>
       )}
 
-      {combo.length > 0 && (
+      {(combo.length > 0 || (ai && comboPairs.length > 0)) && (
         <Section id="ap-combo" title={t('apCombo')}>
           <p className="-mt-1 text-sm text-muted">{t('apComboLead')}</p>
           <div className="grid grid-cols-2 gap-3">
+            {ai && comboPairs.length > 0 && <Tile icon="sparkle" channel="grammar" title={t('apComboOwn')} sub={t('apComboOwnSub')} onClick={() => go({ name: 'comboSentence' })} testId="hub-combo-own" />}
             {combo.map((e) => (
               <Tile key={e.id} icon={e.icon} channel="grammar" title={t(e.label)} sub={e.sub ? t(e.sub) : ''} onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)} testId={e.id} />
             ))}

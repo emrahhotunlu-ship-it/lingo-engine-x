@@ -2,6 +2,7 @@ import { defineArea } from '../app/registry';
 import { HubSections } from '../app/shell/Hub';
 import { placesOf } from '../app/shell/tabs';
 import { ApplyHub } from '../features/apply/ApplyHub';
+import { ComboSentenceScreen } from '../features/apply/ComboSentence';
 import { ListenQuestionScreen } from '../features/apply/ListenQuestion';
 import { RepairRoundScreen } from '../features/apply/RepairRound';
 
@@ -15,6 +16,8 @@ declare module '../app/router/types' {
     repairRound: NoParams;
     /** Hörübung mit Frage zu eigenen Wörtern (Sprachausgabe, Claude schreibt die Texte). */
     listenQ: NoParams;
+    /** „Eigener Satz“: Wort + Grammatikregel im selben Satz, Claude prüft. */
+    comboSentence: NoParams;
   }
 }
 
@@ -34,5 +37,6 @@ export const anwenden = defineArea({
     apply: { kind: 'tab', component: ApplyRoot, title: 'apTitle', keepScroll: true },
     repairRound: { kind: 'exercise', component: RepairRoundScreen, title: 'apRepair' },
     listenQ: { kind: 'exercise', component: ListenQuestionScreen, title: 'apListenQ' },
+    comboSentence: { kind: 'exercise', component: ComboSentenceScreen, title: 'apComboOwn' },
   },
 });
