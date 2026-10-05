@@ -38,7 +38,7 @@ export function TurnTimer({ active }: { active: boolean }) {
           <span className="lx-tnum">{left > 0 ? t('nbSprechenTurnLeft', { s: left }) : t('nbSprechenTurnUp')}</span>
         </>
       )}
-      <button type="button" className="ml-auto min-h-8 hover:text-fg" onClick={toggle} aria-pressed={on} data-testid="rp-turn-timer-toggle">
+      <button type="button" className="lx-hit ml-auto hover:text-fg" onClick={toggle} aria-pressed={on} data-testid="rp-turn-timer-toggle">
         {on ? t('nbSprechenTurnTimerOff') : t('nbSprechenTurnTimerOn')}
       </button>
     </div>

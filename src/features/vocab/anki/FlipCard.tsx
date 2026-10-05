@@ -19,7 +19,7 @@ import { SpeakButton } from '../../../engine/SpeakButton';
 import { classifySwipe, swipeExcluded } from '../../../engine/swipe';
 import { useHotkeys } from '../../../engine/useHotkeys';
 import { useT, type MessageKey } from '../../../i18n';
-import { Button } from '../../../ui/Button';
+import { ActionBar, PrimaryAction } from '../../../ui/ActionBar';
 import { GradeButtons } from '../../../ui/GradeButtons';
 import { Icon } from '../../../ui/Icon';
 import { nextT } from '../../progress/persist';
@@ -328,9 +328,11 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
         )}
       </article>
       {!shown ? (
-        <Button variant="secondary" size="lg" className="w-full" onClick={reveal} data-testid="flip-show">
-          {t('nbWsFlipShow')}
-        </Button>
+        <ActionBar stateKey="show">
+          <PrimaryAction onClick={reveal} testId="flip-show">
+            {t('nbWsFlipShow')}
+          </PrimaryAction>
+        </ActionBar>
       ) : (
         <div className="flex flex-col gap-2">
           <GradeButtons

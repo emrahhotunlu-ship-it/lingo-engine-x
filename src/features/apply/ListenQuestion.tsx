@@ -1,3 +1,4 @@
+import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
 import { useAsk } from '../../ai/useAsk';
@@ -229,11 +230,11 @@ export function ListenQuestionScreen() {
                   {t('rxWhy')}: {cur.why}
                 </p>
                 <p className="text-xs text-subtle">{t('apListenQNotice')}</p>
-                <div>
-                  <Button variant="primary" iconAfter="arrowRight" onClick={next} data-testid="listen-q-next">
+                <ActionBar stateKey="next">
+                  <PrimaryAction iconAfter="arrowRight" onClick={next} testId="listen-q-next">
                     {t('rxNext')}
-                  </Button>
-                </div>
+                  </PrimaryAction>
+                </ActionBar>
               </div>
             )}
           </article>

@@ -10,6 +10,7 @@ import { CardStatus } from '../../engine/CardStatus';
 import { Choices } from '../../engine/Choices';
 import { EnglishText } from '../../engine/EnglishText';
 import { ExerciseFrame } from '../../engine/ExerciseFrame';
+import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
 import { Tiles } from '../../engine/Tiles';
@@ -88,7 +89,7 @@ const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'type', 'situation
  * Arten, deren Frage die deutsche Bedeutung nach der Antwort noch zeigt – im Ergebnis nicht noch einmal (H3, Kap. 15).
  * Bei allen übrigen (mc_en, listen_mc, spot, tiles, Lücken, Diktat …) steht sie nach der Antwort immer da (Emrah 02.10.2026).
  */
-const MEANING_VISIBLE: ReadonlySet<ExerciseId> = new Set(['mc_de', 'type', 'match', 'situation']);
+const MEANING_VISIBLE: ReadonlySet<ExerciseId> = new Set(['mc_de', 'type', 'match', 'situation', 'produce']);
 /** Arten ohne Tipp (Zeitbalken: Tempo misst, statt zu helfen). */
 const NO_TIP: ReadonlySet<ExerciseId> = new Set(['speed']);
 /** Arten, deren Lösung die deutsche Bedeutung ist: der Tipp darf sie nicht verraten (englische Erklärung stattdessen). */
@@ -542,7 +543,7 @@ export function ExerciseView({
     // Feste Mindestbreite: die Lücke wächst beim Legen nicht, der Satz bricht nicht neu um und nichts springt unter den Finger.
     const slot = (
       <span className="lx-gap" data-testid="gap" data-state={!fb ? 'input' : fb.result.verdict} style={{ width: 'auto', minWidth: `${Math.max(3.5, solution.length * 0.62 + 1)}em` }} lang="en">
-        {fb ? (fb.result.verdict === 'correct' ? fb.given : solution) : current || ' '}
+        {fb ? (fb.result.verdict === 'correct' ? fb.given : solution) : current || '\u00a0'}
       </span>
     );
     body = (
@@ -862,27 +863,25 @@ export function ExerciseView({
         {tipBase}
       </p>
     ) : null;
+  const tileSlots = (e.tiles ?? []).filter((x) => !x.distractor).length;
   const checkButton =
     !fb && (e.input === 'typed' || e.input === 'tiles' || e.input === 'produce') ? (
-      <Button
-        variant="primary"
-        onClick={() => (e.input === 'produce' ? void checkProduce() : check(null))}
-        disabled={(e.input === 'tiles' && !placed.length) || (e.input === 'produce' && (!prodText.trim() || produceBusy))}
-        data-testid="check"
-      >
-        {t('trCheck')}
-      </Button>
+      <ActionBar stateKey="check">
+        <PrimaryAction
+          onClick={() => (e.input === 'produce' ? void checkProduce() : check(null))}
+          disabled={(e.input === 'tiles' && placed.length < tileSlots) || (e.input === 'produce' && (!prodText.trim() || produceBusy))}
+          testId="check"
+        >
+          {t('trCheck')}
+        </PrimaryAction>
+      </ActionBar>
     ) : null;
   const actions =
-    checkButton || tipButton || tipLine ? (
+    tipButton || tipLine || checkButton ? (
       <div className="flex flex-col gap-2">
-        {(checkButton || tipButton) && (
-          <div className="flex flex-wrap items-center gap-2">
-            {checkButton}
-            {tipButton}
-          </div>
-        )}
+        {tipButton && <div className="flex flex-wrap items-center gap-2">{tipButton}</div>}
         {tipLine}
+        {checkButton}
       </div>
     ) : undefined;
   return (

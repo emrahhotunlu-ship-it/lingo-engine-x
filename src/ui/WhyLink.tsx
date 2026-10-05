@@ -15,7 +15,7 @@ export function WhyLink({ question, testId = 'feedback-why' }: { question: strin
     <button
       type="button"
       onClick={() => openCompanion({ tab: 'chat', text: question })}
-      className="inline-flex min-h-10 items-center gap-1.5 rounded-[var(--radius-control)] px-2 text-sm font-semibold text-accent-text hover:bg-surface"
+      className="lx-hit inline-flex items-center gap-1.5 rounded-[var(--radius-control)] px-2 text-sm font-semibold text-accent-text hover:bg-surface"
       data-testid={testId}
       data-ai=""
     >

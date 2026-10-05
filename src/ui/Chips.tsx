@@ -15,7 +15,7 @@ type ChipsProps<T extends string> = {
   scroll?: boolean;
 };
 
-const CHIP = 'inline-flex min-h-9 items-center rounded-full px-3 text-sm whitespace-nowrap transition-colors';
+const CHIP = 'lx-hit inline-flex items-center rounded-full px-3 text-sm whitespace-nowrap transition-colors';
 
 /** Filter-Chips: genau einer ist gewählt. */
 export function Chips<T extends string>({ options, value, onChange, label, testId, scroll }: ChipsProps<T>) {

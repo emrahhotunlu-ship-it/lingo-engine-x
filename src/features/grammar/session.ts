@@ -201,6 +201,13 @@ export function leaveGrammar(): void {
 
 // ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2, G3)
 
+/** Zähler der Grammatik-Runde (R4): Nenner = geplante Runde, Wiederholungen falscher Aufgaben getrennt als `extra`. */
+export function grammarProgress(s: Pick<State, 'status' | 'tasks' | 'pos' | 'repeatAt'>): { n: number; total: number; extra: number } | null {
+  if (s.status !== 'running') return null;
+  const total = s.repeatAt ?? s.tasks.length;
+  return { n: Math.min(total, s.pos + 1), total, extra: Math.max(0, s.tasks.length - total) };
+}
+
 export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day' | 'lang' | 'tasks' | 'pos' | 'results' | 'repeatAt'>;
 
 /** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */

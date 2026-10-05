@@ -1,3 +1,4 @@
+import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { motion } from 'framer-motion';
 import { useId, useMemo, useState } from 'react';
 import { useAiAvailable } from '../../ai/scope';
@@ -168,9 +169,11 @@ export function ComboSentenceScreen() {
             {!busy && !res && ask.error && <AiRunPanel phase="error" error={ask.error} onRetry={() => void check()} skeleton={false} />}
             {!res && (
               <div className="flex flex-wrap items-center gap-3">
-                <Button variant="primary" disabled={!text.trim() || busy} onClick={() => void check()} data-testid="combo-check">
-                  {t('rxCheck')}
-                </Button>
+                <ActionBar stateKey="check">
+                  <PrimaryAction disabled={!text.trim() || busy} onClick={() => void check()} testId="combo-check">
+                    {t('rxCheck')}
+                  </PrimaryAction>
+                </ActionBar>
                 <Button variant="ghost" disabled={busy} onClick={next} data-testid="combo-skip">
                   {t('rxSkip')}
                 </Button>
@@ -218,9 +221,11 @@ export function ComboSentenceScreen() {
                       {t('apComboRetry')}
                     </Button>
                   )}
-                  <Button variant="primary" iconAfter="arrowRight" onClick={next} data-testid="combo-next">
-                    {t('rxNext')}
-                  </Button>
+                  <ActionBar stateKey="next">
+                    <PrimaryAction iconAfter="arrowRight" onClick={next} testId="combo-next">
+                      {t('rxNext')}
+                    </PrimaryAction>
+                  </ActionBar>
                 </div>
               </motion.section>
             )}

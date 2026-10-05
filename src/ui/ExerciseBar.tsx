@@ -12,7 +12,7 @@ type Props = {
   closeLabel: string;
   closeTestId?: string;
   /** Fortschritt; `null` = kein Balken (z. B. Zusammenfassung, freie Einheiten). */
-  progress?: { n: number; total: number } | null;
+  progress?: { n: number; total: number; extra?: number } | null;
   /** Beschriftung für Vorleseprogramme, z. B. „Karte 3 von 8". */
   progressLabel?: string;
   progressTestId?: string;
@@ -53,6 +53,11 @@ export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', 
             <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
               {n} / {progress.total}
             </span>
+            {!!progress.extra && (
+              <span className="lx-tnum -ml-2 flex-none text-xs text-subtle" data-testid="round-extra" aria-label={`+${progress.extra}`}>
+                +{progress.extra}
+              </span>
+            )}
           </div>
         ) : (
           <div className="h-1.5" aria-hidden="true" />

@@ -13,6 +13,7 @@ import { verdictHaptic } from '../../platform/haptics';
 import { useSwipeLeft } from '../../engine/swipe';
 import type { WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
+import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { Button, IconButton } from '../../ui/Button';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { ExerciseBar } from '../../ui/ExerciseBar';
@@ -212,18 +213,14 @@ export function NextButton({ onNext, auto, label, testId = 'next' }: { onNext: (
   };
   // Am Handy: nach links wischen = „Weiter“ (Kap. 4.5); Knopf, Enter und Autoweiter bleiben.
   useSwipeLeft(fire, true);
+  // Feste Aktionsleiste unten (R1/R2): „Weiter“ steht an derselben Stelle wie vorher „Prüfen“.
   return (
-    <Button
-      variant="primary"
-      iconAfter="arrowRight"
-      onClick={fire}
-      data-testid={testId}
-      data-auto={running ? '' : undefined}
-      className="overflow-hidden"
-    >
-      {label ?? t('trNext')}
-      {running && <span className="lx-autonext" aria-hidden="true" data-testid="autonext" />}
-    </Button>
+    <ActionBar stateKey="next">
+      <PrimaryAction onClick={fire} iconAfter="arrowRight" testId={testId} data-auto={running ? '' : undefined} className="overflow-hidden">
+        {label ?? t('trNext')}
+        {running && <span className="lx-autonext" aria-hidden="true" data-testid="autonext" />}
+      </PrimaryAction>
+    </ActionBar>
   );
 }
 

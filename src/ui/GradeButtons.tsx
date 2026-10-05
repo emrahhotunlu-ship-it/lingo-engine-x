@@ -1,3 +1,6 @@
+import { ActionBar } from './ActionBar';
+
+// Die Noten stehen in der festen Aktionsleiste unten (4 Knöpfe, je ≥ 44 px), der Hinweis darüber im Inhalt.
 // Hülle der Bewertungsknöpfe im Aufdecken-Modus (Prototyp v1 `.grades`, architektur.md §4.1):
 // Nochmal · Schwer · Gut · Leicht, je mit Intervall; der Vorschlag der App ist hervorgehoben.
 // Nur Darstellung – Tasten 1–4, Wischen, Vorschlag und Speichern gehören P3 (anki-regeln.md).
@@ -28,7 +31,8 @@ export function GradeButtons({ options, suggest = null, onGrade, label, note, di
   const cols = options.length <= 2 ? 'grid-cols-2' : 'grid-cols-4';
   return (
     <div className="flex flex-col gap-2">
-      <div role="group" aria-label={label} className={`grid ${cols} gap-2`} data-testid={testId}>
+      <ActionBar stateKey="grades" testId={`${testId}-bar`}>
+      <div role="group" aria-label={label} className={`lx-actionbar-main grid ${cols} gap-2`} data-testid={testId}>
         {options.map((o) => {
           const isSuggest = suggest === o.grade;
           return (
@@ -51,6 +55,7 @@ export function GradeButtons({ options, suggest = null, onGrade, label, note, di
           );
         })}
       </div>
+      </ActionBar>
       {note && (
         <p className="m-0 text-center text-xs text-subtle" data-testid={`${testId}-note`}>
           {note}

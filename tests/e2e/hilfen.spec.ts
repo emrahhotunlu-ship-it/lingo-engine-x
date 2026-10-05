@@ -137,7 +137,7 @@ test('Satzbau: Bedeutung vorab, klare Aufgabe, Tipp (guter Anfang, dann die erst
     await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${text.replace(/"/g, '\\"')}"]`).first().click();
     await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(n + 1);
   }
-  await item.getByTestId('check').click();
+  await page.getByTestId('check').click();
   await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
   await expect(page.getByTestId('verdict')).toContainText('mit Tipp');
   await expect(item.getByTestId('order-why')).toBeVisible();
@@ -185,7 +185,7 @@ test.describe('Handy 390 px', () => {
   test('Bausteine: beim Antippen springt nichts – „Prüfen“ und die übrigen Bausteine bleiben an ihrem Platz (Emrahs Meldung „kein t“)', async ({ page }) => {
     const { errors } = await openOrder(page);
     const item = page.getByTestId('drill-item');
-    const pos = async () => (await item.getByTestId('check').boundingBox())?.y ?? -1;
+    const pos = async () => (await page.getByTestId('check').boundingBox())?.y ?? -1;
     const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
     const lastTile = item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${(texts[texts.length - 1] ?? '').replace(/"/g, '\\"')}"]`).first();
     const y0 = await pos();

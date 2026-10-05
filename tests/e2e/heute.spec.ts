@@ -190,7 +190,7 @@ test('Block 3 Satzbau aus Heute: Runde als Pflicht, „Weiter“ in der Zusammen
       await item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${text.replace(/"/g, '\\"')}"]`).first().click();
       await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(n + 1);
     }
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
     await page.getByTestId('next').click();
     await expect(page.getByTestId('drill-item').getByTestId('verdict')).toHaveCount(0);

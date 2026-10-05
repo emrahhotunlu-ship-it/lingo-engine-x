@@ -19,7 +19,7 @@ export function useUndoBar(): { t: number | null; word: string } {
   return useUndo((s) => s);
 }
 
-export function UndoBar({ progress, progressTestId = 'round-progress' }: { progress?: { n: number; total: number } | null; progressTestId?: string }) {
+export function UndoBar({ progress, progressTestId = 'round-progress' }: { progress?: { n: number; total: number; extra?: number } | null; progressTestId?: string }) {
   const { t } = useT();
   const api = useHiddenInput();
   const word = useUndo((s) => s.word);
@@ -34,6 +34,11 @@ export function UndoBar({ progress, progressTestId = 'round-progress' }: { progr
       {progress && progress.total > 0 && (
         <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
           {Math.max(1, Math.min(progress.total, progress.n))} / {progress.total}
+        </span>
+      )}
+      {!!progress?.extra && (
+        <span className="lx-tnum -ml-1 flex-none text-xs text-subtle" data-testid="round-extra">
+          +{progress.extra}
         </span>
       )}
       <span className="min-w-0 flex-1 truncate text-xs text-muted">
