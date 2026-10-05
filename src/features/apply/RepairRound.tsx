@@ -27,11 +27,12 @@ export function useOpenRepairs(): Fehlersatz[] {
   const repairDoc = useLive((s) => s.docs['app/repair']);
   const dayDoc = useLive((s) => s.day?.doc);
   const now = useClock((s) => s.now);
+  const { lang } = useT();
   return useMemo(() => {
     const entries = Array.isArray(dayDoc?.entries) ? (dayDoc.entries as Array<{ type?: unknown; id?: unknown }>) : [];
     const done = repairsDoneToday(entries);
-    return dueFehlersaetze({ grammarDocs: grammarDocs ?? NO_DOCS, repairDoc, nowMs: now, today }).filter((e) => !done.has(e.id));
-  }, [grammarDocs, repairDoc, dayDoc, now, today]);
+    return dueFehlersaetze({ grammarDocs: grammarDocs ?? NO_DOCS, repairDoc, nowMs: now, today, lang }).filter((e) => !done.has(e.id));
+  }, [grammarDocs, repairDoc, dayDoc, now, today, lang]);
 }
 
 export function RepairRoundScreen() {
@@ -72,8 +73,8 @@ export function RepairRoundScreen() {
             mode="review"
             area="trainer"
             source={null}
-            onResult={({ ok, given, ms }) => {
-              commitRepairAnswer({ item: cur, ok, given, ms, day: today, lang, ctx: 'xtra', first: pos === 0 });
+            onResult={({ ok, near, given, ms }) => {
+              commitRepairAnswer({ item: cur, ok, near, given, ms, day: today, lang, ctx: 'xtra', first: pos === 0 });
               if (ok) setRight((n) => n + 1);
             }}
             onNext={() => {

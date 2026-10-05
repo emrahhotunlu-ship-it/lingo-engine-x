@@ -1,5 +1,6 @@
 import { readCollection, readDoc } from '../../data/reads';
 import type { Writer } from '../../data/writer';
+import { mayCreateDoc } from '../../domain/capacity/docGuard';
 import { addDays, legacyDayKey } from '../../domain/date';
 import { poolIntake, type PoolIntake } from '../../domain/grammar/pool';
 import type { GrammarTask } from '../../domain/learn/types';
@@ -64,6 +65,8 @@ export async function runDailyIntake(i: {
     const failedWords: Record<string, number> = {};
     for (const w of intake.words) {
       try {
+        // Datenbank fast voll (Gesamtzahl): keine neue Karte, der Tag bleibt offen, laut gemeldet (Prüfbefund S8).
+        if (!mayCreateDoc(`vocab/${w.id}`)) throw new Error('Datenbank fast voll');
         if ((await i.writer.createIfMissing(`vocab/${w.id}`, w.doc)) === 'created') created++;
       } catch (err) {
         logError('day:daily', err, `vocab/${w.id}`);

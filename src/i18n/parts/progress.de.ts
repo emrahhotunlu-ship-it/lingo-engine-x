@@ -206,6 +206,7 @@ export const progressDe = {
   sourcesText: 'Schrift Inter (SIL Open Font License) · Aussprache nach dem CMU Pronouncing Dictionary · Inhalte aus deiner bisherigen Sprachwerkstatt · Claude über dein Claude-Abo.',
 
   // Diagnose und Kapazität (Phase 7, Plan §12)
+  capDocsFull: 'Deine Datenbank ist fast voll ({n} Dokumente). Neue Karten werden vorerst nicht angelegt – dein bisheriger Stand bleibt vollständig erhalten.',
   diagCapacityWarn: 'Bald voll: {n} von 5.000 Dokumenten',
   diagProfileSize: 'Profilgröße',
   diagProfileSizeValue: '{kb} KiB von 256 KiB',

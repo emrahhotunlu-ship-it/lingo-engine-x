@@ -11,7 +11,7 @@ export const DOC_LIMIT_BYTES = 256 * 1024;
 export const PROFILE_WARN_BYTES = 128 * 1024;
 export const PROFILE_COMPACT_BYTES = 160 * 1024;
 export const DOC_COUNT_LIMIT = 5000;
-export const DOC_COUNT_WARN = 4000;
+export const DOC_COUNT_WARN = 3500;
 export const DAY_MAPS = ['days', 'xpDays', 'minutes', 'act', 'pflicht'] as const;
 
 const encoder = new TextEncoder();

@@ -119,7 +119,7 @@ export function TrainerScreen() {
                 mode="review"
                 area="trainer"
                 source={null}
-                onResult={({ ok, given, ms }) => answerRepair(ok, given, ms)}
+                onResult={({ ok, near, given, ms }) => answerRepair(ok, given, ms, near)}
                 onNext={() => {
                   // Tastatur am iPhone: im selben Handler fokussieren bzw. schließen.
                   if (nextRepair() === 'typed') api.focusNow();

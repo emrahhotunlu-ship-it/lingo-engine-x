@@ -6,7 +6,7 @@ import { openSheet } from '../../app/sheets';
 import { entriesFor } from '../../app/registry';
 import { useLive } from '../../data/live';
 import { dueFehlersaetze } from '../../domain/repair/fehlersaetze';
-import { introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
+import { canIntroduce, dueErrorCount, introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
 import { rankTopics } from '../../domain/grammar/tasks';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
@@ -88,13 +88,17 @@ export function LearnHub() {
 
   // „Als Nächstes“: das eine neue Thema des Tages (Pfadreihenfolge, wenn die Bremse es erlaubt), sonst das schwächste begonnene Thema.
   const next = useMemo(() => {
-    const intro = introTopic(docs, today);
+    const intro = introTopic(docs, today, now);
     if (intro) return { id: intro, fresh: true };
     const ranked = rankTopics({ grammarDocs: docs, nowMs: now, seed: today, introduce: null });
     const id = ranked[0]?.topic ?? pathTopics()[0];
     return id ? { id, fresh: isNewTopic(docs.get(id)) } : null;
   }, [docs, now, today]);
   const nDue = useMemo(() => dueFehlersaetze({ grammarDocs: docs, repairDoc, nowMs: now, today }).length, [docs, repairDoc, now, today]);
+
+  // Bremse wegen vieler fälliger Fehlersätze: ruhiger Hinweis mit Grund (kein Vorwurf).
+  const braked = useMemo(() => canIntroduce(docs, today, now), [docs, today, now]);
+  const nBrake = braked.ok ? 0 : braked.reason === 'errors' ? dueErrorCount(docs, now) : 0;
 
   const startNext = () => {
     if (!next) return;
@@ -120,6 +124,11 @@ export function LearnHub() {
             {t('nbLernenNextEyebrow')}
           </p>
           <p className="text-lg font-semibold tracking-tight">{topicName(next.id, lang)}</p>
+          {nBrake > 0 && (
+            <p className="text-sm text-muted" data-testid="hub-intro-brake">
+              {t('nbLernenBrake', { n: nBrake })}
+            </p>
+          )}
           <p className="text-sm text-muted">{next.fresh ? t('nbLernenNextNew', { n: TOPIC_ROUND_MIN + 1 }) : t('nbLernenNextMin', { n: TOPIC_ROUND_MIN })}</p>
           <div>
             <Button variant="primary" iconAfter="arrowRight" onClick={startNext} data-testid="hub-next-start">

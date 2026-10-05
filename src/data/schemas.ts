@@ -159,7 +159,7 @@ export const profileSchema = z.looseObject({
   lxSeq: numMap,
   // `lx`: Tagesbild dieser App (Phase 6, Plan §7.4), Definition in domain/progress/history.ts.
   history: z
-    .array(z.looseObject({ d: str, o: num, vo: num, gr: num, co: num, re: num, li: num, wr: num, fl: num, vs: num, lx: num }))
+    .array(z.looseObject({ d: str, o: num, vo: num, gr: num, co: num, re: num, li: num, wr: num, fl: num, vs: num, lx: num, va: num }))
     .nullish(),
   feed: z.array(z.looseObject({ act: str, t: num, d: z.looseObject({}).nullish() })).nullish(),
   listen: looseArr,
@@ -350,6 +350,8 @@ export const grammarSchema = z.looseObject({
         /** Neu (Phase 2): Quelle der Aufgabe und FSRS-Schatten (steuert nichts, D1). */
         src: str,
         fsrs: loose,
+        /** Neu (Umbau): Erklärung der Aufgabe `{de, en}` für das „Warum“ beim Wiederholen (nur ergänzend). */
+        expl: loose,
       }),
     )
     .nullish(),

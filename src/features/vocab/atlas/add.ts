@@ -1,4 +1,5 @@
 import { getWriter } from '../../../data';
+import { mayCreateDoc } from '../../../domain/capacity/docGuard';
 import { atlasDoc, atlasOp, type AtlasEntry } from '../../../domain/atlas/atlas';
 import { logError } from '../../../platform/diagnostics';
 
@@ -10,6 +11,8 @@ export async function addAtlasCard(e: AtlasEntry, today: string, nowMs: number):
   try {
     let wrote = false;
     await writer.transform(`vocab/${made.id}`, (cur) => {
+      // Datenbank fast voll (Gesamtzahl): keine neue Karte, laut gemeldet (Prüfbefund S8).
+      if (!cur && !mayCreateDoc(`vocab/${made.id}`)) return null;
       const op = atlasOp(cur, made);
       wrote = op !== null;
       return op;

@@ -240,13 +240,13 @@ export type AgainSource = {
 /** Reparatur-Sätze von früher in Block 5, wenn heute keine Aufgabe vorliegt. */
 export const AGAIN_OLD = 3;
 
-export function againSource(i: Pick<FocusInput, 'task' | 'repairDoc' | 'day' | 'traps'> & { now?: number; grammarDocs?: ReadonlyMap<string, Readonly<Record<string, unknown>>> }): AgainSource {
+export function againSource(i: Pick<FocusInput, 'task' | 'repairDoc' | 'day' | 'traps'> & { now?: number; lang?: Lang; grammarDocs?: ReadonlyMap<string, Readonly<Record<string, unknown>>> }): AgainSource {
   const traps = i.traps ?? TRAPS;
   const today = todaysRepairs(i.repairDoc, i.day);
   // Ohne Aufgabe (seit 04.10.2026 der Normalfall, Lernwissenschaft B2): immer die ältesten fälligen Sätze. Sätze von heute
   // werden nicht am selben Tag wiederholt (verteilt statt massiert) – sie kommen laut Box-Plan frühestens morgen.
   const old =
-    !i.task && i.now !== undefined ? dueFehlersaetze({ grammarDocs: i.grammarDocs ?? new Map(), repairDoc: i.repairDoc ?? null, nowMs: i.now, today: i.day, limit: AGAIN_OLD }) : [];
+    !i.task && i.now !== undefined ? dueFehlersaetze({ grammarDocs: i.grammarDocs ?? new Map(), repairDoc: i.repairDoc ?? null, nowMs: i.now, today: i.day, limit: AGAIN_OLD, ...(i.lang ? { lang: i.lang } : {}) }) : [];
   if (old.length) {
     const fixes = old.map((r): FixLike => ({ kind: 'form', mine: r.wrong, right: r.right, why: r.why ?? '' }));
     return { before: old.map((r) => r.wrong).join(' '), better: old.map((r) => r.right).join(' '), betterFrom: 'task', fixes, olds: old.map(({ id, wrong, right, store, topic, errorT }) => ({ id, wrong, right, store, ...(topic ? { topic } : {}), ...(errorT !== undefined ? { errorT } : {}) })) };

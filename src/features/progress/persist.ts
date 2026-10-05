@@ -4,6 +4,8 @@ import { validateDoc } from '../../data/validate';
 import { courseDone } from '../../domain/course/courseDone';
 import { mergeRadar, radarEvent, topicCat } from '../../domain/grammar/radar';
 import { grammarWrite } from '../../domain/grammar/write';
+import type { NewRepair } from '../../domain/repair/repair';
+import { saveRepairs } from '../repair/store';
 import type { DrillAnswer, GrammarAnswer, LearnRecorder, LearnRoundEnd, LessonDone, RadarEvent, SprintEntry } from '../../domain/learn/types';
 import { activityEntry, drillLogEntry, grammarLogEntry, logEntry, mergeLogEntries, type ActivityLogEntry, type AnyLogEntry, type RepairLogEntry } from '../../domain/progress/logPatch';
 import { minimalProfile, profilePatch, roundMinutes, SEQ_KEEP_MS, type CountEvent, type RoundEnd } from '../../domain/progress/profilePatch';
@@ -231,6 +233,7 @@ async function saveGrammar(a: GrammarAnswer): Promise<boolean> {
   if (!writer) return false;
   const path = `grammar/${a.task.topic}`;
   let skipped: string | null = null;
+  let overflow: NewRepair | undefined;
   try {
     await writer.transform(path, (cur) => {
       const w = grammarWrite(cur, a);
@@ -238,10 +241,16 @@ async function saveGrammar(a: GrammarAnswer): Promise<boolean> {
         skipped = w.reason;
         return null;
       }
+      overflow = w.overflow;
       return w.kind === 'create' ? { set: w.doc } : { update: w.patch };
     });
     if (skipped && skipped !== 'already_applied') logWarn('learn:grammar', { code: skipped, message: `${path} nicht geschrieben` }, path);
     usePending.setState((s) => ({ failedGrammar: s.failedGrammar.filter((f) => f.t !== a.t) }));
+    // Thema voll (10 offene Fehlersätze): der neue Fehler geht nie verloren, er wird als Reparatur-Satz abgelegt.
+    if (overflow) {
+      logWarn('learn:grammar', { code: 'errors_full', message: `${path} hat 10 offene Fehlersätze – neuer Fehler als Reparatur-Satz abgelegt` }, path);
+      void saveRepairs([overflow]);
+    }
     return true;
   } catch (err) {
     logError('learn:grammar', err, path);

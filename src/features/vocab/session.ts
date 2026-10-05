@@ -26,7 +26,7 @@ import { useCapabilities } from '../../platform/capabilities';
 import { useSpeech } from '../../platform/speech';
 import { useWatched } from '../../data/watch';
 import { legacySceneDoc } from '../../domain/chunks/legacyScene';
-import { buildQueue, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
+import { buildQueue, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from '../../domain/srs/queue';
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
@@ -375,7 +375,7 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
         .map((k) => byKey.get(k))
         .filter((c): c is TrainCard => !!c && !c.hidden)
         .map((c): QueueItem => ({ key: c.key, reason: c.isNew ? 'new' : 'due', phase: c.stage === 0 ? 'intro' : 'quiz' }))
-    : buildQueue({ cards: chosen, nowMs: now, target: cardTarget, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang });
+    : buildQueue({ cards: chosen, nowMs: now, target: cardTarget, newQuotaLeft: allowNew ? newQuotaLeft : 0, exclude: round === 'pflicht' ? reviewed : answeredToday, lang, mix: { introduced: mixIntroducedToday(cards, day), phrases: introducedToday - introducedLessonToday + newQuotaLeft <= 2 ? 1 : 2 } });
   const docs = pool.map((c) => c.doc);
   const ctl = mode === 'flip' ? controlCounts(docs, now) : { week: 0, day: 0 };
   const base: SessionState = {
@@ -449,15 +449,15 @@ export function roundProgress(s: Pick<SessionState, 'status' | 'round' | 'queue'
 export const currentRepair = (s: Pick<SessionState, 'status' | 'repairs' | 'repairPos'>): RepairItem | null => (s.status === 'running' ? (s.repairs[s.repairPos] ?? null) : null);
 
 /** Ergebnis eines Reparatur-Satzes übernehmen (Protokoll, `app/repair`); weiter geht es mit `nextRepair`. */
-export function answerRepair(ok: boolean, given: string, ms: number): void {
+export function answerRepair(ok: boolean, given: string, ms: number, near = false): void {
   touch();
   const s = useSession.getState();
   const r = currentRepair(s);
   if (!r) return;
   const key = `repair/${r.id}`;
   if (s.answered.includes(key)) return;
-  commitRepairAnswer({ item: r, ok, given, ms, day: s.day, lang: s.lang, ctx: s.round === 'pflicht' ? 'rev' : 'xtra', first: s.results.length === 0 });
-  useSession.setState({ answered: [...s.answered, key], results: [...s.results, { key, word: r.right.split(/\s+/).slice(0, 4).join(' ') + (r.right.split(/\s+/).length > 4 ? ' …' : ''), grade: ok ? 3 : 1, ok }] });
+  commitRepairAnswer({ item: r, ok, near, given, ms, day: s.day, lang: s.lang, ctx: s.round === 'pflicht' ? 'rev' : 'xtra', first: s.results.length === 0 });
+  useSession.setState({ answered: [...s.answered, key], results: [...s.results, { key, word: r.right.split(/\s+/).slice(0, 4).join(' ') + (r.right.split(/\s+/).length > 4 ? ' …' : ''), grade: near ? 2 : ok ? 3 : 1, ok }] });
 }
 
 /** Zum nächsten Reparatur-Satz bzw. zu den Karten (oder zur Zusammenfassung). */

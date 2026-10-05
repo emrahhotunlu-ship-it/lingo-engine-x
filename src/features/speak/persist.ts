@@ -1,4 +1,5 @@
 import { getWriter } from '../../data';
+import { mayCreateDoc } from '../../domain/capacity/docGuard';
 import { chunkPresence, newChunkDoc, takeChunkOp, type NewChunkInput } from '../../domain/chunks/newChunk';
 import { radarEvents, type RadarError } from '../../domain/progress/radarPatch';
 import { sceneRunOp } from '../../domain/speak/sceneDoc';
@@ -23,10 +24,17 @@ export async function takeChunk(input: NewChunkInput): Promise<TakeOutcome> {
   if (!writer) return 'error';
   const seen: { p: ReturnType<typeof chunkPresence> } = { p: 'absent' };
   try {
+    let blocked = false;
     const res = await writer.transform(`chunk/${made.id}`, (cur) => {
       seen.p = chunkPresence(cur);
+      // Datenbank fast voll (Gesamtzahl): keine neue Wendung, laut gemeldet (Prüfbefund S8).
+      if (!cur && !mayCreateDoc(`chunk/${made.id}`)) {
+        blocked = true;
+        return null;
+      }
       return takeChunkOp(cur, made);
     });
+    if (blocked) return 'error';
     if (res === 'created') return 'taken';
     return seen.p === 'hidden' ? 'hidden' : 'exists';
   } catch (err) {

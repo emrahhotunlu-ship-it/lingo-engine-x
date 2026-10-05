@@ -34,14 +34,18 @@ describe('Reparatur-Sätze (V2)', () => {
   it('Kappung zuerst erledigte; tolerantes Lesen; Schema', () => {
     const many = Array.from({ length: REPAIR_MAX + 2 }, (_, i) => ({ id: repairId(`w${i}`), wrong: `w${i}`, right: `r${i}`, src: 'say' as const, t: T, box: 0, due: T, ...(i === 5 ? { done: true } : {}) }));
     const c = capRepairs(many);
-    expect(c).toHaveLength(REPAIR_MAX);
+    // Nur Erledigtes wird verdrängt, offene Sätze bleiben alle (auch über dem Richtwert).
+    expect(c).toHaveLength(REPAIR_MAX + 1);
     expect(c.some((e) => e.done)).toBe(false);
     expect(readRepairs({ items: [null, { wrong: 'a' }, { wrong: 'a b', right: 'c d', t: T }] })).toHaveLength(1);
     expect(validateDoc('app/repair', { items: c }).ok).toBe(true);
     // Größe: auch bei langen Einträgen bleibt das Dokument unter 200 KiB (A6.6).
     const long = Array.from({ length: REPAIR_MAX }, (_, i) => ({ id: `x${i}`, wrong: 'ä'.repeat(300), right: 'ö'.repeat(300), why: 'ü'.repeat(200), ctx: 'c'.repeat(120), fix: Array.from({ length: 6 }, () => 'f'.repeat(80)), src: 'say' as const, t: T, box: 0, due: T }));
     const cut = capRepairs(long);
-    expect(new TextEncoder().encode(JSON.stringify({ items: cut })).length).toBeLessThanOrEqual(200 * 1024);
-    expect(cut.length).toBeLessThan(REPAIR_MAX);
+    expect(cut).toHaveLength(long.length);
+    // Volles Dokument voller offener Sätze: nichts Offenes wird gelöscht, der Zuwachs wird nicht geschrieben (und gemeldet).
+    const full = Array.from({ length: 400 }, (_, i) => ({ ...long[0]!, id: `y${i}`, wrong: `ä${i}`.repeat(150), right: `ö${i}`.repeat(150) }));
+    expect(addRepairs(full, [{ wrong: 'I goed home yesterday', right: 'I went home yesterday.', src: 'say' }], T)).toBeNull();
+    expect(full).toHaveLength(400);
   });
 });

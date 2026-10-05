@@ -53,6 +53,7 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   // Grammar tab as a path (rework W5): next card, path list, mini lesson, learning route
   nbLernenNextEyebrow: 'Up next',
   nbLernenNextMin: 'About {n} min',
+  nbLernenBrake: 'A new topic waits until you have fixed the {n} sentences that are due.',
   nbLernenNextNew: 'New topic · short explanation first · about {n} min',
   nbLernenNextStart: 'Continue',
   nbLernenNextStartNew: 'Start topic',
@@ -73,6 +74,8 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenDontKnow: "I don't know",
   nbLernenMiniEyebrow: 'Quick explanation · about a minute',
   nbLernenMiniExamples: 'Examples',
+  nbLernenMiniTask: 'Read the rule briefly: {topic}',
+  nbLernenMiniPurpose: 'You see the rule once before you practice, so you know what matters in the first task.',
   nbLernenMiniTrap: 'Typical mistake',
   nbLernenMiniGo: 'Go',
   nbLernenFixRow: 'Fix mistakes · {n} due',

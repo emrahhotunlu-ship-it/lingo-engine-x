@@ -59,7 +59,9 @@ export function ComboSentenceScreen() {
   const back = useNav((s) => s.back);
   const ai = useAiAvailable();
   const live = useComboPairs();
-  const [fixed] = useState<ComboPair[]>(() => live);
+  // Paare erst einfrieren, sobald sie erstmals nicht leer sind (die Daten können nach dem Öffnen eintreffen; Prüfbefund S10).
+  const [fixed, setFixed] = useState<ComboPair[]>(() => live);
+  if (!fixed.length && live.length) setFixed(live);
   const ask = useAsk(comboCheck);
   const [pos, setPos] = useState(0);
   const [text, setText] = useState('');

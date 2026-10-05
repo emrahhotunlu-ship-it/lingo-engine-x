@@ -94,7 +94,7 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
     mode,
     topic: o.topic ?? null,
     // Einführungsbremse (höchstens 1 neues Thema je 3 Lerntage, nie bei ≥ 10 offenen Fehlersätzen): nur die Pflichtrunde führt ein Thema ein.
-    introduce: mode === 'duty' ? introTopic(docs, day) : null,
+    introduce: mode === 'duty' ? introTopic(docs, day, useClock.getState().now) : null,
     focusTopic: mode === 'duty' ? planFocusTopic(plan) : null,
     grammarDocs: docs,
     dailyOpen: [...(mode === 'topic' ? extraTasks : []), ...inputs.dailyOpen],
@@ -173,7 +173,7 @@ export function commitGrammar(a: GrammarAnswer): 'typed' | 'choice' | null {
   // N47: Die Wiederholung am Rundenende wird nicht noch einmal gespeichert oder gezählt.
   const repeating = inRepeat(s);
   if (!repeating) void learnRecorder.grammar(a);
-  const results = repeating ? s.results : [...s.results, { key: a.task.key, topic: a.task.topic, ok: !a.dontKnow && a.verdict !== 'wrong', verdict: a.verdict }];
+  const results = repeating ? s.results : [...s.results, { key: a.task.key, topic: a.task.topic, ok: !a.dontKnow && a.verdict !== 'wrong' && a.firstWrong === undefined, verdict: a.verdict }];
   const pos = s.pos + 1;
   let tasks = s.tasks;
   let repeatAt = s.repeatAt;

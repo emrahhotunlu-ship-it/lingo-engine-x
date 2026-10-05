@@ -77,15 +77,18 @@ export function lastReturn(profile: Rec | null | undefined, today: string): { ga
 }
 
 /**
- * Form des Tagesplans nach einer Pause (Gesamtkonzept 3.2): Neustart-Woche (Pause ≥ 14 Tage) gilt an den ersten 7 Lerntagen;
- * nach 7–13 Tagen Pause gilt der Kurz-Plan (nur 3 Grammatikaufgaben, Satzbau pausiert), solange `overdue` ≥ 40 ist
- * (höchstens 14 Lerntage nach der Rückkehr). Sonst `null` (normaler Plan).
+ * Form des Tagesplans nach einer Pause (Gesamtkonzept 3.2): Neustart-Woche (Pause ≥ 14 Tage) gilt an den ersten 7 Lerntagen,
+ * solange `overdue` ≥ 40 ist; sinkt das Überfällige darunter oder sind 7 Tage um, endet sie (Prüfbefund S9). Danach gilt der
+ * Kurz-Plan (nur 3 Grammatikaufgaben, Satzbau pausiert), solange `overdue` ≥ 40 ist (höchstens 14 Lerntage nach der Rückkehr);
+ * nach 7–13 Tagen Pause gilt er von Anfang an so. `overdue === null` = Überfälliges unbekannt (kein Wiederholen im Plan): die
+ * Neustart-Woche gilt dann wie bisher, der Kurz-Plan nicht. Sonst `null` (normaler Plan).
  */
-export function comebackMode(profile: Rec | null | undefined, today: string, overdue: number): ComebackMode | null {
+export function comebackMode(profile: Rec | null | undefined, today: string, overdue: number | null): ComebackMode | null {
   const r = lastReturn(profile, today);
   if (!r) return null;
-  if (r.gap >= RESTART_GAP) return r.since < RESTART_DAYS ? 'restart' : null;
-  return r.since < REDUCED_MAX_DAYS && overdue >= REDUCED_OVERDUE ? 'reduced' : null;
+  const heavy = overdue !== null && overdue >= REDUCED_OVERDUE;
+  if (r.gap >= RESTART_GAP && r.since < RESTART_DAYS && (overdue === null || heavy)) return 'restart';
+  return r.since < REDUCED_MAX_DAYS && heavy ? 'reduced' : null;
 }
 
 /** Neustart-Woche aktiv? (Hängt nicht vom Überfälligen ab, deshalb schon vor dem Plan bekannt.) */

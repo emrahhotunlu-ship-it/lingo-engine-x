@@ -40,15 +40,19 @@ describe('Wiedereinstieg: Form des Plans', () => {
     expect(lastReturn({ days: { [ago(T, 40)]: 1, [ago(T, 20)]: 1 } }, T)).toEqual({ gap: 19, since: 0 });
   });
 
-  it('Neustart-Woche: ab 14 Tagen Pause an den ersten 7 Lerntagen, unabhängig vom Überfälligen', () => {
+  it('Neustart-Woche: ab 14 Tagen Pause an den ersten 7 Lerntagen, solange überfällig ≥ 40 (oder unbekannt); danach Kurz-Plan', () => {
     for (const since of [0, 3, 6]) {
       const p = { days: { [ago(T, 30 + since)]: 1, [ago(T, since)]: 2 } };
       expect(restartActive(p, T)).toBe(true);
-      expect(comebackMode(p, T, 0)).toBe('restart');
+      expect(comebackMode(p, T, 40)).toBe('restart');
+      expect(comebackMode(p, T, null)).toBe('restart');
+      // Unter 40 überfällig endet die Neustart-Woche vorzeitig.
+      expect(comebackMode(p, T, 39)).toBeNull();
     }
     const late = { days: { [ago(T, 37)]: 1, [ago(T, 7)]: 2 } };
     expect(restartActive(late, T)).toBe(false);
-    expect(comebackMode(late, T, 100)).toBeNull();
+    expect(comebackMode(late, T, 100)).toBe('reduced');
+    expect(comebackMode(late, T, 39)).toBeNull();
     expect(restartActive({ days: { [ago(T, 15)]: 1 } }, T)).toBe(true);
   });
 

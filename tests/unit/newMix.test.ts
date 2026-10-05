@@ -21,6 +21,14 @@ describe('mixPhrases', () => {
     ];
     expect(mixPhrases(list).map((c) => c.id)).toEqual(['p1', 'p2', 'w1', 'p3', 'p4', 'w2', 'p5', 'w3']);
   });
+  it('das Muster läuft über den Tag weiter: Startposition aus den heute eingeführten Karten', () => {
+    const list = [...['w1', 'w2'].map((id) => ({ id, kind: 'vocab' })), ...['p1', 'p2', 'p3'].map((id) => ({ id, kind: 'chunk' }))];
+    // Zwei Wendungen schon heute eingeführt: als Nächstes kommt das Wort.
+    expect(mixPhrases(list, { introduced: 2 }).map((c) => c.id)).toEqual(['w1', 'p1', 'p2', 'w2', 'p3']);
+    // Rückstand (2 neue am Tag): eine Wendung, ein Wort.
+    expect(mixPhrases(list, { phrases: 1 }).map((c) => c.id)).toEqual(['p1', 'w1', 'p2', 'w2', 'p3']);
+    expect(mixPhrases(list, { phrases: 1, introduced: 1 }).map((c) => c.id)).toEqual(['w1', 'p1', 'w2', 'p2', 'p3']);
+  });
   it('ohne Wendungen oder ohne Wörter unverändert', () => {
     const w = ['a', 'b'].map((id) => ({ id, kind: 'vocab' }));
     const p = ['c', 'd'].map((id) => ({ id, kind: 'chunk' }));

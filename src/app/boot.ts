@@ -14,6 +14,7 @@ import { routeFromHash } from './router/deeplink';
 import type { RouteName } from './router/types';
 import { applyDocumentSettings, isLang, isPalette, isThemeMode, resolveTheme, useSettings } from './settings';
 import { settingsWritePending } from './actions';
+import { useDocTotal } from '../features/capacity/docTotal';
 
 // Start des App-Rahmens (aus App.tsx verschoben, unverändert): Fähigkeiten starten, Daten genau
 // einmal abonnieren, Einstellungen anwenden, Tagesplan je Lerntag festlegen. Dazu die einmaligen
@@ -25,6 +26,8 @@ export function useBoot(): void {
   useEffect(() => {
     initCapabilities();
   }, []);
+  // Dokumenten-Wächter (Prüfbefund S8): Gesamtzahl für die Sperre neuer Karten.
+  useDocTotal();
 
   useEffect(() => {
     if (dbStatus !== 'ready') return;

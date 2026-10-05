@@ -72,7 +72,9 @@ for (const size of SIZES) {
     await expect(page.getByTestId('summary')).toBeVisible();
 
     // Schreibwege: Boxen in app/repair, Protokoll zählt zu „Wiederholen“.
-    await expect.poll(async () => (await repairs(page)).find((e) => e.id === 'ra1')?.box).toBe(1);
+    // „Fast richtig“ (close): Box bleibt, morgen wieder (Prüfbefund S3), im Protokoll trotzdem als geschafft.
+    await expect.poll(async () => (await repairs(page)).find((e) => e.id === 'ra1')?.last).toBeTruthy();
+    expect((await repairs(page)).find((e) => e.id === 'ra1')).toMatchObject({ box: 0, done: false });
     const list = await repairs(page);
     expect(list.find((e) => e.id === 'rb2')).toMatchObject({ box: 0, done: false });
     await expect
@@ -180,7 +182,7 @@ test('Anwenden › Fehler korrigieren: freiwillige Runde über die fälligen Sä
   await page.getByTestId('hub-repair-round').click();
   await expect(page.getByTestId('repair-round')).toBeVisible();
   await expect(page.getByTestId('repair-item')).toHaveAttribute('data-id', 'ra1');
-  await page.getByTestId('repair-input').fill("We've been working on it for two years now");
+  await page.getByTestId('repair-input').fill(A.right);
   await page.getByTestId('repair-check').click();
   await expect(page.getByTestId('repair-verdict')).toBeVisible();
   await page.getByTestId('repair-next').click();

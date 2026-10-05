@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { getWriter } from '../../data';
 import { readOnce } from '../../data/snapshot';
 import { cacheEntry, cachePatch, lookupKey } from '../../domain/lookup/cache';
+import { mayCreateDoc } from '../../domain/capacity/docGuard';
 import { newVocabDoc, saveCardOp, type NewVocabInput } from '../../domain/srs/newCard';
 import type { WordLookupOut } from '../../prompts/wordLookup';
 import { getDb } from '../../platform/capabilities';
@@ -66,7 +67,16 @@ export async function saveLookupCard(input: NewVocabInput): Promise<SaveResult> 
   if (!made) return 'invalid';
   if (!writer) return 'failed';
   try {
-    const r = await writer.transform(`vocab/${made.id}`, (cur) => saveCardOp(cur, made));
+    let blocked = false;
+    const r = await writer.transform(`vocab/${made.id}`, (cur) => {
+      // Datenbank fast voll (Gesamtzahl): keine neue Karte, laut gemeldet (Prüfbefund S8).
+      if (!cur && !mayCreateDoc(`vocab/${made.id}`)) {
+        blocked = true;
+        return null;
+      }
+      return saveCardOp(cur, made);
+    });
+    if (blocked) return 'failed';
     useLookupData.setState((s) => ({ saved: { ...s.saved, [made.id]: true } }));
     return r === 'created' ? 'saved' : r === 'updated' ? 'added' : 'exists';
   } catch (err) {
