@@ -202,20 +202,22 @@ describe('Abfrageart je Stufe: mindestens zwei, Stufe 5 mit eigenem Satz, Rückf
 
   it('Stufe 5 „Sicher anwenden“: eigener Satz nur mit KI, Diktat nur mit Sprachausgabe', () => {
     const c = vcard({ stage: 5 });
-    expect(availableExercises(c, 'de', 100, { tts: true, ai: true })).toEqual(['dictation', 'speed', 'produce']);
-    expect(availableExercises(c, 'de', 100, { tts: false, ai: true })).toEqual(['speed', 'produce']);
+    expect(availableExercises(c, 'de', 100, { tts: true, ai: true })).toEqual(['dictation', 'produce']);
+    expect(availableExercises(c, 'de', 100, { tts: false, ai: true })).toEqual(['produce', 'type']);
     const noAi = availableExercises(c, 'de', 100, { tts: false, ai: false });
     expect(noAi).not.toContain('produce');
     expect(noAi.length).toBeGreaterThanOrEqual(2);
     // Schwächste Art gewinnt: produce nie geübt → gewählt, ohne KI nie.
-    const weak = vcard({ stage: 5, xs: { speed: { c: 5, w: 0 }, dictation: { c: 5, w: 0 } } });
+    const weak = vcard({ stage: 5, xs: { type: { c: 5, w: 0 }, dictation: { c: 5, w: 0 } } });
     expect(chooseExercise(weak, 'de', 100, [], { tts: true, ai: true })).toBe('produce');
     expect(chooseExercise(weak, 'de', 100, [], { tts: true, ai: false })).not.toBe('produce');
   });
 
-  it('Stufe 1: Hören nur mit Sprachausgabe; ohne Satz kein „Im Satz finden“', () => {
-    expect(availableExercises(vcard({ stage: 1 }), 'de', 100, { tts: true, ai: false })).toEqual(['mc_en', 'spot', 'listen_mc']);
-    expect(availableExercises(vcard({ stage: 1, ex: '' }), 'de', 100, NO_ENV)).not.toContain('spot');
+  it('Stufe 1: Hören nur mit Sprachausgabe; „Im Satz finden“, Tempo und Bausteine sind aus der Leiter entfernt', () => {
+    expect(availableExercises(vcard({ stage: 1 }), 'de', 100, { tts: true, ai: false })).toEqual(['mc_en', 'listen_mc']);
+    const all = new Set<ExerciseId>();
+    for (const stage of [1, 2, 3, 4, 5] as Stage[]) for (const x of availableExercises(vcard({ stage }), 'de', 100, { tts: true, ai: true })) all.add(x);
+    for (const gone of ['spot', 'speed', 'tiles'] as const) expect(all.has(gone), gone).toBe(false);
   });
 
   it('Wendungen: nie „Im Satz finden“ oder Wortpartner; „Aus der Situation“ nur mit Szene', () => {

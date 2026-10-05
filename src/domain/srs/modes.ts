@@ -35,12 +35,16 @@ export const NO_ENV: ExerciseEnv = { tts: false, ai: false };
 
 export const exerciseDef = (ex: ExerciseId): ExerciseDef => CATALOG.find((d) => d.ex === ex) ?? (CATALOG[0] as ExerciseDef);
 
+/** Aus der Wörter-Leiter entfernte Arten: nie verfügbar, alte Daten bleiben lesbar. */
+export const RETIRED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['spot', 'speed', 'tiles']);
+
 /** Arten, die für Wendungen nicht taugen (phase1-plan §4.2, Spalte „Chunk"). */
 const NOT_FOR_CHUNKS: ReadonlySet<ExerciseId> = new Set(['spot', 'colloc']);
 
 /** Was eine Übungsart an Kartendaten und Umgebung braucht. */
 export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): boolean {
   const meaning = meaningOf(card, lang);
+  if (RETIRED.has(ex)) return false;
   if (card.kind === 'chunk' && NOT_FOR_CHUNKS.has(ex)) return false;
   switch (ex) {
     case 'mc_en':

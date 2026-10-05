@@ -5,7 +5,7 @@ import { toTrainCard } from '../../src/domain/srs/cards';
 import { toChunkCard } from '../../src/domain/srs/chunkCards';
 import { CONTROL, FLIP, againPos, calibration, controlAllowed, controlsSince, dirFor, flipStage, flipSuggest, formatInterval, pickMode, weekStartMs } from '../../src/domain/srs/flip';
 import { availableExercises, chooseExercise, exerciseDef } from '../../src/domain/srs/modes';
-import { inboxTier, newCards, tierSrc } from '../../src/domain/srs/queue';
+import { INBOX_TIERS, inboxTier, newCards, tierSrc } from '../../src/domain/srs/queue';
 import type { AnswerEvent, Grade, TrainCard } from '../../src/domain/srs/types';
 import { berlin } from './helpers';
 
@@ -223,11 +223,10 @@ describe('Eingangskorb (§5)', () => {
     expect(tierSrc(cards[2] as TrainCard)).toBe('coach');
     expect(tierSrc(cards[1] as TrainCard)).toBe('lookup');
   });
-  it('Wochenthema ist Stufe 4 (vor eigenen Funden, hinter eigenem Output)', () => {
-    expect(inboxTier('lookup', true)).toBe(3);
-    expect(inboxTier('say', true)).toBe(2);
-    expect(inboxTier('seed', true)).toBe(3);
-    expect(inboxTier('lookup')).toBe(4);
+  it('Eingangskorb ohne Wochenthema: eigener Output vor eigenen Funden, Startwortschatz zuletzt', () => {
+    expect(inboxTier('say')).toBe(2);
+    expect(inboxTier('lookup')).toBe(3);
+    expect(inboxTier('seed')).toBe(INBOX_TIERS.length);
   });
 });
 

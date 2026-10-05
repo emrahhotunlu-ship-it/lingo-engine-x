@@ -2,7 +2,6 @@ import { learningDayEnd } from '../date';
 import { cardSec, NEW_SEC } from './cost';
 import { availableExercises } from './modes';
 import { isLearningState, retrievability } from './scheduler';
-import { themeFirst } from '../week/review';
 import type { Lang, QueueItem, TrainCard } from './types';
 
 // Runde „Wiederholen" (Lern-Entwurf §3): fällige Karten nach Dringlichkeit, dazu neue Karten
@@ -36,27 +35,23 @@ const reviewCost = cardSec;
 /**
  * Eingangskorb (anki-regeln.md §5, ersetzt `SRC_RANK`): Emrahs eigener Kontext zuerst, der
  * Startwortschatz zuletzt. Stufen: 1 Termin · 2 Lehrer (Lehrer-Feedback, frühere Preply-Importe) · 3 eigener Output/eigene Korrektur ·
- * 4 Wochenthema (`isThemeCard`, von außen) · 5 eigene Funde · 6 C1-Paket · 7 Lektion und Vorschläge ·
- * 8 Startwortschatz und Unbekanntes. Innerhalb einer Stufe die älteste zuerst.
+ * 4 eigene Funde · 5 C1-Paket · 6 Lektion und Vorschläge · 7 Startwortschatz und Unbekanntes (das frühere Wochenthema entfällt). Innerhalb einer Stufe die älteste zuerst.
  */
 export const INBOX_TIERS: readonly (readonly string[])[] = [
   ['meeting'],
   ['teacher', 'preply'],
   ['say', 'fluency', 'scene', 'mail', 'pitch', 'biz', 'coach'],
-  [],
   ['lookup', 'read', 'listen', 'translate', 'write', 'user', 'claude'],
   // C1-Paket (02.10.2026): geprüfte, geplante C1-Einträge hinter Emrahs eigenen Funden, vor allgemeinen Vorschlägen.
   ['pack'],
   ['lesson', 'ai', 'job', 'daily'],
 ];
-const THEME_TIER = 3;
 const LAST_TIER = INBOX_TIERS.length;
 
-/** Stufe im Eingangskorb (0 = zuerst). Themenkarten landen auf Stufe 4 (Index 3), außer ihre Quelle ist höher. */
-export function inboxTier(src: string | null, theme = false): number {
+/** Stufe im Eingangskorb (0 = zuerst). */
+export function inboxTier(src: string | null): number {
   const i = INBOX_TIERS.findIndex((t) => t.includes(src ?? ''));
-  const own = i === -1 ? LAST_TIER : i;
-  return theme ? Math.min(own, THEME_TIER) : own;
+  return i === -1 ? LAST_TIER : i;
 }
 
 /**
@@ -115,11 +110,11 @@ export function mixPhrases<T extends { kind: string }>(list: readonly T[]): T[] 
 }
 
 /**
- * Neue Karten in Korb-Reihenfolge (§5); `isTheme` = Stufe 4 „Wochenthema“ (domain/week `isThemeCard`).
+ * Neue Karten in Korb-Reihenfolge (§5).
  * Eigene Funde und Lehrer-Wörter (Stufen vor dem Paket) stehen vorn; ab dem Paket gilt der Tagesmix `mixPhrases`.
  */
-export function newCards(cards: readonly TrainCard[], isTheme?: (c: TrainCard) => boolean): TrainCard[] {
-  const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(tierSrc(c), isTheme ? isTheme(c) : false)]));
+export function newCards(cards: readonly TrainCard[]): TrainCard[] {
+  const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(tierSrc(c))]));
   const sorted = cards
     .filter((c) => c.isNew)
     .sort((a, b) => (tier.get(a.key) ?? LAST_TIER) - (tier.get(b.key) ?? LAST_TIER) || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || a.order - b.order || (a.key < b.key ? -1 : 1));
@@ -209,16 +204,12 @@ export function buildQueue(i: {
   newQuotaLeft: number;
   exclude: ReadonlySet<string>;
   lang: Lang;
-  /** Stufe 4 des Eingangskorbs (Wochenthema). */
-  isTheme?: (c: TrainCard) => boolean;
 }): QueueItem[] {
   if (i.target <= 0) return [];
   const act = active(i.cards, i.lang).filter((c) => !i.exclude.has(c.key));
-  const fresh = newCards(act, i.isTheme);
+  const fresh = newCards(act);
   const nNew = Math.min(Math.max(0, i.newQuotaLeft), fresh.length, i.target);
-  // Block 1 (Prüfung Tageseinheit M1): fällige Karten zum Wochenthema zuerst, sonst nach Dringlichkeit.
-  const urgent = capLeeches(dueCards(act, i.nowMs));
-  const due = i.isTheme ? themeFirst(urgent.map((c) => ({ c, theme: i.isTheme?.(c) === true })), i.target).map((x) => x.c) : urgent;
+  const due = capLeeches(dueCards(act, i.nowMs));
   const reviews = due.slice(0, i.target - nNew).map((c): QueueItem => ({ key: c.key, reason: 'due', phase: 'quiz' }));
   if (reviews.length + nNew < i.target) {
     for (const c of aheadCards(act, i.nowMs).slice(0, i.target - nNew - reviews.length)) reviews.push({ key: c.key, reason: 'ahead', phase: 'quiz' });

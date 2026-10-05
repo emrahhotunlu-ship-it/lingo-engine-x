@@ -64,7 +64,6 @@ describe('matchDeck (rein)', () => {
     expect(inBuiltin(mk('w2', { hist: [{ t: NOW - 20 * D, g: 1, x: 'cloze' }] }), 'mistakes', ctx)).toBe(false);
     expect(inBuiltin(mk('t', { src: 'translate' }), 'src:translate', ctx)).toBe(true);
     expect(inBuiltin(mk('p', { word: 'take over' }), 'phrases', ctx)).toBe(true);
-    expect(inBuiltin(mk('th'), 'theme', { ...ctx, isTheme: (c) => c.id === 'th' })).toBe(true);
   });
   it('Zähler Neu · Lernen · Fällig', () => {
     const cards = [mk('n', { state: 'new', reps: 0 }), mk('d', { due: NOW - 1000 }), mk('f', { due: NOW + 5 * D }), mk('h', { hidden: true, state: 'new' })];

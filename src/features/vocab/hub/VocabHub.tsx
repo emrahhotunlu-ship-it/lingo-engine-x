@@ -31,7 +31,6 @@ export const DECK_LABEL: Record<BuiltinDeck, MessageKey> = {
   leech: 'nbWsDeckLeech',
   job: 'nbWsDeckJob',
   phrases: 'nbWsDeckPhrases',
-  theme: 'nbWsDeckTheme',
   mistakes: 'nbWsDeckMistakes',
   'src:translate': 'nbWsDeckSrcTranslate',
   'src:lookup': 'nbWsDeckSrcLookup',
