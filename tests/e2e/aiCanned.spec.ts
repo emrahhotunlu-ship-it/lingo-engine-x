@@ -1,8 +1,8 @@
 import { legacyTaskKey } from '../../src/domain/grammar/key';
 import bank from '../../src/content/grammar-bank.json' with { type: 'json' };
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen, openEntry, openTab } from './fixtures';
-import { grammarKey, L07_OUTPUT, lessonMeta, playLesson, storedL07 } from './learnHelpers';
+import { boot, screen, openTab } from './fixtures';
+import { skipMiniLesson } from './learnHelpers';
 import { dump } from './trainerHelpers';
 
 // KI-Wege, die bisher ohne feste Testantwort waren (Prüfbericht): „Mit Claude ergänzen",
@@ -70,28 +70,13 @@ test('Wortblatt: alte Ergebnisse je Abfrageart sichtbar; Merkhilfe von Claude wi
   expect(errors).toEqual([]);
 });
 
-test('Lektion „Anwenden": Rückmeldung von Claude, Schreibdokument gespeichert', async ({ page }) => {
-  const l07 = storedL07();
-  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'lesson/l07': l07 } } });
-  await screen(page, 'today');
-  await openEntry(page, 'hub-course');
-  await page.locator('[data-testid="lesson-row"][data-lesson="l07"]').click();
-  const answers: Record<string, string> = {};
-  for (const q of l07.questions as Array<{ q: string; answer: string }>) answers[q.q] = q.answer;
-  await playLesson(page, { words: lessonMeta('l07').words.map(([en, de]) => ({ en, de })), solve: grammarKey([l07]), answers, output: L07_OUTPUT, aiCheck: true });
-  expect(await calls(page, 'lesson-production')).toBe(1);
-  const writing = Object.entries(await dump(page)).find(([p]) => p.startsWith('writing/lesson-l07-'));
-  expect(writing?.[1]).toMatchObject({ lesson: 'l07', res: { pv: 'lesson-production@2' } });
-  expect(errors).toEqual([]);
-});
-
 test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten Themenrunde zuerst', async ({ page }) => {
   // Mit der Grammatik-Bank hat jedes Thema 15 Aufgaben: Der Knopf erscheint erst, wenn ein Thema fast durchgespielt ist.
   const seen = (bank.tasks as Array<{ topic: string; prompt: string }>).filter((x) => x.topic === 'passive').map((x) => legacyTaskKey(x.prompt));
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'grammar/passive': { seen } } } });
   await screen(page, 'today');
-  await openEntry(page, 'hub-grammar');
-  await expect(page.getByTestId('grammar')).toBeVisible();
+  await openTab(page, 'learn');
+  await expect(page.getByTestId('learn-hub')).toBeVisible();
   // Das erste Thema, bei dem der Knopf erscheint (weniger als 8 ungesehene Aufgaben).
   const topics = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-topic') ?? ''));
   let found = '';
@@ -110,6 +95,7 @@ test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten The
   await expect.poll(async () => calls(page, 'grammar-items')).toBe(1);
   await expect.poll(async () => JSON.stringify((await dump(page))['app/pool'] ?? {})).toContain(`"topic":"${found}"`);
   await page.getByTestId('topic-start').click();
+  await skipMiniLesson(page);
   const item = page.getByTestId('gr-item');
   // Fällige Fehler stehen vorn (höchstens 3), danach die neuen Aufgaben.
   let src = '';

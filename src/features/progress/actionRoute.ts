@@ -30,7 +30,7 @@ export function actionRoute(action: string | null): Route | null {
   if (fixed) return fixed.route;
   const [kind, id] = action.split(':') as [string, string];
   if (kind === 'grammar' || kind === 'errors') return { name: 'grammarSession', mode: 'topic', topic: id };
-  if (kind === 'lesson') return { name: 'lesson', id };
+  // `lesson:<id>` (alte gespeicherte Einschätzungen): den Kurs gibt es nicht mehr, also kein Üben-Knopf.
   return null;
 }
 

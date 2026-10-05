@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
 import { useEffect, useLayoutEffect } from 'react';
+import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
+import { useLive } from '../../data/live';
+import { lernweg } from '../../domain/grammar/path';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
@@ -11,9 +14,10 @@ import { flush } from '../progress/persist';
 import { RoundTop, SummaryActions } from '../learn/ui';
 import { GrammarItem } from './GrammarItem';
 import { StepBoundary } from '../../app/shell/Boundary';
-import { topicName } from './GrammarScreen';
+import { MiniLesson } from './MiniLesson';
+import { topicName } from './topicUi';
 import { ensureGrammar } from './resume';
-import { skipGrammar, inRepeat, commitGrammar, leaveGrammar, reportGrammarDone, touchGrammar, useGrammarSession } from './session';
+import { skipGrammar, inRepeat, commitGrammar, leaveGrammar, reportGrammarDone, startAfterIntro, touchGrammar, useGrammarSession } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
@@ -24,6 +28,8 @@ export function GrammarSessionScreen() {
   const back = useNav((s) => s.back);
   const s = useGrammarSession();
   const task = s.tasks[s.pos];
+  const now = useClock((c) => c.now);
+  const docs = useLive((l) => l.collections.grammar);
 
   const leave = () => {
     api.blur();
@@ -61,7 +67,15 @@ export function GrammarSessionScreen() {
       {/* Leistung (N45): kein Warten auf das Ausblenden – die nächste Aufgabe steht sofort da
           und blendet nur kurz ein (≤ 150 ms, Deckkraft/Verschieben). */}
       <motion.div key={s.status === 'summary' ? 'summary' : `g-${s.step}`} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
-        {s.status === 'running' && task ? (
+        {s.status === 'running' && s.intro ? (
+          <MiniLesson
+            topic={s.intro}
+            onGo={() => {
+              const first = startAfterIntro();
+              if (first === 'typed') api.focusNow();
+            }}
+          />
+        ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
             <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} badge={inRepeat(s) ? t('nbLernenRepeatBadge') : task.errorT !== null ? t('grReviewBadge') : null} />
           </StepBoundary>
@@ -83,8 +97,8 @@ export function GrammarSessionScreen() {
             {topics.length > 0 && (
               <ul className="flex flex-wrap gap-2">
                 {topics.map((tp) => (
-                  <li key={tp} className="rounded-full border border-line px-3 py-1 text-sm">
-                    {topicName(tp, lang)}
+                  <li key={tp} className="rounded-full border border-line px-3 py-1 text-sm" data-testid="summary-topic">
+                    {topicName(tp, lang)} · {t('nbLernenPoints', { n: lernweg(tp, docs?.get(tp), now).done.filter(Boolean).length })}
                   </li>
                 ))}
               </ul>

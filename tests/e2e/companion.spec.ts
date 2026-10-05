@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, layoutProblems, screen, openEntry, openSpeak } from './fixtures';
+import { boot, layoutProblems, screen, openSpeak, openTab } from './fixtures';
+import { skipMiniLesson } from './learnHelpers';
 import { dump, forcedPatch, planPatch } from './trainerHelpers';
 import type { InstallOptions } from '../../src/platform/dev/install';
 
@@ -313,10 +314,11 @@ test.describe('Handy 390: Begleiter sieht Phase-2–4-Bildschirme (Prüfbericht 
 
   test('Grammatikaufgabe und Rollenspiel melden ihren Kontext statt „Heute"; offene Aufgabe mit Schutzregel', async ({ page }) => {
     const { errors } = await start(page);
-    await openEntry(page, 'hub-grammar');
-    await expect(page.getByTestId('grammar')).toBeVisible();
+    await openTab(page, 'learn');
+    await expect(page.getByTestId('learn-hub')).toBeVisible();
     expect(await seeing(page)).toMatchObject({ area: 'grammar', text: 'sieht gerade: Grammatik' });
-    await page.getByTestId('gr-start').click();
+    await page.getByTestId('hub-next-start').click();
+    await skipMiniLesson(page);
     await expect(page.getByTestId('gr-item')).toBeVisible();
     const g = await seeing(page);
     expect(g.area).toBe('grammar');

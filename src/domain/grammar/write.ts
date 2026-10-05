@@ -69,8 +69,10 @@ function patchFor(cur: Doc, a: GrammarAnswer): Doc {
   if (a.task.errorT !== null) {
     const next = reviewError(errors, a.task.errorT, { ok, given: a.dontKnow ? '' : a.given, grade: a.grade, t });
     if (next) patch.errors = next;
-  } else if (!ok && !a.dontKnow) {
-    patch.errors = addError(errors, { q: a.task.prompt, given: a.firstWrong ?? a.given, ans: a.task.answer, t, src: a.task.src });
+  } else if (!ok) {
+    // Jede falsche Antwort und auch „Weiß ich nicht“ (`given` leer, die Anzeige sagt dann „Weiß ich nicht“) ergibt genau einen Fehlersatz.
+    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: a.task.answer, t, src: a.task.src });
+    if (next !== errors) patch.errors = next;
   }
   return patch;
 }

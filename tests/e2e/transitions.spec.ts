@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen, openEntry } from './fixtures';
+import { boot, screen } from './fixtures';
 import { forcedPatch, planPatch } from './trainerHelpers';
 
 // Kap. 4.4 Übergänge mit gemeinsamen Elementen: Heldenkarte → erste Übung, Kurszeile → Kopf der
@@ -43,36 +43,6 @@ async function probed(page: Page): Promise<Probe> {
 }
 const moving = (p: Probe): string[] => p.frames.filter((f) => f !== 'none' && /-?[1-9]/.test(f.replace(/scale[XY]?\(1\)|scale\(1, 1\)|0px/g, '')));
 
-async function openCourse(page: Page): Promise<void> {
-  await screen(page, 'today');
-  await openEntry(page, 'hub-course');
-  await expect(page.getByTestId('course')).toBeVisible();
-}
-
-test('Kurszeile → Kopf der Lektion: der Titel gleitet herein und kommt zur Ruhe', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true });
-  await openCourse(page);
-  await probe(page, '[data-testid="lesson-title"]');
-  await page.locator('[data-testid="lesson-row"][data-lesson="l07"]').click();
-  await expect(page.getByTestId('lesson-title')).toHaveAttribute('data-shared', '');
-  const p = await probed(page);
-  expect(moving(p).length).toBeGreaterThan(0);
-  expect(p.frames.at(-1)).toBe('none');
-  test.info().annotations.push({ type: 'frames', description: `${p.gaps.length} Bilder, max. Abstand ${Math.round(Math.max(...p.gaps.slice(2)))} ms` });
-  expect(errors).toEqual([]);
-});
-
-test('Ohne Tippen im Kurs (vom Lernen-Reiter aus) kein Flug', async ({ page }) => {
-  await boot(page, { migrated: true });
-  await screen(page, 'today');
-  // Kurs einmal besuchen (die Quelle war schon zu sehen), dann über „Lektion öffnen“ gehen.
-  await openEntry(page, 'hub-course');
-  await expect(page.getByTestId('course')).toBeVisible();
-  await openEntry(page, 'hub-next-lesson');
-  await expect(page.getByTestId('lesson-title')).toBeVisible();
-  await expect(page.getByTestId('lesson-title')).not.toHaveAttribute('data-shared', '');
-});
-
 test('Heldenkarte → erste Übung: die Karte gleitet in die Übung', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(3), ...forcedPatch() } } });
   await screen(page, 'today');
@@ -88,11 +58,12 @@ test('Heldenkarte → erste Übung: die Karte gleitet in die Übung', async ({ p
 
 test('prefers-reduced-motion: kein Flug, nur Überblendung', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await boot(page, { migrated: true });
-  await openCourse(page);
-  await probe(page, '[data-testid="lesson-title"]');
-  await page.locator('[data-testid="lesson-row"][data-lesson="l07"]').click();
-  await expect(page.getByTestId('lesson-title')).toBeVisible();
+  await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(3), ...forcedPatch() } } });
+  await screen(page, 'today');
+  await probe(page, '[data-testid="exercise"]');
+  await page.getByTestId('start').click();
+  await screen(page, 'trainer');
+  await expect(page.getByTestId('exercise')).toBeVisible();
   const p = await probed(page);
   expect(p.frames.length).toBeGreaterThan(0);
   expect(moving(p)).toEqual([]);

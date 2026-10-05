@@ -68,19 +68,20 @@ test('Rückweg zur Herkunft: Seite „‹ Wortschatz“, Übung ✕ zurück zur 
   await page.getByTestId('vt-close').click();
   await screen(page, 'today');
   // Bildlauf der Reiter-Wurzel bleibt über eine Seite hinweg erhalten.
-  await openTab(page, 'learn');
-  await page.evaluate(() => window.scrollTo(0, 300));
+  await openTab(page, 'vocab');
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
   const y = await page.evaluate(() => window.scrollY);
-  await page.getByTestId('hub-course').click();
-  await expect(page.getByTestId('course')).toBeVisible();
+  expect(y).toBeGreaterThan(0);
+  await page.getByTestId('ws-all').click();
+  await screen(page, 'vocabList');
   await page.getByTestId('back').first().click();
-  await screen(page, 'learn');
+  await screen(page, 'vocab');
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(y);
   // Tipp auf den aktiven Reiter: Wurzel und oben.
-  await page.getByTestId('hub-course').click();
-  await expect(page.getByTestId('course')).toBeVisible();
-  await page.getByTestId('tab-learn').click();
-  await screen(page, 'learn');
+  await page.getByTestId('ws-all').click();
+  await screen(page, 'vocabList');
+  await page.getByTestId('tab-vocab').click();
+  await screen(page, 'vocab');
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   expect(errors).toEqual([]);
 });

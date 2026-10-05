@@ -1,14 +1,10 @@
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
-import { useSettings } from '../../app/settings';
-import { useLive } from '../../data/live';
-import { pickLesson } from '../../domain/course/next';
 import type { DutyId } from '../../domain/plan/types';
 import { unlockSpeech } from '../../platform/speech';
 import { startSession } from '../vocab/session';
 import { startGrammar } from '../grammar/session';
 import { startDrill } from '../drills/session';
-import { useTodayPlan } from '../today/store';
 import { startUnitDuty } from '../unit/run';
 
 // Pflichtpunkte starten – von der Heldenkarte auf „Heute" und aus jeder Pflicht-Zusammenfassung
@@ -16,14 +12,6 @@ import { startUnitDuty } from '../unit/run';
 // derselbe Handler am iPhone die Tastatur öffnen kann.
 
 type FocusApi = { focusNow(): void; blur(): void };
-
-/** Lektion des Pflichtpunkts: die im Plan eingefrorene, sonst die nächste offene. */
-export function dutyLesson(): string | null {
-  const plan = useTodayPlan.getState().plan;
-  if (plan?.lesson) return plan.lesson;
-  const live = useLive.getState();
-  return pickLesson({ course: live.docs['app/course'], assess: live.docs['app/assess'], lang: useSettings.getState().lang })?.lid ?? null;
-}
 
 export function startDuty(id: DutyId, api: FocusApi): void {
   const go = useNav.getState().go;
@@ -39,10 +27,9 @@ export function startDuty(id: DutyId, api: FocusApi): void {
     return;
   }
   if (id === 'lesson') {
-    const lid = dutyLesson();
+    // Pläne vom Übergangstag können noch eine Lektion enthalten; den Kurs gibt es nicht mehr: Reiter „Grammatik“.
     api.blur();
-    if (lid) go({ name: 'lesson', id: lid });
-    else go({ name: 'course' });
+    go({ name: 'learn' });
     return;
   }
   const ch = id.slice(3);

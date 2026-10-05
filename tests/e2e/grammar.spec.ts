@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen, SEED_EVENING, openEntry } from './fixtures';
-import { answerGrammar, grammarKey, nextItem, shownPrompt } from './learnHelpers';
+import { boot, bootAt, openTab, screen, SEED_EVENING } from './fixtures';
+import { answerGrammar, grammarKey, nextItem, shownPrompt, skipMiniLesson } from './learnHelpers';
 import { DAY, dump, type Dump } from './trainerHelpers';
 
 // Grammatik (phase2-plan §5.2, §9.3): Runden mit allen vier Aufgabentypen, Ergebnis an fester
@@ -13,8 +13,8 @@ const solve = grammarKey();
 
 async function openGrammar(page: Page): Promise<void> {
   await screen(page, 'today');
-  await openEntry(page, 'hub-grammar');
-  await expect(page.getByTestId('grammar')).toBeVisible();
+  await openTab(page, 'learn');
+  await expect(page.getByTestId('learn-hub')).toBeVisible();
 }
 
 /** Lösung vor dem Prüfen nicht im DOM (U-04; bei Auswahl steht sie natürlich unter den Optionen). */
@@ -63,10 +63,8 @@ async function playRound(page: Page, opts: { wrongAt?: number } = {}): Promise<A
 test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis und Beispielen; Schreibwege', async ({ page }) => {
   // Lange Runde (seit dem C1-Werkzeugkasten 23 Themen); unter Last mehr Zeit.
   test.slow();
-  const { errors, external } = await boot(page, { migrated: true });
-  await openGrammar(page);
+  const { errors, external } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
   const before = await dump(page);
-  await page.getByTestId('gr-start').click();
   const rows = await playRound(page, { wrongAt: 1 });
   // N47: Die falsche Aufgabe kommt am Rundenende einmal wieder (nicht gezählt, nicht gespeichert).
   expect(rows).toHaveLength(9);
@@ -105,6 +103,7 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Ant
   await expect(page.getByTestId('rule-sheet')).toBeVisible();
   await page.getByTestId('topic-start').click();
   await expect(page.getByTestId('grammar-session')).toHaveAttribute('data-mode', 'topic');
+  await skipMiniLesson(page);
   const seen = new Set<string>();
   let judged = false;
   for (let i = 0; i < 12; i++) {
@@ -136,15 +135,13 @@ test('Auswahl, Lücke, Umformen, Satzkorrektur: alle vier Typen über zwei Runde
   // Lange Runde (seit dem C1-Werkzeugkasten 23 Themen); unter Last mehr Zeit.
   test.slow();
   // Freie Runde (Auswahl, Lücke, Umformen) + Themenrunde (Satzkorrektur) – jeweils bis zum Ende.
-  const { errors } = await boot(page, { migrated: true });
-  await openGrammar(page);
-  await page.getByTestId('gr-start').click();
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
   const a = await playRound(page);
-  // „Zurück" führt dorthin, woher die Runde kam: zur Grammatik (UX-Beratung Nr. 3).
   await page.getByTestId('summary-back').click();
-  await expect(page.getByTestId('grammar')).toBeVisible();
+  await openGrammar(page);
   await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
   await page.getByTestId('topic-start').click();
+  await skipMiniLesson(page);
   const b = await playRound(page);
   expect(new Set([...a, ...b].map((r) => r.type))).toEqual(new Set(['mc', 'gap', 'transform', 'correct']));
   expect([...a, ...b].every((r) => r.verdict === 'correct'), JSON.stringify([...a, ...b])).toBe(true);
@@ -155,9 +152,7 @@ test('Fehler von heute kommt am nächsten Tag in der Wiederholung', async ({ bro
   // Tag 1: eine Aufgabe falsch.
   const ctx1 = await browser.newContext({ timezoneId: 'Europe/Berlin', locale: 'de-DE' });
   const p1 = await ctx1.newPage();
-  const b1 = await boot(p1, { migrated: true });
-  await openGrammar(p1);
-  await p1.getByTestId('gr-start').click();
+  const b1 = await bootAt(p1, { name: 'grammarSession', mode: 'xtra' });
   const logged = async () => (((await dump(p1))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g').length;
   const gBefore = await logged();
   const rows = await playRound(p1, { wrongAt: 3 });
@@ -174,10 +169,11 @@ test('Fehler von heute kommt am nächsten Tag in der Wiederholung', async ({ bro
   const next = new Date(Date.parse(SEED_EVENING) + 26 * 3_600_000).toISOString();
   const b2 = await boot(p2, { now: next, fake: { seed: state } });
   await openGrammar(p2);
-  await expect(p2.getByTestId('gr-errors')).toBeVisible();
+  await expect(p2.getByTestId('hub-errors')).toBeVisible();
   await p2.locator(`[data-testid="topic"][data-topic="${missed.topic}"]`).click();
   await p2.getByTestId('topic-start').click();
   await expect(p2.getByTestId('grammar-session')).toHaveAttribute('data-mode', 'topic');
+  await skipMiniLesson(p2);
   const reviewed: string[] = [];
   for (let i = 0; i < 12; i++) {
     await expect(p2.getByTestId('gr-item').or(p2.getByTestId('summary')).first()).toBeVisible();
@@ -210,19 +206,23 @@ test('Regelblatt: Wörter antippbar (Bedeutung, Lautschrift)', async ({ page }) 
   expect(errors).toEqual([]);
 });
 
-test('Themenliste: Reihenfolge passt zum Stufenwort; Englisch: Formmuster ohne deutsche Fachwörter', async ({ page }) => {
+test('Pfad: 39 Themen in Lehrreihenfolge mit Zustand; Englisch: Formmuster ohne deutsche Fachwörter', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, lang: 'en' });
   await openGrammar(page);
-  const levels = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
-  // 16 alte + 16 neue Themen des Grammatik-Pfads; die 7 des C1-Werkzeugkastens hinter dem Umschalter (P2, plan.md §1.3).
-  expect(levels.length).toBe(32);
-
-  expect([...levels].sort((a, b) => a - b)).toEqual(levels);
-  await page.getByTestId('gr-set-c1').click();
-  const c1 = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => Number(e.getAttribute('data-c'))));
-  expect(c1.length).toBe(7);
-  expect([...c1].sort((a, b) => a - b)).toEqual(c1);
-  await page.getByTestId('gr-set-b2').click();
+  const ids = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-topic') ?? ''));
+  // 16 alte + 16 neue Themen des Grammatik-Pfads + 7 des C1-Werkzeugkastens, alle in einer Liste (Lehrplan Kap. 4).
+  expect(ids).toHaveLength(39);
+  expect(new Set(ids).size).toBe(39);
+  expect(ids[0]).toBe('pres-simple-cont');
+  expect(ids.at(-1)).toBe('comparison');
+  expect(ids.indexOf('past-simple-perfect')).toBeLessThan(ids.indexOf('time-clauses'));
+  expect(ids.indexOf('c1-hedging')).toBeGreaterThan(ids.indexOf('time-clauses'));
+  const states = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-state') ?? ''));
+  expect(states.every((x) => ['new', 'learning', 'safe', 'firm'].includes(x))).toBe(true);
+  // Genau ein Thema wird als „up next“ markiert, und die Weiter-Karte nennt es.
+  await expect(page.locator('[data-testid="topic"][aria-current="step"]')).toHaveCount(1);
+  const next = await page.getByTestId('hub-next-topic').getAttribute('data-topic');
+  await expect(page.locator(`[data-testid="topic"][data-topic="${next}"]`)).toHaveAttribute('aria-current', 'step');
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();
   const patterns = page.getByTestId('rule-sheet').getByTestId('rule-pattern');
   await expect(patterns.first()).toBeVisible();
@@ -239,6 +239,7 @@ test('ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, freie Antwort �
   await expect(page.getByTestId('rule-sheet')).toBeVisible();
   await expect(page.locator('[data-ai]')).toHaveCount(0);
   await page.getByTestId('topic-start').click();
+  await skipMiniLesson(page);
   let sawCorrect = false;
   for (let i = 0; i < 12; i++) {
     await expect(page.getByTestId('gr-item').or(page.getByTestId('summary')).first()).toBeVisible();

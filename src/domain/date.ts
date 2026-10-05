@@ -78,3 +78,14 @@ export function learningDayStart(nowMs: number): number {
   d.setHours(DAY_START_HOUR, 0, 0, 0);
   return d.getTime();
 }
+
+/**
+ * `ms` plus `n` Kalendertage in Ortszeit (gleiche Uhrzeit, auch über die Zeitumstellung hinweg).
+ * Fälligkeiten der Fehlersätze nutzen das statt `+ n · 24 h`: Am Tag mit 25 Stunden würde ein Satz
+ * sonst schon am Tag des Anlegens fällig (Fälligkeit < Lerntagsende).
+ */
+export function addLocalDays(ms: number, n: number): number {
+  const d = new Date(ms);
+  d.setDate(d.getDate() + n);
+  return d.getTime();
+}

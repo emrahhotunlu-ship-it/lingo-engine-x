@@ -174,7 +174,6 @@ export const en: Record<MessageKey, string> = {
   courseLabel: 'Course',
   courseUnit: 'of {total} lessons',
   courseNext: 'Up next: {title}',
-  courseComplete: 'All lessons completed',
   vocabLabel: 'Vocabulary',
   vocabUnit_one: 'card',
   vocabUnit_other: 'cards',

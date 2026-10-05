@@ -4,14 +4,13 @@ import type { UnitBlockNo } from '../../app/unit/types';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { useLive } from '../../data/live';
-import { lessonMeta } from '../../domain/course/catalog';
-import { pickLesson } from '../../domain/course/next';
-import { gramRoundPartial, planFocusTopic, ROUND_SIZE, selectRound, wholeSentence, type RoundMode } from '../../domain/grammar/tasks';
+import { isNewTopic, introTopic, stepDownTasks } from '../../domain/grammar/path';
+import { gramRoundPartial, planFocusTopic, ROUND_SIZE, seedTasks, selectRound, wholeSentence, type RoundMode } from '../../domain/grammar/tasks';
 import { DUTY_ROUND } from '../../domain/plan/channels';
 import type { Ctx, GrammarAnswer, GrammarTask } from '../../domain/learn/types';
 import type { Lang } from '../../domain/srs/types';
 import { learnRecorder } from '../progress/persist';
-import { doneLessonTasks, useLearnInputs } from '../learn/inputs';
+import { useLearnInputs } from '../learn/inputs';
 import { roundCtx } from '../today/state';
 import { useTodayPlan } from '../today/store';
 
@@ -40,6 +39,8 @@ type State = {
   lastInteract: number;
   /** Block der Tageseinheit (Grammatik als Block 2 seit 04.10.2026), sonst `null`. */
   block: UnitBlockNo | null;
+  /** Neues Thema, dessen Mini-Lektion vor der ersten Aufgabe steht (bis „Los“), sonst `null`. */
+  intro: string | null;
 };
 
 export const useGrammarSession = create<State>(() => ({
@@ -59,6 +60,7 @@ export const useGrammarSession = create<State>(() => ({
   activeMs: 0,
   lastInteract: 0,
   block: null,
+  intro: null,
 }));
 
 const IDLE_CAP_MS = 60_000;
@@ -86,26 +88,26 @@ export function startGrammar(o: StartOpts): 'typed' | 'choice' | null {
   if (mode === 'xtra' && ctx === 'duty') mode = 'duty';
   if (mode === 'duty' && ctx !== 'duty') mode = 'xtra';
   const plan = useTodayPlan.getState().plan;
-  const todayLesson = plan?.lesson ? lessonMeta(plan.lesson) : null;
-  const next = pickLesson({ course: live.docs['app/course'], assess: live.docs['app/assess'], lang });
-  const nextTopic = next ? (lessonMeta(next.lid)?.grammar ?? null) : null;
+  const docs = live.collections.grammar ?? new Map<string, Record<string, unknown>>();
   roundNo++;
   const tasks = selectRound({
     mode,
     topic: o.topic ?? null,
-    nextLessonTopic: nextTopic,
-    lessonTopicToday: plan?.duty.includes('lesson') ? (todayLesson?.grammar ?? null) : null,
+    // Einführungsbremse (höchstens 1 neues Thema je 3 Lerntage, nie bei ≥ 10 offenen Fehlersätzen): nur die Pflichtrunde führt ein Thema ein.
+    introduce: mode === 'duty' ? introTopic(docs, day) : null,
     focusTopic: mode === 'duty' ? planFocusTopic(plan) : null,
-    grammarDocs: live.collections.grammar ?? new Map(),
+    grammarDocs: docs,
     dailyOpen: [...(mode === 'topic' ? extraTasks : []), ...inputs.dailyOpen],
     pool: inputs.pool,
-    lessonTasks: doneLessonTasks(lang),
     nowMs,
     size: o.size ?? ROUND_SIZE[mode],
     seed: `${day}|${mode}|${o.topic ?? ''}|${roundNo}`,
   });
   extraTasks = [];
+  // Mini-Lektion vor der ersten Runde eines neuen Themas (Lernweg ①): das erste Thema der Runde, das noch nie geübt wurde.
+  const intro = tasks.find((t) => t.errorT === null && isNewTopic(docs.get(t.topic)))?.topic ?? null;
   useGrammarSession.setState({
+    intro,
     active: true,
     status: tasks.length ? 'running' : 'summary',
     mode,
@@ -185,11 +187,29 @@ export function commitGrammar(a: GrammarAnswer): 'typed' | 'choice' | null {
   }
   const done = pos >= tasks.length;
   const next: State = { ...s, tasks, repeatAt, results, pos, step: s.step + 1, status: done ? 'summary' : 'running' };
+  if (!done && !inRepeat(next)) {
+    // Rückstufung: zwei Fehlschläge in Folge im Thema der nächsten Aufgabe → eine Form leichter (nur in dieser Runde).
+    const live = useLive.getState();
+    const nextTopic = tasks[pos]?.topic;
+    const seen = new Set<string>(nextTopic && Array.isArray(live.collections.grammar?.get(nextTopic)?.seen) ? (live.collections.grammar?.get(nextTopic)?.seen as unknown[]).map(String) : []);
+    const inputs = useLearnInputs.getState();
+    next.tasks = stepDownTasks(tasks, pos, results, [...inputs.dailyOpen, ...inputs.pool, ...seedTasks()], seen);
+  }
   if (done) finish(next, false);
   useGrammarSession.setState(next);
   const t = next.tasks[pos];
   if (!t || done) return null;
   return t.type === 'mc' ? 'choice' : wholeSentence(t) ? null : 'typed';
+}
+
+/** „Los“ in der Mini-Lektion: die erste Aufgabe erscheint. Rückgabe: Eingabeart der ersten Aufgabe (für den Fokus im selben Handler). */
+export function startAfterIntro(): 'typed' | 'choice' | null {
+  const s = useGrammarSession.getState();
+  if (!s.intro) return null;
+  useGrammarSession.setState({ intro: null, step: s.step + 1, startedAt: performance.now(), lastInteract: performance.now() });
+  const first = s.tasks[0];
+  if (!first) return null;
+  return first.type === 'mc' ? 'choice' : wholeSentence(first) ? null : 'typed';
 }
 
 export function leaveGrammar(): void {
@@ -201,14 +221,14 @@ export function leaveGrammar(): void {
 
 // ------------------------------------------------------------------ Fortsetzen (architektur.md §3.2, G3)
 
-export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day' | 'lang' | 'tasks' | 'pos' | 'results' | 'repeatAt'>;
+export type GrammarSnap = Pick<State, 'status' | 'mode' | 'topic' | 'ctx' | 'day' | 'lang' | 'tasks' | 'pos' | 'results' | 'repeatAt'> & { intro?: string | null };
 
 /** Momentaufnahme der laufenden Runde (Aufgaben, Position, Ergebnisse); Antworten liegen schon in der db. */
 export function grammarSnapshot(): GrammarSnap | null {
   const s = useGrammarSession.getState();
   if (!s.active || !s.tasks.length) return null;
-  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt } = s;
-  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt };
+  const { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro } = s;
+  return { status, mode, topic, ctx, day, lang, tasks, pos, results, repeatAt, intro };
 }
 
 /** Synchron herstellen (gleiche Aufgabe); schreibt nie in die db, aktive Minuten zählen neu. */
@@ -218,6 +238,7 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
     ...snap,
     results: Array.isArray(snap.results) ? snap.results : [],
     repeatAt: typeof snap.repeatAt === 'number' ? snap.repeatAt : null,
+    intro: typeof snap.intro === 'string' && snap.pos === 0 ? snap.intro : null,
     active: true,
     step: useGrammarSession.getState().step + 1,
     startedAt: performance.now(),

@@ -1,10 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
-import { grammarKey, L07_OUTPUT, lessonMeta, playLesson, storedL07 } from './learnHelpers';
 import { writes } from './trainerHelpers';
 
-// Paket P2 (docs/neubau/plan.md §4.3): Üben-Hub mit vier Abschnitten, jede Übung ≤ 2 Tipps ab
-// Üben, Tageseinheit Block 4 (Fokus, Mini-Drill bei Fallen-Korrektur) und Block 5 (beide
+// Paket P2 (docs/neubau/plan.md §4.3), umgebaut zum Grammatik-Pfad (W5): Hub mit Weiter-Karte, Pfad, Fehler und Extra, jede Übung ≤ 2 Tipps ab
+// Grammatik, Tageseinheit Block 4 (Fokus, Mini-Drill bei Fallen-Korrektur) und Block 5 (beide
 // Fassungen), Werkzeug der Woche per `grammar?topic=`.
 
 type Doc = Record<string, unknown>;
@@ -15,35 +14,30 @@ const TRAP_REPAIR = { id: 'rf01', wrong: 'Please send me the actual version of t
 const dump = (page: Page): Promise<Record<string, Doc>> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Record<string, Doc> } } }).__LINGO_FAKE__.db.dump());
 
-test('Üben: vier Abschnitte, Einstiege je 1 Tipp, kein waagrechter Bildlauf (390)', async ({ page }) => {
+test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren, Extra – kein waagrechter Bildlauf (390)', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
   await openTab(page, 'learn');
   const hub = page.getByTestId('learn-hub');
-  for (const h of ['Dein Weg', 'Aus deinen Fehlern', 'Grammatik & Fallen']) await expect(hub.getByRole('heading', { name: h })).toBeVisible();
+  await expect(hub.getByRole('heading', { name: 'Grammatik', level: 1 })).toBeVisible();
+  await expect(page.getByTestId('hub-next-topic')).toBeVisible();
+  await expect(page.getByTestId('hub-next-start')).toBeVisible();
+  // Der Pfad: alle 39 Themen in Lehrreihenfolge, je Thema ein Zustand.
+  await expect(page.locator('[data-testid="topic"]')).toHaveCount(39);
+  const states = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
+  expect(new Set(states)).toEqual(new Set(['new', 'learning', 'safe', 'firm'].filter((x) => states.includes(x))));
+  expect(states.every((x) => ['new', 'learning', 'safe', 'firm'].includes(x ?? ''))).toBe(true);
+  // Fehler und Extra als Zeilen; Kurs, Fallen und Nachschlagen sind keine Einträge des Reiters mehr.
+  await expect(page.getByTestId('hub-errors').or(page.getByTestId('hub-errors-none')).first()).toBeVisible();
+  await expect(page.getByTestId('hub-extra')).toBeVisible();
+  for (const id of ['hub-course', 'hub-next-lesson', 'hub-grammar', 'hub-patterns', 'hub-wissen']) await expect(page.getByTestId(id)).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
-  // Reihenfolge laut Ü1: Fehler direkt unter „Dein Weg“.
-  const titles = await hub.locator('h2.lx-eyebrow').allTextContents();
-  expect(titles.slice(0, 3)).toEqual(['Dein Weg', 'Aus deinen Fehlern', 'Grammatik & Fallen']);
-
-  for (const [id, target] of [
-    ['hub-grammar', 'grammar'],
-    ['hub-patterns', 'patterns'],
-    ['hub-wissen', 'wissen'],
-    ['hub-course', 'course'],
-  ] as const) {
-    await openTab(page, 'learn');
-    await page.getByTestId(id).click();
-    await expect(page.getByTestId(target)).toBeVisible();
-  }
   // Kurzübungen stehen seit „Go Anwenden“ im Reiter „Anwenden“.
   await openTab(page, 'apply');
   await page.getByTestId('hub-drill-cloze').click();
   await expect(page.getByTestId('drill-item')).toBeVisible();
   await page.getByTestId('round-close').click();
-  await openTab(page, 'learn');
-  await expect(page.getByTestId('hub-repair')).toContainText('offen');
   expect(errors).toEqual([]);
 });
 
@@ -135,23 +129,16 @@ test('Block 5: Sätze von heute kommen nicht am selben Tag wieder – ohne fäll
   expect(errors).toEqual([]);
 });
 
-test('Werkzeug der Woche: grammar?topic=c1-hedging öffnet das Themenblatt', async ({ page }) => {
+test('Werkzeug der Woche: grammar?topic=c1-hedging öffnet das Themenblatt, darunter der Pfad', async ({ page }) => {
   const { errors } = await bootAt(page, { name: 'grammar', topic: 'c1-hedging' });
   await expect(page.getByTestId('rule-sheet')).toHaveAttribute('data-topic', 'c1-hedging');
-  // Umschalter steht auf dem C1-Werkzeugkasten; B2-Themen sind einen Tipp entfernt.
   await page.keyboard.press('Escape');
-  await expect(page.locator('ul[data-set="c1"] [data-testid="topic"]')).toHaveCount(7);
-  await page.getByTestId('gr-set-b2').click();
-  await expect(page.locator('[data-testid="topic"][data-topic^="c1-"]')).toHaveCount(0);
-  await expect(page.locator('[data-testid="topic"]')).toHaveCount(32);
+  await expect(page.locator('[data-testid="topic"]')).toHaveCount(39);
   expect(errors).toEqual([]);
 });
 
 test('Deutsch-Fallen ohne KI: Startsatz-Falle in 2 Tipps ab Üben, 3 Sätze mit Hinweis und Lösung', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
-  await screen(page, 'today');
-  await openTab(page, 'learn');
-  await page.getByTestId('hub-patterns').click();
+  const { errors } = await bootAt(page, { name: 'patterns' }, { fake: { capabilities: { sample: false } } });
   await expect(page.getByTestId('patterns-start')).toBeVisible();
   await page.getByTestId('pattern-start-f03').click();
   await expect(page.getByTestId('patterns')).toHaveAttribute('data-view', 'drill');
@@ -168,11 +155,7 @@ test('Deutsch-Fallen ohne KI: Startsatz-Falle in 2 Tipps ab Üben, 3 Sätze mit 
 });
 
 test('Grammatik-Runde: „Kurz erklärt“ vor der Aufgabe, zugeklappt (N46)', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true });
-  await screen(page, 'today');
-  await openTab(page, 'learn');
-  await page.getByTestId('hub-grammar').click();
-  await page.getByTestId('gr-start').click();
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await expect(page.getByTestId('gr-brief-text')).toHaveCount(0);
   await page.getByTestId('gr-brief').click();
@@ -181,13 +164,9 @@ test('Grammatik-Runde: „Kurz erklärt“ vor der Aufgabe, zugeklappt (N46)', a
 });
 
 test('Neuladen in der Grammatik-Runde bei Aufgabe 4: gleiche Aufgabe, keine doppelten Einträge (G3)', async ({ page }) => {
-  const { errors } = await boot(page, { migrated: true, fake: { persist: true } });
-  await screen(page, 'today');
-  await openTab(page, 'learn');
-  await page.getByTestId('hub-grammar').click();
+  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' }, { fake: { persist: true } });
   const logged = async () => (((await dump(page))['log/2026-09-20']?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g').length;
   const base = await logged();
-  await page.getByTestId('gr-start').click();
   for (let i = 0; i < 3; i++) {
     await expect(page.getByTestId('gr-item')).toHaveCount(1);
     await page.getByTestId('dont-know').click();
@@ -204,39 +183,6 @@ test('Neuladen in der Grammatik-Runde bei Aufgabe 4: gleiche Aufgabe, keine dopp
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', prompt ?? '');
   await expect(page.getByTestId('gr-item').getByTestId('task-line')).toHaveText(text);
   expect(await logged()).toBe(base + 3);
-  expect(errors).toEqual([]);
-});
-
-test('Neuladen in der Lektion, Schritt 3 (Grammatik) bei Aufgabe 2: dort geht es weiter bis zum Ende (G3)', async ({ page }) => {
-  const l07 = storedL07();
-  const { errors } = await boot(page, { migrated: true, fake: { persist: true, patch: { 'lesson/l07': l07 } } });
-  await screen(page, 'today');
-  await openTab(page, 'learn');
-  await page.getByTestId('hub-course').click();
-  await page.locator('[data-testid="lesson-row"][data-lesson="l07"]').click();
-  const answers: Record<string, string> = {};
-  for (const q of l07.questions as Array<{ q: string; answer: string }>) answers[q.q] = q.answer;
-  let n = 0;
-  let reloaded = false;
-  await playLesson(page, {
-    words: lessonMeta('l07').words.map(([en, de]) => ({ en, de })),
-    solve: grammarKey([l07]),
-    answers,
-    output: L07_OUTPUT,
-    onGrammar: async (phase) => {
-      if (phase !== 'before' || ++n !== 2 || reloaded) return;
-      reloaded = true;
-      const norm = async () => (await page.getByTestId('gr-item').getByTestId('sentence').innerText()).replace(/\s+/g, ' ').trim();
-      const before = await norm();
-      await page.waitForTimeout(600);
-      await page.reload();
-      await screen(page, 'lesson');
-      await expect(page.getByTestId('lesson')).toHaveAttribute('data-step', 'grammar');
-      await expect(page.getByTestId('gr-item')).toBeVisible();
-      expect(await norm()).toBe(before);
-    },
-  });
-  expect(reloaded).toBe(true);
   expect(errors).toEqual([]);
 });
 
@@ -320,5 +266,24 @@ test('Anwenden › Eigener Satz: Wort fehlt → lokal, keine KI; richtiger Satz 
   await expect(page.getByTestId('combo-fixed')).toBeVisible();
   await expect(page.getByTestId('combo-rule-mark')).toHaveAttribute('data-ok', 'false');
   await expect.poll(async () => (((await dump(page))['app/repair'] as { items?: Array<Record<string, unknown>> } | undefined)?.items ?? []).some((e) => e.wrong === wrong)).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('Neues Thema: Mini-Lektion vor der ersten Aufgabe (Regel, Beispiele, typischer Fehler), „Los“ startet die Runde', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'learn');
+  const row = page.locator('[data-testid="topic"][data-topic="time-clauses"]');
+  await expect(row).toHaveAttribute('data-state', 'new');
+  await row.click();
+  await expect(page.getByTestId('topic-start')).toBeVisible();
+  await page.getByTestId('topic-start').click();
+  await expect(page.getByTestId('mini-lesson')).toHaveAttribute('data-topic', 'time-clauses');
+  await expect(page.getByTestId('mini-trap')).toBeVisible();
+  await expect(page.getByTestId('gr-item')).toHaveCount(0);
+  expect(await layoutProblems(page)).toEqual([]);
+  await page.getByTestId('mini-go').click();
+  await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', 'time-clauses');
   expect(errors).toEqual([]);
 });

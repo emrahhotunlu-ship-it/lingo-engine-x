@@ -1,15 +1,16 @@
 import { motion } from 'framer-motion';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useAiAvailable } from '../../ai/scope';
 import { useLive } from '../../data/live';
 import { logWarn } from '../../platform/diagnostics';
-import { TOPICS, topicById, GROUP_EN } from '../../domain/content';
+import { topicById } from '../../domain/content';
 import { certainty, topicP } from '../../domain/grammar/bkt';
-import { dueErrors, errorsOf } from '../../domain/grammar/errors';
+import { errorsOf } from '../../domain/grammar/errors';
+import { lernweg } from '../../domain/grammar/path';
 import { localizePattern, ruleOf } from '../../domain/grammar/rules';
-import { unseenCount } from '../../domain/grammar/tasks';
+import { ROUND_SIZE, unseenCount } from '../../domain/grammar/tasks';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../i18n';
@@ -17,93 +18,46 @@ import { Icon } from '../../ui/Icon';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
 import { Sheet } from '../../ui/Sheet';
-import { Segmented } from '../../ui/Segmented';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { toast } from '../../ui/Toast';
 import { useLearnInputs } from '../learn/inputs';
 import { CERTAINTY_KEYS, ScreenHeader } from '../learn/ui';
+import { PathList } from './PathList';
 import { RuleSearch } from './WissenScreen';
 import { generateTopicTasks } from './generate';
 import { setExtraTasks, startGrammar } from './session';
+import { Dots, topicName } from './topicUi';
 import { useCompanionSee } from '../companion/seeing';
 
 // Grammatik (Kap. 6.4, phase2-plan §5.2/5.3): Themen nach Sicherheit, schwächste zuerst; je Thema
 // ein Regelblatt mit Formen, Signalwörtern, Kontrast zum Deutschen, typischen Fehlern und den
 // eigenen fälligen Fehlern. Zahlen nur unter „Messwerte dahinter".
 
-type Doc = Record<string, unknown>;
-const EMPTY = new Map<string, Doc>();
-
 const item = {
   hidden: { opacity: 0, y: 8 },
   show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE_OUT } },
 };
 
-export function topicName(id: string, lang: 'de' | 'en'): string {
-  const tp = topicById(id);
-  if (!tp) return id;
-  return lang === 'en' ? (tp.name_en ?? tp.name) : tp.name;
-}
+export { Dots, topicName } from './topicUi';
 
-export function Dots({ n }: { n: number }) {
-  return (
-    <span className="lx-dots" aria-hidden="true">
-      {[0, 1, 2, 3, 4].map((i) => (
-        <span key={i} className="lx-dot" data-on={i < n || undefined} />
-      ))}
-    </span>
-  );
-}
-
+/**
+ * Seite „Grammatik“ (Ziel alter Links und von `grammar?topic=`): Regel-Suche, Fallen-Zeile und derselbe Pfad wie im
+ * Reiter. Der Reiter selbst (`LearnHub`) ist die Hauptansicht; diese Seite öffnet auf Wunsch sofort ein Themenblatt.
+ */
 export function GrammarScreen() {
-  const { t, tn, lang } = useT();
-  const api = useHiddenInput();
+  const { t } = useT();
   const go = useNav((s) => s.go);
   const back = useNav((s) => s.back);
-  const now = useClock((s) => s.now);
-  const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   // `grammar?topic=` (Werkzeug der Woche, 1 Tipp von „Deine Woche“): das Themenblatt öffnet sofort.
   const deepTopic = useNav((s) => (s.route.name === 'grammar' ? (s.route.topic ?? null) : null));
   const [open, setOpen] = useState<string | null>(() => (deepTopic && topicById(deepTopic) ? deepTopic : null));
-  // Umschalter B2-Themen · C1-Werkzeugkasten (plan.md §1.3); ein Deep-Link auf `c1-*` öffnet den Werkzeugkasten.
-  const [set, setSet] = useState<'b2' | 'c1'>(() => (deepTopic?.startsWith('c1-') ? 'c1' : 'b2'));
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
   const close = useCallback(() => setOpen(null), []);
-
-  const topics = useMemo(
-    () =>
-      TOPICS.map((tp) => {
-        const doc = docs.get(tp.id);
-        const p = topicP(tp.id, doc, now);
-        const c = certainty(p, { n: typeof doc?.n === 'number' ? doc.n : 0, recent: Array.isArray(doc?.recent) ? (doc.recent as number[]) : null });
-        return { id: tp.id, group: tp.group, p, c };
-      // Sortiert nach der angezeigten Sicherheit (Punkte und Wort), dann nach p – so passt die
-      // Reihenfolge immer zum Stufenwort.
-      }).sort((a, b) => a.c.word - b.c.word || a.p - b.p || (a.id < b.id ? -1 : 1)),
-    [docs, now],
-  );
-  const due = useMemo(() => dueErrors(docs, now), [docs, now]);
-
-  const start = (mode: 'xtra' | 'errors') => {
-    const first = startGrammar({ mode });
-    if (first === 'typed') api.focusNow();
-    go({ name: 'grammarSession', mode });
-  };
 
   return (
     <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }} data-testid="grammar">
       <motion.div variants={item}>
         <ScreenHeader eyebrow={t('lhGrammar')} title={t('grTitle')} lead={t('grLead')} back={back} />
-      </motion.div>
-      <motion.div variants={item} className="flex flex-wrap gap-3">
-        <Button variant="primary" iconAfter="arrowRight" onClick={() => start('xtra')} data-testid="gr-start">
-          {t('grFreeRound')}
-        </Button>
-        {due.length > 0 && (
-          <Button variant="secondary" icon="refresh" onClick={() => start('errors')} data-testid="gr-errors">
-            {t('grErrors', { n: due.length })}
-          </Button>
-        )}
       </motion.div>
       {/* UX-Beratung Nr. 9: „Wissen" geht in Grammatik auf – Suche oben, typische Fallen als Zeile. */}
       <motion.div variants={item} className="flex flex-col gap-1">
@@ -114,50 +68,15 @@ export function GrammarScreen() {
           <Icon name="arrowRight" size={16} className="flex-none text-subtle" />
         </button>
       </motion.div>
-      <motion.div variants={item} className="max-w-sm">
-        <Segmented
-          label={t('nbLernenGrammarSet')}
-          value={set}
-          options={[
-            { value: 'b2', label: t('nbLernenGrammarB2'), testId: 'gr-set-b2' },
-            { value: 'c1', label: t('nbLernenGrammarC1'), testId: 'gr-set-c1' },
-          ]}
-          onChange={setSet}
-          testId="gr-set"
-        />
+      <motion.div variants={item}>
+        <PathList onOpen={setOpen} />
       </motion.div>
-      <motion.ul variants={item} className="grid gap-2 sm:grid-cols-2" aria-label={t('grTopics')} data-set={set}>
-        {topics.filter((tp) => tp.id.startsWith('c1-') === (set === 'c1')).map((tp) => {
-          const nDue = due.filter((d) => d.topic === tp.id).length;
-          return (
-            <li key={tp.id}>
-              <button
-                type="button"
-                className="lx-glass flex w-full items-center justify-between gap-3 rounded-[var(--radius-card)] px-4 py-3 text-left transition-colors hover:bg-surface-strong"
-                onClick={() => setOpen(tp.id)}
-                data-testid="topic"
-                data-topic={tp.id}
-                data-p={tp.p.toFixed(2)}
-                data-c={tp.c.word}
-              >
-                <span className="flex min-w-0 flex-col gap-1">
-                  <span className="font-medium">{topicName(tp.id, lang)}</span>
-                  <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted">
-                    <Dots n={tp.c.dots} />
-                    <span className="whitespace-nowrap">{t(CERTAINTY_KEYS[tp.c.word])}</span>
-                    <span className="whitespace-nowrap text-subtle">· {lang === 'en' ? (GROUP_EN[tp.group] ?? tp.group) : tp.group}</span>
-                  </span>
-                </span>
-                {nDue > 0 && <span className="flex-none rounded-full bg-gold-soft px-2.5 py-0.5 text-xs font-medium text-gold-text">{tn('grDueBadge', nDue)}</span>}
-              </button>
-            </li>
-          );
-        })}
-      </motion.ul>
       <TopicSheet topic={open} onClose={close} />
     </motion.div>
   );
 }
+
+const WEG_KEYS = ['nbLernenWeg1', 'nbLernenWeg2', 'nbLernenWeg3', 'nbLernenWeg4', 'nbLernenWeg5'] as const;
 
 export function TopicSheet({ topic, onClose }: { topic: string | null; onClose: () => void }) {
   const { t, lang } = useT();
@@ -179,6 +98,8 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
   const rule = ruleOf(topic, lang);
   useCompanionSee({ area: 'grammar', label: `${t('grTitle')} · ${topicName(topic, lang)}`, phase: 'idle' });
   const p = topicP(topic, doc, now);
+  const cert = certainty(p, { n: typeof doc?.n === 'number' ? doc.n : 0, recent: Array.isArray(doc?.recent) ? (doc.recent as number[]) : null });
+  const weg = lernweg(topic, doc, now);
   const errs = errorsOf(doc).filter((e) => e.done !== true);
   const unseen = unseenCount(topic, doc, [inputs.pool, inputs.dailyOpen]);
   const [gen, setGen] = useState<{ phase: 'idle' | 'busy' | 'error'; ctl: AbortController | null }>({ phase: 'idle', ctl: null });
@@ -207,10 +128,26 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
   const src = { area: 'trainer' as const, source: `grammar/${topic}` };
   return (
     <div className="flex flex-col gap-6 pb-4" data-testid="rule-sheet" data-topic={topic}>
-      <p className="flex items-center gap-2 text-sm text-muted" data-testid="rule-certainty">
-        <Dots n={certainty(p, { n: typeof doc?.n === 'number' ? doc.n : 0 }).dots} />
-        {t(CERTAINTY_KEYS[certainty(p, { n: typeof doc?.n === 'number' ? doc.n : 0, recent: Array.isArray(doc?.recent) ? (doc.recent as number[]) : null }).word])}
-      </p>
+      {/* Der Knopf bleibt oben stehen, auch beim Lesen der Regel (Gesamtkonzept 3.4, U-07). */}
+      <div className="sticky top-0 z-10 -mx-5 flex flex-col gap-2 bg-surface-solid px-5 pt-1 pb-3 sm:-mx-6 sm:px-6">
+        <Button variant="primary" iconAfter="arrowRight" onClick={startTopic} data-testid="topic-start">
+          {t('nbLernenPractice', { n: ROUND_SIZE.topic })}
+        </Button>
+      </div>
+      <div className="flex flex-col gap-2" data-testid="rule-certainty">
+        <p className="flex items-center gap-2 text-sm text-muted">
+          <Dots n={cert.dots} />
+          {t(CERTAINTY_KEYS[cert.word])}
+        </p>
+        <ol className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted" aria-label={t('nbLernenWegLabel')} data-testid="lernweg">
+          {WEG_KEYS.map((k, i) => (
+            <li key={k} data-done={weg.done[i] || undefined} data-current={weg.current === i || undefined} className={weg.done[i] ? 'text-fg' : weg.current === i ? 'font-medium text-accent-text' : ''}>
+              {weg.done[i] ? '✓ ' : ''}
+              {t(k)}
+            </li>
+          ))}
+        </ol>
+      </div>
       {rule && (
         <>
           <section className="flex flex-col gap-2">
@@ -314,7 +251,7 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
                 <span lang="en">{typeof e.q === 'string' ? e.q : ''}</span>
                 <span>
                   <span className="lx-diff-off" lang="en">
-                    {typeof e.given === 'string' ? e.given : ''}
+                    {typeof e.given === 'string' && e.given.trim() ? e.given : t('nbLernenDontKnow')}
                   </span>
                   <span className="text-muted"> → </span>
                   <span className="font-medium" lang="en">
@@ -327,9 +264,6 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
         </section>
       )}
       <div className="flex flex-col gap-3">
-        <Button variant="primary" iconAfter="arrowRight" onClick={startTopic} data-testid="topic-start">
-          {t('grPractice')}
-        </Button>
         {ai && unseen < 8 && (
           <Button
             variant="secondary"

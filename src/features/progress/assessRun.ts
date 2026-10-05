@@ -11,7 +11,6 @@ import { assessWrite, readAssess, readAssessData, type AssessResult } from '../.
 import { buildEvidence, evidenceText } from '../../domain/assessment/evidence';
 import { allStrengths } from '../../domain/assessment/strength';
 import { finalizeAssess } from '../../domain/assessment/validate';
-import { pickLesson } from '../../domain/course/next';
 import { addDays, dayKey } from '../../domain/date';
 import { errorsOf } from '../../domain/grammar/errors';
 import { mergedVocab } from '../../domain/overview';
@@ -179,8 +178,8 @@ export async function runAssess(trigger: 'auto' | 'manual', nowMs: number = Date
     const prev = readAssess(live.docs['app/assess']);
     const pack = buildEvidence({ nowMs, today, profile, grammar, radar, vocab, logs, prev });
     const errorTopics = [...grammar.entries()].filter(([, d]) => errorsOf(d).some((e) => e.done !== true)).map(([id]) => id);
-    const next = pickLesson({ course: live.docs['app/course'], assess: live.docs['app/assess'], lang });
-    const allowed = allowedActions({ errorTopics, nextLesson: next?.lid ?? null });
+    // Kein Kurs mehr: keine Lektion als Üben-Aktion.
+    const allowed = allowedActions({ errorTopics, nextLesson: null });
     const answers = typeof profile.answers === 'number' ? profile.answers : 0;
     useAssessRun.setState({ phase: 'asking', answers: pack.counts.answers14 || answers });
 

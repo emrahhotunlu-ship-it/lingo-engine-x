@@ -1,46 +1,49 @@
 import { motion } from 'framer-motion';
-import { useEffect, useMemo, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
-import { useLive } from '../../data/live';
-import { lessonMeta, lessonOrder } from '../../domain/course/catalog';
-import { doneLessons } from '../../domain/course/courseDone';
-import { pickLesson } from '../../domain/course/next';
-import { dueErrors } from '../../domain/grammar/errors';
-import { repairStats } from '../../domain/repair/daily';
+import { openSheet } from '../../app/sheets';
 import { entriesFor } from '../../app/registry';
+import { useLive } from '../../data/live';
+import { dueErrors } from '../../domain/grammar/errors';
+import { introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
+import { rankTopics } from '../../domain/grammar/tasks';
+import { dueRepairs, readRepairs } from '../../domain/repair/repair';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { ChannelIcon } from '../../ui/Card';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
-import { loadLearnInputs, useLearnInputs } from './inputs';
+import { useCompanionSee } from '../companion/seeing';
 import { TabTitle } from '../system/Chrome';
+import { TopicSheet } from '../grammar/GrammarScreen';
+import { PathList } from '../grammar/PathList';
 import { startGrammar } from '../grammar/session';
+import { topicName } from '../grammar/topicUi';
 
-// Reiter „Üben" (UX-Beratung Nr. 8, bisher „Lernen"): gegliedert nach Kurs, Wortschatz und
-// Grammatik, Kurzübungen, Lesen/Hören/Schreiben (mit „Sag es") und Entdecken. Nichts hier ist
-// Pflicht – die Pflicht steht auf „Heute" (Kap. 2.6). Keine Einleitung, keine Karte in Karte:
-// Listen liegen in einer Fläche mit Trennlinien. Ein Hauptknopf (nächste Lektion).
-// Übungen, die gerade nicht machbar sind, erscheinen nicht – kein toter Knopf.
+// Reiter „Grammatik“ (Gesamtkonzept 3.4, UX-Ziel Kap. 3.3): Weiter-Karte („Als Nächstes: Thema · n Min.“, ein Knopf),
+// der Pfad aller Themen in Lehrreihenfolge B2 → C1 mit Zustand je Thema, die Zeile „Fehler korrigieren · n fällig“
+// und die Zeile „Extra“. Nichts ist gesperrt. Pflicht steht auf „Heute“ (Kap. 2.6).
 
 const item = {
   hidden: { opacity: 0, y: 8 },
   show: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE_OUT } },
 };
 
-/** Eine Zeilenform für „öffnen" (visuelle Regel 6): Symbol links, Titel + Nebenzeile, Pfeil rechts. */
-function Row({ icon, title, sub, onClick, testId, badge, note, module }: { icon: ReactNode; title: string; sub: string; onClick: () => void; testId: string; badge?: string | null; note?: ReactNode; module?: string }) {
+type Doc = Record<string, unknown>;
+const EMPTY = new Map<string, Doc>();
+
+/** Eine Zeilenform für „öffnen“ (visuelle Regel 6): Symbol links, Titel + Nebenzeile, Pfeil rechts. */
+function Row({ icon, title, sub, onClick, testId, badge }: { icon: ReactNode; title: string; sub?: string; onClick: () => void; testId: string; badge?: string | null }) {
   return (
     <li>
-      <button type="button" onClick={onClick} data-testid={testId} data-module={module} className="flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-strong">
+      <button type="button" onClick={onClick} data-testid={testId} className="flex min-h-14 w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-strong">
         {icon}
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="font-medium">{title}</span>
-          <span className="text-sm text-muted">{sub}</span>
+          {sub && <span className="text-sm text-muted">{sub}</span>}
         </span>
-        {note}
         {badge && <span className="flex-none rounded-full bg-gold-soft px-2.5 py-0.5 text-xs font-medium text-gold-text">{badge}</span>}
         <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
       </button>
@@ -48,51 +51,28 @@ function Row({ icon, title, sub, onClick, testId, badge, note, module }: { icon:
   );
 }
 
-function List({ label, children, testId }: { label: string; children: ReactNode; testId?: string }) {
-  return (
-    <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]" aria-label={label} data-testid={testId}>
-      {children}
-    </ul>
-  );
-}
-
-function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
-  return (
-    <motion.section variants={item} className="flex flex-col gap-3" aria-labelledby={id}>
-      <h2 id={id} className="lx-eyebrow">
-        {title}
-      </h2>
-      {children}
-    </motion.section>
-  );
-}
-
-/** Gruppen der Einstiege auf dem Platz `learn` (plan.md §1.3). Fremde Bereiche hängen ihre Zeilen per
- * `entries: [{ place: 'learn', group }]` an: `way` (Dein Weg, z. B. P1 „Deine Woche“), `errors`
- * (Aus deinen Fehlern), `grammar` (Grammatik & Fallen), `training` (Training, z. B. P7). Einstiege
- * ohne oder mit unbekannter Gruppe erscheinen unter „Training“ – nichts geht verloren. */
-export const LEARN_GROUPS = ['path', 'way', 'errors', 'grammar', 'training'] as const;
-
-function ForeignRows({ group }: { group: (typeof LEARN_GROUPS)[number] }) {
+/** Einstiege anderer Bereiche auf dem Platz `learn` ohne eigene Gruppe (z. B. „Lehrer-Feedback einfügen“): nichts geht verloren. */
+function ForeignRows() {
   const { t } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
-  const all = entriesFor('learn');
-  const known = new Set<string>(LEARN_GROUPS);
-  const list = all.filter((e) => (group === 'training' ? !e.group || !known.has(e.group) || e.group === 'training' : e.group === group));
+  const list = entriesFor('learn');
+  if (!list.length) return null;
   return (
-    <>
-      {list.map((e) => (
-        <Row
-          key={e.id}
-          icon={<ChannelIcon channel="grammar"><Icon name={e.icon} /></ChannelIcon>}
-          title={t(e.label)}
-          sub={e.sub ? t(e.sub) : ''}
-          onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)}
-          testId={e.id}
-        />
-      ))}
-    </>
+    <motion.section variants={item} className="flex flex-col gap-3" aria-label={t('nbLernenHubTraining')}>
+      <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]">
+        {list.map((e) => (
+          <Row
+            key={e.id}
+            icon={<ChannelIcon channel="grammar"><Icon name={e.icon} /></ChannelIcon>}
+            title={t(e.label)}
+            sub={e.sub ? t(e.sub) : ''}
+            onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)}
+            testId={e.id}
+          />
+        ))}
+      </ul>
+    </motion.section>
   );
 }
 
@@ -101,108 +81,95 @@ export function LearnHub() {
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
   const now = useClock((s) => s.now);
-  const course = useLive((s) => s.docs['app/course']);
-  const assess = useLive((s) => s.docs['app/assess']);
-  const grammar = useLive((s) => s.collections.grammar);
+  const today = useClock((s) => s.today);
+  const docs = useLive((s) => s.collections.grammar) ?? EMPTY;
   const repairDoc = useLive((s) => s.docs['app/repair']);
+  const [open, setOpen] = useState<string | null>(null);
+  useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
 
-  useEffect(() => {
-    if (useLearnInputs.getState().status === 'idle') void loadLearnInputs();
-  }, []);
-
-  const lessons = useLearnInputs((s) => s.lessons);
-  // `lessons`: erweiterte Lektionen (l25+, Kap. 6.2) kommen nach dem Lesen von `lesson/*` dazu.
+  // „Als Nächstes“: das eine neue Thema des Tages (Pfadreihenfolge, wenn die Bremse es erlaubt), sonst das schwächste begonnene Thema.
   const next = useMemo(() => {
-    void lessons;
-    return pickLesson({ course, assess, lang });
-  }, [course, assess, lang, lessons]);
-  const meta = next ? lessonMeta(next.lid) : null;
-  const { doneN, totalN } = useMemo(() => {
-    const done = doneLessons(course);
-    void lessons;
-    const order = lessonOrder();
-    return { doneN: order.filter((id) => done.has(id)).length, totalN: order.length };
-  }, [course, lessons]);
-  const nErr = useMemo(() => dueErrors(grammar ?? new Map(), now).length, [grammar, now]);
-  const rep = useMemo(() => repairStats(repairDoc), [repairDoc]);
+    const intro = introTopic(docs, today);
+    if (intro) return { id: intro, fresh: true };
+    const ranked = rankTopics({ grammarDocs: docs, nowMs: now, seed: today, introduce: null });
+    const id = ranked[0]?.topic ?? pathTopics()[0];
+    return id ? { id, fresh: isNewTopic(docs.get(id)) } : null;
+  }, [docs, now, today]);
+  const nGrammar = useMemo(() => dueErrors(docs, now).length, [docs, now]);
+  const nRepair = useMemo(() => dueRepairs(readRepairs(repairDoc ?? undefined), now).length, [repairDoc, now]);
+  const nDue = nGrammar + nRepair;
+
+  const startNext = () => {
+    if (!next) return;
+    const first = startGrammar({ mode: 'topic', topic: next.id });
+    // Ein neues Thema beginnt mit der Mini-Lektion, dort gibt es noch keine Tastatur.
+    if (first === 'typed' && !next.fresh) api.focusNow();
+    go({ name: 'grammarSession', mode: 'topic', topic: next.id });
+  };
+
   const startErrors = () => {
-    const first = startGrammar({ mode: 'errors' });
-    if (first === 'typed') api.focusNow();
-    go({ name: 'grammarSession', mode: 'errors' });
+    if (nGrammar > 0) {
+      const first = startGrammar({ mode: 'errors' });
+      if (first === 'typed') api.focusNow();
+      go({ name: 'grammarSession', mode: 'errors' });
+    } else go({ name: 'repairRound' });
   };
 
   return (
-    <motion.div className="flex flex-col gap-8 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
+    <motion.div className="flex flex-col gap-6 py-6 sm:py-10" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.04 } } }} data-testid="learn-hub">
       <motion.div variants={item}>
         <TabTitle title={t('lhTitle')} />
       </motion.div>
 
-      {/* 1. Dein Weg: Deine Woche (P1) und die Kurs-Karte (nächste Lektion, Fortschritt). */}
-      <Section id="lh-way" title={t('nbLernenHubWay')}>
-        {(entriesFor('learn', 'path').length > 0 || entriesFor('learn', 'way').length > 0) && (
-          <List label={t('nbLernenHubWay')}>
-            <ForeignRows group="path" />
-            <ForeignRows group="way" />
-          </List>
-        )}
-        <div className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" data-testid="hub-course-card">
-          <p className="lx-eyebrow">{t('lhCourse')}</p>
-          <p className="text-lg font-semibold tracking-tight">{meta ? (lang === 'de' ? meta.de : meta.en) : t('courseComplete')}</p>
-          <p className="text-sm text-muted">{t('csProgress', { done: doneN, total: totalN })}</p>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            {meta && (
-              <Button variant="primary" iconAfter="arrowRight" onClick={() => go({ name: 'lesson', id: meta.id })} data-testid="hub-next-lesson">
-                {t('lhOpenLesson')}
-              </Button>
-            )}
-            <button type="button" className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-accent-text hover:underline" onClick={() => go({ name: 'course' })} data-testid="hub-course">
-              {t('lhAllLessons')}
-              <Icon name="arrowRight" size={16} />
-            </button>
+      {next && (
+        <motion.section variants={item} className="lx-glass flex flex-col gap-3 rounded-[var(--radius-card)] p-5" aria-labelledby="lh-next" data-testid="hub-next-topic" data-topic={next.id}>
+          <p id="lh-next" className="lx-eyebrow">
+            {t('nbLernenNextEyebrow')}
+          </p>
+          <p className="text-lg font-semibold tracking-tight">{topicName(next.id, lang)}</p>
+          <p className="text-sm text-muted">{next.fresh ? t('nbLernenNextNew', { n: TOPIC_ROUND_MIN + 1 }) : t('nbLernenNextMin', { n: TOPIC_ROUND_MIN })}</p>
+          <div>
+            <Button variant="primary" iconAfter="arrowRight" onClick={startNext} data-testid="hub-next-start">
+              {next.fresh ? t('nbLernenNextStartNew') : t('nbLernenNextStart')}
+            </Button>
           </div>
-        </div>
-      </Section>
+        </motion.section>
+      )}
 
-      {/* 2. Aus deinen Fehlern (Prüfung Ü1: der einzige Abschnitt mit fälligen Elementen, deshalb oben). */}
-      <Section id="lh-errors" title={t('nbLernenHubErrors')}>
-        <List label={t('nbLernenHubErrors')} testId="hub-errors-list">
-          {nErr > 0 ? (
-            <Row icon={<ChannelIcon channel="grammar"><Icon name="refresh" /></ChannelIcon>} title={t('nbLernenHubGrammarErrors')} sub={tn('grDueBadge', nErr)} onClick={startErrors} testId="hub-errors" badge={String(nErr)} />
+      <motion.section variants={item} className="flex flex-col gap-3" aria-labelledby="lh-path">
+        <h2 id="lh-path" className="lx-eyebrow">
+          {t('nbLernenPathTitle', { n: pathTopics().length })}
+        </h2>
+        <PathList onOpen={setOpen} highlight={next?.id ?? null} />
+      </motion.section>
+
+      <motion.div variants={item}>
+        <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]" aria-label={t('nbLernenHubErrors')} data-testid="hub-errors-list">
+          {nDue > 0 ? (
+            <Row
+              icon={<ChannelIcon channel="grammar"><Icon name="refresh" /></ChannelIcon>}
+              title={t('nbLernenFixRow', { n: nDue })}
+              sub={t('nbLernenFixSub')}
+              onClick={startErrors}
+              testId="hub-errors"
+              badge={tn('grDueBadge', nDue)}
+            />
           ) : (
-            <li className="flex min-h-14 items-center gap-3 px-4 py-3 text-sm text-muted" data-testid="hub-errors-none">
+            <li className="flex min-h-14 items-center gap-3 px-4 py-3" data-testid="hub-errors-none">
               <ChannelIcon channel="grammar"><Icon name="check" /></ChannelIcon>
-              <span>{t('nbLernenHubNoErrors')}</span>
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="font-medium">{t('nbLernenFixNone')}</span>
+                <span className="text-sm text-muted">{t('nbLernenFixNoneSub')}</span>
+              </span>
             </li>
           )}
-          <li className="flex min-h-14 items-center gap-3 px-4 py-3" data-testid="hub-repair">
-            <ChannelIcon channel="speak"><Icon name="refresh" /></ChannelIcon>
-            <span className="flex min-w-0 flex-1 flex-col">
-              <span className="font-medium">{t('nbLernenHubRepair')}</span>
-              <span className="lx-tnum text-sm text-muted">{t('nbLernenHubRepairSub', { open: rep.open, safe: rep.safe })}</span>
-            </span>
-          </li>
-          <ForeignRows group="errors" />
-        </List>
-      </Section>
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="layers" /></ChannelIcon>} title={t('nbLernenExtra')} sub={t('nbLernenExtraSub')} onClick={() => openSheet('x:extra')} testId="hub-extra" />
+        </ul>
+      </motion.div>
 
-      {/* 3. Grammatik & Fallen. */}
-      <Section id="lh-grammar" title={t('nbLernenHubGrammar')}>
-        <List label={t('nbLernenHubGrammar')}>
-          <Row icon={<ChannelIcon channel="grammar"><Icon name="grammar" /></ChannelIcon>} title={t('lhGrammar')} sub={t('nbLernenHubGrammarSub')} onClick={() => go({ name: 'grammar' })} testId="hub-grammar" badge={nErr ? tn('grDueBadge', nErr) : null} />
-          <Row icon={<ChannelIcon channel="grammar"><Icon name="target" /></ChannelIcon>} title={t('nbLernenHubPatterns')} sub={t('nbLernenHubPatternsSub')} onClick={() => go({ name: 'patterns' })} testId="hub-patterns" />
-          <Row icon={<ChannelIcon channel="grammar"><Icon name="book" /></ChannelIcon>} title={t('nbLernenHubWissen')} sub={t('nbLernenHubWissenSub')} onClick={() => go({ name: 'wissen' })} testId="hub-wissen" />
-          <ForeignRows group="grammar" />
-        </List>
-      </Section>
+      <ForeignRows />
 
-      {/* 4. Training: nur noch Einstiege anderer Bereiche ohne feste Gruppe (die Wort-und-Regel-Übungen stehen seit „Go Kombi“ unter „Anwenden“). */}
-      {entriesFor('learn').some((e) => !e.group || !(LEARN_GROUPS as readonly string[]).includes(e.group) || e.group === 'training') && (
-        <Section id="lh-drills" title={t('nbLernenHubTraining')}>
-          <List label={t('nbLernenHubTraining')}>
-            <ForeignRows group="training" />
-          </List>
-        </Section>
-      )}
+      <TopicSheet topic={open} onClose={() => setOpen(null)} />
     </motion.div>
   );
 }

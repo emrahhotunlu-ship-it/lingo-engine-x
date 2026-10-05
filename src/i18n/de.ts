@@ -176,7 +176,6 @@ export const de = {
   courseLabel: 'Kurs',
   courseUnit: 'von {total} Lektionen',
   courseNext: 'Als Nächstes: {title}',
-  courseComplete: 'Alle Lektionen abgeschlossen',
   vocabLabel: 'Wortschatz',
   vocabUnit_one: 'Karte',
   vocabUnit_other: 'Karten',

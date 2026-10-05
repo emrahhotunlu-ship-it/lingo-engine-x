@@ -112,8 +112,8 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const tp = topicById(task.topic);
   const topicLabel = tp ? (lang === 'en' ? (tp.name_en ?? tp.name) : tp.name) : task.topic;
   useCompanionSee({
-    area: area === 'lesson' ? 'course' : 'grammar',
-    label: `${area === 'lesson' ? t('lhCourse') : t('grTitle')} · ${topicLabel}`,
+    area: 'grammar',
+    label: `${t('grTitle')} · ${topicLabel}`,
     phase: fb ? 'feedback' : 'question',
     detail: task.options?.length ? `${task.prompt}\n${task.options.join(' / ')}` : task.prompt,
     ...(fb ? { reveal: `Solution: ${solution}. Learner: ${fb.given || '(empty)'}` } : { mask: [solution, ...task.accepted] }),
@@ -417,7 +417,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
         </header>
         {/* N46 „Kurz erklärt“ (Soll): die Regel in einem Satz, zugeklappt, ohne KI; nicht im Wochen-Check
             und nicht in der Lektion (dort steht die Regel schon über der Aufgabe). */}
-        {!fb && !noHelp && area !== 'lesson' && briefRule && (
+        {!fb && !noHelp && briefRule && (
           <Disclosure label={t('nbLernenBrief')} testId="gr-brief">
             <p className="text-sm text-muted" lang={lang} data-testid="gr-brief-text">
               {briefRule}

@@ -111,7 +111,7 @@ describe('Reparatur-Sätze: tägliche Wiederholung und Stand', () => {
     expect(pickDailyRepairs(doc, T + DAY, new Set())).toHaveLength(REPAIR_PER_DAY);
     expect(pickDailyRepairs(doc, T + DAY, new Set([list[0]!.id])).map((e) => e.id)).toEqual([list[1]!.id, list[2]!.id, list[3]!.id]);
     expect(pickDailyRepairs(doc, T + DAY, new Set(), 2)).toHaveLength(2);
-    expect(pickDailyRepairs(doc, T - 1, new Set())).toHaveLength(0);
+    expect(pickDailyRepairs(doc, T - 2 * DAY, new Set())).toHaveLength(0);
     expect(pickDailyRepairs(null, T, new Set())).toEqual([]);
   });
   it('freiwillige Runde (xtra) verbraucht den Pflicht-Platz nicht', () => {
