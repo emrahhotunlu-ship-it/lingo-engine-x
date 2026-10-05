@@ -169,3 +169,26 @@ test('Atlas: sieben Bänder, Band aufklappen zeigt Einträge mit Stand; schreibt
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
+
+test('Atlas: Wortliste nach Häufigkeit, Suche, „Als Karte“ legt eine Karte mit Beispielsatz an', async ({ page }) => {
+  const { errors, external } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-atlas').click();
+  await expect(page.getByTestId('atlas-fband')).toHaveCount(4);
+  await page.getByTestId('atlas-search').fill('monopol');
+  const hit = page.getByTestId('atlas-hits').getByTestId('atlas-word').first();
+  await expect(hit).toBeVisible();
+  await hit.getByTestId('atlas-add').click();
+  await expect.poll(async () => Object.keys(await dump(page)).filter((k) => k === 'vocab/monopoly').length).toBe(1);
+  const doc = (await dump(page))['vocab/monopoly'] as Doc;
+  expect(String(doc.ex)).toMatch(/\[[^\]]+\]/);
+  expect(doc.src).toBe('pack');
+  await expect(hit).toHaveAttribute('data-have', 'true');
+  await page.getByTestId('atlas-search').fill('');
+  await page.getByTestId('atlas-fband-toggle').first().click();
+  await expect(page.getByTestId('atlas-word').first()).toBeVisible();
+  expect(await layoutProblems(page)).toEqual([]);
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
+});

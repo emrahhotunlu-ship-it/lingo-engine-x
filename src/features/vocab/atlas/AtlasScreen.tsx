@@ -2,7 +2,11 @@ import { useMemo, useState } from 'react';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
 import { useLive } from '../../../data/live';
+import { atlasEntries, atlasId, bandOf, ATLAS_BANDS, type AtlasBand, type AtlasEntry } from '../../../domain/atlas/atlas';
 import { PACK, PACK_CATS, packDoc, type PackCat } from '../../../domain/c1pack/pack';
+import { toast } from '../../../ui/Toast';
+import { Button } from '../../../ui/Button';
+import { addAtlasCard } from './add';
 import { useT, type MessageKey } from '../../../i18n';
 import { ScreenHeader } from '../../learn/ui';
 
@@ -40,8 +44,44 @@ export function AtlasScreen() {
       }),
     [today, now, vocab, chunk],
   );
-  const total = rows.length;
-  const known = rows.filter((r) => r.have).length;
+  const words = useMemo(() => atlasEntries(), []);
+  const [bandOpen, setBandOpen] = useState<AtlasBand | null>(null);
+  const [q, setQ] = useState('');
+  const [shown, setShown] = useState(40);
+  const hasCard = (e: AtlasEntry): boolean => vocab.has(atlasId(e));
+  const packTotal = rows.length;
+  const packKnown = rows.filter((r) => r.have).length;
+  const total = packTotal + words.length;
+  const known = packKnown + words.filter(hasCard).length;
+  const query = q.trim().toLowerCase();
+  const hits = query ? words.filter((e) => e.w.startsWith(query) || e.d.toLowerCase().includes(query)).slice(0, 30) : [];
+  const add = async (e: AtlasEntry) => {
+    const ok = await addAtlasCard(e, today, now);
+    toast(ok ? t('atAdded', { word: e.w }) : t('atNotAdded'));
+  };
+  const entryRow = (e: AtlasEntry) => {
+    const h = hasCard(e);
+    return (
+      <li key={e.w} className="flex flex-col gap-0.5 border-b border-line px-4 py-2.5 last:border-b-0" data-testid="atlas-word" data-have={h ? 'true' : 'false'}>
+        <span className="flex items-baseline justify-between gap-3">
+          <span className="font-medium" lang="en">
+            {e.w}
+          </span>
+          {h ? (
+            <span className="flex-none text-xs text-muted">{t('atHave')}</span>
+          ) : (
+            <Button variant="ghost" icon="plus" onClick={() => void add(e)} data-testid="atlas-add">
+              {t('atAdd')}
+            </Button>
+          )}
+        </span>
+        <span className="text-sm text-muted">{e.d}</span>
+        <span className="text-sm text-muted" lang="en">
+          {e.x}
+        </span>
+      </li>
+    );
+  };
 
   return (
     <div className="flex flex-col gap-4 py-6 sm:gap-6 sm:py-10" data-testid="atlas">
@@ -54,6 +94,64 @@ export function AtlasScreen() {
           </span>
         }
       />
+      <input
+        type="search"
+        className="lx-field text-base"
+        placeholder={t('atSearch')}
+        aria-label={t('atSearch')}
+        value={q}
+        onChange={(ev) => setQ(ev.target.value)}
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+        data-testid="atlas-search"
+      />
+      {query && (
+        <ul className="lx-glass flex flex-col rounded-[var(--radius-card)]" data-testid="atlas-hits">
+          {hits.length ? hits.map(entryRow) : <li className="px-4 py-3 text-sm text-muted">{t('atNoHits')}</li>}
+        </ul>
+      )}
+      <h2 className="text-lg font-semibold">{t('atWordsTitle')}</h2>
+      <ul className="flex flex-col gap-3" data-testid="atlas-freq">
+        {ATLAS_BANDS.map((b) => {
+          const list = words.filter((e) => bandOf(e) === b);
+          if (!list.length) return null;
+          const have = list.filter(hasCard).length;
+          const isOpen = bandOpen === b;
+          return (
+            <li key={b} className="lx-glass rounded-[var(--radius-card)]" data-testid="atlas-fband" data-band={b}>
+              <button
+                type="button"
+                className="flex min-h-14 w-full items-center justify-between gap-3 px-4 py-3 text-left"
+                aria-expanded={isOpen}
+                onClick={() => {
+                  setBandOpen(isOpen ? null : b);
+                  setShown(40);
+                }}
+                data-testid="atlas-fband-toggle"
+              >
+                <span className="flex min-w-0 flex-col gap-1">
+                  <span className="text-base font-semibold">{t(`atFband_${b}`)}</span>
+                  <span className="lx-tnum text-xs text-muted">{t('atBandCount', { have: num(have), total: num(list.length) })}</span>
+                </span>
+              </button>
+              {isOpen && (
+                <>
+                  <ul className="flex flex-col border-t border-line">{list.slice(0, shown).map(entryRow)}</ul>
+                  {shown < list.length && (
+                    <div className="border-t border-line p-3">
+                      <Button variant="secondary" onClick={() => setShown((n) => n + 60)} data-testid="atlas-more">
+                        {t('atMore')}
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      <h2 className="text-lg font-semibold">{t('atPackTitle')}</h2>
       <ul className="flex flex-col gap-3">
         {PACK_CATS.map((c) => {
           const list = rows.filter((r) => r.e.cat === c);
@@ -92,6 +190,9 @@ export function AtlasScreen() {
           );
         })}
       </ul>
+      <p className="text-xs text-subtle" data-testid="atlas-credits">
+        {t('atCredits')}
+      </p>
     </div>
   );
 }
