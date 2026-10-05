@@ -52,6 +52,9 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
   const prompt = s(it.prompt).trim();
   const answer = s(it.answer).trim();
   if (!type || !prompt || !answer) return null;
+  // Mehr als eine Lücke lässt sich mit einem Eingabefeld nicht lösen (Emrah 05.10.2026: „komme nicht an die zweite Lücke“): nie stellen.
+  if ((type === 'gap' || type === 'mc') && (prompt.match(/_{3,}/g)?.length ?? 0) > 1) return null;
+  if (type === 'transform' && (prompt.split('→').slice(1).join('→').match(/_{3,}/g)?.length ?? 0) > 1) return null;
   // Eine Lücke ohne `___` (Lektionen der alten App) wird als Umformung mit Ganzsatz-Eingabe gestellt.
   if (type === 'gap' && !GAP_RE.test(prompt)) type = 'transform';
   let options: string[] | null = null;
