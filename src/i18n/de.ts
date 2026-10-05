@@ -164,7 +164,7 @@ export const de = {
   colApp: 'Profil, Kurs und Verlauf',
 
   ovEyebrow: 'Übersicht',
-  ovTitle: 'Dein Stand',
+  ovTitle: 'Fortschritt',
   ovLead: 'Hier prüfst du, ob alles angekommen ist, was du bisher gelernt hast.',
   streakLabel: 'Serie',
   streakDays_one: '{n} Tag',
@@ -238,8 +238,8 @@ export const de = {
 
   navLabel: 'Bereiche',
   navToday: 'Heute',
-  navOverview: 'Dein Stand',
-  tabOverview: 'Stand',
+  navOverview: 'Fortschritt',
+  tabOverview: 'Fortschritt',
   tdStreak_one: 'Serie: {n} Tag',
   tdStreak_other: 'Serie: {n} Tage',
   tdStatusOpen_one: 'Noch {n} Karte',

@@ -13,14 +13,13 @@ import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCompanionSee } from '../companion/seeing';
 import { LateRescueCard } from '../migration/LateRescueCard';
 import { maybeAutoAssess } from './assessRun';
-import { ErrorsTab } from './ErrorsTab';
+import { GrammarSegment } from './GrammarSegment';
 import { HistoryTab } from './HistoryTab';
 import { JudgeTab } from './JudgeTab';
-import { PathTab } from './PathTab';
 import { LevelScale } from './StandHeader';
-import { StatsTab } from './StatsTab';
+import { WordsSegment, useVocabMetrics } from './WordsSegment';
 
-// „Dein Stand" (Kap. 6.13, Neubau plan.md §1.3; Fokus-Umbau: ohne Kurs): Kopf Wörter · Niveau-Skala, darunter drei
+// „Fortschritt" (Kap. 6.13, Neubau plan.md §1.3; Fokus-Umbau 3.5: ohne Kurs, ohne „Wörter gesamt“): Kopf Fest · Niveau-Skala, darunter drei
 // Segmente Wörter · Grammatik · Rückblick – kein endloses Scrollen am Handy, nichts
 // doppelt. Serie und Wochenstreifen stehen im Profil-Blatt, die Tests und der Wochenbericht dort als
 // Zeilen. Das Profil-Blatt öffnet die Seite direkt auf einem Reiter (`route.tab`); sonst gilt der
@@ -68,6 +67,8 @@ export function ProgressScreen() {
   const now = useClock((s) => s.now);
   const docs = useLive((s) => s.docs);
   const vocab = useLive((s) => s.collections.vocab) ?? EMPTY;
+  const status = useLive((s) => s.status);
+  const { fest } = useVocabMetrics();
   const grammar = useLive((s) => s.collections.grammar) ?? EMPTY;
   const archive = useLive((s) => s.collections.archive) ?? EMPTY;
   const [tab, setTab] = useState<Segment>(() => {
@@ -115,9 +116,9 @@ export function ProgressScreen() {
       </motion.header>
 
       {/* plan.md §1.3: EINE Kopfkarte – Wörter · Niveau, darunter die Niveau-Skala. */}
-      <motion.section variants={item} aria-label={t('ovTitle')} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
+      <motion.section variants={item} aria-label={t('ovTitle')} aria-busy={status === 'waiting'} className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-4 sm:p-6" data-testid="stand-head">
         <div className="grid grid-cols-2 gap-3 sm:gap-6">
-          <Stat label={t('vocabLabel')} value={num(ov.vocab.total)} unit={t(ov.vocab.total === 1 ? 'vocabUnit_one' : 'vocabUnit_other')} testId="vocab-total" />
+          <Stat label={t('nbProfilFestLabel')} value={num(fest)} unit={t(fest === 1 ? 'nbProfilFestUnit_one' : 'nbProfilFestUnit_other')} testId="stand-fest" />
           <Stat label={t('nbProfilLevel')} value={assess?.data.cefr ?? '–'} unit={assess?.data.cefr ? t('nbProfilLevelUnit') : t('nbProfilLevelNone')} testId="stand-level" />
         </div>
         {assess?.data.cefr && (
@@ -129,15 +130,16 @@ export function ProgressScreen() {
 
       <LateRescueCard />
 
+      {status === 'error' && (
+        <p role="status" className="text-sm text-muted" data-testid="stand-error">
+          {t('nbProfilLoadError')}
+        </p>
+      )}
+
       <motion.div variants={item}>
         <Tabs label={t('progTabs')} items={TABS.map((x) => ({ id: x.id, label: t(x.label), testId: `tab-${x.id}` }))} value={tab} onChange={choose} testId="progress-tabs">
-          {tab === 'words' && (
-            <div className="flex flex-col gap-6">
-              <PathTab />
-              <StatsTab />
-            </div>
-          )}
-          {tab === 'grammar' && <ErrorsTab />}
+          {tab === 'words' && <WordsSegment />}
+          {tab === 'grammar' && <GrammarSegment />}
           {tab === 'review' && (
             <div className="flex flex-col gap-6">
               <JudgeTab />

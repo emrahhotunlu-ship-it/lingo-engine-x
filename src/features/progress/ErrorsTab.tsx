@@ -10,8 +10,6 @@ import { Button } from '../../ui/Button';
 import { Card } from '../../ui/Card';
 import { Skeleton } from '../../ui/Skeleton';
 import { actionRoute, startAction } from './actionRoute';
-import { RepairStandLine } from '../repair/StandLine';
-import { PatternsStandCard } from '../patterns/StandCard';
 
 // Reiter „Fehler" (Plan §7.1): Fehler-Radar der letzten 30 Tage je Kategorie mit Veränderung zu
 // den 30 Tagen davor, Quellen und zwei Beispielen. `app/radar` wird nur abonniert, solange der
@@ -29,7 +27,8 @@ export function radarName(r: Pick<RadarRow, 'c' | 'kind'>, t: (k: MessageKey) =>
 const SOURCES: ReadonlySet<string> = new Set(['g', 'w', 'r', 'v', 's', 'k', 'b']);
 const LIVE_SOURCES: ReadonlySet<string> = new Set(['g', 'v', 'k']);
 
-export function ErrorsTab() {
+/** Fehler-Radar als eine Karte (Gesamtkonzept 3.5: höchstens drei Karten je Segment). */
+export function ErrorRadar() {
   const { t, tn, lang, num } = useT();
   const api = useHiddenInput();
   const now = useClock((s) => s.now);
@@ -46,21 +45,17 @@ export function ErrorsTab() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <RepairStandLine />
-      {/* Lernberatung V3/V8: Deutsch-Fallen mit Verlauf und Wochenfokus. */}
-      <PatternsStandCard />
-    <section aria-labelledby="radar-title" className="flex flex-col gap-4" data-testid="radar">
+    <Card aria-labelledby="radar-title" className="flex flex-col gap-4" data-testid="radar">
       <h2 id="radar-title" className="text-lg font-semibold">
         {t('radarTitle')}
       </h2>
       {rows.length === 0 ? (
         <p className="text-sm text-muted">{t('radarEmpty')}</p>
       ) : (
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col divide-y divide-line">
           {rows.map((r) => (
-            <li key={r.c}>
-              <Card className="flex flex-col gap-3" data-testid="radar-row" data-c={r.c} data-trend={r.trend}>
+            <li key={r.c} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0" data-testid="radar-row" data-c={r.c} data-trend={r.trend}>
+              <div className="flex flex-col gap-3">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex min-w-0 flex-col gap-1">
                     <h3 className="text-base font-semibold">{radarName(r, t, lang)}</h3>
@@ -98,12 +93,11 @@ export function ErrorsTab() {
                     </Button>
                   </div>
                 )}
-              </Card>
+              </div>
             </li>
           ))}
         </ul>
       )}
-    </section>
-    </div>
+    </Card>
   );
 }

@@ -166,6 +166,7 @@ test('Dein Stand: Abschnitt „Wortschatz-Statistik“ (Platz stand); ohne KI bl
   // Platz `stand` liegt im Reiter „Statistik“ von „Dein Stand“ (Neubau plan.md §1.3).
   await openOverview(page);
   await page.getByTestId('tab-words').click();
+  await page.getByTestId('measures-words').click();
   const stats = page.getByTestId('ws-stats');
   await stats.scrollIntoViewIfNeeded();
   await expect(stats).toBeVisible();

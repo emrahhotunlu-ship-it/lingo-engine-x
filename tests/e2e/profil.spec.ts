@@ -29,6 +29,7 @@ test.describe('Handy 390', () => {
     // Statistik: der Platz `stand` bzw. die Karten-Messwerte; keine Aktivitäts-Heatmap mehr (Fokus-Umbau).
     await openStandTab(page, 'stats');
     await expect(page.getByTestId('heatmap')).toHaveCount(0);
+    await page.getByTestId('measures-words').click();
     await expect(page.getByTestId('stats')).toBeVisible();
     expect(errors).toEqual([]);
     expect(external).toEqual([]);

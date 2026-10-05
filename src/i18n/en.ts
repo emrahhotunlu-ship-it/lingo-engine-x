@@ -162,7 +162,7 @@ export const en: Record<MessageKey, string> = {
   colApp: 'Profile, course and history',
 
   ovEyebrow: 'Overview',
-  ovTitle: 'Where you stand',
+  ovTitle: 'Progress',
   ovLead: 'Check here that everything you have learned so far has arrived.',
   streakLabel: 'Streak',
   streakDays_one: '{n} day',
@@ -236,7 +236,7 @@ export const en: Record<MessageKey, string> = {
 
   navLabel: 'Sections',
   navToday: 'Today',
-  navOverview: 'Your progress',
+  navOverview: 'Progress',
   tabOverview: 'Progress',
   tdStreak_one: 'Streak: {n} day',
   tdStreak_other: 'Streak: {n} days',

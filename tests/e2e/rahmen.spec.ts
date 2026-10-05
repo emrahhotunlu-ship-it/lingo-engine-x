@@ -150,7 +150,7 @@ for (const [theme, lang] of [
     await expect(page.getByTestId('tab-vocab')).toHaveText(lang === 'de' ? 'Wörter' : 'Words');
     expect(await layoutProblems(page)).toEqual([]);
     await openProfile(page);
-    await expect(page.getByTestId('profile-overview')).toContainText(lang === 'de' ? 'Dein Stand' : 'Your progress');
+    await expect(page.getByTestId('profile-overview')).toContainText(lang === 'de' ? 'Fortschritt' : 'Progress');
     expect(await layoutProblems(page)).toEqual([]);
     expect(errors).toEqual([]);
   });

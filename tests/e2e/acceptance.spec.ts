@@ -64,7 +64,9 @@ test('Kap. 14: alle bisherigen Daten sichtbar, Serie läuft weiter', async ({ pa
   await openOverview(page);
   // Kurs x/24 steht nicht mehr im Kopf (Fokus-Umbau); die Kursdaten bleiben in der Datenbank.
   await expect(page.getByTestId('course-done')).toHaveCount(0);
-  await expect(page.getByTestId('vocab-total')).toHaveText('146');
+  // Kopfzahl ist „Fest“ (Stufe ≥ 4, Stabilität ≥ 21 Tage), nicht mehr „Wörter gesamt“ inkl. Neuer.
+  await expect(page.getByTestId('stand-fest')).toHaveText('12');
+  await expect(page.getByTestId('vocab-total')).toHaveCount(0);
 });
 
 test('Kap. 14/9: der Tagesauftrag funktioniert unverändert – daily/* und feed/* bleiben bytegleich, neue Wörter werden Karten', async ({ page }) => {

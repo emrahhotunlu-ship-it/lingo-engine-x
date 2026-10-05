@@ -78,6 +78,7 @@ async function openPatterns(page: Page, opts: BootOptions) {
   const booted = await boot(page, { migrated: true, ...opts });
   await openOverview(page);
   await page.getByTestId('tab-grammar').click();
+  await page.getByTestId('measures-grammar').click();
   await expect(page.getByTestId('patterns-stand')).toBeVisible();
   await page.getByTestId('patterns-open').click();
   await page.locator('[data-screen="patterns"]').waitFor({ state: 'visible' });
@@ -194,6 +195,7 @@ for (const size of SIZES) {
     await expect(page.getByTestId('patterns')).toHaveAttribute('data-view', 'list');
     await page.getByTestId('patterns-close').click();
     await screen(page, 'overview');
+    await page.getByTestId('measures-grammar').click();
     await expect(page.getByTestId('patterns-stand-item').first()).toBeVisible();
 
     expect(errors).toEqual([]);
@@ -208,6 +210,7 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     const { errors, external } = await boot(page, { migrated: true, lang: 'en', fake: { patch: { 'app/patterns': PRESET, 'say/2026-09': SAY_DOC } } });
     await openOverview(page);
     await page.getByTestId('tab-grammar').click();
+    await page.getByTestId('measures-grammar').click();
     const card = page.getByTestId('patterns-stand');
     await expect(card).toContainText('Your German traps');
     await expect(page.getByTestId('patterns-stand-item')).toHaveCount(2);
@@ -225,6 +228,7 @@ test.describe('Vorhandene Muster (Desktop, EN)', () => {
     // Liste: die Regel liegt nur auf Deutsch vor → Hinweis statt gemischter Sprache.
     // Der Einstieg steht auf der Karte „Deine Deutsch-Fallen“ im Reiter Fehler (Neubau: Stand-Reiter).
     await page.getByTestId('tab-grammar').click();
+    await page.getByTestId('measures-grammar').click();
     await page.getByTestId('patterns-open').click();
     await page.locator('[data-screen="patterns"]').waitFor({ state: 'visible' });
     await expect(page.getByTestId('pattern-rule')).toHaveCount(0);
