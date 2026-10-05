@@ -27,5 +27,10 @@ export function readUnitMeta(v: unknown): UnitMeta | null {
     const pp = o.pp.filter((d): d is string => typeof d === 'string' && DAY_RE.test(d)).slice(0, 8);
     if (pp.length) out.pp = pp;
   }
+  if (o.cb === 'reduced' || o.cb === 'restart') out.cb = o.cb;
+  const ov = num(o.ov);
+  if (ov !== null) out.ov = Math.round(ov);
+  const sure = num(o.sure);
+  if (sure !== null) out.sure = Math.round(sure);
   return out;
 }

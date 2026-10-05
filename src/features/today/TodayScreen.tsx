@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
 import { checkAvailable, startCheck } from '../check/session';
-import { comebackBand, comebackGap } from '../../domain/plan/comeback';
+import { comebackBand, comebackGap, lastReturn, RESTART_DAYS, RESTART_GAP } from '../../domain/plan/comeback';
+import { cardStats } from '../../domain/plan/dayStats';
 import { dowOf } from '../../domain/week';
 import { toast } from '../../ui/Toast';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { armShared } from '../../engine/shared';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
@@ -15,9 +16,8 @@ import { ChannelIcon, type Channel } from '../../ui/Card';
 import { Icon, type IconName } from '../../ui/Icon';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
-import { useLive } from '../../data/live';
-import { invalidIdsOf } from '../../data/live';
-import { dayKeyNoon, legacyDayKey, addDays } from '../../domain/date';
+import { invalidIdsOf, useLive } from '../../data/live';
+import { dayKeyNoon, addDays } from '../../domain/date';
 import { dutyChannelMinutes, dutyMinutes } from '../../domain/plan/buildPlan';
 import { feasible, rankChannels } from '../../domain/plan/channels';
 import { pflichtMarked } from '../../domain/plan/pflicht';
@@ -26,8 +26,10 @@ import type { Lang } from '../../app/settings';
 import { actionLabel } from '../progress/actionRoute';
 import { maybeAutoAssess } from '../progress/assessRun';
 import { logWarn } from '../../platform/diagnostics';
-import { computeStreak, pflichtDays } from '../../domain/streak';
-import { mergeArchives } from '../../domain/capacity/compact';
+import { useStreakCount } from '../../app/shell/useStreak';
+import { isoWeek } from '../../domain/date';
+import { KEY_PREFIX, local } from '../../platform/storage';
+import { useDoneFacts } from './doneFacts';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { flush, usePending } from '../progress/persist';
 import { startSession } from '../vocab/session';
@@ -47,6 +49,7 @@ import { assessPlanInput } from '../../domain/assessment/planInput';
 import { dueErrors } from '../../domain/grammar/errors';
 import { dueCards } from '../../domain/srs/queue';
 import { buildTrainCards } from '../../domain/srs/cards';
+import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { startUnit } from '../unit/run';
 import { blockName, blockWhy } from '../unit/labels';
 import { lessonMeta } from '../../domain/course/catalog';
@@ -57,7 +60,6 @@ import { lessonMeta } from '../../domain/course/catalog';
 // Nach der Pflicht: Fertig-Karte mit Bilanz (Zustand, kein Knopf), EINE Zeile „Lohnt sich jetzt“
 // und ein leiser Verweis „Mehr üben ›“. Alles andere lebt in den Reitern.
 
-const EMPTY_ARCHIVE = new Map<string, Record<string, unknown>>();
 let statusMarked = false;
 const obj = (v: unknown): Record<string, unknown> => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 
@@ -163,25 +165,7 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
 }
 
 function TodaySubline({ today, lang }: { today: string; lang: Lang }) {
-  const { tn } = useT();
-  const now = useClock((s) => s.now);
-  const profile = useLive((s) => s.docs['app/profile']);
-  const schema = useLive((s) => s.docs['app/schema']);
-  const archive = useLive((s) => s.collections.archive) ?? EMPTY_ARCHIVE;
-  const streak = useMemo(() => {
-    // Phase 7 (Plan §12.3): ausgelagerte Jahre zählen mit.
-    const p = obj(mergeArchives(profile ? obj(profile) : null, archive.values()));
-    const pflichtSince = typeof obj(schema).pflichtSince === 'string' ? (obj(schema).pflichtSince as string) : null;
-    return computeStreak({
-      days: obj(p.days) as Record<string, number>,
-      xpDays: obj(p.xpDays) as Record<string, number>,
-      pflichtSince,
-      pflichtDone: pflichtDays(p.pflicht),
-      today,
-      legacyToday: legacyDayKey(now),
-    });
-  }, [profile, schema, today, now, archive]);
-  // Lerntag (Wechsel um 04:00), dieselbe Datumsfunktion wie der Plan: nachts gilt noch der Vortag.
+  // Lerntag (Wechsel um 04:00), dieselbe Datumsfunktion wie der Plan: nachts gilt noch der Vortag. Keine Serie hier (Gesamtkonzept 3.1).
   const dateLabel = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', {
     weekday: 'long',
     day: 'numeric',
@@ -193,12 +177,20 @@ function TodaySubline({ today, lang }: { today: string; lang: Lang }) {
         <span className="whitespace-nowrap" data-testid="today-date" data-day={today}>
           {dateLabel}
         </span>
-        <span aria-hidden="true">·</span>
-        <span className="lx-tnum whitespace-nowrap" data-testid="today-streak">
-          {tn('tdStreak', streak.count)}
-        </span>
       </p>
     </div>
+  );
+}
+
+/** Serie im Fuß der Tageskarte: nur ab 1 Tag, nach einer Pause nichts (Gesamtkonzept 3.1, „Serie 0“ nie). Die einzige Stelle auf Heute. */
+function StreakFoot() {
+  const { tn } = useT();
+  const streak = useStreakCount();
+  if (streak === null || streak < 1) return null;
+  return (
+    <p className="lx-tnum text-xs text-muted" data-testid="today-streak">
+      {tn('tdStreak', streak)}
+    </p>
   );
 }
 
@@ -212,19 +204,24 @@ function BlockDot({ state }: { state: CardRow['state'] }) {
   return <span className={`inline-flex size-6 flex-none items-center justify-center rounded-full border-2 ${state === 'now' ? 'border-accent' : 'border-line'}`} aria-hidden="true" />;
 }
 
-/** Die Tageskarte (offen): Ring, Kernaufgabe, Blockliste und der EINE Knopf. */
-function UnitCard({ view, rows, title, minLeft }: { view: TodayView; rows: CardRow[]; title: string; minLeft: number }) {
-  const { t } = useT();
+/** Start der Tageseinheit (Tageskarte und Willkommens-Karte): der erste offene Block, sonst der alte Weg. SYNCHRON im Klick (iPhone-Tastatur). */
+function useStartUnit(view: TodayView): () => void {
   const api = useHiddenInput();
-  const done = view.duties.done;
-  const total = view.duties.total;
-  const now = rows.find((r) => r.state === 'now') ?? null;
-  const start = () => {
+  return () => {
     unlockSpeech();
     if (startUnit(api)) return;
     const id = firstOpenDuty(view);
     if (id) startDuty(id, api);
   };
+}
+
+/** Die Tageskarte (offen): Ring, Kernaufgabe, Blockliste und der EINE Knopf. `fixNone`: „Fehler korrigieren“ entfällt, weil nichts fällig ist. */
+function UnitCard({ view, rows, title, minLeft, fixNone }: { view: TodayView; rows: CardRow[]; title: string; minLeft: number; fixNone: boolean }) {
+  const { t } = useT();
+  const done = view.duties.done;
+  const total = view.duties.total;
+  const now = rows.find((r) => r.state === 'now') ?? null;
+  const start = useStartUnit(view);
   return (
     <section
       className="lx-card flex flex-col gap-3.5 p-[1.125rem]"
@@ -275,20 +272,38 @@ function UnitCard({ view, rows, title, minLeft }: { view: TodayView; rows: CardR
             </li>
           ))}
         </ol>
+        {fixNone && (
+          <p className="flex min-h-9 items-center gap-3 border-t border-line pt-2 text-xs text-muted" data-testid="fix-none">
+            <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-accent-soft text-accent-text" aria-hidden="true">
+              <Icon name="check" size={14} />
+            </span>
+            {t('nbHeuteFixNone')}
+          </p>
+        )}
       </div>
       <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={start} data-testid="start" data-duty={now?.id} className="w-full">
         {done > 0 && now ? t('nbHeuteContinue', { block: now.name }) : t('nbHeuteStart')}
       </Button>
+      <StreakFoot />
     </section>
   );
 }
 
-/** Fertig-Zustand (N15): Bilanz und „Morgen: …“ – ein Zustand, kein Knopf. */
+/**
+ * Fertig-Zustand (N15, Gesamtkonzept 3.2 „Abschluss“): Häkchen, EINE zählende Zahl, eine Wahrheitszeile („Heute neu sicher: 3 ·
+ * Fehler weg: 1 · überfällig −12“, nur was stimmt) und höchstens ein Meilenstein-Satz. Ein Zustand, kein Knopf, kein Konfetti.
+ */
 function DoneCard({ view, tomorrow }: { view: TodayView; tomorrow: string }) {
   const { t, tn } = useT();
-  const learnMin = Math.max(0, view.balance.minutes);
-  const pct = view.balance.answers ? Math.round((view.balance.correct / view.balance.answers) * 100) : 0;
+  const facts = useDoneFacts(view, true);
   const blocks = view.duties.total;
+  const truth = [
+    facts.sure !== null ? t('nbHeuteTruthSure', { n: facts.sure }) : null,
+    facts.fixed !== null ? t('nbHeuteTruthFixed', { n: facts.fixed }) : null,
+    facts.over !== null ? t('nbHeuteTruthOver', { n: facts.over }) : null,
+  ].filter((x): x is string => x !== null);
+  const ms = facts.milestone;
+  const msText = ms ? (ms.id.startsWith('fest') ? t('nbHeuteMsFest', { n: ms.n ?? 0 }) : ms.id === 'topic1' ? t('nbHeuteMsTopic') : ms.id === 'fix10' ? t('nbHeuteMsFix', { n: ms.n ?? 0 }) : t('nbHeuteMsOver')) : null;
   return (
     <div data-testid="today-card" data-done="true">
       <HeroCard
@@ -303,21 +318,49 @@ function DoneCard({ view, tomorrow }: { view: TodayView; tomorrow: string }) {
         }
         title={
           <span className="lx-tnum" data-testid="balance">
-            {view.balance.answers > 0 ? t('nbHeuteDoneStats', { min: learnMin, blocks, answers: view.balance.answers, pct }) : t('nbHeuteDoneStatsNoAnswers', { min: learnMin, blocks })}
-            {view.extra > 0 && <span className="font-normal text-muted"> · {tn('tdExtraCount', view.extra)}</span>}
+            {view.balance.answers > 0 ? tn('nbHeuteDoneAnswers', view.balance.answers) : t('nbHeuteDoneSteps', { blocks })}
           </span>
         }
       >
-        {view.balance.repaired > 0 && (
-          <p className="text-sm text-muted" data-testid="today-truth">
-            {tn('nbHeuteTruthRepaired', view.balance.repaired)}
+        {truth.length > 0 && (
+          <p className="lx-tnum text-sm text-muted" data-testid="today-truth">
+            {truth.join(' · ')}
+          </p>
+        )}
+        {msText && (
+          <p className="text-sm font-medium" data-testid="today-milestone" data-id={ms?.id}>
+            {msText}
           </p>
         )}
         <p className="text-sm text-muted" data-testid="today-tomorrow">
           {tomorrow}
         </p>
+        <StreakFoot />
       </HeroCard>
     </div>
+  );
+}
+
+/** Willkommens-Karte der Neustart-Woche (Pause ≥ 14 Lerntage): steht statt der Tageskarte, solange heute noch nichts gestartet wurde. */
+function RestartCard({ view, gap, overdue, minutes }: { view: TodayView; gap: number; overdue: number; minutes: number }) {
+  const { t } = useT();
+  const start = useStartUnit(view);
+  const go = () => {
+    local.set(`${KEY_PREFIX}restart:${view.day}`, '1');
+    start();
+  };
+  return (
+    <section className="lx-card flex flex-col gap-3.5 p-[1.125rem]" aria-labelledby="td-restart-title" data-testid="restart-card">
+      <h2 id="td-restart-title" className="text-lg leading-snug font-semibold tracking-tight text-balance">
+        {t('nbHeuteRestartTitle')}
+      </h2>
+      <p className="text-sm text-muted">
+        {t('nbHeuteRestartPause', { gap })} {overdue > 0 ? t('nbHeuteRestartWords', { n: overdue }) : t('nbHeuteRestartNoWords')}
+      </p>
+      <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={go} data-testid="restart-start" className="w-full">
+        {t('nbHeuteRestartStart', { min: minutes })}
+      </Button>
+    </section>
   );
 }
 
@@ -471,9 +514,33 @@ function MissedCheck({ today }: { today: string }) {
   );
 }
 
+/** Wochenrückblick-Band (Gesamtkonzept 3.5f): montags einmal je Woche, führt zur Seite „Wochenrückblick“. Gemerkt nur in diesem Browser (nichts wird geschrieben). */
+function WeeklyBand({ today }: { today: string }) {
+  const { t } = useT();
+  const go = useNav((s) => s.go);
+  const profile = useLive((s) => s.docs['app/profile']);
+  const key = `${KEY_PREFIX}weeklyband:${isoWeek(today)}`;
+  const [seen, setSeen] = useState(() => local.get(key) === '1');
+  if (seen || dowOf(today) !== 1 || Number(obj(profile).answers ?? 0) < 40) return null;
+  const open = () => {
+    local.set(key, '1');
+    setSeen(true);
+    go({ name: 'weekly' });
+  };
+  return (
+    <p className="lx-glass flex flex-wrap items-center justify-between gap-x-3 rounded-[var(--radius-card)] px-4 py-2 text-sm text-muted" data-testid="weekly-band">
+      <span>{t('nbHeuteRecapBand')}</span>
+      <button type="button" onClick={open} className="inline-flex min-h-11 items-center font-medium text-accent-text hover:underline" data-testid="weekly-band-open">
+        {t('nbHeuteRecapOpen')}
+      </button>
+    </p>
+  );
+}
+
 export function TodayScreen() {
   const { t, lang } = useT();
   const today = useClock((s) => s.today);
+  const clockNow = useClock((s) => s.now);
   const view = useToday((s) => s);
   const profile = useLive((s) => s.docs['app/profile']);
   const saveFailed = usePending((s) => s.failed);
@@ -543,8 +610,27 @@ export function TodayScreen() {
   }, [today, unit, t]);
 
   const ok = ready && dayLoaded;
-  const comeback = useMemo(() => comebackBand(comebackGap(obj(profile), today)), [profile, today]);
+  const gap = useMemo(() => comebackGap(obj(profile), today), [profile, today]);
+  const comeback = comebackBand(gap);
+  const ret = useMemo(() => lastReturn(obj(profile), today), [profile, today]);
   const done = view.status === 'allDone' || view.status === 'nothing';
+  // Neustart-Woche: die Willkommens-Karte steht statt der Tageskarte, bis heute etwas gestartet wurde (oder der Knopf gedrückt ist).
+  const restartStarted = local.get(`${KEY_PREFIX}restart:${today}`) === '1';
+  const welcome = ok && !done && comeback === 'restart' && unit !== null && view.duties.done === 0 && !restartStarted;
+  const overdueNow = useMemo(() => {
+    if (!welcome) return 0;
+    try {
+      const live = useLive.getState();
+      const cards = buildTrainCards(live.collections.vocab ?? new Map(), clockNow, invalidIdsOf(live.invalid, 'vocab'));
+      return cardStats([...cards, ...buildChunkCards(live.collections.chunk ?? new Map(), clockNow, invalidIdsOf(live.invalid, 'chunk'))], lang, clockNow).overdue;
+    } catch (err) {
+      logWarn('today:overdue', err);
+      return 0;
+    }
+  }, [welcome, lang, clockNow]);
+  // Kein Fehlersatz fällig: „Fehler korrigieren“ steht nicht im Plan (Plan der Einheit, nicht am Sonntag) – Zustand statt leerem Schritt.
+  const fixNone = !!unit && unit.u.shape !== 'sun' && !unit.u.b.some(([, kind]) => kind === 'again');
+  const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
   const title = t('nbHeuteUnit');
 
   return (
@@ -553,11 +639,19 @@ export function TodayScreen() {
         <TabTitle title={t('navToday')} sub={<TodaySubline today={today} lang={lang} />} />
       </motion.div>
 
-      {ok && !done && comeback !== 'none' && (
+      {ok && !done && !welcome && comeback !== 'none' && comeback !== 'restart' && (
         <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band={comeback}>
           {t(comeback === 'short' ? 'nbHeuteComebackShort' : 'nbHeuteComebackLong')}
         </motion.p>
       )}
+
+      {ok && !done && !welcome && restartDay !== null && (
+        <motion.p variants={item} className="lx-glass rounded-[var(--radius-card)] px-4 py-3 text-sm text-muted" role="status" data-testid="comeback-band" data-band="restart" data-day={restartDay}>
+          {t('nbHeuteRestartDay', { n: restartDay, total: RESTART_DAYS })}
+        </motion.p>
+      )}
+
+      {ok && comeback === 'none' && restartDay === null && <WeeklyBand today={today} />}
 
       {planStatus === 'error' && (
         <div role="alert" className="flex flex-col items-start gap-3" data-testid="plan-error">
@@ -576,9 +670,15 @@ export function TodayScreen() {
         </div>
       )}
 
-      {ok && !done && view.duties.total > 0 && (
+      {welcome && (
         <motion.div variants={item}>
-          <UnitCard view={view} rows={rows} title={title} minLeft={minLeft} />
+          <RestartCard view={view} gap={gap ?? 0} overdue={overdueNow} minutes={minLeft} />
+        </motion.div>
+      )}
+
+      {ok && !done && !welcome && view.duties.total > 0 && (
+        <motion.div variants={item}>
+          <UnitCard view={view} rows={rows} title={title} minLeft={minLeft} fixNone={fixNone} />
         </motion.div>
       )}
 

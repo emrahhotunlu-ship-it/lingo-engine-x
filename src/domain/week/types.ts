@@ -99,7 +99,12 @@ export type UnitPlan = {
   /** `plan.duty`: „x von n“ kommt immer aus `duty.length`. */
   duty: readonly UnitChannel[];
   minutes: number;
+  /** Wiedereinstieg (Gesamtkonzept 3.2): `reduced` = nur 3 Grammatikaufgaben, Satzbau pausiert; `restart` = Neustart-Woche (kleiner Plan). */
+  comeback?: ComebackMode;
 };
+
+/** Plan-Form nach einer Pause (`domain/plan/comeback`). */
+export type ComebackMode = 'reduced' | 'restart';
 
 export type UnitPrefs = {
   /** Tagesziel in Minuten (`GOAL_MIN_OPTIONS`), gültig ab dem Lerntag, an dem der Plan entsteht (M3). */
@@ -112,6 +117,10 @@ export type UnitPrefs = {
   reviewMin?: number;
   /** Vorrang beim Themenvorschlag (N17). */
   themeHint?: ThemeHint;
+  /** Fehlersätze, die heute fällig sind (nicht vom Anlegetag); 0 → der Schritt „Fehler korrigieren“ entfällt. Fehlt der Wert, bleibt der Schritt (ältere Pläne). */
+  fixDue?: number;
+  /** Wiedereinstieg: kleinerer Plan nach einer längeren Pause. */
+  comeback?: ComebackMode;
 };
 
 export type ThemeHint = { meeting?: ThemeId | null };
