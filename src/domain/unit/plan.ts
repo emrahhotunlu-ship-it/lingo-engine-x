@@ -1,5 +1,5 @@
 import { unitPlanFor } from '../week';
-import type { UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs, WeekDoc } from '../week/types';
+import type { ComebackMode, UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs, WeekDoc } from '../week/types';
 import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
 
 // Tageseinheit als gespeicherter Tagesplan (plan.md §1.5, N10/N12; Prüfung M2, M5). Rein.
@@ -18,6 +18,13 @@ export type UnitBuildInput = {
   goalMin: number;
   /** Umfang von Block 1 (mit dem Budget aus `unitPlanFor(...).reviewSec` berechnet). */
   review: ReviewGoal;
+  /** Fällige Fehlersätze (früherer Tage); 0 → Block 5 entfällt. Fehlt der Wert, bleibt Block 5. */
+  fixDue?: number;
+  /** Wiedereinstieg nach einer Pause (`domain/plan/comeback`). */
+  comeback?: ComebackMode;
+  /** Morgenwerte für den Abschluss: überfällige und sichere Karten beim Planen. */
+  ov?: number;
+  sure?: number;
 };
 
 /** Plan-Vorstufe ohne Block-1-Umfang: liefert das Budget für die Berechnung von `goal.review`. */
@@ -25,15 +32,21 @@ export function unitDraft(i: Omit<UnitBuildInput, 'nowMs' | 'review'>): UnitPlan
   return unitPlanFor(i.day, i.week, prefsOf(i));
 }
 
-function prefsOf(i: { goalMin: number }, reviewCount?: number, reviewMin?: number): UnitPrefs {
+function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode }, reviewCount?: number, reviewMin?: number): UnitPrefs {
   const p: UnitPrefs = { goalMin: i.goalMin };
+  if (i.fixDue !== undefined) p.fixDue = i.fixDue;
+  if (i.comeback) p.comeback = i.comeback;
   if (reviewCount !== undefined) p.reviewCount = reviewCount;
   if (reviewMin !== undefined && reviewMin > 0) p.reviewMin = reviewMin;
   return p;
 }
 
-function metaOf(up: UnitPlan): UnitMeta {
-  return { v: 1, shape: up.shape, goalMin: up.goalMin, theme: up.theme, min: up.minutes, b: up.blocks.map((b) => [b.block, b.kind, b.min]) };
+function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number } = {}): UnitMeta {
+  const m: UnitMeta = { v: 1, shape: up.shape, goalMin: up.goalMin, theme: up.theme, min: up.minutes, b: up.blocks.map((b) => [b.block, b.kind, b.min]) };
+  if (up.comeback) m.cb = up.comeback;
+  if (facts.ov !== undefined) m.ov = facts.ov;
+  if (facts.sure !== undefined) m.sure = facts.sure;
+  return m;
 }
 
 /** Der gespeicherte Tagesplan der Einheit (fester Schlüsselsatz, weil `update` verschmilzt). */
@@ -49,7 +62,7 @@ export function buildUnitStored(i: UnitBuildInput): StoredPlan {
     goal: hasReview ? { review: i.review.goal, due: i.review.due, new: i.review.fresh, ahead: 0 } : { review: 0, due: 0, new: 0, ahead: 0 },
     lesson: null,
     at: i.nowMs,
-    u: metaOf(up),
+    u: metaOf(up, { ov: i.ov, sure: i.sure }),
   };
 }
 
@@ -70,7 +83,9 @@ export function unitPlanOf(view: StoredPlan & { u: UnitMeta }, week: WeekDoc | n
 function storedUnitPlan(p: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
   // Die Minuten von Block 1 stammen aus dem eingefrorenen Plan (bei Rückstand länger als der Grundwert).
   const storedReviewMin = p.u.b.find(([, kind]) => kind === 'review')?.[2];
-  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin }, p.goal.review, storedReviewMin));
+  // Form des Plans aus den eingefrorenen Eckdaten: Wiedereinstieg (`cb`) und „kein Fehlersatz fällig“ (Block 5 fehlt).
+  const noFix = p.u.shape !== 'sun' && !p.u.b.some(([, kind]) => kind === 'again');
+  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin, ...(noFix ? { fixDue: 0 } : {}), ...(p.u.cb ? { comeback: p.u.cb } : {}) }, p.goal.review, storedReviewMin));
   const same = live.duty.length === p.duty.length && live.duty.every((d, k) => d === p.duty[k]) && live.blocks.every((b, k) => b.kind === p.u.b[k]?.[1]);
   if (same) return live;
   const blocks: UnitBlock[] = p.u.b.map(([block, kind, min], k) => ({

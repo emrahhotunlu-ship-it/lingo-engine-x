@@ -14,12 +14,13 @@ async function openVtest(page: Page): Promise<void> {
   await screen(page, 'vtest');
 }
 
-test('Einstieg: Kopf wie v1 (Profil + Serie links, Übersetzen + Claude rechts), 4 Reiter einzeilig, Profil-Blatt', async ({ page }) => {
+test('Einstieg: Kopf wie v1 (Profil links ohne Serienzahl, Übersetzen + Claude rechts), 4 Reiter einzeilig, Profil-Blatt', async ({ page }) => {
   const { errors, external } = await boot(page, { migrated: true });
   await screen(page, 'today');
   const top = page.getByTestId('topbar');
   await expect(top.getByTestId('open-profile')).toBeVisible();
-  await expect(top.getByTestId('profile-streak')).toHaveText('Serie 12');
+  // Die Serie steht nicht mehr im Kopf (Gesamtkonzept 3.1), nur im Kartenfuß von Heute und im Profil-Blatt.
+  await expect(top.getByTestId('profile-streak')).toHaveCount(0);
   await expect(top.getByTestId('open-companion')).toBeVisible();
   await expect(top.getByTestId('open-translate')).toBeVisible();
   await expect(top.getByTestId('open-settings')).toBeVisible();
@@ -144,7 +145,8 @@ for (const [theme, lang] of [
   test(`390 px · ${theme} · ${lang}: Kopf, Reiter, Profil-Blatt ohne Überlauf und ohne gemischte Sprache`, async ({ page }) => {
     const { errors } = await boot(page, { migrated: true, theme, lang });
     await screen(page, 'today');
-    await expect(page.getByTestId('profile-streak')).toHaveText(lang === 'de' ? 'Serie 12' : 'Streak 12');
+    await expect(page.getByTestId('profile-streak')).toHaveCount(0);
+    await expect(page.getByTestId('today-streak')).toHaveText(lang === 'de' ? 'Serie: 12 Tage' : 'Streak: 12 days');
     await expect(page.getByTestId('tab-vocab')).toHaveText(lang === 'de' ? 'Wörter' : 'Words');
     expect(await layoutProblems(page)).toEqual([]);
     await openProfile(page);

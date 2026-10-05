@@ -38,6 +38,12 @@ export type UnitMeta = {
   b: UnitMetaBlock[];
   /** Preply-Termine älterer Pläne (bis 28.09.2026); nur noch gelesen, nie ausgewertet. */
   pp?: string[];
+  /** Wiedereinstieg, additiv (Gesamtkonzept 3.2): Form des Plans nach einer Pause. */
+  cb?: 'reduced' | 'restart';
+  /** Überfällige Karten beim Planen (Morgenwert für „überfällig −n“ am Abschluss), additiv. */
+  ov?: number;
+  /** Sichere Karten beim Planen (Morgenwert für „Heute neu sicher: n“), additiv. */
+  sure?: number;
 };
 
 export type DutyState = { id: DutyId; state: 'done' | 'open'; progress: { done: number; total: number } | null };

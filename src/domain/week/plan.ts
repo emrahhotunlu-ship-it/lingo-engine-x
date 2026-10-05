@@ -73,38 +73,48 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
   const pick = themeFor(day, week, prefs.themeHint);
   const dow = dowOf(day);
   const goalMin = normalGoal(prefs.goalMin);
-  const short = goalMin <= SHORT_GOAL_MAX;
+  // Neustart-Woche: immer der kleinste Plan (3 + 4 + 2 Min.), auch am Sonntag.
+  const restart = prefs.comeback === 'restart';
+  const reduced = prefs.comeback === 'reduced';
+  const short = goalMin <= SHORT_GOAL_MAX || restart;
   const blocks: UnitBlock[] = [];
   let shape: UnitShape;
   let reviewSec: number;
   // Rückstand: Block 1 darf länger dauern als der Grundwert (Anzeige „ca. n Min.“ bleibt wahr), nie kürzer.
   const reviewMin = (base: number): number => Math.max(base, Math.min(REVIEW_MIN_MAX, Math.ceil(prefs.reviewMin ?? 0)));
 
-  if (dow === 7) {
+  if (dow === 7 && !restart) {
     // S5: Block 1 (≤ 5 Min.) + Wochen-Check (5 Min.), unabhängig vom Tagesziel.
     shape = 'sun';
     reviewSec = REVIEW_SEC.sun;
     blocks.push(block(1, step('review'), reviewMin(SUNDAY_MIN.review)));
     blocks.push(block(3, step('task.check'), SUNDAY_MIN.check, 'ch:u-check'));
   } else if (short) {
-    const tiny = goalMin <= 10;
+    const tiny = goalMin <= 10 || restart;
     const m = tiny ? VG_MIN.tiny : VG_MIN.short;
     shape = 'short';
     reviewSec = tiny ? REVIEW_SEC.tiny : REVIEW_SEC.short;
     blocks.push(block(1, step('review'), reviewMin(m.review)));
-    blocks.push(block(2, step('grammar', { n: tiny ? GRAMMAR_N.tiny : GRAMMAR_N.short }), m.grammar, 'ch:u-focus'));
+    const light = tiny || reduced;
+    blocks.push(block(2, step('grammar', { n: light ? GRAMMAR_N.tiny : GRAMMAR_N.short }), light ? VG_MIN.tiny.grammar : m.grammar, 'ch:u-focus'));
     blocks.push(block(5, step('again'), m.again));
   } else {
     shape = dow === 6 ? 'sat' : 'full';
     reviewSec = REVIEW_SEC.full;
     blocks.push(block(1, step('review'), reviewMin(VG_MIN.full.review)));
-    blocks.push(block(2, step('grammar', { n: GRAMMAR_N.full }), VG_MIN.full.grammar, 'ch:u-focus'));
-    blocks.push(block(3, step('task.order'), VG_MIN.full.order));
+    if (reduced) {
+      // Wiedereinstieg nach 7–13 Tagen Pause mit viel Überfälligem: nur 3 Grammatikaufgaben, Satzbau pausiert.
+      blocks.push(block(2, step('grammar', { n: GRAMMAR_N.tiny }), VG_MIN.tiny.grammar, 'ch:u-focus'));
+    } else {
+      blocks.push(block(2, step('grammar', { n: GRAMMAR_N.full }), VG_MIN.full.grammar, 'ch:u-focus'));
+      blocks.push(block(3, step('task.order'), VG_MIN.full.order));
+    }
     blocks.push(block(5, step('again'), VG_MIN.full.again));
   }
 
   // M2: Ist `goal.review` = 0, entfällt Block 1.
-  const kept = prefs.reviewCount === 0 ? blocks.filter((b) => b.block !== 1) : blocks;
+  // Nichts fällig: der Schritt „Fehler korrigieren“ (Block 5) entfällt, die Minuten werden neu summiert.
+  const kept = blocks.filter((b) => !(prefs.reviewCount === 0 && b.block === 1) && !(prefs.fixDue === 0 && b.block === 5));
   return {
     v: 1,
     day,
@@ -120,6 +130,7 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
     blocks: kept,
     duty: kept.map((b) => b.channel),
     minutes: kept.reduce((s, b) => s + b.min, 0),
+    ...(prefs.comeback ? { comeback: prefs.comeback } : {}),
   };
 }
 

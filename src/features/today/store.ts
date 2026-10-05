@@ -8,6 +8,8 @@ import { clozeCandidates } from '../../domain/drills/cloze';
 import { orderPoolSize } from '../../domain/drills/orderPool';
 import { buildSprintDeck } from '../../domain/drills/sprint';
 import { readPlan } from '../../domain/plan/buildPlan';
+import { comebackMode, restartActive } from '../../domain/plan/comeback';
+import { cardStats, fixesDue } from '../../domain/plan/dayStats';
 import { type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
@@ -179,8 +181,11 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   const profile = live.docs['app/profile'];
   const lang = useSettings.getState().lang;
   const goalMin = normGoalMin(profile?.goalMin);
-  const draft = unitDraft({ day: today, week: null, goalMin });
+  // Wiedereinstieg: die Neustart-Woche steht schon vor dem Plan fest (nur die Pause zählt), der Kurz-Plan nach 7–13 Tagen erst mit dem Überfälligen.
+  const restart = restartActive(profile, today);
+  const draft = unitDraft({ day: today, week: null, goalMin, ...(restart ? { comeback: 'restart' as const } : {}) });
   let review: ReviewGoal = { goal: 0, due: 0, fresh: 0, repairs: 0 };
+  let facts: { ov: number; sure: number } | null = null;
   if (draft.duty.includes('review')) {
     const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
     // Wendungen (`chunk/*`) gehören zur täglichen Wiederholung (Kap. 5, M15): gleiche Planung.
@@ -188,16 +193,23 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     const introduced = cards.filter((c) => c.intro === today);
     const entries = live.day?.key === today && Array.isArray(live.day.doc?.entries) ? (live.day.doc.entries as Array<{ type?: unknown; id?: unknown }>) : [];
     const repairs = pickDailyRepairs(live.docs['app/repair'], nowMs, repairsDoneToday(entries), REPAIR_MAX, repairsDutyToday(entries)).length;
+    const quota = newQuotaLeft(profile?.newPerDay, introduced.length, introduced.filter((c) => c.src === 'lesson').length);
     review = unitReviewGoal({
       cards: all,
       repairs,
       nowMs,
       lang,
       budgetSec: draft.reviewSec,
-      quotaLeft: newQuotaLeft(profile?.newPerDay, introduced.length, introduced.filter((c) => c.src === 'lesson').length),
+      // Neustart-Woche: höchstens 2 neue Wörter (Gesamtkonzept 3.2, `03` §2).
+      quotaLeft: restart ? Math.min(quota, 2) : quota,
     });
+    const st = cardStats(all, lang, nowMs);
+    facts = { ov: st.overdue, sure: st.sure };
   }
-  return buildUnitStored({ day: today, nowMs, week: null, goalMin, review });
+  const mode = restart ? ('restart' as const) : comebackMode(profile, today, facts?.ov ?? 0);
+  // Fehlersätze: nichts fällig (früherer Lerntage) → der Schritt „Fehler korrigieren“ entfällt (Gesamtkonzept 3.2).
+  const fixDue = fixesDue({ grammarDocs: live.collections.grammar ?? new Map(), repairDoc: live.docs['app/repair'], nowMs, today });
+  return buildUnitStored({ day: today, nowMs, week: null, goalMin, review, fixDue, ...(mode ? { comeback: mode } : {}), ...(facts ? { ov: facts.ov, sure: facts.sure } : {}) });
 }
 
 /** Plan in `app/profile.plan` speichern – außer ein anderes Gerät hat für heute schon einen (der gilt). */

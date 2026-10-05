@@ -4,10 +4,10 @@ import { ClaudeButton, SettingsButton, TitleActions, TranslateButton } from '../
 import { useNav } from '../nav';
 import { screenOf } from '../registry';
 import { openSheet } from '../sheets';
-import { useInitial, useStreakCount } from './useStreak';
+import { useInitial } from './useStreak';
 
 // Kopf des Rahmens (docs/neubau/architektur.md §2.5, plan.md §1.2, Prototyp v1 `.top`):
-// - Reiter-Wurzel: links der Profil-Knopf (Initiale + „Serie 12“) → Profil-Blatt; rechts
+// - Reiter-Wurzel: links der Profil-Knopf (nur die Initiale, keine Serienzahl: Gesamtkonzept 3.1) → Profil-Blatt; rechts
 //   Übersetzen und Claude (ohne KI unsichtbar), dazu immer das Zahnrad (A7 Paket 2: Einstellungen
 //   überall mit einem Tipp). Den großen Titel zeichnet die Seite selbst.
 // - Seite: links „‹ Herkunft“, rechts Übersetzen, Claude und das Zahnrad (`PageTop`).
@@ -16,23 +16,17 @@ import { useInitial, useStreakCount } from './useStreak';
 export function ProfileButton() {
   const { t } = useT();
   const initial = useInitial();
-  const streak = useStreakCount();
   return (
     <button
       type="button"
       onClick={() => openSheet('profile')}
-      aria-label={streak === null ? t('nbShProfile') : `${t('nbShProfile')} · ${t('nbShStreak', { n: streak })}`}
+      aria-label={t('nbShProfile')}
       className="-ml-1 inline-flex min-h-11 items-center gap-2 rounded-full pr-2 pl-1 transition-colors hover:bg-surface"
       data-testid="open-profile"
     >
       <span className="inline-flex size-[2.125rem] items-center justify-center rounded-full bg-surface-strong text-sm font-semibold" aria-hidden="true">
         {initial ?? <Icon name="user" size={18} />}
       </span>
-      {streak !== null && (
-        <span className="lx-tnum text-[0.8125rem] text-muted" data-testid="profile-streak" data-n={streak}>
-          {t('nbShStreak', { n: streak })}
-        </span>
-      )}
     </button>
   );
 }

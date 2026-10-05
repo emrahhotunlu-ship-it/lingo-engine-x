@@ -28,7 +28,7 @@ export function ProfileSheet({ open, onClose }: { open: boolean; onClose: () => 
           <span className="inline-flex size-11 items-center justify-center rounded-full bg-surface-strong text-lg font-semibold" aria-hidden="true">
             {initial ?? <Icon name="user" size={22} />}
           </span>
-          {streak !== null && (
+          {streak !== null && streak >= 1 && (
             <span className="lx-tnum text-base font-semibold" data-testid="profile-sheet-streak">
               {tn('tdStreak', streak)}
             </span>
