@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import raw from '../../content/c1/pack.json';
+import rawText from '../../content/c1/pack.json?raw';
 import { newChunkDoc, takeChunkOp } from '../chunks/newChunk';
 import { dayKey } from '../date';
 import { newVocabDoc, saveCardOp } from '../srs/newCard';
@@ -37,6 +37,8 @@ const entrySchema = z.object({
 export type PackEntry = z.infer<typeof entrySchema>;
 
 const fileSchema = z.object({ v: z.literal(1), items: z.array(z.unknown()) });
+// Als Text eingebettet und einmal geparst: schneller als ein großes Objektliteral beim Start (leistung.md §4 Nr. 5).
+const raw: unknown = JSON.parse(rawText);
 
 /** Alle gültigen Einträge in Dateireihenfolge (Ungültiges fällt weg; der Test prüft, dass nichts wegfällt). */
 export const PACK: readonly PackEntry[] = fileSchema.parse(raw).items.flatMap((i) => {
