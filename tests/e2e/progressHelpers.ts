@@ -49,7 +49,7 @@ export async function answerCheckItem(page: Page, n: number, total: number): Pro
     await item.getByTestId('choice').first().click();
   } else {
     await typeInGap(page, 'zzz');
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
   }
   await expect(item.getByTestId('verdict')).toBeVisible();
   // Weiter – nach einer richtigen Wahl geht es auch von selbst weiter; bis die Aufgabe weg ist.
@@ -57,7 +57,7 @@ export async function answerCheckItem(page: Page, n: number, total: number): Pro
     .poll(
       async () => {
         if (!(await item.count())) return true;
-        const next = item.getByTestId('next');
+        const next = page.getByTestId('next');
         if (await next.isVisible().catch(() => false)) await next.click({ timeout: 1000 }).catch(() => undefined);
         return (await item.count()) === 0;
       },

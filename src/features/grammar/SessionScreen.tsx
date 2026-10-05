@@ -17,7 +17,7 @@ import { StepBoundary } from '../../app/shell/Boundary';
 import { MiniLesson } from './MiniLesson';
 import { topicName } from './topicUi';
 import { ensureGrammar } from './resume';
-import { skipGrammar, inRepeat, commitGrammar, leaveGrammar, reportGrammarDone, startAfterIntro, touchGrammar, useGrammarSession } from './session';
+import { skipGrammar, inRepeat, commitGrammar, grammarProgress, leaveGrammar, reportGrammarDone, startAfterIntro, touchGrammar, useGrammarSession } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
 // die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
@@ -63,7 +63,7 @@ export function GrammarSessionScreen() {
   const topics = [...new Set(s.results.map((r) => r.topic))];
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx}>
-      <RoundTop onClose={leave} progress={s.status === 'running' ? { n: s.pos + 1, total: s.tasks.length } : null} ctx={s.ctx} duty="ch:gram" />
+      <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" />
       {/* Leistung (N45): kein Warten auf das Ausblenden – die nächste Aufgabe steht sofort da
           und blendet nur kurz ein (≤ 150 ms, Deckkraft/Verschieben). */}
       <motion.div key={s.status === 'summary' ? 'summary' : `g-${s.step}`} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>

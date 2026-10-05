@@ -20,6 +20,7 @@ import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { speak, useSpeech } from '../../platform/speech';
+import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { Button } from '../../ui/Button';
 import { nextT } from '../progress/persist';
 import { AlsoRight, CopyOnce, ExampleList, LearnStatus, NextButton, OverrideButton, ResultArea, TaskLine, VerdictLine } from '../learn/ui';
@@ -125,9 +126,11 @@ export function DictationItem({ item, ctx, day, onDone }: ItemProps<{ s: string;
       actions={
         !fb && (
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="primary" onClick={check} data-testid="check">
-              {t('trCheck')}
-            </Button>
+            <ActionBar stateKey="check">
+              <PrimaryAction onClick={check} disabled={!text.trim()} testId="check">
+                {t('trCheck')}
+              </PrimaryAction>
+            </ActionBar>
             {tts && (
               <Button variant="secondary" icon="speaker" onClick={() => play()} data-testid="drill-replay">
                 {t('drReplay')}
@@ -166,9 +169,7 @@ export function DictationItem({ item, ctx, day, onDone }: ItemProps<{ s: string;
               </div>
             )}
             {fb.score.verdict === 'wrong' && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
-            <div className="flex justify-end pt-1">
-              <NextButton onNext={next} auto={fb.score.verdict === 'correct' && !slow && fb.replays <= 2} />
-            </div>
+            <NextButton onNext={next} auto={fb.score.verdict === 'correct' && !slow && fb.replays <= 2} />
           </ResultArea>
         )
       }
@@ -259,9 +260,11 @@ export function ClozeItemView({ item, ctx, day, onDone }: ItemProps<ClozeItem>) 
       actions={
         !fb && (
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="primary" onClick={check} data-testid="check">
-              {t('trCheck')}
-            </Button>
+            <ActionBar stateKey="check">
+              <PrimaryAction onClick={check} testId="check">
+                {t('trCheck')}
+              </PrimaryAction>
+            </ActionBar>
             {tip < 2 && (
               <Button
                 variant="ghost"
@@ -310,9 +313,7 @@ export function ClozeItemView({ item, ctx, day, onDone }: ItemProps<ClozeItem>) 
             <ExampleList items={examples} source={`vocab/${item.cardId}`} />
             {fb.res.verdict === 'wrong' && !fb.override && <OverrideButton onOverride={() => setFb({ ...fb, override: true })} />}
             {fb.res.verdict === 'wrong' && <CopyOnce solution={item.gap} />}
-            <div className="flex justify-end pt-1">
-              <NextButton onNext={next} auto={fb.res.verdict === 'correct' && fb.help.level === 0 && !fb.override} />
-            </div>
+            <NextButton onNext={next} auto={fb.res.verdict === 'correct' && fb.help.level === 0 && !fb.override} />
           </ResultArea>
         )
       }
@@ -361,6 +362,7 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
   const [fb, setFb] = useState<{ res: OrderCheck; grade: Grade; ms: number } | null>(null);
   const topic = orderTopic(item);
   const byId = useMemo(() => new Map(item.tiles.map((x) => [x.id, x])), [item]);
+  const slots = item.tiles.filter((x) => !x.distractor).length;
   // Hilfen (Emrah 02.10.2026, nach Beratung Englischlehrer + Lernwissenschaft): Tipp 1 nennt einen guten Anfang
   // (Hilfe 1), Tipp 2 legt die ersten zwei Bausteine nach vorn (Hilfe 2, zweite Information). Die deutsche
   // Bedeutung steht immer da und ist keine Hilfe.
@@ -410,9 +412,11 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
       actions={
         !fb && (
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="primary" onClick={check} disabled={!placed.length} data-testid="check">
-              {t('trCheck')}
-            </Button>
+            <ActionBar stateKey="check">
+              <PrimaryAction onClick={check} disabled={placed.length < slots} testId="check">
+                {t('trCheck')}
+              </PrimaryAction>
+            </ActionBar>
             {placed.length > 0 && (
               <Button variant="ghost" icon="undo" onClick={() => setPlaced([])} data-testid="tiles-reset">
                 {t('drReset')}
@@ -452,9 +456,7 @@ export function OrderItemView({ item, ctx, day, onDone }: ItemProps<OrderItem>) 
               </p>
             )}
             {topic && <ExampleList items={examplesFor(topic, { exclude: item.sentence, max: 2 })} source={`grammar/${topic}`} />}
-            <div className="flex justify-end pt-1">
-              <NextButton onNext={next} auto={false} />
-            </div>
+            <NextButton onNext={next} auto={false} />
           </ResultArea>
         )
       }

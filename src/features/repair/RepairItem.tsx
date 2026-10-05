@@ -1,3 +1,4 @@
+import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { motion } from 'framer-motion';
 import { useId, useRef, useState, type ReactNode } from 'react';
 import { useAiAvailable } from '../../ai/scope';
@@ -161,9 +162,11 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
 
       {!res && (
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary" disabled={!text.trim() || busy || (prefill && text.trim() === item.wrong.trim())} onClick={() => void check()} data-testid="repair-check">
-            {t('rxCheck')}
-          </Button>
+          <ActionBar stateKey="check">
+            <PrimaryAction disabled={!text.trim() || busy || (prefill && text.trim() === item.wrong.trim())} onClick={() => void check()} testId="repair-check">
+              {t('rxCheck')}
+            </PrimaryAction>
+          </ActionBar>
           {onSkip && (
             <Button variant="ghost" disabled={busy} onClick={onSkip} data-testid="repair-skip">
               {t('rxSkip')}
@@ -202,11 +205,11 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
               {t('rxWhy')}: {item.why}
             </p>
           )}
-          <div>
-            <Button variant="primary" iconAfter="arrowRight" onClick={onNext} data-testid="repair-next">
+          <ActionBar stateKey="next">
+            <PrimaryAction iconAfter="arrowRight" onClick={onNext} testId="repair-next">
               {nextLabel ?? t('rxNext')}
-            </Button>
-          </div>
+            </PrimaryAction>
+          </ActionBar>
         </motion.section>
       )}
     </article>

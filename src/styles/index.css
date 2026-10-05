@@ -330,6 +330,14 @@ h3 {
     }
   }
 
+  /* Tippziel ≥ 44 px bei gleicher Optik: durchsichtiger Rand oben und unten, Füllung nur innerhalb (Messung R8), negativer Rand hält den Abstand. */
+  .lx-hit {
+    min-height: 2.75rem;
+    border-block: 0.25rem solid transparent;
+    background-clip: padding-box;
+    margin-block: -0.25rem;
+  }
+
   .lx-tnum {
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum' 1;
@@ -531,7 +539,7 @@ h3 {
   .lx-word::after {
     content: '';
     position: absolute;
-    inset: -0.3em 0;
+    inset: -0.45em 0;
   }
   .lx-word:hover,
   .lx-word[data-active] {
@@ -956,4 +964,73 @@ h3 {
   [data-testid='sentence-diff'] { gap: 4px; font-size: 0.9rem; }
   [data-testid='verdict'] { font-size: 0.95rem; margin: 0; }
   [data-testid='form-hint'] { font-size: 0.85rem; }
+}
+
+/* ---------------------------------------------------------------- Aktionsleiste (Gesamtkonzept 3.6, R1/R2/R4)
+   Feste Leiste unten mit genau einem Hauptknopf. Deckend (kein Glas, Konzept 3.8 Nr. 3). Solange eine Leiste
+   steht, bekommt der Inhalt Polster in Leistenhöhe, damit nichts darunter verschwindet. */
+:root {
+  --lx-bar-h: 72px;
+}
+.lx-actionbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  box-sizing: border-box;
+  min-height: calc(var(--lx-bar-h) + env(safe-area-inset-bottom));
+  padding: 8px max(1rem, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  background: var(--lx-bg);
+  border-top: 1px solid var(--lx-border);
+}
+.lx-actionbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 40rem;
+  margin: 0 auto;
+  animation: lx-bar-in 150ms ease-out;
+}
+.lx-actionbar-inner > .lx-actionbar-main {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+}
+@keyframes lx-bar-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Am Handy ersetzt die Aktionsleiste die Reiterleiste, solange sie steht (sonst lägen zwei feste Leisten übereinander). */
+@media (max-width: 767.98px) {
+  html[data-actionbar] nav[data-testid='tabbar'] {
+    display: none;
+  }
+}
+html[data-actionbar] #main {
+  padding-bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + 1rem);
+}
+
+/* Bausteine: feste Plätze (gleich hoch) und gestrichelte Umrisse im Vorrat, damit beim Antippen nichts springt (R9). */
+.lx-tile-slot {
+  display: inline-flex;
+  box-sizing: border-box;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  flex: 0 0 auto;
+  border-radius: 0.75rem;
+  border: 1px dashed var(--lx-border);
+  opacity: 0.7;
+}
+.lx-tile.lx-tile-ghost {
+  color: transparent;
+  background: transparent;
+  border-style: dashed;
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.7;
 }

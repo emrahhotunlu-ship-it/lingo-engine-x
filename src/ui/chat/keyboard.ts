@@ -99,9 +99,11 @@ export function useKeepGapVisible(getInput: () => HTMLElement | null, getGap: ()
       if (!input || !gap || document.activeElement !== input) return;
       if (!keyboardCovers(window.innerHeight, vv.height)) return;
       const spans: Span[] = [gap.getBoundingClientRect()];
-      const btn = checkButtonNear(gap);
+      // Steht die feste Aktionsleiste (sie folgt der Tastatur selbst), zählt nur der Bereich darüber; sonst der Prüfen-Knopf im Inhalt.
+      const bar = document.querySelector<HTMLElement>('[data-testid="actionbar"]');
+      const btn = bar ? null : checkButtonNear(gap);
       if (btn) spans.push(btn.getBoundingClientRect());
-      const d = keepVisibleDelta(spans, { top: vv.offsetTop, height: vv.height });
+      const d = keepVisibleDelta(spans, { top: vv.offsetTop, height: vv.height - (bar ? bar.offsetHeight : 0) });
       if (Math.abs(d) > 1) window.scrollBy({ top: d });
     };
     const later = () => {

@@ -131,7 +131,7 @@ test.describe('Desktop', () => {
     const whole = (await item.getByTestId('correct-input').count()) > 0;
     if (whole) await item.getByTestId('correct-input').fill('zzzz wrong');
     else await typeInGap(page, 'zzzz wrong');
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
     await expect(item.getByTestId('retry-hint')).toBeVisible();
     await expect(item.getByTestId('retry-hint')).toContainText(/Achte auf/);
     await expect(item.getByTestId('result')).toHaveCount(0);
@@ -144,7 +144,7 @@ test.describe('Desktop', () => {
     }
     if (whole) await item.getByTestId('correct-input').fill(answer ?? '');
     else await page.keyboard.type(answer ?? '', { delay: 10 });
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
     await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
     await expect(item.getByTestId('form-hint')).toBeVisible();
     await page.getByTestId('next').click();

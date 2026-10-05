@@ -154,12 +154,12 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
   // Gespeichert, bevor Emrah etwas tippt.
   await expect.poll(async () => (await repairs(page)).map((e) => [e.src, e.wrong, e.right, e.box])).toEqual([['talk', 'We must delay the start by two weeks.', 'We need to delay the start by two weeks.', 0]]);
   await step.getByTestId('repair-input').fill('We need to delay the start by two weeks.');
-  await step.getByTestId('repair-check').click();
+  await page.getByTestId('repair-check').click();
   await expect(step.getByTestId('repair-verdict')).toHaveAttribute('data-verdict', 'exact');
   await expect(step.getByTestId('repair-right')).toContainText('need to delay');
   expect(await layoutProblems(page)).toEqual([]);
   await page.screenshot({ path: 'test-results/screens/reparatur-rollenspiel-390.png', fullPage: true });
-  await step.getByTestId('repair-next').click();
+  await page.getByTestId('repair-next').click();
   await expect(step).toHaveAttribute('data-state', 'done');
   // Direkt nach der Korrektur ist ein Treffer noch kein freier Abruf: Box bleibt 0, morgen wieder.
   await page.waitForTimeout(300);

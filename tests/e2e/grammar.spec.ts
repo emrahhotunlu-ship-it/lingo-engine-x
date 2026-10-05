@@ -34,7 +34,7 @@ async function resultComplete(page: Page): Promise<void> {
   await expect(item.getByTestId('form-hint')).toBeVisible();
   expect(await item.getByTestId('example').count()).toBeGreaterThanOrEqual(2);
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
-  await expect(item.getByTestId('next')).toBeVisible();
+  await expect(page.getByTestId('next')).toBeVisible();
 }
 
 /** Eine ganze Runde spielen; Rückgabe: Typen und Urteile je Aufgabe. */

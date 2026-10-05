@@ -104,7 +104,7 @@ export function ApplyHub() {
       </motion.div>
 
       <Section id="ap-listen" title={t('apListenWrite')}>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid auto-rows-fr grid-cols-2 gap-3">
           {listenWrite}
           {tts && ai && <Tile icon="headphones" channel="listen" title={t('apListenQ')} sub={t('apListenQSub')} onClick={() => { unlockSpeech(); go({ name: 'listenQ' }); }} testId="hub-listen-q" />}
           {tts && <Tile icon="speaker" channel="listen" title={t('nbWsLoopTitle')} sub={t('nbWsLoopSub')} onClick={() => { unlockSpeech(); go({ name: 'listenLoop' }); }} testId="hub-listen-loop" />}
@@ -113,14 +113,14 @@ export function ApplyHub() {
 
       {build.length > 0 && (
         <Section id="ap-build" title={t('apBuild')}>
-          <div className="grid grid-cols-2 gap-3">{build}</div>
+          <div className="grid auto-rows-fr grid-cols-2 gap-3">{build}</div>
         </Section>
       )}
 
       {(combo.length > 0 || (ai && comboPairs.length > 0)) && (
         <Section id="ap-combo" title={t('apCombo')}>
           <p className="-mt-1 text-sm text-muted">{t('apComboLead')}</p>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid auto-rows-fr grid-cols-2 gap-3">
             {ai && comboPairs.length > 0 && <Tile icon="sparkle" channel="grammar" title={t('apComboOwn')} sub={t('apComboOwnSub')} onClick={() => go({ name: 'comboSentence' })} testId="hub-combo-own" />}
             {combo.map((e) => (
               <Tile key={e.id} icon={e.icon} channel="grammar" title={t(e.label)} sub={e.sub ? t(e.sub) : ''} onClick={() => (e.start ? e.start(api) : e.route ? go(e.route) : undefined)} testId={e.id} />
@@ -131,14 +131,14 @@ export function ApplyHub() {
 
       {openRepairs.length > 0 && (
         <Section id="ap-repair" title={t('apRepair')}>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid auto-rows-fr grid-cols-2 gap-3">
             <Tile icon="refresh" channel="grammar" title={t('apRepair')} sub={t('apRepairSub', { n: openRepairs.length })} onClick={() => go({ name: 'repairRound' })} testId="hub-repair-round" />
           </div>
         </Section>
       )}
 
       <Section id="ap-speak" title={t('apSpeak')}>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid auto-rows-fr grid-cols-2 gap-3">
           <Tile icon="chat" channel="speak" title={t('apRoleplay')} sub={t('apRoleplaySub')} onClick={() => go({ name: 'speak' })} testId="hub-speak" />
         </div>
       </Section>

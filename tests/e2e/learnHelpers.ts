@@ -83,15 +83,15 @@ export async function answerGrammar(page: Page, solve: (shown: string) => string
     await item.getByTestId('choice').nth(idx).click();
   } else if (type === 'correct' || (await item.getByTestId('correct-input').count())) {
     await item.getByTestId('correct-input').fill(text);
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
   } else {
     await typeInGap(page, text);
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
   }
   // Falsch getippt: erst ein Hinweis, dann der zweite Versuch (hier unverändert → Ergebnis).
   if (type !== 'mc') {
     await expect(item.getByTestId('verdict').or(item.getByTestId('retry-hint'))).toBeVisible();
-    if (await item.getByTestId('retry-hint').isVisible()) await item.getByTestId('check').click();
+    if (await item.getByTestId('retry-hint').isVisible()) await page.getByTestId('check').click();
   }
   await expect(item.getByTestId('verdict')).toBeVisible();
   return { type, answer };

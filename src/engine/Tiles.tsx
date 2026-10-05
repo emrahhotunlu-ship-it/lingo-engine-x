@@ -17,6 +17,8 @@ type Props = {
   labels: { line: string; pool: string };
   /** Beschriftung der Markierungen für Screenreader (die Markierung zeigt zusätzlich zur Farbe ein Zeichen). */
   markLabels?: Readonly<Record<Mark, string>>;
+  /** Anzahl der Plätze in der Antwortzeile (Standard: Bausteine ohne Ablenker). Leere Plätze zeigen gestrichelte Umrisse. */
+  slots?: number;
 };
 
 /** Zeichen je Markierung: Farbe allein reicht nicht (WCAG 1.4.1). */
@@ -26,7 +28,7 @@ type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: num
 
 const THRESHOLD = 6;
 
-export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels }: Props) {
+export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots }: Props) {
   const reduce = useReducedMotion();
   const line = useRef<HTMLDivElement>(null);
   const refs = useRef(new Map<number, HTMLButtonElement>());
@@ -34,6 +36,8 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
   const [over, setOver] = useState(false);
   const justDragged = useRef(false);
   const byId = new Map(tiles.map((t) => [t.id, t]));
+  const slotCount = slots ?? tiles.filter((x) => !x.distractor).length;
+  const emptySlots = locked ? 0 : Math.max(0, slotCount - placed.length);
   // Feste Fläche (Emrahs Meldung 03.10.2026, „kein t im Buchstabenvorrat“): Ein gelegter Baustein lässt im Vorrat einen
   // unsichtbaren Platzhalter zurück, und die Satzzeile ist von Anfang an so hoch wie der volle Vorrat. So springt beim
   // Antippen nichts nach oben – vorher rutschte der Knopf „Prüfen“ unter den Finger und prüfte nach 1–2 Buchstaben.
@@ -160,11 +164,15 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
     <div className="flex flex-col gap-4">
       <div ref={line} className="lx-tile-line" role="group" aria-label={labels.line} data-testid="tile-line" data-over={over || undefined} style={lineMin ? { minHeight: lineMin } : undefined}>
         {placed.map((id) => tileButton(id, 'line'))}
+        {/* Feste Plätze: so viele Umrisse, wie noch Bausteine fehlen – die Zeile bleibt gleich hoch (R9). */}
+        {Array.from({ length: emptySlots }, (_, k) => (
+          <span key={`slot-${k}`} className="lx-tile-slot" aria-hidden="true" data-testid="tile-slot" />
+        ))}
       </div>
       <div ref={poolRef} className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool">
         {tiles.map((t) =>
           placed.includes(t.id) ? (
-            <span key={t.id} className="lx-tile invisible" aria-hidden="true" data-testid="tile-ghost">
+            <span key={t.id} className="lx-tile lx-tile-ghost" aria-hidden="true" data-testid="tile-ghost">
               {t.text}
             </span>
           ) : (

@@ -21,6 +21,7 @@ import { SentenceDiff } from '../../engine/SentenceDiff';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
+import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { Button } from '../../ui/Button';
 import { Disclosure } from '../../ui/Disclosure';
 import { topicById } from '../../domain/content';
@@ -392,9 +393,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
         <AlsoRight answers={also.answers} notes={notes} />
         {fb.verdict === 'wrong' && typedAnswer && !fb.dontKnow && !fb.override && <OverrideButton onOverride={override} />}
         {fb.verdict === 'wrong' && typedAnswer && <CopyOnce solution={task.type === 'correct' ? task.answer : solution} />}
-        <div className="flex justify-end pt-1">
-          <NextButton onNext={next} auto={fb.verdict === 'correct' && fb.help.level === 0 && !fb.override && !fb.why} />
-        </div>
+        <NextButton onNext={next} auto={fb.verdict === 'correct' && fb.help.level === 0 && !fb.override && !fb.why} />
       </ResultArea>
     );
   }
@@ -435,9 +434,11 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
         {!fb && (
           <div className="flex flex-wrap items-center gap-2">
             {task.type !== 'mc' && (
-              <Button variant="primary" onClick={() => void check()} busy={judging} busyLabel={t('aiThinking')} data-testid="check">
-                {t('trCheck')}
-              </Button>
+              <ActionBar stateKey="check">
+                <PrimaryAction onClick={() => void check()} busy={judging} busyLabel={t('aiThinking')} testId="check">
+                  {t('trCheck')}
+                </PrimaryAction>
+              </ActionBar>
             )}
             {typedKind && !scaff && tip < 2 && !noHelp && !retry && (
               <Button

@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { EnglishText } from '../engine/EnglishText';
 import type { WordTapArea } from '../engine/wordTap';
 import { useT } from '../i18n';
+import { ActionBar, PrimaryAction } from './ActionBar';
 import { Button } from './Button';
 import { Icon, type IconName } from './Icon';
 import { topFixes, topUpgrades, type Feedback, type Upgrade } from './feedback/types';
@@ -144,7 +145,7 @@ export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, area = 'tr
                       onKeep(u);
                       setKept((s) => new Set(s).add(u.to));
                     }}
-                    className={`inline-flex min-h-9 flex-none items-center gap-1 rounded-full px-3 text-xs font-semibold ${done ? 'text-muted' : 'bg-accent-soft text-accent-text'}`}
+                    className={`lx-hit inline-flex flex-none items-center gap-1 rounded-full px-3 text-xs font-semibold ${done ? 'text-muted' : 'bg-accent-soft text-accent-text'}`}
                     data-testid="feedback-keep"
                   >
                     {done ? t('nbShFbKept') : t('nbShFbKeep')}
@@ -158,9 +159,11 @@ export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, area = 'tr
       {(onNext || fb.again || question) && (
         <div className="flex flex-col gap-2 pt-1">
           {onNext && (
-            <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={onNext} data-testid="next" className="w-full sm:w-full">
-              {nextLabel ?? t('nbShNext')}
-            </Button>
+            <ActionBar stateKey="next">
+              <PrimaryAction iconAfter="arrowRight" onClick={onNext} testId="next">
+                {nextLabel ?? t('nbShNext')}
+              </PrimaryAction>
+            </ActionBar>
           )}
           <div className="flex flex-wrap items-center gap-2">
             {fb.again && (

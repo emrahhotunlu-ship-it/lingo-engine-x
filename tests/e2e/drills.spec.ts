@@ -175,7 +175,7 @@ test('Satzbau: Tippen und Ziehen, Runde vollständig; Pflichtkanal auf Heute erl
     }
     const line = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile')));
     expect(line).toEqual(ids);
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
     await expect(item.getByTestId('order-why')).toBeVisible();
     if (i === 0) {
       // Kein automatisches Weiter: Emrah liest die Warum-Zeile in Ruhe (nur der Knopf geht weiter).
@@ -234,7 +234,7 @@ test('Satzbau: eine zweite gültige Reihenfolge zählt als richtig, „Auch rich
     const pick = sols.length > 1 ? 1 : 0;
     if (pick === 1) used++;
     await clickTiles(item, (sols[pick] ?? []).map((k) => texts[k] ?? ''));
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
     if (pick === 1) {
       await expect(item.getByTestId('also-right')).toBeVisible();
@@ -268,13 +268,13 @@ test('Satzbau: ein versetzter Baustein ist „fast richtig“, die falsche Stell
     if (valid.includes(swapped.join('|'))) {
       // Zufällig selbst eine gültige Umstellung: dieser Satz taugt nicht für den Test, nächsten nehmen.
       await clickTiles(item, seq);
-      await item.getByTestId('check').click();
+      await page.getByTestId('check').click();
       await finishItem(page);
       round--;
       continue;
     }
     await clickTiles(item, swapped);
-    await item.getByTestId('check').click();
+    await page.getByTestId('check').click();
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', round === 0 ? 'near' : 'wrong');
     // Die falsch gelegten Bausteine sind markiert (Zustand am Baustein, nicht nur Farbe im Verlauf).
     const states = await item.getByTestId('tile-line').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
@@ -302,7 +302,7 @@ test('Satzbau am Handy (390 × 844): Bedeutung, Bausteine und Prüfen ohne Seitw
   await openDrill(page, 'order');
   const item = page.getByTestId('drill-item');
   await expect(item.getByTestId('order-de')).toBeVisible();
-  await expect(item.getByTestId('check')).toBeVisible();
+  await expect(page.getByTestId('check')).toBeVisible();
   await expect(page.getByTestId('tiles-type')).toHaveCount(0);
   const box = await item.getByTestId('tile-pool').boundingBox();
   expect(box && box.x >= 0 && box.x + box.width <= 390).toBe(true);
@@ -319,7 +319,7 @@ test('Satzbau am Handy (390 × 844): Bedeutung, Bausteine und Prüfen ohne Seitw
   expect(await tileTouch()).toBe('none');
   const texts = await poolTexts(item);
   await clickTiles(item, (orderSolutions(texts)[0] ?? []).map((k) => texts[k] ?? ''));
-  await item.getByTestId('check').click();
+  await page.getByTestId('check').click();
   await expect(page.getByTestId('verdict')).toBeVisible();
   expect(await tileTouch()).toBe('auto');
   await expect(item.getByTestId('order-end')).toHaveCount(0);
@@ -345,7 +345,9 @@ async function aiSentencesInRound(page: Page): Promise<{ ai: number; quokka: num
     const isAi = (await item.getByTestId('order-ai').count()) > 0;
     await item.getByTestId('hint').click();
     await item.getByTestId('hint').click();
-    await item.getByTestId('check').click();
+    // „Prüfen“ ist erst aktiv, wenn alle Plätze belegt sind: den Rest einfach der Reihe nach legen.
+    while ((await item.getByTestId('tile-slot').count()) > 0) await item.locator('[data-testid="tile"][data-where="pool"]').first().click();
+    await page.getByTestId('check').click();
     // Bei Sätzen von Claude steht auch in der Rückmeldung der ehrliche Hinweis.
     if (isAi) await expect(item.getByTestId('order-ai-note')).toBeVisible();
     else await expect(item.getByTestId('order-ai-note')).toHaveCount(0);

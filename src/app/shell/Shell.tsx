@@ -2,6 +2,7 @@ import { MotionConfig } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { SettingsSheet } from '../../features/settings/SettingsSheet';
 import { useT } from '../../i18n';
+import { ACTIONBAR_HOST } from '../../ui/ActionBar';
 import { Toaster } from '../../ui/Toast';
 import { HiddenInputProvider } from '../../engine/HiddenInput';
 import { SettingsButton } from '../../features/system/Chrome';
@@ -115,6 +116,7 @@ function Frame() {
         <main id="main" className={`flex-1 ${!system && !exercise ? 'pb-28 md:pb-16' : 'pb-[max(env(safe-area-inset-bottom),2rem)]'}`}>
           {system ? <SystemView screen={screen} /> : <Layers />}
         </main>
+        <div id={ACTIONBAR_HOST} />
       </div>
       <SheetHost />
       <Toaster />

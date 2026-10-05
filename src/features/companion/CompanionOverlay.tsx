@@ -176,7 +176,7 @@ function CompanionOverlay() {
                   role="radio"
                   aria-checked={tier === v}
                   onClick={() => setTier(v)}
-                  className={`min-h-8 rounded-full px-3 ${tier === v ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'text-muted hover:text-fg'}`}
+                  className={`lx-hit rounded-full px-3 ${tier === v ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'text-muted hover:text-fg'}`}
                   data-testid={`chat-tier-${v}`}
                 >
                   {v === 'quick' ? t('cmpTierQuick') : t('cmpTierDeep')}
@@ -197,7 +197,7 @@ function CompanionOverlay() {
               <button
                 type="button"
                 onClick={removeAttach}
-                className="ml-auto inline-flex size-9 flex-none items-center justify-center rounded-full hover:bg-surface"
+                className="ml-auto -m-1 inline-flex size-11 flex-none items-center justify-center rounded-full hover:bg-surface"
                 aria-label={t('cmpAttachRemove')}
                 data-testid="chat-attach-remove"
               >

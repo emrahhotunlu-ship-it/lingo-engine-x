@@ -114,7 +114,7 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
                   role="radio"
                   aria-checked={on}
                   onClick={() => setDirection(v)}
-                  className={`min-h-9 whitespace-nowrap rounded-[calc(var(--radius-control)-4px)] px-3 text-sm ${on ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
+                  className={`lx-hit whitespace-nowrap rounded-[calc(var(--radius-control)-4px)] px-3 text-sm ${on ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
                   data-value={v ?? 'auto'}
                 >
                   {v === null ? t('tlAuto') : t('tlFromTo', { from: v.toUpperCase(), to: (v === 'de' ? 'en' : 'de').toUpperCase() })}
@@ -130,7 +130,7 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
                 role="radio"
                 aria-checked={s.register === v}
                 onClick={() => setRegister(v)}
-                className={`min-h-9 rounded-[calc(var(--radius-control)-4px)] px-3 text-sm ${s.register === v ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
+                className={`lx-hit rounded-[calc(var(--radius-control)-4px)] px-3 text-sm ${s.register === v ? 'bg-surface-solid font-semibold text-fg shadow-sm' : 'font-medium text-muted hover:text-fg'}`}
                 data-value={v}
               >
                 {t(REG_KEY[v])}

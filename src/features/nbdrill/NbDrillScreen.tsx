@@ -1,3 +1,4 @@
+import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
 import { usePlayerSkip } from '../../app/shell/Player';
 import { useRef, useState } from 'react';
 import type { ScreenProps } from '../../app/registry';
@@ -131,9 +132,11 @@ function CollocItem({ s, c }: { s: DrillSession; c: Colloc }) {
           </p>
           {step && <StepNote step={step} c={c} />}
           <div className="flex flex-wrap items-center gap-3">
-            <Button variant="primary" onClick={check} data-testid="drill-check">
-              {t('nbTrainingCheck')}
-            </Button>
+            <ActionBar stateKey="check">
+              <PrimaryAction onClick={check} testId="drill-check">
+                {t('nbTrainingCheck')}
+              </PrimaryAction>
+            </ActionBar>
             <Button variant="ghost" onClick={dontKnow} data-testid="drill-dontknow">
               {t('nbTrainingDontKnow')}
             </Button>
@@ -325,9 +328,11 @@ function MotorItemView({ s, m }: { s: DrillSession; m: MotorItem }) {
             </Note>
           )}
           <div className="flex flex-wrap items-center gap-3">
-            <Button variant="primary" onClick={check} data-testid="drill-check">
-              {t('nbTrainingCheck')}
-            </Button>
+            <ActionBar stateKey="check">
+              <PrimaryAction onClick={check} testId="drill-check">
+                {t('nbTrainingCheck')}
+              </PrimaryAction>
+            </ActionBar>
             <Button variant="ghost" onClick={dontKnow} data-testid="drill-dontknow">
               {t('nbTrainingDontKnow')}
             </Button>

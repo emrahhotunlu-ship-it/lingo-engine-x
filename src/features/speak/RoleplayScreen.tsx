@@ -155,7 +155,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
           <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted">
             <span data-testid="rp-turn-count">{t('spTurn', { n: myTurns + 1 })}</span>
             <span aria-hidden="true">·</span>
-            <button type="button" className="inline-flex min-h-8 items-center gap-1 rounded-full px-1 text-xs text-muted hover:text-fg" aria-expanded={goalOpen} onClick={() => setGoalOpen((v) => !v)} data-testid="rp-goal">
+            <button type="button" className="lx-hit inline-flex items-center gap-1 rounded-full px-1 text-xs text-muted hover:text-fg" aria-expanded={goalOpen} onClick={() => setGoalOpen((v) => !v)} data-testid="rp-goal">
               <Icon name="target" size={14} />
               {t('spGoalChip')}
               <Icon name="info" size={14} />
@@ -172,7 +172,7 @@ function Roleplay({ scene, resume }: { scene: SceneView; resume: ResumeCopy | nu
         <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
           <button
             type="button"
-            className="ml-auto inline-flex min-h-8 items-center gap-1 rounded-full px-1 text-xs text-muted hover:text-fg"
+            className="ml-auto lx-hit inline-flex items-center gap-1 rounded-full px-1 text-xs text-muted hover:text-fg"
             aria-pressed={call}
             onClick={() => setCallMode(!call)}
             data-testid="rp-call-toggle"
