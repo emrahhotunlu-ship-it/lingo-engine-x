@@ -81,10 +81,10 @@ test.describe('Handy 390', () => {
     await openTab(page, 'vocab');
     await page.getByTestId('ws-more').click();
     await expect(page.getByTestId('extra-sheet')).toBeVisible();
-    // Wörter: 6 Zeilen mit Zahl und Grund; dazu Grammatik, Anwenden, Sprechen.
+    // Wörter: 6 Zeilen mit Zahl und Grund; dazu Grammatik (frei, Fehler, Nachschlagen, Fallen, Wissen), Anwenden, Sprechen.
     await expect(page.locator('[data-testid="extra-group-words"] [data-testid="extra-opt"]')).toHaveCount(6);
     await expect(page.locator('[data-testid="extra-group-words"] [data-testid="extra-opt"]').first()).toContainText('neue Wörter');
-    await expect(page.locator('[data-testid="extra-group-grammar"] [data-testid="extra-opt"]')).toHaveCount(2);
+    await expect(page.locator('[data-testid="extra-group-grammar"] [data-testid="extra-opt"]')).toHaveCount(5);
     await expect(page.locator('[data-testid="extra-group-speak"] [data-testid="extra-opt"]')).toHaveCount(1);
     await expect(page.locator('[data-testid="extra-group-apply"] [data-testid="extra-opt"]').first()).toBeVisible();
     const before = Object.keys(await dump(page)).length;

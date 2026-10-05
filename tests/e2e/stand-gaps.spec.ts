@@ -257,13 +257,15 @@ test.describe('Kap. 4.1: Lücke und Prüfen-Knopf bleiben über der iPhone-Tasta
     const expected = await page.evaluate(() => {
       const vv = window.visualViewport as unknown as EventTarget & { height: number };
       vv.height = 300;
-      const btn = document.querySelector('[data-testid="exercise"] [data-testid="check"]')!.getBoundingClientRect();
+      // Die feste Aktionsleiste (Prüfen) folgt der Tastatur selbst: Es zählt nur der Bereich darüber.
+      const bar = document.querySelector<HTMLElement>('[data-testid="actionbar"]')!;
       const gap = document.querySelector('[data-testid="gap"]')!.getBoundingClientRect();
-      const top = Math.min(gap.top, btn.top);
-      const bottom = Math.max(gap.bottom, btn.bottom);
+      const top = gap.top;
+      const bottom = gap.bottom;
+      const h = 300 - bar.offsetHeight;
       vv.dispatchEvent(new Event('resize'));
-      if (bottom - top > 300 - 24) return Math.round(top - 12);
-      if (bottom > 288) return Math.round(bottom - 288);
+      if (bottom - top > h - 24) return Math.round(top - 12);
+      if (bottom > h - 12) return Math.round(bottom - (h - 12));
       if (top < 12) return Math.round(top - 12);
       return 0;
     });

@@ -187,6 +187,12 @@ test.describe('Handy 390 px', () => {
     const pos = async () => (await page.getByTestId('check').boundingBox())?.y ?? -1;
     const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
     const lastTile = item.getByTestId('tile-pool').locator(`[data-testid="tile"][data-tile="${(texts[texts.length - 1] ?? '').replace(/"/g, '\\"')}"]`).first();
+    // Erst messen, wenn der Einblend-Übergang der Übung fertig ist (sonst steht die Grundlinie mitten in der Bewegung).
+    await expect.poll(async () => {
+      const a = (await lastTile.boundingBox())?.y;
+      await page.waitForTimeout(120);
+      return a === (await lastTile.boundingBox())?.y;
+    }).toBe(true);
     const y0 = await pos();
     const t0 = (await lastTile.boundingBox())?.y ?? -1;
     for (const text of texts.slice(0, -1)) {
