@@ -12,17 +12,33 @@ type Doc = Record<string, unknown>;
 test.describe('Handy 390', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 
-  test('Wurzel: Alle fälligen, Prognose, Stapel, Eingangskorb, Zuletzt – ohne Querüberstand', async ({ page }) => {
+  test('Wurzel: Zielkarte, Wiederholen, Neue Wörter heute, drei Stapel, Alle Stapel (Prognose, Eingangskorb, Zuletzt) – ohne Querüberstand', async ({ page }) => {
     const { errors, external } = await boot(page, { migrated: true });
     await screen(page, 'today');
     await openTab(page, 'vocab');
+    // Zielkarte: eine große Zahl „X von 8.000“, Balken mit C1-Marke, Tempo-Zeile.
+    await expect(page.getByTestId('ws-goal')).toBeVisible();
+    await expect(page.getByTestId('ws-goal-now')).toContainText('von 8.000');
+    await expect(page.getByTestId('ws-goal-bar')).toContainText('4.500');
+    await expect(page.getByTestId('ws-goal-pace')).toBeVisible();
+    // Wiederholen-Karte: ein Hauptknopf mit Zahl, Modus als Textknopf.
     await expect(page.getByTestId('ws-due')).toBeVisible();
-    await expect(page.getByTestId('ws-counts')).toBeVisible();
+    await expect(page.getByTestId('ws-review')).toContainText('Wiederholen');
+    await expect(page.getByTestId('ws-mode-open')).toContainText('Modus: Automatisch');
+    await expect(page.getByTestId('ws-new-left')).toBeVisible();
+    // Das Pluszeichen sitzt als Symbolknopf in der Titelzeile.
+    await expect(page.getByTestId('vocab-add')).toHaveAttribute('aria-label', 'Wort hinzufügen');
+    await expect(page.getByTestId('ws-all')).toBeVisible();
+    await expect(page.getByTestId('ws-atlas')).toBeVisible();
+    // Höchstens drei Stapel im Hub; der Rest steht unter „Alle Stapel“.
+    expect(await page.locator('[data-testid="ws-decks-main"] li').count()).toBeLessThanOrEqual(4);
+    expect(await layoutProblems(page)).toEqual([]);
+    await page.getByTestId('ws-decks-all').click();
+    await expect(page.getByTestId('decks-sheet')).toBeVisible();
     await expect(page.locator('[data-testid="ws-forecast"] li')).toHaveCount(7);
     await expect(page.getByTestId('ws-inbox')).toBeVisible();
     await expect(page.getByTestId('ws-deck').first()).toBeVisible();
     await expect(page.locator('[data-testid="ws-recent"] [data-testid="vocab-row"]')).toHaveCount(5);
-    expect(await layoutProblems(page)).toEqual([]);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
@@ -31,6 +47,7 @@ test.describe('Handy 390', () => {
     const { errors } = await boot(page, { migrated: true });
     await screen(page, 'today');
     await openTab(page, 'vocab');
+    await page.getByTestId('ws-decks-all').click();
     await page.getByTestId('ws-new-deck').click();
     await page.getByTestId('deck-new-name').fill('Nachgeschlagen');
     await page.locator('[data-testid="deck-new-src"][data-value="lookup"]').click();
@@ -43,6 +60,7 @@ test.describe('Handy 390', () => {
     // 2 Tipps ab der Reiter-Wurzel: Stapel-Zeile → „Lernen“.
     await page.getByTestId('tab-vocab').click();
     await screen(page, 'vocab');
+    // Der eigene Stapel steht als dritter Stapel direkt im Hub.
     const row = page.locator('[data-testid="ws-deck"][data-deck^="u"]').filter({ hasText: 'Nachgeschlagen' });
     await row.click();
     await page.getByTestId('deck-start').click();
@@ -63,7 +81,12 @@ test.describe('Handy 390', () => {
     await openTab(page, 'vocab');
     await page.getByTestId('ws-more').click();
     await expect(page.getByTestId('extra-sheet')).toBeVisible();
-    await expect(page.getByTestId('extra-opt')).toHaveCount(5);
+    // Wörter: 6 Zeilen mit Zahl und Grund; dazu Grammatik, Anwenden, Sprechen.
+    await expect(page.locator('[data-testid="extra-group-words"] [data-testid="extra-opt"]')).toHaveCount(6);
+    await expect(page.locator('[data-testid="extra-group-words"] [data-testid="extra-opt"]').first()).toContainText('neue Wörter');
+    await expect(page.locator('[data-testid="extra-group-grammar"] [data-testid="extra-opt"]')).toHaveCount(2);
+    await expect(page.locator('[data-testid="extra-group-speak"] [data-testid="extra-opt"]')).toHaveCount(1);
+    await expect(page.locator('[data-testid="extra-group-apply"] [data-testid="extra-opt"]').first()).toBeVisible();
     const before = Object.keys(await dump(page)).length;
     const opt = page.locator('[data-testid="extra-opt"]:not([disabled])').first();
     await opt.click();
@@ -191,4 +214,43 @@ test('Atlas: Wortliste nach Häufigkeit, Suche, „Als Karte“ legt eine Karte 
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
+});
+
+test('Atlas-Sperre: ab 4.500 Karten legt „Als Karte“ nichts an und sagt es ruhig', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { patch: bigVocab(4500) } });
+  await screen(page, 'today');
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-atlas').click();
+  await expect(page.getByTestId('atlas-cap')).toHaveAttribute('data-state', 'full');
+  await page.getByTestId('atlas-search').fill('monopol');
+  const before = Object.keys(await dump(page)).length;
+  await page.getByTestId('atlas-hits').getByTestId('atlas-add').first().click();
+  await expect(page.getByTestId('atlas-hits').getByTestId('atlas-word').first()).toHaveAttribute('data-have', 'false');
+  expect(Object.keys(await dump(page)).length).toBe(before);
+  expect(errors).toEqual([]);
+});
+
+test('Atlas: je Tag nur so viele neue Karten, wie die Kapazitätsregel zulässt, dann „heute genug“', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-atlas').click();
+  await page.getByTestId('atlas-search').fill('con');
+  const added = async () =>
+    Object.values(await dump(page)).filter((d) => {
+      const ref = (d.origin as { ref?: unknown } | undefined)?.ref;
+      return typeof ref === 'string' && ref.startsWith('atlas/');
+    }).length;
+  for (let i = 0; i < 7 && (await page.getByTestId('atlas-cap').count()) === 0; i++) {
+    const n = await added();
+    await page.getByTestId('atlas-hits').getByTestId('atlas-add').first().click();
+    await expect.poll(added).toBe(n + 1);
+  }
+  await expect(page.getByTestId('atlas-cap')).toHaveAttribute('data-state', 'enough');
+  const n = await added();
+  expect(n).toBeGreaterThanOrEqual(2);
+  expect(n).toBeLessThanOrEqual(5);
+  await page.getByTestId('atlas-hits').getByTestId('atlas-add').first().click();
+  expect(await added()).toBe(n);
+  expect(errors).toEqual([]);
 });

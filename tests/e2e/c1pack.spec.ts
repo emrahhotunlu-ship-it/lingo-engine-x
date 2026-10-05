@@ -49,6 +49,7 @@ test.describe('Desktop', () => {
 
     // Der Stapel „C1-Paket“ ist sichtbar, mit allen Karten als „neu“.
     await openTab(page, 'vocab');
+    await page.getByTestId('ws-decks-all').click();
     const row = page.locator('[data-testid="ws-deck"][data-deck="src:pack"]');
     await expect(row).toBeVisible();
     await expect(row).toContainText('C1-Paket');

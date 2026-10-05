@@ -208,4 +208,10 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   compactDone: 'Moved. Your profile is now {kb} KiB.',
   compactFailed: 'Moving was stopped – nothing in your profile was changed.',
   compactNothing: 'There are no years that can be moved.',
+
+  atCapFull: 'Your vocabulary has {n} cards – that is the limit. The Atlas will not add more for now.',
+  atCapToday: 'Enough new words for today (at most {n}). It continues tomorrow.',
+  diagCards: 'Cards delivered',
+  diagCardsValue: '{vocab} words · {chunk} phrases',
+  diagCardsWarn: 'Many cards: {n} of at most 4,500. From 4,500 the Atlas stops adding new ones.',
 };

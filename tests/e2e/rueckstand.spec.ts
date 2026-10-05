@@ -29,8 +29,9 @@ test.describe('Handy 390', () => {
     await expect(hint).toHaveAttribute('data-duty', '');
     await expect(hint).toContainText('Pflicht von heute');
     // Eingangskorb: „reicht für n Tage“ mit 2 neuen am Tag (Bremse), nicht mit dem Kontingent.
-    await expect(page.getByTestId('ws-inbox')).toContainText('Tage');
     expect(await layoutProblems(page)).toEqual([]);
+    await page.getByTestId('ws-decks-all').click();
+    await expect(page.getByTestId('ws-inbox')).toContainText('Tage');
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });

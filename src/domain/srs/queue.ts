@@ -88,12 +88,44 @@ export function dueCards(cards: readonly TrainCard[], nowMs: number): TrainCard[
     .map((x) => x.c);
 }
 
-/** Neue Karten in Korb-Reihenfolge (§5); `isTheme` = Stufe 4 „Wochenthema“ (domain/week `isThemeCard`). */
+/** Erste Stufe, ab der der Tagesmix gilt: das C1-Paket (davor stehen Emrahs eigene Funde und Lehrer-Wörter, die bleiben vorn). */
+const MIX_FROM_TIER = INBOX_TIERS.findIndex((t) => t.includes('pack'));
+/** Tagesmix (Gesamtkonzept 3.3): von je drei neuen Wörtern zwei Wendungen und eins allgemein. */
+export const MIX_PHRASES = 2;
+
+/**
+ * Mischt Wendungen (`chunk/…`, auch die des Pakets) und Wörter im Muster Wendung, Wendung, Wort, Wendung, Wendung, Wort …
+ * Fehlt eine Sorte, bleibt die Reihenfolge der anderen unverändert. Stateless: jeden Tag beginnt das Muster neu, weil
+ * eingeführte Karten die Liste verlassen.
+ */
+export function mixPhrases<T extends { kind: string }>(list: readonly T[]): T[] {
+  const phrases = list.filter((c) => c.kind === 'chunk');
+  const words = list.filter((c) => c.kind !== 'chunk');
+  if (!phrases.length || !words.length) return [...list];
+  const out: T[] = [];
+  let p = 0;
+  let w = 0;
+  while (p < phrases.length || w < words.length) {
+    for (let k = 0; k < MIX_PHRASES && p < phrases.length; k++) out.push(phrases[p++] as T);
+    if (w < words.length) out.push(words[w++] as T);
+    if (p >= phrases.length) while (w < words.length) out.push(words[w++] as T);
+    if (w >= words.length) while (p < phrases.length) out.push(phrases[p++] as T);
+  }
+  return out;
+}
+
+/**
+ * Neue Karten in Korb-Reihenfolge (§5); `isTheme` = Stufe 4 „Wochenthema“ (domain/week `isThemeCard`).
+ * Eigene Funde und Lehrer-Wörter (Stufen vor dem Paket) stehen vorn; ab dem Paket gilt der Tagesmix `mixPhrases`.
+ */
 export function newCards(cards: readonly TrainCard[], isTheme?: (c: TrainCard) => boolean): TrainCard[] {
   const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(tierSrc(c), isTheme ? isTheme(c) : false)]));
-  return cards
+  const sorted = cards
     .filter((c) => c.isNew)
     .sort((a, b) => (tier.get(a.key) ?? LAST_TIER) - (tier.get(b.key) ?? LAST_TIER) || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || a.order - b.order || (a.key < b.key ? -1 : 1));
+  const cut = sorted.findIndex((c) => (tier.get(c.key) ?? LAST_TIER) >= MIX_FROM_TIER);
+  if (cut === -1) return sorted;
+  return [...sorted.slice(0, cut), ...mixPhrases(sorted.slice(cut))];
 }
 
 function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {

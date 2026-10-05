@@ -2,34 +2,28 @@ import { useMemo, useState } from 'react';
 import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
 import { openSheet } from '../../../app/sheets';
-import { addDays, dayKey, dayKeyNoon, daysBetween } from '../../../domain/date';
+import { useLive } from '../../../data/live';
+import { addDays } from '../../../domain/date';
 import { meaningOf } from '../../../domain/srs/cards';
 import { estimateRoundMinutes } from '../../../domain/srs/cost';
-import { BUILTIN_DECKS, deckCards, deckCounts, inboxReach, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
-import { forecast } from '../../../domain/srs/forecast';
+import { deckCards, deckCounts, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
 import { backlogBraked, catchUpOn, overdueCount } from '../../../domain/unit/backlog';
+import { C1_MARK, vocabGoal } from '../../../domain/vocab/goal';
 import { useToday } from '../../today/state';
-import { normalizeNewPerDay } from '../../../domain/srs/queue';
-import type { TrainCard } from '../../../domain/srs/types';
 import { useHiddenInput } from '../../../engine/HiddenInput';
 import { useT, type MessageKey } from '../../../i18n';
-import { Button } from '../../../ui/Button';
+import { Button, IconButton } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { HeroCard } from '../../../ui/HeroCard';
 import { Row, RowList } from '../../../ui/RowList';
-import { Eyebrow } from '../../../ui/Eyebrow';
-import { Segmented } from '../../../ui/Segmented';
-import { toast } from '../../../ui/Toast';
-import { prefsOp } from '../../../domain/srs/decks';
 import { ScreenHeader } from '../../learn/ui';
-import { useDecks, writeDecks } from '../decksStore';
+import { useDecks } from '../decksStore';
 import { startAllDue } from '../start';
 import { useDeckCtx, useQuota, useVocabCards } from './data';
-import { decksErrorKey } from './errors';
 
-// Wurzel des Reiters „Wortschatz“ (plan.md §1.3, Optik wie Prototyp v1): Suche · „Alle fälligen“
-// (Hauptkarte mit Neu · Lernen · Fällig, Modus, „Wiederholen →“, Minuten) · Prognose 7 Tage ·
-// Stapel (eingebaut + eigene, je Zeile die drei Zähler) · Eingangskorb · Zuletzt hinzugefügt.
+// Wurzel des Reiters „Wörter“ (Gesamtkonzept 3.3): Suche · EINE Zielkarte (X von 8.000, Balken mit C1-Marke, Tempo) ·
+// Wiederholen-Karte (ein Hauptknopf, Modus als Textknopf) · „Neue Wörter heute“ · drei Stapel + „Alle Stapel ›“ (Blatt `x:decks`
+// mit Eingangskorb, Prognose, allen Stapeln, Zuletzt hinzugefügt) · Atlas · „Mehr üben“ (Blatt `x:extra`).
 
 export const DECK_LABEL: Record<BuiltinDeck, MessageKey> = {
   inbox: 'nbWsDeckInbox',
@@ -67,7 +61,7 @@ export function Counts({ c, testId }: { c: DeckCounts; testId?: string }) {
 }
 
 export function VocabHub() {
-  const { t, tn, lang } = useT();
+  const { t, tn, lang, num } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
   const now = useClock((s) => s.now);
@@ -76,6 +70,7 @@ export function VocabHub() {
   const quota = useQuota(cards);
   const ctx = useDeckCtx();
   const decks = useDecks((s) => s.decks);
+  const profile = useLive((s) => s.docs['app/profile']);
   const mode: Mode = decks.prefs.mode ?? 'auto';
   const [q, setQ] = useState('');
 
@@ -87,52 +82,30 @@ export function VocabHub() {
   const minutes = estimateRoundMinutes(visible, now, quota.left, mode === 'flip');
   const behind = useMemo(() => overdueCount(visible, now), [visible, now]);
   const braked = backlogBraked(behind);
-  // Was der Knopf „Wiederholen“ jetzt tut (Emrah 02.10.2026: „Alle fälligen 60 Karten“, aber die Runde hat weniger):
-  // Pflicht offen → die Pflichtrunde des Tagesplans, sonst eine freiwillige Runde mit bis zu 20 Karten.
+  // Was der Knopf „Wiederholen“ jetzt tut (Emrah 02.10.2026): Pflicht offen → die Pflichtrunde des Tagesplans, sonst eine freiwillige Runde mit bis zu 20 Karten.
   const dutyOpen = useToday((s) => s.duties.items.some((d) => d.id === 'review' && d.state === 'open'));
   const dutyTotal = useToday((s) => s.review.total);
   const dutyDone = useToday((s) => s.review.done);
-  const fc = useMemo(() => forecast(visible, now), [visible, now]);
-  const fcMax = Math.max(1, ...fc.map((d) => d.n));
-  const perDay = normalizeNewPerDay(quota.perDay);
-  const inbox = inboxReach(all.new, perDay, braked);
-  const rows = useMemo(() => {
-    const builtin = BUILTIN_DECKS.map((id) => ({ id, name: t(DECK_LABEL[id]), cards: deckCards(cards, id, decks, ctx) })).filter((d) => d.cards.length > 0 && d.id !== 'inbox');
-    const own = visibleDecks(decks).map((d) => ({ id: d.id, name: d.name, cards: deckCards(cards, d.id, decks, ctx) }));
-    return [...builtin, ...own].map((d) => ({ ...d, counts: deckCounts(d.cards, now) }));
-  }, [cards, decks, ctx, now, t]);
+  const goal = useMemo(() => vocabGoal({ profile, cards, today }), [profile, cards, today]);
+  const goalNow = goal.now ?? 0;
+  const modeLabel = t(mode === 'auto' ? 'nbWsModeAuto' : mode === 'flip' ? 'nbWsModeFlip' : 'nbWsModeType');
+  // Drei Stapel: Alle · Schwierig · bei Bedarf der erste eigene Stapel (früher „Thema der Woche“). Alles Weitere unter „Alle Stapel“.
+  const hardCards = useMemo(() => deckCards(cards, 'hard', decks, ctx), [cards, decks, ctx]);
+  const ownDeck = useMemo(() => {
+    // Der zuletzt angelegte eigene Stapel (bei gleichem Tag der mit der größeren Kennung).
+    const d = [...visibleDecks(decks)].sort((a, b) => b.created.localeCompare(a.created) || (a.id < b.id ? 1 : -1))[0];
+    return d ? { id: d.id, name: d.name, counts: deckCounts(deckCards(cards, d.id, decks, ctx), now) } : null;
+  }, [cards, decks, ctx, now]);
   const hits = useMemo(() => {
     const k = q.trim().toLowerCase();
     if (k.length < 2) return null;
     const low = (x: string | null) => (x ?? '').toLowerCase();
     return visible.filter((c) => low(c.word).includes(k) || low(c.de).includes(k) || low(c.def).includes(k)).slice(0, 8);
   }, [q, visible]);
-  const recent = useMemo(() => [...visible].sort((a, b) => (a.added < b.added ? 1 : a.added > b.added ? -1 : b.order - a.order)).slice(0, 5), [visible]);
-
-  const setMode = (m: Mode) => {
-    void writeDecks((cur) => prefsOp(cur, { mode: m })).then((r) => {
-      if (!r.ok) toast(t(decksErrorKey(r.error)), 'error');
-    });
-  };
-  const state = (c: TrainCard): string => {
-    if (c.isNew) return t('nbWsStateNew');
-    const d = daysBetween(today, dayKey(c.fsrs.due));
-    if (c.fsrs.due <= now || d <= 0) return t('nbWsStateToday');
-    if (d === 1) return t('nbWsStateTomorrow');
-    return t('nbWsStateIn', { n: d });
-  };
-  const dayLabel = (day: string, i: number) => (i === 0 ? t('nbWsTomorrow') : new Date(dayKeyNoon(day)).toLocaleDateString(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'short' }));
 
   return (
     <div className="flex flex-col gap-6 py-6 sm:py-10" data-testid="vocab">
-      <ScreenHeader
-        title={t('nbWsTitle')}
-        right={
-          <Button variant="secondary" icon="plus" onClick={() => openSheet('add')} data-testid="vocab-add">
-            {t('nbWsAdd')}
-          </Button>
-        }
-      />
+      <ScreenHeader title={t('nbWsTitle')} titleAction={<IconButton icon="plus" label={t('nbWsHAddLabel')} onClick={() => openSheet('add')} data-testid="vocab-add" />} />
       <form
         role="search"
         onSubmit={(e) => {
@@ -156,30 +129,45 @@ export function VocabHub() {
       )}
 
       <HeroCard
+        testId="ws-goal"
+        eyebrow={t('nbWsHGoalEyebrow')}
+        title={
+          <span className="lx-tnum" data-testid="ws-goal-now" data-now={goal.now ?? ''}>
+            {t('nbWsHGoalOf', { now: num(goalNow), target: num(goal.target) })}
+          </span>
+        }
+      >
+        <div data-testid="ws-goal-bar">
+          <div className="relative h-2 rounded-full bg-surface" role="img" aria-label={t('vgBarLabel', { now: goalNow, mark: C1_MARK })}>
+            <div className="h-2 rounded-full bg-accent" style={{ width: `${Math.min(100, Math.round((goalNow / goal.target) * 100))}%` }} />
+            <span className="absolute top-[-3px] h-3.5 w-0.5 bg-fg" style={{ left: `${(C1_MARK / goal.target) * 100}%` }} aria-hidden="true" />
+          </div>
+          <p className="lx-tnum m-0 mt-1 text-xs text-muted">{t('nbWsHGoalMark', { mark: num(C1_MARK) })}</p>
+        </div>
+        <p className="m-0 text-sm text-muted" data-testid="ws-goal-pace">
+          {!goal.measured
+            ? t('nbWsHGoalUnmeasured')
+            : goal.reached
+              ? t('nbWsHGoalReached')
+              : goal.weeks !== null
+                ? t('nbWsHGoalPace', { n: goal.perWeek, weeks: goal.weeks })
+                : goal.perWeek >= 1
+                  ? t('nbWsHGoalPaceOpen', { n: goal.perWeek })
+                  : t('nbWsHGoalNoPace')}
+        </p>
+      </HeroCard>
+
+      <HeroCard
         testId="ws-due"
-        eyebrow={t('nbWsDueEyebrow')}
+        eyebrow={t('nbWsHReviewEyebrow')}
         meta={total > 0 ? <span data-testid="ws-minutes">{t('nbWsMinutes', { n: minutes })}</span> : undefined}
-        title={<span className="lx-tnum">{total > 0 ? tn('nbWsDueHeadline', total) : t('nbWsNothingDue')}</span>}
         action={
           <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => startAllDue(api)} disabled={total === 0} data-testid="ws-review">
-            {t('nbWsReview')}
+            {total > 0 ? tn('nbWsHReviewBtn', total) : t('nbWsHReviewBtnNone')}
           </Button>
         }
       >
-        <dl className="lx-tnum m-0 flex gap-5 text-sm" data-testid="ws-counts" data-total={total}>
-          {(
-            [
-              ['new', 'nbWsCountNew', allShown.new, 'text-cyan-text'],
-              ['learning', 'nbWsCountLearn', allShown.learning, 'text-gold-text'],
-              ['due', 'nbWsCountDue', allShown.due, 'text-accent-text'],
-            ] as const
-          ).map(([k, key, n, tone]) => (
-            <div key={k} className="flex flex-col" data-count={k}>
-              <dt className="text-xs text-muted">{t(key)}</dt>
-              <dd className={`m-0 text-lg font-semibold ${tone}`}>{n}</dd>
-            </div>
-          ))}
-        </dl>
+        <span data-testid="ws-counts" data-total={total} data-new={allShown.new} data-learning={allShown.learning} data-due={allShown.due} hidden />
         {behind > 0 && (
           <p className="m-0 text-sm text-muted" data-testid="ws-behind" data-n={behind}>
             {tn('nbWsBehind', behind)}
@@ -200,79 +188,40 @@ export function VocabHub() {
             {dutyOpen && dutyTotal > 0 ? t('nbWsDutyLeft', { left: Math.max(1, dutyTotal - dutyDone), total: dutyTotal }) : t('nbWsExtraRound', { n: Math.min(20, total) })}
           </p>
         )}
-        <Segmented<Mode>
-          label={t('nbWsModeLabel')}
-          value={mode}
-          options={[
-            { value: 'auto', label: t('nbWsModeAuto') },
-            { value: 'flip', label: t('nbWsModeFlip') },
-            { value: 'type', label: t('nbWsModeType') },
-          ]}
-          onChange={setMode}
-          testId="ws-mode"
-        />
+        <button type="button" className="min-h-11 self-start text-sm text-muted underline-offset-4 hover:underline" onClick={() => openSheet('x:mode')} data-testid="ws-mode-open" data-mode={mode}>
+          {t('nbWsHModeLine', { mode: modeLabel })} ›
+        </button>
       </HeroCard>
 
-      <section className="flex flex-col gap-2.5" data-testid="ws-forecast" aria-label={t('nbWsForecast')}>
-        <Eyebrow>{t('nbWsForecast')}</Eyebrow>
-        <ol className="m-0 grid list-none grid-cols-7 items-end gap-1.5 p-0">
-          {fc.map((d, i) => (
-            <li key={d.day} className="flex flex-col items-center gap-1" aria-label={t('nbWsForecastBar', { day: dayLabel(d.day, i), n: d.n })} data-n={d.n}>
-              <span className="lx-tnum text-xs text-muted" aria-hidden="true">
-                {d.n}
-              </span>
-              <span className="block w-full rounded-md bg-accent/70" style={{ height: `${Math.max(3, Math.round((d.n / fcMax) * 44))}px` }} aria-hidden="true" />
-              <span className="max-w-full truncate text-[0.7rem] text-subtle" aria-hidden="true">
-                {dayLabel(d.day, i)}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <RowList title={t('nbWsDecks')} testId="ws-decks">
+      <RowList testId="ws-newtoday">
         <Row
-          icon="download"
+          icon="plus"
           channel="cards"
-          title={t('nbWsDeckInbox')}
-          sub={
-            <>
-              {inbox.n === 0 ? t('nbWsInboxEmpty') : inbox.days === null ? t('nbWsInboxNoQuota', { n: inbox.n }) : t('nbWsInbox', { n: inbox.n, days: inbox.days })}
-              {inbox.review && (
-                <span className="block text-gold-text" data-testid="ws-inbox-review">
-                  {t('nbWsInboxReview')}
-                </span>
-              )}
-            </>
+          title={t('nbWsHNewToday')}
+          value={
+            <span data-testid="ws-new-left" data-n={quota.left}>
+              {num(quota.left)}
+            </span>
           }
-          onClick={() => go({ name: 'deck', id: 'inbox' })}
-          testId="ws-inbox"
-          data={{ 'data-deck': 'inbox' }}
+          testId="ws-new-today"
         />
-        {rows.map((d) => (
-          <Row key={d.id} icon="cards" channel="cards" title={d.name} value={<Counts c={d.counts} />} chevron onClick={() => go({ name: 'deck', id: d.id })} testId="ws-deck" data={{ 'data-deck': d.id }} />
-        ))}
-        <Row icon="plus" title={t('nbWsNewDeck')} onClick={() => openSheet('x:deck-new')} testId="ws-new-deck" />
       </RowList>
 
-      <RowList title={t('nbWsRecent')} testId="ws-recent">
-        {recent.map((c) => (
-          <Row
-            key={c.key}
-            title={<span lang="en">{c.word}</span>}
-            sub={<span lang={lang}>{meaningOf(c, lang)}</span>}
-            value={state(c)}
-            onClick={() => openSheet('word', { key: c.key })}
-            testId="vocab-row"
-            data={{ 'data-word': c.id, 'data-kind': c.kind }}
-          />
-        ))}
-        <Row title={t('atTitle')} sub={t('atSub')} onClick={() => go({ name: 'atlas' })} testId="ws-atlas" />
-        <Row title={tn('nbWsAll', visible.length)} sub={t('nbWsAllSub')} onClick={() => go({ name: 'vocabList' })} testId="ws-all" />
+      <RowList title={t('nbWsDecks')} testId="ws-decks-main">
+        <Row icon="cards" channel="cards" title={tn('nbWsAll', visible.length)} sub={t('nbWsAllSub')} value={<Counts c={all} />} chevron onClick={() => go({ name: 'vocabList' })} testId="ws-all" />
+        {hardCards.length > 0 && (
+          <Row icon="cards" channel="cards" title={t('nbWsDeckHard')} value={<Counts c={deckCounts(hardCards, now)} />} chevron onClick={() => go({ name: 'deck', id: 'hard' })} testId="ws-deck" data={{ 'data-deck': 'hard' }} />
+        )}
+        {ownDeck && <Row icon="cards" channel="cards" title={ownDeck.name} value={<Counts c={ownDeck.counts} />} chevron onClick={() => go({ name: 'deck', id: ownDeck.id })} testId="ws-deck" data={{ 'data-deck': ownDeck.id }} />}
+        <Row title={`${t('nbWsHAllDecks')} ›`} onClick={() => openSheet('x:decks')} testId="ws-decks-all" />
+      </RowList>
+
+      <RowList testId="ws-atlas-list">
+        <Row icon="grid" channel="cards" title={t('nbWsHAtlasRow')} sub={t('nbWsHAtlasSub')} chevron onClick={() => go({ name: 'atlas' })} testId="ws-atlas" />
       </RowList>
       <p className="m-0 text-center">
         <button type="button" className="min-h-11 text-sm text-muted underline-offset-4 hover:underline" onClick={() => openSheet('x:extra')} data-testid="ws-more">
-          {t('nbWsMore')} ›
+          {t('nbWsHMoreLabel')} ›
         </button>
       </p>
     </div>

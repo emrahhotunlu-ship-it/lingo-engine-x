@@ -3,10 +3,12 @@ import { useClock } from '../../../app/clock';
 import { useNav } from '../../../app/nav';
 import { useLive } from '../../../data/live';
 import { atlasEntries, atlasId, bandOf, ATLAS_BANDS, type AtlasBand, type AtlasEntry } from '../../../domain/atlas/atlas';
+import { atlasGate } from '../../../domain/atlas/capacity';
 import { PACK, PACK_CATS, packDoc, type PackCat } from '../../../domain/c1pack/pack';
 import { toast } from '../../../ui/Toast';
 import { Button } from '../../../ui/Button';
 import { addAtlasCard } from './add';
+import { useVocabCards } from '../hub/data';
 import { useT, type MessageKey } from '../../../i18n';
 import { ScreenHeader } from '../../learn/ui';
 
@@ -55,7 +57,18 @@ export function AtlasScreen() {
   const known = packKnown + words.filter(hasCard).length;
   const query = q.trim().toLowerCase();
   const hits = query ? words.filter((e) => e.w.startsWith(query) || e.d.toLowerCase().includes(query)).slice(0, 30) : [];
+  const cards = useVocabCards();
+  const gate = useMemo(() => atlasGate({ cards, today, nowMs: now }), [cards, today, now]);
   const add = async (e: AtlasEntry) => {
+    // Nie still scheitern: voll oder heute genug neue Wörter → ruhiger Hinweis, nichts wird geschrieben.
+    if (gate.state === 'full') {
+      toast(t('atCapFull', { n: num(gate.total) }));
+      return;
+    }
+    if (gate.state === 'enough') {
+      toast(t('atCapToday', { n: num(gate.limit) }));
+      return;
+    }
     const ok = await addAtlasCard(e, today, now);
     toast(ok ? t('atAdded', { word: e.w }) : t('atNotAdded'));
   };
@@ -94,6 +107,11 @@ export function AtlasScreen() {
           </span>
         }
       />
+      {gate.state !== 'ok' && (
+        <p className="m-0 text-sm text-gold-text" role="status" data-testid="atlas-cap" data-state={gate.state}>
+          {gate.state === 'full' ? t('atCapFull', { n: num(gate.total) }) : t('atCapToday', { n: num(gate.limit) })}
+        </p>
+      )}
       <input
         type="search"
         className="lx-field text-base"

@@ -217,4 +217,10 @@ export const progressDe = {
   compactDone: 'Ausgelagert. Das Profil ist jetzt {kb} KiB groß.',
   compactFailed: 'Auslagern abgebrochen – am Profil wurde nichts geändert.',
   compactNothing: 'Es gibt keine Jahre, die ausgelagert werden können.',
+
+  atCapFull: 'Dein Wortschatz hat {n} Karten – das ist die Grenze. Der Atlas legt vorerst keine neuen an.',
+  atCapToday: 'Heute sind genug neue Wörter dran (höchstens {n}). Morgen geht es weiter.',
+  diagCards: 'Karten geliefert',
+  diagCardsValue: '{vocab} Wörter · {chunk} Wendungen',
+  diagCardsWarn: 'Viele Karten: {n} von höchstens 4.500. Ab 4.500 legt der Atlas keine neuen mehr an.',
 } as const;

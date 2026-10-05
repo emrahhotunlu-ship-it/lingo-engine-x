@@ -110,6 +110,7 @@ test.describe('Desktop', () => {
     await boot(page, { migrated: true, fake: { patch: { ...patch, 'app/decks': { v: 1, builtin: { 'src:preply': { mode: 'flip', dir: 'en-de' } } } } } });
     await screen(page, 'today');
     await openTab(page, 'vocab');
+    await page.getByTestId('ws-decks-all').click();
     await page.locator('[data-testid="ws-deck"][data-deck="src:preply"]').click();
     await screen(page, 'deck');
     await page.getByTestId('deck-start').click();

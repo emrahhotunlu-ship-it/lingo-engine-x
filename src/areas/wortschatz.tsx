@@ -7,7 +7,7 @@ import type { UnitBlockProvider } from '../app/unit/types';
 import { installDecksWatch } from '../features/vocab/decksStore';
 import { DeckScreen } from '../features/vocab/hub/DeckScreen';
 import { VocabStatsSection, VocabSettingsSection } from '../features/vocab/hub/Sections';
-import { AddSheetHost, ExtraSheet, NewDeckSheet, WordSheetHost } from '../features/vocab/hub/Sheets';
+import { AddSheetHost, AllDecksSheet, ExtraSheet, ModeSheet, NewDeckSheet, WordSheetHost } from '../features/vocab/hub/Sheets';
 import { VocabHub } from '../features/vocab/hub/VocabHub';
 import { VocabScreen } from '../features/vocab/list/VocabScreen';
 import { installFlushOnHide } from '../features/vocab/persist';
@@ -100,6 +100,8 @@ export const wortschatz = defineArea({
     { id: 'word', component: WordSheetHost },
     { id: 'add', component: AddSheetHost },
     { id: 'x:extra', component: ExtraSheet },
+    { id: 'x:mode', component: ModeSheet },
+    { id: 'x:decks', component: AllDecksSheet },
     { id: 'x:deck-new', component: NewDeckSheet },
   ],
   settings: [{ id: 'ws-vocab', group: 'vocab', order: 10, component: VocabSettingsSection }],

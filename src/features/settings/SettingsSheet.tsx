@@ -10,6 +10,7 @@ import { clearLog, getLog, logWarn, subscribeLog } from '../../platform/diagnost
 import { phase5Diag } from '../companion/diag';
 import { useLive } from '../../data/live';
 import { countDocuments } from '../../data/reads';
+import { CARD_WARN } from '../../domain/atlas/capacity';
 import { docCount as docCountOf, DOC_COUNT_WARN, profileSize } from '../../domain/capacity/profileSize';
 import { useClock } from '../../app/clock';
 import { COMPACT_ENABLED, compactPreview, runCompact } from './compactRun';
@@ -214,6 +215,9 @@ function Diagnostics({ open }: { open: boolean }) {
   const size = useMemo(() => profileSize(profile, today), [profile, today]);
   const log = useSyncExternalStore(subscribeLog, getLog);
   const [docCount, setDocCount] = useState<number | null>(null);
+  // Karten, die das Live-Abo wirklich geliefert hat (Kapazitätswächter): Warnung ab CARD_WARN, bevor die 5.000 je Abfrage greifen.
+  const vocabN = useLive((s) => s.collections.vocab?.size ?? 0);
+  const chunkN = useLive((s) => s.collections.chunk?.size ?? 0);
   const [p5, setP5] = useState<ReturnType<typeof phase5Diag> | null>(null);
 
   useEffect(() => {
@@ -257,6 +261,7 @@ function Diagnostics({ open }: { open: boolean }) {
     [t('capDb'), t(CAP_LABEL[caps.db])],
     [t('capSample'), t(CAP_LABEL[caps.sampleRevoked ? 'absent' : caps.sample])],
     [t('capDownloads'), t(CAP_LABEL[caps.downloads])],
+    [t('diagCards'), t('diagCardsValue', { vocab: num(vocabN), chunk: num(chunkN) })],
     [t('diagDocuments'), docCount === null ? t('diagDocumentsUnknown') : t('diagDocumentsValue', { n: docCount })],
     // Phase 7 (Plan §12.3): Profilgröße gegen 256 KiB und Prognose.
     [t('diagProfileSize'), `${t('diagProfileSizeValue', { kb: Math.round(size.bytes / 1024) })}${size.yearsLeft !== null ? ` · ${t('diagProfileYears', { years: size.yearsLeft })}` : ''}`],
@@ -288,6 +293,11 @@ function Diagnostics({ open }: { open: boolean }) {
       {docCount !== null && docCount >= DOC_COUNT_WARN && (
         <p className="text-sm text-gold-text" role="status" data-testid="diag-capacity-warn">
           {t('diagCapacityWarn', { n: docCount })}
+        </p>
+      )}
+      {vocabN + chunkN >= CARD_WARN && (
+        <p className="text-sm text-gold-text" role="status" data-testid="diag-cards-warn">
+          {t('diagCardsWarn', { n: num(vocabN + chunkN) })}
         </p>
       )}
       {size.warn && (
