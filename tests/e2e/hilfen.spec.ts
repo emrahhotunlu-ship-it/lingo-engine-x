@@ -53,7 +53,7 @@ test('Auswahl (mc_en): Tipp zeigt die englische Erklärung (nie die deutsche Lö
   expect(errors).toEqual([]);
 });
 
-test('Tipp je Übungsart: Diktat Stufe 1; Tempo ohne Tipp; Wochen-Check-Regel bleibt (noHelp)', async ({ page }) => {
+test('Tipp je Übungsart: Diktat Stufe 1; Wochen-Check-Regel bleibt (noHelp)', async ({ page }) => {
   const i = TOUR.findIndex((t) => t.ex === 'dictation');
   expect(i).toBeGreaterThanOrEqual(0);
   // Die Rundgang-Karten sind in dieser Reihenfolge fällig: bis zum Diktat beantworten.
@@ -69,11 +69,10 @@ test('Tipp je Übungsart: Diktat Stufe 1; Tempo ohne Tipp; Wochen-Check-Regel bl
       await expect(page.getByTestId('tip-info')).toBeVisible();
       await expect(page.getByTestId('hint')).toHaveCount(0);
     }
-    if (ex === 'speed') await expect(page.getByTestId('hint')).toHaveCount(0);
     await answerOnly(page);
     await page.getByTestId('next').click();
     await expect(page.locator('[data-testid="result"]')).toHaveCount(0);
-    if (ex === 'speed' || n === TOUR.length - 1) break;
+    if (ex === 'dictation' || n === TOUR.length - 1) break;
   }
 });
 

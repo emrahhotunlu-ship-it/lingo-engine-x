@@ -22,13 +22,11 @@ const strong = (...ids: string[]): Counts => Object.fromEntries(ids.map((id) => 
 const weak = (id: string): Counts => ({ [id]: { c: 0, w: 6 } });
 
 const MODES: Array<{ ex: string; stage: number; others: string[] }> = [
-  { ex: 'spot', stage: 1, others: ['mc_en', 'listen_mc'] },
-  { ex: 'listen_mc', stage: 1, others: ['mc_en', 'spot'] },
+  // „Im Satz finden“, Tempo und Bausteine sind aus der Wörter-Leiter entfernt (Umbau Fokus, Gesamtkonzept 3.3).
+  { ex: 'listen_mc', stage: 1, others: ['mc_en'] },
   { ex: 'match', stage: 2, others: ['mc_de'] },
-  { ex: 'tiles', stage: 3, others: ['cloze_hint'] },
-  { ex: 'dictation', stage: 5, others: ['speed', 'produce'] },
-  { ex: 'speed', stage: 5, others: ['dictation', 'produce'] },
-  { ex: 'produce', stage: 5, others: ['dictation', 'speed'] },
+  { ex: 'dictation', stage: 5, others: ['produce'] },
+  { ex: 'produce', stage: 5, others: ['dictation'] },
 ];
 
 async function startRound(page: Page, patch: Record<string, Doc>, opts: { sample?: boolean } = {}) {
@@ -51,24 +49,18 @@ for (const m of MODES) {
     await expect(ex).toHaveAttribute('data-card', 'avoid');
     await expect(page.getByTestId('task')).not.toBeEmpty();
     // Lösung steht vor dem Prüfen nicht im DOM (außer als Option bzw. als Satzwort bei „Im Satz finden").
-    if (m.ex === 'dictation' || m.ex === 'speed' || m.ex === 'tiles') await expect(page.getByTestId('sentence')).not.toContainText('avoid');
+    if (m.ex === 'dictation') await expect(page.getByTestId('sentence')).not.toContainText('avoid');
     if (m.ex === 'listen_mc' || m.ex === 'dictation') {
       await expect.poll(async () => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { spoken: string[] } }).__LINGO_FAKE__.spoken.join(' | '))).toContain('Try to avoid driving in rush hour.');
       await expect(page.getByTestId('replay')).toBeVisible();
     }
     if (m.ex === 'listen_mc') await expect(page.getByTestId('sentence')).toHaveCount(0);
-    if (m.ex === 'speed') await expect(page.getByTestId('speed-bar')).toBeVisible();
     expect(await layoutProblems(page)).toEqual([]);
 
     // Lösen per Touch
-    if (m.ex === 'spot') await page.getByTestId('spot-word').filter({ hasText: /^avoid$/ }).tap();
-    else if (m.ex === 'listen_mc') await page.getByTestId('choice').filter({ hasText: 'vermeiden' }).tap();
+    if (m.ex === 'listen_mc') await page.getByTestId('choice').filter({ hasText: 'vermeiden' }).tap();
     else if (m.ex === 'match') await page.getByTestId('choice').filter({ hasText: /^\s*\d?\s*avoid\s*$/ }).tap();
-    else if (m.ex === 'tiles') {
-      for (const ch of 'avoid') await page.locator(`[data-testid="tile"][data-where="pool"][data-tile="${ch}"]`).first().tap();
-      await expect(page.getByTestId('gap')).toHaveText('avoid');
-      await page.getByTestId('check').tap();
-    } else if (m.ex === 'produce') {
+    else if (m.ex === 'produce') {
       await page.getByTestId('produce-input').tap();
       await page.getByTestId('produce-input').fill(produceSentence('avoid'));
       await page.getByTestId('check').tap();
@@ -108,23 +100,9 @@ for (const m of MODES) {
   });
 }
 
-test('Tempo: Zeit läuft ab – die Eingabe wird geprüft, richtig zählt nur als „Schwer"', async ({ browser }) => {
-  test.setTimeout(60_000);
-  const { page, close } = await phone(browser);
-  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'produce'), ...weak('speed') }) });
-  await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'speed');
-  await page.getByTestId('gap-input').tap();
-  await page.keyboard.type('avoid', { delay: 20 });
-  // Nicht prüfen: der Balken läuft ab (Grenze für „avoid" 6 s).
-  await expect(page.getByTestId('verdict')).toBeVisible({ timeout: 12_000 });
-  await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '2');
-  expect(errors).toEqual([]);
-  await close();
-});
-
 test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei KI-Fehler „Ohne Claude prüfen"', async ({ browser }) => {
   const { page, close } = await phone(browser);
-  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'speed'), ...weak('produce') }) });
+  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation'), ...weak('produce') }) });
   await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'produce');
   // „zzjson" liefert keine gültige Antwort: Fehlerzustand, Knopf „Erneut versuchen" und Prüfung ohne Claude.
   await page.getByTestId('produce-input').fill('I zzjson this every day at work.');
@@ -141,7 +119,7 @@ test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei K
   await close();
 
   const second = await phone(browser);
-  await startRound(second.page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'speed'), ...weak('produce') }) });
+  await startRound(second.page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation'), ...weak('produce') }) });
   await second.page.getByTestId('produce-input').fill('The meeting starts at nine.');
   await second.page.getByTestId('check').tap();
   await expect(second.page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
@@ -152,10 +130,10 @@ test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei K
 
 test('ohne KI (nosample): Stufe 5 fällt auf KI-freie Arten zurück, kein toter Knopf', async ({ browser }) => {
   const { page, close } = await phone(browser);
-  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'speed'), ...weak('produce') }) }, { sample: false });
+  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation'), ...weak('produce') }) }, { sample: false });
   const ex = page.getByTestId('exercise');
   await expect(ex).toBeVisible();
-  expect(['dictation', 'speed']).toContain(await ex.getAttribute('data-ex'));
+  expect(['dictation', 'type']).toContain(await ex.getAttribute('data-ex'));
   await expect(page.getByTestId('produce-input')).toHaveCount(0);
   await expect(page.locator('[data-ai]')).toHaveCount(0);
   await answerCurrent(page);

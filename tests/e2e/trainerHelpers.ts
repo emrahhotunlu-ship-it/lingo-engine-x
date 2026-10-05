@@ -207,13 +207,11 @@ export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Pr
  * „aus der Situation“ und das Blatt einer Wendung in der Wortschatzliste.
  */
 export const TOUR: ReadonlyArray<{ path: string; ex: string; stage: number; others: string[] }> = [
-  { path: 'vocab/avoid', ex: 'spot', stage: 1, others: ['mc_en', 'listen_mc'] },
-  { path: 'vocab/deserve', ex: 'listen_mc', stage: 1, others: ['mc_en', 'spot'] },
+  // „Im Satz finden“, Tempo und Bausteine sind aus der Wörter-Leiter entfernt (Umbau Fokus).
+  { path: 'vocab/deserve', ex: 'listen_mc', stage: 1, others: ['mc_en'] },
   { path: 'vocab/convince', ex: 'match', stage: 2, others: ['mc_de'] },
-  { path: 'vocab/afford', ex: 'tiles', stage: 3, others: ['cloze_hint'] },
-  { path: 'vocab/achieve', ex: 'dictation', stage: 5, others: ['speed', 'produce'] },
-  { path: 'vocab/approach', ex: 'speed', stage: 5, others: ['dictation', 'produce'] },
-  { path: 'vocab/affect', ex: 'produce', stage: 5, others: ['dictation', 'speed'] },
+  { path: 'vocab/achieve', ex: 'dictation', stage: 5, others: ['produce'] },
+  { path: 'vocab/affect', ex: 'produce', stage: 5, others: ['dictation'] },
   { path: 'chunk/c-non-negotiable', ex: 'situation', stage: 4, others: ['type', 'cloze'] },
 ];
 

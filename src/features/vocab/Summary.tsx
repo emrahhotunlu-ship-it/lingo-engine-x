@@ -7,7 +7,7 @@ import { usePending, retryFailed } from './persist';
 import { useSession } from './session';
 import { SummaryActions } from '../learn/ui';
 import { useClock } from '../../app/clock';
-import { learningDayEnd } from '../../domain/date';
+import { isDue } from '../../domain/metrics';
 import { calibration, CONTROL } from '../../domain/srs/flip';
 import { local } from '../../platform/storage';
 import { useMemo, useState } from 'react';
@@ -60,9 +60,8 @@ export function Summary({ onBack }: { onBack: () => void }) {
   // beantwortete, fällige Karten dieser Sitzung. Nur nach der Pflicht-Runde und nach freien Runden über alle Fälligen.
   const left = useMemo(() => {
     if (round !== 'pflicht' && deck !== 'all') return 0;
-    const end = learningDayEnd(now);
     const done = new Set(answered);
-    return pool.filter((c) => !c.isNew && !done.has(c.key) && c.fsrs.due < end).length;
+    return pool.filter((c) => !c.isNew && !done.has(c.key) && isDue(c, now)).length;
   }, [round, deck, pool, answered, now]);
   const failedCards = usePending((s) => s.failedCards);
   const failed = usePending((s) => s.failed);

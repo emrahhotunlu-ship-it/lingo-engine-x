@@ -1,3 +1,4 @@
+import { FEST_DAYS } from '../metrics/definitions';
 import { isLearningState, retrievability } from './scheduler';
 import type { TrainCard } from './types';
 
@@ -26,6 +27,6 @@ export function confidenceOf(card: Pick<TrainCard, 'isNew' | 'stage' | 'fsrs'>, 
   const s = card.fsrs.stability;
   if (card.stage <= 1 || (r !== null && r < 0.7)) return 1;
   if (card.stage <= 3 || s < 7) return 2;
-  if (card.stage >= 5 && s >= 21 && (r === null || r >= 0.85)) return 4;
+  if (card.stage >= 5 && s >= FEST_DAYS && (r === null || r >= 0.85)) return 4;
   return 3;
 }

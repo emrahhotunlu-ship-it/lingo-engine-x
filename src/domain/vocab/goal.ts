@@ -1,5 +1,6 @@
 import type { TrainCard } from '../srs/types';
 import { addDays } from '../date';
+import { festCount } from '../metrics/vocab';
 
 // Wortschatzziel 8.000 für C1 mit Tempo-Prognose (Kap. 6.3, phase1-plan §4.9, Plan §7).
 // Messwert: letzter Wortschatztest (`profile.vtests[].passive`), sonst letzter `history[].vs`.
@@ -8,9 +9,7 @@ import { addDays } from '../date';
 export const VOCAB_TARGET = 8000;
 /** C1-Marke im Atlas (Gesamtkonzept 3.3): keine offizielle Grenze, eine Orientierung. */
 export const C1_MARK = 4500;
-/** „Fest“: Stufe ≥ 4 und Stabilität ≥ 21 Tage. */
-export const FEST_STAGE = 4;
-export const FEST_DAYS = 21;
+export { FEST_DAYS, FEST_STAGE } from '../metrics/definitions';
 
 export type VocabGoal = {
   target: number;
@@ -60,6 +59,6 @@ export function vocabGoal(i: { profile: Doc | null | undefined; cards: readonly 
   const now = v0 === null ? null : Math.round(v0 + learned);
   const reached = now !== null && now >= VOCAB_TARGET;
   const weeks = now === null || reached || perWeek < 1 ? null : Math.ceil((VOCAB_TARGET - now) / perWeek);
-  const fest = vocab.filter((c) => c.stage >= FEST_STAGE && c.fsrs.stability >= FEST_DAYS).length;
+  const fest = festCount(vocab);
   return { fest, target: VOCAB_TARGET, now, band, measuredOn, perWeek, weeks, reached, measured: v0 !== null };
 }

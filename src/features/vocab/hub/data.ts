@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useClock } from '../../../app/clock';
 import { invalidIdsOf, useLive } from '../../../data/live';
-import { buildTrainCards } from '../../../domain/srs/cards';
+import { buildTrainCards } from '../../../domain/metrics';
 import { buildChunkCards } from '../../../domain/srs/chunkCards';
 import type { DeckCtx } from '../../../domain/srs/decks';
 import { weekStartMs } from '../../../domain/srs/flip';

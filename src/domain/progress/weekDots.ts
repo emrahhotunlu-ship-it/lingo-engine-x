@@ -1,6 +1,5 @@
-import { mergeArchives } from '../capacity/compact';
-import { dayKey, legacyDayKey } from '../date';
-import { computeStreak, pflichtDays, weekStrip, type Streak, type WeekDay } from '../streak';
+import { streakWeek } from '../metrics/streak';
+import type { Streak, WeekDay } from '../streak';
 
 // Wochenstreifen im Profil-Blatt (plan.md §1.2, markt.md UI 4): sieben Punkte Mo–So mit
 // Pflicht · nur Extra · Ruhetag · offen. Grundlage ist `weekStrip` (dieselbe Regel wie die Serie);
@@ -34,17 +33,8 @@ export function weekDots(week: readonly WeekDay[], profile: unknown): WeekDot[] 
  * (`buildOverview`), aber ohne Karten und Kurs zu lesen (leicht genug für jedes Öffnen).
  */
 export function streakView(input: { nowMs: number; profile: unknown; schema: unknown; archives?: Iterable<Doc> }): { streak: Streak; dots: WeekDot[] } {
-  const merged = obj(mergeArchives(input.profile ? (obj(input.profile)) : null, (input.archives ?? []) as Iterable<Record<string, unknown>>));
-  const since = obj(input.schema).pflichtSince;
-  const streakInput = {
-    days: obj(merged.days) as Record<string, number>,
-    xpDays: obj(merged.xpDays) as Record<string, number>,
-    pflichtSince: typeof since === 'string' ? since : null,
-    pflichtDone: pflichtDays(merged.pflicht),
-    today: dayKey(input.nowMs),
-    legacyToday: legacyDayKey(input.nowMs),
-  };
-  return { streak: computeStreak(streakInput), dots: weekDots(weekStrip(streakInput), merged) };
+  const { streak, week, merged } = streakWeek(input);
+  return { streak, dots: weekDots(week, merged) };
 }
 
 /** „Solides B2+. Im Verhandeln fast C1 …“ → der erste Satz, höchstens `max` Zeichen. */

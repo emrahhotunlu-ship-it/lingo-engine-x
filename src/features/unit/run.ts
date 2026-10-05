@@ -6,7 +6,7 @@ import type { Route } from '../../app/router/types';
 import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types';
 import { invalidIdsOf, useLive } from '../../data/live';
 import type { DutyId, StoredPlan, UnitMeta } from '../../domain/plan/types';
-import { buildTrainCards } from '../../domain/srs/cards';
+import { buildTrainCards } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { isUnitPlan, unitActKey, unitDonePatch, unitPlanOf } from '../../domain/unit/plan';
 import { unitPhrases, weakWords } from '../../domain/unit/phrases';

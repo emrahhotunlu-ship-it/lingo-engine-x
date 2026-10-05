@@ -1,4 +1,4 @@
-import { learningDayEnd } from '../date';
+import { isDue } from '../metrics/definitions';
 import { cardSec, NEW_SEC } from './cost';
 import { availableExercises } from './modes';
 import { isLearningState, retrievability } from './scheduler';
@@ -75,9 +75,8 @@ function active(cards: readonly TrainCard[], lang: Lang): TrainCard[] {
 
 /** Fällige Karten nach Dringlichkeit: Lernschritte zuerst, dann geringste Abrufwahrscheinlichkeit. */
 export function dueCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {
-  const end = learningDayEnd(nowMs);
   return cards
-    .filter((c) => !c.isNew && c.fsrs.due < end)
+    .filter((c) => isDue(c, nowMs))
     .map((c) => ({ c, learning: isLearningState(c.fsrs), r: retrievability(c.fsrs, nowMs) }))
     .sort((a, b) => Number(b.learning) - Number(a.learning) || (a.learning ? a.c.fsrs.due - b.c.fsrs.due : a.r - b.r) || a.c.fsrs.due - b.c.fsrs.due || (a.c.key < b.c.key ? -1 : 1))
     .map((x) => x.c);
@@ -124,9 +123,8 @@ export function newCards(cards: readonly TrainCard[]): TrainCard[] {
 }
 
 function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {
-  const end = learningDayEnd(nowMs);
   return cards
-    .filter((c) => !c.isNew && c.fsrs.due >= end)
+    .filter((c) => !c.isNew && !isDue(c, nowMs))
     .map((c) => ({ c, r: retrievability(c.fsrs, nowMs) }))
     .sort((a, b) => a.r - b.r || (a.c.key < b.c.key ? -1 : 1))
     .map((x) => x.c);

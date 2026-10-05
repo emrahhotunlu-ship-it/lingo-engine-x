@@ -3,7 +3,7 @@ import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { cardStats, fixedStats, milestonePatch, newMilestones, topicsFest, truthParts, type Milestone } from '../../domain/plan/dayStats';
-import { buildTrainCards } from '../../domain/srs/cards';
+import { buildTrainCards } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { vocabGoal } from '../../domain/vocab/goal';
 import { logWarn } from '../../platform/diagnostics';

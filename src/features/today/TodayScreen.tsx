@@ -48,7 +48,7 @@ import type { UnitBlock } from '../../domain/week/types';
 import { assessPlanInput } from '../../domain/assessment/planInput';
 import { dueErrors } from '../../domain/grammar/errors';
 import { dueCards } from '../../domain/srs/queue';
-import { buildTrainCards } from '../../domain/srs/cards';
+import { buildTrainCards } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { startUnit } from '../unit/run';
 import { blockName, blockWhy } from '../unit/labels';

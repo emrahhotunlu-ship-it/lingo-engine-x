@@ -4,7 +4,7 @@ import { useClock } from '../../app/clock';
 import { invalidIdsOf, useLive } from '../../data/live';
 import type { CheckRecord, ResultItem } from '../../domain/check/record';
 import type { CheckItem } from '../../domain/check/select';
-import { buildTrainCards } from '../../domain/srs/cards';
+import { buildTrainCards } from '../../domain/metrics';
 import { buildExercise } from '../../domain/srs/exercise';
 import { useSettings } from '../../app/settings';
 import { useCheck } from './session';

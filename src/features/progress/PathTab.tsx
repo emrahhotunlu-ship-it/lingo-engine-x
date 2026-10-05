@@ -9,7 +9,7 @@ import { TOPICS } from '../../domain/content';
 import { topicP } from '../../domain/grammar/bkt';
 import { canDoEvidence, canDoStatus, canDoSummary, CANDO_DIMS, FOCUS_CANDO_ITEMS, type CanDoEnv, type CanDoItem, type CanDoStatus } from '../../domain/progress/cando';
 import { radarTotals } from '../../domain/progress/radar';
-import { buildTrainCards } from '../../domain/srs/cards';
+import { buildTrainCards } from '../../domain/metrics';
 import { C1_MARK, vocabGoal } from '../../domain/vocab/goal';
 import { useT, type MessageKey } from '../../i18n';
 import { Card } from '../../ui/Card';

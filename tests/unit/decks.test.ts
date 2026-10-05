@@ -159,12 +159,13 @@ describe('Prognose und Statistik (N27)', () => {
   });
   it('Statistik: Quote, Zustände, Median, sichere', () => {
     const cards = [
-      mk('a', { S: 30, stage: 5, hist: [{ t: NOW - 2 * D, g: 3, x: 'cloze' }, { t: NOW - 2 * D + 1000, g: 1, x: 'cloze' }] }),
-      mk('b', { S: 3, hist: [{ t: NOW - 3 * D, g: 1, x: 'flip' }] }),
+      mk('a', { S: 30, stage: 5, hist: [{ t: NOW - 12 * D, g: 3, x: 'cloze' }, { t: NOW - 2 * D, g: 3, x: 'cloze' }, { t: NOW - 2 * D + 1000, g: 1, x: 'cloze' }] }),
+      mk('b', { S: 3, hist: [{ t: NOW - 13 * D, g: 3, x: 'flip' }, { t: NOW - 3 * D, g: 1, x: 'flip' }] }),
       mk('c', { state: 'new', reps: 0 }),
       mk('d', { S: 10, hist: [{ t: NOW - 40 * D, g: 1, x: 'flip' }] }),
     ];
     const s = vocabStatistics(cards, NOW);
+    // Behaltensquote 28 Tage (domain/metrics): erste Antwort je Karte und Tag nach mindestens 7 Tagen Pause.
     expect(s.answers).toBe(2);
     expect(s.retention).toBe(0.5);
     expect(s.byState.new).toBe(1);

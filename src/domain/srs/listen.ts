@@ -1,3 +1,4 @@
+import { isDue } from '../metrics/definitions';
 import { stageOf } from './ladder';
 import { supports, type ExerciseEnv } from './modes';
 import type { ExerciseId, Lang, TrainCard } from './types';
@@ -30,9 +31,9 @@ const lastOf = (c: TrainCard): number => (typeof c.doc.last === 'number' ? c.doc
  */
 export function loopItems(cards: readonly TrainCard[], nowMs: number, size: number = LOOP_SIZE): LoopItem[] {
   const usable = cards.filter((c) => !c.hidden && !c.isNew && !!c.context?.sentence);
-  const due = usable.filter((c) => c.fsrs.due <= nowMs).sort((a, b) => a.fsrs.due - b.fsrs.due || a.key.localeCompare(b.key));
+  const due = usable.filter((c) => isDue(c, nowMs)).sort((a, b) => a.fsrs.due - b.fsrs.due || a.key.localeCompare(b.key));
   const rest = usable
-    .filter((c) => c.fsrs.due > nowMs)
+    .filter((c) => !isDue(c, nowMs))
     .sort((a, b) => stageOf(b.doc) - stageOf(a.doc) || lastOf(b) - lastOf(a) || a.key.localeCompare(b.key));
   const out: LoopItem[] = [];
   const seen = new Set<string>();

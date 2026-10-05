@@ -1,7 +1,10 @@
 import { LESSONS, SEED_VOCAB, TOPICS, UNITS, seedCard, type Lesson } from './content';
-import { dayKey, learningDayEnd, legacyDayKey } from './date';
-import { computeStreak, pflichtDays, weekStrip, type Streak, type StreakInput, type WeekDay } from './streak';
-import { mergeArchives } from './capacity/compact';
+import { dayKey, learningDayEnd } from './date';
+import { isDue } from './metrics/definitions';
+import { streakWeek } from './metrics/streak';
+import { isNewState, readFsrs } from './srs/scheduler';
+import type { Streak } from './streak';
+import type { WeekDay } from './streak';
 
 // „Dein Stand": reine Berechnung aus den gelesenen Dokumenten (keine Seiteneffekte).
 
@@ -55,20 +58,9 @@ export function buildOverview(input: {
   archives?: Iterable<Doc>;
 }): Overview {
   const today = dayKey(input.nowMs);
-  const profile = obj(mergeArchives(input.profile ? obj(input.profile) : null, input.archives ?? []));
   const schemaDoc = input.schema ? obj(input.schema) : null;
-  const pflichtSince = schemaDoc && typeof schemaDoc.pflichtSince === 'string' ? schemaDoc.pflichtSince : null;
-
-  const streakInput: StreakInput = {
-    days: obj(profile.days) as Record<string, number>,
-    xpDays: obj(profile.xpDays) as Record<string, number>,
-    pflichtSince,
-    pflichtDone: pflichtDays(profile.pflicht),
-    today,
-    legacyToday: legacyDayKey(input.nowMs),
-  };
-  const streak = computeStreak(streakInput);
-  const week = weekStrip(streakInput);
+  // Serie und Wochenstreifen: eine Rechnung (`domain/metrics/streak`), dieselbe wie Heute und Profil-Knopf.
+  const { streak, week } = streakWeek({ nowMs: input.nowMs, profile: input.profile, schema: input.schema, archives: input.archives, today });
 
   const doneMap = obj(obj(input.course).done);
   const doneIds = new Set(LESSONS.filter((l) => l.id in doneMap).map((l) => l.id));
@@ -78,7 +70,6 @@ export function buildOverview(input: {
     return { id: u.id, de: u.de, en: u.en, done: ls.filter((l) => doneIds.has(l.id)).length, total: ls.length };
   });
 
-  const end = learningDayEnd(input.nowMs);
   const byStage: Overview['vocab']['byStage'] = [0, 0, 0, 0, 0, 0];
   let total = 0;
   let hidden = 0;
@@ -91,10 +82,8 @@ export function buildOverview(input: {
     total++;
     const stage = Math.min(5, Math.max(0, Math.round(num(card.stage))));
     byStage[stage as 0 | 1 | 2 | 3 | 4 | 5]++;
-    const fsrs = obj(card.fsrs);
-    const isNew = str(card.state) === 'new' || (typeof fsrs.state === 'number' && fsrs.state === 0);
-    const dueAt = num(fsrs.due, num(card.due));
-    if (!isNew && dueAt > 0 && dueAt < end) due++;
+    const fsrs = readFsrs(card, input.nowMs);
+    if (isDue({ hidden: false, isNew: isNewState(fsrs), fsrs }, input.nowMs)) due++;
   }
 
   const topics = TOPICS.map((t) => {

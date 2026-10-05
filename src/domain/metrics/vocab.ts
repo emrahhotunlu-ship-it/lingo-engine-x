@@ -2,7 +2,7 @@ import { dayKey, daysBetween, isDayKey } from '../date';
 import { histOf } from '../srs/flip';
 import { retrievability } from '../srs/scheduler';
 import type { TrainCard } from '../srs/types';
-import { FEST_DAYS, FEST_STAGE } from '../vocab/goal';
+import { isFest } from './definitions';
 
 // Wortzahlen für „Fortschritt“ (Gesamtkonzept 3.5, K1 bis K3). Reine Funktionen, eine Quelle je Zahl:
 // Fest, Zuwachs, Prognose, Erwartet gekonnt und Behaltensquote. Nichts wird gespeichert oder geschrieben.
@@ -21,8 +21,7 @@ export const FEST_GOAL = 1500;
 
 type CardLike = Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs' | 'doc'>;
 
-/** Sitzt die Karte fest? Neue und ausgeblendete Karten nie. */
-export const isFest = (c: Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs'>): boolean => !c.hidden && !c.isNew && c.stage >= FEST_STAGE && c.fsrs.stability >= FEST_DAYS;
+export { isFest };
 
 export function festCount(cards: readonly Pick<TrainCard, 'hidden' | 'isNew' | 'stage' | 'fsrs'>[]): number {
   let n = 0;

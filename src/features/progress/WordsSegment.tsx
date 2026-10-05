@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useClock } from '../../app/clock';
 import { invalidIdsOf, useLive } from '../../data/live';
-import { FEST_GOAL, checkMean, expectedKnown, festCount, festForecast, festGrowth28, retention28, vtestView } from '../../domain/metrics';
-import { buildTrainCards } from '../../domain/srs/cards';
+import { FEST_GOAL, buildTrainCards, checkMean, expectedKnown, festCount, festForecast, festGrowth28, retention28, vtestView } from '../../domain/metrics';
 import { useT } from '../../i18n';
 import { Card } from '../../ui/Card';
 import { Disclosure } from '../../ui/Disclosure';

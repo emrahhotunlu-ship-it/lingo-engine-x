@@ -10,7 +10,7 @@ import { buildSprintDeck, type SprintItem } from '../../domain/drills/sprint';
 import type { Ctx, DrillAnswer, RadarEvent, SprintEntry } from '../../domain/learn/types';
 import { DUTY_ROUND } from '../../domain/plan/channels';
 import { hash32, mulberry32, shuffle } from '../../domain/random';
-import { buildTrainCards } from '../../domain/srs/cards';
+import { buildTrainCards } from '../../domain/metrics';
 import type { Lang, TrainCard } from '../../domain/srs/types';
 import { learnRecorder } from '../progress/persist';
 import { useLearnInputs } from '../learn/inputs';

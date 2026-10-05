@@ -1,5 +1,5 @@
 import { validateDoc } from '../../data/validate';
-import { learningDayEnd } from '../date';
+import { isDue, isFest } from '../metrics/definitions';
 import { legacyToFsrs } from './legacyFsrs';
 import { FSRS_VERSION, readFsrs } from './scheduler';
 import type { TrainCard } from './types';
@@ -53,7 +53,7 @@ export function matchesFilter(c: TrainCard, f: VocabFilter, nowMs: number): bool
     case 'all':
       return true;
     case 'due':
-      return !c.isNew && c.fsrs.due < learningDayEnd(nowMs);
+      return isDue(c, nowMs);
     case 'new':
       return c.isNew;
     case 'shaky':
@@ -61,7 +61,7 @@ export function matchesFilter(c: TrainCard, f: VocabFilter, nowMs: number): bool
     case 'helped':
       return c.stage === 3;
     case 'solid':
-      return c.stage >= 4;
+      return isFest(c);
     case 'job':
       return isJobCard(c);
     case 'phrases':

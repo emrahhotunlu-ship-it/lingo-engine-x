@@ -1,5 +1,4 @@
-import { learningDayStart } from '../date';
-import type { TrainCard } from '../srs/types';
+import { overdueCount } from '../metrics/definitions';
 import { NEW_MIN } from '../week/review';
 
 // Rückstand-Steuerung des Tagesplans (Emrah 02.10.2026: „Wie intelligent ist der Anki-Modus wirklich?“).
@@ -20,13 +19,8 @@ export const BACKLOG_BRAKE_AT = 15;
 /** Im Alltag kommen höchstens so viele neue Wörter am Tag (40 % der Wiederholzeit, `week/review.ts`): Grundlage für „reicht für n Tage“. */
 export const NEW_TYPICAL_MAX = 5;
 
-/** Karten, die gestern oder früher fällig waren (Lerntag beginnt um 04:00 Uhr). Neue Karten zählen nie. */
-export function overdueCount(cards: readonly TrainCard[], nowMs: number): number {
-  const start = learningDayStart(nowMs);
-  let n = 0;
-  for (const c of cards) if (!c.hidden && !c.isNew && c.fsrs.due < start) n++;
-  return n;
-}
+/** Karten, die gestern oder früher fällig waren: die Definition steht in `domain/metrics` (eine Quelle). */
+export { overdueCount };
 
 /** Wiederholzeit in Sekunden: Grundzeit plus Rückstands-Zuschlag. */
 export function backlogBudget(baseSec: number, overdue: number): number {

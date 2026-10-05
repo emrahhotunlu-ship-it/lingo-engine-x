@@ -1,5 +1,5 @@
 import { validateDoc } from '../../data/validate';
-import { learningDayEnd } from '../date';
+import { isDue } from '../metrics/definitions';
 import { expectedNewPerDay } from '../unit/backlog';
 import { applyUpdate } from './applyReview';
 import { histOf, type FlipDir } from './flip';
@@ -125,7 +125,7 @@ export function failures(c: Pick<TrainCard, 'doc' | 'xs' | 'modes'>): number {
 }
 export const isLeechCard = (c: TrainCard): boolean => !c.isNew && failures(c) >= LEECH_MIN;
 
-export const isDueCard = (c: TrainCard, nowMs: number): boolean => !c.isNew && c.fsrs.due < learningDayEnd(nowMs);
+export const isDueCard = isDue;
 
 /** Eigener Filter (rein). `ids` wirkt als feste Liste, die übrigen Bedingungen zusätzlich. */
 export function matchDeck(c: TrainCard, f: DeckFilter, nowMs: number): boolean {
@@ -198,12 +198,11 @@ export type DeckCounts = { new: number; learning: number; due: number };
 
 /** Zähler wie in Anki: Neu · Lernen (Lernschritte heute) · Fällig (Wiederholungen heute). */
 export function deckCounts(cards: readonly TrainCard[], nowMs: number): DeckCounts {
-  const end = learningDayEnd(nowMs);
   const out: DeckCounts = { new: 0, learning: 0, due: 0 };
   for (const c of cards) {
     if (c.hidden) continue;
     if (c.isNew) out.new++;
-    else if (c.fsrs.due < end) {
+    else if (isDue(c, nowMs)) {
       if (isLearningState(c.fsrs)) out.learning++;
       else out.due++;
     }
