@@ -37,7 +37,7 @@ export const nbShEn: Record<keyof typeof nbShDe, string> = {
   nbShEndNewShort: 'new',
   nbShStreak: 'Streak {n}',
   nbShProfileTitle: 'Profile',
-  nbShOverview: 'Your progress',
+  nbShOverview: 'Progress',
   nbShOverviewSub: 'Verdict, errors, goal C1, stats, history',
   nbShSettings: 'Settings',
   nbShSettingsSub: 'Learning, voice, appearance, data',

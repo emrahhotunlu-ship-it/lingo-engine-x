@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
+import { NO_GRAMMAR_ERRORS } from './heuteHelpers';
 import { writes } from './trainerHelpers';
 
 // Paket P2 (docs/neubau/plan.md §4.3), umgebaut zum Grammatik-Pfad (W5): Hub mit Weiter-Karte, Pfad, Fehler und Extra, jede Übung ≤ 2 Tipps ab
@@ -28,10 +29,11 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   const states = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
   expect(new Set(states)).toEqual(new Set(['new', 'learning', 'safe', 'firm'].filter((x) => states.includes(x))));
   expect(states.every((x) => ['new', 'learning', 'safe', 'firm'].includes(x ?? ''))).toBe(true);
-  // Fehler und Extra als Zeilen; Kurs, Fallen und Nachschlagen sind keine Einträge des Reiters mehr.
+  // Fehler, Regeln suchen, Deutsch-Fallen, Nachschlagen und Extra als Zeilen; der Kurs ist kein Eintrag des Reiters mehr.
   await expect(page.getByTestId('hub-errors').or(page.getByTestId('hub-errors-none')).first()).toBeVisible();
   await expect(page.getByTestId('hub-extra')).toBeVisible();
-  for (const id of ['hub-course', 'hub-next-lesson', 'hub-grammar', 'hub-patterns', 'hub-wissen']) await expect(page.getByTestId(id)).toHaveCount(0);
+  for (const id of ['hub-lookup', 'hub-traps', 'hub-wissen']) await expect(page.getByTestId(id)).toBeVisible();
+  for (const id of ['hub-course', 'hub-next-lesson']) await expect(page.getByTestId(id)).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   // Kurzübungen stehen seit „Go Anwenden“ im Reiter „Anwenden“.
   await openTab(page, 'apply');
@@ -43,7 +45,7 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
 
 test('Block 4 Fokus: Fallen-Korrektur → Hinweis, Versuch, Lösung mit Grund, danach Mini-Drill mit 3 Sätzen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const { errors } = await bootAt(page, { name: 'unitFocus' }, { fake: { patch: { 'app/repair': { items: [TRAP_REPAIR] } } } });
+  const { errors } = await bootAt(page, { name: 'unitFocus' }, { fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [TRAP_REPAIR] } } } });
   await screen(page, 'unitFocus');
   const item = page.getByTestId('focus-item');
   await expect(item).toHaveAttribute('data-kind', 'fix');
@@ -106,7 +108,7 @@ test('Block 5: aus dem Kopf neu formulieren, danach beide Fassungen nebeneinande
   await page.setViewportSize({ width: 390, height: 844 });
   // Seit 04.10.2026 nimmt „Fehler korrigieren“ fällige ältere Sätze (verteilt statt massiert): derselbe Satz, drei Tage alt und fällig.
   const old = { ...TRAP_REPAIR, t: TODAY_T - 3 * 86_400_000, due: TODAY_T - 2 * 86_400_000 };
-  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { 'app/repair': { items: [old] } } } });
+  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [old] } } } });
   await screen(page, 'unitAgain');
   await expect(page.getByTestId('again-remember')).toContainText('tatsächlich');
   await page.getByTestId('again-input').fill('Please send me the current version of the contract today.');
@@ -120,12 +122,34 @@ test('Block 5: aus dem Kopf neu formulieren, danach beide Fassungen nebeneinande
 
 test('Block 5: Sätze von heute kommen nicht am selben Tag wieder – ohne fällige ältere Sätze ruhiger Leerzustand', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { 'app/repair': { items: [TRAP_REPAIR] } } } });
+  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [TRAP_REPAIR] } } } });
   await screen(page, 'unitAgain');
   await expect(page.getByTestId('again-empty')).toBeVisible();
   await expect(page.getByTestId('again-done')).toBeVisible();
   await expect(page.getByTestId('again-input')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('Block 5: nur Grammatik-Fehlersätze fällig – kein leeres Feld, die Antwort schreibt Box und Fälligkeit ins Thema', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const errorsOf = async (): Promise<string> =>
+    JSON.stringify(
+      Object.entries(await dump(page))
+        .filter(([k]) => k.startsWith('grammar/'))
+        .map(([k, d]) => [k, d.errors]),
+    );
+  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { 'app/repair': null } } });
+  await screen(page, 'unitAgain');
+  const before = await errorsOf();
+  await expect(page.getByTestId('again-empty')).toHaveCount(0);
+  await expect(page.getByTestId('again-olds')).toBeVisible();
+  const input = page.getByTestId('again-input');
+  await expect(input).not.toHaveValue('');
+  await input.fill(`${await input.inputValue()} (nochmal)`);
+  await page.getByTestId('again-compare').click();
+  await expect(page.getByTestId('again-better')).toBeVisible();
+  await expect.poll(errorsOf).not.toBe(before);
   expect(errors).toEqual([]);
 });
 

@@ -3,7 +3,7 @@
 import type { nbHeuteDe } from './nbHeute.de';
 
 export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
-  nbHeuteUnit: 'Your daily session',
+  nbHeuteUnit: 'Today',
   nbHeuteRing: '{done} of {total} · about {min} min left',
   nbHeuteRingLabel: '{done} of {total} blocks done',
   nbHeuteStart: 'Start',
@@ -23,7 +23,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteBlock_grammar: 'Grammar',
   nbHeuteBlock_order: 'Sentence building',
   nbHeuteWhy_review: '{n} cards · due first',
-  nbHeuteWhy_reviewBehind: '{n} cards · catching up, the rest tomorrow',
+  nbHeuteWhy_reviewBehind: '{n} cards · overdue',
   nbHeuteWhy_reviewNone: 'Due cards and new words',
   nbHeuteWhy_check: '12 items on the week',
   nbHeuteWhy_focus: 'Your corrections and typical mistakes',
@@ -51,10 +51,10 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteRecapBand: 'Your weekly review is ready.',
   nbHeuteRecapOpen: 'View',
   nbHeuteTomorrow: 'Tomorrow: {what}',
-  nbHeuteWorth: 'Worth doing now',
-  nbHeuteMore: 'Practice more',
+  nbHeuteWorth: 'Extra: worth doing now',
+  nbHeuteMore: 'Extra',
   nbHeuteLocal: 'Plan saved on this device only.',
-  nbHeuteLegacy: 'Today still follows your earlier plan. The daily session starts tomorrow.',
+  nbHeuteLegacy: 'Today still follows your earlier plan. The new daily plan starts tomorrow.',
   // Phone mode (Emrah 2026-10-01)
   nbHeuteBetweenDone: '{block} done',
   nbHeuteBetweenNext: 'Up next: {block} · {why}',
@@ -62,7 +62,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteEndBack: 'Back to Today',
   nbHeuteClose: 'Close session',
   nbHeuteSaved: 'Saved. You can pick up where you left off anytime.',
-  nbHeuteNote: 'Daily session · block {n} of {total}',
+  nbHeuteNote: 'Today · step {n} of {total}',
   nbHeuteAgainTask: 'Write it again from memory – shorter, clearer, correct.',
   nbHeuteAgainPurpose: 'Rephrasing locks in what you just learned (generation effect).',
   nbHeuteAgainLabel: 'Your new version',
@@ -78,7 +78,7 @@ export const nbHeuteEn: Record<keyof typeof nbHeuteDe, string> = {
   nbHeuteCheckEmpty: 'There isn’t enough material for a weekly check yet. The block still counts.',
   nbHeuteCheckMissed: 'Extra · Catch up on last week’s check',
   nbHeuteCheckEmptyOk: 'Continue',
-  nbHeuteResumeUnit: 'Daily session · block {n} of {total}',
+  nbHeuteResumeUnit: 'Today · step {n} of {total}',
   nbHeuteResumeCheck: 'Weekly check · item {n} of {total}',
   nbHeuteSpeakExtra: 'Practice speaking (optional)',
 };

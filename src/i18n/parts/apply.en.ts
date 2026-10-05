@@ -40,7 +40,7 @@ export const applyEn = {
   apComboWordMissing: 'The word “{word}” is not in your sentence. Try again with it.',
   apComboRetry: 'Try again',
   apComboNotice: 'Checked by Claude, may contain mistakes.',
-  apComboRepairNote: 'This sentence is saved as a repair sentence and comes back tomorrow under “Fix mistakes”.',
+  apComboRepairNote: 'This sentence is saved as a mistake sentence and comes back tomorrow under “Fix mistakes”.',
   apComboUnavailable: 'This exercise needs Claude and a few known words.',
   apRoleplaySub: 'Speak freely with fixed scenes',
 };

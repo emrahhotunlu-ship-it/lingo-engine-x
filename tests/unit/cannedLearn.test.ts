@@ -2,7 +2,6 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { registerCannedReplies } from '../../src/platform/dev/cannedReplies';
 import { createFakeSample } from '../../src/platform/dev/fakeSample';
 import { grammarItems, type GrammarItemsVars } from '../../src/prompts/grammarItems';
-import { lessonProduction, type LessonProductionVars } from '../../src/prompts/lessonProduction';
 import { mnemonic, type MnemonicVars } from '../../src/prompts/mnemonic';
 import type { PromptTemplate } from '../../src/prompts/types';
 import { wordGen, type WordGenVars } from '../../src/prompts/wordGen';
@@ -33,18 +32,6 @@ describe('word-gen@1', () => {
     expect(f.words[0]).toMatchObject({ word: 'benchmark', de: 'Vergleichsmaßstab, Richtwert' });
     const u = await answer(wordGen, { mode: 'fill', count: 1, known: [], word: 'workaround' } satisfies WordGenVars);
     expect(u.words[0]?.ex).toContain('workaround');
-  });
-});
-
-describe('lesson-production@1', () => {
-  it('Rückmeldung in beiden Sprachen, Pflichtwörter aus dem Text', async () => {
-    for (const uiLang of ['de', 'en'] as const) {
-      const v: LessonProductionVars = { taskEn: 'Explain how invoices are processed.', mustUse: ['invoice', 'approval', 'audit trail'], structure: 'Passive', text: 'Each invoice is checked first. Then an approval is requested and it have a record in the audit trail.', candoEn: 'I can describe a process.', uiLang };
-      const o = await answer(lessonProduction, v);
-      expect(o.mustUsed).toEqual(['invoice', 'approval', 'audit trail']);
-      expect(o.cando).toBe('met');
-      expect(o.errors).toHaveLength(1);
-    }
   });
 });
 

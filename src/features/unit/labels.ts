@@ -1,6 +1,6 @@
 import type { MessageKey } from '../../i18n';
 import { blockNameKey } from '../../domain/unit/rows';
-import type { UnitBlock, UnitBlockKind } from '../../domain/week/types';
+import type { UnitBlock, UnitBlockKind } from '../../domain/unit/types';
 
 // Namen und Gründe der Blöcke (Tageskarte, Zwischenkarte, Zeile unter dem Balken). Eine Stelle,
 // damit alle Orte dasselbe sagen (Kap. 2.2).

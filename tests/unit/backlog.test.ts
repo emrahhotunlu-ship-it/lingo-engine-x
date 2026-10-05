@@ -4,7 +4,7 @@ import type { TrainCard } from '../../src/domain/srs/types';
 import { BACKLOG_BRAKE_AT, BACKLOG_MAX_SHARE, BACKLOG_SEC_PER_CARD, backlogBraked, backlogBudget, capacityNew, overdueCount } from '../../src/domain/unit/backlog';
 import { buildUnitStored, unitPlanOf } from '../../src/domain/unit/plan';
 import { unitReviewGoal } from '../../src/domain/unit/review';
-import { REVIEW_MIN_MAX, REVIEW_SEC, VG_MIN, unitPlanFor } from '../../src/domain/week/plan';
+import { REVIEW_MIN_MAX, REVIEW_SEC, VG_MIN, unitPlanFor } from '../../src/domain/unit/planFor';
 import { berlin } from './helpers';
 
 // Rückstand-Steuerung des Tagesplans (Emrah 02.10.2026): Zeit wächst mit überfälligen Karten (höchstens +50 %), ab 15

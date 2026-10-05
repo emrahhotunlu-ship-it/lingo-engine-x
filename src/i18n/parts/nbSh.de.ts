@@ -37,7 +37,7 @@ export const nbShDe = {
   // WP0b: Kopf und Profil-Blatt
   nbShStreak: 'Serie {n}',
   nbShProfileTitle: 'Profil',
-  nbShOverview: 'Dein Stand',
+  nbShOverview: 'Fortschritt',
   nbShOverviewSub: 'Urteil, Fehler, Ziel C1, Statistik, Verlauf',
   nbShSettings: 'Einstellungen',
   nbShSettingsSub: 'Lernen, Stimme, Darstellung, Daten',
@@ -53,7 +53,7 @@ export const nbShDe = {
   nbShErrPageSub: 'Der Fehler steht in der Diagnose. Der Rest der App läuft weiter.',
   nbShErrRebuild: 'Seite neu aufbauen',
   nbShErrToToday: 'Zu Heute',
-  nbShErrExercise: 'Dein Stand ist gespeichert.',
+  nbShErrExercise: 'Dein Fortschritt ist gespeichert.',
   nbShErrExerciseSub: 'Diese Aufgabe konnte nicht angezeigt werden. Die Übung läuft weiter.',
   nbShErrSkip: 'Diese Aufgabe überspringen',
   nbShErrEnd: 'Übung beenden',

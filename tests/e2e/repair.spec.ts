@@ -1,6 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { boot, layoutProblems, openOverview, openSpeak, openTab, screen } from './fixtures';
+import { NO_GRAMMAR_ERRORS } from './heuteHelpers';
 import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Wiederholung in der
@@ -171,7 +172,7 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
 
 test('Anwenden › Fehler korrigieren: freiwillige Runde über die fälligen Sätze, ctx xtra, Box wächst, Pflicht unberührt', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/repair': { items: [A, B] } } } });
+  const { errors } = await boot(page, { migrated: true, fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [A, B] } } } });
   await screen(page, 'today');
   const planBefore = (await dump(page))['app/profile']?.plan;
   await openTab(page, 'apply');
@@ -198,7 +199,7 @@ test('Anwenden › Fehler korrigieren: freiwillige Runde über die fälligen Sä
 });
 
 test('Anwenden: ohne fällige Sätze gibt es keinen Knopf „Fehler korrigieren“', async ({ page }) => {
-  await boot(page, { migrated: true, fake: { patch: { 'app/repair': { items: [] } } } });
+  await boot(page, { migrated: true, fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [] } } } });
   await screen(page, 'today');
   await openTab(page, 'apply');
   await expect(page.getByTestId('apply-hub')).toBeVisible();

@@ -21,7 +21,7 @@ import type { Lang, TrainCard } from '../../domain/srs/types';
 import { buildUnitStored, unitDraft, type ReviewGoal } from '../../domain/unit/plan';
 import { unitReviewGoal } from '../../domain/unit/review';
 import { packTopUp } from './pack';
-import { REPAIR_MAX } from '../../domain/week';
+import { REPAIR_MAX } from '../../domain/unit/block1';
 import { getDb } from '../../platform/capabilities';
 import { logError, logWarn } from '../../platform/diagnostics';
 import { KEY_PREFIX, local } from '../../platform/storage';

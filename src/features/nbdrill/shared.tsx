@@ -10,9 +10,8 @@ import type { UnitBlockNo, UnitCtx, UnitTaskResult } from '../../app/unit/types'
 import { getWriter } from '../../data';
 import { outPath, upsertOut, type OutItem } from '../../domain/nbdrill/outDoc';
 import { channelLogEntry } from '../../domain/progress/channelLog';
-import type { WeekTargets } from '../../domain/week/types';
-import { detectTargets } from '../../domain/week/targets';
-import { useT, type MessageKey } from '../../i18n';
+import type { WeekTargets } from '../../domain/unit/types';
+import { useT } from '../../i18n';
 import { logError } from '../../platform/diagnostics';
 import { local } from '../../platform/storage';
 import { ExerciseBar } from '../../ui/ExerciseBar';
@@ -263,26 +262,6 @@ export function TimeBar({ left, total, label, testId }: { left: number; total: n
         <div className="h-full rounded-full bg-accent transition-[width] duration-100 ease-linear" style={{ width: `${pct}%` }} />
       </div>
     </div>
-  );
-}
-
-const GOAL_KEY: Record<string, MessageKey> = { hedge: 'nbTrainingGoal_hedge', transition: 'nbTrainingGoal_transition', phrase: 'nbTrainingGoal_phrase' };
-
-/** Wochenziele beim Tippen lokal mitgezählt (N13): „Abschwächungen 1/2 · Überleitungen 0/1“. */
-export function GoalLine({ text, targets }: { text: string; targets: UnitRun['targets'] | null | undefined }) {
-  const { t } = useT();
-  if (!targets?.goals.length) return null;
-  const scan = detectTargets(text, targets);
-  return (
-    <p className="lx-tnum text-xs text-muted" data-testid="training-goals">
-      <span className="font-medium">{t('nbTrainingGoals')}: </span>
-      {scan.progress.map((g, i) => (
-        <span key={g.kind} data-kind={g.kind} data-have={g.have} data-need={g.need} className={g.have >= g.need ? 'text-accent-text' : undefined}>
-          {i > 0 ? ' · ' : ''}
-          {t(GOAL_KEY[g.kind] ?? 'nbTrainingGoal_phrase')} {Math.min(g.have, g.need)}/{g.need}
-        </span>
-      ))}
-    </p>
   );
 }
 

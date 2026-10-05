@@ -20,7 +20,7 @@ export const standEn = {
   ckTooFew: 'A result needs at least 6 answers. Your answers are saved anyway.',
   ckSaveFailed: 'The result could not be saved. Your answers are saved.',
   ckNote: 'The next check is available from Monday.',
-  ckBack: 'Back to “Where you stand”',
+  ckBack: 'Back to “Progress”',
   ckEmpty: 'A check needs a few more practiced words or topics.',
   ckLastOnly: 'Last check: {pct} % on {date}',
   ckLast: 'Last check: {pct} % on {date} · before that {prev} %',

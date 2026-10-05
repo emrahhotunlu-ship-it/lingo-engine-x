@@ -1,4 +1,4 @@
-import { themeFor } from './theme';
+import { isoWeek } from '../date';
 import type {
   UnitBlock,
   UnitBlockKind,
@@ -9,7 +9,6 @@ import type {
   UnitPrefs,
   UnitShape,
   UnitStep,
-  WeekDoc,
 } from './types';
 
 // Wochenplan der Tageseinheit (Plan §1.5, N10/N12; Prüfung Tageseinheit M2, M3, M5, M7, M10, S1, S2, S5).
@@ -67,10 +66,9 @@ function normalGoal(v: unknown): number {
 
 /**
  * Plan eines Lerntags (einmal je Lerntag einfrieren, Kap. 15). Ohne `env` (M5): Blockzahl, Minuten
- * und `duty` sind bei KI/Sprachausgabe an oder aus gleich.
+ * und `duty` sind bei KI/Sprachausgabe an oder aus gleich. `_week` ist ein Rest des früheren Wochenthemas und wird ignoriert.
  */
-export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs: UnitPrefs = {}): UnitPlan {
-  const pick = themeFor(day, week, prefs.themeHint);
+export function unitPlanFor(day: string, _week: unknown, prefs: UnitPrefs = {}): UnitPlan {
   const dow = dowOf(day);
   const goalMin = normalGoal(prefs.goalMin);
   // Neustart-Woche: immer der kleinste Plan (3 + 4 + 2 Min.), auch am Sonntag.
@@ -118,11 +116,8 @@ export function unitPlanFor(day: string, week: WeekDoc | null | undefined, prefs
   return {
     v: 1,
     day,
-    wk: pick.wk,
+    wk: isoWeek(day),
     dow,
-    theme: pick.id,
-    themeBy: pick.by,
-    confirmTheme: !pick.stored,
     shape,
     short,
     goalMin,

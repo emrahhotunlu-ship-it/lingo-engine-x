@@ -4,8 +4,6 @@ import { listenQ } from './listenQ';
 import { orderGen } from './orderGen';
 import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
-import { lessonContent } from './lessonContent';
-import { lessonProduction } from './lessonProduction';
 import { mnemonic } from './mnemonic';
 import { NB_TEMPLATES } from './nb';
 import { produceCheck } from './produceCheck';
@@ -20,7 +18,6 @@ import { roleplayReport } from './roleplayReport';
 import { roleplayTurn } from './roleplayTurn';
 import { assess } from './assess';
 import { weeklyReport } from './weeklyReport';
-import { courseExtend } from './courseExtend';
 import { repairCheck } from './repairCheck';
 import { patterns } from './patterns';
 import { patternCheck } from './patternCheck';
@@ -37,8 +34,6 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   listenQ,
   comboCheck,
   // Phase 2 (docs/phase2-plan.md §7)
-  lessonContent,
-  lessonProduction,
   grammarItems,
   grammarJudge,
   // Phase 2, Funktionsabgleich M2/M3
@@ -54,8 +49,6 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Phase 6 – Urteil
   assess,
   weeklyReport,
-  // Kurs-Erweiterung (Kap. 6.2)
-  courseExtend,
   // Lernberatung 27.09., V2 – Reparatur-Sätze
   repairCheck,
   // Lernberatung 27.09., V3 – Deutsch-Fallen

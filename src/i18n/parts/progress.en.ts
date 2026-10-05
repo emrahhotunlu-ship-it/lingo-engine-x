@@ -146,7 +146,7 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   msFsrs: 'Cards (FSRS)',
   msState_new: 'New',
   msState_learning: 'Learning',
-  msState_review: 'Consolidated',
+  msState_review: 'Firm',
   msState_relearning: 'Relearning',
   msRecall: 'Average recall probability',
   msStability: 'Average stability',
@@ -183,7 +183,7 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   vtCancelAsk: 'Cancel the test? Nothing will be saved.',
   vtCancelYes: 'Yes, cancel',
   vtCancelNo: 'Keep going',
-  vtBack: 'Back to your progress',
+  vtBack: 'Back to Progress',
   vtCancelled: 'Test canceled – nothing was saved.',
 
   setNewPerDay: 'New words per day',

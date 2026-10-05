@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { PHRASES_MAX, WEAK_MAX, unitPhrases, weakWords, type WeakCardLike } from '../../src/domain/unit/phrases';
-import { weekTargets } from '../../src/domain/week';
+import { EMPTY_TARGETS } from '../../src/domain/unit/types';
 
 // Schwache Wörter in der Aufgabe des Tages (Englischlehrer 02.10.2026): bis zu zwei Wörter, die immer wieder entfallen,
 // ersetzen die letzten Plätze der Wendungsliste von Block 3 – Produktion als zweite Methode neben dem Wiederholen.
 
 const MON = '2026-09-28';
-const targets = weekTargets('t01', { day: MON });
+const targets = { ...EMPTY_TARGETS, phrases: ['pain point', 'touch base', 'follow up', 'loop in', 'circle back', 'bandwidth'] };
 const card = (word: string, over: { lapses?: number; reps?: number; stage?: number; isNew?: boolean; hidden?: boolean } = {}): WeakCardLike => ({
   word,
   src: 'lookup',

@@ -8,8 +8,8 @@ import { buildQueue, dueCards, newCards, newQuotaLeft, quizzable } from '../../s
 import { isLearningState, retrievability } from '../../src/domain/srs/scheduler';
 import type { TrainCard } from '../../src/domain/srs/types';
 import { unitReviewGoal } from '../../src/domain/unit/review';
-import { REVIEW_SEC, dowOf } from '../../src/domain/week/plan';
-import { block1Order } from '../../src/domain/week/review';
+import { REVIEW_SEC, dowOf } from '../../src/domain/unit/planFor';
+import { block1Order } from '../../src/domain/unit/block1';
 
 // Langzeit-Prüfung der Wiederholungs-Planung (Emrah 02.10.2026, Kap. 15 „Tests, die nur den heutigen Datensatz prüfen“):
 // 120 Tage Pflicht-Wiederholen mit dem echten Tagesplan (`unitReviewGoal` → Warteschlange → FSRS). Startstand wie auf Emrahs

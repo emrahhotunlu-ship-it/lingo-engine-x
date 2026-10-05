@@ -52,6 +52,16 @@ describe('Entfernungs-Audit', () => {
     expect(hits).toEqual([]);
   });
 
+  // Tote Reste des Wochenthemas (Auftrag 2b): Planmaschine liegt in domain/unit, theme/targets/cards/hint/weekWrite sind gelöscht.
+  it('keine Wochenthema-Reste: Dateien weg, keine Importe, Plan schreibt kein Thema', () => {
+    const gone = ['src/domain/week/theme.ts', 'src/domain/week/targets.ts', 'src/domain/week/cards.ts', 'src/domain/week/hint.ts', 'src/domain/week/index.ts', 'src/domain/week/plan.ts', 'src/domain/week/types.ts', 'src/domain/unit/weekWrite.ts'];
+    expect(gone.filter((p) => existsPath(join(ROOT, p)))).toEqual([]);
+    const re = /from '[^']*\/week(\/(theme|targets|cards|hint|plan|types|index|weekWrite))?'|domain\/unit\/weekWrite/;
+    const hits = FILES.filter((f) => re.test(read(f))).map((f) => f.replace(ROOT, ''));
+    expect(hits).toEqual([]);
+    expect(read(join(ROOT, 'src/domain/unit/types.ts'))).not.toMatch(/confirmTheme|themeBy/);
+  });
+
   // (a) Daten bleiben vollständig (Gesamtkonzept „Daten bleiben“, Kap. 9 des Auftrags): das Register der Pfade ist Stand `pre-fokus`.
   it('Datenregister unverändert: alle Sammlungen und App-Dokumente sind noch eingetragen', () => {
     expect([...COLLECTION_NAMES].sort()).toEqual(

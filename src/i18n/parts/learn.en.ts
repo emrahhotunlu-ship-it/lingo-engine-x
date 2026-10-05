@@ -20,7 +20,7 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
   certainty2: 'building',
   certainty3: 'solid',
   certainty4: 'confident',
-  certainty5: 'mastered',
+  certainty5: 'firm',
 
   lhTitle: 'Grammar',
   lhGrammar: 'Grammar',
@@ -171,7 +171,7 @@ export const learnEn: Record<keyof typeof learnDe, string> = {
 
   tdLessonNext: 'The next lesson of your course',
   tdOfferVocab: 'Vocabulary',
-  tdFreeRound: 'Free vocabulary round',
+  tdFreeRound: 'Extra word round',
   why_whyFocus: 'Claude’s focus',
   why_whyThin: 'Little practice so far',
   why_whyWeakest: 'Your weakest area',

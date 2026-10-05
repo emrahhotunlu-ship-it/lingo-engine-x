@@ -1,5 +1,5 @@
-import { unitPlanFor } from '../week';
-import type { ComebackMode, UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs, WeekDoc } from '../week/types';
+import { unitPlanFor } from './planFor';
+import type { ComebackMode, UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs } from './types';
 import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
 
 // Tageseinheit als gespeicherter Tagesplan (plan.md §1.5, N10/N12; Prüfung M2, M5). Rein.
@@ -14,7 +14,8 @@ export type ReviewGoal = { goal: number; due: number; fresh: number; repairs: nu
 export type UnitBuildInput = {
   day: string;
   nowMs: number;
-  week: WeekDoc | null | undefined;
+  /** Rest des Wochenthemas, wird ignoriert (immer `null`). */
+  week?: null;
   goalMin: number;
   /** Umfang von Block 1 (mit dem Budget aus `unitPlanFor(...).reviewSec` berechnet). */
   review: ReviewGoal;
@@ -42,7 +43,7 @@ function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode 
 }
 
 function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number } = {}): UnitMeta {
-  const m: UnitMeta = { v: 1, shape: up.shape, goalMin: up.goalMin, theme: up.theme, min: up.minutes, b: up.blocks.map((b) => [b.block, b.kind, b.min]) };
+  const m: UnitMeta = { v: 1, shape: up.shape, goalMin: up.goalMin, theme: '', min: up.minutes, b: up.blocks.map((b) => [b.block, b.kind, b.min]) };
   if (up.comeback) m.cb = up.comeback;
   if (facts.ov !== undefined) m.ov = facts.ov;
   if (facts.sure !== undefined) m.sure = facts.sure;
@@ -75,12 +76,12 @@ export const isUnitPlan = (p: StoredPlan | null | undefined): p is StoredPlan & 
  * aktuellen Woche. Weicht die Neuberechnung ab (z. B. ein älterer Plan mit Preply-Rollen, `u.pp`), gilt der
  * eingefrorene Plan mit schlichten Blöcken – nie neu gewürfelt (Kap. 15).
  */
-export function unitPlanOf(view: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
+export function unitPlanOf(view: StoredPlan & { u: UnitMeta }, week?: null): UnitPlan {
   // `view` ist die Ansicht des Umbaus (`domain/plan/retire`): entfallene Blöcke sind schon herausgekürzt.
   return storedUnitPlan(view, week);
 }
 
-function storedUnitPlan(p: StoredPlan & { u: UnitMeta }, week: WeekDoc | null | undefined): UnitPlan {
+function storedUnitPlan(p: StoredPlan & { u: UnitMeta }, week: null | undefined): UnitPlan {
   // Die Minuten von Block 1 stammen aus dem eingefrorenen Plan (bei Rückstand länger als der Grundwert).
   const storedReviewMin = p.u.b.find(([, kind]) => kind === 'review')?.[2];
   // Form des Plans aus den eingefrorenen Eckdaten: Wiedereinstieg (`cb`) und „kein Fehlersatz fällig“ (Block 5 fehlt).

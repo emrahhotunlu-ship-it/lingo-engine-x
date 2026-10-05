@@ -4,7 +4,7 @@ import { useNav } from '../../../app/nav';
 import { closeSheet, openSheet } from '../../../app/sheets';
 import { entriesFor, type SheetProps } from '../../../app/registry';
 import { useLive } from '../../../data/live';
-import { dueErrors } from '../../../domain/grammar/errors';
+import { dueFehlersaetze } from '../../../domain/repair/fehlersaetze';
 import { startDrill } from '../../drills/session';
 import { startGrammar } from '../../grammar/session';
 import { dayKey, dayKeyNoon, daysBetween, learningDayEnd } from '../../../domain/date';
@@ -142,7 +142,8 @@ export function ExtraSheet({ onClose }: SheetProps) {
   const quota = useQuota(cards);
   const ctx = useDeckCtx();
   const gdocs = useLive((s) => s.collections.grammar) ?? NO_DOCS;
-  const errors = useMemo(() => dueErrors(gdocs, now).length, [gdocs, now]);
+  const repairDoc = useLive((st) => st.docs['app/repair']);
+  const errors = useMemo(() => dueFehlersaetze({ grammarDocs: gdocs, repairDoc, nowMs: now, today }).length, [gdocs, repairDoc, now, today]);
   const tts = useSpeech((s) => s.status === 'ready');
   const opts = useMemo((): ExtraOpt[] => {
     const vis = cards.filter((c) => !c.hidden);
@@ -168,11 +169,15 @@ export function ExtraSheet({ onClose }: SheetProps) {
   };
   const wordLines: ExtraLine[] = opts.map((o) => ({ id: o.id, label: o.label, why: o.why, n: o.id === 'new' ? Math.min(quota.left, o.cards.length) : o.cards.length, disabled: o.cards.length === 0, run: () => startCards(o) }));
 
-  const grammarStart = (mode: 'xtra' | 'errors') => {
-    const first = startGrammar({ mode });
+  const grammarStart = () => {
+    const first = startGrammar({ mode: 'xtra' });
     if (first === 'typed') api.focusNow();
     onClose();
-    go({ name: 'grammarSession', mode });
+    go({ name: 'grammarSession', mode: 'xtra' });
+  };
+  const goTo = (route: Parameters<typeof go>[0]) => () => {
+    onClose();
+    go(route);
   };
   const apply = entriesFor('apply');
   const entryLine = (id: string, label: MessageKey, why: MessageKey): ExtraLine | null => {
@@ -192,8 +197,11 @@ export function ExtraSheet({ onClose }: SheetProps) {
     };
   };
   const grammarLines: ExtraLine[] = [
-    { id: 'gr-free', label: t('nbWsXFreeGrammar'), why: t('nbWsXFreeGrammarWhy'), n: null, disabled: false, run: () => grammarStart('xtra') },
-    { id: 'gr-errors', label: t('nbWsXErrors'), why: errors > 0 ? t('nbWsXErrorsWhy', { n: errors }) : t('nbWsXErrorsNone'), n: errors, disabled: errors === 0, run: () => grammarStart('errors') },
+    { id: 'gr-free', label: t('nbWsXFreeGrammar'), why: t('nbWsXFreeGrammarWhy'), n: null, disabled: false, run: grammarStart },
+    { id: 'gr-errors', label: t('nbWsXErrors'), why: errors > 0 ? t('nbWsXErrorsWhy', { n: errors }) : t('nbWsXErrorsNone'), n: errors, disabled: errors === 0, run: goTo({ name: 'repairRound' }) },
+    { id: 'gr-lookup', label: t('nbLernenLookupRow'), why: t('nbLernenLookupSub'), n: null, disabled: false, run: goTo({ name: 'grammar' }) },
+    { id: 'gr-traps', label: t('nbLernenTrapsRow'), why: t('nbLernenTrapsSub'), n: null, disabled: false, run: goTo({ name: 'patterns' }) },
+    { id: 'gr-wissen', label: t('nbLernenWissenRow'), why: t('nbLernenWissenSub'), n: null, disabled: false, run: goTo({ name: 'wissen' }) },
   ];
   const applyLines: ExtraLine[] = [
     {

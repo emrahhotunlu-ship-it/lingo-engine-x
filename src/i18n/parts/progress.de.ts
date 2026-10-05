@@ -152,7 +152,7 @@ export const progressDe = {
   msFsrs: 'Karten (FSRS)',
   msState_new: 'Neu',
   msState_learning: 'Im Lernen',
-  msState_review: 'Gefestigt',
+  msState_review: 'Fest',
   msState_relearning: 'Wieder im Lernen',
   msRecall: 'Mittlere Abrufwahrscheinlichkeit',
   msStability: 'Mittlere Stabilität',
@@ -190,7 +190,7 @@ export const progressDe = {
   vtCancelAsk: 'Test abbrechen? Es wird nichts gespeichert.',
   vtCancelYes: 'Ja, abbrechen',
   vtCancelNo: 'Weitermachen',
-  vtBack: 'Zurück zu Dein Stand',
+  vtBack: 'Zurück zu Fortschritt',
   vtCancelled: 'Test abgebrochen – es wurde nichts gespeichert.',
 
   // Einstellungen (Kap. 6.14)

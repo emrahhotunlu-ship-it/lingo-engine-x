@@ -3,7 +3,7 @@ import { useNav } from '../../app/nav';
 import { StepBoundary } from '../../app/shell/Boundary';
 import type { ScreenProps } from '../../app/registry';
 import { unitDone } from '../../app/unit/done';
-import { normText } from '../../domain/week';
+import { normText } from '../../domain/text/normText';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
 import { toast } from '../../ui/Toast';

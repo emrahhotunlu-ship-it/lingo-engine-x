@@ -280,7 +280,7 @@ export const en: Record<MessageKey, string> = {
   trCheck: 'Check',
   trGapLabel: 'Gap in the sentence: {sentence}',
   trTypeLabel: 'English word for: {meaning}',
-  trHint: 'Hint: {meaning}',
+  trHint: 'Meaning: {meaning}',
   trHintLetter: 'Starts with “{letter}”',
   trEnterHint: 'Enter accepts the suggestion, 1–4 picks your own.',
   trSuggest: 'Suggested: {grade}',

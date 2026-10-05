@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { boot, crashOnce, layoutProblems, screen } from './fixtures';
 import { dump } from './trainerHelpers';
 import { answerGrammar, grammarKey, nextItem, orderSolution } from './learnHelpers';
-import { MON, MON_9, SUN_9, TUE_9, VG_DUTY, WEEK_W39, profileWith, reviewedLog, unitStatus, vgPlan } from './heuteHelpers';
+import { MON, MON_9, NO_GRAMMAR_ERRORS, SUN_9, TUE_9, VG_DUTY, WEEK_W39, profileWith, reviewedLog, unitStatus, vgPlan } from './heuteHelpers';
 
 // P1 (plan.md §4.2): Heute mit Tageskarte, Tageseinheit mit Ersatzblöcken, Wochenthema.
 // Seit 04.10.2026 (Fokus Vokabeln und Grammatik) Mo–Sa: Wortschatz · Grammatik · Satzbau · Fehler korrigieren.
@@ -57,7 +57,7 @@ test('Montag: ohne Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne 
     migrated: true,
     now: MON_9,
     // Grammatik (Block 2) und Satzbau (Block 3) sind schon erledigt; offen ist „Fehler korrigieren“.
-    fake: { capabilities: { sample: false }, speech: false, patch: { ...profileWith(MON, vgPlan(), ['u-task', 'u-focus'], {}), ...reviewedLog(MON), 'app/repair': { items: [SAY_REPAIR] } } },
+    fake: { capabilities: { sample: false }, speech: false, patch: { ...profileWith(MON, vgPlan(), ['u-task', 'u-focus'], {}), ...reviewedLog(MON), ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [SAY_REPAIR] } } },
   });
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toHaveAttribute('data-done', '3');

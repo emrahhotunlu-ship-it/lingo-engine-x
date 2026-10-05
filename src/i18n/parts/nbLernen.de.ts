@@ -81,5 +81,11 @@ export const nbLernenDe = {
   nbLernenFixNone: 'Fehler korrigieren · nichts fällig',
   nbLernenFixNoneSub: 'Neue Fehlersätze kommen ab morgen dazu.',
   nbLernenExtra: 'Extra',
-  nbLernenExtraSub: 'Freie Runden und mehr, wenn du Lust hast',
+  nbLernenExtraSub: 'Extra-Runden und mehr, wenn du Lust hast',
+  nbLernenLookupRow: 'Regeln suchen',
+  nbLernenLookupSub: 'Eine Regel finden, mit Beispielen und deinen Fehlern',
+  nbLernenTrapsRow: 'Deutsch-Fallen',
+  nbLernenTrapsSub: 'Fehler, die dir als Deutschsprachigem immer wieder passieren',
+  nbLernenWissenRow: 'Nachschlagen',
+  nbLernenWissenSub: 'Typische Fallen Deutsch → Englisch im Überblick',
 } as const;

@@ -1,4 +1,6 @@
 import { getWriter } from '../../data';
+import { validateDoc } from '../../data/validate';
+import { reviewError } from '../../domain/grammar/errors';
 import { addRepairs, readRepairs, reviewRepair, type NewRepair, type RepairItem } from '../../domain/repair/repair';
 import { logError } from '../../platform/diagnostics';
 
@@ -58,6 +60,30 @@ export async function recordRepair(id: string, ok: boolean): Promise<boolean> {
     return true;
   } catch (err) {
     logError('repair:review', err, id);
+    return false;
+  }
+}
+
+/**
+ * Eine Wiederholung eines Grammatik-Fehlersatzes (`grammar/<thema>.errors`) eintragen: nur Box und Fälligkeit des einen Eintrags
+ * (`reviewError`, Boxen 1/3/9 wie bisher). Thema-Beherrschung (`p`, `n`, `c`) bleibt unberührt – hier wird ein Satz umgeschrieben,
+ * keine Grammatikaufgabe gelöst. Ein unerwarteter Aufbau wird nie angefasst.
+ */
+export async function recordGrammarError(topic: string, errorT: number, ok: boolean, given: string): Promise<boolean> {
+  const writer = getWriter();
+  if (!writer) return false;
+  const path = `grammar/${topic}`;
+  const t = Date.now();
+  try {
+    await writer.transform(path, (cur) => {
+      if (!cur || !validateDoc(path, cur).ok) return null;
+      const errors = Array.isArray(cur.errors) ? (cur.errors as Parameters<typeof reviewError>[0]) : [];
+      const next = reviewError(errors, errorT, { ok, given, grade: ok ? 3 : 1, t });
+      return next ? { update: { errors: next } } : null;
+    });
+    return true;
+  } catch (err) {
+    logError('repair:grammar', err, path);
     return false;
   }
 }

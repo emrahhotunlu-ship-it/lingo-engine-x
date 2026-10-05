@@ -1,6 +1,6 @@
 import { learningDayStart } from '../date';
 import type { TrainCard } from '../srs/types';
-import { NEW_MIN } from '../week/review';
+import { NEW_MIN } from './block1';
 
 // Rückstand-Steuerung des Tagesplans (Emrah 02.10.2026: „Wie intelligent ist der Anki-Modus wirklich?“).
 // Befund aus der Langzeit-Simulation (tests/unit/backlogSim.test.ts, 120 Tage, fester Startstand mit 52 überfälligen

@@ -9,7 +9,7 @@ export const nbTrainingEn: Record<keyof typeof nbTrainingDe, string> = {
   nbTrainingTransformSub: 'Same meaning with a key word',
   nbTrainingObjection: 'Objection training',
   nbTrainingObjectionSub: '5 objections · step by step in 5 levels',
-  nbTrainingUnitNote: 'Daily session · block {n}',
+  nbTrainingUnitNote: 'Today · step {n}',
   nbTrainingCheck: 'Check',
   nbTrainingNext: 'Next',
   nbTrainingDontKnow: "I don't know",

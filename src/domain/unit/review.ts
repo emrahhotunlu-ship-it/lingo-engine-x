@@ -1,4 +1,4 @@
-import { block1Order, NEW_MIN } from '../week/review';
+import { block1Order, NEW_MIN } from './block1';
 import { CARD_SEC, NEW_SEC, plannedCardSec, REPAIR_SEC } from '../srs/cost';
 import { capLeeches, dueCards, newCards, quizzable } from '../srs/queue';
 import { isLearningState } from '../srs/scheduler';

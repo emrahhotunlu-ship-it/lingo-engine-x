@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { grammarJudgeReply, lessonContentReply, produceCheckReply, templateIdOf, wordLookupReply } from '../../src/platform/dev/cannedReplies';
-import { catalog } from '../../src/domain/course/catalog';
+import { grammarJudgeReply, produceCheckReply, templateIdOf, wordLookupReply } from '../../src/platform/dev/cannedReplies';
 import { grammarJudge } from '../../src/prompts/grammarJudge';
-import { lessonContent } from '../../src/prompts/lessonContent';
 import { clip, PROMPT_MAX_BYTES, promptBytes } from '../../src/prompts/common';
 import {
   LEARNER_SENTENCE_MAX,
@@ -201,18 +199,6 @@ describe('clip', () => {
 });
 
 describe('feste Antworten der Phase-2-Vorlagen (Entwicklungs-Adapter)', () => {
-  it('lesson-content: jede Lektion des Katalogs besteht das Schema (DE und EN)', () => {
-    for (const u of catalog()) {
-      for (const meta of u.lessons) {
-        for (const uiLang of ['de', 'en'] as const) {
-          const vars = { meta, grammarName: meta.grammar, ruleEn: 'rule', uiLang, mix: null };
-          const r = lessonContent.schema(vars).safeParse(JSON.parse(lessonContentReply(lessonContent.build(vars))));
-          expect(r.success, `${meta.id}/${uiLang}: ${JSON.stringify(r.error?.issues)}`).toBe(true);
-        }
-      }
-    }
-  });
-
   it('grammar-judge: Urteil „richtig, akzeptabel" besteht das Schema (DE und EN)', () => {
     for (const uiLang of ['de', 'en'] as const) {
       const vars = { topic: 'passive', type: 'correct' as const, prompt: 'The report wrote yesterday.', answer: 'The report was written yesterday.', accepted: [], given: 'Somebody wrote the report yesterday.', uiLang };

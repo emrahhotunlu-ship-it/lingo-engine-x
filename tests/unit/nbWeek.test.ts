@@ -1,28 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { THEMES, THEME_ORDER } from '../../src/content/nb/themes';
 import { TRAPS } from '../../src/content/nb/traps';
-import { dayKey } from '../../src/domain/date';
-import {
-  block1Order,
-  detectTargets,
-  dowOf,
-  isThemeCard,
-  isoWeek,
-  matchTrap,
-  matchTraps,
-  needsThemeConfirm,
-  readWeekDoc,
-  resolveBlock,
-  suggestTheme,
-  themeFor,
-  themeRef,
-  unitPlanFor,
-  weekTargets,
-  withTheme,
-  type UnitBlock,
-  type UnitEnv,
-  type WeekDoc,
-} from '../../src/domain/week';
+import { dayKey, isoWeek } from '../../src/domain/date';
+import { block1Order } from '../../src/domain/unit/block1';
+import { dowOf, resolveBlock, unitPlanFor } from '../../src/domain/unit/planFor';
+import type { UnitBlock, UnitEnv } from '../../src/domain/unit/types';
+import { matchTrap, matchTraps } from '../../src/domain/patterns/traps';
 
 // Woche 2026-W40: Mo 28.09. … So 04.10.2026 (gerade Kalenderwoche). W41: Mo 05.10. (ungerade).
 const W40 = ['2026-09-28', '2026-09-29', '2026-09-30', '2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04'];
@@ -52,57 +34,10 @@ describe('isoWeek und Lerntag', () => {
   });
 });
 
-describe('Wochenthema', () => {
-  it('ohne Daten: erstes Thema der Reihenfolge, nie leer, Bestätigung nötig (M10)', () => {
-    const p = themeFor('2026-09-30', null);
-    expect(p.id).toBe('t01');
-    expect(p.by).toBe('auto');
-    expect(p.stored).toBe(false);
-    expect(needsThemeConfirm('2026-09-30', null)).toBe(true);
-  });
-  it('gespeichertes Thema der Woche gilt, auf jedem Tag der Woche', () => {
-    const week: WeekDoc = { v: 1, cur: { wk: '2026-W40', theme: 't05', by: 'user', at: 1 } };
-    for (const d of W40) {
-      expect(themeFor(d, week).id).toBe('t05');
-      expect(needsThemeConfirm(d, week)).toBe(false);
-    }
-    expect(needsThemeConfirm('2026-10-05', week)).toBe(true);
-  });
-  it('Vorschlag folgt der Reihenfolge nach dem letzten Thema und beginnt danach von vorn', () => {
-    const week: WeekDoc = { v: 1, cur: { wk: '2026-W40', theme: 't02', by: 'auto' } };
-    expect(suggestTheme(week, '2026-W41')).toBe('t13');
-    const last: WeekDoc = { v: 1, cur: { wk: '2026-W40', theme: 't11', by: 'auto' } };
-    expect(suggestTheme(last, '2026-W41')).toBe(THEME_ORDER[0]);
-  });
-  it('Termin geht vor der Reihenfolge (N17)', () => {
-    expect(suggestTheme(null, '2026-W41', { meeting: 't04' })).toBe('t04');
-  });
-  it('withTheme schiebt die Vorwoche nach hist und kappt bei 26', () => {
-    let doc: WeekDoc | null = null;
-    for (let i = 0; i < 30; i++) {
-      const wk = `2026-W${String(i + 10).padStart(2, '0')}`;
-      doc = withTheme(doc, wk, THEME_ORDER[i % 16] ?? 't01', 'user', i);
-    }
-    expect(doc?.cur?.wk).toBe('2026-W39');
-    expect(doc?.hist?.length).toBe(26);
-    const again = withTheme(doc, '2026-W39', 't03', 'user', 99);
-    expect(again.cur?.theme).toBe('t03');
-    expect(again.hist?.some((h) => h.wk === '2026-W39')).toBe(false);
-  });
-  it('readWeekDoc liest tolerant und verwirft Unsinn', () => {
-    // Frühere Preply-Termine (`preplyNext`, bis 28.09.2026) werden als unbekanntes Feld verworfen.
-    const doc = readWeekDoc({ v: 1, cur: { wk: '2026-W40', theme: 't99', by: 'x' }, hist: [{ wk: 'bad', theme: 't01' }, { wk: '2026-W39', theme: 't02' }], preplyNext: '2026-10-01', extra: 1 });
-    expect(doc.cur).toBeUndefined();
-    expect(doc.hist).toEqual([{ wk: '2026-W39', theme: 't02', by: 'auto' }]);
-    expect(doc).not.toHaveProperty('preplyNext');
-    expect(readWeekDoc(null)).toEqual({ v: 1 });
-  });
-});
-
 describe('unitPlanFor: Wochenplan (N12, M2, M3, M5, M7, S5)', () => {
   // Seit 04.10.2026 (Emrahs Vorgabe „Fokus nur noch Vokabeln und Grammatik“): Mo–Sa Wortschatz · Grammatik ·
   // Satzbau · Fehler korrigieren, Sonntag unverändert Wiederholen + Wochen-Check.
-  const week: WeekDoc = { v: 1, cur: { wk: '2026-W40', theme: 't03', by: 'user' } };
+  const week = null;
   const VG_DUTY = ['review', 'ch:u-focus', 'ch:u-task', 'ch:u-again'];
 
   it('volle Woche: Blöcke, Minuten, duty je Tag', () => {
@@ -128,7 +63,8 @@ describe('unitPlanFor: Wochenplan (N12, M2, M3, M5, M7, S5)', () => {
     expect(plans[0]?.reviewSec).toBe(480);
     expect(plans[6]?.reviewSec).toBe(300);
     expect(plans[6]?.minutes).toBe(10);
-    expect(plans.every((p) => p.theme === 't03' && !p.confirmTheme)).toBe(true);
+    // Kein Wochenthema mehr im Plan (Fokus-Umbau).
+    expect(plans.every((p) => !('theme' in p) && !('confirmTheme' in p))).toBe(true);
   });
 
   it('Block 2 ist an jedem Werktag der Grammatik-Block (grammar, 6 Hauptaufgaben); kein Input-Block mehr', () => {
@@ -221,13 +157,6 @@ describe('unitPlanFor: Wochenplan (N12, M2, M3, M5, M7, S5)', () => {
     const meet: UnitBlock = { block: 3, kind: 'task.meeting', steps: ['task.meeting'], opts: {}, min: 9, channel: 'ch:u-task' };
     expect(resolveBlock(meet, { ai: false, tts: true })).toMatchObject({ kind: 'task.objection', fallback: true });
   });
-
-  it('Montag ohne gespeichertes Thema: Bestätigungskarte, Thema aus dem Vorschlag', () => {
-    const p = unitPlanFor(W40[0] ?? '', { v: 1, cur: { wk: '2026-W39', theme: 't01', by: 'user' } }, { goalMin: 30 });
-    expect(p.confirmTheme).toBe(true);
-    expect(p.theme).toBe('t02');
-    expect(p.themeBy).toBe('auto');
-  });
 });
 
 describe('block1Order (M1, M2)', () => {
@@ -260,62 +189,6 @@ describe('block1Order (M1, M2)', () => {
   });
   it('nichts fällig und nichts neu → goal 0', () => {
     expect(block1Order({ repairs: [], due: [], fresh: [], budgetSec: 480, quotaLeft: 5 }).goal).toBe(0);
-  });
-});
-
-describe('isThemeCard (anki-regeln §5 Stufe 4)', () => {
-  it('Herkunft, Wendung, Stichwort', () => {
-    expect(isThemeCard({ word: 'anything', src: themeRef('t03') }, 't03')).toBe(true);
-    expect(isThemeCard({ word: 'total cost of ownership' }, 't03')).toBe(true);
-    expect(isThemeCard({ word: 'pays for itself' }, 't03')).toBe(true);
-    expect(isThemeCard({ word: 'return on investment' }, 't03')).toBe(true);
-    expect(isThemeCard({ word: 'discounts' }, 't03')).toBe(true);
-    expect(isThemeCard({ word: 'umbrella' }, 't03')).toBe(false);
-    expect(isThemeCard({ word: 'price', doc: { origin: { kind: 'say', ref: 'theme:t05' } } }, 't03')).toBe(false);
-    expect(isThemeCard({ word: 'hotel' }, null)).toBe(false);
-  });
-  it('Stichwörter nur als Wortanfang mit kurzer Endung (keine Fehltreffer)', () => {
-    expect(isThemeCard({ word: 'eventually' }, 't12')).toBe(false);
-    expect(isThemeCard({ word: 'events' }, 't12')).toBe(true);
-    expect(isThemeCard({ word: 'career' }, 't13')).toBe(false);
-    expect(isThemeCard({ word: 'rental car' }, 't13')).toBe(true);
-    expect(isThemeCard({ word: 'aim' }, 't15')).toBe(false);
-    expect(isThemeCard({ word: 'certificate' }, 't04')).toBe(true);
-    expect(isThemeCard({ word: 'e-invoicing' }, 't05')).toBe(true);
-  });
-  it('jedes Thema erkennt seine eigenen Wendungen', () => {
-    for (const t of THEMES) for (const p of t.phrases) expect(isThemeCard({ word: p.en }, t)).toBe(true);
-  });
-});
-
-describe('Wochenziele und Erkennen (N13)', () => {
-  it('weekTargets: eigene Fallen zuerst, dann Themenfalle, höchstens 3; gespeicherte Ziele gehen vor', () => {
-    const t = weekTargets('t03', { day: '2026-09-28', own: ['p:since-for'] });
-    expect(t.traps).toEqual(['p:since-for', 'f19', 'f20']);
-    expect(t.tool).toBe('c1-hedging');
-    expect(t.phrases).toHaveLength(5);
-    const stored = weekTargets('t03', { day: '2026-09-28', week: { v: 1, targets: { wk: '2026-W40', traps: ['f01'], tool: 'passive' } } });
-    expect(stored).toMatchObject({ traps: ['f01'], tool: 'passive' });
-    expect(weekTargets(null).traps).toEqual([]);
-  });
-  it('detectTargets zählt Abschwächungen, Überleitungen und Wendungen', () => {
-    const targets = weekTargets('t03');
-    const text =
-      "I understand it may seem high at first glance. That said, it should save you roughly 30 percent. " +
-      "On top of that, the system pays for itself within 18 months. To sum up, I'd argue it's worth a pilot.";
-    const r = detectTargets(text, targets);
-    expect(r.hedge).toBeGreaterThanOrEqual(4); // may, should, roughly 30, I'd argue
-    expect(r.transition).toBe(3); // That said, On top of that, To sum up
-    expect(r.phrasesUsed).toEqual(['I understand it may seem high at first glance', 'pays for itself within 18 months']);
-    expect(r.progress).toEqual([
-      { kind: 'hedge', need: 2, have: r.hedge },
-      { kind: 'phrase', need: 2, have: 2 },
-    ]);
-  });
-  it('„Could you …“ ist eine Bitte, keine Abschwächung; Kurzformen zählen wie Langformen', () => {
-    expect(detectTargets('Could you send me the file?').hedge).toBe(0);
-    const t = weekTargets('t09');
-    expect(detectTargets('We have identified the root cause and I will keep you posted.', t).phrase).toBe(2);
   });
 });
 

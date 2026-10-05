@@ -31,7 +31,7 @@ import { Icon } from '../../ui/Icon';
 import { SessionEnd } from '../../ui/SessionEnd';
 import { AiRunPanel } from '../../ui/AiRunPanel';
 import { saveLookupCard } from '../lookup/store';
-import { finishUnit, GoalLine, Note, StepBoundary, TaskHead, TimeBar, TrainingBar, useCountdown } from '../nbdrill/shared';
+import { finishUnit, Note, StepBoundary, TaskHead, TimeBar, TrainingBar, useCountdown } from '../nbdrill/shared';
 import {
   beginAnswer,
   bestOf,
@@ -163,7 +163,7 @@ function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
       {lv > 2 && <Pattern answer={s.phase === 'review' ? answer : null} />}
       {s.phase !== 'review' && lv === 1 && <OrderLevel o={o} />}
       {s.phase !== 'review' && lv === 2 && <ChoiceLevel o={o} />}
-      {s.phase !== 'review' && lv === 3 && <StarterLevel key={`${o.id}-${lv}`} s={s} o={o} />}
+      {s.phase !== 'review' && lv === 3 && <StarterLevel key={`${o.id}-${lv}`} o={o} />}
       {s.phase !== 'review' && lv >= 4 && (
         <div className="flex flex-col gap-3">
           {lv === 5 &&
@@ -192,7 +192,6 @@ function ObjectionStep({ s, o }: { s: PressureSession; o: Objection }) {
             spellCheck={false}
             data-testid="pressure-input"
           />
-          <GoalLine text={s.draft} targets={s.unit?.targets} />
           <div className="flex flex-wrap gap-3">
             {s.phase === 'think' ? (
               <Button variant="primary" onClick={start} data-testid="pressure-start">
@@ -349,7 +348,7 @@ function ChoiceLevel({ o }: { o: Objection }) {
 }
 
 /** Stufe 3: vier Felder mit Satzanfängen, Emrah schreibt jeden Satz zu Ende. */
-function StarterLevel({ s, o }: { s: PressureSession; o: Objection }) {
+function StarterLevel({ o }: { o: Objection }) {
   const { t } = useT();
   const [parts, setParts] = useState<string[]>(() => MOVES.map((k) => starterPrefill(o.model[k])));
   const change = (i: number, v: string) => {
@@ -390,7 +389,6 @@ function StarterLevel({ s, o }: { s: PressureSession; o: Objection }) {
           />
         </label>
       ))}
-      <GoalLine text={s.draft} targets={s.unit?.targets} />
       <Button variant="primary" className="self-start" disabled={!written} onClick={() => submitStarters(own)} data-testid="pressure-check">
         {t('nbTrainingCheck')}
       </Button>

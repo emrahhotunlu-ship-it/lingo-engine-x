@@ -13,7 +13,7 @@ import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
 import { againPos, calibration, controlAllowed, controlCounts, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
 import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
 import { listenExercise } from '../../domain/srs/listen';
-import { REPAIR_MAX } from '../../domain/week/review';
+import { REPAIR_MAX } from '../../domain/unit/block1';
 import { unitDone } from '../../app/unit/done';
 import { clearResume } from '../../app/resume';
 import { useDecks } from './decksStore';

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, openEntry, openTab, screen, type Theme } from './fixtures';
+import { boot, openTab, screen, type Theme } from './fixtures';
 import { tourPatch, trainerTour } from './trainerHelpers';
 
 // UX-Regeln R1–R12 als Rundgang (docs/umbau/05-ux-ist-und-ziel.md §3.7, Anhang B): 390 × 844 mit Touch, Dunkel
@@ -10,7 +10,9 @@ import { tourPatch, trainerTour } from './trainerHelpers';
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
 /** Bekannte Befunde in Bereichen anderer Arbeitspakete (Heute-Karte, W3); hier nicht verdeckt, sondern gemeldet. */
-const KNOWN_DUPES = ['Deine Tageseinheit', '9 Fehler fällig'];
+const KNOWN_DUPES = ['Heute'];
+/** Die Zahl fälliger Fehlersätze steht je Thema im Pfad und einmal als Summe in der Zeile „Fehler korrigieren“ (gleicher Text bei gleicher Zahl). */
+const DUE_BADGE = /^\d+ (Fehlersatz|Fehlersätze) fällig$/;
 
 type Measure = {
   primary: Array<{ id: string; bottom: number; top: number }>;
@@ -79,7 +81,7 @@ async function rules(page: Page, name: string, theme: Theme): Promise<void> {
   expect(m.primary.map((p) => p.id), `R1 ${at}: gefüllte Hauptknöpfe im Bild`).toHaveLength(Math.min(m.primary.length, 1));
   for (const p of m.primary) expect(p.bottom, `R2 ${at}: Hauptknopf „${p.id}“ im sichtbaren Bereich`).toBeLessThanOrEqual(m.vvh + 0.5);
   expect(m.small, `R8 ${at}: Ziele unter 44 pt`).toEqual([]);
-  expect(m.dupes.filter((d) => !KNOWN_DUPES.includes(d)), `R7 ${at}: doppelter Text`).toEqual([]);
+  expect(m.dupes.filter((d) => !KNOWN_DUPES.includes(d) && !DUE_BADGE.test(d)), `R7 ${at}: doppelter Text`).toEqual([]);
   expect(m.scrollW, `${at}: waagrechter Bildlauf`).toBeLessThanOrEqual(m.clientW + 1);
 }
 
@@ -155,8 +157,8 @@ test('Rundgang: Grammatik-Übung (Frage und Ergebnis) und Zähler mit festem Nen
   test.slow();
   const { errors } = await boot(page, { migrated: true, theme: 'dark' });
   await screen(page, 'today');
-  await openEntry(page, 'hub-grammar');
-  await page.getByTestId('gr-start').click();
+  await openTab(page, 'learn');
+  await page.getByTestId('hub-next-start').click();
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await page.waitForTimeout(450);
   const total0 = (await page.getByTestId('round-progress').innerText()).split('/')[1]?.trim();

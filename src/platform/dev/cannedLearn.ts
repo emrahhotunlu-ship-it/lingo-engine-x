@@ -1,6 +1,6 @@
 import { registerCannedReply } from './fakeSample';
 
-// Feste, realistische Antworten des Entwicklungs-Adapters für word-gen@1, lesson-production@1,
+// Feste, realistische Antworten des Entwicklungs-Adapters für word-gen@1,
 // grammar-items@1 und mnemonic@1 (Prüfbericht: bisher ohne Testantwort). Sie lesen nur die
 // festen Datenzeilen des Prompts und halten die Schemaregeln der Vorlagen ein (Beispielsatz mit
 // dem Wort, Sprache je Feld, genau eine Lücke …). Nur Entwicklung und Tests.
@@ -75,47 +75,6 @@ function wordGenReply(input: string): string {
   return JSON.stringify({ words: words.length ? words : pool.slice(0, 1) });
 }
 
-// ---------------------------------------------------------------- lesson-production@1
-
-function lessonProductionReply(input: string): string {
-  const lang = uiLang(input, 'Explanation language');
-  const required = line(input, 'Required words')
-    .split(',')
-    .map((w) => w.trim())
-    .filter((w) => w && w !== '(none)');
-  const text = line(input, 'Learner text');
-  const lower = text.toLowerCase();
-  const mustUsed = required.filter((w) => lower.includes(core(w).split(' ')[0] ?? ''));
-  const errors: unknown[] = [];
-  if (/\b(he|she|it) have\b/i.test(text)) {
-    errors.push({ wrong: 'it have', right: 'it has', why: lang === 'de' ? 'Bei he, she und it braucht das Verb im Präsens ein -s.' : 'With he, she and it, the present tense verb needs an -s.', cat: 'verbform', sev: 'minor' });
-  }
-  const full = mustUsed.length === required.length;
-  return JSON.stringify({
-    cefr: 'B2',
-    scores: { task: full ? 85 : 70, grammar: 80, vocabulary: 78, coherence: 82, register: 84 },
-    errors,
-    upgrades: [
-      {
-        orig: text.split(/(?<=[.!?])\s+/)[0]?.slice(0, 180) || text.slice(0, 180),
-        better: 'Each invoice is first checked by our accounting team before anything else happens.',
-        why: lang === 'de' ? 'So klingt der Ablauf klarer und etwas formeller.' : 'This makes the process sound clearer and a little more formal.',
-      },
-    ],
-    mustUsed,
-    structureUsed: true,
-    cando: full ? 'met' : 'partly',
-    candoWhy: full
-      ? lang === 'de'
-        ? 'Du beschreibst den Ablauf verständlich und nutzt alle Pflichtwörter.'
-        : 'You describe the process clearly and use all of the required words.'
-      : lang === 'de'
-        ? 'Der Ablauf ist verständlich, aber es fehlen noch Pflichtwörter.'
-        : 'The process is clear, but some of the required words are still missing.',
-    model: `Every invoice is scanned and checked first. After that, an approval is requested from the finance team. Every step is recorded in the audit trail, so nothing gets lost.`,
-  });
-}
-
 // ---------------------------------------------------------------- grammar-items@1
 
 let itemRun = 0;
@@ -162,7 +121,6 @@ function mnemonicReply(input: string): string {
 
 export function registerLearnReplies(): void {
   registerCannedReply('word-gen', wordGenReply);
-  registerCannedReply('lesson-production', lessonProductionReply);
   registerCannedReply('grammar-items', grammarItemsReply);
   registerCannedReply('mnemonic', mnemonicReply);
 }

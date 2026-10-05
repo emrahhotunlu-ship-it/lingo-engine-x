@@ -13,7 +13,7 @@ export const nbSprechenDe = {
   nbSprechenCriteriaWait: 'Claude prüft die Kriterien …',
   nbSprechenCriteriaFailed: 'Die Kriterien konnten nicht geprüft werden.',
   nbSprechenResumeRoleplay: 'Rollenspiel',
-  nbSprechenUnitDone: 'Weiter in der Tageseinheit',
+  nbSprechenUnitDone: 'Weiter mit Heute',
   nbSprechenTurnLeft: 'noch {s} s für deinen Zug',
   nbSprechenTurnUp: 'Zeit um – sag es trotzdem',
   nbSprechenTurnTimerOff: 'Zeitlimit aus',

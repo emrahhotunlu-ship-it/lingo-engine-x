@@ -19,7 +19,7 @@ export const learnDe = {
   certainty2: 'im Aufbau',
   certainty3: 'solide',
   certainty4: 'sicher',
-  certainty5: 'gefestigt',
+  certainty5: 'fest',
 
   // Lernen-Übersicht
   lhTitle: 'Grammatik',
@@ -176,7 +176,7 @@ export const learnDe = {
   // Heute
   tdLessonNext: 'Die nächste Lektion deines Kurses',
   tdOfferVocab: 'Vokabeln',
-  tdFreeRound: 'Freie Runde Vokabeln',
+  tdFreeRound: 'Extra-Runde Wörter',
   why_whyFocus: 'Claudes Fokus',
   why_whyThin: 'Noch wenig geübt',
   why_whyWeakest: 'Dein schwächster Bereich',

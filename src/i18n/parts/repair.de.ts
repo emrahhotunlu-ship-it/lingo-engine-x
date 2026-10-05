@@ -6,7 +6,7 @@ export const repairDe = {
   rxStepLead: 'Hier sind Sätze von dir mit einer Korrektur. Sag sie jetzt selbst richtig – die bessere Fassung kommt danach.',
   rxPurpose: 'Wer die bessere Form selbst bildet, behält sie. Jeder Satz kommt in 1, 3 und 9 Tagen in der Wiederholung zurück.',
   rxInfo: 'Wozu dient das?',
-  rxKind: 'Reparatur-Satz',
+  rxKind: 'Fehlersatz',
   rxThen: 'Damals hast du gesagt:',
   rxYours: 'Dein Satz:',
   rxTask: 'Schreib es jetzt richtig.',
@@ -32,5 +32,5 @@ export const repairDe = {
   rxSrc_preply: 'aus einer früheren Stunde',
   rxSrc_say: 'aus einer früheren Übung',
   rxSrc_lesson: 'aus der Lektion',
-  rxStand: 'Reparatur-Sätze: {open} offen, {safe} sicher',
+  rxStand: 'Fehlersätze: {open} offen, {safe} sicher',
 } as const;
