@@ -334,7 +334,7 @@ function ensureHistory(today: string, nowMs: number): void {
   historyDay = today;
   const cards = buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab'));
   const goal = vocabGoal({ profile, cards, today });
-  void recordProfileFields('today:history', (cur) => historyPatch(cur, historySnapshot({ day: today, nowMs, profile: cur, grammar: live.collections.grammar ?? new Map(), vocabNow: goal.now }))).then((ok) => {
+  void recordProfileFields('today:history', (cur) => historyPatch(cur, historySnapshot({ day: today, nowMs, profile: cur, grammar: live.collections.grammar ?? new Map(), vocabNow: goal.now, festNow: goal.fest }))).then((ok) => {
     if (!ok) historyDay = null;
   });
 }
