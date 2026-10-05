@@ -62,6 +62,21 @@ describe('Entfernungs-Audit', () => {
     );
   });
 
+  // Kurs-Bereich (W5, Gesamtkonzept: „Kurs entfällt als eigener Bereich“): keine Bildschirme, Routen oder Texte mehr.
+  // Übrig bleiben nur der Katalog und die Lesefunktionen für gespeicherte Pläne (`plan.lesson`) und Prompt-Vorlagen.
+  it('Kurs-Bereich entfernt; Datenpfade `app/course` und `lesson/*` bleiben im Register', () => {
+    expect(existsPath(join(ROOT, 'src/features/course'))).toBe(false);
+    expect(readdirSync(join(ROOT, 'src/domain/course')).sort()).toEqual(['baseLesson.ts', 'catalog.ts', 'courseDone.ts', 'production.ts']);
+    const routes = FILES.filter((f) => f.includes('/src/') && /name: '(course|lesson)'/.test(read(f))).map((f) => f.replace(ROOT, ''));
+    expect(routes).toEqual([]);
+    const imports = FILES.filter((f) => /from '[^']*features\/course(\/[^']*)?'/.test(read(f))).map((f) => f.replace(ROOT, ''));
+    expect(imports).toEqual([]);
+    expect([...COLLECTION_NAMES]).toContain('lesson');
+    expect([...APP_DOC_PATHS]).toContain('app/course');
+    const keys = [...Object.keys(de), ...Object.keys(en)].filter((k) => /^(cs|ls|ce)[A-Z]/.test(k) || /^(lhOpenLesson|lhAllLessons|lhCourse|courseComplete)$/.test(k));
+    expect([...new Set(keys)]).toEqual([]);
+  });
+
   // (b) Keine Textschlüssel der gelöschten Bereiche (Präfixe der 2026-10-04 entfernten Texte).
   it('keine i18n-Schlüssel der gelöschten Bereiche', () => {
     const gone = /^(nbLesen|wrScore|rdOwn|rdSummary|mtDebrief|mtTake|mtRehearsal|mtOwn|ppHeld|ppCtx|ppTab|inAi|inOffer|inSaved|inSave|inHistory|mailInt|mailSt|mailRcp|pitchAud|piTarget|piTo|piApplied|fluCol|fluTask|tnReg|tnVerdict|tnRepairs|sayRepairs|pbAdapt|dcStep|lsShadow|tdBiz|nbHeuteWeek|nbHeuteConfirm|nbHeuteInput|nbHeuteTheme|nbHeutePhone|feedAct_|heat[A-Z])/;

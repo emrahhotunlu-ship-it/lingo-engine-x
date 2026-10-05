@@ -24,11 +24,14 @@ describe('grammarWrite (Schreibweg grammar/<topic>)', () => {
     expect(grammarWrite({ p: 0.5, last: t0 + 5 }, answer({ t: t0 }))).toEqual({ kind: 'skip', reason: 'stale_answer' });
   });
 
-  it('falsch → Fehler in der alten Form; „Weiß ich nicht" legt keinen Fehler an', () => {
+  it('falsch → Fehler in der alten Form; „Weiß ich nicht" legt genau einen Fehler mit leerem `given` an', () => {
     const w = grammarWrite({ p: 0.5, last: 1 }, answer({ t: t0, verdict: 'wrong', given: 'finish' }));
     expect(w.kind === 'update' && w.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: 'finish', ans: 'will have finished', t: t0, src: 'seed' }]);
     const d = grammarWrite({ p: 0.5, last: 1 }, answer({ t: t0, verdict: 'wrong', dontKnow: true, given: '' }));
-    expect(d.kind === 'update' && 'errors' in d.patch).toBe(false);
+    expect(d.kind === 'update' && d.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: '', ans: 'will have finished', t: t0, src: 'seed' }]);
+    // Dieselbe Frage ist schon offen: kein zweiter Fehlersatz (genau einer je Fehler).
+    const again = grammarWrite({ p: 0.5, last: 1, errors: [{ q: 'By next June, I ___ (finish) my course.', given: 'finish', ans: 'will have finished', t: t0 - 5 }] }, answer({ t: t0, verdict: 'wrong', dontKnow: true, given: '' }));
+    expect(again.kind === 'update' && 'errors' in again.patch).toBe(false);
   });
 
   it('richtig erst nach Hinweis → zählt als falsch, der erste Versuch wird als Fehler gemerkt (Lernwissenschaft 27.09.)', () => {

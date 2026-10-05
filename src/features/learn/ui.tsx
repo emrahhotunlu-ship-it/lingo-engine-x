@@ -392,8 +392,8 @@ export function dutyLabel(id: DutyId, t: (k: MessageKey) => string): string {
   return k ? t(k) : id;
 }
 
-/** Beschriftung des Rückwegs nach der Herkunft („Zurück zu Heute", „Zum Kurs" …). */
-const ORIGIN_LABEL: Partial<Record<Route['name'], MessageKey>> = { today: 'sumBack', learn: 'lrBackToLearn', course: 'lsBackToCourse', overview: 'ckBack', apply: 'lrBackToApply' };
+/** Beschriftung des Rückwegs nach der Herkunft („Zurück zu Heute", „Zurück zu Grammatik" …). */
+const ORIGIN_LABEL: Partial<Record<Route['name'], MessageKey>> = { today: 'sumBack', learn: 'lrBackToLearn', overview: 'ckBack', apply: 'lrBackToApply' };
 
 /**
  * Primärknopf jeder Pflicht-Zusammenfassung (M11): „Weiter: {nächster offener Pflichtpunkt}",

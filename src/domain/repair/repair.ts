@@ -1,3 +1,4 @@
+import { addLocalDays, learningDayEnd } from '../date';
 import { hash32 } from '../random';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Emrahs eigene falsche oder
@@ -7,7 +8,6 @@ import { hash32 } from '../random';
 // REPAIR_MAX Einträge (Kapazität, A6.6). Rein und getestet.
 
 type Doc = Record<string, unknown>;
-const DAY = 86_400_000;
 
 export const REPAIR_DAYS = [1, 3, 9] as const;
 export const REPAIR_MAX = 150;
@@ -86,7 +86,7 @@ export function readRepairs(doc: Readonly<Doc> | undefined): RepairItem[] {
       src: src || 'say',
       t,
       box: num(e.box) ?? 0,
-      due: num(e.due) ?? t + DAY,
+      due: num(e.due) ?? addLocalDays(t, 1),
     });
   }
   return out;
@@ -132,7 +132,7 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
       ...(fix ? { fix } : {}),
       t: nowMs,
       box: 0,
-      due: nowMs + DAY,
+      due: addLocalDays(nowMs, 1),
     };
     if (i < 0) {
       out.push(fresh);
@@ -145,9 +145,10 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
   return changed ? capRepairs(out) : null;
 }
 
-/** Fällige, nicht erledigte Einträge, älteste Fälligkeit zuerst. */
+/** Fällige, nicht erledigte Einträge, älteste Fälligkeit zuerst. Fällig = vor dem Ende des Lerntags (04:00 Uhr), wie bei den Fehlersätzen der Grammatik. */
 export function dueRepairs(list: readonly RepairItem[], nowMs: number): RepairItem[] {
-  return list.filter((e) => !e.done && e.due <= nowMs).sort((a, b) => a.due - b.due);
+  const end = learningDayEnd(nowMs);
+  return list.filter((e) => !e.done && e.due < end).sort((a, b) => a.due - b.due);
 }
 
 /**
@@ -161,7 +162,7 @@ export function reviewRepair(list: readonly RepairItem[], id: string, ok: boolea
   if ((e.last ?? 0) >= nowMs) return null;
   const box = ok ? e.box + 1 : 0;
   const done = box >= REPAIR_DAYS.length;
-  const next: RepairItem = { ...e, box, last: nowMs, done, due: nowMs + (REPAIR_DAYS[Math.min(box, REPAIR_DAYS.length - 1)] ?? 1) * DAY };
+  const next: RepairItem = { ...e, box, last: nowMs, done, due: addLocalDays(nowMs, REPAIR_DAYS[Math.min(box, REPAIR_DAYS.length - 1)] ?? 1) };
   const out = [...list];
   out[i] = next;
   return out;

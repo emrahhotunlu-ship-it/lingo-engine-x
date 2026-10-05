@@ -3,7 +3,6 @@ import { useFocus, focusSnapshot, restoreFocus, commitFocus } from '../../src/fe
 import { grammarSnapshot, restoreGrammar, useGrammarSession } from '../../src/features/grammar/session';
 import { againSnapshot, restoreAgain, useAgain } from '../../src/features/repair/again/session';
 import { drillSnapshot, restoreDrill, useDrill } from '../../src/features/drills/session';
-import { lessonSnapshot, openLesson, restoreLesson, useLessonRun } from '../../src/features/course/lessonRun';
 import type { GrammarTask } from '../../src/domain/learn/types';
 import type { FocusTask } from '../../src/domain/repair/unit';
 
@@ -73,16 +72,5 @@ describe('Fortsetzen', () => {
     useAgain.setState({ active: false, draft: '' });
     expect(restoreAgain(snap)).toBe(true);
     expect(useAgain.getState().draft).toBe('Mein Entwurf');
-  });
-
-  it('Lektion: Schritt 3 (Grammatik) und Aufgabe im Schritt', async () => {
-    const snap = { lid: 'l07', step: 'grammar' as const, inner: { grammar: 2 } };
-    expect(restoreLesson(snap)).toBe(true);
-    await openLesson('l07');
-    const s = useLessonRun.getState();
-    expect(s.lid).toBe('l07');
-    expect(s.step).toBe('grammar');
-    expect(s.inner.grammar).toBe(2);
-    expect(lessonSnapshot()).toEqual(snap);
   });
 });

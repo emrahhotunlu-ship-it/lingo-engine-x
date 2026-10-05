@@ -20,9 +20,9 @@ const AREAS: AreaDef[] = [
       learn: { kind: 'tab', component: Empty },
       apply: { kind: 'tab', component: Empty },
       grammar: { kind: 'page', component: Empty },
-      course: { kind: 'page', component: Empty },
+      wissen: { kind: 'page', component: Empty },
       overview: { kind: 'tab', component: Empty, params: z.object({ tab: z.enum(['judge', 'errors', 'path', 'history']).optional() }) },
-      lesson: { kind: 'exercise', component: Empty, params: z.object({ id: z.string().min(1) }) },
+      grammarSession: { kind: 'exercise', component: Empty, params: z.object({ mode: z.enum(['duty', 'xtra', 'errors', 'topic']), topic: z.string().optional() }) },
       trainer: { kind: 'exercise', component: Empty, params: z.object({ round: z.enum(['pflicht', 'extra']) }) },
       roleplay: { kind: 'exercise', component: Empty, params: z.object({ sceneId: z.string(), resume: z.boolean().optional(), n: z.number().optional() }) },
     },
@@ -43,7 +43,7 @@ describe('Register', () => {
 
   it('kennt Ebenen und wirft bei doppelten Bildschirmen', () => {
     expect(kindOf('today')).toBe('tab');
-    expect(kindOf('lesson')).toBe('exercise');
+    expect(kindOf('grammarSession')).toBe('exercise');
     expect(kindOf('unbekannt')).toBe('page');
     expect(() => installAreas([...AREAS, { id: 'zwei', screens: { today: { kind: 'tab', component: Empty } } }])).toThrow(/doppelt/);
     installAreas(AREAS);
@@ -64,8 +64,8 @@ describe('Register', () => {
 describe('Router: Reiter-Stapel und Übungsebene', () => {
   it('Seite legt sich auf den aktiven Reiter, back() führt zur Herkunft', () => {
     let c = navigate(start(), { name: 'grammar' });
-    c = navigate(c, { name: 'course' });
-    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'grammar', 'course']);
+    c = navigate(c, { name: 'wissen' });
+    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'grammar', 'wissen']);
     c = goBack(c);
     expect(top(c).name).toBe('grammar');
     c = goBack(goBack(c));
@@ -73,26 +73,26 @@ describe('Router: Reiter-Stapel und Übungsebene', () => {
   });
 
   it('Ziel gleich dem Eintrag darunter wirkt wie back()', () => {
-    let c = navigate(navigate(start(), { name: 'grammar' }), { name: 'course' });
+    let c = navigate(navigate(start(), { name: 'grammar' }), { name: 'wissen' });
     c = navigate(c, { name: 'grammar' });
     expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'grammar']);
   });
 
   it('Übung öffnet über der Herkunft; Übung → Übung ersetzt; back() schließt zur Herkunft', () => {
-    let c = navigate(navigate(start(), { name: 'course' }), { name: 'lesson', id: 'l07' });
-    expect(c.overlay).toEqual({ route: { name: 'lesson', id: 'l07' }, origin: 'today' });
+    let c = navigate(navigate(start(), { name: 'wissen' }), { name: 'grammarSession', mode: 'duty' });
+    expect(c.overlay).toEqual({ route: { name: 'grammarSession', mode: 'duty' }, origin: 'today' });
     c = navigate(c, { name: 'trainer', round: 'pflicht' });
     expect(c.overlay?.route).toEqual({ name: 'trainer', round: 'pflicht' });
     c = goBack(c);
     expect(c.overlay).toBeNull();
-    expect(top(c).name).toBe('course');
+    expect(top(c).name).toBe('wissen');
   });
 
   it('Seite aus einer Übung schließt die Übung; ist sie die Herkunft, entsteht kein Doppel', () => {
-    let c = navigate(navigate(start(), { name: 'course' }), { name: 'lesson', id: 'l07' });
-    c = navigate(c, { name: 'course' });
+    let c = navigate(navigate(start(), { name: 'wissen' }), { name: 'grammarSession', mode: 'duty' });
+    c = navigate(c, { name: 'wissen' });
     expect(c.overlay).toBeNull();
-    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'course']);
+    expect(c.stacks.today.map((r) => r.name)).toEqual(['today', 'wissen']);
   });
 
   it('Reiter-Wurzel wechselt den Reiter, setzt Wurzelparameter und schließt die Übung', () => {
@@ -127,7 +127,7 @@ describe('Deep-Links', () => {
     expect(parseRoute(s, lookup)).toEqual(r);
     expect(routeToString({ name: 'today' })).toBe('today');
     expect(parseRoute('trainer?round=extra', lookup)).toEqual({ name: 'trainer', round: 'extra' });
-    expect(parseRoute('lesson?id=123', lookup)).toEqual({ name: 'lesson', id: '123' });
+    expect(parseRoute('grammarSession?mode=topic&topic=passive', lookup)).toEqual({ name: 'grammarSession', mode: 'topic', topic: 'passive' });
   });
 
   it('unbekannte Bildschirme und ungültige Werte ergeben null', () => {

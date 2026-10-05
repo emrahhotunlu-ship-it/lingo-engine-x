@@ -54,7 +54,7 @@ describe('selectRound', () => {
     ['conditionals', { p: 0.2, n: 6, last: now - 86_400_000, due: now - 1 }],
     ['passive', { p: 0.8, n: 10, last: now - 86_400_000 }],
   ]);
-  const input = { mode: 'xtra' as const, grammarDocs: docs, dailyOpen: [], pool: [], lessonTasks: [], nowMs: now, size: 8, seed: '2026-09-27|xtra' };
+  const input = { mode: 'xtra' as const, grammarDocs: docs, dailyOpen: [], pool: [], nowMs: now, size: 8, seed: '2026-09-27|xtra' };
 
   it('deterministisch: gleiche Eingabe → gleiche Runde', () => {
     const a = selectRound(input).map((t) => t.key);
@@ -70,21 +70,24 @@ describe('selectRound', () => {
     }
   });
 
-  it('Pflichtrunde ohne das Thema der heutigen Lektion; nächstes Lektionsthema eingemischt', () => {
-    const r = selectRound({ ...input, mode: 'duty', size: 6, lessonTopicToday: 'conditionals', nextLessonTopic: 'relative' });
-    expect(r.some((t) => t.topic === 'conditionals')).toBe(false);
-    expect(r.some((t) => t.topic === 'relative')).toBe(true);
-    expect(r).toHaveLength(6);
+  it('Einführungsbremse: ohne `introduce` kommt kein ungeübtes Thema in die Runde, mit `introduce` genau das eine', () => {
+    for (const seed of ['a', 'b', 'c']) {
+      const none = selectRound({ ...input, seed, mode: 'duty', size: 6, introduce: null });
+      expect(none.every((t) => t.topic === 'conditionals' || t.topic === 'passive')).toBe(true);
+      const one = selectRound({ ...input, seed, mode: 'duty', size: 6, introduce: 'relative' });
+      expect(one.some((t) => t.topic === 'relative')).toBe(true);
+      expect(one.filter((t) => !['conditionals', 'passive', 'relative'].includes(t.topic))).toEqual([]);
+      expect(one).toHaveLength(6);
+    }
   });
 
   it('Pflichtrunde übt das angekündigte Fokus-Thema (vorn, etwa die Hälfte), Rest wie bisher', () => {
     for (const seed of ['a', 'b', 'c']) {
-      const r = selectRound({ ...input, seed, mode: 'duty', size: 6, focusTopic: 'passive', lessonTopicToday: 'conditionals' });
+      const r = selectRound({ ...input, seed, mode: 'duty', size: 6, focusTopic: 'passive', introduce: null });
       expect(r).toHaveLength(6);
       expect(r[0]!.topic).toBe('passive');
       expect(r.filter((t) => t.topic === 'passive').length).toBeGreaterThanOrEqual(3);
       expect(new Set(r.map((t) => t.topic)).size).toBeGreaterThanOrEqual(2);
-      expect(r.some((t) => t.topic === 'conditionals')).toBe(false);
       for (let i = 2; i < r.length; i++) expect(r[i]!.topic === r[i - 1]!.topic && r[i]!.topic === r[i - 2]!.topic).toBe(false);
     }
     // Unbekanntes Thema oder freie Runde: Fokus ohne Wirkung.

@@ -5,6 +5,7 @@ import type { GrammarTask, GrammarTaskType, TaskSrc } from '../learn/types';
 import { hash32, mulberry32, shuffle } from '../random';
 import { topicP } from './bkt';
 import { dueErrors } from './errors';
+import { isNewTopic, nextNewTopic } from './path';
 import { legacyTaskKey } from './key';
 import { asText } from '../text/str';
 import { asList, asRecord, grammarJson, rulesJson, toolkitJson } from './raw';
@@ -152,10 +153,11 @@ export type RoundInput = {
   mode: RoundMode;
   /** Nur bei `topic`: das Thema. */
   topic?: string | null;
-  /** Thema der nächsten offenen Lektion (wird eingemischt). */
-  nextLessonTopic?: string | null;
-  /** Thema der heutigen Lektion – in der Pflichtrunde ausgenommen (Kap. 15, nichts dreimal). */
-  lessonTopicToday?: string | null;
+  /**
+   * Einführungsbremse (Gesamtkonzept 3.4): Ist der Wert gesetzt (auch `null`), kommen nur schon begonnene Themen
+   * in die Runde, dazu höchstens dieses eine neue (`null` = heute kein neues Thema). Ohne Angabe gilt keine Bremse.
+   */
+  introduce?: string | null;
   /**
    * Nur bei `duty`: das auf „Heute" angekündigte Fokus-Thema („Claude's focus · …"). Es steht
    * vorn und bekommt etwa die Hälfte der Plätze; der Rest wird wie bisher aufgefüllt.
@@ -165,8 +167,6 @@ export type RoundInput = {
   /** Offene Aufgaben aus `daily/*`, neueste Tage zuerst. */
   dailyOpen: readonly GrammarTask[];
   pool: readonly GrammarTask[];
-  /** Aufgaben erledigter Lektionen. */
-  lessonTasks: readonly GrammarTask[];
   nowMs: number;
   size: number;
   /** Startwert, z. B. `${tag}|${modus}`. */
@@ -179,8 +179,15 @@ export const ERRORS_PER_ROUND = 3;
 const seenOf = (doc: Readonly<Doc> | undefined): Set<string> => new Set(Array.isArray(doc?.seen) ? (doc.seen as unknown[]).map(s) : []);
 
 /** Themen nach Bedarf: schwach, fällig, wenig geübt zuerst; Gleichstand per Startwert. */
-export function rankTopics(i: Pick<RoundInput, 'grammarDocs' | 'nowMs' | 'seed'>): Array<{ topic: string; p: number; need: number }> {
-  return TOPICS.map((tp) => {
+export function rankTopics(i: Pick<RoundInput, 'grammarDocs' | 'nowMs' | 'seed' | 'introduce'>): Array<{ topic: string; p: number; need: number }> {
+  const gated = i.introduce !== undefined;
+  let pool = TOPICS.filter((tp) => !gated || !isNewTopic(i.grammarDocs.get(tp.id)) || tp.id === i.introduce);
+  // Ganz am Anfang (noch nichts begonnen): das erste Thema des Pfads, damit die Runde nicht leer ist.
+  if (!pool.length) {
+    const first = nextNewTopic(i.grammarDocs);
+    pool = TOPICS.filter((tp) => tp.id === first);
+  }
+  return pool.map((tp) => {
     const doc = i.grammarDocs.get(tp.id);
     const p = topicP(tp.id, doc, i.nowMs);
     const n = typeof doc?.n === 'number' ? doc.n : 0;
@@ -205,7 +212,7 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   const rng = mulberry32(hash32(i.seed));
   const used = new Set<string>();
   const seed = seedTasks();
-  const sources: readonly (readonly GrammarTask[])[] = [i.dailyOpen, i.pool, i.lessonTasks, shuffle(seed, rng)];
+  const sources: readonly (readonly GrammarTask[])[] = [i.dailyOpen, i.pool, shuffle(seed, rng)];
 
   // Quellen haben Vorrang vor der Wunschform: Eine Aufgabe des Tagesauftrags kommt vor jeder
   // Startaufgabe; innerhalb einer Quelle gewinnt die gewünschte Form (`strict`: nur diese).
@@ -249,20 +256,18 @@ export function selectRound(i: RoundInput): GrammarTask[] {
   // 2. Themen der Runde.
   const ranked = rankTopics(i);
   let topics: string[];
-  const focus = i.mode === 'duty' && i.focusTopic && topicById(i.focusTopic) ? i.focusTopic : null;
+  const intro = i.introduce && topicById(i.introduce) ? i.introduce : null;
+  // Mit Bremse ist ein neues Fokus-Thema nur erlaubt, wenn es das eine neue Thema des Tages ist.
+  const focus = i.mode === 'duty' && i.focusTopic && topicById(i.focusTopic) && (i.introduce === undefined || !isNewTopic(i.grammarDocs.get(i.focusTopic)) || i.focusTopic === intro) ? i.focusTopic : null;
   if (i.mode === 'topic' && i.topic && topicById(i.topic)) topics = [i.topic];
   else if (focus) {
-    // Das angekündigte Fokus-Thema gilt – auch wenn es das Thema der heutigen Lektion ist.
-    const skip = i.lessonTopicToday ?? null;
-    const order = ranked.map((r) => r.topic).filter((t) => t !== skip && t !== focus);
+    const order = ranked.map((r) => r.topic).filter((t) => t !== focus);
     topics = [focus, ...order.slice(0, 2)];
   } else {
-    const skip = i.mode === 'duty' ? i.lessonTopicToday ?? null : null;
-    const order = ranked.map((r) => r.topic).filter((t) => t !== skip);
-    const next = i.nextLessonTopic && i.nextLessonTopic !== skip && topicById(i.nextLessonTopic) ? i.nextLessonTopic : null;
+    const order = ranked.map((r) => r.topic);
     topics = order.slice(0, 3);
-    if (next && !topics.includes(next)) topics = [topics[0] ?? next, next, ...topics.slice(1, 2)].filter((t, k, a) => a.indexOf(t) === k);
-    for (const t of order) if (topics.length < 3 && !topics.includes(t)) topics.push(t);
+    // Das eine neue Thema des Tages (nächstes im Pfad) steht immer dabei, als zweites.
+    if (intro && !topics.includes(intro)) topics = [topics[0] ?? intro, intro, ...topics.slice(1, 2)].filter((t, k, a) => a.indexOf(t) === k);
   }
 
   // 3. Aufgaben je Thema, Formen nach Beherrschung im Wechsel.

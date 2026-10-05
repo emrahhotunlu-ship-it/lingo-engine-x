@@ -8,7 +8,7 @@ const t0 = berlin('2026-09-20', 10);
 
 describe('Fehler-Boxen 1/3/9 (D1)', () => {
   it('E-01: falsch → nach 1 Tag, dann +3, +9, dann erledigt', () => {
-    let list: ErrorEntry[] = addError([], { q: 'I ___ (see) her yesterday.', given: 'have seen', ans: 'saw', t: t0, src: 'seed' });
+    let list: readonly ErrorEntry[] = addError([], { q: 'I ___ (see) her yesterday.', given: 'have seen', ans: 'saw', t: t0, src: 'seed' });
     expect(errorDue(list[0]!)).toBe(t0 + DAY);
     let t = t0 + DAY;
     const steps: number[] = [];
@@ -31,14 +31,15 @@ describe('Fehler-Boxen 1/3/9 (D1)', () => {
     expect(reviewError(out, t0, { ok: false, given: 'z', grade: 1, t: t0 + 5 })).toBeNull();
   });
 
-  it('E-03: Kappung auf 10, erledigte zuerst', () => {
+  it('E-03: Kappung auf 10 verdrängt nur Erledigte; sind alle offen, bleibt alles stehen', () => {
     const list: ErrorEntry[] = Array.from({ length: 11 }, (_, i) => ({ q: `q${i}`, t: t0 + i, done: i === 5 }));
     const out = capErrors(list);
     expect(out).toHaveLength(10);
     expect(out.some((e) => e.q === 'q5')).toBe(false);
     expect(out[0]!.q).toBe('q0');
     const open = capErrors(Array.from({ length: 11 }, (_, i) => ({ q: `q${i}`, t: t0 + i })));
-    expect(open[0]!.q).toBe('q1');
+    expect(open).toHaveLength(11);
+    expect(open[0]!.q).toBe('q0');
   });
 
   it('E-04: dieselbe Frage wird nur einmal wiederholt', () => {
@@ -52,14 +53,14 @@ describe('Fehler-Boxen 1/3/9 (D1)', () => {
   it('E-05: ab Box 1 kommt bevorzugt eine ungesehene Variante gleichen Themas und Typs', () => {
     const err = { q: 'I ___ (see) her yesterday.', given: 'have seen', ans: 'saw', t: t0, box: 1, due: t0 + DAY };
     const docs = new Map([['past-simple-perfect', { p: 0.5, n: 5, errors: [err], seen: [] }]]);
-    const round = selectRound({ mode: 'errors', grammarDocs: docs, dailyOpen: [], pool: [], lessonTasks: [], nowMs: t0 + 2 * DAY, size: 8, seed: 'x' });
+    const round = selectRound({ mode: 'errors', grammarDocs: docs, dailyOpen: [], pool: [], nowMs: t0 + 2 * DAY, size: 8, seed: 'x' });
     expect(round).toHaveLength(1);
     expect(round[0]!.errorT).toBe(t0);
     expect(round[0]!.prompt).not.toBe(err.q);
     expect(round[0]!.type).toBe('gap');
     // Box 0: das Original.
     const docs0 = new Map([['past-simple-perfect', { errors: [{ ...err, box: 0 }] }]]);
-    const r0 = selectRound({ mode: 'errors', grammarDocs: docs0, dailyOpen: [], pool: [], lessonTasks: [], nowMs: t0 + 2 * DAY, size: 8, seed: 'x' });
+    const r0 = selectRound({ mode: 'errors', grammarDocs: docs0, dailyOpen: [], pool: [], nowMs: t0 + 2 * DAY, size: 8, seed: 'x' });
     expect(r0[0]!.prompt).toBe(err.q);
     expect(r0[0]!.hint).toBeNull(); // Der Satz nennt die Grundform schon selbst.
   });

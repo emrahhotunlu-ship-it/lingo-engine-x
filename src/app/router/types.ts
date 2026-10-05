@@ -7,7 +7,7 @@
 //     interface RouteParams { lesson: { id: string } }
 //   }
 //
-// Daraus entsteht `Route` als Union mit Namens-Diskriminator; `go({ name: 'lesson', id })` bleibt
+// Daraus entsteht `Route` als Union mit Namens-Diskriminator; `go({ name: 'grammarSession', mode })` bleibt
 // typgeprüft. Jede Route ist reines JSON (Deep-Links, Fortsetzen und Tests nutzen dieselbe Form).
 
 /** Parameter je Bildschirm. Bildschirme ohne Parameter tragen `NoParams` ein. */

@@ -13,7 +13,7 @@ import { hash32, mulberry32, shuffle } from '../../domain/random';
 import { buildTrainCards } from '../../domain/srs/cards';
 import type { Lang, TrainCard } from '../../domain/srs/types';
 import { learnRecorder } from '../progress/persist';
-import { recentLessonLines, useLearnInputs } from '../learn/inputs';
+import { useLearnInputs } from '../learn/inputs';
 import { roundCtx } from '../today/state';
 import { unitDone } from '../../app/unit/done';
 import type { UnitBlockNo } from '../../app/unit/types';
@@ -82,8 +82,8 @@ export function drillCards(nowMs: number): TrainCard[] {
   return buildTrainCards(live.collections.vocab ?? new Map(), nowMs, invalidIdsOf(live.invalid, 'vocab')).filter((c) => !c.hidden);
 }
 
-export function dictationItems(cards: readonly TrainCard[], lang: Lang, seed: string, n = DICTATE_ROUND): DictItem[] {
-  const all = dictationSentences({ cards, lessonLines: recentLessonLines(lang) });
+export function dictationItems(cards: readonly TrainCard[], seed: string, n = DICTATE_ROUND): DictItem[] {
+  const all = dictationSentences({ cards });
   // Überwiegend Bekanntes: aus den ersten Kandidaten (bekannte, fällige Karten zuerst) gemischt.
   const head = all.slice(0, Math.max(n * 3, 12));
   return shuffle(head, mulberry32(hash32(seed))).slice(0, n);
@@ -150,7 +150,7 @@ export function startDrill(kind: DrillKind, day?: string, block: UnitBlockNo | n
     lastInteract: performance.now(),
     block,
   };
-  if (kind === 'dictate') base.dictate = dictationItems(cards, lang, seed);
+  if (kind === 'dictate') base.dictate = dictationItems(cards, seed);
   else if (kind === 'cloze') base.cloze = buildCloze({ cards, seed, n: ctx === 'duty' ? DUTY_ROUND.cloze : CLOZE_ROUND });
   else if (kind === 'order') {
     const n = ctx === 'duty' ? DUTY_ROUND.order : ORDER_ROUND;

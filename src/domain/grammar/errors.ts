@@ -6,6 +6,7 @@ import { reviewFsrs } from '../srs/scheduler';
 import type { Grade } from '../srs/types';
 import { isDictWord } from '../lexicon/dict';
 import { lemmaCandidates } from '../text/lemma';
+import { addLocalDays, learningDayEnd } from '../date';
 import { legacyNorm, legacyTaskKey } from './key';
 
 // Fehler-Wiederholung (phase2-plan D1, §4.3, §5.3): Die Boxen 1/3/9 der alten App steuern
@@ -14,7 +15,6 @@ import { legacyNorm, legacyTaskKey } from './key';
 // `due = e.due ?? e.t + 1 Tag` und erst beim Wiederholen ergänzt.
 
 type Doc = Record<string, unknown>;
-const DAY = 86_400_000;
 
 export const REVIEW_DAYS = [1, 3, 9] as const;
 export const ERRORS_MAX = 10;
@@ -25,8 +25,11 @@ export type ErrorEntry = Doc & { q?: unknown; given?: unknown; ans?: unknown; t?
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
 
-/** Fälligkeit eines Fehlereintrags (Regel der alten App). */
-export const errorDue = (e: ErrorEntry): number => num(e.due) ?? (num(e.t) ?? 0) + DAY;
+/** Fälligkeit eines Fehlereintrags (Regel der alten App; „+ 1 Tag“ als Kalendertag, nicht als 24 Stunden). */
+export const errorDue = (e: ErrorEntry): number => num(e.due) ?? addLocalDays(num(e.t) ?? 0, 1);
+
+/** Fällig heißt: Fälligkeit vor dem Ende des laufenden Lerntags (04:00 Uhr), nicht auf die Millisekunde. */
+export const isDueToday = (due: number, nowMs: number): boolean => due < learningDayEnd(nowMs);
 
 /** Fehlerliste eines Themas, tolerant gelesen (nur Objekte). */
 export function errorsOf(doc: Readonly<Doc> | undefined): ErrorEntry[] {
@@ -35,21 +38,30 @@ export function errorsOf(doc: Readonly<Doc> | undefined): ErrorEntry[] {
 }
 
 /**
- * Auf höchstens `max` Einträge kürzen: zuerst die ältesten erledigten, erst dann die ältesten
- * offenen (bewusst verlustärmer als die alte App, die einfach die ältesten abschnitt).
+ * Auf höchstens `max` Einträge kürzen: nur erledigte Einträge (die ältesten zuerst) werden verdrängt.
+ * Sind alle offen, bleibt die Liste länger – offene Fehlersätze werden nie gelöscht.
  */
 export function capErrors(list: readonly ErrorEntry[], max = ERRORS_MAX): ErrorEntry[] {
   const out = [...list];
   while (out.length > max) {
     const doneIdx = out.findIndex((e) => e.done === true);
-    out.splice(doneIdx >= 0 ? doneIdx : 0, 1);
+    if (doneIdx < 0) break;
+    out.splice(doneIdx, 1);
   }
   return out;
 }
 
-/** Neuer Fehler in der alten Form `{q, given, ans, t, src}`. */
-export function addError(list: readonly ErrorEntry[], e: { q: string; given: string; ans: string; t: number; src: string }): ErrorEntry[] {
-  return capErrors([...list, { q: e.q, given: e.given.slice(0, GIVEN_MAX), ans: e.ans, t: e.t, src: e.src }]);
+/**
+ * Neuer Fehler in der alten Form `{q, given, ans, t, src}`. Genau einer je Fehler: Ist dieselbe Frage
+ * schon offen, ändert sich nichts. Ist das Thema voll (Deckel 10) und alle Einträge sind offen, wird
+ * der neue nicht angelegt – lieber nichts Neues als etwas Offenes zu löschen. Liefert dann dieselbe Liste.
+ */
+export function addError(list: readonly ErrorEntry[], e: { q: string; given: string; ans: string; t: number; src: string }, max = ERRORS_MAX): readonly ErrorEntry[] {
+  const k = legacyNorm(e.q);
+  if (list.some((x) => x.done !== true && legacyNorm(x.q) === k)) return list;
+  const out = capErrors(list, max - 1);
+  if (out.length >= max) return list;
+  return [...out, { q: e.q, given: e.given.slice(0, GIVEN_MAX), ans: e.ans, t: e.t, src: e.src }];
 }
 
 /**
@@ -71,11 +83,11 @@ export function reviewError(
     const box = (num(e.box) ?? 0) + 1;
     next.box = box;
     next.done = box >= REVIEW_DAYS.length;
-    next.due = r.t + REVIEW_DAYS[Math.min(box, REVIEW_DAYS.length - 1)]! * DAY;
+    next.due = addLocalDays(r.t, REVIEW_DAYS[Math.min(box, REVIEW_DAYS.length - 1)]!);
   } else {
     next.box = 0;
     next.done = false;
-    next.due = r.t + DAY;
+    next.due = addLocalDays(r.t, 1);
     next.given = r.given.slice(0, GIVEN_MAX);
   }
   next.last = r.t;
@@ -202,7 +214,7 @@ export function dueErrors(grammarDocs: ReadonlyMap<string, Readonly<Doc>>, nowMs
       if (seen.has(k)) continue;
       seen.add(k);
       const due = errorDue(e);
-      if (due > nowMs) continue;
+      if (!isDueToday(due, nowMs)) continue;
       const task = errorTask(topic, e);
       if (task) out.push({ topic, e, box: num(e.box) ?? 0, due, task });
     }

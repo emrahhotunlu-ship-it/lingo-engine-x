@@ -11,7 +11,7 @@ import { buildTrainCards, toTrainCard } from '../../domain/srs/cards';
 import { buildExercise } from '../../domain/srs/exercise';
 import type { AnswerEvent, Exercise, Lang, TrainCard } from '../../domain/srs/types';
 import { logWarn } from '../../platform/diagnostics';
-import { doneLessonTasks, useLearnInputs } from '../learn/inputs';
+import { useLearnInputs } from '../learn/inputs';
 import { learnRecorder, nextT, recordAnswer, recordProfileFields, recordRoundEnd } from '../progress/persist';
 import { saveCard } from '../vocab/persist';
 import type { Answer, FirstKind } from '../vocab/session';
@@ -108,7 +108,7 @@ export function startCheck(opts: { unit?: boolean } = {}): CheckKind | 'empty' {
   const items = selectCheck({
     cards: all,
     grammarDocs: live.collections.grammar ?? new Map<string, Doc>(),
-    sources: [inputs.dailyOpen, inputs.pool, doneLessonTasks(lang)],
+    sources: [inputs.dailyOpen, inputs.pool],
     nowMs: now,
     dayEndMs: learningDayEnd(now),
     lang,
