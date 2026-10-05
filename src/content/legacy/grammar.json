@@ -539,8 +539,8 @@
     "was used to"
    ],
    "answer": "used to",
-   "expl": "„used to + Infinitiv“ = früher regelmäßig, heute nicht mehr.",
-   "expl_en": "\"used to + infinitive\" = a regular past habit that no longer happens."
+   "expl": "„used to“ + Grundform erzählt von einer Gewohnheit, die früher galt und heute vorbei ist: I used to play football every day.",
+   "expl_en": "“Used to” + base verb describes a habit that was true in the past and is over now: I used to play football every day."
   },
   {
    "topic": "used-to",
@@ -551,8 +551,8 @@
    "accepted": [
     "'m used to"
    ],
-   "expl": "„be used to + -ing“ = an etwas gewöhnt sein.",
-   "expl_en": "\"be used to + -ing\" = to be accustomed to something."
+   "expl": "„be used to“ heißt „an etwas gewöhnt sein“. Danach folgt ein Wort auf -ing, weil „to“ hier eine Präposition ist: I’m used to driving on the left.",
+   "expl_en": "“Be used to” means “to be familiar with something”. An -ing word follows, because “to” is a preposition here: I’m used to driving on the left."
   },
   {
    "topic": "used-to",
@@ -698,8 +698,8 @@
    "type": "transform",
    "prompt": "\"I will call you,\" he said. → He said he ___ me.",
    "answer": "would call",
-   "expl": "will → would in der indirekten Rede.",
-   "expl_en": "will → would in reported speech."
+   "expl": "In der indirekten Rede wird aus „will“ ein „would“, weil die Zeit eine Stufe zurückgeht: „I will call you“ wird zu „He said he would call me.“",
+   "expl_en": "In reported speech “will” becomes “would”, because the tense moves one step back: “I will call you” becomes “He said he would call me.”"
   },
   {
    "topic": "relative",
@@ -712,8 +712,8 @@
     "where"
    ],
    "answer": "who",
-   "expl": "Für Personen: who (oder that).",
-   "expl_en": "For people: who (or that)."
+   "expl": "Für Personen nimmst du „who“ (oder „that“): The woman who lives next door is a doctor.",
+   "expl_en": "For people use “who” (or “that”): The woman who lives next door is a doctor."
   },
   {
    "topic": "relative",
@@ -726,8 +726,8 @@
     "that"
    ],
    "answer": "whose",
-   "expl": "„whose“ = dessen/deren – zeigt Besitz.",
-   "expl_en": "\"whose\" shows possession."
+   "expl": "„whose“ heißt „dessen/deren“ und zeigt Besitz: the man whose car was stolen = der Mann, dessen Auto gestohlen wurde.",
+   "expl_en": "“Whose” shows possession: the man whose car was stolen."
   },
   {
    "topic": "relative",
@@ -799,8 +799,8 @@
    "prompt": "We decided ___ the train.",
    "hint": "(take)",
    "answer": "to take",
-   "expl": "decide + to-Infinitiv.",
-   "expl_en": "decide + to-infinitive."
+   "expl": "Nach „decide“ steht „to“ + Grundform, nicht -ing: We decided to take the train.",
+   "expl_en": "After “decide” use “to” + base verb, not -ing: We decided to take the train."
   },
   {
    "topic": "gerund-inf",
@@ -849,8 +849,8 @@
    "type": "gap",
    "prompt": "She's very good ___ explaining things.",
    "answer": "at",
-   "expl": "good at + Nomen oder -ing.",
-   "expl_en": "good at + noun or -ing."
+   "expl": "Zu „good“ gehört die Präposition „at“, danach folgt ein Nomen oder ein Wort auf -ing: good at explaining things.",
+   "expl_en": "“Good” goes with the preposition “at”, followed by a noun or an -ing word: good at explaining things."
   },
   {
    "topic": "articles",

@@ -7,8 +7,8 @@
       "prompt": "We ___ (have) a paper archive, but now everything is in the cloud.",
       "hint": "(have)",
       "answer": "used to have",
-      "expl": "Früher so, heute nicht mehr → used to + Grundform.",
-      "expl_en": "True in the past, not any more → used to + base form."
+      "expl": "Früher war es so, heute nicht mehr: „used to“ + Grundform (We used to have a paper archive).",
+      "expl_en": "It was like that before, but not any more: “used to” + base verb (We used to have a paper archive)."
     },
     {
       "topic": "used-to",
@@ -16,7 +16,7 @@
       "prompt": "Working with US customers is normal for me now. → I ___ with US customers.",
       "answer": "am used to working",
       "accepted": ["'m used to working"],
-      "expl": "Etwas ist normal/gewohnt → be used to + -ing (to ist hier Präposition).",
+      "expl": "Etwas ist normal für dich: „be used to“ + Wort auf -ing. „to“ ist hier eine Präposition, deshalb -ing.",
       "expl_en": "Something is normal for you → be used to + -ing (to is a preposition here)."
     },
     {
@@ -35,8 +35,8 @@
       "hint": "(who / which / whose)",
       "answer": "who",
       "accepted": ["that"],
-      "expl": "Person ohne Komma → who (oder that).",
-      "expl_en": "A person, no comma → who (or that)."
+      "expl": "Für eine Person ohne Komma nimmst du „who“ (oder „that“): The customer who called this morning wants a demo.",
+      "expl_en": "For a person without a comma use “who” (or “that”): The customer who called this morning wants a demo."
     },
     {
       "topic": "modals-deduction",
@@ -45,7 +45,7 @@
       "hint": "(be)",
       "answer": "can't be",
       "accepted": ["cannot be", "can not be"],
-      "expl": "Sichere Schlussfolgerung, dass etwas NICHT stimmt → can't + Grundform.",
+      "expl": "Du bist sicher, dass etwas NICHT stimmt: „can’t“ + Grundform.",
       "expl_en": "You are sure something is NOT true → can't + base form."
     },
     {
@@ -53,7 +53,7 @@
       "type": "transform",
       "prompt": "I'm sure he forgot the meeting. → He ___ the meeting.",
       "answer": "must have forgotten",
-      "expl": "Sichere Vermutung über die Vergangenheit → must have + 3. Form.",
+      "expl": "Du bist fast sicher, was früher war: „must have“ + 3. Verbform (z. B. must have forgotten).",
       "expl_en": "A confident guess about the past → must have + past participle."
     },
     {
@@ -72,7 +72,7 @@
       "hint": "(meet)",
       "answer": "am meeting",
       "accepted": ["'m meeting"],
-      "expl": "Fest vereinbarter Termin (im Kalender) → Present Continuous für die Zukunft.",
+      "expl": "Ein fester Termin im Kalender: Dafür nimmst du das Present Continuous, auch für die Zukunft.",
       "expl_en": "A fixed arrangement (in the calendar) → present continuous for the future."
     },
     {

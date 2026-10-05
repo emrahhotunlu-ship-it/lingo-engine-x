@@ -2,8 +2,8 @@
  "rules": {
   "pres-simple-cont": {
    "core": [
-    "Present Simple = wie es immer ist. Present Continuous = was gerade läuft.",
-    "Present Simple = how things generally are. Present Continuous = what is going on right now."
+    "Present Simple nimmst du für Gewohnheiten und Fakten („I work from home.“). Present Continuous nimmst du für das, was gerade jetzt passiert oder nur vorübergehend ist („I’m working in the office today.“).",
+    "Use the Present Simple for habits and facts (“I work from home.”). Use the Present Continuous for what is happening right now or only for a short time (“I’m working in the office today.”)."
    ],
    "why": [
     "Englisch trennt streng zwischen Gewohnheit und laufender Handlung. Das Deutsche macht das nicht – deshalb musst du dich bei jedem Satz aktiv entscheiden: dauerhaft oder momentan?",
@@ -81,8 +81,8 @@
   },
   "past-simple-perfect": {
    "core": [
-    "Past Simple = abgeschlossene Zeit mit Zeitpunkt. Present Perfect = Zeitraum reicht bis jetzt oder das Ergebnis zählt jetzt.",
-    "Past Simple = finished time with a point in the past. Present Perfect = the period reaches up to now, or the result matters now."
+    "Past Simple nimmst du, wenn die Zeit vorbei ist und genannt wird („I saw her yesterday.“). Present Perfect nimmst du, wenn die Zeit bis jetzt reicht oder das Ergebnis jetzt zählt („I have lost my keys.“).",
+    "Use the Past Simple when the time is over and named (“I saw her yesterday.”). Use the Present Perfect when the time reaches until now or the result matters now (“I have lost my keys.”)."
    ],
    "why": [
     "Das Present Perfect ist im Englischen keine Vergangenheitsform, sondern eine Gegenwartsform: Es sagt etwas über JETZT aus („Ich kenne Japan nicht – ich war noch nie dort“). Sobald du einen abgeschlossenen Zeitpunkt nennst, ist das Jetzt nicht mehr gemeint und du brauchst Past Simple.",
@@ -167,8 +167,8 @@
   },
   "pres-perf-cont": {
    "core": [
-    "have/has been + -ing: Die Handlung läuft seit einem Startpunkt bis jetzt – die Dauer ist der Punkt.",
-    "have/has been + -ing: the action has been running from a starting point until now – the duration is the point."
+    "Present Perfect Continuous (have/has been + Wort auf -ing) sagt: Etwas hat angefangen und läuft noch, oder es ist gerade erst zu Ende. Es betont, wie lange: „I’ve been waiting for an hour.“",
+    "The Present Perfect Continuous (have/has been + -ing word) says: something started and is still going on, or it has just stopped. It stresses how long: “I’ve been waiting for an hour.”"
    ],
    "why": [
     "Diese Form beantwortet „Seit wann?“ oder „Wie lange schon?“. Sie betont nicht das Ergebnis, sondern dass es die ganze Zeit lief – oder dass man die Spuren jetzt sieht („Sie ist außer Atem, sie ist gerannt“).",
@@ -254,8 +254,8 @@
   },
   "past-perfect": {
    "core": [
-    "had + 3. Form: das FRÜHERE von zwei Ereignissen in der Vergangenheit.",
-    "had + past participle: the EARLIER of two past events."
+    "Past Perfect (had + 3. Verbform, z. B. had left) nimmst du für das Frühere von zwei vergangenen Ereignissen: „When I arrived, the meeting had already started.“ Das Meeting hat zuerst begonnen.",
+    "Use the Past Perfect (had + past participle, e.g. had left) for the earlier of two past events: “When I arrived, the meeting had already started.” The meeting began first."
    ],
    "why": [
     "Wenn du in der Vergangenheit erzählst und noch weiter zurückspringst, braucht Englisch eine eigene Stufe. Das Past Perfect markiert: Das war schon vorher passiert. Ohne diese Stufe klingt die Reihenfolge unklar.",
@@ -325,8 +325,8 @@
   },
   "future-forms": {
    "core": [
-    "will = spontan, Versprechen, Vermutung. going to = Plan oder sichtbarer Beweis. Present Continuous = fester Termin.",
-    "will = spontaneous decision, promise, prediction. going to = plan or visible evidence. Present Continuous = fixed arrangement."
+    "will nimmst du für spontane Entscheidungen und Versprechen („I’ll call you.“). going to nimmst du für einen Plan oder wenn man schon etwas sieht („Look at those clouds – it’s going to rain.“). Für einen festen Termin passt Present Continuous („We’re meeting at 3.“).",
+    "Use will for spontaneous decisions and promises (“I’ll call you.”). Use going to for a plan or when you can already see it coming (“Look at those clouds – it’s going to rain.”). For a fixed appointment, use the Present Continuous (“We’re meeting at 3.”)."
    ],
    "why": [
     "Englisch unterscheidet nicht die Zeit, sondern die Herkunft der Zukunft: Entscheide ich gerade jetzt (will), habe ich es vorher beschlossen (going to), oder steht es schon im Kalender (Present Continuous)?",
@@ -411,8 +411,8 @@
   },
   "future-perf-cont": {
    "core": [
-    "will have + 3. Form: bis zu einem Zeitpunkt in der Zukunft fertig. will be + -ing: zu diesem Zeitpunkt gerade im Gange.",
-    "will have + past participle: finished by a point in the future. will be + -ing: in progress at that point."
+    "will have + 3. Verbform heißt: Bis dahin ist es fertig („By Friday I will have finished.“). will be + Wort auf -ing heißt: Dann bin ich gerade mittendrin („At 8 we will be having dinner.“).",
+    "will have + past participle means: it is finished by then (“By Friday I will have finished.”). will be + -ing word means: I am in the middle of it then (“At 8 we will be having dinner.”)."
    ],
    "why": [
     "Du stellst dich gedanklich in die Zukunft und schaust von dort zurück („Bis Freitag ist es erledigt“) oder um dich („Um 18 Uhr sitze ich gerade im Zug“). Deshalb brauchst du immer zwei Bausteine: will + den passenden zweiten Teil (have oder be).",
@@ -522,8 +522,8 @@
   },
   "used-to": {
    "core": [
-    "used to + Grundform = früher, heute nicht mehr. be used to + -ing = daran gewöhnt sein. get used to + -ing = sich gewöhnen.",
-    "used to + base form = a past habit that stopped. be used to + -ing = to be accustomed to. get used to + -ing = to become accustomed to."
+    "used to + Grundform heißt: Früher war es so, heute nicht mehr („I used to smoke.“). be used to + Wort auf -ing heißt: an etwas gewöhnt sein („I’m used to working late.“). get used to + -ing heißt: sich daran gewöhnen.",
+    "used to + base verb means: it was like that before, but not any more (“I used to smoke.”). be used to + -ing word means: to be familiar with something (“I’m used to working late.”). get used to + -ing means: to become familiar with it."
    ],
    "why": [
     "Die drei Ausdrücke sehen fast gleich aus, haben aber nichts miteinander zu tun: Beim ersten ist „used to“ eine Vergangenheitsform, bei den anderen beiden ist „used“ ein Adjektiv („gewöhnt“) und „to“ eine Präposition – und nach einer Präposition steht im Englischen immer -ing.",
@@ -593,8 +593,8 @@
   },
   "conditionals": {
    "core": [
-    "First: if + Present, will + Grundform. Second: if + Past, would + Grundform. Third: if + Past Perfect, would have + 3. Form. Im if-Teil nie will/would.",
-    "First: if + present, will + base. Second: if + past, would + base. Third: if + past perfect, would have + participle. Never will/would in the if-clause."
+    "Möglich in der Zukunft: if + Präsens, will + Grundform („If it rains, we’ll stay in.“). Nur vorgestellt: if + Past, would + Grundform („If I had time, I would help.“). Vorbei und nicht mehr änderbar: if + Past Perfect, would have + 3. Verbform („If I had known, I would have called.“). Im if-Teil steht nie will oder would.",
+    "Possible in the future: if + present, will + base verb (“If it rains, we’ll stay in.”). Only imagined: if + past, would + base verb (“If I had time, I would help.”). Over and cannot be changed: if + past perfect, would have + past participle (“If I had known, I would have called.”). Never use will or would in the if-part."
    ],
    "why": [
     "Englisch zeigt mit der Zeitform, wie realistisch etwas ist: Präsens = realistisch, Vergangenheitsform = hypothetisch, Past Perfect = vorbei und nicht mehr änderbar. Deshalb ist die Vergangenheitsform im if-Satz kein Zeitsignal, sondern ein Distanzsignal.",
@@ -705,8 +705,8 @@
   },
   "mixed-cond": {
    "core": [
-    "Mixed Conditional: if + Past Perfect, would + Grundform (Ursache damals → Folge heute). wish + Past = Wunsch über jetzt; wish + Past Perfect = Bedauern über früher.",
-    "Mixed conditional: if + past perfect, would + base form (past cause → present result). wish + past = a wish about now; wish + past perfect = regret about the past."
+    "Mixed Conditional verbindet damals mit heute: if + Past Perfect, would + Grundform („If I had taken the job, I would live in Berlin now.“). Mit wish drückst du aus: wish + Past = Wunsch für jetzt („I wish I knew more.“), wish + Past Perfect = Bedauern über früher („I wish I had called.“).",
+    "The mixed conditional links then and now: if + past perfect, would + base verb (“If I had taken the job, I would live in Berlin now.”). With wish: wish + past = a wish about now (“I wish I knew more.”), wish + past perfect = regret about earlier (“I wish I had called.”)."
    ],
    "why": [
     "Hier treffen zwei Zeiten in einem Satz aufeinander: Die Bedingung liegt in der Vergangenheit, die Folge liegt in der Gegenwart. Jede Satzhälfte behält ihre eigene Zeit – deshalb „had studied“ vorne und „would be“ hinten. Bei wish gilt dieselbe Logik: Eine Stufe zurück = Wunsch über die Gegenwart, zwei Stufen zurück = Bedauern über die Vergangenheit.",
@@ -817,8 +817,8 @@
   },
   "passive": {
    "core": [
-    "be (in der passenden Zeit) + 3. Form. Das Objekt wird zum Subjekt.",
-    "be (in the right tense) + past participle. The object becomes the subject."
+    "Im Passiv steht im Vordergrund, was passiert – nicht, wer es tut: be + 3. Verbform („The report was sent yesterday.“). Das Objekt des Aktivsatzes wird zum Subjekt. Das Wort „be“ passt sich der Zeit an (is, was, will be …).",
+    "In the passive, what happens comes first – not who does it: be + past participle (“The report was sent yesterday.”). The object of the active sentence becomes the subject. “Be” changes with the tense (is, was, will be …)."
    ],
    "why": [
     "Passiv nutzt man, wenn die Handlung wichtiger ist als der Handelnde – oder wenn niemand weiß, wer es war. Entscheidend ist: Die Zeit steckt immer im „be“, nie im Hauptverb. Das Hauptverb bleibt für immer in der 3. Form.",
@@ -929,8 +929,8 @@
   },
   "reported": {
    "core": [
-    "Die Zeit geht eine Stufe zurück: am → was, will → would, have done → had done. Zeit- und Ortsangaben verschieben sich mit: tomorrow → the next day.",
-    "Tenses move one step back: am → was, will → would, have done → had done. Time and place expressions shift too: tomorrow → the next day."
+    "In der indirekten Rede geht die Zeit meist einen Schritt zurück: „I am tired“ wird zu „She said she was tired.“ Auch will wird zu would, und Wörter wie tomorrow werden zu the next day.",
+    "In reported speech the tense usually moves one step back: “I am tired” becomes “She said she was tired.” Also, will becomes would, and words like tomorrow become the next day."
    ],
    "why": [
     "Du berichtest später von etwas, das früher gesagt wurde. Weil der Sprechzeitpunkt jetzt weiter weg ist, rückt alles eine Stufe in die Vergangenheit – sonst klänge es, als würde es gerade gesagt.",
@@ -1043,8 +1043,8 @@
   },
   "relative": {
    "core": [
-    "who = Personen, which = Dinge, whose = Besitz, where = Orte. that nur ohne Kommas.",
-    "who = people, which = things, whose = possession, where = places. that only without commas."
+    "Mit who sprichst du über Personen, mit which über Dinge, mit whose über Besitz und mit where über Orte („The man whose car broke down …“). that passt für Personen und Dinge, aber nur in Sätzen ohne Kommas.",
+    "Use who for people, which for things, whose for possession and where for places (“The man whose car broke down …”). That works for people and things, but only in sentences without commas."
    ],
    "why": [
     "Das Komma entscheidet über die Bedeutung: Ohne Komma grenzt der Relativsatz ein (welcher von mehreren?), mit Komma ist er nur eine Zusatzinfo, die man streichen könnte. Deshalb darf „that“ – das reine Eingrenzungswort – nie nach einem Komma stehen.",
@@ -1114,8 +1114,8 @@
   },
   "modals-deduction": {
    "core": [
-    "must = fast sicher ja. might/could = vielleicht. can't = fast sicher nein. Für Vergangenes: must/might/can't have + 3. Form.",
-    "must = almost certainly yes. might/could = possibly. can't = almost certainly not. For the past: must/might/can't have + participle."
+    "Mit must, might/could und can’t sagst du, wie sicher du bist: must = fast sicher, dass es stimmt. might/could = vielleicht. can’t = fast sicher, dass es nicht stimmt. Für Vergangenes folgt have + 3. Verbform: „She must have left.“",
+    "With must, might/could and can’t you say how sure you are: must = almost certainly true. might/could = maybe. can’t = almost certainly not true. For the past, add have + past participle: “She must have left.”"
    ],
    "why": [
     "Hier geht es nicht um Erlaubnis oder Zwang, sondern darum, wie sicher du dir bist. Die Modalverben sind eine Skala der Sicherheit – must ganz oben, can't ganz unten.",
@@ -1185,8 +1185,8 @@
   },
   "gerund-inf": {
    "core": [
-    "Nach enjoy, avoid, finish, mind, suggest, look forward to: -ing. Nach decide, want, hope, agree, plan, promise: to + Grundform.",
-    "After enjoy, avoid, finish, mind, suggest, look forward to: -ing. After decide, want, hope, agree, plan, promise: to + base form."
+    "Nach manchen Verben steht die -ing-Form, nach anderen to + Grundform. -ing: enjoy, avoid, finish, mind, suggest. to: decide, want, hope, agree, plan, promise. Lerne das Verb mit seiner Form: „I enjoy working.“ – „I decided to work.“",
+    "After some verbs you use the -ing form, after others to + base verb. -ing: enjoy, avoid, finish, mind, suggest. to: decide, want, hope, agree, plan, promise. Learn the verb together with its form: “I enjoy working.” – “I decided to work.”"
    ],
    "why": [
     "Es gibt keine Logik zum Herleiten – es hängt am Verb davor und muss als Paar gelernt werden. Eine Hilfe gibt es aber: Nach JEDER Präposition (on, of, about, in, to als Präposition) steht immer -ing.",
@@ -1282,8 +1282,8 @@
   },
   "prepositions": {
    "core": [
-    "Viele Verben und Adjektive haben eine feste Präposition. Sie folgt keiner Logik und wird als Einheit gelernt: depend on, interested in, good at, afraid of, responsible for.",
-    "Many verbs and adjectives take a fixed preposition. It follows no logic and is learned as one chunk: depend on, interested in, good at, afraid of, responsible for."
+    "Viele Verben und Adjektive haben eine feste Präposition, die du nicht aus dem Deutschen ableiten kannst: depend on, interested in, good at, afraid of. Lerne das Wort immer zusammen mit der Präposition.",
+    "Many verbs and adjectives have a fixed preposition that you cannot work out from German: depend on, interested in, good at, afraid of. Always learn the word together with its preposition."
    ],
    "why": [
     "Präpositionen sind das, was im Kopf zuletzt automatisch wird – sie tragen kaum Bedeutung, entscheiden aber, ob ein Satz muttersprachlich klingt. Deshalb lernt man nie die Präposition allein, sondern immer das ganze Paar.",
@@ -1353,8 +1353,8 @@
   },
   "articles": {
    "core": [
-    "a/an = eines von vielen (und bei Berufen). the = bekannt oder einzigartig. kein Artikel = allgemein und abstrakt.",
-    "a/an = one of many (and with jobs). the = known or unique. no article = general and abstract."
+    "a/an nimmst du für „irgendein“ und bei Berufen („She is a lawyer.“). the nimmst du, wenn beide wissen, welches gemeint ist, oder wenn es nur eines gibt. Ohne Artikel sagst du etwas ganz allgemein: „Time is money.“",
+    "Use a/an for “any one” and for jobs (“She is a lawyer.”). Use the when both people know which one is meant, or when there is only one. Use no article to say something in general: “Time is money.”"
    ],
    "why": [
     "Der Artikel beantwortet die Frage: Weiß mein Gegenüber schon, welches Exemplar ich meine? Beim ersten Mal a/an, ab dem zweiten Mal the. Und wenn es gar nicht um ein Exemplar geht, sondern um die Sache an sich (music, life, work), steht gar nichts.",

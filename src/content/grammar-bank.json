@@ -886,8 +886,8 @@
     "'s leaving"
    ],
    "hint": "(leave)",
-   "expl": "Flug- und Fahrpläne stehen im Present Simple.",
-   "expl_en": "Flight and train timetables use the Present Simple."
+   "expl": "Für Fahr- und Flugpläne nimmst du das Present Simple, auch wenn es um die Zukunft geht: The flight leaves at 7:20.",
+   "expl_en": "For timetables use the Present Simple, even when you talk about the future: The flight leaves at 7:20."
   },
   {
    "topic": "future-forms",
@@ -900,8 +900,8 @@
     "'m going to send"
    ],
    "hint": "(send)",
-   "expl": "Ein Versprechen → will.",
-   "expl_en": "A promise → will."
+   "expl": "Ein Versprechen machst du mit „will“: I promise I will send you the report.",
+   "expl_en": "You make a promise with “will”: I promise I will send you the report."
   },
   {
    "topic": "future-forms",
@@ -1277,8 +1277,8 @@
    "type": "gap",
    "prompt": "I'm not ___ talking to large audiences yet, so I get nervous.",
    "answer": "used to",
-   "expl": "„be used to + -ing“ = gewöhnt sein an etwas.",
-   "expl_en": "\"be used to + -ing\" = to be accustomed to something.",
+   "expl": "„be used to“ heißt „an etwas gewöhnt sein“. Danach folgt ein Wort auf -ing: I’m not used to talking to large audiences.",
+   "expl_en": "“Be used to” means “to be familiar with something”. An -ing word follows: I’m not used to talking to large audiences.",
    "accepted": [
     "accustomed to"
    ]
@@ -1312,8 +1312,8 @@
    "prompt": "I didn't ___ like cilantro, but now I love it.",
    "answer": "use to",
    "hint": "(used to)",
-   "expl": "Nach „didn't“ steht „use to“ (ohne d).",
-   "expl_en": "After \"didn't\" we write \"use to\" (without d)."
+   "expl": "Nach „didn’t“ steht „use to“ ohne d, weil „didn’t“ schon die Vergangenheit anzeigt: I didn’t use to like cilantro.",
+   "expl_en": "After “didn’t” write “use to” without d, because “didn’t” already shows the past: I didn’t use to like cilantro."
   },
   {
    "topic": "used-to",
@@ -1337,8 +1337,8 @@
     "used to doing",
     "accustomed to doing"
    ],
-   "expl": "„be used to + -ing“ = an etwas gewöhnt sein.",
-   "expl_en": "\"be used to + -ing\" = to be accustomed to something."
+   "expl": "„be used to“ heißt „an etwas gewöhnt sein“. Danach folgt ein Wort auf -ing, weil „to“ hier eine Präposition ist: I’m used to driving on the left.",
+   "expl_en": "“Be used to” means “to be familiar with something”. An -ing word follows, because “to” is a preposition here: I’m used to driving on the left."
   },
   {
    "topic": "used-to",
@@ -1842,8 +1842,8 @@
     "'ll be presented"
    ],
    "hint": "(present)",
-   "expl": "Zukunft im Passiv: will be + Partizip.",
-   "expl_en": "Future in the passive: will be + past participle."
+   "expl": "Für das Passiv in der Zukunft nimmst du „will be“ + 3. Verbform: The product will be presented next week.",
+   "expl_en": "For the passive in the future use “will be” + past participle: The product will be presented next week."
   },
   {
    "topic": "passive",
@@ -1886,8 +1886,8 @@
     "has to be updated",
     "needs to be updated"
    ],
-   "expl": "Passiv mit Modalverb: modal + be + Partizip.",
-   "expl_en": "Passive with a modal verb: modal + be + past participle."
+   "expl": "Das Passiv mit einem Modalverb bildest du mit „be“ + 3. Verbform: The contract must be updated.",
+   "expl_en": "Form the passive with a modal verb with “be” + past participle: The contract must be updated."
   },
   {
    "topic": "passive",
@@ -2044,8 +2044,8 @@
     "could not"
    ],
    "hint": "(can't)",
-   "expl": "Backshift: can't → couldn't.",
-   "expl_en": "Backshift: can't → couldn't."
+   "expl": "In der indirekten Rede geht die Zeit eine Stufe zurück: aus „can’t“ wird „couldn’t“.",
+   "expl_en": "In reported speech the tense moves one step back: “can’t” becomes “couldn’t”."
   },
   {
    "topic": "reported",
@@ -2055,8 +2055,8 @@
    "accepted": [
     "'d send"
    ],
-   "expl": "will → would in der indirekten Rede.",
-   "expl_en": "will → would in reported speech."
+   "expl": "In der indirekten Rede wird aus „will“ ein „would“, weil die Zeit eine Stufe zurückgeht: „I will call you“ wird zu „He said he would call me.“",
+   "expl_en": "In reported speech “will” becomes “would”, because the tense moves one step back: “I will call you” becomes “He said he would call me.”"
   },
   {
    "topic": "reported",
@@ -2189,8 +2189,8 @@
    "accepted": [
     "that"
    ],
-   "expl": "Für Personen: who (oder that).",
-   "expl_en": "For people: who (or that)."
+   "expl": "Für Personen nimmst du „who“ (oder „that“): The woman who lives next door is a doctor.",
+   "expl_en": "For people use “who” (or “that”): The woman who lives next door is a doctor."
   },
   {
    "topic": "relative",
@@ -2221,8 +2221,8 @@
     "at which",
     "in which"
    ],
-   "expl": "Für Orte: where (= at which).",
-   "expl_en": "For places: where (= at which)."
+   "expl": "Für Orte nimmst du „where“: The restaurant where we had lunch was amazing.",
+   "expl_en": "For places use “where”: The restaurant where we had lunch was amazing."
   },
   {
    "topic": "relative",
@@ -2568,8 +2568,8 @@
    "prompt": "I don't mind ___ late if the project needs it.",
    "answer": "working",
    "hint": "(work)",
-   "expl": "mind + -ing.",
-   "expl_en": "mind + -ing."
+   "expl": "Nach „mind“ steht ein Wort auf -ing: I don’t mind working late.",
+   "expl_en": "After “mind” use an -ing word: I don’t mind working late."
   },
   {
    "topic": "gerund-inf",
@@ -2577,8 +2577,8 @@
    "prompt": "He pretended ___ nothing about the surprise party.",
    "answer": "to know",
    "hint": "(know)",
-   "expl": "pretend + to-Infinitiv.",
-   "expl_en": "pretend + to-infinitive."
+   "expl": "Nach „pretend“ steht „to“ + Grundform: He pretended to know nothing.",
+   "expl_en": "After “pretend” use “to” + base verb: He pretended to know nothing."
   },
   {
    "topic": "gerund-inf",
@@ -2599,8 +2599,8 @@
    "accepted": [
     "talking"
    ],
-   "expl": "avoid + -ing.",
-   "expl_en": "avoid + -ing."
+   "expl": "Nach „avoid“ steht ein Wort auf -ing, nie „to“: She avoided speaking about it.",
+   "expl_en": "After “avoid” use an -ing word, never “to”: She avoided speaking about it."
   },
   {
    "topic": "gerund-inf",
@@ -2918,8 +2918,8 @@
    "type": "transform",
    "prompt": "No other product in our range sells better than this one. → This is ___ best-selling product in our range.",
    "answer": "the",
-   "expl": "Superlative stehen mit „the“.",
-   "expl_en": "Superlatives take \"the\"."
+   "expl": "Vor einem Superlativ steht „the“: This is the best-selling product.",
+   "expl_en": "Put “the” before a superlative: This is the best-selling product."
   },
   {
    "topic": "articles",

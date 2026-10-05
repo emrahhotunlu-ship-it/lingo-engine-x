@@ -76,7 +76,7 @@ export async function answerGrammar(page: Page, solve: (shown: string) => string
   const answer = solve(await shownPrompt(page));
   const text = opts.given ?? (opts.wrong || !answer ? 'zzzz wrong' : answer);
   if (type === 'mc') {
-    const labels = (await item.getByTestId('choice').allInnerTexts()).map((l) => l.replace(/^\d+\s*/, '').trim());
+    const labels = (await item.getByTestId('choice').allInnerTexts()).map((l) => l.replace(/^(?:\d+\s*|[A-F]\s+)/, '').trim());
     let idx = labels.findIndex((l) => l === answer);
     if (idx < 0) idx = 0;
     if (opts.wrong) idx = (idx + 1) % labels.length;
