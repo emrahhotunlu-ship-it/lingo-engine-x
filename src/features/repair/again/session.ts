@@ -39,7 +39,7 @@ export const useAgain = create<State>(initial);
 export function startAgain(ctx: Pick<UnitCtx, 'day' | 'block' | 'task'> | null): void {
   const day = ctx?.day ?? useClock.getState().today;
   const task: TaskLike | null = ctx?.task ? { text: ctx.task.text, ...(ctx.task.better ? { better: ctx.task.better } : {}), fixes: ctx.task.fixes } : null;
-  const src = againSource({ day, task, repairDoc: useLive.getState().docs['app/repair'] ?? null, grammarDocs: useLive.getState().collections.grammar ?? new Map(), now: useClock.getState().now });
+  const src = againSource({ day, task, repairDoc: useLive.getState().docs['app/repair'] ?? null, grammarDocs: useLive.getState().collections.grammar ?? new Map(), now: useClock.getState().now, lang: useSettings.getState().lang });
   useAgain.setState({ ...initial(), draft: againStart(src), active: true, day, lang: useSettings.getState().lang, block: ctx ? ctx.block : null, taskKind: ctx?.task?.kind ?? null, task, src, startedAt: Date.now() });
 }
 

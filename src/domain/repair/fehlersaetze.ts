@@ -1,5 +1,7 @@
 import { dayKey } from '../date';
-import { dueErrors, type ErrorEntry } from '../grammar/errors';
+import { whyOfError } from '../grammar/errorWhy';
+import type { Lang } from '../srs/types';
+import { dueErrors, errorSentences } from '../grammar/errors';
 import { dueRepairs, readRepairs, repairNorm, type RepairSrc } from './repair';
 
 // Fehlersätze (Schritt „Fehler korrigieren“): EINE Liste aus beiden Speichern, `app/repair` (eigene Sätze, Boxen 1/3/9) und
@@ -25,16 +27,9 @@ export type Fehlersatz = {
 };
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
-const GAP = '___';
 
-/** Aus einem Grammatik-Fehler (Lücke oder Satzkorrektur) die beiden Sätze „falsch → richtig“ bilden. */
-function sentences(e: ErrorEntry, q: string, fill: string): { wrong: string; right: string } {
-  if (!q.includes(GAP)) return { wrong: q, right: fill };
-  const given = str(e.given).trim();
-  return { wrong: q.replace(GAP, given || '…'), right: q.replace(GAP, fill) };
-}
 
-export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number }): Fehlersatz[] {
+export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string; limit?: number; lang?: Lang }): Fehlersatz[] {
   const out: Fehlersatz[] = [];
   for (const r of dueRepairs(readRepairs(i.repairDoc ?? undefined), i.nowMs)) {
     if (dayKey(r.t) === i.today) continue;
@@ -44,9 +39,10 @@ export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repa
     const t = typeof d.e.t === 'number' ? d.e.t : null;
     if (t === null || dayKey(t) === i.today) continue;
     const q = str(d.e.q).trim();
-    const { wrong, right } = sentences(d.e, q, d.task.answer);
+    const { wrong, right } = errorSentences(q, str(d.e.given), d.task.answer);
     if (!wrong || !right || repairNorm(wrong) === repairNorm(right)) continue;
-    out.push({ id: `g:${d.topic}:${t}`, wrong, right, due: d.due, store: 'grammar', src: 'lesson', topic: d.topic, errorT: t });
+    const why = whyOfError(d.topic, d.e, i.lang ?? 'de');
+    out.push({ id: `g:${d.topic}:${t}`, wrong, right, ...(why ? { why } : {}), due: d.due, store: 'grammar', src: 'lesson', topic: d.topic, errorT: t });
   }
   const seen = new Set<string>();
   const list = out

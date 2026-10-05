@@ -197,6 +197,7 @@ export const progressEn: Record<keyof typeof progressDe, string> = {
   sourcesTitle: 'Sources and licenses',
   sourcesText: 'Inter typeface (SIL Open Font License) · pronunciation based on the CMU Pronouncing Dictionary · content from your previous language workshop · Claude through your Claude plan.',
 
+  capDocsFull: 'Your database is almost full ({n} documents). New cards are not created for now – everything you have stays intact.',
   diagCapacityWarn: 'Almost full: {n} of 5,000 documents',
   diagProfileSize: 'Profile size',
   diagProfileSizeValue: '{kb} KiB of 256 KiB',

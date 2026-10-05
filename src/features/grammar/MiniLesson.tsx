@@ -2,6 +2,7 @@ import { examplesFor, ruleOf } from '../../domain/grammar/rules';
 import { EnglishText } from '../../engine/EnglishText';
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
+import { TaskLine } from '../learn/ui';
 import { topicName } from './topicUi';
 
 // Mini-Lektion (Gesamtkonzept 3.4, Lernweg ① „Erklären“): eine kurze Seite vor der ersten Runde eines
@@ -16,12 +17,14 @@ export function MiniLesson({ topic, onGo }: { topic: string; onGo: () => void })
   const rule = ruleOf(topic, lang);
   const trap = rule?.traps[0] ?? null;
   const examples = examplesFor(topic, { max: 3 });
+  // „Warum“: das der Falle, sonst das des Regelblatts; fehlt beides, bleibt der Abschnitt weg.
+  const why = trap?.why || rule?.why || '';
   const src = { area: 'trainer' as const, source: `grammar/${topic}` };
   return (
     <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="mini-lesson" data-topic={topic}>
       <header className="flex flex-col gap-2">
         <p className="lx-eyebrow">{t('nbLernenMiniEyebrow')}</p>
-        <h2 className="text-xl font-semibold tracking-tight">{topicName(topic, lang)}</h2>
+        <TaskLine task={t('nbLernenMiniTask', { topic: topicName(topic, lang) })} purpose={t('nbLernenMiniPurpose')} />
         {/* Lernweg: wir stehen bei ① */}
         <ol className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted" aria-label={t('nbLernenWegLabel')}>
           {WEG.map((k, i) => (
@@ -66,11 +69,19 @@ export function MiniLesson({ topic, onGo }: { topic: string; onGo: () => void })
             {trap.bad}
           </span>
           <EnglishText as="span" className="text-sm font-medium" text={trap.good} {...src} />
-          {trap.why && (
-            <span className="text-sm text-muted" lang={lang}>
-              {trap.why}
+          {why && (
+            <span className="text-sm text-muted" lang={lang} data-testid="mini-why">
+              {t('rxWhy')}: {why}
             </span>
           )}
+        </section>
+      )}
+      {!trap && why && (
+        <section className="flex flex-col gap-1" data-testid="mini-why-only">
+          <h3 className="lx-eyebrow">{t('rxWhy')}</h3>
+          <p className="text-sm" lang={lang}>
+            {why}
+          </p>
         </section>
       )}
       <div>

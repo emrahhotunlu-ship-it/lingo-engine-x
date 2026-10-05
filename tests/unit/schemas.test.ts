@@ -48,6 +48,19 @@ describe('Schemas gegen Anhang B', () => {
     expect(validateDoc('app/assess', { d: '2026-09-20', t: 1, lang: 'de', answers: 3, writings: 1, data: { level: 'B2', cefr: 'B2' } }).ok).toBe(true);
   });
 
+  it('liest die neuen Profil-Felder (Tagesbild va, Meilensteine ms, Plan cb/ov/sure) und Fehlersatz-Erklärung', () => {
+    const profile = {
+      history: [{ d: '2026-10-01', o: 3, va: 120, lx: 1 }],
+      ms: { fest100: '2026-10-02', topic1: '2026-10-03' },
+      plan: { d: '2026-10-04', u: { cb: 'reduced', ov: 12, sure: 40 } },
+    };
+    const res = validateDoc('app/profile', profile);
+    expect(res.ok, res.ok ? '' : res.issues.join('; ')).toBe(true);
+    expect(res.ok && res.value).toMatchObject(profile);
+    const g = validateDoc('grammar/passive', { errors: [{ q: 'a ___', given: 'b', ans: 'c', t: 1, expl: { de: 'x', en: 'y' } }] });
+    expect(g.ok && g.value).toMatchObject({ errors: [{ expl: { de: 'x', en: 'y' } }] });
+  });
+
   it('meldet kaputte Dokumente, statt sie zu übernehmen', () => {
     const noWord = validateDoc('vocab/leer', { de: 'ohne Wort' });
     expect(noWord.ok).toBe(false);

@@ -1,3 +1,4 @@
+import { mayCreateDoc } from '../capacity/docGuard';
 import { slug } from '../content';
 import { locate, lemmaOf } from './context';
 
@@ -110,7 +111,7 @@ export function newVocabDoc(i: NewVocabInput): { id: string; doc: Record<string,
  * Satz und Ursprung ergänzen; sonst nichts. Ausgeblendete Karten bleiben unberührt.
  */
 export function saveCardOp(cur: Readonly<Record<string, unknown>> | undefined, made: { doc: Record<string, unknown> }): { set: Record<string, unknown> } | { update: Record<string, unknown> } | null {
-  if (!cur) return { set: made.doc };
+  if (!cur) return mayCreateDoc('vocab') ? { set: made.doc } : null;
   if (cur.hidden === true) return null;
   const ex = typeof cur.ex === 'string' ? cur.ex.trim() : '';
   if (!ex && cur.origin === undefined) return { update: { ex: made.doc.ex, origin: made.doc.origin } };

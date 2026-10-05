@@ -88,38 +88,49 @@ const MIX_FROM_TIER = INBOX_TIERS.findIndex((t) => t.includes('pack'));
 export const MIX_PHRASES = 2;
 
 /**
- * Mischt Wendungen (`chunk/…`, auch die des Pakets) und Wörter im Muster Wendung, Wendung, Wort, Wendung, Wendung, Wort …
- * Fehlt eine Sorte, bleibt die Reihenfolge der anderen unverändert. Stateless: jeden Tag beginnt das Muster neu, weil
- * eingeführte Karten die Liste verlassen.
+ * Startposition des Tagesmixes: Wie viele Karten aus dem Mix wurden heute schon eingeführt (`introduced`), und wie viele Wendungen
+ * kommen je Wort (`phrases`: 2 im Normalfall, 1 bei Rückstand mit 2 neuen Wörtern am Tag). Ohne Angabe beginnt das Muster vorn.
  */
-export function mixPhrases<T extends { kind: string }>(list: readonly T[]): T[] {
+export type MixStart = { introduced?: number; phrases?: number };
+
+/**
+ * Mischt Wendungen (`chunk/…`, auch die des Pakets) und Wörter im Muster Wendung, Wendung, Wort, Wendung, Wendung, Wort …
+ * Fehlt eine Sorte, bleibt die Reihenfolge der anderen unverändert. Das Muster läuft über den Tag weiter: Die heute schon
+ * eingeführten Karten (`start.introduced`) bestimmen, an welcher Stelle des Musters es steht – sonst kämen bei zwei neuen
+ * Wörtern am Tag nie Wörter, nur Wendungen.
+ */
+export function mixPhrases<T extends { kind: string }>(list: readonly T[], start: MixStart = {}): T[] {
   const phrases = list.filter((c) => c.kind === 'chunk');
   const words = list.filter((c) => c.kind !== 'chunk');
   if (!phrases.length || !words.length) return [...list];
+  const per = Math.max(1, Math.floor(start.phrases ?? MIX_PHRASES));
+  const cycle = per + 1;
   const out: T[] = [];
   let p = 0;
   let w = 0;
-  while (p < phrases.length || w < words.length) {
-    for (let k = 0; k < MIX_PHRASES && p < phrases.length; k++) out.push(phrases[p++] as T);
-    if (w < words.length) out.push(words[w++] as T);
-    if (p >= phrases.length) while (w < words.length) out.push(words[w++] as T);
-    if (w >= words.length) while (p < phrases.length) out.push(phrases[p++] as T);
+  for (let i = Math.max(0, Math.floor(start.introduced ?? 0)) % cycle; p < phrases.length || w < words.length; i = (i + 1) % cycle) {
+    const wantPhrase = i < per;
+    if ((wantPhrase && p < phrases.length) || w >= words.length) out.push(phrases[p++] as T);
+    else out.push(words[w++] as T);
   }
   return out;
 }
+
+/** Schon heute eingeführte Karten aus den Mix-Stufen (ab dem Paket), für `MixStart.introduced`. */
+export const mixIntroducedToday = (cards: readonly TrainCard[], day: string): number => cards.filter((c) => c.intro === day && inboxTier(tierSrc(c)) >= MIX_FROM_TIER).length;
 
 /**
  * Neue Karten in Korb-Reihenfolge (§5).
  * Eigene Funde und Lehrer-Wörter (Stufen vor dem Paket) stehen vorn; ab dem Paket gilt der Tagesmix `mixPhrases`.
  */
-export function newCards(cards: readonly TrainCard[]): TrainCard[] {
+export function newCards(cards: readonly TrainCard[], start: MixStart = {}): TrainCard[] {
   const tier = new Map(cards.filter((c) => c.isNew).map((c) => [c.key, inboxTier(tierSrc(c))]));
   const sorted = cards
     .filter((c) => c.isNew)
     .sort((a, b) => (tier.get(a.key) ?? LAST_TIER) - (tier.get(b.key) ?? LAST_TIER) || (a.added < b.added ? -1 : a.added > b.added ? 1 : 0) || a.order - b.order || (a.key < b.key ? -1 : 1));
   const cut = sorted.findIndex((c) => (tier.get(c.key) ?? LAST_TIER) >= MIX_FROM_TIER);
   if (cut === -1) return sorted;
-  return [...sorted.slice(0, cut), ...mixPhrases(sorted.slice(cut))];
+  return [...sorted.slice(0, cut), ...mixPhrases(sorted.slice(cut), start)];
 }
 
 function aheadCards(cards: readonly TrainCard[], nowMs: number): TrainCard[] {
@@ -202,10 +213,12 @@ export function buildQueue(i: {
   newQuotaLeft: number;
   exclude: ReadonlySet<string>;
   lang: Lang;
+  /** Tagesmix: Stand des Musters (heute schon eingeführte Mix-Karten, Wendungen je Wort). */
+  mix?: MixStart;
 }): QueueItem[] {
   if (i.target <= 0) return [];
   const act = active(i.cards, i.lang).filter((c) => !i.exclude.has(c.key));
-  const fresh = newCards(act);
+  const fresh = newCards(act, i.mix ?? {});
   const nNew = Math.min(Math.max(0, i.newQuotaLeft), fresh.length, i.target);
   const due = capLeeches(dueCards(act, i.nowMs));
   const reviews = due.slice(0, i.target - nNew).map((c): QueueItem => ({ key: c.key, reason: 'due', phase: 'quiz' }));

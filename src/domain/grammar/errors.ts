@@ -51,27 +51,51 @@ export function capErrors(list: readonly ErrorEntry[], max = ERRORS_MAX): ErrorE
   return out;
 }
 
+/** Aus einem Fehler (Lücke oder Satzkorrektur) die beiden Sätze „falsch → richtig“ bilden. */
+export function errorSentences(q: string, given: string, fill: string): { wrong: string; right: string } {
+  if (!q.includes('___')) return { wrong: q, right: fill };
+  const g = given.trim();
+  return { wrong: q.replace('___', g || '…'), right: q.replace('___', fill) };
+}
+
+/** Ist dieselbe Frage schon als offener Fehler da? (Dann ist „nichts anlegen“ richtig und kein Überlauf.) */
+export const hasOpenError = (list: readonly ErrorEntry[], q: string): boolean => list.some((x) => x.done !== true && legacyNorm(x.q) === legacyNorm(q));
+
+export const EXPL_MAX = 300;
+/** Erklärung der Aufgabe für das „Warum“ beim Wiederholen: nur nicht leere Teile, gekürzt; sonst `null`. */
+function explPair(v: { de: string | null; en: string | null } | null | undefined): { de?: string; en?: string } | null {
+  const de = v?.de?.trim().slice(0, EXPL_MAX);
+  const en = v?.en?.trim().slice(0, EXPL_MAX);
+  return de || en ? { ...(de ? { de } : {}), ...(en ? { en } : {}) } : null;
+}
+
 /**
  * Neuer Fehler in der alten Form `{q, given, ans, t, src}`. Genau einer je Fehler: Ist dieselbe Frage
  * schon offen, ändert sich nichts. Ist das Thema voll (Deckel 10) und alle Einträge sind offen, wird
  * der neue nicht angelegt – lieber nichts Neues als etwas Offenes zu löschen. Liefert dann dieselbe Liste.
  */
-export function addError(list: readonly ErrorEntry[], e: { q: string; given: string; ans: string; t: number; src: string }, max = ERRORS_MAX): readonly ErrorEntry[] {
+export function addError(
+  list: readonly ErrorEntry[],
+  e: { q: string; given: string; ans: string; t: number; src: string; expl?: { de: string | null; en: string | null } | null },
+  max = ERRORS_MAX,
+): readonly ErrorEntry[] {
   const k = legacyNorm(e.q);
   if (list.some((x) => x.done !== true && legacyNorm(x.q) === k)) return list;
   const out = capErrors(list, max - 1);
   if (out.length >= max) return list;
-  return [...out, { q: e.q, given: e.given.slice(0, GIVEN_MAX), ans: e.ans, t: e.t, src: e.src }];
+  const expl = explPair(e.expl);
+  return [...out, { q: e.q, given: e.given.slice(0, GIVEN_MAX), ans: e.ans, t: e.t, src: e.src, ...(expl ? { expl } : {}) }];
 }
 
 /**
  * Ergebnis einer Fehler-Wiederholung eintragen. `null`, wenn der Eintrag fehlt oder diese
  * Antwort schon angewendet ist (`e.last >= t`). Richtig: Box +1 (ab Box 3 erledigt), sonst Box 0.
+ * „Fast richtig“ (`near`): Box unverändert, morgen wieder, Note 2 im FSRS-Schatten.
  */
 export function reviewError(
   list: readonly ErrorEntry[],
   errorT: number,
-  r: { ok: boolean; given: string; grade: Grade; t: number },
+  r: { ok: boolean; given: string; grade: Grade; t: number; near?: boolean },
 ): ErrorEntry[] | null {
   const idx = list.findIndex((e) => num(e.t) === errorT);
   if (idx < 0) return null;
@@ -79,7 +103,10 @@ export function reviewError(
   const last = num(e.last);
   if (last !== null && last >= r.t) return null;
   const next: ErrorEntry = { ...e };
-  if (r.ok) {
+  if (r.near) {
+    next.done = false;
+    next.due = addLocalDays(r.t, 1);
+  } else if (r.ok) {
     const box = (num(e.box) ?? 0) + 1;
     next.box = box;
     next.done = box >= REVIEW_DAYS.length;
@@ -91,7 +118,7 @@ export function reviewError(
     next.given = r.given.slice(0, GIVEN_MAX);
   }
   next.last = r.t;
-  next.fsrs = shadowFsrs(e.fsrs, r.grade, r.t);
+  next.fsrs = shadowFsrs(e.fsrs, r.near ? 2 : r.grade, r.t);
   const out = [...list];
   out[idx] = next;
   return out;

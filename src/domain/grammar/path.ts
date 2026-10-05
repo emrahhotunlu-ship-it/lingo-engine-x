@@ -2,7 +2,7 @@ import { TOPICS } from '../content';
 import { daysBetween } from '../date';
 import type { GrammarTask, GrammarTaskType } from '../learn/types';
 import { certainty, topicP } from './bkt';
-import { errorsOf } from './errors';
+import { errorDue, errorsOf, isDueToday } from './errors';
 
 // Grammatik-Pfad (Gesamtkonzept Kap. 3.4, `docs/umbau/02-lehrplan.md` Kap. 4): die Themen in
 // Lehrreihenfolge B2 → C1, der Zustand je Thema, die Einführungsbremse und der Lernweg ①–⑤.
@@ -94,13 +94,13 @@ export function introDay(doc: Readonly<Doc> | undefined): string | null {
 
 /** Wie viele Lerntage mindestens zwischen zwei neuen Themen liegen (Gesamtkonzept: 1 je 3 Lerntage). */
 export const INTRO_EVERY_DAYS = 3;
-/** Ab so vielen offenen Fehlersätzen kommt kein neues Thema dazu. */
+/** Ab so vielen FÄLLIGEN Fehlersätzen kommt kein neues Thema dazu (offene, noch nicht fällige zählen nicht: der Dauerstand würde sonst jede Einführung stoppen). */
 export const INTRO_BLOCK_ERRORS = 10;
 
-/** Offene (noch nicht erledigte) Fehlersätze über alle Themen. */
-export function openErrorCount(docs: ReadonlyMap<string, Readonly<Doc>>): number {
+/** Fällige (oder überfällige) Fehlersätze über alle Themen: offen, nicht erledigt, Fälligkeit vor dem Ende des Lerntags. */
+export function dueErrorCount(docs: ReadonlyMap<string, Readonly<Doc>>, nowMs: number): number {
   let n = 0;
-  for (const doc of docs.values()) n += errorsOf(doc).filter((e) => e.done !== true).length;
+  for (const doc of docs.values()) n += errorsOf(doc).filter((e) => e.done !== true && isDueToday(errorDue(e), nowMs)).length;
   return n;
 }
 
@@ -117,9 +117,9 @@ export function lastIntroDay(docs: ReadonlyMap<string, Readonly<Doc>>): string |
 
 export type IntroCheck = { ok: true } | { ok: false; reason: 'recent' | 'errors' };
 
-/** Darf heute ein neues Thema beginnen? Höchstens eines je 3 Lerntage, nie bei ≥ 10 offenen Fehlersätzen. */
-export function canIntroduce(docs: ReadonlyMap<string, Readonly<Doc>>, today: string): IntroCheck {
-  if (openErrorCount(docs) >= INTRO_BLOCK_ERRORS) return { ok: false, reason: 'errors' };
+/** Darf heute ein neues Thema beginnen? Höchstens eines je 3 Lerntage, nie bei ≥ 10 fälligen Fehlersätzen. */
+export function canIntroduce(docs: ReadonlyMap<string, Readonly<Doc>>, today: string, nowMs: number): IntroCheck {
+  if (dueErrorCount(docs, nowMs) >= INTRO_BLOCK_ERRORS) return { ok: false, reason: 'errors' };
   const last = lastIntroDay(docs);
   if (last !== null && daysBetween(last, today) < INTRO_EVERY_DAYS) return { ok: false, reason: 'recent' };
   return { ok: true };
@@ -131,8 +131,8 @@ export function nextNewTopic(docs: ReadonlyMap<string, Readonly<Doc>>): string |
 }
 
 /** Das Thema, das heute neu dazukommen darf (Bremse beachtet), sonst `null`. */
-export function introTopic(docs: ReadonlyMap<string, Readonly<Doc>>, today: string): string | null {
-  return canIntroduce(docs, today).ok ? nextNewTopic(docs) : null;
+export function introTopic(docs: ReadonlyMap<string, Readonly<Doc>>, today: string, nowMs: number): string | null {
+  return canIntroduce(docs, today, nowMs).ok ? nextNewTopic(docs) : null;
 }
 
 /**

@@ -2,7 +2,8 @@ import { validateDoc } from '../../data/validate';
 import { defaultTopic, topicById } from '../content';
 import type { GrammarAnswer } from '../learn/types';
 import { bktStep, displayP, nextDue, p0Of } from './bkt';
-import { addError, errorsOf, reviewError } from './errors';
+import type { NewRepair } from '../repair/repair';
+import { addError, errorSentences, errorsOf, gapFill, hasOpenError, reviewError } from './errors';
 
 // Schreibweg `grammar/<topic>` je bewerteter Antwort (phase2-plan §4.3, 1:1 wie `updateTopic`
 // der alten App, session.js:431–436). Rein; ausgeführt im Writer per `transform` auf dem
@@ -15,7 +16,11 @@ import { addError, errorsOf, reviewError } from './errors';
 type Doc = Record<string, unknown>;
 
 export type GrammarSkip = 'unknown_topic' | 'invalid' | 'already_applied' | 'stale_answer';
-export type GrammarWrite = { kind: 'create'; doc: Doc } | { kind: 'update'; patch: Doc } | { kind: 'skip'; reason: GrammarSkip };
+/**
+ * `overflow`: Das Thema hat schon 10 offene Fehlersätze – der neue Fehler wird nicht verworfen, sondern als Reparatur-Satz
+ * angeboten (`app/repair`, Prüfbefund S1); den Schreibweg übernimmt der Aufrufer.
+ */
+export type GrammarWrite = { kind: 'create'; doc: Doc; overflow?: NewRepair } | { kind: 'update'; patch: Doc; overflow?: NewRepair } | { kind: 'skip'; reason: GrammarSkip };
 
 export const HIST_MAX = 40;
 export const RECENT_MAX = 10;
@@ -27,7 +32,7 @@ const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 const round3 = (v: number) => Math.round(v * 1000) / 1000;
 
 /** Nur die geänderten Felder für eine Antwort; `cur` = frischer Stand (`defaultTopic` bei Neuanlage). */
-function patchFor(cur: Doc, a: GrammarAnswer): Doc {
+function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepair } {
   const topic = a.task.topic;
   const p0 = p0Of(topic);
   const t = a.t;
@@ -66,15 +71,27 @@ function patchFor(cur: Doc, a: GrammarAnswer): Doc {
   patch.seenText = [...arr(cur.seenText), a.task.prompt].slice(-SEEN_TEXT_MAX);
 
   const errors = errorsOf(cur);
+  let overflow: NewRepair | undefined;
   if (a.task.errorT !== null) {
     const next = reviewError(errors, a.task.errorT, { ok, given: a.dontKnow ? '' : a.given, grade: a.grade, t });
     if (next) patch.errors = next;
   } else if (!ok) {
     // Jede falsche Antwort und auch „Weiß ich nicht“ (`given` leer, die Anzeige sagt dann „Weiß ich nicht“) ergibt genau einen Fehlersatz.
-    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: a.task.answer, t, src: a.task.src });
+    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: a.task.answer, t, src: a.task.src, expl: a.task.expl });
     if (next !== errors) patch.errors = next;
+    else if (!hasOpenError(errors, a.task.prompt)) overflow = overflowRepair(a);
   }
-  return patch;
+  return { patch, ...(overflow ? { overflow } : {}) };
+}
+
+/** Der Fehler als Reparatur-Satz („falsch → richtig“ mit Erklärung), wenn das Thema voll ist. */
+function overflowRepair(a: GrammarAnswer): NewRepair | undefined {
+  const q = a.task.prompt.trim();
+  const fill = q.includes('___') ? gapFill(q, a.task.answer) : a.task.answer;
+  if (!q || !fill) return undefined;
+  const { wrong, right } = errorSentences(q, a.dontKnow ? '' : (a.firstWrong ?? a.given), fill);
+  const why = a.lang === 'de' ? (a.task.expl.de ?? a.task.expl.en) : (a.task.expl.en ?? a.task.expl.de);
+  return { wrong, right, why: why ?? null, src: 'lesson' };
 }
 
 export function grammarWrite(cur: Readonly<Doc> | undefined, a: GrammarAnswer): GrammarWrite {
@@ -83,11 +100,13 @@ export function grammarWrite(cur: Readonly<Doc> | undefined, a: GrammarAnswer): 
   if (!cur) {
     if (!tp) return { kind: 'skip', reason: 'unknown_topic' };
     const base = defaultTopic(tp);
-    return { kind: 'create', doc: { ...base, ...patchFor(base, a) } };
+    const r = patchFor(base, a);
+    return { kind: 'create', doc: { ...base, ...r.patch }, ...(r.overflow ? { overflow: r.overflow } : {}) };
   }
   if (!validateDoc(`grammar/${topic}`, cur).ok) return { kind: 'skip', reason: 'invalid' };
   const last = typeof cur.last === 'number' ? cur.last : 0;
   if (last === a.t) return { kind: 'skip', reason: 'already_applied' };
   if (last > a.t) return { kind: 'skip', reason: 'stale_answer' };
-  return { kind: 'update', patch: patchFor({ ...cur }, a) };
+  const r = patchFor({ ...cur }, a);
+  return { kind: 'update', patch: r.patch, ...(r.overflow ? { overflow: r.overflow } : {}) };
 }

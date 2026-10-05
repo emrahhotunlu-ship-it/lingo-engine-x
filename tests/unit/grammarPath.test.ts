@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { TOPICS } from '../../src/domain/content';
 import { addLocalDays, learningDayEnd } from '../../src/domain/date';
-import { addError, capErrors, dueErrors, reviewError, type ErrorEntry } from '../../src/domain/grammar/errors';
+import { addError, capErrors, dueErrors, errorDue, reviewError, type ErrorEntry } from '../../src/domain/grammar/errors';
 import { canIntroduce, GRAMMAR_PATH, introTopic, lernweg, nextNewTopic, pathTopics, stepDownTasks, topicState } from '../../src/domain/grammar/path';
 import { seedTasks } from '../../src/domain/grammar/tasks';
 import type { GrammarTask } from '../../src/domain/learn/types';
@@ -57,26 +57,69 @@ describe('Einführungsbremse', () => {
     m.delete('compound-mod');
     m.delete('linkers');
     m.set('word-order', started(day));
-    if (errors) m.set('articles', { ...started('2026-08-01'), errors: Array.from({ length: errors }, (_, i) => ({ q: `q${i}`, given: 'x', ans: 'y', t: now + i })) });
+    if (errors) m.set('articles', { ...started('2026-08-01'), errors: Array.from({ length: errors }, (_, i) => ({ q: `q${i}`, given: 'x', ans: 'y', t: now - 3 * 86_400_000 + i, due: now - 1000 })) });
     return m;
   };
 
   it('höchstens ein neues Thema je 3 Lerntage', () => {
-    expect(canIntroduce(docs('2026-09-27'), '2026-09-27')).toEqual({ ok: false, reason: 'recent' });
-    expect(canIntroduce(docs('2026-09-26'), '2026-09-27')).toEqual({ ok: false, reason: 'recent' });
-    expect(canIntroduce(docs('2026-09-25'), '2026-09-27')).toEqual({ ok: false, reason: 'recent' });
-    expect(canIntroduce(docs('2026-09-24'), '2026-09-27')).toEqual({ ok: true });
+    expect(canIntroduce(docs('2026-09-27'), '2026-09-27', now)).toEqual({ ok: false, reason: 'recent' });
+    expect(canIntroduce(docs('2026-09-26'), '2026-09-27', now)).toEqual({ ok: false, reason: 'recent' });
+    expect(canIntroduce(docs('2026-09-25'), '2026-09-27', now)).toEqual({ ok: false, reason: 'recent' });
+    expect(canIntroduce(docs('2026-09-24'), '2026-09-27', now)).toEqual({ ok: true });
   });
 
-  it('nie bei 10 oder mehr offenen Fehlersätzen', () => {
-    expect(canIntroduce(docs('2026-09-01', 9), '2026-09-27')).toEqual({ ok: true });
-    expect(canIntroduce(docs('2026-09-01', 10), '2026-09-27')).toEqual({ ok: false, reason: 'errors' });
-    expect(introTopic(docs('2026-09-01', 10), '2026-09-27')).toBeNull();
+  it('nie bei 10 oder mehr FÄLLIGEN Fehlersätzen; noch nicht fällige zählen nicht', () => {
+    expect(canIntroduce(docs('2026-09-01', 9), '2026-09-27', now)).toEqual({ ok: true });
+    expect(canIntroduce(docs('2026-09-01', 10), '2026-09-27', now)).toEqual({ ok: false, reason: 'errors' });
+    expect(introTopic(docs('2026-09-01', 10), '2026-09-27', now)).toBeNull();
+    // 13 offene, aber erst morgen fällig: keine Bremse.
+    const later = docs('2026-09-01', 13);
+    const arts = later.get('articles') as { errors: Array<Record<string, unknown>> };
+    later.set('articles', { ...arts, errors: arts.errors.map((e) => ({ ...e, due: now + 86_400_000 })) });
+    expect(canIntroduce(later, '2026-09-27', now)).toEqual({ ok: true });
+  });
+
+  it('60 Tage mit 1–2 neuen Fehlern am Tag: neue Themen werden weiter freigegeben', () => {
+    const topics = pathTopics();
+    const docsSim = new Map<string, Record<string, unknown>>();
+    let introduced = 0;
+    let lastFree = '';
+    for (let d = 0; d < 60; d++) {
+      const day = addLocalDays(berlin('2026-08-01', 10), d);
+      const key = new Date(day).toISOString().slice(0, 10);
+      // Einführung, wenn die Bremse es erlaubt.
+      const next = introTopic(docsSim, key, day);
+      if (next) {
+        docsSim.set(next, { n: 3, p: 0.5, hist: [{ d: key, p: 0.5 }], errors: [] });
+        introduced++;
+        lastFree = key;
+      }
+      if (!docsSim.size) docsSim.set(topics[0]!, { n: 3, p: 0.5, hist: [{ d: key, p: 0.5 }], errors: [] });
+      // Fällige Fehlersätze werden korrigiert (höchstens 5 je Tag, wie eine Fehlersatz-Runde), dann entstehen 1–2 neue.
+      let budget = 5;
+      for (const [id, doc] of docsSim) {
+        let errs = (doc.errors as ErrorEntry[]) ?? [];
+        for (const e of errs.filter((x) => x.done !== true && errorDue(x) < day + 3_600_000 * 8)) {
+          if (budget-- <= 0) break;
+          errs = reviewError(errs, e.t as number, { ok: true, given: '', grade: 3, t: day + budget }) ?? errs;
+        }
+        docsSim.set(id, { ...doc, errors: errs });
+      }
+      const ids = [...docsSim.keys()];
+      for (let k = 0; k < 1 + (d % 2); k++) {
+        const id = ids[(d + k) % ids.length]!;
+        const doc = docsSim.get(id)!;
+        const errs = addError((doc.errors as ErrorEntry[]) ?? [], { q: `Satz ${d}-${k} ___`, given: 'x', ans: 'y', t: day + 1000 * (k + 1), src: 'seed' });
+        docsSim.set(id, { ...doc, errors: [...errs] });
+      }
+    }
+    expect(introduced).toBeGreaterThanOrEqual(12);
+    expect(lastFree >= '2026-09-15').toBe(true);
   });
 
   it('die Pfadreihenfolge bestimmt das nächste neue Thema', () => {
     expect(nextNewTopic(docs('2026-09-01'))).toBe('compound-mod');
-    expect(introTopic(docs('2026-09-01'), '2026-09-27')).toBe('compound-mod');
+    expect(introTopic(docs('2026-09-01'), '2026-09-27', now)).toBe('compound-mod');
     const all = new Map<string, Record<string, unknown>>();
     expect(nextNewTopic(all)).toBe(pathTopics()[0]);
   });

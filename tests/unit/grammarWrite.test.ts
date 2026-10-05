@@ -26,9 +26,9 @@ describe('grammarWrite (Schreibweg grammar/<topic>)', () => {
 
   it('falsch → Fehler in der alten Form; „Weiß ich nicht" legt genau einen Fehler mit leerem `given` an', () => {
     const w = grammarWrite({ p: 0.5, last: 1 }, answer({ t: t0, verdict: 'wrong', given: 'finish' }));
-    expect(w.kind === 'update' && w.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: 'finish', ans: 'will have finished', t: t0, src: 'seed' }]);
+    expect(w.kind === 'update' && w.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: 'finish', ans: 'will have finished', t: t0, src: 'seed', expl: { de: 'By + Zeitpunkt → Future Perfect.', en: 'By + point in time → future perfect.' } }]);
     const d = grammarWrite({ p: 0.5, last: 1 }, answer({ t: t0, verdict: 'wrong', dontKnow: true, given: '' }));
-    expect(d.kind === 'update' && d.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: '', ans: 'will have finished', t: t0, src: 'seed' }]);
+    expect(d.kind === 'update' && d.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: '', ans: 'will have finished', t: t0, src: 'seed', expl: { de: 'By + Zeitpunkt → Future Perfect.', en: 'By + point in time → future perfect.' } }]);
     // Dieselbe Frage ist schon offen: kein zweiter Fehlersatz (genau einer je Fehler).
     const again = grammarWrite({ p: 0.5, last: 1, errors: [{ q: 'By next June, I ___ (finish) my course.', given: 'finish', ans: 'will have finished', t: t0 - 5 }] }, answer({ t: t0, verdict: 'wrong', dontKnow: true, given: '' }));
     expect(again.kind === 'update' && 'errors' in again.patch).toBe(false);
@@ -39,7 +39,7 @@ describe('grammarWrite (Schreibweg grammar/<topic>)', () => {
     expect(w.kind).toBe('update');
     if (w.kind !== 'update') return;
     expect(w.patch.c).toBe(0);
-    expect(w.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: 'finish', ans: 'will have finished', t: t0, src: 'seed' }]);
+    expect(w.patch.errors).toEqual([{ q: 'By next June, I ___ (finish) my course.', given: 'finish', ans: 'will have finished', t: t0, src: 'seed', expl: { de: 'By + Zeitpunkt → Future Perfect.', en: 'By + point in time → future perfect.' } }]);
     const plain = grammarWrite({ p: 0.5, last: 1 }, answer({ t: t0, verdict: 'correct', given: 'will have finished' }));
     expect(plain.kind === 'update' && (plain.patch.p as number) > (w.patch.p as number)).toBe(true);
   });

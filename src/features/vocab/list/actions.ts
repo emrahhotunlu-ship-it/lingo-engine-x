@@ -2,6 +2,7 @@ import { getWriter } from '../../../data';
 import { invalidIdsOf, useLive } from '../../../data/live';
 import { keysOf, knownRows, newestWords, wordKey } from '../../../domain/srs/known';
 import { hiddenOp, knownOp, resetOp, type CardOp } from '../../../domain/srs/vocabList';
+import { mayCreateDoc } from '../../../domain/capacity/docGuard';
 import { newVocabDoc, saveCardOp } from '../../../domain/srs/newCard';
 import { editOp, tomorrowOp } from '../../../domain/srs/cardOps';
 import { GEN_KNOWN_MAX, type GenWord } from '../../../prompts/wordGen';
@@ -78,6 +79,11 @@ export async function addWord(w: { word: string; de: string; pos?: string | null
   let outcome: AddOutcome = 'exists';
   try {
     await writer.transform(path, (cur) => {
+      // Datenbank fast voll (Gesamtzahl): keine neue Karte, laut gemeldet (Prüfbefund S8); Ergänzen bestehender Karten bleibt erlaubt.
+      if (!cur && !mayCreateDoc(path)) {
+        outcome = 'failed';
+        return null;
+      }
       const op = saveCardOp(cur, made);
       outcome = !op ? 'exists' : 'set' in op ? 'created' : 'extended';
       return op;

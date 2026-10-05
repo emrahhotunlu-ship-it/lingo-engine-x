@@ -1,4 +1,5 @@
 import { getWriter } from '../../data';
+import { mayCreateDoc } from '../../domain/capacity/docGuard';
 import { useLive } from '../../data/live';
 import { nextPackEntries, packDoc, packOp, packState } from '../../domain/c1pack/pack';
 import { normalizeNewPerDay } from '../../domain/srs/queue';
@@ -30,6 +31,8 @@ export async function packTopUp(today: string, nowMs: number): Promise<number> {
     try {
       let wrote = false;
       await writer.transform(made.path, (cur) => {
+        // Datenbank fast voll (Gesamtzahl): kein Zulauf, laut gemeldet (Prüfbefund S8).
+        if (!cur && !mayCreateDoc(made.path)) return null;
         const op = packOp(cur, made);
         wrote = op !== null;
         return op;

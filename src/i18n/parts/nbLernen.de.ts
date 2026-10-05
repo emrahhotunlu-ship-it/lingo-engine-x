@@ -54,6 +54,7 @@ export const nbLernenDe = {
   // Grammatik-Reiter als Pfad (Umbau W5): Weiter-Karte, Pfadliste, Mini-Lektion, Lernweg
   nbLernenNextEyebrow: 'Als Nächstes',
   nbLernenNextMin: 'Etwa {n} Min.',
+  nbLernenBrake: 'Ein neues Thema wartet, bis du die {n} fälligen Fehlersätze korrigiert hast.',
   nbLernenNextNew: 'Neues Thema · mit kurzer Erklärung · etwa {n} Min.',
   nbLernenNextStart: 'Weiter',
   nbLernenNextStartNew: 'Thema beginnen',
@@ -74,6 +75,8 @@ export const nbLernenDe = {
   nbLernenDontKnow: 'Weiß ich nicht',
   nbLernenMiniEyebrow: 'Kurz erklärt · etwa eine Minute',
   nbLernenMiniExamples: 'Beispiele',
+  nbLernenMiniTask: 'Lies kurz die Regel: {topic}',
+  nbLernenMiniPurpose: 'Du siehst die Regel einmal, bevor du übst. So weißt du bei der ersten Aufgabe, worauf es ankommt.',
   nbLernenMiniTrap: 'Typischer Fehler',
   nbLernenMiniGo: 'Los',
   nbLernenFixRow: 'Fehler korrigieren · {n} fällig',

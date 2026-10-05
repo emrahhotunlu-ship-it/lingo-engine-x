@@ -206,7 +206,8 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
     const st = cardStats(all, lang, nowMs);
     facts = { ov: st.overdue, sure: st.sure };
   }
-  const mode = restart ? ('restart' as const) : comebackMode(profile, today, facts?.ov ?? 0);
+  // Die Neustart-Woche endet nach 7 Lerntagen oder sobald weniger als 40 Karten überfällig sind; danach Kurz-Plan, solange es ≥ 40 sind (Prüfbefund S9).
+  const mode = comebackMode(profile, today, facts?.ov ?? null);
   // Fehlersätze: nichts fällig (früherer Lerntage) → der Schritt „Fehler korrigieren“ entfällt (Gesamtkonzept 3.2).
   const fixDue = fixesDue({ grammarDocs: live.collections.grammar ?? new Map(), repairDoc: live.docs['app/repair'], nowMs, today });
   return buildUnitStored({ day: today, nowMs, week: null, goalMin, review, fixDue, ...(mode ? { comeback: mode } : {}), ...(facts ? { ov: facts.ov, sure: facts.sure } : {}) });

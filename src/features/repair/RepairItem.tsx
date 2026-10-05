@@ -34,7 +34,7 @@ type Props = {
   source: string | null;
   /** Zusatz in der Statuszeile (z. B. „Satz 1 von 3"). */
   status?: ReactNode;
-  onResult: (r: { ok: boolean; given: string; ms: number }) => void;
+  onResult: (r: { ok: boolean; near: boolean; given: string; ms: number }) => void;
   onNext: () => void;
   onSkip?: () => void;
   nextLabel?: string;
@@ -60,7 +60,7 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
 
   const finish = (verdict: RepairVerdict, note: string | null, given: string) => {
     setRes({ verdict, note, given });
-    onResult({ ok: verdict !== 'no', given, ms: performance.now() - shownAt });
+    onResult({ ok: verdict !== 'no', near: verdict === 'close', given, ms: performance.now() - shownAt });
   };
 
   const check = async () => {
@@ -167,6 +167,11 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
               {t('rxCheck')}
             </PrimaryAction>
           </ActionBar>
+          {mode === 'review' && (
+            <Button variant="ghost" disabled={busy} onClick={() => finish('no', null, '')} data-testid="repair-dontknow">
+              {t('rxDontKnow')}
+            </Button>
+          )}
           {onSkip && (
             <Button variant="ghost" disabled={busy} onClick={onSkip} data-testid="repair-skip">
               {t('rxSkip')}
@@ -188,7 +193,12 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
             {t(VERDICT_KEY[res.verdict])}
           </p>
           {res.note && <p className="text-sm text-muted">{res.note}</p>}
-          {res.verdict !== 'exact' && (
+          {res.verdict !== 'exact' && res.given === '' && (
+            <p className="text-sm text-muted" data-testid="repair-given">
+              {t('rxDontKnowShown')}
+            </p>
+          )}
+          {res.verdict !== 'exact' && res.given !== '' && (
             <p className="text-sm leading-relaxed">
               <span className="text-muted">{t('rxYouWrote')}: </span>
               <span lang="en" data-testid="repair-given">

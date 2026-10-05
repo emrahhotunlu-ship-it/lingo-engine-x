@@ -1,4 +1,5 @@
 import { addLocalDays, learningDayEnd } from '../date';
+import { logWarn } from '../../platform/diagnostics';
 import { hash32 } from '../random';
 
 // Reparatur-Sätze (Lernberatung 27.09., V2 „Nochmal, aber besser"): Emrahs eigene falsche oder
@@ -97,12 +98,16 @@ export const REPAIR_MAX_BYTES = 200 * 1024;
 const enc = new TextEncoder();
 const bytesOf = (v: unknown): number => enc.encode(JSON.stringify(v)).length;
 
-/** Auf `max` Einträge und `REPAIR_MAX_BYTES` kürzen: zuerst die ältesten erledigten, dann die ältesten offenen. */
+/**
+ * Auf `max` Einträge und `REPAIR_MAX_BYTES` kürzen: nur erledigte Einträge (die ältesten zuerst) werden verdrängt. Offene werden nie
+ * gelöscht; sind alle offen, bleibt die Liste länger (die Zahl ist nur Richtwert, hart ist die Dokumentgröße, siehe `addRepairs`).
+ */
 export function capRepairs(list: readonly RepairItem[], max = REPAIR_MAX, maxBytes = REPAIR_MAX_BYTES): RepairItem[] {
   const out = [...list];
   while (out.length > 1 && (out.length > max || bytesOf({ items: out }) > maxBytes)) {
     const doneIdx = out.findIndex((e) => e.done === true);
-    out.splice(doneIdx >= 0 ? doneIdx : 0, 1);
+    if (doneIdx < 0) break;
+    out.splice(doneIdx, 1);
   }
   return out;
 }
@@ -142,7 +147,14 @@ export function addRepairs(list: readonly RepairItem[], add: readonly NewRepair[
       changed = true;
     }
   }
-  return changed ? capRepairs(out) : null;
+  if (!changed) return null;
+  const capped = capRepairs(out);
+  // Hart ist nur die Dokumentgröße (256 KiB, A6.6): Passt der Zuwachs nicht mehr, wird nichts Offenes gelöscht und nichts geschrieben – laut gemeldet.
+  if (bytesOf({ items: capped }) > REPAIR_MAX_BYTES) {
+    logWarn('repair:cap', { code: 'overflow', message: `app/repair voll (${capped.length} offene Sätze), neuer Satz nicht gespeichert` });
+    return null;
+  }
+  return capped;
 }
 
 /** Fällige, nicht erledigte Einträge, älteste Fälligkeit zuerst. Fällig = vor dem Ende des Lerntags (04:00 Uhr), wie bei den Fehlersätzen der Grammatik. */
@@ -153,13 +165,14 @@ export function dueRepairs(list: readonly RepairItem[], nowMs: number): RepairIt
 
 /**
  * Wiederholung eintragen. Richtig: Box +1 (Abstand 1/3/9 Tage), ab Box 3 erledigt. Falsch:
- * Box 0, morgen wieder. `null`, wenn der Eintrag fehlt oder diese Antwort schon angewendet ist.
+ * Box 0, morgen wieder. „Fast richtig“ (`near`): Box unverändert, morgen wieder. `null`, wenn der Eintrag fehlt oder diese Antwort schon angewendet ist.
  */
-export function reviewRepair(list: readonly RepairItem[], id: string, ok: boolean, nowMs: number): RepairItem[] | null {
+export function reviewRepair(list: readonly RepairItem[], id: string, ok: boolean, nowMs: number, near = false): RepairItem[] | null {
   const i = list.findIndex((e) => e.id === id);
   if (i < 0) return null;
   const e = list[i]!;
   if ((e.last ?? 0) >= nowMs) return null;
+  if (near) return list.map((x, k) => (k === i ? { ...e, last: nowMs, done: false, due: addLocalDays(nowMs, 1) } : x));
   const box = ok ? e.box + 1 : 0;
   const done = box >= REPAIR_DAYS.length;
   const next: RepairItem = { ...e, box, last: nowMs, done, due: addLocalDays(nowMs, REPAIR_DAYS[Math.min(box, REPAIR_DAYS.length - 1)] ?? 1) };
