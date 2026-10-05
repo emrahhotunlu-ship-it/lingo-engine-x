@@ -265,6 +265,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
           chosen={chosen === null ? null : String((task.options ?? []).indexOf(chosen))}
           onChoose={(id) => void check((task.options ?? [])[Number(id)])}
           label={t('trChoicesLabel')}
+          letters
         />
       </>
     );
@@ -273,8 +274,8 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       <>
         {sentenceWithSlot(task.prompt, gapNode)}
         {task.hint && !task.prompt.includes(task.hint) && (
-          <p className="text-sm text-muted" lang="en" data-testid="cue">
-            {task.hint}
+          <p className="text-sm text-muted" data-testid="cue">
+            {t('grCue', { cue: task.hint })}
           </p>
         )}
       </>
@@ -283,8 +284,16 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     const { from, target } = splitTransform(task.prompt);
     body = (
       <>
-        {from && <EnglishText as="p" className="text-base text-muted" text={from} {...src} testId="transform-from" />}
-        {sentenceWithSlot(target, gapNode)}
+        {from && (
+          <div className="flex flex-col gap-1">
+            <p className="lx-eyebrow">{t('grFromLabel')}</p>
+            <EnglishText as="p" className="text-base text-muted" text={from} {...src} testId="transform-from" />
+          </div>
+        )}
+        <div className="flex flex-col gap-1">
+          <p className="lx-eyebrow">{t('grToLabel')}</p>
+          {sentenceWithSlot(target, gapNode)}
+        </div>
       </>
     );
   } else {
@@ -327,7 +336,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
           <EnglishText as="p" className="lx-sentence" text={task.prompt} {...src} testId="transform-from" />
           {task.hint && !task.prompt.includes(task.hint) && (
             <p className="text-sm text-muted" data-testid="cue">
-              {task.hint}
+              {t('grCue', { cue: task.hint })}
             </p>
           )}
           {field}
@@ -362,10 +371,16 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
                 : 'trVerdictWrong';
     const family = c?.kind === 'alt' ? altFamily(task, fb.given) : null;
     const also = alsoRight(task, lang);
-    const notes = family ? [altNote(family, lang), ...also.notes] : also.notes;
+    // „Auch richtig“ nur mit echten Zusatzlösungen oder dem Hinweis der Familie – nie allgemeine Themenhinweise.
+    const notes = family ? [altNote(family, lang)] : [];
     const exclude = solved ?? undefined;
-    const examples = examplesFor(task.topic, { exclude, max: 3, offset: hash32(task.key) % 5 });
+    const examples = examplesFor(task.topic, { exclude, max: 2, offset: hash32(task.key) % 5 });
     const typedAnswer = task.type !== 'mc';
+    // Reihenfolge (Gesamtkonzept 3.6): Urteil, Du/Richtig einmal, Warum, Beispiele. Bei richtiger Antwort und bei
+    // Auswahl steht die Lösung schon in der Karte (Lücke gefüllt, Option markiert): kein zweites „Richtig“.
+    const showDiff = typedAnswer && fb.verdict !== 'correct';
+    const fullSentence = task.type === 'correct' ? task.answer : (solved ?? solution);
+    const hint = formHint(task, lang);
     result = (
       <ResultArea label={t('trResultLabel')}>
         <VerdictLine verdict={fb.verdict} text={t(key)} />
@@ -379,16 +394,21 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
             {t('trUsHint', { us: c.us })}
           </p>
         )}
-        <SentenceDiff
-          ops={c?.ops ?? []}
-          given={fb.given}
-          correct={task.type === 'correct' ? task.answer : solution}
-          onlyCorrect={task.type === 'mc' || fb.verdict === 'correct'}
-          labels={{ yours: t('grYourAnswer'), correct: t('grCorrect'), empty: t('trEmpty'), missing: t('lrMissing') }}
-          {...src}
-        />
-        {solved && task.type !== 'correct' && <EnglishText as="p" className="text-[0.95rem] leading-relaxed text-muted" text={solved} {...src} testId="solved" />}
-        <FormHint text={formHint(task, lang)} />
+        {showDiff && (
+          <SentenceDiff
+            ops={c?.ops ?? []}
+            given={fb.given}
+            correct={fullSentence}
+            labels={{ yours: t('grYourAnswer'), correct: t('grCorrect'), empty: t('trEmpty'), missing: t('lrMissing') }}
+            {...src}
+          />
+        )}
+        {hint && (
+          <div className="flex flex-col gap-1">
+            <p className="lx-eyebrow">{t('grWhyLabel')}</p>
+            <FormHint text={hint} />
+          </div>
+        )}
         <ExampleList items={examples} {...src} />
         <AlsoRight answers={also.answers} notes={notes} />
         {fb.verdict === 'wrong' && typedAnswer && !fb.dontKnow && !fb.override && <OverrideButton onOverride={override} />}
@@ -412,7 +432,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       >
         <header className="flex flex-col gap-2">
           <LearnStatus p={p} n={typeof doc?.n === 'number' ? doc.n : 0} recent={Array.isArray(doc?.recent) ? (doc.recent as number[]) : null} kind={t(`grKind_${task.type}` as MessageKey)} kindId={task.type} extra={badge} />
-          <TaskLine task={t(`grTask_${task.type}` as MessageKey)} purpose={t('purposeGrammar')} />
+          <TaskLine task={t(task.type === 'transform' && whole ? 'grTask_transformWhole' : `grTask_${task.type}`)} purpose={t('purposeGrammar')} />
         </header>
         {/* N46 „Kurz erklärt“ (Soll): die Regel in einem Satz, zugeklappt, ohne KI; nicht im Wochen-Check
             und nicht in der Lektion (dort steht die Regel schon über der Aufgabe). */}

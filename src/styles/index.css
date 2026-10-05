@@ -634,9 +634,36 @@ h3 {
     opacity: 0.55;
   }
   @media (pointer: coarse) {
-    .lx-choice-key {
+    .lx-choice-key:not(.lx-choice-letter) {
       display: none !important;
     }
+  }
+  /* Grammatik-Auswahl: große, klar getrennte Karten mit Buchstaben A–D (Gesamtkonzept R3). */
+  .lx-choice-big {
+    min-height: 3.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-width: 2px;
+    font-size: 1.0625rem;
+    line-height: 1.35;
+  }
+  .lx-choice-letter {
+    width: 2rem;
+    height: 2rem;
+    font-size: var(--text-sm);
+    border: 1px solid var(--lx-border);
+  }
+  .lx-choice-mark {
+    flex: none;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .lx-choice[data-state='correct'] .lx-choice-mark {
+    color: var(--lx-accent);
+  }
+  .lx-choice[data-state='wrong'] .lx-choice-mark {
+    color: var(--lx-danger-text);
   }
   .lx-choice-key {
     display: inline-flex;

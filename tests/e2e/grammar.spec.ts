@@ -30,7 +30,10 @@ async function solutionHidden(page: Page, type: string): Promise<void> {
 /** Ergebnis an fester Stelle (U-02): Vergleich, Form-Hinweis, mindestens zwei Beispiele – immer. */
 async function resultComplete(page: Page): Promise<void> {
   const item = page.getByTestId('gr-item');
-  await expect(item.getByTestId('sentence-diff')).toBeVisible();
+  // Gesamtkonzept 3.6: Du/Richtig nur einmal – bei richtiger Antwort und bei Auswahl steht die Lösung schon in der Karte.
+  const verdict = await item.getByTestId('verdict').getAttribute('data-verdict');
+  if (verdict !== 'correct' && (await item.getAttribute('data-type')) !== 'mc') await expect(item.getByTestId('sentence-diff')).toBeVisible();
+  else await expect(item.getByTestId('sentence-diff')).toHaveCount(0);
   await expect(item.getByTestId('form-hint')).toBeVisible();
   expect(await item.getByTestId('example').count()).toBeGreaterThanOrEqual(2);
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
