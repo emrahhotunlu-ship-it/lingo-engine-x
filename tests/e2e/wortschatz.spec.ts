@@ -154,3 +154,18 @@ test('Dein Stand: Abschnitt „Wortschatz-Statistik“ (Platz stand); ohne KI bl
   await expect(flip.first()).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test('Atlas: sieben Bänder, Band aufklappen zeigt Einträge mit Stand; schreibt nichts; ohne Überstand', async ({ page }) => {
+  const { errors, external } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'vocab');
+  await page.getByTestId('ws-atlas').click();
+  await expect(page.getByTestId('atlas')).toBeVisible();
+  await expect(page.getByTestId('atlas-band')).toHaveCount(7);
+  await expect(page.getByTestId('atlas-total')).toContainText('von');
+  await page.getByTestId('atlas-band-toggle').first().click();
+  await expect(page.getByTestId('atlas-entry').first()).toBeVisible();
+  expect(await layoutProblems(page)).toEqual([]);
+  expect(errors).toEqual([]);
+  expect(external).toEqual([]);
+});

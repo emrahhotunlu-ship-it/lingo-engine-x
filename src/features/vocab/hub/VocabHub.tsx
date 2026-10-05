@@ -267,6 +267,7 @@ export function VocabHub() {
             data={{ 'data-word': c.id, 'data-kind': c.kind }}
           />
         ))}
+        <Row title={t('atTitle')} sub={t('atSub')} onClick={() => go({ name: 'atlas' })} testId="ws-atlas" />
         <Row title={tn('nbWsAll', visible.length)} sub={t('nbWsAllSub')} onClick={() => go({ name: 'vocabList' })} testId="ws-all" />
       </RowList>
       <p className="m-0 text-center">

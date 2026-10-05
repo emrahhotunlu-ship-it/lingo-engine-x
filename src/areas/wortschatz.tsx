@@ -1,3 +1,4 @@
+import { AtlasScreen } from '../features/vocab/atlas/AtlasScreen';
 import { z } from 'zod';
 import { defineArea } from '../app/registry';
 import { restoreFor } from '../app/resume';
@@ -25,6 +26,7 @@ declare module '../app/router/types' {
   interface RouteParams {
     vocab: NoParams;
     vocabList: { filter?: string; q?: string };
+    atlas: NoParams;
     deck: { id: string };
     trainer: { round: 'pflicht' | 'extra'; mode?: 'auto' | 'type' | 'flip' | 'listen'; deck?: string };
     listenLoop: NoParams;
@@ -81,6 +83,7 @@ export const wortschatz = defineArea({
   screens: {
     vocab: { kind: 'tab', component: VocabHub, title: 'nbWsTitle', keepScroll: true },
     vocabList: { kind: 'page', component: VocabListPage, title: 'nbWsListTitle', keepScroll: true, params: z.object({ filter: z.string().max(24).optional(), q: z.string().max(80).optional() }) },
+    atlas: { kind: 'page', component: AtlasScreen, title: 'atTitle', keepScroll: true },
     deck: { kind: 'page', component: DeckScreen, title: 'nbWsDecks', params: z.object({ id: z.string().min(1).max(64) }) },
     trainer: { kind: 'exercise', component: TrainerScreen, params: trainerParams, ensure: ensureTrainer },
     // N35 Hörschleife (Extra-Runde): schreibt nichts, zählt nicht als Wiederholung.
