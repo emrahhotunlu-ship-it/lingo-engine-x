@@ -169,6 +169,8 @@ test('Weg nach C1: Status je Punkt, „Kann ich" wird in profile.canDo gespeiche
   await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
   await openOverview(page);
   await tab(page, 'path');
+  // Die Can-do-Liste steht unter „Messwerte dahinter“ (Gesamtkonzept 3.5: höchstens drei Karten je Segment).
+  await page.getByTestId('measures-words').click();
   // Kurz gehalten (UX-Beratung Nr. 6): je Stufe höchstens 4 offene Punkte sichtbar, der Rest zugeklappt.
   for (const level of await page.getByTestId('cando-level').all()) expect(await level.locator('[data-testid="cando"]:not([data-status="reached"])').count()).toBeLessThanOrEqual(4);
   for (const toggle of await page.locator('[data-testid="cando-more"], [data-testid="cando-reached"]').all()) await toggle.click();
@@ -203,6 +205,7 @@ test('Wochenbericht mit Fakten und gespeichertem KI-Text; Verlauf mit Diagramm u
   // Statistik: die Karten-Messwerte (bis P3 den Platz `stand` füllt); keine Aktivitäts-Heatmap mehr (Fokus-Umbau).
   await tab(page, 'stats');
   await expect(page.getByTestId('heatmap')).toHaveCount(0);
+  await page.getByTestId('measures-words').click();
   await expect(page.getByTestId('stats')).toBeVisible();
   // Zweites Öffnen: der Bericht liegt schon vor, kein weiterer Aufruf.
   await openWeekly(page);
@@ -245,4 +248,53 @@ test('Abo-Höchststand bleibt über einen Durchlauf aller Reiter ≤ 32', async 
   }
   const peak = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { peakSubscriptions(): number } } }).__LINGO_FAKE__.db.peakSubscriptions());
   expect(peak).toBeLessThanOrEqual(32);
+});
+
+test('Fortschritt Wörter: Fest-Zahl im Kopf, höchstens drei Karten, Messwerte eingeklappt, ehrliche Leerzustände', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await expect(page.locator('h1')).toHaveText('Fortschritt');
+  // Kopf: Fest statt „Wörter gesamt“ (Seed: 12 von 146 Karten sitzen fest).
+  await expect(page.getByTestId('stand-fest')).toHaveText('12');
+  await expect(page.getByTestId('vocab-total')).toHaveCount(0);
+  await tab(page, 'path');
+  const seg = page.getByTestId('seg-words');
+  // Drei Karten: Fest, Wortschatzziel, „Wie gut sitzt es?“.
+  await expect(seg.getByTestId('fest-card')).toBeVisible();
+  await expect(seg.getByTestId('vocab-goal')).toBeVisible();
+  await expect(seg.getByTestId('quality-card')).toBeVisible();
+  // Ohne Tagesbilder mit Fest-Zahl keine erfundene Prognose und kein Zuwachs.
+  await expect(page.getByTestId('fest-growth')).toContainText('drei Wochen');
+  await expect(page.getByTestId('fest-forecast')).toHaveCount(0);
+  await expect(page.getByTestId('expected-known')).not.toHaveText('–');
+  // Behaltensquote: zu wenig Antworten → Strich und Hinweis, keine Zahl.
+  await expect(page.getByTestId('retention-28')).toHaveText('–');
+  await expect(page.getByTestId('retention-note')).toContainText('Zu wenig Daten');
+  // Messwerte dahinter: zu, dann Wochen-Check erst ab 3 Checks.
+  await expect(page.getByTestId('tests-measures')).toHaveCount(0);
+  await page.getByTestId('measures-words').click();
+  await expect(page.getByTestId('check-mean')).toContainText(/Erst ab 3 Checks|Mittel der letzten/);
+  expect(errors).toEqual([]);
+});
+
+test('Fortschritt Grammatik: „sicher z von 39“ mit Verteilung, Fehlersätze, Fehler-Radar; Fallen unter den Messwerten', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, fake: { capabilities: { sample: false } } });
+  await openOverview(page);
+  await tab(page, 'errors');
+  const seg = page.getByTestId('seg-grammar');
+  await expect(seg.getByTestId('grammar-path')).toHaveAttribute('data-total', '39');
+  const safe = Number(await seg.getByTestId('grammar-path').getAttribute('data-safe'));
+  await expect(seg.getByTestId('grammar-safe')).toHaveText(`${safe} von 39`);
+  const stages = await seg.getByTestId('grammar-legend').locator('[data-stage]').all();
+  expect(stages).toHaveLength(4);
+  const sum = (await Promise.all(stages.map(async (st) => Number((await st.locator('dd').textContent()) ?? 0)))).reduce((a, b) => a + b, 0);
+  expect(sum).toBe(39);
+  await expect(seg.getByTestId('error-sentences')).toBeVisible();
+  const open = Number(await seg.getByTestId('error-sentences').getAttribute('data-open'));
+  const firm = Number(await seg.getByTestId('error-sentences').getAttribute('data-firm'));
+  expect(open + firm).toBeGreaterThan(0);
+  await expect(seg.getByTestId('radar')).toBeVisible();
+  // Keine Zahl zu entfallenen Fertigkeiten.
+  await expect(seg).not.toContainText(/XP|Kurs \d|Minuten/);
+  expect(errors).toEqual([]);
 });

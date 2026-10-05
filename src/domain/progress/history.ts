@@ -28,13 +28,16 @@ export function pctOf(h: Doc, k: string): number | null {
 const pct = (x: number | null): number | null => (x === null ? null : Math.max(0, Math.min(100, Math.round(x * 100))));
 
 export const HISTORY_MAX = 120;
-export type HistSnap = { d: string; o: number | null; vo: number | null; co: number | null; li: number | null; wr: number | null; gr: number; re: number | null; fl: number | null; vs: number | null; lx: 2 };
+export type HistSnap = { d: string; o: number | null; vo: number | null; co: number | null; li: number | null; wr: number | null; gr: number; re: number | null; fl: number | null; vs: number | null; lx: 2;
+  /** Fest-Zahl des Tages (K1: Zuwachs „+n in 28 Tagen“); fehlt, solange der Aufrufer sie nicht übergibt. */
+  va?: number;
+};
 
 export function hasHistory(profile: Doc | undefined, day: string): boolean {
   return arr(profile?.history).some((h) => h.d === day);
 }
 
-export function historySnapshot(i: { day: string; nowMs: number; profile: Doc; grammar: ReadonlyMap<string, Doc>; readingScores?: readonly number[]; vocabNow: number | null }): HistSnap {
+export function historySnapshot(i: { day: string; nowMs: number; profile: Doc; grammar: ReadonlyMap<string, Doc>; readingScores?: readonly number[]; vocabNow: number | null; festNow?: number | null }): HistSnap {
   const p = i.profile;
   const ema = obj(p.ema);
   const hist = arr(p.history);
@@ -57,6 +60,7 @@ export function historySnapshot(i: { day: string; nowMs: number; profile: Doc; g
     fl: fl === null ? roundOr(pctOf(prev, 'fl')) : pct(fl),
     vs: i.vocabNow ?? numOr(prev.vs, null),
     lx: 2,
+    ...(typeof i.festNow === 'number' && Number.isFinite(i.festNow) ? { va: Math.max(0, Math.round(i.festNow)) } : {}),
   };
 }
 

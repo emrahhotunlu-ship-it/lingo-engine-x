@@ -29,7 +29,8 @@ const obj = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v
 const SHOWN = 4;
 const STATUS_ICON: Record<CanDoStatus, IconName> = { reached: 'check', self: 'flag', open: 'target', thin: 'info' };
 
-export function PathTab() {
+/** `goal` = Zielkarte (Wortschatzziel, Claudes Lücke), `cando` = Can-do-Liste (Messwerte dahinter). */
+export function PathTab({ part }: { part: 'goal' | 'cando' }) {
   const { t, tn, lang } = useT();
   const now = useClock((s) => s.now);
   const today = useClock((s) => s.today);
@@ -110,8 +111,9 @@ export function PathTab() {
     );
   };
 
-  return (
-    <div className="flex flex-col gap-4" data-testid="path">
+  if (part === 'goal') {
+    return (
+      <div data-testid="path">
       {/* Das Wichtigste zuerst (UX-Beratung Nr. 6): Wortschatzziel und Claudes Lücke in einer Karte. */}
       <Card aria-labelledby="vg-title" className="flex flex-col gap-4">
         <div>
@@ -130,9 +132,6 @@ export function PathTab() {
               <p className="lx-tnum mt-1 text-xs text-muted">{t('vgMark', { mark: C1_MARK })}</p>
             </div>
           )}
-          <p className="lx-tnum mt-1 text-sm text-muted" data-testid="vocab-fest">
-            {t('vgFest', { n: goal.fest })}
-          </p>
           {goal.measured && !goal.reached && goal.perWeek >= 1 && <p className="lx-tnum mt-1 text-sm text-muted">{t('vgPace', { n: goal.perWeek })}</p>}
         </div>
         {gap.length > 0 && (
@@ -148,7 +147,11 @@ export function PathTab() {
           </div>
         )}
       </Card>
-
+      </div>
+    );
+  }
+  return (
+    <div data-testid="path-cando">
       {/* Can-dos je Stufe: die ersten offenen Punkte sichtbar, weitere und erreichte zugeklappt. */}
       <section aria-labelledby="cando-title" className="flex flex-col gap-3">
         <h2 id="cando-title" className="text-lg font-semibold">

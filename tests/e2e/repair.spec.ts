@@ -84,10 +84,11 @@ for (const size of SIZES) {
     await screen(page, 'today');
     await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
 
-    // „Dein Stand“: eine Zeile.
+    // „Fortschritt“: Karte „Fehlersätze“ (zählt Reparatur-Sätze und Themen-Fehler zusammen).
     await openOverview(page);
     await page.getByTestId('tab-grammar').click();
-    await expect(page.getByTestId('repair-stand')).toHaveText('Reparatur-Sätze: 2 offen, 0 sicher');
+    await expect(page.getByTestId('error-sentences')).toBeVisible();
+    await expect.poll(async () => Number(await page.getByTestId('error-sentences').getAttribute('data-open'))).toBeGreaterThanOrEqual(2);
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
   });
