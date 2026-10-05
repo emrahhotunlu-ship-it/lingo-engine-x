@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { forFocus } from '../../src/domain/plan/retire';
 import { readUnitMeta } from '../../src/domain/plan/unitMeta';
 import { buildUnitStored, unitPlanOf } from '../../src/domain/unit/plan';
-import { unitPlanFor } from '../../src/domain/week/plan';
+import { unitPlanFor } from '../../src/domain/unit/planFor';
 import { berlin } from './helpers';
 
 // Plan nach Gesamtkonzept 3.2: „Fehler korrigieren“ entfällt, wenn nichts fällig ist; Wiedereinstieg ändert die Form des Plans.

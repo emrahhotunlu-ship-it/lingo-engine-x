@@ -282,7 +282,7 @@ export const de = {
   trCheck: 'Prüfen',
   trGapLabel: 'Lücke im Satz: {sentence}',
   trTypeLabel: 'Englisches Wort für: {meaning}',
-  trHint: 'Hilfe: {meaning}',
+  trHint: 'Bedeutung: {meaning}',
   trHintLetter: 'Beginnt mit „{letter}“',
   trEnterHint: 'Enter übernimmt den Vorschlag, 1–4 wählt selbst.',
   trSuggest: 'Vorschlag: {grade}',

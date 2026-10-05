@@ -5,7 +5,7 @@ export const repairEn = {
   rxStepLead: 'Here are sentences of yours with a correction. Say them correctly yourself now – the better version comes afterward.',
   rxPurpose: 'When you produce the better form yourself, it sticks. Each sentence comes back in your review in 1, 3 and 9 days.',
   rxInfo: 'What is this for?',
-  rxKind: 'Repair sentence',
+  rxKind: 'Mistake sentence',
   rxThen: 'Back then you said:',
   rxYours: 'Your sentence:',
   rxTask: 'Write it correctly now.',
@@ -31,5 +31,5 @@ export const repairEn = {
   rxSrc_preply: 'from an earlier lesson',
   rxSrc_say: 'from an earlier exercise',
   rxSrc_lesson: 'from the lesson',
-  rxStand: 'Repair sentences: {open} open, {safe} solid',
+  rxStand: 'Mistake sentences: {open} open, {safe} secure',
 } as const;

@@ -1,8 +1,9 @@
 import { dayKey } from '../date';
 import { topicById } from '../content';
 import { displayP } from '../grammar/bkt';
-import { dueErrors, errorsOf } from '../grammar/errors';
-import { dueRepairs, readRepairs } from '../repair/repair';
+import { errorsOf } from '../grammar/errors';
+import { dueFehlersaetze } from '../repair/fehlersaetze';
+import { readRepairs } from '../repair/repair';
 import { confidenceOf } from '../srs/confidence';
 import { quizzable } from '../srs/queue';
 import type { Lang, TrainCard } from '../srs/types';
@@ -26,12 +27,7 @@ export function cardStats(cards: readonly TrainCard[], lang: Lang, nowMs: number
  * Lerntagen – ein Satz vom Anlegetag zählt nie (er kommt frühestens morgen, verteilt statt massiert).
  */
 export function fixesDue(i: { grammarDocs: ReadonlyMap<string, Doc>; repairDoc: Doc | null | undefined; nowMs: number; today: string }): number {
-  const fromGrammar = dueErrors(i.grammarDocs, i.nowMs).filter((d) => {
-    const t = num(d.e.t);
-    return t === null || dayKey(t) !== i.today;
-  }).length;
-  const fromRepair = dueRepairs(readRepairs(i.repairDoc ?? undefined), i.nowMs).filter((r) => dayKey(r.t) !== i.today).length;
-  return fromGrammar + fromRepair;
+  return dueFehlersaetze(i).length;
 }
 
 /** Fehlersätze, die „weg“ sind (Box 3 erreicht): heute erledigt und insgesamt. `last` = Zeitpunkt der letzten Wiederholung. */

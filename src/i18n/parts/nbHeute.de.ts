@@ -3,7 +3,7 @@
 
 export const nbHeuteDe = {
   // Heute: Unterzeile und Tageskarte (plan.md §1.3)
-  nbHeuteUnit: 'Deine Tageseinheit',
+  nbHeuteUnit: 'Heute',
   nbHeuteRing: '{done} von {total} · noch ca. {min} Min.',
   nbHeuteRingLabel: '{done} von {total} Blöcken erledigt',
   nbHeuteStart: 'Starten',
@@ -24,7 +24,7 @@ export const nbHeuteDe = {
   nbHeuteBlock_order: 'Satzbau',
   // Grund je Block (eine kurze Zeile)
   nbHeuteWhy_review: '{n} Karten · Fällige zuerst',
-  nbHeuteWhy_reviewBehind: '{n} Karten · überfällig, der Rest morgen',
+  nbHeuteWhy_reviewBehind: '{n} Karten · überfällig',
   nbHeuteWhy_reviewNone: 'Fällige Karten und neue Wörter',
   nbHeuteWhy_check: '12 Aufgaben zur Woche',
   nbHeuteWhy_focus: 'Deine Korrekturen und typischen Fehler',
@@ -53,10 +53,10 @@ export const nbHeuteDe = {
   nbHeuteRecapBand: 'Dein Wochenrückblick ist da.',
   nbHeuteRecapOpen: 'Ansehen',
   nbHeuteTomorrow: 'Morgen: {what}',
-  nbHeuteWorth: 'Lohnt sich jetzt',
-  nbHeuteMore: 'Mehr üben',
+  nbHeuteWorth: 'Extra: lohnt sich jetzt',
+  nbHeuteMore: 'Extra',
   nbHeuteLocal: 'Plan nur auf diesem Gerät gespeichert.',
-  nbHeuteLegacy: 'Heute gilt noch der Plan von vorhin. Ab morgen kommt die Tageseinheit.',
+  nbHeuteLegacy: 'Heute gilt noch der Plan von vorhin. Ab morgen gilt der neue Tagesplan.',
   // Zwischen- und Bestätigungskarte (unitCard)
   nbHeuteBetweenDone: '{block} geschafft',
   nbHeuteBetweenNext: 'Als Nächstes: {block} · {why}',
@@ -64,7 +64,7 @@ export const nbHeuteDe = {
   nbHeuteEndBack: 'Zurück zu Heute',
   nbHeuteClose: 'Einheit schließen',
   nbHeuteSaved: 'Gespeichert. Du kannst jederzeit weitermachen.',
-  nbHeuteNote: 'Tageseinheit · Block {n} von {total}',
+  nbHeuteNote: 'Heute · Schritt {n} von {total}',
   // Ersatzschritte (bis die Anbieter der Pakete kommen)
   nbHeuteAgainTask: 'Schreib es noch einmal aus dem Kopf – kürzer, klarer, richtig.',
   nbHeuteAgainPurpose: 'Neu formulieren festigt, was du vorhin gelernt hast (Generierungseffekt).',
@@ -82,7 +82,7 @@ export const nbHeuteDe = {
   nbHeuteCheckMissed: 'Extra · Wochen-Check der letzten Woche nachholen',
   nbHeuteCheckEmptyOk: 'Weiter',
   // Fortsetzen
-  nbHeuteResumeUnit: 'Tageseinheit · Block {n} von {total}',
+  nbHeuteResumeUnit: 'Heute · Schritt {n} von {total}',
   nbHeuteResumeCheck: 'Wochen-Check · Aufgabe {n} von {total}',
   // Seite „Deine Woche“ (N11, N13)
   nbHeuteSpeakExtra: 'Sprechen üben (freiwillig)',

@@ -6,7 +6,7 @@ import type { UnitBlockNo, UnitCtx } from '../../../app/unit/types';
 import { useLive } from '../../../data/live';
 import { againChecks, againSource, repairSrcOf, unitRepairs, type AgainCheck, type AgainSource, type TaskLike } from '../../../domain/repair/unit';
 import type { Lang } from '../../../domain/srs/types';
-import { recordRepair, saveRepairs } from '../store';
+import { recordGrammarError, recordRepair, saveRepairs } from '../store';
 
 // Block 5 der Tageseinheit „Nochmal, aber besser“ (plan.md §1.5, N42; Prüfung M4c, S4): aus dem
 // Kopf neu formulieren, dann Neufassung ↔ bessere Fassung nebeneinander und je Korrektur „jetzt
@@ -39,7 +39,7 @@ export const useAgain = create<State>(initial);
 export function startAgain(ctx: Pick<UnitCtx, 'day' | 'block' | 'task'> | null): void {
   const day = ctx?.day ?? useClock.getState().today;
   const task: TaskLike | null = ctx?.task ? { text: ctx.task.text, ...(ctx.task.better ? { better: ctx.task.better } : {}), fixes: ctx.task.fixes } : null;
-  const src = againSource({ day, task, repairDoc: useLive.getState().docs['app/repair'] ?? null, now: useClock.getState().now });
+  const src = againSource({ day, task, repairDoc: useLive.getState().docs['app/repair'] ?? null, grammarDocs: useLive.getState().collections.grammar ?? new Map(), now: useClock.getState().now });
   useAgain.setState({ ...initial(), draft: againStart(src), active: true, day, lang: useSettings.getState().lang, block: ctx ? ctx.block : null, taskKind: ctx?.task?.kind ?? null, task, src, startedAt: Date.now() });
 }
 
@@ -62,8 +62,10 @@ export function compareAgain(): void {
   if (s.src.olds?.length) {
     useAgain.setState({ phase: 'compare', checks, saved: 0 });
     checks.forEach((c, k) => {
-      const id = s.src.olds?.[k]?.id;
-      if (id) void recordRepair(id, c.ok);
+      const o = s.src.olds?.[k];
+      if (!o) return;
+      if (o.store === 'grammar' && o.topic && o.errorT !== undefined) void recordGrammarError(o.topic, o.errorT, c.ok, c.ok ? '' : s.draft.slice(0, 160));
+      else void recordRepair(o.id, c.ok);
     });
     return;
   }

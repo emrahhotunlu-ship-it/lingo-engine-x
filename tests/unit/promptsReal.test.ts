@@ -1,13 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import course from '../../src/content/legacy/course.json';
 import { containsPhrase } from '../../src/domain/chunks/newChunk';
-import type { LessonMeta } from '../../src/domain/learn/types';
 import { cardExamples } from '../../src/prompts/cardExamples';
 import { shortenText } from '../../src/prompts/common';
 import { grammarItems } from '../../src/prompts/grammarItems';
 import { grammarJudge } from '../../src/prompts/grammarJudge';
-import { lessonContent } from '../../src/prompts/lessonContent';
-import { lessonProduction } from '../../src/prompts/lessonProduction';
 import { mnemonic } from '../../src/prompts/mnemonic';
 import { threeLayersSchema } from '../../src/prompts/threeLayers';
 import { translate } from '../../src/prompts/translate';
@@ -205,105 +201,6 @@ describe('grammar-items@2 (W8)', () => {
     const p = grammarItems.build(v);
     expect(p.split('\n')[0]).toBe('[grammar-items@2]');
     expect(p).toContain('put English words and phrases in “…”');
-  });
-});
-
-const meta = (course as unknown as { lessons: LessonMeta[] }).lessons[0]!;
-function lesson(o: Record<string, unknown> = {}) {
-  const lines = [
-    ['Anna', "Good morning, everyone. I'll chair the meeting today, so let's look at the agenda."],
-    ['Tom', 'Thanks, Anna. How many attendees have we been expecting?'],
-    ['Anna', "Six. First, let's go over what we have been working on."],
-    ['Tom', 'We have been testing the new archive module since Monday.'],
-    ['Anna', 'Great. Any action items from last week?'],
-    ['Tom', 'Yes, two. Lisa has been talking to the client about the rollout.'],
-    ['Anna', 'Okay. Let me recap: testing continues, and Lisa follows up.'],
-    ['Tom', 'Sounds good. I have been preparing the slides for Friday too.'],
-  ].map(([sp, en]) => ({ sp, en, de: 'Übersetzung.' }));
-  const q = {
-    q: 'Was hat Tom seit Montag gemacht?',
-    options: ['Das Archivmodul getestet', 'Folien erstellt', 'Mit dem Kunden gesprochen', 'Das Meeting geleitet'],
-    answer: 'Das Archivmodul getestet',
-    lang: 'de',
-    q_alt: 'What has Tom been doing since Monday?',
-    options_alt: ['Testing the archive module', 'Making slides', 'Talking to the client', 'Chairing the meeting'],
-    answer_alt: 'Testing the archive module',
-  };
-  const task = { topic: 'pres-perf-cont', type: 'gap', prompt: 'We ___ (work) on the rollout since March.', answer: 'have been working', accepted: [], options: null, hint: '(work)', expl: '„since March“ zeigt eine Dauer bis jetzt → have been + -ing.', expl_en: '“since March” shows a duration up to now, so we use have been + -ing.' };
-  return {
-    words: meta.words.map(([en, de]) => ({ en, de, pos: 'noun', def: 'x', ex: 'y' })),
-    dialogue: { title: 'Weekly meeting', lines },
-    questions: [q, q],
-    tasks: [task, task, task, task],
-    output: { de: 'Schreibe eine kurze E-Mail an dein Team und fasse zusammen, woran ihr gerade arbeitet.', en: 'Write a short email to your team summarizing what you have been working on.', mustUse: ['agenda', 'attendee', 'action item'] },
-    ...o,
-  };
-}
-
-describe('lesson-content@2 (W6, W8, Hinweis Sprecher)', () => {
-  const v = { meta, grammarName: 'Present perfect continuous', ruleEn: 'have/has been + -ing', uiLang: 'de', mix: null } as const;
-  const s = lessonContent.schema(v);
-  const base = lesson();
-
-  it('Voraussetzung: Lektion l01 mit den erwarteten Zielwörtern', () => {
-    expect(meta.grammar).toBe('pres-perf-cont');
-    expect(meta.words.map(([en]) => en)).toEqual(expect.arrayContaining(['agenda', 'to chair a meeting', 'to recap']));
-    ok(s, base);
-  });
-
-  it('W6: Pflichtwörter ohne „to“ oder gebeugt werden den Vorgaben zugeordnet, Unbekanntes verworfen', () => {
-    const out = (mustUse: string[]) => ok<{ output: { mustUse: string[] } }>(s, lesson({ output: { ...base.output, mustUse } })).output.mustUse;
-    expect(out(['agenda', 'chair a meeting', 'recap'])).toEqual(['agenda', 'to chair a meeting', 'to recap']);
-    expect(out(['agenda', 'attendees', 'action items'])).toEqual(['agenda', 'attendee', 'action item']);
-    expect(out(['agenda', 'banana', 'recap', 'Recap'])).toEqual(['agenda', 'to recap']);
-    bad(s, lesson({ output: { ...base.output, mustUse: ['banana', 'agenda'] } }));
-  });
-
-  it('Wörter ohne „to“ werden auf die Vorgabe zurückgeführt; lange Sprechernamen erlaubt', () => {
-    const r = ok<{ words: Array<{ en: string }> }>(s, lesson({ words: meta.words.map(([en, de]) => ({ en: en.replace(/^to /, ''), de, pos: 'verb', def: 'x', ex: 'y' })) }));
-    expect(r.words.map((w) => w.en)).toEqual(meta.words.map(([en]) => en));
-    ok(s, lesson({ dialogue: { title: 'x', lines: base.dialogue.lines.map((l) => ({ ...l, sp: 'Head of Business Development' })) } }));
-  });
-
-  it('W8: ungültige Aufgaben fallen weg (mc mit 3 Optionen), mc-Antwort ohne Groß/klein', () => {
-    const t0 = base.tasks[0]!;
-    const r = ok<{ tasks: unknown[] }>(s, lesson({ tasks: [...base.tasks.slice(0, 3), { ...t0, type: 'mc', options: ['have been working', 'worked', 'are working'], answer: 'have been working' }] }));
-    expect(r.tasks).toHaveLength(3);
-    const mc = ok<{ tasks: Array<{ answer: string; options: string[] | null }> }>(s, lesson({ tasks: [...base.tasks.slice(0, 3), { ...t0, type: 'mc', options: ['Have been working', 'worked', 'are working', 'work'], answer: 'have been working' }] }));
-    expect(mc.tasks[3]?.answer).toBe('Have been working');
-    const gapWithEmptyOptions = ok<{ tasks: Array<{ options: unknown }> }>(s, lesson({ tasks: [...base.tasks.slice(0, 3), { ...t0, options: [] }] }));
-    expect(gapWithEmptyOptions.tasks[3]?.options).toBeNull();
-    bad(s, lesson({ tasks: [t0, t0, { ...t0, prompt: 'No blank here at all, sorry.' }] }));
-  });
-
-  it('Prompt: Version 2', () => {
-    expect(lessonContent.build(v).split('\n')[0]).toBe('[lesson-content@2]');
-  });
-});
-
-describe('lesson-production@2 (W6, Hinweis CEFR)', () => {
-  const v = { taskEn: 'Write a short email', mustUse: ['agenda', 'to recap', 'action item'], structure: 'present perfect continuous', text: 'Hi team, to recap our meeting: we have been working on the agenda. Action items follow.', candoEn: 'I can...', uiLang: 'de' } as const;
-  const base = {
-    cefr: 'B2',
-    scores: { task: 80, grammar: 70, vocabulary: 75, coherence: 80, register: 85 },
-    errors: [{ wrong: 'Action items follow.', right: 'The action items are below.', why: 'Klingt natürlicher.', cat: 'wordchoice', sev: 'minor' }],
-    upgrades: [],
-    mustUsed: ['agenda', 'to recap', 'action item'],
-    structureUsed: true,
-    cando: 'partly',
-    candoWhy: 'Der Text ist kurz, erfüllt aber die Aufgabe teilweise.',
-    model: 'Hi team, to recap our meeting: we have been working on the new agenda all week.',
-  };
-  const s = lessonProduction.schema(v);
-
-  it('Pflichtwörter ohne „to“ oder in der Mehrzahl werden zugeordnet', () => {
-    expect(ok<{ mustUsed: string[] }>(s, { ...base, mustUsed: ['agenda', 'recap', 'action items'] }).mustUsed).toEqual(['agenda', 'to recap', 'action item']);
-  });
-
-  it('„B2+“ → B2; deutsche Begründung mit englischem Zitat', () => {
-    expect(ok<{ cefr: string }>(s, { ...base, cefr: 'B2+' }).cefr).toBe('B2');
-    ok(s, { ...base, errors: [{ ...base.errors[0], why: "Nach 'look forward to' kommt die -ing-Form: 'look forward to hearing from you'." }] });
-    expect(lessonProduction.build(v).split('\n')[0]).toBe('[lesson-production@2]');
   });
 });
 

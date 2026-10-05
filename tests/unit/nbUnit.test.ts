@@ -7,8 +7,8 @@ import { applyUpdate } from '../../src/domain/srs/applyReview';
 import { buildUnitStored, unitDonePatch, unitPlanOf } from '../../src/domain/unit/plan';
 import { unitRows, minutesLeft } from '../../src/domain/unit/rows';
 import { unitPhrases } from '../../src/domain/unit/phrases';
-import { weekDocNew, weekThemePatch } from '../../src/domain/unit/weekWrite';
-import { readWeekDoc, resolveBlock, unitPlanFor, weekTargets, themeFor } from '../../src/domain/week';
+import { resolveBlock, unitPlanFor } from '../../src/domain/unit/planFor';
+import { EMPTY_TARGETS } from '../../src/domain/unit/types';
 import { berlin } from './helpers';
 
 // P1 (plan.md §1.5, N10/N12, Prüfung M2/M3/M5/S5; data-guard §8 00:35): Tagesplan der Einheit,
@@ -151,42 +151,8 @@ describe('Pflicht und Serie ohne Datenumbau (pflichtFor unverändert)', () => {
   });
 });
 
-describe('app/week schreiben (data-guard §8 00:35)', () => {
-  const choice = { wk: '2026-W40', theme: 't02' as const, by: 'auto' as const, at: 1000 };
-
-  it('unbekannte hist-Einträge bleiben, v wird nie verringert, cur.at ist eine Zahl', () => {
-    const raw = { v: 2, cur: { wk: '2026-W39', theme: 't01', by: 'user', at: 5 }, hist: [{ wk: 'kaputt', x: 1 }, { wk: '2026-W38', theme: 't16', by: 'auto', extra: 'bleibt' }] };
-    const p = weekThemePatch(raw, choice);
-    expect(p?.v).toBeUndefined();
-    expect(p?.cur).toEqual({ wk: '2026-W40', theme: 't02', by: 'auto', at: 1000 });
-    expect(p?.hist).toEqual([{ wk: 'kaputt', x: 1 }, { wk: '2026-W38', theme: 't16', by: 'auto', extra: 'bleibt' }, { wk: '2026-W39', theme: 't01', by: 'user' }]);
-    const next = applyUpdate(raw, p ?? {});
-    expect(next.v).toBe(2);
-    expect(weekThemePatch(next, choice)).toBeNull();
-  });
-
-  it('neues Dokument; Wochenziele nur für die eigene Woche; lesbar über readWeekDoc', () => {
-    const targets = weekTargets('t02', { day: '2026-09-28' });
-    const doc = weekDocNew({ ...choice, wk: '2026-W40' }, { ...targets, wk: '2026-W40' });
-    expect(doc.v).toBe(1);
-    expect((doc.targets as { wk: string }).wk).toBe('2026-W40');
-    const week = readWeekDoc(doc);
-    expect(themeFor('2026-09-28', week).stored).toBe(true);
-  });
-
-  it('höchstens 26 bekannte Wochen im Verlauf', () => {
-    const hist = Array.from({ length: 26 }, (_, k) => ({ wk: `2026-W${String(k + 1).padStart(2, '0')}`, theme: 't01', by: 'auto' }));
-    const raw = { v: 1, cur: { wk: '2026-W39', theme: 't03', by: 'auto', at: 1 }, hist: [{ odd: true }, ...hist] };
-    const p = weekThemePatch(raw, choice);
-    const h = p?.hist as Array<Record<string, unknown>>;
-    expect(h.filter((x) => typeof x.wk === 'string').length).toBe(26);
-    expect(h[0]).toEqual({ odd: true });
-    expect(h.at(-1)?.wk).toBe('2026-W39');
-  });
-});
-
 describe('UnitCtx.phrases (M8)', () => {
-  const targets = weekTargets('t01', { day: MON });
+  const targets = { ...EMPTY_TARGETS, phrases: ['pain point', 'touch base', 'follow up', 'loop in', 'circle back', 'bandwidth'] };
   it('Karten aus Lesen/Hören von heute zuerst, sonst die 5 Wendungen der Woche', () => {
     expect(unitPhrases([], MON, targets)).toEqual(targets.phrases.slice(0, 5));
     const cards = [

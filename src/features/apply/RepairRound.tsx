@@ -3,7 +3,7 @@ import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useLive } from '../../data/live';
 import { repairsDoneToday } from '../../domain/repair/daily';
-import { dueRepairs, readRepairs, type RepairItem as Repair } from '../../domain/repair/repair';
+import { dueFehlersaetze, type Fehlersatz } from '../../domain/repair/fehlersaetze';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
 import { SessionEnd } from '../../ui/SessionEnd';
@@ -18,17 +18,20 @@ import { RepairItem } from '../repair/RepairItem';
 // Karten und keinen Rückstand). Was heute schon geübt wurde, kommt nicht noch einmal.
 
 export const REPAIR_ROUND_MAX = 5;
+const NO_DOCS = new Map<string, Readonly<Record<string, unknown>>>();
 
 /** Fällige Reparatur-Sätze, die heute noch nicht geübt wurden (rein aus den Live-Daten). */
-export function useOpenRepairs(): Repair[] {
+export function useOpenRepairs(): Fehlersatz[] {
+  const grammarDocs = useLive((s) => s.collections.grammar);
+  const today = useClock((s) => s.today);
   const repairDoc = useLive((s) => s.docs['app/repair']);
   const dayDoc = useLive((s) => s.day?.doc);
   const now = useClock((s) => s.now);
   return useMemo(() => {
     const entries = Array.isArray(dayDoc?.entries) ? (dayDoc.entries as Array<{ type?: unknown; id?: unknown }>) : [];
     const done = repairsDoneToday(entries);
-    return dueRepairs(readRepairs(repairDoc ?? undefined), now).filter((e) => !done.has(e.id));
-  }, [repairDoc, dayDoc, now]);
+    return dueFehlersaetze({ grammarDocs: grammarDocs ?? NO_DOCS, repairDoc, nowMs: now, today }).filter((e) => !done.has(e.id));
+  }, [grammarDocs, repairDoc, dayDoc, now, today]);
 }
 
 export function RepairRoundScreen() {

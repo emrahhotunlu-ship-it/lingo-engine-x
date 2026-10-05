@@ -1,5 +1,5 @@
 import type { DutyId, DutyState, StoredPlan } from '../plan/types';
-import type { UnitBlockKind } from '../week/types';
+import type { UnitBlockKind } from './types';
 
 // Blockliste der Tageskarte (plan.md §1.3): EINE Ableitung aus Plan und Tagesstand (`deriveToday`).
 // Ring, Zähler, Häkchen, Abzeichen und Knopf lesen dieselben Zeilen (Kap. 2.2).

@@ -14,7 +14,7 @@ export function readUnitMeta(v: unknown): UnitMeta | null {
   if (!o || o.v !== 1 || !Array.isArray(o.b)) return null;
   const goalMin = num(o.goalMin);
   const min = num(o.min);
-  if (goalMin === null || min === null || typeof o.shape !== 'string' || typeof o.theme !== 'string') return null;
+  if (goalMin === null || min === null || typeof o.shape !== 'string') return null;
   const b: UnitMetaBlock[] = [];
   for (const x of o.b) {
     if (!Array.isArray(x) || x.length < 3) return null;
@@ -22,7 +22,7 @@ export function readUnitMeta(v: unknown): UnitMeta | null {
     if (typeof n !== 'number' || !BLOCKS.has(n) || typeof kind !== 'string' || num(m) === null) return null;
     b.push([n as UnitMetaBlock[0], kind, m as number]);
   }
-  const out: UnitMeta = { v: 1, shape: o.shape, goalMin, theme: o.theme, min, b };
+  const out: UnitMeta = { v: 1, shape: o.shape, goalMin, theme: typeof o.theme === 'string' ? o.theme : '', min, b };
   if (Array.isArray(o.pp)) {
     const pp = o.pp.filter((d): d is string => typeof d === 'string' && DAY_RE.test(d)).slice(0, 8);
     if (pp.length) out.pp = pp;

@@ -4,7 +4,7 @@ import { useFocus } from '../../src/features/grammar/focus/session';
 import { useAgain } from '../../src/features/repair/again/session';
 import { useDrill } from '../../src/features/drills/session';
 import { useGrammarSession } from '../../src/features/grammar/session';
-import { EMPTY_TARGETS } from '../../src/domain/week';
+import { EMPTY_TARGETS } from '../../src/domain/unit/types';
 import type { UnitBlockProvider } from '../../src/app/unit/types';
 
 // Anbieter der Blöcke focus/again (plan.md §4.10), Grammatik `grammar` (Block 2) und Satzbau `task.order` (Block 3, beide seit 04.10.2026):

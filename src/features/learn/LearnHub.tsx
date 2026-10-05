@@ -5,10 +5,9 @@ import { useNav } from '../../app/nav';
 import { openSheet } from '../../app/sheets';
 import { entriesFor } from '../../app/registry';
 import { useLive } from '../../data/live';
-import { dueErrors } from '../../domain/grammar/errors';
+import { dueFehlersaetze } from '../../domain/repair/fehlersaetze';
 import { introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
 import { rankTopics } from '../../domain/grammar/tasks';
-import { dueRepairs, readRepairs } from '../../domain/repair/repair';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
 import { Button } from '../../ui/Button';
@@ -95,9 +94,7 @@ export function LearnHub() {
     const id = ranked[0]?.topic ?? pathTopics()[0];
     return id ? { id, fresh: isNewTopic(docs.get(id)) } : null;
   }, [docs, now, today]);
-  const nGrammar = useMemo(() => dueErrors(docs, now).length, [docs, now]);
-  const nRepair = useMemo(() => dueRepairs(readRepairs(repairDoc ?? undefined), now).length, [repairDoc, now]);
-  const nDue = nGrammar + nRepair;
+  const nDue = useMemo(() => dueFehlersaetze({ grammarDocs: docs, repairDoc, nowMs: now, today }).length, [docs, repairDoc, now, today]);
 
   const startNext = () => {
     if (!next) return;
@@ -108,11 +105,7 @@ export function LearnHub() {
   };
 
   const startErrors = () => {
-    if (nGrammar > 0) {
-      const first = startGrammar({ mode: 'errors' });
-      if (first === 'typed') api.focusNow();
-      go({ name: 'grammarSession', mode: 'errors' });
-    } else go({ name: 'repairRound' });
+    go({ name: 'repairRound' });
   };
 
   return (
@@ -163,6 +156,9 @@ export function LearnHub() {
               </span>
             </li>
           )}
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="search" /></ChannelIcon>} title={t('nbLernenLookupRow')} sub={t('nbLernenLookupSub')} onClick={() => go({ name: 'grammar' })} testId="hub-lookup" />
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="target" /></ChannelIcon>} title={t('nbLernenTrapsRow')} sub={t('nbLernenTrapsSub')} onClick={() => go({ name: 'patterns' })} testId="hub-traps" />
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="book" /></ChannelIcon>} title={t('nbLernenWissenRow')} sub={t('nbLernenWissenSub')} onClick={() => go({ name: 'wissen' })} testId="hub-wissen" />
           <Row icon={<ChannelIcon channel="grammar"><Icon name="layers" /></ChannelIcon>} title={t('nbLernenExtra')} sub={t('nbLernenExtraSub')} onClick={() => openSheet('x:extra')} testId="hub-extra" />
         </ul>
       </motion.div>

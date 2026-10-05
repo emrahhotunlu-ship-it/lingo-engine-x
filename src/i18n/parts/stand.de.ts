@@ -21,7 +21,7 @@ export const standDe = {
   ckTooFew: 'Für ein Ergebnis braucht es mindestens 6 Antworten. Deine Antworten sind trotzdem gespeichert.',
   ckSaveFailed: 'Das Ergebnis konnte nicht gespeichert werden. Deine Antworten sind gespeichert.',
   ckNote: 'Der nächste Check ist ab Montag möglich.',
-  ckBack: 'Zu „Dein Stand"',
+  ckBack: 'Zu „Fortschritt“',
   ckEmpty: 'Für einen Check fehlen noch geübte Wörter oder Themen.',
   ckLastOnly: 'Letzter Check: {pct} % am {date}',
   ckLast: 'Letzter Check: {pct} % am {date} · davor {prev} %',

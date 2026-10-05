@@ -6,7 +6,7 @@ import { NOTE_WEIGHT, noteWeight } from '../../src/domain/srs/weight';
 import { LEECH_AT, LEECH_MAX, capLeeches } from '../../src/domain/srs/queue';
 import type { TrainCard } from '../../src/domain/srs/types';
 import { CATCHUP_AT, catchUpOn } from '../../src/domain/unit/backlog';
-import { THEME_CAP_FROM, themeFirst } from '../../src/domain/week/review';
+import { THEME_CAP_FROM, themeFirst } from '../../src/domain/unit/block1';
 import { berlin } from './helpers';
 
 // Lernregeln aus dem Methodenplan der Lernwissenschaft (02.10.2026): Gewichtung der Note, Aufholmodus, billigere Wartung,

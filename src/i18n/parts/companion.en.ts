@@ -11,7 +11,7 @@ export const companionEn: Record<CompanionMessageKey, string> = {
   cmpTabTranslate: 'Translate',
   cmpSeeing: 'currently seeing: {label}',
   cmpSeeToday: 'Today',
-  cmpSeeOverview: 'Your progress',
+  cmpSeeOverview: 'Progress',
   cmpSeeTrainer: 'Exercise',
   cmpAbout: 'About: {word}',
   cmpAttachRemove: 'Remove reference',

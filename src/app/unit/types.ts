@@ -1,4 +1,4 @@
-import type { UnitBlockKind, UnitBlockOpts, UnitEnv, WeekTargets, WeekTheme } from '../../domain/week/types';
+import type { UnitBlockKind, UnitBlockOpts, UnitEnv, WeekTargets, WeekTheme } from '../../domain/unit/types';
 import type { Fix } from '../../ui/feedback/types';
 import type { Route } from '../router/types';
 
@@ -6,8 +6,8 @@ import type { Route } from '../router/types';
 // Einheit sein kann, meldet sich als `UnitBlockProvider` im Register an (`defineArea({ unitBlocks })`).
 // P1 setzt die Kette zusammen und zählt den Abschluss (`unitDone`).
 
-// Die Wochen-Typen kommen aus der Domäne (P7a, `src/domain/week/types.ts`), nie doppelt.
-export type { UnitBlockKind, UnitEnv, UnitPlan, WeekTargets, WeekTheme } from '../../domain/week/types';
+// Die Typen der Einheit kommen aus der Domäne (`src/domain/unit/types.ts`), nie doppelt.
+export type { UnitBlockKind, UnitEnv, UnitPlan, WeekTargets, WeekTheme } from '../../domain/unit/types';
 
 export type UnitBlockNo = 1 | 2 | 3 | 4 | 5;
 
@@ -44,7 +44,7 @@ export type UnitCtx = {
 
 export type UnitBlockProvider = {
   kind: UnitBlockKind;
-  /** Rückfälle entscheidet P1 beim Blockstart mit `resolveBlock(block, env)` (domain/week, M5). */
+  /** Rückfälle entscheidet P1 beim Blockstart mit `resolveBlock(block, env)` (domain/unit, M5). */
   feasible(env: UnitEnv): boolean;
   /** SYNCHRON im Klick (iPhone-Tastatur): Sitzung bauen und Ziel liefern; `false` = nicht startbar. */
   start(ctx: UnitCtx): Route | false;

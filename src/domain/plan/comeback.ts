@@ -1,5 +1,5 @@
 import { daysBetween } from '../date';
-import type { ComebackMode } from '../week/types';
+import type { ComebackMode } from '../unit/types';
 
 // Wiedereinstieg (Gesamtkonzept 3.2): Wie viele volle Lerntage lag zwischen dem letzten aktiven Tag und heute?
 // Rein und getestet. Gezählt wird nur Vergangenes (heute selbst nie); Pflicht-Tage (`pflicht`), Tage mit Antworten

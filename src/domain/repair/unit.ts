@@ -6,7 +6,8 @@ import { hash32 } from '../random';
 import type { Lang } from '../srs/types';
 import { matchTraps } from '../patterns/traps';
 import { checkRepairLocal } from './check';
-import { dueRepairs, readRepairs, repairNorm, type NewRepair, type RepairItem, type RepairSrc } from './repair';
+import { dueFehlersaetze, type Fehlersatz } from './fehlersaetze';
+import { readRepairs, repairNorm, type NewRepair, type RepairItem, type RepairSrc } from './repair';
 
 // Tageseinheit, Blöcke 4 „Fokus“ und 5 „Nochmal, aber besser“ (plan.md §1.5, N41/N42;
 // Prüfung Tageseinheit M4b/c, M6, M9, S4). Rein und getestet: Die Bildschirme bekommen hier
@@ -233,21 +234,22 @@ export type AgainSource = {
   betterFrom: 'task' | 'trap' | null;
   fixes: FixLike[];
   /** Ohne Aufgabe von heute (Handy-Tag): die fälligen Reparatur-Sätze von früher, `fixes` sind genau diese. */
-  olds?: Array<{ id: string; wrong: string; right: string }>;
+  olds?: Array<Pick<Fehlersatz, 'id' | 'wrong' | 'right' | 'store' | 'topic' | 'errorT'>>;
 };
 
 /** Reparatur-Sätze von früher in Block 5, wenn heute keine Aufgabe vorliegt. */
 export const AGAIN_OLD = 3;
 
-export function againSource(i: Pick<FocusInput, 'task' | 'repairDoc' | 'day' | 'traps'> & { now?: number }): AgainSource {
+export function againSource(i: Pick<FocusInput, 'task' | 'repairDoc' | 'day' | 'traps'> & { now?: number; grammarDocs?: ReadonlyMap<string, Readonly<Record<string, unknown>>> }): AgainSource {
   const traps = i.traps ?? TRAPS;
   const today = todaysRepairs(i.repairDoc, i.day);
   // Ohne Aufgabe (seit 04.10.2026 der Normalfall, Lernwissenschaft B2): immer die ältesten fälligen Sätze. Sätze von heute
   // werden nicht am selben Tag wiederholt (verteilt statt massiert) – sie kommen laut Box-Plan frühestens morgen.
-  const old = !i.task && i.now !== undefined ? dueRepairs(readRepairs(i.repairDoc ?? undefined), i.now).slice(0, AGAIN_OLD) : [];
+  const old =
+    !i.task && i.now !== undefined ? dueFehlersaetze({ grammarDocs: i.grammarDocs ?? new Map(), repairDoc: i.repairDoc ?? null, nowMs: i.now, today: i.day, limit: AGAIN_OLD }) : [];
   if (old.length) {
     const fixes = old.map((r): FixLike => ({ kind: 'form', mine: r.wrong, right: r.right, why: r.why ?? '' }));
-    return { before: old.map((r) => r.wrong).join(' '), better: old.map((r) => r.right).join(' '), betterFrom: 'task', fixes, olds: old.map((r) => ({ id: r.id, wrong: r.wrong, right: r.right })) };
+    return { before: old.map((r) => r.wrong).join(' '), better: old.map((r) => r.right).join(' '), betterFrom: 'task', fixes, olds: old.map(({ id, wrong, right, store, topic, errorT }) => ({ id, wrong, right, store, ...(topic ? { topic } : {}), ...(errorT !== undefined ? { errorT } : {}) })) };
   }
   if (!i.task && i.now !== undefined) return { before: '', better: null, betterFrom: null, fixes: [] };
   const fixes = corrections(i);

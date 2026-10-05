@@ -14,7 +14,7 @@ export const nbSprechenEn: Record<keyof typeof nbSprechenDe, string> = {
   nbSprechenCriteriaWait: 'Claude is checking the criteria …',
   nbSprechenCriteriaFailed: 'The criteria could not be checked.',
   nbSprechenResumeRoleplay: 'Role play',
-  nbSprechenUnitDone: 'Continue the daily session',
+  nbSprechenUnitDone: 'Continue with Today',
   nbSprechenTurnLeft: '{s} s left for your turn',
   nbSprechenTurnUp: 'Time\'s up – say it anyway',
   nbSprechenTurnTimerOff: 'Turn timer off',

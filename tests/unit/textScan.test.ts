@@ -36,3 +36,18 @@ describe('Textscan DE und EN', () => {
     expect(hits).toEqual([]);
   });
 });
+
+// Ein Wort pro Ding (Gesamtkonzept 3.6, Glossar `05` §3.6): Altwörter, die nicht mehr in Texten stehen dürfen.
+const OLD_DE = /Reparatur|[Rr]ückstand|der Rest morgen|[Gg]efestigt|Aktiv fest|[Ff]reie (Runde|Grammatikrunde)|Tageseinheit|Block \{?\d|Hilfe:|Dein Stand|Lohnt sich|Mehr üben/;
+const OLD_EN = /[Rr]epair sentence|[Bb]acklog|[Ff]ree (grammar |vocabulary )?rounds?|[Dd]aily (session|unit)|[Bb]lock (\d|\{)|Hint: \{meaning\}|Your standing|Where you stand|Worth doing now|Practice more|[Mm]astered|Consolidated|Active and solid/;
+
+describe('Ein Wort pro Ding (Glossar 3.6)', () => {
+  it('keine Altwörter in den deutschen Texten', () => {
+    const hits = Object.entries(de).filter(([, v]) => OLD_DE.test(v)).map(([k, v]) => `${k}: ${v}`);
+    expect(hits).toEqual([]);
+  });
+  it('keine Altwörter in den englischen Texten', () => {
+    const hits = Object.entries(en).filter(([, v]) => OLD_EN.test(v)).map(([k, v]) => `${k}: ${v}`);
+    expect(hits).toEqual([]);
+  });
+});

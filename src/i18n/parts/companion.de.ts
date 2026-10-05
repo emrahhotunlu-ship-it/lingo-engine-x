@@ -10,7 +10,7 @@ export const companionDe = {
   cmpTabTranslate: 'Übersetzen',
   cmpSeeing: 'sieht gerade: {label}',
   cmpSeeToday: 'Heute',
-  cmpSeeOverview: 'Dein Stand',
+  cmpSeeOverview: 'Fortschritt',
   cmpSeeTrainer: 'Übung',
   cmpAbout: 'Zu: {word}',
   cmpAttachRemove: 'Bezug entfernen',

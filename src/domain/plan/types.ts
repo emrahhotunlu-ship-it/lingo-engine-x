@@ -33,6 +33,7 @@ export type UnitMeta = {
   v: 1;
   shape: string;
   goalMin: number;
+  /** Rest des früheren Wochenthemas: wird nicht mehr belegt (neue Pläne schreiben ''; ältere Pläne behalten ihr Thema, gelesen wird tolerant). Das Feld bleibt für das Rückwärtslesen älterer App-Versionen. */
   theme: string;
   min: number;
   b: UnitMetaBlock[];

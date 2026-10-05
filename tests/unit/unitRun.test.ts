@@ -2,7 +2,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import type { AreaDef } from '../../src/app/registry';
 import { createWriter, type Writer } from '../../src/data/writer';
 import type { StoredPlan } from '../../src/domain/plan/types';
-import type * as PlanModule from '../../src/domain/week/plan';
+import type * as PlanModule from '../../src/domain/unit/planFor';
 import { createMemoryDb, type MemoryDbHandle } from '../../src/platform/dev/memoryDb';
 import { berlin } from './helpers';
 
@@ -38,7 +38,7 @@ vi.mock('../../src/data', () => ({ getWriter: () => holder.writer }));
 // Seit 04.10.2026 plant `unitPlanFor` nur noch Wortschatz · Grammatik · Satzbau · Fehler korrigieren.
 // Die Ablauf-Logik für ältere Pläne (Sprechaufgabe in Block 3, Block 2 = Input → Nachsprechen) gibt es
 // weiter; damit sie geprüft bleibt, liefert der Planer hier auf Wunsch den früheren Montagsplan.
-vi.mock('../../src/domain/week/plan', async (importOriginal) => {
+vi.mock('../../src/domain/unit/planFor', async (importOriginal) => {
   const real = await importOriginal<typeof PlanModule>();
   type Plan = ReturnType<typeof real.unitPlanFor>;
   type Block = Plan['blocks'][number];

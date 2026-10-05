@@ -10,7 +10,7 @@ export const nbTrainingDe = {
   nbTrainingObjection: 'Einwand-Training',
   nbTrainingObjectionSub: '5 Einwände · Schritt für Schritt in 5 Stufen',
   // Gemeinsam
-  nbTrainingUnitNote: 'Tageseinheit · Block {n}',
+  nbTrainingUnitNote: 'Heute · Schritt {n}',
   nbTrainingCheck: 'Prüfen',
   nbTrainingNext: 'Weiter',
   nbTrainingDontKnow: 'Weiß ich nicht',

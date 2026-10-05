@@ -26,7 +26,7 @@ import {
   wordFormation,
 } from '../../src/content/nb/load';
 import ipaJson from '../../src/content/pron/us-ipa.json';
-import { normText, phraseCore } from '../../src/domain/week';
+import { normText, phraseCore } from '../../src/domain/text/normText';
 
 // Inhalte von `content/nb` gegen ihre Schemas (Plan §4.8): Anzahl, keine leeren Felder, IDs eindeutig,
 // US-Schreibweise (Stichproben), Verweise gültig.

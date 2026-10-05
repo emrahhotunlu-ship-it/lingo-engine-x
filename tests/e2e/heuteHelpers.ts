@@ -8,6 +8,13 @@ type Doc = Record<string, unknown>;
 type Docs = Record<string, Doc>;
 const SEED = JSON.parse(readFileSync(new URL('../../seed/sample-data.json', import.meta.url), 'utf8')) as Record<string, Doc>;
 
+/** Patch: alle Grammatik-Fehlersätze des Seeds entfernen (die Dokumente bleiben, nur `errors` wird leer) – für Tests, die nur `app/repair` prüfen. */
+export const NO_GRAMMAR_ERRORS: Record<string, Doc> = Object.fromEntries(
+  Object.entries(SEED)
+    .filter(([k, d]) => k.startsWith('grammar/') && Array.isArray(d.errors) && d.errors.length > 0)
+    .map(([k, d]) => [k, { ...d, errors: [] }]),
+);
+
 /** Montag nach dem Stichtag der Testdaten (Kalenderwoche 2026-W39), 09:00 in Berlin. */
 export const MON = '2026-09-21';
 export const MON_9 = '2026-09-21T09:00:00+02:00';

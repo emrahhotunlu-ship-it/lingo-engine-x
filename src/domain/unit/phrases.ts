@@ -1,4 +1,4 @@
-import type { WeekTargets } from '../week/types';
+import type { WeekTargets } from './types';
 
 // `UnitCtx.phrases` (Prüfbefund M8): Die Wendungen, die Block 3 benutzen soll. Geräteübergreifend
 // aus den Daten: Karten mit Herkunft Lesen/Hören von heute, sonst die 5 Wendungen der Woche.

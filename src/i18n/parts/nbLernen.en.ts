@@ -80,5 +80,11 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenFixNone: 'Fix mistakes · nothing due',
   nbLernenFixNoneSub: 'New correction sentences start tomorrow.',
   nbLernenExtra: 'Extra',
-  nbLernenExtraSub: 'Free rounds and more, whenever you like',
+  nbLernenExtraSub: 'Extra rounds and more, whenever you like',
+  nbLernenLookupRow: 'Find a rule',
+  nbLernenLookupSub: 'Look up a rule with examples and your mistakes',
+  nbLernenTrapsRow: 'German traps',
+  nbLernenTrapsSub: 'Mistakes German speakers keep making',
+  nbLernenWissenRow: 'Look it up',
+  nbLernenWissenSub: 'Typical German → English traps at a glance',
 };

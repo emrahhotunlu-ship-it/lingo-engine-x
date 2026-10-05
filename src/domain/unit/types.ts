@@ -1,9 +1,9 @@
-import type { TargetKind, ThemeGoal, ThemeId, WeekTheme } from '../../content/nb/themes';
+import type { ThemeGoal, WeekTheme } from '../../content/nb/themes';
 
 // Typen der Tageseinheit und des Wochenplans (Plan §1.5, §4.10, Prüfung Tageseinheit M1–M10, S1–S5).
 // Rein, ohne React und ohne Datenbank. `UnitBlockKind` entspricht wörtlich dem Vertrag in Plan §4.10.
 
-export type { TargetKind, ThemeGoal, ThemeId, WeekTheme };
+export type { ThemeGoal, WeekTheme };
 
 export type UnitBlockKind =
   | 'review'
@@ -86,10 +86,6 @@ export type UnitPlan = {
   wk: string;
   /** 1 = Montag … 7 = Sonntag */
   dow: number;
-  theme: ThemeId;
-  themeBy: 'auto' | 'user';
-  /** Bestätigungskarte vor Block 1 (erster Lerntag der Woche ohne gespeichertes Thema, M10). */
-  confirmTheme: boolean;
   shape: UnitShape;
   short: boolean;
   goalMin: number;
@@ -115,33 +111,19 @@ export type UnitPrefs = {
   reviewCount?: number;
   /** Geplante Minuten von Block 1 bei Rückstand (nie unter dem Grundwert, höchstens `REVIEW_MIN_MAX`). */
   reviewMin?: number;
-  /** Vorrang beim Themenvorschlag (N17). */
-  themeHint?: ThemeHint;
   /** Fehlersätze, die heute fällig sind (nicht vom Anlegetag); 0 → der Schritt „Fehler korrigieren“ entfällt. Fehlt der Wert, bleibt der Schritt (ältere Pläne). */
   fixDue?: number;
   /** Wiedereinstieg: kleinerer Plan nach einer längeren Pause. */
   comeback?: ComebackMode;
 };
 
-export type ThemeHint = { meeting?: ThemeId | null };
-
-/** Dokument `app/week` (Plan §4.10). */
-export type WeekCur = { wk: string; theme: ThemeId; by: 'auto' | 'user'; at?: number };
-export type WeekHist = { wk: string; theme: ThemeId; by: 'auto' | 'user' };
-export type WeekStoredTargets = { wk: string; traps: string[]; tool: string };
-/** Vorrang-Hinweis (N17): Thema eines Termins in Kalenderwoche `wk`. */
-export type WeekHint = { wk: string; theme: ThemeId; src: 'meeting' };
-export type WeekDoc = {
-  v: 1;
-  cur?: WeekCur;
-  hist?: WeekHist[];
-  targets?: WeekStoredTargets;
-  hint?: WeekHint;
-};
-
+/**
+ * Wochenziele (Rest aus dem früheren Wochenthema): seit dem Fokus-Umbau immer leer (`EMPTY_TARGETS`). Der Typ bleibt, weil
+ * Block-Kontext, Fokus-Runde und Einwand-Training ihn noch durchreichen; neue Pläne schreiben nichts davon.
+ */
 export type WeekTargets = {
   wk: string | null;
-  theme: ThemeId | null;
+  theme: string | null;
   /** ≤ 3 Fallen: eigene Muster-IDs zuerst, dann Startsatz (`f01`…). */
   traps: string[];
   /** Werkzeug der Woche (Grammatik-ID). */
@@ -150,3 +132,5 @@ export type WeekTargets = {
   /** Die 5 Wendungen der Woche (Englisch). */
   phrases: string[];
 };
+
+export const EMPTY_TARGETS: WeekTargets = { wk: null, theme: null, traps: [], tool: null, goals: [], phrases: [] };
