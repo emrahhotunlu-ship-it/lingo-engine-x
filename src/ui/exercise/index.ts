@@ -1,0 +1,16 @@
+export { Comparison } from './Comparison';
+export { Examples } from './Examples';
+export { ExerciseMenu } from './ExerciseMenu';
+export { ExerciseShell, deriveShellState } from './ExerciseShell';
+export type { ExerciseArea, ExerciseShellProps, ShellAction, ShellFeedback, ShellMenuId, ShellSecondary, ShellState, ShellStatus } from './ExerciseShell';
+export { ExerciseStatus, STATE_DOTS } from './ExerciseStatus';
+export { Explanation } from './Explanation';
+export { HintLine } from './HintLine';
+export { MarkedSentence, markSpans } from './MarkedSentence';
+export { PatternCard } from './PatternCard';
+export { SentenceInput } from './SentenceInput';
+export type { SentenceInputProps } from './SentenceInput';
+export { Verdict } from './Verdict';
+export { AUTO_NEXT_MS, shouldAutoAdvance } from './autoAdvance';
+export { explainDepth, visibleLines, visibleWordCount } from './explainDepth';
+export { useAutoAdvance } from './useAutoAdvance';

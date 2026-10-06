@@ -79,4 +79,7 @@ export const exDe = {
   exInputTouch: 'Touch',
   exInputKeys: 'Tastatur',
   exInputHint: 'Wirkt nur auf die Form der Aufgaben (antippen oder tippen), nie auf deinen Tagesplan.',
+  // --- Teilpaket A (ui/exercise)
+  exSecondaryLabel: 'Weitere Möglichkeiten',
+  exSideLabel: 'Regel und Erklärung',
 } as const;

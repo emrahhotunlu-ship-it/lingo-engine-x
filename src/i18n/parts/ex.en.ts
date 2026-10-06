@@ -70,4 +70,7 @@ export const exEn = {
   exInputTouch: 'Touch',
   exInputKeys: 'Keyboard',
   exInputHint: 'Only changes the form of the tasks (tap or type), never your daily plan.',
+  // --- Teilpaket A (ui/exercise)
+  exSecondaryLabel: 'More options',
+  exSideLabel: 'Rule and explanation',
 } as const;
