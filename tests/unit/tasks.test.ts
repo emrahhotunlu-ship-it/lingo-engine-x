@@ -121,9 +121,10 @@ describe('selectRound', () => {
   });
 
   it('Formen nach Beherrschung', () => {
-    expect(wantTypes(0.2)).toEqual(['mc', 'gap']);
-    expect(wantTypes(0.5)).toEqual(['gap', 'transform']);
-    expect(wantTypes(0.9)).toEqual(['correct', 'transform']);
+    expect(wantTypes(0.2)).toEqual(['meaning', 'mc', 'gap']);
+    expect(wantTypes(0.5)).toEqual(['gap', 'find', 'kwt']);
+    expect(wantTypes(0.9)).toEqual(['correct', 'kwt', 'find']);
+    expect(wantTypes(0.9, 'touch')).toEqual(['kwt', 'find']);
   });
 
   it('rankTopics: schwaches und fälliges Thema zuerst', () => {

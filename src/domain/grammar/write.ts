@@ -1,6 +1,10 @@
 import { validateDoc } from '../../data/validate';
 import { defaultTopic, topicById } from '../content';
 import type { GrammarAnswer } from '../learn/types';
+import { patPush, patsOf, type PatEntry } from '../metrics/pattern';
+import { guessOptions } from './check';
+import { introDay } from './path';
+import { patternsOf } from './patterns';
 import { bktStep, displayP, nextDue, p0Of } from './bkt';
 import type { NewRepair } from '../repair/repair';
 import { addError, errorSentences, errorsOf, gapFill, hasOpenError, reviewError } from './errors';
@@ -46,7 +50,7 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
     day: a.day,
     ok,
     type: a.task.type,
-    nOptions: a.task.options?.length ?? null,
+    nOptions: guessOptions(a.task),
     helpLevel: a.help.level,
   });
   const patch: Doc = {
@@ -70,24 +74,64 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
   patch.seen = [...arr(cur.seen), a.task.key].slice(-SEEN_MAX);
   patch.seenText = [...arr(cur.seenText), a.task.prompt].slice(-SEEN_TEXT_MAX);
 
+  const pats = patsPatch(cur, a, ok);
+  if (pats) patch.pats = pats;
+  if (a.vt) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 2) };
+  if (a.vt?.ok && a.vt.pats.length) {
+    // Bestandener Vortest (§4.7): p = max(p, 0,6), aber nur, wenn damit alle Muster des Themas getestet sind.
+    const all = patternsOf(topic)?.patterns.map((p) => p.id) ?? [];
+    if (all.length && all.every((id) => a.vt?.pats.includes(id))) patch.p = Math.max(num(patch.p, 0), 0.6);
+  }
+
   const errors = errorsOf(cur);
   let overflow: NewRepair | undefined;
-  if (a.task.errorT !== null) {
+  if (a.task.type === 'meaning' || (a.task.type === 'find' && a.task.x?.kind === 'find' && a.task.x.err === null)) {
+    // Ein Bedeutungspaar und ein fehlerfreier Satz haben keine „falsch → richtig“-Fassung: kein Fehlersatz.
+  } else if (a.task.errorT !== null) {
     const next = reviewError(errors, a.task.errorT, { ok, given: a.dontKnow ? '' : a.given, grade: a.grade, t });
     if (next) patch.errors = next;
   } else if (!ok) {
     // Jede falsche Antwort und auch „Weiß ich nicht“ (`given` leer, die Anzeige sagt dann „Weiß ich nicht“) ergibt genau einen Fehlersatz.
-    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: a.task.answer, t, src: a.task.src, expl: a.task.expl });
+    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: errorAnswer(a.task), t, src: a.task.src, expl: a.task.expl, pat: a.task.pat ?? null });
     if (next !== errors) patch.errors = next;
     else if (!hasOpenError(errors, a.task.prompt)) overflow = overflowRepair(a);
   }
   return { patch, ...(overflow ? { overflow } : {}) };
 }
 
+/** Die richtige Fassung für den Fehlereintrag: bei „Fehler finden“ der ganze richtige Satz, sonst die Lösung. */
+function errorAnswer(t: GrammarAnswer['task']): string {
+  return t.type === 'find' && t.x?.kind === 'find' && t.x.fixed ? t.x.fixed : t.answer;
+}
+
+/**
+ * Musterzähler (`pats`, §8): Antwort buchen (`patPush`), den Einführungstag `i` setzen und für ein schon begonnenes Thema beim ersten Schreiben alle
+ * Muster mit dem Tag des ersten `hist`-Eintrags anlegen (§3.2, Datenregel 9), sonst verschwänden geübte Regeln aus den Runden. Höchstens 12 Einträge.
+ * `null`, wenn die Aufgabe kein Muster hat.
+ */
+function patsPatch(cur: Doc, a: GrammarAnswer, ok: boolean): Record<string, PatEntry> | null {
+  const id = a.task.pat;
+  if (!id) return null;
+  const out: Record<string, PatEntry> = { ...patsOf(cur) };
+  if (!Object.keys(out).length && num(cur.n, 0) > 0) {
+    const day = introDay(cur) ?? a.day;
+    for (const p of patternsOf(a.task.topic)?.patterns ?? []) out[p.id] = { n: 0, c: 0, h: 0, r: 0, k: 0, dd: [], i: day };
+  }
+  const prev = out[id];
+  const next = patPush(prev, { ok, help: a.help.level > 0 || a.firstWrong !== undefined, day: a.day, t: a.t });
+  next.i ??= a.day;
+  out[id] = next;
+  const keys = Object.keys(out);
+  if (keys.length > 12) for (const k of keys.sort((x, y) => (out[x]?.last ?? 0) - (out[y]?.last ?? 0))) if (Object.keys(out).length > 12 && k !== id) delete out[k];
+  if (a.vt?.ok) for (const pid of a.vt.pats) if (out[pid]) out[pid] = { ...out[pid], i: out[pid]?.i ?? a.day };
+  return out;
+}
+
 /** Der Fehler als Reparatur-Satz („falsch → richtig“ mit Erklärung), wenn das Thema voll ist. */
 function overflowRepair(a: GrammarAnswer): NewRepair | undefined {
   const q = a.task.prompt.trim();
-  const fill = q.includes('___') ? gapFill(q, a.task.answer) : a.task.answer;
+  const ans = errorAnswer(a.task);
+  const fill = q.includes('___') ? gapFill(q, ans) : ans;
   if (!q || !fill) return undefined;
   const { wrong, right } = errorSentences(q, a.dontKnow ? '' : (a.firstWrong ?? a.given), fill);
   const why = a.lang === 'de' ? (a.task.expl.de ?? a.task.expl.en) : (a.task.expl.en ?? a.task.expl.de);

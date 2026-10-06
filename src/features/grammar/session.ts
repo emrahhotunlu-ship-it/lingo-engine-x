@@ -5,7 +5,7 @@ import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
 import { useLive } from '../../data/live';
 import { isNewTopic, introTopic, stepDownTasks } from '../../domain/grammar/path';
-import { gramRoundPartial, planFocusTopic, ROUND_SIZE, seedTasks, selectRound, wholeSentence, type RoundMode } from '../../domain/grammar/tasks';
+import { gramRoundPartial, planFocusTopic, ROUND_SIZE, allSeedTasks, selectRound, wholeSentence, type RoundMode } from '../../domain/grammar/tasks';
 import { DUTY_ROUND } from '../../domain/plan/channels';
 import type { Ctx, GrammarAnswer, GrammarTask } from '../../domain/learn/types';
 import type { Lang } from '../../domain/srs/types';
@@ -193,7 +193,7 @@ export function commitGrammar(a: GrammarAnswer): 'typed' | 'choice' | null {
     const nextTopic = tasks[pos]?.topic;
     const seen = new Set<string>(nextTopic && Array.isArray(live.collections.grammar?.get(nextTopic)?.seen) ? (live.collections.grammar?.get(nextTopic)?.seen as unknown[]).map(String) : []);
     const inputs = useLearnInputs.getState();
-    next.tasks = stepDownTasks(tasks, pos, results, [...inputs.dailyOpen, ...inputs.pool, ...seedTasks()], seen);
+    next.tasks = stepDownTasks(tasks, pos, results, [...inputs.dailyOpen, ...inputs.pool, ...allSeedTasks()], seen);
   }
   if (done) finish(next, false);
   useGrammarSession.setState(next);

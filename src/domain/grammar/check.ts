@@ -150,3 +150,53 @@ export function closeVariant(task: Pick<GrammarTask, 'answer' | 'accepted'>, giv
     return hit / Math.max(w.length, g.length) >= 0.75;
   });
 }
+
+// ------------------------------------------------------------------ Neue Aufgabenarten (Lernplattform 2.0 §4.7)
+
+/** Zahl der Wahlmöglichkeiten für die Rate-Wahrscheinlichkeit (`guessOf`): meaning a/b/beide = 3, find = Wortzahl, sonst die Optionen. */
+export function guessOptions(task: Pick<GrammarTask, 'type' | 'prompt' | 'options'>): number | null {
+  if (task.type === 'meaning') return 3;
+  if (task.type === 'find') return Math.max(1, splitWords(task.prompt).length);
+  return task.options?.length ?? null;
+}
+
+/**
+ * Umschreibung mit Schlüsselwort: Das Schlüsselwort muss unverändert und ausgeschrieben dastehen (sonst „falsch“, Art `key`),
+ * sonst gilt dieselbe Prüfung wie bei einer Lücke (`answer`/`accepted`, Kurzformen, US-Form, Tippfehler). Außerhalb der erlaubten
+ * Wortzahl gibt es keinen Treffer (Art `words`). Eine frei formulierte, fast gleiche Lösung darf wie bei Umformungen als „nicht sicher prüfbar“ gelten.
+ */
+export function checkKwt(task: GrammarTask, given: string): GrammarCheck {
+  const x = task.x?.kind === 'kwt' ? task.x : null;
+  const base = checkGrammar({ ...task, type: 'gap' }, given);
+  const raw = given.trim();
+  if (!raw) return base;
+  const w = splitWords(raw);
+  const hasKey = !x || splitWords(legacyNorm(raw)).includes(x.key.toLowerCase());
+  if (!hasKey) return { ...base, verdict: 'wrong', kind: 'key', needsJudge: false };
+  if (base.verdict === 'wrong' && x && (w.length < x.words[0] || w.length > x.words[1])) return { ...base, kind: 'words', needsJudge: false };
+  return base.verdict === 'wrong' ? { ...base, needsJudge: w.length >= 3 } : base;
+}
+
+const overlaps = (a: readonly [number, number], b: readonly [number, number]): boolean => a[0] <= b[1] && a[1] >= b[0];
+
+/**
+ * „Fehler finden“: Schritt 1 (`tapped`) prüft nur die Stelle (Wort oder Bereich antippen, `'none'` = „Kein Fehler“), Schritt 2 (`replacement`)
+ * den Ersatz des Bereichs. `found` sagt, ob die Stelle getroffen ist. Ein fehlerfreier Satz (`err: null`) ist nur mit `'none'` richtig.
+ */
+export function checkFind(task: GrammarTask, step: { tapped: [number, number] | 'none' } | { replacement: string }): GrammarCheck & { found?: boolean } {
+  const x = task.x?.kind === 'find' ? task.x : null;
+  const err = x?.err ?? null;
+  if ('tapped' in step) {
+    const found = step.tapped === 'none' ? err === null : err !== null && overlaps(step.tapped, err);
+    return { verdict: found ? 'correct' : 'wrong', ops: [], needsJudge: false, found };
+  }
+  if (err === null) return { verdict: 'wrong', ops: [], needsJudge: false, found: false };
+  const given = step.replacement.trim();
+  if (!task.answer.trim()) return { verdict: given ? 'wrong' : 'correct', ops: [], needsJudge: false, found: true };
+  return { ...checkGrammar({ ...task, type: 'gap' }, given), needsJudge: false, found: true };
+}
+
+/** Bedeutungspaar: `a`, `b` oder `both`. */
+export function checkMeaning(task: GrammarTask, pick: 'a' | 'b' | 'both'): GrammarCheck {
+  return { verdict: pick === task.answer ? 'correct' : 'wrong', ops: [], needsJudge: false };
+}

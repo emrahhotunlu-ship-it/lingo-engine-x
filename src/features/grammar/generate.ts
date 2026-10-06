@@ -39,7 +39,7 @@ export async function generateTopicTasks(topic: string, signal: AbortSignal): Pr
     .filter((e) => e.q && e.ans);
   const r = await askJson({
     template: grammarItems,
-    vars: { topic, nameEn: tp.name_en ?? tp.name, ruleEn, examples: ruleExamples(topic, 4), p, types: wantTypes(p), seenText, errors, count: 6 },
+    vars: { topic, nameEn: tp.name_en ?? tp.name, ruleEn, examples: ruleExamples(topic, 4), p, types: wantTypes(p).filter((x): x is 'mc' | 'gap' | 'transform' | 'correct' => x === 'mc' || x === 'gap' || x === 'transform' || x === 'correct'), seenText, errors, count: 6 },
     signal,
   });
   const tasks = r.data.items.map((it) => normalizeTask(it, 'ai')).filter((t): t is GrammarTask => !!t);

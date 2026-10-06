@@ -35,13 +35,21 @@ export type GrammarTask = {
   pat?: string | null;
   /** Aufgabengenaue Begründung (Lernplattform 2.0 §3.1). */
   why?: TaskWhy | null;
+  /** Zusatzdaten der neuen Aufgabenarten `kwt`, `find` und `meaning` (Lernplattform 2.0 §3.4); `prompt` trägt dort den Rahmensatz, den Satz bzw. Satz a. */
+  x?: TaskExtra;
 };
+
+/** `kwt`: Ausgangssatz, Schlüsselwort (Großbuchstaben), erlaubte Wortzahl in der Lücke. `find`: Wortbereich des Fehlers (`null` = fehlerfrei) und der ganze richtige Satz. `meaning`: Satz a und b, Frage. */
+export type TaskExtra =
+  | { kind: 'kwt'; from: string; key: string; words: [number, number] }
+  | { kind: 'find'; err: [number, number] | null; fixed: string | null }
+  | { kind: 'meaning'; a: string; b: string; q: { de: string; en: string } };
 
 export type Help = { level: 0 | 1 | 2; replays?: number };
 export type WordOp = { op: 'eq' | 'typo' | 'sub' | 'ins' | 'del'; given?: string; expected?: string };
 export type GrammarCheck = {
   verdict: Verdict;
-  kind?: 'typo' | 'uk' | 'contraction' | 'alt' | 'form';
+  kind?: 'typo' | 'uk' | 'contraction' | 'alt' | 'form' | 'key' | 'words';
   /** US-Form als Hinweis, wenn britisch geantwortet wurde (A7.3). */
   us?: string;
   ops: WordOp[];
@@ -70,6 +78,8 @@ export type GrammarAnswer = {
   firstWrong?: string;
   /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */
   dev?: 't' | 'k';
+  /** Letzte Antwort des Vortests (§5.3): trägt das Ergebnis beider Aufgaben; der Schreibweg legt daraus `vt` im Thema an. */
+  vt?: { ok: boolean; pats: string[] };
 };
 
 /** Quellen: g Grammatik, s Sprint, w Schreiben, v Vokabeln (alte App); k Sprechen, b Business (Phase 3). */
