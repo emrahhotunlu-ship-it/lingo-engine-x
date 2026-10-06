@@ -50,10 +50,24 @@
   --lx-danger-soft: rgba(248, 113, 113, 0.14);
   --lx-gold-soft: rgba(251, 191, 36, 0.14);
   --lx-cyan-soft: rgba(34, 211, 238, 0.12);
-  --lx-focus: #67e8f9;
+  --lx-focus: #e9edf5;
   --lx-track: rgba(255, 255, 255, 0.08);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -20px rgba(0, 0, 0, 0.7);
   --lx-scrim: rgba(3, 6, 12, 0.62);
+  --lx-ok: #10b981;
+  --lx-ok-text: #34d399;
+  --lx-ok-soft: rgba(16, 185, 129, 0.14);
+  --lx-near: var(--lx-gold-text);
+  --lx-near-text: var(--lx-gold-text);
+  --lx-near-soft: var(--lx-gold-soft);
+  --lx-wrong: var(--lx-danger-text);
+  --lx-wrong-text: var(--lx-danger-text);
+  --lx-wrong-soft: var(--lx-danger-soft);
+  --lx-hint: var(--lx-cyan);
+  --lx-hint-text: var(--lx-cyan-text);
+  --lx-hint-soft: var(--lx-cyan-soft);
+  --lx-mark: rgba(34, 211, 238, 0.18);
+  --lx-line-strong: rgba(255, 255, 255, 0.16);
 
   --lx-ch-cards: #a78bfa;
   --lx-ch-grammar: #60a5fa;
@@ -89,10 +103,24 @@
   --lx-danger-soft: rgba(252, 165, 165, 0.14);
   --lx-gold-soft: rgba(252, 211, 77, 0.14);
   --lx-cyan-soft: rgba(126, 233, 247, 0.12);
-  --lx-focus: #7ee9f7;
+  --lx-focus: #e4e8f0;
   --lx-track: rgba(255, 255, 255, 0.1);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -22px rgba(0, 0, 0, 0.55);
   --lx-scrim: rgba(8, 11, 18, 0.55);
+  --lx-ok: #10b981;
+  --lx-ok-text: #4ade9f;
+  --lx-ok-soft: rgba(16, 185, 129, 0.16);
+  --lx-near: var(--lx-gold-text);
+  --lx-near-text: var(--lx-gold-text);
+  --lx-near-soft: var(--lx-gold-soft);
+  --lx-wrong: var(--lx-danger-text);
+  --lx-wrong-text: var(--lx-danger-text);
+  --lx-wrong-soft: var(--lx-danger-soft);
+  --lx-hint: var(--lx-cyan);
+  --lx-hint-text: var(--lx-cyan-text);
+  --lx-hint-soft: var(--lx-cyan-soft);
+  --lx-mark: rgba(126, 233, 247, 0.16);
+  --lx-line-strong: rgba(255, 255, 255, 0.17);
 
   --lx-ch-cards: #b4a0fb;
   --lx-ch-grammar: #7cb5fb;
@@ -128,10 +156,24 @@
   --lx-danger-soft: rgba(185, 28, 28, 0.08);
   --lx-gold-soft: rgba(180, 83, 9, 0.1);
   --lx-cyan-soft: rgba(8, 145, 178, 0.1);
-  --lx-focus: #0e7490;
+  --lx-focus: #0e1320;
   --lx-track: rgba(15, 23, 42, 0.08);
   --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 12px 32px -18px rgba(15, 23, 42, 0.25);
   --lx-scrim: rgba(15, 23, 42, 0.32);
+  --lx-ok: #047857;
+  --lx-ok-text: #047857;
+  --lx-ok-soft: rgba(4, 120, 87, 0.1);
+  --lx-near: var(--lx-gold-text);
+  --lx-near-text: var(--lx-gold-text);
+  --lx-near-soft: var(--lx-gold-soft);
+  --lx-wrong: var(--lx-danger-text);
+  --lx-wrong-text: var(--lx-danger-text);
+  --lx-wrong-soft: var(--lx-danger-soft);
+  --lx-hint: var(--lx-cyan);
+  --lx-hint-text: var(--lx-cyan-text);
+  --lx-hint-soft: var(--lx-cyan-soft);
+  --lx-mark: rgba(8, 145, 178, 0.14);
+  --lx-line-strong: rgba(15, 23, 42, 0.18);
 
   --lx-ch-cards: #7c3aed;
   --lx-ch-grammar: #2563eb;
@@ -233,6 +275,20 @@
   --color-danger-soft: var(--lx-danger-soft);
   --color-gold-soft: var(--lx-gold-soft);
   --color-track: var(--lx-track);
+  --color-ok: var(--lx-ok);
+  --color-ok-text: var(--lx-ok-text);
+  --color-ok-soft: var(--lx-ok-soft);
+  --color-near: var(--lx-near);
+  --color-near-text: var(--lx-near-text);
+  --color-near-soft: var(--lx-near-soft);
+  --color-wrong: var(--lx-wrong);
+  --color-wrong-text: var(--lx-wrong-text);
+  --color-wrong-soft: var(--lx-wrong-soft);
+  --color-hint: var(--lx-hint);
+  --color-hint-text: var(--lx-hint-text);
+  --color-hint-soft: var(--lx-hint-soft);
+  --color-mark: var(--lx-mark);
+  --color-line-strong: var(--lx-line-strong);
   --color-ch-cards: var(--lx-ch-cards);
   --color-ch-grammar: var(--lx-ch-grammar);
   --color-ch-read: var(--lx-ch-read);
@@ -264,6 +320,8 @@
 
   --radius-card: 1.25rem;
   --radius-control: 0.875rem;
+  --radius-pill: 999px;
+  --radius-inline: 0.375rem;
   --shadow-glass: var(--lx-shadow);
 }
 
@@ -271,20 +329,22 @@
 
 html {
   /* 16 px am Handy und Laptop, bis 20 px auf 2560-px-Monitoren: alles skaliert mit (Kap. 8). */
-  font-size: clamp(100%, 0.45vw + 0.6rem, 125%);
+  font-size: 100%;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   background: var(--lx-bg);
 }
 
+@media (min-width: 1920px) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
 body {
   margin: 0;
   min-height: 100dvh;
-  background:
-    radial-gradient(1200px 520px at 12% -10%, var(--lx-bg-glow-1), transparent 60%),
-    radial-gradient(900px 460px at 100% 0%, var(--lx-bg-glow-2), transparent 55%),
-    var(--lx-bg);
-  background-attachment: fixed;
+  background: transparent;
   color: var(--lx-fg);
   font-family: var(--font-sans);
   font-size: 1rem;
@@ -294,6 +354,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   overflow-wrap: break-word;
+}
+
+/* Lichtschein auf einer festen Ebene statt `background-attachment: fixed` (ruckelt auf iOS). */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 520px at 12% -10%, var(--lx-bg-glow-1), transparent 60%),
+    radial-gradient(900px 460px at 100% 0%, var(--lx-bg-glow-2), transparent 55%);
 }
 
 #root {
@@ -311,6 +383,11 @@ h3 {
   outline: 2px solid var(--lx-focus);
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+/* Programmatischer Fokus (Container mit tabindex=-1) zeigt nie einen Ring; sichtbar nur über :focus-visible an Bedienelementen. */
+[tabindex='-1']:focus {
+  outline: none;
 }
 
 ::selection {
@@ -352,7 +429,7 @@ h3 {
   .lx-card {
     background: var(--lx-surface-solid);
     border: 1px solid var(--lx-border);
-    border-radius: 1.125rem;
+    border-radius: var(--radius-card);
   }
 
   .lx-eyebrow {
@@ -383,26 +460,27 @@ h3 {
     transition: background-color 0.22s, box-shadow 0.22s;
     cursor: text;
   }
+  /* Fokus ist neutral (nie Akzent, nie Richtig-Grün, §7): Rahmen in der Schriftfarbe. */
   .lx-gap[data-focused] {
-    box-shadow: inset 0 -2px 0 0 var(--lx-cyan);
+    box-shadow: inset 0 -2px 0 0 var(--lx-fg);
   }
   .lx-gap[data-state='correct'] {
-    background: var(--lx-accent-soft);
-    box-shadow: inset 0 -2px 0 0 var(--lx-accent);
+    background: var(--lx-ok-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-ok);
     animation: lx-pulse 0.3s ease-out;
   }
   .lx-gap[data-state='near'] {
-    background: var(--lx-gold-soft);
-    box-shadow: inset 0 -2px 0 0 var(--lx-gold-text);
+    background: var(--lx-near-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-near);
   }
   .lx-gap[data-state='wrong'] {
-    background: var(--lx-danger-soft);
-    box-shadow: inset 0 -2px 0 0 var(--lx-danger-text);
+    background: var(--lx-wrong-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-wrong);
   }
   /* Auswahl falsch: die Lücke zeigt die Lösung – nie rot (H1). */
   .lx-gap[data-state='reveal'] {
-    background: var(--lx-surface-strong);
-    box-shadow: inset 0 -2px 0 0 var(--lx-accent);
+    background: var(--lx-ok-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-ok);
   }
   .lx-gap {
     max-width: 100%;
@@ -426,7 +504,7 @@ h3 {
     opacity: 1;
   }
   .lx-letter-off {
-    color: var(--lx-gold-text);
+    color: var(--lx-near-text);
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
@@ -477,7 +555,7 @@ h3 {
     box-shadow: inset 0 -2px 0 0 var(--lx-border);
   }
   .lx-gap[data-focused] .lx-slot:not([data-filled]):not(.lx-slot-fixed) {
-    box-shadow: inset 0 -2px 0 0 var(--lx-cyan);
+    box-shadow: inset 0 -2px 0 0 var(--lx-fg);
   }
   .lx-slot-fixed {
     width: 0.42em;
@@ -511,11 +589,12 @@ h3 {
     caret-color: transparent;
     background: transparent;
   }
+  /* Signalwort im Satz (Markierung der Erklärung) und markiertes Kartenwort. */
   .lx-mark {
     border-radius: 0.3em;
     padding: 0 0.15em;
-    background: var(--lx-accent-soft);
-    box-shadow: inset 0 -2px 0 0 var(--lx-accent);
+    background: var(--lx-mark);
+    box-shadow: inset 0 -2px 0 0 var(--lx-hint);
   }
   /* Antippbare Wörter (Kap. 6.11): keine Layoutänderung, Trefferfläche per Padding. */
   .lx-word {
@@ -561,7 +640,7 @@ h3 {
     background: var(--lx-track);
   }
   .lx-dot[data-on] {
-    background: var(--lx-accent);
+    background: var(--lx-ok);
   }
   .lx-popover {
     position: fixed;
@@ -582,21 +661,31 @@ h3 {
     touch-action: pan-y;
   }
   .lx-diff-near {
-    color: var(--lx-gold-text);
+    color: var(--lx-near-text);
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
   }
   /* Fehlender Buchstabe, eingefügt (gold hinterlegt). */
+  /* Fehlendes Wort: neutral mit gestricheltem Rahmen („+ has“), nie Gold und nie Rot (§4.3). */
   .lx-diff-missing {
-    color: var(--lx-gold-text);
-    background: var(--lx-gold-soft);
-    border-radius: 0.2em;
-    padding: 0 0.05em;
-    font-weight: 700;
+    color: var(--lx-fg);
+    border: 1px dashed var(--lx-fg-subtle);
+    border-radius: 0.3em;
+    padding: 0 0.3em;
+    font-weight: 600;
+  }
+  .lx-diff-missing::before {
+    content: '+ ';
+    color: var(--lx-fg-muted);
+  }
+  /* Ersetzt: erwartetes Wort in der Erfolgsfarbe. */
+  .lx-diff-sub {
+    color: var(--lx-ok-text);
+    font-weight: 600;
   }
   .lx-diff-off {
-    color: var(--lx-danger-text);
+    color: var(--lx-wrong-text);
     text-decoration: line-through;
     text-decoration-thickness: 1.5px;
   }
@@ -626,13 +715,18 @@ h3 {
   .lx-choice:not(:disabled):hover {
     background: var(--lx-surface-strong);
   }
+  /* Ausgewählt ist nicht Richtig (§7): neutraler 2-px-Rahmen in der Schriftfarbe, Fläche `--lx-line-strong`. */
+  .lx-choice[aria-pressed='true'] {
+    border: 2px solid var(--lx-fg);
+    background: var(--lx-line-strong);
+  }
   .lx-choice[data-state='correct'] {
-    background: var(--lx-accent-soft);
-    border-color: var(--lx-accent);
+    background: var(--lx-ok-soft);
+    border: 2px solid var(--lx-ok);
   }
   .lx-choice[data-state='wrong'] {
-    background: var(--lx-danger-soft);
-    border-color: var(--lx-danger-text);
+    background: var(--lx-wrong-soft);
+    border: 2px solid var(--lx-wrong);
   }
   .lx-choice[data-state='dim'] {
     opacity: 0.55;
@@ -664,10 +758,10 @@ h3 {
     line-height: 1;
   }
   .lx-choice[data-state='correct'] .lx-choice-mark {
-    color: var(--lx-accent);
+    color: var(--lx-ok-text);
   }
   .lx-choice[data-state='wrong'] .lx-choice-mark {
-    color: var(--lx-danger-text);
+    color: var(--lx-wrong-text);
   }
   .lx-choice-key {
     display: inline-flex;
@@ -701,13 +795,13 @@ h3 {
 
 @keyframes lx-pulse {
   0% {
-    box-shadow: inset 0 -2px 0 0 var(--lx-accent), 0 0 0 0 var(--lx-accent-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-ok), 0 0 0 0 var(--lx-ok-soft);
   }
   50% {
-    box-shadow: inset 0 -2px 0 0 var(--lx-accent), 0 0 0 12px var(--lx-accent-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-ok), 0 0 0 12px var(--lx-ok-soft);
   }
   100% {
-    box-shadow: inset 0 -2px 0 0 var(--lx-accent), 0 0 0 0 transparent;
+    box-shadow: inset 0 -2px 0 0 var(--lx-ok), 0 0 0 0 transparent;
   }
 }
 
@@ -756,16 +850,16 @@ h3 {
     resize: none;
   }
   .lx-field[data-state='correct'] {
-    border-color: var(--lx-accent);
-    background: var(--lx-accent-soft);
+    border-color: var(--lx-ok);
+    background: var(--lx-ok-soft);
   }
   .lx-field[data-state='near'] {
-    border-color: var(--lx-gold-text);
-    background: var(--lx-gold-soft);
+    border-color: var(--lx-near);
+    background: var(--lx-near-soft);
   }
   .lx-field[data-state='wrong'] {
-    border-color: var(--lx-danger-text);
-    background: var(--lx-danger-soft);
+    border-color: var(--lx-wrong);
+    background: var(--lx-wrong-soft);
   }
 
   /* Im Satz finden (spot): jedes Wort ein Knopf; nach dem Prüfen grün bzw. rot. */
@@ -773,13 +867,19 @@ h3 {
     text-decoration: underline dotted var(--lx-fg-subtle);
     text-underline-offset: 0.22em;
   }
+  /* Angetippte Stelle (vor dem Prüfen): neutral, nie Richtig-Grün. */
+  .lx-spot[data-selected] {
+    background: var(--lx-line-strong);
+    box-shadow: inset 0 0 0 2px var(--lx-fg);
+    text-decoration-color: transparent;
+  }
   .lx-spot[data-state='wrong'] {
-    background: var(--lx-danger-soft);
-    box-shadow: inset 0 -2px 0 0 var(--lx-danger-text);
+    background: var(--lx-wrong-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-wrong);
   }
   .lx-spot[data-state='correct'] {
-    background: var(--lx-accent-soft);
-    box-shadow: inset 0 -2px 0 0 var(--lx-accent);
+    background: var(--lx-ok-soft);
+    box-shadow: inset 0 -2px 0 0 var(--lx-ok);
   }
   /* Zeitbalken (speed): ruhig, ohne Rot-Alarm; reduzierte Bewegung ohne Übergang. */
   .lx-speed {
@@ -836,29 +936,36 @@ h3 {
     box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.5);
     z-index: 5;
   }
+  .lx-tile[data-selected] {
+    border: 2px solid var(--lx-fg);
+    background: var(--lx-line-strong);
+  }
   .lx-tile[data-state='off'] {
-    border-color: var(--lx-danger-text);
-    background: var(--lx-danger-soft);
+    border-color: var(--lx-wrong);
+    background: var(--lx-wrong-soft);
   }
   .lx-tile[data-state='near'] {
-    border-color: var(--lx-gold-text);
-    background: var(--lx-gold-soft);
+    border-color: var(--lx-near);
+    background: var(--lx-near-soft);
   }
   .lx-tile[data-state='ok'] {
-    border-color: var(--lx-accent);
-    background: var(--lx-accent-soft);
+    border-color: var(--lx-ok);
+    background: var(--lx-ok-soft);
   }
+  /* Plätze in Bausteinhöhe: Zeilen beginnen oben und dehnen sich nicht (bisher 148 px hohe Platzhalter). */
   .lx-tile-line {
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
     gap: 0.5rem;
-    min-height: 3.5rem;
+    min-height: 3.75rem;
     padding: 0.5rem;
     border-radius: var(--radius-control);
     border: 1px dashed var(--lx-border);
   }
   .lx-tile-line[data-over] {
-    border-color: var(--lx-accent);
+    border-color: var(--lx-fg);
   }
 
   /* Filter- und Auswahl-Chips. */
@@ -883,8 +990,8 @@ h3 {
     border-color: var(--lx-fg-subtle);
   }
   .lx-chip[data-used] {
-    color: var(--lx-accent-text);
-    border-color: var(--lx-accent);
+    color: var(--lx-ok-text);
+    border-color: var(--lx-ok);
   }
 
   /* Automatisch weiter (M6): Ablaufbalken am Knopf „Weiter". */
@@ -915,10 +1022,10 @@ h3 {
     transform-origin: left center;
   }
   .lx-flash-ok {
-    box-shadow: 0 0 0 2px var(--lx-accent);
+    box-shadow: 0 0 0 2px var(--lx-ok);
   }
   .lx-flash-wrong {
-    box-shadow: 0 0 0 2px var(--lx-danger-text);
+    box-shadow: 0 0 0 2px var(--lx-wrong);
   }
 
   /* Wochenstreifen (M7): ein Ring je Tag – Form und Zeichen tragen den Zustand, nicht nur die Farbe. */
@@ -933,8 +1040,8 @@ h3 {
     color: var(--lx-fg-muted);
   }
   .lx-ring[data-state='done'] {
-    background: var(--lx-accent);
-    border-color: var(--lx-accent);
+    background: var(--lx-ok);
+    border-color: var(--lx-ok);
     color: var(--lx-accent-fg);
   }
   .lx-ring[data-state='rest'] {
@@ -985,18 +1092,6 @@ h3 {
   }
 }
 
-/* Emrahs Wunsch 27.09.: Antwortansicht am iPhone kompakter, weniger Scrollen (aus Version 54 übernommen). */
-@media (max-width: 480px) {
-  [data-testid='gr-item'] { padding: 14px; gap: 12px; }
-  [data-testid='result'] { gap: 8px; padding-top: 12px; }
-  [data-testid='examples'] { gap: 4px; }
-  [data-testid='examples'] li { font-size: 0.85rem; line-height: 1.35; }
-  [data-testid='also-right'] { gap: 2px; }
-  [data-testid='sentence-diff'] { gap: 4px; font-size: 0.9rem; }
-  [data-testid='verdict'] { font-size: 0.95rem; margin: 0; }
-  [data-testid='form-hint'] { font-size: 0.85rem; }
-}
-
 /* ---------------------------------------------------------------- Aktionsleiste (Gesamtkonzept 3.6, R1/R2/R4)
    Feste Leiste unten mit genau einem Hauptknopf. Deckend (kein Glas, Konzept 3.8 Nr. 3). Solange eine Leiste
    steht, bekommt der Inhalt Polster in Leistenhöhe, damit nichts darunter verschwindet. */
@@ -1042,8 +1137,132 @@ h3 {
     display: none;
   }
 }
+/* Mit offener Tastatur sitzt die Leiste direkt über ihr, ohne Safe-Area-Polster (§4.5). */
+html[data-kb] .lx-actionbar {
+  padding-bottom: 8px;
+}
 html[data-actionbar] #main {
   padding-bottom: calc(var(--lx-bar-h) + env(safe-area-inset-bottom) + 1rem);
+}
+
+/* ---------------------------------------------------------------- Lernplattform 2.0 (P1): Rollen, Dichte, Gerüst */
+:root {
+  --radius-card: 1.25rem;
+  --radius-control: 0.875rem;
+  --radius-pill: 999px;
+  --radius-inline: 0.375rem;
+  --lx-pad-card: 1.25rem;
+  --lx-gap-section: 1rem;
+  --lx-gap-tight: 0.375rem;
+  --lx-dur-fast: 120ms;
+  --lx-dur-base: 180ms;
+  --lx-dur-slow: 260ms;
+}
+@media (min-width: 640px) {
+  :root {
+    --lx-pad-card: 1.75rem;
+    --lx-gap-section: 1.25rem;
+  }
+}
+
+@layer components {
+  /* Typografie-Rollen (§7) auf der vorhandenen Skala. */
+  .lx-t-display {
+    font-size: 2rem;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (min-width: 640px) {
+    .lx-t-display {
+      font-size: 2.75rem;
+    }
+  }
+  .lx-t-title {
+    font-size: 2rem;
+    line-height: 2.375rem;
+    font-weight: 600;
+  }
+  .lx-t-prompt {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .lx-t-task {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .lx-t-answer {
+    font-size: 1.0625rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+  }
+  .lx-t-body {
+    font-size: 1.0625rem;
+    line-height: 1.625rem;
+  }
+  .lx-t-support {
+    font-size: 0.9375rem;
+    line-height: 1.375rem;
+  }
+  .lx-t-meta {
+    font-size: 0.8125rem;
+    line-height: 1.2rem;
+  }
+  .lx-t-label {
+    font-size: 0.75rem;
+    line-height: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--lx-fg-muted);
+  }
+
+  /* Innenfläche statt `rounded-xl`-Kästen (Erklär-Karte, Beispiele). */
+  .lx-inset {
+    background: var(--lx-surface);
+    border-radius: var(--radius-control);
+    padding: 0.75rem;
+  }
+
+  /* Übungskarte: eine Glasebene je Übung, Kante in der Bereichsfarbe (Wörter violett, Grammatik blau). */
+  .lx-exercise {
+    padding: var(--lx-pad-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--lx-shadow), inset 3px 0 0 0 var(--lx-area, transparent);
+  }
+  .lx-exercise[data-area='words'] {
+    --lx-area: var(--lx-ch-cards);
+  }
+  .lx-exercise[data-area='grammar'] {
+    --lx-area: var(--lx-ch-grammar);
+  }
+
+  /* Geteilte Fläche am Laptop (≥ 1.024 px): Übung links, Regel rechts. */
+  .lx-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--lx-gap-section);
+  }
+  @media (min-width: 1024px) {
+    .lx-split[data-split] {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: start;
+    }
+    .lx-split[data-split] > [data-col='main'] {
+      grid-column: span 7 / span 7;
+      max-width: 640px;
+    }
+    .lx-split[data-split] > [data-col='side'] {
+      grid-column: span 5 / span 5;
+      position: sticky;
+      top: 1rem;
+    }
+  }
 }
 
 /* Bausteine: feste Plätze (gleich hoch) und gestrichelte Umrisse im Vorrat, damit beim Antippen nichts springt (R9). */

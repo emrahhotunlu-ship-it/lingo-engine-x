@@ -6,6 +6,7 @@ import { useCapabilities } from '../../platform/capabilities';
 import { playCue, setSoundEnabled, soundSupported, unlockSound } from '../../platform/sound';
 import { Segmented } from '../../ui/Segmented';
 import { Switch } from '../../ui/Switch';
+import { InputProfileSection } from './InputProfileSection';
 
 // Einstellungen „Lernen" und „Ton" (Kap. 6.14, Plan §9): neue Wörter pro Tag (0/2/5/10),
 // Tagesziel in Minuten (10–40), Töne an/aus (Standard aus). Optimistisch mit Rückrollen.
@@ -41,6 +42,7 @@ export function LearningSection() {
         onChange={(v) => void changeGoalMin(Number(v))}
       />
       <p className="text-sm text-muted">{t('setGoalMinHint')}</p>
+      <InputProfileSection />
     </section>
   );
 }

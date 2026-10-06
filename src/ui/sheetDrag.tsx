@@ -1,5 +1,6 @@
 import { animate, useMotionValue } from 'framer-motion';
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useRef, type PointerEvent as ReactPointerEvent } from 'react';
+import { useMediaQuery } from '../platform/input';
 
 // Blatt nach unten wischen zum Schließen (Kap. 4.5), nur am Handy. Gezogen wird ausschließlich
 // am Griff bzw. an der Kopfzeile (`touch-action: none` nur dort) – der Inhalt behält seinen
@@ -14,19 +15,7 @@ export function shouldDismiss(offsetY: number, velocityY: number): boolean {
   return offsetY > DISMISS_PX || (offsetY > 24 && velocityY > DISMISS_VELOCITY);
 }
 
-/** Wahr, solange die Medienabfrage passt (reagiert auf Größenänderung). */
-export function useMediaQuery(q: string): boolean {
-  const [on, setOn] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(q).matches);
-  useEffect(() => {
-    const mq = window.matchMedia?.(q);
-    if (!mq) return;
-    const onChange = () => setOn(mq.matches);
-    onChange();
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, [q]);
-  return on;
-}
+export { useMediaQuery };
 
 /**
  * Props für das Blatt (`panel`) und den Griff (`handle`). Außerhalb des Handys (≥ 768 px) ist

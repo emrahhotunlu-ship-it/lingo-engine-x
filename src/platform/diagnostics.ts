@@ -1,3 +1,4 @@
+import { measureKeyboard, recordKeyboardProbe } from './input';
 import { local, setStorageReporter, KEY_PREFIX } from './storage';
 
 // Fehlerprotokoll (Kap. 3.4): Jeder Fehler wird hier protokolliert und ist in den
@@ -100,7 +101,27 @@ export function initDiagnostics(): void {
     window.addEventListener('unhandledrejection', (ev) => {
       logError('window:unhandledrejection', ev.reason, withContext(undefined));
     });
+    probeKeyboardOnFirstFocus();
   }
+}
+
+// Tastatur im claude.ai-Rahmen (Lernplattform 2.0 §6): Beim ersten Fokus eines Textfelds schreibt die
+// Diagnose eine Zeile mit Rahmen (iframe), Fensterhöhe, sichtbarer Höhe 400 ms nach dem Fokus und dem
+// Tastaturabstand. Emrah liest sie einmal am iPhone ab; `needsInlineCheck` (platform/input) nutzt das Ergebnis.
+function probeKeyboardOnFirstFocus(): void {
+  let done = false;
+  const onFocus = (ev: FocusEvent): void => {
+    const el = ev.target as HTMLElement | null;
+    if (done || !el || !(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) return;
+    done = true;
+    document.removeEventListener('focusin', onFocus, true);
+    window.setTimeout(() => {
+      const p = measureKeyboard();
+      recordKeyboardProbe(p);
+      logInfo('keyboard:probe', `iframe ${p.iframe ? 'ja' : 'nein'} · innerHeight ${p.innerHeight} · visualViewport ${p.viewportHeight ?? '–'} · Abstand ${p.inset ?? '–'}`);
+    }, 400);
+  };
+  document.addEventListener('focusin', onFocus, true);
 }
 
 // ---------------------------------------------------------------- Kontext (Neubau WP0b, leistung.md §6)

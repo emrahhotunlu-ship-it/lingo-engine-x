@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { isTilePrefix, pickTile } from '../domain/srs/exercise';
 import type { Tile } from '../domain/drills/order';
+import { inputProfile } from '../platform/input';
 
 // Bausteine mit der Tastatur (Emrah 02.10.2026: am Rechner tippen statt nur klicken). Ein Textfeld unter den
 // Bausteinen: Wort + Leertaste legt den passenden freien Baustein, Rücktaste im leeren Feld nimmt den letzten
@@ -19,7 +20,7 @@ type Props = {
   unknown: (token: string) => string;
 };
 
-export const hasFinePointer = (): boolean => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(pointer: fine)').matches;
+export const hasFinePointer = (): boolean => inputProfile() === 'keys';
 
 export function TilesKeyboard({ tiles, placed, onChange, onSubmit, locked, mode, label, hint, unknown }: Props) {
   const [text, setText] = useState('');

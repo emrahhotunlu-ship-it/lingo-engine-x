@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { forwardRef, useLayoutEffect, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { Icon } from '../Icon';
 import { DURATION, EASE_OUT } from '../motion';
+import { inputProfile } from '../../platform/input';
 
 // Gemeinsame Eingabezeile aller Gespräche (Rollenspiel Phase 3, Begleiter Phase 5): 16 px (kein
 // Zoom am iPhone), wächst bis 6 Zeilen. Desktop: Enter sendet, Umschalt+Enter bricht um. Touch:
@@ -55,7 +56,7 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(functio
   const onKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing) return;
     // Touch-Geräte: Return bricht um, gesendet wird mit dem Knopf.
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (inputProfile() === 'touch') return;
     e.preventDefault();
     send();
   };

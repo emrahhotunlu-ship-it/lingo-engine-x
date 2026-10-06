@@ -61,7 +61,7 @@ export function TabBar() {
   return (
     <nav
       aria-label={t('navLabel')}
-      className="fixed inset-x-0 bottom-0 z-40 flex justify-center gap-0.5 border-t border-line bg-[color-mix(in_srgb,var(--lx-bg)_88%,transparent)] px-1.5 pt-0.5 pb-[max(env(safe-area-inset-bottom),0.375rem)] backdrop-blur-[16px] md:sticky md:top-0 md:bottom-auto md:mx-auto md:mt-3 md:w-fit md:gap-1 md:rounded-full md:border md:px-1.5 md:py-1.5"
+      className="fixed inset-x-0 bottom-0 z-40 flex justify-center gap-0.5 border-t border-line bg-bg px-1.5 pt-0.5 pb-[max(env(safe-area-inset-bottom),0.375rem)] md:sticky md:top-0 md:bottom-auto md:mx-auto md:mt-3 md:w-fit md:gap-1 md:rounded-full md:border md:px-1.5 md:py-1.5"
       data-testid="tabbar"
     >
       {TABS.map((d) => (

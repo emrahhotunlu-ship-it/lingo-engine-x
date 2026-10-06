@@ -12,6 +12,7 @@ import { CopyButton } from '../../../ui/CopyBox';
 import { useCompanion } from '../store';
 import { saveTargets, type SaveTarget } from '../../../domain/companion/saveTargets';
 import { fillFromHistory, fromOf, isTranslating, requestFrom, runTranslate, setRegister, setTranslateText, stopTranslate, setDirection, useTranslate } from './store';
+import { inputProfile } from '../../../platform/input';
 
 // Übersetzer im Begleiter (Phase 5 §8.2, Kap. 6.12): Eingabe, Richtung ⇄, Ton (Formell/Neutral/
 // Locker), „Übersetzen". Ergebnis: Hauptfassung (englisch antippbar, 🔊, Kopieren), Alternativen mit
@@ -58,7 +59,7 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
 
   const onKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing) return;
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (inputProfile() === 'touch') return;
     e.preventDefault();
     void runTranslate();
   };
