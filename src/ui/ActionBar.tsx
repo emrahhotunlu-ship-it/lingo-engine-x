@@ -23,20 +23,46 @@ type Props = {
   /** Kleinere Zusatzknöpfe links vom Hauptknopf (Tipp, Zurücksetzen): nie gefüllt. */
   aside?: ReactNode;
   testId?: string;
+  /**
+   * `fixed` (Standard): feste Leiste am unteren Rand, in den Anker der Shell gezeichnet.
+   * `column`: Split-Layout am Laptop (§4.5) – die Leiste steht unter der linken Spalte (`sticky; bottom: 1rem`)
+   * an ihrem Platz im Inhalt, ohne feste Leiste und ohne Polster der Seite.
+   */
+  placement?: 'fixed' | 'column';
 };
 
-export function ActionBar({ children, stateKey = 'main', aside, testId = 'actionbar' }: Props) {
+export function ActionBar({ children, stateKey = 'main', aside, testId = 'actionbar', placement = 'fixed' }: Props) {
   // Anker der Shell: beim ersten Zeichnen kann er noch fehlen, React fragt nach dem Einhängen erneut.
   const host = useSyncExternalStore(subscribeNever, findHost, () => null);
   const inset = useKeyboardInset();
+  const fixed = placement === 'fixed';
   useEffect(() => {
+    if (!fixed) return;
     open += 1;
     document.documentElement.setAttribute('data-actionbar', '');
     return () => {
       open = Math.max(0, open - 1);
       if (open === 0) document.documentElement.removeAttribute('data-actionbar');
     };
-  }, []);
+  }, [fixed]);
+  // Mit offener Bildschirmtastatur gilt `padding-bottom: 8px` statt Safe-Area (index.css `[data-kb]`).
+  useEffect(() => {
+    if (!fixed) return;
+    const root = document.documentElement;
+    if (inset > 0) root.setAttribute('data-kb', '');
+    else root.removeAttribute('data-kb');
+    return () => root.removeAttribute('data-kb');
+  }, [fixed, inset]);
+  if (!fixed) {
+    return (
+      <div className="lx-actionbar-column" data-testid={testId} data-placement="column">
+        <div className="lx-actionbar-inner" key={stateKey}>
+          {aside}
+          {children}
+        </div>
+      </div>
+    );
+  }
   const bar = (
     <div className="lx-actionbar" data-testid={testId} style={inset > 0 ? { bottom: inset } : undefined}>
       <div className="lx-actionbar-inner" key={stateKey}>

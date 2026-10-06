@@ -1137,6 +1137,13 @@ h3 {
     display: none;
   }
 }
+/* Split-Layout am Laptop: Leiste unter der linken Spalte, am unteren Rand haftend. */
+.lx-actionbar-column {
+  position: sticky;
+  bottom: 1rem;
+  z-index: 5;
+  padding-top: 0.5rem;
+}
 /* Mit offener Tastatur sitzt die Leiste direkt über ihr, ohne Safe-Area-Polster (§4.5). */
 html[data-kb] .lx-actionbar {
   padding-bottom: 8px;
