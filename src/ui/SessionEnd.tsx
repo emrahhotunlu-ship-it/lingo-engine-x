@@ -1,5 +1,7 @@
-import type { ReactNode } from 'react';
-import { useT } from '../i18n';
+import { useEffect, useState, type ReactNode } from 'react';
+import type { UnitState } from '../domain/metrics';
+import { useT, type MessageKey } from '../i18n';
+import { ActionBar, PrimaryAction } from './ActionBar';
 import { Button } from './Button';
 import { Eyebrow } from './Eyebrow';
 
@@ -8,7 +10,7 @@ import { Eyebrow } from './Eyebrow';
 // Schritt als gefüllter Knopf, optional ein ruhiger zweiter Weg. Kein Konfetti.
 // <SessionEnd right={n} total={m} ms={…} newItems={string[]} takeaways={…} next={{ label, run }} />
 
-export type SessionEndProps = {
+type SessionEndPropsAlt = {
   right: number;
   total: number;
   /** Aktive Zeit der Runde in ms. */
@@ -25,6 +27,41 @@ export type SessionEndProps = {
   title?: string;
 };
 
+/**
+ * Lernplattform 2.0 §4.5: `growth` zeigt echten Zuwachs statt Kacheln (Musterpunkte ●●○○ → ●●●○, „Neu sicher: …“,
+ * Fehlerliste mit „kommt morgen wieder“). Der Hauptknopf steht dann in der ActionBar (Test-ID `session-end-next`).
+ * Ohne `mode` bleibt alles wie bisher (Kacheln).
+ */
+export type SessionEndProps = SessionEndPropsAlt & {
+  mode?: 'tiles' | 'growth';
+  /** Je geübter Einheit eine Zeile; die Punkte wandern in 300 ms von `from` zu `to` (von `max`). */
+  items?: Array<{ label: string; from: number; to: number; max: number; state: UnitState | null }>;
+  /** „Neu sicher: wish + Past (3 von 3 ohne Hilfe)“ – nur Tatsachen, die wirklich eintraten. */
+  facts?: string[];
+  mistakes?: Array<{ wrong: string; right: string; rule: string; when: string }>;
+  warning?: { text: string; retry: () => void } | null;
+  /** „Noch 12 fällig · Noch eine Runde“. */
+  more?: { label: string; run: () => void } | null;
+};
+
+const STATE_KEY: Record<UnitState, MessageKey> = { new: 'exStateNew', learning: 'exStateLearning', safe: 'exStateSafe', firm: 'exStateFirm' };
+
+/** Punkte, die sich von `from` auf `to` füllen (300 ms; bei reduzierter Bewegung sofort, das regelt die globale CSS-Regel). */
+function GrowthDots({ from, to, max, label }: { from: number; to: number; max: number; label: string }) {
+  const [shown, setShown] = useState(from);
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => setShown(to));
+    return () => window.cancelAnimationFrame(id);
+  }, [to]);
+  return (
+    <span className="lx-dots lx-dots-grow" role="img" aria-label={label} data-from={from} data-to={to}>
+      {Array.from({ length: max }, (_, i) => (
+        <span key={i} className="lx-dot" data-on={i < shown || undefined} />
+      ))}
+    </span>
+  );
+}
+
 function Tile({ value, label, testId }: { value: ReactNode; label: string; testId: string }) {
   return (
     <div className="flex flex-col items-center gap-0.5 rounded-[var(--radius-control)] bg-surface px-2 py-3 text-center" data-testid={testId}>
@@ -34,7 +71,105 @@ function Tile({ value, label, testId }: { value: ReactNode; label: string; testI
   );
 }
 
-export function SessionEnd({ right, total, ms, newItems = [], takeaways, next, secondary, title }: SessionEndProps) {
+function GrowthEnd({ title, items = [], facts = [], mistakes = [], warning = null, more = null, next, secondary, takeaways, right, total }: SessionEndProps) {
+  const { t } = useT();
+  return (
+    <section className="lx-card flex flex-col gap-4 p-[1.125rem]" data-testid="session-end" data-mode="growth" data-right={right} data-total={total}>
+      <Eyebrow tone="accent">{title ?? t('nbShEndTitle')}</Eyebrow>
+      {items.length > 0 && (
+        <ul className="m-0 flex list-none flex-col gap-2 p-0" data-testid="session-end-items">
+          {items.map((it) => {
+            const word = it.state ? t(STATE_KEY[it.state]) : null;
+            const label = t('exEndFrom', { from: it.from, to: it.to }) + (word ? ` · ${word}` : '');
+            return (
+              <li key={it.label} className="flex items-center justify-between gap-3" data-testid="session-end-item">
+                <span className="lx-t-support min-w-0" lang="en">
+                  {it.label}
+                </span>
+                <span className="flex flex-none items-center gap-2">
+                  <GrowthDots from={it.from} to={it.to} max={it.max} label={label} />
+                  {word && (
+                    <span className="lx-t-meta text-muted" aria-hidden="true">
+                      {word}
+                    </span>
+                  )}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {facts.length > 0 && (
+        <ul className="m-0 flex list-none flex-col gap-1 p-0" data-testid="session-end-facts" aria-label={t('exEndFacts')}>
+          {facts.map((f) => (
+            <li key={f} className="lx-t-body">
+              {f}
+            </li>
+          ))}
+        </ul>
+      )}
+      {mistakes.length > 0 && (
+        <div className="flex flex-col gap-2" data-testid="session-end-mistakes">
+          <Eyebrow>{t('exEndMistakes')}</Eyebrow>
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {mistakes.map((m) => (
+              <li key={`${m.wrong}|${m.right}`} className="lx-inset flex flex-col gap-0.5" data-testid="session-end-mistake">
+                <span className="lx-t-support" lang="en">
+                  <span className="text-muted line-through decoration-wrong/60">{m.wrong}</span>
+                  {' → '}
+                  <span className="font-semibold text-ok-text">{m.right}</span>
+                </span>
+                <span className="lx-t-meta text-muted">
+                  {m.rule} · {t('exEndWhen', { when: m.when })}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {takeaways && (
+        <div className="flex flex-col gap-2" data-testid="session-end-takeaways">
+          <Eyebrow>{t('nbShEndTakeaways')}</Eyebrow>
+          {takeaways}
+        </div>
+      )}
+      {warning && (
+        <div className="lx-inset flex items-center justify-between gap-3" data-testid="session-end-warning" role="status">
+          <span className="lx-t-support">{warning.text}</span>
+          <Button variant="secondary" onClick={warning.retry} data-testid="session-end-retry">
+            {t('exRetry')}
+          </Button>
+        </div>
+      )}
+      {(more || secondary) && (
+        <div className="flex flex-col gap-1">
+          {more && (
+            <Button variant="secondary" onClick={more.run} data-testid="session-end-more">
+              {more.label}
+            </Button>
+          )}
+          {secondary && (
+            <Button variant="ghost" onClick={secondary.run} data-testid="session-end-secondary">
+              {secondary.label}
+            </Button>
+          )}
+        </div>
+      )}
+      <ActionBar stateKey="end">
+        <PrimaryAction iconAfter="arrowRight" onClick={next.run} testId="session-end-next">
+          {next.label}
+        </PrimaryAction>
+      </ActionBar>
+    </section>
+  );
+}
+
+export function SessionEnd(props: SessionEndProps) {
+  if (props.mode === 'growth') return <GrowthEnd {...props} />;
+  return <TilesEnd {...props} />;
+}
+
+function TilesEnd({ right, total, ms, newItems = [], takeaways, next, secondary, title }: SessionEndProps) {
   const { t } = useT();
   const min = Math.max(1, Math.round(ms / 60_000));
   const shown = newItems.slice(0, 8);

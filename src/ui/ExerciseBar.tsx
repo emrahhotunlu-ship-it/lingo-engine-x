@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import { useT } from '../i18n';
 import { IconButton } from './Button';
 import { DURATION, EASE_OUT } from './motion';
 
@@ -26,9 +27,16 @@ type Props = {
    * (Emrahs Vorgabe „überall", 27.09., Befund 28.09.: der Streifen hat genau das verdeckt).
    */
   middleOverlay?: ReactNode;
+  /**
+   * Eine Zählzeile „Pflicht 2/4 · Karte 7/30 +2“ (Lernplattform 2.0 §4.5). Sie ersetzt „n / total“ und das kleine
+   * Wort darunter; der Balken folgt `card`. Für Vorleseprogramme heißt „+2“ „2 Wiederholungen in dieser Runde“.
+   */
+  counter?: { duty?: [n: number, total: number]; card: [n: number, total: number]; extra?: number };
 };
 
-export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', progress = null, progressLabel, progressTestId = 'round-progress', note, end, middleOverlay = null }: Props) {
+export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', progress: progressProp = null, progressLabel, progressTestId = 'round-progress', note, end, middleOverlay = null, counter }: Props) {
+  const { t } = useT();
+  const progress = counter ? { n: counter.card[0], total: counter.card[1], extra: counter.extra } : progressProp;
   const has = !!progress && progress.total > 0;
   const n = has ? Math.max(1, Math.min(progress.total, progress.n)) : 0;
   const pct = has ? Math.round((n / progress.total) * 100) : 0;
@@ -50,10 +58,22 @@ export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', 
             >
               <motion.div className="h-full rounded-full bg-accent" initial={false} animate={{ width: `${pct}%` }} transition={{ duration: DURATION.base, ease: EASE_OUT }} />
             </div>
-            <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
-              {n} / {progress.total}
-            </span>
-            {!!progress.extra && (
+            {counter ? (
+              <span className="lx-tnum lx-t-meta flex-none text-muted" data-testid={progressTestId} data-counter="">
+                {counter.duty && <span data-testid="counter-duty">{t('exCounterDuty', { n: counter.duty[0], total: counter.duty[1] })} · </span>}
+                <span data-testid="counter-card">{t('exCounterCard', { n, total: progress.total })}</span>
+                {!!counter.extra && (
+                  <span className="ml-1 text-subtle" data-testid="round-extra" aria-label={t('exCounterExtraLabel', { n: counter.extra })}>
+                    {t('exCounterExtra', { n: counter.extra })}
+                  </span>
+                )}
+              </span>
+            ) : (
+              <span className="lx-tnum flex-none text-xs text-muted" data-testid={progressTestId}>
+                {n} / {progress.total}
+              </span>
+            )}
+            {!counter && !!progress.extra && (
               <span className="lx-tnum -ml-2 flex-none text-xs text-subtle" data-testid="round-extra" aria-label={`+${progress.extra}`}>
                 +{progress.extra}
               </span>
@@ -62,7 +82,7 @@ export function ExerciseBar({ onClose, closeLabel, closeTestId = 'round-close', 
         ) : (
           <div className="h-1.5" aria-hidden="true" />
         )}
-        {note && <div className="text-2xs leading-none text-subtle">{note}</div>}
+        {note && !counter && <div className="text-2xs leading-none text-subtle">{note}</div>}
       </div>
       <div className="flex min-w-11 flex-none items-center justify-end">{end}</div>
     </div>

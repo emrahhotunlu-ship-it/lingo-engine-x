@@ -1229,6 +1229,11 @@ html[data-actionbar] #main {
     color: var(--lx-fg-muted);
   }
 
+  /* Punkte füllen sich in 300 ms (ringFill, §7); bei reduzierter Bewegung gilt die globale Sofort-Regel. */
+  .lx-dots-grow .lx-dot {
+    transition: background-color var(--lx-dur-slow) ease-out;
+  }
+
   /* Innenfläche statt `rounded-xl`-Kästen (Erklär-Karte, Beispiele). */
   .lx-inset {
     background: var(--lx-surface);
