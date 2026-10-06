@@ -1,0 +1,427 @@
+{
+  "topic": "c1-hedging",
+  "canDo": {
+    "de": "Ich kann Einschätzungen, Vorschläge und Kritik im Business-Englisch abschwächen: mit might und could, It might be worth, I'd be inclined to, It seems that und Abschwächern wie slightly oder not quite.",
+    "en": "I can soften assessments, suggestions and criticism in business English: with might and could, It might be worth, I'd be inclined to, It seems that and softeners such as slightly or not quite."
+  },
+  "order": [
+    "hg.modal",
+    "hg.worth",
+    "hg.inclined",
+    "hg.seems",
+    "hg.downtoner"
+  ],
+  "introPlan": [
+    [
+      "hg.modal",
+      "hg.worth"
+    ],
+    [
+      "hg.inclined",
+      "hg.seems"
+    ],
+    [
+      "hg.downtoner"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Ist es eine Möglichkeit (might, could) oder ein Eindruck aufgrund von Anzeichen (it seems)?",
+      "Machst du einen Vorschlag (It might be worth -ing) oder nennst du deine Tendenz (I'd be inclined to)?",
+      "Soll dein Urteil bleiben, aber milder klingen (slightly, not quite)?"
+    ],
+    "en": [
+      "Is it a possibility (might, could) or an impression based on signs (it seems)?",
+      "Are you making a suggestion (It might be worth -ing) or stating your leaning (I'd be inclined to)?",
+      "Should your judgment stand but sound milder (slightly, not quite)?"
+    ]
+  },
+  "patterns": [
+    {
+      "id": "hg.modal",
+      "name": {
+        "de": "might / could · vorsichtige Möglichkeit",
+        "en": "might / could · cautious possibility"
+      },
+      "form": {
+        "de": "might / could / may + Grundform statt will oder is",
+        "en": "might / could / may + base verb instead of will or is"
+      },
+      "use": {
+        "de": "Macht aus einer sicheren Aussage eine Möglichkeit. So klingt eine schlechte Nachricht oder Vermutung vorsichtig statt wie ein Vorwurf.",
+        "en": "Turns a firm statement into a possibility. A piece of bad news or a guess then sounds careful instead of like an accusation."
+      },
+      "signals": [
+        "might",
+        "could",
+        "may",
+        "possibly",
+        "perhaps"
+      ],
+      "ex": [
+        {
+          "en": "The migration could take a few days longer than planned.",
+          "de": "Die Migration könnte ein paar Tage länger dauern als geplant.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "This might affect the delivery date for the second batch.",
+          "de": "Das könnte den Liefertermin der zweiten Charge betreffen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "He may not have seen the invitation yet.",
+          "de": "Er hat die Einladung vielleicht noch nicht gesehen.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The delivery will maybe be late.",
+        "good": "The delivery might be late.",
+        "cause": {
+          "de": "Im Deutschen geht „wird vielleicht“ selbstverständlich. Auf Englisch ist will maybe ungewöhnlich, weil will Gewissheit zeigt und maybe Zweifel.",
+          "en": "German happily says “wird vielleicht”. In English will maybe is unusual, since will shows certainty and maybe shows doubt."
+        }
+      },
+      "contrast": {
+        "with": "hg.seems",
+        "a": "The vendor might be late.",
+        "b": "It seems that the vendor is late.",
+        "diff": {
+          "de": "might lässt offen, ob es so ist. It seems nennt einen Eindruck, der auf Anzeichen beruht.",
+          "en": "might leaves open whether it is so. It seems names an impression based on signs."
+        }
+      },
+      "ccq": [
+        {
+          "s": "The vendor might miss the deadline.",
+          "q": {
+            "de": "Weiß der Sprecher sicher, dass der Anbieter die Frist verpasst?",
+            "en": "Does the speaker know for sure that the vendor will miss the deadline?"
+          },
+          "a": false
+        },
+        {
+          "s": "The new rules could affect our timeline.",
+          "q": {
+            "de": "Ist es möglich, dass die neuen Regeln den Zeitplan betreffen?",
+            "en": "Is it possible that the new rules affect our timeline?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Sagst du, was sicher ist, oder nur, was möglich ist, und welche Form folgt auf das Modalverb?",
+        "en": "Are you saying what is certain or only what is possible, and which form follows the modal verb?"
+      }
+    },
+    {
+      "id": "hg.worth",
+      "name": {
+        "de": "It might be worth · höflicher Vorschlag",
+        "en": "It might be worth · polite suggestion"
+      },
+      "form": {
+        "de": "It might be worth + Verb-ing",
+        "en": "It might be worth + verb-ing"
+      },
+      "use": {
+        "de": "Ein höflicher Vorschlag: Es könnte sich lohnen. Nach worth steht die -ing-Form (worth involving); worth it und worthwhile nehmen auch to + Grundform.",
+        "en": "A polite suggestion: it could pay off. After worth the -ing form follows (worth involving); worth it and worthwhile also take to + base verb."
+      },
+      "signals": [
+        "worth",
+        "might be worth",
+        "could be worth",
+        "may be worth"
+      ],
+      "ex": [
+        {
+          "en": "It might be worth involving legal before we commit.",
+          "de": "Es könnte sich lohnen, die Rechtsabteilung einzubinden, bevor wir uns festlegen.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "It may be worth attaching the latest figures to the invite.",
+          "de": "Es könnte sich lohnen, die neuesten Zahlen an die Einladung zu hängen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "It might be worth asking Sam; she ran the last pilot.",
+          "de": "Vielleicht lohnt es sich, Sam zu fragen; sie hat den letzten Pilot geleitet.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "It might be worth to involve legal early.",
+        "good": "It might be worth involving legal early.",
+        "cause": {
+          "de": "Im Deutschen folgt auf „es lohnt sich“ ein Infinitiv mit zu („es lohnt sich, das zu prüfen“). Das Englische verlangt nach worth die -ing-Form.",
+          "en": "In German “es lohnt sich” is followed by an infinitive with zu (“es lohnt sich, das zu prüfen”). English needs the -ing form after worth."
+        }
+      },
+      "contrast": {
+        "with": "hg.inclined",
+        "a": "It might be worth hiring a consultant.",
+        "b": "I'd be inclined to hire a consultant.",
+        "diff": {
+          "de": "worth sagt, dass sich etwas lohnt. inclined nennt die eigene Neigung der Sprecherin.",
+          "en": "worth says that something pays off. inclined names the speaker's own leaning."
+        }
+      },
+      "ccq": [
+        {
+          "s": "It might be worth asking for a second quote.",
+          "q": {
+            "de": "Schlage ich vor, ein zweites Angebot einzuholen?",
+            "en": "Am I suggesting that we ask for a second quote?"
+          },
+          "a": true
+        },
+        {
+          "s": "It's not worth reopening the discussion.",
+          "q": {
+            "de": "Sollen wir die Diskussion wieder öffnen?",
+            "en": "Should we reopen the discussion?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Welche Verbform folgt nach diesem Wort, und wie vorsichtig soll der Vorschlag klingen?",
+        "en": "Which verb form follows this word, and how tentative should the suggestion sound?"
+      }
+    },
+    {
+      "id": "hg.inclined",
+      "name": {
+        "de": "I'd be inclined to · eigene Tendenz",
+        "en": "I'd be inclined to · own leaning"
+      },
+      "form": {
+        "de": "I'd be inclined to + Grundform",
+        "en": "I'd be inclined to + base verb"
+      },
+      "use": {
+        "de": "Nennt eine persönliche Tendenz statt einer Anweisung. Nach inclined folgt to + Grundform, nicht die -ing-Form.",
+        "en": "Names a personal leaning instead of an instruction. After inclined comes to + base verb, not the -ing form."
+      },
+      "signals": [
+        "inclined",
+        "tend to"
+      ],
+      "ex": [
+        {
+          "en": "I'd be inclined to start with the smaller markets.",
+          "de": "Ich würde eher mit den kleineren Märkten anfangen.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I'm inclined to agree, but let me check with finance first.",
+          "de": "Ich neige dazu zuzustimmen, möchte aber zuerst mit dem Controlling sprechen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Honestly, I'd be inclined to wait until the new year.",
+          "de": "Ehrlich gesagt würde ich eher bis zum neuen Jahr warten.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I would be inclined hiring a freelancer first.",
+        "good": "I would be inclined to hire a freelancer first.",
+        "cause": {
+          "de": "Die Ursache ist nicht belegt. Vermutlich wird das -ing-Muster von Wörtern wie worth oder avoid auf inclined übertragen, und to fällt weg.",
+          "en": "The cause is not documented. Probably the -ing pattern of words like worth or avoid gets carried over to inclined, and to drops out."
+        }
+      },
+      "contrast": {
+        "with": "hg.modal",
+        "a": "I'd be inclined to wait.",
+        "b": "We might wait.",
+        "diff": {
+          "de": "inclined nennt, wohin der Sprecher selbst neigt. might nennt nur, dass etwas geschehen könnte.",
+          "en": "inclined names where the speaker leans. might only says that something could happen."
+        }
+      },
+      "ccq": [
+        {
+          "s": "I'd be inclined to reject the offer.",
+          "q": {
+            "de": "Habe ich das Angebot schon endgültig abgelehnt?",
+            "en": "Have I already rejected the offer for good?"
+          },
+          "a": false
+        },
+        {
+          "s": "I'm inclined to agree with Maria.",
+          "q": {
+            "de": "Stimme ich Maria eher zu?",
+            "en": "Do I lean toward agreeing with Maria?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Sprichst du über deine eigene Tendenz, und was folgt auf dieses Wort?",
+        "en": "Are you describing your own leaning, and what follows this word?"
+      }
+    },
+    {
+      "id": "hg.seems",
+      "name": {
+        "de": "It seems / appears · Eindruck",
+        "en": "It seems / appears · impression"
+      },
+      "form": {
+        "de": "It seems (that) + Satz · seems to + Grundform",
+        "en": "It seems (that) + clause · seems to + base verb"
+      },
+      "use": {
+        "de": "Stellt eine Aussage als Eindruck dar, nicht als Tatsache. Nach seems folgt that, as if oder gleich der Satz, aber nie ein bloßes as.",
+        "en": "Presents a statement as an impression, not a fact. After seems come that, as if or the clause itself, but never a bare as."
+      },
+      "signals": [
+        "it seems",
+        "it appears",
+        "seems to",
+        "appears to",
+        "as if"
+      ],
+      "ex": [
+        {
+          "en": "It seems that the issue only affects the mobile app.",
+          "de": "Es scheint, dass das Problem nur die mobile App betrifft.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "It appears we may have missed one attachment.",
+          "de": "Es sieht so aus, als hätten wir einen Anhang übersehen.",
+          "ctx": "mail"
+        },
+        {
+          "en": "She seems to have changed her mind about the offer.",
+          "de": "Sie scheint ihre Meinung zum Angebot geändert zu haben.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "It seems me that the budget is too tight.",
+        "good": "It seems to me that the budget is too tight.",
+        "cause": {
+          "de": "Im Deutschen reicht ein bloßes Dativpronomen („es scheint mir, dass …“). Auf Englisch braucht die Person ein to: seems to me.",
+          "en": "In German a bare dative pronoun is enough (“es scheint mir, dass …”). In English the person needs a to: seems to me."
+        }
+      },
+      "contrast": {
+        "with": "hg.modal",
+        "a": "It seems that the vendor is late.",
+        "b": "The vendor might be late.",
+        "diff": {
+          "de": "It seems nennt einen Eindruck aufgrund von Anzeichen. might lässt offen, ob es überhaupt so ist.",
+          "en": "It seems names an impression based on signs. might leaves open whether it is so at all."
+        }
+      },
+      "ccq": [
+        {
+          "s": "It seems that the client has already signed.",
+          "q": {
+            "de": "Weiß der Sprecher sicher, dass der Kunde unterschrieben hat?",
+            "en": "Does the speaker know for sure that the client has signed?"
+          },
+          "a": false
+        },
+        {
+          "s": "It appears that the server is down again.",
+          "q": {
+            "de": "Gibt es Anzeichen dafür, dass der Server ausgefallen ist?",
+            "en": "Are there signs that the server is down?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Beschreibst du einen Eindruck oder eine Tatsache, und was folgt auf das Verb?",
+        "en": "Are you describing an impression or a fact, and what follows the verb?"
+      }
+    },
+    {
+      "id": "hg.downtoner",
+      "name": {
+        "de": "slightly · not quite · abschwächen",
+        "en": "slightly · not quite · softening"
+      },
+      "form": {
+        "de": "slightly / a bit / somewhat · not quite + Adjektiv",
+        "en": "slightly / a bit / somewhat · not quite + adjective"
+      },
+      "use": {
+        "de": "Schwächt ein Urteil ab: slightly, a bit oder somewhat vor dem Adjektiv, not quite statt einfachem not. Das Urteil bleibt, klingt aber milder.",
+        "en": "Softens a judgment: slightly, a bit or somewhat before the adjective, not quite instead of plain not. The judgment stays but sounds milder."
+      },
+      "signals": [
+        "slightly",
+        "a bit",
+        "somewhat",
+        "not quite",
+        "a little"
+      ],
+      "ex": [
+        {
+          "en": "The new design is a little too complex for first-time users.",
+          "de": "Das neue Design ist für Erstnutzer etwas zu komplex.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I'm not quite sure the timeline works for our team.",
+          "de": "Ich bin nicht ganz sicher, ob der Zeitplan für unser Team passt.",
+          "ctx": "mail"
+        },
+        {
+          "en": "That's slightly different from what we discussed last week.",
+          "de": "Das ist etwas anders als das, was wir letzte Woche besprochen haben.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The offer is something too high for us.",
+        "good": "The offer is a bit too high for us.",
+        "cause": {
+          "de": "Im Deutschen ist „etwas“ beides: Pronomen („etwas Neues“) und Abschwächer („etwas zu hoch“). Das Pronomen heißt something, der Abschwächer a bit oder slightly.",
+          "en": "In German “etwas” is both: pronoun (“etwas Neues”) and softener (“etwas zu hoch”). The pronoun is something, the softener is a bit or slightly."
+        }
+      },
+      "contrast": {
+        "with": "hg.modal",
+        "a": "The plan is slightly risky.",
+        "b": "The plan might be risky.",
+        "diff": {
+          "de": "slightly mildert, wie stark das Urteil ist: Es stimmt, nur weniger. might lässt offen, ob es stimmt.",
+          "en": "slightly lowers how strong the judgment is: it is true, only less so. might leaves open whether it is true."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Your draft is slightly too long.",
+          "q": {
+            "de": "Ist der Entwurf zu lang?",
+            "en": "Is the draft too long?"
+          },
+          "a": true
+        },
+        {
+          "s": "I'm not quite convinced.",
+          "q": {
+            "de": "Bin ich schon vollständig überzeugt?",
+            "en": "Am I already fully convinced?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Soll dein Urteil bestehen bleiben, aber milder klingen? Welches kleine Wort leistet das?",
+        "en": "Should your judgment stand but sound milder? Which small word does that?"
+      }
+    }
+  ]
+}

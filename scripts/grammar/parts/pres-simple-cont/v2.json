@@ -1,0 +1,1123 @@
+[
+ {
+  "id": "psc-hab-k1",
+  "type": "kwt",
+  "pat": "psc.habit",
+  "from": "Most mornings, Julia checks her emails before the first meeting.",
+  "key": "USUALLY",
+  "frame": "Julia ___ her emails before the first meeting.",
+  "answer": "usually checks",
+  "accepted": [
+   "usually reads",
+   "usually looks at",
+   "usually answers",
+   "usually goes through",
+   "usually reviews",
+   "usually handles",
+   "usually replies to"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: usually + Present Simple: usually checks. Es ist eine feste Routine.",
+    "en": "Right: usually + present simple: usually checks. It is a fixed routine."
+   },
+   "wrong": [
+    {
+     "not": [
+      "usually"
+     ],
+     "de": "Das Schlüsselwort usually muss unverändert in der Lücke stehen.",
+     "en": "The key word usually must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "checking"
+     ],
+     "de": "Eine Routine steht im Present Simple (checks), nicht im Continuous (is checking).",
+     "en": "A routine takes the present simple (checks), not the continuous (is checking)."
+    },
+    {
+     "if": [
+      "usually",
+      "check"
+     ],
+     "de": "Nach Julia (she) braucht das Verb ein -s: usually checks.",
+     "en": "After Julia (she) the verb needs an -s: usually checks."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-hab-k2",
+  "type": "kwt",
+  "pat": "psc.habit",
+  "from": "Our CFO does not approve any budget without a written plan.",
+  "key": "NEVER",
+  "frame": "Our CFO ___ a budget without a written plan.",
+  "answer": "never approves",
+  "accepted": [
+   "never signs off on",
+   "never accepts",
+   "never authorizes",
+   "never releases",
+   "never agrees to",
+   "never okays"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: never + Present Simple: never approves. Never trägt die Verneinung schon.",
+    "en": "Right: never + present simple: never approves. Never already carries the negation."
+   },
+   "wrong": [
+    {
+     "not": [
+      "never"
+     ],
+     "de": "Das Schlüsselwort never muss unverändert in der Lücke stehen.",
+     "en": "The key word never must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "never",
+      "not"
+     ],
+     "de": "Doppelte Verneinung: never enthält schon not, also steht kein doesn't davor.",
+     "en": "Double negative: never already contains not, so no doesn't before it."
+    },
+    {
+     "if": [
+      "never",
+      "approve"
+     ],
+     "de": "Nach CFO (he/she) braucht approve ein -s: never approves.",
+     "en": "After CFO (he/she) approve needs an -s: never approves."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-hab-f1",
+  "type": "find",
+  "pat": "psc.habit",
+  "prompt": "Our support team is answering emails from nine to five on weekdays.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "answers",
+  "fixed": "Our support team answers emails from nine to five on weekdays.",
+  "accepted": [
+   "handles",
+   "replies to"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „on weekdays“ nennt eine feste Regel, also Present Simple: answers.",
+    "en": "The error: “on weekdays” names a fixed rule, so present simple: answers."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Feste Arbeitszeiten stehen im Present Simple.",
+     "en": "There is an error: fixed working hours take the present simple."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is answering“: Eine feste Regel braucht kein -ing.",
+     "en": "The error is “is answering”: a fixed rule needs no -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-hab-f2",
+  "type": "find",
+  "pat": "psc.habit",
+  "prompt": "She don't answer calls before ten, so email her instead.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "doesn't answer",
+  "fixed": "She doesn't answer calls before ten, so email her instead.",
+  "accepted": [
+   "does not answer",
+   "doesn't take",
+   "does not take"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach she steht doesn't, nicht don't. Danach folgt die Grundform.",
+    "en": "The error: after she use doesn't, not don't. The base form follows."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Bei „she“ passt das Hilfsverb nicht.",
+     "en": "There is an error: the auxiliary does not match “she”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „don't answer“: Bei he/she/it heißt es doesn't.",
+     "en": "The error is “don't answer”: with he/she/it use doesn't."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-hab-f3",
+  "type": "find",
+  "pat": "psc.habit",
+  "prompt": "Our cafeteria closes at three on Fridays, so plan your lunch early.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Eine feste Zeit („on Fridays“) steht im Present Simple: closes.",
+    "en": "No error: a fixed time (“on Fridays”) takes the present simple: closes."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: „closes at three on Fridays“ ist eine feste Regel, also Present Simple.",
+     "en": "No error: “closes at three on Fridays” is a fixed rule, so present simple."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-hab-m1",
+  "type": "meaning",
+  "pat": "psc.habit",
+  "a": "Our team meets on Mondays.",
+  "b": "Our team is meeting on Mondays for now.",
+  "q": {
+   "de": "Welcher Satz beschreibt eine feste, dauerhafte Regelung?",
+   "en": "Which sentence describes a fixed, permanent arrangement?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. meets ist die feste Regel, ohne Ablaufdatum.",
+    "en": "Right: sentence a. meets is the fixed rule, with no end date."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b zeigen -ing und „for now“ eine vorübergehende Lösung.",
+     "en": "In b, -ing and “for now” show a temporary solution."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a gilt grundsätzlich, b nur vorübergehend.",
+     "en": "Not the same: a holds in general, b only temporarily."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-now-k1",
+  "type": "kwt",
+  "pat": "psc.now",
+  "from": "Right now, we are building a prototype for the Berlin client.",
+  "key": "CURRENTLY",
+  "frame": "We ___ a prototype for the Berlin client.",
+  "answer": "are currently building",
+  "accepted": [
+   "'re currently building",
+   "are currently developing",
+   "'re currently developing",
+   "are currently working on",
+   "'re currently working on",
+   "are currently creating",
+   "'re currently creating",
+   "are currently designing",
+   "'re currently designing",
+   "are currently preparing",
+   "'re currently preparing",
+   "are currently making",
+   "'re currently making",
+   "are currently putting together",
+   "'re currently putting together"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: currently passt zu einer Arbeit, die läuft: are currently building (Continuous).",
+    "en": "Right: currently fits work in progress: are currently building (continuous)."
+   },
+   "wrong": [
+    {
+     "not": [
+      "currently"
+     ],
+     "de": "Das Schlüsselwort currently muss unverändert in der Lücke stehen.",
+     "en": "The key word currently must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "currently"
+     ],
+     "not": [
+      "are"
+     ],
+     "de": "Hier fehlt are: Eine laufende Tätigkeit braucht are + -ing.",
+     "en": "Are is missing: an activity in progress needs are + -ing."
+    },
+    {
+     "if": [
+      "are",
+      "currently"
+     ],
+     "not": [
+      "building",
+      "developing",
+      "designing",
+      "preparing",
+      "making",
+      "putting",
+      "creating",
+      "working"
+     ],
+     "de": "Nach are folgt die -ing-Form des Verbs: are currently building.",
+     "en": "After are comes the -ing form of the verb: are currently building."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-now-k2",
+  "type": "kwt",
+  "pat": "psc.now",
+  "from": "I can't join the call because I'm driving at this moment.",
+  "key": "MOMENT",
+  "frame": "I can't join the call because I ___.",
+  "answer": "am driving at the moment",
+  "accepted": [
+   "'m driving at the moment",
+   "am driving at this moment",
+   "'m driving at this moment"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „at the moment“ + eine Handlung, die läuft, also Continuous: am driving.",
+    "en": "Right: “at the moment” + action in progress, so continuous: am driving."
+   },
+   "wrong": [
+    {
+     "not": [
+      "moment"
+     ],
+     "de": "Das Schlüsselwort moment muss unverändert in der Lücke stehen.",
+     "en": "The key word moment must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "drive"
+     ],
+     "de": "„drive“ nennt eine Gewohnheit. at the moment braucht am driving.",
+     "en": "“drive” names a habit. at the moment needs am driving."
+    },
+    {
+     "if": [
+      "driving"
+     ],
+     "not": [
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort fehlt am: I am driving.",
+     "en": "Am is missing before the -ing word: I am driving."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-now-f1",
+  "type": "find",
+  "pat": "psc.now",
+  "prompt": "Sorry, the system is slow because we update the servers at the moment.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "we are updating",
+  "fixed": "Sorry, the system is slow because we are updating the servers at the moment.",
+  "accepted": [
+   "we're updating"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „at the moment“ zeigt, dass es gerade läuft: we are updating.",
+    "en": "The error: “at the moment” shows it is in progress: we are updating."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: „at the moment“ verlangt die Verlaufsform.",
+     "en": "There is an error: “at the moment” calls for the continuous form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „update“: Das Update läuft gerade, also are updating.",
+     "en": "The error is “update”: the update is in progress, so are updating."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-now-f2",
+  "type": "find",
+  "pat": "psc.now",
+  "prompt": "At the moment, our designer works from Lisbon while her visa is processed.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "is working",
+  "fixed": "At the moment, our designer is working from Lisbon while her visa is processed.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „At the moment“ + vorübergehende Lage verlangt is working.",
+    "en": "The error: “At the moment” + a temporary situation calls for is working."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Lage ist nur vorübergehend, also Continuous.",
+     "en": "There is an error: the situation is only temporary, so continuous."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „works“: Das gilt nur, bis das Visum da ist.",
+     "en": "The error is “works”: it holds only until the visa arrives."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-now-m1",
+  "type": "meaning",
+  "pat": "psc.now",
+  "a": "She lives in Hamburg.",
+  "b": "She's living in Hamburg.",
+  "q": {
+   "de": "Welcher Satz sagt, dass sie nur vorübergehend dort wohnt?",
+   "en": "Which sentence says she lives there only temporarily?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. is living zeigt eine begrenzte Zeit, lives den festen Wohnort.",
+    "en": "Right: sentence b. is living shows a limited time, lives the permanent home."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a ist Hamburg ihr fester Wohnort. Nichts deutet auf „nur für kurze Zeit“ hin.",
+     "en": "In a, Hamburg is her permanent home. Nothing hints at “only for a short time”."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: lives ist dauerhaft, is living vorübergehend.",
+     "en": "Not the same: lives is permanent, is living is temporary."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-sta-k1",
+  "type": "kwt",
+  "pat": "psc.state",
+  "from": "I have no idea who the new client is.",
+  "key": "KNOW",
+  "frame": "I ___ the new client is.",
+  "answer": "don't know who",
+  "accepted": [
+   "do not know who",
+   "really don't know who",
+   "still don't know who",
+   "still do not know who",
+   "don't even know who",
+   "do not even know who",
+   "really do not know who"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: know ist ein Zustandsverb: don't know who, ohne -ing.",
+    "en": "Right: know is a state verb: don't know who, with no -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "know"
+     ],
+     "de": "Das Schlüsselwort know muss unverändert in der Lücke stehen.",
+     "en": "The key word know must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "„knowing“ geht nicht: know ist ein Zustandsverb ohne -ing.",
+     "en": "“knowing” is not possible: know is a state verb without -ing."
+    },
+    {
+     "if": [
+      "know"
+     ],
+     "not": [
+      "do"
+     ],
+     "de": "Die Verneinung braucht do: I don't know who …",
+     "en": "The negative needs do: I don't know who …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-sta-k2",
+  "type": "kwt",
+  "pat": "psc.state",
+  "from": "Sorry, this clause is unclear to me.",
+  "key": "UNDERSTAND",
+  "frame": "Sorry, I ___ this clause.",
+  "answer": "don't understand",
+  "accepted": [
+   "do not understand",
+   "can't understand",
+   "cannot understand",
+   "don't fully understand",
+   "do not fully understand",
+   "don't really understand",
+   "do not really understand",
+   "don't quite understand",
+   "do not quite understand",
+   "don't completely understand",
+   "do not completely understand",
+   "don't entirely understand",
+   "do not entirely understand",
+   "still don't understand",
+   "still do not understand"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: understand ist ein Zustandsverb: don't understand, ohne -ing.",
+    "en": "Right: understand is a state verb: don't understand, with no -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "understand"
+     ],
+     "de": "Das Schlüsselwort understand muss unverändert in der Lücke stehen.",
+     "en": "The key word understand must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "understanding"
+     ],
+     "de": "„am not understanding“ geht nicht: understand ist ein Zustandsverb.",
+     "en": "“am not understanding” is not possible: understand is a state verb."
+    },
+    {
+     "if": [
+      "understand"
+     ],
+     "not": [
+      "do",
+      "can",
+      "cannot"
+     ],
+     "de": "Die Verneinung braucht do oder can: I don't understand.",
+     "en": "The negative needs do or can: I don't understand."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-sta-f1",
+  "type": "find",
+  "pat": "psc.state",
+  "prompt": "I'm needing a few more days to finish the analysis.",
+  "err": [
+   0,
+   1
+  ],
+  "answer": "I need",
+  "fixed": "I need a few more days to finish the analysis.",
+  "accepted": [
+   "I require",
+   "I'll need",
+   "I will need"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: need ist ein Zustandsverb und hat kein -ing: I need.",
+    "en": "The error: need is a state verb and takes no -ing: I need."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Bei need gibt es keine Verlaufsform.",
+     "en": "There is an error: need has no continuous form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „I'm needing“: need ist ein Zustand, keine Tätigkeit.",
+     "en": "The error is “I'm needing”: need is a state, not an activity."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-sta-f2",
+  "type": "find",
+  "pat": "psc.state",
+  "prompt": "This contract is belonging to our Berlin subsidiary, not to the parent company.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "belongs",
+  "fixed": "This contract belongs to our Berlin subsidiary, not to the parent company.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: belong ist ein Zustandsverb und hat kein -ing: belongs.",
+    "en": "The error: belong is a state verb and takes no -ing: belongs."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Zugehörigkeit ist ein Zustand, kein Vorgang.",
+     "en": "There is an error: belonging is a state, not a process."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is belonging“: belong bekommt kein -ing.",
+     "en": "The error is “is belonging”: belong takes no -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-sta-f3",
+  "type": "find",
+  "pat": "psc.state",
+  "prompt": "We prefer a written summary, because we need a record for legal.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: prefer und need sind Zustandsverben und stehen im Present Simple.",
+    "en": "No error: prefer and need are state verbs and take the present simple."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Zustandsverben wie prefer und need brauchen kein -ing.",
+     "en": "No error: state verbs like prefer and need take no -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-sta-m1",
+  "type": "meaning",
+  "pat": "psc.state",
+  "a": "She owns the building.",
+  "b": "She's renting the building this year.",
+  "q": {
+   "de": "Welcher Satz sagt, dass das Gebäude ihr gehört?",
+   "en": "Which sentence says the building belongs to her?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. own ist ein Zustand: Das Gebäude gehört ihr.",
+    "en": "Right: sentence a. own is a state: the building belongs to her."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b mietet sie das Gebäude nur dieses Jahr. Es gehört ihr nicht.",
+     "en": "In b she rents the building for this year only. It does not belong to her."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a ist Besitz, b ist eine vorübergehende Miete.",
+     "en": "Not the same: a is ownership, b is a temporary rental."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-dua-k1",
+  "type": "kwt",
+  "pat": "psc.dual",
+  "from": "In my opinion, the offer is not fair.",
+  "key": "THINK",
+  "frame": "I ___ the offer is fair.",
+  "answer": "don't think",
+  "accepted": [
+   "do not think",
+   "don't really think",
+   "do not really think",
+   "really don't think",
+   "honestly don't think",
+   "actually don't think"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: think = meinen ist ein Zustand: I don't think …, ohne -ing.",
+    "en": "Right: think = have an opinion is a state: I don't think …, with no -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "think"
+     ],
+     "de": "Das Schlüsselwort think muss unverändert in der Lücke stehen.",
+     "en": "The key word think must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "thinking"
+     ],
+     "de": "„am not thinking“ heißt: Ich denke gerade nicht nach. Gemeint ist die Meinung.",
+     "en": "“am not thinking” means: I am not considering it right now. The opinion is meant."
+    },
+    {
+     "if": [
+      "think"
+     ],
+     "not": [
+      "do"
+     ],
+     "de": "Verneint wird mit do: I don't think the offer is fair.",
+     "en": "The negative uses do: I don't think the offer is fair."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-dua-k2",
+  "type": "kwt",
+  "pat": "psc.dual",
+  "from": "The client is in a meeting with our CEO right now.",
+  "key": "HAVING",
+  "frame": "The client ___ with our CEO right now.",
+  "answer": "is having a meeting",
+  "accepted": [
+   "'s having a meeting",
+   "is having lunch",
+   "'s having lunch",
+   "is having dinner",
+   "'s having dinner",
+   "is having a call",
+   "'s having a call",
+   "is having a chat",
+   "'s having a chat",
+   "is having a discussion",
+   "'s having a discussion",
+   "is having a conversation",
+   "'s having a conversation"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: have als Tätigkeit (ein Meeting haben) steht im Continuous: is having.",
+    "en": "Right: have as an activity (to hold a meeting) takes the continuous: is having."
+   },
+   "wrong": [
+    {
+     "not": [
+      "having"
+     ],
+     "de": "Das Schlüsselwort having muss unverändert in der Lücke stehen.",
+     "en": "The key word having must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has a meeting“ nennt eine Regel. right now meint die laufende Handlung.",
+     "en": "“has a meeting” names a rule. right now means the action in progress."
+    },
+    {
+     "if": [
+      "having"
+     ],
+     "not": [
+      "is"
+     ],
+     "de": "Vor dem -ing-Wort fehlt is: is having a meeting.",
+     "en": "Is is missing before the -ing word: is having a meeting."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-dua-f1",
+  "type": "find",
+  "pat": "psc.dual",
+  "prompt": "This soup is tasting too salty for me.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "tastes",
+  "fixed": "This soup tastes too salty for me.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: taste = schmecken ist ein Zustand, also tastes statt is tasting.",
+    "en": "The error: taste (flavor) is a state, so tastes instead of is tasting."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Beim Geschmack gibt es hier keine Verlaufsform.",
+     "en": "There is an error: flavor takes no continuous form here."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is tasting“: Gemeint ist der Geschmack, keine Tätigkeit.",
+     "en": "The error is “is tasting”: the flavor is meant, not an activity."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-dua-f2",
+  "type": "find",
+  "pat": "psc.dual",
+  "prompt": "Our company is having 3,000 employees in Europe.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "has",
+  "fixed": "Our company has 3,000 employees in Europe.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: have = besitzen ist ein Zustand, also has statt is having.",
+    "en": "The error: have = own is a state, so has instead of is having."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Eine Zahl von Mitarbeitern ist ein Zustand, kein Vorgang.",
+     "en": "There is an error: a number of employees is a state, not a process."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is having“: Mit „besitzen“ gibt es kein -ing.",
+     "en": "The error is “is having”: with “own” there is no -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-dua-f3",
+  "type": "find",
+  "pat": "psc.dual",
+  "prompt": "We're having lunch with the client at one, so I'll call you back later.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: have als Tätigkeit (Mittag essen) darf im Continuous stehen.",
+    "en": "No error: have as an activity (eating lunch) may take the continuous."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: „having lunch“ ist eine Handlung, deshalb ist -ing richtig.",
+     "en": "No error: “having lunch” is an action, so -ing is correct."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-dua-m1",
+  "type": "meaning",
+  "pat": "psc.dual",
+  "a": "I'm thinking about the offer.",
+  "b": "I think the offer is fair.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich schon eine feste Meinung habe?",
+   "en": "Which sentence says I already have a firm opinion?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. think = meinen ist ein Zustand, die Meinung steht fest.",
+    "en": "Right: sentence b. think = have an opinion is a state, the opinion is settled."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a überlege ich noch. Das -ing zeigt eine Handlung, die gerade läuft.",
+     "en": "In a I am still considering. The -ing shows an action in progress."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a heißt „ich überlege“, b heißt „ich meine“.",
+     "en": "Not the same: a means “I am considering”, b means “I believe”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-alw-k1",
+  "type": "kwt",
+  "pat": "psc.always",
+  "from": "It annoys me that Tom keeps changing the agenda.",
+  "key": "ALWAYS",
+  "frame": "Tom ___ the agenda!",
+  "answer": "is always changing",
+  "accepted": [
+   "'s always changing",
+   "is always revising",
+   "'s always revising",
+   "is always rewriting",
+   "'s always rewriting",
+   "is always updating",
+   "'s always updating"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: is always + -ing zeigt Ärger über die ständige Wiederholung.",
+    "en": "Right: is always + -ing shows annoyance at constant repetition."
+   },
+   "wrong": [
+    {
+     "not": [
+      "always"
+     ],
+     "de": "Das Schlüsselwort always muss unverändert in der Lücke stehen.",
+     "en": "The key word always must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "always",
+      "changes"
+     ],
+     "de": "„always changes“ nennt nur die Häufigkeit. Der Ärger braucht is always changing.",
+     "en": "“always changes” only states the frequency. The annoyance needs is always changing."
+    },
+    {
+     "if": [
+      "always"
+     ],
+     "not": [
+      "is"
+     ],
+     "de": "Vor always fehlt is: Tom is always changing …",
+     "en": "Is is missing before always: Tom is always changing …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-alw-k2",
+  "type": "kwt",
+  "pat": "psc.always",
+  "from": "I'm annoyed that you leave your badge at home so often.",
+  "key": "ALWAYS",
+  "frame": "You ___ your badge at home!",
+  "answer": "are always leaving",
+  "accepted": [
+   "'re always leaving",
+   "are always forgetting",
+   "'re always forgetting"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: are always + -ing zeigt Ärger über das ständige Wiederholen.",
+    "en": "Right: are always + -ing shows annoyance at the constant repeating."
+   },
+   "wrong": [
+    {
+     "not": [
+      "always"
+     ],
+     "de": "Das Schlüsselwort always muss unverändert in der Lücke stehen.",
+     "en": "The key word always must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "always",
+      "leave"
+     ],
+     "de": "„always leave“ nennt nur die Häufigkeit. Der Ärger braucht are always leaving.",
+     "en": "“always leave” only states the frequency. The annoyance needs are always leaving."
+    },
+    {
+     "if": [
+      "always"
+     ],
+     "not": [
+      "are"
+     ],
+     "de": "Vor always fehlt are: You are always leaving …",
+     "en": "Are is missing before always: You are always leaving …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-alw-f1",
+  "type": "find",
+  "pat": "psc.always",
+  "prompt": "He is interrupting always the other speakers in our meetings.",
+  "err": [
+   1,
+   3
+  ],
+  "answer": "is always interrupting",
+  "fixed": "He is always interrupting the other speakers in our meetings.",
+  "accepted": [
+   "always interrupts"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: always steht zwischen is und dem -ing-Wort: is always interrupting.",
+    "en": "The error: always goes between is and the -ing word: is always interrupting."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Stellung von always stimmt nicht.",
+     "en": "There is an error: the position of always is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „interrupting always“: always gehört vor das -ing-Wort.",
+     "en": "The error is “interrupting always”: always belongs before the -ing word."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-alw-f2",
+  "type": "find",
+  "pat": "psc.always",
+  "prompt": "Our client is always call us after hours.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "is always calling",
+  "fixed": "Our client is always calling us after hours.",
+  "accepted": [
+   "always calls"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach is always folgt die -ing-Form: is always calling.",
+    "en": "The error: after is always the -ing form follows: is always calling."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach is fehlt die -ing-Form.",
+     "en": "There is an error: after is the -ing form is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „call“: is always braucht die -ing-Form.",
+     "en": "The error is “call”: is always needs the -ing form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-alw-f3",
+  "type": "find",
+  "pat": "psc.always",
+  "prompt": "My laptop is always freezing during presentations, which drives me crazy.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: is always + -ing zeigt hier Ärger über die ständige Wiederholung.",
+    "en": "No error: is always + -ing shows annoyance at the constant repetition here."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: „is always freezing“ ist richtig und klingt genervt.",
+     "en": "No error: “is always freezing” is correct and sounds annoyed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psc-alw-m1",
+  "type": "meaning",
+  "pat": "psc.always",
+  "a": "She always borrows my charger.",
+  "b": "She's always borrowing my charger!",
+  "q": {
+   "de": "Welcher Satz drückt eher Ärger über die Wiederholung aus?",
+   "en": "Which sentence is more likely to express annoyance at the repetition?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. is always + -ing klingt nach Ärger, a nennt nur die Gewohnheit.",
+    "en": "Right: sentence b. is always + -ing sounds annoyed, a only states the habit."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "a nennt nur die Häufigkeit und klingt sachlich.",
+     "en": "a only states the frequency and sounds neutral."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: b trägt zusätzlich den Ärger.",
+     "en": "Not the same: b also carries the annoyance."
+    }
+   ]
+  }
+ }
+]

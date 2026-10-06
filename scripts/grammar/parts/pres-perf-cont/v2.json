@@ -1,0 +1,1272 @@
+[
+ {
+  "id": "pc-dur-k1",
+  "type": "kwt",
+  "pat": "pc.duration",
+  "from": "We started testing the new CRM in March, and we are still testing it.",
+  "key": "BEEN",
+  "frame": "We ___ the new CRM since March.",
+  "answer": "have been testing",
+  "accepted": [
+   "'ve been testing"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „since March“ und die Arbeit läuft noch → have been testing.",
+    "en": "Right: “since March” + still going → have been testing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "testing"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Continuous passt nicht zu since: Es fehlt have been.",
+     "en": "Present Continuous does not go with since: have been is missing."
+    },
+    {
+     "if": [
+      "have",
+      "tested"
+     ],
+     "de": "Mit been und -ing: have been testing. Hier ist das Schlüsselwort Pflicht.",
+     "en": "With been and -ing: have been testing. The key word is required here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-dur-k2",
+  "type": "kwt",
+  "pat": "pc.duration",
+  "from": "I started waiting for the invoice on Monday, and I am still waiting.",
+  "key": "SINCE",
+  "frame": "I ___ for the invoice.",
+  "answer": "have been waiting since Monday",
+  "accepted": [
+   "'ve been waiting since Monday",
+   "have waited since Monday",
+   "'ve waited since Monday"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Start am Montag und noch im Gange → have been waiting since Monday.",
+    "en": "Right: started Monday, still going → have been waiting since Monday."
+   },
+   "wrong": [
+    {
+     "not": [
+      "since"
+     ],
+     "de": "Das Schlüsselwort since muss unverändert in der Lücke stehen.",
+     "en": "The key word since must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "since",
+      "am"
+     ],
+     "de": "Nach since steht kein Present Continuous, sondern have been waiting.",
+     "en": "After since use have been waiting, not the Present Continuous."
+    },
+    {
+     "if": [
+      "since",
+      "waiting"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been waiting since Monday.",
+     "en": "been is missing: have been waiting since Monday."
+    },
+    {
+     "if": [
+      "since",
+      "waited"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple passt nicht zu since: have waited oder have been waiting.",
+     "en": "Past Simple does not go with since: have waited or have been waiting."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-dur-f1",
+  "type": "find",
+  "pat": "pc.duration",
+  "prompt": "We are working on the integration since last October.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "have been working",
+  "fixed": "We have been working on the integration since last October.",
+  "accepted": [
+   "have worked"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „are working“ passt nicht zu since. Richtig: have been working.",
+    "en": "The error: “are working” does not go with since. Correct: have been working."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: since verlangt den Blick zurück.",
+     "en": "There is an error: since needs the look back."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „are working“: So klingt das deutsche Präsens, English braucht have been.",
+     "en": "The error is “are working”: that is the German present, English needs have been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-dur-f2",
+  "type": "find",
+  "pat": "pc.duration",
+  "prompt": "She is the account manager for this client since 2020.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "has been",
+  "fixed": "She has been the account manager for this client since 2020.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „is“ passt nicht zu since 2020. Richtig: has been.",
+    "en": "The error: “is” does not go with since 2020. Correct: has been."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: since 2020 verlangt Present Perfect.",
+     "en": "There is an error: since 2020 needs the Present Perfect."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is“: Für „seit 2020“ braucht Englisch has been.",
+     "en": "The error is “is”: for “seit 2020” English needs has been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-dur-f3",
+  "type": "find",
+  "pat": "pc.duration",
+  "prompt": "Our engineers have been fixing the login bug since early this morning.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Stimmt: „since early this morning“ + have been fixing, die Arbeit läuft noch.",
+    "en": "Correct: “since early this morning” + have been fixing, the work is ongoing."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: since verlangt have been fixing, und das steht da.",
+     "en": "This is correct: since needs have been fixing, and that is what we have."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-dur-m1",
+  "type": "meaning",
+  "pat": "pc.duration",
+  "a": "We have been working on the proposal since Monday.",
+  "b": "We worked on the proposal on Monday.",
+  "q": {
+   "de": "Welcher Satz sagt: Die Arbeit am Angebot läuft noch?",
+   "en": "Which sentence says the work on the proposal is still going on?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. have been working since Monday reicht bis jetzt.",
+    "en": "Right: sentence a. have been working since Monday reaches up to now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht Past Simple mit „on Monday“: Das ist vorbei.",
+     "en": "Sentence b uses the Past Simple with “on Monday”: that is over."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a läuft noch, b ist abgeschlossen.",
+     "en": "Not the same: a is ongoing, b is finished."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sf-k1",
+  "type": "kwt",
+  "pat": "pc.since-for",
+  "from": "We started negotiating two weeks ago, and we are still negotiating.",
+  "key": "FOR",
+  "frame": "We ___ two weeks.",
+  "answer": "have been negotiating for",
+  "accepted": [
+   "'ve been negotiating for",
+   "have negotiated for",
+   "'ve negotiated for"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: two weeks ist eine Zeitspanne → have been negotiating for.",
+    "en": "Right: two weeks is a length of time → have been negotiating for."
+   },
+   "wrong": [
+    {
+     "not": [
+      "for"
+     ],
+     "de": "Das Schlüsselwort for muss unverändert in der Lücke stehen.",
+     "en": "The key word for must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "since"
+     ],
+     "de": "since braucht einen Zeitpunkt; two weeks ist eine Zeitspanne, also for.",
+     "en": "since needs a point in time; two weeks is a length of time, so for."
+    },
+    {
+     "if": [
+      "negotiating"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been negotiating for.",
+     "en": "been is missing: have been negotiating for."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sf-k2",
+  "type": "kwt",
+  "pat": "pc.since-for",
+  "from": "He started working remotely in September and still works remotely.",
+  "key": "SINCE",
+  "frame": "He ___ September.",
+  "answer": "has been working remotely since",
+  "accepted": [
+   "has worked remotely since",
+   "'s been working remotely since",
+   "'s worked remotely since"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: September ist ein Zeitpunkt → has been working remotely since.",
+    "en": "Right: September is a point in time → has been working remotely since."
+   },
+   "wrong": [
+    {
+     "not": [
+      "since"
+     ],
+     "de": "Das Schlüsselwort since muss unverändert in der Lücke stehen.",
+     "en": "The key word since must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "for braucht eine Zeitspanne (for months); September ist ein Zeitpunkt.",
+     "en": "for needs a length of time (for months); September is a point in time."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: has been working remotely since.",
+     "en": "been is missing: has been working remotely since."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sf-f1",
+  "type": "find",
+  "pat": "pc.since-for",
+  "prompt": "We have been waiting on the approval since three days.",
+  "err": [
+   7,
+   8
+  ],
+  "answer": "for three",
+  "fixed": "We have been waiting on the approval for three days.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: three days ist eine Zeitspanne, also for three days statt since.",
+    "en": "The error: three days is a length of time, so for three days instead of since."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: since passt nicht zu einer Zeitspanne.",
+     "en": "There is an error: since does not go with a length of time."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „since three“: Deutsch „seit drei Tagen“ braucht hier for.",
+     "en": "The error is “since three”: German “seit drei Tagen” needs for here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sf-f2",
+  "type": "find",
+  "pat": "pc.since-for",
+  "prompt": "I have been working here for 2019 and love it.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "since 2019",
+  "fixed": "I have been working here since 2019 and love it.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: 2019 ist ein Zeitpunkt, also since 2019 statt for.",
+    "en": "The error: 2019 is a point in time, so since 2019 instead of for."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: for passt nicht zu einem Jahr als Startpunkt.",
+     "en": "There is an error: for does not go with a year as a starting point."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „for 2019“: Ein Zeitpunkt verlangt since.",
+     "en": "The error is “for 2019”: a point in time needs since."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sf-m1",
+  "type": "meaning",
+  "pat": "pc.since-for",
+  "a": "I have lived in Munich for two years.",
+  "b": "I lived in Munich for two years.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich wohne noch in München?",
+   "en": "Which sentence says I still live in Munich?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. for + Present Perfect gilt bis jetzt.",
+    "en": "Right: sentence a. for + Present Perfect runs up to now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht Past Simple: Die zwei Jahre sind vorbei.",
+     "en": "Sentence b uses the Past Simple: the two years are over."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a gilt bis jetzt, b ist abgeschlossen.",
+     "en": "Not the same: a runs up to now, b is finished."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-fm-k1",
+  "type": "kwt",
+  "pat": "pc.form",
+  "from": "When did the printer start making that noise? It is still making it.",
+  "key": "BEEN",
+  "frame": "How long ___ that noise?",
+  "answer": "has the printer been making",
+  "accepted": [
+   "has it been making"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Frage mit has + Subjekt + been + -ing: has the printer been making.",
+    "en": "Right: question with has + subject + been + -ing: has the printer been making."
+   },
+   "wrong": [
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "printer",
+      "have"
+     ],
+     "de": "Bei the printer (it) steht has, nicht have.",
+     "en": "With the printer (it) use has, not have."
+    },
+    {
+     "if": [
+      "been",
+      "make"
+     ],
+     "de": "Nach been steht die -ing-Form: making.",
+     "en": "After been use the -ing form: making."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-fm-k2",
+  "type": "kwt",
+  "pat": "pc.form",
+  "from": "Recently we sleep badly because the neighbors are loud.",
+  "key": "BEEN",
+  "frame": "We ___ well recently, because the neighbors are loud.",
+  "answer": "haven't been sleeping",
+  "accepted": [
+   "have not been sleeping"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Verneinung mit haven't been + -ing: haven't been sleeping.",
+    "en": "Right: the negative uses haven't been + -ing: haven't been sleeping."
+   },
+   "wrong": [
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "been",
+      "slept"
+     ],
+     "de": "Nach been steht kein Partizip, sondern sleeping.",
+     "en": "After been there is no participle, but sleeping."
+    },
+    {
+     "if": [
+      "been",
+      "sleep"
+     ],
+     "de": "Nach been steht die -ing-Form: sleeping.",
+     "en": "After been use the -ing form: sleeping."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-fm-f1",
+  "type": "find",
+  "pat": "pc.form",
+  "prompt": "She have been managing the account since March.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "has",
+  "fixed": "She has been managing the account since March.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: she verlangt has, nicht have.",
+    "en": "The error: she takes has, not have."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Das Hilfsverb passt nicht zu she.",
+     "en": "There is an error: the auxiliary does not match she."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „have“: Bei he/she/it heißt es has.",
+     "en": "The error is “have”: with he/she/it use has."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-fm-f2",
+  "type": "find",
+  "pat": "pc.form",
+  "prompt": "We haven't been receive any replies from the client.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "receiving",
+  "fixed": "We haven't been receiving any replies from the client.",
+  "accepted": [
+   "getting"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach been steht die -ing-Form: receiving.",
+    "en": "The error: after been use the -ing form: receiving."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach been fehlt die richtige Endung.",
+     "en": "There is an error: after been the right ending is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „receive“: Nach been braucht das Verb -ing.",
+     "en": "The error is “receive”: after been the verb needs -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-fm-m1",
+  "type": "meaning",
+  "pat": "pc.form",
+  "a": "We have been talking about the budget all morning.",
+  "b": "We had been talking about the budget when the CEO walked in.",
+  "q": {
+   "de": "Welcher Satz beschreibt die Zeit bis jetzt?",
+   "en": "Which sentence describes the time up to now?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. have been talking reicht bis jetzt.",
+    "en": "Right: sentence a. have been talking reaches up to now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "had been talking meint einen früheren Zeitpunkt in der Vergangenheit.",
+     "en": "had been talking refers to an earlier point in the past."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: have been gilt jetzt, had been früher.",
+     "en": "Not the same: have been is about now, had been about earlier."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-rc-k1",
+  "type": "kwt",
+  "pat": "pc.recent",
+  "from": "Our response times have gotten longer over the past few weeks.",
+  "key": "LATELY",
+  "frame": "Our response times ___.",
+  "answer": "have been getting longer lately",
+  "accepted": [
+   "'ve been getting longer lately",
+   "have gotten longer lately",
+   "'ve gotten longer lately",
+   "have lately been getting longer",
+   "have been increasing lately",
+   "'ve been increasing lately",
+   "have been rising lately",
+   "'ve been rising lately",
+   "have been growing longer lately",
+   "'ve been growing longer lately",
+   "have been getting slower lately",
+   "'ve been getting slower lately"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: lately + Entwicklung bis jetzt → have been getting longer lately.",
+    "en": "Right: lately + a development up to now → have been getting longer lately."
+   },
+   "wrong": [
+    {
+     "not": [
+      "lately"
+     ],
+     "de": "Das Schlüsselwort lately muss unverändert in der Lücke stehen.",
+     "en": "The key word lately must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "are",
+      "getting"
+     ],
+     "de": "Present Continuous passt nicht zu lately: gemeint ist die Zeit bis jetzt.",
+     "en": "Present Continuous does not go with lately: the time up to now is meant."
+    },
+    {
+     "if": [
+      "getting"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been getting longer lately.",
+     "en": "been is missing: have been getting longer lately."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-rc-k2",
+  "type": "kwt",
+  "pat": "pc.recent",
+  "from": "He is out of breath because he ran up the stairs a moment ago.",
+  "key": "BEEN",
+  "frame": "He is out of breath because he ___ the stairs.",
+  "answer": "has been running up",
+  "accepted": [
+   "'s been running up",
+   "has been climbing",
+   "'s been climbing",
+   "has been walking up",
+   "'s been walking up",
+   "has been sprinting up",
+   "'s been sprinting up",
+   "has been jogging up",
+   "'s been jogging up",
+   "has been racing up",
+   "'s been racing up",
+   "has been dashing up",
+   "'s been dashing up"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Spur im Jetzt (außer Atem) → has been running up the stairs.",
+    "en": "Right: trace in the present (out of breath) → has been running up the stairs."
+   },
+   "wrong": [
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "been",
+      "ran"
+     ],
+     "de": "Nach been steht kein Partizip oder Past: running.",
+     "en": "After been there is no past form: running."
+    },
+    {
+     "if": [
+      "is",
+      "running"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; der Grund liegt in der Tätigkeit bis jetzt.",
+     "en": "Present Continuous shows only now; the reason lies in the activity up to now."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-rc-f1",
+  "type": "find",
+  "pat": "pc.recent",
+  "prompt": "I don't sleep well lately, so I'm exhausted.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "haven't been sleeping",
+  "fixed": "I haven't been sleeping well lately, so I'm exhausted.",
+  "accepted": [
+   "haven't slept",
+   "have not been sleeping",
+   "have not slept"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „don't sleep“ passt nicht zu lately. Richtig: haven't been sleeping.",
+    "en": "The error: “don't sleep” does not go with lately. Correct: haven't been sleeping."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: lately blickt auf die Zeit bis jetzt zurück.",
+     "en": "There is an error: lately looks back at the time up to now."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „don't sleep“: das deutsche Präsens, lately braucht have been.",
+     "en": "The error is “don't sleep”: the German present, lately needs have been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-rc-f2",
+  "type": "find",
+  "pat": "pc.recent",
+  "prompt": "We aren't getting many leads recently.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "haven't been getting",
+  "fixed": "We haven't been getting many leads recently.",
+  "accepted": [
+   "haven't gotten",
+   "have not been getting",
+   "have not gotten"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „aren't getting“ passt nicht zu recently. Richtig: haven't been getting.",
+    "en": "The error: “aren't getting” does not go with recently. Correct: haven't been getting."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: recently verlangt den Blick zurück.",
+     "en": "There is an error: recently needs the look back."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „aren't getting“: Es geht um die Zeit bis jetzt.",
+     "en": "The error is “aren't getting”: it is about the time up to now."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-rc-m1",
+  "type": "meaning",
+  "pat": "pc.recent",
+  "a": "He has been sleeping badly lately.",
+  "b": "He slept badly last week.",
+  "q": {
+   "de": "Welcher Satz sagt: Das Problem besteht bis heute?",
+   "en": "Which sentence says the problem lasts until today?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. lately + have been sleeping reicht bis jetzt.",
+    "en": "Right: sentence a. lately + has been sleeping reaches up to now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b nennt „last week“ eine vergangene Zeit: Past Simple, vorbei.",
+     "en": "In b “last week” names a finished time: Past Simple, over."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a gilt bis jetzt, b blickt nur auf letzte Woche.",
+     "en": "Not the same: a runs up to now, b only looks at last week."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sv-k1",
+  "type": "kwt",
+  "pat": "pc.state-verbs",
+  "from": "I met our CFO ten years ago, and I still know her.",
+  "key": "KNOWN",
+  "frame": "I ___ ten years.",
+  "answer": "have known her for",
+  "accepted": [
+   "'ve known her for",
+   "have known our CFO for",
+   "'ve known our CFO for",
+   "have known the CFO for",
+   "'ve known the CFO for",
+   "have known her for about",
+   "'ve known her for about",
+   "have known her for almost",
+   "'ve known her for almost",
+   "have known her for nearly",
+   "'ve known her for nearly",
+   "have known her for over",
+   "'ve known her for over"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: know ist ein Zustandsverb → have known her for, ohne -ing.",
+    "en": "Right: know is a state verb → have known her for, without -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "known"
+     ],
+     "de": "Das Schlüsselwort known muss unverändert in der Lücke stehen.",
+     "en": "The key word known must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "been",
+      "knowing"
+     ],
+     "de": "know hat keine -ing-Form, es ist ein Zustandsverb.",
+     "en": "know has no -ing form; it is a state verb."
+    },
+    {
+     "if": [
+      "know"
+     ],
+     "not": [
+      "known"
+     ],
+     "de": "Present Simple passt nicht zu „ten years“: have known.",
+     "en": "Present Simple does not go with “ten years”: have known."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sv-k2",
+  "type": "kwt",
+  "pat": "pc.state-verbs",
+  "from": "I bought this laptop in 2021, and I still own it.",
+  "key": "HAD",
+  "frame": "I ___ 2021.",
+  "answer": "have had this laptop since",
+  "accepted": [
+   "'ve had this laptop since",
+   "have had it since",
+   "'ve had it since",
+   "have had my laptop since",
+   "'ve had my laptop since",
+   "have had the laptop since",
+   "'ve had the laptop since"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: have ist hier Zustand → have had this laptop since, ohne -ing.",
+    "en": "Right: have is a state here → have had this laptop since, without -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Das Schlüsselwort had muss unverändert in der Lücke stehen.",
+     "en": "The key word had must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "been",
+      "having"
+     ],
+     "de": "have als Besitz hat keine -ing-Form: have had.",
+     "en": "have as possession has no -ing form: have had."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Present Simple passt nicht zu since 2021: have had.",
+     "en": "Present Simple does not go with since 2021: have had."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sv-f1",
+  "type": "find",
+  "pat": "pc.state-verbs",
+  "prompt": "I have been knowing the CFO since 2015.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "known",
+  "fixed": "I have known the CFO since 2015.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: know ist ein Zustandsverb, also have known statt been knowing.",
+    "en": "The error: know is a state verb, so have known instead of been knowing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Das Verb verträgt keine -ing-Form.",
+     "en": "There is an error: the verb does not take an -ing form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „been knowing“: Zustandsverben bleiben einfach.",
+     "en": "The error is “been knowing”: state verbs stay simple."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sv-f2",
+  "type": "find",
+  "pat": "pc.state-verbs",
+  "prompt": "How long have you been having this phone?",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "had",
+  "fixed": "How long have you had this phone?",
+  "accepted": [
+   "owned"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: have als Besitz steht einfach: have you had.",
+    "en": "The error: have as possession stays simple: have you had."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: have meint hier Besitz, keine Tätigkeit.",
+     "en": "There is an error: have means possession here, not an activity."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „been having“: Für Besitz braucht es had.",
+     "en": "The error is “been having”: possession needs had."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sv-f3",
+  "type": "find",
+  "pat": "pc.state-verbs",
+  "prompt": "We have owned this office since 2016.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Stimmt: own ist ein Zustandsverb, deshalb have owned ohne -ing.",
+    "en": "Correct: own is a state verb, so have owned without -ing."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: Zustandsverben stehen im einfachen Present Perfect.",
+     "en": "This is correct: state verbs take the simple Present Perfect."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-sv-m1",
+  "type": "meaning",
+  "pat": "pc.state-verbs",
+  "a": "I have known her for years.",
+  "b": "I knew her for years.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich kenne sie noch?",
+   "en": "Which sentence says I still know her?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. have known gilt bis jetzt.",
+    "en": "Right: sentence a. have known runs up to now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht Past Simple: Das gehört zur Vergangenheit.",
+     "en": "Sentence b uses the Past Simple: it belongs to the past."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a gilt bis jetzt, b ist abgeschlossen.",
+     "en": "Not the same: a runs up to now, b is finished."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-cs-k1",
+  "type": "kwt",
+  "pat": "pc.cont-simple",
+  "from": "I am in the middle of writing the report. I began an hour ago.",
+  "key": "BEEN",
+  "frame": "I ___ the report for an hour.",
+  "answer": "have been writing",
+  "accepted": [
+   "'ve been writing"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Tätigkeit läuft noch → have been writing.",
+    "en": "Right: the activity is still going on → have been writing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "written"
+     ],
+     "de": "Mit been steht -ing: writing. have written wäre das Ergebnis.",
+     "en": "With been use -ing: writing. have written would be the result."
+    },
+    {
+     "if": [
+      "writing"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been writing.",
+     "en": "been is missing: have been writing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-cs-k2",
+  "type": "kwt",
+  "pat": "pc.cont-simple",
+  "from": "I wrote a report on Monday, one on Tuesday and one today.",
+  "key": "THREE",
+  "frame": "I ___ reports since Monday.",
+  "answer": "have written three",
+  "accepted": [
+   "'ve written three",
+   "have already written three",
+   "'ve already written three",
+   "have written just three",
+   "'ve written just three",
+   "have written only three",
+   "'ve written only three"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Zahl zählt das Ergebnis → have written three reports.",
+    "en": "Right: a number counts the result → have written three reports."
+   },
+   "wrong": [
+    {
+     "not": [
+      "three"
+     ],
+     "de": "Das Schlüsselwort three muss unverändert in der Lücke stehen.",
+     "en": "The key word three must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "been",
+      "writing"
+     ],
+     "de": "Bei einer Zahl steht das einfache Present Perfect: have written.",
+     "en": "With a number use the simple Present Perfect: have written."
+    },
+    {
+     "if": [
+      "wrote"
+     ],
+     "de": "Past Simple passt nicht zu since Monday: have written three.",
+     "en": "Past Simple does not go with since Monday: have written three."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-cs-f1",
+  "type": "find",
+  "pat": "pc.cont-simple",
+  "prompt": "How many emails have you been sending since this morning?",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "sent",
+  "fixed": "How many emails have you sent since this morning?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „how many“ zählt das Ergebnis, also have you sent statt been sending.",
+    "en": "The error: “how many” counts the result, so have you sent instead of been sending."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Bei „how many“ wird gezählt, das verlangt die einfache Form.",
+     "en": "There is an error: “how many” counts, which needs the simple form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „been sending“: Eine Zählung verlangt sent.",
+     "en": "The error is “been sending”: a count needs sent."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-cs-f2",
+  "type": "find",
+  "pat": "pc.cont-simple",
+  "prompt": "I have been reading the report all morning, and I'm only halfway through.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Stimmt: „all morning“ + noch nicht fertig → have been reading ist richtig.",
+    "en": "Correct: “all morning” + not finished → have been reading is right."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: Die Tätigkeit läuft noch, deshalb -ing.",
+     "en": "This is correct: the activity is still going on, hence -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-cs-f3",
+  "type": "find",
+  "pat": "pc.cont-simple",
+  "prompt": "The team has been finishing three migrations since Monday.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "finished",
+  "fixed": "The team has finished three migrations since Monday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Eine Zahl zählt das Ergebnis, also has finished statt been finishing.",
+    "en": "The error: a number counts the result, so has finished instead of been finishing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Drei Migrationen sind gezählt, das verlangt das Ergebnis.",
+     "en": "There is an error: three migrations are counted, which needs the result form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „been finishing“: Gezählte Ergebnisse brauchen has finished.",
+     "en": "The error is “been finishing”: counted results need has finished."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pc-cs-m1",
+  "type": "meaning",
+  "pat": "pc.cont-simple",
+  "a": "I have been cleaning the kitchen.",
+  "b": "I have cleaned the kitchen.",
+  "q": {
+   "de": "Welcher Satz sagt: Die Küche ist ganz sicher sauber?",
+   "en": "Which sentence says the kitchen is definitely clean?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Das einfache Present Perfect nennt das fertige Ergebnis.",
+    "en": "Right: sentence b. The simple Present Perfect states the finished result."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a steht die Tätigkeit im Mittelpunkt; ob sie fertig ist, bleibt offen.",
+     "en": "In a the activity is in focus; whether it is finished stays open."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a lässt offen, ob fertig, b sagt es klar.",
+     "en": "Not the same: a leaves open whether it is done, b says it clearly."
+    }
+   ]
+  }
+ }
+]

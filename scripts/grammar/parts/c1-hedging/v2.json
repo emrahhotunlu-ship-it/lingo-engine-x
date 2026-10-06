@@ -1,0 +1,1135 @@
+[
+ {
+  "id": "hg-mod-k1",
+  "type": "kwt",
+  "pat": "hg.modal",
+  "from": "Perhaps the vendor will miss the deadline.",
+  "key": "MIGHT",
+  "frame": "The vendor ___ the deadline.",
+  "answer": "might miss",
+  "accepted": [
+   "might well miss",
+   "might possibly miss",
+   "might perhaps miss",
+   "might just miss"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: might + Grundform macht aus will eine Möglichkeit: might miss.",
+    "en": "Right: might + base verb turns will into a possibility: might miss."
+   },
+   "wrong": [
+    {
+     "not": [
+      "might"
+     ],
+     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
+     "en": "The key word might must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "might",
+      "to"
+     ],
+     "de": "Nach might steht die Grundform ohne to: might miss.",
+     "en": "After might use the base form with no to: might miss."
+    },
+    {
+     "if": [
+      "might",
+      "missed"
+     ],
+     "de": "Nach might steht die Grundform: might miss, nicht missed.",
+     "en": "After might use the base form: might miss, not missed."
+    },
+    {
+     "if": [
+      "might",
+      "misses"
+     ],
+     "de": "Nach might steht die Grundform ohne -s: might miss.",
+     "en": "After might use the base form with no -s: might miss."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-mod-k2",
+  "type": "kwt",
+  "pat": "hg.modal",
+  "from": "Maybe he has left already, but I'm not sure.",
+  "key": "MIGHT",
+  "frame": "He ___ left already.",
+  "answer": "might have",
+  "accepted": [
+   "might well have"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: might have + Partizip: eine Vermutung über etwas, das schon passiert sein könnte.",
+    "en": "Right: might have + participle: a guess about something that may already have happened."
+   },
+   "wrong": [
+    {
+     "not": [
+      "might"
+     ],
+     "de": "Das Schlüsselwort might muss unverändert in der Lücke stehen.",
+     "en": "The key word might must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "might",
+      "has"
+     ],
+     "de": "Nach might steht have, nicht has: might have left.",
+     "en": "After might use have, not has: might have left."
+    },
+    {
+     "if": [
+      "might",
+      "had"
+     ],
+     "de": "Für die Vergangenheit: might have + Partizip, nicht might had.",
+     "en": "For the past use might have + participle, not might had."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-mod-f1",
+  "type": "find",
+  "pat": "hg.modal",
+  "prompt": "The new rules might affected our timeline.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "might affect",
+  "fixed": "The new rules might affect our timeline.",
+  "accepted": [
+   "could affect",
+   "may affect",
+   "might have affected",
+   "could have affected",
+   "may have affected"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach might steht die Grundform, nicht affected: might affect.",
+    "en": "The error: after might use the base form, not affected: might affect."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach might folgt die Grundform.",
+     "en": "There is an error: the base form follows might."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „might affected“: Nach might steht die Grundform.",
+     "en": "The error is in “might affected”: the base form follows might."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-mod-f2",
+  "type": "find",
+  "pat": "hg.modal",
+  "prompt": "It could takes a few more days to get approval.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "could take",
+  "fixed": "It could take a few more days to get approval.",
+  "accepted": [
+   "might take",
+   "may take"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach could steht die Grundform, nicht takes: could take.",
+    "en": "The error: after could use the base form, not takes: could take."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: could verlangt die Grundform.",
+     "en": "There is an error: could needs the base form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „could takes“: Nach could kein -s.",
+     "en": "The error is in “could takes”: no -s after could."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-mod-f3",
+  "type": "find",
+  "pat": "hg.modal",
+  "prompt": "The final figures could differ slightly from the draft.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: could + Grundform (differ) ist richtig und klingt vorsichtig.",
+    "en": "No error: could + base verb (differ) is correct and sounds careful."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach could steht die Grundform differ, ganz ohne -s.",
+     "en": "No error: the base form differ follows could, with no -s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-mod-m1",
+  "type": "meaning",
+  "pat": "hg.modal",
+  "a": "The client might be unhappy with the timeline.",
+  "b": "The client must be unhappy with the timeline.",
+  "q": {
+   "de": "Bei welchem Satz ist sich der Sprecher fast sicher?",
+   "en": "In which sentence is the speaker almost certain?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. must be zieht einen fast sicheren Schluss, might be nur eine Möglichkeit.",
+    "en": "Right: sentence b. must be draws an almost certain conclusion, might be only a possibility."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a lässt might offen, ob der Kunde unzufrieden ist. Das ist die vorsichtigere Fassung.",
+     "en": "In a, might leaves open whether the client is unhappy. That is the more careful version."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: must be klingt fast sicher, might be lässt es offen.",
+     "en": "Not the same: must be sounds almost certain, might be leaves it open."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-wor-k1",
+  "type": "kwt",
+  "pat": "hg.worth",
+  "from": "Checking the contract first would be a sensible step.",
+  "key": "WORTH",
+  "frame": "___ checking the contract first.",
+  "answer": "It might be worth",
+  "accepted": [
+   "It could be worth",
+   "It may be worth",
+   "It would be worth",
+   "It is worth",
+   "It's worth",
+   "Might be worth",
+   "Could be worth",
+   "May be worth",
+   "It might well be worth",
+   "It could well be worth",
+   "It may well be worth",
+   "It'd be worth"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: It might be worth + -ing: ein vorsichtiger Vorschlag, das -ing steht schon im Rahmen.",
+    "en": "Right: It might be worth + -ing: a tentative suggestion; the -ing is already in the frame."
+   },
+   "wrong": [
+    {
+     "not": [
+      "worth"
+     ],
+     "de": "Das Schlüsselwort worth muss unverändert in der Lücke stehen.",
+     "en": "The key word worth must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "worth",
+      "to"
+     ],
+     "de": "Nach worth folgt die -ing-Form, nie to; das -ing steht schon im Rahmen.",
+     "en": "After worth the -ing form follows, never to; the -ing is already in the frame."
+    },
+    {
+     "not": [
+      "might",
+      "could",
+      "may"
+     ],
+     "de": "Für einen vorsichtigen Vorschlag braucht es might, could oder may.",
+     "en": "A tentative suggestion needs might, could or may."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-wor-k2",
+  "type": "kwt",
+  "pat": "hg.worth",
+  "from": "I think a quick pilot before scaling could pay off.",
+  "key": "WORTH",
+  "frame": "I think ___ running a quick pilot before we scale.",
+  "answer": "it might be worth",
+  "accepted": [
+   "it could be worth",
+   "it may be worth",
+   "it would be worth",
+   "it is worth",
+   "it's worth",
+   "it might well be worth",
+   "it could well be worth",
+   "it may well be worth",
+   "it'd be worth"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: it might be worth + -ing: ein Pilot lohnt sich vielleicht, ohne dass es ein Auftrag wird.",
+    "en": "Right: it might be worth + -ing: a pilot may pay off, without it becoming an order."
+   },
+   "wrong": [
+    {
+     "not": [
+      "worth"
+     ],
+     "de": "Das Schlüsselwort worth muss unverändert in der Lücke stehen.",
+     "en": "The key word worth must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "worth",
+      "to"
+     ],
+     "de": "Nach worth folgt die -ing-Form, nie to; das -ing steht schon im Rahmen.",
+     "en": "After worth the -ing form follows, never to; the -ing is already in the frame."
+    },
+    {
+     "not": [
+      "might",
+      "could",
+      "may"
+     ],
+     "de": "Für einen vorsichtigen Vorschlag braucht es might, could oder may.",
+     "en": "A tentative suggestion needs might, could or may."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-wor-f1",
+  "type": "find",
+  "pat": "hg.worth",
+  "prompt": "It might be worth to involve legal at this stage.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "worth involving",
+  "fixed": "It might be worth involving legal at this stage.",
+  "accepted": [
+   "worth it to involve",
+   "worthwhile to involve",
+   "worthwhile involving"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach worth steht die -ing-Form: worth involving, nicht worth to involve.",
+    "en": "The error: worth takes the -ing form: worth involving, not worth to involve."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach worth steht kein to.",
+     "en": "There is an error: no to after worth."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „worth to involve“: Nach worth steht die -ing-Form.",
+     "en": "The error is in “worth to involve”: the -ing form follows worth."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-wor-f2",
+  "type": "find",
+  "pat": "hg.worth",
+  "prompt": "It may be worth of considering a second supplier.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "worth",
+  "fixed": "It may be worth considering a second supplier.",
+  "accepted": [
+   "worthwhile"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: worth steht ohne of direkt vor der -ing-Form: worth considering.",
+    "en": "The error: worth goes straight before the -ing form, with no of: worth considering."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: worth braucht kein of.",
+     "en": "There is an error: worth needs no of."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „worth of“: Nach worth kein of.",
+     "en": "The error is in “worth of”: no of after worth."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-wor-f3",
+  "type": "find",
+  "pat": "hg.worth",
+  "prompt": "It might be worth asking Sam before we reply.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: worth + -ing (asking) ist richtig und klingt höflich.",
+    "en": "No error: worth + -ing (asking) is correct and sounds polite."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach worth steht die -ing-Form asking, ganz ohne to.",
+     "en": "No error: the -ing form asking follows worth, with no to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-wor-m1",
+  "type": "meaning",
+  "pat": "hg.worth",
+  "a": "It might be worth hiring a consultant.",
+  "b": "It might not be worth hiring a consultant.",
+  "q": {
+   "de": "Wo rate ich eher davon ab, einen Berater zu holen?",
+   "en": "Where do I lean toward not hiring a consultant?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. not worth heißt: Es lohnt sich eher nicht.",
+    "en": "Right: sentence b. not worth means: it probably does not pay off."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a lohnt es sich: Der Sprecher schlägt den Berater vor.",
+     "en": "In a it pays off: the speaker suggests the consultant."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: not worth rät eher ab, worth schlägt vor.",
+     "en": "Not the same: not worth leans toward advising against, worth suggests it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-inc-k1",
+  "type": "kwt",
+  "pat": "hg.inclined",
+  "from": "I think we should start with the smaller markets.",
+  "key": "INCLINED",
+  "frame": "___ to start with the smaller markets.",
+  "answer": "I'd be inclined",
+  "accepted": [
+   "I would be inclined",
+   "I am inclined",
+   "I'm inclined",
+   "We'd be inclined",
+   "We would be inclined",
+   "We are inclined",
+   "We're inclined",
+   "I'm slightly inclined",
+   "I'm somewhat inclined",
+   "I'd be slightly inclined",
+   "I'm a bit inclined",
+   "I'm a little inclined",
+   "I'm rather inclined",
+   "I'd be somewhat inclined",
+   "We'd be slightly inclined"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I'd be inclined to + Grundform nennt deine Tendenz; das to steht schon im Rahmen.",
+    "en": "Right: I'd be inclined to + base verb names your leaning; the to is already in the frame."
+   },
+   "wrong": [
+    {
+     "not": [
+      "inclined"
+     ],
+     "de": "Das Schlüsselwort inclined muss unverändert in der Lücke stehen.",
+     "en": "The key word inclined must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "inclined",
+      "to"
+     ],
+     "de": "Das to steht schon im Rahmen. In die Lücke gehört nur die Wendung bis inclined.",
+     "en": "The to is already in the frame. The gap only takes the phrase up to inclined."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-inc-k2",
+  "type": "kwt",
+  "pat": "hg.inclined",
+  "from": "As a team we lean toward the cheaper vendor.",
+  "key": "INCLINED",
+  "frame": "As a team, we ___ to go with the cheaper vendor.",
+  "answer": "are inclined",
+  "accepted": [
+   "'re inclined",
+   "would be inclined",
+   "'d be inclined",
+   "are slightly inclined",
+   "are somewhat inclined",
+   "would be somewhat inclined",
+   "would be slightly inclined",
+   "are rather inclined",
+   "'re rather inclined",
+   "are a bit inclined",
+   "are a little inclined"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: we are inclined to + Grundform: die Tendenz des Teams, keine Entscheidung.",
+    "en": "Right: we are inclined to + base verb: the team's leaning, not a decision."
+   },
+   "wrong": [
+    {
+     "not": [
+      "inclined"
+     ],
+     "de": "Das Schlüsselwort inclined muss unverändert in der Lücke stehen.",
+     "en": "The key word inclined must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "inclined",
+      "to"
+     ],
+     "de": "Das to steht schon im Rahmen. In die Lücke gehört nur die Wendung bis inclined.",
+     "en": "The to is already in the frame. The gap only takes the phrase up to inclined."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-inc-f1",
+  "type": "find",
+  "pat": "hg.inclined",
+  "prompt": "I'm inclined agreeing with Maria on the pricing.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "inclined to agree",
+  "fixed": "I'm inclined to agree with Maria on the pricing.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach inclined steht to + Grundform: inclined to agree.",
+    "en": "The error: inclined takes to + base verb: inclined to agree."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach inclined fehlt to.",
+     "en": "There is an error: to is missing after inclined."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „inclined agreeing“: Nach inclined steht to + Grundform.",
+     "en": "The error is in “inclined agreeing”: to + base verb follows inclined."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-inc-f2",
+  "type": "find",
+  "pat": "hg.inclined",
+  "prompt": "We'd be inclined to waiting until the new year.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "to wait",
+  "fixed": "We'd be inclined to wait until the new year.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach to steht die Grundform: to wait, nicht to waiting.",
+    "en": "The error: after to use the base form: to wait, not to waiting."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach to folgt die Grundform.",
+     "en": "There is an error: the base form follows to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to waiting“: Nach to steht die Grundform.",
+     "en": "The error is in “to waiting”: the base form follows to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-inc-f3",
+  "type": "find",
+  "pat": "hg.inclined",
+  "prompt": "She is inclined agree with the proposal.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "inclined to agree",
+  "fixed": "She is inclined to agree with the proposal.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Zwischen inclined und agree fehlt to: inclined to agree.",
+    "en": "The error: to is missing between inclined and agree: inclined to agree."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach inclined fehlt to.",
+     "en": "There is an error: to is missing after inclined."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „inclined agree“: Es fehlt das to.",
+     "en": "The error is in “inclined agree”: the to is missing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-inc-m1",
+  "type": "meaning",
+  "pat": "hg.inclined",
+  "a": "I'd be inclined to reject the offer.",
+  "b": "I will reject the offer.",
+  "q": {
+   "de": "Welcher Satz lässt die Entscheidung noch offen?",
+   "en": "Which sentence still leaves the decision open?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. I'd be inclined to nennt nur eine Tendenz, noch keine Entscheidung.",
+    "en": "Right: sentence a. I'd be inclined to names only a leaning, not yet a decision."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht will: Die Entscheidung ist schon gefallen.",
+     "en": "In b, will is used: the decision has already been made."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: will legt fest, I'd be inclined to nennt nur eine Tendenz.",
+     "en": "Not the same: will commits, I'd be inclined to only names a leaning."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-see-k1",
+  "type": "kwt",
+  "pat": "hg.seems",
+  "from": "Apparently the vendor has overlooked one requirement.",
+  "key": "SEEMS",
+  "frame": "The vendor ___ overlooked one requirement.",
+  "answer": "seems to have",
+  "accepted": [
+   "also seems to have",
+   "now seems to have"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: seems to have + Partizip: ein Eindruck über etwas, das schon passiert ist.",
+    "en": "Right: seems to have + participle: an impression about something that already happened."
+   },
+   "wrong": [
+    {
+     "not": [
+      "seems"
+     ],
+     "de": "Das Schlüsselwort seems muss unverändert in der Lücke stehen.",
+     "en": "The key word seems must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "seems",
+      "have"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Zwischen seems und have fehlt to: seems to have + Partizip.",
+     "en": "To is missing between seems and have: seems to have + participle."
+    },
+    {
+     "if": [
+      "seems",
+      "to"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Für etwas, das schon passiert ist, braucht es have nach seems to.",
+     "en": "For something that already happened you need have after seems to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-see-k2",
+  "type": "kwt",
+  "pat": "hg.seems",
+  "from": "It looks like the update fixed the login issue.",
+  "key": "SEEMS",
+  "frame": "___ the update fixed the login issue.",
+  "answer": "It seems that",
+  "accepted": [
+   "It seems",
+   "It seems as if",
+   "It seems as though",
+   "It seems like",
+   "It now seems that",
+   "It also seems that",
+   "It seems to me that"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: It seems that + Satz stellt die Aussage als Eindruck dar.",
+    "en": "Right: It seems that + clause presents the statement as an impression."
+   },
+   "wrong": [
+    {
+     "not": [
+      "seems"
+     ],
+     "de": "Das Schlüsselwort seems muss unverändert in der Lücke stehen.",
+     "en": "The key word seems must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "seems",
+      "as"
+     ],
+     "not": [
+      "if",
+      "though"
+     ],
+     "de": "Ein bloßes as geht nach seems nicht: that, as if oder as though.",
+     "en": "A bare as does not work after seems: use that, as if or as though."
+    },
+    {
+     "if": [
+      "seems",
+      "to"
+     ],
+     "de": "Nach seems to folgt ein Verb oder me, kein ganzer Satz mit Subjekt.",
+     "en": "After seems to comes a verb or me, not a whole clause with a subject."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-see-f1",
+  "type": "find",
+  "pat": "hg.seems",
+  "prompt": "It seems me that the vendor is overpromising.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "seems to me",
+  "fixed": "It seems to me that the vendor is overpromising.",
+  "accepted": [
+   "appears to me"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor der Person fehlt to: seems to me, nicht seems me.",
+    "en": "The error: to is missing before the person: seems to me, not seems me."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor me fehlt to.",
+     "en": "There is an error: to is missing before me."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „seems me“: Es fehlt das to.",
+     "en": "The error is in “seems me”: the to is missing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-see-f2",
+  "type": "find",
+  "pat": "hg.seems",
+  "prompt": "The client seems being unhappy with the revised offer.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "seems to be",
+  "fixed": "The client seems to be unhappy with the revised offer.",
+  "accepted": [
+   "seems",
+   "appears",
+   "appears to be"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach seems steht to be oder gleich das Adjektiv, nicht being.",
+    "en": "The error: after seems use to be or the adjective directly, not being."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: seems verträgt kein being.",
+     "en": "There is an error: seems does not take being."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „seems being“: seems to be oder seems unhappy.",
+     "en": "The error is in “seems being”: use seems to be or seems unhappy."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-see-f3",
+  "type": "find",
+  "pat": "hg.seems",
+  "prompt": "It appears that the issue only affects older devices.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: It appears that + Satz ist richtig, ein Eindruck statt einer Tatsache.",
+    "en": "No error: It appears that + clause is correct, an impression instead of a fact."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach It appears folgt that und ein ganzer Satz.",
+     "en": "No error: that and a whole clause follow It appears."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-see-m1",
+  "type": "meaning",
+  "pat": "hg.seems",
+  "a": "The server seems to be down again.",
+  "b": "The server is down again.",
+  "q": {
+   "de": "Welcher Satz nennt nur einen Eindruck und keine Tatsache?",
+   "en": "Which sentence names only an impression and not a fact?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. seems to be nennt einen Eindruck, is nennt eine Tatsache.",
+    "en": "Right: sentence a. seems to be names an impression, is names a fact."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht is: Der Sprecher behauptet es als Tatsache.",
+     "en": "In b, is is used: the speaker states it as a fact."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: seems to be nennt einen Eindruck, is eine Tatsache.",
+     "en": "Not the same: seems to be names an impression, is a fact."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-dow-k1",
+  "type": "kwt",
+  "pat": "hg.downtoner",
+  "from": "The new layout takes a bit more time to get used to.",
+  "key": "SLIGHTLY",
+  "frame": "The new layout takes ___ time to get used to.",
+  "answer": "slightly more",
+  "accepted": [
+   "just slightly more",
+   "a slightly longer"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: slightly more: wenig mehr Zeit, das Urteil bleibt mild.",
+    "en": "Right: slightly more: a little more time, the judgment stays mild."
+   },
+   "wrong": [
+    {
+     "not": [
+      "slightly"
+     ],
+     "de": "Das Schlüsselwort slightly muss unverändert in der Lücke stehen.",
+     "en": "The key word slightly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "slightly",
+      "less"
+     ],
+     "de": "Gemeint ist etwas mehr Zeit, nicht weniger: slightly more.",
+     "en": "The meaning is a little more time, not less: slightly more."
+    },
+    {
+     "if": [
+      "slightly",
+      "longer"
+     ],
+     "not": [
+      "a"
+     ],
+     "de": "Mit time dahinter passt a slightly longer oder slightly more.",
+     "en": "With time after it, a slightly longer or slightly more fits."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-dow-k2",
+  "type": "kwt",
+  "pat": "hg.downtoner",
+  "from": "I'm not certain this is the best approach.",
+  "key": "QUITE",
+  "frame": "I'm ___ sure this is the best approach.",
+  "answer": "not quite",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: not quite sure: statt hartem „not sure“ ein vorsichtiger Zweifel.",
+    "en": "Right: not quite sure: a cautious doubt instead of a blunt “not sure”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "quite"
+     ],
+     "de": "Das Schlüsselwort quite muss unverändert in der Lücke stehen.",
+     "en": "The key word quite must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "quite",
+      "not"
+     ],
+     "de": "Die Reihenfolge ist not quite, nicht quite not.",
+     "en": "The order is not quite, not quite not."
+    },
+    {
+     "if": [
+      "very"
+     ],
+     "de": "„very“ verstärkt. Hier soll der Zweifel milder klingen.",
+     "en": "“very” strengthens. Here the doubt should sound milder."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-dow-f1",
+  "type": "find",
+  "pat": "hg.downtoner",
+  "prompt": "The deadline is something tight for the team.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "a bit",
+  "fixed": "The deadline is a bit tight for the team.",
+  "accepted": [
+   "somewhat",
+   "slightly",
+   "a little",
+   "a little bit",
+   "a tad",
+   "kind of",
+   "rather"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „etwas“ heißt hier a bit oder slightly, nicht something.",
+    "en": "The error: “etwas” here is a bit or slightly, not something."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: something passt hier nicht.",
+     "en": "There is an error: something does not fit here."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „something“: Als Abschwächer passt a bit.",
+     "en": "The error is in “something”: a bit works as the softener."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-dow-f2",
+  "type": "find",
+  "pat": "hg.downtoner",
+  "prompt": "I'm quite not sure the numbers add up.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "not quite",
+  "fixed": "I'm not quite sure the numbers add up.",
+  "accepted": [
+   "not entirely",
+   "not completely",
+   "not fully",
+   "not totally"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Die Reihenfolge ist not quite, nicht quite not.",
+    "en": "The error: the order is not quite, not quite not."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: quite und not sind vertauscht.",
+     "en": "There is an error: quite and not are swapped."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „quite not“: Richtig ist not quite.",
+     "en": "The error is in “quite not”: the right order is not quite."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-dow-f3",
+  "type": "find",
+  "pat": "hg.downtoner",
+  "prompt": "The revised quote is slightly higher than the first one.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: slightly vor higher mildert den Vergleich, richtig gebaut.",
+    "en": "No error: slightly before higher softens the comparison, built correctly."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: slightly steht richtig direkt vor higher.",
+     "en": "No error: slightly correctly stands right before higher."
+    }
+   ]
+  }
+ },
+ {
+  "id": "hg-dow-m1",
+  "type": "meaning",
+  "pat": "hg.downtoner",
+  "a": "I'm not quite convinced by the plan.",
+  "b": "I'm not convinced by the plan.",
+  "q": {
+   "de": "Welcher Satz klingt milder?",
+   "en": "Which sentence sounds milder?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. not quite lässt Raum für Zustimmung, not allein ist klarer.",
+    "en": "Right: sentence a. not quite leaves room for agreement, plain not is clearer."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b fehlt quite: Das klingt klarer und härter ablehnend.",
+     "en": "In b, quite is missing: that sounds clearer and more firmly negative."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: not quite mildert, not allein lehnt klarer ab.",
+     "en": "Not the same: not quite softens, plain not rejects more clearly."
+    }
+   ]
+  }
+ }
+]

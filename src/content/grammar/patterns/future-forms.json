@@ -1,0 +1,512 @@
+{
+ "topic": "future-forms",
+ "canDo": {
+  "de": "Ich kann Zukunft genau ausdrücken: Entschluss mit will, Plan mit going to, Termin mit -ing, Fahrplan mit Present Simple, Unmittelbares mit about to und Nicht-Ausgeführtes mit was going to.",
+  "en": "I can express the future precisely: a decision with will, a plan with going to, an arrangement with -ing, a timetable with the Present Simple, the immediate with about to, and a failed plan with was going to."
+ },
+ "order": [
+  "ff.going-to",
+  "ff.will-now",
+  "ff.fixed-times",
+  "ff.was-going-to",
+  "ff.about-to",
+  "ff.no-will-after"
+ ],
+ "introPlan": [
+  [
+   "ff.going-to",
+   "ff.will-now"
+  ],
+  [
+   "ff.fixed-times",
+   "ff.was-going-to"
+  ],
+  [
+   "ff.about-to",
+   "ff.no-will-after"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Fällt die Entscheidung erst jetzt (will) oder steht der Plan schon fest (going to)?",
+   "Hast du die Zeit mit jemandem vereinbart (-ing) oder gibt ein Fahrplan sie vor (Present Simple)?",
+   "Passiert es in Sekunden (about to), oder war es ein Plan, der nicht klappte (was going to)?"
+  ],
+  "en": [
+   "Is the decision made only now (will) or was the plan already fixed (going to)?",
+   "Did you agree the time with someone (-ing) or does a timetable set it (Present Simple)?",
+   "Does it happen within seconds (about to), or was it a plan that fell through (was going to)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "ff.will-now",
+   "name": {
+    "de": "will · Entschluss, Angebot, Versprechen",
+    "en": "will · decision, offer, promise"
+   },
+   "form": {
+    "de": "will + Grundform · Should I + Grundform? (förmlicher: Shall I)",
+    "en": "will + base form · Should I + base form? (more formal: Shall I)"
+   },
+   "use": {
+    "de": "Du entscheidest erst im Moment des Sprechens, bietest etwas an oder versprichst etwas. Der Plan stand vorher nicht fest.",
+    "en": "You decide only while speaking, offer something, or promise something. The plan was not fixed beforehand."
+   },
+   "signals": [
+    "OK, I'll",
+    "Sure, I'll",
+    "Hold on",
+    "I promise",
+    "Shall I",
+    "Should I",
+    "Shall we",
+    "I won't"
+   ],
+   "ex": [
+    {
+     "en": "Good point, I'll update the slides now.",
+     "de": "Guter Punkt, ich aktualisiere die Folien gleich.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Should I send you the revised budget by noon?",
+     "de": "Soll ich dir das überarbeitete Budget bis mittags schicken?",
+     "ctx": "mail"
+    },
+    {
+     "en": "Don't worry, I'll cover your shift on Friday.",
+     "de": "Keine Sorge, ich übernehme deine Schicht am Freitag.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Hold on, I call the client right now.",
+    "good": "Hold on, I'll call the client right now.",
+    "cause": {
+     "de": "Deutsch nimmt für einen spontanen Entschluss das Präsens („Moment, ich rufe ihn an“). Englisch braucht dafür will.",
+     "en": "German uses the present for a spontaneous decision (“Moment, ich rufe ihn an”). English needs will for it."
+    }
+   },
+   "contrast": {
+    "with": "ff.going-to",
+    "a": "Printer's down? OK, I'll call IT now.",
+    "b": "I'm going to call IT after lunch; I booked a slot.",
+    "diff": {
+     "de": "will: Der Entschluss entsteht erst jetzt. going to: Der Plan stand schon vor dem Sprechen fest.",
+     "en": "will: the decision is made right now. going to: the plan was already fixed before you spoke."
+    }
+   },
+   "ccq": [
+    {
+     "s": "OK, I'll take the earlier train.",
+     "q": {
+      "de": "Hattest du die Entscheidung schon vor dem Gespräch getroffen?",
+      "en": "Had you made the decision before the conversation?"
+     },
+     "a": false
+    },
+    {
+     "s": "Should I send you the agenda?",
+     "q": {
+      "de": "Bietest du an, die Tagesordnung zu schicken?",
+      "en": "Are you offering to send the agenda?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Fällt die Entscheidung erst in diesem Moment, oder machst du ein Angebot oder Versprechen?",
+    "en": "Is the decision made only at this moment, or are you making an offer or a promise?"
+   }
+  },
+  {
+   "id": "ff.going-to",
+   "name": {
+    "de": "going to · Plan, sichtbares Zeichen",
+    "en": "going to · plan, visible sign"
+   },
+   "form": {
+    "de": "am/is/are going to + Grundform",
+    "en": "am/is/are going to + base form"
+   },
+   "use": {
+    "de": "Ein Plan, der schon feststeht, oder eine Vorhersage, für die du jetzt schon ein Zeichen siehst.",
+    "en": "A plan that is already fixed, or a prediction based on a sign you can see right now."
+   },
+   "signals": [
+    "going to",
+    "gonna",
+    "plan to",
+    "intend to",
+    "Look at",
+    "Watch out"
+   ],
+   "ex": [
+    {
+     "en": "We're going to move the launch to May.",
+     "de": "Wir verschieben den Launch auf Mai.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'm going to send you the revised draft tomorrow morning.",
+     "de": "Ich schicke dir den überarbeiteten Entwurf morgen früh.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Watch out, that stack of boxes is going to fall.",
+     "de": "Vorsicht, der Kistenstapel kippt gleich um.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We're going to launching the new app in May.",
+    "good": "We're going to launch the new app in May.",
+    "cause": {
+     "de": "Kein reiner Übersetzungsfehler: to wird wie die Präposition in „going to the office“ gelesen, und dann folgt -ing. Hier steht to + Grundform.",
+     "en": "Not a pure translation error: to is read like the preposition in “going to the office”, followed by -ing. Here it is to + base form."
+    }
+   },
+   "contrast": {
+    "with": "ff.will-now",
+    "a": "I'm going to call IT after lunch; I booked a slot.",
+    "b": "Printer's down? OK, I'll call IT now.",
+    "diff": {
+     "de": "going to: Der Plan steht schon vor dem Sprechen fest. will: Der Entschluss entsteht erst jetzt.",
+     "en": "going to: the plan was fixed before you spoke. will: the decision is made right now."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Look at that traffic, we're going to be late.",
+     "q": {
+      "de": "Gibt es schon ein sichtbares Zeichen dafür?",
+      "en": "Is there already a visible sign for it?"
+     },
+     "a": true
+    },
+    {
+     "s": "I'm going to take the train; I already booked my ticket.",
+     "q": {
+      "de": "Entscheidest du das erst in diesem Moment?",
+      "en": "Are you deciding this only at this moment?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Stand der Plan schon vor dem Gespräch fest, oder siehst du jetzt schon ein Zeichen dafür?",
+    "en": "Was the plan already fixed before you spoke, or do you see a sign for it right now?"
+   }
+  },
+  {
+   "id": "ff.was-going-to",
+   "name": {
+    "de": "was going to · Plan, nicht ausgeführt",
+    "en": "was going to · plan that fell through"
+   },
+   "form": {
+    "de": "was/were going to + Grundform",
+    "en": "was/were going to + base form"
+   },
+   "use": {
+    "de": "Du hattest etwas vor, aber es ist nicht passiert. Oft folgt ein but mit dem Grund.",
+    "en": "You planned something, but it did not happen. A but-clause with the reason often follows."
+   },
+   "signals": [
+    "was going to",
+    "were going to",
+    "meant to",
+    "planned to",
+    "intended to"
+   ],
+   "ex": [
+    {
+     "en": "We were going to launch in May, but legal needed more time.",
+     "de": "Wir wollten im Mai starten, aber die Rechtsabteilung brauchte mehr Zeit.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I was going to send the summary yesterday, but the file was corrupted.",
+     "de": "Ich wollte die Zusammenfassung gestern schicken, aber die Datei war beschädigt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I was going to call you, but my phone died.",
+     "de": "Ich wollte dich anrufen, aber mein Handy war leer.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I am going to send you the file this morning, but I forgot.",
+    "good": "I was going to send you the file this morning, but I forgot.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Man übernimmt going to im Präsens und vergisst, dass das Hilfsverb die Zeit trägt. Deutsch gibt hier keine Stütze: „ich wollte“ ist ein einziges Wort.",
+     "en": "Not a translation error: going to is carried over in the present, and the auxiliary, which carries the tense, is forgotten. German gives no help: “ich wollte” is a single word."
+    }
+   },
+   "contrast": {
+    "with": "ff.going-to",
+    "a": "I'm going to call the client today.",
+    "b": "I was going to call the client yesterday.",
+    "diff": {
+     "de": "going to: Der Plan gilt noch. was going to: Der Plan ist vorbei und wurde nicht ausgeführt.",
+     "en": "going to: the plan is still on. was going to: the plan is over and was not carried out."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I was going to email Ana, but she called me first.",
+     "q": {
+      "de": "Habe ich Ana gemailt?",
+      "en": "Did I email Ana?"
+     },
+     "a": false
+    },
+    {
+     "s": "I was going to leave at five, but the call ran long.",
+     "q": {
+      "de": "Hatte ich vor, um fünf zu gehen?",
+      "en": "Did I plan to leave at five?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist der Plan aufgegangen, und in welcher Zeit steht das Hilfsverb?",
+    "en": "Did the plan work out, and in which tense is the auxiliary?"
+   }
+  },
+  {
+   "id": "ff.fixed-times",
+   "name": {
+    "de": "-ing und Present Simple · feste Termine",
+    "en": "-ing and Present Simple · fixed events"
+   },
+   "form": {
+    "de": "am/is/are + -ing (Verabredung) · Present Simple (Fahrplan)",
+    "en": "am/is/are + -ing (arrangement) · Present Simple (timetable)"
+   },
+   "use": {
+    "de": "Eine Verabredung mit Zeit und Person ist -ing. Ein Fahrplan, ein Programm oder ein Stundenplan ist Present Simple.",
+    "en": "A date you arranged with someone takes -ing. A timetable, program, or schedule takes the Present Simple."
+   },
+   "signals": [
+    "in my calendar",
+    "timetable",
+    "schedule",
+    "departs",
+    "leaves at",
+    "starts at",
+    "tomorrow at"
+   ],
+   "ex": [
+    {
+     "en": "I'm presenting the Q3 numbers to the board on Thursday.",
+     "de": "Ich stelle am Donnerstag die Q3-Zahlen dem Vorstand vor.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The shuttle leaves at 8:15 sharp, so please be at the entrance by 8:05.",
+     "de": "Der Shuttle fährt Punkt 8:15 ab, seien Sie also bitte um 8:05 am Eingang.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We're having dinner with the client at seven.",
+     "de": "Wir essen um sieben mit dem Kunden zu Abend.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Tomorrow I meet the client in Lisbon, it is already booked.",
+    "good": "Tomorrow I'm meeting the client in Lisbon, it is already booked.",
+    "cause": {
+     "de": "Deutsch nimmt für Verabredungen das Präsens („Morgen treffe ich den Kunden“). Englisch braucht für eine persönliche Verabredung -ing; das Present Simple gehört zum Fahrplan.",
+     "en": "German uses the present for arrangements (“Morgen treffe ich den Kunden”). English needs -ing for a personal arrangement; the Present Simple belongs to timetables."
+    }
+   },
+   "contrast": {
+    "with": "ff.going-to",
+    "a": "I'm seeing the auditors on Friday at nine.",
+    "b": "I'm going to talk to the auditors at some point.",
+    "diff": {
+     "de": "-ing: Zeit und Person sind schon abgemacht. going to: Du hast es vor, aber noch nichts fixiert.",
+     "en": "-ing: time and person are already agreed. going to: you intend it, but nothing is fixed yet."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I'm seeing my dentist on Friday at nine.",
+     "q": {
+      "de": "Ist der Termin schon vereinbart?",
+      "en": "Is the appointment already arranged?"
+     },
+     "a": true
+    },
+    {
+     "s": "The train to Hamburg leaves at 6:42.",
+     "q": {
+      "de": "Hat sich jemand mit dir persönlich auf diese Zeit geeinigt?",
+      "en": "Did someone agree this time with you personally?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Habt ihr die Zeit persönlich vereinbart, oder gibt ein Fahrplan oder Programm sie vor?",
+    "en": "Did you agree the time personally, or does a timetable or program set it?"
+   }
+  },
+  {
+   "id": "ff.about-to",
+   "name": {
+    "de": "be about to · gleich",
+    "en": "be about to · any moment now"
+   },
+   "form": {
+    "de": "am/is/are/was about to + Grundform",
+    "en": "am/is/are/was about to + base form"
+   },
+   "use": {
+    "de": "Etwas passiert in den nächsten Sekunden oder Minuten, im Rückblick auch mit was about to. Nach about to steht die Grundform.",
+    "en": "Something happens within seconds or minutes, and in hindsight with was about to. About to is followed by the base form."
+   },
+   "signals": [
+    "about to",
+    "just about to",
+    "was about to",
+    "any second",
+    "any minute",
+    "Hurry up"
+   ],
+   "ex": [
+    {
+     "en": "Hold on, the CEO is about to join the call.",
+     "de": "Moment, der CEO schaltet sich gleich zu.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'm about to board, so I'll reply when I land.",
+     "de": "Ich gehe gleich an Bord, ich antworte, sobald ich gelandet bin.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Quick, the demo is about to start.",
+     "de": "Schnell, die Demo beginnt gleich.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Please sit down, the session is about starting.",
+    "good": "Please sit down, the session is about to start.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Nach Präpositionen steht oft -ing („talking about starting“). about to ist aber ein fester Ausdruck mit to + Grundform.",
+     "en": "Not a translation error: -ing often follows prepositions (“talking about starting”). But about to is a fixed phrase with to + base form."
+    }
+   },
+   "contrast": {
+    "with": "ff.going-to",
+    "a": "The call is about to start.",
+    "b": "The call is going to start sometime this afternoon.",
+    "diff": {
+     "de": "about to: in Sekunden oder Minuten. going to: eine Absicht oder Vorhersage ohne Zeitnähe.",
+     "en": "about to: in seconds or minutes. going to: an intention or prediction with no closeness in time."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Hurry up, the train is about to leave.",
+     "q": {
+      "de": "Fährt der Zug erst in einer Stunde?",
+      "en": "Does the train leave only in an hour?"
+     },
+     "a": false
+    },
+    {
+     "s": "We're about to run out of budget.",
+     "q": {
+      "de": "Wird das Budget in Kürze knapp?",
+      "en": "Is the budget about to run short?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Passiert es in den nächsten Sekunden oder Minuten, und was folgt auf to?",
+    "en": "Does it happen in the next seconds or minutes, and what follows to?"
+   }
+  },
+  {
+   "id": "ff.no-will-after",
+   "name": {
+    "de": "Present nach when, until, unless",
+    "en": "Present after when, until, unless"
+   },
+   "form": {
+    "de": "when / as soon as / unless + Present, will im Hauptsatz",
+    "en": "when / as soon as / unless + present, will in the main clause"
+   },
+   "use": {
+    "de": "In Zeit- und Bedingungssätzen steht für die Zukunft das Present. will steht nur im Hauptsatz.",
+    "en": "In time and condition clauses the present stands for the future. Will belongs only in the main clause."
+   },
+   "signals": [
+    "as soon as",
+    "when",
+    "once",
+    "until",
+    "before",
+    "after",
+    "unless",
+    "by the time"
+   ],
+   "ex": [
+    {
+     "en": "We'll start as soon as everyone has joined.",
+     "de": "Wir fangen an, sobald alle dabei sind.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'll send the minutes once I get the final numbers.",
+     "de": "Ich schicke das Protokoll, sobald ich die endgültigen Zahlen habe.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Don't sign anything until the lawyers confirm.",
+     "de": "Unterschreib nichts, bevor die Anwälte bestätigen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I'll forward the file when I will get the final numbers.",
+    "good": "I'll forward the file when I get the final numbers.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch nimmt hier ebenfalls das Präsens („wenn ich die Zahlen bekomme“). Schuld ist der Reflex „Zukunft = will“ im Nebensatz.",
+     "en": "Not a translation error: German also uses the present here (“wenn ich die Zahlen bekomme”). The culprit is the reflex “future = will” in the subordinate clause."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I'll call you as soon as the meeting ends.",
+     "q": {
+      "de": "Rufe ich an, bevor das Meeting zu Ende ist?",
+      "en": "Do I call before the meeting is over?"
+     },
+     "a": false
+    },
+    {
+     "s": "Don't sign until the lawyers confirm.",
+     "q": {
+      "de": "Darfst du unterschreiben, bevor die Anwälte bestätigen?",
+      "en": "May you sign before the lawyers confirm?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welches Wort leitet den Nebensatz ein, und in welchem Satzteil steht will?",
+    "en": "Which word opens the subordinate clause, and in which part of the sentence does will stand?"
+   }
+  }
+ ]
+}

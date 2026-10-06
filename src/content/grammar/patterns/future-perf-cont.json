@@ -1,0 +1,342 @@
+{
+  "topic": "future-perf-cont",
+  "canDo": {
+    "de": "Ich kann sagen, was in der Zukunft gerade läuft, was bis dahin fertig ist und wie lange etwas bis dahin schon dauert, und höflich nach Plänen fragen.",
+    "en": "I can say what will be in progress at a future time, what will be finished by then and how long something will have been going on, and ask politely about plans."
+  },
+  "order": [
+    "fut.continuous",
+    "fut.cont-plan",
+    "fut.perfect",
+    "fut.perf-cont"
+  ],
+  "introPlan": [
+    [
+      "fut.continuous",
+      "fut.cont-plan"
+    ],
+    [
+      "fut.perfect"
+    ],
+    [
+      "fut.perf-cont"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Läuft die Handlung zum genannten Zeitpunkt gerade (will be + -ing) oder ist sie dann schon fertig (will have + 3. Form)?",
+      "Zählt das Ergebnis bis dahin (will have + 3. Form) oder die Dauer bis dahin (will have been + -ing, oft mit for)?",
+      "Nach by the time, when und before steht das Präsens, kein will."
+    ],
+    "en": [
+      "Is the action in progress at the time mentioned (will be + -ing) or already finished by then (will have + participle)?",
+      "Does the result by then count (will have + participle) or the duration up to then (will have been + -ing, often with for)?",
+      "After by the time, when and before use the present, never will."
+    ]
+  },
+  "patterns": [
+    {
+      "id": "fut.continuous",
+      "name": {
+        "de": "Future Continuous · mittendrin",
+        "en": "Future Continuous · in progress"
+      },
+      "form": {
+        "de": "will be + -ing",
+        "en": "will be + -ing"
+      },
+      "use": {
+        "de": "Eine Handlung ist zu einem bestimmten Zeitpunkt in der Zukunft gerade im Gange: Du bist dann mittendrin, nicht am Anfang und nicht fertig.",
+        "en": "An action will be in progress at a specific point in the future: you are in the middle of it then, not at the start and not finished."
+      },
+      "signals": [
+        "this time tomorrow",
+        "this time next week",
+        "at that time",
+        "at this time tomorrow"
+      ],
+      "ex": [
+        {
+          "en": "This time tomorrow, I'll be presenting to the board.",
+          "de": "Morgen um diese Zeit präsentiere ich gerade vor dem Vorstand.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I'll be traveling all day Monday, so please email me.",
+          "de": "Ich bin am Montag den ganzen Tag unterwegs, schreib mir also bitte eine Mail.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Don't call at nine; we'll be putting the kids to bed.",
+          "de": "Ruf nicht um neun an; dann bringen wir gerade die Kinder ins Bett.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "This time next week I sit in a meeting in Boston.",
+        "good": "This time next week I'll be sitting in a meeting in Boston.",
+        "cause": {
+          "de": "Das Deutsche nutzt das Präsens fürs Futur („Nächste Woche um diese Zeit sitze ich in Boston“) und hat keine Pflicht-Verlaufsform. Englisch verlangt hier will be + -ing.",
+          "en": "German uses the present for the future (“um diese Zeit sitze ich in Boston”) and has no obligatory continuous form. English needs will be + -ing here."
+        }
+      },
+      "contrast": {
+        "with": "fut.perfect",
+        "a": "At noon, I'll be writing the report.",
+        "b": "By noon, I'll have written the report.",
+        "diff": {
+          "de": "Links bist du um zwölf mittendrin. Rechts ist der Bericht um zwölf schon fertig (by = bis dahin).",
+          "en": "On the left, you are in the middle of it at noon. On the right, the report is already finished by noon (by = no later than)."
+        }
+      },
+      "ccq": [
+        {
+          "s": "At 9 tomorrow, I'll be reviewing the contract.",
+          "q": {
+            "de": "Ist der Vertrag um 9 Uhr schon geprüft?",
+            "en": "Is the contract already reviewed at 9?"
+          },
+          "a": false
+        },
+        {
+          "s": "This time next week, we'll be flying to Chicago.",
+          "q": {
+            "de": "Ist der Flug nächste Woche um diese Zeit schon vorbei?",
+            "en": "Is the flight already over by then?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Läuft die Handlung zu dem Zeitpunkt gerade, oder ist sie dann schon abgeschlossen?",
+        "en": "Is the action under way at that time, or is it already complete by then?"
+      }
+    },
+    {
+      "id": "fut.cont-plan",
+      "name": {
+        "de": "Future Continuous · Plan, höfliche Frage",
+        "en": "Future Continuous · plans, polite question"
+      },
+      "form": {
+        "de": "will be + -ing · Will you be + -ing?",
+        "en": "will be + -ing · Will you be + -ing?"
+      },
+      "use": {
+        "de": "Ein Plan oder Ablauf als neutrale Tatsache: Was ohnehin geschieht. Mit Will you be …ing? fragst du höflich nach den Plänen anderer, ohne zu drängen.",
+        "en": "A plan or routine as a neutral fact: what will happen anyway. With Will you be …ing? you ask politely about other people's plans, without pushing."
+      },
+      "signals": [
+        "anyway",
+        "as usual",
+        "in the coming years",
+        "in 2030",
+        "this afternoon"
+      ],
+      "ex": [
+        {
+          "en": "Will you be attending the offsite next month?",
+          "de": "Nimmst du nächsten Monat am Offsite teil?",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Will you be sending the final figures tomorrow or Friday?",
+          "de": "Schickst du die endgültigen Zahlen morgen oder am Freitag?",
+          "ctx": "mail"
+        },
+        {
+          "en": "I'll be passing the post office anyway, so I can mail it.",
+          "de": "Ich komme sowieso am Postamt vorbei, ich kann es einwerfen.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Do you attend the offsite next month?",
+        "good": "Will you be attending the offsite next month?",
+        "cause": {
+          "de": "Das Deutsche nutzt das Präsens fürs Futur („Nimmst du nächsten Monat am Offsite teil?“). „Do you attend“ ist nicht falsch, klingt aber nach Gewohnheit. „Are you attending“ ist ebenso üblich; Will you be attending fragt besonders höflich.",
+          "en": "German uses the present for the future (“Nimmst du nächsten Monat am Offsite teil?”). “Do you attend” is not wrong, but it sounds like a habit. “Are you attending” is just as common; Will you be attending asks especially politely."
+        }
+      },
+      "contrast": {
+        "with": "fut.perfect",
+        "a": "Will you be sending the invoice tomorrow?",
+        "b": "Will you have sent the invoice by tomorrow?",
+        "diff": {
+          "de": "Links fragst du nach dem Plan: Schickst du sie morgen? Rechts fragst du nach dem Ergebnis: Ist sie bis dahin draußen?",
+          "en": "On the left, you ask about the plan: are you sending it tomorrow? On the right, you ask about the result: will it already be out by then?"
+        }
+      },
+      "ccq": [
+        {
+          "s": "I'll be going to the bank anyway, so I can deposit the check.",
+          "q": {
+            "de": "Muss ich extra zur Bank fahren?",
+            "en": "Do I have to make a special trip to the bank?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Willst du nur nach dem Ablauf fragen, ohne zu drängen? Welche Form klingt dann neutral?",
+        "en": "Do you just want to ask about the schedule, without pushing? Which form sounds neutral then?"
+      }
+    },
+    {
+      "id": "fut.perfect",
+      "name": {
+        "de": "Future Perfect · bis dahin fertig",
+        "en": "Future Perfect · done by then"
+      },
+      "form": {
+        "de": "will have + 3. Form",
+        "en": "will have + participle"
+      },
+      "use": {
+        "de": "Eine Handlung ist zu einem Zeitpunkt in der Zukunft schon abgeschlossen. Entscheidend ist das Ergebnis bis dahin, nicht der Verlauf.",
+        "en": "An action will already be completed by a point in the future. What counts is the result by then, not the process."
+      },
+      "signals": [
+        "by then",
+        "by the time",
+        "by the end of",
+        "by Friday",
+        "by next",
+        "already"
+      ],
+      "ex": [
+        {
+          "en": "By Friday, we'll have shipped all pending orders.",
+          "de": "Bis Freitag haben wir alle offenen Bestellungen verschickt.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I'll have sent the contract by the time you land.",
+          "de": "Ich habe den Vertrag geschickt, bis du landest.",
+          "ctx": "mail"
+        },
+        {
+          "en": "By next summer, I'll have moved to Berlin.",
+          "de": "Bis nächsten Sommer bin ich nach Berlin gezogen.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "By the time you land, I will already finish the slides.",
+        "good": "By the time you land, I will already have finished the slides.",
+        "cause": {
+          "de": "Das Deutsche nutzt hier Präsens oder Perfekt („Bis du landest, habe ich die Folien fertig“); das Futur II ist ungebräuchlich. So fehlt das Gefühl für will have + 3. Form.",
+          "en": "German uses the present or perfect here (“Bis du landest, habe ich die Folien fertig”); the future perfect is rare. So the feel for will have + participle is missing."
+        }
+      },
+      "contrast": {
+        "with": "fut.perf-cont",
+        "a": "By June, I'll have written 40 pages.",
+        "b": "By June, I'll have been writing for a year.",
+        "diff": {
+          "de": "Links zählt das Ergebnis (40 Seiten sind fertig). Rechts zählt die Dauer bis dahin (ein Jahr Schreiben), fertig oder nicht.",
+          "en": "On the left, the result counts (40 pages are done). On the right, the duration up to then counts (a year of writing), finished or not."
+        }
+      },
+      "ccq": [
+        {
+          "s": "By 6 p.m., I'll have left the office.",
+          "q": {
+            "de": "Bin ich um 18 Uhr noch im Büro?",
+            "en": "Am I still in the office at 6 p.m.?"
+          },
+          "a": false
+        },
+        {
+          "s": "We'll have signed the contract by Friday.",
+          "q": {
+            "de": "Ist der Vertrag spätestens am Freitag unterschrieben?",
+            "en": "Is the contract signed by Friday at the latest?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Ist die Sache zu dem genannten Zeitpunkt schon erledigt, und welche Form zeigt das Ergebnis?",
+        "en": "Is the thing already done by the time mentioned, and which form shows the result?"
+      }
+    },
+    {
+      "id": "fut.perf-cont",
+      "name": {
+        "de": "Future Perfect Continuous · Dauer bis dahin",
+        "en": "Future Perfect Continuous · duration by then"
+      },
+      "form": {
+        "de": "will have been + -ing",
+        "en": "will have been + -ing"
+      },
+      "use": {
+        "de": "Du nennst, wie lange etwas bis zu einem Zeitpunkt in der Zukunft schon läuft. Die Zeitspanne zählt (for ten years), oft mit by.",
+        "en": "You say how long something will have been going on by a point in the future. The span counts (for ten years), often with by."
+      },
+      "signals": [
+        "for ten years",
+        "for years",
+        "for a decade",
+        "how long"
+      ],
+      "ex": [
+        {
+          "en": "By March, we'll have been selling in Spain for three years.",
+          "de": "Im März verkaufen wir seit drei Jahren in Spanien.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "By the time you read this, I'll have been traveling for 12 hours.",
+          "de": "Wenn du das liest, bin ich seit 12 Stunden unterwegs.",
+          "ctx": "mail"
+        },
+        {
+          "en": "In June, we'll have been living here for two years.",
+          "de": "Im Juni wohnen wir seit zwei Jahren hier.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "By March, I work with this client for three years.",
+        "good": "By March, I'll have been working with this client for three years.",
+        "cause": {
+          "de": "Das Deutsche reicht mit dem Präsens aus („Im März arbeite ich seit drei Jahren mit diesem Kunden“). Englisch braucht für die Dauer bis dahin will have been + -ing.",
+          "en": "German is happy with the present (“Im März arbeite ich seit drei Jahren mit diesem Kunden”). English needs will have been + -ing for the duration up to then."
+        }
+      },
+      "contrast": {
+        "with": "fut.perfect",
+        "a": "By May, she'll have been working on the report for a month.",
+        "b": "By May, she'll have finished the report.",
+        "diff": {
+          "de": "Links zählt die Dauer (ein Monat, vielleicht noch nicht fertig). Rechts zählt das Ergebnis (der Bericht ist fertig).",
+          "en": "On the left, the duration counts (a month, maybe not finished yet). On the right, the result counts (the report is done)."
+        }
+      },
+      "ccq": [
+        {
+          "s": "By Friday, she'll have been waiting for a week.",
+          "q": {
+            "de": "Hat das Warten schon vor Freitag begonnen?",
+            "en": "Did the waiting start before Friday?"
+          },
+          "a": true
+        },
+        {
+          "s": "At noon, I'll have been sitting here for three hours.",
+          "q": {
+            "de": "Sitze ich um 12 Uhr erst seit einer Stunde hier?",
+            "en": "Will I have been sitting here for only an hour at noon?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Zählt hier das Ergebnis bis dahin oder die Dauer, die bis dahin schon läuft?",
+        "en": "Does the result by then count here, or the duration that has been running up to then?"
+      }
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+[
+ {
+  "pat": "pp.earlier",
+  "en": "By the time I logged in, the sale had already ended.",
+  "de": "Als ich mich einloggte, ist der Sale schon zu Ende gewesen.",
+  "chunks": [
+   "by the time",
+   "I logged in",
+   "the sale",
+   "had already",
+   "ended"
+  ],
+  "alt": [
+   "The sale had already ended by the time I logged in."
+  ],
+  "why": [
+   "Das frühere Ereignis (der Sale endet) steht im Past Perfect: had already ended. Das spätere (I logged in) bleibt im Past Simple.",
+   "The earlier event (the sale ending) goes in the Past Perfect: had already ended. The later one (I logged in) stays in the Past Simple."
+  ],
+  "bad": "By the time I logged in, the sale already ended.",
+  "trap": {
+   "tile": "had already",
+   "instead": "already",
+   "why": {
+    "de": "Deutsch markiert das Frühere oft nur mit „schon“ („ist schon zu Ende gewesen“). Englisch verlangt had + Partizip.",
+    "en": "German often marks the earlier event only with “schon” (“war schon vorbei”). English needs had + participle."
+   }
+  }
+ },
+ {
+  "pat": "pp.duration",
+  "en": "When the update finally arrived, we had been waiting for weeks.",
+  "de": "Als das Update endlich kam, hatten wir schon wochenlang gewartet.",
+  "chunks": [
+   "when",
+   "the update",
+   "finally arrived",
+   "we",
+   "had been waiting",
+   "for weeks"
+  ],
+  "alt": [
+   "We had been waiting for weeks when the update finally arrived."
+  ],
+  "why": [
+   "Die Wartezeit dauerte bis zu einem Zeitpunkt in der Vergangenheit: had been waiting. Die Dauer „for weeks“ passt dazu.",
+   "The waiting lasted up to a past moment: had been waiting. The duration “for weeks” fits it."
+  ],
+  "bad": "When the update finally arrived, we were waiting for weeks.",
+  "trap": {
+   "tile": "had been waiting",
+   "instead": "were waiting",
+   "why": {
+    "de": "Deutsch bleibt im Präteritum („wir warteten wochenlang“). Englisch braucht für die Dauer davor had been + -ing.",
+    "en": "German stays in the simple past (“wir warteten wochenlang”). English needs had been + -ing for the duration before."
+   }
+  }
+ },
+ {
+  "pat": "pp.first-time",
+  "en": "It was the first time the client had visited our headquarters.",
+  "de": "Es war das erste Mal, dass der Kunde unsere Zentrale besucht hat.",
+  "chunks": [
+   "it was",
+   "the first time",
+   "the client",
+   "had visited",
+   "our headquarters"
+  ],
+  "single": "It was the first time ist ein fester Rahmen; danach folgen Subjekt, had + Partizip und das Objekt in genau dieser Reihenfolge.",
+  "why": [
+   "Nach „It was the first time“ steht had + Partizip, weil die Erfahrung vor dem Zeitpunkt in der Vergangenheit liegt.",
+   "After “It was the first time” comes had + participle, because the experience lies before the past moment."
+  ],
+  "bad": "It was the first time the client has visited our headquarters.",
+  "trap": {
+   "tile": "had visited",
+   "instead": "has visited",
+   "why": {
+    "de": "Deutsch sagt oft „besucht hat“ (Perfekt); daraus wird leicht has visited. Nach „was“ muss die Erfahrung aber eine Stufe zurück: had visited.",
+    "en": "German often says “besucht hat” (perfect), which easily turns into has visited. After “was” the experience has to go one step back: had visited."
+   }
+  }
+ },
+ {
+  "pat": "pp.reported",
+  "en": "Our lawyer said the terms had changed since the last draft.",
+  "de": "Unser Anwalt sagte, die Bedingungen hätten sich seit dem letzten Entwurf geändert.",
+  "chunks": [
+   "our lawyer",
+   "said",
+   "the terms",
+   "had changed",
+   "since",
+   "the last draft"
+  ],
+  "why": [
+   "Nach „said“ in der Vergangenheit rutscht das Berichtete zurück: Aus „have changed“ wird had changed.",
+   "After “said” in the past the reported part moves back: “have changed” becomes had changed."
+  ],
+  "bad": "Our lawyer said the terms have changed since the last draft.",
+  "trap": {
+   "tile": "had changed",
+   "instead": "have changed",
+   "why": {
+    "de": "Deutsch lässt die Zeit der Aussage stehen („haben sich geändert“). Englisch rutscht nach said eine Stufe zurück: had changed.",
+    "en": "German keeps the tense of the original statement (“haben sich geändert”). English moves one step back after said: had changed."
+   }
+  },
+  "alt": [
+   "The terms had changed since the last draft, our lawyer said."
+  ]
+ },
+ {
+  "pat": "pp.inversion",
+  "en": "No sooner had we shipped the update than the bugs appeared.",
+  "de": "Kaum hatten wir das Update ausgeliefert, tauchten die Fehler auf.",
+  "chunks": [
+   "no sooner",
+   "had we",
+   "shipped",
+   "the update",
+   "than",
+   "the bugs appeared"
+  ],
+  "single": "No sooner verlangt had vor dem Subjekt, und than leitet den zweiten Teil ein; die Reihenfolge ist fest.",
+  "why": [
+   "Nach „No sooner“ steht had vor dem Subjekt, dann das Partizip; than verbindet mit dem zweiten Ereignis.",
+   "After “No sooner”, had goes before the subject, then the participle; than links to the second event."
+  ],
+  "bad": "No sooner we had shipped the update than the bugs appeared.",
+  "trap": {
+   "tile": "had we",
+   "instead": "we had",
+   "why": {
+    "de": "Deutsch dreht nach „kaum“ ganz normal um. Im Englischen ist Subjekt + Verb der Normalfall, die Umstellung fehlt leicht.",
+    "en": "German inverts after “kaum” as a matter of course. In English subject + verb is the default, so the inversion gets dropped."
+   }
+  }
+ },
+ {
+  "pat": "pp.reported",
+  "en": "Our manager told us the new tool would go live the following week.",
+  "de": "Unser Chef sagte uns, das neue Tool gehe in der Woche darauf live.",
+  "chunks": [
+   "our manager",
+   "told us",
+   "the new tool",
+   "would go live",
+   "the following week"
+  ],
+  "single": "Nach told us folgt das Berichtete: Subjekt, would go live und zuletzt der Zeitzusatz the following week.",
+  "why": [
+   "Nach „told“ rutscht will eine Stufe zurück zu would. „The following week“ zeigt: aus damaliger Sicht liegt es in der Zukunft.",
+   "After “told”, will moves one step back to would. “The following week” shows it lay in the future from back then."
+  ],
+  "bad": "Our manager told us the new tool will go live the following week.",
+  "trap": {
+   "tile": "would go live",
+   "instead": "will go live",
+   "why": {
+    "de": "Deutsch lässt in der indirekten Rede das Präsens stehen („das Tool geht live“). Englisch rutscht nach told zurück: would.",
+    "en": "German keeps the present in reported speech (“das Tool geht live”). English moves back after told: would."
+   }
+  }
+ }
+]

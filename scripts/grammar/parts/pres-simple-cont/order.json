@@ -1,0 +1,187 @@
+[
+ {
+  "pat": "psc.habit",
+  "en": "The shuttle to the airport leaves every hour on weekdays.",
+  "de": "Der Shuttle zum Flughafen fährt werktags jede Stunde.",
+  "chunks": [
+   "the shuttle",
+   "to the airport",
+   "leaves",
+   "every hour",
+   "on weekdays"
+  ],
+  "alt": [
+   "On weekdays, the shuttle to the airport leaves every hour.",
+   "The shuttle to the airport leaves on weekdays every hour."
+  ],
+  "why": [
+   "Ein Fahrplan ist eine feste Regel und steht im Present Simple: leaves. „Every hour“ sagt, wie oft.",
+   "A timetable is a fixed rule and takes the present simple: leaves. “Every hour” says how often."
+  ],
+  "bad": "The shuttle to the airport is leaving every hour on weekdays.",
+  "trap": {
+   "tile": "leaves",
+   "instead": "is leaving",
+   "why": {
+    "de": "Das deutsche „fährt“ deckt Fahrplan und laufende Fahrt ab. Das verführt zu is leaving. Ein Fahrplan ist aber eine Regel: leaves.",
+    "en": "The German “fährt” covers both timetable and a trip in progress. That tempts you into is leaving. A timetable is a rule: leaves."
+   }
+  }
+ },
+ {
+  "pat": "psc.habit",
+  "en": "Our CEO usually answers emails before seven in the morning.",
+  "de": "Unser Chef beantwortet normalerweise vor sieben Uhr morgens seine E-Mails.",
+  "chunks": [
+   "our CEO",
+   "usually",
+   "answers",
+   "emails",
+   "before seven",
+   "in the morning"
+  ],
+  "alt": [
+   "Usually, our CEO answers emails before seven in the morning."
+  ],
+  "why": [
+   "Usually zeigt eine Gewohnheit, also Present Simple. Das -s an answers steht, weil „our CEO“ für he/she steht.",
+   "Usually shows a habit, so present simple. The -s on answers is there because “our CEO” stands for he/she."
+  ],
+  "bad": "Our CEO is usually answering emails before seven in the morning."
+ },
+ {
+  "pat": "psc.now",
+  "en": "I can't talk because I'm driving to the airport right now.",
+  "de": "Ich kann nicht sprechen, weil ich gerade zum Flughafen fahre.",
+  "chunks": [
+   "I can't talk",
+   "because",
+   "I'm driving",
+   "to the airport",
+   "right now"
+  ],
+  "alt": [
+   "Right now, I can't talk because I'm driving to the airport.",
+   "Because I'm driving to the airport right now, I can't talk.",
+   "I can't talk right now because I'm driving to the airport.",
+   "Because I'm driving to the airport, I can't talk right now."
+  ],
+  "why": [
+   "Right now zeigt, dass die Handlung gerade läuft. Dann braucht das Verb die Verlaufsform: I'm driving.",
+   "Right now shows the action is in progress. Then the verb needs the continuous form: I'm driving."
+  ],
+  "bad": "I can't talk because I drive to the airport right now.",
+  "trap": {
+   "tile": "I'm driving",
+   "instead": "I drive",
+   "why": {
+    "de": "Deutsch sagt „ich fahre gerade“ im Präsens, das Wort „gerade“ trägt das Jetzt. Im Englischen muss das Verb es zeigen: I'm driving.",
+    "en": "German says “ich fahre gerade” in the present; the word “gerade” carries the now. In English the verb must show it: I'm driving."
+   }
+  }
+ },
+ {
+  "pat": "psc.state",
+  "en": "I don't know which supplier the client prefers for this project.",
+  "de": "Ich weiß nicht, welchen Lieferanten der Kunde für dieses Projekt bevorzugt.",
+  "chunks": [
+   "I don't know",
+   "which supplier",
+   "the client",
+   "prefers",
+   "for this project"
+  ],
+  "why": [
+   "Know und prefer sind Zustandsverben. Sie stehen im Present Simple, auch wenn es um jetzt geht: prefers, nicht is preferring.",
+   "Know and prefer are state verbs. They take the present simple, even when the time is now: prefers, not is preferring."
+  ],
+  "bad": "I don't know which supplier the client is preferring for this project.",
+  "trap": {
+   "tile": "prefers",
+   "instead": "is preferring",
+   "why": {
+    "de": "Das ist kein Übersetzungsfehler, sondern der Reflex „jetzt = -ing“. Prefer ist ein Zustandsverb und bleibt im Present Simple.",
+    "en": "This is not a translation error but the reflex “now = -ing”. Prefer is a state verb and stays in the present simple."
+   }
+  },
+  "alt": [
+   "For this project, I don't know which supplier the client prefers."
+  ]
+ },
+ {
+  "pat": "psc.state",
+  "en": "Our legal team needs a written confirmation before we sign.",
+  "de": "Unsere Rechtsabteilung braucht eine schriftliche Bestätigung, bevor wir unterschreiben.",
+  "chunks": [
+   "our legal team",
+   "needs",
+   "a written confirmation",
+   "before",
+   "we sign"
+  ],
+  "alt": [
+   "Before we sign, our legal team needs a written confirmation."
+  ],
+  "why": [
+   "Need ist ein Zustandsverb und bekommt kein -ing. Nach „before“ steht das Präsens: we sign, kein will.",
+   "Need is a state verb and takes no -ing. After “before” the present follows: we sign, not will."
+  ],
+  "bad": "Our legal team is needing a written confirmation before we sign."
+ },
+ {
+  "pat": "psc.dual",
+  "en": "Our team is having a call with the vendor at the moment.",
+  "de": "Unser Team hat gerade ein Telefonat mit dem Lieferanten.",
+  "chunks": [
+   "our team",
+   "is having",
+   "a call",
+   "with the vendor",
+   "at the moment"
+  ],
+  "alt": [
+   "At the moment, our team is having a call with the vendor."
+  ],
+  "why": [
+   "Have ist hier eine Handlung (ein Gespräch führen), die gerade läuft. Deshalb steht is having. Für Besitz hieße es has.",
+   "Have is an action here (holding a conversation) that is in progress. So is having is used. For possession it would be has."
+  ],
+  "bad": "Our team has a call with the vendor at the moment.",
+  "trap": {
+   "tile": "is having",
+   "instead": "has",
+   "why": {
+    "de": "Deutsch nutzt „haben“ für Besitz und Tun: „hat ein Telefonat“. Im Englischen ist „a call“ eine Handlung und braucht -ing, wenn sie läuft.",
+    "en": "German uses “haben” for both possession and doing: “hat ein Telefonat”. In English “a call” is an action and needs -ing while it is going on."
+   }
+  }
+ },
+ {
+  "pat": "psc.always",
+  "en": "My manager is always changing the agenda at the last minute.",
+  "de": "Mein Chef ändert ständig in letzter Minute die Tagesordnung.",
+  "chunks": [
+   "my manager",
+   "is always",
+   "changing",
+   "the agenda",
+   "at the last minute"
+  ],
+  "alt": [
+   "At the last minute, my manager is always changing the agenda."
+  ],
+  "why": [
+   "Is always + -ing zeigt Ärger über die ständige Wiederholung. Always steht zwischen is und dem -ing-Wort.",
+   "Is always + -ing shows annoyance at constant repetition. Always goes between is and the -ing word."
+  ],
+  "bad": "My manager is changing always the agenda at the last minute.",
+  "trap": {
+   "tile": "is always",
+   "instead": "changes always",
+   "why": {
+    "de": "Im Deutschen steht „immer“ oft hinter dem Verb („ändert immer“). Im Englischen steht always zwischen is und dem -ing-Wort.",
+    "en": "In German “immer” often comes after the verb (“ändert immer”). In English always goes between is and the -ing word."
+   }
+  }
+ }
+]

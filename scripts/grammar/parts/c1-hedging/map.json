@@ -1,0 +1,415 @@
+{
+ "Soften this for a client: Your price ___ a bit above our budget.": {
+  "pat": "hg.modal",
+  "why": {
+   "ok": {
+    "de": "Richtig: might be macht aus der Tatsache eine Möglichkeit, a bit mildert zusätzlich.",
+    "en": "Right: might be turns the fact into a possibility, and a bit softens it further."
+   },
+   "wrong": [
+    {
+     "opt": "is",
+     "de": "„is“ behauptet es als Tatsache. Beim Kunden kommt das wie ein Vorwurf an.",
+     "en": "“is” states it as a fact. A client hears that as an accusation."
+    },
+    {
+     "opt": "must be",
+     "de": "„must be“ heißt: ich bin fast sicher. Das mildert nichts.",
+     "en": "“must be” means: I'm almost certain. That does not soften anything."
+    },
+    {
+     "opt": "will be",
+     "de": "„will be“ ist eine sichere Vorhersage. Gesucht ist eine vorsichtige Möglichkeit.",
+     "en": "“will be” is a firm prediction. A cautious possibility is what is needed here."
+    }
+   ]
+  }
+ },
+ "___ worth considering a phased rollout.": {
+  "pat": "hg.worth",
+  "why": {
+   "ok": {
+    "de": "Richtig: It might be worth + -ing ist die feste, höfliche Einleitung für einen Vorschlag.",
+    "en": "Right: It might be worth + -ing is the fixed, polite lead-in for a suggestion."
+   },
+   "wrong": [
+    {
+     "opt": "It might",
+     "de": "Nach might fehlt be: worth ist ein Adjektiv und braucht be davor.",
+     "en": "“might” needs be before worth, because worth works like an adjective."
+    },
+    {
+     "opt": "Maybe it is",
+     "de": "„Maybe it is worth“ ist korrekt, aber lockerer. Hier ist die feste Wendung mit Modalverb gefragt.",
+     "en": "“Maybe it is worth” is correct but looser. Here the fixed phrase with a modal verb is asked for."
+    },
+    {
+     "opt": "It is maybe",
+     "de": "„It is maybe worth“ klingt ungewohnt: maybe steht vorn oder gar nicht.",
+     "en": "“It is maybe worth” sounds unusual: maybe goes first or is left out."
+    }
+   ]
+  }
+ },
+ "Choose the softest way to disagree with a client: ___": {
+  "pat": "hg.downtoner",
+  "why": {
+   "ok": {
+    "de": "Richtig: I'm not sure … quite … schwächt doppelt ab und lässt dem Kunden Raum.",
+    "en": "Right: I'm not sure … quite … softens twice and leaves the client room."
+   },
+   "wrong": [
+    {
+     "opt": "That's wrong.",
+     "de": "Ohne Abschwächer ist das ein hartes Nein. Gesucht ist die mildeste Fassung.",
+     "en": "With no softener this is a blunt no. The mildest wording is what is needed."
+    },
+    {
+     "opt": "You are wrong about that.",
+     "de": "Das spricht den Kunden direkt an und sagt, dass er sich irrt. Zu hart.",
+     "en": "This points straight at the client and says they are mistaken. Too blunt."
+    },
+    {
+     "opt": "That is not correct.",
+     "de": "Sachlich, aber ohne Abschwächer. Es klingt wie eine Korrektur von oben.",
+     "en": "Factual, but with no softener. It sounds like a correction from above."
+    }
+   ]
+  }
+ },
+ "It ___ worth revisiting the timeline before we sign.": {
+  "pat": "hg.worth",
+  "why": {
+   "ok": {
+    "de": "Richtig: might be worth + -ing ist ein vorsichtiger Vorschlag, kein Auftrag.",
+    "en": "Right: might be worth + -ing is a tentative suggestion, not an instruction."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will be worth“ klingt sicher. Hier soll der Vorschlag vorsichtig bleiben.",
+     "en": "“will be worth” sounds certain. The suggestion should stay tentative here."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Vor worth braucht es be: It might be worth revisiting …",
+     "en": "Before worth you need be: It might be worth revisiting …"
+    },
+    {
+     "not": [
+      "might",
+      "could",
+      "may"
+     ],
+     "de": "Gefragt ist ein Modalverb (might, could, may), das den Vorschlag abmildert.",
+     "en": "A modal verb (might, could, may) is needed to soften the suggestion."
+    }
+   ]
+  }
+ },
+ "I'd be inclined ___ with the finance team.": {
+  "pat": "hg.inclined",
+  "why": {
+   "ok": {
+    "de": "Richtig: be inclined + to + Grundform nennt eine persönliche Tendenz.",
+    "en": "Right: be inclined + to + base verb names a personal leaning."
+   },
+   "wrong": [
+    {
+     "if": [
+      "starting"
+     ],
+     "de": "Nach inclined steht to + Grundform, nicht die -ing-Form.",
+     "en": "After inclined use to + base verb, not the -ing form."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach inclined braucht es to + Grundform.",
+     "en": "After inclined you need to + base verb."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach to steht die Grundform, ohne -s und ohne -ing: to start.",
+     "en": "After to comes the base verb, with no -s or -ing: to start."
+    }
+   ]
+  }
+ },
+ "It ___ that the budget is tighter than we expected.": {
+  "pat": "hg.seems",
+  "why": {
+   "ok": {
+    "de": "Richtig: It seems that … stellt die Aussage als Eindruck dar, nicht als Tatsache.",
+    "en": "Right: It seems that … presents the statement as an impression, not a fact."
+   },
+   "wrong": [
+    {
+     "if": [
+      "seem"
+     ],
+     "de": "Nach It steht das Verb mit -s (dritte Person Singular): seems.",
+     "en": "After It the verb takes -s (third person singular): seems."
+    },
+    {
+     "not": [
+      "seems"
+     ],
+     "de": "Mit dem Hinweis (seem) passt seems: It seems that …",
+     "en": "With the hint (seem), seems fits: It seems that …"
+    }
+   ]
+  }
+ },
+ "The migration could take ___ longer than planned.": {
+  "pat": "hg.downtoner",
+  "why": {
+   "ok": {
+    "de": "Richtig: slightly mildert die schlechte Nachricht; es geht nur um wenig.",
+    "en": "Right: slightly softens the bad news; it is only a little."
+   },
+   "wrong": [
+    {
+     "if": [
+      "much"
+     ],
+     "de": "„much longer“ verstärkt die schlechte Nachricht, statt sie zu mildern.",
+     "en": "“much longer” strengthens the bad news instead of softening it."
+    },
+    {
+     "if": [
+      "hugely"
+     ],
+     "de": "„hugely“ macht es noch schlimmer. Gesucht ist ein Wort, das abschwächt.",
+     "en": "“hugely” makes it worse. A word that softens is what is needed."
+    },
+    {
+     "not": [
+      "slightly",
+      "bit",
+      "somewhat",
+      "little"
+     ],
+     "de": "Gesucht ist ein Abschwächer wie slightly, a bit oder somewhat.",
+     "en": "A softener such as slightly, a bit or somewhat is needed."
+    }
+   ]
+  }
+ },
+ "The rollout will fail without training. → Without training, the rollout ___ into difficulties.": {
+  "pat": "hg.modal",
+  "why": {
+   "ok": {
+    "de": "Richtig: might run macht aus der sicheren Vorhersage will fail eine Möglichkeit.",
+    "en": "Right: might run turns the firm prediction will fail into a possibility."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will“ bleibt eine sichere Vorhersage. Gefragt ist eine Möglichkeit.",
+     "en": "“will” stays a firm prediction. A possibility is what is asked for."
+    },
+    {
+     "not": [
+      "might",
+      "could",
+      "may"
+     ],
+     "de": "Gesucht ist ein Modalverb (might, could, may), das die Aussage abschwächt.",
+     "en": "A modal verb (might, could, may) is needed to soften the statement."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "de": "Nach dem Modalverb folgt die Grundform. Passend ist hier die Wendung run into difficulties.",
+     "en": "The base form follows the modal verb. The phrase run into difficulties fits here."
+    }
+   ]
+  }
+ },
+ "Start with a pilot. → I'd be inclined ___ with a pilot.": {
+  "pat": "hg.inclined",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus der Anweisung wird eine Neigung: be inclined to + Grundform.",
+    "en": "Right: the instruction becomes a leaning: be inclined to + base verb."
+   },
+   "wrong": [
+    {
+     "if": [
+      "starting"
+     ],
+     "de": "Nach inclined steht to + Grundform, nicht die -ing-Form.",
+     "en": "After inclined use to + base verb, not the -ing form."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach inclined braucht es to + Grundform.",
+     "en": "After inclined you need to + base verb."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach to steht die Grundform, ohne -s und ohne -ing: to start.",
+     "en": "After to comes the base verb, with no -s or -ing: to start."
+    }
+   ]
+  }
+ },
+ "Your team is not ready. → I'm not sure your team is ___ ready yet.": {
+  "pat": "hg.downtoner",
+  "why": {
+   "ok": {
+    "de": "Richtig: quite mildert das Urteil: aus „not ready“ wird ein vorsichtiger Zweifel.",
+    "en": "Right: quite softens the verdict: “not ready” becomes a cautious doubt."
+   },
+   "wrong": [
+    {
+     "if": [
+      "very"
+     ],
+     "de": "„very ready“ verstärkt. Hier soll das Urteil milder werden.",
+     "en": "“very ready” strengthens. Here the verdict should get milder."
+    },
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Das not steckt schon in I'm not sure. Hier fehlt nur ein Abschwächer wie quite.",
+     "en": "The not is already in I'm not sure. Only a softener such as quite is missing here."
+    },
+    {
+     "not": [
+      "quite",
+      "fully",
+      "entirely"
+     ],
+     "de": "Gesucht ist ein Wort wie quite oder fully, das das Urteil mildert.",
+     "en": "A word such as quite or fully that softens the verdict is needed."
+    }
+   ]
+  }
+ },
+ "It might be worth to check the retention periods first.": {
+  "pat": "hg.worth",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach worth steht die -ing-Form: worth checking.",
+    "en": "Right: worth is followed by the -ing form: worth checking."
+   },
+   "wrong": [
+    {
+     "if": [
+      "worth",
+      "to"
+     ],
+     "de": "Nach worth steht nie to + Grundform, sondern die -ing-Form.",
+     "en": "After worth never use to + base verb; use the -ing form."
+    },
+    {
+     "not": [
+      "checking"
+     ],
+     "de": "Verändert werden muss nur check: worth checking the retention periods.",
+     "en": "Only check needs to change: worth checking the retention periods."
+    }
+   ]
+  }
+ },
+ "I would be inclined starting with the invoices.": {
+  "pat": "hg.inclined",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach be inclined folgt to + Grundform: to start.",
+    "en": "Right: be inclined needs to + base verb: to start."
+   },
+   "wrong": [
+    {
+     "if": [
+      "starting"
+     ],
+     "de": "Nach inclined fehlt to, und das Verb steht in der Grundform: to start.",
+     "en": "After inclined, to is missing and the verb takes the base form: to start."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach be inclined braucht es to + Grundform.",
+     "en": "After be inclined you need to + base verb."
+    }
+   ]
+  }
+ },
+ "It seems as the budget is tighter this year.": {
+  "pat": "hg.seems",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach It seems folgt that (oder gleich der Satz), nicht as.",
+    "en": "Right: It seems is followed by that (or the clause itself), not as."
+   },
+   "wrong": [
+    {
+     "if": [
+      "as"
+     ],
+     "not": [
+      "if",
+      "though"
+     ],
+     "de": "Ein bloßes as geht nach seems nicht: that, as if oder as though.",
+     "en": "A bare as does not work after seems: use that, as if or as though."
+    },
+    {
+     "not": [
+      "seems"
+     ],
+     "de": "Das Verb seems bleibt; verändert wird nur das Wort danach.",
+     "en": "The verb seems stays; only the word after it changes."
+    }
+   ]
+  }
+ },
+ "It might be worth to wait until Q3.": {
+  "pat": "hg.worth",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach worth steht immer die -ing-Form: worth waiting.",
+    "en": "Right: worth is always followed by the -ing form: worth waiting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "worth",
+      "to"
+     ],
+     "de": "Nach worth steht nie to + Grundform, sondern die -ing-Form.",
+     "en": "After worth never use to + base verb; use the -ing form."
+    },
+    {
+     "not": [
+      "waiting"
+     ],
+     "de": "Verändert werden muss nur wait: worth waiting until Q3.",
+     "en": "Only wait needs to change: worth waiting until Q3."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,934 @@
+[
+ {
+  "id": "fpc-cn-k1",
+  "type": "kwt",
+  "pat": "fut.continuous",
+  "from": "I'm attending a training session from 2 to 4 tomorrow, so I can't join the call at 3.",
+  "key": "BE",
+  "frame": "At 3 tomorrow, I ___ a training session, so I can't join the call.",
+  "answer": "will be attending",
+  "accepted": [
+   "'ll be attending",
+   "will be taking",
+   "'ll be taking",
+   "will be taking part in",
+   "'ll be taking part in",
+   "will be in",
+   "'ll be in",
+   "will be sitting in",
+   "'ll be sitting in",
+   "'m going to be attending",
+   "will be participating in",
+   "'ll be participating in"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: um 15 Uhr bist du mitten im Training → will be attending.",
+    "en": "Right: at 3 you will be in the middle of it → will be attending."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have"
+     ],
+     "de": "„will have attended“ hieße: schon vorbei. Um 15 Uhr läuft das Training noch.",
+     "en": "“will have attended” would mean: already over. At 3 the training is still running."
+    },
+    {
+     "if": [
+      "be",
+      "attend"
+     ],
+     "de": "Nach will be steht die -ing-Form: attending.",
+     "en": "After will be comes the -ing form: attending."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Das Schlüsselwort be muss unverändert in der Lücke stehen.",
+     "en": "The key word be must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cn-k2",
+  "type": "kwt",
+  "pat": "fut.continuous",
+  "from": "The server migration runs from midnight to 3 a.m., so nobody can log in at 1 a.m.",
+  "key": "WILL",
+  "frame": "At 1 a.m., the engineers ___ the server migration, so nobody can log in.",
+  "answer": "will be running",
+  "accepted": [
+   "will be performing",
+   "will be carrying out",
+   "will be doing",
+   "will be conducting",
+   "will be working on",
+   "will be handling",
+   "will be executing"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: um 1 Uhr läuft die Migration gerade → will be running.",
+    "en": "Right: at 1 a.m. the migration is in progress → will be running."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "run"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "„will run“ nennt nur die Zukunft; hier geht es um das Mittendrin-Sein: will be running.",
+     "en": "“will run” only names the future; here the point is being in progress: will be running."
+    },
+    {
+     "if": [
+      "running"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Nach will steht be vor der -ing-Form: will be running.",
+     "en": "After will comes be before the -ing form: will be running."
+    },
+    {
+     "not": [
+      "will"
+     ],
+     "de": "Das Schlüsselwort will muss unverändert in der Lücke stehen.",
+     "en": "The key word will must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cn-f1",
+  "type": "find",
+  "pat": "fut.continuous",
+  "prompt": "This time next week, the whole team sits in workshops in Lisbon.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "will be sitting",
+  "fixed": "This time next week, the whole team will be sitting in workshops in Lisbon.",
+  "accepted": [
+   "is sitting",
+   "is going to be sitting",
+   "will sit"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „sits“ (Präsens). Für „dann mittendrin“ passt will be sitting am besten.",
+    "en": "The error: “sits” (present). For “in the middle of it then”, will be sitting fits best."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „sits“ passt nicht zu „this time next week“.",
+     "en": "There is an error: “sits” does not fit “this time next week”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „sits“: Das Präsens ersetzt hier nicht das Future Continuous.",
+     "en": "The error is “sits”: the present cannot stand in for the Future Continuous here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cn-f2",
+  "type": "find",
+  "pat": "fut.continuous",
+  "prompt": "Please don't schedule anything at 10 tomorrow; I will be present the quarterly numbers.",
+  "err": [
+   10,
+   10
+  ],
+  "answer": "presenting",
+  "fixed": "Please don't schedule anything at 10 tomorrow; I will be presenting the quarterly numbers.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach will be steht die -ing-Form: presenting, nicht present.",
+    "en": "The error: after will be comes the -ing form: presenting, not present."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Hinter „will be“ fehlt das -ing.",
+     "en": "There is an error: after “will be” the -ing is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „present“: Nach will be braucht das Verb -ing.",
+     "en": "The error is “present”: after will be the verb needs -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cn-f3",
+  "type": "find",
+  "pat": "fut.continuous",
+  "prompt": "At 2 p.m. tomorrow, our engineers will be testing the new release.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: will be + -ing passt zu „At 2 p.m. tomorrow“ (gerade im Gange).",
+    "en": "No error: will be + -ing fits “At 2 p.m. tomorrow” (in progress)."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: will be testing zeigt, dass sie um 14 Uhr mittendrin sind.",
+     "en": "No error: will be testing shows they are in the middle of it at 2 p.m."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cn-m1",
+  "type": "meaning",
+  "pat": "fut.continuous",
+  "a": "At 4, I'll be presenting to the board.",
+  "b": "At 4, I'll have presented to the board.",
+  "q": {
+   "de": "Welcher Satz sagt: Um 4 Uhr läuft meine Präsentation gerade?",
+   "en": "Which sentence says: my presentation is in progress at 4?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. will be + -ing = um 4 Uhr ist die Präsentation im Gange.",
+    "en": "Right: sentence a. will be + -ing = in the middle of it at 4."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist die Präsentation um 4 Uhr schon vorbei (will have + 3. Form).",
+     "en": "In b the presentation is already over at 4 (will have + participle)."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: will be + -ing = mittendrin, will have + 3. Form = schon fertig.",
+     "en": "Not the same: will be + -ing = in progress, will have + participle = already done."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cp-k1",
+  "type": "kwt",
+  "pat": "fut.cont-plan",
+  "from": "Do you plan to take the 9 o'clock train? I could give you a lift to the station.",
+  "key": "BE",
+  "frame": "___ the 9 o'clock train? I could give you a lift to the station.",
+  "answer": "Will you be taking",
+  "accepted": [
+   "Will you be catching",
+   "Will you be getting",
+   "Will you be using"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Will you be taking …? fragt höflich nach dem Plan.",
+    "en": "Right: Will you be taking …? asks politely about the plan."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "you",
+      "have"
+     ],
+     "de": "„Will you have taken“ fragt nach dem Ergebnis bis dahin, nicht nach deinem Plan.",
+     "en": "“Will you have taken” asks about the result by then, not about your plan."
+    },
+    {
+     "if": [
+      "be",
+      "take"
+     ],
+     "de": "Nach Will you be steht die -ing-Form: taking.",
+     "en": "After Will you be comes the -ing form: taking."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Das Schlüsselwort be muss unverändert in der Lücke stehen.",
+     "en": "The key word be must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cp-k2",
+  "type": "kwt",
+  "pat": "fut.cont-plan",
+  "from": "The post office is on my route today anyway, so I can mail your package.",
+  "key": "BE",
+  "frame": "I ___ the post office today anyway, so I can mail your package.",
+  "answer": "will be passing",
+  "accepted": [
+   "'ll be passing",
+   "will be going past",
+   "'ll be going past",
+   "will be going by",
+   "'ll be going by",
+   "will be passing by",
+   "'ll be passing by",
+   "will be driving past",
+   "'ll be driving past",
+   "will be driving by",
+   "'ll be driving by",
+   "will be walking past",
+   "'ll be walking past",
+   "will be passing near",
+   "'ll be passing near"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: ein Ablauf, der ohnehin stattfindet → will be passing.",
+    "en": "Right: a plan that happens anyway → will be passing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have"
+     ],
+     "de": "„will have passed“ hieße: schon vorbeigekommen. Gemeint ist der Plan für heute.",
+     "en": "“will have passed” would mean: already passed. The point is today's plan."
+    },
+    {
+     "if": [
+      "be",
+      "pass"
+     ],
+     "de": "Nach will be steht die -ing-Form: passing.",
+     "en": "After will be comes the -ing form: passing."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Das Schlüsselwort be muss unverändert in der Lücke stehen.",
+     "en": "The key word be must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cp-f1",
+  "type": "find",
+  "pat": "fut.cont-plan",
+  "prompt": "Will you be need the conference room after lunch?",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "needing",
+  "fixed": "Will you be needing the conference room after lunch?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach Will you be steht die -ing-Form: needing.",
+    "en": "The error: after Will you be comes the -ing form: needing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach „Will you be“ fehlt das -ing.",
+     "en": "There is an error: after “Will you be” the -ing is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „need“: Nach be braucht das Verb hier -ing.",
+     "en": "The error is “need”: after be the verb needs -ing here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cp-f2",
+  "type": "find",
+  "pat": "fut.cont-plan",
+  "prompt": "I will being passing the supermarket anyway, so I can pick up the milk.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "be passing",
+  "fixed": "I will be passing the supermarket anyway, so I can pick up the milk.",
+  "accepted": [
+   "be going past"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach will steht be, nicht being: will be passing.",
+    "en": "The error: after will comes be, not being: will be passing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „will being“ gibt es nicht.",
+     "en": "There is an error: “will being” does not exist."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will being passing“: Es heißt will be passing.",
+     "en": "The error is “will being passing”: it is will be passing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-cp-m1",
+  "type": "meaning",
+  "pat": "fut.cont-plan",
+  "a": "Will you be sending the invoice tomorrow?",
+  "b": "Will you have sent the invoice by tomorrow?",
+  "q": {
+   "de": "Welcher Satz fragt höflich nach dem Plan: Schickst du die Rechnung morgen?",
+   "en": "Which sentence politely asks about the plan: are you sending the invoice tomorrow?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a fragt nach dem Plan für morgen.",
+    "en": "Right: sentence a asks about the plan for tomorrow."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b geht es um das Ergebnis: Ist die Rechnung bis morgen schon draußen?",
+     "en": "In b the point is the result: will the invoice already be out by tomorrow?"
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a fragt nach dem Plan, b nach dem Ergebnis bis dahin.",
+     "en": "Not the same: a asks about the plan, b about the result by then."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pf-k1",
+  "type": "kwt",
+  "pat": "fut.perfect",
+  "from": "I'm going to send the invoices before you land on Friday.",
+  "key": "HAVE",
+  "frame": "By the time you land on Friday, I ___ the invoices.",
+  "answer": "will have sent",
+  "accepted": [
+   "'ll have sent",
+   "will have emailed",
+   "'ll have emailed",
+   "will have mailed",
+   "'ll have mailed",
+   "will have already sent",
+   "'ll have already sent",
+   "will have issued",
+   "'ll have issued",
+   "will have dispatched",
+   "'ll have dispatched",
+   "will have submitted",
+   "'ll have submitted"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: bis du landest, ist es erledigt → will have sent.",
+    "en": "Right: by the time you land it is done → will have sent."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "sent"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt das Verb in der Grundform; mit sent fehlt das have.",
+     "en": "After will the verb stays in the base form; with sent the have is missing."
+    },
+    {
+     "if": [
+      "will",
+      "send"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will send“ nennt nur die Absicht; bis dahin erledigt heißt will have sent.",
+     "en": "“will send” only states the intention; done by then means will have sent."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Das Schlüsselwort have muss unverändert in der Lücke stehen.",
+     "en": "The key word have must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pf-k2",
+  "type": "kwt",
+  "pat": "fut.perfect",
+  "from": "We'll be done with the migration before the audit starts on Monday.",
+  "key": "ALREADY",
+  "frame": "By Monday's audit, we ___ the migration.",
+  "answer": "will already have finished",
+  "accepted": [
+   "will already have completed",
+   "'ll already have finished",
+   "'ll already have completed",
+   "will have already finished",
+   "will have already completed",
+   "'ll have already finished",
+   "'ll have already completed",
+   "will already have carried out",
+   "'ll already have carried out",
+   "will already have done",
+   "'ll already have done"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: bis zum Audit ist es schon abgeschlossen → will already have finished.",
+    "en": "Right: already completed by the audit → will already have finished."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "already",
+      "finish"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Es fehlt have: will already have finished, nicht will already finish.",
+     "en": "The have is missing: will already have finished, not will already finish."
+    },
+    {
+     "if": [
+      "already",
+      "finished"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "Gefragt ist die Zukunft: will already have finished.",
+     "en": "The future is asked for: will already have finished."
+    },
+    {
+     "not": [
+      "already"
+     ],
+     "de": "Das Schlüsselwort already muss unverändert in der Lücke stehen.",
+     "en": "The key word already must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pf-f1",
+  "type": "find",
+  "pat": "fut.perfect",
+  "prompt": "By the time the client arrives, we will have prepare the whole presentation.",
+  "err": [
+   9,
+   9
+  ],
+  "answer": "prepared",
+  "fixed": "By the time the client arrives, we will have prepared the whole presentation.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach will have steht die 3. Form: prepared, nicht prepare.",
+    "en": "The error: after will have comes the participle: prepared, not prepare."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach „will have“ fehlt die 3. Form.",
+     "en": "There is an error: after “will have” the participle is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „prepare“: Nach have steht die 3. Form (prepared).",
+     "en": "The error is “prepare”: after have use the participle (prepared)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pf-f2",
+  "type": "find",
+  "pat": "fut.perfect",
+  "prompt": "By the time the auditors will arrive, we will have archived the old files.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "arrive,",
+  "fixed": "By the time the auditors arrive, we will have archived the old files.",
+  "accepted": [
+   "come,",
+   "get here,",
+   "have arrived,",
+   "show up,",
+   "turn up,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „by the time“ steht das Präsens („arrive“), kein will.",
+    "en": "The error: after “by the time” use the present (“arrive”), not will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach by the time steht kein will.",
+     "en": "There is an error: no will after by the time."
+    },
+    {
+     "tap": "*",
+     "pat": "tc.by-the-time",
+     "de": "Der Fehler liegt bei „will arrive“: Der Zeitsatz braucht das Präsens.",
+     "en": "The error is “will arrive”: the time clause needs the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pf-f3",
+  "type": "find",
+  "pat": "fut.perfect",
+  "prompt": "By the end of the week, we will have trained all the new hires.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: will have trained passt zu „By the end of the week“ (bis dahin fertig).",
+    "en": "No error: will have trained fits “By the end of the week” (done by then)."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: will have + 3. Form zeigt hier das Ergebnis bis Wochenende.",
+     "en": "No error: will have + participle shows the result by the end of the week."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pf-f4",
+  "type": "find",
+  "pat": "fut.perfect",
+  "prompt": "By next quarter, our competitors will launched their own product.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "will have launched",
+  "fixed": "By next quarter, our competitors will have launched their own product.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „will launched“. Nach will steht die Grundform; es fehlt have.",
+    "en": "The error: “will launched”. After will use the base form; the have is missing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: „will launched“ gibt es nicht.",
+     "en": "There is an error: “will launched” does not exist."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will launched“: Es braucht will have launched.",
+     "en": "The error is “will launched”: it needs will have launched."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pf-m1",
+  "type": "meaning",
+  "pat": "fut.perfect",
+  "a": "By Friday, we'll have signed the contract.",
+  "b": "At 3 p.m. on Friday, we'll be signing the contract.",
+  "q": {
+   "de": "Welcher Satz sagt: Spätestens am Freitag ist der Vertrag unterschrieben?",
+   "en": "Which sentence says: the contract is signed by Friday at the latest?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. By + will have + 3. Form = bis dahin ist es fertig.",
+    "en": "Right: sentence a. By + will have + participle = done by then."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b läuft die Unterschrift am Freitag um 15 Uhr gerade, sie ist nicht schon erledigt.",
+     "en": "In b the signing is in progress at 3 p.m. on Friday, not already done."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt das Ergebnis bis Freitag, b einen laufenden Vorgang.",
+     "en": "Not the same: a gives the result by Friday, b an ongoing activity."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pc-k1",
+  "type": "kwt",
+  "pat": "fut.perf-cont",
+  "from": "I started working on this project in January 2024, so in January 2027 it will be three years.",
+  "key": "BEEN",
+  "frame": "In January 2027, I ___ on this project for three years.",
+  "answer": "will have been working",
+  "accepted": [
+   "'ll have been working"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Dauer bis zu einem Zeitpunkt → will have been working.",
+    "en": "Right: duration up to a point in time → will have been working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have",
+      "work"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Für die Dauer braucht es been: will have been working.",
+     "en": "For the duration you need been: will have been working."
+    },
+    {
+     "if": [
+      "been",
+      "work"
+     ],
+     "de": "Nach been steht die -ing-Form: working.",
+     "en": "After been comes the -ing form: working."
+    },
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pc-k2",
+  "type": "kwt",
+  "pat": "fut.perf-cont",
+  "from": "Our sales team began using the new CRM in March; by September it will be six months.",
+  "key": "BEEN",
+  "frame": "By September, our sales team ___ the new CRM for six months.",
+  "answer": "will have been using",
+  "accepted": [],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: die Dauer bis September → will have been using.",
+    "en": "Right: duration up to September → will have been using."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have",
+      "use"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Hier zählt die Dauer: will have been using, mit been.",
+     "en": "The duration counts here: will have been using, with been."
+    },
+    {
+     "if": [
+      "been",
+      "use"
+     ],
+     "de": "Nach been steht die -ing-Form: using.",
+     "en": "After been comes the -ing form: using."
+    },
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pc-f1",
+  "type": "find",
+  "pat": "fut.perf-cont",
+  "prompt": "By next March, I work on this team for five years.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "I will have been working",
+  "fixed": "By next March, I will have been working on this team for five years.",
+  "accepted": [
+   "I'll have been working",
+   "I will have worked",
+   "I'll have worked"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „work“ (Präsens). Die Dauer bis dahin braucht will have been working.",
+    "en": "The error: “work” (present). The duration up to then needs will have been working."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Präsens nennt nicht die Dauer bis „next March“.",
+     "en": "There is an error: the present does not give the duration up to “next March”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „I work“: Es braucht will have been working.",
+     "en": "The error is “I work”: it needs will have been working."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pc-f2",
+  "type": "find",
+  "pat": "fut.perf-cont",
+  "prompt": "In June, she will have been work at the company for a decade.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "working",
+  "fixed": "In June, she will have been working at the company for a decade.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach been steht die -ing-Form: working, nicht work.",
+    "en": "The error: after been comes the -ing form: working, not work."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach „been“ fehlt das -ing.",
+     "en": "There is an error: after “been” the -ing is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „work“: Nach been braucht das Verb -ing.",
+     "en": "The error is “work”: after been the verb needs -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pc-f3",
+  "type": "find",
+  "pat": "fut.perf-cont",
+  "prompt": "By Friday, the team will have been testing the build for two weeks.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: will have been testing nennt die Dauer bis Freitag.",
+    "en": "No error: will have been testing gives the duration up to Friday."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: „for two weeks“ verlangt hier die Dauerform will have been + -ing.",
+     "en": "No error: “for two weeks” calls for the duration form will have been + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "fpc-pc-m1",
+  "type": "meaning",
+  "pat": "fut.perf-cont",
+  "a": "By June, I'll have written 40 pages.",
+  "b": "By June, I'll have been writing for a year.",
+  "q": {
+   "de": "Welcher Satz betont, wie lange ich bis Juni schon schreibe?",
+   "en": "Which sentence stresses how long I will have been writing by June?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. will have been + -ing = die Dauer bis dahin.",
+    "en": "Right: sentence b. will have been + -ing = duration up to then."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a zählt das Ergebnis (40 Seiten), nicht die Dauer des Schreibens.",
+     "en": "In a the result counts (40 pages), not how long the writing has gone on."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt das Ergebnis, b die Dauer bis dahin.",
+     "en": "Not the same: a gives the result, b the duration up to then."
+    }
+   ]
+  }
+ }
+]

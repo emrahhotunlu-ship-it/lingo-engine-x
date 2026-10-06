@@ -443,6 +443,9 @@
    "type": "transform",
    "prompt": "I finished my homework. Then I went out. → After I ___, I went out.",
    "answer": "had finished my homework",
+   "accepted": [
+    "finished my homework"
+   ],
    "expl": "Nach „after“ zeigt das Past Perfect, welche Handlung zuerst passiert ist.",
    "expl_en": "After \"after\", the Past Perfect shows which action happened first."
   },

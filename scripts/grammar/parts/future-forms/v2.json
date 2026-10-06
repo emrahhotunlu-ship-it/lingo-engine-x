@@ -1,0 +1,1383 @@
+[
+ {
+  "id": "ff-wn-k1",
+  "type": "kwt",
+  "pat": "ff.will-now",
+  "from": "I have just decided to take the earlier train.",
+  "key": "WILL",
+  "frame": "That's it – I ___ the earlier train.",
+  "answer": "will take",
+  "accepted": [
+   "will catch",
+   "will get",
+   "will definitely take",
+   "will just take",
+   "will go for",
+   "will choose",
+   "will pick",
+   "will opt for"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: will take. Der Entschluss fällt gerade erst („That's it“), also will.",
+    "en": "Right: will take. The decision is made just now (“That's it”), so will."
+   },
+   "wrong": [
+    {
+     "not": [
+      "will"
+     ],
+     "de": "Das Schlüsselwort will muss unverändert in der Lücke stehen.",
+     "en": "The key word will must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will",
+      "not"
+     ],
+     "de": "Mit not sagst du das Gegenteil: Du entscheidest dich ja für den Zug.",
+     "en": "With not you say the opposite: you are choosing the train."
+    },
+    {
+     "if": [
+      "will",
+      "taking"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Nach will steht die Grundform: will take, nicht will taking.",
+     "en": "After will use the base form: will take, not will taking."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wn-k2",
+  "type": "kwt",
+  "pat": "ff.will-now",
+  "from": "The printer is empty? Don't worry, let me get some paper.",
+  "key": "WILL",
+  "frame": "The printer is empty? Don't worry, I ___ some paper.",
+  "answer": "will get",
+  "accepted": [
+   "will bring",
+   "will fetch",
+   "will grab",
+   "will order",
+   "will buy",
+   "will load",
+   "will go and get",
+   "will go get",
+   "will go and grab",
+   "will go and fetch"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: will get. Du reagierst spontan auf das leere Papierfach.",
+    "en": "Right: will get. You react on the spot to the empty paper tray."
+   },
+   "wrong": [
+    {
+     "not": [
+      "will"
+     ],
+     "de": "Das Schlüsselwort will muss unverändert in der Lücke stehen.",
+     "en": "The key word will must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will",
+      "not"
+     ],
+     "de": "Mit not lehnst du ab. Du willst ja Papier holen.",
+     "en": "With not you refuse. You want to get paper."
+    },
+    {
+     "if": [
+      "will",
+      "got"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will steht die Grundform: will get, nicht will got.",
+     "en": "After will use the base form: will get, not will got."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wn-f1",
+  "type": "find",
+  "pat": "ff.will-now",
+  "prompt": "No problem, I take care of the invoices myself.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "I'll take",
+  "fixed": "No problem, I'll take care of the invoices myself.",
+  "accepted": [
+   "I will take",
+   "I'm going to take",
+   "I am going to take"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Ein spontanes Angebot braucht will: I'll take care of it.",
+    "en": "The error: a spontaneous offer needs will: I'll take care of it."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Ein Angebot im Moment braucht will, nicht das Present.",
+     "en": "There is an error: an offer on the spot needs will, not the present."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „No problem“.",
+     "en": "That is not the error. Look at the verb after “No problem”."
+    },
+    {
+     "if": [
+      "take"
+     ],
+     "not": [
+      "will",
+      "'ll",
+      "going",
+      "taking",
+      "am"
+     ],
+     "de": "Das Present Simple klingt nach Gewohnheit. Für das Angebot nimmst du I'll take.",
+     "en": "The Present Simple sounds like a habit. For the offer use I'll take."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wn-f2",
+  "type": "find",
+  "pat": "ff.will-now",
+  "prompt": "We still need a restaurant for the team dinner. Will I book a table for Friday?",
+  "err": [
+   9,
+   10
+  ],
+  "answer": "Should I",
+  "fixed": "We still need a restaurant for the team dinner. Should I book a table for Friday?",
+  "accepted": [
+   "Shall I"
+  ],
+  "why": {
+   "ok": {
+    "de": "Ein Angebot mit I: Should I (US häufiger), Shall I wirkt förmlich – nicht Will I.",
+    "en": "An offer with I: Should I (more common in the US), Shall I sounds formal – not Will I."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Will I fragt, was künftig passiert, nicht nach einem Angebot.",
+     "en": "There is an error: Will I asks what will happen, not about an offer."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf den Anfang der Frage.",
+     "en": "That is not the error. Look at the start of the question."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Dein Ersatz enthält noch will. Für ein Angebot nimmst du Should I.",
+     "en": "Your replacement still has will. For an offer use Should I."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wn-m1",
+  "type": "meaning",
+  "pat": "ff.will-now",
+  "a": "Oh, the client is waiting? I'll call him now.",
+  "b": "I'm going to call the client; I've already prepared my notes.",
+  "q": {
+   "de": "Welcher Satz zeigt, dass der Entschluss erst jetzt fällt?",
+   "en": "Which sentence shows that the decision is made only now?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. will passt, weil die Nachricht neu ist („Oh, … waiting?“).",
+    "en": "Right: sentence a. will fits because the news is new (“Oh, … waiting?”)."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht der Plan schon fest (already prepared): going to.",
+     "en": "In b the plan is already fixed (already prepared): going to."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: will = Entschluss jetzt, going to = Plan schon da.",
+     "en": "Not the same: will = decision now, going to = plan already there."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-gt-k1",
+  "type": "kwt",
+  "pat": "ff.going-to",
+  "from": "We have decided to open a second office in Dublin.",
+  "key": "GOING",
+  "frame": "We ___ open a second office in Dublin.",
+  "answer": "are going to",
+  "accepted": [
+   "'re going to",
+   "are definitely going to",
+   "'re definitely going to",
+   "are finally going to",
+   "'re finally going to",
+   "are now going to",
+   "'re now going to"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: are going to. Die Entscheidung ist schon gefallen: ein feststehender Plan.",
+    "en": "Right: are going to. The decision is already made: a fixed plan."
+   },
+   "wrong": [
+    {
+     "not": [
+      "going"
+     ],
+     "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
+     "en": "The key word going must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "going"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach going fehlt to: going to + Grundform.",
+     "en": "to is missing after going: going to + base form."
+    },
+    {
+     "if": [
+      "going",
+      "to"
+     ],
+     "not": [
+      "are",
+      "'re"
+     ],
+     "de": "We ist Plural: are going to, nicht is going to.",
+     "en": "We is plural: are going to, not is going to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-gt-k2",
+  "type": "kwt",
+  "pat": "ff.going-to",
+  "from": "The error rate is rising fast, so I expect the server to crash soon.",
+  "key": "GOING",
+  "frame": "Look at the error rate – the server ___ crash.",
+  "answer": "is going to",
+  "accepted": [
+   "'s going to",
+   "is definitely going to",
+   "is clearly going to",
+   "is surely going to",
+   "is certainly going to"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: is going to. Die Fehlerrate ist ein sichtbares Zeichen für den Absturz.",
+    "en": "Right: is going to. The error rate is a visible sign of the crash."
+   },
+   "wrong": [
+    {
+     "not": [
+      "going"
+     ],
+     "de": "Das Schlüsselwort going muss unverändert in der Lücke stehen.",
+     "en": "The key word going must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "going"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach going fehlt to: going to + Grundform.",
+     "en": "to is missing after going: going to + base form."
+    },
+    {
+     "if": [
+      "going",
+      "to"
+     ],
+     "not": [
+      "is",
+      "'s"
+     ],
+     "de": "server ist Singular: is going to, nicht are going to.",
+     "en": "server is singular: is going to, not are going to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-gt-f1",
+  "type": "find",
+  "pat": "ff.going-to",
+  "prompt": "We are going to launching the new dashboard in March.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "launch",
+  "fixed": "We are going to launch the new dashboard in March.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach going to steht die Grundform: launch, nicht launching.",
+    "en": "The error: after going to use the base form: launch, not launching."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach going to steht kein -ing.",
+     "en": "There is an error: no -ing after going to."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach going to.",
+     "en": "That is not the error. Look at the verb after going to."
+    },
+    {
+     "if": [
+      "launching"
+     ],
+     "de": "Dein Ersatz hat noch -ing. Nach going to steht die Grundform.",
+     "en": "Your replacement still has -ing. After going to use the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-gt-f2",
+  "type": "find",
+  "pat": "ff.going-to",
+  "prompt": "We're going open a second office after the merger.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "going to open",
+  "fixed": "We're going to open a second office after the merger.",
+  "accepted": [
+   "opening",
+   "gonna open",
+   "planning to open"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Es fehlt to: going to open.",
+    "en": "The error: to is missing: going to open."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Zwischen going und open fehlt to.",
+     "en": "There is an error: to is missing between going and open."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf „going open“.",
+     "en": "That is not the error. Look at “going open”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-gt-f3",
+  "type": "find",
+  "pat": "ff.going-to",
+  "prompt": "Look at the pipeline – we're going to hit our target this quarter.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Pipeline ist ein sichtbares Zeichen, deshalb going to. Der Satz ist fehlerfrei.",
+    "en": "Right: the pipeline is a visible sign, so going to. The sentence is fine."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist kein Fehler: going to + Grundform passt zu einem sichtbaren Zeichen.",
+     "en": "There is no error: going to + base form fits a visible sign."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-gt-m1",
+  "type": "meaning",
+  "pat": "ff.going-to",
+  "a": "Look at that queue – we're going to miss the keynote.",
+  "b": "We'll probably miss the keynote – I just have a feeling.",
+  "q": {
+   "de": "Welcher Satz stützt sich auf etwas, das man gerade sieht?",
+   "en": "Which sentence rests on something you can see right now?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die Schlange ist ein sichtbares Zeichen: going to.",
+    "en": "Right: sentence a. The queue is a visible sign: going to."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b gibt es nur ein Gefühl, kein sichtbares Zeichen: will.",
+     "en": "In b there is only a feeling, no visible sign: will."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: going to stützt sich auf ein Zeichen, will auf eine Annahme.",
+     "en": "Not the same: going to rests on a sign, will on an assumption."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wg-k1",
+  "type": "kwt",
+  "pat": "ff.was-going-to",
+  "from": "We planned to release the update on Monday, but a bug appeared.",
+  "key": "WERE",
+  "frame": "We ___ release the update on Monday, but a bug appeared.",
+  "answer": "were going to",
+  "accepted": [
+   "were planning to",
+   "were originally going to",
+   "were initially going to",
+   "were originally planning to",
+   "were initially planning to",
+   "were hoping to",
+   "were due to",
+   "were scheduled to"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: were going to. Ein Plan, den der Fehler dann verhindert hat.",
+    "en": "Right: were going to. A plan that the bug then stopped."
+   },
+   "wrong": [
+    {
+     "not": [
+      "were"
+     ],
+     "de": "Das Schlüsselwort were muss unverändert in der Lücke stehen.",
+     "en": "The key word were must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "were",
+      "going"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach going fehlt to: were going to + Grundform.",
+     "en": "to is missing after going: were going to + base form."
+    },
+    {
+     "if": [
+      "were",
+      "planning"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach planning fehlt to: were planning to + Grundform.",
+     "en": "to is missing after planning: were planning to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wg-k2",
+  "type": "kwt",
+  "pat": "ff.was-going-to",
+  "from": "I meant to call the vendor earlier, but the meeting ran long.",
+  "key": "WAS",
+  "frame": "I ___ call the vendor earlier, but the meeting ran long.",
+  "answer": "was going to",
+  "accepted": [
+   "was planning to",
+   "was originally going to",
+   "was originally planning to",
+   "was initially going to",
+   "was hoping to",
+   "was due to",
+   "was scheduled to"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: was going to. Du hattest es vor, aber das Meeting kam dazwischen.",
+    "en": "Right: was going to. You planned it, but the meeting got in the way."
+   },
+   "wrong": [
+    {
+     "not": [
+      "was"
+     ],
+     "de": "Das Schlüsselwort was muss unverändert in der Lücke stehen.",
+     "en": "The key word was must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "was",
+      "going"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach going fehlt to: was going to + Grundform.",
+     "en": "to is missing after going: was going to + base form."
+    },
+    {
+     "if": [
+      "was",
+      "planning"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach planning fehlt to: was planning to + Grundform.",
+     "en": "to is missing after planning: was planning to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wg-f1",
+  "type": "find",
+  "pat": "ff.was-going-to",
+  "prompt": "I am going to finish the report yesterday, but the system crashed.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "was going",
+  "fixed": "I was going to finish the report yesterday, but the system crashed.",
+  "accepted": [
+   "was planning",
+   "had planned",
+   "had been planning",
+   "was hoping",
+   "meant",
+   "had meant",
+   "intended",
+   "had intended",
+   "planned"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: yesterday verlangt die Vergangenheit: was going to, nicht am going to.",
+    "en": "The error: yesterday needs the past: was going to, not am going to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Hilfsverb am passt nicht zu yesterday.",
+     "en": "There is an error: the auxiliary am does not fit yesterday."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Hilfsverb vor going to.",
+     "en": "That is not the error. Look at the auxiliary before going to."
+    },
+    {
+     "if": [
+      "am"
+     ],
+     "de": "Dein Ersatz hat noch am. Ein Plan von gestern braucht was.",
+     "en": "Your replacement still has am. A plan from yesterday needs was."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wg-f2",
+  "type": "find",
+  "pat": "ff.was-going-to",
+  "prompt": "We were going send the offer on Monday, but legal asked for changes.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "going to send",
+  "fixed": "We were going to send the offer on Monday, but legal asked for changes.",
+  "accepted": [
+   "planning to send",
+   "hoping to send"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Es fehlt to: were going to send.",
+    "en": "The error: to is missing: were going to send."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Zwischen going und send fehlt to.",
+     "en": "There is an error: to is missing between going and send."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf „going send“.",
+     "en": "That is not the error. Look at “going send”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-wg-m1",
+  "type": "meaning",
+  "pat": "ff.was-going-to",
+  "a": "I was going to mention the delay in the meeting.",
+  "b": "I mentioned the delay in the meeting.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich die Verzögerung wohl nicht erwähnt habe?",
+   "en": "Which sentence suggests that I probably did not mention the delay?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. was going to = vorgehabt, und meist nicht getan.",
+    "en": "Right: sentence a. was going to = planned, and usually not done."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist es passiert: Das Past Simple berichtet, was geschah.",
+     "en": "In b it happened: the Past Simple reports what took place."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: was going to = vorgehabt, Past Simple = getan.",
+     "en": "Not the same: was going to = planned, Past Simple = done."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ft-k1",
+  "type": "kwt",
+  "pat": "ff.fixed-times",
+  "from": "I have arranged to meet the auditors on Friday at nine.",
+  "key": "MEETING",
+  "frame": "I ___ the auditors on Friday at nine.",
+  "answer": "am meeting",
+  "accepted": [
+   "'m meeting",
+   "am meeting with",
+   "'m meeting with",
+   "will be meeting",
+   "will be meeting with",
+   "am also meeting",
+   "'m also meeting"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: am meeting. Eine abgemachte Verabredung mit Zeit und Personen: -ing.",
+    "en": "Right: am meeting. An arranged date with a time and people: -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "meeting"
+     ],
+     "de": "Das Schlüsselwort meeting muss unverändert in der Lücke stehen.",
+     "en": "The key word meeting must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "meeting"
+     ],
+     "not": [
+      "am",
+      "'m",
+      "be"
+     ],
+     "de": "Es fehlt das Hilfsverb: am meeting. -ing allein ist keine Zeitform.",
+     "en": "The auxiliary is missing: am meeting. -ing alone is not a tense."
+    },
+    {
+     "if": [
+      "will",
+      "meeting"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "will meeting geht nicht: Nach will steht be meeting oder die Grundform.",
+     "en": "will meeting does not work: after will use be meeting or the base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ft-k2",
+  "type": "kwt",
+  "pat": "ff.fixed-times",
+  "from": "The earliest departure of our train to Munich is 9:15.",
+  "key": "DOES",
+  "frame": "Our train to Munich ___ until 9:15.",
+  "answer": "does not leave",
+  "accepted": [
+   "does not depart",
+   "does not go",
+   "does not set off"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Fahrplan, also Present Simple: does not leave, auch für die Zukunft.",
+    "en": "Right: a timetable, so Present Simple: does not leave, also for the future."
+   },
+   "wrong": [
+    {
+     "not": [
+      "does"
+     ],
+     "de": "Das Schlüsselwort does muss unverändert in der Lücke stehen.",
+     "en": "The key word does must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "does",
+      "leaves"
+     ],
+     "de": "Nach does not steht die Grundform: does not leave, ohne -s.",
+     "en": "After does not use the base form: does not leave, with no -s."
+    },
+    {
+     "if": [
+      "does",
+      "leave"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Die Verneinung fehlt: does not leave until 9:15.",
+     "en": "The negation is missing: does not leave until 9:15."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ft-f1",
+  "type": "find",
+  "pat": "ff.fixed-times",
+  "prompt": "The last train to Leipzig leave at 10:15 tonight, so we should hurry.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "leaves",
+  "fixed": "The last train to Leipzig leaves at 10:15 tonight, so we should hurry.",
+  "accepted": [
+   "departs",
+   "is leaving",
+   "will leave"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Fahrplan im Present Simple: train ist Singular, also leaves mit -s.",
+    "en": "The error: a timetable takes the Present Simple: train is singular, so leaves with -s."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Verb passt nicht zum Subjekt train.",
+     "en": "There is an error: the verb does not match the subject train."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „Leipzig“.",
+     "en": "That is not the error. Look at the verb after “Leipzig”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ft-f2",
+  "type": "find",
+  "pat": "ff.fixed-times",
+  "prompt": "I'm have dinner with the board at seven tomorrow.",
+  "err": [
+   0,
+   1
+  ],
+  "answer": "I'm having",
+  "fixed": "I'm having dinner with the board at seven tomorrow.",
+  "accepted": [
+   "I am having",
+   "I'm going to have",
+   "I am going to have",
+   "I will have",
+   "I'll have"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Die Verabredung braucht -ing: I'm having, nicht I'm have.",
+    "en": "The error: the arrangement needs -ing: I'm having, not I'm have."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach I'm fehlt die -ing-Form.",
+     "en": "There is an error: the -ing form is missing after I'm."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb direkt nach I'm.",
+     "en": "That is not the error. Look at the verb right after I'm."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ft-f3",
+  "type": "find",
+  "pat": "ff.fixed-times",
+  "prompt": "We're presenting the results to the board on Thursday at ten.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Richtig: Eine Verabredung mit Zeit braucht -ing. Der Satz ist fehlerfrei.",
+    "en": "Right: an arrangement with a time takes -ing. The sentence is fine."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist kein Fehler: Für eine abgemachte Verabredung steht -ing.",
+     "en": "There is no error: an arranged date takes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ft-m1",
+  "type": "meaning",
+  "pat": "ff.fixed-times",
+  "a": "I'm seeing the auditors on Friday.",
+  "b": "I'm going to see the auditors at some point.",
+  "q": {
+   "de": "Welcher Satz klingt nach einer festen Verabredung?",
+   "en": "Which sentence sounds like a fixed arrangement?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. -ing mit on Friday: Zeit und Personen sind abgemacht.",
+    "en": "Right: sentence a. -ing with on Friday: time and people are agreed."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht nur ein Plan ohne festen Termin (at some point): going to.",
+     "en": "In b there is only a plan with no fixed date (at some point): going to."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: -ing = abgemacht, going to = Plan ohne Termin.",
+     "en": "Not the same: -ing = agreed, going to = plan with no date."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ab-k1",
+  "type": "kwt",
+  "pat": "ff.about-to",
+  "from": "The keynote is going to begin in a few seconds.",
+  "key": "ABOUT",
+  "frame": "Please take your seats – the keynote ___ begin.",
+  "answer": "is about to",
+  "accepted": [
+   "'s about to",
+   "is just about to",
+   "is now about to"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: is about to. Es beginnt jetzt in wenigen Sekunden.",
+    "en": "Right: is about to. It starts in a few seconds."
+   },
+   "wrong": [
+    {
+     "not": [
+      "about"
+     ],
+     "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
+     "en": "The key word about must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach about fehlt to: about to + Grundform.",
+     "en": "to is missing after about: about to + base form."
+    },
+    {
+     "if": [
+      "about",
+      "to"
+     ],
+     "not": [
+      "is",
+      "'s"
+     ],
+     "de": "keynote ist Singular: is about to, nicht are about to.",
+     "en": "keynote is singular: is about to, not are about to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ab-k2",
+  "type": "kwt",
+  "pat": "ff.about-to",
+  "from": "I was just going to text you when you called.",
+  "key": "ABOUT",
+  "frame": "I was ___ text you when you called.",
+  "answer": "about to",
+  "accepted": [
+   "just about to"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: was about to + Grundform. Ich wollte gerade schreiben, aber du warst schneller.",
+    "en": "Right: was about to + base form. I was just about to text you when you called."
+   },
+   "wrong": [
+    {
+     "not": [
+      "about"
+     ],
+     "de": "Das Schlüsselwort about muss unverändert in der Lücke stehen.",
+     "en": "The key word about must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach about fehlt to: about to + Grundform.",
+     "en": "to is missing after about: about to + base form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ab-f1",
+  "type": "find",
+  "pat": "ff.about-to",
+  "prompt": "Please take your seats. The keynote is about starting.",
+  "err": [
+   7,
+   8
+  ],
+  "answer": "about to start.",
+  "fixed": "Please take your seats. The keynote is about to start.",
+  "accepted": [
+   "going to start.",
+   "starting.",
+   "about to begin.",
+   "going to begin.",
+   "beginning."
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach about to steht die Grundform: about to start, nicht about starting.",
+    "en": "The error: about to takes the base form: about to start, not about starting."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Bei „gleich“ fehlt to vor dem Verb.",
+     "en": "There is an error: for “any second” to is missing before the verb."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf „about starting“.",
+     "en": "That is not the error. Look at “about starting”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ab-f2",
+  "type": "find",
+  "pat": "ff.about-to",
+  "prompt": "I was about to leaving the office when the client called.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "leave",
+  "fixed": "I was about to leave the office when the client called.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach about to steht die Grundform: leave, nicht leaving.",
+    "en": "The error: after about to use the base form: leave, not leaving."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach about to steht kein -ing.",
+     "en": "There is an error: no -ing after about to."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach about to.",
+     "en": "That is not the error. Look at the verb after about to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-ab-m1",
+  "type": "meaning",
+  "pat": "ff.about-to",
+  "a": "The session is about to start.",
+  "b": "The session is going to start sometime this afternoon.",
+  "q": {
+   "de": "Welcher Satz sagt, dass es gleich losgeht?",
+   "en": "Which sentence says that it starts any moment?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. about to = in Sekunden oder Minuten.",
+    "en": "Right: sentence a. about to = within seconds or minutes."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b sagt sometime this afternoon: irgendwann später. Das ist going to.",
+     "en": "In b sometime this afternoon means later on. That is going to."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: about to = gleich, going to = irgendwann.",
+     "en": "Not the same: about to = any moment, going to = at some point."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-nw-k1",
+  "type": "kwt",
+  "pat": "ff.no-will-after",
+  "from": "Wait for the lawyers to confirm the terms before you sign.",
+  "key": "UNTIL",
+  "frame": "Don't sign ___ the terms.",
+  "answer": "until the lawyers confirm",
+  "accepted": [
+   "until our lawyers confirm",
+   "until legal confirms",
+   "until the lawyers have confirmed",
+   "until the lawyers approve",
+   "until the lawyers have approved",
+   "until the lawyers check",
+   "until the lawyers review",
+   "until legal approves"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach until steht das Present: until the lawyers confirm.",
+    "en": "Right: after until use the present: until the lawyers confirm."
+   },
+   "wrong": [
+    {
+     "not": [
+      "until"
+     ],
+     "de": "Das Schlüsselwort until muss unverändert in der Lücke stehen.",
+     "en": "The key word until must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach until steht kein will: until the lawyers confirm.",
+     "en": "No will after until: until the lawyers confirm."
+    },
+    {
+     "if": [
+      "confirmed"
+     ],
+     "not": [
+      "have",
+      "has"
+     ],
+     "de": "Die Vergangenheit passt nicht: Es geht um die Zukunft. Nimm confirm oder have confirmed.",
+     "en": "The past does not fit: this is about the future. Use confirm or have confirmed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-nw-k2",
+  "type": "kwt",
+  "pat": "ff.no-will-after",
+  "from": "I'll forward the file after I get the final numbers.",
+  "key": "ONCE",
+  "frame": "I'll forward the file ___ the final numbers.",
+  "answer": "once I get",
+  "accepted": [
+   "once I have",
+   "once I receive",
+   "once we get",
+   "once we have",
+   "once we receive",
+   "once I've got",
+   "once I've received",
+   "once I have received",
+   "once we've received",
+   "once we have received",
+   "once I've gotten",
+   "once I have gotten",
+   "once we've gotten",
+   "once we have gotten"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach once steht das Present: once I get. will steckt schon in „I'll forward“.",
+    "en": "Right: after once use the present: once I get. will is already in “I'll forward”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "once"
+     ],
+     "de": "Das Schlüsselwort once muss unverändert in der Lücke stehen.",
+     "en": "The key word once must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach once steht kein will: once I get. Das Futur trägt „I'll forward“.",
+     "en": "No will after once: once I get. “I'll forward” carries the future."
+    },
+    {
+     "if": [
+      "got"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Die Vergangenheit passt nicht: Es geht um die Zukunft. Nimm get oder have got.",
+     "en": "The past does not fit: this is about the future. Use get or have got."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-nw-f1",
+  "type": "find",
+  "pat": "ff.no-will-after",
+  "prompt": "We will start the workshop as soon as everyone will have arrived.",
+  "err": [
+   9,
+   11
+  ],
+  "answer": "has arrived.",
+  "fixed": "We will start the workshop as soon as everyone has arrived.",
+  "accepted": [
+   "arrives.",
+   "is here."
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach as soon as steht das Present: has arrived, nicht will have arrived.",
+    "en": "The error: after as soon as use the present: has arrived, not will have arrived."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: das will nach „as soon as everyone“.",
+     "en": "There is an error: the will after “as soon as everyone”."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „everyone“.",
+     "en": "That is not the error. Look at the verb after “everyone”."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Dein Ersatz enthält noch will; nach as soon as steht das Present.",
+     "en": "Your replacement still has will; after as soon as use the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-nw-f2",
+  "type": "find",
+  "pat": "ff.no-will-after",
+  "prompt": "I'll check the contract after the client will send the final draft.",
+  "err": [
+   7,
+   8
+  ],
+  "answer": "sends",
+  "fixed": "I'll check the contract after the client sends the final draft.",
+  "accepted": [
+   "has sent"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach after steht das Present: sends, nicht will send.",
+    "en": "The error: after after use the present: sends, not will send."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: das will nach „after the client“.",
+     "en": "There is an error: the will after “after the client”."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „the client“.",
+     "en": "That is not the error. Look at the verb after “the client”."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Dein Ersatz enthält noch will; nach after steht das Present.",
+     "en": "Your replacement still has will; after after use the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-nw-f3",
+  "type": "find",
+  "pat": "ff.no-will-after",
+  "prompt": "Please call me before you leave for the airport tomorrow.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach before steht das Present („leave“). Der Satz ist fehlerfrei.",
+    "en": "Right: after before use the present (“leave”). The sentence is fine."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist kein Fehler: Nach before steht bei Zukünftigem das Present, nicht will.",
+     "en": "There is no error: after before, future meaning takes the present, not will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ff-nw-m1",
+  "type": "meaning",
+  "pat": "ff.no-will-after",
+  "a": "I'll sign the contract before the client arrives.",
+  "b": "I'll sign the contract after the client arrives.",
+  "q": {
+   "de": "Welcher Satz sagt, dass ich unterschreibe, solange der Kunde noch nicht da ist?",
+   "en": "Which sentence says that I sign while the client is not yet there?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. before = davor, und arrives steht im Present, nicht will arrive.",
+    "en": "Right: sentence a. before = earlier, and arrives is in the present, not will arrive."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b sagt after das Gegenteil: Ich unterschreibe, wenn der Kunde schon da ist.",
+     "en": "In b after says the opposite: I sign once the client is already there."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: before = davor, after = danach.",
+     "en": "Not the same: before = earlier, after = later."
+    }
+   ]
+  }
+ }
+]

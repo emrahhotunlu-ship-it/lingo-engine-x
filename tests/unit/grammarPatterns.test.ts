@@ -15,9 +15,9 @@ const task = (prompt: string) => {
 };
 
 describe('Lader', () => {
-  it('die vier Pilotthemen haben Musterdateien, andere (noch) nicht', () => {
-    expect(topicsWithPatterns().sort()).toEqual([...PILOT].sort());
-    expect(patternsOf('passive')).toBeNull();
+  it('die Pilotthemen haben Musterdateien; Themen ohne Datei geben null', () => {
+    for (const t of PILOT) expect(topicsWithPatterns()).toContain(t);
+    expect(patternsOf('no-such-topic')).toBeNull();
     expect(patternsOf('mixed-cond')?.patterns.length).toBeGreaterThanOrEqual(5);
   });
 
@@ -52,7 +52,7 @@ describe('Lader', () => {
 
   it('neue Aufgaben je Thema', () => {
     for (const t of PILOT) expect(v2Tasks(t).length, t).toBeGreaterThan(20);
-    expect(v2Tasks().length).toBe(PILOT.reduce((n, t) => n + v2Tasks(t).length, 0));
+    expect(v2Tasks().length).toBe(topicsWithPatterns().reduce((n, t) => n + v2Tasks(t).length, 0));
   });
 });
 

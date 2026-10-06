@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { orderPool, orderPoolSize, poolNorm, segment } from '../../src/domain/drills/orderPool';
 
@@ -24,7 +24,8 @@ describe('Satzbau-Pool', () => {
     for (const e of raw) per.set(e.topic, (per.get(e.topic) ?? 0) + 1);
     expect([...per.values()].filter((n) => n >= 4).length).toBeGreaterThanOrEqual(5);
     // c1-Themen und die Grammatikthemen mit Muster (Lernplattform 2.0 §3.6).
-    for (const topic of per.keys()) expect(topic).toMatch(/^(c1-[a-z]+|past-simple-perfect|mixed-cond|time-clauses|cond-alt)$/);
+    const withPatterns = readdirSync('src/content/grammar/patterns').map((f) => f.replace(/\.json$/, ''));
+    for (const topic of per.keys()) expect(topic.startsWith('c1-') || withPatterns.includes(topic), topic).toBe(true);
   });
 
   it('keine Dubletten', () => {

@@ -1,4 +1,417 @@
 {
+ "c1-hedging|softenthisforaclientyourpriceabitaboveourbudget": {
+  "pat": "hg.modal",
+  "why": {
+   "ok": {
+    "de": "Richtig: might be macht aus der Tatsache eine Möglichkeit, a bit mildert zusätzlich.",
+    "en": "Right: might be turns the fact into a possibility, and a bit softens it further."
+   },
+   "wrong": [
+    {
+     "opt": "is",
+     "de": "„is“ behauptet es als Tatsache. Beim Kunden kommt das wie ein Vorwurf an.",
+     "en": "“is” states it as a fact. A client hears that as an accusation."
+    },
+    {
+     "opt": "must be",
+     "de": "„must be“ heißt: ich bin fast sicher. Das mildert nichts.",
+     "en": "“must be” means: I'm almost certain. That does not soften anything."
+    },
+    {
+     "opt": "will be",
+     "de": "„will be“ ist eine sichere Vorhersage. Gesucht ist eine vorsichtige Möglichkeit.",
+     "en": "“will be” is a firm prediction. A cautious possibility is what is needed here."
+    }
+   ]
+  }
+ },
+ "c1-hedging|worthconsideringaphasedrollout": {
+  "pat": "hg.worth",
+  "why": {
+   "ok": {
+    "de": "Richtig: It might be worth + -ing ist die feste, höfliche Einleitung für einen Vorschlag.",
+    "en": "Right: It might be worth + -ing is the fixed, polite lead-in for a suggestion."
+   },
+   "wrong": [
+    {
+     "opt": "It might",
+     "de": "Nach might fehlt be: worth ist ein Adjektiv und braucht be davor.",
+     "en": "“might” needs be before worth, because worth works like an adjective."
+    },
+    {
+     "opt": "Maybe it is",
+     "de": "„Maybe it is worth“ ist korrekt, aber lockerer. Hier ist die feste Wendung mit Modalverb gefragt.",
+     "en": "“Maybe it is worth” is correct but looser. Here the fixed phrase with a modal verb is asked for."
+    },
+    {
+     "opt": "It is maybe",
+     "de": "„It is maybe worth“ klingt ungewohnt: maybe steht vorn oder gar nicht.",
+     "en": "“It is maybe worth” sounds unusual: maybe goes first or is left out."
+    }
+   ]
+  }
+ },
+ "c1-hedging|choosethesoftestwaytodisagreewithaclient": {
+  "pat": "hg.downtoner",
+  "why": {
+   "ok": {
+    "de": "Richtig: I'm not sure … quite … schwächt doppelt ab und lässt dem Kunden Raum.",
+    "en": "Right: I'm not sure … quite … softens twice and leaves the client room."
+   },
+   "wrong": [
+    {
+     "opt": "That's wrong.",
+     "de": "Ohne Abschwächer ist das ein hartes Nein. Gesucht ist die mildeste Fassung.",
+     "en": "With no softener this is a blunt no. The mildest wording is what is needed."
+    },
+    {
+     "opt": "You are wrong about that.",
+     "de": "Das spricht den Kunden direkt an und sagt, dass er sich irrt. Zu hart.",
+     "en": "This points straight at the client and says they are mistaken. Too blunt."
+    },
+    {
+     "opt": "That is not correct.",
+     "de": "Sachlich, aber ohne Abschwächer. Es klingt wie eine Korrektur von oben.",
+     "en": "Factual, but with no softener. It sounds like a correction from above."
+    }
+   ]
+  }
+ },
+ "c1-hedging|itworthrevisitingthetimelinebeforewesign": {
+  "pat": "hg.worth",
+  "why": {
+   "ok": {
+    "de": "Richtig: might be worth + -ing ist ein vorsichtiger Vorschlag, kein Auftrag.",
+    "en": "Right: might be worth + -ing is a tentative suggestion, not an instruction."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will be worth“ klingt sicher. Hier soll der Vorschlag vorsichtig bleiben.",
+     "en": "“will be worth” sounds certain. The suggestion should stay tentative here."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Vor worth braucht es be: It might be worth revisiting …",
+     "en": "Before worth you need be: It might be worth revisiting …"
+    },
+    {
+     "not": [
+      "might",
+      "could",
+      "may"
+     ],
+     "de": "Gefragt ist ein Modalverb (might, could, may), das den Vorschlag abmildert.",
+     "en": "A modal verb (might, could, may) is needed to soften the suggestion."
+    }
+   ]
+  }
+ },
+ "c1-hedging|idbeinclinedwiththefinanceteam": {
+  "pat": "hg.inclined",
+  "why": {
+   "ok": {
+    "de": "Richtig: be inclined + to + Grundform nennt eine persönliche Tendenz.",
+    "en": "Right: be inclined + to + base verb names a personal leaning."
+   },
+   "wrong": [
+    {
+     "if": [
+      "starting"
+     ],
+     "de": "Nach inclined steht to + Grundform, nicht die -ing-Form.",
+     "en": "After inclined use to + base verb, not the -ing form."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach inclined braucht es to + Grundform.",
+     "en": "After inclined you need to + base verb."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach to steht die Grundform, ohne -s und ohne -ing: to start.",
+     "en": "After to comes the base verb, with no -s or -ing: to start."
+    }
+   ]
+  }
+ },
+ "c1-hedging|itthatthebudgetistighterthanweexpected": {
+  "pat": "hg.seems",
+  "why": {
+   "ok": {
+    "de": "Richtig: It seems that … stellt die Aussage als Eindruck dar, nicht als Tatsache.",
+    "en": "Right: It seems that … presents the statement as an impression, not a fact."
+   },
+   "wrong": [
+    {
+     "if": [
+      "seem"
+     ],
+     "de": "Nach It steht das Verb mit -s (dritte Person Singular): seems.",
+     "en": "After It the verb takes -s (third person singular): seems."
+    },
+    {
+     "not": [
+      "seems"
+     ],
+     "de": "Mit dem Hinweis (seem) passt seems: It seems that …",
+     "en": "With the hint (seem), seems fits: It seems that …"
+    }
+   ]
+  }
+ },
+ "c1-hedging|themigrationcouldtakelongerthanplanned": {
+  "pat": "hg.downtoner",
+  "why": {
+   "ok": {
+    "de": "Richtig: slightly mildert die schlechte Nachricht; es geht nur um wenig.",
+    "en": "Right: slightly softens the bad news; it is only a little."
+   },
+   "wrong": [
+    {
+     "if": [
+      "much"
+     ],
+     "de": "„much longer“ verstärkt die schlechte Nachricht, statt sie zu mildern.",
+     "en": "“much longer” strengthens the bad news instead of softening it."
+    },
+    {
+     "if": [
+      "hugely"
+     ],
+     "de": "„hugely“ macht es noch schlimmer. Gesucht ist ein Wort, das abschwächt.",
+     "en": "“hugely” makes it worse. A word that softens is what is needed."
+    },
+    {
+     "not": [
+      "slightly",
+      "bit",
+      "somewhat",
+      "little"
+     ],
+     "de": "Gesucht ist ein Abschwächer wie slightly, a bit oder somewhat.",
+     "en": "A softener such as slightly, a bit or somewhat is needed."
+    }
+   ]
+  }
+ },
+ "c1-hedging|therolloutwillfailwithouttrainingwithouttrainingtherolloutintodifficulties": {
+  "pat": "hg.modal",
+  "why": {
+   "ok": {
+    "de": "Richtig: might run macht aus der sicheren Vorhersage will fail eine Möglichkeit.",
+    "en": "Right: might run turns the firm prediction will fail into a possibility."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will“ bleibt eine sichere Vorhersage. Gefragt ist eine Möglichkeit.",
+     "en": "“will” stays a firm prediction. A possibility is what is asked for."
+    },
+    {
+     "not": [
+      "might",
+      "could",
+      "may"
+     ],
+     "de": "Gesucht ist ein Modalverb (might, could, may), das die Aussage abschwächt.",
+     "en": "A modal verb (might, could, may) is needed to soften the statement."
+    },
+    {
+     "if": [
+      "might"
+     ],
+     "de": "Nach dem Modalverb folgt die Grundform. Passend ist hier die Wendung run into difficulties.",
+     "en": "The base form follows the modal verb. The phrase run into difficulties fits here."
+    }
+   ]
+  }
+ },
+ "c1-hedging|startwithapilotidbeinclinedwithapilot": {
+  "pat": "hg.inclined",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus der Anweisung wird eine Neigung: be inclined to + Grundform.",
+    "en": "Right: the instruction becomes a leaning: be inclined to + base verb."
+   },
+   "wrong": [
+    {
+     "if": [
+      "starting"
+     ],
+     "de": "Nach inclined steht to + Grundform, nicht die -ing-Form.",
+     "en": "After inclined use to + base verb, not the -ing form."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach inclined braucht es to + Grundform.",
+     "en": "After inclined you need to + base verb."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Nach to steht die Grundform, ohne -s und ohne -ing: to start.",
+     "en": "After to comes the base verb, with no -s or -ing: to start."
+    }
+   ]
+  }
+ },
+ "c1-hedging|yourteamisnotreadyiamnotsureyourteamisreadyyet": {
+  "pat": "hg.downtoner",
+  "why": {
+   "ok": {
+    "de": "Richtig: quite mildert das Urteil: aus „not ready“ wird ein vorsichtiger Zweifel.",
+    "en": "Right: quite softens the verdict: “not ready” becomes a cautious doubt."
+   },
+   "wrong": [
+    {
+     "if": [
+      "very"
+     ],
+     "de": "„very ready“ verstärkt. Hier soll das Urteil milder werden.",
+     "en": "“very ready” strengthens. Here the verdict should get milder."
+    },
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Das not steckt schon in I'm not sure. Hier fehlt nur ein Abschwächer wie quite.",
+     "en": "The not is already in I'm not sure. Only a softener such as quite is missing here."
+    },
+    {
+     "not": [
+      "quite",
+      "fully",
+      "entirely"
+     ],
+     "de": "Gesucht ist ein Wort wie quite oder fully, das das Urteil mildert.",
+     "en": "A word such as quite or fully that softens the verdict is needed."
+    }
+   ]
+  }
+ },
+ "c1-hedging|itmightbeworthtochecktheretentionperiodsfirst": {
+  "pat": "hg.worth",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach worth steht die -ing-Form: worth checking.",
+    "en": "Right: worth is followed by the -ing form: worth checking."
+   },
+   "wrong": [
+    {
+     "if": [
+      "worth",
+      "to"
+     ],
+     "de": "Nach worth steht nie to + Grundform, sondern die -ing-Form.",
+     "en": "After worth never use to + base verb; use the -ing form."
+    },
+    {
+     "not": [
+      "checking"
+     ],
+     "de": "Verändert werden muss nur check: worth checking the retention periods.",
+     "en": "Only check needs to change: worth checking the retention periods."
+    }
+   ]
+  }
+ },
+ "c1-hedging|iwouldbeinclinedstartingwiththeinvoices": {
+  "pat": "hg.inclined",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach be inclined folgt to + Grundform: to start.",
+    "en": "Right: be inclined needs to + base verb: to start."
+   },
+   "wrong": [
+    {
+     "if": [
+      "starting"
+     ],
+     "de": "Nach inclined fehlt to, und das Verb steht in der Grundform: to start.",
+     "en": "After inclined, to is missing and the verb takes the base form: to start."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach be inclined braucht es to + Grundform.",
+     "en": "After be inclined you need to + base verb."
+    }
+   ]
+  }
+ },
+ "c1-hedging|itseemsasthebudgetistighterthisyear": {
+  "pat": "hg.seems",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach It seems folgt that (oder gleich der Satz), nicht as.",
+    "en": "Right: It seems is followed by that (or the clause itself), not as."
+   },
+   "wrong": [
+    {
+     "if": [
+      "as"
+     ],
+     "not": [
+      "if",
+      "though"
+     ],
+     "de": "Ein bloßes as geht nach seems nicht: that, as if oder as though.",
+     "en": "A bare as does not work after seems: use that, as if or as though."
+    },
+    {
+     "not": [
+      "seems"
+     ],
+     "de": "Das Verb seems bleibt; verändert wird nur das Wort danach.",
+     "en": "The verb seems stays; only the word after it changes."
+    }
+   ]
+  }
+ },
+ "c1-hedging|itmightbeworthtowaituntilq": {
+  "pat": "hg.worth",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach worth steht immer die -ing-Form: worth waiting.",
+    "en": "Right: worth is always followed by the -ing form: worth waiting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "worth",
+      "to"
+     ],
+     "de": "Nach worth steht nie to + Grundform, sondern die -ing-Form.",
+     "en": "After worth never use to + base verb; use the -ing form."
+    },
+    {
+     "not": [
+      "waiting"
+     ],
+     "de": "Verändert werden muss nur wait: worth waiting until Q3.",
+     "en": "Only wait needs to change: worth waiting until Q3."
+    }
+   ]
+  }
+ },
  "cond-alt|wewillmissthedeadlinewehireextrastaff": {
   "pat": "ca.unless",
   "why": {
@@ -391,6 +804,1426 @@
      ],
      "de": "Nach as long as steht kein will. Das ist der Reflex „Zukunft = will“; Deutsch nutzt hier Präsens.",
      "en": "No will after as long as. It is the “future = will” reflex; German uses the present here too."
+    }
+   ]
+  }
+ },
+ "future-forms|lookatthosedarkcloudsitrain": {
+  "pat": "ff.going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Wolken sind ein sichtbares Zeichen jetzt, deshalb is going to.",
+    "en": "Right: the clouds are a sign you can see now, so is going to."
+   },
+   "wrong": [
+    {
+     "opt": "will",
+     "pat": "ff.will-now",
+     "de": "will klingt nach Vermutung. Du siehst die Wolken schon: going to passt besser.",
+     "en": "will sounds like a guess. You can already see the clouds: going to fits better."
+    },
+    {
+     "opt": "rains",
+     "de": "Das Present Simple steht für Gewohnheiten und Fahrpläne, nicht für eine Vorhersage.",
+     "en": "The Present Simple is for habits and timetables, not for a prediction."
+    },
+    {
+     "opt": "is raining",
+     "de": "„is raining rain“ geht nicht, und der Regen kommt erst noch.",
+     "en": "“is raining rain” does not work, and the rain is still to come."
+    }
+   ]
+  }
+ },
+ "future-forms|athephoneisringingbokiit": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: B entscheidet erst jetzt, als das Telefon klingelt: will („I'll“).",
+    "en": "Right: B decides only now, as the phone rings: will (“I'll”)."
+   },
+   "wrong": [
+    {
+     "opt": "answer",
+     "de": "Das Present Simple nennt eine Gewohnheit oder einen Fahrplan, keinen Entschluss.",
+     "en": "The Present Simple names a habit or a timetable, not a decision."
+    },
+    {
+     "opt": "'m going to answer",
+     "pat": "ff.going-to",
+     "de": "going to gilt für einen Plan, der vorher feststand. Das Klingeln ist neu.",
+     "en": "going to is for a plan fixed beforehand. The ringing is new."
+    },
+    {
+     "opt": "am answering",
+     "de": "am answering heißt: Du bist schon dabei. Entschieden wird aber erst jetzt.",
+     "en": "am answering means you are already doing it. The decision is only made now."
+    }
+   ]
+  }
+ },
+ "future-forms|imyteacheratpmtomorrowitsinmycalendar": {
+  "pat": "ff.fixed-times",
+  "why": {
+   "ok": {
+    "de": "Richtig: Verabredung mit Uhrzeit im Kalender: am meeting (Present Continuous).",
+    "en": "Right: an arrangement with a time in the calendar: am meeting (Present Continuous)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "ff.will-now",
+     "de": "will passt zu einem Entschluss jetzt. Ein Termin im Kalender steht schon fest.",
+     "en": "will fits a decision made now. An appointment in the calendar is already fixed."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "to",
+      "going"
+     ],
+     "de": "Das Present Simple klingt nach Gewohnheit. Für den Termin nimmst du am meeting.",
+     "en": "The Present Simple sounds like a habit. For the appointment use am meeting."
+    },
+    {
+     "if": [
+      "meeting"
+     ],
+     "not": [
+      "am",
+      "'m"
+     ],
+     "de": "Es fehlt das Hilfsverb: am meeting. Mit -ing allein ist es keine Zeitform.",
+     "en": "The auxiliary is missing: am meeting. -ing alone is not a tense."
+    },
+    {
+     "if": [
+      "met"
+     ],
+     "de": "Die Vergangenheit passt nicht: Der Termin liegt noch vor dir.",
+     "en": "The past tense does not fit: the appointment is still ahead of you."
+    }
+   ]
+  }
+ },
+ "future-forms|imeetthenewclientatpmtomorrowitsinmycalendar": {
+  "pat": "ff.fixed-times",
+  "dup": "future-forms|imyteacheratpmtomorrowitsinmycalendar",
+  "why": {
+   "ok": {
+    "de": "Richtig: Fester Termin im Kalender: am meeting, auch für die Zukunft.",
+    "en": "Right: a fixed appointment in the calendar: am meeting, also for the future."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "ff.will-now",
+     "de": "will passt zu einem Entschluss jetzt. Ein Termin im Kalender steht schon fest.",
+     "en": "will fits a decision made now. An appointment in the calendar is already fixed."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "to",
+      "going"
+     ],
+     "de": "Das Present Simple klingt nach Gewohnheit. Für den Termin nimmst du am meeting.",
+     "en": "The Present Simple sounds like a habit. For the appointment use am meeting."
+    },
+    {
+     "if": [
+      "meeting"
+     ],
+     "not": [
+      "am",
+      "'m"
+     ],
+     "de": "Es fehlt das Hilfsverb: am meeting. Mit -ing allein ist es keine Zeitform.",
+     "en": "The auxiliary is missing: am meeting. -ing alone is not a tense."
+    }
+   ]
+  }
+ },
+ "future-forms|iwillcallyouassoonasthemeeting": {
+  "pat": "ff.no-will-after",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht das Present: ends. will steckt schon in „I'll call“.",
+    "en": "Right: after “as soon as” use the present: ends. will is already in “I'll call”."
+   },
+   "wrong": [
+    {
+     "opt": "will end",
+     "de": "Nach as soon as steht kein will. Das Futur trägt schon „I'll call“.",
+     "en": "No will after as soon as. “I'll call” already carries the future."
+    },
+    {
+     "opt": "ended",
+     "de": "Die Vergangenheit passt nicht: Das Meeting ist noch nicht zu Ende.",
+     "en": "The past tense does not fit: the meeting is not over yet."
+    },
+    {
+     "opt": "is ending",
+     "de": "is ending beschreibt, was gerade läuft. Hier brauchst du das einfache Present.",
+     "en": "is ending describes what is happening now. Here you need the simple present."
+    }
+   ]
+  }
+ },
+ "future-forms|isendyoutheagendabeforethecall": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Shall I … ? bietet etwas an. Im US-Englisch ist Should I häufiger, Shall I wirkt förmlich.",
+    "en": "Right: Shall I … ? makes an offer. In US English Should I is more common; Shall I sounds formal."
+   },
+   "wrong": [
+    {
+     "opt": "Am",
+     "de": "„Am I send“ gibt es nicht. Ein Angebot mit I beginnt mit Shall I.",
+     "en": "“Am I send” does not exist. An offer with I starts with Shall I."
+    },
+    {
+     "opt": "Will",
+     "pat": "ff.will-now",
+     "de": "Will I send fragt, was künftig passiert, nicht ob du es anbieten sollst.",
+     "en": "Will I send asks what will happen, not whether you should offer it."
+    },
+    {
+     "opt": "Do",
+     "de": "Do I send fragt nach einer Regel oder Gewohnheit, nicht nach einem Angebot.",
+     "en": "Do I send asks about a rule or a habit, not about an offer."
+    }
+   ]
+  }
+ },
+ "future-forms|ipromiseianyoneaboutthemerger": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Versprechen machst du mit will (verneint: won't).",
+    "en": "Right: you make a promise with will (negative: won't)."
+   },
+   "wrong": [
+    {
+     "opt": "am not telling",
+     "de": "Das Present Continuous nennt, was gerade läuft oder abgemacht ist, kein Versprechen.",
+     "en": "The Present Continuous names what is happening now or arranged, not a promise."
+    },
+    {
+     "opt": "hadn't told",
+     "de": "Die Vergangenheit passt nicht: Du versprichst etwas für die Zukunft.",
+     "en": "The past does not fit: you are promising something for the future."
+    },
+    {
+     "opt": "don't tell",
+     "de": "Das Present Simple nennt eine Gewohnheit. Für ein Versprechen brauchst du will.",
+     "en": "The Present Simple names a habit. For a promise you need will."
+    }
+   ]
+  }
+ },
+ "future-forms|hurryupthewebinarstart": {
+  "pat": "ff.about-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be about to + Grundform heißt: Es beginnt jetzt in Sekunden.",
+    "en": "Right: be about to + base form means: it starts within seconds."
+   },
+   "wrong": [
+    {
+     "opt": "is going",
+     "de": "„is going start“ geht nicht: Nach going fehlt das to.",
+     "en": "“is going start” does not work: to is missing after going."
+    },
+    {
+     "opt": "will be",
+     "de": "„will be start“ geht nicht: Nach be steht hier kein Grundverb.",
+     "en": "“will be start” does not work: no base verb follows be here."
+    },
+    {
+     "opt": "starts about",
+     "de": "„starts about“ ist keine Wendung. about to steht vor dem Verb.",
+     "en": "“starts about” is not a phrase. about to comes before the verb."
+    }
+   ]
+  }
+ },
+ "future-forms|icannotmakeitonthursdayiaworkshopinhamburgallday": {
+  "pat": "ff.fixed-times",
+  "why": {
+   "ok": {
+    "de": "Richtig: Verabredung mit Zeitangabe: Present Continuous (am attending).",
+    "en": "Right: an arrangement with a time: Present Continuous (am attending)."
+   },
+   "wrong": [
+    {
+     "opt": "attend",
+     "de": "attend klingt nach Gewohnheit. Für einen festen Termin nimmst du am attending.",
+     "en": "attend sounds like a habit. For a fixed date use am attending."
+    },
+    {
+     "opt": "attending",
+     "de": "Es fehlt das Hilfsverb: am attending. -ing allein ist keine Zeitform.",
+     "en": "The auxiliary is missing: am attending. -ing alone is not a tense."
+    },
+    {
+     "opt": "attended",
+     "de": "attended ist Vergangenheit. Der Workshop liegt noch vor dir.",
+     "en": "attended is past. The workshop is still ahead of you."
+    }
+   ]
+  }
+ },
+ "future-forms|icallyouyesterdaybutiforgot": {
+  "pat": "ff.was-going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: was going to = ich hatte vor. Der Plan von gestern wurde nicht ausgeführt.",
+    "en": "Right: was going to = I intended to. Yesterday's plan was not carried out."
+   },
+   "wrong": [
+    {
+     "opt": "am going to",
+     "pat": "ff.going-to",
+     "de": "yesterday verlangt die Vergangenheit: was going to, nicht am going to.",
+     "en": "yesterday needs the past: was going to, not am going to."
+    },
+    {
+     "opt": "will",
+     "de": "will blickt nach vorn. Du sprichst über einen Plan von gestern.",
+     "en": "will looks ahead. You are talking about a plan from yesterday."
+    },
+    {
+     "opt": "go to",
+     "de": "go to heißt „zu etwas hingehen“. Für einen Plan nimmst du going to.",
+     "en": "go to means to walk to a place. For a plan use going to."
+    }
+   ]
+  }
+ },
+ "future-forms|wewillreleasetheupdateassoonastheclientit": {
+  "pat": "ff.no-will-after",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht das Present: the client approves.",
+    "en": "Right: after “as soon as” use the present: the client approves."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach as soon as steht kein will. Das Futur trägt schon „We will release“.",
+     "en": "No will after as soon as. “We will release” already carries the future."
+    },
+    {
+     "if": [
+      "approved"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit passt nicht: Es geht um die Zukunft. Nimm approves oder has approved.",
+     "en": "The past does not fit: this is about the future. Use approves or has approved."
+    },
+    {
+     "if": [
+      "approve"
+     ],
+     "not": [
+      "will",
+      "to",
+      "has",
+      "have"
+     ],
+     "de": "Der Kunde ist Singular: approves, nicht approve.",
+     "en": "The client is singular: approves, not approve."
+    }
+   ]
+  }
+ },
+ "future-forms|lookathisfacehecry": {
+  "pat": "ff.going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Sein Gesicht ist ein sichtbares Zeichen, deshalb is going to.",
+    "en": "Right: his face is a visible sign, so is going to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "ff.will-now",
+     "de": "will klingt nach Vermutung. Du siehst sein Gesicht schon: going to passt besser.",
+     "en": "will sounds like a guess. You can already see his face: going to fits better."
+    },
+    {
+     "if": [
+      "going"
+     ],
+     "not": [
+      "is",
+      "'s",
+      "are"
+     ],
+     "de": "Es fehlt das Hilfsverb: is going to. Das Subjekt he verlangt is.",
+     "en": "The auxiliary is missing: is going to. The subject he needs is."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "pat": "ff.about-to",
+     "de": "about to wäre ein „gleich“. Der Hinweis (be going to) verlangt hier going to.",
+     "en": "about to would mean “any second”. The hint (be going to) asks for going to here."
+    }
+   ]
+  }
+ },
+ "future-forms|ourflighttobostonattomorrowmorningsoweneedtobeattheairportby": {
+  "pat": "ff.fixed-times",
+  "why": {
+   "ok": {
+    "de": "Richtig: Flugplan: Present Simple („leaves“), auch wenn es um morgen geht.",
+    "en": "Right: a flight schedule takes the Present Simple (“leaves”), even for tomorrow."
+   },
+   "wrong": [
+    {
+     "if": [
+      "leave"
+     ],
+     "not": [
+      "will",
+      "to",
+      "going"
+     ],
+     "de": "Das Subjekt flight ist Singular: leaves, mit -s.",
+     "en": "The subject flight is singular: leaves, with -s."
+    },
+    {
+     "if": [
+      "left"
+     ],
+     "de": "Die Vergangenheit passt nicht: Der Flug geht erst morgen früh.",
+     "en": "The past does not fit: the flight leaves only tomorrow morning."
+    },
+    {
+     "if": [
+      "leaving"
+     ],
+     "not": [
+      "is",
+      "'s",
+      "are"
+     ],
+     "de": "Es fehlt das Hilfsverb: is leaving. -ing allein ist keine Zeitform.",
+     "en": "The auxiliary is missing: is leaving. -ing alone is not a tense."
+    }
+   ]
+  }
+ },
+ "future-forms|ipromiseiyouthereportbyfriday": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Versprechen machst du mit will: will send.",
+    "en": "Right: you make a promise with will: will send."
+   },
+   "wrong": [
+    {
+     "if": [
+      "sending"
+     ],
+     "de": "sending allein ist keine Zeitform. Auch am sending wäre kein Versprechen.",
+     "en": "sending alone is not a tense. Even am sending would not be a promise."
+    },
+    {
+     "if": [
+      "send"
+     ],
+     "not": [
+      "will",
+      "to",
+      "going"
+     ],
+     "de": "Das Present Simple nennt eine Gewohnheit. Für ein Versprechen brauchst du will.",
+     "en": "The Present Simple names a habit. For a promise you need will."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "de": "Die Vergangenheit passt nicht: Du versprichst etwas für die Zukunft.",
+     "en": "The past does not fit: you are promising something for the future."
+    }
+   ]
+  }
+ },
+ "future-forms|holdoniapenandwritethatdown": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Spontaner Entschluss im Moment des Sprechens: will get.",
+    "en": "Right: a spontaneous decision at the moment of speaking: will get."
+   },
+   "wrong": [
+    {
+     "if": [
+      "getting"
+     ],
+     "not": [
+      "am",
+      "'m"
+     ],
+     "de": "Es fehlt das Hilfsverb. Auch am getting wäre kein Entschluss, sondern ein Vorgang.",
+     "en": "The auxiliary is missing. Even am getting would be an action in progress, not a decision."
+    },
+    {
+     "if": [
+      "get"
+     ],
+     "not": [
+      "will",
+      "to",
+      "going"
+     ],
+     "de": "Das Present Simple nennt eine Gewohnheit. Für den Entschluss brauchst du will.",
+     "en": "The Present Simple names a habit. For the decision you need will."
+    },
+    {
+     "if": [
+      "got"
+     ],
+     "not": [
+      "have",
+      "has"
+     ],
+     "de": "Die Vergangenheit passt nicht: Du entscheidest dich jetzt.",
+     "en": "The past does not fit: you are deciding right now."
+    }
+   ]
+  }
+ },
+ "future-forms|iplantovisittheclientinmadridnextmonthitheclientinmadridnextmonth": {
+  "pat": "ff.going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Plan, der schon feststeht: am going to visit.",
+    "en": "Right: a plan that is already fixed: am going to visit."
+   },
+   "wrong": [
+    {
+     "if": [
+      "visited"
+     ],
+     "de": "Die Vergangenheit passt nicht: Der Besuch liegt noch vor dir (next month).",
+     "en": "The past does not fit: the visit is still ahead of you (next month)."
+    },
+    {
+     "if": [
+      "visit"
+     ],
+     "not": [
+      "will",
+      "to",
+      "going",
+      "am",
+      "'m",
+      "planning"
+     ],
+     "de": "Das Present Simple nennt eine Gewohnheit. Für den Plan nimmst du am going to visit.",
+     "en": "The Present Simple names a habit. For the plan use am going to visit."
+    },
+    {
+     "if": [
+      "visiting"
+     ],
+     "not": [
+      "am",
+      "'m",
+      "planning"
+     ],
+     "de": "Es fehlt das Hilfsverb: am visiting. -ing allein ist keine Zeitform.",
+     "en": "The auxiliary is missing: am visiting. -ing alone is not a tense."
+    }
+   ]
+  }
+ },
+ "future-forms|iintendedtosendtheinvoiceyesterdaybutiforgotisendtheinvoiceyesterdaybutiforgot": {
+  "pat": "ff.was-going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Plan von gestern, der nicht klappte: was going to.",
+    "en": "Right: a plan from yesterday that fell through: was going to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will blickt nach vorn. Du sprichst über einen Plan von gestern.",
+     "en": "will looks ahead. You are talking about a plan from yesterday."
+    },
+    {
+     "if": [
+      "going",
+      "to"
+     ],
+     "not": [
+      "was",
+      "were"
+     ],
+     "pat": "ff.going-to",
+     "de": "yesterday verlangt die Vergangenheit: was going to, nicht am going to.",
+     "en": "yesterday needs the past: was going to, not am going to."
+    },
+    {
+     "if": [
+      "was",
+      "going"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach going fehlt to: was going to + Grundform.",
+     "en": "to is missing after going: was going to + base form."
+    }
+   ]
+  }
+ },
+ "future-forms|iwillcallyouwheniwillarriveattheoffice": {
+  "pat": "ff.no-will-after",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „when“ steht das Present: when I arrive. Das erste will bleibt.",
+    "en": "Right: after “when” use the present: when I arrive. The first will stays."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will arrive"
+     ],
+     "de": "Nach when steht kein will: when I arrive. Nur der Hauptsatz trägt will.",
+     "en": "No will after when: when I arrive. Only the main clause carries will."
+    },
+    {
+     "if": [
+      "arrived"
+     ],
+     "de": "Die Vergangenheit passt nicht: Du kommst erst noch an.",
+     "en": "The past does not fit: you have not arrived yet."
+    },
+    {
+     "if": [
+      "call",
+      "when"
+     ],
+     "not": [
+      "will",
+      "'ll"
+     ],
+     "de": "Das erste will bleibt: Es nennt, was du tust. Nur im when-Satz fällt es weg.",
+     "en": "The first will stays: it says what you will do. Only in the when-clause does it go."
+    }
+   ]
+  }
+ },
+ "future-forms|unlessyouwillsignthecontracttodaywecannotguaranteetheprice": {
+  "pat": "ff.no-will-after",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „unless“ steht das Present: Unless you sign.",
+    "en": "Right: after “unless” use the present: Unless you sign."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will sign"
+     ],
+     "de": "Nach unless steht kein will: Unless you sign. will bleibt dem Hauptsatz.",
+     "en": "No will after unless: Unless you sign. will is left to the main clause."
+    },
+    {
+     "if": [
+      "unless",
+      "not"
+     ],
+     "de": "unless trägt die Verneinung schon: Unless you sign, ohne not.",
+     "en": "unless already carries the negation: Unless you sign, with no not."
+    },
+    {
+     "if": [
+      "signed"
+     ],
+     "not": [
+      "have",
+      "has"
+     ],
+     "de": "Die Vergangenheit passt nicht: Es geht um heute, also sign.",
+     "en": "The past does not fit: this is about today, so sign."
+    }
+   ]
+  }
+ },
+ "future-forms|iwillmeettomatsixitsinmycalendar": {
+  "pat": "ff.fixed-times",
+  "why": {
+   "ok": {
+    "de": "Richtig: Fester Termin im Kalender: I'm meeting Tom, nicht will.",
+    "en": "Right: a fixed appointment in the calendar: I'm meeting Tom, not will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "ff.will-now",
+     "de": "will passt zu einem Entschluss jetzt. Ein Termin im Kalender steht schon fest.",
+     "en": "will fits a decision made now. An appointment in the calendar is already fixed."
+    },
+    {
+     "if": [
+      "going"
+     ],
+     "pat": "ff.going-to",
+     "de": "going to geht, -ing ist hier präziser: Der Termin steht schon im Kalender.",
+     "en": "going to works, but -ing is more precise here: the appointment is already in the calendar."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "meeting",
+      "will",
+      "going"
+     ],
+     "de": "Das Present Simple klingt nach Gewohnheit. Für den Termin nimmst du I'm meeting.",
+     "en": "The Present Simple sounds like a habit. For the appointment use I'm meeting."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bynextjuneimycourse": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: by + Zeitpunkt = bis dahin ist es abgeschlossen → will have finished.",
+    "en": "Right: by + a point in time = completed by then → will have finished."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "finished"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt das Verb in der Grundform; mit finished fehlt das have.",
+     "en": "After will the verb stays in the base form; with finished the have is missing."
+    },
+    {
+     "if": [
+      "finishing"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Nach have steht die 3. Form (finished); -ing käme nur nach been.",
+     "en": "After have comes the participle (finished); -ing would need been."
+    },
+    {
+     "if": [
+      "will",
+      "finish"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will finish“ nennt nur die Absicht; by verlangt das Ergebnis: will have finished.",
+     "en": "“will finish” only states the intention; by asks for the result: will have finished."
+    },
+    {
+     "if": [
+      "finished"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "Gefragt ist die Zukunft: will have + 3. Form, nicht nur finished.",
+     "en": "The future is asked for: will have + participle, not just finished."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|thistimetomorrowionthebeach": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: „this time tomorrow“ = ich liege dann gerade dort → will be lying.",
+    "en": "Right: “this time tomorrow” = I'll be lying there at that moment → will be lying."
+   },
+   "wrong": [
+    {
+     "opt": "will lie",
+     "pat": "fut.continuous",
+     "de": "„will lie“ ist nur eine Vorhersage; „this time tomorrow“ zeigt das Mittendrin-Sein.",
+     "en": "“will lie” is only a prediction; “this time tomorrow” points to being in the middle of it."
+    },
+    {
+     "opt": "will have lain",
+     "pat": "fut.perfect",
+     "de": "„will have lain“ hieße: bis dahin schon dort gelegen. Gemeint ist: gerade dabei.",
+     "en": "“will have lain” would mean: already lain there by then. The point is: in progress."
+    },
+    {
+     "opt": "lie",
+     "de": "Das Präsens passt nicht zu „this time tomorrow“; hier braucht es will be + -ing.",
+     "en": "The present simple does not fit “this time tomorrow”; here you need will be + -ing."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|donotcallatwedinnerthen": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: um 8 sind wir mitten im Essen → will be having.",
+    "en": "Right: at 8 we are in the middle of dinner → will be having."
+   },
+   "wrong": [
+    {
+     "opt": "will have",
+     "de": "„will have“ nennt nur den Plan; hier zählt, dass wir um 8 mittendrin sind.",
+     "en": "“will have” only states the plan; what counts here is that we are in the middle of it at 8."
+    },
+    {
+     "opt": "have had",
+     "de": "„have had“ ist Present Perfect und passt nicht zu einem Zeitpunkt in der Zukunft.",
+     "en": "“have had” is the present perfect and does not fit a point in the future."
+    },
+    {
+     "opt": "had",
+     "de": "„had“ ist Vergangenheit; „don't call“ und „then“ zeigen in die Zukunft.",
+     "en": "“had” is the past; “don't call” and “then” point to the future."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bytheendofthisquarterwenewcustomers": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „by the end of …“ = bis dahin ist es geschafft → will have won.",
+    "en": "Right: “by the end of …” = achieved by then → will have won."
+   },
+   "wrong": [
+    {
+     "opt": "win",
+     "de": "Das Präsens sagt nichts über ein Ergebnis bis zum Quartalsende.",
+     "en": "The plain present says nothing about a result by the end of the quarter."
+    },
+    {
+     "opt": "will be winning",
+     "pat": "fut.continuous",
+     "de": "„will be winning“ zeigt: mittendrin, nicht das Ergebnis bis dahin.",
+     "en": "“will be winning” shows we are in the middle of it, not the result by then."
+    },
+    {
+     "opt": "have won",
+     "de": "„have won“ blickt von heute zurück; hier steht ein Zeitpunkt in der Zukunft.",
+     "en": "“have won” looks back from today; here a point in the future is given."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|pleasedonotcallmeatpmtomorrowithequarterlyreviewtotheboard": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: um 15 Uhr bin ich mitten in der Präsentation → will be presenting.",
+    "en": "Right: at 3 p.m. I will be in the middle of it → will be presenting."
+   },
+   "wrong": [
+    {
+     "opt": "presented",
+     "de": "„presented“ ist Vergangenheit; hier geht es um morgen 15 Uhr.",
+     "en": "“presented” is the past; this is about 3 p.m. tomorrow."
+    },
+    {
+     "opt": "have presented",
+     "de": "„have presented“ blickt von heute zurück; „tomorrow“ zeigt in die Zukunft.",
+     "en": "“have presented” looks back from today; “tomorrow” points to the future."
+    },
+    {
+     "opt": "will have presented",
+     "pat": "fut.perfect",
+     "de": "„will have presented“ hieße: um 15 Uhr schon fertig. Du bist dann aber mittendrin.",
+     "en": "“will have presented” would mean: already done at 3. But you are in the middle of it then."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|thistimenextyeariforthiscompanyfortenyears": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: „for ten years“ = die Dauer bis dahin → will have been working.",
+    "en": "Right: “for ten years” = duration up to then → will have been working."
+   },
+   "wrong": [
+    {
+     "opt": "will work",
+     "de": "„will work“ nennt keine Dauer bis dahin; „for ten years“ braucht die Zeitspanne.",
+     "en": "“will work” gives no duration up to then; “for ten years” needs the span."
+    },
+    {
+     "opt": "am working",
+     "de": "„am working“ ist Gegenwart; „this time next year“ liegt in der Zukunft.",
+     "en": "“am working” is the present; “this time next year” lies in the future."
+    },
+    {
+     "opt": "will be working",
+     "pat": "fut.continuous",
+     "de": "„will be working“ zeigt nur: dann mittendrin. Die zehn Jahre bis dahin fehlen.",
+     "en": "“will be working” only shows: in progress then. The ten years up to then are missing."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bythetimeyouarrivethecleanerstheconferenceroom": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „by the time you arrive“ → dann sind sie fertig → will have cleaned.",
+    "en": "Right: “by the time you arrive” → they will be done by then → will have cleaned."
+   },
+   "wrong": [
+    {
+     "opt": "will clean",
+     "de": "„will clean“ sagt nur, dass sie putzen werden, nicht dass sie dann fertig sind.",
+     "en": "“will clean” only says they will clean, not that they will be done by then."
+    },
+    {
+     "opt": "clean",
+     "de": "Das Präsens nennt eine Gewohnheit; hier geht es um ein Ergebnis bis zu deiner Ankunft.",
+     "en": "The present describes a habit; here the point is a result by the time you arrive."
+    },
+    {
+     "opt": "are cleaning",
+     "de": "„are cleaning“ heißt: gerade jetzt. Gemeint ist das Ergebnis bei deiner Ankunft.",
+     "en": "“are cleaning” means: right now. The point is the result when you arrive."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|theprojectorthisafternoonidliketoborrowit": {
+  "pat": "fut.cont-plan",
+  "why": {
+   "ok": {
+    "de": "Richtig: Will you be using …? fragt höflich nach dem Plan, ohne zu drängen.",
+    "en": "Right: Will you be using …? asks politely about the plan, without pushing."
+   },
+   "wrong": [
+    {
+     "opt": "Will you have used",
+     "pat": "fut.perfect",
+     "de": "„Will you have used“ fragt, ob du es bis dahin schon benutzt hast, nicht nach deinem Plan.",
+     "en": "“Will you have used” asks whether you will already have used it, not about your plan."
+    },
+    {
+     "opt": "Do you use",
+     "de": "„Do you use“ fragt nach einer Gewohnheit, nicht nach heute Nachmittag.",
+     "en": "“Do you use” asks about a habit, not about this afternoon."
+    },
+    {
+     "opt": "Have you used",
+     "de": "„Have you used“ fragt nach dem Bisherigen, nicht nach deinem Plan für heute Nachmittag.",
+     "en": "“Have you used” asks about so far, not about your plan for this afternoon."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bynextweekendiallthreeseasonsofthatseries": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: by next weekend + „all three seasons“ = es ist abgeschlossen → will have watched.",
+    "en": "Right: by next weekend + “all three seasons” = completed → will have watched."
+   },
+   "wrong": [
+    {
+     "opt": "watch",
+     "de": "Das Präsens nennt eine Gewohnheit; „by next weekend“ verlangt ein Ergebnis bis dahin.",
+     "en": "The present describes a habit; “by next weekend” asks for a result by then."
+    },
+    {
+     "opt": "will be watched",
+     "de": "„will be watched“ ist Passiv: Die Staffeln würden angeschaut. Du schaust aber selbst.",
+     "en": "“will be watched” is passive: the seasons would be watched. But you are the one watching."
+    },
+    {
+     "opt": "have watched",
+     "de": "„have watched“ blickt von heute zurück; „next weekend“ liegt in der Zukunft.",
+     "en": "“have watched” looks back from today; “next weekend” lies in the future."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|byfridayourengineersthebug": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „By Friday“ = bis dahin ist es erledigt → will have fixed.",
+    "en": "Right: “By Friday” = done by then → will have fixed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "fixed"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt das Verb in der Grundform: will have fixed, nicht will fixed.",
+     "en": "After will the verb stays in the base form: will have fixed, not will fixed."
+    },
+    {
+     "if": [
+      "will",
+      "fix"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will fix“ nennt nur die Absicht; gefragt ist: bis Freitag erledigt → will have fixed.",
+     "en": "“will fix” only states the intention; the task asks: done by Friday → will have fixed."
+    },
+    {
+     "if": [
+      "have",
+      "fixed"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "„have fixed“ ist Gegenwart; die Zukunft braucht will have fixed.",
+     "en": "“have fixed” is the present; the future needs will have fixed."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|atamtomorrowionaplanetozurichsoicannottakeyourcall": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: um 10 Uhr bin ich mittendrin im Flug → will be sitting.",
+    "en": "Right: at 10 a.m. I will be in the middle of the flight → will be sitting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have"
+     ],
+     "de": "„will have sat“ hieße: schon vorbei. Um 10 Uhr bist du aber mittendrin.",
+     "en": "“will have sat” would mean: already over. But at 10 a.m. you are in the middle of it."
+    },
+    {
+     "if": [
+      "be",
+      "sit"
+     ],
+     "not": [
+      "sitting"
+     ],
+     "de": "Nach will be steht die -ing-Form: sitting.",
+     "en": "After will be comes the -ing form: sitting."
+    },
+    {
+     "if": [
+      "will",
+      "sit"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "„will sit“ nennt nur die Zukunft; hier geht es um das Mittendrin-Sein: will be sitting.",
+     "en": "“will sit” only names the future; here the point is being in the middle of it: will be sitting."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bytheendoftheyearsheinsalesforexactlyyears": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: Dauer bis zu einem Zeitpunkt (12 years) → will have been working.",
+    "en": "Right: duration up to a point in time (12 years) → will have been working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will work“ nennt nicht die Dauer bis dahin; „for 12 years“ braucht will have been working.",
+     "en": "“will work” gives no duration up to then; “for 12 years” needs will have been working."
+    },
+    {
+     "if": [
+      "be",
+      "working"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will be working“ blickt nach vorn, nicht auf die zwölf Jahre bis dahin.",
+     "en": "“will be working” looks ahead, not at the twelve years up to then."
+    },
+    {
+     "if": [
+      "been",
+      "work"
+     ],
+     "de": "Nach been steht die -ing-Form: working.",
+     "en": "After been comes the -ing form: working."
+    },
+    {
+     "if": [
+      "will",
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt jedes Verb in der Grundform: will have worked.",
+     "en": "After will every verb stays in the base form: will have worked."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bythetimeyoureadthisemailtheupdatelive": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: bis dahin ist es abgeschlossen → will have gone (go – went – gone).",
+    "en": "Right: completed by then → will have gone (go – went – gone)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "went"
+     ],
+     "de": "Nach have steht die 3. Form: gone, nicht went.",
+     "en": "After have comes the participle: gone, not went."
+    },
+    {
+     "if": [
+      "will",
+      "go"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will go“ nennt nur die Zukunft; bis dahin schon live: will have gone.",
+     "en": "“will go” only names the future; already live by then: will have gone."
+    },
+    {
+     "if": [
+      "gone"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Es fehlt das will have: Nur „gone“ reicht nicht.",
+     "en": "The will have is missing: “gone” alone is not enough."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|inmostofusfromhomeatleastthreedaysaweek": {
+  "pat": "fut.cont-plan",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vorhersage über etwas, das dann läuft → will be working.",
+    "en": "Right: a prediction about something that will be going on then → will be working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have"
+     ],
+     "de": "„will have worked“ meint: bis 2030 abgeschlossen. Gemeint ist eine Situation in 2030.",
+     "en": "“will have worked” means: completed by 2030. The point is a situation in 2030."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "will",
+      "going"
+     ],
+     "de": "Die Zukunftsform fehlt: will be working, nicht nur -ing.",
+     "en": "The future form is missing: will be working, not just -ing."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "will",
+      "going"
+     ],
+     "de": "Das Präsens passt nicht zu „In 2030“; gebraucht wird will be working.",
+     "en": "The present does not fit “In 2030”; will be working is needed."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|iwillfinishthereportbeforethemeetingatbyoclockithereport": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „By 4 o'clock“ = bis dahin ist es fertig → will have finished.",
+    "en": "Right: “By 4 o'clock” = done by then → will have finished."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "finished"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt das Verb in der Grundform; hier fehlt have.",
+     "en": "After will the verb stays in the base form; here the have is missing."
+    },
+    {
+     "if": [
+      "have",
+      "finished"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "„have finished“ ist Gegenwart; die Zukunft braucht will have finished.",
+     "en": "“have finished” is the present; the future needs will have finished."
+    },
+    {
+     "if": [
+      "will",
+      "finish"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will finish“ ist nur die Absicht; „By 4 o'clock“ verlangt das Ergebnis: will have finished.",
+     "en": "“will finish” is only the intention; “By 4 o'clock” asks for the result: will have finished."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|tomorrowatpmtheflighttonewyorkbeginsandiwillbeonittomorrowatpmitonewyork": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: um 15 Uhr bin ich mitten in der Reise → will be flying.",
+    "en": "Right: at 3 p.m. I will be on my way → will be flying."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have"
+     ],
+     "de": "„will have flown“ hieße: schon geflogen. Um 15 Uhr bist du aber mittendrin.",
+     "en": "“will have flown” would mean: already flown. But at 3 p.m. you are in the middle of it."
+    },
+    {
+     "if": [
+      "will",
+      "fly"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "„will fly“ nennt nur die Zukunft; hier geht es um das Mittendrin-Sein: will be flying.",
+     "en": "“will fly” only names the future; here the point is being in the middle of it: will be flying."
+    },
+    {
+     "if": [
+      "flying"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "Gefragt ist will be + -ing (mittendrin um 15 Uhr), nicht nur -ing.",
+     "en": "The task asks for will be + -ing (in progress at 3 p.m.), not just -ing."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bynextyearhewillworkherefortenyears": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: „By next year“ + eine Zeitspanne → will have worked / will have been working.",
+    "en": "Right: “By next year” + a span of time → will have worked / will have been working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Bei „By next year“ + Zeitspanne fehlt have: will have worked.",
+     "en": "With “By next year” + a span of time the have is missing: will have worked."
+    },
+    {
+     "if": [
+      "have",
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Nach will have steht -ing nur mit been: will have been working.",
+     "en": "After will have, -ing needs been: will have been working."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bythetimeyouwillarriveiwillhavefinishedthereport": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „By the time“ steht das Präsens („you arrive“); will have finished bleibt.",
+    "en": "Right: after “By the time” use the present (“you arrive”); will have finished stays."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "arrive"
+     ],
+     "pat": "tc.by-the-time",
+     "de": "Nach „by the time“ steht das Präsens, nicht will: by the time you arrive.",
+     "en": "After “by the time” use the present, not will: by the time you arrive."
+    },
+    {
+     "not": [
+      "finished"
+     ],
+     "de": "Der Hauptsatz mit will have finished ist richtig; ändere nur den Nebensatz.",
+     "en": "The main clause with will have finished is correct; change only the subordinate clause."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bytheendoftheyearshewillworkedhereforfiveyears": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: will + have + 3. Form (will have worked); nach will keine gebeugte Form.",
+    "en": "Right: will + have + participle (will have worked); no inflected form after will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Es fehlt have: will have worked (oder will have been working).",
+     "en": "The have is missing: will have worked (or will have been working)."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Nach will have steht -ing nur mit been: will have been working.",
+     "en": "After will have, -ing needs been: will have been working."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|bynextmonthhewillhavelivingherefortenyears": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach have kommt die 3. Form (lived); -ing nur nach be/been.",
+    "en": "Right: after have comes the participle (lived); -ing only after be/been."
+   },
+   "wrong": [
+    {
+     "if": [
+      "living"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "-ing nach have braucht been: will have been living (oder: will have lived).",
+     "en": "-ing after have needs been: will have been living (or: will have lived)."
+    },
+    {
+     "not": [
+      "lived"
+     ],
+     "de": "Das Verb braucht hier die 3. Form: live – lived.",
+     "en": "The verb needs the participle here: live – lived."
+    }
+   ]
+  }
+ },
+ "future-perf-cont|shewillhascompletedhertraining": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach will bleibt jedes Verb in der Grundform: will have completed.",
+    "en": "Right: after will every verb stays in the base form: will have completed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "Nach will steht have, nie has.",
+     "en": "After will comes have, never has."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "Nach will keine gebeugte Form: have, nicht had.",
+     "en": "No inflected form after will: have, not had."
     }
    ]
   }
@@ -997,6 +2830,657 @@
      ],
      "de": "have ist Präsens; nach wish rückt die Form eine Stufe zurück: had.",
      "en": "have is present; after wish the verb moves one step back: had."
+    }
+   ]
+  }
+ },
+ "past-perfect|whenwearrivedatthecinemathefilm": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Beginn lag vor unserer Ankunft → had already started.",
+    "en": "Right: the start came before we arrived → had already started."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has started“ gehört zur Gegenwart; die Geschichte spielt in der Vergangenheit.",
+     "en": "“has started” belongs to the present; the story is in the past."
+    },
+    {
+     "if": [
+      "started"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„started“ allein heißt: Der Film begann nach unserer Ankunft. Er lief schon.",
+     "en": "“started” alone says the film began after we arrived. It was already running."
+    },
+    {
+     "if": [
+      "was",
+      "starting"
+     ],
+     "de": "„was starting“ ist ein Verlauf bei der Ankunft, nicht das, was davor passiert war.",
+     "en": "“was starting” is a process at the moment of arrival, not what had happened before."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere von zwei Ereignissen in der Vergangenheit braucht had + Partizip.",
+     "en": "The earlier of two past events needs had + participle."
+    }
+   ]
+  }
+ },
+ "past-perfect|shewasexhaustedbecausesheforhours": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: Dauer bis zum Zeitpunkt „erschöpft“ in der Vergangenheit → had been working.",
+    "en": "Right: duration up to the past moment “exhausted” → had been working."
+   },
+   "wrong": [
+    {
+     "opt": "has worked",
+     "de": "„has worked“ gehört zur Gegenwart; sie war erschöpft, das ist Vergangenheit.",
+     "en": "“has worked” belongs to the present; she was exhausted, so we are in the past."
+    },
+    {
+     "opt": "was working",
+     "de": "„was working“ läuft gleichzeitig mit „was exhausted“; die Ursache lag davor.",
+     "en": "“was working” runs at the same time as “was exhausted”; the cause came before."
+    },
+    {
+     "opt": "works",
+     "de": "„works“ ist Präsens; die Geschichte spielt in der Vergangenheit.",
+     "en": "“works” is present tense; the story is in the past."
+    }
+   ]
+  }
+ },
+ "past-perfect|ifinishedmyhomeworktheniwentoutafteriiwentout": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: had finished zeigt, dass das Beenden zuerst kam. Nach „after“ geht auch „finished“.",
+    "en": "Right: had finished shows that finishing came first. After “after”, plain “finished” works too."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have finished“ gehört zur Gegenwart; „went out“ liegt in der Vergangenheit.",
+     "en": "“have finished” belongs to the present; “went out” is in the past."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Nach „after“ zeigt had + Partizip, welche Handlung zuerst kam.",
+     "en": "After “after”, had + participle shows which action came first."
+    }
+   ]
+  }
+ },
+ "past-perfect|bythetimeijoinedthecalltheclientthemeeting": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Kunde war schon gegangen, bevor ich einstieg → had already left.",
+    "en": "Right: the client had gone before I joined → had already left."
+   },
+   "wrong": [
+    {
+     "opt": "is already leaving",
+     "de": "„is leaving“ ist Gegenwart; „joined“ steht in der Vergangenheit.",
+     "en": "“is leaving” is present tense; “joined” is in the past."
+    },
+    {
+     "opt": "would already leave",
+     "de": "„would leave“ schaut nach vorn, nicht auf etwas, das davor lag.",
+     "en": "“would leave” looks ahead, not back at something that came before."
+    },
+    {
+     "opt": "has already left",
+     "de": "„has left“ gehört zur Gegenwart; der Kunde war vor meinem Einstieg gegangen.",
+     "en": "“has left” belongs to the present; the client had gone before I joined."
+    }
+   ]
+  }
+ },
+ "past-perfect|bythetimetheclientfinallysignedwethedealformonths": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Verhandlung dauerte Monate bis zur Unterschrift → had been negotiating.",
+    "en": "Right: the negotiation lasted months up to the signing → had been negotiating."
+   },
+   "wrong": [
+    {
+     "opt": "have been negotiating",
+     "de": "„have been negotiating“ reicht bis jetzt; die Unterschrift liegt in der Vergangenheit.",
+     "en": "“have been negotiating” runs up to now; the signing is in the past."
+    },
+    {
+     "opt": "negotiated",
+     "de": "„negotiated“ nennt nur die Handlung, nicht die Dauer bis zur Unterschrift.",
+     "en": "“negotiated” names only the action, not the duration up to the signing."
+    },
+    {
+     "opt": "were negotiating",
+     "de": "„were negotiating“ ist ein Verlauf zum Zeitpunkt, nicht die Dauer davor.",
+     "en": "“were negotiating” is a process at that moment, not the duration before it."
+    }
+   ]
+  }
+ },
+ "past-perfect|itwasthefirsttimeshesuchalargeaccount": {
+  "pat": "pp.first-time",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Erfahrung liegt vor dem Zeitpunkt in der Vergangenheit → had handled.",
+    "en": "Right: the experience lies before the past moment → had handled."
+   },
+   "wrong": [
+    {
+     "opt": "would handle",
+     "de": "„would handle“ schaut nach vorn; hier geht es um etwas, das davor lag.",
+     "en": "“would handle” looks ahead; here it is about something that came before."
+    },
+    {
+     "opt": "has handled",
+     "de": "„has handled“ gehört zur Gegenwart: „It is the first time …“ steht im Präsens.",
+     "en": "“has handled” belongs to the present (“It is the first time …”)."
+    },
+    {
+     "opt": "was handling",
+     "de": "„was handling“ beschreibt etwas Laufendes, nicht die Erfahrung davor.",
+     "en": "“was handling” describes something in progress, not the experience before."
+    }
+   ]
+  }
+ },
+ "past-perfect|nosoonerthepresentationthantheprojectorbrokedown": {
+  "pat": "pp.inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „No sooner“ steht had vor dem Subjekt: had we started.",
+    "en": "Right: after “No sooner”, had goes before the subject: had we started."
+   },
+   "wrong": [
+    {
+     "opt": "we started",
+     "de": "Nach „No sooner“ fehlen had und die Umstellung: had we started.",
+     "en": "After “No sooner”, both had and the inversion are missing: had we started."
+    },
+    {
+     "opt": "we had started",
+     "de": "Das had stimmt, muss aber nach „No sooner“ vor das Subjekt: had we started.",
+     "en": "The had is right, but after “No sooner” it must come before the subject: had we started."
+    },
+    {
+     "opt": "did we start",
+     "de": "„did we start“ ist Past Simple; „No sooner … than“ verlangt had we started.",
+     "en": "“did we start” is Past Simple; “No sooner … than” needs had we started."
+    }
+   ]
+  }
+ },
+ "past-perfect|whenicalledhimatnoonhesoundedexhaustedhesinceam": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: Dauer „since 5 a.m.“ bis zum Anruf in der Vergangenheit → had been working.",
+    "en": "Right: duration “since 5 a.m.” up to the past call → had been working."
+   },
+   "wrong": [
+    {
+     "opt": "worked",
+     "de": "„worked“ nennt nur die Handlung, nicht die Dauer seit 5 Uhr bis zum Anruf.",
+     "en": "“worked” names only the action, not the duration from 5 a.m. up to the call."
+    },
+    {
+     "opt": "works",
+     "de": "„works“ ist Präsens; der Anruf liegt in der Vergangenheit.",
+     "en": "“works” is present tense; the call lies in the past."
+    },
+    {
+     "opt": "was working",
+     "de": "„was working since“ geht nicht: since braucht die Perfektform had been.",
+     "en": "“was working since” does not work: since needs the perfect form had been."
+    }
+   ]
+  }
+ },
+ "past-perfect|ifeltlonelybecausemybestfriendtoanothercitythemonthbefore": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: „the month before“ zeigt: Der Umzug lag vor dem Gefühl → had moved.",
+    "en": "Right: “the month before” shows the move came before the feeling → had moved."
+   },
+   "wrong": [
+    {
+     "opt": "would move",
+     "de": "„would move“ schaut nach vorn; der Umzug war schon im Monat davor.",
+     "en": "“would move” looks ahead; the move happened the month before."
+    },
+    {
+     "opt": "has moved",
+     "de": "„has moved“ gehört zur Gegenwart; „the month before“ liegt in der Vergangenheit.",
+     "en": "“has moved” belongs to the present; “the month before” is in the past."
+    },
+    {
+     "opt": "moves",
+     "de": "„moves“ ist Präsens; der Satz steht in der Vergangenheit („felt“).",
+     "en": "“moves” is present tense; the sentence is in the past (“felt”)."
+    }
+   ]
+  }
+ },
+ "past-perfect|bythetimethesupportteamcalledbackitheproblemmyself": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Beheben kam vor dem Rückruf → had fixed (by the time + Vergangenheit).",
+    "en": "Right: the fixing came before the callback → had fixed (by the time + past)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has fixed“ gehört zur Gegenwart; der Rückruf liegt in der Vergangenheit.",
+     "en": "“has fixed” belongs to the present; the callback lies in the past."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have fixed“ gehört zur Gegenwart; der Rückruf liegt in der Vergangenheit.",
+     "en": "“have fixed” belongs to the present; the callback lies in the past."
+    },
+    {
+     "if": [
+      "fixed"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„fixed“ allein ordnet die Reihenfolge nicht: Das Beheben war vor dem Rückruf fertig.",
+     "en": "“fixed” alone does not show the order: the fixing was done before the callback."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere nach „by the time“ + Vergangenheit braucht had + Partizip.",
+     "en": "The earlier event after “by the time” + past needs had + participle."
+    }
+   ]
+  }
+ },
+ "past-perfect|whenourceoarrivedtheteamtheagendaforanhour": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: „for an hour“ nennt die Dauer vor der Ankunft → had been discussing.",
+    "en": "Right: “for an hour” gives the duration before the arrival → had been discussing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have been discussing“ reicht bis jetzt; die Ankunft liegt in der Vergangenheit.",
+     "en": "“have been discussing” runs up to now; the arrival lies in the past."
+    },
+    {
+     "if": [
+      "was",
+      "discussing"
+     ],
+     "de": "„was discussing“ nennt nur den Verlauf bei der Ankunft, nicht die Dauer davor.",
+     "en": "“was discussing” gives only the process at the arrival, not the duration before it."
+    },
+    {
+     "if": [
+      "discussed"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„discussed“ allein: Die Besprechung lief schon eine Stunde vor der Ankunft.",
+     "en": "“discussed” alone: the discussion had been going on for an hour before the arrival."
+    },
+    {
+     "pat": "pp.duration",
+     "de": "Dauer vor einem Zeitpunkt in der Vergangenheit braucht had been + -ing.",
+     "en": "Duration before a past moment needs had been + -ing."
+    }
+   ]
+  }
+ },
+ "past-perfect|shewasprouditwasthefirsttimesheamajordealalone": {
+  "pat": "pp.first-time",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „it was the first time“ steht had + Partizip: had closed.",
+    "en": "Right: after “it was the first time” comes had + participle: had closed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has closed“ gehört zur Gegenwart; „it was“ steht in der Vergangenheit.",
+     "en": "“has closed” belongs to the present; “it was” is in the past."
+    },
+    {
+     "if": [
+      "was",
+      "closing"
+     ],
+     "de": "„was closing“ ist ein Verlauf; hier geht es um die Erfahrung davor.",
+     "en": "“was closing” is a process; here it is about the experience before."
+    },
+    {
+     "if": [
+      "closed"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„closed“ allein: Die Erfahrung liegt eine Stufe vor „was“ → had closed.",
+     "en": "“closed” alone: the experience sits one step before “was” → had closed."
+    },
+    {
+     "pat": "pp.first-time",
+     "de": "Nach „the first time“ in der Vergangenheit steht had + Partizip.",
+     "en": "After “the first time” in a past story comes had + participle."
+    }
+   ]
+  }
+ },
+ "past-perfect|whenigothomemyflatmatedinneralready": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Kochen war vor meiner Heimkehr fertig → had cooked.",
+    "en": "Right: the cooking was done before I got home → had cooked."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has cooked“ gehört zur Gegenwart; „got home“ liegt in der Vergangenheit.",
+     "en": "“has cooked” belongs to the present; “got home” is in the past."
+    },
+    {
+     "if": [
+      "was",
+      "cooking"
+     ],
+     "de": "„was cooking“ wäre ein Verlauf; „already“ zeigt: Es war schon fertig.",
+     "en": "“was cooking” would be a process; “already” shows it was done."
+    },
+    {
+     "if": [
+      "cooked"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„cooked“ allein ordnet die Reihenfolge nicht; das Kochen war schon vorbei.",
+     "en": "“cooked” alone does not show the order; the cooking was already over."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere von zwei Ereignissen in der Vergangenheit braucht had + Partizip.",
+     "en": "The earlier of two past events needs had + participle."
+    }
+   ]
+  }
+ },
+ "past-perfect|bythetimetheupdatefinishedinstallingmostemployeeshome": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Sie waren schon weg, bevor das Update fertig war → had gone.",
+    "en": "Right: they had left before the update finished → had gone."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have gone“ gehört zur Gegenwart; das Update liegt in der Vergangenheit.",
+     "en": "“have gone” belongs to the present; the update lies in the past."
+    },
+    {
+     "if": [
+      "went"
+     ],
+     "de": "„went“ allein ordnet die Reihenfolge nicht; sie waren schon vorher gegangen.",
+     "en": "“went” alone does not show the order; they had gone earlier."
+    },
+    {
+     "if": [
+      "gone"
+     ],
+     "not": [
+      "had",
+      "has",
+      "have"
+     ],
+     "de": "„gone“ braucht ein Hilfsverb: had gone.",
+     "en": "“gone” needs an auxiliary: had gone."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere nach „by the time“ + Vergangenheit braucht had + Partizip.",
+     "en": "The earlier event after “by the time” + past needs had + participle."
+    }
+   ]
+  }
+ },
+ "past-perfect|wesenttheinvoiceonmondaytheclientcalledontuesdaytoaskwhereitwaswhentheclientcall": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Senden lag vor dem Anruf → had already sent.",
+    "en": "Right: the sending came before the call → had already sent."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have sent“ gehört zur Gegenwart; der Anruf liegt in der Vergangenheit.",
+     "en": "“have sent” belongs to the present; the call lies in the past."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has sent“ gehört zur Gegenwart; der Anruf liegt in der Vergangenheit.",
+     "en": "“has sent” belongs to the present; the call lies in the past."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "not": [
+      "had",
+      "has",
+      "have"
+     ],
+     "de": "„sent“ allein ordnet die Reihenfolge nicht: Montag lag vor dem Anruf am Dienstag.",
+     "en": "“sent” alone does not show the order: Monday came before the call on Tuesday."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere von zwei Ereignissen in der Vergangenheit braucht had + Partizip.",
+     "en": "The earlier of two past events needs had + participle."
+    }
+   ]
+  }
+ },
+ "past-perfect|shestartedworkingatwecalledheratandshewasstillworkingwhenwecalledshefortwohours": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: „for two hours“ nennt die Dauer bis zum Anruf → had been working.",
+    "en": "Right: “for two hours” gives the duration up to the call → had been working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was",
+      "working"
+     ],
+     "de": "„was working“ passt nicht zu „for two hours“: Die Dauer braucht had been working.",
+     "en": "“was working” does not fit “for two hours”: the duration needs had been working."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„has/have been working“ reicht bis jetzt; der Anruf liegt in der Vergangenheit.",
+     "en": "“has/have been working” runs up to now; the call lies in the past."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„worked“ allein nennt nicht die Dauer bis zum Anruf; sie arbeitete noch.",
+     "en": "“worked” alone does not give the duration up to the call; she was still working."
+    },
+    {
+     "pat": "pp.duration",
+     "de": "Dauer vor einem Zeitpunkt in der Vergangenheit braucht had been + -ing.",
+     "en": "Duration before a past moment needs had been + -ing."
+    }
+   ]
+  }
+ },
+ "past-perfect|wheniarrivedatthemeetingtheothersalreadystarted": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Beginn lag vor meiner Ankunft → had already started.",
+    "en": "Right: their start came before my arrival → had already started."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has started“ gehört zur Gegenwart; „arrived“ steht in der Vergangenheit.",
+     "en": "“has started” belongs to the present; “arrived” is in the past."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have started“ gehört zur Gegenwart; „arrived“ steht in der Vergangenheit.",
+     "en": "“have started” belongs to the present; “arrived” is in the past."
+    },
+    {
+     "if": [
+      "started"
+     ],
+     "not": [
+      "had",
+      "has",
+      "have"
+     ],
+     "de": "„started“ allein heißt: Sie begannen nach meiner Ankunft. Es lief schon.",
+     "en": "“started” alone says they began after I arrived. It was already under way."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere von zwei Ereignissen in der Vergangenheit braucht had + Partizip.",
+     "en": "The earlier of two past events needs had + participle."
+    }
+   ]
+  }
+ },
+ "past-perfect|mybosstoldmethathewillcallmethenextday": {
+  "pat": "pp.reported",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „told“ rutscht will eine Stufe zurück → would call.",
+    "en": "Right: after “told”, will moves one step back → would call."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will“ bleibt nicht stehen: Nach „told“ wird daraus would.",
+     "en": "“will” does not stay: after “told” it becomes would."
+    },
+    {
+     "if": [
+      "calls"
+     ],
+     "de": "„calls“ ist Präsens; „told“ steht in der Vergangenheit, das Berichtete rutscht zurück.",
+     "en": "“calls” is present tense; “told” is past, so the reported part moves back."
+    },
+    {
+     "pat": "pp.reported",
+     "de": "Nach einem Verb der Vergangenheit rutscht die Zeit zurück: will → would.",
+     "en": "After a past reporting verb the tense moves back: will → would."
+    }
+   ]
+  }
+ },
+ "past-perfect|bythetimewearrivedthefilmhavealreadystarted": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: In der Vergangenheit heißt es had, nie have → had already started.",
+    "en": "Right: in a past story it is had, never have → had already started."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has started“ gehört zur Gegenwart; „arrived“ steht in der Vergangenheit.",
+     "en": "“has started” belongs to the present; “arrived” is in the past."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have“ zieht den Satz in die Gegenwart und passt auch nicht zu „film“: had.",
+     "en": "“have” pulls the sentence into the present and does not fit “film”: had."
+    },
+    {
+     "if": [
+      "started"
+     ],
+     "not": [
+      "had",
+      "has",
+      "have"
+     ],
+     "de": "„started“ allein: Der Film lief schon vor der Ankunft → had already started.",
+     "en": "“started” alone: the film was already running before we arrived → had already started."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere nach „by the time“ + Vergangenheit braucht had + Partizip.",
+     "en": "The earlier event after “by the time” + past needs had + participle."
     }
    ]
   }
@@ -1630,6 +4114,1525 @@
      ],
      "de": "Die Frage im Past Simple braucht did + Grundform.",
      "en": "The Past Simple question needs did + base form."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|iamtiredbecauseiallafternoon": {
+  "pat": "pc.recent",
+  "why": {
+   "ok": {
+    "de": "Richtig: Müdigkeit jetzt + „all afternoon“ → have been studying, die Tätigkeit mit Spur im Jetzt.",
+    "en": "Right: tired now + “all afternoon” → have been studying, an activity with a trace in the present."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have",
+      "studied"
+     ],
+     "de": "Grammatisch möglich, doch gesucht ist die Dauerform: have been studying.",
+     "en": "Grammatically possible, but the continuous form is wanted: have been studying."
+    },
+    {
+     "if": [
+      "studied"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple blickt auf Vergangenes zurück; hier wirkt die Tätigkeit bis jetzt nach.",
+     "en": "Past Simple looks back at the past; here the activity still shows in the present."
+    },
+    {
+     "if": [
+      "am",
+      "studying"
+     ],
+     "de": "am studying beschreibt nur den Moment, nicht den ganzen Nachmittag bis jetzt.",
+     "en": "am studying describes only this moment, not the whole afternoon up to now."
+    },
+    {
+     "if": [
+      "studying"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been + studying.",
+     "en": "been is missing: have been + studying."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|howlongenglish": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„How long“ + Dauer bis jetzt → have you been learning, nicht das Präsens des Deutschen.",
+    "en": "“How long” + duration up to now → have you been learning, not the German-style present."
+   },
+   "wrong": [
+    {
+     "opt": "do you learn",
+     "pat": "psp.since-for",
+     "de": "Present Simple fragt nach Gewohnheit, nicht nach der Dauer bis jetzt.",
+     "en": "Present Simple asks about habit, not about duration up to now."
+    },
+    {
+     "opt": "are you learning",
+     "de": "Present Continuous gilt für jetzt, nicht für den Zeitraum bis jetzt.",
+     "en": "Present Continuous covers now, not the period up to now."
+    },
+    {
+     "opt": "did you learn",
+     "pat": "psp.finished-time",
+     "de": "Past Simple meint abgeschlossene Zeit, du lernst aber noch.",
+     "en": "Past Simple means finished time, but you are still learning."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|sheheresince": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 2019“ + Dauer bis heute → has been living oder has lived. Beides stimmt.",
+    "en": "“since 2019” + duration until today → has been living or has lived. Both are right."
+   },
+   "wrong": [
+    {
+     "if": [
+      "lives"
+     ],
+     "de": "Present Simple passt nicht zu since: Dauer bis jetzt braucht has lived / has been living.",
+     "en": "Present Simple does not go with since: duration up to now needs has lived / has been living."
+    },
+    {
+     "if": [
+      "is",
+      "living"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; since 2019 verlangt die Zeit bis jetzt.",
+     "en": "Present Continuous shows only now; since 2019 needs the time up to now."
+    },
+    {
+     "if": [
+      "lived"
+     ],
+     "not": [
+      "has"
+     ],
+     "de": "Past Simple wäre abgeschlossen, sie wohnt aber noch hier: has lived.",
+     "en": "Past Simple would be finished, but she still lives here: has lived."
+    },
+    {
+     "if": [
+      "has",
+      "live"
+     ],
+     "de": "Nach has braucht es lived oder been living.",
+     "en": "After has you need lived or been living."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|iforaparkingspacesinceandiamgoingtobelate": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 8:15“ + die Suche läuft noch → have been looking.",
+    "en": "“since 8:15” + the search is still going → have been looking."
+   },
+   "wrong": [
+    {
+     "opt": "looked",
+     "pat": "psp.finished-time",
+     "de": "Past Simple meint abgeschlossene Zeit; du suchst aber noch.",
+     "en": "Past Simple means finished time, but you are still looking."
+    },
+    {
+     "opt": "am looking",
+     "de": "Present Continuous passt nicht zu since: Es fehlt der Blick zurück.",
+     "en": "Present Continuous does not go with since: the look back is missing."
+    },
+    {
+     "opt": "look",
+     "de": "Present Simple nennt eine Gewohnheit, hier läuft eine Suche seit 8:15.",
+     "en": "Present Simple names a habit; here a search has been running since 8:15."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|howlongourcfo": {
+  "pat": "pc.state-verbs",
+  "why": {
+   "ok": {
+    "de": "know ist ein Zustandsverb, also ohne -ing: How long have you known our CFO?",
+    "en": "know is a state verb, so no -ing: How long have you known our CFO?"
+   },
+   "wrong": [
+    {
+     "opt": "are you knowing",
+     "de": "know steht nie in der -ing-Form, auch nicht im Present Continuous.",
+     "en": "know never takes the -ing form, not even in the Present Continuous."
+    },
+    {
+     "opt": "do you know",
+     "de": "Present Simple passt nicht zu „How long“ + Zeitraum bis jetzt.",
+     "en": "Present Simple does not go with “How long” + a period up to now."
+    },
+    {
+     "opt": "have you been knowing",
+     "pat": "pc.duration",
+     "de": "Die Dauerform geht bei know nicht, es ist ein Zustandsverb.",
+     "en": "The continuous form does not work with know; it is a state verb."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|theteamonthisfeaturesincejanuaryandthereleaseisnextweek": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since January“ + die Arbeit läuft noch → has been working.",
+    "en": "“since January” + the work is still going → has been working."
+   },
+   "wrong": [
+    {
+     "opt": "works",
+     "de": "Present Simple passt nicht zu since: Dauer bis jetzt braucht has been working.",
+     "en": "Present Simple does not go with since: duration up to now needs has been working."
+    },
+    {
+     "opt": "is working",
+     "de": "Present Continuous zeigt nur jetzt, nicht die Zeit seit Januar.",
+     "en": "Present Continuous shows only now, not the time since January."
+    },
+    {
+     "opt": "worked",
+     "pat": "psp.finished-time",
+     "de": "Past Simple wäre abgeschlossen, aber die Arbeit geht weiter.",
+     "en": "Past Simple would be finished, but the work goes on."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|shehasbeenlearningspanishtwoyears": {
+  "pat": "pc.since-for",
+  "why": {
+   "ok": {
+    "de": "two years ist eine Zeitspanne → for. since braucht einen Zeitpunkt (since 2022).",
+    "en": "two years is a length of time → for. since needs a point in time (since 2022)."
+   },
+   "wrong": [
+    {
+     "opt": "ago",
+     "de": "ago steht mit Past Simple und stünde nach „two years“, nicht davor.",
+     "en": "ago goes with the Past Simple and would follow “two years”, not precede it."
+    },
+    {
+     "opt": "since",
+     "pat": "pc.since-for",
+     "de": "since braucht einen Startpunkt wie 2022; two years nennt eine Länge.",
+     "en": "since needs a starting point like 2022; two years names a length."
+    },
+    {
+     "opt": "from",
+     "de": "from braucht ein Gegenstück (from … to …); für die Dauer steht for.",
+     "en": "from needs a counterpart (from … to …); for a duration use for."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|forthecrmupdatesincetuesday": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since Tuesday“ + Handlung bis jetzt → Have you been waiting.",
+    "en": "“since Tuesday” + an action up to now → Have you been waiting."
+   },
+   "wrong": [
+    {
+     "opt": "Did you wait",
+     "pat": "psp.finished-time",
+     "de": "Past Simple meint abgeschlossene Zeit; das Warten dauert aber an.",
+     "en": "Past Simple means finished time, but the waiting continues."
+    },
+    {
+     "opt": "Do you wait",
+     "de": "Present Simple passt nicht zu since: So klingt „Wartest du seit Dienstag?“ wörtlich.",
+     "en": "Present Simple does not go with since: it is the word-for-word German version."
+    },
+    {
+     "opt": "Are you waiting",
+     "de": "Present Continuous passt nicht zu since: Es fehlt der Blick zurück.",
+     "en": "Present Continuous does not go with since: the look back is missing."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|myneighborsloudmusicsincepmandicannotconcentrate": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 6 p.m.“ + die Musik läuft noch → have been playing.",
+    "en": "“since 6 p.m.” + the music is still on → have been playing."
+   },
+   "wrong": [
+    {
+     "opt": "are playing",
+     "de": "Present Continuous zeigt nur jetzt, nicht die Zeit seit 6 Uhr.",
+     "en": "Present Continuous shows only now, not the time since 6 p.m."
+    },
+    {
+     "opt": "played",
+     "pat": "psp.finished-time",
+     "de": "Past Simple meint abgeschlossen; die Musik läuft aber noch.",
+     "en": "Past Simple means finished, but the music is still on."
+    },
+    {
+     "opt": "play",
+     "de": "Present Simple nennt eine Gewohnheit und passt nicht zu since.",
+     "en": "Present Simple names a habit and does not go with since."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|wewiththissuppliersince": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 2017“ → Dauer bis jetzt → have been working. have worked geht auch.",
+    "en": "“since 2017” → duration up to now → have been working. have worked also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Simple passt nicht zu since: Dauer bis jetzt braucht have been working.",
+     "en": "Present Simple does not go with since: duration up to now needs have been working."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; ihr arbeitet aber noch zusammen.",
+     "en": "Past Simple means finished time, but you still work together."
+    },
+    {
+     "if": [
+      "are",
+      "working"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; since 2017 braucht den Blick zurück.",
+     "en": "Present Continuous shows only now; since 2017 needs the look back."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been working.",
+     "en": "been is missing: have been working."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|itoreachheralldaybutherphoneisoff": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„all day“ betont die Dauer bis jetzt → have been trying. have tried geht auch.",
+    "en": "“all day” stresses the duration up to now → have been trying. have tried also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "try"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Simple nennt eine Gewohnheit; „all day“ meint die Zeit bis jetzt.",
+     "en": "Present Simple names a habit; “all day” means the time up to now."
+    },
+    {
+     "if": [
+      "tried"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; du versuchst es aber weiter.",
+     "en": "Past Simple means finished time, but you keep trying."
+    },
+    {
+     "if": [
+      "am",
+      "trying"
+     ],
+     "de": "Present Continuous zeigt nur jetzt, nicht den ganzen Tag bis jetzt.",
+     "en": "Present Continuous shows only now, not the whole day up to now."
+    },
+    {
+     "if": [
+      "trying"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been trying.",
+     "en": "been is missing: have been trying."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|whyareyourhandssodirtyiinthegardenallmorning": {
+  "pat": "pc.recent",
+  "why": {
+   "ok": {
+    "de": "Spur im Jetzt (schmutzige Hände) + „all morning“ → have been working. have worked geht auch.",
+    "en": "Trace in the present (dirty hands) + “all morning” → have been working. have worked also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple wäre möglich, gesucht ist hier die Perfect-Form mit Spur im Jetzt.",
+     "en": "Past Simple is possible, but the Perfect form with a trace in the present is wanted."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Simple nennt eine Gewohnheit, hier geht es um den Morgen bis jetzt.",
+     "en": "Present Simple names a habit; here it is about the morning up to now."
+    },
+    {
+     "if": [
+      "am",
+      "working"
+     ],
+     "de": "Present Continuous zeigt nur jetzt, nicht den ganzen Morgen.",
+     "en": "Present Continuous shows only now, not the whole morning."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been working.",
+     "en": "been is missing: have been working."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|wemuchprogressonthemigrationlatelybecausethedataisamess": {
+  "pat": "pc.recent",
+  "why": {
+   "ok": {
+    "de": "„lately“ + Entwicklung bis jetzt → haven't been making. haven't made geht auch.",
+    "en": "“lately” + a development up to now → haven't been making. haven't made also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are",
+      "not",
+      "making"
+     ],
+     "de": "Present Continuous passt nicht zu lately: gemeint ist die Zeit bis jetzt.",
+     "en": "Present Continuous does not go with lately: the period up to now is meant."
+    },
+    {
+     "if": [
+      "do",
+      "not"
+     ],
+     "de": "Present Simple nennt eine Gewohnheit; lately blickt auf die letzte Zeit zurück.",
+     "en": "Present Simple names a habit; lately looks back at recent time."
+    },
+    {
+     "if": [
+      "did",
+      "not"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; lately reicht bis jetzt.",
+     "en": "Past Simple means finished time; lately reaches up to now."
+    },
+    {
+     "if": [
+      "not",
+      "making"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have not been making.",
+     "en": "been is missing: have not been making."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|mycousinforanapartmentinhamburgformonthsbutthepricesarecrazy": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„for months“ + die Suche läuft noch → has been looking. has looked geht auch.",
+    "en": "“for months” + the search is still going → has been looking. has looked also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "looks"
+     ],
+     "de": "Present Simple nennt eine Gewohnheit; „for months“ meint die Zeit bis jetzt.",
+     "en": "Present Simple names a habit; “for months” means the time up to now."
+    },
+    {
+     "if": [
+      "looked"
+     ],
+     "not": [
+      "has"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; die Suche geht aber weiter.",
+     "en": "Past Simple means finished time, but the search goes on."
+    },
+    {
+     "if": [
+      "is",
+      "looking"
+     ],
+     "de": "Present Continuous zeigt nur jetzt, nicht die Monate bis jetzt.",
+     "en": "Present Continuous shows only now, not the months up to now."
+    },
+    {
+     "if": [
+      "looking"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: has been looking.",
+     "en": "been is missing: has been looking."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|ourdevelopersstartedworkingonthebugatamtheyarestillworkingonitourdevelopersonthe": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "Beginn früher + noch im Gange + „since 9 a.m.“ → have been working. have worked geht auch.",
+    "en": "Earlier start + still going + “since 9 a.m.” → have been working. have worked also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Simple passt nicht zu since: Dauer bis jetzt braucht have been working.",
+     "en": "Present Simple does not go with since: duration up to now needs have been working."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; sie arbeiten aber noch daran.",
+     "en": "Past Simple means finished time, but they are still working on it."
+    },
+    {
+     "if": [
+      "are",
+      "working"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; since 9 a.m. braucht den Blick zurück.",
+     "en": "Present Continuous shows only now; since 9 a.m. needs the look back."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been working.",
+     "en": "been is missing: have been working."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|itstartedrainingatpmanditisstillrainingitsincepm": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 3 p.m.“ + der Regen dauert an → has been raining.",
+    "en": "“since 3 p.m.” + the rain is continuing → has been raining."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rains"
+     ],
+     "de": "Present Simple nennt eine Regel; since 3 p.m. braucht den Blick zurück.",
+     "en": "Present Simple states a rule; since 3 p.m. needs the look back."
+    },
+    {
+     "if": [
+      "is",
+      "raining"
+     ],
+     "de": "Present Continuous zeigt nur jetzt, nicht die Zeit seit 15 Uhr.",
+     "en": "Present Continuous shows only now, not the time since 3 p.m."
+    },
+    {
+     "if": [
+      "rained"
+     ],
+     "not": [
+      "has"
+     ],
+     "de": "Past Simple meint abgeschlossen; es regnet aber noch.",
+     "en": "Past Simple means finished, but it is still raining."
+    },
+    {
+     "if": [
+      "raining"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: has been raining.",
+     "en": "been is missing: has been raining."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|iamwaitingforyourreplysincemonday": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since Monday“ verlangt Perfect, nicht Present Continuous: have been waiting.",
+    "en": "“since Monday” needs the Perfect, not the Present Continuous: have been waiting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "am",
+      "waiting"
+     ],
+     "de": "Present Continuous passt nicht zu since: Dauer bis jetzt → have been waiting.",
+     "en": "Present Continuous does not go with since: duration up to now → have been waiting."
+    },
+    {
+     "if": [
+      "waiting"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been waiting.",
+     "en": "been is missing: have been waiting."
+    },
+    {
+     "if": [
+      "waited"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; du wartest aber noch.",
+     "en": "Past Simple means finished time, but you are still waiting."
+    },
+    {
+     "not": [
+      "since"
+     ],
+     "de": "since Monday nennt den Startpunkt und soll stehen bleiben.",
+     "en": "since Monday names the starting point and should stay."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|howlongdoyouworkinthisindustry": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„How long“ + Dauer bis jetzt → have you been working (oder have you worked).",
+    "en": "“How long” + duration up to now → have you been working (or have you worked)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "do",
+      "work"
+     ],
+     "de": "Present Simple fragt nach Gewohnheit, nicht nach der Dauer bis jetzt.",
+     "en": "Present Simple asks about habit, not about duration up to now."
+    },
+    {
+     "if": [
+      "are",
+      "working"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; „How long“ braucht den Blick zurück.",
+     "en": "Present Continuous shows only now; “How long” needs the look back."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; du arbeitest aber noch dort.",
+     "en": "Past Simple means finished time, but you still work there."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: How long have you been working.",
+     "en": "been is missing: How long have you been working."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|hehavebeenfeelingtired": {
+  "pat": "pc.form",
+  "why": {
+   "ok": {
+    "de": "Bei he/she/it steht has: He has been feeling tired.",
+    "en": "he/she/it takes has: He has been feeling tired."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Bei he/she/it heißt es has, auch mitten in der langen Form.",
+     "en": "With he/she/it use has, even inside the long form."
+    },
+    {
+     "if": [
+      "feel"
+     ],
+     "de": "Nach been steht die -ing-Form: feeling, nicht die Grundform.",
+     "en": "After been use the -ing form: feeling, not the base form."
+    },
+    {
+     "if": [
+      "felt"
+     ],
+     "de": "Nach been steht die -ing-Form: feeling, nicht das Partizip.",
+     "en": "After been use the -ing form: feeling, not the participle."
+    },
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Die Form braucht been: has been feeling.",
+     "en": "The form needs been: has been feeling."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|iamwaitingsinceminutes": {
+  "pat": "pc.since-for",
+  "why": {
+   "ok": {
+    "de": "Zwei Fehler: Present Continuous mit since, und eine Zeitspanne braucht for: have been waiting for.",
+    "en": "Two errors: Present Continuous with since, and a length of time needs for: have been waiting for."
+   },
+   "wrong": [
+    {
+     "if": [
+      "am",
+      "waiting",
+      "since"
+     ],
+     "de": "Zwei Fehler: Present Continuous, und 20 minutes ist eine Spanne, also for.",
+     "en": "Two errors: Present Continuous, and 20 minutes is a length, so for."
+    },
+    {
+     "if": [
+      "since"
+     ],
+     "de": "20 minutes ist eine Zeitspanne, deshalb for. since braucht einen Zeitpunkt.",
+     "en": "20 minutes is a length of time, so for. since needs a point in time."
+    },
+    {
+     "if": [
+      "am",
+      "waiting"
+     ],
+     "de": "Present Continuous passt nicht zu einer Dauer bis jetzt: have been waiting.",
+     "en": "Present Continuous does not fit a duration up to now: have been waiting."
+    },
+    {
+     "if": [
+      "waiting"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been waiting for 20 minutes.",
+     "en": "been is missing: have been waiting for 20 minutes."
+    }
+   ]
+  }
+ },
+ "pres-perf-cont|ihavebeenstudiedallafternoon": {
+  "pat": "pc.form",
+  "why": {
+   "ok": {
+    "de": "Nach been kommt die -ing-Form: have been studying.",
+    "en": "After been comes the -ing form: have been studying."
+   },
+   "wrong": [
+    {
+     "if": [
+      "been",
+      "studied"
+     ],
+     "de": "Nach been steht kein Partizip, sondern studying.",
+     "en": "After been there is no participle, but studying."
+    },
+    {
+     "if": [
+      "studied"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Grammatisch möglich, doch gesucht ist die Dauerform: have been studying.",
+     "en": "Grammatically possible, but the continuous form is wanted: have been studying."
+    },
+    {
+     "if": [
+      "study"
+     ],
+     "de": "Nach been steht die -ing-Form: studying, nicht die Grundform.",
+     "en": "After been use the -ing form: studying, not the base form."
+    },
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Die Form braucht been: have been studying.",
+     "en": "The form needs been: have been studying."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|lookitoutside": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „Look!“ zeigt auf diesen Moment, also Present Continuous: is snowing.",
+    "en": "Right: “Look!” points at this very moment, so present continuous: is snowing."
+   },
+   "wrong": [
+    {
+     "opt": "snows",
+     "pat": "psc.habit",
+     "de": "„snows“ nennt Schnee als Regel. „Look!“ zeigt aber auf das, was jetzt passiert.",
+     "en": "“snows” states snow as a general fact. But “Look!” points at what is happening now."
+    },
+    {
+     "opt": "snowed",
+     "de": "„snowed“ ist vergangen, aber „Look!“ zeigt auf den Moment jetzt.",
+     "en": "“snowed” is in the past, but “Look!” points at the moment now."
+    },
+    {
+     "opt": "has snowed",
+     "de": "„has snowed“ nennt ein Ergebnis. „Look!“ + outside zeigt auf den laufenden Vorgang.",
+     "en": "“has snowed” names a result. “Look!” + outside points at the process in progress."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|iusuallyfromhomeonfridays": {
+  "pat": "psc.habit",
+  "why": {
+   "ok": {
+    "de": "Richtig: „usually“ und „on Fridays“ nennen eine Regel, also Present Simple: work.",
+    "en": "Right: “usually” and “on Fridays” name a rule, so present simple: work."
+   },
+   "wrong": [
+    {
+     "if": [
+      "working"
+     ],
+     "pat": "psc.now",
+     "de": "„am working“ passt zu jetzt oder vorübergehend. „usually“ nennt aber eine Regel.",
+     "en": "“am working” fits now or temporary. But “usually” names a rule."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "de": "„worked“ ist vergangen, aber „usually“ und „on Fridays“ beschreiben die Regel heute.",
+     "en": "“worked” is past, but “usually” and “on Fridays” describe the rule today."
+    },
+    {
+     "if": [
+      "works"
+     ],
+     "de": "Nach „I“ steht keine -s-Form: I work.",
+     "en": "After “I” there is no -s form: I work."
+    },
+    {
+     "not": [
+      "work"
+     ],
+     "de": "Gesucht ist die Grundform von work: I usually work.",
+     "en": "The base form of work is needed: I usually work."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|nowiwhatyoumean": {
+  "pat": "psc.state",
+  "why": {
+   "ok": {
+    "de": "Richtig: understand ist ein Zustandsverb. Es bekommt kein -ing, auch bei „now“.",
+    "en": "Right: understand is a state verb. It takes no -ing, even with “now”."
+   },
+   "wrong": [
+    {
+     "opt": "am understanding",
+     "pat": "psc.now",
+     "de": "Zustandsverben haben kein -ing, auch wenn „now“ dasteht.",
+     "en": "State verbs take no -ing, even when “now” is there."
+    },
+    {
+     "opt": "understood",
+     "de": "„understood“ ist vergangen, aber „now“ meint den Zustand jetzt.",
+     "en": "“understood” is past, but “now” means the state at this moment."
+    },
+    {
+     "opt": "have understood",
+     "de": "„have understood“ betont das Ergebnis. Für den Zustand jetzt sagt man understand.",
+     "en": "“have understood” stresses the result. For the state now, say understand."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|sorryicannottalkrightnowweademoforabigclient": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „right now“ heißt, die Demo läuft jetzt, also Present Continuous: are giving.",
+    "en": "Right: “right now” means the demo is under way, so present continuous: are giving."
+   },
+   "wrong": [
+    {
+     "opt": "gave",
+     "de": "„gave“ ist vergangen, aber die Demo läuft gerade noch.",
+     "en": "“gave” is past, but the demo is still going on."
+    },
+    {
+     "opt": "have given",
+     "de": "„have given“ wäre abgeschlossen, aber „can't talk“ zeigt: Die Demo läuft noch.",
+     "en": "“have given” would be finished. “can't talk” shows it is still on."
+    },
+    {
+     "opt": "give",
+     "pat": "psc.habit",
+     "de": "„give“ beschriebe eine Gewohnheit. „right now“ meint den Moment.",
+     "en": "“give” would describe a habit. “right now” means this moment."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|ourplatformmorethancustomersacrosseurope": {
+  "pat": "psc.dual",
+  "why": {
+   "ok": {
+    "de": "Richtig: have = besitzen ist ein Zustand, also kein -ing. „platform“ ist Singular: has.",
+    "en": "Right: have = own is a state, so no -ing. “platform” is singular: has."
+   },
+   "wrong": [
+    {
+     "opt": "is having",
+     "pat": "psc.state",
+     "de": "Mit „besitzen“ gibt es kein -ing. Es passt nur zu Handlungen wie „having lunch“.",
+     "en": "With “own” there is no -ing. It fits only actions like “having lunch”."
+    },
+    {
+     "opt": "are having",
+     "de": "Kein -ing bei „haben = besitzen“. Und „platform“ ist Singular: is, nicht are.",
+     "en": "No -ing for “have = own”. And “platform” is singular: is, not are."
+    },
+    {
+     "opt": "have",
+     "de": "„platform“ ist Singular, deshalb steht hier has, nicht have.",
+     "en": "“platform” is singular, so has is needed here, not have."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|atthemomentifromourberlinofficebecausethemunichofficeisbeingrenovated": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „At the moment“ und der Umbau machen es vorübergehend: Continuous, am working.",
+    "en": "Right: “At the moment” and the renovation make it temporary: continuous, am working."
+   },
+   "wrong": [
+    {
+     "opt": "worked",
+     "de": "„worked“ ist vergangen. Die Lage gilt aber gerade jetzt.",
+     "en": "“worked” is past. But the situation applies right now."
+    },
+    {
+     "opt": "work",
+     "pat": "psc.habit",
+     "de": "„work“ nennt eine feste Gewohnheit. Der Umbau macht es vorübergehend.",
+     "en": "“work” names a fixed habit. The renovation makes it temporary."
+    },
+    {
+     "opt": "have worked",
+     "de": "„have worked“ blickt zurück. Hier gilt die Lage aber jetzt, nur für kurze Zeit.",
+     "en": "“have worked” looks back. Here the situation holds now, for a short time only."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|pricesusuallyinthefourthquartersoweplanourdiscountsearly": {
+  "pat": "psc.habit",
+  "why": {
+   "ok": {
+    "de": "Richtig: „usually“ nennt ein wiederkehrendes Muster, also Present Simple: rise.",
+    "en": "Right: “usually” names a recurring pattern, so present simple: rise."
+   },
+   "wrong": [
+    {
+     "opt": "have risen",
+     "de": "„have risen“ meldet ein Ergebnis bis jetzt, aber kein wiederkehrendes Muster.",
+     "en": "“have risen” reports a result up to now, but not a recurring pattern."
+    },
+    {
+     "opt": "are rising",
+     "pat": "psc.now",
+     "de": "„are rising“ beschriebe eine Veränderung jetzt. „usually“ nennt ein Muster.",
+     "en": "“are rising” would describe a change now. “usually” names a pattern."
+    },
+    {
+     "opt": "rose",
+     "de": "„rose“ ist einmalig vergangen. „usually“ sagt: Jedes Jahr wieder.",
+     "en": "“rose” is a single past event. “usually” says: again every year."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|iyouarerightaboutthetimelineitstootight": {
+  "pat": "psc.dual",
+  "why": {
+   "ok": {
+    "de": "Richtig: think = meinen ist ein Zustand, also Present Simple ohne -ing.",
+    "en": "Right: think = have an opinion is a state, so present simple without -ing."
+   },
+   "wrong": [
+    {
+     "opt": "am thinking",
+     "pat": "psc.now",
+     "de": "„am thinking“ heißt: Ich denke gerade nach (Handlung). Gemeint ist „ich meine“.",
+     "en": "“am thinking” means: I am considering it right now (action). “I believe” is meant."
+    },
+    {
+     "opt": "thinks",
+     "de": "Nach „I“ steht keine -s-Form: I think.",
+     "en": "After “I” there is no -s form: I think."
+    },
+    {
+     "opt": "have thought",
+     "de": "„have thought“ blickt zurück. Gemeint ist die Meinung jetzt.",
+     "en": "“have thought” looks back. The opinion now is meant."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|thissoupgreatwhatsinit": {
+  "pat": "psc.dual",
+  "why": {
+   "ok": {
+    "de": "Richtig: taste = Geschmack ist ein Zustand, also Present Simple: tastes.",
+    "en": "Right: taste = flavor is a state, so present simple: tastes."
+   },
+   "wrong": [
+    {
+     "opt": "has tasted",
+     "de": "„has tasted“ wäre abgeschlossen. Hier geht es um den Geschmack jetzt.",
+     "en": "“has tasted” would be finished. Here the flavor right now is meant."
+    },
+    {
+     "opt": "was tasting",
+     "de": "„was tasting“ ist eine Handlung in der Vergangenheit. Die Suppe schmeckt jetzt.",
+     "en": "“was tasting” is an action in the past. The soup tastes great now."
+    },
+    {
+     "opt": "is tasting",
+     "de": "„is tasting“ hieße: Jemand probiert die Suppe gerade. Gemeint ist ihr Geschmack.",
+     "en": "“is tasting” would mean: someone is sampling the soup. Its flavor is meant."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|oursalesdirectortosingaporetwiceayeartomeetpartners": {
+  "pat": "psc.habit",
+  "why": {
+   "ok": {
+    "de": "Richtig: „twice a year“ ist regelmäßig, also Present Simple, 3. Person: flies.",
+    "en": "Right: “twice a year” is regular, so present simple, third person: flies."
+   },
+   "wrong": [
+    {
+     "if": [
+      "flying"
+     ],
+     "pat": "psc.now",
+     "de": "„is flying“ passt zu jetzt. „twice a year“ nennt eine Regel.",
+     "en": "“is flying” fits now. “twice a year” names a rule."
+    },
+    {
+     "if": [
+      "flew"
+     ],
+     "de": "„flew“ ist einmalig vergangen. „twice a year“ beschreibt die Regel heute.",
+     "en": "“flew” is a single past event. “twice a year” describes the rule today."
+    },
+    {
+     "if": [
+      "fly"
+     ],
+     "de": "Nach he/she/it braucht das Verb ein -s: flies.",
+     "en": "After he/she/it the verb needs an -s: flies."
+    },
+    {
+     "not": [
+      "flies"
+     ],
+     "de": "Gesucht ist die Present-Simple-Form von fly: flies.",
+     "en": "The present simple form of fly is needed: flies."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|atthemomentmyteamanewonboardingprocesssopleaseaskagainnextweek": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „At the moment“ + vorübergehend, also Present Continuous: is testing.",
+    "en": "Right: “At the moment” + temporary, so present continuous: is testing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "tests"
+     ],
+     "pat": "psc.habit",
+     "de": "„tests“ nennt eine Gewohnheit. „At the moment“ meint die Lage jetzt.",
+     "en": "“tests” names a habit. “At the moment” means the situation now."
+    },
+    {
+     "if": [
+      "tested"
+     ],
+     "de": "„tested“ ist vergangen. „please ask again next week“ zeigt: Es läuft noch.",
+     "en": "“tested” is past. “please ask again next week” shows: it is still going on."
+    },
+    {
+     "if": [
+      "testing"
+     ],
+     "not": [
+      "is",
+      "are",
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort braucht es is: is testing.",
+     "en": "The -ing word needs is before it: is testing."
+    },
+    {
+     "not": [
+      "testing"
+     ],
+     "de": "Gesucht ist is + -ing: Es läuft gerade.",
+     "en": "Is + -ing is needed: it is in progress right now."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|whyareyouwhisperingbecausetheclientonthephoneinthenextroom": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es passiert genau jetzt (Frage „Why are you whispering?“), also is talking.",
+    "en": "Right: it is happening right now (the question “Why are you whispering?”), so is talking."
+   },
+   "wrong": [
+    {
+     "if": [
+      "talks"
+     ],
+     "pat": "psc.habit",
+     "de": "„talks“ nennt eine Gewohnheit. Er telefoniert aber gerade im Nebenraum.",
+     "en": "“talks” names a habit. But he is on the phone in the next room right now."
+    },
+    {
+     "if": [
+      "talked"
+     ],
+     "de": "„talked“ ist vergangen. Das Flüstern zeigt: Er telefoniert noch.",
+     "en": "“talked” is past. The whispering shows: he is still on the phone."
+    },
+    {
+     "if": [
+      "talking"
+     ],
+     "not": [
+      "is",
+      "are",
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort braucht es is: is talking.",
+     "en": "The -ing word needs is before it: is talking."
+    },
+    {
+     "not": [
+      "talking"
+     ],
+     "de": "Gesucht ist is + -ing: Er telefoniert gerade.",
+     "en": "Is + -ing is needed: he is on the phone right now."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|thissoftwarealotofmemorysoitrunsslowlyonoldlaptops": {
+  "pat": "psc.state",
+  "why": {
+   "ok": {
+    "de": "Richtig: need ist ein Zustandsverb, also Present Simple, 3. Person: needs.",
+    "en": "Right: need is a state verb, so present simple, third person: needs."
+   },
+   "wrong": [
+    {
+     "if": [
+      "needing"
+     ],
+     "de": "„is needing“ geht nicht: need ist ein Zustandsverb ohne -ing.",
+     "en": "“is needing” is not possible: need is a state verb without -ing."
+    },
+    {
+     "if": [
+      "need"
+     ],
+     "de": "„software“ ist Singular, deshalb braucht need ein -s: needs.",
+     "en": "“software” is singular, so need takes an -s: needs."
+    },
+    {
+     "if": [
+      "needed"
+     ],
+     "de": "„needed“ ist vergangen. „it runs slowly“ beschreibt die Lage jetzt.",
+     "en": "“needed” is past. “it runs slowly” describes the situation now."
+    },
+    {
+     "not": [
+      "needs"
+     ],
+     "de": "Gesucht ist die Present-Simple-Form von need: needs.",
+     "en": "The present simple form of need is needed: needs."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|hecoffeeheonlydrinkstea": {
+  "pat": "psc.state",
+  "why": {
+   "ok": {
+    "de": "Richtig: like ist ein Zustandsverb, also Present Simple. Verneint mit doesn't: doesn't like.",
+    "en": "Right: like is a state verb, so present simple. Negated with doesn't: doesn't like."
+   },
+   "wrong": [
+    {
+     "if": [
+      "liking"
+     ],
+     "de": "„liking“ geht nicht: like ist ein Zustandsverb ohne -ing.",
+     "en": "“liking” is not possible: like is a state verb without -ing."
+    },
+    {
+     "if": [
+      "do",
+      "like"
+     ],
+     "de": "„don't“ passt zu I/you/we. Bei „he“ heißt es doesn't.",
+     "en": "“don't” goes with I/you/we. With “he” it is doesn't."
+    },
+    {
+     "if": [
+      "not",
+      "like"
+     ],
+     "not": [
+      "does"
+     ],
+     "de": "Die Verneinung braucht do/does davor: he doesn't like.",
+     "en": "The negative needs do/does before it: he doesn't like."
+    },
+    {
+     "not": [
+      "like"
+     ],
+     "de": "Gesucht ist die Verneinung von like: doesn't like.",
+     "en": "The negative of like is needed: doesn't like."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|heinterruptspeopleineverymeetinganditannoysmeheinterruptingpeopleinmeetings": {
+  "pat": "psc.always",
+  "why": {
+   "ok": {
+    "de": "Richtig: is always + -ing zeigt Ärger über die ständige Wiederholung: He's always interrupting.",
+    "en": "Right: is always + -ing shows annoyance at constant repetition: He's always interrupting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "usually"
+     ],
+     "pat": "psc.habit",
+     "de": "„usually“ nennt nur die Häufigkeit. Den Ärger trägt always + -ing.",
+     "en": "“usually” only states the frequency. The annoyance comes from always + -ing."
+    },
+    {
+     "if": [
+      "always",
+      "is"
+     ],
+     "de": "Die Wortstellung: always steht nach is, also is always interrupting.",
+     "en": "Word order: always comes after is, so is always interrupting."
+    },
+    {
+     "if": [
+      "always"
+     ],
+     "not": [
+      "is"
+     ],
+     "de": "Vor always fehlt is: He is always interrupting.",
+     "en": "Is is missing before always: He is always interrupting."
+    },
+    {
+     "not": [
+      "always"
+     ],
+     "de": "Für Ärger braucht es always (oder constantly) vor dem -ing-Wort.",
+     "en": "For annoyance you need always (or constantly) before the -ing word."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|annanormallylivesinhamburgjustforthissummershehasanapartmentinmunichthissummeran": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „This summer“ + nur vorübergehend, also Present Continuous: is living.",
+    "en": "Right: “This summer” + only temporary, so present continuous: is living."
+   },
+   "wrong": [
+    {
+     "if": [
+      "lives"
+     ],
+     "pat": "psc.habit",
+     "de": "„lives“ wäre ihr fester Wohnort. Es gilt aber nur für diesen Sommer.",
+     "en": "“lives” would be her permanent home. But this applies only for this summer."
+    },
+    {
+     "if": [
+      "lived"
+     ],
+     "de": "„lived“ ist vergangen. Der Sommer läuft aber gerade.",
+     "en": "“lived” is past. But the summer is going on now."
+    },
+    {
+     "if": [
+      "living"
+     ],
+     "not": [
+      "is",
+      "are",
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort braucht es is: is living.",
+     "en": "The -ing word needs is before it: is living."
+    },
+    {
+     "not": [
+      "living",
+      "staying"
+     ],
+     "de": "Gesucht ist is + -ing: vorübergehend, nur für diesen Sommer.",
+     "en": "Is + -ing is needed: temporary, for this summer only."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|iamknowingtheclientverywellsoiwillleadthecall": {
+  "pat": "psc.state",
+  "dup": "pres-simple-cont|iamknowingtheanswer",
+  "why": {
+   "ok": {
+    "de": "Richtig: know ist ein Zustandsverb und hat nie -ing: I know the client.",
+    "en": "Right: know is a state verb and never takes -ing: I know the client."
+   },
+   "wrong": [
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "„knowing“ geht nicht: know ist ein Zustandsverb ohne -ing.",
+     "en": "“knowing” is not possible: know is a state verb without -ing."
+    },
+    {
+     "if": [
+      "knew"
+     ],
+     "de": "„knew“ ist vergangen. Gemeint ist: Ich kenne den Kunden jetzt gut.",
+     "en": "“knew” is past. The point is: I know the client well now."
+    },
+    {
+     "not": [
+      "know"
+     ],
+     "de": "Das Verb bleibt know, aber in der einfachen Form: I know the client.",
+     "en": "The verb stays know, but in the simple form: I know the client."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|ourceoisusuallyarrivingattheofficebefoream": {
+  "pat": "psc.habit",
+  "why": {
+   "ok": {
+    "de": "Richtig: „usually“ zeigt eine Gewohnheit, also Present Simple: usually arrives.",
+    "en": "Right: “usually” shows a habit, so present simple: usually arrives."
+   },
+   "wrong": [
+    {
+     "if": [
+      "arriving"
+     ],
+     "de": "„is arriving“ passt nicht zu „usually“. Eine Gewohnheit steht im Present Simple.",
+     "en": "“is arriving” does not fit “usually”. A habit takes the present simple."
+    },
+    {
+     "if": [
+      "arrive"
+     ],
+     "de": "Nach „CEO“ (he/she) braucht arrive ein -s: arrives.",
+     "en": "After “CEO” (he/she) arrive needs an -s: arrives."
+    },
+    {
+     "not": [
+      "arrives"
+     ],
+     "de": "Gesucht ist die Gewohnheitsform von arrive: usually arrives.",
+     "en": "The habit form of arrive is needed: usually arrives."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|iamknowingtheanswer": {
+  "pat": "psc.state",
+  "why": {
+   "ok": {
+    "de": "Richtig: know ist ein Zustandsverb, Zustände stehen nie in der -ing-Form: I know.",
+    "en": "Right: know is a state verb, states never take the -ing form: I know."
+   },
+   "wrong": [
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "„knowing“ geht nicht: know ist ein Zustandsverb ohne -ing.",
+     "en": "“knowing” is not possible: know is a state verb without -ing."
+    },
+    {
+     "not": [
+      "know"
+     ],
+     "de": "Das Verb bleibt know, aber in der einfachen Form: I know the answer.",
+     "en": "The verb stays know, but in the simple form: I know the answer."
+    }
+   ]
+  }
+ },
+ "pres-simple-cont|lookitsnows": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „Look!“ zeigt auf diesen Moment, also Continuous: It's snowing.",
+    "en": "Right: “Look!” points at this very moment, so continuous: It's snowing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "snows"
+     ],
+     "pat": "psc.habit",
+     "de": "„snows“ nennt eine Regel. „Look!“ zeigt aber auf das, was jetzt passiert.",
+     "en": "“snows” names a rule. But “Look!” points at what is happening now."
+    },
+    {
+     "if": [
+      "snowing"
+     ],
+     "not": [
+      "is",
+      "are",
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort braucht es is: It's snowing.",
+     "en": "The -ing word needs is before it: It's snowing."
+    },
+    {
+     "not": [
+      "snowing"
+     ],
+     "de": "Gesucht ist is + -ing: Es schneit gerade.",
+     "en": "Is + -ing is needed: it is snowing right now."
     }
    ]
   }

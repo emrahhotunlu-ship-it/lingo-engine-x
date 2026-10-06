@@ -1,0 +1,189 @@
+[
+ {
+  "pat": "fut.continuous",
+  "en": "This time next week, we'll be sitting in workshops in Berlin.",
+  "de": "Nächste Woche um diese Zeit sitzen wir in Workshops in Berlin.",
+  "chunks": [
+   "this time",
+   "next week",
+   "we'll be sitting",
+   "in workshops",
+   "in Berlin"
+  ],
+  "alt": [
+   "We'll be sitting in workshops in Berlin this time next week."
+  ],
+  "why": [
+   "Will be + -ing zeigt: Wir sind dann mittendrin. Die Zeitangabe steht vorn oder am Ende.",
+   "Will be + -ing shows that we will be in the middle of it then. The time phrase can come first or last."
+  ],
+  "bad": "This time next week, we sit in workshops in Berlin.",
+  "trap": {
+   "tile": "we'll be sitting",
+   "instead": "we sit",
+   "why": {
+    "de": "Das Deutsche nutzt das Präsens fürs Futur („wir sitzen“). Englisch braucht für „dann mittendrin“ will be + -ing.",
+    "en": "German can use the present for the future (“wir sitzen”). English needs will be + -ing for “in the middle of it then”."
+   }
+  }
+ },
+ {
+  "pat": "fut.continuous",
+  "en": "I'll be traveling all day Monday, so please email me.",
+  "de": "Ich bin am Montag den ganzen Tag unterwegs, schreib mir also bitte eine Mail.",
+  "chunks": [
+   "I'll be traveling",
+   "all day Monday",
+   "so",
+   "please",
+   "email me"
+  ],
+  "alt": [
+   "All day Monday I'll be traveling, so please email me."
+  ],
+  "why": [
+   "Be + -ing macht daraus eine laufende Situation: Ich bin dann unterwegs. Die Zeitangabe kann vorn oder hinten stehen.",
+   "Be + -ing turns this into a situation in progress: I will be on the road. The time phrase can come first or later."
+  ]
+ },
+ {
+  "pat": "fut.cont-plan",
+  "en": "Will you be attending the offsite in Denver next month?",
+  "de": "Nimmst du nächsten Monat am Offsite in Denver teil?",
+  "chunks": [
+   "will you",
+   "be attending",
+   "the offsite",
+   "in Denver",
+   "next month"
+  ],
+  "alt": [
+   "Will you be attending the offsite next month in Denver?",
+   "Next month, will you be attending the offsite in Denver?"
+  ],
+  "why": [
+   "Will you be + -ing fragt höflich nach dem Plan, ohne zu drängen. Die Wortfolge ist wie bei jeder Frage: will, you, dann das Verb.",
+   "Will you be + -ing asks politely about the plan, without pushing. The word order is that of any question: will, you, then the verb."
+  ]
+ },
+ {
+  "pat": "fut.cont-plan",
+  "en": "I'll be passing the post office anyway, so I can mail it.",
+  "de": "Ich komme sowieso am Postamt vorbei, ich kann es einwerfen.",
+  "chunks": [
+   "I'll be passing",
+   "the post office",
+   "anyway",
+   "so I can",
+   "mail it"
+  ],
+  "single": "Das anyway gehört direkt hinter den Ort, die Folge mit so I can steht zuletzt; sonst ändert sich die Aussage.",
+  "why": [
+   "Will be + -ing nennt den ohnehin geplanten Ablauf. Daraus folgt der Nutzen: so I can mail it.",
+   "Will be + -ing names the routine that happens anyway. The benefit follows from it: so I can mail it."
+  ]
+ },
+ {
+  "pat": "fut.perfect",
+  "en": "By Friday, we'll already have shipped all pending orders.",
+  "de": "Bis Freitag haben wir schon alle offenen Bestellungen verschickt.",
+  "chunks": [
+   "by Friday",
+   "we'll already have",
+   "shipped",
+   "all pending",
+   "orders"
+  ],
+  "alt": [
+   "We'll already have shipped all pending orders by Friday."
+  ],
+  "why": [
+   "Bis zu einem Zeitpunkt in der Zukunft schon fertig: will have + 3. Form. Already steht meist nach will oder nach have.",
+   "Already finished by a point in the future: will have + participle. Already usually sits after will or after have."
+  ],
+  "bad": "By Friday, we'll already shipped all pending orders.",
+  "trap": {
+   "tile": "we'll already have",
+   "instead": "we'll already",
+   "why": {
+    "de": "Kein Übersetzungsfehler, sondern ein Formfehler: will + 3. Form statt will have + 3. Form.",
+    "en": "Not a translation error but a form error: will + participle instead of will have + participle."
+   }
+  }
+ },
+ {
+  "pat": "fut.perfect",
+  "en": "By the time you land, I'll have sent the contract.",
+  "de": "Bis du landest, habe ich den Vertrag geschickt.",
+  "chunks": [
+   "by the time",
+   "you land",
+   "I'll have",
+   "sent",
+   "the contract"
+  ],
+  "alt": [
+   "I'll have sent the contract by the time you land."
+  ],
+  "why": [
+   "Nach by the time steht das Präsens (you land); das will have steckt nur im Hauptsatz. So zeigt der Satz: bis dahin erledigt.",
+   "After by the time use the present (you land); will have appears only in the main clause. So the sentence shows: done by then."
+  ],
+  "bad": "By the time you will land, I'll have sent the contract.",
+  "trap": {
+   "tile": "you land",
+   "instead": "you will land",
+   "why": {
+    "de": "Im Deutschen steht im Zeitsatz ebenfalls Präsens („bis du landest“), trotzdem rutscht will hinein. Nach by the time bleibt es bei land.",
+    "en": "German also uses the present in the time clause (“bis du landest”), yet will slips in. After by the time, keep land."
+   }
+  }
+ },
+ {
+  "pat": "fut.perf-cont",
+  "en": "By March, we'll have been selling in Spain for three years.",
+  "de": "Im März verkaufen wir seit drei Jahren in Spanien.",
+  "chunks": [
+   "by March",
+   "we'll have been",
+   "selling",
+   "in Spain",
+   "for three years"
+  ],
+  "alt": [
+   "We'll have been selling in Spain for three years by March."
+  ],
+  "why": [
+   "Die Dauer bis zu einem Zeitpunkt in der Zukunft: will have been + -ing, meist mit for. Die Zeitangabe steht vorn oder am Ende.",
+   "The duration up to a point in the future: will have been + -ing, usually with for. The time phrase comes first or last."
+  ],
+  "bad": "By March, we are selling in Spain for three years.",
+  "trap": {
+   "tile": "we'll have been",
+   "instead": "we are",
+   "why": {
+    "de": "Das Deutsche reicht mit dem Präsens („wir verkaufen seit drei Jahren“). Englisch braucht für die Dauer bis dahin will have been + -ing.",
+    "en": "German is happy with the present (“wir verkaufen seit drei Jahren”). English needs will have been + -ing for the duration up to then."
+   }
+  }
+ },
+ {
+  "pat": "fut.perf-cont",
+  "en": "In June, she'll have been working at the bank for ten years.",
+  "de": "Im Juni arbeitet sie seit zehn Jahren bei der Bank.",
+  "chunks": [
+   "in June",
+   "she'll have been",
+   "working",
+   "at the bank",
+   "for ten years"
+  ],
+  "alt": [
+   "She'll have been working at the bank for ten years in June."
+  ],
+  "why": [
+   "Will have been + -ing nennt, wie lange etwas bis zu einem Zeitpunkt schon läuft. For ten years gibt die Spanne an.",
+   "Will have been + -ing says how long something will have been going on by a point in time. For ten years gives the span."
+  ]
+ }
+]

@@ -1146,6 +1146,193 @@
    "bad": "With using the new search, you can find any invoice in seconds."
   },
   {
+   "pat": "hg.modal",
+   "en": "The migration might take a few days longer than planned.",
+   "de": "Die Migration könnte ein paar Tage länger dauern als geplant. (vorsichtig, als Prognose)",
+   "chunks": [
+    "the migration",
+    "might",
+    "take",
+    "a few days",
+    "longer",
+    "than planned"
+   ],
+   "single": "Nach might folgt direkt die Grundform take; a few days longer than planned bleibt als Block am Ende.",
+   "why": [
+    "Might + Grundform macht aus der Vorhersage eine Möglichkeit: might take, ohne to und ohne -s.",
+    "Might + base verb turns a prediction into a possibility: might take, with no to and no -s."
+   ],
+   "bad": "The migration will maybe take a few days longer than planned.",
+   "trap": {
+    "tile": "might",
+    "instead": "would",
+    "why": {
+     "de": "Der Konjunktiv-II-Reflex („würde dauern“) führt zu would take. Als bloße Möglichkeit ist might take natürlicher.",
+     "en": "The subjunctive reflex (“würde dauern”) leads to would take. As a plain possibility, might take is more natural."
+    }
+   },
+   "topic": "c1-hedging"
+  },
+  {
+   "pat": "hg.worth",
+   "en": "It might be worth involving legal before we commit.",
+   "de": "Es könnte sich lohnen, die Rechtsabteilung einzubinden, bevor wir uns festlegen. (vorsichtig, als Vorschlag)",
+   "chunks": [
+    "it",
+    "might be",
+    "worth",
+    "involving",
+    "legal",
+    "before we commit"
+   ],
+   "alt": [
+    "Before we commit, it might be worth involving legal."
+   ],
+   "why": [
+    "Nach worth steht die -ing-Form: worth involving. Das Deutsche „lohnt sich, … zu“ verführt zu worth to involve.",
+    "After worth comes the -ing form: worth involving. German “lohnt sich, … zu” tempts you into worth to involve."
+   ],
+   "bad": "It might be worth to involve legal before we commit.",
+   "trap": {
+    "tile": "involving",
+    "instead": "to involve",
+    "why": {
+     "de": "Im Deutschen folgt auf „es lohnt sich“ ein Infinitiv mit zu. Nach worth steht aber die -ing-Form.",
+     "en": "In German “es lohnt sich” is followed by an infinitive with zu. After worth, though, the -ing form is used."
+    }
+   },
+   "topic": "c1-hedging"
+  },
+  {
+   "pat": "hg.inclined",
+   "en": "We'd be inclined to pilot the tool in one region first.",
+   "de": "Wir würden das Tool zuerst in einer Region testen. (vorsichtig, als Absicht)",
+   "chunks": [
+    "we'd",
+    "be inclined",
+    "to pilot",
+    "the tool",
+    "in one region",
+    "first"
+   ],
+   "alt": [
+    "We'd be inclined to pilot the tool first in one region."
+   ],
+   "why": [
+    "Nach be inclined folgt to + Grundform: to pilot. Die -ing-Form gehört zu Wörtern wie worth.",
+    "After be inclined comes to + base verb: to pilot. The -ing form belongs to words such as worth."
+   ],
+   "bad": "We'd be inclined piloting the tool in one region first.",
+   "trap": {
+    "tile": "to pilot",
+    "instead": "piloting",
+    "why": {
+     "de": "Kein Übersetzungsfehler, sondern ein Reflex: Nach worth steht -ing, und das wird auf inclined übertragen. Hier folgt to + Grundform.",
+     "en": "Not a translation error but a reflex: worth takes -ing, and that gets carried over to inclined. Here to + base verb follows."
+    }
+   },
+   "topic": "c1-hedging"
+  },
+  {
+   "pat": "hg.seems",
+   "en": "It seems to me that the pricing needs another look.",
+   "de": "Mir scheint, dass der Preis noch einmal geprüft werden muss. (vorsichtig, als Eindruck)",
+   "chunks": [
+    "it seems",
+    "to me",
+    "that",
+    "the pricing",
+    "needs",
+    "another look"
+   ],
+   "why": [
+    "Die Person braucht nach seems ein to: seems to me. Danach folgt that mit dem ganzen Satz.",
+    "The person needs a to after seems: seems to me. Then that follows with the whole clause."
+   ],
+   "bad": "It seems me that the pricing needs another look.",
+   "trap": {
+    "tile": "to me",
+    "instead": "me",
+    "why": {
+     "de": "„Es scheint mir, dass“ hat im Deutschen nur ein Dativpronomen. Englisch braucht to: seems to me.",
+     "en": "German “es scheint mir, dass” uses a bare dative pronoun. English needs to: seems to me."
+    }
+   },
+   "alt": [
+    "To me, it seems that the pricing needs another look."
+   ],
+   "topic": "c1-hedging"
+  },
+  {
+   "pat": "hg.seems",
+   "en": "The numbers seem to have changed since last quarter.",
+   "de": "Die Zahlen scheinen sich seit dem letzten Quartal verändert zu haben. (vorsichtig, als Eindruck)",
+   "chunks": [
+    "the numbers",
+    "seem",
+    "to have",
+    "changed",
+    "since last quarter"
+   ],
+   "alt": [
+    "Since last quarter, the numbers seem to have changed."
+   ],
+   "why": [
+    "Für etwas, das schon passiert ist, folgt auf seem die Form to have + Partizip: seem to have changed.",
+    "For something that already happened, seem is followed by to have + participle: seem to have changed."
+   ],
+   "bad": "The numbers seem to changed since last quarter.",
+   "topic": "c1-hedging"
+  },
+  {
+   "pat": "hg.downtoner",
+   "en": "The revised timeline is slightly too tight for the team.",
+   "de": "Der überarbeitete Zeitplan ist für das Team etwas zu knapp. (vorsichtig, als Einschätzung)",
+   "chunks": [
+    "the revised timeline",
+    "is",
+    "slightly",
+    "too tight",
+    "for the team"
+   ],
+   "alt": [
+    "For the team, the revised timeline is slightly too tight."
+   ],
+   "why": [
+    "Slightly steht direkt vor too tight und mildert das Urteil: Es ist knapp, aber nur ein wenig.",
+    "Slightly goes right before too tight and softens the judgment: it is tight, but only a little."
+   ],
+   "bad": "The revised timeline is something too tight for the team.",
+   "trap": {
+    "tile": "slightly",
+    "instead": "something",
+    "why": {
+     "de": "Im Deutschen ist „etwas“ Pronomen und Abschwächer. Das Pronomen ist something, der Abschwächer slightly oder a bit.",
+     "en": "In German “etwas” is both pronoun and softener. The pronoun is something, the softener is slightly or a bit."
+    }
+   },
+   "topic": "c1-hedging"
+  },
+  {
+   "pat": "hg.downtoner",
+   "en": "I'm not quite convinced this approach scales.",
+   "de": "Ich bin nicht ganz überzeugt, dass dieser Ansatz skaliert. (vorsichtig, als Zweifel)",
+   "chunks": [
+    "I'm",
+    "not quite",
+    "convinced",
+    "this approach",
+    "scales"
+   ],
+   "single": "Not quite steht direkt vor dem Adjektiv convinced; quite not ist keine natürliche Reihenfolge.",
+   "why": [
+    "Not quite mildert aus „not convinced“ einen vorsichtigen Zweifel. Die Reihenfolge ist not quite, nicht quite not.",
+    "Not quite turns “not convinced” into a cautious doubt. The order is not quite, not quite not."
+   ],
+   "bad": "I'm quite not convinced this approach scales.",
+   "topic": "c1-hedging"
+  },
+  {
    "pat": "ca.unless",
    "en": "We'll ship on Monday unless the client objects.",
    "de": "Wir liefern am Montag, es sei denn, der Kunde widerspricht.",
@@ -1324,6 +1511,395 @@
    "topic": "cond-alt"
   },
   {
+   "pat": "ff.going-to",
+   "en": "We're going to move the launch to May.",
+   "de": "Wir verschieben den Launch auf Mai.",
+   "chunks": [
+    "we're",
+    "going to",
+    "move",
+    "the launch",
+    "to May"
+   ],
+   "single": "Nach going to folgen das Verb, das Objekt und das Ziel in genau dieser Reihenfolge: move the launch to May.",
+   "why": [
+    "Der Plan steht schon fest: am/is/are going to + Grundform. Nach going to steht move, nicht moving.",
+    "The plan is already fixed: am/is/are going to + base form. After going to comes move, not moving."
+   ],
+   "bad": "We're going to moving the launch to May.",
+   "trap": {
+    "tile": "move",
+    "instead": "moving",
+    "why": {
+     "de": "Kein reiner Übersetzungsfehler: to wird wie die Präposition in „going to the office“ gelesen, und dann folgt -ing. Nach going to steht die Grundform.",
+     "en": "Not a pure translation error: to is read like the preposition in “going to the office”, followed by -ing. After going to comes the base form."
+    }
+   },
+   "topic": "future-forms"
+  },
+  {
+   "pat": "ff.will-now",
+   "en": "Good point, I'll update the slides now.",
+   "de": "Guter Punkt, ich aktualisiere die Folien gleich.",
+   "chunks": [
+    "good point",
+    "I'll",
+    "update",
+    "the slides",
+    "now"
+   ],
+   "alt": [
+    "I'll update the slides now, good point.",
+    "Good point, now I'll update the slides."
+   ],
+   "why": [
+    "Der Entschluss fällt erst jetzt, als Reaktion auf den Hinweis: will + Grundform. Das Deutsche käme hier mit dem Präsens aus.",
+    "The decision is made only now, in reaction to the remark: will + base form. German would get by with the present here."
+   ],
+   "bad": "Good point, I update the slides now.",
+   "trap": {
+    "tile": "I'll",
+    "instead": "I",
+    "why": {
+     "de": "Deutsch nimmt für einen spontanen Entschluss das Präsens („ich aktualisiere sie gleich“). Englisch braucht dafür will.",
+     "en": "German uses the present for a spontaneous decision (“ich aktualisiere sie gleich”). English needs will for it."
+    }
+   },
+   "topic": "future-forms"
+  },
+  {
+   "pat": "ff.was-going-to",
+   "en": "I was going to send the report, but the file was corrupted.",
+   "de": "Ich wollte den Bericht schicken, aber die Datei war beschädigt.",
+   "chunks": [
+    "I was going to",
+    "send the report",
+    "but",
+    "the file",
+    "was corrupted"
+   ],
+   "single": "Erst steht der Plan (I was going to send the report), dann mit but der Grund, der ihn verhindert hat.",
+   "why": [
+    "was going to + Grundform sagt: Der Plan klappte nicht. Das but nennt den Grund, warum.",
+    "was going to + base form says: the plan fell through. The but-clause gives the reason why."
+   ],
+   "bad": "I am going to send the report, but the file was corrupted.",
+   "trap": {
+    "tile": "I was going to",
+    "instead": "I am going to",
+    "why": {
+     "de": "Kein Übersetzungsfehler: Man übernimmt going to im Präsens. Das Hilfsverb trägt aber die Zeit und muss was heißen.",
+     "en": "Not a translation error: going to is carried over in the present. But the auxiliary carries the tense and must be was."
+    }
+   },
+   "topic": "future-forms"
+  },
+  {
+   "pat": "ff.fixed-times",
+   "en": "We're meeting the auditors on Friday at nine.",
+   "de": "Wir treffen die Prüfer am Freitag um neun.",
+   "chunks": [
+    "we're",
+    "meeting",
+    "the auditors",
+    "on Friday",
+    "at nine"
+   ],
+   "alt": [
+    "On Friday at nine we're meeting the auditors.",
+    "We're meeting the auditors at nine on Friday.",
+    "On Friday we're meeting the auditors at nine."
+   ],
+   "why": [
+    "Eine Verabredung mit Zeit und Personen: am/is/are + -ing. Das Present Simple wäre ein Fahrplan.",
+    "An arrangement with a time and people: am/is/are + -ing. The Present Simple would be a timetable."
+   ],
+   "topic": "future-forms"
+  },
+  {
+   "pat": "ff.fixed-times",
+   "en": "The last train to Leipzig leaves at nine tonight.",
+   "de": "Der letzte Zug nach Leipzig fährt heute Abend um neun.",
+   "chunks": [
+    "the last train",
+    "to Leipzig",
+    "leaves",
+    "at nine",
+    "tonight"
+   ],
+   "alt": [
+    "The last train to Leipzig leaves tonight at nine.",
+    "Tonight the last train to Leipzig leaves at nine."
+   ],
+   "why": [
+    "Ein Fahrplan steht im Present Simple, auch für heute Abend: Das Subjekt train ist Singular, also leaves.",
+    "A timetable takes the Present Simple, even for tonight: the subject train is singular, so leaves."
+   ],
+   "bad": "The last train to Leipzig leave at nine tonight.",
+   "trap": {
+    "tile": "leaves",
+    "instead": "leave",
+    "why": {
+     "de": "Kein Übersetzungsfehler: Das -s der 3. Person Singular fällt unter Zeitdruck leicht weg. Bei train steht immer leaves.",
+     "en": "Not a translation error: the -s of the third person singular is easily dropped under time pressure. With train it is always leaves."
+    }
+   },
+   "topic": "future-forms"
+  },
+  {
+   "pat": "ff.about-to",
+   "en": "Please take your seats. The keynote is about to start.",
+   "de": "Bitte nehmen Sie Platz. Die Keynote beginnt gleich.",
+   "chunks": [
+    "please take",
+    "your seats",
+    "the keynote",
+    "is about to",
+    "start"
+   ],
+   "alt": [
+    "The keynote is about to start. Please take your seats."
+   ],
+   "why": [
+    "about to + Grundform: Es passiert in Sekunden oder Minuten. Nach about to steht start, nicht starting.",
+    "about to + base form: it happens within seconds or minutes. After about to comes start, not starting."
+   ],
+   "bad": "Please take your seats. The keynote is about starting.",
+   "trap": {
+    "tile": "start",
+    "instead": "starting",
+    "why": {
+     "de": "Kein Übersetzungsfehler: Nach Präpositionen steht oft -ing („talking about starting“). about to ist aber ein fester Ausdruck mit Grundform.",
+     "en": "Not a translation error: -ing often follows prepositions (“talking about starting”). But about to is a fixed phrase with the base form."
+    }
+   },
+   "topic": "future-forms"
+  },
+  {
+   "pat": "ff.no-will-after",
+   "en": "I'll email you before I leave the office.",
+   "de": "Ich maile dir, bevor ich das Büro verlasse.",
+   "chunks": [
+    "I'll email you",
+    "before",
+    "I",
+    "leave",
+    "the office"
+   ],
+   "alt": [
+    "Before I leave the office, I'll email you."
+   ],
+   "why": [
+    "Im Zeitsatz steht das Present: before I leave. Das Futur trägt schon „I'll email you“ im Hauptsatz.",
+    "The time clause takes the present: before I leave. The future is already in “I'll email you” in the main clause."
+   ],
+   "bad": "I'll email you before I will leave the office.",
+   "trap": {
+    "tile": "leave",
+    "instead": "will leave",
+    "why": {
+     "de": "Kein Übersetzungsfehler: Deutsch nimmt hier auch das Präsens („bevor ich verlasse“). Schuld ist der Reflex „Zukunft = will“ im Nebensatz.",
+     "en": "Not a translation error: German also uses the present here (“bevor ich verlasse”). The culprit is the reflex “future = will” in the subordinate clause."
+    }
+   },
+   "topic": "future-forms"
+  },
+  {
+   "pat": "fut.continuous",
+   "en": "This time next week, we'll be sitting in workshops in Berlin.",
+   "de": "Nächste Woche um diese Zeit sitzen wir in Workshops in Berlin.",
+   "chunks": [
+    "this time",
+    "next week",
+    "we'll be sitting",
+    "in workshops",
+    "in Berlin"
+   ],
+   "alt": [
+    "We'll be sitting in workshops in Berlin this time next week."
+   ],
+   "why": [
+    "Will be + -ing zeigt: Wir sind dann mittendrin. Die Zeitangabe steht vorn oder am Ende.",
+    "Will be + -ing shows that we will be in the middle of it then. The time phrase can come first or last."
+   ],
+   "bad": "This time next week, we sit in workshops in Berlin.",
+   "trap": {
+    "tile": "we'll be sitting",
+    "instead": "we sit",
+    "why": {
+     "de": "Das Deutsche nutzt das Präsens fürs Futur („wir sitzen“). Englisch braucht für „dann mittendrin“ will be + -ing.",
+     "en": "German can use the present for the future (“wir sitzen”). English needs will be + -ing for “in the middle of it then”."
+    }
+   },
+   "topic": "future-perf-cont"
+  },
+  {
+   "pat": "fut.continuous",
+   "en": "I'll be traveling all day Monday, so please email me.",
+   "de": "Ich bin am Montag den ganzen Tag unterwegs, schreib mir also bitte eine Mail.",
+   "chunks": [
+    "I'll be traveling",
+    "all day Monday",
+    "so",
+    "please",
+    "email me"
+   ],
+   "alt": [
+    "All day Monday I'll be traveling, so please email me."
+   ],
+   "why": [
+    "Be + -ing macht daraus eine laufende Situation: Ich bin dann unterwegs. Die Zeitangabe kann vorn oder hinten stehen.",
+    "Be + -ing turns this into a situation in progress: I will be on the road. The time phrase can come first or later."
+   ],
+   "topic": "future-perf-cont"
+  },
+  {
+   "pat": "fut.cont-plan",
+   "en": "Will you be attending the offsite in Denver next month?",
+   "de": "Nimmst du nächsten Monat am Offsite in Denver teil?",
+   "chunks": [
+    "will you",
+    "be attending",
+    "the offsite",
+    "in Denver",
+    "next month"
+   ],
+   "alt": [
+    "Will you be attending the offsite next month in Denver?",
+    "Next month, will you be attending the offsite in Denver?"
+   ],
+   "why": [
+    "Will you be + -ing fragt höflich nach dem Plan, ohne zu drängen. Die Wortfolge ist wie bei jeder Frage: will, you, dann das Verb.",
+    "Will you be + -ing asks politely about the plan, without pushing. The word order is that of any question: will, you, then the verb."
+   ],
+   "topic": "future-perf-cont"
+  },
+  {
+   "pat": "fut.cont-plan",
+   "en": "I'll be passing the post office anyway, so I can mail it.",
+   "de": "Ich komme sowieso am Postamt vorbei, ich kann es einwerfen.",
+   "chunks": [
+    "I'll be passing",
+    "the post office",
+    "anyway",
+    "so I can",
+    "mail it"
+   ],
+   "single": "Das anyway gehört direkt hinter den Ort, die Folge mit so I can steht zuletzt; sonst ändert sich die Aussage.",
+   "why": [
+    "Will be + -ing nennt den ohnehin geplanten Ablauf. Daraus folgt der Nutzen: so I can mail it.",
+    "Will be + -ing names the routine that happens anyway. The benefit follows from it: so I can mail it."
+   ],
+   "topic": "future-perf-cont"
+  },
+  {
+   "pat": "fut.perfect",
+   "en": "By Friday, we'll already have shipped all pending orders.",
+   "de": "Bis Freitag haben wir schon alle offenen Bestellungen verschickt.",
+   "chunks": [
+    "by Friday",
+    "we'll already have",
+    "shipped",
+    "all pending",
+    "orders"
+   ],
+   "alt": [
+    "We'll already have shipped all pending orders by Friday."
+   ],
+   "why": [
+    "Bis zu einem Zeitpunkt in der Zukunft schon fertig: will have + 3. Form. Already steht meist nach will oder nach have.",
+    "Already finished by a point in the future: will have + participle. Already usually sits after will or after have."
+   ],
+   "bad": "By Friday, we'll already shipped all pending orders.",
+   "trap": {
+    "tile": "we'll already have",
+    "instead": "we'll already",
+    "why": {
+     "de": "Kein Übersetzungsfehler, sondern ein Formfehler: will + 3. Form statt will have + 3. Form.",
+     "en": "Not a translation error but a form error: will + participle instead of will have + participle."
+    }
+   },
+   "topic": "future-perf-cont"
+  },
+  {
+   "pat": "fut.perfect",
+   "en": "By the time you land, I'll have sent the contract.",
+   "de": "Bis du landest, habe ich den Vertrag geschickt.",
+   "chunks": [
+    "by the time",
+    "you land",
+    "I'll have",
+    "sent",
+    "the contract"
+   ],
+   "alt": [
+    "I'll have sent the contract by the time you land."
+   ],
+   "why": [
+    "Nach by the time steht das Präsens (you land); das will have steckt nur im Hauptsatz. So zeigt der Satz: bis dahin erledigt.",
+    "After by the time use the present (you land); will have appears only in the main clause. So the sentence shows: done by then."
+   ],
+   "bad": "By the time you will land, I'll have sent the contract.",
+   "trap": {
+    "tile": "you land",
+    "instead": "you will land",
+    "why": {
+     "de": "Im Deutschen steht im Zeitsatz ebenfalls Präsens („bis du landest“), trotzdem rutscht will hinein. Nach by the time bleibt es bei land.",
+     "en": "German also uses the present in the time clause (“bis du landest”), yet will slips in. After by the time, keep land."
+    }
+   },
+   "topic": "future-perf-cont"
+  },
+  {
+   "pat": "fut.perf-cont",
+   "en": "By March, we'll have been selling in Spain for three years.",
+   "de": "Im März verkaufen wir seit drei Jahren in Spanien.",
+   "chunks": [
+    "by March",
+    "we'll have been",
+    "selling",
+    "in Spain",
+    "for three years"
+   ],
+   "alt": [
+    "We'll have been selling in Spain for three years by March."
+   ],
+   "why": [
+    "Die Dauer bis zu einem Zeitpunkt in der Zukunft: will have been + -ing, meist mit for. Die Zeitangabe steht vorn oder am Ende.",
+    "The duration up to a point in the future: will have been + -ing, usually with for. The time phrase comes first or last."
+   ],
+   "bad": "By March, we are selling in Spain for three years.",
+   "trap": {
+    "tile": "we'll have been",
+    "instead": "we are",
+    "why": {
+     "de": "Das Deutsche reicht mit dem Präsens („wir verkaufen seit drei Jahren“). Englisch braucht für die Dauer bis dahin will have been + -ing.",
+     "en": "German is happy with the present (“wir verkaufen seit drei Jahren”). English needs will have been + -ing for the duration up to then."
+    }
+   },
+   "topic": "future-perf-cont"
+  },
+  {
+   "pat": "fut.perf-cont",
+   "en": "In June, she'll have been working at the bank for ten years.",
+   "de": "Im Juni arbeitet sie seit zehn Jahren bei der Bank.",
+   "chunks": [
+    "in June",
+    "she'll have been",
+    "working",
+    "at the bank",
+    "for ten years"
+   ],
+   "alt": [
+    "She'll have been working at the bank for ten years in June."
+   ],
+   "why": [
+    "Will have been + -ing nennt, wie lange etwas bis zu einem Zeitpunkt schon läuft. For ten years gibt die Spanne an.",
+    "Will have been + -ing says how long something will have been going on by a point in time. For ten years gives the span."
+   ],
+   "topic": "future-perf-cont"
+  },
+  {
    "en": "If we had hired a QA lead earlier, we would have fewer bugs now.",
    "de": "Hätten wir früher einen QA-Leiter eingestellt, hätten wir jetzt weniger Fehler.",
    "chunks": [
@@ -1486,6 +2062,177 @@
    "topic": "mixed-cond"
   },
   {
+   "pat": "pp.earlier",
+   "en": "By the time I logged in, the sale had already ended.",
+   "de": "Als ich mich einloggte, ist der Sale schon zu Ende gewesen.",
+   "chunks": [
+    "by the time",
+    "I logged in",
+    "the sale",
+    "had already",
+    "ended"
+   ],
+   "alt": [
+    "The sale had already ended by the time I logged in."
+   ],
+   "why": [
+    "Das frühere Ereignis (der Sale endet) steht im Past Perfect: had already ended. Das spätere (I logged in) bleibt im Past Simple.",
+    "The earlier event (the sale ending) goes in the Past Perfect: had already ended. The later one (I logged in) stays in the Past Simple."
+   ],
+   "bad": "By the time I logged in, the sale already ended.",
+   "trap": {
+    "tile": "had already",
+    "instead": "already",
+    "why": {
+     "de": "Deutsch markiert das Frühere oft nur mit „schon“ („ist schon zu Ende gewesen“). Englisch verlangt had + Partizip.",
+     "en": "German often marks the earlier event only with “schon” (“war schon vorbei”). English needs had + participle."
+    }
+   },
+   "topic": "past-perfect"
+  },
+  {
+   "pat": "pp.duration",
+   "en": "When the update finally arrived, we had been waiting for weeks.",
+   "de": "Als das Update endlich kam, hatten wir schon wochenlang gewartet.",
+   "chunks": [
+    "when",
+    "the update",
+    "finally arrived",
+    "we",
+    "had been waiting",
+    "for weeks"
+   ],
+   "alt": [
+    "We had been waiting for weeks when the update finally arrived."
+   ],
+   "why": [
+    "Die Wartezeit dauerte bis zu einem Zeitpunkt in der Vergangenheit: had been waiting. Die Dauer „for weeks“ passt dazu.",
+    "The waiting lasted up to a past moment: had been waiting. The duration “for weeks” fits it."
+   ],
+   "bad": "When the update finally arrived, we were waiting for weeks.",
+   "trap": {
+    "tile": "had been waiting",
+    "instead": "were waiting",
+    "why": {
+     "de": "Deutsch bleibt im Präteritum („wir warteten wochenlang“). Englisch braucht für die Dauer davor had been + -ing.",
+     "en": "German stays in the simple past (“wir warteten wochenlang”). English needs had been + -ing for the duration before."
+    }
+   },
+   "topic": "past-perfect"
+  },
+  {
+   "pat": "pp.first-time",
+   "en": "It was the first time the client had visited our headquarters.",
+   "de": "Es war das erste Mal, dass der Kunde unsere Zentrale besucht hat.",
+   "chunks": [
+    "it was",
+    "the first time",
+    "the client",
+    "had visited",
+    "our headquarters"
+   ],
+   "single": "It was the first time ist ein fester Rahmen; danach folgen Subjekt, had + Partizip und das Objekt in genau dieser Reihenfolge.",
+   "why": [
+    "Nach „It was the first time“ steht had + Partizip, weil die Erfahrung vor dem Zeitpunkt in der Vergangenheit liegt.",
+    "After “It was the first time” comes had + participle, because the experience lies before the past moment."
+   ],
+   "bad": "It was the first time the client has visited our headquarters.",
+   "trap": {
+    "tile": "had visited",
+    "instead": "has visited",
+    "why": {
+     "de": "Deutsch sagt oft „besucht hat“ (Perfekt); daraus wird leicht has visited. Nach „was“ muss die Erfahrung aber eine Stufe zurück: had visited.",
+     "en": "German often says “besucht hat” (perfect), which easily turns into has visited. After “was” the experience has to go one step back: had visited."
+    }
+   },
+   "topic": "past-perfect"
+  },
+  {
+   "pat": "pp.reported",
+   "en": "Our lawyer said the terms had changed since the last draft.",
+   "de": "Unser Anwalt sagte, die Bedingungen hätten sich seit dem letzten Entwurf geändert.",
+   "chunks": [
+    "our lawyer",
+    "said",
+    "the terms",
+    "had changed",
+    "since",
+    "the last draft"
+   ],
+   "why": [
+    "Nach „said“ in der Vergangenheit rutscht das Berichtete zurück: Aus „have changed“ wird had changed.",
+    "After “said” in the past the reported part moves back: “have changed” becomes had changed."
+   ],
+   "bad": "Our lawyer said the terms have changed since the last draft.",
+   "trap": {
+    "tile": "had changed",
+    "instead": "have changed",
+    "why": {
+     "de": "Deutsch lässt die Zeit der Aussage stehen („haben sich geändert“). Englisch rutscht nach said eine Stufe zurück: had changed.",
+     "en": "German keeps the tense of the original statement (“haben sich geändert”). English moves one step back after said: had changed."
+    }
+   },
+   "alt": [
+    "The terms had changed since the last draft, our lawyer said."
+   ],
+   "topic": "past-perfect"
+  },
+  {
+   "pat": "pp.inversion",
+   "en": "No sooner had we shipped the update than the bugs appeared.",
+   "de": "Kaum hatten wir das Update ausgeliefert, tauchten die Fehler auf.",
+   "chunks": [
+    "no sooner",
+    "had we",
+    "shipped",
+    "the update",
+    "than",
+    "the bugs appeared"
+   ],
+   "single": "No sooner verlangt had vor dem Subjekt, und than leitet den zweiten Teil ein; die Reihenfolge ist fest.",
+   "why": [
+    "Nach „No sooner“ steht had vor dem Subjekt, dann das Partizip; than verbindet mit dem zweiten Ereignis.",
+    "After “No sooner”, had goes before the subject, then the participle; than links to the second event."
+   ],
+   "bad": "No sooner we had shipped the update than the bugs appeared.",
+   "trap": {
+    "tile": "had we",
+    "instead": "we had",
+    "why": {
+     "de": "Deutsch dreht nach „kaum“ ganz normal um. Im Englischen ist Subjekt + Verb der Normalfall, die Umstellung fehlt leicht.",
+     "en": "German inverts after “kaum” as a matter of course. In English subject + verb is the default, so the inversion gets dropped."
+    }
+   },
+   "topic": "past-perfect"
+  },
+  {
+   "pat": "pp.reported",
+   "en": "Our manager told us the new tool would go live the following week.",
+   "de": "Unser Chef sagte uns, das neue Tool gehe in der Woche darauf live.",
+   "chunks": [
+    "our manager",
+    "told us",
+    "the new tool",
+    "would go live",
+    "the following week"
+   ],
+   "single": "Nach told us folgt das Berichtete: Subjekt, would go live und zuletzt der Zeitzusatz the following week.",
+   "why": [
+    "Nach „told“ rutscht will eine Stufe zurück zu would. „The following week“ zeigt: aus damaliger Sicht liegt es in der Zukunft.",
+    "After “told”, will moves one step back to would. “The following week” shows it lay in the future from back then."
+   ],
+   "bad": "Our manager told us the new tool will go live the following week.",
+   "trap": {
+    "tile": "would go live",
+    "instead": "will go live",
+    "why": {
+     "de": "Deutsch lässt in der indirekten Rede das Präsens stehen („das Tool geht live“). Englisch rutscht nach told zurück: would.",
+     "en": "German keeps the present in reported speech (“das Tool geht live”). English moves back after told: would."
+    }
+   },
+   "topic": "past-perfect"
+  },
+  {
    "pat": "psp.finished-time",
    "en": "We signed the contract two weeks ago.",
    "de": "Wir haben den Vertrag vor zwei Wochen unterschrieben.",
@@ -1643,6 +2390,391 @@
     }
    },
    "topic": "past-simple-perfect"
+  },
+  {
+   "pat": "pc.duration",
+   "en": "We have been testing the new tool since March.",
+   "de": "Wir testen das neue Tool seit März.",
+   "chunks": [
+    "we",
+    "have been",
+    "testing",
+    "the new tool",
+    "since March"
+   ],
+   "alt": [
+    "Since March, we have been testing the new tool."
+   ],
+   "why": [
+    "Mit since läuft die Tätigkeit noch: have been testing. Das deutsche Präsens „testen wir“ wäre im Englischen falsch.",
+    "With since the activity is still going on: have been testing. The German present “testen wir” would be wrong in English."
+   ],
+   "bad": "We are testing the new tool since March.",
+   "trap": {
+    "tile": "have been",
+    "instead": "are",
+    "why": {
+     "de": "Das deutsche Präsens „testen wir seit März“ verführt zu are testing. Mit since braucht Englisch have been testing.",
+     "en": "The German present “testen wir seit März” tempts you into are testing. With since English needs have been testing."
+    }
+   },
+   "topic": "pres-perf-cont"
+  },
+  {
+   "pat": "pc.duration",
+   "en": "How long have you been working here?",
+   "de": "Wie lange arbeitest du schon hier?",
+   "chunks": [
+    "how long",
+    "have you",
+    "been",
+    "working",
+    "here"
+   ],
+   "single": "Nach how long folgt die Frageform have you been working, nicht you have been.",
+   "why": [
+    "In der Frage steht have vor dem Subjekt: How long have you been working. Das Deutsche nutzt dafür das Präsens.",
+    "In the question have comes before the subject: How long have you been working. German uses the present for this."
+   ],
+   "bad": "How long are you working here?",
+   "trap": {
+    "tile": "have you",
+    "instead": "do you",
+    "why": {
+     "de": "Wie das deutsche „arbeitest du“ führt do you zum Present Simple. Bei „how long“ bis jetzt steht have you been.",
+     "en": "Like German “arbeitest du”, do you leads to the Present Simple. With “how long” up to now use have you been."
+    }
+   },
+   "topic": "pres-perf-cont"
+  },
+  {
+   "pat": "pc.since-for",
+   "en": "I have been waiting for twenty minutes.",
+   "de": "Ich warte seit zwanzig Minuten.",
+   "chunks": [
+    "I",
+    "have been",
+    "waiting",
+    "for",
+    "twenty minutes"
+   ],
+   "alt": [
+    "For twenty minutes, I have been waiting."
+   ],
+   "why": [
+    "twenty minutes ist eine Zeitspanne, also for. since bräuchte einen Zeitpunkt wie since nine.",
+    "twenty minutes is a length of time, so for. since would need a point in time like since nine."
+   ],
+   "bad": "I have been waiting since twenty minutes.",
+   "trap": {
+    "tile": "for",
+    "instead": "since",
+    "why": {
+     "de": "Deutsch „seit“ passt für beides, deshalb liegt since nahe. Eine Zeitspanne verlangt aber for.",
+     "en": "German “seit” covers both, so since feels natural. A length of time needs for, though."
+    }
+   },
+   "topic": "pres-perf-cont"
+  },
+  {
+   "pat": "pc.form",
+   "en": "She has been leading the project since May.",
+   "de": "Sie leitet das Projekt seit Mai.",
+   "chunks": [
+    "she",
+    "has been",
+    "leading",
+    "the project",
+    "since May"
+   ],
+   "alt": [
+    "Since May, she has been leading the project."
+   ],
+   "why": [
+    "Die Form hat drei Teile: has, been und -ing. Nach been steht leading, nicht led.",
+    "The form has three parts: has, been and -ing. After been comes leading, not led."
+   ],
+   "bad": "She is leading the project since May.",
+   "topic": "pres-perf-cont"
+  },
+  {
+   "pat": "pc.recent",
+   "en": "We haven't been getting many leads lately.",
+   "de": "Wir bekommen in letzter Zeit nicht viele Leads.",
+   "chunks": [
+    "we",
+    "haven't been",
+    "getting",
+    "many leads",
+    "lately"
+   ],
+   "alt": [
+    "Lately, we haven't been getting many leads."
+   ],
+   "why": [
+    "lately blickt auf die Zeit bis jetzt: haven't been getting. Das deutsche Präsens „bekommen wir“ passt nicht.",
+    "lately looks at the time up to now: haven't been getting. The German present “bekommen wir” does not fit."
+   ],
+   "bad": "We don't get many leads lately.",
+   "trap": {
+    "tile": "haven't been",
+    "instead": "don't",
+    "why": {
+     "de": "Deutsch sagt „in letzter Zeit bekommen wir“ im Präsens, daraus wird don't get. lately braucht have been.",
+     "en": "German says “in letzter Zeit bekommen wir” in the present, which becomes don't get. lately needs have been."
+    }
+   },
+   "topic": "pres-perf-cont"
+  },
+  {
+   "pat": "pc.state-verbs",
+   "en": "I have known our CFO for ten years.",
+   "de": "Ich kenne unseren Finanzchef seit zehn Jahren.",
+   "chunks": [
+    "I",
+    "have known",
+    "our CFO",
+    "for",
+    "ten years"
+   ],
+   "alt": [
+    "For ten years, I have known our CFO."
+   ],
+   "why": [
+    "know ist ein Zustandsverb und steht ohne -ing: have known. Die Dauer „for ten years“ gilt trotzdem.",
+    "know is a state verb and takes no -ing: have known. The duration “for ten years” still applies."
+   ],
+   "bad": "I have been knowing our CFO for ten years.",
+   "trap": {
+    "tile": "have known",
+    "instead": "have been knowing",
+    "why": {
+     "de": "Der Reflex „Dauer = -ing“ erzeugt have been knowing. Zustandsverben wie know bleiben einfach.",
+     "en": "The reflex “duration = -ing” produces have been knowing. State verbs like know stay simple."
+    }
+   },
+   "topic": "pres-perf-cont"
+  },
+  {
+   "pat": "pc.cont-simple",
+   "en": "I have written three reports since Monday.",
+   "de": "Ich habe seit Montag drei Berichte geschrieben.",
+   "chunks": [
+    "I",
+    "have",
+    "written",
+    "three reports",
+    "since Monday"
+   ],
+   "alt": [
+    "Since Monday, I have written three reports."
+   ],
+   "why": [
+    "Eine Zahl (three reports) zählt das Ergebnis: einfaches Present Perfect, have written, nicht been writing.",
+    "A number (three reports) counts the result: simple Present Perfect, have written, not been writing."
+   ],
+   "bad": "I have been writing three reports since Monday.",
+   "trap": {
+    "tile": "written",
+    "instead": "been writing",
+    "why": {
+     "de": "Der Reflex „Dauer = -ing“ greift auch bei einer Zahl. Bei einer Anzahl steht aber das Partizip.",
+     "en": "The reflex “duration = -ing” also kicks in with a number. With a count the participle is used."
+    }
+   },
+   "topic": "pres-perf-cont"
+  },
+  {
+   "pat": "psc.habit",
+   "en": "The shuttle to the airport leaves every hour on weekdays.",
+   "de": "Der Shuttle zum Flughafen fährt werktags jede Stunde.",
+   "chunks": [
+    "the shuttle",
+    "to the airport",
+    "leaves",
+    "every hour",
+    "on weekdays"
+   ],
+   "alt": [
+    "On weekdays, the shuttle to the airport leaves every hour.",
+    "The shuttle to the airport leaves on weekdays every hour."
+   ],
+   "why": [
+    "Ein Fahrplan ist eine feste Regel und steht im Present Simple: leaves. „Every hour“ sagt, wie oft.",
+    "A timetable is a fixed rule and takes the present simple: leaves. “Every hour” says how often."
+   ],
+   "bad": "The shuttle to the airport is leaving every hour on weekdays.",
+   "trap": {
+    "tile": "leaves",
+    "instead": "is leaving",
+    "why": {
+     "de": "Das deutsche „fährt“ deckt Fahrplan und laufende Fahrt ab. Das verführt zu is leaving. Ein Fahrplan ist aber eine Regel: leaves.",
+     "en": "The German “fährt” covers both timetable and a trip in progress. That tempts you into is leaving. A timetable is a rule: leaves."
+    }
+   },
+   "topic": "pres-simple-cont"
+  },
+  {
+   "pat": "psc.habit",
+   "en": "Our CEO usually answers emails before seven in the morning.",
+   "de": "Unser Chef beantwortet normalerweise vor sieben Uhr morgens seine E-Mails.",
+   "chunks": [
+    "our CEO",
+    "usually",
+    "answers",
+    "emails",
+    "before seven",
+    "in the morning"
+   ],
+   "alt": [
+    "Usually, our CEO answers emails before seven in the morning."
+   ],
+   "why": [
+    "Usually zeigt eine Gewohnheit, also Present Simple. Das -s an answers steht, weil „our CEO“ für he/she steht.",
+    "Usually shows a habit, so present simple. The -s on answers is there because “our CEO” stands for he/she."
+   ],
+   "bad": "Our CEO is usually answering emails before seven in the morning.",
+   "topic": "pres-simple-cont"
+  },
+  {
+   "pat": "psc.now",
+   "en": "I can't talk because I'm driving to the airport right now.",
+   "de": "Ich kann nicht sprechen, weil ich gerade zum Flughafen fahre.",
+   "chunks": [
+    "I can't talk",
+    "because",
+    "I'm driving",
+    "to the airport",
+    "right now"
+   ],
+   "alt": [
+    "Right now, I can't talk because I'm driving to the airport.",
+    "Because I'm driving to the airport right now, I can't talk.",
+    "I can't talk right now because I'm driving to the airport.",
+    "Because I'm driving to the airport, I can't talk right now."
+   ],
+   "why": [
+    "Right now zeigt, dass die Handlung gerade läuft. Dann braucht das Verb die Verlaufsform: I'm driving.",
+    "Right now shows the action is in progress. Then the verb needs the continuous form: I'm driving."
+   ],
+   "bad": "I can't talk because I drive to the airport right now.",
+   "trap": {
+    "tile": "I'm driving",
+    "instead": "I drive",
+    "why": {
+     "de": "Deutsch sagt „ich fahre gerade“ im Präsens, das Wort „gerade“ trägt das Jetzt. Im Englischen muss das Verb es zeigen: I'm driving.",
+     "en": "German says “ich fahre gerade” in the present; the word “gerade” carries the now. In English the verb must show it: I'm driving."
+    }
+   },
+   "topic": "pres-simple-cont"
+  },
+  {
+   "pat": "psc.state",
+   "en": "I don't know which supplier the client prefers for this project.",
+   "de": "Ich weiß nicht, welchen Lieferanten der Kunde für dieses Projekt bevorzugt.",
+   "chunks": [
+    "I don't know",
+    "which supplier",
+    "the client",
+    "prefers",
+    "for this project"
+   ],
+   "why": [
+    "Know und prefer sind Zustandsverben. Sie stehen im Present Simple, auch wenn es um jetzt geht: prefers, nicht is preferring.",
+    "Know and prefer are state verbs. They take the present simple, even when the time is now: prefers, not is preferring."
+   ],
+   "bad": "I don't know which supplier the client is preferring for this project.",
+   "trap": {
+    "tile": "prefers",
+    "instead": "is preferring",
+    "why": {
+     "de": "Das ist kein Übersetzungsfehler, sondern der Reflex „jetzt = -ing“. Prefer ist ein Zustandsverb und bleibt im Present Simple.",
+     "en": "This is not a translation error but the reflex “now = -ing”. Prefer is a state verb and stays in the present simple."
+    }
+   },
+   "alt": [
+    "For this project, I don't know which supplier the client prefers."
+   ],
+   "topic": "pres-simple-cont"
+  },
+  {
+   "pat": "psc.state",
+   "en": "Our legal team needs a written confirmation before we sign.",
+   "de": "Unsere Rechtsabteilung braucht eine schriftliche Bestätigung, bevor wir unterschreiben.",
+   "chunks": [
+    "our legal team",
+    "needs",
+    "a written confirmation",
+    "before",
+    "we sign"
+   ],
+   "alt": [
+    "Before we sign, our legal team needs a written confirmation."
+   ],
+   "why": [
+    "Need ist ein Zustandsverb und bekommt kein -ing. Nach „before“ steht das Präsens: we sign, kein will.",
+    "Need is a state verb and takes no -ing. After “before” the present follows: we sign, not will."
+   ],
+   "bad": "Our legal team is needing a written confirmation before we sign.",
+   "topic": "pres-simple-cont"
+  },
+  {
+   "pat": "psc.dual",
+   "en": "Our team is having a call with the vendor at the moment.",
+   "de": "Unser Team hat gerade ein Telefonat mit dem Lieferanten.",
+   "chunks": [
+    "our team",
+    "is having",
+    "a call",
+    "with the vendor",
+    "at the moment"
+   ],
+   "alt": [
+    "At the moment, our team is having a call with the vendor."
+   ],
+   "why": [
+    "Have ist hier eine Handlung (ein Gespräch führen), die gerade läuft. Deshalb steht is having. Für Besitz hieße es has.",
+    "Have is an action here (holding a conversation) that is in progress. So is having is used. For possession it would be has."
+   ],
+   "bad": "Our team has a call with the vendor at the moment.",
+   "trap": {
+    "tile": "is having",
+    "instead": "has",
+    "why": {
+     "de": "Deutsch nutzt „haben“ für Besitz und Tun: „hat ein Telefonat“. Im Englischen ist „a call“ eine Handlung und braucht -ing, wenn sie läuft.",
+     "en": "German uses “haben” for both possession and doing: “hat ein Telefonat”. In English “a call” is an action and needs -ing while it is going on."
+    }
+   },
+   "topic": "pres-simple-cont"
+  },
+  {
+   "pat": "psc.always",
+   "en": "My manager is always changing the agenda at the last minute.",
+   "de": "Mein Chef ändert ständig in letzter Minute die Tagesordnung.",
+   "chunks": [
+    "my manager",
+    "is always",
+    "changing",
+    "the agenda",
+    "at the last minute"
+   ],
+   "alt": [
+    "At the last minute, my manager is always changing the agenda."
+   ],
+   "why": [
+    "Is always + -ing zeigt Ärger über die ständige Wiederholung. Always steht zwischen is und dem -ing-Wort.",
+    "Is always + -ing shows annoyance at constant repetition. Always goes between is and the -ing word."
+   ],
+   "bad": "My manager is changing always the agenda at the last minute.",
+   "trap": {
+    "tile": "is always",
+    "instead": "changes always",
+    "why": {
+     "de": "Im Deutschen steht „immer“ oft hinter dem Verb („ändert immer“). Im Englischen steht always zwischen is und dem -ing-Wort.",
+     "en": "In German “immer” often comes after the verb (“ändert immer”). In English always goes between is and the -ing word."
+    }
+   },
+   "topic": "pres-simple-cont"
   },
   {
    "pat": "tc.present-for-future",

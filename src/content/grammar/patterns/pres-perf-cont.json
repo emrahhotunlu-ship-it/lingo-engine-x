@@ -1,0 +1,497 @@
+{
+  "topic": "pres-perf-cont",
+  "canDo": {
+    "de": "Ich kann ausdrücken, was bis jetzt läuft oder gerade Spuren hinterlassen hat: have been + -ing mit since und for, lately, Zustandsverben ohne -ing und der Unterschied zu Zahl und Ergebnis.",
+    "en": "I can express what has been going on up to now or has just left traces: have been + -ing with since and for, lately, state verbs without -ing, and the difference from a number or a result."
+  },
+  "order": [
+    "pc.duration",
+    "pc.since-for",
+    "pc.form",
+    "pc.recent",
+    "pc.state-verbs",
+    "pc.cont-simple"
+  ],
+  "introPlan": [
+    [
+      "pc.duration",
+      "pc.since-for"
+    ],
+    [
+      "pc.form",
+      "pc.recent"
+    ],
+    [
+      "pc.state-verbs",
+      "pc.cont-simple"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Läuft die Tätigkeit noch oder hat sie gerade eine Spur im Jetzt hinterlassen? Dann have/has been + -ing.",
+      "Ist es ein Zustandsverb (know, have, own) oder zählt eine Zahl oder ein Ergebnis? Dann das einfache Present Perfect.",
+      "Nennst du einen Startpunkt (since) oder eine Länge von Zeit (for)?"
+    ],
+    "en": [
+      "Is the activity still going on, or has it just left a trace in the present? Then have/has been + -ing.",
+      "Is it a state verb (know, have, own), or does a number or a result count? Then the simple Present Perfect.",
+      "Do you name a starting point (since) or a length of time (for)?"
+    ]
+  },
+  "patterns": [
+    {
+      "id": "pc.duration",
+      "name": {
+        "de": "have been + -ing · Dauer bis jetzt",
+        "en": "have been + -ing · duration up to now"
+      },
+      "form": {
+        "de": "have/has been + -ing, mit since / for / how long",
+        "en": "have/has been + -ing, with since / for / how long"
+      },
+      "use": {
+        "de": "Eine Tätigkeit begann früher und läuft noch. Deutsch nimmt dafür das Präsens („seit März teste ich“), Englisch braucht have/has been + -ing.",
+        "en": "An activity began earlier and is still going on. German uses the present here (“seit März teste ich”), English needs have/has been + -ing."
+      },
+      "signals": [
+        "since",
+        "for",
+        "how long",
+        "all day",
+        "all week"
+      ],
+      "ex": [
+        {
+          "en": "We have been testing the new CRM since March.",
+          "de": "Wir testen das neue CRM seit März.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Sorry for the delay, I have been traveling since Tuesday.",
+          "de": "Entschuldige die Verzögerung, ich bin seit Dienstag unterwegs.",
+          "ctx": "mail"
+        },
+        {
+          "en": "How long have you been living in Berlin?",
+          "de": "Wie lange wohnst du schon in Berlin?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "We are testing the new tool since March.",
+        "good": "We have been testing the new tool since March.",
+        "cause": {
+          "de": "Deutsch sagt „Wir testen das Tool seit März“ im Präsens. Wort für Wort entsteht daraus are testing. Englisch blickt bei „seit“ zurück: have been testing.",
+          "en": "German says “Wir testen das Tool seit März” in the present. Word for word that becomes are testing. English looks back with “since”: have been testing."
+        }
+      },
+      "contrast": {
+        "with": "psp.finished-time",
+        "a": "We have been testing the tool since March.",
+        "b": "We tested the tool in March.",
+        "diff": {
+          "de": "Mit since läuft die Tätigkeit noch: have been testing. Mit einer genannten, vergangenen Zeit ist sie abgeschlossen: Past Simple.",
+          "en": "With since the activity is still going on: have been testing. With a named, finished time it is over: Past Simple."
+        }
+      },
+      "ccq": [
+        {
+          "s": "We have been testing the tool since March.",
+          "q": {
+            "de": "Ist der Test schon abgeschlossen?",
+            "en": "Is the test already finished?"
+          },
+          "a": false
+        },
+        {
+          "s": "I have been waiting for an hour.",
+          "q": {
+            "de": "Warte ich immer noch?",
+            "en": "Am I still waiting?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Hat die Handlung früher begonnen und läuft sie noch? Welche Form verlangt dieser Blick zurück?",
+        "en": "Did the action start earlier and is it still going on? Which form does that look back call for?"
+      }
+    },
+    {
+      "id": "pc.since-for",
+      "name": {
+        "de": "since / for · Zeitpunkt oder Zeitspanne",
+        "en": "since / for · point or length of time"
+      },
+      "form": {
+        "de": "since + Zeitpunkt · for + Zeitspanne",
+        "en": "since + point in time · for + length of time"
+      },
+      "use": {
+        "de": "Deutsch „seit“ passt für beides. Englisch trennt: since nennt den Startpunkt (since 2022), for die Dauer (for two years).",
+        "en": "German “seit” covers both. English separates them: since names the starting point (since 2022), for names the length (for two years)."
+      },
+      "signals": [
+        "since",
+        "for"
+      ],
+      "ex": [
+        {
+          "en": "We have been using this vendor for two years.",
+          "de": "Wir nutzen diesen Anbieter seit zwei Jahren.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I have been working on the report since 9 a.m.",
+          "de": "Ich arbeite seit 9 Uhr an dem Bericht.",
+          "ctx": "mail"
+        },
+        {
+          "en": "He has been out of the office for a week.",
+          "de": "Er ist seit einer Woche nicht im Büro.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I have been waiting since 20 minutes.",
+        "good": "I have been waiting for 20 minutes.",
+        "cause": {
+          "de": "Im Deutschen heißt es „seit 20 Minuten“ und „seit 9 Uhr“ mit demselben Wort. Englisch muss zwischen Zeitspanne (for) und Zeitpunkt (since) wählen.",
+          "en": "German uses the same word in “seit 20 Minuten” and “seit 9 Uhr”. English has to choose between a length of time (for) and a point in time (since)."
+        }
+      },
+      "contrast": {
+        "with": "psp.finished-time",
+        "a": "I have lived here for two years.",
+        "b": "I lived there for two years.",
+        "diff": {
+          "de": "for mit Present Perfect gilt bis jetzt. for mit Past Simple beschreibt eine Zeitspanne, die vorbei ist.",
+          "en": "for with the Present Perfect runs up to now. for with the Past Simple describes a stretch of time that is over."
+        }
+      },
+      "ccq": [
+        {
+          "s": "She has worked here since 2020.",
+          "q": {
+            "de": "Nennt „2020“ einen Startpunkt?",
+            "en": "Does “2020” name a starting point?"
+          },
+          "a": true
+        },
+        {
+          "s": "We have been talking for an hour.",
+          "q": {
+            "de": "Nennt „an hour“ einen Zeitpunkt?",
+            "en": "Does “an hour” name a point in time?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Beantwortet das Gemeinte „Seit wann?“ oder „Wie lange?“",
+        "en": "Does it answer “Since when?” or “How long?”"
+      }
+    },
+    {
+      "id": "pc.form",
+      "name": {
+        "de": "Form · has/have been + -ing",
+        "en": "form · has/have been + -ing"
+      },
+      "form": {
+        "de": "have/has + been + Verb-ing (he/she/it: has)",
+        "en": "have/has + been + verb-ing (he/she/it: has)"
+      },
+      "use": {
+        "de": "Die Form hat drei feste Teile: have/has, been und die -ing-Form. Nach been steht nie das Partizip, und bei he/she/it steht has.",
+        "en": "The form has three fixed parts: have/has, been and the -ing form. After been there is never a participle, and he/she/it takes has."
+      },
+      "signals": [
+        "has been",
+        "have been",
+        "haven't been",
+        "hasn't been"
+      ],
+      "ex": [
+        {
+          "en": "She has been leading the project since May.",
+          "de": "Sie leitet das Projekt seit Mai.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "We haven't been receiving your updates.",
+          "de": "Wir bekommen Ihre Updates nicht.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Have you been sleeping well?",
+          "de": "Schläfst du gut?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I have been studied all afternoon.",
+        "good": "I have been studying all afternoon.",
+        "cause": {
+          "de": "Nach „habe“ folgt im Deutschen immer ein Partizip („habe gelernt“). Dieser Reflex setzt es auch nach been, wo die -ing-Form nötig ist. Es ist ein Reflex, keine Übersetzung.",
+          "en": "After “habe” German always has a participle (“habe gelernt”). That reflex puts one after been, too, where the -ing form is needed. It is a reflex, not a translation."
+        }
+      },
+      "ccq": [
+        {
+          "s": "They haven't been answering our calls.",
+          "q": {
+            "de": "Hat sich bis jetzt jemand gemeldet?",
+            "en": "Has anyone picked up so far?"
+          },
+          "a": false
+        },
+        {
+          "s": "She has been feeling tired.",
+          "q": {
+            "de": "Fühlt sie sich bis jetzt müde?",
+            "en": "Has she felt tired up to now?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Welche drei Teile hat die Form, und welche Endung steht nach dem mittleren Teil?",
+        "en": "Which three parts does the form have, and which ending follows the middle part?"
+      }
+    },
+    {
+      "id": "pc.recent",
+      "name": {
+        "de": "Spur im Jetzt · lately, recently",
+        "en": "trace in the present · lately, recently"
+      },
+      "form": {
+        "de": "have/has been + -ing, mit lately / recently / all morning",
+        "en": "have/has been + -ing, with lately / recently / all morning"
+      },
+      "use": {
+        "de": "Eine Tätigkeit ist gerade vorbei oder läuft in letzter Zeit immer wieder, und man sieht oder spürt die Spur jetzt. Es geht um die Tätigkeit selbst, nicht um die Zahl.",
+        "en": "An activity has just stopped or keeps happening lately, and you can see or feel the trace now. The activity itself matters, not a number."
+      },
+      "signals": [
+        "lately",
+        "recently",
+        "these days",
+        "all morning",
+        "all afternoon"
+      ],
+      "ex": [
+        {
+          "en": "We haven't been getting many leads lately.",
+          "de": "Wir bekommen in letzter Zeit nicht viele Leads.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Sorry, I have been dealing with a server issue all morning.",
+          "de": "Tut mir leid, ich kümmere mich den ganzen Morgen um ein Serverproblem.",
+          "ctx": "mail"
+        },
+        {
+          "en": "You look exhausted. Have you been sleeping at all?",
+          "de": "Du siehst erschöpft aus. Schläfst du überhaupt?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I don't sleep well lately.",
+        "good": "I haven't been sleeping well lately.",
+        "cause": {
+          "de": "Deutsch sagt „In letzter Zeit schlafe ich schlecht“ im Präsens. Wort für Wort entsteht don't sleep, doch lately blickt auf die Zeit bis jetzt zurück.",
+          "en": "German says “In letzter Zeit schlafe ich schlecht” in the present. Word for word that becomes don't sleep, but lately looks back at the time up to now."
+        }
+      },
+      "contrast": {
+        "with": "psp.result-now",
+        "a": "I have been cleaning, so the floor is still wet.",
+        "b": "I have cleaned the kitchen, so it is spotless now.",
+        "diff": {
+          "de": "Mit -ing steht die Tätigkeit und ihre Spur im Vordergrund. Das einfache Present Perfect zeigt das fertige Ergebnis.",
+          "en": "With -ing the activity and its trace are in focus. The simple Present Perfect shows the finished result."
+        }
+      },
+      "ccq": [
+        {
+          "s": "I have been walking in the rain.",
+          "q": {
+            "de": "Bin ich vermutlich nass?",
+            "en": "Am I probably wet?"
+          },
+          "a": true
+        },
+        {
+          "s": "He has been working on the slides.",
+          "q": {
+            "de": "Steht fest, dass die Folien fertig sind?",
+            "en": "Is it certain that the slides are finished?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Siehst oder spürst du jetzt eine Spur der Tätigkeit? Welcher Zeitraum bis jetzt ist gemeint?",
+        "en": "Can you see or feel a trace of the activity now? Which period up to now is meant?"
+      }
+    },
+    {
+      "id": "pc.state-verbs",
+      "name": {
+        "de": "Zustandsverben · ohne -ing",
+        "en": "state verbs · no -ing"
+      },
+      "form": {
+        "de": "have/has + Partizip bei know, have, own, belong",
+        "en": "have/has + participle with know, have, own, belong"
+      },
+      "use": {
+        "de": "Verben, die einen Zustand ausdrücken, stehen nicht in der -ing-Form. Die Dauer bis jetzt gilt trotzdem: How long have you known him? Ausnahmen mit Tätigkeitssinn: have been having trouble, have been feeling unwell.",
+        "en": "Verbs that express a state do not take the -ing form. The period up to now still applies: How long have you known him? Exceptions with an activity sense: have been having trouble, have been feeling unwell."
+      },
+      "signals": [
+        "known",
+        "owned",
+        "belonged",
+        "understood",
+        "had"
+      ],
+      "ex": [
+        {
+          "en": "We have known our CFO for ten years.",
+          "de": "Wir kennen unseren Finanzchef seit zehn Jahren.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I have had this laptop since 2021.",
+          "de": "Ich habe diesen Laptop seit 2021.",
+          "ctx": "mail"
+        },
+        {
+          "en": "He has owned this restaurant for years.",
+          "de": "Ihm gehört dieses Restaurant seit Jahren.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I have been knowing her since 2018.",
+        "good": "I have known her since 2018.",
+        "cause": {
+          "de": "Deutsch sagt „Ich kenne sie seit 2018“ im Präsens und hat keine Pflicht-Verlaufsform. Der Fehler ist der Reflex „Dauer = -ing“ aus dem Englischunterricht, keine Übersetzung.",
+          "en": "German says “Ich kenne sie seit 2018” in the present and has no obligatory continuous form. The mistake is the classroom reflex “duration = -ing”, not a translation."
+        }
+      },
+      "contrast": {
+        "with": "pc.duration",
+        "a": "I have known him for years.",
+        "b": "I have been working with him for years.",
+        "diff": {
+          "de": "know beschreibt einen Zustand, deshalb ohne -ing. work ist eine Tätigkeit, deshalb geht have been working.",
+          "en": "know describes a state, so there is no -ing. work is an activity, so have been working works."
+        }
+      },
+      "ccq": [
+        {
+          "s": "We have known the supplier since 2015.",
+          "q": {
+            "de": "Kennen wir den Lieferanten noch?",
+            "en": "Do we still know the supplier?"
+          },
+          "a": true
+        },
+        {
+          "s": "I have had this phone since May.",
+          "q": {
+            "de": "Hatte ich es nur im Mai?",
+            "en": "Did I have it only in May?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Beschreibt das Verb einen Zustand oder eine Tätigkeit, die jemand gerade ausführt?",
+        "en": "Does the verb describe a state, or an activity that someone is carrying out?"
+      }
+    },
+    {
+      "id": "pc.cont-simple",
+      "name": {
+        "de": "-ing oder einfach · Tätigkeit oder Ergebnis",
+        "en": "-ing or simple · activity or result"
+      },
+      "form": {
+        "de": "have been + -ing: Tätigkeit, Dauer · have + Partizip: Ergebnis, Anzahl",
+        "en": "have been + -ing: activity, duration · have + participle: result, number"
+      },
+      "use": {
+        "de": "Mit -ing steht die Tätigkeit im Mittelpunkt, auch wenn sie nicht fertig ist. Mit dem einfachen Present Perfect zählt das Ergebnis oder die Anzahl (three reports).",
+        "en": "With -ing the activity is in focus, even if it is not finished. With the simple Present Perfect the result or the number counts (three reports)."
+      },
+      "signals": [
+        "how long",
+        "how many",
+        "how much",
+        "so far"
+      ],
+      "ex": [
+        {
+          "en": "I have been drafting the proposal, but it is not finished.",
+          "de": "Ich arbeite am Angebot, aber es ist noch nicht fertig.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I have written three reports since Monday.",
+          "de": "Ich habe seit Montag drei Berichte geschrieben.",
+          "ctx": "mail"
+        },
+        {
+          "en": "How many emails have you sent today?",
+          "de": "Wie viele E-Mails hast du heute geschickt?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I have been writing three reports since Monday.",
+        "good": "I have written three reports since Monday.",
+        "cause": {
+          "de": "Deutsch hat keine Pflicht-Verlaufsform, die Wahl steckt also nur im Zusammenhang. Es ist der Reflex „Dauer = -ing“, der auch bei einer Zahl greift.",
+          "en": "German has no obligatory continuous form, so the choice lies only in the context. It is the reflex “duration = -ing” that kicks in even when there is a number."
+        }
+      },
+      "contrast": {
+        "with": "pc.recent",
+        "a": "I have been reading this report.",
+        "b": "I have read this report.",
+        "diff": {
+          "de": "Mit -ing bleibt offen, ob du fertig bist. Das einfache Present Perfect sagt: gelesen, abgeschlossen.",
+          "en": "With -ing it stays open whether you are done. The simple Present Perfect says: read, finished."
+        }
+      },
+      "ccq": [
+        {
+          "s": "I have been reading this book.",
+          "q": {
+            "de": "Steht fest, dass ich fertig bin?",
+            "en": "Is it certain that I am done?"
+          },
+          "a": false
+        },
+        {
+          "s": "I have read this book.",
+          "q": {
+            "de": "Steht fest, dass ich fertig bin?",
+            "en": "Is it certain that I am done?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Zählt hier die Tätigkeit selbst oder eine Zahl oder ein fertiges Ergebnis?",
+        "en": "Does the activity itself count here, or a number or a finished result?"
+      }
+    }
+  ]
+}

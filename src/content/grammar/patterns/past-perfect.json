@@ -1,0 +1,435 @@
+{
+ "topic": "past-perfect",
+ "canDo": {
+  "de": "Ich kann sagen, was vor einem Zeitpunkt in der Vergangenheit schon passiert war: die Reihenfolge mit had + Partizip, die Dauer mit had been + -ing, Erfahrungen mit the first time, die indirekte Rede und die betonte Form No sooner had.",
+  "en": "I can say what had already happened before a past moment: the order with had + participle, the duration with had been + -ing, experiences with the first time, reported speech, and the emphatic No sooner had."
+ },
+ "order": [
+  "pp.earlier",
+  "pp.duration",
+  "pp.first-time",
+  "pp.reported",
+  "pp.inversion"
+ ],
+ "introPlan": [
+  [
+   "pp.earlier",
+   "pp.duration"
+  ],
+  [
+   "pp.first-time",
+   "pp.reported"
+  ],
+  [
+   "pp.inversion"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Liegt ein Ereignis vor einem anderen Zeitpunkt der Vergangenheit, oder erzählst du nur der Reihe nach?",
+   "Betonst du die Dauer bis dahin (had been + -ing) oder das Ergebnis (had + Partizip)?",
+   "Beginnt der Satz mit No sooner, Hardly oder Never? Dann steht had vor dem Subjekt."
+  ],
+  "en": [
+   "Does one event lie before another past moment, or are you just telling things in order?",
+   "Do you stress the duration up to then (had been + -ing) or the result (had + participle)?",
+   "Does the sentence begin with No sooner, Hardly or Never? Then had goes before the subject."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "pp.earlier",
+   "name": {
+    "de": "had + Partizip · früher passiert",
+    "en": "had + participle · happened earlier"
+   },
+   "form": {
+    "de": "had + 3. Form (Partizip)",
+    "en": "had + past participle"
+   },
+   "use": {
+    "de": "Das frühere von zwei Ereignissen in der Vergangenheit: Es war schon passiert, als das andere geschah. Das spätere bleibt im Past Simple.",
+    "en": "The earlier of two past events: it had already happened when the other took place. The later one stays in the Past Simple."
+   },
+   "signals": [
+    "already",
+    "by the time",
+    "after",
+    "before",
+    "the day before",
+    "the month before"
+   ],
+   "ex": [
+    {
+     "en": "By the time legal reviewed it, the deal had already closed.",
+     "de": "Als die Rechtsabteilung es prüfte, war der Deal schon abgeschlossen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Thanks for the update; we had already fixed the bug by then.",
+     "de": "Danke für das Update; den Fehler hatten wir bis dahin schon behoben.",
+     "ctx": "mail"
+    },
+    {
+     "en": "When we got to the restaurant, they had closed the kitchen.",
+     "de": "Als wir im Restaurant ankamen, hatten sie die Küche schon geschlossen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "When we reached the station, the train already left.",
+    "good": "When we reached the station, the train had already left.",
+    "cause": {
+     "de": "Deutsch markiert das Frühere oft nur mit „schon“ („Der Zug war schon weg“, gesprochen „ist schon abgefahren“). Englisch verlangt dafür had + Partizip.",
+     "en": "German often marks the earlier event only with “schon” (“Der Zug war schon weg”, in speech “ist schon abgefahren”). English needs had + participle."
+    }
+   },
+   "contrast": {
+    "with": "psp.finished-time",
+    "a": "When I arrived, the meeting started.",
+    "b": "When I arrived, the meeting had started.",
+    "diff": {
+     "de": "a: Das Meeting begann erst, als ich da war. b: Es lief schon, als ich kam.",
+     "en": "a: the meeting began once I was there. b: it was already under way when I got there."
+    }
+   },
+   "ccq": [
+    {
+     "s": "When we got there, the demo had already ended.",
+     "q": {
+      "de": "Haben wir die Demo noch gesehen?",
+      "en": "Did we still see the demo?"
+     },
+     "a": false
+    },
+    {
+     "s": "By the time I got home, the package had arrived.",
+     "q": {
+      "de": "War das Paket schon da, als ich heimkam?",
+      "en": "Was the package already there when I got home?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welches der beiden Ereignisse war zuerst, und wie zeigt der Satz das?",
+    "en": "Which of the two events came first, and how does the sentence show it?"
+   }
+  },
+  {
+   "id": "pp.duration",
+   "name": {
+    "de": "had been + -ing · Dauer davor",
+    "en": "had been + -ing · duration before"
+   },
+   "form": {
+    "de": "had been + Verb-ing",
+    "en": "had been + verb-ing"
+   },
+   "use": {
+    "de": "Betont die Dauer oder den Verlauf bis zu einem Zeitpunkt in der Vergangenheit, oft als Grund: Sie war müde, weil sie gearbeitet hatte. Zustandsverben wie know oder be bleiben bei had + Partizip.",
+    "en": "Stresses the duration or process up to a past moment, often as the reason: she was tired because she had been working. Stative verbs like know or be keep had + participle."
+   },
+   "signals": [
+    "had been",
+    "since",
+    "for hours",
+    "for weeks",
+    "for months",
+    "all day"
+   ],
+   "ex": [
+    {
+     "en": "We had been chasing the data for weeks when it finally arrived.",
+     "de": "Wir hatten wochenlang hinter den Daten hergejagt, als sie endlich kamen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I apologize for the delay; I had been traveling all week.",
+     "de": "Entschuldigen Sie die Verzögerung; ich war die ganze Woche auf Reisen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She looked tired because she had been studying all night.",
+     "de": "Sie sah müde aus, weil sie die ganze Nacht gelernt hatte.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "When the inspector arrived, we were waiting since eight.",
+    "good": "When the inspector arrived, we had been waiting since eight.",
+    "cause": {
+     "de": "Deutsch bleibt im Präteritum mit „seit“ („wir warteten seit acht“). Englisch braucht für die Dauer bis zu dem Zeitpunkt had been + -ing.",
+     "en": "German stays in the simple past with “seit” (“wir warteten seit acht”). English needs had been + -ing for the duration up to that moment."
+    }
+   },
+   "contrast": {
+    "with": "pp.earlier",
+    "a": "When she called, I had fixed the bug.",
+    "b": "When she called, I had been fixing the bug.",
+    "diff": {
+     "de": "a: Der Fehler war behoben. b: Ich steckte mitten im Beheben; die Dauer zählt, fertig ist offen.",
+     "en": "a: the bug was fixed. b: I was in the middle of fixing it; the duration counts, whether it was done is open."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He had been waiting for an hour when the train arrived.",
+     "q": {
+      "de": "Hat er noch gewartet, als der Zug kam?",
+      "en": "Was he still waiting when the train arrived?"
+     },
+     "a": true
+    },
+    {
+     "s": "I had been writing the report for hours when she called.",
+     "q": {
+      "de": "Steht fest, dass der Bericht fertig war?",
+      "en": "Is it certain that the report was finished?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wird hier die Dauer bis zu einem Zeitpunkt in der Vergangenheit betont, nicht nur das Ergebnis?",
+    "en": "Does the sentence stress the duration up to a past moment, not only the result?"
+   }
+  },
+  {
+   "id": "pp.first-time",
+   "name": {
+    "de": "the first time + had + Partizip",
+    "en": "the first time + had + participle"
+   },
+   "form": {
+    "de": "It was the first time + had + 3. Form",
+    "en": "It was the first time + had + past participle"
+   },
+   "use": {
+    "de": "Eine Erfahrung, die vor einem Zeitpunkt der Vergangenheit lag: It was the first time …, I had never … before. Die Erfahrung steht eine Stufe hinter dem „was“.",
+    "en": "An experience that came before a past moment: It was the first time …, I had never … before. The experience sits one step behind “was”."
+   },
+   "signals": [
+    "the first time",
+    "the second time",
+    "never before",
+    "had never",
+    "had ever"
+   ],
+   "ex": [
+    {
+     "en": "It was the second time the vendor had missed a deadline.",
+     "de": "Es war das zweite Mal, dass der Lieferant eine Frist verpasst hat.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I had never worked with this vendor before the pilot.",
+     "de": "Vor dem Pilotprojekt hatte ich noch nie mit diesem Lieferanten gearbeitet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "It was the first time he had flown business class.",
+     "de": "Es war das erste Mal, dass er Business Class geflogen ist.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "It was the first time I have been to Tokyo.",
+    "good": "It was the first time I had been to Tokyo.",
+    "cause": {
+     "de": "Im gesprochenen Deutsch steht hier das Perfekt („dass ich in Tokio gewesen bin“). Daraus wird have been. Nach „was“ muss die Erfahrung aber eine Stufe zurück: had been.",
+     "en": "Spoken German uses the perfect here (“dass ich in Tokio gewesen bin”), which turns into have been. After “was” the experience has to go one step back: had been."
+    }
+   },
+   "contrast": {
+    "with": "psp.experience",
+    "a": "It is the first time I have presented in English.",
+    "b": "It was the first time I had presented in English.",
+    "diff": {
+     "de": "a: gilt jetzt (is … have). b: erzählt aus der Vergangenheit, die Erfahrung liegt eine Stufe davor.",
+     "en": "a: true now (is … have). b: told from the past, the experience sits one step back."
+    }
+   },
+   "ccq": [
+    {
+     "s": "It was the first time she had led a workshop.",
+     "q": {
+      "de": "Hatte sie vorher schon einen Workshop geleitet?",
+      "en": "Had she led a workshop before?"
+     },
+     "a": false
+    },
+    {
+     "s": "He had never met the client before the call.",
+     "q": {
+      "de": "Hat er den Kunden vor dem Anruf getroffen?",
+      "en": "Had he met the client before the call?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Liegt die Erfahrung vor dem Zeitpunkt, von dem aus erzählt wird, oder gilt sie jetzt?",
+    "en": "Does the experience lie before the moment you are telling from, or does it hold now?"
+   }
+  },
+  {
+   "id": "pp.reported",
+   "name": {
+    "de": "Indirekte Rede · eine Stufe zurück",
+    "en": "Reported speech · one step back"
+   },
+   "form": {
+    "de": "said/told + would / had + 3. Form",
+    "en": "said/told + would / had + past participle"
+   },
+   "use": {
+    "de": "Nach einem Verb der Vergangenheit rutscht die Zeit zurück: will wird zu would, früher Passiertes zu had + Partizip. Zeitangaben wechseln mit: the next day, the day before.",
+    "en": "After a past reporting verb the tense moves back: will becomes would, earlier events become had + participle. Time words shift too: the next day, the day before."
+   },
+   "signals": [
+    "told me",
+    "told us",
+    "said that",
+    "the next day",
+    "the following week",
+    "the day before",
+    "the previous"
+   ],
+   "ex": [
+    {
+     "en": "Our lawyer said the terms would change after the review.",
+     "de": "Unser Anwalt sagte, die Bedingungen würden sich nach der Prüfung ändern.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "He told me the board would decide the next day.",
+     "de": "Er sagte mir, der Vorstand werde am nächsten Tag entscheiden.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Mia said she had missed the train the day before.",
+     "de": "Mia sagte, sie habe am Tag davor den Zug verpasst.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "My manager said that she will send the report the next day.",
+    "good": "My manager said that she would send the report the next day.",
+    "cause": {
+     "de": "Deutsch lässt in der indirekten Rede das Präsens oder den Konjunktiv stehen („sie sagte, sie schickt/schicke den Bericht morgen“). Englisch rutscht nach said eine Stufe zurück.",
+     "en": "German keeps the present or subjunctive in reported speech (“sie sagte, sie schickt/schicke den Bericht morgen”). English moves one step back after said."
+    }
+   },
+   "contrast": {
+    "with": "pp.earlier",
+    "a": "He said he would call me the next day.",
+    "b": "He said he had called me the day before.",
+    "diff": {
+     "de": "a: would = Zukunft aus der Sicht von damals. b: had called = schon vor seiner Aussage passiert.",
+     "en": "a: would = future seen from back then. b: had called = already happened before he spoke."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She said she had already sent the offer.",
+     "q": {
+      "de": "Hatte sie das Angebot zum Zeitpunkt ihrer Aussage schon geschickt?",
+      "en": "Had she already sent the offer when she spoke?"
+     },
+     "a": true
+    },
+    {
+     "s": "The CFO told us the figures would improve the following quarter.",
+     "q": {
+      "de": "Waren die Zahlen zum Zeitpunkt der Aussage schon besser?",
+      "en": "Were the figures already better when he spoke?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wann wurde das gesagt, und liegt das Berichtete davor oder danach?",
+    "en": "When was it said, and does the reported event lie before or after that moment?"
+   }
+  },
+  {
+   "id": "pp.inversion",
+   "name": {
+    "de": "No sooner had … than · betont",
+    "en": "No sooner had … than · emphatic"
+   },
+   "form": {
+    "de": "No sooner had + Subjekt + 3. Form … than",
+    "en": "No sooner had + subject + past participle … than"
+   },
+   "use": {
+    "de": "Betont, wie schnell oder selten etwas war: No sooner, Hardly, Never stehen vorn. Danach steht had vor dem Subjekt, dann das Partizip. Das klingt förmlich und passt in Reden und Mails.",
+    "en": "Stresses how quickly or rarely something happened: No sooner, Hardly, Never come first. Then had goes before the subject, followed by the participle. It sounds formal and suits speeches and emails."
+   },
+   "signals": [
+    "No sooner",
+    "Hardly had",
+    "Scarcely had",
+    "Never had",
+    "Seldom had"
+   ],
+   "ex": [
+    {
+     "en": "No sooner had we signed than the client asked for changes.",
+     "de": "Kaum hatten wir unterschrieben, wollte der Kunde Änderungen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Hardly had I sent the email when the client replied.",
+     "de": "Kaum hatte ich die Mail geschickt, antwortete der Kunde.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Never had I seen such a quick turnaround.",
+     "de": "So eine schnelle Abwicklung hatte ich noch nie gesehen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "No sooner we had started the demo than the projector froze.",
+    "good": "No sooner had we started the demo than the projector froze.",
+    "cause": {
+     "de": "Keine Übersetzungsursache: Deutsch dreht nach „kaum“ ganz normal um („Kaum hatten wir …“). Der Fehler ist ein anderer Reflex: Im Englischen ist Subjekt + Verb der Normalfall, die Umstellung fehlt leicht.",
+     "en": "No translation cause: German inverts after “kaum” as a matter of course (“Kaum hatten wir …”). The slip is a different reflex: in English subject + verb is the default, so the inversion gets dropped."
+    }
+   },
+   "contrast": {
+    "with": "pp.earlier",
+    "a": "We had barely started the demo when the projector froze.",
+    "b": "Hardly had we started the demo when the projector froze.",
+    "diff": {
+     "de": "Gleiche Bedeutung. Die Umstellung in b betont, wie schnell es ging, und klingt förmlicher.",
+     "en": "Same meaning. The inversion in b stresses how fast it was and sounds more formal."
+    }
+   },
+   "ccq": [
+    {
+     "s": "No sooner had she sat down than the call began.",
+     "q": {
+      "de": "Kam der Anruf gleich, nachdem sie sich gesetzt hatte?",
+      "en": "Did the call come right after she sat down?"
+     },
+     "a": true
+    },
+    {
+     "s": "Never had we seen such a drop in sales.",
+     "q": {
+      "de": "Haben wir früher schon einen solchen Einbruch gesehen?",
+      "en": "Had we seen such a drop before?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Beginnt der Satz mit einem verneinenden oder einschränkenden Wort? Was ändert sich dann bei Hilfsverb und Subjekt?",
+    "en": "Does the sentence start with a negative or restrictive word? What changes then for the auxiliary and the subject?"
+   }
+  }
+ ]
+}

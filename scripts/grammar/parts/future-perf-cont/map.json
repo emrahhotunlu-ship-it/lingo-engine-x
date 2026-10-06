@@ -1,0 +1,715 @@
+{
+ "By next June, I ___ my course.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: by + Zeitpunkt = bis dahin ist es abgeschlossen → will have finished.",
+    "en": "Right: by + a point in time = completed by then → will have finished."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "finished"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt das Verb in der Grundform; mit finished fehlt das have.",
+     "en": "After will the verb stays in the base form; with finished the have is missing."
+    },
+    {
+     "if": [
+      "finishing"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Nach have steht die 3. Form (finished); -ing käme nur nach been.",
+     "en": "After have comes the participle (finished); -ing would need been."
+    },
+    {
+     "if": [
+      "will",
+      "finish"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will finish“ nennt nur die Absicht; by verlangt das Ergebnis: will have finished.",
+     "en": "“will finish” only states the intention; by asks for the result: will have finished."
+    },
+    {
+     "if": [
+      "finished"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "Gefragt ist die Zukunft: will have + 3. Form, nicht nur finished.",
+     "en": "The future is asked for: will have + participle, not just finished."
+    }
+   ]
+  }
+ },
+ "This time tomorrow, I ___ on the beach.": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: „this time tomorrow“ = ich liege dann gerade dort → will be lying.",
+    "en": "Right: “this time tomorrow” = I'll be lying there at that moment → will be lying."
+   },
+   "wrong": [
+    {
+     "opt": "will lie",
+     "pat": "fut.continuous",
+     "de": "„will lie“ ist nur eine Vorhersage; „this time tomorrow“ zeigt das Mittendrin-Sein.",
+     "en": "“will lie” is only a prediction; “this time tomorrow” points to being in the middle of it."
+    },
+    {
+     "opt": "will have lain",
+     "pat": "fut.perfect",
+     "de": "„will have lain“ hieße: bis dahin schon dort gelegen. Gemeint ist: gerade dabei.",
+     "en": "“will have lain” would mean: already lain there by then. The point is: in progress."
+    },
+    {
+     "opt": "lie",
+     "de": "Das Präsens passt nicht zu „this time tomorrow“; hier braucht es will be + -ing.",
+     "en": "The present simple does not fit “this time tomorrow”; here you need will be + -ing."
+    }
+   ]
+  }
+ },
+ "Don't call at 8 – we ___ dinner then.": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: um 8 sind wir mitten im Essen → will be having.",
+    "en": "Right: at 8 we are in the middle of dinner → will be having."
+   },
+   "wrong": [
+    {
+     "opt": "will have",
+     "de": "„will have“ nennt nur den Plan; hier zählt, dass wir um 8 mittendrin sind.",
+     "en": "“will have” only states the plan; what counts here is that we are in the middle of it at 8."
+    },
+    {
+     "opt": "have had",
+     "de": "„have had“ ist Present Perfect und passt nicht zu einem Zeitpunkt in der Zukunft.",
+     "en": "“have had” is the present perfect and does not fit a point in the future."
+    },
+    {
+     "opt": "had",
+     "de": "„had“ ist Vergangenheit; „don't call“ und „then“ zeigen in die Zukunft.",
+     "en": "“had” is the past; “don't call” and “then” point to the future."
+    }
+   ]
+  }
+ },
+ "By the end of this quarter, we ___ 200 new customers.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „by the end of …“ = bis dahin ist es geschafft → will have won.",
+    "en": "Right: “by the end of …” = achieved by then → will have won."
+   },
+   "wrong": [
+    {
+     "opt": "win",
+     "de": "Das Präsens sagt nichts über ein Ergebnis bis zum Quartalsende.",
+     "en": "The plain present says nothing about a result by the end of the quarter."
+    },
+    {
+     "opt": "will be winning",
+     "pat": "fut.continuous",
+     "de": "„will be winning“ zeigt: mittendrin, nicht das Ergebnis bis dahin.",
+     "en": "“will be winning” shows we are in the middle of it, not the result by then."
+    },
+    {
+     "opt": "have won",
+     "de": "„have won“ blickt von heute zurück; hier steht ein Zeitpunkt in der Zukunft.",
+     "en": "“have won” looks back from today; here a point in the future is given."
+    }
+   ]
+  }
+ },
+ "Please don't call me at 3 p.m. tomorrow – I ___ the quarterly review to the board.": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: um 15 Uhr bin ich mitten in der Präsentation → will be presenting.",
+    "en": "Right: at 3 p.m. I will be in the middle of it → will be presenting."
+   },
+   "wrong": [
+    {
+     "opt": "presented",
+     "de": "„presented“ ist Vergangenheit; hier geht es um morgen 15 Uhr.",
+     "en": "“presented” is the past; this is about 3 p.m. tomorrow."
+    },
+    {
+     "opt": "have presented",
+     "de": "„have presented“ blickt von heute zurück; „tomorrow“ zeigt in die Zukunft.",
+     "en": "“have presented” looks back from today; “tomorrow” points to the future."
+    },
+    {
+     "opt": "will have presented",
+     "pat": "fut.perfect",
+     "de": "„will have presented“ hieße: um 15 Uhr schon fertig. Du bist dann aber mittendrin.",
+     "en": "“will have presented” would mean: already done at 3. But you are in the middle of it then."
+    }
+   ]
+  }
+ },
+ "This time next year, I ___ for this company for ten years.": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: „for ten years“ = die Dauer bis dahin → will have been working.",
+    "en": "Right: “for ten years” = duration up to then → will have been working."
+   },
+   "wrong": [
+    {
+     "opt": "will work",
+     "de": "„will work“ nennt keine Dauer bis dahin; „for ten years“ braucht die Zeitspanne.",
+     "en": "“will work” gives no duration up to then; “for ten years” needs the span."
+    },
+    {
+     "opt": "am working",
+     "de": "„am working“ ist Gegenwart; „this time next year“ liegt in der Zukunft.",
+     "en": "“am working” is the present; “this time next year” lies in the future."
+    },
+    {
+     "opt": "will be working",
+     "pat": "fut.continuous",
+     "de": "„will be working“ zeigt nur: dann mittendrin. Die zehn Jahre bis dahin fehlen.",
+     "en": "“will be working” only shows: in progress then. The ten years up to then are missing."
+    }
+   ]
+  }
+ },
+ "By the time you arrive, the cleaners ___ the conference room.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „by the time you arrive“ → dann sind sie fertig → will have cleaned.",
+    "en": "Right: “by the time you arrive” → they will be done by then → will have cleaned."
+   },
+   "wrong": [
+    {
+     "opt": "will clean",
+     "de": "„will clean“ sagt nur, dass sie putzen werden, nicht dass sie dann fertig sind.",
+     "en": "“will clean” only says they will clean, not that they will be done by then."
+    },
+    {
+     "opt": "clean",
+     "de": "Das Präsens nennt eine Gewohnheit; hier geht es um ein Ergebnis bis zu deiner Ankunft.",
+     "en": "The present describes a habit; here the point is a result by the time you arrive."
+    },
+    {
+     "opt": "are cleaning",
+     "de": "„are cleaning“ heißt: gerade jetzt. Gemeint ist das Ergebnis bei deiner Ankunft.",
+     "en": "“are cleaning” means: right now. The point is the result when you arrive."
+    }
+   ]
+  }
+ },
+ "___ the projector this afternoon? I'd like to borrow it.": {
+  "pat": "fut.cont-plan",
+  "why": {
+   "ok": {
+    "de": "Richtig: Will you be using …? fragt höflich nach dem Plan, ohne zu drängen.",
+    "en": "Right: Will you be using …? asks politely about the plan, without pushing."
+   },
+   "wrong": [
+    {
+     "opt": "Will you have used",
+     "pat": "fut.perfect",
+     "de": "„Will you have used“ fragt, ob du es bis dahin schon benutzt hast, nicht nach deinem Plan.",
+     "en": "“Will you have used” asks whether you will already have used it, not about your plan."
+    },
+    {
+     "opt": "Do you use",
+     "de": "„Do you use“ fragt nach einer Gewohnheit, nicht nach heute Nachmittag.",
+     "en": "“Do you use” asks about a habit, not about this afternoon."
+    },
+    {
+     "opt": "Have you used",
+     "de": "„Have you used“ fragt nach dem Bisherigen, nicht nach deinem Plan für heute Nachmittag.",
+     "en": "“Have you used” asks about so far, not about your plan for this afternoon."
+    }
+   ]
+  }
+ },
+ "By next weekend, I ___ all three seasons of that series.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: by next weekend + „all three seasons“ = es ist abgeschlossen → will have watched.",
+    "en": "Right: by next weekend + “all three seasons” = completed → will have watched."
+   },
+   "wrong": [
+    {
+     "opt": "watch",
+     "de": "Das Präsens nennt eine Gewohnheit; „by next weekend“ verlangt ein Ergebnis bis dahin.",
+     "en": "The present describes a habit; “by next weekend” asks for a result by then."
+    },
+    {
+     "opt": "will be watched",
+     "de": "„will be watched“ ist Passiv: Die Staffeln würden angeschaut. Du schaust aber selbst.",
+     "en": "“will be watched” is passive: the seasons would be watched. But you are the one watching."
+    },
+    {
+     "opt": "have watched",
+     "de": "„have watched“ blickt von heute zurück; „next weekend“ liegt in der Zukunft.",
+     "en": "“have watched” looks back from today; “next weekend” lies in the future."
+    }
+   ]
+  }
+ },
+ "By Friday, our engineers ___ the bug.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „By Friday“ = bis dahin ist es erledigt → will have fixed.",
+    "en": "Right: “By Friday” = done by then → will have fixed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "fixed"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt das Verb in der Grundform: will have fixed, nicht will fixed.",
+     "en": "After will the verb stays in the base form: will have fixed, not will fixed."
+    },
+    {
+     "if": [
+      "will",
+      "fix"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will fix“ nennt nur die Absicht; gefragt ist: bis Freitag erledigt → will have fixed.",
+     "en": "“will fix” only states the intention; the task asks: done by Friday → will have fixed."
+    },
+    {
+     "if": [
+      "have",
+      "fixed"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "„have fixed“ ist Gegenwart; die Zukunft braucht will have fixed.",
+     "en": "“have fixed” is the present; the future needs will have fixed."
+    }
+   ]
+  }
+ },
+ "At 10 a.m. tomorrow, I ___ on a plane to Zurich, so I can't take your call.": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: um 10 Uhr bin ich mittendrin im Flug → will be sitting.",
+    "en": "Right: at 10 a.m. I will be in the middle of the flight → will be sitting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have"
+     ],
+     "de": "„will have sat“ hieße: schon vorbei. Um 10 Uhr bist du aber mittendrin.",
+     "en": "“will have sat” would mean: already over. But at 10 a.m. you are in the middle of it."
+    },
+    {
+     "if": [
+      "be",
+      "sit"
+     ],
+     "not": [
+      "sitting"
+     ],
+     "de": "Nach will be steht die -ing-Form: sitting.",
+     "en": "After will be comes the -ing form: sitting."
+    },
+    {
+     "if": [
+      "will",
+      "sit"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "„will sit“ nennt nur die Zukunft; hier geht es um das Mittendrin-Sein: will be sitting.",
+     "en": "“will sit” only names the future; here the point is being in the middle of it: will be sitting."
+    }
+   ]
+  }
+ },
+ "By the end of the year, she ___ in sales for exactly 12 years.": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: Dauer bis zu einem Zeitpunkt (12 years) → will have been working.",
+    "en": "Right: duration up to a point in time (12 years) → will have been working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will work“ nennt nicht die Dauer bis dahin; „for 12 years“ braucht will have been working.",
+     "en": "“will work” gives no duration up to then; “for 12 years” needs will have been working."
+    },
+    {
+     "if": [
+      "be",
+      "working"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will be working“ blickt nach vorn, nicht auf die zwölf Jahre bis dahin.",
+     "en": "“will be working” looks ahead, not at the twelve years up to then."
+    },
+    {
+     "if": [
+      "been",
+      "work"
+     ],
+     "de": "Nach been steht die -ing-Form: working.",
+     "en": "After been comes the -ing form: working."
+    },
+    {
+     "if": [
+      "will",
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt jedes Verb in der Grundform: will have worked.",
+     "en": "After will every verb stays in the base form: will have worked."
+    }
+   ]
+  }
+ },
+ "By the time you read this email, the update ___ live.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: bis dahin ist es abgeschlossen → will have gone (go – went – gone).",
+    "en": "Right: completed by then → will have gone (go – went – gone)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "went"
+     ],
+     "de": "Nach have steht die 3. Form: gone, nicht went.",
+     "en": "After have comes the participle: gone, not went."
+    },
+    {
+     "if": [
+      "will",
+      "go"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will go“ nennt nur die Zukunft; bis dahin schon live: will have gone.",
+     "en": "“will go” only names the future; already live by then: will have gone."
+    },
+    {
+     "if": [
+      "gone"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Es fehlt das will have: Nur „gone“ reicht nicht.",
+     "en": "The will have is missing: “gone” alone is not enough."
+    }
+   ]
+  }
+ },
+ "In 2030, most of us ___ from home at least three days a week.": {
+  "pat": "fut.cont-plan",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vorhersage über etwas, das dann läuft → will be working.",
+    "en": "Right: a prediction about something that will be going on then → will be working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have"
+     ],
+     "de": "„will have worked“ meint: bis 2030 abgeschlossen. Gemeint ist eine Situation in 2030.",
+     "en": "“will have worked” means: completed by 2030. The point is a situation in 2030."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "will",
+      "going"
+     ],
+     "de": "Die Zukunftsform fehlt: will be working, nicht nur -ing.",
+     "en": "The future form is missing: will be working, not just -ing."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "will",
+      "going"
+     ],
+     "de": "Das Präsens passt nicht zu „In 2030“; gebraucht wird will be working.",
+     "en": "The present does not fit “In 2030”; will be working is needed."
+    }
+   ]
+  }
+ },
+ "I'll finish the report before the meeting at 4. → By 4 o'clock, I ___ the report.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „By 4 o'clock“ = bis dahin ist es fertig → will have finished.",
+    "en": "Right: “By 4 o'clock” = done by then → will have finished."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "finished"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach will bleibt das Verb in der Grundform; hier fehlt have.",
+     "en": "After will the verb stays in the base form; here the have is missing."
+    },
+    {
+     "if": [
+      "have",
+      "finished"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "„have finished“ ist Gegenwart; die Zukunft braucht will have finished.",
+     "en": "“have finished” is the present; the future needs will have finished."
+    },
+    {
+     "if": [
+      "will",
+      "finish"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„will finish“ ist nur die Absicht; „By 4 o'clock“ verlangt das Ergebnis: will have finished.",
+     "en": "“will finish” is only the intention; “By 4 o'clock” asks for the result: will have finished."
+    }
+   ]
+  }
+ },
+ "Tomorrow at 3 p.m., the flight to New York begins, and I'll be on it. → Tomorrow at 3 p.m., I ___ to New York.": {
+  "pat": "fut.continuous",
+  "why": {
+   "ok": {
+    "de": "Richtig: um 15 Uhr bin ich mitten in der Reise → will be flying.",
+    "en": "Right: at 3 p.m. I will be on my way → will be flying."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "have"
+     ],
+     "de": "„will have flown“ hieße: schon geflogen. Um 15 Uhr bist du aber mittendrin.",
+     "en": "“will have flown” would mean: already flown. But at 3 p.m. you are in the middle of it."
+    },
+    {
+     "if": [
+      "will",
+      "fly"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "„will fly“ nennt nur die Zukunft; hier geht es um das Mittendrin-Sein: will be flying.",
+     "en": "“will fly” only names the future; here the point is being in the middle of it: will be flying."
+    },
+    {
+     "if": [
+      "flying"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "Gefragt ist will be + -ing (mittendrin um 15 Uhr), nicht nur -ing.",
+     "en": "The task asks for will be + -ing (in progress at 3 p.m.), not just -ing."
+    }
+   ]
+  }
+ },
+ "By next year, he will work here for ten years.": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: „By next year“ + eine Zeitspanne → will have worked / will have been working.",
+    "en": "Right: “By next year” + a span of time → will have worked / will have been working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Bei „By next year“ + Zeitspanne fehlt have: will have worked.",
+     "en": "With “By next year” + a span of time the have is missing: will have worked."
+    },
+    {
+     "if": [
+      "have",
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Nach will have steht -ing nur mit been: will have been working.",
+     "en": "After will have, -ing needs been: will have been working."
+    }
+   ]
+  }
+ },
+ "By the time you will arrive, I will have finished the report.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „By the time“ steht das Präsens („you arrive“); will have finished bleibt.",
+    "en": "Right: after “By the time” use the present (“you arrive”); will have finished stays."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "arrive"
+     ],
+     "pat": "tc.by-the-time",
+     "de": "Nach „by the time“ steht das Präsens, nicht will: by the time you arrive.",
+     "en": "After “by the time” use the present, not will: by the time you arrive."
+    },
+    {
+     "not": [
+      "finished"
+     ],
+     "de": "Der Hauptsatz mit will have finished ist richtig; ändere nur den Nebensatz.",
+     "en": "The main clause with will have finished is correct; change only the subordinate clause."
+    }
+   ]
+  }
+ },
+ "By the end of the year, she will worked here for five years.": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: will + have + 3. Form (will have worked); nach will keine gebeugte Form.",
+    "en": "Right: will + have + participle (will have worked); no inflected form after will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Es fehlt have: will have worked (oder will have been working).",
+     "en": "The have is missing: will have worked (or will have been working)."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Nach will have steht -ing nur mit been: will have been working.",
+     "en": "After will have, -ing needs been: will have been working."
+    }
+   ]
+  }
+ },
+ "By next month, he will have living here for ten years.": {
+  "pat": "fut.perf-cont",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach have kommt die 3. Form (lived); -ing nur nach be/been.",
+    "en": "Right: after have comes the participle (lived); -ing only after be/been."
+   },
+   "wrong": [
+    {
+     "if": [
+      "living"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "-ing nach have braucht been: will have been living (oder: will have lived).",
+     "en": "-ing after have needs been: will have been living (or: will have lived)."
+    },
+    {
+     "not": [
+      "lived"
+     ],
+     "de": "Das Verb braucht hier die 3. Form: live – lived.",
+     "en": "The verb needs the participle here: live – lived."
+    }
+   ]
+  }
+ },
+ "She will has completed her training.": {
+  "pat": "fut.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach will bleibt jedes Verb in der Grundform: will have completed.",
+    "en": "Right: after will every verb stays in the base form: will have completed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "Nach will steht have, nie has.",
+     "en": "After will comes have, never has."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "Nach will keine gebeugte Form: have, nicht had.",
+     "en": "No inflected form after will: have, not had."
+    }
+   ]
+  }
+ }
+}

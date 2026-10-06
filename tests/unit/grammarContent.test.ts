@@ -15,11 +15,11 @@ const PILOT = ['past-simple-perfect', 'mixed-cond', 'time-clauses', 'cond-alt'];
 type Raw = Record<string, unknown> & { topic: string; prompt: string; type: string; answer: string; hint?: string };
 
 describe('Pilotthemen: Muster, Zuordnung, neue Aufgaben, Satzbau (scripts/grammar/validate.mjs)', () => {
-  it('alle vier Pilotthemen haben Teile und eine Musterdatei', () => {
-    expect([...partTopics()].sort()).toEqual([...PILOT].sort());
-    expect([...patternFiles()].sort()).toEqual([...PILOT].sort());
+  it('jedes Thema mit Teilen hat eine Musterdatei und umgekehrt; die vier Pilotthemen sind dabei', () => {
+    expect([...partTopics()].sort()).toEqual([...patternFiles()].sort());
+    for (const t of PILOT) expect(partTopics()).toContain(t);
   });
-  for (const topic of PILOT) {
+  for (const topic of partTopics()) {
     it(`${topic}: keine Befunde`, () => {
       expect(validateTopic(topic)).toEqual([]);
     });
@@ -58,13 +58,13 @@ describe('Fertige Dateien', () => {
     for (const t of ['past-simple-perfect', 'pres-perf-cont', 'past-perfect', 'conditionals', 'cond-alt', 'mixed-cond']) expect(p.families.flat()).toContain(t);
   });
 
-  it('neue Inhalte zusammen höchstens 450 KB', () => {
+  it('neue Inhalte zusammen höchstens 1,2 MB (Stufe 2, inhalte-pruefung.md §7)', () => {
     const files = [
       ...readdirSync('src/content/grammar/patterns').map((f) => join('src/content/grammar/patterns', f)),
       ...['pattern-map', 'tasks-v2', 'path', 'retired'].map((f) => `src/content/grammar/${f}.json`),
     ];
     const total = files.reduce((n, f) => n + statSync(f).size, 0);
-    expect(total).toBeLessThan(450 * 1024);
+    expect(total).toBeLessThan(1228 * 1024);
   });
 
   it('Satzbau: je Pilotthema mindestens 6 Sätze mit Muster, davon mindestens einer mit trap', () => {

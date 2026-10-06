@@ -1,0 +1,182 @@
+[
+ {
+  "pat": "hg.modal",
+  "en": "The migration might take a few days longer than planned.",
+  "de": "Die Migration könnte ein paar Tage länger dauern als geplant. (vorsichtig, als Prognose)",
+  "chunks": [
+   "the migration",
+   "might",
+   "take",
+   "a few days",
+   "longer",
+   "than planned"
+  ],
+  "single": "Nach might folgt direkt die Grundform take; a few days longer than planned bleibt als Block am Ende.",
+  "why": [
+   "Might + Grundform macht aus der Vorhersage eine Möglichkeit: might take, ohne to und ohne -s.",
+   "Might + base verb turns a prediction into a possibility: might take, with no to and no -s."
+  ],
+  "bad": "The migration will maybe take a few days longer than planned.",
+  "trap": {
+   "tile": "might",
+   "instead": "would",
+   "why": {
+    "de": "Der Konjunktiv-II-Reflex („würde dauern“) führt zu would take. Als bloße Möglichkeit ist might take natürlicher.",
+    "en": "The subjunctive reflex (“würde dauern”) leads to would take. As a plain possibility, might take is more natural."
+   }
+  }
+ },
+ {
+  "pat": "hg.worth",
+  "en": "It might be worth involving legal before we commit.",
+  "de": "Es könnte sich lohnen, die Rechtsabteilung einzubinden, bevor wir uns festlegen. (vorsichtig, als Vorschlag)",
+  "chunks": [
+   "it",
+   "might be",
+   "worth",
+   "involving",
+   "legal",
+   "before we commit"
+  ],
+  "alt": [
+   "Before we commit, it might be worth involving legal."
+  ],
+  "why": [
+   "Nach worth steht die -ing-Form: worth involving. Das Deutsche „lohnt sich, … zu“ verführt zu worth to involve.",
+   "After worth comes the -ing form: worth involving. German “lohnt sich, … zu” tempts you into worth to involve."
+  ],
+  "bad": "It might be worth to involve legal before we commit.",
+  "trap": {
+   "tile": "involving",
+   "instead": "to involve",
+   "why": {
+    "de": "Im Deutschen folgt auf „es lohnt sich“ ein Infinitiv mit zu. Nach worth steht aber die -ing-Form.",
+    "en": "In German “es lohnt sich” is followed by an infinitive with zu. After worth, though, the -ing form is used."
+   }
+  }
+ },
+ {
+  "pat": "hg.inclined",
+  "en": "We'd be inclined to pilot the tool in one region first.",
+  "de": "Wir würden das Tool zuerst in einer Region testen. (vorsichtig, als Absicht)",
+  "chunks": [
+   "we'd",
+   "be inclined",
+   "to pilot",
+   "the tool",
+   "in one region",
+   "first"
+  ],
+  "alt": [
+   "We'd be inclined to pilot the tool first in one region."
+  ],
+  "why": [
+   "Nach be inclined folgt to + Grundform: to pilot. Die -ing-Form gehört zu Wörtern wie worth.",
+   "After be inclined comes to + base verb: to pilot. The -ing form belongs to words such as worth."
+  ],
+  "bad": "We'd be inclined piloting the tool in one region first.",
+  "trap": {
+   "tile": "to pilot",
+   "instead": "piloting",
+   "why": {
+    "de": "Kein Übersetzungsfehler, sondern ein Reflex: Nach worth steht -ing, und das wird auf inclined übertragen. Hier folgt to + Grundform.",
+    "en": "Not a translation error but a reflex: worth takes -ing, and that gets carried over to inclined. Here to + base verb follows."
+   }
+  }
+ },
+ {
+  "pat": "hg.seems",
+  "en": "It seems to me that the pricing needs another look.",
+  "de": "Mir scheint, dass der Preis noch einmal geprüft werden muss. (vorsichtig, als Eindruck)",
+  "chunks": [
+   "it seems",
+   "to me",
+   "that",
+   "the pricing",
+   "needs",
+   "another look"
+  ],
+  "why": [
+   "Die Person braucht nach seems ein to: seems to me. Danach folgt that mit dem ganzen Satz.",
+   "The person needs a to after seems: seems to me. Then that follows with the whole clause."
+  ],
+  "bad": "It seems me that the pricing needs another look.",
+  "trap": {
+   "tile": "to me",
+   "instead": "me",
+   "why": {
+    "de": "„Es scheint mir, dass“ hat im Deutschen nur ein Dativpronomen. Englisch braucht to: seems to me.",
+    "en": "German “es scheint mir, dass” uses a bare dative pronoun. English needs to: seems to me."
+   }
+  },
+  "alt": [
+   "To me, it seems that the pricing needs another look."
+  ]
+ },
+ {
+  "pat": "hg.seems",
+  "en": "The numbers seem to have changed since last quarter.",
+  "de": "Die Zahlen scheinen sich seit dem letzten Quartal verändert zu haben. (vorsichtig, als Eindruck)",
+  "chunks": [
+   "the numbers",
+   "seem",
+   "to have",
+   "changed",
+   "since last quarter"
+  ],
+  "alt": [
+   "Since last quarter, the numbers seem to have changed."
+  ],
+  "why": [
+   "Für etwas, das schon passiert ist, folgt auf seem die Form to have + Partizip: seem to have changed.",
+   "For something that already happened, seem is followed by to have + participle: seem to have changed."
+  ],
+  "bad": "The numbers seem to changed since last quarter."
+ },
+ {
+  "pat": "hg.downtoner",
+  "en": "The revised timeline is slightly too tight for the team.",
+  "de": "Der überarbeitete Zeitplan ist für das Team etwas zu knapp. (vorsichtig, als Einschätzung)",
+  "chunks": [
+   "the revised timeline",
+   "is",
+   "slightly",
+   "too tight",
+   "for the team"
+  ],
+  "alt": [
+   "For the team, the revised timeline is slightly too tight."
+  ],
+  "why": [
+   "Slightly steht direkt vor too tight und mildert das Urteil: Es ist knapp, aber nur ein wenig.",
+   "Slightly goes right before too tight and softens the judgment: it is tight, but only a little."
+  ],
+  "bad": "The revised timeline is something too tight for the team.",
+  "trap": {
+   "tile": "slightly",
+   "instead": "something",
+   "why": {
+    "de": "Im Deutschen ist „etwas“ Pronomen und Abschwächer. Das Pronomen ist something, der Abschwächer slightly oder a bit.",
+    "en": "In German “etwas” is both pronoun and softener. The pronoun is something, the softener is slightly or a bit."
+   }
+  }
+ },
+ {
+  "pat": "hg.downtoner",
+  "en": "I'm not quite convinced this approach scales.",
+  "de": "Ich bin nicht ganz überzeugt, dass dieser Ansatz skaliert. (vorsichtig, als Zweifel)",
+  "chunks": [
+   "I'm",
+   "not quite",
+   "convinced",
+   "this approach",
+   "scales"
+  ],
+  "single": "Not quite steht direkt vor dem Adjektiv convinced; quite not ist keine natürliche Reihenfolge.",
+  "why": [
+   "Not quite mildert aus „not convinced“ einen vorsichtigen Zweifel. Die Reihenfolge ist not quite, nicht quite not.",
+   "Not quite turns “not convinced” into a cautious doubt. The order is not quite, not quite not."
+  ],
+  "bad": "I'm quite not convinced this approach scales."
+ }
+]

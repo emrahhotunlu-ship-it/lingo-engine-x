@@ -1,0 +1,188 @@
+[
+ {
+  "pat": "pc.duration",
+  "en": "We have been testing the new tool since March.",
+  "de": "Wir testen das neue Tool seit März.",
+  "chunks": [
+   "we",
+   "have been",
+   "testing",
+   "the new tool",
+   "since March"
+  ],
+  "alt": [
+   "Since March, we have been testing the new tool."
+  ],
+  "why": [
+   "Mit since läuft die Tätigkeit noch: have been testing. Das deutsche Präsens „testen wir“ wäre im Englischen falsch.",
+   "With since the activity is still going on: have been testing. The German present “testen wir” would be wrong in English."
+  ],
+  "bad": "We are testing the new tool since March.",
+  "trap": {
+   "tile": "have been",
+   "instead": "are",
+   "why": {
+    "de": "Das deutsche Präsens „testen wir seit März“ verführt zu are testing. Mit since braucht Englisch have been testing.",
+    "en": "The German present “testen wir seit März” tempts you into are testing. With since English needs have been testing."
+   }
+  }
+ },
+ {
+  "pat": "pc.duration",
+  "en": "How long have you been working here?",
+  "de": "Wie lange arbeitest du schon hier?",
+  "chunks": [
+   "how long",
+   "have you",
+   "been",
+   "working",
+   "here"
+  ],
+  "single": "Nach how long folgt die Frageform have you been working, nicht you have been.",
+  "why": [
+   "In der Frage steht have vor dem Subjekt: How long have you been working. Das Deutsche nutzt dafür das Präsens.",
+   "In the question have comes before the subject: How long have you been working. German uses the present for this."
+  ],
+  "bad": "How long are you working here?",
+  "trap": {
+   "tile": "have you",
+   "instead": "do you",
+   "why": {
+    "de": "Wie das deutsche „arbeitest du“ führt do you zum Present Simple. Bei „how long“ bis jetzt steht have you been.",
+    "en": "Like German “arbeitest du”, do you leads to the Present Simple. With “how long” up to now use have you been."
+   }
+  }
+ },
+ {
+  "pat": "pc.since-for",
+  "en": "I have been waiting for twenty minutes.",
+  "de": "Ich warte seit zwanzig Minuten.",
+  "chunks": [
+   "I",
+   "have been",
+   "waiting",
+   "for",
+   "twenty minutes"
+  ],
+  "alt": [
+   "For twenty minutes, I have been waiting."
+  ],
+  "why": [
+   "twenty minutes ist eine Zeitspanne, also for. since bräuchte einen Zeitpunkt wie since nine.",
+   "twenty minutes is a length of time, so for. since would need a point in time like since nine."
+  ],
+  "bad": "I have been waiting since twenty minutes.",
+  "trap": {
+   "tile": "for",
+   "instead": "since",
+   "why": {
+    "de": "Deutsch „seit“ passt für beides, deshalb liegt since nahe. Eine Zeitspanne verlangt aber for.",
+    "en": "German “seit” covers both, so since feels natural. A length of time needs for, though."
+   }
+  }
+ },
+ {
+  "pat": "pc.form",
+  "en": "She has been leading the project since May.",
+  "de": "Sie leitet das Projekt seit Mai.",
+  "chunks": [
+   "she",
+   "has been",
+   "leading",
+   "the project",
+   "since May"
+  ],
+  "alt": [
+   "Since May, she has been leading the project."
+  ],
+  "why": [
+   "Die Form hat drei Teile: has, been und -ing. Nach been steht leading, nicht led.",
+   "The form has three parts: has, been and -ing. After been comes leading, not led."
+  ],
+  "bad": "She is leading the project since May."
+ },
+ {
+  "pat": "pc.recent",
+  "en": "We haven't been getting many leads lately.",
+  "de": "Wir bekommen in letzter Zeit nicht viele Leads.",
+  "chunks": [
+   "we",
+   "haven't been",
+   "getting",
+   "many leads",
+   "lately"
+  ],
+  "alt": [
+   "Lately, we haven't been getting many leads."
+  ],
+  "why": [
+   "lately blickt auf die Zeit bis jetzt: haven't been getting. Das deutsche Präsens „bekommen wir“ passt nicht.",
+   "lately looks at the time up to now: haven't been getting. The German present “bekommen wir” does not fit."
+  ],
+  "bad": "We don't get many leads lately.",
+  "trap": {
+   "tile": "haven't been",
+   "instead": "don't",
+   "why": {
+    "de": "Deutsch sagt „in letzter Zeit bekommen wir“ im Präsens, daraus wird don't get. lately braucht have been.",
+    "en": "German says “in letzter Zeit bekommen wir” in the present, which becomes don't get. lately needs have been."
+   }
+  }
+ },
+ {
+  "pat": "pc.state-verbs",
+  "en": "I have known our CFO for ten years.",
+  "de": "Ich kenne unseren Finanzchef seit zehn Jahren.",
+  "chunks": [
+   "I",
+   "have known",
+   "our CFO",
+   "for",
+   "ten years"
+  ],
+  "alt": [
+   "For ten years, I have known our CFO."
+  ],
+  "why": [
+   "know ist ein Zustandsverb und steht ohne -ing: have known. Die Dauer „for ten years“ gilt trotzdem.",
+   "know is a state verb and takes no -ing: have known. The duration “for ten years” still applies."
+  ],
+  "bad": "I have been knowing our CFO for ten years.",
+  "trap": {
+   "tile": "have known",
+   "instead": "have been knowing",
+   "why": {
+    "de": "Der Reflex „Dauer = -ing“ erzeugt have been knowing. Zustandsverben wie know bleiben einfach.",
+    "en": "The reflex “duration = -ing” produces have been knowing. State verbs like know stay simple."
+   }
+  }
+ },
+ {
+  "pat": "pc.cont-simple",
+  "en": "I have written three reports since Monday.",
+  "de": "Ich habe seit Montag drei Berichte geschrieben.",
+  "chunks": [
+   "I",
+   "have",
+   "written",
+   "three reports",
+   "since Monday"
+  ],
+  "alt": [
+   "Since Monday, I have written three reports."
+  ],
+  "why": [
+   "Eine Zahl (three reports) zählt das Ergebnis: einfaches Present Perfect, have written, nicht been writing.",
+   "A number (three reports) counts the result: simple Present Perfect, have written, not been writing."
+  ],
+  "bad": "I have been writing three reports since Monday.",
+  "trap": {
+   "tile": "written",
+   "instead": "been writing",
+   "why": {
+    "de": "Der Reflex „Dauer = -ing“ greift auch bei einer Zahl. Bei einer Anzahl steht aber das Partizip.",
+    "en": "The reflex “duration = -ing” also kicks in with a number. With a count the participle is used."
+   }
+  }
+ }
+]

@@ -1,0 +1,688 @@
+{
+ "Look! It ___ outside.": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „Look!“ zeigt auf diesen Moment, also Present Continuous: is snowing.",
+    "en": "Right: “Look!” points at this very moment, so present continuous: is snowing."
+   },
+   "wrong": [
+    {
+     "opt": "snows",
+     "pat": "psc.habit",
+     "de": "„snows“ nennt Schnee als Regel. „Look!“ zeigt aber auf das, was jetzt passiert.",
+     "en": "“snows” states snow as a general fact. But “Look!” points at what is happening now."
+    },
+    {
+     "opt": "snowed",
+     "de": "„snowed“ ist vergangen, aber „Look!“ zeigt auf den Moment jetzt.",
+     "en": "“snowed” is in the past, but “Look!” points at the moment now."
+    },
+    {
+     "opt": "has snowed",
+     "de": "„has snowed“ nennt ein Ergebnis. „Look!“ + outside zeigt auf den laufenden Vorgang.",
+     "en": "“has snowed” names a result. “Look!” + outside points at the process in progress."
+    }
+   ]
+  }
+ },
+ "I usually ___ from home on Fridays.": {
+  "pat": "psc.habit",
+  "why": {
+   "ok": {
+    "de": "Richtig: „usually“ und „on Fridays“ nennen eine Regel, also Present Simple: work.",
+    "en": "Right: “usually” and “on Fridays” name a rule, so present simple: work."
+   },
+   "wrong": [
+    {
+     "if": [
+      "working"
+     ],
+     "pat": "psc.now",
+     "de": "„am working“ passt zu jetzt oder vorübergehend. „usually“ nennt aber eine Regel.",
+     "en": "“am working” fits now or temporary. But “usually” names a rule."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "de": "„worked“ ist vergangen, aber „usually“ und „on Fridays“ beschreiben die Regel heute.",
+     "en": "“worked” is past, but “usually” and “on Fridays” describe the rule today."
+    },
+    {
+     "if": [
+      "works"
+     ],
+     "de": "Nach „I“ steht keine -s-Form: I work.",
+     "en": "After “I” there is no -s form: I work."
+    },
+    {
+     "not": [
+      "work"
+     ],
+     "de": "Gesucht ist die Grundform von work: I usually work.",
+     "en": "The base form of work is needed: I usually work."
+    }
+   ]
+  }
+ },
+ "Now I ___ what you mean.": {
+  "pat": "psc.state",
+  "why": {
+   "ok": {
+    "de": "Richtig: understand ist ein Zustandsverb. Es bekommt kein -ing, auch bei „now“.",
+    "en": "Right: understand is a state verb. It takes no -ing, even with “now”."
+   },
+   "wrong": [
+    {
+     "opt": "am understanding",
+     "pat": "psc.now",
+     "de": "Zustandsverben haben kein -ing, auch wenn „now“ dasteht.",
+     "en": "State verbs take no -ing, even when “now” is there."
+    },
+    {
+     "opt": "understood",
+     "de": "„understood“ ist vergangen, aber „now“ meint den Zustand jetzt.",
+     "en": "“understood” is past, but “now” means the state at this moment."
+    },
+    {
+     "opt": "have understood",
+     "de": "„have understood“ betont das Ergebnis. Für den Zustand jetzt sagt man understand.",
+     "en": "“have understood” stresses the result. For the state now, say understand."
+    }
+   ]
+  }
+ },
+ "Sorry, I can't talk right now. We ___ a demo for a big client.": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „right now“ heißt, die Demo läuft jetzt, also Present Continuous: are giving.",
+    "en": "Right: “right now” means the demo is under way, so present continuous: are giving."
+   },
+   "wrong": [
+    {
+     "opt": "gave",
+     "de": "„gave“ ist vergangen, aber die Demo läuft gerade noch.",
+     "en": "“gave” is past, but the demo is still going on."
+    },
+    {
+     "opt": "have given",
+     "de": "„have given“ wäre abgeschlossen, aber „can't talk“ zeigt: Die Demo läuft noch.",
+     "en": "“have given” would be finished. “can't talk” shows it is still on."
+    },
+    {
+     "opt": "give",
+     "pat": "psc.habit",
+     "de": "„give“ beschriebe eine Gewohnheit. „right now“ meint den Moment.",
+     "en": "“give” would describe a habit. “right now” means this moment."
+    }
+   ]
+  }
+ },
+ "Our platform ___ more than 5,000 customers across Europe.": {
+  "pat": "psc.dual",
+  "why": {
+   "ok": {
+    "de": "Richtig: have = besitzen ist ein Zustand, also kein -ing. „platform“ ist Singular: has.",
+    "en": "Right: have = own is a state, so no -ing. “platform” is singular: has."
+   },
+   "wrong": [
+    {
+     "opt": "is having",
+     "pat": "psc.state",
+     "de": "Mit „besitzen“ gibt es kein -ing. Es passt nur zu Handlungen wie „having lunch“.",
+     "en": "With “own” there is no -ing. It fits only actions like “having lunch”."
+    },
+    {
+     "opt": "are having",
+     "de": "Kein -ing bei „haben = besitzen“. Und „platform“ ist Singular: is, nicht are.",
+     "en": "No -ing for “have = own”. And “platform” is singular: is, not are."
+    },
+    {
+     "opt": "have",
+     "de": "„platform“ ist Singular, deshalb steht hier has, nicht have.",
+     "en": "“platform” is singular, so has is needed here, not have."
+    }
+   ]
+  }
+ },
+ "At the moment, I ___ from our Berlin office because the Munich office is being renovated.": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „At the moment“ und der Umbau machen es vorübergehend: Continuous, am working.",
+    "en": "Right: “At the moment” and the renovation make it temporary: continuous, am working."
+   },
+   "wrong": [
+    {
+     "opt": "worked",
+     "de": "„worked“ ist vergangen. Die Lage gilt aber gerade jetzt.",
+     "en": "“worked” is past. But the situation applies right now."
+    },
+    {
+     "opt": "work",
+     "pat": "psc.habit",
+     "de": "„work“ nennt eine feste Gewohnheit. Der Umbau macht es vorübergehend.",
+     "en": "“work” names a fixed habit. The renovation makes it temporary."
+    },
+    {
+     "opt": "have worked",
+     "de": "„have worked“ blickt zurück. Hier gilt die Lage aber jetzt, nur für kurze Zeit.",
+     "en": "“have worked” looks back. Here the situation holds now, for a short time only."
+    }
+   ]
+  }
+ },
+ "Prices usually ___ in the fourth quarter, so we plan our discounts early.": {
+  "pat": "psc.habit",
+  "why": {
+   "ok": {
+    "de": "Richtig: „usually“ nennt ein wiederkehrendes Muster, also Present Simple: rise.",
+    "en": "Right: “usually” names a recurring pattern, so present simple: rise."
+   },
+   "wrong": [
+    {
+     "opt": "have risen",
+     "de": "„have risen“ meldet ein Ergebnis bis jetzt, aber kein wiederkehrendes Muster.",
+     "en": "“have risen” reports a result up to now, but not a recurring pattern."
+    },
+    {
+     "opt": "are rising",
+     "pat": "psc.now",
+     "de": "„are rising“ beschriebe eine Veränderung jetzt. „usually“ nennt ein Muster.",
+     "en": "“are rising” would describe a change now. “usually” names a pattern."
+    },
+    {
+     "opt": "rose",
+     "de": "„rose“ ist einmalig vergangen. „usually“ sagt: Jedes Jahr wieder.",
+     "en": "“rose” is a single past event. “usually” says: again every year."
+    }
+   ]
+  }
+ },
+ "I ___ you're right about the timeline – it's too tight.": {
+  "pat": "psc.dual",
+  "why": {
+   "ok": {
+    "de": "Richtig: think = meinen ist ein Zustand, also Present Simple ohne -ing.",
+    "en": "Right: think = have an opinion is a state, so present simple without -ing."
+   },
+   "wrong": [
+    {
+     "opt": "am thinking",
+     "pat": "psc.now",
+     "de": "„am thinking“ heißt: Ich denke gerade nach (Handlung). Gemeint ist „ich meine“.",
+     "en": "“am thinking” means: I am considering it right now (action). “I believe” is meant."
+    },
+    {
+     "opt": "thinks",
+     "de": "Nach „I“ steht keine -s-Form: I think.",
+     "en": "After “I” there is no -s form: I think."
+    },
+    {
+     "opt": "have thought",
+     "de": "„have thought“ blickt zurück. Gemeint ist die Meinung jetzt.",
+     "en": "“have thought” looks back. The opinion now is meant."
+    }
+   ]
+  }
+ },
+ "This soup ___ great – what's in it?": {
+  "pat": "psc.dual",
+  "why": {
+   "ok": {
+    "de": "Richtig: taste = Geschmack ist ein Zustand, also Present Simple: tastes.",
+    "en": "Right: taste = flavor is a state, so present simple: tastes."
+   },
+   "wrong": [
+    {
+     "opt": "has tasted",
+     "de": "„has tasted“ wäre abgeschlossen. Hier geht es um den Geschmack jetzt.",
+     "en": "“has tasted” would be finished. Here the flavor right now is meant."
+    },
+    {
+     "opt": "was tasting",
+     "de": "„was tasting“ ist eine Handlung in der Vergangenheit. Die Suppe schmeckt jetzt.",
+     "en": "“was tasting” is an action in the past. The soup tastes great now."
+    },
+    {
+     "opt": "is tasting",
+     "de": "„is tasting“ hieße: Jemand probiert die Suppe gerade. Gemeint ist ihr Geschmack.",
+     "en": "“is tasting” would mean: someone is sampling the soup. Its flavor is meant."
+    }
+   ]
+  }
+ },
+ "Our sales director ___ to Singapore twice a year to meet partners.": {
+  "pat": "psc.habit",
+  "why": {
+   "ok": {
+    "de": "Richtig: „twice a year“ ist regelmäßig, also Present Simple, 3. Person: flies.",
+    "en": "Right: “twice a year” is regular, so present simple, third person: flies."
+   },
+   "wrong": [
+    {
+     "if": [
+      "flying"
+     ],
+     "pat": "psc.now",
+     "de": "„is flying“ passt zu jetzt. „twice a year“ nennt eine Regel.",
+     "en": "“is flying” fits now. “twice a year” names a rule."
+    },
+    {
+     "if": [
+      "flew"
+     ],
+     "de": "„flew“ ist einmalig vergangen. „twice a year“ beschreibt die Regel heute.",
+     "en": "“flew” is a single past event. “twice a year” describes the rule today."
+    },
+    {
+     "if": [
+      "fly"
+     ],
+     "de": "Nach he/she/it braucht das Verb ein -s: flies.",
+     "en": "After he/she/it the verb needs an -s: flies."
+    },
+    {
+     "not": [
+      "flies"
+     ],
+     "de": "Gesucht ist die Present-Simple-Form von fly: flies.",
+     "en": "The present simple form of fly is needed: flies."
+    }
+   ]
+  }
+ },
+ "At the moment my team ___ a new onboarding process, so please ask again next week.": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „At the moment“ + vorübergehend, also Present Continuous: is testing.",
+    "en": "Right: “At the moment” + temporary, so present continuous: is testing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "tests"
+     ],
+     "pat": "psc.habit",
+     "de": "„tests“ nennt eine Gewohnheit. „At the moment“ meint die Lage jetzt.",
+     "en": "“tests” names a habit. “At the moment” means the situation now."
+    },
+    {
+     "if": [
+      "tested"
+     ],
+     "de": "„tested“ ist vergangen. „please ask again next week“ zeigt: Es läuft noch.",
+     "en": "“tested” is past. “please ask again next week” shows: it is still going on."
+    },
+    {
+     "if": [
+      "testing"
+     ],
+     "not": [
+      "is",
+      "are",
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort braucht es is: is testing.",
+     "en": "The -ing word needs is before it: is testing."
+    },
+    {
+     "not": [
+      "testing"
+     ],
+     "de": "Gesucht ist is + -ing: Es läuft gerade.",
+     "en": "Is + -ing is needed: it is in progress right now."
+    }
+   ]
+  }
+ },
+ "Why are you whispering? – Because the client ___ on the phone in the next room.": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es passiert genau jetzt (Frage „Why are you whispering?“), also is talking.",
+    "en": "Right: it is happening right now (the question “Why are you whispering?”), so is talking."
+   },
+   "wrong": [
+    {
+     "if": [
+      "talks"
+     ],
+     "pat": "psc.habit",
+     "de": "„talks“ nennt eine Gewohnheit. Er telefoniert aber gerade im Nebenraum.",
+     "en": "“talks” names a habit. But he is on the phone in the next room right now."
+    },
+    {
+     "if": [
+      "talked"
+     ],
+     "de": "„talked“ ist vergangen. Das Flüstern zeigt: Er telefoniert noch.",
+     "en": "“talked” is past. The whispering shows: he is still on the phone."
+    },
+    {
+     "if": [
+      "talking"
+     ],
+     "not": [
+      "is",
+      "are",
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort braucht es is: is talking.",
+     "en": "The -ing word needs is before it: is talking."
+    },
+    {
+     "not": [
+      "talking"
+     ],
+     "de": "Gesucht ist is + -ing: Er telefoniert gerade.",
+     "en": "Is + -ing is needed: he is on the phone right now."
+    }
+   ]
+  }
+ },
+ "This software ___ a lot of memory, so it runs slowly on old laptops.": {
+  "pat": "psc.state",
+  "why": {
+   "ok": {
+    "de": "Richtig: need ist ein Zustandsverb, also Present Simple, 3. Person: needs.",
+    "en": "Right: need is a state verb, so present simple, third person: needs."
+   },
+   "wrong": [
+    {
+     "if": [
+      "needing"
+     ],
+     "de": "„is needing“ geht nicht: need ist ein Zustandsverb ohne -ing.",
+     "en": "“is needing” is not possible: need is a state verb without -ing."
+    },
+    {
+     "if": [
+      "need"
+     ],
+     "de": "„software“ ist Singular, deshalb braucht need ein -s: needs.",
+     "en": "“software” is singular, so need takes an -s: needs."
+    },
+    {
+     "if": [
+      "needed"
+     ],
+     "de": "„needed“ ist vergangen. „it runs slowly“ beschreibt die Lage jetzt.",
+     "en": "“needed” is past. “it runs slowly” describes the situation now."
+    },
+    {
+     "not": [
+      "needs"
+     ],
+     "de": "Gesucht ist die Present-Simple-Form von need: needs.",
+     "en": "The present simple form of need is needed: needs."
+    }
+   ]
+  }
+ },
+ "He ___ coffee; he only drinks tea.": {
+  "pat": "psc.state",
+  "why": {
+   "ok": {
+    "de": "Richtig: like ist ein Zustandsverb, also Present Simple. Verneint mit doesn't: doesn't like.",
+    "en": "Right: like is a state verb, so present simple. Negated with doesn't: doesn't like."
+   },
+   "wrong": [
+    {
+     "if": [
+      "liking"
+     ],
+     "de": "„liking“ geht nicht: like ist ein Zustandsverb ohne -ing.",
+     "en": "“liking” is not possible: like is a state verb without -ing."
+    },
+    {
+     "if": [
+      "do",
+      "like"
+     ],
+     "de": "„don't“ passt zu I/you/we. Bei „he“ heißt es doesn't.",
+     "en": "“don't” goes with I/you/we. With “he” it is doesn't."
+    },
+    {
+     "if": [
+      "not",
+      "like"
+     ],
+     "not": [
+      "does"
+     ],
+     "de": "Die Verneinung braucht do/does davor: he doesn't like.",
+     "en": "The negative needs do/does before it: he doesn't like."
+    },
+    {
+     "not": [
+      "like"
+     ],
+     "de": "Gesucht ist die Verneinung von like: doesn't like.",
+     "en": "The negative of like is needed: doesn't like."
+    }
+   ]
+  }
+ },
+ "He interrupts people in every meeting, and it annoys me. → He ___ interrupting people in meetings!": {
+  "pat": "psc.always",
+  "why": {
+   "ok": {
+    "de": "Richtig: is always + -ing zeigt Ärger über die ständige Wiederholung: He's always interrupting.",
+    "en": "Right: is always + -ing shows annoyance at constant repetition: He's always interrupting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "usually"
+     ],
+     "pat": "psc.habit",
+     "de": "„usually“ nennt nur die Häufigkeit. Den Ärger trägt always + -ing.",
+     "en": "“usually” only states the frequency. The annoyance comes from always + -ing."
+    },
+    {
+     "if": [
+      "always",
+      "is"
+     ],
+     "de": "Die Wortstellung: always steht nach is, also is always interrupting.",
+     "en": "Word order: always comes after is, so is always interrupting."
+    },
+    {
+     "if": [
+      "always"
+     ],
+     "not": [
+      "is"
+     ],
+     "de": "Vor always fehlt is: He is always interrupting.",
+     "en": "Is is missing before always: He is always interrupting."
+    },
+    {
+     "not": [
+      "always"
+     ],
+     "de": "Für Ärger braucht es always (oder constantly) vor dem -ing-Wort.",
+     "en": "For annoyance you need always (or constantly) before the -ing word."
+    }
+   ]
+  }
+ },
+ "Anna normally lives in Hamburg. Just for this summer, she has an apartment in Munich. → This summer, Anna ___ in Munich.": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „This summer“ + nur vorübergehend, also Present Continuous: is living.",
+    "en": "Right: “This summer” + only temporary, so present continuous: is living."
+   },
+   "wrong": [
+    {
+     "if": [
+      "lives"
+     ],
+     "pat": "psc.habit",
+     "de": "„lives“ wäre ihr fester Wohnort. Es gilt aber nur für diesen Sommer.",
+     "en": "“lives” would be her permanent home. But this applies only for this summer."
+    },
+    {
+     "if": [
+      "lived"
+     ],
+     "de": "„lived“ ist vergangen. Der Sommer läuft aber gerade.",
+     "en": "“lived” is past. But the summer is going on now."
+    },
+    {
+     "if": [
+      "living"
+     ],
+     "not": [
+      "is",
+      "are",
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort braucht es is: is living.",
+     "en": "The -ing word needs is before it: is living."
+    },
+    {
+     "not": [
+      "living",
+      "staying"
+     ],
+     "de": "Gesucht ist is + -ing: vorübergehend, nur für diesen Sommer.",
+     "en": "Is + -ing is needed: temporary, for this summer only."
+    }
+   ]
+  }
+ },
+ "I am knowing the client very well, so I'll lead the call.": {
+  "pat": "psc.state",
+  "dup": "I am knowing the answer.",
+  "why": {
+   "ok": {
+    "de": "Richtig: know ist ein Zustandsverb und hat nie -ing: I know the client.",
+    "en": "Right: know is a state verb and never takes -ing: I know the client."
+   },
+   "wrong": [
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "„knowing“ geht nicht: know ist ein Zustandsverb ohne -ing.",
+     "en": "“knowing” is not possible: know is a state verb without -ing."
+    },
+    {
+     "if": [
+      "knew"
+     ],
+     "de": "„knew“ ist vergangen. Gemeint ist: Ich kenne den Kunden jetzt gut.",
+     "en": "“knew” is past. The point is: I know the client well now."
+    },
+    {
+     "not": [
+      "know"
+     ],
+     "de": "Das Verb bleibt know, aber in der einfachen Form: I know the client.",
+     "en": "The verb stays know, but in the simple form: I know the client."
+    }
+   ]
+  }
+ },
+ "Our CEO is usually arriving at the office before 7 a.m.": {
+  "pat": "psc.habit",
+  "why": {
+   "ok": {
+    "de": "Richtig: „usually“ zeigt eine Gewohnheit, also Present Simple: usually arrives.",
+    "en": "Right: “usually” shows a habit, so present simple: usually arrives."
+   },
+   "wrong": [
+    {
+     "if": [
+      "arriving"
+     ],
+     "de": "„is arriving“ passt nicht zu „usually“. Eine Gewohnheit steht im Present Simple.",
+     "en": "“is arriving” does not fit “usually”. A habit takes the present simple."
+    },
+    {
+     "if": [
+      "arrive"
+     ],
+     "de": "Nach „CEO“ (he/she) braucht arrive ein -s: arrives.",
+     "en": "After “CEO” (he/she) arrive needs an -s: arrives."
+    },
+    {
+     "not": [
+      "arrives"
+     ],
+     "de": "Gesucht ist die Gewohnheitsform von arrive: usually arrives.",
+     "en": "The habit form of arrive is needed: usually arrives."
+    }
+   ]
+  }
+ },
+ "I am knowing the answer.": {
+  "pat": "psc.state",
+  "why": {
+   "ok": {
+    "de": "Richtig: know ist ein Zustandsverb, Zustände stehen nie in der -ing-Form: I know.",
+    "en": "Right: know is a state verb, states never take the -ing form: I know."
+   },
+   "wrong": [
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "„knowing“ geht nicht: know ist ein Zustandsverb ohne -ing.",
+     "en": "“knowing” is not possible: know is a state verb without -ing."
+    },
+    {
+     "not": [
+      "know"
+     ],
+     "de": "Das Verb bleibt know, aber in der einfachen Form: I know the answer.",
+     "en": "The verb stays know, but in the simple form: I know the answer."
+    }
+   ]
+  }
+ },
+ "Look! It snows.": {
+  "pat": "psc.now",
+  "why": {
+   "ok": {
+    "de": "Richtig: „Look!“ zeigt auf diesen Moment, also Continuous: It's snowing.",
+    "en": "Right: “Look!” points at this very moment, so continuous: It's snowing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "snows"
+     ],
+     "pat": "psc.habit",
+     "de": "„snows“ nennt eine Regel. „Look!“ zeigt aber auf das, was jetzt passiert.",
+     "en": "“snows” names a rule. But “Look!” points at what is happening now."
+    },
+    {
+     "if": [
+      "snowing"
+     ],
+     "not": [
+      "is",
+      "are",
+      "am"
+     ],
+     "de": "Vor dem -ing-Wort braucht es is: It's snowing.",
+     "en": "The -ing word needs is before it: It's snowing."
+    },
+    {
+     "not": [
+      "snowing"
+     ],
+     "de": "Gesucht ist is + -ing: Es schneit gerade.",
+     "en": "Is + -ing is needed: it is snowing right now."
+    }
+   ]
+  }
+ }
+}

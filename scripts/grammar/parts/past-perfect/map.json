@@ -1,0 +1,653 @@
+{
+ "When we arrived at the cinema, the film ___.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Beginn lag vor unserer Ankunft → had already started.",
+    "en": "Right: the start came before we arrived → had already started."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has started“ gehört zur Gegenwart; die Geschichte spielt in der Vergangenheit.",
+     "en": "“has started” belongs to the present; the story is in the past."
+    },
+    {
+     "if": [
+      "started"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„started“ allein heißt: Der Film begann nach unserer Ankunft. Er lief schon.",
+     "en": "“started” alone says the film began after we arrived. It was already running."
+    },
+    {
+     "if": [
+      "was",
+      "starting"
+     ],
+     "de": "„was starting“ ist ein Verlauf bei der Ankunft, nicht das, was davor passiert war.",
+     "en": "“was starting” is a process at the moment of arrival, not what had happened before."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere von zwei Ereignissen in der Vergangenheit braucht had + Partizip.",
+     "en": "The earlier of two past events needs had + participle."
+    }
+   ]
+  }
+ },
+ "She was exhausted because she ___ for hours.": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: Dauer bis zum Zeitpunkt „erschöpft“ in der Vergangenheit → had been working.",
+    "en": "Right: duration up to the past moment “exhausted” → had been working."
+   },
+   "wrong": [
+    {
+     "opt": "has worked",
+     "de": "„has worked“ gehört zur Gegenwart; sie war erschöpft, das ist Vergangenheit.",
+     "en": "“has worked” belongs to the present; she was exhausted, so we are in the past."
+    },
+    {
+     "opt": "was working",
+     "de": "„was working“ läuft gleichzeitig mit „was exhausted“; die Ursache lag davor.",
+     "en": "“was working” runs at the same time as “was exhausted”; the cause came before."
+    },
+    {
+     "opt": "works",
+     "de": "„works“ ist Präsens; die Geschichte spielt in der Vergangenheit.",
+     "en": "“works” is present tense; the story is in the past."
+    }
+   ]
+  }
+ },
+ "I finished my homework. Then I went out. → After I ___, I went out.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: had finished zeigt, dass das Beenden zuerst kam. Nach „after“ geht auch „finished“.",
+    "en": "Right: had finished shows that finishing came first. After “after”, plain “finished” works too."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have finished“ gehört zur Gegenwart; „went out“ liegt in der Vergangenheit.",
+     "en": "“have finished” belongs to the present; “went out” is in the past."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Nach „after“ zeigt had + Partizip, welche Handlung zuerst kam.",
+     "en": "After “after”, had + participle shows which action came first."
+    }
+   ]
+  }
+ },
+ "By the time I joined the call, the client ___ the meeting.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Kunde war schon gegangen, bevor ich einstieg → had already left.",
+    "en": "Right: the client had gone before I joined → had already left."
+   },
+   "wrong": [
+    {
+     "opt": "is already leaving",
+     "de": "„is leaving“ ist Gegenwart; „joined“ steht in der Vergangenheit.",
+     "en": "“is leaving” is present tense; “joined” is in the past."
+    },
+    {
+     "opt": "would already leave",
+     "de": "„would leave“ schaut nach vorn, nicht auf etwas, das davor lag.",
+     "en": "“would leave” looks ahead, not back at something that came before."
+    },
+    {
+     "opt": "has already left",
+     "de": "„has left“ gehört zur Gegenwart; der Kunde war vor meinem Einstieg gegangen.",
+     "en": "“has left” belongs to the present; the client had gone before I joined."
+    }
+   ]
+  }
+ },
+ "By the time the client finally signed, we ___ the deal for months.": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Verhandlung dauerte Monate bis zur Unterschrift → had been negotiating.",
+    "en": "Right: the negotiation lasted months up to the signing → had been negotiating."
+   },
+   "wrong": [
+    {
+     "opt": "have been negotiating",
+     "de": "„have been negotiating“ reicht bis jetzt; die Unterschrift liegt in der Vergangenheit.",
+     "en": "“have been negotiating” runs up to now; the signing is in the past."
+    },
+    {
+     "opt": "negotiated",
+     "de": "„negotiated“ nennt nur die Handlung, nicht die Dauer bis zur Unterschrift.",
+     "en": "“negotiated” names only the action, not the duration up to the signing."
+    },
+    {
+     "opt": "were negotiating",
+     "de": "„were negotiating“ ist ein Verlauf zum Zeitpunkt, nicht die Dauer davor.",
+     "en": "“were negotiating” is a process at that moment, not the duration before it."
+    }
+   ]
+  }
+ },
+ "It was the first time she ___ such a large account.": {
+  "pat": "pp.first-time",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Erfahrung liegt vor dem Zeitpunkt in der Vergangenheit → had handled.",
+    "en": "Right: the experience lies before the past moment → had handled."
+   },
+   "wrong": [
+    {
+     "opt": "would handle",
+     "de": "„would handle“ schaut nach vorn; hier geht es um etwas, das davor lag.",
+     "en": "“would handle” looks ahead; here it is about something that came before."
+    },
+    {
+     "opt": "has handled",
+     "de": "„has handled“ gehört zur Gegenwart: „It is the first time …“ steht im Präsens.",
+     "en": "“has handled” belongs to the present (“It is the first time …”)."
+    },
+    {
+     "opt": "was handling",
+     "de": "„was handling“ beschreibt etwas Laufendes, nicht die Erfahrung davor.",
+     "en": "“was handling” describes something in progress, not the experience before."
+    }
+   ]
+  }
+ },
+ "No sooner ___ the presentation than the projector broke down.": {
+  "pat": "pp.inversion",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „No sooner“ steht had vor dem Subjekt: had we started.",
+    "en": "Right: after “No sooner”, had goes before the subject: had we started."
+   },
+   "wrong": [
+    {
+     "opt": "we started",
+     "de": "Nach „No sooner“ fehlen had und die Umstellung: had we started.",
+     "en": "After “No sooner”, both had and the inversion are missing: had we started."
+    },
+    {
+     "opt": "we had started",
+     "de": "Das had stimmt, muss aber nach „No sooner“ vor das Subjekt: had we started.",
+     "en": "The had is right, but after “No sooner” it must come before the subject: had we started."
+    },
+    {
+     "opt": "did we start",
+     "de": "„did we start“ ist Past Simple; „No sooner … than“ verlangt had we started.",
+     "en": "“did we start” is Past Simple; “No sooner … than” needs had we started."
+    }
+   ]
+  }
+ },
+ "When I called him at noon, he sounded exhausted – he ___ since 5 a.m.": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: Dauer „since 5 a.m.“ bis zum Anruf in der Vergangenheit → had been working.",
+    "en": "Right: duration “since 5 a.m.” up to the past call → had been working."
+   },
+   "wrong": [
+    {
+     "opt": "worked",
+     "de": "„worked“ nennt nur die Handlung, nicht die Dauer seit 5 Uhr bis zum Anruf.",
+     "en": "“worked” names only the action, not the duration from 5 a.m. up to the call."
+    },
+    {
+     "opt": "works",
+     "de": "„works“ ist Präsens; der Anruf liegt in der Vergangenheit.",
+     "en": "“works” is present tense; the call lies in the past."
+    },
+    {
+     "opt": "was working",
+     "de": "„was working since“ geht nicht: since braucht die Perfektform had been.",
+     "en": "“was working since” does not work: since needs the perfect form had been."
+    }
+   ]
+  }
+ },
+ "I felt lonely because my best friend ___ to another city the month before.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: „the month before“ zeigt: Der Umzug lag vor dem Gefühl → had moved.",
+    "en": "Right: “the month before” shows the move came before the feeling → had moved."
+   },
+   "wrong": [
+    {
+     "opt": "would move",
+     "de": "„would move“ schaut nach vorn; der Umzug war schon im Monat davor.",
+     "en": "“would move” looks ahead; the move happened the month before."
+    },
+    {
+     "opt": "has moved",
+     "de": "„has moved“ gehört zur Gegenwart; „the month before“ liegt in der Vergangenheit.",
+     "en": "“has moved” belongs to the present; “the month before” is in the past."
+    },
+    {
+     "opt": "moves",
+     "de": "„moves“ ist Präsens; der Satz steht in der Vergangenheit („felt“).",
+     "en": "“moves” is present tense; the sentence is in the past (“felt”)."
+    }
+   ]
+  }
+ },
+ "By the time the support team called back, I ___ the problem myself.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Beheben kam vor dem Rückruf → had fixed (by the time + Vergangenheit).",
+    "en": "Right: the fixing came before the callback → had fixed (by the time + past)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has fixed“ gehört zur Gegenwart; der Rückruf liegt in der Vergangenheit.",
+     "en": "“has fixed” belongs to the present; the callback lies in the past."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have fixed“ gehört zur Gegenwart; der Rückruf liegt in der Vergangenheit.",
+     "en": "“have fixed” belongs to the present; the callback lies in the past."
+    },
+    {
+     "if": [
+      "fixed"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„fixed“ allein ordnet die Reihenfolge nicht: Das Beheben war vor dem Rückruf fertig.",
+     "en": "“fixed” alone does not show the order: the fixing was done before the callback."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere nach „by the time“ + Vergangenheit braucht had + Partizip.",
+     "en": "The earlier event after “by the time” + past needs had + participle."
+    }
+   ]
+  }
+ },
+ "When our CEO arrived, the team ___ the agenda for an hour.": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: „for an hour“ nennt die Dauer vor der Ankunft → had been discussing.",
+    "en": "Right: “for an hour” gives the duration before the arrival → had been discussing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have been discussing“ reicht bis jetzt; die Ankunft liegt in der Vergangenheit.",
+     "en": "“have been discussing” runs up to now; the arrival lies in the past."
+    },
+    {
+     "if": [
+      "was",
+      "discussing"
+     ],
+     "de": "„was discussing“ nennt nur den Verlauf bei der Ankunft, nicht die Dauer davor.",
+     "en": "“was discussing” gives only the process at the arrival, not the duration before it."
+    },
+    {
+     "if": [
+      "discussed"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„discussed“ allein: Die Besprechung lief schon eine Stunde vor der Ankunft.",
+     "en": "“discussed” alone: the discussion had been going on for an hour before the arrival."
+    },
+    {
+     "pat": "pp.duration",
+     "de": "Dauer vor einem Zeitpunkt in der Vergangenheit braucht had been + -ing.",
+     "en": "Duration before a past moment needs had been + -ing."
+    }
+   ]
+  }
+ },
+ "She was proud: it was the first time she ___ a major deal alone.": {
+  "pat": "pp.first-time",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „it was the first time“ steht had + Partizip: had closed.",
+    "en": "Right: after “it was the first time” comes had + participle: had closed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has closed“ gehört zur Gegenwart; „it was“ steht in der Vergangenheit.",
+     "en": "“has closed” belongs to the present; “it was” is in the past."
+    },
+    {
+     "if": [
+      "was",
+      "closing"
+     ],
+     "de": "„was closing“ ist ein Verlauf; hier geht es um die Erfahrung davor.",
+     "en": "“was closing” is a process; here it is about the experience before."
+    },
+    {
+     "if": [
+      "closed"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„closed“ allein: Die Erfahrung liegt eine Stufe vor „was“ → had closed.",
+     "en": "“closed” alone: the experience sits one step before “was” → had closed."
+    },
+    {
+     "pat": "pp.first-time",
+     "de": "Nach „the first time“ in der Vergangenheit steht had + Partizip.",
+     "en": "After “the first time” in a past story comes had + participle."
+    }
+   ]
+  }
+ },
+ "When I got home, my flatmate ___ dinner already.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Kochen war vor meiner Heimkehr fertig → had cooked.",
+    "en": "Right: the cooking was done before I got home → had cooked."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has cooked“ gehört zur Gegenwart; „got home“ liegt in der Vergangenheit.",
+     "en": "“has cooked” belongs to the present; “got home” is in the past."
+    },
+    {
+     "if": [
+      "was",
+      "cooking"
+     ],
+     "de": "„was cooking“ wäre ein Verlauf; „already“ zeigt: Es war schon fertig.",
+     "en": "“was cooking” would be a process; “already” shows it was done."
+    },
+    {
+     "if": [
+      "cooked"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„cooked“ allein ordnet die Reihenfolge nicht; das Kochen war schon vorbei.",
+     "en": "“cooked” alone does not show the order; the cooking was already over."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere von zwei Ereignissen in der Vergangenheit braucht had + Partizip.",
+     "en": "The earlier of two past events needs had + participle."
+    }
+   ]
+  }
+ },
+ "By the time the update finished installing, most employees ___ home.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Sie waren schon weg, bevor das Update fertig war → had gone.",
+    "en": "Right: they had left before the update finished → had gone."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have gone“ gehört zur Gegenwart; das Update liegt in der Vergangenheit.",
+     "en": "“have gone” belongs to the present; the update lies in the past."
+    },
+    {
+     "if": [
+      "went"
+     ],
+     "de": "„went“ allein ordnet die Reihenfolge nicht; sie waren schon vorher gegangen.",
+     "en": "“went” alone does not show the order; they had gone earlier."
+    },
+    {
+     "if": [
+      "gone"
+     ],
+     "not": [
+      "had",
+      "has",
+      "have"
+     ],
+     "de": "„gone“ braucht ein Hilfsverb: had gone.",
+     "en": "“gone” needs an auxiliary: had gone."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere nach „by the time“ + Vergangenheit braucht had + Partizip.",
+     "en": "The earlier event after “by the time” + past needs had + participle."
+    }
+   ]
+  }
+ },
+ "We sent the invoice on Monday. The client called on Tuesday to ask where it was. → When the client called, we ___ the invoice.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Senden lag vor dem Anruf → had already sent.",
+    "en": "Right: the sending came before the call → had already sent."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have sent“ gehört zur Gegenwart; der Anruf liegt in der Vergangenheit.",
+     "en": "“have sent” belongs to the present; the call lies in the past."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has sent“ gehört zur Gegenwart; der Anruf liegt in der Vergangenheit.",
+     "en": "“has sent” belongs to the present; the call lies in the past."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "not": [
+      "had",
+      "has",
+      "have"
+     ],
+     "de": "„sent“ allein ordnet die Reihenfolge nicht: Montag lag vor dem Anruf am Dienstag.",
+     "en": "“sent” alone does not show the order: Monday came before the call on Tuesday."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere von zwei Ereignissen in der Vergangenheit braucht had + Partizip.",
+     "en": "The earlier of two past events needs had + participle."
+    }
+   ]
+  }
+ },
+ "She started working at 8:00. We called her at 10:00, and she was still working. → When we called, she ___ for two hours.": {
+  "pat": "pp.duration",
+  "why": {
+   "ok": {
+    "de": "Richtig: „for two hours“ nennt die Dauer bis zum Anruf → had been working.",
+    "en": "Right: “for two hours” gives the duration up to the call → had been working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was",
+      "working"
+     ],
+     "de": "„was working“ passt nicht zu „for two hours“: Die Dauer braucht had been working.",
+     "en": "“was working” does not fit “for two hours”: the duration needs had been working."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„has/have been working“ reicht bis jetzt; der Anruf liegt in der Vergangenheit.",
+     "en": "“has/have been working” runs up to now; the call lies in the past."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "„worked“ allein nennt nicht die Dauer bis zum Anruf; sie arbeitete noch.",
+     "en": "“worked” alone does not give the duration up to the call; she was still working."
+    },
+    {
+     "pat": "pp.duration",
+     "de": "Dauer vor einem Zeitpunkt in der Vergangenheit braucht had been + -ing.",
+     "en": "Duration before a past moment needs had been + -ing."
+    }
+   ]
+  }
+ },
+ "When I arrived at the meeting, the others already started.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Beginn lag vor meiner Ankunft → had already started.",
+    "en": "Right: their start came before my arrival → had already started."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has started“ gehört zur Gegenwart; „arrived“ steht in der Vergangenheit.",
+     "en": "“has started” belongs to the present; “arrived” is in the past."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have started“ gehört zur Gegenwart; „arrived“ steht in der Vergangenheit.",
+     "en": "“have started” belongs to the present; “arrived” is in the past."
+    },
+    {
+     "if": [
+      "started"
+     ],
+     "not": [
+      "had",
+      "has",
+      "have"
+     ],
+     "de": "„started“ allein heißt: Sie begannen nach meiner Ankunft. Es lief schon.",
+     "en": "“started” alone says they began after I arrived. It was already under way."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere von zwei Ereignissen in der Vergangenheit braucht had + Partizip.",
+     "en": "The earlier of two past events needs had + participle."
+    }
+   ]
+  }
+ },
+ "My boss told me that he will call me the next day.": {
+  "pat": "pp.reported",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „told“ rutscht will eine Stufe zurück → would call.",
+    "en": "Right: after “told”, will moves one step back → would call."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will“ bleibt nicht stehen: Nach „told“ wird daraus would.",
+     "en": "“will” does not stay: after “told” it becomes would."
+    },
+    {
+     "if": [
+      "calls"
+     ],
+     "de": "„calls“ ist Präsens; „told“ steht in der Vergangenheit, das Berichtete rutscht zurück.",
+     "en": "“calls” is present tense; “told” is past, so the reported part moves back."
+    },
+    {
+     "pat": "pp.reported",
+     "de": "Nach einem Verb der Vergangenheit rutscht die Zeit zurück: will → would.",
+     "en": "After a past reporting verb the tense moves back: will → would."
+    }
+   ]
+  }
+ },
+ "By the time we arrived, the film have already started.": {
+  "pat": "pp.earlier",
+  "why": {
+   "ok": {
+    "de": "Richtig: In der Vergangenheit heißt es had, nie have → had already started.",
+    "en": "Right: in a past story it is had, never have → had already started."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has started“ gehört zur Gegenwart; „arrived“ steht in der Vergangenheit.",
+     "en": "“has started” belongs to the present; “arrived” is in the past."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have“ zieht den Satz in die Gegenwart und passt auch nicht zu „film“: had.",
+     "en": "“have” pulls the sentence into the present and does not fit “film”: had."
+    },
+    {
+     "if": [
+      "started"
+     ],
+     "not": [
+      "had",
+      "has",
+      "have"
+     ],
+     "de": "„started“ allein: Der Film lief schon vor der Ankunft → had already started.",
+     "en": "“started” alone: the film was already running before we arrived → had already started."
+    },
+    {
+     "pat": "pp.earlier",
+     "de": "Das Frühere nach „by the time“ + Vergangenheit braucht had + Partizip.",
+     "en": "The earlier event after “by the time” + past needs had + participle."
+    }
+   ]
+  }
+ }
+}

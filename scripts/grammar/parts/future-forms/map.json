@@ -1,0 +1,709 @@
+{
+ "Look at those dark clouds! It ___ rain.": {
+  "pat": "ff.going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Wolken sind ein sichtbares Zeichen jetzt, deshalb is going to.",
+    "en": "Right: the clouds are a sign you can see now, so is going to."
+   },
+   "wrong": [
+    {
+     "opt": "will",
+     "pat": "ff.will-now",
+     "de": "will klingt nach Vermutung. Du siehst die Wolken schon: going to passt besser.",
+     "en": "will sounds like a guess. You can already see the clouds: going to fits better."
+    },
+    {
+     "opt": "rains",
+     "de": "Das Present Simple steht für Gewohnheiten und Fahrpläne, nicht für eine Vorhersage.",
+     "en": "The Present Simple is for habits and timetables, not for a prediction."
+    },
+    {
+     "opt": "is raining",
+     "de": "„is raining rain“ geht nicht, und der Regen kommt erst noch.",
+     "en": "“is raining rain” does not work, and the rain is still to come."
+    }
+   ]
+  }
+ },
+ "A: The phone is ringing. B: OK, I ___ it.": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: B entscheidet erst jetzt, als das Telefon klingelt: will („I'll“).",
+    "en": "Right: B decides only now, as the phone rings: will (“I'll”)."
+   },
+   "wrong": [
+    {
+     "opt": "answer",
+     "de": "Das Present Simple nennt eine Gewohnheit oder einen Fahrplan, keinen Entschluss.",
+     "en": "The Present Simple names a habit or a timetable, not a decision."
+    },
+    {
+     "opt": "'m going to answer",
+     "pat": "ff.going-to",
+     "de": "going to gilt für einen Plan, der vorher feststand. Das Klingeln ist neu.",
+     "en": "going to is for a plan fixed beforehand. The ringing is new."
+    },
+    {
+     "opt": "am answering",
+     "de": "am answering heißt: Du bist schon dabei. Entschieden wird aber erst jetzt.",
+     "en": "am answering means you are already doing it. The decision is only made now."
+    }
+   ]
+  }
+ },
+ "I ___ my teacher at 5 pm tomorrow – it's in my calendar.": {
+  "pat": "ff.fixed-times",
+  "why": {
+   "ok": {
+    "de": "Richtig: Verabredung mit Uhrzeit im Kalender: am meeting (Present Continuous).",
+    "en": "Right: an arrangement with a time in the calendar: am meeting (Present Continuous)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "ff.will-now",
+     "de": "will passt zu einem Entschluss jetzt. Ein Termin im Kalender steht schon fest.",
+     "en": "will fits a decision made now. An appointment in the calendar is already fixed."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "to",
+      "going"
+     ],
+     "de": "Das Present Simple klingt nach Gewohnheit. Für den Termin nimmst du am meeting.",
+     "en": "The Present Simple sounds like a habit. For the appointment use am meeting."
+    },
+    {
+     "if": [
+      "meeting"
+     ],
+     "not": [
+      "am",
+      "'m"
+     ],
+     "de": "Es fehlt das Hilfsverb: am meeting. Mit -ing allein ist es keine Zeitform.",
+     "en": "The auxiliary is missing: am meeting. -ing alone is not a tense."
+    },
+    {
+     "if": [
+      "met"
+     ],
+     "de": "Die Vergangenheit passt nicht: Der Termin liegt noch vor dir.",
+     "en": "The past tense does not fit: the appointment is still ahead of you."
+    }
+   ]
+  }
+ },
+ "I ___ (meet) the new client at 3 pm tomorrow – it's in my calendar.": {
+  "pat": "ff.fixed-times",
+  "dup": "I ___ my teacher at 5 pm tomorrow – it's in my calendar.",
+  "why": {
+   "ok": {
+    "de": "Richtig: Fester Termin im Kalender: am meeting, auch für die Zukunft.",
+    "en": "Right: a fixed appointment in the calendar: am meeting, also for the future."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "ff.will-now",
+     "de": "will passt zu einem Entschluss jetzt. Ein Termin im Kalender steht schon fest.",
+     "en": "will fits a decision made now. An appointment in the calendar is already fixed."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "to",
+      "going"
+     ],
+     "de": "Das Present Simple klingt nach Gewohnheit. Für den Termin nimmst du am meeting.",
+     "en": "The Present Simple sounds like a habit. For the appointment use am meeting."
+    },
+    {
+     "if": [
+      "meeting"
+     ],
+     "not": [
+      "am",
+      "'m"
+     ],
+     "de": "Es fehlt das Hilfsverb: am meeting. Mit -ing allein ist es keine Zeitform.",
+     "en": "The auxiliary is missing: am meeting. -ing alone is not a tense."
+    }
+   ]
+  }
+ },
+ "I'll call you as soon as the meeting ___.": {
+  "pat": "ff.no-will-after",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht das Present: ends. will steckt schon in „I'll call“.",
+    "en": "Right: after “as soon as” use the present: ends. will is already in “I'll call”."
+   },
+   "wrong": [
+    {
+     "opt": "will end",
+     "de": "Nach as soon as steht kein will. Das Futur trägt schon „I'll call“.",
+     "en": "No will after as soon as. “I'll call” already carries the future."
+    },
+    {
+     "opt": "ended",
+     "de": "Die Vergangenheit passt nicht: Das Meeting ist noch nicht zu Ende.",
+     "en": "The past tense does not fit: the meeting is not over yet."
+    },
+    {
+     "opt": "is ending",
+     "de": "is ending beschreibt, was gerade läuft. Hier brauchst du das einfache Present.",
+     "en": "is ending describes what is happening now. Here you need the simple present."
+    }
+   ]
+  }
+ },
+ "___ I send you the agenda before the call?": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Shall I … ? bietet etwas an. Im US-Englisch ist Should I häufiger, Shall I wirkt förmlich.",
+    "en": "Right: Shall I … ? makes an offer. In US English Should I is more common; Shall I sounds formal."
+   },
+   "wrong": [
+    {
+     "opt": "Am",
+     "de": "„Am I send“ gibt es nicht. Ein Angebot mit I beginnt mit Shall I.",
+     "en": "“Am I send” does not exist. An offer with I starts with Shall I."
+    },
+    {
+     "opt": "Will",
+     "pat": "ff.will-now",
+     "de": "Will I send fragt, was künftig passiert, nicht ob du es anbieten sollst.",
+     "en": "Will I send asks what will happen, not whether you should offer it."
+    },
+    {
+     "opt": "Do",
+     "de": "Do I send fragt nach einer Regel oder Gewohnheit, nicht nach einem Angebot.",
+     "en": "Do I send asks about a rule or a habit, not about an offer."
+    }
+   ]
+  }
+ },
+ "I promise I ___ anyone about the merger.": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Versprechen machst du mit will (verneint: won't).",
+    "en": "Right: you make a promise with will (negative: won't)."
+   },
+   "wrong": [
+    {
+     "opt": "am not telling",
+     "de": "Das Present Continuous nennt, was gerade läuft oder abgemacht ist, kein Versprechen.",
+     "en": "The Present Continuous names what is happening now or arranged, not a promise."
+    },
+    {
+     "opt": "hadn't told",
+     "de": "Die Vergangenheit passt nicht: Du versprichst etwas für die Zukunft.",
+     "en": "The past does not fit: you are promising something for the future."
+    },
+    {
+     "opt": "don't tell",
+     "de": "Das Present Simple nennt eine Gewohnheit. Für ein Versprechen brauchst du will.",
+     "en": "The Present Simple names a habit. For a promise you need will."
+    }
+   ]
+  }
+ },
+ "Hurry up! The webinar ___ start.": {
+  "pat": "ff.about-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be about to + Grundform heißt: Es beginnt jetzt in Sekunden.",
+    "en": "Right: be about to + base form means: it starts within seconds."
+   },
+   "wrong": [
+    {
+     "opt": "is going",
+     "de": "„is going start“ geht nicht: Nach going fehlt das to.",
+     "en": "“is going start” does not work: to is missing after going."
+    },
+    {
+     "opt": "will be",
+     "de": "„will be start“ geht nicht: Nach be steht hier kein Grundverb.",
+     "en": "“will be start” does not work: no base verb follows be here."
+    },
+    {
+     "opt": "starts about",
+     "de": "„starts about“ ist keine Wendung. about to steht vor dem Verb.",
+     "en": "“starts about” is not a phrase. about to comes before the verb."
+    }
+   ]
+  }
+ },
+ "I can't make it on Thursday – I ___ a workshop in Hamburg all day.": {
+  "pat": "ff.fixed-times",
+  "why": {
+   "ok": {
+    "de": "Richtig: Verabredung mit Zeitangabe: Present Continuous (am attending).",
+    "en": "Right: an arrangement with a time: Present Continuous (am attending)."
+   },
+   "wrong": [
+    {
+     "opt": "attend",
+     "de": "attend klingt nach Gewohnheit. Für einen festen Termin nimmst du am attending.",
+     "en": "attend sounds like a habit. For a fixed date use am attending."
+    },
+    {
+     "opt": "attending",
+     "de": "Es fehlt das Hilfsverb: am attending. -ing allein ist keine Zeitform.",
+     "en": "The auxiliary is missing: am attending. -ing alone is not a tense."
+    },
+    {
+     "opt": "attended",
+     "de": "attended ist Vergangenheit. Der Workshop liegt noch vor dir.",
+     "en": "attended is past. The workshop is still ahead of you."
+    }
+   ]
+  }
+ },
+ "I ___ call you yesterday, but I forgot.": {
+  "pat": "ff.was-going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: was going to = ich hatte vor. Der Plan von gestern wurde nicht ausgeführt.",
+    "en": "Right: was going to = I intended to. Yesterday's plan was not carried out."
+   },
+   "wrong": [
+    {
+     "opt": "am going to",
+     "pat": "ff.going-to",
+     "de": "yesterday verlangt die Vergangenheit: was going to, nicht am going to.",
+     "en": "yesterday needs the past: was going to, not am going to."
+    },
+    {
+     "opt": "will",
+     "de": "will blickt nach vorn. Du sprichst über einen Plan von gestern.",
+     "en": "will looks ahead. You are talking about a plan from yesterday."
+    },
+    {
+     "opt": "go to",
+     "de": "go to heißt „zu etwas hingehen“. Für einen Plan nimmst du going to.",
+     "en": "go to means to walk to a place. For a plan use going to."
+    }
+   ]
+  }
+ },
+ "We will release the update as soon as the client ___ it.": {
+  "pat": "ff.no-will-after",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht das Present: the client approves.",
+    "en": "Right: after “as soon as” use the present: the client approves."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach as soon as steht kein will. Das Futur trägt schon „We will release“.",
+     "en": "No will after as soon as. “We will release” already carries the future."
+    },
+    {
+     "if": [
+      "approved"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit passt nicht: Es geht um die Zukunft. Nimm approves oder has approved.",
+     "en": "The past does not fit: this is about the future. Use approves or has approved."
+    },
+    {
+     "if": [
+      "approve"
+     ],
+     "not": [
+      "will",
+      "to",
+      "has",
+      "have"
+     ],
+     "de": "Der Kunde ist Singular: approves, nicht approve.",
+     "en": "The client is singular: approves, not approve."
+    }
+   ]
+  }
+ },
+ "Look at his face – he ___ cry.": {
+  "pat": "ff.going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Sein Gesicht ist ein sichtbares Zeichen, deshalb is going to.",
+    "en": "Right: his face is a visible sign, so is going to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "ff.will-now",
+     "de": "will klingt nach Vermutung. Du siehst sein Gesicht schon: going to passt besser.",
+     "en": "will sounds like a guess. You can already see his face: going to fits better."
+    },
+    {
+     "if": [
+      "going"
+     ],
+     "not": [
+      "is",
+      "'s",
+      "are"
+     ],
+     "de": "Es fehlt das Hilfsverb: is going to. Das Subjekt he verlangt is.",
+     "en": "The auxiliary is missing: is going to. The subject he needs is."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "pat": "ff.about-to",
+     "de": "about to wäre ein „gleich“. Der Hinweis (be going to) verlangt hier going to.",
+     "en": "about to would mean “any second”. The hint (be going to) asks for going to here."
+    }
+   ]
+  }
+ },
+ "Our flight to Boston ___ at 7:20 tomorrow morning, so we need to be at the airport by 6.": {
+  "pat": "ff.fixed-times",
+  "why": {
+   "ok": {
+    "de": "Richtig: Flugplan: Present Simple („leaves“), auch wenn es um morgen geht.",
+    "en": "Right: a flight schedule takes the Present Simple (“leaves”), even for tomorrow."
+   },
+   "wrong": [
+    {
+     "if": [
+      "leave"
+     ],
+     "not": [
+      "will",
+      "to",
+      "going"
+     ],
+     "de": "Das Subjekt flight ist Singular: leaves, mit -s.",
+     "en": "The subject flight is singular: leaves, with -s."
+    },
+    {
+     "if": [
+      "left"
+     ],
+     "de": "Die Vergangenheit passt nicht: Der Flug geht erst morgen früh.",
+     "en": "The past does not fit: the flight leaves only tomorrow morning."
+    },
+    {
+     "if": [
+      "leaving"
+     ],
+     "not": [
+      "is",
+      "'s",
+      "are"
+     ],
+     "de": "Es fehlt das Hilfsverb: is leaving. -ing allein ist keine Zeitform.",
+     "en": "The auxiliary is missing: is leaving. -ing alone is not a tense."
+    }
+   ]
+  }
+ },
+ "I promise I ___ you the report by Friday.": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Versprechen machst du mit will: will send.",
+    "en": "Right: you make a promise with will: will send."
+   },
+   "wrong": [
+    {
+     "if": [
+      "sending"
+     ],
+     "de": "sending allein ist keine Zeitform. Auch am sending wäre kein Versprechen.",
+     "en": "sending alone is not a tense. Even am sending would not be a promise."
+    },
+    {
+     "if": [
+      "send"
+     ],
+     "not": [
+      "will",
+      "to",
+      "going"
+     ],
+     "de": "Das Present Simple nennt eine Gewohnheit. Für ein Versprechen brauchst du will.",
+     "en": "The Present Simple names a habit. For a promise you need will."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "de": "Die Vergangenheit passt nicht: Du versprichst etwas für die Zukunft.",
+     "en": "The past does not fit: you are promising something for the future."
+    }
+   ]
+  }
+ },
+ "Hold on, I ___ a pen and write that down.": {
+  "pat": "ff.will-now",
+  "why": {
+   "ok": {
+    "de": "Richtig: Spontaner Entschluss im Moment des Sprechens: will get.",
+    "en": "Right: a spontaneous decision at the moment of speaking: will get."
+   },
+   "wrong": [
+    {
+     "if": [
+      "getting"
+     ],
+     "not": [
+      "am",
+      "'m"
+     ],
+     "de": "Es fehlt das Hilfsverb. Auch am getting wäre kein Entschluss, sondern ein Vorgang.",
+     "en": "The auxiliary is missing. Even am getting would be an action in progress, not a decision."
+    },
+    {
+     "if": [
+      "get"
+     ],
+     "not": [
+      "will",
+      "to",
+      "going"
+     ],
+     "de": "Das Present Simple nennt eine Gewohnheit. Für den Entschluss brauchst du will.",
+     "en": "The Present Simple names a habit. For the decision you need will."
+    },
+    {
+     "if": [
+      "got"
+     ],
+     "not": [
+      "have",
+      "has"
+     ],
+     "de": "Die Vergangenheit passt nicht: Du entscheidest dich jetzt.",
+     "en": "The past does not fit: you are deciding right now."
+    }
+   ]
+  }
+ },
+ "I plan to visit the client in Madrid next month. → I ___ the client in Madrid next month.": {
+  "pat": "ff.going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Plan, der schon feststeht: am going to visit.",
+    "en": "Right: a plan that is already fixed: am going to visit."
+   },
+   "wrong": [
+    {
+     "if": [
+      "visited"
+     ],
+     "de": "Die Vergangenheit passt nicht: Der Besuch liegt noch vor dir (next month).",
+     "en": "The past does not fit: the visit is still ahead of you (next month)."
+    },
+    {
+     "if": [
+      "visit"
+     ],
+     "not": [
+      "will",
+      "to",
+      "going",
+      "am",
+      "'m",
+      "planning"
+     ],
+     "de": "Das Present Simple nennt eine Gewohnheit. Für den Plan nimmst du am going to visit.",
+     "en": "The Present Simple names a habit. For the plan use am going to visit."
+    },
+    {
+     "if": [
+      "visiting"
+     ],
+     "not": [
+      "am",
+      "'m",
+      "planning"
+     ],
+     "de": "Es fehlt das Hilfsverb: am visiting. -ing allein ist keine Zeitform.",
+     "en": "The auxiliary is missing: am visiting. -ing alone is not a tense."
+    }
+   ]
+  }
+ },
+ "I intended to send the invoice yesterday, but I forgot. → I ___ send the invoice yesterday, but I forgot.": {
+  "pat": "ff.was-going-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Ein Plan von gestern, der nicht klappte: was going to.",
+    "en": "Right: a plan from yesterday that fell through: was going to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will blickt nach vorn. Du sprichst über einen Plan von gestern.",
+     "en": "will looks ahead. You are talking about a plan from yesterday."
+    },
+    {
+     "if": [
+      "going",
+      "to"
+     ],
+     "not": [
+      "was",
+      "were"
+     ],
+     "pat": "ff.going-to",
+     "de": "yesterday verlangt die Vergangenheit: was going to, nicht am going to.",
+     "en": "yesterday needs the past: was going to, not am going to."
+    },
+    {
+     "if": [
+      "was",
+      "going"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach going fehlt to: was going to + Grundform.",
+     "en": "to is missing after going: was going to + base form."
+    }
+   ]
+  }
+ },
+ "I will call you when I will arrive at the office.": {
+  "pat": "ff.no-will-after",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „when“ steht das Present: when I arrive. Das erste will bleibt.",
+    "en": "Right: after “when” use the present: when I arrive. The first will stays."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will arrive"
+     ],
+     "de": "Nach when steht kein will: when I arrive. Nur der Hauptsatz trägt will.",
+     "en": "No will after when: when I arrive. Only the main clause carries will."
+    },
+    {
+     "if": [
+      "arrived"
+     ],
+     "de": "Die Vergangenheit passt nicht: Du kommst erst noch an.",
+     "en": "The past does not fit: you have not arrived yet."
+    },
+    {
+     "if": [
+      "call",
+      "when"
+     ],
+     "not": [
+      "will",
+      "'ll"
+     ],
+     "de": "Das erste will bleibt: Es nennt, was du tust. Nur im when-Satz fällt es weg.",
+     "en": "The first will stays: it says what you will do. Only in the when-clause does it go."
+    }
+   ]
+  }
+ },
+ "Unless you will sign the contract today, we can't guarantee the price.": {
+  "pat": "ff.no-will-after",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „unless“ steht das Present: Unless you sign.",
+    "en": "Right: after “unless” use the present: Unless you sign."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will sign"
+     ],
+     "de": "Nach unless steht kein will: Unless you sign. will bleibt dem Hauptsatz.",
+     "en": "No will after unless: Unless you sign. will is left to the main clause."
+    },
+    {
+     "if": [
+      "unless",
+      "not"
+     ],
+     "de": "unless trägt die Verneinung schon: Unless you sign, ohne not.",
+     "en": "unless already carries the negation: Unless you sign, with no not."
+    },
+    {
+     "if": [
+      "signed"
+     ],
+     "not": [
+      "have",
+      "has"
+     ],
+     "de": "Die Vergangenheit passt nicht: Es geht um heute, also sign.",
+     "en": "The past does not fit: this is about today, so sign."
+    }
+   ]
+  }
+ },
+ "I will meet Tom at six – it's in my calendar.": {
+  "pat": "ff.fixed-times",
+  "why": {
+   "ok": {
+    "de": "Richtig: Fester Termin im Kalender: I'm meeting Tom, nicht will.",
+    "en": "Right: a fixed appointment in the calendar: I'm meeting Tom, not will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "ff.will-now",
+     "de": "will passt zu einem Entschluss jetzt. Ein Termin im Kalender steht schon fest.",
+     "en": "will fits a decision made now. An appointment in the calendar is already fixed."
+    },
+    {
+     "if": [
+      "going"
+     ],
+     "pat": "ff.going-to",
+     "de": "going to geht, -ing ist hier präziser: Der Termin steht schon im Kalender.",
+     "en": "going to works, but -ing is more precise here: the appointment is already in the calendar."
+    },
+    {
+     "if": [
+      "meet"
+     ],
+     "not": [
+      "meeting",
+      "will",
+      "going"
+     ],
+     "de": "Das Present Simple klingt nach Gewohnheit. Für den Termin nimmst du I'm meeting.",
+     "en": "The Present Simple sounds like a habit. For the appointment use I'm meeting."
+    }
+   ]
+  }
+ }
+}

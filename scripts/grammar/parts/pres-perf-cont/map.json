@@ -1,0 +1,835 @@
+{
+ "I'm tired because I ___ all afternoon.": {
+  "pat": "pc.recent",
+  "why": {
+   "ok": {
+    "de": "Richtig: Müdigkeit jetzt + „all afternoon“ → have been studying, die Tätigkeit mit Spur im Jetzt.",
+    "en": "Right: tired now + “all afternoon” → have been studying, an activity with a trace in the present."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have",
+      "studied"
+     ],
+     "de": "Grammatisch möglich, doch gesucht ist die Dauerform: have been studying.",
+     "en": "Grammatically possible, but the continuous form is wanted: have been studying."
+    },
+    {
+     "if": [
+      "studied"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple blickt auf Vergangenes zurück; hier wirkt die Tätigkeit bis jetzt nach.",
+     "en": "Past Simple looks back at the past; here the activity still shows in the present."
+    },
+    {
+     "if": [
+      "am",
+      "studying"
+     ],
+     "de": "am studying beschreibt nur den Moment, nicht den ganzen Nachmittag bis jetzt.",
+     "en": "am studying describes only this moment, not the whole afternoon up to now."
+    },
+    {
+     "if": [
+      "studying"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been + studying.",
+     "en": "been is missing: have been + studying."
+    }
+   ]
+  }
+ },
+ "How long ___ English?": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„How long“ + Dauer bis jetzt → have you been learning, nicht das Präsens des Deutschen.",
+    "en": "“How long” + duration up to now → have you been learning, not the German-style present."
+   },
+   "wrong": [
+    {
+     "opt": "do you learn",
+     "pat": "psp.since-for",
+     "de": "Present Simple fragt nach Gewohnheit, nicht nach der Dauer bis jetzt.",
+     "en": "Present Simple asks about habit, not about duration up to now."
+    },
+    {
+     "opt": "are you learning",
+     "de": "Present Continuous gilt für jetzt, nicht für den Zeitraum bis jetzt.",
+     "en": "Present Continuous covers now, not the period up to now."
+    },
+    {
+     "opt": "did you learn",
+     "pat": "psp.finished-time",
+     "de": "Past Simple meint abgeschlossene Zeit, du lernst aber noch.",
+     "en": "Past Simple means finished time, but you are still learning."
+    }
+   ]
+  }
+ },
+ "She ___ here since 2019.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 2019“ + Dauer bis heute → has been living oder has lived. Beides stimmt.",
+    "en": "“since 2019” + duration until today → has been living or has lived. Both are right."
+   },
+   "wrong": [
+    {
+     "if": [
+      "lives"
+     ],
+     "de": "Present Simple passt nicht zu since: Dauer bis jetzt braucht has lived / has been living.",
+     "en": "Present Simple does not go with since: duration up to now needs has lived / has been living."
+    },
+    {
+     "if": [
+      "is",
+      "living"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; since 2019 verlangt die Zeit bis jetzt.",
+     "en": "Present Continuous shows only now; since 2019 needs the time up to now."
+    },
+    {
+     "if": [
+      "lived"
+     ],
+     "not": [
+      "has"
+     ],
+     "de": "Past Simple wäre abgeschlossen, sie wohnt aber noch hier: has lived.",
+     "en": "Past Simple would be finished, but she still lives here: has lived."
+    },
+    {
+     "if": [
+      "has",
+      "live"
+     ],
+     "de": "Nach has braucht es lived oder been living.",
+     "en": "After has you need lived or been living."
+    }
+   ]
+  }
+ },
+ "I ___ for a parking space since 8:15, and I'm going to be late.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 8:15“ + die Suche läuft noch → have been looking.",
+    "en": "“since 8:15” + the search is still going → have been looking."
+   },
+   "wrong": [
+    {
+     "opt": "looked",
+     "pat": "psp.finished-time",
+     "de": "Past Simple meint abgeschlossene Zeit; du suchst aber noch.",
+     "en": "Past Simple means finished time, but you are still looking."
+    },
+    {
+     "opt": "am looking",
+     "de": "Present Continuous passt nicht zu since: Es fehlt der Blick zurück.",
+     "en": "Present Continuous does not go with since: the look back is missing."
+    },
+    {
+     "opt": "look",
+     "de": "Present Simple nennt eine Gewohnheit, hier läuft eine Suche seit 8:15.",
+     "en": "Present Simple names a habit; here a search has been running since 8:15."
+    }
+   ]
+  }
+ },
+ "How long ___ our CFO?": {
+  "pat": "pc.state-verbs",
+  "why": {
+   "ok": {
+    "de": "know ist ein Zustandsverb, also ohne -ing: How long have you known our CFO?",
+    "en": "know is a state verb, so no -ing: How long have you known our CFO?"
+   },
+   "wrong": [
+    {
+     "opt": "are you knowing",
+     "de": "know steht nie in der -ing-Form, auch nicht im Present Continuous.",
+     "en": "know never takes the -ing form, not even in the Present Continuous."
+    },
+    {
+     "opt": "do you know",
+     "de": "Present Simple passt nicht zu „How long“ + Zeitraum bis jetzt.",
+     "en": "Present Simple does not go with “How long” + a period up to now."
+    },
+    {
+     "opt": "have you been knowing",
+     "pat": "pc.duration",
+     "de": "Die Dauerform geht bei know nicht, es ist ein Zustandsverb.",
+     "en": "The continuous form does not work with know; it is a state verb."
+    }
+   ]
+  }
+ },
+ "The team ___ on this feature since January, and the release is next week.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since January“ + die Arbeit läuft noch → has been working.",
+    "en": "“since January” + the work is still going → has been working."
+   },
+   "wrong": [
+    {
+     "opt": "works",
+     "de": "Present Simple passt nicht zu since: Dauer bis jetzt braucht has been working.",
+     "en": "Present Simple does not go with since: duration up to now needs has been working."
+    },
+    {
+     "opt": "is working",
+     "de": "Present Continuous zeigt nur jetzt, nicht die Zeit seit Januar.",
+     "en": "Present Continuous shows only now, not the time since January."
+    },
+    {
+     "opt": "worked",
+     "pat": "psp.finished-time",
+     "de": "Past Simple wäre abgeschlossen, aber die Arbeit geht weiter.",
+     "en": "Past Simple would be finished, but the work goes on."
+    }
+   ]
+  }
+ },
+ "She has been learning Spanish ___ two years.": {
+  "pat": "pc.since-for",
+  "why": {
+   "ok": {
+    "de": "two years ist eine Zeitspanne → for. since braucht einen Zeitpunkt (since 2022).",
+    "en": "two years is a length of time → for. since needs a point in time (since 2022)."
+   },
+   "wrong": [
+    {
+     "opt": "ago",
+     "de": "ago steht mit Past Simple und stünde nach „two years“, nicht davor.",
+     "en": "ago goes with the Past Simple and would follow “two years”, not precede it."
+    },
+    {
+     "opt": "since",
+     "pat": "pc.since-for",
+     "de": "since braucht einen Startpunkt wie 2022; two years nennt eine Länge.",
+     "en": "since needs a starting point like 2022; two years names a length."
+    },
+    {
+     "opt": "from",
+     "de": "from braucht ein Gegenstück (from … to …); für die Dauer steht for.",
+     "en": "from needs a counterpart (from … to …); for a duration use for."
+    }
+   ]
+  }
+ },
+ "___ for the CRM update since Tuesday?": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since Tuesday“ + Handlung bis jetzt → Have you been waiting.",
+    "en": "“since Tuesday” + an action up to now → Have you been waiting."
+   },
+   "wrong": [
+    {
+     "opt": "Did you wait",
+     "pat": "psp.finished-time",
+     "de": "Past Simple meint abgeschlossene Zeit; das Warten dauert aber an.",
+     "en": "Past Simple means finished time, but the waiting continues."
+    },
+    {
+     "opt": "Do you wait",
+     "de": "Present Simple passt nicht zu since: So klingt „Wartest du seit Dienstag?“ wörtlich.",
+     "en": "Present Simple does not go with since: it is the word-for-word German version."
+    },
+    {
+     "opt": "Are you waiting",
+     "de": "Present Continuous passt nicht zu since: Es fehlt der Blick zurück.",
+     "en": "Present Continuous does not go with since: the look back is missing."
+    }
+   ]
+  }
+ },
+ "My neighbors ___ loud music since 6 p.m., and I can't concentrate.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 6 p.m.“ + die Musik läuft noch → have been playing.",
+    "en": "“since 6 p.m.” + the music is still on → have been playing."
+   },
+   "wrong": [
+    {
+     "opt": "are playing",
+     "de": "Present Continuous zeigt nur jetzt, nicht die Zeit seit 6 Uhr.",
+     "en": "Present Continuous shows only now, not the time since 6 p.m."
+    },
+    {
+     "opt": "played",
+     "pat": "psp.finished-time",
+     "de": "Past Simple meint abgeschlossen; die Musik läuft aber noch.",
+     "en": "Past Simple means finished, but the music is still on."
+    },
+    {
+     "opt": "play",
+     "de": "Present Simple nennt eine Gewohnheit und passt nicht zu since.",
+     "en": "Present Simple names a habit and does not go with since."
+    }
+   ]
+  }
+ },
+ "We ___ with this supplier since 2017.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 2017“ → Dauer bis jetzt → have been working. have worked geht auch.",
+    "en": "“since 2017” → duration up to now → have been working. have worked also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Simple passt nicht zu since: Dauer bis jetzt braucht have been working.",
+     "en": "Present Simple does not go with since: duration up to now needs have been working."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; ihr arbeitet aber noch zusammen.",
+     "en": "Past Simple means finished time, but you still work together."
+    },
+    {
+     "if": [
+      "are",
+      "working"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; since 2017 braucht den Blick zurück.",
+     "en": "Present Continuous shows only now; since 2017 needs the look back."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been working.",
+     "en": "been is missing: have been working."
+    }
+   ]
+  }
+ },
+ "I ___ to reach her all day, but her phone is off.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„all day“ betont die Dauer bis jetzt → have been trying. have tried geht auch.",
+    "en": "“all day” stresses the duration up to now → have been trying. have tried also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "try"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Simple nennt eine Gewohnheit; „all day“ meint die Zeit bis jetzt.",
+     "en": "Present Simple names a habit; “all day” means the time up to now."
+    },
+    {
+     "if": [
+      "tried"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; du versuchst es aber weiter.",
+     "en": "Past Simple means finished time, but you keep trying."
+    },
+    {
+     "if": [
+      "am",
+      "trying"
+     ],
+     "de": "Present Continuous zeigt nur jetzt, nicht den ganzen Tag bis jetzt.",
+     "en": "Present Continuous shows only now, not the whole day up to now."
+    },
+    {
+     "if": [
+      "trying"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been trying.",
+     "en": "been is missing: have been trying."
+    }
+   ]
+  }
+ },
+ "Why are your hands so dirty? – I ___ in the garden all morning.": {
+  "pat": "pc.recent",
+  "why": {
+   "ok": {
+    "de": "Spur im Jetzt (schmutzige Hände) + „all morning“ → have been working. have worked geht auch.",
+    "en": "Trace in the present (dirty hands) + “all morning” → have been working. have worked also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple wäre möglich, gesucht ist hier die Perfect-Form mit Spur im Jetzt.",
+     "en": "Past Simple is possible, but the Perfect form with a trace in the present is wanted."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Simple nennt eine Gewohnheit, hier geht es um den Morgen bis jetzt.",
+     "en": "Present Simple names a habit; here it is about the morning up to now."
+    },
+    {
+     "if": [
+      "am",
+      "working"
+     ],
+     "de": "Present Continuous zeigt nur jetzt, nicht den ganzen Morgen.",
+     "en": "Present Continuous shows only now, not the whole morning."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been working.",
+     "en": "been is missing: have been working."
+    }
+   ]
+  }
+ },
+ "We ___ much progress on the migration lately, because the data is a mess.": {
+  "pat": "pc.recent",
+  "why": {
+   "ok": {
+    "de": "„lately“ + Entwicklung bis jetzt → haven't been making. haven't made geht auch.",
+    "en": "“lately” + a development up to now → haven't been making. haven't made also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are",
+      "not",
+      "making"
+     ],
+     "de": "Present Continuous passt nicht zu lately: gemeint ist die Zeit bis jetzt.",
+     "en": "Present Continuous does not go with lately: the period up to now is meant."
+    },
+    {
+     "if": [
+      "do",
+      "not"
+     ],
+     "de": "Present Simple nennt eine Gewohnheit; lately blickt auf die letzte Zeit zurück.",
+     "en": "Present Simple names a habit; lately looks back at recent time."
+    },
+    {
+     "if": [
+      "did",
+      "not"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; lately reicht bis jetzt.",
+     "en": "Past Simple means finished time; lately reaches up to now."
+    },
+    {
+     "if": [
+      "not",
+      "making"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have not been making.",
+     "en": "been is missing: have not been making."
+    }
+   ]
+  }
+ },
+ "My cousin ___ for an apartment in Hamburg for months, but the prices are crazy.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„for months“ + die Suche läuft noch → has been looking. has looked geht auch.",
+    "en": "“for months” + the search is still going → has been looking. has looked also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "looks"
+     ],
+     "de": "Present Simple nennt eine Gewohnheit; „for months“ meint die Zeit bis jetzt.",
+     "en": "Present Simple names a habit; “for months” means the time up to now."
+    },
+    {
+     "if": [
+      "looked"
+     ],
+     "not": [
+      "has"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; die Suche geht aber weiter.",
+     "en": "Past Simple means finished time, but the search goes on."
+    },
+    {
+     "if": [
+      "is",
+      "looking"
+     ],
+     "de": "Present Continuous zeigt nur jetzt, nicht die Monate bis jetzt.",
+     "en": "Present Continuous shows only now, not the months up to now."
+    },
+    {
+     "if": [
+      "looking"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: has been looking.",
+     "en": "been is missing: has been looking."
+    }
+   ]
+  }
+ },
+ "Our developers started working on the bug at 9 a.m. They are still working on it. → Our developers ___ on the bug since 9 a.m.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "Beginn früher + noch im Gange + „since 9 a.m.“ → have been working. have worked geht auch.",
+    "en": "Earlier start + still going + “since 9 a.m.” → have been working. have worked also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Present Simple passt nicht zu since: Dauer bis jetzt braucht have been working.",
+     "en": "Present Simple does not go with since: duration up to now needs have been working."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; sie arbeiten aber noch daran.",
+     "en": "Past Simple means finished time, but they are still working on it."
+    },
+    {
+     "if": [
+      "are",
+      "working"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; since 9 a.m. braucht den Blick zurück.",
+     "en": "Present Continuous shows only now; since 9 a.m. needs the look back."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been working.",
+     "en": "been is missing: have been working."
+    }
+   ]
+  }
+ },
+ "It started raining at 3 p.m., and it is still raining. → It ___ since 3 p.m.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since 3 p.m.“ + der Regen dauert an → has been raining.",
+    "en": "“since 3 p.m.” + the rain is continuing → has been raining."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rains"
+     ],
+     "de": "Present Simple nennt eine Regel; since 3 p.m. braucht den Blick zurück.",
+     "en": "Present Simple states a rule; since 3 p.m. needs the look back."
+    },
+    {
+     "if": [
+      "is",
+      "raining"
+     ],
+     "de": "Present Continuous zeigt nur jetzt, nicht die Zeit seit 15 Uhr.",
+     "en": "Present Continuous shows only now, not the time since 3 p.m."
+    },
+    {
+     "if": [
+      "rained"
+     ],
+     "not": [
+      "has"
+     ],
+     "de": "Past Simple meint abgeschlossen; es regnet aber noch.",
+     "en": "Past Simple means finished, but it is still raining."
+    },
+    {
+     "if": [
+      "raining"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: has been raining.",
+     "en": "been is missing: has been raining."
+    }
+   ]
+  }
+ },
+ "I am waiting for your reply since Monday.": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„since Monday“ verlangt Perfect, nicht Present Continuous: have been waiting.",
+    "en": "“since Monday” needs the Perfect, not the Present Continuous: have been waiting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "am",
+      "waiting"
+     ],
+     "de": "Present Continuous passt nicht zu since: Dauer bis jetzt → have been waiting.",
+     "en": "Present Continuous does not go with since: duration up to now → have been waiting."
+    },
+    {
+     "if": [
+      "waiting"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been waiting.",
+     "en": "been is missing: have been waiting."
+    },
+    {
+     "if": [
+      "waited"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; du wartest aber noch.",
+     "en": "Past Simple means finished time, but you are still waiting."
+    },
+    {
+     "not": [
+      "since"
+     ],
+     "de": "since Monday nennt den Startpunkt und soll stehen bleiben.",
+     "en": "since Monday names the starting point and should stay."
+    }
+   ]
+  }
+ },
+ "How long do you work in this industry?": {
+  "pat": "pc.duration",
+  "why": {
+   "ok": {
+    "de": "„How long“ + Dauer bis jetzt → have you been working (oder have you worked).",
+    "en": "“How long” + duration up to now → have you been working (or have you worked)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "do",
+      "work"
+     ],
+     "de": "Present Simple fragt nach Gewohnheit, nicht nach der Dauer bis jetzt.",
+     "en": "Present Simple asks about habit, not about duration up to now."
+    },
+    {
+     "if": [
+      "are",
+      "working"
+     ],
+     "de": "Present Continuous zeigt nur jetzt; „How long“ braucht den Blick zurück.",
+     "en": "Present Continuous shows only now; “How long” needs the look back."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Past Simple meint abgeschlossene Zeit; du arbeitest aber noch dort.",
+     "en": "Past Simple means finished time, but you still work there."
+    },
+    {
+     "if": [
+      "working"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: How long have you been working.",
+     "en": "been is missing: How long have you been working."
+    }
+   ]
+  }
+ },
+ "He have been feeling tired.": {
+  "pat": "pc.form",
+  "why": {
+   "ok": {
+    "de": "Bei he/she/it steht has: He has been feeling tired.",
+    "en": "he/she/it takes has: He has been feeling tired."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Bei he/she/it heißt es has, auch mitten in der langen Form.",
+     "en": "With he/she/it use has, even inside the long form."
+    },
+    {
+     "if": [
+      "feel"
+     ],
+     "de": "Nach been steht die -ing-Form: feeling, nicht die Grundform.",
+     "en": "After been use the -ing form: feeling, not the base form."
+    },
+    {
+     "if": [
+      "felt"
+     ],
+     "de": "Nach been steht die -ing-Form: feeling, nicht das Partizip.",
+     "en": "After been use the -ing form: feeling, not the participle."
+    },
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Die Form braucht been: has been feeling.",
+     "en": "The form needs been: has been feeling."
+    }
+   ]
+  }
+ },
+ "I am waiting since 20 minutes.": {
+  "pat": "pc.since-for",
+  "why": {
+   "ok": {
+    "de": "Zwei Fehler: Present Continuous mit since, und eine Zeitspanne braucht for: have been waiting for.",
+    "en": "Two errors: Present Continuous with since, and a length of time needs for: have been waiting for."
+   },
+   "wrong": [
+    {
+     "if": [
+      "am",
+      "waiting",
+      "since"
+     ],
+     "de": "Zwei Fehler: Present Continuous, und 20 minutes ist eine Spanne, also for.",
+     "en": "Two errors: Present Continuous, and 20 minutes is a length, so for."
+    },
+    {
+     "if": [
+      "since"
+     ],
+     "de": "20 minutes ist eine Zeitspanne, deshalb for. since braucht einen Zeitpunkt.",
+     "en": "20 minutes is a length of time, so for. since needs a point in time."
+    },
+    {
+     "if": [
+      "am",
+      "waiting"
+     ],
+     "de": "Present Continuous passt nicht zu einer Dauer bis jetzt: have been waiting.",
+     "en": "Present Continuous does not fit a duration up to now: have been waiting."
+    },
+    {
+     "if": [
+      "waiting"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt die Form: have been waiting for 20 minutes.",
+     "en": "been is missing: have been waiting for 20 minutes."
+    }
+   ]
+  }
+ },
+ "I have been studied all afternoon.": {
+  "pat": "pc.form",
+  "why": {
+   "ok": {
+    "de": "Nach been kommt die -ing-Form: have been studying.",
+    "en": "After been comes the -ing form: have been studying."
+   },
+   "wrong": [
+    {
+     "if": [
+      "been",
+      "studied"
+     ],
+     "de": "Nach been steht kein Partizip, sondern studying.",
+     "en": "After been there is no participle, but studying."
+    },
+    {
+     "if": [
+      "studied"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Grammatisch möglich, doch gesucht ist die Dauerform: have been studying.",
+     "en": "Grammatically possible, but the continuous form is wanted: have been studying."
+    },
+    {
+     "if": [
+      "study"
+     ],
+     "de": "Nach been steht die -ing-Form: studying, nicht die Grundform.",
+     "en": "After been use the -ing form: studying, not the base form."
+    },
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Die Form braucht been: have been studying.",
+     "en": "The form needs been: have been studying."
+    }
+   ]
+  }
+ }
+}

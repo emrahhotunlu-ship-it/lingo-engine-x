@@ -1,0 +1,443 @@
+{
+  "topic": "pres-simple-cont",
+  "canDo": {
+    "de": "Ich kann Gewohnheiten und Fakten im Present Simple, laufende oder vorübergehende Situationen im Present Continuous ausdrücken, Zustandsverben richtig verwenden und mit always + -ing Ärger zeigen.",
+    "en": "I can express habits and facts in the present simple, ongoing or temporary situations in the present continuous, use state verbs correctly, and show annoyance with always + -ing."
+  },
+  "order": [
+    "psc.habit",
+    "psc.now",
+    "psc.state",
+    "psc.dual",
+    "psc.always"
+  ],
+  "introPlan": [
+    [
+      "psc.habit",
+      "psc.now"
+    ],
+    [
+      "psc.state",
+      "psc.dual"
+    ],
+    [
+      "psc.always"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Passiert es regelmäßig und grundsätzlich, oder läuft es genau jetzt oder nur für begrenzte Zeit?",
+      "Beschreibt das Verb einen Zustand (know, need, like, have = besitzen) oder eine Handlung, die gerade läuft?",
+      "Nennst du nur, wie oft etwas passiert, oder ärgerst du dich über die ständige Wiederholung?"
+    ],
+    "en": [
+      "Does it happen regularly and as a rule, or is it going on right now or only for a limited time?",
+      "Does the verb describe a state (know, need, like, have = own) or an action that is in progress?",
+      "Are you only saying how often something happens, or are you annoyed at the constant repetition?"
+    ]
+  },
+  "patterns": [
+    {
+      "id": "psc.habit",
+      "name": {
+        "de": "Present Simple · Gewohnheit und Fakten",
+        "en": "Present Simple · habits and facts"
+      },
+      "form": {
+        "de": "Grundform (he/she/it + -s); do/does bei Frage und Verneinung",
+        "en": "base form (he/she/it + -s); do/does for questions and negatives"
+      },
+      "use": {
+        "de": "Beschreibt, was regelmäßig oder grundsätzlich gilt: Gewohnheiten, Abläufe, Fakten und Fahrpläne. Das Signalwort sagt meist, wie oft.",
+        "en": "Describes what happens regularly or is true in general: habits, routines, facts and timetables. The signal word usually says how often."
+      },
+      "signals": [
+        "always",
+        "usually",
+        "often",
+        "every",
+        "once a week",
+        "twice a year",
+        "never",
+        "on Fridays"
+      ],
+      "ex": [
+        {
+          "en": "Our team meets every Monday at nine.",
+          "de": "Unser Team trifft sich jeden Montag um neun.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "The office closes at six on Fridays.",
+          "de": "Das Büro schließt freitags um sechs.",
+          "ctx": "mail"
+        },
+        {
+          "en": "She never answers calls before ten.",
+          "de": "Sie geht vor zehn nie ans Telefon.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Our team is meeting every Monday to review the numbers.",
+        "good": "Our team meets every Monday to review the numbers.",
+        "cause": {
+          "de": "Das ist kein reiner Übersetzungsfehler: Deutsch hat nur ein Präsens („trifft sich“). Der Grund ist eher der Reflex, dass -ing aktiver klingt. „Every Monday“ verlangt aber die einfache Form.",
+          "en": "This is not a pure translation error: German has one present (“trifft sich”). The cause is more the reflex that -ing sounds more active. But “every Monday” needs the simple form."
+        }
+      },
+      "contrast": {
+        "with": "psc.now",
+        "a": "My manager works from home on Fridays.",
+        "b": "My manager is working from home this week.",
+        "diff": {
+          "de": "works nennt die feste Regel. is working beschreibt nur diese eine Woche, also etwas Vorübergehendes.",
+          "en": "works names the fixed rule. is working describes only this one week, so something temporary."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Our team meets every Monday.",
+          "q": {
+            "de": "Treffen wir uns nur heute?",
+            "en": "Do we meet only today?"
+          },
+          "a": false
+        },
+        {
+          "s": "I work from home on Fridays.",
+          "q": {
+            "de": "Passiert das jeden Freitag, nicht nur diese Woche?",
+            "en": "Does this happen every Friday, not just this week?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Wie oft passiert es: als Regel oder gerade jetzt? Welches Wort im Satz verrät es?",
+        "en": "How often does it happen: as a rule or right now? Which word in the sentence tells you?"
+      }
+    },
+    {
+      "id": "psc.now",
+      "name": {
+        "de": "Present Continuous · jetzt und vorübergehend",
+        "en": "Present Continuous · now and temporary"
+      },
+      "form": {
+        "de": "am/is/are + -ing",
+        "en": "am/is/are + -ing"
+      },
+      "use": {
+        "de": "Beschreibt, was genau jetzt läuft oder nur für begrenzte Zeit gilt, auch eine Veränderung, die gerade im Gang ist.",
+        "en": "Describes what is going on right now or only for a limited time, including a change that is under way."
+      },
+      "signals": [
+        "now",
+        "right now",
+        "at the moment",
+        "currently",
+        "today",
+        "this week",
+        "these days",
+        "Look!"
+      ],
+      "ex": [
+        {
+          "en": "We are testing the new tool this week.",
+          "de": "Wir testen das neue Tool diese Woche.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I am traveling this week, so replies may be slow.",
+          "de": "Ich bin diese Woche unterwegs, deshalb kann die Antwort dauern.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Sorry, I can't talk. I'm driving right now.",
+          "de": "Entschuldige, ich kann nicht sprechen. Ich fahre gerade.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Sorry, I can't talk, we give a demo for a client right now.",
+        "good": "Sorry, I can't talk, we are giving a demo for a client right now.",
+        "cause": {
+          "de": "Deutsch sagt „wir geben gerade eine Demo“ im Präsens, das Wort „gerade“ trägt das Jetzt. Im Englischen muss das Verb selbst es zeigen: are giving.",
+          "en": "German says “wir geben gerade eine Demo” in the present; the word “gerade” carries the now. In English the verb itself must show it: are giving."
+        }
+      },
+      "contrast": {
+        "with": "psc.habit",
+        "a": "I'm working from home this week.",
+        "b": "I work from home on Fridays.",
+        "diff": {
+          "de": "a gilt nur für diese Woche, b ist eine feste Regel.",
+          "en": "a is true only for this week, b is a fixed rule."
+        }
+      },
+      "ccq": [
+        {
+          "s": "We're using a temporary office this month.",
+          "q": {
+            "de": "Bleibt das Büro für immer so?",
+            "en": "Will the office stay like this forever?"
+          },
+          "a": false
+        },
+        {
+          "s": "Look! The server is crashing.",
+          "q": {
+            "de": "Passiert es genau in diesem Moment?",
+            "en": "Is it happening at this very moment?"
+          },
+          "a": true
+        }
+      ],
+      "nudge": {
+        "de": "Läuft es genau jetzt oder nur für begrenzte Zeit, oder ist es eine feste Regel?",
+        "en": "Is it going on right now or only for a limited time, or is it a fixed rule?"
+      }
+    },
+    {
+      "id": "psc.state",
+      "name": {
+        "de": "Zustandsverben · keine -ing-Form",
+        "en": "State verbs · no -ing form"
+      },
+      "form": {
+        "de": "know/understand/need/like … + Present Simple",
+        "en": "know/understand/need/like … + present simple"
+      },
+      "use": {
+        "de": "Verben für Wissen, Meinung, Wunsch und Besitz beschreiben einen Zustand, keine Handlung. Sie stehen im Present Simple, auch wenn es um jetzt geht.",
+        "en": "Verbs for knowing, opinion, wanting and owning describe a state, not an action. They take the present simple, even when the time is now."
+      },
+      "signals": [
+        "know",
+        "understand",
+        "believe",
+        "need",
+        "want",
+        "like",
+        "prefer",
+        "belong"
+      ],
+      "ex": [
+        {
+          "en": "I understand your concern, but we need more data.",
+          "de": "Ich verstehe Ihre Sorge, aber wir brauchen mehr Daten.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "We prefer a written confirmation.",
+          "de": "Wir bevorzugen eine schriftliche Bestätigung.",
+          "ctx": "mail"
+        },
+        {
+          "en": "I don't know where the printer is.",
+          "de": "Ich weiß nicht, wo der Drucker steht.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "I am wanting a quick decision from the client.",
+        "good": "I want a quick decision from the client.",
+        "cause": {
+          "de": "Das ist kein Übersetzungsfehler, denn Deutsch hat keine Pflicht-Verlaufsform. Der Grund ist die Regel „jetzt = -ing“, die man zu weit anwendet. Zustände wie wollen oder wissen bleiben im Present Simple.",
+          "en": "This is not a translation error, because German has no obligatory continuous form. The cause is the rule “now = -ing”, applied too far. States like want or know stay in the present simple."
+        }
+      },
+      "contrast": {
+        "with": "psc.now",
+        "a": "I understand the problem.",
+        "b": "I'm working on the problem.",
+        "diff": {
+          "de": "understand ist ein Zustand und bekommt kein -ing. working beschreibt eine Tätigkeit, die gerade läuft.",
+          "en": "understand is a state and takes no -ing. working describes an activity in progress."
+        }
+      },
+      "ccq": [
+        {
+          "s": "I know the client very well.",
+          "q": {
+            "de": "Beschreibt der Satz einen Zustand und keine Tätigkeit?",
+            "en": "Does the sentence describe a state rather than an activity?"
+          },
+          "a": true
+        },
+        {
+          "s": "She owns two apartments in Munich.",
+          "q": {
+            "de": "Sagt der Satz, was sie gerade tut?",
+            "en": "Does the sentence say what she is doing right now?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Ist das Verb eine Tätigkeit, die man beobachten kann, oder ein Zustand wie Wissen, Wollen, Mögen?",
+        "en": "Is the verb an activity you could watch, or a state like knowing, wanting, liking?"
+      }
+    },
+    {
+      "id": "psc.dual",
+      "name": {
+        "de": "Verben mit zwei Bedeutungen · think, have, taste",
+        "en": "Verbs with two meanings · think, have, taste"
+      },
+      "form": {
+        "de": "Zustand: Present Simple · Handlung: am/is/are + -ing",
+        "en": "state: present simple · action: am/is/are + -ing"
+      },
+      "use": {
+        "de": "Manche Verben haben eine Zustands- und eine Handlungsbedeutung. Meinen, besitzen und schmecken sind Zustände (Present Simple). Nachdenken, essen und probieren sind Handlungen (Continuous).",
+        "en": "Some verbs have a state meaning and an action meaning. Opinion, owning and tasting are states (present simple). Thinking it over, eating and sampling are actions (continuous)."
+      },
+      "signals": [
+        "think",
+        "thinking",
+        "have",
+        "having",
+        "taste",
+        "smell"
+      ],
+      "ex": [
+        {
+          "en": "I think the deadline is realistic.",
+          "de": "Ich halte die Frist für realistisch.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I'm thinking about moving to the Berlin office.",
+          "de": "Ich überlege, ins Berliner Büro zu wechseln.",
+          "ctx": "talk"
+        },
+        {
+          "en": "We're having a call with legal at three.",
+          "de": "Wir haben um drei einen Call mit der Rechtsabteilung.",
+          "ctx": "mail"
+        }
+      ],
+      "trap": {
+        "bad": "I'm thinking this price is too high.",
+        "good": "I think this price is too high.",
+        "cause": {
+          "de": "Das deutsche „denken“ kann Meinen und Nachdenken heißen. Das verführt zum -ing. Als Meinung bleibt es bei think; „I’m thinking we should …“ geht nur als Vorschlag.",
+          "en": "The German “denken” can mean having an opinion and thinking something over. That tempts you into -ing. For an opinion stay with think; “I’m thinking we should …” works only as a suggestion."
+        }
+      },
+      "contrast": {
+        "with": "psc.now",
+        "a": "I think the offer is fair.",
+        "b": "I'm thinking the offer over.",
+        "diff": {
+          "de": "Gleiches Verb, anderer Sinn: think = ich meine (Zustand). am thinking over = ich überlege gerade (Handlung).",
+          "en": "Same verb, different sense: think = I believe (state). am thinking over = I am considering it right now (action)."
+        }
+      },
+      "ccq": [
+        {
+          "s": "I'm thinking about the offer.",
+          "q": {
+            "de": "Habe ich schon eine feste Meinung?",
+            "en": "Do I already have a firm opinion?"
+          },
+          "a": false
+        },
+        {
+          "s": "This coffee tastes bitter.",
+          "q": {
+            "de": "Probiert jemand den Kaffee gerade?",
+            "en": "Is someone sampling the coffee right now?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Meinst du einen Zustand (Meinung, Besitz, Geschmack) oder eine Handlung (nachdenken, essen, probieren), die gerade läuft?",
+        "en": "Do you mean a state (opinion, possession, taste) or an action (thinking over, eating, sampling) in progress?"
+      }
+    },
+    {
+      "id": "psc.always",
+      "name": {
+        "de": "always + -ing · Ärger über Wiederholung",
+        "en": "always + -ing · annoyance at repetition"
+      },
+      "form": {
+        "de": "am/is/are + always/constantly + -ing",
+        "en": "am/is/are + always/constantly + -ing"
+      },
+      "use": {
+        "de": "Mit always oder constantly und -ing zeigst du Ärger oder Staunen über etwas, das sich ständig wiederholt. Ohne dieses Gefühl nennst du nur die Häufigkeit: always + Present Simple.",
+        "en": "With always or constantly plus -ing you show annoyance or surprise at something that keeps repeating. Without that feeling you only state the frequency: always + present simple."
+      },
+      "signals": [
+        "always",
+        "is always",
+        "are always",
+        "constantly",
+        "continually",
+        "forever",
+        "all the time"
+      ],
+      "ex": [
+        {
+          "en": "He's constantly changing the agenda.",
+          "de": "Er ändert ständig die Tagesordnung.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "The portal is constantly timing out, so I'm escalating this.",
+          "de": "Das Portal bricht ständig ab, deshalb eskaliere ich das.",
+          "ctx": "mail"
+        },
+        {
+          "en": "You're always forgetting your badge!",
+          "de": "Du vergisst ständig deinen Ausweis!",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "He is interrupting always the other speakers.",
+        "good": "He is always interrupting the other speakers.",
+        "cause": {
+          "de": "Im Deutschen steht „immer“ oft hinter dem Verb („Er unterbricht immer die anderen“). Im Englischen steht always zwischen is und dem -ing-Wort.",
+          "en": "In German “immer” often comes after the verb (“Er unterbricht immer die anderen”). In English always goes between is and the -ing word."
+        }
+      },
+      "contrast": {
+        "with": "psc.habit",
+        "a": "He always arrives early.",
+        "b": "He's always arriving late!",
+        "diff": {
+          "de": "a nennt nur die Gewohnheit. b klingt genervt: Die Wiederholung stört den Sprecher.",
+          "en": "a only states the habit. b sounds annoyed: the repetition bothers the speaker."
+        }
+      },
+      "ccq": [
+        {
+          "s": "He's constantly changing the plan.",
+          "q": {
+            "de": "Klingt der Sprecher genervt?",
+            "en": "Does the speaker sound annoyed?"
+          },
+          "a": true
+        },
+        {
+          "s": "He always arrives at nine.",
+          "q": {
+            "de": "Klingt das nach Ärger?",
+            "en": "Does this sound annoyed?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Willst du nur sagen, wie oft etwas passiert, oder ärgerst du dich über die ständige Wiederholung?",
+        "en": "Do you only want to say how often something happens, or are you annoyed at the constant repetition?"
+      }
+    }
+  ]
+}

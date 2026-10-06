@@ -1,0 +1,1057 @@
+[
+ {
+  "id": "pp-ear-k1",
+  "type": "kwt",
+  "pat": "pp.earlier",
+  "from": "My colleague went through security at 6:00, and I got to the airport at 6:30.",
+  "key": "ALREADY",
+  "frame": "When I got to the airport, my colleague ___ security.",
+  "answer": "had already cleared",
+  "accepted": [
+   "'d already cleared",
+   "had already passed",
+   "'d already passed",
+   "had already gone through",
+   "'d already gone through",
+   "had already been through",
+   "'d already been through",
+   "had already passed through",
+   "'d already passed through",
+   "had already gotten through",
+   "'d already gotten through"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Es geschah vor meiner Ankunft → had already cleared (had + Partizip).",
+    "en": "Right: it happened before I arrived → had already cleared (had + participle)."
+   },
+   "wrong": [
+    {
+     "not": [
+      "already"
+     ],
+     "de": "Das Schlüsselwort already muss unverändert in der Lücke stehen.",
+     "en": "The key word already must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has“ gehört zur Gegenwart; „got“ steht in der Vergangenheit.",
+     "en": "“has” belongs to the present; “got” is in the past."
+    },
+    {
+     "if": [
+      "already"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Ohne had bleibt es Past Simple: Das Frühere braucht had + Partizip.",
+     "en": "Without had it stays Past Simple: the earlier event needs had + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ear-k2",
+  "type": "kwt",
+  "pat": "pp.earlier",
+  "from": "The client signed the contract before I got the email.",
+  "key": "SIGNED",
+  "frame": "___ the contract by the time I got the email.",
+  "answer": "The client had signed",
+  "accepted": [
+   "The client had already signed",
+   "The client had just signed",
+   "Our client had signed",
+   "Our client had already signed",
+   "They had signed",
+   "They had already signed",
+   "They'd signed",
+   "They'd already signed"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Unterschreiben lag vor dem Erhalt der Mail → had signed.",
+    "en": "Right: the signing came before I got the email → had signed."
+   },
+   "wrong": [
+    {
+     "not": [
+      "signed"
+     ],
+     "de": "Das Schlüsselwort signed muss unverändert in der Lücke stehen.",
+     "en": "The key word signed must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has signed“ ist Gegenwart; „got“ steht in der Vergangenheit.",
+     "en": "“has signed” is present tense; “got” is in the past."
+    },
+    {
+     "if": [
+      "signed"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Ohne had fehlt das Past Perfect: Das Frühere braucht had + Partizip.",
+     "en": "Without had the Past Perfect is missing: the earlier event needs had + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ear-f1",
+  "type": "find",
+  "pat": "pp.earlier",
+  "prompt": "By the time we reached the venue, the keynote already started and everyone was seated.",
+  "err": [
+   9,
+   10
+  ],
+  "answer": "had already started",
+  "fixed": "By the time we reached the venue, the keynote had already started and everyone was seated.",
+  "accepted": [
+   "had started",
+   "had already begun",
+   "had begun"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „already started“ braucht had: Der Beginn lag vor unserer Ankunft.",
+    "en": "The error: “already started” needs had: the start came before we arrived."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Frühere braucht had + Partizip.",
+     "en": "There is an error: the earlier event needs had + participle."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „already started“: Das Hilfsverb had fehlt.",
+     "en": "The error is at “already started”: the auxiliary had is missing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ear-f2",
+  "type": "find",
+  "pat": "pp.earlier",
+  "prompt": "When the auditors arrived, we had already archived the old files.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Das Archivieren lag vor der Ankunft → had already archived.",
+    "en": "No error: the archiving came before the arrival → had already archived."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: had + Partizip ist hier genau richtig für das Frühere.",
+     "en": "No error: had + participle is exactly right here for the earlier event."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ear-f3",
+  "type": "find",
+  "pat": "pp.earlier",
+  "prompt": "She knew the route well because she driven it many times before.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "had driven",
+  "fixed": "She knew the route well because she had driven it many times before.",
+  "accepted": [
+   "'d driven"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Bei „she driven“ fehlt had, das Hilfsverb des Past Perfect.",
+    "en": "The error: “she driven” lacks had, the auxiliary of the Past Perfect."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier fehlt had vor driven.",
+     "en": "There is an error: had is missing before driven."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „driven“: Ohne had ist es keine Zeitform.",
+     "en": "The error is at “driven”: without had it is not a tense."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ear-m1",
+  "type": "meaning",
+  "pat": "pp.earlier",
+  "a": "When I got to the office, the manager left.",
+  "b": "When I got to the office, the manager had left.",
+  "q": {
+   "de": "Welcher Satz sagt: Der Manager war schon weg, als ich kam?",
+   "en": "Which sentence says the manager was already gone when I arrived?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Mit had left war der Manager schon weg, bevor ich kam.",
+    "en": "Right: sentence b. With had left the manager was gone before I got there."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a geht der Manager erst nach meiner Ankunft: Past Simple, dann Past Simple.",
+     "en": "In a the manager leaves after I arrive: Past Simple, then Past Simple."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Past Simple heißt danach, had left heißt schon vorher.",
+     "en": "Not the same: Past Simple means after, had left means before."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-dur-k1",
+  "type": "kwt",
+  "pat": "pp.duration",
+  "from": "How many months did the team work on the project before the layoffs began?",
+  "key": "BEEN",
+  "frame": "How many months ___ on the project before the layoffs began?",
+  "answer": "had the team been working",
+  "accepted": [
+   "had they been working"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Dauer vor den Entlassungen in der Vergangenheit → had the team been working.",
+    "en": "Right: duration before the layoffs in the past → had the team been working."
+   },
+   "wrong": [
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have … been“ reicht bis jetzt; die Entlassungen liegen in der Vergangenheit.",
+     "en": "“have … been” runs up to now; the layoffs lie in the past."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has … been“ reicht bis jetzt; die Entlassungen liegen in der Vergangenheit.",
+     "en": "“has … been” runs up to now; the layoffs lie in the past."
+    },
+    {
+     "pat": "pp.duration",
+     "de": "Dauer vor einem Zeitpunkt in der Vergangenheit braucht had + been.",
+     "en": "Duration before a past moment needs had + been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-dur-k2",
+  "type": "kwt",
+  "pat": "pp.duration",
+  "from": "Maria started preparing the pitch on Monday, and she was still at it on Wednesday when the client called.",
+  "key": "BEEN",
+  "frame": "When the client called on Wednesday, Maria ___ the pitch since Monday.",
+  "answer": "had been preparing",
+  "accepted": [
+   "'d been preparing",
+   "had been working on",
+   "'d been working on"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „since Monday“ nennt die Dauer bis zum Anruf → had been preparing.",
+    "en": "Right: “since Monday” gives the duration up to the call → had been preparing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss unverändert in der Lücke stehen.",
+     "en": "The key word been must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have been“ reicht bis jetzt; der Anruf lag in der Vergangenheit.",
+     "en": "“have been” runs up to now; the call lay in the past."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has been“ reicht bis jetzt; der Anruf lag in der Vergangenheit.",
+     "en": "“has been” runs up to now; the call lay in the past."
+    },
+    {
+     "pat": "pp.duration",
+     "de": "Mit since braucht die Dauer vor einem Zeitpunkt had been + -ing.",
+     "en": "With since, duration before a past moment needs had been + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-dur-f1",
+  "type": "find",
+  "pat": "pp.duration",
+  "prompt": "When the inspector arrived, the crew was repairing the roof since dawn.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "had been repairing",
+  "fixed": "When the inspector arrived, the crew had been repairing the roof since dawn.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „was repairing since“ geht nicht; die Dauer seit dawn braucht had been repairing.",
+    "en": "The error: “was repairing since” does not work; duration since dawn needs had been repairing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: since braucht die Perfektform had been.",
+     "en": "There is an error: since needs the perfect form had been."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „was repairing“: Mit since braucht es had been repairing.",
+     "en": "The error is at “was repairing”: with since you need had been repairing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-dur-f2",
+  "type": "find",
+  "pat": "pp.duration",
+  "prompt": "I was out of breath because I had been running up the stairs.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: had been running nennt die Ursache, die vor „was“ lag.",
+    "en": "No error: had been running names the cause that came before “was”."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: had been + -ing ist hier richtig, das Laufen ging dem Atemlos-Sein voraus.",
+     "en": "No error: had been + -ing is right here; the running came before being out of breath."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-dur-m1",
+  "type": "meaning",
+  "pat": "pp.duration",
+  "a": "I had written the report when she called.",
+  "b": "I had been writing the report when she called.",
+  "q": {
+   "de": "Welcher Satz sagt: Der Bericht war beim Anruf fertig?",
+   "en": "Which sentence says the report was finished when she called?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. had written meldet das Ergebnis: Der Bericht war fertig.",
+    "en": "Right: sentence a. had written reports the result: the report was finished."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b zählt der Verlauf (had been writing); ob er fertig war, bleibt offen.",
+     "en": "In b the process counts (had been writing); whether it was done stays open."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: had written = fertig, had been writing = Verlauf.",
+     "en": "Not the same: had written = finished, had been writing = in progress."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ft-k1",
+  "type": "kwt",
+  "pat": "pp.first-time",
+  "from": "The vendor had never missed a deadline before that week.",
+  "key": "TIME",
+  "frame": "That week was the first ___ a deadline.",
+  "answer": "time the vendor had missed",
+  "accepted": [
+   "time our vendor had missed",
+   "time the supplier had missed",
+   "time they had missed",
+   "time they had ever missed"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „the first time“ steht had + Partizip → had missed.",
+    "en": "Right: after “the first time” comes had + participle → had missed."
+   },
+   "wrong": [
+    {
+     "not": [
+      "time"
+     ],
+     "de": "Das Schlüsselwort time muss unverändert in der Lücke stehen.",
+     "en": "The key word time must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "„has missed“ gehört zur Gegenwart; „was“ steht in der Vergangenheit.",
+     "en": "“has missed” belongs to the present; “was” is in the past."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have missed“ gehört zur Gegenwart; „was“ steht in der Vergangenheit.",
+     "en": "“have missed” belongs to the present; “was” is in the past."
+    },
+    {
+     "if": [
+      "missed"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Ohne had fehlt die Stufe zurück: Die Erfahrung liegt vor „was“.",
+     "en": "Without had the step back is missing: the experience lies before “was”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ft-k2",
+  "type": "kwt",
+  "pat": "pp.first-time",
+  "from": "That trip was my first flight in business class.",
+  "key": "NEVER",
+  "frame": "I ___ in business class before that trip.",
+  "answer": "had never flown",
+  "accepted": [
+   "'d never flown",
+   "had never traveled",
+   "'d never traveled",
+   "had never been",
+   "'d never been"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „before that trip“ steht die Erfahrung davor → had never flown.",
+    "en": "Right: “before that trip” + experience before it → had never flown."
+   },
+   "wrong": [
+    {
+     "not": [
+      "never"
+     ],
+     "de": "Das Schlüsselwort never muss unverändert in der Lücke stehen.",
+     "en": "The key word never must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have never“ gehört zur Gegenwart; „that trip“ liegt in der Vergangenheit.",
+     "en": "“have never” belongs to the present; “that trip” lies in the past."
+    },
+    {
+     "if": [
+      "never"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Ohne had bleibt es Past Simple; die Erfahrung lag vor dem Flug: had never flown.",
+     "en": "Without had it stays Past Simple; the experience came before the flight: had never flown."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ft-f1",
+  "type": "find",
+  "pat": "pp.first-time",
+  "prompt": "It was the first time our team wins a client in Asia.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "had won",
+  "fixed": "It was the first time our team had won a client in Asia.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „It was the first time“ steht had + Partizip: had won.",
+    "en": "The error: after “It was the first time” comes had + participle: had won."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Die Erfahrung liegt eine Stufe vor „was“.",
+     "en": "There is an error: the experience sits one step before “was”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „wins“: Es braucht had won.",
+     "en": "The error is at “wins”: it needs had won."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ft-f2",
+  "type": "find",
+  "pat": "pp.first-time",
+  "prompt": "It was the first time the CFO had spoke at a shareholder meeting.",
+  "err": [
+   8,
+   8
+  ],
+  "answer": "spoken",
+  "fixed": "It was the first time the CFO had spoken at a shareholder meeting.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach had steht die 3. Form: spoken, nicht spoke.",
+    "en": "The error: after had comes the past participle: spoken, not spoke."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: had braucht das Partizip.",
+     "en": "There is an error: had needs the participle."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „spoke“: Nach had steht spoken.",
+     "en": "The error is at “spoke”: after had comes spoken."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-ft-m1",
+  "type": "meaning",
+  "pat": "pp.first-time",
+  "a": "It is the first time she has led the meeting.",
+  "b": "It was the first time she had led the meeting.",
+  "q": {
+   "de": "Welcher Satz blickt aus der Vergangenheit auf die Erfahrung zurück?",
+   "en": "Which sentence looks back at the experience from the past?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. „It was“ + had + Partizip: Die Erfahrung lag vor dem Zeitpunkt.",
+    "en": "Right: sentence b. “It was” + had + participle: the experience came before that moment."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a steht die Gegenwart (is … has led): Die Erfahrung gilt jetzt.",
+     "en": "In a it is the present (is … has led): the experience holds now."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a erzählt aus der Gegenwart, b aus der Vergangenheit.",
+     "en": "Not the same: a is told from the present, b from the past."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-rep-k1",
+  "type": "kwt",
+  "pat": "pp.reported",
+  "from": "Lena told me, “I’ll send the proposal tomorrow.”",
+  "key": "SEND",
+  "frame": "Lena told me she ___ the proposal the next day.",
+  "answer": "would send",
+  "accepted": [
+   "'d send",
+   "was going to send"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus „I’ll send“ wird nach „told“ would send.",
+    "en": "Right: after “told”, “I’ll send” becomes would send."
+   },
+   "wrong": [
+    {
+     "not": [
+      "send"
+     ],
+     "de": "Das Schlüsselwort send muss unverändert in der Lücke stehen.",
+     "en": "The key word send must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„will send“ bleibt nicht stehen: Nach „told“ wird daraus would.",
+     "en": "“will send” does not stay: after “told” it becomes would."
+    },
+    {
+     "pat": "pp.reported",
+     "de": "Nach einem Verb der Vergangenheit rutscht die Zeit zurück: will → would.",
+     "en": "After a past reporting verb the tense moves back: will → would."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-rep-k2",
+  "type": "kwt",
+  "pat": "pp.reported",
+  "from": "The supplier told us, “We’ve already sent the samples.”",
+  "key": "ALREADY",
+  "frame": "The supplier told us they ___ the samples.",
+  "answer": "had already sent",
+  "accepted": [
+   "'d already sent",
+   "had already shipped",
+   "'d already shipped"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus „We’ve sent“ wird nach „told“ had sent.",
+    "en": "Right: after “told”, “We’ve sent” becomes had sent."
+   },
+   "wrong": [
+    {
+     "not": [
+      "already"
+     ],
+     "de": "Das Schlüsselwort already muss unverändert in der Lücke stehen.",
+     "en": "The key word already must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have sent“ bleibt nicht stehen: Nach „told“ rutscht es zu had sent zurück.",
+     "en": "“have sent” does not stay: after “told” it moves back to had sent."
+    },
+    {
+     "if": [
+      "already"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Ohne had fehlt die Stufe zurück: Das Berichtete war schon passiert.",
+     "en": "Without had the step back is missing: the reported event had already happened."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-rep-k3",
+  "type": "kwt",
+  "pat": "pp.reported",
+  "from": "Priya told me, “I booked the hotel last week.”",
+  "key": "HAD",
+  "frame": "Priya told me she ___ the hotel the week before.",
+  "answer": "had booked",
+  "accepted": [
+   "had reserved"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus „I booked“ (schon passiert) wird nach „told“ had booked.",
+    "en": "Right: after “told”, “I booked” (already done) becomes had booked."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Das Schlüsselwort had muss unverändert in der Lücke stehen.",
+     "en": "The key word had must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„have booked“ bleibt nicht stehen: Nach „told“ rutscht es zu had booked zurück.",
+     "en": "“have booked” does not stay: after “told” it moves back to had booked."
+    },
+    {
+     "pat": "pp.reported",
+     "de": "Nach einem Verb der Vergangenheit rutscht das Frühere zurück: had + Partizip.",
+     "en": "After a past reporting verb the earlier event moves back: had + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-rep-f1",
+  "type": "find",
+  "pat": "pp.reported",
+  "prompt": "The recruiter told us that the offer will be ready the following week.",
+  "err": [
+   7,
+   8
+  ],
+  "answer": "would be",
+  "fixed": "The recruiter told us that the offer would be ready the following week.",
+  "accepted": [
+   "was going to be"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „told“ rutscht will zu would zurück: would be.",
+    "en": "The error: after “told”, will moves back to would: would be."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach „told“ bleibt will nicht stehen.",
+     "en": "There is an error: after “told”, will does not stay."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will be“: Es braucht would be.",
+     "en": "The error is at “will be”: it needs would be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-rep-f2",
+  "type": "find",
+  "pat": "pp.reported",
+  "prompt": "Tom said he has already left the office the day before.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "had already left",
+  "fixed": "Tom said he had already left the office the day before.",
+  "accepted": [
+   "had left"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Mit „the day before“ braucht das Berichtete had + Partizip.",
+    "en": "The error: with “the day before” the reported event needs had + participle."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „has“ passt nicht zu „the day before“.",
+     "en": "There is an error: “has” does not fit “the day before”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „has already left“: Es braucht had already left.",
+     "en": "The error is at “has already left”: it needs had already left."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-rep-f3",
+  "type": "find",
+  "pat": "pp.reported",
+  "prompt": "The client said they signed the contract the day before.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "had signed",
+  "fixed": "The client said they had signed the contract the day before.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Mit „the day before“ braucht das Berichtete had + Partizip.",
+    "en": "The error: with “the day before” the reported event needs had + participle."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „signed“ passt nicht zu „the day before“.",
+     "en": "There is an error: “signed” does not fit “the day before”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „signed“: Es braucht had signed.",
+     "en": "The error is at “signed”: it needs had signed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-rep-m1",
+  "type": "meaning",
+  "pat": "pp.reported",
+  "a": "She told us the budget would be approved the following week.",
+  "b": "She told us the budget had been approved the previous week.",
+  "q": {
+   "de": "Welcher Satz berichtet etwas, das schon vor ihrer Aussage passiert war?",
+   "en": "Which sentence reports something that had already happened before she spoke?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. had been approved + the previous week liegt vor dem Sprechen.",
+    "en": "Right: sentence b. had been approved + the previous week lies before she spoke."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a zeigt would nach vorn: Die Genehmigung kommt erst nach ihrer Aussage.",
+     "en": "In a would points ahead: the approval comes only after she spoke."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: would = danach, had + Partizip = davor.",
+     "en": "Not the same: would = after, had + participle = before."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-inv-k1",
+  "type": "kwt",
+  "pat": "pp.inversion",
+  "from": "As soon as we started the demo, the projector froze.",
+  "key": "SOONER",
+  "frame": "No ___ the demo than the projector froze.",
+  "answer": "sooner had we started",
+  "accepted": [
+   "sooner had we begun"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „No sooner“ steht had vor dem Subjekt: had we started.",
+    "en": "Right: after “No sooner”, had goes before the subject: had we started."
+   },
+   "wrong": [
+    {
+     "not": [
+      "sooner"
+     ],
+     "de": "Das Schlüsselwort sooner muss unverändert in der Lücke stehen.",
+     "en": "The key word sooner must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "sooner"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Nach No sooner braucht es had + Partizip, nicht das Past Simple.",
+     "en": "After No sooner you need had + participle, not the Past Simple."
+    },
+    {
+     "pat": "pp.inversion",
+     "de": "Nach „No sooner“ steht had vor dem Subjekt: had we started.",
+     "en": "After “No sooner”, had goes before the subject: had we started."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-inv-k2",
+  "type": "kwt",
+  "pat": "pp.inversion",
+  "from": "Our meeting had just begun when the fire alarm rang.",
+  "key": "HARDLY",
+  "frame": "___ begun when the fire alarm rang.",
+  "answer": "Hardly had our meeting",
+  "accepted": [
+   "Hardly had the meeting",
+   "Hardly had we",
+   "Hardly had it"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „Hardly had“ + Subjekt + Partizip, und danach folgt „when“.",
+    "en": "Right: “Hardly had” + subject + participle, then “when” follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "hardly"
+     ],
+     "de": "Das Schlüsselwort hardly muss unverändert in der Lücke stehen.",
+     "en": "The key word hardly must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "hardly"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "Nach Hardly braucht es had vor dem Subjekt: Hardly had our meeting begun.",
+     "en": "After Hardly you need had before the subject: Hardly had our meeting begun."
+    },
+    {
+     "pat": "pp.inversion",
+     "de": "Nach „Hardly“ steht had vor dem Subjekt, dann das Partizip.",
+     "en": "After “Hardly”, had goes before the subject, then the participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-inv-f1",
+  "type": "find",
+  "pat": "pp.inversion",
+  "prompt": "No sooner we had launched the campaign than the complaints started.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "had we",
+  "fixed": "No sooner had we launched the campaign than the complaints started.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „No sooner“ steht das Hilfsverb vor dem Subjekt: had we launched.",
+    "en": "The error: after “No sooner” the auxiliary goes before the subject: had we launched."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach „No sooner“ fehlt die Umstellung.",
+     "en": "There is an error: after “No sooner” the inversion is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „we had“: Hier muss had vor we stehen.",
+     "en": "The error is at “we had”: had has to come before we."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-inv-f2",
+  "type": "find",
+  "pat": "pp.inversion",
+  "prompt": "Never had the team faced such a tight deadline.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Never + had the team + Partizip ist genau die richtige Umstellung.",
+    "en": "No error: Never + had the team + participle is exactly the right inversion."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach Never steht had vor dem Subjekt, so ist es richtig.",
+     "en": "No error: after Never, had goes before the subject, so it is correct."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-inv-m1",
+  "type": "meaning",
+  "pat": "pp.inversion",
+  "a": "We had barely started when the call dropped.",
+  "b": "Hardly had we started when the call dropped.",
+  "q": {
+   "de": "Sagen beide Sätze dasselbe?",
+   "en": "Do both sentences say the same thing?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Gleiche Bedeutung, förmlichere Form, Hardly had we … ist nur betonter.",
+    "en": "Right: both. Same meaning, more formal form: Hardly had we … is more emphatic."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Beide Sätze nennen dasselbe; nur die Wortstellung unterscheidet sie.",
+     "en": "Both sentences state the same thing; only the word order differs."
+    },
+    {
+     "opt": "b",
+     "de": "Beide Sätze nennen dasselbe; nur die Wortstellung unterscheidet sie.",
+     "en": "Both sentences state the same thing; only the word order differs."
+    }
+   ]
+  }
+ }
+]

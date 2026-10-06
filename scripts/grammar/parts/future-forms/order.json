@@ -1,0 +1,189 @@
+[
+ {
+  "pat": "ff.going-to",
+  "en": "We're going to move the launch to May.",
+  "de": "Wir verschieben den Launch auf Mai.",
+  "chunks": [
+   "we're",
+   "going to",
+   "move",
+   "the launch",
+   "to May"
+  ],
+  "single": "Nach going to folgen das Verb, das Objekt und das Ziel in genau dieser Reihenfolge: move the launch to May.",
+  "why": [
+   "Der Plan steht schon fest: am/is/are going to + Grundform. Nach going to steht move, nicht moving.",
+   "The plan is already fixed: am/is/are going to + base form. After going to comes move, not moving."
+  ],
+  "bad": "We're going to moving the launch to May.",
+  "trap": {
+   "tile": "move",
+   "instead": "moving",
+   "why": {
+    "de": "Kein reiner Übersetzungsfehler: to wird wie die Präposition in „going to the office“ gelesen, und dann folgt -ing. Nach going to steht die Grundform.",
+    "en": "Not a pure translation error: to is read like the preposition in “going to the office”, followed by -ing. After going to comes the base form."
+   }
+  }
+ },
+ {
+  "pat": "ff.will-now",
+  "en": "Good point, I'll update the slides now.",
+  "de": "Guter Punkt, ich aktualisiere die Folien gleich.",
+  "chunks": [
+   "good point",
+   "I'll",
+   "update",
+   "the slides",
+   "now"
+  ],
+  "alt": [
+   "I'll update the slides now, good point.",
+   "Good point, now I'll update the slides."
+  ],
+  "why": [
+   "Der Entschluss fällt erst jetzt, als Reaktion auf den Hinweis: will + Grundform. Das Deutsche käme hier mit dem Präsens aus.",
+   "The decision is made only now, in reaction to the remark: will + base form. German would get by with the present here."
+  ],
+  "bad": "Good point, I update the slides now.",
+  "trap": {
+   "tile": "I'll",
+   "instead": "I",
+   "why": {
+    "de": "Deutsch nimmt für einen spontanen Entschluss das Präsens („ich aktualisiere sie gleich“). Englisch braucht dafür will.",
+    "en": "German uses the present for a spontaneous decision (“ich aktualisiere sie gleich”). English needs will for it."
+   }
+  }
+ },
+ {
+  "pat": "ff.was-going-to",
+  "en": "I was going to send the report, but the file was corrupted.",
+  "de": "Ich wollte den Bericht schicken, aber die Datei war beschädigt.",
+  "chunks": [
+   "I was going to",
+   "send the report",
+   "but",
+   "the file",
+   "was corrupted"
+  ],
+  "single": "Erst steht der Plan (I was going to send the report), dann mit but der Grund, der ihn verhindert hat.",
+  "why": [
+   "was going to + Grundform sagt: Der Plan klappte nicht. Das but nennt den Grund, warum.",
+   "was going to + base form says: the plan fell through. The but-clause gives the reason why."
+  ],
+  "bad": "I am going to send the report, but the file was corrupted.",
+  "trap": {
+   "tile": "I was going to",
+   "instead": "I am going to",
+   "why": {
+    "de": "Kein Übersetzungsfehler: Man übernimmt going to im Präsens. Das Hilfsverb trägt aber die Zeit und muss was heißen.",
+    "en": "Not a translation error: going to is carried over in the present. But the auxiliary carries the tense and must be was."
+   }
+  }
+ },
+ {
+  "pat": "ff.fixed-times",
+  "en": "We're meeting the auditors on Friday at nine.",
+  "de": "Wir treffen die Prüfer am Freitag um neun.",
+  "chunks": [
+   "we're",
+   "meeting",
+   "the auditors",
+   "on Friday",
+   "at nine"
+  ],
+  "alt": [
+   "On Friday at nine we're meeting the auditors.",
+   "We're meeting the auditors at nine on Friday.",
+   "On Friday we're meeting the auditors at nine."
+  ],
+  "why": [
+   "Eine Verabredung mit Zeit und Personen: am/is/are + -ing. Das Present Simple wäre ein Fahrplan.",
+   "An arrangement with a time and people: am/is/are + -ing. The Present Simple would be a timetable."
+  ]
+ },
+ {
+  "pat": "ff.fixed-times",
+  "en": "The last train to Leipzig leaves at nine tonight.",
+  "de": "Der letzte Zug nach Leipzig fährt heute Abend um neun.",
+  "chunks": [
+   "the last train",
+   "to Leipzig",
+   "leaves",
+   "at nine",
+   "tonight"
+  ],
+  "alt": [
+   "The last train to Leipzig leaves tonight at nine.",
+   "Tonight the last train to Leipzig leaves at nine."
+  ],
+  "why": [
+   "Ein Fahrplan steht im Present Simple, auch für heute Abend: Das Subjekt train ist Singular, also leaves.",
+   "A timetable takes the Present Simple, even for tonight: the subject train is singular, so leaves."
+  ],
+  "bad": "The last train to Leipzig leave at nine tonight.",
+  "trap": {
+   "tile": "leaves",
+   "instead": "leave",
+   "why": {
+    "de": "Kein Übersetzungsfehler: Das -s der 3. Person Singular fällt unter Zeitdruck leicht weg. Bei train steht immer leaves.",
+    "en": "Not a translation error: the -s of the third person singular is easily dropped under time pressure. With train it is always leaves."
+   }
+  }
+ },
+ {
+  "pat": "ff.about-to",
+  "en": "Please take your seats. The keynote is about to start.",
+  "de": "Bitte nehmen Sie Platz. Die Keynote beginnt gleich.",
+  "chunks": [
+   "please take",
+   "your seats",
+   "the keynote",
+   "is about to",
+   "start"
+  ],
+  "alt": [
+   "The keynote is about to start. Please take your seats."
+  ],
+  "why": [
+   "about to + Grundform: Es passiert in Sekunden oder Minuten. Nach about to steht start, nicht starting.",
+   "about to + base form: it happens within seconds or minutes. After about to comes start, not starting."
+  ],
+  "bad": "Please take your seats. The keynote is about starting.",
+  "trap": {
+   "tile": "start",
+   "instead": "starting",
+   "why": {
+    "de": "Kein Übersetzungsfehler: Nach Präpositionen steht oft -ing („talking about starting“). about to ist aber ein fester Ausdruck mit Grundform.",
+    "en": "Not a translation error: -ing often follows prepositions (“talking about starting”). But about to is a fixed phrase with the base form."
+   }
+  }
+ },
+ {
+  "pat": "ff.no-will-after",
+  "en": "I'll email you before I leave the office.",
+  "de": "Ich maile dir, bevor ich das Büro verlasse.",
+  "chunks": [
+   "I'll email you",
+   "before",
+   "I",
+   "leave",
+   "the office"
+  ],
+  "alt": [
+   "Before I leave the office, I'll email you."
+  ],
+  "why": [
+   "Im Zeitsatz steht das Present: before I leave. Das Futur trägt schon „I'll email you“ im Hauptsatz.",
+   "The time clause takes the present: before I leave. The future is already in “I'll email you” in the main clause."
+  ],
+  "bad": "I'll email you before I will leave the office.",
+  "trap": {
+   "tile": "leave",
+   "instead": "will leave",
+   "why": {
+    "de": "Kein Übersetzungsfehler: Deutsch nimmt hier auch das Präsens („bevor ich verlasse“). Schuld ist der Reflex „Zukunft = will“ im Nebensatz.",
+    "en": "Not a translation error: German also uses the present here (“bevor ich verlasse”). The culprit is the reflex “future = will” in the subordinate clause."
+   }
+  }
+ }
+]
