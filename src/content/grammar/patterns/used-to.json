@@ -1,0 +1,436 @@
+{
+ "topic": "used-to",
+ "canDo": {
+  "de": "Ich kann Früheres und Vertrautes genau ausdrücken: früher mit used to oder would, Fragen und Verneinung mit use to, gewöhnt sein mit be used to und sich gewöhnen mit get used to.",
+  "en": "I can express past habits and familiarity precisely: the past with used to or would, questions and negatives with use to, being accustomed with be used to, and becoming accustomed with get used to."
+ },
+ "order": [
+  "ut.used-to",
+  "ut.would",
+  "ut.did-use-to",
+  "ut.be-used-to",
+  "ut.get-used-to"
+ ],
+ "introPlan": [
+  [
+   "ut.used-to",
+   "ut.would"
+  ],
+  [
+   "ut.be-used-to",
+   "ut.get-used-to"
+  ],
+  [
+   "ut.did-use-to"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Gilt es heute noch (be used to, get used to) oder war es nur früher so (used to, would)?",
+   "Ist es eine wiederholte Handlung (would ist möglich) oder ein Zustand (nur used to)?",
+   "Welches Wort steht vor used: be, get, did oder keines? Es bestimmt, welche Form danach folgt."
+  ],
+  "en": [
+   "Is it still true today (be used to, get used to) or only in the past (used to, would)?",
+   "Is it a repeated action (would is possible) or a state (only used to)?",
+   "Which word comes before used: be, get, did, or none? It decides which form follows."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "ut.used-to",
+   "name": {
+    "de": "used to · früher, jetzt nicht mehr",
+    "en": "used to · past, no longer"
+   },
+   "form": {
+    "de": "used to + Grundform",
+    "en": "used to + base verb"
+   },
+   "use": {
+    "de": "Beschreibt Gewohnheiten und Zustände von früher, die heute nicht mehr gelten. Danach steht immer die Grundform.",
+    "en": "Describes past habits and states that no longer hold today. The base form always follows."
+   },
+   "signals": [
+    "used to",
+    "no longer",
+    "anymore",
+    "back then",
+    "in those days"
+   ],
+   "ex": [
+    {
+     "en": "We used to review every contract by hand.",
+     "de": "Wir haben früher jeden Vertrag von Hand geprüft.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I used to work in the Berlin office before the merger.",
+     "de": "Ich habe früher vor der Fusion im Berliner Büro gearbeitet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She used to be much more skeptical about remote work.",
+     "de": "Sie war früher viel skeptischer gegenüber Homeoffice.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We used to having weekly all-hands meetings.",
+    "good": "We used to have weekly all-hands meetings.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch trennt „früher“ und „gewohnt sein“ in zwei Wörter. Englisch schreibt beides ähnlich, und das -ing von be used to rutscht hinein.",
+     "en": "Not a translation error: German uses two different words for “früher” and “gewohnt sein”. English spells them alike, and the -ing of be used to slips in."
+    }
+   },
+   "contrast": {
+    "with": "ut.be-used-to",
+    "a": "I used to work night shifts.",
+    "b": "I'm used to working night shifts.",
+    "diff": {
+     "de": "used to + Grundform: früher so, heute nicht mehr. be used to + -ing: heute vertraut und normal für dich.",
+     "en": "used to + base verb: true before, not any more. be used to + -ing: familiar and normal for you today."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We used to fly business class.",
+     "q": {
+      "de": "Fliegen wir heute noch Business Class?",
+      "en": "Do we still fly business class?"
+     },
+     "a": false
+    },
+    {
+     "s": "We used to meet on Mondays.",
+     "q": {
+      "de": "Haben wir uns früher montags getroffen, und ist das heute vorbei?",
+      "en": "Did we meet on Mondays in the past, and is that over now?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Gilt es heute noch, oder war es nur früher so? Und welche Verbform braucht der Ausdruck dafür?",
+    "en": "Is it still true today, or only in the past? And which verb form does the phrase need?"
+   }
+  },
+  {
+   "id": "ut.would",
+   "name": {
+    "de": "would · wiederholt früher",
+    "en": "would · repeated past actions"
+   },
+   "form": {
+    "de": "would + Grundform, nur Handlungen",
+    "en": "would + base verb, actions only"
+   },
+   "use": {
+    "de": "Erzählt von Handlungen, die früher regelmäßig passierten. Für Zustände wie be oder have geht nur used to. Der frühere Zeitrahmen muss klar sein.",
+    "en": "Tells of actions that happened regularly in the past. For states like be or have only used to works. The past time frame must be clear."
+   },
+   "signals": [
+    "would",
+    "whenever",
+    "every summer",
+    "every Friday",
+    "each year"
+   ],
+   "ex": [
+    {
+     "en": "Every Friday, we would order pizza for the whole team.",
+     "de": "Jeden Freitag bestellten wir früher Pizza für das ganze Team.",
+     "ctx": "talk"
+    },
+    {
+     "en": "In my first job, I would answer every email within an hour.",
+     "de": "In meinem ersten Job beantwortete ich jede E-Mail innerhalb einer Stunde.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Whenever a client called, our manager would take notes by hand.",
+     "de": "Wann immer ein Kunde anrief, machte unser Chef handschriftliche Notizen.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "We would own a small office in Chicago back then.",
+    "good": "We used to own a small office in Chicago back then.",
+    "cause": {
+     "de": "Im Deutschen reicht für beides das Präteritum („wir besaßen“, „wir bestellten“). Darum fällt der Unterschied zwischen Zustand und Handlung nicht auf.",
+     "en": "German uses one simple past for both (“wir besaßen”, “wir bestellten”). So the difference between a state and an action goes unnoticed."
+    }
+   },
+   "contrast": {
+    "with": "ut.used-to",
+    "a": "We used to own a small office.",
+    "b": "We would meet there every Friday.",
+    "diff": {
+     "de": "used to passt zu Zuständen und Handlungen. would passt nur zu wiederholten Handlungen, und der frühere Zeitrahmen muss klar sein.",
+     "en": "used to fits states and actions. would fits only repeated actions, and the past time frame must be clear."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Every Friday back then, we would meet at nine.",
+     "q": {
+      "de": "Haben wir uns früher regelmäßig getroffen?",
+      "en": "Did we meet regularly in the past?"
+     },
+     "a": true
+    },
+    {
+     "s": "When I was a trainee, I would shadow senior reps every week.",
+     "q": {
+      "de": "Habe ich das nur ein einziges Mal gemacht?",
+      "en": "Did I do that only once?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Beschreibst du eine Handlung, die sich wiederholte, oder einen Zustand? Und ist der frühere Zeitrahmen klar?",
+    "en": "Do you describe an action that repeated, or a state? And is the past time frame clear?"
+   }
+  },
+  {
+   "id": "ut.did-use-to",
+   "name": {
+    "de": "did … use to · Frage, Verneinung",
+    "en": "did … use to · questions, negatives"
+   },
+   "form": {
+    "de": "did/didn't + use to, ohne d",
+    "en": "did/didn't + use to, no d"
+   },
+   "use": {
+    "de": "Nach did und didn't zeigt did die Vergangenheit schon. Darum heißt es use to ohne d. In bejahten Sätzen bleibt es used to.",
+    "en": "After did and didn't, did already shows the past. So it is use to without d. Affirmative sentences keep used to."
+   },
+   "signals": [
+    "didn't use to",
+    "did not use to",
+    "did you use to",
+    "did we use to"
+   ],
+   "ex": [
+    {
+     "en": "Did we use to have a budget for training?",
+     "de": "Hatten wir früher ein Budget für Schulungen?",
+     "ctx": "meeting"
+    },
+    {
+     "en": "My manager didn't use to join our weekly calls.",
+     "de": "Mein Chef nahm früher nicht an unseren Wochen-Calls teil.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Where did you use to work before this?",
+     "de": "Wo hast du früher gearbeitet, bevor du hierher kamst?",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I didn't used to like spreadsheets.",
+    "good": "I didn't use to like spreadsheets.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: „I used to“ ist so geläufig, dass das d auch nach did bleibt. Doch did zeigt die Vergangenheit schon.",
+     "en": "Not a translation error: “I used to” is so familiar that the d stays even after did. But did already shows the past."
+    }
+   },
+   "contrast": {
+    "with": "ut.used-to",
+    "a": "We used to meet on Mondays.",
+    "b": "We didn't use to meet on Mondays.",
+    "diff": {
+     "de": "Bejaht steht used to mit d. Mit did oder didn't steht use to ohne d, weil did die Vergangenheit schon zeigt.",
+     "en": "Affirmative sentences take used to with d. After did or didn't it is use to without d, because did already shows the past."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I didn't use to take notes in meetings.",
+     "q": {
+      "de": "Habe ich früher in Meetings mitgeschrieben?",
+      "en": "Did I take notes in meetings in the past?"
+     },
+     "a": false
+    },
+    {
+     "s": "Did you use to travel for work?",
+     "q": {
+      "de": "Frage ich danach, ob du früher oft gereist bist?",
+      "en": "Am I asking whether you traveled often in the past?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welches Wort im Satz zeigt die Vergangenheit schon? Was heißt das für das d in used?",
+    "en": "Which word in the sentence already shows the past? What does that mean for the d in used?"
+   },
+   "usNote": {
+    "de": "Im US-Alltag hört man auch didn't used to. Geschrieben und in Prüfungen gilt use to ohne d.",
+    "en": "In everyday US speech you also hear didn't used to. In writing and in exams, use to without d is the rule."
+   }
+  },
+  {
+   "id": "ut.be-used-to",
+   "name": {
+    "de": "be used to · gewöhnt sein",
+    "en": "be used to · be accustomed"
+   },
+   "form": {
+    "de": "be used to + -ing oder Nomen",
+    "en": "be used to + -ing or noun"
+   },
+   "use": {
+    "de": "Beschreibt, was dir vertraut ist, weil du es oft getan hast. Hier ist „to“ eine Präposition, darum folgt -ing oder ein Nomen.",
+    "en": "Describes what is familiar to you because you have done it often. Here to is a preposition, so -ing or a noun follows."
+   },
+   "signals": [
+    "be used to",
+    "am used to",
+    "not used to",
+    "accustomed to"
+   ],
+   "ex": [
+    {
+     "en": "I'm used to presenting to large groups.",
+     "de": "Ich bin es gewohnt, vor großen Gruppen zu präsentieren.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Our team is used to tight deadlines.",
+     "de": "Unser Team ist an knappe Fristen gewöhnt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'm not used to speaking English all day yet.",
+     "de": "Ich bin es noch nicht gewohnt, den ganzen Tag Englisch zu sprechen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I'm used to work under pressure.",
+    "good": "I'm used to working under pressure.",
+    "cause": {
+     "de": "Im Deutschen heißt es „gewohnt, zu arbeiten“ mit Infinitiv. Das englische to wirkt wie dieses „zu“. Es ist aber eine Präposition.",
+     "en": "German says “gewohnt, zu arbeiten” with an infinitive, so English to looks like that “zu”. But it is a preposition."
+    }
+   },
+   "contrast": {
+    "with": "ut.get-used-to",
+    "a": "I'm used to the noise.",
+    "b": "I'm getting used to the noise.",
+    "diff": {
+     "de": "be used to nennt den Zustand: Du bist schon gewöhnt. get used to nennt den Vorgang: Du gewöhnst dich gerade oder bist es geworden.",
+     "en": "be used to names the state: you are already accustomed. get used to names the process: you are becoming or have become accustomed."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She is used to working night shifts.",
+     "q": {
+      "de": "Sind Nachtschichten für sie normal?",
+      "en": "Are night shifts normal for her?"
+     },
+     "a": true
+    },
+    {
+     "s": "I'm not used to the new system.",
+     "q": {
+      "de": "Ist mir das neue System schon vertraut?",
+      "en": "Is the new system already familiar to me?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Ist es für dich schon vertraut, und welche Form steht nach einer Präposition?",
+    "en": "Is it already familiar to you, and which form follows a preposition?"
+   }
+  },
+  {
+   "id": "ut.get-used-to",
+   "name": {
+    "de": "get used to · sich gewöhnen",
+    "en": "get used to · become accustomed"
+   },
+   "form": {
+    "de": "get used to + -ing oder Nomen",
+    "en": "get used to + -ing or noun"
+   },
+   "use": {
+    "de": "Beschreibt den Vorgang des Gewöhnens. Auch hier ist „to“ eine Präposition: -ing oder ein Nomen. Im Present Perfect steht in den USA gotten used to, im Präteritum got used to.",
+    "en": "Describes the process of becoming accustomed. Here too to is a preposition: -ing or a noun. In the present perfect, US English uses gotten used to; the simple past is got used to."
+   },
+   "signals": [
+    "get used to",
+    "got used to",
+    "gotten used to",
+    "getting used to"
+   ],
+   "ex": [
+    {
+     "en": "It took me a month to get used to the new CRM.",
+     "de": "Ich habe einen Monat gebraucht, um mich an das neue CRM zu gewöhnen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "You'll get used to working across time zones.",
+     "de": "Du wirst dich daran gewöhnen, über Zeitzonen hinweg zu arbeiten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I still can't get used to getting up at five.",
+     "de": "Ich kann mich immer noch nicht daran gewöhnen, um fünf aufzustehen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "It took me weeks to be used to the new office.",
+    "good": "It took me weeks to get used to the new office.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch trennt „sich gewöhnen“ und „gewohnt sein“ klar. Im Englischen unterscheidet nur be oder get, und das wird leicht übersehen.",
+     "en": "Not a translation error: German clearly separates “sich gewöhnen” and “gewohnt sein”. In English only be or get tells them apart, and that is easy to miss."
+    }
+   },
+   "contrast": {
+    "with": "ut.be-used-to",
+    "a": "I'm getting used to the new office.",
+    "b": "I'm used to the new office.",
+    "diff": {
+     "de": "get used to nennt den Weg dorthin: Es ist noch neu oder war es. be used to nennt das Ergebnis: Es ist vertraut.",
+     "en": "get used to names the way there: it is still new or was new. be used to names the result: it is familiar."
+    }
+   },
+   "ccq": [
+    {
+     "s": "It took me a month to get used to the open-plan office.",
+     "q": {
+      "de": "Ist das Großraumbüro für mich jetzt vertraut?",
+      "en": "Is the open-plan office familiar to me now?"
+     },
+     "a": true
+    },
+    {
+     "s": "I'm still getting used to the new system.",
+     "q": {
+      "de": "Ist mir das System schon ganz vertraut?",
+      "en": "Is the system already fully familiar to me?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Beschreibst du einen Zustand oder den Weg dorthin? Und was folgt auf to?",
+    "en": "Do you describe a state or the way there? And what follows to?"
+   },
+   "usNote": {
+    "de": "Present Perfect im US-Englisch: have gotten used to. Im britischen Englisch heißt es have got used to.",
+    "en": "Present perfect in US English: have gotten used to. British English says have got used to."
+   }
+  }
+ ]
+}

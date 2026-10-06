@@ -1445,6 +1445,10 @@
    "type": "gap",
    "prompt": "If you ___ the contract today, we'll guarantee the current price.",
    "answer": "sign",
+   "accepted": [
+    "have signed",
+    "'ve signed"
+   ],
    "hint": "(sign)",
    "expl": "First Conditional: If + Present Simple. Kein „will“ im if-Teil.",
    "expl_en": "First conditional: if + Present Simple. No \"will\" in the if-clause."
@@ -1515,6 +1519,10 @@
    "type": "transform",
    "prompt": "You must send the invoice today, or we can't pay you on time. → We can't pay you on time unless you ___ the invoice today.",
    "answer": "send",
+   "accepted": [
+    "have sent",
+    "'ve sent"
+   ],
    "expl": "„unless“ = „if … not“ → bejahtes Verb im Present Simple.",
    "expl_en": "\"unless\" = \"if … not\" → a positive verb in the Present Simple."
   },
@@ -1845,7 +1853,9 @@
    "accepted": [
     "is going to be presented",
     "is being presented",
-    "'ll be presented"
+    "'ll be presented",
+    "'s going to be presented",
+    "is to be presented"
    ],
    "hint": "(present)",
    "expl": "Für das Passiv in der Zukunft nimmst du „will be“ + 3. Verbform: The product will be presented next week.",
@@ -1857,7 +1867,8 @@
    "prompt": "The contract can't be signed until all the changes ___.",
    "answer": "have been made",
    "accepted": [
-    "are made"
+    "are made",
+    "'ve been made"
    ],
    "hint": "(make)",
    "expl": "Abgeschlossen bis zum Unterschreiben → Present Perfect Passiv: have been + Partizip.",

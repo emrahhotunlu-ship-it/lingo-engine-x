@@ -1,0 +1,207 @@
+[
+ {
+  "pat": "pv.simple",
+  "en": "The new software was installed by IT last Friday.",
+  "de": "Die neue Software wurde letzten Freitag von der IT installiert.",
+  "chunks": [
+   "the new software",
+   "was",
+   "installed",
+   "by IT",
+   "last Friday"
+  ],
+  "alt": [
+   "Last Friday, the new software was installed by IT.",
+   "The new software was installed last Friday by IT."
+  ],
+  "why": [
+   "Passiv Past Simple: was + 3. Form (installed). Der Handelnde folgt mit by, die Zeitangabe last Friday steht vorn oder hinten.",
+   "Past simple passive: was + past participle (installed). The agent follows with by, and last Friday can go at the start or the end."
+  ],
+  "bad": "The new software was installed from IT last Friday.",
+  "trap": {
+   "tile": "by IT",
+   "instead": "from IT",
+   "why": {
+    "de": "Im Deutschen heißt der Handelnde „von“. Wörtlich wird daraus from. Im englischen Passiv steht dafür by.",
+    "en": "In German the agent is “von”. Word for word that becomes from. In the English passive it is by."
+   }
+  }
+ },
+ {
+  "pat": "pv.simple",
+  "en": "We weren't told about the delay until Monday.",
+  "de": "Uns wurde die Verzögerung erst am Montag mitgeteilt.",
+  "chunks": [
+   "we",
+   "weren't",
+   "told",
+   "about the delay",
+   "until Monday"
+  ],
+  "alt": [
+   "Until Monday, we weren't told about the delay.",
+   "We weren't told until Monday about the delay."
+  ],
+  "why": [
+   "Passiv Past Simple: weren't + 3. Form (told). Mit uns geschah etwas, deshalb steht we vorn und kein Handelnder im Satz.",
+   "Past simple passive: weren't + past participle (told). Something happened to us, so we comes first and no agent is named."
+  ],
+  "bad": "We didn't told about the delay until Monday."
+ },
+ {
+  "pat": "pv.progressive",
+  "en": "The conference room is being cleaned right now.",
+  "de": "Der Konferenzraum wird gerade gereinigt.",
+  "chunks": [
+   "the",
+   "conference room",
+   "is being",
+   "cleaned",
+   "right now"
+  ],
+  "alt": [
+   "Right now, the conference room is being cleaned."
+  ],
+  "why": [
+   "Passiv Continuous: is + being + 3. Form (cleaned). being zeigt, dass die Arbeit gerade läuft. right now steht vorn oder hinten.",
+   "Continuous passive: is + being + past participle (cleaned). being shows the work is in progress. right now can go at the start or the end."
+  ],
+  "bad": "The conference room is cleaned right now.",
+  "trap": {
+   "tile": "is being",
+   "instead": "is",
+   "why": {
+    "de": "Deutsch sagt nur „wird gereinigt“, egal ob gewohnt oder gerade jetzt. Englisch braucht für den laufenden Vorgang being.",
+    "en": "German just says “wird gereinigt”, whether habitual or right now. English needs being for the process in progress."
+   }
+  }
+ },
+ {
+  "pat": "pv.progressive",
+  "en": "Our contracts are being reviewed by the legal team this week.",
+  "de": "Unsere Verträge werden diese Woche von der Rechtsabteilung geprüft.",
+  "chunks": [
+   "our contracts",
+   "are",
+   "being reviewed",
+   "by the legal team",
+   "this week"
+  ],
+  "alt": [
+   "This week, our contracts are being reviewed by the legal team.",
+   "Our contracts are being reviewed this week by the legal team."
+  ],
+  "why": [
+   "Passiv Continuous: are + being + 3. Form (reviewed). Der Handelnde folgt mit by, this week steht vorn, in der Mitte oder hinten.",
+   "Continuous passive: are + being + past participle (reviewed). The agent follows with by, and this week can go at the start, in the middle or at the end."
+  ],
+  "bad": "Our contracts are reviewing by the legal team this week."
+ },
+ {
+  "pat": "pv.perfect",
+  "en": "Our prices have been frozen since January.",
+  "de": "Unsere Preise sind seit Januar eingefroren.",
+  "chunks": [
+   "our prices",
+   "have been",
+   "frozen",
+   "since",
+   "January"
+  ],
+  "alt": [
+   "Since January, our prices have been frozen."
+  ],
+  "why": [
+   "Passiv Present Perfect: have + been + 3. Form (frozen). since January nennt den Beginn, der Zustand gilt bis heute.",
+   "Present perfect passive: have + been + past participle (frozen). since January names the start, and the state holds until today."
+  ],
+  "bad": "Our prices are frozen since January.",
+  "trap": {
+   "tile": "have been",
+   "instead": "are",
+   "why": {
+    "de": "Deutsch nutzt bei „seit“ das Präsens: „sind eingefroren“. Englisch braucht bei since das Perfect: have been frozen.",
+    "en": "German uses the present with “seit”: “sind eingefroren”. English needs the perfect after since: have been frozen."
+   }
+  }
+ },
+ {
+  "pat": "pv.modal-future",
+  "en": "The agenda will be sent to all participants tomorrow.",
+  "de": "Die Tagesordnung wird morgen an alle Teilnehmer verschickt.",
+  "chunks": [
+   "the agenda",
+   "will be",
+   "sent",
+   "to all participants",
+   "tomorrow"
+  ],
+  "alt": [
+   "Tomorrow, the agenda will be sent to all participants.",
+   "The agenda will be sent tomorrow to all participants."
+  ],
+  "why": [
+   "Passiv Zukunft: will + be + 3. Form (sent). Die Zeitangabe tomorrow steht vorn oder nach dem Verb.",
+   "Future passive: will + be + past participle (sent). The time word tomorrow can go at the start or after the verb."
+  ],
+  "bad": "The agenda will sent to all participants tomorrow.",
+  "trap": {
+   "tile": "will be",
+   "instead": "will",
+   "why": {
+    "de": "Im Deutschen reicht ein „wird“: „wird verschickt“. Es steht für Zukunft und Passiv zugleich. Englisch braucht will + be.",
+    "en": "German needs only one “wird”: “wird verschickt”. It covers future and passive at once. English needs will + be."
+   }
+  }
+ },
+ {
+  "pat": "pv.modal-future",
+  "en": "The report must be finished before the board meeting.",
+  "de": "Der Bericht muss vor der Vorstandssitzung fertiggestellt werden.",
+  "chunks": [
+   "the report",
+   "must",
+   "be",
+   "finished",
+   "before the board meeting"
+  ],
+  "alt": [
+   "Before the board meeting, the report must be finished."
+  ],
+  "why": [
+   "Passiv mit Modalverb: must + be + 3. Form (finished). Nach dem Modalverb steht immer die Grundform be.",
+   "Passive with a modal verb: must + be + past participle (finished). After the modal the base form be always follows."
+  ],
+  "bad": "The report must finished before the board meeting."
+ },
+ {
+  "pat": "pv.prep-agent",
+  "en": "The complaint was dealt with by our support team yesterday.",
+  "de": "Die Beschwerde wurde gestern von unserem Support-Team bearbeitet.",
+  "chunks": [
+   "the complaint",
+   "was",
+   "dealt with",
+   "by our support team",
+   "yesterday"
+  ],
+  "alt": [
+   "Yesterday, the complaint was dealt with by our support team.",
+   "The complaint was dealt with yesterday by our support team."
+  ],
+  "why": [
+   "Bei deal with bleibt with im Passiv beim Verb: was dealt with. Den Handelnden nennt by, er steht meist am Ende.",
+   "With deal with the preposition stays with the verb in the passive: was dealt with. The agent comes with by, usually near the end."
+  ],
+  "bad": "The complaint was dealt by our support team yesterday.",
+  "trap": {
+   "tile": "dealt with",
+   "instead": "dealt",
+   "why": {
+    "de": "Im Deutschen hat „bearbeiten“ keine Präposition. Deshalb fällt with leicht weg. Es gehört aber fest zu deal und bleibt im Passiv.",
+    "en": "In German “bearbeiten” has no preposition, so with is easily dropped. But it belongs to deal and stays in the passive."
+   }
+  }
+ }
+]

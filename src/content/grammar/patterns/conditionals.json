@@ -1,0 +1,516 @@
+{
+ "topic": "conditionals",
+ "canDo": {
+  "de": "Ich kann Bedingungen sicher bilden: feste Regeln (Zero), mögliche Fälle (First), Annahmen mit were (Second), verpasste Chancen (Third) und Bedingungen mit unless oder provided that.",
+  "en": "I can form conditions with confidence: fixed rules (zero), possible cases (first), assumptions with were (second), missed chances (third), and conditions with unless or provided that."
+ },
+ "order": [
+  "cn.zero",
+  "cn.first",
+  "cn.second",
+  "cn.were",
+  "cn.third",
+  "cn.if-words"
+ ],
+ "introPlan": [
+  [
+   "cn.zero",
+   "cn.first"
+  ],
+  [
+   "cn.second",
+   "cn.were"
+  ],
+  [
+   "cn.third",
+   "cn.if-words"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Gilt es immer (Zero), ist es wirklich möglich (First) oder nur ausgedacht (Second)?",
+   "Liegt es in der Vergangenheit und ist vorbei (Third: had + 3. Form, would have)?",
+   "Gibst du einen Rat (If I were you) oder nennst du eine Bedingung (unless, provided that)?"
+  ],
+  "en": [
+   "Is it always true (zero), really possible (first) or only imagined (second)?",
+   "Is it in the past and over (third: had + participle, would have)?",
+   "Are you giving advice (If I were you) or naming a condition (unless, provided that)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "cn.zero",
+   "name": {
+    "de": "Zero Conditional · feste Regel",
+    "en": "zero conditional · fixed rule"
+   },
+   "form": {
+    "de": "if + Präsens, Präsens",
+    "en": "if + present, present"
+   },
+   "use": {
+    "de": "Beschreibt eine feste Regel oder einen Automatismus: Passiert A, folgt immer B. if lässt sich oft durch when ersetzen.",
+    "en": "Describes a fixed rule or automatic result: whenever A happens, B follows. if can often be replaced by when."
+   },
+   "signals": [
+    "whenever",
+    "every time",
+    "automatically",
+    "always",
+    "as a rule"
+   ],
+   "ex": [
+    {
+     "en": "If a payment fails, the system sends an alert.",
+     "de": "Wenn eine Zahlung fehlschlägt, sendet das System eine Warnung.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "When the client approves the draft, the contract goes to legal.",
+     "de": "Sobald der Kunde den Entwurf freigibt, geht der Vertrag an die Rechtsabteilung.",
+     "ctx": "mail"
+    },
+    {
+     "en": "If I skip breakfast, I get a headache by ten.",
+     "de": "Wenn ich das Frühstück auslasse, habe ich um zehn Kopfschmerzen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "If an order comes in after 5 p.m., it would ship the next day.",
+    "good": "If an order comes in after 5 p.m., it ships the next day.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler, sondern ein Reflex: would klingt vorsichtig. Eine feste Regel ist aber keine Annahme.",
+     "en": "Not a translation error but a reflex: would sounds cautious. A fixed rule is not an assumption."
+    }
+   },
+   "contrast": {
+    "with": "cn.first",
+    "a": "If the build fails, the pipeline stops.",
+    "b": "If the build fails tomorrow, we'll stop the release.",
+    "diff": {
+     "de": "Zero gilt immer, beide Teile stehen im Präsens. First meint einen einzelnen möglichen Fall, der Hauptsatz hat will.",
+     "en": "Zero is always true, both parts are in the present. First means one possible case, the main clause takes will."
+    }
+   },
+   "ccq": [
+    {
+     "s": "If a customer cancels within 14 days, we refund the full amount.",
+     "q": {
+      "de": "Gilt das nur für einen bestimmten Kunden?",
+      "en": "Does this apply only to one particular customer?"
+     },
+     "a": false
+    },
+    {
+     "s": "If I drink coffee late, I can't sleep.",
+     "q": {
+      "de": "Passiert das jedes Mal?",
+      "en": "Does this happen every time?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Beschreibt der Satz eine Regel, die immer gilt, oder einen einzelnen möglichen Fall?",
+    "en": "Does the sentence describe a rule that always applies, or one single possible case?"
+   }
+  },
+  {
+   "id": "cn.first",
+   "name": {
+    "de": "First Conditional · mögliche Zukunft",
+    "en": "first conditional · real future"
+   },
+   "form": {
+    "de": "if + Präsens, will + Grundform",
+    "en": "if + present, will + base form"
+   },
+   "use": {
+    "de": "Nennt eine mögliche Bedingung in der Zukunft und ihre wahrscheinliche Folge. Im if-Teil steht das Präsens, will steht nur im Hauptsatz.",
+    "en": "Names a possible future condition and its likely result. The if-clause takes the present, will appears only in the main clause."
+   },
+   "signals": [
+    "tomorrow",
+    "next week",
+    "by Friday",
+    "we will",
+    "we'll"
+   ],
+   "ex": [
+    {
+     "en": "If the vendor confirms by noon, we'll ship tomorrow.",
+     "de": "Wenn der Lieferant bis mittags bestätigt, versenden wir morgen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "If you send the figures today, I'll update the deck tonight.",
+     "de": "Wenn du die Zahlen heute schickst, aktualisiere ich heute Abend die Präsentation.",
+     "ctx": "mail"
+    },
+    {
+     "en": "If it rains on Saturday, we'll move the barbecue indoors.",
+     "de": "Wenn es am Samstag regnet, verlegen wir das Grillen nach drinnen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "If the supplier will confirm by noon, we'll ship tomorrow.",
+    "good": "If the supplier confirms by noon, we'll ship tomorrow.",
+    "cause": {
+     "de": "Das ist der Reflex „Zukunft = will“. Im Deutschen steht nach „wenn“ ebenfalls das Präsens („wenn er bestätigt“).",
+     "en": "It is the reflex “future = will”. German also uses the present after “wenn” (“wenn er bestätigt”)."
+    }
+   },
+   "contrast": {
+    "with": "cn.second",
+    "a": "If I get the promotion, I'll move to Berlin.",
+    "b": "If I got the promotion, I'd move to Berlin.",
+    "diff": {
+     "de": "First: Die Beförderung ist wirklich möglich. Second: Sie ist unwahrscheinlich oder nur ausgedacht.",
+     "en": "First: the promotion is a real possibility. Second: it is unlikely or only imagined."
+    }
+   },
+   "ccq": [
+    {
+     "s": "If the client signs by Friday, we'll start on Monday.",
+     "q": {
+      "de": "Ist es möglich, dass der Kunde unterschreibt?",
+      "en": "Is it possible that the client signs?"
+     },
+     "a": true
+    },
+    {
+     "s": "If you finish early, I'll buy you lunch.",
+     "q": {
+      "de": "Hast du schon fertig gearbeitet?",
+      "en": "Have you already finished?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Ist die Bedingung realistisch möglich, und welcher Satzteil beschreibt die Folge?",
+    "en": "Is the condition a realistic possibility, and which part describes the result?"
+   }
+  },
+  {
+   "id": "cn.second",
+   "name": {
+    "de": "Second Conditional · Annahme",
+    "en": "second conditional · hypothetical"
+   },
+   "form": {
+    "de": "if + Past Simple, would + Grundform",
+    "en": "if + Past Simple, would + base form"
+   },
+   "use": {
+    "de": "Beschreibt etwas Unwahrscheinliches oder Ausgedachtes für jetzt oder die Zukunft und seine Folge. Das Past im if-Teil markiert die Annahme, nicht die Vergangenheit.",
+    "en": "Describes something unlikely or imagined for now or the future and its result. The past form in the if-clause marks an assumption, not past time."
+   },
+   "signals": [
+    "would",
+    "I'd",
+    "we'd",
+    "imagine",
+    "suppose"
+   ],
+   "ex": [
+    {
+     "en": "If the client moved the deadline, we would finish without overtime.",
+     "de": "Wenn der Kunde die Frist verschöbe, würden wir ohne Überstunden fertig.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'd accept the offer if they gave me more flexibility.",
+     "de": "Ich würde das Angebot annehmen, wenn sie mir mehr Flexibilität gäben.",
+     "ctx": "talk"
+    },
+    {
+     "en": "What would you do if the project got canceled tomorrow?",
+     "de": "Was würdest du tun, wenn das Projekt morgen eingestellt würde?",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "If we would have more time, we would test it again.",
+    "good": "If we had more time, we would test it again.",
+    "cause": {
+     "de": "Das deutsche „würde“ im wenn-Satz („wenn wir mehr Zeit haben würden“) wird wörtlich übersetzt. Im Englischen steht im if-Teil die Past-Form.",
+     "en": "Germans translate the “würde” in “wenn wir mehr Zeit haben würden” word for word. English uses the past form in the if-clause."
+    }
+   },
+   "contrast": {
+    "with": "cn.third",
+    "a": "If I had more time, I would help you.",
+    "b": "If I had had more time, I would have helped you.",
+    "diff": {
+     "de": "Second: jetzt oder künftig, eine Annahme. Third: damals, es ist vorbei.",
+     "en": "Second: now or in the future, an assumption. Third: back then, it is over."
+    }
+   },
+   "ccq": [
+    {
+     "s": "If the client moved the deadline, we would finish without overtime.",
+     "q": {
+      "de": "Meint der Satz die Vergangenheit?",
+      "en": "Does the sentence refer to the past?"
+     },
+     "a": false
+    },
+    {
+     "s": "If I won the lottery, I'd quit tomorrow.",
+     "q": {
+      "de": "Ist das Gewinnen unwahrscheinlich oder ausgedacht?",
+      "en": "Is winning unlikely or imagined?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist die Annahme unwahrscheinlich oder nur ausgedacht, und blickst du nach vorn oder zurück?",
+    "en": "Is the assumption unlikely or only imagined, and are you looking ahead or back?"
+   }
+  },
+  {
+   "id": "cn.were",
+   "name": {
+    "de": "If I were you · Rat und Annahme",
+    "en": "if I were you · advice and assumption"
+   },
+   "form": {
+    "de": "if + I/he/she/it + were, would + Grundform",
+    "en": "if + I/he/she/it + were, would + base form"
+   },
+   "use": {
+    "de": "Im if-Teil steht bei Annahmen oft were statt was, vor allem in If I were you für einen Rat. In formellen Texten ist were die sichere Wahl.",
+    "en": "In hypothetical if-clauses were often replaces was, above all in If I were you for advice. In formal writing were is the safe choice."
+   },
+   "signals": [
+    "if I were you",
+    "if I were",
+    "if it were",
+    "if she were",
+    "if he were"
+   ],
+   "ex": [
+    {
+     "en": "If I were you, I'd get the terms in writing.",
+     "de": "An deiner Stelle würde ich mir die Bedingungen schriftlich geben lassen.",
+     "ctx": "talk"
+    },
+    {
+     "en": "If the deadline were flexible, we'd run another test.",
+     "de": "Wenn die Frist flexibel wäre, würden wir noch einen Test machen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "If it were my decision, I'd postpone the launch.",
+     "de": "Wenn es meine Entscheidung wäre, würde ich den Start verschieben.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "If I would be you, I would ask for a raise.",
+    "good": "If I were you, I would ask for a raise.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Das deutsche „wäre“ entspricht genau were. Der Fehler entsteht, wenn man sich unsicher auf would be rettet.",
+     "en": "Not a translation error: the German “wäre” matches were exactly. The mistake appears when you fall back on would be out of doubt."
+    }
+   },
+   "contrast": {
+    "with": "cn.second",
+    "a": "If I were you, I'd wait.",
+    "b": "If I had your job, I'd wait.",
+    "diff": {
+     "de": "were ersetzt das Past von be und bleibt für alle Personen gleich. Andere Verben nehmen das normale Past (had).",
+     "en": "were replaces the past of be and stays the same for all persons. Other verbs take the normal past (had)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "If I were you, I'd call the client today.",
+     "q": {
+      "de": "Gibt der Satz einen Rat?",
+      "en": "Does the sentence give advice?"
+     },
+     "a": true
+    },
+    {
+     "s": "If it were my budget, I'd approve it.",
+     "q": {
+      "de": "Ist es mein Budget?",
+      "en": "Is it my budget?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Stellst du dir etwas vor, das nicht stimmt, und welche Form von be passt dazu?",
+    "en": "Are you imagining something that is not true, and which form of be fits it?"
+   },
+   "usNote": {
+    "de": "Im Alltag sagen viele Amerikaner auch If I was you. Für Rat und in formellen Texten ist were üblich und sicherer.",
+    "en": "In everyday speech many Americans also say If I was you. For advice and in formal writing, were is standard and safer."
+   }
+  },
+  {
+   "id": "cn.third",
+   "name": {
+    "de": "Third Conditional · verpasste Chance",
+    "en": "third conditional · missed chance"
+   },
+   "form": {
+    "de": "if + Past Perfect, would have + 3. Form",
+    "en": "if + Past Perfect, would have + participle"
+   },
+   "use": {
+    "de": "Spricht über eine Vergangenheit, die sich nicht mehr ändern lässt: Was wäre passiert, wenn früher etwas anders gewesen wäre? Gut für Bedauern und Ursachenanalyse.",
+    "en": "Talks about a past that can't be changed: what would have happened if something had been different? Good for regret and root-cause analysis."
+   },
+   "signals": [
+    "would have",
+    "we'd have",
+    "I'd have",
+    "wouldn't have",
+    "at the time",
+    "back then"
+   ],
+   "ex": [
+    {
+     "en": "If we had flagged the risk in March, we would have avoided the delay.",
+     "de": "Hätten wir das Risiko im März gemeldet, hätten wir die Verzögerung vermieden.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "If you had told me, I would have rescheduled the call.",
+     "de": "Wenn du es mir gesagt hättest, hätte ich den Call verschoben.",
+     "ctx": "talk"
+    },
+    {
+     "en": "We wouldn't have lost the account if support had responded sooner.",
+     "de": "Wir hätten den Kunden nicht verloren, wenn der Support schneller geantwortet hätte.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "If we would have tested earlier, we would have caught the bug.",
+    "good": "If we had tested earlier, we would have caught the bug.",
+    "cause": {
+     "de": "Im Deutschen heißt es zweimal „hätte“ (wenn wir getestet hätten, hätten wir …). Im Englischen nimmt nur der Hauptsatz would have, der if-Teil braucht had.",
+     "en": "German uses “hätte” twice (wenn wir getestet hätten, hätten wir …). In English only the main clause takes would have, the if-clause needs had."
+    }
+   },
+   "contrast": {
+    "with": "mc.past-cond",
+    "a": "If we had tested earlier, we would have caught the bug.",
+    "b": "If we had tested earlier, we would be live now.",
+    "diff": {
+     "de": "Third: Auch die Folge liegt in der Vergangenheit (would have + 3. Form). Gemischt: Ursache damals, Folge heute (would + Grundform).",
+     "en": "Third: the result is in the past too (would have + participle). Mixed: cause back then, result today (would + base form)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "If we had left earlier, we wouldn't have missed the train.",
+     "q": {
+      "de": "Haben wir den Zug verpasst?",
+      "en": "Did we miss the train?"
+     },
+     "a": true
+    },
+    {
+     "s": "If the client had called, I would have told you.",
+     "q": {
+      "de": "Hat der Kunde angerufen?",
+      "en": "Did the client call?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Liegen Bedingung und Folge in der Vergangenheit, und lässt sich das nicht mehr ändern?",
+    "en": "Are the condition and the result in the past, and can it no longer be changed?"
+   }
+  },
+  {
+   "id": "cn.if-words",
+   "name": {
+    "de": "unless, provided that · Alternativen zu if",
+    "en": "unless, provided that · alternatives to if"
+   },
+   "form": {
+    "de": "unless / provided that + Präsens",
+    "en": "unless / provided that + present"
+   },
+   "use": {
+    "de": "Zwei Wörter für die mögliche Bedingung: unless = es sei denn (die Verneinung steckt schon drin), provided that = vorausgesetzt, dass. Danach steht wie bei if das Präsens.",
+    "en": "Two words for the possible condition: unless = except if (the negation is built in), provided that = on condition that. As with if, the present follows."
+   },
+   "signals": [
+    "unless",
+    "provided that",
+    "provided",
+    "providing",
+    "on condition that"
+   ],
+   "ex": [
+    {
+     "en": "We'll ship on Friday provided that the deposit arrives.",
+     "de": "Wir liefern am Freitag, vorausgesetzt, die Anzahlung trifft ein.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Unless you object, I'll send the draft today.",
+     "de": "Wenn du nicht widersprichst, schicke ich den Entwurf heute.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'll join provided that the meeting ends by five.",
+     "de": "Ich komme dazu, sofern das Meeting um fünf endet.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We'll agree provided that you will order 500 units.",
+    "good": "We'll agree provided that you order 500 units.",
+    "cause": {
+     "de": "Das ist der Reflex „Zukunft = will“. Im Deutschen steht nach „vorausgesetzt, dass“ ebenfalls das Präsens („dass Sie bestellen“).",
+     "en": "It is the reflex “future = will”. German also uses the present after “vorausgesetzt, dass” (“dass Sie bestellen”)."
+    }
+   },
+   "contrast": {
+    "with": "cn.first",
+    "a": "If you order today, we'll ship on Friday.",
+    "b": "Provided that you order today, we'll ship on Friday.",
+    "diff": {
+     "de": "if nennt eine mögliche Bedingung. provided that macht sie zur ausdrücklichen Voraussetzung, ohne die das Angebot nicht gilt.",
+     "en": "if names a possible condition. provided that makes it an explicit requirement without which the offer does not hold."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We'll refund the fee unless you used the service.",
+     "q": {
+      "de": "Bekommst du Geld zurück, wenn du den Service genutzt hast?",
+      "en": "Do you get a refund if you used the service?"
+     },
+     "a": false
+    },
+    {
+     "s": "I'll lend you the car provided that you return it by six.",
+     "q": {
+      "de": "Muss ich das Auto um sechs zurückgeben?",
+      "en": "Do I have to return the car by six?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Nennst du eine Ausnahme oder eine Voraussetzung, und was steht nach dem Wort?",
+    "en": "Are you naming an exception or a requirement, and what follows the word?"
+   }
+  }
+ ]
+}

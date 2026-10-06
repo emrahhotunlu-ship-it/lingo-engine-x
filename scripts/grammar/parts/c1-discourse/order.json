@@ -1,0 +1,169 @@
+[
+ {
+  "pat": "dm.concede",
+  "en": "The pilot went well. That said, it exposed two security gaps.",
+  "de": "Der Pilot lief gut. Allerdings hat er zwei Sicherheitslücken offengelegt.",
+  "chunks": [
+   "the pilot",
+   "went well",
+   "that said",
+   "it",
+   "exposed",
+   "two security gaps"
+  ],
+  "single": "Das Pronomen it verweist auf den Pilot, deshalb muss der Pilot-Satz zuerst kommen.",
+  "why": [
+   "That said steht vorn im zweiten Satz und schränkt den guten Pilot ein. Danach folgt ein normaler Hauptsatz, ohne but.",
+   "That said opens the second sentence and qualifies the good pilot. A normal main clause follows, with no but."
+  ],
+  "bad": "The pilot went well. That said, but it exposed two security gaps.",
+  "trap": {
+   "tile": "that said",
+   "instead": "that said, but",
+   "why": {
+    "de": "Der Reflex ist but, das passt zu „aber“. That said nimmt aber dessen Platz ein: nie beides zusammen.",
+    "en": "The reflex is but, which matches “aber”. That said takes its place: never both together."
+   }
+  }
+ },
+ {
+  "pat": "dm.contrast",
+  "en": "The cloud version is cheaper. On the other hand, it needs more trust in the vendor.",
+  "de": "Die Cloud-Version ist günstiger. Andererseits braucht sie mehr Vertrauen in den Anbieter.",
+  "chunks": [
+   "the cloud version",
+   "is cheaper",
+   "on the other hand",
+   "it",
+   "needs",
+   "more trust in the vendor"
+  ],
+  "why": [
+   "On the other hand eröffnet den zweiten Satz und stellt die Gegenseite vor. Es heißt hand, nicht side, trotz „andere Seite“.",
+   "On the other hand opens the second sentence and introduces the other side. It is hand, not side, despite “andere Seite”."
+  ],
+  "bad": "The cloud version is cheaper. On the other side, it needs more trust in the vendor.",
+  "trap": {
+   "tile": "on the other hand",
+   "instead": "on the other side",
+   "why": {
+    "de": "„Auf der anderen Seite“ wörtlich übersetzt ergibt on the other side. Englisch sagt aber on the other hand.",
+    "en": "Translated literally, “auf der anderen Seite” gives on the other side. English says on the other hand."
+   }
+  },
+  "alt": [
+   "The cloud version is cheaper. It, on the other hand, needs more trust in the vendor."
+  ]
+ },
+ {
+  "pat": "dm.build",
+  "en": "Anna proposed a pilot. To build on that, we could add a second team.",
+  "de": "Anna hat einen Pilot vorgeschlagen. Darauf aufbauend könnten wir ein zweites Team ergänzen.",
+  "chunks": [
+   "Anna",
+   "proposed",
+   "a pilot",
+   "to build on that",
+   "we",
+   "could add",
+   "a second team"
+  ],
+  "alt": [
+   "Anna proposed a pilot. We could add a second team to build on that."
+  ],
+  "why": [
+   "To build on that bezieht sich auf den Pilot und steht vorn mit Komma. Nach build folgt on, kein up.",
+   "To build on that refers to the pilot and sits up front with a comma. After build comes on, with no up."
+  ],
+  "bad": "Anna proposed a pilot. To build up on that, we could add a second team.",
+  "trap": {
+   "tile": "to build on that",
+   "instead": "to build up on that",
+   "why": {
+    "de": "„Darauf aufbauen“ legt build up on nahe: auf wird on, aufbauen wird build up. Englisch sagt nur build on.",
+    "en": "“Darauf aufbauen” suggests build up on: auf becomes on, aufbauen becomes build up. English says only build on."
+   }
+  }
+ },
+ {
+  "pat": "dm.return",
+  "en": "Coming back to the budget, we need approval by May.",
+  "de": "Zurück zum Budget: Wir brauchen bis Mai eine Freigabe.",
+  "chunks": [
+   "coming back to",
+   "the budget",
+   "we need",
+   "approval",
+   "by May"
+  ],
+  "single": "Coming back to opens the sentence and names the topic before the statement.",
+  "why": [
+   "Coming back to nennt zuerst das Thema, dann folgt nach dem Komma die Aussage. Nach back steht to, nicht on.",
+   "Coming back to names the topic first, then the statement follows after the comma. After back comes to, not on."
+  ],
+  "bad": "Coming back on the budget, we need approval by May.",
+  "trap": {
+   "tile": "coming back to",
+   "instead": "coming back on",
+   "why": {
+    "de": "Wer „auf etwas zurückkommen“ übersetzt, nimmt on für „auf“. Englisch braucht hier to.",
+    "en": "Translating “auf etwas zurückkommen”, you pick on for “auf”. English needs to here."
+   }
+  }
+ },
+ {
+  "pat": "dm.sum",
+  "en": "In short, the migration saved us two weeks of work.",
+  "de": "Kurz gesagt hat uns die Migration zwei Wochen Arbeit gespart.",
+  "chunks": [
+   "in short",
+   "the migration",
+   "saved",
+   "us",
+   "two weeks of work"
+  ],
+  "why": [
+   "In short eröffnet das Fazit und wird durch ein Komma abgesetzt. Danach folgt ein normaler Hauptsatz.",
+   "In short opens the conclusion and is set off by a comma. A normal main clause follows."
+  ],
+  "bad": "In resume, the migration saved us two weeks of work.",
+  "trap": {
+   "tile": "in short",
+   "instead": "in resume",
+   "why": {
+    "de": "„Resümee“ klingt wie resume. Englisch sagt in summary oder in short.",
+    "en": "“Resümee” sounds like resume. English says in summary or in short."
+   }
+  },
+  "alt": [
+   "The migration, in short, saved us two weeks of work."
+  ]
+ },
+ {
+  "pat": "dm.concede",
+  "en": "We like the proposal. Having said that, we still want to compare it with two other offers.",
+  "de": "Wir mögen den Vorschlag. Allerdings wollen wir ihn noch mit zwei anderen Angeboten vergleichen.",
+  "chunks": [
+   "we like",
+   "the proposal",
+   "having said that",
+   "we still want",
+   "to compare it",
+   "with two other offers"
+  ],
+  "single": "Das Pronomen it verweist auf den Vorschlag, deshalb muss dieser Satz zuerst kommen.",
+  "why": [
+   "Having said that steht vorn im zweiten Satz und schränkt das Lob ein. Es heißt said (Partizip), nicht say.",
+   "Having said that opens the second sentence and limits the praise. It is said (participle), not say."
+  ],
+  "bad": "We like the proposal. Having say that, we still want to compare it with two other offers.",
+  "trap": {
+   "tile": "having said that",
+   "instead": "having say that",
+   "why": {
+    "de": "Nach Having steht immer das Partizip said. Die Grundform say klingt vertraut, ist hier aber falsch.",
+    "en": "Having is always followed by the participle said. The base form say sounds familiar but is wrong here."
+   }
+  }
+ }
+]

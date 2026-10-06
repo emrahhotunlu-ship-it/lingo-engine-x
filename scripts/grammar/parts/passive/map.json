@@ -1,0 +1,710 @@
+{
+ "This bridge ___ in 1890.": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: „in 1890“ ist abgeschlossen → Passiv Past Simple: was built.",
+    "en": "Right: “in 1890” is finished → past simple passive: was built."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "„is built“ passt nicht: 1890 ist vorbei, also was.",
+     "en": "“is built” does not fit: 1890 is over, so use was."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„1890“ ist ein fester Zeitpunkt, deshalb kein Present Perfect.",
+     "en": "“1890” names a fixed point in time, so no present perfect."
+    },
+    {
+     "if": [
+      "build"
+     ],
+     "de": "Nach was steht die 3. Form: built, nicht build.",
+     "en": "After was use the past participle: built, not build."
+    },
+    {
+     "if": [
+      "built"
+     ],
+     "not": [
+      "was",
+      "were"
+     ],
+     "de": "Das Passiv braucht was: Die Brücke baut nichts, sie wurde gebaut.",
+     "en": "The passive needs was: the bridge builds nothing, it was built."
+    }
+   ]
+  }
+ },
+ "They are repairing the road. → The road ___.": {
+  "pat": "pv.progressive",
+  "why": {
+   "ok": {
+    "de": "Richtig: they are repairing, das läuft gerade → the road is being repaired.",
+    "en": "Right: they are repairing (in progress) → the road is being repaired."
+   },
+   "wrong": [
+    {
+     "if": [
+      "repairing"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "„is repairing“ hieße: Die Straße repariert selbst. Passiv: is being repaired.",
+     "en": "“is repairing” would mean the road repairs something. Passive: is being repaired."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Der Ausgangssatz steht im Present (are repairing), also is being.",
+     "en": "The source sentence is in the present (are repairing), so use is being."
+    },
+    {
+     "if": [
+      "repaired"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "Ohne being fehlt „läuft gerade“: Die Arbeit ist noch im Gang.",
+     "en": "Without being, “in progress” is lost: the work is still going on."
+    },
+    {
+     "not": [
+      "repaired"
+     ],
+     "de": "Nach being steht die 3. Form von repair: repaired.",
+     "en": "After being use the past participle of repair: repaired."
+    }
+   ]
+  }
+ },
+ "The results ___ next week.": {
+  "pat": "pv.modal-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Ergebnisse werden bekannt gegeben: will be + 3. Form. „next week“ = Zukunft.",
+    "en": "Right: the results get announced: will be + past participle. “next week” = future."
+   },
+   "wrong": [
+    {
+     "opt": "will announce",
+     "pat": "pv.modal-future",
+     "de": "„will announce“ hieße: Die Ergebnisse geben selbst etwas bekannt.",
+     "en": "“will announce” would mean the results announce something themselves."
+    },
+    {
+     "opt": "are announcing",
+     "de": "„are announcing“: Die Ergebnisse geben jetzt etwas bekannt. Gemeint: Sie werden bekannt gegeben.",
+     "en": "“are announcing”: the results announce something now. Meant: they get announced."
+    },
+    {
+     "opt": "announce",
+     "de": "„announce“ macht die Ergebnisse zum Handelnden, und die Zukunft fehlt.",
+     "en": "“announce” makes the results the doer, and the future is missing."
+    }
+   ]
+  }
+ },
+ "The new CRM ___ by IT next Monday.": {
+  "pat": "pv.modal-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das CRM wird installiert, „next Monday“ ist Zukunft: will be installed.",
+    "en": "Right: the CRM gets installed, and “next Monday” is future: will be installed."
+   },
+   "wrong": [
+    {
+     "opt": "will install",
+     "de": "„will install“ hieße: Das CRM installiert selbst. Gemeint: IT installiert es.",
+     "en": "“will install” would mean the CRM installs something. Meant: IT installs it."
+    },
+    {
+     "opt": "is installing",
+     "de": "„is installing“: Das CRM installiert gerade etwas selbst.",
+     "en": "“is installing”: the CRM is installing something itself right now."
+    },
+    {
+     "opt": "installs",
+     "de": "„installs“ macht das CRM zum Handelnden, und die Zukunft fehlt.",
+     "en": "“installs” makes the CRM the doer, and the future is missing."
+    }
+   ]
+  }
+ },
+ "Our invoices ___ by the finance team every Friday.": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: „every Friday“ ist eine Gewohnheit → Passiv Present Simple: are processed.",
+    "en": "Right: “every Friday” = habit → present simple passive: are processed."
+   },
+   "wrong": [
+    {
+     "opt": "were processed",
+     "de": "„were processed“ meint einmal früher. „every Friday“ ist eine Gewohnheit.",
+     "en": "“were processed” means once in the past. “every Friday” is a habit."
+    },
+    {
+     "opt": "are processing",
+     "de": "„are processing“: Die Rechnungen würden selbst bearbeiten, und das gerade jetzt.",
+     "en": "“are processing”: the invoices would do the processing themselves, right now."
+    },
+    {
+     "opt": "process",
+     "de": "„process“ macht die Rechnungen zum Handelnden. Sie werden aber bearbeitet.",
+     "en": "“process” makes the invoices the doer. But they get processed."
+    }
+   ]
+  }
+ },
+ "I ___ about the schedule change, so I missed the meeting.": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: Mit mir wurde etwas getan, niemand hat mich informiert → wasn't informed.",
+    "en": "Right: something was done to me, nobody informed me → wasn't informed."
+   },
+   "wrong": [
+    {
+     "opt": "haven't informed",
+     "de": "„haven't informed“ ist aktiv und hieße: Ich habe niemanden informiert.",
+     "en": "“haven't informed” would mean: I have not informed anyone."
+    },
+    {
+     "opt": "didn't inform",
+     "de": "„didn't inform“ ist aktiv und hieße: Ich habe niemanden informiert.",
+     "en": "“didn't inform” would mean: I did not inform anyone."
+    },
+    {
+     "opt": "wasn't informing",
+     "de": "„wasn't informing“ hieße: Ich war nicht dabei, andere zu informieren.",
+     "en": "“wasn't informing” would mean: I was not in the middle of informing others."
+    }
+   ]
+  }
+ },
+ "The server ___ at the moment, so please try again later.": {
+  "pat": "pv.progressive",
+  "why": {
+   "ok": {
+    "de": "Richtig: „at the moment“ heißt: Das läuft gerade → is being maintained.",
+    "en": "Right: “at the moment” = in progress → is being maintained."
+   },
+   "wrong": [
+    {
+     "opt": "is maintained",
+     "pat": "pv.simple",
+     "de": "„is maintained“ ist ein Dauerzustand. „at the moment“ verlangt being.",
+     "en": "“is maintained” means a standing situation. “at the moment” needs being."
+    },
+    {
+     "opt": "maintains",
+     "de": "„maintains“ macht den Server zum Handelnden. Er wird aber gewartet.",
+     "en": "“maintains” makes the server the doer. But it is being maintained."
+    },
+    {
+     "opt": "has maintained",
+     "de": "„has maintained“ hieße: Der Server hat selbst etwas gewartet.",
+     "en": "“has maintained” would mean the server has maintained something itself."
+    }
+   ]
+  }
+ },
+ "She ___ a promotion by the board last month.": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: Sie bekommt die Beförderung, „by the board“ ist der Handelnde → was offered.",
+    "en": "Right: she receives the promotion, “by the board” is the agent → was offered."
+   },
+   "wrong": [
+    {
+     "opt": "has offered",
+     "de": "„has offered“: „last month“ nennt eine feste Zeit, und sie bietet hier nichts an.",
+     "en": "“has offered”: “last month” names a fixed time, and she offers nothing here."
+    },
+    {
+     "opt": "offered",
+     "de": "„offered“ aktiv hieße: Sie hat dem Vorstand etwas angeboten.",
+     "en": "“offered” in the active would mean she offered something to the board."
+    },
+    {
+     "opt": "was offering",
+     "de": "„was offering“ hieße: Sie war dabei, dem Vorstand etwas anzubieten.",
+     "en": "“was offering” would mean she was in the middle of offering something."
+    }
+   ]
+  }
+ },
+ "The restaurant ___ by the same family since 1985.": {
+  "pat": "pv.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „since 1985“ reicht bis in die Gegenwart → Passiv Present Perfect: has been owned.",
+    "en": "Right: “since 1985” reaches until today → present perfect passive: has been owned."
+   },
+   "wrong": [
+    {
+     "opt": "owns",
+     "de": "„owns“ macht das Restaurant zum Besitzer. Es gehört aber der Familie.",
+     "en": "“owns” makes the restaurant the owner. But it belongs to the family."
+    },
+    {
+     "opt": "was owned",
+     "pat": "pv.simple",
+     "de": "„was owned“ meint abgeschlossene Zeit. Mit since gilt es bis heute.",
+     "en": "“was owned” means finished time. With since it holds until today."
+    },
+    {
+     "opt": "is owned",
+     "de": "„is owned“ nennt nur den Zustand heute. Mit since braucht es has been.",
+     "en": "“is owned” gives only today's state. With since you need has been."
+    }
+   ]
+  }
+ },
+ "The final report ___ to the board yesterday.": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: „yesterday“ ist abgeschlossen → Passiv Past Simple: was sent (send – sent – sent).",
+    "en": "Right: “yesterday” is finished → past simple passive: was sent (send – sent – sent)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "„is sent“ passt nicht: „yesterday“ ist vorbei, also was.",
+     "en": "“is sent” does not fit: “yesterday” is over, so use was."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„yesterday“ nennt eine feste Zeit, deshalb kein Present Perfect.",
+     "en": "“yesterday” names a fixed time, so no present perfect."
+    },
+    {
+     "if": [
+      "send"
+     ],
+     "de": "Nach was steht die 3. Form: sent, nicht send.",
+     "en": "After was use the past participle: sent, not send."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "not": [
+      "was",
+      "were"
+     ],
+     "de": "Das Passiv braucht was: Der Bericht wurde gesendet.",
+     "en": "The passive needs was: the report was sent."
+    }
+   ]
+  }
+ },
+ "Over 200 customers ___ by the data breach last month.": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: Plural und „last month“ → Passiv Past Simple: were affected.",
+    "en": "Right: plural and “last month” → past simple passive: were affected."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was"
+     ],
+     "de": "customers ist Plural: were affected, nicht was.",
+     "en": "customers is plural: were affected, not was."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„last month“ nennt eine feste Zeit, deshalb kein Present Perfect.",
+     "en": "“last month” names a fixed time, so no present perfect."
+    },
+    {
+     "not": [
+      "affected"
+     ],
+     "de": "Nach were steht die 3. Form von affect: affected.",
+     "en": "After were use the past participle of affect: affected."
+    },
+    {
+     "if": [
+      "affected"
+     ],
+     "not": [
+      "were"
+     ],
+     "de": "Das Passiv braucht were: Die Kunden waren betroffen.",
+     "en": "The passive needs were: the customers were affected."
+    }
+   ]
+  }
+ },
+ "Our new product ___ at the trade fair next week.": {
+  "pat": "pv.modal-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Produkt wird vorgestellt, „next week“ ist Zukunft: will be presented.",
+    "en": "Right: the product gets presented, and “next week” is future: will be presented."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was"
+     ],
+     "de": "„next week“ liegt in der Zukunft, also will be, nicht was.",
+     "en": "“next week” is in the future, so use will be, not was."
+    },
+    {
+     "if": [
+      "present"
+     ],
+     "de": "„will present“ hieße: Das Produkt stellt selbst etwas vor.",
+     "en": "“will present” would mean the product presents something itself."
+    },
+    {
+     "if": [
+      "presenting"
+     ],
+     "de": "Nach be steht die 3. Form: presented, nicht -ing.",
+     "en": "After be use the past participle: presented, not -ing."
+    },
+    {
+     "if": [
+      "presented"
+     ],
+     "not": [
+      "be",
+      "being"
+     ],
+     "de": "Für die Zukunft fehlt be: will be presented.",
+     "en": "For the future be is missing: will be presented."
+    }
+   ]
+  }
+ },
+ "The contract can't be signed until all the changes ___.": {
+  "pat": "pv.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Änderungen müssen bis dahin fertig sein → have been made.",
+    "en": "Right: the changes must be finished by then → have been made."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach until steht kein will: Present Perfect have been made.",
+     "en": "No will after until: use the present perfect have been made."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "changes ist Plural: have been made, nicht has.",
+     "en": "changes is plural: have been made, not has."
+    },
+    {
+     "if": [
+      "made",
+      "have"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been wäre es aktiv: Die Änderungen machen selbst etwas.",
+     "en": "Without been it would be active: the changes make something themselves."
+    },
+    {
+     "if": [
+      "make"
+     ],
+     "de": "Nach been steht die 3. Form von make: made.",
+     "en": "After been use the past participle of make: made."
+    }
+   ]
+  }
+ },
+ "Look! The windows ___ right now.": {
+  "pat": "pv.progressive",
+  "why": {
+   "ok": {
+    "de": "Richtig: „right now“ = das läuft gerade → are being cleaned.",
+    "en": "Right: “right now” = in progress → are being cleaned."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "windows ist Plural: are being cleaned, nicht is.",
+     "en": "windows is plural: are being cleaned, not is."
+    },
+    {
+     "if": [
+      "cleaning"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "„are cleaning“ hieße: Die Fenster putzen selbst. Passiv: are being cleaned.",
+     "en": "“are cleaning” would mean the windows clean something. Passive: are being cleaned."
+    },
+    {
+     "if": [
+      "cleaned"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "Ohne being fehlt „gerade jetzt“: right now verlangt are being cleaned.",
+     "en": "Without being, “right now” is lost: right now needs are being cleaned."
+    },
+    {
+     "not": [
+      "cleaned"
+     ],
+     "de": "Nach being steht die 3. Form von clean: cleaned.",
+     "en": "After being use the past participle of clean: cleaned."
+    }
+   ]
+  }
+ },
+ "Someone has stolen the prototype from our lab. → The prototype ___ from our lab.": {
+  "pat": "pv.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: aus has stolen wird im Passiv has been stolen (Present Perfect).",
+    "en": "Right: has stolen → present perfect passive: has been stolen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "prototype ist Singular: has been stolen, nicht have.",
+     "en": "prototype is singular: has been stolen, not have."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Der Ausgangssatz steht im Present Perfect, also bleibt has been.",
+     "en": "The source sentence is in the present perfect, so keep has been."
+    },
+    {
+     "if": [
+      "stolen"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt das Passiv: has been stolen.",
+     "en": "Without been the passive is missing: has been stolen."
+    },
+    {
+     "not": [
+      "stolen"
+     ],
+     "de": "Die 3. Form von steal ist stolen.",
+     "en": "The past participle of steal is stolen."
+    }
+   ]
+  }
+ },
+ "Someone must update the contract before the meeting. → The contract ___ before the meeting.": {
+  "pat": "pv.modal-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Vertrag soll noch aktualisiert werden → must be updated.",
+    "en": "Right: the contract still has to be updated → must be updated."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„must have updated“ meint etwas Früheres. Hier steht es noch an: must be updated.",
+     "en": "“must have updated” points to the past. Here it is still to do: must be updated."
+    },
+    {
+     "if": [
+      "update"
+     ],
+     "de": "Nach be steht die 3. Form von update: updated.",
+     "en": "After be use the past participle of update: updated."
+    },
+    {
+     "if": [
+      "updating"
+     ],
+     "de": "Nach be steht die 3. Form: updated, nicht -ing.",
+     "en": "After be use the past participle: updated, not -ing."
+    },
+    {
+     "if": [
+      "updated"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Nach must fehlt be: must be updated.",
+     "en": "After must the be is missing: must be updated."
+    }
+   ]
+  }
+ },
+ "The report is writing by our analyst right now.": {
+  "pat": "pv.progressive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Bericht schreibt nicht selbst, er wird geschrieben → is being written.",
+    "en": "Right: the report does not write, it gets written → is being written."
+   },
+   "wrong": [
+    {
+     "if": [
+      "writing"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "„is writing“ hieße: Der Bericht schreibt selbst. Passiv: is being written.",
+     "en": "“is writing” would mean the report writes something. Passive: is being written."
+    },
+    {
+     "if": [
+      "being",
+      "writing"
+     ],
+     "de": "Nach being steht die 3. Form von write: written.",
+     "en": "After being use the past participle of write: written."
+    },
+    {
+     "if": [
+      "written"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "Ohne being fehlt „gerade jetzt“: right now verlangt is being written.",
+     "en": "Without being, “right now” is lost: right now needs is being written."
+    },
+    {
+     "not": [
+      "written"
+     ],
+     "de": "Die 3. Form von write ist written.",
+     "en": "The past participle of write is written."
+    }
+   ]
+  }
+ },
+ "The contract was signed from both parties yesterday.": {
+  "pat": "pv.prep-agent",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Handelnde im Passiv steht mit by: signed by both parties.",
+    "en": "Right: the agent in a passive sentence takes by: signed by both parties."
+   },
+   "wrong": [
+    {
+     "if": [
+      "from"
+     ],
+     "de": "„from“ ist die wörtliche Übersetzung von „von“. Der Handelnde braucht by.",
+     "en": "“from” is the literal translation of “von”. The agent needs by."
+    },
+    {
+     "if": [
+      "of"
+     ],
+     "de": "„of“ passt hier nicht. Der Handelnde im Passiv steht mit by.",
+     "en": "“of” does not fit here. The agent in a passive sentence takes by."
+    },
+    {
+     "not": [
+      "by"
+     ],
+     "de": "Der Handelnde steht im Passiv mit by: signed by both parties.",
+     "en": "The agent in the passive takes by: signed by both parties."
+    }
+   ]
+  }
+ },
+ "My bike was stoled yesterday.": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: steal ist unregelmäßig (steal – stole – stolen), das Passiv nimmt stolen.",
+    "en": "Right: steal is irregular (steal – stole – stolen), the passive takes stolen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "stoled"
+     ],
+     "de": "„stoled“ gibt es nicht: steal – stole – stolen.",
+     "en": "There is no “stoled”: steal – stole – stolen."
+    },
+    {
+     "if": [
+      "stole"
+     ],
+     "de": "„stole“ ist die 2. Form. Nach was steht die 3. Form: stolen.",
+     "en": "“stole” is the past tense. After was use the participle: stolen."
+    },
+    {
+     "not": [
+      "stolen"
+     ],
+     "de": "Nach was steht die 3. Form von steal: stolen.",
+     "en": "After was use the past participle of steal: stolen."
+    }
+   ]
+  }
+ },
+ "Our house was broken last week.": {
+  "pat": "pv.prep-agent",
+  "why": {
+   "ok": {
+    "de": "Richtig: break into behält into auch im Passiv: was broken into.",
+    "en": "Right: break into keeps into in the passive: was broken into."
+   },
+   "wrong": [
+    {
+     "if": [
+      "in"
+     ],
+     "de": "„broken in“ meint etwas anderes. Beim Einbruch ist es break into.",
+     "en": "“broken in” means something else. For a burglary it is break into."
+    },
+    {
+     "not": [
+      "into"
+     ],
+     "de": "Bei break into bleibt into im Passiv stehen: was broken into.",
+     "en": "With break into the preposition stays in the passive: was broken into."
+    }
+   ]
+  }
+ }
+}

@@ -15,7 +15,7 @@
       "type": "transform",
       "prompt": "Working with US customers is normal for me now. → I ___ with US customers.",
       "answer": "am used to working",
-      "accepted": ["'m used to working"],
+      "accepted": ["'m used to working", "am accustomed to working", "'m accustomed to working"],
       "expl": "Etwas ist normal für dich: „be used to“ + Wort auf -ing. „to“ ist hier eine Präposition, deshalb -ing.",
       "expl_en": "Something is normal for you → be used to + -ing (to is a preposition here)."
     },

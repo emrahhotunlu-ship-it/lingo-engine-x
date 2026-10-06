@@ -2,6 +2,1838 @@
  "v": 1,
  "tasks": [
   {
+   "id": "dp-wo-k1",
+   "type": "kwt",
+   "pat": "dip.wondering",
+   "from": "Can you resend the agenda?",
+   "key": "WONDERING",
+   "frame": "I ___ you could resend the agenda.",
+   "answer": "was wondering if",
+   "accepted": [
+    "was wondering whether",
+    "am wondering if",
+    "am wondering whether",
+    "was just wondering if",
+    "was just wondering whether"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: I was wondering if you could … Vergangenheit und could machen die Bitte weich.",
+     "en": "Right: I was wondering if you could … Past tense and could soften the request."
+    },
+    "wrong": [
+     {
+      "not": [
+       "wondering"
+      ],
+      "de": "Das Schlüsselwort wondering muss unverändert in der Lücke stehen.",
+      "en": "The key word wondering must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "if",
+       "whether"
+      ],
+      "de": "Nach wondering fehlt if oder whether: was wondering if you could.",
+      "en": "If or whether is missing after wondering: was wondering if you could."
+     },
+     {
+      "not": [
+       "was",
+       "am"
+      ],
+      "de": "Wondering braucht ein Hilfsverb davor: was wondering.",
+      "en": "Wondering needs a helping verb before it: was wondering."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-wo-k2",
+   "type": "kwt",
+   "pat": "dip.wondering",
+   "from": "Can you share the notes from yesterday’s call?",
+   "key": "WONDERING",
+   "frame": "Hi Dana, ___ you could share the notes from yesterday’s call.",
+   "answer": "I was wondering if",
+   "accepted": [
+    "I was wondering whether",
+    "I am wondering if",
+    "I am wondering whether",
+    "I’m wondering if",
+    "I was just wondering if"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: I was wondering if you could share … ist eine weiche Bitte.",
+     "en": "Right: I was wondering if you could share … is a soft request."
+    },
+    "wrong": [
+     {
+      "not": [
+       "wondering"
+      ],
+      "de": "Das Schlüsselwort wondering muss unverändert in der Lücke stehen.",
+      "en": "The key word wondering must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "if",
+       "whether"
+      ],
+      "de": "Nach wondering fehlt if oder whether.",
+      "en": "If or whether is missing after wondering."
+     },
+     {
+      "not": [
+       "was",
+       "am"
+      ],
+      "de": "Wondering braucht ein Hilfsverb davor: I was wondering.",
+      "en": "Wondering needs a helping verb before it: I was wondering."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-wo-f1",
+   "type": "find",
+   "pat": "dip.wondering",
+   "prompt": "I was wondering whether could you join the kickoff call.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "you could",
+   "fixed": "I was wondering whether you could join the kickoff call.",
+   "accepted": [
+    "you would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „could you“. Nach whether steht das Subjekt vor dem Verb: you could.",
+     "en": "The error: “could you”. After whether the subject comes first: you could."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach whether steht nicht die Fragestellung could you.",
+      "en": "There is an error: after whether you do not use the question order could you."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „could you“: Nach whether gilt die normale Wortstellung.",
+      "en": "The error is in “could you”: after whether normal word order applies."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-wo-f2",
+   "type": "find",
+   "pat": "dip.wondering",
+   "prompt": "I was wondering if you could me send the invoice.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "send me",
+   "fixed": "I was wondering if you could send me the invoice.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „me send“. Nach could steht zuerst das Verb: could send me.",
+     "en": "The error: “me send”. After could the verb comes first: could send me."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das Objekt me steht nicht vor dem Verb.",
+      "en": "There is an error: the object me does not come before the verb."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „me send“: Erst das Verb, dann das Objekt.",
+      "en": "The error is in “me send”: verb first, then the object."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-wo-m1",
+   "type": "meaning",
+   "pat": "dip.wondering",
+   "a": "I wonder whether the client has read the draft.",
+   "b": "I was wondering whether you could read the draft.",
+   "q": {
+    "de": "Welcher Satz ist eine höfliche Bitte?",
+    "en": "Which sentence is a polite request?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Mit was wondering + you could bittest du jemanden um etwas.",
+     "en": "Right: sentence b. With was wondering + you could you ask someone to do something."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a fragt sich die Sprecherin nur selbst, ob der Kunde den Entwurf gelesen hat.",
+      "en": "In a the speaker only asks herself whether the client has read the draft."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a stellt keine Bitte, b bittet um das Lesen.",
+      "en": "Not the same: a makes no request, b asks for the reading."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-ho-k1",
+   "type": "kwt",
+   "pat": "dip.hoping",
+   "from": "We want the contract signed by the end of the month.",
+   "key": "HOPING",
+   "frame": "We ___ the contract signed by the end of the month.",
+   "answer": "were hoping to have",
+   "accepted": [
+    "are hoping to have",
+    "were hoping to get",
+    "are hoping to get",
+    "were hoping to see",
+    "are hoping to see",
+    "were hoping we could have"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: were hoping to have macht aus „We want“ einen Wunsch und keine Forderung.",
+     "en": "Right: were hoping to have turns “We want” into a wish."
+    },
+    "wrong": [
+     {
+      "not": [
+       "hoping"
+      ],
+      "de": "Das Schlüsselwort hoping muss unverändert in der Lücke stehen.",
+      "en": "The key word hoping must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "hoping"
+      ],
+      "not": [
+       "to",
+       "we"
+      ],
+      "de": "Nach hoping folgt to + Grundform: hoping to have.",
+      "en": "Hoping is followed by to + base verb: hoping to have."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "Vor einem Verb steht to, nicht for: hoping to have.",
+      "en": "Before a verb use to, not for: hoping to have."
+     },
+     {
+      "not": [
+       "were",
+       "are",
+       "had"
+      ],
+      "de": "Hoping braucht ein Hilfsverb davor: were hoping.",
+      "en": "Hoping needs a helping verb before it: were hoping."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-ho-k2",
+   "type": "kwt",
+   "pat": "dip.hoping",
+   "from": "Can you confirm the venue today?",
+   "key": "HOPING",
+   "frame": "We ___ you could confirm the venue today.",
+   "answer": "were hoping",
+   "accepted": [
+    "are hoping",
+    "were really hoping",
+    "were just hoping",
+    "were hoping that",
+    "are hoping that"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: We were hoping you could … ist ein Wunsch statt einer Forderung.",
+     "en": "Right: We were hoping you could … is a wish instead of a demand."
+    },
+    "wrong": [
+     {
+      "not": [
+       "hoping"
+      ],
+      "de": "Das Schlüsselwort hoping muss unverändert in der Lücke stehen.",
+      "en": "The key word hoping must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "were",
+       "are",
+       "had"
+      ],
+      "de": "Hoping braucht ein Hilfsverb davor: were hoping.",
+      "en": "Hoping needs a helping verb before it: were hoping."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "Zu we passt were, nicht was.",
+      "en": "With we use were, not was."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-ho-f1",
+   "type": "find",
+   "pat": "dip.hoping",
+   "prompt": "We were hoping to getting your feedback today.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "get",
+   "fixed": "We were hoping to get your feedback today.",
+   "accepted": [
+    "receive",
+    "have"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „to getting“. Nach hoping to steht die Grundform: hoping to get.",
+     "en": "The error: “to getting”. After hoping to the base form follows: hoping to get."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach hoping to steht keine -ing-Form.",
+      "en": "There is an error: no -ing form follows hoping to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „getting“: Nach hoping to folgt die Grundform.",
+      "en": "The error is in “getting”: after hoping to the base form follows."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-ho-f2",
+   "type": "find",
+   "pat": "dip.hoping",
+   "prompt": "We were hoping to hear back before the end of the week.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: were hoping to + Grundform ist richtig.",
+     "en": "No error: were hoping to + base verb is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach hoping folgt to + Grundform, hier hear.",
+      "en": "No error: hoping is followed by to + base verb, here hear."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-ho-m1",
+   "type": "meaning",
+   "pat": "dip.hoping",
+   "a": "We were hoping to sign next week.",
+   "b": "We hoped to sign last week.",
+   "q": {
+    "de": "Welcher Satz drückt einen Wunsch aus, der noch gilt?",
+    "en": "Which sentence expresses a wish that still holds?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Were hoping meint hier das Jetzt: Wir wollen nächste Woche unterschreiben.",
+     "en": "Right: sentence a. Were hoping refers to now: we want to sign next week."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b steht hoped mit last week: Der Wunsch gehört der Vergangenheit an.",
+      "en": "In b, hoped with last week puts the wish in the past."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a gilt noch, b ist vorbei.",
+      "en": "Not the same: a still holds, b is over."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-po-k1",
+   "type": "kwt",
+   "pat": "dip.possible",
+   "from": "Can you send the revised proposal today?",
+   "key": "POSSIBLE",
+   "frame": "Would it be ___ the revised proposal today?",
+   "answer": "possible to send",
+   "accepted": [
+    "possible for you to send",
+    "possible for us to send",
+    "possible for me to send"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Would it be possible to send … fragt nach der Sache, nicht nach der Person.",
+     "en": "Right: Would it be possible to send … asks about the thing, not the person."
+    },
+    "wrong": [
+     {
+      "not": [
+       "possible"
+      ],
+      "de": "Das Schlüsselwort possible muss unverändert in der Lücke stehen.",
+      "en": "The key word possible must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Nach possible folgt üblicherweise to + Grundform, kein that-Satz.",
+      "en": "Possible is usually followed by to + base verb, not a that-clause."
+     },
+     {
+      "if": [
+       "sending"
+      ],
+      "de": "Nach possible steht to + Grundform, keine -ing-Form.",
+      "en": "After possible use to + base verb, not the -ing form."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Die Grundform braucht to davor: possible to send.",
+      "en": "The base verb needs to before it: possible to send."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-po-k2",
+   "type": "kwt",
+   "pat": "dip.possible",
+   "from": "Could we meet earlier on Thursday?",
+   "key": "POSSIBLE",
+   "frame": "Would it be ___ earlier on Thursday?",
+   "answer": "possible to meet",
+   "accepted": [
+    "possible for us to meet",
+    "possible for you to meet",
+    "possible to get together"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Would it be possible to meet … ist die höfliche Frage nach der Machbarkeit.",
+     "en": "Right: Would it be possible to meet … is the polite question about feasibility."
+    },
+    "wrong": [
+     {
+      "not": [
+       "possible"
+      ],
+      "de": "Das Schlüsselwort possible muss unverändert in der Lücke stehen.",
+      "en": "The key word possible must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "Nach possible folgt üblicherweise to + Grundform, kein that-Satz.",
+      "en": "Possible is usually followed by to + base verb, not a that-clause."
+     },
+     {
+      "if": [
+       "meeting"
+      ],
+      "de": "Nach possible steht to + Grundform, keine -ing-Form.",
+      "en": "After possible use to + base verb, not the -ing form."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Die Grundform braucht to davor: possible to meet.",
+      "en": "The base verb needs to before it: possible to meet."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-po-f1",
+   "type": "find",
+   "pat": "dip.possible",
+   "prompt": "Would it possible to move the review to Monday?",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "it be possible",
+   "fixed": "Would it be possible to move the review to Monday?",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „it possible“. Es fehlt be: Would it be possible.",
+     "en": "The error: “it possible”. Be is missing: Would it be possible."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: In der Frage fehlt das Verb be.",
+      "en": "There is an error: the verb be is missing in the question."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „it possible“: Zwischen it und possible fehlt be.",
+      "en": "The error is in “it possible”: be is missing between it and possible."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-po-f2",
+   "type": "find",
+   "pat": "dip.possible",
+   "prompt": "Would it be possible for you sending the contract today?",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "to send",
+   "fixed": "Would it be possible for you to send the contract today?",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „sending“. Nach for you folgt to + Grundform: to send.",
+     "en": "The error: “sending”. After for you comes to + base verb: to send."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach for you steht keine -ing-Form.",
+      "en": "There is an error: after for you there is no -ing form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „sending“: Hier braucht es to + Grundform.",
+      "en": "The error is in “sending”: it needs to + base verb here."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-po-m1",
+   "type": "meaning",
+   "pat": "dip.possible",
+   "a": "Would it be possible to move the call?",
+   "b": "Is it possible to move the call?",
+   "q": {
+    "de": "Welche Frage klingt vorsichtiger?",
+    "en": "Which question sounds more tentative?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Would schafft Abstand: Die Frage lässt ein Nein leichter zu.",
+     "en": "Right: sentence a. Would adds distance: the question makes a no easier."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b fragt Is it possible direkter, ohne den Abstand von would.",
+      "en": "In b, Is it possible asks more directly, without the distance of would."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich im Ton: Nur a hat den Abstand von would.",
+      "en": "Not the same in tone: only a has the distance of would."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-un-k1",
+   "type": "kwt",
+   "pat": "dip.understate",
+   "from": "Your offer is too expensive for our budget.",
+   "key": "STRETCH",
+   "frame": "Your offer ___ for our budget.",
+   "answer": "could be a stretch",
+   "accepted": [
+    "might be a stretch",
+    "may be a stretch",
+    "would be a stretch",
+    "could be quite a stretch",
+    "might be quite a stretch",
+    "would be quite a stretch"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: could be a stretch nennt den Einwand, ohne hart zu klingen.",
+     "en": "Right: could be a stretch names the objection without sounding harsh."
+    },
+    "wrong": [
+     {
+      "not": [
+       "stretch"
+      ],
+      "de": "Das Schlüsselwort stretch muss unverändert in der Lücke stehen.",
+      "en": "The key word stretch must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Will legt den Einwand fest. Could lässt ihn offen.",
+      "en": "Will fixes the objection. Could leaves it open."
+     },
+     {
+      "not": [
+       "could",
+       "might",
+       "may",
+       "would"
+      ],
+      "de": "Gesucht ist ein Modalverb mit Abstand: could be a stretch.",
+      "en": "A modal with distance is needed: could be a stretch."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-un-k2",
+   "type": "kwt",
+   "pat": "dip.understate",
+   "from": "That deadline is impossible for us.",
+   "key": "TRICKY",
+   "frame": "That deadline ___ for us.",
+   "answer": "could be tricky",
+   "accepted": [
+    "might be tricky",
+    "may be tricky",
+    "would be tricky",
+    "could get tricky",
+    "could become tricky",
+    "could prove tricky",
+    "might prove tricky",
+    "could be a bit tricky",
+    "might be a bit tricky",
+    "would be a bit tricky",
+    "could be quite tricky",
+    "might be quite tricky",
+    "would be quite tricky",
+    "could be pretty tricky",
+    "could be rather tricky",
+    "could be a little tricky",
+    "could be somewhat tricky",
+    "might be a little tricky",
+    "might be rather tricky",
+    "would be a little tricky"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: could be tricky ist ein höflicher Einwand statt „impossible“.",
+     "en": "Right: could be tricky is a polite objection instead of “impossible”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "tricky"
+      ],
+      "de": "Das Schlüsselwort tricky muss unverändert in der Lücke stehen.",
+      "en": "The key word tricky must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "impossible"
+      ],
+      "de": "Impossible ist ein hartes Nein. Der Satz soll Abstand halten.",
+      "en": "Impossible is a flat no. The sentence should keep its distance."
+     },
+     {
+      "not": [
+       "could",
+       "might",
+       "may",
+       "would"
+      ],
+      "de": "Gesucht ist ein Modalverb mit Abstand: could be tricky.",
+      "en": "A modal with distance is needed: could be tricky."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-un-f1",
+   "type": "find",
+   "pat": "dip.understate",
+   "prompt": "That would be a bit challenge for our team.",
+   "err": [
+    3,
+    5
+   ],
+   "answer": "a bit of a challenge",
+   "fixed": "That would be a bit of a challenge for our team.",
+   "accepted": [
+    "a bit challenging",
+    "a little challenging",
+    "a little bit challenging",
+    "somewhat challenging",
+    "a challenge"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „a bit challenge“. Vor einem Nomen heißt es a bit of a challenge.",
+     "en": "The error: “a bit challenge”. Before a noun it is a bit of a challenge."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Vor dem Nomen challenge fehlt of a.",
+      "en": "There is an error: of a is missing before the noun challenge."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „a bit challenge“: a bit braucht of a vor dem Nomen.",
+      "en": "The error is in “a bit challenge”: a bit needs of a before the noun."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-un-f2",
+   "type": "find",
+   "pat": "dip.understate",
+   "prompt": "A Friday launch might be a bit of a stretch for the team.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: a bit of a stretch ist die feste, höfliche Form.",
+     "en": "No error: a bit of a stretch is the fixed, polite form."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: might be a bit of a stretch ist ein weicher Einwand.",
+      "en": "No error: might be a bit of a stretch is a soft objection."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dp-un-m1",
+   "type": "meaning",
+   "pat": "dip.understate",
+   "a": "That timeline is impossible for us.",
+   "b": "That timeline could be tricky for us.",
+   "q": {
+    "de": "Welcher Satz lässt noch Spielraum für eine Lösung?",
+    "en": "Which sentence still leaves room for a solution?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Could be tricky ist ein weicher Einwand, über den man reden kann.",
+     "en": "Right: sentence b. Could be tricky is a soft objection that leaves room to talk."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a sagt impossible klar Nein, und es bleibt kein Spielraum.",
+      "en": "In a, impossible says a flat no: no room is left."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a schließt aus, b lässt es offen.",
+      "en": "Not the same: a rules it out, b leaves it open."
+     }
+    ]
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "id": "dm-con-k1",
+   "type": "kwt",
+   "pat": "dm.concede",
+   "from": "The demo went well, but we still need a business case.",
+   "key": "SAID",
+   "frame": "The demo went well. ___, we still need a business case.",
+   "answer": "That said",
+   "accepted": [
+    "Having said that",
+    "That being said",
+    "Having said this",
+    "With that said"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: That said schränkt das Gute ein, ohne aber: Wir brauchen trotzdem einen Business Case.",
+     "en": "Right: That said qualifies the good news with no but: we still need a business case."
+    },
+    "wrong": [
+     {
+      "if": [
+       "but"
+      ],
+      "de": "Kein zusätzliches but: That said ersetzt „aber“ bereits.",
+      "en": "No extra but: That said already replaces “but”."
+     },
+     {
+      "if": [
+       "say"
+      ],
+      "de": "Nach Having steht das Partizip: Having said that, nicht Having say.",
+      "en": "After Having use the participle: Having said that, not Having say."
+     },
+     {
+      "not": [
+       "said"
+      ],
+      "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
+      "en": "The key word said must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-con-k2",
+   "type": "kwt",
+   "pat": "dm.concede",
+   "from": "The offer is generous, but I'd still ask legal to review it.",
+   "key": "EVEN",
+   "frame": "The offer is generous. ___, I'd ask legal to review it.",
+   "answer": "Even so",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Even so = „trotzdem“. Es schränkt das Lob ein, ohne es zurückzunehmen.",
+     "en": "Right: Even so = “all the same”. It qualifies the praise without taking it back."
+    },
+    "wrong": [
+     {
+      "not": [
+       "even"
+      ],
+      "de": "Das Schlüsselwort even muss unverändert in der Lücke stehen.",
+      "en": "The key word even must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "even",
+       "though"
+      ],
+      "de": "„Even though“ braucht einen Nebensatz. Hier folgt ein neuer Satz: Even so.",
+      "en": "“Even though” needs a full clause. Here a new sentence follows: Even so."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-con-f1",
+   "type": "find",
+   "pat": "dm.concede",
+   "prompt": "The pilot went well. Despite that said, the timeline is tight.",
+   "err": [
+    4,
+    6
+   ],
+   "answer": "That said,",
+   "fixed": "The pilot went well. That said, the timeline is tight.",
+   "accepted": [
+    "Having said that,",
+    "That being said,",
+    "Even so,"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „Despite that said“ gibt es nicht. Richtig: That said, …",
+     "en": "The error: “Despite that said” does not exist. Correct: That said, …"
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Despite that said ist keine Wendung.",
+      "en": "There is an error: Despite that said is not a phrase."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „Despite that said“: Hier passt That said.",
+      "en": "The error is “Despite that said”: That said fits here."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-con-f2",
+   "type": "find",
+   "pat": "dm.concede",
+   "prompt": "We like the proposal. Have said that, we still want a second quote.",
+   "err": [
+    4,
+    6
+   ],
+   "answer": "Having said that,",
+   "fixed": "We like the proposal. Having said that, we still want a second quote.",
+   "accepted": [
+    "That said,",
+    "That being said,",
+    "Even so,"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Es heißt Having said that (Partizip), nicht Have said that.",
+     "en": "The error: it is Having said that (participle), not Have said that."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Die Wendung beginnt mit Having, nicht mit Have.",
+      "en": "There is an error: the phrase starts with Having, not Have."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „Have said that“: Richtig ist Having said that.",
+      "en": "The error is “Have said that”: the correct form is Having said that."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-con-f3",
+   "type": "find",
+   "pat": "dm.concede",
+   "prompt": "The rollout went well. That said, we should still run one more test.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: That said, + Hauptsatz schränkt den guten Rollout ein.",
+     "en": "No error: That said, + a main clause qualifies the good rollout."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach That said steht ein normaler Hauptsatz, ohne but.",
+      "en": "No error: a normal main clause follows That said, with no but."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-con-m1",
+   "type": "meaning",
+   "pat": "dm.concede",
+   "a": "The pilot went well. That said, the timeline is tight.",
+   "b": "The pilot went well. As a result, the timeline is tight.",
+   "q": {
+    "de": "Welcher Text schränkt das Gute ein, statt eine Folge zu nennen?",
+    "en": "Which text qualifies the good news instead of naming a result?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Text a. That said schränkt den guten Pilot ein, ohne ihn zurückzunehmen.",
+     "en": "Right: text a. That said qualifies the good pilot without taking it back."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b nennt As a result eine Folge: guter Pilot, deshalb knapper Zeitplan. Das ergibt keinen Sinn.",
+      "en": "In b, As a result names a consequence: good pilot, so a tight timeline. That makes no sense."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: That said schränkt ein, As a result folgert.",
+      "en": "Not the same: That said qualifies, As a result concludes."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ctr-k1",
+   "type": "kwt",
+   "pat": "dm.contrast",
+   "from": "The cloud version is cheaper, but it needs more trust in the vendor.",
+   "key": "HAND",
+   "frame": "The cloud version is cheaper. ___, it needs more trust in the vendor.",
+   "answer": "On the other hand",
+   "accepted": [
+    "But on the other hand"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: On the other hand stellt Vorteil und Nachteil gegenüber.",
+     "en": "Right: On the other hand sets benefit against drawback."
+    },
+    "wrong": [
+     {
+      "if": [
+       "side"
+      ],
+      "de": "Nicht side: Der Gegensatz heißt on the other hand.",
+      "en": "Not side: the contrast is on the other hand."
+     },
+     {
+      "not": [
+       "hand"
+      ],
+      "de": "Das Schlüsselwort hand muss unverändert in der Lücke stehen.",
+      "en": "The key word hand must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "other"
+      ],
+      "de": "Hier fehlt other: on the other hand, nicht on the hand.",
+      "en": "Here other is missing: on the other hand, not on the hand."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ctr-k2",
+   "type": "kwt",
+   "pat": "dm.contrast",
+   "from": "Sales grew in Spain, whereas they fell in Italy.",
+   "key": "CONTRAST",
+   "frame": "Sales grew in Spain. ___, they fell in Italy.",
+   "answer": "In contrast",
+   "accepted": [
+    "By contrast",
+    "In stark contrast",
+    "In sharp contrast",
+    "By way of contrast"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: In contrast = „im Gegensatz dazu“. Es stellt Spanien und Italien gegenüber.",
+     "en": "Right: In contrast = “as opposed to that”. It sets Spain against Italy."
+    },
+    "wrong": [
+     {
+      "if": [
+       "contrary"
+      ],
+      "de": "On the contrary heißt „im Gegenteil“ und widerspricht. Hier passt contrast.",
+      "en": "On the contrary means “quite the opposite” and denies. Here contrast fits."
+     },
+     {
+      "not": [
+       "contrast"
+      ],
+      "de": "Das Schlüsselwort contrast muss unverändert in der Lücke stehen.",
+      "en": "The key word contrast must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ctr-f1",
+   "type": "find",
+   "pat": "dm.contrast",
+   "prompt": "The old tool is cheaper. On the other side, it has no audit trail.",
+   "err": [
+    8,
+    8
+   ],
+   "answer": "hand,",
+   "fixed": "The old tool is cheaper. On the other hand, it has no audit trail.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Gegensatz heißt on the other hand. „Side“ meint einen Ort.",
+     "en": "The error: the contrast is on the other hand. “Side” means a place."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Für einen Gegensatz heißt es on the other hand.",
+      "en": "There is an error: a contrast is on the other hand."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „side“: Wörtlich „andere Seite“, Englisch sagt on the other hand.",
+      "en": "The error is “side”: literally “other side”, but English says on the other hand."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ctr-f2",
+   "type": "find",
+   "pat": "dm.contrast",
+   "prompt": "Sales grew in Spain. In contrary, they fell in Italy.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "In contrast,",
+   "fixed": "Sales grew in Spain. In contrast, they fell in Italy.",
+   "accepted": [
+    "By contrast,"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „In contrary“ gibt es nicht. Richtig: In contrast („im Gegensatz“).",
+     "en": "The error: “In contrary” does not exist. Correct: In contrast."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Der Gegensatz heißt in contrast, nicht in contrary.",
+      "en": "There is an error: the contrast is in contrast, not in contrary."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „In contrary“: Gemeint ist in contrast.",
+      "en": "The error is “In contrary”: in contrast is meant."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ctr-f3",
+   "type": "find",
+   "pat": "dm.contrast",
+   "prompt": "Remote hiring widens the pool. On the other hand, onboarding takes longer.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: On the other hand stellt Vorteil und Nachteil gegenüber.",
+     "en": "No error: On the other hand sets the benefit against the drawback."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: On the other hand ist die feste Wendung für die Gegenseite.",
+      "en": "No error: On the other hand is the fixed phrase for the other side."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ctr-m1",
+   "type": "meaning",
+   "pat": "dm.contrast",
+   "a": "Team A shipped early. In contrast, team B shipped late.",
+   "b": "Team A shipped early. Likewise, team B shipped early.",
+   "q": {
+    "de": "Welcher Text sagt, dass Team B später fertig war?",
+    "en": "Which text says that team B finished later?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Text a. In contrast stellt die Teams gegenüber: A ist früh, B spät.",
+     "en": "Right: text a. In contrast sets the two teams against each other: A early, B late."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b heißt Likewise „ebenso“: Die Teams waren beide früh fertig.",
+      "en": "In b, Likewise means “in the same way”: both teams were early."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: In contrast kehrt den Sinn um, Likewise nicht.",
+      "en": "Not the same: In contrast flips the meaning, Likewise does not."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-bld-k1",
+   "type": "kwt",
+   "pat": "dm.build",
+   "from": "Lena suggested a pilot, and we could add a second team.",
+   "key": "BUILD",
+   "frame": "Lena suggested a pilot. ___, we could add a second team.",
+   "answer": "To build on that",
+   "accepted": [
+    "To build upon that",
+    "To build on this",
+    "To build upon this"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: To build on that führt Lenas Idee weiter und ergänzt sie.",
+     "en": "Right: To build on that develops Lena's idea and adds to it."
+    },
+    "wrong": [
+     {
+      "if": [
+       "up",
+       "on"
+      ],
+      "de": "Kein up: „darauf aufbauen“ heißt build on, nicht build up on.",
+      "en": "No up: “darauf aufbauen” is build on, not build up on."
+     },
+     {
+      "not": [
+       "build"
+      ],
+      "de": "Das Schlüsselwort build muss unverändert in der Lücke stehen.",
+      "en": "The key word build must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-bld-k2",
+   "type": "kwt",
+   "pat": "dm.build",
+   "from": "The tool is easy to set up, and the training takes only an hour.",
+   "key": "ADD",
+   "frame": "The tool is easy to set up. ___, the training takes only an hour.",
+   "answer": "To add to that",
+   "accepted": [
+    "To add to this"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: To add to that fügt einen weiteren Punkt an, der zum selben Thema gehört.",
+     "en": "Right: To add to that attaches another point on the same topic."
+    },
+    "wrong": [
+     {
+      "not": [
+       "add"
+      ],
+      "de": "Das Schlüsselwort add muss unverändert in der Lücke stehen.",
+      "en": "The key word add must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "add",
+       "on"
+      ],
+      "de": "Nach add steht to: To add to that. „Add on“ passt hier nicht.",
+      "en": "After add use to: To add to that. Add on does not fit here."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-bld-f1",
+   "type": "find",
+   "pat": "dm.build",
+   "prompt": "To build up on Anna's point, we could add a pilot team.",
+   "err": [
+    1,
+    3
+   ],
+   "answer": "build on",
+   "fixed": "To build on Anna's point, we could add a pilot team.",
+   "accepted": [
+    "build upon"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Es heißt build on, nicht build up on („darauf aufbauen“).",
+     "en": "The error: it is build on, not build up on."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach build steht on, kein up.",
+      "en": "There is an error: build takes on, with no up."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „build up on“: Das up muss weg.",
+      "en": "The error is “build up on”: the up has to go."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-bld-f2",
+   "type": "find",
+   "pat": "dm.build",
+   "prompt": "Building up on Mark's idea, we could invite two partners.",
+   "err": [
+    0,
+    2
+   ],
+   "answer": "Building on",
+   "fixed": "Building on Mark's idea, we could invite two partners.",
+   "accepted": [
+    "Building upon"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Es heißt Building on, ohne up: Man baut auf einer Idee auf.",
+     "en": "The error: it is Building on, with no up: you build on an idea."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Building up on passt nicht zu einer Idee.",
+      "en": "There is an error: Building up on does not fit an idea."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „Building up on“: Richtig ist Building on.",
+      "en": "The error is “Building up on”: the correct form is Building on."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-bld-f3",
+   "type": "find",
+   "pat": "dm.build",
+   "prompt": "Mark outlined the budget. To build on that, we could add a cost forecast.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: To build on that knüpft an Marks Budget an und ergänzt es.",
+     "en": "No error: To build on that picks up Mark's budget and adds to it."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach build steht on, und das Komma trennt die Wendung vom Satz.",
+      "en": "No error: build takes on, and the comma sets the phrase off from the clause."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-bld-m1",
+   "type": "meaning",
+   "pat": "dm.build",
+   "a": "Anna proposed a pilot. To build on that, we could add a second team.",
+   "b": "Anna proposed a pilot. Despite that, we could add a second team.",
+   "q": {
+    "de": "Welcher Text führt Annas Idee weiter, statt gegen sie zu argumentieren?",
+    "en": "Which text extends Anna's idea instead of arguing against it?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Text a. To build on that knüpft an Annas Pilot an und baut ihn aus.",
+     "en": "Right: text a. To build on that picks up Anna's pilot and expands it."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "pat": "dm.concede",
+      "de": "In b zeigt Despite that einen Gegensatz zu Annas Pilot. Die Idee wird nicht weitergeführt.",
+      "en": "In b, Despite that signals a contrast to Anna's pilot. The idea is not developed."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Despite that setzt einen Einwand, to build on that eine Ergänzung.",
+      "en": "Not the same: Despite that sets an objection, to build on that an addition."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ret-k1",
+   "type": "kwt",
+   "pat": "dm.return",
+   "from": "I want to return to the deadline. Can we move it to Friday?",
+   "key": "BACK",
+   "frame": "___ the deadline, can we move it to Friday?",
+   "answer": "Coming back to",
+   "accepted": [
+    "Going back to",
+    "Getting back to",
+    "Circling back to"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Coming back to + Thema greift die Frist wieder auf.",
+     "en": "Right: Coming back to + topic picks the deadline up again."
+    },
+    "wrong": [
+     {
+      "not": [
+       "back"
+      ],
+      "de": "Das Schlüsselwort back muss unverändert in der Lücke stehen.",
+      "en": "The key word back must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "back",
+       "on"
+      ],
+      "de": "Nicht on: „zurückkommen auf“ wird zu coming back to.",
+      "en": "Not on: “zurückkommen auf” becomes coming back to."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Nach back fehlt to: Coming back to the deadline, …",
+      "en": "After back, to is missing: Coming back to the deadline, …"
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ret-k2",
+   "type": "kwt",
+   "pat": "dm.return",
+   "from": "On Mark's earlier question: the license is per user.",
+   "key": "RETURN",
+   "frame": "___ Mark's earlier question, the license is per user.",
+   "answer": "To return to",
+   "accepted": [],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: To return to + Thema kehrt zu Marks früherer Frage zurück.",
+     "en": "Right: To return to + topic goes back to Mark's earlier question."
+    },
+    "wrong": [
+     {
+      "not": [
+       "return"
+      ],
+      "de": "Das Schlüsselwort return muss unverändert in der Lücke stehen.",
+      "en": "The key word return must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "return",
+       "on"
+      ],
+      "de": "Nicht on: Man kehrt zu etwas zurück, also return to.",
+      "en": "Not on: you return to something, so return to."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Nach return steht to: To return to Mark's earlier question, …",
+      "en": "After return comes to: To return to Mark's earlier question, …"
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ret-f1",
+   "type": "find",
+   "pat": "dm.return",
+   "prompt": "Coming back on the budget, we need approval by May.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "to",
+   "fixed": "Coming back to the budget, we need approval by May.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Es heißt coming back to, nicht on. „Zurückkommen auf“ führt in die Irre.",
+     "en": "The error: it is coming back to, not on. “Zurückkommen auf” misleads."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach coming back steht to.",
+      "en": "There is an error: coming back takes to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „on“: Deutsch sagt „auf“, Englisch sagt to.",
+      "en": "The error is “on”: German says “auf”, English says to."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ret-f2",
+   "type": "find",
+   "pat": "dm.return",
+   "prompt": "Coming back the topic of timing, we should add a buffer.",
+   "err": [
+    1,
+    1
+   ],
+   "answer": "back to",
+   "fixed": "Coming back to the topic of timing, we should add a buffer.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach back fehlt to: Coming back to the topic of timing.",
+     "en": "The error: to is missing after back: Coming back to the topic of timing."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: In der Wendung fehlt ein Wort.",
+      "en": "There is an error: a word is missing in the phrase."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „back“: Danach fehlt to, also back to.",
+      "en": "The error is at “back”: to is missing after it, so back to."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-ret-m1",
+   "type": "meaning",
+   "pat": "dm.return",
+   "a": "Coming back to the contract, legal still needs two days.",
+   "b": "Moving on to the contract, legal still needs two days.",
+   "q": {
+    "de": "Welcher Satz sagt, dass der Vertrag schon früher Thema war?",
+    "en": "Which sentence says the contract was already a topic earlier?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Coming back to nimmt ein früheres Thema wieder auf.",
+     "en": "Right: sentence a. Coming back to takes an earlier topic up again."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "„Moving on to“ eröffnet ein neues Thema. Zurück zum Vertrag geht es dort nicht.",
+      "en": "“Moving on to” opens a new topic. It does not go back to the contract."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Coming back to kehrt zurück, Moving on to geht weiter.",
+      "en": "Not the same: Coming back to returns, Moving on to goes forward."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-sum-k1",
+   "type": "kwt",
+   "pat": "dm.sum",
+   "from": "The tests are late and the budget is tight, so to put it briefly, we need two more weeks.",
+   "key": "SHORT",
+   "frame": "The tests are late and the budget is tight. ___, we need two more weeks.",
+   "answer": "In short",
+   "accepted": [
+    "Long story short"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: In short kündigt das Fazit an: Aus den zwei Problemen folgt der Bedarf von zwei Wochen.",
+     "en": "Right: In short announces the conclusion: the two problems add up to a need for two weeks."
+    },
+    "wrong": [
+     {
+      "if": [
+       "shortly"
+      ],
+      "de": "Nicht shortly: Das Fazit heißt in short („kurz gesagt“).",
+      "en": "Not shortly: the conclusion phrase is in short."
+     },
+     {
+      "not": [
+       "short"
+      ],
+      "de": "Das Schlüsselwort short muss unverändert in der Lücke stehen.",
+      "en": "The key word short must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-sum-k2",
+   "type": "kwt",
+   "pat": "dm.sum",
+   "from": "The migration was smooth, support was fast, and users are happy, so overall the launch went better than we expected.",
+   "key": "ALL",
+   "frame": "The migration was smooth, support was fast, and users are happy. ___, the launch went better than we expected.",
+   "answer": "All in all",
+   "accepted": [
+    "All told",
+    "All things considered"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: All in all fasst die drei guten Punkte zum Gesamtbild zusammen.",
+     "en": "Right: All in all sums the three good points up into one overall picture."
+    },
+    "wrong": [
+     {
+      "if": [
+       "after"
+      ],
+      "de": "„After all“ heißt „schließlich“ und fasst nicht zusammen.",
+      "en": "“After all” means “you must not forget” and does not sum up."
+     },
+     {
+      "not": [
+       "all"
+      ],
+      "de": "Das Schlüsselwort all muss unverändert in der Lücke stehen.",
+      "en": "The key word all must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-sum-f1",
+   "type": "find",
+   "pat": "dm.sum",
+   "prompt": "In resume, the team needs one more tester.",
+   "err": [
+    0,
+    1
+   ],
+   "answer": "In summary,",
+   "fixed": "In summary, the team needs one more tester.",
+   "accepted": [
+    "In short,",
+    "In sum,",
+    "To sum up,",
+    "To summarize,"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „In resume“ gibt es nicht. Richtig: In summary oder In short.",
+     "en": "The error: “In resume” does not exist. Correct: In summary or In short."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Ein Fazit beginnt nicht mit in resume.",
+      "en": "There is an error: a conclusion does not start with in resume."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „In resume“: Es heißt In summary („Resümee“).",
+      "en": "The error is “In resume”: it is In summary."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-sum-f2",
+   "type": "find",
+   "pat": "dm.sum",
+   "prompt": "To summarize up, the launch went better than expected.",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "sum up,",
+   "fixed": "To sum up, the launch went better than expected.",
+   "accepted": [
+    "summarize,"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Es heißt To sum up oder To summarize, nicht summarize up.",
+     "en": "The error: it is To sum up or To summarize, not summarize up."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach summarize steht kein up.",
+      "en": "There is an error: summarize takes no up."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „summarize up“: sum up oder summarize allein.",
+      "en": "The error is “summarize up”: use sum up or summarize alone."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-sum-f3",
+   "type": "find",
+   "pat": "dm.sum",
+   "prompt": "Overall, the team is happy with the rollout.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Overall fasst als Fazit zusammen und steht vorn mit Komma.",
+     "en": "No error: Overall sums up as a conclusion and opens with a comma."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Overall steht vorn und wird durch ein Komma abgesetzt.",
+      "en": "No error: Overall opens the sentence and is set off by a comma."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "id": "dm-sum-m1",
+   "type": "meaning",
+   "pat": "dm.sum",
+   "a": "In short, the project needs more time.",
+   "b": "For example, the project needs more time.",
+   "q": {
+    "de": "Welcher Satz fasst das Vorherige zusammen?",
+    "en": "Which sentence sums up what came before?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. In short leitet das Fazit ein.",
+     "en": "Right: sentence a. In short introduces the conclusion."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "„For example“ gibt ein einzelnes Beispiel, kein Fazit.",
+      "en": "“For example” gives a single instance, not a conclusion."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: In short fasst zusammen, For example illustriert.",
+      "en": "Not the same: In short sums up, For example illustrates."
+     }
+    ]
+   },
+   "topic": "c1-discourse"
+  },
+  {
    "id": "hg-mod-k1",
    "type": "kwt",
    "pat": "hg.modal",
@@ -2380,6 +4212,1170 @@
     ]
    },
    "topic": "cond-alt"
+  },
+  {
+   "id": "cn-z-k1",
+   "type": "kwt",
+   "pat": "cn.zero",
+   "from": "Every time a customer cancels within 14 days, we refund the full fee.",
+   "key": "WHENEVER",
+   "frame": "We refund the full fee ___ within 14 days.",
+   "answer": "whenever a customer cancels",
+   "accepted": [
+    "whenever customers cancel",
+    "whenever a customer has canceled",
+    "whenever the customer cancels",
+    "whenever someone cancels"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Das ist eine feste Regel → whenever + Präsens: whenever a customer cancels.",
+     "en": "Right: fixed rule → whenever + present: whenever a customer cancels."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort WHENEVER muss unverändert in der Lücke stehen.",
+      "en": "The key word WHENEVER must stay unchanged in the gap.",
+      "not": [
+       "whenever"
+      ]
+     },
+     {
+      "if": [
+       "whenever",
+       "will"
+      ],
+      "de": "Eine feste Regel braucht das Präsens, kein will: whenever a customer cancels.",
+      "en": "A fixed rule needs the present, not will: whenever a customer cancels."
+     },
+     {
+      "if": [
+       "whenever",
+       "would"
+      ],
+      "de": "would macht daraus eine Annahme. Hier gilt eine feste Regel (Präsens).",
+      "en": "would turns it into an assumption. Here a fixed rule applies (present)."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-z-k2",
+   "type": "kwt",
+   "pat": "cn.zero",
+   "from": "If the build fails, the pipeline stops automatically.",
+   "key": "WHEN",
+   "frame": "The pipeline stops automatically ___.",
+   "answer": "when the build fails",
+   "accepted": [
+    "when a build fails",
+    "when the build breaks",
+    "when builds fail"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Das ist eine feste Regel → when + Präsens: when the build fails.",
+     "en": "Right: fixed rule → when + present: when the build fails."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort WHEN muss unverändert in der Lücke stehen.",
+      "en": "The key word WHEN must stay unchanged in the gap.",
+      "not": [
+       "when"
+      ]
+     },
+     {
+      "if": [
+       "when",
+       "will"
+      ],
+      "de": "Eine feste Regel braucht das Präsens, kein will: when the build fails.",
+      "en": "A fixed rule needs the present, not will: when the build fails."
+     },
+     {
+      "if": [
+       "when",
+       "failed"
+      ],
+      "de": "Das Past macht aus der Regel eine Annahme oder einen Rückblick: Präsens.",
+      "en": "The past turns the rule into an assumption or a look back: use the present."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-z-f1",
+   "type": "find",
+   "pat": "cn.zero",
+   "prompt": "If the temperature will exceed 80 degrees, the system shuts down automatically.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "exceeds",
+   "fixed": "If the temperature exceeds 80 degrees, the system shuts down automatically.",
+   "accepted": [
+    "rises above",
+    "goes above",
+    "has exceeded"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Eine feste Regel braucht das Präsens im if-Teil: exceeds, kein will.",
+     "en": "The error: a fixed rule needs the present in the if-clause: exceeds, no will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Im if-Teil steht kein will.",
+      "en": "There is an error: no will in the if-clause."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will exceed“: Die Regel gilt immer, also Präsens.",
+      "en": "The error is “will exceed”: the rule always applies, so use the present."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-z-f2",
+   "type": "find",
+   "pat": "cn.zero",
+   "prompt": "If an invoice is more than 30 days overdue, the system sends a reminder.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Present + Present beschreibt hier eine feste Regel.",
+     "en": "No error: present + present describes a fixed rule here."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Eine feste Regel braucht das Präsens in beiden Teilen.",
+      "en": "No error: a fixed rule needs the present in both parts."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-z-m1",
+   "type": "meaning",
+   "pat": "cn.zero",
+   "a": "If a customer registers, the system sends a confirmation email.",
+   "b": "If a customer registers tomorrow, we'll send them a confirmation email.",
+   "q": {
+    "de": "Welcher Satz beschreibt eine feste Regel, die immer gilt?",
+    "en": "Which sentence describes a fixed rule that always applies?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Präsens + Präsens ist ein Ablauf, der bei jedem Kunden gilt.",
+     "en": "Right: sentence a. Present + present is a process that applies to every customer."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "pat": "cn.first",
+      "de": "b nennt tomorrow und will: Das ist ein einzelner möglicher Fall.",
+      "en": "b names tomorrow and will: that is one possible case."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a gilt immer, b nur für einen Fall morgen.",
+      "en": "Not the same: a always applies, b only for one case tomorrow."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-f-k1",
+   "type": "kwt",
+   "pat": "cn.first",
+   "from": "Our team will finish on time, but the supplier must deliver by Monday.",
+   "key": "IF",
+   "frame": "Our team will finish on time ___ by Monday.",
+   "answer": "if the supplier delivers",
+   "accepted": [
+    "if the supplier has delivered",
+    "if our supplier delivers",
+    "if they deliver",
+    "if they have delivered"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Das ist eine mögliche Zukunft → if + Präsens: if the supplier delivers.",
+     "en": "Right: possible future → if + present: if the supplier delivers."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort IF muss unverändert in der Lücke stehen.",
+      "en": "The key word IF must stay unchanged in the gap.",
+      "not": [
+       "if"
+      ]
+     },
+     {
+      "if": [
+       "if",
+       "will"
+      ],
+      "de": "Nach if steht kein will: if the supplier delivers.",
+      "en": "No will after if: if the supplier delivers."
+     },
+     {
+      "if": [
+       "if",
+       "delivered"
+      ],
+      "pat": "cn.second",
+      "de": "Das Past macht es zur Annahme. Hier ist es ein realer Fall.",
+      "en": "The past makes it an assumption. Here it is a real case."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-f-k2",
+   "type": "kwt",
+   "pat": "cn.first",
+   "from": "The client may approve the budget by Friday. In that case, we'll start on Monday.",
+   "key": "IF",
+   "frame": "___ the budget by Friday, we'll start on Monday.",
+   "answer": "If the client approves",
+   "accepted": [
+    "If the client has approved",
+    "If they approve",
+    "If they have approved"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Das ist eine mögliche Zukunft → if + Präsens: If the client approves.",
+     "en": "Right: possible future → if + present: If the client approves."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort IF muss unverändert in der Lücke stehen.",
+      "en": "The key word IF must stay unchanged in the gap.",
+      "not": [
+       "if"
+      ]
+     },
+     {
+      "if": [
+       "if",
+       "will"
+      ],
+      "de": "Nach if steht kein will: If the client approves.",
+      "en": "No will after if: If the client approves."
+     },
+     {
+      "if": [
+       "if",
+       "approved"
+      ],
+      "pat": "cn.second",
+      "de": "Das Past macht es zur Annahme. Hier ist die Freigabe bis Freitag real möglich.",
+      "en": "The past makes it an assumption. Here approval by Friday is a real possibility."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-f-f1",
+   "type": "find",
+   "pat": "cn.first",
+   "prompt": "If it will rain tomorrow, we'll move the team lunch indoors.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "rains",
+   "fixed": "If it rains tomorrow, we'll move the team lunch indoors.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach if steht bei möglicher Zukunft das Präsens (rains), kein will.",
+     "en": "The error: after if, a possible future takes the present (rains), not will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach if steht kein will.",
+      "en": "There is an error: no will after if."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will rain“: Das ist der Reflex „Zukunft = will“.",
+      "en": "The error is “will rain”: it is the “future = will” reflex."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-f-f2",
+   "type": "find",
+   "pat": "cn.first",
+   "prompt": "If the test passes today, we'll release the update on Monday.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: if + Präsens (passes), will im Hauptsatz.",
+     "en": "No error: if + present (passes), will in the main clause."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Der if-Teil steht im Präsens, will gehört in den Hauptsatz.",
+      "en": "No error: the if-clause is in the present, will belongs in the main clause."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-f-m1",
+   "type": "meaning",
+   "pat": "cn.first",
+   "a": "If the client signs by Friday, we'll start on Monday.",
+   "b": "If the client signed by Friday, we would start on Monday.",
+   "q": {
+    "de": "Welcher Satz hält die Unterschrift für wirklich möglich?",
+    "en": "Which sentence treats the signature as a real possibility?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Präsens + will rechnet damit, dass der Kunde unterschreibt.",
+     "en": "Right: sentence a. Present + will expects that the client may sign."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "pat": "cn.second",
+      "de": "b ist eine Annahme (Past + would): Man hält die Unterschrift für unwahrscheinlich.",
+      "en": "b is an assumption (past + would): the signature seems unlikely."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a rechnet damit, b ist eine bloße Annahme.",
+      "en": "Not the same: a expects it, b is a mere assumption."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-s-k1",
+   "type": "kwt",
+   "pat": "cn.second",
+   "from": "We lack staff, so we won't accept the project.",
+   "key": "WOULD",
+   "frame": "If we had more staff, we ___ the project.",
+   "answer": "would accept",
+   "accepted": [
+    "would take on",
+    "would take",
+    "would gladly accept",
+    "would happily accept",
+    "would be able to accept"
+   ],
+   "words": [
+    2,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Annahme (had more staff) → Hauptsatz mit would + Grundform: would accept.",
+     "en": "Right: assumption (had more staff) → main clause with would + base form: would accept."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort WOULD muss unverändert in der Lücke stehen.",
+      "en": "The key word WOULD must stay unchanged in the gap.",
+      "not": [
+       "would"
+      ]
+     },
+     {
+      "if": [
+       "would",
+       "have"
+      ],
+      "pat": "cn.third",
+      "de": "would have accepted blickt zurück. Hier geht es um jetzt: would accept.",
+      "en": "would have accepted looks back. This is about now: would accept."
+     },
+     {
+      "if": [
+       "would",
+       "accepted"
+      ],
+      "de": "Nach would steht die Grundform: would accept, nicht accepted.",
+      "en": "After would comes the base form: would accept, not accepted."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-s-k2",
+   "type": "kwt",
+   "pat": "cn.second",
+   "from": "The client won't move the deadline, so we have to work overtime.",
+   "key": "IF",
+   "frame": "___ the deadline, we would finish without overtime.",
+   "answer": "If the client moved",
+   "accepted": [
+    "If the client postponed",
+    "If the client extended",
+    "If the client pushed back",
+    "If the client shifted",
+    "If they moved"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Annahme → if + Past: If the client moved. would steht im Hauptsatz.",
+     "en": "Right: assumption → if + past: If the client moved. would goes in the main clause."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort IF muss unverändert in der Lücke stehen.",
+      "en": "The key word IF must stay unchanged in the gap.",
+      "not": [
+       "if"
+      ]
+     },
+     {
+      "if": [
+       "if",
+       "would"
+      ],
+      "de": "would gehört nicht in den if-Teil. Dort steht das Past (moved).",
+      "en": "would does not go in the if-clause. The past (moved) goes there."
+     },
+     {
+      "if": [
+       "if",
+       "moves"
+      ],
+      "pat": "cn.first",
+      "de": "Das Präsens wäre ein realer Fall. would finish zeigt eine Annahme: Past.",
+      "en": "The present would be a real case. would finish shows an assumption: past."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-s-f1",
+   "type": "find",
+   "pat": "cn.second",
+   "prompt": "If the budget would be larger, we would hire two more analysts.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "were",
+   "fixed": "If the budget were larger, we would hire two more analysts.",
+   "accepted": [
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: would gehört nicht in den if-Teil. Dort steht das Past: were.",
+     "en": "The error: would does not belong in the if-clause. The past goes there: were."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Im if-Teil steht kein would.",
+      "en": "There is an error: no would in the if-clause."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would be“: Der if-Teil nimmt das Past (were).",
+      "en": "The error is “would be”: the if-clause takes the past (were)."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-s-f2",
+   "type": "find",
+   "pat": "cn.second",
+   "prompt": "If our main competitor cut prices, we would need to rethink our strategy.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: if + Past (cut), would + Grundform ist eine korrekte Annahme.",
+     "en": "No error: if + past (cut), would + base form is a correct assumption."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: cut ist hier das Past, would steht nur im Hauptsatz.",
+      "en": "No error: cut is the past here, would appears only in the main clause."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-s-m1",
+   "type": "meaning",
+   "pat": "cn.second",
+   "a": "If I got the promotion, I'd move to Berlin.",
+   "b": "If I get the promotion, I'll move to Berlin.",
+   "q": {
+    "de": "Welcher Satz hält die Beförderung für unwahrscheinlich oder ausgedacht?",
+    "en": "Which sentence treats the promotion as unlikely or imagined?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Past + would macht die Beförderung zur Annahme.",
+     "en": "Right: sentence a. Past + would makes the promotion an assumption."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "pat": "cn.first",
+      "de": "b (Präsens + will) rechnet mit der Beförderung: Sie ist eine echte Möglichkeit.",
+      "en": "b (present + will) counts on the promotion: it is a real possibility."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Past + would sagt „unwahrscheinlich“, Präsens + will sagt „möglich“.",
+      "en": "Not the same: past + would says “unlikely”, present + will says “possible”."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-w-k1",
+   "type": "kwt",
+   "pat": "cn.were",
+   "from": "I'm not in your position, but my advice is to renegotiate the price.",
+   "key": "IF",
+   "frame": "___ you, I'd renegotiate the price.",
+   "answer": "If I were",
+   "accepted": [
+    "If I was"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Rat = Annahme → If I were you. Die Folge steht mit would.",
+     "en": "Right: advice = assumption → If I were you. The result takes would."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort IF muss unverändert in der Lücke stehen.",
+      "en": "The key word IF must stay unchanged in the gap.",
+      "not": [
+       "if"
+      ]
+     },
+     {
+      "if": [
+       "if",
+       "would"
+      ],
+      "de": "would be steht nicht im if-Teil: If I were you, nicht If I would be you.",
+      "en": "would be does not go in the if-clause: If I were you, not If I would be you."
+     },
+     {
+      "if": [
+       "if",
+       "am"
+      ],
+      "de": "am wäre eine Tatsache. Ein Rat braucht die Annahme: were (oder umgangssprachlich was).",
+      "en": "am would state a fact. Advice needs the assumption: were (or informally was)."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-w-k2",
+   "type": "kwt",
+   "pat": "cn.were",
+   "from": "The deadline isn't flexible, so we can't run another test.",
+   "key": "FLEXIBLE",
+   "frame": "If the deadline ___, we would run another test.",
+   "answer": "were flexible",
+   "accepted": [
+    "was flexible",
+    "were more flexible",
+    "was more flexible",
+    "were a bit more flexible"
+   ],
+   "words": [
+    2,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Das ist eine Annahme → if + were: If the deadline were flexible.",
+     "en": "Right: assumption → if + were: If the deadline were flexible."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort FLEXIBLE muss unverändert in der Lücke stehen.",
+      "en": "The key word FLEXIBLE must stay unchanged in the gap.",
+      "not": [
+       "flexible"
+      ]
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would be steht nicht im if-Teil. Dort steht were (oder umgangssprachlich was).",
+      "en": "would be does not go in the if-clause. were goes there (or informally was)."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "pat": "cn.first",
+      "de": "Das Präsens wäre ein realer Fall. would run zeigt eine Annahme: were.",
+      "en": "The present would be a real case. would run shows an assumption: were."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-w-f1",
+   "type": "find",
+   "pat": "cn.were",
+   "prompt": "If I would be you, I would renegotiate the contract before signing.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "were",
+   "fixed": "If I were you, I would renegotiate the contract before signing.",
+   "accepted": [
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Im if-Teil steht were, nicht would be: If I were you.",
+     "en": "The error: the if-clause takes were, not would be: If I were you."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: would be gehört nicht in den if-Teil.",
+      "en": "There is an error: would be does not go in the if-clause."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would be“: If I were you ist die feste Form für einen Rat.",
+      "en": "The error is “would be”: If I were you is the set form for advice."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-w-f2",
+   "type": "find",
+   "pat": "cn.were",
+   "prompt": "If our budget were not so tight, we can hire another analyst.",
+   "err": [
+    8,
+    8
+   ],
+   "answer": "could",
+   "fixed": "If our budget were not so tight, we could hire another analyst.",
+   "accepted": [
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach einer Annahme (were) steht im Hauptsatz would oder could, nicht can.",
+     "en": "The error: after an assumption (were) the main clause takes would or could, not can."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Der Hauptsatz passt nicht zur Annahme.",
+      "en": "There is an error: the main clause does not match the assumption."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „can“: Zu were gehört would oder could.",
+      "en": "The error is “can”: were goes with would or could."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-w-m1",
+   "type": "meaning",
+   "pat": "cn.were",
+   "a": "If I were you, I'd call the client today.",
+   "b": "If I called the client today, he would be surprised.",
+   "q": {
+    "de": "Welcher Satz ist ein Rat an dich?",
+    "en": "Which sentence is advice to you?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. If I were you = an deiner Stelle. Der Sprecher rät dir etwas.",
+     "en": "Right: sentence a. If I were you = in your position. The speaker advises you."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "b sagt, was nach dem Anruf des Sprechers passieren würde. Das ist kein Rat.",
+      "en": "b says what would happen after the speaker calls. That is not advice."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a setzt dich an die Stelle des Sprechers (If I were you).",
+      "en": "Not the same: only a puts you in the speaker's position (If I were you)."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-t-k1",
+   "type": "kwt",
+   "pat": "cn.third",
+   "from": "We didn't test earlier, so we missed the bug.",
+   "key": "TESTED",
+   "frame": "If we ___ earlier, we would have caught the bug.",
+   "answer": "had tested",
+   "accepted": [
+    "'d tested",
+    "had tested it",
+    "'d tested it"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Es ist vorbei → if + Past Perfect: had tested. Folge: would have caught.",
+     "en": "Right: over → if + Past Perfect: had tested. Result: would have caught."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort TESTED muss unverändert in der Lücke stehen.",
+      "en": "The key word TESTED must stay unchanged in the gap.",
+      "not": [
+       "tested"
+      ]
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would gehört nicht in den if-Teil. Third Conditional = had + 3. Form.",
+      "en": "would does not go in the if-clause. Third conditional = had + participle."
+     },
+     {
+      "if": [
+       "tested"
+      ],
+      "not": [
+       "had",
+       "'d"
+      ],
+      "de": "Ohne had ist es nur ein Past. Der if-Teil braucht had tested.",
+      "en": "Without had it is just a past. The if-clause needs had tested."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-t-k2",
+   "type": "kwt",
+   "pat": "cn.third",
+   "from": "The client didn't tell us about the change, so we didn't adjust the plan.",
+   "key": "HAVE",
+   "frame": "If the client had told us about the change, we ___ the plan.",
+   "answer": "would have adjusted",
+   "accepted": [
+    "'d have adjusted",
+    "would have changed",
+    "'d have changed",
+    "would have updated",
+    "'d have updated",
+    "would have revised",
+    "'d have revised"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Folge in der Vergangenheit → would have + 3. Form: would have adjusted.",
+     "en": "Right: result in the past → would have + participle: would have adjusted."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort HAVE muss unverändert in der Lücke stehen.",
+      "en": "The key word HAVE must stay unchanged in the gap.",
+      "not": [
+       "have"
+      ]
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will passt nicht: Die Folge liegt in der Vergangenheit und ist vorbei.",
+      "en": "will does not fit: the result lies in the past and is over."
+     },
+     {
+      "if": [
+       "would",
+       "have",
+       "adjust"
+      ],
+      "de": "Nach would have steht die 3. Form: would have adjusted.",
+      "en": "After would have comes the participle: would have adjusted."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-t-f1",
+   "type": "find",
+   "pat": "cn.third",
+   "prompt": "If the supplier would have warned us, we would have switched vendors in time.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "had",
+   "fixed": "If the supplier had warned us, we would have switched vendors in time.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: would have gehört nicht in den if-Teil. Dort steht had + 3. Form.",
+     "en": "The error: would have does not belong in the if-clause. It takes had + participle."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Im if-Teil steht kein would have.",
+      "en": "There is an error: no would have in the if-clause."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would have warned“: Der if-Teil nimmt had warned.",
+      "en": "The error is “would have warned”: the if-clause takes had warned."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-t-f2",
+   "type": "find",
+   "pat": "cn.third",
+   "prompt": "If the client had approved the draft, we would started production sooner.",
+   "err": [
+    8,
+    9
+   ],
+   "answer": "would have started",
+   "fixed": "If the client had approved the draft, we would have started production sooner.",
+   "accepted": [
+    "would have begun"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Im Hauptsatz fehlt have: would have + 3. Form.",
+     "en": "The error: the main clause is missing have: would have + participle."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Im Hauptsatz fehlt have.",
+      "en": "There is an error: have is missing in the main clause."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would started“: Es heißt would have started.",
+      "en": "The error is “would started”: it should be would have started."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-t-m1",
+   "type": "meaning",
+   "pat": "cn.third",
+   "a": "If the client had signed in March, we would have started in April.",
+   "b": "If the client signs in March, we'll start in April.",
+   "q": {
+    "de": "Welcher Satz meint: Der Kunde hat im März nicht unterschrieben?",
+    "en": "Which sentence means: the client did not sign in March?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Past Perfect + would have blickt auf etwas zurück, das nicht geschah.",
+     "en": "Right: sentence a. Past Perfect + would have looks back at something that did not happen."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "pat": "cn.first",
+      "de": "b ist Präsens + will: Die Unterschrift im März ist noch möglich.",
+      "en": "b is present + will: signing in March is still possible."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a ist vorbei und nicht passiert, b steht noch offen.",
+      "en": "Not the same: a is over and did not happen, b is still open."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-i-k1",
+   "type": "kwt",
+   "pat": "cn.if-words",
+   "from": "We'll extend the contract, but only if the price stays fixed.",
+   "key": "PROVIDED",
+   "frame": "We'll extend the contract ___ stays fixed.",
+   "answer": "provided that the price",
+   "accepted": [
+    "provided the price"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: provided that = vorausgesetzt, dass, danach das Präsens: provided that the price stays.",
+     "en": "Right: provided that = on condition that, then the present: provided that the price stays."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort PROVIDED muss unverändert in der Lücke stehen.",
+      "en": "The key word PROVIDED must stay unchanged in the gap.",
+      "not": [
+       "provided"
+      ]
+     },
+     {
+      "if": [
+       "provided",
+       "will"
+      ],
+      "de": "Nach provided that steht das Präsens, kein will.",
+      "en": "After provided that use the present, not will."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-i-k2",
+   "type": "kwt",
+   "pat": "cn.if-words",
+   "from": "If the deposit doesn't arrive by Thursday, we won't ship on Friday.",
+   "key": "UNLESS",
+   "frame": "We won't ship on Friday ___ by Thursday.",
+   "answer": "unless the deposit arrives",
+   "accepted": [
+    "unless the deposit has arrived",
+    "unless the payment arrives",
+    "unless the payment has arrived",
+    "unless we receive the deposit"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: unless the deposit arrives.",
+     "en": "Right: unless = “if not” → present with no not: unless the deposit arrives."
+    },
+    "wrong": [
+     {
+      "de": "Das Schlüsselwort UNLESS muss unverändert in der Lücke stehen.",
+      "en": "The key word UNLESS must stay unchanged in the gap.",
+      "not": [
+       "unless"
+      ]
+     },
+     {
+      "if": [
+       "unless",
+       "not"
+      ],
+      "de": "Doppelte Verneinung: unless heißt schon „wenn nicht“.",
+      "en": "Double negation: unless already means “if not”."
+     },
+     {
+      "if": [
+       "unless",
+       "will"
+      ],
+      "de": "Nach unless steht kein will, sondern das Präsens.",
+      "en": "No will after unless, the present follows."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-i-f1",
+   "type": "find",
+   "pat": "cn.if-words",
+   "prompt": "I won't sign unless the lawyers don't approve the terms.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "approve",
+   "fixed": "I won't sign unless the lawyers approve the terms.",
+   "accepted": [
+    "have approved"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „unless … don't“ verneint doppelt. Richtig: unless the lawyers approve.",
+     "en": "The error: “unless … don't” negates twice. Correct: unless the lawyers approve."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: unless + don't ist eine doppelte Verneinung.",
+      "en": "There is an error: unless + don't is a double negation."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „don't approve“: unless trägt das not schon.",
+      "en": "The error is “don't approve”: unless already carries the not."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-i-f2",
+   "type": "find",
+   "pat": "cn.if-words",
+   "prompt": "We can't start unless we will receive the signed contract.",
+   "err": [
+    5,
+    6
+   ],
+   "answer": "receive",
+   "fixed": "We can't start unless we receive the signed contract.",
+   "accepted": [
+    "get",
+    "have received",
+    "obtain"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach unless steht das Präsens (receive), kein will.",
+     "en": "The error: after unless use the present (receive), not will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach unless steht kein will.",
+      "en": "There is an error: no will after unless."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will receive“: Das ist der Reflex „Zukunft = will“.",
+      "en": "The error is “will receive”: it is the “future = will” reflex."
+     }
+    ]
+   },
+   "topic": "conditionals"
+  },
+  {
+   "id": "cn-i-m1",
+   "type": "meaning",
+   "pat": "cn.if-words",
+   "a": "We'll sign unless the terms change.",
+   "b": "We'll sign if the terms change.",
+   "q": {
+    "de": "Welcher Satz sagt: Bei geänderten Bedingungen unterschreiben wir nicht?",
+    "en": "Which sentence says: if the terms change, we won't sign?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Unless = „wenn nicht“: Ändern sich die Bedingungen, unterschreiben wir nicht.",
+     "en": "Right: sentence a. Unless = “if not”: if the terms change, we won't sign."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b sagt if das Gegenteil: Wir unterschreiben nur, wenn sich die Bedingungen ändern.",
+      "en": "In b, if says the opposite: we sign only if the terms change."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: unless dreht die Bedingung um, if nicht.",
+      "en": "Not the same: unless reverses the condition, if does not."
+     }
+    ]
+   },
+   "topic": "conditionals"
   },
   {
    "id": "ff-wn-k1",
@@ -5800,6 +8796,2229 @@
     ]
    },
    "topic": "mixed-cond"
+  },
+  {
+   "id": "pv-sim-k1",
+   "type": "kwt",
+   "pat": "pv.simple",
+   "from": "Nobody told us about the delay until Monday.",
+   "key": "TOLD",
+   "frame": "We ___ about the delay until Monday.",
+   "answer": "weren't told",
+   "accepted": [
+    "were not told"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Uns hat niemand etwas gesagt, das ist Passiv Past Simple: weren't told.",
+     "en": "Right: nobody told us → past simple passive: weren't told."
+    },
+    "wrong": [
+     {
+      "not": [
+       "told"
+      ],
+      "de": "Das Schlüsselwort told muss unverändert in der Lücke stehen.",
+      "en": "The key word told must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "were",
+       "was",
+       "weren't",
+       "wasn't"
+      ],
+      "de": "Ohne Form von be fehlt das Passiv: weren't told.",
+      "en": "Without a form of be the passive is missing: weren't told."
+     },
+     {
+      "if": [
+       "didn't"
+      ],
+      "de": "„didn't told“ gibt es nicht. Das Passiv braucht be + told.",
+      "en": "“didn't told” does not exist. The passive needs be + told."
+     },
+     {
+      "if": [
+       "wasn't"
+      ],
+      "de": "we ist Plural: weren't told, nicht wasn't.",
+      "en": "we is plural: weren't told, not wasn't."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-sim-k2",
+   "type": "kwt",
+   "pat": "pv.simple",
+   "from": "A courier delivered the samples yesterday morning.",
+   "key": "DELIVERED",
+   "frame": "The samples ___ a courier yesterday morning.",
+   "answer": "were delivered by",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Die Proben wurden geliefert, der Handelnde folgt mit by: were delivered by.",
+     "en": "Right: the samples were delivered, and the agent follows with by: were delivered by."
+    },
+    "wrong": [
+     {
+      "not": [
+       "delivered"
+      ],
+      "de": "Das Schlüsselwort delivered muss unverändert in der Lücke stehen.",
+      "en": "The key word delivered must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "by"
+      ],
+      "de": "Der Handelnde im Passiv braucht by: were delivered by a courier.",
+      "en": "The agent in the passive needs by: were delivered by a courier."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "samples ist Plural: were delivered, nicht was.",
+      "en": "samples is plural: were delivered, not was."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "„yesterday“ ist abgeschlossen: Past Simple, kein have been.",
+      "en": "“yesterday” is finished: past simple, no have been."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-sim-f1",
+   "type": "find",
+   "pat": "pv.simple",
+   "prompt": "The shipment was send to the wrong address by mistake.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "sent",
+   "fixed": "The shipment was sent to the wrong address by mistake.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach was steht die 3. Form von send: sent.",
+     "en": "The error: after was use the past participle of send: sent."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach was steht die 3. Form.",
+      "en": "There is an error: after was the past participle is needed."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „send“: Es muss die 3. Form sent sein.",
+      "en": "The error is “send”: it must be the past participle sent."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-sim-f2",
+   "type": "find",
+   "pat": "pv.simple",
+   "prompt": "Our invoices become paid within thirty days.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "are",
+   "fixed": "Our invoices are paid within thirty days.",
+   "accepted": [
+    "get"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „become“ ist hier falsch. Das Passiv braucht be: are paid.",
+     "en": "The error: “become” is wrong here. The passive needs be: are paid."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: become ist kein Passiv-Helfer.",
+      "en": "There is an error: become is not a passive auxiliary."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „become“: Es heißt are paid.",
+      "en": "The error is “become”: it should be are paid."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-sim-f3",
+   "type": "find",
+   "pat": "pv.simple",
+   "prompt": "The new hires were welcomed by the whole team on their first day.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: were welcomed by … ist richtiges Passiv Past Simple.",
+     "en": "No error: were welcomed by … is a correct past simple passive."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Past Simple Passiv mit by ist hier richtig.",
+      "en": "No error: the past simple passive with by is correct here."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-sim-m1",
+   "type": "meaning",
+   "pat": "pv.simple",
+   "a": "We weren't invited to the kickoff.",
+   "b": "We didn't invite anyone to the kickoff.",
+   "q": {
+    "de": "Welcher Satz sagt: Uns hat niemand zum Kickoff eingeladen?",
+    "en": "Which sentence says: nobody invited us to the kickoff?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. weren't invited = Mit uns wurde etwas getan, wir wurden nicht eingeladen.",
+     "en": "Right: sentence a. weren't invited = something was not done to us."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b sind wir die Handelnden: Wir haben niemanden eingeladen.",
+      "en": "In b we are the doers: we did not invite anyone."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a sagt, was mit uns geschah, b sagt, was wir getan haben.",
+      "en": "Not the same: a says what happened to us, b says what we did."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pro-k1",
+   "type": "kwt",
+   "pat": "pv.progressive",
+   "from": "Technicians are testing the new system at the moment.",
+   "key": "TESTED",
+   "frame": "The new system ___ technicians at the moment.",
+   "answer": "is being tested by",
+   "accepted": [
+    "'s being tested by"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: at the moment heißt: Das läuft gerade → is being tested by.",
+     "en": "Right: at the moment = in progress → is being tested by."
+    },
+    "wrong": [
+     {
+      "not": [
+       "tested"
+      ],
+      "de": "Das Schlüsselwort tested muss unverändert in der Lücke stehen.",
+      "en": "The key word tested must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "being"
+      ],
+      "de": "Ohne being fehlt „gerade jetzt“: is being tested by.",
+      "en": "Without being, “right now” is lost: is being tested by."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "not": [
+       "by"
+      ],
+      "de": "Der Handelnde im Passiv braucht by: is being tested by technicians.",
+      "en": "The agent in the passive needs by: is being tested by technicians."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "system ist Singular: is being tested, nicht are.",
+      "en": "system is singular: is being tested, not are."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pro-k2",
+   "type": "kwt",
+   "pat": "pv.progressive",
+   "from": "We are reviewing all applications at the moment.",
+   "key": "REVIEWED",
+   "frame": "All applications ___ at the moment.",
+   "answer": "are being reviewed",
+   "accepted": [
+    "are getting reviewed"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Die Bewerbungen werden gerade geprüft → are being reviewed.",
+     "en": "Right: the applications are being checked right now → are being reviewed."
+    },
+    "wrong": [
+     {
+      "not": [
+       "reviewed"
+      ],
+      "de": "Das Schlüsselwort reviewed muss unverändert in der Lücke stehen.",
+      "en": "The key word reviewed must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "not": [
+       "being",
+       "getting"
+      ],
+      "de": "Ohne being fehlt „gerade jetzt“: are being reviewed.",
+      "en": "Without being, “right now” is lost: are being reviewed."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "applications ist Plural: are being reviewed, nicht is.",
+      "en": "applications is plural: are being reviewed, not is."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "„at the moment“ meint jetzt, also kein have been.",
+      "en": "“at the moment” means now, so no have been."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pro-f1",
+   "type": "find",
+   "pat": "pv.progressive",
+   "prompt": "The documents are being print right now, so please wait.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "printed",
+   "fixed": "The documents are being printed right now, so please wait.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach being steht die 3. Form: printed.",
+     "en": "The error: after being use the past participle: printed."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach being braucht das Verb die 3. Form.",
+      "en": "There is an error: after being the verb needs the participle."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „print“: Nach being steht printed.",
+      "en": "The error is “print”: after being use printed."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pro-f2",
+   "type": "find",
+   "pat": "pv.progressive",
+   "prompt": "Our website is redesigning at the moment by an external agency.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "is being redesigned",
+   "fixed": "Our website is being redesigned at the moment by an external agency.",
+   "accepted": [
+    "is getting redesigned",
+    "'s being redesigned"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „is redesigning“ macht die Website zum Handelnden. Passiv: is being redesigned.",
+     "en": "The error: “is redesigning” makes the website the doer. Passive: is being redesigned."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Die Website gestaltet nichts selbst um.",
+      "en": "There is an error: the website does not redesign anything itself."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „is redesigning“: Es muss is being redesigned heißen.",
+      "en": "The error is “is redesigning”: it should be is being redesigned."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pro-f3",
+   "type": "find",
+   "pat": "pv.progressive",
+   "prompt": "The new hires are being trained by our senior engineers this week.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: are being trained ist richtiges Passiv Continuous.",
+     "en": "No error: are being trained is a correct continuous passive."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: are being trained by … ist hier richtig.",
+      "en": "No error: are being trained by … fits here."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pro-m1",
+   "type": "meaning",
+   "pat": "pv.progressive",
+   "a": "The building is being inspected.",
+   "b": "The building is inspected.",
+   "q": {
+    "de": "Welcher Satz beschreibt einen Vorgang, der jetzt gerade läuft?",
+    "en": "Which sentence describes a process happening right now?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. is being inspected = die Prüfung läuft gerade.",
+     "en": "Right: sentence a. is being inspected = the inspection is under way."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "b nennt eine Tatsache oder Gewohnheit, nicht den laufenden Vorgang.",
+      "en": "b states a fact or habit, not a process under way."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: being macht aus der Tatsache einen laufenden Vorgang.",
+      "en": "Not the same: being turns the fact into a process under way."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-per-k1",
+   "type": "kwt",
+   "pat": "pv.perfect",
+   "from": "Someone has already booked the meeting room.",
+   "key": "BOOKED",
+   "frame": "The meeting room ___ already.",
+   "answer": "has been booked",
+   "accepted": [
+    "'s been booked"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Der Raum ist schon gebucht → Passiv Present Perfect: has been booked.",
+     "en": "Right: the room is already taken → present perfect passive: has been booked."
+    },
+    "wrong": [
+     {
+      "not": [
+       "booked"
+      ],
+      "de": "Das Schlüsselwort booked muss unverändert in der Lücke stehen.",
+      "en": "The key word booked must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "booked"
+      ],
+      "not": [
+       "been"
+      ],
+      "de": "Ohne been fehlt das Passiv: has been booked.",
+      "en": "Without been the passive is missing: has been booked."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "room ist Singular: has been booked, nicht have.",
+      "en": "room is singular: has been booked, not have."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "„already“ verlangt das Perfect, nicht was booked.",
+      "en": "“already” goes with the perfect, not was booked."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-per-k2",
+   "type": "kwt",
+   "pat": "pv.perfect",
+   "from": "They have not told us the results yet.",
+   "key": "TOLD",
+   "frame": "We ___ the results yet.",
+   "answer": "haven't been told",
+   "accepted": [
+    "have not been told"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Uns wurde nichts mitgeteilt, das ist Present Perfect Passiv: haven't been told.",
+     "en": "Right: we have not been given the results → present perfect passive: haven't been told."
+    },
+    "wrong": [
+     {
+      "not": [
+       "told"
+      ],
+      "de": "Das Schlüsselwort told muss unverändert in der Lücke stehen.",
+      "en": "The key word told must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "told"
+      ],
+      "not": [
+       "been"
+      ],
+      "de": "Ohne been fehlt das Passiv: haven't been told.",
+      "en": "Without been the passive is missing: haven't been told."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "„yet“ verlangt das Perfect, nicht wasn't oder weren't.",
+      "en": "“yet” goes with the perfect, not wasn't or weren't."
+     },
+     {
+      "if": [
+       "hasn't"
+      ],
+      "de": "we ist Plural: haven't been told, nicht hasn't.",
+      "en": "we is plural: haven't been told, not hasn't."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-per-f1",
+   "type": "find",
+   "pat": "pv.perfect",
+   "prompt": "The system is used by our sales team since 2020.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "has been used",
+   "fixed": "The system has been used by our sales team since 2020.",
+   "accepted": [
+    "'s been used"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Mit since steht das Perfect: has been used, nicht is used.",
+     "en": "The error: with since use the perfect: has been used, not is used."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Mit since passt is used nicht.",
+      "en": "There is an error: is used does not go with since."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „is used“: Mit since steht has been used.",
+      "en": "The error is “is used”: with since use has been used."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-per-f2",
+   "type": "find",
+   "pat": "pv.perfect",
+   "prompt": "Two company phones have been stole from the office again.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "stolen",
+   "fixed": "Two company phones have been stolen from the office again.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach been steht die 3. Form von steal: stolen.",
+     "en": "The error: after been use the past participle of steal: stolen."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach been braucht steal die 3. Form.",
+      "en": "There is an error: after been steal needs the participle."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „stole“: Die 3. Form ist stolen.",
+      "en": "The error is “stole”: the participle is stolen."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-per-m1",
+   "type": "meaning",
+   "pat": "pv.perfect",
+   "a": "The system has been used since 2019.",
+   "b": "The system was used in 2019.",
+   "q": {
+    "de": "Welcher Satz sagt: Das System wird auch heute noch benutzt?",
+    "en": "Which sentence says the system is still used today?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. has been used since reicht bis in die Gegenwart.",
+     "en": "Right: sentence a. has been used since reaches until today."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "b nennt nur 2019. Ob es heute noch benutzt wird, sagt der Satz nicht.",
+      "en": "b names only 2019. It does not say whether it is still used today."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a reicht bis heute, b bleibt in 2019.",
+      "en": "Not the same: a reaches until today, b stays in 2019."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-mod-k1",
+   "type": "kwt",
+   "pat": "pv.modal-future",
+   "from": "We will send the final invoice by Friday.",
+   "key": "SENT",
+   "frame": "The final invoice ___ by Friday.",
+   "answer": "will be sent",
+   "accepted": [
+    "'ll be sent",
+    "is going to be sent",
+    "is to be sent"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Die Rechnung wird noch verschickt → Passiv Zukunft: will be sent.",
+     "en": "Right: the invoice is yet to be sent → future passive: will be sent."
+    },
+    "wrong": [
+     {
+      "not": [
+       "sent"
+      ],
+      "de": "Das Schlüsselwort sent muss unverändert in der Lücke stehen.",
+      "en": "The key word sent must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "be",
+       "sent"
+      ],
+      "not": [
+       "will",
+       "going",
+       "to"
+      ],
+      "de": "Gemeint ist die Zukunft: will be sent, nicht must, should oder can.",
+      "en": "The future is meant: will be sent, not must, should or can."
+     },
+     {
+      "if": [
+       "will",
+       "sent"
+      ],
+      "not": [
+       "be"
+      ],
+      "de": "„will sent“ gibt es nicht: Nach will fehlt be. Richtig ist will be sent.",
+      "en": "“will sent” does not exist: after will the be is missing. Correct: will be sent."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "not": [
+       "will",
+       "going"
+      ],
+      "de": "„has been sent“ meint: schon geschehen. Hier steht es noch an.",
+      "en": "“has been sent” means: already done. Here it is still to come."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-mod-k2",
+   "type": "kwt",
+   "pat": "pv.modal-future",
+   "from": "Employees can book rooms online.",
+   "key": "BOOKED",
+   "frame": "Rooms ___ online by employees.",
+   "answer": "can be booked",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Die Räume können gebucht werden → can be booked.",
+     "en": "Right: rooms can be booked → can be booked."
+    },
+    "wrong": [
+     {
+      "not": [
+       "booked"
+      ],
+      "de": "Das Schlüsselwort booked muss unverändert in der Lücke stehen.",
+      "en": "The key word booked must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "can",
+       "booked"
+      ],
+      "not": [
+       "be"
+      ],
+      "de": "Nach can fehlt be: can be booked.",
+      "en": "After can the be is missing: can be booked."
+     },
+     {
+      "if": [
+       "booked"
+      ],
+      "not": [
+       "be",
+       "can"
+      ],
+      "de": "Für „können“ braucht das Passiv can + be + 3. Form: can be booked.",
+      "en": "For “können” the passive needs can + be + past participle: can be booked."
+     },
+     {
+      "if": [
+       "booking"
+      ],
+      "de": "Nach be steht die 3. Form: booked, nicht booking.",
+      "en": "After be use the past participle: booked, not booking."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-mod-f1",
+   "type": "find",
+   "pat": "pv.modal-future",
+   "prompt": "The agenda will sent to all participants tomorrow morning.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "will be sent",
+   "fixed": "The agenda will be sent to all participants tomorrow morning.",
+   "accepted": [
+    "'ll be sent"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach will fehlt be: will be sent.",
+     "en": "The error: after will the be is missing: will be sent."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Im Passiv steht nach will ein be.",
+      "en": "There is an error: in the passive will is followed by be."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will sent“: Es heißt will be sent.",
+      "en": "The error is “will sent”: it should be will be sent."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-mod-f2",
+   "type": "find",
+   "pat": "pv.modal-future",
+   "prompt": "The proposal can't approved without a second signature.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "can't be approved",
+   "fixed": "The proposal can't be approved without a second signature.",
+   "accepted": [
+    "cannot be approved"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach can't fehlt be: can't be approved.",
+     "en": "The error: after can't the be is missing: can't be approved."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach dem Modalwort fehlt be.",
+      "en": "There is an error: the be is missing after the modal."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „can't approved“: Es heißt can't be approved.",
+      "en": "The error is “can't approved”: it should be can't be approved."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-mod-f3",
+   "type": "find",
+   "pat": "pv.modal-future",
+   "prompt": "All expense reports must be submitted before the end of the month.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: must be submitted ist richtiges Passiv mit Modalverb.",
+     "en": "No error: must be submitted is a correct passive with a modal verb."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: must be + 3. Form ist hier richtig.",
+      "en": "No error: must be + past participle is correct here."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-mod-m1",
+   "type": "meaning",
+   "pat": "pv.modal-future",
+   "a": "The old accounts will be closed.",
+   "b": "The old accounts have been closed.",
+   "q": {
+    "de": "Welcher Satz sagt: Die alten Konten sind noch offen?",
+    "en": "Which sentence says the old accounts are still open?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. will be closed = Das Schließen steht noch an.",
+     "en": "Right: sentence a. will be closed = the closing is still to come."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "b sagt: Die Konten sind schon geschlossen.",
+      "en": "b says: the accounts are already closed."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: will be liegt in der Zukunft, have been ist schon geschehen.",
+      "en": "Not the same: will be is future, have been is already done."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pre-k1",
+   "type": "kwt",
+   "pat": "pv.prep-agent",
+   "from": "Our legal team looked into the complaint.",
+   "key": "LOOKED",
+   "frame": "The complaint ___ our legal team.",
+   "answer": "was looked into by",
+   "accepted": [
+    "got looked into by"
+   ],
+   "words": [
+    4,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Die Präposition into bleibt, der Handelnde folgt mit by: was looked into by.",
+     "en": "Right: the preposition into stays and the agent follows with by: was looked into by."
+    },
+    "wrong": [
+     {
+      "not": [
+       "looked"
+      ],
+      "de": "Das Schlüsselwort looked muss unverändert in der Lücke stehen.",
+      "en": "The key word looked must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "into"
+      ],
+      "de": "Die Präposition into bleibt im Passiv stehen: was looked into by.",
+      "en": "The preposition into stays in the passive: was looked into by."
+     },
+     {
+      "if": [
+       "into"
+      ],
+      "not": [
+       "by"
+      ],
+      "de": "Der Handelnde im Passiv braucht by: was looked into by.",
+      "en": "The agent in the passive needs by: was looked into by."
+     },
+     {
+      "if": [
+       "from"
+      ],
+      "de": "„from“ ist die wörtliche Übersetzung von „von“. Es heißt by.",
+      "en": "“from” is the literal translation of “von”. It should be by."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pre-k2",
+   "type": "kwt",
+   "pat": "pv.prep-agent",
+   "from": "Someone dealt with the issue immediately.",
+   "key": "DEALT",
+   "frame": "The issue ___ immediately.",
+   "answer": "was dealt with",
+   "accepted": [
+    "got dealt with"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: with gehört fest zu deal und bleibt im Passiv: was dealt with.",
+     "en": "Right: with belongs to deal and stays in the passive: was dealt with."
+    },
+    "wrong": [
+     {
+      "not": [
+       "dealt"
+      ],
+      "de": "Das Schlüsselwort dealt muss unverändert in der Lücke stehen.",
+      "en": "The key word dealt must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "with"
+      ],
+      "de": "Die Präposition with bleibt im Passiv stehen: was dealt with.",
+      "en": "The preposition with stays in the passive: was dealt with."
+     },
+     {
+      "if": [
+       "dealt"
+      ],
+      "not": [
+       "was",
+       "were",
+       "got"
+      ],
+      "de": "Das Passiv braucht hier was: was dealt with.",
+      "en": "The passive needs was here: was dealt with."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "„immediately“ nennt keinen Zeitraum bis jetzt, also kein has been.",
+      "en": "“immediately” names no period up to now, so no has been."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pre-f1",
+   "type": "find",
+   "pat": "pv.prep-agent",
+   "prompt": "The new budget was approved from the finance director on Monday.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "by",
+   "fixed": "The new budget was approved by the finance director on Monday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Handelnde im Passiv steht mit by, nicht mit from.",
+     "en": "The error: the agent in the passive takes by, not from."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Der Handelnde braucht by.",
+      "en": "There is an error: the agent needs by."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „from“: Der Handelnde steht mit by.",
+      "en": "The error is “from”: the agent takes by."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pre-f2",
+   "type": "find",
+   "pat": "pv.prep-agent",
+   "prompt": "The problem was dealt quickly by the support team.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "dealt with",
+   "fixed": "The problem was dealt with quickly by the support team.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: with fehlt. Bei deal with bleibt die Präposition im Passiv: dealt with.",
+     "en": "The error: with is missing. With deal with the preposition stays in the passive: dealt with."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Bei deal with fehlt die Präposition.",
+      "en": "There is an error: with deal with the preposition is missing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „dealt“: Es fehlt with.",
+      "en": "The error is “dealt”: with is missing."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pre-f3",
+   "type": "find",
+   "pat": "pv.prep-agent",
+   "prompt": "The new policy was drawn up by the legal team last month.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: was drawn up by … ist richtig, up bleibt beim Verb.",
+     "en": "No error: was drawn up by … is correct, up stays with the verb."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Passiv mit up und by ist hier richtig.",
+      "en": "No error: the passive with up and by is correct here."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pv-pre-m1",
+   "type": "meaning",
+   "pat": "pv.prep-agent",
+   "a": "The deal was approved by the board.",
+   "b": "The deal was approved.",
+   "q": {
+    "de": "Welcher Satz sagt, wer die Vereinbarung genehmigt hat?",
+    "en": "Which sentence says who approved the deal?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Mit by wird der Handelnde genannt.",
+     "en": "Right: sentence a. With by the agent is named."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "b lässt den Handelnden offen: Wir erfahren nicht, wer genehmigt hat.",
+      "en": "b leaves the agent open: we do not learn who approved it."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a nennt den Handelnden.",
+      "en": "Not the same: only a names the agent."
+     }
+    ]
+   },
+   "topic": "passive"
+  },
+  {
+   "id": "pp-mod-k1",
+   "type": "kwt",
+   "pat": "pp.modal",
+   "from": "Someone must check the figures before the call.",
+   "key": "MUST",
+   "frame": "The figures ___ checked before the call.",
+   "answer": "must be",
+   "accepted": [
+    "must all be",
+    "must first be",
+    "must also be",
+    "must still be"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: must + be + Partizip. Die Zahlen werden geprüft, sie prüfen nicht selbst.",
+     "en": "Right: must + be + participle. The figures get checked; they check nothing themselves."
+    },
+    "wrong": [
+     {
+      "not": [
+       "must"
+      ],
+      "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
+      "en": "The key word must must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "must",
+       "been"
+      ],
+      "de": "Nach dem Modalverb steht be, nicht been: must be checked.",
+      "en": "After the modal verb use be, not been: must be checked."
+     },
+     {
+      "if": [
+       "must"
+      ],
+      "not": [
+       "be"
+      ],
+      "de": "Ohne be fehlt das Passiv: must be checked.",
+      "en": "Without be the passive is missing: must be checked."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-mod-k2",
+   "type": "kwt",
+   "pat": "pp.modal",
+   "from": "I think someone ought to tell the client about the delay.",
+   "key": "SHOULD",
+   "frame": "The client ___ about the delay.",
+   "answer": "should be told",
+   "accepted": [
+    "should be informed",
+    "should be notified",
+    "should be advised"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: should + be + Partizip. Der Kunde bekommt die Information, er gibt sie nicht.",
+     "en": "Right: should + be + participle. The client receives the news; he does not give it."
+    },
+    "wrong": [
+     {
+      "not": [
+       "should"
+      ],
+      "de": "Das Schlüsselwort should muss unverändert in der Lücke stehen.",
+      "en": "The key word should must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "should"
+      ],
+      "not": [
+       "be"
+      ],
+      "de": "Nach should steht be, nicht been oder being.",
+      "en": "After should use be, not been or being."
+     },
+     {
+      "if": [
+       "should",
+       "tell"
+      ],
+      "de": "Aktiv: Der Kunde würde selbst informieren. Es braucht be + Partizip.",
+      "en": "Active: the client would be informing someone. It needs be + participle."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-mod-f1",
+   "type": "find",
+   "pat": "pp.modal",
+   "prompt": "The proposal can approved by the board next week.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "can be approved",
+   "fixed": "The proposal can be approved by the board next week.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach can fehlt be. Richtig: can be approved.",
+     "en": "The error: be is missing after can. Correct: can be approved."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach can fehlt be.",
+      "en": "There is an error: be is missing after can."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „can approved“: Modal + be + Partizip.",
+      "en": "The error is in “can approved”: modal + be + participle."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-mod-f2",
+   "type": "find",
+   "pat": "pp.modal",
+   "prompt": "All attendees must been notified before the workshop starts.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "be",
+   "fixed": "All attendees must be notified before the workshop starts.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „must been“. Nach einem Modalverb steht be.",
+     "en": "The error: “must been”. After a modal verb use be."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach must steht be, nicht been.",
+      "en": "There is an error: after must use be, not been."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „been“: Nach must steht be.",
+      "en": "The error is in “been”: be follows must."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-mod-f3",
+   "type": "find",
+   "pat": "pp.modal",
+   "prompt": "The new policy has to be explained to every team leader.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: has to + be + Partizip ist das Passiv mit Modal.",
+     "en": "No error: has to + be + participle is the passive with a modal."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: has to be explained ist richtig gebaut.",
+      "en": "No error: has to be explained is built correctly."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-mod-f4",
+   "type": "find",
+   "pat": "pp.modal",
+   "prompt": "The old files should be delete from the shared drive.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "deleted",
+   "fixed": "The old files should be deleted from the shared drive.",
+   "accepted": [
+    "removed"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach be steht das Partizip: deleted.",
+     "en": "The error: after be the participle is needed: deleted."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach be fehlt die Partizip-Endung.",
+      "en": "There is an error: the participle ending is missing after be."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „delete“: be + Partizip, also deleted.",
+      "en": "The error is in “delete”: be + participle, so deleted."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-mod-m1",
+   "type": "meaning",
+   "pat": "pp.modal",
+   "a": "The files should be sent today.",
+   "b": "The files must be sent today.",
+   "q": {
+    "de": "Welcher Satz drückt eine strikte Pflicht aus, nicht nur eine Empfehlung?",
+    "en": "Which sentence expresses a strict obligation, not just a recommendation?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. must verlangt, should empfiehlt nur.",
+     "en": "Right: sentence b. must demands, should only recommends."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a steht should: eine Empfehlung, keine feste Pflicht.",
+      "en": "Sentence a has should: a recommendation, not a firm obligation."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: should rät, must verlangt.",
+      "en": "Not the same: should advises, must demands."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-per-k1",
+   "type": "kwt",
+   "pat": "pp.perfect",
+   "from": "The team had already sent the invoices before the client called.",
+   "key": "ALREADY",
+   "frame": "The invoices ___ sent before the client called.",
+   "answer": "had already been",
+   "accepted": [
+    "had all already been"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: had already been. Das Senden lag vor dem Anruf des Kunden.",
+     "en": "Right: had already been. The sending came before the client's call."
+    },
+    "wrong": [
+     {
+      "not": [
+       "already"
+      ],
+      "de": "Das Schlüsselwort already muss unverändert in der Lücke stehen.",
+      "en": "The key word already must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "already"
+      ],
+      "not": [
+       "had",
+       "were"
+      ],
+      "de": "Mit before the client called braucht es had been: früher als der Anruf.",
+      "en": "With before the client called use had been: earlier than the call."
+     },
+     {
+      "if": [
+       "had",
+       "already"
+      ],
+      "not": [
+       "been"
+      ],
+      "de": "Das Passiv braucht been: had already been sent.",
+      "en": "The passive needs been: had already been sent."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-per-k2",
+   "type": "kwt",
+   "pat": "pp.perfect",
+   "from": "Someone has just announced the new strategy.",
+   "key": "JUST",
+   "frame": "The new strategy ___ announced.",
+   "answer": "has just been",
+   "accepted": [
+    "has only just been",
+    "was just"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: has just been. just betont: Es ist eben erst passiert, das Ergebnis gilt jetzt.",
+     "en": "Right: has just been. just stresses: it only now happened, and the result holds now."
+    },
+    "wrong": [
+     {
+      "not": [
+       "just"
+      ],
+      "de": "Das Schlüsselwort just muss unverändert in der Lücke stehen.",
+      "en": "The key word just must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "just",
+       "has"
+      ],
+      "not": [
+       "been"
+      ],
+      "de": "Das Passiv braucht been: has just been announced.",
+      "en": "The passive needs been: has just been announced."
+     },
+     {
+      "if": [
+       "had",
+       "just"
+      ],
+      "de": "Ohne Zeitangabe gilt das Perfekt: has just been, nicht had just been.",
+      "en": "With no past time given the perfect fits: has just been, not had just been."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-per-k3",
+   "type": "kwt",
+   "pat": "pp.perfect",
+   "from": "The IT team fixed the bug on Tuesday.",
+   "key": "FIXED",
+   "frame": "The bug ___ by the IT team on Tuesday.",
+   "answer": "was fixed",
+   "accepted": [
+    "got fixed",
+    "was finally fixed",
+    "was quickly fixed",
+    "was already fixed",
+    "was eventually fixed"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: was fixed. Mit „on Tuesday“ steht das Simple Past im Passiv.",
+     "en": "Right: was fixed. “On Tuesday” takes the passive simple past."
+    },
+    "wrong": [
+     {
+      "not": [
+       "fixed"
+      ],
+      "de": "Das Schlüsselwort fixed muss unverändert in der Lücke stehen.",
+      "en": "The key word fixed must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "has",
+       "been"
+      ],
+      "de": "Mit on Tuesday steht kein has been: Ein fester Zeitpunkt braucht was.",
+      "en": "With on Tuesday no has been: a finished time needs was."
+     },
+     {
+      "if": [
+       "fixed"
+      ],
+      "not": [
+       "was",
+       "got"
+      ],
+      "de": "Das Passiv braucht was + Partizip: was fixed.",
+      "en": "The passive needs was + participle: was fixed."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-per-f1",
+   "type": "find",
+   "pat": "pp.perfect",
+   "prompt": "The new logo has been presented to the board on Monday.",
+   "err": [
+    3,
+    5
+   ],
+   "answer": "was presented",
+   "fixed": "The new logo was presented to the board on Monday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „on Monday“ ist ein fester Zeitpunkt. Richtig: was presented.",
+     "en": "The error: “on Monday” is a finished time. Correct: was presented."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Mit on Monday passt has been nicht.",
+      "en": "There is an error: has been does not fit with on Monday."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „has been presented“: fester Zeitpunkt, also was.",
+      "en": "The error is in “has been presented”: a finished time needs was."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-per-f2",
+   "type": "find",
+   "pat": "pp.perfect",
+   "prompt": "By the time the client called, the invoice has been sent.",
+   "err": [
+    8,
+    9
+   ],
+   "answer": "had been",
+   "fixed": "By the time the client called, the invoice had been sent.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Mit „by the time … called“ steht had been, nicht has been.",
+     "en": "The error: with “by the time … called” use had been, not has been."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Die Zeitform passt nicht zu by the time.",
+      "en": "There is an error: the tense does not fit by the time."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „has been“: Es geschah vor dem Anruf, also had been.",
+      "en": "The error is in “has been”: it happened before the call, so had been."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-per-f3",
+   "type": "find",
+   "pat": "pp.perfect",
+   "prompt": "The invoice had been paid by the time the auditors arrived.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: had been + Partizip passt zu by the time, es war früher.",
+     "en": "No error: had been + participle fits by the time, it was earlier."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Die Zahlung lag vor der Ankunft, daher had been paid.",
+      "en": "No error: the payment came before the arrival, hence had been paid."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-per-f4",
+   "type": "find",
+   "pat": "pp.perfect",
+   "prompt": "The meeting room had cleaned before we arrived.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "had been cleaned",
+   "fixed": "The meeting room had been cleaned before we arrived.",
+   "accepted": [
+    "was cleaned"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „had cleaned“ ist aktiv. Das Passiv heißt had been cleaned.",
+     "en": "The error: “had cleaned” is active. The passive is had been cleaned."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Im Passiv fehlt been.",
+      "en": "There is an error: been is missing in the passive."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „had cleaned“: Der Raum putzt nicht selbst.",
+      "en": "The error is in “had cleaned”: the room does not clean itself."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-per-m1",
+   "type": "meaning",
+   "pat": "pp.perfect",
+   "a": "The invoice was paid on Friday.",
+   "b": "The invoice has been paid.",
+   "q": {
+    "de": "Welcher Satz nennt keinen Zeitpunkt und betont, dass die Sache jetzt erledigt ist?",
+    "en": "Which sentence names no time and stresses that the matter is settled now?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. has been paid betont das Ergebnis bis jetzt, ohne Zeitpunkt.",
+     "en": "Right: sentence b. has been paid stresses the result up to now, with no time."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "a nennt Friday als abgeschlossenen Zeitpunkt: Simple Past.",
+      "en": "Sentence a names Friday as a finished time: simple past."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: was paid datiert die Zahlung, has been paid zählt das Ergebnis.",
+      "en": "Not the same: was paid dates the payment, has been paid counts the result."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-prs-k1",
+   "type": "kwt",
+   "pat": "pp.personal",
+   "from": "People say that the new director is very demanding.",
+   "key": "SAID",
+   "frame": "The new director ___ very demanding.",
+   "answer": "is said to be",
+   "accepted": [
+    "is also said to be",
+    "is often said to be",
+    "is generally said to be",
+    "is widely said to be"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: is said to be. Das Gerücht steht im Passiv, danach folgt to + Infinitiv.",
+     "en": "Right: is said to be. The rumor is in the passive, followed by to + infinitive."
+    },
+    "wrong": [
+     {
+      "not": [
+       "said"
+      ],
+      "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
+      "en": "The key word said must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "said"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach said folgt to + Infinitiv: said to be very demanding.",
+      "en": "After said comes to + infinitive: said to be very demanding."
+     },
+     {
+      "if": [
+       "said"
+      ],
+      "not": [
+       "is"
+      ],
+      "de": "Das Passiv braucht is vor said: is said to be.",
+      "en": "The passive needs is before said: is said to be."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-prs-k2",
+   "type": "kwt",
+   "pat": "pp.personal",
+   "from": "Experts believe that the company lost a lot of customers last year.",
+   "key": "BELIEVED",
+   "frame": "The company ___ a lot of customers last year.",
+   "answer": "is believed to have lost",
+   "accepted": [],
+   "words": [
+    5,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: is believed to have lost. Das Verlieren liegt vor der Annahme: to have + Partizip.",
+     "en": "Right: is believed to have lost. The losing came earlier than the belief: to have + participle."
+    },
+    "wrong": [
+     {
+      "not": [
+       "believed"
+      ],
+      "de": "Das Schlüsselwort believed muss unverändert in der Lücke stehen.",
+      "en": "The key word believed must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "believed"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "Für Früheres steht to have + Partizip: to have lost.",
+      "en": "For earlier events use to have + participle: to have lost."
+     },
+     {
+      "if": [
+       "believed",
+       "lose"
+      ],
+      "de": "Nach to have steht das Partizip lost, nicht lose.",
+      "en": "After to have the participle lost is needed, not lose."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-prs-f1",
+   "type": "find",
+   "pat": "pp.personal",
+   "prompt": "The merger is expected completing in June.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "expected to complete",
+   "fixed": "The merger is expected to complete in June.",
+   "accepted": [
+    "expected to be completed"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach expected fehlt to. Richtig: expected to complete.",
+     "en": "The error: to is missing after expected. Correct: expected to complete."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach is expected folgt to + Infinitiv.",
+      "en": "There is an error: after is expected comes to + infinitive."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „expected completing“: nach expected steht to.",
+      "en": "The error is in “expected completing”: to follows expected."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-prs-f2",
+   "type": "find",
+   "pat": "pp.personal",
+   "prompt": "The founder is said to has left the firm in 2019.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "have",
+   "fixed": "The founder is said to have left the firm in 2019.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach to steht der Infinitiv: to have left.",
+     "en": "The error: after to the infinitive is needed: to have left."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach to steht have, nicht has.",
+      "en": "There is an error: after to use have, not has."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „has“: Nach to steht have + Partizip.",
+      "en": "The error is in “has”: after to use have + participle."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-prs-f3",
+   "type": "find",
+   "pat": "pp.personal",
+   "prompt": "The bank is said to planning layoffs.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "to be planning",
+   "fixed": "The bank is said to be planning layoffs.",
+   "accepted": [
+    "to plan"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „to planning“. Richtig: to be planning oder to plan.",
+     "en": "The error: “to planning”. Correct: to be planning or to plan."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach to fehlt be oder die Grundform.",
+      "en": "There is an error: be or the base form is missing after to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to planning“: Nach to steht be planning oder plan.",
+      "en": "The error is in “to planning”: after to use be planning or plan."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-prs-f4",
+   "type": "find",
+   "pat": "pp.personal",
+   "prompt": "The two firms are said to be close to an agreement.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: are said to be … gibt das Gerücht sachlich wieder.",
+     "en": "No error: are said to be … reports the rumor neutrally."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: are said to be ist hier richtig gebaut.",
+      "en": "No error: are said to be is built correctly here."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-prs-m1",
+   "type": "meaning",
+   "pat": "pp.personal",
+   "a": "The warehouse is said to be closing.",
+   "b": "The warehouse is closing.",
+   "q": {
+    "de": "Welcher Satz gibt nur ein Gerücht wieder und lässt offen, ob es stimmt?",
+    "en": "Which sentence only passes on a rumor and leaves it open whether it is true?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. is said to = man sagt es, aber ob es stimmt, bleibt offen.",
+     "en": "Right: sentence a. is said to = people say so; whether it is true stays open."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "b stellt es als Tatsache dar, ohne Quelle.",
+      "en": "Sentence b presents it as a fact, with no source."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: b behauptet es sicher, a gibt nur ein Gerücht wieder.",
+      "en": "Not the same: b states it as certain, a only passes on a rumor."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-bei-k1",
+   "type": "kwt",
+   "pat": "pp.being",
+   "from": "She was upset because nobody had told her about the change.",
+   "key": "BEING",
+   "frame": "She was upset about ___ about the change.",
+   "answer": "not being told",
+   "accepted": [
+    "never being told",
+    "not being informed",
+    "not being notified",
+    "not being kept informed"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: not being told. Nach der Präposition about steht -ing, im Passiv being + Partizip.",
+     "en": "Right: not being told. After the preposition about comes -ing, in the passive being + participle."
+    },
+    "wrong": [
+     {
+      "not": [
+       "being"
+      ],
+      "de": "Das Schlüsselwort being muss unverändert in der Lücke stehen.",
+      "en": "The key word being must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "not": [
+       "told",
+       "informed",
+       "notified",
+       "aware",
+       "kept"
+      ],
+      "de": "Nach about steht being + Partizip, nicht to be: not being told.",
+      "en": "After about use being + participle, not to be: not being told."
+     },
+     {
+      "if": [
+       "telling"
+      ],
+      "de": "Aktiv: Sie wurde informiert, sie informierte nicht. Gesucht: being + Partizip.",
+      "en": "Active: she was the one informed, not the informer. Needed: being + participle."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-bei-k2",
+   "type": "kwt",
+   "pat": "pp.being",
+   "from": "Nobody asked for his opinion, and he left the meeting early.",
+   "key": "BEING",
+   "frame": "He left the meeting early without ___ for his opinion.",
+   "answer": "being asked",
+   "accepted": [
+    "ever being asked"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: being asked. Nach without steht -ing, im Passiv being + Partizip.",
+     "en": "Right: being asked. After without comes -ing, in the passive being + participle."
+    },
+    "wrong": [
+     {
+      "not": [
+       "being"
+      ],
+      "de": "Das Schlüsselwort being muss unverändert in der Lücke stehen.",
+      "en": "The key word being must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "not": [
+       "asked"
+      ],
+      "de": "Nach without steht being + Partizip, nicht to be: being asked.",
+      "en": "After without use being + participle, not to be: being asked."
+     },
+     {
+      "if": [
+       "asking"
+      ],
+      "de": "Aktiv: Er wurde gefragt, er fragte nicht. Gesucht: being + Partizip.",
+      "en": "Active: he was the one asked, not the asker. Needed: being + participle."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-bei-f1",
+   "type": "find",
+   "pat": "pp.being",
+   "prompt": "I really appreciate to be kept informed about the project.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "being",
+   "fixed": "I really appreciate being kept informed about the project.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach appreciate steht -ing: being kept informed.",
+     "en": "The error: after appreciate comes -ing: being kept informed."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach appreciate folgt being, nicht to be.",
+      "en": "There is an error: appreciate is followed by being, not to be."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to be“: appreciate + being + Partizip.",
+      "en": "The error is in “to be”: appreciate + being + participle."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-bei-f2",
+   "type": "find",
+   "pat": "pp.being",
+   "prompt": "She hates being interrupt when she presents.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "interrupted",
+   "fixed": "She hates being interrupted when she presents.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach being steht das Partizip: interrupted.",
+     "en": "The error: after being the participle is needed: interrupted."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach being fehlt die Partizip-Endung.",
+      "en": "There is an error: the participle ending is missing after being."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „interrupt“: being + Partizip, also interrupted.",
+      "en": "The error is in “interrupt”: being + participle, so interrupted."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-bei-f3",
+   "type": "find",
+   "pat": "pp.being",
+   "prompt": "He was angry about not been invited to the launch.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "being",
+   "fixed": "He was angry about not being invited to the launch.",
+   "accepted": [
+    "having been"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach not steht being: not being invited.",
+     "en": "The error: after not use being: not being invited."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach about not fehlt being statt been.",
+      "en": "There is an error: being is needed instead of been after about not."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „been“: Nach about steht being + Partizip.",
+      "en": "The error is in “been”: after about use being + participle."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-bei-f4",
+   "type": "find",
+   "pat": "pp.being",
+   "prompt": "The intern was upset about being left out of the meeting.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: about + being + Partizip ist die richtige -ing-Form.",
+     "en": "No error: about + being + participle is the correct -ing form."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach about steht being left out ganz richtig.",
+      "en": "No error: being left out is exactly right after about."
+     }
+    ]
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "id": "pp-bei-m1",
+   "type": "meaning",
+   "pat": "pp.being",
+   "a": "I don't like asking customers for feedback.",
+   "b": "I don't like being asked for feedback.",
+   "q": {
+    "de": "Welcher Satz sagt: Ich werde nicht gern um Feedback gebeten?",
+    "en": "Which sentence says: I do not like it when I am asked for feedback?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Mit being asked werde ich gefragt, und nicht ich frage.",
+     "en": "Right: sentence b. being asked = I am the one asked (passive)."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a fragst du selbst: asking ist aktiv.",
+      "en": "In a you do the asking: asking is active."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: asking = ich frage, being asked = ich werde gefragt.",
+      "en": "Not the same: asking = I ask, being asked = I get asked."
+     }
+    ]
+   },
+   "topic": "passive-plus"
   },
   {
    "id": "pp-ear-k1",
@@ -11120,6 +16339,1054 @@
     ]
    },
    "topic": "time-clauses"
+  },
+  {
+   "id": "ut-usd-k1",
+   "type": "kwt",
+   "pat": "ut.used-to",
+   "from": "We had a printed handbook back then, but we don't anymore.",
+   "key": "USED",
+   "frame": "We ___ a printed handbook back then.",
+   "answer": "used to have",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: früher so, heute nicht mehr: used to + Grundform (have).",
+     "en": "Right: true before, not any more: used to + base verb (have)."
+    },
+    "wrong": [
+     {
+      "not": [
+       "used"
+      ],
+      "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+      "en": "The key word used must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "used",
+       "to",
+       "having"
+      ],
+      "de": "Nach used to steht die Grundform: used to have, nicht having.",
+      "en": "Used to takes the base form: used to have, not having."
+     },
+     {
+      "if": [
+       "am",
+       "used"
+      ],
+      "pat": "ut.be-used-to",
+      "de": "„Am used to“ heißt „gewöhnt sein“ und braucht -ing. Hier geht es um früher.",
+      "en": "“Am used to” means “be accustomed” and takes -ing. Here the past is meant."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-usd-k2",
+   "type": "kwt",
+   "pat": "ut.used-to",
+   "from": "I commuted by train every day, but I don't anymore.",
+   "key": "USED",
+   "frame": "I ___ by train every day.",
+   "answer": "used to commute",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: eine frühere Gewohnheit, die vorbei ist: used to + commute.",
+     "en": "Right: a past habit that is over: used to + commute."
+    },
+    "wrong": [
+     {
+      "not": [
+       "used"
+      ],
+      "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+      "en": "The key word used must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "used",
+       "to",
+       "commuting"
+      ],
+      "de": "Nach used to steht die Grundform: used to commute, nicht commuting.",
+      "en": "Used to takes the base form: used to commute, not commuting."
+     },
+     {
+      "if": [
+       "am",
+       "used"
+      ],
+      "pat": "ut.be-used-to",
+      "de": "„Am used to“ heißt „gewöhnt sein“. Gemeint ist: früher ja, heute nicht mehr.",
+      "en": "“Am used to” means “be accustomed”. Meant here: yes in the past, not any more."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-usd-f1",
+   "type": "find",
+   "pat": "ut.used-to",
+   "prompt": "We never use to hold meetings on Fridays.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "used to",
+   "fixed": "We never used to hold meetings on Fridays.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: In bejahten Sätzen heißt es used to mit d: never used to hold.",
+     "en": "The error: affirmative sentences take used to with d: never used to hold."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: In „use to“ fehlt das d.",
+      "en": "There is an error: the d is missing in “use to”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „use to“: Ohne did braucht der Satz used to.",
+      "en": "The error is in “use to”: without did the sentence needs used to."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-usd-f2",
+   "type": "find",
+   "pat": "ut.used-to",
+   "prompt": "We used to buying everything on paper until two years ago.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "buy",
+   "fixed": "We used to buy everything on paper until two years ago.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach used to steht die Grundform („buy“), nicht -ing.",
+     "en": "The error: used to takes the base form (“buy”), not -ing."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Auf used to folgt kein -ing.",
+      "en": "There is an error: used to is not followed by -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „buying“: Hier geht es um früher, nicht um „gewöhnt sein“.",
+      "en": "The error is in “buying”: this is about the past, not about “be accustomed”."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-usd-f3",
+   "type": "find",
+   "pat": "ut.used-to",
+   "prompt": "Our office used to be in the city center before we moved.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: used to + be passt zu einem früheren Zustand.",
+     "en": "No error: used to + be fits a past state."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Auf used to folgt die Grundform („be“).",
+      "en": "No error: used to is followed by the base form (“be”)."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-usd-m1",
+   "type": "meaning",
+   "pat": "ut.used-to",
+   "a": "We used to work from the office.",
+   "b": "We're used to working from the office.",
+   "q": {
+    "de": "Welcher Satz sagt: Wir arbeiten heute nicht mehr im Büro?",
+    "en": "Which sentence says we no longer work from the office?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Used to + Grundform heißt: früher ja, heute nicht mehr.",
+     "en": "Right: sentence a. Used to + base verb means: yes before, not any more."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist Büroarbeit heute normal für uns: be used to + -ing.",
+      "en": "In b, working from the office is normal for us today: be used to + -ing."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a erzählt von früher, b von etwas, das heute vertraut ist.",
+      "en": "Not the same: a tells of the past, b of something familiar today."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-wld-k1",
+   "type": "kwt",
+   "pat": "ut.would",
+   "from": "Every Monday, my old boss reviewed our pipeline in a short call.",
+   "key": "WOULD",
+   "frame": "Every Monday, my old boss ___ our pipeline in a short call.",
+   "answer": "would review",
+   "accepted": [
+    "would go over",
+    "would go through",
+    "would look at",
+    "would check",
+    "would look over",
+    "would run through"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: eine wiederholte Handlung früher: would + Grundform.",
+     "en": "Right: a repeated action in the past: would + base verb."
+    },
+    "wrong": [
+     {
+      "not": [
+       "would"
+      ],
+      "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
+      "en": "The key word would must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "would",
+       "reviewed"
+      ],
+      "de": "Nach would steht die Grundform: would review, nicht reviewed.",
+      "en": "Would takes the base form: would review, not reviewed."
+     },
+     {
+      "if": [
+       "would",
+       "reviewing"
+      ],
+      "de": "Nach would steht die Grundform: would review, nicht reviewing.",
+      "en": "Would takes the base form: would review, not reviewing."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-wld-k2",
+   "type": "kwt",
+   "pat": "ut.would",
+   "from": "As kids, we always played outside until dinner.",
+   "key": "WOULD",
+   "frame": "As kids, we ___ until dinner.",
+   "answer": "would play outside",
+   "accepted": [
+    "would always play outside",
+    "would usually play outside",
+    "would often play outside",
+    "would play outdoors",
+    "would always play outdoors",
+    "would usually play outdoors",
+    "would often play outdoors"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Spielen ist eine wiederholte Handlung früher: would + Grundform.",
+     "en": "Right: playing is a repeated action in the past: would + base verb."
+    },
+    "wrong": [
+     {
+      "not": [
+       "would"
+      ],
+      "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
+      "en": "The key word would must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "would",
+       "played"
+      ],
+      "de": "Nach would steht die Grundform: would play, nicht played.",
+      "en": "Would takes the base form: would play, not played."
+     },
+     {
+      "if": [
+       "would",
+       "playing"
+      ],
+      "de": "Nach would steht die Grundform: would play, nicht playing.",
+      "en": "Would takes the base form: would play, not playing."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-wld-f1",
+   "type": "find",
+   "pat": "ut.would",
+   "prompt": "Yesterday, I would finish the report before lunch.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "finished",
+   "fixed": "Yesterday, I finished the report before lunch.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: would erzählt von Wiederholung. Ein einmaliges Ereignis braucht das Past Simple.",
+     "en": "The error: would tells of repetition. A one-time event needs the simple past."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: „Yesterday“ nennt ein einmaliges Ereignis, kein would.",
+      "en": "There is an error: “Yesterday” names a one-time event, not would."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would finish“: Es ist ein einzelnes Ereignis, keine Gewohnheit.",
+      "en": "The error is in “would finish”: it is a single event, not a habit."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-wld-f2",
+   "type": "find",
+   "pat": "ut.would",
+   "prompt": "When I was a kid, my uncle would own a small bakery downtown.",
+   "err": [
+    7,
+    8
+   ],
+   "answer": "owned",
+   "fixed": "When I was a kid, my uncle owned a small bakery downtown.",
+   "accepted": [
+    "used to own"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „own“ ist ein Zustand, keine wiederholte Handlung. Passend: owned oder used to own.",
+     "en": "The error: “own” is a state, not a repeated action. Fits: owned or used to own."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Zustände wie „own“ gehen nicht mit would.",
+      "en": "There is an error: states like “own” do not go with would."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would own“: Für frühere Zustände passt nur used to oder die Vergangenheit.",
+      "en": "The error is in “would own”: for past states only used to or the simple past fits."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-wld-m1",
+   "type": "meaning",
+   "pat": "ut.would",
+   "a": "As a student, I used to read on the train.",
+   "b": "As a student, I would read on the train.",
+   "q": {
+    "de": "Welche Sätze erzählen von einer früheren Gewohnheit?",
+    "en": "Which sentences tell of a past habit?"
+   },
+   "answer": "both",
+   "why": {
+    "ok": {
+     "de": "Richtig: beide. Auch would passt, weil „read“ eine wiederholte Handlung ist.",
+     "en": "Right: both. Would works too, because “read” is a repeated action."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Nicht nur a: Auch b erzählt von einer früheren Gewohnheit.",
+      "en": "Not only a: b also tells of a past habit."
+     },
+     {
+      "opt": "b",
+      "de": "Nicht nur b: Auch a erzählt von einer früheren Gewohnheit.",
+      "en": "Not only b: a also tells of a past habit."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-did-k1",
+   "type": "kwt",
+   "pat": "ut.did-use-to",
+   "from": "Did you work remotely regularly before the pandemic?",
+   "key": "USE",
+   "frame": "Did you ___ remotely before the pandemic?",
+   "answer": "use to work",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: nach did steht use to ohne d, danach die Grundform.",
+     "en": "Right: after did comes use to without d, then the base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "used",
+       "to"
+      ],
+      "pat": "ut.used-to",
+      "de": "Nach did entfällt das d: Did you use to work, nicht used.",
+      "en": "After did the d drops: Did you use to work, not used."
+     },
+     {
+      "not": [
+       "use"
+      ],
+      "de": "Das Schlüsselwort use muss unverändert in der Lücke stehen.",
+      "en": "The key word use must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "use",
+       "to",
+       "worked"
+      ],
+      "de": "Nach did bleibt die Grundform: use to work, nicht worked.",
+      "en": "After did the base form stays: use to work, not worked."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-did-k2",
+   "type": "kwt",
+   "pat": "ut.did-use-to",
+   "from": "In the past, I never checked my phone during meetings.",
+   "key": "USE",
+   "frame": "Back then, I ___ my phone during meetings.",
+   "answer": "didn't use to check",
+   "accepted": [
+    "did not use to check"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: didn't + use to ohne d + Grundform: didn't use to check.",
+     "en": "Right: didn't + use to without d + base verb: didn't use to check."
+    },
+    "wrong": [
+     {
+      "if": [
+       "used",
+       "to"
+      ],
+      "pat": "ut.used-to",
+      "de": "Nach didn't entfällt das d: didn't use to, nicht used.",
+      "en": "After didn't the d drops: didn't use to, not used."
+     },
+     {
+      "not": [
+       "use"
+      ],
+      "de": "Das Schlüsselwort use muss unverändert in der Lücke stehen.",
+      "en": "The key word use must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "use",
+       "to",
+       "checking"
+      ],
+      "de": "Nach use to steht die Grundform: check, nicht checking.",
+      "en": "Use to takes the base form: check, not checking."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-did-f1",
+   "type": "find",
+   "pat": "ut.did-use-to",
+   "prompt": "Did you use travel a lot for your old job?",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "use to travel",
+   "fixed": "Did you use to travel a lot for your old job?",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach „use“ fehlt das to: Did you use to travel.",
+     "en": "The error: to is missing after “use”: Did you use to travel."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Bei „use“ fehlt das to.",
+      "en": "There is an error: to is missing after “use”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „use travel“: Es heißt use to + Grundform.",
+      "en": "The error is in “use travel”: it is use to + base verb."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-did-f2",
+   "type": "find",
+   "pat": "ut.did-use-to",
+   "prompt": "Did you use to worked night shifts at your old company?",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "work",
+   "fixed": "Did you use to work night shifts at your old company?",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach did bleibt die Grundform: use to work, nicht worked.",
+     "en": "The error: after did the base form stays: use to work, not worked."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach did steht keine Vergangenheitsform.",
+      "en": "There is an error: no past form follows did."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „worked“: did zeigt die Vergangenheit schon.",
+      "en": "The error is in “worked”: did already shows the past."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-did-f3",
+   "type": "find",
+   "pat": "ut.did-use-to",
+   "prompt": "We didn't use to track our hours, but now everyone does.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: didn't + use to ohne d ist richtig.",
+     "en": "No error: didn't + use to without d is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach didn't steht use to ohne d.",
+      "en": "No error: after didn't comes use to without d."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-did-m1",
+   "type": "meaning",
+   "pat": "ut.did-use-to",
+   "a": "We didn't use to have a travel budget.",
+   "b": "We don't have a travel budget.",
+   "q": {
+    "de": "Welcher Satz deutet auf eine Veränderung hin (früher kein Budget, heute eins)?",
+    "en": "Which sentence points to a change (no travel budget before, one today)?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Didn't use to heißt: früher nicht, heute meist schon.",
+     "en": "Right: sentence a. Didn't use to means: not before, usually yes today."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist heute kein Budget da.",
+      "en": "In b, there is no budget today."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a deutet auf eine Veränderung, b beschreibt nur heute.",
+      "en": "Not the same: a points to a change, b only describes today."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-be-k1",
+   "type": "kwt",
+   "pat": "ut.be-used-to",
+   "from": "Presenting to the board no longer makes me nervous.",
+   "key": "USED",
+   "frame": "I'm ___ to the board.",
+   "answer": "used to presenting",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach be used to steht -ing: I'm used to presenting.",
+     "en": "Right: be used to + -ing: I'm used to presenting."
+    },
+    "wrong": [
+     {
+      "if": [
+       "use",
+       "to"
+      ],
+      "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt).",
+      "en": "The d is missing: used is an adjective here (accustomed)."
+     },
+     {
+      "not": [
+       "used"
+      ],
+      "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+      "en": "The key word used must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "used",
+       "to",
+       "present"
+      ],
+      "de": "Nach be used to steht -ing: presenting, nicht present.",
+      "en": "Be used to takes -ing: presenting, not present."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-be-k2",
+   "type": "kwt",
+   "pat": "ut.be-used-to",
+   "from": "Long travel days are nothing new for the sales team.",
+   "key": "USED",
+   "frame": "The sales team ___ long travel days.",
+   "answer": "is used to",
+   "accepted": [
+    "'s used to",
+    "are used to"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: be used to + Nomen: Das ist nichts Neues, sondern vertraut.",
+     "en": "Right: be used to + noun: nothing new, but familiar."
+    },
+    "wrong": [
+     {
+      "if": [
+       "use",
+       "to"
+      ],
+      "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt).",
+      "en": "The d is missing: used is an adjective here (accustomed)."
+     },
+     {
+      "not": [
+       "used"
+      ],
+      "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+      "en": "The key word used must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "getting",
+       "used"
+      ],
+      "pat": "ut.get-used-to",
+      "de": "„Getting used to“ ist der Vorgang. Für „nichts Neues“ passt der Zustand: is used to.",
+      "en": "“Getting used to” is the process. For “nothing new” the state fits: is used to."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-be-f1",
+   "type": "find",
+   "pat": "ut.be-used-to",
+   "prompt": "I'm not used to speak English all day, so by evening I'm tired.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "speaking",
+   "fixed": "I'm not used to speaking English all day, so by evening I'm tired.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach be used to ist „to“ eine Präposition: speaking.",
+     "en": "The error: after be used to, to is a preposition: speaking."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach „used to“ fehlt die -ing-Form.",
+      "en": "There is an error: the -ing form is missing after “used to”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „speak“: Nach be used to steht -ing.",
+      "en": "The error is in “speak”: be used to takes -ing."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-be-f2",
+   "type": "find",
+   "pat": "ut.be-used-to",
+   "prompt": "Our support team is use to handling angry customers.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "used",
+   "fixed": "Our support team is used to handling angry customers.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „used“ ist hier ein Adjektiv („gewöhnt“) und braucht das d.",
+     "en": "The error: used is an adjective here (“accustomed”) and needs the d."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: In „is use to“ fehlt das d.",
+      "en": "There is an error: the d is missing in “is use to”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „use“: Nach is steht das Adjektiv used.",
+      "en": "The error is in “use”: after is comes the adjective used."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-be-f3",
+   "type": "find",
+   "pat": "ut.be-used-to",
+   "prompt": "She's used to getting emails at all hours, so she barely notices.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: be used to + -ing (getting) ist richtig.",
+     "en": "No error: be used to + -ing (getting) is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach be used to steht -ing, hier „getting“.",
+      "en": "No error: be used to takes -ing, here “getting”."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-be-m1",
+   "type": "meaning",
+   "pat": "ut.be-used-to",
+   "a": "I'm used to the noise.",
+   "b": "I used to hear the noise.",
+   "q": {
+    "de": "Welcher Satz sagt: Der Lärm stört mich nicht mehr, weil er vertraut ist?",
+    "en": "Which sentence says the noise no longer bothers me because it is familiar?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Be used to nennt den vertrauten Zustand von heute.",
+     "en": "Right: sentence a. Be used to names the familiar state today."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b hast du den Lärm früher gehört, heute nicht mehr.",
+      "en": "In b, you heard the noise in the past, but not any more."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt Gewöhnung heute, b eine frühere Gewohnheit.",
+      "en": "Not the same: a names familiarity today, b a past habit."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-get-k1",
+   "type": "kwt",
+   "pat": "ut.get-used-to",
+   "from": "After a few weeks, working in a hybrid setup no longer felt strange to me.",
+   "key": "USED",
+   "frame": "After a few weeks, I ___ in a hybrid setup.",
+   "answer": "got used to working",
+   "accepted": [
+    "had gotten used to working",
+    "'d gotten used to working",
+    "grew used to working",
+    "had grown used to working",
+    "became used to working",
+    "had become used to working"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: der Vorgang des Gewöhnens: got used to + -ing.",
+     "en": "Right: the process of becoming accustomed: got used to + -ing."
+    },
+    "wrong": [
+     {
+      "not": [
+       "used"
+      ],
+      "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+      "en": "The key word used must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "used",
+       "to",
+       "work"
+      ],
+      "de": "Nach get used to steht -ing: working, nicht die Grundform.",
+      "en": "Get used to takes -ing: working, not the base form."
+     },
+     {
+      "if": [
+       "was",
+       "used",
+       "to"
+      ],
+      "pat": "ut.be-used-to",
+      "de": "„Was used to“ = war gewöhnt (Zustand). Hier ist der Vorgang gemeint: got used to.",
+      "en": "“Was used to” = was accustomed (a state). Here the process is meant: got used to."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-get-k2",
+   "type": "kwt",
+   "pat": "ut.get-used-to",
+   "from": "It takes time to adjust to a new time zone.",
+   "key": "USED",
+   "frame": "It takes time to ___ a new time zone.",
+   "answer": "get used to",
+   "accepted": [
+    "become used to",
+    "grow used to"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: der Vorgang des Gewöhnens: get used to + Nomen.",
+     "en": "Right: the process of becoming accustomed: get used to + noun."
+    },
+    "wrong": [
+     {
+      "if": [
+       "use",
+       "to"
+      ],
+      "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt).",
+      "en": "The d is missing: used is an adjective here (accustomed)."
+     },
+     {
+      "not": [
+       "used"
+      ],
+      "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+      "en": "The key word used must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "be",
+       "used",
+       "to"
+      ],
+      "pat": "ut.be-used-to",
+      "de": "„Be used to“ nennt den Zustand. Nach „takes time“ passt der Vorgang: get used to.",
+      "en": "“Be used to” names the state. After “takes time” the process fits: get used to."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-get-f1",
+   "type": "find",
+   "pat": "ut.get-used-to",
+   "prompt": "It took me weeks to be used to the new expense system.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "get",
+   "fixed": "It took me weeks to get used to the new expense system.",
+   "accepted": [
+    "become",
+    "grow"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Vorgang des Gewöhnens braucht get, nicht be: to get used to.",
+     "en": "The error: the process of becoming accustomed needs get, not be: to get used to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Zum Vorgang „sich gewöhnen“ passt be nicht.",
+      "en": "There is an error: be does not fit the process of getting accustomed."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „be used to“: be nennt den Zustand, get den Vorgang.",
+      "en": "The error is in “be used to”: be names the state, get the process."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-get-f2",
+   "type": "find",
+   "pat": "ut.get-used-to",
+   "prompt": "After a year in Dallas, I finally got used to drive on the highway.",
+   "err": [
+    10,
+    10
+   ],
+   "answer": "driving",
+   "fixed": "After a year in Dallas, I finally got used to driving on the highway.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach get used to ist „to“ eine Präposition: driving.",
+     "en": "The error: after get used to, to is a preposition: driving."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach „got used to“ fehlt die -ing-Form.",
+      "en": "There is an error: the -ing form is missing after “got used to”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „drive“: Nach get used to steht -ing.",
+      "en": "The error is in “drive”: get used to takes -ing."
+     }
+    ]
+   },
+   "topic": "used-to"
+  },
+  {
+   "id": "ut-get-m1",
+   "type": "meaning",
+   "pat": "ut.get-used-to",
+   "a": "I'm getting used to the new system.",
+   "b": "I'm used to the new system.",
+   "q": {
+    "de": "Welcher Satz sagt: Ich bin noch dabei, mich daran zu gewöhnen?",
+    "en": "Which sentence says I am still in the process of getting used to it?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Getting used to nennt den Vorgang, der noch läuft.",
+     "en": "Right: sentence a. Getting used to names the process that is still going on."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist die Gewöhnung schon abgeschlossen: be used to nennt den Zustand.",
+      "en": "In b, getting used to it is already done: be used to names the state."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt den Vorgang, b das Ergebnis.",
+      "en": "Not the same: a names the process, b the result."
+     }
+    ]
+   },
+   "topic": "used-to"
   }
  ]
 }

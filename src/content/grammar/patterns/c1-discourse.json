@@ -1,0 +1,426 @@
+{
+ "topic": "c1-discourse",
+ "canDo": {
+  "de": "Ich kann Diskussionen und Mails klar gliedern: mit That said einschränken, mit On the other hand gegenüberstellen, mit To build on that anknüpfen, mit Coming back to zurückkehren und mit In short zusammenfassen.",
+  "en": "I can structure discussions and emails clearly: qualify with That said, contrast with On the other hand, extend a point with To build on that, return with Coming back to and sum up with In short."
+ },
+ "order": [
+  "dm.concede",
+  "dm.contrast",
+  "dm.build",
+  "dm.return",
+  "dm.sum"
+ ],
+ "introPlan": [
+  [
+   "dm.concede",
+   "dm.contrast"
+  ],
+  [
+   "dm.build",
+   "dm.return"
+  ],
+  [
+   "dm.sum"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Schränkst du etwas Gutes ein (That said) oder stellst du zwei Seiten einer Abwägung gegenüber (On the other hand)?",
+   "Knüpfst du an einen Beitrag an (To build on that) oder kehrst du zu einem früheren Thema zurück (Coming back to)?",
+   "Fasst du am Ende zusammen (In short, All in all)?"
+  ],
+  "en": [
+   "Are you qualifying something good (That said) or setting two sides of a trade-off against each other (On the other hand)?",
+   "Are you extending a point someone made (To build on that) or going back to an earlier topic (Coming back to)?",
+   "Are you summing up at the end (In short, All in all)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "dm.concede",
+   "name": {
+    "de": "That said · einschränken",
+    "en": "That said · qualify"
+   },
+   "form": {
+    "de": "That said / Having said that, + Hauptsatz (ohne but)",
+    "en": "That said / Having said that, + main clause (no but)"
+   },
+   "use": {
+    "de": "Schränkt etwas Gutes ein, das du gerade gesagt hast, ohne es zurückzunehmen. Wirkt strukturierter als ein schlichtes But.",
+    "en": "Qualifies something positive you just said without taking it back. Sounds more structured than a plain But."
+   },
+   "signals": [
+    "that said",
+    "having said that",
+    "that being said",
+    "even so",
+    "nevertheless",
+    "despite that"
+   ],
+   "ex": [
+    {
+     "en": "The pilot went well. That said, the timeline is tight.",
+     "de": "Der Pilot lief gut. Allerdings ist der Zeitplan knapp.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The offer is fair. Having said that, we should check the terms.",
+     "de": "Das Angebot ist fair. Dennoch sollten wir die Bedingungen prüfen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I like the plan. Even so, I'd double-check the budget.",
+     "de": "Der Plan gefällt mir. Trotzdem würde ich das Budget noch einmal prüfen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The pilot went well. That said, but it exposed two security gaps.",
+    "good": "The pilot went well. That said, it exposed two security gaps.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler, sondern ein Reflex: Zu „allerdings“ gehört im Kopf oft „aber“. That said ersetzt but aber schon.",
+     "en": "Not a translation error but a reflex: “allerdings” often pulls in “aber”. That said already replaces but."
+    }
+   },
+   "contrast": {
+    "with": "dm.contrast",
+    "a": "The pilot went well. That said, the timeline is tight.",
+    "b": "The cloud tool is cheaper. On the other hand, it needs more trust.",
+    "diff": {
+     "de": "That said schränkt die Aussage direkt davor ein. On the other hand stellt zwei Seiten einer Abwägung nebeneinander.",
+     "en": "That said qualifies the statement right before it. On the other hand sets two sides of a trade-off side by side."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The demo was great. That said, we have no budget yet.",
+     "q": {
+      "de": "Sagt die Sprecherin, dass die Demo schlecht war?",
+      "en": "Does the speaker say the demo was bad?"
+     },
+     "a": false
+    },
+    {
+     "s": "Nice offer. Even so, I'll ask legal to check it.",
+     "q": {
+      "de": "Lässt die Sprecherin das Angebot trotzdem prüfen?",
+      "en": "Will the speaker still have legal check the offer?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Nimmst du etwas Gutes nicht zurück, sondern schränkst es ein? Welche feste Wendung zeigt das, ohne aber?",
+    "en": "Are you limiting something good rather than taking it back? Which fixed phrase shows that without but?"
+   }
+  },
+  {
+   "id": "dm.contrast",
+   "name": {
+    "de": "On the other hand · Gegenseite",
+    "en": "On the other hand · other side"
+   },
+   "form": {
+    "de": "On the other hand / In contrast / By contrast + Satz",
+    "en": "On the other hand / In contrast / By contrast + sentence"
+   },
+   "use": {
+    "de": "Stellt zwei Seiten einer Abwägung oder zwei Gegensätze nebeneinander. Die Wendung steht fest: other hand, nicht other side.",
+    "en": "Sets two sides of a trade-off or two opposites next to each other. The phrase is fixed: other hand, not other side."
+   },
+   "signals": [
+    "on the other hand",
+    "in contrast",
+    "by contrast",
+    "conversely"
+   ],
+   "ex": [
+    {
+     "en": "The old tool is cheaper. On the other hand, it lacks an audit trail.",
+     "de": "Das alte Tool ist günstiger. Andererseits fehlt ihm eine Prüfspur.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Remote hiring widens the pool. On the other hand, onboarding takes longer.",
+     "de": "Remote-Einstellung erweitert den Bewerberkreis. Andererseits dauert das Einarbeiten länger.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Sales grew in Spain. In contrast, they fell in Italy.",
+     "de": "Der Umsatz wuchs in Spanien. Im Gegensatz dazu sank er in Italien.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "On the other side, the cloud version needs no local servers.",
+    "good": "On the other hand, the cloud version needs no local servers.",
+    "cause": {
+     "de": "Im Deutschen heißt es „auf der anderen Seite“. Wörtlich übersetzt wird daraus on the other side, doch Englisch sagt on the other hand.",
+     "en": "German says “auf der anderen Seite”. Translated literally that becomes on the other side, but English says on the other hand."
+    }
+   },
+   "contrast": {
+    "with": "dm.concede",
+    "a": "The cloud tool is cheaper. On the other hand, it needs more trust.",
+    "b": "The cloud tool is cheaper. That said, it needs more trust.",
+    "diff": {
+     "de": "On the other hand gibt beiden Seiten gleiches Gewicht. That said hält die erste Aussage für wichtig und schränkt sie nur ein.",
+     "en": "On the other hand gives both sides equal weight. That said keeps the first statement as the main point and only qualifies it."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Plan A is fast. On the other hand, plan B is safe.",
+     "q": {
+      "de": "Nennt der Sprecher nur Vorteile von Plan A?",
+      "en": "Does the speaker name only advantages of plan A?"
+     },
+     "a": false
+    },
+    {
+     "s": "Sales grew in Spain. In contrast, they fell in Italy.",
+     "q": {
+      "de": "Verläuft die Entwicklung in Italien anders als in Spanien?",
+      "en": "Is the trend in Italy different from the trend in Spain?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Stellst du zwei Seiten einer Abwägung gleichwertig nebeneinander, und wie heißt die feste Wendung dafür?",
+    "en": "Are you setting two sides of a trade-off next to each other as equals, and what is the fixed phrase for that?"
+   }
+  },
+  {
+   "id": "dm.build",
+   "name": {
+    "de": "To build on that · anknüpfen",
+    "en": "To build on that · extend a point"
+   },
+   "form": {
+    "de": "To build on that / Building on + Beitrag, + Vorschlag",
+    "en": "To build on that / Building on + point, + suggestion"
+   },
+   "use": {
+    "de": "Knüpft an einen Beitrag an und führt ihn weiter, statt zu widersprechen. Nach build steht on, kein up.",
+    "en": "Picks up a point and develops it instead of objecting. After build comes on, with no up."
+   },
+   "signals": [
+    "to build on that",
+    "building on",
+    "to build upon",
+    "to add to that",
+    "adding to that",
+    "picking up on"
+   ],
+   "ex": [
+    {
+     "en": "To build on Anna's point, we could add a pilot team.",
+     "de": "Anknüpfend an Annas Punkt könnten wir ein Pilotteam ergänzen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Building on our call, I've attached a revised timeline.",
+     "de": "Anknüpfend an unser Telefonat habe ich einen überarbeiteten Zeitplan angehängt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "To add to that, the training takes only an hour.",
+     "de": "Dazu kommt: Die Schulung dauert nur eine Stunde.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "To build up on Anna's point, we could add a pilot team.",
+    "good": "To build on Anna's point, we could add a pilot team.",
+    "cause": {
+     "de": "Aus „darauf aufbauen“ wird leicht build up on: auf wird on, aufbauen wird build up. Englisch sagt nur build on.",
+     "en": "“Darauf aufbauen” easily becomes build up on: auf turns into on, aufbauen into build up. English says only build on."
+    }
+   },
+   "contrast": {
+    "with": "dm.return",
+    "a": "To build on that, we could add a cost forecast.",
+    "b": "Coming back to that, we should set a date for the pilot.",
+    "diff": {
+     "de": "To build on that führt den gerade genannten Gedanken weiter. Coming back to greift ein früheres Thema wieder auf.",
+     "en": "To build on that develops the point just made. Coming back to picks an earlier topic up again."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Anna mentioned the audit trail. To build on that, we could show retention rules.",
+     "q": {
+      "de": "Widerspricht der Sprecher Anna?",
+      "en": "Does the speaker disagree with Anna?"
+     },
+     "a": false
+    },
+    {
+     "s": "To add to that, we need two more licenses.",
+     "q": {
+      "de": "Nennt der Sprecher einen weiteren Punkt zum selben Thema?",
+      "en": "Does the speaker name another point on the same topic?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Führst du den Beitrag einer anderen Person weiter? Welche Präposition folgt dann auf das Verb?",
+    "en": "Are you extending someone else's point? Which preposition follows the verb then?"
+   }
+  },
+  {
+   "id": "dm.return",
+   "name": {
+    "de": "Coming back to · zurückkommen",
+    "en": "Coming back to · return to a topic"
+   },
+   "form": {
+    "de": "Coming back to + Thema, + Aussage",
+    "en": "Coming back to + topic, + statement"
+   },
+   "use": {
+    "de": "Kehrt zu einem früheren Punkt zurück. Nach back steht to, nicht on.",
+    "en": "Returns to an earlier point. After back comes to, not on."
+   },
+   "signals": [
+    "coming back to",
+    "going back to",
+    "getting back to",
+    "circling back to",
+    "returning to",
+    "to return to"
+   ],
+   "ex": [
+    {
+     "en": "Coming back to the deadline, can we move it to Friday?",
+     "de": "Zurück zur Frist: Können wir sie auf Freitag verschieben?",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Going back to your earlier question, support is included.",
+     "de": "Zu Ihrer früheren Frage: Der Support ist enthalten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "To return to what you said about hiring, I agree.",
+     "de": "Zurück zu dem, was du über Einstellungen gesagt hast: Ich stimme zu.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Coming back on your question, the price includes support.",
+    "good": "Coming back to your question, the price includes support.",
+    "cause": {
+     "de": "Im Deutschen „kommen wir auf eine Frage zurück“. Aus dem auf wird gern on, doch Englisch sagt coming back to.",
+     "en": "German says “auf eine Frage zurückkommen”. The auf easily becomes on, but English says coming back to."
+    }
+   },
+   "contrast": {
+    "with": "dm.build",
+    "a": "Coming back to the budget, we need approval by May.",
+    "b": "To build on that, we could add a cost forecast.",
+    "diff": {
+     "de": "Coming back to greift ein früheres Thema wieder auf. To build on that führt den gerade genannten Gedanken weiter.",
+     "en": "Coming back to picks an earlier topic up again. To build on that develops the point just made."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Coming back to the budget, we need approval by May.",
+     "q": {
+      "de": "Wurde das Budget schon früher besprochen?",
+      "en": "Was the budget discussed earlier?"
+     },
+     "a": true
+    },
+    {
+     "s": "Coming back to your question, the answer is yes.",
+     "q": {
+      "de": "Beginnt der Sprecher ein ganz neues Thema?",
+      "en": "Does the speaker start a completely new topic?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Greifst du ein früheres Thema wieder auf? Welches kleine Wort verbindet back mit dem Thema?",
+    "en": "Are you picking an earlier topic up again? Which small word links back to the topic?"
+   }
+  },
+  {
+   "id": "dm.sum",
+   "name": {
+    "de": "In short · zusammenfassen",
+    "en": "In short · sum up"
+   },
+   "form": {
+    "de": "In short / All in all / To sum up, + Fazit",
+    "en": "In short / All in all / To sum up, + conclusion"
+   },
+   "use": {
+    "de": "Kündigt am Ende das Fazit an: kurz gesagt, alles in allem. Es fasst Gesagtes zusammen und bringt nichts Neues.",
+    "en": "Announces the conclusion at the end: in brief, everything considered. It sums up what was said and adds nothing new."
+   },
+   "signals": [
+    "in short",
+    "all in all",
+    "to sum up",
+    "in summary",
+    "in conclusion",
+    "overall",
+    "all told"
+   ],
+   "ex": [
+    {
+     "en": "All in all, we are on track for the March release.",
+     "de": "Alles in allem liegen wir für den März-Release im Plan.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "In summary, the proposal is sound, but the timeline needs work.",
+     "de": "Zusammengefasst ist der Vorschlag solide, aber der Zeitplan braucht Arbeit.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Overall, I'm happy with how the launch went.",
+     "de": "Insgesamt bin ich zufrieden, wie der Start gelaufen ist.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "In resume, the migration saved us two weeks of work.",
+    "good": "In short, the migration saved us two weeks of work.",
+    "cause": {
+     "de": "Kein klarer Übersetzungsfehler: Das deutsche „Resümee“ klingt nach resume und lockt in die Falle. Englisch sagt in summary oder in short.",
+     "en": "Not a clear translation error: the German “Resümee” sounds like resume and lures you in. English says in summary or in short."
+    }
+   },
+   "ccq": [
+    {
+     "s": "In short, the pilot worked.",
+     "q": {
+      "de": "Bringt der Satz ein ganz neues Thema?",
+      "en": "Does the sentence introduce a completely new topic?"
+     },
+     "a": false
+    },
+    {
+     "s": "All in all, the project was a success.",
+     "q": {
+      "de": "Fasst die Sprecherin das Projekt zusammen?",
+      "en": "Is the speaker summing up the project?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Fasst du Gesagtes am Ende zusammen? Welche kurze Wendung kündigt das Fazit an?",
+    "en": "Are you summing up what was said at the end? Which short phrase announces the conclusion?"
+   }
+  }
+ ]
+}

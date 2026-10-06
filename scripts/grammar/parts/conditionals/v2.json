@@ -1,0 +1,1136 @@
+[
+ {
+  "id": "cn-z-k1",
+  "type": "kwt",
+  "pat": "cn.zero",
+  "from": "Every time a customer cancels within 14 days, we refund the full fee.",
+  "key": "WHENEVER",
+  "frame": "We refund the full fee ___ within 14 days.",
+  "answer": "whenever a customer cancels",
+  "accepted": [
+   "whenever customers cancel",
+   "whenever a customer has canceled",
+   "whenever the customer cancels",
+   "whenever someone cancels"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das ist eine feste Regel → whenever + Präsens: whenever a customer cancels.",
+    "en": "Right: fixed rule → whenever + present: whenever a customer cancels."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort WHENEVER muss unverändert in der Lücke stehen.",
+     "en": "The key word WHENEVER must stay unchanged in the gap.",
+     "not": [
+      "whenever"
+     ]
+    },
+    {
+     "if": [
+      "whenever",
+      "will"
+     ],
+     "de": "Eine feste Regel braucht das Präsens, kein will: whenever a customer cancels.",
+     "en": "A fixed rule needs the present, not will: whenever a customer cancels."
+    },
+    {
+     "if": [
+      "whenever",
+      "would"
+     ],
+     "de": "would macht daraus eine Annahme. Hier gilt eine feste Regel (Präsens).",
+     "en": "would turns it into an assumption. Here a fixed rule applies (present)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-z-k2",
+  "type": "kwt",
+  "pat": "cn.zero",
+  "from": "If the build fails, the pipeline stops automatically.",
+  "key": "WHEN",
+  "frame": "The pipeline stops automatically ___.",
+  "answer": "when the build fails",
+  "accepted": [
+   "when a build fails",
+   "when the build breaks",
+   "when builds fail"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das ist eine feste Regel → when + Präsens: when the build fails.",
+    "en": "Right: fixed rule → when + present: when the build fails."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort WHEN muss unverändert in der Lücke stehen.",
+     "en": "The key word WHEN must stay unchanged in the gap.",
+     "not": [
+      "when"
+     ]
+    },
+    {
+     "if": [
+      "when",
+      "will"
+     ],
+     "de": "Eine feste Regel braucht das Präsens, kein will: when the build fails.",
+     "en": "A fixed rule needs the present, not will: when the build fails."
+    },
+    {
+     "if": [
+      "when",
+      "failed"
+     ],
+     "de": "Das Past macht aus der Regel eine Annahme oder einen Rückblick: Präsens.",
+     "en": "The past turns the rule into an assumption or a look back: use the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-z-f1",
+  "type": "find",
+  "pat": "cn.zero",
+  "prompt": "If the temperature will exceed 80 degrees, the system shuts down automatically.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "exceeds",
+  "fixed": "If the temperature exceeds 80 degrees, the system shuts down automatically.",
+  "accepted": [
+   "rises above",
+   "goes above",
+   "has exceeded"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Eine feste Regel braucht das Präsens im if-Teil: exceeds, kein will.",
+    "en": "The error: a fixed rule needs the present in the if-clause: exceeds, no will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Im if-Teil steht kein will.",
+     "en": "There is an error: no will in the if-clause."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will exceed“: Die Regel gilt immer, also Präsens.",
+     "en": "The error is “will exceed”: the rule always applies, so use the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-z-f2",
+  "type": "find",
+  "pat": "cn.zero",
+  "prompt": "If an invoice is more than 30 days overdue, the system sends a reminder.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Present + Present beschreibt hier eine feste Regel.",
+    "en": "No error: present + present describes a fixed rule here."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Eine feste Regel braucht das Präsens in beiden Teilen.",
+     "en": "No error: a fixed rule needs the present in both parts."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-z-m1",
+  "type": "meaning",
+  "pat": "cn.zero",
+  "a": "If a customer registers, the system sends a confirmation email.",
+  "b": "If a customer registers tomorrow, we'll send them a confirmation email.",
+  "q": {
+   "de": "Welcher Satz beschreibt eine feste Regel, die immer gilt?",
+   "en": "Which sentence describes a fixed rule that always applies?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Präsens + Präsens ist ein Ablauf, der bei jedem Kunden gilt.",
+    "en": "Right: sentence a. Present + present is a process that applies to every customer."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "cn.first",
+     "de": "b nennt tomorrow und will: Das ist ein einzelner möglicher Fall.",
+     "en": "b names tomorrow and will: that is one possible case."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a gilt immer, b nur für einen Fall morgen.",
+     "en": "Not the same: a always applies, b only for one case tomorrow."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-f-k1",
+  "type": "kwt",
+  "pat": "cn.first",
+  "from": "Our team will finish on time, but the supplier must deliver by Monday.",
+  "key": "IF",
+  "frame": "Our team will finish on time ___ by Monday.",
+  "answer": "if the supplier delivers",
+  "accepted": [
+   "if the supplier has delivered",
+   "if our supplier delivers",
+   "if they deliver",
+   "if they have delivered"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das ist eine mögliche Zukunft → if + Präsens: if the supplier delivers.",
+    "en": "Right: possible future → if + present: if the supplier delivers."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort IF muss unverändert in der Lücke stehen.",
+     "en": "The key word IF must stay unchanged in the gap.",
+     "not": [
+      "if"
+     ]
+    },
+    {
+     "if": [
+      "if",
+      "will"
+     ],
+     "de": "Nach if steht kein will: if the supplier delivers.",
+     "en": "No will after if: if the supplier delivers."
+    },
+    {
+     "if": [
+      "if",
+      "delivered"
+     ],
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. Hier ist es ein realer Fall.",
+     "en": "The past makes it an assumption. Here it is a real case."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-f-k2",
+  "type": "kwt",
+  "pat": "cn.first",
+  "from": "The client may approve the budget by Friday. In that case, we'll start on Monday.",
+  "key": "IF",
+  "frame": "___ the budget by Friday, we'll start on Monday.",
+  "answer": "If the client approves",
+  "accepted": [
+   "If the client has approved",
+   "If they approve",
+   "If they have approved"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das ist eine mögliche Zukunft → if + Präsens: If the client approves.",
+    "en": "Right: possible future → if + present: If the client approves."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort IF muss unverändert in der Lücke stehen.",
+     "en": "The key word IF must stay unchanged in the gap.",
+     "not": [
+      "if"
+     ]
+    },
+    {
+     "if": [
+      "if",
+      "will"
+     ],
+     "de": "Nach if steht kein will: If the client approves.",
+     "en": "No will after if: If the client approves."
+    },
+    {
+     "if": [
+      "if",
+      "approved"
+     ],
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. Hier ist die Freigabe bis Freitag real möglich.",
+     "en": "The past makes it an assumption. Here approval by Friday is a real possibility."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-f-f1",
+  "type": "find",
+  "pat": "cn.first",
+  "prompt": "If it will rain tomorrow, we'll move the team lunch indoors.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "rains",
+  "fixed": "If it rains tomorrow, we'll move the team lunch indoors.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach if steht bei möglicher Zukunft das Präsens (rains), kein will.",
+    "en": "The error: after if, a possible future takes the present (rains), not will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach if steht kein will.",
+     "en": "There is an error: no will after if."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will rain“: Das ist der Reflex „Zukunft = will“.",
+     "en": "The error is “will rain”: it is the “future = will” reflex."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-f-f2",
+  "type": "find",
+  "pat": "cn.first",
+  "prompt": "If the test passes today, we'll release the update on Monday.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: if + Präsens (passes), will im Hauptsatz.",
+    "en": "No error: if + present (passes), will in the main clause."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Der if-Teil steht im Präsens, will gehört in den Hauptsatz.",
+     "en": "No error: the if-clause is in the present, will belongs in the main clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-f-m1",
+  "type": "meaning",
+  "pat": "cn.first",
+  "a": "If the client signs by Friday, we'll start on Monday.",
+  "b": "If the client signed by Friday, we would start on Monday.",
+  "q": {
+   "de": "Welcher Satz hält die Unterschrift für wirklich möglich?",
+   "en": "Which sentence treats the signature as a real possibility?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Präsens + will rechnet damit, dass der Kunde unterschreibt.",
+    "en": "Right: sentence a. Present + will expects that the client may sign."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "cn.second",
+     "de": "b ist eine Annahme (Past + would): Man hält die Unterschrift für unwahrscheinlich.",
+     "en": "b is an assumption (past + would): the signature seems unlikely."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a rechnet damit, b ist eine bloße Annahme.",
+     "en": "Not the same: a expects it, b is a mere assumption."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-s-k1",
+  "type": "kwt",
+  "pat": "cn.second",
+  "from": "We lack staff, so we won't accept the project.",
+  "key": "WOULD",
+  "frame": "If we had more staff, we ___ the project.",
+  "answer": "would accept",
+  "accepted": [
+   "would take on",
+   "would take",
+   "would gladly accept",
+   "would happily accept",
+   "would be able to accept"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Annahme (had more staff) → Hauptsatz mit would + Grundform: would accept.",
+    "en": "Right: assumption (had more staff) → main clause with would + base form: would accept."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort WOULD muss unverändert in der Lücke stehen.",
+     "en": "The key word WOULD must stay unchanged in the gap.",
+     "not": [
+      "would"
+     ]
+    },
+    {
+     "if": [
+      "would",
+      "have"
+     ],
+     "pat": "cn.third",
+     "de": "would have accepted blickt zurück. Hier geht es um jetzt: would accept.",
+     "en": "would have accepted looks back. This is about now: would accept."
+    },
+    {
+     "if": [
+      "would",
+      "accepted"
+     ],
+     "de": "Nach would steht die Grundform: would accept, nicht accepted.",
+     "en": "After would comes the base form: would accept, not accepted."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-s-k2",
+  "type": "kwt",
+  "pat": "cn.second",
+  "from": "The client won't move the deadline, so we have to work overtime.",
+  "key": "IF",
+  "frame": "___ the deadline, we would finish without overtime.",
+  "answer": "If the client moved",
+  "accepted": [
+   "If the client postponed",
+   "If the client extended",
+   "If the client pushed back",
+   "If the client shifted",
+   "If they moved"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Annahme → if + Past: If the client moved. would steht im Hauptsatz.",
+    "en": "Right: assumption → if + past: If the client moved. would goes in the main clause."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort IF muss unverändert in der Lücke stehen.",
+     "en": "The key word IF must stay unchanged in the gap.",
+     "not": [
+      "if"
+     ]
+    },
+    {
+     "if": [
+      "if",
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Dort steht das Past (moved).",
+     "en": "would does not go in the if-clause. The past (moved) goes there."
+    },
+    {
+     "if": [
+      "if",
+      "moves"
+     ],
+     "pat": "cn.first",
+     "de": "Das Präsens wäre ein realer Fall. would finish zeigt eine Annahme: Past.",
+     "en": "The present would be a real case. would finish shows an assumption: past."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-s-f1",
+  "type": "find",
+  "pat": "cn.second",
+  "prompt": "If the budget would be larger, we would hire two more analysts.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "were",
+  "fixed": "If the budget were larger, we would hire two more analysts.",
+  "accepted": [
+   "was"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: would gehört nicht in den if-Teil. Dort steht das Past: were.",
+    "en": "The error: would does not belong in the if-clause. The past goes there: were."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Im if-Teil steht kein would.",
+     "en": "There is an error: no would in the if-clause."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would be“: Der if-Teil nimmt das Past (were).",
+     "en": "The error is “would be”: the if-clause takes the past (were)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-s-f2",
+  "type": "find",
+  "pat": "cn.second",
+  "prompt": "If our main competitor cut prices, we would need to rethink our strategy.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: if + Past (cut), would + Grundform ist eine korrekte Annahme.",
+    "en": "No error: if + past (cut), would + base form is a correct assumption."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: cut ist hier das Past, would steht nur im Hauptsatz.",
+     "en": "No error: cut is the past here, would appears only in the main clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-s-m1",
+  "type": "meaning",
+  "pat": "cn.second",
+  "a": "If I got the promotion, I'd move to Berlin.",
+  "b": "If I get the promotion, I'll move to Berlin.",
+  "q": {
+   "de": "Welcher Satz hält die Beförderung für unwahrscheinlich oder ausgedacht?",
+   "en": "Which sentence treats the promotion as unlikely or imagined?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Past + would macht die Beförderung zur Annahme.",
+    "en": "Right: sentence a. Past + would makes the promotion an assumption."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "cn.first",
+     "de": "b (Präsens + will) rechnet mit der Beförderung: Sie ist eine echte Möglichkeit.",
+     "en": "b (present + will) counts on the promotion: it is a real possibility."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Past + would sagt „unwahrscheinlich“, Präsens + will sagt „möglich“.",
+     "en": "Not the same: past + would says “unlikely”, present + will says “possible”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-w-k1",
+  "type": "kwt",
+  "pat": "cn.were",
+  "from": "I'm not in your position, but my advice is to renegotiate the price.",
+  "key": "IF",
+  "frame": "___ you, I'd renegotiate the price.",
+  "answer": "If I were",
+  "accepted": [
+   "If I was"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Rat = Annahme → If I were you. Die Folge steht mit would.",
+    "en": "Right: advice = assumption → If I were you. The result takes would."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort IF muss unverändert in der Lücke stehen.",
+     "en": "The key word IF must stay unchanged in the gap.",
+     "not": [
+      "if"
+     ]
+    },
+    {
+     "if": [
+      "if",
+      "would"
+     ],
+     "de": "would be steht nicht im if-Teil: If I were you, nicht If I would be you.",
+     "en": "would be does not go in the if-clause: If I were you, not If I would be you."
+    },
+    {
+     "if": [
+      "if",
+      "am"
+     ],
+     "de": "am wäre eine Tatsache. Ein Rat braucht die Annahme: were (oder umgangssprachlich was).",
+     "en": "am would state a fact. Advice needs the assumption: were (or informally was)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-w-k2",
+  "type": "kwt",
+  "pat": "cn.were",
+  "from": "The deadline isn't flexible, so we can't run another test.",
+  "key": "FLEXIBLE",
+  "frame": "If the deadline ___, we would run another test.",
+  "answer": "were flexible",
+  "accepted": [
+   "was flexible",
+   "were more flexible",
+   "was more flexible",
+   "were a bit more flexible"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Das ist eine Annahme → if + were: If the deadline were flexible.",
+    "en": "Right: assumption → if + were: If the deadline were flexible."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort FLEXIBLE muss unverändert in der Lücke stehen.",
+     "en": "The key word FLEXIBLE must stay unchanged in the gap.",
+     "not": [
+      "flexible"
+     ]
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would be steht nicht im if-Teil. Dort steht were (oder umgangssprachlich was).",
+     "en": "would be does not go in the if-clause. were goes there (or informally was)."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "pat": "cn.first",
+     "de": "Das Präsens wäre ein realer Fall. would run zeigt eine Annahme: were.",
+     "en": "The present would be a real case. would run shows an assumption: were."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-w-f1",
+  "type": "find",
+  "pat": "cn.were",
+  "prompt": "If I would be you, I would renegotiate the contract before signing.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "were",
+  "fixed": "If I were you, I would renegotiate the contract before signing.",
+  "accepted": [
+   "was"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Im if-Teil steht were, nicht would be: If I were you.",
+    "en": "The error: the if-clause takes were, not would be: If I were you."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: would be gehört nicht in den if-Teil.",
+     "en": "There is an error: would be does not go in the if-clause."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would be“: If I were you ist die feste Form für einen Rat.",
+     "en": "The error is “would be”: If I were you is the set form for advice."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-w-f2",
+  "type": "find",
+  "pat": "cn.were",
+  "prompt": "If our budget were not so tight, we can hire another analyst.",
+  "err": [
+   8,
+   8
+  ],
+  "answer": "could",
+  "fixed": "If our budget were not so tight, we could hire another analyst.",
+  "accepted": [
+   "would"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach einer Annahme (were) steht im Hauptsatz would oder could, nicht can.",
+    "en": "The error: after an assumption (were) the main clause takes would or could, not can."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Der Hauptsatz passt nicht zur Annahme.",
+     "en": "There is an error: the main clause does not match the assumption."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „can“: Zu were gehört would oder could.",
+     "en": "The error is “can”: were goes with would or could."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-w-m1",
+  "type": "meaning",
+  "pat": "cn.were",
+  "a": "If I were you, I'd call the client today.",
+  "b": "If I called the client today, he would be surprised.",
+  "q": {
+   "de": "Welcher Satz ist ein Rat an dich?",
+   "en": "Which sentence is advice to you?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. If I were you = an deiner Stelle. Der Sprecher rät dir etwas.",
+    "en": "Right: sentence a. If I were you = in your position. The speaker advises you."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b sagt, was nach dem Anruf des Sprechers passieren würde. Das ist kein Rat.",
+     "en": "b says what would happen after the speaker calls. That is not advice."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a setzt dich an die Stelle des Sprechers (If I were you).",
+     "en": "Not the same: only a puts you in the speaker's position (If I were you)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-t-k1",
+  "type": "kwt",
+  "pat": "cn.third",
+  "from": "We didn't test earlier, so we missed the bug.",
+  "key": "TESTED",
+  "frame": "If we ___ earlier, we would have caught the bug.",
+  "answer": "had tested",
+  "accepted": [
+   "'d tested",
+   "had tested it",
+   "'d tested it"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Es ist vorbei → if + Past Perfect: had tested. Folge: would have caught.",
+    "en": "Right: over → if + Past Perfect: had tested. Result: would have caught."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort TESTED muss unverändert in der Lücke stehen.",
+     "en": "The key word TESTED must stay unchanged in the gap.",
+     "not": [
+      "tested"
+     ]
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Third Conditional = had + 3. Form.",
+     "en": "would does not go in the if-clause. Third conditional = had + participle."
+    },
+    {
+     "if": [
+      "tested"
+     ],
+     "not": [
+      "had",
+      "'d"
+     ],
+     "de": "Ohne had ist es nur ein Past. Der if-Teil braucht had tested.",
+     "en": "Without had it is just a past. The if-clause needs had tested."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-t-k2",
+  "type": "kwt",
+  "pat": "cn.third",
+  "from": "The client didn't tell us about the change, so we didn't adjust the plan.",
+  "key": "HAVE",
+  "frame": "If the client had told us about the change, we ___ the plan.",
+  "answer": "would have adjusted",
+  "accepted": [
+   "'d have adjusted",
+   "would have changed",
+   "'d have changed",
+   "would have updated",
+   "'d have updated",
+   "would have revised",
+   "'d have revised"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Folge in der Vergangenheit → would have + 3. Form: would have adjusted.",
+    "en": "Right: result in the past → would have + participle: would have adjusted."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort HAVE muss unverändert in der Lücke stehen.",
+     "en": "The key word HAVE must stay unchanged in the gap.",
+     "not": [
+      "have"
+     ]
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will passt nicht: Die Folge liegt in der Vergangenheit und ist vorbei.",
+     "en": "will does not fit: the result lies in the past and is over."
+    },
+    {
+     "if": [
+      "would",
+      "have",
+      "adjust"
+     ],
+     "de": "Nach would have steht die 3. Form: would have adjusted.",
+     "en": "After would have comes the participle: would have adjusted."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-t-f1",
+  "type": "find",
+  "pat": "cn.third",
+  "prompt": "If the supplier would have warned us, we would have switched vendors in time.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "had",
+  "fixed": "If the supplier had warned us, we would have switched vendors in time.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: would have gehört nicht in den if-Teil. Dort steht had + 3. Form.",
+    "en": "The error: would have does not belong in the if-clause. It takes had + participle."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Im if-Teil steht kein would have.",
+     "en": "There is an error: no would have in the if-clause."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would have warned“: Der if-Teil nimmt had warned.",
+     "en": "The error is “would have warned”: the if-clause takes had warned."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-t-f2",
+  "type": "find",
+  "pat": "cn.third",
+  "prompt": "If the client had approved the draft, we would started production sooner.",
+  "err": [
+   8,
+   9
+  ],
+  "answer": "would have started",
+  "fixed": "If the client had approved the draft, we would have started production sooner.",
+  "accepted": [
+   "would have begun"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Im Hauptsatz fehlt have: would have + 3. Form.",
+    "en": "The error: the main clause is missing have: would have + participle."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Im Hauptsatz fehlt have.",
+     "en": "There is an error: have is missing in the main clause."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would started“: Es heißt would have started.",
+     "en": "The error is “would started”: it should be would have started."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-t-m1",
+  "type": "meaning",
+  "pat": "cn.third",
+  "a": "If the client had signed in March, we would have started in April.",
+  "b": "If the client signs in March, we'll start in April.",
+  "q": {
+   "de": "Welcher Satz meint: Der Kunde hat im März nicht unterschrieben?",
+   "en": "Which sentence means: the client did not sign in March?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Past Perfect + would have blickt auf etwas zurück, das nicht geschah.",
+    "en": "Right: sentence a. Past Perfect + would have looks back at something that did not happen."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "cn.first",
+     "de": "b ist Präsens + will: Die Unterschrift im März ist noch möglich.",
+     "en": "b is present + will: signing in March is still possible."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a ist vorbei und nicht passiert, b steht noch offen.",
+     "en": "Not the same: a is over and did not happen, b is still open."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-i-k1",
+  "type": "kwt",
+  "pat": "cn.if-words",
+  "from": "We'll extend the contract, but only if the price stays fixed.",
+  "key": "PROVIDED",
+  "frame": "We'll extend the contract ___ stays fixed.",
+  "answer": "provided that the price",
+  "accepted": [
+   "provided the price"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: provided that = vorausgesetzt, dass, danach das Präsens: provided that the price stays.",
+    "en": "Right: provided that = on condition that, then the present: provided that the price stays."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort PROVIDED muss unverändert in der Lücke stehen.",
+     "en": "The key word PROVIDED must stay unchanged in the gap.",
+     "not": [
+      "provided"
+     ]
+    },
+    {
+     "if": [
+      "provided",
+      "will"
+     ],
+     "de": "Nach provided that steht das Präsens, kein will.",
+     "en": "After provided that use the present, not will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-i-k2",
+  "type": "kwt",
+  "pat": "cn.if-words",
+  "from": "If the deposit doesn't arrive by Thursday, we won't ship on Friday.",
+  "key": "UNLESS",
+  "frame": "We won't ship on Friday ___ by Thursday.",
+  "answer": "unless the deposit arrives",
+  "accepted": [
+   "unless the deposit has arrived",
+   "unless the payment arrives",
+   "unless the payment has arrived",
+   "unless we receive the deposit"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: unless the deposit arrives.",
+    "en": "Right: unless = “if not” → present with no not: unless the deposit arrives."
+   },
+   "wrong": [
+    {
+     "de": "Das Schlüsselwort UNLESS muss unverändert in der Lücke stehen.",
+     "en": "The key word UNLESS must stay unchanged in the gap.",
+     "not": [
+      "unless"
+     ]
+    },
+    {
+     "if": [
+      "unless",
+      "not"
+     ],
+     "de": "Doppelte Verneinung: unless heißt schon „wenn nicht“.",
+     "en": "Double negation: unless already means “if not”."
+    },
+    {
+     "if": [
+      "unless",
+      "will"
+     ],
+     "de": "Nach unless steht kein will, sondern das Präsens.",
+     "en": "No will after unless, the present follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-i-f1",
+  "type": "find",
+  "pat": "cn.if-words",
+  "prompt": "I won't sign unless the lawyers don't approve the terms.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "approve",
+  "fixed": "I won't sign unless the lawyers approve the terms.",
+  "accepted": [
+   "have approved"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „unless … don't“ verneint doppelt. Richtig: unless the lawyers approve.",
+    "en": "The error: “unless … don't” negates twice. Correct: unless the lawyers approve."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: unless + don't ist eine doppelte Verneinung.",
+     "en": "There is an error: unless + don't is a double negation."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „don't approve“: unless trägt das not schon.",
+     "en": "The error is “don't approve”: unless already carries the not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-i-f2",
+  "type": "find",
+  "pat": "cn.if-words",
+  "prompt": "We can't start unless we will receive the signed contract.",
+  "err": [
+   5,
+   6
+  ],
+  "answer": "receive",
+  "fixed": "We can't start unless we receive the signed contract.",
+  "accepted": [
+   "get",
+   "have received",
+   "obtain"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach unless steht das Präsens (receive), kein will.",
+    "en": "The error: after unless use the present (receive), not will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach unless steht kein will.",
+     "en": "There is an error: no will after unless."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will receive“: Das ist der Reflex „Zukunft = will“.",
+     "en": "The error is “will receive”: it is the “future = will” reflex."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cn-i-m1",
+  "type": "meaning",
+  "pat": "cn.if-words",
+  "a": "We'll sign unless the terms change.",
+  "b": "We'll sign if the terms change.",
+  "q": {
+   "de": "Welcher Satz sagt: Bei geänderten Bedingungen unterschreiben wir nicht?",
+   "en": "Which sentence says: if the terms change, we won't sign?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Unless = „wenn nicht“: Ändern sich die Bedingungen, unterschreiben wir nicht.",
+    "en": "Right: sentence a. Unless = “if not”: if the terms change, we won't sign."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b sagt if das Gegenteil: Wir unterschreiben nur, wenn sich die Bedingungen ändern.",
+     "en": "In b, if says the opposite: we sign only if the terms change."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: unless dreht die Bedingung um, if nicht.",
+     "en": "Not the same: unless reverses the condition, if does not."
+    }
+   ]
+  }
+ }
+]

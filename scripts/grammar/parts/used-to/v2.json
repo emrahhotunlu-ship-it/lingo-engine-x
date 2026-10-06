@@ -1,0 +1,1022 @@
+[
+ {
+  "id": "ut-usd-k1",
+  "type": "kwt",
+  "pat": "ut.used-to",
+  "from": "We had a printed handbook back then, but we don't anymore.",
+  "key": "USED",
+  "frame": "We ___ a printed handbook back then.",
+  "answer": "used to have",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: früher so, heute nicht mehr: used to + Grundform (have).",
+    "en": "Right: true before, not any more: used to + base verb (have)."
+   },
+   "wrong": [
+    {
+     "not": [
+      "used"
+     ],
+     "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+     "en": "The key word used must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "having"
+     ],
+     "de": "Nach used to steht die Grundform: used to have, nicht having.",
+     "en": "Used to takes the base form: used to have, not having."
+    },
+    {
+     "if": [
+      "am",
+      "used"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Am used to“ heißt „gewöhnt sein“ und braucht -ing. Hier geht es um früher.",
+     "en": "“Am used to” means “be accustomed” and takes -ing. Here the past is meant."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-usd-k2",
+  "type": "kwt",
+  "pat": "ut.used-to",
+  "from": "I commuted by train every day, but I don't anymore.",
+  "key": "USED",
+  "frame": "I ___ by train every day.",
+  "answer": "used to commute",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: eine frühere Gewohnheit, die vorbei ist: used to + commute.",
+    "en": "Right: a past habit that is over: used to + commute."
+   },
+   "wrong": [
+    {
+     "not": [
+      "used"
+     ],
+     "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+     "en": "The key word used must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "commuting"
+     ],
+     "de": "Nach used to steht die Grundform: used to commute, nicht commuting.",
+     "en": "Used to takes the base form: used to commute, not commuting."
+    },
+    {
+     "if": [
+      "am",
+      "used"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Am used to“ heißt „gewöhnt sein“. Gemeint ist: früher ja, heute nicht mehr.",
+     "en": "“Am used to” means “be accustomed”. Meant here: yes in the past, not any more."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-usd-f1",
+  "type": "find",
+  "pat": "ut.used-to",
+  "prompt": "We never use to hold meetings on Fridays.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "used to",
+  "fixed": "We never used to hold meetings on Fridays.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: In bejahten Sätzen heißt es used to mit d: never used to hold.",
+    "en": "The error: affirmative sentences take used to with d: never used to hold."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: In „use to“ fehlt das d.",
+     "en": "There is an error: the d is missing in “use to”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „use to“: Ohne did braucht der Satz used to.",
+     "en": "The error is in “use to”: without did the sentence needs used to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-usd-f2",
+  "type": "find",
+  "pat": "ut.used-to",
+  "prompt": "We used to buying everything on paper until two years ago.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "buy",
+  "fixed": "We used to buy everything on paper until two years ago.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach used to steht die Grundform („buy“), nicht -ing.",
+    "en": "The error: used to takes the base form (“buy”), not -ing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Auf used to folgt kein -ing.",
+     "en": "There is an error: used to is not followed by -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „buying“: Hier geht es um früher, nicht um „gewöhnt sein“.",
+     "en": "The error is in “buying”: this is about the past, not about “be accustomed”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-usd-f3",
+  "type": "find",
+  "pat": "ut.used-to",
+  "prompt": "Our office used to be in the city center before we moved.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: used to + be passt zu einem früheren Zustand.",
+    "en": "No error: used to + be fits a past state."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Auf used to folgt die Grundform („be“).",
+     "en": "No error: used to is followed by the base form (“be”)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-usd-m1",
+  "type": "meaning",
+  "pat": "ut.used-to",
+  "a": "We used to work from the office.",
+  "b": "We're used to working from the office.",
+  "q": {
+   "de": "Welcher Satz sagt: Wir arbeiten heute nicht mehr im Büro?",
+   "en": "Which sentence says we no longer work from the office?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Used to + Grundform heißt: früher ja, heute nicht mehr.",
+    "en": "Right: sentence a. Used to + base verb means: yes before, not any more."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist Büroarbeit heute normal für uns: be used to + -ing.",
+     "en": "In b, working from the office is normal for us today: be used to + -ing."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a erzählt von früher, b von etwas, das heute vertraut ist.",
+     "en": "Not the same: a tells of the past, b of something familiar today."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-wld-k1",
+  "type": "kwt",
+  "pat": "ut.would",
+  "from": "Every Monday, my old boss reviewed our pipeline in a short call.",
+  "key": "WOULD",
+  "frame": "Every Monday, my old boss ___ our pipeline in a short call.",
+  "answer": "would review",
+  "accepted": [
+   "would go over",
+   "would go through",
+   "would look at",
+   "would check",
+   "would look over",
+   "would run through"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: eine wiederholte Handlung früher: would + Grundform.",
+    "en": "Right: a repeated action in the past: would + base verb."
+   },
+   "wrong": [
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
+     "en": "The key word would must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "would",
+      "reviewed"
+     ],
+     "de": "Nach would steht die Grundform: would review, nicht reviewed.",
+     "en": "Would takes the base form: would review, not reviewed."
+    },
+    {
+     "if": [
+      "would",
+      "reviewing"
+     ],
+     "de": "Nach would steht die Grundform: would review, nicht reviewing.",
+     "en": "Would takes the base form: would review, not reviewing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-wld-k2",
+  "type": "kwt",
+  "pat": "ut.would",
+  "from": "As kids, we always played outside until dinner.",
+  "key": "WOULD",
+  "frame": "As kids, we ___ until dinner.",
+  "answer": "would play outside",
+  "accepted": [
+   "would always play outside",
+   "would usually play outside",
+   "would often play outside",
+   "would play outdoors",
+   "would always play outdoors",
+   "would usually play outdoors",
+   "would often play outdoors"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Spielen ist eine wiederholte Handlung früher: would + Grundform.",
+    "en": "Right: playing is a repeated action in the past: would + base verb."
+   },
+   "wrong": [
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Das Schlüsselwort would muss unverändert in der Lücke stehen.",
+     "en": "The key word would must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "would",
+      "played"
+     ],
+     "de": "Nach would steht die Grundform: would play, nicht played.",
+     "en": "Would takes the base form: would play, not played."
+    },
+    {
+     "if": [
+      "would",
+      "playing"
+     ],
+     "de": "Nach would steht die Grundform: would play, nicht playing.",
+     "en": "Would takes the base form: would play, not playing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-wld-f1",
+  "type": "find",
+  "pat": "ut.would",
+  "prompt": "Yesterday, I would finish the report before lunch.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "finished",
+  "fixed": "Yesterday, I finished the report before lunch.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: would erzählt von Wiederholung. Ein einmaliges Ereignis braucht das Past Simple.",
+    "en": "The error: would tells of repetition. A one-time event needs the simple past."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: „Yesterday“ nennt ein einmaliges Ereignis, kein would.",
+     "en": "There is an error: “Yesterday” names a one-time event, not would."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would finish“: Es ist ein einzelnes Ereignis, keine Gewohnheit.",
+     "en": "The error is in “would finish”: it is a single event, not a habit."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-wld-f2",
+  "type": "find",
+  "pat": "ut.would",
+  "prompt": "When I was a kid, my uncle would own a small bakery downtown.",
+  "err": [
+   7,
+   8
+  ],
+  "answer": "owned",
+  "fixed": "When I was a kid, my uncle owned a small bakery downtown.",
+  "accepted": [
+   "used to own"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „own“ ist ein Zustand, keine wiederholte Handlung. Passend: owned oder used to own.",
+    "en": "The error: “own” is a state, not a repeated action. Fits: owned or used to own."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Zustände wie „own“ gehen nicht mit would.",
+     "en": "There is an error: states like “own” do not go with would."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would own“: Für frühere Zustände passt nur used to oder die Vergangenheit.",
+     "en": "The error is in “would own”: for past states only used to or the simple past fits."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-wld-m1",
+  "type": "meaning",
+  "pat": "ut.would",
+  "a": "As a student, I used to read on the train.",
+  "b": "As a student, I would read on the train.",
+  "q": {
+   "de": "Welche Sätze erzählen von einer früheren Gewohnheit?",
+   "en": "Which sentences tell of a past habit?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Auch would passt, weil „read“ eine wiederholte Handlung ist.",
+    "en": "Right: both. Would works too, because “read” is a repeated action."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Nicht nur a: Auch b erzählt von einer früheren Gewohnheit.",
+     "en": "Not only a: b also tells of a past habit."
+    },
+    {
+     "opt": "b",
+     "de": "Nicht nur b: Auch a erzählt von einer früheren Gewohnheit.",
+     "en": "Not only b: a also tells of a past habit."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-did-k1",
+  "type": "kwt",
+  "pat": "ut.did-use-to",
+  "from": "Did you work remotely regularly before the pandemic?",
+  "key": "USE",
+  "frame": "Did you ___ remotely before the pandemic?",
+  "answer": "use to work",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: nach did steht use to ohne d, danach die Grundform.",
+    "en": "Right: after did comes use to without d, then the base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.used-to",
+     "de": "Nach did entfällt das d: Did you use to work, nicht used.",
+     "en": "After did the d drops: Did you use to work, not used."
+    },
+    {
+     "not": [
+      "use"
+     ],
+     "de": "Das Schlüsselwort use muss unverändert in der Lücke stehen.",
+     "en": "The key word use must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "use",
+      "to",
+      "worked"
+     ],
+     "de": "Nach did bleibt die Grundform: use to work, nicht worked.",
+     "en": "After did the base form stays: use to work, not worked."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-did-k2",
+  "type": "kwt",
+  "pat": "ut.did-use-to",
+  "from": "In the past, I never checked my phone during meetings.",
+  "key": "USE",
+  "frame": "Back then, I ___ my phone during meetings.",
+  "answer": "didn't use to check",
+  "accepted": [
+   "did not use to check"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: didn't + use to ohne d + Grundform: didn't use to check.",
+    "en": "Right: didn't + use to without d + base verb: didn't use to check."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.used-to",
+     "de": "Nach didn't entfällt das d: didn't use to, nicht used.",
+     "en": "After didn't the d drops: didn't use to, not used."
+    },
+    {
+     "not": [
+      "use"
+     ],
+     "de": "Das Schlüsselwort use muss unverändert in der Lücke stehen.",
+     "en": "The key word use must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "use",
+      "to",
+      "checking"
+     ],
+     "de": "Nach use to steht die Grundform: check, nicht checking.",
+     "en": "Use to takes the base form: check, not checking."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-did-f1",
+  "type": "find",
+  "pat": "ut.did-use-to",
+  "prompt": "Did you use travel a lot for your old job?",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "use to travel",
+  "fixed": "Did you use to travel a lot for your old job?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach „use“ fehlt das to: Did you use to travel.",
+    "en": "The error: to is missing after “use”: Did you use to travel."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Bei „use“ fehlt das to.",
+     "en": "There is an error: to is missing after “use”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „use travel“: Es heißt use to + Grundform.",
+     "en": "The error is in “use travel”: it is use to + base verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-did-f2",
+  "type": "find",
+  "pat": "ut.did-use-to",
+  "prompt": "Did you use to worked night shifts at your old company?",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "work",
+  "fixed": "Did you use to work night shifts at your old company?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach did bleibt die Grundform: use to work, nicht worked.",
+    "en": "The error: after did the base form stays: use to work, not worked."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach did steht keine Vergangenheitsform.",
+     "en": "There is an error: no past form follows did."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „worked“: did zeigt die Vergangenheit schon.",
+     "en": "The error is in “worked”: did already shows the past."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-did-f3",
+  "type": "find",
+  "pat": "ut.did-use-to",
+  "prompt": "We didn't use to track our hours, but now everyone does.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: didn't + use to ohne d ist richtig.",
+    "en": "No error: didn't + use to without d is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach didn't steht use to ohne d.",
+     "en": "No error: after didn't comes use to without d."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-did-m1",
+  "type": "meaning",
+  "pat": "ut.did-use-to",
+  "a": "We didn't use to have a travel budget.",
+  "b": "We don't have a travel budget.",
+  "q": {
+   "de": "Welcher Satz deutet auf eine Veränderung hin (früher kein Budget, heute eins)?",
+   "en": "Which sentence points to a change (no travel budget before, one today)?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Didn't use to heißt: früher nicht, heute meist schon.",
+    "en": "Right: sentence a. Didn't use to means: not before, usually yes today."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist heute kein Budget da.",
+     "en": "In b, there is no budget today."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a deutet auf eine Veränderung, b beschreibt nur heute.",
+     "en": "Not the same: a points to a change, b only describes today."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-be-k1",
+  "type": "kwt",
+  "pat": "ut.be-used-to",
+  "from": "Presenting to the board no longer makes me nervous.",
+  "key": "USED",
+  "frame": "I'm ___ to the board.",
+  "answer": "used to presenting",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach be used to steht -ing: I'm used to presenting.",
+    "en": "Right: be used to + -ing: I'm used to presenting."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt).",
+     "en": "The d is missing: used is an adjective here (accustomed)."
+    },
+    {
+     "not": [
+      "used"
+     ],
+     "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+     "en": "The key word used must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "present"
+     ],
+     "de": "Nach be used to steht -ing: presenting, nicht present.",
+     "en": "Be used to takes -ing: presenting, not present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-be-k2",
+  "type": "kwt",
+  "pat": "ut.be-used-to",
+  "from": "Long travel days are nothing new for the sales team.",
+  "key": "USED",
+  "frame": "The sales team ___ long travel days.",
+  "answer": "is used to",
+  "accepted": [
+   "'s used to",
+   "are used to"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + Nomen: Das ist nichts Neues, sondern vertraut.",
+    "en": "Right: be used to + noun: nothing new, but familiar."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt).",
+     "en": "The d is missing: used is an adjective here (accustomed)."
+    },
+    {
+     "not": [
+      "used"
+     ],
+     "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+     "en": "The key word used must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "getting",
+      "used"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Getting used to“ ist der Vorgang. Für „nichts Neues“ passt der Zustand: is used to.",
+     "en": "“Getting used to” is the process. For “nothing new” the state fits: is used to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-be-f1",
+  "type": "find",
+  "pat": "ut.be-used-to",
+  "prompt": "I'm not used to speak English all day, so by evening I'm tired.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "speaking",
+  "fixed": "I'm not used to speaking English all day, so by evening I'm tired.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach be used to ist „to“ eine Präposition: speaking.",
+    "en": "The error: after be used to, to is a preposition: speaking."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach „used to“ fehlt die -ing-Form.",
+     "en": "There is an error: the -ing form is missing after “used to”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „speak“: Nach be used to steht -ing.",
+     "en": "The error is in “speak”: be used to takes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-be-f2",
+  "type": "find",
+  "pat": "ut.be-used-to",
+  "prompt": "Our support team is use to handling angry customers.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "used",
+  "fixed": "Our support team is used to handling angry customers.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „used“ ist hier ein Adjektiv („gewöhnt“) und braucht das d.",
+    "en": "The error: used is an adjective here (“accustomed”) and needs the d."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: In „is use to“ fehlt das d.",
+     "en": "There is an error: the d is missing in “is use to”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „use“: Nach is steht das Adjektiv used.",
+     "en": "The error is in “use”: after is comes the adjective used."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-be-f3",
+  "type": "find",
+  "pat": "ut.be-used-to",
+  "prompt": "She's used to getting emails at all hours, so she barely notices.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: be used to + -ing (getting) ist richtig.",
+    "en": "No error: be used to + -ing (getting) is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach be used to steht -ing, hier „getting“.",
+     "en": "No error: be used to takes -ing, here “getting”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-be-m1",
+  "type": "meaning",
+  "pat": "ut.be-used-to",
+  "a": "I'm used to the noise.",
+  "b": "I used to hear the noise.",
+  "q": {
+   "de": "Welcher Satz sagt: Der Lärm stört mich nicht mehr, weil er vertraut ist?",
+   "en": "Which sentence says the noise no longer bothers me because it is familiar?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Be used to nennt den vertrauten Zustand von heute.",
+    "en": "Right: sentence a. Be used to names the familiar state today."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b hast du den Lärm früher gehört, heute nicht mehr.",
+     "en": "In b, you heard the noise in the past, but not any more."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt Gewöhnung heute, b eine frühere Gewohnheit.",
+     "en": "Not the same: a names familiarity today, b a past habit."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-get-k1",
+  "type": "kwt",
+  "pat": "ut.get-used-to",
+  "from": "After a few weeks, working in a hybrid setup no longer felt strange to me.",
+  "key": "USED",
+  "frame": "After a few weeks, I ___ in a hybrid setup.",
+  "answer": "got used to working",
+  "accepted": [
+   "had gotten used to working",
+   "'d gotten used to working",
+   "grew used to working",
+   "had grown used to working",
+   "became used to working",
+   "had become used to working"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: der Vorgang des Gewöhnens: got used to + -ing.",
+    "en": "Right: the process of becoming accustomed: got used to + -ing."
+   },
+   "wrong": [
+    {
+     "not": [
+      "used"
+     ],
+     "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+     "en": "The key word used must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "work"
+     ],
+     "de": "Nach get used to steht -ing: working, nicht die Grundform.",
+     "en": "Get used to takes -ing: working, not the base form."
+    },
+    {
+     "if": [
+      "was",
+      "used",
+      "to"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Was used to“ = war gewöhnt (Zustand). Hier ist der Vorgang gemeint: got used to.",
+     "en": "“Was used to” = was accustomed (a state). Here the process is meant: got used to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-get-k2",
+  "type": "kwt",
+  "pat": "ut.get-used-to",
+  "from": "It takes time to adjust to a new time zone.",
+  "key": "USED",
+  "frame": "It takes time to ___ a new time zone.",
+  "answer": "get used to",
+  "accepted": [
+   "become used to",
+   "grow used to"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: der Vorgang des Gewöhnens: get used to + Nomen.",
+    "en": "Right: the process of becoming accustomed: get used to + noun."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt).",
+     "en": "The d is missing: used is an adjective here (accustomed)."
+    },
+    {
+     "not": [
+      "used"
+     ],
+     "de": "Das Schlüsselwort used muss unverändert in der Lücke stehen.",
+     "en": "The key word used must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "be",
+      "used",
+      "to"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Be used to“ nennt den Zustand. Nach „takes time“ passt der Vorgang: get used to.",
+     "en": "“Be used to” names the state. After “takes time” the process fits: get used to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-get-f1",
+  "type": "find",
+  "pat": "ut.get-used-to",
+  "prompt": "It took me weeks to be used to the new expense system.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "get",
+  "fixed": "It took me weeks to get used to the new expense system.",
+  "accepted": [
+   "become",
+   "grow"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Vorgang des Gewöhnens braucht get, nicht be: to get used to.",
+    "en": "The error: the process of becoming accustomed needs get, not be: to get used to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Zum Vorgang „sich gewöhnen“ passt be nicht.",
+     "en": "There is an error: be does not fit the process of getting accustomed."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „be used to“: be nennt den Zustand, get den Vorgang.",
+     "en": "The error is in “be used to”: be names the state, get the process."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-get-f2",
+  "type": "find",
+  "pat": "ut.get-used-to",
+  "prompt": "After a year in Dallas, I finally got used to drive on the highway.",
+  "err": [
+   10,
+   10
+  ],
+  "answer": "driving",
+  "fixed": "After a year in Dallas, I finally got used to driving on the highway.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach get used to ist „to“ eine Präposition: driving.",
+    "en": "The error: after get used to, to is a preposition: driving."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach „got used to“ fehlt die -ing-Form.",
+     "en": "There is an error: the -ing form is missing after “got used to”."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „drive“: Nach get used to steht -ing.",
+     "en": "The error is in “drive”: get used to takes -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ut-get-m1",
+  "type": "meaning",
+  "pat": "ut.get-used-to",
+  "a": "I'm getting used to the new system.",
+  "b": "I'm used to the new system.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich bin noch dabei, mich daran zu gewöhnen?",
+   "en": "Which sentence says I am still in the process of getting used to it?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Getting used to nennt den Vorgang, der noch läuft.",
+    "en": "Right: sentence a. Getting used to names the process that is still going on."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist die Gewöhnung schon abgeschlossen: be used to nennt den Zustand.",
+     "en": "In b, getting used to it is already done: be used to names the state."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt den Vorgang, b das Ergebnis.",
+     "en": "Not the same: a names the process, b the result."
+    }
+   ]
+  }
+ }
+]

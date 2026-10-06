@@ -1,0 +1,209 @@
+[
+ {
+  "pat": "ut.used-to",
+  "en": "We used to print every report for the board.",
+  "de": "Wir haben früher jeden Bericht für den Vorstand ausgedruckt.",
+  "chunks": [
+   "we",
+   "used to",
+   "print",
+   "every report",
+   "for the board"
+  ],
+  "alt": [
+   "For the board, we used to print every report."
+  ],
+  "why": [
+   "Used to + Grundform erzählt von früher: Nach „used to“ folgt direkt print, ohne -ing und ohne zweites to.",
+   "Used to + base verb tells of the past: print follows used to directly, with no -ing and no extra to."
+  ],
+  "bad": "We used to printing every report for the board.",
+  "trap": {
+   "tile": "print",
+   "instead": "printing",
+   "why": {
+    "de": "Wegen „be used to“ rutscht oft -ing hinter used to. Für früher bleibt die Grundform: used to print.",
+    "en": "Because of “be used to”, -ing often slips in after used to. For the past, the base form stays: used to print."
+   }
+  }
+ },
+ {
+  "pat": "ut.used-to",
+  "en": "Back then, we used to answer every call within an hour.",
+  "de": "Damals haben wir jeden Anruf innerhalb einer Stunde beantwortet.",
+  "chunks": [
+   "back then",
+   "we",
+   "used to",
+   "answer",
+   "every call",
+   "within an hour"
+  ],
+  "alt": [
+   "We used to answer every call within an hour back then."
+  ],
+  "why": [
+   "Used to steht direkt vor der Grundform answer. Die Zeitangabe „back then“ darf vorn oder hinten stehen.",
+   "Used to stands directly before the base form answer. The time phrase “back then” can go first or last."
+  ],
+  "bad": "Back then, we used to answering every call within an hour."
+ },
+ {
+  "pat": "ut.would",
+  "en": "Whenever a client complained, our manager would call back within the hour.",
+  "de": "Wann immer sich ein Kunde beschwerte, rief unser Chef innerhalb einer Stunde zurück.",
+  "chunks": [
+   "whenever",
+   "a client",
+   "complained",
+   "our manager",
+   "would",
+   "call back",
+   "within the hour"
+  ],
+  "alt": [
+   "Our manager would call back within the hour whenever a client complained."
+  ],
+  "why": [
+   "Would erzählt von einer wiederholten Handlung früher; „whenever“ macht die Wiederholung klar. Nach would folgt die Grundform.",
+   "Would tells of a repeated action in the past; “whenever” makes the repetition clear. Would is followed by the base form."
+  ],
+  "bad": "Whenever a client complained, our manager would called back within the hour."
+ },
+ {
+  "pat": "ut.would",
+  "en": "Every Friday, we would order pizza for the whole team.",
+  "de": "Jeden Freitag bestellten wir früher Pizza für das ganze Team.",
+  "chunks": [
+   "every Friday",
+   "we",
+   "would",
+   "order",
+   "pizza",
+   "for the whole team"
+  ],
+  "alt": [
+   "We would order pizza for the whole team every Friday."
+  ],
+  "why": [
+   "Der frühere Zeitrahmen „every Friday“ macht would möglich. Nach would steht die Grundform order.",
+   "The past time frame “every Friday” makes would possible. Would is followed by the base form order."
+  ],
+  "bad": "Every Friday, we would ordered pizza for the whole team.",
+  "trap": {
+   "tile": "order",
+   "instead": "ordered",
+   "why": {
+    "de": "Die Vergangenheit steckt schon in would. Danach bleibt die Grundform: would order, nicht would ordered.",
+    "en": "The past is already inside would. After it the base form stays: would order, not would ordered."
+   }
+  }
+ },
+ {
+  "pat": "ut.did-use-to",
+  "en": "Back then, my manager didn't use to join our calls.",
+  "de": "Damals nahm mein Chef nicht an unseren Calls teil.",
+  "chunks": [
+   "back then",
+   "my manager",
+   "didn't",
+   "use to",
+   "join",
+   "our calls"
+  ],
+  "alt": [
+   "My manager didn't use to join our calls back then."
+  ],
+  "why": [
+   "Nach didn't zeigt didn't die Vergangenheit schon. Darum steht use to ohne d, danach die Grundform join.",
+   "After didn't, didn't already shows the past. So it is use to without d, then the base form join."
+  ],
+  "bad": "Back then, my manager didn't used to join our calls.",
+  "trap": {
+   "tile": "use to",
+   "instead": "used to",
+   "why": {
+    "de": "„I used to“ ist so geläufig, dass das d auch nach didn't bleibt. Doch didn't zeigt die Vergangenheit schon: use to.",
+    "en": "“I used to” is so familiar that the d stays even after didn't. But didn't already shows the past: use to."
+   }
+  }
+ },
+ {
+  "pat": "ut.be-used-to",
+  "en": "Our clients are used to getting a reply within a day.",
+  "de": "Unsere Kunden sind es gewohnt, innerhalb eines Tages eine Antwort zu bekommen.",
+  "chunks": [
+   "our clients",
+   "are used to",
+   "getting",
+   "a reply",
+   "within a day"
+  ],
+  "single": "Are used to bildet mit dem -ing-Wort einen festen Block; getting a reply within a day lässt sich davor nicht verschieben.",
+  "why": [
+   "Be used to heißt „gewöhnt sein“. „To“ ist hier eine Präposition, darum folgt -ing: getting.",
+   "Be used to means “be accustomed”. Here to is a preposition, so -ing follows: getting."
+  ],
+  "bad": "Our clients are used to get a reply within a day.",
+  "trap": {
+   "tile": "getting",
+   "instead": "get",
+   "why": {
+    "de": "Im Deutschen heißt es „gewohnt, zu bekommen“ mit Infinitiv. Das englische to ist aber eine Präposition: getting.",
+    "en": "German says “gewohnt, zu bekommen” with an infinitive. But English to is a preposition: getting."
+   }
+  }
+ },
+ {
+  "pat": "ut.be-used-to",
+  "en": "We're not used to making decisions this fast.",
+  "de": "Wir sind es nicht gewohnt, Entscheidungen so schnell zu treffen.",
+  "chunks": [
+   "we're not",
+   "used to",
+   "making",
+   "decisions",
+   "this fast"
+  ],
+  "single": "Not steht direkt vor used to, und making decisions this fast bleibt als Block am Ende; sonst ändert sich der Sinn.",
+  "why": [
+   "Be used to + -ing heißt „gewöhnt sein“: making. Mit dem d in used ist es das Adjektiv „gewöhnt“.",
+   "Be used to + -ing means “be accustomed”: making. With the d, used is the adjective “accustomed”."
+  ],
+  "bad": "We're not use to making decisions this fast.",
+  "trap": {
+   "tile": "used to",
+   "instead": "use to",
+   "why": {
+    "de": "Hier ist used ein Adjektiv („gewöhnt“) und braucht das d. Ohne d wäre es das Verb use.",
+    "en": "Here used is an adjective (“accustomed”) and needs the d. Without d it would be the verb use."
+   }
+  }
+ },
+ {
+  "pat": "ut.get-used-to",
+  "en": "It took a few weeks to get used to the new office.",
+  "de": "Es hat ein paar Wochen gedauert, bis ich mich an das neue Büro gewöhnt hatte.",
+  "chunks": [
+   "it took",
+   "a few weeks",
+   "to",
+   "get used to",
+   "the new office"
+  ],
+  "single": "It took a few weeks bildet den festen Rahmen, danach folgt to get used to und das Nomen; eine andere Reihenfolge klingt unnatürlich.",
+  "why": [
+   "Der Vorgang des Gewöhnens braucht get: to get used to. Be used to beschriebe nur den Zustand danach.",
+   "The process of becoming accustomed needs get: to get used to. Be used to would describe only the state afterwards."
+  ],
+  "bad": "It took a few weeks to be used to the new office.",
+  "trap": {
+   "tile": "get used to",
+   "instead": "be used to",
+   "why": {
+    "de": "Deutsch trennt „sich gewöhnen“ und „gewohnt sein“. Im Englischen entscheidet nur be oder get: Der Vorgang braucht get.",
+    "en": "German separates “sich gewöhnen” and “gewohnt sein”. In English only be or get decides: the process needs get."
+   }
+  }
+ }
+]

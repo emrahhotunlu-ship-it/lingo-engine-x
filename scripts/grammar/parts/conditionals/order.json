@@ -1,0 +1,237 @@
+[
+ {
+  "pat": "cn.zero",
+  "en": "If a payment fails, the system sends an alert.",
+  "de": "Wenn eine Zahlung fehlschlägt, sendet das System eine Warnung.",
+  "chunks": [
+   "if a payment",
+   "fails",
+   "the system",
+   "sends",
+   "an alert"
+  ],
+  "alt": [
+   "The system sends an alert if a payment fails."
+  ],
+  "why": [
+   "Feste Regel: if + Präsens, Präsens. Beide Teile stehen im Präsens, ohne will und ohne would.",
+   "Fixed rule: if + present, present. Both parts are in the present, with no will and no would."
+  ],
+  "bad": "If a payment would fail, the system sends an alert.",
+  "trap": {
+   "tile": "fails",
+   "instead": "would fail",
+   "why": {
+    "de": "Der Reflex „würde = would“ verführt zu would fail. Im if-Teil einer festen Regel steht aber das Präsens.",
+    "en": "The reflex “würde = would” tempts you into would fail. The if-clause of a fixed rule takes the present."
+   }
+  }
+ },
+ {
+  "pat": "cn.zero",
+  "en": "When the server overheats, it shuts down automatically.",
+  "de": "Wenn der Server überhitzt, schaltet er sich automatisch ab.",
+  "chunks": [
+   "when the server",
+   "overheats",
+   "it",
+   "shuts down",
+   "automatically"
+  ],
+  "alt": [
+   "It shuts down automatically when the server overheats.",
+   "It automatically shuts down when the server overheats."
+  ],
+  "why": [
+   "Feste Regel: Beide Teile stehen im Präsens. when lässt sich hier durch if ersetzen.",
+   "Fixed rule: both parts are in the present. when can be replaced by if here."
+  ],
+  "bad": "When the server overheats, it would shut down automatically.",
+  "trap": {
+   "tile": "shuts down",
+   "instead": "would shut down",
+   "why": {
+    "de": "would klingt vorsichtig, macht aus der Regel aber eine Annahme. Bei festen Abläufen steht das Präsens.",
+    "en": "would sounds cautious but turns the rule into an assumption. Fixed processes take the present."
+   }
+  }
+ },
+ {
+  "pat": "cn.first",
+  "en": "If the client approves the budget, we'll start on Monday.",
+  "de": "Wenn der Kunde das Budget freigibt, starten wir am Montag.",
+  "chunks": [
+   "if the client",
+   "approves",
+   "the budget",
+   "we'll",
+   "start",
+   "on Monday"
+  ],
+  "alt": [
+   "We'll start on Monday if the client approves the budget."
+  ],
+  "why": [
+   "Mögliche Zukunft: Im if-Teil steht das Präsens (approves), will steht nur im Hauptsatz (we'll start).",
+   "Possible future: the if-clause takes the present (approves), will appears only in the main clause (we'll start)."
+  ],
+  "bad": "If the client will approve the budget, we'll start on Monday.",
+  "trap": {
+   "tile": "approves",
+   "instead": "will approve",
+   "why": {
+    "de": "Der Reflex „Zukunft = will“ verführt zu will approve. Nach if steht bei möglicher Zukunft aber das Präsens.",
+    "en": "The reflex “future = will” tempts you into will approve. After if, a possible future takes the present."
+   }
+  }
+ },
+ {
+  "pat": "cn.second",
+  "en": "If we had a bigger team, we would finish the project sooner.",
+  "de": "Wenn wir ein größeres Team hätten, würden wir das Projekt früher abschließen.",
+  "chunks": [
+   "if we",
+   "had",
+   "a bigger team",
+   "we",
+   "would finish",
+   "the project",
+   "sooner"
+  ],
+  "alt": [
+   "We would finish the project sooner if we had a bigger team."
+  ],
+  "why": [
+   "Annahme für jetzt: if + Past (had), Hauptsatz would + Grundform. Das Past meint hier nicht „früher“.",
+   "Assumption for now: if + past (had), main clause would + base form. The past does not mean “earlier” here."
+  ],
+  "bad": "If we would have a bigger team, we would finish the project sooner.",
+  "trap": {
+   "tile": "had",
+   "instead": "would have",
+   "why": {
+    "de": "Das deutsche „wenn wir ein größeres Team haben würden“ führt zu would have. Im Englischen steht im if-Teil nur das Past: had.",
+    "en": "The German “wenn wir ein größeres Team haben würden” leads to would have. English uses only the past in the if-clause: had."
+   }
+  }
+ },
+ {
+  "pat": "cn.were",
+  "en": "If I were you, I would renegotiate the price first.",
+  "de": "An deiner Stelle würde ich zuerst den Preis neu verhandeln.",
+  "chunks": [
+   "if I were you",
+   "I would",
+   "renegotiate",
+   "the price",
+   "first"
+  ],
+  "alt": [
+   "I would renegotiate the price first if I were you.",
+   "I would first renegotiate the price if I were you.",
+   "If I were you, I would first renegotiate the price."
+  ],
+  "why": [
+   "If I were you gibt einen Rat. Im if-Teil steht were, im Hauptsatz would + Grundform.",
+   "If I were you gives advice. The if-clause takes were, the main clause would + base form."
+  ],
+  "bad": "If I would be you, I would renegotiate the price first.",
+  "trap": {
+   "tile": "if I were you",
+   "instead": "if I would be you",
+   "why": {
+    "de": "Kein Übersetzungsfehler: Das deutsche „wäre“ entspricht genau were. Der Fehler entsteht, wenn man sich unsicher auf would be rettet.",
+    "en": "Not a translation error: the German “wäre” matches were exactly. The mistake appears when you fall back on would be out of doubt."
+   }
+  }
+ },
+ {
+  "pat": "cn.third",
+  "en": "If we had tested the update earlier, we would have caught the bug.",
+  "de": "Wenn wir das Update früher getestet hätten, hätten wir den Fehler entdeckt.",
+  "chunks": [
+   "if we",
+   "had tested",
+   "the update",
+   "earlier",
+   "we",
+   "would have caught",
+   "the bug"
+  ],
+  "alt": [
+   "We would have caught the bug if we had tested the update earlier."
+  ],
+  "why": [
+   "Der Rückblick ist vorbei: if + Past Perfect (had tested), Hauptsatz would have + 3. Form (would have caught).",
+   "Over: if + Past Perfect (had tested), main clause would have + participle (would have caught)."
+  ],
+  "bad": "If we would have tested the update earlier, we would have caught the bug.",
+  "trap": {
+   "tile": "had tested",
+   "instead": "would have tested",
+   "why": {
+    "de": "Das deutsche „hätten“ steckt in beiden Teilen. Nur der Hauptsatz bekommt would have, der if-Teil braucht had + 3. Form.",
+    "en": "The German “hätten” appears in both parts. Only the main clause gets would have, the if-clause needs had + participle."
+   }
+  }
+ },
+ {
+  "pat": "cn.if-words",
+  "en": "We won't start the rollout unless legal approves the plan.",
+  "de": "Wir starten den Rollout nicht, es sei denn, die Rechtsabteilung genehmigt den Plan.",
+  "chunks": [
+   "we won't",
+   "start",
+   "the rollout",
+   "unless",
+   "legal",
+   "approves",
+   "the plan"
+  ],
+  "alt": [
+   "Unless legal approves the plan, we won't start the rollout."
+  ],
+  "why": [
+   "unless trägt die Verneinung schon: Nach unless legal folgt approves im Präsens, ohne zweites not.",
+   "unless already carries the negation: unless legal is followed by approves in the present, with no second not."
+  ],
+  "bad": "We won't start the rollout unless legal doesn't approve the plan.",
+  "trap": {
+   "tile": "approves",
+   "instead": "doesn't approve",
+   "why": {
+    "de": "Wer „wenn nicht“ denkt, setzt oft ein zweites not. Unless enthält die Verneinung aber schon.",
+    "en": "Thinking “wenn nicht”, Germans often add a second not. But unless already contains the negation."
+   }
+  }
+ },
+ {
+  "pat": "cn.if-words",
+  "en": "We can offer the discount provided that you order today.",
+  "de": "Wir können den Rabatt anbieten, vorausgesetzt, du bestellst heute.",
+  "chunks": [
+   "we can offer",
+   "the discount",
+   "provided that",
+   "you",
+   "order",
+   "today"
+  ],
+  "alt": [
+   "Provided that you order today, we can offer the discount."
+  ],
+  "why": [
+   "provided that nennt die Voraussetzung und verlangt das Präsens: you order, kein will.",
+   "provided that names the requirement and takes the present: you order, no will."
+  ],
+  "bad": "We can offer the discount provided that you will order today.",
+  "trap": {
+   "tile": "order",
+   "instead": "will order",
+   "why": {
+    "de": "Der Reflex „Zukunft = will“ verführt zu will order. Nach provided that steht das Präsens.",
+    "en": "The reflex “future = will” tempts you into will order. After provided that the present is used."
+   }
+  }
+ }
+]

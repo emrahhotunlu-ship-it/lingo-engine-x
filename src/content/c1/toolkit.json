@@ -2607,6 +2607,12 @@
    "type": "gap",
    "prompt": "I ___ whether you could share the requirements by Friday.",
    "answer": "was wondering",
+   "accepted": [
+    "wondered",
+    "wonder",
+    "am wondering",
+    "was just wondering"
+   ],
    "hint": "(wonder)",
    "expl": "Die Verlaufsform der Vergangenheit macht die Bitte höflich – gemeint ist jetzt.",
    "expl_en": "The past continuous makes the request polite – it still means now."
@@ -2616,6 +2622,12 @@
    "type": "gap",
    "prompt": "We ___ to sign before the end of Q3.",
    "answer": "were hoping",
+   "accepted": [
+    "are hoping",
+    "hope",
+    "hoped",
+    "had been hoping"
+   ],
    "hint": "(hope)",
    "expl": "„We were hoping …“ klingt weicher als „We want …“.",
    "expl_en": "“We were hoping …” sounds softer than “We want …”."
@@ -2625,6 +2637,12 @@
    "type": "gap",
    "prompt": "Would it be possible ___ the trial by two weeks?",
    "answer": "to extend",
+   "accepted": [
+    "for us to extend",
+    "for you to extend",
+    "for me to extend",
+    "for them to extend"
+   ],
    "hint": "(extend)",
    "expl": "Nach „Would it be possible“ folgt „to“ + Grundform.",
    "expl_en": "“Would it be possible” + to + base form."
@@ -2634,6 +2652,9 @@
    "type": "gap",
    "prompt": "I was wondering if you ___ join the call on Monday.",
    "answer": "could",
+   "accepted": [
+    "would"
+   ],
    "hint": "(can)",
    "expl": "Nach „I was wondering“ bleibt der Abstand: could statt can.",
    "expl_en": "After “I was wondering” the distance continues: could instead of can."
@@ -2685,6 +2706,10 @@
    "type": "transform",
    "prompt": "Can you move the demo to Thursday? → I was wondering whether you ___ the demo to Thursday.",
    "answer": "could move",
+   "accepted": [
+    "would move",
+    "could possibly move"
+   ],
    "expl": "Aus der direkten Frage wird eine indirekte Bitte mit could.",
    "expl_en": "The direct question becomes an indirect request with could."
   },
@@ -2695,7 +2720,8 @@
    "answer": "could",
    "accepted": [
     "might",
-    "may"
+    "may",
+    "would"
    ],
    "expl": "Einwand mit Abstand: „could be a bit of a stretch“ statt „is too expensive“.",
    "expl_en": "An objection with distance: could be a bit of a stretch instead of is too expensive."
@@ -2705,6 +2731,10 @@
    "type": "transform",
    "prompt": "We want a discount. → We ___ hoping for a small discount.",
    "answer": "were",
+   "accepted": [
+    "are",
+    "had been"
+   ],
    "expl": "„We were hoping for …“ macht aus der Forderung einen Wunsch.",
    "expl_en": "“We were hoping for …” turns the demand into a wish."
   },
@@ -2713,6 +2743,13 @@
    "type": "correct",
    "prompt": "We were hoping you can confirm the date.",
    "answer": "We were hoping you could confirm the date.",
+   "accepted": [
+    "We were hoping that you could confirm the date.",
+    "We were hoping you would confirm the date.",
+    "We were hoping that you would confirm the date.",
+    "We were hoping you'd confirm the date.",
+    "We are hoping you can confirm the date."
+   ],
    "expl": "Nach der Distanz-Vergangenheit steht could, nicht can.",
    "expl_en": "After the distancing past, use could, not can."
   },
@@ -2721,6 +2758,11 @@
    "type": "correct",
    "prompt": "I was wondering whether could you share the price list.",
    "answer": "I was wondering whether you could share the price list.",
+   "accepted": [
+    "I was wondering if you could share the price list.",
+    "I was wondering whether you would share the price list.",
+    "I was wondering if you would share the price list."
+   ],
    "expl": "Indirekte Frage: normale Wortstellung, Subjekt vor Verb.",
    "expl_en": "Indirect question: normal word order, subject before verb."
   },
@@ -2729,6 +2771,13 @@
    "type": "correct",
    "prompt": "I was wondering if you can send the signed contract today.",
    "answer": "I was wondering if you could send the signed contract today.",
+   "accepted": [
+    "I was wondering whether you could send the signed contract today.",
+    "I was wondering if you would send the signed contract today.",
+    "I was wondering whether you would send the signed contract today.",
+    "I am wondering if you can send the signed contract today.",
+    "I'm wondering if you can send the signed contract today."
+   ],
    "expl": "„I was wondering if …“ verlangt could statt can.",
    "expl_en": "“I was wondering if …” needs could instead of can."
   },
@@ -3768,7 +3817,12 @@
     "thought",
     "rumored",
     "alleged",
-    "understood"
+    "understood",
+    "known",
+    "estimated",
+    "suspected",
+    "supposed",
+    "claimed"
    ],
    "hint": "(say / report / believe)",
    "expl": "Persönliches Passiv: is said / reported / believed to have + Partizip.",
@@ -3793,7 +3847,10 @@
     "is believed",
     "is known",
     "is considered",
-    "is reported"
+    "is reported",
+    "is rumored",
+    "is reputed",
+    "is understood"
    ],
    "expl": "„People say that …“ wird zu „X is said to …“.",
    "expl_en": "“People say that …” becomes “X is said to …”."

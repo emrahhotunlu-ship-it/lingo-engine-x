@@ -574,6 +574,10 @@
    "prompt": "If it ___ tomorrow, we will stay at home.",
    "hint": "(rain)",
    "answer": "rains",
+   "accepted": [
+    "is raining",
+    "'s raining"
+   ],
    "expl": "First Conditional: If + Present Simple, will + Infinitiv. Kein „will“ im if-Teil!",
    "expl_en": "First conditional: if + Present Simple, will + infinitive. No \"will\" in the if-clause!"
   },
@@ -657,6 +661,10 @@
    "type": "transform",
    "prompt": "They are repairing the road. → The road ___.",
    "answer": "is being repaired",
+   "accepted": [
+    "'s being repaired",
+    "is getting repaired"
+   ],
    "expl": "Passiv im Present Continuous: is/are being + Partizip.",
    "expl_en": "Present continuous passive: is/are being + past participle."
   },

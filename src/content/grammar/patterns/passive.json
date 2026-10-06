@@ -1,0 +1,435 @@
+{
+ "topic": "passive",
+ "canDo": {
+  "de": "Ich kann sagen, was mit Dingen geschieht: im Passiv Simple, mit being und been, mit will und Modalverben und mit by oder fester Präposition.",
+  "en": "I can say what happens to things: in the simple passive, with being and been, with will and modal verbs, and with by or a fixed preposition."
+ },
+ "order": [
+  "pv.simple",
+  "pv.progressive",
+  "pv.perfect",
+  "pv.modal-future",
+  "pv.prep-agent"
+ ],
+ "introPlan": [
+  [
+   "pv.simple",
+   "pv.progressive"
+  ],
+  [
+   "pv.perfect",
+   "pv.modal-future"
+  ],
+  [
+   "pv.prep-agent"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Tut das Subjekt etwas, oder geschieht etwas mit ihm (Passiv)?",
+   "Läuft es gerade (being), gilt es bis jetzt (been) oder steht es noch an (will be)?",
+   "Ist der Handelnde wichtig (by) oder egal?"
+  ],
+  "en": [
+   "Does the subject do something, or does something happen to it (passive)?",
+   "Is it happening now (being), does it hold until now (been), or is it still to come (will be)?",
+   "Is the agent important (by) or unimportant?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "pv.simple",
+   "name": {
+    "de": "Passiv Simple · be + 3. Form",
+    "en": "Simple passive · be + past participle"
+   },
+   "form": {
+    "de": "am/is/are/was/were + 3. Verbform",
+    "en": "am/is/are/was/were + past participle"
+   },
+   "use": {
+    "de": "Der Gegenstand steht vorn und erlebt die Handlung: The report was sent. Die Zeit steckt in be: is/are für Gewohnheit, was/were für Abgeschlossenes.",
+    "en": "The thing in front receives the action: The report was sent. Time sits in be: is/are for habits, was/were for finished events."
+   },
+   "signals": [
+    "every Friday",
+    "every day",
+    "yesterday",
+    "last week",
+    "last month",
+    "ago"
+   ],
+   "ex": [
+    {
+     "en": "Every order is reviewed before it leaves the warehouse.",
+     "de": "Jede Bestellung wird geprüft, bevor sie das Lager verlässt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Your account was upgraded yesterday, and no action is required.",
+     "de": "Ihr Konto wurde gestern hochgestuft, und Sie müssen nichts tun.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I wasn't told about the change until Monday.",
+     "de": "Mir wurde die Änderung erst am Montag gesagt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The invoices become processed every Friday.",
+    "good": "The invoices are processed every Friday.",
+    "cause": {
+     "de": "Im Deutschen heißt „werden“ zugleich Passiv und „become“. So rutscht become in den Satz. Das Passiv braucht be.",
+     "en": "German uses one word, “werden”, for the passive and for “become”. So become slips in where the passive needs be."
+    }
+   },
+   "contrast": {
+    "with": "pv.progressive",
+    "a": "The server is maintained every night.",
+    "b": "The server is being maintained right now.",
+    "diff": {
+     "de": "is maintained nennt Gewohnheit oder Tatsache. is being maintained läuft gerade jetzt.",
+     "en": "is maintained names a habit or a fact. is being maintained is happening right now."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The files were deleted last week.",
+     "q": {
+      "de": "Sagt der Satz, wer die Dateien gelöscht hat?",
+      "en": "Does the sentence say who deleted the files?"
+     },
+     "a": false
+    },
+    {
+     "s": "Our invoices are processed every Friday.",
+     "q": {
+      "de": "Passiert das regelmäßig?",
+      "en": "Does this happen regularly?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wer tut hier etwas, und wer erlebt es? Welche Zeit zeigt das Signalwort?",
+    "en": "Who does something here, and who experiences it? Which time does the signal word show?"
+   }
+  },
+  {
+   "id": "pv.progressive",
+   "name": {
+    "de": "Passiv Continuous · is being + 3. Form",
+    "en": "Continuous passive · is being + participle"
+   },
+   "form": {
+    "de": "am/is/are/was/were + being + 3. Verbform",
+    "en": "am/is/are/was/were + being + past participle"
+   },
+   "use": {
+    "de": "Die Handlung läuft gerade und ist noch nicht fertig: The room is being cleaned. Deutsch sagt dafür nur „wird geputzt“, Englisch braucht being.",
+    "en": "The action is in progress and not finished: The room is being cleaned. German just says “wird geputzt”, English needs being."
+   },
+   "signals": [
+    "right now",
+    "at the moment",
+    "currently",
+    "at present",
+    "still"
+   ],
+   "ex": [
+    {
+     "en": "The new system is being tested at the moment.",
+     "de": "Das neue System wird gerade getestet.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Your request is currently being reviewed by our team.",
+     "de": "Ihre Anfrage wird derzeit von unserem Team geprüft.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Sorry, the lobby is being painted, so use the side door.",
+     "de": "Entschuldigung, die Lobby wird gestrichen, nehmen Sie bitte den Seiteneingang.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The road is repaired right now.",
+    "good": "The road is being repaired right now.",
+    "cause": {
+     "de": "Deutsch unterscheidet nicht: „wird repariert“ heißt „regelmäßig“ und „gerade jetzt“. Englisch braucht für „gerade jetzt“ being.",
+     "en": "German makes no difference: “wird repariert” means “regularly” and “right now”. English needs being for “right now”."
+    }
+   },
+   "contrast": {
+    "with": "pv.perfect",
+    "a": "The report is being written.",
+    "b": "The report has been written.",
+    "diff": {
+     "de": "is being written: noch in Arbeit. has been written: fertig.",
+     "en": "is being written: still in progress. has been written: finished."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The lobby is being painted.",
+     "q": {
+      "de": "Ist die Arbeit schon fertig?",
+      "en": "Is the work finished yet?"
+     },
+     "a": false
+    },
+    {
+     "s": "The lobby is painted every year.",
+     "q": {
+      "de": "Wird die Lobby jetzt gerade gestrichen?",
+      "en": "Is the lobby being painted at this moment?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Läuft die Handlung jetzt gerade, oder beschreibt der Satz eine Gewohnheit?",
+    "en": "Is the action happening now, or does the sentence describe a habit?"
+   }
+  },
+  {
+   "id": "pv.perfect",
+   "name": {
+    "de": "Passiv Perfect · has/have been + 3. Form",
+    "en": "Perfect passive · has/have been + participle"
+   },
+   "form": {
+    "de": "has/have + been + 3. Verbform",
+    "en": "has/have + been + past participle"
+   },
+   "use": {
+    "de": "Etwas ist geschehen, und das Ergebnis oder der Zeitraum reicht bis heute: The deal has been signed. Mit since und for steht dieses Perfect.",
+    "en": "Something has happened and the result or period reaches today: The deal has been signed. With since and for this perfect is used."
+   },
+   "signals": [
+    "since",
+    "for years",
+    "already",
+    "yet",
+    "so far",
+    "recently"
+   ],
+   "ex": [
+    {
+     "en": "Our prices have been frozen since January.",
+     "de": "Unsere Preise sind seit Januar eingefroren.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The invitations have already been sent to all guests.",
+     "de": "Die Einladungen sind schon an alle Gäste verschickt worden.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We haven't been told the results yet.",
+     "de": "Uns wurden die Ergebnisse noch nicht mitgeteilt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The office is closed since the fire.",
+    "good": "The office has been closed since the fire.",
+    "cause": {
+     "de": "Deutsch nutzt bei „seit“ das Präsens: „ist seit dem Brand geschlossen“. Englisch braucht bei since das Perfect: has been closed.",
+     "en": "German uses the present with “seit”: “ist seit dem Brand geschlossen”. English needs the perfect after since: has been closed."
+    }
+   },
+   "contrast": {
+    "with": "pv.simple",
+    "a": "The office has been renovated.",
+    "b": "The office was renovated in May.",
+    "diff": {
+     "de": "has been renovated: das Ergebnis zählt jetzt. was renovated in May: abgeschlossen, mit festem Zeitpunkt.",
+     "en": "has been renovated: the result matters now. was renovated in May: finished, at a fixed time."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The server has been replaced.",
+     "q": {
+      "de": "Läuft jetzt der neue Server?",
+      "en": "Is the new server running now?"
+     },
+     "a": true
+    },
+    {
+     "s": "The contract has been signed.",
+     "q": {
+      "de": "Fehlt die Unterschrift noch?",
+      "en": "Is the signature still missing?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Gilt das Ergebnis oder der Zeitraum bis jetzt, oder nennt der Satz einen festen Zeitpunkt?",
+    "en": "Does the result or period reach until now, or does the sentence name a fixed point in time?"
+   }
+  },
+  {
+   "id": "pv.modal-future",
+   "name": {
+    "de": "Passiv Zukunft und Modal · will be + 3. Form",
+    "en": "Future and modal passive · will be + participle"
+   },
+   "form": {
+    "de": "will/can/must/should + be + 3. Verbform",
+    "en": "will/can/must/should + be + past participle"
+   },
+   "use": {
+    "de": "Etwas soll noch geschehen oder ist nötig oder möglich: The offer will be sent. The files must be checked. Nach dem Modalwort steht be.",
+    "en": "Something is yet to happen or is necessary or possible: The offer will be sent. The files must be checked. After the modal comes be."
+   },
+   "signals": [
+    "next week",
+    "tomorrow",
+    "next Monday",
+    "by Friday",
+    "before the meeting",
+    "soon"
+   ],
+   "ex": [
+    {
+     "en": "The new laptops will be delivered next week.",
+     "de": "Die neuen Laptops werden nächste Woche geliefert.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Please note that all expense reports must be submitted by Friday.",
+     "de": "Bitte beachten Sie: Alle Spesenabrechnungen müssen bis Freitag eingereicht werden.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Don't worry, this can be fixed in an hour.",
+     "de": "Keine Sorge, das lässt sich in einer Stunde beheben.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The agenda will sent to all participants tomorrow.",
+    "good": "The agenda will be sent to all participants tomorrow.",
+    "cause": {
+     "de": "Deutsch nutzt für die Zukunft oft das Präsens: „wird morgen verschickt“ braucht nur ein Hilfsverb. Englisch braucht beides: will + be + 3. Form.",
+     "en": "German often uses the present tense for the future: “wird morgen verschickt” needs only one auxiliary. English needs both: will + be + past participle."
+    }
+   },
+   "contrast": {
+    "with": "pv.perfect",
+    "a": "The old accounts will be closed.",
+    "b": "The old accounts have been closed.",
+    "diff": {
+     "de": "will be closed: noch nicht geschehen. have been closed: schon geschehen.",
+     "en": "will be closed: not yet done. have been closed: already done."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The new laptops will be delivered next week.",
+     "q": {
+      "de": "Sind die Laptops schon da?",
+      "en": "Have the laptops arrived yet?"
+     },
+     "a": false
+    },
+    {
+     "s": "The report must be finished by Friday.",
+     "q": {
+      "de": "Muss der Bericht bis Freitag fertig sein?",
+      "en": "Does the report have to be finished by Friday?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist es schon geschehen oder erst geplant? Wer macht es, wer bekommt es?",
+    "en": "Has it happened already or is it only planned? Who does it, and who receives it?"
+   }
+  },
+  {
+   "id": "pv.prep-agent",
+   "name": {
+    "de": "Handelnder mit by · Präposition bleibt",
+    "en": "Agent with by · preposition stays"
+   },
+   "form": {
+    "de": "... + 3. Verbform + by + Handelnder · Verb + Präposition bleibt",
+    "en": "... + past participle + by + agent · verb + preposition stays"
+   },
+   "use": {
+    "de": "Den Handelnden nennst du nur mit by, und nur wenn er neu und wichtig ist. Bei Verben wie deal with bleibt die Präposition im Passiv stehen.",
+    "en": "Name the agent only with by, and only if it is new and important. With verbs like deal with the preposition stays in the passive."
+   },
+   "signals": [
+    "by",
+    "dealt with",
+    "looked into",
+    "broken into",
+    "drawn up",
+    "carried out"
+   ],
+   "ex": [
+    {
+     "en": "The merger was announced by the CEO on Monday.",
+     "de": "Die Fusion wurde am Montag vom Vorstandschef verkündet.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Your complaint has been looked into, and the issue was dealt with.",
+     "de": "Ihre Beschwerde wurde geprüft, und das Problem wurde erledigt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The new policy was drawn up by our legal team.",
+     "de": "Die neue Richtlinie wurde von unserer Rechtsabteilung ausgearbeitet.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The offer was approved from the board.",
+    "good": "The offer was approved by the board.",
+    "cause": {
+     "de": "Im Deutschen heißt der Handelnde „von“. Wörtlich wird daraus from. Im englischen Passiv steht dafür by.",
+     "en": "In German the agent is introduced with “von”. Word for word that becomes from. In the English passive it is by."
+    }
+   },
+   "contrast": {
+    "with": "pv.simple",
+    "a": "The contract was signed.",
+    "b": "The contract was signed by both parties.",
+    "diff": {
+     "de": "Ohne by ist der Handelnde unbekannt oder egal. Mit by ist er neu und wichtig.",
+     "en": "Without by the agent is unknown or unimportant. With by it is new and important."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The decision was made by the board.",
+     "q": {
+      "de": "Wissen wir, wer entschieden hat?",
+      "en": "Do we know who made the decision?"
+     },
+     "a": true
+    },
+    {
+     "s": "The issue was dealt with immediately.",
+     "q": {
+      "de": "Wissen wir, wer das Problem erledigt hat?",
+      "en": "Do we know who dealt with the issue?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Kennst du den Handelnden, und ist er wichtig? Bleibt ein Wort beim Verb stehen?",
+    "en": "Do you know the agent, and is it important? Does a word stay with the verb?"
+   }
+  }
+ ]
+}

@@ -1,0 +1,191 @@
+[
+ {
+  "pat": "dip.wondering",
+  "en": "I was wondering whether you could walk me through the proposal.",
+  "de": "Ich wollte fragen, ob Sie mir das Angebot Schritt für Schritt erklären könnten. (höflich, vorsichtig)",
+  "chunks": [
+   "I",
+   "was wondering",
+   "whether",
+   "you could",
+   "walk me through",
+   "the proposal"
+  ],
+  "single": "Nach whether bleibt die normale Reihenfolge you could; walk me through und the proposal gehören fest zusammen.",
+  "why": [
+   "Nach whether steht die normale Reihenfolge: you could, nicht could you. Die Vergangenheit macht die Bitte weich.",
+   "After whether the normal order follows: you could, not could you. The past tense softens the request."
+  ],
+  "bad": "I was wondering whether could you walk me through the proposal.",
+  "trap": {
+   "tile": "you could",
+   "instead": "could you",
+   "why": {
+    "de": "Die direkte Frage „Could you …?“ klingt noch nach. In der indirekten Frage steht aber das Subjekt vor could.",
+    "en": "The direct question “Could you …?” still echoes. In an indirect question the subject comes before could."
+   }
+  }
+ },
+ {
+  "pat": "dip.wondering",
+  "en": "I was wondering if we could reschedule the review for Thursday.",
+  "de": "Ich wollte fragen, ob wir die Prüfung auf Donnerstag verschieben könnten. (höflich, vorsichtig)",
+  "chunks": [
+   "I",
+   "was wondering",
+   "if",
+   "we could",
+   "reschedule",
+   "the review",
+   "for Thursday"
+  ],
+  "single": "Der Block we could steht direkt nach if; for Thursday gehört ans Ende, denn es bezieht sich auf reschedule.",
+  "why": [
+   "Nach if folgt zuerst das Subjekt, dann could: if we could. Das Ziel for Thursday steht am Ende.",
+   "After if the subject comes first, then could: if we could. The target for Thursday goes at the end."
+  ],
+  "bad": "I was wondering if could we reschedule the review for Thursday."
+ },
+ {
+  "pat": "dip.hoping",
+  "en": "We were hoping to hear from you before the end of the week.",
+  "de": "Wir hatten gehofft, vor Ende der Woche von Ihnen zu hören. (höflich, vorsichtig)",
+  "chunks": [
+   "we",
+   "were hoping",
+   "to hear",
+   "from you",
+   "before the end",
+   "of the week"
+  ],
+  "alt": [
+   "Before the end of the week, we were hoping to hear from you."
+  ],
+  "why": [
+   "Nach hoping folgt to + Grundform: to hear. Die Zeitangabe kann auch am Anfang stehen.",
+   "After hoping comes to + base verb: to hear. The time phrase can also come first."
+  ],
+  "bad": "We were hoping hearing from you before the end of the week.",
+  "trap": {
+   "tile": "to hear",
+   "instead": "hearing",
+   "why": {
+    "de": "Nach hope steht der Infinitiv mit to, nie die -ing-Form. Das unterscheidet es von look forward to.",
+    "en": "After hope comes the to-infinitive, never the -ing form. That sets it apart from look forward to."
+   }
+  }
+ },
+ {
+  "pat": "dip.hoping",
+  "en": "We were hoping you could introduce us to the new team lead.",
+  "de": "Wir hatten gehofft, du könntest uns dem neuen Teamleiter vorstellen. (höflich, vorsichtig)",
+  "chunks": [
+   "we",
+   "were hoping",
+   "you could",
+   "introduce us",
+   "to the new team lead"
+  ],
+  "single": "You could folgt direkt auf were hoping; introduce us to the new team lead bleibt als feste Folge am Ende.",
+  "why": [
+   "Nach were hoping folgt could, nicht can: Die Vergangenheit zieht den ganzen Satz mit.",
+   "After were hoping comes could, not can: the past tense carries the whole sentence along."
+  ],
+  "bad": "We were hoping you can introduce us to the new team lead."
+ },
+ {
+  "pat": "dip.possible",
+  "en": "Would it be possible to move the workshop to the afternoon?",
+  "de": "Wäre es möglich, den Workshop auf den Nachmittag zu verschieben? (höflich, vorsichtig)",
+  "chunks": [
+   "would it be",
+   "possible",
+   "to move",
+   "the workshop",
+   "to the afternoon"
+  ],
+  "single": "Would it be possible bildet eine feste Frage; danach folgen to move und der Rest in fester Reihenfolge.",
+  "why": [
+   "Nach Would it be possible folgt üblicherweise to + Grundform: to move. Ein that-Satz ist hier ungewöhnlich.",
+   "Would it be possible is usually followed by to + base verb: to move. A that-clause is unusual here."
+  ],
+  "bad": "Would it be possible that you move the workshop to the afternoon?",
+  "trap": {
+   "tile": "to move",
+   "instead": "that you move",
+   "why": {
+    "de": "Auf Deutsch geht „möglich, dass Sie … verschieben“. Im Englischen folgt nach Would it be possible üblicherweise to + Grundform.",
+    "en": "German allows “möglich, dass Sie … verschieben”. In English Would it be possible is usually followed by to + base verb."
+   }
+  }
+ },
+ {
+  "pat": "dip.possible",
+  "en": "Would it be possible for us to see the proposal beforehand?",
+  "de": "Wäre es möglich, dass wir den Vorschlag vorab sehen? (höflich, vorsichtig)",
+  "chunks": [
+   "would it be",
+   "possible",
+   "for us",
+   "to see",
+   "the proposal",
+   "beforehand"
+  ],
+  "alt": [
+   "Beforehand, would it be possible for us to see the proposal?"
+  ],
+  "why": [
+   "For us nennt die Person direkt nach possible; danach folgt to + Grundform. Beforehand kann auch vorn stehen.",
+   "For us names the person right after possible; to + base verb follows. Beforehand can also come first."
+  ],
+  "bad": "Would it be possible for us seeing the proposal beforehand?"
+ },
+ {
+  "pat": "dip.understate",
+  "en": "That timeline could be a bit of a stretch for us.",
+  "de": "Dieser Zeitplan könnte für uns etwas sportlich werden. (höflich, vorsichtig)",
+  "chunks": [
+   "that timeline",
+   "could be",
+   "a bit of a",
+   "stretch",
+   "for us"
+  ],
+  "alt": [
+   "For us, that timeline could be a bit of a stretch."
+  ],
+  "why": [
+   "Could be macht den Einwand weich. Vor einem Nomen heißt es a bit of a stretch, nicht a bit stretch.",
+   "Could be softens the objection. Before a noun it is a bit of a stretch, not a bit stretch."
+  ],
+  "bad": "That timeline could be a bit stretch for us.",
+  "trap": {
+   "tile": "a bit of a",
+   "instead": "a bit",
+   "why": {
+    "de": "Das Deutsche sagt „ein bisschen Zumutung“ ohne Artikel. Im Englischen braucht das Nomen nach a bit das Wort of a.",
+    "en": "German says “ein bisschen Zumutung” with no article. In English the noun after a bit needs of a."
+   }
+  }
+ },
+ {
+  "pat": "dip.understate",
+  "en": "That might be a little challenging for our team.",
+  "de": "Das könnte für unser Team etwas herausfordernd werden. (höflich, vorsichtig)",
+  "chunks": [
+   "that",
+   "might be",
+   "a little",
+   "challenging",
+   "for our team"
+  ],
+  "alt": [
+   "For our team, that might be a little challenging."
+  ],
+  "why": [
+   "Might be und a little nehmen dem Einwand die Schärfe; das Adjektiv challenging steht direkt danach.",
+   "Might be and a little take the edge off the objection; the adjective challenging follows directly."
+  ],
+  "bad": "That might a little be challenging for our team."
+ }
+]

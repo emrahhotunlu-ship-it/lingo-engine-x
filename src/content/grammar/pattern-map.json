@@ -1,4 +1,785 @@
 {
+ "c1-diplomacy|iwhetheryoucouldsharetherequirementsbyfriday": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: was wondering. Die Vergangenheit macht die Bitte weich, gemeint ist jetzt.",
+    "en": "Right: was wondering. The past tense softens the request; it still means now."
+   },
+   "wrong": [
+    {
+     "if": [
+      "wondering"
+     ],
+     "not": [
+      "was",
+      "am"
+     ],
+     "de": "Vor wondering fehlt das Hilfsverb: Die Verlaufsform braucht was.",
+     "en": "A helping verb is missing before wondering: the continuous needs was."
+    },
+    {
+     "if": [
+      "were"
+     ],
+     "de": "Zu I passt was, nicht were: I was wondering.",
+     "en": "With I use was, not were: I was wondering."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Have wondered meint eine Dauer bis jetzt, keine weiche Bitte.",
+     "en": "Have wondered means a span up to now, not a soft request."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|wetosignbeforetheendofq": {
+  "pat": "dip.hoping",
+  "why": {
+   "ok": {
+    "de": "Richtig: were hoping. Die Vergangenheit macht aus „Wir wollen“ einen Wunsch.",
+    "en": "Right: were hoping. The past tense turns “we want” into a wish."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Zu we passt were, nicht was: We were hoping.",
+     "en": "With we use were, not was: We were hoping."
+    },
+    {
+     "if": [
+      "hoping"
+     ],
+     "not": [
+      "were",
+      "are",
+      "had"
+     ],
+     "de": "Hoping braucht ein Hilfsverb davor: were hoping.",
+     "en": "Hoping needs a helping verb before it: were hoping."
+    },
+    {
+     "if": [
+      "want"
+     ],
+     "de": "Want ist direkt. Gesucht ist die weichere Verlaufsform.",
+     "en": "Want is direct. The softer continuous form is what you need."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|woulditbepossiblethetrialbytwoweeks": {
+  "pat": "dip.possible",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Would it be possible folgt to + Grundform: to extend.",
+    "en": "Right: Would it be possible + to + base verb: to extend."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach Would it be possible folgt üblicherweise to + Grundform, kein that-Satz.",
+     "en": "Would it be possible is usually followed by to + base verb, not a that-clause."
+    },
+    {
+     "if": [
+      "extending"
+     ],
+     "de": "Nach possible steht to + Grundform, keine -ing-Form.",
+     "en": "After possible use to + base verb, not the -ing form."
+    },
+    {
+     "if": [
+      "extend"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform braucht to davor: possible to extend.",
+     "en": "The base verb needs to before it: possible to extend."
+    },
+    {
+     "if": [
+      "extends"
+     ],
+     "de": "Nach to steht die Grundform ohne -s: to extend.",
+     "en": "After to use the base verb with no -s: to extend."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|iwaswonderingifyoujointhecallonmonday": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: could. Nach I was wondering bleibt der Abstand erhalten.",
+    "en": "Right: could. After I was wondering the distance stays in place."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Can bricht den Abstand: Nach was wondering passt could.",
+     "en": "Can breaks the distance: after was wondering use could."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will fragt nach dem Plan. Die weiche Bitte braucht could.",
+     "en": "Will asks about a plan. The soft request needs could."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|whichrequestsoundsmostdiplomatictoanewclient": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vergangenheit plus could macht aus der Forderung eine Bitte, die man ablehnen darf.",
+    "en": "Right: past tense plus could turns the demand into a request the client may decline."
+   },
+   "wrong": [
+    {
+     "opt": "Send me the data by Friday.",
+     "de": "Ein Befehl ohne Abstand: Der Kunde hat keine Wahl.",
+     "en": "An order with no distance: the client has no choice."
+    },
+    {
+     "opt": "You must send the data by Friday.",
+     "de": "Must ist eine Pflicht, keine Bitte.",
+     "en": "Must is an obligation, not a request."
+    },
+    {
+     "opt": "I want the data by Friday.",
+     "de": "I want fordert direkt, ohne Abstand zum Kunden.",
+     "en": "I want demands directly, with no distance to the client."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|thattimelinecouldbeabitforus": {
+  "pat": "dip.understate",
+  "why": {
+   "ok": {
+    "de": "Richtig: tricky untertreibt. Gemeint ist „kaum machbar“, aber höflich.",
+    "en": "Right: tricky understates. It means “hardly doable”, but politely."
+   },
+   "wrong": [
+    {
+     "opt": "impossible",
+     "de": "Impossible ist ein hartes Nein ohne Abstand. Mit a bit passt es nicht.",
+     "en": "Impossible is a flat no with no distance. It does not fit with a bit."
+    },
+    {
+     "opt": "stupid",
+     "de": "Stupid beleidigt und passt nie in eine höfliche Einschätzung.",
+     "en": "Stupid insults and never fits a polite assessment."
+    },
+    {
+     "opt": "wrong",
+     "de": "Wrong urteilt hart, statt den Zeitplan weich zu beschreiben.",
+     "en": "Wrong judges harshly instead of describing the timeline softly."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|wetogetyourfeedbackthisweek": {
+  "pat": "dip.hoping",
+  "why": {
+   "ok": {
+    "de": "Richtig: were hoping ist die höfliche, distanzierte Form des Wunsches.",
+    "en": "Right: were hoping is the polite, distanced way to state a wish."
+   },
+   "wrong": [
+    {
+     "opt": "are hope",
+     "de": "Hope ist hier das Verb: are hope gibt es nicht, gesucht ist were hoping.",
+     "en": "Hope is the verb here: are hope does not exist; you need were hoping."
+    },
+    {
+     "opt": "have hope",
+     "de": "Have hope heißt „Hoffnung haben“ und nimmt kein to + Grundform so.",
+     "en": "Have hope means “to have hope” and does not take to + base verb like this."
+    },
+    {
+     "opt": "hoping",
+     "de": "Hoping allein ist kein Prädikat: Es fehlt das Hilfsverb were.",
+     "en": "Hoping alone is no predicate: the helping verb were is missing."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|canyoumovethedemotothursdayiwaswonderingwhetheryouthedemotothursday": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: could move. Aus der direkten Frage wird eine indirekte Bitte.",
+    "en": "Right: could move. The direct question becomes an indirect request."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Can behält die Direktheit. Nach was wondering passt could.",
+     "en": "Can keeps it direct. After was wondering use could."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will fragt nach dem Plan, nicht nach einer weichen Bitte.",
+     "en": "Will asks about a plan, not a soft request."
+    },
+    {
+     "not": [
+      "could",
+      "would"
+     ],
+     "de": "Gesucht ist ein Modalverb mit Abstand: could move.",
+     "en": "A modal with distance is needed: could move."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|yourofferistooexpensiveyourofferbeabitofastretchforourbudget": {
+  "pat": "dip.understate",
+  "why": {
+   "ok": {
+    "de": "Richtig: could be a bit of a stretch ist ein Einwand mit Abstand.",
+    "en": "Right: could be a bit of a stretch is an objection with distance."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will legt den Einwand fest. Could lässt ihn offen.",
+     "en": "Will fixes the objection. Could leaves it open."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "de": "Must wirkt wie ein Urteil, nicht wie ein weicher Einwand.",
+     "en": "Must sounds like a verdict, not a soft objection."
+    },
+    {
+     "not": [
+      "could",
+      "might",
+      "may",
+      "would"
+     ],
+     "de": "Gesucht ist ein Modalverb mit Abstand: could, might, may oder would.",
+     "en": "A modal with distance is needed: could, might, may or would."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|wewantadiscountwehopingforasmalldiscount": {
+  "pat": "dip.hoping",
+  "why": {
+   "ok": {
+    "de": "Richtig: were hoping for macht aus „We want“ einen Wunsch und keine Forderung.",
+    "en": "Right: were hoping for turns “We want” into a wish."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Zu we passt were, nicht was.",
+     "en": "With we use were, not was."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Have hoping ist keine Form: Es braucht were.",
+     "en": "Have hoping is not a form: you need were."
+    },
+    {
+     "not": [
+      "were",
+      "are",
+      "had"
+     ],
+     "de": "Hoping braucht ein Hilfsverb mit Abstand: were hoping.",
+     "en": "Hoping needs a helping verb with distance: were hoping."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|wewerehopingyoucanconfirmthedate": {
+  "pat": "dip.hoping",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach were hoping folgt could. Die Vergangenheit zieht den Nebensatz mit.",
+    "en": "Right: were hoping is followed by could. The past tense pulls the clause along."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Can bleibt im Präsens stehen. Nach were hoping folgt could.",
+     "en": "Can stays in the present. After were hoping use could."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will passt nicht zu were hoping. Could lässt die Bitte offen.",
+     "en": "Will does not fit were hoping. Could leaves the request open."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|iwaswonderingwhethercouldyousharethepricelist": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: whether you could. Nach whether bleibt die normale Wortstellung.",
+    "en": "Right: whether you could. After whether the normal word order stays."
+   },
+   "wrong": [
+    {
+     "if": [
+      "could",
+      "you"
+     ],
+     "de": "Das Subjekt gehört vor could. Die Umstellung gilt nur in der direkten Frage.",
+     "en": "The subject belongs before could. Inversion is only for direct questions."
+    },
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Es geht um die Wortstellung nach whether: Subjekt vor Verb.",
+     "en": "The issue is word order after whether: subject before verb."
+    },
+    {
+     "not": [
+      "whether",
+      "if"
+     ],
+     "de": "Das Einleitewort bleibt: I was wondering whether you could …",
+     "en": "The linking word stays: I was wondering whether you could …"
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|iwaswonderingifyoucansendthesignedcontracttoday": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: could statt can. Nach I was wondering bleibt der Abstand.",
+    "en": "Right: could instead of can. After I was wondering the distance stays."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Can bricht den Abstand von was wondering. Hier passt could (oder would).",
+     "en": "Can breaks the distance of was wondering. Use could (or would) here."
+    },
+    {
+     "not": [
+      "could",
+      "would"
+     ],
+     "de": "Gesucht ist ein Modalverb mit Abstand: you could send.",
+     "en": "A modal with distance is needed: you could send."
+    }
+   ]
+  }
+ },
+ "c1-diplomacy|woulditbepossiblethatyousendtheofferagain": {
+  "pat": "dip.possible",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Would it be possible folgt to + Grundform, kein that-Satz.",
+    "en": "Right: Would it be possible + to + base verb, no that-clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Ein that-Satz klingt hier ungewöhnlich. Üblich ist to + Grundform.",
+     "en": "A that-clause sounds unusual here. To + base verb is the norm."
+    },
+    {
+     "if": [
+      "sending"
+     ],
+     "de": "Nach possible steht to + Grundform, keine -ing-Form.",
+     "en": "After possible use to + base verb, not the -ing form."
+    },
+    {
+     "if": [
+      "for",
+      "you",
+      "to"
+     ],
+     "de": "Auch richtig: for you to send. In dieser Aufgabe wird die kurze Form mit to + Grundform geübt.",
+     "en": "Also correct: for you to send. This task practices the short form with to + base verb."
+    }
+   ]
+  }
+ },
+ "c1-discourse|thepilotwentwellthetimelinefortherolloutisstilltight": {
+  "pat": "dm.concede",
+  "why": {
+   "ok": {
+    "de": "Richtig: That said schränkt den guten Pilot ein. Der Zeitplan bleibt trotzdem knapp.",
+    "en": "Right: That said qualifies the good pilot. The timeline is still tight all the same."
+   },
+   "wrong": [
+    {
+     "opt": "Because",
+     "de": "„Because“ nennt einen Grund. Der knappe Zeitplan erklärt aber nicht den guten Pilot.",
+     "en": "“Because” gives a reason. A tight timeline does not explain a good pilot."
+    },
+    {
+     "opt": "Therefore",
+     "de": "„Therefore“ zieht eine Folge: guter Pilot, deshalb knapper Zeitplan. Das ergibt keinen Sinn.",
+     "en": "“Therefore” draws a result: good pilot, so a tight timeline. That makes no sense."
+    },
+    {
+     "opt": "For example",
+     "de": "„For example“ nennt ein Beispiel. Hier folgt aber ein Gegengewicht, kein Beispiel.",
+     "en": "“For example” gives an instance. Here a counterweight follows, not an example."
+    }
+   ]
+  }
+ },
+ "c1-discourse|annamentionedtheaudittrailwecouldalsoshowtheretentionrules": {
+  "pat": "dm.build",
+  "why": {
+   "ok": {
+    "de": "Richtig: To build on that knüpft an Annas Beitrag an und ergänzt ihn.",
+    "en": "Right: To build on that picks up Anna's point and adds to it."
+   },
+   "wrong": [
+    {
+     "opt": "In contrast",
+     "pat": "dm.contrast",
+     "de": "„In contrast“ stellt Gegensätze nebeneinander. Hier wird Annas Punkt aber ergänzt.",
+     "en": "“In contrast” sets opposites side by side. Here Anna's point is extended instead."
+    },
+    {
+     "opt": "Despite this",
+     "pat": "dm.concede",
+     "de": "„Despite this“ drückt Trotz aus. Gemeint ist aber eine Ergänzung, kein Einwand.",
+     "en": "“Despite this” expresses concession. An addition is meant here, not an objection."
+    },
+    {
+     "opt": "Instead",
+     "de": "„Instead“ ersetzt etwas durch etwas anderes. Annas Punkt soll aber bleiben.",
+     "en": "“Instead” swaps one thing for another. Anna's point is supposed to stay."
+    }
+   ]
+  }
+ },
+ "c1-discourse|thepilotsavedtheteamabouttenhoursaweek": {
+  "pat": "dm.sum",
+  "why": {
+   "ok": {
+    "de": "Richtig: In short kündigt das Fazit an: etwa zehn gesparte Stunden pro Woche.",
+    "en": "Right: In short announces the conclusion: about ten hours saved a week."
+   },
+   "wrong": [
+    {
+     "opt": "On the other side",
+     "pat": "dm.contrast",
+     "de": "„On the other side“ gibt es so nicht. Der Gegensatz heißt on the other hand.",
+     "en": "“On the other side” is not the phrase. A contrast is on the other hand."
+    },
+    {
+     "opt": "By the way of",
+     "de": "„By the way of“ ist keine feste Wendung. „By the way“ heißt „übrigens“.",
+     "en": "“By the way of” is not a fixed phrase. “By the way” means “incidentally”."
+    },
+    {
+     "opt": "Firstly of all",
+     "de": "„Firstly of all“ ist falsch gebaut: first of all heißt „zuallererst“, nicht Fazit.",
+     "en": "“Firstly of all” is mis-built: first of all means “to begin with”, not a conclusion."
+    }
+   ]
+  }
+ },
+ "c1-discourse|thepriceishigherthantheoldsystemyousaveonhardwareandmaintenance": {
+  "pat": "dm.contrast",
+  "why": {
+   "ok": {
+    "de": "Richtig: On the other hand stellt Nachteil und Vorteil gegenüber: höherer Preis, aber Ersparnis.",
+    "en": "Right: On the other hand sets drawback against benefit: higher price, but savings."
+   },
+   "wrong": [
+    {
+     "opt": "Moreover",
+     "de": "„Moreover“ fügt Gleichgerichtetes an. Hier steht aber ein Vorteil gegen den hohen Preis.",
+     "en": "“Moreover” adds something pointing the same way. Here a benefit offsets the high price."
+    },
+    {
+     "opt": "As a result",
+     "de": "„As a result“ nennt eine Folge. Die Ersparnis ist keine Folge des höheren Preises.",
+     "en": "“As a result” names a consequence. Savings are not a consequence of a higher price."
+    },
+    {
+     "opt": "For instance",
+     "de": "„For instance“ leitet ein Beispiel ein. Hier folgt aber ein Gegenargument.",
+     "en": "“For instance” introduces an example. Here a counterargument follows."
+    }
+   ]
+  }
+ },
+ "c1-discourse|comingbackyourquestionaboutpricingthelicensesareperuser": {
+  "pat": "dm.return",
+  "why": {
+   "ok": {
+    "de": "Richtig: coming back to + Thema. So kehrst du zu einem früheren Punkt zurück.",
+    "en": "Right: coming back to + topic. This is how you return to an earlier point."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "Nicht on: „zurückkommen auf“ wird auf Englisch zu coming back to.",
+     "en": "Not on: “zurückkommen auf” becomes coming back to in English."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach coming back steht to: Coming back to your question …",
+     "en": "After coming back use to: Coming back to your question …"
+    }
+   ]
+  }
+ },
+ "c1-discourse|tobuildwhatmarksaidwecouldstartwiththeinvoices": {
+  "pat": "dm.build",
+  "why": {
+   "ok": {
+    "de": "Richtig: build on = an etwas anknüpfen. Marks Punkt wird weitergeführt.",
+    "en": "Right: build on = develop what someone said. Mark's point is extended."
+   },
+   "wrong": [
+    {
+     "if": [
+      "up"
+     ],
+     "de": "„Build up on“ gibt es hier nicht. Nach build steht on, kein up.",
+     "en": "There is no build up on here. After build comes on, with no up."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Verbindung build on (oder build upon).",
+     "en": "The fixed phrase build on (or build upon) is needed."
+    }
+   ]
+  }
+ },
+ "c1-discourse|havingthatwestillneedittosignoff": {
+  "pat": "dm.concede",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having said that ist die feste Wendung zum Einschränken.",
+    "en": "Right: Having said that is the fixed phrase for qualifying."
+   },
+   "wrong": [
+    {
+     "if": [
+      "say"
+     ],
+     "de": "Nach Having steht das Partizip: Having said that, nicht Having say.",
+     "en": "After Having use the participle: Having said that, not Having say."
+    },
+    {
+     "if": [
+      "saying"
+     ],
+     "de": "„Having saying“ gibt es nicht. Nach having steht said.",
+     "en": "There is no having saying. After having comes said."
+    },
+    {
+     "not": [
+      "said"
+     ],
+     "de": "Gesucht ist das Partizip von say: said, in der Wendung Having said that.",
+     "en": "The participle of say is needed: said, in the phrase Having said that."
+    }
+   ]
+  }
+ },
+ "c1-discourse|allallthemigrationwentsmoothly": {
+  "pat": "dm.sum",
+  "why": {
+   "ok": {
+    "de": "Richtig: All in all = „alles in allem“. Es fasst die Migration zusammen.",
+    "en": "Right: All in all = “everything considered”. It sums up the migration."
+   },
+   "wrong": [
+    {
+     "not": [
+      "in"
+     ],
+     "de": "Gesucht ist ein kurzes Wort: All in all, wie im deutschen „alles in allem“.",
+     "en": "A short word is needed: All in all, like German “alles in allem”."
+    }
+   ]
+  }
+ },
+ "c1-discourse|thedemowasgoodbutwestillneedabusinesscasethedemowasgoodthatwestillneedabusinessc": {
+  "pat": "dm.concede",
+  "why": {
+   "ok": {
+    "de": "Richtig: That said ersetzt But. Es schränkt den guten Eindruck der Demo ein.",
+    "en": "Right: That said replaces But. It qualifies the good impression of the demo."
+   },
+   "wrong": [
+    {
+     "if": [
+      "but"
+     ],
+     "de": "But steht schon im Ausgangssatz. That said ersetzt es, es wird nicht ergänzt.",
+     "en": "But is in the source sentence. That said replaces it; it is not added."
+    },
+    {
+     "not": [
+      "said"
+     ],
+     "de": "Nach That fehlt said: That said, we still need … ersetzt das schlichte But.",
+     "en": "That needs said: That said, we still need … replaces plain But."
+    }
+   ]
+  }
+ },
+ "c1-discourse|iwanttoreturntothetopicofsecuritycomingsecurityalldataisencryptedatrest": {
+  "pat": "dm.return",
+  "why": {
+   "ok": {
+    "de": "Richtig: Coming back to + Thema ist die Kurzform für „I want to return to“.",
+    "en": "Right: Coming back to + topic replaces “I want to return to”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "Nicht on: „zurückkommen auf“ wird zu coming back to.",
+     "en": "Not on: “zurückkommen auf” becomes coming back to."
+    },
+    {
+     "not": [
+      "back"
+     ],
+     "de": "Hier fehlt back: Gesucht ist Coming back to security („zurück zum Thema“).",
+     "en": "Here back is missing: Coming back to security (return to the topic)."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach back fehlt to: Coming back to security.",
+     "en": "After back, to is missing: Coming back to security."
+    }
+   ]
+  }
+ },
+ "c1-discourse|ontheothersidethecloudversionneedsnolocalservers": {
+  "pat": "dm.contrast",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Gegensatz heißt on the other hand. „Side“ meint nur einen Ort.",
+    "en": "Right: The contrast is on the other hand. “Side” only means a place."
+   },
+   "wrong": [
+    {
+     "if": [
+      "side"
+     ],
+     "de": "„Side“ bleibt falsch. Setze hand ein: on the other hand.",
+     "en": "“Side” is still wrong. Use hand instead: on the other hand."
+    },
+    {
+     "not": [
+      "hand"
+     ],
+     "de": "Gesucht ist die feste Wendung on the other hand für den Gegensatz.",
+     "en": "The fixed phrase on the other hand is needed for the contrast."
+    }
+   ]
+  }
+ },
+ "c1-discourse|tobuilduponthatwecouldaddaseconddepartment": {
+  "pat": "dm.build",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es heißt build on (oder build upon), ohne up.",
+    "en": "Right: It is build on (or build upon), with no up."
+   },
+   "wrong": [
+    {
+     "if": [
+      "up"
+     ],
+     "de": "Das up muss weg: Es heißt „build on“ (oder „build upon“).",
+     "en": "The up has to go: it is “build on” (or “build upon”)."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Nach build steht on oder upon: To build on that, …",
+     "en": "After build comes on or upon: To build on that, …"
+    }
+   ]
+  }
+ },
+ "c1-discourse|comingbackonyourquestionthepriceincludessupport": {
+  "pat": "dm.return",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es heißt coming back to, nicht on.",
+    "en": "Right: It is coming back to, not on."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "Nicht on: „zurückkommen auf“ wird zu coming back to.",
+     "en": "Not on: “zurückkommen auf” becomes coming back to."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Gesucht ist coming back to: Coming back to your question, …",
+     "en": "Coming back to is needed: Coming back to your question, …"
+    }
+   ]
+  },
+  "dup": "c1-discourse|comingbackyourquestionaboutpricingthelicensesareperuser"
+ },
  "c1-hedging|softenthisforaclientyourpriceabitaboveourbudget": {
   "pat": "hg.modal",
   "why": {
@@ -804,6 +1585,679 @@
      ],
      "de": "Nach as long as steht kein will. Das ist der Reflex „Zukunft = will“; Deutsch nutzt hier Präsens.",
      "en": "No will after as long as. It is the “future = will” reflex; German uses the present here too."
+    }
+   ]
+  }
+ },
+ "conditionals|ifittomorrowwewillstayathome": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: tomorrow = mögliche Zukunft → if + Präsens (rains). will steht nur im Hauptsatz.",
+    "en": "Right: tomorrow = possible future → if + present (rains). will appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach if steht kein will: Der if-Teil nimmt das Präsens (rains).",
+     "en": "No will after if: the if-clause takes the present (rains)."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "cn.second",
+     "de": "would gehört in den Hauptsatz einer Annahme. Regen morgen ist aber wirklich möglich.",
+     "en": "would belongs in the main clause of an assumption. Rain tomorrow is a real possibility."
+    },
+    {
+     "if": [
+      "rained"
+     ],
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. Aber tomorrow nennt eine echte Möglichkeit.",
+     "en": "The past makes it an assumption. But tomorrow names a real possibility."
+    },
+    {
+     "if": [
+      "rain"
+     ],
+     "de": "Mit it braucht das Präsens ein -s: it rains.",
+     "en": "With it the present needs an -s: it rains."
+    }
+   ]
+  }
+ },
+ "conditionals|ifimoretimeiwouldtravelmore": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: would travel = Annahme → im if-Teil das Past: had.",
+    "en": "Right: would travel = assumption → the if-clause takes the past: had."
+   },
+   "wrong": [
+    {
+     "opt": "have",
+     "pat": "cn.first",
+     "de": "have ist Präsens und würde zu will travel passen. would travel verlangt das Past.",
+     "en": "have is present and would fit will travel. would travel calls for the past."
+    },
+    {
+     "opt": "would have",
+     "de": "would steht nicht im if-Teil. Dort braucht die Annahme das Past (had).",
+     "en": "would does not go in the if-clause. The assumption needs the past (had) there."
+    },
+    {
+     "opt": "will have",
+     "pat": "cn.first",
+     "de": "will gehört nicht in den if-Teil, und would travel verlangt das Past.",
+     "en": "will does not go in the if-clause, and would travel calls for the past."
+    }
+   ]
+  }
+ },
+ "conditionals|ifwehadleftearlierwethetrain": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: had left ist vorbei → would not have + 3. Form: wouldn't have missed.",
+    "en": "Right: had left (over) → would not have + participle: wouldn't have missed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have",
+      "miss"
+     ],
+     "de": "Nach would have steht die 3. Form: would not have missed.",
+     "en": "After would have comes the participle: would not have missed."
+    },
+    {
+     "if": [
+      "would",
+      "miss"
+     ],
+     "de": "Nach had left liegt die Folge in der Vergangenheit: would not have missed.",
+     "en": "After had left the result lies in the past: would not have missed."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will passt nicht: Der Zug ist schon weg, die Folge liegt in der Vergangenheit.",
+     "en": "will does not fit: the train is gone, the result lies in the past."
+    },
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Die Folge braucht would not have + 3. Form, keine einfache Zeitform.",
+     "en": "The result needs would not have + participle, not a simple tense."
+    }
+   ]
+  }
+ },
+ "conditionals|iftheclienttheofferbyfridaywewillstartproductiononmonday": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: reale Bedingung → if + Präsens (accepts). Im Hauptsatz steht will.",
+    "en": "Right: real condition → if + present (accepts). The main clause takes will."
+   },
+   "wrong": [
+    {
+     "opt": "would accept",
+     "pat": "cn.second",
+     "de": "would steht nicht im if-Teil. Die Bedingung bis Freitag ist realistisch: Präsens.",
+     "en": "would does not go in the if-clause. The condition by Friday is realistic: present."
+    },
+    {
+     "opt": "accepted",
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. Hier ist es ein realer Fall mit will im Hauptsatz.",
+     "en": "The past makes it an assumption. Here it is a real case with will in the main clause."
+    },
+    {
+     "opt": "will accept",
+     "de": "Nach if steht kein will: Der if-Teil nimmt das Präsens, will steht im Hauptsatz.",
+     "en": "No will after if: the if-clause takes the present, will goes in the main clause."
+    }
+   ]
+  }
+ },
+ "conditionals|ifiwereyouithecontractcarefullybeforesigning": {
+  "pat": "cn.were",
+  "why": {
+   "ok": {
+    "de": "Richtig: If I were you gibt einen Rat → Hauptsatz mit would + Grundform: would check.",
+    "en": "Right: If I were you gives advice → main clause with would + base form: would check."
+   },
+   "wrong": [
+    {
+     "opt": "will check",
+     "pat": "cn.first",
+     "de": "If I were you ist eine Annahme, kein echter Fall. Dann steht would, nicht will.",
+     "en": "If I were you is an assumption, not a real case. Then would is used, not will."
+    },
+    {
+     "opt": "would have checked",
+     "pat": "cn.third",
+     "de": "would have checked blickt zurück. Der Rat gilt für jetzt, vor dem Unterschreiben.",
+     "en": "would have checked looks back. The advice is for now, before signing."
+    },
+    {
+     "opt": "checked",
+     "de": "Das Past allein wäre eine Tatsache. Im Hauptsatz einer Annahme steht would + Grundform.",
+     "en": "The past alone would state a fact. The main clause of an assumption takes would + base form."
+    }
+   ]
+  }
+ },
+ "conditionals|ifwehadknownaboutthebugearlierwethelaunch": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: had known ist vorbei → would have + 3. Form: would have delayed.",
+    "en": "Right: had known (over) → would have + participle: would have delayed."
+   },
+   "wrong": [
+    {
+     "opt": "would delay",
+     "pat": "cn.second",
+     "de": "had known blickt zurück: Die Folge braucht would have + 3. Form.",
+     "en": "had known looks back: the result needs would have + participle."
+    },
+    {
+     "opt": "will delay",
+     "de": "will meint Zukunft. Der Fehler ist aber längst bekannt, die Folge liegt in der Vergangenheit.",
+     "en": "will points to the future. But the bug was known long ago, the result lies in the past."
+    },
+    {
+     "opt": "delayed",
+     "de": "Das einfache Past wäre eine Tatsache. Die unmögliche Folge braucht would have + 3. Form.",
+     "en": "The simple past would state a fact. The impossible result needs would have + participle."
+    }
+   ]
+  }
+ },
+ "conditionals|unlessyoutheinvoicetodaywecannotprocessthepayment": {
+  "pat": "cn.if-words",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: send.",
+    "en": "Right: unless = “if not” → present with no not: send."
+   },
+   "wrong": [
+    {
+     "opt": "sent",
+     "de": "Unless nennt eine mögliche Ausnahme: Danach steht das Präsens, nicht das Past.",
+     "en": "Unless names a possible exception: the present follows, not the past."
+    },
+    {
+     "opt": "will send",
+     "de": "Nach unless steht kein will, sondern das Präsens.",
+     "en": "No will after unless, the present follows."
+    },
+    {
+     "opt": "don't send",
+     "de": "Doppelte Verneinung: unless heißt schon „wenn nicht“.",
+     "en": "Double negation: unless already means “if not”."
+    }
+   ]
+  }
+ },
+ "conditionals|wewillagreetothediscountyouorderatleastunits": {
+  "pat": "cn.if-words",
+  "why": {
+   "ok": {
+    "de": "Richtig: provided that = vorausgesetzt, dass. Der Rabatt gilt nur bei 500 Stück.",
+    "en": "Right: provided that = on condition that. The discount applies only from 500 units."
+   },
+   "wrong": [
+    {
+     "opt": "in case",
+     "pat": "ca.in-case",
+     "de": "in case = für den Fall, dass (Vorsorge). Hier geht es um eine Voraussetzung.",
+     "en": "in case = as a precaution. Here it is a requirement."
+    },
+    {
+     "opt": "whereas",
+     "de": "whereas = während (Gegensatz) und nennt keine Bedingung.",
+     "en": "whereas = while (contrast). It does not name a condition."
+    },
+    {
+     "opt": "unless",
+     "pat": "ca.unless",
+     "de": "unless hieße „es sei denn“ und kehrt den Sinn um.",
+     "en": "unless would mean “except if” and reverses the meaning."
+    }
+   ]
+  }
+ },
+ "conditionals|ifiyouwerecomingiwouldhavebakedacake": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: would have baked (vorbei) → im if-Teil Past Perfect: had known.",
+    "en": "Right: would have baked (over) → the if-clause takes the Past Perfect: had known."
+   },
+   "wrong": [
+    {
+     "opt": "know",
+     "pat": "cn.first",
+     "de": "know ist Präsens. would have baked blickt zurück und braucht had + 3. Form.",
+     "en": "know is present. would have baked looks back and needs had + participle."
+    },
+    {
+     "opt": "knew",
+     "pat": "cn.second",
+     "de": "knew wäre Second Conditional (jetzt). would have baked blickt zurück: had known.",
+     "en": "knew would be second conditional (now). would have baked looks back: had known."
+    },
+    {
+     "opt": "would know",
+     "de": "would steht nicht im if-Teil. Dort braucht Third Conditional had + 3. Form.",
+     "en": "would does not go in the if-clause. The third conditional needs had + participle there."
+    }
+   ]
+  }
+ },
+ "conditionals|ifyouthecontracttodaywewillguaranteethecurrentprice": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: reale Bedingung (today) → if + Präsens: sign. will steht im Hauptsatz.",
+    "en": "Right: real condition (today) → if + present: sign. will goes in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach if steht kein will: Der if-Teil nimmt das Präsens (sign).",
+     "en": "No will after if: the if-clause takes the present (sign)."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Hier reicht das Präsens (sign).",
+     "en": "would does not go in the if-clause. The present (sign) is enough here."
+    },
+    {
+     "if": [
+      "signed"
+     ],
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. Aber today nennt eine echte Möglichkeit.",
+     "en": "The past makes it an assumption. But today names a real possibility."
+    },
+    {
+     "if": [
+      "signs"
+     ],
+     "de": "Mit you steht sign ohne -s.",
+     "en": "With you, sign takes no -s."
+    }
+   ]
+  }
+ },
+ "conditionals|ifourcompetitorloweredtheirpriceswemarketshare": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: lowered = Annahme → Hauptsatz mit would + Grundform: would lose.",
+    "en": "Right: lowered = assumption → main clause with would + base form: would lose."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "cn.first",
+     "de": "will passt nicht zu lowered. Eine Annahme verlangt would im Hauptsatz.",
+     "en": "will does not fit lowered. An assumption calls for would in the main clause."
+    },
+    {
+     "if": [
+      "would",
+      "have"
+     ],
+     "pat": "cn.third",
+     "de": "would have lost blickt zurück. Die Annahme gilt für jetzt: would lose.",
+     "en": "would have lost looks back. The assumption is for now: would lose."
+    },
+    {
+     "not": [
+      "would",
+      "'d",
+      "might",
+      "could"
+     ],
+     "de": "Die Folge einer Annahme braucht would + Grundform: would lose.",
+     "en": "The result of an assumption needs would + base form: would lose."
+    }
+   ]
+  }
+ },
+ "conditionals|ifimoreexperienceatthetimeiwouldhaveappliedforthemanagerpositionlastyear": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: at the time und last year → Past Perfect von have: had had.",
+    "en": "Right: at the time and last year → Past Perfect of have: had had."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Dort steht had + 3. Form: had had.",
+     "en": "would does not go in the if-clause. It takes had + participle: had had."
+    },
+    {
+     "if": [
+      "had",
+      "have"
+     ],
+     "de": "Nach had steht die 3. Form von have: had had.",
+     "en": "After had comes the participle of have: had had."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "Die 3. Form von have ist had. Der if-Teil braucht deshalb had had.",
+     "en": "The participle of have is had. So the if-clause needs had had."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Der if-Teil braucht Past Perfect (had + 3. Form), weil es um früher geht.",
+     "en": "The if-clause needs the Past Perfect (had + participle) because it is about earlier."
+    }
+   ]
+  }
+ },
+ "conditionals|ifacustomerforademooursystemsendsaconfirmationemailautomatically": {
+  "pat": "cn.zero",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das ist eine feste Regel (automatically) → Präsens in beiden Teilen: registers.",
+    "en": "Right: fixed rule (automatically) → present in both parts: registers."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Eine feste Regel braucht das Präsens, kein will.",
+     "en": "A fixed rule needs the present, not will."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would macht daraus eine Annahme. Hier gilt eine feste Regel.",
+     "en": "would turns it into an assumption. Here a fixed rule applies."
+    },
+    {
+     "if": [
+      "registered"
+     ],
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. automatically beschreibt eine feste Regel.",
+     "en": "The past makes it an assumption. automatically describes a fixed rule."
+    },
+    {
+     "if": [
+      "register"
+     ],
+     "de": "Mit a customer braucht das Präsens ein -s: registers.",
+     "en": "With a customer the present needs an -s: registers."
+    }
+   ]
+  }
+ },
+ "conditionals|idbehappierifisomuchtimeintrafficeveryday": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: I'd be ist eine Annahme → if + Past, verneint didn't + Grundform: didn't spend.",
+    "en": "Right: I'd be = assumption → if + past, negative didn't + base form: didn't spend."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Dort steht das Past (didn't spend).",
+     "en": "would does not go in the if-clause. The past (didn't spend) goes there."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "cn.first",
+     "de": "will gehört nicht in den if-Teil. I'd be zeigt eine Annahme: Past.",
+     "en": "will does not go in the if-clause. I'd be signals an assumption: past."
+    },
+    {
+     "if": [
+      "do",
+      "not"
+     ],
+     "de": "Das Präsens wäre eine Tatsache. Die Annahme braucht das Past: didn't spend.",
+     "en": "The present would state a fact. The assumption needs the past: didn't spend."
+    },
+    {
+     "if": [
+      "spent"
+     ],
+     "de": "Nach didn't steht die Grundform: didn't spend, nicht spent.",
+     "en": "After didn't comes the base form: didn't spend, not spent."
+    }
+   ]
+  }
+ },
+ "conditionals|wedidnotprepareproperlysowelostthedealifweproperlywewouldnothavelostthedeal": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der if-Teil dreht die Tatsache um: had prepared. Folge: wouldn't have lost.",
+    "en": "Right: the if-clause reverses the fact: had prepared. Result: wouldn't have lost."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Dort braucht Third Conditional had + 3. Form.",
+     "en": "would does not go in the if-clause. The third conditional needs had + participle there."
+    },
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Der if-Teil dreht die Tatsache um: Ihr wart unvorbereitet, also had prepared ohne not.",
+     "en": "The if-clause reverses the fact: you were unprepared, so had prepared with no not."
+    },
+    {
+     "if": [
+      "had",
+      "prepare"
+     ],
+     "de": "Nach had steht die 3. Form: had prepared.",
+     "en": "After had comes the participle: had prepared."
+    },
+    {
+     "not": [
+      "had",
+      "'d"
+     ],
+     "de": "Der if-Teil braucht Past Perfect: had prepared, nicht nur prepared.",
+     "en": "The if-clause needs the Past Perfect: had prepared, not just prepared."
+    }
+   ]
+  }
+ },
+ "conditionals|youmustsendtheinvoicetodayorwecannotpayyouontimewecannotpayyouontimeunlessyouthe": {
+  "pat": "cn.if-words",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: send.",
+    "en": "Right: unless = “if not” → present with no not: send."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Doppelte Verneinung: unless heißt schon „wenn nicht“, danach kein not.",
+     "en": "Double negation: unless already means “if not”, so no not follows."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach unless steht kein will, sondern das Präsens.",
+     "en": "No will after unless, the present follows."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "de": "Nach unless steht das Präsens, nicht das Past: send.",
+     "en": "After unless the present follows, not the past: send."
+    }
+   ]
+  }
+ },
+ "conditionals|ifwewouldhavemorebudgetwewouldhiremorepeople": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: Annahme → if + Past (had). would steht nur im Hauptsatz.",
+    "en": "Right: assumption → if + past (had). would appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "we would have"
+     ],
+     "de": "Das deutsche „würde haben“ wird im Englischen zu had: If we had more budget.",
+     "en": "The German “würde haben” becomes had in English: If we had more budget."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Der if-Teil einer Annahme braucht das Past: had more budget.",
+     "en": "The if-clause of an assumption needs the past: had more budget."
+    }
+   ]
+  }
+ },
+ "conditionals|iftheclientwillagreetothetermswewillstartproductionnextweek": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: mögliche Zukunft → if + Präsens (agrees). will steht nur im Hauptsatz.",
+    "en": "Right: possible future → if + present (agrees). will appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "client will agree"
+     ],
+     "de": "Nach if steht bei realer Zukunft das Präsens (agrees), will nur im Hauptsatz.",
+     "en": "After if, a real future takes the present (agrees), will only in the main clause."
+    },
+    {
+     "not": [
+      "agrees"
+     ],
+     "de": "Das Verb im if-Teil muss ins Präsens: the client agrees (mit -s).",
+     "en": "The verb in the if-clause must be present: the client agrees (with -s)."
+    }
+   ]
+  }
+ },
+ "conditionals|ifiwouldhavemoremoneyiwouldbuyacar": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: Annahme → if + Past (had). would steht nur im Hauptsatz.",
+    "en": "Right: assumption → if + past (had). would appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "i would have"
+     ],
+     "de": "Das deutsche „würde haben“ wird im Englischen zu had: If I had more money.",
+     "en": "The German “würde haben” becomes had in English: If I had more money."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Der if-Teil einer Annahme braucht das Past: had more money.",
+     "en": "The if-clause of an assumption needs the past: had more money."
+    }
+   ]
+  }
+ },
+ "conditionals|ifshewillcallmetomorrowiwilltellher": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: mögliche Zukunft → if + Präsens (calls). will steht nur im Hauptsatz.",
+    "en": "Right: possible future → if + present (calls). will appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "she will call"
+     ],
+     "de": "Nach if steht das Präsens (calls). will bleibt im Hauptsatz (I'll tell her).",
+     "en": "After if the present follows (calls). will stays in the main clause (I'll tell her)."
+    },
+    {
+     "not": [
+      "calls"
+     ],
+     "de": "Im if-Teil braucht she das Präsens mit -s: calls.",
+     "en": "In the if-clause she needs the present with -s: calls."
+    }
+   ]
+  }
+ },
+ "conditionals|iftheyhadleftearliertheywouldnotmissedthetrain": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: had left ist vorbei → would have + 3. Form: wouldn't have missed.",
+    "en": "Right: had left (over) → would have + participle: wouldn't have missed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would",
+      "miss"
+     ],
+     "de": "Nach had left liegt die Folge in der Vergangenheit: would not have missed.",
+     "en": "After had left the result lies in the past: would not have missed."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Das have fehlt: Third Conditional = would have + 3. Form.",
+     "en": "The have is missing: third conditional = would have + participle."
     }
    ]
   }
@@ -2830,6 +4284,1133 @@
      ],
      "de": "have ist Präsens; nach wish rückt die Form eine Stufe zurück: had.",
      "en": "have is present; after wish the verb moves one step back: had."
+    }
+   ]
+  }
+ },
+ "passive|thisbridgein": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: „in 1890“ ist abgeschlossen → Passiv Past Simple: was built.",
+    "en": "Right: “in 1890” is finished → past simple passive: was built."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "„is built“ passt nicht: 1890 ist vorbei, also was.",
+     "en": "“is built” does not fit: 1890 is over, so use was."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„1890“ ist ein fester Zeitpunkt, deshalb kein Present Perfect.",
+     "en": "“1890” names a fixed point in time, so no present perfect."
+    },
+    {
+     "if": [
+      "build"
+     ],
+     "de": "Nach was steht die 3. Form: built, nicht build.",
+     "en": "After was use the past participle: built, not build."
+    },
+    {
+     "if": [
+      "built"
+     ],
+     "not": [
+      "was",
+      "were"
+     ],
+     "de": "Das Passiv braucht was: Die Brücke baut nichts, sie wurde gebaut.",
+     "en": "The passive needs was: the bridge builds nothing, it was built."
+    }
+   ]
+  }
+ },
+ "passive|theyarerepairingtheroadtheroad": {
+  "pat": "pv.progressive",
+  "why": {
+   "ok": {
+    "de": "Richtig: they are repairing, das läuft gerade → the road is being repaired.",
+    "en": "Right: they are repairing (in progress) → the road is being repaired."
+   },
+   "wrong": [
+    {
+     "if": [
+      "repairing"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "„is repairing“ hieße: Die Straße repariert selbst. Passiv: is being repaired.",
+     "en": "“is repairing” would mean the road repairs something. Passive: is being repaired."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Der Ausgangssatz steht im Present (are repairing), also is being.",
+     "en": "The source sentence is in the present (are repairing), so use is being."
+    },
+    {
+     "if": [
+      "repaired"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "Ohne being fehlt „läuft gerade“: Die Arbeit ist noch im Gang.",
+     "en": "Without being, “in progress” is lost: the work is still going on."
+    },
+    {
+     "not": [
+      "repaired"
+     ],
+     "de": "Nach being steht die 3. Form von repair: repaired.",
+     "en": "After being use the past participle of repair: repaired."
+    }
+   ]
+  }
+ },
+ "passive|theresultsnextweek": {
+  "pat": "pv.modal-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Ergebnisse werden bekannt gegeben: will be + 3. Form. „next week“ = Zukunft.",
+    "en": "Right: the results get announced: will be + past participle. “next week” = future."
+   },
+   "wrong": [
+    {
+     "opt": "will announce",
+     "pat": "pv.modal-future",
+     "de": "„will announce“ hieße: Die Ergebnisse geben selbst etwas bekannt.",
+     "en": "“will announce” would mean the results announce something themselves."
+    },
+    {
+     "opt": "are announcing",
+     "de": "„are announcing“: Die Ergebnisse geben jetzt etwas bekannt. Gemeint: Sie werden bekannt gegeben.",
+     "en": "“are announcing”: the results announce something now. Meant: they get announced."
+    },
+    {
+     "opt": "announce",
+     "de": "„announce“ macht die Ergebnisse zum Handelnden, und die Zukunft fehlt.",
+     "en": "“announce” makes the results the doer, and the future is missing."
+    }
+   ]
+  }
+ },
+ "passive|thenewcrmbyitnextmonday": {
+  "pat": "pv.modal-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das CRM wird installiert, „next Monday“ ist Zukunft: will be installed.",
+    "en": "Right: the CRM gets installed, and “next Monday” is future: will be installed."
+   },
+   "wrong": [
+    {
+     "opt": "will install",
+     "de": "„will install“ hieße: Das CRM installiert selbst. Gemeint: IT installiert es.",
+     "en": "“will install” would mean the CRM installs something. Meant: IT installs it."
+    },
+    {
+     "opt": "is installing",
+     "de": "„is installing“: Das CRM installiert gerade etwas selbst.",
+     "en": "“is installing”: the CRM is installing something itself right now."
+    },
+    {
+     "opt": "installs",
+     "de": "„installs“ macht das CRM zum Handelnden, und die Zukunft fehlt.",
+     "en": "“installs” makes the CRM the doer, and the future is missing."
+    }
+   ]
+  }
+ },
+ "passive|ourinvoicesbythefinanceteameveryfriday": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: „every Friday“ ist eine Gewohnheit → Passiv Present Simple: are processed.",
+    "en": "Right: “every Friday” = habit → present simple passive: are processed."
+   },
+   "wrong": [
+    {
+     "opt": "were processed",
+     "de": "„were processed“ meint einmal früher. „every Friday“ ist eine Gewohnheit.",
+     "en": "“were processed” means once in the past. “every Friday” is a habit."
+    },
+    {
+     "opt": "are processing",
+     "de": "„are processing“: Die Rechnungen würden selbst bearbeiten, und das gerade jetzt.",
+     "en": "“are processing”: the invoices would do the processing themselves, right now."
+    },
+    {
+     "opt": "process",
+     "de": "„process“ macht die Rechnungen zum Handelnden. Sie werden aber bearbeitet.",
+     "en": "“process” makes the invoices the doer. But they get processed."
+    }
+   ]
+  }
+ },
+ "passive|iabouttheschedulechangesoimissedthemeeting": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: Mit mir wurde etwas getan, niemand hat mich informiert → wasn't informed.",
+    "en": "Right: something was done to me, nobody informed me → wasn't informed."
+   },
+   "wrong": [
+    {
+     "opt": "haven't informed",
+     "de": "„haven't informed“ ist aktiv und hieße: Ich habe niemanden informiert.",
+     "en": "“haven't informed” would mean: I have not informed anyone."
+    },
+    {
+     "opt": "didn't inform",
+     "de": "„didn't inform“ ist aktiv und hieße: Ich habe niemanden informiert.",
+     "en": "“didn't inform” would mean: I did not inform anyone."
+    },
+    {
+     "opt": "wasn't informing",
+     "de": "„wasn't informing“ hieße: Ich war nicht dabei, andere zu informieren.",
+     "en": "“wasn't informing” would mean: I was not in the middle of informing others."
+    }
+   ]
+  }
+ },
+ "passive|theserveratthemomentsopleasetryagainlater": {
+  "pat": "pv.progressive",
+  "why": {
+   "ok": {
+    "de": "Richtig: „at the moment“ heißt: Das läuft gerade → is being maintained.",
+    "en": "Right: “at the moment” = in progress → is being maintained."
+   },
+   "wrong": [
+    {
+     "opt": "is maintained",
+     "pat": "pv.simple",
+     "de": "„is maintained“ ist ein Dauerzustand. „at the moment“ verlangt being.",
+     "en": "“is maintained” means a standing situation. “at the moment” needs being."
+    },
+    {
+     "opt": "maintains",
+     "de": "„maintains“ macht den Server zum Handelnden. Er wird aber gewartet.",
+     "en": "“maintains” makes the server the doer. But it is being maintained."
+    },
+    {
+     "opt": "has maintained",
+     "de": "„has maintained“ hieße: Der Server hat selbst etwas gewartet.",
+     "en": "“has maintained” would mean the server has maintained something itself."
+    }
+   ]
+  }
+ },
+ "passive|sheapromotionbytheboardlastmonth": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: Sie bekommt die Beförderung, „by the board“ ist der Handelnde → was offered.",
+    "en": "Right: she receives the promotion, “by the board” is the agent → was offered."
+   },
+   "wrong": [
+    {
+     "opt": "has offered",
+     "de": "„has offered“: „last month“ nennt eine feste Zeit, und sie bietet hier nichts an.",
+     "en": "“has offered”: “last month” names a fixed time, and she offers nothing here."
+    },
+    {
+     "opt": "offered",
+     "de": "„offered“ aktiv hieße: Sie hat dem Vorstand etwas angeboten.",
+     "en": "“offered” in the active would mean she offered something to the board."
+    },
+    {
+     "opt": "was offering",
+     "de": "„was offering“ hieße: Sie war dabei, dem Vorstand etwas anzubieten.",
+     "en": "“was offering” would mean she was in the middle of offering something."
+    }
+   ]
+  }
+ },
+ "passive|therestaurantbythesamefamilysince": {
+  "pat": "pv.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: „since 1985“ reicht bis in die Gegenwart → Passiv Present Perfect: has been owned.",
+    "en": "Right: “since 1985” reaches until today → present perfect passive: has been owned."
+   },
+   "wrong": [
+    {
+     "opt": "owns",
+     "de": "„owns“ macht das Restaurant zum Besitzer. Es gehört aber der Familie.",
+     "en": "“owns” makes the restaurant the owner. But it belongs to the family."
+    },
+    {
+     "opt": "was owned",
+     "pat": "pv.simple",
+     "de": "„was owned“ meint abgeschlossene Zeit. Mit since gilt es bis heute.",
+     "en": "“was owned” means finished time. With since it holds until today."
+    },
+    {
+     "opt": "is owned",
+     "de": "„is owned“ nennt nur den Zustand heute. Mit since braucht es has been.",
+     "en": "“is owned” gives only today's state. With since you need has been."
+    }
+   ]
+  }
+ },
+ "passive|thefinalreporttotheboardyesterday": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: „yesterday“ ist abgeschlossen → Passiv Past Simple: was sent (send – sent – sent).",
+    "en": "Right: “yesterday” is finished → past simple passive: was sent (send – sent – sent)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "„is sent“ passt nicht: „yesterday“ ist vorbei, also was.",
+     "en": "“is sent” does not fit: “yesterday” is over, so use was."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„yesterday“ nennt eine feste Zeit, deshalb kein Present Perfect.",
+     "en": "“yesterday” names a fixed time, so no present perfect."
+    },
+    {
+     "if": [
+      "send"
+     ],
+     "de": "Nach was steht die 3. Form: sent, nicht send.",
+     "en": "After was use the past participle: sent, not send."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "not": [
+      "was",
+      "were"
+     ],
+     "de": "Das Passiv braucht was: Der Bericht wurde gesendet.",
+     "en": "The passive needs was: the report was sent."
+    }
+   ]
+  }
+ },
+ "passive|overcustomersbythedatabreachlastmonth": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: Plural und „last month“ → Passiv Past Simple: were affected.",
+    "en": "Right: plural and “last month” → past simple passive: were affected."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was"
+     ],
+     "de": "customers ist Plural: were affected, nicht was.",
+     "en": "customers is plural: were affected, not was."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„last month“ nennt eine feste Zeit, deshalb kein Present Perfect.",
+     "en": "“last month” names a fixed time, so no present perfect."
+    },
+    {
+     "not": [
+      "affected"
+     ],
+     "de": "Nach were steht die 3. Form von affect: affected.",
+     "en": "After were use the past participle of affect: affected."
+    },
+    {
+     "if": [
+      "affected"
+     ],
+     "not": [
+      "were"
+     ],
+     "de": "Das Passiv braucht were: Die Kunden waren betroffen.",
+     "en": "The passive needs were: the customers were affected."
+    }
+   ]
+  }
+ },
+ "passive|ournewproductatthetradefairnextweek": {
+  "pat": "pv.modal-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das Produkt wird vorgestellt, „next week“ ist Zukunft: will be presented.",
+    "en": "Right: the product gets presented, and “next week” is future: will be presented."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was"
+     ],
+     "de": "„next week“ liegt in der Zukunft, also will be, nicht was.",
+     "en": "“next week” is in the future, so use will be, not was."
+    },
+    {
+     "if": [
+      "present"
+     ],
+     "de": "„will present“ hieße: Das Produkt stellt selbst etwas vor.",
+     "en": "“will present” would mean the product presents something itself."
+    },
+    {
+     "if": [
+      "presenting"
+     ],
+     "de": "Nach be steht die 3. Form: presented, nicht -ing.",
+     "en": "After be use the past participle: presented, not -ing."
+    },
+    {
+     "if": [
+      "presented"
+     ],
+     "not": [
+      "be",
+      "being"
+     ],
+     "de": "Für die Zukunft fehlt be: will be presented.",
+     "en": "For the future be is missing: will be presented."
+    }
+   ]
+  }
+ },
+ "passive|thecontractcannotbesigneduntilallthechanges": {
+  "pat": "pv.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Änderungen müssen bis dahin fertig sein → have been made.",
+    "en": "Right: the changes must be finished by then → have been made."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach until steht kein will: Present Perfect have been made.",
+     "en": "No will after until: use the present perfect have been made."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "changes ist Plural: have been made, nicht has.",
+     "en": "changes is plural: have been made, not has."
+    },
+    {
+     "if": [
+      "made",
+      "have"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been wäre es aktiv: Die Änderungen machen selbst etwas.",
+     "en": "Without been it would be active: the changes make something themselves."
+    },
+    {
+     "if": [
+      "make"
+     ],
+     "de": "Nach been steht die 3. Form von make: made.",
+     "en": "After been use the past participle of make: made."
+    }
+   ]
+  }
+ },
+ "passive|lookthewindowsrightnow": {
+  "pat": "pv.progressive",
+  "why": {
+   "ok": {
+    "de": "Richtig: „right now“ = das läuft gerade → are being cleaned.",
+    "en": "Right: “right now” = in progress → are being cleaned."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "windows ist Plural: are being cleaned, nicht is.",
+     "en": "windows is plural: are being cleaned, not is."
+    },
+    {
+     "if": [
+      "cleaning"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "„are cleaning“ hieße: Die Fenster putzen selbst. Passiv: are being cleaned.",
+     "en": "“are cleaning” would mean the windows clean something. Passive: are being cleaned."
+    },
+    {
+     "if": [
+      "cleaned"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "Ohne being fehlt „gerade jetzt“: right now verlangt are being cleaned.",
+     "en": "Without being, “right now” is lost: right now needs are being cleaned."
+    },
+    {
+     "not": [
+      "cleaned"
+     ],
+     "de": "Nach being steht die 3. Form von clean: cleaned.",
+     "en": "After being use the past participle of clean: cleaned."
+    }
+   ]
+  }
+ },
+ "passive|someonehasstolentheprototypefromourlabtheprototypefromourlab": {
+  "pat": "pv.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: aus has stolen wird im Passiv has been stolen (Present Perfect).",
+    "en": "Right: has stolen → present perfect passive: has been stolen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "prototype ist Singular: has been stolen, nicht have.",
+     "en": "prototype is singular: has been stolen, not have."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Der Ausgangssatz steht im Present Perfect, also bleibt has been.",
+     "en": "The source sentence is in the present perfect, so keep has been."
+    },
+    {
+     "if": [
+      "stolen"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt das Passiv: has been stolen.",
+     "en": "Without been the passive is missing: has been stolen."
+    },
+    {
+     "not": [
+      "stolen"
+     ],
+     "de": "Die 3. Form von steal ist stolen.",
+     "en": "The past participle of steal is stolen."
+    }
+   ]
+  }
+ },
+ "passive|someonemustupdatethecontractbeforethemeetingthecontractbeforethemeeting": {
+  "pat": "pv.modal-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Vertrag soll noch aktualisiert werden → must be updated.",
+    "en": "Right: the contract still has to be updated → must be updated."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„must have updated“ meint etwas Früheres. Hier steht es noch an: must be updated.",
+     "en": "“must have updated” points to the past. Here it is still to do: must be updated."
+    },
+    {
+     "if": [
+      "update"
+     ],
+     "de": "Nach be steht die 3. Form von update: updated.",
+     "en": "After be use the past participle of update: updated."
+    },
+    {
+     "if": [
+      "updating"
+     ],
+     "de": "Nach be steht die 3. Form: updated, nicht -ing.",
+     "en": "After be use the past participle: updated, not -ing."
+    },
+    {
+     "if": [
+      "updated"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Nach must fehlt be: must be updated.",
+     "en": "After must the be is missing: must be updated."
+    }
+   ]
+  }
+ },
+ "passive|thereportiswritingbyouranalystrightnow": {
+  "pat": "pv.progressive",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Bericht schreibt nicht selbst, er wird geschrieben → is being written.",
+    "en": "Right: the report does not write, it gets written → is being written."
+   },
+   "wrong": [
+    {
+     "if": [
+      "writing"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "„is writing“ hieße: Der Bericht schreibt selbst. Passiv: is being written.",
+     "en": "“is writing” would mean the report writes something. Passive: is being written."
+    },
+    {
+     "if": [
+      "being",
+      "writing"
+     ],
+     "de": "Nach being steht die 3. Form von write: written.",
+     "en": "After being use the past participle of write: written."
+    },
+    {
+     "if": [
+      "written"
+     ],
+     "not": [
+      "being"
+     ],
+     "de": "Ohne being fehlt „gerade jetzt“: right now verlangt is being written.",
+     "en": "Without being, “right now” is lost: right now needs is being written."
+    },
+    {
+     "not": [
+      "written"
+     ],
+     "de": "Die 3. Form von write ist written.",
+     "en": "The past participle of write is written."
+    }
+   ]
+  }
+ },
+ "passive|thecontractwassignedfrombothpartiesyesterday": {
+  "pat": "pv.prep-agent",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Handelnde im Passiv steht mit by: signed by both parties.",
+    "en": "Right: the agent in a passive sentence takes by: signed by both parties."
+   },
+   "wrong": [
+    {
+     "if": [
+      "from"
+     ],
+     "de": "„from“ ist die wörtliche Übersetzung von „von“. Der Handelnde braucht by.",
+     "en": "“from” is the literal translation of “von”. The agent needs by."
+    },
+    {
+     "if": [
+      "of"
+     ],
+     "de": "„of“ passt hier nicht. Der Handelnde im Passiv steht mit by.",
+     "en": "“of” does not fit here. The agent in a passive sentence takes by."
+    },
+    {
+     "not": [
+      "by"
+     ],
+     "de": "Der Handelnde steht im Passiv mit by: signed by both parties.",
+     "en": "The agent in the passive takes by: signed by both parties."
+    }
+   ]
+  }
+ },
+ "passive|mybikewasstoledyesterday": {
+  "pat": "pv.simple",
+  "why": {
+   "ok": {
+    "de": "Richtig: steal ist unregelmäßig (steal – stole – stolen), das Passiv nimmt stolen.",
+    "en": "Right: steal is irregular (steal – stole – stolen), the passive takes stolen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "stoled"
+     ],
+     "de": "„stoled“ gibt es nicht: steal – stole – stolen.",
+     "en": "There is no “stoled”: steal – stole – stolen."
+    },
+    {
+     "if": [
+      "stole"
+     ],
+     "de": "„stole“ ist die 2. Form. Nach was steht die 3. Form: stolen.",
+     "en": "“stole” is the past tense. After was use the participle: stolen."
+    },
+    {
+     "not": [
+      "stolen"
+     ],
+     "de": "Nach was steht die 3. Form von steal: stolen.",
+     "en": "After was use the past participle of steal: stolen."
+    }
+   ]
+  }
+ },
+ "passive|ourhousewasbrokenlastweek": {
+  "pat": "pv.prep-agent",
+  "why": {
+   "ok": {
+    "de": "Richtig: break into behält into auch im Passiv: was broken into.",
+    "en": "Right: break into keeps into in the passive: was broken into."
+   },
+   "wrong": [
+    {
+     "if": [
+      "in"
+     ],
+     "de": "„broken in“ meint etwas anderes. Beim Einbruch ist es break into.",
+     "en": "“broken in” means something else. For a burglary it is break into."
+    },
+    {
+     "not": [
+      "into"
+     ],
+     "de": "Bei break into bleibt into im Passiv stehen: was broken into.",
+     "en": "With break into the preposition stays in the passive: was broken into."
+    }
+   ]
+  }
+ },
+ "passive-plus|thenewsoftwarebytheendofthemonth": {
+  "pat": "pp.modal",
+  "why": {
+   "ok": {
+    "de": "Richtig: must + be + Partizip. Die Software wird installiert, sie installiert nichts selbst.",
+    "en": "Right: must + be + participle. The software gets installed; it installs nothing itself."
+   },
+   "wrong": [
+    {
+     "opt": "must install",
+     "de": "Aktiv: Die Software kann nichts installieren. Es braucht be + Partizip.",
+     "en": "Active: software cannot install anything. It needs be + participle."
+    },
+    {
+     "opt": "must been installed",
+     "de": "Nach einem Modalverb steht be, nicht been.",
+     "en": "After a modal verb use be, not been."
+    },
+    {
+     "opt": "must be installing",
+     "de": "be + -ing ist aktiv: Die Software würde selbst etwas installieren.",
+     "en": "be + -ing is active: the software would be installing something itself."
+    }
+   ]
+  }
+ },
+ "passive-plus|theofficebythetimewearrived": {
+  "pat": "pp.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: had been cleaned. Das Putzen war schon vor unserer Ankunft erledigt.",
+    "en": "Right: had been cleaned. The cleaning was finished before we arrived."
+   },
+   "wrong": [
+    {
+     "opt": "has been cleaned",
+     "de": "has been reicht bis jetzt. Mit „we arrived“ liegt alles in der Vergangenheit.",
+     "en": "has been reaches up to now. With “we arrived” everything lies in the past."
+    },
+    {
+     "opt": "had cleaned",
+     "de": "Aktiv: Das Büro putzt nicht selbst. Es braucht had been + Partizip.",
+     "en": "Active: the office does not clean itself. It needs had been + participle."
+    },
+    {
+     "opt": "was cleaning",
+     "de": "Aktiv und Verlaufsform: Das Büro würde sich selbst putzen.",
+     "en": "Active and continuous: the office would be cleaning itself."
+    }
+   ]
+  }
+ },
+ "passive-plus|theceotobeplanningamerger": {
+  "pat": "pp.personal",
+  "why": {
+   "ok": {
+    "de": "Richtig: is said to be … gibt ein Gerücht sachlich wieder, ohne Quelle.",
+    "en": "Right: is said to be … reports a rumor neutrally, without a source."
+   },
+   "wrong": [
+    {
+     "opt": "says",
+     "de": "Aktiv: „says to be“ gibt es nicht. Ein Gerücht braucht is said + to.",
+     "en": "Active: “says to be” does not exist. A rumor needs is said + to."
+    },
+    {
+     "opt": "is saying",
+     "de": "is saying ist aktiv und verlangt kein to: Der CEO würde selbst etwas sagen.",
+     "en": "is saying is active and takes no to: the CEO would be speaking himself."
+    },
+    {
+     "opt": "has said",
+     "de": "Aktiv: has said braucht einen that-Satz, nicht to be planning.",
+     "en": "Active: has said needs a that-clause, not to be planning."
+    }
+   ]
+  }
+ },
+ "passive-plus|idonotlikebycustomerswhileiaminmeetings": {
+  "pat": "pp.being",
+  "why": {
+   "ok": {
+    "de": "Richtig: like + being + Partizip. Kunden stören dich, du störst nicht selbst.",
+    "en": "Right: like + being + participle. Customers disturb you; you do not disturb anyone."
+   },
+   "wrong": [
+    {
+     "opt": "be disturbed",
+     "de": "Nach like steht hier die -ing-Form: being, nicht der bloße Infinitiv be.",
+     "en": "After like the -ing form is needed here: being, not the bare infinitive be."
+    },
+    {
+     "opt": "to disturb",
+     "de": "Aktiv: Du würdest die Kunden stören. Gemeint ist: Kunden stören dich.",
+     "en": "Active: you would be disturbing the customers. The meaning is: customers disturb you."
+    },
+    {
+     "opt": "disturbing",
+     "de": "Aktiv: disturbing heißt, du störst selbst. Mit by customers braucht es being disturbed.",
+     "en": "Active: disturbing means you do the disturbing. With by customers use being disturbed."
+    }
+   ]
+  }
+ },
+ "passive-plus|thecontracthastobeforefriday": {
+  "pat": "pp.modal",
+  "why": {
+   "ok": {
+    "de": "Richtig: has to + be + Partizip. Der Vertrag wird unterschrieben.",
+    "en": "Right: has to + be + participle. The contract gets signed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "been"
+     ],
+     "de": "Nach has to steht be, nicht been.",
+     "en": "After has to use be, not been."
+    },
+    {
+     "if": [
+      "be",
+      "sign"
+     ],
+     "de": "Nach be steht das Partizip: signed, nicht sign.",
+     "en": "After be the participle signed is needed, not sign."
+    },
+    {
+     "if": [
+      "sign"
+     ],
+     "de": "Aktiv: Der Vertrag unterschreibt nicht selbst. Es braucht be signed.",
+     "en": "Active: the contract does not sign itself. It needs be signed."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Das Passiv braucht be + Partizip: has to be signed.",
+     "en": "The passive needs be + participle: has to be signed."
+    }
+   ]
+  }
+ },
+ "passive-plus|thecompanyistohavelostmillionslastyear": {
+  "pat": "pp.personal",
+  "why": {
+   "ok": {
+    "de": "Richtig: is said to have + Partizip. Das Gerücht betrifft das letzte Jahr.",
+    "en": "Right: is said to have + participle. The rumor is about last year."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Das is steht schon im Satz. In die Lücke gehört nur das Partizip: said.",
+     "en": "The is is already in the sentence. Only the participle belongs in the gap: said."
+    },
+    {
+     "if": [
+      "say"
+     ],
+     "de": "Nach is steht das Partizip said, nicht say.",
+     "en": "After is the participle said is needed, not say."
+    },
+    {
+     "if": [
+      "saying"
+     ],
+     "de": "Nach is steht das Partizip said, nicht saying.",
+     "en": "After is the participle said is needed, not saying."
+    },
+    {
+     "not": [
+      "said",
+      "reported",
+      "believed",
+      "thought",
+      "rumored",
+      "alleged",
+      "understood",
+      "known",
+      "estimated",
+      "suspected",
+      "supposed",
+      "claimed"
+     ],
+     "de": "Gesucht ist ein Partizip wie said oder believed: is said to have lost.",
+     "en": "A participle such as said or believed is needed: is said to have lost."
+    }
+   ]
+  }
+ },
+ "passive-plus|ihateinterruptedwheniampresenting": {
+  "pat": "pp.being",
+  "why": {
+   "ok": {
+    "de": "Richtig: hate + being + Partizip. Der Sprecher wird unterbrochen.",
+    "en": "Right: hate + being + participle. The speaker is the one being interrupted."
+   },
+   "wrong": [
+    {
+     "if": [
+      "being",
+      "interrupted"
+     ],
+     "de": "Interrupted steht schon im Satz. In die Lücke gehört nur being.",
+     "en": "Interrupted is already in the sentence. Only being belongs in the gap."
+    },
+    {
+     "if": [
+      "be"
+     ],
+     "de": "Gefragt ist die -ing-Form (Hinweis): hate + being + Partizip.",
+     "en": "The -ing form is asked for (see hint): hate + being + participle."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "been passt nicht nach hate. Gesucht ist being + Partizip.",
+     "en": "been does not fit after hate. What is needed is being + participle."
+    },
+    {
+     "not": [
+      "being"
+     ],
+     "de": "Gesucht ist die -ing-Form des Passivs: being + Partizip.",
+     "en": "The -ing form of the passive is needed: being + participle."
+    }
+   ]
+  }
+ },
+ "passive-plus|peoplesaythatthenewmanagerisverystrictthenewmanagertobeverystrict": {
+  "pat": "pp.personal",
+  "why": {
+   "ok": {
+    "de": "Richtig: „People say that …“ wird zu X is said to be … (Passiv + to).",
+    "en": "Right: “People say that …” becomes X is said to be … (passive + to)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "says"
+     ],
+     "de": "Aktiv: Der Manager sagt hier nichts. Es braucht das Passiv: is said.",
+     "en": "Active: the manager says nothing here. The passive is needed: is said."
+    },
+    {
+     "if": [
+      "said"
+     ],
+     "not": [
+      "is"
+     ],
+     "de": "Das Passiv braucht is vor said: is said to be.",
+     "en": "The passive needs is before said: is said to be."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Gesucht ist ein Passiv mit is + Partizip, zum Beispiel is said.",
+     "en": "A passive with is + participle is needed, for example is said."
+    }
+   ]
+  }
+ },
+ "passive-plus|someonemustrepairtheprintertodaytheprintertoday": {
+  "pat": "pp.modal",
+  "why": {
+   "ok": {
+    "de": "Richtig: must + be + Partizip. Der Drucker steht im Mittelpunkt, nicht wer repariert.",
+    "en": "Right: must + be + participle. The printer is the focus, not who repairs it."
+   },
+   "wrong": [
+    {
+     "if": [
+      "been"
+     ],
+     "de": "Nach must steht be, nicht been.",
+     "en": "After must use be, not been."
+    },
+    {
+     "if": [
+      "repair"
+     ],
+     "de": "Aktiv: Der Drucker repariert nichts selbst. Es braucht be repaired.",
+     "en": "Active: the printer repairs nothing itself. It needs be repaired."
+    },
+    {
+     "if": [
+      "repairing"
+     ],
+     "de": "be + -ing ist aktiv. Hier braucht es be + Partizip: repaired.",
+     "en": "be + -ing is active. Here be + participle is needed: repaired."
+    },
+    {
+     "not": [
+      "be"
+     ],
+     "de": "Das Passiv braucht be + Partizip: must be repaired.",
+     "en": "The passive needs be + participle: must be repaired."
+    }
+   ]
+  }
+ },
+ "passive-plus|thedocumentsmustbesendtotheclientbynoon": {
+  "pat": "pp.modal",
+  "why": {
+   "ok": {
+    "de": "Richtig: be + Partizip. Das Partizip von send heißt sent.",
+    "en": "Right: be + participle. The participle of send is sent."
+   },
+   "wrong": [
+    {
+     "if": [
+      "send"
+     ],
+     "de": "Nach be steht das Partizip sent, nicht send.",
+     "en": "After be the participle sent is needed, not send."
+    },
+    {
+     "if": [
+      "sended"
+     ],
+     "de": "send ist unregelmäßig: sent, nicht sended.",
+     "en": "send is irregular: sent, not sended."
+    },
+    {
+     "if": [
+      "sending"
+     ],
+     "de": "be + -ing ist aktiv. Hier braucht es be sent.",
+     "en": "be + -ing is active. Here be sent is needed."
+    }
+   ]
+  }
+ },
+ "passive-plus|theplantisbelievedclosingnextyear": {
+  "pat": "pp.personal",
+  "why": {
+   "ok": {
+    "de": "Richtig: is believed to be closing (oder to close). Nach believed folgt to.",
+    "en": "Right: is believed to be closing (or to close). To follows believed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to",
+      "closing"
+     ],
+     "de": "Nach to steht der Infinitiv: to be closing oder to close.",
+     "en": "After to the infinitive is needed: to be closing or to close."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach is believed fehlt to: believed to be closing.",
+     "en": "To is missing after is believed: believed to be closing."
+    }
+   ]
+  }
+ },
+ "passive-plus|ourofferhasbeenacceptedbytheclientyesterday": {
+  "pat": "pp.perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: was accepted. Mit „yesterday“ steht das Simple Past, nicht has been.",
+    "en": "Right: was accepted. “Yesterday” takes the simple past, not has been."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has",
+      "been"
+     ],
+     "de": "Ein fester Zeitpunkt wie yesterday verbietet has been. Es heißt was accepted.",
+     "en": "A finished time like yesterday rules out has been. Use was accepted."
+    },
+    {
+     "not": [
+      "was"
+     ],
+     "de": "Gesucht ist das Simple Past im Passiv: was + Partizip.",
+     "en": "The passive simple past is needed: was + participle."
+    }
+   ]
+  }
+ },
+ "passive-plus|ourofferhasbeenacceptedyesterday": {
+  "pat": "pp.perfect",
+  "dup": "passive-plus|ourofferhasbeenacceptedbytheclientyesterday",
+  "why": {
+   "ok": {
+    "de": "Richtig: was accepted. Mit „yesterday“ steht das Simple Past, nicht has been.",
+    "en": "Right: was accepted. “Yesterday” takes the simple past, not has been."
+   },
+   "wrong": [
+    {
+     "if": [
+      "has",
+      "been"
+     ],
+     "de": "Ein fester Zeitpunkt wie yesterday verbietet has been. Es heißt was accepted.",
+     "en": "A finished time like yesterday rules out has been. Use was accepted."
+    },
+    {
+     "not": [
+      "was"
+     ],
+     "de": "Gesucht ist das Simple Past im Passiv: was + Partizip.",
+     "en": "The passive simple past is needed: was + participle."
     }
    ]
   }
@@ -6064,6 +8645,736 @@
      ],
      "de": "Die Vergangenheit „finished“ passt nicht; nimm „is over“ oder „has finished“.",
      "en": "The past “finished” does not fit; use “is over” or “has finished”."
+    }
+   ]
+  }
+ },
+ "used-to|wheniwasachildiplayfootballeveryday": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: used to + Grundform erzählt von einer Gewohnheit, die vorbei ist.",
+    "en": "Right: used to + base verb tells of a habit that is over."
+   },
+   "wrong": [
+    {
+     "opt": "am used to",
+     "pat": "ut.be-used-to",
+     "de": "„Am used to“ heißt „gewöhnt sein“ und braucht -ing, nicht „play“.",
+     "en": "“Am used to” means “be accustomed” and takes -ing, not “play”."
+    },
+    {
+     "opt": "get used to",
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ = sich gewöhnen, danach -ing. Gemeint ist eine frühere Gewohnheit.",
+     "en": "“Get used to” = become accustomed, then -ing. Here a past habit is meant."
+    },
+    {
+     "opt": "was used to",
+     "pat": "ut.be-used-to",
+     "de": "„Was used to“ = war gewöhnt, danach -ing. Hier folgt „play“: eine frühere Gewohnheit.",
+     "en": "“Was used to” = was accustomed, then -ing. Here “play” follows: a past habit."
+    }
+   ]
+  }
+ },
+ "used-to|ihavelivedinenglandforyearssoidrivingontheleft": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + -ing. Nach Jahren in England ist Linksverkehr vertraut.",
+    "en": "Right: be used to + -ing. After years in England, driving on the left feels normal."
+   },
+   "wrong": [
+    {
+     "if": [
+      "get",
+      "used"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ nennt den Vorgang. Nach Jahren ist man schon gewöhnt: am used to.",
+     "en": "“Get used to” names the process. After years you are already used to it: am used to."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): am used to.",
+     "en": "The d is missing: used is an adjective here (accustomed): am used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "not": [
+      "am",
+      "be",
+      "get",
+      "was"
+     ],
+     "pat": "ut.used-to",
+     "de": "Ohne „am“ klingt es nach früher. Für „gewöhnt sein“ braucht es be: am used to.",
+     "en": "Without “am” it sounds like the past. For “be accustomed” you need be: am used to."
+    }
+   ]
+  }
+ },
+ "used-to|iamusedtogetupearly": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + -ing. „to“ ist hier eine Präposition: getting up.",
+    "en": "Right: be used to + -ing. Here to is a preposition: getting up."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to",
+      "get"
+     ],
+     "not": [
+      "am",
+      "is",
+      "are"
+     ],
+     "pat": "ut.used-to",
+     "de": "Mit „used to get“ änderst du den Sinn: früher, heute nicht mehr. Gemeint ist: gewöhnt sein.",
+     "en": "With “used to get” you change the meaning: past, no longer. “Be accustomed” is meant."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "get"
+     ],
+     "de": "Das „get up“ bleibt falsch: Nach be used to steht -ing (getting up).",
+     "en": "“get up” is still wrong: be used to takes -ing (getting up)."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "getting"
+     ],
+     "not": [
+      "am",
+      "is",
+      "are"
+     ],
+     "pat": "ut.used-to",
+     "de": "Es fehlt „am“: Ohne be wird daraus ein Satz über früher.",
+     "en": "“am” is missing: without be this becomes a sentence about the past."
+    }
+   ]
+  }
+ },
+ "used-to|wehaveapaperarchivebutnoweverythingisinthecloud": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früher so, heute nicht mehr, also used to + Grundform: used to have.",
+    "en": "Right: true before, not now, so used to + base verb: used to have."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "ut.would",
+     "de": "„Would“ geht nicht bei Zuständen wie „have“. Hier passt nur used to.",
+     "en": "Would does not work with states like “have”. Only used to fits here."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "having"
+     ],
+     "de": "Nach used to steht die Grundform: used to have, nicht having.",
+     "en": "Used to takes the base form: used to have, not having."
+    },
+    {
+     "if": [
+      "was",
+      "used"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Was used to“ + -ing hieße „war gewöhnt“. Gemeint ist: Früher gab es das Archiv.",
+     "en": "“Was used to” + -ing would mean “was accustomed”. Here: there used to be an archive."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: In bejahten Sätzen heißt es used to.",
+     "en": "The d is missing: affirmative sentences take used to."
+    }
+   ]
+  }
+ },
+ "used-to|workingwithuscustomersisnormalformenowiwithuscustomers": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: „normal für mich“ = be used to + -ing: am used to working.",
+    "en": "Right: “normal for me” = be used to + -ing: am used to working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to",
+      "work"
+     ],
+     "de": "Nach be used to steht -ing: working, nicht die Grundform.",
+     "en": "Be used to takes -ing: working, not the base form."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "working"
+     ],
+     "not": [
+      "am",
+      "be",
+      "get",
+      "was",
+      "is"
+     ],
+     "pat": "ut.used-to",
+     "de": "Es fehlt „am“: Ohne be heißt used to + -ing nicht „gewöhnt sein“.",
+     "en": "“am” is missing: be used to + -ing means “be accustomed”."
+    },
+    {
+     "if": [
+      "get",
+      "used"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ beschreibt den Weg dorthin. Gefragt ist der Zustand: am used to.",
+     "en": "“Get used to” describes the way there. The state is asked for: am used to."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): am used to working.",
+     "en": "The d is missing: used is an adjective here (accustomed): am used to working."
+    }
+   ]
+  }
+ },
+ "used-to|iworkinglonghourssinceistartedinsalessoitdoesnotbotherme": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + -ing = gewöhnt sein. Darum stört es dich nicht.",
+    "en": "Right: be used to + -ing = be accustomed. That is why it does not bother you."
+   },
+   "wrong": [
+    {
+     "opt": "get used to",
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ nennt den Weg dorthin. Gemeint ist der Zustand: Es stört dich nicht mehr.",
+     "en": "“Get used to” names the way there. The state is meant: it no longer bothers you."
+    },
+    {
+     "opt": "used to",
+     "pat": "ut.used-to",
+     "de": "„Used to“ + Grundform hieße: früher so, heute nicht mehr. Gemeint ist: heute gewöhnt.",
+     "en": "“Used to” + base verb would mean: true before, not now. Here: accustomed today."
+    },
+    {
+     "opt": "would",
+     "pat": "ut.would",
+     "de": "Nach „would“ steht die Grundform, kein -ing. Zudem heißt „would“ nicht „gewöhnt sein“.",
+     "en": "After “would” comes the base form, not -ing. Also “would” does not mean “be accustomed”."
+    }
+   ]
+  }
+ },
+ "used-to|whenistartedatthiscompanyicouldnottheopenplanofficebutnowiloveit": {
+  "pat": "ut.get-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Vorgang des Gewöhnens: couldn't + get used to + Nomen.",
+    "en": "Right: the process of becoming accustomed: couldn't + get used to + noun."
+   },
+   "wrong": [
+    {
+     "opt": "be used to",
+     "pat": "ut.be-used-to",
+     "de": "„Be used to“ = gewöhnt sein (Zustand). Zu „couldn't“ passt der Vorgang: get used to.",
+     "en": "“Be used to” = be accustomed (a state). After “couldn't” the process fits: get used to."
+    },
+    {
+     "opt": "use to",
+     "pat": "ut.did-use-to",
+     "de": "„Use to“ steht nur nach did oder didn't und meint „früher“, nicht „sich gewöhnen“.",
+     "en": "“Use to” follows only did or didn't and means “in the past”, not “become accustomed”."
+    },
+    {
+     "opt": "used to",
+     "pat": "ut.used-to",
+     "de": "„Used to“ meint „früher“ und passt nicht hinter „couldn't“. Gemeint ist „sich gewöhnen“.",
+     "en": "“Used to” means “in the past” and does not fit after “couldn't”. “Become accustomed” is meant."
+    }
+   ]
+  }
+ },
+ "used-to|webethemarketleaderbutnowweareonlythird": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früher so, heute nicht mehr. „be“ ist ein Zustand: used to be.",
+    "en": "Right: true before, not now. “Be” is a state: used to be."
+   },
+   "wrong": [
+    {
+     "opt": "would",
+     "pat": "ut.would",
+     "de": "„Would be“ ist hier falsch: Für frühere Zustände wie „be“ passt nur used to.",
+     "en": "“Would be” is wrong here: for past states like “be” only used to fits."
+    },
+    {
+     "opt": "get used to",
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ heißt „sich gewöhnen“ und braucht -ing, kein „be“.",
+     "en": "“Get used to” means “become accustomed” and takes -ing, not “be”."
+    },
+    {
+     "opt": "are used to",
+     "pat": "ut.be-used-to",
+     "de": "„Are used to“ heißt „gewöhnt sein“ und braucht -ing, kein „be“. Gemeint ist: früher.",
+     "en": "“Are used to” means “be accustomed” and takes -ing, not “be”. Here: in the past."
+    }
+   ]
+  }
+ },
+ "used-to|didyouworkinsalesbeforeyoujoinedus": {
+  "pat": "ut.did-use-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach did steht use to ohne d. Gefragt wird nach früher.",
+    "en": "Right: after did we write use to without d. The question is about the past."
+   },
+   "wrong": [
+    {
+     "opt": "use",
+     "de": "„Use“ allein heißt „benutzen“. Für „früher“ braucht es use to.",
+     "en": "“Use” alone means to employ. For “in the past” you need use to."
+    },
+    {
+     "opt": "are used to",
+     "pat": "ut.be-used-to",
+     "de": "„Are used to“ braucht -ing, und nach did steht die Grundform. Gefragt ist: früher.",
+     "en": "“Are used to” takes -ing, and after did comes the base form. The question is about the past."
+    },
+    {
+     "opt": "used to",
+     "pat": "ut.used-to",
+     "de": "Hier zeigt did schon die Vergangenheit, darum entfällt das d: use to.",
+     "en": "Here did already shows the past, so the d drops: use to."
+    }
+   ]
+  }
+ },
+ "used-to|iamnotusedtoinenglishyetsoipreparemyargumentscarefully": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach be used to ist „to“ eine Präposition, also -ing: negotiating.",
+    "en": "Right: after be used to, to is a preposition, so -ing: negotiating."
+   },
+   "wrong": [
+    {
+     "opt": "negotiate",
+     "de": "Nach der Präposition „to“ steht nicht die Grundform, sondern -ing.",
+     "en": "After the preposition “to” the base form is wrong; use -ing."
+    },
+    {
+     "opt": "to negotiate",
+     "de": "„To“ steckt schon im Ausdruck be used to. Danach folgt direkt -ing.",
+     "en": "“To” is already part of the phrase be used to. Then -ing follows directly."
+    },
+    {
+     "opt": "negotiated",
+     "de": "Eine -ed-Form passt nach „to“ nicht: Gebraucht wird die -ing-Form.",
+     "en": "An -ed form does not fit after “to”: you need the -ing form."
+    }
+   ]
+  }
+ },
+ "used-to|wheniwasakidwespendeverysummeratmygrandparentsfarm": {
+  "pat": "ut.would",
+  "why": {
+   "ok": {
+    "de": "Richtig: „spend“ ist eine wiederholte Handlung: would + Grundform geht (wie used to).",
+    "en": "Right: “spend” is a repeated action: would + base verb works (like used to)."
+   },
+   "wrong": [
+    {
+     "opt": "get used to",
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ = sich gewöhnen, danach -ing. Gemeint ist eine frühere Gewohnheit.",
+     "en": "“Get used to” = become accustomed, then -ing. Here a past habit is meant."
+    },
+    {
+     "opt": "are used to",
+     "pat": "ut.be-used-to",
+     "de": "„Are used to“ = gewöhnt sein, danach -ing. Gemeint ist eine frühere Gewohnheit.",
+     "en": "“Are used to” = be accustomed, then -ing. Here a past habit is meant."
+    },
+    {
+     "opt": "use to",
+     "pat": "ut.did-use-to",
+     "de": "Hier passt would (oder used to), aber nicht use to: „Use to“ ohne d steht nur nach did oder didn't.",
+     "en": "Here would (or used to) fits, but not use to: “use to” without d follows only did or didn't."
+    }
+   ]
+  }
+ },
+ "used-to|beforeweswitchedtoslackwesendhundredsofinternalemailseveryday": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: frühere, wiederholte Handlung: used to + send. Auch would geht.",
+    "en": "Right: a past repeated action: used to + send. Would also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: In bejahten Sätzen heißt es used to.",
+     "en": "The d is missing: affirmative sentences take used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "Vor used to steht hier kein am, get oder was. Sonst hieße es „gewöhnt“ und -ing folgte.",
+     "en": "No am, get or was comes before used to here. Otherwise it means “accustomed” and -ing follows."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„Will“ ist Zukunft. Gemeint ist eine Gewohnheit von früher: used to oder would.",
+     "en": "“Will” is the future. A past habit is meant: used to or would."
+    }
+   ]
+  }
+ },
+ "used-to|iamnottalkingtolargeaudiencesyetsoigetnervous": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + -ing = gewöhnt sein. Noch nicht gewöhnt, darum nervös.",
+    "en": "Right: be used to + -ing = be accustomed. Not yet used to it, so you get nervous."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): I'm not used to talking.",
+     "en": "The d is missing: used is an adjective here (accustomed): I'm not used to talking."
+    },
+    {
+     "if": [
+      "getting"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Getting used to“ nennt den Vorgang. Hier geht es um den Zustand: noch nicht gewöhnt.",
+     "en": "“Getting used to” names the process. Here the state is meant: not yet accustomed."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "not": [
+      "getting"
+     ],
+     "de": "Vor used to steht schon „I'm not“. Ein zweites am oder be ist zu viel.",
+     "en": "“I'm not” already comes before used to. A second am or be is too much."
+    }
+   ]
+  }
+ },
+ "used-to|itwashardatfirstbutihavefinallyworkingwithamericanclients": {
+  "pat": "ut.get-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Vorgang ist abgeschlossen: gotten used to + -ing (US).",
+    "en": "Right: the process is complete: gotten used to + -ing (US)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "get"
+     ],
+     "de": "Nach „I've“ braucht get die dritte Form: gotten (US) oder got.",
+     "en": "After “I've”, get needs its third form: gotten (US) or got."
+    },
+    {
+     "if": [
+      "been",
+      "used"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Been used to“ = gewöhnt gewesen (Zustand). Hier ist das Gewöhnen gemeint: gotten used to.",
+     "en": "“Been used to” = have been accustomed (a state). The process is meant: gotten used to."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): gotten used to.",
+     "en": "The d is missing: used is an adjective here (accustomed): gotten used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.used-to",
+     "de": "Vor used to fehlt das Verb get (hier: gotten). Sonst hieße es „früher“.",
+     "en": "The verb get (here: gotten) is missing before used to. Otherwise it means “in the past”."
+    }
+   ]
+  }
+ },
+ "used-to|myteambereallysmallbutnowwearepeople": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früherer Zustand (be) → used to. Heute sind es 25, also vorbei.",
+    "en": "Right: a past state (be) → used to. Today it is 25, so that is over."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "ut.would",
+     "de": "„Would“ geht nicht bei Zuständen wie „be“. Hier passt nur used to.",
+     "en": "Would does not work with states like “be”. Only used to fits here."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: In bejahten Sätzen heißt es used to.",
+     "en": "The d is missing: affirmative sentences take used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "Vor used to steht hier kein am, get oder was. Sonst folgte -ing statt „be“.",
+     "en": "No am, get or was comes before used to here. Otherwise -ing would follow instead of “be”."
+    }
+   ]
+  }
+ },
+ "used-to|ididnotlikecilantrobutnowiloveit": {
+  "pat": "ut.did-use-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: „didn't“ zeigt die Vergangenheit schon, darum use to ohne d.",
+    "en": "Right: “didn't” already shows the past, so use to without d."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.used-to",
+     "de": "Nach didn't entfällt das d: didn't use to, weil didn't schon die Vergangenheit zeigt.",
+     "en": "After didn't the d drops: didn't use to, because didn't already shows the past."
+    },
+    {
+     "if": [
+      "use"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt „to“: Nach didn't steht use to + Grundform.",
+     "en": "“to” is missing: didn't use to + base verb."
+    }
+   ]
+  }
+ },
+ "used-to|inthepastitraveledalotforworkbutidonotanymoreialotforwork": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früher regelmäßig, heute nicht mehr: used to + travel.",
+    "en": "Right: regular before, not now: used to + travel."
+   },
+   "wrong": [
+    {
+     "if": [
+      "am",
+      "used"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Am used to“ = gewöhnt sein. Gemeint ist: früher ja, heute nicht mehr.",
+     "en": "“Am used to” = be accustomed. Meant here: yes in the past, not any more."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: In bejahten Sätzen heißt es used to.",
+     "en": "The d is missing: affirmative sentences take used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "not": [
+      "travel"
+     ],
+     "de": "Nach used to steht die Grundform: used to travel.",
+     "en": "Used to takes the base form: used to travel."
+    }
+   ]
+  }
+ },
+ "used-to|workingnightshiftsisnormalformenowihavedoneitforyearsiamnightshifts": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: „normal für mich“ = be used to + -ing: I'm used to working.",
+    "en": "Right: “normal for me” = be used to + -ing: I'm used to working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to",
+      "work"
+     ],
+     "de": "Nach be used to steht -ing: working, nicht die Grundform.",
+     "en": "Be used to takes -ing: working, not the base form."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): used to working.",
+     "en": "The d is missing: used is an adjective here (accustomed): used to working."
+    },
+    {
+     "if": [
+      "getting",
+      "used"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Getting used to“ nennt den Vorgang. Gemeint ist: für dich schon normal.",
+     "en": "“Getting used to” names the process. Meant here: already normal for you."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "not": [
+      "working",
+      "doing"
+     ],
+     "de": "Nach used to folgt hier -ing: working oder doing.",
+     "en": "Here -ing follows used to: working or doing."
+    }
+   ]
+  }
+ },
+ "used-to|weusedtohavingastrictdresscodebutitsmorerelaxednow": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früher so, jetzt nicht mehr: used to + Grundform (have).",
+    "en": "Right: true before, not any more: used to + base verb (have)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to",
+      "having"
+     ],
+     "not": [
+      "am",
+      "are",
+      "is",
+      "was",
+      "were"
+     ],
+     "de": "Das -ing bleibt falsch: used to hat die Grundform: used to have.",
+     "en": "The -ing is still wrong: used to takes the base form: used to have."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "having"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Are used to having“ ist ein anderer Satz: gewöhnt sein. Gemeint ist: früher.",
+     "en": "“Are used to having” is a different sentence: be accustomed. Meant here: in the past."
+    }
+   ]
+  }
+ },
+ "used-to|icannotgetusedtoworkwiththenewcrmsystem": {
+  "pat": "ut.get-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: get used to + -ing. „to“ ist eine Präposition: working.",
+    "en": "Right: get used to + -ing. To is a preposition: working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "get",
+      "used",
+      "to",
+      "work"
+     ],
+     "de": "Das „work“ bleibt falsch: Nach get used to steht -ing: working.",
+     "en": "“work” is still wrong: get used to takes -ing: working."
+    },
+    {
+     "if": [
+      "be",
+      "used",
+      "to"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Be used to“ = gewöhnt sein. Gemeint ist der Vorgang: get used to.",
+     "en": "“Be used to” = be accustomed. The process is meant: get used to."
     }
    ]
   }

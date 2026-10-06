@@ -1,0 +1,1049 @@
+[
+ {
+  "id": "pp-mod-k1",
+  "type": "kwt",
+  "pat": "pp.modal",
+  "from": "Someone must check the figures before the call.",
+  "key": "MUST",
+  "frame": "The figures ___ checked before the call.",
+  "answer": "must be",
+  "accepted": [
+   "must all be",
+   "must first be",
+   "must also be",
+   "must still be"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: must + be + Partizip. Die Zahlen werden geprüft, sie prüfen nicht selbst.",
+    "en": "Right: must + be + participle. The figures get checked; they check nothing themselves."
+   },
+   "wrong": [
+    {
+     "not": [
+      "must"
+     ],
+     "de": "Das Schlüsselwort must muss unverändert in der Lücke stehen.",
+     "en": "The key word must must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "must",
+      "been"
+     ],
+     "de": "Nach dem Modalverb steht be, nicht been: must be checked.",
+     "en": "After the modal verb use be, not been: must be checked."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Ohne be fehlt das Passiv: must be checked.",
+     "en": "Without be the passive is missing: must be checked."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-mod-k2",
+  "type": "kwt",
+  "pat": "pp.modal",
+  "from": "I think someone ought to tell the client about the delay.",
+  "key": "SHOULD",
+  "frame": "The client ___ about the delay.",
+  "answer": "should be told",
+  "accepted": [
+   "should be informed",
+   "should be notified",
+   "should be advised"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: should + be + Partizip. Der Kunde bekommt die Information, er gibt sie nicht.",
+    "en": "Right: should + be + participle. The client receives the news; he does not give it."
+   },
+   "wrong": [
+    {
+     "not": [
+      "should"
+     ],
+     "de": "Das Schlüsselwort should muss unverändert in der Lücke stehen.",
+     "en": "The key word should must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "should"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Nach should steht be, nicht been oder being.",
+     "en": "After should use be, not been or being."
+    },
+    {
+     "if": [
+      "should",
+      "tell"
+     ],
+     "de": "Aktiv: Der Kunde würde selbst informieren. Es braucht be + Partizip.",
+     "en": "Active: the client would be informing someone. It needs be + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-mod-f1",
+  "type": "find",
+  "pat": "pp.modal",
+  "prompt": "The proposal can approved by the board next week.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "can be approved",
+  "fixed": "The proposal can be approved by the board next week.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach can fehlt be. Richtig: can be approved.",
+    "en": "The error: be is missing after can. Correct: can be approved."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach can fehlt be.",
+     "en": "There is an error: be is missing after can."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „can approved“: Modal + be + Partizip.",
+     "en": "The error is in “can approved”: modal + be + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-mod-f2",
+  "type": "find",
+  "pat": "pp.modal",
+  "prompt": "All attendees must been notified before the workshop starts.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "be",
+  "fixed": "All attendees must be notified before the workshop starts.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „must been“. Nach einem Modalverb steht be.",
+    "en": "The error: “must been”. After a modal verb use be."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach must steht be, nicht been.",
+     "en": "There is an error: after must use be, not been."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „been“: Nach must steht be.",
+     "en": "The error is in “been”: be follows must."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-mod-f3",
+  "type": "find",
+  "pat": "pp.modal",
+  "prompt": "The new policy has to be explained to every team leader.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: has to + be + Partizip ist das Passiv mit Modal.",
+    "en": "No error: has to + be + participle is the passive with a modal."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: has to be explained ist richtig gebaut.",
+     "en": "No error: has to be explained is built correctly."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-mod-f4",
+  "type": "find",
+  "pat": "pp.modal",
+  "prompt": "The old files should be delete from the shared drive.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "deleted",
+  "fixed": "The old files should be deleted from the shared drive.",
+  "accepted": [
+   "removed"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach be steht das Partizip: deleted.",
+    "en": "The error: after be the participle is needed: deleted."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach be fehlt die Partizip-Endung.",
+     "en": "There is an error: the participle ending is missing after be."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „delete“: be + Partizip, also deleted.",
+     "en": "The error is in “delete”: be + participle, so deleted."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-mod-m1",
+  "type": "meaning",
+  "pat": "pp.modal",
+  "a": "The files should be sent today.",
+  "b": "The files must be sent today.",
+  "q": {
+   "de": "Welcher Satz drückt eine strikte Pflicht aus, nicht nur eine Empfehlung?",
+   "en": "Which sentence expresses a strict obligation, not just a recommendation?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. must verlangt, should empfiehlt nur.",
+    "en": "Right: sentence b. must demands, should only recommends."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a steht should: eine Empfehlung, keine feste Pflicht.",
+     "en": "Sentence a has should: a recommendation, not a firm obligation."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: should rät, must verlangt.",
+     "en": "Not the same: should advises, must demands."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-per-k1",
+  "type": "kwt",
+  "pat": "pp.perfect",
+  "from": "The team had already sent the invoices before the client called.",
+  "key": "ALREADY",
+  "frame": "The invoices ___ sent before the client called.",
+  "answer": "had already been",
+  "accepted": [
+   "had all already been"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: had already been. Das Senden lag vor dem Anruf des Kunden.",
+    "en": "Right: had already been. The sending came before the client's call."
+   },
+   "wrong": [
+    {
+     "not": [
+      "already"
+     ],
+     "de": "Das Schlüsselwort already muss unverändert in der Lücke stehen.",
+     "en": "The key word already must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "already"
+     ],
+     "not": [
+      "had",
+      "were"
+     ],
+     "de": "Mit before the client called braucht es had been: früher als der Anruf.",
+     "en": "With before the client called use had been: earlier than the call."
+    },
+    {
+     "if": [
+      "had",
+      "already"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Das Passiv braucht been: had already been sent.",
+     "en": "The passive needs been: had already been sent."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-per-k2",
+  "type": "kwt",
+  "pat": "pp.perfect",
+  "from": "Someone has just announced the new strategy.",
+  "key": "JUST",
+  "frame": "The new strategy ___ announced.",
+  "answer": "has just been",
+  "accepted": [
+   "has only just been",
+   "was just"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: has just been. just betont: Es ist eben erst passiert, das Ergebnis gilt jetzt.",
+    "en": "Right: has just been. just stresses: it only now happened, and the result holds now."
+   },
+   "wrong": [
+    {
+     "not": [
+      "just"
+     ],
+     "de": "Das Schlüsselwort just muss unverändert in der Lücke stehen.",
+     "en": "The key word just must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "just",
+      "has"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Das Passiv braucht been: has just been announced.",
+     "en": "The passive needs been: has just been announced."
+    },
+    {
+     "if": [
+      "had",
+      "just"
+     ],
+     "de": "Ohne Zeitangabe gilt das Perfekt: has just been, nicht had just been.",
+     "en": "With no past time given the perfect fits: has just been, not had just been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-per-k3",
+  "type": "kwt",
+  "pat": "pp.perfect",
+  "from": "The IT team fixed the bug on Tuesday.",
+  "key": "FIXED",
+  "frame": "The bug ___ by the IT team on Tuesday.",
+  "answer": "was fixed",
+  "accepted": [
+   "got fixed",
+   "was finally fixed",
+   "was quickly fixed",
+   "was already fixed",
+   "was eventually fixed"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: was fixed. Mit „on Tuesday“ steht das Simple Past im Passiv.",
+    "en": "Right: was fixed. “On Tuesday” takes the passive simple past."
+   },
+   "wrong": [
+    {
+     "not": [
+      "fixed"
+     ],
+     "de": "Das Schlüsselwort fixed muss unverändert in der Lücke stehen.",
+     "en": "The key word fixed must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "has",
+      "been"
+     ],
+     "de": "Mit on Tuesday steht kein has been: Ein fester Zeitpunkt braucht was.",
+     "en": "With on Tuesday no has been: a finished time needs was."
+    },
+    {
+     "if": [
+      "fixed"
+     ],
+     "not": [
+      "was",
+      "got"
+     ],
+     "de": "Das Passiv braucht was + Partizip: was fixed.",
+     "en": "The passive needs was + participle: was fixed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-per-f1",
+  "type": "find",
+  "pat": "pp.perfect",
+  "prompt": "The new logo has been presented to the board on Monday.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "was presented",
+  "fixed": "The new logo was presented to the board on Monday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „on Monday“ ist ein fester Zeitpunkt. Richtig: was presented.",
+    "en": "The error: “on Monday” is a finished time. Correct: was presented."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Mit on Monday passt has been nicht.",
+     "en": "There is an error: has been does not fit with on Monday."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „has been presented“: fester Zeitpunkt, also was.",
+     "en": "The error is in “has been presented”: a finished time needs was."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-per-f2",
+  "type": "find",
+  "pat": "pp.perfect",
+  "prompt": "By the time the client called, the invoice has been sent.",
+  "err": [
+   8,
+   9
+  ],
+  "answer": "had been",
+  "fixed": "By the time the client called, the invoice had been sent.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Mit „by the time … called“ steht had been, nicht has been.",
+    "en": "The error: with “by the time … called” use had been, not has been."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Die Zeitform passt nicht zu by the time.",
+     "en": "There is an error: the tense does not fit by the time."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „has been“: Es geschah vor dem Anruf, also had been.",
+     "en": "The error is in “has been”: it happened before the call, so had been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-per-f3",
+  "type": "find",
+  "pat": "pp.perfect",
+  "prompt": "The invoice had been paid by the time the auditors arrived.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: had been + Partizip passt zu by the time, es war früher.",
+    "en": "No error: had been + participle fits by the time, it was earlier."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Die Zahlung lag vor der Ankunft, daher had been paid.",
+     "en": "No error: the payment came before the arrival, hence had been paid."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-per-f4",
+  "type": "find",
+  "pat": "pp.perfect",
+  "prompt": "The meeting room had cleaned before we arrived.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "had been cleaned",
+  "fixed": "The meeting room had been cleaned before we arrived.",
+  "accepted": [
+   "was cleaned"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „had cleaned“ ist aktiv. Das Passiv heißt had been cleaned.",
+    "en": "The error: “had cleaned” is active. The passive is had been cleaned."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Im Passiv fehlt been.",
+     "en": "There is an error: been is missing in the passive."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „had cleaned“: Der Raum putzt nicht selbst.",
+     "en": "The error is in “had cleaned”: the room does not clean itself."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-per-m1",
+  "type": "meaning",
+  "pat": "pp.perfect",
+  "a": "The invoice was paid on Friday.",
+  "b": "The invoice has been paid.",
+  "q": {
+   "de": "Welcher Satz nennt keinen Zeitpunkt und betont, dass die Sache jetzt erledigt ist?",
+   "en": "Which sentence names no time and stresses that the matter is settled now?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. has been paid betont das Ergebnis bis jetzt, ohne Zeitpunkt.",
+    "en": "Right: sentence b. has been paid stresses the result up to now, with no time."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "a nennt Friday als abgeschlossenen Zeitpunkt: Simple Past.",
+     "en": "Sentence a names Friday as a finished time: simple past."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: was paid datiert die Zahlung, has been paid zählt das Ergebnis.",
+     "en": "Not the same: was paid dates the payment, has been paid counts the result."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-prs-k1",
+  "type": "kwt",
+  "pat": "pp.personal",
+  "from": "People say that the new director is very demanding.",
+  "key": "SAID",
+  "frame": "The new director ___ very demanding.",
+  "answer": "is said to be",
+  "accepted": [
+   "is also said to be",
+   "is often said to be",
+   "is generally said to be",
+   "is widely said to be"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: is said to be. Das Gerücht steht im Passiv, danach folgt to + Infinitiv.",
+    "en": "Right: is said to be. The rumor is in the passive, followed by to + infinitive."
+   },
+   "wrong": [
+    {
+     "not": [
+      "said"
+     ],
+     "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
+     "en": "The key word said must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "said"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Nach said folgt to + Infinitiv: said to be very demanding.",
+     "en": "After said comes to + infinitive: said to be very demanding."
+    },
+    {
+     "if": [
+      "said"
+     ],
+     "not": [
+      "is"
+     ],
+     "de": "Das Passiv braucht is vor said: is said to be.",
+     "en": "The passive needs is before said: is said to be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-prs-k2",
+  "type": "kwt",
+  "pat": "pp.personal",
+  "from": "Experts believe that the company lost a lot of customers last year.",
+  "key": "BELIEVED",
+  "frame": "The company ___ a lot of customers last year.",
+  "answer": "is believed to have lost",
+  "accepted": [],
+  "words": [
+   5,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: is believed to have lost. Das Verlieren liegt vor der Annahme: to have + Partizip.",
+    "en": "Right: is believed to have lost. The losing came earlier than the belief: to have + participle."
+   },
+   "wrong": [
+    {
+     "not": [
+      "believed"
+     ],
+     "de": "Das Schlüsselwort believed muss unverändert in der Lücke stehen.",
+     "en": "The key word believed must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "believed"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Für Früheres steht to have + Partizip: to have lost.",
+     "en": "For earlier events use to have + participle: to have lost."
+    },
+    {
+     "if": [
+      "believed",
+      "lose"
+     ],
+     "de": "Nach to have steht das Partizip lost, nicht lose.",
+     "en": "After to have the participle lost is needed, not lose."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-prs-f1",
+  "type": "find",
+  "pat": "pp.personal",
+  "prompt": "The merger is expected completing in June.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "expected to complete",
+  "fixed": "The merger is expected to complete in June.",
+  "accepted": [
+   "expected to be completed"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach expected fehlt to. Richtig: expected to complete.",
+    "en": "The error: to is missing after expected. Correct: expected to complete."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach is expected folgt to + Infinitiv.",
+     "en": "There is an error: after is expected comes to + infinitive."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „expected completing“: nach expected steht to.",
+     "en": "The error is in “expected completing”: to follows expected."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-prs-f2",
+  "type": "find",
+  "pat": "pp.personal",
+  "prompt": "The founder is said to has left the firm in 2019.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "have",
+  "fixed": "The founder is said to have left the firm in 2019.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach to steht der Infinitiv: to have left.",
+    "en": "The error: after to the infinitive is needed: to have left."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach to steht have, nicht has.",
+     "en": "There is an error: after to use have, not has."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „has“: Nach to steht have + Partizip.",
+     "en": "The error is in “has”: after to use have + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-prs-f3",
+  "type": "find",
+  "pat": "pp.personal",
+  "prompt": "The bank is said to planning layoffs.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "to be planning",
+  "fixed": "The bank is said to be planning layoffs.",
+  "accepted": [
+   "to plan"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „to planning“. Richtig: to be planning oder to plan.",
+    "en": "The error: “to planning”. Correct: to be planning or to plan."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach to fehlt be oder die Grundform.",
+     "en": "There is an error: be or the base form is missing after to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to planning“: Nach to steht be planning oder plan.",
+     "en": "The error is in “to planning”: after to use be planning or plan."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-prs-f4",
+  "type": "find",
+  "pat": "pp.personal",
+  "prompt": "The two firms are said to be close to an agreement.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: are said to be … gibt das Gerücht sachlich wieder.",
+    "en": "No error: are said to be … reports the rumor neutrally."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: are said to be ist hier richtig gebaut.",
+     "en": "No error: are said to be is built correctly here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-prs-m1",
+  "type": "meaning",
+  "pat": "pp.personal",
+  "a": "The warehouse is said to be closing.",
+  "b": "The warehouse is closing.",
+  "q": {
+   "de": "Welcher Satz gibt nur ein Gerücht wieder und lässt offen, ob es stimmt?",
+   "en": "Which sentence only passes on a rumor and leaves it open whether it is true?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. is said to = man sagt es, aber ob es stimmt, bleibt offen.",
+    "en": "Right: sentence a. is said to = people say so; whether it is true stays open."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b stellt es als Tatsache dar, ohne Quelle.",
+     "en": "Sentence b presents it as a fact, with no source."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: b behauptet es sicher, a gibt nur ein Gerücht wieder.",
+     "en": "Not the same: b states it as certain, a only passes on a rumor."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-bei-k1",
+  "type": "kwt",
+  "pat": "pp.being",
+  "from": "She was upset because nobody had told her about the change.",
+  "key": "BEING",
+  "frame": "She was upset about ___ about the change.",
+  "answer": "not being told",
+  "accepted": [
+   "never being told",
+   "not being informed",
+   "not being notified",
+   "not being kept informed"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: not being told. Nach der Präposition about steht -ing, im Passiv being + Partizip.",
+    "en": "Right: not being told. After the preposition about comes -ing, in the passive being + participle."
+   },
+   "wrong": [
+    {
+     "not": [
+      "being"
+     ],
+     "de": "Das Schlüsselwort being muss unverändert in der Lücke stehen.",
+     "en": "The key word being must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "being"
+     ],
+     "not": [
+      "told",
+      "informed",
+      "notified",
+      "aware",
+      "kept"
+     ],
+     "de": "Nach about steht being + Partizip, nicht to be: not being told.",
+     "en": "After about use being + participle, not to be: not being told."
+    },
+    {
+     "if": [
+      "telling"
+     ],
+     "de": "Aktiv: Sie wurde informiert, sie informierte nicht. Gesucht: being + Partizip.",
+     "en": "Active: she was the one informed, not the informer. Needed: being + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-bei-k2",
+  "type": "kwt",
+  "pat": "pp.being",
+  "from": "Nobody asked for his opinion, and he left the meeting early.",
+  "key": "BEING",
+  "frame": "He left the meeting early without ___ for his opinion.",
+  "answer": "being asked",
+  "accepted": [
+   "ever being asked"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: being asked. Nach without steht -ing, im Passiv being + Partizip.",
+    "en": "Right: being asked. After without comes -ing, in the passive being + participle."
+   },
+   "wrong": [
+    {
+     "not": [
+      "being"
+     ],
+     "de": "Das Schlüsselwort being muss unverändert in der Lücke stehen.",
+     "en": "The key word being must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "being"
+     ],
+     "not": [
+      "asked"
+     ],
+     "de": "Nach without steht being + Partizip, nicht to be: being asked.",
+     "en": "After without use being + participle, not to be: being asked."
+    },
+    {
+     "if": [
+      "asking"
+     ],
+     "de": "Aktiv: Er wurde gefragt, er fragte nicht. Gesucht: being + Partizip.",
+     "en": "Active: he was the one asked, not the asker. Needed: being + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-bei-f1",
+  "type": "find",
+  "pat": "pp.being",
+  "prompt": "I really appreciate to be kept informed about the project.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "being",
+  "fixed": "I really appreciate being kept informed about the project.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach appreciate steht -ing: being kept informed.",
+    "en": "The error: after appreciate comes -ing: being kept informed."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach appreciate folgt being, nicht to be.",
+     "en": "There is an error: appreciate is followed by being, not to be."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to be“: appreciate + being + Partizip.",
+     "en": "The error is in “to be”: appreciate + being + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-bei-f2",
+  "type": "find",
+  "pat": "pp.being",
+  "prompt": "She hates being interrupt when she presents.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "interrupted",
+  "fixed": "She hates being interrupted when she presents.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach being steht das Partizip: interrupted.",
+    "en": "The error: after being the participle is needed: interrupted."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach being fehlt die Partizip-Endung.",
+     "en": "There is an error: the participle ending is missing after being."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „interrupt“: being + Partizip, also interrupted.",
+     "en": "The error is in “interrupt”: being + participle, so interrupted."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-bei-f3",
+  "type": "find",
+  "pat": "pp.being",
+  "prompt": "He was angry about not been invited to the launch.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "being",
+  "fixed": "He was angry about not being invited to the launch.",
+  "accepted": [
+   "having been"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach not steht being: not being invited.",
+    "en": "The error: after not use being: not being invited."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach about not fehlt being statt been.",
+     "en": "There is an error: being is needed instead of been after about not."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „been“: Nach about steht being + Partizip.",
+     "en": "The error is in “been”: after about use being + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-bei-f4",
+  "type": "find",
+  "pat": "pp.being",
+  "prompt": "The intern was upset about being left out of the meeting.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: about + being + Partizip ist die richtige -ing-Form.",
+    "en": "No error: about + being + participle is the correct -ing form."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach about steht being left out ganz richtig.",
+     "en": "No error: being left out is exactly right after about."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pp-bei-m1",
+  "type": "meaning",
+  "pat": "pp.being",
+  "a": "I don't like asking customers for feedback.",
+  "b": "I don't like being asked for feedback.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich werde nicht gern um Feedback gebeten?",
+   "en": "Which sentence says: I do not like it when I am asked for feedback?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Mit being asked werde ich gefragt, und nicht ich frage.",
+    "en": "Right: sentence b. being asked = I am the one asked (passive)."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a fragst du selbst: asking ist aktiv.",
+     "en": "In a you do the asking: asking is active."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: asking = ich frage, being asked = ich werde gefragt.",
+     "en": "Not the same: asking = I ask, being asked = I get asked."
+    }
+   ]
+  }
+ }
+]

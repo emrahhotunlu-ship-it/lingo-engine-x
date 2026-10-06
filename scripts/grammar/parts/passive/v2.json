@@ -1,0 +1,1120 @@
+[
+ {
+  "id": "pv-sim-k1",
+  "type": "kwt",
+  "pat": "pv.simple",
+  "from": "Nobody told us about the delay until Monday.",
+  "key": "TOLD",
+  "frame": "We ___ about the delay until Monday.",
+  "answer": "weren't told",
+  "accepted": [
+   "were not told"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Uns hat niemand etwas gesagt, das ist Passiv Past Simple: weren't told.",
+    "en": "Right: nobody told us → past simple passive: weren't told."
+   },
+   "wrong": [
+    {
+     "not": [
+      "told"
+     ],
+     "de": "Das Schlüsselwort told muss unverändert in der Lücke stehen.",
+     "en": "The key word told must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "were",
+      "was",
+      "weren't",
+      "wasn't"
+     ],
+     "de": "Ohne Form von be fehlt das Passiv: weren't told.",
+     "en": "Without a form of be the passive is missing: weren't told."
+    },
+    {
+     "if": [
+      "didn't"
+     ],
+     "de": "„didn't told“ gibt es nicht. Das Passiv braucht be + told.",
+     "en": "“didn't told” does not exist. The passive needs be + told."
+    },
+    {
+     "if": [
+      "wasn't"
+     ],
+     "de": "we ist Plural: weren't told, nicht wasn't.",
+     "en": "we is plural: weren't told, not wasn't."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-sim-k2",
+  "type": "kwt",
+  "pat": "pv.simple",
+  "from": "A courier delivered the samples yesterday morning.",
+  "key": "DELIVERED",
+  "frame": "The samples ___ a courier yesterday morning.",
+  "answer": "were delivered by",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Proben wurden geliefert, der Handelnde folgt mit by: were delivered by.",
+    "en": "Right: the samples were delivered, and the agent follows with by: were delivered by."
+   },
+   "wrong": [
+    {
+     "not": [
+      "delivered"
+     ],
+     "de": "Das Schlüsselwort delivered muss unverändert in der Lücke stehen.",
+     "en": "The key word delivered must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "by"
+     ],
+     "de": "Der Handelnde im Passiv braucht by: were delivered by a courier.",
+     "en": "The agent in the passive needs by: were delivered by a courier."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "samples ist Plural: were delivered, nicht was.",
+     "en": "samples is plural: were delivered, not was."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„yesterday“ ist abgeschlossen: Past Simple, kein have been.",
+     "en": "“yesterday” is finished: past simple, no have been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-sim-f1",
+  "type": "find",
+  "pat": "pv.simple",
+  "prompt": "The shipment was send to the wrong address by mistake.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "sent",
+  "fixed": "The shipment was sent to the wrong address by mistake.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach was steht die 3. Form von send: sent.",
+    "en": "The error: after was use the past participle of send: sent."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach was steht die 3. Form.",
+     "en": "There is an error: after was the past participle is needed."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „send“: Es muss die 3. Form sent sein.",
+     "en": "The error is “send”: it must be the past participle sent."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-sim-f2",
+  "type": "find",
+  "pat": "pv.simple",
+  "prompt": "Our invoices become paid within thirty days.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "are",
+  "fixed": "Our invoices are paid within thirty days.",
+  "accepted": [
+   "get"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „become“ ist hier falsch. Das Passiv braucht be: are paid.",
+    "en": "The error: “become” is wrong here. The passive needs be: are paid."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: become ist kein Passiv-Helfer.",
+     "en": "There is an error: become is not a passive auxiliary."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „become“: Es heißt are paid.",
+     "en": "The error is “become”: it should be are paid."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-sim-f3",
+  "type": "find",
+  "pat": "pv.simple",
+  "prompt": "The new hires were welcomed by the whole team on their first day.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: were welcomed by … ist richtiges Passiv Past Simple.",
+    "en": "No error: were welcomed by … is a correct past simple passive."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Past Simple Passiv mit by ist hier richtig.",
+     "en": "No error: the past simple passive with by is correct here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-sim-m1",
+  "type": "meaning",
+  "pat": "pv.simple",
+  "a": "We weren't invited to the kickoff.",
+  "b": "We didn't invite anyone to the kickoff.",
+  "q": {
+   "de": "Welcher Satz sagt: Uns hat niemand zum Kickoff eingeladen?",
+   "en": "Which sentence says: nobody invited us to the kickoff?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. weren't invited = Mit uns wurde etwas getan, wir wurden nicht eingeladen.",
+    "en": "Right: sentence a. weren't invited = something was not done to us."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b sind wir die Handelnden: Wir haben niemanden eingeladen.",
+     "en": "In b we are the doers: we did not invite anyone."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a sagt, was mit uns geschah, b sagt, was wir getan haben.",
+     "en": "Not the same: a says what happened to us, b says what we did."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pro-k1",
+  "type": "kwt",
+  "pat": "pv.progressive",
+  "from": "Technicians are testing the new system at the moment.",
+  "key": "TESTED",
+  "frame": "The new system ___ technicians at the moment.",
+  "answer": "is being tested by",
+  "accepted": [
+   "'s being tested by"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: at the moment heißt: Das läuft gerade → is being tested by.",
+    "en": "Right: at the moment = in progress → is being tested by."
+   },
+   "wrong": [
+    {
+     "not": [
+      "tested"
+     ],
+     "de": "Das Schlüsselwort tested muss unverändert in der Lücke stehen.",
+     "en": "The key word tested must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "being"
+     ],
+     "de": "Ohne being fehlt „gerade jetzt“: is being tested by.",
+     "en": "Without being, “right now” is lost: is being tested by."
+    },
+    {
+     "if": [
+      "being"
+     ],
+     "not": [
+      "by"
+     ],
+     "de": "Der Handelnde im Passiv braucht by: is being tested by technicians.",
+     "en": "The agent in the passive needs by: is being tested by technicians."
+    },
+    {
+     "if": [
+      "are"
+     ],
+     "de": "system ist Singular: is being tested, nicht are.",
+     "en": "system is singular: is being tested, not are."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pro-k2",
+  "type": "kwt",
+  "pat": "pv.progressive",
+  "from": "We are reviewing all applications at the moment.",
+  "key": "REVIEWED",
+  "frame": "All applications ___ at the moment.",
+  "answer": "are being reviewed",
+  "accepted": [
+   "are getting reviewed"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Bewerbungen werden gerade geprüft → are being reviewed.",
+    "en": "Right: the applications are being checked right now → are being reviewed."
+   },
+   "wrong": [
+    {
+     "not": [
+      "reviewed"
+     ],
+     "de": "Das Schlüsselwort reviewed muss unverändert in der Lücke stehen.",
+     "en": "The key word reviewed must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "are"
+     ],
+     "not": [
+      "being",
+      "getting"
+     ],
+     "de": "Ohne being fehlt „gerade jetzt“: are being reviewed.",
+     "en": "Without being, “right now” is lost: are being reviewed."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "de": "applications ist Plural: are being reviewed, nicht is.",
+     "en": "applications is plural: are being reviewed, not is."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„at the moment“ meint jetzt, also kein have been.",
+     "en": "“at the moment” means now, so no have been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pro-f1",
+  "type": "find",
+  "pat": "pv.progressive",
+  "prompt": "The documents are being print right now, so please wait.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "printed",
+  "fixed": "The documents are being printed right now, so please wait.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach being steht die 3. Form: printed.",
+    "en": "The error: after being use the past participle: printed."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach being braucht das Verb die 3. Form.",
+     "en": "There is an error: after being the verb needs the participle."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „print“: Nach being steht printed.",
+     "en": "The error is “print”: after being use printed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pro-f2",
+  "type": "find",
+  "pat": "pv.progressive",
+  "prompt": "Our website is redesigning at the moment by an external agency.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "is being redesigned",
+  "fixed": "Our website is being redesigned at the moment by an external agency.",
+  "accepted": [
+   "is getting redesigned",
+   "'s being redesigned"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „is redesigning“ macht die Website zum Handelnden. Passiv: is being redesigned.",
+    "en": "The error: “is redesigning” makes the website the doer. Passive: is being redesigned."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Die Website gestaltet nichts selbst um.",
+     "en": "There is an error: the website does not redesign anything itself."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is redesigning“: Es muss is being redesigned heißen.",
+     "en": "The error is “is redesigning”: it should be is being redesigned."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pro-f3",
+  "type": "find",
+  "pat": "pv.progressive",
+  "prompt": "The new hires are being trained by our senior engineers this week.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: are being trained ist richtiges Passiv Continuous.",
+    "en": "No error: are being trained is a correct continuous passive."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: are being trained by … ist hier richtig.",
+     "en": "No error: are being trained by … fits here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pro-m1",
+  "type": "meaning",
+  "pat": "pv.progressive",
+  "a": "The building is being inspected.",
+  "b": "The building is inspected.",
+  "q": {
+   "de": "Welcher Satz beschreibt einen Vorgang, der jetzt gerade läuft?",
+   "en": "Which sentence describes a process happening right now?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. is being inspected = die Prüfung läuft gerade.",
+    "en": "Right: sentence a. is being inspected = the inspection is under way."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b nennt eine Tatsache oder Gewohnheit, nicht den laufenden Vorgang.",
+     "en": "b states a fact or habit, not a process under way."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: being macht aus der Tatsache einen laufenden Vorgang.",
+     "en": "Not the same: being turns the fact into a process under way."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-per-k1",
+  "type": "kwt",
+  "pat": "pv.perfect",
+  "from": "Someone has already booked the meeting room.",
+  "key": "BOOKED",
+  "frame": "The meeting room ___ already.",
+  "answer": "has been booked",
+  "accepted": [
+   "'s been booked"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Raum ist schon gebucht → Passiv Present Perfect: has been booked.",
+    "en": "Right: the room is already taken → present perfect passive: has been booked."
+   },
+   "wrong": [
+    {
+     "not": [
+      "booked"
+     ],
+     "de": "Das Schlüsselwort booked muss unverändert in der Lücke stehen.",
+     "en": "The key word booked must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "booked"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt das Passiv: has been booked.",
+     "en": "Without been the passive is missing: has been booked."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "room ist Singular: has been booked, nicht have.",
+     "en": "room is singular: has been booked, not have."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "„already“ verlangt das Perfect, nicht was booked.",
+     "en": "“already” goes with the perfect, not was booked."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-per-k2",
+  "type": "kwt",
+  "pat": "pv.perfect",
+  "from": "They have not told us the results yet.",
+  "key": "TOLD",
+  "frame": "We ___ the results yet.",
+  "answer": "haven't been told",
+  "accepted": [
+   "have not been told"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Uns wurde nichts mitgeteilt, das ist Present Perfect Passiv: haven't been told.",
+    "en": "Right: we have not been given the results → present perfect passive: haven't been told."
+   },
+   "wrong": [
+    {
+     "not": [
+      "told"
+     ],
+     "de": "Das Schlüsselwort told muss unverändert in der Lücke stehen.",
+     "en": "The key word told must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "told"
+     ],
+     "not": [
+      "been"
+     ],
+     "de": "Ohne been fehlt das Passiv: haven't been told.",
+     "en": "Without been the passive is missing: haven't been told."
+    },
+    {
+     "if": [
+      "were"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "„yet“ verlangt das Perfect, nicht wasn't oder weren't.",
+     "en": "“yet” goes with the perfect, not wasn't or weren't."
+    },
+    {
+     "if": [
+      "hasn't"
+     ],
+     "de": "we ist Plural: haven't been told, nicht hasn't.",
+     "en": "we is plural: haven't been told, not hasn't."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-per-f1",
+  "type": "find",
+  "pat": "pv.perfect",
+  "prompt": "The system is used by our sales team since 2020.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "has been used",
+  "fixed": "The system has been used by our sales team since 2020.",
+  "accepted": [
+   "'s been used"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Mit since steht das Perfect: has been used, nicht is used.",
+    "en": "The error: with since use the perfect: has been used, not is used."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Mit since passt is used nicht.",
+     "en": "There is an error: is used does not go with since."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is used“: Mit since steht has been used.",
+     "en": "The error is “is used”: with since use has been used."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-per-f2",
+  "type": "find",
+  "pat": "pv.perfect",
+  "prompt": "Two company phones have been stole from the office again.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "stolen",
+  "fixed": "Two company phones have been stolen from the office again.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach been steht die 3. Form von steal: stolen.",
+    "en": "The error: after been use the past participle of steal: stolen."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach been braucht steal die 3. Form.",
+     "en": "There is an error: after been steal needs the participle."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „stole“: Die 3. Form ist stolen.",
+     "en": "The error is “stole”: the participle is stolen."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-per-m1",
+  "type": "meaning",
+  "pat": "pv.perfect",
+  "a": "The system has been used since 2019.",
+  "b": "The system was used in 2019.",
+  "q": {
+   "de": "Welcher Satz sagt: Das System wird auch heute noch benutzt?",
+   "en": "Which sentence says the system is still used today?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. has been used since reicht bis in die Gegenwart.",
+    "en": "Right: sentence a. has been used since reaches until today."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b nennt nur 2019. Ob es heute noch benutzt wird, sagt der Satz nicht.",
+     "en": "b names only 2019. It does not say whether it is still used today."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a reicht bis heute, b bleibt in 2019.",
+     "en": "Not the same: a reaches until today, b stays in 2019."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-mod-k1",
+  "type": "kwt",
+  "pat": "pv.modal-future",
+  "from": "We will send the final invoice by Friday.",
+  "key": "SENT",
+  "frame": "The final invoice ___ by Friday.",
+  "answer": "will be sent",
+  "accepted": [
+   "'ll be sent",
+   "is going to be sent",
+   "is to be sent"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Rechnung wird noch verschickt → Passiv Zukunft: will be sent.",
+    "en": "Right: the invoice is yet to be sent → future passive: will be sent."
+   },
+   "wrong": [
+    {
+     "not": [
+      "sent"
+     ],
+     "de": "Das Schlüsselwort sent muss unverändert in der Lücke stehen.",
+     "en": "The key word sent must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "be",
+      "sent"
+     ],
+     "not": [
+      "will",
+      "going",
+      "to"
+     ],
+     "de": "Gemeint ist die Zukunft: will be sent, nicht must, should oder can.",
+     "en": "The future is meant: will be sent, not must, should or can."
+    },
+    {
+     "if": [
+      "will",
+      "sent"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "„will sent“ gibt es nicht: Nach will fehlt be. Richtig ist will be sent.",
+     "en": "“will sent” does not exist: after will the be is missing. Correct: will be sent."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "not": [
+      "will",
+      "going"
+     ],
+     "de": "„has been sent“ meint: schon geschehen. Hier steht es noch an.",
+     "en": "“has been sent” means: already done. Here it is still to come."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-mod-k2",
+  "type": "kwt",
+  "pat": "pv.modal-future",
+  "from": "Employees can book rooms online.",
+  "key": "BOOKED",
+  "frame": "Rooms ___ online by employees.",
+  "answer": "can be booked",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Räume können gebucht werden → can be booked.",
+    "en": "Right: rooms can be booked → can be booked."
+   },
+   "wrong": [
+    {
+     "not": [
+      "booked"
+     ],
+     "de": "Das Schlüsselwort booked muss unverändert in der Lücke stehen.",
+     "en": "The key word booked must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "can",
+      "booked"
+     ],
+     "not": [
+      "be"
+     ],
+     "de": "Nach can fehlt be: can be booked.",
+     "en": "After can the be is missing: can be booked."
+    },
+    {
+     "if": [
+      "booked"
+     ],
+     "not": [
+      "be",
+      "can"
+     ],
+     "de": "Für „können“ braucht das Passiv can + be + 3. Form: can be booked.",
+     "en": "For “können” the passive needs can + be + past participle: can be booked."
+    },
+    {
+     "if": [
+      "booking"
+     ],
+     "de": "Nach be steht die 3. Form: booked, nicht booking.",
+     "en": "After be use the past participle: booked, not booking."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-mod-f1",
+  "type": "find",
+  "pat": "pv.modal-future",
+  "prompt": "The agenda will sent to all participants tomorrow morning.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "will be sent",
+  "fixed": "The agenda will be sent to all participants tomorrow morning.",
+  "accepted": [
+   "'ll be sent"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach will fehlt be: will be sent.",
+    "en": "The error: after will the be is missing: will be sent."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Im Passiv steht nach will ein be.",
+     "en": "There is an error: in the passive will is followed by be."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will sent“: Es heißt will be sent.",
+     "en": "The error is “will sent”: it should be will be sent."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-mod-f2",
+  "type": "find",
+  "pat": "pv.modal-future",
+  "prompt": "The proposal can't approved without a second signature.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "can't be approved",
+  "fixed": "The proposal can't be approved without a second signature.",
+  "accepted": [
+   "cannot be approved"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach can't fehlt be: can't be approved.",
+    "en": "The error: after can't the be is missing: can't be approved."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach dem Modalwort fehlt be.",
+     "en": "There is an error: the be is missing after the modal."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „can't approved“: Es heißt can't be approved.",
+     "en": "The error is “can't approved”: it should be can't be approved."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-mod-f3",
+  "type": "find",
+  "pat": "pv.modal-future",
+  "prompt": "All expense reports must be submitted before the end of the month.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: must be submitted ist richtiges Passiv mit Modalverb.",
+    "en": "No error: must be submitted is a correct passive with a modal verb."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: must be + 3. Form ist hier richtig.",
+     "en": "No error: must be + past participle is correct here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-mod-m1",
+  "type": "meaning",
+  "pat": "pv.modal-future",
+  "a": "The old accounts will be closed.",
+  "b": "The old accounts have been closed.",
+  "q": {
+   "de": "Welcher Satz sagt: Die alten Konten sind noch offen?",
+   "en": "Which sentence says the old accounts are still open?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. will be closed = Das Schließen steht noch an.",
+    "en": "Right: sentence a. will be closed = the closing is still to come."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b sagt: Die Konten sind schon geschlossen.",
+     "en": "b says: the accounts are already closed."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: will be liegt in der Zukunft, have been ist schon geschehen.",
+     "en": "Not the same: will be is future, have been is already done."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pre-k1",
+  "type": "kwt",
+  "pat": "pv.prep-agent",
+  "from": "Our legal team looked into the complaint.",
+  "key": "LOOKED",
+  "frame": "The complaint ___ our legal team.",
+  "answer": "was looked into by",
+  "accepted": [
+   "got looked into by"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Präposition into bleibt, der Handelnde folgt mit by: was looked into by.",
+    "en": "Right: the preposition into stays and the agent follows with by: was looked into by."
+   },
+   "wrong": [
+    {
+     "not": [
+      "looked"
+     ],
+     "de": "Das Schlüsselwort looked muss unverändert in der Lücke stehen.",
+     "en": "The key word looked must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "into"
+     ],
+     "de": "Die Präposition into bleibt im Passiv stehen: was looked into by.",
+     "en": "The preposition into stays in the passive: was looked into by."
+    },
+    {
+     "if": [
+      "into"
+     ],
+     "not": [
+      "by"
+     ],
+     "de": "Der Handelnde im Passiv braucht by: was looked into by.",
+     "en": "The agent in the passive needs by: was looked into by."
+    },
+    {
+     "if": [
+      "from"
+     ],
+     "de": "„from“ ist die wörtliche Übersetzung von „von“. Es heißt by.",
+     "en": "“from” is the literal translation of “von”. It should be by."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pre-k2",
+  "type": "kwt",
+  "pat": "pv.prep-agent",
+  "from": "Someone dealt with the issue immediately.",
+  "key": "DEALT",
+  "frame": "The issue ___ immediately.",
+  "answer": "was dealt with",
+  "accepted": [
+   "got dealt with"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: with gehört fest zu deal und bleibt im Passiv: was dealt with.",
+    "en": "Right: with belongs to deal and stays in the passive: was dealt with."
+   },
+   "wrong": [
+    {
+     "not": [
+      "dealt"
+     ],
+     "de": "Das Schlüsselwort dealt muss unverändert in der Lücke stehen.",
+     "en": "The key word dealt must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "with"
+     ],
+     "de": "Die Präposition with bleibt im Passiv stehen: was dealt with.",
+     "en": "The preposition with stays in the passive: was dealt with."
+    },
+    {
+     "if": [
+      "dealt"
+     ],
+     "not": [
+      "was",
+      "were",
+      "got"
+     ],
+     "de": "Das Passiv braucht hier was: was dealt with.",
+     "en": "The passive needs was here: was dealt with."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "„immediately“ nennt keinen Zeitraum bis jetzt, also kein has been.",
+     "en": "“immediately” names no period up to now, so no has been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pre-f1",
+  "type": "find",
+  "pat": "pv.prep-agent",
+  "prompt": "The new budget was approved from the finance director on Monday.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "by",
+  "fixed": "The new budget was approved by the finance director on Monday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Handelnde im Passiv steht mit by, nicht mit from.",
+    "en": "The error: the agent in the passive takes by, not from."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Handelnde braucht by.",
+     "en": "There is an error: the agent needs by."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „from“: Der Handelnde steht mit by.",
+     "en": "The error is “from”: the agent takes by."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pre-f2",
+  "type": "find",
+  "pat": "pv.prep-agent",
+  "prompt": "The problem was dealt quickly by the support team.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "dealt with",
+  "fixed": "The problem was dealt with quickly by the support team.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: with fehlt. Bei deal with bleibt die Präposition im Passiv: dealt with.",
+    "en": "The error: with is missing. With deal with the preposition stays in the passive: dealt with."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Bei deal with fehlt die Präposition.",
+     "en": "There is an error: with deal with the preposition is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „dealt“: Es fehlt with.",
+     "en": "The error is “dealt”: with is missing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pre-f3",
+  "type": "find",
+  "pat": "pv.prep-agent",
+  "prompt": "The new policy was drawn up by the legal team last month.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: was drawn up by … ist richtig, up bleibt beim Verb.",
+    "en": "No error: was drawn up by … is correct, up stays with the verb."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Passiv mit up und by ist hier richtig.",
+     "en": "No error: the passive with up and by is correct here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pv-pre-m1",
+  "type": "meaning",
+  "pat": "pv.prep-agent",
+  "a": "The deal was approved by the board.",
+  "b": "The deal was approved.",
+  "q": {
+   "de": "Welcher Satz sagt, wer die Vereinbarung genehmigt hat?",
+   "en": "Which sentence says who approved the deal?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Mit by wird der Handelnde genannt.",
+    "en": "Right: sentence a. With by the agent is named."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "b lässt den Handelnden offen: Wir erfahren nicht, wer genehmigt hat.",
+     "en": "b leaves the agent open: we do not learn who approved it."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a nennt den Handelnden.",
+     "en": "Not the same: only a names the agent."
+    }
+   ]
+  }
+ }
+]

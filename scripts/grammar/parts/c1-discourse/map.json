@@ -1,0 +1,344 @@
+{
+ "The pilot went well. ___, the timeline for the rollout is still tight.": {
+  "pat": "dm.concede",
+  "why": {
+   "ok": {
+    "de": "Richtig: That said schränkt den guten Pilot ein. Der Zeitplan bleibt trotzdem knapp.",
+    "en": "Right: That said qualifies the good pilot. The timeline is still tight all the same."
+   },
+   "wrong": [
+    {
+     "opt": "Because",
+     "de": "„Because“ nennt einen Grund. Der knappe Zeitplan erklärt aber nicht den guten Pilot.",
+     "en": "“Because” gives a reason. A tight timeline does not explain a good pilot."
+    },
+    {
+     "opt": "Therefore",
+     "de": "„Therefore“ zieht eine Folge: guter Pilot, deshalb knapper Zeitplan. Das ergibt keinen Sinn.",
+     "en": "“Therefore” draws a result: good pilot, so a tight timeline. That makes no sense."
+    },
+    {
+     "opt": "For example",
+     "de": "„For example“ nennt ein Beispiel. Hier folgt aber ein Gegengewicht, kein Beispiel.",
+     "en": "“For example” gives an instance. Here a counterweight follows, not an example."
+    }
+   ]
+  }
+ },
+ "Anna mentioned the audit trail. ___, we could also show the retention rules.": {
+  "pat": "dm.build",
+  "why": {
+   "ok": {
+    "de": "Richtig: To build on that knüpft an Annas Beitrag an und ergänzt ihn.",
+    "en": "Right: To build on that picks up Anna's point and adds to it."
+   },
+   "wrong": [
+    {
+     "opt": "In contrast",
+     "pat": "dm.contrast",
+     "de": "„In contrast“ stellt Gegensätze nebeneinander. Hier wird Annas Punkt aber ergänzt.",
+     "en": "“In contrast” sets opposites side by side. Here Anna's point is extended instead."
+    },
+    {
+     "opt": "Despite this",
+     "pat": "dm.concede",
+     "de": "„Despite this“ drückt Trotz aus. Gemeint ist aber eine Ergänzung, kein Einwand.",
+     "en": "“Despite this” expresses concession. An addition is meant here, not an objection."
+    },
+    {
+     "opt": "Instead",
+     "de": "„Instead“ ersetzt etwas durch etwas anderes. Annas Punkt soll aber bleiben.",
+     "en": "“Instead” swaps one thing for another. Anna's point is supposed to stay."
+    }
+   ]
+  }
+ },
+ "___, the pilot saved the team about ten hours a week.": {
+  "pat": "dm.sum",
+  "why": {
+   "ok": {
+    "de": "Richtig: In short kündigt das Fazit an: etwa zehn gesparte Stunden pro Woche.",
+    "en": "Right: In short announces the conclusion: about ten hours saved a week."
+   },
+   "wrong": [
+    {
+     "opt": "On the other side",
+     "pat": "dm.contrast",
+     "de": "„On the other side“ gibt es so nicht. Der Gegensatz heißt on the other hand.",
+     "en": "“On the other side” is not the phrase. A contrast is on the other hand."
+    },
+    {
+     "opt": "By the way of",
+     "de": "„By the way of“ ist keine feste Wendung. „By the way“ heißt „übrigens“.",
+     "en": "“By the way of” is not a fixed phrase. “By the way” means “incidentally”."
+    },
+    {
+     "opt": "Firstly of all",
+     "de": "„Firstly of all“ ist falsch gebaut: first of all heißt „zuallererst“, nicht Fazit.",
+     "en": "“Firstly of all” is mis-built: first of all means “to begin with”, not a conclusion."
+    }
+   ]
+  }
+ },
+ "The price is higher than the old system. ___, you save on hardware and maintenance.": {
+  "pat": "dm.contrast",
+  "why": {
+   "ok": {
+    "de": "Richtig: On the other hand stellt Nachteil und Vorteil gegenüber: höherer Preis, aber Ersparnis.",
+    "en": "Right: On the other hand sets drawback against benefit: higher price, but savings."
+   },
+   "wrong": [
+    {
+     "opt": "Moreover",
+     "de": "„Moreover“ fügt Gleichgerichtetes an. Hier steht aber ein Vorteil gegen den hohen Preis.",
+     "en": "“Moreover” adds something pointing the same way. Here a benefit offsets the high price."
+    },
+    {
+     "opt": "As a result",
+     "de": "„As a result“ nennt eine Folge. Die Ersparnis ist keine Folge des höheren Preises.",
+     "en": "“As a result” names a consequence. Savings are not a consequence of a higher price."
+    },
+    {
+     "opt": "For instance",
+     "de": "„For instance“ leitet ein Beispiel ein. Hier folgt aber ein Gegenargument.",
+     "en": "“For instance” introduces an example. Here a counterargument follows."
+    }
+   ]
+  }
+ },
+ "Coming back ___ your question about pricing, the licenses are per user.": {
+  "pat": "dm.return",
+  "why": {
+   "ok": {
+    "de": "Richtig: coming back to + Thema. So kehrst du zu einem früheren Punkt zurück.",
+    "en": "Right: coming back to + topic. This is how you return to an earlier point."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "Nicht on: „zurückkommen auf“ wird auf Englisch zu coming back to.",
+     "en": "Not on: “zurückkommen auf” becomes coming back to in English."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach coming back steht to: Coming back to your question …",
+     "en": "After coming back use to: Coming back to your question …"
+    }
+   ]
+  }
+ },
+ "To build ___ what Mark said, we could start with the invoices.": {
+  "pat": "dm.build",
+  "why": {
+   "ok": {
+    "de": "Richtig: build on = an etwas anknüpfen. Marks Punkt wird weitergeführt.",
+    "en": "Right: build on = develop what someone said. Mark's point is extended."
+   },
+   "wrong": [
+    {
+     "if": [
+      "up"
+     ],
+     "de": "„Build up on“ gibt es hier nicht. Nach build steht on, kein up.",
+     "en": "There is no build up on here. After build comes on, with no up."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Verbindung build on (oder build upon).",
+     "en": "The fixed phrase build on (or build upon) is needed."
+    }
+   ]
+  }
+ },
+ "Having ___ that, we still need IT to sign off.": {
+  "pat": "dm.concede",
+  "why": {
+   "ok": {
+    "de": "Richtig: Having said that ist die feste Wendung zum Einschränken.",
+    "en": "Right: Having said that is the fixed phrase for qualifying."
+   },
+   "wrong": [
+    {
+     "if": [
+      "say"
+     ],
+     "de": "Nach Having steht das Partizip: Having said that, nicht Having say.",
+     "en": "After Having use the participle: Having said that, not Having say."
+    },
+    {
+     "if": [
+      "saying"
+     ],
+     "de": "„Having saying“ gibt es nicht. Nach having steht said.",
+     "en": "There is no having saying. After having comes said."
+    },
+    {
+     "not": [
+      "said"
+     ],
+     "de": "Gesucht ist das Partizip von say: said, in der Wendung Having said that.",
+     "en": "The participle of say is needed: said, in the phrase Having said that."
+    }
+   ]
+  }
+ },
+ "All ___ all, the migration went smoothly.": {
+  "pat": "dm.sum",
+  "why": {
+   "ok": {
+    "de": "Richtig: All in all = „alles in allem“. Es fasst die Migration zusammen.",
+    "en": "Right: All in all = “everything considered”. It sums up the migration."
+   },
+   "wrong": [
+    {
+     "not": [
+      "in"
+     ],
+     "de": "Gesucht ist ein kurzes Wort: All in all, wie im deutschen „alles in allem“.",
+     "en": "A short word is needed: All in all, like German “alles in allem”."
+    }
+   ]
+  }
+ },
+ "The demo was good. But we still need a business case. → The demo was good. That ___, we still need a business case.": {
+  "pat": "dm.concede",
+  "why": {
+   "ok": {
+    "de": "Richtig: That said ersetzt But. Es schränkt den guten Eindruck der Demo ein.",
+    "en": "Right: That said replaces But. It qualifies the good impression of the demo."
+   },
+   "wrong": [
+    {
+     "if": [
+      "but"
+     ],
+     "de": "But steht schon im Ausgangssatz. That said ersetzt es, es wird nicht ergänzt.",
+     "en": "But is in the source sentence. That said replaces it; it is not added."
+    },
+    {
+     "not": [
+      "said"
+     ],
+     "de": "Nach That fehlt said: That said, we still need … ersetzt das schlichte But.",
+     "en": "That needs said: That said, we still need … replaces plain But."
+    }
+   ]
+  }
+ },
+ "I want to return to the topic of security. → Coming ___ security, all data is encrypted at rest.": {
+  "pat": "dm.return",
+  "why": {
+   "ok": {
+    "de": "Richtig: Coming back to + Thema ist die Kurzform für „I want to return to“.",
+    "en": "Right: Coming back to + topic replaces “I want to return to”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "Nicht on: „zurückkommen auf“ wird zu coming back to.",
+     "en": "Not on: “zurückkommen auf” becomes coming back to."
+    },
+    {
+     "not": [
+      "back"
+     ],
+     "de": "Hier fehlt back: Gesucht ist Coming back to security („zurück zum Thema“).",
+     "en": "Here back is missing: Coming back to security (return to the topic)."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach back fehlt to: Coming back to security.",
+     "en": "After back, to is missing: Coming back to security."
+    }
+   ]
+  }
+ },
+ "On the other side, the cloud version needs no local servers.": {
+  "pat": "dm.contrast",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Gegensatz heißt on the other hand. „Side“ meint nur einen Ort.",
+    "en": "Right: The contrast is on the other hand. “Side” only means a place."
+   },
+   "wrong": [
+    {
+     "if": [
+      "side"
+     ],
+     "de": "„Side“ bleibt falsch. Setze hand ein: on the other hand.",
+     "en": "“Side” is still wrong. Use hand instead: on the other hand."
+    },
+    {
+     "not": [
+      "hand"
+     ],
+     "de": "Gesucht ist die feste Wendung on the other hand für den Gegensatz.",
+     "en": "The fixed phrase on the other hand is needed for the contrast."
+    }
+   ]
+  }
+ },
+ "To build up on that, we could add a second department.": {
+  "pat": "dm.build",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es heißt build on (oder build upon), ohne up.",
+    "en": "Right: It is build on (or build upon), with no up."
+   },
+   "wrong": [
+    {
+     "if": [
+      "up"
+     ],
+     "de": "Das up muss weg: Es heißt „build on“ (oder „build upon“).",
+     "en": "The up has to go: it is “build on” (or “build upon”)."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Nach build steht on oder upon: To build on that, …",
+     "en": "After build comes on or upon: To build on that, …"
+    }
+   ]
+  }
+ },
+ "Coming back on your question, the price includes support.": {
+  "pat": "dm.return",
+  "why": {
+   "ok": {
+    "de": "Richtig: Es heißt coming back to, nicht on.",
+    "en": "Right: It is coming back to, not on."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "Nicht on: „zurückkommen auf“ wird zu coming back to.",
+     "en": "Not on: “zurückkommen auf” becomes coming back to."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Gesucht ist coming back to: Coming back to your question, …",
+     "en": "Coming back to is needed: Coming back to your question, …"
+    }
+   ]
+  },
+  "dup": "Coming back ___ your question about pricing, the licenses are per user."
+ }
+}

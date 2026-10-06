@@ -1,0 +1,441 @@
+{
+ "I ___ whether you could share the requirements by Friday.": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: was wondering. Die Vergangenheit macht die Bitte weich, gemeint ist jetzt.",
+    "en": "Right: was wondering. The past tense softens the request; it still means now."
+   },
+   "wrong": [
+    {
+     "if": [
+      "wondering"
+     ],
+     "not": [
+      "was",
+      "am"
+     ],
+     "de": "Vor wondering fehlt das Hilfsverb: Die Verlaufsform braucht was.",
+     "en": "A helping verb is missing before wondering: the continuous needs was."
+    },
+    {
+     "if": [
+      "were"
+     ],
+     "de": "Zu I passt was, nicht were: I was wondering.",
+     "en": "With I use was, not were: I was wondering."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Have wondered meint eine Dauer bis jetzt, keine weiche Bitte.",
+     "en": "Have wondered means a span up to now, not a soft request."
+    }
+   ]
+  }
+ },
+ "We ___ to sign before the end of Q3.": {
+  "pat": "dip.hoping",
+  "why": {
+   "ok": {
+    "de": "Richtig: were hoping. Die Vergangenheit macht aus „Wir wollen“ einen Wunsch.",
+    "en": "Right: were hoping. The past tense turns “we want” into a wish."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Zu we passt were, nicht was: We were hoping.",
+     "en": "With we use were, not was: We were hoping."
+    },
+    {
+     "if": [
+      "hoping"
+     ],
+     "not": [
+      "were",
+      "are",
+      "had"
+     ],
+     "de": "Hoping braucht ein Hilfsverb davor: were hoping.",
+     "en": "Hoping needs a helping verb before it: were hoping."
+    },
+    {
+     "if": [
+      "want"
+     ],
+     "de": "Want ist direkt. Gesucht ist die weichere Verlaufsform.",
+     "en": "Want is direct. The softer continuous form is what you need."
+    }
+   ]
+  }
+ },
+ "Would it be possible ___ the trial by two weeks?": {
+  "pat": "dip.possible",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Would it be possible folgt to + Grundform: to extend.",
+    "en": "Right: Would it be possible + to + base verb: to extend."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach Would it be possible folgt üblicherweise to + Grundform, kein that-Satz.",
+     "en": "Would it be possible is usually followed by to + base verb, not a that-clause."
+    },
+    {
+     "if": [
+      "extending"
+     ],
+     "de": "Nach possible steht to + Grundform, keine -ing-Form.",
+     "en": "After possible use to + base verb, not the -ing form."
+    },
+    {
+     "if": [
+      "extend"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform braucht to davor: possible to extend.",
+     "en": "The base verb needs to before it: possible to extend."
+    },
+    {
+     "if": [
+      "extends"
+     ],
+     "de": "Nach to steht die Grundform ohne -s: to extend.",
+     "en": "After to use the base verb with no -s: to extend."
+    }
+   ]
+  }
+ },
+ "I was wondering if you ___ join the call on Monday.": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: could. Nach I was wondering bleibt der Abstand erhalten.",
+    "en": "Right: could. After I was wondering the distance stays in place."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Can bricht den Abstand: Nach was wondering passt could.",
+     "en": "Can breaks the distance: after was wondering use could."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will fragt nach dem Plan. Die weiche Bitte braucht could.",
+     "en": "Will asks about a plan. The soft request needs could."
+    }
+   ]
+  }
+ },
+ "Which request sounds most diplomatic to a new client? ___": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vergangenheit plus could macht aus der Forderung eine Bitte, die man ablehnen darf.",
+    "en": "Right: past tense plus could turns the demand into a request the client may decline."
+   },
+   "wrong": [
+    {
+     "opt": "Send me the data by Friday.",
+     "de": "Ein Befehl ohne Abstand: Der Kunde hat keine Wahl.",
+     "en": "An order with no distance: the client has no choice."
+    },
+    {
+     "opt": "You must send the data by Friday.",
+     "de": "Must ist eine Pflicht, keine Bitte.",
+     "en": "Must is an obligation, not a request."
+    },
+    {
+     "opt": "I want the data by Friday.",
+     "de": "I want fordert direkt, ohne Abstand zum Kunden.",
+     "en": "I want demands directly, with no distance to the client."
+    }
+   ]
+  }
+ },
+ "That timeline could be a bit ___ for us.": {
+  "pat": "dip.understate",
+  "why": {
+   "ok": {
+    "de": "Richtig: tricky untertreibt. Gemeint ist „kaum machbar“, aber höflich.",
+    "en": "Right: tricky understates. It means “hardly doable”, but politely."
+   },
+   "wrong": [
+    {
+     "opt": "impossible",
+     "de": "Impossible ist ein hartes Nein ohne Abstand. Mit a bit passt es nicht.",
+     "en": "Impossible is a flat no with no distance. It does not fit with a bit."
+    },
+    {
+     "opt": "stupid",
+     "de": "Stupid beleidigt und passt nie in eine höfliche Einschätzung.",
+     "en": "Stupid insults and never fits a polite assessment."
+    },
+    {
+     "opt": "wrong",
+     "de": "Wrong urteilt hart, statt den Zeitplan weich zu beschreiben.",
+     "en": "Wrong judges harshly instead of describing the timeline softly."
+    }
+   ]
+  }
+ },
+ "We ___ to get your feedback this week.": {
+  "pat": "dip.hoping",
+  "why": {
+   "ok": {
+    "de": "Richtig: were hoping ist die höfliche, distanzierte Form des Wunsches.",
+    "en": "Right: were hoping is the polite, distanced way to state a wish."
+   },
+   "wrong": [
+    {
+     "opt": "are hope",
+     "de": "Hope ist hier das Verb: are hope gibt es nicht, gesucht ist were hoping.",
+     "en": "Hope is the verb here: are hope does not exist; you need were hoping."
+    },
+    {
+     "opt": "have hope",
+     "de": "Have hope heißt „Hoffnung haben“ und nimmt kein to + Grundform so.",
+     "en": "Have hope means “to have hope” and does not take to + base verb like this."
+    },
+    {
+     "opt": "hoping",
+     "de": "Hoping allein ist kein Prädikat: Es fehlt das Hilfsverb were.",
+     "en": "Hoping alone is no predicate: the helping verb were is missing."
+    }
+   ]
+  }
+ },
+ "Can you move the demo to Thursday? → I was wondering whether you ___ the demo to Thursday.": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: could move. Aus der direkten Frage wird eine indirekte Bitte.",
+    "en": "Right: could move. The direct question becomes an indirect request."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Can behält die Direktheit. Nach was wondering passt could.",
+     "en": "Can keeps it direct. After was wondering use could."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will fragt nach dem Plan, nicht nach einer weichen Bitte.",
+     "en": "Will asks about a plan, not a soft request."
+    },
+    {
+     "not": [
+      "could",
+      "would"
+     ],
+     "de": "Gesucht ist ein Modalverb mit Abstand: could move.",
+     "en": "A modal with distance is needed: could move."
+    }
+   ]
+  }
+ },
+ "Your offer is too expensive. → Your offer ___ be a bit of a stretch for our budget.": {
+  "pat": "dip.understate",
+  "why": {
+   "ok": {
+    "de": "Richtig: could be a bit of a stretch ist ein Einwand mit Abstand.",
+    "en": "Right: could be a bit of a stretch is an objection with distance."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will legt den Einwand fest. Could lässt ihn offen.",
+     "en": "Will fixes the objection. Could leaves it open."
+    },
+    {
+     "if": [
+      "must"
+     ],
+     "de": "Must wirkt wie ein Urteil, nicht wie ein weicher Einwand.",
+     "en": "Must sounds like a verdict, not a soft objection."
+    },
+    {
+     "not": [
+      "could",
+      "might",
+      "may",
+      "would"
+     ],
+     "de": "Gesucht ist ein Modalverb mit Abstand: could, might, may oder would.",
+     "en": "A modal with distance is needed: could, might, may or would."
+    }
+   ]
+  }
+ },
+ "We want a discount. → We ___ hoping for a small discount.": {
+  "pat": "dip.hoping",
+  "why": {
+   "ok": {
+    "de": "Richtig: were hoping for macht aus „We want“ einen Wunsch und keine Forderung.",
+    "en": "Right: were hoping for turns “We want” into a wish."
+   },
+   "wrong": [
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Zu we passt were, nicht was.",
+     "en": "With we use were, not was."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Have hoping ist keine Form: Es braucht were.",
+     "en": "Have hoping is not a form: you need were."
+    },
+    {
+     "not": [
+      "were",
+      "are",
+      "had"
+     ],
+     "de": "Hoping braucht ein Hilfsverb mit Abstand: were hoping.",
+     "en": "Hoping needs a helping verb with distance: were hoping."
+    }
+   ]
+  }
+ },
+ "We were hoping you can confirm the date.": {
+  "pat": "dip.hoping",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach were hoping folgt could. Die Vergangenheit zieht den Nebensatz mit.",
+    "en": "Right: were hoping is followed by could. The past tense pulls the clause along."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Can bleibt im Präsens stehen. Nach were hoping folgt could.",
+     "en": "Can stays in the present. After were hoping use could."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will passt nicht zu were hoping. Could lässt die Bitte offen.",
+     "en": "Will does not fit were hoping. Could leaves the request open."
+    }
+   ]
+  }
+ },
+ "I was wondering whether could you share the price list.": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: whether you could. Nach whether bleibt die normale Wortstellung.",
+    "en": "Right: whether you could. After whether the normal word order stays."
+   },
+   "wrong": [
+    {
+     "if": [
+      "could",
+      "you"
+     ],
+     "de": "Das Subjekt gehört vor could. Die Umstellung gilt nur in der direkten Frage.",
+     "en": "The subject belongs before could. Inversion is only for direct questions."
+    },
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Es geht um die Wortstellung nach whether: Subjekt vor Verb.",
+     "en": "The issue is word order after whether: subject before verb."
+    },
+    {
+     "not": [
+      "whether",
+      "if"
+     ],
+     "de": "Das Einleitewort bleibt: I was wondering whether you could …",
+     "en": "The linking word stays: I was wondering whether you could …"
+    }
+   ]
+  }
+ },
+ "I was wondering if you can send the signed contract today.": {
+  "pat": "dip.wondering",
+  "why": {
+   "ok": {
+    "de": "Richtig: could statt can. Nach I was wondering bleibt der Abstand.",
+    "en": "Right: could instead of can. After I was wondering the distance stays."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "Can bricht den Abstand von was wondering. Hier passt could (oder would).",
+     "en": "Can breaks the distance of was wondering. Use could (or would) here."
+    },
+    {
+     "not": [
+      "could",
+      "would"
+     ],
+     "de": "Gesucht ist ein Modalverb mit Abstand: you could send.",
+     "en": "A modal with distance is needed: you could send."
+    }
+   ]
+  }
+ },
+ "Would it be possible that you send the offer again?": {
+  "pat": "dip.possible",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach Would it be possible folgt to + Grundform, kein that-Satz.",
+    "en": "Right: Would it be possible + to + base verb, no that-clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Ein that-Satz klingt hier ungewöhnlich. Üblich ist to + Grundform.",
+     "en": "A that-clause sounds unusual here. To + base verb is the norm."
+    },
+    {
+     "if": [
+      "sending"
+     ],
+     "de": "Nach possible steht to + Grundform, keine -ing-Form.",
+     "en": "After possible use to + base verb, not the -ing form."
+    },
+    {
+     "if": [
+      "for",
+      "you",
+      "to"
+     ],
+     "de": "Auch richtig: for you to send. In dieser Aufgabe wird die kurze Form mit to + Grundform geübt.",
+     "en": "Also correct: for you to send. This task practices the short form with to + base verb."
+    }
+   ]
+  }
+ }
+}

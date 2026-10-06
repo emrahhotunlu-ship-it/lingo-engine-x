@@ -1,0 +1,337 @@
+{
+ "topic": "passive-plus",
+ "canDo": {
+  "de": "Ich kann das Passiv genau einsetzen: mit Modalverben, in Vergangenheitsformen, als is said to und mit being.",
+  "en": "I can use the passive precisely: with modals, in past tenses, as is said to, and with being."
+ },
+ "order": [
+  "pp.modal",
+  "pp.perfect",
+  "pp.personal",
+  "pp.being"
+ ],
+ "introPlan": [
+  [
+   "pp.modal",
+   "pp.perfect"
+  ],
+  [
+   "pp.personal",
+   "pp.being"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Steht ein Modalverb im Satz? Dann folgt be + Partizip.",
+   "Gibt es einen abgeschlossenen Zeitpunkt (yesterday) oder ein früheres Ereignis (by the time)?",
+   "Wird ein Gerücht berichtet (is said to), oder folgt auf like, hate, without eine -ing-Form (being)?"
+  ],
+  "en": [
+   "Is there a modal verb in the sentence? Then be + participle follows.",
+   "Is there a finished time (yesterday) or an earlier event (by the time)?",
+   "Is a rumor reported (is said to), or does an -ing form follow like, hate, without (being)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "pp.modal",
+   "name": {
+    "de": "Modal + be + Partizip · Passiv mit Modalverb",
+    "en": "Modal + be + participle · passive with modals"
+   },
+   "form": {
+    "de": "must / can / has to + be + Partizip",
+    "en": "must / can / has to + be + participle"
+   },
+   "use": {
+    "de": "Wenn die Handlung wichtiger ist als die Person: Nach dem Modalverb steht be und das Partizip (dritte Form).",
+    "en": "When the action matters more than the person: the modal is followed by be and the past participle."
+   },
+   "signals": [
+    "must be",
+    "has to be",
+    "needs to be",
+    "should be",
+    "can't be"
+   ],
+   "ex": [
+    {
+     "en": "The budget must be approved before we hire anyone.",
+     "de": "Das Budget muss genehmigt werden, bevor wir jemanden einstellen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Your request can be processed within two working days.",
+     "de": "Ihre Anfrage kann innerhalb von zwei Werktagen bearbeitet werden.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The tickets have to be booked by Friday.",
+     "de": "Die Tickets müssen bis Freitag gebucht werden.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The invoices must paid by the 15th.",
+    "good": "The invoices must be paid by the 15th.",
+    "cause": {
+     "de": "Im Deutschen steht „werden“ hinter dem Partizip („bezahlt werden“). Im Englischen steht be direkt nach dem Modal und geht leicht verloren.",
+     "en": "In German werden comes after the participle (“bezahlt werden”). In English be follows the modal directly and is easily dropped."
+    }
+   },
+   "contrast": {
+    "with": "pp.perfect",
+    "a": "The room must be cleaned before the guests arrive.",
+    "b": "The room had been cleaned before the guests arrived.",
+    "diff": {
+     "de": "Modal + be blickt nach vorn: Was muss oder kann geschehen? had been sagt: Es war schon vorher geschehen.",
+     "en": "Modal + be looks ahead: what must or can happen? had been says it had already happened earlier."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The report must be finished by Friday.",
+     "q": {
+      "de": "Ist der Bericht schon fertig?",
+      "en": "Is the report finished already?"
+     },
+     "a": false
+    },
+    {
+     "s": "The room can be booked online.",
+     "q": {
+      "de": "Ist es möglich, den Raum online zu buchen?",
+      "en": "Is it possible to book the room online?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wer die Handlung ausführt, ist nebensächlich. Woran sieht man im Satz, dass mit dem Subjekt etwas gemacht wird?",
+    "en": "Who performs the action is secondary. How does the sentence show that something is done to the subject?"
+   }
+  },
+  {
+   "id": "pp.perfect",
+   "name": {
+    "de": "Passiv in Vergangenheitsformen",
+    "en": "Passive in past tenses"
+   },
+   "form": {
+    "de": "was + Partizip / has been + Partizip / had been + Partizip",
+    "en": "was + participle / has been + participle / had been + participle"
+   },
+   "use": {
+    "de": "Wähle nach dem Zeitbezug: Mit „yesterday“ oder einem Datum steht was, mit Bezug zu jetzt has been, vor einem anderen Vergangenen had been.",
+    "en": "Choose by time reference: was with a finished time like “yesterday”, has been with a link to now, had been before another past moment."
+   },
+   "signals": [
+    "yesterday",
+    "last week",
+    "by the time",
+    "by then",
+    "already",
+    "so far"
+   ],
+   "ex": [
+    {
+     "en": "The proposal has been approved, so we can start.",
+     "de": "Der Vorschlag ist genehmigt worden, also können wir anfangen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Your order was shipped yesterday.",
+     "de": "Ihre Bestellung wurde gestern versandt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "By the time I got there, the doors had been locked.",
+     "de": "Als ich dort ankam, waren die Türen schon abgeschlossen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The parcel has been delivered last week.",
+    "good": "The parcel was delivered last week.",
+    "cause": {
+     "de": "Im Deutschen ist das Perfekt mit „letzte Woche“ normal („ist geliefert worden“). Im Englischen verbietet ein abgeschlossener Zeitpunkt das Present Perfect.",
+     "en": "In German the perfect is normal with “letzte Woche” (“ist geliefert worden”). In English a finished point in time rules out the present perfect."
+    }
+   },
+   "contrast": {
+    "with": "pp.modal",
+    "a": "The report was finished by Friday.",
+    "b": "The report must be finished by Friday.",
+    "diff": {
+     "de": "was finished berichtet von etwas Erledigtem. must be finished verlangt, dass es noch erledigt wird.",
+     "en": "was finished reports something done. must be finished demands that it still gets done."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The office had been cleaned by the time we arrived.",
+     "q": {
+      "de": "Wurde zuerst geputzt und kamen wir danach an?",
+      "en": "Was the cleaning done first, and did we arrive afterward?"
+     },
+     "a": true
+    },
+    {
+     "s": "The invoice has been paid.",
+     "q": {
+      "de": "Nennt der Satz einen genauen Zeitpunkt der Zahlung?",
+      "en": "Does the sentence give an exact time of payment?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Gibt es einen abgeschlossenen Zeitpunkt, oder geschah etwas vor einem anderen Moment der Vergangenheit?",
+    "en": "Is there a finished point in time, or did something happen before another moment in the past?"
+   }
+  },
+  {
+   "id": "pp.personal",
+   "name": {
+    "de": "is said to · Gerücht sachlich berichten",
+    "en": "is said to · neutral reporting"
+   },
+   "form": {
+    "de": "X is said to + be / have + Partizip",
+    "en": "X is said to + be / have + participle"
+   },
+   "use": {
+    "de": "Gibt Gerüchte und Meinungen sachlich wieder, ohne die Quelle zu nennen. Für Früheres steht to have + Partizip.",
+    "en": "Reports rumors and opinions neutrally without naming the source. For earlier events use to have + participle."
+   },
+   "signals": [
+    "is said to",
+    "is believed to",
+    "is thought to",
+    "is reported to",
+    "is expected to",
+    "is known to",
+    "is considered to",
+    "is understood to"
+   ],
+   "ex": [
+    {
+     "en": "The competitor is believed to be preparing a launch.",
+     "de": "Der Wettbewerber bereitet vermutlich eine Markteinführung vor.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The supplier is reported to have raised its prices.",
+     "de": "Der Lieferant soll seine Preise erhöht haben.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She is said to be very good at negotiating.",
+     "de": "Sie soll sehr gut im Verhandeln sein.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The supplier is said raising its prices.",
+    "good": "The supplier is said to be raising its prices.",
+    "cause": {
+     "de": "Im Deutschen steckt das Gerücht im Modalverb („Er soll … erhöhen“). Im Englischen fehlt nach is said leicht das to.",
+     "en": "In German the rumor sits in the modal verb (“Er soll … erhöhen”). In English the to after is said is easily forgotten."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The branch is believed to have closed early.",
+     "q": {
+      "de": "Geht es um etwas, das schon passiert ist?",
+      "en": "Is it about something that has already happened?"
+     },
+     "a": true
+    },
+    {
+     "s": "The plant is said to be closing.",
+     "q": {
+      "de": "Ist sicher, dass das Werk schließt?",
+      "en": "Is it certain that the plant is closing?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Willst du eine Quelle nennen oder nur das Gerücht wiedergeben? Und liegt das Gemeinte jetzt oder schon davor?",
+    "en": "Do you want to name a source or only pass on the rumor? And is the matter now or earlier?"
+   }
+  },
+  {
+   "id": "pp.being",
+   "name": {
+    "de": "being + Partizip · Passiv mit -ing",
+    "en": "being + participle · passive with -ing"
+   },
+   "form": {
+    "de": "like / hate / avoid / without + being + Partizip",
+    "en": "like / hate / avoid / without + being + participle"
+   },
+   "use": {
+    "de": "Nach Verben wie like, hate, avoid, enjoy und nach Präpositionen steht -ing. Im Passiv wird daraus being + Partizip. -ing ist hier die übliche Wahl; „I hate to be interrupted“ ist ebenfalls richtig.",
+    "en": "After verbs such as like, hate, avoid, enjoy and after prepositions, -ing is used. In the passive this becomes being + participle. -ing is the usual choice here; “I hate to be interrupted” is also correct."
+   },
+   "signals": [
+    "hate being",
+    "like being",
+    "avoid being",
+    "enjoy being",
+    "without being",
+    "about being",
+    "risk being"
+   ],
+   "ex": [
+    {
+     "en": "Nobody enjoys being criticized in front of the team.",
+     "de": "Niemand wird gern vor dem Team kritisiert.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I appreciate being kept in the loop.",
+     "de": "Ich schätze es, auf dem Laufenden gehalten zu werden.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She left the room without being asked.",
+     "de": "Sie verließ den Raum, ohne gefragt zu werden.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I appreciate to be kept in the loop.",
+    "good": "I appreciate being kept in the loop.",
+    "cause": {
+     "de": "Im Deutschen heißt es „ich schätze es, informiert zu werden“, also zu + Infinitiv. Das wird gern als to be übertragen, doch nach appreciate steht -ing.",
+     "en": "German says “ich schätze es, informiert zu werden”, so zu + infinitive. That is often carried over as to be, but appreciate takes -ing."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She left without being asked.",
+     "q": {
+      "de": "Hat jemand sie gefragt?",
+      "en": "Did anyone ask her?"
+     },
+     "a": false
+    },
+    {
+     "s": "He avoids being quoted in the press.",
+     "q": {
+      "de": "Zitiert er andere Leute?",
+      "en": "Does he quote other people?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wer handelt hier, und welche -ing-Form zeigt, dass dem Sprecher etwas geschieht?",
+    "en": "Who acts here, and which -ing form shows that something happens to the speaker?"
+   }
+  }
+ ]
+}

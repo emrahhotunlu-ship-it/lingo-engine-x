@@ -1,0 +1,984 @@
+[
+ {
+  "id": "dm-con-k1",
+  "type": "kwt",
+  "pat": "dm.concede",
+  "from": "The demo went well, but we still need a business case.",
+  "key": "SAID",
+  "frame": "The demo went well. ___, we still need a business case.",
+  "answer": "That said",
+  "accepted": [
+   "Having said that",
+   "That being said",
+   "Having said this",
+   "With that said"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: That said schränkt das Gute ein, ohne aber: Wir brauchen trotzdem einen Business Case.",
+    "en": "Right: That said qualifies the good news with no but: we still need a business case."
+   },
+   "wrong": [
+    {
+     "if": [
+      "but"
+     ],
+     "de": "Kein zusätzliches but: That said ersetzt „aber“ bereits.",
+     "en": "No extra but: That said already replaces “but”."
+    },
+    {
+     "if": [
+      "say"
+     ],
+     "de": "Nach Having steht das Partizip: Having said that, nicht Having say.",
+     "en": "After Having use the participle: Having said that, not Having say."
+    },
+    {
+     "not": [
+      "said"
+     ],
+     "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
+     "en": "The key word said must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-con-k2",
+  "type": "kwt",
+  "pat": "dm.concede",
+  "from": "The offer is generous, but I'd still ask legal to review it.",
+  "key": "EVEN",
+  "frame": "The offer is generous. ___, I'd ask legal to review it.",
+  "answer": "Even so",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Even so = „trotzdem“. Es schränkt das Lob ein, ohne es zurückzunehmen.",
+    "en": "Right: Even so = “all the same”. It qualifies the praise without taking it back."
+   },
+   "wrong": [
+    {
+     "not": [
+      "even"
+     ],
+     "de": "Das Schlüsselwort even muss unverändert in der Lücke stehen.",
+     "en": "The key word even must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "even",
+      "though"
+     ],
+     "de": "„Even though“ braucht einen Nebensatz. Hier folgt ein neuer Satz: Even so.",
+     "en": "“Even though” needs a full clause. Here a new sentence follows: Even so."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-con-f1",
+  "type": "find",
+  "pat": "dm.concede",
+  "prompt": "The pilot went well. Despite that said, the timeline is tight.",
+  "err": [
+   4,
+   6
+  ],
+  "answer": "That said,",
+  "fixed": "The pilot went well. That said, the timeline is tight.",
+  "accepted": [
+   "Having said that,",
+   "That being said,",
+   "Even so,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „Despite that said“ gibt es nicht. Richtig: That said, …",
+    "en": "The error: “Despite that said” does not exist. Correct: That said, …"
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Despite that said ist keine Wendung.",
+     "en": "There is an error: Despite that said is not a phrase."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Despite that said“: Hier passt That said.",
+     "en": "The error is “Despite that said”: That said fits here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-con-f2",
+  "type": "find",
+  "pat": "dm.concede",
+  "prompt": "We like the proposal. Have said that, we still want a second quote.",
+  "err": [
+   4,
+   6
+  ],
+  "answer": "Having said that,",
+  "fixed": "We like the proposal. Having said that, we still want a second quote.",
+  "accepted": [
+   "That said,",
+   "That being said,",
+   "Even so,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Es heißt Having said that (Partizip), nicht Have said that.",
+    "en": "The error: it is Having said that (participle), not Have said that."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Wendung beginnt mit Having, nicht mit Have.",
+     "en": "There is an error: the phrase starts with Having, not Have."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Have said that“: Richtig ist Having said that.",
+     "en": "The error is “Have said that”: the correct form is Having said that."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-con-f3",
+  "type": "find",
+  "pat": "dm.concede",
+  "prompt": "The rollout went well. That said, we should still run one more test.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: That said, + Hauptsatz schränkt den guten Rollout ein.",
+    "en": "No error: That said, + a main clause qualifies the good rollout."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach That said steht ein normaler Hauptsatz, ohne but.",
+     "en": "No error: a normal main clause follows That said, with no but."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-con-m1",
+  "type": "meaning",
+  "pat": "dm.concede",
+  "a": "The pilot went well. That said, the timeline is tight.",
+  "b": "The pilot went well. As a result, the timeline is tight.",
+  "q": {
+   "de": "Welcher Text schränkt das Gute ein, statt eine Folge zu nennen?",
+   "en": "Which text qualifies the good news instead of naming a result?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Text a. That said schränkt den guten Pilot ein, ohne ihn zurückzunehmen.",
+    "en": "Right: text a. That said qualifies the good pilot without taking it back."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b nennt As a result eine Folge: guter Pilot, deshalb knapper Zeitplan. Das ergibt keinen Sinn.",
+     "en": "In b, As a result names a consequence: good pilot, so a tight timeline. That makes no sense."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: That said schränkt ein, As a result folgert.",
+     "en": "Not the same: That said qualifies, As a result concludes."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ctr-k1",
+  "type": "kwt",
+  "pat": "dm.contrast",
+  "from": "The cloud version is cheaper, but it needs more trust in the vendor.",
+  "key": "HAND",
+  "frame": "The cloud version is cheaper. ___, it needs more trust in the vendor.",
+  "answer": "On the other hand",
+  "accepted": [
+   "But on the other hand"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: On the other hand stellt Vorteil und Nachteil gegenüber.",
+    "en": "Right: On the other hand sets benefit against drawback."
+   },
+   "wrong": [
+    {
+     "if": [
+      "side"
+     ],
+     "de": "Nicht side: Der Gegensatz heißt on the other hand.",
+     "en": "Not side: the contrast is on the other hand."
+    },
+    {
+     "not": [
+      "hand"
+     ],
+     "de": "Das Schlüsselwort hand muss unverändert in der Lücke stehen.",
+     "en": "The key word hand must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "other"
+     ],
+     "de": "Hier fehlt other: on the other hand, nicht on the hand.",
+     "en": "Here other is missing: on the other hand, not on the hand."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ctr-k2",
+  "type": "kwt",
+  "pat": "dm.contrast",
+  "from": "Sales grew in Spain, whereas they fell in Italy.",
+  "key": "CONTRAST",
+  "frame": "Sales grew in Spain. ___, they fell in Italy.",
+  "answer": "In contrast",
+  "accepted": [
+   "By contrast",
+   "In stark contrast",
+   "In sharp contrast",
+   "By way of contrast"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: In contrast = „im Gegensatz dazu“. Es stellt Spanien und Italien gegenüber.",
+    "en": "Right: In contrast = “as opposed to that”. It sets Spain against Italy."
+   },
+   "wrong": [
+    {
+     "if": [
+      "contrary"
+     ],
+     "de": "On the contrary heißt „im Gegenteil“ und widerspricht. Hier passt contrast.",
+     "en": "On the contrary means “quite the opposite” and denies. Here contrast fits."
+    },
+    {
+     "not": [
+      "contrast"
+     ],
+     "de": "Das Schlüsselwort contrast muss unverändert in der Lücke stehen.",
+     "en": "The key word contrast must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ctr-f1",
+  "type": "find",
+  "pat": "dm.contrast",
+  "prompt": "The old tool is cheaper. On the other side, it has no audit trail.",
+  "err": [
+   8,
+   8
+  ],
+  "answer": "hand,",
+  "fixed": "The old tool is cheaper. On the other hand, it has no audit trail.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Gegensatz heißt on the other hand. „Side“ meint einen Ort.",
+    "en": "The error: the contrast is on the other hand. “Side” means a place."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Für einen Gegensatz heißt es on the other hand.",
+     "en": "There is an error: a contrast is on the other hand."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „side“: Wörtlich „andere Seite“, Englisch sagt on the other hand.",
+     "en": "The error is “side”: literally “other side”, but English says on the other hand."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ctr-f2",
+  "type": "find",
+  "pat": "dm.contrast",
+  "prompt": "Sales grew in Spain. In contrary, they fell in Italy.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "In contrast,",
+  "fixed": "Sales grew in Spain. In contrast, they fell in Italy.",
+  "accepted": [
+   "By contrast,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „In contrary“ gibt es nicht. Richtig: In contrast („im Gegensatz“).",
+    "en": "The error: “In contrary” does not exist. Correct: In contrast."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Gegensatz heißt in contrast, nicht in contrary.",
+     "en": "There is an error: the contrast is in contrast, not in contrary."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „In contrary“: Gemeint ist in contrast.",
+     "en": "The error is “In contrary”: in contrast is meant."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ctr-f3",
+  "type": "find",
+  "pat": "dm.contrast",
+  "prompt": "Remote hiring widens the pool. On the other hand, onboarding takes longer.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: On the other hand stellt Vorteil und Nachteil gegenüber.",
+    "en": "No error: On the other hand sets the benefit against the drawback."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: On the other hand ist die feste Wendung für die Gegenseite.",
+     "en": "No error: On the other hand is the fixed phrase for the other side."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ctr-m1",
+  "type": "meaning",
+  "pat": "dm.contrast",
+  "a": "Team A shipped early. In contrast, team B shipped late.",
+  "b": "Team A shipped early. Likewise, team B shipped early.",
+  "q": {
+   "de": "Welcher Text sagt, dass Team B später fertig war?",
+   "en": "Which text says that team B finished later?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Text a. In contrast stellt die Teams gegenüber: A ist früh, B spät.",
+    "en": "Right: text a. In contrast sets the two teams against each other: A early, B late."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b heißt Likewise „ebenso“: Die Teams waren beide früh fertig.",
+     "en": "In b, Likewise means “in the same way”: both teams were early."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: In contrast kehrt den Sinn um, Likewise nicht.",
+     "en": "Not the same: In contrast flips the meaning, Likewise does not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-bld-k1",
+  "type": "kwt",
+  "pat": "dm.build",
+  "from": "Lena suggested a pilot, and we could add a second team.",
+  "key": "BUILD",
+  "frame": "Lena suggested a pilot. ___, we could add a second team.",
+  "answer": "To build on that",
+  "accepted": [
+   "To build upon that",
+   "To build on this",
+   "To build upon this"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: To build on that führt Lenas Idee weiter und ergänzt sie.",
+    "en": "Right: To build on that develops Lena's idea and adds to it."
+   },
+   "wrong": [
+    {
+     "if": [
+      "up",
+      "on"
+     ],
+     "de": "Kein up: „darauf aufbauen“ heißt build on, nicht build up on.",
+     "en": "No up: “darauf aufbauen” is build on, not build up on."
+    },
+    {
+     "not": [
+      "build"
+     ],
+     "de": "Das Schlüsselwort build muss unverändert in der Lücke stehen.",
+     "en": "The key word build must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-bld-k2",
+  "type": "kwt",
+  "pat": "dm.build",
+  "from": "The tool is easy to set up, and the training takes only an hour.",
+  "key": "ADD",
+  "frame": "The tool is easy to set up. ___, the training takes only an hour.",
+  "answer": "To add to that",
+  "accepted": [
+   "To add to this"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: To add to that fügt einen weiteren Punkt an, der zum selben Thema gehört.",
+    "en": "Right: To add to that attaches another point on the same topic."
+   },
+   "wrong": [
+    {
+     "not": [
+      "add"
+     ],
+     "de": "Das Schlüsselwort add muss unverändert in der Lücke stehen.",
+     "en": "The key word add must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "add",
+      "on"
+     ],
+     "de": "Nach add steht to: To add to that. „Add on“ passt hier nicht.",
+     "en": "After add use to: To add to that. Add on does not fit here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-bld-f1",
+  "type": "find",
+  "pat": "dm.build",
+  "prompt": "To build up on Anna's point, we could add a pilot team.",
+  "err": [
+   1,
+   3
+  ],
+  "answer": "build on",
+  "fixed": "To build on Anna's point, we could add a pilot team.",
+  "accepted": [
+   "build upon"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Es heißt build on, nicht build up on („darauf aufbauen“).",
+    "en": "The error: it is build on, not build up on."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach build steht on, kein up.",
+     "en": "There is an error: build takes on, with no up."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „build up on“: Das up muss weg.",
+     "en": "The error is “build up on”: the up has to go."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-bld-f2",
+  "type": "find",
+  "pat": "dm.build",
+  "prompt": "Building up on Mark's idea, we could invite two partners.",
+  "err": [
+   0,
+   2
+  ],
+  "answer": "Building on",
+  "fixed": "Building on Mark's idea, we could invite two partners.",
+  "accepted": [
+   "Building upon"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Es heißt Building on, ohne up: Man baut auf einer Idee auf.",
+    "en": "The error: it is Building on, with no up: you build on an idea."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Building up on passt nicht zu einer Idee.",
+     "en": "There is an error: Building up on does not fit an idea."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „Building up on“: Richtig ist Building on.",
+     "en": "The error is “Building up on”: the correct form is Building on."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-bld-f3",
+  "type": "find",
+  "pat": "dm.build",
+  "prompt": "Mark outlined the budget. To build on that, we could add a cost forecast.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: To build on that knüpft an Marks Budget an und ergänzt es.",
+    "en": "No error: To build on that picks up Mark's budget and adds to it."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach build steht on, und das Komma trennt die Wendung vom Satz.",
+     "en": "No error: build takes on, and the comma sets the phrase off from the clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-bld-m1",
+  "type": "meaning",
+  "pat": "dm.build",
+  "a": "Anna proposed a pilot. To build on that, we could add a second team.",
+  "b": "Anna proposed a pilot. Despite that, we could add a second team.",
+  "q": {
+   "de": "Welcher Text führt Annas Idee weiter, statt gegen sie zu argumentieren?",
+   "en": "Which text extends Anna's idea instead of arguing against it?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Text a. To build on that knüpft an Annas Pilot an und baut ihn aus.",
+    "en": "Right: text a. To build on that picks up Anna's pilot and expands it."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "dm.concede",
+     "de": "In b zeigt Despite that einen Gegensatz zu Annas Pilot. Die Idee wird nicht weitergeführt.",
+     "en": "In b, Despite that signals a contrast to Anna's pilot. The idea is not developed."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Despite that setzt einen Einwand, to build on that eine Ergänzung.",
+     "en": "Not the same: Despite that sets an objection, to build on that an addition."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ret-k1",
+  "type": "kwt",
+  "pat": "dm.return",
+  "from": "I want to return to the deadline. Can we move it to Friday?",
+  "key": "BACK",
+  "frame": "___ the deadline, can we move it to Friday?",
+  "answer": "Coming back to",
+  "accepted": [
+   "Going back to",
+   "Getting back to",
+   "Circling back to"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Coming back to + Thema greift die Frist wieder auf.",
+    "en": "Right: Coming back to + topic picks the deadline up again."
+   },
+   "wrong": [
+    {
+     "not": [
+      "back"
+     ],
+     "de": "Das Schlüsselwort back muss unverändert in der Lücke stehen.",
+     "en": "The key word back must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "back",
+      "on"
+     ],
+     "de": "Nicht on: „zurückkommen auf“ wird zu coming back to.",
+     "en": "Not on: “zurückkommen auf” becomes coming back to."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach back fehlt to: Coming back to the deadline, …",
+     "en": "After back, to is missing: Coming back to the deadline, …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ret-k2",
+  "type": "kwt",
+  "pat": "dm.return",
+  "from": "On Mark's earlier question: the license is per user.",
+  "key": "RETURN",
+  "frame": "___ Mark's earlier question, the license is per user.",
+  "answer": "To return to",
+  "accepted": [],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: To return to + Thema kehrt zu Marks früherer Frage zurück.",
+    "en": "Right: To return to + topic goes back to Mark's earlier question."
+   },
+   "wrong": [
+    {
+     "not": [
+      "return"
+     ],
+     "de": "Das Schlüsselwort return muss unverändert in der Lücke stehen.",
+     "en": "The key word return must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "return",
+      "on"
+     ],
+     "de": "Nicht on: Man kehrt zu etwas zurück, also return to.",
+     "en": "Not on: you return to something, so return to."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Nach return steht to: To return to Mark's earlier question, …",
+     "en": "After return comes to: To return to Mark's earlier question, …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ret-f1",
+  "type": "find",
+  "pat": "dm.return",
+  "prompt": "Coming back on the budget, we need approval by May.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "to",
+  "fixed": "Coming back to the budget, we need approval by May.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Es heißt coming back to, nicht on. „Zurückkommen auf“ führt in die Irre.",
+    "en": "The error: it is coming back to, not on. “Zurückkommen auf” misleads."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach coming back steht to.",
+     "en": "There is an error: coming back takes to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „on“: Deutsch sagt „auf“, Englisch sagt to.",
+     "en": "The error is “on”: German says “auf”, English says to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ret-f2",
+  "type": "find",
+  "pat": "dm.return",
+  "prompt": "Coming back the topic of timing, we should add a buffer.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "back to",
+  "fixed": "Coming back to the topic of timing, we should add a buffer.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach back fehlt to: Coming back to the topic of timing.",
+    "en": "The error: to is missing after back: Coming back to the topic of timing."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: In der Wendung fehlt ein Wort.",
+     "en": "There is an error: a word is missing in the phrase."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „back“: Danach fehlt to, also back to.",
+     "en": "The error is at “back”: to is missing after it, so back to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-ret-m1",
+  "type": "meaning",
+  "pat": "dm.return",
+  "a": "Coming back to the contract, legal still needs two days.",
+  "b": "Moving on to the contract, legal still needs two days.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Vertrag schon früher Thema war?",
+   "en": "Which sentence says the contract was already a topic earlier?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Coming back to nimmt ein früheres Thema wieder auf.",
+    "en": "Right: sentence a. Coming back to takes an earlier topic up again."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "„Moving on to“ eröffnet ein neues Thema. Zurück zum Vertrag geht es dort nicht.",
+     "en": "“Moving on to” opens a new topic. It does not go back to the contract."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Coming back to kehrt zurück, Moving on to geht weiter.",
+     "en": "Not the same: Coming back to returns, Moving on to goes forward."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-sum-k1",
+  "type": "kwt",
+  "pat": "dm.sum",
+  "from": "The tests are late and the budget is tight, so to put it briefly, we need two more weeks.",
+  "key": "SHORT",
+  "frame": "The tests are late and the budget is tight. ___, we need two more weeks.",
+  "answer": "In short",
+  "accepted": [
+   "Long story short"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: In short kündigt das Fazit an: Aus den zwei Problemen folgt der Bedarf von zwei Wochen.",
+    "en": "Right: In short announces the conclusion: the two problems add up to a need for two weeks."
+   },
+   "wrong": [
+    {
+     "if": [
+      "shortly"
+     ],
+     "de": "Nicht shortly: Das Fazit heißt in short („kurz gesagt“).",
+     "en": "Not shortly: the conclusion phrase is in short."
+    },
+    {
+     "not": [
+      "short"
+     ],
+     "de": "Das Schlüsselwort short muss unverändert in der Lücke stehen.",
+     "en": "The key word short must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-sum-k2",
+  "type": "kwt",
+  "pat": "dm.sum",
+  "from": "The migration was smooth, support was fast, and users are happy, so overall the launch went better than we expected.",
+  "key": "ALL",
+  "frame": "The migration was smooth, support was fast, and users are happy. ___, the launch went better than we expected.",
+  "answer": "All in all",
+  "accepted": [
+   "All told",
+   "All things considered"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: All in all fasst die drei guten Punkte zum Gesamtbild zusammen.",
+    "en": "Right: All in all sums the three good points up into one overall picture."
+   },
+   "wrong": [
+    {
+     "if": [
+      "after"
+     ],
+     "de": "„After all“ heißt „schließlich“ und fasst nicht zusammen.",
+     "en": "“After all” means “you must not forget” and does not sum up."
+    },
+    {
+     "not": [
+      "all"
+     ],
+     "de": "Das Schlüsselwort all muss unverändert in der Lücke stehen.",
+     "en": "The key word all must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-sum-f1",
+  "type": "find",
+  "pat": "dm.sum",
+  "prompt": "In resume, the team needs one more tester.",
+  "err": [
+   0,
+   1
+  ],
+  "answer": "In summary,",
+  "fixed": "In summary, the team needs one more tester.",
+  "accepted": [
+   "In short,",
+   "In sum,",
+   "To sum up,",
+   "To summarize,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „In resume“ gibt es nicht. Richtig: In summary oder In short.",
+    "en": "The error: “In resume” does not exist. Correct: In summary or In short."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Ein Fazit beginnt nicht mit in resume.",
+     "en": "There is an error: a conclusion does not start with in resume."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „In resume“: Es heißt In summary („Resümee“).",
+     "en": "The error is “In resume”: it is In summary."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-sum-f2",
+  "type": "find",
+  "pat": "dm.sum",
+  "prompt": "To summarize up, the launch went better than expected.",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "sum up,",
+  "fixed": "To sum up, the launch went better than expected.",
+  "accepted": [
+   "summarize,"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Es heißt To sum up oder To summarize, nicht summarize up.",
+    "en": "The error: it is To sum up or To summarize, not summarize up."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach summarize steht kein up.",
+     "en": "There is an error: summarize takes no up."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „summarize up“: sum up oder summarize allein.",
+     "en": "The error is “summarize up”: use sum up or summarize alone."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-sum-f3",
+  "type": "find",
+  "pat": "dm.sum",
+  "prompt": "Overall, the team is happy with the rollout.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Overall fasst als Fazit zusammen und steht vorn mit Komma.",
+    "en": "No error: Overall sums up as a conclusion and opens with a comma."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Overall steht vorn und wird durch ein Komma abgesetzt.",
+     "en": "No error: Overall opens the sentence and is set off by a comma."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dm-sum-m1",
+  "type": "meaning",
+  "pat": "dm.sum",
+  "a": "In short, the project needs more time.",
+  "b": "For example, the project needs more time.",
+  "q": {
+   "de": "Welcher Satz fasst das Vorherige zusammen?",
+   "en": "Which sentence sums up what came before?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. In short leitet das Fazit ein.",
+    "en": "Right: sentence a. In short introduces the conclusion."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "„For example“ gibt ein einzelnes Beispiel, kein Fazit.",
+     "en": "“For example” gives a single instance, not a conclusion."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: In short fasst zusammen, For example illustriert.",
+     "en": "Not the same: In short sums up, For example illustrates."
+    }
+   ]
+  }
+ }
+]

@@ -1,0 +1,803 @@
+[
+ {
+  "id": "dp-wo-k1",
+  "type": "kwt",
+  "pat": "dip.wondering",
+  "from": "Can you resend the agenda?",
+  "key": "WONDERING",
+  "frame": "I ___ you could resend the agenda.",
+  "answer": "was wondering if",
+  "accepted": [
+   "was wondering whether",
+   "am wondering if",
+   "am wondering whether",
+   "was just wondering if",
+   "was just wondering whether"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I was wondering if you could … Vergangenheit und could machen die Bitte weich.",
+    "en": "Right: I was wondering if you could … Past tense and could soften the request."
+   },
+   "wrong": [
+    {
+     "not": [
+      "wondering"
+     ],
+     "de": "Das Schlüsselwort wondering muss unverändert in der Lücke stehen.",
+     "en": "The key word wondering must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "if",
+      "whether"
+     ],
+     "de": "Nach wondering fehlt if oder whether: was wondering if you could.",
+     "en": "If or whether is missing after wondering: was wondering if you could."
+    },
+    {
+     "not": [
+      "was",
+      "am"
+     ],
+     "de": "Wondering braucht ein Hilfsverb davor: was wondering.",
+     "en": "Wondering needs a helping verb before it: was wondering."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-wo-k2",
+  "type": "kwt",
+  "pat": "dip.wondering",
+  "from": "Can you share the notes from yesterday’s call?",
+  "key": "WONDERING",
+  "frame": "Hi Dana, ___ you could share the notes from yesterday’s call.",
+  "answer": "I was wondering if",
+  "accepted": [
+   "I was wondering whether",
+   "I am wondering if",
+   "I am wondering whether",
+   "I’m wondering if",
+   "I was just wondering if"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: I was wondering if you could share … ist eine weiche Bitte.",
+    "en": "Right: I was wondering if you could share … is a soft request."
+   },
+   "wrong": [
+    {
+     "not": [
+      "wondering"
+     ],
+     "de": "Das Schlüsselwort wondering muss unverändert in der Lücke stehen.",
+     "en": "The key word wondering must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "if",
+      "whether"
+     ],
+     "de": "Nach wondering fehlt if oder whether.",
+     "en": "If or whether is missing after wondering."
+    },
+    {
+     "not": [
+      "was",
+      "am"
+     ],
+     "de": "Wondering braucht ein Hilfsverb davor: I was wondering.",
+     "en": "Wondering needs a helping verb before it: I was wondering."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-wo-f1",
+  "type": "find",
+  "pat": "dip.wondering",
+  "prompt": "I was wondering whether could you join the kickoff call.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "you could",
+  "fixed": "I was wondering whether you could join the kickoff call.",
+  "accepted": [
+   "you would"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „could you“. Nach whether steht das Subjekt vor dem Verb: you could.",
+    "en": "The error: “could you”. After whether the subject comes first: you could."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach whether steht nicht die Fragestellung could you.",
+     "en": "There is an error: after whether you do not use the question order could you."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „could you“: Nach whether gilt die normale Wortstellung.",
+     "en": "The error is in “could you”: after whether normal word order applies."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-wo-f2",
+  "type": "find",
+  "pat": "dip.wondering",
+  "prompt": "I was wondering if you could me send the invoice.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "send me",
+  "fixed": "I was wondering if you could send me the invoice.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „me send“. Nach could steht zuerst das Verb: could send me.",
+    "en": "The error: “me send”. After could the verb comes first: could send me."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Objekt me steht nicht vor dem Verb.",
+     "en": "There is an error: the object me does not come before the verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „me send“: Erst das Verb, dann das Objekt.",
+     "en": "The error is in “me send”: verb first, then the object."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-wo-m1",
+  "type": "meaning",
+  "pat": "dip.wondering",
+  "a": "I wonder whether the client has read the draft.",
+  "b": "I was wondering whether you could read the draft.",
+  "q": {
+   "de": "Welcher Satz ist eine höfliche Bitte?",
+   "en": "Which sentence is a polite request?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Mit was wondering + you could bittest du jemanden um etwas.",
+    "en": "Right: sentence b. With was wondering + you could you ask someone to do something."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a fragt sich die Sprecherin nur selbst, ob der Kunde den Entwurf gelesen hat.",
+     "en": "In a the speaker only asks herself whether the client has read the draft."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a stellt keine Bitte, b bittet um das Lesen.",
+     "en": "Not the same: a makes no request, b asks for the reading."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-ho-k1",
+  "type": "kwt",
+  "pat": "dip.hoping",
+  "from": "We want the contract signed by the end of the month.",
+  "key": "HOPING",
+  "frame": "We ___ the contract signed by the end of the month.",
+  "answer": "were hoping to have",
+  "accepted": [
+   "are hoping to have",
+   "were hoping to get",
+   "are hoping to get",
+   "were hoping to see",
+   "are hoping to see",
+   "were hoping we could have"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: were hoping to have macht aus „We want“ einen Wunsch und keine Forderung.",
+    "en": "Right: were hoping to have turns “We want” into a wish."
+   },
+   "wrong": [
+    {
+     "not": [
+      "hoping"
+     ],
+     "de": "Das Schlüsselwort hoping muss unverändert in der Lücke stehen.",
+     "en": "The key word hoping must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "hoping"
+     ],
+     "not": [
+      "to",
+      "we"
+     ],
+     "de": "Nach hoping folgt to + Grundform: hoping to have.",
+     "en": "Hoping is followed by to + base verb: hoping to have."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "Vor einem Verb steht to, nicht for: hoping to have.",
+     "en": "Before a verb use to, not for: hoping to have."
+    },
+    {
+     "not": [
+      "were",
+      "are",
+      "had"
+     ],
+     "de": "Hoping braucht ein Hilfsverb davor: were hoping.",
+     "en": "Hoping needs a helping verb before it: were hoping."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-ho-k2",
+  "type": "kwt",
+  "pat": "dip.hoping",
+  "from": "Can you confirm the venue today?",
+  "key": "HOPING",
+  "frame": "We ___ you could confirm the venue today.",
+  "answer": "were hoping",
+  "accepted": [
+   "are hoping",
+   "were really hoping",
+   "were just hoping",
+   "were hoping that",
+   "are hoping that"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: We were hoping you could … ist ein Wunsch statt einer Forderung.",
+    "en": "Right: We were hoping you could … is a wish instead of a demand."
+   },
+   "wrong": [
+    {
+     "not": [
+      "hoping"
+     ],
+     "de": "Das Schlüsselwort hoping muss unverändert in der Lücke stehen.",
+     "en": "The key word hoping must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "were",
+      "are",
+      "had"
+     ],
+     "de": "Hoping braucht ein Hilfsverb davor: were hoping.",
+     "en": "Hoping needs a helping verb before it: were hoping."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Zu we passt were, nicht was.",
+     "en": "With we use were, not was."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-ho-f1",
+  "type": "find",
+  "pat": "dip.hoping",
+  "prompt": "We were hoping to getting your feedback today.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "get",
+  "fixed": "We were hoping to get your feedback today.",
+  "accepted": [
+   "receive",
+   "have"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „to getting“. Nach hoping to steht die Grundform: hoping to get.",
+    "en": "The error: “to getting”. After hoping to the base form follows: hoping to get."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach hoping to steht keine -ing-Form.",
+     "en": "There is an error: no -ing form follows hoping to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „getting“: Nach hoping to folgt die Grundform.",
+     "en": "The error is in “getting”: after hoping to the base form follows."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-ho-f2",
+  "type": "find",
+  "pat": "dip.hoping",
+  "prompt": "We were hoping to hear back before the end of the week.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: were hoping to + Grundform ist richtig.",
+    "en": "No error: were hoping to + base verb is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach hoping folgt to + Grundform, hier hear.",
+     "en": "No error: hoping is followed by to + base verb, here hear."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-ho-m1",
+  "type": "meaning",
+  "pat": "dip.hoping",
+  "a": "We were hoping to sign next week.",
+  "b": "We hoped to sign last week.",
+  "q": {
+   "de": "Welcher Satz drückt einen Wunsch aus, der noch gilt?",
+   "en": "Which sentence expresses a wish that still holds?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Were hoping meint hier das Jetzt: Wir wollen nächste Woche unterschreiben.",
+    "en": "Right: sentence a. Were hoping refers to now: we want to sign next week."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht hoped mit last week: Der Wunsch gehört der Vergangenheit an.",
+     "en": "In b, hoped with last week puts the wish in the past."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a gilt noch, b ist vorbei.",
+     "en": "Not the same: a still holds, b is over."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-po-k1",
+  "type": "kwt",
+  "pat": "dip.possible",
+  "from": "Can you send the revised proposal today?",
+  "key": "POSSIBLE",
+  "frame": "Would it be ___ the revised proposal today?",
+  "answer": "possible to send",
+  "accepted": [
+   "possible for you to send",
+   "possible for us to send",
+   "possible for me to send"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Would it be possible to send … fragt nach der Sache, nicht nach der Person.",
+    "en": "Right: Would it be possible to send … asks about the thing, not the person."
+   },
+   "wrong": [
+    {
+     "not": [
+      "possible"
+     ],
+     "de": "Das Schlüsselwort possible muss unverändert in der Lücke stehen.",
+     "en": "The key word possible must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach possible folgt üblicherweise to + Grundform, kein that-Satz.",
+     "en": "Possible is usually followed by to + base verb, not a that-clause."
+    },
+    {
+     "if": [
+      "sending"
+     ],
+     "de": "Nach possible steht to + Grundform, keine -ing-Form.",
+     "en": "After possible use to + base verb, not the -ing form."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform braucht to davor: possible to send.",
+     "en": "The base verb needs to before it: possible to send."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-po-k2",
+  "type": "kwt",
+  "pat": "dip.possible",
+  "from": "Could we meet earlier on Thursday?",
+  "key": "POSSIBLE",
+  "frame": "Would it be ___ earlier on Thursday?",
+  "answer": "possible to meet",
+  "accepted": [
+   "possible for us to meet",
+   "possible for you to meet",
+   "possible to get together"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Would it be possible to meet … ist die höfliche Frage nach der Machbarkeit.",
+    "en": "Right: Would it be possible to meet … is the polite question about feasibility."
+   },
+   "wrong": [
+    {
+     "not": [
+      "possible"
+     ],
+     "de": "Das Schlüsselwort possible muss unverändert in der Lücke stehen.",
+     "en": "The key word possible must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "that"
+     ],
+     "de": "Nach possible folgt üblicherweise to + Grundform, kein that-Satz.",
+     "en": "Possible is usually followed by to + base verb, not a that-clause."
+    },
+    {
+     "if": [
+      "meeting"
+     ],
+     "de": "Nach possible steht to + Grundform, keine -ing-Form.",
+     "en": "After possible use to + base verb, not the -ing form."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Die Grundform braucht to davor: possible to meet.",
+     "en": "The base verb needs to before it: possible to meet."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-po-f1",
+  "type": "find",
+  "pat": "dip.possible",
+  "prompt": "Would it possible to move the review to Monday?",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "it be possible",
+  "fixed": "Would it be possible to move the review to Monday?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „it possible“. Es fehlt be: Would it be possible.",
+    "en": "The error: “it possible”. Be is missing: Would it be possible."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: In der Frage fehlt das Verb be.",
+     "en": "There is an error: the verb be is missing in the question."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „it possible“: Zwischen it und possible fehlt be.",
+     "en": "The error is in “it possible”: be is missing between it and possible."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-po-f2",
+  "type": "find",
+  "pat": "dip.possible",
+  "prompt": "Would it be possible for you sending the contract today?",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "to send",
+  "fixed": "Would it be possible for you to send the contract today?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „sending“. Nach for you folgt to + Grundform: to send.",
+    "en": "The error: “sending”. After for you comes to + base verb: to send."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach for you steht keine -ing-Form.",
+     "en": "There is an error: after for you there is no -ing form."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „sending“: Hier braucht es to + Grundform.",
+     "en": "The error is in “sending”: it needs to + base verb here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-po-m1",
+  "type": "meaning",
+  "pat": "dip.possible",
+  "a": "Would it be possible to move the call?",
+  "b": "Is it possible to move the call?",
+  "q": {
+   "de": "Welche Frage klingt vorsichtiger?",
+   "en": "Which question sounds more tentative?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Would schafft Abstand: Die Frage lässt ein Nein leichter zu.",
+    "en": "Right: sentence a. Would adds distance: the question makes a no easier."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b fragt Is it possible direkter, ohne den Abstand von would.",
+     "en": "In b, Is it possible asks more directly, without the distance of would."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich im Ton: Nur a hat den Abstand von would.",
+     "en": "Not the same in tone: only a has the distance of would."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-un-k1",
+  "type": "kwt",
+  "pat": "dip.understate",
+  "from": "Your offer is too expensive for our budget.",
+  "key": "STRETCH",
+  "frame": "Your offer ___ for our budget.",
+  "answer": "could be a stretch",
+  "accepted": [
+   "might be a stretch",
+   "may be a stretch",
+   "would be a stretch",
+   "could be quite a stretch",
+   "might be quite a stretch",
+   "would be quite a stretch"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: could be a stretch nennt den Einwand, ohne hart zu klingen.",
+    "en": "Right: could be a stretch names the objection without sounding harsh."
+   },
+   "wrong": [
+    {
+     "not": [
+      "stretch"
+     ],
+     "de": "Das Schlüsselwort stretch muss unverändert in der Lücke stehen.",
+     "en": "The key word stretch must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Will legt den Einwand fest. Could lässt ihn offen.",
+     "en": "Will fixes the objection. Could leaves it open."
+    },
+    {
+     "not": [
+      "could",
+      "might",
+      "may",
+      "would"
+     ],
+     "de": "Gesucht ist ein Modalverb mit Abstand: could be a stretch.",
+     "en": "A modal with distance is needed: could be a stretch."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-un-k2",
+  "type": "kwt",
+  "pat": "dip.understate",
+  "from": "That deadline is impossible for us.",
+  "key": "TRICKY",
+  "frame": "That deadline ___ for us.",
+  "answer": "could be tricky",
+  "accepted": [
+   "might be tricky",
+   "may be tricky",
+   "would be tricky",
+   "could get tricky",
+   "could become tricky",
+   "could prove tricky",
+   "might prove tricky",
+   "could be a bit tricky",
+   "might be a bit tricky",
+   "would be a bit tricky",
+   "could be quite tricky",
+   "might be quite tricky",
+   "would be quite tricky",
+   "could be pretty tricky",
+   "could be rather tricky",
+   "could be a little tricky",
+   "could be somewhat tricky",
+   "might be a little tricky",
+   "might be rather tricky",
+   "would be a little tricky"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: could be tricky ist ein höflicher Einwand statt „impossible“.",
+    "en": "Right: could be tricky is a polite objection instead of “impossible”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "tricky"
+     ],
+     "de": "Das Schlüsselwort tricky muss unverändert in der Lücke stehen.",
+     "en": "The key word tricky must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "impossible"
+     ],
+     "de": "Impossible ist ein hartes Nein. Der Satz soll Abstand halten.",
+     "en": "Impossible is a flat no. The sentence should keep its distance."
+    },
+    {
+     "not": [
+      "could",
+      "might",
+      "may",
+      "would"
+     ],
+     "de": "Gesucht ist ein Modalverb mit Abstand: could be tricky.",
+     "en": "A modal with distance is needed: could be tricky."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-un-f1",
+  "type": "find",
+  "pat": "dip.understate",
+  "prompt": "That would be a bit challenge for our team.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "a bit of a challenge",
+  "fixed": "That would be a bit of a challenge for our team.",
+  "accepted": [
+   "a bit challenging",
+   "a little challenging",
+   "a little bit challenging",
+   "somewhat challenging",
+   "a challenge"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „a bit challenge“. Vor einem Nomen heißt es a bit of a challenge.",
+    "en": "The error: “a bit challenge”. Before a noun it is a bit of a challenge."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor dem Nomen challenge fehlt of a.",
+     "en": "There is an error: of a is missing before the noun challenge."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „a bit challenge“: a bit braucht of a vor dem Nomen.",
+     "en": "The error is in “a bit challenge”: a bit needs of a before the noun."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-un-f2",
+  "type": "find",
+  "pat": "dip.understate",
+  "prompt": "A Friday launch might be a bit of a stretch for the team.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: a bit of a stretch ist die feste, höfliche Form.",
+    "en": "No error: a bit of a stretch is the fixed, polite form."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: might be a bit of a stretch ist ein weicher Einwand.",
+     "en": "No error: might be a bit of a stretch is a soft objection."
+    }
+   ]
+  }
+ },
+ {
+  "id": "dp-un-m1",
+  "type": "meaning",
+  "pat": "dip.understate",
+  "a": "That timeline is impossible for us.",
+  "b": "That timeline could be tricky for us.",
+  "q": {
+   "de": "Welcher Satz lässt noch Spielraum für eine Lösung?",
+   "en": "Which sentence still leaves room for a solution?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Could be tricky ist ein weicher Einwand, über den man reden kann.",
+    "en": "Right: sentence b. Could be tricky is a soft objection that leaves room to talk."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a sagt impossible klar Nein, und es bleibt kein Spielraum.",
+     "en": "In a, impossible says a flat no: no room is left."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a schließt aus, b lässt es offen.",
+     "en": "Not the same: a rules it out, b leaves it open."
+    }
+   ]
+  }
+ }
+]

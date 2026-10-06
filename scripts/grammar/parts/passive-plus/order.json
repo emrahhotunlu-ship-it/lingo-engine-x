@@ -1,0 +1,199 @@
+[
+ {
+  "pat": "pp.modal",
+  "en": "The new policy must be approved by the board before launch.",
+  "de": "Die neue Richtlinie muss vor dem Start vom Vorstand genehmigt werden.",
+  "chunks": [
+   "the new policy",
+   "must",
+   "be approved",
+   "by the board",
+   "before launch"
+  ],
+  "alt": [
+   "Before launch, the new policy must be approved by the board.",
+   "The new policy must be approved before launch by the board."
+  ],
+  "why": [
+   "Nach dem Modalverb stehen be und das Partizip: must be approved. Wer genehmigt, folgt mit by.",
+   "After the modal come be and the participle: must be approved. The doer follows with by."
+  ],
+  "bad": "The new policy must approved by the board before launch.",
+  "trap": {
+   "tile": "be approved",
+   "instead": "approved",
+   "why": {
+    "de": "Im Deutschen steht „werden“ am Ende („genehmigt werden“). Im Englischen steht be direkt nach dem Modal, vor dem Partizip.",
+    "en": "In German werden comes last (“genehmigt werden”). In English be follows the modal directly, before the participle."
+   }
+  }
+ },
+ {
+  "pat": "pp.modal",
+  "en": "Our passwords should not be shared with anyone outside the team.",
+  "de": "Unsere Passwörter sollten nicht an Personen außerhalb des Teams weitergegeben werden.",
+  "chunks": [
+   "our passwords",
+   "should not",
+   "be shared",
+   "with anyone",
+   "outside the team"
+  ],
+  "single": "Outside the team gehört zu anyone und bleibt ein Block; die Passivkette should not be shared steht davor.",
+  "why": [
+   "Nach should not folgen be und das Partizip: should not be shared. Der Empfänger steht mit with danach.",
+   "After should not come be and the participle: should not be shared. The recipient follows with with."
+  ],
+  "bad": "Our passwords should not been shared with anyone outside the team."
+ },
+ {
+  "pat": "pp.perfect",
+  "en": "The invoices had already been paid when the auditors arrived.",
+  "de": "Die Rechnungen waren schon bezahlt worden, als die Prüfer ankamen.",
+  "chunks": [
+   "the invoices",
+   "had already been",
+   "paid",
+   "when",
+   "the auditors",
+   "arrived"
+  ],
+  "alt": [
+   "When the auditors arrived, the invoices had already been paid."
+  ],
+  "why": [
+   "Die Zahlung lag vor der Ankunft der Prüfer, also had been paid. Der Zeitsatz mit when kann auch vorn stehen.",
+   "The payment came before the auditors arrived, so had been paid. The when-clause can also come first."
+  ],
+  "bad": "The invoices have already been paid when the auditors arrived.",
+  "trap": {
+   "tile": "had already been",
+   "instead": "have already been",
+   "why": {
+    "de": "Die Zahlung liegt vor dem Moment, als die Prüfer kamen: had been. have been würde bis jetzt reichen.",
+    "en": "The payment came before the moment the auditors arrived: had been. have been would reach up to now."
+   }
+  }
+ },
+ {
+  "pat": "pp.perfect",
+  "en": "Your order was shipped from our warehouse yesterday morning.",
+  "de": "Ihre Bestellung wurde gestern Morgen aus unserem Lager versandt.",
+  "chunks": [
+   "your order",
+   "was shipped",
+   "from",
+   "our warehouse",
+   "yesterday morning"
+  ],
+  "alt": [
+   "Yesterday morning, your order was shipped from our warehouse.",
+   "Your order was shipped yesterday morning from our warehouse."
+  ],
+  "why": [
+   "Mit yesterday morning steht ein fester Zeitpunkt, also das Simple Past: was shipped.",
+   "With yesterday morning a finished time is given, so the simple past is used: was shipped."
+  ],
+  "bad": "Your order has been shipped from our warehouse yesterday morning.",
+  "trap": {
+   "tile": "was shipped",
+   "instead": "has been shipped",
+   "why": {
+    "de": "Im Deutschen geht „ist versandt worden“ auch mit „gestern“. Im Englischen verlangt ein fester Zeitpunkt wie yesterday morning das Simple Past: was shipped.",
+    "en": "German allows “ist versandt worden” with “gestern”. English needs the simple past after a finished time like yesterday morning: was shipped."
+   }
+  }
+ },
+ {
+  "pat": "pp.personal",
+  "en": "The company is said to be planning a major restructuring.",
+  "de": "Das Unternehmen soll eine große Umstrukturierung planen.",
+  "chunks": [
+   "the company",
+   "is",
+   "said",
+   "to be planning",
+   "a major restructuring"
+  ],
+  "single": "Is said to be planning ist eine feste Kette aus Passiv und to-Infinitiv; das Objekt folgt direkt dahinter.",
+  "why": [
+   "Das Gerücht steht im Passiv, danach folgt to + Infinitiv: is said to be planning.",
+   "The rumor is in the passive, followed by to + infinitive: is said to be planning."
+  ],
+  "bad": "The company is said planning a major restructuring.",
+  "trap": {
+   "tile": "to be planning",
+   "instead": "planning",
+   "why": {
+    "de": "Im Deutschen steckt das Gerücht im Modalverb („Es soll planen“). Im Englischen folgt auf is said ein to + Infinitiv.",
+    "en": "In German the rumor sits in the modal verb (“Es soll planen”). In English is said is followed by to + infinitive."
+   }
+  }
+ },
+ {
+  "pat": "pp.personal",
+  "en": "The new hire is believed to have worked for a competitor before.",
+  "de": "Der neue Mitarbeiter soll früher für einen Konkurrenten gearbeitet haben.",
+  "chunks": [
+   "the new hire",
+   "is believed",
+   "to have worked",
+   "for a competitor",
+   "before"
+  ],
+  "single": "Is believed to have worked bildet eine Kette; for a competitor und before folgen in dieser Reihenfolge, sonst klingt es schief.",
+  "why": [
+   "Das Arbeiten liegt vor der Annahme, daher to have worked. Is believed bleibt im Präsens.",
+   "The working came before the belief, hence to have worked. Is believed stays in the present."
+  ],
+  "bad": "The new hire is believed to work for a competitor before."
+ },
+ {
+  "pat": "pp.being",
+  "en": "Nobody enjoys being criticized in front of the whole team.",
+  "de": "Niemand mag es, vor dem ganzen Team kritisiert zu werden.",
+  "chunks": [
+   "nobody",
+   "enjoys",
+   "being criticized",
+   "in front of",
+   "the whole team"
+  ],
+  "alt": [
+   "In front of the whole team, nobody enjoys being criticized."
+  ],
+  "why": [
+   "Nach enjoy steht die -ing-Form, im Passiv being + Partizip: enjoys being criticized.",
+   "After enjoy the -ing form follows, in the passive being + participle: enjoys being criticized."
+  ],
+  "bad": "Nobody enjoys to be criticized in front of the whole team.",
+  "trap": {
+   "tile": "being criticized",
+   "instead": "to be criticized",
+   "why": {
+    "de": "Im Deutschen heißt es „kritisiert zu werden“, also zu + Infinitiv. Das wird gern als to be übertragen, doch enjoy verlangt -ing.",
+    "en": "German says “kritisiert zu werden”, so zu + infinitive. That is often carried over as to be, but enjoy requires -ing."
+   }
+  }
+ },
+ {
+  "pat": "pp.being",
+  "en": "He joined the call without being invited.",
+  "de": "Er nahm am Anruf teil, ohne eingeladen zu werden.",
+  "chunks": [
+   "he",
+   "joined",
+   "the call",
+   "without",
+   "being invited"
+  ],
+  "alt": [
+   "Without being invited, he joined the call."
+  ],
+  "why": [
+   "Nach without steht -ing, im Passiv being + Partizip: without being invited.",
+   "After without comes -ing, in the passive being + participle: without being invited."
+  ],
+  "bad": "He joined the call without invited."
+ }
+]

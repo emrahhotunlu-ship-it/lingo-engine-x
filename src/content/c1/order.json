@@ -1146,6 +1146,376 @@
    "bad": "With using the new search, you can find any invoice in seconds."
   },
   {
+   "pat": "dip.wondering",
+   "en": "I was wondering whether you could walk me through the proposal.",
+   "de": "Ich wollte fragen, ob Sie mir das Angebot Schritt für Schritt erklären könnten. (höflich, vorsichtig)",
+   "chunks": [
+    "I",
+    "was wondering",
+    "whether",
+    "you could",
+    "walk me through",
+    "the proposal"
+   ],
+   "single": "Nach whether bleibt die normale Reihenfolge you could; walk me through und the proposal gehören fest zusammen.",
+   "why": [
+    "Nach whether steht die normale Reihenfolge: you could, nicht could you. Die Vergangenheit macht die Bitte weich.",
+    "After whether the normal order follows: you could, not could you. The past tense softens the request."
+   ],
+   "bad": "I was wondering whether could you walk me through the proposal.",
+   "trap": {
+    "tile": "you could",
+    "instead": "could you",
+    "why": {
+     "de": "Die direkte Frage „Could you …?“ klingt noch nach. In der indirekten Frage steht aber das Subjekt vor could.",
+     "en": "The direct question “Could you …?” still echoes. In an indirect question the subject comes before could."
+    }
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "pat": "dip.wondering",
+   "en": "I was wondering if we could reschedule the review for Thursday.",
+   "de": "Ich wollte fragen, ob wir die Prüfung auf Donnerstag verschieben könnten. (höflich, vorsichtig)",
+   "chunks": [
+    "I",
+    "was wondering",
+    "if",
+    "we could",
+    "reschedule",
+    "the review",
+    "for Thursday"
+   ],
+   "single": "Der Block we could steht direkt nach if; for Thursday gehört ans Ende, denn es bezieht sich auf reschedule.",
+   "why": [
+    "Nach if folgt zuerst das Subjekt, dann could: if we could. Das Ziel for Thursday steht am Ende.",
+    "After if the subject comes first, then could: if we could. The target for Thursday goes at the end."
+   ],
+   "bad": "I was wondering if could we reschedule the review for Thursday.",
+   "topic": "c1-diplomacy"
+  },
+  {
+   "pat": "dip.hoping",
+   "en": "We were hoping to hear from you before the end of the week.",
+   "de": "Wir hatten gehofft, vor Ende der Woche von Ihnen zu hören. (höflich, vorsichtig)",
+   "chunks": [
+    "we",
+    "were hoping",
+    "to hear",
+    "from you",
+    "before the end",
+    "of the week"
+   ],
+   "alt": [
+    "Before the end of the week, we were hoping to hear from you."
+   ],
+   "why": [
+    "Nach hoping folgt to + Grundform: to hear. Die Zeitangabe kann auch am Anfang stehen.",
+    "After hoping comes to + base verb: to hear. The time phrase can also come first."
+   ],
+   "bad": "We were hoping hearing from you before the end of the week.",
+   "trap": {
+    "tile": "to hear",
+    "instead": "hearing",
+    "why": {
+     "de": "Nach hope steht der Infinitiv mit to, nie die -ing-Form. Das unterscheidet es von look forward to.",
+     "en": "After hope comes the to-infinitive, never the -ing form. That sets it apart from look forward to."
+    }
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "pat": "dip.hoping",
+   "en": "We were hoping you could introduce us to the new team lead.",
+   "de": "Wir hatten gehofft, du könntest uns dem neuen Teamleiter vorstellen. (höflich, vorsichtig)",
+   "chunks": [
+    "we",
+    "were hoping",
+    "you could",
+    "introduce us",
+    "to the new team lead"
+   ],
+   "single": "You could folgt direkt auf were hoping; introduce us to the new team lead bleibt als feste Folge am Ende.",
+   "why": [
+    "Nach were hoping folgt could, nicht can: Die Vergangenheit zieht den ganzen Satz mit.",
+    "After were hoping comes could, not can: the past tense carries the whole sentence along."
+   ],
+   "bad": "We were hoping you can introduce us to the new team lead.",
+   "topic": "c1-diplomacy"
+  },
+  {
+   "pat": "dip.possible",
+   "en": "Would it be possible to move the workshop to the afternoon?",
+   "de": "Wäre es möglich, den Workshop auf den Nachmittag zu verschieben? (höflich, vorsichtig)",
+   "chunks": [
+    "would it be",
+    "possible",
+    "to move",
+    "the workshop",
+    "to the afternoon"
+   ],
+   "single": "Would it be possible bildet eine feste Frage; danach folgen to move und der Rest in fester Reihenfolge.",
+   "why": [
+    "Nach Would it be possible folgt üblicherweise to + Grundform: to move. Ein that-Satz ist hier ungewöhnlich.",
+    "Would it be possible is usually followed by to + base verb: to move. A that-clause is unusual here."
+   ],
+   "bad": "Would it be possible that you move the workshop to the afternoon?",
+   "trap": {
+    "tile": "to move",
+    "instead": "that you move",
+    "why": {
+     "de": "Auf Deutsch geht „möglich, dass Sie … verschieben“. Im Englischen folgt nach Would it be possible üblicherweise to + Grundform.",
+     "en": "German allows “möglich, dass Sie … verschieben”. In English Would it be possible is usually followed by to + base verb."
+    }
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "pat": "dip.possible",
+   "en": "Would it be possible for us to see the proposal beforehand?",
+   "de": "Wäre es möglich, dass wir den Vorschlag vorab sehen? (höflich, vorsichtig)",
+   "chunks": [
+    "would it be",
+    "possible",
+    "for us",
+    "to see",
+    "the proposal",
+    "beforehand"
+   ],
+   "alt": [
+    "Beforehand, would it be possible for us to see the proposal?"
+   ],
+   "why": [
+    "For us nennt die Person direkt nach possible; danach folgt to + Grundform. Beforehand kann auch vorn stehen.",
+    "For us names the person right after possible; to + base verb follows. Beforehand can also come first."
+   ],
+   "bad": "Would it be possible for us seeing the proposal beforehand?",
+   "topic": "c1-diplomacy"
+  },
+  {
+   "pat": "dip.understate",
+   "en": "That timeline could be a bit of a stretch for us.",
+   "de": "Dieser Zeitplan könnte für uns etwas sportlich werden. (höflich, vorsichtig)",
+   "chunks": [
+    "that timeline",
+    "could be",
+    "a bit of a",
+    "stretch",
+    "for us"
+   ],
+   "alt": [
+    "For us, that timeline could be a bit of a stretch."
+   ],
+   "why": [
+    "Could be macht den Einwand weich. Vor einem Nomen heißt es a bit of a stretch, nicht a bit stretch.",
+    "Could be softens the objection. Before a noun it is a bit of a stretch, not a bit stretch."
+   ],
+   "bad": "That timeline could be a bit stretch for us.",
+   "trap": {
+    "tile": "a bit of a",
+    "instead": "a bit",
+    "why": {
+     "de": "Das Deutsche sagt „ein bisschen Zumutung“ ohne Artikel. Im Englischen braucht das Nomen nach a bit das Wort of a.",
+     "en": "German says “ein bisschen Zumutung” with no article. In English the noun after a bit needs of a."
+    }
+   },
+   "topic": "c1-diplomacy"
+  },
+  {
+   "pat": "dip.understate",
+   "en": "That might be a little challenging for our team.",
+   "de": "Das könnte für unser Team etwas herausfordernd werden. (höflich, vorsichtig)",
+   "chunks": [
+    "that",
+    "might be",
+    "a little",
+    "challenging",
+    "for our team"
+   ],
+   "alt": [
+    "For our team, that might be a little challenging."
+   ],
+   "why": [
+    "Might be und a little nehmen dem Einwand die Schärfe; das Adjektiv challenging steht direkt danach.",
+    "Might be and a little take the edge off the objection; the adjective challenging follows directly."
+   ],
+   "bad": "That might a little be challenging for our team.",
+   "topic": "c1-diplomacy"
+  },
+  {
+   "pat": "dm.concede",
+   "en": "The pilot went well. That said, it exposed two security gaps.",
+   "de": "Der Pilot lief gut. Allerdings hat er zwei Sicherheitslücken offengelegt.",
+   "chunks": [
+    "the pilot",
+    "went well",
+    "that said",
+    "it",
+    "exposed",
+    "two security gaps"
+   ],
+   "single": "Das Pronomen it verweist auf den Pilot, deshalb muss der Pilot-Satz zuerst kommen.",
+   "why": [
+    "That said steht vorn im zweiten Satz und schränkt den guten Pilot ein. Danach folgt ein normaler Hauptsatz, ohne but.",
+    "That said opens the second sentence and qualifies the good pilot. A normal main clause follows, with no but."
+   ],
+   "bad": "The pilot went well. That said, but it exposed two security gaps.",
+   "trap": {
+    "tile": "that said",
+    "instead": "that said, but",
+    "why": {
+     "de": "Der Reflex ist but, das passt zu „aber“. That said nimmt aber dessen Platz ein: nie beides zusammen.",
+     "en": "The reflex is but, which matches “aber”. That said takes its place: never both together."
+    }
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "pat": "dm.contrast",
+   "en": "The cloud version is cheaper. On the other hand, it needs more trust in the vendor.",
+   "de": "Die Cloud-Version ist günstiger. Andererseits braucht sie mehr Vertrauen in den Anbieter.",
+   "chunks": [
+    "the cloud version",
+    "is cheaper",
+    "on the other hand",
+    "it",
+    "needs",
+    "more trust in the vendor"
+   ],
+   "why": [
+    "On the other hand eröffnet den zweiten Satz und stellt die Gegenseite vor. Es heißt hand, nicht side, trotz „andere Seite“.",
+    "On the other hand opens the second sentence and introduces the other side. It is hand, not side, despite “andere Seite”."
+   ],
+   "bad": "The cloud version is cheaper. On the other side, it needs more trust in the vendor.",
+   "trap": {
+    "tile": "on the other hand",
+    "instead": "on the other side",
+    "why": {
+     "de": "„Auf der anderen Seite“ wörtlich übersetzt ergibt on the other side. Englisch sagt aber on the other hand.",
+     "en": "Translated literally, “auf der anderen Seite” gives on the other side. English says on the other hand."
+    }
+   },
+   "alt": [
+    "The cloud version is cheaper. It, on the other hand, needs more trust in the vendor."
+   ],
+   "topic": "c1-discourse"
+  },
+  {
+   "pat": "dm.build",
+   "en": "Anna proposed a pilot. To build on that, we could add a second team.",
+   "de": "Anna hat einen Pilot vorgeschlagen. Darauf aufbauend könnten wir ein zweites Team ergänzen.",
+   "chunks": [
+    "Anna",
+    "proposed",
+    "a pilot",
+    "to build on that",
+    "we",
+    "could add",
+    "a second team"
+   ],
+   "alt": [
+    "Anna proposed a pilot. We could add a second team to build on that."
+   ],
+   "why": [
+    "To build on that bezieht sich auf den Pilot und steht vorn mit Komma. Nach build folgt on, kein up.",
+    "To build on that refers to the pilot and sits up front with a comma. After build comes on, with no up."
+   ],
+   "bad": "Anna proposed a pilot. To build up on that, we could add a second team.",
+   "trap": {
+    "tile": "to build on that",
+    "instead": "to build up on that",
+    "why": {
+     "de": "„Darauf aufbauen“ legt build up on nahe: auf wird on, aufbauen wird build up. Englisch sagt nur build on.",
+     "en": "“Darauf aufbauen” suggests build up on: auf becomes on, aufbauen becomes build up. English says only build on."
+    }
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "pat": "dm.return",
+   "en": "Coming back to the budget, we need approval by May.",
+   "de": "Zurück zum Budget: Wir brauchen bis Mai eine Freigabe.",
+   "chunks": [
+    "coming back to",
+    "the budget",
+    "we need",
+    "approval",
+    "by May"
+   ],
+   "single": "Coming back to opens the sentence and names the topic before the statement.",
+   "why": [
+    "Coming back to nennt zuerst das Thema, dann folgt nach dem Komma die Aussage. Nach back steht to, nicht on.",
+    "Coming back to names the topic first, then the statement follows after the comma. After back comes to, not on."
+   ],
+   "bad": "Coming back on the budget, we need approval by May.",
+   "trap": {
+    "tile": "coming back to",
+    "instead": "coming back on",
+    "why": {
+     "de": "Wer „auf etwas zurückkommen“ übersetzt, nimmt on für „auf“. Englisch braucht hier to.",
+     "en": "Translating “auf etwas zurückkommen”, you pick on for “auf”. English needs to here."
+    }
+   },
+   "topic": "c1-discourse"
+  },
+  {
+   "pat": "dm.sum",
+   "en": "In short, the migration saved us two weeks of work.",
+   "de": "Kurz gesagt hat uns die Migration zwei Wochen Arbeit gespart.",
+   "chunks": [
+    "in short",
+    "the migration",
+    "saved",
+    "us",
+    "two weeks of work"
+   ],
+   "why": [
+    "In short eröffnet das Fazit und wird durch ein Komma abgesetzt. Danach folgt ein normaler Hauptsatz.",
+    "In short opens the conclusion and is set off by a comma. A normal main clause follows."
+   ],
+   "bad": "In resume, the migration saved us two weeks of work.",
+   "trap": {
+    "tile": "in short",
+    "instead": "in resume",
+    "why": {
+     "de": "„Resümee“ klingt wie resume. Englisch sagt in summary oder in short.",
+     "en": "“Resümee” sounds like resume. English says in summary or in short."
+    }
+   },
+   "alt": [
+    "The migration, in short, saved us two weeks of work."
+   ],
+   "topic": "c1-discourse"
+  },
+  {
+   "pat": "dm.concede",
+   "en": "We like the proposal. Having said that, we still want to compare it with two other offers.",
+   "de": "Wir mögen den Vorschlag. Allerdings wollen wir ihn noch mit zwei anderen Angeboten vergleichen.",
+   "chunks": [
+    "we like",
+    "the proposal",
+    "having said that",
+    "we still want",
+    "to compare it",
+    "with two other offers"
+   ],
+   "single": "Das Pronomen it verweist auf den Vorschlag, deshalb muss dieser Satz zuerst kommen.",
+   "why": [
+    "Having said that steht vorn im zweiten Satz und schränkt das Lob ein. Es heißt said (Partizip), nicht say.",
+    "Having said that opens the second sentence and limits the praise. It is said (participle), not say."
+   ],
+   "bad": "We like the proposal. Having say that, we still want to compare it with two other offers.",
+   "trap": {
+    "tile": "having said that",
+    "instead": "having say that",
+    "why": {
+     "de": "Nach Having steht immer das Partizip said. Die Grundform say klingt vertraut, ist hier aber falsch.",
+     "en": "Having is always followed by the participle said. The base form say sounds familiar but is wrong here."
+    }
+   },
+   "topic": "c1-discourse"
+  },
+  {
    "pat": "hg.modal",
    "en": "The migration might take a few days longer than planned.",
    "de": "Die Migration könnte ein paar Tage länger dauern als geplant. (vorsichtig, als Prognose)",
@@ -1509,6 +1879,249 @@
     }
    },
    "topic": "cond-alt"
+  },
+  {
+   "pat": "cn.zero",
+   "en": "If a payment fails, the system sends an alert.",
+   "de": "Wenn eine Zahlung fehlschlägt, sendet das System eine Warnung.",
+   "chunks": [
+    "if a payment",
+    "fails",
+    "the system",
+    "sends",
+    "an alert"
+   ],
+   "alt": [
+    "The system sends an alert if a payment fails."
+   ],
+   "why": [
+    "Feste Regel: if + Präsens, Präsens. Beide Teile stehen im Präsens, ohne will und ohne would.",
+    "Fixed rule: if + present, present. Both parts are in the present, with no will and no would."
+   ],
+   "bad": "If a payment would fail, the system sends an alert.",
+   "trap": {
+    "tile": "fails",
+    "instead": "would fail",
+    "why": {
+     "de": "Der Reflex „würde = would“ verführt zu would fail. Im if-Teil einer festen Regel steht aber das Präsens.",
+     "en": "The reflex “würde = would” tempts you into would fail. The if-clause of a fixed rule takes the present."
+    }
+   },
+   "topic": "conditionals"
+  },
+  {
+   "pat": "cn.zero",
+   "en": "When the server overheats, it shuts down automatically.",
+   "de": "Wenn der Server überhitzt, schaltet er sich automatisch ab.",
+   "chunks": [
+    "when the server",
+    "overheats",
+    "it",
+    "shuts down",
+    "automatically"
+   ],
+   "alt": [
+    "It shuts down automatically when the server overheats.",
+    "It automatically shuts down when the server overheats."
+   ],
+   "why": [
+    "Feste Regel: Beide Teile stehen im Präsens. when lässt sich hier durch if ersetzen.",
+    "Fixed rule: both parts are in the present. when can be replaced by if here."
+   ],
+   "bad": "When the server overheats, it would shut down automatically.",
+   "trap": {
+    "tile": "shuts down",
+    "instead": "would shut down",
+    "why": {
+     "de": "would klingt vorsichtig, macht aus der Regel aber eine Annahme. Bei festen Abläufen steht das Präsens.",
+     "en": "would sounds cautious but turns the rule into an assumption. Fixed processes take the present."
+    }
+   },
+   "topic": "conditionals"
+  },
+  {
+   "pat": "cn.first",
+   "en": "If the client approves the budget, we'll start on Monday.",
+   "de": "Wenn der Kunde das Budget freigibt, starten wir am Montag.",
+   "chunks": [
+    "if the client",
+    "approves",
+    "the budget",
+    "we'll",
+    "start",
+    "on Monday"
+   ],
+   "alt": [
+    "We'll start on Monday if the client approves the budget."
+   ],
+   "why": [
+    "Mögliche Zukunft: Im if-Teil steht das Präsens (approves), will steht nur im Hauptsatz (we'll start).",
+    "Possible future: the if-clause takes the present (approves), will appears only in the main clause (we'll start)."
+   ],
+   "bad": "If the client will approve the budget, we'll start on Monday.",
+   "trap": {
+    "tile": "approves",
+    "instead": "will approve",
+    "why": {
+     "de": "Der Reflex „Zukunft = will“ verführt zu will approve. Nach if steht bei möglicher Zukunft aber das Präsens.",
+     "en": "The reflex “future = will” tempts you into will approve. After if, a possible future takes the present."
+    }
+   },
+   "topic": "conditionals"
+  },
+  {
+   "pat": "cn.second",
+   "en": "If we had a bigger team, we would finish the project sooner.",
+   "de": "Wenn wir ein größeres Team hätten, würden wir das Projekt früher abschließen.",
+   "chunks": [
+    "if we",
+    "had",
+    "a bigger team",
+    "we",
+    "would finish",
+    "the project",
+    "sooner"
+   ],
+   "alt": [
+    "We would finish the project sooner if we had a bigger team."
+   ],
+   "why": [
+    "Annahme für jetzt: if + Past (had), Hauptsatz would + Grundform. Das Past meint hier nicht „früher“.",
+    "Assumption for now: if + past (had), main clause would + base form. The past does not mean “earlier” here."
+   ],
+   "bad": "If we would have a bigger team, we would finish the project sooner.",
+   "trap": {
+    "tile": "had",
+    "instead": "would have",
+    "why": {
+     "de": "Das deutsche „wenn wir ein größeres Team haben würden“ führt zu would have. Im Englischen steht im if-Teil nur das Past: had.",
+     "en": "The German “wenn wir ein größeres Team haben würden” leads to would have. English uses only the past in the if-clause: had."
+    }
+   },
+   "topic": "conditionals"
+  },
+  {
+   "pat": "cn.were",
+   "en": "If I were you, I would renegotiate the price first.",
+   "de": "An deiner Stelle würde ich zuerst den Preis neu verhandeln.",
+   "chunks": [
+    "if I were you",
+    "I would",
+    "renegotiate",
+    "the price",
+    "first"
+   ],
+   "alt": [
+    "I would renegotiate the price first if I were you.",
+    "I would first renegotiate the price if I were you.",
+    "If I were you, I would first renegotiate the price."
+   ],
+   "why": [
+    "If I were you gibt einen Rat. Im if-Teil steht were, im Hauptsatz would + Grundform.",
+    "If I were you gives advice. The if-clause takes were, the main clause would + base form."
+   ],
+   "bad": "If I would be you, I would renegotiate the price first.",
+   "trap": {
+    "tile": "if I were you",
+    "instead": "if I would be you",
+    "why": {
+     "de": "Kein Übersetzungsfehler: Das deutsche „wäre“ entspricht genau were. Der Fehler entsteht, wenn man sich unsicher auf would be rettet.",
+     "en": "Not a translation error: the German “wäre” matches were exactly. The mistake appears when you fall back on would be out of doubt."
+    }
+   },
+   "topic": "conditionals"
+  },
+  {
+   "pat": "cn.third",
+   "en": "If we had tested the update earlier, we would have caught the bug.",
+   "de": "Wenn wir das Update früher getestet hätten, hätten wir den Fehler entdeckt.",
+   "chunks": [
+    "if we",
+    "had tested",
+    "the update",
+    "earlier",
+    "we",
+    "would have caught",
+    "the bug"
+   ],
+   "alt": [
+    "We would have caught the bug if we had tested the update earlier."
+   ],
+   "why": [
+    "Der Rückblick ist vorbei: if + Past Perfect (had tested), Hauptsatz would have + 3. Form (would have caught).",
+    "Over: if + Past Perfect (had tested), main clause would have + participle (would have caught)."
+   ],
+   "bad": "If we would have tested the update earlier, we would have caught the bug.",
+   "trap": {
+    "tile": "had tested",
+    "instead": "would have tested",
+    "why": {
+     "de": "Das deutsche „hätten“ steckt in beiden Teilen. Nur der Hauptsatz bekommt would have, der if-Teil braucht had + 3. Form.",
+     "en": "The German “hätten” appears in both parts. Only the main clause gets would have, the if-clause needs had + participle."
+    }
+   },
+   "topic": "conditionals"
+  },
+  {
+   "pat": "cn.if-words",
+   "en": "We won't start the rollout unless legal approves the plan.",
+   "de": "Wir starten den Rollout nicht, es sei denn, die Rechtsabteilung genehmigt den Plan.",
+   "chunks": [
+    "we won't",
+    "start",
+    "the rollout",
+    "unless",
+    "legal",
+    "approves",
+    "the plan"
+   ],
+   "alt": [
+    "Unless legal approves the plan, we won't start the rollout."
+   ],
+   "why": [
+    "unless trägt die Verneinung schon: Nach unless legal folgt approves im Präsens, ohne zweites not.",
+    "unless already carries the negation: unless legal is followed by approves in the present, with no second not."
+   ],
+   "bad": "We won't start the rollout unless legal doesn't approve the plan.",
+   "trap": {
+    "tile": "approves",
+    "instead": "doesn't approve",
+    "why": {
+     "de": "Wer „wenn nicht“ denkt, setzt oft ein zweites not. Unless enthält die Verneinung aber schon.",
+     "en": "Thinking “wenn nicht”, Germans often add a second not. But unless already contains the negation."
+    }
+   },
+   "topic": "conditionals"
+  },
+  {
+   "pat": "cn.if-words",
+   "en": "We can offer the discount provided that you order today.",
+   "de": "Wir können den Rabatt anbieten, vorausgesetzt, du bestellst heute.",
+   "chunks": [
+    "we can offer",
+    "the discount",
+    "provided that",
+    "you",
+    "order",
+    "today"
+   ],
+   "alt": [
+    "Provided that you order today, we can offer the discount."
+   ],
+   "why": [
+    "provided that nennt die Voraussetzung und verlangt das Präsens: you order, kein will.",
+    "provided that names the requirement and takes the present: you order, no will."
+   ],
+   "bad": "We can offer the discount provided that you will order today.",
+   "trap": {
+    "tile": "order",
+    "instead": "will order",
+    "why": {
+     "de": "Der Reflex „Zukunft = will“ verführt zu will order. Nach provided that steht das Präsens.",
+     "en": "The reflex “future = will” tempts you into will order. After provided that the present is used."
+    }
+   },
+   "topic": "conditionals"
   },
   {
    "pat": "ff.going-to",
@@ -2060,6 +2673,424 @@
     }
    },
    "topic": "mixed-cond"
+  },
+  {
+   "pat": "pv.simple",
+   "en": "The new software was installed by IT last Friday.",
+   "de": "Die neue Software wurde letzten Freitag von der IT installiert.",
+   "chunks": [
+    "the new software",
+    "was",
+    "installed",
+    "by IT",
+    "last Friday"
+   ],
+   "alt": [
+    "Last Friday, the new software was installed by IT.",
+    "The new software was installed last Friday by IT."
+   ],
+   "why": [
+    "Passiv Past Simple: was + 3. Form (installed). Der Handelnde folgt mit by, die Zeitangabe last Friday steht vorn oder hinten.",
+    "Past simple passive: was + past participle (installed). The agent follows with by, and last Friday can go at the start or the end."
+   ],
+   "bad": "The new software was installed from IT last Friday.",
+   "trap": {
+    "tile": "by IT",
+    "instead": "from IT",
+    "why": {
+     "de": "Im Deutschen heißt der Handelnde „von“. Wörtlich wird daraus from. Im englischen Passiv steht dafür by.",
+     "en": "In German the agent is “von”. Word for word that becomes from. In the English passive it is by."
+    }
+   },
+   "topic": "passive"
+  },
+  {
+   "pat": "pv.simple",
+   "en": "We weren't told about the delay until Monday.",
+   "de": "Uns wurde die Verzögerung erst am Montag mitgeteilt.",
+   "chunks": [
+    "we",
+    "weren't",
+    "told",
+    "about the delay",
+    "until Monday"
+   ],
+   "alt": [
+    "Until Monday, we weren't told about the delay.",
+    "We weren't told until Monday about the delay."
+   ],
+   "why": [
+    "Passiv Past Simple: weren't + 3. Form (told). Mit uns geschah etwas, deshalb steht we vorn und kein Handelnder im Satz.",
+    "Past simple passive: weren't + past participle (told). Something happened to us, so we comes first and no agent is named."
+   ],
+   "bad": "We didn't told about the delay until Monday.",
+   "topic": "passive"
+  },
+  {
+   "pat": "pv.progressive",
+   "en": "The conference room is being cleaned right now.",
+   "de": "Der Konferenzraum wird gerade gereinigt.",
+   "chunks": [
+    "the",
+    "conference room",
+    "is being",
+    "cleaned",
+    "right now"
+   ],
+   "alt": [
+    "Right now, the conference room is being cleaned."
+   ],
+   "why": [
+    "Passiv Continuous: is + being + 3. Form (cleaned). being zeigt, dass die Arbeit gerade läuft. right now steht vorn oder hinten.",
+    "Continuous passive: is + being + past participle (cleaned). being shows the work is in progress. right now can go at the start or the end."
+   ],
+   "bad": "The conference room is cleaned right now.",
+   "trap": {
+    "tile": "is being",
+    "instead": "is",
+    "why": {
+     "de": "Deutsch sagt nur „wird gereinigt“, egal ob gewohnt oder gerade jetzt. Englisch braucht für den laufenden Vorgang being.",
+     "en": "German just says “wird gereinigt”, whether habitual or right now. English needs being for the process in progress."
+    }
+   },
+   "topic": "passive"
+  },
+  {
+   "pat": "pv.progressive",
+   "en": "Our contracts are being reviewed by the legal team this week.",
+   "de": "Unsere Verträge werden diese Woche von der Rechtsabteilung geprüft.",
+   "chunks": [
+    "our contracts",
+    "are",
+    "being reviewed",
+    "by the legal team",
+    "this week"
+   ],
+   "alt": [
+    "This week, our contracts are being reviewed by the legal team.",
+    "Our contracts are being reviewed this week by the legal team."
+   ],
+   "why": [
+    "Passiv Continuous: are + being + 3. Form (reviewed). Der Handelnde folgt mit by, this week steht vorn, in der Mitte oder hinten.",
+    "Continuous passive: are + being + past participle (reviewed). The agent follows with by, and this week can go at the start, in the middle or at the end."
+   ],
+   "bad": "Our contracts are reviewing by the legal team this week.",
+   "topic": "passive"
+  },
+  {
+   "pat": "pv.perfect",
+   "en": "Our prices have been frozen since January.",
+   "de": "Unsere Preise sind seit Januar eingefroren.",
+   "chunks": [
+    "our prices",
+    "have been",
+    "frozen",
+    "since",
+    "January"
+   ],
+   "alt": [
+    "Since January, our prices have been frozen."
+   ],
+   "why": [
+    "Passiv Present Perfect: have + been + 3. Form (frozen). since January nennt den Beginn, der Zustand gilt bis heute.",
+    "Present perfect passive: have + been + past participle (frozen). since January names the start, and the state holds until today."
+   ],
+   "bad": "Our prices are frozen since January.",
+   "trap": {
+    "tile": "have been",
+    "instead": "are",
+    "why": {
+     "de": "Deutsch nutzt bei „seit“ das Präsens: „sind eingefroren“. Englisch braucht bei since das Perfect: have been frozen.",
+     "en": "German uses the present with “seit”: “sind eingefroren”. English needs the perfect after since: have been frozen."
+    }
+   },
+   "topic": "passive"
+  },
+  {
+   "pat": "pv.modal-future",
+   "en": "The agenda will be sent to all participants tomorrow.",
+   "de": "Die Tagesordnung wird morgen an alle Teilnehmer verschickt.",
+   "chunks": [
+    "the agenda",
+    "will be",
+    "sent",
+    "to all participants",
+    "tomorrow"
+   ],
+   "alt": [
+    "Tomorrow, the agenda will be sent to all participants.",
+    "The agenda will be sent tomorrow to all participants."
+   ],
+   "why": [
+    "Passiv Zukunft: will + be + 3. Form (sent). Die Zeitangabe tomorrow steht vorn oder nach dem Verb.",
+    "Future passive: will + be + past participle (sent). The time word tomorrow can go at the start or after the verb."
+   ],
+   "bad": "The agenda will sent to all participants tomorrow.",
+   "trap": {
+    "tile": "will be",
+    "instead": "will",
+    "why": {
+     "de": "Im Deutschen reicht ein „wird“: „wird verschickt“. Es steht für Zukunft und Passiv zugleich. Englisch braucht will + be.",
+     "en": "German needs only one “wird”: “wird verschickt”. It covers future and passive at once. English needs will + be."
+    }
+   },
+   "topic": "passive"
+  },
+  {
+   "pat": "pv.modal-future",
+   "en": "The report must be finished before the board meeting.",
+   "de": "Der Bericht muss vor der Vorstandssitzung fertiggestellt werden.",
+   "chunks": [
+    "the report",
+    "must",
+    "be",
+    "finished",
+    "before the board meeting"
+   ],
+   "alt": [
+    "Before the board meeting, the report must be finished."
+   ],
+   "why": [
+    "Passiv mit Modalverb: must + be + 3. Form (finished). Nach dem Modalverb steht immer die Grundform be.",
+    "Passive with a modal verb: must + be + past participle (finished). After the modal the base form be always follows."
+   ],
+   "bad": "The report must finished before the board meeting.",
+   "topic": "passive"
+  },
+  {
+   "pat": "pv.prep-agent",
+   "en": "The complaint was dealt with by our support team yesterday.",
+   "de": "Die Beschwerde wurde gestern von unserem Support-Team bearbeitet.",
+   "chunks": [
+    "the complaint",
+    "was",
+    "dealt with",
+    "by our support team",
+    "yesterday"
+   ],
+   "alt": [
+    "Yesterday, the complaint was dealt with by our support team.",
+    "The complaint was dealt with yesterday by our support team."
+   ],
+   "why": [
+    "Bei deal with bleibt with im Passiv beim Verb: was dealt with. Den Handelnden nennt by, er steht meist am Ende.",
+    "With deal with the preposition stays with the verb in the passive: was dealt with. The agent comes with by, usually near the end."
+   ],
+   "bad": "The complaint was dealt by our support team yesterday.",
+   "trap": {
+    "tile": "dealt with",
+    "instead": "dealt",
+    "why": {
+     "de": "Im Deutschen hat „bearbeiten“ keine Präposition. Deshalb fällt with leicht weg. Es gehört aber fest zu deal und bleibt im Passiv.",
+     "en": "In German “bearbeiten” has no preposition, so with is easily dropped. But it belongs to deal and stays in the passive."
+    }
+   },
+   "topic": "passive"
+  },
+  {
+   "pat": "pp.modal",
+   "en": "The new policy must be approved by the board before launch.",
+   "de": "Die neue Richtlinie muss vor dem Start vom Vorstand genehmigt werden.",
+   "chunks": [
+    "the new policy",
+    "must",
+    "be approved",
+    "by the board",
+    "before launch"
+   ],
+   "alt": [
+    "Before launch, the new policy must be approved by the board.",
+    "The new policy must be approved before launch by the board."
+   ],
+   "why": [
+    "Nach dem Modalverb stehen be und das Partizip: must be approved. Wer genehmigt, folgt mit by.",
+    "After the modal come be and the participle: must be approved. The doer follows with by."
+   ],
+   "bad": "The new policy must approved by the board before launch.",
+   "trap": {
+    "tile": "be approved",
+    "instead": "approved",
+    "why": {
+     "de": "Im Deutschen steht „werden“ am Ende („genehmigt werden“). Im Englischen steht be direkt nach dem Modal, vor dem Partizip.",
+     "en": "In German werden comes last (“genehmigt werden”). In English be follows the modal directly, before the participle."
+    }
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "pat": "pp.modal",
+   "en": "Our passwords should not be shared with anyone outside the team.",
+   "de": "Unsere Passwörter sollten nicht an Personen außerhalb des Teams weitergegeben werden.",
+   "chunks": [
+    "our passwords",
+    "should not",
+    "be shared",
+    "with anyone",
+    "outside the team"
+   ],
+   "single": "Outside the team gehört zu anyone und bleibt ein Block; die Passivkette should not be shared steht davor.",
+   "why": [
+    "Nach should not folgen be und das Partizip: should not be shared. Der Empfänger steht mit with danach.",
+    "After should not come be and the participle: should not be shared. The recipient follows with with."
+   ],
+   "bad": "Our passwords should not been shared with anyone outside the team.",
+   "topic": "passive-plus"
+  },
+  {
+   "pat": "pp.perfect",
+   "en": "The invoices had already been paid when the auditors arrived.",
+   "de": "Die Rechnungen waren schon bezahlt worden, als die Prüfer ankamen.",
+   "chunks": [
+    "the invoices",
+    "had already been",
+    "paid",
+    "when",
+    "the auditors",
+    "arrived"
+   ],
+   "alt": [
+    "When the auditors arrived, the invoices had already been paid."
+   ],
+   "why": [
+    "Die Zahlung lag vor der Ankunft der Prüfer, also had been paid. Der Zeitsatz mit when kann auch vorn stehen.",
+    "The payment came before the auditors arrived, so had been paid. The when-clause can also come first."
+   ],
+   "bad": "The invoices have already been paid when the auditors arrived.",
+   "trap": {
+    "tile": "had already been",
+    "instead": "have already been",
+    "why": {
+     "de": "Die Zahlung liegt vor dem Moment, als die Prüfer kamen: had been. have been würde bis jetzt reichen.",
+     "en": "The payment came before the moment the auditors arrived: had been. have been would reach up to now."
+    }
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "pat": "pp.perfect",
+   "en": "Your order was shipped from our warehouse yesterday morning.",
+   "de": "Ihre Bestellung wurde gestern Morgen aus unserem Lager versandt.",
+   "chunks": [
+    "your order",
+    "was shipped",
+    "from",
+    "our warehouse",
+    "yesterday morning"
+   ],
+   "alt": [
+    "Yesterday morning, your order was shipped from our warehouse.",
+    "Your order was shipped yesterday morning from our warehouse."
+   ],
+   "why": [
+    "Mit yesterday morning steht ein fester Zeitpunkt, also das Simple Past: was shipped.",
+    "With yesterday morning a finished time is given, so the simple past is used: was shipped."
+   ],
+   "bad": "Your order has been shipped from our warehouse yesterday morning.",
+   "trap": {
+    "tile": "was shipped",
+    "instead": "has been shipped",
+    "why": {
+     "de": "Im Deutschen geht „ist versandt worden“ auch mit „gestern“. Im Englischen verlangt ein fester Zeitpunkt wie yesterday morning das Simple Past: was shipped.",
+     "en": "German allows “ist versandt worden” with “gestern”. English needs the simple past after a finished time like yesterday morning: was shipped."
+    }
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "pat": "pp.personal",
+   "en": "The company is said to be planning a major restructuring.",
+   "de": "Das Unternehmen soll eine große Umstrukturierung planen.",
+   "chunks": [
+    "the company",
+    "is",
+    "said",
+    "to be planning",
+    "a major restructuring"
+   ],
+   "single": "Is said to be planning ist eine feste Kette aus Passiv und to-Infinitiv; das Objekt folgt direkt dahinter.",
+   "why": [
+    "Das Gerücht steht im Passiv, danach folgt to + Infinitiv: is said to be planning.",
+    "The rumor is in the passive, followed by to + infinitive: is said to be planning."
+   ],
+   "bad": "The company is said planning a major restructuring.",
+   "trap": {
+    "tile": "to be planning",
+    "instead": "planning",
+    "why": {
+     "de": "Im Deutschen steckt das Gerücht im Modalverb („Es soll planen“). Im Englischen folgt auf is said ein to + Infinitiv.",
+     "en": "In German the rumor sits in the modal verb (“Es soll planen”). In English is said is followed by to + infinitive."
+    }
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "pat": "pp.personal",
+   "en": "The new hire is believed to have worked for a competitor before.",
+   "de": "Der neue Mitarbeiter soll früher für einen Konkurrenten gearbeitet haben.",
+   "chunks": [
+    "the new hire",
+    "is believed",
+    "to have worked",
+    "for a competitor",
+    "before"
+   ],
+   "single": "Is believed to have worked bildet eine Kette; for a competitor und before folgen in dieser Reihenfolge, sonst klingt es schief.",
+   "why": [
+    "Das Arbeiten liegt vor der Annahme, daher to have worked. Is believed bleibt im Präsens.",
+    "The working came before the belief, hence to have worked. Is believed stays in the present."
+   ],
+   "bad": "The new hire is believed to work for a competitor before.",
+   "topic": "passive-plus"
+  },
+  {
+   "pat": "pp.being",
+   "en": "Nobody enjoys being criticized in front of the whole team.",
+   "de": "Niemand mag es, vor dem ganzen Team kritisiert zu werden.",
+   "chunks": [
+    "nobody",
+    "enjoys",
+    "being criticized",
+    "in front of",
+    "the whole team"
+   ],
+   "alt": [
+    "In front of the whole team, nobody enjoys being criticized."
+   ],
+   "why": [
+    "Nach enjoy steht die -ing-Form, im Passiv being + Partizip: enjoys being criticized.",
+    "After enjoy the -ing form follows, in the passive being + participle: enjoys being criticized."
+   ],
+   "bad": "Nobody enjoys to be criticized in front of the whole team.",
+   "trap": {
+    "tile": "being criticized",
+    "instead": "to be criticized",
+    "why": {
+     "de": "Im Deutschen heißt es „kritisiert zu werden“, also zu + Infinitiv. Das wird gern als to be übertragen, doch enjoy verlangt -ing.",
+     "en": "German says “kritisiert zu werden”, so zu + infinitive. That is often carried over as to be, but enjoy requires -ing."
+    }
+   },
+   "topic": "passive-plus"
+  },
+  {
+   "pat": "pp.being",
+   "en": "He joined the call without being invited.",
+   "de": "Er nahm am Anruf teil, ohne eingeladen zu werden.",
+   "chunks": [
+    "he",
+    "joined",
+    "the call",
+    "without",
+    "being invited"
+   ],
+   "alt": [
+    "Without being invited, he joined the call."
+   ],
+   "why": [
+    "Nach without steht -ing, im Passiv being + Partizip: without being invited.",
+    "After without comes -ing, in the passive being + participle: without being invited."
+   ],
+   "bad": "He joined the call without invited.",
+   "topic": "passive-plus"
   },
   {
    "pat": "pp.earlier",
@@ -2942,6 +3973,221 @@
    ],
    "bad": "We won't sign the contract until legal will approve the draft.",
    "topic": "time-clauses"
+  },
+  {
+   "pat": "ut.used-to",
+   "en": "We used to print every report for the board.",
+   "de": "Wir haben früher jeden Bericht für den Vorstand ausgedruckt.",
+   "chunks": [
+    "we",
+    "used to",
+    "print",
+    "every report",
+    "for the board"
+   ],
+   "alt": [
+    "For the board, we used to print every report."
+   ],
+   "why": [
+    "Used to + Grundform erzählt von früher: Nach „used to“ folgt direkt print, ohne -ing und ohne zweites to.",
+    "Used to + base verb tells of the past: print follows used to directly, with no -ing and no extra to."
+   ],
+   "bad": "We used to printing every report for the board.",
+   "trap": {
+    "tile": "print",
+    "instead": "printing",
+    "why": {
+     "de": "Wegen „be used to“ rutscht oft -ing hinter used to. Für früher bleibt die Grundform: used to print.",
+     "en": "Because of “be used to”, -ing often slips in after used to. For the past, the base form stays: used to print."
+    }
+   },
+   "topic": "used-to"
+  },
+  {
+   "pat": "ut.used-to",
+   "en": "Back then, we used to answer every call within an hour.",
+   "de": "Damals haben wir jeden Anruf innerhalb einer Stunde beantwortet.",
+   "chunks": [
+    "back then",
+    "we",
+    "used to",
+    "answer",
+    "every call",
+    "within an hour"
+   ],
+   "alt": [
+    "We used to answer every call within an hour back then."
+   ],
+   "why": [
+    "Used to steht direkt vor der Grundform answer. Die Zeitangabe „back then“ darf vorn oder hinten stehen.",
+    "Used to stands directly before the base form answer. The time phrase “back then” can go first or last."
+   ],
+   "bad": "Back then, we used to answering every call within an hour.",
+   "topic": "used-to"
+  },
+  {
+   "pat": "ut.would",
+   "en": "Whenever a client complained, our manager would call back within the hour.",
+   "de": "Wann immer sich ein Kunde beschwerte, rief unser Chef innerhalb einer Stunde zurück.",
+   "chunks": [
+    "whenever",
+    "a client",
+    "complained",
+    "our manager",
+    "would",
+    "call back",
+    "within the hour"
+   ],
+   "alt": [
+    "Our manager would call back within the hour whenever a client complained."
+   ],
+   "why": [
+    "Would erzählt von einer wiederholten Handlung früher; „whenever“ macht die Wiederholung klar. Nach would folgt die Grundform.",
+    "Would tells of a repeated action in the past; “whenever” makes the repetition clear. Would is followed by the base form."
+   ],
+   "bad": "Whenever a client complained, our manager would called back within the hour.",
+   "topic": "used-to"
+  },
+  {
+   "pat": "ut.would",
+   "en": "Every Friday, we would order pizza for the whole team.",
+   "de": "Jeden Freitag bestellten wir früher Pizza für das ganze Team.",
+   "chunks": [
+    "every Friday",
+    "we",
+    "would",
+    "order",
+    "pizza",
+    "for the whole team"
+   ],
+   "alt": [
+    "We would order pizza for the whole team every Friday."
+   ],
+   "why": [
+    "Der frühere Zeitrahmen „every Friday“ macht would möglich. Nach would steht die Grundform order.",
+    "The past time frame “every Friday” makes would possible. Would is followed by the base form order."
+   ],
+   "bad": "Every Friday, we would ordered pizza for the whole team.",
+   "trap": {
+    "tile": "order",
+    "instead": "ordered",
+    "why": {
+     "de": "Die Vergangenheit steckt schon in would. Danach bleibt die Grundform: would order, nicht would ordered.",
+     "en": "The past is already inside would. After it the base form stays: would order, not would ordered."
+    }
+   },
+   "topic": "used-to"
+  },
+  {
+   "pat": "ut.did-use-to",
+   "en": "Back then, my manager didn't use to join our calls.",
+   "de": "Damals nahm mein Chef nicht an unseren Calls teil.",
+   "chunks": [
+    "back then",
+    "my manager",
+    "didn't",
+    "use to",
+    "join",
+    "our calls"
+   ],
+   "alt": [
+    "My manager didn't use to join our calls back then."
+   ],
+   "why": [
+    "Nach didn't zeigt didn't die Vergangenheit schon. Darum steht use to ohne d, danach die Grundform join.",
+    "After didn't, didn't already shows the past. So it is use to without d, then the base form join."
+   ],
+   "bad": "Back then, my manager didn't used to join our calls.",
+   "trap": {
+    "tile": "use to",
+    "instead": "used to",
+    "why": {
+     "de": "„I used to“ ist so geläufig, dass das d auch nach didn't bleibt. Doch didn't zeigt die Vergangenheit schon: use to.",
+     "en": "“I used to” is so familiar that the d stays even after didn't. But didn't already shows the past: use to."
+    }
+   },
+   "topic": "used-to"
+  },
+  {
+   "pat": "ut.be-used-to",
+   "en": "Our clients are used to getting a reply within a day.",
+   "de": "Unsere Kunden sind es gewohnt, innerhalb eines Tages eine Antwort zu bekommen.",
+   "chunks": [
+    "our clients",
+    "are used to",
+    "getting",
+    "a reply",
+    "within a day"
+   ],
+   "single": "Are used to bildet mit dem -ing-Wort einen festen Block; getting a reply within a day lässt sich davor nicht verschieben.",
+   "why": [
+    "Be used to heißt „gewöhnt sein“. „To“ ist hier eine Präposition, darum folgt -ing: getting.",
+    "Be used to means “be accustomed”. Here to is a preposition, so -ing follows: getting."
+   ],
+   "bad": "Our clients are used to get a reply within a day.",
+   "trap": {
+    "tile": "getting",
+    "instead": "get",
+    "why": {
+     "de": "Im Deutschen heißt es „gewohnt, zu bekommen“ mit Infinitiv. Das englische to ist aber eine Präposition: getting.",
+     "en": "German says “gewohnt, zu bekommen” with an infinitive. But English to is a preposition: getting."
+    }
+   },
+   "topic": "used-to"
+  },
+  {
+   "pat": "ut.be-used-to",
+   "en": "We're not used to making decisions this fast.",
+   "de": "Wir sind es nicht gewohnt, Entscheidungen so schnell zu treffen.",
+   "chunks": [
+    "we're not",
+    "used to",
+    "making",
+    "decisions",
+    "this fast"
+   ],
+   "single": "Not steht direkt vor used to, und making decisions this fast bleibt als Block am Ende; sonst ändert sich der Sinn.",
+   "why": [
+    "Be used to + -ing heißt „gewöhnt sein“: making. Mit dem d in used ist es das Adjektiv „gewöhnt“.",
+    "Be used to + -ing means “be accustomed”: making. With the d, used is the adjective “accustomed”."
+   ],
+   "bad": "We're not use to making decisions this fast.",
+   "trap": {
+    "tile": "used to",
+    "instead": "use to",
+    "why": {
+     "de": "Hier ist used ein Adjektiv („gewöhnt“) und braucht das d. Ohne d wäre es das Verb use.",
+     "en": "Here used is an adjective (“accustomed”) and needs the d. Without d it would be the verb use."
+    }
+   },
+   "topic": "used-to"
+  },
+  {
+   "pat": "ut.get-used-to",
+   "en": "It took a few weeks to get used to the new office.",
+   "de": "Es hat ein paar Wochen gedauert, bis ich mich an das neue Büro gewöhnt hatte.",
+   "chunks": [
+    "it took",
+    "a few weeks",
+    "to",
+    "get used to",
+    "the new office"
+   ],
+   "single": "It took a few weeks bildet den festen Rahmen, danach folgt to get used to und das Nomen; eine andere Reihenfolge klingt unnatürlich.",
+   "why": [
+    "Der Vorgang des Gewöhnens braucht get: to get used to. Be used to beschriebe nur den Zustand danach.",
+    "The process of becoming accustomed needs get: to get used to. Be used to would describe only the state afterwards."
+   ],
+   "bad": "It took a few weeks to be used to the new office.",
+   "trap": {
+    "tile": "get used to",
+    "instead": "be used to",
+    "why": {
+     "de": "Deutsch trennt „sich gewöhnen“ und „gewohnt sein“. Im Englischen entscheidet nur be oder get: Der Vorgang braucht get.",
+     "en": "German separates “sich gewöhnen” and “gewohnt sein”. In English only be or get decides: the process needs get."
+    }
+   },
+   "topic": "used-to"
   }
  ]
 }

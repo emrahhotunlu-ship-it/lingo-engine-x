@@ -1,0 +1,732 @@
+{
+ "When I was a child, I ___ play football every day.": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: used to + Grundform erzählt von einer Gewohnheit, die vorbei ist.",
+    "en": "Right: used to + base verb tells of a habit that is over."
+   },
+   "wrong": [
+    {
+     "opt": "am used to",
+     "pat": "ut.be-used-to",
+     "de": "„Am used to“ heißt „gewöhnt sein“ und braucht -ing, nicht „play“.",
+     "en": "“Am used to” means “be accustomed” and takes -ing, not “play”."
+    },
+    {
+     "opt": "get used to",
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ = sich gewöhnen, danach -ing. Gemeint ist eine frühere Gewohnheit.",
+     "en": "“Get used to” = become accustomed, then -ing. Here a past habit is meant."
+    },
+    {
+     "opt": "was used to",
+     "pat": "ut.be-used-to",
+     "de": "„Was used to“ = war gewöhnt, danach -ing. Hier folgt „play“: eine frühere Gewohnheit.",
+     "en": "“Was used to” = was accustomed, then -ing. Here “play” follows: a past habit."
+    }
+   ]
+  }
+ },
+ "I've lived in England for years, so I ___ driving on the left.": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + -ing. Nach Jahren in England ist Linksverkehr vertraut.",
+    "en": "Right: be used to + -ing. After years in England, driving on the left feels normal."
+   },
+   "wrong": [
+    {
+     "if": [
+      "get",
+      "used"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ nennt den Vorgang. Nach Jahren ist man schon gewöhnt: am used to.",
+     "en": "“Get used to” names the process. After years you are already used to it: am used to."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): am used to.",
+     "en": "The d is missing: used is an adjective here (accustomed): am used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "not": [
+      "am",
+      "be",
+      "get",
+      "was"
+     ],
+     "pat": "ut.used-to",
+     "de": "Ohne „am“ klingt es nach früher. Für „gewöhnt sein“ braucht es be: am used to.",
+     "en": "Without “am” it sounds like the past. For “be accustomed” you need be: am used to."
+    }
+   ]
+  }
+ },
+ "I am used to get up early.": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + -ing. „to“ ist hier eine Präposition: getting up.",
+    "en": "Right: be used to + -ing. Here to is a preposition: getting up."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to",
+      "get"
+     ],
+     "not": [
+      "am",
+      "is",
+      "are"
+     ],
+     "pat": "ut.used-to",
+     "de": "Mit „used to get“ änderst du den Sinn: früher, heute nicht mehr. Gemeint ist: gewöhnt sein.",
+     "en": "With “used to get” you change the meaning: past, no longer. “Be accustomed” is meant."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "get"
+     ],
+     "de": "Das „get up“ bleibt falsch: Nach be used to steht -ing (getting up).",
+     "en": "“get up” is still wrong: be used to takes -ing (getting up)."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "getting"
+     ],
+     "not": [
+      "am",
+      "is",
+      "are"
+     ],
+     "pat": "ut.used-to",
+     "de": "Es fehlt „am“: Ohne be wird daraus ein Satz über früher.",
+     "en": "“am” is missing: without be this becomes a sentence about the past."
+    }
+   ]
+  }
+ },
+ "We ___ (have) a paper archive, but now everything is in the cloud.": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früher so, heute nicht mehr, also used to + Grundform: used to have.",
+    "en": "Right: true before, not now, so used to + base verb: used to have."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "ut.would",
+     "de": "„Would“ geht nicht bei Zuständen wie „have“. Hier passt nur used to.",
+     "en": "Would does not work with states like “have”. Only used to fits here."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "having"
+     ],
+     "de": "Nach used to steht die Grundform: used to have, nicht having.",
+     "en": "Used to takes the base form: used to have, not having."
+    },
+    {
+     "if": [
+      "was",
+      "used"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Was used to“ + -ing hieße „war gewöhnt“. Gemeint ist: Früher gab es das Archiv.",
+     "en": "“Was used to” + -ing would mean “was accustomed”. Here: there used to be an archive."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: In bejahten Sätzen heißt es used to.",
+     "en": "The d is missing: affirmative sentences take used to."
+    }
+   ]
+  }
+ },
+ "Working with US customers is normal for me now. → I ___ with US customers.": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: „normal für mich“ = be used to + -ing: am used to working.",
+    "en": "Right: “normal for me” = be used to + -ing: am used to working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to",
+      "work"
+     ],
+     "de": "Nach be used to steht -ing: working, nicht die Grundform.",
+     "en": "Be used to takes -ing: working, not the base form."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "working"
+     ],
+     "not": [
+      "am",
+      "be",
+      "get",
+      "was",
+      "is"
+     ],
+     "pat": "ut.used-to",
+     "de": "Es fehlt „am“: Ohne be heißt used to + -ing nicht „gewöhnt sein“.",
+     "en": "“am” is missing: be used to + -ing means “be accustomed”."
+    },
+    {
+     "if": [
+      "get",
+      "used"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ beschreibt den Weg dorthin. Gefragt ist der Zustand: am used to.",
+     "en": "“Get used to” describes the way there. The state is asked for: am used to."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): am used to working.",
+     "en": "The d is missing: used is an adjective here (accustomed): am used to working."
+    }
+   ]
+  }
+ },
+ "I ___ working long hours since I started in sales, so it doesn't bother me.": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + -ing = gewöhnt sein. Darum stört es dich nicht.",
+    "en": "Right: be used to + -ing = be accustomed. That is why it does not bother you."
+   },
+   "wrong": [
+    {
+     "opt": "get used to",
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ nennt den Weg dorthin. Gemeint ist der Zustand: Es stört dich nicht mehr.",
+     "en": "“Get used to” names the way there. The state is meant: it no longer bothers you."
+    },
+    {
+     "opt": "used to",
+     "pat": "ut.used-to",
+     "de": "„Used to“ + Grundform hieße: früher so, heute nicht mehr. Gemeint ist: heute gewöhnt.",
+     "en": "“Used to” + base verb would mean: true before, not now. Here: accustomed today."
+    },
+    {
+     "opt": "would",
+     "pat": "ut.would",
+     "de": "Nach „would“ steht die Grundform, kein -ing. Zudem heißt „would“ nicht „gewöhnt sein“.",
+     "en": "After “would” comes the base form, not -ing. Also “would” does not mean “be accustomed”."
+    }
+   ]
+  }
+ },
+ "When I started at this company, I couldn't ___ the open-plan office, but now I love it.": {
+  "pat": "ut.get-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Vorgang des Gewöhnens: couldn't + get used to + Nomen.",
+    "en": "Right: the process of becoming accustomed: couldn't + get used to + noun."
+   },
+   "wrong": [
+    {
+     "opt": "be used to",
+     "pat": "ut.be-used-to",
+     "de": "„Be used to“ = gewöhnt sein (Zustand). Zu „couldn't“ passt der Vorgang: get used to.",
+     "en": "“Be used to” = be accustomed (a state). After “couldn't” the process fits: get used to."
+    },
+    {
+     "opt": "use to",
+     "pat": "ut.did-use-to",
+     "de": "„Use to“ steht nur nach did oder didn't und meint „früher“, nicht „sich gewöhnen“.",
+     "en": "“Use to” follows only did or didn't and means “in the past”, not “become accustomed”."
+    },
+    {
+     "opt": "used to",
+     "pat": "ut.used-to",
+     "de": "„Used to“ meint „früher“ und passt nicht hinter „couldn't“. Gemeint ist „sich gewöhnen“.",
+     "en": "“Used to” means “in the past” and does not fit after “couldn't”. “Become accustomed” is meant."
+    }
+   ]
+  }
+ },
+ "We ___ be the market leader, but now we're only third.": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früher so, heute nicht mehr. „be“ ist ein Zustand: used to be.",
+    "en": "Right: true before, not now. “Be” is a state: used to be."
+   },
+   "wrong": [
+    {
+     "opt": "would",
+     "pat": "ut.would",
+     "de": "„Would be“ ist hier falsch: Für frühere Zustände wie „be“ passt nur used to.",
+     "en": "“Would be” is wrong here: for past states like “be” only used to fits."
+    },
+    {
+     "opt": "get used to",
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ heißt „sich gewöhnen“ und braucht -ing, kein „be“.",
+     "en": "“Get used to” means “become accustomed” and takes -ing, not “be”."
+    },
+    {
+     "opt": "are used to",
+     "pat": "ut.be-used-to",
+     "de": "„Are used to“ heißt „gewöhnt sein“ und braucht -ing, kein „be“. Gemeint ist: früher.",
+     "en": "“Are used to” means “be accustomed” and takes -ing, not “be”. Here: in the past."
+    }
+   ]
+  }
+ },
+ "Did you ___ work in sales before you joined us?": {
+  "pat": "ut.did-use-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach did steht use to ohne d. Gefragt wird nach früher.",
+    "en": "Right: after did we write use to without d. The question is about the past."
+   },
+   "wrong": [
+    {
+     "opt": "use",
+     "de": "„Use“ allein heißt „benutzen“. Für „früher“ braucht es use to.",
+     "en": "“Use” alone means to employ. For “in the past” you need use to."
+    },
+    {
+     "opt": "are used to",
+     "pat": "ut.be-used-to",
+     "de": "„Are used to“ braucht -ing, und nach did steht die Grundform. Gefragt ist: früher.",
+     "en": "“Are used to” takes -ing, and after did comes the base form. The question is about the past."
+    },
+    {
+     "opt": "used to",
+     "pat": "ut.used-to",
+     "de": "Hier zeigt did schon die Vergangenheit, darum entfällt das d: use to.",
+     "en": "Here did already shows the past, so the d drops: use to."
+    }
+   ]
+  }
+ },
+ "I'm not used to ___ in English yet, so I prepare my arguments carefully.": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach be used to ist „to“ eine Präposition, also -ing: negotiating.",
+    "en": "Right: after be used to, to is a preposition, so -ing: negotiating."
+   },
+   "wrong": [
+    {
+     "opt": "negotiate",
+     "de": "Nach der Präposition „to“ steht nicht die Grundform, sondern -ing.",
+     "en": "After the preposition “to” the base form is wrong; use -ing."
+    },
+    {
+     "opt": "to negotiate",
+     "de": "„To“ steckt schon im Ausdruck be used to. Danach folgt direkt -ing.",
+     "en": "“To” is already part of the phrase be used to. Then -ing follows directly."
+    },
+    {
+     "opt": "negotiated",
+     "de": "Eine -ed-Form passt nach „to“ nicht: Gebraucht wird die -ing-Form.",
+     "en": "An -ed form does not fit after “to”: you need the -ing form."
+    }
+   ]
+  }
+ },
+ "When I was a kid, we ___ spend every summer at my grandparents' farm.": {
+  "pat": "ut.would",
+  "why": {
+   "ok": {
+    "de": "Richtig: „spend“ ist eine wiederholte Handlung: would + Grundform geht (wie used to).",
+    "en": "Right: “spend” is a repeated action: would + base verb works (like used to)."
+   },
+   "wrong": [
+    {
+     "opt": "get used to",
+     "pat": "ut.get-used-to",
+     "de": "„Get used to“ = sich gewöhnen, danach -ing. Gemeint ist eine frühere Gewohnheit.",
+     "en": "“Get used to” = become accustomed, then -ing. Here a past habit is meant."
+    },
+    {
+     "opt": "are used to",
+     "pat": "ut.be-used-to",
+     "de": "„Are used to“ = gewöhnt sein, danach -ing. Gemeint ist eine frühere Gewohnheit.",
+     "en": "“Are used to” = be accustomed, then -ing. Here a past habit is meant."
+    },
+    {
+     "opt": "use to",
+     "pat": "ut.did-use-to",
+     "de": "Hier passt would (oder used to), aber nicht use to: „Use to“ ohne d steht nur nach did oder didn't.",
+     "en": "Here would (or used to) fits, but not use to: “use to” without d follows only did or didn't."
+    }
+   ]
+  }
+ },
+ "Before we switched to Slack, we ___ send hundreds of internal emails every day.": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: frühere, wiederholte Handlung: used to + send. Auch would geht.",
+    "en": "Right: a past repeated action: used to + send. Would also works."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: In bejahten Sätzen heißt es used to.",
+     "en": "The d is missing: affirmative sentences take used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "Vor used to steht hier kein am, get oder was. Sonst hieße es „gewöhnt“ und -ing folgte.",
+     "en": "No am, get or was comes before used to here. Otherwise it means “accustomed” and -ing follows."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "„Will“ ist Zukunft. Gemeint ist eine Gewohnheit von früher: used to oder would.",
+     "en": "“Will” is the future. A past habit is meant: used to or would."
+    }
+   ]
+  }
+ },
+ "I'm not ___ talking to large audiences yet, so I get nervous.": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: be used to + -ing = gewöhnt sein. Noch nicht gewöhnt, darum nervös.",
+    "en": "Right: be used to + -ing = be accustomed. Not yet used to it, so you get nervous."
+   },
+   "wrong": [
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): I'm not used to talking.",
+     "en": "The d is missing: used is an adjective here (accustomed): I'm not used to talking."
+    },
+    {
+     "if": [
+      "getting"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Getting used to“ nennt den Vorgang. Hier geht es um den Zustand: noch nicht gewöhnt.",
+     "en": "“Getting used to” names the process. Here the state is meant: not yet accustomed."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "not": [
+      "getting"
+     ],
+     "de": "Vor used to steht schon „I'm not“. Ein zweites am oder be ist zu viel.",
+     "en": "“I'm not” already comes before used to. A second am or be is too much."
+    }
+   ]
+  }
+ },
+ "It was hard at first, but I've finally ___ working with American clients.": {
+  "pat": "ut.get-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Vorgang ist abgeschlossen: gotten used to + -ing (US).",
+    "en": "Right: the process is complete: gotten used to + -ing (US)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "get"
+     ],
+     "de": "Nach „I've“ braucht get die dritte Form: gotten (US) oder got.",
+     "en": "After “I've”, get needs its third form: gotten (US) or got."
+    },
+    {
+     "if": [
+      "been",
+      "used"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Been used to“ = gewöhnt gewesen (Zustand). Hier ist das Gewöhnen gemeint: gotten used to.",
+     "en": "“Been used to” = have been accustomed (a state). The process is meant: gotten used to."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): gotten used to.",
+     "en": "The d is missing: used is an adjective here (accustomed): gotten used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.used-to",
+     "de": "Vor used to fehlt das Verb get (hier: gotten). Sonst hieße es „früher“.",
+     "en": "The verb get (here: gotten) is missing before used to. Otherwise it means “in the past”."
+    }
+   ]
+  }
+ },
+ "My team ___ be really small, but now we're 25 people.": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früherer Zustand (be) → used to. Heute sind es 25, also vorbei.",
+    "en": "Right: a past state (be) → used to. Today it is 25, so that is over."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "ut.would",
+     "de": "„Would“ geht nicht bei Zuständen wie „be“. Hier passt nur used to.",
+     "en": "Would does not work with states like “be”. Only used to fits here."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: In bejahten Sätzen heißt es used to.",
+     "en": "The d is missing: affirmative sentences take used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "Vor used to steht hier kein am, get oder was. Sonst folgte -ing statt „be“.",
+     "en": "No am, get or was comes before used to here. Otherwise -ing would follow instead of “be”."
+    }
+   ]
+  }
+ },
+ "I didn't ___ like cilantro, but now I love it.": {
+  "pat": "ut.did-use-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: „didn't“ zeigt die Vergangenheit schon, darum use to ohne d.",
+    "en": "Right: “didn't” already shows the past, so use to without d."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "pat": "ut.used-to",
+     "de": "Nach didn't entfällt das d: didn't use to, weil didn't schon die Vergangenheit zeigt.",
+     "en": "After didn't the d drops: didn't use to, because didn't already shows the past."
+    },
+    {
+     "if": [
+      "use"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "Es fehlt „to“: Nach didn't steht use to + Grundform.",
+     "en": "“to” is missing: didn't use to + base verb."
+    }
+   ]
+  }
+ },
+ "In the past I traveled a lot for work, but I don't anymore. → I ___ a lot for work.": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früher regelmäßig, heute nicht mehr: used to + travel.",
+    "en": "Right: regular before, not now: used to + travel."
+   },
+   "wrong": [
+    {
+     "if": [
+      "am",
+      "used"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Am used to“ = gewöhnt sein. Gemeint ist: früher ja, heute nicht mehr.",
+     "en": "“Am used to” = be accustomed. Meant here: yes in the past, not any more."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: In bejahten Sätzen heißt es used to.",
+     "en": "The d is missing: affirmative sentences take used to."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "not": [
+      "travel"
+     ],
+     "de": "Nach used to steht die Grundform: used to travel.",
+     "en": "Used to takes the base form: used to travel."
+    }
+   ]
+  }
+ },
+ "Working night shifts is normal for me now; I've done it for years. → I'm ___ night shifts.": {
+  "pat": "ut.be-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: „normal für mich“ = be used to + -ing: I'm used to working.",
+    "en": "Right: “normal for me” = be used to + -ing: I'm used to working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to",
+      "work"
+     ],
+     "de": "Nach be used to steht -ing: working, nicht die Grundform.",
+     "en": "Be used to takes -ing: working, not the base form."
+    },
+    {
+     "if": [
+      "use",
+      "to"
+     ],
+     "de": "Es fehlt das d: „used“ ist hier ein Adjektiv (gewöhnt): used to working.",
+     "en": "The d is missing: used is an adjective here (accustomed): used to working."
+    },
+    {
+     "if": [
+      "getting",
+      "used"
+     ],
+     "pat": "ut.get-used-to",
+     "de": "„Getting used to“ nennt den Vorgang. Gemeint ist: für dich schon normal.",
+     "en": "“Getting used to” names the process. Meant here: already normal for you."
+    },
+    {
+     "if": [
+      "used",
+      "to"
+     ],
+     "not": [
+      "working",
+      "doing"
+     ],
+     "de": "Nach used to folgt hier -ing: working oder doing.",
+     "en": "Here -ing follows used to: working or doing."
+    }
+   ]
+  }
+ },
+ "We used to having a strict dress code, but it's more relaxed now.": {
+  "pat": "ut.used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: früher so, jetzt nicht mehr: used to + Grundform (have).",
+    "en": "Right: true before, not any more: used to + base verb (have)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "used",
+      "to",
+      "having"
+     ],
+     "not": [
+      "am",
+      "are",
+      "is",
+      "was",
+      "were"
+     ],
+     "de": "Das -ing bleibt falsch: used to hat die Grundform: used to have.",
+     "en": "The -ing is still wrong: used to takes the base form: used to have."
+    },
+    {
+     "if": [
+      "used",
+      "to",
+      "having"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Are used to having“ ist ein anderer Satz: gewöhnt sein. Gemeint ist: früher.",
+     "en": "“Are used to having” is a different sentence: be accustomed. Meant here: in the past."
+    }
+   ]
+  }
+ },
+ "I can't get used to work with the new CRM system.": {
+  "pat": "ut.get-used-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: get used to + -ing. „to“ ist eine Präposition: working.",
+    "en": "Right: get used to + -ing. To is a preposition: working."
+   },
+   "wrong": [
+    {
+     "if": [
+      "get",
+      "used",
+      "to",
+      "work"
+     ],
+     "de": "Das „work“ bleibt falsch: Nach get used to steht -ing: working.",
+     "en": "“work” is still wrong: get used to takes -ing: working."
+    },
+    {
+     "if": [
+      "be",
+      "used",
+      "to"
+     ],
+     "pat": "ut.be-used-to",
+     "de": "„Be used to“ = gewöhnt sein. Gemeint ist der Vorgang: get used to.",
+     "en": "“Be used to” = be accustomed. The process is meant: get used to."
+    }
+   ]
+  }
+ }
+}

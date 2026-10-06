@@ -1,0 +1,675 @@
+{
+ "If it ___ tomorrow, we will stay at home.": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: tomorrow = mögliche Zukunft → if + Präsens (rains). will steht nur im Hauptsatz.",
+    "en": "Right: tomorrow = possible future → if + present (rains). will appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach if steht kein will: Der if-Teil nimmt das Präsens (rains).",
+     "en": "No will after if: the if-clause takes the present (rains)."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "cn.second",
+     "de": "would gehört in den Hauptsatz einer Annahme. Regen morgen ist aber wirklich möglich.",
+     "en": "would belongs in the main clause of an assumption. Rain tomorrow is a real possibility."
+    },
+    {
+     "if": [
+      "rained"
+     ],
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. Aber tomorrow nennt eine echte Möglichkeit.",
+     "en": "The past makes it an assumption. But tomorrow names a real possibility."
+    },
+    {
+     "if": [
+      "rain"
+     ],
+     "de": "Mit it braucht das Präsens ein -s: it rains.",
+     "en": "With it the present needs an -s: it rains."
+    }
+   ]
+  }
+ },
+ "If I ___ more time, I would travel more.": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: would travel = Annahme → im if-Teil das Past: had.",
+    "en": "Right: would travel = assumption → the if-clause takes the past: had."
+   },
+   "wrong": [
+    {
+     "opt": "have",
+     "pat": "cn.first",
+     "de": "have ist Präsens und würde zu will travel passen. would travel verlangt das Past.",
+     "en": "have is present and would fit will travel. would travel calls for the past."
+    },
+    {
+     "opt": "would have",
+     "de": "would steht nicht im if-Teil. Dort braucht die Annahme das Past (had).",
+     "en": "would does not go in the if-clause. The assumption needs the past (had) there."
+    },
+    {
+     "opt": "will have",
+     "pat": "cn.first",
+     "de": "will gehört nicht in den if-Teil, und would travel verlangt das Past.",
+     "en": "will does not go in the if-clause, and would travel calls for the past."
+    }
+   ]
+  }
+ },
+ "If we had left earlier, we ___ the train.": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: had left ist vorbei → would not have + 3. Form: wouldn't have missed.",
+    "en": "Right: had left (over) → would not have + participle: wouldn't have missed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have",
+      "miss"
+     ],
+     "de": "Nach would have steht die 3. Form: would not have missed.",
+     "en": "After would have comes the participle: would not have missed."
+    },
+    {
+     "if": [
+      "would",
+      "miss"
+     ],
+     "de": "Nach had left liegt die Folge in der Vergangenheit: would not have missed.",
+     "en": "After had left the result lies in the past: would not have missed."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will passt nicht: Der Zug ist schon weg, die Folge liegt in der Vergangenheit.",
+     "en": "will does not fit: the train is gone, the result lies in the past."
+    },
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Die Folge braucht would not have + 3. Form, keine einfache Zeitform.",
+     "en": "The result needs would not have + participle, not a simple tense."
+    }
+   ]
+  }
+ },
+ "If the client ___ the offer by Friday, we will start production on Monday.": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: reale Bedingung → if + Präsens (accepts). Im Hauptsatz steht will.",
+    "en": "Right: real condition → if + present (accepts). The main clause takes will."
+   },
+   "wrong": [
+    {
+     "opt": "would accept",
+     "pat": "cn.second",
+     "de": "would steht nicht im if-Teil. Die Bedingung bis Freitag ist realistisch: Präsens.",
+     "en": "would does not go in the if-clause. The condition by Friday is realistic: present."
+    },
+    {
+     "opt": "accepted",
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. Hier ist es ein realer Fall mit will im Hauptsatz.",
+     "en": "The past makes it an assumption. Here it is a real case with will in the main clause."
+    },
+    {
+     "opt": "will accept",
+     "de": "Nach if steht kein will: Der if-Teil nimmt das Präsens, will steht im Hauptsatz.",
+     "en": "No will after if: the if-clause takes the present, will goes in the main clause."
+    }
+   ]
+  }
+ },
+ "If I were you, I ___ the contract carefully before signing.": {
+  "pat": "cn.were",
+  "why": {
+   "ok": {
+    "de": "Richtig: If I were you gibt einen Rat → Hauptsatz mit would + Grundform: would check.",
+    "en": "Right: If I were you gives advice → main clause with would + base form: would check."
+   },
+   "wrong": [
+    {
+     "opt": "will check",
+     "pat": "cn.first",
+     "de": "If I were you ist eine Annahme, kein echter Fall. Dann steht would, nicht will.",
+     "en": "If I were you is an assumption, not a real case. Then would is used, not will."
+    },
+    {
+     "opt": "would have checked",
+     "pat": "cn.third",
+     "de": "would have checked blickt zurück. Der Rat gilt für jetzt, vor dem Unterschreiben.",
+     "en": "would have checked looks back. The advice is for now, before signing."
+    },
+    {
+     "opt": "checked",
+     "de": "Das Past allein wäre eine Tatsache. Im Hauptsatz einer Annahme steht would + Grundform.",
+     "en": "The past alone would state a fact. The main clause of an assumption takes would + base form."
+    }
+   ]
+  }
+ },
+ "If we had known about the bug earlier, we ___ the launch.": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: had known ist vorbei → would have + 3. Form: would have delayed.",
+    "en": "Right: had known (over) → would have + participle: would have delayed."
+   },
+   "wrong": [
+    {
+     "opt": "would delay",
+     "pat": "cn.second",
+     "de": "had known blickt zurück: Die Folge braucht would have + 3. Form.",
+     "en": "had known looks back: the result needs would have + participle."
+    },
+    {
+     "opt": "will delay",
+     "de": "will meint Zukunft. Der Fehler ist aber längst bekannt, die Folge liegt in der Vergangenheit.",
+     "en": "will points to the future. But the bug was known long ago, the result lies in the past."
+    },
+    {
+     "opt": "delayed",
+     "de": "Das einfache Past wäre eine Tatsache. Die unmögliche Folge braucht would have + 3. Form.",
+     "en": "The simple past would state a fact. The impossible result needs would have + participle."
+    }
+   ]
+  }
+ },
+ "Unless you ___ the invoice today, we can't process the payment.": {
+  "pat": "cn.if-words",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: send.",
+    "en": "Right: unless = “if not” → present with no not: send."
+   },
+   "wrong": [
+    {
+     "opt": "sent",
+     "de": "Unless nennt eine mögliche Ausnahme: Danach steht das Präsens, nicht das Past.",
+     "en": "Unless names a possible exception: the present follows, not the past."
+    },
+    {
+     "opt": "will send",
+     "de": "Nach unless steht kein will, sondern das Präsens.",
+     "en": "No will after unless, the present follows."
+    },
+    {
+     "opt": "don't send",
+     "de": "Doppelte Verneinung: unless heißt schon „wenn nicht“.",
+     "en": "Double negation: unless already means “if not”."
+    }
+   ]
+  }
+ },
+ "We'll agree to the discount ___ you order at least 500 units.": {
+  "pat": "cn.if-words",
+  "why": {
+   "ok": {
+    "de": "Richtig: provided that = vorausgesetzt, dass. Der Rabatt gilt nur bei 500 Stück.",
+    "en": "Right: provided that = on condition that. The discount applies only from 500 units."
+   },
+   "wrong": [
+    {
+     "opt": "in case",
+     "pat": "ca.in-case",
+     "de": "in case = für den Fall, dass (Vorsorge). Hier geht es um eine Voraussetzung.",
+     "en": "in case = as a precaution. Here it is a requirement."
+    },
+    {
+     "opt": "whereas",
+     "de": "whereas = während (Gegensatz) und nennt keine Bedingung.",
+     "en": "whereas = while (contrast). It does not name a condition."
+    },
+    {
+     "opt": "unless",
+     "pat": "ca.unless",
+     "de": "unless hieße „es sei denn“ und kehrt den Sinn um.",
+     "en": "unless would mean “except if” and reverses the meaning."
+    }
+   ]
+  }
+ },
+ "If I ___ you were coming, I would have baked a cake.": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: would have baked (vorbei) → im if-Teil Past Perfect: had known.",
+    "en": "Right: would have baked (over) → the if-clause takes the Past Perfect: had known."
+   },
+   "wrong": [
+    {
+     "opt": "know",
+     "pat": "cn.first",
+     "de": "know ist Präsens. would have baked blickt zurück und braucht had + 3. Form.",
+     "en": "know is present. would have baked looks back and needs had + participle."
+    },
+    {
+     "opt": "knew",
+     "pat": "cn.second",
+     "de": "knew wäre Second Conditional (jetzt). would have baked blickt zurück: had known.",
+     "en": "knew would be second conditional (now). would have baked looks back: had known."
+    },
+    {
+     "opt": "would know",
+     "de": "would steht nicht im if-Teil. Dort braucht Third Conditional had + 3. Form.",
+     "en": "would does not go in the if-clause. The third conditional needs had + participle there."
+    }
+   ]
+  }
+ },
+ "If you ___ the contract today, we'll guarantee the current price.": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: reale Bedingung (today) → if + Präsens: sign. will steht im Hauptsatz.",
+    "en": "Right: real condition (today) → if + present: sign. will goes in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach if steht kein will: Der if-Teil nimmt das Präsens (sign).",
+     "en": "No will after if: the if-clause takes the present (sign)."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Hier reicht das Präsens (sign).",
+     "en": "would does not go in the if-clause. The present (sign) is enough here."
+    },
+    {
+     "if": [
+      "signed"
+     ],
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. Aber today nennt eine echte Möglichkeit.",
+     "en": "The past makes it an assumption. But today names a real possibility."
+    },
+    {
+     "if": [
+      "signs"
+     ],
+     "de": "Mit you steht sign ohne -s.",
+     "en": "With you, sign takes no -s."
+    }
+   ]
+  }
+ },
+ "If our competitor lowered their prices, we ___ market share.": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: lowered = Annahme → Hauptsatz mit would + Grundform: would lose.",
+    "en": "Right: lowered = assumption → main clause with would + base form: would lose."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "cn.first",
+     "de": "will passt nicht zu lowered. Eine Annahme verlangt would im Hauptsatz.",
+     "en": "will does not fit lowered. An assumption calls for would in the main clause."
+    },
+    {
+     "if": [
+      "would",
+      "have"
+     ],
+     "pat": "cn.third",
+     "de": "would have lost blickt zurück. Die Annahme gilt für jetzt: would lose.",
+     "en": "would have lost looks back. The assumption is for now: would lose."
+    },
+    {
+     "not": [
+      "would",
+      "'d",
+      "might",
+      "could"
+     ],
+     "de": "Die Folge einer Annahme braucht would + Grundform: would lose.",
+     "en": "The result of an assumption needs would + base form: would lose."
+    }
+   ]
+  }
+ },
+ "If I ___ more experience at the time, I would have applied for the manager position last year.": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: at the time und last year → Past Perfect von have: had had.",
+    "en": "Right: at the time and last year → Past Perfect of have: had had."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Dort steht had + 3. Form: had had.",
+     "en": "would does not go in the if-clause. It takes had + participle: had had."
+    },
+    {
+     "if": [
+      "had",
+      "have"
+     ],
+     "de": "Nach had steht die 3. Form von have: had had.",
+     "en": "After had comes the participle of have: had had."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "Die 3. Form von have ist had. Der if-Teil braucht deshalb had had.",
+     "en": "The participle of have is had. So the if-clause needs had had."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Der if-Teil braucht Past Perfect (had + 3. Form), weil es um früher geht.",
+     "en": "The if-clause needs the Past Perfect (had + participle) because it is about earlier."
+    }
+   ]
+  }
+ },
+ "If a customer ___ for a demo, our system sends a confirmation email automatically.": {
+  "pat": "cn.zero",
+  "why": {
+   "ok": {
+    "de": "Richtig: Das ist eine feste Regel (automatically) → Präsens in beiden Teilen: registers.",
+    "en": "Right: fixed rule (automatically) → present in both parts: registers."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Eine feste Regel braucht das Präsens, kein will.",
+     "en": "A fixed rule needs the present, not will."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would macht daraus eine Annahme. Hier gilt eine feste Regel.",
+     "en": "would turns it into an assumption. Here a fixed rule applies."
+    },
+    {
+     "if": [
+      "registered"
+     ],
+     "pat": "cn.second",
+     "de": "Das Past macht es zur Annahme. automatically beschreibt eine feste Regel.",
+     "en": "The past makes it an assumption. automatically describes a fixed rule."
+    },
+    {
+     "if": [
+      "register"
+     ],
+     "de": "Mit a customer braucht das Präsens ein -s: registers.",
+     "en": "With a customer the present needs an -s: registers."
+    }
+   ]
+  }
+ },
+ "I'd be happier if I ___ so much time in traffic every day.": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: I'd be ist eine Annahme → if + Past, verneint didn't + Grundform: didn't spend.",
+    "en": "Right: I'd be = assumption → if + past, negative didn't + base form: didn't spend."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Dort steht das Past (didn't spend).",
+     "en": "would does not go in the if-clause. The past (didn't spend) goes there."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "pat": "cn.first",
+     "de": "will gehört nicht in den if-Teil. I'd be zeigt eine Annahme: Past.",
+     "en": "will does not go in the if-clause. I'd be signals an assumption: past."
+    },
+    {
+     "if": [
+      "do",
+      "not"
+     ],
+     "de": "Das Präsens wäre eine Tatsache. Die Annahme braucht das Past: didn't spend.",
+     "en": "The present would state a fact. The assumption needs the past: didn't spend."
+    },
+    {
+     "if": [
+      "spent"
+     ],
+     "de": "Nach didn't steht die Grundform: didn't spend, nicht spent.",
+     "en": "After didn't comes the base form: didn't spend, not spent."
+    }
+   ]
+  }
+ },
+ "We didn't prepare properly, so we lost the deal. → If we ___ properly, we wouldn't have lost the deal.": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: Der if-Teil dreht die Tatsache um: had prepared. Folge: wouldn't have lost.",
+    "en": "Right: the if-clause reverses the fact: had prepared. Result: wouldn't have lost."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil. Dort braucht Third Conditional had + 3. Form.",
+     "en": "would does not go in the if-clause. The third conditional needs had + participle there."
+    },
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Der if-Teil dreht die Tatsache um: Ihr wart unvorbereitet, also had prepared ohne not.",
+     "en": "The if-clause reverses the fact: you were unprepared, so had prepared with no not."
+    },
+    {
+     "if": [
+      "had",
+      "prepare"
+     ],
+     "de": "Nach had steht die 3. Form: had prepared.",
+     "en": "After had comes the participle: had prepared."
+    },
+    {
+     "not": [
+      "had",
+      "'d"
+     ],
+     "de": "Der if-Teil braucht Past Perfect: had prepared, nicht nur prepared.",
+     "en": "The if-clause needs the Past Perfect: had prepared, not just prepared."
+    }
+   ]
+  }
+ },
+ "You must send the invoice today, or we can't pay you on time. → We can't pay you on time unless you ___ the invoice today.": {
+  "pat": "cn.if-words",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“ → Präsens ohne not: send.",
+    "en": "Right: unless = “if not” → present with no not: send."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Doppelte Verneinung: unless heißt schon „wenn nicht“, danach kein not.",
+     "en": "Double negation: unless already means “if not”, so no not follows."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach unless steht kein will, sondern das Präsens.",
+     "en": "No will after unless, the present follows."
+    },
+    {
+     "if": [
+      "sent"
+     ],
+     "de": "Nach unless steht das Präsens, nicht das Past: send.",
+     "en": "After unless the present follows, not the past: send."
+    }
+   ]
+  }
+ },
+ "If we would have more budget, we would hire more people.": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: Annahme → if + Past (had). would steht nur im Hauptsatz.",
+    "en": "Right: assumption → if + past (had). would appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "we would have"
+     ],
+     "de": "Das deutsche „würde haben“ wird im Englischen zu had: If we had more budget.",
+     "en": "The German “würde haben” becomes had in English: If we had more budget."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Der if-Teil einer Annahme braucht das Past: had more budget.",
+     "en": "The if-clause of an assumption needs the past: had more budget."
+    }
+   ]
+  }
+ },
+ "If the client will agree to the terms, we will start production next week.": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: mögliche Zukunft → if + Präsens (agrees). will steht nur im Hauptsatz.",
+    "en": "Right: possible future → if + present (agrees). will appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "client will agree"
+     ],
+     "de": "Nach if steht bei realer Zukunft das Präsens (agrees), will nur im Hauptsatz.",
+     "en": "After if, a real future takes the present (agrees), will only in the main clause."
+    },
+    {
+     "not": [
+      "agrees"
+     ],
+     "de": "Das Verb im if-Teil muss ins Präsens: the client agrees (mit -s).",
+     "en": "The verb in the if-clause must be present: the client agrees (with -s)."
+    }
+   ]
+  }
+ },
+ "If I would have more money, I would buy a car.": {
+  "pat": "cn.second",
+  "why": {
+   "ok": {
+    "de": "Richtig: Annahme → if + Past (had). would steht nur im Hauptsatz.",
+    "en": "Right: assumption → if + past (had). would appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "i would have"
+     ],
+     "de": "Das deutsche „würde haben“ wird im Englischen zu had: If I had more money.",
+     "en": "The German “würde haben” becomes had in English: If I had more money."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Der if-Teil einer Annahme braucht das Past: had more money.",
+     "en": "The if-clause of an assumption needs the past: had more money."
+    }
+   ]
+  }
+ },
+ "If she will call me tomorrow, I'll tell her.": {
+  "pat": "cn.first",
+  "why": {
+   "ok": {
+    "de": "Richtig: mögliche Zukunft → if + Präsens (calls). will steht nur im Hauptsatz.",
+    "en": "Right: possible future → if + present (calls). will appears only in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "she will call"
+     ],
+     "de": "Nach if steht das Präsens (calls). will bleibt im Hauptsatz (I'll tell her).",
+     "en": "After if the present follows (calls). will stays in the main clause (I'll tell her)."
+    },
+    {
+     "not": [
+      "calls"
+     ],
+     "de": "Im if-Teil braucht she das Präsens mit -s: calls.",
+     "en": "In the if-clause she needs the present with -s: calls."
+    }
+   ]
+  }
+ },
+ "If they had left earlier, they wouldn't missed the train.": {
+  "pat": "cn.third",
+  "why": {
+   "ok": {
+    "de": "Richtig: had left ist vorbei → would have + 3. Form: wouldn't have missed.",
+    "en": "Right: had left (over) → would have + participle: wouldn't have missed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would",
+      "miss"
+     ],
+     "de": "Nach had left liegt die Folge in der Vergangenheit: would not have missed.",
+     "en": "After had left the result lies in the past: would not have missed."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Das have fehlt: Third Conditional = would have + 3. Form.",
+     "en": "The have is missing: third conditional = would have + participle."
+    }
+   ]
+  }
+ }
+}

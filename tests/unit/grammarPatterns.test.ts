@@ -67,7 +67,7 @@ describe('patternOf', () => {
 
   it('task.pat hat Vorrang; Themen ohne Musterdatei geben null', () => {
     expect(patternOf({ topic: 'mixed-cond', prompt: WISH, pat: 'mc.wish-now' })?.id).toBe('mc.wish-now');
-    expect(patternOf({ topic: 'passive', prompt: 'The report ___ by Lena.' })).toBeNull();
+    expect(patternOf({ topic: 'comparison', prompt: 'The report ___ by Lena.' })).toBeNull();
   });
 
   it('Aufgaben außerhalb der Tabelle: nur bei eindeutigem Signalwort-Treffer', () => {

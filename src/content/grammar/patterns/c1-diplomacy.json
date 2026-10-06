@@ -1,0 +1,347 @@
+{
+ "topic": "c1-diplomacy",
+ "canDo": {
+  "de": "Ich kann Bitten, Wünsche und Einwände höflich mit Abstand formulieren: mit I was wondering whether, We were hoping, Would it be possible to und Untertreibungen wie a bit tricky.",
+  "en": "I can phrase requests, wishes and objections politely with distance: with I was wondering whether, We were hoping, Would it be possible to and understatements such as a bit tricky."
+ },
+ "order": [
+  "dip.wondering",
+  "dip.hoping",
+  "dip.possible",
+  "dip.understate"
+ ],
+ "introPlan": [
+  [
+   "dip.wondering",
+   "dip.possible"
+  ],
+  [
+   "dip.hoping",
+   "dip.understate"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Bittest du eine Person um etwas (I was wondering whether you could) oder fragst du nach der Sache (Would it be possible to)?",
+   "Äußerst du einen Wunsch (We were hoping to) statt einer Forderung (We want)?",
+   "Sagst du einen Einwand mit Abstand (could be a bit tricky) statt mit einem harten Wort (impossible)?"
+  ],
+  "en": [
+   "Are you asking a person for something (I was wondering whether you could) or asking about the thing (Would it be possible to)?",
+   "Are you voicing a wish (We were hoping to) instead of a demand (We want)?",
+   "Are you raising an objection with distance (could be a bit tricky) instead of a harsh word (impossible)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "dip.wondering",
+   "name": {
+    "de": "I was wondering · weiche Bitte",
+    "en": "I was wondering · soft request"
+   },
+   "form": {
+    "de": "I was wondering if/whether + you could",
+    "en": "I was wondering if/whether + you could"
+   },
+   "use": {
+    "de": "Eine Bitte, die man ablehnen darf: Die Vergangenheit schafft Abstand, und could bleibt im Nebensatz. Danach gilt die normale Wortstellung.",
+    "en": "A request that is easy to decline: the past tense adds distance, and could stays in the clause. Normal word order follows."
+   },
+   "signals": [
+    "I was wondering",
+    "was wondering if",
+    "was wondering whether",
+    "whether you could",
+    "if you could"
+   ],
+   "ex": [
+    {
+     "en": "I was wondering whether you could walk us through the numbers.",
+     "de": "Ich wollte fragen, ob Sie uns die Zahlen erläutern könnten.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I was wondering if you could send the revised draft by Thursday.",
+     "de": "Ich wollte fragen, ob Sie den überarbeiteten Entwurf bis Donnerstag schicken könnten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I was wondering if you could cover my shift on Friday.",
+     "de": "Ich wollte fragen, ob du am Freitag meine Schicht übernehmen könntest.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I was wondering if could you confirm the venue.",
+    "good": "I was wondering if you could confirm the venue.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Die direkte Frage „Could you …?“ klingt noch nach. Nach if und whether steht aber das Subjekt vor could.",
+     "en": "Not a translation error: the direct question “Could you …?” still echoes. After if and whether, though, the subject comes before could."
+    }
+   },
+   "contrast": {
+    "with": "dip.possible",
+    "a": "I was wondering whether you could extend the trial.",
+    "b": "Would it be possible to extend the trial?",
+    "diff": {
+     "de": "wondering nennt die Person (you could) und beginnt bei dir. possible fragt neutral nach der Sache, ohne you.",
+     "en": "wondering names the person (you could) and starts with you. possible asks neutrally about the thing, without you."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I was wondering whether you could join the call.",
+     "q": {
+      "de": "Wird hier um etwas gebeten?",
+      "en": "Is the speaker asking for something?"
+     },
+     "a": true
+    },
+    {
+     "s": "I wonder whether the client has read the draft.",
+     "q": {
+      "de": "Wird hier jemand um etwas gebeten?",
+      "en": "Is anyone being asked to do something?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welche Zeit schafft Abstand, und welche Wortstellung folgt nach if oder whether?",
+    "en": "Which tense creates distance, and what word order follows if or whether?"
+   }
+  },
+  {
+   "id": "dip.hoping",
+   "name": {
+    "de": "We were hoping · höflicher Wunsch",
+    "en": "We were hoping · polite wish"
+   },
+   "form": {
+    "de": "We were hoping + to / for / you could",
+    "en": "We were hoping + to / for / you could"
+   },
+   "use": {
+    "de": "Macht aus einer Forderung einen Wunsch. Die Vergangenheit schafft Abstand, gemeint ist das Jetzt; danach folgt could, nicht can.",
+    "en": "Turns a demand into a wish. The past tense adds distance while the meaning is now; could follows, not can."
+   },
+   "signals": [
+    "were hoping",
+    "was hoping",
+    "hoping to",
+    "hoping for",
+    "hoping you could"
+   ],
+   "ex": [
+    {
+     "en": "We were hoping to close the deal before the end of the quarter.",
+     "de": "Wir hatten gehofft, den Abschluss vor Quartalsende zu schaffen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I was hoping you could review the slides before Monday.",
+     "de": "Ich hatte gehofft, du könntest die Folien vor Montag durchsehen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We were hoping for a quieter table, if that is possible.",
+     "de": "Wir hatten auf einen ruhigeren Tisch gehofft, falls das geht.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We were hoping to getting your feedback today.",
+    "good": "We were hoping to get your feedback today.",
+    "cause": {
+     "de": "Nach „look forward to“ steht -ing („Wir freuen uns auf …“). Das färbt auf hoping to ab, doch nach hoping to folgt die Grundform: hoping to get.",
+     "en": "After “look forward to” comes -ing. That tends to spill over to hoping to, but hoping to is followed by the base form: hoping to get."
+    }
+   },
+   "contrast": {
+    "with": "dip.wondering",
+    "a": "We were hoping you could confirm the date.",
+    "b": "I was wondering whether you could confirm the date.",
+    "diff": {
+     "de": "hoping nennt den eigenen Wunsch. wondering stellt eine Frage an das Gegenüber.",
+     "en": "hoping states your own wish. wondering puts a question to the other person."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We were hoping to sign next week.",
+     "q": {
+      "de": "Möchte das Team nächste Woche noch unterschreiben?",
+      "en": "Does the team still want to sign next week?"
+     },
+     "a": true
+    },
+    {
+     "s": "We were hoping for a discount.",
+     "q": {
+      "de": "Fordert das Team den Rabatt hart ein?",
+      "en": "Is the team demanding the discount firmly?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wie machst du aus einer Forderung einen Wunsch, und welches Hilfsverb passt zu dieser Zeit?",
+    "en": "How do you turn a demand into a wish, and which modal fits that tense?"
+   }
+  },
+  {
+   "id": "dip.possible",
+   "name": {
+    "de": "Would it be possible · höfliche Frage",
+    "en": "Would it be possible · polite question"
+   },
+   "form": {
+    "de": "Would it be possible + to + Grundform",
+    "en": "Would it be possible + to + base verb"
+   },
+   "use": {
+    "de": "Fragt nach der Machbarkeit statt nach der Person. Danach folgt to + Grundform, meist kein that-Satz.",
+    "en": "Asks whether something can be done instead of asking the person. To + base verb follows, usually not a that-clause."
+   },
+   "signals": [
+    "would it be possible",
+    "is it possible",
+    "would it be possible for"
+   ],
+   "ex": [
+    {
+     "en": "Would it be possible to move the demo to Thursday?",
+     "de": "Wäre es möglich, die Demo auf Donnerstag zu verschieben?",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Would it be possible for you to send the contract by noon?",
+     "de": "Wäre es möglich, dass Sie den Vertrag bis mittags schicken?",
+     "ctx": "mail"
+    },
+    {
+     "en": "Would it be possible to sit by the window?",
+     "de": "Wäre es möglich, am Fenster zu sitzen?",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Would it be possible that you resend the invoice?",
+    "good": "Would it be possible to resend the invoice?",
+    "cause": {
+     "de": "Das Deutsche kennt den dass-Satz („möglich, dass Sie … schicken“). Im Englischen folgt hier üblicherweise to + Grundform.",
+     "en": "German allows the dass-clause (“möglich, dass Sie … schicken”). English usually follows with to + base verb here."
+    }
+   },
+   "contrast": {
+    "with": "dip.wondering",
+    "a": "Would it be possible to extend the trial?",
+    "b": "I was wondering whether you could extend the trial.",
+    "diff": {
+     "de": "possible fragt nach der Sache. wondering nennt die Person, die etwas tun soll (you could).",
+     "en": "possible asks about the thing. wondering names the person who is meant to act (you could)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Would it be possible to postpone the review?",
+     "q": {
+      "de": "Wird hier um eine Verschiebung gebeten?",
+      "en": "Is the speaker asking for a postponement?"
+     },
+     "a": true
+    },
+    {
+     "s": "It is possible to postpone the review.",
+     "q": {
+      "de": "Wird hier um eine Verschiebung gebeten?",
+      "en": "Is the speaker asking for a postponement?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Fragst du nach der Person oder nach der Sache, und welche Form folgt danach?",
+    "en": "Are you asking about the person or the thing, and which form follows?"
+   }
+  },
+  {
+   "id": "dip.understate",
+   "name": {
+    "de": "a bit tricky · weicher Einwand",
+    "en": "a bit tricky · soft objection"
+   },
+   "form": {
+    "de": "could be (a bit of) a stretch / tricky",
+    "en": "could be (a bit of) a stretch / tricky"
+   },
+   "use": {
+    "de": "Ein Einwand mit Abstand: could be und ein mildes Wort wie tricky oder a stretch statt impossible oder too expensive. Vor einem Nomen heißt es a bit of a.",
+    "en": "An objection with distance: could be and a mild word such as tricky or a stretch instead of impossible or too expensive. Before a noun it is a bit of a."
+   },
+   "signals": [
+    "a bit tricky",
+    "a bit of a stretch",
+    "a little challenging",
+    "not ideal",
+    "could be"
+   ],
+   "ex": [
+    {
+     "en": "That timeline could be a bit tricky for us.",
+     "de": "Dieser Zeitplan könnte für uns etwas knifflig werden.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "A Friday launch might be a bit of a stretch for the team.",
+     "de": "Ein Start am Freitag wäre für das Team etwas sportlich.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Monday could be a little challenging on my side.",
+     "de": "Montag könnte bei mir etwas schwierig werden.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "That would be a bit challenge for our team.",
+    "good": "That would be a bit of a challenge for our team.",
+    "cause": {
+     "de": "Im Deutschen geht „ein bisschen Herausforderung“ ohne Artikel. Im Englischen braucht das Nomen nach a bit das Wort of a.",
+     "en": "German allows “ein bisschen Herausforderung” with no article. In English the noun after a bit needs of a."
+    }
+   },
+   "contrast": {
+    "with": "dip.hoping",
+    "a": "We were hoping for a lower price.",
+    "b": "Your price could be a bit of a stretch for us.",
+    "diff": {
+     "de": "hoping formuliert einen Wunsch. a stretch formuliert einen Einwand. Beide nehmen die Schärfe heraus.",
+     "en": "hoping puts a wish. a stretch puts an objection. Both take the edge off."
+    }
+   },
+   "ccq": [
+    {
+     "s": "That timeline could be a bit tricky for us.",
+     "q": {
+      "de": "Sagt die Sprecherin klar Nein?",
+      "en": "Does the speaker say a flat no?"
+     },
+     "a": false
+    },
+    {
+     "s": "The budget is a bit of a stretch, but we can manage.",
+     "q": {
+      "de": "Kann das Team das Budget am Ende stemmen?",
+      "en": "Can the team manage the budget in the end?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wie nimmst du dem Einwand die Schärfe, ohne ihn zu verstecken?",
+    "en": "How do you take the edge off an objection without hiding it?"
+   }
+  }
+ ]
+}
