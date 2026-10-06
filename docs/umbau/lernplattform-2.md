@@ -143,9 +143,9 @@ Nach der Prüfung des Entwurfs (06.10.2026) sind 30 Befunde eingearbeitet. Welch
 
 | Reiter | Erste Fläche | Hauptknopf | Heute falsch (Beleg) |
 |---|---|---|---|
-| Heute | Datum als Titel, Tageskarte mit Ring, „Als Nächstes: …“, die Pflichtschritte als Zustand | „Weiter: Wörter wiederholen · 30 Karten“ | „Heute“ viermal (`TodayScreen.tsx:239`, `:633`, `:638`); zwei Wochenhinweise (`:531` und `ProfilePages.tsx:46-60`); unter der Tageskarte stehen während der Pflicht drei weitere Zeilen (`:687`, `:697`, `:700`) |
+| Heute | Datum als Titel, Tageskarte mit Ring, „Als Nächstes: …“, die Pflichtschritte als Zustand | „Weiter: Wörter wiederholen · 30 Karten“ | „Heute“ viermal (`TodayScreen.tsx:239`, `:633`, `:638`); zwei Wochenhinweise (`:531` und `ProfilePages.tsx:46-60`); unter der Tageskarte stehen während der Pflicht zwei weitere Zeilen (`:697`, `:700`), nach der Pflicht dazu `WorthNow` (`:687`) |
 | Wörter | Wiederholen-Karte, darunter die Zielkarte | „Pflicht: 30 Karten · 8 Min.“; ohne offene Pflicht „Alle fälligen: 51“ | Knopf unter der Falz, eigener Kopf statt `TabTitle` (`VocabHub.tsx:107`, `:130-193`); 51 gegen 30 (`:165` gegen `:187`) |
-| Grammatik | Weiter-Karte mit genau einer Handlung, darunter die Zeile „Fehlersätze · n“, dann der Lernpfad | „Thema starten“ oder bei aktiver Bremse „Fehlersätze korrigieren · 9“ | Der Text nennt Fehlersätze, der Knopf startet ein Thema (`LearnHub.tsx:103-109`, `:127-131`); 21 gegen 9 (`:97` gegen `:101`) |
+| Grammatik | Weiter-Karte mit genau einer Handlung, darunter die Zeile „Fehlersätze · 21 fällig · heute 5“, dann der Lernpfad | „Thema starten“ oder bei aktiver Bremse „Fehlersätze korrigieren · 5“ (Zahl = was der Knopf startet, §2.4) | Der Text nennt Fehlersätze, der Knopf startet ein Thema (`LearnHub.tsx:103-109`, `:127-131`); 21 gegen 9 (`:97` gegen `:101`) |
 | Anwenden | Kachel „Jetzt empfohlen“, Reihenfolge nach Gerät | die Kachel | Am Handy kommt Hören zuerst (`ApplyHub.tsx:101-142`) |
 | Fortschritt | Kopfzeile „Wörter B2+ · Grammatik B2“, Segment **Wörter** | keiner | „B2“ fünfmal, Gesamtstufe entgegen Gesamtkonzept 3.5 |
 
@@ -161,11 +161,12 @@ Nach der Prüfung des Entwurfs (06.10.2026) sind 30 Befunde eingearbeitet. Welch
    - ein Hauptknopf.
    - Laptop ≥ 1.024 px: rechts daneben die Karte „Stand“ mit „Wörter fest 312“ und „Grammatik: Kapitel 3 von 7“.
 3. Montags genau **ein** Band „Wochenrückblick ›“ über der Tageskarte. `TodayWeeklyRow` (`ProfilePages.tsx:46-60`, eingehängt in `areas/profil.tsx:62`) erscheint nicht mehr auf Heute.
-4. **Solange die Pflicht offen ist, steht unter der Tageskarte nichts** außer Speicher- und Planfehlern (`save-failed`). `SpeakExtra` (`TodayScreen.tsx:476`, `:697`), `MissedCheck` (`:510`, `:700`) und `WorthNow` (`:687`) stehen dort nicht mehr (Kap. 2 Nr. 1, Standard L8).
+4. **Solange die Pflicht offen ist, steht unter der Tageskarte nichts** außer Speicher- und Planfehlern (`save-failed`). `SpeakExtra` (`TodayScreen.tsx:476`, `:697`) und `MissedCheck` (`:510`, `:700`) stehen dort nicht mehr (Kap. 2 Nr. 1, Standard L8).
 5. **Nach der Pflicht:** die Abschlusskarte (§5.10) und darunter genau **eine** Zeile „Extra ›“. Sie öffnet ein Blatt mit höchstens drei Einträgen in fester Reihenfolge:
    - Profil `keys`: „Am Laptop vertiefen · 3 eigene Sätze mit Wörtern von heute · ca. 5 Min.“ → Route `comboSentence`, `ctx:'xtra'`. Die Wörter liefert `laptopDeepen` (§4.9) aus der Datenbank, also auch die vom iPhone am Morgen. Profil `touch`: „Fehlwörter von heute · 2 Min.“;
    - „Sprechen üben (Rollenspiel, Einwände)“. Damit bleibt Sprechen nach A7 vom 04.10. auf Heute erreichbar, mit 2 Tipps;
    - „Wochen-Check nachholen“, nur wenn er fehlt (bisher `MissedCheck`).
+   - `WorthNow` (`:687`) entfällt als eigene Karte; sein Vorschlag geht in den ersten Eintrag des Blatts ein.
    - Nichts davon zählt für Ring oder Serie. Hören und Diktat werden am Handy nie empfohlen. Das Wort „schwächster Bereich“ entfällt (`TodayScreen.tsx:74-81`, `:373-390`).
 
 ### 2.3 Tagesplan v2 (Regelversion `u.rv = 2`)
@@ -1026,98 +1027,124 @@ Nicht mehr vorgesehen: `lx:produce-due:<tag>` in `localStorage`. iPhone und Lapt
 
 1. Dieses Dokument.
 2. `src/domain/explain/types.ts` wörtlich aus §3.1.
-3. `src/domain/learn/types.ts`: die drei optionalen Felder aus §3.1.
-4. Leere i18n-Teile `src/i18n/parts/{ex,gx,wx,hx,fx}.{de,en}.ts`, eingebunden in `de.ts`/`en.ts`. `tests/unit/i18nParts.test.ts` prüft zusätzlich, dass diese fünf Teile nur Schlüssel mit ihrem eigenen Präfix tragen.
-5. Leere CSS-Teile `src/styles/parts/{gx,wx,hx,fx}.css`, per `@import` direkt nach `@import 'tailwindcss'` in `index.css`.
-6. `src/content/atlas/meta.json` mit `{ "atlas": 6346, "pack": 443 }`.
-7. `npm run typecheck` und `npm test` grün.
+3. `src/domain/learn/types.ts`: die drei optionalen Felder aus §3.1. Dazu kommt `GrammarTaskType` mit `meaning | find | kwt`. Im selben Commit werden alle Tabellen angepasst, die an dem Typ hängen. So bleibt die Typprüfung grün, und kein Paket muss fremde Dateien ändern:
+   - `RANK`/`BY_RANK` in `domain/grammar/path.ts:162`: meaning 0, find 2, kwt 2; Rückstufung kwt → gap, find → mc;
+   - `kinds` in `domain/learn/grade.ts:14`: vorläufig meaning → `mc`, find → `correct`, kwt → `transform`, bis P4 die neuen Notenschlüssel liefert und P5 umstellt;
+   - `guessOf` in `domain/grammar/bkt.ts:27` nach §4.7;
+   - `grammarChannel` in `features/progress/persist.ts:224`: mc und meaning → `null`, sonst `write`. Bisher zählte alles außer mc als Schreiben;
+   - `kindOf` in `features/check/session.ts:96`: mc und meaning → `choice`.
+4. `dev?: 't' | 'k'` als optionales Feld in `AnswerEvent` (`domain/srs/types.ts:155`), `LogEntry` und `ChunkLogEntry` (`domain/progress/logPatch.ts:16`, `:36`).
+5. Leere i18n-Teile `src/i18n/parts/{ex,gx,wx,hx,fx}.{de,en}.ts`, eingebunden in `de.ts`/`en.ts`. `tests/unit/i18nParts.test.ts` prüft zusätzlich, dass diese fünf Teile nur Schlüssel mit ihrem eigenen Präfix tragen.
+6. Leere CSS-Teile `src/styles/parts/{gx,wx,hx,fx}.css`, per `@import` direkt nach `@import 'tailwindcss'` in `index.css`.
+7. `src/content/atlas/meta.json` mit `{ "atlas": 6346, "pack": 443 }`.
+8. Testantworten je Paket: `src/platform/dev/canned/lp2/{p2,p5,p6}.ts`, eingebunden wie die vorhandenen `canned/*`. Die Registrierungen von `grammar-items` (`cannedLearn.ts:124`) und `card-examples` (`cannedReplies.ts:253`) werden unverändert nach `lp2/p5.ts` bzw. `lp2/p6.ts` verschoben. Danach ändert jedes Paket in `src/platform/dev/**` nur seine eigene Datei.
+9. `tests/unit/removalAudit.test.ts` bekommt einen neuen Fall: „`src/domain/**` und `src/features/today/store.ts` importieren nichts aus `src/platform/input`“. Das Verbot von `src/platform/device.ts` bleibt stehen (§4.1).
+10. CLAUDE.md A7 bekommt die Einträge „Eingabeprofil statt Handy-Modus (nie planwirksam)“ und „Regelversion `u.rv`, Planversion bleibt 1“.
+11. `npm run typecheck`, `npm run lint` und `npm test` grün.
 
-Danach berührt kein Paket diese Wiring-Zeilen mehr. Jedes Paket schreibt nur in seine eigenen Teile.
+Danach berührt kein Paket diese Verdrahtungen mehr. Jedes Paket schreibt nur in seine eigenen Teile.
 
 ### 10.1 Übersicht
 
 | Paket | Welle | Inhalt | hängt ab von | Aufwand |
 |---|---|---|---|---|
-| P1 Fundament | 1 | Gerüst, Erklär-Karte, Eingabebausteine, Tokens, Bewegung, Eingabeprofil | Vertrag | XL |
-| P2 Grammatik-Inhalte | 1 | Muster, Zuordnung, Begründungen, neue Aufgaben, Pfad/Familien, Erklär-Domäne, Sofort-Inhalt | Vertrag | XL |
+| P1 Fundament | 1 | Gerüst, Erklär-Karte, Eingabebausteine, Tokens (Auswahl ≠ Richtig), Bewegung, Eingabeprofil `platform/input.ts`, Wächter | Vertrag | XL |
+| P2 Grammatik-Inhalte | 1 (Stufe 2 läuft in Welle 2 weiter) | Muster, Zuordnung, Begründungen, neue Aufgaben, Pfad/Familien, Erklär-Domäne, Fehlerschlange je Muster, stillgelegte Aufgaben | Vertrag | XL |
 | P3 Wörter-Inhalte | 1 | Paket-Felder, Fallen-Index, Atlas-Bereinigung | Vertrag | L |
-| P4 Zahlen und Tagesplan | 1 | `domain/metrics`-Selektoren, Plan v2, Noten, Log `dev` | Vertrag | M |
-| P5 Grammatik-Übung und -Ablauf | 2 | GrammarItem, Einführung, Themenblatt, Rundenlogik, neue Typen, Rundenende | P1, P2, P4 | XL |
-| P6 Wörter-Übung | 2 | ExerciseView, Anki, Einführung, neue Formen, Warum-Zeile, Kenne ich | P1, P3, P4 | XL |
-| P7 Heute, Hubs, Fortschritt | 2 | Heute, Wörter-/Grammatik-/Anwenden-Reiter, Pfad, Fortschritt, Atlas-Seite | P1, P2, P4 | L |
-| P8 Fehler korrigieren, Satzbau, Anwenden-Übungen, Absicherung | 2 | Schritt 4, Reparatur, Satzbau, Hörübung, Kombi, Wächter-Tests | P1, P2, P4 | L |
+| P4 Zahlen und Tagesplan | 1, Nachtrag nach P2 | Selektoren, Plan v2 (`u.rv`), Einfrieren (`u.gt`, `u.ps`), Musterzustand, Messwerte, Noten, Log `dev`, Rückweg-Test, Schlangen-Simulation | Vertrag; Nachtrag: P2 Stufe 1 | L |
+| P5 Grammatik-Übung und -Ablauf | 2 | GrammarItem, Einführung über mehrere Tage, Vortest, Themenblatt, Rundenlogik, neue Typen, Rundenende | P1, P2, P4 | XL |
+| P6 Wörter-Übung | 2 | ExerciseView, Anki, Einführung, neue Formen, Warum-Zeile, Kenne ich, Schritt 1 ohne Reparatur-Sätze, Plan sprachunabhängig | P1, P3, P4 | XL |
+| P7 Heute, Reiter, Fortschritt | 2 | Heute, Wörter-/Grammatik-/Anwenden-Reiter, Pfad, Fortschritt mit Messwerten, Atlas-Seite | P1, P2, P4 | L |
+| P8 Fehler korrigieren, Satzbau, Anwenden-Übungen, Absicherung | 2 | Schritt 4 mit Varianten und mehreren Stellen, Reparatur, Satzbau zum Tagesthema, Hörübung, Kombi, Wochen-Check, Wächter-Tests | P1, P2, P4, P5 | L |
 
-### 10.2 Zusammenführen, Prüfer, Test-Links
+### 10.2 Zusammenführen, Entwurf, Prüfer, Test-Links
 
-1. **Welle 1:** Zusammengeführt wird einzeln in der Reihenfolge P4 → P3 → P2 (Stufe 1) → P1, nach jedem Paket `npm run verify`. Prüfer je eine Runde und eine gezielte Nachprüfung (A2/A5): data-guard (P2, P4), platform-guard, learning-scientist (P2 Inhalte, `explain-answer@1`), Englischlehrer (Stichprobe P2/P3). Danach **Test-Link 1**.
-2. **Welle 2:** Reihenfolge P5 → P6 → P8 → P7, nach jedem Paket `verify`. P2 Stufe 2 (Ausrollen der übrigen 35 Themen) läuft parallel weiter und berührt nur Inhaltsdateien.
-3. **Abschluss Welle 2 (Koordination):** Allowlisten in `tests/unit/uiGuards/` müssen leer sein. ESLint-Regel (`no-restricted-syntax`) gegen `matchMedia('(pointer` außerhalb `src/platform` und gegen `text-[` in `src/features`/`src/ui`. Volle Suite, `check:platform`, Prüfer: ux-reviewer (Handy und Laptop, drei Modi, Deutsch/Englisch), data-guard, learning-scientist, platform-guard. Danach **Test-Link 2**, aber erst, wenn P2 Stufe 2 fertig ist (L6).
-4. **Live** nur nach „Ja live nehmen“. Vorher die Live-Version neu lesen.
-5. Rote Tests: höchstens zwei Behebungsversuche je Ursache, dann ein offener Befund an Emrah (A2).
-6. Nach jeder Welle trägt die Koordination den Stand in `docs/umbau/stand.md` und die Entscheidungen in CLAUDE.md A7 ein.
+1. **Welle 1** in dieser Reihenfolge, nach jedem Schritt `npm run verify`: P4 → P3 → P2 (Stufe 1) → **P4-Nachtrag** → P1.
+   - Im P4-Nachtrag wird `freezeGrammarDay` mit `patternsOf` aus P2 verdrahtet (`u.gt.pats`, `u.ps`). Alle zählenden Leser werden auf `liveErrorsOf` umgestellt, und `errorQueueSim.test.ts` läuft mit den echten `addError`/`reviewError` aus P2 grün.
+   - Prüfer je eine Runde und eine gezielte Nachprüfung (A2/A5): data-guard (P2, P4), platform-guard, learning-scientist (P2-Inhalte, `explain-answer@1`, Regeln der Fehlerschlange), Englischlehrer (Stichprobe P2/P3).
+   - Danach **Test-Link 1**, noch mit `PLAN_RV = 1`.
+2. **Entwurf vor Welle 2 (Koordination):** eine Design-Fläche als eigenes Artefakt mit 8 Bildschirmen aus den Tokens von §7. Gezeigt werden Heute offen und fertig, das Grammatik-Ergebnis „falsch“ am Handy und am Laptop, die Einführung (Karte 1–3), das Wörter-Ergebnis, der Lernpfad und das Rundenende, mit echten Texten aus einem Pilotthema und Beispielzahlen. Emrah gibt einmal „Go“ oder Rückmeldung; nach einer Korrekturrunde entscheidet er (A2). Domänenschritte von Welle 2 dürfen vorher beginnen, Bildschirmarbeit erst nach dem „Go“. Später vergleicht der ux-reviewer die Screenshots aus `screens.spec` mit der Fläche; Abweichungen sind Befunde.
+3. **Welle 2** in dieser Reihenfolge, nach jedem Paket `verify`: P5 → **Test-Link 1b** (L6) → P6 → P8 → P7. P2 Stufe 2 läuft parallel, berührt nur Inhaltsdateien und geht chargenweise auf den Test-Link.
+4. **Abschluss Welle 2 (Koordination):**
+   - `PLAN_RV = 2` in einem eigenen Commit. Danach laufen `planV2`, `againV2`, `phoneProfile` und `today-duties` mit dem Standardwert.
+   - Die Allowlisten in `tests/unit/uiGuards/` (P1, P5–P8) müssen leer sein. Dazu kommt die ESLint-Regel (`no-restricted-syntax`) gegen `matchMedia('(pointer` außerhalb `src/platform` und gegen `text-[` in `src/features`/`src/ui`.
+   - Volle Suite, `check:platform`, Prüfer: ux-reviewer (Handy und Laptop, drei Modi, Deutsch/Englisch, Vergleich mit der Design-Fläche), data-guard, learning-scientist, platform-guard.
+   - Danach **Test-Link 2**. Themen ohne Musterdatei verhalten sich wie auf Test-Link 1b, bis P2 Stufe 2 sie liefert.
+5. **Live** nur nach „Ja live nehmen“. Vorher die Live-Version neu lesen.
+6. **Messung nach 14 Tagen** mit Test-Link 2 bzw. live: die Regeln aus §4.9 anwenden und das Ergebnis in `stand.md` eintragen. Es gibt keine neue Planungsrunde.
+7. Rote Tests: höchstens zwei Behebungsversuche je Ursache, dann ein offener Befund an Emrah (A2). Das gilt auch für `errorQueueSim`: Ist der Test nach zwei Anpassungen innerhalb von §2.3 noch rot, bekommt Emrah die Zahlen und einen Vorschlag.
+8. Nach jeder Welle trägt die Koordination den Stand in `docs/umbau/stand.md` und die Entscheidungen in CLAUDE.md A7 ein.
 
 ### 10.3 Besitzregeln für parallele Arbeitsbereiche
 
 - Jede Datei hat **genau einen** Besitzer (Liste unten). Ein anderes Paket liest sie nur.
-- **Texte:** Neue Schlüssel stehen nur im eigenen neuen Teil (`ex`, `gx`, `wx`, `hx`, `fx`, Schlüssel mit diesem Präfix). Vorhandene Teile ändert nur ihr Besitzer: `engine`, `nbSh` → P1 · `hint` → P2 · `learn` → P5 · `trainer` → P6 · `nbHeute`, `nbLernen`, `nbWs`, `nbProfil`, `progress`, `stand` → P7 · `repair`, `apply`, `nbTraining`, `nbSprechen`, `speak` → P8. `de.ts`/`en.ts` ändert nur die Koordination (alte Schlüssel wie `conf*` entfernt sie nach Welle 2).
+- **Texte:** Neue Schlüssel stehen nur im eigenen neuen Teil (`ex`, `gx`, `wx`, `hx`, `fx`, Schlüssel mit diesem Präfix). Vorhandene Teile ändert nur ihr Besitzer: `engine`, `nbSh` → P1 · `hint` → P2 · `learn` → P5 · `trainer` → P6 · `nbHeute`, `nbLernen`, `nbWs`, `nbProfil`, `progress`, `stand` → P7 · `repair`, `apply`, `nbTraining`, `nbSprechen`, `speak` → P8. Ausnahme: P4 legt in Welle 1 die Schlüssel `hxNum*` im Teil `hx` an (nur additiv, vor P7). `de.ts`/`en.ts` ändert nur die Koordination; alte Schlüssel wie `conf*` entfernt sie nach Welle 2.
 - **CSS:** `index.css` gehört P1. Welle-2-Pakete schreiben nur in ihren Teil `src/styles/parts/<präfix>.css`.
 - **E2E-Specs** gehören dem Paket des Bereichs. Querschnitts-Specs (`a11y`, `screens`, `acceptance`, `perf`, `hilfen`) passt die Koordination beim Zusammenführen an. Kein Paket löscht eine Erwartung, ohne sie zu ersetzen.
-- **Welle 1 vor Welle 2:** Ändert ein Welle-1-Paket Verhalten, das Specs eines Welle-2-Bereichs prüfen, passt es dort nur die betroffenen Erwartungen an (nacheinander, also ohne Konflikt). Das steht als `sharedTouches` beim Paket.
+- **Welle 1 vor Welle 2:** Ändert ein Welle-1-Paket Verhalten, das Specs eines Welle-2-Bereichs prüfen, passt es dort nur die betroffenen Erwartungen an. Das geschieht nacheinander, also ohne Konflikt, und der Commit nennt jede geänderte Erwartung. Diese Stellen stehen als `sharedTouches` beim Paket.
+- **Entwicklungs-Adapter:** `src/platform/dev/canned/lp2/<paket>.ts` gehört dem jeweiligen Paket. Alle übrigen Dateien in `src/platform/dev/**` ändert nur die Koordination.
+- **Routen:** `src/areas/lernen.tsx` gehört P8 (Schritt 4, Satzbau, Wiederaufnahmen, `lernen.tsx:104-114`). P5 behält die exportierten Namen (`grammarResume`, Start der Grammatikrunde). Braucht P5 mehr, meldet es das über eine Registrierfunktion in `features/grammar/resume.ts`, nicht in `lernen.tsx`. Die übrigen `src/areas/**` gehören P7.
+- **Schalter:** `PLAN_RV` stellt nur die Koordination um.
 
 ### 10.4 Pakete im Einzelnen
 
 #### P1 Fundament: Übungsgerüst, Erklär-Karte, Tokens, Eingabeprofil (Welle 1, XL)
 
-**Ziel:** Alle Übungen bekommen ein gemeinsames Gerüst mit fester Reihenfolge, eine strukturierte Erklär-Karte, einheitliche Eingabebausteine, feste Bedeutungsfarben und genau eine Geräteerkennung. Sofort sichtbar: Grün heißt richtig, Bausteinplätze in Bausteinhöhe, ein Wort-für-Wort-Vergleich mit dem erwarteten Wort, eine deckende Reiterleiste.
+**Ziel:** Alle Übungen bekommen ein gemeinsames Gerüst mit fester Reihenfolge, eine strukturierte Erklär-Karte, einheitliche Eingabebausteine, feste Bedeutungsfarben und genau eine Erkennung des Eingabeprofils. Sofort sichtbar wird: Grün heißt richtig, und Ausgewählt sieht anders aus als Richtig. Dazu kommen Bausteinplätze in Bausteinhöhe, ein Wort-für-Wort-Vergleich mit dem erwarteten Wort und eine deckende Reiterleiste.
 
-**Besitz:** `src/ui/exercise/**` (neu: `ExerciseShell`, `ExerciseStatus`, `Verdict`, `Comparison`, `Explanation`, `PatternCard`, `MarkedSentence`, `Examples`, `HintLine`, `ExerciseMenu`, `SentenceInput`, `explainDepth.ts`, `index.ts`) · `src/engine/{Choices,KineticGap,SentenceDiff,Tiles,TilesKeyboard,HiddenInput,ExerciseFrame}.tsx`, `src/engine/SpotSentence.tsx` (neu) · `src/ui/{ActionBar,ExerciseBar,SessionEnd,FeedbackPanel,Disclosure}.tsx`, `src/ui/motion.ts`, `src/ui/sheetDrag.tsx`, `src/ui/chat/ChatInput.tsx` · `src/features/learn/{ui.tsx,RetryHint.tsx}` · `src/features/companion/translate/TranslatePane.tsx` · `src/styles/index.css` · `src/app/shell/TabBar.tsx` · `src/platform/device.ts` (neu), `src/platform/diagnostics.ts` · `src/features/settings/{LearningSection,InputProfileSection}.tsx` · i18n `ex`, `engine`, `nbSh` · Tests `tests/unit/{contrast,explainDepth,device,uiGuards}.test.ts`, `tests/unit/uiGuards/allow-P5…P8.json`, `tests/e2e/slots.ts`, `tests/e2e/shellColors.spec.ts`.
+**Besitz:** `src/ui/exercise/**` (neu: `ExerciseShell`, `ExerciseStatus`, `Verdict`, `Comparison`, `Explanation`, `PatternCard`, `MarkedSentence`, `Examples`, `HintLine`, `ExerciseMenu`, `SentenceInput`, `explainDepth.ts`, `index.ts`) · `src/engine/{Choices,KineticGap,SentenceDiff,Tiles,TilesKeyboard,HiddenInput,ExerciseFrame}.tsx`, `src/engine/SpotSentence.tsx` (neu) · `src/ui/{ActionBar,ExerciseBar,SessionEnd,FeedbackPanel,Disclosure,GradeButtons,HeroCard,RowList,CopyBox,Steps}.tsx`, `src/ui/motion.ts`, `src/ui/sheetDrag.tsx`, `src/ui/chat/ChatInput.tsx` · `src/features/companion/{ChatMessage,ChatPane}.tsx`, `src/features/companion/translate/TranslatePane.tsx` · `src/features/system/Chrome.tsx` · `src/features/learn/{ui.tsx,RetryHint.tsx}` · `src/styles/index.css` · `src/app/shell/TabBar.tsx` · `src/platform/input.ts` (neu), `src/platform/diagnostics.ts` · `src/features/settings/{LearningSection,InputProfileSection,MemorySection}.tsx` · i18n `ex`, `engine`, `nbSh` · Tests `tests/unit/{contrast,explainDepth,input,uiGuards}.test.ts`, `tests/unit/uiGuards/allow-P1.json` und `allow-P5…P8.json`, `tests/e2e/{slots,input}.ts`, `tests/e2e/shellColors.spec.ts`.
+**Gemeinsam (nacheinander, nur betroffene Erwartungen, im Commit genannt):** `tests/e2e/{trainer,trainerFeedback,trainerModes,grammar,hilfen,drills,uxRules}.spec.ts` (A–D statt 1–4, Text des Vergleichs, Bausteinhöhe, Farbe „Richtig“).
 
 **Schritte:**
-1. Tokens nach §7 in `index.css`; alle Erfolgszustände auf `--lx-ok`; data-testid-Overrides (984–994) löschen; `.lx-tile-line` korrigieren; Fokusregel; `body`-Verlauf.
-2. `platform/device.ts` (§4.1), Einstellung „Eingabe an diesem Gerät“, Diagnosezeile zum Tastaturabstand.
-3. `src/ui/exercise/*` nach §4.2, §4.3 und §4.6 mit `data-slot`, Zuständen, Split-Layout; Haptik, Ton und `role="status"` nur in `Verdict`.
-4. Eingabebausteine nach §4.4; die vier `matchMedia`-Stellen in eigenen Dateien (`ChatInput`, `TranslatePane`, `TilesKeyboard`, `sheetDrag`) auf `device.ts` umstellen. Die übrigen fünf stellen P5 (`GrammarItem`), P6 (`ExerciseView`, `LookupPopover`) und P8 (`DrillItems`, `RoleplayScreen`) um.
-5. Leisten und Enden nach §4.5 (ActionBar `placement`/`aside`, ExerciseBar `counter`, SessionEnd `growth` mit Hauptknopf in der Leiste, FeedbackPanel als Adapter, `learn/ui.tsx` und `ExerciseFrame` als Hüllen), Bewegungsvorlagen, deckende TabBar.
+1. Tokens nach §7 in `index.css`: alle Erfolgszustände auf `--lx-ok`; Auswahl- und Fokuszustände neutral (nie Akzent, nie `--lx-ok`); data-testid-Overrides (984–994) löschen; `.lx-tile-line` korrigieren; Fokusregel; `body`-Verlauf.
+2. `platform/input.ts` (§4.1), Einstellung „Eingabe an diesem Gerät“, Diagnosezeile zum Tastaturabstand, E2E-Helfer `tests/e2e/input.ts` (setzt `__LINGO_INPUT__` per `addInitScript`). `src/platform/device.ts` wird **nicht** angelegt.
+3. `src/ui/exercise/*` nach §4.2, §4.3 und §4.6 mit `data-slot`, Zuständen und Split-Layout. Haptik, Ton und `role="status"` gibt es nur in `Verdict`. `ShellFeedback.auto` mit einem Zeitgeber im Gerüst, der bei offenem Menü oder Aufklappbereich pausiert.
+4. Eingabebausteine nach §4.4, mit der Antipp-Regel (vor dem Prüfen wählen, danach nachschlagen; `SpotSentence locked` → `EnglishText`). Die vier `matchMedia`-Stellen in eigenen Dateien (`ChatInput`, `TranslatePane`, `TilesKeyboard`, `sheetDrag`) werden auf `platform/input.ts` umgestellt. Die übrigen fünf stellen P5 (`GrammarItem`), P6 (`ExerciseView`, `LookupPopover`) und P8 (`DrillItems`, `RoleplayScreen`) um.
+5. Leisten und Enden nach §4.5 (ActionBar `placement`/`aside`, ExerciseBar `counter`, SessionEnd `growth` mit Hauptknopf in der Leiste, FeedbackPanel als Adapter, `learn/ui.tsx` und `ExerciseFrame` als Hüllen, `autoNext` aus `learn/ui.tsx:170-199` geht in `ShellFeedback.auto` über), Bewegungsvorlagen, deckende TabBar.
 6. Texte im Teil `ex`: Urteil, Zustände Neu · Lernt · Sicher · Fest, Menü, Profil-Einstellung (DE und EN, US-Schreibweise).
-7. Wächter `uiGuards.test.ts`: kein `matchMedia('(pointer` außerhalb `src/platform`, kein `text-[`, keine kopierte Kartenklasse außerhalb `src/ui/exercise`. Heutige Fundstellen stehen je Besitzer in `allow-P5…P8.json`. Dazu der E2E-Helfer `expectSlotOrder(page)`.
+7. Wächter `uiGuards.test.ts`: kein `matchMedia('(pointer` außerhalb `src/platform`, kein `text-[`, keine kopierte Kartenklasse außerhalb `src/ui/exercise`. Die heutigen Fundstellen stehen je Besitzer in `allow-P1.json` und `allow-P5…P8.json`. `allow-P1.json` umfasst auch die neun Dateien, die bisher keinem Paket gehörten (`GradeButtons`, `HeroCard`, `RowList`, `CopyBox`, `Steps`, `ChatMessage`, `ChatPane`, `MemorySection`, `Chrome`); P1 leert sie selbst. Dazu der E2E-Helfer `expectSlotOrder(page)`.
 
 **Abnahme:**
 - In allen 4 Paletten × 3 Modi haben „Richtig“-Zeile, richtige Option und richtige Lücke die Farbe von `--lx-ok-text` (E2E `shellColors`).
+- In allen 4 Paletten × 3 Modi unterscheiden sich gewählte und richtige Option in Hintergrund **und** Rahmen (berechnete Stile). Die Rahmenfarbe der Auswahl ist nie `--lx-ok` (E2E `shellColors`).
 - Kontrasttest: Text in ok/near/wrong/hint ≥ 4,5:1 auf `bg` und `surface` in allen Paletten und Modi. Kein Palettenblock setzt `--lx-ok*`.
 - Bausteinplätze bei 390×844: Höhe = Bausteinhöhe ± 2 px.
 - `Comparison` zeigt bei Ersetzung „given → expected“ und ein fehlendes Wort als neutrales „+ …“.
-- `inputProfile`: Einstellung vor Testschalter vor Medienabfrage, nie in der Datenbank (Unit).
+- `inputProfile`: Einstellung vor Testschalter vor Medienabfrage, nie in der Datenbank (Unit). `removalAudit.test.ts` bleibt grün.
+- `ShellFeedback.auto`: geht nur bei ok, Hilfe 0 und Tiefe `min` weiter und pausiert bei offenem Menü (Unit).
 - `explainDepth`, `visibleLines` und `visibleWordCount` entsprechen der Tabelle in §4.6 (Unit).
-- Alle bestehenden Unit- und E2E-Tests grün; der Build wächst um höchstens 60 KB.
+- `allow-P1.json` ist leer. Alle bestehenden Unit- und E2E-Tests sind grün, die geänderten Erwartungen stehen im Commit. Der Build wächst um höchstens 60 KB.
 
 #### P2 Grammatik-Inhalte und Erklär-Domäne (Welle 1, XL, in zwei Stufen)
 
-**Ziel:** Jede Grammatikaufgabe kennt ihr Muster und hat aufgabengenaue Begründungen. Die Domäne liefert die fertige Erklär-Karte und Beispiele nur aus demselben Muster. Die falsche Regel und die fehlende Erklärung bei der Fehlerwiederholung werden sofort repariert.
+**Ziel:** Jede Grammatikaufgabe kennt ihr Muster und hat aufgabengenaue Begründungen. Die Domäne liefert die fertige Erklär-Karte und Beispiele nur aus demselben Muster. Die Fehlerschlange arbeitet je Muster: ein offener Eintrag, falsch heißt eine Box zurück. Die falsche Regel, alte Fehlersätze dazu und die fehlende Erklärung bei der Fehlerwiederholung werden sofort repariert.
 
-**Besitz:** `src/content/grammar/**` (neu: `patterns/*.json`, `pattern-map.json`, `tasks-v2.json`, `path.json`) · `src/content/legacy/{rules,grammar}.json`, `src/content/grammar-bank.json`, `src/content/grammar-extra.json`, `src/content/c1/{toolkit,order}.json` · `src/domain/grammar/{patternTypes,patterns,explain,span}.ts` (neu), `src/domain/grammar/{rules,errors,errorWhy,retryHint,raw}.ts` · `src/prompts/explainAnswer.ts` (neu) · i18n `hint` · `scripts/grammar/**` · `docs/umbau/inhalte-pruefung.md` · Tests `tests/unit/{grammarPatterns,grammarContent,grammarExplain,errorsExpl,errorSpan}.test.ts`.
-**Gemeinsam (nur additiv):** `src/prompts/registry.ts` (eine Zeile).
+**Besitz:** `src/content/grammar/**` (neu: `patterns/*.json`, `pattern-map.json`, `tasks-v2.json`, `path.json`, `retired.json`) · `src/content/legacy/{rules,grammar}.json`, `src/content/grammar-bank.json`, `src/content/grammar-extra.json`, `src/content/c1/{toolkit,order}.json` · `src/domain/grammar/{patternTypes,patterns,explain,span}.ts` (neu), `src/domain/grammar/{rules,errors,errorWhy,retryHint,raw}.ts` · `src/prompts/explainAnswer.ts` (neu) · `src/platform/dev/canned/lp2/p2.ts` · i18n `hint` · `scripts/grammar/**` · `docs/umbau/inhalte-pruefung.md` · Tests `tests/unit/{grammarPatterns,grammarContent,grammarExplain,errorsExpl,errorSpan,errorsQueue}.test.ts`.
+**Gemeinsam:** `src/prompts/registry.ts` (eine Zeile, nur additiv) · nacheinander, nur betroffene Erwartungen: `tests/e2e/{grammar,hint,repair}.spec.ts` (Erklärung in `errorTask`, Stützen-Text).
 
 **Schritte:**
-1. `patternTypes.ts` (§3.2–§3.5), Lader `patterns.ts` (lazy wie `raw.ts`), `span.ts` (`errorSpan`).
-2. Zuordnungsskript `scripts/grammar/map-patterns.mjs`: Regeln auf Satz und Lösung, Bericht über nicht Zugeordnetes, Beinahe-Doppel (> 80 % Wortähnlichkeit).
-3. **Stufe 1 (Pilot):** past-simple-perfect, mixed-cond, time-clauses, cond-alt vollständig. Musterdateien (Vorlage: Befund „grammatik“), Zuordnung 100 %, `why.ok` mit dem Signal aus diesem Satz, `why.wrong` je falscher Option und für die häufigsten Lückenfehler, `tasks-v2` (je Muster ≥ 2 kwt, ≥ 2 find mit etwa 25 % fehlerfrei, 1 meaning), je Thema 6 Satzbau-Sätze mit `pat`/`trap`.
-4. Sofort-Korrekturen §3.9; `path.json` (7 Kapitel = `GRAMMAR_PATH`, Familien).
-5. `explain.ts` (`grammarExplanation`); `rules.ts` (`examplesFor({pattern})`, `formHint`); `errors.ts` (Erklärung bei `errorTask`, `addError(…, pat?)`); `errorWhy.ts` über das Muster; `retryHint.ts` mit `nudge`.
-6. `explain-answer@1`: Eingabe Aufgabe, Antwort und Muster; Ausgabe `{de, en}` mit höchstens 60 Wörtern; zod, `isWrongLang`, `QUOTE_RULE`, `quick`, Zwischenspeicher; Eintrag in `registry.ts`.
-7. Englischlehrer-Stichprobe 20 %, learning-scientist für Inhalte und Vorlage; Protokoll in `inhalte-pruefung.md`.
-8. **Stufe 2:** die übrigen 35 Themen in Chargen zu 6–8 (Musterdateien, Zuordnung, Begründungen, Stichprobe). Läuft während Welle 2 weiter und berührt nur eigene Inhaltsdateien.
+1. `patternTypes.ts` (§3.2–§3.5), Lader `patterns.ts` (lazy wie `raw.ts`), `span.ts` mit `errorSpan` und `errorSpans`.
+2. Zuordnungsskript `scripts/grammar/map-patterns.mjs`: Regeln auf Satz und Lösung, Bericht über nicht Zugeordnetes, Beinahe-Doppel (> 80 % Wortähnlichkeit). `patternOf` ordnet nur bei eindeutigem Treffer zu, damit P5 Pool- und Tagesaufgaben beim Laden zuordnen kann (§3.3).
+3. **Stufe 1 (Pilot):** past-simple-perfect, mixed-cond, time-clauses, cond-alt vollständig. Musterdateien (Vorlage: Befund „grammatik“), Zuordnung 100 %, `why.ok` mit dem Signal aus diesem Satz, `why.wrong` je falscher Option und für die häufigsten Lückenfehler, `tasks-v2` (je Muster ≥ 2 kwt, ≥ 2 find mit etwa 25 % fehlerfrei, 1 meaning; kein Satz wörtlich aus einer vorhandenen Aufgabe, §3.4), je Thema 6 Satzbau-Sätze mit `pat`/`trap`.
+4. Sofort-Korrekturen §3.9, `retired.json` mit der wish-Falle, `path.json` (7 Kapitel = `GRAMMAR_PATH`, Familien).
+5. `explain.ts` (`grammarExplanation`), `rules.ts` (`examplesFor({pattern})`, `formHint`), `errorWhy.ts` über das Muster, `retryHint.ts` mit `nudge`.
+6. `errors.ts`, nur ergänzend: Erklärung bei `errorTask` übernehmen; `liveErrorsOf(doc)` ohne stillgelegte Einträge (§3.9); `addError(…, pat)` mit einem offenen Eintrag je Muster und `more[]` (§5.7); `reviewError` setzt bei falsch eine Box zurück statt auf 0 (`errors.ts:115`) und ergänzt `rh[]`. Einträge ohne `pat` verhalten sich wie bisher, nur „eine Box zurück“ gilt für alle.
+7. `explain-answer@1`: Eingabe Aufgabe, Antwort und Muster; Ausgabe `{de, en}` mit höchstens 60 Wörtern; zod, `isWrongLang`, `QUOTE_RULE`, `quick`, Zwischenspeicher; Eintrag in `registry.ts`; Testantwort in `lp2/p2.ts`.
+8. Englischlehrer-Stichprobe 20 %, learning-scientist für Inhalte, Vorlage und Schlangenregeln; Protokoll in `inhalte-pruefung.md`.
+9. **Stufe 2:** die übrigen 35 Themen in Chargen zu 6–8 (Musterdateien, Zuordnung, Begründungen, je Thema ≥ 4 Satzbau-Sätze mit `pat`, davon ≥ 1 mit `trap`, Stichprobe). Läuft während Welle 2 weiter und berührt nur eigene Inhaltsdateien.
 
 **Abnahme:**
 - Alle Inhaltsdateien sind gegen zod gültig.
-- Stufe 1: 100 % der Pilotaufgaben haben `pat`. Stufe 2: alle 39 Themen haben eine Musterdatei, ≥ 95 % aller vorhandenen Aufgaben haben `pat`.
-- Jede Map-Kennung findet ihre Aufgabe; jede `pat`- und `contrast.with`-Kennung existiert.
+- Stufe 1: 100 % der Pilotaufgaben haben `pat`. Stufe 2: alle 39 Themen haben eine Musterdatei, ≥ 95 % aller vorhandenen Aufgaben haben `pat`, und jedes Thema hat ≥ 4 Satzbau-Sätze mit `pat` (≥ 1 mit `trap`).
+- Jede Map-Kennung findet ihre Aufgabe; jede `pat`- und `contrast.with`-Kennung existiert. Die Aufgabenschlüssel sind je Thema über Startaufgaben, Fallen und `tasks-v2` eindeutig.
 - `examplesFor({pattern})` liefert nur Beispiele dieses Musters und nie den Aufgabensatz; ohne `pattern` kommt `[]`.
 - `grammarExplanation`: Warum-Text ≠ Musterkarte ≠ Einführungstext; bei falscher Auswahl kommt `yours` aus der passenden Regel; bei Tiefe `full` höchstens 45 sichtbare Wörter für alle Pilotaufgaben.
 - Keine Stütze enthält ein Wort der Lösung, dessen Wahl das Thema prüft (modals-*, c1-hedging, articles, prepositions, relative).
 - US-Schreibweise in allen englischen Feldern (Liste: -our, -ise, -tre, telly, lorry …).
-- Die wish-Falle ist keine Satzkorrektur-Aufgabe mehr; `errorTask` übernimmt die gespeicherte Erklärung.
-- `errorSpan` liefert für ≥ 80 der 98 `correct`-Aufgaben einen Bereich ≤ 4 Wörter.
-- Neue Inhalte zusammen ≤ 450 KB, lazy geparst; `perf.spec` unverändert.
+- Die wish-Falle ist keine Satzkorrektur-Aufgabe mehr. Ein vorhandener Fehlereintrag dazu (Seed-Test) erscheint nicht in `dueErrors`, zählt nicht für die Bremse und bleibt in der Datenbank unverändert.
+- `errorsQueue`: Ein zweiter Fehler auf dasselbe Muster legt keinen neuen Eintrag an, setzt den vorhandenen auf Box 0 und hängt den Satz an `more` an. Falsch in Box 2 führt zu Box 1. `rh` wächst bis 6. Einträge ohne `pat` bleiben einzeln.
+- `errorSpan` liefert für ≥ 80 der 98 `correct`-Aufgaben einen Bereich ≤ 4 Wörter. `errorSpans` liefert für Sätze mit 2–3 Fehlerstellen alle Bereiche.
+- Neue Inhalte zusammen ≤ 450 KB, lazy geparst; `perf.spec` unverändert. data-guard ohne Befund für `errors.ts`.
 
 #### P3 Wörter-Inhalte: Paket-Felder, Fallen-Index, Atlas (Welle 1, L)
 
@@ -1126,89 +1153,109 @@ Danach berührt kein Paket diese Wiring-Zeilen mehr. Jedes Paket schreibt nur in
 **Besitz:** `src/content/c1/pack.json` · `src/content/atlas/**` (`atlas.json`, `meta.json`) · `src/content/nb/trapIndex.ts` (neu) · `src/domain/c1pack/packFields.ts` (neu) · `src/domain/atlas/atlas.ts` · `src/domain/srs/traps.ts` (neu) · `scripts/atlas/**`, `scripts/pack/**` · `docs/atlas-quellen.md` · Tests `tests/unit/{packContent,atlasContent,trapIndex}.test.ts`.
 
 **Schritte:**
-1. `packFields.ts` (§3.7) mit `packExtraOf(idOrEn)`.
+1. `packFields.ts` (§3.7) mit `packExtraOf(idOrEn | card)`. Das ist die Überlagerung beim Lesen, die P6 für bestehende Karten nutzt (§4.8); geschrieben wird damit nichts.
 2. `pack.json` für alle 443 Einträge ergänzen: `col` ≥ 2, `register`, `gap` für Kollokationen/Phrasal Verbs mit der typischen Fehlwahl aus `why`, `fam` (u. a. die 32 Klammer-Familien), `alt`, `scene` für Wendungen, `starts` (2) für Wörter. Englischlehrer-Stichprobe 20 %.
 3. `trapIndex.ts` und `srs/traps.ts` mit `trapForCard(card)` und `matchTrapInAnswer(text)` (über `matchTraps`).
 4. Atlas-Prüfskript: britische Wörter und Schreibweisen, Wortart gegen Definition, Datenmüll („Euro, introduction of the euro“), Grundwortschatz (NGSL-Kern) als `basic`, schwache Beispielsätze („Tom …“, britisch) als `exWeak`. Die Band-Kennungen bleiben, die Bezeichnungen werden „häufig · mittel · selten“. `meta.json` wird neu geschrieben.
 
 **Abnahme:**
 - `pack.json` ist gegen zod gültig; ≥ 95 % der Einträge haben `register` und `col` ≥ 2; jede Kollokation und jedes Phrasal Verb hat `gap`.
+- `packExtraOf` liefert für eine Karte ohne `register` den Wert aus `pack.json` und lässt vorhandene Kartenfelder unverändert (die Datenbank gewinnt).
 - Jede Falle aus `traps.ts` ist mindestens einem englischen Wort zugeordnet; `matchTrapInAnswer` erkennt „the actual version“.
 - Atlas: 0 Treffer der Britisch-Liste in `en`/`ex`, kein Datenmüll-Muster, jeans/lighter/euro stehen in keinem Band mit C1-Bezeichnung, `meta.json` = tatsächliche Anzahl.
 - Kein vorhandenes Feld wurde geändert oder entfernt (Unit-Vergleich mit dem alten Stand).
 
-#### P4 Zahlen und Tagesplan (Welle 1, M)
+#### P4 Zahlen und Tagesplan (Welle 1 mit Nachtrag nach P2, L)
 
-**Ziel:** eine Quelle je Zahl, Tagesplan v2 mit einer Fehlerschlange, ein sprachunabhängiger Plan, neue Notenschlüssel und das Eingabeprofil im Protokoll.
+**Ziel:** eine Quelle je Zahl. Dazu der Tagesplan v2 über die Regelversion `u.rv` (die Planversion bleibt 1, der Rückweg ist sicher), eingeschaltet erst am Ende von Welle 2. Das Grammatikthema des Tages und die Musterzustände vom Morgen werden eingefroren. Musterzustand und Messwerte sind festgelegt, die Notenschlüssel neu, das Eingabeprofil steht im Protokoll, und der Nachweis, dass die Fehlerschlange trägt, ist erbracht.
 
-**Besitz:** `src/domain/metrics/**` (neu `today.ts`) · `src/domain/unit/**` · `src/domain/grammar/path.ts` · `src/domain/repair/fehlersaetze.ts` · `src/domain/grade/index.ts` · `src/domain/progress/logPatch.ts` · `src/features/today/{store,state,device}.ts` · Tests `tests/unit/{metricsInvariants,gradeTable}.test.ts`, `tests/unit/{planV2,planLang,planDevice}.test.ts` (neu), `tests/e2e/{today-duties,rueckstand}.spec.ts`.
-**Gemeinsam (nacheinander, nur betroffene Erwartungen):** `tests/e2e/{trainerReview,repair,heute}.spec.ts`.
+**Besitz:** `src/domain/metrics/**` (neu `today.ts`, `pattern.ts`, `effect.ts`) · `src/domain/unit/**` · `src/domain/plan/**` (`types`, `unitMeta`, `buildPlan`, `dayStats`, `retire`, `pflicht`, `channels`, `comeback`, `dailyIntake`) · `src/domain/grammar/path.ts` · `src/domain/repair/fehlersaetze.ts` · `src/domain/grade/index.ts` · `src/domain/progress/logPatch.ts` · `src/features/today/{store,state,device}.ts` · Tests `tests/unit/{metricsInvariants,gradeTable}.test.ts`, neu `tests/unit/{planV2,planRollback,planDevice,freezeGrammarDay,errorQueueSim,patternState,learningEffect}.test.ts`, `tests/unit/fixtures/plan8d8f3a3.ts` (Kopie des Lesers von Commit `8d8f3a3`), `tests/e2e/{today-duties,rueckstand}.spec.ts`.
+**Gemeinsam (Welle 1, vor den Besitzern, nur die genannten Stellen):** `src/features/vocab/hub/VocabHub.tsx` (nur die Zahlzeilen `:165`, `:187` auf `reviewToday`/`reviewAll`) · `src/features/learn/LearnHub.tsx` (nur `:88-101` auf `fixToday`, `fixAll`, `grammarErrorsDue`; im Nachtrag „Als Nächstes“ auf `u.gt.intro`) · i18n-Schlüssel `hxNum*` im Teil `hx` · `tests/e2e/{wortschatz,lernen,trainerReview,repair,heute}.spec.ts` (nur Erwartungen, die diese Zahlen ändern).
 
 **Schritte:**
-1. Selektoren §4.9 in `metrics/today.ts`, Export über `index.ts`; `atlasSize` aus `meta.json`.
-2. Plan v2 (§2.3): `u.v = 2`, Schritt 1 `repairs: 0`, Grammatik `errs: 0`, Schritt 4 `limit: 5`, `fixDue` aus `fehlersaetzeDue`, `unitGrammarArgs(plan)`. Pläne ohne `v` bleiben unverändert.
-3. `path.ts`: `dueErrorCount` rechnet über `grammarErrorsDue` (gleiche Filter wie `fehlersaetze.ts`).
-4. Ursache für „DE 30 gegen EN 27 Karten“ klären und innerhalb von `domain/unit` beheben. Liegt sie in `domain/srs`, geht der Befund an die Koordination für P6, und der Test wird als bekannter Befund markiert.
-5. `grade/index.ts`: neue Schlüssel und Touch-Faktor (§4.10).
-6. `logPatch.ts`: `dev` übernehmen, wenn gesetzt.
-7. `today/store.ts`: Zahlen über die Selektoren; `ensureHistory` übergibt `festNow` (offen laut `stand.md`); tote Handy-Kommentare und `UnitEnv.phone` entfernen.
+1. Selektoren §4.9 in `metrics/today.ts` (mit `fixToday`, `fixAll`, `wordsToday`, `laptopDeepen`), Export über `index.ts`; `atlasSize` aus `meta.json`.
+2. Plan v2 (§2.3): `u.rv`, 4. Tupel-Element `{errs, repairs, limit}`, `PLAN_RV = 1`, Grenzregel (`limit` 5–9, kurz ≤ 5, Sonntag 3), Sonntagsschritt `again` nur in rv 2, `unitStepArgs`/`unitGrammarArgs`. Alle Leser von `u.b` (`unitMeta.ts`, `retire.ts`, `unit/plan.ts`) reichen das 4. Element durch.
+3. Rückweg-Test `planRollback.test.ts` mit der Kopie des Lesers von `8d8f3a3`.
+4. `freezeGrammarDay` und `introStepFor` in `path.ts` mit eingespritzter Musterquelle (`introPlanOf`). `u.gt` und `u.ps` werden für alle neuen Pläne geschrieben, unabhängig von `rv`.
+5. `path.ts`: `dueErrorCount` über `grammarErrorsDue` (gleiche Filter wie `fehlersaetze.ts`), `lastIntroDay` überspringt Themen mit `vt.ok`.
+6. `metrics/pattern.ts` (`patternState`, `topicStateFromPatterns`) und `metrics/effect.ts` (`learningEffect`) mit den Entscheidungsregeln aus §4.9 als Konstanten.
+7. `grade/index.ts`: neue Schlüssel und Touch-Faktor (§4.10), `complete` höchstens „Schwer“ ohne Claude.
+8. `logPatch.ts`: `dev` übernehmen, wenn gesetzt; API für `um` je Pflichtschritt.
+9. `today/store.ts`: Zahlen über die Selektoren; `ensureHistory` übergibt `festNow` (offen laut `stand.md`); tote Handy-Kommentare (`store.ts:117-119`, `state.ts:136`) und `UnitEnv.phone` entfernen.
+10. Die gemeinsamen Stellen in `VocabHub.tsx` und `LearnHub.tsx` auf die Selektoren umstellen (Test-Link 1: Zahlen stimmen).
+11. **Nachtrag nach P2 Stufe 1:** `introPlanOf` mit `patternsOf` verdrahten; `fehlersaetze.ts`, `path.ts`, `dayStats.ts` und `metrics/grammar.ts` auf `liveErrorsOf`; `errorQueueSim.test.ts` mit den echten `addError`/`reviewError`.
 
 **Abnahme:**
-- Invarianten-Test: Für den Seed und 3 erfundene Stände liefern Heute, Wörter, Grammatik und Fortschritt dieselben Zahlen aus denselben Selektoren; `fehlersaetzeDue` ist an allen drei Einstiegen gleich.
-- Der Plan für DE und EN am selben Tag ist identisch (duty, Minuten, Blöcke, Wiederholziel).
-- Plan ohne `v`: alle bisherigen Plan-Tests grün. Plan v2: Schritt 1 ohne Reparatur-Sätze, Grammatik ohne Fehlersätze, Schritt 4 genau dann, wenn `fehlersaetzeDue > 0`, höchstens 5.
-- `planDevice`: Das Profil hat keinen Einfluss auf Plan, `duty` und `pflicht[tag]`.
-- `backlogSim.test.ts` grün und nicht schlechter als vorher.
-- `logPatch` schreibt `dev` nur, wenn vorhanden; data-guard ohne Befund.
+- Invarianten-Test: Für den Seed und 3 erfundene Stände liefern Heute, Wörter, Grammatik und Fortschritt dieselben Zahlen aus denselben Selektoren. `fixToday` ist gleich der Zahl der Sätze, die `startAgain` bzw. `repairRound` mit diesem Plan startet.
+- Rückweg (Unit): Die Kopie des Lesers von `8d8f3a3` liest einen rv-2-Plan vollständig, auch einen Sonntagsplan mit Schritt 4. Für einen rv-2-Plan ist `isUnitPlan` wahr, Heute zeigt die Tageskarte und nie `today-legacy`.
+- Plan rv 2 (mit ausdrücklichem `rv: 2`): Schritt 1 ohne Reparatur-Sätze, Grammatik ohne Fehlersätze, Schritt 4 genau dann, wenn `fixDue > 0`, `limit` nach der Formel; Sonntag mit `limit` 3; kurze Tage ≤ 5. Mit dem Standardwert `PLAN_RV = 1` bleiben alle bisherigen Plan-Tests unverändert grün.
+- Eingefroren (Unit): `freezeGrammarDay` ist für denselben Stand deterministisch. Nachdem im Lauf des Tages Fehlersätze erledigt oder hinzugekommen sind, bleiben `u.gt.intro` und `u.gt.topics` gleich. `u.gt.pats` hat höchstens 2 Muster und nie ein Muster eines nicht fälligen Folgeschritts.
+- `errorQueueSim` (60 Lerntage, Fehlerquote 30 % und 50 %, Sonntage nach Plan, Boxen 1/3/9, echte Funktionen): An mindestens 80 % der Tage sind weniger als 10 Grammatikfehler fällig, und mindestens 1 neues Thema je 6 Lerntage ist möglich.
+- `patternState`: Unit-Tests für alle Übergänge (Neu → Lernt → Sicher → Fest, Rückfall nach zwei Fehlern, „Sicher“ erst an 2 Tagen).
+- `learningEffect`: liefert `null` bzw. „keine Daten“ ohne Daten und die fünf Größen aus einem erfundenen 14-Tage-Stand.
+- `planDevice`: Das Profil hat keinen Einfluss auf Plan, `duty` und `pflicht[tag]`. `backlogSim.test.ts` ist grün und nicht schlechter als vorher.
+- `logPatch` schreibt `dev` und `um` nur, wenn vorhanden. data-guard ohne Befund.
 
 #### P5 Grammatik-Übung und -Ablauf (Welle 2, XL)
 
-**Ziel:** Grammatikaufgaben laufen im Gerüst mit aufgabengenauer Erklär-Karte, Tipp-Leiter, neuen C1-Aufgabenarten, Einführung neuer Themen, Mischen nach Kontrastfamilien, Varianten statt Wiederholungen und einem Rundenende, das den Musterfortschritt zeigt.
+**Ziel:** Grammatikaufgaben laufen im Gerüst mit aufgabengenauer Erklär-Karte, Tipp-Leiter, neuen C1-Aufgabenarten, Einführung neuer Themen über mehrere Tage (Vortest, Karten, 4 Aufgaben), Mischen nach Kontrastfamilien und einem Rundenende, das den Musterfortschritt zeigt. Die Runde liest das eingefrorene Tagesthema. In Pflichtrunden gibt es nur Aufgaben mit Muster, und am Handy keine Ganzsatz-Aufgaben.
 
-**Besitz:** `src/features/grammar/**` außer `PathList.tsx` (`GrammarItem`, `GrammarScreen`, `MiniLesson`, `SessionScreen`, `WissenScreen`, `session.ts`, `generate.ts`, `resume.ts`, `resumeKit.ts`, `topicUi.tsx`, `focus/**`, neu `IntroFlow.tsx`, `PatternSheet.tsx`) · `src/features/learn/{flow,inputs,time}.ts` · `src/domain/grammar/{tasks,check,write,pool,ruleFocus}.ts` · `src/domain/learn/types.ts` · `src/prompts/grammarItems.ts` · i18n `gx`, `learn` · `src/styles/parts/gx.css` · Tests `tests/unit/{grammarRound,grammarCheckV2}.test.ts` (neu), `tests/unit/{grammarWrite,grammarCheck,grammarTwoGaps,grammarPath,ruleFocus}.test.ts`, `tests/e2e/{grammar,hint,grammarPatterns}.spec.ts`, `tests/e2e/learnHelpers.ts`, `tests/unit/uiGuards/allow-P5.json`.
+**Besitz:** `src/features/grammar/**` außer `PathList.tsx` (`GrammarItem`, `GrammarScreen`, `MiniLesson`, `SessionScreen`, `WissenScreen`, `session.ts`, `generate.ts`, `resume.ts`, `resumeKit.ts`, `topicUi.tsx`, `focus/**`, neu `IntroFlow.tsx`, `PatternSheet.tsx`) · `src/features/learn/{flow,inputs,time}.ts` · `src/domain/grammar/{tasks,check,write,pool,ruleFocus,bkt}.ts` · `src/domain/learn/{types,grade}.ts` · `src/prompts/grammarItems.ts` · `src/platform/dev/canned/lp2/p5.ts` · i18n `gx`, `learn` · `src/styles/parts/gx.css` · Tests `tests/unit/{grammarRound,grammarCheckV2,grammarIntro,grammarBkt}.test.ts` (neu), `tests/unit/{grammarWrite,grammarCheck,grammarTwoGaps,grammarPath,ruleFocus}.test.ts`, `tests/e2e/{grammar,hint,grammarPatterns}.spec.ts`, `tests/e2e/learnHelpers.ts`, `tests/unit/uiGuards/allow-P5.json`.
 
 **Schritte:**
-1. `GrammarTaskType` erweitern; `normalizeTask` liest `pat`/`why` aus der Map und die v2-Aufgaben über den Lader aus P2.
+1. `normalizeTask` liest `pat`/`why` aus der Map und die v2-Aufgaben über den Lader aus P2. Pool- und `daily/*`-Aufgaben werden über `patternOf` zugeordnet (§3.3). `learn/grade.ts` stellt `kinds` auf die neuen Notenschlüssel aus P4 um.
 2. `check.ts`: `checkKwt`, `checkFind`, `checkMeaning` (§4.7).
-3. `tasks.ts`: `wantTypes(p, profile)`; `selectRound` mit `errorsMax`, `introBlock`, `profile` (touch: keine Ganzsatz-Aufgaben, `correct` → `find` über `errorSpan`), Familienpartner, Varianten nach `pat`, `dup`-Regel.
-4. `write.ts`: `pats`, Vortest-Ergebnis; `addError` mit `pat`.
-5. `session.ts`: Profil einfrieren, Einführungsablauf (Vortest → Karten → 4 Aufgaben → gemischt), `errorsMax` aus `unitGrammarArgs(plan)`, Varianten am Rundenende, Wiederaufnahme rückwärtskompatibel.
-6. `GrammarItem` auf `ExerciseShell` (§5.2) mit Feedback aus `grammarExplanation` + `explainDepth`, Tipp-Leiter, Menü (Ich lag richtig, Einmal richtig schreiben, Erklär mir meine Antwort, Ganzes Thema), rechter Spalte im Split.
-7. `IntroFlow` statt `MiniLesson` (§5.3), `PatternSheet` statt Regelblatt (§5.5), `SessionScreen` → `SessionEnd growth` (§5.4), `FocusItem` ins Gerüst.
-8. `grammar-items@3`: Musterliste rein; `pat`, `why_ok`, `why_not` und neue Typen raus; zod; die Prüfung verwirft Aufgaben ohne Signal des genannten Musters.
+3. `tasks.ts`: `wantTypes(p, profile)` mit Rückfall-Reihenfolge je Profil (§4.7). `selectRound` liest `gt` (Themen und `introBlock`), `errorsMax`, `profile` (touch: keine Ganzsatz-Aufgaben, `correct` → `find` über `errorSpan`), `wordsToday` als Gleichstand-Brecher, Familienpartner, Varianten nach `pat`, `dup`-Regel. Zugeordnete Aufgaben kommen vor nicht zugeordneten; nicht eingeführte Muster und `pat: null` kommen nie in eine Pflichtrunde eines Themas mit Musterdatei.
+4. `write.ts`: `pats` mit allen Feldern aus §8, Anlage aller Muster für schon begonnene Themen (§3.2), Einführungstag `i` je Muster, `vt` aus dem Vortest; `addError` mit `pat`.
+5. `session.ts`: Profil einfrieren; Einführungsablauf nach §5.3 (Vortest nur beim ersten Schritt eines neuen Themas, Folgeschritte mit Karten und 4 Aufgaben); `errorsMax` aus `unitGrammarArgs(plan)`; Varianten am Rundenende; Wiederaufnahme rückwärtskompatibel; die exportierten Namen für `areas/lernen.tsx` bleiben.
+6. `GrammarItem` auf `ExerciseShell` (§5.2) mit Feedback aus `grammarExplanation` + `explainDepth`, Tipp-Leiter, Menü (Ich lag richtig, Einmal richtig schreiben, Erklär mir meine Antwort, Ganzes Thema), rechter Spalte im Split, `auto` aus dem Gerüst und der Antipp-Regel. In Themen ohne Musterdatei (Test-Link 1b): nur die aufgabeneigene Erklärung (`source: 'task'`), kein Zufallsbeispiel, kein ganzer Absatz; Tipp-Leiter H1 = bisheriger `formHint`.
+7. `IntroFlow` statt `MiniLesson` (§5.3), `PatternSheet` statt Regelblatt (§5.5), `SessionScreen` → `SessionEnd growth` mit Musterpunkten aus `patternState` (§5.4), `FocusItem` ins Gerüst.
+8. `grammar-items@3`: Musterliste rein; `pat` (z.enum der eingeführten Muster), `why_ok`, `why_not` und neue Typen raus; zod; die Prüfung verwirft Aufgaben ohne Signal des genannten Musters; Testantwort in `lp2/p5.ts`.
 9. `ruleFocus.ts` und `ruleFocus.test.ts` löschen; `allow-P5.json` leeren.
 
 **Abnahme:**
 - In den Pilotthemen zeigt jede Aufgabe nach dem Prüfen den Namen ihres Musters, Beispiele nur aus diesem Muster (E2E auf ≥ 3 Aufgaben aus 2 Themen).
 - Falsche Auswahl zeigt „Deine Antwort „X“: …“ aus `why.wrong` (E2E).
 - Sichtbare Wörter der Erklärung ≤ 45 bei 390 px (E2E-Messung).
-- kwt, find (auch fehlerfrei) und meaning sind mit Profil `touch` und `keys` spielbar und werden richtig bewertet (E2E mit `__LINGO_INPUT__`).
-- Profil `touch`: kein `textarea` in einer Grammatikrunde.
-- Einführungstag: Die erste Aufgabe nach der Einführung gehört zum neuen Thema, die 4 Einführungsaufgaben stehen am Stück; bestandener Vortest → keine Karten, p ≥ 0,6 (Unit).
-- Plan v2: Pflichtrunde ohne Fehlersätze; das Rundenende wiederholt nie die identische Aufgabe (Unit).
-- `data-slot`-Reihenfolge für alle Grammatik-Arten; `ruleFocus.ts` existiert nicht mehr; `allow-P5.json` leer; data-guard ohne Befund.
+- kwt, find (auch fehlerfrei) und meaning sind mit Profil `touch` und `keys` spielbar und werden richtig bewertet (E2E mit `__LINGO_INPUT__`). Profil `touch`: kein `textarea` in einer Grammatikrunde, auch in einem Thema ganz ohne kwt und find (Unit: Rückfall ohne Ganzsatz-Aufgabe).
+- Mit vorbelegtem `app/pool` enthält eine Pflichtrunde in einem Pilotthema zu 100 % Aufgaben mit `pat` (Unit).
+- Einführung (Unit): mixed-cond wird an mindestens 3 verschiedenen Lerntagen eingeführt, nie mehr als 2 Muster an einem Tag, kein Muster vor seiner Einführung in einer gemischten Runde. Die 4 Einführungsaufgaben stehen am Stück.
+- Vortest (Unit): Bestanden heißt keine Karten, getestete Muster „Lernt“; p ≥ 0,6 nur, wenn alle Muster getestet sind. Ein bestandener Vortest blockiert die Einführung am nächsten Lerntag nicht.
+- Eingefroren (Unit + E2E): Das Einführungsthema der gestarteten Runde ist `u.gt.intro`, auch nachdem zwischendurch Fehlersätze erledigt wurden.
+- Wörter des Tages (Unit): Gibt es Treffer, enthält mindestens 1 von 6 Pflichtaufgaben ein Kartenwort des Tages.
+- BKT (Unit): Der Zuwachs nach einer richtigen `meaning`-Antwort ist ≤ dem Zuwachs nach `mc`.
+- Plan rv 2: Pflichtrunde ohne Fehlersätze; das Rundenende wiederholt nie die identische Aufgabe (Unit).
+- `data-slot`-Reihenfolge für alle Grammatik-Arten; `ruleFocus.ts` existiert nicht mehr; `allow-P5.json` leer; data-guard ohne Befund für `pats`, `vt` und neue Aufgabentypen.
 
 #### P6 Wörter-Übung (Welle 2, XL)
 
-**Ziel:** Wörter-Übungen laufen im Gerüst mit einer Warum-Zeile je Fehlerart, neuen handytauglichen Formen (Partnerwort, Satz vervollständigen, Wortfamilie, Falle finden, „Was heißt das hier?“), ehrlichem „Kenne ich“ und einer Einführung mit C1-Wissen.
+**Ziel:** Wörter-Übungen laufen im Gerüst mit einer Warum-Zeile je Fehlerart, neuen handytauglichen Formen (Partnerwort, Satz vervollständigen, Wortfamilie, Falle finden, „Was heißt das hier?“), ehrlichem „Kenne ich“, ehrlicher Bewertung freier Sätze und einer Einführung mit C1-Wissen. Die Pflichtrunde enthält in rv 2 nur Karten, und der Plan ist für Deutsch und Englisch gleich.
 
-**Besitz:** `src/features/vocab/**` außer `hub/**` und `atlas/AtlasScreen.tsx` (u. a. `ExerciseView`, `IntroCard`, `Summary`, `MoreInfo`, `ExampleTranslation`, `mnemonic`, `TrainerScreen`, `session.ts`, `examples.ts`, `persist.ts`, `start.ts`, `anki/**`, `list/**`, `listen/**`, `atlas/add.ts`) · `src/domain/srs/**` außer `traps.ts` (neu `explainWord.ts`) · `src/domain/answer/check.ts` · `src/domain/c1pack/pack.ts` · `src/features/lookup/**` · `src/prompts/cardExamples.ts` · i18n `wx`, `trainer` · `src/styles/parts/wx.css` · Tests `tests/unit/{explainWord,modesV2,knownCheck}.test.ts` (neu), bestehende srs-Tests, `tests/e2e/{trainer,trainerFeedback,trainerModes,trainerReview,anki,ankiUndo,introCard,c1pack,weighting}.spec.ts`, `tests/e2e/trainerHelpers.ts`, `tests/unit/uiGuards/allow-P6.json`.
+**Besitz:** `src/features/vocab/**` außer `hub/**` und `atlas/AtlasScreen.tsx` (u. a. `ExerciseView`, `IntroCard`, `Summary`, `MoreInfo`, `ExampleTranslation`, `mnemonic`, `TrainerScreen`, `session.ts`, `examples.ts`, `persist.ts`, `start.ts`, `anki/**`, `list/**`, `listen/**`, `atlas/add.ts`) · `src/domain/srs/**` außer `traps.ts` (neu `explainWord.ts`; mit `queue.ts`, `weight.ts`, `types.ts`) · `src/domain/answer/check.ts` · `src/domain/c1pack/pack.ts` · `src/features/lookup/**` · `src/prompts/cardExamples.ts` · `src/platform/dev/canned/lp2/p6.ts` · i18n `wx`, `trainer` · `src/styles/parts/wx.css` · Tests `tests/unit/{explainWord,modesV2,knownCheck,planLang,pflichtRound,packOverlay}.test.ts` (neu), bestehende srs-Tests, `tests/e2e/{trainer,trainerFeedback,trainerModes,trainerReview,anki,ankiUndo,introCard,c1pack,weighting}.spec.ts`, `tests/e2e/trainerHelpers.ts`, `tests/unit/uiGuards/allow-P6.json`.
 
 **Schritte:**
 1. Katalog und Umgebung nach §4.8: `ExerciseEnv` mit `touch` und `listen`, neue Arten, `colloc` getippt, `type` nur ohne Satz, `produce` nur `keys`, Stufenregel ≥ 2 Arten je Profil.
-2. `explainWord.ts` (§4.8): Verwechslung, falsche Option, Deutsch-Falle (`srs/traps.ts` aus P3), Partnerwort (`pack.why`), Synonym aus `alt` (optional Claude `quick`, Urteil „Fast richtig“, Note höchstens „Schwer“).
-3. `ExerciseView` zerlegen: je Eingabe ein kleiner Baustein im Gerüst; der eigene Ergebnisblock (`:716-846`) entfällt; ▶ im Ergebnis; „Zum Wort ▸“.
-4. `FlipCard` im Gerüst mit `barOverride`; die Rückseite zeigt die deutsche Bedeutung nicht noch einmal.
-5. `IntroCard`: `ctx_mc` vorab (ohne FSRS), feste Zeilen mit den Paket-Feldern, „Kenne ich“ → Prüffrage, `m:'known'`.
-6. `rotate.ts` (Wendungen), `newCard.ts`/`pack.ts` (`register`, `why`, `tip`, `alt`, `fam`), `lookup/store.ts` (`tip`), `answer/check.ts` (`alt`).
-7. `card-examples@3`; `atlas/add.ts`: „Lernen“ holt zuerst einen Business-Satz in US-Englisch, sonst den alten Satz mit Kennzeichnung.
-8. `Summary` → `SessionEnd growth` mit antippbaren Chips und dem Extra „Fehlwörter nochmal“; `lx:produce-due:<tag>` über `platform/storage`.
-9. `TrainerScreen`: Kartenwechsel mit `itemEnter`; `purpose5` neu; Profil je Runde einfrieren; `allow-P6.json` leeren.
+2. **Pflichtrunde nach Plan:** `session.ts:367` liest `repairs` über `unitStepArgs(plan, 1)`; bei rv 2 sind es 0 Reparatur-Sätze. Ohne Argument gilt die alte Regel.
+3. **Plan sprachunabhängig:** Ursache „DE 30 gegen EN 27“ in `quizzable(c, lang)` (`queue.ts:69`) bzw. `availableExercises` beheben, z. B. mit einem Rückfall auf die deutsche Bedeutung, wenn eine englische Definition fehlt. Test `planLang.test.ts`.
+4. `explainWord.ts` (§4.8): Verwechslung, falsche Option, Deutsch-Falle (`srs/traps.ts` aus P3), Partnerwort (`pack.why`), Synonym aus `alt` als „Fast richtig“; andere Synonyme nur auf Wunsch über das Menü ⋯ (Claude `quick`, Schlüssel `card.id|given`).
+5. `complete` bewerten nach §4.8: lokal höchstens „Schwer“, Gewicht 0,8 in `weight.ts`; mit Claude Kurzprüfung, bei falsch ein Fehlersatz `src:'write'`; Fehlerzustände nach A6.3.
+6. `ExerciseView` zerlegen: je Eingabe ein kleiner Baustein im Gerüst; der eigene Ergebnisblock (`:716-846`) entfällt; ▶ im Ergebnis; „Zum Wort ▸“; Antipp-Regel.
+7. `FlipCard` im Gerüst mit `barOverride`; die Rückseite zeigt die deutsche Bedeutung nicht noch einmal.
+8. `IntroCard`: `ctx_mc` vorab (ohne FSRS), feste Zeilen mit den Paket-Feldern (für bestehende Karten über `packExtraOf`, ohne zu schreiben), „Kenne ich“ → Prüffrage, `m:'known'`.
+9. `rotate.ts` (Wendungen), `newCard.ts`/`pack.ts` (`register`, `why`, `tip`, `alt`, `fam` nur bei neuen Karten), `lookup/store.ts` (`tip`), `answer/check.ts` (`alt`).
+10. `card-examples@3` (Testantwort in `lp2/p6.ts`); `atlas/add.ts`: „Lernen“ holt zuerst einen Business-Satz in US-Englisch, sonst den alten Satz mit Kennzeichnung.
+11. `Summary` → `SessionEnd growth` mit antippbaren Chips und dem Extra „Fehlwörter nochmal“. Kein `lx:produce-due`; `dev` an jedem `AnswerEvent`.
+12. `TrainerScreen`: Kartenwechsel mit `itemEnter`; `purpose5` neu; Profil je Runde einfrieren; `allow-P6.json` leeren.
 
 **Abnahme:**
 - Falsche Auswahl zeigt „‚X‘ heißt … (gehört zu …)“; eine getippte Verwechslung zeigt die Bedeutung der anderen Karte (E2E).
 - Jede Stufe hat für `touch`/`keys` × mit/ohne Sprachausgabe × mit/ohne Claude mindestens 2 Arten (Unit).
 - Profil `touch`: Pflichtrunde ohne `produce`, `listen_mc`, `dictation` (E2E).
+- `pflichtRound` (Unit): Bei rv 2 enthält die Pflichtrunde 0 Reparatur-Sätze, und die Zahl der Rundenelemente ist `goal.review` (sofern genug Karten da sind). Bei rv 1 gilt das alte Verhalten.
+- `planLang` (Unit): Plan für DE und EN am selben Tag identisch (duty, Minuten, Blöcke, Wiederholziel).
+- `complete`: lokal nie besser als „Schwer“; bei `not_granted` kein Fehler, kein Neuversuch (Unit).
+- Synonym: Ohne Antippen von „War das auch richtig?“ gibt es keine `sample`-Anfrage (Unit mit gezähltem Entwicklungs-Adapter).
+- `packOverlay` (Unit): Das Öffnen des Wörter-Reiters und einer Runde schreibt kein Dokument außer den regulären Review-Einträgen.
 - „Kenne ich“ schreibt keinen erfundenen `type`-Eintrag, sondern `m:'known'`; die Karte ist danach nicht „Fest“ (Unit + E2E).
 - Wendungen wechseln ab Stufe 3 den Satz; neue Paket-Karten behalten `register` und `why` (Unit).
 - Die Rückseite zeigt die deutsche Bedeutung genau einmal (E2E).
@@ -1216,83 +1263,140 @@ Danach berührt kein Paket diese Wiring-Zeilen mehr. Jedes Paket schreibt nur in
 
 #### P7 Heute, Reiter, Fortschritt (Welle 2, L)
 
-**Ziel:** Heute als roter Faden (Datum, Ring, nächster Schritt, ein Wochenhinweis, Abschluss mit echtem Zuwachs, ein Extra). Alle Reiter mit genau einer Hauptaktion über der Falz und Zahlen aus einer Quelle. Ein Grammatik-Lernpfad mit Kapiteln, ein gerätebewusstes Anwenden, ein Fortschritt ohne Gesamtstufe.
+**Ziel:** Heute wird der rote Faden. Dazu gehören Datum, Ring mit einem Segment je Pflichtschritt, der nächste Schritt mit eingefrorenem Thema, während der Pflicht nichts anderes, danach eine Zeile „Extra ›“ und ein Abschluss mit echtem Zuwachs. Alle Reiter haben genau eine Hauptaktion über der Falz und Zahlen aus einer Quelle. Der Grammatik-Lernpfad hat Kapitel, Anwenden ist gerätebewusst, und der Fortschritt hat keine Gesamtstufe, zeigt aber die Messwerte.
 
-**Besitz:** `src/features/today/{TodayScreen.tsx,doneFacts.ts,marks.ts,pack.ts}` · `src/features/unit/{UnitCard.tsx,labels.ts}` · `src/features/vocab/hub/**` · `src/features/vocab/atlas/AtlasScreen.tsx` · `src/features/learn/LearnHub.tsx` · `src/features/grammar/PathList.tsx` · `src/features/apply/ApplyHub.tsx` · `src/features/progress/**` · `src/areas/**` · `src/ui/ProgressRing.tsx` · i18n `hx`, `nbHeute`, `nbLernen`, `nbWs`, `nbProfil`, `progress`, `stand` · `src/styles/parts/hx.css` · Tests `tests/unit/{doneCard,pathChapters}.test.ts` (neu), `tests/e2e/{heute,today,heuteWiedereinstieg,wortschatz,progress,profil,stand-gaps}.spec.ts`, `tests/e2e/{heuteHelpers,wortschatzHelpers,progressHelpers,profilHelpers}.ts`, `tests/unit/uiGuards/allow-P7.json`.
+**Besitz:** `src/features/today/{TodayScreen.tsx,doneFacts.ts,marks.ts,pack.ts}` · `src/features/unit/{UnitCard.tsx,labels.ts}` · `src/features/vocab/hub/**` · `src/features/vocab/atlas/AtlasScreen.tsx` · `src/features/learn/LearnHub.tsx` · `src/features/grammar/PathList.tsx` · `src/features/apply/ApplyHub.tsx` · `src/features/progress/**` · `src/areas/**` außer `lernen.tsx` · `src/ui/ProgressRing.tsx` · i18n `hx`, `nbHeute`, `nbLernen`, `nbWs`, `nbProfil`, `progress`, `stand` · `src/styles/parts/hx.css` · Tests `tests/unit/{doneCard,pathChapters}.test.ts` (neu), `tests/e2e/{heute,today,heuteWiedereinstieg,wortschatz,progress,profil,stand-gaps}.spec.ts`, `tests/e2e/{heuteHelpers,wortschatzHelpers,progressHelpers,profilHelpers}.ts`, `tests/unit/uiGuards/allow-P7.json`.
 **Gemeinsam (nur Texterwartungen):** `tests/e2e/{today-duties,rueckstand}.spec.ts` (Besitz P4).
 
 **Schritte:**
-1. Heute nach §2.2 und Abschlusskarte nach §5.10 (Ring mit `ringFill`, Titel = nächster Schritt, ein Band, Extra-Zeile nach Profil, Zweispalter am Laptop, Wochenstreifen, Meilenstein-Satz); `TodayWeeklyRow` raus aus Heute.
-2. Wörter-Reiter nach §2.5.
-3. Grammatik-Reiter nach §2.4: Weiter-Karte mit einer Handlung, Fehlerzeile, Nachschlagen-Zeile; `PathList` mit Kapiteln aus `path.json`, „Du bist hier“, Knotenring aus `pats`, Fehlerzahl je Kapitel.
-4. Anwenden nach §2.6.
-5. Fortschritt nach §2.7.
-6. Atlas-Seite: Bandbezeichnungen, ✓ „im Wortschatz“ statt „dabei“, Balken für jedes Band.
-7. Layout-Raster 1.120 px, Kopfsymbole bündig; `allow-P7.json` leeren.
+1. Heute nach §2.2: Titel = Datum, Ring mit `duty.length` Segmenten (`ringFill`), Titel aus `u.gt`, während der Pflicht nichts unter der Tageskarte (`SpeakExtra`, `MissedCheck` weg), nach der Pflicht kein eigenes `WorthNow`, ein Band „Wochenrückblick“, Zweispalter am Laptop. Nach der Pflicht eine Zeile „Extra ›“ mit Blatt (Laptop vertiefen bzw. Fehlwörter aus `laptopDeepen`, Sprechen üben, Wochen-Check nachholen). `TodayWeeklyRow` raus aus Heute.
+2. Abschlusskarte nach §5.10: große Zahl echten Zuwachses, Wahrheitszeile aus `u.ps` gegen `patternState`, Wochenstreifen, „Morgen“ als Vorschau, Meilenstein-Satz.
+3. Wörter-Reiter nach §2.5.
+4. Grammatik-Reiter nach §2.4: Weiter-Karte mit einer Handlung und `fixToday`, Zeile „n fällig · heute m“, Bremsentext getrennt, „Als Nächstes“ aus `u.gt.intro`, Nachschlagen-Zeile; `PathList` mit Kapiteln aus `path.json`, „Du bist hier“, Knotenring „Muster sicher x/y“ aus `patternState`, Fehlerzahl je Kapitel.
+5. Anwenden nach §2.6.
+6. Fortschritt nach §2.7, dazu unter Verlauf › „Messwerte dahinter“ die fünf Größen aus `learningEffect` mit „noch keine Daten“, wenn sie fehlen.
+7. Atlas-Seite: Bandbezeichnungen, ✓ „im Wortschatz“ statt „dabei“, Balken für jedes Band.
+8. Layout-Raster 1.120 px, Kopfsymbole bündig; `allow-P7.json` leeren.
 
 **Abnahme:**
 - „Heute“ steht höchstens einmal auf Heute; montags genau ein Wochenhinweis (E2E).
-- Ring-Segmente = erledigte Schritte; Füllung animiert, bei reduzierter Bewegung sofort.
+- Während der offenen Pflicht steht unter der Tageskarte keine Zeile. Danach gibt es höchstens 1 Extra-Zeile, und Sprechen ist von Heute mit höchstens 2 Tipps erreichbar (E2E).
+- Ring-Segmente = Zahl der Pflichtschritte des Plans (voller Tag 4, Sonntag 2–3, kurzer Tag 3), Füllung = erledigte Schritte; animiert, bei reduzierter Bewegung sofort.
+- Eingefroren (E2E): Titel-Thema auf Heute = Thema der gestarteten Grammatikrunde = „Als Nächstes“ im Grammatik-Reiter, auch nachdem zwischendurch Fehlersätze erledigt wurden.
+- Laptop-Extra über Geräte hinweg (E2E): Runde mit Profil `touch`, dann `localStorage` leeren und Profil `keys`. Die Extra-Zeile nennt dieselben Wörter.
 - Wörter: Hauptknopf bei 390×844 ohne Scrollen sichtbar, Beschriftung = was er startet.
 - Für denselben Stand zeigen Heute, Wörter, Grammatik und Fortschritt dieselben Zahlen (E2E über Test-IDs).
-- Grammatik: Bei aktiver Bremse startet der Hauptknopf die Fehlersätze; Text und Klickziel stimmen überein.
+- Grammatik: Bei aktiver Bremse startet der Hauptknopf die Fehlersätze; die Zahl auf dem Knopf = Zahl der Sätze der gestarteten Runde.
 - Anwenden mit Profil `touch`: oben keine Hör- oder Sprechkachel; Hörkacheln tragen „Kopfhörer“.
-- Fortschritt: „B2“ höchstens zweimal, keine Gesamtstufe-Karte, Standardsegment Wörter.
-- `allow-P7.json` leer.
+- Fortschritt: „B2“ höchstens zweimal, keine Gesamtstufe-Karte, Standardsegment Wörter, Messwerte sichtbar.
+- Abschlusskarte zeigt als große Zahl echten Zuwachs, nie eine Antwortzahl; die Wahrheitszeile nennt nur echte Zustandswechsel (Unit `doneCard`). `allow-P7.json` leer.
 
 #### P8 Fehler korrigieren, Satzbau, Anwenden-Übungen, Absicherung (Welle 2, L)
 
-**Ziel:** Schritt 4 als eine Fehlerschlange Satz für Satz (am Handy die Stelle antippen). Satzbau zum Grammatikthema mit Fallen-Baustein. Alle übrigen Übungen (Reparatur, Kombi-Satz, Hörübung, Wochen-Check, Trainings) im Gerüst. Dazu die Wächter-Tests für R6, das Handy-Profil und die Übergänge.
+**Ziel:** Schritt 4 wird die eine Fehlerschlange, Satz für Satz. Ab der zweiten Wiederholung kommt eine Variante desselben Musters. Am Handy werden bis zu 3 Fehlerstellen angetippt und ersetzt, nie ein Ganzsatz-Feld. Satzbau übt Sätze zum eingefrorenen Tagesthema mit einem Fallen-Baustein. Reparatur, Kombi-Satz, Hörübung, Wochen-Check und Trainings laufen im Gerüst. Dazu kommen die Wächter-Tests für Reihenfolge, Handy-Profil, Antippen, automatisches Weiter und Übergänge.
 
-**Besitz:** `src/features/repair/**` · `src/features/apply/{RepairRound,ComboSentence,ListenQuestion}.tsx` · `src/features/drills/**` · `src/domain/drills/**` · `src/features/unit/{UnitStep.tsx,run.ts,runStore.ts}` · `src/features/{check,nbdrill,pressure,patterns,speak}/**` · `src/domain/repair/**` außer `fehlersaetze.ts` · i18n `fx`, `repair`, `apply`, `nbTraining`, `nbSprechen`, `speak` · `src/styles/parts/fx.css` · Tests `tests/unit/{againV2,orderTopic}.test.ts` (neu), `tests/e2e/{repair,drills,lernen,training,patterns,speak,sprechen,rahmen,uxRules,transitions}.spec.ts`, `tests/e2e/phoneProfile.spec.ts` (neu), `tests/e2e/{lernenHelpers,trainingHelpers,sprechenHelpers}.ts`, `tests/unit/uiGuards/allow-P8.json`.
+**Besitz:** `src/features/repair/**` · `src/features/apply/{RepairRound,ComboSentence,ListenQuestion}.tsx` · `src/features/drills/**` · `src/domain/drills/**` · `src/features/unit/{UnitStep.tsx,run.ts,runStore.ts}` · `src/features/{check,nbdrill,pressure,patterns,speak}/**` · `src/domain/repair/**` außer `fehlersaetze.ts` (neu `variant.ts`) · `src/areas/lernen.tsx` · i18n `fx`, `repair`, `apply`, `nbTraining`, `nbSprechen`, `speak` · `src/styles/parts/fx.css` · Tests `tests/unit/{againV2,orderTopic,againVariant}.test.ts` (neu), `tests/e2e/{repair,drills,lernen,training,patterns,speak,sprechen,rahmen,uxRules,transitions}.spec.ts`, `tests/e2e/phoneProfile.spec.ts` (neu), `tests/e2e/{lernenHelpers,trainingHelpers,sprechenHelpers}.ts`, `tests/unit/uiGuards/allow-P8.json`.
 
 **Schritte:**
-1. Schritt 4 nach §5.7: `again/session.ts` ohne Zusammenfügen, `RepairItem` im Gerüst (`touch`: `SpotSentence` → `edit-span` mit `errorSpan` aus P2; `keys`: vorbefülltes Feld), erst korrigieren, dann das Warum, Buchung über `reviewError`/`recordRepair`, `limit` 5, `unitDone(5)`.
-2. `UnitStep.AgainStep` löschen, `run.ts:119` auf die Route umstellen; `RepairRound` nutzt dasselbe Item.
-3. Satzbau nach §5.8; `DrillScreen` und `CheckScreen` → `SessionEnd`.
-4. `ListenQuestion` nach §5.9, `ComboSentence`, `nbdrill`, `pressure`, `patterns/FreeItem` ins Gerüst bzw. über den FeedbackPanel-Adapter; Hinweis auf die Diktiertaste im Sprechen mit Profil `touch`.
-5. Wächter-Tests: `uxRules` R6 per `slots.ts` für alle Übungsarten, „kein gefüllter Knopf außerhalb `.lx-actionbar`“, `KNOWN_DUPES` leeren; `phoneProfile.spec` (Pflicht 1–4 mit `touch`: kein `textarea`, kein `produce`, kein Hören; Plan wie `keys`); `transitions.spec` (Median ≤ 250 ms in Trainer und Grammatik bei 390 px, beide Bewegungseinstellungen).
-6. `allow-P8.json` leeren.
+1. Schritt 4 nach §5.7: `again/session.ts` und `repair/unit.ts` ohne Zusammenfügen (`:241`, `:249`); `RepairItem` im Gerüst (`touch`: `SpotSentence` mit `errorSpans`, bis zu 3 Stellen nacheinander, sonst `Tiles` der richtigen Fassung; `keys`: vorbefülltes Feld); erst korrigieren, dann das Warum; Buchung über `reviewError`/`recordRepair`; `limit` aus `unitStepArgs(plan, 5)`, sonst alte Grenze; `unitDone(5)` und `um` (Sekunden je Schritt) über die P4-API.
+2. `domain/repair/variant.ts`: ab Box 1 eine ungesehene `find`/`gap`-Variante desselben eingeführten Musters (`dup` bevorzugt), gebucht am Originaleintrag; Box 0 zeigt den neuesten Satz aus `more`, sonst `q`.
+3. Diagnosezeile beim Start von Schritt 4 (§5.7 Nr. 8).
+4. `UnitStep.AgainStep` löschen, `run.ts:119` und `areas/lernen.tsx` auf die Route umstellen; `RepairRound` nutzt dasselbe Item.
+5. Satzbau nach §5.8 mit Thema und Muster aus `u.gt` (Rückfall: gleiches Muster → Familienpartner → C1-Werkzeuge, Statuszeile nennt dann das Thema des Satzes). `DrillScreen` und `CheckScreen` → `SessionEnd`.
+6. Wochen-Check: `meaning`, `find` und `kwt` zulassen, keine Tipps, ein Muster je Aufgabe.
+7. `ListenQuestion` nach §5.9, `ComboSentence` (Wörter aus `laptopDeepen`), `nbdrill`, `pressure`, `patterns/FreeItem` ins Gerüst bzw. über den FeedbackPanel-Adapter; Hinweis auf die Diktiertaste im Sprechen mit Profil `touch`; `dev` an jeder Antwort.
+8. Wächter-Tests: `uxRules` R6 per `slots.ts` für alle Übungsarten, „kein gefüllter Knopf außerhalb `.lx-actionbar`“, Antipp-Regel nach dem Ergebnis (find, kwt, meaning, Schritt 4), automatisches Weiter gleich bei Wörtern und Grammatik, `KNOWN_DUPES` leeren; `phoneProfile.spec` (Pflicht 1–4 mit `touch`: kein `textarea`, kein `produce`, kein Hören, auch mit einem Reparatur-Satz mit 2 Fehlerstellen; Plan wie `keys`); `transitions.spec` (Median ≤ 250 ms in Trainer und Grammatik bei 390 px, beide Bewegungseinstellungen).
+9. `allow-P8.json` leeren.
 
 **Abnahme:**
-- Schritt 4: ein Satz je Karte. `touch`: Stelle antippen, nur den Ersatz tippen; `keys`: vorbefülltes Feld. Die Erklärung kommt erst nach der Antwort; höchstens 5 Sätze (E2E).
+- Schritt 4: ein Satz je Karte. Mit `touch` wird die Stelle angetippt und nur der Ersatz getippt, bei 2–3 Stellen nacheinander; nie ein `textarea`. Mit `keys` gibt es ein vorbefülltes Feld. Die Erklärung kommt erst nach der Antwort, höchstens `limit` Sätze (E2E).
+- Varianten (Unit `againVariant`): Die zweite Wiederholung eines Eintrags mit `pat` zeigt einen anderen Satz als das Original, mit gleichem Muster, und die Box des Originaleintrags steigt bei richtiger Antwort.
 - Schritt 4 gilt als erledigt, wenn alle Sätze beantwortet sind; Serie und Zähler bleiben richtig (E2E).
-- Satzbau: Sätze passen zum Grammatikthema des Tages, wenn es welche gibt; Fallen-Baustein nur ab p ≥ 0,4; nie ein falsches „neu“ (Unit + E2E).
+- Satzbau: Sätze passen zu `u.gt`, wenn es welche gibt; Fallen-Baustein nur ab p ≥ 0,4; nie ein falsches „neu“ (Unit + E2E).
 - Hörübung: „Gerade kein Ton“ ohne Note, „Abspielen“ in der Leiste.
-- Nach dem Zusammenführen aller Welle-2-Pakete: R6-Reihenfolge, Ein-Hauptknopf-Regel und `phoneProfile` grün.
+- Nach dem Ergebnis von find, kwt, meaning und Schritt 4 öffnet ein Tipp auf ein Wort das Nachschlage-Fenster (E2E).
+- Nach dem Zusammenführen aller Welle-2-Pakete sind R6-Reihenfolge, Ein-Hauptknopf-Regel, automatisches Weiter und `phoneProfile` grün.
 - `allow-P8.json` leer; data-guard ohne Befund.
 
 ## 11 Abnahme gesamt (Definition of Done für Lernplattform 2.0)
 
-1. **R6 in allen Übungsarten:** `data-slot`-Reihenfolge stimmt (uxRules), kein gefüllter Knopf außerhalb `.lx-actionbar` in Übungen, R1–R12 grün.
-2. **Erklärung passt zur Aufgabe:** Für jede zugeordnete Aufgabe stammen Beispiele nur aus ihrem Muster. Warum-Text, Musterkarte und Einführung sind nie wortgleich. Bei falscher Auswahl erscheint eine Zeile zur gewählten Option (Unit + E2E in den Pilotthemen).
-3. **≥ 95 %** der vorhandenen Grammatikaufgaben haben ein Muster, alle 39 Themen haben Musterdateien. Keine Stütze verrät die Zielwahl. US-Schreibweise überall.
-4. **Zahlen:** Heute, Wörter, Grammatik und Fortschritt zeigen für denselben Stand dieselben Zahlen (Invarianten-Test). Der Plan ist für DE und EN identisch.
-5. **Gerät:** Die Handy-Pflicht (Profil `touch`) enthält kein `textarea`, kein `produce`, kein Hören. Plan, `duty`, „x von 4“ und `pflicht[tag]` sind für `touch` und `keys` gleich.
-6. **Farben:** „Richtig“ hat in allen 4 Paletten × 3 Modi die Farbe `--lx-ok`. Der Kontrasttest ist grün.
+1. **R6 in allen Übungsarten:** `data-slot`-Reihenfolge stimmt (uxRules), kein gefüllter Knopf außerhalb `.lx-actionbar` in Übungen, R1–R12 grün, automatisches Weiter überall gleich.
+2. **Erklärung passt zur Aufgabe:** Für jede zugeordnete Aufgabe stammen Beispiele nur aus ihrem Muster. Warum-Text, Musterkarte und Einführung sind nie wortgleich. Bei falscher Auswahl erscheint eine Zeile zur gewählten Option (Unit + E2E in den Pilotthemen). Pflichtrunden in Themen mit Musterdatei enthalten zu 100 % Aufgaben mit Muster, auch mit Pool- und Tagesaufgaben.
+3. **≥ 95 %** der vorhandenen Grammatikaufgaben haben ein Muster, alle 39 Themen haben Musterdateien und ≥ 4 Satzbau-Sätze. Keine Stütze verrät die Zielwahl. US-Schreibweise überall. Stillgelegte Aufgaben erscheinen nirgends mehr.
+4. **Zahlen:** Heute, Wörter, Grammatik und Fortschritt zeigen für denselben Stand dieselben Zahlen (Invarianten-Test). Jede Knopfzahl ist die Zahl dessen, was der Knopf startet. Der Plan ist für DE und EN identisch.
+5. **Gerät:** Die Handy-Pflicht (Profil `touch`) enthält kein `textarea`, kein `produce` und kein Hören, auch in Schritt 4 mit mehreren Fehlerstellen. Plan, `duty`, „x von 4“ und `pflicht[tag]` sind für `touch` und `keys` gleich. Das Laptop-Extra kennt die Wörter vom iPhone.
+6. **Farben:** „Richtig“ hat in allen 4 Paletten × 3 Modi die Farbe `--lx-ok` und unterscheidet sich von „Ausgewählt“ in Fläche und Rahmen. Der Kontrasttest ist grün.
 7. **Bewegung:** Kartenwechsel im Median ≤ 250 ms bei 390 px, mit und ohne reduzierte Bewegung, ohne Leerbild.
-8. **Heute:** „Heute“ höchstens einmal, montags ein Wochenhinweis, Ring = erledigte Schritte, Abschluss mit echtem Zuwachs.
-9. **Plattform:** `check:platform` grün, `dist/index.html` < 16 MB (Ziel ≤ 5,2 MB), Start unter 4× gedrosselter CPU nicht langsamer als heute (perf.spec).
-10. **Daten:** data-guard ohne Befund, keine neue Sammlung, alle neuen Felder optional.
-11. **Kap. 14/15:** alle Tests grün auf Handy und Desktop, in allen Modi und beiden Sprachen. Keiner der Fehler aus Kap. 15 kommt zurück (insbesondere „dasselbe dreimal“, „würfelt neu“, „Wörter in neuen Übungen nicht antippbar“).
+8. **Heute:** „Heute“ höchstens einmal, montags ein Wochenhinweis, Ring = Pflichtschritte des Plans, während der Pflicht nichts als die Tageskarte, Abschluss mit echtem Zuwachs.
+9. **Eingefroren:** Titel-Thema, gestartete Grammatikrunde und Satzbau nennen dasselbe Thema, den ganzen Tag lang (Unit + E2E).
+10. **Fehlerschlange:** `errorQueueSim` grün. Ab Box 1 kommt eine Variante desselben Musters statt desselben Satzes.
+11. **Rückweg:** Der Leser der Live-Version 67 liest jeden neuen Plan vollständig (Unit). Heute zeigt nie `today-legacy` für einen neuen Plan.
+12. **Antippen:** Nach dem Ergebnis öffnet jedes englische Wort in jeder Übung das Nachschlagen (Kap. 15).
+13. **Lernwirkung:** `learningEffect` zeigt die fünf Größen unter „Messwerte dahinter“, und die Entscheidungsregeln aus §4.9 stehen als Konstanten im Code.
+14. **Plattform:** `check:platform` grün, `dist/index.html` < 16 MB (Ziel ≤ 5,2 MB), Start unter 4× gedrosselter CPU nicht langsamer als heute (perf.spec).
+15. **Daten:** data-guard ohne Befund, keine neue Sammlung, alle neuen Felder optional, kein Massenschreiben (Paket-Felder nur überlagert).
+16. **Kap. 14/15:** alle Tests grün auf Handy und Desktop, in allen Modi und beiden Sprachen. Keiner der Fehler aus Kap. 15 kommt zurück (insbesondere „dasselbe dreimal“, „würfelt neu“, „Wörter in neuen Übungen nicht antippbar“).
+17. **Design:** Die Bildschirme entsprechen der von Emrah freigegebenen Design-Fläche (ux-reviewer-Vergleich ohne offene Befunde).
 
 ## 12 Risiken
 
-- **Falsch gelehrte Inhalte** (siehe die wish-Falle): ca. 1.000 `why.wrong`-Zeilen und 130 Muster. Gegenmittel: Pilot zuerst, Lehrer-Stichprobe 20 % je Charge, automatische Prüfungen, Kennzeichnung von allem, was zur Laufzeit von Claude kommt.
-- **Zuordnung bricht bei Textänderung:** Prompts werden nie geändert, ein Waisen-Test findet verlorene Einträge.
-- **Plan v2:** Schritt 4 wird an vollen Tagen länger. Grenze 5 Sätze; die Einführungsbremse wird vorher mit `backlogSim.test.ts` gerechnet.
+- **Falsch gelehrte Inhalte** (siehe die wish-Falle): ca. 1.000 `why.wrong`-Zeilen und 130 Muster. Gegenmittel: Pilot zuerst, Lehrer-Stichprobe 20 % je Charge, automatische Prüfungen, Kennzeichnung von allem, was zur Laufzeit von Claude kommt, und `retired.json` für alles, was gestrichen wird.
+- **Zuordnung bricht bei Textänderung:** Prompts werden nie geändert, ein Waisen-Test findet verlorene Einträge, Schlüssel sind eindeutig.
+- **Fehlerschlange zu langsam:** Die grobe Rechnung (§2.3) zeigt, dass Grenze und Sonntag allein nicht reichen. Gegenmittel sind die Regeln „ein offener Eintrag je Muster“ und „eine Box zurück“ sowie der verbindliche Test `errorQueueSim`. Bleibt er nach zwei Anpassungen rot, entscheidet Emrah mit Zahlen.
+- **Plan-Umstellung:** Planversion bleibt 1, Regelversion `u.rv` und Schalter `PLAN_RV` erst am Ende. Rückweg-Test gegen den Leser von `8d8f3a3`.
+- **Eingefrorenes Thema veraltet im Tagesverlauf:** gewollt (Kap. 15). Startet Emrah das Thema vorher über den Grammatik-Reiter, entfallen in Schritt 2 nur Vortest und Karten.
 - **iPhone-Tastatur im iframe** ist ungemessen (die Tests laufen ohne WebKit). Abhilfe: Diagnosezeile, Prüfen-Knopf direkt unter dem Feld als Rückfall, eine Prüfung am Gerät.
-- **Touch-Erkennung in Chromium** ist instabil. Deshalb gibt es den Testschalter `window.__LINGO_INPUT__`, gesetzt nur über den Entwicklungs-Adapter.
+- **Touch-Erkennung in Chromium** ist instabil. Deshalb gibt es den Testschalter `window.__LINGO_INPUT__`, gesetzt nur in E2E-Tests.
 - **Größe und Start:** Musterdateien und neue Aufgaben (≤ 450 KB) werden wie der Atlas erst bei Bedarf geparst.
-- **E2E-Umbau:** Die Test-IDs bleiben, erwartete Texte ändern sich. Jedes Paket passt nur seine eigenen Specs an.
+- **E2E-Umbau:** Die Test-IDs bleiben, erwartete Texte ändern sich. Jedes Paket passt nur seine eigenen Specs an, Welle-1-Pakete die genannten fremden Erwartungen nacheinander.
+- **„Modern“ bleibt Geschmackssache:** Deshalb gibt es die Design-Fläche mit Emrahs „Go“ vor der Bildschirmarbeit und den Vergleich durch den ux-reviewer.
 - **Umfang:** keine Neuplanung ohne echten Blocker (A2). Läuft P1 aus dem Ruder, bauen P5 und P6 zuerst auf den bestehenden Bausteinen, bis das Gerüst da ist. Die Erklärung (P2-Domäne) ist davon unabhängig.
 
 ## 13 Bewusst später (nicht Teil dieses Plans)
 
-- Box 28/90 für Fehlersätze (erst die Fehlerlast nach Plan v2 messen).
+- Box 28/90 für Fehlersätze (Entscheidung nach der Messung, §4.9).
 - Atlas „Kenne ich“ mit Einstufung und Sammeldokument `app/atlas`.
 - Kontrastkarten für Dauerfehler („constraint oder restriction?“).
 - „Wendung speichern“ beim Wort-Antippen (`wordLookup` mit `phrase`).
 - Sicherheitsabfrage „sicher/unsicher“ im Wochen-Check.
 - Kanalfarben von 8 auf 2 reduzieren (nur Aufräumen, kein sichtbarer Nutzen).
 - Kostenmodell aus gemessenen Zeiten (A7 03.10., offen).
+- Zweites neues Thema am selben Tag nach bestandenem Vortest (abgelehnt für jetzt, §14 Nr. 7).
+
+## 14 Einarbeitung der Prüfung vom 06.10.2026
+
+Alle 30 Befunde wurden am Code nachgeprüft und sind berechtigt. Wo dieser Plan vom Vorschlag der Prüfung abweicht, steht der Grund in der letzten Spalte.
+
+| Nr. | Befund (kurz) | Eingearbeitet in | Abweichung vom Vorschlag und Grund |
+|---|---|---|---|
+| 1 | `u.v = 2` zerstört das Lesen des Plans | §2.3 „Versionen“, §8, P4 | keine |
+| 2 | Plan v2 in Welle 1 gespeichert, aber erst in Welle 2 ausgeführt; Test-Link 1 verspricht zu viel | §2.3 „Einschalten“ (`PLAN_RV`), Teil A „Wann du was siehst“, P4 (gemeinsame Zahlzeilen), P6 Schritt 2 | Die Zahl-Korrekturen in `VocabHub`/`LearnHub` übernimmt P4 als gemeinsame Stelle, die Fehlersätze sind aus Test-Link 1 herausgenommen |
+| 3 | Fehlerschlange zu langsam, Bremse blockiert den Pfad | §2.3 „Durchsatz“, §5.7 „Schlange“, Teil A L2, P2 Schritt 6, P4 `errorQueueSim` | Strenger als vorgeschlagen. Die grobe Rechnung zeigt, dass „Grenze bis 9 + Sonntag 3“ allein nur 34 % der Tage unter der Bremse hält. Deshalb gelten zusätzlich von Anfang an „ein offener Eintrag je Muster“ und „falsch = eine Box zurück“ |
+| 4 | Variantenlogik in v2 tot | §5.7 „Welcher Satz erscheint“, P8 `variant.ts` | P8 hängt deshalb auch von P5 ab |
+| 5 | Grammatikthema des Tages nicht eingefroren | §1 Nr. 7, §2.3 `u.gt`, §2.2, §2.4, §5.8, P4/P5/P7/P8 | Die Muster (`gt.pats`) verdrahtet P4 im Nachtrag nach P2, weil P4 vor P2 zusammengeführt wird |
+| 6 | `introPlan` ohne Verbraucher und Zustand | §3.2 „Einführungsplan“, §5.3, P5 | Zusätzlich: Bestandsthemen bekommen alle Muster als eingeführt, sonst verschwänden geübte Regeln |
+| 7 | Vortest beschleunigt den Pfad nicht | §4.7 „Vortest“, §5.3, P4 Schritt 5, P5 | Das nächste Thema darf am **nächsten** Lerntag beginnen, nicht am selben (höchstens ein Einführungsschritt je Tag, 6 Plätze reichen nicht für zwei). Steht in §13 |
+| 8 | Pool- und Tagesaufgaben ohne Muster haben Vorrang | §3.3, P5 Schritt 1 und 3 | keine |
+| 9 | Neue Aufgabentypen brechen fremde Tabellen, BKT bucht Raten | §10.0 Nr. 3, §4.7, P5 (Besitz `learn/grade.ts`, `bkt.ts`) | Übergangsweise vorhandene Notenschlüssel im Vertrags-Commit, damit die Typprüfung sofort grün ist |
+| 10 | Dateien doppelt oder ohne Besitzer | §10.3 (Adapter, Routen), §10.0 Nr. 8, P1 (`allow-P1.json`), P6 (`planLang`), P8 (`areas/lernen.tsx`) | `planLang` geht ganz an P6 statt „erwartet rot“ bei P4; die Testantworten liegen unter `canned/lp2/`, weil es `canned/p7.ts` schon gibt |
+| 11 | `device.ts` kollidiert mit dem Entfernungs-Test | §4.1, §10.0 Nr. 9 und 10, P1 | Die Datei heißt `platform/input.ts`; das Verbot von `device.ts` bleibt unverändert |
+| 12 | Auswahl und Richtig gleich gefärbt | §7 „Ausgewählt ist nicht Richtig“, P1 | Der Hauptknopf behält die Palettenfarbe, er unterscheidet sich durch Form und Ort |
+| 13 | Knopf „Fehlersätze · 9“ startet etwas anderes | §2.4, §4.9 `fixToday`/`fixAll`, P4, P7 | keine |
+| 14 | Gestrichene Falle bleibt als Fehlersatz fällig | §3.9 „Stillgelegte Aufgaben“, §8 Nr. 8, P2, P4-Nachtrag | Gefiltert wird über `liveErrorsOf`, nicht in `errorsOf`, weil `write.ts:73` `errorsOf` zum Schreiben nutzt |
+| 15 | Schritt 4 am Handy oft Ganzsatz-Feld | §5.7 Nr. 5 und 8, §6, P2 `errorSpans`, P8 | keine |
+| 16 | „Am Laptop vertiefen“ über Geräte kaputt | §2.2, §4.9 `laptopDeepen`, §8, §10.0 Nr. 4, P6, P7 | keine |
+| 17 | Musterzustand undefiniert | §4.9 `patternState`, §8 `pats`, §2.3 `u.ps`, P4 | keine |
+| 18 | Antippen kollidiert mit Nachschlagen | §1 Nr. 9, §4.4, P1, P8 | keine |
+| 19 | Heute unvollständig beschrieben | §2.2 Nr. 4–5, Teil A L8, P7 | Gewählt ist die Variante „Extra ›“ mit Blatt, als Standard L8 für Emrah |
+| 20 | Sonntag und kurze Tage fehlen | §2.3 „Andere Tagesformen“, Wochen-Check, Teil A, P7, P8 | Sonntag bekommt in rv 2 einen kurzen Schritt 4 mit 3 Sätzen |
+| 21 | Rückfall der Aufgabenwahl unterläuft die Handy-Regel | §4.7 `wantTypes`, P5 | keine |
+| 22 | Satzbau zum Thema nur in 4 Themen | §3.6, P2 Stufe 2, P8 Schritt 5 | Beides: Abnahme in Stufe 2 und ehrlicher Rückfall bis dahin |
+| 23 | Wörter und Grammatik nicht verbunden (Kap. 2 Nr. 5) | §4.7, §4.9 `wordsToday`, P5 | nur als Gleichstand-Brecher, die Musterwahl hat Vorrang |
+| 24 | Automatisches Weiter fehlt im Gerüst | §4.2 `auto`, P1, P8 | keine |
+| 25 | Paket-Felder als Massenschreiben | §4.8, §8, P3, P6 | Strenger: Bestehende Karten werden gar nicht beschrieben, nur beim Lesen überlagert |
+| 26 | Bewertung `complete`/Synonym unklar | §4.8, §4.10, §6, P4, P6 | keine |
+| 27 | „Kurz erklärt“ fällt ohne Entscheidung weg | Teil A L7, §9 | keine |
+| 28 | Kernbeschwerde erst auf Test-Link 2 | Teil A L6 und „Wann du was siehst“, §10.2 Nr. 3 | keine |
+| 29 | „Modern“ und „Wow“ nicht prüfbar | §10.2 Nr. 2, §11 Nr. 17, §12 | keine |
+| 30 | Messkonzept fehlt | §1 Nr. 8, §4.9 `learningEffect` und Regeltabelle, §10.2 Nr. 6, P4, P7 | Die Regel für die Schlange hebt die Obergrenze (9 → 11) statt sie zu senken, weil die Grenze jetzt mit dem Rückstand wächst |
+| – | Sprechen „kleiner Einstieg auf Heute“ (A7 04.10.) | §2.2 Nr. 5 | Sprechen steht nach der Pflicht im Extra-Blatt und jederzeit unter Anwenden. Emrah kann mit L8 widersprechen |
