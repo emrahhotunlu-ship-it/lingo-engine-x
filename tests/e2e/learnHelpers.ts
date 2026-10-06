@@ -13,7 +13,7 @@ const SEED = json('../../seed/sample-data.json') as Record<string, Doc>;
 /** Buchstaben und Ziffern, klein – Lücken, Satzzeichen und Leerraum fallen weg. */
 export const squash = (s: string): string => s.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9']/g, '');
 
-type Known = { prompt: string; answer: string };
+type Known = { prompt: string; answer: string; type?: string; err?: [number, number] | null; fixed?: string };
 
 /** Alle Aufgaben mit Lösung, die eine Runde stellen kann (Voreinstellungen, Seed, zusätzliche). */
 function collectTasks(extra: readonly Doc[]): Known[] {
@@ -38,6 +38,12 @@ function collectTasks(extra: readonly Doc[]): Known[] {
   // C1-Werkzeugkasten (Lernberatung 27.09.): Aufgaben und Beispielsätze fließen auch in den Satzbau.
   walk(json('../../src/content/c1/toolkit.json'));
   walk(json('../../src/content/legacy/rules.json'));
+  // Neue Aufgabenarten (Lernplattform 2.0 §3.4): Der Schlüssel ist der Rahmensatz (kwt), der Satz (find) bzw. Satz a (meaning).
+  for (const v of (json('../../src/content/grammar/tasks-v2.json') as { tasks: Doc[] }).tasks) {
+    if (v.type === 'kwt') out.push({ prompt: String(v.frame), answer: String(v.answer), type: 'kwt' });
+    else if (v.type === 'find') out.push({ prompt: String(v.prompt), answer: typeof v.answer === 'string' ? v.answer : '', type: 'find', err: (v.err as [number, number] | null) ?? null, fixed: typeof v.fixed === 'string' ? v.fixed : '' });
+    else if (v.type === 'meaning') out.push({ prompt: String(v.a), answer: String(v.answer), type: 'meaning' });
+  }
   // C1-Werkzeugkasten (Lernberatung 27.09., Vorschlag 7): Aufgaben und Fallen der Regelblätter.
   walk(json('../../src/content/c1/toolkit.json'));
   walk(SEED);
@@ -46,22 +52,27 @@ function collectTasks(extra: readonly Doc[]): Known[] {
 }
 
 /** Lösung einer Aufgabe über ihren sichtbaren Wortlaut. */
-export function grammarKey(extra: readonly Doc[] = []): (shown: string) => string | null {
-  const tasks = collectTasks(extra).map((t) => ({ key: squash(t.prompt.replace('→', ' ')), answer: t.answer }));
-  return (shown) => {
+export function grammarKey(extra: readonly Doc[] = []): ((shown: string) => string | null) & { full: (shown: string) => Known | null } {
+  const tasks = collectTasks(extra).map((t) => ({ ...t, key: squash(t.prompt.replace('→', ' ')) }));
+  const full = (shown: string): Known | null => {
     const k = squash(shown);
-    return tasks.find((t) => t.key === k)?.answer ?? null;
+    return tasks.find((t) => t.key === k) ?? null;
   };
+  return Object.assign((shown: string) => full(shown)?.answer ?? null, { full });
 }
 
 /** Sichtbarer Aufgabentext eines `gr-item` (Ausgangssatz + Satz mit Lücke bzw. zu korrigierender Satz). */
 export async function shownPrompt(page: Page): Promise<string> {
   const item = page.getByTestId('gr-item');
-  if ((await item.getAttribute('data-type')) === 'correct') return item.getByTestId('correct-input').inputValue();
+  const type = (await item.getAttribute('data-type')) ?? '';
+  if (type === 'correct') return item.getByTestId('correct-input').inputValue();
+  // Neue Aufgabenarten: Rahmensatz (kwt), Satz mit anklickbaren Wörtern (find), Satz a (meaning).
+  if (type === 'find') return item.getByTestId('spot-sentence').innerText();
+  if (type === 'meaning') return (await item.getByTestId('choice').first().innerText()).replace(/^[A-F]\s+/, '');
   // Umformung ohne Lücke: Auftrag steht über dem leeren Ganzsatz-Feld.
-  if (await item.locator('[data-testid="correct-input"][data-whole]').count()) return item.getByTestId('transform-from').innerText();
+  if (type === 'transform' && (await item.getByTestId('correct-input').count())) return item.getByTestId('transform-from').innerText();
   const from = item.getByTestId('transform-from');
-  const pre = (await from.count()) ? await from.innerText() : '';
+  const pre = type === 'kwt' || !(await from.count()) ? '' : await from.innerText();
   return `${pre} ${await item.getByTestId('sentence').innerText()}`;
 }
 
@@ -69,29 +80,55 @@ export async function shownPrompt(page: Page): Promise<string> {
  * Eine Grammatikaufgabe beantworten: richtig (Lösung aus den Testdaten), falsch oder frei
  * (`given`). Wartet auf das Ergebnis; weiter geht es mit `next`. Rückgabe: Typ und Lösung.
  */
-export async function answerGrammar(page: Page, solve: (shown: string) => string | null, opts: { wrong?: boolean; given?: string } = {}): Promise<{ type: string; answer: string | null }> {
+export async function answerGrammar(page: Page, solve: ((shown: string) => string | null) & { full?: (shown: string) => Known | null }, opts: { wrong?: boolean; given?: string } = {}): Promise<{ type: string; answer: string | null }> {
   const item = page.getByTestId('gr-item');
   await expect(item).toHaveCount(1);
   const type = (await item.getAttribute('data-type')) ?? '';
-  const answer = solve(await shownPrompt(page));
+  const shown = await shownPrompt(page);
+  const known = solve.full?.(shown) ?? null;
+  const answer = known?.answer ?? solve(shown);
   const text = opts.given ?? (opts.wrong || !answer ? 'zzzz wrong' : answer);
-  if (type === 'mc') {
+  const check = page.getByTestId('check');
+  if (type === 'mc' || type === 'meaning') {
     const labels = (await item.getByTestId('choice').allInnerTexts()).map((l) => l.replace(/^(?:\d+\s*|[A-F]\s+)/, '').trim());
-    let idx = labels.findIndex((l) => l === answer);
+    let idx = type === 'meaning' ? ['a', 'b', 'both'].indexOf(answer ?? 'a') : labels.findIndex((l) => l === answer);
     if (idx < 0) idx = 0;
     if (opts.wrong) idx = (idx + 1) % labels.length;
     await item.getByTestId('choice').nth(idx).click();
+    await check.click();
+  } else if (type === 'find') {
+    const words = item.getByTestId('spot-word');
+    const err = known?.err ?? null;
+    if (err === null && !opts.wrong) await page.getByTestId('no-error').click();
+    else {
+      const n = await words.count();
+      const right = err ? err[0] : 0;
+      const miss = right === 0 ? n - 1 : 0;
+      await words.nth(opts.wrong ? miss : right).click();
+      await check.click();
+      // Falsche Stelle: erst die Leitfrage, dann ein zweiter Versuch.
+      if (opts.wrong) {
+        await expect(item.getByTestId('verdict').or(item.getByTestId('hint-line'))).toBeVisible();
+        if (await item.getByTestId('hint-line').isVisible()) {
+          await words.nth(miss).click();
+          await check.click();
+        }
+      } else {
+        await typeInGap(page, opts.given ?? known?.answer ?? 'zzzz');
+        await check.click();
+      }
+    }
   } else if (type === 'correct' || (await item.getByTestId('correct-input').count())) {
     await item.getByTestId('correct-input').fill(text);
-    await page.getByTestId('check').click();
+    await check.click();
   } else {
     await typeInGap(page, text);
-    await page.getByTestId('check').click();
+    await check.click();
   }
   // Falsch getippt: erst ein Hinweis, dann der zweite Versuch (hier unverändert → Ergebnis).
-  if (type !== 'mc') {
-    await expect(item.getByTestId('verdict').or(item.getByTestId('retry-hint'))).toBeVisible();
-    if (await item.getByTestId('retry-hint').isVisible()) await page.getByTestId('check').click();
+  if (type !== 'mc' && type !== 'meaning') {
+    await expect(item.getByTestId('verdict').or(item.locator('[data-testid="hint-line"][data-tone="near"]'))).toBeVisible();
+    if (await item.locator('[data-testid="hint-line"][data-tone="near"]').isVisible()) await check.click();
   }
   await expect(item.getByTestId('verdict')).toBeVisible();
   return { type, answer };
@@ -249,7 +286,9 @@ export type LearnScreen = 'lernen' | 'regelblatt' | 'minilektion' | 'grammatik-a
 export async function skipMiniLesson(page: Page): Promise<void> {
   const mini = page.getByTestId('mini-go');
   const item = page.getByTestId('gr-item').or(page.getByTestId('summary'));
-  await expect(mini.or(item).first()).toBeVisible();
+  await expect(mini.or(page.getByTestId('intro-next')).or(item).first()).toBeVisible();
+  // Mehrere Karten: „Weiter“, bis „Los“ erscheint.
+  for (let i = 0; i < 8 && !(await mini.isVisible()) && (await page.getByTestId('intro-next').isVisible()); i++) await page.getByTestId('intro-next').click();
   if (await mini.isVisible()) await mini.click();
   await expect(item.first()).toBeVisible();
 }
@@ -273,10 +312,11 @@ export async function learnTour(page: Page, visit: (name: LearnScreen) => Promis
   // Ein neues Thema beginnt mit der Mini-Lektion (nur wenn es noch keine Antworten gibt).
   await page.getByTestId('hub-next-start').click();
   const mini = page.getByTestId('mini-go');
-  await expect(mini.or(page.getByTestId('gr-item')).first()).toBeVisible();
-  if (await mini.isVisible()) {
+  await expect(mini.or(page.getByTestId('intro-next')).or(page.getByTestId('gr-item')).first()).toBeVisible();
+  if (await mini.or(page.getByTestId('intro-next')).first().isVisible()) {
     await settle();
     await visit('minilektion');
+    for (let i = 0; i < 8 && !(await mini.isVisible()); i++) await page.getByTestId('intro-next').click();
     await mini.click();
   }
   await expect(page.getByTestId('gr-item')).toBeVisible();

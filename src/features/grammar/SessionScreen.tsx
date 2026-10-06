@@ -1,26 +1,28 @@
 import { motion } from 'framer-motion';
 import { useEffect, useLayoutEffect } from 'react';
-import { useClock } from '../../app/clock';
-import { useNav } from '../../app/nav';
-import { useLive } from '../../data/live';
-import { lernweg } from '../../domain/grammar/path';
+import { leaveBack, useNav } from '../../app/nav';
+import { patternById } from '../../domain/grammar/patterns';
+import { patternState, type PatternState } from '../../domain/metrics/pattern';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { useT } from '../../i18n';
-import { Button } from '../../ui/Button';
-import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
+import { SessionEnd } from '../../ui/SessionEnd';
+import { STATE_DOTS } from '../../ui/exercise';
 import { flush } from '../progress/persist';
-import { RoundTop, SummaryActions } from '../learn/ui';
+import { RoundTop, dutyLabel } from '../learn/ui';
+import { startDuty } from '../learn/flow';
+import { firstOpenDuty, useToday } from '../today/state';
 import { GrammarItem } from './GrammarItem';
+import { IntroFlow } from './IntroFlow';
 import { StepBoundary } from '../../app/shell/Boundary';
-import { MiniLesson } from './MiniLesson';
 import { topicName } from './topicUi';
 import { ensureGrammar } from './resume';
-import { skipGrammar, inRepeat, commitGrammar, grammarProgress, leaveGrammar, reportGrammarDone, startAfterIntro, touchGrammar, useGrammarSession } from './session';
+import { cardsDue, commitGrammar, grammarProgress, inRepeat, inVortest, leaveGrammar, patternGrowth, reportGrammarDone, skipGrammar, startAfterIntro, touchGrammar, useGrammarSession } from './session';
 
 // Grammatikrunde: eine Aufgabe zur Zeit, Wechsel als kurze Seitwärts-Überblendung. Esc verlässt
-// die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
+// die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt. Vorn steht bei einem neuen Muster der Vortest und die Einführung
+// (`IntroFlow`), am Ende das Rundenende mit dem echten Zuwachs je Muster (Lernplattform 2.0 §5.4).
 
 export function GrammarSessionScreen() {
   const { t, lang } = useT();
@@ -28,8 +30,6 @@ export function GrammarSessionScreen() {
   const back = useNav((s) => s.back);
   const s = useGrammarSession();
   const task = s.tasks[s.pos];
-  const now = useClock((c) => c.now);
-  const docs = useLive((l) => l.collections.grammar);
 
   const leave = () => {
     api.blur();
@@ -59,17 +59,20 @@ export function GrammarSessionScreen() {
     };
   }, []);
 
-  const right = s.results.filter((r) => r.ok).length;
-  const topics = [...new Set(s.results.map((r) => r.topic))];
+  const showCards = cardsDue(s) && !!s.intro;
+  const vortest = inVortest(s);
+  const badge = vortest ? t('gxBadgeVortest', { n: s.pos + 1 }) : inRepeat(s) ? t('nbLernenRepeatBadge') : task?.errorT !== null && task ? t('grReviewBadge') : null;
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx}>
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="grammar-session" data-mode={s.mode} data-ctx={s.ctx} data-profile={s.profile}>
       <RoundTop onClose={leave} progress={grammarProgress(s)} ctx={s.ctx} duty="ch:gram" />
       {/* Leistung (N45): kein Warten auf das Ausblenden – die nächste Aufgabe steht sofort da
           und blendet nur kurz ein (≤ 150 ms, Deckkraft/Verschieben). */}
-      <motion.div key={s.status === 'summary' ? 'summary' : `g-${s.step}`} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
-        {s.status === 'running' && s.intro ? (
-          <MiniLesson
-            topic={s.intro}
+      <motion.div key={s.status === 'summary' ? 'summary' : showCards ? `intro-${s.step}` : `g-${s.step}`} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: DURATION.fast, ease: EASE_OUT }}>
+        {showCards && s.intro ? (
+          <IntroFlow
+            topic={s.intro.topic}
+            pats={s.intro.pats}
+            fresh={s.intro.fresh}
             onGo={() => {
               const first = startAfterIntro();
               if (first === 'typed') api.focusNow();
@@ -77,44 +80,81 @@ export function GrammarSessionScreen() {
           />
         ) : s.status === 'running' && task ? (
           <StepBoundary resetKey={`g-${s.step}`} scope="grammarSession" onSkip={skipGrammar}>
-            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} badge={inRepeat(s) ? t('nbLernenRepeatBadge') : task.errorT !== null ? t('grReviewBadge') : null} />
+            <GrammarItem task={task} ctx={s.ctx} day={s.day} onDone={commitGrammar} profile={s.profile} noHelp={vortest} topicRound={s.mode === 'topic' || (!!s.intro && s.intro.topic === task.topic && !!task.pat && s.intro.pats.includes(task.pat))} badge={badge} />
           </StepBoundary>
         ) : (
-          <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="summary">
-            <header className="flex items-start gap-3">
-              <span className="inline-flex size-10 items-center justify-center rounded-full bg-accent-soft text-accent-text">
-                <Icon name="check" size={22} />
-              </span>
-              <div className="flex flex-col gap-1">
-                <h2 className="text-xl font-semibold tracking-tight">{s.results.length ? t('sumTitle') : t('grNothing')}</h2>
-                {s.results.length > 0 && (
-                  <p className="lx-tnum text-base text-muted" data-testid="summary-stats">
-                    {t('sumStats', { n: s.results.length, pct: Math.round((right / s.results.length) * 100) })}
-                  </p>
-                )}
-              </div>
-            </header>
-            {topics.length > 0 && (
-              <ul className="flex flex-wrap gap-2">
-                {topics.map((tp) => (
-                  <li key={tp} className="rounded-full border border-line px-3 py-1 text-sm" data-testid="summary-topic">
-                    {topicName(tp, lang)} · {t('nbLernenPoints', { n: lernweg(tp, docs?.get(tp), now).done.filter(Boolean).length })}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {s.block ? (
-              <div>
-                <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={reportGrammarDone} data-testid="summary-next">
-                  {t('nbShNext')}
-                </Button>
-              </div>
-            ) : (
-              <SummaryActions onBack={leaveGrammar} />
-            )}
-          </article>
+          <div data-testid="summary">
+            <GrammarEnd lang={lang} />
+          </div>
         )}
       </motion.div>
     </div>
+  );
+}
+
+const dots = (st: PatternState): number => STATE_DOTS[st];
+
+/** Rundenende (§5.4): je geübtem Muster eine Zeile, deren Punkte wandern; „Neu sicher“, „Noch wackelig“, Fehlerliste mit „kommt morgen wieder“. */
+function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
+  const { t, tn } = useT();
+  const s = useGrammarSession((x) => x);
+  const api = useHiddenInput();
+  const duties = useToday((x) => x.duties);
+  const ready = useToday((x) => x.ready);
+  const back = () => leaveBack(leaveGrammar);
+  const growth = patternGrowth(s);
+  const pick = (b: { de: string; en: string }): string => (lang === 'de' ? b.de : b.en);
+  const name = (id: string): string => {
+    const p = patternById(id);
+    return p ? pick(p.name) : id;
+  };
+  const items = growth.map((g) => ({
+    label: name(g.pat),
+    from: dots(patternState(g.from, s.day)),
+    to: dots(patternState(g.to, s.day)),
+    max: 4,
+    state: patternState(g.to, s.day),
+  }));
+  const facts: string[] = [];
+  for (const g of growth) {
+    const was = patternState(g.from, s.day);
+    const now = patternState(g.to, s.day);
+    if ((was === 'new' || was === 'learning') && (now === 'safe' || now === 'firm')) facts.push(t('gxEndSafe', { name: name(g.pat), k: g.clean, n: g.n }));
+  }
+  const wrongPats = new Set(s.results.filter((r) => !r.ok && r.pat).map((r) => r.pat as string));
+  for (const g of growth) if (wrongPats.has(g.pat) && patternState(g.to, s.day) === 'learning') facts.push(t('gxEndWobbly', { name: name(g.pat) }));
+  const mistakes = s.results
+    .filter((r) => !r.ok && r.right)
+    .slice(0, 4)
+    .map((r) => ({ wrong: r.given.trim() || '…', right: r.right, rule: r.pat ? name(r.pat) : topicName(r.topic, lang), when: t('gxEndTomorrow') }));
+  // Ohne Muster (Themen ohne Musterdatei): die geübten Themen als Zeilen ohne Punkte.
+  const plain = growth.length ? [] : [...new Set(s.results.map((r) => r.topic))].map((tp) => t('gxEndNoPattern', { topic: topicName(tp, lang) }));
+  const right = s.results.filter((r) => r.ok).length;
+  const next = s.block ? null : ready ? firstOpenDuty({ duties }) : null;
+  const main = s.block
+    ? { label: t('nbShNext'), run: reportGrammarDone }
+    : next
+      ? {
+          label: t('lrNextDuty', { step: dutyLabel(next, t) }),
+          run: () => {
+            leaveGrammar();
+            startDuty(next, api);
+          },
+        }
+      : { label: t('sumBack'), run: back };
+  void tn;
+  return (
+    <SessionEnd
+      mode="growth"
+      title={s.results.length ? t('gxEndTitle') : t('grNothing')}
+      right={right}
+      total={s.results.length}
+      ms={s.activeMs}
+      items={items}
+      facts={[...facts, ...plain]}
+      mistakes={mistakes}
+      next={main}
+      {...(!s.block && next ? { secondary: { label: t('sumBack'), run: back } } : {})}
+    />
   );
 }

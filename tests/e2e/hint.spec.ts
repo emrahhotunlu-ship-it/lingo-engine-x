@@ -112,18 +112,18 @@ test.describe('Desktop', () => {
   test('Grammatik: getippte Aufgabe falsch → Hinweis, zweiter Versuch richtig → „Schwer", kein Fehlereintrag', async ({ page }) => {
     const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
     const item = page.getByTestId('gr-item');
-    // Auswahlaufgaben richtig beantworten, bis eine getippte Aufgabe kommt.
-    for (let i = 0; i < 8; i++) {
+    // Auswahl-, Bedeutungs- und „Fehler finden“-Aufgaben richtig beantworten, bis eine getippte Aufgabe in der Lücke kommt.
+    for (let i = 0; i < 12; i++) {
       await expect(item).toHaveCount(1);
-      await expect(item.getByTestId('task-line')).toBeVisible();
-      if ((await item.getAttribute('data-type')) !== 'mc') break;
+      await expect(item.getByTestId('task')).toBeVisible();
+      if (!['mc', 'meaning', 'find'].includes((await item.getAttribute('data-type')) ?? '')) break;
       await answerGrammar(page, solve);
       await page.getByTestId('next').click();
       await expect(item.getByTestId('result')).toHaveCount(0);
     }
     const type = (await item.getAttribute('data-type')) ?? '';
     const topic = (await item.getAttribute('data-topic')) ?? '';
-    expect(type).not.toBe('mc');
+    expect(['mc', 'meaning', 'find']).not.toContain(type);
     const prompt = await shownPrompt(page);
     const answer = solve(prompt);
     expect(answer).not.toBeNull();
@@ -132,8 +132,10 @@ test.describe('Desktop', () => {
     if (whole) await item.getByTestId('correct-input').fill('zzzz wrong');
     else await typeInGap(page, 'zzzz wrong');
     await page.getByTestId('check').click();
-    await expect(item.getByTestId('retry-hint')).toBeVisible();
-    await expect(item.getByTestId('retry-hint')).toContainText(/Achte auf/);
+    // Leitfrage des Musters bzw. „Achte auf …“; sie verrät die Lösung nicht.
+    const retry = item.locator('[data-testid="hint-line"][data-tone="near"]');
+    await expect(retry).toBeVisible();
+    await expect(retry).not.toHaveText('');
     await expect(item.getByTestId('result')).toHaveCount(0);
     await expect(item.getByTestId('hint')).toHaveCount(0);
     if (whole) await expect(item.getByTestId('correct-input')).toHaveValue('zzzz wrong');
@@ -145,8 +147,8 @@ test.describe('Desktop', () => {
     if (whole) await item.getByTestId('correct-input').fill(answer ?? '');
     else await page.keyboard.type(answer ?? '', { delay: 10 });
     await page.getByTestId('check').click();
-    await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
-    await expect(item.getByTestId('form-hint')).toBeVisible();
+    await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+    await expect(item.getByTestId('explanation')).toBeVisible();
     await page.getByTestId('next').click();
     const logged = async () => (((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g' && e.topic === topic && e.given !== 'zzzz wrong' && e.ok === true && e.g === 2);
     await expect.poll(async () => (await logged()).length).toBe(1);

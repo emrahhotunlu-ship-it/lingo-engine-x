@@ -1,41 +1,48 @@
-import { focusRule } from '../../domain/grammar/ruleFocus';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { askJson } from '../../ai/gate';
+import { useAiAvailable } from '../../ai/scope';
 import { useClock } from '../../app/clock';
+import { useNav } from '../../app/nav';
 import { useSharedTarget } from '../../engine/shared';
 import { useLive } from '../../data/live';
-import { solvedSentence } from '../../domain/course/baseLesson';
+import { alignWords, splitWords } from '../../domain/answer/align';
+import { maskOf } from '../../domain/answer/mask';
+import { topicById } from '../../domain/content';
+import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { topicP } from '../../domain/grammar/bkt';
-import { altFamily, checkGrammar, closeVariant } from '../../domain/grammar/check';
-import { alsoRight, altNote, examplesFor, formHint, ruleOf } from '../../domain/grammar/rules';
+import { altFamily, checkFind, checkGrammar, checkKwt, checkMeaning, closeVariant } from '../../domain/grammar/check';
+import { grammarExplanation } from '../../domain/grammar/explain';
+import { patternOf } from '../../domain/grammar/patterns';
+import { topicState } from '../../domain/grammar/path';
+import { formHint } from '../../domain/grammar/rules';
 import { grammarRetryHint, type GrammarRetryHint } from '../../domain/grammar/retryHint';
-import { scaffolded, splitTransform, wholeSentence } from '../../domain/grammar/tasks';
+import { scaffolded, splitTransform, wholeSentence, type InputProfile } from '../../domain/grammar/tasks';
 import { learnGrade } from '../../domain/learn/grade';
 import type { Ctx, GrammarAnswer, GrammarCheck, GrammarTask, Help, Verdict } from '../../domain/learn/types';
-import { maskOf } from '../../domain/answer/mask';
-import { hash32 } from '../../domain/random';
+import { patsOf, patternState } from '../../domain/metrics/pattern';
 import type { Grade } from '../../domain/srs/types';
 import { Choices } from '../../engine/Choices';
 import { EnglishText } from '../../engine/EnglishText';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { KineticGap, hintOffset, type GapState } from '../../engine/KineticGap';
-import { SentenceDiff } from '../../engine/SentenceDiff';
+import { SpotSentence } from '../../engine/SpotSentence';
 import { useHotkeys } from '../../engine/useHotkeys';
 import { lookupOpenMs, useLookup, type WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
-import { ActionBar, PrimaryAction } from '../../ui/ActionBar';
-import { Button } from '../../ui/Button';
-import { Disclosure } from '../../ui/Disclosure';
-import { topicById } from '../../domain/content';
+import { inputProfile, useSplitLayout } from '../../platform/input';
+import { explainAnswer } from '../../prompts/explainAnswer';
+import { ExerciseShell, PatternCard, SentenceInput, explainDepth, markSpans, type ShellFeedback, type ShellMenuId, type ShellSecondary } from '../../ui/exercise';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
-import { RetryHintLine } from '../learn/RetryHint';
-import { AlsoRight, CopyOnce, ExampleList, FormHint, LearnStatus, NextButton, OverrideButton, ResultArea, TaskLine, VerdictLine } from '../learn/ui';
+import { TopicSheet } from './GrammarScreen';
 
-// Eine Grammatikaufgabe (phase2-plan §5.0/§5.2, CLAUDE.md A7): Status oben, Aufgabe in einer
-// Zeile, Eingabe IN der Lücke bzw. im Satz selbst, „Prüfen", danach an fester Stelle:
-// Vergleich, Form-Hinweis, Beispiele, „Auch richtig" – auch bei richtiger Antwort. Keine
-// Bewertungsknöpfe: die Note folgt aus Richtigkeit, Zeit und Hilfe. Freie Antworten, die lokal
-// abgelehnt werden, beurteilt auf denselben Druck auf „Prüfen" einmal Claude (D13).
+// Eine Grammatikaufgabe im Übungsgerüst (Lernplattform 2.0 §5.2). Das Gerüst (`ExerciseShell`) zeichnet Status, Aufgabenzeile, Satz,
+// Eingabe, Urteil, Vergleich und die Erklär-Karte; diese Datei sammelt nur Eingabe und Prüfung je Aufgabenart:
+//   mc · meaning → `Choices` A–D (Auswahl, dann „Prüfen“)     gap · transform mit Lücke → `KineticGap` in der Lücke
+//   kwt          → breite Lücke, Schlüsselwort als Chip        find → Wort antippen (`SpotSentence`), dann nur die Stelle ersetzen
+//   correct · ganze Umformung → `SentenceInput` (nur Tastatur; am Handy wird `correct` zu `find`)
+// Keine Selbstbewertung: die Note folgt aus Richtigkeit, Zeit und Hilfe. Die Erklärung kommt aus dem Muster der Aufgabe
+// (`grammarExplanation`); ohne Musterdatei steht nur die aufgabeneigene Erklärung da, nie ein Zufallsbeispiel.
 
 type Next = 'typed' | 'choice' | null | void;
 
@@ -45,75 +52,106 @@ export type GrammarItemProps = {
   day: string;
   onDone: (a: GrammarAnswer) => Next;
   area?: WordTapArea;
-  /** Zusatz in der Statuszeile (z. B. „Deine Fehler"). */
+  /** Zusatz in der Statuszeile (z. B. „Deine Fehler“, „Kurztest 1/2“). */
   badge?: string | null;
-  /** Wochen-Check (M10): ohne Platzhalter und ohne Tipp – der Check misst, statt zu helfen. */
+  /** Wochen-Check und Vortest (M10): ohne Tipp, ohne Platzhalter und ohne Zweitversuch – es wird gemessen, nicht geholfen. */
   noHelp?: boolean;
+  /** Eingabeprofil der Runde (einmal eingefroren). Ohne Angabe das des Geräts. */
+  profile?: InputProfile;
+  /** Themenrunde oder Einführung: die Musterkarte steht offen. */
+  topicRound?: boolean;
 };
 
 type Fb = {
   verdict: Verdict;
   check: GrammarCheck | null;
   given: string;
+  /** Auswahl: der gewählte Text bzw. a/b/both; „Fehler finden“: das angetippte Wort oder `none`. */
+  picked?: string;
+  tapped?: string;
   dontKnow: boolean;
   grade: Grade;
   ms: number;
   help: Help;
   judged: GrammarAnswer['judged'];
-  why: string | null;
   unsure: boolean;
   override: boolean;
 };
 
+/** Uhr (eigene Funktion, damit die Zeitnahme nie als Teil des Zeichnens gilt). */
+const tick = (): number => performance.now();
 const GAP = /_{3,}/;
+const MEANING_KEYS = ['a', 'b', 'both'] as const;
+/** „Ohne Hilfe“ im Vortest: jede Antwort in höchstens 20 s (§5.3). */
+const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().length > 0;
 
-export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false }: GrammarItemProps) {
+export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false, profile: profileProp, topicRound = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
+  const go = useNav((s) => s.go);
   const now = useClock((s) => s.now);
+  const ai = useAiAvailable();
+  const split = useSplitLayout();
+  const [profile] = useState<InputProfile>(() => profileProp ?? inputProfile());
   const doc = useLive((s) => s.collections.grammar?.get(task.topic));
   const [pStart] = useState(() => topicP(task.topic, doc, now));
   const p = topicP(task.topic, doc, now);
-  // Ganzsatz-Eingabe: `correct` und Umformungen ohne Lücke `___` (Lektionen der alten App).
+  const pattern = useMemo(() => patternOf(task), [task]);
+  const patId = task.pat ?? pattern?.id ?? null;
+  const patEntry = patId ? patsOf(doc)[patId] : undefined;
+  // Lernphase: die ersten 3 Antworten auf ein Muster und jede Themenrunde (§5.1). Dann steht die Musterkarte offen.
+  const learning = !!pattern && (topicRound || (patEntry?.n ?? 0) < 3);
+  const state = patId && pattern ? patternState(patEntry, day) : topicState(task.topic, doc, now);
+  const tp = topicById(task.topic);
+  const topicLabel = tp ? (lang === 'en' ? (tp.name_en ?? tp.name) : tp.name) : task.topic;
+
+  const type = task.type;
+  const choiceType = type === 'mc' || type === 'meaning';
+  const findTask = type === 'find';
+  const err = task.x?.kind === 'find' ? task.x.err : null;
   const whole = wholeSentence(task);
-  const scaff = task.type === 'gap' && !whole && scaffolded(pStart) && !noHelp;
+  const wordsOfPrompt = useMemo(() => (findTask ? splitWords(task.prompt) : []), [findTask, task.prompt]);
+
   const [fb, setFb] = useState<Fb | null>(null);
-  const [tip, setTip] = useState<0 | 1 | 2>(0);
-  /** „Erst ein Hinweis, dann die Lösung": Hinweis nach falschem erstem Versuch (zweiter Versuch). */
+  const [tip, setTip] = useState<0 | 1 | 2 | 3>(0);
   const [retry, setRetry] = useState<GrammarRetryHint | null>(null);
+  const [chosen, setChosen] = useState<number | null>(null);
+  const [text, setText] = useState(type === 'correct' ? task.prompt : '');
+  // „Fehler finden“: Schritt 1 (Stelle antippen) → Schritt 2 (nur die Stelle ersetzen).
+  const [stage, setStage] = useState<'locate' | 'replace'>('locate');
+  const [tapped, setTapped] = useState<[number, number] | null>(null);
+  const [locateMisses, setLocateMisses] = useState(0);
+  const [copyOpen, setCopyOpen] = useState(false);
+  const [sheet, setSheet] = useState(false);
+  const [aiText, setAiText] = useState<{ text: string } | null>(null);
+  const [aiState, setAiState] = useState<'idle' | 'busy' | 'error'>('idle');
   const firstWrong = useRef<string | null>(null);
-  const fieldRef = useRef<HTMLTextAreaElement>(null);
-  // Seit 27.09. ohne Claude-Nachprüfung: nie im Wartezustand.
-  const judging = false;
-  const [chosen, setChosen] = useState<string | null>(null);
-  const [text, setText] = useState(task.type === 'correct' ? task.prompt : '');
   const typed = useRef('');
   const shownAt = useRef(0);
   const firstKeyAt = useRef<number | null>(null);
   const lookupAt = useRef(0);
   const root = useRef<HTMLDivElement>(null);
+  const aiCtl = useRef<AbortController | null>(null);
   // Kap. 4.4: Die Heldenkarte von Heute gleitet in die erste Aufgabe (nur direkt nach dem Start).
-  const { ref: sharedRef, shared } = useSharedTarget<HTMLElement>('lx-hero');
+  const { ref: sharedRef, shared } = useSharedTarget<HTMLDivElement>('lx-hero');
 
   useEffect(() => {
     shownAt.current = performance.now();
     lookupAt.current = lookupOpenMs();
     const a = document.activeElement;
     if (!a || a === document.body) root.current?.focus({ preventScroll: true });
+    return () => aiCtl.current?.abort();
   }, []);
 
   const solution = task.answer;
-  const brief = useMemo(() => focusRule(ruleOf(task.topic, lang)?.core ?? '', task), [task, lang]);
-  const briefRule = brief.focus;
-  const typedKind = !whole && (task.type === 'gap' || task.type === 'transform');
-  const maskShown = typedKind && (scaff || tip > 0);
-  const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
-  // Zweiter Versuch nach dem Hinweis zählt wie „Tipp" Stufe 2: richtig höchstens „Schwer".
+  const typedKind = !choiceType && !findTask;
+  const gapKind = typedKind && !whole && (type === 'gap' || type === 'transform' || type === 'kwt');
+  const scaff = type === 'gap' && scaffolded(pStart) && !noHelp;
+  const maskShown = gapKind && type !== 'kwt' && (scaff || tip >= 3);
+  const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 3 }) : null;
+  // Jede Stufe der Tipp-Leiter zählt als Hilfe: H1 (Leitfrage) und H2 (Formel) bis „Gut“, H3 (erster Buchstabe) bis „Schwer“; der Zweitversuch wie H3.
   const help: Help = { level: tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0 };
 
-  // Was der Begleiter sieht (Phase 5 D4): vor dem Prüfen nur Thema und Aufgabe, nie die Lösung.
-  const tp = topicById(task.topic);
-  const topicLabel = tp ? (lang === 'en' ? (tp.name_en ?? tp.name) : tp.name) : task.topic;
   useCompanionSee({
     area: 'grammar',
     label: `${t('grTitle')} · ${topicLabel}`,
@@ -123,60 +161,113 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   });
 
   const elapsed = () => Math.max(0, Math.round(performance.now() - shownAt.current - (lookupOpenMs() - lookupAt.current)));
+  const hintVisible = !!task.hint && (task.prompt.includes(task.hint) || type === 'gap' || (whole && type === 'transform'));
 
-  // Steht der Hinweis der Aufgabe schon vor dem Prüfen da (Stütze unter der Lücke, im Satz oder
-  // über dem Feld der Umformung)? Dann nennt der Hinweis für den zweiten Versuch das Thema.
-  const hintVisible = !!task.hint && (task.prompt.includes(task.hint) || task.type === 'gap' || (whole && task.type === 'transform'));
+  // ------------------------------------------------------------------ Prüfen
 
   const finishCheck = (verdict: Verdict, check: GrammarCheck | null, given: string, extra: Partial<Fb> = {}) => {
-    // Erster Versuch falsch → Hinweis statt Lösung; die Eingabe bleibt stehen, der Fokus bleibt im
-    // Feld. Nicht bei Auswahl, nicht im Wochen-Check, nicht bei „nicht sicher prüfbar".
-    if (verdict === 'wrong' && !retry && !noHelp && task.type !== 'mc' && !extra.unsure) {
+    // Erster Versuch falsch → Leitfrage statt Lösung; die Eingabe bleibt stehen. Nicht bei Auswahl, nicht im Wochen-Check, nicht bei „nicht sicher prüfbar“.
+    if (verdict === 'wrong' && !retry && !noHelp && !choiceType && !extra.unsure) {
       firstWrong.current = given;
-      setRetry(grammarRetryHint(task, tp ? topicLabel : null, hintVisible));
-      if (whole) fieldRef.current?.focus({ preventScroll: true });
+      setRetry(grammarRetryHint(task, tp ? topicLabel : null, hintVisible, { task, given, lang, ...(extra.tapped ? { tapped: extra.tapped } : {}) }));
+      if (whole || type === 'correct') root.current?.querySelector<HTMLTextAreaElement>('textarea')?.focus({ preventScroll: true });
       else api.focusNow();
       return;
     }
-    // Zeit: Gesamtzeit ab dem Einblenden über beide Versuche (durch die Deckelung auf „Schwer"
-    // entscheidet sie beim zweiten Versuch nicht mehr über die Note).
+    // Zeit: Gesamtzeit ab dem Einblenden über beide Versuche; bei „Fehler finden“ ab dem Fund der Stelle (§4.10).
     const ms = elapsed();
     const firstKeyMs = firstKeyAt.current === null ? ms : Math.max(0, Math.round(firstKeyAt.current - shownAt.current));
-    const grade = learnGrade(task.type, verdict, { submitMs: ms, firstKeyMs }, help);
-    setFb({ verdict, check, given, dontKnow: false, grade, ms, help, judged: 'local', why: null, unsure: false, override: false, ...extra });
-    if (typedKind && window.matchMedia('(pointer: coarse)').matches) api.blur();
+    const grade = learnGrade(type, verdict, { submitMs: ms, firstKeyMs }, help, profile);
+    setFb({ verdict, check, given, dontKnow: false, grade, ms, help, judged: 'local', unsure: false, override: false, ...extra });
+    if ((gapKind || findTask) && profile === 'touch') api.blur();
   };
 
-  const check = (choice?: string) => {
-    if (fb || judging) return;
+  const submit = () => {
+    if (fb) return;
+    if (choiceType) {
+      if (chosen === null) return;
+      if (type === 'mc') {
+        const opt = (task.options ?? [])[chosen] ?? '';
+        finishCheck(checkGrammar(task, opt).verdict, checkGrammar(task, opt), opt, { picked: opt });
+      } else {
+        const pick = MEANING_KEYS[chosen] ?? 'a';
+        const res = checkMeaning(task, pick);
+        finishCheck(res.verdict, res, pick, { picked: pick });
+      }
+      return;
+    }
+    if (findTask) {
+      if (stage === 'locate') {
+        if (!tapped) return;
+        const res = checkFind(task, { tapped });
+        if (res.found && err) {
+          // Stelle gefunden: weiter mit dem Ersatz. Die Zeit zählt ab hier.
+          setStage('replace');
+          shownAt.current = tick();
+          firstKeyAt.current = null;
+          lookupAt.current = lookupOpenMs();
+          typed.current = '';
+          api.focusNow();
+          return;
+        }
+        if (res.found) {
+          // (err === null kann hier nicht gefunden werden – nur „Kein Fehler“.)
+          return;
+        }
+        missLocate(wordsOfPrompt.slice(tapped[0], tapped[1] + 1).join(' '), res);
+        return;
+      }
+      const given = typed.current;
+      if (!given.trim()) return;
+      const res = checkFind(task, { replacement: given });
+      if (res.verdict === 'wrong' && closeVariant({ answer: task.answer, accepted: task.accepted }, given)) finishCheck('near', res, given, { judged: 'noai', unsure: true, tapped: tappedWord() });
+      else finishCheck(res.verdict, res, given, { tapped: tappedWord() });
+      return;
+    }
     let given: string;
-    if (task.type === 'mc') {
-      if (!choice) return;
-      given = choice;
-      setChosen(choice);
-    } else if (whole) given = text;
+    if (whole || type === 'correct') given = text;
     else {
       given = typed.current;
-      if (tip >= 2 && mask) {
+      if (tip >= 3 && mask) {
         const first = mask[0];
         if (first?.kind === 'slot' && first.hint && hintOffset(mask, given) === 1) given = first.hint + given;
       }
     }
     if (!given.trim()) return;
-    const res = checkGrammar(task, given);
+    const res = type === 'kwt' ? checkKwt(task, given) : checkGrammar(task, given);
     if (res.verdict !== 'wrong' || !res.needsJudge) {
       finishCheck(res.verdict, res, given);
       return;
     }
-    // Emrahs Wunsch 27.09.: Bewertung sofort, kein Warten auf Claude. Sehr ähnlich zur Lösung →
-    // mögliche gültige Variante („nicht sicher prüfbar“, mit „Ich lag richtig“); sonst falsch.
+    // Bewertung sofort, kein Warten auf Claude: sehr ähnlich zur Lösung → mögliche gültige Variante („nicht sicher prüfbar“), sonst falsch.
     if (closeVariant(task, given)) finishCheck('near', res, given, { judged: 'noai', unsure: true });
     else finishCheck('wrong', res, given);
   };
 
+  const tappedWord = (): string | undefined => (tapped ? wordsOfPrompt.slice(tapped[0], tapped[1] + 1).join(' ') : undefined);
+
+  /** Stelle verfehlt (oder „Kein Fehler“ bei einem Satz mit Fehler): erst Leitfrage und ein zweiter Versuch, dann die Auflösung. */
+  const missLocate = (word: string, res: GrammarCheck) => {
+    if (locateMisses < 1 && !noHelp) {
+      setLocateMisses(1);
+      setRetry(grammarRetryHint(task, tp ? topicLabel : null, false, { task, tapped: word, lang }));
+      setTapped(null);
+      return;
+    }
+    const ms = elapsed();
+    finishCheck('wrong', res, word, { tapped: word, grade: 1, ms, help });
+  };
+
+  const noError = () => {
+    if (fb || !findTask) return;
+    const res = checkFind(task, { tapped: 'none' });
+    if (res.verdict === 'correct') finishCheck('correct', res, '', { tapped: 'none', picked: 'none' });
+    else missLocate('none', res);
+  };
+
   const dontKnow = () => {
-    if (fb || judging) return;
-    setFb({ verdict: 'wrong', check: null, given: '', dontKnow: true, grade: 1, ms: elapsed(), help, judged: 'local', why: null, unsure: false, override: false });
+    if (fb) return;
+    setFb({ verdict: 'wrong', check: null, given: '', dontKnow: true, grade: 1, ms: elapsed(), help, judged: 'local', unsure: false, override: false });
     api.blur();
   };
 
@@ -201,6 +292,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       ms: fb.ms,
       help: fb.help,
       judged: fb.judged,
+      dev: profile === 'touch' ? 't' : 'k',
       ...(fb.override ? { override: true } : {}),
       ...(retry && firstWrong.current !== null ? { firstWrong: firstWrong.current } : {}),
     };
@@ -209,26 +301,62 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     else api.blur();
   };
 
+  const primaryGo = () => {
+    if (fb) next();
+    else submit();
+  };
+
   useHotkeys(
     {
       enter: () => {
         if (useLookup.getState().req) return;
         if (fb) next();
-        else if (task.type !== 'mc') void check();
-      },
-      digit: (n) => {
-        if (fb || task.type !== 'mc' || useLookup.getState().req) return;
-        const o = task.options?.[n - 1];
-        if (o) void check(o);
+        else if (!choiceType || chosen !== null) submit();
       },
     },
     api.isInput,
   );
 
-  const gapState: GapState = !fb ? 'input' : fb.verdict;
-  const solved = useMemo(() => solvedSentence(task) ?? (task.type === 'correct' ? task.answer : null), [task]);
-  const src = { area, source: `grammar/${task.topic}` };
+  // ------------------------------------------------------------------ Erklärung
 
+  const picked = fb?.picked;
+  const model: ExplanationModel | null = useMemo(() => {
+    if (!fb) return null;
+    const verdict: ResultVerdict = fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
+    return grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning, ai: aiText });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fb, aiText, lang, learning, task]);
+
+  const rv: ResultVerdict = !fb ? 'ok' : fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? (fb.unsure ? 'near' : 'near') : 'wrong';
+  const depth: ExplainDepth = explainDepth({ verdict: rv, p, learning });
+
+  // ------------------------------------------------------------------ Hinweise (Tipp-Leiter und Zweitversuch)
+
+  const tipText = (): string => {
+    if (tip === 1) return pattern ? (lang === 'de' ? pattern.nudge.de : pattern.nudge.en) : formHint(task, lang);
+    if (tip >= 2) return pattern ? `${t('gxHintFormula')}: ${lang === 'de' ? pattern.form.de : pattern.form.en}` : (task.hint ?? formHint(task, lang));
+    return '';
+  };
+  const retryText = (r: GrammarRetryHint): string => (r.kind === 'nudge' ? r.text : r.kind === 'hint' ? t('rhGrammarHint', { hint: r.text }) : r.kind === 'topic' ? t('rhGrammarTopic', { topic: r.name }) : t('rhGrammarVerb'));
+  const hint = fb ? null : retry ? { text: retryText(retry), tone: 'near' as const } : tip > 0 && tipText() ? { text: tipText(), tone: 'hint' as const } : null;
+
+  const maxTip = choiceType ? 2 : gapKind || type === 'kwt' ? 3 : findTask && stage === 'replace' ? 2 : type === 'correct' || whole ? 2 : 2;
+  const canTip = !noHelp && !retry && !fb && tip < maxTip && !(findTask && stage === 'locate');
+  const secondary: ShellSecondary[] = [
+    ...(findTask && stage === 'locate' ? [{ id: 'noError' as const, label: t('exNoError'), onClick: () => noError(), testId: 'no-error' }] : []),
+    ...(canTip ? [{ id: 'hint' as const, label: t('exHint'), onClick: () => moreTip(), testId: 'hint' }] : []),
+    { id: 'dontKnow' as const, label: t('exDontKnow'), onClick: () => dontKnow(), testId: 'dont-know' },
+  ];
+  function moreTip(): void {
+    setTip((v) => Math.min(3, v + 1) as 1 | 2 | 3);
+    if (!choiceType && !findTask) api.focusNow();
+  }
+
+  // ------------------------------------------------------------------ Satz und Eingabe
+
+  const src = { area, source: `grammar/${task.topic}` };
+  const gapState: GapState = !fb ? 'input' : fb.verdict;
+  const gapReveal = fb && fb.verdict === 'wrong' && gapKind ? { solution, given: fb.given.trim() ? fb.given : null } : null;
   const gapNode = (
     <KineticGap
       label={t('grGapLabel')}
@@ -236,279 +364,266 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       state={gapState}
       mask={mask}
       shown={fb ? fb.given : null}
+      reveal={gapReveal}
+      silent
       onChange={(v, info) => {
         typed.current = v;
         if (info.firstKey && firstKeyAt.current === null) firstKeyAt.current = performance.now();
       }}
-      onEnter={() => (fb ? next() : void check())}
+      onEnter={() => primaryGo()}
     />
   );
-
+  // Signalwort des Musters leuchtet bei Tipp 1 im Satz auf.
+  const lit = (sentence: string): [number, number] | null => {
+    const sp = tip >= 1 && pattern && !fb ? markSpans(sentence, pattern.signals)[0] : undefined;
+    return sp ? [sp[0], sp[1]] : null;
+  };
   const sentenceWithSlot = (sentence: string, slot: ReactNode) => {
     const m = GAP.exec(sentence);
-    if (!m) return <EnglishText as="p" className="lx-sentence" text={sentence} {...src} />;
-    return <EnglishText as="p" className="lx-sentence" testId="sentence" text={sentence} {...src} slot={{ start: m.index, end: m.index + m[0].length, node: slot }} />;
+    if (!m) return <EnglishText as="p" text={sentence} {...src} />;
+    const hl = lit(sentence);
+    return <EnglishText as="p" testId="sentence" text={sentence} {...src} {...(hl && (hl[1] <= m.index || hl[0] >= m.index + m[0].length) ? { highlight: hl } : {})} slot={{ start: m.index, end: m.index + m[0].length, node: slot }} />;
   };
 
-  // ------------------------------------------------------------------ Aufgabe
-  let body: ReactNode;
-  if (task.type === 'mc') {
-    const filled = fb ? (fb.verdict === 'correct' ? (chosen ?? '') : solution) : '';
-    body = (
-      <>
-        {sentenceWithSlot(
-          task.prompt,
-          <span className="lx-gap" data-testid="gap" data-state={!fb ? 'input' : fb.verdict === 'correct' ? 'correct' : 'reveal'} style={{ width: 'auto' }}>
-            {filled || '   '}
-          </span>,
-        )}
-        <Choices
-          items={(task.options ?? []).map((o, i) => ({ id: String(i), label: o, lang: 'en', correct: o === task.answer }))}
-          chosen={chosen === null ? null : String((task.options ?? []).indexOf(chosen))}
-          onChoose={(id) => void check((task.options ?? [])[Number(id)])}
-          label={t('trChoicesLabel')}
-          letters
-        />
-      </>
+  let prompt: ReactNode;
+  let answer: ReactNode = null;
+  const solved = useMemo(() => (task.prompt.includes('___') ? task.prompt.replace(GAP, solution) : null), [task.prompt, solution]);
+
+  if (type === 'mc') {
+    const shown = fb ? (fb.verdict === 'correct' ? (fb.picked ?? '') : solution) : chosen !== null ? ((task.options ?? [])[chosen] ?? '') : '';
+    prompt = sentenceWithSlot(
+      task.prompt,
+      <span className="lx-gap" data-testid="gap" data-state={!fb ? 'input' : fb.verdict === 'correct' ? 'correct' : 'reveal'} style={{ width: 'auto' }}>
+        {shown || '   '}
+      </span>,
     );
-  } else if (task.type === 'gap') {
-    body = (
+    const opts = task.options ?? [];
+    const why: Partial<Record<number, string>> = {};
+    if (model && fb && fb.verdict === 'wrong' && chosen !== null) {
+      const yours = model.lines.find((l) => l.k === 'yours');
+      if (yours && yours.k === 'yours') why[chosen] = yours.text;
+    }
+    answer = <Choices options={opts} chosen={chosen} correct={opts.indexOf(solution) >= 0 ? opts.indexOf(solution) : null} revealed={!!fb} onPick={(i) => !fb && setChosen(i)} lang="en" collapse={profile === 'touch'} why={why} label={t('trChoicesLabel')} testId="choices" />;
+  } else if (type === 'meaning' && task.x?.kind === 'meaning') {
+    const x = task.x;
+    prompt = (
+      <p lang={lang} data-testid="meaning-q">
+        {lang === 'de' ? x.q.de : x.q.en}
+      </p>
+    );
+    const correctIdx = MEANING_KEYS.indexOf(task.answer as 'a' | 'b' | 'both');
+    const why: Partial<Record<number, string>> = {};
+    if (model && fb && fb.verdict === 'wrong' && chosen !== null) {
+      const yours = model.lines.find((l) => l.k === 'yours');
+      if (yours && yours.k === 'yours') why[chosen] = yours.text;
+    }
+    answer = <Choices options={[x.a, x.b, t('gxMeaningBoth')]} langs={['en', 'en', lang]} chosen={chosen} correct={correctIdx >= 0 ? correctIdx : null} revealed={!!fb} onPick={(i) => !fb && setChosen(i)} lang="en" collapse={profile === 'touch'} why={why} label={t('trChoicesLabel')} testId="choices" />;
+  } else if (type === 'gap') {
+    prompt = (
       <>
         {sentenceWithSlot(task.prompt, gapNode)}
         {task.hint && !task.prompt.includes(task.hint) && (
-          <p className="text-sm text-muted" data-testid="cue">
+          <p className="lx-t-support text-muted" data-testid="cue">
             {t('grCue', { cue: task.hint })}
           </p>
         )}
       </>
     );
-  } else if (task.type === 'transform' && !whole) {
+  } else if (type === 'kwt' && task.x?.kind === 'kwt') {
+    const x = task.x;
+    prompt = (
+      <div className="flex flex-col gap-2">
+        <EnglishText as="p" className="text-muted" text={x.from} {...src} testId="transform-from" />
+        <p className="flex flex-wrap items-center gap-2">
+          <span className="lx-t-meta text-muted">{t('gxKeyWord')}</span>
+          <span className="rounded-[var(--radius-inline)] bg-surface px-2 py-0.5 font-semibold tracking-wide" lang="en" data-testid="kwt-key">
+            {x.key}
+          </span>
+          <span className="lx-t-meta text-muted">{t('gxKwtWords', { min: x.words[0], max: x.words[1] })}</span>
+        </p>
+        {sentenceWithSlot(task.prompt, gapNode)}
+      </div>
+    );
+  } else if (type === 'transform' && !whole) {
     const { from, target } = splitTransform(task.prompt);
-    body = (
-      <>
-        {from && (
-          <div className="flex flex-col gap-1">
-            <p className="lx-eyebrow">{t('grFromLabel')}</p>
-            <EnglishText as="p" className="text-base text-muted" text={from} {...src} testId="transform-from" />
-          </div>
+    prompt = (
+      <div className="flex flex-col gap-2">
+        {from && <EnglishText as="p" className="text-muted" text={from} {...src} testId="transform-from" />}
+        {sentenceWithSlot(target, gapNode)}
+      </div>
+    );
+  } else if (findTask) {
+    const words = wordsOfPrompt;
+    if (fb) {
+      const marks = err ? [{ span: [err[0], err[1]] as [number, number], tone: fb.verdict === 'wrong' ? ('wrong' as const) : ('ok' as const) }] : [];
+      prompt = <SpotSentence words={words} pick="one" selected={null} onSelect={() => undefined} locked marks={marks} area={area} source={src.source} testId="spot-sentence" />;
+    } else if (stage === 'locate') {
+      prompt = <SpotSentence words={words} pick="one" selected={tapped} onSelect={setTapped} area={area} source={src.source} testId="spot-sentence" />;
+    } else if (err) {
+      const before = words.slice(0, err[0]).join(' ');
+      const after = words.slice(err[1] + 1).join(' ');
+      prompt = (
+        <p lang="en" data-testid="spot-replace">
+          {before && <span>{before} </span>}
+          {gapNode}
+          {after && <span> {after}</span>}
+        </p>
+      );
+    } else prompt = null;
+  } else if (type === 'correct') {
+    prompt = <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb} testId="correct-input" />;
+  } else {
+    // Umformung ohne Lücke (ganzer Satz): Auftragssatz oben, leeres Feld darunter.
+    prompt = (
+      <div className="flex flex-col gap-3">
+        <EnglishText as="p" text={task.prompt} {...src} testId="transform-from" />
+        {task.hint && !task.prompt.includes(task.hint) && (
+          <p className="lx-t-support text-muted" data-testid="cue">
+            {t('grCue', { cue: task.hint })}
+          </p>
         )}
-        <div className="flex flex-col gap-1">
-          <p className="lx-eyebrow">{t('grToLabel')}</p>
-          {sentenceWithSlot(target, gapNode)}
-        </div>
+        <SentenceInput mode="free" value={text} onChange={(v) => { if (firstKeyAt.current === null) firstKeyAt.current = performance.now(); setText(v); }} onSubmit={primaryGo} disabled={!!fb} testId="correct-input" />
+      </div>
+    );
+  }
+  void solved;
+  if (copyOpen && fb) {
+    answer = (
+      <>
+        {answer}
+        <CopyOnceField solution={type === 'correct' ? task.answer : (solved ?? solution)} />
       </>
     );
-  } else {
-    // Ganzsatz: `correct` (Satz steht im Feld) oder Umformung ohne Lücke (Auftrag oben, Feld leer).
-    const field = (
-      <textarea
-        ref={fieldRef}
-        className="lx-field"
-        data-sentence=""
-        data-testid="correct-input"
-        data-whole={task.type === 'correct' ? undefined : ''}
-        data-state={fb ? fb.verdict : undefined}
-        lang="en"
-        rows={2}
-        value={text}
-        readOnly={!!fb}
-        autoCapitalize="off"
-        autoComplete="off"
-        autoCorrect="off"
-        spellCheck={false}
-        aria-label={t(task.type === 'correct' ? 'grCorrectLabel' : 'grRewriteLabel')}
-        onChange={(e) => {
-          if (firstKeyAt.current === null) firstKeyAt.current = performance.now();
-          setText(e.target.value);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            if (fb) next();
-            else void check();
-          }
-        }}
-      />
-    );
-    body =
-      task.type === 'correct' ? (
-        field
-      ) : (
-        <>
-          <EnglishText as="p" className="lx-sentence" text={task.prompt} {...src} testId="transform-from" />
-          {task.hint && !task.prompt.includes(task.hint) && (
-            <p className="text-sm text-muted" data-testid="cue">
-              {t('grCue', { cue: task.hint })}
-            </p>
-          )}
-          {field}
-        </>
-      );
   }
 
-  // ------------------------------------------------------------------ Ergebnis
-  let result: ReactNode = null;
-  if (fb) {
+  // ------------------------------------------------------------------ Rückmeldung
+
+  let feedback: ShellFeedback | null = null;
+  if (fb && model) {
     const c = fb.check;
-    const key: MessageKey = fb.dontKnow
-      ? 'grVerdictDontKnow'
+    const sub: string | null = fb.dontKnow
+      ? null
       : fb.override
-        ? 'lrOverridden'
+        ? t('lrOverridden')
         : fb.unsure
-          ? 'grUnsure'
-          : fb.verdict === 'correct'
-            ? c?.kind === 'uk'
-              ? 'trVerdictUk'
-              : c?.kind === 'contraction'
-                ? 'grVerdictContraction'
-                : c?.kind === 'alt'
-                  ? 'grVerdictAlt'
-                  : 'trVerdictCorrect'
-            : fb.verdict === 'near'
-              ? c?.kind === 'typo'
-                ? 'trVerdictTypo'
-                : 'trVerdictNear'
-              : c?.kind === 'form'
-                ? 'grVerdictForm'
-                : 'trVerdictWrong';
-    const family = c?.kind === 'alt' ? altFamily(task, fb.given) : null;
-    const also = alsoRight(task, lang);
-    // „Auch richtig“ nur mit echten Zusatzlösungen oder dem Hinweis der Familie – nie allgemeine Themenhinweise.
-    const notes = family ? [altNote(family, lang)] : [];
-    const exclude = solved ?? undefined;
-    const examples = examplesFor(task.topic, { exclude, max: 2, offset: hash32(task.key) % 5 });
-    const typedAnswer = task.type !== 'mc';
-    // Reihenfolge (Gesamtkonzept 3.6): Urteil, Du/Richtig einmal, Warum, Beispiele. Bei richtiger Antwort und bei
-    // Auswahl steht die Lösung schon in der Karte (Lücke gefüllt, Option markiert): kein zweites „Richtig“.
-    const showDiff = typedAnswer && fb.verdict !== 'correct';
-    const fullSentence = task.type === 'correct' ? task.answer : (solved ?? solution);
-    const hint = formHint(task, lang);
-    result = (
-      <ResultArea label={t('trResultLabel')}>
-        <VerdictLine verdict={fb.verdict} text={t(key)} />
-        {fb.why && (
-          <p className="text-sm" data-testid="judge-why" lang={lang}>
-            {fb.why}
-          </p>
-        )}
-        {c?.us && (
-          <p className="text-sm text-muted" data-testid="us-hint">
-            {t('trUsHint', { us: c.us })}
-          </p>
-        )}
-        {showDiff && (
-          <SentenceDiff
-            ops={c?.ops ?? []}
-            given={fb.given}
-            correct={fullSentence}
-            labels={{ yours: t('grYourAnswer'), correct: t('grCorrect'), empty: t('trEmpty'), missing: t('lrMissing') }}
-            {...src}
-          />
-        )}
-        {hint && (
-          <div className="flex flex-col gap-1">
-            <p className="lx-eyebrow">{t('grWhyLabel')}</p>
-            <FormHint text={hint} />
-          </div>
-        )}
-        <ExampleList items={examples} {...src} />
-        <AlsoRight answers={also.answers} notes={notes} />
-        {fb.verdict === 'wrong' && typedAnswer && !fb.dontKnow && !fb.override && <OverrideButton onOverride={override} />}
-        {fb.verdict === 'wrong' && typedAnswer && <CopyOnce solution={task.type === 'correct' ? task.answer : solution} />}
-        <NextButton onNext={next} auto={fb.verdict === 'correct' && fb.help.level === 0 && !fb.override && !fb.why} />
-      </ResultArea>
-    );
+          ? t('grUnsure')
+          : c?.kind === 'uk' && c.us
+            ? t('trUsHint', { us: c.us })
+            : c?.kind === 'contraction'
+              ? t('grVerdictContraction')
+              : c?.kind === 'alt'
+                ? t('grVerdictAlt')
+                : c?.kind === 'typo'
+                  ? t('trVerdictTypo')
+                  : c?.kind === 'form'
+                    ? t('grVerdictForm')
+                    : c?.kind === 'key'
+                      ? t('gxKwtKeyMissing')
+                      : c?.kind === 'words'
+                        ? t('gxKwtWordCount')
+                        : null;
+    // Vergleich nur, wo Lücke und Optionen die Lösung nicht schon zeigen (§5.2).
+    let comparison: ShellFeedback['comparison'] = null;
+    if (fb.verdict === 'wrong' && !fb.dontKnow && !fb.override) {
+      if (type === 'correct' || (type === 'transform' && whole)) comparison = { given: fb.given, ops: c?.ops ?? alignWords(fb.given, task.answer) };
+      else if (type === 'kwt' && (c?.ops ?? []).filter((o) => o.op !== 'eq').length > 1) comparison = { given: fb.given, ops: c?.ops ?? [] };
+      else if (findTask && task.x?.kind === 'find' && task.x.fixed) comparison = { given: task.prompt, ops: alignWords(task.prompt, task.x.fixed) };
+    }
+    const wrongTyped = fb.verdict === 'wrong' && !choiceType && !fb.dontKnow && !fb.override;
+    const menu: Partial<Record<ShellMenuId, () => void>> = {};
+    if (wrongTyped && !findTask) menu.override = override;
+    if (wrongTyped) menu.copyOnce = () => setCopyOpen(true);
+    if (ai && fb.verdict === 'wrong' && !fb.dontKnow && aiState !== 'busy') menu.askClaude = () => void askClaude();
+    menu.wholeTopic = () => setSheet(true);
+    feedback = { verdict: rv, sub, comparison, explanation: model, depth, menu, auto: fb.help.level === 0 && !fb.override };
   }
+
+  async function askClaude(): Promise<void> {
+    if (!fb) return;
+    aiCtl.current?.abort();
+    const ctl = new AbortController();
+    aiCtl.current = ctl;
+    setAiState('busy');
+    try {
+      const r = await askJson({
+        template: explainAnswer,
+        vars: { topic: task.topic, prompt: task.x?.kind === 'find' ? task.prompt : task.prompt, answer: solution, given: fb.picked ?? fb.given, pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null, uiLang: lang },
+        signal: ctl.signal,
+      });
+      setAiText({ text: lang === 'de' ? r.data.de : r.data.en });
+      setAiState('idle');
+    } catch {
+      setAiState(ctl.signal.aborted ? 'idle' : 'error');
+    }
+  }
+
+  const kindLabel = t(findTask ? 'gxKind_find' : type === 'kwt' ? 'gxKind_kwt' : type === 'meaning' ? 'gxKind_meaning' : (`grKind_${type}` as MessageKey));
+  const taskKey: MessageKey = findTask ? (stage === 'locate' ? 'gxTask_find1' : 'gxTask_find2') : type === 'kwt' ? 'gxTask_kwt' : type === 'meaning' ? 'gxTask_meaning' : type === 'transform' && whole ? 'grTask_transformWhole' : (`grTask_${type}` as MessageKey);
+  const purposeKey: MessageKey = findTask ? 'gxPurpose_find' : type === 'kwt' ? 'gxPurpose_kwt' : type === 'meaning' ? 'gxPurpose_meaning' : 'purposeGrammar';
+  const learnLine = learning && pattern ? { topic: topicLabel, pattern: lang === 'de' ? pattern.name.de : pattern.name.en } : { topic: null, pattern: null };
+  // Aufgabenzeile in der Lernphase mit Musternamen (§5.2); in gemischten Runden bleibt sie allgemein.
+  const taskText = learning && pattern && !findTask && type !== 'meaning' && type !== 'mc' ? `${t(taskKey)} ${t('gxTaskFor', { pattern: learnLine.pattern ?? '' })}` : t(taskKey);
+
+  const primary = fb
+    ? { label: t('exNext'), onClick: () => next(), testId: 'next' }
+    : { label: t('exCheck'), onClick: () => submit(), testId: 'check', disabled: choiceType ? chosen === null : findTask && stage === 'locate' ? !tapped : false };
+
+  const card = pattern ? (
+    <PatternCard name={lang === 'de' ? pattern.name.de : pattern.name.en} formula={lang === 'de' ? pattern.form.de : pattern.form.en} example={pattern.ex[0]?.en ?? null} signals={pattern.signals} compact={!split} area={area} />
+  ) : null;
 
   return (
-    <div ref={root} tabIndex={-1} className="outline-none">
-      <article
-        ref={sharedRef}
-        data-shared={shared ? '' : undefined}
-        className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7"
-        data-testid="gr-item"
-        data-type={task.type}
-        data-topic={task.topic}
-        data-src={task.src}
-        data-review={task.errorT !== null ? '' : undefined}
-      >
-        <header className="flex flex-col gap-2">
-          <LearnStatus p={p} n={typeof doc?.n === 'number' ? doc.n : 0} recent={Array.isArray(doc?.recent) ? (doc.recent as number[]) : null} kind={t(`grKind_${task.type}` as MessageKey)} kindId={task.type} extra={badge} />
-          <TaskLine task={t(task.type === 'transform' && whole ? 'grTask_transformWhole' : `grTask_${task.type}` as MessageKey)} purpose={t('purposeGrammar')} />
-        </header>
-        {/* N46 „Kurz erklärt“ (Soll): die Regel in einem Satz, zugeklappt, ohne KI; nicht im Wochen-Check
-            und nicht in der Lektion (dort steht die Regel schon über der Aufgabe). */}
-        {!fb && !noHelp && briefRule && (
-          <Disclosure label={t('nbLernenBrief')} testId="gr-brief">
-            <p className="text-sm text-muted" lang={lang} data-testid="gr-brief-text">
-              {briefRule}
-            </p>
-            {brief.rest && (
-              <Disclosure label={t('nbLernenBriefMore')} testId="gr-brief-more">
-                <p className="text-sm text-muted" lang={lang}>
-                  {brief.rest}
-                </p>
-              </Disclosure>
-            )}
-          </Disclosure>
-        )}
-        <div className="flex flex-col gap-4">
-          {body}
-          {retry && !fb && (
-            <RetryHintLine
-              text={retry.kind === 'hint' ? t('rhGrammarHint', { hint: retry.text }) : retry.kind === 'topic' ? t('rhGrammarTopic', { topic: retry.name }) : t('rhGrammarVerb')}
-            />
-          )}
-        </div>
-        {!fb && (
-          <div className="flex flex-wrap items-center gap-2">
-            {task.type !== 'mc' && (
-              <ActionBar stateKey="check">
-                <PrimaryAction onClick={() => void check()} busy={judging} busyLabel={t('aiThinking')} testId="check">
-                  {t('trCheck')}
-                </PrimaryAction>
-              </ActionBar>
-            )}
-            {typedKind && !scaff && tip < 2 && !noHelp && !retry && (
-              <Button
-                variant="ghost"
-                icon="lightbulb"
-                onClick={() => {
-                  setTip((v) => (v === 0 ? 1 : 2));
-                  api.focusNow();
-                }}
-                data-testid="hint"
-                data-level={tip}
-              >
-                {tip === 0 ? t('grTip') : t('trTipLetter')}
-              </Button>
-            )}
-            {scaff && tip < 2 && !retry && (
-              <Button
-                variant="ghost"
-                icon="lightbulb"
-                onClick={() => {
-                  setTip(2);
-                  api.focusNow();
-                }}
-                data-testid="hint"
-                data-level={tip}
-              >
-                {t('trTipLetter')}
-              </Button>
-            )}
-            <Button variant="ghost" onClick={dontKnow} data-testid="dont-know">
-              {t('grDontKnow')}
-            </Button>
-            {judging && (
-              <p className="text-sm text-muted" data-testid="gr-judge-phase" role="status">
-                {t('grJudging')}
-              </p>
-            )}
-          </div>
-        )}
-        {result}
-      </article>
+    <div
+      ref={(el) => {
+        root.current = el;
+        sharedRef.current = el;
+      }}
+      tabIndex={-1}
+      className="outline-none"
+      data-testid="gr-item"
+      data-type={type}
+      data-topic={task.topic}
+      data-src={task.src}
+      data-pat={patId ? '1' : undefined}
+      data-profile={profile}
+      data-shared={shared ? '' : undefined}
+      data-review={task.errorT !== null ? '' : undefined}
+    >
+      <ExerciseShell
+        meta={{ ex: `gr_${type}`, id: `${task.topic}|${task.key}`, kind: type }}
+        status={{ area: 'grammar', state, kindLabel, topic: learnLine.topic, pattern: learnLine.pattern, badge }}
+        task={{ text: taskText, purpose: t(purposeKey) }}
+        aid={!split && learning && !fb ? card : null}
+        prompt={prompt}
+        answer={answer}
+        hint={hint ?? (aiState === 'busy' ? { text: t('exThinking'), tone: 'hint' } : aiState === 'error' ? { text: t('exAiError'), tone: 'near' } : null)}
+        secondary={secondary}
+        primary={primary}
+        feedback={feedback}
+        side={split && learning && !fb ? card : null}
+      />
+      {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
+      {void go}
     </div>
   );
 }
+
+/** „Einmal richtig schreiben“ (M5): freiwillig, zählt nicht als Antwort und ändert keine Note. */
+function CopyOnceField({ solution }: { solution: string }) {
+  const { t } = useT();
+  const [value, setValue] = useState('');
+  const ok = nonEmpty(value) && value.trim().toLowerCase() === solution.trim().toLowerCase();
+  return (
+    <label className="flex flex-col gap-1">
+      <span className="lx-t-support text-muted">{t('lrCopyLabel')}</span>
+      <input className="lx-field" lang="en" autoCapitalize="off" autoComplete="off" autoCorrect="off" spellCheck={false} value={value} onChange={(e) => setValue(e.target.value)} data-testid="copy-input" data-state={ok ? 'correct' : undefined} autoFocus />
+      {ok && (
+        <span className="lx-t-support text-ok-text" data-testid="copy-ok">
+          {t('lrCopyOk')}
+        </span>
+      )}
+    </label>
+  );
+}
+
+export { altFamily };

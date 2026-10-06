@@ -231,7 +231,7 @@ test('Block 2 Grammatik aus Heute: Grammatikrunde als Pflicht mit 6 Aufgaben, â€
   }
   await expect(page.getByTestId('summary')).toBeVisible();
   await expect(page.getByTestId('summary-back')).toHaveCount(0);
-  await page.getByTestId('summary-next').click();
+  await page.getByTestId('session-end-next').click();
   await expect.poll(async () => (((await dump(page))['app/profile']?.act as Record<string, Doc>)[MON] ?? {})['u-focus']).toBe(1);
   // Weiter geht es mit Block 3 Satzbau (Zwischenkarte oder direkt).
   await page.locator('[data-screen="unitCard"], [data-screen="drill"]').first().waitFor();

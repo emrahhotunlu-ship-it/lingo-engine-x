@@ -9,6 +9,7 @@ import { topicById } from '../../domain/content';
 import { certainty, topicP } from '../../domain/grammar/bkt';
 import { errorsOf } from '../../domain/grammar/errors';
 import { lernweg } from '../../domain/grammar/path';
+import { patternsOf } from '../../domain/grammar/patterns';
 import { localizePattern, ruleOf } from '../../domain/grammar/rules';
 import { ROUND_SIZE, unseenCount } from '../../domain/grammar/tasks';
 import { EnglishText } from '../../engine/EnglishText';
@@ -23,6 +24,7 @@ import { toast } from '../../ui/Toast';
 import { useLearnInputs } from '../learn/inputs';
 import { CERTAINTY_KEYS, ScreenHeader } from '../learn/ui';
 import { PathList } from './PathList';
+import { PatternSheetBody } from './PatternSheet';
 import { RuleSearch } from './WissenScreen';
 import { generateTopicTasks } from './generate';
 import { setExtraTasks, startGrammar } from './session';
@@ -78,16 +80,17 @@ export function GrammarScreen() {
 
 const WEG_KEYS = ['nbLernenWeg1', 'nbLernenWeg2', 'nbLernenWeg3', 'nbLernenWeg4', 'nbLernenWeg5'] as const;
 
-export function TopicSheet({ topic, onClose }: { topic: string | null; onClose: () => void }) {
+/** `inRound`: aus einer laufenden Runde geöffnet („Ganzes Thema ansehen“) – nur lesen, nichts Neues starten. */
+export function TopicSheet({ topic, onClose, inRound = false }: { topic: string | null; onClose: () => void; inRound?: boolean }) {
   const { t, lang } = useT();
   return (
     <Sheet open={!!topic} onClose={onClose} title={topic ? topicName(topic, lang) : t('grTitle')} closeLabel={t('close')}>
-      {topic && <RuleSheet key={topic} topic={topic} onStarted={onClose} />}
+      {topic && <RuleSheet key={topic} topic={topic} onStarted={onClose} inRound={inRound} />}
     </Sheet>
   );
 }
 
-function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void }) {
+function RuleSheet({ topic, onStarted, inRound = false }: { topic: string; onStarted: () => void; inRound?: boolean }) {
   const { t, tn, lang, num } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
@@ -96,6 +99,8 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
   const doc = useLive((s) => s.collections.grammar?.get(topic));
   const inputs = useLearnInputs();
   const rule = ruleOf(topic, lang);
+  // Mit Musterdatei ersetzt das Themenblatt den Querschnitt (Lernplattform 2.0 §5.5); ohne bleibt das Regelblatt wie bisher.
+  const tpats = patternsOf(topic);
   useCompanionSee({ area: 'grammar', label: `${t('grTitle')} · ${topicName(topic, lang)}`, phase: 'idle' });
   const p = topicP(topic, doc, now);
   const cert = certainty(p, { n: typeof doc?.n === 'number' ? doc.n : 0, recent: Array.isArray(doc?.recent) ? (doc.recent as number[]) : null });
@@ -106,6 +111,13 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
 
   const startTopic = () => {
     const first = startGrammar({ mode: 'topic', topic });
+    if (first === 'typed') api.focusNow();
+    onStarted();
+    go({ name: 'grammarSession', mode: 'topic', topic });
+  };
+
+  const practicePattern = (pat: string) => {
+    const first = startGrammar({ mode: 'topic', topic, pat });
     if (first === 'typed') api.focusNow();
     onStarted();
     go({ name: 'grammarSession', mode: 'topic', topic });
@@ -129,11 +141,13 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
   return (
     <div className="flex flex-col gap-6 pb-4" data-testid="rule-sheet" data-topic={topic}>
       {/* Der Knopf bleibt oben stehen, auch beim Lesen der Regel (Gesamtkonzept 3.4, U-07). */}
-      <div className="sticky top-0 z-10 -mx-5 flex flex-col gap-2 bg-surface-solid px-5 pt-1 pb-3 sm:-mx-6 sm:px-6">
-        <Button variant="primary" iconAfter="arrowRight" onClick={startTopic} data-testid="topic-start">
-          {t('nbLernenPractice', { n: ROUND_SIZE.topic })}
-        </Button>
-      </div>
+      {!inRound && (
+        <div className="sticky top-0 z-10 -mx-5 flex flex-col gap-2 bg-surface-solid px-5 pt-1 pb-3 sm:-mx-6 sm:px-6">
+          <Button variant="primary" iconAfter="arrowRight" onClick={startTopic} data-testid="topic-start">
+            {t('nbLernenPractice', { n: ROUND_SIZE.topic })}
+          </Button>
+        </div>
+      )}
       <div className="flex flex-col gap-2" data-testid="rule-certainty">
         <p className="flex items-center gap-2 text-sm text-muted">
           <Dots n={cert.dots} />
@@ -148,7 +162,8 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
           ))}
         </ol>
       </div>
-      {rule && (
+      {tpats && <PatternSheetBody topic={topic} tp={tpats} onPractice={practicePattern} readOnly={inRound} />}
+      {!tpats && rule && (
         <>
           <section className="flex flex-col gap-2">
             <h3 className="lx-eyebrow">{t('grRule')}</h3>
@@ -242,7 +257,7 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
           )}
         </>
       )}
-      {errs.length > 0 && (
+      {!tpats && errs.length > 0 && (
         <section className="flex flex-col gap-2" data-testid="own-errors">
           <h3 className="lx-eyebrow">{t('grOwnErrors')}</h3>
           <ul className="flex flex-col gap-2">
@@ -264,7 +279,7 @@ function RuleSheet({ topic, onStarted }: { topic: string; onStarted: () => void 
         </section>
       )}
       <div className="flex flex-col gap-3">
-        {ai && unseen < 8 && (
+        {!inRound && ai && unseen < 8 && (
           <Button
             variant="secondary"
             icon="sparkle"

@@ -9,10 +9,10 @@ import type { GrammarTaskType, Help, Timing, Verdict } from './types';
 
 export type LearnKind = GrammarTaskType | 'dictate' | 'cloze' | 'order';
 
-export function learnGrade(kind: LearnKind, verdict: Verdict, timing: Timing, help: Help): Grade {
+export function learnGrade(kind: LearnKind, verdict: Verdict, timing: Timing, help: Help, profile?: 'touch' | 'keys'): Grade {
   // Die Tabelle steht in `domain/grade` (eine Notentabelle für Wörter und Grammatik).
-  // Vorläufig (Lernplattform 2.0 §10.0): meaning → mc, find → correct, kwt → transform, bis P4/P5 eigene Schlüssel liefern.
-  const kinds = { mc: 'mc', gap: 'gap', transform: 'transform', correct: 'correct', meaning: 'mc', find: 'correct', kwt: 'transform', dictate: 'dictate', cloze: 'cloze', order: 'order' } as const;
+  // Die neuen Aufgabenarten haben eigene Schlüssel (Lernplattform 2.0 §4.10).
+  const kinds = { mc: 'mc', gap: 'gap', transform: 'transform', correct: 'correct', meaning: 'meaning', find: 'find', kwt: 'kwt', dictate: 'dictate', cloze: 'cloze', order: 'order' } as const;
   return gradeAnswer({
     key: kinds[kind],
     verdict,
@@ -21,5 +21,6 @@ export function learnGrade(kind: LearnKind, verdict: Verdict, timing: Timing, he
     units: timing.units,
     replays: Math.max(help.replays ?? 0, timing.replays ?? 0),
     help: help.level,
+    ...(profile ? { profile } : {}),
   });
 }

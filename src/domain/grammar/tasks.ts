@@ -310,7 +310,8 @@ function picker(i: Pick2) {
   const seed = prof(allSeedTasks());
   const sources: readonly (readonly GrammarTask[])[] = [prof(i.dailyOpen), prof(i.pool), shuffle(seed, rng)];
   const gt = i.gt ?? null;
-  const block = i.mode === 'duty' ? (i.introBlock ?? (gt?.intro && gt.pats.length ? { topic: gt.intro, pats: gt.pats } : null)) : null;
+  // Ein ausdrücklich übergebener Block (auch `null` = keiner) gilt immer; ohne Angabe leitet nur die Pflichtrunde ihn aus `gt` ab.
+  const block = i.introBlock !== undefined ? i.introBlock : i.mode === 'duty' && gt?.intro && gt.pats.length ? { topic: gt.intro, pats: gt.pats } : null;
 
   // Eingeführte Muster (§3.2): ab `pats[id].i`; ein begonnenes Thema ohne `pats` gilt als ganz eingeführt (Bestand);
   // das Muster des heutigen Einführungsschritts gilt ab sofort.

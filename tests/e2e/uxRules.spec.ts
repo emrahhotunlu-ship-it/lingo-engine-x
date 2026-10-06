@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, openTab, screen, type Theme } from './fixtures';
 import { tourPatch, trainerTour } from './trainerHelpers';
+import { skipMiniLesson } from './learnHelpers';
 
 // UX-Regeln R1–R12 als Rundgang (docs/umbau/05-ux-ist-und-ziel.md §3.7, Anhang B): 390 × 844 mit Touch, Dunkel
 // und Hell. Hier geprüft: R1 (höchstens ein gefüllter Hauptknopf im Bild), R2 (Hauptknopf im sichtbaren Bereich),
@@ -159,6 +160,7 @@ test('Rundgang: Grammatik-Übung (Frage und Ergebnis) und Zähler mit festem Nen
   await screen(page, 'today');
   await openTab(page, 'learn');
   await page.getByTestId('hub-next-start').click();
+  await skipMiniLesson(page);
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await page.waitForTimeout(450);
   const total0 = (await page.getByTestId('round-progress').innerText()).split('/')[1]?.trim();
@@ -171,8 +173,28 @@ test('Rundgang: Grammatik-Übung (Frage und Ergebnis) und Zähler mit festem Nen
     seen.push(n ?? 0);
     expect(String(total), 'R4: Nenner fest').toBe(total0);
     const item = page.getByTestId('gr-item');
-    if ((await item.getAttribute('data-type')) === 'mc') await item.getByTestId('choice').first().click();
-    else {
+    const kind = (await item.getAttribute('data-type')) ?? '';
+    if (kind === 'mc' || kind === 'meaning') {
+      await item.getByTestId('choice').first().click();
+      await page.getByTestId('check').click();
+    } else if (kind === 'find') {
+      // Schritt 1: Stelle antippen (liegt sie richtig, folgt Schritt 2 mit der Lücke); bei Fehlversuch erst die Leitfrage, dann die Auflösung.
+      await item.getByTestId('spot-word').first().click();
+      await page.getByTestId('check').click();
+      const replace = item.getByTestId('spot-replace');
+      const near = item.locator('[data-testid="hint-line"][data-tone="near"]');
+      await expect(item.getByTestId('verdict').or(near).or(replace).first()).toBeVisible();
+      if (await replace.isVisible()) {
+        await page.getByTestId('gap-input').focus();
+        await page.keyboard.type('zzzz', { delay: 10 });
+        await page.getByTestId('check').click();
+        await expect(item.getByTestId('verdict').or(near).first()).toBeVisible();
+        if (await near.isVisible()) await page.getByTestId('check').click();
+      } else if (await near.isVisible()) {
+        await item.getByTestId('spot-word').first().click();
+        await page.getByTestId('check').click();
+      }
+    } else {
       const input = item.getByTestId('correct-input');
       if (await input.count()) await input.fill('zzzz wrong');
       else {
@@ -180,8 +202,8 @@ test('Rundgang: Grammatik-Übung (Frage und Ergebnis) und Zähler mit festem Nen
         await page.keyboard.type('zzzz', { delay: 10 });
       }
       await page.getByTestId('check').click();
-      await expect(item.getByTestId('verdict').or(item.getByTestId('retry-hint'))).toBeVisible();
-      if (await item.getByTestId('retry-hint').isVisible()) await page.getByTestId('check').click();
+      await expect(item.getByTestId('verdict').or(item.locator('[data-testid="hint-line"][data-tone="near"]'))).toBeVisible();
+      if (await item.locator('[data-testid="hint-line"][data-tone="near"]').isVisible()) await page.getByTestId('check').click();
     }
     await expect(item.getByTestId('verdict')).toBeVisible();
     await page.waitForTimeout(450);

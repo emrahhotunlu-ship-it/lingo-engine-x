@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
 import { NO_GRAMMAR_ERRORS } from './heuteHelpers';
 import { writes } from './trainerHelpers';
+import { skipMiniLesson } from './learnHelpers';
 
 // Paket P2 (docs/neubau/plan.md §4.3), umgebaut zum Grammatik-Pfad (W5): Hub mit Weiter-Karte, Pfad, Fehler und Extra, jede Übung ≤ 2 Tipps ab
 // Grammatik, Tageseinheit Block 4 (Fokus, Mini-Drill bei Fallen-Korrektur) und Block 5 (beide
@@ -178,12 +179,18 @@ test('Deutsch-Fallen ohne KI: Startsatz-Falle in 2 Tipps ab Üben, 3 Sätze mit 
   expect(errors).toEqual([]);
 });
 
-test('Grammatik-Runde: „Kurz erklärt“ vor der Aufgabe, zugeklappt (N46)', async ({ page }) => {
-  const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
+test('Grammatik-Runde in der Lernphase: kompakte Musterkarte steht offen, kein ganzer Absatz „Kurz erklärt“ (Lernplattform 2.0 §5.1)', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await boot(page, { migrated: true });
+  await screen(page, 'today');
+  await openTab(page, 'learn');
+  await page.locator('[data-testid="topic"][data-topic="time-clauses"]').click();
+  await page.getByTestId('topic-start').click();
+  await skipMiniLesson(page);
   await expect(page.getByTestId('gr-item')).toBeVisible();
-  await expect(page.getByTestId('gr-brief-text')).toHaveCount(0);
-  await page.getByTestId('gr-brief').click();
-  await expect(page.getByTestId('gr-brief-text')).not.toBeEmpty();
+  await expect(page.getByTestId('gr-brief')).toHaveCount(0);
+  await expect(page.getByTestId('pattern-card')).toBeVisible();
+  await expect(page.getByTestId('pattern-card')).toHaveAttribute('data-compact', '');
   expect(errors).toEqual([]);
 });
 
@@ -198,14 +205,14 @@ test('Neuladen in der Grammatik-Runde bei Aufgabe 4: gleiche Aufgabe, keine dopp
   }
   await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\b8\b/);
   const prompt = await page.getByTestId('gr-item').getAttribute('data-topic');
-  const text = await page.getByTestId('gr-item').getByTestId('task-line').innerText();
+  const text = await page.getByTestId('gr-item').getByTestId('task').innerText();
   await expect.poll(logged).toBe(base + 3);
   await page.waitForTimeout(600);
   await page.reload();
   await screen(page, 'grammarSession');
   await expect(page.getByTestId('round-progress')).toHaveText(/\b4\b\D+\b8\b/);
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', prompt ?? '');
-  await expect(page.getByTestId('gr-item').getByTestId('task-line')).toHaveText(text);
+  await expect(page.getByTestId('gr-item').getByTestId('task')).toHaveText(text);
   expect(await logged()).toBe(base + 3);
   expect(errors).toEqual([]);
 });
@@ -293,7 +300,7 @@ test('Anwenden › Eigener Satz: Wort fehlt → lokal, keine KI; richtiger Satz 
   expect(errors).toEqual([]);
 });
 
-test('Neues Thema: Mini-Lektion vor der ersten Aufgabe (Regel, Beispiele, typischer Fehler), „Los“ startet die Runde', async ({ page }) => {
+test('Neues Thema: drei Karten vor der ersten Aufgabe (Alltag mit Verständnisfrage, Formel, typischer Fehler), „Los“ startet die Runde', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await boot(page, { migrated: true });
   await screen(page, 'today');
@@ -303,10 +310,22 @@ test('Neues Thema: Mini-Lektion vor der ersten Aufgabe (Regel, Beispiele, typisc
   await row.click();
   await expect(page.getByTestId('topic-start')).toBeVisible();
   await page.getByTestId('topic-start').click();
-  await expect(page.getByTestId('mini-lesson')).toHaveAttribute('data-topic', 'time-clauses');
-  await expect(page.getByTestId('mini-trap')).toBeVisible();
+  await expect(page.getByTestId('intro-flow')).toHaveAttribute('data-topic', 'time-clauses');
   await expect(page.getByTestId('gr-item')).toHaveCount(0);
+  // Karte 1: Alltag und Verständnisfrage – die Antwort kommt erst nach dem Antippen.
+  await expect(page.getByTestId('intro-ccq').first()).toBeVisible();
+  await expect(page.getByTestId('intro-ccq-result')).toHaveCount(0);
+  await page.getByTestId('intro-ccq-answer').first().click();
+  await expect(page.getByTestId('intro-ccq-result').first()).toBeVisible();
   expect(await layoutProblems(page)).toEqual([]);
+  await page.getByTestId('intro-next').click();
+  await expect(page.getByTestId('intro-formula')).toBeVisible();
+  expect(await layoutProblems(page)).toEqual([]);
+  await page.getByTestId('intro-next').click();
+  await expect(page.getByTestId('intro-trap')).toBeVisible();
+  expect(await layoutProblems(page)).toEqual([]);
+  // Je Muster drei Karten (höchstens zwei Muster je Einführungsschritt): „Weiter“, bis „Los“ erscheint.
+  for (let i = 0; i < 8 && !(await page.getByTestId('mini-go').isVisible()); i++) await page.getByTestId('intro-next').click();
   await page.getByTestId('mini-go').click();
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', 'time-clauses');
   expect(errors).toEqual([]);

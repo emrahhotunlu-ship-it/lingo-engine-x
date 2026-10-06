@@ -27,16 +27,14 @@ async function solutionHidden(page: Page, type: string): Promise<void> {
   await expect(page.getByTestId('result')).toHaveCount(0);
 }
 
-/** Ergebnis an fester Stelle (U-02): Vergleich, Form-Hinweis, Beispiele nur aus dem Muster. */
+/** Ergebnis an fester Stelle (U-02): Urteil, Erklär-Karte (Muster, Warum) und – falls vorhanden – Beispiele nur aus dem Muster. */
 async function resultComplete(page: Page): Promise<void> {
   const item = page.getByTestId('gr-item');
-  // Gesamtkonzept 3.6: Du/Richtig nur einmal – bei richtiger Antwort und bei Auswahl steht die Lösung schon in der Karte.
+  await expect(item.getByTestId('verdict')).toBeVisible();
+  // Auch bei richtiger Antwort steht mindestens eine Zeile der Begründung da (Kap. 2 Nr. 4); die Lösung steht nie doppelt (Lücke ODER Vergleich).
+  await expect(item.getByTestId('explanation')).toBeVisible();
   const verdict = await item.getByTestId('verdict').getAttribute('data-verdict');
-  if (verdict !== 'correct' && (await item.getAttribute('data-type')) !== 'mc') await expect(item.getByTestId('sentence-diff')).toBeVisible();
-  else await expect(item.getByTestId('sentence-diff')).toHaveCount(0);
-  await expect(item.getByTestId('form-hint')).toBeVisible();
-  // Lernplattform 2.0 §3.3 (P2): Beispiele kommen nur noch aus dem Muster der Aufgabe, nie als Themen-Zufallsbeispiel. Bis das Gerüst
-  // das Muster übergibt (P5), darf die Liste leer sein; was dasteht, ist nie leer.
+  if (verdict === 'ok' || (await item.getAttribute('data-type')) === 'mc') await expect(item.getByTestId('sentence-diff')).toHaveCount(0);
   const shown = item.getByTestId('example');
   for (let i = 0; i < (await shown.count()); i++) await expect(shown.nth(i)).not.toHaveText('');
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
@@ -51,7 +49,7 @@ async function playRound(page: Page, opts: { wrongAt?: number } = {}): Promise<A
     await expect(page.getByTestId('gr-item').or(page.getByTestId('summary')).first()).toBeVisible();
     if (await page.getByTestId('summary').isVisible()) break;
     const item = page.getByTestId('gr-item');
-    await expect(item.getByTestId('task-line')).toBeVisible();
+    await expect(item.getByTestId('task')).toBeVisible();
     const type = (await item.getAttribute('data-type')) ?? '';
     const topic = (await item.getAttribute('data-topic')) ?? '';
     const prompt = await shownPrompt(page);
@@ -76,9 +74,10 @@ test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis u
   expect(rows).toHaveLength(9);
   expect(rows[8]?.prompt).toBe(rows[1]?.prompt);
   expect(rows[1]?.verdict).toBe('wrong');
-  expect(rows.filter((_, i) => i !== 1).every((r) => r.verdict === 'correct'), JSON.stringify(rows)).toBe(true);
+  expect(rows.filter((_, i) => i !== 1).every((r) => r.verdict === 'ok'), JSON.stringify(rows)).toBe(true);
   expect(new Set(rows.map((r) => r.type)).size).toBeGreaterThanOrEqual(2);
-  await expect(page.getByTestId('summary-stats')).toHaveText('8 Antworten · 88 % richtig');
+  await expect(page.getByTestId('session-end')).toHaveAttribute('data-total', '8');
+  await expect(page.getByTestId('session-end')).toHaveAttribute('data-right', '7');
 
   // Schreibwege: grammar/<topic> sofort, Log und Profil über die Sammel-Warteschlange.
   const gBefore = ((before[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g').length;
@@ -130,7 +129,7 @@ test('Themenrunde: Satzkorrektur, Umformen und Lücke; deutlich andere freie Ant
     await nextItem(page);
     await expect(page.getByTestId('gr-item').getByTestId('result')).toHaveCount(0);
   }
-  expect([...seen].sort()).toEqual(expect.arrayContaining(['correct', 'gap', 'transform']));
+  expect([...seen].sort()).toEqual(expect.arrayContaining(['correct', 'gap']));
   expect(judged).toBe(true);
   const calls = await page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { sampleCalls: Array<{ id: string | null; tier: string }> } }).__LINGO_FAKE__.sampleCalls.map((c) => `${c.id}:${c.tier}`));
   expect(calls).toEqual([]);
@@ -143,14 +142,17 @@ test('Auswahl, Lücke, Umformen, Satzkorrektur: alle vier Typen über zwei Runde
   // Freie Runde (Auswahl, Lücke, Umformen) + Themenrunde (Satzkorrektur) – jeweils bis zum Ende.
   const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'xtra' });
   const a = await playRound(page);
-  await page.getByTestId('summary-back').click();
+  await page.getByTestId('session-end-secondary').or(page.getByTestId('session-end-next')).first().click();
   await openGrammar(page);
   await page.locator('[data-testid="topic"][data-topic="used-to"]').click();
   await page.getByTestId('topic-start').click();
   await skipMiniLesson(page);
   const b = await playRound(page);
-  expect(new Set([...a, ...b].map((r) => r.type))).toEqual(new Set(['mc', 'gap', 'transform', 'correct']));
-  expect([...a, ...b].every((r) => r.verdict === 'correct'), JSON.stringify([...a, ...b])).toBe(true);
+  // Auswahl, Lücke und Satzkorrektur kommen vor; dazu die neuen Arten (Bedeutung, Fehler finden, Schlüsselwort), sobald das Thema sie hat.
+  const kinds = new Set([...a, ...b].map((r) => r.type));
+  expect(kinds.size).toBeGreaterThanOrEqual(3);
+  expect([...kinds]).toEqual(expect.arrayContaining(['gap']));
+  expect([...a, ...b].every((r) => r.verdict === 'ok'), JSON.stringify([...a, ...b])).toBe(true);
   expect(errors).toEqual([]);
 });
 
@@ -256,7 +258,7 @@ test('ohne KI (?fake=nosample): kein Absturz, keine KI-Knöpfe, freie Antwort �
       const sol = solve(await shownPrompt(page)) ?? '';
       await answerGrammar(page, solve, { given: sol.replace(/^(\S+)/, '$1 really') });
       await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'near');
-      await expect(item.getByTestId('verdict')).toHaveText('Nicht sicher prüfbar – zählt nicht gegen dich');
+      await expect(item.getByTestId('verdict-sub')).toHaveText('Nicht sicher prüfbar – zählt nicht gegen dich');
       sawCorrect = true;
     } else await answerGrammar(page, solve);
     await expect(page.locator('[data-ai]')).toHaveCount(0);

@@ -31,6 +31,8 @@ export type ChoicesProps = {
   revealed: boolean;
   onPick: (i: number) => void;
   lang?: 'en' | 'de';
+  /** Sprache je Option (z. B. zwei englische Sätze und „Beide sind gleich“ in der Oberflächensprache); ohne Angabe gilt `lang`. */
+  langs?: ReadonlyArray<'en' | 'de'>;
   /** Handy: nach dem Prüfen nur gewählte (✕) und richtige (✓) Option, die übrigen blenden in 150 ms aus. */
   collapse?: boolean;
   /** Zeile unter der gewählten falschen Option. */
@@ -99,7 +101,7 @@ function Mark({ state }: { state: 'correct' | 'wrong' }) {
   );
 }
 
-function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en', collapse = false, why, label, keys = true, testId = 'choices' }: ChoicesProps) {
+function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en', langs, collapse = false, why, label, keys = true, testId = 'choices' }: ChoicesProps) {
   const reduce = useReducedMotion();
   const live = useRef({ onPick, revealed, n: options.length });
   useEffect(() => {
@@ -149,7 +151,7 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
                 <span className="lx-choice-key lx-choice-letter" aria-hidden="true">
                   {CHOICE_LETTERS[i] ?? i + 1}
                 </span>
-                <span lang={lang} className="min-w-0 flex-1 text-left">
+                <span lang={langs?.[i] ?? lang} className="min-w-0 flex-1 text-left">
                   {text}
                 </span>
                 {(state === 'correct' || state === 'wrong') && <Mark state={state} />}
