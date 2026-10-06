@@ -1593,8 +1593,8 @@
     "wouldn't have offered"
    ],
    "answer": "hadn't offered",
-   "expl": "Mixed Conditional: If + Past Perfect (Bedingung in der Vergangenheit), would + Infinitiv (Folge jetzt). „didn't offer“ wäre eine Bedingung in der Gegenwart, aber „last quarter“ liegt in der Vergangenheit.",
-   "expl_en": "Mixed conditional: if + Past Perfect (condition in the past), would + infinitive (result now). \"didn't offer\" would be a condition in the present, but \"last quarter\" is in the past."
+   "expl": "Mixed Conditional: If + Past Perfect (Bedingung in der Vergangenheit), would + Infinitiv (Folge jetzt). „didn't offer“ ist nur Past Simple und passt nicht zu „last quarter“.",
+   "expl_en": "Mixed conditional: if + Past Perfect (condition in the past), would + infinitive (result now). “didn't offer” is only the simple past and does not fit “last quarter”."
   },
   {
    "topic": "mixed-cond",
@@ -1666,11 +1666,13 @@
     "'d be",
     "would already be",
     "would have been",
-    "'d have been"
+    "'d have been",
+    "would already have been",
+    "would've been"
    ],
    "hint": "(be)",
-   "expl": "Bedingung in der Vergangenheit, Folge jetzt („by now“) → Mixed Conditional: would + Infinitiv.",
-   "expl_en": "Condition in the past, result now (\"by now\") → mixed conditional: would + infinitive."
+   "expl": "Bedingung in der Vergangenheit, Folge jetzt („by now“) → Mixed Conditional: would + Infinitiv. Auch möglich: would have been ready by now – das blickt von heute zurück. Mit reinem now/today wäre es falsch.",
+   "expl_en": "Condition in the past, result now (\"by now\") → mixed conditional: would + infinitive. Also possible: would have been ready by now (looking back from today). With plain now/today it would be wrong."
   },
   {
    "topic": "mixed-cond",
@@ -1705,7 +1707,11 @@
    "accepted": [
     "had not lost",
     "had kept",
-    "'d kept"
+    "'d kept",
+    "had retained",
+    "'d retained",
+    "had held on to",
+    "had held onto"
    ],
    "expl": "Mixed Conditional: If + Past Perfect (Vergangenheit), would + Infinitiv (Folge jetzt).",
    "expl_en": "Mixed conditional: if + Past Perfect (past), would + infinitive (result now)."
@@ -2356,7 +2362,7 @@
    "type": "gap",
    "prompt": "The window is broken and there's a baseball on the floor. Someone ___ it through the window.",
    "answer": "must have thrown",
-   "hint": "(must / throw)",
+   "hint": "(throw)",
    "expl": "Logische Schlussfolgerung über die Vergangenheit → must have + Partizip (throw – threw – thrown).",
    "expl_en": "A logical conclusion about the past → must have + past participle (throw – threw – thrown)."
   },
@@ -2370,7 +2376,7 @@
     "couldn't have received",
     "could not have received"
    ],
-   "hint": "(can't / receive)",
+   "hint": "(receive)",
    "expl": "Unmöglich in der Vergangenheit → can't have + Partizip.",
    "expl_en": "Impossible in the past → can't have + past participle."
   },
@@ -2383,7 +2389,7 @@
     "may have sent",
     "could have sent"
    ],
-   "hint": "(might / send)",
+   "hint": "(send)",
    "expl": "Nur eine Möglichkeit in der Vergangenheit → might have + Partizip.",
    "expl_en": "Just a possibility in the past → might have + past participle."
   },
@@ -2392,7 +2398,7 @@
    "type": "gap",
    "prompt": "She ___ at her desk right now – her coat is still here.",
    "answer": "must be",
-   "hint": "(must / be)",
+   "hint": "(be)",
    "expl": "Gerade jetzt, mit Beweis (der Mantel) → must be.",
    "expl_en": "Right now, with evidence (the coat) → must be."
   },
@@ -2406,7 +2412,7 @@
     "couldn't be",
     "could not be"
    ],
-   "hint": "(can't / be)",
+   "hint": "(be)",
    "expl": "Unmöglich (sie hat nur eine Schwester) → can't be.",
    "expl_en": "Impossible (she only has a sister) → can't be."
   },

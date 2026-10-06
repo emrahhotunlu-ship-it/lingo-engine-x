@@ -1,0 +1,155 @@
+[
+ {
+  "pat": "psp.finished-time",
+  "en": "We signed the contract two weeks ago.",
+  "de": "Wir haben den Vertrag vor zwei Wochen unterschrieben.",
+  "chunks": [
+   "we",
+   "signed",
+   "the contract",
+   "two weeks",
+   "ago"
+  ],
+  "alt": [
+   "Two weeks ago we signed the contract."
+  ],
+  "why": [
+   "Mit ago ist die Zeit vorbei: Past Simple (signed). Das deutsche Perfekt „haben unterschrieben“ führt hier in die Falle.",
+   "With ago the time is over, so use the Past Simple (signed). The German perfect “haben unterschrieben” is the trap here."
+  ],
+  "bad": "We have signed the contract two weeks ago.",
+  "trap": {
+   "tile": "signed",
+   "instead": "have signed",
+   "why": {
+    "de": "„ago“ nennt eine abgeschlossene Zeit: signed, nicht have signed.",
+    "en": "“ago” names finished time: signed, not have signed."
+   }
+  }
+ },
+ {
+  "pat": "psp.since-for",
+  "en": "We have worked with this supplier since 2019.",
+  "de": "Wir arbeiten seit 2019 mit diesem Lieferanten zusammen.",
+  "chunks": [
+   "we",
+   "have worked",
+   "with",
+   "this supplier",
+   "since 2019"
+  ],
+  "alt": [
+   "Since 2019 we have worked with this supplier."
+  ],
+  "why": [
+   "Das Deutsche sagt „arbeiten seit“ im Präsens. Englisch braucht für den Zeitraum bis jetzt have worked mit since.",
+   "German uses the present tense for “arbeiten seit”. English needs have worked with since for a period up to now."
+  ],
+  "bad": "We work with this supplier since 2019.",
+  "trap": {
+   "tile": "have worked",
+   "instead": "work",
+   "why": {
+    "de": "Mit since gilt der Zeitraum bis jetzt: have worked, nicht das Präsens work.",
+    "en": "With since the period runs up to now: have worked, not the present work."
+   }
+  }
+ },
+ {
+  "pat": "psp.experience",
+  "en": "Have you ever managed a team in another country?",
+  "de": "Hast du schon einmal ein Team in einem anderen Land geleitet?",
+  "chunks": [
+   "have",
+   "you",
+   "ever",
+   "managed",
+   "a team",
+   "in another country"
+  ],
+  "single": "In der Frage steht have vor you, und ever sitzt direkt vor dem Partizip. Nur diese Reihenfolge ist natürlich.",
+  "why": [
+   "Für Erfahrung bis jetzt ohne Zeitpunkt fragt Englisch mit Have you ever + 3. Form. Hier steht kein did.",
+   "For experience up to now with no time named, English asks Have you ever + past participle. There is no did here."
+  ],
+  "bad": "Have you managed ever a team in another country?"
+ },
+ {
+  "pat": "psp.experience",
+  "en": "This is the third time we have missed the deadline.",
+  "de": "Es ist das dritte Mal, dass wir die Frist verpasst haben.",
+  "chunks": [
+   "this is",
+   "the third time",
+   "we",
+   "have missed",
+   "the deadline"
+  ],
+  "single": "Nach the third time folgt direkt we have missed. Andere Reihenfolgen gibt es nicht.",
+  "why": [
+   "Nach „the third time“ zählt Englisch die Erfahrung bis jetzt: Present Perfect (have missed), nicht das Präsens.",
+   "After “the third time”, English counts experience up to now: Present Perfect (have missed), not the present tense."
+  ],
+  "bad": "This is the third time we miss the deadline.",
+  "trap": {
+   "tile": "have missed",
+   "instead": "miss",
+   "why": {
+    "de": "Nach „the third time“ steht das Present Perfect, nicht das Präsens miss.",
+    "en": "After “the third time” the Present Perfect follows, not the present miss."
+   }
+  }
+ },
+ {
+  "pat": "psp.result-now",
+  "en": "The server has crashed, so nobody can log in.",
+  "de": "Der Server ist abgestürzt, deshalb kann sich niemand anmelden.",
+  "chunks": [
+   "the server",
+   "has crashed",
+   "so",
+   "nobody",
+   "can log in"
+  ],
+  "single": "Der Satz hat Ursache und Folge mit so in der Mitte. Eine andere Reihenfolge würde Ursache und Folge vertauschen.",
+  "why": [
+   "Ohne Zeitpunkt zählt das Ergebnis jetzt: has crashed erklärt, warum sich gerade niemand anmelden kann.",
+   "With no time named, the result now counts: has crashed explains why nobody can log in right now."
+  ],
+  "bad": "The server is crashed, so nobody can log in.",
+  "trap": {
+   "tile": "has crashed",
+   "instead": "is crashed",
+   "why": {
+    "de": "Deutsch sagt „ist abgestürzt“ mit sein. Englisch nimmt have/has: has crashed.",
+    "en": "German says “ist abgestürzt” with sein. English uses have/has: has crashed."
+   }
+  }
+ },
+ {
+  "pat": "psp.finished-time",
+  "en": "When did you send the revised offer?",
+  "de": "Wann hast du das überarbeitete Angebot geschickt?",
+  "chunks": [
+   "when",
+   "did",
+   "you",
+   "send",
+   "the revised offer"
+  ],
+  "single": "Frage mit when: Fragewort, did, Subjekt, Grundform. Das ist eine feste Reihenfolge, eine zweite gibt es nicht.",
+  "why": [
+   "„When“ fragt nach einem Zeitpunkt, also Past Simple mit did. Das deutsche „hast du geschickt“ führt oft zu have.",
+   "“When” asks for a point in time, so the Past Simple with did. German “hast du geschickt” often leads to have."
+  ],
+  "bad": "When have you sent the revised offer?",
+  "trap": {
+   "tile": "did",
+   "instead": "have",
+   "why": {
+    "de": "„When“ fragt nach der Zeit: did statt have.",
+    "en": "“When” asks for the time: did instead of have."
+   }
+  }
+ }
+]

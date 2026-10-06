@@ -102,7 +102,8 @@ describe('acceptGenerated – Prüfregeln', () => {
 
   it('nur bekannte Themen', () => {
     expect(ORDER_TOPICS).toHaveLength(7);
-    for (const e of orderPool()) expect(ORDER_TOPICS as readonly string[]).toContain(e.topic);
+    // Sätze zu den Grammatikthemen (Lernplattform 2.0 §3.6, mit `pat`) gehören nicht zu den Themen der Claude-Erzeugung.
+    for (const e of orderPool().filter((x) => x.topic.startsWith('c1-'))) expect(ORDER_TOPICS as readonly string[]).toContain(e.topic);
   });
 });
 

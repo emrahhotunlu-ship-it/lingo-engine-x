@@ -1,0 +1,491 @@
+{
+ "topic": "cond-alt",
+ "canDo": {
+  "de": "Ich kann Bedingungen genau ausdrücken: Ausnahme mit unless, Bedingung mit as long as, Folge mit Otherwise, Dank mit But for, förmlich mit Should you und Vorsorge mit in case.",
+  "en": "I can express conditions precisely: an exception with unless, a requirement with as long as, a result with Otherwise, a credit with But for, formal Should you, and a precaution with in case."
+ },
+ "order": [
+  "ca.unless",
+  "ca.as-long-as",
+  "ca.otherwise",
+  "ca.but-for",
+  "ca.inversion",
+  "ca.in-case"
+ ],
+ "introPlan": [
+  [
+   "ca.unless",
+   "ca.as-long-as"
+  ],
+  [
+   "ca.otherwise",
+   "ca.but-for"
+  ],
+  [
+   "ca.inversion",
+   "ca.in-case"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Nennst du eine Ausnahme (unless) oder eine Bedingung, die erfüllt sein muss (as long as / provided that)?",
+   "Handelst du vorsorglich vor einem möglichen Ereignis (in case) oder erst, wenn es eintritt (if)?",
+   "Blickst du zurück (But for, Had we) oder schaust du nach vorn (Should you, unless)?"
+  ],
+  "en": [
+   "Do you name an exception (unless) or a requirement that must be met (as long as / provided that)?",
+   "Do you act as a precaution before something might happen (in case) or only once it happens (if)?",
+   "Are you looking back (But for, Had we) or looking ahead (Should you, unless)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "ca.unless",
+   "name": {
+    "de": "unless · Ausnahme",
+    "en": "unless · exception"
+   },
+   "form": {
+    "de": "unless + Präsens, ohne not",
+    "en": "unless + present (no extra not)"
+   },
+   "use": {
+    "de": "Nennt die einzige Ausnahme: unless = if … not. Danach steht das Präsens, und die Verneinung steckt schon im Wort.",
+    "en": "Names the only exception: unless = if … not. The present follows, and the negation is already inside the word."
+   },
+   "signals": [
+    "unless",
+    "if not"
+   ],
+   "ex": [
+    {
+     "en": "The rollout starts Monday unless legal objects.",
+     "de": "Der Rollout startet am Montag, es sei denn, die Rechtsabteilung widerspricht.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Unless we hear back today, we'll proceed as planned.",
+     "de": "Wenn wir heute nichts hören, machen wir wie geplant weiter.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I won't sign unless the terms are in writing.",
+     "de": "Ich unterschreibe nur, wenn die Bedingungen schriftlich vorliegen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We'll ship Monday unless the client doesn't object.",
+    "good": "We'll ship Monday unless the client objects.",
+    "cause": {
+     "de": "Im Kopf wird „unless“ zu „wenn nicht“, und dann kommt noch ein not dazu. Doch unless enthält die Verneinung schon.",
+     "en": "Germans think “unless = wenn nicht” and then add not. But unless already contains the negation."
+    }
+   },
+   "contrast": {
+    "with": "ca.as-long-as",
+    "a": "I'll attend unless something comes up.",
+    "b": "I'll attend as long as it starts after ten.",
+    "diff": {
+     "de": "unless nennt, was den Plan stoppen würde. as long as nennt, was erfüllt sein muss, damit der Plan gilt.",
+     "en": "unless names what would stop the plan. as long as names what must be true for the plan to hold."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We'll cancel the workshop unless 20 people sign up.",
+     "q": {
+      "de": "Sagen wir ab, wenn sich 25 Leute anmelden?",
+      "en": "Do we cancel if 25 people sign up?"
+     },
+     "a": false
+    },
+    {
+     "s": "I'll sign unless the price goes up.",
+     "q": {
+      "de": "Unterschreibe ich, wenn der Preis gleich bleibt?",
+      "en": "Do I sign if the price stays the same?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Steckt die Verneinung schon in dem Wort, das du wählst, und was folgt dann?",
+    "en": "Is the negation already inside the word you choose, and what follows then?"
+   }
+  },
+  {
+   "id": "ca.as-long-as",
+   "name": {
+    "de": "as long as · nur wenn",
+    "en": "as long as · only if"
+   },
+   "form": {
+    "de": "as long as + Präsens",
+    "en": "as long as + present"
+   },
+   "use": {
+    "de": "Nennt die Bedingung, die erfüllt sein muss: nur wenn. Danach steht das Präsens, auch wenn es um die Zukunft geht.",
+    "en": "States the condition that must be met: only if. The present follows, even when it is about the future."
+   },
+   "signals": [
+    "as long as",
+    "so long as",
+    "provided (that)",
+    "providing (that)",
+    "on condition that"
+   ],
+   "ex": [
+    {
+     "en": "We'll extend the contract as long as the price stays fixed.",
+     "de": "Wir verlängern den Vertrag, solange der Preis stabil bleibt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Remote work is fine providing you join the daily call.",
+     "de": "Homeoffice ist in Ordnung, sofern du am täglichen Call teilnimmst.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'll cover your shift on condition that you return the favor.",
+     "de": "Ich übernehme deine Schicht unter der Bedingung, dass du dich revanchierst.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We'll go ahead as long as the client will approve the draft.",
+    "good": "We'll go ahead as long as the client approves the draft.",
+    "cause": {
+     "de": "Das ist der Reflex „Zukunft = will“. Im Deutschen steht nach „solange“ ebenfalls das Präsens („solange er zustimmt“).",
+     "en": "It is the reflex “future = will”. German also uses the present after “solange” (“solange er zustimmt”)."
+    }
+   },
+   "contrast": {
+    "with": "ca.unless",
+    "a": "We'll sign as long as the terms are clear.",
+    "b": "We'll sign unless the terms are unclear.",
+    "diff": {
+     "de": "as long as nennt, was gelten muss. unless nennt, was das Unterschreiben stoppen würde.",
+     "en": "as long as names what must hold. unless names what would stop us from signing."
+    }
+   },
+   "ccq": [
+    {
+     "s": "You can borrow it provided that you return it.",
+     "q": {
+      "de": "Musst du es zurückgeben?",
+      "en": "Do you have to return it?"
+     },
+     "a": true
+    },
+    {
+     "s": "We'll go ahead as long as the budget holds.",
+     "q": {
+      "de": "Machen wir auch weiter, wenn das Budget nicht hält?",
+      "en": "Do we go ahead if the budget doesn't hold?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Gilt das Folgende nur unter einer Bedingung, und welche Zeitform steht nach diesem Wort?",
+    "en": "Does the rest hold only under a condition, and which tense follows this word?"
+   }
+  },
+  {
+   "id": "ca.otherwise",
+   "name": {
+    "de": "otherwise · sonst",
+    "en": "otherwise · or else"
+   },
+   "form": {
+    "de": "Satz. Otherwise, + Hauptsatz",
+    "en": "Sentence. Otherwise, + main clause"
+   },
+   "use": {
+    "de": "Nennt die Folge, wenn das Vorherige nicht passiert: „sonst, andernfalls“. Es beginnt einen neuen Satz und ersetzt kein if.",
+    "en": "Names the result if the previous point does not happen: “or else”. It starts a new sentence and does not replace if."
+   },
+   "signals": [
+    "otherwise",
+    "or else"
+   ],
+   "ex": [
+    {
+     "en": "Submit your expenses by Friday. Otherwise, they'll be paid next month.",
+     "de": "Reichen Sie die Spesen bis Freitag ein. Sonst werden sie erst nächsten Monat erstattet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We need a clear owner. Otherwise, nothing will move.",
+     "de": "Wir brauchen einen klaren Verantwortlichen. Sonst bewegt sich nichts.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I have to leave at five. Otherwise, I'd stay for the demo.",
+     "de": "Ich muss um fünf gehen. Sonst würde ich für die Demo bleiben.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Otherwise you sign the contract today, we can't start.",
+    "good": "Sign the contract today. Otherwise, we can't start.",
+    "cause": {
+     "de": "Man denkt „sonst = wenn nicht“ und baut otherwise wie ein if-Wort in einen Nebensatz. Es beginnt aber einen eigenen Satz.",
+     "en": "Germans think “sonst = wenn nicht” and use otherwise like an if-word in a subordinate clause. It starts its own sentence."
+    }
+   },
+   "contrast": {
+    "with": "ca.unless",
+    "a": "We'll miss the deadline unless we hire help.",
+    "b": "Hire help. Otherwise, we'll miss the deadline.",
+    "diff": {
+     "de": "unless hängt als Nebensatz im selben Satz. Otherwise beginnt einen neuen Satz mit eigenem Hauptsatz.",
+     "en": "unless attaches a clause to the same sentence. Otherwise starts a new sentence with its own main clause."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Book the room now. Otherwise, someone else will take it.",
+     "q": {
+      "de": "Nimmt jemand anderes den Raum, wenn du jetzt buchst?",
+      "en": "Does someone else take the room if you book it now?"
+     },
+     "a": false
+    },
+    {
+     "s": "I'm leaving at five. Otherwise, I'd join you.",
+     "q": {
+      "de": "Komme ich mit?",
+      "en": "Do I join you?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Beginnt hier ein neuer Satz mit eigenem Hauptsatz, oder hängt die Bedingung am selben Satz?",
+    "en": "Does a new sentence start here, or does the condition hang on the same sentence?"
+   }
+  },
+  {
+   "id": "ca.but-for",
+   "name": {
+    "de": "but for · ohne (Rückblick)",
+    "en": "but for · without (hindsight)"
+   },
+   "form": {
+    "de": "But for + Nomen",
+    "en": "But for + noun"
+   },
+   "use": {
+    "de": "Sagt: Ohne X wäre es anders gekommen. Nach but for steht ein Nomen, im Hauptsatz would have + Partizip.",
+    "en": "Says: without X it would have turned out differently. A noun follows but for, and the main clause has would have + participle."
+   },
+   "signals": [
+    "but for",
+    "without",
+    "if it hadn't been for"
+   ],
+   "ex": [
+    {
+     "en": "But for the early warning, we would have missed the recall.",
+     "de": "Ohne die Frühwarnung hätten wir den Rückruf verpasst.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Without the extra budget, we would have had to cancel.",
+     "de": "Ohne das Zusatzbudget hätten wir absagen müssen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "But for a late flight, I would have joined the kickoff.",
+     "de": "Wäre der Flug nicht verspätet gewesen, hätte ich am Kickoff teilgenommen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "But for you helped us, the launch would have failed.",
+    "good": "But for your help, the launch would have failed.",
+    "cause": {
+     "de": "Mit „wenn du nicht geholfen hättest“ im Kopf rutscht ein ganzer Satz hinein. Nach but for steht aber nur ein Nomen: your help.",
+     "en": "With “wenn du nicht geholfen hättest” in mind, a whole clause slips in. But for takes only a noun: your help."
+    }
+   },
+   "contrast": {
+    "with": "ca.unless",
+    "a": "But for the delay, we would have launched in May.",
+    "b": "Unless there is a delay, we'll launch in May.",
+    "diff": {
+     "de": "but for blickt zurück auf etwas, das nicht eintrat. unless schaut nach vorn und nennt eine mögliche Ausnahme.",
+     "en": "but for looks back at something that did not happen. unless looks ahead and names a possible exception."
+    }
+   },
+   "ccq": [
+    {
+     "s": "But for the extra funding, we would have shut the project down.",
+     "q": {
+      "de": "Haben wir das Projekt eingestellt?",
+      "en": "Did we shut the project down?"
+     },
+     "a": false
+    },
+    {
+     "s": "But for her warning, the error would have gone unnoticed.",
+     "q": {
+      "de": "Hat sie das Team gewarnt?",
+      "en": "Did she warn the team?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Schau auf das, was nach der Lücke folgt: ein Nomen oder ein Satz? Und blickt der Rest zurück?",
+    "en": "Look at what follows the gap: a noun or a clause? And does the rest of the sentence look back?"
+   }
+  },
+  {
+   "id": "ca.inversion",
+   "name": {
+    "de": "Inversion · förmlich ohne if",
+    "en": "Inversion · formal, no if"
+   },
+   "form": {
+    "de": "Should you … / Had we …",
+    "en": "Should you … / Had we …"
+   },
+   "use": {
+    "de": "Förmliche Bedingung ohne if: Should = möglich, Were … to = hypothetisch, Had we + Partizip = unreal in der Vergangenheit.",
+    "en": "Formal condition without if: Should = possible, Were … to = hypothetical, Had we + participle = unreal in the past."
+   },
+   "signals": [
+    "Should you",
+    "Should there be",
+    "Were we to",
+    "Had we",
+    "Had it not been for"
+   ],
+   "ex": [
+    {
+     "en": "Should you need further details, please call me.",
+     "de": "Falls Sie weitere Angaben brauchen, rufen Sie mich bitte an.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Were we to lose the client, we'd have to restructure.",
+     "de": "Sollten wir den Kunden verlieren, müssten wir umstrukturieren.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Had we known about the delay, we would have rescheduled.",
+     "de": "Hätten wir von der Verzögerung gewusst, hätten wir umgeplant.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Had we known about the delay, we had rescheduled the launch.",
+    "good": "Had we known about the delay, we would have rescheduled the launch.",
+    "cause": {
+     "de": "Im Deutschen steht in beiden Teilen „hätten“. Im Englischen steht vorn had + Partizip, im Hauptsatz aber would have + Partizip.",
+     "en": "German uses “hätten” in both parts. In English the front part has had + participle, but the main clause needs would have + participle."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Should you need help, call me.",
+     "q": {
+      "de": "Ist sicher, dass du Hilfe brauchst?",
+      "en": "Is it certain that you need help?"
+     },
+     "a": false
+    },
+    {
+     "s": "Had we known, we would have acted.",
+     "q": {
+      "de": "Wussten wir es?",
+      "en": "Did we know?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wenn kein if da ist, steht das Hilfsverb vor dem Subjekt. Welches passt zur Zeit und zur Wahrscheinlichkeit?",
+    "en": "If there is no if, the auxiliary goes before the subject. Which one fits the time and the likelihood?"
+   }
+  },
+  {
+   "id": "ca.in-case",
+   "name": {
+    "de": "in case · Vorsorge",
+    "en": "in case · precaution"
+   },
+   "form": {
+    "de": "in case + Präsens (nicht if)",
+    "en": "in case + present (not if)"
+   },
+   "use": {
+    "de": "Nennt eine Vorsorge: Du tust etwas jetzt, weil später etwas passieren könnte. Es ist kein if, die Handlung hängt nicht davon ab. Im amerikanischen Alltag hört man in case auch wie „if“ („in case you need anything“); für eine echte Bedingung nimm in Verträgen und Mails trotzdem if.",
+    "en": "Names a precaution: you act now because something might happen later. It is not if: the action does not depend on it. In casual American speech in case is sometimes used like if (“in case you need anything”); for a real condition, still use if in contracts and emails."
+   },
+   "signals": [
+    "in case",
+    "just in case"
+   ],
+   "ex": [
+    {
+     "en": "Take a charger in case the meeting runs long.",
+     "de": "Nimm ein Ladegerät mit, für den Fall, dass das Meeting länger dauert.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'll send the files now in case the server goes down.",
+     "de": "Ich schicke die Dateien jetzt, für den Fall, dass der Server ausfällt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Bring a copy of the contract in case the client asks.",
+     "de": "Bring eine Kopie des Vertrags mit, für den Fall, dass der Kunde danach fragt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We'll call you in case the visa gets approved.",
+    "good": "We'll call you if the visa gets approved.",
+    "cause": {
+     "de": "„Falls“ übersetzt man reflexartig mit „in case“. „In case“ heißt aber „für den Fall, dass“ und meint Vorsorge, nicht die Bedingung.",
+     "en": "“Falls” gets turned into “in case” by reflex. But “in case” means “just in case” and describes a precaution, not a condition."
+    }
+   },
+   "contrast": {
+    "with": "ca.unless",
+    "a": "We'll leave early in case traffic is bad.",
+    "b": "We'll leave early unless traffic is bad.",
+    "diff": {
+     "de": "in case: Du handelst vorsorglich, egal ob es eintritt. unless: Du handelst nur, wenn die Ausnahme ausbleibt.",
+     "en": "in case: you act as a precaution, whether or not it happens. unless: you act only if the exception does not occur."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Take an umbrella in case it rains.",
+     "q": {
+      "de": "Nimmst du den Schirm auch mit, wenn es am Ende trocken bleibt?",
+      "en": "Do you take the umbrella even if it stays dry?"
+     },
+     "a": true
+    },
+    {
+     "s": "I'll send the files now in case the server goes down.",
+     "q": {
+      "de": "Schicke ich die Dateien, bevor der Server ausfällt?",
+      "en": "Do I send the files before the server goes down?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Handelst du vorsorglich, bevor etwas passiert, oder erst, wenn es passiert ist?",
+    "en": "Do you act as a precaution before something happens, or only after it has happened?"
+   }
+  }
+ ]
+}

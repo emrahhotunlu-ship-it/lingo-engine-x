@@ -1,0 +1,174 @@
+[
+ {
+  "pat": "ca.unless",
+  "en": "We'll ship on Monday unless the client objects.",
+  "de": "Wir liefern am Montag, es sei denn, der Kunde widerspricht.",
+  "chunks": [
+   "we'll",
+   "ship",
+   "on Monday",
+   "unless",
+   "the client",
+   "objects"
+  ],
+  "alt": [
+   "Unless the client objects, we'll ship on Monday.",
+   "On Monday, we'll ship unless the client objects."
+  ],
+  "why": [
+   "Unless nennt die Ausnahme und trägt die Verneinung schon in sich: Nach „unless the client“ folgt objects im Präsens, ohne zweites not.",
+   "Unless names the exception and already carries the negation: “unless the client” is followed by objects in the present, with no second not."
+  ],
+  "bad": "We'll ship on Monday unless the client doesn't object.",
+  "trap": {
+   "tile": "unless",
+   "instead": "if",
+   "why": {
+    "de": "Wer „wenn nicht“ denkt, nimmt oft if und vergisst die Verneinung. „We'll ship if the client objects“ sagt das Gegenteil. Unless trägt die Verneinung schon.",
+    "en": "Thinking “wenn nicht”, Germans often pick if and drop the negation. “We'll ship if the client objects” says the opposite. Unless already carries the negation."
+   }
+  }
+ },
+ {
+  "pat": "ca.as-long-as",
+  "en": "The discount stays valid as long as you order this month.",
+  "de": "Der Rabatt bleibt gültig, solange du diesen Monat bestellst.",
+  "chunks": [
+   "the discount",
+   "stays valid",
+   "as long as",
+   "you",
+   "order",
+   "this month"
+  ],
+  "alt": [
+   "As long as you order this month, the discount stays valid."
+  ],
+  "why": [
+   "Nach as long as steht das Präsens: „you order“ gilt auch für die Zukunft. Im Deutschen steht nach „solange“ ebenfalls das Präsens.",
+   "After as long as the present follows: “you order” also covers the future. German likewise uses the present after “solange”."
+  ],
+  "bad": "The discount stays valid as long as you will order this month.",
+  "trap": {
+   "tile": "order",
+   "instead": "will order",
+   "why": {
+    "de": "Der Reflex „Zukunft = will“ verführt zu will order. Nach as long as steht aber das Präsens.",
+    "en": "The “future = will” reflex tempts you into will order. After as long as the present is used."
+   }
+  }
+ },
+ {
+  "pat": "ca.otherwise",
+  "en": "We need your approval today; otherwise, we can't start.",
+  "de": "Wir brauchen heute Ihre Freigabe; sonst können wir nicht starten.",
+  "chunks": [
+   "we need",
+   "your approval today",
+   "otherwise",
+   "we can't",
+   "start"
+  ],
+  "why": [
+   "Otherwise bedeutet „sonst“ und beginnt einen neuen Hauptsatz mit normaler Wortstellung: otherwise, we can't start. Es ist kein Nebensatzwort wie if.",
+   "Otherwise means “or else” and starts a new main clause with normal word order: otherwise, we can't start. It is not a clause word like if."
+  ],
+  "bad": "We need your approval today, otherwise can we not start.",
+  "trap": {
+   "tile": "otherwise",
+   "instead": "if",
+   "why": {
+    "de": "Mit „sonst = wenn nicht“ im Kopf baut man otherwise wie ein if-Wort in einen Nebensatz. Es beginnt aber einen eigenen Hauptsatz.",
+    "en": "With “sonst = wenn nicht” in mind, learners use otherwise like an if-word in a subordinate clause. It starts its own main clause."
+   }
+  },
+  "alt": [
+   "We need your approval today; we can't start otherwise."
+  ]
+ },
+ {
+  "pat": "ca.but-for",
+  "en": "But for the extra budget, we would have canceled the pilot.",
+  "de": "Ohne das Zusatzbudget hätten wir das Pilotprojekt abgesagt.",
+  "chunks": [
+   "but for",
+   "the extra budget",
+   "we",
+   "would have",
+   "canceled",
+   "the pilot"
+  ],
+  "alt": [
+   "We would have canceled the pilot but for the extra budget."
+  ],
+  "why": [
+   "But for + Nomen heißt „ohne“ und blickt zurück. Dazu passt would have + Partizip: would have canceled.",
+   "But for + noun means “without” and looks back. It goes with would have + participle: would have canceled."
+  ],
+  "bad": "But for the extra budget, we would cancel the pilot.",
+  "trap": {
+   "tile": "would have",
+   "instead": "would",
+   "why": {
+    "de": "Deutsch kennt auch „ohne das Budget würden wir absagen“ (Gegenwart). Daraus rutscht das have weg. Der Rückblick braucht would have + Partizip.",
+    "en": "German also has “ohne das Budget würden wir absagen” (present). That is where the have gets lost. Hindsight needs would have + participle."
+   }
+  }
+ },
+ {
+  "pat": "ca.inversion",
+  "en": "Should you need further details, please contact our office.",
+  "de": "Falls Sie weitere Angaben benötigen, wenden Sie sich bitte an unser Büro.",
+  "chunks": [
+   "should",
+   "you need",
+   "further details",
+   "please contact",
+   "our office"
+  ],
+  "alt": [
+   "Please contact our office should you need further details."
+  ],
+  "why": [
+   "Should vor dem Subjekt ersetzt if und klingt förmlich: Should you need … = falls Sie … benötigen. Danach steht die Grundform.",
+   "Should before the subject replaces if and sounds formal: Should you need … = if you should need … The base form follows."
+  ],
+  "bad": "If should you need further details, please contact our office.",
+  "trap": {
+   "tile": "should",
+   "instead": "if",
+   "why": {
+    "de": "Im Deutschen bleibt „falls“ stehen. Im Englischen ersetzt das vorgezogene Should das if.",
+    "en": "German keeps “falls”. In English the fronted Should replaces if."
+   }
+  }
+ },
+ {
+  "pat": "ca.in-case",
+  "en": "Take a spare charger in case the meeting runs long.",
+  "de": "Nimm ein Ersatzladegerät mit, für den Fall, dass das Meeting länger dauert.",
+  "chunks": [
+   "take",
+   "a spare charger",
+   "in case",
+   "the meeting",
+   "runs long"
+  ],
+  "alt": [
+   "In case the meeting runs long, take a spare charger."
+  ],
+  "why": [
+   "In case nennt eine Vorsorge: Du nimmst das Ladegerät vorher mit, nicht erst wenn das Meeting lang wird. Danach steht das Präsens.",
+   "In case names a precaution: you take the charger beforehand, not only once the meeting runs long. The present follows."
+  ],
+  "bad": "Take a spare charger in case the meeting will run long.",
+  "trap": {
+   "tile": "in case",
+   "instead": "if",
+   "why": {
+    "de": "Mit „falls“ im Kopf greift man zu if. Für Vorsorge sagt man in case: Du handelst vorher.",
+    "en": "With “falls” in mind, Germans pick if. For a precaution say in case: you act beforehand."
+   }
+  }
+ }
+]

@@ -128,8 +128,8 @@
    "p0": 0.45,
    "name": "Bedingungen mit unless, as long as, provided that",
    "name_en": "Conditionals beyond if: unless, as long as, provided that",
-   "rule": "„Unless“ heißt „wenn nicht“, „as long as“ und „provided that“ heißen „solange / unter der Bedingung, dass“. „Otherwise“ nennt die Folge, wenn die Bedingung fehlt; „but for“ meint „ohne“ im Rückblick. Nach diesen Wörtern steht kein „will“.",
-   "rule_en": "“Unless” means “if not”, “as long as” and “provided that” mean “on condition that”. “Otherwise” names the result if the condition fails; “but for” means “without” in hindsight. No will after these words.",
+   "rule": "„Unless“ heißt „wenn nicht“, „as long as“ und „provided that“ heißen „solange / unter der Bedingung, dass“. Nach diesen drei Wörtern steht kein „will“. „But for“ meint „ohne“ im Rückblick; „Should you …“ ist die förmliche Form ohne if. „Otherwise“ ersetzt kein if: Es heißt „sonst“ und beginnt einen neuen Satz.",
+   "rule_en": "“Unless” means “if not”, “as long as” and “provided that” mean “on condition that”. After these three words there is no will. “But for” means “without” in hindsight; “Should you …” is the formal form without if. “Otherwise” does not replace if: it means “or else” and starts a new sentence.",
    "ex": [
     "We'll miss the deadline unless we hire extra staff.",
     "You can use the car as long as you return it by Friday."
@@ -939,25 +939,27 @@
     "After when, as soon as, until, before, after and by the time you use the present simple or present perfect – even when you talk about the future: “I’ll call you as soon as I arrive.” (not: as soon as I will arrive)."
    ],
    "why": [
-    "Im Deutschen sagt man „Wenn ich ankomme, rufe ich an“ ohne Futur. Im Englischen ist „will“ im Zeitsatz ein klarer Fehler, der im Berufsalltag sofort auffällt.",
-    "German says “Wenn ich ankomme, rufe ich an” without a future form. In English, will inside the time clause is a clear error that stands out at work."
+    "Im Zeitsatz steht das Präsens, auch wenn es um die Zukunft geht. Das Deutsche macht es genauso („Wenn ich ankomme, rufe ich an“). Der Fehler kommt vom Reflex „Zukunft = will“, nicht von der Übersetzung. Im Berufsalltag fällt „when I will arrive“ sofort auf.",
+    "The time clause takes the present, even when it is about the future. German does the same (“Wenn ich ankomme, rufe ich an”). The mistake comes from the reflex “future = will”, not from translation. At work, “when I will arrive” stands out at once."
    ],
    "contrast": [
-    "Das Deutsche macht den Fehler leicht: „Ich rufe an, wenn ich ankommen werde“ klingt gestelzt, wird aber manchmal wörtlich übersetzt. Auf Englisch ist nur das Präsens richtig.",
-    "German makes the slip easy: “wenn ich ankommen werde” sounds stilted but is sometimes translated word for word. In English only the present is correct."
+    "Aufpassen: Sind when und if Fragewörter (Wann? Ob?), steht will: „I don't know when she will arrive.“ Als Zeitwort („sobald“) gilt das Präsens: „I'll call when she arrives.“",
+    "Careful: when and if take will when they are question words (When? Whether?): “I don't know when she will arrive.” As time words (= as soon as) they take the present: “I'll call when she arrives.”"
    ],
    "steps": [
     [
      "Future-Signal erkennen: when, as soon as, until, before, after, by the time.",
      "Den Zeitsatz ins Präsens setzen: „as soon as it arrives“.",
      "Ist die Handlung dann schon abgeschlossen, Present Perfect wählen: „after we have finished“.",
-     "„Will“ gehört nur in den Hauptsatz."
+     "„Will“ gehört nur in den Hauptsatz.",
+     "Ist when oder if ein Fragewort (nach know, ask, wonder)? Dann steht will: „I wonder when it will be ready.“"
     ],
     [
      "Spot the time word: when, as soon as, until, before, after, by the time.",
      "Put the time clause in the present: “as soon as it arrives”.",
      "If the action will already be complete, use present perfect: “after we have finished”.",
-     "Will belongs only in the main clause."
+     "Will belongs only in the main clause.",
+     "Is when or if a question word (after know, ask, wonder)? Then use will: “I wonder when it will be ready.”"
     ]
    ],
    "forms": [
@@ -992,6 +994,14 @@
      ],
      "won't … until + present",
      "We won't sign until they send the draft."
+    ],
+    [
+     [
+      "Fragewort",
+      "Question word"
+     ],
+     "know / ask / wonder + when / if + will",
+     "I wonder when the update will be ready."
     ]
    ],
    "signals": [
@@ -1031,8 +1041,8 @@
   },
   "cond-alt": {
    "core": [
-    "Diese Wörter ersetzen „if“: unless = wenn nicht, as long as / provided that = nur wenn, otherwise = sonst. Danach steht das Präsens: „We’ll start unless it rains.“ But for heißt „ohne …“ mit Blick zurück: „But for your help, we would have failed.“",
-    "These words replace “if”: unless = if not, as long as / provided that = only if, otherwise = or else. After them you use the present: “We’ll start unless it rains.” But for means “without …” looking back: “But for your help, we would have failed.”"
+    "Diese Wörter ersetzen „if“: unless = wenn nicht, as long as / provided that = nur wenn. Danach steht das Präsens: „We’ll start unless it rains.“ Dazu kommen Should you … = falls Sie … (förmlich, ohne if) und But for = „ohne …“ mit Blick zurück. Nicht dazu gehört otherwise: Es heißt „sonst“, beginnt einen neuen Satz und ersetzt kein if.",
+    "These words replace “if”: unless = if not, as long as / provided that = only if. After them you use the present: “We’ll start unless it rains.” Also possible: Should you … = if you should … (formal, no if), and But for = “without …” looking back. Otherwise is not one of them: it means “or else”, starts a new sentence and does not replace if."
    ],
    "why": [
     "Diese Wörter machen Bedingungen präziser als „if“: Sie zeigen, ob etwas Pflicht, Ausnahme oder Dank ist. Das klingt in Verträgen und Absprachen professionell.",
@@ -1045,13 +1055,13 @@
    "steps": [
     [
      "Die Bedingung als Wunsch oder Ausnahme erkennen.",
-     "Passendes Wort wählen: unless (Ausnahme), as long as / provided that (Bedingung), otherwise (Folge), but for (Dank).",
+     "Passendes Wort wählen: unless (Ausnahme), as long as / provided that (Bedingung), Should you (förmlich), but for (Dank). Eine Folge ohne if beginnt mit Otherwise (neuer Satz).",
      "Nach unless, as long as, provided that das Präsens verwenden.",
      "Bei „unless“ keine zusätzliche Verneinung setzen."
     ],
     [
      "Decide whether the condition is an exception, a requirement or a credit.",
-     "Choose the word: unless (exception), as long as / provided that (condition), otherwise (result), but for (credit).",
+     "Choose the word: unless (exception), as long as / provided that (requirement), Should you (formal), but for (credit). A result without if starts with Otherwise (new sentence).",
      "Use the present after unless, as long as and provided that.",
      "Do not add a second negation after unless."
     ]
@@ -1072,6 +1082,14 @@
      ],
      "as long as / provided (that) + present",
      "You can leave early provided that you finish the report."
+    ],
+    [
+     [
+      "Förmlich",
+      "Formal"
+     ],
+     "Should you + Grundform, … (ohne if)",
+     "Should you need anything, call me."
     ],
     [
      [
@@ -1104,6 +1122,20 @@
       "unter der Bedingung, dass / solange",
       "on condition that / for as long as"
      ]
+    ],
+    [
+     "Should you …",
+     [
+      "falls Sie … (förmlich)",
+      "if you should … (formal)"
+     ]
+    ],
+    [
+     "in case",
+     [
+      "für den Fall, dass (Vorsorge, kein if)",
+      "just in case (precaution, not if)"
+     ]
     ]
    ],
    "traps": [
@@ -1121,6 +1153,20 @@
      "why": [
       "Nach „as long as“ steht das Präsens, nicht „will“.",
       "After “as long as” use the present, not will."
+     ]
+    }
+   ],
+   "alts": [
+    {
+     "note": [
+      "„in case“ ist kein „if“: „Take an umbrella in case it rains“ = für den Fall, dass es regnet (Vorsorge). „If it rains“ ist die Bedingung.",
+      "“in case” is not “if”: “Take an umbrella in case it rains” = just in case it rains (precaution). “If it rains” is the condition."
+     ]
+    },
+    {
+     "note": [
+      "Förmlich geht auch die Umstellung ohne if: Were we to lose the client, … (hypothetisch), Should you need help, … (möglich).",
+      "Formally you can also invert without if: Were we to lose the client, … (hypothetical), Should you need help, … (possible)."
      ]
     }
    ]
@@ -2458,7 +2504,7 @@
     "could be",
     "may be"
    ],
-   "hint": "(might / be)",
+   "hint": "(be)",
    "expl": "Vorsichtiger Vorschlag: „might be worth“ + -ing-Form.",
    "expl_en": "A careful suggestion: might be worth + -ing."
   },
@@ -3380,7 +3426,8 @@
     "is",
     "gets",
     "has gotten",
-    "has come"
+    "has come",
+    "has shown up"
    ],
    "hint": "(arrive)",
    "expl": "Im Zeitsatz steht Present Perfect oder Präsens, nicht „will have“.",
@@ -3393,7 +3440,12 @@
    "answer": "have checked",
    "accepted": [
     "check",
-    "have verified"
+    "have verified",
+    "verify",
+    "have double-checked",
+    "double-check",
+    "have reviewed",
+    "review"
    ],
    "hint": "(check)",
    "expl": "Nach „after“ bei Zukünftigem: Present Perfect (oder Präsens).",
@@ -3405,7 +3457,8 @@
    "prompt": "Don't switch off the server until the backup ___ completed.",
    "answer": "has been",
    "accepted": [
-    "is"
+    "is",
+    "gets"
    ],
    "hint": "(be)",
    "expl": "Nach „until“ steht das Präsens oder Present Perfect: „has been completed“.",
@@ -3419,7 +3472,14 @@
    "accepted": [
     "has ended",
     "is over",
-    "finishes"
+    "finishes",
+    "has finished",
+    "is finished",
+    "is done",
+    "wraps up",
+    "has wrapped up",
+    "concludes",
+    "has concluded"
    ],
    "expl": "Der Zeitsatz mit „as soon as“ steht im Präsens.",
    "expl_en": "The “as soon as” clause stays in the present."
@@ -3433,7 +3493,14 @@
     "comes",
     "has arrived",
     "has come",
-    "is received"
+    "is received",
+    "is granted",
+    "has been granted",
+    "is given",
+    "has been given",
+    "comes through",
+    "has come through",
+    "has been received"
    ],
    "expl": "Nach „until“ steht das Präsens oder Present Perfect.",
    "expl_en": "After “until” use the present simple or present perfect."
@@ -3445,7 +3512,12 @@
    "answer": "I will call you when I arrive at the airport.",
    "accepted": [
     "I'll call you when I arrive at the airport.",
-    "I will call you when I get to the airport."
+    "I will call you when I get to the airport.",
+    "I'll call you when I get to the airport.",
+    "I will call you when I have arrived at the airport.",
+    "I'll call you when I have arrived at the airport.",
+    "I will call you when I reach the airport.",
+    "I'll call you when I reach the airport."
    ],
    "expl": "Nach „when“ steht das Präsens, nicht „will“.",
    "expl_en": "After “when” the present is needed, not will."
@@ -3467,7 +3539,11 @@
    "prompt": "Please wait here until the manager will come back.",
    "answer": "Please wait here until the manager comes back.",
    "accepted": [
-    "Please wait here until the manager has come back."
+    "Please wait here until the manager has come back.",
+    "Please wait here until the manager gets back.",
+    "Please wait here until the manager returns.",
+    "Please wait here until the manager has returned.",
+    "Please wait here until the manager is back."
    ],
    "expl": "Nach „until“ steht das Präsens statt „will come“.",
    "expl_en": "After “until” use the present instead of will come."
@@ -3572,7 +3648,10 @@
    "prompt": "Without your help, we would have failed. → ___ your help, we would have failed.",
    "answer": "But for",
    "accepted": [
-    "but for"
+    "but for",
+    "Had it not been for",
+    "If it hadn't been for",
+    "If it had not been for"
    ],
    "expl": "„But for“ + Nomen = „ohne“ im Rückblick.",
    "expl_en": "“But for” + noun = “without” in hindsight."

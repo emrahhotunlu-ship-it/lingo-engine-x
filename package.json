@@ -17,7 +17,9 @@
     "test": "TZ=Europe/Berlin vitest run",
     "test:e2e": "npm run build && npm run build:runtime && playwright test",
     "check:platform": "node scripts/check-platform.mjs",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run test:e2e && npm run check:platform"
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run test:e2e && npm run check:platform",
+    "grammar:check": "node --experimental-strip-types --no-warnings scripts/grammar/validate.mjs",
+    "grammar:build": "node scripts/grammar/build-content.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",

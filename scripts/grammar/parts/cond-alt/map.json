@@ -1,0 +1,398 @@
+{
+ "We'll miss the deadline ___ we hire extra staff.": {
+  "pat": "ca.unless",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“. Ohne zusätzliches Personal verpassen wir die Frist.",
+    "en": "Right: unless = “if not”. Without extra staff, we miss the deadline."
+   },
+   "wrong": [
+    {
+     "opt": "otherwise",
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz (sonst …) und verbindet nicht zwei Satzteile.",
+     "en": "Otherwise starts a new sentence (or else …); it cannot join two clauses."
+    },
+    {
+     "opt": "provided",
+     "pat": "ca.as-long-as",
+     "de": "„Provided“ = nur wenn: Wir verpassen die Frist nur, wenn wir einstellen. Unsinn.",
+     "en": "“Provided” = only if: we'd miss the deadline only if we hire. That makes no sense."
+    },
+    {
+     "opt": "but for",
+     "pat": "ca.but-for",
+     "de": "„But for“ + Nomen heißt „ohne“; hier folgt aber ein ganzer Satz (we hire …).",
+     "en": "“But for” + noun means “without”; here a whole clause follows (we hire …)."
+    }
+   ]
+  }
+ },
+ "You can use the company car ___ you return it by Friday.": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "as long as + Präsens nennt die Bedingung: nur wenn du es zurückgibst.",
+    "en": "as long as + present gives the condition: only if you return it."
+   },
+   "wrong": [
+    {
+     "opt": "but for",
+     "pat": "ca.but-for",
+     "de": "„But for“ + Nomen heißt „ohne“ (Rückblick); hier folgt ein Satz mit Präsens.",
+     "en": "“But for” + noun means “without” (hindsight); here a present-tense clause follows."
+    },
+    {
+     "opt": "unless",
+     "pat": "ca.unless",
+     "de": "„Unless“ = „wenn nicht“: Du dürftest den Wagen nur nutzen, wenn du ihn nicht zurückgibst.",
+     "en": "“Unless” = “if not”: you could use the car only if you do not return it."
+    },
+    {
+     "opt": "otherwise",
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ (sonst) beginnt einen neuen Satz und verbindet keine Satzteile.",
+     "en": "Otherwise (or else) starts a new sentence and cannot join two clauses."
+    }
+   ]
+  }
+ },
+ "Send me the invoice today. ___, we can't process the payment this month.": {
+  "pat": "ca.otherwise",
+  "why": {
+   "ok": {
+    "de": "Richtig: Otherwise = „sonst“ im neuen Satz. Ohne Rechnung heute keine Zahlung.",
+    "en": "Right: Otherwise = “or else”, starting a new sentence: no invoice, no payment."
+   },
+   "wrong": [
+    {
+     "opt": "Provided that",
+     "pat": "ca.as-long-as",
+     "de": "„Provided that“ = nur wenn. Der Satz hieße: Nur wenn …, können wir nicht zahlen. Unsinn.",
+     "en": "“Provided that” = only if. That would read: only if …, we can't pay. Nonsense."
+    },
+    {
+     "opt": "As long as",
+     "pat": "ca.as-long-as",
+     "de": "„As long as“ = solange und leitet einen Nebensatz ein; hier fehlt dieser Satz.",
+     "en": "“As long as” = for as long as and opens a subordinate clause; that clause is missing here."
+    },
+    {
+     "opt": "Unless",
+     "pat": "ca.unless",
+     "de": "„Unless“ leitet einen Nebensatz ein, den es hier nicht gibt. Und es heißt „wenn nicht“.",
+     "en": "“Unless” opens a subordinate clause, which is missing here. It also means “if not”."
+    }
+   ]
+  }
+ },
+ "___ your support, the project would never have launched on time.": {
+  "pat": "ca.but-for",
+  "why": {
+   "ok": {
+    "de": "Richtig: But for + Nomen (your support) heißt „ohne“ und passt zu would have.",
+    "en": "Right: But for + noun (your support) = “without”; it fits would have + participle."
+   },
+   "wrong": [
+    {
+     "opt": "Otherwise",
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ braucht davor einen Satz und danach einen Hauptsatz, kein Nomen.",
+     "en": "Otherwise needs a sentence before it and a main clause after it, not a noun."
+    },
+    {
+     "opt": "Provided",
+     "pat": "ca.as-long-as",
+     "de": "„Provided (that)“ = nur wenn und braucht einen Satz, kein Nomen. Rückblick fehlt.",
+     "en": "“Provided (that)” = only if and needs a clause, not a noun. It has no hindsight meaning."
+    },
+    {
+     "opt": "Unless",
+     "pat": "ca.unless",
+     "de": "„Unless“ = „wenn nicht“ + Satz im Präsens; hier folgt nur ein Nomen im Rückblick.",
+     "en": "“Unless” = “if not” + a present clause; here only a noun follows, looking back."
+    }
+   ]
+  }
+ },
+ "The client will renew ___ that we improve our support.": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: „provided that“ = nur wenn; danach Präsens: that we improve …",
+    "en": "Right: “provided that” = only if; the present follows: that we improve …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "unless"
+     ],
+     "pat": "ca.unless",
+     "de": "„Unless“ = „wenn nicht“ und steht nie vor that. Gemeint ist: nur wenn wir uns verbessern.",
+     "en": "“Unless” = “if not” and is never followed by that. The meaning here: only if we improve."
+    },
+    {
+     "if": [
+      "otherwise"
+     ],
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz und passt nicht vor „that we improve“.",
+     "en": "Otherwise starts a new sentence and does not fit before “that we improve”."
+    },
+    {
+     "if": [
+      "long"
+     ],
+     "de": "„As long“ braucht ein zweites as (as long as, ohne that). Mit that sagt man provided that.",
+     "en": "“As long” needs a second as (as long as, no that). With that, say provided that."
+    },
+    {
+     "not": [
+      "provided",
+      "providing"
+     ],
+     "de": "Gesucht ist ein Wort für „nur wenn“, das mit that geht: provided oder providing.",
+     "en": "A word for “only if” that takes that fits here: provided or providing."
+    }
+   ]
+  }
+ },
+ "We'll cancel the event ___ enough people sign up by Monday.": {
+  "pat": "ca.unless",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“. Wir sagen ab, wenn sich nicht genug anmelden.",
+    "en": "Right: unless = “if not”. We cancel if not enough people sign up."
+   },
+   "wrong": [
+    {
+     "if": [
+      "if"
+     ],
+     "de": "„If“ kehrt den Sinn um: Wir sagten ab, wenn sich genug anmelden. Gemeint ist: wenn nicht.",
+     "en": "“If” flips the meaning: we'd cancel if enough people sign up. The point is: if not."
+    },
+    {
+     "if": [
+      "provided"
+     ],
+     "pat": "ca.as-long-as",
+     "de": "„Provided“ = nur wenn: Wir sagten nur ab, wenn sich genug anmelden. Falsch herum.",
+     "en": "“Provided” = only if: we'd cancel only if enough people sign up. That is backwards."
+    },
+    {
+     "if": [
+      "otherwise"
+     ],
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz und kann hier keinen Nebensatz einleiten.",
+     "en": "Otherwise starts a new sentence and cannot open a subordinate clause here."
+    },
+    {
+     "not": [
+      "unless"
+     ],
+     "de": "Gesucht ist ein Wort für „wenn nicht“: unless.",
+     "en": "A word for “if not” is needed here: unless."
+    }
+   ]
+  }
+ },
+ "You may work remotely as ___ as you stay reachable.": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: as long as = „solange, sofern“: die Bedingung fürs Homeoffice.",
+    "en": "Right: as long as = “provided that”: the condition for remote work."
+   },
+   "wrong": [
+    {
+     "if": [
+      "soon"
+     ],
+     "de": "„As soon as“ = „sobald“ (Zeitpunkt), nicht die Bedingung „solange du erreichbar bist“.",
+     "en": "“As soon as” = “the moment that” (time), not a condition. Here: for as long as you are reachable."
+    },
+    {
+     "if": [
+      "far"
+     ],
+     "de": "„As far as“ = „soweit“ (Umfang, Wissen), nicht „solange“ als Bedingung.",
+     "en": "“As far as” = “to the extent that”, not a condition like as long as."
+    },
+    {
+     "not": [
+      "long"
+     ],
+     "de": "Gesucht ist das Wort aus „as … as“, das „solange“ ausdrückt: long.",
+     "en": "The word from “as … as” that means “provided that” is long."
+    }
+   ]
+  }
+ },
+ "If we don't get the budget, we can't hire anyone. → We can't hire anyone ___ we get the budget.": {
+  "pat": "ca.unless",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „if … not“. Ohne Budget stellen wir niemanden ein.",
+    "en": "Right: unless = “if … not”. Without the budget, we hire no one."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Unless ersetzt „if … not“ als ein Wort. Ein zusätzliches not ist nicht nötig.",
+     "en": "Unless replaces “if … not” as one word. No extra not is needed."
+    },
+    {
+     "if": [
+      "if"
+     ],
+     "de": "„If“ allein macht daraus: Wir stellen niemanden ein, wenn wir das Budget bekommen.",
+     "en": "“If” alone would mean: we can't hire anyone if we get the budget."
+    },
+    {
+     "if": [
+      "otherwise"
+     ],
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz und kann hier keinen Nebensatz einleiten.",
+     "en": "Otherwise starts a new sentence and cannot open a subordinate clause here."
+    }
+   ]
+  }
+ },
+ "Without your help, we would have failed. → ___ your help, we would have failed.": {
+  "pat": "ca.but-for",
+  "why": {
+   "ok": {
+    "de": "Richtig: But for + Nomen (your help) = „ohne“ im Rückblick, passend zu would have.",
+    "en": "Right: But for + noun (your help) = “without” in hindsight, as with would have."
+   },
+   "wrong": [
+    {
+     "if": [
+      "but"
+     ],
+     "not": [
+      "for"
+     ],
+     "de": "„But“ allein heißt „aber, außer“. Für „ohne“ im Rückblick braucht es „but for“.",
+     "en": "“But” alone means “however” or “except”. “Without” in hindsight needs “but for”."
+    },
+    {
+     "if": [
+      "without"
+     ],
+     "de": "„Without“ steht schon im Ausgangssatz. Gefragt ist die Umformung mit „but for“.",
+     "en": "“Without” is already in the source sentence. The task asks for the form with “but for”."
+    },
+    {
+     "if": [
+      "unless"
+     ],
+     "pat": "ca.unless",
+     "de": "„Unless“ + Satz im Präsens passt nicht zu einem Rückblick mit would have.",
+     "en": "“Unless” + a present clause does not fit a hindsight sentence with would have."
+    },
+    {
+     "if": [
+      "otherwise"
+     ],
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz; hier folgt kein Hauptsatz, sondern ein Nomen.",
+     "en": "Otherwise starts a new sentence; here a noun follows, not a main clause."
+    }
+   ]
+  }
+ },
+ "Unless you don't sign today, the offer expires.": {
+  "pat": "ca.unless",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless trägt die Verneinung schon. Nach „Unless you sign“ folgt kein not.",
+    "en": "Right: unless already carries the negation. “Unless you sign” takes no not."
+   },
+   "wrong": [
+    {
+     "if": [
+      "unless",
+      "not"
+     ],
+     "de": "Zweite Verneinung: Unless heißt schon „wenn nicht“. Mit „don't“ kippt der Sinn.",
+     "en": "Second negation: unless already means “if not”. With don't the meaning flips."
+    },
+    {
+     "if": [
+      "if",
+      "not"
+     ],
+     "de": "Mit „if … not“ stimmt der Sinn, doch hier soll unless sitzen: „Unless you sign“.",
+     "en": "“If … not” has the same meaning, but this task wants unless: “Unless you sign”."
+    },
+    {
+     "not": [
+      "unless"
+     ],
+     "de": "Der Satz soll mit „Unless“ bleiben; nur das „don't“ ist zu viel.",
+     "en": "The sentence should keep “Unless”; only the “don't” is extra."
+    }
+   ]
+  }
+ },
+ "I'll attend the workshop as long as it will not overlap with my client call.": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach „as long as“ steht das Präsens: „doesn't overlap“, kein will.",
+    "en": "Right: after “as long as” use the present: “doesn't overlap”, no will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach as long as steht kein will, auch wenn es um die Zukunft geht: „doesn't overlap“.",
+     "en": "No will after as long as, even for the future: use “doesn't overlap”."
+    }
+   ]
+  }
+ },
+ "You can borrow my laptop provided you will return it tomorrow.": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach „provided“ steht das Präsens: „you return it“, kein will.",
+    "en": "Right: after “provided” use the present: “you return it”, no will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach provided (that) steht kein will; das Präsens („return“) deckt die Zukunft ab.",
+     "en": "No will after provided (that); the present (“return”) covers the future."
+    }
+   ]
+  }
+ },
+ "As long as it will not rain, we'll hold the event outside.": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach „As long as“ steht das Präsens: „doesn't rain“, kein will.",
+    "en": "Right: after “As long as” use the present: “doesn't rain”, no will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach as long as steht kein will. Das ist der Reflex „Zukunft = will“; Deutsch nutzt hier Präsens.",
+     "en": "No will after as long as. It is the “future = will” reflex; German uses the present here too."
+    }
+   ]
+  }
+ }
+}

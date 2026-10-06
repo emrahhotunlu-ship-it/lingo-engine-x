@@ -1,0 +1,135 @@
+{
+ "chapters": [
+  {
+   "id": "k1",
+   "name": {
+    "de": "Zeiten im Alltag",
+    "en": "Everyday tenses"
+   },
+   "topics": [
+    "pres-simple-cont",
+    "past-simple-perfect",
+    "pres-perf-cont",
+    "future-forms",
+    "time-clauses"
+   ]
+  },
+  {
+   "id": "k2",
+   "name": {
+    "de": "Zeiten präzise und vorsichtig",
+    "en": "Precise tenses and caution"
+   },
+   "topics": [
+    "c1-hedging",
+    "future-perf-cont",
+    "past-perfect",
+    "used-to",
+    "c1-diplomacy"
+   ]
+  },
+  {
+   "id": "k3",
+   "name": {
+    "de": "Bedingungen",
+    "en": "Conditionals"
+   },
+   "topics": [
+    "conditionals",
+    "cond-alt",
+    "mixed-cond"
+   ]
+  },
+  {
+   "id": "k4",
+   "name": {
+    "de": "Passiv und Berichten",
+    "en": "Passive and reporting"
+   },
+   "topics": [
+    "passive",
+    "c1-discourse",
+    "passive-plus",
+    "reported",
+    "report-verbs",
+    "questions"
+   ]
+  },
+  {
+   "id": "k5",
+   "name": {
+    "de": "Betonen, Schließen, Raten",
+    "en": "Emphasis, deduction, advice"
+   },
+   "topics": [
+    "c1-emphasis",
+    "relative",
+    "modals-deduction",
+    "modals-advice",
+    "gerund-inf"
+   ]
+  },
+  {
+   "id": "k6",
+   "name": {
+    "de": "Verbmuster, Artikel, Präpositionen",
+    "en": "Verb patterns, articles, prepositions"
+   },
+   "topics": [
+    "verb-patterns",
+    "c1-participle",
+    "mandative",
+    "articles",
+    "countable",
+    "prepositions",
+    "prep-noun"
+   ]
+  },
+  {
+   "id": "k7",
+   "name": {
+    "de": "Präzise Sprache und Satzbau",
+    "en": "Precise language and sentence building"
+   },
+   "topics": [
+    "c1-nominal",
+    "prep-time",
+    "compound-mod",
+    "phrasal-syntax",
+    "word-order",
+    "c1-precision",
+    "linkers",
+    "comparison"
+   ]
+  }
+ ],
+ "families": [
+  [
+   "past-simple-perfect",
+   "pres-perf-cont",
+   "past-perfect"
+  ],
+  [
+   "conditionals",
+   "cond-alt",
+   "mixed-cond"
+  ],
+  [
+   "gerund-inf",
+   "verb-patterns"
+  ],
+  [
+   "modals-deduction",
+   "modals-advice"
+  ],
+  [
+   "articles",
+   "countable"
+  ],
+  [
+   "passive",
+   "passive-plus",
+   "report-verbs"
+  ]
+ ]
+}

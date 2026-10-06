@@ -720,13 +720,13 @@
     [
      "Wo liegt die Ursache? In der Vergangenheit → if + had + 3. Form.",
      "Wo liegt die Folge? Jetzt → would + Grundform. Damals → would have + 3. Form.",
-     "Bei wish: Wunsch über jetzt → wish + Past (I wish I had more time). Ärger über eine Gewohnheit anderer → wish + wouldn't (I wish you wouldn't interrupt me).",
+     "Bei wish: Wunsch über jetzt → wish + Past (I wish I had more time). Ärger über das Verhalten anderer, das sich ändern soll → wish + would / wouldn't (I wish you would stop). Eine bloße Feststellung kann auch Past sein (I wish you didn't work so late).",
      "Bedauern über früher → wish + had + 3. Form (I wish I hadn't said that)."
     ],
     [
      "Where is the cause? In the past → if + had + participle.",
      "Where is the result? Now → would + base form. Back then → would have + participle.",
-     "With wish: a wish about now → wish + past (I wish I had more time). Annoyance about someone's habit → wish + wouldn't.",
+     "With wish: a wish about now → wish + past (I wish I had more time). Annoyance about someone's behavior that should change → wish + would / wouldn't (I wish you would stop). A plain statement can also be past (I wish you didn't work so late).",
      "Regret about the past → wish + had + participle (I wish I hadn't said that)."
     ]
    ],
@@ -760,7 +760,7 @@
       "wish Ärger",
       "wish annoyance"
      ],
-     "wish + wouldn't",
+     "wish + would / wouldn't",
      "I wish you wouldn't interrupt me."
     ]
    ],
@@ -795,14 +795,6 @@
      "why": [
       "Nach wish geht die Zeit eine Stufe zurück: have → had.",
       "After wish the tense moves one step back: have → had."
-     ]
-    },
-    {
-     "bad": "I wish you didn't interrupt me all the time.",
-     "good": "I wish you wouldn't interrupt me all the time.",
-     "why": [
-      "Bei Ärger über das Verhalten anderer nimmt man wish + wouldn't.",
-      "For annoyance about someone else's behaviour use wish + wouldn't."
      ]
     }
    ],
@@ -893,14 +885,6 @@
     ]
    ],
    "traps": [
-    {
-     "bad": "The window had broken during the storm.",
-     "good": "The window was broken during the storm.",
-     "why": [
-      "„had broken“ ist Aktiv (es hat selbst etwas zerbrochen). Passiv braucht be + 3. Form: was broken.",
-      "“had broken” is active. The passive needs be + participle: was broken."
-     ]
-    },
     {
      "bad": "My bike was stoled yesterday.",
      "good": "My bike was stolen yesterday.",
@@ -1013,22 +997,6 @@
      "why": [
       "Nach would steht immer die Grundform – finish, nicht finished.",
       "After would always use the base form – finish, not finished."
-     ]
-    },
-    {
-     "bad": "He told me that he already sent the contract.",
-     "good": "He told me that he had already sent the contract.",
-     "why": [
-      "„have sent“ wird in der indirekten Rede zu „had sent“ – die Rückverschiebung fehlt.",
-      "“have sent” becomes “had sent” in reported speech – the backshift is missing."
-     ]
-    },
-    {
-     "bad": "She told me that she will finish it next week.",
-     "good": "She told me that she would finish it next week.",
-     "why": [
-      "will wird nach einem Verb in der Vergangenheit immer zu would.",
-      "will always becomes would after a past reporting verb."
      ]
     }
    ],
@@ -1250,8 +1218,8 @@
      "bad": "He suggested to meet at the office.",
      "good": "He suggested meeting at the office.",
      "why": [
-      "Nach suggest steht immer -ing, nie to + Grundform.",
-      "suggest is always followed by -ing, never by to + base form."
+      "Nach suggest folgt -ing oder ein that-Satz, nie to + Grundform.",
+      "After suggest use -ing or a that-clause, never to + base form."
      ]
     },
     {
@@ -1411,16 +1379,7 @@
      ]
     ]
    ],
-   "traps": [
-    {
-     "bad": "I love the music, especially the jazz.",
-     "good": "I love music, especially jazz.",
-     "why": [
-      "Allgemeine, abstrakte Begriffe stehen ohne Artikel.",
-      "General, abstract nouns take no article."
-     ]
-    }
-   ],
+   "traps": [],
    "alts": []
   }
  },

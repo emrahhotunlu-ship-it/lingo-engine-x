@@ -2,6 +2,7 @@ import { cardExamples } from './cardExamples';
 import { comboCheck } from './comboCheck';
 import { listenQ } from './listenQ';
 import { orderGen } from './orderGen';
+import { explainAnswer } from './explainAnswer';
 import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
 import { mnemonic } from './mnemonic';
@@ -33,6 +34,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   // Anwenden, Stufe 2: Hörübung mit Frage
   listenQ,
   comboCheck,
+  // Lernplattform 2.0 P2: „Erklär mir meine Antwort“
+  explainAnswer,
   // Phase 2 (docs/phase2-plan.md §7)
   grammarItems,
   grammarJudge,

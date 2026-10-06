@@ -1,0 +1,884 @@
+[
+ {
+  "id": "tc.pff-kwt1",
+  "type": "kwt",
+  "pat": "tc.present-for-future",
+  "from": "We will wait for the legal team's approval before we sign.",
+  "key": "UNTIL",
+  "frame": "We won't sign ___ the legal team's approval.",
+  "answer": "until we get",
+  "accepted": [
+   "until we receive",
+   "until we have",
+   "until we have received",
+   "until we've received",
+   "until we have gotten",
+   "until we've gotten",
+   "until we have got",
+   "until we've got",
+   "until we obtain",
+   "until we have obtained",
+   "until we've obtained",
+   "until we are given",
+   "until we're given"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „until“ + Präsens („we get“); will ist schon in „won't“.",
+    "en": "Right: “until” + present (“we get”); will is already in “won't”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "until"
+     ],
+     "de": "Das Schlüsselwort „until“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “until” must appear unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „until“ steht kein will; „won't sign“ trägt schon die Zukunft.",
+     "en": "No will after “until”; “won't sign” already carries the future."
+    },
+    {
+     "if": [
+      "got"
+     ],
+     "not": [
+      "have",
+      "has"
+     ],
+     "de": "Die Vergangenheit passt nicht: Die Freigabe fehlt noch. Nimm get oder have.",
+     "en": "The past tense does not fit: the approval is still missing. Use get or have."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pff-kwt2",
+  "type": "kwt",
+  "pat": "tc.present-for-future",
+  "from": "I'll update you after the vendor has replied.",
+  "key": "WHEN",
+  "frame": "I'll update you ___.",
+  "answer": "when the vendor replies",
+  "accepted": [
+   "when the vendor has replied",
+   "when the vendor responds",
+   "when the vendor has responded",
+   "when the vendor gets back",
+   "when they reply",
+   "when they respond",
+   "when they have replied",
+   "when the vendor writes back",
+   "when they've replied",
+   "when the vendor's replied"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „when“ (= sobald) steht Präsens: „the vendor replies“.",
+    "en": "Right: after “when” (= as soon as) use the present: “the vendor replies”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "when"
+     ],
+     "de": "Das Schlüsselwort „when“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “when” must appear unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „when“ (= sobald) steht kein will; „I'll update“ trägt die Zukunft.",
+     "en": "No will after “when” (= as soon as); “I'll update” carries the future."
+    },
+    {
+     "if": [
+      "replied"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit passt nicht: Die Antwort steht noch aus. Nimm replies.",
+     "en": "The past tense does not fit: the reply is still pending. Use replies."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pff-find1",
+  "type": "find",
+  "pat": "tc.present-for-future",
+  "prompt": "We will start the call as soon as the client will join.",
+  "err": [
+   10,
+   11
+  ],
+  "answer": "joins.",
+  "fixed": "We will start the call as soon as the client joins.",
+  "accepted": [
+   "has joined."
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht Präsens: „the client joins“.",
+    "en": "Right: after “as soon as” use the present: “the client joins”."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: das will nach „as soon as“.",
+     "en": "There is an error: the will after “as soon as”."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „as soon as“.",
+     "en": "That is not the error. Look at the verb after “as soon as”."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Dein Ersatz enthält noch will; nach „as soon as“ steht das Präsens.",
+     "en": "Your replacement still has will; after “as soon as” use the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pff-find2",
+  "type": "find",
+  "pat": "tc.present-for-future",
+  "prompt": "Please don't send the invoice until the client will confirm the order.",
+  "err": [
+   8,
+   9
+  ],
+  "answer": "confirms",
+  "fixed": "Please don't send the invoice until the client confirms the order.",
+  "accepted": [
+   "has confirmed"
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „until“ steht Präsens: „the client confirms“.",
+    "en": "Right: after “until” use the present: “the client confirms”."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: das will nach „until“.",
+     "en": "There is an error: the will after “until”."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „until“.",
+     "en": "That is not the error. Look at the verb after “until”."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Dein Ersatz enthält noch will; nach „until“ steht das Präsens.",
+     "en": "Your replacement still has will; after “until” use the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pff-find3",
+  "type": "find",
+  "pat": "tc.present-for-future",
+  "prompt": "Let's align on the numbers before the client arrives tomorrow.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „before“ steht Präsens („arrives“); der Satz ist fehlerfrei.",
+    "en": "Right: after “before” the present (“arrives”) is correct; the sentence is fine."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist kein Fehler: Nach „before“ steht bei Zukünftigem das Präsens, nicht will.",
+     "en": "There is no error: after “before” future meaning takes the present, not will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pff-m1",
+  "type": "meaning",
+  "pat": "tc.present-for-future",
+  "a": "I'll call you when the client confirms.",
+  "b": "I'll call you if the client confirms.",
+  "q": {
+   "de": "Welcher Satz geht davon aus, dass der Kunde ganz sicher bestätigt?",
+   "en": "Which sentence assumes the client will definitely confirm?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: „when“ nimmt das Ereignis als sicher, „if“ lässt offen, ob es passiert.",
+    "en": "Right: “when” treats the event as certain; “if” leaves it open whether it happens."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "Das ist „if“: Es bleibt offen, ob der Kunde bestätigt.",
+     "en": "That is “if”: it stays open whether the client confirms."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pp-kwt1",
+  "type": "kwt",
+  "pat": "tc.present-perfect",
+  "from": "We'll finalize the budget after the board has approved the plan.",
+  "key": "ONCE",
+  "frame": "We'll finalize the budget ___ the plan.",
+  "answer": "once the board has approved",
+  "accepted": [
+   "once the board approves",
+   "once the board's approved",
+   "once the board has endorsed"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „once“ steht has approved: erst genehmigt, dann Budget.",
+    "en": "Right: after “once”, has approved: approved first, then the budget."
+   },
+   "wrong": [
+    {
+     "not": [
+      "once"
+     ],
+     "de": "Das Schlüsselwort „once“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “once” must appear unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „once“ steht kein will, auch nicht „will have“. Nimm has approved.",
+     "en": "No will after “once”, not even “will have”. Use has approved."
+    },
+    {
+     "if": [
+      "approved"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit „approved“ passt nicht: Nimm has approved oder approves.",
+     "en": "The past “approved” does not fit: use has approved or approves."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pp-kwt2",
+  "type": "kwt",
+  "pat": "tc.present-perfect",
+  "from": "Please wait for QA's sign-off before you deploy.",
+  "key": "UNTIL",
+  "frame": "Please don't deploy ___ signed off.",
+  "answer": "until QA has",
+  "accepted": [
+   "until QA's",
+   "until they have",
+   "until they've",
+   "until it has",
+   "until it's",
+   "until it has been",
+   "until it's been",
+   "until it is"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „until“ + has signed off: erst die Freigabe, dann der Deploy.",
+    "en": "Right: “until” + has signed off: approval first, then the deploy."
+   },
+   "wrong": [
+    {
+     "not": [
+      "until"
+     ],
+     "de": "Das Schlüsselwort „until“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “until” must appear unchanged in the gap."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „until“ steht kein will, auch nicht „will have“: until QA has.",
+     "en": "No will after “until”, not even “will have”: until QA has."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "„had“ passt nicht: Die Freigabe liegt noch vor uns. Nimm has.",
+     "en": "“had” does not fit: the approval is still ahead. Use has."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pp-find1",
+  "type": "find",
+  "pat": "tc.present-perfect",
+  "prompt": "We'll finalize the budget after the board will have approved it.",
+  "err": [
+   7,
+   9
+  ],
+  "answer": "has approved",
+  "fixed": "We'll finalize the budget after the board has approved it.",
+  "accepted": [
+   "approves"
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „after“ steht has approved, nicht „will have approved“.",
+    "en": "Right: after “after” use has approved, not “will have approved”."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „will have“ nach „after“.",
+     "en": "There is an error: “will have” after “after”."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „after“.",
+     "en": "That is not the error. Look at the verb after “after”."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Dein Ersatz enthält noch will; nach „after“ steht Perfekt oder Präsens.",
+     "en": "Your replacement still has will; after “after” use perfect or present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pp-find2",
+  "type": "find",
+  "pat": "tc.present-perfect",
+  "prompt": "Don't deploy until QA signed off on the release.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "has signed off",
+  "fixed": "Don't deploy until QA has signed off on the release.",
+  "accepted": [
+   "signs off"
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „until“ + has signed off: Die Freigabe liegt noch in der Zukunft.",
+    "en": "Right: “until” + has signed off: the approval is still in the future."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „signed off“ ist Vergangenheit.",
+     "en": "There is an error: “signed off” is the past tense."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf die Zeitform des Verbs.",
+     "en": "That is not the error. Look at the tense of the verb."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Dein Ersatz enthält noch will; nach „until“ steht Perfekt oder Präsens.",
+     "en": "Your replacement still has will; after “until” use perfect or present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.pp-m1",
+  "type": "meaning",
+  "pat": "tc.present-perfect",
+  "a": "Don't leave until the meeting finishes.",
+  "b": "Don't leave until the meeting has finished.",
+  "q": {
+   "de": "Welcher Satz sagt, dass das Meeting vorbei sein muss, bevor du gehst?",
+   "en": "Which sentence says the meeting must be over before you leave?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: Beide meinen dasselbe; has finished betont nur, dass es ganz vorbei ist.",
+    "en": "Right: both mean the same; has finished just stresses that it is completely over."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "Nicht nur b: Auch a („finishes“, Präsens) meint hier die Zukunft. Beide sagen dasselbe.",
+     "en": "Not only b: a (“finishes”, present) also covers the future here. Both say the same."
+    },
+    {
+     "opt": "a",
+     "de": "Nicht nur a: Auch b („has finished“) passt. Es betont nur, dass das Meeting ganz vorbei ist.",
+     "en": "Not only a: b (“has finished”) fits too. It only stresses that the meeting is completely over."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.btt-kwt1",
+  "type": "kwt",
+  "pat": "tc.by-the-time",
+  "from": "I will finish the slides before you arrive.",
+  "key": "TIME",
+  "frame": "I'll have finished the slides ___ here.",
+  "answer": "by the time you get",
+  "accepted": [
+   "by the time you arrive",
+   "by the time you're",
+   "by the time you are",
+   "by the time you come",
+   "by the time you've arrived",
+   "by the time you've gotten"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „By the time“ + Präsens („get here“); davor steht will have finished.",
+    "en": "Right: “By the time” + present (“get here”); will have finished goes before it."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "de": "„until“ heißt: bis dahin dauert es an. Hier ist es dann schon fertig: by the time.",
+     "en": "“until” means it continues up to then. Here it is finished by then: by the time."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „by the time“ steht kein will: „you get here“.",
+     "en": "No will after “by the time”: “you get here”."
+    },
+    {
+     "not": [
+      "time"
+     ],
+     "de": "Das Schlüsselwort „time“ muss unverändert in „by the time“ stehen.",
+     "en": "The key word “time” must appear unchanged in “by the time”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.btt-kwt2",
+  "type": "kwt",
+  "pat": "tc.by-the-time",
+  "from": "I will get to the office after the meeting has already started.",
+  "key": "TIME",
+  "frame": "___ there, the meeting will have started.",
+  "answer": "By the time I get",
+  "accepted": [
+   "By the time I arrive",
+   "By the time I'm",
+   "By the time I've gotten",
+   "By the time I've arrived"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „By the time“ + Präsens („I get“); im Hauptsatz steht will have started.",
+    "en": "Right: “By the time” + present (“I get”); will have started in the main clause."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "de": "„until“ heißt: bis dahin dauert es an. Hier ist es dann schon passiert: by the time.",
+     "en": "“until” means it continues up to then. Here it has already happened: by the time."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „by the time“ steht kein will: „I get there“.",
+     "en": "No will after “by the time”: “I get there”."
+    },
+    {
+     "not": [
+      "time"
+     ],
+     "de": "Das Schlüsselwort „time“ muss unverändert in „by the time“ stehen.",
+     "en": "The key word “time” must appear unchanged in “by the time”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.btt-find1",
+  "type": "find",
+  "pat": "tc.by-the-time",
+  "prompt": "By the time you will read this, I'll have left the office.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "read",
+  "fixed": "By the time you read this, I'll have left the office.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „By the time“ steht Präsens: „you read“.",
+    "en": "Right: after “By the time” use the present: “you read”."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: das will nach „By the time“.",
+     "en": "There is an error: the will after “By the time”."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „By the time“.",
+     "en": "That is not the error. Look at the verb after “By the time”."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Dein Ersatz enthält noch will; nach „By the time“ steht das Präsens.",
+     "en": "Your replacement still has will; after “By the time” use the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.btt-find2",
+  "type": "find",
+  "pat": "tc.by-the-time",
+  "prompt": "Until the new hire starts, we will have set up her laptop.",
+  "err": [
+   0,
+   0
+  ],
+  "answer": "By the time",
+  "fixed": "By the time the new hire starts, we will have set up her laptop.",
+  "accepted": [
+   "Before"
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Fertig bis zu einem Zeitpunkt heißt „By the time“, nicht „Until“.",
+    "en": "Right: finished by a certain moment is “By the time”, not “Until”."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: „Until“ passt nicht zu „will have set up“.",
+     "en": "There is an error: “Until” does not go with “will have set up”."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das erste Wort des Satzes.",
+     "en": "That is not the error. Look at the first word of the sentence."
+    },
+    {
+     "if": [
+      "until"
+     ],
+     "de": "Mit „until“ dauert etwas bis dahin an. Hier ist es schon fertig: By the time.",
+     "en": "With “until” something continues up to then. Here it is finished: By the time."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.btt-m1",
+  "type": "meaning",
+  "pat": "tc.by-the-time",
+  "a": "We'll keep working until the client arrives.",
+  "b": "We'll have finished by the time the client arrives.",
+  "q": {
+   "de": "Welcher Satz sagt, dass die Arbeit schon fertig ist, wenn der Kunde kommt?",
+   "en": "Which sentence says the work is already done when the client arrives?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: „by the time“ heißt: bis dahin ist es fertig. „until“ heißt: es dauert an.",
+    "en": "Right: “by the time” means finished by then; “until” means working up to then."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Das ist „until“: Ihr arbeitet noch, bis der Kunde kommt.",
+     "en": "That is “until”: you are still working when the client comes."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.nc-kwt1",
+  "type": "kwt",
+  "pat": "tc.noun-clause",
+  "from": "I have no idea what time the update will be ready.",
+  "key": "WHEN",
+  "frame": "I don't know ___ ready.",
+  "answer": "when the update will be",
+  "accepted": [
+   "when it will be",
+   "when this will be"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „know“ ist when ein Fragewort („wann“), deshalb steht will.",
+    "en": "Right: after “know”, when is a question word (“at what time”), so will is used."
+   },
+   "wrong": [
+    {
+     "not": [
+      "when"
+     ],
+     "de": "Das Schlüsselwort „when“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “when” must appear unchanged in the gap."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "not": [
+      "will"
+     ],
+     "de": "Mit „is“ liest man when eher als „sobald“. Für „wann wird es fertig sein?“ nimm will.",
+     "en": "With “is”, when reads more like “as soon as”. For “when will it be ready?” use will."
+    },
+    {
+     "not": [
+      "will"
+     ],
+     "de": "Hier ist when ein Fragewort. Das Futur braucht will: when the update will be.",
+     "en": "Here when is a question word. The future needs will: when the update will be."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.nc-kwt2",
+  "type": "kwt",
+  "pat": "tc.noun-clause",
+  "from": "I'd like to know: Will the client sign before Friday?",
+  "key": "WHETHER",
+  "frame": "I'd like to know ___ before Friday.",
+  "answer": "whether the client will sign",
+  "accepted": [
+   "whether they will sign",
+   "whether they'll sign",
+   "whether he will sign",
+   "whether she will sign"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „whether“ ist hier „ob“ (Frage), deshalb bleibt will.",
+    "en": "Right: “whether” means “if” as a question here, so will stays."
+   },
+   "wrong": [
+    {
+     "not": [
+      "whether"
+     ],
+     "de": "Das Schlüsselwort „whether“ muss unverändert in der Lücke stehen.",
+     "en": "The key word “whether” must appear unchanged in the gap."
+    },
+    {
+     "if": [
+      "signs"
+     ],
+     "de": "Hier ist whether „ob“ (Frage): Das Futur braucht will, nicht das Präsens.",
+     "en": "Here whether means “if” as a question: the future needs will, not the present."
+    },
+    {
+     "not": [
+      "will"
+     ],
+     "de": "Hier ist whether ein Fragewort. Für Zukünftiges steht will.",
+     "en": "Here whether is a question word. For the future use will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.nc-find1",
+  "type": "find",
+  "pat": "tc.noun-clause",
+  "prompt": "I'm not sure if the client accepts our offer by Friday.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "will accept",
+  "fixed": "I'm not sure if the client will accept our offer by Friday.",
+  "accepted": [
+   "is going to accept"
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: „if“ meint hier „ob“ (Frage), deshalb steht will.",
+    "en": "Right: here “if” means “whether” (question), so will is needed."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach „not sure if“ fehlt das will.",
+     "en": "There is an error: after “not sure if” the will is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „if“.",
+     "en": "That is not the error. Look at the verb after “if”."
+    },
+    {
+     "not": [
+      "will"
+     ],
+     "de": "Hier ist „if“ = „ob“ (Frage), kein Zeitsatz. Zukünftiges braucht will.",
+     "en": "Here “if” means “whether” (question), not a time clause. The future needs will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.nc-find2",
+  "type": "find",
+  "pat": "tc.noun-clause",
+  "prompt": "Nobody can predict when the budget gets approved next quarter.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "will get approved",
+  "fixed": "Nobody can predict when the budget will get approved next quarter.",
+  "accepted": [
+   "will be approved",
+   "is going to get approved",
+   "is going to be approved"
+  ],
+  "why": {
+   "ok": {
+    "de": "Nach „predict“ ist when die Frage „wann“, deshalb steht üblicherweise will.",
+    "en": "After “predict”, when is the question “at what time”, so will is the normal choice."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Hier fehlt das will nach „when“.",
+     "en": "There is an error: the will after “when” is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „when“.",
+     "en": "That is not the error. Look at the verb after “when”."
+    },
+    {
+     "not": [
+      "will"
+     ],
+     "de": "Hier ist when „wann“ (Frage), kein Zeitsatz. Zukünftiges braucht will.",
+     "en": "Here when means “at what time” (question), not a time clause. The future needs will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.nc-find3",
+  "type": "find",
+  "pat": "tc.noun-clause",
+  "prompt": "Could you check whether the vendor will deliver before the audit?",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Richtig: „whether“ ist hier „ob“ (Frage), deshalb steht will. Kein Fehler.",
+    "en": "Right: “whether” means “if” as a question here, so will belongs. No error."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist kein Fehler: Nach „whether“ als Fragewort steht will für Zukünftiges.",
+     "en": "There is no error: after “whether” as a question word, will marks the future."
+    }
+   ]
+  }
+ },
+ {
+  "id": "tc.nc-m1",
+  "type": "meaning",
+  "pat": "tc.noun-clause",
+  "a": "Please tell me when the report is ready.",
+  "b": "Please tell me when the report will be ready.",
+  "q": {
+   "de": "Welcher Satz fragt nach dem erwarteten Fertigstellungstermin („Wann wird er fertig sein?“)?",
+   "en": "Which sentence asks for the expected completion date (“When will it be ready?”)?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: „will be“ fragt „wann?“ (Schätzung). „is ready“ ist „sobald es fertig ist“.",
+    "en": "Right: “will be” asks “when?” (an estimate); “is ready” means “as soon as it is ready”."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Das ist „sobald“: Du willst erst Bescheid, wenn der Bericht fertig ist.",
+     "en": "That is “as soon as”: you only want to hear once the report is ready."
+    }
+   ]
+  }
+ }
+]

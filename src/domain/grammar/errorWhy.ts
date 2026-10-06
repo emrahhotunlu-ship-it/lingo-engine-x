@@ -1,6 +1,7 @@
 import type { Lang } from '../srs/types';
 import { legacyNorm, legacyTaskKey } from './key';
 import { formHint, ruleOf } from './rules';
+import { mapEntryOf, patternOf } from './patterns';
 import { seedTasks } from './tasks';
 
 // „Warum“ zu einem Grammatik-Fehlersatz (Prüfbefund B1): erst die beim Anlegen mitgeschriebene Erklärung (`expl`),
@@ -28,13 +29,18 @@ function seedExpl(key: string): Expl | null {
   return byKey.get(key) ?? null;
 }
 
-export function whyOfError(topic: string, e: { q?: unknown; expl?: unknown }, lang: Lang): string {
+export function whyOfError(topic: string, e: { q?: unknown; expl?: unknown; pat?: unknown }, lang: Lang): string {
   const q = typeof e.q === 'string' ? e.q : '';
-  const own = explOf(e.expl) ?? (q ? seedExpl(legacyTaskKey(q)) : null);
+  const key = q ? legacyTaskKey(q) : '';
+  // Reihenfolge: gespeicherte Erklärung, aufgabengenaue Begründung (Muster-Zuordnung), Erklärung der Startaufgabe, Verwendung des Musters, Falle, Kernsatz.
+  const mapped = key ? mapEntryOf(topic, key)?.why?.ok : null;
+  const own = explOf(e.expl) ?? (mapped ? { de: mapped.de, en: mapped.en } : null) ?? (key ? seedExpl(key) : null);
   if (own) {
     const t = formHint({ topic, expl: own }, lang);
     if (t) return t;
   }
+  const pat = q ? patternOf({ topic, prompt: q, pat: typeof e.pat === 'string' ? e.pat : null }) : null;
+  if (pat) return lang === 'de' ? pat.use.de : pat.use.en;
   const rule = ruleOf(topic, lang);
   const k = legacyNorm(q);
   const trap = k ? rule?.traps.find((x) => legacyNorm(x.bad) === k) : undefined;

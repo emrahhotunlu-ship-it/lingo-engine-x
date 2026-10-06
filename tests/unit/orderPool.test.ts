@@ -23,7 +23,8 @@ describe('Satzbau-Pool', () => {
     const per = new Map<string, number>();
     for (const e of raw) per.set(e.topic, (per.get(e.topic) ?? 0) + 1);
     expect([...per.values()].filter((n) => n >= 4).length).toBeGreaterThanOrEqual(5);
-    for (const topic of per.keys()) expect(topic).toMatch(/^c1-[a-z]+$/);
+    // c1-Themen und die Grammatikthemen mit Muster (Lernplattform 2.0 §3.6).
+    for (const topic of per.keys()) expect(topic).toMatch(/^(c1-[a-z]+|past-simple-perfect|mixed-cond|time-clauses|cond-alt)$/);
   });
 
   it('keine Dubletten', () => {

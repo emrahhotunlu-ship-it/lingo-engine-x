@@ -3,6 +3,7 @@ import { detectLang } from '../lang/detect';
 import type { GrammarTask } from '../learn/types';
 import type { Lang } from '../srs/types';
 import { asList, asRecord, rulesJson, toolkitJson } from './raw';
+import { patternById, patternOf } from './patterns';
 
 // Regelwerk der alten App typisiert (content/legacy/rules.json) und die Hilfen nach dem Prüfen
 // (phase2-plan §5.0): eine Zeile Form-Hinweis, 2–3 Beispiele, „Auch richtig". Texte immer in der
@@ -108,33 +109,35 @@ function langOk(text: string, lang: Lang): boolean {
 
 /**
  * Eine Zeile Form-Hinweis: die Erklärung der Aufgabe in der Oberflächensprache; fehlt sie oder
- * steht sie in der falschen Sprache, der Kernsatz des Regelwerks.
+ * steht sie in der falschen Sprache, der Kernsatz des Regelwerks. Ist das Muster der Aufgabe bekannt
+ * (`pat` oder Zuordnung über `prompt`), fällt der Hinweis nie auf den ganzen Kernsatz zurück, sondern
+ * auf die Verwendung dieses Musters (Lernplattform 2.0 §4.7).
  */
-export function formHint(task: Pick<GrammarTask, 'topic' | 'expl'>, lang: Lang): string {
+export function formHint(task: Pick<GrammarTask, 'topic' | 'expl'> & { prompt?: string; pat?: string | null }, lang: Lang): string {
   const own = lang === 'de' ? task.expl.de : task.expl.en;
   if (own && own.trim() && langOk(own, lang)) return own.trim();
+  if (task.prompt !== undefined || task.pat) {
+    const p = patternOf({ topic: task.topic, prompt: task.prompt ?? '', pat: task.pat });
+    if (p) return lang === 'de' ? p.use.de : p.use.en;
+  }
   return ruleOf(task.topic, lang)?.core ?? '';
 }
 
 /**
- * 2–3 englische Beispielsätze zum Thema (Formen, gute Fassung der Fallen, Themenbeispiele),
- * ohne den Satz der Aufgabe selbst. Deterministisch, damit dieselbe Aufgabe dieselben Beispiele zeigt.
+ * Englische Beispielsätze nur aus **einem Muster** (seine Beispiele, danach die gute Fassung seiner Falle), ohne `exclude`
+ * (der Aufgabensatz). Ohne `pattern` kommt nichts: kein Themen-Zufallsbeispiel mehr (Lernplattform 2.0 §3.3, Leitsatz 5).
  */
-export function examplesFor(topic: string, opts: { exclude?: string; max?: number; offset?: number } = {}): string[] {
-  const r = raw().rules[topic];
-  const tp = topicById(topic);
+export function examplesFor(topic: string, opts: { pattern?: string | null; exclude?: string; max?: number; /** veraltet, wirkungslos (alte Hash-Rotation) */ offset?: number } = {}): string[] {
+  if (!opts.pattern) return [];
+  const p = patternById(opts.pattern.includes(':') ? opts.pattern : `${topic}:${opts.pattern}`);
+  if (!p || p.topic !== topic) return [];
   const all: string[] = [];
-  const push = (x: unknown) => {
-    const t = typeof x === 'string' ? x.trim() : '';
-    if (t && !all.includes(t) && t !== opts.exclude?.trim()) all.push(t);
-  };
-  for (const f of r?.forms ?? []) push(f[2]);
-  for (const t of r?.traps ?? []) push(t.good);
-  for (const e of tp?.ex ?? []) push(e);
-  const max = Math.max(1, Math.min(3, opts.max ?? 3));
-  if (all.length <= max) return all;
-  const start = (opts.offset ?? 0) % all.length;
-  return [...all.slice(start), ...all.slice(0, start)].slice(0, max);
+  const ex = opts.exclude?.trim().toLowerCase();
+  for (const x of [...p.ex.map((e) => e.en), p.trap.good]) {
+    const t = x.trim();
+    if (t && !all.includes(t) && t.toLowerCase() !== ex) all.push(t);
+  }
+  return all.slice(0, Math.max(1, Math.min(3, opts.max ?? 3)));
 }
 
 /** Alle englischen Beispielsätze eines Themas (Formen, Fallen, Themenbeispiele), ohne Doppelte. */

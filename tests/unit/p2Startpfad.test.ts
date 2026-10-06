@@ -37,6 +37,15 @@ function docs(): Map<string, Record<string, unknown>> {
 }
 
 describe('Startpfad ohne Wörterbuch und ohne JSON-Parsen', () => {
+  it('Regelwerk, Startaufgaben und C1-Werkzeugkasten sind beim Import noch nicht geparst (steht vor den Tests, die die Erklärung lesen)', async () => {
+    // Die Themenlisten (domain/content) laden, ohne die großen Inhalte zu parsen.
+    await import('../../src/domain/content');
+    expect(raw.parsedYet()).toEqual({ rules: false, grammar: false, toolkit: false });
+    const { ruleOf } = await import('../../src/domain/grammar/rules');
+    expect(ruleOf('past-perfect', 'de')?.core ?? '').not.toBe('');
+    expect(raw.parsedYet().rules).toBe(true);
+  });
+
   it('dueErrors zählt fällige Fehler, ohne das Wörterbuch zu fragen', () => {
     dictCalls.n = 0;
     const due = dueErrors(docs(), NOW);
@@ -61,14 +70,5 @@ describe('Startpfad ohne Wörterbuch und ohne JSON-Parsen', () => {
   it('eine Lücke mit Klammer-Hinweis bekommt keinen zusätzlichen Hinweis', () => {
     const task = errorTask('future-forms', { q: 'She ___ (work) here since May.', given: 'works', ans: 'has worked', t: NOW });
     expect(task?.hint).toBeNull();
-  });
-
-  it('Regelwerk, Startaufgaben und C1-Werkzeugkasten sind beim Import noch nicht geparst', async () => {
-    // Die Themenlisten (domain/content) laden, ohne die großen Inhalte zu parsen.
-    await import('../../src/domain/content');
-    expect(raw.parsedYet()).toEqual({ rules: false, grammar: false, toolkit: false });
-    const { ruleOf } = await import('../../src/domain/grammar/rules');
-    expect(ruleOf('past-perfect', 'de')?.core ?? '').not.toBe('');
-    expect(raw.parsedYet().rules).toBe(true);
   });
 });

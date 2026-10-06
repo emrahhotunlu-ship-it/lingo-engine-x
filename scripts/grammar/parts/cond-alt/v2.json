@@ -1,0 +1,1185 @@
+[
+ {
+  "id": "ca-unl-k1",
+  "type": "kwt",
+  "pat": "ca.unless",
+  "from": "If the client doesn't sign by Friday, we'll withdraw the proposal.",
+  "key": "UNLESS",
+  "frame": "We'll withdraw the proposal ___ by Friday.",
+  "answer": "unless the client signs",
+  "accepted": [
+   "unless the client has signed",
+   "unless the client signs off",
+   "unless they sign",
+   "unless they have signed",
+   "unless they've signed"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“, also unless the client signs, ohne zweites not.",
+    "en": "Right: unless = “if not”, so unless the client signs, with no second not."
+   },
+   "wrong": [
+    {
+     "not": [
+      "unless"
+     ],
+     "de": "Das Schlüsselwort unless muss unverändert in der Lücke stehen.",
+     "en": "The key word unless must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "unless",
+      "not"
+     ],
+     "de": "Zweite Verneinung: Unless heißt schon „wenn nicht“. Mit not kippt der Sinn.",
+     "en": "Second negation: unless already means “if not”. With not the meaning flips."
+    },
+    {
+     "if": [
+      "unless",
+      "will"
+     ],
+     "de": "Nach unless steht das Präsens, kein will: unless the client signs.",
+     "en": "After unless use the present, not will: unless the client signs."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-unl-k2",
+  "type": "kwt",
+  "pat": "ca.unless",
+  "from": "We can't close the deal if we don't get legal approval.",
+  "key": "UNLESS",
+  "frame": "We can't close the deal ___ approval.",
+  "answer": "unless we get legal",
+  "accepted": [
+   "unless we receive legal",
+   "unless we obtain legal",
+   "unless we have legal",
+   "unless we secure legal"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: unless we get legal approval = „wenn wir keine Freigabe bekommen“.",
+    "en": "Right: unless we get legal approval = “if we don't get approval”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "unless"
+     ],
+     "de": "Das Schlüsselwort unless muss unverändert in der Lücke stehen.",
+     "en": "The key word unless must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Zweite Verneinung: Unless heißt schon „wenn nicht“. Dahinter steht kein not.",
+     "en": "Second negation: unless already means “if not”. No not follows it."
+    },
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach unless steht das Präsens, kein will: unless we get …",
+     "en": "After unless use the present, not will: unless we get …"
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-unl-f1",
+  "type": "find",
+  "pat": "ca.unless",
+  "prompt": "Unless the client doesn't confirm today, we'll release the room.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "confirms",
+  "fixed": "Unless the client confirms today, we'll release the room.",
+  "accepted": [
+   "has confirmed"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „Unless … doesn't“ ist doppelt verneint. Richtig: unless the client confirms.",
+    "en": "The error: “Unless … doesn't” negates twice. Correct: unless the client confirms."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Unless + doesn't ist eine doppelte Verneinung.",
+     "en": "There is an error: Unless + doesn't is a double negation."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „doesn't confirm“: unless trägt das not schon.",
+     "en": "The error is in “doesn't confirm”: unless already carries the not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-unl-f2",
+  "type": "find",
+  "pat": "ca.unless",
+  "prompt": "We'll go ahead with the launch unless the data will show a problem.",
+  "err": [
+   9,
+   10
+  ],
+  "answer": "shows",
+  "fixed": "We'll go ahead with the launch unless the data shows a problem.",
+  "accepted": [
+   "show"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach unless steht das Präsens („shows“), kein will.",
+    "en": "The error: after unless use the present (“shows”), not will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach unless steht kein will.",
+     "en": "There is an error: no will after unless."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will show“: Das ist der Reflex „Zukunft = will“.",
+     "en": "The error is “will show”: it is the “future = will” reflex."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-unl-m1",
+  "type": "meaning",
+  "pat": "ca.unless",
+  "a": "We'll cancel the workshop unless 20 people register.",
+  "b": "We'll cancel the workshop if 20 people register.",
+  "q": {
+   "de": "Welcher Satz sagt: Bei weniger als 20 Anmeldungen fällt der Workshop aus?",
+   "en": "Which sentence says the workshop is canceled if fewer than 20 people register?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Unless = „wenn nicht“: ohne 20 Anmeldungen wird abgesagt.",
+    "en": "Right: sentence a. Unless = “if not”: without 20 sign-ups, it is canceled."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b sagt „if“ das Gegenteil: Der Workshop fällt aus, sobald 20 Leute da sind.",
+     "en": "In b, “if” says the opposite: it is canceled once 20 people register."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: unless dreht die Bedingung um, if nicht.",
+     "en": "Not the same: unless reverses the condition, if does not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-als-k1",
+  "type": "kwt",
+  "pat": "ca.as-long-as",
+  "from": "You can join remotely, but only if you keep your camera on.",
+  "key": "LONG",
+  "frame": "You can join remotely ___ keep your camera on.",
+  "answer": "as long as you",
+  "accepted": [
+   "so long as you",
+   "only as long as you",
+   "only so long as you"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: as long as you keep = „nur wenn“, mit Präsens und ohne will.",
+    "en": "Right: as long as you keep = “only if”, in the present with no will."
+   },
+   "wrong": [
+    {
+     "not": [
+      "long"
+     ],
+     "de": "Das Schlüsselwort long muss stehen: as long as = solange, nur wenn.",
+     "en": "The key word long must appear: as long as = provided that."
+    },
+    {
+     "if": [
+      "long",
+      "will"
+     ],
+     "de": "Nach as long as steht das Präsens („you keep“), kein will.",
+     "en": "After as long as use the present (“you keep”), not will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-als-k2",
+  "type": "kwt",
+  "pat": "ca.as-long-as",
+  "from": "We'll sign the contract only if the payment terms stay unchanged.",
+  "key": "CONDITION",
+  "frame": "We'll sign the contract ___ payment terms stay unchanged.",
+  "answer": "on condition that the",
+  "accepted": [
+   "on the condition that the",
+   "only on condition that the"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: on condition that = „unter der Bedingung, dass“, danach Präsens.",
+    "en": "Right: on condition that = “provided that”, followed by the present."
+   },
+   "wrong": [
+    {
+     "not": [
+      "condition"
+     ],
+     "de": "Das Schlüsselwort condition muss stehen: on condition that + Satz.",
+     "en": "The key word condition must appear: on condition that + clause."
+    },
+    {
+     "if": [
+      "condition"
+     ],
+     "not": [
+      "that"
+     ],
+     "de": "Nach on condition steht that: on condition that + Satz.",
+     "en": "On condition needs that: on condition that + clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-als-f1",
+  "type": "find",
+  "pat": "ca.as-long-as",
+  "prompt": "You can leave early as long as you will finish the report first.",
+  "err": [
+   8,
+   9
+  ],
+  "answer": "finish",
+  "fixed": "You can leave early as long as you finish the report first.",
+  "accepted": [
+   "have finished"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach as long as steht das Präsens („finish“), kein will.",
+    "en": "The error: after as long as use the present (“finish”), not will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach as long as steht kein will.",
+     "en": "There is an error: no will after as long as."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will finish“. Deutsch nutzt hier auch das Präsens.",
+     "en": "The error is “will finish”. German also uses the present here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-als-f2",
+  "type": "find",
+  "pat": "ca.as-long-as",
+  "prompt": "We'll extend the trial as far as the client stays interested.",
+  "err": [
+   4,
+   6
+  ],
+  "answer": "as long as",
+  "fixed": "We'll extend the trial as long as the client stays interested.",
+  "accepted": [
+   "provided that",
+   "provided",
+   "providing that",
+   "providing",
+   "so long as"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „as far as“ = „soweit“. Die Bedingung heißt as long as.",
+    "en": "The error: “as far as” = “to the extent”. The condition is as long as."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: „as far as“ nennt keine Bedingung.",
+     "en": "There is an error: “as far as” does not state a condition."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „as far as“ (= soweit). Gemeint ist „solange“.",
+     "en": "The error is “as far as” (= to the extent). “For as long as” is meant."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-als-f3",
+  "type": "find",
+  "pat": "ca.as-long-as",
+  "prompt": "You can keep the device provided that you return it after the trial.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: provided that + Präsens („you return“) ist richtig.",
+    "en": "No error: provided that + present (“you return”) is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach provided that steht das Präsens, ganz ohne will.",
+     "en": "No error: the present follows provided that, with no will."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-als-m1",
+  "type": "meaning",
+  "pat": "ca.as-long-as",
+  "a": "You can borrow the car as long as you return it by five.",
+  "b": "You can borrow the car even if you don't return it by five.",
+  "q": {
+   "de": "Welcher Satz macht die Rückgabe zur Bedingung?",
+   "en": "Which sentence makes returning the car a condition?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. As long as = „nur wenn“: Die Rückgabe ist die Bedingung.",
+    "en": "Right: sentence a. As long as = “only if”: returning it is the condition."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist die Rückgabe keine Bedingung: Der Wagen ist auch ohne sie erlaubt.",
+     "en": "In b returning it is no condition: you may borrow the car either way."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a verlangt die Rückgabe, b nicht.",
+     "en": "Not the same: a requires the return, b does not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-oth-k1",
+  "type": "kwt",
+  "pat": "ca.otherwise",
+  "from": "Please sign the form today, or we can't process your request.",
+  "key": "OTHERWISE",
+  "frame": "Please sign the form today. ___ process your request.",
+  "answer": "Otherwise, we can't",
+  "accepted": [
+   "Otherwise we can't",
+   "Otherwise, we cannot",
+   "Otherwise we cannot",
+   "Otherwise, we're unable to",
+   "Otherwise we're unable to",
+   "Otherwise, we won't",
+   "Otherwise we won't"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Otherwise, + Hauptsatz = „sonst“, im neuen Satz nach dem Punkt.",
+    "en": "Right: Otherwise, + main clause = “or else”, in the new sentence after the period."
+   },
+   "wrong": [
+    {
+     "not": [
+      "otherwise"
+     ],
+     "de": "Das Schlüsselwort otherwise muss stehen: Es beginnt den neuen Satz.",
+     "en": "The key word otherwise must appear: it starts the new sentence."
+    },
+    {
+     "if": [
+      "otherwise",
+      "if"
+     ],
+     "de": "Otherwise ist kein Nebensatz-Wort wie if. Danach folgt ein Hauptsatz.",
+     "en": "Otherwise is not a clause word like if. A main clause follows it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-oth-k2",
+  "type": "kwt",
+  "pat": "ca.otherwise",
+  "from": "We have to agree on an owner, or the project will stall.",
+  "key": "OTHERWISE",
+  "frame": "We have to agree on an owner. ___ stall.",
+  "answer": "Otherwise, the project will",
+  "accepted": [
+   "Otherwise the project will",
+   "Otherwise, the project would",
+   "Otherwise the project would",
+   "Otherwise, the project could",
+   "Otherwise the project could",
+   "Otherwise, the project may",
+   "Otherwise the project may"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Otherwise, the project will stall = „sonst gerät das Projekt ins Stocken“.",
+    "en": "Right: Otherwise, the project will stall = “or else the project stalls”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "otherwise"
+     ],
+     "de": "Das Schlüsselwort otherwise muss stehen: „sonst“ im neuen Satz.",
+     "en": "The key word otherwise must appear: “or else” in the new sentence."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-oth-f1",
+  "type": "find",
+  "pat": "ca.otherwise",
+  "prompt": "We'll lose the slot otherwise we confirm by Friday.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "unless",
+  "fixed": "We'll lose the slot unless we confirm by Friday.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: otherwise ist kein Bindewort. Für „es sei denn“ passt unless.",
+    "en": "The error: otherwise is not a conjunction. For “unless” use unless."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: otherwise kann keinen Nebensatz einleiten.",
+     "en": "There is an error: otherwise cannot open a subordinate clause."
+    },
+    {
+     "tap": "*",
+     "pat": "ca.unless",
+     "de": "Der Fehler liegt bei „otherwise“ (= sonst, neuer Satz). Hier passt unless.",
+     "en": "The error is “otherwise” (= or else, new sentence). Here unless fits."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-oth-f2",
+  "type": "find",
+  "pat": "ca.otherwise",
+  "prompt": "Please approve the plan today. Otherwise, can we not start on Monday.",
+  "err": [
+   6,
+   8
+  ],
+  "answer": "we can't",
+  "fixed": "Please approve the plan today. Otherwise, we can't start on Monday.",
+  "accepted": [
+   "we cannot",
+   "we can not",
+   "we won't be able to",
+   "we're unable to"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach Otherwise, steht normale Satzstellung: we can't start.",
+    "en": "The error: normal word order follows Otherwise,: we can't start."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach Otherwise, steht Subjekt vor Verb.",
+     "en": "There is an error: after Otherwise, the subject comes before the verb."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „can we not“: Nach „sonst“ steht im Deutschen das Verb vorn.",
+     "en": "The error is “can we not”: German puts the verb first after “sonst”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-oth-m1",
+  "type": "meaning",
+  "pat": "ca.otherwise",
+  "a": "Please confirm by noon. Otherwise, the slot goes to another team.",
+  "b": "Please confirm by noon. Then we'll hold the slot for you.",
+  "q": {
+   "de": "Welcher Satz sagt: Ohne Bestätigung geht der Termin verloren?",
+   "en": "Which sentence says you lose the slot if you do not confirm?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Otherwise = „sonst“: ohne Bestätigung geht der Termin weg.",
+    "en": "Right: sentence a. Otherwise = “or else”: without confirming, the slot goes."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b heißt then „danach“: Es nennt keine Folge ohne die Bestätigung, a schon.",
+     "en": "In b, then means “after that”: it names no consequence of not confirming; a does."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Otherwise nennt die Folge ohne Bestätigung, then die danach.",
+     "en": "Not the same: Otherwise names the result without it, then the result after it."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-buf-k1",
+  "type": "kwt",
+  "pat": "ca.but-for",
+  "from": "The launch would have failed without the extra budget.",
+  "key": "BUT",
+  "frame": "The launch would have failed, ___ the extra budget.",
+  "answer": "but for",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: but for + Nomen (the extra budget) = „ohne“ im Rückblick.",
+    "en": "Right: but for + noun (the extra budget) = “without” in hindsight."
+   },
+   "wrong": [
+    {
+     "if": [
+      "but"
+     ],
+     "not": [
+      "for"
+     ],
+     "de": "„But“ allein heißt „aber, außer“. Für „ohne“ im Rückblick braucht es „but for“.",
+     "en": "“But” alone means “however” or “except”. “Without” in hindsight needs “but for”."
+    },
+    {
+     "not": [
+      "but"
+     ],
+     "de": "Das Schlüsselwort but muss stehen: but for + Nomen.",
+     "en": "The key word but must appear: but for + noun."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-buf-k2",
+  "type": "kwt",
+  "pat": "ca.but-for",
+  "from": "We would never have found the error without the audit.",
+  "key": "BEEN",
+  "frame": "We would never have found the error if it hadn't ___ the audit.",
+  "answer": "been for",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: if it hadn't been for + Nomen = „wäre nicht … gewesen“, ohne die Prüfung.",
+    "en": "Right: if it hadn't been for + noun = “had it not been for”, without the audit."
+   },
+   "wrong": [
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort been muss stehen: if it hadn't been for + Nomen.",
+     "en": "The key word been must appear: if it hadn't been for + noun."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "not": [
+      "for"
+     ],
+     "de": "Nach „been“ braucht es for: if it hadn't been for + Nomen.",
+     "en": "“Been” needs for after it: if it hadn't been for + noun."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-buf-f1",
+  "type": "find",
+  "pat": "ca.but-for",
+  "prompt": "But for the early warning last spring, we would lose the client.",
+  "err": [
+   8,
+   9
+  ],
+  "answer": "would have lost",
+  "fixed": "But for the early warning last spring, we would have lost the client.",
+  "accepted": [
+   "would've lost"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Rückblick braucht would have + Partizip („would have lost“).",
+    "en": "The error: hindsight needs would have + participle (“would have lost”)."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: „last spring“ blickt zurück, also would have + Partizip.",
+     "en": "There is an error: “last spring” looks back, so use would have + participle."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „would lose“: Deutsches „hätten verloren“ braucht would have lost.",
+     "en": "The error is “would lose”: German “hätten verloren” needs would have lost."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-buf-f2",
+  "type": "find",
+  "pat": "ca.but-for",
+  "prompt": "But for the CFO had approved the budget, we couldn't have started.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "CFO's approval of",
+  "fixed": "But for the CFO's approval of the budget, we couldn't have started.",
+  "accepted": [
+   "CFO's approval for"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach but for steht ein Nomen („the CFO's approval“), kein ganzer Satz.",
+    "en": "The error: but for takes a noun (“the CFO's approval”), not a whole clause."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach but for folgt kein Satz mit had approved.",
+     "en": "There is an error: no clause with had approved follows but for."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „had approved“: Nach but for steht ein Nomen, kein Verb.",
+     "en": "The error is “had approved”: a noun follows but for, not a verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-buf-f3",
+  "type": "find",
+  "pat": "ca.but-for",
+  "prompt": "But for the late shipment, we would have hit our target.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: but for + Nomen und would have + Partizip passen zusammen.",
+    "en": "No error: but for + noun and would have + participle fit together."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach but for steht ein Nomen, danach would have + Partizip.",
+     "en": "No error: a noun follows but for, then would have + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-buf-m1",
+  "type": "meaning",
+  "pat": "ca.but-for",
+  "a": "But for the audit, we would have missed the error.",
+  "b": "We missed the error because of the audit.",
+  "q": {
+   "de": "In welchem Satz hat die Prüfung geholfen, den Fehler zu finden?",
+   "en": "In which sentence did the audit help us find the error?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. But for = „ohne“: ohne die Prüfung hätten wir ihn übersehen.",
+    "en": "Right: sentence a. But for = “without”: no audit, and we'd have missed it."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b verursacht die Prüfung das Übersehen (because of). But for meint das Gegenteil.",
+     "en": "In b the audit caused the miss (because of). But for means the opposite."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a lobt die Prüfung, b macht sie zur Ursache des Fehlers.",
+     "en": "Not the same: a credits the audit, b blames it for the miss."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inv-k1",
+  "type": "kwt",
+  "pat": "ca.inversion",
+  "from": "If you should need further details, please contact me.",
+  "key": "SHOULD",
+  "frame": "___ further details, please contact me.",
+  "answer": "Should you need",
+  "accepted": [
+   "Should you require",
+   "Should you want"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Should you + Grundform = „falls Sie … brauchen“, förmlich und ohne if.",
+    "en": "Right: Should you + base verb = “if you should need”, formal with no if."
+   },
+   "wrong": [
+    {
+     "if": [
+      "if"
+     ],
+     "de": "Der Satz mit if ist richtig, aber gefragt ist die förmliche Umstellung ohne if: Should you need.",
+     "en": "The sentence with if is correct, but the formal inversion without if is asked for: Should you need."
+    },
+    {
+     "not": [
+      "should"
+     ],
+     "de": "Das Schlüsselwort should muss stehen: Should you + Grundform.",
+     "en": "The key word should must appear: Should you + base verb."
+    },
+    {
+     "if": [
+      "should",
+      "needs"
+     ],
+     "de": "Nach Should you steht die Grundform: need, ohne -s.",
+     "en": "After Should you use the base form: need, without -s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inv-k2",
+  "type": "kwt",
+  "pat": "ca.inversion",
+  "from": "If we had known about the delay, we would have rescheduled the launch.",
+  "key": "HAD",
+  "frame": "___ about the delay, we would have rescheduled the launch.",
+  "answer": "Had we known",
+  "accepted": [
+   "Had we heard",
+   "Had we learned",
+   "Had we been told",
+   "Had we been informed",
+   "Had we only known",
+   "Had we been notified",
+   "Had we been warned"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Had we + Partizip = „hätten wir gewusst“, unreal und ohne if.",
+    "en": "Right: Had we + participle = “if we had known”, unreal and with no if."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Das Schlüsselwort had muss stehen: Had we + Partizip.",
+     "en": "The key word had must appear: Had we + participle."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Nach Had we steht direkt das Partizip, ohne have.",
+     "en": "After Had we comes the participle directly, with no have."
+    },
+    {
+     "if": [
+      "had",
+      "if"
+     ],
+     "de": "Der Satz mit if ist richtig, aber gefragt ist die Umstellung ohne if: Had we known.",
+     "en": "The sentence with if is correct, but the inversion without if is asked for: Had we known."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inv-f1",
+  "type": "find",
+  "pat": "ca.inversion",
+  "prompt": "Should you will need more time, let me know.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "need",
+  "fixed": "Should you need more time, let me know.",
+  "accepted": [
+   "require"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach Should you steht die Grundform („need“), kein will.",
+    "en": "The error: after Should you use the base form (“need”), not will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach Should you folgt kein will.",
+     "en": "There is an error: no will follows Should you."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will need“: Should steckt schon in der Umstellung.",
+     "en": "The error is “will need”: Should already sits in the inversion."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inv-f2",
+  "type": "find",
+  "pat": "ca.inversion",
+  "prompt": "Were we losing the client, we would restructure the team.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "to lose",
+  "fixed": "Were we to lose the client, we would restructure the team.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Die hypothetische Umstellung heißt Were we to + Verb („to lose“).",
+    "en": "The error: the hypothetical inversion is Were we to + verb (“to lose”)."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach Were we steht to + Verb, nicht -ing.",
+     "en": "There is an error: after Were we comes to + verb, not -ing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „losing“: Die Form ist Were we to lose.",
+     "en": "The error is “losing”: the form is Were we to lose."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inv-f3",
+  "type": "find",
+  "pat": "ca.inversion",
+  "prompt": "Should there be any delay, we will inform you immediately.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Should there be … ersetzt „if there is“, förmlich und korrekt.",
+    "en": "No error: Should there be … replaces “if there is”, formal and correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Nach Should there be steht der Hauptsatz mit will ganz normal.",
+     "en": "No error: the main clause after Should there be can use will as usual."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inv-m1",
+  "type": "meaning",
+  "pat": "ca.inversion",
+  "a": "Had we signed the contract, we would be paying less now.",
+  "b": "Should we sign the contract, we'll pay less.",
+  "q": {
+   "de": "Welcher Satz sagt: Wir haben den Vertrag nicht unterschrieben?",
+   "en": "Which sentence says we did NOT sign the contract?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Had we + Partizip = unreal in der Vergangenheit: nicht unterschrieben.",
+    "en": "Right: sentence a. Had we + participle = unreal past: we did not sign."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b blickt Should we sign nach vorn: Unterschreiben ist noch möglich.",
+     "en": "In b, Should we sign looks ahead: signing is still possible."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a ist unreal und vergangen, b ist möglich und offen.",
+     "en": "Not the same: a is unreal and past, b is possible and open."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inc-k1",
+  "type": "kwt",
+  "pat": "ca.in-case",
+  "from": "I'll take a charger with me because the meeting might run long.",
+  "key": "CASE",
+  "frame": "I'll take a charger with me ___ runs long.",
+  "answer": "in case the meeting",
+  "accepted": [
+   "just in case the meeting",
+   "in case this meeting",
+   "just in case this meeting"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: in case + Präsens = Vorsorge: Ich nehme das Ladegerät vorher mit.",
+    "en": "Right: in case + present = precaution: I take the charger beforehand."
+   },
+   "wrong": [
+    {
+     "if": [
+      "if"
+     ],
+     "de": "„If“ wäre eine Bedingung. Gemeint ist Vorsorge: in case.",
+     "en": "“If” would be a condition. A precaution is meant: in case."
+    },
+    {
+     "not": [
+      "case"
+     ],
+     "de": "Das Schlüsselwort case muss stehen: in case + Satz.",
+     "en": "The key word case must appear: in case + clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inc-k2",
+  "type": "kwt",
+  "pat": "ca.in-case",
+  "from": "Let's send the files now because the server might go down later.",
+  "key": "CASE",
+  "frame": "Let's send the files now ___ goes down later.",
+  "answer": "in case the server",
+  "accepted": [
+   "just in case the server"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: in case the server goes down = „für den Fall, dass der Server ausfällt“.",
+    "en": "Right: in case the server goes down = “just in case the server fails”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "if"
+     ],
+     "de": "„If“ hieße: erst bei Ausfall senden. Das ist keine Vorsorge: in case.",
+     "en": "“If” would mean sending only after the failure. That is no precaution: in case."
+    },
+    {
+     "not": [
+      "case"
+     ],
+     "de": "Das Schlüsselwort case muss stehen: in case + Satz.",
+     "en": "The key word case must appear: in case + clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inc-f1",
+  "type": "find",
+  "pat": "ca.in-case",
+  "prompt": "Bring a spare cable in case the projector will fail.",
+  "err": [
+   8,
+   9
+  ],
+  "answer": "fails.",
+  "fixed": "Bring a spare cable in case the projector fails.",
+  "accepted": [
+   "should fail."
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach in case steht das Präsens („fails“), kein will.",
+    "en": "The error: after in case use the present (“fails”), not will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach in case steht kein will.",
+     "en": "There is an error: no will after in case."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „will fail“: Auch nach „für den Fall, dass“ steht Präsens.",
+     "en": "The error is “will fail”: the present also follows “in case”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inc-f2",
+  "type": "find",
+  "pat": "ca.in-case",
+  "prompt": "We'll refund the deposit in case you cancel within 24 hours.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "if",
+  "fixed": "We'll refund the deposit if you cancel within 24 hours.",
+  "accepted": [
+   "as long as",
+   "provided",
+   "provided that",
+   "providing"
+  ],
+  "why": {
+   "ok": {
+    "de": "Die Rückzahlung folgt erst nach der Absage: if, nicht in case (Verträge, Mails).",
+    "en": "The refund comes only after you cancel: if, not in case (contracts, emails)."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: „in case“ meint Vorsorge, hier gilt eine Bedingung.",
+     "en": "There is an error: “in case” means precaution, but here a condition applies."
+    },
+    {
+     "tap": "*",
+     "pat": "ca.in-case",
+     "de": "Der Fehler liegt bei „in case“: Man zahlt nicht vorab zurück, sondern nur wenn.",
+     "en": "The error is “in case”: you do not refund beforehand, only if it happens."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inc-f3",
+  "type": "find",
+  "pat": "ca.in-case",
+  "prompt": "I'll save the draft twice in case the file gets corrupted.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: in case + Präsens nennt eine Vorsorge: Ich speichere vorher.",
+    "en": "No error: in case + present names a precaution: I save beforehand."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Hier ist in case richtig, denn gespeichert wird vor dem Schaden.",
+     "en": "No error: in case is right here, because saving happens before the damage."
+    }
+   ]
+  }
+ },
+ {
+  "id": "ca-inc-m1",
+  "type": "meaning",
+  "pat": "ca.in-case",
+  "a": "I'll take an umbrella in case it rains.",
+  "b": "I'll take an umbrella if it rains.",
+  "q": {
+   "de": "Welcher Satz sagt: Ich nehme den Schirm mit, bevor ich weiß, ob es regnet?",
+   "en": "Which sentence says you take the umbrella before you know whether it rains?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. In case = Vorsorge: Der Schirm kommt vorher mit.",
+    "en": "Right: sentence a. In case = precaution: the umbrella comes along beforehand."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b gilt „if“ als Bedingung: Der Schirm kommt erst bei Regen ins Spiel.",
+     "en": "In b, “if” is a condition: the umbrella matters only once it rains."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: in case handelt vorher, if erst bei Eintritt.",
+     "en": "Not the same: in case acts beforehand, if only when it happens."
+    }
+   ]
+  }
+ }
+]

@@ -1,0 +1,859 @@
+[
+ {
+  "id": "psp.kwt1",
+  "type": "kwt",
+  "pat": "psp.finished-time",
+  "from": "The last time we talked to the supplier was on Wednesday.",
+  "key": "LAST",
+  "frame": "We ___ the supplier on Wednesday.",
+  "answer": "last talked to",
+  "accepted": [
+   "last spoke to",
+   "last spoke with",
+   "last talked with"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "„on Wednesday“ ist vorbei → Past Simple: last talked to.",
+    "en": "“on Wednesday” is over → Past Simple: last talked to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "pat": "psp.since-for",
+     "de": "Mit „on Wednesday“ steht kein have, sondern Past Simple.",
+     "en": "With “on Wednesday” there is no have, only the Past Simple."
+    },
+    {
+     "not": [
+      "talked",
+      "spoke"
+     ],
+     "de": "Das Verb steht in der 2. Form: last talked to oder last spoke to.",
+     "en": "The verb is in the past form: last talked to or last spoke to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.kwt2",
+  "type": "kwt",
+  "pat": "psp.finished-time",
+  "from": "Please tell me the date of your last visit to the Munich plant.",
+  "key": "WHEN",
+  "frame": "Please tell me ___ the Munich plant.",
+  "answer": "when you last visited",
+  "accepted": [
+   "when you last went to",
+   "when you were last at",
+   "when you last came to"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "„when“ fragt nach einem Zeitpunkt → Past Simple: when you last visited.",
+    "en": "“when” asks for a point in time → Past Simple: when you last visited."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did"
+     ],
+     "de": "In der indirekten Frage steht kein did: when you last visited.",
+     "en": "An indirect question has no did: when you last visited."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Nach „when“ steht der Zeitpunkt, also Past Simple und nicht have.",
+     "en": "After “when” comes a point in time, so Past Simple and not have."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.kwt3",
+  "type": "kwt",
+  "pat": "psp.since-for",
+  "from": "We started using the new tool in January and we still use it.",
+  "key": "BEEN",
+  "frame": "We ___ the new tool since January.",
+  "answer": "have been using",
+  "accepted": [
+   "'ve been using"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "„since January“ und wir nutzen es noch → have been using.",
+    "en": "“since January” + we still use it → have been using."
+   },
+   "wrong": [
+    {
+     "if": [
+      "are",
+      "using"
+     ],
+     "de": "„are using since“ folgt dem Deutschen; since braucht have been using.",
+     "en": "“are using since” follows German; since needs have been using."
+    },
+    {
+     "not": [
+      "been"
+     ],
+     "de": "Das Schlüsselwort BEEN muss vorkommen: have been using.",
+     "en": "The key word BEEN must appear: have been using."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.kwt4",
+  "type": "kwt",
+  "pat": "psp.since-for",
+  "from": "The last time Ms. Park called us was in September.",
+  "key": "SINCE",
+  "frame": "Ms. Park ___ September.",
+  "answer": "hasn't called us since",
+  "accepted": [
+   "has not called us since",
+   "hasn't called since",
+   "has not called since",
+   "hasn't phoned us since",
+   "has not phoned us since",
+   "hasn't contacted us since",
+   "has not contacted us since"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Zeitraum reicht bis jetzt → hasn't called us since.",
+    "en": "The period reaches up to now → hasn't called us since."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did",
+      "not"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„didn't call“ ist abgeschlossen; mit since zählt die Zeit bis jetzt.",
+     "en": "“didn't call” is finished; with since the time runs up to now."
+    },
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "„doesn't call“ ist Präsens; since verlangt hasn't called.",
+     "en": "“doesn't call” is present tense; since needs hasn't called."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.kwt5",
+  "type": "kwt",
+  "pat": "psp.experience",
+  "from": "It is my first time managing a remote team.",
+  "key": "NEVER",
+  "frame": "I ___ a remote team before.",
+  "answer": "have never managed",
+  "accepted": [
+   "'ve never managed",
+   "have never led",
+   "'ve never led"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Erfahrung bis jetzt, ohne dass ein Zeitpunkt zählt → have never managed.",
+    "en": "Experience up to now, no time named → have never managed."
+   },
+   "wrong": [
+    {
+     "if": [
+      "had"
+     ],
+     "de": "„had never managed“ meint eine frühere Zeit; hier zählt jetzt.",
+     "en": "“had never managed” refers to an earlier time; here now counts."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "„Bis jetzt noch nie“ ist have never + 3. Form, nicht das Präsens.",
+     "en": "“Never up to now” needs have never + past participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.kwt6",
+  "type": "kwt",
+  "pat": "psp.experience",
+  "from": "I have never seen a better presentation than this one.",
+  "key": "EVER",
+  "frame": "This is the best presentation ___.",
+  "answer": "I have ever seen",
+  "accepted": [
+   "I've ever seen",
+   "that I have ever seen",
+   "that I've ever seen",
+   "I ever saw",
+   "that I ever saw"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Superlativ mit Erfahrung bis jetzt → I have ever seen.",
+    "en": "Superlative + experience up to now → I have ever seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "ever",
+      "seen"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach dem Superlativ braucht seen ein have: I have ever seen.",
+     "en": "After the superlative, seen needs have: I have ever seen."
+    },
+    {
+     "not": [
+      "ever"
+     ],
+     "de": "Das Schlüsselwort EVER gehört in den Satz: I have ever seen.",
+     "en": "The key word EVER belongs in the sentence: I have ever seen."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.kwt7",
+  "type": "kwt",
+  "pat": "psp.result-now",
+  "from": "Our CEO announced the new strategy only moments before this call.",
+  "key": "JUST",
+  "frame": "The CEO ___ the new strategy.",
+  "answer": "has just announced",
+  "accepted": [
+   "just announced",
+   "'s just announced",
+   "has only just announced"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Ganz neu, ohne dass ein Zeitpunkt zählt → has just announced.",
+    "en": "Brand new, no time named → has just announced."
+   },
+   "wrong": [
+    {
+     "if": [
+      "announce"
+     ],
+     "de": "Es fehlt die Endung: Nach has steht announced.",
+     "en": "The ending is missing: after has comes announced."
+    },
+    {
+     "if": [
+      "is",
+      "announcing"
+     ],
+     "de": "Gemeint ist das Ergebnis, nicht der Ablauf: has just announced.",
+     "en": "The result is meant, not the process: has just announced."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.kwt8",
+  "type": "kwt",
+  "pat": "psp.result-now",
+  "from": "The client has not replied to our offer, and we are waiting for an answer.",
+  "key": "STILL",
+  "frame": "The client ___ to our offer.",
+  "answer": "still hasn't replied",
+  "accepted": [
+   "still has not replied",
+   "has still not replied"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Stand jetzt zählt → still hasn't replied.",
+    "en": "The status now counts → still hasn't replied."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did",
+      "not"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„didn't reply“ erzählt ein Ereignis; hier zählt der Stand jetzt.",
+     "en": "“didn't reply” tells an event; here the status now counts."
+    },
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "„doesn't reply“ ist Präsens; das Ergebnis braucht hasn't replied.",
+     "en": "“doesn't reply” is present tense; the result needs hasn't replied."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.kwt9",
+  "type": "kwt",
+  "pat": "psp.result-now",
+  "from": "You do not need to work on the slides, because marketing finished them earlier.",
+  "key": "ALREADY",
+  "frame": "Marketing ___ the slides.",
+  "answer": "has already finished",
+  "accepted": [
+   "already finished",
+   "'s already finished"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Schon erledigt, die Folge gilt jetzt → has already finished.",
+    "en": "Already done, the consequence holds now → has already finished."
+   },
+   "wrong": [
+    {
+     "if": [
+      "finish"
+     ],
+     "de": "Es fehlt die Endung: Nach has steht finished.",
+     "en": "The ending is missing: after has comes finished."
+    },
+    {
+     "if": [
+      "is",
+      "finishing"
+     ],
+     "de": "Das ist schon fertig; gemeint ist das Ergebnis: has already finished.",
+     "en": "It is already done; the result is meant: has already finished."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find1",
+  "type": "find",
+  "pat": "psp.finished-time",
+  "prompt": "Our legal team has reviewed the contract on Tuesday and sent comments.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "reviewed",
+  "fixed": "Our legal team reviewed the contract on Tuesday and sent comments.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "„on Tuesday“ ist vorbei, daher reviewed statt has reviewed.",
+    "en": "“on Tuesday” is over, so reviewed instead of has reviewed."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Nicht diese Stelle. Die Zeitangabe stimmt, das Verb passt nicht dazu.",
+     "en": "Not this spot. The time expression is fine; the verb does not match it."
+    },
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Zeitangabe und Verbform passen nicht zusammen.",
+     "en": "There is an error: the time expression and the verb form do not match."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "„had reviewed“ braucht einen späteren Bezugspunkt; reviewed ist genug.",
+     "en": "“had reviewed” needs a later point in the past; reviewed is enough."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find2",
+  "type": "find",
+  "pat": "psp.finished-time",
+  "prompt": "We met the vendor in Frankfurt two weeks ago and agreed on a price.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Stimmt: „two weeks ago“ nennt die Zeit, met und agreed passen.",
+    "en": "Correct: “two weeks ago” names the time, and met and agreed fit."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: „two weeks ago“ verlangt Past Simple, und das steht da.",
+     "en": "This is correct: “two weeks ago” needs the Past Simple, and that is what we have."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find3",
+  "type": "find",
+  "pat": "psp.finished-time",
+  "prompt": "Who has opened this ticket at 9 a.m. on Friday?",
+  "err": [
+   1,
+   2
+  ],
+  "answer": "opened",
+  "fixed": "Who opened this ticket at 9 a.m. on Friday?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "„at 9 a.m. on Friday“ ist ein Zeitpunkt → Who opened …?",
+    "en": "“at 9 a.m. on Friday” is a point in time → Who opened …?"
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Nicht diese Stelle. Die Zeitangabe stimmt, das Verb passt nicht dazu.",
+     "en": "Not this spot. The time expression is fine; the verb does not match it."
+    },
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Uhrzeit passt nicht zur Verbform.",
+     "en": "There is an error: the clock time does not match the verb form."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "de": "Bei „who“ als Subjekt steht kein did: Who opened …?",
+     "en": "When “who” is the subject, there is no did: Who opened …?"
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find4",
+  "type": "find",
+  "pat": "psp.since-for",
+  "prompt": "Our regional manager is with the company for eight years now.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "has been",
+  "fixed": "Our regional manager has been with the company for eight years now.",
+  "accepted": [
+   "has been working",
+   "has worked"
+  ],
+  "why": {
+   "ok": {
+    "de": "„for eight years now“ reicht bis jetzt, das ist has been.",
+    "en": "“for eight years now” reaches up to now → has been."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Prüfe das Verb vor „with“.",
+     "en": "That is not the error. Check the verb before “with”."
+    },
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Das Verb passt nicht zu „for eight years“.",
+     "en": "There is an error: the verb does not fit “for eight years”."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„was“ hieße: vorbei. Er ist aber noch dabei.",
+     "en": "“was” would mean over, but he is still with the company."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find5",
+  "type": "find",
+  "pat": "psp.since-for",
+  "prompt": "How long do you know our new client?",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "have you known",
+  "fixed": "How long have you known our new client?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "„How long“ fragt nach der Zeit bis jetzt → have you known (Zustandsverb, kein -ing).",
+    "en": "“How long” asks about the time up to now → have you known (stative verb, no -ing)."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Prüfe die Verbform nach „How long“.",
+     "en": "That is not the error. Check the verb form after “How long”."
+    },
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: „How long“ braucht eine andere Zeitform.",
+     "en": "There is an error: “How long” needs a different tense."
+    },
+    {
+     "if": [
+      "did"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„did you know“ fragt nach einer vergangenen Zeit; gemeint ist bis jetzt.",
+     "en": "“did you know” asks about a past time; up to now is meant."
+    },
+    {
+     "if": [
+      "knowing"
+     ],
+     "de": "Zustandsverben wie know stehen nicht in der -ing-Form: have you known.",
+     "en": "Stative verbs like know take no -ing form: have you known."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find6",
+  "type": "find",
+  "pat": "psp.experience",
+  "prompt": "It is the second time this month that we lose a major client.",
+  "err": [
+   9,
+   9
+  ],
+  "answer": "have lost",
+  "fixed": "It is the second time this month that we have lost a major client.",
+  "accepted": [
+   "'ve lost"
+  ],
+  "why": {
+   "ok": {
+    "de": "Nach „the second time“ zählt die Erfahrung bis jetzt → have lost.",
+    "en": "After “the second time” the experience up to now counts → have lost."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Prüfe das Verb nach „we“.",
+     "en": "That is not the error. Check the verb after “we”."
+    },
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Das Verb passt nicht zu „the second time“.",
+     "en": "There is an error: the verb does not fit “the second time”."
+    },
+    {
+     "if": [
+      "lost"
+     ],
+     "not": [
+      "have"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„lost“ allein erzählt ein Ereignis; nach „the second time“ steht have lost.",
+     "en": "“lost” alone tells an event; after “the second time” use have lost."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find7",
+  "type": "find",
+  "pat": "psp.experience",
+  "prompt": "We had three data breaches so far this year.",
+  "err": [
+   1,
+   1
+  ],
+  "answer": "have had",
+  "fixed": "We have had three data breaches so far this year.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "„so far this year“ zählt bis jetzt, das ist have had.",
+    "en": "“so far this year” counts up to now → have had."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Prüfe das Verb direkt nach „We“.",
+     "en": "That is not the error. Check the verb right after “We”."
+    },
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Zur Zählung bis jetzt passt die Verbform nicht.",
+     "en": "There is an error: the verb form does not fit a count up to now."
+    },
+    {
+     "if": [
+      "has"
+     ],
+     "de": "Zu „We“ gehört have, nicht has: We have had.",
+     "en": "“We” goes with have, not has: We have had."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find8",
+  "type": "find",
+  "pat": "psp.result-now",
+  "prompt": "I haven't sent the invoice already, because Legal is still checking it.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "yet,",
+  "fixed": "I haven't sent the invoice yet, because Legal is still checking it.",
+  "accepted": [
+   "yet"
+  ],
+  "why": {
+   "ok": {
+    "de": "„noch nicht“ heißt haven't … yet; already passt hier nicht.",
+    "en": "“noch nicht” is haven't … yet; already does not fit here."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Das ist nicht die Fehlerstelle. Prüfe das Wort für „noch nicht“.",
+     "en": "That is not the error. Check the word for “not yet”."
+    },
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Ein Wort passt nicht zur Verneinung.",
+     "en": "There is an error: one word does not fit the negative."
+    },
+    {
+     "if": [
+      "already"
+     ],
+     "de": "In der Verneinung heißt „noch nicht“ yet, nicht already.",
+     "en": "In a negative, “not yet” is yet, not already."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.find9",
+  "type": "find",
+  "pat": "psp.result-now",
+  "prompt": "The board has approved the revised budget, so we can start hiring.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Stimmt: Das Ergebnis zählt jetzt, ohne Zeitpunkt → has approved.",
+    "en": "Correct: the result counts now, with no time named → has approved."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist alles richtig: Das Ergebnis zählt jetzt, ein Zeitpunkt fehlt.",
+     "en": "This is correct: the result counts now, and no time is named."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.mean1",
+  "type": "meaning",
+  "pat": "psp.finished-time",
+  "a": "I read the report on Friday.",
+  "b": "I have read the report.",
+  "q": {
+   "de": "Welcher Satz nennt einen bestimmten, abgeschlossenen Zeitpunkt?",
+   "en": "Which sentence names a specific finished time?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "„on Friday“ nennt die Zeit, deshalb Past Simple.",
+    "en": "“on Friday” names the time, so the Past Simple."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "Satz b nennt keinen Zeitpunkt; er sagt nur, dass der Bericht gelesen ist.",
+     "en": "Sentence b names no time; it only says the report has been read."
+    },
+    {
+     "opt": "both",
+     "de": "Nur Satz a nennt einen Zeitpunkt; Satz b lässt ihn offen.",
+     "en": "Only sentence a names a time; sentence b leaves it open."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.mean2",
+  "type": "meaning",
+  "pat": "psp.since-for",
+  "a": "I have lived in Hamburg for six years.",
+  "b": "I lived in Hamburg for six years.",
+  "q": {
+   "de": "Welcher Satz legt nahe, dass der Sprecher jetzt in Hamburg wohnt?",
+   "en": "Which sentence suggests the speaker lives in Hamburg now?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "have lived … for: Die Zeit reicht bis jetzt, ich wohne noch dort.",
+    "en": "have lived … for: the time reaches now, I still live there."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "lived … for erzählt eine abgeschlossene Zeit; ich wohne nicht mehr dort.",
+     "en": "lived … for tells a finished period; I no longer live there."
+    },
+    {
+     "opt": "both",
+     "de": "Die Sätze meinen nicht dasselbe: Nur Satz a läuft bis jetzt.",
+     "en": "The sentences do not mean the same: only sentence a runs up to now."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.mean3",
+  "type": "meaning",
+  "pat": "psp.experience",
+  "a": "How many deals have you closed this year?",
+  "b": "How many deals did you close last year?",
+  "q": {
+   "de": "In welcher Frage kann die Zahl noch steigen?",
+   "en": "In which question can the number still grow?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "„this year“ läuft noch: Die Zählung bis jetzt ist offen.",
+    "en": "“this year” is still running: the count up to now is open."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "„last year“ ist vorbei, die Zahl steht fest.",
+     "en": "“last year” is over, so the number is fixed."
+    },
+    {
+     "opt": "both",
+     "de": "Nur in Satz a ist der Zeitraum offen.",
+     "en": "Only in sentence a is the time period still open."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.mean4",
+  "type": "meaning",
+  "pat": "psp.result-now",
+  "a": "The server crashed at 9:15.",
+  "b": "The server has crashed.",
+  "q": {
+   "de": "Welcher Satz sagt, dass das System jetzt vermutlich ausgefallen ist?",
+   "en": "Which sentence suggests the system is probably down right now?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "has crashed ohne Zeitpunkt: Das Ergebnis gilt jetzt.",
+    "en": "has crashed with no time: the result holds now."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "pat": "psp.finished-time",
+     "de": "Satz a erzählt nur das Ereignis um 9:15; ob es jetzt läuft, bleibt offen.",
+     "en": "Sentence a only tells the event at 9:15; whether it runs now stays open."
+    },
+    {
+     "opt": "both",
+     "de": "Nur Satz b stellt das Ergebnis jetzt in den Vordergrund.",
+     "en": "Only sentence b puts the result now in the foreground."
+    }
+   ]
+  }
+ },
+ {
+  "id": "psp.mean5",
+  "type": "meaning",
+  "pat": "psp.result-now",
+  "a": "Prices have gone up recently.",
+  "b": "Prices went up in January.",
+  "q": {
+   "de": "Welcher Satz zeigt die Änderung als aktuelle Entwicklung, ohne Zeitpunkt?",
+   "en": "Which sentence presents the change as a current development, with no time named?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "recently nennt keinen Zeitpunkt: Die Neuigkeit gilt jetzt.",
+    "en": "recently names no point in time: the news holds now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "psp.finished-time",
+     "de": "„in January“ ist ein genannter Zeitpunkt: Das Ereignis wird erzählt.",
+     "en": "“in January” is a named time: the event is being told."
+    },
+    {
+     "opt": "both",
+     "de": "Nur Satz a lässt den Zeitpunkt offen; Satz b nennt ihn.",
+     "en": "Only sentence a leaves the time open; sentence b names it."
+    }
+   ]
+  }
+ }
+]

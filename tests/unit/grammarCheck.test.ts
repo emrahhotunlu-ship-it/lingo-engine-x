@@ -80,10 +80,13 @@ describe('Regelwerk und Hilfen', () => {
   });
 
   it('2–3 Beispiele ohne den Aufgabensatz', () => {
-    const ex = examplesFor('passive', { exclude: 'The contract has been signed.' });
+    // Beispiele kommen nur aus dem Muster der Aufgabe (Lernplattform 2.0 §3.3); ohne Muster kommt nichts.
+    const first = examplesFor('mixed-cond', { pattern: 'mc.wish-past' })[0]!;
+    const ex = examplesFor('mixed-cond', { pattern: 'mc.wish-past', exclude: first });
     expect(ex.length).toBeGreaterThanOrEqual(2);
     expect(ex.length).toBeLessThanOrEqual(3);
-    expect(ex).not.toContain('The contract has been signed.');
+    expect(ex).not.toContain(first);
+    expect(examplesFor('passive', {})).toEqual([]);
   });
 
   it('Auch richtig: accepted und Hinweise', () => {

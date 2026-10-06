@@ -1,0 +1,158 @@
+[
+ {
+  "en": "If we had hired a QA lead earlier, we would have fewer bugs now.",
+  "de": "Hätten wir früher einen QA-Leiter eingestellt, hätten wir jetzt weniger Fehler.",
+  "chunks": [
+   "if we",
+   "had hired",
+   "a QA lead earlier",
+   "we",
+   "would have",
+   "fewer bugs now"
+  ],
+  "alt": [
+   "We would have fewer bugs now if we had hired a QA lead earlier."
+  ],
+  "why": [
+   "Die Ursache liegt früher (had hired), die Folge gilt jetzt (would have + Grundform). Im if-Teil steht nie would.",
+   "The cause lies earlier (had hired), the result holds now (would have + base form). The if-clause never takes would."
+  ],
+  "bad": "If we would have hired a QA lead earlier, we would have fewer bugs now.",
+  "pat": "mc.past-cond",
+  "trap": {
+   "tile": "had hired",
+   "instead": "would have hired",
+   "why": {
+    "de": "Der würde-Reflex setzt would in den if-Teil; dort steht had + 3. Form.",
+    "en": "The würde reflex puts would into the if-clause; it needs had + participle."
+   }
+  }
+ },
+ {
+  "en": "If our process were simpler, we would have won more bids last year.",
+  "de": "Wäre unser Prozess einfacher, hätten wir letztes Jahr mehr Ausschreibungen gewonnen.",
+  "chunks": [
+   "if our process",
+   "were",
+   "simpler",
+   "we",
+   "would have won",
+   "more bids last year"
+  ],
+  "alt": [
+   "We would have won more bids last year if our process were simpler."
+  ],
+  "why": [
+   "Der Zustand gilt jetzt (were), die Folge liegt früher (would have won). Deshalb ist die Folge hier ein Perfekt-Baustein.",
+   "The state holds now (were), the result lies earlier (would have won). That is why the result is a perfect-form chunk here."
+  ],
+  "bad": "If our process would be simpler, we would have won more bids last year.",
+  "pat": "mc.present-cond",
+  "trap": {
+   "tile": "would have won",
+   "instead": "would win",
+   "why": {
+    "de": "Die Folge liegt in der Vergangenheit (last year): would have + 3. Form, nicht would + Grundform.",
+    "en": "The result lies in the past (last year): would have + participle, not would + base form."
+   }
+  }
+ },
+ {
+  "en": "I wish our CRM were faster during peak hours.",
+  "de": "Ich wünschte, unser CRM wäre zu Stoßzeiten schneller.",
+  "chunks": [
+   "I wish",
+   "our CRM",
+   "were",
+   "faster",
+   "during peak hours"
+  ],
+  "why": [
+   "Ein Wunsch über jetzt: wish + Past, bei be meist were. would be wäre hier der Ärger-Fall und passt nicht.",
+   "A wish about now: wish + past, usually were for be. would be would be the annoyance pattern and does not fit."
+  ],
+  "bad": "I wish our CRM would be faster during peak hours.",
+  "pat": "mc.wish-now",
+  "trap": {
+   "tile": "were",
+   "instead": "would be",
+   "why": {
+    "de": "Ein Zustand jetzt braucht wish + Past (were). would be wünscht anderes Verhalten.",
+    "en": "A state now needs wish + past (were). would be wishes for other behavior."
+   }
+  },
+  "alt": [
+   "During peak hours I wish our CRM were faster."
+  ]
+ },
+ {
+  "en": "I wish we had told the client about the delay sooner.",
+  "de": "Ich wünschte, wir hätten dem Kunden früher von der Verzögerung erzählt.",
+  "chunks": [
+   "I wish",
+   "we",
+   "had told",
+   "the client",
+   "about the delay sooner"
+  ],
+  "single": "Nach had told folgen zuerst der Empfänger, dann das Thema mit dem Zeitzusatz; eine andere Reihenfolge klingt unnatürlich.",
+  "why": [
+   "Bedauern über früher: wish + had + 3. Form. Zwei Stufen zurück, nicht would have wie im Deutschen „hätte“.",
+   "Regret about earlier: wish + had + participle. Two steps back, not would have as with German hätte."
+  ],
+  "bad": "I wish we would have told the client about the delay sooner.",
+  "pat": "mc.wish-past"
+ },
+ {
+  "en": "I wish the vendor would stop changing the requirements.",
+  "de": "Ich wünschte, der Anbieter würde aufhören, die Anforderungen zu ändern.",
+  "chunks": [
+   "I wish",
+   "the vendor",
+   "would stop",
+   "changing",
+   "the requirements"
+  ],
+  "single": "Das Verhalten des Anbieters steht direkt nach wish, danach folgt would stop mit dem Gerundium und dem Objekt.",
+  "why": [
+   "Ärger über das Verhalten anderer, das sich ändern soll: wish + would. Nach wish steht nie will.",
+   "Annoyance at others' behavior that should change: wish + would. After wish, never use will."
+  ],
+  "bad": "I wish the vendor will stop changing the requirements.",
+  "pat": "mc.wish-would",
+  "trap": {
+   "tile": "would stop",
+   "instead": "will stop",
+   "why": {
+    "de": "Deutsch „ich wünsche, dass er aufhört“ klingt nach Zukunft. Nach wish steht would, nie will.",
+    "en": "German „ich wünsche, dass er aufhört“ sounds like the future. After wish use would, never will."
+   }
+  }
+ },
+ {
+  "en": "It's high time we replaced the old ticketing system.",
+  "de": "Es ist höchste Zeit, dass wir das alte Ticketsystem ersetzen.",
+  "chunks": [
+   "it's",
+   "high time",
+   "we",
+   "replaced",
+   "the old ticketing system"
+  ],
+  "single": "It's high time ist ein fester Rahmen: Danach folgen Subjekt, Past-Verb und Objekt in genau dieser Reihenfolge.",
+  "why": [
+   "Nach It's high time steht das Past Simple (replaced), obwohl es um jetzt geht: überfällig, jetzt handeln.",
+   "After It's high time comes the past simple (replaced), even though it is about now: overdue, act now."
+  ],
+  "bad": "It's high time we replace the old ticketing system.",
+  "pat": "mc.high-time",
+  "trap": {
+   "tile": "replaced",
+   "instead": "replace",
+   "why": {
+    "de": "Deutsch „dass wir ersetzen“ steht im Präsens. Nach high time steht aber die Past-Form.",
+    "en": "German „dass wir ersetzen“ is present. After high time, English needs the past form."
+   }
+  }
+ }
+]

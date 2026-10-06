@@ -23,10 +23,10 @@ describe('Fehler-Boxen 1/3/9 (D1)', () => {
     expect(list[0]!.box).toBe(3);
   });
 
-  it('E-02: falsch in Box 2 → zurück auf Box 0, fällig morgen, neue Antwort gemerkt', () => {
+  it('E-02: falsch in Box 2 → eine Box zurück (Box 1), fällig morgen, neue Antwort gemerkt', () => {
     const list: ErrorEntry[] = [{ q: 'q', given: 'x', ans: 'y', t: t0, box: 2, due: t0, done: false }];
     const out = reviewError(list, t0, { ok: false, given: 'z', grade: 1, t: t0 + 5 })!;
-    expect(out[0]).toMatchObject({ box: 0, done: false, due: t0 + 5 + DAY, given: 'z', last: t0 + 5 });
+    expect(out[0]).toMatchObject({ box: 1, done: false, due: t0 + 5 + DAY, given: 'z', last: t0 + 5, rh: [[t0 + 5, 2, 0]] });
     // Dieselbe Antwort noch einmal angewendet: nichts.
     expect(reviewError(out, t0, { ok: false, given: 'z', grade: 1, t: t0 + 5 })).toBeNull();
   });

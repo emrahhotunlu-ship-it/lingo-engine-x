@@ -1,0 +1,608 @@
+{
+ "I wish I ___ speak Spanish.": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "wish + Fähigkeit jetzt: can wird zu could.",
+    "en": "wish + ability now: can becomes could."
+   },
+   "wrong": [
+    {
+     "opt": "can",
+     "de": "can bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "can stays present; after wish the verb moves one step back."
+    },
+    {
+     "opt": "would",
+     "pat": "mc.wish-would",
+     "de": "would drückt Ärger über andere aus, nicht die eigene Fähigkeit.",
+     "en": "would voices annoyance at others, not your own ability."
+    },
+    {
+     "opt": "will",
+     "de": "will steht nie nach wish; gebraucht wird eine Past-Form.",
+     "en": "will is never used after wish; a past form is needed."
+    }
+   ]
+  }
+ },
+ "I wish I ___ that yesterday.": {
+  "pat": "mc.wish-past",
+  "why": {
+   "ok": {
+    "de": "yesterday ist vorbei: Bedauern → wish + had + 3. Form.",
+    "en": "yesterday is over: regret → wish + had + participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "wish + would betrifft das Verhalten anderer; für früher braucht wish had + 3. Form.",
+     "en": "wish + would is for others' behavior; for earlier, wish needs had + participle."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "pat": "mc.wish-now",
+     "de": "Past Simple würde nur eine Tatsache melden; yesterday verlangt had + 3. Form.",
+     "en": "simple past only reports a fact; yesterday calls for had + participle."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Du bereust, es gesagt zu haben: Die Verneinung fehlt, also hadn't said.",
+     "en": "you regret having said it: the negative is missing, so hadn't said."
+    }
+   ]
+  }
+ },
+ "If I had taken that job, I ___ in Berlin now.": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "had taken (früher) + now: Folge jetzt → would + Grundform.",
+    "en": "had taken (earlier) + now → would + base form."
+   },
+   "wrong": [
+    {
+     "opt": "would have lived",
+     "de": "would have lived meint damals; now verlangt die Folge für jetzt.",
+     "en": "would have lived means back then; now needs the result for the present."
+    },
+    {
+     "opt": "will live",
+     "de": "will gehört zu realen Bedingungen; hier ist die Bedingung vorbei.",
+     "en": "will belongs to real conditions; here the condition is over."
+    },
+    {
+     "opt": "lived",
+     "de": "lived ist Past Simple: die unreale Folge braucht would.",
+     "en": "lived is simple past: the unreal result needs would."
+    }
+   ]
+  }
+ },
+ "It's high time we ___ a new CRM system.": {
+  "pat": "mc.high-time",
+  "why": {
+   "ok": {
+    "de": "It's high time + Past Simple: bought, auch wenn es um jetzt geht.",
+    "en": "It's high time + past simple: bought, even though it is about now."
+   },
+   "wrong": [
+    {
+     "opt": "buy",
+     "de": "Präsens ist die deutsche Form („dass wir kaufen“); hier steht Past.",
+     "en": "present is the German pattern (“dass wir kaufen”); English takes past."
+    },
+    {
+     "opt": "would buy",
+     "de": "would buy nennt eine mögliche Handlung; nach high time steht reines Past.",
+     "en": "would buy names a possible action; after high time use plain past."
+    },
+    {
+     "opt": "have bought",
+     "de": "have bought blickt auf Erledigtes zurück; gemeint ist: jetzt handeln.",
+     "en": "have bought looks back at something done; the point is to act now."
+    }
+   ]
+  }
+ },
+ "I wish the client ___ us the data last week.": {
+  "pat": "mc.wish-past",
+  "why": {
+   "ok": {
+    "de": "last week + Bedauern → für früher: wish + had + 3. Form (had sent).",
+    "en": "last week + regret → wish + had + participle: had sent."
+   },
+   "wrong": [
+    {
+     "opt": "has sent",
+     "de": "has sent steht nie nach wish; es braucht had + 3. Form.",
+     "en": "has sent is never used after wish; it needs had + participle."
+    },
+    {
+     "opt": "sent",
+     "pat": "mc.wish-now",
+     "de": "sent wäre ein Wunsch über jetzt; last week ist vorbei.",
+     "en": "sent would be a wish about now; last week is over."
+    },
+    {
+     "opt": "would send",
+     "pat": "mc.wish-would",
+     "de": "would send fordert künftiges Verhalten; last week ist vorbei.",
+     "en": "would send asks for future behavior; last week is over."
+    }
+   ]
+  }
+ },
+ "You keep interrupting me in meetings! I wish you ___.": {
+  "pat": "mc.wish-would",
+  "why": {
+   "ok": {
+    "de": "You keep interrupting: Ärger über Verhalten, das enden soll → would stop.",
+    "en": "You keep interrupting: annoyance at behavior that should end → would stop."
+   },
+   "wrong": [
+    {
+     "opt": "will stop",
+     "de": "will steht nie nach wish; dieser Ärger braucht would.",
+     "en": "will is never used after wish; this annoyance needs would."
+    },
+    {
+     "opt": "stop",
+     "de": "Das Präsens stop geht nach wish nicht; hier passt would stop.",
+     "en": "present stop does not work after wish; would stop fits here."
+    },
+    {
+     "opt": "had stopped",
+     "pat": "mc.wish-past",
+     "de": "had stopped bedauert etwas Vergangenes; die Unterbrechungen laufen noch.",
+     "en": "had stopped regrets something past; the interrupting is still going on."
+    }
+   ]
+  }
+ },
+ "If we ___ the discount last quarter, we wouldn't be struggling with margins now.": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "last quarter (früher) + now (die Folge jetzt): if + had + 3. Form.",
+    "en": "last quarter (earlier) + now (result now): if + had + participle."
+   },
+   "wrong": [
+    {
+     "opt": "didn't offer",
+     "de": "didn't offer ist Past Simple; last quarter verlangt had + 3. Form.",
+     "en": "didn't offer is simple past; last quarter needs had + participle."
+    },
+    {
+     "opt": "haven't offered",
+     "de": "haven't offered ist Present Perfect; eine unreale Bedingung früher braucht had.",
+     "en": "haven't offered is present perfect; an unreal past condition needs had."
+    },
+    {
+     "opt": "wouldn't have offered",
+     "de": "would steht nicht im if-Teil; dort gehört had + 3. Form hin.",
+     "en": "would does not belong in the if-clause; it takes had + participle."
+    }
+   ]
+  }
+ },
+ "If she hadn't accepted the offer from Google, she ___ for us today.": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "hadn't accepted (früher) + today: die Folge gilt jetzt → would + Grundform.",
+    "en": "hadn't accepted (earlier) + today: result now → would + base form."
+   },
+   "wrong": [
+    {
+     "opt": "would have worked",
+     "de": "would have worked meint damals; today verlangt die Folge für jetzt.",
+     "en": "would have worked means back then; today needs the result for now."
+    },
+    {
+     "opt": "worked",
+     "de": "worked ohne would nennt eine Tatsache; die unreale Folge braucht would.",
+     "en": "worked without would states a fact; the unreal result needs would."
+    },
+    {
+     "opt": "will work",
+     "de": "will gehört zu realen Bedingungen; hier geht es um etwas Unwirkliches.",
+     "en": "will belongs to real conditions; this is about something unreal."
+    }
+   ]
+  }
+ },
+ "It's 9 p.m. and I'm still at the office. I wish I ___ at home.": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "still at the office = jetzt: wish + Past, bei be were.",
+    "en": "still at the office = now: wish + past, were for be."
+   },
+   "wrong": [
+    {
+     "opt": "had been",
+     "pat": "mc.wish-past",
+     "de": "had been bedauert etwas von früher; hier geht es um den Abend jetzt.",
+     "en": "had been regrets something earlier; this is about tonight."
+    },
+    {
+     "opt": "would be",
+     "pat": "mc.wish-would",
+     "de": "would be passt nicht zum eigenen Wunsch; hier braucht es die Past-Form were.",
+     "en": "would be does not fit your own wish; it needs the past form were."
+    },
+    {
+     "opt": "am",
+     "de": "am bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "am stays present; after wish the verb moves one step back."
+    }
+   ]
+  }
+ },
+ "If only we ___ the security warning earlier!": {
+  "pat": "mc.wish-past",
+  "why": {
+   "ok": {
+    "de": "If only + earlier: Bedauern für früher → had + 3. Form.",
+    "en": "If only + earlier: regret about the past → had + participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would read wünscht künftiges Verhalten; earlier ist vorbei.",
+     "en": "would read wishes for future behavior; earlier is over."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "pat": "mc.wish-now",
+     "de": "Past Simple read bleibt bei jetzt; für früher braucht If only had read.",
+     "en": "simple past read stays at now; for earlier, if only needs had read."
+    }
+   ]
+  }
+ },
+ "I wish I ___ speak better Spanish; my clients in Madrid would love it.": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "wish + can → could: ein Wunsch über jetzt, eine Fähigkeit.",
+    "en": "wish + can → could: a wish about now, an ability."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "can bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "can stays present; after wish the verb moves one step back."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would drückt Ärger über andere aus; für die eigene Fähigkeit gilt could.",
+     "en": "would voices annoyance at others; for your own ability use could."
+    },
+    {
+     "not": [
+      "could"
+     ],
+     "de": "Nach wish braucht die Fähigkeit eine Past-Form: can wird zu could.",
+     "en": "after wish an ability takes a past form: can becomes could."
+    }
+   ]
+  }
+ },
+ "If I ___ the advice of my mentor back then, I wouldn't be in this situation now.": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "back then + now: if + had + 3. Form, dann wouldn't be.",
+    "en": "back then + now: if + had + participle, then wouldn't be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil: dort steht had + 3. Form.",
+     "en": "would does not belong in the if-clause: it takes had + participle."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Der if-Teil braucht had + 3. Form, weil back then vorbei ist.",
+     "en": "the if-clause needs had + participle because back then is over."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "taken"
+     ],
+     "de": "Nach had steht die 3. Form: taken, nicht took.",
+     "en": "after had comes the participle: taken, not took."
+    }
+   ]
+  }
+ },
+ "If our developer hadn't left last month, the app ___ ready by now.": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "hadn't left (früher) + by now: die Folge jetzt → would be.",
+    "en": "hadn't left (earlier) + by now: result now → would be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will passt zu realen Bedingungen; der Entwickler ist schon gegangen.",
+     "en": "will fits real conditions; the developer has already left."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "would"
+     ],
+     "de": "had been blickt zurück; by now meint die Folge für jetzt: would be.",
+     "en": "had been looks back; by now means the result for now: would be."
+    },
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Die unreale Folge braucht would + Grundform.",
+     "en": "the unreal result needs would + base form."
+    }
+   ]
+  }
+ },
+ "I wish it ___ so cold today; I hate winter.": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "today + I hate winter: ein Wunsch für jetzt → wish + Past (weren't).",
+    "en": "today + I hate winter: wish about now → wish + past (weren't)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is",
+      "not"
+     ],
+     "de": "isn't bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "isn't stays present; after wish the verb moves one step back."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "pat": "mc.wish-past",
+     "de": "had + 3. Form bedauert früher; hier geht es nur um today.",
+     "en": "had + participle regrets earlier; this is about today."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "wouldn't passt hier nicht: ein Zustand heute braucht wish + Past (weren't).",
+     "en": "wouldn't does not fit: a state today needs wish + past (weren't)."
+    }
+   ]
+  }
+ },
+ "I regret that I didn't ask for a discount. → I wish I ___ for a discount.": {
+  "pat": "mc.wish-past",
+  "why": {
+   "ok": {
+    "de": "regret + didn't ask (früher) → für früher: wish + had + 3. Form (had asked).",
+    "en": "regret + didn't ask (earlier) → wish + had + participle: had asked."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Das Bedauern gilt dem Nicht-Fragen: wish + had asked, ohne not.",
+     "en": "the regret is about not asking: wish + had asked, without not."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would ask wünscht künftiges Verhalten; die Chance ist vorbei.",
+     "en": "would ask wishes for future behavior; the chance is gone."
+    },
+    {
+     "if": [
+      "asked"
+     ],
+     "not": [
+      "had"
+     ],
+     "pat": "mc.wish-now",
+     "de": "asked allein ist Past Simple; Bedauern über früher braucht had asked.",
+     "en": "asked alone is simple past; regret about earlier needs had asked."
+    }
+   ]
+  }
+ },
+ "We lost the client last year, so we are short of revenue now. → If we ___ the client last year, we wouldn't be short of revenue now.": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "last year (früher) + now: if + had + 3. Form, wouldn't be (die Folge jetzt).",
+    "en": "last year (earlier) + now: if + had + participle, wouldn't be (result now)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil: dort steht had + 3. Form.",
+     "en": "would does not belong in the if-clause: it takes had + participle."
+    },
+    {
+     "if": [
+      "lost"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "lost allein ist Past Simple; für früher braucht der if-Teil had + 3. Form.",
+     "en": "lost alone is simple past; for earlier the if-clause needs had + participle."
+    },
+    {
+     "if": [
+      "had",
+      "lost"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Die Bedingung dreht die Tatsache um: Wir verloren ihn, also hadn't lost.",
+     "en": "the condition reverses the fact: we did lose the client, so use hadn't lost."
+    }
+   ]
+  }
+ },
+ "I wish I would have more time for my family.": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "Wunsch über jetzt: wish + Past (had), nicht would have.",
+    "en": "wish about now: wish + past (had), not would have."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "Für den eigenen Wunsch über jetzt gibt es wish + would nicht; es heißt had.",
+     "en": "for your own wish about now there is no wish + would; use had."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "have ist Präsens; nach wish rückt die Form eine Stufe zurück: had.",
+     "en": "have is present; after wish the verb moves one step back: had."
+    }
+   ]
+  }
+ },
+ "If I would have studied harder at university, I would have a better job now.": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "had studied (früher), would have (jetzt): Folge gilt jetzt.",
+    "en": "had studied (earlier), would have (now): result now."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Im if-Teil steht had + 3. Form, nie would.",
+     "en": "The if-clause takes had + participle, never would."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "studied"
+     ],
+     "de": "Nach had steht die 3. Form: studied.",
+     "en": "after had comes the participle: studied."
+    }
+   ]
+  }
+ },
+ "If I would have studied harder, I would have a better job now.": {
+  "pat": "mc.past-cond",
+  "dup": "If I would have studied harder at university, I would have a better job now.",
+  "why": {
+   "ok": {
+    "de": "had studied (früher), would have (jetzt): Folge gilt jetzt.",
+    "en": "had studied (earlier), would have (now): result now."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Im if-Teil steht had + 3. Form, nie would.",
+     "en": "The if-clause takes had + participle, never would."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "studied"
+     ],
+     "de": "Nach had steht die 3. Form: studied.",
+     "en": "after had comes the participle: studied."
+    }
+   ]
+  }
+ },
+ "I wish I have more free time.": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "Wunsch über jetzt: wish + Past (had), nicht das Präsens.",
+    "en": "wish about now: wish + past (had), not the present."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "wish + would passt nicht zum eigenen Wunsch über jetzt; es heißt had.",
+     "en": "wish + would does not fit your own wish about now; use had."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "have ist Präsens; nach wish rückt die Form eine Stufe zurück: had.",
+     "en": "have is present; after wish the verb moves one step back: had."
+    }
+   ]
+  }
+ }
+}

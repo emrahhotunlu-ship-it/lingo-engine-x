@@ -1,0 +1,514 @@
+{
+ "topic": "mixed-cond",
+ "canDo": {
+  "de": "Ich kann Bedauern, Wünsche und die heutigen Folgen früherer Entscheidungen im Business-Englisch genau ausdrücken.",
+  "en": "I can express regret, wishes, and today's results of earlier decisions precisely in business English."
+ },
+ "order": [
+  "mc.past-cond",
+  "mc.wish-now",
+  "mc.wish-past",
+  "mc.wish-would",
+  "mc.present-cond",
+  "mc.high-time"
+ ],
+ "introPlan": [
+  [
+   "mc.past-cond",
+   "mc.present-cond"
+  ],
+  [
+   "mc.wish-now",
+   "mc.wish-past"
+  ],
+  [
+   "mc.wish-would",
+   "mc.high-time"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Liegt die Ursache früher und die Folge jetzt, oder ist es umgekehrt?",
+   "Geht es um einen Wunsch für jetzt, um Bedauern über früher oder um Ärger über das Verhalten anderer?",
+   "Ist etwas überfällig und soll jetzt passieren?"
+  ],
+  "en": [
+   "Is the cause earlier and the result now, or the other way around?",
+   "Is it a wish about now, regret about the past, or annoyance at someone else's behavior?",
+   "Is something overdue and should happen now?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "mc.past-cond",
+   "name": {
+    "de": "If + Past Perfect · Folge jetzt",
+    "en": "If + past perfect · result now"
+   },
+   "form": {
+    "de": "if + had + Partizip, would + Grundform",
+    "en": "if + had + participle, would + base form"
+   },
+   "use": {
+    "de": "Eine Entscheidung früher hat eine Folge, die heute noch gilt: If I had taken that job, I would live in Berlin now. Jede Satzhälfte behält ihre eigene Zeit.",
+    "en": "An earlier decision has a result that still holds today: If I had taken that job, I would live in Berlin now. Each half keeps its own time."
+   },
+   "signals": [
+    "now",
+    "today",
+    "by now",
+    "these days",
+    "currently"
+   ],
+   "ex": [
+    {
+     "en": "If we had hired a designer earlier, our onboarding would be smoother today.",
+     "de": "Hätten wir früher eine Designerin eingestellt, wäre unser Onboarding heute reibungsloser.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "If I had accepted the transfer, I would be working in Dublin now.",
+     "de": "Hätte ich den Wechsel angenommen, würde ich jetzt in Dublin arbeiten.",
+     "ctx": "talk"
+    },
+    {
+     "en": "If the vendor had answered in May, we would be live by now.",
+     "de": "Hätte der Anbieter im Mai geantwortet, wären wir jetzt schon live.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "If we would have invested in testing, we would have fewer bugs now.",
+    "good": "If we had invested in testing, we would have fewer bugs now.",
+    "cause": {
+     "de": "Deutsch nutzt „hätte/würde“ in beiden Hälften. Der würde-Reflex setzt would in den if-Teil; dort gehört had + 3. Form hin.",
+     "en": "German uses hätte/würde in both halves. The würde reflex puts would into the if-clause; after if, English needs had + participle."
+    }
+   },
+   "contrast": {
+    "with": "mc.present-cond",
+    "a": "If I had prepared, I would be calmer now.",
+    "b": "If I were calmer, I would have prepared.",
+    "diff": {
+     "de": "a: Ursache früher, Folge jetzt (had + 3. Form, would + Grundform). b: Zustand jetzt, Folge früher (Past, would have + 3. Form).",
+     "en": "a: cause earlier, result now (had + participle, would + base form). b: state now, result earlier (past, would have + participle)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "If I had taken that job, I would live in Berlin now.",
+     "q": {
+      "de": "Lebe ich jetzt in Berlin?",
+      "en": "Do I live in Berlin now?"
+     },
+     "a": false
+    },
+    {
+     "s": "If we had signed in May, we would be live now.",
+     "q": {
+      "de": "Haben wir im Mai unterschrieben?",
+      "en": "Did we sign in May?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wann liegt die Ursache, wann die Folge? Jede Satzhälfte hat ihre eigene Zeit.",
+    "en": "When is the cause, and when is the result? Each half has its own time."
+   }
+  },
+  {
+   "id": "mc.present-cond",
+   "name": {
+    "de": "If + Past · Folge früher",
+    "en": "If + past · result earlier"
+   },
+   "form": {
+    "de": "if + Past, would have + Partizip",
+    "en": "if + past, would have + participle"
+   },
+   "use": {
+    "de": "Ein Zustand oder eine Eigenschaft von jetzt erklärt, warum früher etwas anders lief: If I were more organized, I would have finished the report.",
+    "en": "A state or trait that holds now explains why something went differently earlier: If I were more organized, I would have finished the report."
+   },
+   "signals": [
+    "last week",
+    "yesterday",
+    "back then",
+    "at the time",
+    "already"
+   ],
+   "ex": [
+    {
+     "en": "If I were more organized, I would have finished the report.",
+     "de": "Wäre ich organisierter, hätte ich den Bericht fertiggestellt.",
+     "ctx": "talk"
+    },
+    {
+     "en": "If our CEO were less risk-averse, we would have launched in Asia last year.",
+     "de": "Wäre unser CEO weniger risikoscheu, hätten wir letztes Jahr in Asien gestartet.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "If I spoke fluent French, I would have taken the Paris account.",
+     "de": "Spräche ich fließend Französisch, hätte ich das Paris-Konto übernommen.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "If our team would be bigger, we would have won the bid.",
+    "good": "If our team were bigger, we would have won the bid.",
+    "cause": {
+     "de": "Deutsch sagt „wäre“ und der würde-Reflex macht daraus would be. Im if-Teil steht aber die Past-Form (were), nie would.",
+     "en": "German says „wäre“, and the würde reflex turns it into would be. The if-clause takes the past form (were), never would."
+    }
+   },
+   "contrast": {
+    "with": "mc.past-cond",
+    "a": "If I were calmer, I would have prepared.",
+    "b": "If I had prepared, I would be calmer now.",
+    "diff": {
+     "de": "a: Zustand jetzt, Folge früher (Past, would have + 3. Form). b: Ursache früher, Folge jetzt (had + 3. Form, would + Grundform).",
+     "en": "a: state now, result earlier (past, would have + participle). b: cause earlier, result now (had + participle, would + base form)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "If our CEO were less risk-averse, we would have launched in Asia last year.",
+     "q": {
+      "de": "Ist der CEO risikoscheu?",
+      "en": "Is the CEO risk-averse?"
+     },
+     "a": true
+    },
+    {
+     "s": "If our CEO were less risk-averse, we would have launched in Asia last year.",
+     "q": {
+      "de": "Sind wir in Asien gestartet?",
+      "en": "Did we launch in Asia?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Beschreibt der if-Teil etwas, das heute noch gilt? Und wann geschah die Folge?",
+    "en": "Does the if-clause describe something that is still true today? And when did the result happen?"
+   }
+  },
+  {
+   "id": "mc.wish-now",
+   "name": {
+    "de": "wish + Past · Wunsch jetzt",
+    "en": "wish + past · wish now"
+   },
+   "form": {
+    "de": "wish + Past (be: were)",
+    "en": "wish + past (be: were)"
+   },
+   "use": {
+    "de": "Etwas ist jetzt anders, als man es sich wünscht: I wish I could join the call. Die Form geht eine Stufe zurück, die Bedeutung bleibt bei jetzt.",
+    "en": "Something is not the way you want it right now: I wish I could join the call. The form steps back once, the meaning stays at now."
+   },
+   "signals": [
+    "now",
+    "today",
+    "at the moment",
+    "still"
+   ],
+   "ex": [
+    {
+     "en": "I wish we had more budget for training.",
+     "de": "Ich wünschte, wir hätten mehr Budget für Schulungen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I wish I could join the call, but I'm stuck in traffic.",
+     "de": "Ich wünschte, ich könnte am Call teilnehmen, aber ich stehe im Stau.",
+     "ctx": "talk"
+    },
+    {
+     "en": "If only our CRM were faster; sales loses minutes on every call.",
+     "de": "Wäre unser CRM nur schneller; der Vertrieb verliert bei jedem Anruf Minuten.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "I wish I have more time for the project.",
+    "good": "I wish I had more time for the project.",
+    "cause": {
+     "de": "Nach „wünschen“ denken Deutsche an jetzt und bleiben im Präsens („ich habe“). Englisch rückt nach wish eine Stufe zurück: had.",
+     "en": "After „wünschen“ Germans think of now and stay in the present („ich habe“). English moves one step back after wish: had."
+    }
+   },
+   "contrast": {
+    "with": "mc.wish-past",
+    "a": "I wish I had more time.",
+    "b": "I wish I had had more time.",
+    "diff": {
+     "de": "a: Es fehlt jetzt Zeit (Past). b: Früher fehlte Zeit, Bedauern über damals (Past Perfect).",
+     "en": "a: you lack time now (past). b: you lacked time earlier, regret about back then (past perfect)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I wish I could join the call.",
+     "q": {
+      "de": "Kann ich jetzt am Call teilnehmen?",
+      "en": "Can I join the call now?"
+     },
+     "a": false
+    },
+    {
+     "s": "I wish I could join the call.",
+     "q": {
+      "de": "Möchte ich teilnehmen?",
+      "en": "Do I want to join?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um jetzt oder um früher? Wie viele Zeitstufen musst du zurück?",
+    "en": "Is it about now or about earlier? How many tense steps back do you need?"
+   },
+   "usNote": {
+    "de": "Bei be sagen Amerikaner meist were (I wish I were); was ist im Alltag auch üblich.",
+    "en": "With be, Americans usually say were (I wish I were); was is also common in casual speech."
+   }
+  },
+  {
+   "id": "mc.wish-past",
+   "name": {
+    "de": "wish + had + Partizip · Bedauern",
+    "en": "wish + past perfect · regret"
+   },
+   "form": {
+    "de": "wish + had + Partizip",
+    "en": "wish + had + participle"
+   },
+   "use": {
+    "de": "Bedauern über etwas, das früher passiert oder nicht passiert ist: I wish we had involved IT earlier. Zwei Stufen zurück.",
+    "en": "Regret about something that did or did not happen earlier: I wish we had involved IT earlier. Two steps back."
+   },
+   "signals": [
+    "yesterday",
+    "last week",
+    "last year",
+    "earlier",
+    "back then",
+    "at the time"
+   ],
+   "ex": [
+    {
+     "en": "I wish we had involved legal before signing.",
+     "de": "Ich wünschte, wir hätten vor der Unterschrift die Rechtsabteilung einbezogen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "If only we had backed up the files before the update.",
+     "de": "Hätten wir nur vor dem Update die Dateien gesichert.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I wish I hadn't promised the client a fixed date.",
+     "de": "Ich wünschte, ich hätte dem Kunden keinen festen Termin versprochen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I wish I would have called the client earlier.",
+    "good": "I wish I had called the client earlier.",
+    "cause": {
+     "de": "Deutsch „hätte“ wird gern zu would have übersetzt (würde-Reflex). Nach wish steht aber had + 3. Form.",
+     "en": "German „hätte“ is often turned into would have (würde reflex). After wish, English needs had + participle."
+    }
+   },
+   "contrast": {
+    "with": "mc.wish-now",
+    "a": "I wish I had had more time.",
+    "b": "I wish I had more time.",
+    "diff": {
+     "de": "a: Bedauern über früher (Past Perfect). b: Wunsch über jetzt (Past Simple).",
+     "en": "a: regret about earlier (past perfect). b: wish about now (past simple)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I wish I had called the client earlier.",
+     "q": {
+      "de": "Habe ich den Kunden früher angerufen?",
+      "en": "Did I call the client earlier?"
+     },
+     "a": false
+    },
+    {
+     "s": "I wish I had called the client earlier.",
+     "q": {
+      "de": "Bedauere ich das?",
+      "en": "Do I regret it?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wie weit liegt das zurück? Eine oder zwei Zeitstufen?",
+    "en": "How far back is it? One or two tense steps?"
+   }
+  },
+  {
+   "id": "mc.wish-would",
+   "name": {
+    "de": "wish + would · Ärger",
+    "en": "wish + would · annoyance"
+   },
+   "form": {
+    "de": "wish + would + Grundform",
+    "en": "wish + would + base form"
+   },
+   "use": {
+    "de": "Das Verhalten anderer ärgert dich und soll sich ändern: I wish you would stop interrupting. Für eigenes Handeln benutzt man das nicht. Auch bei Dingen: I wish it would stop raining.",
+    "en": "Someone else's behavior annoys you and should change: I wish you would stop interrupting. It is not used for your own actions. Also for things: I wish it would stop raining."
+   },
+   "signals": [
+    "always",
+    "keep",
+    "all the time",
+    "every time",
+    "constantly"
+   ],
+   "ex": [
+    {
+     "en": "I wish the vendor would answer our emails on time.",
+     "de": "Ich wünschte, der Anbieter würde unsere Mails pünktlich beantworten.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I wish you wouldn't check your phone during meetings.",
+     "de": "Ich wünschte, du würdest in Meetings nicht aufs Handy schauen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I wish our manager would give us clearer deadlines.",
+     "de": "Ich wünschte, unser Chef würde uns klarere Fristen geben.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I wish the vendor will answer our emails on time.",
+    "good": "I wish the vendor would answer our emails on time.",
+    "cause": {
+     "de": "Deutsch „ich wünsche, dass er antwortet“ klingt nach Zukunft, deshalb will. Nach wish steht nie will, sondern would (will passt zu hope).",
+     "en": "German „ich wünsche, dass er antwortet“ sounds like the future, hence will. After wish never use will but would (will goes with hope)."
+    }
+   },
+   "contrast": {
+    "with": "mc.wish-now",
+    "a": "I wish you would stop interrupting me.",
+    "b": "I wish you didn't interrupt me so often.",
+    "diff": {
+     "de": "a: Du verlangst eine Änderung des Verhaltens (Ärger). b: Du beschreibst nur den Zustand, den du nicht magst. Beides ist richtig.",
+     "en": "a: you want the behavior to change (annoyance). b: you only describe the state you dislike. Both are correct."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I wish you would stop checking your phone.",
+     "q": {
+      "de": "Hast du schon aufgehört?",
+      "en": "Have you stopped already?"
+     },
+     "a": false
+    },
+    {
+     "s": "I wish you would stop checking your phone.",
+     "q": {
+      "de": "Soll sich dein Verhalten ändern?",
+      "en": "Should your behavior change?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Wer soll sich ändern, und ist es ein Verhalten oder ein Zustand?",
+    "en": "Who should change, and is it a behavior or a state?"
+   }
+  },
+  {
+   "id": "mc.high-time",
+   "name": {
+    "de": "It's high time + Past",
+    "en": "It's high time + past"
+   },
+   "form": {
+    "de": "It's high time + Subjekt + Past",
+    "en": "It's high time + subject + past"
+   },
+   "use": {
+    "de": "Etwas ist überfällig und soll jetzt passieren: It's high time we bought a new CRM. Die Form ist Past, gemeint ist jetzt.",
+    "en": "Something is overdue and should happen now: It's high time we bought a new CRM. The form is past, the meaning is now."
+   },
+   "signals": [
+    "high time",
+    "about time",
+    "long overdue",
+    "finally"
+   ],
+   "ex": [
+    {
+     "en": "It's about time we reviewed the vendor contract.",
+     "de": "Es wird Zeit, dass wir den Anbietervertrag prüfen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "It's high time the team got proper training.",
+     "de": "Es ist höchste Zeit, dass das Team eine richtige Schulung bekommt.",
+     "ctx": "talk"
+    },
+    {
+     "en": "It's high time we sent the client a clear timeline.",
+     "de": "Es ist höchste Zeit, dass wir dem Kunden einen klaren Zeitplan schicken.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "It's high time we hire a second developer.",
+    "good": "It's high time we hired a second developer.",
+    "cause": {
+     "de": "Deutsch sagt „dass wir einstellen“ im Präsens. Englisch schiebt die Zeit zurück: Past, obwohl es um jetzt geht (wie bei wish).",
+     "en": "German says „dass wir einstellen“ in the present. English shifts the tense back: past, even though it is about now (like wish)."
+    }
+   },
+   "contrast": {
+    "with": "mc.wish-now",
+    "a": "It's high time we updated the pricing.",
+    "b": "I wish we updated the pricing more often.",
+    "diff": {
+     "de": "a: Die Handlung ist überfällig und soll jetzt passieren. b: Du wünschst dir einen anderen Zustand, es ist keine Aufforderung.",
+     "en": "a: the action is overdue and should happen now. b: you wish for a different state, it is not a call to act."
+    }
+   },
+   "ccq": [
+    {
+     "s": "It's high time we updated the roadmap.",
+     "q": {
+      "de": "Haben wir die Roadmap schon aktualisiert?",
+      "en": "Have we updated the roadmap already?"
+     },
+     "a": false
+    },
+    {
+     "s": "It's high time we updated the roadmap.",
+     "q": {
+      "de": "Sollten wir es jetzt tun?",
+      "en": "Should we do it now?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Es geht um jetzt, trotzdem verlangt die Wendung eine bestimmte Zeitform. Welche?",
+    "en": "It is about now, yet the phrase demands a particular tense. Which one?"
+   }
+  }
+ ]
+}

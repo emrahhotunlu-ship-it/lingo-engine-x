@@ -1,0 +1,1022 @@
+[
+ {
+  "id": "mc.kwt1",
+  "type": "kwt",
+  "pat": "mc.past-cond",
+  "from": "We missed the deadline in March, so we are paying a penalty now.",
+  "key": "HAD",
+  "frame": "If we ___ the deadline in March, we wouldn't be paying a penalty now.",
+  "answer": "had met",
+  "accepted": [
+   "had made",
+   "had hit",
+   "had not missed"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Ursache im März (had + 3. Form), Folge jetzt (now): wouldn't be.",
+    "en": "cause in March (had + participle), result now: wouldn't be."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Das Schlüsselwort had fehlt: Der if-Teil braucht had + 3. Form.",
+     "en": "the key word had is missing: the if-clause needs had + participle."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil: dort steht had + 3. Form.",
+     "en": "would does not belong in the if-clause: it takes had + participle."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt2",
+  "type": "kwt",
+  "pat": "mc.past-cond",
+  "from": "Our CFO left in June, so we have no one to approve the budget now.",
+  "key": "WOULD",
+  "frame": "If our CFO hadn't left in June, we ___ someone to approve the budget now.",
+  "answer": "would have",
+  "accepted": [
+   "would still have"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "hadn't left (früher) + now: die Folge jetzt → would + Grundform.",
+    "en": "hadn't left (earlier) + now: result now → would + base form."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would",
+      "have",
+      "had"
+     ],
+     "de": "would have had blickt auf damals zurück; now verlangt would + Grundform: would have someone.",
+     "en": "would have had looks back to then; now needs would + base form: would have someone."
+    },
+    {
+     "if": [
+      "would",
+      "had"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach would steht die Grundform, nicht had: would have someone.",
+     "en": "after would comes the base form, not had: would have someone."
+    },
+    {
+     "if": [
+      "been"
+     ],
+     "de": "would have been wäre ein Satz über damals; now verlangt die Folge für jetzt.",
+     "en": "would have been is about back then; now needs the result for the present."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt3",
+  "type": "kwt",
+  "pat": "mc.present-cond",
+  "from": "Our process is slow, so we didn't win the bid.",
+  "key": "HAVE",
+  "frame": "If our process were faster, we ___ the bid.",
+  "answer": "would have won",
+  "accepted": [
+   "would have secured",
+   "would have landed",
+   "would not have lost",
+   "wouldn't have lost",
+   "'d have won",
+   "would have gotten",
+   "would have taken"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Zustand jetzt (were), die Folge früher: would have + 3. Form.",
+    "en": "state now (were), result earlier: would have + participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would",
+      "win"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Die Folge liegt in der Vergangenheit: would have won, nicht would win.",
+     "en": "the result lies in the past: would have won, not would win."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Nach would steht have, nicht had: would have won.",
+     "en": "after would comes have, not had: would have won."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt4",
+  "type": "kwt",
+  "pat": "mc.present-cond",
+  "from": "Our manager is very cautious, so he didn't approve the pilot.",
+  "key": "APPROVED",
+  "frame": "If our manager were less cautious, he ___ the pilot.",
+  "answer": "would have approved",
+  "accepted": [
+   "'d have approved"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Eigenschaft jetzt (were), die Folge früher: would have + 3. Form.",
+    "en": "trait now (were), result earlier: would have + participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would",
+      "approve"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Die Entscheidung fiel früher: would have approved, nicht would approve.",
+     "en": "the decision came earlier: would have approved, not would approve."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "had approved gehört in den if-Teil; im Hauptsatz steht would have approved.",
+     "en": "had approved belongs in the if-clause; the main clause has would have approved."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt5",
+  "type": "kwt",
+  "pat": "mc.wish-now",
+  "from": "Unfortunately, I can't attend the workshop this week.",
+  "key": "COULD",
+  "frame": "I wish ___ attend the workshop this week.",
+  "answer": "I could",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "wish + can → could: ein Wunsch über jetzt, eine Fähigkeit.",
+    "en": "wish + can → could: a wish about now, an ability."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "can bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "can stays present; after wish the verb moves one step back."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would fordert Verhalten anderer; die eigene Fähigkeit heißt could.",
+     "en": "would asks others to change; your own ability is could."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt6",
+  "type": "kwt",
+  "pat": "mc.wish-now",
+  "from": "It's a pity that the client is so inflexible about dates.",
+  "key": "WERE",
+  "frame": "I wish the client ___ about dates.",
+  "answer": "were more flexible",
+  "accepted": [
+   "were less rigid",
+   "were a bit more flexible",
+   "were a little more flexible",
+   "were less strict",
+   "were more relaxed",
+   "were flexible"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Wunsch über jetzt: wish + Past, bei be meist were.",
+    "en": "wish about now: wish + past, usually were for be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is"
+     ],
+     "de": "is bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "is stays present; after wish the verb moves one step back."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would be wünscht anderes Verhalten; ein Zustand jetzt braucht were.",
+     "en": "would be wishes for other behavior; a state now needs were."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt7",
+  "type": "kwt",
+  "pat": "mc.wish-past",
+  "from": "I regret sending the proposal without legal review.",
+  "key": "SENT",
+  "frame": "I wish I ___ the proposal without legal review.",
+  "answer": "hadn't sent",
+  "accepted": [
+   "had not sent"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Bedauern für früher: wish + hadn't + 3. Form (sent).",
+    "en": "regret about earlier: wish + hadn't + participle (sent)."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "pat": "mc.wish-now",
+     "de": "Past Simple bleibt bei jetzt; Bedauern über früher braucht had + 3. Form.",
+     "en": "simple past stays at now; regret about earlier needs had + participle."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Du bereust das Senden: Es muss verneint werden (hadn't sent).",
+     "en": "you regret sending: it must be negative (hadn't sent)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt8",
+  "type": "kwt",
+  "pat": "mc.wish-past",
+  "from": "It's a shame we didn't ask IT before the migration.",
+  "key": "ASKED",
+  "frame": "If only we ___ IT before the migration!",
+  "answer": "had asked",
+  "accepted": [
+   "'d asked"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "If only + before (früher): das Bedauern → had + 3. Form.",
+    "en": "if only + before (earlier): regret → had + participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would ask wünscht künftiges Verhalten; before the migration ist vorbei.",
+     "en": "would ask wishes for future behavior; before the migration is over."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "pat": "mc.wish-now",
+     "de": "Past Simple bleibt bei jetzt; für früher braucht If only had asked.",
+     "en": "simple past stays at now; for earlier, if only needs had asked."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt9",
+  "type": "kwt",
+  "pat": "mc.wish-would",
+  "from": "It annoys me that you never confirm meeting times in advance.",
+  "key": "WOULD",
+  "frame": "I wish you ___ meeting times in advance.",
+  "answer": "would confirm",
+  "accepted": [
+   "would always confirm",
+   "would start confirming",
+   "would finally confirm"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "never confirm: Ärger über Verhalten, das sich ändern soll → would.",
+    "en": "never confirm: annoyance at behavior that should change → would."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will steht nie nach wish; dieser Ärger braucht would.",
+     "en": "will is never used after wish; this annoyance needs would."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "pat": "mc.wish-past",
+     "de": "had confirmed bedauert etwas Vergangenes; die Gewohnheit besteht weiter.",
+     "en": "had confirmed regrets something past; the habit continues."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt10",
+  "type": "kwt",
+  "pat": "mc.wish-would",
+  "from": "It annoys me that the vendor keeps changing the requirements.",
+  "key": "STOP",
+  "frame": "I wish the vendor ___ the requirements.",
+  "answer": "would stop changing",
+  "accepted": [
+   "would just stop changing",
+   "'d stop changing",
+   "would stop altering",
+   "would stop modifying"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "keeps changing: wiederholtes Verhalten, das enden soll → would stop.",
+    "en": "keeps changing: repeated behavior that should end → would stop."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will steht nie nach wish; hier braucht der Ärger would.",
+     "en": "will is never used after wish; here the annoyance needs would."
+    },
+    {
+     "if": [
+      "stops"
+     ],
+     "de": "Nach would steht die Grundform: would stop, nicht stops.",
+     "en": "after would comes the base form: would stop, not stops."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt11",
+  "type": "kwt",
+  "pat": "mc.high-time",
+  "from": "Updating our onboarding process is long overdue.",
+  "key": "TIME",
+  "frame": "It's ___ we updated our onboarding process.",
+  "answer": "high time",
+  "accepted": [
+   "about time",
+   "past time",
+   "finally time",
+   "really time"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "It's high time + Subjekt + Past Simple: überfällig, jetzt wird gehandelt.",
+    "en": "It's high time + subject + past simple: overdue, act now."
+   },
+   "wrong": [
+    {
+     "if": [
+      "time"
+     ],
+     "not": [
+      "high",
+      "about",
+      "past"
+     ],
+     "de": "„It's time we updated“ stimmt auch, sagt aber nicht „überfällig“. Gefragt: high/about/past time.",
+     "en": "“It's time we updated” is correct too, but not “overdue”. Needed: high/about/past time."
+    },
+    {
+     "not": [
+      "high",
+      "about",
+      "past"
+     ],
+     "de": "Es fehlt high, about oder past vor time: It's high time we updated.",
+     "en": "high, about or past is missing before time: It's high time we updated."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.kwt12",
+  "type": "kwt",
+  "pat": "mc.high-time",
+  "from": "The team should start preparing for the audit now; it's overdue.",
+  "key": "STARTED",
+  "frame": "It's high time the team ___ for the audit.",
+  "answer": "started preparing",
+  "accepted": [
+   "started to prepare",
+   "started getting ready",
+   "started to get ready"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "It's high time + Past Simple: started, auch wenn es um jetzt geht.",
+    "en": "It's high time + past simple: started, even though it is about now."
+   },
+   "wrong": [
+    {
+     "if": [
+      "start"
+     ],
+     "de": "Präsens start passt nicht: nach high time steht die Past-Form started.",
+     "en": "present start does not fit: after high time use the past form started."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht nach high time; hier steht schlicht das Past.",
+     "en": "would does not belong after high time; use the plain past here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find1",
+  "type": "find",
+  "pat": "mc.past-cond",
+  "prompt": "If we would have tested the patch earlier, we would have fewer outages now.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "had tested",
+  "fixed": "If we had tested the patch earlier, we would have fewer outages now.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Im if-Teil steht had + 3. Form; would gehört nur in die Folge (now).",
+    "en": "the if-clause takes had + participle; would belongs only in the result (now)."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: im if-Teil darf kein would stehen.",
+     "en": "there is an error: the if-clause cannot contain would."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort ist in Ordnung; der Fehler liegt bei would have im if-Teil.",
+     "en": "this word is fine; the error is would have in the if-clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find2",
+  "type": "find",
+  "pat": "mc.past-cond",
+  "prompt": "If the client had signed in May, we would have been busy now.",
+  "err": [
+   8,
+   10
+  ],
+  "answer": "would be",
+  "fixed": "If the client had signed in May, we would be busy now.",
+  "accepted": [
+   "'d be"
+  ],
+  "why": {
+   "ok": {
+    "de": "now verlangt die Folge für jetzt: would be, nicht would have been.",
+    "en": "now needs the result for the present: would be, not would have been."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: Die Folge gilt jetzt, aber would have been blickt zurück.",
+     "en": "there is an error: the result holds now, but would have been looks back."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler steckt in would have been neben now.",
+     "en": "this word fits; the error is in would have been next to now."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find3",
+  "type": "find",
+  "pat": "mc.present-cond",
+  "prompt": "If I would be more patient, I would have waited for the quote.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "were",
+  "fixed": "If I were more patient, I would have waited for the quote.",
+  "accepted": [
+   "was"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der if-Teil nimmt die Past-Form (were), nie would be.",
+    "en": "the if-clause takes the past form (were), never would be."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: Nach if steht kein would, sondern die Past-Form.",
+     "en": "there is an error: after if comes the past form, not would."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist would be im if-Teil.",
+     "en": "this word fits; the error is would be in the if-clause."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find4",
+  "type": "find",
+  "pat": "mc.present-cond",
+  "prompt": "If our CTO were less cautious, we would have launched the beta in March.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: were (der Zustand jetzt), would have launched (Folge früher).",
+    "en": "correct: were (state now), would have launched (result earlier)."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Hier ist kein Fehler: were beschreibt den Zustand, would have launched das Frühere.",
+     "en": "there is no error: were describes the state, would have launched the earlier result."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find5",
+  "type": "find",
+  "pat": "mc.wish-now",
+  "prompt": "I wish I am less busy this quarter.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "were",
+  "fixed": "I wish I were less busy this quarter.",
+  "accepted": [
+   "was"
+  ],
+  "why": {
+   "ok": {
+    "de": "Nach wish rückt die Form zurück: bei be were (oder umgangssprachlich was).",
+    "en": "after wish the verb steps back: were for be (or casual was)."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: am bleibt im Präsens, nach wish steht die Past-Form.",
+     "en": "there is an error: am stays present, but wish takes the past form."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist am nach wish.",
+     "en": "this word fits; the error is am after wish."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find6",
+  "type": "find",
+  "pat": "mc.wish-now",
+  "prompt": "I wish our system can handle more requests at once.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "could",
+  "fixed": "I wish our system could handle more requests at once.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "wish + Fähigkeit jetzt: can wird zu could.",
+    "en": "wish + ability now: can becomes could."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: can bleibt im Präsens, nach wish braucht es could.",
+     "en": "there is an error: can stays present, but wish needs could."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist can nach wish.",
+     "en": "this word fits; the error is can after wish."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find7",
+  "type": "find",
+  "pat": "mc.wish-past",
+  "prompt": "I wish I would have asked for the contract in writing.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "had",
+  "fixed": "I wish I had asked for the contract in writing.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Bedauern über früher: wish + had + 3. Form, nicht would have.",
+    "en": "regret about earlier: wish + had + participle, not would have."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: would have gehört nicht hinter wish; es braucht had.",
+     "en": "there is an error: would have does not follow wish; it needs had."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist would have nach wish.",
+     "en": "this word fits; the error is would have after wish."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find8",
+  "type": "find",
+  "pat": "mc.wish-past",
+  "prompt": "If only we didn't wait so long before contacting the client last week.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "hadn't waited",
+  "fixed": "If only we hadn't waited so long before contacting the client last week.",
+  "accepted": [
+   "had not waited"
+  ],
+  "why": {
+   "ok": {
+    "de": "Bedauern für früher: If only + hadn't + 3. Form.",
+    "en": "regret about earlier: if only + hadn't + participle."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: Past Simple bleibt bei jetzt, es geht um früher.",
+     "en": "there is an error: simple past stays at now, but this is about earlier."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist didn't wait.",
+     "en": "this word fits; the error is didn't wait."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find9",
+  "type": "find",
+  "pat": "mc.wish-would",
+  "prompt": "I wish the client doesn't change the scope every week.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "wouldn't change",
+  "fixed": "I wish the client wouldn't change the scope every week.",
+  "accepted": [
+   "didn't change"
+  ],
+  "why": {
+   "ok": {
+    "de": "every week: Ärger über Verhalten → wouldn't change (didn't change auch möglich).",
+    "en": "every week: annoyance at behavior → wouldn't change (didn't change also works)."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: das Präsens doesn't geht nach wish nicht.",
+     "en": "there is an error: present doesn't does not work after wish."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist doesn't change nach wish.",
+     "en": "this word fits; the error is doesn't change after wish."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find10",
+  "type": "find",
+  "pat": "mc.wish-would",
+  "prompt": "I wish you didn't interrupt me so often.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: didn't interrupt beschreibt nur den Zustand, den ich nicht mag.",
+    "en": "correct: didn't interrupt only describes the state I dislike."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: wish + Past ist richtig; would stop wäre die Forderung.",
+     "en": "no error: wish + past is correct; would stop would be the demand."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find11",
+  "type": "find",
+  "pat": "mc.high-time",
+  "prompt": "It's high time we will switch to a better ticketing tool.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "switched",
+  "fixed": "It's high time we switched to a better ticketing tool.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Nach It's high time steht das Past Simple, nie will.",
+    "en": "after It's high time comes the past simple, never will."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, ein Fehler: will gibt es nach high time nicht.",
+     "en": "there is an error: will does not follow high time."
+    },
+    {
+     "tap": "*",
+     "de": "Dieses Wort passt; der Fehler ist will switch nach high time.",
+     "en": "this word fits; the error is will switch after high time."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.find12",
+  "type": "find",
+  "pat": "mc.high-time",
+  "prompt": "It's high time our support team got a proper escalation process.",
+  "err": null,
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Richtig: nach high time steht got (Past), gemeint ist jetzt.",
+    "en": "correct: after high time comes got (past), meaning now."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: High time + Past Simple (got) ist die richtige Form.",
+     "en": "no error: high time + past simple (got) is the right form."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.mean1",
+  "type": "meaning",
+  "pat": "mc.past-cond",
+  "a": "If we had signed the deal, we would be profitable today.",
+  "b": "If we had signed the deal, we would have been profitable last year.",
+  "q": {
+   "de": "Welcher Satz sagt, dass uns der Erfolg heute fehlt?",
+   "en": "Which sentence says the success is missing today?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "today + would be: Die Folge gilt jetzt. b spricht von last year.",
+    "en": "today + would be: the result holds now. b is about last year."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "would have been profitable last year nennt die Folge für früher.",
+     "en": "would have been profitable last year gives the result for earlier."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.mean2",
+  "type": "meaning",
+  "pat": "mc.present-cond",
+  "a": "If I were more careful, I would have caught the error.",
+  "b": "If I had been more careful, I would have caught the error.",
+  "q": {
+   "de": "Welcher Satz beschreibt eine Eigenschaft, die heute noch gilt?",
+   "en": "Which sentence describes a trait that is still true today?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "were beschreibt einen Zustand jetzt; b nennt nur das Verhalten damals.",
+    "en": "were describes a state now; b only names behavior back then."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "had been careful liegt ganz in der Vergangenheit, nicht bei heute.",
+     "en": "had been careful lies entirely in the past, not at today."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.mean3",
+  "type": "meaning",
+  "pat": "mc.wish-now",
+  "a": "I wish I could join the call.",
+  "b": "I wish I could have joined the call.",
+  "q": {
+   "de": "Welcher Satz handelt von einem Anruf, der noch bevorsteht oder läuft?",
+   "en": "Which sentence is about a call that is still ahead or going on?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "could join wünscht etwas für jetzt; could have joined bedauert früher.",
+    "en": "could join wishes for now; could have joined regrets earlier."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "could have joined blickt zurück: Der Call ist schon vorbei.",
+     "en": "could have joined looks back: the call is already over."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.mean4",
+  "type": "meaning",
+  "pat": "mc.wish-past",
+  "a": "I wish I had called the client yesterday.",
+  "b": "I wish I could call the client now.",
+  "q": {
+   "de": "In welchem Satz bedauert der Sprecher etwas, das schon vorbei ist?",
+   "en": "In which sentence does the speaker regret something that is already over?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "had called + yesterday: Bedauern über früher. b wünscht etwas für jetzt.",
+    "en": "had called + yesterday: regret about earlier. b wishes for now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "could call + now ist ein Wunsch über jetzt, kein Bedauern.",
+     "en": "could call + now is a wish about now, not regret."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.mean5",
+  "type": "meaning",
+  "pat": "mc.wish-would",
+  "a": "I wish you would stop interrupting me.",
+  "b": "I wish I hadn't interrupted you.",
+  "q": {
+   "de": "In welchem Satz soll sich das Verhalten einer anderen Person ändern?",
+   "en": "In which sentence should another person change what they do?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "wish + would stop: Du willst, dass der andere sein Verhalten ändert.",
+    "en": "wish + would stop: you want the other person to change."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "pat": "mc.wish-past",
+     "de": "hadn't interrupted bedauert das eigene frühere Verhalten.",
+     "en": "hadn't interrupted regrets your own earlier behavior."
+    }
+   ]
+  }
+ },
+ {
+  "id": "mc.mean6",
+  "type": "meaning",
+  "pat": "mc.high-time",
+  "a": "It's high time we updated the pricing.",
+  "b": "We updated the pricing a while ago.",
+  "q": {
+   "de": "Welcher Satz sagt, dass die Preisanpassung noch aussteht?",
+   "en": "Which sentence says the pricing update is still to be done?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "high time + updated: Es ist überfällig und soll jetzt passieren.",
+    "en": "high time + updated: it is overdue and should happen now."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "a while ago macht b zu einer abgeschlossenen Handlung.",
+     "en": "a while ago makes b a finished action."
+    }
+   ]
+  }
+ }
+]

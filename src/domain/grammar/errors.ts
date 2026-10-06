@@ -8,6 +8,8 @@ import { isDictWord } from '../lexicon/dict';
 import { lemmaCandidates } from '../text/lemma';
 import { addLocalDays, learningDayEnd } from '../date';
 import { legacyNorm, legacyTaskKey } from './key';
+import { isRetired, mapEntryOf } from './patterns';
+import { seedExplOf } from './seedExpl';
 
 // Fehler-Wiederholung (phase2-plan D1, §4.3, §5.3): Die Boxen 1/3/9 der alten App steuern
 // (`box`, `due`, `done`, `last`). FSRS läuft nur als Schatten in `errors[i].fsrs` mit (ab der
@@ -20,7 +22,29 @@ export const REVIEW_DAYS = [1, 3, 9] as const;
 export const ERRORS_MAX = 10;
 export const GIVEN_MAX = 160;
 
-export type ErrorEntry = Doc & { q?: unknown; given?: unknown; ans?: unknown; t?: unknown; box?: unknown; due?: unknown; done?: unknown; last?: unknown; fsrs?: unknown };
+export type ErrorEntry = Doc & {
+  q?: unknown;
+  given?: unknown;
+  ans?: unknown;
+  t?: unknown;
+  box?: unknown;
+  due?: unknown;
+  done?: unknown;
+  last?: unknown;
+  fsrs?: unknown;
+  /** Muster-Kennung (Lernplattform 2.0 §5.7): ein offener Eintrag je Muster. */
+  pat?: unknown;
+  /** Weitere falsche Sätze desselben Musters (höchstens 3, `{q, given, ans, t}`). */
+  more?: unknown;
+  /** Verlauf der Wiederholungen (höchstens 6, `[t, Box vor der Antwort, 1 = richtig | 0 = falsch]`). */
+  rh?: unknown;
+};
+
+export const MORE_MAX = 3;
+export const RH_MAX = 6;
+/** Höchstlänge von `q` und `ans` der Zusatzsätze in `more`. */
+export const MORE_TEXT_MAX = 300;
+export const PAT_MAX = 40;
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
@@ -35,6 +59,14 @@ export const isDueToday = (due: number, nowMs: number): boolean => due < learnin
 export function errorsOf(doc: Readonly<Doc> | undefined): ErrorEntry[] {
   const list = doc?.errors;
   return Array.isArray(list) ? (list.filter((e) => e && typeof e === 'object' && !Array.isArray(e)) as ErrorEntry[]) : [];
+}
+
+/**
+ * Fehlerliste ohne stillgelegte Einträge (`content/grammar/retired.json`, §3.9). Zählende und anzeigende Leser benutzen diese
+ * Funktion; schreibende Pfade bleiben bei `errorsOf`, damit nichts verloren geht. Ohne `topic` zählt der Schlüssel des Satzes allein.
+ */
+export function liveErrorsOf(doc: Readonly<Doc> | undefined, topic?: string): ErrorEntry[] {
+  return errorsOf(doc).filter((e) => !isRetired(e.q, topic));
 }
 
 /**
@@ -76,20 +108,37 @@ function explPair(v: { de: string | null; en: string | null } | null | undefined
  */
 export function addError(
   list: readonly ErrorEntry[],
-  e: { q: string; given: string; ans: string; t: number; src: string; expl?: { de: string | null; en: string | null } | null },
+  e: { q: string; given: string; ans: string; t: number; src: string; expl?: { de: string | null; en: string | null } | null; pat?: string | null },
   max = ERRORS_MAX,
 ): readonly ErrorEntry[] {
   const k = legacyNorm(e.q);
   if (list.some((x) => x.done !== true && legacyNorm(x.q) === k)) return list;
+  const pat = typeof e.pat === 'string' && e.pat.trim() ? e.pat.trim().slice(0, PAT_MAX) : '';
+  // Ein offener Eintrag je Muster (§5.7): Ein zweiter Fehler auf dasselbe Muster setzt den vorhandenen auf Box 0, morgen fällig,
+  // und hängt den neuen falschen Satz an `more` an. Der Eintrag selbst und seine Felder bleiben erhalten; nur der älteste Zusatzsatz in `more` wird verdrängt, wenn es mehr als 3 werden (die Regel zählt, nicht der Satz).
+  if (pat) {
+    const idx = list.findIndex((x) => x.done !== true && x.pat === pat);
+    if (idx >= 0) {
+      const cur = list[idx] as ErrorEntry;
+      const dup = Array.isArray(cur.more) && (cur.more as unknown[]).some((m) => m && typeof m === 'object' && legacyNorm((m as Doc).q) === k);
+      if (dup) return list;
+      const more = [...(Array.isArray(cur.more) ? (cur.more as unknown[]) : []), { q: e.q.slice(0, MORE_TEXT_MAX), given: e.given.slice(0, GIVEN_MAX), ans: e.ans.slice(0, MORE_TEXT_MAX), t: e.t }].slice(-MORE_MAX);
+      const out = [...list];
+      // `rh`, `last` und `fsrs` bleiben stehen; der Rückfall auf Box 0 ist die Regel des Plans (§5.7), kein Eintrag in `rh`.
+      out[idx] = { ...cur, box: 0, done: false, due: addLocalDays(e.t, 1), more };
+      return out;
+    }
+  }
   const out = capErrors(list, max - 1);
   if (out.length >= max) return list;
   const expl = explPair(e.expl);
-  return [...out, { q: e.q, given: e.given.slice(0, GIVEN_MAX), ans: e.ans, t: e.t, src: e.src, ...(expl ? { expl } : {}) }];
+  return [...out, { q: e.q, given: e.given.slice(0, GIVEN_MAX), ans: e.ans, t: e.t, src: e.src, ...(pat ? { pat } : {}), ...(expl ? { expl } : {}) }];
 }
 
 /**
  * Ergebnis einer Fehler-Wiederholung eintragen. `null`, wenn der Eintrag fehlt oder diese
- * Antwort schon angewendet ist (`e.last >= t`). Richtig: Box +1 (ab Box 3 erledigt), sonst Box 0.
+ * Antwort schon angewendet ist (`e.last >= t`). Richtig: Box +1 (ab Box 3 erledigt), falsch: eine Box zurück (Box 0 bleibt 0).
+ * Jede Antwort steht zusätzlich in `rh` (`[t, Box vor der Antwort, 1|0]`, höchstens 6).
  * „Fast richtig“ (`near`): Box unverändert, morgen wieder, Note 2 im FSRS-Schatten.
  */
 export function reviewError(
@@ -112,12 +161,13 @@ export function reviewError(
     next.done = box >= REVIEW_DAYS.length;
     next.due = addLocalDays(r.t, REVIEW_DAYS[Math.min(box, REVIEW_DAYS.length - 1)]!);
   } else {
-    next.box = 0;
+    next.box = Math.max(0, (num(e.box) ?? 0) - 1);
     next.done = false;
     next.due = addLocalDays(r.t, 1);
     next.given = r.given.slice(0, GIVEN_MAX);
   }
   next.last = r.t;
+  if (!r.near) next.rh = [...(Array.isArray(e.rh) ? (e.rh as unknown[]) : []), [r.t, num(e.box) ?? 0, r.ok ? 1 : 0]].slice(-RH_MAX);
   next.fsrs = shadowFsrs(e.fsrs, r.near ? 2 : r.grade, r.t);
   const out = [...list];
   out[idx] = next;
@@ -180,6 +230,18 @@ export function gapFill(q: string, ans: string): string {
   return a.slice(hasBefore ? before.length : 0, a.length - (hasAfter ? after.length : 0)).trim();
 }
 
+/** Erklärung zum Fehlersatz: die im Eintrag gespeicherte, sonst die aufgabengenaue Begründung, sonst die der Startaufgabe mit gleichem Schlüssel. */
+function explOfError(topic: string, e: ErrorEntry, q: string): { de: string | null; en: string | null } {
+  const own = e.expl && typeof e.expl === 'object' && !Array.isArray(e.expl) ? (e.expl as Doc) : null;
+  const de = typeof own?.de === 'string' && own.de.trim() ? own.de.trim() : null;
+  const en = typeof own?.en === 'string' && own.en.trim() ? own.en.trim() : null;
+  if (de || en) return { de, en };
+  const key = legacyTaskKey(q);
+  const why = mapEntryOf(topic, key)?.why?.ok;
+  if (why) return { de: why.de, en: why.en };
+  return seedExplOf(key) ?? { de: null, en: null };
+}
+
 /** Aufgabe aus einem Fehlereintrag (Port von `reviewItem`): Lücke oder Satzkorrektur. */
 export function errorTask(topic: string, e: ErrorEntry): GrammarTask | null {
   const q = str(e.q).trim();
@@ -209,7 +271,24 @@ export function errorTask(topic: string, e: ErrorEntry): GrammarTask | null {
   // Hinweis (Grundform) erst beim ersten Lesen: `reviewBase` braucht das Wörterbuch (≈100 ms
   // Parsen bei 4×), `dueErrors` zählt aber schon auf dem Startpfad (leistung.md §3.2 Nr. 3, N45).
   if (gap && !/\([^)]*\)/.test(q)) lazyHint(task, fill);
+  // Erklärung ebenfalls erst beim ersten Lesen: Die Startaufgaben und die Zuordnungstabelle zu parsen kostet, `dueErrors` zählt nur.
+  lazyExpl(task, topic, e, q);
   return task;
+}
+
+function lazyExpl(task: GrammarTask, topic: string, e: ErrorEntry, q: string): void {
+  Object.defineProperty(task, 'expl', {
+    enumerable: true,
+    configurable: true,
+    get() {
+      const v = explOfError(topic, e, q);
+      Object.defineProperty(task, 'expl', { value: v, enumerable: true, writable: true, configurable: true });
+      return v;
+    },
+    set(v: { de: string | null; en: string | null }) {
+      Object.defineProperty(task, 'expl', { value: v, enumerable: true, writable: true, configurable: true });
+    },
+  });
 }
 
 function lazyHint(task: GrammarTask, fill: string): void {
@@ -236,7 +315,7 @@ export function dueErrors(grammarDocs: ReadonlyMap<string, Readonly<Doc>>, nowMs
   const out: DueError[] = [];
   const seen = new Set<string>();
   for (const [topic, doc] of grammarDocs) {
-    for (const e of [...errorsOf(doc)].reverse()) {
+    for (const e of [...liveErrorsOf(doc, topic)].reverse()) {
       const k = legacyNorm(e.q);
       if (seen.has(k)) continue;
       seen.add(k);

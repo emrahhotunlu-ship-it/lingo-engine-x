@@ -755,7 +755,7 @@
    "topic": "modals-deduction",
    "type": "gap",
    "prompt": "He ___ us – it was far too dark.",
-   "hint": "(can't / see)",
+   "hint": "(see)",
    "answer": "can't have seen",
    "accepted": [
     "cannot have seen",

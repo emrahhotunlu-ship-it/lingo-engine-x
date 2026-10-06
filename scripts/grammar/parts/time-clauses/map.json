@@ -1,0 +1,144 @@
+{
+  "Please call me as soon as the shipment ___ at the warehouse.": {
+    "pat": "tc.present-for-future",
+    "why": {
+      "ok": { "de": "Richtig: Nach „as soon as“ steht das Präsens, auch für Zukünftiges.", "en": "Right: after “as soon as” the present simple carries the future." },
+      "wrong": [
+        { "opt": "will arrive", "de": "Nach „as soon as“ steht kein will; die Zukunft zeigt schon „call me“.", "en": "No will after “as soon as”; the future is already in “call me”." },
+        { "opt": "is arriving", "de": "„is arriving“ meint: gerade jetzt. Für den Zeitpunkt reicht „arrives“.", "en": "“is arriving” means: right now. For the moment, simple “arrives” is enough." },
+        { "opt": "would arrive", "de": "„would“ ist hypothetisch. Hier geht es um einen echten, erwarteten Termin.", "en": "“would” is hypothetical. This is a real, expected event." }
+      ]
+    }
+  },
+  "We won't sign the contract until the legal team ___ the final draft.": {
+    "pat": "tc.present-for-future",
+    "why": {
+      "ok": { "de": "Richtig: Nach „until“ steht Präsens; will steckt schon in „won't sign“.", "en": "Right: after “until” use the present; will is already in “won't sign”." },
+      "wrong": [
+        { "opt": "approving", "de": "Nach „the legal team“ braucht es ein konjugiertes Verb, nicht -ing.", "en": "After “the legal team” you need a conjugated verb, not -ing." },
+        { "opt": "will approve", "de": "Auch nach „until“ steht kein will; es steckt schon in „won't sign“.", "en": "No will after “until” either; it is already in “won't sign”." },
+        { "opt": "would approve", "de": "„would“ passt nicht: Der Zeitsatz bleibt im Präsens, auch bei Zukünftigem.", "en": "“would” does not fit: the time clause stays in the present, even for the future." }
+      ]
+    }
+  },
+  "By the time you read this email, I ___ the presentation.": {
+    "pat": "tc.by-the-time",
+    "why": {
+      "ok": { "de": "Richtig: „By the time“ + Präsens im Nebensatz, dann will have + Partizip.", "en": "Right: “By the time” + present in the clause, then will have + participle." },
+      "wrong": [
+        { "opt": "would finish", "de": "„would finish“ ist hypothetisch. Gemeint ist: bis dahin ist es schon fertig.", "en": "“would finish” is hypothetical. The meaning is: already finished by then." },
+        { "opt": "finish", "de": "Das einfache Präsens sagt nicht, dass es bis dahin fertig ist: will have finished.", "en": "The simple present does not say it is finished by then: will have finished." },
+        { "opt": "am finishing", "de": "„am finishing“: Die Handlung ist noch im Gang. „By the time“ verlangt: schon fertig.", "en": "“am finishing” means: in progress. “By the time” needs: already finished." }
+      ]
+    }
+  },
+  "I'll text you when I ___ home tonight.": {
+    "pat": "tc.present-for-future",
+    "why": {
+      "ok": { "de": "Richtig: Nach „when“ (= sobald) steht das Präsens, nicht „will“.", "en": "Right: after “when” (= as soon as) use the present, not will." },
+      "wrong": [
+        { "opt": "am going to get", "de": "Das Futur steht schon in „I'll text“; der Zeitsatz braucht kein going to.", "en": "The future is already in “I'll text”; the time clause needs no going to." },
+        { "opt": "will get", "de": "Nach „when“ steht kein will; das Futur trägt schon „I'll text“.", "en": "No will after “when”; “I'll text” already carries the future." },
+        { "opt": "would get", "de": "„would“ ist hypothetisch. Für einen echten Plan steht im Zeitsatz das Präsens.", "en": "“would” is hypothetical. For a real plan the time clause takes the present." }
+      ]
+    }
+  },
+  "Let's start the meeting as soon as everyone ___ here.": {
+    "pat": "tc.present-perfect",
+    "why": {
+      "ok": { "de": "Richtig: Nach „as soon as“ passt has arrived: erst sind alle da, dann geht es los.", "en": "Right: after “as soon as”, has arrived fits: everyone is there first, then we start." },
+      "wrong": [
+        { "if": ["will"], "de": "Nach „as soon as“ steht kein will, auch nicht „will have“.", "en": "No will after “as soon as”, not even “will have”." },
+        { "if": ["arrived"], "not": ["has", "have"], "de": "Die Vergangenheit passt nicht: Es geht um die Zukunft. Nimm has arrived.", "en": "The past tense does not fit: this is about the future. Use has arrived." },
+        { "if": ["arrive"], "not": ["has", "have", "to"], "de": "„Everyone“ ist Singular: „arrives“ (oder has arrived), nicht „arrive“.", "en": "“Everyone” is singular: “arrives” (or has arrived), not “arrive”." }
+      ]
+    }
+  },
+  "I'll send you the report after I ___ the numbers.": {
+    "pat": "tc.present-perfect",
+    "why": {
+      "ok": { "de": "Richtig: Nach „after“ steht have checked: erst ist geprüft, dann kommt der Bericht.", "en": "Right: after “after”, have checked: the check is done first, then the report." },
+      "wrong": [
+        { "if": ["will"], "de": "Nach „after“ steht kein will, auch nicht „will have checked“.", "en": "No will after “after”, not even “will have checked”." },
+        { "if": ["checked"], "not": ["have", "has"], "de": "Die Vergangenheit „checked“ passt nicht, es geht um die Zukunft: have checked.", "en": "The past “checked” does not fit; this is about the future: have checked." }
+      ]
+    }
+  },
+  "Don't switch off the server until the backup ___ completed.": {
+    "pat": "tc.present-perfect",
+    "why": {
+      "ok": { "de": "Richtig: Nach „until“ steht has been completed: erst fertig, dann abschalten.", "en": "Right: after “until”, has been completed: finished first, then switch off." },
+      "wrong": [
+        { "if": ["will"], "de": "Nach „until“ steht kein will, auch nicht „will be completed“.", "en": "No will after “until”, not even “will be completed”." },
+        { "if": ["was"], "de": "Die Vergangenheit „was“ passt nicht: Es geht um die Zukunft. Nimm has been.", "en": "The past “was” does not fit: this is about the future. Use has been." }
+      ]
+    }
+  },
+  "The call will end soon. Then I'll email you. → I'll email you as soon as the call ___.": {
+    "pat": "tc.present-for-future",
+    "why": {
+      "ok": { "de": "Richtig: Nach „as soon as“ steht Präsens: „the call ends“.", "en": "Right: after “as soon as” use the present: “the call ends”." },
+      "wrong": [
+        { "if": ["will"], "de": "Nach „as soon as“ steht kein will; es steckt schon in „I'll email“.", "en": "No will after “as soon as”; it is already in “I'll email”." },
+        { "if": ["ended"], "not": ["has", "have"], "de": "Die Vergangenheit passt nicht: Das Ende liegt noch vor uns. Nimm ends.", "en": "The past tense does not fit: the end is still ahead. Use ends." },
+        { "if": ["end"], "not": ["has", "have", "to"], "de": "„The call“ ist Singular: „ends“, nicht „end“.", "en": "“The call” is singular: “ends”, not “end”." }
+      ]
+    }
+  },
+  "We will wait for the approval. Then we will start. → We won't start until the approval ___.": {
+    "pat": "tc.present-for-future",
+    "why": {
+      "ok": { "de": "Richtig: Nach „until“ steht Präsens („arrives“); will steckt in „won't start“.", "en": "Right: after “until” use the present (“arrives”); will is in “won't start”." },
+      "wrong": [
+        { "if": ["will"], "de": "Nach „until“ steht kein will; es steckt schon in „won't start“.", "en": "No will after “until”; it is already in “won't start”." },
+        { "if": ["arrived"], "not": ["has", "have"], "de": "Die Vergangenheit passt nicht: Die Freigabe fehlt noch. Nimm arrives.", "en": "The past tense does not fit: the approval is still missing. Use arrives." },
+        { "if": ["arrive"], "not": ["has", "have", "to"], "de": "„The approval“ ist Singular: „arrives“, nicht „arrive“.", "en": "“The approval” is singular: “arrives”, not “arrive”." }
+      ]
+    }
+  },
+  "I will call you when I will arrive at the airport.": {
+    "pat": "tc.present-for-future",
+    "why": {
+      "ok": { "de": "Richtig: Nach „when“ (= sobald) steht Präsens: „when I arrive“.", "en": "Right: after “when” (= as soon as) use the present: “when I arrive”." },
+      "wrong": [
+        { "if": ["will", "arrive"], "de": "Nach „when“ steht kein will: „when I arrive“. Das will bleibt im Hauptsatz.", "en": "No will after “when”: “when I arrive”. Keep will in the main clause." },
+        { "if": ["arrived"], "not": ["have", "has"], "de": "Die Vergangenheit passt nicht: Du rufst an, wenn du ankommst. Nimm arrive.", "en": "The past tense does not fit: you call when you get there. Use arrive." },
+        { "if": ["arriving"], "de": "„Arriving“ meint: gerade dabei. Für den Zeitpunkt reicht das einfache Präsens.", "en": "“Arriving” means in progress. For the moment, the simple present is enough." }
+      ]
+    }
+  },
+  "We'll go home as soon as the meeting will be over.": {
+    "pat": "tc.present-for-future",
+    "why": {
+      "ok": { "de": "Richtig: Nach „as soon as“ steht Präsens: „the meeting is over“.", "en": "Right: after “as soon as” use the present: “the meeting is over”." },
+      "wrong": [
+        { "if": ["will", "be"], "de": "Nach „as soon as“ steht kein will: „is over“. Das Futur trägt „we'll go“.", "en": "No will after “as soon as”: “is over”. “We'll go” carries the future." },
+        { "if": ["was"], "de": "Die Vergangenheit passt nicht: Das Meeting läuft noch. Nimm is over.", "en": "The past tense does not fit: the meeting is still going. Use is over." },
+        { "if": ["finished"], "not": ["has", "have"], "de": "Die Vergangenheit „finished“ passt nicht; nimm „is over“ oder „has finished“.", "en": "The past “finished” does not fit; use “is over” or “has finished”." }
+      ]
+    }
+  },
+  "Please wait here until the manager will come back.": {
+    "pat": "tc.present-for-future",
+    "why": {
+      "ok": { "de": "Richtig: Nach „until“ steht Präsens: „the manager comes back“.", "en": "Right: after “until” use the present: “the manager comes back”." },
+      "wrong": [
+        { "if": ["will"], "de": "Nach „until“ steht kein will: „until the manager comes back“.", "en": "No will after “until”: “until the manager comes back”." },
+        { "if": ["came"], "de": "Die Vergangenheit passt nicht: Die Chefin ist noch nicht da. Nimm comes.", "en": "The past tense does not fit: the manager is not back yet. Use comes." },
+        { "if": ["come"], "not": ["will", "has", "have", "to"], "de": "„The manager“ ist Singular: „comes back“, nicht „come back“.", "en": "“The manager” is singular: “comes back”, not “come back”." }
+      ]
+    }
+  },
+  "We'll start as soon as the meeting will be over.": {
+    "pat": "tc.present-for-future",
+    "dup": "We'll go home as soon as the meeting will be over.",
+    "why": {
+      "ok": { "de": "Richtig: Nach „as soon as“ steht Präsens: „the meeting is over“.", "en": "Right: after “as soon as” use the present: “the meeting is over”." },
+      "wrong": [
+        { "if": ["will", "be"], "de": "Nach „as soon as“ steht kein will: „is over“. Das Futur trägt „we'll start“.", "en": "No will after “as soon as”: “is over”. “We'll start” carries the future." },
+        { "if": ["was"], "de": "Die Vergangenheit passt nicht: Das Meeting läuft noch. Nimm is over.", "en": "The past tense does not fit: the meeting is still going. Use is over." },
+        { "if": ["finished"], "not": ["has", "have"], "de": "Die Vergangenheit „finished“ passt nicht; nimm „is over“ oder „has finished“.", "en": "The past “finished” does not fit; use “is over” or “has finished”." }
+      ]
+    }
+  }
+}

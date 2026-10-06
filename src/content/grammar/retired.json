@@ -1,0 +1,29 @@
+{
+ "v": 1,
+ "retired": [
+  {
+   "key": "mixed-cond|iwishyoudidnotinterruptmeallthetime",
+   "reason": "Der Satz ist richtiges Englisch (wish + Past für eine Feststellung); die Falle lehrte eine falsche Regel.",
+   "note": {
+    "de": "Jetzt Kontrastpaar im Muster mc.wish-would.",
+    "en": "Now a contrast pair in pattern mc.wish-would."
+   }
+  },
+  {
+   "key": "passive|thewindowhadbrokenduringthestorm",
+   "reason": "Prüfung 06.10.2026: bad ist richtiges Englisch (intransitives break, andere Bedeutung)."
+  },
+  {
+   "key": "reported|hetoldmethathealreadysentthecontract",
+   "reason": "Prüfung 06.10.2026: bad ist im US-Englisch normal."
+  },
+  {
+   "key": "reported|shetoldmethatshewillfinishitnextweek",
+   "reason": "Prüfung 06.10.2026: bad ist richtig, wenn die Zukunft noch aussteht."
+  },
+  {
+   "key": "articles|ilovethemusicespeciallythejazz",
+   "reason": "Prüfung 06.10.2026: bad ist ohne Kontext nicht falsch (bestimmte Musik möglich)."
+  }
+ ]
+}

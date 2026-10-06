@@ -27,7 +27,7 @@ async function solutionHidden(page: Page, type: string): Promise<void> {
   await expect(page.getByTestId('result')).toHaveCount(0);
 }
 
-/** Ergebnis an fester Stelle (U-02): Vergleich, Form-Hinweis, mindestens zwei Beispiele – immer. */
+/** Ergebnis an fester Stelle (U-02): Vergleich, Form-Hinweis, Beispiele nur aus dem Muster. */
 async function resultComplete(page: Page): Promise<void> {
   const item = page.getByTestId('gr-item');
   // Gesamtkonzept 3.6: Du/Richtig nur einmal – bei richtiger Antwort und bei Auswahl steht die Lösung schon in der Karte.
@@ -35,7 +35,10 @@ async function resultComplete(page: Page): Promise<void> {
   if (verdict !== 'correct' && (await item.getAttribute('data-type')) !== 'mc') await expect(item.getByTestId('sentence-diff')).toBeVisible();
   else await expect(item.getByTestId('sentence-diff')).toHaveCount(0);
   await expect(item.getByTestId('form-hint')).toBeVisible();
-  expect(await item.getByTestId('example').count()).toBeGreaterThanOrEqual(2);
+  // Lernplattform 2.0 §3.3 (P2): Beispiele kommen nur noch aus dem Muster der Aufgabe, nie als Themen-Zufallsbeispiel. Bis das Gerüst
+  // das Muster übergibt (P5), darf die Liste leer sein; was dasteht, ist nie leer.
+  const shown = item.getByTestId('example');
+  for (let i = 0; i < (await shown.count()); i++) await expect(shown.nth(i)).not.toHaveText('');
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
   await expect(page.getByTestId('next')).toBeVisible();
 }

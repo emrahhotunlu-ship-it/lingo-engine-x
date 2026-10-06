@@ -1,0 +1,4056 @@
+{
+ "v": 1,
+ "tasks": [
+  {
+   "id": "ca-unl-k1",
+   "type": "kwt",
+   "pat": "ca.unless",
+   "from": "If the client doesn't sign by Friday, we'll withdraw the proposal.",
+   "key": "UNLESS",
+   "frame": "We'll withdraw the proposal ___ by Friday.",
+   "answer": "unless the client signs",
+   "accepted": [
+    "unless the client has signed",
+    "unless the client signs off",
+    "unless they sign",
+    "unless they have signed",
+    "unless they've signed"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: unless = „wenn nicht“, also unless the client signs, ohne zweites not.",
+     "en": "Right: unless = “if not”, so unless the client signs, with no second not."
+    },
+    "wrong": [
+     {
+      "not": [
+       "unless"
+      ],
+      "de": "Das Schlüsselwort unless muss unverändert in der Lücke stehen.",
+      "en": "The key word unless must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "unless",
+       "not"
+      ],
+      "de": "Zweite Verneinung: Unless heißt schon „wenn nicht“. Mit not kippt der Sinn.",
+      "en": "Second negation: unless already means “if not”. With not the meaning flips."
+     },
+     {
+      "if": [
+       "unless",
+       "will"
+      ],
+      "de": "Nach unless steht das Präsens, kein will: unless the client signs.",
+      "en": "After unless use the present, not will: unless the client signs."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-unl-k2",
+   "type": "kwt",
+   "pat": "ca.unless",
+   "from": "We can't close the deal if we don't get legal approval.",
+   "key": "UNLESS",
+   "frame": "We can't close the deal ___ approval.",
+   "answer": "unless we get legal",
+   "accepted": [
+    "unless we receive legal",
+    "unless we obtain legal",
+    "unless we have legal",
+    "unless we secure legal"
+   ],
+   "words": [
+    4,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: unless we get legal approval = „wenn wir keine Freigabe bekommen“.",
+     "en": "Right: unless we get legal approval = “if we don't get approval”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "unless"
+      ],
+      "de": "Das Schlüsselwort unless muss unverändert in der Lücke stehen.",
+      "en": "The key word unless must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "not"
+      ],
+      "de": "Zweite Verneinung: Unless heißt schon „wenn nicht“. Dahinter steht kein not.",
+      "en": "Second negation: unless already means “if not”. No not follows it."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach unless steht das Präsens, kein will: unless we get …",
+      "en": "After unless use the present, not will: unless we get …"
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-unl-f1",
+   "type": "find",
+   "pat": "ca.unless",
+   "prompt": "Unless the client doesn't confirm today, we'll release the room.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "confirms",
+   "fixed": "Unless the client confirms today, we'll release the room.",
+   "accepted": [
+    "has confirmed"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „Unless … doesn't“ ist doppelt verneint. Richtig: unless the client confirms.",
+     "en": "The error: “Unless … doesn't” negates twice. Correct: unless the client confirms."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Unless + doesn't ist eine doppelte Verneinung.",
+      "en": "There is an error: Unless + doesn't is a double negation."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „doesn't confirm“: unless trägt das not schon.",
+      "en": "The error is in “doesn't confirm”: unless already carries the not."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-unl-f2",
+   "type": "find",
+   "pat": "ca.unless",
+   "prompt": "We'll go ahead with the launch unless the data will show a problem.",
+   "err": [
+    9,
+    10
+   ],
+   "answer": "shows",
+   "fixed": "We'll go ahead with the launch unless the data shows a problem.",
+   "accepted": [
+    "show"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach unless steht das Präsens („shows“), kein will.",
+     "en": "The error: after unless use the present (“shows”), not will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach unless steht kein will.",
+      "en": "There is an error: no will after unless."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will show“: Das ist der Reflex „Zukunft = will“.",
+      "en": "The error is “will show”: it is the “future = will” reflex."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-unl-m1",
+   "type": "meaning",
+   "pat": "ca.unless",
+   "a": "We'll cancel the workshop unless 20 people register.",
+   "b": "We'll cancel the workshop if 20 people register.",
+   "q": {
+    "de": "Welcher Satz sagt: Bei weniger als 20 Anmeldungen fällt der Workshop aus?",
+    "en": "Which sentence says the workshop is canceled if fewer than 20 people register?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Unless = „wenn nicht“: ohne 20 Anmeldungen wird abgesagt.",
+     "en": "Right: sentence a. Unless = “if not”: without 20 sign-ups, it is canceled."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b sagt „if“ das Gegenteil: Der Workshop fällt aus, sobald 20 Leute da sind.",
+      "en": "In b, “if” says the opposite: it is canceled once 20 people register."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: unless dreht die Bedingung um, if nicht.",
+      "en": "Not the same: unless reverses the condition, if does not."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-als-k1",
+   "type": "kwt",
+   "pat": "ca.as-long-as",
+   "from": "You can join remotely, but only if you keep your camera on.",
+   "key": "LONG",
+   "frame": "You can join remotely ___ keep your camera on.",
+   "answer": "as long as you",
+   "accepted": [
+    "so long as you",
+    "only as long as you",
+    "only so long as you"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: as long as you keep = „nur wenn“, mit Präsens und ohne will.",
+     "en": "Right: as long as you keep = “only if”, in the present with no will."
+    },
+    "wrong": [
+     {
+      "not": [
+       "long"
+      ],
+      "de": "Das Schlüsselwort long muss stehen: as long as = solange, nur wenn.",
+      "en": "The key word long must appear: as long as = provided that."
+     },
+     {
+      "if": [
+       "long",
+       "will"
+      ],
+      "de": "Nach as long as steht das Präsens („you keep“), kein will.",
+      "en": "After as long as use the present (“you keep”), not will."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-als-k2",
+   "type": "kwt",
+   "pat": "ca.as-long-as",
+   "from": "We'll sign the contract only if the payment terms stay unchanged.",
+   "key": "CONDITION",
+   "frame": "We'll sign the contract ___ payment terms stay unchanged.",
+   "answer": "on condition that the",
+   "accepted": [
+    "on the condition that the",
+    "only on condition that the"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: on condition that = „unter der Bedingung, dass“, danach Präsens.",
+     "en": "Right: on condition that = “provided that”, followed by the present."
+    },
+    "wrong": [
+     {
+      "not": [
+       "condition"
+      ],
+      "de": "Das Schlüsselwort condition muss stehen: on condition that + Satz.",
+      "en": "The key word condition must appear: on condition that + clause."
+     },
+     {
+      "if": [
+       "condition"
+      ],
+      "not": [
+       "that"
+      ],
+      "de": "Nach on condition steht that: on condition that + Satz.",
+      "en": "On condition needs that: on condition that + clause."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-als-f1",
+   "type": "find",
+   "pat": "ca.as-long-as",
+   "prompt": "You can leave early as long as you will finish the report first.",
+   "err": [
+    8,
+    9
+   ],
+   "answer": "finish",
+   "fixed": "You can leave early as long as you finish the report first.",
+   "accepted": [
+    "have finished"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach as long as steht das Präsens („finish“), kein will.",
+     "en": "The error: after as long as use the present (“finish”), not will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach as long as steht kein will.",
+      "en": "There is an error: no will after as long as."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will finish“. Deutsch nutzt hier auch das Präsens.",
+      "en": "The error is “will finish”. German also uses the present here."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-als-f2",
+   "type": "find",
+   "pat": "ca.as-long-as",
+   "prompt": "We'll extend the trial as far as the client stays interested.",
+   "err": [
+    4,
+    6
+   ],
+   "answer": "as long as",
+   "fixed": "We'll extend the trial as long as the client stays interested.",
+   "accepted": [
+    "provided that",
+    "provided",
+    "providing that",
+    "providing",
+    "so long as"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „as far as“ = „soweit“. Die Bedingung heißt as long as.",
+     "en": "The error: “as far as” = “to the extent”. The condition is as long as."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: „as far as“ nennt keine Bedingung.",
+      "en": "There is an error: “as far as” does not state a condition."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „as far as“ (= soweit). Gemeint ist „solange“.",
+      "en": "The error is “as far as” (= to the extent). “For as long as” is meant."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-als-f3",
+   "type": "find",
+   "pat": "ca.as-long-as",
+   "prompt": "You can keep the device provided that you return it after the trial.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: provided that + Präsens („you return“) ist richtig.",
+     "en": "No error: provided that + present (“you return”) is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach provided that steht das Präsens, ganz ohne will.",
+      "en": "No error: the present follows provided that, with no will."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-als-m1",
+   "type": "meaning",
+   "pat": "ca.as-long-as",
+   "a": "You can borrow the car as long as you return it by five.",
+   "b": "You can borrow the car even if you don't return it by five.",
+   "q": {
+    "de": "Welcher Satz macht die Rückgabe zur Bedingung?",
+    "en": "Which sentence makes returning the car a condition?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. As long as = „nur wenn“: Die Rückgabe ist die Bedingung.",
+     "en": "Right: sentence a. As long as = “only if”: returning it is the condition."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist die Rückgabe keine Bedingung: Der Wagen ist auch ohne sie erlaubt.",
+      "en": "In b returning it is no condition: you may borrow the car either way."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a verlangt die Rückgabe, b nicht.",
+      "en": "Not the same: a requires the return, b does not."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-oth-k1",
+   "type": "kwt",
+   "pat": "ca.otherwise",
+   "from": "Please sign the form today, or we can't process your request.",
+   "key": "OTHERWISE",
+   "frame": "Please sign the form today. ___ process your request.",
+   "answer": "Otherwise, we can't",
+   "accepted": [
+    "Otherwise we can't",
+    "Otherwise, we cannot",
+    "Otherwise we cannot",
+    "Otherwise, we're unable to",
+    "Otherwise we're unable to",
+    "Otherwise, we won't",
+    "Otherwise we won't"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Otherwise, + Hauptsatz = „sonst“, im neuen Satz nach dem Punkt.",
+     "en": "Right: Otherwise, + main clause = “or else”, in the new sentence after the period."
+    },
+    "wrong": [
+     {
+      "not": [
+       "otherwise"
+      ],
+      "de": "Das Schlüsselwort otherwise muss stehen: Es beginnt den neuen Satz.",
+      "en": "The key word otherwise must appear: it starts the new sentence."
+     },
+     {
+      "if": [
+       "otherwise",
+       "if"
+      ],
+      "de": "Otherwise ist kein Nebensatz-Wort wie if. Danach folgt ein Hauptsatz.",
+      "en": "Otherwise is not a clause word like if. A main clause follows it."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-oth-k2",
+   "type": "kwt",
+   "pat": "ca.otherwise",
+   "from": "We have to agree on an owner, or the project will stall.",
+   "key": "OTHERWISE",
+   "frame": "We have to agree on an owner. ___ stall.",
+   "answer": "Otherwise, the project will",
+   "accepted": [
+    "Otherwise the project will",
+    "Otherwise, the project would",
+    "Otherwise the project would",
+    "Otherwise, the project could",
+    "Otherwise the project could",
+    "Otherwise, the project may",
+    "Otherwise the project may"
+   ],
+   "words": [
+    4,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Otherwise, the project will stall = „sonst gerät das Projekt ins Stocken“.",
+     "en": "Right: Otherwise, the project will stall = “or else the project stalls”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "otherwise"
+      ],
+      "de": "Das Schlüsselwort otherwise muss stehen: „sonst“ im neuen Satz.",
+      "en": "The key word otherwise must appear: “or else” in the new sentence."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-oth-f1",
+   "type": "find",
+   "pat": "ca.otherwise",
+   "prompt": "We'll lose the slot otherwise we confirm by Friday.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "unless",
+   "fixed": "We'll lose the slot unless we confirm by Friday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: otherwise ist kein Bindewort. Für „es sei denn“ passt unless.",
+     "en": "The error: otherwise is not a conjunction. For “unless” use unless."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: otherwise kann keinen Nebensatz einleiten.",
+      "en": "There is an error: otherwise cannot open a subordinate clause."
+     },
+     {
+      "tap": "*",
+      "pat": "ca.unless",
+      "de": "Der Fehler liegt bei „otherwise“ (= sonst, neuer Satz). Hier passt unless.",
+      "en": "The error is “otherwise” (= or else, new sentence). Here unless fits."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-oth-f2",
+   "type": "find",
+   "pat": "ca.otherwise",
+   "prompt": "Please approve the plan today. Otherwise, can we not start on Monday.",
+   "err": [
+    6,
+    8
+   ],
+   "answer": "we can't",
+   "fixed": "Please approve the plan today. Otherwise, we can't start on Monday.",
+   "accepted": [
+    "we cannot",
+    "we can not",
+    "we won't be able to",
+    "we're unable to"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach Otherwise, steht normale Satzstellung: we can't start.",
+     "en": "The error: normal word order follows Otherwise,: we can't start."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach Otherwise, steht Subjekt vor Verb.",
+      "en": "There is an error: after Otherwise, the subject comes before the verb."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „can we not“: Nach „sonst“ steht im Deutschen das Verb vorn.",
+      "en": "The error is “can we not”: German puts the verb first after “sonst”."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-oth-m1",
+   "type": "meaning",
+   "pat": "ca.otherwise",
+   "a": "Please confirm by noon. Otherwise, the slot goes to another team.",
+   "b": "Please confirm by noon. Then we'll hold the slot for you.",
+   "q": {
+    "de": "Welcher Satz sagt: Ohne Bestätigung geht der Termin verloren?",
+    "en": "Which sentence says you lose the slot if you do not confirm?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Otherwise = „sonst“: ohne Bestätigung geht der Termin weg.",
+     "en": "Right: sentence a. Otherwise = “or else”: without confirming, the slot goes."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b heißt then „danach“: Es nennt keine Folge ohne die Bestätigung, a schon.",
+      "en": "In b, then means “after that”: it names no consequence of not confirming; a does."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Otherwise nennt die Folge ohne Bestätigung, then die danach.",
+      "en": "Not the same: Otherwise names the result without it, then the result after it."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-buf-k1",
+   "type": "kwt",
+   "pat": "ca.but-for",
+   "from": "The launch would have failed without the extra budget.",
+   "key": "BUT",
+   "frame": "The launch would have failed, ___ the extra budget.",
+   "answer": "but for",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: but for + Nomen (the extra budget) = „ohne“ im Rückblick.",
+     "en": "Right: but for + noun (the extra budget) = “without” in hindsight."
+    },
+    "wrong": [
+     {
+      "if": [
+       "but"
+      ],
+      "not": [
+       "for"
+      ],
+      "de": "„But“ allein heißt „aber, außer“. Für „ohne“ im Rückblick braucht es „but for“.",
+      "en": "“But” alone means “however” or “except”. “Without” in hindsight needs “but for”."
+     },
+     {
+      "not": [
+       "but"
+      ],
+      "de": "Das Schlüsselwort but muss stehen: but for + Nomen.",
+      "en": "The key word but must appear: but for + noun."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-buf-k2",
+   "type": "kwt",
+   "pat": "ca.but-for",
+   "from": "We would never have found the error without the audit.",
+   "key": "BEEN",
+   "frame": "We would never have found the error if it hadn't ___ the audit.",
+   "answer": "been for",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: if it hadn't been for + Nomen = „wäre nicht … gewesen“, ohne die Prüfung.",
+     "en": "Right: if it hadn't been for + noun = “had it not been for”, without the audit."
+    },
+    "wrong": [
+     {
+      "not": [
+       "been"
+      ],
+      "de": "Das Schlüsselwort been muss stehen: if it hadn't been for + Nomen.",
+      "en": "The key word been must appear: if it hadn't been for + noun."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "not": [
+       "for"
+      ],
+      "de": "Nach „been“ braucht es for: if it hadn't been for + Nomen.",
+      "en": "“Been” needs for after it: if it hadn't been for + noun."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-buf-f1",
+   "type": "find",
+   "pat": "ca.but-for",
+   "prompt": "But for the early warning last spring, we would lose the client.",
+   "err": [
+    8,
+    9
+   ],
+   "answer": "would have lost",
+   "fixed": "But for the early warning last spring, we would have lost the client.",
+   "accepted": [
+    "would've lost"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Rückblick braucht would have + Partizip („would have lost“).",
+     "en": "The error: hindsight needs would have + participle (“would have lost”)."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: „last spring“ blickt zurück, also would have + Partizip.",
+      "en": "There is an error: “last spring” looks back, so use would have + participle."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „would lose“: Deutsches „hätten verloren“ braucht would have lost.",
+      "en": "The error is “would lose”: German “hätten verloren” needs would have lost."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-buf-f2",
+   "type": "find",
+   "pat": "ca.but-for",
+   "prompt": "But for the CFO had approved the budget, we couldn't have started.",
+   "err": [
+    3,
+    5
+   ],
+   "answer": "CFO's approval of",
+   "fixed": "But for the CFO's approval of the budget, we couldn't have started.",
+   "accepted": [
+    "CFO's approval for"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach but for steht ein Nomen („the CFO's approval“), kein ganzer Satz.",
+     "en": "The error: but for takes a noun (“the CFO's approval”), not a whole clause."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach but for folgt kein Satz mit had approved.",
+      "en": "There is an error: no clause with had approved follows but for."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „had approved“: Nach but for steht ein Nomen, kein Verb.",
+      "en": "The error is “had approved”: a noun follows but for, not a verb."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-buf-f3",
+   "type": "find",
+   "pat": "ca.but-for",
+   "prompt": "But for the late shipment, we would have hit our target.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: but for + Nomen und would have + Partizip passen zusammen.",
+     "en": "No error: but for + noun and would have + participle fit together."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach but for steht ein Nomen, danach would have + Partizip.",
+      "en": "No error: a noun follows but for, then would have + participle."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-buf-m1",
+   "type": "meaning",
+   "pat": "ca.but-for",
+   "a": "But for the audit, we would have missed the error.",
+   "b": "We missed the error because of the audit.",
+   "q": {
+    "de": "In welchem Satz hat die Prüfung geholfen, den Fehler zu finden?",
+    "en": "In which sentence did the audit help us find the error?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. But for = „ohne“: ohne die Prüfung hätten wir ihn übersehen.",
+     "en": "Right: sentence a. But for = “without”: no audit, and we'd have missed it."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b verursacht die Prüfung das Übersehen (because of). But for meint das Gegenteil.",
+      "en": "In b the audit caused the miss (because of). But for means the opposite."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a lobt die Prüfung, b macht sie zur Ursache des Fehlers.",
+      "en": "Not the same: a credits the audit, b blames it for the miss."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inv-k1",
+   "type": "kwt",
+   "pat": "ca.inversion",
+   "from": "If you should need further details, please contact me.",
+   "key": "SHOULD",
+   "frame": "___ further details, please contact me.",
+   "answer": "Should you need",
+   "accepted": [
+    "Should you require",
+    "Should you want"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Should you + Grundform = „falls Sie … brauchen“, förmlich und ohne if.",
+     "en": "Right: Should you + base verb = “if you should need”, formal with no if."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "Der Satz mit if ist richtig, aber gefragt ist die förmliche Umstellung ohne if: Should you need.",
+      "en": "The sentence with if is correct, but the formal inversion without if is asked for: Should you need."
+     },
+     {
+      "not": [
+       "should"
+      ],
+      "de": "Das Schlüsselwort should muss stehen: Should you + Grundform.",
+      "en": "The key word should must appear: Should you + base verb."
+     },
+     {
+      "if": [
+       "should",
+       "needs"
+      ],
+      "de": "Nach Should you steht die Grundform: need, ohne -s.",
+      "en": "After Should you use the base form: need, without -s."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inv-k2",
+   "type": "kwt",
+   "pat": "ca.inversion",
+   "from": "If we had known about the delay, we would have rescheduled the launch.",
+   "key": "HAD",
+   "frame": "___ about the delay, we would have rescheduled the launch.",
+   "answer": "Had we known",
+   "accepted": [
+    "Had we heard",
+    "Had we learned",
+    "Had we been told",
+    "Had we been informed",
+    "Had we only known",
+    "Had we been notified",
+    "Had we been warned"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Had we + Partizip = „hätten wir gewusst“, unreal und ohne if.",
+     "en": "Right: Had we + participle = “if we had known”, unreal and with no if."
+    },
+    "wrong": [
+     {
+      "not": [
+       "had"
+      ],
+      "de": "Das Schlüsselwort had muss stehen: Had we + Partizip.",
+      "en": "The key word had must appear: Had we + participle."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "Nach Had we steht direkt das Partizip, ohne have.",
+      "en": "After Had we comes the participle directly, with no have."
+     },
+     {
+      "if": [
+       "had",
+       "if"
+      ],
+      "de": "Der Satz mit if ist richtig, aber gefragt ist die Umstellung ohne if: Had we known.",
+      "en": "The sentence with if is correct, but the inversion without if is asked for: Had we known."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inv-f1",
+   "type": "find",
+   "pat": "ca.inversion",
+   "prompt": "Should you will need more time, let me know.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "need",
+   "fixed": "Should you need more time, let me know.",
+   "accepted": [
+    "require"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach Should you steht die Grundform („need“), kein will.",
+     "en": "The error: after Should you use the base form (“need”), not will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach Should you folgt kein will.",
+      "en": "There is an error: no will follows Should you."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will need“: Should steckt schon in der Umstellung.",
+      "en": "The error is “will need”: Should already sits in the inversion."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inv-f2",
+   "type": "find",
+   "pat": "ca.inversion",
+   "prompt": "Were we losing the client, we would restructure the team.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "to lose",
+   "fixed": "Were we to lose the client, we would restructure the team.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Die hypothetische Umstellung heißt Were we to + Verb („to lose“).",
+     "en": "The error: the hypothetical inversion is Were we to + verb (“to lose”)."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach Were we steht to + Verb, nicht -ing.",
+      "en": "There is an error: after Were we comes to + verb, not -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „losing“: Die Form ist Were we to lose.",
+      "en": "The error is “losing”: the form is Were we to lose."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inv-f3",
+   "type": "find",
+   "pat": "ca.inversion",
+   "prompt": "Should there be any delay, we will inform you immediately.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Should there be … ersetzt „if there is“, förmlich und korrekt.",
+     "en": "No error: Should there be … replaces “if there is”, formal and correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach Should there be steht der Hauptsatz mit will ganz normal.",
+      "en": "No error: the main clause after Should there be can use will as usual."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inv-m1",
+   "type": "meaning",
+   "pat": "ca.inversion",
+   "a": "Had we signed the contract, we would be paying less now.",
+   "b": "Should we sign the contract, we'll pay less.",
+   "q": {
+    "de": "Welcher Satz sagt: Wir haben den Vertrag nicht unterschrieben?",
+    "en": "Which sentence says we did NOT sign the contract?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Had we + Partizip = unreal in der Vergangenheit: nicht unterschrieben.",
+     "en": "Right: sentence a. Had we + participle = unreal past: we did not sign."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b blickt Should we sign nach vorn: Unterschreiben ist noch möglich.",
+      "en": "In b, Should we sign looks ahead: signing is still possible."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a ist unreal und vergangen, b ist möglich und offen.",
+      "en": "Not the same: a is unreal and past, b is possible and open."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inc-k1",
+   "type": "kwt",
+   "pat": "ca.in-case",
+   "from": "I'll take a charger with me because the meeting might run long.",
+   "key": "CASE",
+   "frame": "I'll take a charger with me ___ runs long.",
+   "answer": "in case the meeting",
+   "accepted": [
+    "just in case the meeting",
+    "in case this meeting",
+    "just in case this meeting"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: in case + Präsens = Vorsorge: Ich nehme das Ladegerät vorher mit.",
+     "en": "Right: in case + present = precaution: I take the charger beforehand."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "„If“ wäre eine Bedingung. Gemeint ist Vorsorge: in case.",
+      "en": "“If” would be a condition. A precaution is meant: in case."
+     },
+     {
+      "not": [
+       "case"
+      ],
+      "de": "Das Schlüsselwort case muss stehen: in case + Satz.",
+      "en": "The key word case must appear: in case + clause."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inc-k2",
+   "type": "kwt",
+   "pat": "ca.in-case",
+   "from": "Let's send the files now because the server might go down later.",
+   "key": "CASE",
+   "frame": "Let's send the files now ___ goes down later.",
+   "answer": "in case the server",
+   "accepted": [
+    "just in case the server"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: in case the server goes down = „für den Fall, dass der Server ausfällt“.",
+     "en": "Right: in case the server goes down = “just in case the server fails”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "„If“ hieße: erst bei Ausfall senden. Das ist keine Vorsorge: in case.",
+      "en": "“If” would mean sending only after the failure. That is no precaution: in case."
+     },
+     {
+      "not": [
+       "case"
+      ],
+      "de": "Das Schlüsselwort case muss stehen: in case + Satz.",
+      "en": "The key word case must appear: in case + clause."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inc-f1",
+   "type": "find",
+   "pat": "ca.in-case",
+   "prompt": "Bring a spare cable in case the projector will fail.",
+   "err": [
+    8,
+    9
+   ],
+   "answer": "fails.",
+   "fixed": "Bring a spare cable in case the projector fails.",
+   "accepted": [
+    "should fail."
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach in case steht das Präsens („fails“), kein will.",
+     "en": "The error: after in case use the present (“fails”), not will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach in case steht kein will.",
+      "en": "There is an error: no will after in case."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „will fail“: Auch nach „für den Fall, dass“ steht Präsens.",
+      "en": "The error is “will fail”: the present also follows “in case”."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inc-f2",
+   "type": "find",
+   "pat": "ca.in-case",
+   "prompt": "We'll refund the deposit in case you cancel within 24 hours.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "if",
+   "fixed": "We'll refund the deposit if you cancel within 24 hours.",
+   "accepted": [
+    "as long as",
+    "provided",
+    "provided that",
+    "providing"
+   ],
+   "why": {
+    "ok": {
+     "de": "Die Rückzahlung folgt erst nach der Absage: if, nicht in case (Verträge, Mails).",
+     "en": "The refund comes only after you cancel: if, not in case (contracts, emails)."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: „in case“ meint Vorsorge, hier gilt eine Bedingung.",
+      "en": "There is an error: “in case” means precaution, but here a condition applies."
+     },
+     {
+      "tap": "*",
+      "pat": "ca.in-case",
+      "de": "Der Fehler liegt bei „in case“: Man zahlt nicht vorab zurück, sondern nur wenn.",
+      "en": "The error is “in case”: you do not refund beforehand, only if it happens."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inc-f3",
+   "type": "find",
+   "pat": "ca.in-case",
+   "prompt": "I'll save the draft twice in case the file gets corrupted.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: in case + Präsens nennt eine Vorsorge: Ich speichere vorher.",
+     "en": "No error: in case + present names a precaution: I save beforehand."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Hier ist in case richtig, denn gespeichert wird vor dem Schaden.",
+      "en": "No error: in case is right here, because saving happens before the damage."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "ca-inc-m1",
+   "type": "meaning",
+   "pat": "ca.in-case",
+   "a": "I'll take an umbrella in case it rains.",
+   "b": "I'll take an umbrella if it rains.",
+   "q": {
+    "de": "Welcher Satz sagt: Ich nehme den Schirm mit, bevor ich weiß, ob es regnet?",
+    "en": "Which sentence says you take the umbrella before you know whether it rains?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. In case = Vorsorge: Der Schirm kommt vorher mit.",
+     "en": "Right: sentence a. In case = precaution: the umbrella comes along beforehand."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b gilt „if“ als Bedingung: Der Schirm kommt erst bei Regen ins Spiel.",
+      "en": "In b, “if” is a condition: the umbrella matters only once it rains."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: in case handelt vorher, if erst bei Eintritt.",
+      "en": "Not the same: in case acts beforehand, if only when it happens."
+     }
+    ]
+   },
+   "topic": "cond-alt"
+  },
+  {
+   "id": "mc.kwt1",
+   "type": "kwt",
+   "pat": "mc.past-cond",
+   "from": "We missed the deadline in March, so we are paying a penalty now.",
+   "key": "HAD",
+   "frame": "If we ___ the deadline in March, we wouldn't be paying a penalty now.",
+   "answer": "had met",
+   "accepted": [
+    "had made",
+    "had hit",
+    "had not missed"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Ursache im März (had + 3. Form), Folge jetzt (now): wouldn't be.",
+     "en": "cause in March (had + participle), result now: wouldn't be."
+    },
+    "wrong": [
+     {
+      "not": [
+       "had"
+      ],
+      "de": "Das Schlüsselwort had fehlt: Der if-Teil braucht had + 3. Form.",
+      "en": "the key word had is missing: the if-clause needs had + participle."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would gehört nicht in den if-Teil: dort steht had + 3. Form.",
+      "en": "would does not belong in the if-clause: it takes had + participle."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt2",
+   "type": "kwt",
+   "pat": "mc.past-cond",
+   "from": "Our CFO left in June, so we have no one to approve the budget now.",
+   "key": "WOULD",
+   "frame": "If our CFO hadn't left in June, we ___ someone to approve the budget now.",
+   "answer": "would have",
+   "accepted": [
+    "would still have"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "hadn't left (früher) + now: die Folge jetzt → would + Grundform.",
+     "en": "hadn't left (earlier) + now: result now → would + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would",
+       "have",
+       "had"
+      ],
+      "de": "would have had blickt auf damals zurück; now verlangt would + Grundform: would have someone.",
+      "en": "would have had looks back to then; now needs would + base form: would have someone."
+     },
+     {
+      "if": [
+       "would",
+       "had"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "Nach would steht die Grundform, nicht had: would have someone.",
+      "en": "after would comes the base form, not had: would have someone."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "would have been wäre ein Satz über damals; now verlangt die Folge für jetzt.",
+      "en": "would have been is about back then; now needs the result for the present."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt3",
+   "type": "kwt",
+   "pat": "mc.present-cond",
+   "from": "Our process is slow, so we didn't win the bid.",
+   "key": "HAVE",
+   "frame": "If our process were faster, we ___ the bid.",
+   "answer": "would have won",
+   "accepted": [
+    "would have secured",
+    "would have landed",
+    "would not have lost",
+    "wouldn't have lost",
+    "'d have won",
+    "would have gotten",
+    "would have taken"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Zustand jetzt (were), die Folge früher: would have + 3. Form.",
+     "en": "state now (were), result earlier: would have + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would",
+       "win"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "Die Folge liegt in der Vergangenheit: would have won, nicht would win.",
+      "en": "the result lies in the past: would have won, not would win."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "Nach would steht have, nicht had: would have won.",
+      "en": "after would comes have, not had: would have won."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt4",
+   "type": "kwt",
+   "pat": "mc.present-cond",
+   "from": "Our manager is very cautious, so he didn't approve the pilot.",
+   "key": "APPROVED",
+   "frame": "If our manager were less cautious, he ___ the pilot.",
+   "answer": "would have approved",
+   "accepted": [
+    "'d have approved"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Eigenschaft jetzt (were), die Folge früher: would have + 3. Form.",
+     "en": "trait now (were), result earlier: would have + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would",
+       "approve"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "Die Entscheidung fiel früher: would have approved, nicht would approve.",
+      "en": "the decision came earlier: would have approved, not would approve."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had approved gehört in den if-Teil; im Hauptsatz steht would have approved.",
+      "en": "had approved belongs in the if-clause; the main clause has would have approved."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt5",
+   "type": "kwt",
+   "pat": "mc.wish-now",
+   "from": "Unfortunately, I can't attend the workshop this week.",
+   "key": "COULD",
+   "frame": "I wish ___ attend the workshop this week.",
+   "answer": "I could",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "wish + can → could: ein Wunsch über jetzt, eine Fähigkeit.",
+     "en": "wish + can → could: a wish about now, an ability."
+    },
+    "wrong": [
+     {
+      "if": [
+       "can"
+      ],
+      "de": "can bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+      "en": "can stays present; after wish the verb moves one step back."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "pat": "mc.wish-would",
+      "de": "would fordert Verhalten anderer; die eigene Fähigkeit heißt could.",
+      "en": "would asks others to change; your own ability is could."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt6",
+   "type": "kwt",
+   "pat": "mc.wish-now",
+   "from": "It's a pity that the client is so inflexible about dates.",
+   "key": "WERE",
+   "frame": "I wish the client ___ about dates.",
+   "answer": "were more flexible",
+   "accepted": [
+    "were less rigid",
+    "were a bit more flexible",
+    "were a little more flexible",
+    "were less strict",
+    "were more relaxed",
+    "were flexible"
+   ],
+   "words": [
+    2,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Wunsch über jetzt: wish + Past, bei be meist were.",
+     "en": "wish about now: wish + past, usually were for be."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+      "en": "is stays present; after wish the verb moves one step back."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "pat": "mc.wish-would",
+      "de": "would be wünscht anderes Verhalten; ein Zustand jetzt braucht were.",
+      "en": "would be wishes for other behavior; a state now needs were."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt7",
+   "type": "kwt",
+   "pat": "mc.wish-past",
+   "from": "I regret sending the proposal without legal review.",
+   "key": "SENT",
+   "frame": "I wish I ___ the proposal without legal review.",
+   "answer": "hadn't sent",
+   "accepted": [
+    "had not sent"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Bedauern für früher: wish + hadn't + 3. Form (sent).",
+     "en": "regret about earlier: wish + hadn't + participle (sent)."
+    },
+    "wrong": [
+     {
+      "not": [
+       "had"
+      ],
+      "pat": "mc.wish-now",
+      "de": "Past Simple bleibt bei jetzt; Bedauern über früher braucht had + 3. Form.",
+      "en": "simple past stays at now; regret about earlier needs had + participle."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "not": [
+       "not"
+      ],
+      "de": "Du bereust das Senden: Es muss verneint werden (hadn't sent).",
+      "en": "you regret sending: it must be negative (hadn't sent)."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt8",
+   "type": "kwt",
+   "pat": "mc.wish-past",
+   "from": "It's a shame we didn't ask IT before the migration.",
+   "key": "ASKED",
+   "frame": "If only we ___ IT before the migration!",
+   "answer": "had asked",
+   "accepted": [
+    "'d asked"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "If only + before (früher): das Bedauern → had + 3. Form.",
+     "en": "if only + before (earlier): regret → had + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would"
+      ],
+      "pat": "mc.wish-would",
+      "de": "would ask wünscht künftiges Verhalten; before the migration ist vorbei.",
+      "en": "would ask wishes for future behavior; before the migration is over."
+     },
+     {
+      "not": [
+       "had"
+      ],
+      "pat": "mc.wish-now",
+      "de": "Past Simple bleibt bei jetzt; für früher braucht If only had asked.",
+      "en": "simple past stays at now; for earlier, if only needs had asked."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt9",
+   "type": "kwt",
+   "pat": "mc.wish-would",
+   "from": "It annoys me that you never confirm meeting times in advance.",
+   "key": "WOULD",
+   "frame": "I wish you ___ meeting times in advance.",
+   "answer": "would confirm",
+   "accepted": [
+    "would always confirm",
+    "would start confirming",
+    "would finally confirm"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "never confirm: Ärger über Verhalten, das sich ändern soll → would.",
+     "en": "never confirm: annoyance at behavior that should change → would."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will steht nie nach wish; dieser Ärger braucht would.",
+      "en": "will is never used after wish; this annoyance needs would."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "pat": "mc.wish-past",
+      "de": "had confirmed bedauert etwas Vergangenes; die Gewohnheit besteht weiter.",
+      "en": "had confirmed regrets something past; the habit continues."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt10",
+   "type": "kwt",
+   "pat": "mc.wish-would",
+   "from": "It annoys me that the vendor keeps changing the requirements.",
+   "key": "STOP",
+   "frame": "I wish the vendor ___ the requirements.",
+   "answer": "would stop changing",
+   "accepted": [
+    "would just stop changing",
+    "'d stop changing",
+    "would stop altering",
+    "would stop modifying"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "keeps changing: wiederholtes Verhalten, das enden soll → would stop.",
+     "en": "keeps changing: repeated behavior that should end → would stop."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will steht nie nach wish; hier braucht der Ärger would.",
+      "en": "will is never used after wish; here the annoyance needs would."
+     },
+     {
+      "if": [
+       "stops"
+      ],
+      "de": "Nach would steht die Grundform: would stop, nicht stops.",
+      "en": "after would comes the base form: would stop, not stops."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt11",
+   "type": "kwt",
+   "pat": "mc.high-time",
+   "from": "Updating our onboarding process is long overdue.",
+   "key": "TIME",
+   "frame": "It's ___ we updated our onboarding process.",
+   "answer": "high time",
+   "accepted": [
+    "about time",
+    "past time",
+    "finally time",
+    "really time"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "It's high time + Subjekt + Past Simple: überfällig, jetzt wird gehandelt.",
+     "en": "It's high time + subject + past simple: overdue, act now."
+    },
+    "wrong": [
+     {
+      "if": [
+       "time"
+      ],
+      "not": [
+       "high",
+       "about",
+       "past"
+      ],
+      "de": "„It's time we updated“ stimmt auch, sagt aber nicht „überfällig“. Gefragt: high/about/past time.",
+      "en": "“It's time we updated” is correct too, but not “overdue”. Needed: high/about/past time."
+     },
+     {
+      "not": [
+       "high",
+       "about",
+       "past"
+      ],
+      "de": "Es fehlt high, about oder past vor time: It's high time we updated.",
+      "en": "high, about or past is missing before time: It's high time we updated."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.kwt12",
+   "type": "kwt",
+   "pat": "mc.high-time",
+   "from": "The team should start preparing for the audit now; it's overdue.",
+   "key": "STARTED",
+   "frame": "It's high time the team ___ for the audit.",
+   "answer": "started preparing",
+   "accepted": [
+    "started to prepare",
+    "started getting ready",
+    "started to get ready"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "It's high time + Past Simple: started, auch wenn es um jetzt geht.",
+     "en": "It's high time + past simple: started, even though it is about now."
+    },
+    "wrong": [
+     {
+      "if": [
+       "start"
+      ],
+      "de": "Präsens start passt nicht: nach high time steht die Past-Form started.",
+      "en": "present start does not fit: after high time use the past form started."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would gehört nicht nach high time; hier steht schlicht das Past.",
+      "en": "would does not belong after high time; use the plain past here."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find1",
+   "type": "find",
+   "pat": "mc.past-cond",
+   "prompt": "If we would have tested the patch earlier, we would have fewer outages now.",
+   "err": [
+    2,
+    4
+   ],
+   "answer": "had tested",
+   "fixed": "If we had tested the patch earlier, we would have fewer outages now.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Im if-Teil steht had + 3. Form; would gehört nur in die Folge (now).",
+     "en": "the if-clause takes had + participle; would belongs only in the result (now)."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: im if-Teil darf kein would stehen.",
+      "en": "there is an error: the if-clause cannot contain would."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort ist in Ordnung; der Fehler liegt bei would have im if-Teil.",
+      "en": "this word is fine; the error is would have in the if-clause."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find2",
+   "type": "find",
+   "pat": "mc.past-cond",
+   "prompt": "If the client had signed in May, we would have been busy now.",
+   "err": [
+    8,
+    10
+   ],
+   "answer": "would be",
+   "fixed": "If the client had signed in May, we would be busy now.",
+   "accepted": [
+    "'d be"
+   ],
+   "why": {
+    "ok": {
+     "de": "now verlangt die Folge für jetzt: would be, nicht would have been.",
+     "en": "now needs the result for the present: would be, not would have been."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, ein Fehler: Die Folge gilt jetzt, aber would have been blickt zurück.",
+      "en": "there is an error: the result holds now, but would have been looks back."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort passt; der Fehler steckt in would have been neben now.",
+      "en": "this word fits; the error is in would have been next to now."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find3",
+   "type": "find",
+   "pat": "mc.present-cond",
+   "prompt": "If I would be more patient, I would have waited for the quote.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "were",
+   "fixed": "If I were more patient, I would have waited for the quote.",
+   "accepted": [
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der if-Teil nimmt die Past-Form (were), nie would be.",
+     "en": "the if-clause takes the past form (were), never would be."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, ein Fehler: Nach if steht kein would, sondern die Past-Form.",
+      "en": "there is an error: after if comes the past form, not would."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort passt; der Fehler ist would be im if-Teil.",
+      "en": "this word fits; the error is would be in the if-clause."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find4",
+   "type": "find",
+   "pat": "mc.present-cond",
+   "prompt": "If our CTO were less cautious, we would have launched the beta in March.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: were (der Zustand jetzt), would have launched (Folge früher).",
+     "en": "correct: were (state now), would have launched (result earlier)."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist kein Fehler: were beschreibt den Zustand, would have launched das Frühere.",
+      "en": "there is no error: were describes the state, would have launched the earlier result."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find5",
+   "type": "find",
+   "pat": "mc.wish-now",
+   "prompt": "I wish I am less busy this quarter.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "were",
+   "fixed": "I wish I were less busy this quarter.",
+   "accepted": [
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach wish rückt die Form zurück: bei be were (oder umgangssprachlich was).",
+     "en": "after wish the verb steps back: were for be (or casual was)."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, ein Fehler: am bleibt im Präsens, nach wish steht die Past-Form.",
+      "en": "there is an error: am stays present, but wish takes the past form."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort passt; der Fehler ist am nach wish.",
+      "en": "this word fits; the error is am after wish."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find6",
+   "type": "find",
+   "pat": "mc.wish-now",
+   "prompt": "I wish our system can handle more requests at once.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "could",
+   "fixed": "I wish our system could handle more requests at once.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "wish + Fähigkeit jetzt: can wird zu could.",
+     "en": "wish + ability now: can becomes could."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, ein Fehler: can bleibt im Präsens, nach wish braucht es could.",
+      "en": "there is an error: can stays present, but wish needs could."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort passt; der Fehler ist can nach wish.",
+      "en": "this word fits; the error is can after wish."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find7",
+   "type": "find",
+   "pat": "mc.wish-past",
+   "prompt": "I wish I would have asked for the contract in writing.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "had",
+   "fixed": "I wish I had asked for the contract in writing.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Bedauern über früher: wish + had + 3. Form, nicht would have.",
+     "en": "regret about earlier: wish + had + participle, not would have."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, ein Fehler: would have gehört nicht hinter wish; es braucht had.",
+      "en": "there is an error: would have does not follow wish; it needs had."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort passt; der Fehler ist would have nach wish.",
+      "en": "this word fits; the error is would have after wish."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find8",
+   "type": "find",
+   "pat": "mc.wish-past",
+   "prompt": "If only we didn't wait so long before contacting the client last week.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "hadn't waited",
+   "fixed": "If only we hadn't waited so long before contacting the client last week.",
+   "accepted": [
+    "had not waited"
+   ],
+   "why": {
+    "ok": {
+     "de": "Bedauern für früher: If only + hadn't + 3. Form.",
+     "en": "regret about earlier: if only + hadn't + participle."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, ein Fehler: Past Simple bleibt bei jetzt, es geht um früher.",
+      "en": "there is an error: simple past stays at now, but this is about earlier."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort passt; der Fehler ist didn't wait.",
+      "en": "this word fits; the error is didn't wait."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find9",
+   "type": "find",
+   "pat": "mc.wish-would",
+   "prompt": "I wish the client doesn't change the scope every week.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "wouldn't change",
+   "fixed": "I wish the client wouldn't change the scope every week.",
+   "accepted": [
+    "didn't change"
+   ],
+   "why": {
+    "ok": {
+     "de": "every week: Ärger über Verhalten → wouldn't change (didn't change auch möglich).",
+     "en": "every week: annoyance at behavior → wouldn't change (didn't change also works)."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, ein Fehler: das Präsens doesn't geht nach wish nicht.",
+      "en": "there is an error: present doesn't does not work after wish."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort passt; der Fehler ist doesn't change nach wish.",
+      "en": "this word fits; the error is doesn't change after wish."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find10",
+   "type": "find",
+   "pat": "mc.wish-would",
+   "prompt": "I wish you didn't interrupt me so often.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: didn't interrupt beschreibt nur den Zustand, den ich nicht mag.",
+     "en": "correct: didn't interrupt only describes the state I dislike."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: wish + Past ist richtig; would stop wäre die Forderung.",
+      "en": "no error: wish + past is correct; would stop would be the demand."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find11",
+   "type": "find",
+   "pat": "mc.high-time",
+   "prompt": "It's high time we will switch to a better ticketing tool.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "switched",
+   "fixed": "It's high time we switched to a better ticketing tool.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Nach It's high time steht das Past Simple, nie will.",
+     "en": "after It's high time comes the past simple, never will."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, ein Fehler: will gibt es nach high time nicht.",
+      "en": "there is an error: will does not follow high time."
+     },
+     {
+      "tap": "*",
+      "de": "Dieses Wort passt; der Fehler ist will switch nach high time.",
+      "en": "this word fits; the error is will switch after high time."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.find12",
+   "type": "find",
+   "pat": "mc.high-time",
+   "prompt": "It's high time our support team got a proper escalation process.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: nach high time steht got (Past), gemeint ist jetzt.",
+     "en": "correct: after high time comes got (past), meaning now."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: High time + Past Simple (got) ist die richtige Form.",
+      "en": "no error: high time + past simple (got) is the right form."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.mean1",
+   "type": "meaning",
+   "pat": "mc.past-cond",
+   "a": "If we had signed the deal, we would be profitable today.",
+   "b": "If we had signed the deal, we would have been profitable last year.",
+   "q": {
+    "de": "Welcher Satz sagt, dass uns der Erfolg heute fehlt?",
+    "en": "Which sentence says the success is missing today?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "today + would be: Die Folge gilt jetzt. b spricht von last year.",
+     "en": "today + would be: the result holds now. b is about last year."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "would have been profitable last year nennt die Folge für früher.",
+      "en": "would have been profitable last year gives the result for earlier."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.mean2",
+   "type": "meaning",
+   "pat": "mc.present-cond",
+   "a": "If I were more careful, I would have caught the error.",
+   "b": "If I had been more careful, I would have caught the error.",
+   "q": {
+    "de": "Welcher Satz beschreibt eine Eigenschaft, die heute noch gilt?",
+    "en": "Which sentence describes a trait that is still true today?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "were beschreibt einen Zustand jetzt; b nennt nur das Verhalten damals.",
+     "en": "were describes a state now; b only names behavior back then."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "had been careful liegt ganz in der Vergangenheit, nicht bei heute.",
+      "en": "had been careful lies entirely in the past, not at today."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.mean3",
+   "type": "meaning",
+   "pat": "mc.wish-now",
+   "a": "I wish I could join the call.",
+   "b": "I wish I could have joined the call.",
+   "q": {
+    "de": "Welcher Satz handelt von einem Anruf, der noch bevorsteht oder läuft?",
+    "en": "Which sentence is about a call that is still ahead or going on?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "could join wünscht etwas für jetzt; could have joined bedauert früher.",
+     "en": "could join wishes for now; could have joined regrets earlier."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "could have joined blickt zurück: Der Call ist schon vorbei.",
+      "en": "could have joined looks back: the call is already over."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.mean4",
+   "type": "meaning",
+   "pat": "mc.wish-past",
+   "a": "I wish I had called the client yesterday.",
+   "b": "I wish I could call the client now.",
+   "q": {
+    "de": "In welchem Satz bedauert der Sprecher etwas, das schon vorbei ist?",
+    "en": "In which sentence does the speaker regret something that is already over?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "had called + yesterday: Bedauern über früher. b wünscht etwas für jetzt.",
+     "en": "had called + yesterday: regret about earlier. b wishes for now."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "could call + now ist ein Wunsch über jetzt, kein Bedauern.",
+      "en": "could call + now is a wish about now, not regret."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.mean5",
+   "type": "meaning",
+   "pat": "mc.wish-would",
+   "a": "I wish you would stop interrupting me.",
+   "b": "I wish I hadn't interrupted you.",
+   "q": {
+    "de": "In welchem Satz soll sich das Verhalten einer anderen Person ändern?",
+    "en": "In which sentence should another person change what they do?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "wish + would stop: Du willst, dass der andere sein Verhalten ändert.",
+     "en": "wish + would stop: you want the other person to change."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "pat": "mc.wish-past",
+      "de": "hadn't interrupted bedauert das eigene frühere Verhalten.",
+      "en": "hadn't interrupted regrets your own earlier behavior."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "mc.mean6",
+   "type": "meaning",
+   "pat": "mc.high-time",
+   "a": "It's high time we updated the pricing.",
+   "b": "We updated the pricing a while ago.",
+   "q": {
+    "de": "Welcher Satz sagt, dass die Preisanpassung noch aussteht?",
+    "en": "Which sentence says the pricing update is still to be done?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "high time + updated: Es ist überfällig und soll jetzt passieren.",
+     "en": "high time + updated: it is overdue and should happen now."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "a while ago macht b zu einer abgeschlossenen Handlung.",
+      "en": "a while ago makes b a finished action."
+     }
+    ]
+   },
+   "topic": "mixed-cond"
+  },
+  {
+   "id": "psp.kwt1",
+   "type": "kwt",
+   "pat": "psp.finished-time",
+   "from": "The last time we talked to the supplier was on Wednesday.",
+   "key": "LAST",
+   "frame": "We ___ the supplier on Wednesday.",
+   "answer": "last talked to",
+   "accepted": [
+    "last spoke to",
+    "last spoke with",
+    "last talked with"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "„on Wednesday“ ist vorbei → Past Simple: last talked to.",
+     "en": "“on Wednesday” is over → Past Simple: last talked to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "pat": "psp.since-for",
+      "de": "Mit „on Wednesday“ steht kein have, sondern Past Simple.",
+      "en": "With “on Wednesday” there is no have, only the Past Simple."
+     },
+     {
+      "not": [
+       "talked",
+       "spoke"
+      ],
+      "de": "Das Verb steht in der 2. Form: last talked to oder last spoke to.",
+      "en": "The verb is in the past form: last talked to or last spoke to."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.kwt2",
+   "type": "kwt",
+   "pat": "psp.finished-time",
+   "from": "Please tell me the date of your last visit to the Munich plant.",
+   "key": "WHEN",
+   "frame": "Please tell me ___ the Munich plant.",
+   "answer": "when you last visited",
+   "accepted": [
+    "when you last went to",
+    "when you were last at",
+    "when you last came to"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "„when“ fragt nach einem Zeitpunkt → Past Simple: when you last visited.",
+     "en": "“when” asks for a point in time → Past Simple: when you last visited."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did"
+      ],
+      "de": "In der indirekten Frage steht kein did: when you last visited.",
+      "en": "An indirect question has no did: when you last visited."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "Nach „when“ steht der Zeitpunkt, also Past Simple und nicht have.",
+      "en": "After “when” comes a point in time, so Past Simple and not have."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.kwt3",
+   "type": "kwt",
+   "pat": "psp.since-for",
+   "from": "We started using the new tool in January and we still use it.",
+   "key": "BEEN",
+   "frame": "We ___ the new tool since January.",
+   "answer": "have been using",
+   "accepted": [
+    "'ve been using"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "„since January“ und wir nutzen es noch → have been using.",
+     "en": "“since January” + we still use it → have been using."
+    },
+    "wrong": [
+     {
+      "if": [
+       "are",
+       "using"
+      ],
+      "de": "„are using since“ folgt dem Deutschen; since braucht have been using.",
+      "en": "“are using since” follows German; since needs have been using."
+     },
+     {
+      "not": [
+       "been"
+      ],
+      "de": "Das Schlüsselwort BEEN muss vorkommen: have been using.",
+      "en": "The key word BEEN must appear: have been using."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.kwt4",
+   "type": "kwt",
+   "pat": "psp.since-for",
+   "from": "The last time Ms. Park called us was in September.",
+   "key": "SINCE",
+   "frame": "Ms. Park ___ September.",
+   "answer": "hasn't called us since",
+   "accepted": [
+    "has not called us since",
+    "hasn't called since",
+    "has not called since",
+    "hasn't phoned us since",
+    "has not phoned us since",
+    "hasn't contacted us since",
+    "has not contacted us since"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Zeitraum reicht bis jetzt → hasn't called us since.",
+     "en": "The period reaches up to now → hasn't called us since."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "not"
+      ],
+      "pat": "psp.finished-time",
+      "de": "„didn't call“ ist abgeschlossen; mit since zählt die Zeit bis jetzt.",
+      "en": "“didn't call” is finished; with since the time runs up to now."
+     },
+     {
+      "if": [
+       "does",
+       "not"
+      ],
+      "de": "„doesn't call“ ist Präsens; since verlangt hasn't called.",
+      "en": "“doesn't call” is present tense; since needs hasn't called."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.kwt5",
+   "type": "kwt",
+   "pat": "psp.experience",
+   "from": "It is my first time managing a remote team.",
+   "key": "NEVER",
+   "frame": "I ___ a remote team before.",
+   "answer": "have never managed",
+   "accepted": [
+    "'ve never managed",
+    "have never led",
+    "'ve never led"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Erfahrung bis jetzt, ohne dass ein Zeitpunkt zählt → have never managed.",
+     "en": "Experience up to now, no time named → have never managed."
+    },
+    "wrong": [
+     {
+      "if": [
+       "had"
+      ],
+      "de": "„had never managed“ meint eine frühere Zeit; hier zählt jetzt.",
+      "en": "“had never managed” refers to an earlier time; here now counts."
+     },
+     {
+      "not": [
+       "have"
+      ],
+      "de": "„Bis jetzt noch nie“ ist have never + 3. Form, nicht das Präsens.",
+      "en": "“Never up to now” needs have never + past participle."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.kwt6",
+   "type": "kwt",
+   "pat": "psp.experience",
+   "from": "I have never seen a better presentation than this one.",
+   "key": "EVER",
+   "frame": "This is the best presentation ___.",
+   "answer": "I have ever seen",
+   "accepted": [
+    "I've ever seen",
+    "that I have ever seen",
+    "that I've ever seen",
+    "I ever saw",
+    "that I ever saw"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Superlativ mit Erfahrung bis jetzt → I have ever seen.",
+     "en": "Superlative + experience up to now → I have ever seen."
+    },
+    "wrong": [
+     {
+      "if": [
+       "ever",
+       "seen"
+      ],
+      "not": [
+       "have"
+      ],
+      "de": "Nach dem Superlativ braucht seen ein have: I have ever seen.",
+      "en": "After the superlative, seen needs have: I have ever seen."
+     },
+     {
+      "not": [
+       "ever"
+      ],
+      "de": "Das Schlüsselwort EVER gehört in den Satz: I have ever seen.",
+      "en": "The key word EVER belongs in the sentence: I have ever seen."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.kwt7",
+   "type": "kwt",
+   "pat": "psp.result-now",
+   "from": "Our CEO announced the new strategy only moments before this call.",
+   "key": "JUST",
+   "frame": "The CEO ___ the new strategy.",
+   "answer": "has just announced",
+   "accepted": [
+    "just announced",
+    "'s just announced",
+    "has only just announced"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Ganz neu, ohne dass ein Zeitpunkt zählt → has just announced.",
+     "en": "Brand new, no time named → has just announced."
+    },
+    "wrong": [
+     {
+      "if": [
+       "announce"
+      ],
+      "de": "Es fehlt die Endung: Nach has steht announced.",
+      "en": "The ending is missing: after has comes announced."
+     },
+     {
+      "if": [
+       "is",
+       "announcing"
+      ],
+      "de": "Gemeint ist das Ergebnis, nicht der Ablauf: has just announced.",
+      "en": "The result is meant, not the process: has just announced."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.kwt8",
+   "type": "kwt",
+   "pat": "psp.result-now",
+   "from": "The client has not replied to our offer, and we are waiting for an answer.",
+   "key": "STILL",
+   "frame": "The client ___ to our offer.",
+   "answer": "still hasn't replied",
+   "accepted": [
+    "still has not replied",
+    "has still not replied"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Stand jetzt zählt → still hasn't replied.",
+     "en": "The status now counts → still hasn't replied."
+    },
+    "wrong": [
+     {
+      "if": [
+       "did",
+       "not"
+      ],
+      "pat": "psp.finished-time",
+      "de": "„didn't reply“ erzählt ein Ereignis; hier zählt der Stand jetzt.",
+      "en": "“didn't reply” tells an event; here the status now counts."
+     },
+     {
+      "if": [
+       "does",
+       "not"
+      ],
+      "de": "„doesn't reply“ ist Präsens; das Ergebnis braucht hasn't replied.",
+      "en": "“doesn't reply” is present tense; the result needs hasn't replied."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.kwt9",
+   "type": "kwt",
+   "pat": "psp.result-now",
+   "from": "You do not need to work on the slides, because marketing finished them earlier.",
+   "key": "ALREADY",
+   "frame": "Marketing ___ the slides.",
+   "answer": "has already finished",
+   "accepted": [
+    "already finished",
+    "'s already finished"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Schon erledigt, die Folge gilt jetzt → has already finished.",
+     "en": "Already done, the consequence holds now → has already finished."
+    },
+    "wrong": [
+     {
+      "if": [
+       "finish"
+      ],
+      "de": "Es fehlt die Endung: Nach has steht finished.",
+      "en": "The ending is missing: after has comes finished."
+     },
+     {
+      "if": [
+       "is",
+       "finishing"
+      ],
+      "de": "Das ist schon fertig; gemeint ist das Ergebnis: has already finished.",
+      "en": "It is already done; the result is meant: has already finished."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find1",
+   "type": "find",
+   "pat": "psp.finished-time",
+   "prompt": "Our legal team has reviewed the contract on Tuesday and sent comments.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "reviewed",
+   "fixed": "Our legal team reviewed the contract on Tuesday and sent comments.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "„on Tuesday“ ist vorbei, daher reviewed statt has reviewed.",
+     "en": "“on Tuesday” is over, so reviewed instead of has reviewed."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Nicht diese Stelle. Die Zeitangabe stimmt, das Verb passt nicht dazu.",
+      "en": "Not this spot. The time expression is fine; the verb does not match it."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Zeitangabe und Verbform passen nicht zusammen.",
+      "en": "There is an error: the time expression and the verb form do not match."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "„had reviewed“ braucht einen späteren Bezugspunkt; reviewed ist genug.",
+      "en": "“had reviewed” needs a later point in the past; reviewed is enough."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find2",
+   "type": "find",
+   "pat": "psp.finished-time",
+   "prompt": "We met the vendor in Frankfurt two weeks ago and agreed on a price.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Stimmt: „two weeks ago“ nennt die Zeit, met und agreed passen.",
+     "en": "Correct: “two weeks ago” names the time, and met and agreed fit."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: „two weeks ago“ verlangt Past Simple, und das steht da.",
+      "en": "This is correct: “two weeks ago” needs the Past Simple, and that is what we have."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find3",
+   "type": "find",
+   "pat": "psp.finished-time",
+   "prompt": "Who has opened this ticket at 9 a.m. on Friday?",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "opened",
+   "fixed": "Who opened this ticket at 9 a.m. on Friday?",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "„at 9 a.m. on Friday“ ist ein Zeitpunkt → Who opened …?",
+     "en": "“at 9 a.m. on Friday” is a point in time → Who opened …?"
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Nicht diese Stelle. Die Zeitangabe stimmt, das Verb passt nicht dazu.",
+      "en": "Not this spot. The time expression is fine; the verb does not match it."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Die Uhrzeit passt nicht zur Verbform.",
+      "en": "There is an error: the clock time does not match the verb form."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "Bei „who“ als Subjekt steht kein did: Who opened …?",
+      "en": "When “who” is the subject, there is no did: Who opened …?"
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find4",
+   "type": "find",
+   "pat": "psp.since-for",
+   "prompt": "Our regional manager is with the company for eight years now.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "has been",
+   "fixed": "Our regional manager has been with the company for eight years now.",
+   "accepted": [
+    "has been working",
+    "has worked"
+   ],
+   "why": {
+    "ok": {
+     "de": "„for eight years now“ reicht bis jetzt, das ist has been.",
+     "en": "“for eight years now” reaches up to now → has been."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Prüfe das Verb vor „with“.",
+      "en": "That is not the error. Check the verb before “with”."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Das Verb passt nicht zu „for eight years“.",
+      "en": "There is an error: the verb does not fit “for eight years”."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "pat": "psp.finished-time",
+      "de": "„was“ hieße: vorbei. Er ist aber noch dabei.",
+      "en": "“was” would mean over, but he is still with the company."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find5",
+   "type": "find",
+   "pat": "psp.since-for",
+   "prompt": "How long do you know our new client?",
+   "err": [
+    2,
+    4
+   ],
+   "answer": "have you known",
+   "fixed": "How long have you known our new client?",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "„How long“ fragt nach der Zeit bis jetzt → have you known (Zustandsverb, kein -ing).",
+     "en": "“How long” asks about the time up to now → have you known (stative verb, no -ing)."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Prüfe die Verbform nach „How long“.",
+      "en": "That is not the error. Check the verb form after “How long”."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: „How long“ braucht eine andere Zeitform.",
+      "en": "There is an error: “How long” needs a different tense."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "pat": "psp.finished-time",
+      "de": "„did you know“ fragt nach einer vergangenen Zeit; gemeint ist bis jetzt.",
+      "en": "“did you know” asks about a past time; up to now is meant."
+     },
+     {
+      "if": [
+       "knowing"
+      ],
+      "de": "Zustandsverben wie know stehen nicht in der -ing-Form: have you known.",
+      "en": "Stative verbs like know take no -ing form: have you known."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find6",
+   "type": "find",
+   "pat": "psp.experience",
+   "prompt": "It is the second time this month that we lose a major client.",
+   "err": [
+    9,
+    9
+   ],
+   "answer": "have lost",
+   "fixed": "It is the second time this month that we have lost a major client.",
+   "accepted": [
+    "'ve lost"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „the second time“ zählt die Erfahrung bis jetzt → have lost.",
+     "en": "After “the second time” the experience up to now counts → have lost."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Prüfe das Verb nach „we“.",
+      "en": "That is not the error. Check the verb after “we”."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Das Verb passt nicht zu „the second time“.",
+      "en": "There is an error: the verb does not fit “the second time”."
+     },
+     {
+      "if": [
+       "lost"
+      ],
+      "not": [
+       "have"
+      ],
+      "pat": "psp.finished-time",
+      "de": "„lost“ allein erzählt ein Ereignis; nach „the second time“ steht have lost.",
+      "en": "“lost” alone tells an event; after “the second time” use have lost."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find7",
+   "type": "find",
+   "pat": "psp.experience",
+   "prompt": "We had three data breaches so far this year.",
+   "err": [
+    1,
+    1
+   ],
+   "answer": "have had",
+   "fixed": "We have had three data breaches so far this year.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "„so far this year“ zählt bis jetzt, das ist have had.",
+     "en": "“so far this year” counts up to now → have had."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Prüfe das Verb direkt nach „We“.",
+      "en": "That is not the error. Check the verb right after “We”."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Zur Zählung bis jetzt passt die Verbform nicht.",
+      "en": "There is an error: the verb form does not fit a count up to now."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "Zu „We“ gehört have, nicht has: We have had.",
+      "en": "“We” goes with have, not has: We have had."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find8",
+   "type": "find",
+   "pat": "psp.result-now",
+   "prompt": "I haven't sent the invoice already, because Legal is still checking it.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "yet,",
+   "fixed": "I haven't sent the invoice yet, because Legal is still checking it.",
+   "accepted": [
+    "yet"
+   ],
+   "why": {
+    "ok": {
+     "de": "„noch nicht“ heißt haven't … yet; already passt hier nicht.",
+     "en": "“noch nicht” is haven't … yet; already does not fit here."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Prüfe das Wort für „noch nicht“.",
+      "en": "That is not the error. Check the word for “not yet”."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Ein Wort passt nicht zur Verneinung.",
+      "en": "There is an error: one word does not fit the negative."
+     },
+     {
+      "if": [
+       "already"
+      ],
+      "de": "In der Verneinung heißt „noch nicht“ yet, nicht already.",
+      "en": "In a negative, “not yet” is yet, not already."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.find9",
+   "type": "find",
+   "pat": "psp.result-now",
+   "prompt": "The board has approved the revised budget, so we can start hiring.",
+   "err": null,
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Stimmt: Das Ergebnis zählt jetzt, ohne Zeitpunkt → has approved.",
+     "en": "Correct: the result counts now, with no time named → has approved."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist alles richtig: Das Ergebnis zählt jetzt, ein Zeitpunkt fehlt.",
+      "en": "This is correct: the result counts now, and no time is named."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.mean1",
+   "type": "meaning",
+   "pat": "psp.finished-time",
+   "a": "I read the report on Friday.",
+   "b": "I have read the report.",
+   "q": {
+    "de": "Welcher Satz nennt einen bestimmten, abgeschlossenen Zeitpunkt?",
+    "en": "Which sentence names a specific finished time?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "„on Friday“ nennt die Zeit, deshalb Past Simple.",
+     "en": "“on Friday” names the time, so the Past Simple."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "Satz b nennt keinen Zeitpunkt; er sagt nur, dass der Bericht gelesen ist.",
+      "en": "Sentence b names no time; it only says the report has been read."
+     },
+     {
+      "opt": "both",
+      "de": "Nur Satz a nennt einen Zeitpunkt; Satz b lässt ihn offen.",
+      "en": "Only sentence a names a time; sentence b leaves it open."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.mean2",
+   "type": "meaning",
+   "pat": "psp.since-for",
+   "a": "I have lived in Hamburg for six years.",
+   "b": "I lived in Hamburg for six years.",
+   "q": {
+    "de": "Welcher Satz legt nahe, dass der Sprecher jetzt in Hamburg wohnt?",
+    "en": "Which sentence suggests the speaker lives in Hamburg now?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "have lived … for: Die Zeit reicht bis jetzt, ich wohne noch dort.",
+     "en": "have lived … for: the time reaches now, I still live there."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "lived … for erzählt eine abgeschlossene Zeit; ich wohne nicht mehr dort.",
+      "en": "lived … for tells a finished period; I no longer live there."
+     },
+     {
+      "opt": "both",
+      "de": "Die Sätze meinen nicht dasselbe: Nur Satz a läuft bis jetzt.",
+      "en": "The sentences do not mean the same: only sentence a runs up to now."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.mean3",
+   "type": "meaning",
+   "pat": "psp.experience",
+   "a": "How many deals have you closed this year?",
+   "b": "How many deals did you close last year?",
+   "q": {
+    "de": "In welcher Frage kann die Zahl noch steigen?",
+    "en": "In which question can the number still grow?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "„this year“ läuft noch: Die Zählung bis jetzt ist offen.",
+     "en": "“this year” is still running: the count up to now is open."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "„last year“ ist vorbei, die Zahl steht fest.",
+      "en": "“last year” is over, so the number is fixed."
+     },
+     {
+      "opt": "both",
+      "de": "Nur in Satz a ist der Zeitraum offen.",
+      "en": "Only in sentence a is the time period still open."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.mean4",
+   "type": "meaning",
+   "pat": "psp.result-now",
+   "a": "The server crashed at 9:15.",
+   "b": "The server has crashed.",
+   "q": {
+    "de": "Welcher Satz sagt, dass das System jetzt vermutlich ausgefallen ist?",
+    "en": "Which sentence suggests the system is probably down right now?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "has crashed ohne Zeitpunkt: Das Ergebnis gilt jetzt.",
+     "en": "has crashed with no time: the result holds now."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "pat": "psp.finished-time",
+      "de": "Satz a erzählt nur das Ereignis um 9:15; ob es jetzt läuft, bleibt offen.",
+      "en": "Sentence a only tells the event at 9:15; whether it runs now stays open."
+     },
+     {
+      "opt": "both",
+      "de": "Nur Satz b stellt das Ergebnis jetzt in den Vordergrund.",
+      "en": "Only sentence b puts the result now in the foreground."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "psp.mean5",
+   "type": "meaning",
+   "pat": "psp.result-now",
+   "a": "Prices have gone up recently.",
+   "b": "Prices went up in January.",
+   "q": {
+    "de": "Welcher Satz zeigt die Änderung als aktuelle Entwicklung, ohne Zeitpunkt?",
+    "en": "Which sentence presents the change as a current development, with no time named?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "recently nennt keinen Zeitpunkt: Die Neuigkeit gilt jetzt.",
+     "en": "recently names no point in time: the news holds now."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "pat": "psp.finished-time",
+      "de": "„in January“ ist ein genannter Zeitpunkt: Das Ereignis wird erzählt.",
+      "en": "“in January” is a named time: the event is being told."
+     },
+     {
+      "opt": "both",
+      "de": "Nur Satz a lässt den Zeitpunkt offen; Satz b nennt ihn.",
+      "en": "Only sentence a leaves the time open; sentence b names it."
+     }
+    ]
+   },
+   "topic": "past-simple-perfect"
+  },
+  {
+   "id": "tc.pff-kwt1",
+   "type": "kwt",
+   "pat": "tc.present-for-future",
+   "from": "We will wait for the legal team's approval before we sign.",
+   "key": "UNTIL",
+   "frame": "We won't sign ___ the legal team's approval.",
+   "answer": "until we get",
+   "accepted": [
+    "until we receive",
+    "until we have",
+    "until we have received",
+    "until we've received",
+    "until we have gotten",
+    "until we've gotten",
+    "until we have got",
+    "until we've got",
+    "until we obtain",
+    "until we have obtained",
+    "until we've obtained",
+    "until we are given",
+    "until we're given"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: „until“ + Präsens („we get“); will ist schon in „won't“.",
+     "en": "Right: “until” + present (“we get”); will is already in “won't”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "until"
+      ],
+      "de": "Das Schlüsselwort „until“ muss unverändert in der Lücke stehen.",
+      "en": "The key word “until” must appear unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach „until“ steht kein will; „won't sign“ trägt schon die Zukunft.",
+      "en": "No will after “until”; “won't sign” already carries the future."
+     },
+     {
+      "if": [
+       "got"
+      ],
+      "not": [
+       "have",
+       "has"
+      ],
+      "de": "Die Vergangenheit passt nicht: Die Freigabe fehlt noch. Nimm get oder have.",
+      "en": "The past tense does not fit: the approval is still missing. Use get or have."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pff-kwt2",
+   "type": "kwt",
+   "pat": "tc.present-for-future",
+   "from": "I'll update you after the vendor has replied.",
+   "key": "WHEN",
+   "frame": "I'll update you ___.",
+   "answer": "when the vendor replies",
+   "accepted": [
+    "when the vendor has replied",
+    "when the vendor responds",
+    "when the vendor has responded",
+    "when the vendor gets back",
+    "when they reply",
+    "when they respond",
+    "when they have replied",
+    "when the vendor writes back",
+    "when they've replied",
+    "when the vendor's replied"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach „when“ (= sobald) steht Präsens: „the vendor replies“.",
+     "en": "Right: after “when” (= as soon as) use the present: “the vendor replies”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "when"
+      ],
+      "de": "Das Schlüsselwort „when“ muss unverändert in der Lücke stehen.",
+      "en": "The key word “when” must appear unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach „when“ (= sobald) steht kein will; „I'll update“ trägt die Zukunft.",
+      "en": "No will after “when” (= as soon as); “I'll update” carries the future."
+     },
+     {
+      "if": [
+       "replied"
+      ],
+      "not": [
+       "has",
+       "have"
+      ],
+      "de": "Die Vergangenheit passt nicht: Die Antwort steht noch aus. Nimm replies.",
+      "en": "The past tense does not fit: the reply is still pending. Use replies."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pff-find1",
+   "type": "find",
+   "pat": "tc.present-for-future",
+   "prompt": "We will start the call as soon as the client will join.",
+   "err": [
+    10,
+    11
+   ],
+   "answer": "joins.",
+   "fixed": "We will start the call as soon as the client joins.",
+   "accepted": [
+    "has joined."
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach „as soon as“ steht Präsens: „the client joins“.",
+     "en": "Right: after “as soon as” use the present: “the client joins”."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: das will nach „as soon as“.",
+      "en": "There is an error: the will after “as soon as”."
+     },
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „as soon as“.",
+      "en": "That is not the error. Look at the verb after “as soon as”."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Dein Ersatz enthält noch will; nach „as soon as“ steht das Präsens.",
+      "en": "Your replacement still has will; after “as soon as” use the present."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pff-find2",
+   "type": "find",
+   "pat": "tc.present-for-future",
+   "prompt": "Please don't send the invoice until the client will confirm the order.",
+   "err": [
+    8,
+    9
+   ],
+   "answer": "confirms",
+   "fixed": "Please don't send the invoice until the client confirms the order.",
+   "accepted": [
+    "has confirmed"
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach „until“ steht Präsens: „the client confirms“.",
+     "en": "Right: after “until” use the present: “the client confirms”."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: das will nach „until“.",
+      "en": "There is an error: the will after “until”."
+     },
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „until“.",
+      "en": "That is not the error. Look at the verb after “until”."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Dein Ersatz enthält noch will; nach „until“ steht das Präsens.",
+      "en": "Your replacement still has will; after “until” use the present."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pff-find3",
+   "type": "find",
+   "pat": "tc.present-for-future",
+   "prompt": "Let's align on the numbers before the client arrives tomorrow.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach „before“ steht Präsens („arrives“); der Satz ist fehlerfrei.",
+     "en": "Right: after “before” the present (“arrives”) is correct; the sentence is fine."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist kein Fehler: Nach „before“ steht bei Zukünftigem das Präsens, nicht will.",
+      "en": "There is no error: after “before” future meaning takes the present, not will."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pff-m1",
+   "type": "meaning",
+   "pat": "tc.present-for-future",
+   "a": "I'll call you when the client confirms.",
+   "b": "I'll call you if the client confirms.",
+   "q": {
+    "de": "Welcher Satz geht davon aus, dass der Kunde ganz sicher bestätigt?",
+    "en": "Which sentence assumes the client will definitely confirm?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: „when“ nimmt das Ereignis als sicher, „if“ lässt offen, ob es passiert.",
+     "en": "Right: “when” treats the event as certain; “if” leaves it open whether it happens."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "Das ist „if“: Es bleibt offen, ob der Kunde bestätigt.",
+      "en": "That is “if”: it stays open whether the client confirms."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pp-kwt1",
+   "type": "kwt",
+   "pat": "tc.present-perfect",
+   "from": "We'll finalize the budget after the board has approved the plan.",
+   "key": "ONCE",
+   "frame": "We'll finalize the budget ___ the plan.",
+   "answer": "once the board has approved",
+   "accepted": [
+    "once the board approves",
+    "once the board's approved",
+    "once the board has endorsed"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach „once“ steht has approved: erst genehmigt, dann Budget.",
+     "en": "Right: after “once”, has approved: approved first, then the budget."
+    },
+    "wrong": [
+     {
+      "not": [
+       "once"
+      ],
+      "de": "Das Schlüsselwort „once“ muss unverändert in der Lücke stehen.",
+      "en": "The key word “once” must appear unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach „once“ steht kein will, auch nicht „will have“. Nimm has approved.",
+      "en": "No will after “once”, not even “will have”. Use has approved."
+     },
+     {
+      "if": [
+       "approved"
+      ],
+      "not": [
+       "has",
+       "have"
+      ],
+      "de": "Die Vergangenheit „approved“ passt nicht: Nimm has approved oder approves.",
+      "en": "The past “approved” does not fit: use has approved or approves."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pp-kwt2",
+   "type": "kwt",
+   "pat": "tc.present-perfect",
+   "from": "Please wait for QA's sign-off before you deploy.",
+   "key": "UNTIL",
+   "frame": "Please don't deploy ___ signed off.",
+   "answer": "until QA has",
+   "accepted": [
+    "until QA's",
+    "until they have",
+    "until they've",
+    "until it has",
+    "until it's",
+    "until it has been",
+    "until it's been",
+    "until it is"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: „until“ + has signed off: erst die Freigabe, dann der Deploy.",
+     "en": "Right: “until” + has signed off: approval first, then the deploy."
+    },
+    "wrong": [
+     {
+      "not": [
+       "until"
+      ],
+      "de": "Das Schlüsselwort „until“ muss unverändert in der Lücke stehen.",
+      "en": "The key word “until” must appear unchanged in the gap."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach „until“ steht kein will, auch nicht „will have“: until QA has.",
+      "en": "No will after “until”, not even “will have”: until QA has."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "„had“ passt nicht: Die Freigabe liegt noch vor uns. Nimm has.",
+      "en": "“had” does not fit: the approval is still ahead. Use has."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pp-find1",
+   "type": "find",
+   "pat": "tc.present-perfect",
+   "prompt": "We'll finalize the budget after the board will have approved it.",
+   "err": [
+    7,
+    9
+   ],
+   "answer": "has approved",
+   "fixed": "We'll finalize the budget after the board has approved it.",
+   "accepted": [
+    "approves"
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach „after“ steht has approved, nicht „will have approved“.",
+     "en": "Right: after “after” use has approved, not “will have approved”."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will have“ nach „after“.",
+      "en": "There is an error: “will have” after “after”."
+     },
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „after“.",
+      "en": "That is not the error. Look at the verb after “after”."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Dein Ersatz enthält noch will; nach „after“ steht Perfekt oder Präsens.",
+      "en": "Your replacement still has will; after “after” use perfect or present."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pp-find2",
+   "type": "find",
+   "pat": "tc.present-perfect",
+   "prompt": "Don't deploy until QA signed off on the release.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "has signed off",
+   "fixed": "Don't deploy until QA has signed off on the release.",
+   "accepted": [
+    "signs off"
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: „until“ + has signed off: Die Freigabe liegt noch in der Zukunft.",
+     "en": "Right: “until” + has signed off: the approval is still in the future."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „signed off“ ist Vergangenheit.",
+      "en": "There is an error: “signed off” is the past tense."
+     },
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Schau auf die Zeitform des Verbs.",
+      "en": "That is not the error. Look at the tense of the verb."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Dein Ersatz enthält noch will; nach „until“ steht Perfekt oder Präsens.",
+      "en": "Your replacement still has will; after “until” use perfect or present."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.pp-m1",
+   "type": "meaning",
+   "pat": "tc.present-perfect",
+   "a": "Don't leave until the meeting finishes.",
+   "b": "Don't leave until the meeting has finished.",
+   "q": {
+    "de": "Welcher Satz sagt, dass das Meeting vorbei sein muss, bevor du gehst?",
+    "en": "Which sentence says the meeting must be over before you leave?"
+   },
+   "answer": "both",
+   "why": {
+    "ok": {
+     "de": "Richtig: Beide meinen dasselbe; has finished betont nur, dass es ganz vorbei ist.",
+     "en": "Right: both mean the same; has finished just stresses that it is completely over."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "Nicht nur b: Auch a („finishes“, Präsens) meint hier die Zukunft. Beide sagen dasselbe.",
+      "en": "Not only b: a (“finishes”, present) also covers the future here. Both say the same."
+     },
+     {
+      "opt": "a",
+      "de": "Nicht nur a: Auch b („has finished“) passt. Es betont nur, dass das Meeting ganz vorbei ist.",
+      "en": "Not only a: b (“has finished”) fits too. It only stresses that the meeting is completely over."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.btt-kwt1",
+   "type": "kwt",
+   "pat": "tc.by-the-time",
+   "from": "I will finish the slides before you arrive.",
+   "key": "TIME",
+   "frame": "I'll have finished the slides ___ here.",
+   "answer": "by the time you get",
+   "accepted": [
+    "by the time you arrive",
+    "by the time you're",
+    "by the time you are",
+    "by the time you come",
+    "by the time you've arrived",
+    "by the time you've gotten"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: „By the time“ + Präsens („get here“); davor steht will have finished.",
+     "en": "Right: “By the time” + present (“get here”); will have finished goes before it."
+    },
+    "wrong": [
+     {
+      "if": [
+       "until"
+      ],
+      "de": "„until“ heißt: bis dahin dauert es an. Hier ist es dann schon fertig: by the time.",
+      "en": "“until” means it continues up to then. Here it is finished by then: by the time."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach „by the time“ steht kein will: „you get here“.",
+      "en": "No will after “by the time”: “you get here”."
+     },
+     {
+      "not": [
+       "time"
+      ],
+      "de": "Das Schlüsselwort „time“ muss unverändert in „by the time“ stehen.",
+      "en": "The key word “time” must appear unchanged in “by the time”."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.btt-kwt2",
+   "type": "kwt",
+   "pat": "tc.by-the-time",
+   "from": "I will get to the office after the meeting has already started.",
+   "key": "TIME",
+   "frame": "___ there, the meeting will have started.",
+   "answer": "By the time I get",
+   "accepted": [
+    "By the time I arrive",
+    "By the time I'm",
+    "By the time I've gotten",
+    "By the time I've arrived"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: „By the time“ + Präsens („I get“); im Hauptsatz steht will have started.",
+     "en": "Right: “By the time” + present (“I get”); will have started in the main clause."
+    },
+    "wrong": [
+     {
+      "if": [
+       "until"
+      ],
+      "de": "„until“ heißt: bis dahin dauert es an. Hier ist es dann schon passiert: by the time.",
+      "en": "“until” means it continues up to then. Here it has already happened: by the time."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach „by the time“ steht kein will: „I get there“.",
+      "en": "No will after “by the time”: “I get there”."
+     },
+     {
+      "not": [
+       "time"
+      ],
+      "de": "Das Schlüsselwort „time“ muss unverändert in „by the time“ stehen.",
+      "en": "The key word “time” must appear unchanged in “by the time”."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.btt-find1",
+   "type": "find",
+   "pat": "tc.by-the-time",
+   "prompt": "By the time you will read this, I'll have left the office.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "read",
+   "fixed": "By the time you read this, I'll have left the office.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach „By the time“ steht Präsens: „you read“.",
+     "en": "Right: after “By the time” use the present: “you read”."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: das will nach „By the time“.",
+      "en": "There is an error: the will after “By the time”."
+     },
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „By the time“.",
+      "en": "That is not the error. Look at the verb after “By the time”."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Dein Ersatz enthält noch will; nach „By the time“ steht das Präsens.",
+      "en": "Your replacement still has will; after “By the time” use the present."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.btt-find2",
+   "type": "find",
+   "pat": "tc.by-the-time",
+   "prompt": "Until the new hire starts, we will have set up her laptop.",
+   "err": [
+    0,
+    0
+   ],
+   "answer": "By the time",
+   "fixed": "By the time the new hire starts, we will have set up her laptop.",
+   "accepted": [
+    "Before"
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Fertig bis zu einem Zeitpunkt heißt „By the time“, nicht „Until“.",
+     "en": "Right: finished by a certain moment is “By the time”, not “Until”."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „Until“ passt nicht zu „will have set up“.",
+      "en": "There is an error: “Until” does not go with “will have set up”."
+     },
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Schau auf das erste Wort des Satzes.",
+      "en": "That is not the error. Look at the first word of the sentence."
+     },
+     {
+      "if": [
+       "until"
+      ],
+      "de": "Mit „until“ dauert etwas bis dahin an. Hier ist es schon fertig: By the time.",
+      "en": "With “until” something continues up to then. Here it is finished: By the time."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.btt-m1",
+   "type": "meaning",
+   "pat": "tc.by-the-time",
+   "a": "We'll keep working until the client arrives.",
+   "b": "We'll have finished by the time the client arrives.",
+   "q": {
+    "de": "Welcher Satz sagt, dass die Arbeit schon fertig ist, wenn der Kunde kommt?",
+    "en": "Which sentence says the work is already done when the client arrives?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: „by the time“ heißt: bis dahin ist es fertig. „until“ heißt: es dauert an.",
+     "en": "Right: “by the time” means finished by then; “until” means working up to then."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Das ist „until“: Ihr arbeitet noch, bis der Kunde kommt.",
+      "en": "That is “until”: you are still working when the client comes."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.nc-kwt1",
+   "type": "kwt",
+   "pat": "tc.noun-clause",
+   "from": "I have no idea what time the update will be ready.",
+   "key": "WHEN",
+   "frame": "I don't know ___ ready.",
+   "answer": "when the update will be",
+   "accepted": [
+    "when it will be",
+    "when this will be"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Nach „know“ ist when ein Fragewort („wann“), deshalb steht will.",
+     "en": "Right: after “know”, when is a question word (“at what time”), so will is used."
+    },
+    "wrong": [
+     {
+      "not": [
+       "when"
+      ],
+      "de": "Das Schlüsselwort „when“ muss unverändert in der Lücke stehen.",
+      "en": "The key word “when” must appear unchanged in the gap."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "not": [
+       "will"
+      ],
+      "de": "Mit „is“ liest man when eher als „sobald“. Für „wann wird es fertig sein?“ nimm will.",
+      "en": "With “is”, when reads more like “as soon as”. For “when will it be ready?” use will."
+     },
+     {
+      "not": [
+       "will"
+      ],
+      "de": "Hier ist when ein Fragewort. Das Futur braucht will: when the update will be.",
+      "en": "Here when is a question word. The future needs will: when the update will be."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.nc-kwt2",
+   "type": "kwt",
+   "pat": "tc.noun-clause",
+   "from": "I'd like to know: Will the client sign before Friday?",
+   "key": "WHETHER",
+   "frame": "I'd like to know ___ before Friday.",
+   "answer": "whether the client will sign",
+   "accepted": [
+    "whether they will sign",
+    "whether they'll sign",
+    "whether he will sign",
+    "whether she will sign"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: „whether“ ist hier „ob“ (Frage), deshalb bleibt will.",
+     "en": "Right: “whether” means “if” as a question here, so will stays."
+    },
+    "wrong": [
+     {
+      "not": [
+       "whether"
+      ],
+      "de": "Das Schlüsselwort „whether“ muss unverändert in der Lücke stehen.",
+      "en": "The key word “whether” must appear unchanged in the gap."
+     },
+     {
+      "if": [
+       "signs"
+      ],
+      "de": "Hier ist whether „ob“ (Frage): Das Futur braucht will, nicht das Präsens.",
+      "en": "Here whether means “if” as a question: the future needs will, not the present."
+     },
+     {
+      "not": [
+       "will"
+      ],
+      "de": "Hier ist whether ein Fragewort. Für Zukünftiges steht will.",
+      "en": "Here whether is a question word. For the future use will."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.nc-find1",
+   "type": "find",
+   "pat": "tc.noun-clause",
+   "prompt": "I'm not sure if the client accepts our offer by Friday.",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "will accept",
+   "fixed": "I'm not sure if the client will accept our offer by Friday.",
+   "accepted": [
+    "is going to accept"
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: „if“ meint hier „ob“ (Frage), deshalb steht will.",
+     "en": "Right: here “if” means “whether” (question), so will is needed."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach „not sure if“ fehlt das will.",
+      "en": "There is an error: after “not sure if” the will is missing."
+     },
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „if“.",
+      "en": "That is not the error. Look at the verb after “if”."
+     },
+     {
+      "not": [
+       "will"
+      ],
+      "de": "Hier ist „if“ = „ob“ (Frage), kein Zeitsatz. Zukünftiges braucht will.",
+      "en": "Here “if” means “whether” (question), not a time clause. The future needs will."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.nc-find2",
+   "type": "find",
+   "pat": "tc.noun-clause",
+   "prompt": "Nobody can predict when the budget gets approved next quarter.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "will get approved",
+   "fixed": "Nobody can predict when the budget will get approved next quarter.",
+   "accepted": [
+    "will be approved",
+    "is going to get approved",
+    "is going to be approved"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach „predict“ ist when die Frage „wann“, deshalb steht üblicherweise will.",
+     "en": "After “predict”, when is the question “at what time”, so will is the normal choice."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Hier fehlt das will nach „when“.",
+      "en": "There is an error: the will after “when” is missing."
+     },
+     {
+      "tap": "*",
+      "de": "Das ist nicht die Fehlerstelle. Schau auf das Verb nach „when“.",
+      "en": "That is not the error. Look at the verb after “when”."
+     },
+     {
+      "not": [
+       "will"
+      ],
+      "de": "Hier ist when „wann“ (Frage), kein Zeitsatz. Zukünftiges braucht will.",
+      "en": "Here when means “at what time” (question), not a time clause. The future needs will."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.nc-find3",
+   "type": "find",
+   "pat": "tc.noun-clause",
+   "prompt": "Could you check whether the vendor will deliver before the audit?",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Richtig: „whether“ ist hier „ob“ (Frage), deshalb steht will. Kein Fehler.",
+     "en": "Right: “whether” means “if” as a question here, so will belongs. No error."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Hier ist kein Fehler: Nach „whether“ als Fragewort steht will für Zukünftiges.",
+      "en": "There is no error: after “whether” as a question word, will marks the future."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  },
+  {
+   "id": "tc.nc-m1",
+   "type": "meaning",
+   "pat": "tc.noun-clause",
+   "a": "Please tell me when the report is ready.",
+   "b": "Please tell me when the report will be ready.",
+   "q": {
+    "de": "Welcher Satz fragt nach dem erwarteten Fertigstellungstermin („Wann wird er fertig sein?“)?",
+    "en": "Which sentence asks for the expected completion date (“When will it be ready?”)?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: „will be“ fragt „wann?“ (Schätzung). „is ready“ ist „sobald es fertig ist“.",
+     "en": "Right: “will be” asks “when?” (an estimate); “is ready” means “as soon as it is ready”."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Das ist „sobald“: Du willst erst Bescheid, wenn der Bericht fertig ist.",
+      "en": "That is “as soon as”: you only want to hear once the report is ready."
+     }
+    ]
+   },
+   "topic": "time-clauses"
+  }
+ ]
+}

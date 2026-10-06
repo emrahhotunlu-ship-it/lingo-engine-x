@@ -1,0 +1,163 @@
+[
+ {
+  "pat": "tc.present-for-future",
+  "en": "We'll start the call as soon as the client joins.",
+  "de": "Wir starten den Anruf, sobald der Kunde dazukommt.",
+  "chunks": [
+   "we'll start",
+   "the call",
+   "as soon as",
+   "the client",
+   "joins"
+  ],
+  "alt": [
+   "As soon as the client joins, we'll start the call.",
+   "We'll start as soon as the client joins the call.",
+   "As soon as the client joins the call, we'll start."
+  ],
+  "why": [
+   "Im Zeitsatz steht das Präsens: as soon as the client joins. Das Futur trägt schon we'll start.",
+   "The time clause takes the present: as soon as the client joins. The future is already in we'll start."
+  ],
+  "bad": "We'll start the call as soon as the client will join.",
+  "trap": {
+   "tile": "joins",
+   "instead": "will join",
+   "why": {
+    "de": "Im Deutschen steht im Zeitsatz auch Präsens, trotzdem kommt oft ein will dazu. Nach as soon as bleibt es bei joins.",
+    "en": "German also uses the present in the time clause, yet a will often sneaks in. After as soon as, keep joins."
+   }
+  }
+ },
+ {
+  "pat": "tc.present-perfect",
+  "en": "We won't deploy the release until QA has signed off.",
+  "de": "Wir deployen das Release erst, wenn QA freigegeben hat.",
+  "chunks": [
+   "we won't deploy",
+   "the release",
+   "until",
+   "QA",
+   "has signed off"
+  ],
+  "alt": [
+   "Until QA has signed off, we won't deploy the release."
+  ],
+  "why": [
+   "Nach until steht has signed off: Erst muss die Freigabe da sein, dann geht der Deploy raus.",
+   "After until, use has signed off: the approval has to be there first, then the deploy goes out."
+  ],
+  "bad": "We won't deploy the release until QA will have signed off.",
+  "trap": {
+   "tile": "has signed off",
+   "instead": "will have signed off",
+   "why": {
+    "de": "Das will have des Hauptsatzes wandert gern in den Zeitsatz. Nach until reicht has signed off.",
+    "en": "The will have of the main clause likes to move into the time clause. After until, has signed off is enough."
+   }
+  }
+ },
+ {
+  "pat": "tc.present-perfect",
+  "en": "I'll send the minutes after we have finished the call.",
+  "de": "Ich schicke das Protokoll, nachdem wir den Call beendet haben.",
+  "chunks": [
+   "I'll send",
+   "the minutes",
+   "after",
+   "we have finished",
+   "the call"
+  ],
+  "alt": [
+   "After we have finished the call, I'll send the minutes."
+  ],
+  "why": [
+   "Nach after steht have finished: Der Call ist dann vorbei. Die Vergangenheit finished passt nicht zur Zukunft.",
+   "After after, use have finished: the call is over by then. The simple past finished does not fit a future plan."
+  ],
+  "bad": "I'll send the minutes after we finished the call.",
+  "trap": {
+   "tile": "we have finished",
+   "instead": "we finished",
+   "why": {
+    "de": "Deutsch sagt „nachdem wir beendet haben“ (Perfekt). Viele machen daraus die Vergangenheit (finished). Hier passt das englische Perfekt have finished.",
+    "en": "German says “nachdem wir beendet haben” (perfect). Many learners turn it into the simple past (finished). Here the English present perfect have finished fits."
+   }
+  }
+ },
+ {
+  "pat": "tc.by-the-time",
+  "en": "By the time the auditors arrive, we will have fixed the bug.",
+  "de": "Bis die Prüfer eintreffen, haben wir den Fehler behoben.",
+  "chunks": [
+   "by the time",
+   "the auditors",
+   "arrive",
+   "we will have fixed",
+   "the bug"
+  ],
+  "alt": [
+   "We will have fixed the bug by the time the auditors arrive."
+  ],
+  "why": [
+   "By the time + Präsens (arrive), im Hauptsatz will have fixed: Bis dahin ist der Fehler schon behoben.",
+   "By the time + present (arrive), then will have fixed in the main clause: the bug is already fixed by then."
+  ],
+  "bad": "Until the auditors arrive, we will have fixed the bug.",
+  "trap": {
+   "tile": "by the time",
+   "instead": "until",
+   "why": {
+    "de": "„Bis“ heißt im Deutschen beides. Fertig bis zu einem Zeitpunkt ist by the time; until meint, dass etwas bis dahin andauert.",
+    "en": "German “bis” covers both. Finished by a certain moment is by the time; until means something continues up to then."
+   }
+  }
+ },
+ {
+  "pat": "tc.noun-clause",
+  "en": "I don't know when the update will be ready.",
+  "de": "Ich weiß nicht, wann das Update fertig sein wird.",
+  "chunks": [
+   "I don't know",
+   "when",
+   "the update",
+   "will be",
+   "ready"
+  ],
+  "single": "Der indirekte Fragesatz hängt hinter know und lässt sich nicht nach vorn ziehen, ohne unnatürlich zu klingen.",
+  "why": [
+   "Nach know ist when die Frage „wann?“, kein Zeitsatz. Deshalb steht hier will be, nicht is.",
+   "After know, when is the question “at what time?”, not a time clause. So will be is used here, not is."
+  ],
+  "bad": "I don't know when the update gets ready.",
+  "trap": {
+   "tile": "will be",
+   "instead": "is",
+   "why": {
+    "de": "Deutsch sagt „wann das Update fertig ist“ im Präsens. Im Englischen klingt „when it is ready“ nach „sobald“. Für „wann wird es fertig sein?“ nimm will be.",
+    "en": "German says “wann das Update fertig ist” in the present. In English “when it is ready” sounds like “as soon as”. For “when will it be ready?” use will be."
+   }
+  }
+ },
+ {
+  "pat": "tc.present-for-future",
+  "en": "We won't sign the contract until legal approves the draft.",
+  "de": "Wir unterschreiben den Vertrag erst, wenn Legal den Entwurf freigibt.",
+  "chunks": [
+   "we won't sign",
+   "the contract",
+   "until",
+   "legal",
+   "approves",
+   "the draft"
+  ],
+  "alt": [
+   "Until legal approves the draft, we won't sign the contract."
+  ],
+  "why": [
+   "Nach until steht das Präsens: until legal approves. Die Verneinung won't trägt schon die Zukunft.",
+   "After until, use the present: until legal approves. The negative won't already carries the future."
+  ],
+  "bad": "We won't sign the contract until legal will approve the draft."
+ }
+]

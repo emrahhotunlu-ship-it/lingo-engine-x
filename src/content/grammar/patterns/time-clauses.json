@@ -1,0 +1,348 @@
+{
+ "topic": "time-clauses",
+ "canDo": {
+  "de": "Ich kann Zeitsätze mit when, as soon as, until und by the time richtig bilden, auch wenn es um Zukünftiges geht.",
+  "en": "I can build time clauses with when, as soon as, until and by the time correctly, even when they refer to the future."
+ },
+ "order": [
+  "tc.present-for-future",
+  "tc.present-perfect",
+  "tc.by-the-time",
+  "tc.noun-clause"
+ ],
+ "introPlan": [
+  [
+   "tc.present-for-future",
+   "tc.present-perfect"
+  ],
+  [
+   "tc.by-the-time",
+   "tc.noun-clause"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Ist when oder if hier ein Zeitwort („sobald“) oder ein Fragewort („wann“, „ob“)?",
+   "Muss die Handlung im Zeitsatz schon fertig sein, bevor der Hauptsatz passiert?",
+   "Geht es um eine Tätigkeit, die bis dahin dauert, oder um etwas, das bis dahin fertig ist?"
+  ],
+  "en": [
+   "Is when or if a time word (“as soon as”) or a question word (“at what time”, “whether”) here?",
+   "Does the action in the time clause have to be finished before the main clause happens?",
+   "Is it an activity that continues until then, or something that is finished by then?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "tc.present-for-future",
+   "name": {
+    "de": "Zeitsatz: Präsens statt will",
+    "en": "Time clause: present, not will"
+   },
+   "form": {
+    "de": "when/as soon as + Präsens",
+    "en": "when/as soon as + present"
+   },
+   "use": {
+    "de": "Geht es um Zukünftiges, steht nach when, as soon as, until, before und after das Präsens. Das Futur steht nur im Hauptsatz. Auch verneint: won't … until + Präsens.",
+    "en": "For future meaning, use the present simple after when, as soon as, until, before and after. The future belongs only in the main clause. This includes the negative: won't … until + present."
+   },
+   "signals": [
+    "when",
+    "as soon as",
+    "until",
+    "before",
+    "after",
+    "won't … until"
+   ],
+   "ex": [
+    {
+     "en": "I'll send the invoice as soon as the client confirms the order.",
+     "de": "Ich schicke die Rechnung, sobald der Kunde die Bestellung bestätigt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We won't launch until the security team signs off.",
+     "de": "Wir starten erst, wenn das Security-Team freigibt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Let's align on the numbers before the client arrives.",
+     "de": "Lass uns die Zahlen abstimmen, bevor der Kunde kommt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I'll forward the file when the client will reply.",
+    "good": "I'll forward the file when the client replies.",
+    "cause": {
+     "de": "Der Reflex „Zukunft = will“. Im Deutschen steht im Zeitsatz ebenfalls Präsens („wenn der Kunde antwortet“), trotzdem rutscht will ins Englische.",
+     "en": "The reflex “future = will”. German also uses the present in the time clause (“wenn der Kunde antwortet”), yet will slips into the English."
+    }
+   },
+   "contrast": {
+    "with": "tc.noun-clause",
+    "a": "I'll call you when she arrives.",
+    "b": "I don't know when she will arrive.",
+    "diff": {
+     "de": "Links ist when „sobald“ (Zeitsatz): Präsens. Rechts ist when „zu welchem Zeitpunkt“ (Frage): dort steht will.",
+     "en": "On the left, when means “as soon as” (time clause): present. On the right, when means “at what time” (question): will is used."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We'll start as soon as the data arrives.",
+     "q": {
+      "de": "Wartet ihr zuerst auf die Daten?",
+      "en": "Do you wait for the data first?"
+     },
+     "a": true
+    },
+    {
+     "s": "I'll call you when I get to the hotel.",
+     "q": {
+      "de": "Ist der Anruf schon passiert?",
+      "en": "Has the call already happened?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "In welchem Teil steht die Zukunft, und in welcher Form steht das Verb im Zeitsatz?",
+    "en": "Which part carries the future, and what form is the verb in the time clause?"
+   }
+  },
+  {
+   "id": "tc.present-perfect",
+   "name": {
+    "de": "Zeitsatz: Present Perfect",
+    "en": "Time clause: present perfect"
+   },
+   "form": {
+    "de": "after/once/until + Present Perfect",
+    "en": "after/once/until + present perfect"
+   },
+   "use": {
+    "de": "Muss die Handlung im Zeitsatz fertig sein, bevor der Hauptsatz beginnt, steht Present Perfect. Typisch nach after, once und until; das einfache Präsens ist oft auch möglich.",
+    "en": "If the action in the time clause must be finished before the main clause begins, use the present perfect. Typical with after, once and until; the present simple is often possible too."
+   },
+   "signals": [
+    "after",
+    "once",
+    "until",
+    "as soon as",
+    "when"
+   ],
+   "ex": [
+    {
+     "en": "Once the board has approved the budget, we'll start hiring.",
+     "de": "Sobald der Vorstand das Budget genehmigt hat, fangen wir mit dem Einstellen an.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'll send the minutes after we have finished the call.",
+     "de": "Ich schicke das Protokoll, nachdem wir den Call beendet haben.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Don't deploy until QA has signed off.",
+     "de": "Deploy erst, wenn QA freigegeben hat.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Don't deploy until QA signed off.",
+    "good": "Don't deploy until QA has signed off.",
+    "cause": {
+     "de": "Deutsch sagt „bis QA freigegeben hat“ (Perfekt). Viele übersetzen das Perfekt automatisch mit der Vergangenheit (signed off). Im Englischen passt hier has signed off (oder das Präsens).",
+     "en": "German says “bis QA freigegeben hat” (perfect). Many learners turn it into the simple past (signed off). In English use has signed off (or the present)."
+    }
+   },
+   "contrast": {
+    "with": "tc.present-for-future",
+    "a": "I'll call you when I leave.",
+    "b": "I'll call you when I have left.",
+    "diff": {
+     "de": "Beides meint die Zukunft. Mit have left betonst du: erst ist die Handlung ganz abgeschlossen, dann kommt der Hauptsatz.",
+     "en": "Both refer to the future. With have left you stress that the action is completely finished before the main clause happens."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We'll start once everyone has arrived.",
+     "q": {
+      "de": "Sind dann alle schon da, wenn ihr beginnt?",
+      "en": "Is everyone already there when you begin?"
+     },
+     "a": true
+    },
+    {
+     "s": "I'll call you when I have landed.",
+     "q": {
+      "de": "Rufst du an, bevor du gelandet bist?",
+      "en": "Do you call before you have landed?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Muss die Handlung im Zeitsatz schon ganz erledigt sein, bevor der Hauptsatz passiert?",
+    "en": "Does the action in the time clause have to be completely done before the main clause happens?"
+   }
+  },
+  {
+   "id": "tc.by-the-time",
+   "name": {
+    "de": "By the time · dann fertig",
+    "en": "By the time · done by then"
+   },
+   "form": {
+    "de": "By the time + Präsens",
+    "en": "By the time + present"
+   },
+   "use": {
+    "de": "By the time nennt den Zeitpunkt, bis zu dem etwas schon fertig sein wird. Der Zeitsatz steht im Präsens, der Hauptsatz meist im Future Perfect (will have + Partizip).",
+    "en": "By the time names the moment by which something will already be finished. The time clause is in the present simple, the main clause is usually in the future perfect (will have + participle)."
+   },
+   "signals": [
+    "by the time",
+    "by then",
+    "already"
+   ],
+   "ex": [
+    {
+     "en": "By the time you read this, I'll have left the office.",
+     "de": "Bis du das liest, bin ich schon aus dem Büro.",
+     "ctx": "mail"
+    },
+    {
+     "en": "By the time the client arrives, we'll have finished the slides.",
+     "de": "Bis der Kunde kommt, haben wir die Folien fertig.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "By the time the audit starts, we'll have fixed the bug.",
+     "de": "Bis das Audit beginnt, haben wir den Fehler behoben.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Until the client arrives, we will have finished the slides.",
+    "good": "By the time the client arrives, we will have finished the slides.",
+    "cause": {
+     "de": "„Bis“ heißt im Deutschen beides: bis dahin andauernd (until) und spätestens dann fertig (by the time). Deutsche greifen oft zu until.",
+     "en": "German “bis” covers both: continuing until then (until) and finished at the latest by then (by the time). Germans often reach for until."
+    }
+   },
+   "contrast": {
+    "with": "tc.present-for-future",
+    "a": "We'll keep working until the client arrives.",
+    "b": "We'll have finished by the time the client arrives.",
+    "diff": {
+     "de": "Mit until dauert die Tätigkeit bis zum Zeitpunkt an. Mit by the time ist sie spätestens dann abgeschlossen.",
+     "en": "With until the activity continues up to that moment. With by the time it is finished by then at the latest."
+    }
+   },
+   "ccq": [
+    {
+     "s": "By the time you call, I'll have left.",
+     "q": {
+      "de": "Bist du dann noch im Büro?",
+      "en": "Are you still at the office then?"
+     },
+     "a": false
+    },
+    {
+     "s": "By the time the call starts, we'll have sent the deck.",
+     "q": {
+      "de": "Ist das Deck vor dem Anruf raus?",
+      "en": "Is the deck sent before the call?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Dauert die Tätigkeit bis zu diesem Zeitpunkt an, oder ist sie dann schon fertig?",
+    "en": "Does the activity continue up to that moment, or is it already finished by then?"
+   }
+  },
+  {
+   "id": "tc.noun-clause",
+   "name": {
+    "de": "when/if als Frage · will bleibt",
+    "en": "when/if as question · will stays"
+   },
+   "form": {
+    "de": "know/ask + when/if + will",
+    "en": "know/ask + when/if + will"
+   },
+   "use": {
+    "de": "Nach know, ask, wonder oder not sure sind when, if und whether Fragewörter („wann“, „ob“), kein Zeitsatz. Bei Plänen und Prognosen steht deshalb will. Bei festen Terminen geht auch das Präsens: „Do you know when the train leaves?“",
+    "en": "After know, ask, wonder or not sure, when, if and whether are question words (“at what time”, “whether”), not a time clause. For plans and predictions use will. For fixed schedules the present also works: “Do you know when the train leaves?”"
+   },
+   "signals": [
+    "I don't know when",
+    "I wonder if",
+    "ask whether",
+    "not sure if",
+    "wonder when"
+   ],
+   "ex": [
+    {
+     "en": "I don't know when the update will be ready.",
+     "de": "Ich weiß nicht, wann das Update fertig sein wird.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Could you ask whether the client will join us?",
+     "de": "Kannst du fragen, ob der Kunde dazustoßen wird?",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'm not sure if we will finish by Friday.",
+     "de": "Ich bin nicht sicher, ob wir bis Freitag fertig werden.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I wonder if the client accepts our offer.",
+    "good": "I wonder if the client will accept our offer.",
+    "cause": {
+     "de": "Deutsch nutzt auch hier das Präsens („ob der Kunde annimmt“). Wer die Zeitsatz-Regel gelernt hat, lässt dann will weg, obwohl es sich um eine Frage handelt.",
+     "en": "German also uses the present here (“ob der Kunde annimmt”). Learners who know the time-clause rule then drop will, even though this is a question."
+    }
+   },
+   "contrast": {
+    "with": "tc.present-for-future",
+    "a": "I don't know when the report will be ready.",
+    "b": "I'll call you when the report is ready.",
+    "diff": {
+     "de": "Links ist when „zu welchem Zeitpunkt“ (Frage): will. Rechts ist when „sobald“ (Zeitsatz): Präsens.",
+     "en": "On the left, when means “at what time” (question): will. On the right, when means “as soon as” (time clause): present."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I don't know when the update will be ready.",
+     "q": {
+      "de": "Kannst du when hier mit „sobald“ ersetzen?",
+      "en": "Can you replace when here with “as soon as”?"
+     },
+     "a": false
+    },
+    {
+     "s": "I'll call you when the update is ready.",
+     "q": {
+      "de": "Kannst du when hier mit „sobald“ ersetzen?",
+      "en": "Can you replace when here with “as soon as”?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Kannst du when hier durch „sobald“ ersetzen, oder ist es die Frage „wann genau?“",
+    "en": "Can you replace when here with “as soon as”, or is it the question “at what time exactly?”"
+   }
+  }
+ ]
+}

@@ -1,0 +1,2068 @@
+{
+ "cond-alt|wewillmissthedeadlinewehireextrastaff": {
+  "pat": "ca.unless",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“. Ohne zusätzliches Personal verpassen wir die Frist.",
+    "en": "Right: unless = “if not”. Without extra staff, we miss the deadline."
+   },
+   "wrong": [
+    {
+     "opt": "otherwise",
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz (sonst …) und verbindet nicht zwei Satzteile.",
+     "en": "Otherwise starts a new sentence (or else …); it cannot join two clauses."
+    },
+    {
+     "opt": "provided",
+     "pat": "ca.as-long-as",
+     "de": "„Provided“ = nur wenn: Wir verpassen die Frist nur, wenn wir einstellen. Unsinn.",
+     "en": "“Provided” = only if: we'd miss the deadline only if we hire. That makes no sense."
+    },
+    {
+     "opt": "but for",
+     "pat": "ca.but-for",
+     "de": "„But for“ + Nomen heißt „ohne“; hier folgt aber ein ganzer Satz (we hire …).",
+     "en": "“But for” + noun means “without”; here a whole clause follows (we hire …)."
+    }
+   ]
+  }
+ },
+ "cond-alt|youcanusethecompanycaryoureturnitbyfriday": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "as long as + Präsens nennt die Bedingung: nur wenn du es zurückgibst.",
+    "en": "as long as + present gives the condition: only if you return it."
+   },
+   "wrong": [
+    {
+     "opt": "but for",
+     "pat": "ca.but-for",
+     "de": "„But for“ + Nomen heißt „ohne“ (Rückblick); hier folgt ein Satz mit Präsens.",
+     "en": "“But for” + noun means “without” (hindsight); here a present-tense clause follows."
+    },
+    {
+     "opt": "unless",
+     "pat": "ca.unless",
+     "de": "„Unless“ = „wenn nicht“: Du dürftest den Wagen nur nutzen, wenn du ihn nicht zurückgibst.",
+     "en": "“Unless” = “if not”: you could use the car only if you do not return it."
+    },
+    {
+     "opt": "otherwise",
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ (sonst) beginnt einen neuen Satz und verbindet keine Satzteile.",
+     "en": "Otherwise (or else) starts a new sentence and cannot join two clauses."
+    }
+   ]
+  }
+ },
+ "cond-alt|sendmetheinvoicetodaywecannotprocessthepaymentthismonth": {
+  "pat": "ca.otherwise",
+  "why": {
+   "ok": {
+    "de": "Richtig: Otherwise = „sonst“ im neuen Satz. Ohne Rechnung heute keine Zahlung.",
+    "en": "Right: Otherwise = “or else”, starting a new sentence: no invoice, no payment."
+   },
+   "wrong": [
+    {
+     "opt": "Provided that",
+     "pat": "ca.as-long-as",
+     "de": "„Provided that“ = nur wenn. Der Satz hieße: Nur wenn …, können wir nicht zahlen. Unsinn.",
+     "en": "“Provided that” = only if. That would read: only if …, we can't pay. Nonsense."
+    },
+    {
+     "opt": "As long as",
+     "pat": "ca.as-long-as",
+     "de": "„As long as“ = solange und leitet einen Nebensatz ein; hier fehlt dieser Satz.",
+     "en": "“As long as” = for as long as and opens a subordinate clause; that clause is missing here."
+    },
+    {
+     "opt": "Unless",
+     "pat": "ca.unless",
+     "de": "„Unless“ leitet einen Nebensatz ein, den es hier nicht gibt. Und es heißt „wenn nicht“.",
+     "en": "“Unless” opens a subordinate clause, which is missing here. It also means “if not”."
+    }
+   ]
+  }
+ },
+ "cond-alt|yoursupporttheprojectwouldneverhavelaunchedontime": {
+  "pat": "ca.but-for",
+  "why": {
+   "ok": {
+    "de": "Richtig: But for + Nomen (your support) heißt „ohne“ und passt zu would have.",
+    "en": "Right: But for + noun (your support) = “without”; it fits would have + participle."
+   },
+   "wrong": [
+    {
+     "opt": "Otherwise",
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ braucht davor einen Satz und danach einen Hauptsatz, kein Nomen.",
+     "en": "Otherwise needs a sentence before it and a main clause after it, not a noun."
+    },
+    {
+     "opt": "Provided",
+     "pat": "ca.as-long-as",
+     "de": "„Provided (that)“ = nur wenn und braucht einen Satz, kein Nomen. Rückblick fehlt.",
+     "en": "“Provided (that)” = only if and needs a clause, not a noun. It has no hindsight meaning."
+    },
+    {
+     "opt": "Unless",
+     "pat": "ca.unless",
+     "de": "„Unless“ = „wenn nicht“ + Satz im Präsens; hier folgt nur ein Nomen im Rückblick.",
+     "en": "“Unless” = “if not” + a present clause; here only a noun follows, looking back."
+    }
+   ]
+  }
+ },
+ "cond-alt|theclientwillrenewthatweimproveoursupport": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: „provided that“ = nur wenn; danach Präsens: that we improve …",
+    "en": "Right: “provided that” = only if; the present follows: that we improve …"
+   },
+   "wrong": [
+    {
+     "if": [
+      "unless"
+     ],
+     "pat": "ca.unless",
+     "de": "„Unless“ = „wenn nicht“ und steht nie vor that. Gemeint ist: nur wenn wir uns verbessern.",
+     "en": "“Unless” = “if not” and is never followed by that. The meaning here: only if we improve."
+    },
+    {
+     "if": [
+      "otherwise"
+     ],
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz und passt nicht vor „that we improve“.",
+     "en": "Otherwise starts a new sentence and does not fit before “that we improve”."
+    },
+    {
+     "if": [
+      "long"
+     ],
+     "de": "„As long“ braucht ein zweites as (as long as, ohne that). Mit that sagt man provided that.",
+     "en": "“As long” needs a second as (as long as, no that). With that, say provided that."
+    },
+    {
+     "not": [
+      "provided",
+      "providing"
+     ],
+     "de": "Gesucht ist ein Wort für „nur wenn“, das mit that geht: provided oder providing.",
+     "en": "A word for “only if” that takes that fits here: provided or providing."
+    }
+   ]
+  }
+ },
+ "cond-alt|wewillcanceltheeventenoughpeoplesignupbymonday": {
+  "pat": "ca.unless",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „wenn nicht“. Wir sagen ab, wenn sich nicht genug anmelden.",
+    "en": "Right: unless = “if not”. We cancel if not enough people sign up."
+   },
+   "wrong": [
+    {
+     "if": [
+      "if"
+     ],
+     "de": "„If“ kehrt den Sinn um: Wir sagten ab, wenn sich genug anmelden. Gemeint ist: wenn nicht.",
+     "en": "“If” flips the meaning: we'd cancel if enough people sign up. The point is: if not."
+    },
+    {
+     "if": [
+      "provided"
+     ],
+     "pat": "ca.as-long-as",
+     "de": "„Provided“ = nur wenn: Wir sagten nur ab, wenn sich genug anmelden. Falsch herum.",
+     "en": "“Provided” = only if: we'd cancel only if enough people sign up. That is backwards."
+    },
+    {
+     "if": [
+      "otherwise"
+     ],
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz und kann hier keinen Nebensatz einleiten.",
+     "en": "Otherwise starts a new sentence and cannot open a subordinate clause here."
+    },
+    {
+     "not": [
+      "unless"
+     ],
+     "de": "Gesucht ist ein Wort für „wenn nicht“: unless.",
+     "en": "A word for “if not” is needed here: unless."
+    }
+   ]
+  }
+ },
+ "cond-alt|youmayworkremotelyasasyoustayreachable": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: as long as = „solange, sofern“: die Bedingung fürs Homeoffice.",
+    "en": "Right: as long as = “provided that”: the condition for remote work."
+   },
+   "wrong": [
+    {
+     "if": [
+      "soon"
+     ],
+     "de": "„As soon as“ = „sobald“ (Zeitpunkt), nicht die Bedingung „solange du erreichbar bist“.",
+     "en": "“As soon as” = “the moment that” (time), not a condition. Here: for as long as you are reachable."
+    },
+    {
+     "if": [
+      "far"
+     ],
+     "de": "„As far as“ = „soweit“ (Umfang, Wissen), nicht „solange“ als Bedingung.",
+     "en": "“As far as” = “to the extent that”, not a condition like as long as."
+    },
+    {
+     "not": [
+      "long"
+     ],
+     "de": "Gesucht ist das Wort aus „as … as“, das „solange“ ausdrückt: long.",
+     "en": "The word from “as … as” that means “provided that” is long."
+    }
+   ]
+  }
+ },
+ "cond-alt|ifwedonotgetthebudgetwecannothireanyonewecannothireanyonewegetthebudget": {
+  "pat": "ca.unless",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless = „if … not“. Ohne Budget stellen wir niemanden ein.",
+    "en": "Right: unless = “if … not”. Without the budget, we hire no one."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Unless ersetzt „if … not“ als ein Wort. Ein zusätzliches not ist nicht nötig.",
+     "en": "Unless replaces “if … not” as one word. No extra not is needed."
+    },
+    {
+     "if": [
+      "if"
+     ],
+     "de": "„If“ allein macht daraus: Wir stellen niemanden ein, wenn wir das Budget bekommen.",
+     "en": "“If” alone would mean: we can't hire anyone if we get the budget."
+    },
+    {
+     "if": [
+      "otherwise"
+     ],
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz und kann hier keinen Nebensatz einleiten.",
+     "en": "Otherwise starts a new sentence and cannot open a subordinate clause here."
+    }
+   ]
+  }
+ },
+ "cond-alt|withoutyourhelpwewouldhavefailedyourhelpwewouldhavefailed": {
+  "pat": "ca.but-for",
+  "why": {
+   "ok": {
+    "de": "Richtig: But for + Nomen (your help) = „ohne“ im Rückblick, passend zu would have.",
+    "en": "Right: But for + noun (your help) = “without” in hindsight, as with would have."
+   },
+   "wrong": [
+    {
+     "if": [
+      "but"
+     ],
+     "not": [
+      "for"
+     ],
+     "de": "„But“ allein heißt „aber, außer“. Für „ohne“ im Rückblick braucht es „but for“.",
+     "en": "“But” alone means “however” or “except”. “Without” in hindsight needs “but for”."
+    },
+    {
+     "if": [
+      "without"
+     ],
+     "de": "„Without“ steht schon im Ausgangssatz. Gefragt ist die Umformung mit „but for“.",
+     "en": "“Without” is already in the source sentence. The task asks for the form with “but for”."
+    },
+    {
+     "if": [
+      "unless"
+     ],
+     "pat": "ca.unless",
+     "de": "„Unless“ + Satz im Präsens passt nicht zu einem Rückblick mit would have.",
+     "en": "“Unless” + a present clause does not fit a hindsight sentence with would have."
+    },
+    {
+     "if": [
+      "otherwise"
+     ],
+     "pat": "ca.otherwise",
+     "de": "„Otherwise“ beginnt einen neuen Satz; hier folgt kein Hauptsatz, sondern ein Nomen.",
+     "en": "Otherwise starts a new sentence; here a noun follows, not a main clause."
+    }
+   ]
+  }
+ },
+ "cond-alt|unlessyoudonotsigntodaytheofferexpires": {
+  "pat": "ca.unless",
+  "why": {
+   "ok": {
+    "de": "Richtig: unless trägt die Verneinung schon. Nach „Unless you sign“ folgt kein not.",
+    "en": "Right: unless already carries the negation. “Unless you sign” takes no not."
+   },
+   "wrong": [
+    {
+     "if": [
+      "unless",
+      "not"
+     ],
+     "de": "Zweite Verneinung: Unless heißt schon „wenn nicht“. Mit „don't“ kippt der Sinn.",
+     "en": "Second negation: unless already means “if not”. With don't the meaning flips."
+    },
+    {
+     "if": [
+      "if",
+      "not"
+     ],
+     "de": "Mit „if … not“ stimmt der Sinn, doch hier soll unless sitzen: „Unless you sign“.",
+     "en": "“If … not” has the same meaning, but this task wants unless: “Unless you sign”."
+    },
+    {
+     "not": [
+      "unless"
+     ],
+     "de": "Der Satz soll mit „Unless“ bleiben; nur das „don't“ ist zu viel.",
+     "en": "The sentence should keep “Unless”; only the “don't” is extra."
+    }
+   ]
+  }
+ },
+ "cond-alt|iwillattendtheworkshopaslongasitwillnotoverlapwithmyclientcall": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach „as long as“ steht das Präsens: „doesn't overlap“, kein will.",
+    "en": "Right: after “as long as” use the present: “doesn't overlap”, no will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach as long as steht kein will, auch wenn es um die Zukunft geht: „doesn't overlap“.",
+     "en": "No will after as long as, even for the future: use “doesn't overlap”."
+    }
+   ]
+  }
+ },
+ "cond-alt|youcanborrowmylaptopprovidedyouwillreturnittomorrow": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach „provided“ steht das Präsens: „you return it“, kein will.",
+    "en": "Right: after “provided” use the present: “you return it”, no will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach provided (that) steht kein will; das Präsens („return“) deckt die Zukunft ab.",
+     "en": "No will after provided (that); the present (“return”) covers the future."
+    }
+   ]
+  }
+ },
+ "cond-alt|aslongasitwillnotrainwewillholdtheeventoutside": {
+  "pat": "ca.as-long-as",
+  "why": {
+   "ok": {
+    "de": "Richtig: nach „As long as“ steht das Präsens: „doesn't rain“, kein will.",
+    "en": "Right: after “As long as” use the present: “doesn't rain”, no will."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach as long as steht kein will. Das ist der Reflex „Zukunft = will“; Deutsch nutzt hier Präsens.",
+     "en": "No will after as long as. It is the “future = will” reflex; German uses the present here too."
+    }
+   ]
+  }
+ },
+ "mixed-cond|iwishispeakspanish": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "wish + Fähigkeit jetzt: can wird zu could.",
+    "en": "wish + ability now: can becomes could."
+   },
+   "wrong": [
+    {
+     "opt": "can",
+     "de": "can bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "can stays present; after wish the verb moves one step back."
+    },
+    {
+     "opt": "would",
+     "pat": "mc.wish-would",
+     "de": "would drückt Ärger über andere aus, nicht die eigene Fähigkeit.",
+     "en": "would voices annoyance at others, not your own ability."
+    },
+    {
+     "opt": "will",
+     "de": "will steht nie nach wish; gebraucht wird eine Past-Form.",
+     "en": "will is never used after wish; a past form is needed."
+    }
+   ]
+  }
+ },
+ "mixed-cond|iwishithatyesterday": {
+  "pat": "mc.wish-past",
+  "why": {
+   "ok": {
+    "de": "yesterday ist vorbei: Bedauern → wish + had + 3. Form.",
+    "en": "yesterday is over: regret → wish + had + participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "wish + would betrifft das Verhalten anderer; für früher braucht wish had + 3. Form.",
+     "en": "wish + would is for others' behavior; for earlier, wish needs had + participle."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "pat": "mc.wish-now",
+     "de": "Past Simple würde nur eine Tatsache melden; yesterday verlangt had + 3. Form.",
+     "en": "simple past only reports a fact; yesterday calls for had + participle."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Du bereust, es gesagt zu haben: Die Verneinung fehlt, also hadn't said.",
+     "en": "you regret having said it: the negative is missing, so hadn't said."
+    }
+   ]
+  }
+ },
+ "mixed-cond|ifihadtakenthatjobiinberlinnow": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "had taken (früher) + now: Folge jetzt → would + Grundform.",
+    "en": "had taken (earlier) + now → would + base form."
+   },
+   "wrong": [
+    {
+     "opt": "would have lived",
+     "de": "would have lived meint damals; now verlangt die Folge für jetzt.",
+     "en": "would have lived means back then; now needs the result for the present."
+    },
+    {
+     "opt": "will live",
+     "de": "will gehört zu realen Bedingungen; hier ist die Bedingung vorbei.",
+     "en": "will belongs to real conditions; here the condition is over."
+    },
+    {
+     "opt": "lived",
+     "de": "lived ist Past Simple: die unreale Folge braucht would.",
+     "en": "lived is simple past: the unreal result needs would."
+    }
+   ]
+  }
+ },
+ "mixed-cond|itshightimeweanewcrmsystem": {
+  "pat": "mc.high-time",
+  "why": {
+   "ok": {
+    "de": "It's high time + Past Simple: bought, auch wenn es um jetzt geht.",
+    "en": "It's high time + past simple: bought, even though it is about now."
+   },
+   "wrong": [
+    {
+     "opt": "buy",
+     "de": "Präsens ist die deutsche Form („dass wir kaufen“); hier steht Past.",
+     "en": "present is the German pattern (“dass wir kaufen”); English takes past."
+    },
+    {
+     "opt": "would buy",
+     "de": "would buy nennt eine mögliche Handlung; nach high time steht reines Past.",
+     "en": "would buy names a possible action; after high time use plain past."
+    },
+    {
+     "opt": "have bought",
+     "de": "have bought blickt auf Erledigtes zurück; gemeint ist: jetzt handeln.",
+     "en": "have bought looks back at something done; the point is to act now."
+    }
+   ]
+  }
+ },
+ "mixed-cond|iwishtheclientusthedatalastweek": {
+  "pat": "mc.wish-past",
+  "why": {
+   "ok": {
+    "de": "last week + Bedauern → für früher: wish + had + 3. Form (had sent).",
+    "en": "last week + regret → wish + had + participle: had sent."
+   },
+   "wrong": [
+    {
+     "opt": "has sent",
+     "de": "has sent steht nie nach wish; es braucht had + 3. Form.",
+     "en": "has sent is never used after wish; it needs had + participle."
+    },
+    {
+     "opt": "sent",
+     "pat": "mc.wish-now",
+     "de": "sent wäre ein Wunsch über jetzt; last week ist vorbei.",
+     "en": "sent would be a wish about now; last week is over."
+    },
+    {
+     "opt": "would send",
+     "pat": "mc.wish-would",
+     "de": "would send fordert künftiges Verhalten; last week ist vorbei.",
+     "en": "would send asks for future behavior; last week is over."
+    }
+   ]
+  }
+ },
+ "mixed-cond|youkeepinterruptingmeinmeetingsiwishyou": {
+  "pat": "mc.wish-would",
+  "why": {
+   "ok": {
+    "de": "You keep interrupting: Ärger über Verhalten, das enden soll → would stop.",
+    "en": "You keep interrupting: annoyance at behavior that should end → would stop."
+   },
+   "wrong": [
+    {
+     "opt": "will stop",
+     "de": "will steht nie nach wish; dieser Ärger braucht would.",
+     "en": "will is never used after wish; this annoyance needs would."
+    },
+    {
+     "opt": "stop",
+     "de": "Das Präsens stop geht nach wish nicht; hier passt would stop.",
+     "en": "present stop does not work after wish; would stop fits here."
+    },
+    {
+     "opt": "had stopped",
+     "pat": "mc.wish-past",
+     "de": "had stopped bedauert etwas Vergangenes; die Unterbrechungen laufen noch.",
+     "en": "had stopped regrets something past; the interrupting is still going on."
+    }
+   ]
+  }
+ },
+ "mixed-cond|ifwethediscountlastquarterwewouldnotbestrugglingwithmarginsnow": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "last quarter (früher) + now (die Folge jetzt): if + had + 3. Form.",
+    "en": "last quarter (earlier) + now (result now): if + had + participle."
+   },
+   "wrong": [
+    {
+     "opt": "didn't offer",
+     "de": "didn't offer ist Past Simple; last quarter verlangt had + 3. Form.",
+     "en": "didn't offer is simple past; last quarter needs had + participle."
+    },
+    {
+     "opt": "haven't offered",
+     "de": "haven't offered ist Present Perfect; eine unreale Bedingung früher braucht had.",
+     "en": "haven't offered is present perfect; an unreal past condition needs had."
+    },
+    {
+     "opt": "wouldn't have offered",
+     "de": "would steht nicht im if-Teil; dort gehört had + 3. Form hin.",
+     "en": "would does not belong in the if-clause; it takes had + participle."
+    }
+   ]
+  }
+ },
+ "mixed-cond|ifshehadnotacceptedtheofferfromgooglesheforustoday": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "hadn't accepted (früher) + today: die Folge gilt jetzt → would + Grundform.",
+    "en": "hadn't accepted (earlier) + today: result now → would + base form."
+   },
+   "wrong": [
+    {
+     "opt": "would have worked",
+     "de": "would have worked meint damals; today verlangt die Folge für jetzt.",
+     "en": "would have worked means back then; today needs the result for now."
+    },
+    {
+     "opt": "worked",
+     "de": "worked ohne would nennt eine Tatsache; die unreale Folge braucht would.",
+     "en": "worked without would states a fact; the unreal result needs would."
+    },
+    {
+     "opt": "will work",
+     "de": "will gehört zu realen Bedingungen; hier geht es um etwas Unwirkliches.",
+     "en": "will belongs to real conditions; this is about something unreal."
+    }
+   ]
+  }
+ },
+ "mixed-cond|itspmandiamstillattheofficeiwishiathome": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "still at the office = jetzt: wish + Past, bei be were.",
+    "en": "still at the office = now: wish + past, were for be."
+   },
+   "wrong": [
+    {
+     "opt": "had been",
+     "pat": "mc.wish-past",
+     "de": "had been bedauert etwas von früher; hier geht es um den Abend jetzt.",
+     "en": "had been regrets something earlier; this is about tonight."
+    },
+    {
+     "opt": "would be",
+     "pat": "mc.wish-would",
+     "de": "would be passt nicht zum eigenen Wunsch; hier braucht es die Past-Form were.",
+     "en": "would be does not fit your own wish; it needs the past form were."
+    },
+    {
+     "opt": "am",
+     "de": "am bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "am stays present; after wish the verb moves one step back."
+    }
+   ]
+  }
+ },
+ "mixed-cond|ifonlywethesecuritywarningearlier": {
+  "pat": "mc.wish-past",
+  "why": {
+   "ok": {
+    "de": "If only + earlier: Bedauern für früher → had + 3. Form.",
+    "en": "If only + earlier: regret about the past → had + participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would read wünscht künftiges Verhalten; earlier ist vorbei.",
+     "en": "would read wishes for future behavior; earlier is over."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "pat": "mc.wish-now",
+     "de": "Past Simple read bleibt bei jetzt; für früher braucht If only had read.",
+     "en": "simple past read stays at now; for earlier, if only needs had read."
+    }
+   ]
+  }
+ },
+ "mixed-cond|iwishispeakbetterspanishmyclientsinmadridwouldloveit": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "wish + can → could: ein Wunsch über jetzt, eine Fähigkeit.",
+    "en": "wish + can → could: a wish about now, an ability."
+   },
+   "wrong": [
+    {
+     "if": [
+      "can"
+     ],
+     "de": "can bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "can stays present; after wish the verb moves one step back."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would drückt Ärger über andere aus; für die eigene Fähigkeit gilt could.",
+     "en": "would voices annoyance at others; for your own ability use could."
+    },
+    {
+     "not": [
+      "could"
+     ],
+     "de": "Nach wish braucht die Fähigkeit eine Past-Form: can wird zu could.",
+     "en": "after wish an ability takes a past form: can becomes could."
+    }
+   ]
+  }
+ },
+ "mixed-cond|ifitheadviceofmymentorbacktheniwouldnotbeinthissituationnow": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "back then + now: if + had + 3. Form, dann wouldn't be.",
+    "en": "back then + now: if + had + participle, then wouldn't be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil: dort steht had + 3. Form.",
+     "en": "would does not belong in the if-clause: it takes had + participle."
+    },
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Der if-Teil braucht had + 3. Form, weil back then vorbei ist.",
+     "en": "the if-clause needs had + participle because back then is over."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "taken"
+     ],
+     "de": "Nach had steht die 3. Form: taken, nicht took.",
+     "en": "after had comes the participle: taken, not took."
+    }
+   ]
+  }
+ },
+ "mixed-cond|ifourdeveloperhadnotleftlastmonththeappreadybynow": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "hadn't left (früher) + by now: die Folge jetzt → would be.",
+    "en": "hadn't left (earlier) + by now: result now → would be."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "will passt zu realen Bedingungen; der Entwickler ist schon gegangen.",
+     "en": "will fits real conditions; the developer has already left."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "would"
+     ],
+     "de": "had been blickt zurück; by now meint die Folge für jetzt: would be.",
+     "en": "had been looks back; by now means the result for now: would be."
+    },
+    {
+     "not": [
+      "would"
+     ],
+     "de": "Die unreale Folge braucht would + Grundform.",
+     "en": "the unreal result needs would + base form."
+    }
+   ]
+  }
+ },
+ "mixed-cond|iwishitsocoldtodayihatewinter": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "today + I hate winter: ein Wunsch für jetzt → wish + Past (weren't).",
+    "en": "today + I hate winter: wish about now → wish + past (weren't)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "is",
+      "not"
+     ],
+     "de": "isn't bleibt im Präsens; nach wish rückt die Form eine Stufe zurück.",
+     "en": "isn't stays present; after wish the verb moves one step back."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "pat": "mc.wish-past",
+     "de": "had + 3. Form bedauert früher; hier geht es nur um today.",
+     "en": "had + participle regrets earlier; this is about today."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "de": "wouldn't passt hier nicht: ein Zustand heute braucht wish + Past (weren't).",
+     "en": "wouldn't does not fit: a state today needs wish + past (weren't)."
+    }
+   ]
+  }
+ },
+ "mixed-cond|iregretthatididnotaskforadiscountiwishiforadiscount": {
+  "pat": "mc.wish-past",
+  "why": {
+   "ok": {
+    "de": "regret + didn't ask (früher) → für früher: wish + had + 3. Form (had asked).",
+    "en": "regret + didn't ask (earlier) → wish + had + participle: had asked."
+   },
+   "wrong": [
+    {
+     "if": [
+      "not"
+     ],
+     "de": "Das Bedauern gilt dem Nicht-Fragen: wish + had asked, ohne not.",
+     "en": "the regret is about not asking: wish + had asked, without not."
+    },
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "would ask wünscht künftiges Verhalten; die Chance ist vorbei.",
+     "en": "would ask wishes for future behavior; the chance is gone."
+    },
+    {
+     "if": [
+      "asked"
+     ],
+     "not": [
+      "had"
+     ],
+     "pat": "mc.wish-now",
+     "de": "asked allein ist Past Simple; Bedauern über früher braucht had asked.",
+     "en": "asked alone is simple past; regret about earlier needs had asked."
+    }
+   ]
+  }
+ },
+ "mixed-cond|welosttheclientlastyearsoweareshortofrevenuenowifwetheclientlastyearwewouldnotbe": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "last year (früher) + now: if + had + 3. Form, wouldn't be (die Folge jetzt).",
+    "en": "last year (earlier) + now: if + had + participle, wouldn't be (result now)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "de": "would gehört nicht in den if-Teil: dort steht had + 3. Form.",
+     "en": "would does not belong in the if-clause: it takes had + participle."
+    },
+    {
+     "if": [
+      "lost"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "lost allein ist Past Simple; für früher braucht der if-Teil had + 3. Form.",
+     "en": "lost alone is simple past; for earlier the if-clause needs had + participle."
+    },
+    {
+     "if": [
+      "had",
+      "lost"
+     ],
+     "not": [
+      "not"
+     ],
+     "de": "Die Bedingung dreht die Tatsache um: Wir verloren ihn, also hadn't lost.",
+     "en": "the condition reverses the fact: we did lose the client, so use hadn't lost."
+    }
+   ]
+  }
+ },
+ "mixed-cond|iwishiwouldhavemoretimeformyfamily": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "Wunsch über jetzt: wish + Past (had), nicht would have.",
+    "en": "wish about now: wish + past (had), not would have."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "Für den eigenen Wunsch über jetzt gibt es wish + would nicht; es heißt had.",
+     "en": "for your own wish about now there is no wish + would; use had."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "have ist Präsens; nach wish rückt die Form eine Stufe zurück: had.",
+     "en": "have is present; after wish the verb moves one step back: had."
+    }
+   ]
+  }
+ },
+ "mixed-cond|ifiwouldhavestudiedharderatuniversityiwouldhaveabetterjobnow": {
+  "pat": "mc.past-cond",
+  "why": {
+   "ok": {
+    "de": "had studied (früher), would have (jetzt): Folge gilt jetzt.",
+    "en": "had studied (earlier), would have (now): result now."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Im if-Teil steht had + 3. Form, nie would.",
+     "en": "The if-clause takes had + participle, never would."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "studied"
+     ],
+     "de": "Nach had steht die 3. Form: studied.",
+     "en": "after had comes the participle: studied."
+    }
+   ]
+  }
+ },
+ "mixed-cond|ifiwouldhavestudiedharderiwouldhaveabetterjobnow": {
+  "pat": "mc.past-cond",
+  "dup": "mixed-cond|ifiwouldhavestudiedharderatuniversityiwouldhaveabetterjobnow",
+  "why": {
+   "ok": {
+    "de": "had studied (früher), would have (jetzt): Folge gilt jetzt.",
+    "en": "had studied (earlier), would have (now): result now."
+   },
+   "wrong": [
+    {
+     "not": [
+      "had"
+     ],
+     "de": "Im if-Teil steht had + 3. Form, nie would.",
+     "en": "The if-clause takes had + participle, never would."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "not": [
+      "studied"
+     ],
+     "de": "Nach had steht die 3. Form: studied.",
+     "en": "after had comes the participle: studied."
+    }
+   ]
+  }
+ },
+ "mixed-cond|iwishihavemorefreetime": {
+  "pat": "mc.wish-now",
+  "why": {
+   "ok": {
+    "de": "Wunsch über jetzt: wish + Past (had), nicht das Präsens.",
+    "en": "wish about now: wish + past (had), not the present."
+   },
+   "wrong": [
+    {
+     "if": [
+      "would"
+     ],
+     "pat": "mc.wish-would",
+     "de": "wish + would passt nicht zum eigenen Wunsch über jetzt; es heißt had.",
+     "en": "wish + would does not fit your own wish about now; use had."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "not": [
+      "had"
+     ],
+     "de": "have ist Präsens; nach wish rückt die Form eine Stufe zurück: had.",
+     "en": "have is present; after wish the verb moves one step back: had."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|itolondonthreetimessofar": {
+  "pat": "psp.experience",
+  "why": {
+   "ok": {
+    "de": "„so far“ + „three times“ ist eine Anzahl bis jetzt → have been.",
+    "en": "“so far” + “three times”: a count up to now → have been."
+   },
+   "wrong": [
+    {
+     "opt": "was",
+     "pat": "psp.finished-time",
+     "de": "„was“ meint einen abgeschlossenen Moment, „so far“ reicht aber bis jetzt.",
+     "en": "“was” points to a finished moment, but “so far” runs up to now."
+    },
+    {
+     "opt": "went",
+     "pat": "psp.finished-time",
+     "de": "„went“ braucht einen genannten Zeitpunkt; hier zählt die Anzahl bis jetzt.",
+     "en": "“went” needs a named time; here the count up to now matters."
+    },
+    {
+     "opt": "had been",
+     "de": "„had been“ braucht einen früheren Bezugspunkt in der Vergangenheit; hier fehlt er.",
+     "en": "“had been” needs an earlier point in the past as a reference; none is given."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|welasttuesday": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„last Tuesday“ ist vorbei und genannt → Past Simple: met.",
+    "en": "“last Tuesday” is over and named → Past Simple: met."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Mit „last Tuesday“ ist die Zeit vorbei, deshalb ohne have.",
+     "en": "“last Tuesday” is finished time, so no have."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "„had met“ braucht einen späteren Bezugspunkt; hier ist met genug.",
+     "en": "“had met” needs a later point in the past; plain met is enough here."
+    },
+    {
+     "not": [
+      "met"
+     ],
+     "de": "Gesucht ist die 2. Form von meet: met.",
+     "en": "You need the past form of “meet”: met."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|ihaveseenthatfilmyesterday": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„yesterday“ nennt die Zeit, also Past Simple: saw.",
+    "en": "“yesterday” names the time, so Past Simple: saw."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did",
+      "saw"
+     ],
+     "de": "Nach did steht die Grundform (see), nicht saw.",
+     "en": "After did the base form (see) is needed, not saw."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„yesterday“ ist vorbei: Past Simple, nicht have + 3. Form.",
+     "en": "“yesterday” is finished time: Past Simple, not have + participle."
+    },
+    {
+     "if": [
+      "seen"
+     ],
+     "de": "„seen“ gehört zu have; im Past Simple steht saw.",
+     "en": "“seen” belongs with have; the Past Simple is saw."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|sheatthiscompanysince": {
+  "pat": "psp.since-for",
+  "why": {
+   "ok": {
+    "de": "„since 2021“ ist ein Zeitraum bis jetzt → has worked.",
+    "en": "“since 2021” → period up to now: has worked."
+   },
+   "wrong": [
+    {
+     "opt": "works",
+     "de": "„works“ spiegelt „arbeitet seit“, passt aber nicht zu since.",
+     "en": "“works” mirrors German “arbeitet seit” but does not go with since."
+    },
+    {
+     "opt": "worked",
+     "pat": "psp.finished-time",
+     "de": "„worked“ heißt: vorbei. Mit since läuft die Zeit bis jetzt.",
+     "en": "“worked” means over. With since the time runs until now."
+    },
+    {
+     "opt": "is working",
+     "de": "„is working“ bleibt Gegenwart; since + Zeitraum braucht has worked, nicht das.",
+     "en": "“is working” stays in the present; since + a period needs has worked."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|weourcrmproviderthreeyearsago": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„three years ago“ nennt die Zeit → Past Simple: changed.",
+    "en": "“three years ago” names the time → Past Simple: changed."
+   },
+   "wrong": [
+    {
+     "opt": "have changed",
+     "de": "„ago“ nennt einen Zeitpunkt, das schließt have changed aus.",
+     "en": "“ago” names a point in time, which rules out have changed."
+    },
+    {
+     "opt": "change",
+     "de": "„change“ ist Präsens, „ago“ verlangt aber die Vergangenheit.",
+     "en": "“change” is present tense, but “ago” needs the past."
+    },
+    {
+     "opt": "have been changing",
+     "pat": "psp.since-for",
+     "de": "have been changing meint eine Entwicklung bis jetzt, nicht „ago“.",
+     "en": "have been changing is a development up to now, not “ago”."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|ifromtheclientsincelastfridayscall": {
+  "pat": "psp.since-for",
+  "why": {
+   "ok": {
+    "de": "„since“ ist ein Zeitraum bis jetzt → haven't heard.",
+    "en": "“since” + a period up to now → haven't heard."
+   },
+   "wrong": [
+    {
+     "opt": "don't hear",
+     "de": "„don't hear“ ist Präsens; since verlangt das Present Perfect.",
+     "en": "“don't hear” is present tense; since needs the Present Perfect."
+    },
+    {
+     "opt": "didn't hear",
+     "pat": "psp.finished-time",
+     "de": "„didn't hear“ ist ein abgeschlossenes Ereignis; since reicht bis jetzt.",
+     "en": "“didn't hear” is a finished event; since runs up to now."
+    },
+    {
+     "opt": "am not hearing",
+     "de": "„am not hearing“ beschreibt jetzt, nicht die Zeit seit dem Call.",
+     "en": "“am not hearing” describes now, not the time since the call."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|youeverworkedwithanenterpriseclient": {
+  "pat": "psp.experience",
+  "why": {
+   "ok": {
+    "de": "„ever“ fragt nach Erfahrung bis jetzt: Have you ever worked.",
+    "en": "“ever” asks about experience up to now: Have you ever worked."
+   },
+   "wrong": [
+    {
+     "opt": "Did",
+     "de": "Nach „Did“ steht die Grundform work, hier steht aber worked.",
+     "en": "After “Did” the base form work is needed, but worked stands here."
+    },
+    {
+     "opt": "Were",
+     "de": "„Were you ever worked“ wäre ein Passiv und ergibt keinen Sinn.",
+     "en": "“Were you ever worked” would be a passive and makes no sense."
+    },
+    {
+     "opt": "Do",
+     "de": "Nach „Do“ steht ebenfalls die Grundform, nicht worked.",
+     "en": "“Do” also needs the base form, not worked."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|theceotheannouncementanhourago": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„an hour ago“ nennt die Zeit → Past Simple: made.",
+    "en": "“an hour ago” names the time → Past Simple: made."
+   },
+   "wrong": [
+    {
+     "opt": "has made",
+     "de": "„has made“ klingt wie „hat gemacht“, aber „ago“ verlangt Past Simple.",
+     "en": "“has made” mirrors German “hat gemacht”, but “ago” needs the Past Simple."
+    },
+    {
+     "opt": "is making",
+     "de": "„is making“ läuft jetzt; „an hour ago“ liegt in der Vergangenheit.",
+     "en": "“is making” is happening now; “an hour ago” is in the past."
+    },
+    {
+     "opt": "makes",
+     "de": "„makes“ ist Präsens und passt nicht zu „ago“.",
+     "en": "“makes” is present tense and does not fit “ago”."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|myparentsmarriedforyearsandtheyarestillhappytogether": {
+  "pat": "psp.since-for",
+  "why": {
+   "ok": {
+    "de": "„for 35 years“ und noch verheiratet → have been.",
+    "en": "“for 35 years” + still married → have been."
+   },
+   "wrong": [
+    {
+     "opt": "had been",
+     "de": "„had been“ meint eine Zeit vor einem anderen Punkt in der Vergangenheit.",
+     "en": "“had been” means a time before another point in the past."
+    },
+    {
+     "opt": "are",
+     "de": "„are married for“ ist „sind seit … verheiratet“ Wort für Wort und falsch.",
+     "en": "“are married for” is a word-for-word copy of the German and wrong."
+    },
+    {
+     "opt": "were",
+     "pat": "psp.finished-time",
+     "de": "„were“ hieße: vorbei. Die Ehe dauert aber noch an.",
+     "en": "“were” would mean over, but the marriage is still going."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|ourteamthenewproductinmarchlastyear": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„in March last year“ ist vorbei und genannt → launched.",
+    "en": "“in March last year” is over and named → launched."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Mit „in March last year“ steht kein have, sondern Past Simple.",
+     "en": "With “in March last year” there is no have, only the Past Simple."
+    },
+    {
+     "if": [
+      "had"
+     ],
+     "de": "„had launched“ braucht einen späteren Bezugspunkt; launched ist genug.",
+     "en": "“had launched” needs a later point in the past; launched is enough."
+    },
+    {
+     "not": [
+      "launched"
+     ],
+     "de": "Gesucht ist die Past-Simple-Form von launch: launched.",
+     "en": "You need the Past Simple of “launch”: launched."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|ithisreportthreetimessincemonday": {
+  "pat": "psp.since-for",
+  "why": {
+   "ok": {
+    "de": "„since Monday“ ist ein Zeitraum bis jetzt, also have rewritten.",
+    "en": "“since Monday”: a period up to now, so have rewritten."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rewrote"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„rewrote“ ist vorbei; since Monday reicht bis jetzt.",
+     "en": "“rewrote” is over; since Monday runs up to now."
+    },
+    {
+     "if": [
+      "have",
+      "rewrite"
+     ],
+     "de": "Nach have steht die 3. Form: rewritten, nicht rewrite.",
+     "en": "After have the past participle is needed: rewritten, not rewrite."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Zu „since Monday“ gehört have + 3. Form.",
+     "en": "“since Monday” goes with have + past participle."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|hetomyemailsincetuesday": {
+  "pat": "psp.since-for",
+  "why": {
+   "ok": {
+    "de": "„since Tuesday“ → Present Perfect, mit Verneinung: hasn't replied.",
+    "en": "“since Tuesday” → Present Perfect, negative: hasn't replied."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did",
+      "not"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„didn't reply“ ist ein abgeschlossenes Ereignis; since reicht bis jetzt.",
+     "en": "“didn't reply” is a finished event; since runs up to now."
+    },
+    {
+     "if": [
+      "has",
+      "not",
+      "reply"
+     ],
+     "de": "Nach hasn't steht die 3. Form: replied.",
+     "en": "After hasn't the past participle is needed: replied."
+    },
+    {
+     "if": [
+      "does",
+      "not"
+     ],
+     "de": "„doesn't reply“ ist Präsens; since verlangt das Present Perfect.",
+     "en": "“doesn't reply” is present tense; since needs the Present Perfect."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|inimyfirstsalesjobatastartupinberlin": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„In 2019“ ist vorbei und genannt → Past Simple: got.",
+    "en": "“In 2019” is over and named → Past Simple: got."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Mit „In 2019“ steht kein have, sondern Past Simple.",
+     "en": "With “In 2019” there is no have, only the Past Simple."
+    },
+    {
+     "if": [
+      "gotten"
+     ],
+     "de": "„gotten“ ist die 3. Form und braucht have; im Past Simple steht got.",
+     "en": "“gotten” is the participle and needs have; the Past Simple is got."
+    },
+    {
+     "if": [
+      "get"
+     ],
+     "de": "„get“ ist Präsens; „In 2019“ verlangt die Vergangenheit got.",
+     "en": "“get” is present tense; “In 2019” needs the past form got."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|thisisthefirsttimeiakeynoteinenglish": {
+  "pat": "psp.experience",
+  "why": {
+   "ok": {
+    "de": "„the first time“ zählt die Erfahrung bis jetzt → have given.",
+    "en": "“the first time” counts experience up to now → have given."
+   },
+   "wrong": [
+    {
+     "if": [
+      "gave"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„gave“ passt zu genannter Zeit; nach „first time“ steht have given.",
+     "en": "“gave” fits a named time; after “first time” use have given."
+    },
+    {
+     "if": [
+      "have",
+      "give"
+     ],
+     "de": "Nach have steht die 3. Form: given, nicht give.",
+     "en": "After have the past participle is needed: given, not give."
+    },
+    {
+     "not": [
+      "have"
+     ],
+     "de": "Nach „This is the first time“ steht das Present Perfect.",
+     "en": "After “This is the first time” the Present Perfect follows."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|ijoinedthiscompanyinandistillworkhereiheresince": {
+  "pat": "psp.since-for",
+  "why": {
+   "ok": {
+    "de": "„since 2020“ und noch dort: ein Zeitraum bis jetzt → have worked.",
+    "en": "“since 2020” + still there: period up to now → have worked."
+   },
+   "wrong": [
+    {
+     "if": [
+      "am",
+      "working"
+     ],
+     "de": "„am working since“ folgt dem Deutschen; since braucht have worked.",
+     "en": "“am working since” follows German; since needs have worked."
+    },
+    {
+     "if": [
+      "worked"
+     ],
+     "not": [
+      "have"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„worked“ ist vorbei, du arbeitest aber noch hier.",
+     "en": "“worked” is over, but you still work here."
+    },
+    {
+     "if": [
+      "work"
+     ],
+     "not": [
+      "have"
+     ],
+     "de": "Das Präsens reicht nicht: Der Zeitraum bis jetzt braucht have worked.",
+     "en": "The present tense is not enough: a period up to now needs have worked."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|thelasttimeisawherwasinmarchihersincemarch": {
+  "pat": "psp.since-for",
+  "why": {
+   "ok": {
+    "de": "„since March“: bis jetzt nicht gesehen → haven't seen.",
+    "en": "“since March”: not seen up to now → haven't seen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did",
+      "not"
+     ],
+     "pat": "psp.finished-time",
+     "de": "„didn't see“ ist ein abgeschlossenes Ereignis; since reicht bis jetzt.",
+     "en": "“didn't see” is a finished event; since runs up to now."
+    },
+    {
+     "if": [
+      "have",
+      "saw"
+     ],
+     "de": "Nach have steht die 3. Form: seen, nicht saw.",
+     "en": "After have the past participle is needed: seen, not saw."
+    },
+    {
+     "if": [
+      "not",
+      "see"
+     ],
+     "de": "„don't see“ ist Präsens; since verlangt haven't seen.",
+     "en": "“don't see” is present tense; since needs haven't seen."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|wehavelaunchedthenewwebsitelastweek": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„last week“ ist vorbei → Past Simple: launched.",
+    "en": "“last week” is finished time → Past Simple: launched."
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„last week“ ist vorbei, daher kein have + 3. Form.",
+     "en": "“last week” is over, so no have + past participle."
+    },
+    {
+     "if": [
+      "did",
+      "launched"
+     ],
+     "de": "Nach did steht die Grundform; launched allein genügt.",
+     "en": "After did the base form follows; launched alone is enough."
+    },
+    {
+     "if": [
+      "launch"
+     ],
+     "not": [
+      "launched"
+     ],
+     "de": "„launch“ ist Präsens; mit „last week“ braucht es launched.",
+     "en": "“launch” is present tense; with “last week” you need launched."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|haveyoumetournewcolleagueyesterday": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„yesterday“ ist vorbei → Past Simple: Did you meet …?",
+    "en": "“yesterday” is finished time → Past Simple: Did you meet …?"
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Mit „yesterday“ steht kein have; die Frage braucht did.",
+     "en": "With “yesterday” there is no have; the question needs did."
+    },
+    {
+     "if": [
+      "did",
+      "met"
+     ],
+     "de": "Nach did steht die Grundform: meet, nicht met.",
+     "en": "After did the base form is needed: meet, not met."
+    },
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Eine Frage im Past Simple braucht did + Grundform.",
+     "en": "A Past Simple question needs did + base form."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|ihaveseenhimyesterday": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„yesterday“ ist vorbei und genannt → Past Simple: saw.",
+    "en": "“yesterday” is over and named → Past Simple: saw."
+   },
+   "wrong": [
+    {
+     "if": [
+      "did",
+      "saw"
+     ],
+     "de": "Nach did steht die Grundform (see), nicht saw.",
+     "en": "After did the base form (see) is needed, not saw."
+    },
+    {
+     "if": [
+      "have"
+     ],
+     "de": "Mit „yesterday“ geht kein have + 3. Form, sondern Past Simple.",
+     "en": "With “yesterday” you cannot use have + participle, only the Past Simple."
+    },
+    {
+     "if": [
+      "seen"
+     ],
+     "de": "„seen“ braucht have; im Past Simple steht saw.",
+     "en": "“seen” needs have; the Past Simple is saw."
+    }
+   ]
+  }
+ },
+ "past-simple-perfect|whenhaveyouarrived": {
+  "pat": "psp.finished-time",
+  "why": {
+   "ok": {
+    "de": "„When“ fragt nach einem Zeitpunkt → When did you arrive?",
+    "en": "“When” asks for a point in time → When did you arrive?"
+   },
+   "wrong": [
+    {
+     "if": [
+      "have"
+     ],
+     "de": "„When“ fragt nach der Zeit; dann steht did, nicht have.",
+     "en": "“When” asks for the time; then use did, not have."
+    },
+    {
+     "if": [
+      "did",
+      "arrived"
+     ],
+     "de": "Nach did steht die Grundform: arrive.",
+     "en": "After did the base form is needed: arrive."
+    },
+    {
+     "not": [
+      "did"
+     ],
+     "de": "Die Frage im Past Simple braucht did + Grundform.",
+     "en": "The Past Simple question needs did + base form."
+    }
+   ]
+  }
+ },
+ "time-clauses|pleasecallmeassoonastheshipmentatthewarehouse": {
+  "pat": "tc.present-for-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht das Präsens, auch für Zukünftiges.",
+    "en": "Right: after “as soon as” the present simple carries the future."
+   },
+   "wrong": [
+    {
+     "opt": "will arrive",
+     "de": "Nach „as soon as“ steht kein will; die Zukunft zeigt schon „call me“.",
+     "en": "No will after “as soon as”; the future is already in “call me”."
+    },
+    {
+     "opt": "is arriving",
+     "de": "„is arriving“ meint: gerade jetzt. Für den Zeitpunkt reicht „arrives“.",
+     "en": "“is arriving” means: right now. For the moment, simple “arrives” is enough."
+    },
+    {
+     "opt": "would arrive",
+     "de": "„would“ ist hypothetisch. Hier geht es um einen echten, erwarteten Termin.",
+     "en": "“would” is hypothetical. This is a real, expected event."
+    }
+   ]
+  }
+ },
+ "time-clauses|wewillnotsignthecontractuntilthelegalteamthefinaldraft": {
+  "pat": "tc.present-for-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „until“ steht Präsens; will steckt schon in „won't sign“.",
+    "en": "Right: after “until” use the present; will is already in “won't sign”."
+   },
+   "wrong": [
+    {
+     "opt": "approving",
+     "de": "Nach „the legal team“ braucht es ein konjugiertes Verb, nicht -ing.",
+     "en": "After “the legal team” you need a conjugated verb, not -ing."
+    },
+    {
+     "opt": "will approve",
+     "de": "Auch nach „until“ steht kein will; es steckt schon in „won't sign“.",
+     "en": "No will after “until” either; it is already in “won't sign”."
+    },
+    {
+     "opt": "would approve",
+     "de": "„would“ passt nicht: Der Zeitsatz bleibt im Präsens, auch bei Zukünftigem.",
+     "en": "“would” does not fit: the time clause stays in the present, even for the future."
+    }
+   ]
+  }
+ },
+ "time-clauses|bythetimeyoureadthisemailithepresentation": {
+  "pat": "tc.by-the-time",
+  "why": {
+   "ok": {
+    "de": "Richtig: „By the time“ + Präsens im Nebensatz, dann will have + Partizip.",
+    "en": "Right: “By the time” + present in the clause, then will have + participle."
+   },
+   "wrong": [
+    {
+     "opt": "would finish",
+     "de": "„would finish“ ist hypothetisch. Gemeint ist: bis dahin ist es schon fertig.",
+     "en": "“would finish” is hypothetical. The meaning is: already finished by then."
+    },
+    {
+     "opt": "finish",
+     "de": "Das einfache Präsens sagt nicht, dass es bis dahin fertig ist: will have finished.",
+     "en": "The simple present does not say it is finished by then: will have finished."
+    },
+    {
+     "opt": "am finishing",
+     "de": "„am finishing“: Die Handlung ist noch im Gang. „By the time“ verlangt: schon fertig.",
+     "en": "“am finishing” means: in progress. “By the time” needs: already finished."
+    }
+   ]
+  }
+ },
+ "time-clauses|iwilltextyouwhenihometonight": {
+  "pat": "tc.present-for-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „when“ (= sobald) steht das Präsens, nicht „will“.",
+    "en": "Right: after “when” (= as soon as) use the present, not will."
+   },
+   "wrong": [
+    {
+     "opt": "am going to get",
+     "de": "Das Futur steht schon in „I'll text“; der Zeitsatz braucht kein going to.",
+     "en": "The future is already in “I'll text”; the time clause needs no going to."
+    },
+    {
+     "opt": "will get",
+     "de": "Nach „when“ steht kein will; das Futur trägt schon „I'll text“.",
+     "en": "No will after “when”; “I'll text” already carries the future."
+    },
+    {
+     "opt": "would get",
+     "de": "„would“ ist hypothetisch. Für einen echten Plan steht im Zeitsatz das Präsens.",
+     "en": "“would” is hypothetical. For a real plan the time clause takes the present."
+    }
+   ]
+  }
+ },
+ "time-clauses|letsstartthemeetingassoonaseveryonehere": {
+  "pat": "tc.present-perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ passt has arrived: erst sind alle da, dann geht es los.",
+    "en": "Right: after “as soon as”, has arrived fits: everyone is there first, then we start."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „as soon as“ steht kein will, auch nicht „will have“.",
+     "en": "No will after “as soon as”, not even “will have”."
+    },
+    {
+     "if": [
+      "arrived"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit passt nicht: Es geht um die Zukunft. Nimm has arrived.",
+     "en": "The past tense does not fit: this is about the future. Use has arrived."
+    },
+    {
+     "if": [
+      "arrive"
+     ],
+     "not": [
+      "has",
+      "have",
+      "to"
+     ],
+     "de": "„Everyone“ ist Singular: „arrives“ (oder has arrived), nicht „arrive“.",
+     "en": "“Everyone” is singular: “arrives” (or has arrived), not “arrive”."
+    }
+   ]
+  }
+ },
+ "time-clauses|iwillsendyouthereportafterithenumbers": {
+  "pat": "tc.present-perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „after“ steht have checked: erst ist geprüft, dann kommt der Bericht.",
+    "en": "Right: after “after”, have checked: the check is done first, then the report."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „after“ steht kein will, auch nicht „will have checked“.",
+     "en": "No will after “after”, not even “will have checked”."
+    },
+    {
+     "if": [
+      "checked"
+     ],
+     "not": [
+      "have",
+      "has"
+     ],
+     "de": "Die Vergangenheit „checked“ passt nicht, es geht um die Zukunft: have checked.",
+     "en": "The past “checked” does not fit; this is about the future: have checked."
+    }
+   ]
+  }
+ },
+ "time-clauses|donotswitchofftheserveruntilthebackupcompleted": {
+  "pat": "tc.present-perfect",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „until“ steht has been completed: erst fertig, dann abschalten.",
+    "en": "Right: after “until”, has been completed: finished first, then switch off."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „until“ steht kein will, auch nicht „will be completed“.",
+     "en": "No will after “until”, not even “will be completed”."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Die Vergangenheit „was“ passt nicht: Es geht um die Zukunft. Nimm has been.",
+     "en": "The past “was” does not fit: this is about the future. Use has been."
+    }
+   ]
+  }
+ },
+ "time-clauses|thecallwillendsoontheniwillemailyouiwillemailyouassoonasthecall": {
+  "pat": "tc.present-for-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht Präsens: „the call ends“.",
+    "en": "Right: after “as soon as” use the present: “the call ends”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „as soon as“ steht kein will; es steckt schon in „I'll email“.",
+     "en": "No will after “as soon as”; it is already in “I'll email”."
+    },
+    {
+     "if": [
+      "ended"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit passt nicht: Das Ende liegt noch vor uns. Nimm ends.",
+     "en": "The past tense does not fit: the end is still ahead. Use ends."
+    },
+    {
+     "if": [
+      "end"
+     ],
+     "not": [
+      "has",
+      "have",
+      "to"
+     ],
+     "de": "„The call“ ist Singular: „ends“, nicht „end“.",
+     "en": "“The call” is singular: “ends”, not “end”."
+    }
+   ]
+  }
+ },
+ "time-clauses|wewillwaitfortheapprovalthenwewillstartwewillnotstartuntiltheapproval": {
+  "pat": "tc.present-for-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „until“ steht Präsens („arrives“); will steckt in „won't start“.",
+    "en": "Right: after “until” use the present (“arrives”); will is in “won't start”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „until“ steht kein will; es steckt schon in „won't start“.",
+     "en": "No will after “until”; it is already in “won't start”."
+    },
+    {
+     "if": [
+      "arrived"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit passt nicht: Die Freigabe fehlt noch. Nimm arrives.",
+     "en": "The past tense does not fit: the approval is still missing. Use arrives."
+    },
+    {
+     "if": [
+      "arrive"
+     ],
+     "not": [
+      "has",
+      "have",
+      "to"
+     ],
+     "de": "„The approval“ ist Singular: „arrives“, nicht „arrive“.",
+     "en": "“The approval” is singular: “arrives”, not “arrive”."
+    }
+   ]
+  }
+ },
+ "time-clauses|iwillcallyouwheniwillarriveattheairport": {
+  "pat": "tc.present-for-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „when“ (= sobald) steht Präsens: „when I arrive“.",
+    "en": "Right: after “when” (= as soon as) use the present: “when I arrive”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "arrive"
+     ],
+     "de": "Nach „when“ steht kein will: „when I arrive“. Das will bleibt im Hauptsatz.",
+     "en": "No will after “when”: “when I arrive”. Keep will in the main clause."
+    },
+    {
+     "if": [
+      "arrived"
+     ],
+     "not": [
+      "have",
+      "has"
+     ],
+     "de": "Die Vergangenheit passt nicht: Du rufst an, wenn du ankommst. Nimm arrive.",
+     "en": "The past tense does not fit: you call when you get there. Use arrive."
+    },
+    {
+     "if": [
+      "arriving"
+     ],
+     "de": "„Arriving“ meint: gerade dabei. Für den Zeitpunkt reicht das einfache Präsens.",
+     "en": "“Arriving” means in progress. For the moment, the simple present is enough."
+    }
+   ]
+  }
+ },
+ "time-clauses|wewillgohomeassoonasthemeetingwillbeover": {
+  "pat": "tc.present-for-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht Präsens: „the meeting is over“.",
+    "en": "Right: after “as soon as” use the present: “the meeting is over”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "be"
+     ],
+     "de": "Nach „as soon as“ steht kein will: „is over“. Das Futur trägt „we'll go“.",
+     "en": "No will after “as soon as”: “is over”. “We'll go” carries the future."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Die Vergangenheit passt nicht: Das Meeting läuft noch. Nimm is over.",
+     "en": "The past tense does not fit: the meeting is still going. Use is over."
+    },
+    {
+     "if": [
+      "finished"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit „finished“ passt nicht; nimm „is over“ oder „has finished“.",
+     "en": "The past “finished” does not fit; use “is over” or “has finished”."
+    }
+   ]
+  }
+ },
+ "time-clauses|pleasewaithereuntilthemanagerwillcomeback": {
+  "pat": "tc.present-for-future",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „until“ steht Präsens: „the manager comes back“.",
+    "en": "Right: after “until” use the present: “the manager comes back”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will"
+     ],
+     "de": "Nach „until“ steht kein will: „until the manager comes back“.",
+     "en": "No will after “until”: “until the manager comes back”."
+    },
+    {
+     "if": [
+      "came"
+     ],
+     "de": "Die Vergangenheit passt nicht: Die Chefin ist noch nicht da. Nimm comes.",
+     "en": "The past tense does not fit: the manager is not back yet. Use comes."
+    },
+    {
+     "if": [
+      "come"
+     ],
+     "not": [
+      "will",
+      "has",
+      "have",
+      "to"
+     ],
+     "de": "„The manager“ ist Singular: „comes back“, nicht „come back“.",
+     "en": "“The manager” is singular: “comes back”, not “come back”."
+    }
+   ]
+  }
+ },
+ "time-clauses|wewillstartassoonasthemeetingwillbeover": {
+  "pat": "tc.present-for-future",
+  "dup": "time-clauses|wewillgohomeassoonasthemeetingwillbeover",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „as soon as“ steht Präsens: „the meeting is over“.",
+    "en": "Right: after “as soon as” use the present: “the meeting is over”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "will",
+      "be"
+     ],
+     "de": "Nach „as soon as“ steht kein will: „is over“. Das Futur trägt „we'll start“.",
+     "en": "No will after “as soon as”: “is over”. “We'll start” carries the future."
+    },
+    {
+     "if": [
+      "was"
+     ],
+     "de": "Die Vergangenheit passt nicht: Das Meeting läuft noch. Nimm is over.",
+     "en": "The past tense does not fit: the meeting is still going. Use is over."
+    },
+    {
+     "if": [
+      "finished"
+     ],
+     "not": [
+      "has",
+      "have"
+     ],
+     "de": "Die Vergangenheit „finished“ passt nicht; nimm „is over“ oder „has finished“.",
+     "en": "The past “finished” does not fit; use “is over” or “has finished”."
+    }
+   ]
+  }
+ }
+}

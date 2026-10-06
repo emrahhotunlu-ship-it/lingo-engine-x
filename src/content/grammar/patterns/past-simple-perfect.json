@@ -1,0 +1,358 @@
+{
+ "topic": "past-simple-perfect",
+ "canDo": {
+  "de": "Ich sage, ob etwas vorbei ist, bis jetzt andauert oder jetzt zählt, und wähle Past Simple oder Present Perfect.",
+  "en": "I can tell whether something is over, lasts until now, or matters now, and choose Past Simple or Present Perfect."
+ },
+ "order": [
+  "psp.finished-time",
+  "psp.since-for",
+  "psp.experience",
+  "psp.result-now"
+ ],
+ "introPlan": [
+  [
+   "psp.finished-time",
+   "psp.since-for"
+  ],
+  [
+   "psp.experience",
+   "psp.result-now"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Ist ein abgeschlossener Zeitpunkt genannt (gestern, vor …, 2019, Wann …?) → Past Simple.",
+   "Läuft die Situation bis jetzt weiter (seit, seit … Jahren) → Present Perfect mit since/for.",
+   "Zählen Erfahrung, Anzahl oder ein Ergebnis jetzt, ohne Zeitpunkt → Present Perfect."
+  ],
+  "en": [
+   "Is a finished time named (yesterday, … ago, in 2019, When …?) → Past Simple.",
+   "Does the situation continue until now (since, for … years) → Present Perfect with since/for.",
+   "Do experience, a count, or a result now matter, with no time named → Present Perfect."
+  ]
+ },
+ "patterns": [
+  {
+   "id": "psp.finished-time",
+   "name": {
+    "de": "Past Simple · abgeschlossene Zeit",
+    "en": "Past Simple · finished time"
+   },
+   "form": {
+    "de": "Past Simple + genannter Zeitpunkt",
+    "en": "Past Simple + named time"
+   },
+   "use": {
+    "de": "Der Zeitpunkt ist vorbei und wird genannt oder ist klar (yesterday, ago, in 2019, When …?). Dann steht Past Simple, auch wenn das Deutsche das Perfekt nimmt.",
+    "en": "The time is over and is named or clear (yesterday, ago, in 2019, When …?). Then use the Past Simple, even though German would use its perfect."
+   },
+   "signals": [
+    "yesterday",
+    "last week",
+    "in 2019",
+    "ago",
+    "when",
+    "on Monday",
+    "at 3 p.m."
+   ],
+   "ex": [
+    {
+     "en": "We signed the contract two weeks ago.",
+     "de": "Wir haben den Vertrag vor zwei Wochen unterschrieben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Sarah joined the call at ten o'clock.",
+     "de": "Sarah ist um zehn Uhr dem Call beigetreten.",
+     "ctx": "talk"
+    },
+    {
+     "en": "When did you send the invoice?",
+     "de": "Wann hast du die Rechnung geschickt?",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "She has left the company in June.",
+    "good": "She left the company in June.",
+    "cause": {
+     "de": "Deutsch sagt „Sie hat die Firma im Juni verlassen“ und nimmt für Vergangenes das Perfekt. Englisch: Ist der Zeitpunkt genannt, steht Past Simple.",
+     "en": "German says “Sie hat die Firma im Juni verlassen” and uses its perfect for past events. In English, a named point in time takes the Past Simple."
+    }
+   },
+   "contrast": {
+    "with": "psp.result-now",
+    "a": "I sent the report on Monday.",
+    "b": "I have sent the report.",
+    "diff": {
+     "de": "Mit Zeitpunkt (on Monday) erzählst du das Ereignis. Ohne Zeitpunkt zählt das Ergebnis jetzt: Der Bericht ist da.",
+     "en": "With a time (on Monday) you tell the event. With no time, the result now matters: the report is there."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We moved to the new office in May.",
+     "q": {
+      "de": "Ist der Zeitpunkt genannt und vorbei?",
+      "en": "Is the time named and over?"
+     },
+     "a": true
+    },
+    {
+     "s": "I have sent the report.",
+     "q": {
+      "de": "Wird gesagt, wann der Bericht geschickt wurde?",
+      "en": "Does the sentence say when the report was sent?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Kannst du „Wann genau?“ beantworten, und liegt diese Zeit ganz hinter uns?",
+    "en": "Can you answer “when exactly?”, and is that time completely over?"
+   }
+  },
+  {
+   "id": "psp.since-for",
+   "name": {
+    "de": "Present Perfect · bis jetzt",
+    "en": "Present Perfect · up to now"
+   },
+   "form": {
+    "de": "have/has + Partizip + since/for",
+    "en": "have/has + participle + since/for"
+   },
+   "use": {
+    "de": "Etwas hat begonnen und dauert jetzt noch an. Das Deutsche nimmt dafür das Präsens („Ich arbeite seit 2021 hier“), Englisch braucht das Present Perfect.",
+    "en": "Something started and is still going on now. German uses the present tense for this (“Ich arbeite seit 2021 hier”); English needs the Present Perfect."
+   },
+   "signals": [
+    "since",
+    "for",
+    "how long",
+    "all week",
+    "until now"
+   ],
+   "ex": [
+    {
+     "en": "I have worked in sales since 2019.",
+     "de": "Ich arbeite seit 2019 im Vertrieb.",
+     "ctx": "talk"
+    },
+    {
+     "en": "We have been partners for ten years.",
+     "de": "Wir sind seit zehn Jahren Partner.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "How long have you managed this team?",
+     "de": "Wie lange leitest du dieses Team schon?",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We are partners since 2015.",
+    "good": "We have been partners since 2015.",
+    "cause": {
+     "de": "Deutsch sagt „Wir sind seit 2015 Partner“ im Präsens. Englisch kann mit since/for kein Präsens nutzen: Der Zeitraum bis jetzt verlangt have been.",
+     "en": "German says “Wir sind seit 2015 Partner” in the present tense. English cannot use the present with since/for: a period up to now needs have been."
+    }
+   },
+   "contrast": {
+    "with": "psp.finished-time",
+    "a": "I have lived in Munich for six years.",
+    "b": "I lived in Munich for six years.",
+    "diff": {
+     "de": "have lived … for: Ich wohne noch dort. lived … for: Es ist vorbei, ich wohne nicht mehr dort.",
+     "en": "have lived … for: I still live there. lived … for: it is over, I no longer live there."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I have worked here for three years.",
+     "q": {
+      "de": "Arbeite ich jetzt noch hier?",
+      "en": "Do I still work here?"
+     },
+     "a": true
+    },
+    {
+     "s": "I worked at Siemens for three years.",
+     "q": {
+      "de": "Arbeite ich jetzt noch dort?",
+      "en": "Do I still work there?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Hat die Situation schon begonnen und dauert sie jetzt noch an?",
+    "en": "Did the situation start earlier and is it still going on now?"
+   }
+  },
+  {
+   "id": "psp.experience",
+   "name": {
+    "de": "Present Perfect · Erfahrung, Anzahl",
+    "en": "Present Perfect · experience, count"
+   },
+   "form": {
+    "de": "have/has + Partizip, ever/never",
+    "en": "have/has + participle, ever/never"
+   },
+   "use": {
+    "de": "Du sagst, ob oder wie oft etwas bis jetzt passiert ist, ohne den Zeitpunkt zu nennen: ever, never, three times, the first time. Dein Leben bis jetzt ist der Zeitraum.",
+    "en": "You say whether or how often something has happened up to now, without naming a time: ever, never, three times, the first time. Your life so far is the time frame."
+   },
+   "signals": [
+    "ever",
+    "never",
+    "before",
+    "so far",
+    "twice",
+    "three times",
+    "first time"
+   ],
+   "ex": [
+    {
+     "en": "Have you ever negotiated with a Japanese partner?",
+     "de": "Hast du schon einmal mit einem japanischen Partner verhandelt?",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I have never presented to the board.",
+     "de": "Ich habe noch nie vor dem Vorstand präsentiert.",
+     "ctx": "talk"
+    },
+    {
+     "en": "We have had three outages so far this year.",
+     "de": "Wir hatten dieses Jahr bisher drei Ausfälle.",
+     "ctx": "mail"
+    }
+   ],
+   "trap": {
+    "bad": "My boss has been to Frankfurt, so he is not in the office today.",
+    "good": "My boss has gone to Frankfurt, so he is not in the office today.",
+    "cause": {
+     "de": "Deutsch sagt für beides „war in / ist nach … gefahren“. Englisch trennt: have been to = war dort und ist zurück, have gone to = ist hingefahren und noch dort.",
+     "en": "German uses one verb for both. English separates them: have been to = was there and is back, have gone to = went there and is still there."
+    }
+   },
+   "contrast": {
+    "with": "psp.finished-time",
+    "a": "I have seen the product demo twice.",
+    "b": "I saw the product demo in March.",
+    "diff": {
+     "de": "Ohne Zeitpunkt zählt die Erfahrung bis jetzt (Present Perfect). Mit genanntem Zeitpunkt (in March) steht Past Simple.",
+     "en": "With no time named, experience up to now counts (Present Perfect). With a named time (in March), use the Past Simple."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I have never missed a deadline.",
+     "q": {
+      "de": "Sagt der Satz, wann etwas passiert ist?",
+      "en": "Does the sentence say when something happened?"
+     },
+     "a": false
+    },
+    {
+     "s": "We have had three outages so far this year.",
+     "q": {
+      "de": "Zählt die Anzahl bis jetzt?",
+      "en": "Does the count run up to now?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um dein Leben bis jetzt, ohne dass ein Zeitpunkt genannt ist?",
+    "en": "Is this about your life up to now, with no time named?"
+   }
+  },
+  {
+   "id": "psp.result-now",
+   "name": {
+    "de": "Present Perfect · Ergebnis jetzt",
+    "en": "Present Perfect · result now"
+   },
+   "form": {
+    "de": "have/has + Partizip, just/already/yet",
+    "en": "have/has + participle, just/already/yet"
+   },
+   "use": {
+    "de": "Etwas ist passiert, ohne dass ein Zeitpunkt zählt, und die Folge gilt jetzt: Neuigkeiten, Zwischenstände, „ist schon erledigt“. Typisch sind just, already, yet, recently.",
+    "en": "Something happened, no time matters, and the consequence holds now: news, status updates, “it is done already”. Typical signals are just, already, yet, recently."
+   },
+   "signals": [
+    "just",
+    "already",
+    "yet",
+    "recently",
+    "lately",
+    "this week"
+   ],
+   "ex": [
+    {
+     "en": "The board has just approved the budget.",
+     "de": "Der Vorstand hat gerade das Budget genehmigt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Have you sent the invoice yet?",
+     "de": "Hast du die Rechnung schon geschickt?",
+     "ctx": "mail"
+    },
+    {
+     "en": "I've lost my badge, so I can't get in.",
+     "de": "Ich habe meinen Ausweis verloren und komme nicht rein.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I have yet not sent the invoice.",
+    "good": "I haven't sent the invoice yet.",
+    "cause": {
+     "de": "„noch nicht“ wird Wort für Wort zu yet not. Im Englischen heißt es haven't + 3. Form + yet, mit yet am Ende.",
+     "en": "German “noch nicht” turns word for word into yet not. English says haven't + past participle + yet, with yet at the end."
+    }
+   },
+   "contrast": {
+    "with": "psp.finished-time",
+    "a": "The server has crashed.",
+    "b": "The server crashed at 9:15.",
+    "diff": {
+     "de": "Ohne Zeitpunkt zählt das Ergebnis jetzt: Der Server ist down. Mit Zeitpunkt (at 9:15) erzählst du das Ereignis.",
+     "en": "With no time, the result now counts: the server is down. With a time (at 9:15), you tell the event."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I've lost my badge.",
+     "q": {
+      "de": "Fehlt der Ausweis jetzt noch?",
+      "en": "Is the badge still missing now?"
+     },
+     "a": true
+    },
+    {
+     "s": "Have you sent the invoice yet?",
+     "q": {
+      "de": "Wird nach einem bestimmten Zeitpunkt gefragt?",
+      "en": "Does the question ask about a specific time?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wichtig ist, was jetzt gilt, nicht wann es war. Welche Form passt dazu?",
+    "en": "What matters is what holds now, not when it happened. Which form fits that?"
+   },
+   "usNote": {
+    "de": "Im amerikanischen Englisch ist bei just, already und yet auch Past Simple üblich („Did you send it yet?“). In Mails und Prüfungen ist das Present Perfect die sichere Wahl.",
+    "en": "In American English, the Past Simple is also common with just, already, and yet (“Did you send it yet?”). In mail and exams, the Present Perfect is the safe choice."
+   }
+  }
+ ]
+}
