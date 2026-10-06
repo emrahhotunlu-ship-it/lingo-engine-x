@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import { useHiddenInput } from './HiddenInput';
 import { verdictHaptic } from '../platform/haptics';
 import { playCue } from '../platform/sound';
+import { useT } from '../i18n';
 import type { MaskCell } from '../domain/answer/mask';
 
 // Kinetische Lücke (Kap. 4.1, Architektur-Entwurf §6.1/6.3): getippt wird direkt in die Lücke.
@@ -31,6 +32,13 @@ type Props = {
   onChange: (value: string, info: { firstKey: boolean; deleted: number }) => void;
   onEnter: () => void;
   onKey?: (key: string) => boolean;
+  /**
+   * Nach der Prüfung: die Lösung gleitet in 200 ms in die Lücke, die eigene Eingabe steht klein und durchgestrichen
+   * darüber (Lernplattform 2.0 §4.4). Bei reduzierter Bewegung sofort. Wirkt nur, solange die Lücke nicht mehr eingibt.
+   */
+  reveal?: { solution: string; given: string | null } | null | undefined;
+  /** Unterdrückt Haptik und Ton der Lücke (das Urteil übernimmt sie). Standard: aus, also wie bisher. */
+  silent?: boolean | undefined;
 };
 
 type Flyer = { id: number; index: number; ch: string; x: number; y: number; dx: number; dy: number; font: string };
@@ -53,7 +61,8 @@ function textWidth(text: string, font: string): number {
   return ctx.measureText(text).width;
 }
 
-export function KineticGap({ label, maxLength, state, marks, mask, shown, onChange, onEnter, onKey }: Props) {
+export function KineticGap({ label, maxLength, state, marks, mask, shown, onChange, onEnter, onKey, reveal, silent = false }: Props) {
+  const { t } = useT();
   const api = useHiddenInput();
   const reduce = useReducedMotion();
   const gap = useRef<HTMLSpanElement>(null);
@@ -67,10 +76,10 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
   // Ton zur Rückmeldung (Kap. 4.7), nur wenn eingeschaltet – einmal je Wechsel des Zustands.
   // Dazu eine kurze Vibration, wo das Gerät sie kann (Kap. 4.3; iPhone: nur sichtbar).
   useEffect(() => {
-    if (state === 'input') return;
+    if (state === 'input' || silent) return;
     playCue(state);
     verdictHaptic(state);
-  }, [state]);
+  }, [state, silent]);
   const flyersNow = useRef<Flyer[]>([]);
   const timers = useRef(new Set<number>());
   const landRef = useRef((f: Flyer) => {
@@ -155,11 +164,13 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
   // Die Lücke wächst mit dem Text (Feder), mindestens 3,5em – unabhängig von der Lösung.
   // Mit Platzhaltern bemisst sie sich aus den Plätzen selbst (Breite `auto`, B3).
   const masked = !!mask;
+  const rv = reveal && locked ? reveal : null;
+  const revealed = !!rv;
   useLayoutEffect(() => {
     const g = gap.current;
     const i = inner.current;
     if (!g || !i) return;
-    if (masked) {
+    if (masked || revealed) {
       api.remeasure();
       return;
     }
@@ -175,7 +186,7 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
     if (typeof cur !== 'number' || reduce) width.set(target);
     else if (cur !== target) void animate(width, target, { type: 'spring', stiffness: 520, damping: 40 });
     api.remeasure();
-  }, [value, api, reduce, width, masked, shown]);
+  }, [value, api, reduce, width, masked, revealed, shown]);
 
 
   return (
@@ -184,14 +195,32 @@ export function KineticGap({ label, maxLength, state, marks, mask, shown, onChan
         ref={gap}
         className="lx-gap"
         data-testid="gap"
-        data-state={state}
+        data-state={revealed ? 'reveal' : state}
         data-focused={focused || undefined}
-        data-masked={mask ? '' : undefined}
-        style={{ width: mask ? 'auto' : width }}
+        data-masked={mask && !revealed ? '' : undefined}
+        data-revealed={revealed || undefined}
+        style={{ width: mask || revealed ? 'auto' : width }}
         lang="en"
       >
+        {rv?.given?.trim() && (
+          <span className="lx-gap-given" data-testid="gap-given">
+            <span className="sr-only">{t('exGapYours')}: </span>
+            {rv.given}
+          </span>
+        )}
         <span ref={inner} className="lx-gap-inner" data-settled={locked || undefined}>
-          {mask ? (
+          {rv ? (
+            <motion.span
+              className="lx-gap-reveal"
+              data-testid="gap-solution"
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduce ? 0 : 0.2, ease: 'easeOut' }}
+            >
+              <span className="sr-only">{t('exGapSolution')}: </span>
+              {rv.solution}
+            </motion.span>
+          ) : mask ? (
             <MaskedLetters mask={mask} value={value} shown={locked ? (shown ?? null) : null} landed={landed} marks={marks} reduce={!!reduce} />
           ) : (
             // Wörter bleiben zusammen; lange Antworten (ganze Satzteile) brechen zwischen Wörtern um,

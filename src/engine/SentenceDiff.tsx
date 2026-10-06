@@ -5,7 +5,8 @@ import type { WordTapArea } from './wordTap';
 // Wort-für-Wort-Vergleich nach dem Prüfen (phase2-plan §5.0 Nr. 1): „Deine Antwort" mit
 // markierten Abweichungen (fehlend, zu viel, ersetzt, Tippfehler), darunter „Richtig" als
 // antippbarer Satz. Nie Farbe allein: Abweichungen sind zusätzlich durch-/unterstrichen und
-// fehlende Wörter als eigene Markierung eingefügt.
+// fehlende Wörter als eigene Markierung eingefügt (das „+ “ davor setzt die CSS-Klasse `lx-diff-missing`).
+// Ersetzt: „deins → erwartet“; Tippfehler bleiben `lx-diff-near`.
 
 type Props = {
   ops: readonly WordOp[];
@@ -45,6 +46,19 @@ export function SentenceDiff({ ops, given, correct, labels, area = 'trainer', so
                       </span>
                     );
                   case 'sub':
+                    // „given → expected“: das Eigene durchgestrichen, das erwartete Wort in der Erfolgsfarbe (Plan §4.3).
+                    return (
+                      <span key={i}>
+                        {sep}
+                        <span className="lx-diff-off" data-op="sub">
+                          {o.given}
+                        </span>
+                        {' → '}
+                        <span className="lx-diff-sub" data-op="sub-expected">
+                          {o.expected}
+                        </span>
+                      </span>
+                    );
                   case 'ins':
                     return (
                       <span key={i}>

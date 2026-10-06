@@ -1296,3 +1296,41 @@ html[data-actionbar] #main {
   pointer-events: none;
   opacity: 0.7;
 }
+
+/* engine (Teilpaket B) */
+/* Lücke mit aufgedeckter Lösung: die Lösung gleitet hinein, die eigene Eingabe steht klein und durchgestrichen darüber. */
+.lx-gap[data-revealed] {
+  width: auto;
+  white-space: normal;
+}
+.lx-gap-reveal {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--lx-ok-text);
+}
+.lx-gap-given {
+  position: absolute;
+  left: 0.25em;
+  bottom: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.55em;
+  line-height: 1.1;
+  color: var(--lx-fg-muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+/* Antipp-Satz: das Zeichen ✓/✕ steht hinter der markierten Stelle, nie Farbe allein. */
+.lx-spot-glyph {
+  margin-left: 0.25em;
+  font-size: 0.8em;
+  font-weight: 700;
+}
+.lx-spot-glyph[data-mark='correct'] {
+  color: var(--lx-ok-text);
+}
+.lx-spot-glyph[data-mark='wrong'] {
+  color: var(--lx-wrong-text);
+}

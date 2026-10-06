@@ -1,10 +1,14 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import type { Tile } from '../domain/drills/order';
+import { decideDrag } from './tileDrag';
 
 // Bausteine (Kap. 4.3): Tippen legt einen Baustein ans Ende der Satzzeile bzw. nimmt ihn zurück;
 // Ziehen legt ihn an eine bestimmte Stelle (auch innerhalb der Zeile umsortieren). Beides mit
 // Maus, Finger und Tastatur (Bausteine sind Knöpfe). Layout-Animation beim Umordnen.
+// Lernplattform 2.0 §4.4: Die Ablagezeile ist so hoch wie die Zeilen der gelegten Bausteine (mindestens eine, einmal geschätzt,
+// wächst nur). Der Vorrat lässt senkrechtes Wischen zu (`pan-y`);
+// Ziehen beginnt erst nach 6 px waagrechter Bewegung oder 150 ms Halten (`decideDrag`). Gesperrt: leerer Vorrat weg, Wischen frei.
 
 type Mark = 'ok' | 'off' | 'near';
 
@@ -24,9 +28,7 @@ type Props = {
 /** Zeichen je Markierung: Farbe allein reicht nicht (WCAG 1.4.1). */
 const MARK_GLYPH: Readonly<Record<Mark, string>> = { ok: '✓', near: '↔', off: '✕' };
 
-type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: number; dy: number; moved: boolean; pointer: number };
-
-const THRESHOLD = 6;
+type Drag = { id: number; from: 'pool' | 'line'; x0: number; y0: number; dx: number; dy: number; moved: boolean; pointer: number; t0: number; kind: 'touch' | 'mouse' };
 
 export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabels, slots }: Props) {
   const reduce = useReducedMotion();
@@ -38,20 +40,56 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
   const byId = new Map(tiles.map((t) => [t.id, t]));
   const slotCount = slots ?? tiles.filter((x) => !x.distractor).length;
   const emptySlots = locked ? 0 : Math.max(0, slotCount - placed.length);
-  // Feste Fläche (Emrahs Meldung 03.10.2026, „kein t im Buchstabenvorrat“): Ein gelegter Baustein lässt im Vorrat einen
-  // unsichtbaren Platzhalter zurück, und die Satzzeile ist von Anfang an so hoch wie der volle Vorrat. So springt beim
-  // Antippen nichts nach oben – vorher rutschte der Knopf „Prüfen“ unter den Finger und prüfte nach 1–2 Buchstaben.
-  const poolRef = useRef<HTMLDivElement>(null);
+  // Plätze in Bausteinhöhe (Plan §4.4): Die Ablagezeile ist so hoch wie die Zeilen, die die gelegten Bausteine brauchen – nicht
+  // höher (bisher fest 148 px). Damit beim Antippen nichts springt (Emrahs Meldung „kein t“), wird die Zeilenzahl EINMAL aus den
+  // Breiten aller Bausteine geschätzt (Zeilenumbruch nachgerechnet) und danach nur noch nach oben korrigiert. Ein Satz, der in
+  // eine Zeile passt, hat damit eine Zeile Höhe. Gemessen wird nach dem Zeichnen, neu mit jeder Aufgabe.
+  const pool = useRef<HTMLDivElement>(null);
   const [lineMin, setLineMin] = useState<number | null>(null);
+  const rowsSeen = useRef<{ tiles: readonly Tile[]; rows: number }>({ tiles, rows: 1 });
   useLayoutEffect(() => {
-    const h = poolRef.current?.getBoundingClientRect().height ?? 0;
     const el = line.current;
-    if (!(h > 0) || !el) return;
-    // border-box: Innenabstand und Rahmen der Zeile kommen dazu.
-    const cs = window.getComputedStyle(el);
-    const extra = ['paddingTop', 'paddingBottom', 'borderTopWidth', 'borderBottomWidth'].reduce((n, k) => n + (parseFloat(cs.getPropertyValue(k.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`))) || 0), 0);
-    setLineMin(Math.ceil(h + extra));
-  }, [tiles]);
+    if (!el) return;
+    const measure = (): void => {
+      if (rowsSeen.current.tiles !== tiles) rowsSeen.current = { tiles, rows: 1 };
+      const cs = window.getComputedStyle(el);
+      const px = (k: string): number => parseFloat(cs.getPropertyValue(k)) || 0;
+      const extra = px('padding-top') + px('padding-bottom') + px('border-top-width') + px('border-bottom-width');
+      const gap = px('row-gap');
+      const avail = el.clientWidth - px('padding-left') - px('padding-right');
+      const placedEls = Array.from(el.querySelectorAll<HTMLElement>('[data-where="line"]'));
+      const poolEls = Array.from(pool.current?.children ?? []) as HTMLElement[];
+      const th = Math.max(0, ...placedEls.map((n) => n.offsetHeight), ...poolEls.map((n) => n.offsetHeight)) || (el.firstElementChild as HTMLElement | null)?.offsetHeight || 0;
+      if (!(th > 0)) return;
+      // Zeilen der schon gelegten Bausteine (tatsächlich) und aller Bausteine (Schätzung, nur solange der Vorrat sichtbar ist).
+      const placedRows = new Set(placedEls.map((n) => Math.round(n.offsetTop))).size;
+      let guess = 1;
+      if (avail > 0 && poolEls.length === tiles.length) {
+        const widths = tiles.flatMap((x, k) => (x.distractor ? [] : [(poolEls[k]?.offsetWidth ?? 0) + 4]));
+        const pack = (ws: number[]): number => {
+          let rows = 1;
+          let used = 0;
+          for (const w of ws) {
+            if (used > 0 && used + gap + w > avail) {
+              rows++;
+              used = w;
+            } else used += (used > 0 ? gap : 0) + w;
+          }
+          return rows;
+        };
+        guess = Math.max(pack(widths), pack([...widths].sort((x, y) => y - x)));
+      }
+      const rows = Math.max(rowsSeen.current.rows, placedRows, guess, 1);
+      rowsSeen.current.rows = rows;
+      const next = Math.ceil(rows * th + (rows - 1) * gap + extra);
+      setLineMin((cur) => (cur === next ? cur : next));
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [tiles, placed, locked, slots]);
 
   const toggle = (id: number) => {
     if (locked) return;
@@ -79,14 +117,24 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
   const onPointerDown = (e: ReactPointerEvent<HTMLButtonElement>, id: number, from: 'pool' | 'line') => {
     if (locked || e.button !== 0) return;
     e.currentTarget.setPointerCapture?.(e.pointerId);
-    setDrag({ id, from, x0: e.clientX, y0: e.clientY, dx: 0, dy: 0, moved: false, pointer: e.pointerId });
+    setDrag({ id, from, x0: e.clientX, y0: e.clientY, dx: 0, dy: 0, moved: false, pointer: e.pointerId, t0: e.timeStamp, kind: e.pointerType === 'touch' ? 'touch' : 'mouse' });
   };
 
   const onPointerMove = (e: ReactPointerEvent<HTMLButtonElement>) => {
     if (!drag || e.pointerId !== drag.pointer) return;
     const dx = e.clientX - drag.x0;
     const dy = e.clientY - drag.y0;
-    const moved = drag.moved || Math.hypot(dx, dy) > THRESHOLD;
+    let moved = drag.moved;
+    if (!moved) {
+      const decision = decideDrag({ dx, dy, heldMs: e.timeStamp - drag.t0, pointer: drag.kind });
+      if (decision === 'scroll') {
+        // Senkrecht gewinnt: die Seite scrollt, kein Ziehen (der Browser sendet danach pointercancel).
+        setDrag(null);
+        setOver(false);
+        return;
+      }
+      moved = decision === 'drag';
+    }
     setDrag({ ...drag, dx, dy, moved });
     setOver(moved && inLine(e.clientX, e.clientY));
   };
@@ -128,9 +176,10 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
         data-tile={t.text}
         data-where={where}
         data-state={mark}
+        data-selected={(where === 'line' && !mark && !locked) || undefined}
         data-dragging={dragging || undefined}
         disabled={locked}
-        style={dragging ? { transform: `translate(${drag.dx}px, ${drag.dy}px)`, position: 'relative' } : undefined}
+        style={{ ...(where === 'pool' && !locked ? { touchAction: 'pan-y' } : null), ...(dragging ? { transform: `translate(${drag.dx}px, ${drag.dy}px)`, position: 'relative' } : null) }}
         onPointerDown={(e) => onPointerDown(e, id, where)}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -169,17 +218,21 @@ export function Tiles({ tiles, placed, onChange, locked, marks, labels, markLabe
           <span key={`slot-${k}`} className="lx-tile-slot" aria-hidden="true" data-testid="tile-slot" />
         ))}
       </div>
-      <div ref={poolRef} className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool">
-        {tiles.map((t) =>
-          placed.includes(t.id) ? (
-            <span key={t.id} className="lx-tile lx-tile-ghost" aria-hidden="true" data-testid="tile-ghost">
-              {t.text}
-            </span>
-          ) : (
-            tileButton(t.id, 'pool')
-          ),
-        )}
-      </div>
+      {(!locked || tiles.some((x) => !placed.includes(x.id))) && (
+        <div ref={pool} className="flex flex-wrap gap-2" role="group" aria-label={labels.pool} data-testid="tile-pool" style={locked ? undefined : { touchAction: 'pan-y' }}>
+          {tiles.map((t) =>
+            placed.includes(t.id) ? (
+              locked ? null : (
+                <span key={t.id} className="lx-tile lx-tile-ghost" aria-hidden="true" data-testid="tile-ghost">
+                  {t.text}
+                </span>
+              )
+            ) : (
+              tileButton(t.id, 'pool')
+            ),
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -315,8 +315,23 @@ test('Satzbau am Handy (390 × 844): Bedeutung, Bausteine und Prüfen ohne Seitw
     expect(sz.h).toBeGreaterThanOrEqual(43.5);
   }
   // Vor dem Prüfen ziehen die Bausteine (kein Scrollen darauf), danach gesperrt: Wischen scrollt die Seite.
+  // Lernplattform 2.0 §4.4: im Vorrat bleibt senkrechtes Wischen frei (`pan-y`), Ziehen beginnt erst nach 6 px waagrecht oder 150 ms Halten.
   const tileTouch = () => item.getByTestId('tile').first().evaluate((e) => getComputedStyle(e).touchAction);
-  expect(await tileTouch()).toBe('none');
+  expect(await tileTouch()).toBe('pan-y');
+  // Plätze in Bausteinhöhe: die Ablagezeile ist ein ganzes Vielfaches der Bausteinhöhe (Zeilen + 8 px Abstand, ± 2 px), nie die bisherigen
+  // festen 148 px. Wie viele Zeilen, schätzt sie einmal aus den Baustein-Breiten (so springt beim Antippen nichts, siehe hilfen.spec).
+  const geo = await item.evaluate((root) => {
+    const line = root.querySelector<HTMLElement>('[data-testid="tile-line"]');
+    const tile = root.querySelector<HTMLElement>('[data-testid="tile-pool"] [data-testid="tile"]');
+    if (!line || !tile) return null;
+    const cs = getComputedStyle(line);
+    const inner = line.getBoundingClientRect().height - (parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth));
+    return { inner, tile: tile.getBoundingClientRect().height };
+  });
+  expect(geo).not.toBeNull();
+  const tileH = geo?.tile ?? 0;
+  const fits = [1, 2, 3].some((n) => Math.abs((geo?.inner ?? 0) - (n * tileH + (n - 1) * 8)) <= 2);
+  expect(fits, JSON.stringify(geo)).toBe(true);
   const texts = await poolTexts(item);
   await clickTiles(item, (orderSolutions(texts)[0] ?? []).map((k) => texts[k] ?? ''));
   await page.getByTestId('check').click();

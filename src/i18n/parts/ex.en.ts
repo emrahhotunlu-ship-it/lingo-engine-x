@@ -73,4 +73,7 @@ export const exEn = {
   // --- Teilpaket A (ui/exercise)
   exSecondaryLabel: 'More options',
   exSideLabel: 'Rule and explanation',
+  // --- Teilpaket B (engine)
+  exGapYours: 'Your entry',
+  exGapSolution: 'Solution',
 } as const;

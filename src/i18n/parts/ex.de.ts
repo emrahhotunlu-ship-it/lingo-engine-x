@@ -82,4 +82,7 @@ export const exDe = {
   // --- Teilpaket A (ui/exercise)
   exSecondaryLabel: 'Weitere Möglichkeiten',
   exSideLabel: 'Regel und Erklärung',
+  // --- Teilpaket B (engine)
+  exGapYours: 'Deine Eingabe',
+  exGapSolution: 'Lösung',
 } as const;
