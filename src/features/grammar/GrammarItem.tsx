@@ -1,3 +1,4 @@
+import { focusRule } from '../../domain/grammar/ruleFocus';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
 import { useSharedTarget } from '../../engine/shared';
@@ -102,7 +103,8 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   }, []);
 
   const solution = task.answer;
-  const briefRule = useMemo(() => ruleOf(task.topic, lang)?.core ?? '', [task.topic, lang]);
+  const brief = useMemo(() => focusRule(ruleOf(task.topic, lang)?.core ?? '', task), [task, lang]);
+  const briefRule = brief.focus;
   const typedKind = !whole && (task.type === 'gap' || task.type === 'transform');
   const maskShown = typedKind && (scaff || tip > 0);
   const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 2 }) : null;
@@ -441,6 +443,13 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
             <p className="text-sm text-muted" lang={lang} data-testid="gr-brief-text">
               {briefRule}
             </p>
+            {brief.rest && (
+              <Disclosure label={t('nbLernenBriefMore')} testId="gr-brief-more">
+                <p className="text-sm text-muted" lang={lang}>
+                  {brief.rest}
+                </p>
+              </Disclosure>
+            )}
           </Disclosure>
         )}
         <div className="flex flex-col gap-4">

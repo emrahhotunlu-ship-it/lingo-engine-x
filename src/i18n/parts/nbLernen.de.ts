@@ -49,6 +49,7 @@ export const nbLernenDe = {
   nbLernenResumePattern: 'Deutsch-Falle · Aufgabe {n} von {total}',
   nbLernenStartSet: 'Typische Fallen im Beruf',
   nbLernenStartSetLead: '25 klassische Deutsch-Fallen – je 3 Sätze zum Umschreiben, auch ohne KI.',
+  nbLernenBriefMore: 'Ganze Regel',
   nbLernenBrief: 'Kurz erklärt',
   nbLernenRepeatBadge: 'Nochmal',
   // Grammatik-Reiter als Pfad (Umbau W5): Weiter-Karte, Pfadliste, Mini-Lektion, Lernweg

@@ -48,6 +48,7 @@ export const nbLernenEn: Record<keyof typeof nbLernenDe, string> = {
   nbLernenResumePattern: 'German trap · task {n} of {total}',
   nbLernenStartSet: 'Typical traps at work',
   nbLernenStartSetLead: '25 classic German traps – 3 sentences each to rewrite, also without AI.',
+  nbLernenBriefMore: 'Full rule',
   nbLernenBrief: 'Quick rule',
   nbLernenRepeatBadge: 'Once more',
   // Grammar tab as a path (rework W5): next card, path list, mini lesson, learning route
