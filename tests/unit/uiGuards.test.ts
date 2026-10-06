@@ -54,7 +54,10 @@ describe.each(['matchMedia', 'textPx', 'card'] as const)('UI-Wächter %s', (k) =
   it('jede Datei steht höchstens auf einer Liste', () => {
     const seen = new Map<string, string>();
     const dupes: string[] = [];
-    for (const o of OWNERS) for (const f of allow[o]?.[k] ?? []) (seen.has(f) ? dupes.push(`${f}: ${seen.get(f)} und ${o}`) : seen.set(f, o));
+    for (const o of OWNERS) for (const f of allow[o]?.[k] ?? []) {
+      if (seen.has(f)) dupes.push(`${f}: ${seen.get(f)} und ${o}`);
+      else seen.set(f, o);
+    }
     expect(dupes).toEqual([]);
   });
 });
