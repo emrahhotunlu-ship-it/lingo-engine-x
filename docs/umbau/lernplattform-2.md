@@ -940,7 +940,8 @@ Die Muster des Tages stehen in `u.gt.pats` (eingefroren, §2.3). Ein Folgeschrit
 | `--lx-hint` / `-text` / `-soft` | = `--lx-cyan-*` | = `--lx-cyan-*` | = `--lx-cyan-*` | Tipp, Hinweis, Leitfrage, Muster-Chip |
 | `--lx-mark` | rgba(34,211,238,.18) | rgba(126,233,247,.16) | rgba(8,145,178,.14) | Signalwort im Satz |
 
-- Die Paletten steuern nur Hauptknopf, Links, Fokus und Lichtschein.
+- Die Paletten steuern nur Hauptknopf, Links und Lichtschein.
+- **Ausgewählt ist nicht Richtig:** `.lx-choice[aria-pressed=true]`, `.lx-tile[data-selected]`, `.lx-spot[data-selected]` und `.lx-gap:focus` bekommen einen neutralen Ton: 2 px Rahmen in `--lx-fg`, Fläche `--lx-line-strong`. Nie den Akzent und nie `--lx-ok`. Auch der Fokusring (`:focus-visible`) ist neutral. Grund: In der Standardpalette `sage` ist der Akzent #10b981 bzw. #047857 (`index.css:38`, `:77`, `:116`), also genau `--lx-ok`. „Richtig“ trägt immer das Zeichen ✓ und die weiche Füllung `--lx-ok-soft`. Der Hauptknopf behält die Palettenfarbe; er unterscheidet sich durch Form und Ort (nur in der ActionBar).
 - Alle Erfolgszustände werden umgestellt: `.lx-gap`, `.lx-choice`, `.lx-tile`, `.lx-field`, `.lx-spot` `[data-state=correct]`, Punkte und Häkchen.
 - `@theme inline` bekommt `--color-ok`, `--color-ok-text`, `--color-ok-soft`, `--color-near*`, `--color-wrong*`, `--color-hint*`, `--color-mark` für Tailwind-Klassen.
 - Die Kanalfarben bleiben vorerst stehen, neu benutzt werden nur zwei (Wörter, Grammatik).
@@ -974,14 +975,19 @@ Die Muster des Tages stehen in `u.gt.pats` (eingefroren, §2.3). Ein Folgeschrit
 
 | Neu (nur ergänzend) | Ort | Schreibt | Grenze |
 |---|---|---|---|
-| `pats: {id: {n, c, last}}` | `grammar/<topic>` | P5 (`write.ts`) | ≤ 12 Einträge, < 1 KB |
-| `pat` | Fehlereintrag in `grammar/<topic>` | P2 (`addError`), Aufruf P5 | String ≤ 40 |
+| `pats: {id: {n, c, last, h?, r?, k?, dd?, s?, i?}}`: Antworten, richtige, letzte Antwort, Hilfen, letzte 5 Ergebnisse als Bits (1 = richtig ohne Hilfe), Zahl der Bits, ≤ 2 Tage mit „richtig ohne Hilfe“, erster Tag „Sicher“, Einführungstag | `grammar/<topic>` | P5 (`write.ts`) | ≤ 12 Einträge, < 2 KB |
+| `vt: {d, ok, pats}` (Vortest) | `grammar/<topic>` | P5 | ≤ 2 Muster |
+| `pat`, `more: [{q, given, ans, t}]`, `rh: [[t, box, ok]]` | Fehlereintrag in `grammar/<topic>` | P2 (`addError`, `reviewError`), Aufruf P5/P8 | `pat` ≤ 40 Zeichen, `more` ≤ 3, `rh` ≤ 6 |
 | neue Werte `find`/`kwt`/`meaning` als Aufgabentyp | `grammar/<topic>` (hist/recent), Log | P5 | – |
-| `dev: 't' \| 'k'` | `log/<tag>`-Einträge | P4 (`logPatch.ts`); gesetzt von P5, P6, P8 | ein Zeichen |
+| `dev: 't' \| 'k'` | `log/<tag>`-Einträge (Wörter, Wendungen, Grammatik, Übungen) | P4 (`logPatch.ts`, Typen im Vertrags-Commit); gesetzt von P5, P6, P8 | ein Zeichen |
+| `um: {[block]: {s, dev}}` (Sekunden je Pflichtschritt) | `log/<tag>` | P4 (API), Aufruf P8 (`unitDone`) | ≤ 5 Einträge |
 | `m: 'known'` in `hist` | `vocab/*` | P6 | wie bisherige hist-Einträge |
-| `register`, `why`, `tip`, `alt` | `vocab/*`, `chunk/*` | P6 | `alt` ≤ 4 |
-| `u.v = 2`, Schritt-Argumente `errs`, `repairs`, `limit` | gespeicherter Tagesplan | P4 | – |
-| `lx:input`, `lx:produce-due:<tag>` | nur `localStorage` (Bequemlichkeit) | P1, P6 | – |
+| `register`, `why`, `tip`, `alt` | nur **neue** Karten in `vocab/*`, `chunk/*` | P6 | `alt` ≤ 4; bestehende Karten nur überlagert beim Lesen (§4.8) |
+| `u.rv: 2`, 4. Tupel-Element `{errs?, repairs?, limit?}` in `u.b` | gespeicherter Tagesplan (`app/profile.plan`) | P4 | `u.v` und `p.v` bleiben 1 |
+| `u.gt: {intro, pats, topics}`, `u.ps: {patId: 0–3}` | gespeicherter Tagesplan | P4 | `pats` ≤ 2, `topics` ≤ 3, `ps` ≤ 24 |
+| `lx:input` | nur `localStorage` (Bequemlichkeit) | P1 | – |
+
+Nicht mehr vorgesehen: `lx:produce-due:<tag>` in `localStorage`. iPhone und Laptop haben getrennten Speicher, das Laptop-Extra liest deshalb aus der Datenbank (`laptopDeepen`, §4.9). Ebenfalls nicht vorgesehen ist das einmalige Nachtragen von Paket-Feldern in bestehende Karten (§4.8).
 
 **Regeln:**
 1. Keine neue Sammlung und kein neues Dokument; die Dokumentzahl bleibt gleich (A6.6).
@@ -990,15 +996,17 @@ Die Muster des Tages stehen in `u.gt.pats` (eingefroren, §2.3). Ein Folgeschrit
 4. `legacyTaskKey` und die Texte vorhandener Aufgaben ändern sich nie (Test: jede Map-Kennung findet ihre Aufgabe).
 5. Alte „Kenne ich“-Einträge (`m:'type'`) bleiben unverändert. Die Fest-Zahl springt also nicht rückwärts.
 6. Gerät und Profil wirken nie auf `duty`, Minuten, `pflicht[tag]` oder Serie (Test `planDevice.test.ts`).
-7. Pläne ohne `u.v` werden nach der alten Regel zu Ende gerechnet. Die neue Regel greift ab dem nächsten gespeicherten Plan.
-8. data-guard prüft vor dem Zusammenführen von P2 (`errors.ts`), P4, P5, P6 und P8.
-9. Claude-Aufrufe (`explain-answer@1`, `card-examples@3`, `grammar-items@3`, Synonym-Prüfung) laufen nur über `sample`, mit Eingabe unter 64 KiB, ohne eigenen Timer und ohne automatischen Neuversuch außer A6.3. Bei `not_granted` wird die Funktion ausgeblendet.
+7. Pläne ohne `u.rv = 2` werden nach der alten Regel zu Ende gerechnet. Die neue Regel greift ab dem nächsten gespeicherten Plan, nachdem `PLAN_RV` auf 2 steht. Der Leser der Live-Version 67 liest jeden neuen Plan vollständig (Rückweg-Test, §2.3).
+8. Stillgelegte Aufgaben (`retired.json`) werden nur beim Lesen ausgeblendet. Ihre Fehlereinträge bleiben unverändert (§3.9).
+9. `pats` eines schon begonnenen Themas werden beim ersten Schreiben für alle Muster mit dem Einführungstag aus `hist` angelegt (§3.2), sonst verschwänden geübte Regeln aus den Runden.
+10. data-guard prüft vor dem Zusammenführen von P2 (`errors.ts`), P4, P5, P6 und P8.
+11. Claude-Aufrufe (`explain-answer@1`, `card-examples@3`, `grammar-items@3`, Synonym-Prüfung) laufen nur über `sample`, mit Eingabe unter 64 KiB, ohne eigenen Timer und ohne automatischen Neuversuch außer A6.3. Bei `not_granted` wird die Funktion ausgeblendet.
 
 ## 9 Was wegfällt oder zusammengelegt wird (Daten bleiben vollständig)
 
 | Weg / zusammen | Ersatz |
 |---|---|
-| `ruleFocus.ts`, Disclosure „Kurz erklärt › Ganze Regel“ (`GrammarItem.tsx:441-454`), Hash-Beispiele (`:379`) | Musterkarte (Lernphase), Tipp-Leiter, `examplesFor({pattern})` |
+| `ruleFocus.ts`, Disclosure „Kurz erklärt › Ganze Regel“ (`GrammarItem.tsx:441-454`), Hash-Beispiele (`:379`) | Musterkarte (Lernphase), Tipp-Leiter, `examplesFor({pattern})`. Das ist eine sichtbare Änderung an etwas, das mit T8 live ist (`stand.md:87-89`), deshalb Entscheidung L7 in Teil A |
 | Mini-Lektion als Textblock, Regelblatt quer über alle Muster | Einführung (§5.3), `PatternSheet` (§5.5) |
 | 3 Rückmeldesysteme, 5 Urteils-Wortlaute, 3 Begriffswelten für den Zustand, 22 kopierte Kartenklassen, 5 ⓘ-Kopien | `ExerciseShell` · „Richtig · Fast richtig · Noch nicht“ · „Neu · Lernt · Sicher · Fest“ |
 | 4 eigene Endkarten (`Summary.tsx:91`, `SessionScreen.tsx:83`, `DrillScreen.tsx:78`, `CheckScreen.tsx:84`) | `SessionEnd` |
