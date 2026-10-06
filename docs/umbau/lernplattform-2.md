@@ -25,7 +25,9 @@ Du hast recht, und wir haben es an echten Stellen der App nachgeprüft. Es sind 
 5. **Handy und Laptop teilen sich die Arbeit.** Tagesplan und Serie sind auf beiden Geräten gleich. Am Handy tippst du an, wählst aus oder schreibst ein bis fünf Wörter. Am Laptop schreibst du ganze und eigene Sätze und hörst. Dort steht die Regel in einer zweiten Spalte neben der Übung.
 6. **Neue Grammatikthemen werden richtig eingeführt.** Zuerst ein Kurztest: Kannst du es schon, überspringst du die Erklärung. Sonst kommen drei kurze Karten mit einem Satz aus Mail oder Meeting und danach vier Aufgaben genau dazu.
 7. **Neue Übungsarten, die zwischen B2 und C1 trennen:** den Fehler im Satz finden (manchmal ist keiner drin), mit einem Schlüsselwort umformen (2–5 Wörter), zwei Sätze vergleichen, das passende Partnerwort tippen („___ concerns“ → address).
-8. **Heute zeigt einen Ring mit vier Teilen und immer den nächsten Schritt.** Am Ende siehst du, was sich wirklich bewegt hat, zum Beispiel: „Neu sicher: wish + Past · +3 Wörter fest · Morgen: 2 Fehlersätze“.
+8. **Heute zeigt einen Ring mit einem Teil je Pflichtschritt und immer den nächsten Schritt.** Meist sind es 4 Teile, sonntags und an kurzen Tagen 2 oder 3. Was Heute ankündigt, zum Beispiel „neues Thema wish“, steht für den ganzen Tag fest und ist genau das, was dann startet. Am Ende siehst du, was sich wirklich bewegt hat, zum Beispiel: „Neu sicher: wish + Past · +3 Wörter fest · Morgen: 2 Fehlersätze“.
+9. **Fehler lernst du an der Regel, nicht am Satz.** Je Regel gibt es höchstens einen offenen Fehlersatz. Beim ersten Mal korrigierst du deinen eigenen Satz. Ab dem zweiten Mal kommt ein neuer Satz mit derselben Regel, damit du die Regel lernst und nicht den Satz auswendig.
+10. **Wir messen, ob es wirkt.** Nach zwei Wochen prüfen wir an deinen echten Antworten, ob Erklärungen, Fehlersätze und Kurztest etwas bringen. Nachgestellt wird nach festen Regeln, die schon heute feststehen.
 
 ## Vorher und nachher: eine Grammatikaufgabe
 
@@ -40,11 +42,13 @@ Aufgabe: „I wish the client ___ us the data last week.“ Du wählst „sent�
 
 ## Dein Tag
 
-**Morgens am iPhone (Pflicht, je nach Tag etwa 15–23 Minuten)**
-1. **Wörter wiederholen:** aufdecken, antippen, ein Wort in die Lücke schreiben.
-2. **Grammatik:** auswählen, Lücke füllen, Fehler antippen, kurz umformen. An Einführungstagen kommt das neue Thema zuerst.
-3. **Satzbau:** Bausteine zum Grammatikthema von heute.
-4. **Fehler korrigieren:** alle deine alten Fehlersätze an *einer* Stelle, Satz für Satz. Du tippst die falsche Stelle an und ersetzt nur sie.
+**Morgens am iPhone (Pflicht, je nach Tag etwa 15–23 Minuten, sonntags etwa 10)**
+1. **Wörter wiederholen:** nur Karten, keine Fehlersätze mehr. Du deckst auf, tippst an oder schreibst ein Wort in die Lücke.
+2. **Grammatik:** auswählen, Lücke füllen, Fehler antippen, kurz umformen. An Einführungstagen kommt das neue Thema zuerst. Sätze mit Wörtern, die du heute wiederholst, werden bevorzugt.
+3. **Satzbau:** Bausteine zum Grammatikthema von heute. An kurzen Tagen und sonntags entfällt der Satzbau.
+4. **Fehler korrigieren:** alle deine Fehlersätze an *einer* Stelle, Satz für Satz. Es sind 5 am Tag, bei Rückstand bis zu 9, sonntags 3. Du tippst die falsche Stelle an und ersetzt nur sie.
+
+Sonntags gibt es nur Wiederholen, den Wochen-Check und, falls welche fällig sind, 3 Fehlersätze.
 
 Am Ende schließt sich der Ring, und du siehst, was heute neu sitzt.
 
@@ -56,6 +60,7 @@ Am Ende schließt sich der Ring, und du siehst, was heute neu sitzt.
 
 - Alle deine Daten bleiben vollständig. Nichts wird gelöscht, Neues wird nur ergänzt.
 - Die Serie läuft weiter. Der Tagesplan, der heute schon gespeichert ist, bleibt bis zum Tagesende gleich; neue Regeln gelten ab dem nächsten Lerntag.
+- Musst du auf die vorige Version zurück, läuft der Tag weiter, auch mit einem schon gespeicherten neuen Tagesplan.
 - Die fünf Reiter bleiben: Heute · Wörter · Grammatik · Anwenden · Fortschritt.
 - Keine Kosten außerhalb deines Claude-Abos.
 - Deine laufende App ändert sich erst, wenn du „Ja live nehmen“ sagst.
@@ -65,17 +70,22 @@ Am Ende schließt sich der Ring, und du siehst, was heute neu sitzt.
 | Nr. | Frage | Standard |
 |---|---|---|
 | L1 | Hören in der Pflicht | nur am Laptop. Am Handy liegt Hören im Reiter Anwenden, gekennzeichnet mit „Kopfhörer“. |
-| L2 | Wo stehen die Fehlersätze? | nur noch in Schritt 4 „Fehler korrigieren“, höchstens 5 am Tag, der Rest morgen |
+| L2 | Wo stehen die Fehlersätze? | nur noch in Schritt 4 „Fehler korrigieren“. Je Regel gibt es einen offenen Fehlersatz. Es sind 5 am Tag, bei Rückstand bis zu 9 (ca. 2–4 Min.), sonntags 3. Eine falsche Antwort setzt den Satz eine Stufe zurück, nicht ganz auf Anfang. Grob nachgerechnet: Mit dem bisherigen Verfahren (jeder Satz einzeln, falsch heißt von vorn) wäre die Schlange schon bei 3 von 10 falschen Antworten an mehr als der Hälfte der Tage so lang, dass kein neues Thema käme, mit nur 5 Sätzen am Tag sogar an drei von vier Tagen. Mit der neuen Regel passiert das selbst bei 5 von 10 falschen Antworten höchstens an jedem fünften Tag. Der echte Test mit dem App-Code folgt in P4. |
 | L3 | „Kenne ich“ bei einem neuen Wort | startet eine kurze Prüffrage. Erst wenn du sie richtig beantwortest, gilt das Wort als bekannt. |
 | L4 | Eigener Satz | nur am Laptop. Am Handy kommt stattdessen „Satz vervollständigen“ mit 4–8 Wörtern. |
 | L5 | Farbe für „richtig“ | immer Grün, auch mit dem Farbthema Ozean |
-| L6 | Wann du die neue Grammatik siehst | erst, wenn alle 39 Themen ihre Muster haben. Keine halben Sachen. |
+| L6 | Wann du die neue Grammatik siehst | auf **Test-Link 1b**, mit den 4 fertigen Themen (Vergangenheit, Mixed Conditionals, Zeitsätze, Bedingungen ohne *if*). Die übrigen 35 Themen zeigen dort schon keine falschen Zufallsbeispiele und keinen ganzen Absatz mehr, nur die Erklärung der Aufgabe selbst. Sie bekommen ihre Muster nach und nach. Willst du lieber warten, bis alle 39 fertig sind, sag „warten“. |
+| L7 | Regel vor der Antwort | In der Wiederholung steht vor der Antwort keine Regel mehr. „Kurz erklärt“ entfällt dort. Stattdessen gibt es den Knopf „Tipp“ in drei Stufen. Nach dem Prüfen kommt die Erklärung zu genau deiner Aufgabe, am Laptop steht sie rechts daneben. Grund: Wer erst selbst überlegt, behält die Regel besser. Beim ersten Kennenlernen einer Regel bleibt die kurze Musterkarte sichtbar. |
+| L8 | Was Heute zeigt, solange die Pflicht offen ist | nur die Tageskarte. Danach kommt eine Zeile „Extra ›“ mit „Am Laptop vertiefen“ bzw. „Fehlwörter“, „Sprechen üben“ und „Wochen-Check nachholen“. Sprechen ist außerdem jederzeit im Reiter Anwenden. |
 
 ## Wann du was siehst
 
-1. **Test-Link 1 „Schnelle Korrekturen“** nach dem ersten Bauabschnitt: Grün heißt richtig. Die Zahlen stimmen überall überein. Die falsch gelehrte wish-Regel ist weg. Fehlersätze stehen nur noch an einer Stelle. Die Bausteine haben keine hohen Balken mehr. Der Wort-für-Wort-Vergleich zeigt das richtige Wort.
-2. **Test-Link 2 „Lernplattform 2.0“** nach dem zweiten Bauabschnitt: alles aus diesem Plan.
-3. **Live** erst nach deinem „Ja live nehmen“.
+1. **Test-Link 1 „Schnelle Korrekturen“** nach dem ersten Bauabschnitt: Grün heißt richtig, und was du ausgewählt hast, sieht anders aus als „richtig“. Die Zahlen auf den Reitern Wörter und Grammatik widersprechen sich nicht mehr. Die falsch gelehrte wish-Regel ist weg, und alte Fehlersätze dazu kommen nicht mehr. Die Bausteine haben keine hohen Balken mehr. Der Wort-für-Wort-Vergleich zeigt das richtige Wort.
+2. **Entwurf zum Anschauen:** 8 Bildschirme als klickbare Vorschau, nämlich Heute offen und fertig, Grammatik-Ergebnis am Handy und am Laptop, Einführung eines Themas, Wörter-Ergebnis, Lernpfad und Rundenende. Der zweite Bauabschnitt an den Bildschirmen beginnt erst nach deinem „Go“.
+3. **Test-Link 1b „Grammatik neu“:** die neue Grammatik-Übung mit den 4 fertigen Themen (L6).
+4. **Test-Link 2 „Lernplattform 2.0“** nach dem zweiten Bauabschnitt: alles aus diesem Plan. Erst hier stehen die Fehlersätze nur noch in Schritt 4, denn der neue Tagesplan wird erst eingeschaltet, wenn alle Teile dafür fertig sind.
+5. **Live** erst nach deinem „Ja live nehmen“.
+6. **Nach 14 Tagen** schauen wir gemeinsam auf die Messwerte und stellen nach festen Regeln nach.
 
 Bei jedem Test-Link bekommst du drei Dinge: was neu ist, was du am iPhone Schritt für Schritt antippst, und woran du erkennst, dass es richtig funktioniert.
 
@@ -101,13 +111,15 @@ Bei jedem Test-Link bekommst du drei Dinge: was neu ist, was du am iPhone Schrit
 | Vortest | 3 Aufgaben | 2 Aufgaben | 3 Aufgaben | **2 getippte Aufgaben** (Lücke oder kwt). Sie passen in die 6 Plätze der Grammatik, und Raten ist praktisch ausgeschlossen. |
 | Hilfe vor der Antwort | Musterkarte offen | Chip in der Lernphase | Chip in Lernphase oder Themenrunde | Lernphase (die ersten 3 Aufgaben eines Musters) und Themenrunde: kompakte Musterkarte, fest offen, damit nichts springt. Wiederholung: keine Erklärung, nur die Tipp-Leiter. |
 | Kennzeichnung der Auswahl | – | Ziffern 1–4 | A–D | **A–D** ist der Stand nach Emrahs Kommentar (T8). Tasten A–D *und* 1–4 werden angenommen. |
-| Fehlersätze | Schritt 4 | Schritt 4 | Schritt 4, nur neue Pläne | Schritt 4, nur in Plänen mit `u.v = 2`, höchstens 5 am Tag |
+| Fehlersätze | Schritt 4 | Schritt 4 | Schritt 4, nur neue Pläne | Schritt 4, nur in Plänen mit der Regelversion `u.rv = 2`; die Planversion `u.v` bleibt 1 (§2.3). Je Muster ein offener Eintrag, falsch = eine Box zurück, 5 am Tag, bei Rückstand bis 9, sonntags 3 (§5.7) |
 | Box 28 für Fehlersätze | – | ja | – | **später** (§13), erst die Fehlerlast nach dem Umbau messen |
 | Atlas „Kenne ich“ + `app/atlas` | ja | später | – | **später** (§13) |
 | Mini-Lektion | 3 Karten | 3 Karten | 3 Karten Handy, 1 Karte Laptop | 3 wischbare Karten am Handy, 1 zweispaltige Karte am Laptop |
 | „Erklär mir meine Antwort“ | ja | ja | optional | ja, nur auf Antippen im Menü ⋯, `quick`, kein automatischer Neuversuch |
 | Profil wechselt im Tag | – | – | – | Das Profil wird **je Runde** beim Start eingefroren (Kap. 15 „würfelt neu“) |
 | Name des Wochenhinweises | Wochenrückblick | Wochenrückblick | – | nur „Wochenrückblick“ |
+
+Nach der Prüfung des Entwurfs (06.10.2026) sind 30 Befunde eingearbeitet. Welche das sind, wo sie stehen und wo dieser Plan vom Vorschlag der Prüfung abweicht, steht in §14.
 
 ## 1 Leitsätze (verbindlich)
 
@@ -117,6 +129,9 @@ Bei jedem Test-Link bekommst du drei Dinge: was neu ist, was du am iPhone Schrit
 4. **Eine Quelle je Zahl.** Jede sichtbare Zahl liest einen Selektor aus `domain/metrics`. Jeder Knopf nennt genau das, was er startet.
 5. **Lieber kein Beispiel als ein falsches.** Ohne Musterbezug zeigt die App nur die aufgabeneigene Erklärung und kein Themen-Zufallsbeispiel.
 6. **Ruhig, ehrlich, hochwertig.** Bewegung höchstens 300 ms, kein Konfetti, eine große Zahl je Karte. Erfolg zeigt echten Zuwachs, nie eine Antwortzahl.
+7. **Was Heute ankündigt, ist eingefroren.** Das Grammatikthema des Tages, die Einführungsmuster und die Musterzustände vom Morgen werden beim Anlegen des Plans festgehalten (`u.gt`, `u.ps`, §2.3). Titel, gestartete Runde, Satzbau und Abschlusskarte lesen nur diese Werte (Kap. 2 Nr. 2, Kap. 15 „würfelt neu“).
+8. **Gemessen wird, ob es wirkt.** Jede neue Lernmethode hat eine Messgröße in `domain/metrics/effect.ts` und eine feste Entscheidungsregel für die Prüfung nach 14 Tagen (§4.9).
+9. **Antippen hat genau eine Bedeutung je Zustand.** Vor dem Prüfen wählt Antippen eine Stelle oder einen Baustein. Nach dem Ergebnis öffnet jedes englische Wort das Nachschlagen (§4.4).
 
 **Glossar (ein Wort pro Ding):** Neu · Lernt · Sicher · Fest (Zustand) · Richtig · Fast richtig · Noch nicht (Urteil) · Muster · Fehlersatz · Pflicht · Extra · Wochenrückblick · Tipp.
 
@@ -128,7 +143,7 @@ Bei jedem Test-Link bekommst du drei Dinge: was neu ist, was du am iPhone Schrit
 
 | Reiter | Erste Fläche | Hauptknopf | Heute falsch (Beleg) |
 |---|---|---|---|
-| Heute | Datum als Titel, Tageskarte mit Ring, „Als Nächstes: …“, 4 Schritte als Zustand | „Weiter: Wörter wiederholen · 30 Karten“ | „Heute“ viermal (`TodayScreen.tsx:239`, `:633`, `:638`); zwei Wochenhinweise (`:531` und `ProfilePages.tsx:46-60`) |
+| Heute | Datum als Titel, Tageskarte mit Ring, „Als Nächstes: …“, die Pflichtschritte als Zustand | „Weiter: Wörter wiederholen · 30 Karten“ | „Heute“ viermal (`TodayScreen.tsx:239`, `:633`, `:638`); zwei Wochenhinweise (`:531` und `ProfilePages.tsx:46-60`); unter der Tageskarte stehen während der Pflicht drei weitere Zeilen (`:687`, `:697`, `:700`) |
 | Wörter | Wiederholen-Karte, darunter die Zielkarte | „Pflicht: 30 Karten · 8 Min.“; ohne offene Pflicht „Alle fälligen: 51“ | Knopf unter der Falz, eigener Kopf statt `TabTitle` (`VocabHub.tsx:107`, `:130-193`); 51 gegen 30 (`:165` gegen `:187`) |
 | Grammatik | Weiter-Karte mit genau einer Handlung, darunter die Zeile „Fehlersätze · n“, dann der Lernpfad | „Thema starten“ oder bei aktiver Bremse „Fehlersätze korrigieren · 9“ | Der Text nennt Fehlersätze, der Knopf startet ein Thema (`LearnHub.tsx:103-109`, `:127-131`); 21 gegen 9 (`:97` gegen `:101`) |
 | Anwenden | Kachel „Jetzt empfohlen“, Reihenfolge nach Gerät | die Kachel | Am Handy kommt Hören zuerst (`ApplyHub.tsx:101-142`) |
@@ -140,38 +155,62 @@ Bei jedem Test-Link bekommst du drei Dinge: was neu ist, was du am iPhone Schrit
 
 1. **Titel = Datum** („Dienstag, 6. Oktober“). Eyebrow und Kartentitel „Heute“ entfallen.
 2. **Tageskarte:**
-   - links `ProgressRing` mit 4 Segmenten (56 px, Erfolgsfarbe, Tabellenziffern), in der Mitte „23 Min.“;
-   - Titel = nächster Schritt („Als Nächstes: Grammatik · neues Thema *wish*“);
-   - die 4 Schritte als Zustandszeilen; erledigt ist ein Häkchen und nie ein Knopf;
+   - links `ProgressRing` mit **einem Segment je Pflichtschritt** (`viewPlan(plan).duty.length`: voller Tag 4, kurzer Tag 3, Sonntag 2 oder 3), 56 px, Erfolgsfarbe, Tabellenziffern, in der Mitte „23 Min.“;
+   - Titel = nächster Schritt („Als Nächstes: Grammatik · neues Thema *wish*“). Das Thema kommt **nur** aus `u.gt` des gespeicherten Plans (§2.3), nie aus einer Neuberechnung mit `introTopic`;
+   - die Pflichtschritte als Zustandszeilen; erledigt ist ein Häkchen und nie ein Knopf;
    - ein Hauptknopf.
    - Laptop ≥ 1.024 px: rechts daneben die Karte „Stand“ mit „Wörter fest 312“ und „Grammatik: Kapitel 3 von 7“.
-3. Montags genau **ein** Band „Wochenrückblick ›“. `TodayWeeklyRow` (`ProfilePages.tsx:46-60`, eingehängt in `areas/profil.tsx:62`) erscheint nicht mehr auf Heute.
-4. **Nach der Pflicht:** die Abschlusskarte (§5.10) und genau **eine** Zeile Extra:
-   - Laptop (`keys`): „Am Laptop vertiefen · 3 eigene Sätze mit Wörtern von heute · ca. 5 Min.“ → Route `comboSentence`, `ctx:'xtra'`;
-   - Handy (`touch`): „Noch 2 Minuten? Fehlwörter von heute“.
-   - Beides zählt nie für Ring oder Serie. Hören und Diktat werden am Handy nie empfohlen. Das Wort „schwächster Bereich“ entfällt (`TodayScreen.tsx:74-81`, `:373-390`).
+3. Montags genau **ein** Band „Wochenrückblick ›“ über der Tageskarte. `TodayWeeklyRow` (`ProfilePages.tsx:46-60`, eingehängt in `areas/profil.tsx:62`) erscheint nicht mehr auf Heute.
+4. **Solange die Pflicht offen ist, steht unter der Tageskarte nichts** außer Speicher- und Planfehlern (`save-failed`). `SpeakExtra` (`TodayScreen.tsx:476`, `:697`), `MissedCheck` (`:510`, `:700`) und `WorthNow` (`:687`) stehen dort nicht mehr (Kap. 2 Nr. 1, Standard L8).
+5. **Nach der Pflicht:** die Abschlusskarte (§5.10) und darunter genau **eine** Zeile „Extra ›“. Sie öffnet ein Blatt mit höchstens drei Einträgen in fester Reihenfolge:
+   - Profil `keys`: „Am Laptop vertiefen · 3 eigene Sätze mit Wörtern von heute · ca. 5 Min.“ → Route `comboSentence`, `ctx:'xtra'`. Die Wörter liefert `laptopDeepen` (§4.9) aus der Datenbank, also auch die vom iPhone am Morgen. Profil `touch`: „Fehlwörter von heute · 2 Min.“;
+   - „Sprechen üben (Rollenspiel, Einwände)“. Damit bleibt Sprechen nach A7 vom 04.10. auf Heute erreichbar, mit 2 Tipps;
+   - „Wochen-Check nachholen“, nur wenn er fehlt (bisher `MissedCheck`).
+   - Nichts davon zählt für Ring oder Serie. Hören und Diktat werden am Handy nie empfohlen. Das Wort „schwächster Bereich“ entfällt (`TodayScreen.tsx:74-81`, `:373-390`).
 
-### 2.3 Tagesplan v2 (voller Tag; kurzer und sehr kurzer Tag analog mit `VG_MIN.short/tiny`)
+### 2.3 Tagesplan v2 (Regelversion `u.rv = 2`)
+
+**Voller Tag (Mo–Sa, Form `full`/`sat`):**
 
 | Schritt | Kanal (unverändert) | Min. | Inhalt v2 | Handy (`touch`) | Laptop (`keys`) |
 |---|---|---|---|---|---|
-| 1 Wörter wiederholen | `review` | 8 | **nur Karten**: `repairs: 0` (bisher bis zu 3 Reparatur-Sätze, `block1.ts:56-63`) | Aufdecken, Auswahl, Ein-Wort-/Partnerwort-Lücke, Satz vervollständigen | zusätzlich `listen_mc`, `dictation`, eigener Satz |
-| 2 Grammatik | `ch:u-focus` | 7 | 6 Plätze, **keine Fehlersätze** (`errs: 0`, bisher `ERRORS_PER_ROUND = 3`, `tasks.ts:180`, `:246`). Am Einführungstag zuerst Vortest und Einführung | meaning, mc, gap, find, kwt | zusätzlich `correct` als ganzer Satz |
-| 3 Satzbau | `ch:u-task` | 5 | Sätze zum Grammatikthema aus Schritt 2, Rückfall C1-Werkzeuge; ab p ≥ 0,4 ein Fallen-Baustein | Bausteine | Bausteine + Tastatur |
-| 4 Fehler korrigieren | `again` | 3 | **die einzige Fehlerschlange**: Grammatikfehler und Reparatur-Sätze aus `dueFehlersaetze`, Satz für Satz, `limit: 5` | Fehlerstelle antippen, nur sie ersetzen | vorbefülltes Satzfeld |
+| 1 Wörter wiederholen | `review` | 8 | **nur Karten**: Schritt-Argument `repairs: 0`. Bisher kamen bis zu 3 Reparatur-Sätze dazu (`block1.ts:10`, `:56-63`), die Pflichtrunde zieht sie in `vocab/session.ts:367` | Aufdecken, Auswahl, Ein-Wort-/Partnerwort-Lücke, Satz vervollständigen | zusätzlich `listen_mc`, `dictation`, eigener Satz |
+| 2 Grammatik | `ch:u-focus` | 7 | 6 Plätze, **keine Fehlersätze** (`errs: 0`, bisher `ERRORS_PER_ROUND = 3`, `tasks.ts:180`, `:246`). Themen aus `u.gt`; am Einführungstag zuerst Vortest und Einführung | meaning, mc, gap, find, kwt | zusätzlich `correct` als ganzer Satz |
+| 3 Satzbau | `ch:u-task` | 5 | Sätze zum Muster bzw. Thema aus `u.gt` (§5.8); ab p ≥ 0,4 ein Fallen-Baustein | Bausteine | Bausteine + Tastatur |
+| 4 Fehler korrigieren | `again` (Block 5, `ch:u-again`) | 3–4 | **die einzige Fehlerschlange**: Grammatikfehler und Reparatur-Sätze aus `dueFehlersaetze`, Satz für Satz, `limit` 5–9 (Regel unten) | Fehlerstelle antippen, nur sie ersetzen | vorbefülltes Satzfeld |
+
+**Andere Tagesformen** (Ring = Zahl der Pflichtschritte):
+
+| Form | Schritte | Ring |
+|---|---|---|
+| `short` (Tagesziel ≤ `SHORT_GOAL_MAX`) | 1 Wörter (5 Min.) · 2 Grammatik (`n` 4) · 4 Fehler korrigieren (`limit` ≤ 5) | 3 |
+| `tiny` (Tagesziel ≤ 10 Min., Neustart-Woche) | 1 Wörter (3 Min.) · 2 Grammatik (`n` 3) · 4 Fehler korrigieren (`limit` ≤ 5) | 3 |
+| `sun` (Sonntag) | 1 Wörter (≤ 5 Min.) · Wochen-Check (5 Min., `ch:u-check`) · **neu in rv 2:** 4 Fehler korrigieren mit `limit: 3` (2 Min.), nur wenn `fixDue > 0` | 2–3 |
+| Wiedereinstieg `reduced` | 1 Wörter · 2 Grammatik (`n` 3) · 4 Fehler korrigieren; Satzbau pausiert | 3 |
+
+Ohne fällige Fehlersätze (`fixDue = 0`) entfällt Schritt 4 in jeder Form (`planFor.ts:115`).
+
+**Wochen-Check** (Sonntag, P8): Er lässt auch `meaning`, `find` und `kwt` zu, je Aufgabe genau ein Muster, ohne Tipps.
 
 **Regeln:**
-- Ein neu gespeicherter Plan bekommt `u.v = 2`. Pläne ohne `v` laufen bis zum Tagesende nach der alten Regel (Kap. 15).
-- `prefs.fixDue` (`planFor.ts:115`) kommt aus `fehlersaetzeDue` (Grammatik + Reparatur, mit derselben Bereinigung wie `fehlersaetze.ts:32-57`). Schritt 4 entfällt nur, wenn diese Zahl 0 ist.
-- Kanäle, Blocknummern, Minuten und `duty` bleiben gleich, deshalb bleiben auch Serie und `pflicht[tag]` unberührt.
-- Der Plan hängt nicht von der Oberflächensprache ab. Heute zeigt DE 30 Karten, EN 27 Karten: die Ursache wird in P4 geklärt und mit einem Test abgesichert.
+- **Versionen:** Die Planversion bleibt `1`, auf oberster Ebene (`p.v`) und in `u.v`. Neu ist das rein ergänzende Feld `u.rv` (Regelversion). `rv !== 2` heißt alte Regel; das gilt heute für jeden gespeicherten Plan. Begründung: `readUnitMeta` verwirft jeden Plan mit `o.v !== 1` (`unitMeta.ts:14`), `readPlan` verlangt `p.v === 1` (`buildPlan.ts:28`), `UnitMeta.v` ist das Literal 1 (`plan/types.ts:33`). Ohne `u` wird `isUnitPlan` falsch (`unit/plan.ts:71`), und Heute zeigt nur den Hinweis `today-legacy` (`TodayScreen.tsx:691-695`). Mit `u.v = 2` träfe das auch den Rückweg auf die Live-Version 67.
+- **Schritt-Argumente** stehen als optionales 4. Tupel-Element in `u.b`: `[block, kind, min, { errs?, repairs?, limit? }]`. Der alte Leser liest nur die ersten drei Elemente (`unitMeta.ts:20-23`). Alle Leser von `u.b` in `domain/plan/**` und `domain/unit/**`, auch die Ansicht `forFocus` (`plan/retire.ts`), reichen das 4. Element durch.
+- **Einschalten:** `PLAN_RV` in `domain/unit/plan.ts` steht auf `1`, bis P5, P6 und P8 zusammengeführt sind. Erst die Koordination stellt es beim Abschluss von Welle 2 auf `2` (§10.2). Bis dahin übergeben alle rv-2-Tests `rv: 2` ausdrücklich. Grund: Schritt 1 ohne Reparatur-Sätze (P6), Grammatik ohne Fehlersätze (P5) und Schritt 4 Satz für Satz (P8) müssen gleichzeitig gelten, sonst zeigt „x von 30“ etwas anderes, als die Runde enthält (Kap. 2 Nr. 2).
+- **Grenze von Schritt 4**, beim Anlegen eingefroren: `limit = min(9, 5 + ceil(max(0, fixDue − 5) / 3))`; an kurzen Tagen `min(5, …)`; sonntags `3`. Minuten: `max(VG_MIN.*.again, ceil(limit × 25 s / 60))`. `fixDue` = `fehlersaetzeDue` (Grammatik und Reparatur, gleiche Bereinigung wie `fehlersaetze.ts:32-57`, ohne stillgelegte Einträge nach §3.9).
+- **Durchsatz:** Die Grenze allein reicht nicht. Eine grobe Rechnung (60 Lerntage, Boxen 1/3/9, 75 % richtig beim Wiederholen) ergibt: Mit „jeder Satz einzeln, falsch = Box 0“ (`errors.ts:19`, `reviewError`) sind bei 30 % Fehlerquote nur 23 % (fest 5) bzw. 34 % (bis 9, sonntags 3) der Tage unter der Einführungsbremse von 10 (`path.ts:98`, `:121`). Selbst der heutige Durchsatz von 9 am Tag schafft nur 49 %. Erst zwei Regeln aus §5.7 machen die Schlange tragfähig: **ein offener Eintrag je Muster** und **falsch = eine Box zurück**. Damit sind es 95 % bei 30 % und 84 % bei 50 % Fehlerquote. Der verbindliche Nachweis ist `tests/unit/errorQueueSim.test.ts` (P4) mit den echten Funktionen.
+- **Eingefroren** (ergänzend in `u`, für alle neuen Pläne ab dem P4-Nachtrag, unabhängig von `rv`):
+  - `u.gt = { intro: string | null, pats: string[], topics: string[] }`: das Einführungsthema nach der Bremse zum Zeitpunkt des Anlegens, die Muster des heutigen Einführungsschritts (≤ 2, §3.2) und bis zu 3 Rundenthemen (`rankTopics`). Ist `intro` heute schon über den Grammatik-Reiter eingeführt worden, bleibt die Runde beim Thema; Vortest und Karten entfallen dann.
+  - `u.ps = { [patId]: 0 | 1 | 2 | 3 }`: die Musterzustände Neu · Lernt · Sicher · Fest am Morgen, nur für die Muster der `gt`-Themen (≤ 24 Einträge). Daraus kommt die Wahrheitszeile in §5.10.
+- Kanäle, Blocknummern und `duty` bleiben gleich, Serie und `pflicht[tag]` sind unberührt. Neu ist nur der Sonntagsschritt `ch:u-again` in rv-2-Plänen.
+- Der Plan hängt nicht von der Oberflächensprache ab. Ursache für „DE 30 gegen EN 27 Karten“ ist laut Prüfung `quizzable(c, lang)` (`srs/queue.ts:69`), also `domain/srs`. Behoben wird sie in P6 (`planLang.test.ts`).
+- **Rückweg** (P4, Unit): Eine Kopie des Lesers von Commit `8d8f3a3` (`readUnitMeta`, `readPlan`) liest einen rv-2-Plan vollständig, auch einen Sonntagsplan mit Schritt 4. Heute zeigt für einen rv-2-Plan die Tageskarte und nie `today-legacy`.
 
 ### 2.4 Grammatik-Reiter
 
 - **Weiter-Karte:**
-  - Bremse aktiv (`canIntroduce.reason === 'errors'`): Hauptknopf „Fehlersätze korrigieren · 9“. Ist Schritt 4 heute noch offen, startet er Schritt 4 (Pflicht), sonst `repairRound` mit `ctx:'xtra'`. Daneben der Textknopf „Trotzdem: Past Perfect“.
-  - Sonst: „Thema starten · *wish*“.
-- **Direkt darunter** die Zeile „Fehlersätze · n“ (gleiche Zahl wie Heute Schritt 4).
+  - Bremse aktiv (`canIntroduce.reason === 'errors'`): Hauptknopf „Fehlersätze korrigieren · 5“. Die Zahl ist `fixToday` (§4.9), also genau die Zahl der Sätze, die dieser Knopf startet. Ist Schritt 4 heute noch offen, startet er Schritt 4 (Pflicht), sonst `repairRound` mit `ctx:'xtra'` und derselben Grenze. Darunter klein und getrennt: „Neues Thema ab weniger als 10 fälligen Grammatikfehlern · jetzt 12“ (`grammarErrorsDue`). Daneben der Textknopf „Trotzdem: Past Perfect“.
+  - Sonst: „Thema starten · *wish*“. Das Thema kommt aus `u.gt.intro`, wenn heute ein Plan existiert, sonst aus `introTopic` (bisher immer neu berechnet, `LearnHub.tsx:90-96`).
+- **Direkt darunter** die Zeile „Fehlersätze · 21 fällig · heute 5“ (`fixAll` · `fixToday`), dieselben Zahlen wie Heute Schritt 4. Bisher stand „21“ neben „9“ (`LearnHub.tsx:97` gegen `:101`), ohne dass klar war, was gezählt wird.
 - **Lernpfad:** 7 Kapitel (Zeiten · Zukunft · Bedingung und Wunsch · Passiv und Berichten · Modalität · Verbmuster · Satzbau und Betonung).
   - Am Handy ist nur das aktuelle Kapitel offen, mit der Wegmarke „Du bist hier“.
   - Jeder Knoten zeigt Zustand und einen Ring „Muster sicher 2/5“.
@@ -306,6 +345,14 @@ export const WhyRuleSchema = z.object({
 export const TaskWhySchema = z.object({ ok: Bi, wrong: z.array(WhyRuleSchema).max(4) }) satisfies z.ZodType<TaskWhy>;
 ```
 
+**Einführungsplan (`introPlan`) über mehrere Tage:**
+- Ein Thema wird in Schritten eingeführt: Schritt k = `introPlan[k]` mit höchstens 2 Mustern. Über alle Themen gibt es je Lerntag höchstens **einen** Einführungsschritt, entweder den ersten Schritt eines neuen Themas oder einen Folgeschritt.
+- Ein Folgeschritt ist fällig, wenn jedes Muster des vorigen Schritts mindestens 3 Antworten mit mindestens 2 richtigen hat (`pats[id].n ≥ 3`, `c ≥ 2`) und der vorige Schritt nicht von heute ist. Er wird beim Anlegen des Plans in `u.gt.pats` eingefroren (`introStepFor`, P4, §4.9).
+- Folgeschritte zählen nicht für die Bremse „1 neues Thema je 3 Lerntage“, belegen aber den Einführungsplatz des Tages.
+- Eingeführt ist ein Muster ab `pats[id].i` (Einführungstag). Nicht eingeführte Muster stehen nie in gemischten Runden, nie im Satzbau und nie als Variante in Schritt 4.
+- **Bestand:** Beim ersten Schreiben von `pats` in ein schon begonnenes Thema (es hat `hist`) legt P5 alle Muster des Themas mit `i` = Tag des ersten `hist`-Eintrags an. Bereits geübte Themen verlieren so keine Regel aus ihren Runden.
+- Beispiel mixed-cond mit 4 Einführungsschritten: Das Thema wird an mindestens 3 verschiedenen Lerntagen eingeführt, nie mehr als 2 Muster an einem Tag, kein Muster vor seiner Einführung (Unit-Abnahme P5).
+
 ### 3.3 Zuordnung Aufgabe → Muster: `src/content/grammar/pattern-map.json`
 
 ```ts
@@ -322,6 +369,7 @@ export const PatternMapSchema = z.record(
 - Vorhandene Aufgaben (`grammar-bank.json`, `c1/toolkit.json`, `legacy/grammar.json`, `grammar-extra.json`, Fallen als Satzkorrektur) werden **nie** umformuliert. Dadurch bleiben `seen`, Pool und Rückweg gültig (`key.ts:33`). Wer einen Satz ändern will, legt eine neue Aufgabe an.
 - `normalizeTask` füllt `pat`/`why` aus der Tabelle. Aufgaben ohne Eintrag bekommen `pat: null`, dann gilt Regel 5 aus §1.
 - Aufgaben mit `dup` kommen nicht in dieselbe Runde wie ihre Hauptaufgabe. Sie dienen als Variante für die Fehlerwiederholung.
+- **Aufgaben außerhalb der Tabelle:** Das sind `app/pool` (KI-Aufgaben aus `grammar-items@2`) und offene `daily/*`-Aufgaben aus dem Tagesauftrag. `normalizeTask` ordnet sie beim Laden über `patternOf` (Signalwörter aus Lösung und Satz) zu, aber nur bei eindeutigem Treffer. Ohne Treffer bleiben sie bei `pat: null` und laufen nur in Extra-Runden, nie in einer Pflichtrunde eines Themas mit Musterdatei. Bisher hat die Quelle `daily → pool → Start` Vorrang (`tasks.ts:218`). In Themen mit Musterdatei kommen künftig zugeordnete Aufgaben vor nicht zugeordneten; innerhalb davon gilt die alte Quellenreihenfolge. Ohne diese Regel zeigten gerade die Pool-Aufgaben wieder nur die allgemeine Erklärung, also genau Emrahs Ausgangsproblem.
 
 ### 3.4 Neue Aufgabenarten: `src/content/grammar/tasks-v2.json`
 
@@ -346,6 +394,7 @@ export const V2FileSchema = z.object({ v: z.literal(1), tasks: z.array(V2TaskSch
 
 - `find`: Etwa jede vierte Aufgabe ist fehlerfrei. Nach dem Antippen wird nur der Bereich ersetzt.
 - `key` der neuen Aufgaben = `legacyTaskKey(prompt | frame | a)`, damit sie in `seen` und im Pool genauso laufen.
+- **Eindeutige Schlüssel:** Kein v2-Satz wiederholt wörtlich einen vorhandenen Aufgabensatz. Das gilt auch für die 71 Fallen, denn sie sind schon `correct`-Aufgaben mit `legacyTaskKey(bad)` (`tasks.ts:132-138`). Ein `find` zu einer Falle bekommt einen neuen Satz derselben Falle. Ist der Satz doch derselbe, wird er per `dup` an die vorhandene Aufgabe gebunden. Unit-Test (P2): Die Schlüssel sind je Thema über Startaufgaben, Fallen und `tasks-v2` eindeutig.
 
 ### 3.5 Pfad, Kapitel und Kontrastfamilien: `src/content/grammar/path.json`
 
@@ -361,7 +410,7 @@ export const PathFileSchema = z.object({
 
 ### 3.6 Satzbau-Sätze: `src/content/c1/order.json` (nur ergänzende Felder)
 
-Jedes Element bekommt optional `pat: string` und `trap: { tile: string; instead: string; why: Bi }`, z. B. `{ tile: "which", instead: "who", … }`. Neu sind je Pilot-Thema 6 Sätze, später je Thema mindestens 4. Gibt es zum Thema keinen Satz, gilt der Rückfall auf die C1-Werkzeuge.
+Jedes Element bekommt optional `pat: string` und `trap: { tile: string; instead: string; why: Bi }`, z. B. `{ tile: "which", instead: "who", … }`. Neu sind je Pilot-Thema 6 Sätze (P2 Stufe 1). In Stufe 2 bekommt jedes übrige Thema mindestens 4 Sätze mit `pat`, davon mindestens 1 mit `trap`, zusammen etwa 140; das ist eine Abnahme von P2 Stufe 2. Bis dahin gilt der Rückfall in dieser Reihenfolge: ein Satz desselben Musters, dann eines Themas derselben Kontrastfamilie (`familyOf`), dann die C1-Werkzeuge. Im Rückfall nennt die Statuszeile das Thema des Satzes, nicht das Tagesthema.
 
 ### 3.7 Wörter-Paket: `src/content/c1/pack.json` (nur ergänzende Felder, zod in `src/domain/c1pack/packFields.ts`)
 
@@ -394,10 +443,13 @@ Dazu kommt `src/content/nb/trapIndex.ts` (neu): Falle ↔ englische Wörter ↔ 
 - time-clauses bekommen das Gegenmuster `tc.noun-clause`: *when*/*if* als Fragewort + *will*. Die Ursache wird neu formuliert: Es ist der Reflex „Zukunft = will“, keine Übersetzung.
 - cond-alt bekommt *Should you …*, *in case* (≠ if) und *Were we to …*. *otherwise* heißt „sonst“ und ist kein Ersatz für *if*.
 - Alle 71 Fallen werden einmal geprüft: Ist `bad` wirklich falsch, und ist es ein typischer B2-Fehler?
+- **Stillgelegte Aufgaben:** `src/content/grammar/retired.json` nennt jede gestrichene Falle oder Aufgabe mit dem Schlüssel `${topic}|${legacyTaskKey}`, als Erstes die wish-Falle. Vorhandene Fehlereinträge dazu bleiben unverändert in der Datenbank, werden aber beim **Lesen** ausgeblendet. `liveErrorsOf(doc)` (P2, `errors.ts`) liefert `errorsOf(doc)` ohne stillgelegte Einträge. Alle zählenden und anzeigenden Leser benutzen es: `dueErrors`, `dueFehlersaetze`, `dueErrorCount`, `plan/dayStats.ts:43`, das Radar in `metrics/grammar.ts:76`, `GrammarScreen.tsx:103`, `generate.ts:36`. Schreibende Pfade (`write.ts:73`, `addError`, `reviewError`, `repair/store.ts:81`) bleiben bei `errorsOf`, damit nichts verloren geht. Grund: `errorTask` baut die Aufgabe nur aus `q` und `ans` (`errors.ts:190-215`). Ohne Filter müsste Emrah einen richtigen Satz „verbessern“, und der Eintrag zählte für die Bremse mit.
 
 ## 4 Komponenten- und Domänen-APIs
 
-### 4.1 Eingabeprofil: `src/platform/device.ts` (P1)
+### 4.1 Eingabeprofil: `src/platform/input.ts` (P1)
+
+**Name und Abgrenzung:** Die Datei heißt bewusst nicht `device.ts`. `tests/unit/removalAudit.test.ts:50` verbietet `src/platform/device.ts`, weil dort bis W2 der alte Handy-Modus lag (`stand.md:39`). Dieses Verbot bleibt, ebenso das für `phoneMode`, `PhoneModeSection` und `setPhoneModeLocal`. Der alte Handy-Modus änderte die Pflicht. Das Eingabeprofil wählt nur die **Form** einer Aufgabe und ist nie planwirksam. Abgesichert wird das durch einen neuen Fall in `removalAudit.test.ts` aus dem Vertrags-Commit: `src/domain/**` und `src/features/today/store.ts` importieren nichts aus `src/platform/input`. Die Begründung steht als A7-Eintrag in CLAUDE.md.
 
 ```ts
 export type InputProfile = 'touch' | 'keys';
@@ -412,8 +464,9 @@ export function useSplitLayout(): boolean;               // keys && wide
 ```
 
 - Die Einstellung „Eingabe an diesem Gerät: Automatisch · Touch · Tastatur“ steht unter Einstellungen › Lernen (`InputProfileSection.tsx`).
+- Den Testschalter `window.__LINGO_INPUT__` setzen nur E2E-Tests per `page.addInitScript` (Helfer `tests/e2e/input.ts`, P1). Der Entwicklungs-Adapter wird dafür nicht geändert.
 - **Einfrieren:** Jede Runde liest `inputProfile()` genau einmal beim Start und speichert es in ihrem Zustand und Wiederaufnahme-Paket.
-- Die 9 verstreuten `matchMedia('(pointer…')`-Stellen werden umgestellt (GrammarItem.tsx:147, ExerciseView.tsx:250, DrillItems.tsx:235, ChatInput.tsx:58, TranslatePane.tsx:61, LookupPopover.tsx:54, RoleplayScreen.tsx:37, TilesKeyboard.tsx:22, sheetDrag.tsx:19). Ein Wächter-Test verbietet neue Stellen außerhalb von `src/platform`.
+- Die 9 verstreuten `matchMedia('(pointer…')`-Stellen werden auf `platform/input.ts` umgestellt (GrammarItem.tsx:147, ExerciseView.tsx:250, DrillItems.tsx:235, ChatInput.tsx:58, TranslatePane.tsx:61, LookupPopover.tsx:54, RoleplayScreen.tsx:37, TilesKeyboard.tsx:22, sheetDrag.tsx:19). Ein Wächter-Test verbietet neue Stellen außerhalb von `src/platform`.
 
 ### 4.2 `ExerciseShell` (`src/ui/exercise/ExerciseShell.tsx`, P1)
 
@@ -442,6 +495,10 @@ export type ShellFeedback = {
   depth: ExplainDepth;
   menu?: Partial<Record<ShellMenuId, () => void>>;
   nextIn?: string | null;                                // „Kommt in 10 Min. wieder“
+  /** Automatisch weiter nach 4 s (bisher nur learn/ui.tsx:170-199, `app/profile.autoNext`).
+   *  Nur bei Urteil 'ok', Hilfe 0 und Tiefe 'min' und wenn autoNext ≠ false; pausiert, solange Menü ⋯
+   *  oder ein Aufklappbereich offen ist; für alle Übungsarten gleich. Das Gerüst setzt den Zeitgeber. */
+  auto?: boolean;
 };
 export type ExerciseShellProps = {
   meta: { ex: string; id: string; stage?: number; kind?: string };   // → data-ex, data-card, data-stage, data-kind
@@ -517,6 +574,8 @@ type SpotSentenceProps = {
 // Vorrat mit touch-action: pan-y, Ziehen erst ab 6 px waagrecht oder 150 ms Halten; locked blendet den leeren Vorrat aus
 ```
 
+**Antippen im Satz (Regel für alle Übungen, Kap. 15 „Wörter in neuen Übungen nicht antippbar“):** Vor dem Prüfen wählt Antippen in `SpotSentence`, `Tiles`, bei `find`, `find_trap` und in Schritt 4 die Stelle bzw. den Baustein. Nach dem Ergebnis öffnet jedes englische Wort in `prompt`, `explanation` und `examples` das Nachschlagen (`EnglishText`). `SpotSentence` schaltet dafür mit `locked` auf `EnglishText` um. E2E in `uxRules` (P8): Nach dem Ergebnis von find, kwt, meaning und Schritt 4 öffnet ein Tipp auf ein Wort das Nachschlage-Fenster.
+
 ### 4.5 Leisten und Enden (P1)
 
 - `ActionBar`: neue Prop `placement?: 'fixed' | 'column'`. `column` wird im Split-Layout unter der linken Spalte gezeichnet (`sticky; bottom: 1rem`). `aside` nimmt `secondary` am Laptop (≥ 768 px) auf. Mit offener Tastatur gilt `padding-bottom: 8px` statt Safe-Area (`[data-kb]`).
@@ -569,6 +628,9 @@ export function chapters(): Array<{ id: string; name: Bi; topics: string[] }>;
 export function v2Tasks(topic?: string): readonly V2Task[];
 // span.ts
 export function errorSpan(wrong: string, right: string): [number, number] | null; // über alignWords; null bei > 1 Bereich oder > 4 Wörtern
+export function errorSpans(wrong: string, right: string): Array<[number, number]> | null; // bis zu 3 Bereiche mit je ≤ 4 Wörtern, sonst null (Schritt 4, §5.7)
+// errors.ts (zusätzlich): liveErrorsOf(doc) ohne stillgelegte Einträge (§3.9); addError mit pat: ein offener Eintrag je Muster, more[] (§5.7);
+// reviewError: falsch = eine Box zurück, rh[] ergänzen
 
 // explain.ts
 export function grammarExplanation(i: {
@@ -584,21 +646,31 @@ export function grammarExplanation(i: {
 **P5 (Welle 2), `tasks.ts`, `check.ts`, `write.ts`:**
 
 ```ts
+// Die Typ-Erweiterung steht schon im Vertrags-Commit (§10.0), samt allen Tabellen, die daran hängen.
 export type GrammarTaskType = 'mc' | 'gap' | 'transform' | 'correct' | 'meaning' | 'find' | 'kwt';
 export function wantTypes(p: number, profile: InputProfile): GrammarTaskType[];
 // p < 0,4: ['meaning','mc','gap'] · p ≤ 0,7: ['gap','find','kwt'] · sonst touch ['kwt','find'], keys ['correct','kwt','find']
+// Rückfall, wenn die gewünschten Typen fehlen (ersetzt anySeed ohne Typfilter, tasks.ts:236, :296-301):
+//   touch: kwt → find → gap → mc → meaning; nie `correct` ohne errorSpan, nie `transform` mit ganzem Satz
+//   keys:  wie bisher, zuletzt beliebige Startaufgabe des Themas
 export type RoundInput = RoundInputAlt & {
   errorsMax?: number;                                // aus dem Plan (errs), Standard ERRORS_PER_ROUND
-  introBlock?: { topic: string; pats: string[] } | null; // Einführung vorn, die ersten 4 Plätze ungemischt
+  gt?: { intro: string | null; pats: string[]; topics: string[] } | null; // eingefroren aus u.gt (§2.3); hat Vorrang vor rankTopics/introTopic
+  introBlock?: { topic: string; pats: string[] } | null; // aus gt: Einführung vorn, die ersten 4 Plätze ungemischt
   profile?: InputProfile;                            // touch: keine Ganzsatz-Aufgaben; correct → find, wenn errorSpan ≠ null
+  wordsToday?: readonly string[];                    // Lemmata der heute fälligen und neuen Karten (P4 wordsToday)
 };
 export function checkKwt(task: KwtTask, given: string): GrammarCheck;   // Schlüsselwort ausgeschrieben, Wortzahl, answer/accepted
 export function checkFind(task: FindTask, step: { tapped: [number, number] | 'none' } | { replacement: string }): GrammarCheck & { found?: boolean };
 export function checkMeaning(task: MeaningTask, pick: 'a' | 'b' | 'both'): GrammarCheck;
 ```
 
-- `selectRound` nimmt als zweites Thema bevorzugt den Familienpartner (`familyOf`). Fehlerwiederholung und Wiederholung am Rundenende nehmen eine **ungesehene Variante desselben Musters** statt derselben Aufgabe (`session.ts:147-151`, `tasks.ts:251`).
-- `write.ts` schreibt ergänzend `pats: { [patId]: { n, c, last } }` (höchstens 12 Einträge, unter 1 KB). Hat der Vortest bestanden, gilt `p = max(p, 0.6)` und der Einführungstag wird gesetzt.
+- `selectRound` nimmt die Themen aus `gt.topics`, sofern vorhanden. Als zweites Thema nimmt es bevorzugt den Familienpartner (`familyOf`). Die Wiederholung am Rundenende nimmt eine **ungesehene Variante desselben Musters** statt derselben Aufgabe (`session.ts:147-151`, `tasks.ts:251`). In rv-1-Plänen (`errs > 0`) gilt das auch für Fehlersätze in der Runde; in rv 2 übernimmt Schritt 4 die Varianten (§5.7).
+- **Wörter und Grammatik am selben Stoff (Kap. 2 Nr. 5):** Unter gleich passenden Kandidaten (gleiches Thema, gleicher Wunschtyp) gewinnt eine Aufgabe, deren Satz ein Lemma aus `wordsToday` enthält (Abgleich über `lemmaOf`, `srs/context.ts:11`). Das ist nur ein Gleichstand-Brecher, die Musterwahl bleibt unberührt. Unit-Abnahme: Gibt es Treffer, enthält mindestens 1 von 6 Pflichtaufgaben ein Kartenwort des Tages.
+- **Nicht eingeführte Muster** (§3.2) und Aufgaben mit `pat: null` in Themen mit Musterdatei (§3.3) kommen nie in eine Pflichtrunde.
+- **Vortest:** Das Ergebnis steht ergänzend als `vt: { d, ok, pats }` im Thema. Bestanden heißt: die getesteten Muster bekommen `i = heute` und gelten als „Lernt“. `p = max(p, 0.6)` gilt nur, wenn damit alle Muster des Themas getestet sind; sonst bleibt p, wie BKT es aus den beiden Antworten rechnet. `lastIntroDay` (`path.ts:108`) überspringt Themen mit `vt.ok`. Ein bestandener Vortest hält das nächste neue Thema also nicht drei Lerntage auf; es darf am nächsten Lerntag beginnen, höchstens ein Einführungsschritt je Tag (§3.2).
+- `write.ts` schreibt ergänzend `pats: { [patId]: { n, c, last, h?, r?, k?, dd?, s?, i? } }` mit höchstens 12 Einträgen und unter 2 KB, Bedeutung in §8. Den Zustand eines Musters berechnet nur `patternState` (§4.9).
+- **Rate-Wahrscheinlichkeit** (`guessOf`, `bkt.ts:27`, im Vertrags-Commit): `meaning` = 1/Zahl der Wahlmöglichkeiten, `find` = 1/(Wortzahl + 1), `kwt` = `GUESS_TYPED` (`bkt.ts:14`). Unit-Abnahme (P5): Der BKT-Zuwachs nach einer richtigen `meaning`-Antwort ist höchstens so groß wie nach `mc`.
 - `ruleFocus.ts` wird gelöscht.
 
 ### 4.8 Wörter-Domäne (P6)
@@ -628,7 +700,9 @@ export function explainWord(i: {
 
 - **„Kenne ich“:** startet eine Prüffrage (frei tippen im Ursprungssatz, am Handy mit Buchstaben-Platzhaltern). Richtig ohne Hilfe → Stufe 3, S = 10 Tage. In `hist` steht dann `m:'known'` statt eines erfundenen `{m:'type', g:4}` (`IntroCard.tsx:34-42`).
 - **Satzwechsel ab Stufe 3 auch für Wendungen:** `contextsOf` mit `locateChunk` (`rotate.ts:18`, `:31`).
-- **Neue Karten aus dem Paket** behalten `register`, `why`, `tip` und `alt` (`pack.ts:77-89`, `newCard.ts:23-37`). Fehlende Felder bestehender Paket-Karten werden einmal aus `pack.json` ergänzt, nie ersetzt.
+- **Neue Karten aus dem Paket** behalten `register`, `why`, `tip` und `alt` (`pack.ts:77-89`, `newCard.ts:23-37`). **Bestehende** Paket-Karten werden nicht beschrieben. Ihre fehlenden Felder legt `packExtraOf(card)` beim **Lesen** darüber; die Datenbank gewinnt (A6.11). Es gibt kein Massenschreiben in `vocab/*` oder `chunk/*`. Unit-Test: Das Öffnen des Wörter-Reiters und einer Runde schreibt kein Dokument außer den regulären Review-Einträgen.
+- **„Satz vervollständigen“ (`complete`) bewerten:** Lokal (Zielwort enthalten, 4–8 Wörter) gibt es höchstens „Schwer“, mit dem Gewicht 0,8 in `srs/weight.ts`. Mit Claude läuft eine Kurzprüfung wie `produce-check` (`quick`). Bei „ok“ gibt es „Gut“, bei „falsch“ entsteht ein Fehlersatz `src:'write'`. Bei `not_granted`, `rate_limited` oder einem anderen Fehler gilt das lokale Urteil, ohne automatischen Neuversuch (A6.3). Während Claude prüft, zeigt das Gerüst den Zustand `busy`.
+- **Synonym bei getippten Antworten:** Steht die Antwort in `alt` (Paket), gilt sofort „Fast richtig“, Note höchstens „Schwer“. Sonst gilt sofort lokal „Noch nicht“, und das Menü ⋯ bietet „War das auch richtig? (Claude)“. Mitten in der Runde gibt es keine automatische Anfrage. Der Zwischenspeicher-Schlüssel ist `card.id|given`. Gibt Claude recht, wird die Note wie bei „Ich lag richtig“ korrigiert.
 - **`card-examples@3`:** Profilzeile (Head of Business Development, Cloud-DMS/ECM, Vertrieb, Einwände, Mails, Verhandlungen) und genau 3 Sätze für Meeting · Mail · Alltag. Alte `xEx` bleiben.
 
 ### 4.9 Metrik-Selektoren und Plan v2 (P4)
@@ -643,9 +717,48 @@ export function newToday(i: …): { n: number; cap: number; braked: boolean; rea
 export function vocabEstimate(i: …): { n: number; at: number; c1Reached: boolean } | null;
 export function atlasSize(): number;                                            // aus content/atlas/meta.json
 export function dayLeft(plan: StoredPlan | null, done: ReadonlySet<number>): { blocks: number; minutes: number };
+export function fixToday(i: { plan: StoredPlan | null; fixDue: number }): number;   // min(limit des Plans bzw. der Extra-Runde, fixDue) – Zahl auf jedem Knopf, der Schritt 4 startet
+export function fixAll(fixDue: number): number;                                       // alle fälligen („21 fällig“)
+export function wordsToday(i: { cards: readonly TrainCard[]; plan: StoredPlan | null; nowMs: number }): string[]; // Lemmata fälliger und heute neuer Karten
+export function laptopDeepen(i: { log: Readonly<Doc> | null; cards: readonly TrainCard[]; today: string }): string[];
+//   aus log/<tag>: Einträge mit dev 't' zu Karten mit Stufe ≥ 4 sowie Karten mit intro === heute; nie localStorage
+// domain/metrics/pattern.ts (neu)
+export type PatternState = 'new' | 'learning' | 'safe' | 'firm';
+export function patternState(e: PatEntry | undefined, today: string): PatternState;
+//   Neu: kein Eintrag oder n = 0 bzw. nicht eingeführt
+//   Sicher: von den letzten 3 Ergebnissen (r, k) mindestens 2 richtig ohne Hilfe, an mindestens 2 Tagen (dd)
+//   Fest: Sicher und mindestens 21 Tage seit dem ersten „Sicher“ (s) und das letzte Ergebnis richtig
+//   sonst Lernt; zwei falsche in Folge setzen Sicher/Fest auf Lernt zurück (s bleibt stehen)
+export function topicStateFromPatterns(topic: string, doc: Readonly<Doc> | undefined, today: string): PatternState | null;
+//   ein Thema ist höchstens „Sicher“, wenn jedes Muster mindestens „Lernt“ ist (p-Regel bleibt zusätzlich)
+// domain/metrics/effect.ts (neu)
+export function learningEffect(i: { grammarDocs; repairDoc; logs: ReadonlyArray<Readonly<Doc>>; today: string }): {
+  firstTry: { box1: Rate; box3: Rate; box9: Rate };  // Treffer beim ersten Versuch je Box in Schritt 4 (aus errors[].rh)
+  relapse14: Rate;                                   // erledigte Fehler, deren Muster binnen 14 Tagen wieder falsch war
+  pretest: Rate;                                     // bestandene Vortests (vt)
+  minutesPerStep: Record<1 | 2 | 3 | 5, { t: number | null; k: number | null }>; // aus log/<tag>.um je Profil
+  queue: { today: number; max7: number };            // Länge der Fehlerschlange
+} | null;                                            // Rate = { n, hit } | null; fehlen Daten, zeigt die Ansicht „noch keine Daten“
+// domain/grammar/path.ts (P4)
+export function introStepFor(i: { docs; today: string; nowMs: number; introPlanOf: (topic: string) => string[][] | null }): { topic: string; pats: string[]; fresh: boolean } | null;
+export function freezeGrammarDay(i: { docs; today: string; nowMs: number; introPlanOf; seed: string }): { gt: GrammarDay; ps: Record<string, 0 | 1 | 2 | 3> };
 // domain/unit/plan.ts
-export function unitGrammarArgs(plan: StoredPlan | null): { n: number; errs: number }; // v2: errs 0; alt: ERRORS_PER_ROUND
+export const PLAN_RV: 1 | 2 = 1;                                                     // die Koordination stellt am Ende von Welle 2 auf 2
+export function unitGrammarArgs(plan: StoredPlan | null): { n: number; errs: number }; // rv 2: errs 0; sonst ERRORS_PER_ROUND
+export function unitStepArgs(plan: StoredPlan | null, block: 1 | 2 | 5): { errs?: number; repairs?: number; limit?: number }; // 4. Tupel-Element, sonst alte Regel
 ```
+
+**Messung nach 14 Tagen (feste Regeln, keine neue Planungsrunde):** Die Werte stehen unter Fortschritt › Verlauf › „Messwerte dahinter“ (P7).
+
+| Messgröße | Schwelle | Folge |
+|---|---|---|
+| Fehlerschlange `queue.today` | an 7 von 14 Tagen über 15 | `limit`-Obergrenze 9 → 11, sonst nichts |
+| Treffer beim ersten Versuch in Box 1 | unter 50 % | Erklär-Tiefe für Fehlersätze in Box 0 auf `full` erzwingen |
+| Rückfall binnen 14 Tagen | über 40 % je Muster | Muster an die Englischlehrer-Prüfung (Erklärung, Falle) |
+| Vortest bestanden | über 70 % | Vortest auf 3 Aufgaben (Raten unwahrscheinlicher) |
+| Minuten je Schritt, `touch` gegen `keys` | `touch` über 1,5 × `keys` | Touch-Faktor in §4.10 von 1,4 auf 1,6 |
+
+Box 28/90 (§13) wird nur entschieden, wenn die Treffer in Box 9 über 85 % liegen.
 
 ### 4.10 Noten (`src/domain/grade/index.ts`, P4)
 
@@ -655,7 +768,7 @@ Neue Schlüssel, unabhängig von den Typ-Unions (`GradeKey = … | NewGradeKey`)
 |---|---|---|---|---|
 | `ctx_mc` | choice | 9 s | – | Wahl |
 | `colloc_gap` | typed | 7 s | 2,5 s | erstes Zeichen |
-| `complete` | free | – | – | Gut, wenn das Zielwort enthalten ist und ≥ 4 Wörter; höchstens „Gut“ |
+| `complete` | free | – | – | lokal (Zielwort enthalten, 4–8 Wörter) höchstens „Schwer“, Gewicht 0,8; „Gut“ nur nach Claude-Kurzprüfung (§4.8) |
 | `wordfam` | typed | 8 s | 3 s | erstes Zeichen |
 | `find_trap`, `find` | typed | 9 s | 3,5 s | ab dem Fund der Stelle |
 | `kwt` | transform | 14 s | 6 s | Abschicken |
@@ -703,11 +816,13 @@ Im Profil `touch` gilt für getippte Formen der Faktor 1,4 auf „Gut bis“ und
 
 ### 5.3 Einführung eines neuen Themas (innerhalb von Schritt 2, 6 Plätze)
 
-1. **Vortest**, Plätze 1–2: zwei getippte Aufgaben (gap/kwt) zu den heutigen Mustern, ohne Hilfe. Der Status zeigt „Neues Thema · Kurztest 1/2“. Sind beide richtig und jeweils unter 20 s gelöst, ist das Thema „Lernt“ (p = max(p0; 0,6)), die Lektion entfällt, und es geht mit Platz 3 gemischt weiter.
+Die Muster des Tages stehen in `u.gt.pats` (eingefroren, §2.3). Ein Folgeschritt eines schon begonnenen Themas (§3.2) beginnt ohne Vortest gleich mit den Musterkarten.
+
+1. **Vortest** (nur erster Schritt eines neuen Themas), Plätze 1–2: zwei getippte Aufgaben (gap/kwt) zu den heutigen Mustern, ohne Hilfe. Der Status zeigt „Neues Thema · Kurztest 1/2“. Sind beide richtig und jeweils unter 20 s gelöst, gelten die getesteten Muster als „Lernt“ (`vt`, §4.7). Die Karten entfallen, und es geht mit Platz 3 gemischt weiter. Das ganze Thema steigt nur dann auf p ≥ 0,6, wenn damit alle seine Muster getestet sind.
 2. **Musterkarten** (zählen nicht als Platz). Kopfzeile „Neues Thema · Schritt 1 von 3“; „Weiter“ bzw. „Los“ steht in der ActionBar. Die Schrittleiste ①–⑤ entfällt (`MiniLesson.tsx:24-90`).
    - Handy: 3 wischbare Karten mit je höchstens 35 Wörtern: ① Kontext aus Mail oder Meeting, Muster farbig, darunter 1–2 `ccq` zum Antippen („Sind wir jetzt live?“ → Nein) · ② Formel-Chip + `decide` · ③ ✕ falsch → ✓ richtig + deutsche Ursache.
    - Laptop: **eine** Karte, links Kontext und Formel, rechts Fehler und Beispiel.
-3. **Plätze 3–6 am Stück** nur zu diesen Mustern: meaning → mc → gap mit Stütze → Gegenpaar zum Nachbarmuster. Die kompakte Musterkarte bleibt als `aid` offen. Ab dem Folgetag wird gemischt.
+3. **Plätze 3–6 am Stück** nur zu diesen Mustern: meaning → mc → gap mit Stütze → Gegenpaar zum Nachbarmuster. Die kompakte Musterkarte bleibt als `aid` offen. Ab dem Folgetag laufen die eingeführten Muster gemischt. Die übrigen Muster des Themas kommen an späteren Lerntagen als eigener Einführungsschritt (§3.2), mit Karten und 4 Aufgaben, aber ohne Vortest.
 
 ### 5.4 Rundenende Grammatik (`SessionEnd mode="growth"`)
 
@@ -744,15 +859,28 @@ Im Profil `touch` gilt für getippte Formen der Faktor 1,4 auf „Gut bis“ und
 
 ### 5.7 Fehler korrigieren (Schritt 4 und `repairRound`)
 
+**Schlange (Daten und Regeln, P2 `errors.ts`, nur ergänzend):**
+- **Ein offener Eintrag je Muster:** `addError(…, pat)` legt keinen zweiten offenen Eintrag mit demselben `pat` an. Stattdessen geht der vorhandene Eintrag auf Box 0, fällig morgen, und der neue falsche Satz wird ergänzend in `more` angehängt (≤ 3, `{q, given, ans, t}`). Nichts wird überschrieben. Einträge ohne `pat` (Bestand, Reparatur-Sätze aus eigenem Schreiben) bleiben einzeln wie heute (`errors.ts:83`).
+- **Falsch = eine Box zurück** statt auf 0 (bisher `next.box = 0`, `errors.ts:115`). Box 0 bleibt Box 0. „Fast richtig“ bleibt wie bisher. Erledigt ist ein Eintrag weiter nach 3 richtigen Wiederholungen (1/3/9 Tage).
+- Jede Wiederholung schreibt ergänzend `rh: [t, box, ok]` an den Eintrag (≤ 6). Daraus rechnet `learningEffect` (§4.9).
+- Begründung und Rechnung in §2.3 („Durchsatz“).
+
+**Welcher Satz erscheint (P8 `domain/repair/variant.ts`):**
+- **Box 0:** der falsche Satz selbst, also der neueste aus `more`, sonst `q`.
+- **Ab Box 1 mit bekanntem `pat`:** eine ungesehene `find`- oder `gap`-Aufgabe desselben Musters. Quelle sind `v2Tasks` und die Startaufgaben mit gleichem `pat`, `dup` bevorzugt, nur eingeführte Muster. Gebucht wird weiter über `reviewError` am Originaleintrag (`errorT`). Gibt es keine ungesehene Variante, kommt der Originalsatz.
+- Reparatur-Sätze ohne Muster zeigen immer den eigenen Satz.
+
+**Bildschirm:**
 1. `ExerciseBar`: „Satz 2 von 5“.
 2. `status`: „Fehlersatz · Box 2 von 3 · Thema · Muster“.
-3. `task`: „Finde den Fehler und korrigiere ihn.“
-4. `prompt`: der alte falsche Satz. **Kein** „Denk an“ vor der Antwort (bisher `AgainScreen.tsx:105-114`).
+3. `task`: Bei Box 0 heißt es „Finde den Fehler und korrigiere ihn.“, bei einer Variante „Finde den Fehler (wenn einer drin ist).“.
+4. `prompt`: der Satz. **Kein** „Denk an“ vor der Antwort (bisher `AgainScreen.tsx:105-114`).
 5. `answer`:
-   - `touch`: `SpotSentence` → angetippter Bereich wird `edit-span`, getippt wird nur der Ersatz (1–4 Wörter). Gibt `errorSpan` `null` zurück, gilt das vorbefüllte Feld.
+   - `touch`: `SpotSentence`. Die angetippte Stelle wird `edit-span`, getippt wird nur der Ersatz (1–4 Wörter). Hat der Satz **mehrere Fehlerstellen** (`errorSpans` liefert bis zu 3 Bereiche mit je ≤ 4 Wörtern), werden sie nacheinander angetippt und ersetzt; der Status zeigt „Stelle 1 von 2“. Bei mehr als 3 Stellen oder einem längeren Bereich werden die Wörter der richtigen Fassung als `Tiles` gelegt (vorgeordnet bis zur ersten Abweichung). Ein Textfeld mit dem ganzen Satz gibt es mit `touch` nie.
    - `keys`: `SentenceInput free`, vorbefüllt.
-6. Ergebnis: `verdict` → `comparison` → Erklärung aus der gespeicherten Erklärung bzw. dem Muster → ActionBar „Weiter“.
-7. Grammatikfehler werden über `reviewError`, Reparatur-Sätze über `recordRepair` gebucht. Schritt 4 ist erledigt, wenn alle Sätze der Runde beantwortet sind (`unitDone(5)`). Es gibt nie mehr drei Sätze in einem Feld (`again/session.ts:42-43`).
+6. Ergebnis: `verdict` → `comparison` → Erklärung aus der gespeicherten Erklärung bzw. dem Muster → ActionBar „Weiter“. Nach dem Ergebnis öffnet jedes Wort das Nachschlagen (§4.4).
+7. Grammatikfehler werden über `reviewError`, Reparatur-Sätze über `recordRepair` gebucht. Schritt 4 ist erledigt, wenn alle Sätze der Runde beantwortet sind (`unitDone(5)`). Es gibt nie mehr drei Sätze in einem Feld (`again/session.ts:42-47`, `repair/unit.ts:241`, `:249`).
+8. **Diagnose:** Beim Start schreibt Schritt 4 einmal je Tag eine Zeile ins Diagnose-Protokoll: „Fehlersätze n, davon ohne Bereich m, mit 2–3 Stellen k“. Emrah liest sie einmal ab; so ist der Anteil ohne Bereich in den echten Daten bekannt (die Zahl „83 von 98“ in §6 gilt nur für die Startaufgaben).
 
 ### 5.8 Satzbau
 
@@ -771,12 +899,12 @@ Im Profil `touch` gilt für getippte Formen der Faktor 1,4 auf „Gut bis“ und
 
 ### 5.10 Abschlusskarte Heute (`DoneCard`, `TodayScreen.tsx:300-340`)
 
-1. Voller Ring mit ✓ (Füllung 300 ms).
+1. Voller Ring mit ✓, ein Segment je Pflichtschritt (Füllung 300 ms).
 2. **Eine** große Zahl mit tatsächlich Gefestigtem („+3 Wörter sicher“, aus `domain/metrics`), nie eine Antwortzahl.
-3. Eine Wahrheitszeile: „Neu sicher: wish + Past · Fehlersätze erledigt: 2“; Zustandswechsel nur, wenn er stattfand.
+3. Eine Wahrheitszeile aus dem Vergleich `u.ps` (Morgen) mit `patternState` (jetzt): „Neu sicher: wish + Past · Fehlersätze erledigt: 2“. Ein Zustandswechsel steht nur da, wenn er stattfand.
 4. Wochenstreifen Mo–So mit sichtbarem Ruhetag.
-5. „Morgen: Mixed Conditionals (Teil 2) · 28 Karten“.
-6. Darunter die eine Extra-Zeile (§2.2).
+5. „Morgen: 28 Karten · 3 Fehlersätze“ aus den fälligen Zahlen von morgen. Ein Thema steht nur als Vorschau da („geplant: Mixed Conditionals, Teil 2“), wenn `introStepFor` es für morgen ergibt und die Bremse jetzt frei ist. Morgen gilt, was der neue Plan einfriert.
+6. Darunter die eine Zeile „Extra ›“ (§2.2).
 
 ## 6 Geräte-Matrix
 
@@ -784,11 +912,11 @@ Im Profil `touch` gilt für getippte Formen der Faktor 1,4 auf „Gut bis“ und
 |---|---|---|---|
 | Aufdecken (Anki), Auswahl, `ctx_mc` | ja | ja | – |
 | Ein-Wort-Lücke, Partnerwort, Wortfamilie, Falle finden | ja | ja | – |
-| Satz vervollständigen (4–8 Wörter) | ja | ja | – |
+| Satz vervollständigen (4–8 Wörter) | ja (lokal höchstens „Schwer“, mit Claude bis „Gut“) | ja | – |
 | Grammatik `meaning`, `mc`, `gap`, `kwt` (≤ 5 Wörter), `find` | ja | ja | – |
 | Grammatik „Satz korrigieren“ | als `find` / `correct_tap` (83 von 98 Aufgaben haben einen Bereich ≤ 4 Wörter), sonst nicht | ganzer Satz | – |
 | Satzbau-Bausteine | ja | ja (+ Tastatur) | Satzbau-Runde |
-| Fehler korrigieren | Satz für Satz, Stelle antippen | Satz für Satz, Feld vorbefüllt | „Weitere Fehlersätze“ |
+| Fehler korrigieren | Satz für Satz: bis zu 3 Stellen nacheinander antippen und ersetzen, sonst Bausteine der richtigen Fassung; nie ein Ganzsatz-Feld | Satz für Satz, Feld vorbefüllt | „Weitere Fehlersätze“ |
 | `listen_mc`, `dictation` | nie | ja | Hör-Modus mit Kennzeichen „Kopfhörer“ |
 | Eigener Satz (`produce`, Kombi-Satz) | nie (Ersatz: `complete` bzw. `FREE_TYPED`) | Stufe 5 + Extra „Am Laptop vertiefen“ | Laptop oben, Handy unter „Für den Laptop ›“ |
 | Diktat, Hörübung, Hörschleife | nie Pflicht | nie Pflicht (außer Wörter-Leiter) | Laptop oben; Handy mit „Kopfhörer“ |

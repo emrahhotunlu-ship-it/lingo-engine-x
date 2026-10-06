@@ -42,7 +42,7 @@ Am längsten dauert der **aktive Wortschatz**: Wörter, die du selbst benutzen k
 
 - **Kein echtes Video.** Eine einzige Minute Video wäre größer als die ganze App und dürfte auch nicht von außen geladen werden. Stattdessen gibt es programmierte Animationen. Sie sind winzig, gestochen scharf und laufen sofort.
 - **Kein Zertifikat.** Der C1-Check ist ein Richtwert, keine geeichte Prüfung. Willst du es amtlich, kannst du später einen offiziellen Test machen (außerhalb der App, kostet Gebühr).
-- **Sprechen und Schreiben auf C1 misst die App nicht.** Das übst du mit Preply und freiwillig im Reiter Anwenden. Die App hilft dabei: Sie gibt dir für deinen Lehrer jeden Monat einen Zettel mit den Mustern, die du gerade lernst.
+- **Sprechen und Schreiben auf C1 misst die App nicht.** Das übst du mit Preply und freiwillig im Reiter Anwenden. Die App hilft dabei: Sie gibt dir zu jedem Kapitel einen kurzen englischen Text für deinen Lehrer mit den Mustern, die du gerade lernst.
 
 ## Was du entscheidest (der Standard gilt, bis du „anders“ sagst)
 
