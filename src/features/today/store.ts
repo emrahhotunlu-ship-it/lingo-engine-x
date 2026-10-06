@@ -16,6 +16,7 @@ import type { StoredPlan } from '../../domain/plan/types';
 import { repairsDoneToday, repairsDutyToday, pickDailyRepairs } from '../../domain/repair/daily';
 import { buildTrainCards, fehlersaetzeDue } from '../../domain/metrics';
 import { freezeGrammarDay } from '../../domain/grammar/path';
+import { patternsOf } from '../../domain/grammar/patterns';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
@@ -64,11 +65,8 @@ let intakeDay: string | null = null;
 let lateIntakeDay: string | null = null;
 const LATE_INTAKE_HOUR = 20;
 
-/**
- * Einführungsplan je Thema (`introPlan` der Musterdatei). Wird mit P2 Stufe 1 (`patternsOf`) verdrahtet (P4-Nachtrag, Lernplattform 2.0 §10.2);
- * bis dahin gibt es keine Muster, `u.gt.pats` bleibt leer und das Einführungsthema selbst wird trotzdem eingefroren.
- */
-const INTRO_PLAN_OF = (): string[][] | null => null;
+/** Einführungsplan je Thema (`introPlan` der Musterdatei, P2); Themen ohne Musterdatei haben keinen (`u.gt.pats` bleibt dann leer). */
+const INTRO_PLAN_OF = (topic: string): string[][] | null => patternsOf(topic)?.introPlan ?? null;
 
 // ------------------------------------------------------------------ lokale Kopie `lx:plan:<tag>`
 

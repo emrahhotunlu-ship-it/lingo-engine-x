@@ -1,5 +1,5 @@
 import { dayKey } from '../date';
-import { errorDue, errorsOf, type ErrorEntry } from '../grammar/errors';
+import { errorDue, liveErrorsOf, type ErrorEntry } from '../grammar/errors';
 import { readRepairs } from '../repair/repair';
 
 // Messgrößen „wirkt die neue Methode?“ (Lernplattform 2.0 §4.9, Leitsatz 8). Rein, nur Lesen. Die Entscheidungsregeln nach 14 Tagen stehen
@@ -63,8 +63,8 @@ type Item = { pat: string; t: number; done: boolean; last: number | null; due: n
 
 function itemsOf(grammarDocs: ReadonlyMap<string, Doc>, repairDoc: Doc | null | undefined): Item[] {
   const out: Item[] = [];
-  for (const doc of grammarDocs.values()) {
-    for (const e of errorsOf(doc)) {
+  for (const [topic, doc] of grammarDocs) {
+    for (const e of liveErrorsOf(doc, topic)) {
       const t = num(e.t);
       if (t === null) continue;
       const more = Array.isArray(e.more) ? e.more.map((m) => (m && typeof m === 'object' ? num((m as Doc).t) : null)).filter((x): x is number => x !== null) : [];

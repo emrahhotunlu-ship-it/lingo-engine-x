@@ -5,7 +5,7 @@ import { patternState, patternStateNo, patsOf } from '../metrics/pattern';
 import type { GrammarDay, PatState } from '../plan/types';
 import { grammarFehlersaetzeDue } from '../repair/fehlersaetze';
 import { certainty, topicP } from './bkt';
-import { errorsOf } from './errors';
+import { liveErrorsOf } from './errors';
 import { rankTopics } from './tasks';
 
 // Grammatik-Pfad (Gesamtkonzept Kap. 3.4, `docs/umbau/02-lehrplan.md` Kap. 4): die Themen in
@@ -156,7 +156,7 @@ export function lernweg(topic: string, doc: Readonly<Doc> | undefined, nowMs: nu
   const d2 = n >= 3 && p >= 0.4;
   const d3 = n >= 5 && p >= 0.55;
   const d4 = n >= 8 && p >= 0.7;
-  const d5 = d4 && errorsOf(doc).every((e) => e.done === true);
+  const d5 = d4 && liveErrorsOf(doc, topic).every((e) => e.done === true);
   const done = [d1, d2, d3, d4, d5];
   const firstOpen = done.findIndex((x) => !x);
   return { done, current: firstOpen < 0 ? 4 : firstOpen };

@@ -1,5 +1,5 @@
 import { topicP } from '../grammar/bkt';
-import { errorsOf } from '../grammar/errors';
+import { liveErrorsOf } from '../grammar/errors';
 import { readRepairs } from '../repair/repair';
 
 // Grammatikzahlen für „Fortschritt“ (Gesamtkonzept 3.5, K5 und K6). Rein, nur Lesen, nichts wird gespeichert.
@@ -73,7 +73,7 @@ const asItem = (e: Doc): Item => ({
  */
 export function errorSentenceStats(repairDoc: Doc | null | undefined, grammar: ReadonlyMap<string, Doc>, nowMs: number): ErrorSentenceStats {
   const items: Item[] = [...readRepairs(repairDoc ?? undefined).map((e) => asItem(e as unknown as Doc))];
-  for (const d of grammar.values()) for (const e of errorsOf(d)) items.push(asItem(e));
+  for (const [topic, d] of grammar) for (const e of liveErrorsOf(d, topic)) items.push(asItem(e));
   const out: ErrorSentenceStats = { open: 0, firm: 0, recurring: 0, due: 0 };
   for (const i of items) {
     if (i.done) {

@@ -59,8 +59,12 @@ export const P2_RULES: Rules = {
   },
 };
 
-// Im P4-Nachtrag: P2_REAL = die echten `addError(…, pat)` und `reviewError` aus P2 Stufe 1 (siehe stand.md).
-export const P2_REAL: Rules | null = null;
+// P4-Nachtrag erledigt: `P2_REAL` sind die echten Funktionen von P2.
+/** Die echten Funktionen aus P2 Stufe 1 (`addError(…, pat)`, `reviewError`). */
+export const P2_REAL: Rules | null = {
+  add: (list, e) => addErrorReal(list, e),
+  review: (list, t, r) => reviewErrorReal(list, t, r),
+};
 
 const PATH = pathTopics();
 const TOPICS16 = PATH.slice(0, 16);

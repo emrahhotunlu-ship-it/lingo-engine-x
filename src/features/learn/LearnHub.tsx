@@ -15,6 +15,7 @@ import { ChannelIcon } from '../../ui/Card';
 import { Icon } from '../../ui/Icon';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { useCompanionSee } from '../companion/seeing';
+import { useToday } from '../today/state';
 import { TabTitle } from '../system/Chrome';
 import { TopicSheet } from '../grammar/GrammarScreen';
 import { PathList } from '../grammar/PathList';
@@ -87,13 +88,15 @@ export function LearnHub() {
   useCompanionSee({ area: 'grammar', label: t('grTitle'), phase: 'idle' });
 
   // „Als Nächstes“: das eine neue Thema des Tages (Pfadreihenfolge, wenn die Bremse es erlaubt), sonst das schwächste begonnene Thema.
+  const planGt = useToday((s) => s.plan?.u?.gt);
   const next = useMemo(() => {
-    const intro = introTopic(docs, today, now);
+    // Gibt es einen Plan von heute mit eingefrorenem Grammatikthema (`u.gt`), gilt nur dieser Wert, nie eine Neuberechnung (Lernplattform 2.0 §2.3).
+    const intro = planGt ? planGt.intro : introTopic(docs, today, now);
     if (intro) return { id: intro, fresh: true };
     const ranked = rankTopics({ grammarDocs: docs, nowMs: now, seed: today, introduce: null });
     const id = ranked[0]?.topic ?? pathTopics()[0];
     return id ? { id, fresh: isNewTopic(docs.get(id)) } : null;
-  }, [docs, now, today]);
+  }, [docs, now, today, planGt]);
   // Eine Quelle je Zahl (`domain/metrics/today`): alle fälligen Fehlersätze, die Zahl auf dem Knopf (heute) und die Grammatikfehler der Bremse.
   const nDue = useMemo(() => fixAll(fehlersaetzeDue({ grammarDocs: docs, repairDoc, nowMs: now, today })), [docs, repairDoc, now, today]);
   // Der Knopf startet die Extra-Fehlerrunde (`repairRound`, höchstens 5): bis Schritt 4 als eigener Start dazukommt, zählt `fixToday` ohne Plan.

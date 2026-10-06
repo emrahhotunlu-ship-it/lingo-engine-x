@@ -1,7 +1,7 @@
 import { dayKey } from '../date';
 import { topicById } from '../content';
 import { displayP } from '../grammar/bkt';
-import { errorsOf } from '../grammar/errors';
+import { liveErrorsOf } from '../grammar/errors';
 import { dueFehlersaetze } from '../repair/fehlersaetze';
 import { readRepairs } from '../repair/repair';
 import { confidenceOf } from '../srs/confidence';
@@ -40,7 +40,7 @@ export function fixedStats(i: { grammarDocs: ReadonlyMap<string, Doc>; repairDoc
     const t = num(last);
     if (t !== null && dayKey(t) === i.today) today++;
   };
-  for (const doc of i.grammarDocs.values()) for (const e of errorsOf(doc)) count(e.done, e.last);
+  for (const [topic, doc] of i.grammarDocs) for (const e of liveErrorsOf(doc, topic)) count(e.done, e.last);
   for (const r of readRepairs(i.repairDoc ?? undefined)) count(r.done, r.last);
   return { today, total };
 }
