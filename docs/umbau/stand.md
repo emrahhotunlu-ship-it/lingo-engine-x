@@ -89,3 +89,6 @@ Neben Wörtern und Grammatik gibt es einen vierten Reiter **Anwenden**: Reiter H
 **LIVE 2 (05.10.2026, Emrahs „Ja live nehmen“):** gleicher Build wie Test-Link Version 39 auf `JLL8…`, Version `1791218492-8439` (Artefakt-Version 67). **Rückweg:** Version `1791205663-ffee` (66); davor `1790969044-1fb7` (65). Enthält Grammatik-Darstellung neu (Auswahl-Karten A–D, Aufgabenzeilen, Ergebnis-Reihenfolge, Kurz erklärt in Sätzen) und den Zwei-Lücken-Fix. Plattform-Prüfung Freigabe, Live-Version vorher gelesen (unverändert). Der volle E2E-Lauf nach dieser Änderung steht noch aus.
 
 **LP2 · Vertrags-Commit fertig (06.10.2026):** Commit `fa9cac6` auf `claude/umbau-fokus` (§10.0 Punkte 1–11). Typen `explain/types.ts`, `GrammarTaskType` + meaning/find/kwt samt Tabellen, `dev` im Protokoll, leere i18n-/CSS-Teile, `atlas/meta.json`, `canned/lp2/*`, Wächter-Fall zu `platform/input`, A7-Einträge. typecheck, lint, 1554 Unit grün; build und check:platform Freigabe. Keine Verhaltensänderung, `dist/` unverändert, nicht live.
+
+**06.10.2026, abends – Design freigegeben (Emrah: „das design gebe ich frei“)**
+- Bildschirmarbeit von Lernplattform 2.0 (Welle 2: P5 bis P8) darf nach Abschluss von Welle 1 beginnen. Plattform bleibt das Claude-Artefakt (kostenlose Cloudflare-KI und Web-App geprüft und verworfen: C1-Korrektur zu schwach). Alle Umsetzung in eigenen Sonnet-Sitzungen.
