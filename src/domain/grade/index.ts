@@ -37,7 +37,17 @@ export type GradeKey =
   | 'transform'
   | 'correct'
   | 'dictate'
-  | 'order';
+  | 'order'
+  // Lernplattform 2.0 (§4.10): neue Schlüssel, unabhängig von den Typ-Unions der Wörter und der Grammatik.
+  | 'ctx_mc'
+  | 'colloc_gap'
+  | 'complete'
+  | 'wordfam'
+  | 'find_trap'
+  | 'find'
+  | 'kwt'
+  | 'meaning'
+  | 'correct_tap';
 
 type Row = {
   form: GradeForm;
@@ -74,6 +84,16 @@ export const GRADE_TABLE: Readonly<Record<GradeKey, Row>> = {
   // Bausteine: Grundwert plus 0,6 s je Baustein (Lesen und Ordnen), nie „Leicht“ (die Teile sind vorgegeben).
   tiles: { form: 'tiles', good: 9000, easy: null, measure: 'submit' },
   order: { form: 'tiles', good: 13_000, easy: null, measure: 'submit' },
+  // Lernplattform 2.0 (§4.10). `complete` hat keine Zeitgrenzen (frei): lokal höchstens „Schwer“, „Gut“ nur nach der Claude-Kurzprüfung (`aiChecked: true`).
+  ctx_mc: choice(9000),
+  colloc_gap: typed(7000, 2500),
+  complete: { form: 'free', good: 0, easy: null, measure: 'submit' },
+  wordfam: typed(8000, 3000),
+  find_trap: typed(9000, 3500),
+  find: typed(9000, 3500),
+  kwt: { form: 'transform', good: 14_000, easy: 6000, measure: 'submit' },
+  meaning: choice(10_000),
+  correct_tap: typed(9000, 3500),
   speed: { form: 'timed', good: 10_000, easy: null, measure: 'submit' },
   produce: { form: 'free', good: 0, easy: null, measure: 'submit' },
   flip: { form: 'free', good: 0, easy: null, measure: 'submit' },
@@ -87,6 +107,10 @@ export const PER_UNIT_MS = 600;
 export const REPLAY_MS = 1200;
 /** Mehr als so viele Wiederholungen zählen als Hilfe 1. */
 export const FREE_REPLAYS = 2;
+/** Eingabeprofil `touch`: Langsameres Tippen am Handy wird nicht als „Schwer“ gebucht (§4.10), Faktor auf „Gut bis“ und „Leicht bis“ getippter Formen. */
+export const TOUCH_FACTOR = 1.4;
+/** `complete` ohne Claude-Kurzprüfung zählt höchstens als „Schwer“. */
+export const COMPLETE_LOCAL_MAX = 2;
 
 export type GradeInput = {
   key: GradeKey;
@@ -104,6 +128,10 @@ export type GradeInput = {
   units?: number;
   /** Wiederholungen des Vorlesens. */
   replays?: number;
+  /** Eingabeprofil: `touch` dehnt die Zeitgrenzen getippter Formen (Tippen, Umformen) um `TOUCH_FACTOR`. Ohne Angabe wie bisher. */
+  profile?: 'touch' | 'keys';
+  /** Nur `complete`: Die Claude-Kurzprüfung hat den Satz bestätigt (sonst höchstens „Schwer“). */
+  aiChecked?: boolean;
   /** Zeitgrenze und ob sie abgelaufen war (nur `speed`). */
   limitMs?: number;
   timedOut?: boolean;
@@ -122,7 +150,8 @@ function byTime(i: GradeInput): Grade {
   if (row.form === 'tiles') return i.timeMs <= row.good + PER_UNIT_MS * Math.max(0, i.units ?? 0) ? 3 : 2;
   const raw = row.measure === 'firstKey' ? (i.firstKeyMs ?? i.timeMs) : i.timeMs;
   const t = raw - (i.key === 'dictation' || i.key === 'dictate' ? REPLAY_MS * replays : 0);
-  let g: Grade = row.easy !== null && t <= row.easy ? 4 : t <= row.good ? 3 : 2;
+  const f = i.profile === 'touch' ? TOUCH_FACTOR : 1;
+  let g: Grade = row.easy !== null && t <= row.easy * f ? 4 : t <= row.good * f ? 3 : 2;
   if (g === 4 && i.chars !== undefined) {
     const slowTyping = i.timeMs > t + 1000 * i.chars + 5000;
     if ((i.deletions ?? 0) >= 3 || slowTyping) g = 3;
@@ -135,7 +164,7 @@ export function gradeAnswer(i: GradeInput): Grade {
   const help = i.help ?? 0;
   if (i.verdict === 'wrong' || help >= 3) return 1;
   if (i.verdict === 'near') return 2;
-  const g = byTime(i);
+  const g = i.key === 'complete' && !i.aiChecked ? (Math.min(byTime(i), COMPLETE_LOCAL_MAX) as Grade) : byTime(i);
   const level = Math.max(help, (i.replays ?? 0) > FREE_REPLAYS ? 1 : 0);
   if (level >= 2) return Math.min(g, 2) as Grade;
   if (level === 1) return Math.min(g, 3) as Grade;

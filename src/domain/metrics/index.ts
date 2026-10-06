@@ -9,3 +9,7 @@ export { streak, streakInputOf, streakWeek, type StreakDocs } from './streak';
 export { FEST_GOAL, expectedKnown, festCount, festForecast, festGrowth28, isFest, retention28, type FestForecast, type FestGrowth, type Retention28 } from './vocab';
 export { errorSentenceStats, grammarDistribution, topicStage, type ErrorSentenceStats, type GrammarDistribution, type TopicStage } from './grammar';
 export { checkMean, vtestView, type CheckMean, type VtestView } from './tests';
+// Lernplattform 2.0 (§4.9): Zahlen von Heute, Wörtern und Grammatik, Musterzustand, Messwerte.
+export { EXTRA_ROUND_MAX, atlasSize, dayLeft, fehlersaetzeDue, festNow, fixAll, fixLimitOfPlan, fixToday, grammarErrorsDue, laptopDeepen, newToday, reviewAll, reviewToday, vocabEstimate, wordsToday } from './today';
+export { PATTERN_STATES, patPush, patternState, patternStateNo, patsOf, readPatEntry, topicStateFromPatterns, type PatEntry, type PatternState } from './pattern';
+export { EFFECT_RULES, learningEffect, type LearningEffect, type Rate } from './effect';

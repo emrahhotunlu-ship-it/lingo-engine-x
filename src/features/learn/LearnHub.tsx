@@ -5,8 +5,8 @@ import { useNav } from '../../app/nav';
 import { openSheet } from '../../app/sheets';
 import { entriesFor } from '../../app/registry';
 import { useLive } from '../../data/live';
-import { dueFehlersaetze } from '../../domain/repair/fehlersaetze';
-import { canIntroduce, dueErrorCount, introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
+import { fehlersaetzeDue, fixAll, fixToday, grammarErrorsDue } from '../../domain/metrics';
+import { canIntroduce, introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
 import { rankTopics } from '../../domain/grammar/tasks';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
@@ -94,11 +94,14 @@ export function LearnHub() {
     const id = ranked[0]?.topic ?? pathTopics()[0];
     return id ? { id, fresh: isNewTopic(docs.get(id)) } : null;
   }, [docs, now, today]);
-  const nDue = useMemo(() => dueFehlersaetze({ grammarDocs: docs, repairDoc, nowMs: now, today }).length, [docs, repairDoc, now, today]);
+  // Eine Quelle je Zahl (`domain/metrics/today`): alle fälligen Fehlersätze, die Zahl auf dem Knopf (heute) und die Grammatikfehler der Bremse.
+  const nDue = useMemo(() => fixAll(fehlersaetzeDue({ grammarDocs: docs, repairDoc, nowMs: now, today })), [docs, repairDoc, now, today]);
+  // Der Knopf startet die Extra-Fehlerrunde (`repairRound`, höchstens 5): bis Schritt 4 als eigener Start dazukommt, zählt `fixToday` ohne Plan.
+  const nToday = fixToday({ plan: null, fixDue: nDue });
 
   // Bremse wegen vieler fälliger Fehlersätze: ruhiger Hinweis mit Grund (kein Vorwurf).
   const braked = useMemo(() => canIntroduce(docs, today, now), [docs, today, now]);
-  const nBrake = braked.ok ? 0 : braked.reason === 'errors' ? dueErrorCount(docs, now) : 0;
+  const nBrake = braked.ok ? 0 : braked.reason === 'errors' ? grammarErrorsDue({ grammarDocs: docs, nowMs: now, today }) : 0;
 
   const startNext = () => {
     if (!next) return;
@@ -151,7 +154,7 @@ export function LearnHub() {
             <Row
               icon={<ChannelIcon channel="grammar"><Icon name="refresh" /></ChannelIcon>}
               title={t('nbLernenFixRow', { n: nDue })}
-              sub={t('nbLernenFixSub')}
+              sub={t('hxNumFixLine', { today: nToday })}
               onClick={startErrors}
               testId="hub-errors"
               badge={tn('grDueBadge', nDue)}

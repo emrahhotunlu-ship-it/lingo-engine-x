@@ -82,6 +82,7 @@ export type GrammarLogEntry = {
   ctx: 'rev' | 'duty' | 'xtra';
   lesson?: string;
   override?: true;
+  dev?: 't' | 'k';
 };
 
 /** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
@@ -98,6 +99,7 @@ export type DrillLogEntry = {
   ctx: 'rev' | 'duty' | 'xtra';
   lesson?: string;
   override?: true;
+  dev?: 't' | 'k';
 };
 
 /**
@@ -147,6 +149,7 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
     ctx: a.ctx,
     ...(lesson ? { lesson } : {}),
     ...(a.override ? { override: true as const } : {}),
+    ...(a.dev ? { dev: a.dev } : {}),
   };
 }
 
@@ -164,6 +167,7 @@ export function drillLogEntry(a: DrillAnswer): DrillLogEntry {
     ctx: a.ctx,
     ...(a.lesson ? { lesson: a.lesson } : {}),
     ...(a.override ? { override: true as const } : {}),
+    ...(a.dev ? { dev: a.dev } : {}),
   };
 }
 
@@ -193,9 +197,9 @@ export function activityEntry(e: ActivityLogEntry): ActivityLogEntry {
 
 export function logEntry(a: AnswerEvent): LogEntry | ChunkLogEntry {
   if (a.kind === 'chunk') {
-    return { t: a.t, ok: a.grade > 1, lang: a.lang, type: 'chunk', id: a.id, m: `tr-${a.ex}`, q: clip(a.q ?? a.ans), given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.override ? { override: true as const } : {}) };
+    return { t: a.t, ok: a.grade > 1, lang: a.lang, type: 'chunk', id: a.id, m: `tr-${a.ex}`, q: clip(a.q ?? a.ans), given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}) };
   }
-  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}), ...(a.override ? { override: true as const } : {}) };
+  return { t: a.t, ok: a.grade > 1, lang: a.lang, k: 'v', id: a.id, m: a.lesson ? 'lesson' : `tr-${a.ex}`, given: clip(a.given), ans: clip(a.ans), g: a.grade, ms: Math.max(0, Math.round(a.ms)), ctx: a.ctx, ...(a.lesson ? { lesson: a.lesson } : {}), ...(a.override ? { override: true as const } : {}), ...(a.dev ? { dev: a.dev } : {}) };
 }
 
 const keyOf = (e: unknown): string => {
@@ -253,4 +257,23 @@ function dropOldest(list: readonly unknown[], n: number, keep: ReadonlySet<unkno
     drop.add(e);
   }
   return list.filter((e) => !drop.has(e));
+}
+
+// ------------------------------------------------------------------ Sekunden je Pflichtschritt (`log/<tag>.um`, Lernplattform 2.0 §8)
+
+/** Pflichtschritte, für die `um` Sekunden führt (Wörter 1, Grammatik 2, Satzbau 3, Fehler korrigieren 5). */
+export const UM_BLOCKS = [1, 2, 3, 5] as const;
+/** Höchste Sekundenzahl, die ein Schritt je Tag tragen kann (Schutz gegen offen gelassene Bildschirme). */
+export const UM_MAX_SEC = 3600;
+
+/**
+ * `um` des Tagesprotokolls mit einem fertigen Schritt: `{ [block]: { s: Sekunden, dev: 't' | 'k' } }`. Ein Schritt wird nur EINMAL je Tag
+ * eingetragen (der erste Abschluss gilt, nichts wird überschrieben); gibt `null` zurück, wenn nichts zu schreiben ist (Wert ungültig oder schon da).
+ * Der Aufruf kommt beim Abschluss eines Pflichtschritts (`unitDone`); geschrieben wird mit dem übrigen Protokoll über den einen Schreibpfad.
+ */
+export function unitSecondsPatch(cur: unknown, a: { block: number; s: number; dev: 't' | 'k' | undefined }): { um: Record<string, { s: number; dev: 't' | 'k' }> } | null {
+  if (!(UM_BLOCKS as readonly number[]).includes(a.block) || (a.dev !== 't' && a.dev !== 'k') || !Number.isFinite(a.s) || a.s < 0) return null;
+  const old = cur && typeof cur === 'object' && !Array.isArray(cur) ? (cur as Record<string, unknown>) : {};
+  if (old[String(a.block)] !== undefined) return null;
+  return { um: { [String(a.block)]: { s: Math.min(UM_MAX_SEC, Math.round(a.s)), dev: a.dev } } };
 }

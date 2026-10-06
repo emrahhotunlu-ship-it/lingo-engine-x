@@ -1,6 +1,15 @@
-import { unitPlanFor } from './planFor';
+import { REPAIR_MAX } from './block1';
+import { fixLimitFor, GRAMMAR_N, unitPlanFor } from './planFor';
 import type { ComebackMode, UnitBlock, UnitBlockKind, UnitChannel, UnitPlan, UnitPrefs } from './types';
-import type { DutyId, StoredPlan, UnitMeta } from '../plan/types';
+import { ERRORS_PER_ROUND } from '../grammar/tasks';
+import { AGAIN_OLD } from '../repair/unit';
+import type { DutyId, GrammarDay, PatState, StoredPlan, UnitMeta } from '../plan/types';
+
+/**
+ * Regelversion für NEUE Pläne (Lernplattform 2.0 §2.3). Bleibt `1`, bis P5, P6 und P8 zusammengeführt sind; nur die Koordination stellt
+ * auf `2` (§10.2). Bis dahin übergeben alle rv-2-Tests `rv: 2` ausdrücklich. Gespeicherte Pläne ohne `u.rv = 2` laufen nach der alten Regel zu Ende.
+ */
+export const PLAN_RV = 1 as 1 | 2;
 
 // Tageseinheit als gespeicherter Tagesplan (plan.md §1.5, N10/N12; Prüfung M2, M5). Rein.
 // - Der Plan entsteht EINMAL je Lerntag aus Wochentag und Tagesziel (nie aus `env`)
@@ -26,6 +35,11 @@ export type UnitBuildInput = {
   /** Morgenwerte für den Abschluss: überfällige und sichere Karten beim Planen. */
   ov?: number;
   sure?: number;
+  /** Regelversion dieses Plans (Standard `PLAN_RV`). */
+  rv?: 1 | 2;
+  /** Eingefroren beim Anlegen (§2.3), unabhängig von `rv`: Grammatikthema des Tages und Musterzustände vom Morgen. */
+  gt?: GrammarDay;
+  ps?: Record<string, PatState>;
 };
 
 /** Plan-Vorstufe ohne Block-1-Umfang: liefert das Budget für die Berechnung von `goal.review`. */
@@ -33,8 +47,9 @@ export function unitDraft(i: Omit<UnitBuildInput, 'nowMs' | 'review'>): UnitPlan
   return unitPlanFor(i.day, i.week, prefsOf(i));
 }
 
-function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode }, reviewCount?: number, reviewMin?: number): UnitPrefs {
+function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode; rv?: 1 | 2 }, reviewCount?: number, reviewMin?: number): UnitPrefs {
   const p: UnitPrefs = { goalMin: i.goalMin };
+  if (i.rv === 2) p.rv = 2;
   if (i.fixDue !== undefined) p.fixDue = i.fixDue;
   if (i.comeback) p.comeback = i.comeback;
   if (reviewCount !== undefined) p.reviewCount = reviewCount;
@@ -42,17 +57,20 @@ function prefsOf(i: { goalMin: number; fixDue?: number; comeback?: ComebackMode 
   return p;
 }
 
-function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number } = {}): UnitMeta {
-  const m: UnitMeta = { v: 1, shape: up.shape, goalMin: up.goalMin, theme: '', min: up.minutes, b: up.blocks.map((b) => [b.block, b.kind, b.min]) };
+function metaOf(up: UnitPlan, facts: { ov?: number; sure?: number; gt?: GrammarDay; ps?: Record<string, PatState> } = {}): UnitMeta {
+  const m: UnitMeta = { v: 1, shape: up.shape, goalMin: up.goalMin, theme: '', min: up.minutes, b: up.blocks.map((b) => (b.args ? [b.block, b.kind, b.min, b.args] : [b.block, b.kind, b.min])) };
   if (up.comeback) m.cb = up.comeback;
   if (facts.ov !== undefined) m.ov = facts.ov;
   if (facts.sure !== undefined) m.sure = facts.sure;
+  if (up.rv === 2) m.rv = 2;
+  if (facts.gt) m.gt = facts.gt;
+  if (facts.ps && Object.keys(facts.ps).length) m.ps = facts.ps;
   return m;
 }
 
 /** Der gespeicherte Tagesplan der Einheit (fester Schlüsselsatz, weil `update` verschmilzt). */
 export function buildUnitStored(i: UnitBuildInput): StoredPlan {
-  const up = unitPlanFor(i.day, i.week, prefsOf(i, i.review.goal, i.review.sec !== undefined ? Math.ceil(i.review.sec / 60) : undefined));
+  const up = unitPlanFor(i.day, i.week, prefsOf({ ...i, rv: i.rv ?? PLAN_RV }, i.review.goal, i.review.sec !== undefined ? Math.ceil(i.review.sec / 60) : undefined));
   const hasReview = up.duty.includes('review');
   return {
     d: i.day,
@@ -63,7 +81,7 @@ export function buildUnitStored(i: UnitBuildInput): StoredPlan {
     goal: hasReview ? { review: i.review.goal, due: i.review.due, new: i.review.fresh, ahead: 0 } : { review: 0, due: 0, new: 0, ahead: 0 },
     lesson: null,
     at: i.nowMs,
-    u: metaOf(up, { ov: i.ov, sure: i.sure }),
+    u: metaOf(up, { ov: i.ov, sure: i.sure, ...(i.gt ? { gt: i.gt } : {}), ...(i.ps ? { ps: i.ps } : {}) }),
   };
 }
 
@@ -84,21 +102,63 @@ export function unitPlanOf(view: StoredPlan & { u: UnitMeta }, week?: null): Uni
 function storedUnitPlan(p: StoredPlan & { u: UnitMeta }, week: null | undefined): UnitPlan {
   // Die Minuten von Block 1 stammen aus dem eingefrorenen Plan (bei Rückstand länger als der Grundwert).
   const storedReviewMin = p.u.b.find(([, kind]) => kind === 'review')?.[2];
+  const rv2 = p.u.rv === 2;
   // Form des Plans aus den eingefrorenen Eckdaten: Wiedereinstieg (`cb`) und „kein Fehlersatz fällig“ (Block 5 fehlt).
-  const noFix = p.u.shape !== 'sun' && !p.u.b.some(([, kind]) => kind === 'again');
-  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin, ...(noFix ? { fixDue: 0 } : {}), ...(p.u.cb ? { comeback: p.u.cb } : {}) }, p.goal.review, storedReviewMin));
+  // Regelversion 2: Auch der Sonntag trägt Schritt 4 nur, wenn er gespeichert ist.
+  const hasFix = p.u.b.some(([, kind]) => kind === 'again');
+  const noFix = rv2 ? !hasFix : p.u.shape !== 'sun' && !hasFix;
+  const fixDue = noFix ? { fixDue: 0 } : rv2 && p.u.shape === 'sun' ? { fixDue: 1 } : {};
+  const live = unitPlanFor(p.d, week, prefsOf({ goalMin: p.u.goalMin, ...fixDue, ...(p.u.cb ? { comeback: p.u.cb } : {}), ...(rv2 ? { rv: 2 as const } : {}) }, p.goal.review, storedReviewMin));
   const same = live.duty.length === p.duty.length && live.duty.every((d, k) => d === p.duty[k]) && live.blocks.every((b, k) => b.kind === p.u.b[k]?.[1]);
-  if (same) return live;
-  const blocks: UnitBlock[] = p.u.b.map(([block, kind, min], k) => ({
+  if (same) {
+    if (!rv2) return live;
+    // Regelversion 2: Argumente und Minuten stammen aus dem eingefrorenen Plan (die Grenze von Schritt 4 hing von `fixDue` beim Anlegen ab).
+    const blocks = live.blocks.map((b, k): UnitBlock => {
+      const [, , min, args] = p.u.b[k] ?? [];
+      const out: UnitBlock = { ...b, min: min ?? b.min };
+      if (args) out.args = args;
+      else delete out.args;
+      return out;
+    });
+    return { ...live, blocks, minutes: blocks.reduce((s, b) => s + b.min, 0) };
+  }
+  const blocks: UnitBlock[] = p.u.b.map(([block, kind, min, args], k) => ({
     block,
     kind: kind as UnitBlockKind,
     steps: [kind as UnitBlockKind],
     opts: {},
     min,
     channel: (p.duty[k] ?? 'review') as UnitChannel,
+    ...(args ? { args } : {}),
   }));
   return { ...live, blocks, duty: p.duty as UnitChannel[], minutes: p.u.min, shape: live.shape };
 }
+
+/** Regelversion eines gespeicherten Plans: `2` nur mit `u.rv = 2`, sonst gilt die alte Regel. */
+export const planRvOf = (plan: StoredPlan | null | undefined): 1 | 2 => (plan?.u?.rv === 2 ? 2 : 1);
+
+/** Grammatikrunde des Plans: Zahl der Hauptaufgaben und der Fehlersätze darin (rv 2: keine; sonst `ERRORS_PER_ROUND`). */
+export function unitGrammarArgs(plan: StoredPlan | null | undefined): { n: number; errs: number } {
+  if (!plan?.u) return { n: GRAMMAR_N.full, errs: ERRORS_PER_ROUND };
+  const stored = plan.u.b.find(([block]) => block === 2)?.[3];
+  const n = unitPlanOf(plan as StoredPlan & { u: UnitMeta }, null).blocks.find((b) => b.block === 2)?.opts.n ?? GRAMMAR_N.full;
+  return { n, errs: stored?.errs ?? (plan.u.rv === 2 ? 0 : ERRORS_PER_ROUND) };
+}
+
+/**
+ * Argumente eines Schritts (4. Tupel-Element, sonst die alte Regel): Schritt 1 `repairs`, Grammatik `errs`, Schritt 4 `limit`.
+ * Die alte Regel kennt für Schritt 4 nur die Zahl der alten Sätze (`AGAIN_OLD`).
+ */
+export function unitStepArgs(plan: StoredPlan | null | undefined, block: 1 | 2 | 5): { errs?: number; repairs?: number; limit?: number } {
+  const stored = plan?.u?.b.find(([b]) => b === block)?.[3];
+  if (stored) return { ...stored };
+  if (block === 1) return { repairs: REPAIR_MAX };
+  if (block === 2) return { errs: ERRORS_PER_ROUND };
+  return { limit: AGAIN_OLD };
+}
+
+/** Grenze von Schritt 4 für einen neuen Plan der Regelversion 2 (Formel §2.3), für Tests und Anzeige. */
+export const fixLimitOf = fixLimitFor;
 
 /** Kanal-Schlüssel in `act[tag]` für einen Pflichtpunkt der Einheit (`ch:u-in` → `u-in`). */
 export const unitActKey = (duty: string): string | null => (duty.startsWith('ch:u-') ? duty.slice(3) : null);

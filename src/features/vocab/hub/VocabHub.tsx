@@ -5,6 +5,7 @@ import { openSheet } from '../../../app/sheets';
 import { useLive } from '../../../data/live';
 import { addDays } from '../../../domain/date';
 import { meaningOf } from '../../../domain/srs/cards';
+import { EXTRA_ROUND_MAX, reviewAll, reviewToday } from '../../../domain/metrics';
 import { estimateRoundMinutes } from '../../../domain/srs/cost';
 import { deckCards, deckCounts, visibleDecks, type BuiltinDeck, type DeckCounts } from '../../../domain/srs/decks';
 import { backlogBraked, catchUpOn, overdueCount } from '../../../domain/unit/backlog';
@@ -76,15 +77,22 @@ export function VocabHub() {
   const visible = useMemo(() => cards.filter((c) => !c.hidden), [cards]);
   const all = useMemo(() => deckCounts(visible, now), [visible, now]);
   const allShown: DeckCounts = { ...all, new: Math.min(all.new, quota.left) };
-  const total = allShown.new + allShown.learning + allShown.due;
+  // Eine Quelle je Zahl (`domain/metrics/today`): Gesamtzahl aller Karten und die Pflichtrunde von heute.
+  const total = reviewAll(visible, now, quota.left);
   // Zeit wie im Tagesplan gerechnet (`domain/srs/cost.ts`), im Modus „Aufdecken“ kürzer – nicht mehr zwei verschiedene Annahmen.
-  const minutes = estimateRoundMinutes(visible, now, quota.left, mode === 'flip');
+  const extraMinutes = estimateRoundMinutes(visible, now, quota.left, mode === 'flip');
   const behind = useMemo(() => overdueCount(visible, now), [visible, now]);
   const braked = backlogBraked(behind);
   // Was der Knopf „Wiederholen“ jetzt tut (Emrah 02.10.2026): Pflicht offen → die Pflichtrunde des Tagesplans, sonst eine freiwillige Runde mit bis zu 20 Karten.
   const dutyOpen = useToday((s) => s.duties.items.some((d) => d.id === 'review' && d.state === 'open'));
   const dutyTotal = useToday((s) => s.review.total);
   const dutyDone = useToday((s) => s.review.done);
+  const plan = useToday((s) => s.plan);
+  const dutyRound = dutyOpen && dutyTotal > 0;
+  const rt = reviewToday({ plan, cards: visible, nowMs: now, done: dutyDone, quotaLeft: quota.left });
+  // Der Knopf nennt, was er startet: die offene Pflichtrunde, sonst alle fälligen Karten.
+  const startCount = dutyRound ? rt.left : total;
+  const minutes = dutyRound ? rt.minutes : extraMinutes;
   const goal = useMemo(() => vocabGoal({ profile, cards, today }), [profile, cards, today]);
   const goalNow = goal.now ?? 0;
   const modeLabel = t(mode === 'auto' ? 'nbWsModeAuto' : mode === 'flip' ? 'nbWsModeFlip' : 'nbWsModeType');
@@ -162,7 +170,7 @@ export function VocabHub() {
         meta={total > 0 ? <span data-testid="ws-minutes">{t('nbWsMinutes', { n: minutes })}</span> : undefined}
         action={
           <Button variant="primary" size="lg" iconAfter="arrowRight" onClick={() => startAllDue(api)} disabled={total === 0} data-testid="ws-review">
-            {total > 0 ? tn('nbWsHReviewBtn', total) : t('nbWsHReviewBtnNone')}
+            {total > 0 ? tn('nbWsHReviewBtn', startCount) : t('nbWsHReviewBtnNone')}
           </Button>
         }
       >
@@ -184,7 +192,7 @@ export function VocabHub() {
         )}
         {total > 0 && (
           <p className="m-0 text-sm text-muted" data-testid="ws-round-hint" data-duty={dutyOpen && dutyTotal > 0 ? '' : undefined}>
-            {dutyOpen && dutyTotal > 0 ? t('nbWsDutyLeft', { left: Math.max(1, dutyTotal - dutyDone), total: dutyTotal }) : t('nbWsExtraRound', { n: Math.min(20, total) })}
+            {dutyOpen && dutyTotal > 0 ? t('nbWsDutyLeft', { left: Math.max(1, rt.left), total: dutyTotal }) : t('nbWsExtraRound', { n: Math.min(EXTRA_ROUND_MAX, total) })}
           </p>
         )}
         <button type="button" className="min-h-11 self-start text-sm text-muted underline-offset-4 hover:underline" onClick={() => openSheet('x:mode')} data-testid="ws-mode-open" data-mode={mode}>

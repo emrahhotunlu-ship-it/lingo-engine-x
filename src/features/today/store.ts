@@ -9,12 +9,13 @@ import { orderPoolSize } from '../../domain/drills/orderPool';
 import { buildSprintDeck } from '../../domain/drills/sprint';
 import { readPlan } from '../../domain/plan/buildPlan';
 import { comebackMode, restartActive } from '../../domain/plan/comeback';
-import { cardStats, fixesDue } from '../../domain/plan/dayStats';
+import { cardStats } from '../../domain/plan/dayStats';
 import { type FeasibleData } from '../../domain/plan/channels';
 import { pflichtFor, pflichtMarked, type PflichtInput } from '../../domain/plan/pflicht';
 import type { StoredPlan } from '../../domain/plan/types';
 import { repairsDoneToday, repairsDutyToday, pickDailyRepairs } from '../../domain/repair/daily';
-import { buildTrainCards } from '../../domain/metrics';
+import { buildTrainCards, fehlersaetzeDue } from '../../domain/metrics';
+import { freezeGrammarDay } from '../../domain/grammar/path';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { newQuotaLeft, quizzable } from '../../domain/srs/queue';
 import type { Lang, TrainCard } from '../../domain/srs/types';
@@ -62,6 +63,12 @@ let intakeDay: string | null = null;
 /** H4: Lerntag, an dem nach 20 Uhr schon einmal neu abgeglichen wurde. */
 let lateIntakeDay: string | null = null;
 const LATE_INTAKE_HOUR = 20;
+
+/**
+ * Einführungsplan je Thema (`introPlan` der Musterdatei). Wird mit P2 Stufe 1 (`patternsOf`) verdrahtet (P4-Nachtrag, Lernplattform 2.0 §10.2);
+ * bis dahin gibt es keine Muster, `u.gt.pats` bleibt leer und das Einführungsthema selbst wird trotzdem eingefroren.
+ */
+const INTRO_PLAN_OF = (): string[][] | null => null;
 
 // ------------------------------------------------------------------ lokale Kopie `lx:plan:<tag>`
 
@@ -115,8 +122,8 @@ useLive.subscribe((s) => {
 
 /**
  * Plan eines Lerntags: aktueller Plan, gemerkter Plan oder `app/profile.plan` (falls noch dieser Tag) –
- * in der Ansicht dieses Geräts (Handy: ohne die Aufgabe des Tages). Die Pflicht-Prüfung (`pflichtFor`)
- * liest dieselbe Liste wie Zähler und Zeilen, sonst würde `pflicht[tag]` am Handy nie gesetzt.
+ * in der Ansicht des Umbaus (ohne entfallene Blöcke, `domain/plan/retire`; nie vom Gerät abhängig). Die Pflicht-Prüfung (`pflichtFor`)
+ * liest dieselbe Liste wie Zähler und Zeilen.
  */
 function planFor(day: string, profile?: Readonly<Doc> | null): StoredPlan | null {
   const s = useTodayPlan.getState();
@@ -209,8 +216,11 @@ export function buildTodayPlan(today: string, nowMs: number): StoredPlan {
   // Die Neustart-Woche endet nach 7 Lerntagen oder sobald weniger als 40 Karten überfällig sind; danach Kurz-Plan, solange es ≥ 40 sind (Prüfbefund S9).
   const mode = comebackMode(profile, today, facts?.ov ?? null);
   // Fehlersätze: nichts fällig (früherer Lerntage) → der Schritt „Fehler korrigieren“ entfällt (Gesamtkonzept 3.2).
-  const fixDue = fixesDue({ grammarDocs: live.collections.grammar ?? new Map(), repairDoc: live.docs['app/repair'], nowMs, today });
-  return buildUnitStored({ day: today, nowMs, week: null, goalMin, review, fixDue, ...(mode ? { comeback: mode } : {}), ...(facts ? { ov: facts.ov, sure: facts.sure } : {}) });
+  const grammarDocs = live.collections.grammar ?? new Map();
+  const fixDue = fehlersaetzeDue({ grammarDocs, repairDoc: live.docs['app/repair'], nowMs, today });
+  // Das Grammatikthema des Tages und die Musterzustände vom Morgen werden mit dem Plan eingefroren (Lernplattform 2.0 §2.3, für jeden neuen Plan).
+  const { gt, ps } = freezeGrammarDay({ docs: grammarDocs, today, nowMs, introPlanOf: INTRO_PLAN_OF, seed: today });
+  return buildUnitStored({ day: today, nowMs, week: null, goalMin, review, fixDue, gt, ps, ...(mode ? { comeback: mode } : {}), ...(facts ? { ov: facts.ov, sure: facts.sure } : {}) });
 }
 
 /** Plan in `app/profile.plan` speichern – außer ein anderes Gerät hat für heute schon einen (der gilt). */

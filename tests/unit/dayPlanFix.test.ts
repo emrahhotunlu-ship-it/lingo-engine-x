@@ -13,7 +13,7 @@ const SAT = '2026-10-10';
 const SUN = '2026-10-11';
 const NOW = berlin(MON, 9);
 const review = { goal: 12, due: 8, fresh: 3, repairs: 0 };
-const kinds = (p: { u?: { b: Array<[number, string, number]> } }) => p.u?.b.map((b) => b[1]);
+const kinds = (p: { u?: { b: Array<[number, string, number, ...unknown[]]> } }) => p.u?.b.map((b) => b[1]);
 type Stored = ReturnType<typeof buildUnitStored>;
 const withU = (p: Stored) => p as Stored & { u: NonNullable<Stored['u']> };
 

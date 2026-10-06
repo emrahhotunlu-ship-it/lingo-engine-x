@@ -1,8 +1,12 @@
 import { TOPICS } from '../content';
-import { daysBetween } from '../date';
+import { dayKey, daysBetween } from '../date';
 import type { GrammarTask, GrammarTaskType } from '../learn/types';
+import { patternState, patternStateNo, patsOf } from '../metrics/pattern';
+import type { GrammarDay, PatState } from '../plan/types';
+import { grammarFehlersaetzeDue } from '../repair/fehlersaetze';
 import { certainty, topicP } from './bkt';
-import { errorDue, errorsOf, isDueToday } from './errors';
+import { errorsOf } from './errors';
+import { rankTopics } from './tasks';
 
 // Grammatik-Pfad (Gesamtkonzept Kap. 3.4, `docs/umbau/02-lehrplan.md` Kap. 4): die Themen in
 // Lehrreihenfolge B2 → C1, der Zustand je Thema, die Einführungsbremse und der Lernweg ①–⑤.
@@ -97,11 +101,12 @@ export const INTRO_EVERY_DAYS = 3;
 /** Ab so vielen FÄLLIGEN Fehlersätzen kommt kein neues Thema dazu (offene, noch nicht fällige zählen nicht: der Dauerstand würde sonst jede Einführung stoppen). */
 export const INTRO_BLOCK_ERRORS = 10;
 
-/** Fällige (oder überfällige) Fehlersätze über alle Themen: offen, nicht erledigt, Fälligkeit vor dem Ende des Lerntags. */
+/**
+ * Fällige Grammatik-Fehlersätze über alle Themen (Lernplattform 2.0 §4.9, `grammarErrorsDue`): derselbe Filter wie bei „Fehler korrigieren“ –
+ * Sätze vom heutigen Lerntag nie, nichts doppelt, nur gültige Sätze. Die Bremse und die Zahl auf dem Knopf zählen dasselbe.
+ */
 export function dueErrorCount(docs: ReadonlyMap<string, Readonly<Doc>>, nowMs: number): number {
-  let n = 0;
-  for (const doc of docs.values()) n += errorsOf(doc).filter((e) => e.done !== true && isDueToday(errorDue(e), nowMs)).length;
-  return n;
+  return grammarFehlersaetzeDue({ grammarDocs: docs, nowMs, today: dayKey(nowMs) });
 }
 
 /** Letzter Tag, an dem ein neues Thema begonnen wurde (abgeleitet aus `hist`, kein eigenes Feld). */
@@ -109,6 +114,9 @@ export function lastIntroDay(docs: ReadonlyMap<string, Readonly<Doc>>): string |
   let last: string | null = null;
   for (const doc of docs.values()) {
     if (isNewTopic(doc)) continue;
+    // Ein bestandener Vortest hält das nächste neue Thema nicht auf (Lernplattform 2.0 §4.7): solche Themen zählen nicht als Einführungstag.
+    const vt = doc.vt;
+    if (vt && typeof vt === 'object' && !Array.isArray(vt) && (vt as Doc).ok === true) continue;
     const d = introDay(doc);
     if (d && (last === null || d > last)) last = d;
   }
@@ -188,4 +196,90 @@ export function stepDownTasks(
   const out = [...tasks];
   out[pos] = easier;
   return out;
+}
+
+// ------------------------------------------------------------------ Einführungsschritt und eingefrorenes Grammatikthema (Lernplattform 2.0 §2.3, §3.2)
+
+const PAT_OK_N = 3;
+const PAT_OK_C = 2;
+
+/**
+ * Der Einführungsschritt des Tages: höchstens EINER je Lerntag über alle Themen. Quelle der Schritte ist `introPlanOf(thema)` (aus der Musterdatei,
+ * `introPlan`), eingespritzt, damit dieser Ordner nichts von den Inhaltsdateien weiß. Reihenfolge:
+ * 1. Wurde heute schon ein Thema oder ein Schritt eingeführt (Grammatik-Reiter): `{ topic, pats: [], fresh: false }` – die Runde bleibt dort, ohne Vortest und Karten.
+ * 2. Ein Folgeschritt eines begonnenen Themas (Pfadreihenfolge), wenn jedes Muster des vorigen Schritts mindestens 3 Antworten und 2 richtige hat
+ *    und der vorige Schritt nicht von heute ist. Folgeschritte zählen nicht für die Bremse, belegen aber den Platz des Tages.
+ * 3. Das nächste neue Thema, wenn die Bremse es erlaubt: sein erster Schritt (`fresh: true`, mit Vortest).
+ * Ohne Musterdatei (`introPlanOf` → null) gibt es keine Muster (`pats: []`); das neue Thema selbst bleibt möglich.
+ */
+export function introStepFor(i: {
+  docs: ReadonlyMap<string, Readonly<Doc>>;
+  today: string;
+  nowMs: number;
+  introPlanOf: (topic: string) => string[][] | null;
+}): { topic: string; pats: string[]; fresh: boolean } | null {
+  const order = pathTopics();
+  // 1. Heute schon eingeführt (Thema begonnen oder Schritt gelegt).
+  for (const topic of order) {
+    const doc = i.docs.get(topic);
+    if (isNewTopic(doc)) continue;
+    const pats = patsOf(doc);
+    if (introDay(doc) === i.today || Object.values(pats).some((e) => e.i === i.today)) return { topic, pats: [], fresh: false };
+  }
+  // 2. Folgeschritt.
+  for (const topic of order) {
+    const doc = i.docs.get(topic);
+    if (isNewTopic(doc)) continue;
+    const plan = i.introPlanOf(topic);
+    if (!plan) continue;
+    const pats = patsOf(doc);
+    const k = plan.findIndex((step) => !step.every((id) => pats[id]?.i !== undefined));
+    if (k <= 0) continue;
+    const prev = plan[k - 1] ?? [];
+    const ready = prev.every((id) => {
+      const e = pats[id];
+      return !!e && (e.n ?? 0) >= PAT_OK_N && (e.c ?? 0) >= PAT_OK_C && e.i !== undefined && e.i < i.today;
+    });
+    if (ready) return { topic, pats: (plan[k] ?? []).slice(0, 2), fresh: false };
+  }
+  // 3. Neues Thema (Bremse beachtet).
+  const topic = introTopic(i.docs, i.today, i.nowMs);
+  if (!topic) return null;
+  return { topic, pats: (i.introPlanOf(topic)?.[0] ?? []).slice(0, 2), fresh: true };
+}
+
+/** Obergrenze der eingefrorenen Musterzustände (`u.ps`). */
+export const PS_MAX = 24;
+
+/**
+ * Das Grammatikthema des Tages und die Musterzustände vom Morgen, beim Anlegen des Plans eingefroren (`u.gt`, `u.ps`). Deterministisch für denselben
+ * Stand (`seed` = Lerntag). Danach ändern erledigte oder neue Fehlersätze nichts mehr: Titel, gestartete Runde, Satzbau und Abschlusskarte lesen nur diese Werte.
+ */
+export function freezeGrammarDay(i: {
+  docs: ReadonlyMap<string, Readonly<Doc>>;
+  today: string;
+  nowMs: number;
+  introPlanOf: (topic: string) => string[][] | null;
+  seed: string;
+}): { gt: GrammarDay; ps: Record<string, PatState> } {
+  const step = introStepFor(i);
+  const intro = step?.topic ?? null;
+  const pats = step ? step.pats.slice(0, 2) : [];
+  let topics = rankTopics({ grammarDocs: i.docs, nowMs: i.nowMs, seed: i.seed, introduce: intro })
+    .slice(0, 3)
+    .map((r) => r.topic);
+  // Wie `selectRound`: das Thema des Tages steht immer dabei, als zweites.
+  if (intro && !topics.includes(intro)) topics = [topics[0] ?? intro, intro, ...topics.slice(1, 2)].filter((t, k, a) => a.indexOf(t) === k);
+  topics = topics.slice(0, 3);
+  const ps: Record<string, PatState> = {};
+  for (const topic of topics) {
+    const doc = i.docs.get(topic);
+    const entries = patsOf(doc);
+    const ids = [...new Set([...(i.introPlanOf(topic)?.flat() ?? []), ...Object.keys(entries)])];
+    for (const id of ids) {
+      if (Object.keys(ps).length >= PS_MAX) break;
+      ps[id] = patternStateNo(patternState(entries[id], i.today));
+    }
+  }
+  return { gt: { intro, pats, topics }, ps };
 }

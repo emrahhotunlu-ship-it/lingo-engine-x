@@ -1,4 +1,5 @@
 import type { ThemeGoal, WeekTheme } from '../../content/nb/themes';
+import type { StepArgs } from '../plan/types';
 
 // Typen der Tageseinheit und des Wochenplans (Plan §1.5, §4.10, Prüfung Tageseinheit M1–M10, S1–S5).
 // Rein, ohne React und ohne Datenbank. `UnitBlockKind` entspricht wörtlich dem Vertrag in Plan §4.10.
@@ -24,8 +25,7 @@ export type UnitBlockKind =
   | 'focus.colloc'
   | 'again';
 
-/** `phone`: Handy-Ansicht gilt (Emrah 01.10.2026) – Nachsprechen und Sprech-/Schreibaufgaben entfallen. */
-export type UnitEnv = { ai: boolean; tts: boolean; phone?: boolean };
+export type UnitEnv = { ai: boolean; tts: boolean };
 
 /** Quelle des Inputs in Block 2 (Prüfung M7) bzw. des Nachsprechens. */
 export type InputSrc =
@@ -69,6 +69,8 @@ export type UnitStep = { kind: UnitBlockKind; steps: readonly UnitBlockKind[]; o
 
 export type UnitBlock = UnitStep & {
   block: 1 | 2 | 3 | 4 | 5;
+  /** Schritt-Argumente der Regelversion 2 (`errs`, `repairs`, `limit`); fehlt bei der alten Regel. */
+  args?: StepArgs;
   /** Minuten (Deckel für die Planung, bricht nichts ab). */
   min: number;
   channel: UnitChannel;
@@ -95,6 +97,8 @@ export type UnitPlan = {
   /** `plan.duty`: „x von n“ kommt immer aus `duty.length`. */
   duty: readonly UnitChannel[];
   minutes: number;
+  /** Regelversion (Lernplattform 2.0 §2.3): `2` = Schritt 1 ohne Reparatur-Sätze, Grammatik ohne Fehlersätze, Schritt 4 mit `limit`. Fehlt = alte Regel. */
+  rv?: 2;
   /** Wiedereinstieg (Gesamtkonzept 3.2): `reduced` = nur 3 Grammatikaufgaben, Satzbau pausiert; `restart` = Neustart-Woche (kleiner Plan). */
   comeback?: ComebackMode;
 };
@@ -115,6 +119,8 @@ export type UnitPrefs = {
   fixDue?: number;
   /** Wiedereinstieg: kleinerer Plan nach einer längeren Pause. */
   comeback?: ComebackMode;
+  /** Regelversion; `2` schaltet Plan v2 ein (§2.3). Nur die Koordination stellt `PLAN_RV` um. */
+  rv?: 1 | 2;
 };
 
 /**

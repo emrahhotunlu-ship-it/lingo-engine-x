@@ -133,7 +133,7 @@ function readInputs(): Inputs {
   const pend = usePending.getState();
   return {
     today,
-    // Handy-Ansicht (Emrah 01.10.2026): am Handy ohne die Aufgabe des Tages; sonst der Plan wie gespeichert.
+    // Ansicht des Umbaus (ohne entfallene Blöcke); nie vom Gerät abhängig.
     plan: viewPlan(p.day === today ? p.plan : null),
     planStatus: p.day === today ? p.status : 'idle',
     exhausted: p.exhausted === today,

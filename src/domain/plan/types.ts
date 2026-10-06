@@ -25,8 +25,20 @@ export type StoredPlan = {
   u?: UnitMeta;
 };
 
-/** Block der Tageseinheit im gespeicherten Plan: [Block-Nr., Art, Minuten]. */
-export type UnitMetaBlock = [block: 1 | 2 | 3 | 4 | 5, kind: string, min: number];
+/**
+ * Schritt-Argumente der Regelversion 2 (Lernplattform 2.0 §2.3): `errs` = Fehlersätze in der Grammatikrunde, `repairs` = Reparatur-Sätze in
+ * Schritt 1, `limit` = Sätze in Schritt 4. Ältere Leser lesen nur die ersten drei Tupel-Elemente.
+ */
+export type StepArgs = { errs?: number; repairs?: number; limit?: number };
+
+/** Block der Tageseinheit im gespeicherten Plan: [Block-Nr., Art, Minuten, Schritt-Argumente (nur ab Regelversion 2)]. */
+export type UnitMetaBlock = [block: 1 | 2 | 3 | 4 | 5, kind: string, min: number, args?: StepArgs];
+
+/** Zustand eines Musters am Morgen: 0 Neu · 1 Lernt · 2 Sicher · 3 Fest (`metrics/pattern`). */
+export type PatState = 0 | 1 | 2 | 3;
+
+/** Das Grammatikthema des Tages, beim Anlegen des Plans eingefroren (Lernplattform 2.0 §2.3). */
+export type GrammarDay = { intro: string | null; pats: string[]; topics: string[] };
 
 /** Eingefrorene Eckdaten der Tageseinheit (ohne `env`, Prüfbefund M5). */
 export type UnitMeta = {
@@ -45,6 +57,12 @@ export type UnitMeta = {
   ov?: number;
   /** Sichere Karten beim Planen (Morgenwert für „Heute neu sicher: n“), additiv. */
   sure?: number;
+  /** Regelversion (Lernplattform 2.0 §2.3), additiv: `2` = Plan v2; fehlt = alte Regel. Die Planversion `v` bleibt 1. */
+  rv?: 2;
+  /** Eingefroren (Lernplattform 2.0 §2.3): Einführungsthema, Muster des Tages und Rundenthemen. */
+  gt?: GrammarDay;
+  /** Eingefroren: Musterzustände vom Morgen für die Muster der `gt`-Themen (≤ 24). */
+  ps?: Record<string, PatState>;
 };
 
 export type DutyState = { id: DutyId; state: 'done' | 'open'; progress: { done: number; total: number } | null };

@@ -107,7 +107,7 @@ describe('unitReviewGoal mit Rückstand', () => {
 
 describe('Minuten von Block 1 in der Anzeige', () => {
   const review = (sec: number) => ({ goal: 30, due: 25, fresh: 3, repairs: 1, sec, overdue: 40 });
-  const b1 = (p: { u?: { b: Array<[number, string, number]> } }) => p.u?.b.find((b) => b[1] === 'review')?.[2];
+  const b1 = (p: { u?: { b: Array<[number, string, number, ...unknown[]]> } }) => p.u?.b.find((b) => b[1] === 'review')?.[2];
 
   it('Grundwert bleibt, solange die geplante Zeit hineinpasst (8 Min. am vollen Tag)', () => {
     expect(b1(buildUnitStored({ day: MON, nowMs: NOW, week: null, goalMin: 25, review: review(470) }))).toBe(8);

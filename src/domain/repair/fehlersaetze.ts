@@ -55,3 +55,11 @@ export function dueFehlersaetze(i: { grammarDocs: ReadonlyMap<string, Doc>; repa
     });
   return i.limit === undefined ? list : list.slice(0, i.limit);
 }
+
+/**
+ * Fällige Grammatik-Fehlersätze: derselbe Filter wie `dueFehlersaetze` (Sätze vom Anlegetag nie, gültige Sätze, nichts doppelt), nur ohne
+ * Reparatur-Sätze. Grundlage der Einführungsbremse „ab 10 fälligen Grammatikfehlern kein neues Thema“ (`grammar/path`).
+ */
+export function grammarFehlersaetzeDue(i: { grammarDocs: ReadonlyMap<string, Doc>; nowMs: number; today: string }): number {
+  return dueFehlersaetze({ grammarDocs: i.grammarDocs, repairDoc: null, nowMs: i.nowMs, today: i.today }).length;
+}
