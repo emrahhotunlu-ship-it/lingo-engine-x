@@ -1,4 +1,4 @@
-import { measureKeyboard, recordKeyboardProbe } from './input';
+import { measureKeyboard, recordKeyboardProbe } from './inputCore';
 import { local, setStorageReporter, KEY_PREFIX } from './storage';
 
 // Fehlerprotokoll (Kap. 3.4): Jeder Fehler wird hier protokolliert und ist in den

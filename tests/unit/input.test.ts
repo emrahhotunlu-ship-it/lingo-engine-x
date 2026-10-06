@@ -56,3 +56,13 @@ describe('inputProfile', () => {
     expect(m.inputProfile()).toBe('keys');
   });
 });
+
+describe('Aufbau', () => {
+  it('die Diagnose (Teil des Test-Laufzeit-Bündels) importiert nur den React-freien Kern', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync(new URL('../../src/platform/diagnostics.ts', import.meta.url), 'utf8');
+    expect(src).toContain("from './inputCore'");
+    expect(src).not.toMatch(/from '\.\/input'/);
+    expect(readFileSync(new URL('../../src/platform/inputCore.ts', import.meta.url), 'utf8')).not.toMatch(/from 'react'/);
+  });
+});
