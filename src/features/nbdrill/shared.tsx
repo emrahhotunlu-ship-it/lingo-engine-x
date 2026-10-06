@@ -204,7 +204,7 @@ export function TaskHead({ status, task, purpose }: { status: ReactNode; task: s
 
 /** Hinweis oder Zwischenstand während einer Aufgabe (Streifen + Symbol, nie nur Farbe). */
 export function Note({ tone, children, testId, kind }: { tone: 'ok' | 'warn' | 'info'; children: ReactNode; testId?: string; kind?: string }) {
-  const stripe = tone === 'ok' ? 'border-accent' : tone === 'warn' ? 'border-gold-text' : 'border-line';
+  const stripe = tone === 'ok' ? 'border-ok' : tone === 'warn' ? 'border-gold-text' : 'border-line';
   const icon = tone === 'ok' ? 'check' : tone === 'warn' ? 'lightbulb' : 'info';
   return (
     <div className={`flex items-start gap-2 border-l-2 ${stripe} py-1 pl-3 text-sm`} role="status" data-testid={testId ?? 'training-note-box'} data-kind={kind}>

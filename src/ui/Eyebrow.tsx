@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function Eyebrow({ children, meta, tone = 'default', as: Tag = 'p', testId }: Props) {
-  const text = <Tag className={`lx-eyebrow m-0 ${tone === 'accent' ? 'text-accent-text' : 'text-subtle'}`} data-testid={testId}>{children}</Tag>;
+  const text = <Tag className={`lx-eyebrow m-0 ${tone === 'accent' ? 'text-ok-text' : 'text-subtle'}`} data-testid={testId}>{children}</Tag>;
   if (meta === undefined || meta === null) return text;
   return (
     <div className="flex items-baseline justify-between gap-3">

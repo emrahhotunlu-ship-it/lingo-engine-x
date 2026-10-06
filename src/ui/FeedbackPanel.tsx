@@ -40,7 +40,7 @@ export type FeedbackPanelProps = {
 type Tone = { key: 'nbShFbOk' | 'nbShFbClose' | 'nbShFbWrong' | 'nbShFbUnchecked'; icon: IconName; stripe: string; text: string };
 
 const TONE: Record<Feedback['verdict'], Tone> = {
-  ok: { key: 'nbShFbOk', icon: 'check', stripe: 'var(--lx-accent)', text: 'text-accent-text' },
+  ok: { key: 'nbShFbOk', icon: 'check', stripe: 'var(--lx-ok)', text: 'text-ok-text' },
   close: { key: 'nbShFbClose', icon: 'alert', stripe: 'var(--lx-gold-text)', text: 'text-gold-text' },
   wrong: { key: 'nbShFbWrong', icon: 'close', stripe: 'var(--lx-danger-text)', text: 'text-danger-text' },
   unchecked: { key: 'nbShFbUnchecked', icon: 'info', stripe: 'var(--lx-fg-subtle)', text: 'text-muted' },
@@ -79,25 +79,25 @@ export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, area = 'tr
           <span className="text-fg">{t(tone.key)}</span>
         </p>
         {fb.effect && (
-          <p className="m-0 text-[0.9375rem] text-muted" data-testid="feedback-effect">
+          <p className="m-0 text-sm text-muted" data-testid="feedback-effect">
             {fb.effect}
           </p>
         )}
       </div>
       {fb.retryHint && (
-        <p className="m-0 text-[0.9375rem]" data-testid="feedback-hint">
+        <p className="m-0 text-sm" data-testid="feedback-hint">
           <span className="font-semibold">{t('nbShFbHint')}: </span>
           {fb.retryHint}
         </p>
       )}
       {fb.mine && fb.verdict !== 'ok' && (
-        <p className="m-0 text-[0.9375rem]" data-testid="feedback-mine">
+        <p className="m-0 text-sm" data-testid="feedback-mine">
           <span className="text-muted">{t('nbShFbMine')}: </span>
           <span lang="en">{fb.mine}</span>
         </p>
       )}
       {fb.solution && (
-        <p className="m-0 text-[0.9375rem]" data-testid="feedback-solution">
+        <p className="m-0 text-sm" data-testid="feedback-solution">
           <span className="text-muted">{t('nbShFbSolution')}: </span>
           {en(fb.solution, 'font-semibold')}
         </p>
@@ -105,7 +105,7 @@ export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, area = 'tr
       {fixes.length > 0 && (
         <ol className="m-0 flex list-none flex-col gap-2.5 p-0" data-testid="feedback-fixes" aria-label={t('nbShFbFixes')}>
           {fixes.map((f, i) => (
-            <li key={`${f.kind}-${i}`} className="flex gap-2.5 text-[0.9375rem]" data-kind={f.kind} data-trap={f.trapId}>
+            <li key={`${f.kind}-${i}`} className="flex gap-2.5 text-sm" data-kind={f.kind} data-trap={f.trapId}>
               <span className="lx-tnum w-4 flex-none text-subtle">{fixes.length > 1 ? `${i + 1}.` : '·'}</span>
               <span className="flex min-w-0 flex-col gap-0.5">
                 <span lang="en">
@@ -132,7 +132,7 @@ export function FeedbackPanel({ fb, onNext, nextLabel, onWhy, onKeep, area = 'tr
           {upgrades.map((u, i) => {
             const done = kept.has(u.to);
             return (
-              <div key={i} className="flex items-start justify-between gap-3 text-[0.9375rem]" data-testid="feedback-upgrade">
+              <div key={i} className="flex items-start justify-between gap-3 text-sm" data-testid="feedback-upgrade">
                 <span className="flex min-w-0 flex-col gap-0.5">
                   {en(u.to)}
                   {u.note && <span className="text-sm text-muted">{u.note}</span>}

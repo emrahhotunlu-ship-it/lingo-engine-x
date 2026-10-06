@@ -45,7 +45,7 @@ export function GradeButtons({ options, suggest = null, onGrade, label, note, di
               data-grade={o.grade}
               data-suggest={isSuggest ? '' : undefined}
               aria-keyshortcuts={String(o.grade)}
-              className={`flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] border-2 bg-surface-strong px-1 py-2.5 text-[0.90625rem] font-semibold transition-colors disabled:opacity-60 ${
+              className={`flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] border-2 bg-surface-strong px-1 py-2.5 text-sm font-semibold transition-colors disabled:opacity-60 ${
                 isSuggest ? 'border-accent' : 'border-transparent'
               } ${o.grade === 1 ? 'text-danger-text' : 'text-fg'}`}
             >

@@ -28,7 +28,7 @@ export function HeroCard({ eyebrow, meta, tone = 'default', title, children, act
           {eyebrow}
         </Eyebrow>
       )}
-      {title !== undefined && <h2 className="m-0 text-[1.3125rem] leading-snug font-semibold tracking-[-0.01em]">{title}</h2>}
+      {title !== undefined && <h2 className="m-0 text-lg leading-snug font-semibold tracking-[-0.01em]">{title}</h2>}
       {children}
       {action && <div className="flex flex-col [&>*]:w-full">{action}</div>}
     </Tag>

@@ -85,7 +85,7 @@ export function CopyBox({ text, label, testId = 'pp-copy', copiedTestId = 'pp-co
         readOnly
         value={text}
         rows={Math.min(8, Math.max(3, Math.ceil(text.length / 60)))}
-        className="w-full resize-none rounded-xl border border-line bg-surface px-3 py-2 text-[0.95rem] leading-relaxed text-fg outline-none"
+        className="w-full resize-none rounded-xl border border-line bg-surface px-3 py-2 text-sm leading-relaxed text-fg outline-none"
         lang="en"
         aria-label={label}
       />

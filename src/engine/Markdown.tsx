@@ -74,7 +74,7 @@ export function Markdown({ text, streaming, uiLang, area = 'companion', source =
       if (n.type === 'text') return textNode(n.text, k, english);
       if (n.type === 'code')
         return (
-          <code key={k} className="rounded bg-surface-strong px-1 py-0.5 text-[0.92em]">
+          <code key={k} className="rounded bg-surface-strong px-1 py-0.5 text-sm">
             {tap && (uiLang === 'en' || notGerman(n.text)) ? eng(n.text, `${k}c`) : n.text}
           </code>
         );

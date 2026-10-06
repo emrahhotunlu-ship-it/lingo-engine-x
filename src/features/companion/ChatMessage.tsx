@@ -29,7 +29,7 @@ export function ChatMessage({ msg, state, earlier, truncated, interrupted, onAsk
   if (msg.role === 'user') {
     return (
       <div className={`flex justify-end ${earlier ? 'opacity-70' : ''}`} data-testid="chat-msg" data-role="user" data-lang={dataLang} data-state={state}>
-        <div className="max-w-[85%] rounded-2xl rounded-br-md bg-surface-strong px-4 py-2.5 text-[0.95rem] leading-relaxed whitespace-pre-wrap break-words">
+        <div className="max-w-[85%] rounded-2xl rounded-br-md bg-surface-strong px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words">
           <span className="sr-only">{t('cmpYou')}: </span>
           {msg.content}
         </div>
@@ -38,7 +38,7 @@ export function ChatMessage({ msg, state, earlier, truncated, interrupted, onAsk
   }
 
   const foreign = state === 'foreign';
-  const body = <Markdown text={msg.content} streaming={state === 'streaming'} uiLang={dataLang === 'en' ? 'en' : 'de'} className="text-[0.95rem] leading-relaxed" />;
+  const body = <Markdown text={msg.content} streaming={state === 'streaming'} uiLang={dataLang === 'en' ? 'en' : 'de'} className="text-sm leading-relaxed" />;
   return (
     <div className={`flex max-w-[68ch] flex-col gap-1.5 ${earlier ? 'opacity-70' : ''}`} data-testid="chat-msg" data-role="assistant" data-lang={dataLang} data-state={state}>
       <p className="flex items-center gap-1.5 text-xs font-semibold text-muted">

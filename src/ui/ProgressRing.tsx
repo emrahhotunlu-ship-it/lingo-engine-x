@@ -22,7 +22,7 @@ export function ProgressRing({ value, size = 64, stroke = 6, label }: RingProps)
         cy={size / 2}
         r={r}
         fill="none"
-        stroke="var(--lx-accent)"
+        stroke="var(--lx-ok)"
         strokeWidth={stroke}
         strokeLinecap="round"
         strokeDasharray={c}

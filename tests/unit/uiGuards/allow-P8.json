@@ -1,0 +1,23 @@
+{
+  "owner": "P8",
+  "matchMedia": [
+    "src/features/drills/DrillItems.tsx"
+  ],
+  "textPx": [
+    "src/features/drills/DrillItems.tsx",
+    "src/features/patterns/parts.tsx"
+  ],
+  "card": [
+    "src/features/apply/ComboSentence.tsx",
+    "src/features/apply/ListenQuestion.tsx",
+    "src/features/check/CheckScreen.tsx",
+    "src/features/drills/DrillItems.tsx",
+    "src/features/drills/DrillScreen.tsx",
+    "src/features/drills/SprintView.tsx",
+    "src/features/nbdrill/NbDrillScreen.tsx",
+    "src/features/patterns/FreeItem.tsx",
+    "src/features/pressure/PressureScreen.tsx",
+    "src/features/repair/RepairItem.tsx",
+    "src/features/repair/again/AgainScreen.tsx"
+  ]
+}

@@ -81,7 +81,7 @@ function AgainStep() {
                   <span lang="en" className="font-medium">
                     {f.right}
                   </span>{' '}
-                  · <span className={ok ? 'text-accent-text' : 'text-gold-text'}>{ok ? t('nbHeuteAgainFixOk') : t('nbHeuteAgainFixOpen')}</span>
+                  · <span className={ok ? 'text-ok-text' : 'text-gold-text'}>{ok ? t('nbHeuteAgainFixOk') : t('nbHeuteAgainFixOpen')}</span>
                   <span className="block text-muted">{f.why}</span>
                 </li>
               ))}

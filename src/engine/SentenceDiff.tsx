@@ -22,7 +22,7 @@ type Props = {
 
 export function SentenceDiff({ ops, given, correct, labels, area = 'trainer', source = null, onlyCorrect = false }: Props) {
   return (
-    <div className="flex flex-col gap-1.5 text-[0.95rem] leading-relaxed" data-testid="sentence-diff">
+    <div className="flex flex-col gap-1.5 text-sm leading-relaxed" data-testid="sentence-diff">
       {!onlyCorrect && (
         <p>
           <span className="text-muted">{labels.yours}: </span>

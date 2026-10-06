@@ -69,7 +69,7 @@ export function TabTitle({ title, sub, actions, testId }: { title: ReactNode; su
   return (
     <header className="flex flex-col gap-1">
       <div className="flex min-h-11 items-center justify-between gap-3">
-        <h1 className="min-w-0 text-[1.75rem] leading-tight font-bold tracking-[-0.02em] sm:text-3xl" data-testid={testId}>
+        <h1 className="min-w-0 text-2xl leading-tight font-bold tracking-[-0.02em] sm:text-3xl" data-testid={testId}>
           {title}
         </h1>
         {/* Nur eigene Knöpfe: Übersetzer, Claude und Zahnrad zeigt schon der Kopf (Reiter-Wurzel) bzw. die Seitenleiste

@@ -98,7 +98,7 @@ export function ClaudeDrillScreen() {
             </p>
           )}
           {answered && (
-            <div className={`flex flex-col gap-1 border-l-4 pl-3 ${answered.ok ? 'border-accent' : 'border-[var(--lx-danger-text)]'}`} data-testid="cd-verdict" data-ok={answered.ok ? '1' : '0'}>
+            <div className={`flex flex-col gap-1 border-l-4 pl-3 ${answered.ok ? 'border-ok' : 'border-[var(--lx-danger-text)]'}`} data-testid="cd-verdict" data-ok={answered.ok ? '1' : '0'}>
               <p className="text-sm font-semibold">{answered.ok ? t('nbProfilDrillRight') : t('nbProfilDrillWrong')}</p>
               <EnglishText text={`${before}${item.answer}${after}`} area="lookup" source="claude-drill" className="text-sm" />
               <p className="text-sm text-muted">{item.why}</p>

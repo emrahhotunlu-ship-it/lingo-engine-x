@@ -448,7 +448,7 @@ function StructuredReview({ o, answer }: { o: Objection; answer: PressureAnswer 
           const ok = pick[i] === k;
           return (
             <li key={k} className="flex items-start gap-2 text-sm" data-testid={`struct-row-${i}`} data-ok={ok ? '1' : '0'}>
-              <Icon name={ok ? 'check' : 'close'} size={16} className={`mt-0.5 flex-none ${ok ? 'text-accent' : 'text-danger-text'}`} />
+              <Icon name={ok ? 'check' : 'close'} size={16} className={`mt-0.5 flex-none ${ok ? 'text-ok' : 'text-danger-text'}`} />
               <span className="sr-only">{ok ? t('nbTrainingStepOk') : t('nbTrainingStepWrong')}</span>
               <span className="flex flex-col">
                 <span className="font-medium">{t('nbTrainingSlot', { n: i + 1, move: t(MOVE_KEY[k]) })}</span>

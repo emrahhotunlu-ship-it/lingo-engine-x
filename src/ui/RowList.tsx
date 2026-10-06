@@ -56,7 +56,7 @@ export function Row({ title, sub, icon, channel, value, onClick, testId, data, d
       )}
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="font-semibold">{title}</span>
-        {sub && <span className="text-[0.84375rem] leading-snug text-muted">{sub}</span>}
+        {sub && <span className="text-xs leading-snug text-muted">{sub}</span>}
       </span>
       {value !== undefined && value !== null && <span className="lx-tnum flex-none text-sm text-muted">{value}</span>}
       {onClick && (chevron ?? (value === undefined || value === null)) && <Icon name="chevronRight" size={18} className="flex-none text-subtle" />}

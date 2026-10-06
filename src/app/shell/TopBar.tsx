@@ -64,7 +64,7 @@ export function BackLink({ onClick, testId = 'page-back' }: { onClick: () => voi
       type="button"
       onClick={onClick}
       aria-label={title ? t('nbShBackTo', { title }) : t('nbShBack')}
-      className="-ml-2 inline-flex min-h-11 min-w-11 items-center gap-0.5 rounded-full pr-3 pl-1 text-[0.9375rem] font-medium text-accent-text transition-colors hover:bg-surface"
+      className="-ml-2 inline-flex min-h-11 min-w-11 items-center gap-0.5 rounded-full pr-3 pl-1 text-sm font-medium text-accent-text transition-colors hover:bg-surface"
       data-testid={testId}
     >
       <Icon name="chevronLeft" size={22} />

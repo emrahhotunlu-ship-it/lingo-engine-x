@@ -115,7 +115,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
               </>
             )}
             {current.length === 0 && !running && (
-              <p className="max-w-[60ch] text-[0.95rem] leading-relaxed text-muted" data-testid="chat-empty">
+              <p className="max-w-[60ch] text-sm leading-relaxed text-muted" data-testid="chat-empty">
                 {t('cmpEmpty')}
               </p>
             )}
@@ -127,7 +127,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
                   {t('cmpTitle')}
                 </p>
                 {turn.text ? (
-                  <Markdown text={turn.text} streaming uiLang={lang} className="text-[0.95rem] leading-relaxed" />
+                  <Markdown text={turn.text} streaming uiLang={lang} className="text-sm leading-relaxed" />
                 ) : (
                   <p className="lx-thinking text-sm text-muted" data-testid="ai-phase" data-ai-phase={turn.status}>
                     {phaseLabel}
@@ -144,7 +144,7 @@ export function ChatPane({ focusSeq }: { focusSeq: number }) {
               <div className="flex flex-col gap-2" role="alert" data-testid="chat-error" data-kind={turn.errorKind ?? ''}>
                 {turn.text && (
                   <div className="flex max-w-[68ch] flex-col gap-1" data-testid="chat-msg" data-role="assistant" data-lang={lang} data-state="error">
-                    <Markdown text={turn.text} streaming={false} uiLang={lang} className="text-[0.95rem] leading-relaxed" />
+                    <Markdown text={turn.text} streaming={false} uiLang={lang} className="text-sm leading-relaxed" />
                     <p className="text-xs text-subtle">{t('cmpInterrupted')}</p>
                   </div>
                 )}

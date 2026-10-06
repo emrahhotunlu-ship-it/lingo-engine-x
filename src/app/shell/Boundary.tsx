@@ -99,7 +99,7 @@ function Notice({ title, sub, children, testId }: { title: string; sub: string; 
         <Icon name="alert" size={18} className="text-gold-text" />
         {title}
       </p>
-      <p className="m-0 text-[0.9375rem] text-muted">{sub}</p>
+      <p className="m-0 text-sm text-muted">{sub}</p>
       <div className="flex flex-wrap gap-2">{children}</div>
     </div>
   );

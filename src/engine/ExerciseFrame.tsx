@@ -29,7 +29,7 @@ export function ExerciseFrame({ status, task, infoLabel, purpose, body, actions,
     <article
       ref={ref}
       data-shared={shared ? '' : undefined}
-      className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 outline-none sm:p-7"
+      className="lx-glass lx-exercise flex flex-col gap-5 outline-none"
       tabIndex={-1}
       data-testid="exercise"
       data-ex={meta?.ex}

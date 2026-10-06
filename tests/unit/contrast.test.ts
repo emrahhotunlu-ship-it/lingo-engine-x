@@ -99,3 +99,63 @@ it('Salbei ist der Standard: ohne eigenen Block gelten die Grund-Tokens (Smaragd
   expect(css.includes(`[data-palette='sage']`)).toBe(false);
   expect(tokens('dark').accent).toBe('#10b981');
 });
+
+// Lernplattform 2.0 §7: Bedeutungsfarben (ok · near · wrong · hint) je Modus, von keiner Palette überschrieben.
+function resolved(theme: string): Record<string, string> {
+  const t = tokens(theme);
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(t)) {
+    let val = v;
+    for (let i = 0; i < 4; i++) {
+      const m = /^var\(--lx-([\w-]+)\)$/.exec(val);
+      if (!m) break;
+      val = t[m[1] ?? ''] ?? val;
+    }
+    out[k] = val;
+  }
+  return out;
+}
+
+describe.each(['dark', 'dim', 'light'])('Bedeutungsfarben im Modus %s', (theme) => {
+  const t = resolved(theme);
+  const bg = parse(t.bg ?? '');
+  const surfaces: Array<[string, RGBA]> = [
+    ['Hintergrund', bg],
+    ['Glasfläche', over(parse(t.surface ?? ''), bg)],
+    ['Blatt', parse(t['surface-solid'] ?? '')],
+  ];
+
+  it.each(['ok-text', 'near-text', 'wrong-text', 'hint-text'])('Text %s ≥ 4,5:1 auf Hintergrund und Fläche', (key) => {
+    for (const [name, s] of surfaces) expect(ratio(parse(t[key] ?? ''), s), `${key} auf ${name}`).toBeGreaterThanOrEqual(4.5);
+  });
+
+  // Der Text von Optionen, Lücken und Bausteinen bleibt in der Schriftfarbe; nur Zeichen und Rand tragen die Bedeutung.
+  it('Schriftfarbe auf der weichen Füllung (ok, near, wrong, hint) bleibt ≥ 4,5:1', () => {
+    for (const k of ['ok', 'near', 'wrong', 'hint']) {
+      const fill = over(parse(t[`${k}-soft`] ?? ''), bg);
+      expect(ratio(parse(t.fg ?? ''), fill), `fg auf ${k}-soft`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it('Rahmenfarben ok/wrong ≥ 3:1 (Grafik, WCAG 1.4.11)', () => {
+    for (const k of ['ok', 'wrong']) for (const [name, s] of surfaces) expect(ratio(parse(t[k] ?? ''), s), `${k} auf ${name}`).toBeGreaterThanOrEqual(3);
+  });
+
+  it('Markierung `--lx-mark` ist vorhanden und der Schriftfarbe-Kontrast darauf bleibt ≥ 4,5:1', () => {
+    const fill = over(parse(t.mark ?? ''), bg);
+    expect(ratio(parse(t.fg ?? ''), fill)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('Auswahl ist neutral: Rahmen `--lx-fg` unterscheidet sich von `--lx-ok`, Fläche `--lx-line-strong` von `--lx-ok-soft`', () => {
+    expect(t.fg).not.toBe(t.ok);
+    expect(t['line-strong']).not.toBe(t['ok-soft']);
+  });
+});
+
+describe('Keine Palette überschreibt Bedeutungsfarben', () => {
+  it('kein Palettenblock setzt --lx-ok*, --lx-near*, --lx-wrong*, --lx-hint* oder --lx-mark', () => {
+    const blocks = [...css.matchAll(/:root\[data-palette='[\w-]+'\](?:\[data-theme='[\w-]+'\])?\s*\{([^}]*)\}/g)].map((m) => m[1] ?? '');
+    expect(blocks.length).toBeGreaterThanOrEqual(9);
+    for (const b of blocks) expect(b).not.toMatch(/--lx-(ok|near|wrong|hint|mark)\b/);
+  });
+});

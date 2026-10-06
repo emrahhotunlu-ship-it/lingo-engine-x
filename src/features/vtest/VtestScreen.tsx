@@ -228,7 +228,7 @@ export function VtestScreen() {
             />
           </p>
           {c.answered && (
-            <p className={`text-center text-sm ${c.answered.correct ? 'text-accent-text' : 'text-danger-text'}`} data-testid="vt-verdict" data-correct={c.answered.correct ? '1' : '0'}>
+            <p className={`text-center text-sm ${c.answered.correct ? 'text-ok-text' : 'text-danger-text'}`} data-testid="vt-verdict" data-correct={c.answered.correct ? '1' : '0'}>
               {c.answered.correct ? t('vtCorrect') : t('vtWrongWas', { w: activeItem.w })}
             </p>
           )}

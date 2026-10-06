@@ -37,7 +37,7 @@ export function MemorySection() {
         <ul className="flex flex-col divide-y divide-line rounded-[var(--radius-control)] border border-line" data-testid="memory-list">
           {shown.map((f) => (
             <li key={f.id} className="flex items-center gap-2 py-1 pr-1 pl-4" data-testid="memory-fact" data-id={f.id}>
-              <span className="min-w-0 flex-1 py-2 text-[0.9375rem] leading-snug break-words" lang={f.lang}>
+              <span className="min-w-0 flex-1 py-2 text-sm leading-snug break-words" lang={f.lang}>
                 {f.text}
               </span>
               <IconButton icon="close" label={t('nbProfilMemDelete', { text: f.text })} onClick={() => void forget(f.id)} disabled={busy === f.id} data-testid="memory-forget" className="flex-none" />

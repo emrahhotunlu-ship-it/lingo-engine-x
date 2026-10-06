@@ -192,9 +192,9 @@ export function ListenQuestionScreen() {
                           lang="en"
                           data-testid="listen-q-option"
                           data-right={right ? 'true' : undefined}
-                          className={`flex min-h-12 w-full items-center gap-2 rounded-[var(--radius-control)] border px-3 py-2 text-left text-base ${right ? 'border-accent bg-accent-soft' : wrong ? 'border-danger' : 'border-line'}`}
+                          className={`flex min-h-12 w-full items-center gap-2 rounded-[var(--radius-control)] border px-3 py-2 text-left text-base ${right ? 'border-ok bg-ok-soft' : wrong ? 'border-danger' : 'border-line'}`}
                         >
-                          {right && <Icon name="check" size={16} className="flex-none text-accent-text" />}
+                          {right && <Icon name="check" size={16} className="flex-none text-ok-text" />}
                           {wrong && <Icon name="close" size={16} className="flex-none text-danger-text" />}
                           <span>{o}</span>
                         </button>
@@ -206,7 +206,7 @@ export function ListenQuestionScreen() {
             )}
             {res && (
               <div className="flex flex-col gap-3 border-t border-line pt-4" data-testid="listen-q-result">
-                <p className={`text-base font-semibold ${res.ok ? 'text-accent-text' : 'text-danger-text'}`} role="status">
+                <p className={`text-base font-semibold ${res.ok ? 'text-ok-text' : 'text-danger-text'}`} role="status">
                   {res.ok ? t('apListenQRight') : t('apListenQWrong')}
                 </p>
                 <div className="flex flex-col gap-1 rounded-xl bg-surface px-3 py-2">

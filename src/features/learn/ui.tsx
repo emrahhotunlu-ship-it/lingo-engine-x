@@ -76,7 +76,7 @@ export function ScreenHeader({
   titleAction?: ReactNode;
 }) {
   // Neubau (WP0b, Prototyp v1): links „‹ Herkunft“, rechts Übersetzen, Claude, Zahnrad; darunter der Titel.
-  const h1 = <h1 className="min-w-0 text-[1.75rem] leading-tight font-bold tracking-[-0.02em] sm:text-3xl">{title}</h1>;
+  const h1 = <h1 className="min-w-0 text-2xl leading-tight font-bold tracking-[-0.02em] sm:text-3xl">{title}</h1>;
   return (
     <header className="flex flex-col gap-2">
       <div className="flex min-h-11 items-center justify-between gap-3">
@@ -224,7 +224,7 @@ export function NextButton({ onNext, auto, label, testId = 'next' }: { onNext: (
   );
 }
 
-export const VERDICT_TONE: Record<Verdict, string> = { correct: 'text-accent-text', near: 'text-gold-text', wrong: 'text-danger-text' };
+export const VERDICT_TONE: Record<Verdict, string> = { correct: 'text-ok-text', near: 'text-gold-text', wrong: 'text-danger-text' };
 
 export function VerdictLine({ verdict, text }: { verdict: Verdict; text: string }) {
   // Kurze Vibration beim Erscheinen des Ergebnisses (Kap. 4.3), nur wo möglich und eingeschaltet;
@@ -249,7 +249,7 @@ export function ExampleList({ items, area = 'trainer', source = null }: { items:
       <p className="lx-eyebrow">{t('trExamples')}</p>
       <ul className="flex flex-col gap-1.5">
         {items.map((x) => (
-          <li key={x} className="text-[0.95rem] leading-relaxed" data-testid="example">
+          <li key={x} className="text-sm leading-relaxed" data-testid="example">
             <EnglishText as="span" text={x} area={area} source={source} />
           </li>
         ))}
@@ -329,7 +329,7 @@ export function CopyOnce({ solution }: { solution: string }) {
         autoFocus
       />
       {ok && (
-        <span className="text-sm text-accent-text" data-testid="copy-ok">
+        <span className="text-sm text-ok-text" data-testid="copy-ok">
           {t('lrCopyOk')}
         </span>
       )}

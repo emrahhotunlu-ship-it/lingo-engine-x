@@ -79,7 +79,7 @@ export function RepairItem({ item, mode, area, source, status, onResult, onNext,
     finish(out.ok ? 'ok' : 'no', out.note ?? null, given);
   };
 
-  const tone = !res ? '' : res.verdict === 'no' ? 'text-danger-text' : res.verdict === 'close' ? 'text-gold-text' : 'text-accent-text';
+  const tone = !res ? '' : res.verdict === 'no' ? 'text-danger-text' : res.verdict === 'close' ? 'text-gold-text' : 'text-ok-text';
 
   return (
     <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="repair-item" data-id={item.id} data-mode={mode} data-state={res ? res.verdict : 'open'}>

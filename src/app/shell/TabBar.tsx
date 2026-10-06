@@ -43,7 +43,7 @@ function TabButton({ tab, active }: { tab: TabDef; active: boolean }) {
         if (active) window.scrollTo({ top: 0 });
       }}
       data-testid={`tab-${tab.id}`}
-      className={`relative flex min-h-12 min-w-0 flex-auto flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] px-0.5 pt-1.5 pb-1 text-[0.71875rem] transition-colors md:min-h-11 md:flex-none md:flex-row md:gap-1.5 md:rounded-full md:px-4 md:text-sm ${active ? 'font-semibold text-accent-text md:bg-surface-strong md:text-fg' : 'font-medium text-subtle hover:text-fg'}`}
+      className={`relative flex min-h-12 min-w-0 flex-auto flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] px-0.5 pt-1.5 pb-1 text-2xs transition-colors md:min-h-11 md:flex-none md:flex-row md:gap-1.5 md:rounded-full md:px-4 md:text-sm ${active ? 'font-semibold text-accent-text md:bg-surface-strong md:text-fg' : 'font-medium text-subtle hover:text-fg'}`}
     >
       {/* Aktiver Reiter: Symbol auf heller Pille + fette Schrift (nicht nur Farbe). */}
       <span className={`relative inline-flex rounded-full px-3.5 py-0.5 transition-colors duration-150 md:py-0 md:pr-2 md:pl-0 ${active ? 'bg-accent-soft md:bg-transparent' : ''}`}>

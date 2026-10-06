@@ -1,0 +1,13 @@
+{
+  "owner": "P5",
+  "matchMedia": [
+    "src/features/grammar/GrammarItem.tsx"
+  ],
+  "textPx": [],
+  "card": [
+    "src/features/grammar/GrammarItem.tsx",
+    "src/features/grammar/MiniLesson.tsx",
+    "src/features/grammar/SessionScreen.tsx",
+    "src/features/grammar/focus/FocusItem.tsx"
+  ]
+}

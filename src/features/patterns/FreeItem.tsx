@@ -48,7 +48,7 @@ export function FreeItem({ task, pattern, example, status, onResult, onNext }: P
     onResult(out.verdict !== 'wrong');
   };
 
-  const tone = !res ? '' : res.out.verdict === 'wrong' ? 'text-danger-text' : res.out.verdict === 'minor' ? 'text-gold-text' : 'text-accent-text';
+  const tone = !res ? '' : res.out.verdict === 'wrong' ? 'text-danger-text' : res.out.verdict === 'minor' ? 'text-gold-text' : 'text-ok-text';
 
   return (
     <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7" data-testid="pattern-free" data-state={res ? res.out.verdict : 'open'}>

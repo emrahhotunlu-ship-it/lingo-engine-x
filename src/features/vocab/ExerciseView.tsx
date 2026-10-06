@@ -691,7 +691,7 @@ export function ExerciseView({
                     ? 'trVerdictSynonym'
                     : 'trVerdictNear'
               : 'trVerdictWrong';
-    const tone = v.verdict === 'correct' ? 'text-accent-text' : v.verdict === 'near' ? 'text-gold-text' : 'text-danger-text';
+    const tone = v.verdict === 'correct' ? 'text-ok-text' : v.verdict === 'near' ? 'text-gold-text' : 'text-danger-text';
     const answerLang = e.ex === 'mc_en' || e.ex === 'listen_mc' ? lang : 'en';
     const writes = e.input === 'typed' || e.input === 'tiles';
     // „fast richtig": Buchstaben gold, fehlende eingefügt; falsch: ganze Wörter rot (H2).
@@ -715,7 +715,7 @@ export function ExerciseView({
     result = (
       <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: DURATION.base, ease: EASE_OUT }} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
-          <p className={`text-base font-semibold ${fb.override ? 'text-accent-text' : tone}`} data-testid="verdict" data-verdict={fb.override ? 'correct' : v.verdict}>
+          <p className={`text-base font-semibold ${fb.override ? 'text-ok-text' : tone}`} data-testid="verdict" data-verdict={fb.override ? 'correct' : v.verdict}>
             {t(verdictKey, { solution })}
           </p>
           {v.verdict !== 'correct' && writes && (

@@ -249,7 +249,7 @@ export function TranslatePane({ focusSeq }: { focusSeq: number }) {
                 <ul className="flex flex-col gap-2">
                   {r.alternatives.map((a, i) => (
                     <li key={i} className="flex flex-col gap-1 rounded-xl border border-line px-3 py-2" data-testid="tr-alt" data-register={a.register} lang={resultIsEn ? 'en' : 'de'}>
-                      <span className="text-[0.95rem] leading-relaxed">{resultIsEn ? english(a.text) : a.text}</span>
+                      <span className="text-sm leading-relaxed">{resultIsEn ? english(a.text) : a.text}</span>
                       <span className="flex flex-wrap items-center gap-2 text-xs text-muted">
                         <span className="rounded-full bg-surface-strong px-2 py-0.5 font-semibold">{t(REG_KEY[a.register])}</span>
                         {a.note && <span lang={lang}>{a.note}</span>}
