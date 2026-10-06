@@ -159,8 +159,10 @@ export const TOPIC_ROUND_MIN = 5;
 
 // ------------------------------------------------------------------ Rückstufung in der Runde
 
-const RANK: Record<GrammarTaskType, number> = { mc: 0, gap: 1, transform: 2, correct: 3 };
+const RANK: Record<GrammarTaskType, number> = { meaning: 0, mc: 0, gap: 1, transform: 2, find: 2, kwt: 2, correct: 3 };
 const BY_RANK: readonly GrammarTaskType[] = ['mc', 'gap', 'transform', 'correct'];
+/** Rückstufung der neuen Arten (Lernplattform 2.0 §10.0): kwt → gap, find → mc; die übrigen gehen eine Stufe in BY_RANK zurück. */
+const STEP_DOWN: Partial<Record<GrammarTaskType, GrammarTaskType>> = { kwt: 'gap', find: 'mc' };
 
 /**
  * Rückstufung (Gesamtkonzept 3.4): Zwei Fehlschläge in Folge im selben Thema → die nächste Aufgabe dieses
@@ -176,10 +178,10 @@ export function stepDownTasks(
   seen: ReadonlySet<string>,
 ): GrammarTask[] {
   const cur = tasks[pos];
-  if (!cur || cur.errorT !== null || cur.type === 'mc') return [...tasks];
+  if (!cur || cur.errorT !== null || RANK[cur.type] === 0) return [...tasks];
   const last = results.filter((r) => r.topic === cur.topic).slice(-2);
   if (last.length < 2 || last.some((r) => r.ok)) return [...tasks];
-  const target = BY_RANK[RANK[cur.type] - 1];
+  const target = STEP_DOWN[cur.type] ?? BY_RANK[RANK[cur.type] - 1];
   const used = new Set(tasks.map((t) => t.key));
   const easier = candidates.find((t) => t.topic === cur.topic && t.type === target && t.errorT === null && !used.has(t.key) && !seen.has(t.key));
   if (!easier) return [...tasks];

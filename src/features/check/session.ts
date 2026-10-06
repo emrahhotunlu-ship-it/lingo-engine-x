@@ -93,7 +93,7 @@ function kindOf(s: Pick<State, 'items'>, pos: number, ex: Exercise | null): Chec
   const it = s.items[pos];
   if (!it) return null;
   if (it.kind === 'v') return ex ? (ex.input === 'typed' ? 'typed' : 'choice') : null;
-  return it.task.type === 'mc' ? 'choice' : 'typed';
+  return it.task.type === 'mc' || it.task.type === 'meaning' ? 'choice' : 'typed';
 }
 
 /** Aufgaben synchron im Klick zusammenstellen (Tastatur am iPhone). Rückgabe: Eingabeart der ersten Aufgabe. */

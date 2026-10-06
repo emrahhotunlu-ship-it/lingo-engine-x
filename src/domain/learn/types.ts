@@ -1,3 +1,4 @@
+import type { TaskWhy } from '../explain/types';
 import type { Grade, Lang } from '../srs/types';
 
 // Gemeinsame Typen von Phase 2 (docs/phase2-plan.md §10.1, S0a). Nur der Lead ändert diese
@@ -10,7 +11,8 @@ export type ExecChannel = 'gram' | 'vocab' | 'sprint' | 'dictate' | 'cloze' | 'o
 /** `order` nur noch in gespeicherten Plänen (seit „Sag es“ freiwillig); `say` = „Sag es“ (Lernberatung V1/V2). */
 export type DutyChannel = 'gram' | 'cloze' | 'order' | 'say';
 export type Verdict = 'correct' | 'near' | 'wrong';
-export type GrammarTaskType = 'mc' | 'gap' | 'transform' | 'correct';
+/** `meaning`, `find` und `kwt` sind Aufgabenarten von Lernplattform 2.0 (docs/umbau/lernplattform-2.md §4.7). */
+export type GrammarTaskType = 'mc' | 'gap' | 'transform' | 'correct' | 'meaning' | 'find' | 'kwt';
 export type TaskSrc = 'seed' | 'daily' | 'pool' | 'lesson' | 'ai' | 'review';
 
 export type GrammarTask = {
@@ -29,6 +31,10 @@ export type GrammarTask = {
   ref: string | null;
   /** Zeitstempel des Fehlereintrags, wenn die Aufgabe eine Fehler-Wiederholung ist. */
   errorT: number | null;
+  /** Muster-Kennung (Lernplattform 2.0 §3.1). */
+  pat?: string | null;
+  /** Aufgabengenaue Begründung (Lernplattform 2.0 §3.1). */
+  why?: TaskWhy | null;
 };
 
 export type Help = { level: 0 | 1 | 2; replays?: number };
@@ -62,6 +68,8 @@ export type GrammarAnswer = {
   override?: boolean;
   /** Erster, falscher Versuch vor dem Hinweis (Selbstkorrektur): zählt für Beherrschung und Fehler als falsch. */
   firstWrong?: string;
+  /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */
+  dev?: 't' | 'k';
 };
 
 /** Quellen: g Grammatik, s Sprint, w Schreiben, v Vokabeln (alte App); k Sprechen, b Business (Phase 3). */
@@ -85,6 +93,8 @@ export type DrillAnswer = {
   radar?: RadarEvent;
   /** Einspruch „Ich lag richtig" (M4). */
   override?: boolean;
+  /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */
+  dev?: 't' | 'k';
 };
 
 export type SprintEntry = { t: number; score: number; ok: number; n: number; avgMs: number; combo: number };

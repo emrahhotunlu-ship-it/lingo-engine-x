@@ -44,6 +44,19 @@ describe('i18n-Teile', () => {
     });
   }
 
+  // Lernplattform 2.0 (docs/umbau/lernplattform-2.md §10.0/§10.3): fünf Teile je Paket, nur Schlüssel mit eigenem Präfix.
+  for (const lang of ['de', 'en'] as const) {
+    it(`Teile ex, gx, wx, hx, fx tragen nur Schlüssel mit eigenem Präfix (${lang})`, async () => {
+      const all = await parts(lang);
+      const lp = all.filter((p) => ['ex', 'gx', 'wx', 'hx', 'fx'].includes(p.file.split('.')[0] ?? ''));
+      expect(lp.map((p) => p.file.split('.')[0]).sort()).toEqual(['ex', 'fx', 'gx', 'hx', 'wx']);
+      for (const p of lp) {
+        const prefix = p.file.split('.')[0] ?? '';
+        for (const k of p.keys) expect(k.startsWith(prefix), `${p.file}: ${k}`).toBe(true);
+      }
+    });
+  }
+
   it('jeder Teil ist in de.ts bzw. en.ts eingebunden', async () => {
     const { de } = await import('../../src/i18n/de');
     const { en } = await import('../../src/i18n/en');

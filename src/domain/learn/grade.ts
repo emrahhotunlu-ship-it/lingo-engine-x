@@ -11,7 +11,8 @@ export type LearnKind = GrammarTaskType | 'dictate' | 'cloze' | 'order';
 
 export function learnGrade(kind: LearnKind, verdict: Verdict, timing: Timing, help: Help): Grade {
   // Die Tabelle steht in `domain/grade` (eine Notentabelle für Wörter und Grammatik).
-  const kinds = { mc: 'mc', gap: 'gap', transform: 'transform', correct: 'correct', dictate: 'dictate', cloze: 'cloze', order: 'order' } as const;
+  // Vorläufig (Lernplattform 2.0 §10.0): meaning → mc, find → correct, kwt → transform, bis P4/P5 eigene Schlüssel liefern.
+  const kinds = { mc: 'mc', gap: 'gap', transform: 'transform', correct: 'correct', meaning: 'mc', find: 'correct', kwt: 'transform', dictate: 'dictate', cloze: 'cloze', order: 'order' } as const;
   return gradeAnswer({
     key: kinds[kind],
     verdict,

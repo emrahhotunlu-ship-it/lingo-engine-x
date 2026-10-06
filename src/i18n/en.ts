@@ -27,6 +27,11 @@ import { nbWsEn } from './parts/nbWs.en';
 import { nbSprechenEn } from './parts/nbSprechen.en';
 import { nbProfilEn } from './parts/nbProfil.en';
 import { nbTrainingEn } from './parts/nbTraining.en';
+import { exEn } from './parts/ex.en';
+import { gxEn } from './parts/gx.en';
+import { wxEn } from './parts/wx.en';
+import { hxEn } from './parts/hx.en';
+import { fxEn } from './parts/fx.en';
 
 // UI texts in English (American spelling, CLAUDE.md A7). Plain language, no jargon.
 
@@ -73,6 +78,12 @@ export const en: Record<MessageKey, string> = {
   ...nbSprechenEn,
   ...nbProfilEn,
   ...nbTrainingEn,
+  // Lernplattform 2.0: je Paket ein Teil, nur mit eigenem Präfix
+  ...exEn,
+  ...gxEn,
+  ...wxEn,
+  ...hxEn,
+  ...fxEn,
   appName: 'Lingo-Engine X',
   openSettings: 'Open settings',
   settings: 'Settings',

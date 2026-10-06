@@ -434,7 +434,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       >
         <header className="flex flex-col gap-2">
           <LearnStatus p={p} n={typeof doc?.n === 'number' ? doc.n : 0} recent={Array.isArray(doc?.recent) ? (doc.recent as number[]) : null} kind={t(`grKind_${task.type}` as MessageKey)} kindId={task.type} extra={badge} />
-          <TaskLine task={t(task.type === 'transform' && whole ? 'grTask_transformWhole' : `grTask_${task.type}`)} purpose={t('purposeGrammar')} />
+          <TaskLine task={t(task.type === 'transform' && whole ? 'grTask_transformWhole' : `grTask_${task.type}` as MessageKey)} purpose={t('purposeGrammar')} />
         </header>
         {/* N46 „Kurz erklärt“ (Soll): die Regel in einem Satz, zugeklappt, ohne KI; nicht im Wochen-Check
             und nicht in der Lektion (dort steht die Regel schon über der Aufgabe). */}

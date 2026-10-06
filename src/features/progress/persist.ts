@@ -221,7 +221,7 @@ export function recordProfileFields(scope: string, compute: (cur: Readonly<Doc>)
   });
 }
 
-const grammarChannel = (a: GrammarAnswer): CountEvent['channel'] => (a.task.type === 'mc' ? null : 'write');
+const grammarChannel = (a: GrammarAnswer): CountEvent['channel'] => (a.task.type === 'mc' || a.task.type === 'meaning' ? null : 'write');
 const DRILL_COUNT: Partial<Record<DrillAnswer['type'], { kind: 'v' | 'g'; channel: CountEvent['channel'] }>> = {
   dictate: { kind: 'g', channel: 'listen' },
   cloze: { kind: 'v', channel: 'colloc' },

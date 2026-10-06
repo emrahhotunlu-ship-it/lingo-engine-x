@@ -11,6 +11,9 @@ import { repairCheckReply } from './canned/repairCheck';
 import { patternCheckReply, patternsReply } from './canned/patterns';
 import { registerP7Replies } from './canned/p7';
 import { registerNbReplies } from './canned/nb';
+import { registerLp2P2Replies } from './canned/lp2/p2';
+import { registerLp2P5Replies } from './canned/lp2/p5';
+import { registerLp2P6Replies } from './canned/lp2/p6';
 import { registerTeacherFeedbackReply } from './canned/teacherFeedback';
 
 // Feste, realistische Antworten des Entwicklungs-Adapters für die Vorlagen word-lookup@2,
@@ -250,7 +253,6 @@ export function grammarJudgeReply(input: string): string {
 export function registerCannedReplies(): void {
   registerCannedReply('word-lookup', wordLookupReply);
   registerCannedReply('produce-check', produceCheckReply);
-  registerCannedReply('card-examples', cardExamplesReply);
   registerCannedReply('order-gen', orderGenReply);
   registerCannedReply('grammar-judge', grammarJudgeReply);
   // Phase 3 – Sprechen und Business
@@ -275,6 +277,10 @@ export function registerCannedReplies(): void {
   registerCannedReply('pattern-check', patternCheckReply);
   // word-gen, grammar-items, mnemonic
   registerLearnReplies();
+  // Lernplattform 2.0: je Paket eine eigene Datei (grammar-items → P5, card-examples → P6)
+  registerLp2P2Replies();
+  registerLp2P5Replies();
+  registerLp2P6Replies();
   // Neubau: goal-check, claude-drill, text-cards
   registerNbReplies();
 }

@@ -81,7 +81,7 @@ let itemRun = 0;
 
 type Type = 'mc' | 'gap' | 'transform' | 'correct';
 
-function grammarItemsReply(input: string): string {
+export function grammarItemsReply(input: string): string {
   const topic = line(input, 'Topic id');
   const count = Math.max(3, Number(line(input, 'Count')) || 6);
   const wanted = line(input, 'Wanted types')
@@ -121,6 +121,5 @@ function mnemonicReply(input: string): string {
 
 export function registerLearnReplies(): void {
   registerCannedReply('word-gen', wordGenReply);
-  registerCannedReply('grammar-items', grammarItemsReply);
   registerCannedReply('mnemonic', mnemonicReply);
 }

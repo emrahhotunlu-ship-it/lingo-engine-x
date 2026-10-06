@@ -52,6 +52,14 @@ describe('Entfernungs-Audit', () => {
     expect(hits).toEqual([]);
   });
 
+  // Lernplattform 2.0 (docs/umbau/lernplattform-2.md §4.1/§10.0): Das Eingabeprofil wählt nur die Form einer Aufgabe und ist nie
+  // planwirksam. Domäne und Tagesplan-Speicher dürfen es deshalb nicht importieren (`src/platform/device.ts` bleibt verboten, s. o.).
+  it('src/domain/** und src/features/today/store.ts importieren nichts aus src/platform/input', () => {
+    const re = /from '[^']*\/platform\/input(\.[tj]sx?)?'|import\('[^']*\/platform\/input(\.[tj]sx?)?'\)/;
+    const hits = FILES.filter((f) => (f.includes('/src/domain/') || f.endsWith('/src/features/today/store.ts')) && re.test(read(f))).map((f) => f.replace(ROOT, ''));
+    expect(hits).toEqual([]);
+  });
+
   // Tote Reste des Wochenthemas (Auftrag 2b): Planmaschine liegt in domain/unit, theme/targets/cards/hint/weekWrite sind gelöscht.
   it('keine Wochenthema-Reste: Dateien weg, keine Importe, Plan schreibt kein Thema', () => {
     const gone = ['src/domain/week/theme.ts', 'src/domain/week/targets.ts', 'src/domain/week/cards.ts', 'src/domain/week/hint.ts', 'src/domain/week/index.ts', 'src/domain/week/plan.ts', 'src/domain/week/types.ts', 'src/domain/unit/weekWrite.ts'];

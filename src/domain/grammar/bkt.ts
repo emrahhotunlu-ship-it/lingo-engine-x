@@ -26,6 +26,10 @@ const num = (v: unknown, d: number): number => (typeof v === 'number' && Number.
 
 export function guessOf(type: GrammarTaskType, nOptions: number | null | undefined): number {
   if (type === 'mc') return 1 / Math.max(2, nOptions ?? 4);
+  // Lernplattform 2.0 §4.7: meaning = 1/Zahl der Wahlmöglichkeiten (a, b, beide = 3), find = 1/(Wortzahl + 1;
+  // `nOptions` trägt hier die Wortzahl), kwt = getippt.
+  if (type === 'meaning') return 1 / Math.max(2, nOptions ?? 3);
+  if (type === 'find') return 1 / (Math.max(1, nOptions ?? 6) + 1);
   return GUESS_TYPED;
 }
 

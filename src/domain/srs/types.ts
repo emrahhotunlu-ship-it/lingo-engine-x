@@ -173,6 +173,8 @@ export type AnswerEvent = {
   /** Lektion, aus deren Wörter-Schritt die Antwort stammt (Phase 2, D17). */
   lesson?: string;
   colIndex?: number;
+  /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */
+  dev?: 't' | 'k';
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */
   override?: boolean;
   /** Genutzter Tipp (1 Platzhalter, 2 erster Buchstabe): gewichtet die Antwort geringer (`weight.ts`). */

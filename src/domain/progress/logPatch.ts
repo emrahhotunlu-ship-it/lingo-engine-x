@@ -27,6 +27,7 @@ export type LogEntry = {
   ctx: 'rev' | 'duty' | 'xtra';
   lesson?: string;
   override?: true;
+  dev?: 't' | 'k';
 };
 
 /**
@@ -47,6 +48,7 @@ export type ChunkLogEntry = {
   ms: number;
   ctx: 'rev' | 'duty' | 'xtra';
   override?: true;
+  dev?: 't' | 'k';
 };
 
 /**

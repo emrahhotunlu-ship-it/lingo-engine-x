@@ -1,4 +1,8 @@
 @import 'tailwindcss';
+@import './parts/gx.css';
+@import './parts/wx.css';
+@import './parts/hx.css';
+@import './parts/fx.css';
 
 /* ==========================================================================
    Lingo-Engine X · Design-System (Kap. 8)

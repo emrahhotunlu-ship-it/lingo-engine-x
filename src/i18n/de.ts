@@ -29,6 +29,11 @@ import { nbWsDe } from './parts/nbWs.de';
 import { nbSprechenDe } from './parts/nbSprechen.de';
 import { nbProfilDe } from './parts/nbProfil.de';
 import { nbTrainingDe } from './parts/nbTraining.de';
+import { exDe } from './parts/ex.de';
+import { gxDe } from './parts/gx.de';
+import { wxDe } from './parts/wx.de';
+import { hxDe } from './parts/hx.de';
+import { fxDe } from './parts/fx.de';
 
 export const de = {
   ...aiDe,
@@ -75,6 +80,12 @@ export const de = {
   ...nbSprechenDe,
   ...nbProfilDe,
   ...nbTrainingDe,
+  // Lernplattform 2.0: je Paket ein Teil, nur mit eigenem Präfix
+  ...exDe,
+  ...gxDe,
+  ...wxDe,
+  ...hxDe,
+  ...fxDe,
   appName: 'Lingo-Engine X',
   openSettings: 'Einstellungen öffnen',
   settings: 'Einstellungen',

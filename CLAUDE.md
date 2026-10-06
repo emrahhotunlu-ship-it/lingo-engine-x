@@ -110,6 +110,10 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
 ## A7. Entscheidungsprotokoll
 Hier werden Emrahs Antworten auf die Phase-0-Fragen und alle weiteren Produktentscheidungen mit Datum eingetragen.
 
+**06.10.2026 – Lernplattform 2.0: Vertrags-Commit (Plan `docs/umbau/lernplattform-2.md`)**
+- **Eingabeprofil statt Handy-Modus (nie planwirksam):** Die neue Datei `src/platform/input.ts` (kommt mit P1) wählt nur die **Form** einer Aufgabe (Touch oder Tastatur), nie die Pflicht. Der alte Handy-Modus änderte die Pflicht; sein Verbot (`src/platform/device.ts`, `phoneMode`, `PhoneModeSection`, `setPhoneModeLocal`) bleibt. Abgesichert durch einen Fall in `tests/unit/removalAudit.test.ts`: `src/domain/**` und `src/features/today/store.ts` importieren nichts aus `src/platform/input`.
+- **Regelversion `u.rv`, Planversion bleibt 1:** Tagesplan v2 läuft über das rein ergänzende Feld `u.rv` (`rv !== 2` = alte Regel). `u.v` und `p.v` bleiben 1, damit jeder Leser (auch die Live-Version) jeden neuen Plan liest und der Rückweg sicher ist. Schalter `PLAN_RV` stellt nur die Koordination am Ende von Welle 2 um.
+
 **04.10.2026 – „Go Anwenden“: vierter Reiter neben Wörtern und Grammatik (Emrahs Wunsch)**
 - Emrah: „lieber neben Wortschatz und Grammatik einen Kombinationsübungsbereich … Diktat und Hörübung und sowas“. Reiter: Heute · Wörter · Grammatik · **Anwenden** · Fortschritt. Freiwillig, nie Pflicht, keine eigene Fortschrittsnote.
 - Diktat, Hörschleife, Hör-Modus, Lücke, Satzbau und Rollenspiel/Einwand-Training liegen dort. Der Standardwert „Diktat/Sprint/Hören entfallen“ gilt nicht mehr (Sprint entfällt weiter). Zweite Stufe (Hörübung mit Frage, Kombi-Aufgaben) wird mit Lernwissenschaft und Englischlehrer geplant; Stand in `docs/umbau/stand.md`.

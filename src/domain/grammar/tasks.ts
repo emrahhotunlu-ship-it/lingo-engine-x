@@ -141,7 +141,7 @@ export function seedTasks(): readonly GrammarTask[] {
 }
 
 /** Wunschformen nach Beherrschung (§5.2): unsicher erkennen, mittel ergänzen, sicher selbst bauen. */
-export function wantTypes(p: number): GrammarTaskType[] {
+export function wantTypes(p: number): Array<'mc' | 'gap' | 'transform' | 'correct'> {
   if (p < 0.4) return ['mc', 'gap'];
   if (p <= 0.7) return ['gap', 'transform'];
   return ['correct', 'transform'];
