@@ -14,3 +14,11 @@ Hinweise
 - FreeDict ist GPL-3.0: Die App ist privat und wird nicht weitergegeben. Würde die App je verteilt, müsste dieser Teil neu bewertet werden.
 - Auswahlregel gegen falsche Bedeutungen: eine deutsche Bedeutung muss im deutschen Beispielsatz vorkommen oder das Wort hat nur eine Bedeutung; danach prüft Claude jeden Eintrag.
 - Neu bauen: `SRC=/tmp/atl python3 scripts/atlas/build_atlas.py` (Quellen vorher laden, siehe Kopf des Skripts), danach erneut durchsehen lassen.
+
+## Bereinigung (Lernplattform 2.0, P3, 06.10.2026)
+`python3 scripts/atlas/clean_atlas.py` (nur Python-Standardbibliothek, idempotent) bereinigt `atlas.json` **ohne** Neuaufbau aus den Quellen. Nichts wird gelöscht; `meta.json` wird mitgeschrieben (sichtbare Einträge, Paketgröße).
+- **Ausgeblendet (`hidden`)**: britisches Stichwort (`scripts/atlas/british.py`), Wortart passt nicht zur Definition und lässt sich nicht sicher berichtigen.
+- **Berichtigt**: britische Schreibung im Beispielsatz → US-Form; englische Brocken in der deutschen Bedeutung (`d`, z. B. „introduction of the euro“); Wortart `p`, wenn Definition und deutsche Bedeutung eindeutig dazu passen; wenige Handkorrekturen nach Englischlehrer-Prüfung (`OVERRIDES`).
+- **Markiert**: `basic` (Grundwortschatz: Rang < 3.300 oder alltägliche Dinge wie jeans/lighter/euro; die NGSL-Kernliste war offline nicht verfügbar, die Rangschwelle ist ein Näherungswert), `exWeak` (Beispielsatz mit Vorname wie „Tom“ oder britischem Wort wie „lorry“).
+- Die Band-Kennungen (`core`, `plus`, `c1`, `rare`) bleiben; ihre Anzeigenamen („häufig · mittel · selten“) stehen in den Texten der Atlas-Seite (nicht in diesen Daten).
+- Lizenzen unverändert: FreeDict GPL-3 (private App), Tatoeba CC BY 2.0 FR, wordfreq/WordNet wie oben.

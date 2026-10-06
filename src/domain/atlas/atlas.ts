@@ -20,6 +20,12 @@ export type AtlasEntry = {
   xd: string;
   /** Häufigkeitsrang (wordfreq) */
   r: number;
+  /** Ausgeblendet (`scripts/atlas/clean_atlas.py`: britisches Stichwort, Wortart passt nicht zur Definition); bleibt in der Datei. */
+  hidden?: 1;
+  /** Grundwortschatz (kein C1-Ziel). */
+  basic?: 1;
+  /** Beispielsatz schwach (Vorname, britisches Wort): beim Kartenanlegen lieber einen neuen Satz holen. */
+  exWeak?: 1;
 };
 
 export const ATLAS_BANDS = ['core', 'plus', 'c1', 'rare'] as const;
@@ -33,7 +39,7 @@ let cache: readonly AtlasEntry[] | null = null;
 export function atlasEntries(): readonly AtlasEntry[] {
   if (!cache) {
     const raw = JSON.parse(atlasText) as { items?: AtlasEntry[] };
-    cache = (raw.items ?? []).filter((e) => e.w && e.d && e.x).sort((a, b) => a.r - b.r);
+    cache = (raw.items ?? []).filter((e) => e.w && e.d && e.x && !e.hidden).sort((a, b) => a.r - b.r);
   }
   return cache;
 }
