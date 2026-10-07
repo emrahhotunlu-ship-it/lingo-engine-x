@@ -25,6 +25,10 @@ export type Timing = {
   /** Zeitgrenze (speed) und ob sie abgelaufen war. */
   limitMs?: number;
   timedOut?: boolean;
+  /** Eingabeprofil der Runde (`touch` dehnt die Zeitgrenzen getippter Formen, §4.10). */
+  profile?: 'touch' | 'keys';
+  /** Nur `complete`: Claude hat den Satz bestätigt (sonst höchstens „Schwer“). */
+  aiChecked?: boolean;
 };
 
 const inputOf = (ex: ExerciseId, verdict: Verdict, timing: Timing, help: 0 | 1 | 2): GradeInput => ({
@@ -39,6 +43,8 @@ const inputOf = (ex: ExerciseId, verdict: Verdict, timing: Timing, help: 0 | 1 |
   limitMs: timing.limitMs,
   timedOut: timing.timedOut,
   help,
+  ...(timing.profile ? { profile: timing.profile } : {}),
+  ...(timing.aiChecked ? { aiChecked: true } : {}),
 });
 
 /** Note ohne Hilfe-Deckel (Tabelle `domain/grade`). */

@@ -90,7 +90,7 @@ export function packDoc(e: PackEntry, today: string, nowMs: number): PackDoc | n
     src: 'pack',
     origin: { v: 1, kind: 'pack', ref, title: 'C1-Paket', t: nowMs },
     today,
-    keep: { register: e.register, ...(e.why ? { why: e.why } : {}), ...(x?.alt ? { alt: x.alt } : {}), ...(x?.fam ? { fam: x.fam as Record<string, string> } : {}) },
+    keep: { register: e.register, ...(e.why ? { why: e.why } : {}), ...(x?.alt ? { alt: x.alt } : {}), ...(x?.fam ? { fam: x.fam } : {}) },
   });
   return made ? { kind: 'vocab', path: `vocab/${made.id}`, id: made.id, doc: made.doc } : null;
 }

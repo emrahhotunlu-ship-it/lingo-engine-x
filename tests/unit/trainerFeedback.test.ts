@@ -139,11 +139,11 @@ describe('Beispielsätze', () => {
     expect(examplesPatch({ ...doc, xEx: 'kaputt' }, ok)).toBeNull();
     expect(examplesPatch(undefined, ok)).toBeNull();
   });
-  it('Vorlage card-examples@2: quick, Beispiel und Adapter-Antwort bestehen das Schema', () => {
+  it('Vorlage card-examples@3: quick, Beispiel und Adapter-Antwort bestehen das Schema', () => {
     expect(examplesTemplate.tier).toBe('quick');
     const vars = { word: 'to persuade', pos: 'verb', meaning: 'to make someone agree', sentence: 'I persuaded him.' };
     const p = examplesTemplate.build(vars);
-    expect(p.split('\n')[0]).toBe('[card-examples@2]');
+    expect(p.split('\n')[0]).toBe('[card-examples@3]');
     expect(examplesTemplate.schema(vars).safeParse(JSON.parse(CARD_EXAMPLES_EXAMPLE)).success).toBe(true);
     expect(examplesTemplate.schema(vars).safeParse(JSON.parse(cardExamplesReply(p))).success).toBe(true);
     expect(examplesTemplate.schema(vars).safeParse({ examples: ['Wir haben ihn heute endlich überzeugt, mitzukommen.', 'Das ist ein deutscher Satz mit vielen Wörtern.'] }).success).toBe(false);

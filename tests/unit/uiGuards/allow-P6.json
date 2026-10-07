@@ -1,18 +1,6 @@
 {
   "owner": "P6",
-  "matchMedia": [
-    "src/features/lookup/LookupPopover.tsx",
-    "src/features/vocab/ExerciseView.tsx"
-  ],
-  "textPx": [
-    "src/features/vocab/ExerciseView.tsx",
-    "src/features/vocab/anki/FlipCard.tsx",
-    "src/features/vocab/list/VocabScreen.tsx",
-    "src/features/vocab/list/WordSheet.tsx"
-  ],
-  "card": [
-    "src/features/vocab/IntroCard.tsx",
-    "src/features/vocab/Summary.tsx",
-    "src/features/vocab/listen/ListenLoop.tsx"
-  ]
+  "matchMedia": [],
+  "textPx": [],
+  "card": []
 }

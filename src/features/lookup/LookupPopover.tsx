@@ -16,6 +16,7 @@ import { normalizeWord } from '../../domain/text/tokenize';
 import { closeLookup, focusTargetOf, useLookup, type WordTapRequest } from '../../engine/wordTap';
 import { useSettings } from '../../app/settings';
 import { useT, type MessageKey } from '../../i18n';
+import { inputProfile } from '../../platform/input';
 import { speak, unlockSpeech, useSpeech } from '../../platform/speech';
 import { wordLookup, type WordLookupOut } from '../../prompts/wordLookup';
 import { Button, IconButton } from '../../ui/Button';
@@ -51,7 +52,7 @@ function useCardIndex(): ReadonlyMap<string, CardInfo> {
 }
 
 function useSheetMode(): boolean {
-  const [sheet] = useState(() => window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 640);
+  const [sheet] = useState(() => inputProfile() === 'touch' || window.innerWidth < 640);
   return sheet;
 }
 

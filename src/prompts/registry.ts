@@ -8,6 +8,7 @@ import { grammarJudge } from './grammarJudge';
 import { mnemonic } from './mnemonic';
 import { NB_TEMPLATES } from './nb';
 import { produceCheck } from './produceCheck';
+import { synonymCheck } from './synonymCheck';
 import { wordGen } from './wordGen';
 import { companionChat } from './companionChat';
 import { translate } from './translate';
@@ -61,6 +62,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   ...NB_TEMPLATES,
   // Paket B: „Claude merkt sich“ (B5)
   memoryExtract,
+  // Lernplattform 2.0 P6: „War das auch richtig?“
+  synonymCheck,
 ];
 
 /** Gesprächsvorlagen (Freitext, gestreamt über src/ai/stream.ts; Phase 3 und 5). */

@@ -65,7 +65,7 @@ function ChunkOrigin({ card }: { card: TrainCard }) {
         <div className="flex items-start gap-1">
           <EnglishText
             as="p"
-            className="min-w-0 flex-1 text-[0.95rem] leading-relaxed"
+            className="lx-t-support min-w-0 flex-1"
             testId="origin-sentence"
             text={sentence}
             area="lookup"
@@ -215,7 +215,7 @@ function WordBody({ card, onClose }: { card: TrainCard; onClose: () => void }) {
           <p className="lx-eyebrow">{t('trExamples')}</p>
           <ul className="flex flex-col gap-1.5">
             {examples.map((x) => (
-              <li key={x.en} className="text-[0.95rem] leading-relaxed" data-testid="example" data-src={x.src}>
+              <li key={x.en} className="lx-t-support" data-testid="example" data-src={x.src}>
                 <EnglishText as="span" text={x.en} {...src} />
               </li>
             ))}

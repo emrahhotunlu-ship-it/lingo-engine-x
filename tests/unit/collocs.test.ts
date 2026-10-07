@@ -137,11 +137,11 @@ describe('wann gefragt wird (wantsEnrichment)', () => {
   });
 });
 
-describe('Vorlage card-examples@2', () => {
+describe('Vorlage card-examples@3', () => {
   const vars = { word: 'reliable', pos: 'adj', meaning: 'can be trusted', sentence: '' };
   it('Beispielantwort und Testantwort bestehen das Schema; Antworten ohne Wortpartner auch (leer)', () => {
     const schema = template.schema(vars);
-    expect(template.version).toBe(2);
+    expect(template.version).toBe(3);
     expect(schema.safeParse(JSON.parse(CARD_EXAMPLES_EXAMPLE)).success).toBe(true);
     const out = schema.safeParse({ examples: ['This is a reliable partner for us.', 'We need reliable data today.'] });
     expect(out.success && out.data.collocations).toEqual([]);

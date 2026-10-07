@@ -225,7 +225,7 @@ function WordRow({ card, nowMs, lang, onOpen, selecting, selected }: { card: Tra
           <span className="max-w-full font-medium [overflow-wrap:anywhere]" lang="en">
             {card.word}
           </span>
-          {card.kind === 'chunk' && <span className="flex-none rounded-full border border-line px-2 py-0.5 text-[0.7rem] font-medium text-muted">{t('vcChunkBadge')}</span>}
+          {card.kind === 'chunk' && <span className="flex-none rounded-full border border-line px-2 py-0.5 lx-t-meta font-medium text-muted">{t('vcChunkBadge')}</span>}
         </span>
         {meaning && (
           <span className="text-sm text-muted [overflow-wrap:anywhere]" lang={lang}>

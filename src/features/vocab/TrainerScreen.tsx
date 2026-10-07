@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { itemEnter } from '../../ui/motion';
 import { useEffect, useLayoutEffect, useMemo } from 'react';
 import { useNav } from '../../app/nav';
 import { useT } from '../../i18n';
@@ -21,8 +22,8 @@ import { RepairItem } from '../repair/RepairItem';
 import { ExerciseTop } from '../learn/ui';
 
 // Vokabeltrainer: eine Karte zur Zeit. Kartenwechsel ohne Warte-Animation (leistung.md §4 Nr. 4):
-// die neue Karte ersetzt sofort und blendet nur ein (120 ms, nur Deckkraft – kein seitliches
-// Verschieben, das am Handy kurz waagrecht überstand). Jede Karte in einer eigenen Fehlergrenze.
+// die neue Karte ersetzt sofort und blendet ab dem ersten Bild von 0,6 auf 1 ein (`itemEnter`, 150 ms, nur Deckkraft – nie ein Leerbild und
+// kein seitliches Verschieben, das am Handy kurz waagrecht überstand). Jede Karte in einer eigenen Fehlergrenze.
 // Esc verlässt die Runde – alles Beantwortete ist gespeichert bzw. vorgemerkt.
 
 export function TrainerScreen() {
@@ -101,13 +102,7 @@ export function TrainerScreen() {
         duty="review"
         middleOverlay={undo.t !== null ? <UndoBar progress={progress} progressTestId="trainer-progress" /> : null}
       />
-      <motion.div
-        key={status === 'summary' ? 'summary' : `step-${step}`}
-        data-step={status === 'summary' ? 'summary' : step}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.12, ease: 'easeOut' }}
-      >
+      <motion.div key={status === 'summary' ? 'summary' : `step-${step}`} data-step={status === 'summary' ? 'summary' : step} variants={itemEnter} initial="initial" animate="animate">
         {status === 'summary' ? (
           <Summary onBack={leave} />
         ) : (

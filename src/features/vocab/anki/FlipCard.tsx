@@ -1,30 +1,27 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useAiAvailable } from '../../../ai/scope';
-import { useClock } from '../../../app/clock';
 import { maskOf } from '../../../domain/answer/mask';
 import { ipaOf } from '../../../domain/lexicon/pron';
 import { meaningOf } from '../../../domain/srs/cards';
-import { chunkWhy } from '../../../domain/srs/chunkCards';
-import { CONFIDENCE_KEYS, confidenceDots, confidenceOf } from '../../../domain/srs/confidence';
+import { unitState } from '../../../domain/metrics';
 import { cardExamples, wantsEnrichment } from '../../../domain/srs/examples';
+import { explainWord, registerOf } from '../../../domain/srs/explainWord';
 import { posKey } from '../../../domain/srs/explain';
 import { flipSuggest, formatInterval, seenOn, wordCount } from '../../../domain/srs/flip';
 import { previewIntervals } from '../../../domain/srs/scheduler';
 import type { Exercise, Grade } from '../../../domain/srs/types';
 import { isPhraseCard } from '../../../domain/srs/vocabList';
-import { CardStatus } from '../../../engine/CardStatus';
 import { EnglishText } from '../../../engine/EnglishText';
 import { useHiddenInput } from '../../../engine/HiddenInput';
 import { SpeakButton } from '../../../engine/SpeakButton';
 import { classifySwipe, swipeExcluded } from '../../../engine/swipe';
 import { useHotkeys } from '../../../engine/useHotkeys';
 import { useT, type MessageKey } from '../../../i18n';
-import { ActionBar, PrimaryAction } from '../../../ui/ActionBar';
+import { ExerciseShell, Explanation, Examples } from '../../../ui/exercise';
 import { GradeButtons } from '../../../ui/GradeButtons';
-import { Icon } from '../../../ui/Icon';
 import { nextT } from '../../progress/persist';
 import { useDecks } from '../decksStore';
-import { MnemonicBlock } from '../mnemonic';
+import { WordExtras } from '../WordExtras';
 import { requestExamples, useExamples } from '../examples';
 import { commitAnswer, prepareNext, useSession, type FirstKind } from '../session';
 
@@ -59,7 +56,6 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const { t, lang } = useT();
   const api = useHiddenInput();
   const ai = useAiAvailable();
-  const now = useClock((s) => s.now);
   const day = useSession((s) => s.day);
   const strict = useSession((s) => s.strict);
   const twoButtons = useDecks((s) => s.decks.prefs.grades === 2);
@@ -68,13 +64,12 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const dir = e.dir ?? 'de-en';
   const meaning = meaningOf(card, lang);
   const [shown, setShown] = useState<{ t: number; ms: number; suggest: 2 | 3 | 4; iv: Record<Grade, number> } | null>(null);
-  const [info, setInfo] = useState(false);
   const shownAt = useRef(0);
   const hiddenMs = useRef(0);
   const hiddenAt = useRef<number | null>(null);
   const wasHidden = useRef(false);
   const done = useRef(false);
-  const [conf] = useState(() => confidenceOf(card, now));
+  const [state0] = useState(() => unitState(card));
 
   // Denkzeit ab dem ersten Bild der Vorderseite; Zeit im Hintergrund zählt nicht (§2).
   useEffect(() => {
@@ -195,155 +190,88 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const ctx = card.context;
   const pk = posKey(card.pos);
   const ipa = shown ? ipaOf(card.word) : null;
-  const why = chunkWhy(card, lang);
   const freshEntry = useExamples((s) => s.byCard[card.id]);
-  const examples = shown ? cardExamples(card, ctx?.sentence ?? null, freshEntry?.items ?? NO_EXAMPLES) : [];
-  // Eigene Wortpartner der Karte; fehlen sie, zeigt die Rückseite sofort, was Claude eben ergänzt hat (gespeichert, `ai`).
-  const col = (card.col.length ? card.col.map((c) => ({ p: c.p, de: c.de, ai: !!c.ai })) : (freshEntry?.col ?? []).map((c) => ({ p: c.p, de: c.de, ai: true }))).filter((c) => c.p).slice(0, 3);
+  const extras = freshEntry?.items ?? NO_EXAMPLES;
+  const model = useMemo(
+    () =>
+      shown
+        ? explainWord({ card, ex: 'flip', verdict: 'ok', given: '', check: { verdict: 'correct' }, lang, examples: cardExamples(card, ctx?.sentence ?? null, extras).map((x) => ({ en: x.en, de: null, ctx: null })) })
+        : null,
+    [shown, card, lang, ctx?.sentence, extras],
+  );
+  const reg = registerOf(card);
+  const prompt =
+    dir === 'de-en' ? (
+      <div className="flex flex-col items-center gap-3 text-center">
+        <p className="lx-t-title" lang={lang} data-testid="flip-front">
+          {meaning}
+        </p>
+        {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} slot={{ start: ctx.start, end: ctx.end, node: gapNode }} testId="flip-sentence" />}
+      </div>
+    ) : (
+      <div className="flex flex-col items-center gap-3 text-center">
+        <p className="lx-t-title" lang="en" data-testid="flip-front">
+          {card.word}
+        </p>
+        {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="flip-sentence" />}
+      </div>
+    );
+  const back = shown ? (
+    <section className="flex flex-col gap-3 text-left" data-testid="flip-back" aria-live="polite">
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="lx-t-title" lang="en" data-testid="flip-answer">
+          {card.word}
+        </p>
+        <SpeakButton text={card.word} testId="flip-listen" />
+        {ipa && (
+          <span className="lx-t-meta text-muted" lang="en" data-testid="flip-ipa">
+            {ipa}
+          </span>
+        )}
+      </div>
+      <p className="lx-t-support">
+        {/* Die deutsche Bedeutung steht genau einmal: bei Deutsch → Englisch zeigt sie schon die Vorderseite. */}
+        {dir === 'en-de' && meaning && <span lang={lang}>{meaning}</span>}
+        {pk && <span className="text-muted">{dir === 'en-de' && meaning ? ' · ' : ''}{t(pk as MessageKey)}</span>}
+        {reg && <span className="text-muted"> · {t(`wxReg_${reg}` as MessageKey)}</span>}
+      </p>
+      {model && <Explanation model={model} depth="min" learning={false} />}
+      {model && model.examples.length > 0 && <Examples items={model.examples} open={0} />}
+      <WordExtras card={card} open={false} lang={lang} extras={extras} />
+    </section>
+  ) : null;
 
   return (
-    <div className="flex flex-col gap-4" data-testid="flip" data-card={card.id} data-kind={card.kind} data-dir={dir} data-shown={shown ? '' : undefined} data-suggest={shown?.suggest}>
-      <article
-        className="lx-glass flex min-h-[18rem] flex-col gap-4 rounded-[var(--radius-card)] p-5 sm:p-7"
-        data-testid="exercise"
-        data-ex="flip"
-        data-card={card.id}
-        data-kind={card.kind}
-        data-stage={card.stage}
-        onClick={(ev) => {
-          if (!shown && !(ev.target as HTMLElement).closest('button')) reveal();
-        }}
-      >
-        <header className="flex items-start justify-between gap-3">
-          <CardStatus
-            dots={confidenceDots(conf)}
-            level={conf}
-            word={t(CONFIDENCE_KEYS[conf])}
-            label={t('confLabel', { level: t(CONFIDENCE_KEYS[conf]) })}
-            again={again ? t('trAgainBadge') : null}
-            kind={t('nbWsFlipKind')}
-            kindLabel={t('exKindLabel', { name: '' }).trim()}
-            kindId="flip"
-          />
-          <button
-            type="button"
-            className="-m-2 inline-flex size-11 flex-none items-center justify-center rounded-full text-subtle transition-colors hover:text-fg"
-            aria-label={t('nbWsFlipInfoLabel')}
-            aria-expanded={info}
-            onClick={() => setInfo((v) => !v)}
-            data-testid="purpose-info"
-          >
-            <Icon name="info" size={18} />
-          </button>
-        </header>
-        {info && (
-          <p className="text-sm text-muted" data-testid="purpose">
-            {t('nbWsFlipInfo')} {t('nbWsGradeInfo')}
-          </p>
-        )}
-        <h2 className="text-base font-medium text-muted" data-testid="task">
-          {t(dir === 'de-en' ? 'nbWsFlipTaskDeEn' : 'nbWsFlipTaskEnDe')}
-        </h2>
-        <div className="flex flex-1 flex-col items-center justify-center gap-3 text-center">
-          {dir === 'de-en' ? (
-            <>
-              <p className="text-2xl font-semibold tracking-tight" lang={lang} data-testid="flip-front">
-                {meaning}
-              </p>
-              {ctx && !shown && (
-                <EnglishText as="p" className="lx-sentence max-w-[34ch] text-muted" text={ctx.sentence} {...src} slot={{ start: ctx.start, end: ctx.end, node: gapNode }} testId="flip-sentence" />
-              )}
-            </>
-          ) : (
-            <>
-              <p className="text-3xl font-bold tracking-tight" lang="en" data-testid="flip-front">
-                {card.word}
-              </p>
-              {ctx && !shown && <EnglishText as="p" className="lx-sentence max-w-[34ch] text-muted" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="flip-sentence" />}
-            </>
-          )}
-        </div>
-        {shown && (
-          <section className="flex flex-col gap-3 border-t border-line pt-4 text-left" data-testid="flip-back" aria-live="polite">
-            <div className="flex flex-wrap items-center gap-2">
-              <p className="text-2xl font-semibold tracking-tight" lang="en" data-testid="flip-answer">
-                {card.word}
-              </p>
-              <SpeakButton text={card.word} testId="flip-listen" />
-              {ipa && (
-                <span className="text-sm text-muted" lang="en" data-testid="flip-ipa">
-                  {ipa}
-                </span>
-              )}
-            </div>
-            <p className="text-base">
-              {meaning && <span lang={lang}>{meaning}</span>}
-              {pk && <span className="text-muted"> · {t(pk as MessageKey)}</span>}
-            </p>
-            {why && (
-              <p className="text-sm text-muted" lang={lang} data-testid="chunk-why">
-                {why}
-              </p>
-            )}
-            {ctx && (
-              <div className="flex items-start gap-1">
-                <EnglishText as="p" className="lx-sentence min-w-0 flex-1" text={ctx.sentence} {...src} highlight={[ctx.start, ctx.end]} testId="origin-sentence" />
-                <SpeakButton text={ctx.sentence} />
-              </div>
-            )}
-            {col.length > 0 && (
-              <div className="flex flex-col gap-1" data-testid="flip-col">
-                <p className="lx-eyebrow">{t('nbWsCollocations')}</p>
-                <ul className="flex flex-col gap-0.5 text-sm">
-                  {col.map((c) => (
-                    <li key={c.p}>
-                      <span lang="en" className="font-medium">
-                        {c.p}
-                      </span>
-                      {lang === 'de' && c.de ? <span className="text-muted"> – {c.de}</span> : null}
-                    </li>
-                  ))}
-                </ul>
-                {col.some((c) => c.ai) && (
-                  <p className="text-xs text-subtle" data-testid="flip-col-ai">
-                    {t('nbWsColAiNote')}
-                  </p>
-                )}
-              </div>
-            )}
-            {examples.length > 0 && (
-              <div className="flex flex-col gap-1.5" data-testid="examples">
-                <p className="lx-eyebrow">{t('trExamples')}</p>
-                <ul className="flex flex-col gap-1.5">
-                  {examples.slice(0, 3).map((x) => (
-                    <li key={x.en} className="text-[0.95rem] leading-relaxed" data-testid="example">
-                      <EnglishText as="span" text={x.en} {...src} />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <MnemonicBlock card={card} />
-          </section>
-        )}
-      </article>
-      {!shown ? (
-        <ActionBar stateKey="show">
-          <PrimaryAction onClick={reveal} testId="flip-show">
-            {t('nbWsFlipShow')}
-          </PrimaryAction>
-        </ActionBar>
-      ) : (
-        <div className="flex flex-col gap-2">
-          <GradeButtons
-            options={grades.map((g, i) => ({ grade: g, label: twoButtons ? t(i === 0 ? 'nbWsGradeNo' : 'nbWsGradeYes') : t(GRADE_KEY[g]), interval: formatInterval(shown.iv[g], lang) }))}
-            suggest={shown.suggest}
-            onGrade={grade}
-            label={t('nbWsGradesLabel')}
-            note={`${t('nbWsSuggest', { grade: t(GRADE_KEY[shown.suggest]) })} · ${t('nbWsSwipeHint', { again: t('nbWsGrade1'), grade: t(GRADE_KEY[shown.suggest]) })}`}
-          />
-        </div>
-      )}
+    <div
+      data-testid="flip"
+      data-card={card.id}
+      data-kind={card.kind}
+      data-dir={dir}
+      data-shown={shown ? '' : undefined}
+      data-suggest={shown?.suggest}
+      onClick={(ev) => {
+        if (!shown && !(ev.target as HTMLElement).closest('button')) reveal();
+      }}
+    >
+      <ExerciseShell
+        meta={{ ex: 'flip', id: card.id, stage: card.stage, kind: card.kind }}
+        status={{ area: 'words', state: state0, kindLabel: t('nbWsFlipKind'), badge: again ? t('trAgainBadge') : null }}
+        task={{ text: t(dir === 'de-en' ? 'nbWsFlipTaskDeEn' : 'nbWsFlipTaskEnDe'), purpose: `${t('nbWsFlipInfo')} ${t('nbWsGradeInfo')}` }}
+        prompt={prompt}
+        answer={back}
+        primary={{ label: t('nbWsFlipShow'), onClick: reveal, testId: 'flip-show' }}
+        barOverride={
+          shown ? (
+            <GradeButtons
+              options={grades.map((g, i) => ({ grade: g, label: twoButtons ? t(i === 0 ? 'nbWsGradeNo' : 'nbWsGradeYes') : t(GRADE_KEY[g]), interval: formatInterval(shown.iv[g], lang) }))}
+              suggest={shown.suggest}
+              onGrade={grade}
+              label={t('nbWsGradesLabel')}
+              note={`${t('nbWsSuggest', { grade: t(GRADE_KEY[shown.suggest]) })} · ${t('nbWsSwipeHint', { again: t('nbWsGrade1'), grade: t(GRADE_KEY[shown.suggest]) })}`}
+            />
+          ) : undefined
+        }
+      />
     </div>
   );
 }

@@ -83,7 +83,7 @@ export function ListenLoop() {
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="listen-loop">
       <ExerciseTop onClose={close} closeLabel={t('nbWsLoopClose')} closeTestId="loop-close" progress={item ? { n: idx + 1, total: items.length } : null} progressTestId="loop-progress" ctx="extra" />
-      <section className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7">
+      <section className="lx-glass lx-exercise flex flex-col gap-5">
         <header className="flex flex-col gap-1">
           <h2 className="text-base font-medium text-muted" data-testid="task">
             {t('nbWsLoopTask')}

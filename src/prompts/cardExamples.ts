@@ -3,7 +3,7 @@ import { isWrongLang } from '../domain/lang/detect';
 import { clip, header } from './common';
 import type { PromptTemplate } from './types';
 
-// card-examples@2: zwei bis drei natürliche Beispielsätze für eine Karte, deren eigene
+// card-examples@3 (Lernplattform 2.0 §4.8: die Beispielsätze stammen aus der Berufswelt, auch beim Atlas-Eintrag „Lernen“) · card-examples@2: zwei bis drei natürliche Beispielsätze für eine Karte, deren eigene
 // Beispiele nicht reichen (CLAUDE.md A7), und seit @2 (Englischlehrer 02.10.2026) bis zu zwei typische Wortpartner
 // (`collocations`, Format der alten App `{p, de, gap, opts, ex}`). `quick`, klein, 24 h zwischengespeichert.
 // Nur Englisch (amerikanisch), keine Erklärung – so entsteht keine Mischsprache.
@@ -23,7 +23,7 @@ export const CARD_EXAMPLES_EXAMPLE =
   '{"examples":["Our supplier has always been reliable, even during the holidays.","We need reliable data before we present the numbers to the board.","She is one of the most reliable people on the team."],"collocations":[{"p":"highly reliable","de":"äußerst zuverlässig","gap":"highly","opts":["strongly","heavily","deeply"],"ex":"The new archive system has proven [highly reliable] in daily use."}]}';
 
 const ID = 'card-examples';
-const VERSION = 2;
+const VERSION = 3;
 
 /** Tolerant lesen: `{en: "…"}` statt Text, mehr als vier Sätze (die ersten vier zählen). */
 function looseExamples(v: unknown): unknown {
@@ -71,7 +71,7 @@ export const cardExamples: PromptTemplate<CardExamplesVars, CardExamplesOut> = {
       CARD_EXAMPLES_EXAMPLE,
       'Rules:',
       '- examples: exactly 3 new, natural sentences, each 8–18 words, each containing the word (inflected forms are fine).',
-      '- Use the word with the same meaning as on the card. Mix work and everyday contexts.',
+      '- Use the word with the same meaning as on the card. Set the sentences in business life (meetings, e-mails, contracts, clients, projects), never in everyday small talk.',
       '- Do not repeat the card sentence. No brackets, no quotes, no translations in the examples.',
       '- collocations: 0 to 2 typical collocations of the word (verb + noun, adjective + noun, noun + preposition, adverb + adjective) that German speakers often get wrong. Only give one if you are sure it is natural American English; otherwise use an empty list.',
       '  - p: the collocation in base form, 2 to 5 words, containing the word. de: its German meaning in 2 to 6 words.',
