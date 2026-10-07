@@ -123,3 +123,15 @@
   display: inline-block;
   animation: dz-rise 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* Urteilsband: Urteil, dann „Wieder in …“, danach Zusätze („War das auch richtig?“, Teilpunkte) – feste Reihenfolge. */
+[data-slot='verdict'] {
+  display: flex;
+  flex-direction: column;
+}
+[data-slot='verdict'] > [data-testid='verdict-block'] {
+  order: -2;
+}
+[data-slot='verdict'] > [data-testid='next-in'] {
+  order: -1;
+}
