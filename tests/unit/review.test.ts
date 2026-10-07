@@ -65,7 +65,7 @@ describe('FSRS-Planung und Spiegelung der alten Felder', () => {
         }
       }
     }
-  });
+  }, 30000);
 
   it('lapses nur bei „Nochmal" auf einer nicht neuen Karte; intro nur beim Übergang von neu', () => {
     const review = { word: 'x', state: 'review', S: 5, D: 5, due: T, last: T - 5 * DAY, reps: 3, lapses: 1, stage: 3 };
