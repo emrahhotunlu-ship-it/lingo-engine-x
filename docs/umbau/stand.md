@@ -219,3 +219,7 @@ Tests: 1953 Unit; E2E der berührten Bildschirme grün (a11y: Kontrast der „Ne
 **07.10.2026 – Zwischenstand-Test-Link (Emrahs Neugier):** `AXHkh6…` Version `1791405486-6ab2` (Artefakt-Version 49), Rückweg `1791393276-ae06` (Test 6). Enthält Design Stufe 1 + Effekt-Engine + mcc-Mischen + R3-a (Schalter aus). Bekannte UX-Befunde (B1–B3, W1–W11) noch offen, Korrekturrunde beim Design-Agenten. Live unverändert v68.
 
 **07.10.2026 – Reihenfolge (Emrahs Entscheidung):** 1) Design Stufe 2 (UX-Befunde B1–B3/W1–W11) → Test-Link 7 → live nach „Ja live nehmen“; 2) danach sofort **R6 Premium** (C1-Reise, Wort-Himmel mit WebGL, Struktur-Filme, Funken-System, native Übergänge) mit Design-Agent (Opus), **vor R4**; 3) dann R4 Messen, R3 live nach Lehrer-Freigabe, R5. Emrah: „Bin zufrieden heute.“
+
+## 07.10.2026 spät – Nachtauftrag Emrah: „bis morgen fertig mit neuem Design premium“
+- Design (W5–W11) in fokus zusammengeführt: `c01377e` (Unit 4693 grün, volle E2E läuft).
+- R6 gestartet in zwei Spuren (Opus): A `claude/umbau-r6-a` (P54–P57, P60), B `claude/umbau-r6-b` (P58, P59, P61 + 6 Pilotfilme). Danach: Lehrer-Prüfung der Filme, Zusammenführen, volle Tests, ux-reviewer, Test-Link mit Design + Premium. Live erst nach „Ja live nehmen“.
