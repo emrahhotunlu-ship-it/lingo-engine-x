@@ -31,12 +31,11 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
   const { errors } = await startWith(page, { 'vocab/avoid': avoid() });
   const ex = page.getByTestId('exercise');
   await expect(ex).toHaveAttribute('data-ex', 'cloze_hint');
-  // Status: fünf Punkte mit Wort und Abfrageart; Aufgabe in einer Zeile.
+  // Status: vier Punkte mit Zustandswort (Neu · Lernt · Sicher · Fest) und Abfrageart; Aufgabe in einer Zeile.
   await expect(page.getByTestId('status')).toBeVisible();
-  await expect(page.locator('.lx-dot')).toHaveCount(5);
-  // Die Testkarte ist seit Jahren überfällig: niedrige Abrufwahrscheinlichkeit → unsicher.
-  await expect(page.getByTestId('confidence')).toHaveText('unsicher');
-  await expect(page.locator('.lx-dot[data-on]')).toHaveCount(2);
+  await expect(page.getByTestId('status').locator('.lx-dot')).toHaveCount(4);
+  await expect(page.getByTestId('status')).toContainText('Lernt');
+  await expect(page.getByTestId('status').locator('.lx-dot[data-on]')).toHaveCount(2);
   await expect(page.getByTestId('ex-kind')).toContainText('Lücke mit Hilfe');
   await expect(page.getByTestId('task')).toHaveText('Ergänze die Lücke.');
   // „Wozu" nur hinter dem Info-Symbol.
@@ -57,19 +56,21 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
   await page.keyboard.type('avoid', { delay: 20 });
   await expect(page.locator('[data-slot="letter"][data-filled]')).toHaveCount(5);
   await page.keyboard.press('Enter');
-  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
   await expect(page.locator('button[data-grade]')).toHaveCount(0);
   await expect(page.getByTestId('rating')).toHaveCount(0);
-  await expect(page.getByTestId('why')).toHaveCount(0);
-  await expect(page.getByTestId('meaning')).toContainText('vermeiden');
-  await expect(page.getByTestId('meaning')).toContainText('Verb');
-  await expect(page.getByTestId('due-in')).toHaveText(/^Wieder in \d+ (Min\.|Std\.|Tagen?)$/);
-  // Beispiele: Kollokationssätze, nicht der schon sichtbare Satz.
-  await expect(page.getByTestId('example')).toHaveCount(3);
+  // Die Erklär-Karte nennt Wort, Wortart und „Merke“; die Bedeutung steht schon als Hinweis in der Frage und kommt nicht noch einmal als eigene Zeile.
+  await expect(page.getByTestId('explanation')).toContainText('avoid');
+  await expect(page.getByTestId('explanation')).toContainText('Verb');
+  await expect(page.getByTestId('next-in')).toHaveText(/^Wieder in \d+ (Min\.|Std\.|Tagen?)$/);
+  // Beispiele: Kollokationssätze, nicht der schon sichtbare Satz (bei dieser Stufe unter „Weitere Beispiele“).
+  await page.getByTestId('examples-more').click();
+  await expect(page.getByTestId('examples').getByTestId('example')).toHaveCount(3);
   await expect(page.getByTestId('examples')).not.toContainText('Try to avoid driving');
   expect(await layoutProblems(page)).toEqual([]);
   if (process.env.LX_SHOTS) await page.screenshot({ path: `${process.env.LX_SHOTS}/desktop-result.png` });
-  await page.keyboard.press('Enter');
+  // Der Fokus liegt auf „Weitere Beispiele“: weiter geht es mit dem Knopf.
+  await page.getByTestId('next').click();
   await expect(page.getByTestId('summary')).toBeVisible();
   const card = (await dump(page))['vocab/avoid'] as { hist: Array<{ g: number }> };
   expect(card.hist.at(-1)?.g).toBeGreaterThanOrEqual(2);
@@ -79,22 +80,22 @@ test('Status statt Erklärtexten, Platzhalter je Buchstabe, keine Bewertungsknö
 test('freie Stufe: „Tipp" deckt Platzhalter und ersten Buchstaben auf und zählt als Hilfe; Formhinweis', async ({ page }) => {
   const { errors } = await startWith(page, { 'vocab/overcome': overcome() });
   await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'cloze');
-  await expect(page.locator('[data-slot]')).toHaveCount(0);
+  await expect(page.locator('[data-slot="letter"]')).toHaveCount(0);
   await page.getByTestId('hint').click();
   await expect(page.locator('[data-slot="letter"]')).toHaveCount('overcame'.length);
   await expect(page.locator('.lx-slot-hint')).toHaveCount(0);
-  await expect(page.getByTestId('hint')).toHaveText('Erster Buchstabe');
+  // Das Gerüst hat einen Tipp-Knopf; die zweite Stufe deckt den ersten Buchstaben auf.
   await page.getByTestId('hint').click();
   await expect(page.locator('.lx-slot-hint')).toHaveText('o');
   await expect(page.getByTestId('hint')).toHaveCount(0);
   // Die Tastatur bleibt im Feld: getippt wird direkt weiter.
   await page.keyboard.type('overcome', { delay: 20 });
   await page.keyboard.press('Enter');
-  await expect(page.getByTestId('verdict')).toHaveText('Fast richtig – andere Form');
-  await expect(page.getByTestId('given')).toContainText('overcome');
-  await expect(page.getByTestId('solution')).toHaveText('overcame');
-  await expect(page.getByTestId('form-hint')).toHaveText('Vergangenheit: overcame · Grundform: overcome');
-  await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '2');
+  await expect(page.getByTestId('verdict')).toHaveText('≈Fast richtig');
+  await expect(page.getByTestId('verdict-sub')).toHaveText('Andere Form');
+  await expect(page.getByTestId('gap-given')).toContainText('overcome');
+  await expect(page.getByTestId('gap-solution')).toContainText('overcame');
+  await expect(page.getByTestId('next-in')).toBeVisible();
   if (process.env.LX_SHOTS) {
     await page.waitForTimeout(500);
     await page.screenshot({ path: `${process.env.LX_SHOTS}/desktop-form.png` });
@@ -150,12 +151,14 @@ test('fehlende Beispiele ergänzt Claude einmal (quick) und speichert sie an der
   await page.getByTestId('gap-input').click();
   await page.keyboard.type('avoid', { delay: 20 });
   await page.keyboard.press('Enter');
-  await expect(page.locator('[data-testid="example"][data-src="ai"]')).toHaveCount(3);
+  // Beispiele von Claude stehen in der Erklär-Karte (unter „Weitere Beispiele“); die Übersetzungen unter „Zum Wort“.
+  await page.getByTestId('examples-more').click();
+  await expect(page.getByTestId('examples').getByTestId('example')).toHaveCount(3);
   const calls = (await sampleCalls(page)).filter((c) => c.id === 'card-examples');
   expect(calls).toHaveLength(1);
   expect(calls[0]?.tier).toBe('quick');
   // Beispielwörter sind antippbar.
-  await expect(page.getByTestId('example').first().locator('button.lx-word').first()).toBeVisible();
+  await expect(page.getByTestId('examples').getByTestId('example').first().locator('button.lx-word').first()).toBeVisible();
   await expect.poll(async () => ((await dump(page))['vocab/avoid']?.xEx as unknown[] | undefined)?.length ?? 0).toBe(3);
   const card = (await dump(page))['vocab/avoid'] as Record<string, unknown>;
   expect(card.word).toBe('to avoid');
@@ -169,6 +172,7 @@ test('ohne KI: keine KI-Knöpfe, keine Beispiel-Anfrage, Wörterbuch funktionier
   await page.keyboard.type('avoid', { delay: 20 });
   await page.keyboard.press('Enter');
   await expect(page.getByTestId('next')).toBeVisible();
+  // Ohne Claude gibt es keine zusätzlichen Beispiele; der Ursprungssatz steht schon in der Frage.
   await expect(page.getByTestId('examples')).toHaveCount(0);
   await page.getByTestId('sentence').locator('button.lx-word[data-word="driving"]').click();
   await expect(page.getByTestId('lk-meaning')).toBeVisible();

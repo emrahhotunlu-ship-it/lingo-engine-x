@@ -70,7 +70,7 @@ export type ExplainWordInput = {
   otherMeaning?: string | null;
   /** Lösung der Übung (Anzeigeform), sonst das Kartenwort. */
   solution?: string;
-  /** Beispiele dieser Karte (Ursprungssatz zuerst); sonst nur der Ursprungssatz. */
+  /** Beispiele dieser Karte (Ursprungssatz zuerst, außer die Frage zeigt ihn schon). */
   examples?: readonly ExplainExample[];
   /** Fast richtig, weil die Antwort eine Variante aus `alt` ist. */
   alt?: boolean;
@@ -158,7 +158,7 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
     seen.add(k);
     examples.push(e);
   };
-  if (card.context) add({ en: card.context.sentence, de: null, ctx: null });
+  // Der Aufrufer reicht die Beispiele dieser Karte (Ursprungssatz nur, wenn die Frage ihn nicht schon zeigt – nichts doppelt, Kap. 15).
   for (const e of i.examples ?? []) add(e);
   for (const c of extra?.col ?? []) if (c.ex) add({ en: c.ex, de: null, ctx: null });
 

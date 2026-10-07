@@ -8,7 +8,7 @@ import { TYPE_MODE } from './trainerHelpers';
 
 test.use({ viewport: { width: 1440, height: 900 } });
 
-const CATALOG_IDS = ['mc_en', 'spot', 'listen_mc', 'mc_de', 'match', 'cloze_hint', 'tiles', 'type', 'cloze', 'colloc', 'situation', 'dictation', 'speed', 'produce'];
+const CATALOG_IDS = ['mc_en', 'spot', 'listen_mc', 'mc_de', 'match', 'cloze_hint', 'tiles', 'type', 'cloze', 'colloc', 'situation', 'dictation', 'speed', 'produce', 'ctx_mc', 'colloc_gap', 'complete', 'wordfam', 'find_trap'];
 
 test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach „Fertig für heute"', async ({ page }) => {
   test.setTimeout(90_000);
@@ -32,9 +32,10 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   // Jede der sechs erzwungenen Arten kommt vor; Wiedervorlagen dürfen weitere Arten des Katalogs zeigen.
   expect([...seen]).toEqual(expect.arrayContaining(['cloze', 'cloze_hint', 'colloc', 'mc_de', 'mc_en', 'type']));
   for (const ex of seen) expect(CATALOG_IDS).toContain(ex);
-  // Je Wort genau ein Chip, auch wenn eine Karte in der Runde wiederkam.
+  // Das Rundenende zeigt Zuwachs statt Kacheln; Fehlwörter-Chips gibt es nur, wenn ein Wort falsch war (hier alle richtig), je Wort höchstens einen.
+  await expect(page.getByTestId('session-end')).toHaveAttribute('data-mode', 'growth');
+  await expect(page.getByTestId('session-end-facts')).toBeVisible();
   const chipWords = await page.getByTestId('summary-chip').allInnerTexts();
-  expect(chipWords.length).toBeGreaterThan(0);
   expect(new Set(chipWords).size).toBe(chipWords.length);
 
   // Schreibwege: Karte mit FSRS und gespiegelten Altfeldern, Protokoll, Zähler.
@@ -59,15 +60,15 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   expect(profile.minutes[DAY]).toBeGreaterThanOrEqual(16);
 
   // Zurück zu Heute: erledigt ist Zustand, kein Knopf; Extra klar getrennt.
-  await page.getByTestId('summary-back').click();
+  await page.getByTestId('session-end-next').click();
   await screen(page, 'today');
   await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
   const doneCard = page.locator('[data-testid="today-card"][data-done="true"]');
   await expect(doneCard).toBeVisible();
   await expect(doneCard.locator('button')).toHaveCount(0);
   await expect(page.getByTestId('start')).toHaveCount(0);
-  await expect(page.getByTestId('offer')).toHaveCount(1);
-  await expect(page.getByTestId('more-practice')).toBeVisible();
+  // Heute nach der Pflicht (P7): genau eine Zeile „Extra ›“ statt Angebotskarten.
+  await expect(page.getByTestId('today-extra')).toBeVisible();
   expect(errors).toEqual([]);
   expect(external).toEqual([]);
 });
@@ -128,10 +129,11 @@ test('die fliegenden Buchstaben landen in der Lücke; falsche Antwort zeigt die 
   await expect(page.locator('[data-letter]')).toHaveCount(3);
   await page.keyboard.type('di');
   await page.keyboard.press('Enter');
-  await expect(page.getByTestId('gap')).toHaveAttribute('data-state', 'near');
-  await expect(page.getByTestId('solution')).toContainText('avoid');
-  await expect(page.getByTestId('verdict')).toHaveText('Fast richtig – Tippfehler');
-  await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '2');
+  await expect(page.getByTestId('gap')).toHaveAttribute('data-revealed', 'true');
+  await expect(page.getByTestId('gap-solution')).toContainText('avoid');
+  await expect(page.getByTestId('verdict')).toHaveText('≈Fast richtig');
+  await expect(page.getByTestId('verdict-sub')).toHaveText('Tippfehler');
+  await expect(page.getByTestId('next-in')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

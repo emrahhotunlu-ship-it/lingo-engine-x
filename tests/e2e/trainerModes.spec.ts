@@ -9,24 +9,31 @@ import { TYPE_MODE } from './trainerHelpers';
 
 type Doc = Record<string, unknown>;
 type Counts = Record<string, { c: number; w: number }>;
+type Device = 'phone' | 'keys';
 
-async function phone(browser: Browser): Promise<{ page: Page; close: () => Promise<void> }> {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin', locale: 'de-DE' });
+/** `phone`: Touch 390 px (Eingabeprofil touch); `keys`: Laptop mit Tastatur (Profil keys). */
+async function device(browser: Browser, kind: Device): Promise<{ page: Page; close: () => Promise<void> }> {
+  const context =
+    kind === 'phone'
+      ? await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, timezoneId: 'Europe/Berlin', locale: 'de-DE' })
+      : await browser.newContext({ viewport: { width: 1440, height: 900 }, timezoneId: 'Europe/Berlin', locale: 'de-DE' });
   const page = await context.newPage();
   return { page, close: () => context.close() };
 }
+const phone = (browser: Browser) => device(browser, 'phone');
 
 /** Karte, die als erste fällig ist und deren schwächste Art feststeht. */
 const forcedDoc = (stage: number, xs: Counts, i = 0): Doc => ({ state: 'learning', stage, S: 1, D: 5, due: 1_690_000_000_000 + i, last: 1_689_900_000_000, reps: 3, lapses: 0, xs });
 const strong = (...ids: string[]): Counts => Object.fromEntries(ids.map((id) => [id, { c: 6, w: 0 }]));
 const weak = (id: string): Counts => ({ [id]: { c: 0, w: 6 } });
 
-const MODES: Array<{ ex: string; stage: number; others: string[] }> = [
-  // „Im Satz finden“, Tempo und Bausteine sind aus der Wörter-Leiter entfernt (Umbau Fokus, Gesamtkonzept 3.3).
-  { ex: 'listen_mc', stage: 1, others: ['mc_en'] },
-  { ex: 'match', stage: 2, others: ['mc_de'] },
-  { ex: 'dictation', stage: 5, others: ['produce'] },
-  { ex: 'produce', stage: 5, others: ['dictation'] },
+// Hören (listen_mc, dictation) und der eigene Satz (produce) gibt es nur mit Tastatur (Profil keys, Geräte-Matrix); am Handy fehlen sie.
+const MODES: Array<{ ex: string; stage: number; others: string[]; device: Device }> = [
+  { ex: 'ctx_mc', stage: 1, others: ['mc_en'], device: 'phone' },
+  { ex: 'match', stage: 2, others: ['mc_de'], device: 'phone' },
+  { ex: 'listen_mc', stage: 1, others: ['mc_en', 'ctx_mc'], device: 'keys' },
+  { ex: 'dictation', stage: 5, others: ['produce', 'complete', 'cloze'], device: 'keys' },
+  { ex: 'produce', stage: 5, others: ['dictation', 'complete', 'cloze'], device: 'keys' },
 ];
 
 async function startRound(page: Page, patch: Record<string, Doc>, opts: { sample?: boolean } = {}) {
@@ -35,20 +42,20 @@ async function startRound(page: Page, patch: Record<string, Doc>, opts: { sample
     fake: { patch: { ...TYPE_MODE, 'app/profile': planPatch(1), ...patch }, ...(opts.sample === false ? { capabilities: { sample: false } } : {}) },
   });
   await screen(page, 'today');
-  await page.getByTestId('start').tap();
+  await page.getByTestId('start').click();
   await screen(page, 'trainer');
   return booted;
 }
 
 for (const m of MODES) {
-  test(`Handy: ${m.ex} – Aufgabe, Lösen per Touch, automatische Note, Schreibweg`, async ({ browser }) => {
-    const { page, close } = await phone(browser);
+  test(`${m.device === 'phone' ? 'Handy' : 'Tastatur'}: ${m.ex} – Aufgabe, Lösen, automatische Note, Schreibweg`, async ({ browser }) => {
+    const { page, close } = await device(browser, m.device);
     const { errors, external } = await startRound(page, { 'vocab/avoid': forcedDoc(m.stage, { ...strong(...m.others), ...weak(m.ex) }) });
     const ex = page.getByTestId('exercise');
     await expect(ex).toHaveAttribute('data-ex', m.ex);
     await expect(ex).toHaveAttribute('data-card', 'avoid');
     await expect(page.getByTestId('task')).not.toBeEmpty();
-    // Lösung steht vor dem Prüfen nicht im DOM (außer als Option bzw. als Satzwort bei „Im Satz finden").
+    // Lösung steht vor dem Prüfen nicht im DOM (außer als Option).
     if (m.ex === 'dictation') await expect(page.getByTestId('sentence')).not.toContainText('avoid');
     if (m.ex === 'listen_mc' || m.ex === 'dictation') {
       await expect.poll(async () => page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { spoken: string[] } }).__LINGO_FAKE__.spoken.join(' | '))).toContain('Try to avoid driving in rush hour.');
@@ -57,30 +64,37 @@ for (const m of MODES) {
     if (m.ex === 'listen_mc') await expect(page.getByTestId('sentence')).toHaveCount(0);
     expect(await layoutProblems(page)).toEqual([]);
 
-    // Lösen per Touch
-    if (m.ex === 'listen_mc') await page.getByTestId('choice').filter({ hasText: 'vermeiden' }).tap();
-    else if (m.ex === 'match') await page.getByTestId('choice').filter({ hasText: /^\s*\d?\s*avoid\s*$/ }).tap();
-    else if (m.ex === 'produce') {
-      await page.getByTestId('produce-input').tap();
+    // Lösen
+    if (m.ex === 'listen_mc') {
+      await page.getByTestId('choice').filter({ hasText: 'vermeiden' }).click();
+      await page.getByTestId('check').click();
+    } else if (m.ex === 'ctx_mc') {
+      await page.getByTestId('choice').filter({ hasText: 'vermeiden' }).click();
+      await page.getByTestId('check').click();
+    } else if (m.ex === 'match') {
+      await page.getByTestId('choice').filter({ has: page.locator('[lang]', { hasText: /^avoid$/ }) }).click();
+      await page.getByTestId('check').click();
+    } else if (m.ex === 'produce') {
+      await page.getByTestId('produce-input').click();
       await page.getByTestId('produce-input').fill(produceSentence('avoid'));
-      await page.getByTestId('check').tap();
+      await page.getByTestId('check').click();
     } else {
-      await page.getByTestId('gap-input').tap();
+      await page.getByTestId('gap-input').click();
       await page.keyboard.type('avoid', { delay: 20 });
-      await page.getByTestId('check').tap();
+      await page.getByTestId('check').click();
     }
-    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
     await expect(page.getByTestId('result')).toBeVisible();
-    // Keine Bewertungsknöpfe (A7), Beispiele bzw. Rückmeldung von Claude, jedes englische Wort antippbar.
+    // Keine Bewertungsknöpfe (A7), Erklär-Karte (bei „Eigener Satz“ mit der Rückmeldung von Claude), jedes englische Wort antippbar.
     await expect(page.locator('button[data-grade]')).toHaveCount(0);
     if (m.ex === 'produce') {
-      await expect(page.getByTestId('produce-result')).toHaveAttribute('data-source', 'ai');
-      await expect(page.getByTestId('produce-why')).not.toBeEmpty();
-    } else await expect(page.getByTestId('examples')).toBeVisible();
+      await expect(page.getByTestId('explanation')).toBeVisible();
+      await expect(page.getByTestId('ai-note')).toBeVisible();
+    } else await expect(page.getByTestId('explanation')).toBeVisible();
     expect(await page.getByTestId('result').locator('button.lx-word').count()).toBeGreaterThan(0);
     expect(await layoutProblems(page)).toEqual([]);
     const step = (await page.locator('[data-step]').getAttribute('data-step')) ?? '';
-    await page.getByTestId('next').tap();
+    await page.getByTestId('next').click();
     // Karte in Lernschritten: sie kommt in der Runde noch einmal (F10) – dann ebenfalls lösen.
     await expect(page.locator(`[data-step="${step}"]`)).toHaveCount(0);
     await expect(page.locator('[data-step]')).toHaveCount(1);
@@ -89,54 +103,65 @@ for (const m of MODES) {
 
     await expect.poll(async () => ((await dump(page))['vocab/avoid']?.xs as Counts | undefined)?.[m.ex]?.c ?? 0).toBeGreaterThanOrEqual(1);
     expect(((await dump(page))['vocab/avoid']?.xs as Counts)[m.ex]?.w).toBe(6);
-    const card = (await dump(page))['vocab/avoid'] as Doc & { fsrs: Doc; hist: Doc[] };
+    const card = (await dump(page))['vocab/avoid'] as Doc & { fsrs: Doc; hist: Doc[]; dev?: unknown };
     expect(card.fsrs).toMatchObject({ v: 1, src: 'lx' });
     expect(card.hist.some((h) => h.x === m.ex)).toBe(true);
     expect(card.word).toBe('to avoid');
-    await expect.poll(async () => ((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined)?.find((e) => e.id === 'avoid' && e.ctx === 'rev')).toMatchObject({ k: 'v', m: `tr-${m.ex}`, ok: true });
+    await expect.poll(async () => ((await dump(page))[`log/${DAY}`]?.entries as Doc[] | undefined)?.find((e) => e.id === 'avoid' && e.ctx === 'rev')).toMatchObject({ k: 'v', m: `tr-${m.ex}`, ok: true, dev: m.device === 'phone' ? 't' : 'k' });
     expect(errors).toEqual([]);
     expect(external).toEqual([]);
     await close();
   });
 }
 
-test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei KI-Fehler „Ohne Claude prüfen"', async ({ browser }) => {
+test('Am Handy gibt es nie Hören, Diktat oder eigenen Satz – auch nicht, wenn sie die schwächste Art wären', async ({ browser }) => {
   const { page, close } = await phone(browser);
-  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation'), ...weak('produce') }) });
+  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('cloze', 'complete'), ...weak('dictation'), produce: { c: 0, w: 9 } }) });
+  const ex = await page.getByTestId('exercise').getAttribute('data-ex');
+  expect(['complete', 'cloze']).toContain(ex);
+  await expect(page.getByTestId('replay')).toHaveCount(0);
+  await expect(page.getByTestId('produce-input')).toHaveCount(0);
+  expect(errors).toEqual([]);
+  await close();
+});
+
+test('Eigener Satz: falsche Verwendung → „Noch nicht" mit Begründung; bei KI-Fehler „Ohne Claude prüfen"', async ({ browser }) => {
+  const { page, close } = await device(browser, 'keys');
+  const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'complete', 'cloze'), ...weak('produce') }) });
   await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'produce');
   // „zzjson" liefert keine gültige Antwort: Fehlerzustand, Knopf „Erneut versuchen" und Prüfung ohne Claude.
   await page.getByTestId('produce-input').fill('I zzjson this every day at work.');
-  await page.getByTestId('check').tap();
-  await expect(page.getByTestId('ai-error')).toBeVisible();
+  await page.getByTestId('check').click();
   await expect(page.getByTestId('produce-local')).toBeVisible();
   await page.getByTestId('produce-input').fill('We always avoid long meetings on Friday afternoons.');
-  await page.getByTestId('produce-local').tap();
-  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
-  await expect(page.getByTestId('produce-result')).toHaveAttribute('data-source', 'self');
-  await expect(page.getByTestId('produce-local-note')).toBeVisible();
-  await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '3');
-  expect(errors.filter((e) => !/invalid_json|zzjson/i.test(e))).toEqual([]);
+  await page.getByTestId('produce-local').click();
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+  await expect(page.getByTestId('verdict-sub')).toContainText('Ohne Claude geprüft');
+  await expect(page.getByTestId('next-in')).toBeVisible();
+  expect(errors.filter((e) => !/invalid_json|zzjson|not valid JSON/i.test(e))).toEqual([]);
   await close();
 
-  const second = await phone(browser);
-  await startRound(second.page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation'), ...weak('produce') }) });
+  const second = await device(browser, 'keys');
+  await startRound(second.page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation', 'complete', 'cloze'), ...weak('produce') }) });
   await second.page.getByTestId('produce-input').fill('The meeting starts at nine.');
-  await second.page.getByTestId('check').tap();
+  await second.page.getByTestId('check').click();
   await expect(second.page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
-  await expect(second.page.getByTestId('produce-why')).toContainText('Zielwort');
-  await expect(second.page.getByTestId('due-in')).toHaveAttribute('data-grade', '1');
+  await expect(second.page.getByTestId('explanation')).toContainText('Zielwort');
+  // Ein falscher Satz wird zum Fehlersatz (Box 1) – nur mit Claudes Korrektur.
+  await expect.poll(async () => ((await dump(second.page))['app/repair']?.items as Doc[] | undefined)?.some((i) => i.src === 'write') ?? false).toBe(true);
   await second.close();
 });
 
 test('ohne KI (nosample): Stufe 5 fällt auf KI-freie Arten zurück, kein toter Knopf', async ({ browser }) => {
-  const { page, close } = await phone(browser);
+  const { page, close } = await device(browser, 'keys');
   const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('dictation'), ...weak('produce') }) }, { sample: false });
   const ex = page.getByTestId('exercise');
   await expect(ex).toBeVisible();
-  expect(['dictation', 'type']).toContain(await ex.getAttribute('data-ex'));
+  expect(['dictation', 'complete', 'cloze']).toContain(await ex.getAttribute('data-ex'));
   await expect(page.getByTestId('produce-input')).toHaveCount(0);
   await expect(page.locator('[data-ai]')).toHaveCount(0);
-  await answerCurrent(page);
+  // Ohne Claude zählt „Satz vervollständigen“ höchstens als „Schwer“: die Karte kommt in der Runde noch einmal.
+  for (let i = 0; i < 5 && !(await page.getByTestId('summary').isVisible()); i++) await answerCurrent(page);
   await expect(page.getByTestId('summary')).toBeVisible();
   expect(errors).toEqual([]);
   await close();
@@ -176,7 +201,7 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
     const entry = ((await dump(page))[`log/${DAY}`]?.entries as Doc[]).find((e) => e.id === 'c-non-negotiable');
     expect(entry).not.toHaveProperty('k');
 
-    await page.getByTestId('summary-back').click();
+    await page.getByTestId('session-end-next').click();
     await screen(page, 'today');
     await expect(page.getByTestId('today-status')).toHaveText('Fertig für heute');
     expect(errors).toEqual([]);
@@ -199,9 +224,10 @@ test.describe('Wendungen in der täglichen Wiederholung', () => {
     await page.getByTestId('gap-input').click();
     await page.keyboard.type('non-negotiable', { delay: 20 });
     await page.keyboard.press('Enter');
-    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
-    // „Tipp" zählt als Hilfe: höchstens „Gut".
-    expect(Number(await page.getByTestId('due-in').getAttribute('data-grade'))).toBeLessThanOrEqual(3);
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+    // „Tipp" zählt als Hilfe: höchstens „Gut" (die Zeit bis zur nächsten Wiederholung steht in der Rückmeldung).
+    await expect(page.getByTestId('next-in')).toBeVisible();
+    await expect(page.getByTestId('explanation')).toBeVisible();
     await expect(page.getByTestId('situation-then')).toContainText('Damals hattest du gesagt');
     await expect(page.getByTestId('examples')).toContainText('For us, the Q2 date is non-negotiable.');
     expect(errors).toEqual([]);

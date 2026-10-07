@@ -195,7 +195,7 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const model = useMemo(
     () =>
       shown
-        ? explainWord({ card, ex: 'flip', verdict: 'ok', given: '', check: { verdict: 'correct' }, lang, examples: cardExamples(card, ctx?.sentence ?? null, extras).map((x) => ({ en: x.en, de: null, ctx: null })) })
+        ? explainWord({ card, ex: 'flip', verdict: 'ok', given: '', check: { verdict: 'correct' }, lang, examples: cardExamples(card, null, extras).map((x) => ({ en: x.en, de: null, ctx: null })) })
         : null,
     [shown, card, lang, ctx?.sentence, extras],
   );

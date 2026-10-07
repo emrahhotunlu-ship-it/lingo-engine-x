@@ -68,7 +68,7 @@ describe('explainWord: der echte Grund des Fehlers', () => {
   });
   it('richtige Antwort: mindestens die Merke-Zeile; Beispiele nur von dieser Karte; Tiefe „min“ zeigt genau eine Zeile', () => {
     const card = packCard('family-01');
-    const m = explainWord({ card, ex: 'cloze', verdict: 'ok', given: 'compliance', check: { verdict: 'correct' }, lang: 'en' });
+    const m = explainWord({ card, ex: 'cloze', verdict: 'ok', given: 'compliance', check: { verdict: 'correct' }, lang: 'en', examples: [{ en: card.context?.sentence ?? '', de: null, ctx: null }] });
     expect(m.lines.some((l) => l.k === 'why')).toBe(true);
     expect(m.examples[0]?.en).toBe(card.context?.sentence);
     const own = new Set([card.context?.sentence, ...(packExtraOf(card)?.col ?? []).map((c) => c.ex)]);

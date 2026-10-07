@@ -9,10 +9,13 @@ test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true
 
 test('Einführungskarte am Handy: Beschriftungen überlappen nie den Inhalt', async ({ page }) => {
   const { patch } = ankiPatch(0);
-  const card = { word: 'reduce manual effort', de: 'manuellen Aufwand reduzieren', def: 'to make a task need less work by hand', ex: 'We want to [reduce manual effort] in invoice handling.', pos: 'verb', level: 'C1', state: 'new', stage: 0, S: 0, D: 5, due: 0, last: 0, reps: 0, lapses: 0, src: 'lookup', added: '2026-09-20' };
+  const card = { word: 'reduce manual effort', de: 'manuellen Aufwand reduzieren', def: 'to make a task need less work by hand', ex: 'We want to [reduce manual effort] in invoice handling.', pos: 'verb', level: 'C1', state: 'new', stage: 0, S: 0, D: 5, due: 0, last: 0, reps: 0, lapses: 0, src: 'lookup', added: '2026-09-20', register: 'formal', col: [{ p: 'reduce manual effort', de: 'manuellen Aufwand reduzieren', gap: 'reduce', opts: ['cut', 'lower', 'drop'], ex: 'We [reduce manual effort] every quarter.' }] };
   const { errors } = await boot(page, { migrated: true, fake: { patch: { ...patch, 'app/profile': { ...planPatch(1), newPerDay: 2 }, 'vocab/reduce-manual-effort': card } } });
   await screen(page, 'today');
   await page.getByTestId('start').click();
+  // Vorab fragt die Karte „Was heißt das hier?“ (ohne Planung); „Weiß ich nicht“ zeigt die Antwort, dann folgt die Einführung.
+  await page.getByTestId('intro-ask-dontknow').click();
+  await page.getByTestId('intro-ask-next').click();
   const intro = page.getByTestId('intro');
   await expect(intro).toBeVisible();
   const rows = await intro.locator('dl > div').evaluateAll((els) =>

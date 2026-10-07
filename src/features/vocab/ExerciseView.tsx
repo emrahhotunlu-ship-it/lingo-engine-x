@@ -20,7 +20,7 @@ import { packExtraOf } from '../../domain/c1pack/packFields';
 import type { ExplainExample, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { unitState } from '../../domain/metrics';
 import { choiceVerdict } from '../../domain/srs/exercise';
-import { cardExamples, wantsEnrichment } from '../../domain/srs/examples';
+import { cardExamples, storedTranslation, wantsEnrichment } from '../../domain/srs/examples';
 import { explainWord, isAltAnswer } from '../../domain/srs/explainWord';
 import { posKey } from '../../domain/srs/explain';
 import { autoGrade, produceGrade } from '../../domain/srs/grade';
@@ -417,7 +417,7 @@ export function ExerciseView({
   const depth = explainDepth({ verdict: rv, stage: card.stage, learning });
 
   /** Beispiele dieser Karte für die Erklär-Karte (Ursprungssatz zuerst, dann Paket und Claude), nie der Satz der Aufgabe. */
-  const exampleItems: ExplainExample[] = useMemo(() => cardExamples(card, shownSentence, extras).map((x) => ({ en: x.en, de: null, ctx: null })), [card, shownSentence, extras]);
+  const exampleItems: ExplainExample[] = useMemo(() => cardExamples(card, shownSentence, extras).map((x) => ({ en: x.en, de: storedTranslation(card.doc, x.en), ctx: null })), [card, shownSentence, extras]);
 
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
@@ -487,7 +487,7 @@ export function ExerciseView({
       : FREE_TYPED.has(e.ex) && tip > 0
         ? maskOf(solution, { firstLetter: e.ex === 'wordfam' || colTyped ? tip >= 1 && !(e.ex === 'wordfam' && tip === 1) : tip >= 2 })
         : null;
-  const gapReveal = fb && fb.result.verdict === 'wrong' && isTyped ? { solution, given: fb.given.trim() ? fb.given : null } : null;
+  const gapReveal = fb && fb.result.verdict !== 'correct' && isTyped ? { solution, given: fb.given.trim() ? fb.given : null } : null;
   const gapNode = (
     <KineticGap
       label={e.sentence ? t('trGapLabel', { sentence: `${e.sentence.sentence.slice(0, e.sentence.start)}…${e.sentence.sentence.slice(e.sentence.end)}` }) : t('trTypeLabel', { meaning: e.meaning ?? '' })}
@@ -701,16 +701,16 @@ export function ExerciseView({
       ? null
       : fb.override
         ? t('lrOverridden')
-        : fb.sentence && !fb.sentence.out && e.ex === 'complete'
+        : fb.sentence && !fb.sentence.out
           ? t('trProduceLocalNote')
           : c.variant === 'uk' && c.us
             ? t('trUsHint', { us: c.us })
             : c.kind === 'typo'
-              ? t('trVerdictTypo')
+              ? t('wxSubTypo')
               : c.kind === 'form'
-                ? t('trVerdictForm')
+                ? t('wxSubForm')
                 : c.kind === 'synonym' || (c.verdict !== 'correct' && isAltAnswer(card, fb.given))
-                  ? t('trVerdictSynonym')
+                  ? t('wxSubSynonym')
                   : null;
     let comparison: ShellFeedback['comparison'] = null;
     const fixed = fb.sentence?.out?.fixed;
@@ -736,6 +736,11 @@ export function ExerciseView({
     answer = (
       <>
         {answer}
+        {e.ex === 'situation' && e.situation?.then && (
+          <p className="lx-t-support" data-testid="situation-then">
+            <span className="text-muted">{t('sitThen')}</span> <span lang="en">„{e.situation.then}“</span>
+          </p>
+        )}
         {copyOpen && fb.result.verdict === 'wrong' && isTyped && <CopyOnceField solution={solution} />}
         {!fb.override && fb.result.verdict === 'wrong' && isTyped && ai && e.ex !== 'situation' && <SynonymAsk card={card} given={fb.given} onOk={override} />}
         <WordExtras card={card} open={moreOpen} lang={lang} extras={extras} />
@@ -765,7 +770,7 @@ export function ExerciseView({
     : { label: t('exCheck'), onClick: check, testId: 'check', disabled: !canCheck, busy: sentenceBusy, busyLabel: t('exChecking') };
 
   return (
-    <div ref={root} data-profile={touch ? 'touch' : 'keys'}>
+    <div ref={root} data-profile={touch ? 'touch' : 'keys'} data-col={e.colloc && e.colloc.index >= 0 ? e.colloc.index : undefined}>
       <ExerciseShell
         meta={{ ex: e.ex, id: card.id, stage: e.stage, kind: card.kind }}
         status={{ area: 'words', state: state0, kindLabel, badge: again ? t('trAgainBadge') : null }}

@@ -36,4 +36,7 @@ export const wxDe = {
   wxEndMore: 'Noch {n} fällig · Noch eine Runde',
   wxEndNone: 'Diesmal kein Wort fester geworden – das ist normal, es kommt morgen wieder.',
   wxExFromAtlas: 'Beispielsatz aus dem Wörterbuch',
+  wxSubTypo: 'Tippfehler',
+  wxSubForm: 'Andere Form',
+  wxSubSynonym: 'Gleichwertig',
 } as const;

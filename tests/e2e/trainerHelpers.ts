@@ -25,12 +25,13 @@ export const planPatch = (review: number) => ({
 });
 
 /** Karten, die an erster Stelle fällig sind und deren schwächste Übung feststeht. */
-export const FORCED: Record<string, { stage: number; xs: Record<string, { c: number; w: number }> }> = {
+// `struggle` hat keinen Beispielsatz mit dem Wort: `type` („Wort schreiben“) gibt es nur ohne Satz (Lernplattform 2.0 §4.8).
+export const FORCED: Record<string, { stage: number; xs: Record<string, { c: number; w: number }>; ex?: string }> = {
   deserve: { stage: 1, xs: { mc_en: { c: 0, w: 6 }, mc_de: { c: 6, w: 0 } } },
   convince: { stage: 2, xs: { mc_de: { c: 0, w: 6 }, cloze_hint: { c: 6, w: 0 }, mc_en: { c: 6, w: 0 } } },
   avoid: { stage: 3, xs: { cloze_hint: { c: 0, w: 6 }, type: { c: 6, w: 0 } } },
   overcome: { stage: 4, xs: { cloze: { c: 0, w: 6 }, type: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } } },
-  struggle: { stage: 4, xs: { type: { c: 0, w: 6 }, cloze: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } } },
+  struggle: { stage: 4, xs: { type: { c: 0, w: 6 }, cloze: { c: 6, w: 0 }, colloc: { c: 6, w: 0 } }, ex: 'No sentence at all.' },
   handle: { stage: 4, xs: { colloc: { c: 0, w: 6 }, type: { c: 6, w: 0 }, cloze: { c: 6, w: 0 } } },
 };
 
@@ -43,7 +44,7 @@ export const TYPE_MODE: Record<string, Doc> = { 'app/decks': { v: 1, prefs: { mo
 export function forcedPatch(): Record<string, Doc> {
   const out: Record<string, Doc> = { ...TYPE_MODE };
   Object.entries(FORCED).forEach(([id, f], i) => {
-    out[`vocab/${id}`] = { state: 'learning', stage: f.stage, S: 1, D: 5, due: 1_700_000_000_000 + i * 1000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: f.xs };
+    out[`vocab/${id}`] = { state: 'learning', stage: f.stage, S: 1, D: 5, due: 1_700_000_000_000 + i * 1000, last: 1_699_900_000_000, reps: 3, lapses: 0, xs: f.xs, ...(f.ex ? { ex: f.ex } : {}) };
   });
   return out;
 }
@@ -76,6 +77,7 @@ export function expected(ex: string, id: string, col: number | null, kind: strin
     const d = SEED[`chunk/${id}`] ?? {};
     switch (ex) {
       case 'mc_en':
+      case 'ctx_mc':
       case 'listen_mc':
         return meaning(d);
       case 'mc_de':
@@ -90,6 +92,7 @@ export function expected(ex: string, id: string, col: number | null, kind: strin
       case 'dictation':
         return chunkGap(d);
       case 'produce':
+      case 'complete':
         return typedForm(String(d.en));
       default:
         throw new Error(`unbekannte Übung ${ex} (Wendung)`);
@@ -98,6 +101,7 @@ export function expected(ex: string, id: string, col: number | null, kind: strin
   const d = SEED[`vocab/${id}`] ?? {};
   switch (ex) {
     case 'mc_en':
+    case 'ctx_mc':
     case 'listen_mc':
       return meaning(d);
     case 'mc_de':
@@ -114,8 +118,10 @@ export function expected(ex: string, id: string, col: number | null, kind: strin
     case 'tiles':
       return bracket(d.ex) || String(d.word).replace(/^to\s+/i, '');
     case 'produce':
+    case 'complete':
       return String(d.word).replace(/^to\s+/i, '');
     case 'colloc':
+    case 'colloc_gap':
       {
         const gap = (Array.isArray(d.col) ? (d.col[col ?? 0] as Doc) : {}).gap;
         return typeof gap === 'string' ? gap : '';
@@ -164,35 +170,32 @@ export async function answerOnly(page: Page, opts: { wrong?: boolean } = {}): Pr
   const ex = (await exEl.getAttribute('data-ex')) ?? '';
   const id = (await exEl.getAttribute('data-card')) ?? '';
   const kind = (await exEl.getAttribute('data-kind')) ?? 'vocab';
-  const colAttr = await exEl.getAttribute('data-col');
+  const colAttr = await page.locator('[data-col]').first().getAttribute('data-col').catch(() => null);
   const lang = await page.evaluate(() => document.documentElement.lang);
   const answer = expected(ex, id, colAttr === null ? null : Number(colAttr), kind, lang);
-  if (ex === 'mc_en' || ex === 'mc_de' || ex === 'colloc' || ex === 'listen_mc' || ex === 'match') {
-    const labels = await page.getByTestId('choice').allInnerTexts();
-    const idx = labels.findIndex((l) => l.replace(/^\d+\s*/, '').trim() === answer);
+  if (['mc_en', 'ctx_mc', 'mc_de', 'colloc_gap', 'listen_mc', 'match'].includes(ex)) {
+    const labels = (await page.getByTestId('choice').locator('[lang]').allInnerTexts()).map((l) => l.trim());
+    const idx = labels.findIndex((l) => l === answer);
     expect(idx, `${ex} ${id}: „${answer}" in ${labels.join(' | ')}`).toBeGreaterThanOrEqual(0);
     const pick = opts.wrong ? (idx + 1) % labels.length : idx;
-    // Handy: keine Ziffern-Tasten – dort wird getippt.
-    if (await isTouch(page)) await page.getByTestId('choice').nth(pick).click();
-    else await page.keyboard.press(String(pick + 1));
-  } else if (ex === 'spot') {
-    const first = answer.split(/\s+/)[0] ?? answer;
-    const words = page.getByTestId('spot-word');
-    if (opts.wrong) await words.filter({ hasNotText: first }).first().click();
-    else await words.filter({ hasText: new RegExp(`^${first}$`) }).first().click();
-  } else if (ex === 'tiles') {
-    await placeTiles(page, answer, opts);
+    await page.getByTestId('choice').nth(pick).click();
     await page.getByTestId('check').click();
-  } else if (ex === 'produce') {
-    await page.getByTestId('produce-input').fill(opts.wrong ? 'The meeting starts at nine.' : produceSentence(answer));
+  } else if (ex === 'find_trap') {
+    const words = page.getByTestId('spot-word');
+    const target = String(SEED[`vocab/${id}`]?.word ?? '').replace(/^to\s+/i, '');
+    if (opts.wrong) await words.filter({ hasNotText: new RegExp(`^${target}`, 'i') }).first().click();
+    else await words.filter({ hasText: new RegExp(`^${target}`, 'i') }).first().click();
+    await page.getByTestId('check').click();
+  } else if (ex === 'produce' || ex === 'complete') {
+    await page.getByTestId(ex === 'complete' ? 'complete-input' : 'produce-input').fill(opts.wrong ? 'The meeting starts at nine.' : produceSentence(answer));
     await page.getByTestId('check').click();
   } else {
     await page.getByTestId('gap-input').click();
     await page.keyboard.type(opts.wrong ? 'zzzz' : answer, { delay: 30 });
     await page.keyboard.press('Enter');
     // Falsch getippt: erst ein Hinweis, dann der zweite Versuch (hier unverändert → Ergebnis).
-    await expect(page.getByTestId('verdict').or(page.getByTestId('retry-hint'))).toBeVisible();
-    if (await page.getByTestId('retry-hint').isVisible()) await page.keyboard.press('Enter');
+    await expect(page.getByTestId('verdict').or(page.getByTestId('hint-line'))).toBeVisible();
+    if (await page.getByTestId('hint-line').isVisible()) await page.keyboard.press('Enter');
   }
   await expect(page.getByTestId('verdict')).toBeVisible();
   await expect(page.getByTestId('next')).toBeVisible();

@@ -36,4 +36,7 @@ export const wxEn = {
   wxEndMore: '{n} more due · Another round',
   wxEndNone: 'No word became firmer this time – that is normal, it comes back tomorrow.',
   wxExFromAtlas: 'Example sentence from the dictionary',
+  wxSubTypo: 'Typo',
+  wxSubForm: 'Different form',
+  wxSubSynonym: 'Equivalent',
 } as const;

@@ -18,7 +18,8 @@ export function WordExtras({ card, open: forced, lang, extras }: { card: TrainCa
   const { t } = useT();
   const [open, setOpen] = useState(false);
   const ipa = ipaOf(card.word);
-  const more = cardExamples(card, null, extras).slice(1);
+  // Die Beispiele selbst stehen in der Erklär-Karte; hier nur ihre deutsche Übersetzung (auf Antippen, einmal von Claude).
+  const more = cardExamples(card, null, extras);
   const col = card.col.filter((c) => c.p).slice(0, 3);
   const src = { area: 'trainer' as const, source: card.path, title: card.word };
   const shown = open || forced;
@@ -50,9 +51,9 @@ export function WordExtras({ card, open: forced, lang, extras }: { card: TrainCa
       {shown && (
         <div className="lx-inset flex flex-col gap-3" data-testid="word-more-body">
           {more.length > 0 && (
-            <ul className="flex flex-col gap-1.5" data-testid="examples">
+            <ul className="flex flex-col gap-1.5" data-testid="extras-examples">
               {more.map((x) => (
-                <li key={x.en} className="lx-t-support" data-testid="example" data-src={x.src}>
+                <li key={x.en} className="lx-t-support" data-testid="extras-example" data-src={x.src}>
                   <EnglishText as="span" text={x.en} {...src} />
                   <ExampleTranslation card={card} en={x.en} />
                 </li>

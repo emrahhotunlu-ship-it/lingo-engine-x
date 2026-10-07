@@ -2,7 +2,7 @@
 // Nur Entwicklung und Tests – nie Teil des Produktions-Builds.
 
 import { registerCannedReply } from '../../fakeSample';
-import { cardExamplesReply } from '../../cannedReplies';
+import { cardExamplesReply, produceCheckReply } from '../../cannedReplies';
 
 function line(input: string, key: string): string {
   return new RegExp(`^${key}: (.*)$`, 'm').exec(input)?.[1]?.trim() ?? '';
@@ -21,8 +21,22 @@ export function synonymCheckReply(input: string): string {
   });
 }
 
+/**
+ * `produce-check@1` wie bisher, aber bei „wrong“ mit einer echten Korrektur (ein anderer Satz als der des Lernenden): nur dann wird
+ * der Satz zum Fehlersatz (`src:'write'`, Lernplattform 2.0 §5.6).
+ */
+export function produceCheckReplyV2(input: string): string {
+  const out = JSON.parse(produceCheckReply(input)) as { verdict?: string; fixed?: string };
+  if (out.verdict === 'wrong' && typeof out.fixed === 'string') {
+    const target = /^Target (?:word|phrase): (.*) \(meaning: /m.exec(input)?.[1]?.trim() ?? 'the word';
+    out.fixed = `At work, we always use ${target} in a clear sentence.`;
+  }
+  return JSON.stringify(out);
+}
+
 /** Meldet die Testantworten von P6 an. */
 export function registerLp2P6Replies(): void {
   registerCannedReply('card-examples', cardExamplesReply);
   registerCannedReply('synonym-check', synonymCheckReply);
+  registerCannedReply('produce-check', produceCheckReplyV2);
 }
