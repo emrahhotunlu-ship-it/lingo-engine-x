@@ -147,8 +147,22 @@ export function locate(sentence: string, target: string): { start: number; end: 
   return { start, end: start + (m[2]?.length ?? 0) };
 }
 
+/** Ergebnis je (Satz, Wort), einmal berechnet (Startzeit, perf.spec 4×): `buildTrainCards` läuft je Uhrzeit-Tick und Bildschirm erneut über alle Karten. Rein: gleiche Eingabe, gleiches Ergebnis (Kopie, damit niemand den Speicher verändert). */
+const CTX_CACHE = new Map<string, ContextSpan | null>();
+const CTX_CACHE_MAX = 6000;
+
 export function findContext(ex: unknown, word: string): ContextSpan | null {
   if (typeof ex !== 'string' || !ex.trim()) return null;
+  const key = `${word}\u0000${ex}`;
+  const hit = CTX_CACHE.get(key);
+  if (hit !== undefined) return hit ? { ...hit } : null;
+  const out = findContextUncached(ex, word);
+  if (CTX_CACHE.size >= CTX_CACHE_MAX) CTX_CACHE.clear();
+  CTX_CACHE.set(key, out);
+  return out ? { ...out } : null;
+}
+
+function findContextUncached(ex: string, word: string): ContextSpan | null {
   const bracket = /\[([^\]]*\S[^\]]*)\]/.exec(ex);
   if (bracket) {
     const before = stripBrackets(ex.slice(0, bracket.index));

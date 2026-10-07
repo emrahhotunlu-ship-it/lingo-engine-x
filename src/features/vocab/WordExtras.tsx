@@ -15,7 +15,8 @@ import { MoreInfo } from './MoreInfo';
 // weitere Beispiele (je mit „Deutsch“), Wortpartner, Merkhilfe, Mehr Infos. Am Handy zu, am Laptop offen. Nur Daten der Karte, nichts doppelt
 // zur Erklär-Karte: Die Bedeutung steht schon in „Merke“, die Beispiele hier sind die weiteren.
 
-export function WordExtras({ card, open: forced, lang, extras }: { card: TrainCard; open: boolean; lang: 'de' | 'en'; extras: readonly StoredExample[] }) {
+/** `part`: 'all' (Kopf + „Zum Wort“), 'head' (nur Wort, Vorlesen, Lautschrift), 'more' (nur „Zum Wort“) – so steht der Kopf oben und „Zum Wort“ unten in der Ergebnis-Karte (Design-Lead). */
+export function WordExtras({ card, open: forced, lang, extras, part = 'all' }: { card: TrainCard; open: boolean; lang: 'de' | 'en'; extras: readonly StoredExample[]; part?: 'all' | 'head' | 'more' }) {
   const { t } = useT();
   const [open, setOpen] = useState(false);
   const ipa = ipaOf(card.word);
@@ -28,6 +29,7 @@ export function WordExtras({ card, open: forced, lang, extras }: { card: TrainCa
   const shown = open || forced;
   return (
     <div className="flex flex-col gap-2" data-testid="word-extras" data-open={shown ? '' : undefined}>
+      {part !== 'more' && (
       <div className="flex flex-wrap items-center gap-2" data-testid="word-head">
         <span className="lx-t-answer" lang="en" data-testid="word-text">
           {card.word}
@@ -39,9 +41,11 @@ export function WordExtras({ card, open: forced, lang, extras }: { card: TrainCa
           </span>
         )}
       </div>
+      )}
+      {part !== 'head' && (
       <button
         type="button"
-        className="lx-t-meta -mx-1 inline-flex min-h-11 items-center gap-1 self-start rounded-[var(--radius-inline)] px-1 font-medium text-muted hover:text-fg"
+        className="lx-t-support -mx-1 flex min-h-11 items-center justify-between gap-2 self-stretch rounded-[var(--radius-inline)] px-1 font-semibold text-muted hover:text-fg"
         aria-expanded={shown}
         onClick={() => setOpen((v) => !v)}
         data-testid="word-more"
@@ -51,7 +55,8 @@ export function WordExtras({ card, open: forced, lang, extras }: { card: TrainCa
           ▸
         </span>
       </button>
-      {shown && (
+      )}
+      {part !== 'head' && shown && (
         <div className="lx-inset flex flex-col gap-3" data-testid="word-more-body">
           {more.length > 0 && (
             <ul className="flex flex-col gap-1.5" data-testid="extras-examples">

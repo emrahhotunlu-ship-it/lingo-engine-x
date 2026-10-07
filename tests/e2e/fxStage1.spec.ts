@@ -137,10 +137,11 @@ test.describe('Stufe „Aus“ und reduzierte Bewegung', () => {
     await expect(page.locator('html')).toHaveAttribute('data-fx', 'off');
   });
 
-  test('ohne gespeicherte Wahl gilt „Ruhig“', async ({ page }) => {
-    // Ein leerer Wert überspringt den Testumgebungs-Standard „Aus“ und ist keine gültige Wahl: es gilt der Standard „Ruhig“.
+  // Angepasst 07.10.2026 (Design-Lead): der Standard ist jetzt „Voll“ (Emrahs Wunsch nach Spiel-Gefühl); vorher „Ruhig“.
+  test('ohne gespeicherte Wahl gilt „Voll“', async ({ page }) => {
+    // Ein leerer Wert überspringt den Testumgebungs-Standard „Aus“ und ist keine gültige Wahl: es gilt der Standard „Voll“.
     await bootAt(page, { name: 'apply' }, { localStorage: { 'lx:fx': '' } });
-    await expect(page.locator('html')).toHaveAttribute('data-fx', 'calm');
+    await expect(page.locator('html')).toHaveAttribute('data-fx', 'full');
   });
 });
 

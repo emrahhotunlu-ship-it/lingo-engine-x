@@ -4,7 +4,12 @@
 
 export type FxArea = 'words' | 'grammar';
 
-export type LearnEvent = {
+export type LearnEvent = VerdictEvent | MomentEvent;
+
+/** Momente (Design-Lead, EE M6/M7): Runde geschafft, Tag geschafft. `el` = Ort des Effekts (Ring, Karte). */
+export type MomentEvent = { k: 'moment'; m: 'round' | 'day'; el?: Element | null };
+
+export type VerdictEvent = {
   k: 'verdict';
   /** Urteil einer geprüften Antwort. „Weiß ich nicht“ löst keinen Ton und keine Vibration aus. */
   v: 'ok' | 'near' | 'wrong' | 'dontKnow';

@@ -65,7 +65,7 @@ export function PathList({ onOpen, highlight = null }: { onOpen: (topic: string)
                 <span className="lx-t-answer tracking-tight">
                   {t('hxPathChapter', { n: ci + 1, name: lang === 'en' ? c.name.en : c.name.de })}
                   {here && (
-                    <span className="ml-2 inline-flex h-[1.375rem] items-center rounded-full px-2.5 align-middle text-xs font-bold" style={{ background: 'var(--lx-btn-grammar)', color: '#fff' }} data-testid="chapter-here">
+                    <span className="dz-here ml-2 inline-flex h-[1.375rem] items-center rounded-full px-2.5 align-middle text-xs font-bold" style={{ background: 'var(--lx-btn-grammar)', color: '#fff' }} data-testid="chapter-here">
                       {t('hxPathHere')}
                     </span>
                   )}

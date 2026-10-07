@@ -127,11 +127,15 @@ for (const profile of ['touch', 'keys'] as const) {
         if (!['meaning', 'find', 'kwt', 'mc', 'gap'].includes(type)) {
           await page.getByTestId('dont-know').click();
           await nextItem(page);
+          await expect(page.getByTestId('gr-item').getByTestId('result')).toHaveCount(0);
           continue;
         }
         await answerGrammar(page, solve);
         await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
         await nextItem(page);
+        // Erst weiter, wenn die alte Aufgabe abgelöst ist (07.10.2026, Absicherung gegen das Lesen der alten Aufgabe; der Altbefund selbst lag
+        // in der App: „Fehler finden“ mit überflüssigem Wort ließ sich mit leerem Ersatz nicht prüfen, behoben in GrammarItem.tsx).
+        await expect(page.getByTestId('gr-item').getByTestId('result')).toHaveCount(0);
       }
     }
     // Mit niedriger, mittlerer und hoher Beherrschung kommen alle drei neuen Arten vor.

@@ -93,6 +93,13 @@ function Frame() {
   useAutoResume(!system, openAtOrigin, deepLinkApplied);
   useDiagContext();
   const exercise = !system && kind === 'exercise';
+  // Design-Lead: aktiver Reiter am Wurzelelement (Bereichslicht und Reiterfarbe in `styles/parts/dz.css`), reine Darstellung.
+  const activeTab = useNav((s) => s.tab);
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute('data-lx-tab', activeTab);
+    return () => root.removeAttribute('data-lx-tab');
+  }, [activeTab]);
   const tabRoot = !system && kind === 'tab';
 
   return (

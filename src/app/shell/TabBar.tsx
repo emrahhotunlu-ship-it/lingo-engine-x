@@ -43,11 +43,17 @@ function TabButton({ tab, active }: { tab: TabDef; active: boolean }) {
         if (active) window.scrollTo({ top: 0 });
       }}
       data-testid={`tab-${tab.id}`}
-      className={`relative flex min-h-12 min-w-0 flex-auto flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] px-0.5 pt-1.5 pb-1 text-2xs transition-colors md:min-h-11 md:flex-none md:flex-row md:gap-1.5 md:rounded-full md:px-4 md:text-sm ${active ? 'font-semibold text-fg md:bg-surface-strong' : 'font-medium text-subtle hover:text-fg'}`}
+      data-tab={tab.id}
+      className={`dz-tab relative isolate flex min-h-12 min-w-0 flex-auto flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] px-0.5 pt-1.5 pb-1 text-2xs transition-colors md:min-h-11 md:flex-none md:flex-row md:gap-1.5 md:rounded-full md:px-4 md:text-sm ${active ? 'font-semibold text-fg' : 'font-medium text-subtle hover:text-fg'}`}
     >
       {/* Aktiver Reiter: Symbol auf heller Pille + fette Schrift (nicht nur Farbe). */}
-      <span className={`relative inline-flex rounded-full px-3.5 py-0.5 transition-colors duration-150 md:py-0 md:pr-2 md:pl-0 `}>
-        <Icon name={tab.icon} size={24} />
+      {/* Design-Lead: Pille in der Bereichsfarbe hinter dem aktiven Reiter, das Symbol springt kurz auf (Erlebnis-Engine B5; keine Layout-Animation, leistung.md §4 Nr. 8). */}
+      {active && <span aria-hidden="true" className="dz-tab-pill hidden md:block" />}
+      <span className={`relative isolate inline-flex rounded-full px-3.5 py-0.5 transition-colors duration-150 md:py-0 md:pr-2 md:pl-0 `}>
+        {active && <span aria-hidden="true" className="dz-tab-pill md:hidden" />}
+        <span className="dz-tab-icon inline-flex">
+          <Icon name={tab.icon} size={24} />
+        </span>
         {badge && <BadgeCount badge={badge} />}
       </span>
       <span className="whitespace-nowrap">{t(tab.label)}</span>
@@ -61,7 +67,7 @@ export function TabBar() {
   return (
     <nav
       aria-label={t('navLabel')}
-      className="fixed inset-x-0 bottom-0 z-40 flex justify-center gap-0.5 border-t border-line bg-bg px-1.5 pt-0.5 pb-[max(env(safe-area-inset-bottom),0.375rem)] md:sticky md:top-0 md:bottom-auto md:mx-auto md:mt-3 md:w-fit md:gap-1 md:rounded-full md:border md:px-1.5 md:py-1.5"
+      className="dz-tabbar fixed inset-x-0 bottom-0 z-40 flex justify-center gap-0.5 border-t border-line px-1.5 pt-0.5 pb-[max(env(safe-area-inset-bottom),0.375rem)] md:sticky md:top-0 md:bottom-auto md:mx-auto md:mt-3 md:w-fit md:gap-1 md:rounded-full md:border md:px-1.5 md:py-1.5"
       data-testid="tabbar"
     >
       {TABS.map((d) => (

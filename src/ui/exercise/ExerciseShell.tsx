@@ -14,6 +14,7 @@ import { Skeleton } from '../Skeleton';
 import { Comparison } from './Comparison';
 import { ExerciseMenu } from './ExerciseMenu';
 import { ExerciseStatus } from './ExerciseStatus';
+import { FoldToggle } from './FoldToggle';
 import { Examples } from './Examples';
 import { Explanation } from './Explanation';
 import { HintLine } from './HintLine';
@@ -44,7 +45,7 @@ export type ShellMenuId = 'override' | 'copyOnce' | 'translate' | 'moreInfo' | '
 export type ShellFeedback = {
   verdict: ResultVerdict;
   sub?: string | null;
-  comparison?: { given: string; ops: WordOp[] } | null;
+  comparison?: { given: string; ops: WordOp[]; compact?: boolean } | null;
   explanation?: ExplanationModel | null;
   depth: ExplainDepth;
   menu?: Partial<Record<ShellMenuId, () => void>>;
@@ -54,6 +55,10 @@ export type ShellFeedback = {
   parts?: ReactNode;
   /** Zusatz unter der Erklär-Karte (c1x: „Warum nicht …?“ je Option): steht im Platz `explanation`. */
   after?: ReactNode;
+  /** Kopf der Rückmeldung (Wörter: Wort, Vorlesen, Lautschrift, „Zum Wort“): steht direkt unter dem Urteil, vor der Erklärung (Design-Lead). */
+  head?: ReactNode;
+  /** Fuß der Rückmeldung (Wörter: „Zum Wort“), ganz unten in der Ergebnis-Karte. */
+  foot?: ReactNode;
   nextIn?: string | null;
   /**
    * Die Übung meldet: keine Hilfe genutzt. Zusammen mit Urteil `ok`, Tiefe `min` und `app/profile.autoNext`
@@ -155,6 +160,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
   const asideSecondary = tablet && secondaryNode;
 
   const depthLines = feedback?.explanation ? visibleLines(feedback.explanation, feedback.depth, { learning }) : null;
+  const moreLines = depthLines?.folded.length ?? 0;
   const result =
     feedback !== null ? (
       <motion.section
@@ -175,23 +181,45 @@ export function ExerciseShell(props: ExerciseShellProps) {
             </p>
           )}
         </div>
+        {feedback.head && <div data-slot="head">{feedback.head}</div>}
         {feedback.comparison && (
           <div data-slot="comparison">
-            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} />
+            <Comparison given={feedback.comparison.given} ops={feedback.comparison.ops} compact={!!feedback.comparison.compact} />
           </div>
         )}
         {(feedback.explanation || feedback.after) && (
           <div data-slot="explanation">
-            {feedback.explanation && <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} onFoldChange={onFold} />}
+            {feedback.explanation && <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} onFoldChange={onFold} hideWord={status.area === 'words'} only="open" />}
             {feedback.after}
           </div>
         )}
-        {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
-        {feedback.explanation && feedback.explanation.examples.length > 0 && (
+        {/* Design-Lead: Beispiel → Tutor-Knopf → EINE Fußzeile „Mehr“ (eingeklappte Zeilen und weitere Beispiele zusammen). */}
+        {feedback.explanation && feedback.explanation.examples.length > 0 ? (
           <div data-slot="examples">
-            <Examples items={feedback.explanation.examples} open={depthLines?.examplesOpen ?? 0} onFoldChange={onFold} />
+            <Examples
+              items={feedback.explanation.examples}
+              open={depthLines?.examplesOpen ?? 0}
+              onFoldChange={onFold}
+              more={{
+                label: t('exMore'),
+                before: feedback.tutor ? <div data-slot="tutor">{feedback.tutor}</div> : undefined,
+                extra: moreLines > 0 ? <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} hideWord={status.area === 'words'} only="folded" /> : undefined,
+              }}
+            />
           </div>
+        ) : (
+          <>
+            {feedback.tutor && <div data-slot="tutor">{feedback.tutor}</div>}
+            {feedback.explanation && moreLines > 0 && (
+              <div data-slot="more" className="-mx-4 border-t border-line px-4 pt-1">
+                <FoldToggle label={t('exMore')} onOpenChange={onFold} testId="explanation-more">
+                  <Explanation model={feedback.explanation} depth={feedback.depth} learning={learning} hideWord={status.area === 'words'} only="folded" />
+                </FoldToggle>
+              </div>
+            )}
+          </>
         )}
+        {feedback.foot && <div data-slot="foot">{feedback.foot}</div>}
         {feedback.menu && Object.keys(feedback.menu).length > 0 && (
           <div className="absolute right-1 top-2">
             <ExerciseMenu items={feedback.menu} onOpenChange={setMenuOpen} />

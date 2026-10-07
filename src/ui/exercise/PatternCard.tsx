@@ -21,7 +21,7 @@ export function PatternCard({ name, formula, example = null, signals = null, com
       <p className="flex flex-wrap items-center gap-2">
         <span className="font-semibold">{name}</span>
         {formula && (
-          <span className="rounded-[var(--radius-inline)] bg-hint-soft px-1.5 text-hint-text" lang="en" data-testid="pattern-formula">
+          <span className="rounded-full bg-hint-soft px-2.5 py-0.5 font-semibold text-hint-text" lang="en" data-testid="pattern-formula">
             {formula}
           </span>
         )}

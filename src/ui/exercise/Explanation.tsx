@@ -5,6 +5,7 @@ import type { WordTapArea } from '../../engine/wordTap';
 import { useT, type MessageKey } from '../../i18n';
 import { FoldToggle } from './FoldToggle';
 import { visibleLines } from './explainDepth';
+import { splitHead, splitWhy } from './wordParts';
 import { Slot } from '../../app/slots';
 
 // Erklär-Karte (§4.3/§4.6): EINE Innenfläche, feste Zeilen mit Symbol und kurzem Label (keine Großbuchstaben-
@@ -17,6 +18,10 @@ type Props = {
   learning?: boolean;
   area?: WordTapArea;
   onFoldChange?: (open: boolean) => void;
+  /** Wort-Rückmeldung: der Kopf darüber zeigt das Wort schon (Anki-Rückseite) – hier nur für Vorleseprogramme. */
+  hideWord?: boolean;
+  /** 'open': nur die offenen Zeilen (das Gerüst sammelt „Mehr“ unten in EINER Fußzeile); 'folded': nur die eingeklappten Zeilen; Standard: beides. */
+  only?: 'open' | 'folded';
 };
 
 const LABEL: Record<ExplainLine['k'], MessageKey> = {
@@ -29,7 +34,7 @@ const LABEL: Record<ExplainLine['k'], MessageKey> = {
 };
 const SYMBOL: Record<ExplainLine['k'], string> = { pattern: '◇', yours: '›', why: '✓', mistake: '✕', contrast: '⇄', note: 'i' };
 
-export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange }: Props) {
+export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false, only }: Props) {
   const { t, lang } = useT();
   const v = visibleLines(model, depth, { learning });
   const en = (text: string): ReactNode => <EnglishText as="span" text={text} area={area} />;
@@ -80,6 +85,79 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
     }
   };
 
+  // Wort-Rückmeldung (Design-Lead 07.10.2026): Kopf als Chips, Merke als eigener Block, Gegenstück als eigene Zeile – dieselben Texte, nur getrennt.
+  const card = model.source === 'card';
+  const head = card ? model.lines.find((l): l is Extract<ExplainLine, { k: 'pattern' }> => l.k === 'pattern') : undefined;
+  const headWord = head ? splitHead(head.name).word : '';
+  const cardRow = (l: ExplainLine, i: number): ReactNode => {
+    if (l.k === 'pattern') {
+      const h = splitHead(l.name);
+      const w = splitWhy(model.lines.find((x): x is Extract<ExplainLine, { k: 'why' }> => x.k === 'why')?.text ?? '', h.word);
+      const showFormula = !!l.formula && l.formula !== w.main;
+      if (hideWord && !h.chips.length && !showFormula) return (
+          <li key={`${l.k}-${i}`} className="sr-only" data-line="pattern">
+            {h.word}
+          </li>
+        );
+      return (
+        <li key={`${l.k}-${i}`} className="flex flex-wrap items-center gap-2 border-t border-line px-4 py-3" data-line="pattern">
+          {hideWord ? (
+            <span className="sr-only">{h.word}</span>
+          ) : (
+            <span className="lx-t-answer mr-1 text-fg" lang="en">
+              {en(h.word)}
+            </span>
+          )}
+          {h.chips.map((c) => (
+            <span key={c} className="lx-t-meta inline-flex min-h-7 items-center rounded-full bg-surface-strong px-2.5 font-medium text-muted">
+              {c}
+            </span>
+          ))}
+          {showFormula && (
+            <span className="lx-t-meta inline-flex min-h-7 items-center rounded-full bg-hint-soft px-2.5 font-semibold text-hint-text" lang="en">
+              {l.formula}
+            </span>
+          )}
+        </li>
+      );
+    }
+    if (l.k === 'why') {
+      const w = splitWhy(l.text, headWord);
+      // Nichts außer dem Wort selbst: keine leere Überschrift (das Wort steht schon im Kopf).
+      if (!w.main && !w.rest.length)
+        return (
+          <li key={`${l.k}-${i}`} className="sr-only" data-line="why">
+            {l.text}
+          </li>
+        );
+      return (
+        <li key={`${l.k}-${i}`} className="flex flex-col gap-2 border-t border-line px-4 py-3.5" data-line="why">
+          <span className="lx-eyebrow text-subtle">{w.label ?? t(LABEL.why)}</span>
+          {w.main && (
+            <span className="lx-t-answer min-w-0 text-fg" lang={w.main.includes(' = ') ? lang : 'en'}>
+              {w.main.includes(' = ') ? w.main : en(w.main)}
+            </span>
+          )}
+          {w.rest.map((r, k) =>
+            r.label ? (
+              <span key={k} className="lx-t-support flex min-w-0 items-baseline gap-2">
+                <span className="lx-t-meta flex-none font-medium text-subtle">{r.label}</span>
+                <span className="min-w-0 font-semibold text-fg" lang="en">
+                  {en(r.text)}
+                </span>
+              </span>
+            ) : (
+              <span key={k} className="lx-t-support min-w-0 text-muted" lang={lang}>
+                {r.text}
+              </span>
+            ),
+          )}
+        </li>
+      );
+    }
+    return row(l, i);
+  };
+
   const row = (l: ExplainLine, i: number): ReactNode => (
     <li key={`${l.k}-${i}`} className="flex flex-col gap-1 border-t border-line px-4 py-3.5" data-line={l.k}>
       <span className="lx-eyebrow text-subtle">
@@ -93,7 +171,9 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
   );
 
   let main: ReactNode;
-  if (v.oneLine) {
+  if (card) {
+    main = v.open.length ? <ul className="m-0 flex list-none flex-col p-0">{v.open.map(cardRow)}</ul> : null;
+  } else if (v.oneLine) {
     const p = v.open.find((l): l is Extract<ExplainLine, { k: 'pattern' }> => l.k === 'pattern');
     const w = v.open.find((l): l is Extract<ExplainLine, { k: 'why' }> => l.k === 'why');
     const text = [p?.name, w?.text].filter((x): x is string => !!x).join(' · ');
@@ -109,14 +189,22 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
     main = v.open.length ? <ul className="m-0 flex list-none flex-col p-0">{v.open.map(row)}</ul> : null;
   }
 
-  if (!main && !v.folded.length && !model.ai) return null;
+  if (only === 'folded') {
+    if (!v.folded.length) return null;
+    return (
+      <ul className="-mx-4 m-0 flex list-none flex-col p-0" data-testid="explanation-folded">
+        {v.folded.map(card ? cardRow : row)}
+      </ul>
+    );
+  }
+  if (!main && (only === 'open' || !v.folded.length) && !model.ai) return null;
   return (
     <div className="-mx-4 flex flex-col" data-testid="explanation" data-depth={depth} data-source={model.source}>
       {main}
-      {v.folded.length > 0 && (
+      {only !== 'open' && v.folded.length > 0 && (
         <div className="border-t border-line px-4 py-1">
           <FoldToggle label={t('exMore')} {...(onFoldChange ? { onOpenChange: onFoldChange } : {})} testId="explanation-more">
-            <ul className="-mx-4 m-0 flex list-none flex-col p-0">{v.folded.map(row)}</ul>
+            <ul className="-mx-4 m-0 flex list-none flex-col p-0">{v.folded.map(card ? cardRow : row)}</ul>
           </FoldToggle>
         </div>
       )}

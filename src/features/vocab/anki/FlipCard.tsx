@@ -202,14 +202,14 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
   const reg = registerOf(card);
   const prompt =
     dir === 'de-en' ? (
-      <div className="flex flex-col items-center gap-3 text-center">
+      <div className="dz-flip flex flex-col items-center gap-3 text-center">
         <p className="lx-t-title" lang={lang} data-testid="flip-front">
           {meaning}
         </p>
         {ctx && !shown && <EnglishText as="p" className="max-w-[34ch] text-muted" text={ctx.sentence} {...src} slot={{ start: ctx.start, end: ctx.end, node: gapNode }} testId="flip-sentence" />}
       </div>
     ) : (
-      <div className="flex flex-col items-center gap-3 text-center">
+      <div className="dz-flip flex flex-col items-center gap-3 text-center">
         <p className="lx-t-title" lang="en" data-testid="flip-front">
           {card.word}
         </p>
@@ -217,27 +217,35 @@ export function FlipCard({ exercise, again = false, onDone }: { exercise: Exerci
       </div>
     );
   const back = shown ? (
-    <section className="flex flex-col gap-3 text-left" data-testid="flip-back" aria-live="polite">
-      <div className="flex flex-wrap items-center gap-2">
+    <section className="lx-card flex flex-col gap-3 overflow-hidden p-4 text-left" data-testid="flip-back" aria-live="polite">
+      {/* Kopf (Design-Lead): Wort groß, Vorlesen und Lautschrift genau einmal; Wortart und Register stehen als Chips in der Erklärung darunter. */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <p className="lx-t-title" lang="en" data-testid="flip-answer">
           {card.word}
         </p>
         <SpeakButton text={card.word} testId="flip-listen" />
         {ipa && (
-          <span className="lx-t-meta text-muted" lang="en" data-testid="flip-ipa">
+          <span className="lx-t-meta basis-full text-muted" lang="en" data-testid="flip-ipa">
             {ipa}
           </span>
         )}
       </div>
-      <p className="lx-t-support">
-        {/* Die deutsche Bedeutung steht genau einmal: bei Deutsch → Englisch zeigt sie schon die Vorderseite. */}
-        {dir === 'en-de' && meaning && <span lang={lang}>{meaning}</span>}
-        {pk && <span className="text-muted">{dir === 'en-de' && meaning ? ' · ' : ''}{t(pk as MessageKey)}</span>}
-        {reg && <span className="text-muted"> · {t(`wxReg_${reg}` as MessageKey)}</span>}
-      </p>
-      {model && <Explanation model={model} depth="min" learning={false} />}
+      {/* Die deutsche Bedeutung steht genau einmal: bei Deutsch → Englisch zeigt sie schon die Vorderseite. */}
+      {dir === 'en-de' && meaning && (
+        <p className="lx-t-body m-0" lang={lang}>
+          {meaning}
+        </p>
+      )}
+      {!model && (pk || reg) && (
+        <p className="lx-t-meta m-0 text-muted">
+          {pk && t(pk as MessageKey)}
+          {pk && reg && ' · '}
+          {reg && t(`wxReg_${reg}` as MessageKey)}
+        </p>
+      )}
+      {model && <Explanation model={model} depth="min" learning={false} hideWord />}
       {model && model.examples.length > 0 && <Examples items={model.examples} open={0} />}
-      <WordExtras card={card} open={false} lang={lang} extras={extras} />
+      <WordExtras card={card} open={false} lang={lang} extras={extras} part="more" />
     </section>
   ) : null;
 
