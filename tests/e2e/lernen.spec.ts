@@ -13,6 +13,12 @@ const TODAY_T = Date.parse('2026-09-20T18:00:00+02:00');
 // Eine Korrektur aus Block 3 von heute (Reparatur-Satz) mit der Falle f01 „actual ≠ aktuell“.
 const TRAP_REPAIR = { id: 'rf01', wrong: 'Please send me the actual version of the contract.', right: 'Please send me the current version of the contract.', why: '„actual“ heißt „tatsächlich“.', src: 'say', t: TODAY_T, box: 0, due: TODAY_T + 86_400_000 };
 
+/** Klappt alle Kapitel des Lernwegs auf (am Handy ist nur das aktuelle offen). */
+async function openAllChapters(page: Page): Promise<void> {
+  const closed = page.locator('[data-testid="chapter"][data-open="false"] [data-testid="chapter-head"]');
+  while ((await closed.count()) > 0) await closed.first().click();
+}
+
 const dump = (page: Page): Promise<Record<string, Doc>> =>
   page.evaluate(() => (window as unknown as { __LINGO_FAKE__: { db: { dump(): Record<string, Doc> } } }).__LINGO_FAKE__.db.dump());
 
@@ -26,6 +32,10 @@ test('Grammatik-Reiter: Weiter-Karte, Pfad mit allen Themen, Fehler korrigieren,
   await expect(page.getByTestId('hub-next-topic')).toBeVisible();
   await expect(page.getByTestId('hub-next-start')).toBeVisible();
   // Der Pfad: alle 39 Themen in Lehrreihenfolge, je Thema ein Zustand.
+  // Handy: nur das aktuelle Kapitel ist offen („Du bist hier“); alle sieben aufklappen.
+  await expect(page.getByTestId('chapter')).toHaveCount(7);
+  await expect(page.getByTestId('chapter-here')).toHaveCount(1);
+  await openAllChapters(page);
   await expect(page.locator('[data-testid="topic"]')).toHaveCount(39);
   const states = await page.getByTestId('topic').evaluateAll((els) => els.map((e) => e.getAttribute('data-state')));
   expect(new Set(states)).toEqual(new Set(['new', 'learning', 'safe', 'firm'].filter((x) => states.includes(x))));
@@ -328,4 +338,27 @@ test('Neues Thema: drei Karten vor der ersten Aufgabe (Alltag mit Verständnisfr
   await page.getByTestId('mini-go').click();
   await expect(page.getByTestId('gr-item')).toHaveAttribute('data-topic', 'time-clauses');
   expect(errors).toEqual([]);
+});
+
+// Lernplattform 2.0 P7 (§2.4): Bremse aktiv → der Hauptknopf startet Fehlersätze, die Zahl auf dem Knopf ist die Zahl der Sätze der Runde.
+test('P7 Grammatik-Reiter: bei aktiver Bremse startet der Hauptknopf die Fehlersätze, Zahl = Länge der Runde, eine Zeile „n fällig · heute m“', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const due = Date.parse('2026-09-19T09:00:00+02:00');
+  const errors = Array.from({ length: 12 }, (_, i) => ({ q: `Wrong sentence number ${i} here.`, given: `Wrong sentence number ${i} here.`, ans: `Right sentence number ${i} here.`, t: due - 5 * 86_400_000, box: 0, due, done: false }));
+  const { errors: errs } = await boot(page, { migrated: true, fake: { patch: { 'grammar/passive': { id: 'passive', p: 0.5, n: 10, c: 5, last: due, hist: [], recent: [1, 0, 1], seen: [], seenText: [], errors } } } });
+  await screen(page, 'today');
+  await openTab(page, 'learn');
+  const main = page.getByTestId('hub-next-start');
+  await expect(main).toHaveAttribute('data-action', 'fix');
+  const n = Number(await main.getAttribute('data-n'));
+  expect(n).toBeGreaterThan(0);
+  await expect(main).toContainText(`Fehlersätze korrigieren · ${n}`);
+  await expect(page.getByTestId('hub-intro-brake')).toContainText('Neues Thema ab weniger als 10');
+  const dueN = Number(await page.getByTestId('hub-errors').getAttribute('data-due'));
+  expect(dueN).toBeGreaterThanOrEqual(10);
+  await expect(page.getByTestId('hub-errors')).toContainText(`Fehlersätze · ${dueN} fällig · heute ${n}`);
+  await expect(page.getByTestId('hub-errors')).toHaveAttribute('data-today', String(n));
+  await main.click();
+  await screen(page, 'repairRound');
+  expect(errs).toEqual([]);
 });

@@ -6,7 +6,8 @@ import { openSheet } from '../../app/sheets';
 import { entriesFor } from '../../app/registry';
 import { useLive } from '../../data/live';
 import { fehlersaetzeDue, fixAll, fixToday, grammarErrorsDue } from '../../domain/metrics';
-import { canIntroduce, introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
+import { canIntroduce, INTRO_BLOCK_ERRORS, introTopic, isNewTopic, pathTopics, TOPIC_ROUND_MIN } from '../../domain/grammar/path';
+import { startUnitDuty } from '../unit/run';
 import { rankTopics } from '../../domain/grammar/tasks';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { useT } from '../../i18n';
@@ -77,7 +78,7 @@ function ForeignRows() {
 }
 
 export function LearnHub() {
-  const { t, tn, lang } = useT();
+  const { t, lang } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
   const now = useClock((s) => s.now);
@@ -98,13 +99,16 @@ export function LearnHub() {
     return id ? { id, fresh: isNewTopic(docs.get(id)) } : null;
   }, [docs, now, today, planGt]);
   // Eine Quelle je Zahl (`domain/metrics/today`): alle fälligen Fehlersätze, die Zahl auf dem Knopf (heute) und die Grammatikfehler der Bremse.
+  const plan = useToday((s) => s.plan);
+  const fixOpen = useToday((s) => s.duties.items.some((d) => d.id === 'ch:u-again' && d.state === 'open'));
   const nDue = useMemo(() => fixAll(fehlersaetzeDue({ grammarDocs: docs, repairDoc, nowMs: now, today })), [docs, repairDoc, now, today]);
-  // Der Knopf startet die Extra-Fehlerrunde (`repairRound`, höchstens 5): bis Schritt 4 als eigener Start dazukommt, zählt `fixToday` ohne Plan.
-  const nToday = fixToday({ plan: null, fixDue: nDue });
+  // Genau die Zahl der Sätze, die der Knopf „Fehlersätze korrigieren“ startet (Schritt 4 von heute oder die freiwillige Runde).
+  const nToday = fixToday({ plan, fixDue: nDue });
 
   // Bremse wegen vieler fälliger Fehlersätze: ruhiger Hinweis mit Grund (kein Vorwurf).
   const braked = useMemo(() => canIntroduce(docs, today, now), [docs, today, now]);
   const nBrake = braked.ok ? 0 : braked.reason === 'errors' ? grammarErrorsDue({ grammarDocs: docs, nowMs: now, today }) : 0;
+  const brakeActive = !braked.ok && braked.reason === 'errors' && nDue > 0;
 
   const startNext = () => {
     if (!next) return;
@@ -115,6 +119,8 @@ export function LearnHub() {
   };
 
   const startErrors = () => {
+    // Schritt 4 von heute noch offen: Pflicht starten; sonst die freiwillige Runde mit derselben Grenze.
+    if (fixOpen && startUnitDuty('ch:u-again', api)) return;
     go({ name: 'repairRound' });
   };
 
@@ -130,19 +136,50 @@ export function LearnHub() {
             {t('nbLernenNextEyebrow')}
           </p>
           <p className="text-lg font-semibold tracking-tight">{topicName(next.id, lang)}</p>
-          {nBrake > 0 && (
-            <p className="text-sm text-muted" data-testid="hub-intro-brake">
-              {t('nbLernenBrake', { n: nBrake })}
-            </p>
-          )}
           <p className="text-sm text-muted">{next.fresh ? t('nbLernenNextNew', { n: TOPIC_ROUND_MIN + 1 }) : t('nbLernenNextMin', { n: TOPIC_ROUND_MIN })}</p>
-          <div>
-            <Button variant="primary" iconAfter="arrowRight" onClick={startNext} data-testid="hub-next-start">
-              {next.fresh ? t('nbLernenNextStartNew') : t('nbLernenNextStart')}
-            </Button>
-          </div>
+          {brakeActive ? (
+            <>
+              <div>
+                <Button variant="primary" iconAfter="arrowRight" onClick={startErrors} data-testid="hub-next-start" data-action="fix" data-n={nToday}>
+                  {t('hxLearnFixBtn', { n: nToday })}
+                </Button>
+              </div>
+              <p className="text-sm text-muted" data-testid="hub-intro-brake">
+                {t('hxLearnBrake', { limit: INTRO_BLOCK_ERRORS, n: nBrake })}
+              </p>
+              <div>
+                <button type="button" onClick={startNext} className="inline-flex min-h-11 items-center text-sm font-medium text-accent-text hover:underline" data-testid="hub-next-anyway">
+                  {t('hxLearnAnyway', { topic: topicName(next.id, lang) })}
+                </button>
+              </div>
+            </>
+          ) : (
+            <div>
+              <Button variant="primary" iconAfter="arrowRight" onClick={startNext} data-testid="hub-next-start" data-action="topic">
+                {next.fresh ? t('hxLearnStartNew', { topic: topicName(next.id, lang) }) : t('nbLernenNextStart')}
+              </Button>
+            </div>
+          )}
         </motion.section>
       )}
+
+      <motion.div variants={item}>
+        {nDue > 0 ? (
+          <button type="button" onClick={startErrors} className="lx-glass flex min-h-14 w-full items-center gap-3 rounded-[var(--radius-card)] px-4 py-3 text-left transition-colors hover:bg-surface-strong" data-testid="hub-errors" data-due={nDue} data-today={nToday}>
+            <ChannelIcon channel="grammar"><Icon name="refresh" /></ChannelIcon>
+            <span className="lx-tnum min-w-0 flex-1 font-medium">{t('hxLearnFixLine', { n: nDue, today: nToday })}</span>
+            <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
+          </button>
+        ) : (
+          <p className="lx-glass flex min-h-14 items-center gap-3 rounded-[var(--radius-card)] px-4 py-3" data-testid="hub-errors-none">
+            <ChannelIcon channel="grammar"><Icon name="check" /></ChannelIcon>
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="font-medium">{t('nbLernenFixNone')}</span>
+              <span className="text-sm text-muted">{t('nbLernenFixNoneSub')}</span>
+            </span>
+          </p>
+        )}
+      </motion.div>
 
       <motion.section variants={item} className="flex flex-col gap-3" aria-labelledby="lh-path">
         <h2 id="lh-path" className="lx-eyebrow">
@@ -151,30 +188,23 @@ export function LearnHub() {
         <PathList onOpen={setOpen} highlight={next?.id ?? null} />
       </motion.section>
 
-      <motion.div variants={item}>
-        <ul className="lx-glass flex flex-col divide-y divide-line overflow-hidden rounded-[var(--radius-card)]" aria-label={t('nbLernenHubErrors')} data-testid="hub-errors-list">
-          {nDue > 0 ? (
-            <Row
-              icon={<ChannelIcon channel="grammar"><Icon name="refresh" /></ChannelIcon>}
-              title={t('nbLernenFixRow', { n: nDue })}
-              sub={t('hxNumFixLine', { today: nToday })}
-              onClick={startErrors}
-              testId="hub-errors"
-              badge={tn('grDueBadge', nDue)}
-            />
-          ) : (
-            <li className="flex min-h-14 items-center gap-3 px-4 py-3" data-testid="hub-errors-none">
-              <ChannelIcon channel="grammar"><Icon name="check" /></ChannelIcon>
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span className="font-medium">{t('nbLernenFixNone')}</span>
-                <span className="text-sm text-muted">{t('nbLernenFixNoneSub')}</span>
-              </span>
-            </li>
-          )}
-          <Row icon={<ChannelIcon channel="grammar"><Icon name="search" /></ChannelIcon>} title={t('nbLernenLookupRow')} sub={t('nbLernenLookupSub')} onClick={() => go({ name: 'grammar' })} testId="hub-lookup" />
-          <Row icon={<ChannelIcon channel="grammar"><Icon name="target" /></ChannelIcon>} title={t('nbLernenTrapsRow')} sub={t('nbLernenTrapsSub')} onClick={() => go({ name: 'patterns' })} testId="hub-traps" />
-          <Row icon={<ChannelIcon channel="grammar"><Icon name="book" /></ChannelIcon>} title={t('nbLernenWissenRow')} sub={t('nbLernenWissenSub')} onClick={() => go({ name: 'wissen' })} testId="hub-wissen" />
-          <Row icon={<ChannelIcon channel="grammar"><Icon name="layers" /></ChannelIcon>} title={t('nbLernenExtra')} sub={t('nbLernenExtraSub')} onClick={() => openSheet('x:extra')} testId="hub-extra" />
+      <motion.div variants={item} className="flex flex-col gap-3">
+        <div className="lx-glass flex min-h-14 flex-wrap items-center gap-x-1 gap-y-0 rounded-[var(--radius-card)] px-4 py-1" role="group" aria-label={t('hxLearnLookup')} data-testid="hub-lookup-row">
+          <span className="flex-none font-medium">{t('hxLearnLookup')}</span>
+          <span className="flex flex-wrap items-center">
+            <button type="button" onClick={() => go({ name: 'wissen' })} className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-accent-text hover:underline" data-testid="hub-wissen">
+              {t('hxLearnRules')}
+            </button>
+            <button type="button" onClick={() => go({ name: 'patterns' })} className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-accent-text hover:underline" data-testid="hub-traps">
+              {t('hxLearnTraps')}
+            </button>
+            <button type="button" onClick={() => go({ name: 'grammar' })} className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-accent-text hover:underline" data-testid="hub-lookup">
+              {t('hxLearnSearch')}
+            </button>
+          </span>
+        </div>
+        <ul className="lx-glass flex flex-col overflow-hidden rounded-[var(--radius-card)]" aria-label={t('nbLernenHubErrors')} data-testid="hub-errors-list">
+          <Row icon={<ChannelIcon channel="grammar"><Icon name="layers" /></ChannelIcon>} title={t('nbLernenExtra')} sub={t('nbLernenExtraSub')} onClick={() => openSheet('x:extra', { scope: 'grammar' })} testId="hub-extra" />
         </ul>
       </motion.div>
 

@@ -25,9 +25,9 @@ test.describe('Handy 390', () => {
     await expect(page.getByTestId('ws-behind')).toHaveAttribute('data-n', '40');
     await expect(page.getByTestId('ws-braked')).toContainText('2 neue Wörter');
     // Pflicht offen: der Knopf startet die Pflicht von heute.
-    const hint = page.getByTestId('ws-round-hint');
-    await expect(hint).toHaveAttribute('data-duty', '');
-    await expect(hint).toContainText('Pflicht von heute');
+    const review = page.getByTestId('ws-review');
+    await expect(review).toContainText('Pflicht:');
+    await expect(page.getByTestId('ws-round-hint')).toHaveCount(0);
     // Eingangskorb: „reicht für n Tage“ mit 2 neuen am Tag (Bremse), nicht mit dem Kontingent.
     expect(await layoutProblems(page)).toEqual([]);
     await page.getByTestId('ws-decks-all').click();

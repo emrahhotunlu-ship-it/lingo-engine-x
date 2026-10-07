@@ -23,7 +23,7 @@ test.describe('Handy 390', () => {
     await expect(page.getByTestId('ws-goal-pace')).toBeVisible();
     // Wiederholen-Karte: ein Hauptknopf mit Zahl, Modus als Textknopf.
     await expect(page.getByTestId('ws-due')).toBeVisible();
-    await expect(page.getByTestId('ws-review')).toContainText('Wiederholen');
+    await expect(page.getByTestId('ws-review')).toContainText(/Pflicht: \d+ Karten|Alle fälligen|Heute alles/);
     await expect(page.getByTestId('ws-mode-open')).toContainText('Modus: Automatisch');
     await expect(page.getByTestId('ws-new-left')).toBeVisible();
     // Das Pluszeichen sitzt als Symbolknopf in der Titelzeile.
@@ -81,12 +81,10 @@ test.describe('Handy 390', () => {
     await openTab(page, 'vocab');
     await page.getByTestId('ws-more').click();
     await expect(page.getByTestId('extra-sheet')).toBeVisible();
-    // Wörter: 6 Zeilen mit Zahl und Grund; dazu Grammatik (frei, Fehler, Nachschlagen, Fallen, Wissen), Anwenden, Sprechen.
+    // Lernplattform 2.0 §2.5: im Reiter Wörter nur Wörter-Zeilen (6 mit Zahl und Grund), keine Grammatik-, Anwenden- oder Sprechen-Zeilen.
     await expect(page.locator('[data-testid="extra-group-words"] [data-testid="extra-opt"]')).toHaveCount(6);
     await expect(page.locator('[data-testid="extra-group-words"] [data-testid="extra-opt"]').first()).toContainText('neue Wörter');
-    await expect(page.locator('[data-testid="extra-group-grammar"] [data-testid="extra-opt"]')).toHaveCount(5);
-    await expect(page.locator('[data-testid="extra-group-speak"] [data-testid="extra-opt"]')).toHaveCount(1);
-    await expect(page.locator('[data-testid="extra-group-apply"] [data-testid="extra-opt"]').first()).toBeVisible();
+    for (const g of ['grammar', 'speak', 'apply']) await expect(page.getByTestId(`extra-group-${g}`)).toHaveCount(0);
     const before = Object.keys(await dump(page)).length;
     const opt = page.locator('[data-testid="extra-opt"]:not([disabled])').first();
     await opt.click();

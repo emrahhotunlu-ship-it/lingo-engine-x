@@ -131,7 +131,9 @@ type ExtraLine = { id: string; label: string; why: string; n: number | null; dis
  * Dokument (N26), neue Karten nur im Rahmen des Tageskontingents; Grammatik, Anwenden und Sprechen starten ihre bestehenden Übungen.
  * Alles hier ist freiwillig und zählt nie zur Pflicht, zur Serie oder zum Fortschritt.
  */
-export function ExtraSheet({ onClose }: SheetProps) {
+export function ExtraSheet({ onClose, params }: SheetProps) {
+  // Lernplattform 2.0 §2.5: im Reiter Wörter nur Wörter-Zeilen; der Grammatik-Reiter öffnet dasselbe Blatt mit `scope: 'grammar'`.
+  const scope: 'words' | 'grammar' | 'all' = params && typeof params === 'object' && (params as { scope?: unknown }).scope === 'grammar' ? 'grammar' : params && typeof params === 'object' && (params as { scope?: unknown }).scope === 'words' ? 'words' : 'all';
   const { t, tn } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
@@ -262,11 +264,11 @@ export function ExtraSheet({ onClose }: SheetProps) {
   return (
     <Sheet open onClose={onClose} title={t('nbWsExtraTitle')} closeLabel={t('close')}>
       <div className="flex flex-col gap-5" data-testid="extra-sheet">
-        {group('words', t('nbWsXWords'), wordLines)}
-        {group('grammar', t('nbWsXGrammar'), grammarLines)}
-        {group('apply', t('nbWsXApply'), applyLines)}
-        {group('speak', t('nbWsXSpeak'), speakLines)}
-        {tts && (
+        {scope !== 'grammar' && group('words', t('nbWsXWords'), wordLines)}
+        {scope !== 'words' && group('grammar', t('nbWsXGrammar'), grammarLines)}
+        {scope !== 'words' && group('apply', t('nbWsXApply'), applyLines)}
+        {scope !== 'words' && group('speak', t('nbWsXSpeak'), speakLines)}
+        {scope !== 'grammar' && tts && (
           <button
             type="button"
             onClick={() => {

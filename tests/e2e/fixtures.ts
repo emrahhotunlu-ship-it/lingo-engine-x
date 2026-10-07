@@ -193,13 +193,15 @@ export async function openSettings(page: Page): Promise<void> {
 export const crashOnce = (route: string): Record<string, string> => ({ 'lx:crash-once': route });
 
 /**
- * Freiwilliges Extra „Sprechen“ öffnen (seit 04.10.2026 kein Reiter: Einstieg auf „Heute“, `today-speak`).
+ * Freiwilliges Extra „Sprechen“ öffnen (seit 04.10.2026 kein Reiter; seit Lernplattform 2.0 steht auf Heute nur die Zeile „Extra ›“ nach der
+ * Pflicht, immer erreichbar ist der Weg Grammatik › Extra › Sprechen üben).
  * Es zeigt nur noch das Rollenspiel und das Einwand-Training.
  */
 export async function openSpeak(page: Page): Promise<void> {
   if (!(await page.getByTestId('speak-hub').isVisible())) {
-    await openTab(page, 'today');
-    await page.getByTestId('today-speak').click();
+    await openTab(page, 'learn');
+    await page.getByTestId('hub-extra').click();
+    await page.locator('[data-testid="extra-group-speak"] [data-testid="extra-opt"]').click();
     await screen(page, 'speak');
   }
   await page.getByTestId('speak-hub').waitFor();
