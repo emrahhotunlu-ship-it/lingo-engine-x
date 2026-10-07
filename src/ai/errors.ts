@@ -1,4 +1,4 @@
-import { markSampleRevoked } from '../platform/capabilities';
+import { markSampleRevoked, pauseBackground } from '../platform/capabilities';
 import { logError, logWarn } from '../platform/diagnostics';
 import { AiFailure, type AiErrorKind, type AiMessageKey } from './types';
 import { pauseAi } from './status';
@@ -84,6 +84,7 @@ export function failureFromSample(err: unknown, scope: string): AiFailure {
       break;
     case 'busy':
       pauseAi();
+      if (err.code === 'rate_limited') pauseBackground();
       logWarn(scope, err);
       break;
     case 'too_large':

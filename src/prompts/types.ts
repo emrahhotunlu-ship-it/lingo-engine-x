@@ -22,6 +22,11 @@ export type PromptTemplate<V, O> = {
    * tatsächlich antwortende Stufe (`modelTierApplied`), z. B. für die Einschätzung (`complex`).
    */
   verb?: 'json' | 'text-json';
+  /**
+   * Tagesdeckel für Hintergrundaufrufe dieser Vorlage je Gerät (Lernplattform 3.0 P25, `src/ai/budget.ts`). Nur mit diesem Feld prüft das
+   * KI-Tor Budget und Zustimmung (`priority: 'background'`); Nutzeraufrufe sind nie gedeckelt.
+   */
+  budget?: { bgPerDay: number };
   /** Der ganze Prompt. Erste Zeile: `[${id}@${version}]`. */
   build(vars: V): string;
   /** Prüft die Antwort; hängt von den Variablen ab (z. B. Sprache der Erklärung). */

@@ -62,6 +62,7 @@ export const orderGen: PromptTemplate<OrderGenVars, OrderGenOut> = {
   version: VERSION,
   tier: 'default',
   cache: false,
+  budget: { bgPerDay: 1 },
   build(vars) {
     const words = vars.words.slice(0, 12).map((w) => clip(w, 40)).filter(Boolean);
     const avoid = vars.avoid.slice(0, 6).map((s) => clip(s, 120)).filter(Boolean);

@@ -13,6 +13,13 @@ type CapState = {
   downloads: CapStatus;
   /** `sample` wurde abgelehnt (not_granted & Co.) – Funktion für diese Ansicht ausblenden. */
   sampleRevoked: boolean;
+  /**
+   * In dieser Ansicht wurde ein vom Nutzer ausgelöster Aufruf beantwortet, ohne `not_granted` (der Vertrag bietet keine Abfrage der
+   * Zustimmung, `contract/sample.d.ts`). Erst dann darf ein Hintergrundaufruf gesendet werden (kein Zustimmungsdialog ungefragt).
+   */
+  sampleConfirmed: boolean;
+  /** Nach `not_granted` oder `rate_limited` ruhen alle Hintergrundaufrufe für den Rest der Ansicht. */
+  backgroundPaused: boolean;
 };
 
 export const useCapabilities = create<CapState>(() => ({
@@ -20,6 +27,8 @@ export const useCapabilities = create<CapState>(() => ({
   sample: 'pending',
   downloads: 'pending',
   sampleRevoked: false,
+  sampleConfirmed: false,
+  backgroundPaused: false,
 }));
 
 let dbNs: Db | null = null;
@@ -73,5 +82,20 @@ export async function sampleUsableWithin(maxMs: number): Promise<boolean> {
 }
 
 export function markSampleRevoked(): void {
-  useCapabilities.setState({ sampleRevoked: true });
+  useCapabilities.setState({ sampleRevoked: true, backgroundPaused: true });
+}
+
+/** Ein Nutzer-Aufruf wurde beantwortet: Hintergrundaufrufe sind jetzt erlaubt (solange nicht pausiert). */
+export function markSampleConfirmed(): void {
+  if (!useCapabilities.getState().sampleConfirmed) useCapabilities.setState({ sampleConfirmed: true });
+}
+
+/** `rate_limited`: Hintergrundaufrufe ruhen für den Rest der Ansicht. */
+export function pauseBackground(): void {
+  if (!useCapabilities.getState().backgroundPaused) useCapabilities.setState({ backgroundPaused: true });
+}
+
+/** Nur für Tests. */
+export function resetSampleConsent(): void {
+  useCapabilities.setState({ sampleConfirmed: false, backgroundPaused: false });
 }

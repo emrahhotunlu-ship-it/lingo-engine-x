@@ -1,4 +1,4 @@
-import { getSample } from '../platform/capabilities';
+import { getSample, markSampleConfirmed } from '../platform/capabilities';
 import { logError, logWarn } from '../platform/diagnostics';
 import type { Turn, TurnInput } from '../prompts/types';
 import { linkAbort } from './abort';
@@ -162,6 +162,8 @@ async function runText(req: TextRequest, scope: string, phase: (p: AiPhase) => v
       const tierApplied = res.modelTierApplied ?? req.tier;
       if (tierApplied !== req.tier) logWarn(scope, { code: 'tier_substituted', message: `${req.tier} → ${tierApplied}` });
       if (res.truncated) logWarn(scope, { code: 'truncated', message: 'answer hit the length limit' });
+      // Ein Nutzer-Aufruf wurde beantwortet: Hintergrundaufrufe sind erlaubt (P25, `sampleConfirmed`).
+      if ((req.priority ?? 'user') === 'user') markSampleConfirmed();
       return { text: res.text, truncated: res.truncated === true, tierApplied };
     } catch (err) {
       throw failureFromSample(err, scope);
