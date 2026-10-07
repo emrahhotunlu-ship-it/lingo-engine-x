@@ -75,7 +75,11 @@ function GrowthEnd({ title, items = [], facts = [], mistakes = [], warning = nul
   const { t } = useT();
   return (
     <section className="lx-card flex flex-col gap-4 p-[1.125rem]" data-testid="session-end" data-mode="growth" data-right={right} data-total={total}>
-      <Eyebrow tone="accent">{title ?? t('nbShEndTitle')}</Eyebrow>
+      <div className="flex flex-col gap-1">
+        <Eyebrow tone="accent">{t('hxEndRoundDone')}</Eyebrow>
+        <h1 className="m-0 text-2xl leading-8 font-semibold tracking-tight text-balance">{title ?? t('nbShEndTitle')}</h1>
+        {total > 0 && <p className="lx-tnum lx-t-support m-0 text-muted">{t('nbShEndScore', { right, total })}</p>}
+      </div>
       {items.length > 0 && (
         <ul className="m-0 flex list-none flex-col gap-2 p-0" data-testid="session-end-items">
           {items.map((it) => {

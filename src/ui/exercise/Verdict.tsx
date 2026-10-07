@@ -16,6 +16,7 @@ const WORD: Record<ResultVerdict, MessageKey> = {
   unchecked: 'exVerdictUnchecked',
 };
 const TONE: Record<ResultVerdict, string> = { ok: 'text-ok-text', near: 'text-near-text', wrong: 'text-wrong-text', dontKnow: 'text-fg', unchecked: 'text-muted' };
+const BADGE: Record<ResultVerdict, string> = { ok: 'bg-ok', near: 'bg-near', wrong: 'bg-wrong', dontKnow: '', unchecked: '' };
 const MARK: Record<ResultVerdict, string> = { ok: '✓', near: '≈', wrong: '✕', dontKnow: '', unchecked: '' };
 const ICON: Partial<Record<ResultVerdict, IconName>> = { dontKnow: 'lightbulb' };
 
@@ -38,8 +39,12 @@ export function Verdict({ verdict, sub = null }: { verdict: ResultVerdict; sub?:
   const icon = ICON[verdict];
   return (
     <div className="flex flex-col gap-0.5" data-testid="verdict-block">
-      <p className={`lx-t-answer flex items-center gap-2 ${TONE[verdict]}`} data-testid="verdict" data-verdict={verdict} role="status">
-        {MARK[verdict] && <span aria-hidden="true">{MARK[verdict]}</span>}
+      <p className={`flex items-center gap-3 text-xl leading-7 font-semibold tracking-tight ${TONE[verdict]}`} data-testid="verdict" data-verdict={verdict} role="status">
+        {MARK[verdict] && (
+          <span aria-hidden="true" className={`inline-flex size-8 flex-none items-center justify-center rounded-full text-base font-bold ${BADGE[verdict]}`} style={{ color: 'var(--lx-accent-fg)' }}>
+            {MARK[verdict]}
+          </span>
+        )}
         {icon && <Icon name={icon} size={18} />}
         <span>{t(WORD[verdict])}</span>
       </p>

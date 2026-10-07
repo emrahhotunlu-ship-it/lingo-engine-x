@@ -18,7 +18,7 @@ const VIEWPORTS = [
 ] as const;
 const THEMES: Theme[] = ['dark', 'dim', 'light'];
 const LANGS: Lang[] = ['de', 'en'];
-const BG: Record<Theme, string> = { dark: 'rgb(11, 15, 25)', dim: 'rgb(26, 32, 48)', light: 'rgb(245, 246, 250)' };
+const BG: Record<Theme, string> = { dark: 'rgb(13, 16, 22)', dim: 'rgb(26, 32, 48)', light: 'rgb(245, 246, 250)' };
 const SHOTS = 'test-results/screens';
 mkdirSync(SHOTS, { recursive: true });
 

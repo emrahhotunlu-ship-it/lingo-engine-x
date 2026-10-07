@@ -9,7 +9,7 @@ import { DAY, dump, planPatch, writes } from './trainerHelpers';
 const SHOTS = 'test-results/screens';
 mkdirSync(SHOTS, { recursive: true });
 const GERMAN_IN_EN = /[äöüÄÖÜß]|\b(und|nicht|wird|Karten|Tage|Einstellungen|Serie|Heute|Wiederholen)\b/;
-const BG: Record<Theme, string> = { dark: 'rgb(11, 15, 25)', dim: 'rgb(26, 32, 48)', light: 'rgb(245, 246, 250)' };
+const BG: Record<Theme, string> = { dark: 'rgb(13, 16, 22)', dim: 'rgb(26, 32, 48)', light: 'rgb(245, 246, 250)' };
 
 const SAMPLES: Array<{ width: number; theme: Theme; lang: Lang }> = [
   { width: 390, theme: 'dark', lang: 'de' },

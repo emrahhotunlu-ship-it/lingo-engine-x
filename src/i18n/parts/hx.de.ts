@@ -5,6 +5,8 @@ export const hxDe = {
   hxTodayNext: 'Als Nächstes: {what}',
   hxTodayNextGrammarNew: 'Als Nächstes: Grammatik · neues Thema {topic}',
   hxTodayRingMin: '{min} Min.',
+  hxEndRoundDone: 'Runde geschafft',
+  hxTodayRingOpen: 'Min. offen',
   hxDoneBigWords: '+{n} Wörter sicher',
   hxDoneBigPatterns: '+{n} Muster sicher',
   hxDoneNewSafe: 'Neu sicher: {names}',

@@ -187,11 +187,14 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
     >
       <div className="flex items-center gap-3.5">
-        <SegmentRing segments={Math.max(1, total)} done={done} label={t('nbHeuteRingLabel', { done, total })}>
-          {t('hxTodayRingMin', { min: minLeft })}
+        <SegmentRing segments={Math.max(1, total)} done={done} size={112} stroke={8} label={t('nbHeuteRingLabel', { done, total })}>
+          <span className="flex flex-col items-center gap-0.5">
+            <span className="text-3xl leading-none font-semibold tracking-tight">{minLeft}</span>
+            <span className="text-xs font-normal text-subtle">{t('hxTodayRingOpen')}</span>
+          </span>
         </SegmentRing>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <h2 id="td-unit-title" className="text-lg leading-snug font-semibold tracking-tight text-balance" data-testid="today-title">
+          <h2 id="td-unit-title" className="text-xl leading-7 font-semibold tracking-tight text-balance" data-testid="today-title">
             {title}
           </h2>
           <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="lx-tnum text-xs text-muted">

@@ -28,31 +28,31 @@
 
 :root,
 :root[data-theme='dark'] {
-  --lx-bg: #0b0f19;
+  --lx-bg: #0d1016;
   --lx-bg-glow-1: rgba(16, 185, 129, 0.1);
   --lx-bg-glow-2: rgba(34, 211, 238, 0.07);
   --lx-surface: rgba(255, 255, 255, 0.045);
-  --lx-surface-strong: rgba(255, 255, 255, 0.08);
-  --lx-surface-solid: #121827;
-  --lx-border: rgba(255, 255, 255, 0.09);
+  --lx-surface-strong: #1b2029;
+  --lx-surface-solid: #141821;
+  --lx-border: rgba(255, 255, 255, 0.08);
   --lx-edge: rgba(255, 255, 255, 0.1);
-  --lx-fg: #e9edf5;
-  --lx-fg-muted: #a3acbd;
-  --lx-fg-subtle: #8a93a6;
+  --lx-fg: #f1f3f8;
+  --lx-fg-muted: #a8afc0;
+  --lx-fg-subtle: #8c94a8;
   --lx-accent: #10b981;
   --lx-accent-fg: #03140d;
   --lx-accent-text: #34d399;
   --lx-accent-soft: rgba(16, 185, 129, 0.14);
   --lx-cyan: #22d3ee;
-  --lx-cyan-text: #67e8f9;
-  --lx-gold-text: #fbbf24;
-  --lx-danger-text: #f87171;
-  --lx-danger-soft: rgba(248, 113, 113, 0.14);
-  --lx-gold-soft: rgba(251, 191, 36, 0.14);
+  --lx-cyan-text: #67e3f5;
+  --lx-gold-text: #f4c56a;
+  --lx-danger-text: #ff8f8a;
+  --lx-danger-soft: rgba(240, 100, 95, 0.14);
+  --lx-gold-soft: rgba(242, 184, 75, 0.14);
   --lx-cyan-soft: rgba(34, 211, 238, 0.12);
-  --lx-focus: #e9edf5;
+  --lx-focus: #f1f3f8;
   --lx-track: rgba(255, 255, 255, 0.08);
-  --lx-shadow: 0 1px 0 0 var(--lx-edge) inset, 0 16px 40px -20px rgba(0, 0, 0, 0.7);
+  --lx-shadow: 0 12px 32px -20px rgba(0, 0, 0, 0.7);
   --lx-scrim: rgba(3, 6, 12, 0.62);
   --lx-ok: #10b981;
   --lx-ok-text: #34d399;
@@ -66,8 +66,8 @@
   --lx-hint: var(--lx-cyan);
   --lx-hint-text: var(--lx-cyan-text);
   --lx-hint-soft: var(--lx-cyan-soft);
-  --lx-mark: rgba(34, 211, 238, 0.18);
-  --lx-line-strong: rgba(255, 255, 255, 0.16);
+  --lx-mark: rgba(34, 211, 238, 0.22);
+  --lx-line-strong: rgba(255, 255, 255, 0.17);
 
   --lx-ch-cards: #a78bfa;
   --lx-ch-grammar: #60a5fa;
@@ -703,10 +703,10 @@ h3 {
     align-items: center;
     gap: 0.75rem;
     min-height: 3.25rem;
-    padding: 0.625rem 0.875rem;
-    border-radius: var(--radius-control);
-    border: 1px solid var(--lx-border);
-    background: var(--lx-surface);
+    padding: 0.375rem 1rem 0.375rem 0.75rem;
+    border-radius: 0.875rem;
+    border: 1.5px solid var(--lx-line-strong);
+    background: var(--lx-surface-solid);
     color: var(--lx-fg);
     font-size: var(--text-base);
     text-align: left;
@@ -717,16 +717,26 @@ h3 {
   }
   /* Ausgewählt ist nicht Richtig (§7): neutraler 2-px-Rahmen in der Schriftfarbe, Fläche `--lx-line-strong`. */
   .lx-choice[aria-pressed='true'] {
-    border: 2px solid var(--lx-fg);
+    border: 1.5px solid var(--lx-fg);
     background: var(--lx-line-strong);
   }
   .lx-choice[data-state='correct'] {
     background: var(--lx-ok-soft);
-    border: 2px solid var(--lx-ok);
+    border: 1.5px solid var(--lx-ok);
   }
   .lx-choice[data-state='wrong'] {
     background: var(--lx-wrong-soft);
-    border: 2px solid var(--lx-wrong);
+    border: 1.5px solid var(--lx-wrong);
+  }
+  .lx-choice[data-state='correct'] .lx-choice-key,
+  .lx-choice[data-state='correct'] .lx-choice-letter {
+    background: var(--lx-ok);
+    color: #0b0f14;
+  }
+  .lx-choice[data-state='wrong'] .lx-choice-key,
+  .lx-choice[data-state='wrong'] .lx-choice-letter {
+    background: var(--lx-wrong);
+    color: #0b0f14;
   }
   .lx-choice[data-state='dim'] {
     opacity: 0.55;
@@ -740,16 +750,16 @@ h3 {
   .lx-choice-big {
     min-height: 3.5rem;
     width: 100%;
-    padding: 0.75rem 1rem;
-    border-width: 2px;
+    padding: 0.375rem 1rem 0.375rem 0.75rem;
     font-size: 1.0625rem;
     line-height: 1.35;
   }
   .lx-choice-letter {
-    width: 2rem;
-    height: 2rem;
+    width: 1.875rem;
+    height: 1.875rem;
+    border-radius: 9999px;
     font-size: var(--text-sm);
-    border: 1px solid var(--lx-border);
+    font-weight: 650;
   }
   .lx-choice-mark {
     flex: none;
@@ -768,10 +778,10 @@ h3 {
     flex: none;
     align-items: center;
     justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 0.5rem;
-    background: var(--lx-track);
+    width: 1.875rem;
+    height: 1.875rem;
+    border-radius: 9999px;
+    background: var(--lx-surface-strong);
     color: var(--lx-fg-muted);
     font-size: var(--text-xs);
     font-weight: 600;
@@ -1246,6 +1256,15 @@ html[data-actionbar] #main {
     padding: var(--lx-pad-card);
     border-radius: var(--radius-card);
     box-shadow: var(--lx-shadow), inset 3px 0 0 0 var(--lx-area, transparent);
+  }
+  /* Design-Vorschau: die Übung steht flach auf dem Grund, ohne Karte und Kante; der Bereich zeigt sich in den Status-Punkten. */
+  .lx-glass.lx-exercise {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    padding-inline: 0.25rem;
   }
   .lx-exercise[data-area='words'] {
     --lx-area: var(--lx-ch-cards);

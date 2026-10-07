@@ -146,13 +146,13 @@ export function ExerciseShell(props: ExerciseShellProps) {
       <motion.section
         key={resultKey}
         ref={resultRef}
-        className="relative flex scroll-mt-4 flex-col gap-3 border-t border-line-strong pt-4"
+        className="lx-card relative flex scroll-mt-4 flex-col gap-3 overflow-hidden p-4"
         data-testid="result"
         aria-label={t('exExplanationLabel')}
         data-verdict={feedback.verdict}
         {...(reduce ? {} : { initial: { opacity: 0, y: -6 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.22 } })}
       >
-        <div data-slot="verdict" className="pr-12">
+        <div data-slot="verdict" className={`-mx-4 -mt-4 px-4 py-3.5 pr-14 ${feedback.verdict === 'ok' ? 'bg-ok-soft' : feedback.verdict === 'near' ? 'bg-near-soft' : feedback.verdict === 'wrong' ? 'bg-wrong-soft' : ''}`}>
           <Verdict verdict={feedback.verdict} sub={feedback.sub ?? null} />
           {feedback.nextIn && (
             <p className="lx-t-meta mt-0.5 text-muted" data-testid="next-in">
@@ -176,7 +176,7 @@ export function ExerciseShell(props: ExerciseShellProps) {
           </div>
         )}
         {feedback.menu && Object.keys(feedback.menu).length > 0 && (
-          <div className="absolute right-0 top-2">
+          <div className="absolute right-1 top-2">
             <ExerciseMenu items={feedback.menu} onOpenChange={setMenuOpen} />
           </div>
         )}
