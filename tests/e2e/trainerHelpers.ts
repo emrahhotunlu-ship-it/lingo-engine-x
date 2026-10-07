@@ -149,7 +149,9 @@ export async function placeTiles(page: Page, answer: string, opts: { wrong?: boo
 /** Satz für „Eigener Satz“, den die feste Testantwort als richtig wertet (Großbuchstabe, Punkt, Zielwort). */
 export const produceSentence = (target: string): string => `In our team we ${target} every single week.`;
 
-const isTouch = (page: Page): Promise<boolean> => page.evaluate(() => window.matchMedia('(pointer: coarse)').matches);
+// Eingabeprofil der App (Testschalter `__LINGO_INPUT__` oder Touch-Gerät), nicht nur der Zeiger.
+const isTouch = (page: Page): Promise<boolean> =>
+  page.evaluate(() => window.__LINGO_INPUT__ === 'touch' || window.matchMedia('(pointer: coarse)').matches);
 
 /** Beantwortet die aktuelle Übung (Tastatur); die App stuft selbst ein, Enter geht weiter. Rückgabe: Übungsart. */
 export async function answerCurrent(page: Page, opts: { wrong?: boolean } = {}): Promise<string> {

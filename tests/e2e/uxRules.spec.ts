@@ -142,7 +142,7 @@ for (const theme of ['dark', 'light'] as const) {
 for (const theme of ['dark', 'light'] as const) {
   test(`Rundgang ${theme}: Wörter-Übungen (Frage und Ergebnis) mit Aktionsleiste, Zustandstexte, nichts springt`, async ({ page }) => {
     test.slow();
-    const { errors } = await boot(page, { migrated: true, theme, fake: { patch: tourPatch() } });
+    const { errors } = await boot(page, { migrated: true, theme, fake: { patch: tourPatch(true) } });
     await screen(page, 'today');
     await trainerTour(page, async (name) => {
       await rules(page, name, theme);

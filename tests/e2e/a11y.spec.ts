@@ -4,6 +4,7 @@ import { boot, openSettings, openOverview, screen, type Theme } from './fixtures
 import { learnTour } from './learnHelpers';
 import { openChecks } from './profilHelpers';
 import { checkSettled, playCheck, progressTour } from './progressHelpers';
+import { setInputProfile } from './input';
 import { tourPatch, trainerTour } from './trainerHelpers';
 
 // Barrierefreiheit (Kap. 8, Kap. 12): axe in allen drei Modi, Touch-Ziele ≥ 44 px.
@@ -52,6 +53,8 @@ for (const theme of THEMES) {
       test.setTimeout(90_000);
       await page.setViewportSize({ width, height: 900 });
       await page.emulateMedia({ reducedMotion: 'reduce' });
+      // Schmal = Handy-Profil (Finger): die Übungen folgen dem Eingabeprofil, nicht der Breite.
+      if (width < 700) await setInputProfile(page, 'touch');
       await boot(page, { theme, migrated: true, fake: { patch: tourPatch(width < 700) } });
       await screen(page, 'today');
       const found: string[] = [];
