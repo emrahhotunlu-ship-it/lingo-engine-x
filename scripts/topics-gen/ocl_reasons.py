@@ -48,7 +48,7 @@ R = {
         'is': ('is braucht ein -ing oder eine 3. Form, hier folgt die Grundform speak.', 'is needs an -ing or a participle, but the base form speak follows.')},
     'Much ___ I would like to attend, I have another meeting at that time.': {
         'that': ('Much that ist keine gültige Verbindung für einen Einwand.', 'Much that is not a valid combination for a concession.'),
-        'so': ('Much so bedeutet „sehr“ und leitet keinen Einwand ein.', 'Much so means “very” and does not start a concession.'),
+        'so': ('Much so gibt es nur als very much so („allerdings“), es leitet keinen Einwand ein.', 'Much so exists only as very much so (“indeed”), it does not start a concession.'),
         'if': ('if nennt eine Bedingung, hier soll aber ein Einwand stehen.', 'if names a condition, but a concession is needed here.')},
     'Hard ___ we tried, the migration was not finished before the deadline.': {
         'that': ('Hard that we tried ist keine gültige Verbindung für einen Einwand.', 'Hard that we tried is not a valid combination for a concession.'),
@@ -61,7 +61,7 @@ R = {
     'It was ___ a good offer that we accepted it at once.': {
         'so': ('so steht vor einem Adjektiv allein, vor a + Nomen braucht es such.', 'so goes before an adjective alone, before a + noun it needs such.'),
         'very': ('very verstärkt nur ein Adjektiv und nennt keine Folge mit that.', 'very only strengthens an adjective and names no result with that.'),
-        'too': ('too heißt „zu“ und passt nicht zu einer Folge mit that.', 'too means “too” and does not fit a result with that.')},
+        'too': ('too steht vor einem Adjektiv und verlangt danach to + Infinitiv, keinen that-Satz.', 'too stands before an adjective and needs to + infinitive after it, not a that-clause.')},
     'Such ___ his excitement that he could not sleep the night before the trip.': {
         'is': ('is ist Präsens, die Geschichte liegt aber in der Vergangenheit (could not).', 'is is present, but the story lies in the past (could not).'),
         'has': ('has verlangt eine 3. Form und passt nicht zu Such … that.', 'has needs a participle and does not fit Such … that.'),

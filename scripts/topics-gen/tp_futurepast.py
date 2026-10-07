@@ -263,7 +263,7 @@ def c1x():
          (G, 'Would to ist keine feste Form.', 'Would to is not a fixed form.')])
 
     ocl(T, 'fp.was-going', 'C1', 'biz', 0.0, 'The team was ___ to present the results on Monday, but the data was incomplete.',
-        ['going', 'supposed', 'due', 'meant'], 'part', ['go', 'went', 'gone'],
+        ['going', 'supposed', 'due', 'meant', 'scheduled', 'expected', 'planning', 'set'], 'part', ['go', 'went', 'gone'],
         ('Was going to nennt den Plan von damals.', 'Was going to names the plan from back then.'))
     ocl(T, 'fp.about-to', 'C1', 'biz', 0.0, 'The auditors were about ___ present their findings when the fire alarm went off.',
         ['to'], 'part', ['for', 'of', 'at'],
@@ -308,7 +308,7 @@ def c1x():
         [(['would'], ['become CFO'])], ['become', 'CFO'], ['will', 'became', 'is'], [],
         ('would become CFO. Aus der Vergangenheit auf Späteres blickt would.', 'would become CFO. Would looks from the past at something later.'), [])
     kwt(T, 'fp.was-to', 'C1', 'biz', 0.0, 'The conference had been planned for September, but a strike forced a delay.', 'WAS', 'The conference', 'in September, but a strike forced a delay.',
-        [(['was to', 'was supposed to', 'was going to', 'was due to', 'was meant to'], ['take place', 'be held'])], ['to', 'take', 'place'], ['should', 'is', 'were'], [],
+        [(['was to', 'was supposed to', 'was going to', 'was due to', 'was meant to', 'was scheduled to', 'was set to'], ['take place', 'be held'])], ['to', 'take', 'place'], ['should', 'is', 'were'], [],
         ('was to take place. Was to nennt das Vorgesehene.', 'was to take place. Was to names what was meant to be.'), [])
     kwt(T, 'fp.about-to', 'C1', 'life', 0.0, 'I almost fell asleep when the phone rang.', 'ABOUT', 'I was', 'when the phone rang.',
         [(['about to'], ['fall asleep'])], ['to', 'fall', 'asleep'], ['for', 'falling', 'at'], [],

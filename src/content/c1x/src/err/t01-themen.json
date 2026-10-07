@@ -282,7 +282,9 @@
    "bad": {
     "span": "Hard we tried",
     "fix": [
-     "Hard as we tried"
+     "Hard as we tried",
+     "Hard though we tried",
+     "However hard we tried"
     ],
     "choices": [
      "Hard as we tried",
@@ -737,23 +739,23 @@
    "pat": "el.so-not",
    "why": {
     "ok": {
-     "de": "Nach neither steht das Hilfsverb vor dem Subjekt: neither do I.",
-     "en": "After neither the auxiliary comes before the subject: neither do I."
+     "de": "Nach neither steht das Hilfsverb vor dem Subjekt: neither does my wife.",
+     "en": "After neither the auxiliary comes before the subject: neither does my wife."
     },
     "wrong": []
    },
    "bad": {
-    "span": "neither I do",
+    "span": "neither my wife does",
     "fix": [
-     "neither do I"
+     "neither does my wife"
     ],
     "choices": [
-     "neither do I",
-     "neither I do",
-     "so do I"
+     "neither does my wife",
+     "neither my wife does",
+     "so does my wife"
     ]
    },
-   "text": "I do not like coffee, and neither I do, so we ordered water."
+   "text": "I do not like coffee, and neither my wife does, so we ordered water."
   },
   {
    "id": "err-0530",

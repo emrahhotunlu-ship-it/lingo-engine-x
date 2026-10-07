@@ -40,7 +40,7 @@ PAT = [
             ('I was wondering could you send me the file.', 'I was wondering if you could send me the file.',
              'Nach wondering folgt ein Nebensatz mit if und normaler Satzstellung. Eine Frage mit vorgezogenem could passt hier nicht.',
              'After wondering a clause with if and normal word order follows. A question with could in front does not fit here.'),
-            ('sa.no-ing', 'I am hoping you could help.', 'I hope you can help.',
+            ('sa.no-ing', 'I was hoping you could help.', 'I hope you can help.',
              'Mit der Verlaufsform und could wird die Bitte weicher. Die einfache Form klingt direkter.', 'With the continuous and could the request gets softer. The simple form sounds more direct.'),
             [('I was wondering if you could help.', 'Klingt die Bitte weich und höflich?', 'Does the request sound soft and polite?', True)],
             ('Willst du eine Bitte weich machen? Dann nimm was hoping oder was wondering mit if you could.', 'Do you want to soften a request? Then use was hoping or was wondering with if you could.')),
@@ -89,8 +89,8 @@ FILE = topic_file(T, ('Ich kann die Verlaufsform gezielt nutzen: für Entwicklun
 RULES = rules_from(PAT,
     ('Die Verlaufsform zeigt, dass etwas läuft, vorläufig ist oder höflich klingen soll. Zustände (know, need, belong) bleiben meist in der einfachen Form. Ausnahmen: think (nachdenken), have (essen), see (treffen).',
      'The continuous shows that something is under way, temporary, or meant to sound polite. States (know, need, belong) mostly stay in the simple form. Exceptions: think (consider), have (eat), see (meet).'),
-    ('Im Beruf beschreibst du Trends („We are seeing …“) und bittest weich („I was wondering if …“). Wann ja, wann nein: Die weiche Bitte passt bei Fremden und Vorgesetzten, unter Kollegen wirkt „Can you …?“ normal. Zustandsverben bleiben immer einfach.',
-     'At work you describe trends (“We are seeing …”) and ask softly (“I was wondering if …”). When yes, when no: the soft request fits strangers and superiors, among colleagues “Can you …?” sounds normal. Stative verbs always stay simple.'),
+    ('Im Beruf beschreibst du Trends („We are seeing …“) und bittest weich („I was wondering if …“). Wann ja, wann nein: Die weiche Bitte passt bei Fremden und Vorgesetzten, unter Kollegen wirkt „Can you …?“ normal. Zustandsverben bleiben meist einfach.',
+     'At work you describe trends (“We are seeing …”) and ask softly (“I was wondering if …”). When yes, when no: the soft request fits strangers and superiors, among colleagues “Can you …?” sounds normal. Stative verbs usually stay simple.'),
     ('Nicht verwechseln: Im Deutschen gibt es keine Verlaufsform. Aus „ich kenne“ wird nie „I am knowing“. Aus „er ist müde“ wird nie „he is being tired“.',
      'Do not mix up: German has no continuous. “Ich kenne” never becomes “I am knowing”. “Er ist müde” never becomes “he is being tired”.'),
     (['Zustand, Meinung oder Besitz? Einfache Form.', 'Läuft die Veränderung gerade? are seeing, is getting.', 'Weiche Bitte? was hoping, was wondering + if you could.', 'Verhalten für kurze Zeit? is being + Adjektiv.'],
@@ -263,7 +263,7 @@ def c1x():
          (G, 'Does belonging mischt zwei Formen.', 'Does belonging mixes two forms.')])
 
     ocl(T, 'sa.trend', 'C1', 'biz', 0.0, 'Our clients are ___ requesting flexible payment terms, and we have to react.',
-        ['increasingly', 'now', 'constantly', 'repeatedly'], 'adv', ['increase', 'increased', 'increasing'],
+        ['increasingly', 'now', 'constantly', 'repeatedly', 'also', 'already', 'still', 'often', 'frequently'], 'adv', ['increase', 'increased', 'increasing'],
         ('Ein Adverb steht zwischen are und requesting: are increasingly requesting.', 'An adverb stands between are and requesting: are increasingly requesting.'))
     ocl(T, 'sa.soft', 'C1', 'biz', 0.0, 'We are ___ to hear from you by the end of the week.',
         ['hoping'], 'part', ['hope', 'hoped', 'hopeful'],
@@ -276,15 +276,15 @@ def c1x():
         ('Are being zeigt Verhalten für begrenzte Zeit: You are being unreasonable.', 'Are being shows behavior for a limited time: You are being unreasonable.'),
         [(G, 'Nach are steht being, nicht be.', 'After are comes being, not be.'),
          (G, 'Been braucht have, nicht are.', 'Been needs have, not are.'),
-         (G, 'Are allein sagt, wie er ist, nicht, wie er sich gerade verhält.', 'Are alone says what he is like, not how he is behaving right now.')])
+         (G, 'Are steht schon vor der Lücke, ein zweites are ist zu viel.', 'Are already stands before the gap, a second are is too much.')])
     ocl(T, 'sa.no-ing', 'C1', 'biz', 0.0, 'The data center belongs ___ our parent company, so we need their approval.',
         ['to'], 'prep', ['for', 'at', 'of'],
         ('Belong ist ein Zustandsverb und bleibt einfach: belongs to.', 'Belong is a stative verb and stays simple: belongs to.'))
     ocl(T, 'sa.trend', 'C1', 'life', 0.0, 'It is getting ___ harder to find an apartment in this city, even for a small family.',
-        ['much', 'even', 'far'], 'adv', ['more', 'very', 'most'],
+        ['much', 'even', 'far', 'slightly', 'considerably', 'significantly', 'way'], 'adv', ['more', 'very', 'most'],
         ('Is getting + Komparativ beschreibt eine Entwicklung. Vor harder verstärken much, even oder far.', 'Is getting + comparative describes a change. Before harder, much, even or far strengthens it.'))
     ocl(T, 'sa.being', 'C1', 'life', 0.0, 'My little sister is always ___ my things without asking.',
-        ['borrowing', 'taking', 'using'], 'part', ['borrow', 'taken', 'used'],
+        ['borrowing', 'taking', 'using', 'wearing', 'touching', 'stealing', 'grabbing'], 'part', ['borrow', 'taken', 'used'],
         ('Always + -ing zeigt Ärger über eine Gewohnheit: is always borrowing.', 'Always + -ing shows annoyance at a habit: is always borrowing.'))
     mcc(T, 'sa.being', 'C1', 'life', 0.0, 'My brother is ___ silly today because he wants to cheer us up.',
         'being', ['be', 'been', 'having'],
@@ -297,7 +297,7 @@ def c1x():
         ('rise at the moment', ['are rising at the moment'], ['are rising at the moment', 'rises at the moment', 'rising at the moment']),
         ('Mit at the moment braucht es die Verlaufsform: are rising.', 'With at the moment you need the continuous: are rising.'))
     err(T, 'sa.soft', 'C1', 'biz', 0.0, 'I was wondering could we shift the review to Thursday afternoon.',
-        ('could we shift', ['if we could shift'], ['if we could shift', 'if could we shift', 'whether could we shift']),
+        ('could we shift', ['if we could shift', 'whether we could shift'], ['if we could shift', 'if could we shift', 'whether could we shift']),
         ('Nach wondering folgt if und normale Satzstellung: if we could shift.', 'After wondering comes if and normal word order: if we could shift.'))
     err(T, 'sa.being', 'C1', 'biz', 0.0, 'The client is being very tired after the long negotiation, so let us end early.',
         ('being very tired', ['very tired', 'completely exhausted'], ['very tired', 'been very tired', 'being tired very']),
@@ -306,18 +306,18 @@ def c1x():
         ('are needing', ['need'], ['need', 'needing', 'do needing']),
         ('Need ist ein Zustandsverb und bleibt einfach: We need.', 'Need is a stative verb and stays simple: We need.'))
     err(T, 'sa.being', 'C1', 'life', 0.0, 'My cousin is being very funny tonight because he wants us all to laugh.', None,
-        ('Kein Fehler: Silly beschreibt Verhalten, deshalb passt is being.', 'No mistake: silly describes behavior, so is being fits.'))
+        ('Kein Fehler: Funny beschreibt Verhalten, deshalb passt is being.', 'No mistake: funny describes behavior, so is being fits.'))
     err(T, 'sa.soft', 'C1', 'life', 0.0, 'We are hoping to see you at the barbecue on Saturday.', None,
         ('Kein Fehler: Are hoping macht die Einladung freundlich und weich.', 'No mistake: are hoping makes the invitation friendly and soft.'))
 
     kwt(T, 'sa.trend', 'C1', 'biz', 0.0, 'Orders are going up fast this month.', 'SEEING', 'We', 'in orders this month.',
-        [(['are seeing'], ['a sharp rise', 'a rapid rise', 'a steep rise'])], ['are', 'a', 'sharp', 'rise'], ['see', 'saw', 'seen'], [],
-        ('are seeing a fast rise. Die Verlaufsform zeigt die laufende Entwicklung.', 'are seeing a fast rise. The continuous shows the change under way.'), [])
+        [(['are seeing'], ['a sharp rise', 'a rapid rise', 'a steep rise', 'a sharp increase', 'a rapid increase', 'a steep increase'])], ['are', 'a', 'sharp', 'rise'], ['see', 'saw', 'seen'], [],
+        ('are seeing a sharp rise. Die Verlaufsform zeigt die laufende Entwicklung.', 'are seeing a sharp rise. The continuous shows the change under way.'), [])
     kwt(T, 'sa.soft', 'C1', 'biz', 0.0, 'Could you confirm the venue for the workshop?', 'HOPING', 'I was', 'confirm the venue for the workshop.',
-        [(['hoping'], ['you could'])], ['you', 'could'], ['hope', 'hoped', 'to'], [],
+        [(['hoping'], ['you could', 'that you could', 'you would', 'that you would'])], ['you', 'could'], ['hope', 'hoped', 'to'], [],
         ('was hoping you could. Die Verlaufsform macht die Bitte weicher.', 'was hoping you could. The continuous softens the request.'), [])
     kwt(T, 'sa.being', 'C1', 'biz', 0.0, 'The client is making life very hard for us today.', 'BEING', 'The client', 'today.',
-        [(['is being'], ['very difficult'])], ['is', 'very', 'difficult'], ['be', 'been', 'has'], [],
+        [(['is being'], ['very difficult', 'difficult'])], ['is', 'very', 'difficult'], ['be', 'been', 'has'], [],
         ('is being very difficult. Being zeigt Verhalten für begrenzte Zeit.', 'is being very difficult. Being shows behavior for a limited time.'), [])
     kwt(T, 'sa.no-ing', 'C1', 'biz', 0.0, 'A decision is urgently required by Friday.', 'NEED', 'We', 'by Friday.',
         [(['urgently need'], ['a decision']), (['need'], ['a decision'])], ['urgently', 'a', 'decision'], ['are', 'needing', 'needed'], ['are needing'],
@@ -327,7 +327,7 @@ def c1x():
         [(['getting'], ['more expensive'])], ['more', 'expensive'], ['get', 'got', 'gets'], [],
         ('are getting more expensive. Die Verlaufsform zeigt die laufende Entwicklung.', 'are getting more expensive. The continuous shows the change under way.'), [])
     kwt(T, 'sa.soft', 'C1', 'life', 0.0, 'We hope you can come to our housewarming party.', 'HOPING', 'We', 'come to our housewarming party.',
-        [(['are hoping'], ['you can', 'you will', "you'll"])], ['are', 'you', 'can'], ['hope', 'hoped', 'to'], [],
+        [(['are hoping'], ['you can', 'you will', "you'll", 'that you can', 'that you will'])], ['are', 'you', 'can'], ['hope', 'hoped', 'to'], [],
         ('are hoping you can come. Die Verlaufsform macht die Einladung freundlicher.', 'are hoping you can come. The continuous makes the invitation friendlier.'), [])
 
 def place():

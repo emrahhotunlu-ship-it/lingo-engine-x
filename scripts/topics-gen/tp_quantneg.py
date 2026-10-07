@@ -71,7 +71,7 @@ PAT = [
              'Beim Kern „the number“ steht das Verb im Singular. Bei „a number of“ steht es im Plural.',
              'With the core “the number” the verb is singular. With “a number of” it is plural.'),
             ('qn.hardly', 'Few people came.', 'A few people came.',
-             'Few heißt: zu wenige. A few heißt: einige, genug.', 'Few means: too few. A few means: some, enough.'),
+             'Few = nicht viele (eher negativ) · A few = einige (neutral oder positiv).', 'Few = not many (rather negative) · A few = some (neutral or positive).'),
             [('A number of clients have left.', 'Sind es einige Kunden?', 'Are there several clients?', True)],
             ('Geht es um einige Dinge oder um die Zahl selbst? A number of: Plural. The number of: Singular.', 'Is it about several things or the figure itself? A number of: plural. The number of: singular.')),
 ]
@@ -272,7 +272,7 @@ def c1x():
         ['longer'], 'adv', ['later', 'farther', 'shorter'],
         ('No longer heißt „nicht mehr“.', 'No longer means “not anymore”.'))
     ocl(T, 'qn.number', 'C1', 'biz', 0.0, 'A large ___ of our customers have switched to the annual plan.',
-        ['number', 'majority', 'proportion', 'share'], 'det', ['amount', 'deal', 'quantity'],
+        ['number', 'majority', 'proportion', 'share', 'percentage'], 'det', ['amount', 'deal', 'quantity'],
         ('A large number of steht vor zählbaren Nomen im Plural.', 'A large number of is used before countable plural nouns.'))
     ocl(T, 'qn.hardly', 'C1', 'life', 0.0, 'There is ___ any milk left, so I will go to the store.',
         ['hardly', 'barely', 'scarcely'], 'adv', ['nearly', 'almost', 'none'],

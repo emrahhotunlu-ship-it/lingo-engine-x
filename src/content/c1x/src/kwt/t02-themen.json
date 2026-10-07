@@ -280,8 +280,8 @@
    "pat": "sa.trend",
    "why": {
     "ok": {
-     "de": "are seeing a fast rise. Die Verlaufsform zeigt die laufende Entwicklung.",
-     "en": "are seeing a fast rise. The continuous shows the change under way."
+     "de": "are seeing a sharp rise. Die Verlaufsform zeigt die laufende Entwicklung.",
+     "en": "are seeing a sharp rise. The continuous shows the change under way."
     },
     "wrong": []
    },
@@ -297,7 +297,10 @@
      "b": [
       "a sharp rise",
       "a rapid rise",
-      "a steep rise"
+      "a steep rise",
+      "a sharp increase",
+      "a rapid increase",
+      "a steep increase"
      ]
     }
    ],
@@ -340,7 +343,10 @@
       "hoping"
      ],
      "b": [
-      "you could"
+      "you could",
+      "that you could",
+      "you would",
+      "that you would"
      ]
     }
    ],
@@ -381,7 +387,8 @@
       "is being"
      ],
      "b": [
-      "very difficult"
+      "very difficult",
+      "difficult"
      ]
     }
    ],
@@ -526,7 +533,9 @@
      "b": [
       "you can",
       "you will",
-      "you'll"
+      "you'll",
+      "that you can",
+      "that you will"
      ]
     }
    ],
@@ -693,7 +702,9 @@
       "was supposed to",
       "was going to",
       "was due to",
-      "was meant to"
+      "was meant to",
+      "was scheduled to",
+      "was set to"
      ],
      "b": [
       "take place",

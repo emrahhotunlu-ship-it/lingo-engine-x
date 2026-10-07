@@ -284,7 +284,7 @@ def c1x():
         ('sends', ['send'], ['send', 'sent', 'sending']),
         ('Nach does steht die Grundform: does send.', 'After does the base form follows: does send.'))
     err(T, 'ep.concession', 'C1', 'biz', 0.0, 'Hard we tried, we could not reach the client by phone.',
-        ('Hard we tried', ['Hard as we tried'], ['Hard as we tried', 'Hard that we tried', 'Hard so we tried']),
+        ('Hard we tried', ['Hard as we tried', 'Hard though we tried', 'However hard we tried'], ['Hard as we tried', 'Hard that we tried', 'Hard so we tried']),
         ('Bei der Voranstellung fehlt as: Hard as we tried, … Ohne as ist der Einwand nicht ausgedrückt.', 'The as is missing in the fronting: Hard as we tried, … Without as the concession is not expressed.'))
     err(T, 'ep.so-such', 'C1', 'biz', 0.0, 'Such was the demand what the shop ran out of stock within an hour.',
         ('what', ['that'], ['that', 'which', 'as']),
@@ -315,7 +315,7 @@ def c1x():
         [(['Such was'], ['the demand'])], ['was', 'the', 'demand'], ['so', 'a', 'very'], [],
         ('Such was the demand that … Das Verb steht vor dem Subjekt.', 'Such was the demand that … The verb stands before the subject.'), [])
     kwt(T, 'ep.do-emph', 'C1', 'biz', 0.0, 'They claim we never paid, but we settled the invoice in full.', 'DID', 'They claim we never paid, but we', 'the invoice in full.',
-        [(['really did'], ['pay']), (['did actually', 'did really'], ['pay'])], ['really', 'pay'], ['paid', 'do', 'had'], ['really did paid'],
+        [(['really did'], ['pay']), (['did actually', 'did really', 'did indeed', 'did in fact'], ['pay'])], ['really', 'pay'], ['paid', 'do', 'had'], ['really did paid'],
         ('Das betonte did widerspricht dem Vorwurf und steht vor der Grundform pay.', 'The stressed did rebuts the accusation and stands before the base form pay.'),
         [W(['did', 'paid'], 'Nach did steht die Grundform pay.', 'After did the base form pay follows.')])
 

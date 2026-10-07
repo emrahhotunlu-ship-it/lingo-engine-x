@@ -294,8 +294,8 @@
     "a": "Few people came.",
     "b": "A few people came.",
     "diff": {
-     "de": "Few heißt: zu wenige. A few heißt: einige, genug.",
-     "en": "Few means: too few. A few means: some, enough."
+     "de": "Few = nicht viele (eher negativ) · A few = einige (neutral oder positiv).",
+     "en": "Few = not many (rather negative) · A few = some (neutral or positive)."
     }
    },
    "ccq": [
