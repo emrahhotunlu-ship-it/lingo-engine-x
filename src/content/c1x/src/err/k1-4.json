@@ -14,7 +14,8 @@
    "bad": {
     "span": "could you confirm",
     "fix": [
-     "you could confirm"
+     "you could confirm",
+     "you can confirm"
     ],
     "choices": [
      "you could confirm",
@@ -175,7 +176,7 @@
    },
    "why": {
     "ok": {
-     "de": "Entweder hoping to hear oder hoping for a reply. „For to“ geht im Englischen nicht. Deutsch „auf … hoffen zu“ vermischt beides.",
+     "de": "Entweder hoping to hear oder hoping for a reply. „For to“ geht im Englischen nicht. Deutsch „hoffen auf“ und „hoffen, zu“ werden hier vermischt.",
      "en": "Either hoping to hear or hoping for a reply. “For to” is not possible in English."
     },
     "wrong": [
@@ -266,7 +267,10 @@
     "span": "a bit challenge",
     "fix": [
      "a bit of a challenge",
-     "a bit challenging"
+     "a bit challenging",
+     "a little challenging",
+     "a little bit of a challenge",
+     "a little bit challenging"
     ],
     "choices": [
      "a bit of challenge",
@@ -312,44 +316,44 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "That would be a little stretch for our team in the current quarter.",
+   "text": "That would be bit of stretch for our team in the current quarter.",
    "bad": {
-    "span": "a little stretch",
+    "span": "bit of stretch",
     "fix": [
      "a bit of a stretch",
      "a little bit of a stretch"
     ],
     "choices": [
      "a bit of a stretch",
-     "a bit stretch",
-     "a stretching"
+     "a bit of stretch",
+     "bit a stretch"
     ]
    },
    "why": {
     "ok": {
-     "de": "Die höfliche Abschwächung heißt a bit of a stretch. Vor einem Nomen braucht a little ein „bit of a“. Deutsch „ein bisschen Anstrengung“ hat keinen Artikel.",
-     "en": "The polite softener is a bit of a stretch. Before a noun a little needs “bit of a”."
+     "de": "Die höfliche Abschwächung ist das Idiom a bit of a stretch, mit beiden Artikeln. Deutsch „ein bisschen Anstrengung“ hat keine Artikel, deshalb fallen sie weg.",
+     "en": "The polite softener is the idiom a bit of a stretch, with both articles. German “ein bisschen Anstrengung” has no articles, so they get dropped."
     },
     "wrong": [
      {
-      "opt": "a bit stretch",
-      "de": "A bit stretch hat kein of und keinen Artikel.",
-      "en": "“a bit stretch” lacks of and the article."
+      "opt": "a bit of stretch",
+      "de": "Vor stretch fehlt der zweite Artikel: a bit of a stretch.",
+      "en": "The second article is missing before stretch: a bit of a stretch."
      },
      {
-      "opt": "a stretching",
-      "de": "„a stretching“ ändert das Wort und passt nicht.",
-      "en": "“a stretching” changes the word and does not fit."
+      "opt": "bit a stretch",
+      "de": "Die Reihenfolge ist a bit of a, nicht bit a.",
+      "en": "The order is a bit of a, not bit a."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „a little stretch“, nicht hier.",
-      "en": "The mistake is at “a little stretch”, not here."
+      "de": "Der Fehler steckt bei „bit of stretch“, nicht hier.",
+      "en": "The mistake is at “bit of stretch”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „a little stretch“ ist falsch.",
-      "en": "There is a mistake: “a little stretch” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „bit of stretch“ ist falsch.",
+      "en": "There is a mistake: “bit of stretch” is wrong."
      }
     ]
    }
@@ -453,12 +457,15 @@
    "level": "B2",
    "dom": "biz",
    "src": "seed",
-   "text": "If an invoice arrives after the cutoff, it would be processed on the next working day.",
+   "text": "Under our policy, if an invoice arrives after the cutoff, it would be processed on the next working day.",
    "bad": {
     "span": "would be processed",
     "fix": [
      "is processed",
-     "will be processed"
+     "will be processed",
+     "gets processed",
+     "will get processed",
+     "’ll be processed"
     ],
     "choices": [
      "are processed",
@@ -609,7 +616,8 @@
    "bad": {
     "span": "would be",
     "fix": [
-     "were"
+     "were",
+     "was"
     ],
     "choices": [
      "being",
@@ -730,8 +738,8 @@
      },
      {
       "opt": "would order",
-      "de": "„would order“ verschiebt den Satz in eine andere Zeit.",
-      "en": "“would order” moves the sentence into another time frame."
+      "de": "„would order“ ist hypothetisch; nach provided that steht das Present.",
+      "en": "“would order” is hypothetical; the present follows provided that."
      },
      {
       "tap": "*",
@@ -759,7 +767,8 @@
    "bad": {
     "span": "would caught",
     "fix": [
-     "would have caught"
+     "would have caught",
+     "would’ve caught"
     ],
     "choices": [
      "would catching",
@@ -909,7 +918,7 @@
    },
    "why": {
     "ok": {
-     "de": "Unless bedeutet schon „wenn nicht“. Eine zweite Verneinung dreht den Sinn um: Unless you sign. Deutsch „es sei denn, du unterschreibst nicht“ führt zur Doppelung.",
+     "de": "Unless bedeutet schon „wenn nicht“. Eine zweite Verneinung dreht den Sinn um: Unless you sign. Deutsch „wenn du nicht unterschreibst“ legt die Verneinung nahe, aber unless enthält sie schon.",
      "en": "Unless already means “if not”. A second negation reverses the meaning: Unless you sign."
     },
     "wrong": [
@@ -950,7 +959,9 @@
     "span": "will not rain",
     "fix": [
      "doesn’t rain",
-     "does not rain"
+     "does not rain",
+     "isn’t raining",
+     "is not raining"
     ],
     "choices": [
      "doesn’t rain",
@@ -1047,43 +1058,44 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "But for your help last week, the launch would fail.",
+   "text": "But for your help last week, we would miss yesterday’s launch.",
    "bad": {
-    "span": "would fail",
+    "span": "would miss",
     "fix": [
-     "would have failed"
+     "would have missed",
+     "would’ve missed"
     ],
     "choices": [
-     "would failed",
-     "had failed",
-     "would have failed"
+     "would missed",
+     "had missed",
+     "would have missed"
     ]
    },
    "why": {
     "ok": {
-     "de": "Vergangenheit („last week“) braucht would have + 3. Form: would have failed. But for ersetzt If it had not been for.",
-     "en": "The past (“last week”) needs would have + participle: would have failed. But for replaces If it had not been for."
+     "de": "Das Ereignis (yesterday’s launch) liegt in der Vergangenheit, also would have + 3. Form: would have missed. But for ersetzt If it had not been for.",
+     "en": "The event (yesterday’s launch) lies in the past, so would have + participle: would have missed. But for replaces If it had not been for."
     },
     "wrong": [
      {
-      "opt": "would failed",
-      "de": "„would failed“ lässt have aus.",
-      "en": "“would failed” drops have."
+      "opt": "would missed",
+      "de": "„would missed“ lässt have aus.",
+      "en": "“would missed” drops have."
      },
      {
-      "opt": "had failed",
-      "de": "„had failed“ gibt es hier nicht: nach But for steht would have.",
-      "en": "“had failed” is not possible here: But for takes would have."
+      "opt": "had missed",
+      "de": "„had missed“ gibt es hier nicht: nach But for steht would have.",
+      "en": "“had missed” is not possible here: But for takes would have."
      },
      {
       "tap": "*",
-      "de": "Der Fehler steckt bei „would fail“, nicht hier.",
-      "en": "The mistake is at “would fail”, not here."
+      "de": "Der Fehler steckt bei „would miss“, nicht hier.",
+      "en": "The mistake is at “would miss”, not here."
      },
      {
       "tap": "none",
-      "de": "Doch, hier steckt ein Fehler: „would fail“ ist falsch.",
-      "en": "There is a mistake: “would fail” is wrong."
+      "de": "Doch, hier steckt ein Fehler: „would miss“ ist falsch.",
+      "en": "There is a mistake: “would miss” is wrong."
      }
     ]
    }
@@ -1101,7 +1113,8 @@
    "bad": {
     "span": "we had planned",
     "fix": [
-     "we would have planned"
+     "we would have planned",
+     "we would’ve planned"
     ],
     "choices": [
      "we would have planned",
@@ -1202,11 +1215,12 @@
     "span": "will fail",
     "fix": [
      "fails",
-     "should fail"
+     "should fail",
+     "were to fail"
     ],
     "choices": [
-     "failing",
-     "failed",
+     "fail",
+     "to fail",
      "fails"
     ]
    },
@@ -1217,14 +1231,14 @@
     },
     "wrong": [
      {
-      "opt": "failing",
-      "de": "„failing“ allein ist kein Prädikat.",
-      "en": "“failing” alone is no predicate."
+      "opt": "fail",
+      "de": "Nach in case steht ein finites Verb mit -s: fails.",
+      "en": "After in case comes a finite verb with -s: fails."
      },
      {
-      "opt": "failed",
-      "de": "„failed“ ist Vergangenheit, aber der Satz spricht von der Zukunft.",
-      "en": "“failed” is past, but the sentence is about the future."
+      "opt": "to fail",
+      "de": "„to fail“ gibt es nach in case nicht.",
+      "en": "“to fail” is not possible after in case."
      },
      {
       "tap": "*",
@@ -1308,7 +1322,7 @@
    "level": "C1",
    "dom": "biz",
    "src": "seed",
-   "text": "Had we known about the delay in time, we would have rescheduled the launch.",
+   "text": "Had we known about the delay earlier, we would have rescheduled the launch.",
    "bad": null,
    "why": {
     "ok": {
@@ -1442,7 +1456,8 @@
    "bad": {
     "span": "will update",
     "fix": [
-     "would update"
+     "would update",
+     "updated"
     ],
     "choices": [
      "updating",
@@ -1452,7 +1467,7 @@
    },
    "why": {
     "ok": {
-     "de": "Nach wish steht would, nie will: wish + would + Grundform drückt Ärger über eine Gewohnheit aus.",
+     "de": "Nach wish steht would, nie will: wish + would + Grundform drückt Ärger über eine Gewohnheit aus (auch wish + Past ist möglich).",
      "en": "After wish comes would, never will: wish + would + base form expresses annoyance at a habit."
     },
     "wrong": [
@@ -1559,8 +1574,8 @@
     "wrong": [
      {
       "opt": "be",
-      "de": "„be“ ohne Hilfsverb ist kein Konjunktiv-Satz.",
-      "en": "“be” alone does not make a clause."
+      "de": "„be“ gibt es nur in festen Formeln (If that be the case). Hier steht nach if were.",
+      "en": "“be” only occurs in set phrases (If that be the case). Here were follows if."
      },
      {
       "opt": "being",
