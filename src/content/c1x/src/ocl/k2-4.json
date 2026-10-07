@@ -1,0 +1,1287 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "ocl-0095",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.past-cond",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If we had invested in cloud storage two years ago, we ___ not have this capacity problem now.",
+   "accept": [
+    "would",
+    "might",
+    "could"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "had",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vergangene Ursache, heutige Folge: if + Past Perfect, would + Grundform.",
+     "en": "A past cause with a result today: if + past perfect, would + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will steht nicht in dieser unwirklichen Aussage über heute.",
+      "en": "will does not fit this unreal statement about today."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had not have gibt es nicht; im Hauptsatz steht would not have.",
+      "en": "had not have does not exist; the main clause takes would not have."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did not have beschreibt keine unwirkliche Folge.",
+      "en": "did not have does not describe an unreal result."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0096",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.present-cond",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "text": "If I were better at math, I ___ have chosen a different career years ago, and I would earn more now.",
+   "accept": [
+    "would",
+    "might",
+    "could"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "had",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Heutiger Zustand, frühere Folge: if + Past Simple, would have + Partizip.",
+     "en": "A present state with an earlier result: if + past simple, would have + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will have passt nicht zu einer unwirklichen Bedingung.",
+      "en": "will have does not fit an unreal condition."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had have gibt es nicht; im Hauptsatz steht would have + Partizip.",
+      "en": "had have does not exist; the main clause takes would have + participle."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did have drückt keine unwirkliche Folge aus.",
+      "en": "did have does not express an unreal result."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0097",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.wish-now",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish we ___ more storage space; the current server is full again, and it is only the middle of the month.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "have",
+    "has",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Wunsch über die Gegenwart: wish + Past Simple (had).",
+     "en": "A wish about the present: wish + past simple (had)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "de": "wish + have gibt es nicht; für Wünsche über heute braucht wish die Vergangenheit.",
+      "en": "wish + have does not exist; wishes about now need wish + past."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "wish we has ist falsch.",
+      "en": "wish we has is wrong."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "wish + would drückt Ärger über Verhalten aus, nicht den Wunsch nach Besitz.",
+      "en": "wish + would expresses annoyance at behavior, not a wish to own something."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0098",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.wish-now",
+   "topic": "mixed-cond",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I wish it ___ already Friday; this week has been exhausting, and I have another long meeting tomorrow.",
+   "accept": [
+    "were",
+    "was"
+   ],
+   "cls": "aux",
+   "chips": [
+    "is",
+    "be",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Wunsch über jetzt: wish + Vergangenheit (it were/was Friday).",
+     "en": "A wish about now: wish + past (it were/was Friday)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "wish + is gibt es nicht; wish braucht die Vergangenheit.",
+      "en": "wish + is does not exist; wish needs the past."
+     },
+     {
+      "if": [
+       "be"
+      ],
+      "de": "wish + be gibt es nicht.",
+      "en": "wish + be does not exist."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "wish + would passt nicht zu einem Zustand wie „es ist Freitag“.",
+      "en": "wish + would does not fit a state like “it is Friday”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0099",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.wish-past",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish I ___ asked for a written confirmation before sending the goods, because now the customer denies everything.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "have",
+    "would",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Bedauern über die Vergangenheit: wish + Past Perfect (had asked).",
+     "en": "Regret about the past: wish + past perfect (had asked)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "de": "wish + have asked gibt es nicht; für Bedauern über früher braucht wish had + Partizip.",
+      "en": "wish + have asked does not exist; regret about the past needs wish + had + participle."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "wish + would asked gibt es nicht.",
+      "en": "wish + would asked does not exist."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "wish + did asked ist falsch.",
+      "en": "wish + did asked is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0100",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.wish-past",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "She wishes she ___ not signed the contract without reading the small print, but now it is too late.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "would",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Bedauern: wish + had (not) + Partizip.",
+     "en": "Regret: wish + had (not) + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "wishes she has not signed gibt es nicht; es braucht had not signed.",
+      "en": "wishes she has not signed does not exist; it needs had not signed."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "wishes she would not signed gibt es nicht.",
+      "en": "wishes she would not signed does not exist."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "wishes she did not signed ist falsch.",
+      "en": "wishes she did not signed is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0101",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.wish-would",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish the client ___ stop changing the requirements every other day; we can never finish anything.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "had",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Ärger über wiederholtes Verhalten anderer: wish + would + Grundform.",
+     "en": "Annoyance at other people's repeated behavior: wish + would + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "wish + will gibt es nicht; für Ärger über Verhalten steht wish + would.",
+      "en": "wish + will does not exist; annoyance at behavior takes wish + would."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "wish + had stop gibt es nicht; had braucht ein Partizip (stopped).",
+      "en": "wish + had stop does not exist; had needs a participle (stopped)."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "wish + did stop ist falsch.",
+      "en": "wish + did stop is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0102",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.wish-would",
+   "topic": "mixed-cond",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I wish you ___ not leave your coffee cups all over the meeting room; it looks terrible every afternoon.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "did",
+    "had"
+   ],
+   "why": {
+    "ok": {
+     "de": "Ärger über Gewohnheiten: wish + would (not) + Grundform.",
+     "en": "Annoyance at habits: wish + would (not) + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "wish you will not leave ist falsch; hier steht wish + would.",
+      "en": "wish you will not leave is wrong; here it is wish + would."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "wish you did not leave wäre Wunsch über einen Zustand, nicht über künftiges Verhalten.",
+      "en": "wish you did not leave would be a wish about a state, not about future behavior."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "wish you had not leave ist falsch.",
+      "en": "wish you had not leave is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0103",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.inversion",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ I known about the delay, I would have informed the client immediately instead of letting him find out.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "have",
+    "did",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Förmlich ohne if: Had + Subjekt + Partizip, would have …",
+     "en": "Formal without if: Had + subject + participle, would have …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "de": "Have I known gibt es hier nicht; die Umstellung der dritten Bedingung beginnt mit Had.",
+      "en": "Have I known does not fit; the inverted third conditional starts with Had."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "Did I known ist falsch.",
+      "en": "Did I known is wrong."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "Would I known ist falsch.",
+      "en": "Would I known is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0104",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "mc.inversion",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ I in your position, I would not accept the offer without negotiating the payment terms first.",
+   "accept": [
+    "were"
+   ],
+   "cls": "aux",
+   "chips": [
+    "was",
+    "am",
+    "be"
+   ],
+   "why": {
+    "ok": {
+     "de": "Förmlich ohne if: Were + Subjekt …, would … (= If I were in your position).",
+     "en": "Formal without if: Were + subject …, would … (= If I were in your position)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "was"
+      ],
+      "de": "Was I in your position gibt es in dieser förmlichen Umstellung nicht.",
+      "en": "Was I in your position does not exist in this formal inversion."
+     },
+     {
+      "if": [
+       "am"
+      ],
+      "de": "Am I in your position wäre eine Frage.",
+      "en": "Am I in your position would be a question."
+     },
+     {
+      "if": [
+       "be"
+      ],
+      "de": "Be I in your position ist veraltet.",
+      "en": "Be I in your position is archaic."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0105",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.state-verbs",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "How long ___ you known the client, and did you ever work with his predecessor?",
+   "accept": [
+    "have"
+   ],
+   "cls": "aux",
+   "chips": [
+    "are",
+    "did",
+    "do"
+   ],
+   "why": {
+    "ok": {
+     "de": "know ist ein Zustandsverb: have known (nie have been knowing).",
+     "en": "know is a state verb: have known (never have been knowing)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "are"
+      ],
+      "de": "How long are you known wäre Passiv und falsch gebaut.",
+      "en": "How long are you known would be a badly built passive."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "How long did you known ist falsch; nach did steht die Grundform.",
+      "en": "How long did you known is wrong; after did comes the base form."
+     },
+     {
+      "if": [
+       "do"
+      ],
+      "de": "How long do you known ist falsch.",
+      "en": "How long do you known is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0106",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.state-verbs",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I ___ known my neighbor since university, so I trust his judgment about anything related to property.",
+   "accept": [
+    "have"
+   ],
+   "cls": "aux",
+   "chips": [
+    "am",
+    "was",
+    "had"
+   ],
+   "why": {
+    "ok": {
+     "de": "Zustand bis jetzt mit since: have known (Present Perfect, keine -ing-Form).",
+     "en": "A state up to now with since: have known (present perfect, no -ing form)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "am"
+      ],
+      "de": "I am known bedeutet „ich bin bekannt“ und ist Passiv.",
+      "en": "I am known means “I am famous” and is passive."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "I was known wäre Passiv in der Vergangenheit.",
+      "en": "I was known would be passive in the past."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had known passt zu einer früheren Zeit, hier gilt es bis heute.",
+      "en": "had known fits an earlier time, but this reaches up to now."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0107",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.cont-simple",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "How ___ emails have you written since this morning, and have you replied to the customers?",
+   "accept": [
+    "many"
+   ],
+   "cls": "det",
+   "chips": [
+    "much",
+    "long",
+    "often"
+   ],
+   "why": {
+    "ok": {
+     "de": "Zahl als Ergebnis fragt man mit How many + have written (einfache Form).",
+     "en": "A number as the result is asked with How many + have written (simple form)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "much"
+      ],
+      "de": "much steht bei nicht zählbaren Dingen; emails sind zählbar.",
+      "en": "much goes with uncountable things; emails are countable."
+     },
+     {
+      "if": [
+       "long"
+      ],
+      "de": "How long fragt nach der Dauer, nicht nach der Zahl.",
+      "en": "How long asks about duration, not about number."
+     },
+     {
+      "if": [
+       "often"
+      ],
+      "de": "How often fragt nach der Häufigkeit.",
+      "en": "How often asks about frequency."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0108",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.cont-simple",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "How ___ have you been waiting for the technician, and did anyone give you an estimated time?",
+   "accept": [
+    "long"
+   ],
+   "cls": "adv",
+   "chips": [
+    "many",
+    "much",
+    "often"
+   ],
+   "why": {
+    "ok": {
+     "de": "Dauer bis jetzt: How long + have you been + -ing.",
+     "en": "Duration up to now: How long + have you been + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "many"
+      ],
+      "de": "How many fragt nach einer Zahl; hier geht es um die Dauer.",
+      "en": "How many asks for a number; this is about duration."
+     },
+     {
+      "if": [
+       "much"
+      ],
+      "de": "How much fragt nach einer Menge.",
+      "en": "How much asks for an amount."
+     },
+     {
+      "if": [
+       "often"
+      ],
+      "de": "How often fragt nach der Häufigkeit, nicht nach der Dauer.",
+      "en": "How often asks about frequency, not duration."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0109",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psc.state",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "She ___ not belong to the sales team anymore; she moved to the finance department last month.",
+   "accept": [
+    "does"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "is",
+    "has"
+   ],
+   "why": {
+    "ok": {
+     "de": "belong ist ein Zustandsverb: Present Simple, Verneinung does not belong.",
+     "en": "belong is a state verb: present simple, negative does not belong."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do passt zu I, you, we, they; she verlangt does.",
+      "en": "do goes with I, you, we, they; she needs does."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is not belong ist keine Form.",
+      "en": "is not belong is not a form."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has not belong ist keine Form; belong braucht die Grundform.",
+      "en": "has not belong is not a form; belong needs the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0110",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psc.dual",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ thinking about moving the whole archive to a new data center next year, but nothing is decided yet.",
+   "accept": [
+    "are"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "have",
+    "will"
+   ],
+   "why": {
+    "ok": {
+     "de": "think im Sinn von „überlegen“ ist eine Handlung: are thinking.",
+     "en": "think meaning “consider” is an action: are thinking."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do thinking gibt es nicht; vor -ing steht eine Form von be.",
+      "en": "do thinking does not exist; -ing needs a form of be."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have thinking ist keine Form.",
+      "en": "have thinking is not a form."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will thinking ist keine Form; will braucht die Grundform.",
+      "en": "will thinking is not a form; will needs the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0111",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.fixed-times",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The conference starts ___ Tuesday at nine and ends on Friday afternoon, so we should book the hotel soon.",
+   "accept": [
+    "on"
+   ],
+   "cls": "prep",
+   "chips": [
+    "in",
+    "at",
+    "by"
+   ],
+   "why": {
+    "ok": {
+     "de": "Wochentage mit on: starts on Tuesday (Fahrplan im Present Simple).",
+     "en": "Weekdays take on: starts on Tuesday (a timetable in the present simple)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "in"
+      ],
+      "de": "in steht vor Monaten und Jahren, nicht vor Wochentagen.",
+      "en": "in goes before months and years, not weekdays."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at steht vor Uhrzeiten und Punkten wie at night.",
+      "en": "at goes before clock times and points like at night."
+     },
+     {
+      "if": [
+       "by"
+      ],
+      "de": "by heißt „spätestens“, die Konferenz beginnt aber genau an diesem Tag.",
+      "en": "by means “no later than”, but the conference begins on that day."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0112",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.no-will-after",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I will call you as soon ___ I land in Frankfurt, so please keep your phone nearby this evening.",
+   "accept": [
+    "as"
+   ],
+   "cls": "adv",
+   "chips": [
+    "so",
+    "at",
+    "how"
+   ],
+   "why": {
+    "ok": {
+     "de": "as soon as + Gegenwart (I land), im Hauptsatz will.",
+     "en": "as soon as + present (I land), will in the main clause."
+    },
+    "wrong": [
+     {
+      "if": [
+       "so"
+      ],
+      "de": "as soon so gibt es nicht; die Wendung heißt as soon as.",
+      "en": "as soon so does not exist; the phrase is as soon as."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "as soon at gibt es nicht.",
+      "en": "as soon at does not exist."
+     },
+     {
+      "if": [
+       "how"
+      ],
+      "de": "as soon how gibt es nicht.",
+      "en": "as soon how does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0113",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.will-now",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ I send you the updated figures right now, or would you prefer to have them tomorrow morning?",
+   "accept": [
+    "shall",
+    "should"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "do",
+    "am"
+   ],
+   "why": {
+    "ok": {
+     "de": "Angebot und Vorschlag: Shall I … ? oder Should I … ?",
+     "en": "An offer or suggestion: Shall I … ? or Should I … ?"
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Will I send you klingt wie eine Frage nach der Zukunft, nicht wie ein Angebot.",
+      "en": "Will I send you sounds like a question about the future, not like an offer."
+     },
+     {
+      "if": [
+       "do"
+      ],
+      "de": "Do I send you fragt eher nach einer Regel als nach einem Angebot.",
+      "en": "Do I send you asks about a rule more than it offers help."
+     },
+     {
+      "if": [
+       "am"
+      ],
+      "de": "Am I send you ist keine Form.",
+      "en": "Am I send you is not a form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0114",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Look at the sky: it ___ going to rain, so let us take the car instead of walking to the station.",
+   "accept": [
+    "is"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "does",
+    "has"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vorhersage mit sichtbarem Zeichen: is going to + Grundform.",
+     "en": "A prediction based on what you can see: is going to + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will + going to kann man nicht verbinden.",
+      "en": "will and going to cannot be combined."
+     },
+     {
+      "if": [
+       "does"
+      ],
+      "de": "does going to gibt es nicht.",
+      "en": "does going to does not exist."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has going to ist falsch; die Form lautet be going to.",
+      "en": "has going to is wrong; the form is be going to."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0115",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.was-going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ going to launch the new product in May, but the supplier delayed everything by six weeks.",
+   "accept": [
+    "were"
+   ],
+   "cls": "aux",
+   "chips": [
+    "are",
+    "was",
+    "will"
+   ],
+   "why": {
+    "ok": {
+     "de": "Geplatzter Plan: was/were going to + Grundform; zu we gehört were.",
+     "en": "A plan that fell through: was/were going to + base form; we goes with were."
+    },
+    "wrong": [
+     {
+      "if": [
+       "are"
+      ],
+      "de": "are going to ist Gegenwart; der Plan ist aber geplatzt (delayed).",
+      "en": "are going to is present, but the plan has fallen through (delayed)."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was passt zu I, he, she, it; zu we gehört were.",
+      "en": "was goes with I, he, she, it; we needs were."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will launch ist Zukunft; gemeint ist ein Plan in der Vergangenheit.",
+      "en": "will launch is future; a plan in the past is meant."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0116",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.would",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "When I was a student, I ___ spend hours in the library every evening and read until it closed.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "used",
+    "did",
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Wiederholte Handlungen in der Vergangenheit: would + Grundform.",
+     "en": "Repeated actions in the past: would + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "used"
+      ],
+      "de": "used spend gibt es nicht; es heißt used to spend.",
+      "en": "used spend does not exist; it is used to spend."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did spend wäre betont und einmalig, nicht „jeden Abend“.",
+      "en": "did spend would be emphatic and one-off, not “every evening”."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was spend gibt es nicht.",
+      "en": "was spend does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0117",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.used-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "There ___ to be a small café on this corner, but it closed last year and now it is a phone shop.",
+   "accept": [
+    "used"
+   ],
+   "cls": "aux",
+   "chips": [
+    "use",
+    "would",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Zustand in der Vergangenheit, der nicht mehr gilt: used to + Grundform (nicht would).",
+     "en": "A past state that no longer holds: used to + base form (not would)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "use"
+      ],
+      "de": "there use to gibt es in der Aussage nicht; es heißt used to.",
+      "en": "there use to does not exist in a statement; it is used to."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would gilt nicht für Zustände wie „es gab ein Café“; hier steht used to.",
+      "en": "would does not work for states like “there was a café”; here used to is needed."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "there did to be gibt es nicht.",
+      "en": "there did to be does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0118",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "dip.wondering",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I was wondering ___ it would be possible to reschedule our call to Thursday, because of a customer visit.",
+   "accept": [
+    "if",
+    "whether"
+   ],
+   "cls": "conj",
+   "chips": [
+    "that",
+    "when",
+    "what"
+   ],
+   "why": {
+    "ok": {
+     "de": "Weiche Bitte: I was wondering if/whether + Satz.",
+     "en": "A soft request: I was wondering if/whether + clause."
+    },
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "wondering that passt nicht vor einer Frage nach Möglichkeit.",
+      "en": "wondering that does not fit before a question about possibility."
+     },
+     {
+      "if": [
+       "when"
+      ],
+      "de": "wondering when fragt nach der Zeit; hier geht es um ja oder nein.",
+      "en": "wondering when asks about time; this is a yes/no question."
+     },
+     {
+      "if": [
+       "what"
+      ],
+      "de": "wondering what braucht eine offene Frage mit einem Fragewort als Teil.",
+      "en": "wondering what needs an open question with a question word as part."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0119",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.were",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If it ___ up to me, I would choose the cheaper option, but the board makes the final decision.",
+   "accept": [
+    "were",
+    "was"
+   ],
+   "cls": "aux",
+   "chips": [
+    "is",
+    "be",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Unwirkliche Annahme: if + were/was …, would + Grundform.",
+     "en": "An unreal assumption: if + were/was …, would + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "if it is up to me wäre eine reale Möglichkeit; zu would passt die unwirkliche Form.",
+      "en": "if it is up to me would be a real possibility; with would the unreal form fits."
+     },
+     {
+      "if": [
+       "be"
+      ],
+      "de": "if it be up to me ist veraltet.",
+      "en": "if it be up to me is archaic."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would steht im Hauptsatz, nicht im if-Satz.",
+      "en": "would belongs in the main clause, not the if-clause."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0120",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.third",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I would have called you earlier if I ___ known that the meeting had been cancelled until this morning.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "have",
+    "would",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Dritte Bedingung: if + Past Perfect (had known), would have + Partizip.",
+     "en": "Third conditional: if + past perfect (had known), would have + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "de": "if I have known passt nicht zu would have; hier braucht der if-Satz had known.",
+      "en": "if I have known does not fit would have; the if-clause needs had known."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would steht im Hauptsatz, nicht nach if.",
+      "en": "would belongs in the main clause, not after if."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "if I did known ist falsch.",
+      "en": "if I did known is wrong."
+     }
+    ]
+   }
+  }
+ ]
+}

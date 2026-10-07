@@ -1,0 +1,1344 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "ocl-0068",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.zero",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ a customer pays by credit card, our system automatically sends a receipt to the registered address.",
+   "accept": [
+    "if",
+    "when",
+    "whenever"
+   ],
+   "cls": "conj",
+   "chips": [
+    "although",
+    "unless",
+    "despite"
+   ],
+   "why": {
+    "ok": {
+     "de": "Feste Regel, die immer gilt: if/when + Gegenwart, Gegenwart.",
+     "en": "A fixed rule that always applies: if/when + present, present."
+    },
+    "wrong": [
+     {
+      "if": [
+       "although"
+      ],
+      "de": "although heißt „obwohl“ und passt nicht zu einer festen Regel.",
+      "en": "although means “even though” and does not fit a fixed rule."
+     },
+     {
+      "if": [
+       "unless"
+      ],
+      "de": "unless heißt „außer wenn“; hier gilt die Regel gerade, wenn gezahlt wird.",
+      "en": "unless means “except if”; here the rule applies exactly when someone pays."
+     },
+     {
+      "if": [
+       "despite"
+      ],
+      "de": "despite braucht ein Nomen oder -ing, keinen ganzen Satz.",
+      "en": "despite needs a noun or -ing, not a full clause."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0069",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.zero",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "If the sun ___ shining all day, the plants on my balcony grow much faster than in cloudy weeks.",
+   "accept": [
+    "is"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "was",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Zero Conditional: if + Gegenwart, Gegenwart; hier is shining.",
+     "en": "Zero conditional: if + present, present; here is shining."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will steht nicht im if-Satz; nach if bleibt die Gegenwart.",
+      "en": "will does not belong in the if-clause; after if the present stays."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was ist Vergangenheit, die Regel gilt aber immer (grow).",
+      "en": "was is past, but the rule always applies (grow)."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would steht nicht im if-Satz.",
+      "en": "would does not belong in the if-clause."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0070",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.first",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If you do not hurry with the proposal, you ___ miss the deadline, and the client will go to a competitor.",
+   "accept": [
+    "will",
+    "may",
+    "might",
+    "could"
+   ],
+   "cls": "aux",
+   "chips": [
+    "would",
+    "did",
+    "were"
+   ],
+   "why": {
+    "ok": {
+     "de": "Reale Möglichkeit: if + Gegenwart, will (oder may/might) + Grundform.",
+     "en": "A real possibility: if + present, will (or may/might) + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would passt zu einer unwahrscheinlichen Annahme, hier ist die Folge real möglich.",
+      "en": "would fits an unlikely assumption, but here the result is really possible."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did miss gibt es hier nicht; es geht um die Zukunft.",
+      "en": "did miss does not fit here; this is about the future."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "were miss gibt es nicht.",
+      "en": "were miss does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0071",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.were",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If I ___ you, I would ask for a written confirmation before sending any money to that supplier.",
+   "accept": [
+    "were",
+    "was"
+   ],
+   "cls": "aux",
+   "chips": [
+    "am",
+    "be",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Rat und Annahme: If I were you, … (were auch bei I).",
+     "en": "Advice and assumption: If I were you, … (were even with I)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "am"
+      ],
+      "de": "Nach if I steht in dieser Rede were; „if I am you“ passt nicht zu einem Ratschlag.",
+      "en": "After if I this advice form takes were; “if I am you” does not fit advice."
+     },
+     {
+      "if": [
+       "be"
+      ],
+      "de": "if I be you gibt es im modernen Englisch nicht.",
+      "en": "if I be you does not exist in modern English."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would steht im Hauptsatz, nicht im if-Satz.",
+      "en": "would belongs in the main clause, not the if-clause."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0072",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.were",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "If I ___ you, I would talk to the manager before the weekend instead of waiting until Monday.",
+   "accept": [
+    "were",
+    "was"
+   ],
+   "cls": "aux",
+   "chips": [
+    "am",
+    "be",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Ratschlag: If I were you, I would …",
+     "en": "Advice: If I were you, I would …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "am"
+      ],
+      "de": "am passt nicht in einen Ratschlag mit if I … would.",
+      "en": "am does not fit advice with if I … would."
+     },
+     {
+      "if": [
+       "be"
+      ],
+      "de": "if I be you ist falsch.",
+      "en": "if I be you is wrong."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would steht im Hauptsatz, nicht im if-Satz.",
+      "en": "would belongs in the main clause, not the if-clause."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0073",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.second",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If our company ___ more money to spend, we would hire another developer for the cloud team immediately.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "have",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Unwirkliche Gegenwart: if + Past Simple, would + Grundform.",
+     "en": "Unreal present: if + past simple, would + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has passt nicht zu if + Vergangenheitsform; hier geht es um eine unwirkliche Annahme.",
+      "en": "has does not fit if + past form; this is an unreal assumption."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have ist Gegenwart; für die unwirkliche Annahme braucht der if-Satz die Vergangenheit.",
+      "en": "have is present; the unreal if-clause needs the past."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would steht im Hauptsatz, nicht nach if.",
+      "en": "would belongs in the main clause, not after if."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0074",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.second",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "If I won the lottery next week, I ___ quit my job and travel around the world for a year.",
+   "accept": [
+    "would",
+    "could",
+    "might"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "did",
+    "had"
+   ],
+   "why": {
+    "ok": {
+     "de": "Unwirkliche Annahme: if + Past Simple, would + Grundform.",
+     "en": "An unreal assumption: if + past simple, would + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will passt zu realen Annahmen; „won“ zeigt hier eine unwirkliche.",
+      "en": "will fits real conditions; “won” shows an unreal one here."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did quit gibt es hier nicht; es geht um Wünsche in der Zukunft.",
+      "en": "did quit does not fit; this is about wishes for the future."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had quit wäre Vergangenheit.",
+      "en": "had quit would be past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0075",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.third",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If we had checked the figures twice, we ___ have noticed the mistake long before the audit.",
+   "accept": [
+    "would",
+    "could",
+    "might"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "had",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Verpasste Chance: if + Past Perfect, would have + Partizip.",
+     "en": "A missed chance: if + past perfect, would have + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will have steht nicht in einer verpassten Vergangenheit.",
+      "en": "will have does not belong to a missed past."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had have gibt es nicht; im Hauptsatz steht would have + Partizip.",
+      "en": "had have does not exist; the main clause takes would have + participle."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did have drückt keine verpasste Möglichkeit aus.",
+      "en": "did have does not express a missed possibility."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0076",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.third",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If the client had signed on time, we would ___ delivered the whole project by the end of March.",
+   "accept": [
+    "have"
+   ],
+   "cls": "aux",
+   "chips": [
+    "had",
+    "be",
+    "has"
+   ],
+   "why": {
+    "ok": {
+     "de": "Hauptsatz der dritten Bedingung: would have + Partizip.",
+     "en": "The main clause of the third conditional: would have + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "had"
+      ],
+      "de": "would had gibt es nicht; nach would steht have.",
+      "en": "would had does not exist; would is followed by have."
+     },
+     {
+      "if": [
+       "be"
+      ],
+      "de": "would be delivered wäre Passiv und passt nicht zum Sinn.",
+      "en": "would be delivered would be passive and does not fit the meaning."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "would has gibt es nicht.",
+      "en": "would has does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0077",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.if-words",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "You may use the company car this weekend ___ you promise to bring it back with a full tank by Monday.",
+   "accept": [
+    "provided",
+    "providing"
+   ],
+   "cls": "conj",
+   "chips": [
+    "unless",
+    "although",
+    "until"
+   ],
+   "why": {
+    "ok": {
+     "de": "Bedingung mit Auflage: provided/providing (that) + Gegenwart.",
+     "en": "A condition with a requirement: provided/providing (that) + present."
+    },
+    "wrong": [
+     {
+      "if": [
+       "unless"
+      ],
+      "de": "unless würde die Bedingung umkehren: nur wenn du es nicht versprichst.",
+      "en": "unless would reverse the condition: only if you do not promise it."
+     },
+     {
+      "if": [
+       "although"
+      ],
+      "de": "although heißt „obwohl“ und nennt keine Bedingung.",
+      "en": "although means “even though” and names no condition."
+     },
+     {
+      "if": [
+       "until"
+      ],
+      "de": "until nennt einen Zeitpunkt, keine Bedingung.",
+      "en": "until names a point in time, not a condition."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0078",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.if-words",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will not start the implementation ___ the client has paid the first invoice in full.",
+   "accept": [
+    "unless",
+    "until",
+    "before",
+    "till"
+   ],
+   "cls": "conj",
+   "chips": [
+    "if",
+    "although",
+    "since"
+   ],
+   "why": {
+    "ok": {
+     "de": "Voraussetzung: not … unless/until + Gegenwart, ohne extra not im Nebensatz.",
+     "en": "A requirement: not … unless/until + present, with no extra not in the clause."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if würde die Bedeutung umkehren: Wir starten nicht, falls bezahlt wurde.",
+      "en": "if would reverse the meaning: we do not start if it has been paid."
+     },
+     {
+      "if": [
+       "although"
+      ],
+      "de": "although heißt „obwohl“ und passt nicht zu einer Voraussetzung.",
+      "en": "although means “even though” and does not fit a requirement."
+     },
+     {
+      "if": [
+       "since"
+      ],
+      "de": "since heißt „seit“ oder „weil“ und passt nicht zu einer Voraussetzung.",
+      "en": "since means “from the time” or “because” and does not fit a requirement."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0079",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.unless",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will cancel the order ___ the supplier confirms the delivery date by Monday at the latest.",
+   "accept": [
+    "unless"
+   ],
+   "cls": "conj",
+   "chips": [
+    "if",
+    "until",
+    "although"
+   ],
+   "why": {
+    "ok": {
+     "de": "unless = if … not: außer, der Lieferant bestätigt. Im Nebensatz steht kein zweites not.",
+     "en": "unless = if … not: except if the supplier confirms. No second not in the clause."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if würde die Bedeutung umkehren: Wir stornieren, falls er bestätigt.",
+      "en": "if would reverse the meaning: we cancel if he confirms."
+     },
+     {
+      "if": [
+       "until"
+      ],
+      "de": "until nennt einen Endpunkt, keine Ausnahme.",
+      "en": "until names an end point, not an exception."
+     },
+     {
+      "if": [
+       "although"
+      ],
+      "de": "although heißt „obwohl“ und passt nicht zu einer Ausnahme.",
+      "en": "although means “even though” and does not fit an exception."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0080",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.unless",
+   "topic": "cond-alt",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Please do not call me before noon ___ it is really urgent, because I am working night shifts this week.",
+   "accept": [
+    "unless"
+   ],
+   "cls": "conj",
+   "chips": [
+    "if",
+    "until",
+    "because"
+   ],
+   "why": {
+    "ok": {
+     "de": "Ausnahme: do not call … unless it is urgent.",
+     "en": "An exception: do not call … unless it is urgent."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if würde die Bitte umkehren: „ruf nicht an, wenn es dringend ist“.",
+      "en": "if would reverse the request: “do not call if it is urgent”."
+     },
+     {
+      "if": [
+       "until"
+      ],
+      "de": "until nennt einen Endpunkt, hier fehlt die Ausnahme.",
+      "en": "until names an end point, but the exception is missing."
+     },
+     {
+      "if": [
+       "because"
+      ],
+      "de": "because gibt einen Grund an, keine Ausnahme.",
+      "en": "because gives a reason, not an exception."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0081",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.as-long-as",
+   "topic": "cond-alt",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "You can use my laptop for the demo ___ long as you save all the files on the shared company drive.",
+   "accept": [
+    "as",
+    "so"
+   ],
+   "cls": "conj",
+   "chips": [
+    "too",
+    "very",
+    "how"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nur unter einer Bedingung: as long as (oder so long as) + Gegenwart.",
+     "en": "Only under one condition: as long as (or so long as) + present."
+    },
+    "wrong": [
+     {
+      "if": [
+       "too"
+      ],
+      "de": "too long as ist keine Wendung.",
+      "en": "too long as is not a phrase."
+     },
+     {
+      "if": [
+       "very"
+      ],
+      "de": "very long as ist keine Wendung.",
+      "en": "very long as is not a phrase."
+     },
+     {
+      "if": [
+       "how"
+      ],
+      "de": "how long as ist keine Wendung.",
+      "en": "how long as is not a phrase."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0082",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.as-long-as",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will keep the old archive system running as long ___ the migration to the new platform is not finished.",
+   "accept": [
+    "as"
+   ],
+   "cls": "conj",
+   "chips": [
+    "than",
+    "so",
+    "like"
+   ],
+   "why": {
+    "ok": {
+     "de": "as long as = solange: die Bedingung gilt, bis sie endet.",
+     "en": "as long as = for as long as: the condition holds until it ends."
+    },
+    "wrong": [
+     {
+      "if": [
+       "than"
+      ],
+      "de": "as long than ist falsch; die Wendung ist as long as.",
+      "en": "as long than is wrong; the phrase is as long as."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "as long so gibt es nicht.",
+      "en": "as long so does not exist."
+     },
+     {
+      "if": [
+       "like"
+      ],
+      "de": "as long like gibt es nicht.",
+      "en": "as long like does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0083",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.otherwise",
+   "topic": "cond-alt",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Please send the signed copy by this afternoon. ___, we cannot start the project on Monday as planned.",
+   "accept": [
+    "otherwise"
+   ],
+   "cls": "adv",
+   "chips": [
+    "therefore",
+    "moreover",
+    "instead"
+   ],
+   "why": {
+    "ok": {
+     "de": "Otherwise = sonst: sagt, was passiert, wenn die Bitte nicht erfüllt wird.",
+     "en": "Otherwise = or else: it says what happens if the request is not met."
+    },
+    "wrong": [
+     {
+      "if": [
+       "therefore"
+      ],
+      "de": "therefore nennt eine Folge, hier folgt aber eine Warnung („sonst“).",
+      "en": "therefore names a result, but here a warning (“or else”) follows."
+     },
+     {
+      "if": [
+       "moreover"
+      ],
+      "de": "moreover fügt etwas Gleichartiges hinzu, keine Warnung.",
+      "en": "moreover adds something similar, not a warning."
+     },
+     {
+      "if": [
+       "instead"
+      ],
+      "de": "instead heißt „stattdessen“.",
+      "en": "instead means “in place of that”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0084",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.otherwise",
+   "topic": "cond-alt",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "You should back up your files every week; ___, you may lose important data when the laptop fails.",
+   "accept": [
+    "otherwise"
+   ],
+   "cls": "adv",
+   "chips": [
+    "therefore",
+    "moreover",
+    "furthermore"
+   ],
+   "why": {
+    "ok": {
+     "de": "Otherwise = sonst: die Folge, falls man es nicht tut.",
+     "en": "Otherwise = or else: the consequence if you do not do it."
+    },
+    "wrong": [
+     {
+      "if": [
+       "therefore"
+      ],
+      "de": "therefore nennt eine Folge, keine Warnung.",
+      "en": "therefore names a result, not a warning."
+     },
+     {
+      "if": [
+       "moreover"
+      ],
+      "de": "moreover fügt nur etwas hinzu.",
+      "en": "moreover only adds something."
+     },
+     {
+      "if": [
+       "furthermore"
+      ],
+      "de": "furthermore fügt nur etwas hinzu.",
+      "en": "furthermore only adds something."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0085",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.but-for",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ for the quick help of our IT team, the whole customer database would have been lost last night.",
+   "accept": [
+    "but"
+   ],
+   "cls": "conj",
+   "chips": [
+    "only",
+    "not",
+    "just"
+   ],
+   "why": {
+    "ok": {
+     "de": "But for + Nomen = ohne (eine verpasste Hilfe): But for X, … would have …",
+     "en": "But for + noun = without (a help that was there): But for X, … would have …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "only"
+      ],
+      "de": "Only for gibt es hier nicht; die Wendung heißt But for.",
+      "en": "Only for does not fit here; the phrase is But for."
+     },
+     {
+      "if": [
+       "not"
+      ],
+      "de": "Not for ergibt eine andere Bedeutung.",
+      "en": "Not for gives a different meaning."
+     },
+     {
+      "if": [
+       "just"
+      ],
+      "de": "Just for bedeutet „nur für“.",
+      "en": "Just for means “only for”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0086",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.but-for",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "text": "If it ___ not been for your advice, I would have accepted the first offer without any negotiation.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "was",
+    "were",
+    "has"
+   ],
+   "why": {
+    "ok": {
+     "de": "If it had not been for … = hätte es … nicht gegeben (dritte Bedingung).",
+     "en": "If it had not been for … = had it not been for … (third conditional)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was been ist keine Form; es braucht had been.",
+      "en": "was been is not a form; it needs had been."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "were been ist keine Form.",
+      "en": "were been is not a form."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has not been passt zur Gegenwart, hier geht es um die Vergangenheit.",
+      "en": "has not been is present, but this is about the past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0087",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.inversion",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ we known about the supplier's financial problems earlier, we would have changed the order immediately.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "have",
+    "did",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Förmlich ohne if: Had + Subjekt + Partizip, would have … (= If we had known).",
+     "en": "Formal without if: Had + subject + participle, would have … (= If we had known)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "de": "Have we known gibt es hier nicht; die Umstellung der dritten Bedingung steht mit Had.",
+      "en": "Have we known does not fit; the inverted third conditional starts with Had."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "Did we known ist falsch; nach did steht die Grundform.",
+      "en": "Did we known is wrong; after did comes the base form."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "Would we known gibt es nicht.",
+      "en": "Would we known does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0088",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.inversion",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ the client decide to cancel the contract, we will need to find a new buyer for the machines quickly.",
+   "accept": [
+    "should"
+   ],
+   "cls": "aux",
+   "chips": [
+    "would",
+    "could",
+    "will"
+   ],
+   "why": {
+    "ok": {
+     "de": "Förmlich für „falls“: Should + Subjekt + Grundform, … (= If the client decides).",
+     "en": "Formal for “if”: Should + subject + base form, … (= If the client decides)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would"
+      ],
+      "de": "Would the client decide ist keine Bedingungsform für etwas Mögliches.",
+      "en": "Would the client decide is not a conditional form for a real possibility."
+     },
+     {
+      "if": [
+       "could"
+      ],
+      "de": "Could the client decide ist eine Frage nach Möglichkeit, keine Bedingung.",
+      "en": "Could the client decide is a question of possibility, not a condition."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Will the client decide wäre eine Frage.",
+      "en": "Will the client decide would be a question."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0089",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.inversion",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Were we ___ extend the offer by another month, the price would have to go up by about five percent.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "not",
+    "for",
+    "going"
+   ],
+   "why": {
+    "ok": {
+     "de": "Förmlich für eine unwahrscheinliche Annahme: Were + Subjekt + to + Grundform, … would …",
+     "en": "Formal for an unlikely assumption: Were + subject + to + base form, … would …"
+    },
+    "wrong": [
+     {
+      "if": [
+       "not"
+      ],
+      "de": "Were we not extend ist falsch; es heißt Were we to + Grundform.",
+      "en": "Were we not extend is wrong; it is Were we to + base form."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "Were we for extend gibt es nicht.",
+      "en": "Were we for extend does not exist."
+     },
+     {
+      "if": [
+       "going"
+      ],
+      "de": "Were we going extend ist falsch; going bräuchte to.",
+      "en": "Were we going extend is wrong; going would need to."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0090",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.in-case",
+   "topic": "cond-alt",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Take an umbrella ___ case it rains later this afternoon, because the forecast is not very reliable.",
+   "accept": [
+    "in"
+   ],
+   "cls": "prep",
+   "chips": [
+    "on",
+    "at",
+    "by"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vorsorge: in case + Gegenwart (nicht if), wegen etwas, das passieren könnte.",
+     "en": "Precaution: in case + present (not if), because of something that might happen."
+    },
+    "wrong": [
+     {
+      "if": [
+       "on"
+      ],
+      "de": "on case gibt es nicht; die feste Wendung heißt in case.",
+      "en": "on case does not exist; the fixed phrase is in case."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at case gibt es nicht.",
+      "en": "at case does not exist."
+     },
+     {
+      "if": [
+       "by"
+      ],
+      "de": "by case gibt es nicht.",
+      "en": "by case does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0091",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.in-case",
+   "topic": "cond-alt",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Let me give you my mobile number just ___ case you cannot reach me at the office during the trade fair.",
+   "accept": [
+    "in"
+   ],
+   "cls": "prep",
+   "chips": [
+    "on",
+    "at",
+    "for"
+   ],
+   "why": {
+    "ok": {
+     "de": "Just in case = für alle Fälle, mit Gegenwart im Nebensatz.",
+     "en": "Just in case = to be on the safe side, with the present in the clause."
+    },
+    "wrong": [
+     {
+      "if": [
+       "on"
+      ],
+      "de": "just on case gibt es nicht.",
+      "en": "just on case does not exist."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "just at case gibt es nicht.",
+      "en": "just at case does not exist."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "just for case gibt es nicht; es heißt just in case.",
+      "en": "just for case does not exist; it is just in case."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0092",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.first",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "If we do ___ leave before six, we will miss the beginning of the concert and the best seats.",
+   "accept": [
+    "not"
+   ],
+   "cls": "part",
+   "chips": [
+    "no",
+    "never",
+    "neither"
+   ],
+   "why": {
+    "ok": {
+     "de": "Verneinung im if-Satz: do/does not + Grundform.",
+     "en": "Negation in the if-clause: do/does not + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "no"
+      ],
+      "de": "do no leave ist falsch; do verneint man mit not.",
+      "en": "do no leave is wrong; do is negated with not."
+     },
+     {
+      "if": [
+       "never"
+      ],
+      "de": "do never leave ist ungewöhnlich und passt nicht zur einmaligen Situation.",
+      "en": "do never leave is unusual and does not fit this one situation."
+     },
+     {
+      "if": [
+       "neither"
+      ],
+      "de": "do neither leave ist falsch.",
+      "en": "do neither leave is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0093",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "cn.if-words",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "I will join you for dinner tonight ___ my flight from Hamburg is delayed by more than an hour.",
+   "accept": [
+    "unless"
+   ],
+   "cls": "conj",
+   "chips": [
+    "if",
+    "until",
+    "although"
+   ],
+   "why": {
+    "ok": {
+     "de": "unless = außer wenn: nur eine Ausnahme verhindert es.",
+     "en": "unless = except if: only one exception would stop it."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if würde die Bedeutung umkehren: Ich komme nur, falls der Flug verspätet ist.",
+      "en": "if would reverse the meaning: I only come if the flight is delayed."
+     },
+     {
+      "if": [
+       "until"
+      ],
+      "de": "until nennt einen Endpunkt und passt hier nicht.",
+      "en": "until names an end point and does not fit here."
+     },
+     {
+      "if": [
+       "although"
+      ],
+      "de": "although heißt „obwohl“ und nennt keine Ausnahme.",
+      "en": "although means “even though” and names no exception."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0094",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ca.unless",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The new archive will go live on Monday ___ the final security test shows any serious problems this weekend.",
+   "accept": [
+    "unless"
+   ],
+   "cls": "conj",
+   "chips": [
+    "if",
+    "although",
+    "when"
+   ],
+   "why": {
+    "ok": {
+     "de": "Eine Ausnahme verhindert den Plan: unless + Gegenwart.",
+     "en": "One exception would stop the plan: unless + present."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if würde die Bedeutung umkehren: Start, falls Probleme auftauchen.",
+      "en": "if would reverse the meaning: go live if problems appear."
+     },
+     {
+      "if": [
+       "although"
+      ],
+      "de": "although passt nicht zu einer möglichen Ausnahme.",
+      "en": "although does not fit a possible exception."
+     },
+     {
+      "if": [
+       "when"
+      ],
+      "de": "when meint einen sicheren Zeitpunkt, hier geht es um eine Ausnahme.",
+      "en": "when means a certain moment, but this is an exception."
+     }
+    ]
+   }
+  }
+ ]
+}

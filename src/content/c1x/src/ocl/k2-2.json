@@ -1,0 +1,1733 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "ocl-0033",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "hg.modal",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The delay ___ be caused by the new firewall, but we have not checked the logs yet.",
+   "accept": [
+    "might",
+    "may",
+    "could"
+   ],
+   "cls": "aux",
+   "chips": [
+    "must",
+    "shall",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Vorsichtige Möglichkeit: might/could/may + Grundform statt einer festen Behauptung.",
+     "en": "Cautious possibility: might/could/may + base form instead of a flat claim."
+    },
+    "wrong": [
+     {
+      "if": [
+       "must"
+      ],
+      "de": "must drückt Sicherheit aus, ihr habt aber noch nicht geprüft.",
+      "en": "must expresses certainty, but you have not checked yet."
+     },
+     {
+      "if": [
+       "shall"
+      ],
+      "de": "shall passt nicht zu einer vermuteten Ursache.",
+      "en": "shall does not fit a suspected cause."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would braucht eine Bedingung (if …); hier steht keine.",
+      "en": "would needs a condition (if …); there is none here."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0034",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "hg.modal",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The new vendor ___ be cheaper than our current one, but we need to compare both offers first.",
+   "accept": [
+    "might",
+    "may",
+    "could"
+   ],
+   "cls": "aux",
+   "chips": [
+    "must",
+    "shall",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Noch nicht belegt, also vorsichtig: might/may/could be statt is.",
+     "en": "Not yet proven, so cautious: might/may/could be instead of is."
+    },
+    "wrong": [
+     {
+      "if": [
+       "must"
+      ],
+      "de": "must wäre eine Schlussfolgerung mit Sicherheit; der Vergleich steht noch aus.",
+      "en": "must would be a confident conclusion; the comparison is still to come."
+     },
+     {
+      "if": [
+       "shall"
+      ],
+      "de": "shall passt nicht zu einer Vermutung über Preise.",
+      "en": "shall does not fit a guess about prices."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would ohne if-Satz klingt unvollständig.",
+      "en": "would without an if-clause sounds incomplete."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0035",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "hg.worth",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It might ___ worth checking the contract once more before we sign anything on Friday.",
+   "accept": [
+    "be"
+   ],
+   "cls": "aux",
+   "chips": [
+    "is",
+    "been",
+    "being"
+   ],
+   "why": {
+    "ok": {
+     "de": "Höfliche Empfehlung: It might be worth + -ing.",
+     "en": "A polite suggestion: It might be worth + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "Nach might steht die Grundform be, nicht is.",
+      "en": "After might comes the base form be, not is."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "might been ist keine Form; es braucht be oder have been.",
+      "en": "might been is not a form; it needs be or have been."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "de": "might being gibt es nicht; nach einem Modalverb steht die Grundform.",
+      "en": "might being does not exist; a modal verb takes the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0036",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "hg.inclined",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Personally, I would be inclined ___ wait for the second quote before we make a final decision.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "of",
+    "at"
+   ],
+   "why": {
+    "ok": {
+     "de": "Eigene Neigung vorsichtig sagen: I would be inclined to + Grundform.",
+     "en": "Stating your own leaning cautiously: I would be inclined to + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "inclined for + Grundform gibt es nicht; es heißt inclined to + Grundform.",
+      "en": "inclined for + base form does not exist; it is inclined to + base form."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "inclined of ist keine Wendung.",
+      "en": "inclined of is not a phrase."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "inclined at ist keine Wendung.",
+      "en": "inclined at is not a phrase."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0037",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "hg.seems",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It seems as ___ the client has changed his mind about the budget, because nobody has replied to our offer.",
+   "accept": [
+    "if",
+    "though"
+   ],
+   "cls": "conj",
+   "chips": [
+    "when",
+    "unless",
+    "since"
+   ],
+   "why": {
+    "ok": {
+     "de": "Eindruck vorsichtig ausdrücken: It seems as if/as though + Satz.",
+     "en": "Expressing an impression cautiously: It seems as if/as though + clause."
+    },
+    "wrong": [
+     {
+      "if": [
+       "when"
+      ],
+      "de": "as when ist keine Wendung nach seems; es heißt as if oder as though.",
+      "en": "as when is not used after seems; it is as if or as though."
+     },
+     {
+      "if": [
+       "unless"
+      ],
+      "de": "unless heißt „außer wenn“ und passt nicht nach as.",
+      "en": "unless means “except if” and does not follow as."
+     },
+     {
+      "if": [
+       "since"
+      ],
+      "de": "as since gibt es nicht.",
+      "en": "as since does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0038",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "hg.downtoner",
+   "topic": "c1-hedging",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "To be honest, the new interface is ___ quite as intuitive as the old one, at least for our sales team.",
+   "accept": [
+    "not",
+    "never"
+   ],
+   "cls": "adv",
+   "chips": [
+    "very",
+    "too",
+    "so"
+   ],
+   "why": {
+    "ok": {
+     "de": "Weiche Kritik: not quite + as … as, ohne „schlechter“ zu sagen.",
+     "en": "Soft criticism: not quite + as … as, without saying “worse”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "very"
+      ],
+      "de": "very quite gibt es nicht; very und quite stehen nicht zusammen.",
+      "en": "very quite does not exist; very and quite do not go together."
+     },
+     {
+      "if": [
+       "too"
+      ],
+      "de": "too quite gibt es nicht.",
+      "en": "too quite does not exist."
+     },
+     {
+      "if": [
+       "so"
+      ],
+      "de": "so quite gibt es nicht; „not quite as … as“ ist die weiche Kritik.",
+      "en": "so quite does not exist; “not quite as … as” is the soft criticism."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0039",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "fut.continuous",
+   "topic": "future-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "This time next week, we will ___ sitting on a beach in Portugal, far away from our inboxes.",
+   "accept": [
+    "be"
+   ],
+   "cls": "aux",
+   "chips": [
+    "are",
+    "been",
+    "being"
+   ],
+   "why": {
+    "ok": {
+     "de": "Was zu einem künftigen Zeitpunkt gerade läuft: will be + -ing.",
+     "en": "What will be in progress at a future moment: will be + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "are"
+      ],
+      "de": "will are gibt es nicht; nach will steht die Grundform be.",
+      "en": "will are does not exist; will takes the base form be."
+     },
+     {
+      "if": [
+       "been"
+      ],
+      "de": "will been ist falsch; will be + -ing ist die Form.",
+      "en": "will been is wrong; will be + -ing is the form."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "de": "will being ist falsch; nach will steht be.",
+      "en": "will being is wrong; will is followed by be."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0040",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "fut.continuous",
+   "topic": "future-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "At ___ time tomorrow, I will be meeting the new CFO in Zurich, so I will not read any e-mails.",
+   "accept": [
+    "this",
+    "that"
+   ],
+   "cls": "det",
+   "chips": [
+    "the",
+    "any",
+    "each"
+   ],
+   "why": {
+    "ok": {
+     "de": "This time tomorrow nennt den künftigen Zeitpunkt, an dem die Handlung läuft: will be meeting.",
+     "en": "This time tomorrow names the future moment when the action is in progress: will be meeting."
+    },
+    "wrong": [
+     {
+      "if": [
+       "the"
+      ],
+      "de": "at the time tomorrow passt nicht; es braucht this time.",
+      "en": "at the time tomorrow does not fit; it needs this time."
+     },
+     {
+      "if": [
+       "any"
+      ],
+      "de": "at any time tomorrow heißt „jederzeit“, nicht „zu dieser Uhrzeit“.",
+      "en": "at any time tomorrow means “whenever”, not “at this hour”."
+     },
+     {
+      "if": [
+       "each"
+      ],
+      "de": "at each time tomorrow ist keine Wendung.",
+      "en": "at each time tomorrow is not a phrase."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0041",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "fut.cont-plan",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ you be using the projector at two, or can I borrow it for a short customer call?",
+   "accept": [
+    "will",
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "are",
+    "do",
+    "can"
+   ],
+   "why": {
+    "ok": {
+     "de": "Höfliche Frage nach Plänen: Will you be + -ing? klingt weniger drängend als Are you going to …?",
+     "en": "A polite question about plans: Will you be + -ing? sounds less pushy than Are you going to …?"
+    },
+    "wrong": [
+     {
+      "if": [
+       "are"
+      ],
+      "de": "Are you be using ist falsch; mit be + -ing braucht es Will you be using.",
+      "en": "Are you be using is wrong; with be + -ing it is Will you be using."
+     },
+     {
+      "if": [
+       "do"
+      ],
+      "de": "Do you be using gibt es nicht.",
+      "en": "Do you be using does not exist."
+     },
+     {
+      "if": [
+       "can"
+      ],
+      "de": "Can you be using ist keine Form.",
+      "en": "Can you be using is not a form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0042",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "fut.perfect",
+   "topic": "future-perf-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By the end of this quarter, we will ___ signed fifty new customers in the Nordic region.",
+   "accept": [
+    "have"
+   ],
+   "cls": "aux",
+   "chips": [
+    "be",
+    "had",
+    "has"
+   ],
+   "why": {
+    "ok": {
+     "de": "Bis zu einem künftigen Zeitpunkt abgeschlossen: will have + Partizip.",
+     "en": "Completed by a future moment: will have + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "be"
+      ],
+      "de": "will be signed wäre Passiv; hier sind wir die, die unterschreiben lassen: will have signed.",
+      "en": "will be signed would be passive; here we are the ones doing it: will have signed."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "will had gibt es nicht; nach will steht have.",
+      "en": "will had does not exist; will is followed by have."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "will has gibt es nicht; nach will steht immer have.",
+      "en": "will has does not exist; will is always followed by have."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0043",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "fut.perfect",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "By the time you read this message, I will already ___ boarded the plane to Singapore.",
+   "accept": [
+    "have"
+   ],
+   "cls": "aux",
+   "chips": [
+    "be",
+    "had",
+    "has"
+   ],
+   "why": {
+    "ok": {
+     "de": "By the time + Gegenwart, im Hauptsatz will have + Partizip: schon passiert bis dahin.",
+     "en": "By the time + present, the main clause takes will have + participle: already done by then."
+    },
+    "wrong": [
+     {
+      "if": [
+       "be"
+      ],
+      "de": "will be boarded wäre Passiv; gemeint ist die Handlung des Sprechers.",
+      "en": "will be boarded would be passive; the speaker's own action is meant."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "will had gibt es nicht; nach will steht have.",
+      "en": "will had does not exist; will is followed by have."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "will has gibt es nicht; nach will steht have.",
+      "en": "will has does not exist; will is followed by have."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0044",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "fut.perf-cont",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Next June, I will have ___ working for this company for exactly ten years.",
+   "accept": [
+    "been"
+   ],
+   "cls": "aux",
+   "chips": [
+    "be",
+    "being",
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Dauer bis zu einem künftigen Zeitpunkt: will have been + -ing.",
+     "en": "Duration up to a future moment: will have been + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "be"
+      ],
+      "de": "will have be ist falsch; die Form heißt will have been + -ing.",
+      "en": "will have be is wrong; the form is will have been + -ing."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "de": "will have being ist falsch.",
+      "en": "will have being is wrong."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "will have was gibt es nicht.",
+      "en": "will have was does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0045",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "fut.perf-cont",
+   "topic": "future-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By December, she will have been managing the sales team ___ nearly eight years.",
+   "accept": [
+    "for"
+   ],
+   "cls": "prep",
+   "chips": [
+    "since",
+    "in",
+    "during"
+   ],
+   "why": {
+    "ok": {
+     "de": "Länge der Zeit mit for: will have been managing for nearly eight years.",
+     "en": "A length of time takes for: will have been managing for nearly eight years."
+    },
+    "wrong": [
+     {
+      "if": [
+       "since"
+      ],
+      "de": "since braucht einen Zeitpunkt („since 2017“), hier steht eine Länge.",
+      "en": "since needs a point in time (“since 2017”), but here is a length."
+     },
+     {
+      "if": [
+       "in"
+      ],
+      "de": "in nearly eight years passt nicht zu will have been managing.",
+      "en": "in nearly eight years does not fit will have been managing."
+     },
+     {
+      "if": [
+       "during"
+      ],
+      "de": "during nennt keinen Gesamtzeitraum bis zu einem Zeitpunkt.",
+      "en": "during does not name a total span up to a point."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0046",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.earlier",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "By the time the CEO arrived at the venue, the presentation ___ already started without her.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "have",
+    "is"
+   ],
+   "why": {
+    "ok": {
+     "de": "Das frühere von zwei Ereignissen in der Vergangenheit: had + Partizip.",
+     "en": "The earlier of two past events: had + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has already started gehört zur Gegenwart; hier geht es um früher als „arrived“.",
+      "en": "has already started is present; here the action is earlier than “arrived”."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have passt nicht zu presentation (Singular) und nicht zur Vergangenheit.",
+      "en": "have does not fit presentation (singular) or the past."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is already started ist keine Zeitform.",
+      "en": "is already started is not a tense."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0047",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.earlier",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I could not open the door of my flat because I ___ left my keys at the office again.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "have",
+    "was",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Was vor „could not“ passiert war: had left (Past Perfect).",
+     "en": "What had happened before “could not”: had left (past perfect)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have left passt zur Gegenwart; „could not“ liegt schon in der Vergangenheit.",
+      "en": "have left is present; “could not” is already in the past."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was left wäre Passiv; gemeint ist, dass ich sie liegen ließ.",
+      "en": "was left would be passive; what is meant is that I left them."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did left gibt es nicht; nach did steht die Grundform.",
+      "en": "did left does not exist; did takes the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0048",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.duration",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We had ___ waiting for the client for two hours when he finally called to cancel the meeting.",
+   "accept": [
+    "been"
+   ],
+   "cls": "aux",
+   "chips": [
+    "be",
+    "being",
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Dauer vor einem Zeitpunkt in der Vergangenheit: had been + -ing.",
+     "en": "Duration before a past point: had been + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "be"
+      ],
+      "de": "had be waiting ist falsch; die Form heißt had been + -ing.",
+      "en": "had be waiting is wrong; the form is had been + -ing."
+     },
+     {
+      "if": [
+       "being"
+      ],
+      "de": "had being waiting ist falsch.",
+      "en": "had being waiting is wrong."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "had was waiting gibt es nicht.",
+      "en": "had was waiting does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0049",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.duration",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "She looked exhausted because she had been working ___ six o'clock that morning without a single break.",
+   "accept": [
+    "since",
+    "from"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "during",
+    "by"
+   ],
+   "why": {
+    "ok": {
+     "de": "Startpunkt der Dauer: since six o'clock (oder from six o'clock).",
+     "en": "The starting point of the duration: since six o'clock (or from six o'clock)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for braucht eine Länge („for ten hours“), hier steht eine Uhrzeit.",
+      "en": "for needs a length of time (“for ten hours”), but here is a clock time."
+     },
+     {
+      "if": [
+       "during"
+      ],
+      "de": "during passt nicht vor einer Uhrzeit.",
+      "en": "during does not fit before a clock time."
+     },
+     {
+      "if": [
+       "by"
+      ],
+      "de": "by heißt „spätestens um“; hier ist der Anfang gemeint.",
+      "en": "by means “no later than”; the start is meant here."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0050",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.first-time",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It was the first time I ___ ever spoken to a customer in Japanese, and I was very nervous.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "have",
+    "did",
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "It was the first time + had + Partizip: die Erfahrung liegt vor „was“.",
+     "en": "It was the first time + had + participle: the experience lies before “was”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have passt zur Gegenwart; „It was“ steht schon in der Vergangenheit.",
+      "en": "have is present; “It was” is already in the past."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did spoken gibt es nicht; nach did steht die Grundform.",
+      "en": "did spoken does not exist; did takes the base form."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was spoken wäre Passiv: „mit mir wurde gesprochen“.",
+      "en": "was spoken would be passive: “was spoken to”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0051",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.first-time",
+   "topic": "past-perfect",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "It was the first time he had ___ been to a trade fair, so everything felt new and exciting.",
+   "accept": [
+    "ever"
+   ],
+   "cls": "adv",
+   "chips": [
+    "never",
+    "yet",
+    "already"
+   ],
+   "why": {
+    "ok": {
+     "de": "the first time + had ever + Partizip: in meinem Leben bis dahin.",
+     "en": "the first time + had ever + participle: in his life up to then."
+    },
+    "wrong": [
+     {
+      "if": [
+       "never"
+      ],
+      "de": "never plus „first time“ ergibt eine doppelte Verneinung.",
+      "en": "never plus “first time” makes a double negative."
+     },
+     {
+      "if": [
+       "yet"
+      ],
+      "de": "yet passt nicht zwischen had und been in dieser Aussage.",
+      "en": "yet does not fit between had and been in this statement."
+     },
+     {
+      "if": [
+       "already"
+      ],
+      "de": "already bedeutet „schon“ und widerspricht „first time“.",
+      "en": "already means “by then” and contradicts “first time”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0052",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.reported",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "She told me that the board ___ already approved the budget the day before the announcement.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "have",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Berichtete Rede in der Vergangenheit: have/has + Partizip wird zu had + Partizip.",
+     "en": "Reported speech in the past: have/has + participle becomes had + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has gehört zur Gegenwart; nach „told“ rutscht have/has einen Schritt zurück zu had.",
+      "en": "has is present; after “told” have/has moves one step back to had."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have wird in der berichteten Rede zu had.",
+      "en": "have becomes had in reported speech."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would approved gibt es nicht; had + Partizip steht für das Frühere.",
+      "en": "would approved does not exist; had + participle expresses the earlier action."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0053",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.reported",
+   "topic": "past-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "He said that he ___ call me the next day, but I never heard from him again.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "had",
+    "has"
+   ],
+   "why": {
+    "ok": {
+     "de": "Berichtete Rede in der Vergangenheit: will wird zu would, tomorrow zu the next day.",
+     "en": "Reported speech in the past: will becomes would, tomorrow becomes the next day."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will wird nach „said“ in der Vergangenheit zu would.",
+      "en": "will becomes would after “said” in the past."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had call gibt es nicht; had braucht ein Partizip (called).",
+      "en": "had call does not exist; had needs a participle (called)."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has call gibt es nicht.",
+      "en": "has call does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0054",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.inversion",
+   "topic": "past-perfect",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "No sooner had we signed the contract ___ the client asked for several changes to the terms.",
+   "accept": [
+    "than"
+   ],
+   "cls": "conj",
+   "chips": [
+    "when",
+    "then",
+    "that"
+   ],
+   "why": {
+    "ok": {
+     "de": "No sooner had + Subjekt + Partizip … than: kaum war etwas passiert, passierte das Nächste.",
+     "en": "No sooner had + subject + participle … than: hardly had one thing happened when the next did."
+    },
+    "wrong": [
+     {
+      "if": [
+       "when"
+      ],
+      "de": "when gehört zu Hardly … when; zu No sooner gehört than.",
+      "en": "when belongs to Hardly … when; No sooner takes than."
+     },
+     {
+      "if": [
+       "then"
+      ],
+      "de": "then ist kein Bindewort für diesen Vergleich.",
+      "en": "then is not the linking word for this comparison."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that passt nicht nach No sooner had …",
+      "en": "that does not fit after No sooner had …"
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0055",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pp.inversion",
+   "topic": "past-perfect",
+   "level": "C1",
+   "dom": "life",
+   "src": "seed",
+   "text": "Hardly had we arrived at the hotel ___ it started to rain heavily, so we stayed in for the evening.",
+   "accept": [
+    "when",
+    "before"
+   ],
+   "cls": "conj",
+   "chips": [
+    "than",
+    "then",
+    "while"
+   ],
+   "why": {
+    "ok": {
+     "de": "Hardly had + Subjekt + Partizip … when: kaum angekommen, schon passierte das Nächste.",
+     "en": "Hardly had + subject + participle … when: hardly arrived, the next thing happened."
+    },
+    "wrong": [
+     {
+      "if": [
+       "than"
+      ],
+      "de": "than gehört zu No sooner; nach Hardly steht traditionell when.",
+      "en": "than belongs to No sooner; after Hardly the standard word is when."
+     },
+     {
+      "if": [
+       "then"
+      ],
+      "de": "then ist kein Bindewort für diesen Satz.",
+      "en": "then is not the linking word for this sentence."
+     },
+     {
+      "if": [
+       "while"
+      ],
+      "de": "while heißt „während“ und beschreibt Gleichzeitigkeit, hier folgt aber eins auf das andere.",
+      "en": "while means “during” and describes simultaneity, but here one thing follows the other."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0056",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.used-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ to work in a small office near the station before the company grew to two hundred people.",
+   "accept": [
+    "used"
+   ],
+   "cls": "aux",
+   "chips": [
+    "use",
+    "would",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Frühere Gewohnheit oder Lage, die es nicht mehr gibt: used to + Grundform.",
+     "en": "A past habit or situation that no longer exists: used to + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "use"
+      ],
+      "de": "use to ohne did ist falsch; in der Aussage heißt es used to.",
+      "en": "use to without did is wrong; in a statement it is used to."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "would to work gibt es nicht; would steht ohne to.",
+      "en": "would to work does not exist; would takes no to."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did to work gibt es nicht; did steht mit use to in Fragen und Verneinungen.",
+      "en": "did to work does not exist; did goes with use to in questions and negatives."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0057",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.would",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Every Friday afternoon, our old boss ___ invite the whole team for coffee and talk about the week.",
+   "accept": [
+    "would"
+   ],
+   "cls": "aux",
+   "chips": [
+    "used",
+    "did",
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Wiederholte Handlungen in der Vergangenheit: would + Grundform („every Friday“).",
+     "en": "Repeated actions in the past: would + base form (“every Friday”)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "used"
+      ],
+      "de": "used invite gibt es nicht; es heißt used to invite.",
+      "en": "used invite does not exist; it is used to invite."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did invite wäre betont und einmalig, nicht „jeden Freitag“.",
+      "en": "did invite would be emphatic and one-off, not “every Friday”."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was invite gibt es nicht.",
+      "en": "was invite does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0058",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.did-use-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Did you ___ to work from home before the pandemic, or was it always an office job?",
+   "accept": [
+    "use"
+   ],
+   "cls": "part",
+   "chips": [
+    "used",
+    "using",
+    "would"
+   ],
+   "why": {
+    "ok": {
+     "de": "Fragen und Verneinungen: did + use to (ohne d).",
+     "en": "Questions and negatives: did + use to (without d)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "used"
+      ],
+      "de": "Nach did steht use, nicht used: Did you use to …",
+      "en": "After did comes use, not used: Did you use to …"
+     },
+     {
+      "if": [
+       "using"
+      ],
+      "de": "use to hat kein -ing; nach did steht die Grundform.",
+      "en": "use to has no -ing; after did the base form is used."
+     },
+     {
+      "if": [
+       "would"
+      ],
+      "de": "Did you would gibt es nicht.",
+      "en": "Did you would does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0059",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.did-use-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I did not ___ to like jazz, but now I listen to it almost every evening after work.",
+   "accept": [
+    "use"
+   ],
+   "cls": "part",
+   "chips": [
+    "used",
+    "using",
+    "get"
+   ],
+   "why": {
+    "ok": {
+     "de": "Verneinung früherer Gewohnheiten: did not + use to.",
+     "en": "Negating past habits: did not + use to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "used"
+      ],
+      "de": "Nach did not steht use, nicht used.",
+      "en": "After did not comes use, not used."
+     },
+     {
+      "if": [
+       "using"
+      ],
+      "de": "use to hat kein -ing.",
+      "en": "use to has no -ing form."
+     },
+     {
+      "if": [
+       "get"
+      ],
+      "de": "did not get to like wäre eine andere Wendung („dazu kommen, etwas zu mögen“).",
+      "en": "did not get to like would be a different phrase (“to come to like”)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0060",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.be-used-to",
+   "topic": "used-to",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "After ten years in Spain, she is completely ___ to eating dinner at ten o'clock at night.",
+   "accept": [
+    "used",
+    "accustomed"
+   ],
+   "cls": "part",
+   "chips": [
+    "use",
+    "got",
+    "getting"
+   ],
+   "why": {
+    "ok": {
+     "de": "Schon gewöhnt: be used to + -ing oder Nomen.",
+     "en": "Already accustomed: be used to + -ing or noun."
+    },
+    "wrong": [
+     {
+      "if": [
+       "use"
+      ],
+      "de": "is use to gibt es nicht; die Wendung heißt be used to.",
+      "en": "is use to does not exist; the phrase is be used to."
+     },
+     {
+      "if": [
+       "got"
+      ],
+      "de": "is got to ist keine Form; gewöhnt sein heißt is used to.",
+      "en": "is got to is not a form; being accustomed is is used to."
+     },
+     {
+      "if": [
+       "getting"
+      ],
+      "de": "is getting to eating wäre „kommen dazu“, nicht „gewöhnt sein“.",
+      "en": "is getting to eating would be “come to”, not “be accustomed”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0061",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.get-used-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It took me a few weeks to get used ___ the new software, but now I could not work without it.",
+   "accept": [
+    "to"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "with",
+    "at"
+   ],
+   "why": {
+    "ok": {
+     "de": "Sich gewöhnen: get used to + Nomen oder -ing.",
+     "en": "Becoming accustomed: get used to + noun or -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "get used for hat eine andere Bedeutung („verwendet werden für“).",
+      "en": "get used for has a different meaning (“be used for”)."
+     },
+     {
+      "if": [
+       "with"
+      ],
+      "de": "get used with ist falsch; es heißt get used to.",
+      "en": "get used with is wrong; it is get used to."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "get used at ist keine Wendung.",
+      "en": "get used at is not a phrase."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0062",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ut.be-used-to",
+   "topic": "used-to",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I am not ___ to working without a second monitor, so the trip to the client site is a challenge.",
+   "accept": [
+    "used",
+    "accustomed"
+   ],
+   "cls": "part",
+   "chips": [
+    "use",
+    "getting",
+    "going"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nicht gewöhnt an etwas: not be used to + -ing.",
+     "en": "Not accustomed to something: not be used to + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "use"
+      ],
+      "de": "am not use to gibt es nicht; die Wendung heißt be used to.",
+      "en": "am not use to does not exist; the phrase is be used to."
+     },
+     {
+      "if": [
+       "getting"
+      ],
+      "de": "am not getting to working ist keine Wendung.",
+      "en": "am not getting to working is not a phrase."
+     },
+     {
+      "if": [
+       "going"
+      ],
+      "de": "am not going to working wäre „ich gehe nicht zur Arbeit“.",
+      "en": "am not going to working would mean “I am not going to work”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0063",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "dip.wondering",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I was wondering ___ you could send me the updated price list by tomorrow afternoon.",
+   "accept": [
+    "if",
+    "whether"
+   ],
+   "cls": "conj",
+   "chips": [
+    "that",
+    "when",
+    "unless"
+   ],
+   "why": {
+    "ok": {
+     "de": "Weiche Bitte: I was wondering if/whether you could … (Vergangenheitsform macht es höflicher).",
+     "en": "A soft request: I was wondering if/whether you could … (the past form makes it more polite)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "wondering that passt nicht vor einer Bitte; gebraucht wird if oder whether.",
+      "en": "wondering that does not fit before a request; if or whether is needed."
+     },
+     {
+      "if": [
+       "when"
+      ],
+      "de": "wondering when fragt nach einem Zeitpunkt, nicht nach einer Bitte.",
+      "en": "wondering when asks for a point in time, not a request."
+     },
+     {
+      "if": [
+       "unless"
+      ],
+      "de": "unless heißt „außer wenn“ und leitet keine höfliche Frage ein.",
+      "en": "unless means “except if” and does not introduce a polite question."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0064",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "dip.hoping",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We were hoping ___ extend the deadline by two days, if that would be possible for your team.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "that",
+    "of"
+   ],
+   "why": {
+    "ok": {
+     "de": "Höflicher Wunsch: We were hoping to + Grundform.",
+     "en": "A polite wish: We were hoping to + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "hoping for braucht ein Nomen, hier folgt ein Verb.",
+      "en": "hoping for needs a noun, but a verb follows here."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "hoping that braucht einen ganzen Satz mit Subjekt.",
+      "en": "hoping that needs a full clause with a subject."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "hoping of gibt es nicht.",
+      "en": "hoping of does not exist."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0065",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "dip.possible",
+   "topic": "c1-diplomacy",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Would it be possible ___ move the meeting to Thursday morning, because several people are travelling on Wednesday?",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "if",
+    "that"
+   ],
+   "why": {
+    "ok": {
+     "de": "Höfliche Frage: Would it be possible + to + Grundform?",
+     "en": "A polite question: Would it be possible + to + base form?"
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "possible for braucht eine Person danach („for us to move“).",
+      "en": "possible for needs a person after it (“for us to move”)."
+     },
+     {
+      "if": [
+       "if"
+      ],
+      "de": "possible if + Grundform passt nicht; if braucht einen ganzen Satz.",
+      "en": "possible if + base form does not fit; if needs a full clause."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "possible that braucht einen Satz mit Subjekt.",
+      "en": "possible that needs a clause with a subject."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0066",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "dip.possible",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Would it be possible ___ us to join the call about ten minutes late, because of a customer meeting?",
+   "accept": [
+    "for"
+   ],
+   "cls": "prep",
+   "chips": [
+    "to",
+    "if",
+    "that"
+   ],
+   "why": {
+    "ok": {
+     "de": "Mit Person: Would it be possible for us to + Grundform?",
+     "en": "With a person: Would it be possible for us to + base form?"
+    },
+    "wrong": [
+     {
+      "if": [
+       "to"
+      ],
+      "de": "possible to us ist falsch; vor der Person steht for.",
+      "en": "possible to us is wrong; for goes before the person."
+     },
+     {
+      "if": [
+       "if"
+      ],
+      "de": "possible if us ist falsch.",
+      "en": "possible if us is wrong."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "possible that us ist falsch.",
+      "en": "possible that us is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0067",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "dip.understate",
+   "topic": "c1-diplomacy",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Honestly, that deadline could be a bit of ___ stretch for our team, given the holidays in December.",
+   "accept": [
+    "a"
+   ],
+   "cls": "art",
+   "chips": [
+    "the",
+    "an",
+    "one"
+   ],
+   "why": {
+    "ok": {
+     "de": "Weiche Kritik: could be a bit of a stretch klingt freundlicher als „is impossible“.",
+     "en": "Soft objection: could be a bit of a stretch sounds friendlier than “is impossible”."
+    },
+    "wrong": [
+     {
+      "if": [
+       "the"
+      ],
+      "de": "a bit of the stretch ist keine feste Wendung; es heißt a bit of a stretch.",
+      "en": "a bit of the stretch is not the fixed phrase; it is a bit of a stretch."
+     },
+     {
+      "if": [
+       "an"
+      ],
+      "de": "an steht vor Vokalen; stretch beginnt mit s.",
+      "en": "an goes before vowel sounds; stretch begins with s."
+     },
+     {
+      "if": [
+       "one"
+      ],
+      "de": "a bit of one stretch gibt es nicht.",
+      "en": "a bit of one stretch does not exist."
+     }
+    ]
+   }
+  }
+ ]
+}

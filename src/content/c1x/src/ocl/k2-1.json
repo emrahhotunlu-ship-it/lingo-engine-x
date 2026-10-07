@@ -1,0 +1,1579 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "ocl-0001",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psc.habit",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Why ___ our customers usually pay at the end of the quarter rather than at the start?",
+   "accept": [
+    "do"
+   ],
+   "cls": "aux",
+   "chips": [
+    "are",
+    "does",
+    "have"
+   ],
+   "why": {
+    "ok": {
+     "de": "Gewohnheit in der Frage: do/does + Grundform. Zu customers (Plural) passt do.",
+     "en": "A habit in a question takes do/does + base form. The plural customers takes do."
+    },
+    "wrong": [
+     {
+      "if": [
+       "are"
+      ],
+      "de": "Nach are steht -ing, hier steht aber die Grundform pay.",
+      "en": "After are the verb takes -ing, but the sentence has the base form pay."
+     },
+     {
+      "if": [
+       "does"
+      ],
+      "de": "customers ist Plural, does passt nur zu he, she und it.",
+      "en": "customers is plural; does only goes with he, she and it."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have braucht ein Partizip (paid), nicht die Grundform.",
+      "en": "have needs a participle (paid), not the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0002",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psc.habit",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "My brother ___ not drink coffee after lunch because it keeps him awake all night.",
+   "accept": [
+    "does"
+   ],
+   "cls": "aux",
+   "chips": [
+    "is",
+    "do",
+    "has"
+   ],
+   "why": {
+    "ok": {
+     "de": "Verneinung im Present Simple: does not + Grundform; bei he/she/it steht does.",
+     "en": "Negative in the present simple: does not + base form; he/she/it takes does."
+    },
+    "wrong": [
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is not drink gibt es nicht; mit not + Grundform braucht es do/does.",
+      "en": "is not drink does not exist; not + base form needs do/does."
+     },
+     {
+      "if": [
+       "do"
+      ],
+      "de": "brother ist Singular: do passt zu I, you, we, they.",
+      "en": "brother is singular: do goes with I, you, we, they."
+     },
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has braucht ein Partizip (drunk), nicht die Grundform.",
+      "en": "has needs a participle (drunk), not the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0003",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psc.now",
+   "topic": "pres-simple-cont",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Sorry, I cannot talk right now because we ___ running a live demo for a prospect.",
+   "accept": [
+    "are"
+   ],
+   "cls": "aux",
+   "chips": [
+    "do",
+    "have",
+    "were"
+   ],
+   "why": {
+    "ok": {
+     "de": "Was gerade passiert: am/is/are + -ing. Zu we passt are.",
+     "en": "What is happening now: am/is/are + -ing. We goes with are."
+    },
+    "wrong": [
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do + running gibt es nicht; vor -ing steht eine Form von be.",
+      "en": "do + running does not exist; -ing needs a form of be."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have + running ist keine Zeitform; „gerade jetzt“ braucht am/is/are + -ing.",
+      "en": "have + running is not a tense; “right now” needs am/is/are + -ing."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "were ist Vergangenheit, „right now“ meint die Gegenwart.",
+      "en": "were is past, but “right now” means the present."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0004",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psc.state",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "At the moment I ___ not understand why the report shows two different totals for May.",
+   "accept": [
+    "do"
+   ],
+   "cls": "aux",
+   "chips": [
+    "am",
+    "will",
+    "have"
+   ],
+   "why": {
+    "ok": {
+     "de": "understand ist ein Zustandsverb und steht im Present Simple: do not understand, nie am understanding.",
+     "en": "understand is a state verb and takes the present simple: do not understand, never am understanding."
+    },
+    "wrong": [
+     {
+      "if": [
+       "am"
+      ],
+      "de": "am not understand ist keine Form; und understand hat kein -ing.",
+      "en": "am not understand is not a form, and understand has no -ing form."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will verschiebt es in die Zukunft; „at the moment“ meint jetzt.",
+      "en": "will moves it to the future, but “at the moment” means now."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have not understand gibt es nicht; have braucht das Partizip understood.",
+      "en": "have not understand does not exist; have needs the participle understood."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0005",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psc.dual",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our director ___ having dinner with the client tonight, so she will not be in the office.",
+   "accept": [
+    "is"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "does",
+    "will"
+   ],
+   "why": {
+    "ok": {
+     "de": "have im Sinn von „essen“ ist eine Handlung und steht mit be + -ing: is having dinner.",
+     "en": "have meaning “to eat” is an action and takes be + -ing: is having dinner."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has having ist falsch; have als Handlung („essen“) braucht be + -ing.",
+      "en": "has having is wrong; the action have (“to eat”) takes be + -ing."
+     },
+     {
+      "if": [
+       "does"
+      ],
+      "de": "does having gibt es nicht; vor -ing steht be.",
+      "en": "does having does not exist; -ing needs be."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will having ist keine Form; will braucht die Grundform.",
+      "en": "will having is not a form; will needs the base form."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0006",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psc.always",
+   "topic": "pres-simple-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Look at this e-mail: the vendor ___ always changing the delivery dates again, and it really annoys me.",
+   "accept": [
+    "is"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "does",
+    "are"
+   ],
+   "why": {
+    "ok": {
+     "de": "Ärger über ständige Wiederholung: is/are + always + -ing. Zu vendor passt is.",
+     "en": "Annoyance at constant repetition: is/are + always + -ing. vendor goes with is."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has always changing ist falsch; für den Ärger braucht es is + always + -ing.",
+      "en": "has always changing is wrong; the annoyance needs is + always + -ing."
+     },
+     {
+      "if": [
+       "does"
+      ],
+      "de": "does always changing gibt es nicht; vor -ing steht be.",
+      "en": "does always changing does not exist; -ing needs be."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "vendor ist Singular, also is und nicht are.",
+      "en": "vendor is singular, so is and not are."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0007",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "When ___ the client finally sign the contract, and who was in the room at that point?",
+   "accept": [
+    "did"
+   ],
+   "cls": "aux",
+   "chips": [
+    "has",
+    "was",
+    "does"
+   ],
+   "why": {
+    "ok": {
+     "de": "Frage nach einem Zeitpunkt in der Vergangenheit: When did + Subjekt + Grundform.",
+     "en": "A question about a past point in time: When did + subject + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "has"
+      ],
+      "de": "has braucht ein Partizip (signed); hier steht die Grundform sign.",
+      "en": "has needs a participle (signed); the sentence has the base form sign."
+     },
+     {
+      "if": [
+       "was"
+      ],
+      "de": "was sign ist falsch; in der Frage nach einem Zeitpunkt steht did + Grundform.",
+      "en": "was sign is wrong; a question about a point in time takes did + base form."
+     },
+     {
+      "if": [
+       "does"
+      ],
+      "de": "does ist Gegenwart, die Frage geht aber um etwas Vergangenes.",
+      "en": "does is present, but the question is about the past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0008",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psp.finished-time",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "We moved to Frankfurt ___ 2019, and my daughter was born there two years later.",
+   "accept": [
+    "in"
+   ],
+   "cls": "prep",
+   "chips": [
+    "since",
+    "for",
+    "at"
+   ],
+   "why": {
+    "ok": {
+     "de": "Abgeschlossene Zeit mit Jahreszahl: Past Simple und in 2019.",
+     "en": "A finished time with a year: past simple and in 2019."
+    },
+    "wrong": [
+     {
+      "if": [
+       "since"
+      ],
+      "de": "since nennt den Anfang bis heute; die Handlung ist aber abgeschlossen.",
+      "en": "since names a start up to now, but the action is finished."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for nennt eine Dauer, hier steht aber ein Jahr als Zeitpunkt.",
+      "en": "for names a length of time, but here a year is a point in time."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at steht bei Uhrzeiten, nicht bei Jahreszahlen.",
+      "en": "at goes with clock times, not with years."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0009",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our company has used the same document management system ___ 2018, and nobody wants to change it.",
+   "accept": [
+    "since"
+   ],
+   "cls": "prep",
+   "chips": [
+    "for",
+    "in",
+    "from"
+   ],
+   "why": {
+    "ok": {
+     "de": "Dauer bis heute ab einem Zeitpunkt: has/have + Partizip + since + Zeitpunkt.",
+     "en": "Duration up to now from a point in time: has/have + participle + since + point in time."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "for braucht eine Länge („for six years“), keine Jahreszahl.",
+      "en": "for needs a length of time (“for six years”), not a year."
+     },
+     {
+      "if": [
+       "in"
+      ],
+      "de": "in 2018 passt zum Past Simple, nicht zu has used.",
+      "en": "in 2018 goes with the past simple, not with has used."
+     },
+     {
+      "if": [
+       "from"
+      ],
+      "de": "from 2018 braucht ein „to“ oder „until“; mit has used gilt since.",
+      "en": "from 2018 needs “to” or “until”; with has used you need since."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0010",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psp.since-for",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I have known my business partner ___ almost fifteen years, and we have never had a serious argument.",
+   "accept": [
+    "for"
+   ],
+   "cls": "prep",
+   "chips": [
+    "since",
+    "during",
+    "in"
+   ],
+   "why": {
+    "ok": {
+     "de": "Länge der Zeit: for + fifteen years; since stünde nur vor einem Startpunkt.",
+     "en": "A length of time: for + fifteen years; since only comes before a starting point."
+    },
+    "wrong": [
+     {
+      "if": [
+       "since"
+      ],
+      "de": "since braucht einen Zeitpunkt („since 2011“), keine Länge.",
+      "en": "since needs a point in time (“since 2011”), not a length."
+     },
+     {
+      "if": [
+       "during"
+      ],
+      "de": "during nennt einen Zeitraum, in dem etwas geschieht, nicht die Länge bis heute.",
+      "en": "during names a period in which something happens, not the length up to now."
+     },
+     {
+      "if": [
+       "in"
+      ],
+      "de": "in passt nicht zu einer Länge von Jahren mit have known.",
+      "en": "in does not fit a length of years with have known."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0011",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psp.experience",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Have you ___ worked with a customer who changed the scope after the contract was signed?",
+   "accept": [
+    "ever"
+   ],
+   "cls": "adv",
+   "chips": [
+    "yet",
+    "just",
+    "soon"
+   ],
+   "why": {
+    "ok": {
+     "de": "Erfahrung im bisherigen Leben fragt man mit Have you ever + Partizip?",
+     "en": "You ask about experience so far in life with Have you ever + participle?"
+    },
+    "wrong": [
+     {
+      "if": [
+       "yet"
+      ],
+      "de": "yet steht am Satzende in Fragen nach einem erwarteten Ereignis.",
+      "en": "yet comes at the end of questions about an expected event."
+     },
+     {
+      "if": [
+       "just"
+      ],
+      "de": "just bedeutet „gerade eben“, nicht „je im Leben“.",
+      "en": "just means “a moment ago”, not “at any time in your life”."
+     },
+     {
+      "if": [
+       "soon"
+      ],
+      "de": "soon bedeutet „bald“ und passt nicht zu have worked.",
+      "en": "soon means “shortly” and does not fit have worked."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0012",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psp.experience",
+   "topic": "past-simple-perfect",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "I have ___ been to Japan, so I have no idea what to expect from the trip next month.",
+   "accept": [
+    "never",
+    "not"
+   ],
+   "cls": "adv",
+   "chips": [
+    "ever",
+    "yet",
+    "just"
+   ],
+   "why": {
+    "ok": {
+     "de": "Keine Erfahrung bis jetzt: have never been (oder have not been).",
+     "en": "No experience so far: have never been (or have not been)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "ever"
+      ],
+      "de": "ever steht in Fragen oder nach Superlativen, nicht in einer solchen Aussage.",
+      "en": "ever belongs in questions or after superlatives, not in a statement like this."
+     },
+     {
+      "if": [
+       "yet"
+      ],
+      "de": "yet passt nicht zwischen have und been in dieser Aussage.",
+      "en": "yet does not fit between have and been in this statement."
+     },
+     {
+      "if": [
+       "just"
+      ],
+      "de": "just bedeutet „gerade eben“ und widerspricht „no idea“.",
+      "en": "just means “a moment ago” and contradicts “no idea”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0013",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psp.result-now",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Could you check the figures again? The finance team has ___ sent me a corrected version.",
+   "accept": [
+    "just",
+    "already"
+   ],
+   "cls": "adv",
+   "chips": [
+    "ever",
+    "yet",
+    "ago"
+   ],
+   "why": {
+    "ok": {
+     "de": "Gerade eben oder schon passiert, Ergebnis jetzt: has/have + just/already + Partizip.",
+     "en": "Happened a moment ago or by now, result now: has/have + just/already + participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "ever"
+      ],
+      "de": "ever steht in Fragen und Verneinungen, nicht in einer solchen Aussage.",
+      "en": "ever belongs in questions and negatives, not in a statement like this."
+     },
+     {
+      "if": [
+       "yet"
+      ],
+      "de": "yet steht am Ende von Fragen und Verneinungen, nicht vor dem Partizip.",
+      "en": "yet comes at the end of questions and negatives, not before the participle."
+     },
+     {
+      "if": [
+       "ago"
+      ],
+      "de": "ago steht nach einer Zeitangabe und braucht das Past Simple.",
+      "en": "ago follows a time expression and needs the past simple."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0014",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "psp.result-now",
+   "topic": "past-simple-perfect",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I have not decided ___ whether I will accept the new offer, so please give me until Friday.",
+   "accept": [
+    "yet"
+   ],
+   "cls": "adv",
+   "chips": [
+    "already",
+    "ever",
+    "still"
+   ],
+   "why": {
+    "ok": {
+     "de": "Noch nicht, aber erwartet: have not + Partizip + yet.",
+     "en": "Not yet, but expected: have not + participle + yet."
+    },
+    "wrong": [
+     {
+      "if": [
+       "already"
+      ],
+      "de": "already steht in Aussagen, nicht in einer Verneinung wie „have not decided“.",
+      "en": "already belongs in statements, not in a negative like “have not decided”."
+     },
+     {
+      "if": [
+       "ever"
+      ],
+      "de": "ever passt nicht zu „have not decided … whether“.",
+      "en": "ever does not fit “have not decided … whether”."
+     },
+     {
+      "if": [
+       "still"
+      ],
+      "de": "still würde vor have not stehen: „I still have not decided“.",
+      "en": "still would stand before have not: “I still have not decided”."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0015",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.duration",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We ___ been working on the migration to the cloud since January, and we are still not finished.",
+   "accept": [
+    "have"
+   ],
+   "cls": "aux",
+   "chips": [
+    "are",
+    "had",
+    "were"
+   ],
+   "why": {
+    "ok": {
+     "de": "Dauer bis jetzt mit Handlung: have/has been + -ing; zu we passt have.",
+     "en": "Duration up to now with an activity: have/has been + -ing; we goes with have."
+    },
+    "wrong": [
+     {
+      "if": [
+       "are"
+      ],
+      "de": "are been gibt es nicht; vor been steht have/has.",
+      "en": "are been does not exist; been needs have/has."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had been bezieht sich auf einen früheren Zeitpunkt; „since January … still“ reicht bis jetzt.",
+      "en": "had been refers to an earlier point; “since January … still” reaches up to now."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "were been ist falsch; die Form heißt have/has been + -ing.",
+      "en": "were been is wrong; the form is have/has been + -ing."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0016",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.since-for",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "My neighbor has been playing the drums ___ three hours, and I really need some quiet to work.",
+   "accept": [
+    "for"
+   ],
+   "cls": "prep",
+   "chips": [
+    "since",
+    "during",
+    "from"
+   ],
+   "why": {
+    "ok": {
+     "de": "for + Länge der Zeit (three hours), since + Zeitpunkt (since noon).",
+     "en": "for + length of time (three hours), since + point in time (since noon)."
+    },
+    "wrong": [
+     {
+      "if": [
+       "since"
+      ],
+      "de": "since braucht einen Startpunkt („since noon“), hier steht eine Länge.",
+      "en": "since needs a starting point (“since noon”), but here is a length."
+     },
+     {
+      "if": [
+       "during"
+      ],
+      "de": "during passt nicht zu has been playing + Länge der Zeit.",
+      "en": "during does not fit has been playing + a length of time."
+     },
+     {
+      "if": [
+       "from"
+      ],
+      "de": "from passt nicht ohne „to“; die Länge nennt for.",
+      "en": "from does not work without “to”; for names the length."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0017",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.recent",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our sales figures have been going up ___, and the board is finally starting to take notice.",
+   "accept": [
+    "lately",
+    "recently"
+   ],
+   "cls": "adv",
+   "chips": [
+    "ago",
+    "yesterday",
+    "tomorrow"
+   ],
+   "why": {
+    "ok": {
+     "de": "Eine Entwicklung in letzter Zeit, noch sichtbar: have been + -ing mit lately oder recently.",
+     "en": "A recent development you can still see: have been + -ing with lately or recently."
+    },
+    "wrong": [
+     {
+      "if": [
+       "ago"
+      ],
+      "de": "ago braucht eine Zeitangabe davor und das Past Simple.",
+      "en": "ago needs a time expression before it and the past simple."
+     },
+     {
+      "if": [
+       "yesterday"
+      ],
+      "de": "yesterday verlangt das Past Simple, nicht have been going.",
+      "en": "yesterday needs the past simple, not have been going."
+     },
+     {
+      "if": [
+       "tomorrow"
+      ],
+      "de": "tomorrow meint die Zukunft und passt nicht zu have been going.",
+      "en": "tomorrow means the future and does not fit have been going."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0018",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.form",
+   "topic": "pres-perf-cont",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "Your sister looks exhausted. How long ___ she been waiting at the airport for her connecting flight?",
+   "accept": [
+    "has"
+   ],
+   "cls": "aux",
+   "chips": [
+    "have",
+    "is",
+    "did"
+   ],
+   "why": {
+    "ok": {
+     "de": "Frage nach der Dauer bis jetzt: How long + has/have + Subjekt + been + -ing. Zu she gehört has.",
+     "en": "A question about duration up to now: How long + has/have + subject + been + -ing. She takes has."
+    },
+    "wrong": [
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have passt zu I, you, we, they; she verlangt has.",
+      "en": "have goes with I, you, we, they; she needs has."
+     },
+     {
+      "if": [
+       "is"
+      ],
+      "de": "is been ist keine Form; vor been steht has/have.",
+      "en": "is been is not a form; been needs has/have."
+     },
+     {
+      "if": [
+       "did"
+      ],
+      "de": "did + been gibt es nicht; die Dauer bis jetzt braucht has been + -ing.",
+      "en": "did + been does not exist; duration up to now needs has been + -ing."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0019",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "pc.cont-simple",
+   "topic": "pres-perf-cont",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "So ___, we have signed twelve new customers this quarter, but I have been talking to many more.",
+   "accept": [
+    "far"
+   ],
+   "cls": "adv",
+   "chips": [
+    "long",
+    "much",
+    "well"
+   ],
+   "why": {
+    "ok": {
+     "de": "So far = bis jetzt, mit der Zahl als Ergebnis: have signed twelve.",
+     "en": "So far = up to now, with the number as the result: have signed twelve."
+    },
+    "wrong": [
+     {
+      "if": [
+       "long"
+      ],
+      "de": "So long heißt „bis bald“ und passt nicht zu einer Zahl.",
+      "en": "So long means “goodbye” and does not fit a count."
+     },
+     {
+      "if": [
+       "much"
+      ],
+      "de": "So much passt hier nicht; „so far“ ist die feste Wendung.",
+      "en": "So much does not fit here; “so far” is the fixed phrase."
+     },
+     {
+      "if": [
+       "well"
+      ],
+      "de": "So well bedeutet „so gut“ und nennt keinen Zeitraum bis jetzt.",
+      "en": "So well means “so successfully” and does not name a period up to now."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0020",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.will-now",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "You are right, the invoice contains a mistake. Thank you for telling me; I ___ correct it today.",
+   "accept": [
+    "will",
+    "shall"
+   ],
+   "cls": "aux",
+   "chips": [
+    "am",
+    "do",
+    "have"
+   ],
+   "why": {
+    "ok": {
+     "de": "Spontane Entscheidung im Gespräch: I will + Grundform.",
+     "en": "A spontaneous decision during the conversation: I will + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "am"
+      ],
+      "de": "am correct ergibt keinen Satz; für eine spontane Entscheidung steht will + Grundform.",
+      "en": "am correct does not make a sentence; a spontaneous decision takes will + base form."
+     },
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do correct sagt nichts über die Zukunft.",
+      "en": "do correct says nothing about the future."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have correct gibt es nicht; have braucht corrected.",
+      "en": "have correct does not exist; have needs corrected."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0021",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "We ___ going to renovate the kitchen next spring because the old one is falling apart.",
+   "accept": [
+    "are"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "do",
+    "have"
+   ],
+   "why": {
+    "ok": {
+     "de": "Ein schon geplantes Vorhaben: am/is/are + going to + Grundform; zu we gehört are.",
+     "en": "A plan already made: am/is/are + going to + base form; we goes with are."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will + going to kann man nicht verbinden.",
+      "en": "will and going to cannot be combined."
+     },
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do + going to gibt es nicht; vor going to steht am/is/are.",
+      "en": "do + going to does not exist; going to needs am/is/are."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have + going to ist falsch; die Form lautet be going to.",
+      "en": "have + going to is wrong; the form is be going to."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0022",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.was-going-to",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I ___ going to call the customer this morning, but then the system crashed and I forgot.",
+   "accept": [
+    "was"
+   ],
+   "cls": "aux",
+   "chips": [
+    "am",
+    "were",
+    "will"
+   ],
+   "why": {
+    "ok": {
+     "de": "Plan, der nicht klappte: was/were going to + Grundform; zu I gehört was.",
+     "en": "A plan that fell through: was/were going to + base form; I goes with was."
+    },
+    "wrong": [
+     {
+      "if": [
+       "am"
+      ],
+      "de": "am going to meint die Gegenwart; „but then … forgot“ zeigt, dass der Plan Vergangenheit ist.",
+      "en": "am going to is present; “but then … forgot” shows the plan is past."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "were passt zu you, we, they; I verlangt was.",
+      "en": "were goes with you, we, they; I needs was."
+     },
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will ist Zukunft; hier geht es um einen geplatzten Plan in der Vergangenheit.",
+      "en": "will is future; this is about a plan that fell through in the past."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0023",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.fixed-times",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our train to the trade fair in Hanover leaves ___ 7:45 tomorrow morning, so please be at the station by 7:15.",
+   "accept": [
+    "at"
+   ],
+   "cls": "prep",
+   "chips": [
+    "in",
+    "on",
+    "by"
+   ],
+   "why": {
+    "ok": {
+     "de": "Fahrplan im Present Simple, Uhrzeit mit at: leaves at 7:45.",
+     "en": "A timetable takes the present simple, clock time takes at: leaves at 7:45."
+    },
+    "wrong": [
+     {
+      "if": [
+       "in"
+      ],
+      "de": "in steht bei Zeiträumen („in May“), nicht bei einer Uhrzeit.",
+      "en": "in goes with periods (“in May”), not with a clock time."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "on steht bei Tagen und Daten („on Monday“).",
+      "en": "on goes with days and dates (“on Monday”)."
+     },
+     {
+      "if": [
+       "by"
+      ],
+      "de": "by heißt „spätestens um“, der Zug fährt aber genau um 7:45.",
+      "en": "by means “no later than”, but the train leaves exactly at 7:45."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0024",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.about-to",
+   "topic": "future-forms",
+   "level": "B2+",
+   "dom": "life",
+   "src": "seed",
+   "text": "Hurry up, the doors of the train are about ___ close, and the next one leaves in an hour.",
+   "accept": [
+    "to"
+   ],
+   "cls": "part",
+   "chips": [
+    "for",
+    "of",
+    "by"
+   ],
+   "why": {
+    "ok": {
+     "de": "Gleich passiert es: be about to + Grundform.",
+     "en": "It happens any moment now: be about to + base form."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "about for close ist keine Wendung; es heißt be about to + Grundform.",
+      "en": "about for close is not a phrase; it is be about to + base form."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "about of close gibt es nicht; nach about folgt hier to.",
+      "en": "about of close does not exist; to follows about here."
+     },
+     {
+      "if": [
+       "by"
+      ],
+      "de": "about by close gibt es nicht; die feste Wendung ist about to.",
+      "en": "about by close does not exist; the fixed phrase is about to."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0025",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "ff.no-will-after",
+   "topic": "future-forms",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will not be able to deliver the update on Friday ___ the client sends us the missing data today.",
+   "accept": [
+    "unless"
+   ],
+   "cls": "conj",
+   "chips": [
+    "if",
+    "when",
+    "although"
+   ],
+   "why": {
+    "ok": {
+     "de": "unless = außer wenn, mit Gegenwart statt will: unless the client sends.",
+     "en": "unless = except if, with the present instead of will: unless the client sends."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if ergäbe die falsche Bedeutung: Wir liefern nicht, falls er sendet.",
+      "en": "if would give the wrong meaning: we do not deliver if he sends it."
+     },
+     {
+      "if": [
+       "when"
+      ],
+      "de": "when meint einen sicheren Zeitpunkt, hier geht es um eine Bedingung.",
+      "en": "when means a certain point in time, but this is a condition."
+     },
+     {
+      "if": [
+       "although"
+      ],
+      "de": "although heißt „obwohl“; es gibt keinen Gegensatz, sondern eine Voraussetzung.",
+      "en": "although means “even though”; there is no contrast, only a requirement."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0026",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I will send you the proposal as ___ as I have finished the calculation for the second option.",
+   "accept": [
+    "soon"
+   ],
+   "cls": "adv",
+   "chips": [
+    "long",
+    "well",
+    "much"
+   ],
+   "why": {
+    "ok": {
+     "de": "Zeitsatz mit as soon as und Gegenwart statt will: as soon as I have finished.",
+     "en": "A time clause with as soon as and the present instead of will: as soon as I have finished."
+    },
+    "wrong": [
+     {
+      "if": [
+       "long"
+      ],
+      "de": "as long as bedeutet „solange“ und passt nicht zu „sobald ich fertig bin“.",
+      "en": "as long as means “provided that” and does not fit “as soon as I am done”."
+     },
+     {
+      "if": [
+       "well"
+      ],
+      "de": "as well as heißt „sowie“ und hat keinen Zeitbezug.",
+      "en": "as well as means “and also” and has no time reference."
+     },
+     {
+      "if": [
+       "much"
+      ],
+      "de": "as much as nennt eine Menge, keinen Zeitpunkt.",
+      "en": "as much as names an amount, not a point in time."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0027",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "When my parents arrive on Saturday, we ___ going to take them to the old town for dinner.",
+   "accept": [
+    "are"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "do",
+    "have"
+   ],
+   "why": {
+    "ok": {
+     "de": "Nach when steht die Gegenwart (arrive), nicht will; der Plan selbst: are going to.",
+     "en": "After when the present is used (arrive), not will; the plan itself: are going to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "will + going to kann man nicht verbinden.",
+      "en": "will and going to cannot be combined."
+     },
+     {
+      "if": [
+       "do"
+      ],
+      "de": "do + going to gibt es nicht; vor going to steht am/is/are.",
+      "en": "do + going to does not exist; going to needs am/is/are."
+     },
+     {
+      "if": [
+       "have"
+      ],
+      "de": "have + going to ist falsch; die Form lautet be going to.",
+      "en": "have + going to is wrong; the form is be going to."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0028",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "tc.present-perfect",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Once we ___ received the signed order form, our team will start setting up your account.",
+   "accept": [
+    "have"
+   ],
+   "cls": "aux",
+   "chips": [
+    "will",
+    "are",
+    "had"
+   ],
+   "why": {
+    "ok": {
+     "de": "Eine Handlung muss vorher abgeschlossen sein: once + Present Perfect, im Hauptsatz will.",
+     "en": "An action must be completed first: once + present perfect, will in the main clause."
+    },
+    "wrong": [
+     {
+      "if": [
+       "will"
+      ],
+      "de": "Nach once steht keine Zukunft mit will.",
+      "en": "After once you do not use will."
+     },
+     {
+      "if": [
+       "are"
+      ],
+      "de": "are received ist keine Form; es fehlt have + Partizip.",
+      "en": "are received is not a form; it needs have + participle."
+     },
+     {
+      "if": [
+       "had"
+      ],
+      "de": "had received ist Vergangenheit; hier wird eine künftige Voraussetzung beschrieben.",
+      "en": "had received is past; this describes a future condition."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0029",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "tc.by-the-time",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "___ the time the auditors arrive next Monday, we will already have archived all of the old contracts.",
+   "accept": [
+    "by"
+   ],
+   "cls": "prep",
+   "chips": [
+    "at",
+    "on",
+    "in"
+   ],
+   "why": {
+    "ok": {
+     "de": "By the time + Gegenwart: spätestens bis dahin; im Hauptsatz Future Perfect.",
+     "en": "By the time + present: no later than then; the main clause takes the future perfect."
+    },
+    "wrong": [
+     {
+      "if": [
+       "at"
+      ],
+      "de": "at the time heißt „damals“ und passt nicht zu einer künftigen Frist.",
+      "en": "at the time means “back then” and does not fit a future deadline."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "on the time ist keine Wendung.",
+      "en": "on the time is not a phrase."
+     },
+     {
+      "if": [
+       "in"
+      ],
+      "de": "in the time bedeutet „in der Zeit“ und passt nicht zu einer Frist.",
+      "en": "in the time means “within the time” and does not fit a deadline."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0030",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "tc.noun-clause",
+   "topic": "time-clauses",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I do not know ___ the new software will be ready, but I will ask our IT department tomorrow.",
+   "accept": [
+    "when"
+   ],
+   "cls": "conj",
+   "chips": [
+    "if",
+    "unless",
+    "until"
+   ],
+   "why": {
+    "ok": {
+     "de": "In einer indirekten Frage bleibt will: I do not know when it will be ready.",
+     "en": "In an indirect question will stays: I do not know when it will be ready."
+    },
+    "wrong": [
+     {
+      "if": [
+       "if"
+      ],
+      "de": "if bedeutet „ob“; die Lücke fragt nach dem Zeitpunkt.",
+      "en": "if means “whether”; the gap asks about the point in time."
+     },
+     {
+      "if": [
+       "unless"
+      ],
+      "de": "unless heißt „außer wenn“ und passt nicht zu einem Zeitpunkt.",
+      "en": "unless means “except if” and does not fit a point in time."
+     },
+     {
+      "if": [
+       "until"
+      ],
+      "de": "until nennt einen Endpunkt und leitet hier keine indirekte Frage ein.",
+      "en": "until names an end point and does not introduce an indirect question here."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0031",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "tc.noun-clause",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "text": "I am not sure ___ my flight will be on time, because there is a strike at the airport.",
+   "accept": [
+    "whether",
+    "if"
+   ],
+   "cls": "conj",
+   "chips": [
+    "when",
+    "unless",
+    "that"
+   ],
+   "why": {
+    "ok": {
+     "de": "Ja/Nein-Frage nach not sure: whether oder if, und will bleibt.",
+     "en": "A yes/no question after not sure: whether or if, and will stays."
+    },
+    "wrong": [
+     {
+      "if": [
+       "when"
+      ],
+      "de": "when fragt nach einem Zeitpunkt; hier geht es um ja oder nein.",
+      "en": "when asks for a point in time; this is a yes/no question."
+     },
+     {
+      "if": [
+       "unless"
+      ],
+      "de": "unless heißt „außer wenn“ und leitet keine Frage ein.",
+      "en": "unless means “except if” and does not introduce a question."
+     },
+     {
+      "if": [
+       "that"
+      ],
+      "de": "that passt nicht zu „not sure“ mit einer offenen Frage.",
+      "en": "that does not fit “not sure” with an open question."
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0032",
+   "kind": "ocl",
+   "area": "gram",
+   "pat": "tc.present-for-future",
+   "topic": "time-clauses",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our support team will keep answering calls ___ the last customer on the line has been helped.",
+   "accept": [
+    "until",
+    "till"
+   ],
+   "cls": "conj",
+   "chips": [
+    "unless",
+    "since",
+    "while"
+   ],
+   "why": {
+    "ok": {
+     "de": "until = bis; danach steht die Gegenwart (has been helped), kein will.",
+     "en": "until = up to the time that; the present follows (has been helped), never will."
+    },
+    "wrong": [
+     {
+      "if": [
+       "unless"
+      ],
+      "de": "unless heißt „außer wenn“; hier ist „bis“ gemeint.",
+      "en": "unless means “except if”; here “up to the time that” is meant."
+     },
+     {
+      "if": [
+       "since"
+      ],
+      "de": "since nennt einen Startpunkt, hier geht es um ein Ende.",
+      "en": "since names a starting point, but this is about an end."
+     },
+     {
+      "if": [
+       "while"
+      ],
+      "de": "while heißt „während“ und passt nicht zu einer abgeschlossenen Handlung (has been helped).",
+      "en": "while means “during” and does not fit a completed action (has been helped)."
+     }
+    ]
+   }
+  }
+ ]
+}
