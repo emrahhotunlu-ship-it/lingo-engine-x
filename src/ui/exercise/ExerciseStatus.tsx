@@ -31,23 +31,16 @@ export function ExerciseStatus({ area, state, kindLabel, topic, pattern, badge }
         </span>
       )}
       <span data-testid="ex-kind">{kindLabel}</span>
-      {where && (
-        <>
-          <span aria-hidden="true" className="text-subtle">
-            ·
-          </span>
-          <span data-testid="status-where">{where}</span>
-        </>
-      )}
       {badge && (
-        <>
-          <span aria-hidden="true" className="text-subtle">
-            ·
-          </span>
-          <span className="text-near-text" data-testid="again-badge">
-            {badge}
-          </span>
-        </>
+        <span className="rounded-full bg-near-soft px-2 py-0.5 text-near-text" data-testid="again-badge">
+          {badge}
+        </span>
+      )}
+      {/* Design-Lead: Thema und Muster in eigener, leiser Zeile (Vorschau: Thema nur als Nebeninfo), kein verwaister Trennpunkt am Zeilenanfang. */}
+      {where && (
+        <span className="basis-full text-subtle" data-testid="status-where">
+          {where}
+        </span>
       )}
     </p>
   );

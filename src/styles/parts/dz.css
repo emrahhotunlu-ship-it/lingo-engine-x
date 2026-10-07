@@ -276,7 +276,17 @@ html[data-lx-area] button.lx-btn-primary:not(:disabled) {
 html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {
   background: var(--lx-field);
 }
-/* Urteils-Zeichen springt kurz auf (pop) und sendet einen Lichtring (nur Stufe full/calm). */
+/* Lücke beim Tippen (Vorschau `.gap`): eine klare Linie statt einer dunklen Box; beim Fokus wird die Linie hell und kräftig. */
+.lx-gap[data-state='input']:not([data-masked]) {
+  background: transparent;
+  box-shadow: inset 0 -2.5px 0 0 var(--lx-line-strong);
+  border-radius: 0.2em 0.2em 0 0;
+}
+.lx-gap[data-state='input'][data-focused]:not([data-masked]) {
+  background: color-mix(in srgb, var(--lx-fg) 5%, transparent);
+  box-shadow: inset 0 -2.5px 0 0 var(--lx-fg);
+}
+/* Urteils-Zeichen springt kurz auf (pop) und sendet einen Lichtring – nur Stufe „Voll“. „Ruhig“ bleibt bei Stufe 1 (≤ 220 ms, kein Schütteln, kein Licht; P30, fxStage1.spec). */
 .dz-badge {
   position: relative;
   isolation: isolate;
@@ -290,8 +300,7 @@ html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {
   background: currentColor;
   opacity: 0;
 }
-:root[data-fx='full'] .dz-badge,
-:root[data-fx='calm'] .dz-badge {
+:root[data-fx='full'] .dz-badge {
   animation: dz-pop 300ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
 }
 :root[data-fx='full'] .dz-badge[data-mark='ok']::after {
@@ -313,15 +322,11 @@ html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {
   opacity: 0;
   animation: dz-pulse 460ms ease-out 40ms both;
 }
-/* M3 sanftes Schütteln nur des Antwortelements (Lücke, gewählte Option, Baustein), 320 ms, verschiebt keine Nachbarn. */
+/* M3 (nur „Voll“) sanftes Schütteln nur des Antwortelements (Lücke, gewählte Option, Baustein), 320 ms, verschiebt keine Nachbarn. */
 :root[data-fx='full'] .lx-choice[data-state='wrong'],
-:root[data-fx='calm'] .lx-choice[data-state='wrong'],
 :root[data-fx='full'] .lx-gap[data-state='wrong'],
-:root[data-fx='calm'] .lx-gap[data-state='wrong'],
 :root[data-fx='full'] .lx-gap-given,
-:root[data-fx='calm'] .lx-gap-given,
-:root[data-fx='full'] .lx-tile[data-state='off'],
-:root[data-fx='calm'] .lx-tile[data-state='off'] {
+:root[data-fx='full'] .lx-tile[data-state='off'] {
   animation: dz-shake 320ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 /* ------------------------------------------------------------------ Keyframes */
@@ -447,4 +452,37 @@ html[data-lx-area] [data-testid='exercise-bar'] [role='progressbar'] > div {
     opacity: 0.55;
     transform: scale(1.12);
   }
+}
+
+/* ------------------------------------------------------------------ Balken (Vorschau `.scale`, `.mini`): Bereichsfarbe mit leichtem Verlauf, wachsen von links */
+.dz-fill-words {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--lx-ch-cards) 70%, transparent), var(--lx-ch-cards));
+}
+.dz-fill-grammar {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--lx-ch-grammar) 70%, transparent), var(--lx-ch-grammar));
+}
+.dz-grow {
+  transform-origin: left center;
+}
+:root[data-fx='full'] .dz-grow,
+:root[data-fx='calm'] .dz-grow {
+  animation: dz-grow 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms both;
+}
+@keyframes dz-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Hauptknopf je Reiter in der Bereichsfarbe (Vorschau: Wörter `btnW` violett, Grammatik `btnG` blau); Heute bleibt neutral hell. */
+html[data-lx-tab='vocab']:not([data-lx-area]) {
+  --lx-btn-bg: var(--lx-btn-words);
+  --lx-btn-fg: #ffffff;
+}
+html[data-lx-tab='learn']:not([data-lx-area]) {
+  --lx-btn-bg: var(--lx-btn-grammar);
+  --lx-btn-fg: #ffffff;
 }

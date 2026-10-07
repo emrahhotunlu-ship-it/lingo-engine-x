@@ -16,7 +16,7 @@ export function FoldToggle({ label, children, onOpenChange, testId }: { label: s
     <div className="flex flex-col gap-2">
       <button
         type="button"
-        className="lx-t-meta -mx-1 inline-flex min-h-11 items-center gap-1 self-start rounded-[var(--radius-inline)] px-1 font-medium text-muted hover:text-fg"
+        className="lx-t-support -mx-1 flex min-h-11 items-center justify-between gap-2 self-stretch rounded-[var(--radius-inline)] px-1 font-semibold text-muted hover:text-fg"
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen((o) => !o)}

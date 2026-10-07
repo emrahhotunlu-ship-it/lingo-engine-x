@@ -195,8 +195,8 @@ export function VocabHub() {
         }
       >
         <div data-testid="ws-goal-bar">
-          <div className="relative h-2 rounded-full bg-surface" role="img" aria-label={t('vgBarLabel', { now: goalNow, mark: C1_MARK })}>
-            <div className="h-2 rounded-full bg-accent" style={{ width: `${Math.min(100, Math.round((goalNow / goal.target) * 100))}%` }} />
+          <div className="relative h-2.5 rounded-full bg-track" role="img" aria-label={t('vgBarLabel', { now: goalNow, mark: C1_MARK })}>
+            <div className="dz-grow dz-fill-words h-2.5 rounded-full" style={{ width: `${Math.min(100, Math.round((goalNow / goal.target) * 100))}%` }} />
             <span className="absolute top-[-3px] h-3.5 w-0.5 bg-fg" style={{ left: `${(C1_MARK / goal.target) * 100}%` }} aria-hidden="true" />
           </div>
           <p className="lx-tnum m-0 mt-1 text-xs text-muted">{t('nbWsHGoalMark', { mark: num(C1_MARK) })}</p>
