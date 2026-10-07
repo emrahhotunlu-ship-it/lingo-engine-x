@@ -4,9 +4,19 @@ import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
+/** Entwicklungs-Adapter und Testdaten gehören nie in den Build (Lernplattform 3.0 §10.4 P9): eine Musterkonstante für alle `src/**`-Blöcke. */
+const DEV_PATTERN = {
+  regex: '(^|/)(seed|platform/dev)(/|$)',
+  message: 'Seed und Entwicklungs-Adapter nur in src/platform und Tests (Kap. 3.3, check:platform).',
+};
+const DEV_IMPORT_SYNTAX = {
+  selector: "ImportExpression[source.value=/(^|\\/)(seed|platform\\/dev)(\\/|$)/]",
+  message: 'Kein dynamisches import() von Seed oder Entwicklungs-Adapter (nur src/main.tsx).',
+};
 const PLATFORM_SYNTAX = [
   { selector: "MemberExpression[property.name='claude']", message: 'claude.use nur in src/platform (Kap. 3.3).' },
   { selector: "Identifier[name='localStorage']", message: 'localStorage nur über src/platform/storage.ts.' },
+  DEV_IMPORT_SYNTAX,
   { selector: "Identifier[name='sessionStorage']", message: 'sessionStorage nur über src/platform/storage.ts.' },
   { selector: "CallExpression[callee.property.name='matchMedia'][arguments.0.value=/^\\(\\s*(any-)?pointer/]", message: 'Eingabeprofil nur über src/platform/input.ts (Lernplattform 2.0 §4.1).' },
   { selector: "Literal[value=/(^|[\\s\"'`])text-\\[/]", message: 'Keine freien Schriftgrößen (text-[…]); Schriftstufen aus den Tokens (Lernplattform 2.0 §7).' },
@@ -83,6 +93,11 @@ export default defineConfig(
     rules: { 'no-restricted-syntax': ['error', ...PLATFORM_SYNTAX, ...LAYOUT_SYNTAX] },
   },
   {
+    // src/main.tsx lädt den Entwicklungs-Adapter im Dev-Server dynamisch (toter Zweig im Build, check:platform prüft das).
+    files: ['src/main.tsx'],
+    rules: { 'no-restricted-syntax': ['error', ...PLATFORM_SYNTAX.filter((r) => r !== DEV_IMPORT_SYNTAX), ...LAYOUT_SYNTAX, ...STORE_SYNTAX] },
+  },
+  {
     // Der Vertrag (contract/sample.d.ts, db.d.ts) verlangt Fehler als schlichte Objekte
     // `{code, message}`, nicht als Error – der Entwicklungs-Adapter bildet genau das nach.
     files: ['src/platform/dev/**/*.ts'],
@@ -105,7 +120,7 @@ export default defineConfig(
     // Eine Quelle je Zahl (Gesamtkonzept Kap. 6, tests/unit/archGuards.test.ts): Karten und Serie nur über `domain/metrics`.
     // (Die Umstellung der alten App rechnet die alte Serie bewusst selbst.) Wiederholt das Entfernungs-Audit, weil `no-restricted-imports` je Datei nur einmal gilt.
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/domain/metrics/**', 'src/domain/migration/**'],
+    ignores: ['src/domain/metrics/**', 'src/domain/migration/**', 'src/platform/**'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -114,8 +129,32 @@ export default defineConfig(
             { regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' },
             { regex: '(^|/)srs/cards$', importNames: ['buildTrainCards'], message: 'Karten nur über domain/metrics (eine Quelle je Zahl).' },
             { regex: '(^|/)streak$', importNames: ['computeStreak'], message: 'Serie nur über domain/metrics (streak, streakWeek).' },
+            DEV_PATTERN,
           ],
         },
+      ],
+    },
+  },
+  {
+    // Dieselbe Regel für die beiden Ordner, die die Block oben auslässt (metrics, migration), mit Seed-/Adapter-Sperre.
+    files: ['src/domain/metrics/**/*.{ts,tsx}', 'src/domain/migration/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [{ regex: `/(features|domain)/(${GONE_AREAS})(/|$)`, message: 'Dieser Bereich wurde im Umbau „Fokus Wörter und Grammatik“ gelöscht (docs/umbau/gesamtkonzept.md Kap. 6).' }, DEV_PATTERN] },
+      ],
+    },
+  },
+  {
+    // Kein Netzzugriff aus dem Code (K-3, check:platform): `fetch` ist überall in src verboten (auch `window.fetch`, `globalThis.fetch`).
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-globals': ['error', { name: 'fetch', message: 'Kein fetch (Artefakt-Regel, Kap. 3.1); gepackte Inhalte über src/content/store.' }],
+      'no-restricted-properties': [
+        'error',
+        { object: 'window', property: 'fetch', message: 'Kein fetch (Artefakt-Regel, Kap. 3.1).' },
+        { object: 'globalThis', property: 'fetch', message: 'Kein fetch (Artefakt-Regel, Kap. 3.1).' },
+        { object: 'self', property: 'fetch', message: 'Kein fetch (Artefakt-Regel, Kap. 3.1).' },
       ],
     },
   },
