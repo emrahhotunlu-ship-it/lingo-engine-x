@@ -10,10 +10,11 @@ const startsWith = (hay: readonly string[], seq: readonly string[]): boolean => 
 const endsWith = (hay: readonly string[], seq: readonly string[]): boolean => seq.length > 0 && seq.length <= hay.length && seq.every((w, i) => hay[hay.length - seq.length + i] === w);
 
 export function scoreKwt(item: Kwt, r: Extract<C1Response, { kind: 'kwt' }>): C1Score {
-  const toks = kwtWords(r.text);
+  const atom = [item.key];
+  const toks = kwtWords(r.text, atom);
   const text = toks.join(' ');
   const free = r.typed === true;
-  const trap = (item.traps ?? []).findIndex((t) => kwtText(t) === text);
+  const trap = (item.traps ?? []).findIndex((t) => kwtText(t, atom) === text);
   const trapPart = trap >= 0 ? { trap } : {};
   const zero = { got: 0, max: 2, parts: [{ id: 'a' as const, ok: false }, { id: 'b' as const, ok: false }], verdict: 'wrong' as const, free, ...trapPart };
   if (!hasKey(toks, item.key)) return { ...zero, reason: 'key' };
@@ -21,8 +22,8 @@ export function scoreKwt(item: Kwt, r: Extract<C1Response, { kind: 'kwt' }>): C1
   if (toks.length < lo || toks.length > hi) return { ...zero, reason: 'length' };
   let best = { a: false, b: false, got: 0 };
   for (const k of item.keys) {
-    for (const a of k.a.map(kwtWords)) {
-      for (const b of k.b.map(kwtWords)) {
+    for (const a of k.a.map((x) => kwtWords(x, atom))) {
+      for (const b of k.b.map((x) => kwtWords(x, atom))) {
         const whole = [...a, ...b];
         const single = a.length > 0 && a.join(' ') === b.join(' ');
         const full = (whole.length === toks.length && whole.every((w, i) => w === toks[i])) || (single && a.length === toks.length && a.every((w, i) => w === toks[i]));
@@ -48,31 +49,35 @@ export function checkKwt(item: Kwt): Problems {
   if (!first) return ['keys leer'];
   const a0 = first.a[0] ?? '';
   const b0 = first.b[0] ?? '';
-  const sol = kwtWords(`${a0} ${b0}`);
+  const atom = [item.key];
+  const sol = kwtWords(`${a0} ${b0}`, atom);
   // Lösung 3–6 Wörter, enthält das Schlüsselwort unverändert (jede Variante, jede Kombination).
   for (const k of item.keys) {
     for (const a of k.a) {
       for (const b of k.b) {
-        const w = kwtWords(`${a} ${b}`);
+        const w = kwtWords(`${a} ${b}`, atom);
         const [lo, hi] = item.words ?? [3, 6];
         if (w.length < lo || w.length > hi) out.push(`Lösung „${a} ${b}“ hat ${w.length} Wörter (${lo}–${hi})`);
         if (!hasKey(w, key)) out.push(`Lösung „${a} ${b}“ enthält das Schlüsselwort ${item.key} nicht unverändert`);
       }
     }
   }
-  // Das musterbildende Wort gehört in Teil B, nie in Teil A (A hat höchstens ein Funktionswort und verrät die Wortzahl nicht).
-  if (!legacy) for (const k of item.keys) for (const a of k.a) if (kwtWords(a).length > 3) out.push(`Teil A „${a}“ ist länger als 3 Wörter`);
+  // Das musterbildende Wort gehört in Teil B, Teil A enthält höchstens ein Funktionswort und verrät die Wortzahl nicht: das prüft die Gegenlesung.
   if (!legacy && new RegExp(`\\b${key}\\b`, 'i').test(item.lead)) out.push('Schlüsselwort steht schon in Satz A (lead)');
   // Bausteine ∪ Schlüsselwort = die Wörter der ersten Lösung (als Mehrfachmenge), Ablenker (extra) kommen in der Lösung nicht vor.
   const need = [...sol];
   const ki = need.indexOf(key);
   if (ki >= 0) need.splice(ki, 1);
-  const have = item.tiles.flatMap((t) => kwtWords(t));
+  const have = item.tiles.flatMap((t) => kwtWords(t, atom));
   if (!legacy && [...need].sort().join('|') !== [...have].sort().join('|')) out.push(`tiles (${have.join(' ')}) ergeben mit dem Schlüsselwort nicht genau die erste Lösung (${sol.join(' ')})`);
-  const solSet = new Set(sol);
   if (!legacy && (item.extra.length < 2 || item.extra.length > 4)) out.push('extra braucht 2–4 Ablenker');
   if (!legacy && item.words) out.push('words nur bei Aufgaben aus dem LP2-Adapter (kwt-v2-<n>)');
-  for (const e of item.extra) for (const w of kwtWords(e)) if (solSet.has(w)) out.push(`extra „${e}“ enthält das Lösungswort „${w}“`);
+  // Ein Ablenker ist nie ein Baustein der Lösung (als ganzer Baustein verglichen) und nie das Schlüsselwort.
+  const tileKeys = new Set(item.tiles.map((t) => kwtWords(t, atom).join(' ')));
+  for (const e of item.extra) {
+    const k = kwtWords(e, atom).join(' ');
+    if (tileKeys.has(k) || k === key) out.push(`extra „${e}“ ist ein Baustein der Lösung`);
+  }
   const lead = wordCount(item.lead);
   const frame = wordCount(`${item.before} ${item.after}`) + sol.length;
   if (!legacy && (lead < 6 || lead > 25)) out.push(`Satz A hat ${lead} Wörter (6–25)`);

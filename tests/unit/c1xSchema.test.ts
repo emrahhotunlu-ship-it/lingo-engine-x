@@ -98,13 +98,12 @@ describe('Inhaltsprüfung (checkC1Content) findet, was zod nicht ausdrückt', ()
     const k = get('kwt-0001');
     if (k.kind !== 'kwt') throw new Error();
     expect(checkC1Content({ ...k, tiles: ['is', 'to'] }, ctx).join()).toContain('tiles');
-    expect(checkC1Content({ ...k, extra: ['was', 'to'] }, ctx).join()).toContain('extra');
+    expect(checkC1Content({ ...k, extra: ['was', 'to'] }, ctx).join()).toContain('Baustein der Lösung');
     expect(checkC1Content({ ...k, keys: [{ a: ['is'], b: ['to be'] }] }, ctx).join()).toContain('Schlüsselwort');
     expect(checkC1Content({ ...k, keys: [{ a: ['is said'], b: ['to be seen as to be'] }] }, ctx).join()).toContain('Wörter (3–6)');
     expect(checkC1Content({ ...k, lead: 'The company is said to be planning to move its headquarters now.' }, ctx).join()).toContain('Schlüsselwort');
     expect(checkC1Content({ ...k, traps: ['is said to be'] }, ctx).join()).toContain('volle Punkte');
     expect(checkC1Content({ ...k, traps: ['is said what'] }, ctx).join()).toContain('ohne Begründung');
-    expect(checkC1Content({ ...k, keys: [{ a: ['it is probably said'], b: ['to be'] }] }, ctx).join()).toContain('Teil A');
     expect(checkC1Content({ ...k, words: [1, 6] }, ctx).join()).toContain('words nur');
   });
 

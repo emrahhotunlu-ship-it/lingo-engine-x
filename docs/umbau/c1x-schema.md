@@ -20,7 +20,7 @@ Dieses Dokument ist die Arbeitsanweisung für alle, die c1x-Aufgaben **schreiben
 | `trap` | Deutsch-Falle `f01`–`f28` (`src/content/nb/traps.ts`) |
 | `level` | `B2` · `B2+` · `C1` |
 | `dom` | `biz` · `life` |
-| `why` | `{ ok: { de, en }, wrong: WhyRule[] }` (≤ 4 Regeln). `ok` = Kernbegründung ≤ 180 Zeichen je Sprache; jede `WhyRule` ≤ 140 Zeichen |
+| `why` | `{ ok: { de, en }, wrong: WhyRule[] }` (≤ 4 Regeln). `ok` = Kernbegründung ≤ 240 Zeichen je Sprache; jede `WhyRule` ≤ 140 Zeichen |
 | `src` | `seed` |
 | `set`, `seq` | Textmodus (Aufgaben eines Absatzes) |
 | `probe`, `form` | nur C1-Check (Form `A`–`L`) |

@@ -25,7 +25,8 @@ const isParticiple = (w: string): boolean => (/ed$/.test(w) && w.length > 3 && !
 const PRONOUN_S = new Set(['it', 'he', 'she', 'that', 'there', 'who', 'what', 'here', 'where', 'how', 'when', 'why']);
 
 /** Wörter der Antwort nach der KWT-Normalisierung (Kurzformen ausgeschrieben, `can't` = 1, Besitz-'s hängt am Nomen). */
-export function kwtWords(raw: string): string[] {
+export function kwtWords(raw: string, atomic: readonly string[] = []): string[] {
+  const keep = new Set(atomic.map((a) => a.toLowerCase().replace(/[’‘`´]/g, "'")));
   const clean = raw
     .normalize('NFKC')
     .toLowerCase()
@@ -38,6 +39,11 @@ export function kwtWords(raw: string): string[] {
   const out: string[] = [];
   for (let i = 0; i < toks.length; i++) {
     const w = toks[i] as string;
+    // Ein Schlüsselwort mit Apostroph (DIDN'T) bleibt ein Wort, wie es gegeben ist.
+    if (keep.has(w)) {
+      out.push(w);
+      continue;
+    }
     const next = (toks[i + 1] ?? '').replace(/'.*$/, '');
     if (w === "can't" || w === 'cannot') out.push('cannot');
     else if (w === "won't") out.push('will', 'not');
@@ -61,12 +67,12 @@ export function kwtWords(raw: string): string[] {
 
 /** Steht das Schlüsselwort unverändert in den Wörtern? Ein Bindestrich-Wort (two-day) enthält es als Teil, wenn der Teil genau dem Schlüsselwort entspricht. */
 export const hasKey = (toks: readonly string[], key: string): boolean => {
-  const k = key.toLowerCase();
+  const k = key.toLowerCase().replace(/[’‘`´]/g, "'");
   return toks.some((t) => t === k || t.split('-').includes(k));
 };
 
 /** Normalform als Text (Wörter mit einem Leerzeichen). */
-export const kwtText = (raw: string): string => kwtWords(raw).join(' ');
+export const kwtText = (raw: string, atomic: readonly string[] = []): string => kwtWords(raw, atomic).join(' ');
 
 /** Wortzahl nach Cambridge-Zählung. */
 export const kwtCount = (raw: string): number => kwtWords(raw).length;

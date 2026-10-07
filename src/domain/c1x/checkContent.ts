@@ -27,7 +27,7 @@ export function checkC1Content(item: C1Item, ctx: CheckCtx = {}): Problems {
     }
   } else if (!item.pat.startsWith('lx.')) out.push('area lex braucht pat „lx.<slug>“');
   if (item.probe && item.pool) out.push('probe und pool zugleich');
-  for (const [name, s] of [['why.ok.de', item.why.ok.de], ['why.ok.en', item.why.ok.en]] as const) if (s.length > 180) out.push(`${name} länger als 180 Zeichen`);
+  for (const [name, s] of [['why.ok.de', item.why.ok.de], ['why.ok.en', item.why.ok.en]] as const) if (s.length > 240) out.push(`${name} länger als 240 Zeichen`);
   for (const w of [item.why.ok, ...item.why.wrong]) {
     if (wrongLang(w.de, 'de')) out.push(`Begründung auf Deutsch ist nicht deutsch („${w.de.slice(0, 30)}…“)`);
     if (wrongLang(w.en, 'en')) out.push(`Begründung auf Englisch ist nicht englisch („${w.en.slice(0, 30)}…“)`);

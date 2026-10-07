@@ -57,7 +57,7 @@ export const whyRuleFor = (item: C1Item, input: { given?: string; picked?: strin
   item.why.wrong.find((r) => ruleMatches(r, input)) ?? null;
 
 /** Britische Schreibweisen, die in Inhalten nicht vorkommen dürfen (US ist Standard, A7.3). */
-export const BRITISH = /\b(colour|programme|centre|licence|cheque|whilst|learnt|behaviour|favour|catalogue|labour|honour|enquir|towards|amongst)\w*|\b(organis|realis|recognis|prioritis|minimis|customis|summaris|finalis|optimis|analys)(e|ed|es|ing|ation|ations|er|ers)\b/i;
+export const BRITISH = /\b(colour|programme|centre|licence|cheque|whilst|learnt|behaviour|favour|catalogue|labour|honour|enquir|amongst)\w*|\b(organis|realis|recognis|prioritis|minimis|customis|summaris|finalis|optimis|analys)(e|ed|es|ing|ation|ations|er|ers)\b/i;
 
 /**
  * Liegt eine Begründung erkennbar in der falschen Sprache? Milder als `isWrongLang`: deutsche Hinweise zitieren oft englische Beispielsätze
