@@ -121,7 +121,7 @@ export function PathList({ onOpen, highlight = null }: { onOpen: (topic: string)
 }
 
 const STATE_TONE: Record<TopicState, string> = {
-  new: 'bg-surface-strong text-muted',
+  new: 'bg-surface-strong text-fg',
   learning: 'bg-hint-soft text-hint-text',
   safe: 'bg-ok-soft text-ok-text',
   firm: 'bg-ok-soft text-ok-text',
