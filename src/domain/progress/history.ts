@@ -31,13 +31,17 @@ export const HISTORY_MAX = 120;
 export type HistSnap = { d: string; o: number | null; vo: number | null; co: number | null; li: number | null; wr: number | null; gr: number; re: number | null; fl: number | null; vs: number | null; lx: 2;
   /** Fest-Zahl des Tages (K1: Zuwachs „+n in 28 Tagen“); fehlt, solange der Aufrufer sie nicht übergibt. */
   va?: number;
+  /** Wörter und Wendungen fest (`festUnits`, P22); `va` behält seine alte Bedeutung (nur Vokabeln). */
+  vu?: number;
+  /** Dokumentzahl der Datenbank an diesem Tag (P22, Grundlage der Prognose in P29). */
+  dc?: number;
 };
 
 export function hasHistory(profile: Doc | undefined, day: string): boolean {
   return arr(profile?.history).some((h) => h.d === day);
 }
 
-export function historySnapshot(i: { day: string; nowMs: number; profile: Doc; grammar: ReadonlyMap<string, Doc>; readingScores?: readonly number[]; vocabNow: number | null; festNow?: number | null }): HistSnap {
+export function historySnapshot(i: { day: string; nowMs: number; profile: Doc; grammar: ReadonlyMap<string, Doc>; readingScores?: readonly number[]; vocabNow: number | null; festNow?: number | null; unitsFest?: number | null; docCount?: number | null }): HistSnap {
   const p = i.profile;
   const ema = obj(p.ema);
   const hist = arr(p.history);
@@ -61,6 +65,8 @@ export function historySnapshot(i: { day: string; nowMs: number; profile: Doc; g
     vs: i.vocabNow ?? numOr(prev.vs, null),
     lx: 2,
     ...(typeof i.festNow === 'number' && Number.isFinite(i.festNow) ? { va: Math.max(0, Math.round(i.festNow)) } : {}),
+    ...(typeof i.unitsFest === 'number' && Number.isFinite(i.unitsFest) ? { vu: Math.max(0, Math.round(i.unitsFest)) } : {}),
+    ...(typeof i.docCount === 'number' && Number.isFinite(i.docCount) && i.docCount > 0 ? { dc: Math.round(i.docCount) } : {}),
   };
 }
 

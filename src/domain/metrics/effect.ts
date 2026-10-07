@@ -1,4 +1,6 @@
-import { dayKey } from '../date';
+import { addDays, dayKey, daysBetween, isDayKey } from '../date';
+import { pflichtDays, weekStrip } from '../streak';
+import { streakInputOf } from './streak';
 import { errorDue, liveErrorsOf, type ErrorEntry } from '../grammar/errors';
 import { readRepairs } from '../repair/repair';
 
@@ -162,4 +164,103 @@ export function learningEffect(i: { grammarDocs: ReadonlyMap<string, Doc>; repai
     minutesPerStep,
     queue: { today: lens[0] ?? 0, max7: Math.max(0, ...lens) },
   };
+}
+
+// ------------------------------------------------------------------ Motivation: Messwerte S1 bis S4 (Motivation §5)
+
+/** Feste Regeln nach vier Wochen (keine neue Planungsrunde): Schwellen und Fenster, damit Ansicht und `stand.md` dieselben Zahlen nennen. */
+export const MOTIVATION_RULES = {
+  /** S1: volle ISO-Wochen in der Betrachtung. */
+  weeks: 8,
+  /** S1: ein Rückgang um so viele Wochen gegenüber der Basis → kürzerer Tag anbieten. */
+  quotaDrop: 2,
+  /** S3: Lücken ab so vielen Tagen zählen als Pause. */
+  gapMin: 3,
+  /** S3: Median darüber → Erinnerung anbieten. */
+  gapMedianMax: 4,
+  /** S4: Fenster (Tage) und Schwelle (Anteil abgebrochener Runden). */
+  abortDays: 28,
+  abortMax: 0.2,
+} as const;
+
+export type MotivationSignals = {
+  /** S1: volle Wochen mit mindestens 6 Pflichttagen (`hit`) von den betrachteten Wochen (`n`). */
+  weekQuota: Rate;
+  /** S2: Lerntage mit mindestens einem Extra-Eintrag nach erledigter Pflicht (`hit`) von allen Lerntagen mit erledigter Pflicht und Protokoll (`n`). */
+  voluntary: Rate;
+  /** S3: Median der Pausenlängen (Tage ohne Pflicht) bei Lücken ab 3 Tagen; `n` = Zahl der Pausen. */
+  returnGap: { n: number; median: number } | null;
+  /** S4: abgebrochene Runden (`hit`) von allen Runden (`n`) der letzten 28 Tage. */
+  abort: Rate;
+};
+
+const obj = (v: unknown): Doc => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Doc) : {});
+const median = (xs: readonly number[]): number => {
+  const s = [...xs].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? (s[m] as number) : ((s[m - 1] as number) + (s[m] as number)) / 2;
+};
+
+/**
+ * Die vier Messwerte S1 bis S4. Fehlen Daten, ist der Wert `null` („noch keine Daten“, nie 0). Nur Lesen; Pflichttage kommen über
+ * `weekStrip` aus derselben Serienregel wie überall.
+ */
+export function motivationSignals(i: { profile: Doc | null | undefined; schema?: Doc | null | undefined; logs: ReadonlyArray<Readonly<Doc>>; today: string }): MotivationSignals {
+  const profile = obj(i.profile);
+  const base = streakInputOf({ nowMs: 0, profile: i.profile ?? null, schema: i.schema ?? null, today: i.today }).input;
+  const dayRows = [obj(profile.days), obj(profile.xpDays), obj(profile.pflicht)];
+  const firstActive = dayRows
+    .flatMap((m) => Object.entries(m).filter(([k, v]) => isDayKey(k) && !!v && k <= i.today).map(([k]) => k))
+    .sort()[0];
+
+  // S1: die letzten acht vollen ISO-Wochen, ab der Woche mit der ersten Aktivität.
+  const dow = new Date(`${i.today}T12:00:00Z`).getUTCDay();
+  const monday = addDays(i.today, -((dow + 6) % 7));
+  let wn = 0;
+  let whit = 0;
+  for (let k = 1; k <= MOTIVATION_RULES.weeks; k++) {
+    const mon = addDays(monday, -7 * k);
+    if (!firstActive || addDays(mon, 6) < firstActive) continue;
+    wn++;
+    const done = weekStrip({ ...base, today: addDays(mon, 6), legacyToday: undefined }).filter((d) => d.state === 'done').length;
+    if (done >= 6) whit++;
+  }
+
+  // S2: Extra nach erledigter Pflicht.
+  const duty = pflichtDays(profile.pflicht);
+  let sn = 0;
+  let shit = 0;
+  for (const log of i.logs) {
+    const d = typeof log.date === 'string' ? log.date : '';
+    if (!isDayKey(d) || !duty.has(d) || daysBetween(d, i.today) > 28 || daysBetween(d, i.today) < 0) continue;
+    const entries = Array.isArray(log.entries) ? log.entries : [];
+    if (!entries.length) continue;
+    sn++;
+    if (entries.some((e) => obj(e).ctx === 'xtra')) shit++;
+  }
+
+  // S3: Pausenlängen.
+  const since = typeof obj(i.schema).pflichtSince === 'string' ? (obj(i.schema).pflichtSince as string) : null;
+  const active = new Set<string>(duty);
+  for (const [k, v] of Object.entries(obj(profile.days))) if (isDayKey(k) && (v as number) > 0 && (!since || k < since)) active.add(k);
+  const sorted = [...active].filter((k) => k <= i.today).sort();
+  const gaps: number[] = [];
+  for (let k = 1; k < sorted.length; k++) {
+    const gap = daysBetween(sorted[k - 1] as string, sorted[k] as string) - 1;
+    if (gap >= MOTIVATION_RULES.gapMin) gaps.push(gap);
+  }
+
+  // S4: abgebrochene Runden (`act`-Schlüssel mit `~`).
+  let an = 0;
+  let ahit = 0;
+  for (const [d, acts] of Object.entries(obj(profile.act))) {
+    if (!isDayKey(d) || daysBetween(d, i.today) < 0 || daysBetween(d, i.today) >= MOTIVATION_RULES.abortDays) continue;
+    for (const [key, n] of Object.entries(obj(acts))) {
+      const c = typeof n === 'number' && n > 0 ? Math.round(n) : 0;
+      an += c;
+      if (key.endsWith('~')) ahit += c;
+    }
+  }
+
+  return { weekQuota: rate(wn, whit), voluntary: rate(sn, shit), returnGap: gaps.length ? { n: gaps.length, median: median(gaps) } : null, abort: rate(an, ahit) };
 }

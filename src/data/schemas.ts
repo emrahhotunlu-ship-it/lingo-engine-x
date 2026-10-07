@@ -159,7 +159,7 @@ export const profileSchema = z.looseObject({
   lxSeq: numMap,
   // `lx`: Tagesbild dieser App (Phase 6, Plan §7.4), Definition in domain/progress/history.ts.
   history: z
-    .array(z.looseObject({ d: str, o: num, vo: num, gr: num, co: num, re: num, li: num, wr: num, fl: num, vs: num, lx: num, va: num }))
+    .array(z.looseObject({ d: str, o: num, vo: num, gr: num, co: num, re: num, li: num, wr: num, fl: num, vs: num, lx: num, va: num, vu: num, dc: num }))
     .nullish(),
   feed: z.array(z.looseObject({ act: str, t: num, d: z.looseObject({}).nullish() })).nullish(),
   listen: looseArr,
@@ -271,6 +271,8 @@ const schedulingFields = {
   hist: z.array(z.looseObject({ g: num, m: str, t: num })).nullish(),
   modes: z.record(z.string(), z.looseObject({ c: num, w: num }).nullish()).nullish(),
   intro: str,
+  /** Erster Fest-Tag (Lernplattform 3.0 P22, `JJJJ-MM-TT`), rein ergänzend, einmal gesetzt. */
+  ff: str,
   hidden: bool,
   fsrs: fsrsSchema.nullish(),
   /** Neu: Trefferbilanz je Übungsart der neuen App. */
