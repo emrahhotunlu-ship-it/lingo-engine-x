@@ -69,7 +69,7 @@ describe('Wiedereinstieg im Plan', () => {
 
   it('restart (Neustart-Woche): kleinster Plan 3 + 4 + 2 Min., auch am Sonntag und bei Tagesziel 25', () => {
     for (const day of [MON, SAT, SUN]) {
-      const p = buildUnitStored({ day, nowMs: NOW, week: null, goalMin: 25, review, comeback: 'restart' });
+      const p = buildUnitStored({ day, nowMs: NOW, week: null, goalMin: 25, review, comeback: 'restart', rv: 1 });
       expect(kinds(p)).toEqual(['review', 'grammar', 'again']);
       expect(p.u?.min).toBe(9);
       expect(p.u?.cb).toBe('restart');

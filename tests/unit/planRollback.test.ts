@@ -58,13 +58,13 @@ describe('Rückweg: der alte Leser (8d8f3a3) liest neue Pläne vollständig', ()
   });
 
   it('ein Plan der alten Regel liest der alte und der neue Leser gleich', () => {
-    const plan = buildUnitStored({ day: '2026-10-05', nowMs: NOW, week: null, goalMin: 25, review, fixDue: 12 });
+    const plan = buildUnitStored({ day: '2026-10-05', nowMs: NOW, week: null, goalMin: 25, review, fixDue: 12, rv: 1 });
     const stored = JSON.parse(JSON.stringify(plan)) as unknown;
     expect(readPlan(stored, '2026-10-05')!.u).toEqual(readPlan8d8f3a3(stored, '2026-10-05')!.u);
   });
 
   it('ohne u.rv und ohne 4. Element ist das gespeicherte Dokument byte-gleich zu dem der alten Regel (nur gt/ps sind neu)', () => {
-    const plan = buildUnitStored({ day: '2026-10-05', nowMs: NOW, week: null, goalMin: 25, review, fixDue: 12 });
+    const plan = buildUnitStored({ day: '2026-10-05', nowMs: NOW, week: null, goalMin: 25, review, fixDue: 12, rv: 1 });
     expect(Object.keys(plan.u!).sort()).toEqual(['b', 'goalMin', 'min', 'ov', 'shape', 'sure', 'theme', 'v'].filter((k) => k in plan.u!).sort());
     expect(plan.u!.rv).toBeUndefined();
   });

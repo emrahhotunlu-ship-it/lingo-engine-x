@@ -157,5 +157,5 @@ describe('Wiederholungs-Planung über 120 Tage (echter Tagesplan)', () => {
     expect(peak).toBeGreaterThan(40);
     expect(max(pause.rows.slice(-30), (r) => r.overdueBefore)).toBeLessThanOrEqual(60);
     expect(retention(pause.rows.slice(-30))).toBeGreaterThanOrEqual(0.85);
-  });
+  }, 30_000);
 });

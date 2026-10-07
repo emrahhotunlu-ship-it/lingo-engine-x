@@ -28,25 +28,26 @@ describe('Wochentage der Testtage', () => {
   });
 });
 
-describe('Standardwert PLAN_RV = 1: alles bleibt wie bisher', () => {
-  it('der Schalter steht auf 1', () => {
-    expect(PLAN_RV).toBe(1);
+describe('rv: 1 bleibt die alte Regel (Rückweg); Standardwert PLAN_RV = 2', () => {
+  it('der Schalter steht auf 2, ohne rv gilt Plan v2', () => {
+    expect(PLAN_RV).toBe(2);
+    expect(plan(MON, { fixDue: 12 }).u!.rv).toBe(2);
   });
 
-  it('ohne ausdrückliches rv: kein u.rv, keine Argumente, Sonntag ohne Schritt 4', () => {
+  it('mit rv: 1: kein u.rv, keine Argumente, Sonntag ohne Schritt 4', () => {
     for (const day of [MON, SAT, SUN]) {
       for (const goalMin of [10, 15, 25]) {
-        const p = plan(day, { goalMin, fixDue: 12 });
+        const p = plan(day, { rv: 1, goalMin, fixDue: 12 });
         expect(p.u!.rv).toBeUndefined();
         for (const b of p.u!.b) expect(b).toHaveLength(3);
       }
     }
-    expect(kinds(plan(SUN, { fixDue: 12 }))).toEqual(['review', 'task.check']);
-    expect(plan(SUN, { fixDue: 12 }).duty).toEqual(['review', 'ch:u-check']);
+    expect(kinds(plan(SUN, { rv: 1, fixDue: 12 }))).toEqual(['review', 'task.check']);
+    expect(plan(SUN, { rv: 1, fixDue: 12 }).duty).toEqual(['review', 'ch:u-check']);
   });
 
   it('alte Regel: die Minuten von Schritt 4 sind der Grundwert (3 am vollen Tag)', () => {
-    expect(plan(MON, { fixDue: 20 }).u!.b.find(([, k]) => k === 'again')?.[2]).toBe(3);
+    expect(plan(MON, { rv: 1, fixDue: 20 }).u!.b.find(([, k]) => k === 'again')?.[2]).toBe(3);
   });
 });
 
@@ -182,14 +183,14 @@ describe('unitStepArgs und unitGrammarArgs', () => {
   });
 
   it('alte Regel: Reparatur-Sätze bis 3, drei Fehlersätze in der Grammatik, drei alte Sätze in Schritt 4', () => {
-    const p = plan(MON, { fixDue: 8 });
+    const p = plan(MON, { rv: 1, fixDue: 8 });
     expect(planRvOf(p)).toBe(1);
     expect(unitStepArgs(p, 1)).toEqual({ repairs: 3 });
     expect(unitStepArgs(p, 2)).toEqual({ errs: ERRORS_PER_ROUND });
     expect(unitStepArgs(p, 5)).toEqual({ limit: AGAIN_OLD });
     expect(unitGrammarArgs(p)).toEqual({ n: 6, errs: ERRORS_PER_ROUND });
     expect(unitGrammarArgs(null)).toEqual({ n: 6, errs: ERRORS_PER_ROUND });
-    expect(unitGrammarArgs(plan(MON, { goalMin: 15 })).n).toBe(4);
+    expect(unitGrammarArgs(plan(MON, { rv: 1, goalMin: 15 })).n).toBe(4);
     expect(unitGrammarArgs(plan(MON, { goalMin: 10 })).n).toBe(3);
   });
 });
@@ -200,7 +201,7 @@ describe('Zahl auf dem Knopf von Schritt 4', () => {
     expect(fixToday({ plan: plan(MON, { rv: 2, fixDue: 30 }), fixDue: 30 })).toBe(9);
     expect(fixToday({ plan: plan(MON, { rv: 2, fixDue: 3 }), fixDue: 3 })).toBe(3);
     expect(fixToday({ plan: plan(SUN, { rv: 2, fixDue: 30 }), fixDue: 30 })).toBe(3);
-    expect(fixToday({ plan: plan(MON, { fixDue: 30 }), fixDue: 30 })).toBe(AGAIN_OLD);
+    expect(fixToday({ plan: plan(MON, { rv: 1, fixDue: 30 }), fixDue: 30 })).toBe(AGAIN_OLD);
     expect(fixToday({ plan: null, fixDue: 30 })).toBe(FIX_LIMIT.min);
     expect(fixToday({ plan: null, fixDue: 0 })).toBe(0);
     expect(fixAll(21)).toBe(21);

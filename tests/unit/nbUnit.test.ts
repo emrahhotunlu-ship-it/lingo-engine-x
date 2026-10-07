@@ -20,7 +20,7 @@ const SAT = '2026-10-03';
 const SUN = '2026-10-04';
 const review = { goal: 12, due: 8, fresh: 3, repairs: 1 };
 
-const build = (day: string, goalMin = 25, r = review): StoredPlan => buildUnitStored({ day, nowMs: berlin(day, 9), week: null, goalMin, review: r });
+const build = (day: string, goalMin = 25, r = review): StoredPlan => buildUnitStored({ day, nowMs: berlin(day, 9), week: null, goalMin, review: r, rv: 1 });
 
 /** Profil mit Aktivität und den genannten Blöcken erledigt. */
 const profileWith = (day: string, keys: string[]) => ({ days: { [day]: 12 }, act: { [day]: Object.fromEntries(keys.map((k) => [k, 1])) } });
