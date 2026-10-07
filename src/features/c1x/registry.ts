@@ -2,6 +2,8 @@ import { kindEnabled } from '../../app/flags';
 import type { C1Kind } from '../../domain/c1x/types';
 import { useErrUi } from './kinds/Err';
 import { useKwtUi } from './kinds/Kwt';
+import { useMccUi } from './kinds/McCloze';
+import { useOclUi } from './kinds/OpenCloze';
 import { useStubUi } from './kinds/Stub';
 import type { C1KindEntry } from './types';
 
@@ -10,8 +12,8 @@ import type { C1KindEntry } from './types';
 
 const stub: C1KindEntry = { useUi: useStubUi };
 const ENTRIES: Record<C1Kind, C1KindEntry> = {
-  mcc: stub,
-  ocl: stub,
+  mcc: { useUi: useMccUi },
+  ocl: { useUi: useOclUi },
   wf: stub,
   kwt: { useUi: useKwtUi },
   err: { useUi: useErrUi },

@@ -1,3 +1,4 @@
+import { hash32 } from '../../random';
 import type { C1Response, C1Score, Mcc } from '../types';
 import { BRITISH, wordCount, type Problems } from './common';
 
@@ -22,4 +23,10 @@ export function checkMcc(item: Mcc): Problems {
   });
   if (BRITISH.test(item.text) || item.options.some((o) => BRITISH.test(o))) out.push('britische Schreibweise');
   return out;
+}
+
+/** Hinweis 2: die falsche Option, die ausgegraut wird (stabil je Aufgabe, nie die Lösung und nie die gerade gewählte Option). */
+export function mccMuted(item: Mcc, avoid: number | null = null): number {
+  const wrong = [0, 1, 2, 3].filter((i) => i !== item.answer && i !== avoid);
+  return wrong[hash32(`mcc-muted|${item.id}`) % wrong.length] ?? 0;
 }

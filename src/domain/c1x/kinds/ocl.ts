@@ -1,4 +1,5 @@
 import { editDistance } from '../../answer/diff';
+import { maskOf, type MaskCell } from '../../answer/mask';
 import { typoBudget } from '../../answer/check';
 import type { C1Response, C1Score, Ocl } from '../types';
 import { BRITISH, cmp, usHint, wordCount, type Problems } from './common';
@@ -28,3 +29,6 @@ export function checkOcl(item: Ocl): Problems {
   if (BRITISH.test(item.text)) out.push('britische Schreibweise');
   return out;
 }
+
+/** Stütze nach Hinweis 2: Platzhalter je Buchstabe der ersten Lösung, der erste Buchstabe sichtbar. */
+export const oclMask = (item: Ocl): MaskCell[] => maskOf(item.accept[0] ?? '', { firstLetter: true });

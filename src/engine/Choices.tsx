@@ -41,6 +41,8 @@ export type ChoicesProps = {
   label?: string;
   /** Tasten A–D und 1–4 wählen (Standard an). Der Aufrufer schaltet ab, wenn er die Tasten selbst behandelt. */
   keys?: boolean;
+  /** Ausgegraute Optionen (Hinweis „eine falsche Antwort weniger“): nicht wählbar, auch nicht per Taste. */
+  muted?: readonly number[];
   testId?: string;
 };
 
@@ -101,11 +103,11 @@ function Mark({ state }: { state: 'correct' | 'wrong' }) {
   );
 }
 
-function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en', langs, collapse = false, why, label, keys = true, testId = 'choices' }: ChoicesProps) {
+function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en', langs, collapse = false, why, label, keys = true, muted, testId = 'choices' }: ChoicesProps) {
   const reduce = useReducedMotion();
-  const live = useRef({ onPick, revealed, n: options.length });
+  const live = useRef({ onPick, revealed, n: options.length, muted: (muted ?? []) as readonly number[] });
   useEffect(() => {
-    live.current = { onPick, revealed, n: options.length };
+    live.current = { onPick, revealed, n: options.length, muted: muted ?? [] };
   });
   useEffect(() => {
     if (!keys) return;
@@ -119,6 +121,7 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
       const i = keyToIndex(e.key, s.n);
       if (i === null) return;
       e.preventDefault();
+      if (s.muted.includes(i)) return;
       s.onPick(i);
     };
     window.addEventListener('keydown', onKey);
@@ -130,7 +133,8 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
     <div role="group" aria-label={label} className="flex flex-col" data-testid={testId} data-revealed={revealed || undefined}>
       <AnimatePresence initial={false}>
         {options.map((text, i) => {
-          const state = !revealed ? 'idle' : i === correct ? 'correct' : i === chosen ? 'wrong' : 'dim';
+          const isMuted = !revealed && !!muted?.includes(i);
+          const state = !revealed ? (isMuted ? 'dim' : 'idle') : i === correct ? 'correct' : i === chosen ? 'wrong' : 'dim';
           if (revealed && collapse && state === 'dim') return null;
           const line = revealed && state === 'wrong' ? why?.[i] : undefined;
           return (
@@ -143,7 +147,7 @@ function ModernChoices({ options, chosen, correct, revealed, onPick, lang = 'en'
                 type="button"
                 data-testid="choice"
                 data-state={state}
-                disabled={revealed}
+                disabled={revealed || isMuted}
                 aria-pressed={!revealed && chosen === i}
                 onClick={() => onPick(i)}
                 className="lx-choice lx-choice-big"

@@ -27,6 +27,7 @@ import { explainDepth, PatternCard, type ShellFeedback, type ShellMenuId, type S
 import { TutorButton } from '../../ui/exercise/TutorButton';
 import { useCompanionSee } from '../companion/seeing';
 import { nextT } from '../progress/persist';
+import { bookLex } from './lexWrite';
 import { ResultAfter, ResultParts, useResultSub } from './ResultCard';
 import type { C1Ctrl, C1KindEntry, ResponseMeta } from './types';
 
@@ -173,6 +174,11 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       given: fb.given,
     };
     const a = bookAnswer(task, fb.score, fb.response, run);
+    // Wortkarten und Verlauf der Lexik-Aufgaben (P20): höchstens eine Wiederholung je Karte und Lerntag, nie eine neue Karte, nie im Messmodus.
+    if (item.lex?.length || item.area === 'lex') {
+      const score = fb.override ? { ...fb.score, verdict: 'correct' as const } : fb.score;
+      void bookLex({ item, score, grade: a.grade, day, lang, ms: fb.ms, given: fb.given, dev: inp === 'touch' ? 't' : 'k', ...(seenBefore ? { again: true } : {}), ...(noHelp ? { measure: true } : {}) });
+    }
     const booked: GrammarAnswer = retry && firstWrong.current !== null ? { ...a, firstWrong: firstWrong.current } : a;
     const kind = onDone(booked);
     if (kind === 'typed') api.focusNow();
