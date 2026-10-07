@@ -147,6 +147,11 @@ const answeredOn = (cur: Doc, day: string): boolean => typeof cur.last === 'numb
  * der eigenen – sie prüft Gehör und Schreibung, nicht die Bedeutung. Auf Stufe 4–5 (Leiter) ändert
  * das nichts; im Hör-Modus hebt eine junge Karte so je Antwort nur um eine Stufe und fällt nie tiefer.
  */
+/** Verlaufseintrag; `s` = Schlüssel des gezeigten Satzes (V1, nur wenn die Abfrage einen Satz hatte). */
+function histEntry(a: AnswerEvent, mode: LegacyMode): Record<string, unknown> {
+  return { t: a.t, m: mode, g: a.grade, x: a.ex, ...(a.sx ? { s: a.sx } : {}) };
+}
+
 export function levelFor(ex: ExerciseId, stage: number): number {
   const level = exerciseDef(ex).level;
   return ex === 'dictation' ? Math.min(level, Math.max(1, stage) + 1) : level;
@@ -184,7 +189,7 @@ export function cardPatch(cur: Doc, a: AnswerEvent): Doc {
     stage: stageAfter(cur, a),
     modes: { [def.mode]: { c: Math.round(num(prevMode.c)) + ok, w: Math.round(num(prevMode.w)) + (1 - ok) } },
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
-    hist: [...hist, { t: a.t, m: def.mode, g: a.grade, x: a.ex }].slice(-HIST_MAX),
+    hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
     ...skillPatch(cur, def.mode, a.grade, a.colIndex, col.length),
   };
   // Nur ergänzen: ein vorhandenes Einführungsdatum der alten App bleibt stehen (Kap. 9, Regel 2).
@@ -213,7 +218,7 @@ export function chunkPatch(cur: Doc, a: AnswerEvent): Doc {
     lapses: Math.max(0, Math.round(num(cur.lapses))) + (a.grade === 1 && !wasNew ? 1 : 0),
     stage: stageAfter(cur, a),
     xs: { [a.ex]: { c: Math.round(num(prevXs.c)) + ok, w: Math.round(num(prevXs.w)) + (1 - ok) } },
-    hist: [...hist, { t: a.t, m: def.mode, g: a.grade, x: a.ex }].slice(-HIST_MAX),
+    hist: [...hist, histEntry(a, def.mode)].slice(-HIST_MAX),
   };
   const mode = chunkMode(a.ex);
   if (mode) {

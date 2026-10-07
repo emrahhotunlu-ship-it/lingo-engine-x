@@ -130,7 +130,7 @@ function patsPatch(cur: Doc, a: GrammarAnswer, ok: boolean): Record<string, PatE
   const prev = out[id];
   // Hilfe-Bit: Tipp, zweiter Versuch, und bei c1x jedes Ergebnis ohne getippten Anteil (Auswahl, Bausteine) und jede zweite Sicht (§3.4): Fest nur über getippte Treffer.
   const help = a.help.level > 0 || a.firstWrong !== undefined || (!!a.pts && a.free !== true) || a.again === true;
-  const next = patPush(prev, { ok, help, day: a.day, t: a.t });
+  const next = patPush(prev, { ok, help, day: a.day, t: a.t, form: a.c1k ?? a.task.type });
   next.i ??= a.day;
   // Unbekannte Felder eines Eintrags bleiben erhalten (Datenregel 2: nie strippen).
   const rawOld = rawPats[id];

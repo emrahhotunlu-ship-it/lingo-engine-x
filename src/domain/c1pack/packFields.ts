@@ -60,6 +60,17 @@ export function packExtras(): PackExtraView[] {
   });
 }
 
+/** Alle Beispielsätze des Pakets (`ex` und die Sätze der Wortpartner), mit der Kennung des Eintrags. Nur Lesen (V1, Mehrfachkombination). */
+export function packSentences(): { id: string; sentence: string }[] {
+  load();
+  const out: { id: string; sentence: string }[] = [];
+  for (const [id, r] of byId as ReadonlyMap<string, Row>) {
+    if (typeof r.ex === 'string' && r.ex.trim()) out.push({ id, sentence: r.ex.trim() });
+    if (Array.isArray(r.col)) for (const c of r.col) if (c && typeof c === 'object' && typeof (c as { ex?: unknown }).ex === 'string') out.push({ id, sentence: (c as { ex: string }).ex.trim() });
+  }
+  return out;
+}
+
 function viewOf(r: Row): PackExtraView | null {
   const keys = ['col', 'gap', 'trap', 'fam', 'alt', 'scene', 'starts'] as const;
   const part: Record<string, unknown> = {};

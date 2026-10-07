@@ -185,6 +185,8 @@ export type AnswerEvent = {
   /** Lektion, aus deren Wörter-Schritt die Antwort stammt (Phase 2, D17). */
   lesson?: string;
   colIndex?: number;
+  /** Schlüssel des gezeigten Satzes (`sentKey`, V1): kommt als `s` in `hist`, damit derselbe Satz nicht zweimal in Folge kommt. */
+  sx?: string;
   /** Eingabeprofil der Runde: Touch oder Tastatur (Lernplattform 2.0 §3.1). */
   dev?: 't' | 'k';
   /** Einspruch „Ich lag richtig" (M4): als richtig gewertet, höchstens „Gut", im Log `override:true`. */

@@ -20,6 +20,8 @@ export type PatEntry = {
   dd?: string[];
   s?: string;
   i?: string;
+  /** V1: die Formen der letzten Antworten (Aufgabenart, höchstens 4, kommagetrennt, die neueste zuletzt), z. B. `ocl,kwt,err`. */
+  f?: string;
 };
 
 export type PatternState = 'new' | 'learning' | 'safe' | 'firm';
@@ -48,6 +50,7 @@ export function readPatEntry(v: unknown): PatEntry | undefined {
   if (s) out.s = s;
   const i = dayOf(o.i);
   if (i) out.i = i;
+  if (typeof o.f === 'string' && /^[a-z0-9_]+(,[a-z0-9_]+){0,3}$/.test(o.f)) out.f = o.f;
   return out;
 }
 
@@ -82,7 +85,11 @@ export const patternStateNo = (s: PatternState): PatState => ORDER[s] as PatStat
  * Antwort in den Eintrag buchen: Zähler, die 5 Bits, die jüngsten 2 Tage „richtig ohne Hilfe“, der erste Tag „Sicher“ (`s`).
  * `ok` = richtig, `help` = mit Hilfe (Tipp, Stütze, zweiter Versuch). Ein Ergebnis zählt nur ohne Hilfe als richtig. Liefert einen neuen Eintrag.
  */
-export function patPush(e: PatEntry | undefined, a: { ok: boolean; help: boolean; day: string; t: number }): PatEntry {
+export const FORMS_MAX = 4;
+/** Die letzten Formen eines Musters (neueste zuletzt), tolerant gelesen. */
+export const formsOfPat = (e: PatEntry | undefined): string[] => (e?.f ? e.f.split(',') : []);
+
+export function patPush(e: PatEntry | undefined, a: { ok: boolean; help: boolean; day: string; t: number; form?: string }): PatEntry {
   const cur = readPatEntry(e) ?? { n: 0, c: 0, h: 0, r: 0, k: 0, dd: [] };
   const clean = a.ok && !a.help;
   const r = (((num(cur.r) << 1) | (clean ? 1 : 0)) & 31) >>> 0;
@@ -90,6 +97,7 @@ export function patPush(e: PatEntry | undefined, a: { ok: boolean; help: boolean
   const dd = clean && !(cur.dd ?? []).includes(a.day) ? [...(cur.dd ?? []), a.day].sort().slice(-DD_MAX) : [...(cur.dd ?? [])];
   const next: PatEntry = { ...cur, n: num(cur.n) + 1, c: num(cur.c) + (a.ok ? 1 : 0), h: num(cur.h) + (a.help ? 1 : 0), last: a.t, r, k, dd };
   if (!next.s && safeNow(next)) next.s = a.day;
+  if (a.form && /^[a-z0-9_]+$/.test(a.form)) next.f = [...formsOfPat(cur), a.form].slice(-FORMS_MAX).join(',');
   return next;
 }
 

@@ -9,6 +9,7 @@ import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
 import { buildExercise, type SceneLookup } from '../../domain/srs/exercise';
+import { sentKey } from '../../domain/srs/variety';
 import { chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
 import { inputProfile } from '../../platform/input';
 import { knownOp } from '../../domain/srs/vocabList';
@@ -620,6 +621,7 @@ export function commitAnswer(ans: Answer): FirstKind {
   };
   if ((e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc && e.colloc.index >= 0) a.colIndex = e.colloc.index;
   a.dev = s.env.touch ? 't' : 'k';
+  if (e.sentence?.sentence) a.sx = sentKey(e.sentence.sentence);
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
   if (ans.hint) a.hint = ans.hint;

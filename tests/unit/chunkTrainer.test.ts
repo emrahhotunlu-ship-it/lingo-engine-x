@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { deriveToday, type DayEntry } from '../../src/domain/plan/buildPlan';
 import { entryCardKey, logEntry, mergeLogEntries } from '../../src/domain/progress/logPatch';
 import { applyUpdate, chunkMode, chunkPatchSchema, reviewWrite } from '../../src/domain/srs/applyReview';
@@ -15,6 +15,9 @@ import { mulberry32 } from '../../src/domain/random';
 import { produceCheckReply } from '../../src/platform/dev/cannedReplies';
 import { produceCheck, produceVerdict } from '../../src/prompts/produceCheck';
 import { berlin, loadSeed } from './helpers';
+
+// Diese Tests prüfen den Satzwechsel mit den Sätzen der Karte selbst; die festen Zusatz-Sätze (V1, crossLink) prüfen variety.test und varietySim.test.
+vi.mock('../../src/domain/srs/crossLink', () => ({ crossSentences: () => [] }));
 
 // Wendungen in der täglichen Wiederholung (FSRS wie Vokabeln), Abfragearten je Stufe
 // (phase1-plan §4.2) und die neuen Bausteine der Übungen. Zeitpunkte über mehrere Tage (Kap. 15).

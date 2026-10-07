@@ -34,11 +34,22 @@ export function wantKinds(p: number, inp: C1Input, pat?: string | null, avail?: 
  * Alle Arten, die zum Muster passen und eingeschaltet sind: zuerst die der Stufe (`wantKinds`), danach die übrigen (für „andere Art desselben Musters“,
  * wenn es in der gewünschten Art nichts Ungesehenes mehr gibt).
  */
-export function kindsFor(p: number, inp: C1Input, pat?: string | null, avail?: ReadonlySet<C1Kind>): C1Kind[] {
-  const first = wantKinds(p, inp, pat, avail);
+export function kindsFor(p: number, inp: C1Input, pat?: string | null, avail?: ReadonlySet<C1Kind>, recent: readonly string[] = []): C1Kind[] {
+  const first = varyKinds(wantKinds(p, inp, pat, avail), recent);
   const allowed = patternKinds(pat);
   const rest = (['mcc', 'ocl', 'wf', 'kwt', 'err', 'pair', 'cnet', 'reg', 'para'] as const).filter((k) => !first.includes(k) && (allowed ? allowed.includes(k) : true) && (avail ? avail.has(k) : kindEnabled(k)));
   return [...first, ...rest];
+}
+
+/**
+ * Varianz (V1): Die Art, die bei diesem Muster zuletzt dran war (`recent`, neueste zuletzt, aus `pats[muster].f`), rückt innerhalb der Arten der
+ * Stufe ans Ende; die Arten der letzten Antworten stehen hinter den lange nicht gesehenen. Die Stufenwahl bleibt: es werden keine Arten hinzugenommen.
+ * Gibt es nur eine Art, bleibt sie (kein Verbot ohne Alternative).
+ */
+export function varyKinds(kinds: readonly C1Kind[], recent: readonly string[]): C1Kind[] {
+  if (kinds.length < 2 || !recent.length) return [...kinds];
+  const age = (k: C1Kind): number => recent.lastIndexOf(k);
+  return kinds.map((k, i) => ({ k, i, a: age(k) })).sort((x, y) => x.a - y.a || x.i - y.i).map((x) => x.k);
 }
 
 /** Darf die Aufgabe im Training vorkommen? Nie Check (`probe`), Kapitelprüfung/Einstufung (`pool`), gemeldete (`bad`). */

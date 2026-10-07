@@ -118,7 +118,8 @@ test('Am Handy gibt es nie Hören, Diktat oder eigenen Satz – auch nicht, wenn
   const { page, close } = await phone(browser);
   const { errors } = await startRound(page, { 'vocab/avoid': forcedDoc(5, { ...strong('cloze', 'complete'), ...weak('dictation'), produce: { c: 0, w: 9 } }) });
   const ex = await page.getByTestId('exercise').getAttribute('data-ex');
-  expect(['complete', 'cloze']).toContain(ex);
+  // V1: ab Stufe 4 mit wenig Formen kommen auch Nachbar-Arten (z. B. Wortpartner) dazu; verboten bleiben Hören, Diktat und der eigene Satz.
+  expect(['dictation', 'listen_mc', 'produce', 'flip']).not.toContain(ex);
   await expect(page.getByTestId('replay')).toHaveCount(0);
   await expect(page.getByTestId('produce-input')).toHaveCount(0);
   expect(errors).toEqual([]);
