@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { boot, screen } from './fixtures';
+import { boot, bootAt, screen } from './fixtures';
 import { forcedPatch, planPatch } from './trainerHelpers';
 
 // Kap. 4.4 Übergänge mit gemeinsamen Elementen: Heldenkarte → erste Übung, Kurszeile → Kopf der
@@ -68,3 +68,39 @@ test('prefers-reduced-motion: kein Flug, nur Überblendung', async ({ page }) =>
   expect(p.frames.length).toBeGreaterThan(0);
   expect(moving(p)).toEqual([]);
 });
+
+// Lernplattform 2.0 §10.4 P8: Wechsel zur nächsten Aufgabe ≤ 250 ms (Median) bei 390 px, mit und ohne Bewegungseinstellung.
+// Gemessen wird in der Seite: vom Klick auf „Weiter“ bis die nächste Aufgabe (anderer Satz) im DOM steht.
+for (const reduced of [false, true]) {
+  test(`Grammatikrunde: Wechsel zur nächsten Aufgabe im Median ≤ 250 ms (${reduced ? 'reduzierte' : 'volle'} Bewegung, 390 px)`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    if (reduced) await page.emulateMedia({ reducedMotion: 'reduce' });
+    const { errors } = await bootAt(page, { name: 'grammarSession', mode: 'duty' });
+    await screen(page, 'grammarSession');
+    const times: number[] = [];
+    for (let i = 0; i < 5; i++) {
+      await expect(page.getByTestId('gr-item')).toBeVisible();
+      await page.getByTestId('dont-know').click();
+      await expect(page.getByTestId('next')).toBeVisible();
+      const ms = await page.evaluate(
+        () =>
+          new Promise<number>((resolve) => {
+            const before = document.querySelector('[data-testid="gr-item"]')?.textContent ?? '';
+            const t0 = performance.now();
+            const poll = (): void => {
+              const el = document.querySelector('[data-testid="gr-item"]');
+              if (!el || (el.textContent !== before && !document.querySelector('[data-testid="result"]'))) resolve(performance.now() - t0);
+              else requestAnimationFrame(poll);
+            };
+            (document.querySelector('[data-testid="next"]') as HTMLElement).click();
+            requestAnimationFrame(poll);
+          }),
+      );
+      times.push(ms);
+      if (await page.getByTestId('summary').count()) break;
+    }
+    const median = [...times].sort((a, b) => a - b)[Math.floor(times.length / 2)] ?? 0;
+    expect(median, `Wechselzeiten ${times.map((t) => Math.round(t)).join(', ')} ms`).toBeLessThanOrEqual(250);
+    expect(errors).toEqual([]);
+  });
+}
