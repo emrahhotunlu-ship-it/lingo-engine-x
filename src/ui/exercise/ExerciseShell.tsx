@@ -83,6 +83,8 @@ export type ExerciseShellProps = {
   feedback?: ShellFeedback | null;
   side?: ReactNode | null;
   layout?: 'auto' | 'stack' | 'split';
+  /** Tastaturhinweis am Laptop je Übungsart (UX-Prüfung W5/W9): eigener Text, `null` = keiner; sonst nach Art (Auswahl oder Tippen). */
+  keysHint?: string | null;
   /** Skelett in Kartengröße statt Inhalt (nie ein Leerbild). */
   loading?: boolean;
   /** Optional: `retry` (Hinweis mit Leitfrage, Eingabe bleibt) und `aiError`; sonst aus `feedback`/`primary.busy` abgeleitet. */
@@ -98,12 +100,13 @@ export function deriveShellState(p: Pick<ExerciseShellProps, 'loading' | 'state'
 }
 
 export function ExerciseShell(props: ExerciseShellProps) {
-  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto' } = props;
+  const { meta, status, task, aid = null, prompt, answer, hint = null, secondary = [], primary, barOverride, feedback = null, side = null, layout = 'auto', keysHint } = props;
   const { t } = useT();
   const state = deriveShellState(props);
   const profileSplit = useSplitLayout();
   const split = layout === 'split' || (layout === 'auto' && profileSplit);
   const tablet = useMediaQuery('(min-width: 768px)');
+  const fine = useMediaQuery('(pointer: fine)');
   const [info, setInfo] = useState(false);
   const infoId = useId();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -345,9 +348,15 @@ export function ExerciseShell(props: ExerciseShellProps) {
           </aside>
         )}
       </div>
-      {split && (
+      {fine && keysHint !== null && (split || keysHint) && (
         <p className="lx-t-meta text-subtle" data-testid="keys-hint">
-          {t('exKeysHint')}
+          {/* Hinweis je Art: nur wo Optionen stehen, nennt er „A–D oder 1–4 wählen“ (Auswahl per CSS `:has`, dz2.css). */}
+          {keysHint ?? (
+            <>
+              <span className="dz-kh-choice">{t('exKeysHint')}</span>
+              <span className="dz-kh-typed">{t('exKeysHintTyped')}</span>
+            </>
+          )}
         </p>
       )}
       {!split && bar}

@@ -111,7 +111,7 @@ export function StandLevels({ dims, cefr, sameLang }: { dims: readonly AssessDim
         {rows.map((d) => `${label(d)} ${d.level ?? '–'}`).join(' · ')}
       </p>
       <ul className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-        {rows.map((d) => (
+        {rows.map((d, i) => (
           <li key={d.id} className="flex flex-col gap-1.5" data-testid="dim" data-id={d.id} data-level={d.level ?? ''} data-confidence={d.confidence}>
             <span className="text-sm font-medium">{label(d)}</span>
             {d.level ? (
@@ -128,7 +128,8 @@ export function StandLevels({ dims, cefr, sameLang }: { dims: readonly AssessDim
                     {t('hxStandC1')}
                   </span>
                 </div>
-                {sameLang && d.why && (
+                {/* UX-Prüfung W7: derselbe Begründungssatz steht nur einmal. */}
+                {sameLang && d.why && !(i > 0 && d.why === rows[0]?.why) && (
                   <span className="text-sm text-muted" data-testid="dim-why">
                     {d.why}
                   </span>

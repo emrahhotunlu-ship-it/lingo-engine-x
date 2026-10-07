@@ -26,9 +26,9 @@ export function LearningSection() {
       <Segmented
         label={t('setNewPerDay')}
         value={String(perDay)}
-        columns={4}
         testId="set-newperday"
-        options={NEW_PER_DAY_OPTIONS.map((n) => ({ value: String(n), label: String(n) }))}
+        // UX-Prüfung W11: „0“ widersprach „mindestens 2 am Tag“ – zur Wahl stehen nur 2, 5 und 10 (gespeicherte Werte bleiben unberührt).
+        options={NEW_PER_DAY_OPTIONS.filter((n) => n > 0).map((n) => ({ value: String(n), label: String(n) }))}
         onChange={(v) => void changeNewPerDay(Number(v))}
       />
       <p className="text-sm text-muted">{t('setNewPerDayHint')}</p>

@@ -117,7 +117,7 @@ export const nbProfilDe = {
   nbProfilExpected: 'Erwartet gekonnt',
   nbProfilExpectedSub: 'von {n} gelernten Wörtern, heute geschätzt. Sinkt bei Pausen.',
   nbProfilRetention: 'Behalten nach Pause',
-  nbProfilRetentionSub: 'letzte 28 Tage, nur Antworten nach mindestens 7 Tagen Pause',
+  nbProfilRetentionSub: 'Letzte 28 Tage, nur Antworten nach mindestens 7 Tagen Pause.',
   nbProfilRetentionNone: 'Zu wenig Daten: erst ab 30 Antworten ({n} bisher).',
   nbProfilRetentionLow: 'Unter dem Zielbereich von 85 bis 93 %.',
   nbProfilRetentionIn: 'Im Zielbereich von 85 bis 93 %.',

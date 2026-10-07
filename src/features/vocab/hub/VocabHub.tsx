@@ -62,7 +62,7 @@ export function Counts({ c, testId }: { c: DeckCounts; testId?: string }) {
 }
 
 export function VocabHub() {
-  const { t, tn, lang, num } = useT();
+  const { t, tn, lang, num, date } = useT();
   const api = useHiddenInput();
   const go = useNav((s) => s.go);
   const now = useClock((s) => s.now);
@@ -202,7 +202,7 @@ export function VocabHub() {
           <p className="lx-tnum m-0 mt-1 text-xs text-muted">{t('nbWsHGoalMark', { mark: num(C1_MARK) })}</p>
         </div>
         <p className="m-0 text-sm text-muted" data-testid="ws-goal-source">
-          {goal.measured ? t('hxWsSource', { n: num(goalNow), date: goal.measuredOn ?? '', fest: num(goal.fest) }) : t('hxWsSourceNone', { fest: num(goal.fest) })}
+          {goal.measured ? t('hxWsSource', { date: goal.measuredOn ? date(Date.parse(`${goal.measuredOn}T12:00:00`)) : '', fest: num(goal.fest) }) : t('hxWsSourceNone', { fest: num(goal.fest) })}
         </p>
         <p className="m-0 text-sm text-muted" data-testid="ws-goal-pace">
           {!goal.measured

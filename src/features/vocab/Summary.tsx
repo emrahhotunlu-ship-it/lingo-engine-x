@@ -85,7 +85,9 @@ export function Summary({ onBack }: { onBack: () => void }) {
   const wrong = [...byKey.values()].filter((r) => !r.ok);
   // Wachstum (LP3 P28): Zustand zu Beginn der Runde (`pool`) gegen jetzt (`cards`); alle Zahlen kommen aus dem Selektor `roundGrowth`.
   const rg = roundGrowth(pool, [...cards.values()]);
-  const growthView = n > 0 ? { up: rg.up, memory: rg.memory, down: rg.down, hard: hardRound(right, n), onOpen: (id: string) => setSheet(cards.get(id) ?? null) } : null;
+  // UX-Prüfung W6: ein Wort, das in dieser Runde falsch war, steht nicht unter „Aufgestiegen“ (es steht unter „Das nimmst du mit“).
+  const wrongIds = new Set(wrong.map((r) => r.key));
+  const growthView = n > 0 ? { up: rg.up.filter((u) => !wrongIds.has(u.id)), memory: rg.memory, down: rg.down, hard: hardRound(right, n), onOpen: (id: string) => setSheet(cards.get(id) ?? null) } : null;
   const facts = n > 0 && rg.up.length === 0 && !rg.memory ? [t('wxEndNone')] : [];
   const seeds = new Map<string, Record<string, unknown>>();
   for (const c of cards.values()) if (!c.inDb) seeds.set(c.id, { ...c.doc });
@@ -112,7 +114,7 @@ export function Summary({ onBack }: { onBack: () => void }) {
             <li key={r.key}>
               <button
                 type="button"
-                className="inline-flex min-h-11 items-center rounded-full border border-line px-3 text-sm text-wrong-text hover:bg-surface"
+                className="inline-flex min-h-11 items-center rounded-full border border-line px-3 text-sm text-fg hover:bg-surface"
                 data-testid="summary-chip"
                 data-ok=""
                 onClick={() => setSheet(cards.get(r.key) ?? null)}
@@ -125,6 +127,7 @@ export function Summary({ onBack }: { onBack: () => void }) {
         <div>
           <Button
             variant="secondary"
+            className="w-full"
             onClick={() => {
               onBack();
               startExtra(api, { only: wrong.map((r) => r.key), label: t('wxEndWrongTitle') });
