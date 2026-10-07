@@ -1,0 +1,1724 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "err-0082",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.wondering",
+   "topic": "c1-diplomacy",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I was wondering if could you confirm the venue by Friday.",
+   "bad": {
+    "span": "could you confirm",
+    "fix": [
+     "you could confirm"
+    ],
+    "choices": [
+     "you could confirm",
+     "you could confirmed",
+     "could you confirmed"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach wondering if steht normale Satzstellung: you could confirm, keine Frage-Umstellung. Deutsch „ob du bestätigen könntest“ hat Verb am Ende, das verwirrt die Stellung.",
+     "en": "After wondering if comes normal word order: you could confirm, not question order."
+    },
+    "wrong": [
+     {
+      "opt": "you could confirmed",
+      "de": "Nach could steht die Grundform: could confirm.",
+      "en": "After could comes the base form: could confirm."
+     },
+     {
+      "opt": "could you confirmed",
+      "de": "Mit could vorn bleibt die Frage-Umstellung, und confirmed ist falsch.",
+      "en": "Question order stays with could first, and confirmed is wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „could you confirm“, nicht hier.",
+      "en": "The mistake is at “could you confirm”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „could you confirm“ ist falsch.",
+      "en": "There is a mistake: “could you confirm” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0083",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.wondering",
+   "topic": "c1-diplomacy",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I was wondering whether you would be able sending me the agenda before Monday.",
+   "bad": {
+    "span": "able sending",
+    "fix": [
+     "able to send"
+    ],
+    "choices": [
+     "able send",
+     "able to send",
+     "able to sending"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Be able braucht to + Grundform: able to send. Deutsch „in der Lage sein zu senden“ nutzt zu + Infinitiv, das -ing drängt sich von anderen Wendungen auf.",
+     "en": "Be able needs to + base form: able to send. German uses zu + infinitive; the -ing comes from other phrases."
+    },
+    "wrong": [
+     {
+      "opt": "able send",
+      "de": "Hinter able fehlt to.",
+      "en": "to is missing after able."
+     },
+     {
+      "opt": "able to sending",
+      "de": "Nach to steht die Grundform, nicht -ing.",
+      "en": "After to comes the base form, not -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „able sending“, nicht hier.",
+      "en": "The mistake is at “able sending”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „able sending“ ist falsch.",
+      "en": "There is a mistake: “able sending” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0084",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.hoping",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We were hoping getting your feedback by the end of the day.",
+   "bad": {
+    "span": "getting",
+    "fix": [
+     "to get",
+     "to receive"
+    ],
+    "choices": [
+     "get",
+     "to getting",
+     "to get"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach hope steht to + Grundform: hoping to get. Deutsch „hofften, zu bekommen“ nutzt zu + Infinitiv. -ing kommt von Verben wie enjoy.",
+     "en": "After hope comes to + base form: hoping to get. -ing comes from verbs like enjoy."
+    },
+    "wrong": [
+     {
+      "opt": "get",
+      "de": "Hinter hoping fehlt to.",
+      "en": "to is missing after hoping."
+     },
+     {
+      "opt": "to getting",
+      "de": "Nach to steht die Grundform, nicht -ing.",
+      "en": "After to comes the base form, not -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „getting“, nicht hier.",
+      "en": "The mistake is at “getting”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „getting“ ist falsch.",
+      "en": "There is a mistake: “getting” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0085",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.hoping",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We were hoping for to hear from you before the end of the week.",
+   "bad": {
+    "span": "for to hear",
+    "fix": [
+     "to hear"
+    ],
+    "choices": [
+     "to hear",
+     "for hearing",
+     "for hear"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Entweder hoping to hear oder hoping for a reply. „For to“ geht im Englischen nicht. Deutsch „auf … hoffen zu“ vermischt beides.",
+     "en": "Either hoping to hear or hoping for a reply. “For to” is not possible in English."
+    },
+    "wrong": [
+     {
+      "opt": "for hearing",
+      "de": "Nach hoping steht für etwas Konkretes „for + Nomen“, hier fehlt das Nomen.",
+      "en": "“for + noun” names something concrete, but here the noun is missing."
+     },
+     {
+      "opt": "for hear",
+      "de": "Nach for steht ein Nomen oder -ing, aber hier ist die Wendung hoping to hear gemeint.",
+      "en": "After for comes a noun; the intended phrase is hoping to hear."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „for to hear“, nicht hier.",
+      "en": "The mistake is at “for to hear”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „for to hear“ ist falsch.",
+      "en": "There is a mistake: “for to hear” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0086",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.possible",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Would it possible to move the demo to Thursday morning?",
+   "bad": {
+    "span": "it possible",
+    "fix": [
+     "it be possible"
+    ],
+    "choices": [
+     "be possible",
+     "it be possible",
+     "it is possible"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach would fehlt das be: Would it be possible. Deutsch „Wäre es möglich“ trägt das „sein“ im Wort „wäre“.",
+     "en": "After would the be is missing: Would it be possible. German carries “sein” inside “wäre”."
+    },
+    "wrong": [
+     {
+      "opt": "be possible",
+      "de": "Ohne it fehlt das Subjekt.",
+      "en": "Without it the subject is missing."
+     },
+     {
+      "opt": "it is possible",
+      "de": "Nach would steht die Grundform be, nicht is.",
+      "en": "After would comes the base form be, not is."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „it possible“, nicht hier.",
+      "en": "The mistake is at “it possible”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „it possible“ ist falsch.",
+      "en": "There is a mistake: “it possible” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0087",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.understate",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "That deadline would be a bit challenge for our small team.",
+   "bad": {
+    "span": "a bit challenge",
+    "fix": [
+     "a bit of a challenge",
+     "a bit challenging"
+    ],
+    "choices": [
+     "a bit of challenge",
+     "bit a challenge",
+     "a bit of a challenge"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Mit Nomen heißt es a bit of a challenge, mit Adjektiv a bit challenging. „A bit challenge“ mischt beides.",
+     "en": "With a noun it is a bit of a challenge, with an adjective a bit challenging. “A bit challenge” mixes both."
+    },
+    "wrong": [
+     {
+      "opt": "a bit of challenge",
+      "de": "Nach a bit of braucht das Nomen einen Artikel: a challenge.",
+      "en": "After a bit of the noun needs an article: a challenge."
+     },
+     {
+      "opt": "bit a challenge",
+      "de": "Die Reihenfolge ist a bit, nicht bit a.",
+      "en": "The order is a bit, not bit a."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „a bit challenge“, nicht hier.",
+      "en": "The mistake is at “a bit challenge”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „a bit challenge“ ist falsch.",
+      "en": "There is a mistake: “a bit challenge” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0088",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.understate",
+   "topic": "c1-diplomacy",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "That would be a little stretch for our team in the current quarter.",
+   "bad": {
+    "span": "a little stretch",
+    "fix": [
+     "a bit of a stretch",
+     "a little bit of a stretch"
+    ],
+    "choices": [
+     "a bit of a stretch",
+     "a bit stretch",
+     "a stretching"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Die höfliche Abschwächung heißt a bit of a stretch. Vor einem Nomen braucht a little ein „bit of a“. Deutsch „ein bisschen Anstrengung“ hat keinen Artikel.",
+     "en": "The polite softener is a bit of a stretch. Before a noun a little needs “bit of a”."
+    },
+    "wrong": [
+     {
+      "opt": "a bit stretch",
+      "de": "A bit stretch hat kein of und keinen Artikel.",
+      "en": "“a bit stretch” lacks of and the article."
+     },
+     {
+      "opt": "a stretching",
+      "de": "„a stretching“ ändert das Wort und passt nicht.",
+      "en": "“a stretching” changes the word and does not fit."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „a little stretch“, nicht hier.",
+      "en": "The mistake is at “a little stretch”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „a little stretch“ ist falsch.",
+      "en": "There is a mistake: “a little stretch” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0089",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.wondering",
+   "topic": "c1-diplomacy",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I was wondering if you could confirm the venue before Friday.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: was wondering if you could … ist die höfliche Bitte mit Abstand durch die Vergangenheitsform.",
+     "en": "No mistake: was wondering if you could … is the polite request, with distance from the past tense."
+    },
+    "wrong": [
+     {
+      "tap": "could",
+      "de": "Hier ist could richtig, weil nach if keine Frageform folgt. „could you“ wäre der Fehler.",
+      "en": "Could is right here because no question order follows if. “could you” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0090",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.hoping",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We were hoping to get your feedback before the end of the week.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: were hoping to + Grundform ist die höfliche Form eines Wunsches.",
+     "en": "No mistake: were hoping to + base form is the polite form of a wish."
+    },
+    "wrong": [
+     {
+      "tap": "hoping",
+      "de": "Die Vergangenheit macht den Wunsch höflicher. „We hope“ klingt direkter.",
+      "en": "The past tense makes the wish more polite. “We hope” sounds more direct."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0091",
+   "kind": "err",
+   "area": "gram",
+   "pat": "dip.possible",
+   "topic": "c1-diplomacy",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Would it be possible to share the slides before the meeting starts?",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Would it be possible + to + Grundform ist die höfliche Frage nach einer Möglichkeit.",
+     "en": "No mistake: Would it be possible + to + base form is the polite question about a possibility."
+    },
+    "wrong": [
+     {
+      "tap": "possible",
+      "de": "Hier ist possible richtig. „possibly“ wäre das falsche Wort.",
+      "en": "Possible is right here. “possibly” would be the wrong word."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0092",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.zero",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If an invoice arrives after the cutoff, it would be processed on the next working day.",
+   "bad": {
+    "span": "would be processed",
+    "fix": [
+     "is processed",
+     "will be processed"
+    ],
+    "choices": [
+     "are processed",
+     "is processed",
+     "would processed"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Eine feste Regel oder echte Möglichkeit braucht im Hauptsatz das Present oder will: is processed. would passt zu unwirklichen Fällen.",
+     "en": "A fixed rule or real possibility takes the present or will in the main clause: is processed. Would fits unreal cases."
+    },
+    "wrong": [
+     {
+      "opt": "are processed",
+      "de": "Zu it passt is, nicht are.",
+      "en": "With it the form is is, not are."
+     },
+     {
+      "opt": "would processed",
+      "de": "„would processed“ lässt be aus.",
+      "en": "“would processed” drops be."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would be processed“, nicht hier.",
+      "en": "The mistake is at “would be processed”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would be processed“ ist falsch.",
+      "en": "There is a mistake: “would be processed” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0093",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.first",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If the client will sign the quote today, we will start next week.",
+   "bad": {
+    "span": "will sign",
+    "fix": [
+     "signs",
+     "has signed"
+    ],
+    "choices": [
+     "is sign",
+     "signing",
+     "signs"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach if steht bei echter Zukunft das Present: If the client signs. Das will gehört in den Hauptsatz. Deutsch „wenn der Kunde unterschreiben wird“ zieht will in den if-Satz.",
+     "en": "After if comes the present for a real future: If the client signs. The will belongs in the main clause."
+    },
+    "wrong": [
+     {
+      "opt": "is sign",
+      "de": "„is sign“ mischt Hilfsverb und Grundform.",
+      "en": "“is sign” mixes auxiliary and base form."
+     },
+     {
+      "opt": "signing",
+      "de": "„signing“ allein ist kein Prädikat.",
+      "en": "“signing” alone is no predicate."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will sign“, nicht hier.",
+      "en": "The mistake is at “will sign”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will sign“ ist falsch.",
+      "en": "There is a mistake: “will sign” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0094",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.second",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If our team would have more capacity, we would take on the new client.",
+   "bad": {
+    "span": "would have",
+    "fix": [
+     "had"
+    ],
+    "choices": [
+     "had",
+     "having",
+     "would had"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Im if-Teil steht die Past-Form, kein would: If our team had. Deutsch „wenn wir mehr hätten“ klingt nach „würden haben“.",
+     "en": "The if-clause takes the past form, no would: If our team had. German “wenn wir mehr hätten” sounds like “würden haben”."
+    },
+    "wrong": [
+     {
+      "opt": "having",
+      "de": "„having“ allein ist kein Prädikat.",
+      "en": "“having” alone is no predicate."
+     },
+     {
+      "opt": "would had",
+      "de": "„would had“ mischt zwei Formen.",
+      "en": "“would had” mixes two forms."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would have“, nicht hier.",
+      "en": "The mistake is at “would have”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would have“ ist falsch.",
+      "en": "There is a mistake: “would have” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0095",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.were",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If I would be in your position, I would ask for a raise.",
+   "bad": {
+    "span": "would be",
+    "fix": [
+     "were"
+    ],
+    "choices": [
+     "being",
+     "were",
+     "would being"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Für Rat und Annahme steht nach if were, nicht would be. Deutsch „wenn ich wäre“ klingt nach „würde sein“.",
+     "en": "For advice and assumptions were follows if, not would be. German “wenn ich wäre” sounds like “würde sein”."
+    },
+    "wrong": [
+     {
+      "opt": "being",
+      "de": "„being“ allein ist kein Prädikat.",
+      "en": "“being” alone is no predicate."
+     },
+     {
+      "opt": "would being",
+      "de": "„would being“ gibt es nicht.",
+      "en": "“would being” does not exist."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would be“, nicht hier.",
+      "en": "The mistake is at “would be”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would be“ ist falsch.",
+      "en": "There is a mistake: “would be” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0096",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.third",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If the vendor would have warned us, we would have changed the order.",
+   "bad": {
+    "span": "would have warned",
+    "fix": [
+     "had warned"
+    ],
+    "choices": [
+     "would warned",
+     "has warned",
+     "had warned"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Im if-Teil steht had + 3. Form, nicht would have: If the vendor had warned. Would have gehört in den Hauptsatz.",
+     "en": "The if-clause takes had + participle, not would have: If the vendor had warned. Would have belongs in the main clause."
+    },
+    "wrong": [
+     {
+      "opt": "would warned",
+      "de": "„would warned“ lässt have aus.",
+      "en": "“would warned” drops have."
+     },
+     {
+      "opt": "has warned",
+      "de": "Has passt nicht zu einer Vergangenheit mit would have im Hauptsatz.",
+      "en": "Has does not fit a past reference with would have in the main clause."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would have warned“, nicht hier.",
+      "en": "The mistake is at “would have warned”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would have warned“ ist falsch.",
+      "en": "There is a mistake: “would have warned” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0097",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.if-words",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will agree to the discount provided that you will order at least 500 units.",
+   "bad": {
+    "span": "will order",
+    "fix": [
+     "order"
+    ],
+    "choices": [
+     "order",
+     "ordering",
+     "would order"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach provided that steht das Present, nicht will. Deutsch „vorausgesetzt, Sie werden bestellen“ zieht will in den Nebensatz.",
+     "en": "After provided that comes the present, not will. German “vorausgesetzt, Sie werden bestellen” pulls will in."
+    },
+    "wrong": [
+     {
+      "opt": "ordering",
+      "de": "„ordering“ allein ist kein Prädikat.",
+      "en": "“ordering” alone is no predicate."
+     },
+     {
+      "opt": "would order",
+      "de": "„would order“ verschiebt den Satz in eine andere Zeit.",
+      "en": "“would order” moves the sentence into another time frame."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will order“, nicht hier.",
+      "en": "The mistake is at “will order”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will order“ ist falsch.",
+      "en": "There is a mistake: “will order” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0098",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.third",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If we had tested earlier, we would caught the bug before the release.",
+   "bad": {
+    "span": "would caught",
+    "fix": [
+     "would have caught"
+    ],
+    "choices": [
+     "would catching",
+     "would have caught",
+     "would have catch"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Im Hauptsatz einer unerfüllten Vergangenheit steht would have + 3. Form. Es fehlt have: would have caught.",
+     "en": "In the main clause of an unreal past comes would have + participle. The have is missing: would have caught."
+    },
+    "wrong": [
+     {
+      "opt": "would catching",
+      "de": "Nach would steht die Grundform, nicht -ing.",
+      "en": "After would comes the base form, not -ing."
+     },
+     {
+      "opt": "would have catch",
+      "de": "Nach would have steht die 3. Form (caught), nicht catch.",
+      "en": "After would have comes the participle (caught), not catch."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would caught“, nicht hier.",
+      "en": "The mistake is at “would caught”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would caught“ ist falsch.",
+      "en": "There is a mistake: “would caught” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0099",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.zero",
+   "topic": "conditionals",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If an order arrives after 5 p.m., it ships the next working day.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Eine feste Regel steht im Present Simple in beiden Teilen: arrives … ships.",
+     "en": "No mistake: a fixed rule takes the present simple in both parts: arrives … ships."
+    },
+    "wrong": [
+     {
+      "tap": "ships",
+      "de": "Das Present ist hier richtig, es ist eine Regel. „would ship“ wäre der Fehler.",
+      "en": "The present is right here because it is a rule. “would ship” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0100",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.were",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If I were you, I would ask for a raise before the review.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: If I were you ist die feste Wendung für einen Rat.",
+     "en": "No mistake: If I were you is the set phrase for advice."
+    },
+    "wrong": [
+     {
+      "tap": "were",
+      "de": "Nach if steht bei I formal were. „was“ wäre in dieser Wendung unüblich.",
+      "en": "After if with I the formal form is were. “was” would be unusual in this phrase."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0101",
+   "kind": "err",
+   "area": "gram",
+   "pat": "cn.if-words",
+   "topic": "conditionals",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will accept the revised terms provided that you pay within thirty days.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach provided that steht das Present: provided that you pay.",
+     "en": "No mistake: after provided that comes the present: provided that you pay."
+    },
+    "wrong": [
+     {
+      "tap": "pay",
+      "de": "Das Present ist hier richtig. „will pay“ wäre der Fehler.",
+      "en": "The present is right here. “will pay” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0102",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.unless",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Unless you don’t sign the contract today, the offer will expire tonight.",
+   "bad": {
+    "span": "don’t sign",
+    "fix": [
+     "sign"
+    ],
+    "choices": [
+     "didn’t sign",
+     "won’t sign",
+     "sign"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Unless bedeutet schon „wenn nicht“. Eine zweite Verneinung dreht den Sinn um: Unless you sign. Deutsch „es sei denn, du unterschreibst nicht“ führt zur Doppelung.",
+     "en": "Unless already means “if not”. A second negation reverses the meaning: Unless you sign."
+    },
+    "wrong": [
+     {
+      "opt": "didn’t sign",
+      "de": "„didn’t sign“ verneint ein zweites Mal und ist Vergangenheit.",
+      "en": "“didn’t sign” negates a second time and is past."
+     },
+     {
+      "opt": "won’t sign",
+      "de": "„won’t sign“ ist ebenfalls verneint.",
+      "en": "“won’t sign” is also negated."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „don’t sign“, nicht hier.",
+      "en": "The mistake is at “don’t sign”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „don’t sign“ ist falsch.",
+      "en": "There is a mistake: “don’t sign” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0103",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.as-long-as",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "As long as it will not rain, we will hold the client event outside.",
+   "bad": {
+    "span": "will not rain",
+    "fix": [
+     "doesn’t rain",
+     "does not rain"
+    ],
+    "choices": [
+     "doesn’t rain",
+     "not rain",
+     "no rain"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach as long as steht das Present, nicht will. Deutsch „solange es nicht regnen wird“ zieht das Futur nach.",
+     "en": "After as long as comes the present, not will. German pulls the future in."
+    },
+    "wrong": [
+     {
+      "opt": "not rain",
+      "de": "Das Verb braucht ein Hilfsverb: does not rain.",
+      "en": "The verb needs an auxiliary: does not rain."
+     },
+     {
+      "opt": "no rain",
+      "de": "„no rain“ ist ein Nomen und kein Verb.",
+      "en": "“no rain” is a noun and no verb."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will not rain“, nicht hier.",
+      "en": "The mistake is at “will not rain”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will not rain“ ist falsch.",
+      "en": "There is a mistake: “will not rain” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0104",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.otherwise",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Otherwise you confirm the venue this week, we can’t hold the event.",
+   "bad": {
+    "span": "Otherwise you confirm",
+    "fix": [
+     "Unless you confirm",
+     "If you don’t confirm"
+    ],
+    "choices": [
+     "Unless you don’t confirm",
+     "Unless you confirm",
+     "If you confirm"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Otherwise steht allein als Satzanfang („sonst“), nicht als Bindewort. Hier passt Unless oder If … don’t.",
+     "en": "Otherwise stands alone as a sentence opening (“or else”), not as a conjunction. Here Unless or If … don’t fits."
+    },
+    "wrong": [
+     {
+      "opt": "Unless you don’t confirm",
+      "de": "„Unless you don’t“ verneint doppelt.",
+      "en": "“Unless you don’t” negates twice."
+     },
+     {
+      "opt": "If you confirm",
+      "de": "„If you confirm“ kehrt den Sinn um: dann könnte man die Veranstaltung halten.",
+      "en": "“If you confirm” reverses the meaning: then the event could be held."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „Otherwise you confirm“, nicht hier.",
+      "en": "The mistake is at “Otherwise you confirm”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „Otherwise you confirm“ ist falsch.",
+      "en": "There is a mistake: “Otherwise you confirm” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0105",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.but-for",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "But for your help last week, the launch would fail.",
+   "bad": {
+    "span": "would fail",
+    "fix": [
+     "would have failed"
+    ],
+    "choices": [
+     "would failed",
+     "had failed",
+     "would have failed"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Vergangenheit („last week“) braucht would have + 3. Form: would have failed. But for ersetzt If it had not been for.",
+     "en": "The past (“last week”) needs would have + participle: would have failed. But for replaces If it had not been for."
+    },
+    "wrong": [
+     {
+      "opt": "would failed",
+      "de": "„would failed“ lässt have aus.",
+      "en": "“would failed” drops have."
+     },
+     {
+      "opt": "had failed",
+      "de": "„had failed“ gibt es hier nicht: nach But for steht would have.",
+      "en": "“had failed” is not possible here: But for takes would have."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would fail“, nicht hier.",
+      "en": "The mistake is at “would fail”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would fail“ ist falsch.",
+      "en": "There is a mistake: “would fail” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0106",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.inversion",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Had we known about the audit, we had planned the release differently.",
+   "bad": {
+    "span": "we had planned",
+    "fix": [
+     "we would have planned"
+    ],
+    "choices": [
+     "we would have planned",
+     "we planned",
+     "we would planned"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach der Inversion (Had we known) steht im Hauptsatz would have + 3. Form: we would have planned.",
+     "en": "After the inversion (Had we known) the main clause takes would have + participle: we would have planned."
+    },
+    "wrong": [
+     {
+      "opt": "we planned",
+      "de": "Past Simple trägt keinen Konditional-Sinn.",
+      "en": "The past simple carries no conditional meaning."
+     },
+     {
+      "opt": "we would planned",
+      "de": "„would planned“ lässt have aus.",
+      "en": "“would planned” drops have."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „we had planned“, nicht hier.",
+      "en": "The mistake is at “we had planned”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „we had planned“ ist falsch.",
+      "en": "There is a mistake: “we had planned” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0107",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.inversion",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Should you will have any questions, please call me directly.",
+   "bad": {
+    "span": "will have",
+    "fix": [
+     "have"
+    ],
+    "choices": [
+     "to have",
+     "have",
+     "having"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach Should you steht die Grundform: Should you have. Das will ist doppelt, die Inversion ersetzt schon das if.",
+     "en": "After Should you comes the base form: Should you have. The will is redundant because the inversion already replaces if."
+    },
+    "wrong": [
+     {
+      "opt": "to have",
+      "de": "Nach should steht kein to.",
+      "en": "After should no to follows."
+     },
+     {
+      "opt": "having",
+      "de": "„having“ allein ist kein Prädikat.",
+      "en": "“having” alone is no predicate."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will have“, nicht hier.",
+      "en": "The mistake is at “will have”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will have“ ist falsch.",
+      "en": "There is a mistake: “will have” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0108",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.in-case",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I will bring a printed copy in case the projector will fail.",
+   "bad": {
+    "span": "will fail",
+    "fix": [
+     "fails",
+     "should fail"
+    ],
+    "choices": [
+     "failing",
+     "failed",
+     "fails"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach in case steht das Present (oder should): in case the projector fails. Das will gehört nicht in den Nebensatz.",
+     "en": "After in case comes the present (or should): in case the projector fails. The will does not belong in the clause."
+    },
+    "wrong": [
+     {
+      "opt": "failing",
+      "de": "„failing“ allein ist kein Prädikat.",
+      "en": "“failing” alone is no predicate."
+     },
+     {
+      "opt": "failed",
+      "de": "„failed“ ist Vergangenheit, aber der Satz spricht von der Zukunft.",
+      "en": "“failed” is past, but the sentence is about the future."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will fail“, nicht hier.",
+      "en": "The mistake is at “will fail”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will fail“ ist falsch.",
+      "en": "There is a mistake: “will fail” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0109",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.unless",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We will ship on Monday unless the client objects to the date.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Unless steht mit der bejahten Form: unless the client objects.",
+     "en": "No mistake: unless takes the affirmative form: unless the client objects."
+    },
+    "wrong": [
+     {
+      "tap": "objects",
+      "de": "Hier ist objects richtig, weil unless schon „wenn nicht“ enthält. „doesn’t object“ wäre doppelt verneint.",
+      "en": "Objects is right because unless already holds “if not”. “doesn’t object” would be double negation."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0110",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.as-long-as",
+   "topic": "cond-alt",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Staff may work remotely as long as they attend the Monday team sync.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach as long as steht das Present: as long as they attend.",
+     "en": "No mistake: after as long as comes the present: as long as they attend."
+    },
+    "wrong": [
+     {
+      "tap": "attend",
+      "de": "Das Present ist hier richtig. „will attend“ wäre der Fehler.",
+      "en": "The present is right here. “will attend” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0111",
+   "kind": "err",
+   "area": "gram",
+   "pat": "ca.inversion",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Had we known about the delay in time, we would have rescheduled the launch.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Had we known ist die förmliche Inversion von If we had known, danach would have + 3. Form.",
+     "en": "No mistake: Had we known is the formal inversion of If we had known, followed by would have + participle."
+    },
+    "wrong": [
+     {
+      "tap": "Had",
+      "de": "Hier steht Had zuerst, ohne if: genau die richtige Inversion.",
+      "en": "Had comes first without if: exactly the right inversion."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0112",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.wish-past",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish I would have asked for a written quote before the call.",
+   "bad": {
+    "span": "would have asked",
+    "fix": [
+     "had asked"
+    ],
+    "choices": [
+     "had asked",
+     "would asked",
+     "have asked"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach wish steht für die Vergangenheit had + 3. Form: had asked. Deutsch „ich wünschte, ich hätte gefragt“ verleitet zu would have.",
+     "en": "After wish the past takes had + participle: had asked. German “ich wünschte, ich hätte gefragt” invites would have."
+    },
+    "wrong": [
+     {
+      "opt": "would asked",
+      "de": "„would asked“ lässt have aus.",
+      "en": "“would asked” drops have."
+     },
+     {
+      "opt": "have asked",
+      "de": "Nach wish I steht had, nicht have.",
+      "en": "After wish I comes had, not have."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would have asked“, nicht hier.",
+      "en": "The mistake is at “would have asked”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would have asked“ ist falsch.",
+      "en": "There is a mistake: “would have asked” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0113",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.wish-now",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish I have more capacity for another client right now.",
+   "bad": {
+    "span": "have",
+    "fix": [
+     "had"
+    ],
+    "choices": [
+     "having",
+     "had",
+     "would have"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach wish geht die Zeit eine Stufe zurück: have wird zu had. Ein Wunsch für jetzt braucht die Past-Form.",
+     "en": "After wish the tense moves one step back: have becomes had. A wish about now takes the past form."
+    },
+    "wrong": [
+     {
+      "opt": "having",
+      "de": "„having“ allein ist kein Prädikat.",
+      "en": "“having” alone is no predicate."
+     },
+     {
+      "opt": "would have",
+      "de": "Nach wish steht für jetzt kein would have.",
+      "en": "After wish, would have is wrong for a wish about now."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „have“, nicht hier.",
+      "en": "The mistake is at “have”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „have“ ist falsch.",
+      "en": "There is a mistake: “have” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0114",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.wish-would",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish our colleagues will update the shared calendar every day.",
+   "bad": {
+    "span": "will update",
+    "fix": [
+     "would update"
+    ],
+    "choices": [
+     "updating",
+     "would updating",
+     "would update"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach wish steht would, nie will: wish + would + Grundform drückt Ärger über eine Gewohnheit aus.",
+     "en": "After wish comes would, never will: wish + would + base form expresses annoyance at a habit."
+    },
+    "wrong": [
+     {
+      "opt": "updating",
+      "de": "„updating“ allein ist kein Prädikat.",
+      "en": "“updating” alone is no predicate."
+     },
+     {
+      "opt": "would updating",
+      "de": "Nach would steht die Grundform, nicht -ing.",
+      "en": "After would comes the base form, not -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „will update“, nicht hier.",
+      "en": "The mistake is at “will update”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „will update“ ist falsch.",
+      "en": "There is a mistake: “will update” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0115",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.past-cond",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If we would have automated the invoicing, we would spend less time on it now.",
+   "bad": {
+    "span": "would have automated",
+    "fix": [
+     "had automated"
+    ],
+    "choices": [
+     "had automated",
+     "would automated",
+     "have automated"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Im if-Teil steht had + 3. Form, would have gehört nicht dorthin: If we had automated. Das „now“ im Hauptsatz passt zu would spend.",
+     "en": "The if-clause takes had + participle, not would have: If we had automated. The “now” in the main clause fits would spend."
+    },
+    "wrong": [
+     {
+      "opt": "would automated",
+      "de": "„would automated“ lässt have aus.",
+      "en": "“would automated” drops have."
+     },
+     {
+      "opt": "have automated",
+      "de": "Nach if steht hier had, nicht have.",
+      "en": "After if comes had here, not have."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would have automated“, nicht hier.",
+      "en": "The mistake is at “would have automated”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would have automated“ ist falsch.",
+      "en": "There is a mistake: “would have automated” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0116",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.present-cond",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If our team would be larger, we would have won the bid last quarter.",
+   "bad": {
+    "span": "would be",
+    "fix": [
+     "were",
+     "was"
+    ],
+    "choices": [
+     "be",
+     "were",
+     "being"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Im if-Teil steht kein would: If our team were larger. Das would have won im Hauptsatz erklärt die Folge in der Vergangenheit.",
+     "en": "The if-clause takes no would: If our team were larger. The would have won in the main clause gives the past result."
+    },
+    "wrong": [
+     {
+      "opt": "be",
+      "de": "„be“ ohne Hilfsverb ist kein Konjunktiv-Satz.",
+      "en": "“be” alone does not make a clause."
+     },
+     {
+      "opt": "being",
+      "de": "„being“ allein ist kein Prädikat.",
+      "en": "“being” alone is no predicate."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „would be“, nicht hier.",
+      "en": "The mistake is at “would be”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „would be“ ist falsch.",
+      "en": "There is a mistake: “would be” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0117",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.high-time",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It’s high time we replace the old server before it fails again.",
+   "bad": {
+    "span": "replace",
+    "fix": [
+     "replaced"
+    ],
+    "choices": [
+     "replacing",
+     "will replace",
+     "replaced"
+    ]
+   },
+   "why": {
+    "ok": {
+     "de": "Nach It’s high time steht die Past-Form, obwohl es um jetzt geht: we replaced. Deutsch „es ist höchste Zeit, dass wir ersetzen“ nutzt das Präsens.",
+     "en": "After It’s high time comes the past form, although it is about now: we replaced. German uses the present."
+    },
+    "wrong": [
+     {
+      "opt": "replacing",
+      "de": "„replacing“ allein ist kein Prädikat.",
+      "en": "“replacing” alone is no predicate."
+     },
+     {
+      "opt": "will replace",
+      "de": "„will replace“ ist Zukunft, aber die Wendung verlangt die Past-Form.",
+      "en": "“will replace” is future, but the phrase takes the past form."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler steckt bei „replace“, nicht hier.",
+      "en": "The mistake is at “replace”, not here."
+     },
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: „replace“ ist falsch.",
+      "en": "There is a mistake: “replace” is wrong."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0118",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.wish-past",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I wish I had asked for a written quote before the call.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Bedauern über die Vergangenheit steht nach wish mit had + 3. Form.",
+     "en": "No mistake: regret about the past takes had + participle after wish."
+    },
+    "wrong": [
+     {
+      "tap": "had",
+      "de": "Hier ist had richtig. „would have asked“ wäre der Fehler.",
+      "en": "Had is right here. “would have asked” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0119",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.present-cond",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "If our team were bigger, we would have won the bid last quarter.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Der Zustand jetzt steht im if-Teil mit were, die Folge in der Vergangenheit im Hauptsatz mit would have won.",
+     "en": "No mistake: the state now takes were in the if-clause, the past result takes would have won in the main clause."
+    },
+    "wrong": [
+     {
+      "tap": "were",
+      "de": "Hier ist were richtig. „would be“ im if-Teil wäre der Fehler.",
+      "en": "Were is right here. “would be” in the if-clause would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0120",
+   "kind": "err",
+   "area": "gram",
+   "pat": "mc.high-time",
+   "topic": "mixed-cond",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "It’s high time we replaced the old server before it fails again.",
+   "bad": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach It’s high time steht die Past-Form: we replaced, obwohl es um jetzt geht.",
+     "en": "No mistake: after It’s high time comes the past form: we replaced, although it is about now."
+    },
+    "wrong": [
+     {
+      "tap": "replaced",
+      "de": "Hier ist die Past-Form gewollt. „we replace“ wäre der Fehler.",
+      "en": "The past form is intended here. “we replace” would be the mistake."
+     },
+     {
+      "tap": "*",
+      "de": "Der Satz ist richtig: An dieser Stelle steckt kein Fehler.",
+      "en": "The sentence is correct: there is no mistake at this spot."
+     }
+    ]
+   }
+  }
+ ]
+}
