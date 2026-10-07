@@ -82,7 +82,9 @@ export function buildTrainCards(dbVocab: ReadonlyMap<string, Doc>, nowMs: number
 
 /** Bedeutung in der Oberflächensprache: Deutsch → `de`, Englisch → `def` (keine Mischsprache). */
 export function meaningOf(card: Pick<TrainCard, 'de' | 'def'>, lang: Lang): string | null {
-  return lang === 'de' ? card.de : card.def;
+  // Fehlt die Bedeutung in der Oberflächensprache, gilt die andere: Der Tagesplan hängt nicht von der Sprache ab
+  // („DE 30 gegen EN 27 Karten“, Lernplattform 2.0 §2.3). Gleichwertig in beide Richtungen.
+  return (lang === 'de' ? card.de || card.def : card.def || card.de) ?? null;
 }
 
 /**

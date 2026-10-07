@@ -12,8 +12,10 @@ import type { ExerciseId, Lang, TrainCard } from './types';
  */
 export function listenExercise(card: TrainCard, lang: Lang, poolSize: number, env: ExerciseEnv): ExerciseId | null {
   if (!env.tts) return null;
-  if (supports(card, 'dictation', lang, poolSize, env)) return 'dictation';
-  if (card.stage <= 2 && supports(card, 'listen_mc', lang, poolSize, env)) return 'listen_mc';
+  // Der Hör-Modus ist ausdrücklich gewählt (freiwillig, Kennzeichen „Kopfhörer“): er gilt auch am Handy.
+  const on: ExerciseEnv = { ...env, listen: true };
+  if (supports(card, 'dictation', lang, poolSize, on)) return 'dictation';
+  if (card.stage <= 2 && supports(card, 'listen_mc', lang, poolSize, on)) return 'listen_mc';
   return null;
 }
 

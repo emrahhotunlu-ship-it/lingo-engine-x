@@ -43,7 +43,8 @@ describe('Kontext-Wechsel', () => {
     for (const stage of [1, 2]) expect(rotatedContext(card({ stage, reps: 1 }), 'cloze')?.sentence).toBe('We use leverage in every price talk.');
     for (const ex of ['mc_en', 'spot', 'match', 'mc_de', 'type', 'colloc', 'produce', 'listen_mc', 'flip'] as ExerciseId[]) expect(rotatedContext(card({ reps: 1 }), ex)?.sentence, ex).toBe('We use leverage in every price talk.');
     expect(rotatedContext(card({ reps: 1, xEx: undefined }), 'cloze')?.sentence).toBe('We use leverage in every price talk.');
-    const chunk = { ...card({ reps: 1 }), kind: 'chunk' } as TrainCard;
+    // Wendungen wechseln den Satz ab Stufe 3 wie Vokabeln (Lernplattform 2.0 §4.8); ohne gespeicherte Sätze bleibt der Ursprungssatz.
+    const chunk = { ...card({ reps: 1, xEx: undefined }), kind: 'chunk' } as TrainCard;
     expect(rotatedContext(chunk, 'cloze')).toBe(chunk.context);
   });
 

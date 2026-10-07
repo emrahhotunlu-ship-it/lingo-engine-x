@@ -130,8 +130,12 @@ export function resetOp(cur: Readonly<Doc> | undefined, path: string, nowMs: num
   return { update: { fsrs: { ...fresh, v: FSRS_VERSION, src: 'lx', last } } };
 }
 
-/** „Kenne ich schon" nach bestandener Probeabfrage (M2): Stufe 4, fällig in 30 Tagen. */
-export const KNOWN_DAYS = 30;
+/**
+ * „Kenne ich“ nach bestandener Prüffrage (Lernplattform 2.0 §4.8): Stufe 3, Stabilität 10 Tage, fällig in 10 Tagen. Die Karte ist
+ * danach nicht „Fest“ (Fest braucht Stufe 4 und 21 Tage) und wird noch frei abgefragt. In `hist` steht `m:'known'` – nichts Erfundenes.
+ */
+export const KNOWN_DAYS = 10;
+export const KNOWN_STAGE = 3;
 
 export function knownOp(cur: Readonly<Doc> | undefined, path: string, seed: Readonly<Doc> | null, nowMs: number, day: string): CardOp {
   const base = cur ?? seed;
@@ -151,8 +155,8 @@ export function knownOp(cur: Readonly<Doc> | undefined, path: string, seed: Read
     last: nowMs,
     state: 'review',
     reps,
-    stage: Math.max(stageOf(base), clampStage(4)),
-    hist: [...hist, { t: nowMs, m: 'type', g: 4 }].slice(-12),
+    stage: Math.max(stageOf(base), clampStage(KNOWN_STAGE)),
+    hist: [...hist, { t: nowMs, m: 'known', g: 3 }].slice(-12),
     fsrs,
   };
   if (base.state === 'new' && (typeof base.intro !== 'string' || !base.intro)) patch.intro = day;

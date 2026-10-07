@@ -1,3 +1,4 @@
+import { chunkContext } from './chunkCards';
 import { findContext } from './context';
 import { storedExamples } from './examples';
 import type { ContextSpan, ExerciseId, TrainCard } from './types';
@@ -15,10 +16,10 @@ export const ROTATING: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['cloze_hin
 /** Ursprungssatz zuerst, danach jeder gespeicherte Satz, in dem das Wort (auch gebeugt) vorkommt. */
 export function contextsOf(card: Pick<TrainCard, 'context' | 'doc' | 'word' | 'kind'>): ContextSpan[] {
   const out: ContextSpan[] = card.context ? [card.context] : [];
-  if (card.kind !== 'vocab') return out;
   const have = new Set(out.map((c) => c.sentence.toLowerCase()));
   for (const x of storedExamples(card.doc)) {
-    const c = findContext(x.en, card.word);
+    // Wendungen (Lernplattform 2.0 §4.8): die Stelle der Wendung im Satz über `locateChunk`, Vokabeln über das Wort.
+    const c = card.kind === 'chunk' ? chunkContext(x.en, card.word) : findContext(x.en, card.word);
     if (!c || have.has(c.sentence.toLowerCase())) continue;
     have.add(c.sentence.toLowerCase());
     out.push(c);
@@ -28,7 +29,7 @@ export function contextsOf(card: Pick<TrainCard, 'context' | 'doc' | 'word' | 'k
 
 /** Satz für diese Übung: bei Rotation der `reps % n`-te Satz, sonst der Ursprungssatz. */
 export function rotatedContext(card: TrainCard, ex: ExerciseId): ContextSpan | null {
-  if (card.kind !== 'vocab' || card.stage < ROTATE_FROM_STAGE || !ROTATING.has(ex)) return card.context;
+  if (card.stage < ROTATE_FROM_STAGE || !ROTATING.has(ex)) return card.context;
   const all = contextsOf(card);
   if (all.length < 2) return card.context;
   const reps = typeof card.doc.reps === 'number' && Number.isFinite(card.doc.reps) ? Math.max(0, Math.floor(card.doc.reps)) : 0;

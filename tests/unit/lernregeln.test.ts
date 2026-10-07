@@ -19,7 +19,10 @@ const DAY = '2026-10-05';
 describe('Gewichtung der Note', () => {
   it('Gewichte je Übungsart: Auswahl 0,55 · Stütze 0,8 · frei 1 · eigener Satz 1,1; Tipp macht freies Tippen zur Stütze', () => {
     expect(noteWeight('mc_en')).toBe(NOTE_WEIGHT.choice);
-    expect(noteWeight('colloc')).toBe(NOTE_WEIGHT.choice);
+    expect(noteWeight('colloc_gap')).toBe(NOTE_WEIGHT.choice);
+    expect(noteWeight('ctx_mc')).toBe(NOTE_WEIGHT.choice);
+    expect(noteWeight('colloc')).toBe(NOTE_WEIGHT.free);
+    expect(noteWeight('complete')).toBe(NOTE_WEIGHT.help);
     expect(noteWeight('spot')).toBe(NOTE_WEIGHT.choice);
     expect(noteWeight('tiles')).toBe(NOTE_WEIGHT.help);
     expect(noteWeight('cloze_hint')).toBe(NOTE_WEIGHT.help);

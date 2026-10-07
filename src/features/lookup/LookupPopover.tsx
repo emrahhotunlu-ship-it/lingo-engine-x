@@ -208,6 +208,8 @@ function LookupPopover({ req }: { req: WordTapRequest }) {
       src: cardSrcFor(req.area),
       origin: { v: 1, kind: req.area, t: Date.now(), ...(req.source ? { ref: req.source } : {}), ...(req.title ? { title: req.title } : {}) },
       today: dayKey(Date.now()),
+      // Die Verwendungshilfe aus dem Nachschlagen wird als Merkhilfe der NEUEN Karte behalten (§4.8).
+      ...(aiData?.note ? { keep: { tip: aiData.note } } : {}),
     });
     // Nur eine neu angelegte Karte heißt „gespeichert"; sonst ehrlich sagen, was passiert ist.
     if (r === 'saved') {

@@ -202,19 +202,21 @@ describe('Abfrageart je Stufe: mindestens zwei, Stufe 5 mit eigenem Satz, Rückf
 
   it('Stufe 5 „Sicher anwenden“: eigener Satz nur mit KI, Diktat nur mit Sprachausgabe', () => {
     const c = vcard({ stage: 5 });
-    expect(availableExercises(c, 'de', 100, { tts: true, ai: true })).toEqual(['dictation', 'produce']);
-    expect(availableExercises(c, 'de', 100, { tts: false, ai: true })).toEqual(['produce', 'type']);
+    expect(availableExercises(c, 'de', 100, { tts: true, ai: true })).toEqual(['complete', 'cloze', 'dictation', 'produce']);
+    expect(availableExercises(c, 'de', 100, { tts: false, ai: true })).toEqual(['complete', 'cloze', 'produce']);
+    // Am Handy (touch): kein eigener Satz, kein Hören – aber weiter mindestens zwei Arten.
+    expect(availableExercises(c, 'de', 100, { tts: true, ai: true, touch: true })).toEqual(['complete', 'cloze']);
     const noAi = availableExercises(c, 'de', 100, { tts: false, ai: false });
     expect(noAi).not.toContain('produce');
     expect(noAi.length).toBeGreaterThanOrEqual(2);
     // Schwächste Art gewinnt: produce nie geübt → gewählt, ohne KI nie.
-    const weak = vcard({ stage: 5, xs: { type: { c: 5, w: 0 }, dictation: { c: 5, w: 0 } } });
+    const weak = vcard({ stage: 5, xs: { type: { c: 5, w: 0 }, dictation: { c: 5, w: 0 }, complete: { c: 5, w: 0 }, cloze: { c: 5, w: 0 } } });
     expect(chooseExercise(weak, 'de', 100, [], { tts: true, ai: true })).toBe('produce');
     expect(chooseExercise(weak, 'de', 100, [], { tts: true, ai: false })).not.toBe('produce');
   });
 
   it('Stufe 1: Hören nur mit Sprachausgabe; „Im Satz finden“, Tempo und Bausteine sind aus der Leiter entfernt', () => {
-    expect(availableExercises(vcard({ stage: 1 }), 'de', 100, { tts: true, ai: false })).toEqual(['mc_en', 'listen_mc']);
+    expect(availableExercises(vcard({ stage: 1 }), 'de', 100, { tts: true, ai: false })).toEqual(['mc_en', 'ctx_mc', 'listen_mc']);
     const all = new Set<ExerciseId>();
     for (const stage of [1, 2, 3, 4, 5] as Stage[]) for (const x of availableExercises(vcard({ stage }), 'de', 100, { tts: true, ai: true })) all.add(x);
     for (const gone of ['spot', 'speed', 'tiles'] as const) expect(all.has(gone), gone).toBe(false);
@@ -224,6 +226,7 @@ describe('Abfrageart je Stufe: mindestens zwei, Stufe 5 mit eigenem Satz, Rückf
     const all = new Set<ExerciseId>();
     for (const stage of [1, 2, 3, 4, 5] as Stage[]) for (const x of availableExercises(ccard({ stage }), 'de', 100, { tts: true, ai: true })) all.add(x);
     expect(all.has('spot')).toBe(false);
+    // Wortpartner gibt es für Wendungen nur mit Partnerwort-Daten (Paket `gap`), nie ohne.
     expect(all.has('colloc')).toBe(false);
     expect(availableExercises(ccard({ stage: 4 }), 'de', 100, NO_ENV)).toContain('situation');
     const mail = ccard({ stage: 4, src: { kind: 'mail', ref: 'biz/x', title: 'Email Refiner', utterance: '', upgraded: 'We are happy to meet you halfway on the timeline.' } });

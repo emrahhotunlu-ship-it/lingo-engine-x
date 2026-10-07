@@ -3,6 +3,7 @@ import rawText from '../../content/c1/pack.json?raw';
 import { newChunkDoc, takeChunkOp } from '../chunks/newChunk';
 import { dayKey } from '../date';
 import { newVocabDoc, saveCardOp } from '../srs/newCard';
+import { packExtraOf } from './packFields';
 
 // C1-Paket (Emrah 02.10.2026, Englischlehrer: „Es gibt keinen C1-Plan“): 100 von Hand geschriebene, geprüfte Einträge für
 // Business-Englisch auf C1-Niveau (`src/content/c1/pack.json`), im Soll-Mix des Englischlehrers: Wortpartner 25 %, Rahmen und
@@ -72,8 +73,12 @@ export function packDoc(e: PackEntry, today: string, nowMs: number): PackDoc | n
       src: { kind: 'pack', ref, title: 'C1-Paket', utterance: '', upgraded: e.ex },
       nowMs,
     });
-    return made ? { kind: 'chunk', path: `chunk/${made.id}`, id: made.id, doc: made.doc } : null;
+    if (!made) return null;
+    // Neue Paket-Karten behalten auch die gleichwertigen Varianten (Lernplattform 2.0 §4.8); register/why stehen schon im Dokument.
+    const alt = packExtraOf(e.id)?.alt;
+    return { kind: 'chunk', path: `chunk/${made.id}`, id: made.id, doc: alt?.length ? { ...made.doc, alt: alt.slice(0, 4) } : made.doc };
   }
+  const x = packExtraOf(e.id);
   const made = newVocabDoc({
     word: e.en,
     de: e.de,
@@ -85,6 +90,7 @@ export function packDoc(e: PackEntry, today: string, nowMs: number): PackDoc | n
     src: 'pack',
     origin: { v: 1, kind: 'pack', ref, title: 'C1-Paket', t: nowMs },
     today,
+    keep: { register: e.register, ...(e.why ? { why: e.why } : {}), ...(x?.alt ? { alt: x.alt } : {}), ...(x?.fam ? { fam: x.fam as Record<string, string> } : {}) },
   });
   return made ? { kind: 'vocab', path: `vocab/${made.id}`, id: made.id, doc: made.doc } : null;
 }

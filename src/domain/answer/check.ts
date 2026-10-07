@@ -16,6 +16,8 @@ export type CheckDeps = {
   lemma: string;
   /** Wörter anderer Karten (normalisiert) – ein Treffer dort ist eine Verwechslung, kein Tippfehler. */
   knownWords?: ReadonlySet<string>;
+  /** Gleichwertige Varianten (Paket `alt`, z. B. „restriction“ für „constraint“): „fast richtig“, nicht falsch. */
+  alt?: readonly string[];
 };
 
 export function checkTyped(givenRaw: string, accepted: readonly string[], deps: CheckDeps): CheckResult {
@@ -31,6 +33,8 @@ export function checkTyped(givenRaw: string, accepted: readonly string[], deps: 
   const lemma = withoutTo(normalize(deps.lemma));
   // Dasselbe Wort in einer anderen Form (persuade statt persuaded, went statt gone).
   if (lemma && (g === lemma || (!g.includes(' ') && lemmaCandidates(g).includes(lemma)))) return { verdict: 'near', kind: 'form' };
+
+  if (deps.alt?.some((a) => withoutTo(normalize(a)) === g)) return { verdict: 'near', kind: 'synonym' };
 
   if (deps.knownWords?.has(g) && !targets.includes(g)) return { verdict: 'wrong', kind: 'confusable', otherWord: g };
 

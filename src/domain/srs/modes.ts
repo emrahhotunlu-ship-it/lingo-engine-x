@@ -1,25 +1,33 @@
+import { packExtraOf } from '../c1pack/packFields';
 import { meaningOf } from './cards';
+import { familyFrom, hasPartner, trapTask } from './partner';
 import type { Counts, ExerciseId, InputKind, Lang, LegacyMode, Stage, TrainCard } from './types';
 
-// Katalog der Abfragearten (phase1-plan §4.2, Lern-Entwurf §1.2, Zuordnung laut Daten-Entwurf §1.2).
-// Jede Art gehört fest zu einer Stufe; `level` ist die Stufe der alten App für `nextStage`.
-// Ohne Sprachausgabe und ohne KI hat jede Stufe mindestens zwei Arten (Kap. 15):
-// 1 mc_en, spot · 2 mc_de, match · 3 cloze_hint, tiles · 4 type, cloze · 5 speed (+ Leihe aus 4).
-// Mit Sprachausgabe kommen listen_mc (1) und dictation (5) dazu, mit KI produce (5, „Sicher anwenden").
+// Katalog der Abfragearten (phase1-plan §4.2, Lernplattform 2.0 §4.8). Jede Art gehört fest zu einer Stufe (`also`: auch zu
+// weiteren); `level` ist die Stufe der alten App für `nextStage`. Jede Stufe hat für jedes Profil (touch/keys × mit/ohne
+// Sprachausgabe × mit/ohne KI) mindestens zwei Arten (Kap. 15):
+//   1 mc_en, ctx_mc, listen_mc (Hören)   2 mc_de, match   3 cloze_hint, colloc_gap, complete (mit Satzanfang)
+//   4 cloze, colloc (getippt), wordfam, find_trap, type (nur ohne Satz), situation
+//   5 cloze im neuen Satz (Satzwechsel), complete ohne Satzanfang, produce (KI, nicht am Handy), dictation (Hören)
 
-export type ExerciseDef = { ex: ExerciseId; stage: Stage; level: number; mode: LegacyMode; input: InputKind };
+export type ExerciseDef = { ex: ExerciseId; stage: Stage; level: number; mode: LegacyMode; input: InputKind; also?: readonly Stage[] };
 
 export const CATALOG: readonly ExerciseDef[] = [
   { ex: 'mc_en', stage: 1, level: 1, mode: 'recog', input: 'choice' },
+  { ex: 'ctx_mc', stage: 1, level: 1, mode: 'recog', input: 'choice' },
   { ex: 'spot', stage: 1, level: 1, mode: 'recog', input: 'spot' },
   { ex: 'listen_mc', stage: 1, level: 1, mode: 'recog', input: 'choice' },
   { ex: 'mc_de', stage: 2, level: 2, mode: 'recog', input: 'choice' },
   { ex: 'match', stage: 2, level: 2, mode: 'recog', input: 'choice' },
   { ex: 'cloze_hint', stage: 3, level: 3, mode: 'cloze', input: 'typed' },
+  { ex: 'colloc_gap', stage: 3, level: 3, mode: 'colloc', input: 'choice' },
+  { ex: 'complete', stage: 3, level: 3, mode: 'type', input: 'sentence', also: [5] },
   { ex: 'tiles', stage: 3, level: 3, mode: 'cloze', input: 'tiles' },
+  { ex: 'cloze', stage: 4, level: 4, mode: 'type', input: 'typed', also: [5] },
+  { ex: 'colloc', stage: 4, level: 4, mode: 'colloc', input: 'typed' },
+  { ex: 'wordfam', stage: 4, level: 4, mode: 'type', input: 'typed' },
+  { ex: 'find_trap', stage: 4, level: 4, mode: 'recog', input: 'spot' },
   { ex: 'type', stage: 4, level: 4, mode: 'type', input: 'typed' },
-  { ex: 'cloze', stage: 4, level: 4, mode: 'type', input: 'typed' },
-  { ex: 'colloc', stage: 4, level: 4, mode: 'colloc', input: 'choice' },
   { ex: 'situation', stage: 4, level: 4, mode: 'type', input: 'typed' },
   { ex: 'dictation', stage: 5, level: 5, mode: 'listen', input: 'typed' },
   { ex: 'speed', stage: 5, level: 5, mode: 'type', input: 'typed' },
@@ -29,9 +37,15 @@ export const CATALOG: readonly ExerciseDef[] = [
   { ex: 'flip', stage: 0, level: 2, mode: 'recog', input: 'flip' },
 ];
 
-/** Was die Umgebung kann: Sprachausgabe (listen_mc, dictation) und KI (produce). */
-export type ExerciseEnv = { tts: boolean; ai: boolean };
-export const NO_ENV: ExerciseEnv = { tts: false, ai: false };
+/**
+ * Was die Umgebung kann: Sprachausgabe, KI und das Eingabeprofil. `listen` = `tts && !touch` (Hören gibt es nur mit Tastatur,
+ * Kap. 6 Geräte-Matrix); `touch` sperrt auch den eigenen Satz (`produce`). Das Profil wird je Runde einmal eingefroren.
+ */
+export type ExerciseEnv = { tts: boolean; ai: boolean; touch?: boolean; listen?: boolean };
+export const NO_ENV: ExerciseEnv = { tts: false, ai: false, touch: false, listen: false };
+export const makeEnv = (tts: boolean, ai: boolean, touch: boolean): ExerciseEnv => ({ tts, ai, touch, listen: tts && !touch });
+/** Hören nur mit Sprachausgabe und Tastatur-Profil (ohne Angabe des Profils wie bisher: Sprachausgabe genügt). */
+export const canListen = (env: ExerciseEnv): boolean => env.listen ?? (env.tts && !env.touch);
 
 export const exerciseDef = (ex: ExerciseId): ExerciseDef => CATALOG.find((d) => d.ex === ex) ?? (CATALOG[0] as ExerciseDef);
 
@@ -39,7 +53,7 @@ export const exerciseDef = (ex: ExerciseId): ExerciseDef => CATALOG.find((d) => 
 export const RETIRED: ReadonlySet<ExerciseId> = new Set<ExerciseId>(['spot', 'speed', 'tiles']);
 
 /** Arten, die für Wendungen nicht taugen (phase1-plan §4.2, Spalte „Chunk"). */
-const NOT_FOR_CHUNKS: ReadonlySet<ExerciseId> = new Set(['spot', 'colloc']);
+const NOT_FOR_CHUNKS: ReadonlySet<ExerciseId> = new Set(['spot', 'wordfam']);
 
 /** Was eine Übungsart an Kartendaten und Umgebung braucht. */
 export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): boolean {
@@ -51,11 +65,15 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
     case 'mc_de':
     case 'match':
       return !!meaning && poolSize >= 3;
+    case 'ctx_mc':
+      return !!meaning && !!card.context && poolSize >= 3;
     case 'listen_mc':
-      return env.tts && !!meaning && poolSize >= 3;
+      return canListen(env) && !!meaning && poolSize >= 3;
     case 'spot':
       return !!meaning && !!card.context;
     case 'type':
+      // „nur ohne Satz“: mit Ursprungssatz übt die Lücke (`cloze`) dasselbe im Zusammenhang.
+      return !!meaning && !card.context;
     case 'speed':
       return !!meaning;
     case 'cloze_hint':
@@ -63,18 +81,28 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
       return !!card.context;
     case 'tiles':
       return !!card.context || !!meaning;
+    case 'colloc_gap':
     case 'colloc':
-      return card.col.some((c) => c.ctx && c.opts.length >= 2);
+      return hasPartner(card);
+    case 'complete':
+      // Mit Satzanfang aus dem Paket schon früh; ohne Anfang erst in der freien Anwendung (Stufe 5).
+      return !!meaning && (card.stage >= 5 || (packExtraOf(card)?.starts?.length ?? 0) > 0);
+    case 'wordfam':
+      return familyFrom(card) !== null;
+    case 'find_trap':
+      return trapTask(card) !== null;
     case 'situation':
       return card.kind === 'chunk' && !!card.chunk?.scene && !!meaning;
     case 'dictation':
-      return env.tts && !!card.context;
+      return canListen(env) && !!card.context;
     case 'produce':
-      return env.ai && !!meaning;
+      return env.ai && !env.touch && !!meaning;
     case 'flip':
       return false;
   }
 }
+
+const inStage = (d: ExerciseDef, k: number): boolean => d.stage === k || (d.also?.includes(k as Stage) ?? false);
 
 /**
  * Verfügbare Arten für die Stufe der Karte. Sind es weniger als 2, kommen Arten der Nachbarstufen
@@ -83,12 +111,12 @@ export function supports(card: TrainCard, ex: ExerciseId, lang: Lang, poolSize: 
 export function availableExercises(card: TrainCard, lang: Lang, poolSize: number, env: ExerciseEnv = NO_ENV): ExerciseId[] {
   const k = Math.max(1, card.stage);
   const ok = (d: ExerciseDef) => supports(card, d.ex, lang, poolSize, env);
-  const out = CATALOG.filter((d) => d.stage === k && ok(d)).map((d) => d.ex);
+  const out = CATALOG.filter((d) => inStage(d, k) && ok(d)).map((d) => d.ex);
   for (let dist = 1; out.length < 2 && dist <= 4; dist++) {
     for (const s of [k + dist, k - dist]) {
       for (const d of CATALOG) {
         if (out.length >= 2) break;
-        if (d.stage === s && ok(d) && !out.includes(d.ex)) out.push(d.ex);
+        if (inStage(d, s) && ok(d) && !out.includes(d.ex)) out.push(d.ex);
       }
     }
   }

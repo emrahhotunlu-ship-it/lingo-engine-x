@@ -34,6 +34,11 @@ export type NewVocabInput = {
   lesson?: string | null;
   origin: CardOrigin;
   today: string;
+  /**
+   * Nur NEUE Karten behalten diese Felder (Lernplattform 2.0 §4.8): Register, Begründung, Merkhilfe, gleichwertige Varianten
+   * und Wortfamilie. Bestehende Karten werden nie beschrieben; ihre fehlenden Felder legt `packExtraOf` beim Lesen darüber.
+   */
+  keep?: { register?: 'formal' | 'neutral' | 'informal'; why?: string; tip?: string; alt?: readonly string[]; fam?: Readonly<Record<string, string>> };
 };
 
 const VALID_EX = /^[^[\]]*\[[^[\]]+\][^[\]]*$/;
@@ -102,8 +107,20 @@ export function newVocabDoc(i: NewVocabInput): { id: string; doc: Record<string,
       added: i.today,
       origin,
       ...(i.lesson ? { lesson: i.lesson } : {}),
+      ...keepFields(i.keep),
     },
   };
+}
+
+/** Ergänzende Felder neuer Karten, begrenzt (`alt` ≤ 4, Texte ≤ 220 Zeichen). */
+function keepFields(k: NewVocabInput['keep']): Record<string, unknown> {
+  if (!k) return {};
+  const text = (v: string | undefined): string | undefined => (v && v.trim() ? v.trim().slice(0, 220) : undefined);
+  const why = text(k.why);
+  const tip = text(k.tip);
+  const alt = (k.alt ?? []).map((a) => a.trim()).filter(Boolean).slice(0, 4);
+  const fam = k.fam && Object.keys(k.fam).length ? k.fam : undefined;
+  return { ...(k.register ? { register: k.register } : {}), ...(why ? { why } : {}), ...(tip ? { tip } : {}), ...(alt.length ? { alt } : {}), ...(fam ? { fam } : {}) };
 }
 
 /**

@@ -2,6 +2,8 @@ import { hash32, mulberry32, shuffle } from '../random';
 import { typedForm } from '../chunks/situation';
 import { meaningOf, shortMeaning } from './cards';
 import { exerciseDef } from './modes';
+import { familyFrom, partnerOf, trapTask } from './partner';
+import { packExtraOf } from '../c1pack/packFields';
 import { rotatedContext } from './rotate';
 import type { CheckResult, Colloc, Exercise, ExerciseId, Lang, Option, SituationTask, Stage, Tile, TrainCard } from './types';
 
@@ -204,9 +206,7 @@ function situationTask(card: TrainCard, lang: Lang, sceneOf?: SceneLookup): Situ
 }
 
 function pickColloc(card: TrainCard, rng: () => number): Colloc | null {
-  const usable = card.col.filter((c) => c.ctx && c.opts.length >= 2);
-  if (!usable.length) return null;
-  return usable[Math.floor(rng() * usable.length)] ?? usable[0] ?? null;
+  return partnerOf(card, Math.floor(rng() * 1000));
 }
 
 /** Lösungsform einer freistehenden Abfrage (ohne Satz): Wort bzw. Wendung ohne „…“. */
@@ -268,12 +268,34 @@ export function buildExercise(card: TrainCard, ex: ExerciseId, lang: Lang, pool:
       const correct: Option = { id: 'ok', label, lang: 'en', correct: true };
       return { ...base, options: shuffle([correct, ...wordDistractors(card, pool, lang, rng)], rng), accepted: [label] };
     }
+    case 'colloc_gap':
     case 'colloc': {
+      // Die Lücke steht nur am Partnerwort. `colloc` (Stufe 4) wird getippt; die Optionen dienen dort nur als Tipp 2.
       const c = pickColloc(card, rng);
       const answer = c?.ctx?.gap ?? c?.gap ?? '';
       const opts = (c?.opts ?? []).filter((o) => norm(o) !== norm(answer)).slice(0, 3);
       const options: Option[] = [{ id: 'ok', label: answer, lang: 'en', correct: true }, ...opts.map((o, i) => ({ id: `d${i}`, label: o, lang: 'en' as const, correct: false }))];
       return { ...base, sentence: c?.ctx ?? null, colloc: c, options: shuffle(options, rng), accepted: [answer] };
+    }
+    case 'ctx_mc': {
+      // „Was heißt das hier?“: Satz mit markiertem Wort, drei deutsche Optionen (die richtige und zwei andere).
+      const label = shortMeaning(meaning ?? '', lang);
+      const correct: Option = { id: 'ok', label, lang, correct: true };
+      return { ...base, sentence: card.context, options: shuffle([correct, ...meaningDistractors(card, pool, lang, rng).slice(0, 2)], rng), accepted: [label] };
+    }
+    case 'complete': {
+      const starts = packExtraOf(card)?.starts ?? [];
+      const start = starts.length ? (starts[Math.floor(rng() * starts.length)] ?? null) : null;
+      return { ...base, start, accepted: [] };
+    }
+    case 'wordfam': {
+      const gap = ctx?.gap ?? card.word;
+      return { ...base, sentence: ctx, accepted: [gap], famFrom: familyFrom(card) };
+    }
+    case 'find_trap': {
+      const t = trapTask(card);
+      const sentence = t ? { sentence: t.sentence, start: t.start, end: t.end, gap: t.sentence.slice(t.start, t.end) } : null;
+      return { ...base, sentence, accepted: [sentence?.gap ?? card.word], trap: t };
     }
     case 'cloze_hint':
     case 'cloze': {

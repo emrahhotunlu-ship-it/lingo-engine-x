@@ -9,13 +9,16 @@ import { buildTrainCards } from '../../domain/metrics';
 import { toTrainCard } from '../../domain/srs/cards';
 import { buildChunkCards, toChunkCard } from '../../domain/srs/chunkCards';
 import { buildExercise, type SceneLookup } from '../../domain/srs/exercise';
-import { chooseExercise, supports, type ExerciseEnv } from '../../domain/srs/modes';
+import { chooseExercise, makeEnv, NO_ENV, supports, type ExerciseEnv } from '../../domain/srs/modes';
+import { inputProfile } from '../../platform/input';
+import { knownOp } from '../../domain/srs/vocabList';
 import { catchUpOn, overdueCount } from '../../domain/unit/backlog';
 import { againPos, calibration, controlAllowed, controlCounts, dirFor, lastRating, pickMode, weekStartMs, type FlipDir, type PickedMode, type RequestedMode } from '../../domain/srs/flip';
 import { deckCards, isBuiltinDeck, type DeckCtx } from '../../domain/srs/decks';
 import { listenExercise } from '../../domain/srs/listen';
 import { REPAIR_MAX } from '../../domain/unit/block1';
 import { unitDone } from '../../app/unit/done';
+import { unitStepArgs } from '../../domain/unit/plan';
 import { clearResume } from '../../app/resume';
 import { useDecks } from './decksStore';
 import { cardGo } from './cardMark';
@@ -30,7 +33,7 @@ import { buildQueue, mixIntroducedToday, newQuotaLeft as newQuotaLeftFor } from 
 import { isLearningState } from '../../domain/srs/scheduler';
 import type { AnswerEvent, Exercise, ExerciseId, Grade, Lang, QueueItem, TrainCard } from '../../domain/srs/types';
 import { markExhausted, useTodayPlan } from '../today/store';
-import { nextT, recordAnswer, recordRoundEnd, saveCard, usePending } from './persist';
+import { nextT, recordAnswer, recordRoundEnd, saveCard, saveKnown, usePending } from './persist';
 import { flushOnHide } from '../progress/persist';
 import { pickDailyRepairs, repairsDoneToday, repairsDutyToday } from '../../domain/repair/daily';
 import type { RepairItem } from '../../domain/repair/repair';
@@ -109,7 +112,7 @@ export const useSession = create<SessionState>(() => ({
   round: 'pflicht',
   day: '',
   lang: 'de',
-  env: { tts: false, ai: false },
+  env: NO_ENV,
   cards: new Map(),
   pool: [],
   queue: [],
@@ -152,7 +155,8 @@ export function todayEntries(day: string): DayEntry[] {
 
 /** Umgebung jetzt: Sprachausgabe bereit, KI nutzbar (not_granted/nosample → ohne produce). */
 export function currentEnv(): ExerciseEnv {
-  return { tts: useSpeech.getState().status === 'ready', ai: selectAiAvailable(useCapabilities.getState()) };
+  // Das Eingabeprofil wird je Runde einmal gelesen und mit der Runde eingefroren (Lernplattform 2.0 §4.1).
+  return makeEnv(useSpeech.getState().status === 'ready', selectAiAvailable(useCapabilities.getState()), inputProfile() === 'touch');
 }
 
 /** Szene einer Wendung (Inhalt ⊕ geladene `scene/*`) für die Situationsübung (M15). */
@@ -364,7 +368,10 @@ export function startSession(round: Round, opts: SessionOpts = {}): FirstKind {
   const dir: FlipDir = round === 'pflicht' || deck === 'all' ? 'de-en' : (opts.dir ?? defaults.dir);
   const ctx: DeckCtx = { nowMs: now, weekStartMs: weekStartMs(now) };
   // Lernberatung V2: fällige Reparatur-Sätze zählen zur Runde (Pflicht bzw. freie Runde „alle“).
-  const repairs = !opts.only && !opts.pick && (round === 'pflicht' || deck === 'all') ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), Math.min(target, REPAIR_MAX), repairsDutyToday(entries)) : [];
+  // Lernplattform 2.0 §2.3: Im Plan der Regelversion 2 steht Schritt 1 für Karten allein (`repairs: 0`); die Fehlersätze
+  // gehören dann in Schritt 4. Ohne Argument im Plan gilt die alte Regel (bis zu 3 Reparatur-Sätze).
+  const repairMax = round === 'pflicht' ? (unitStepArgs(plan, 1).repairs ?? REPAIR_MAX) : REPAIR_MAX;
+  const repairs = !opts.only && !opts.pick && (round === 'pflicht' || deck === 'all') && repairMax > 0 ? pickDailyRepairs(live.docs['app/repair'], now, repairsDoneToday(entries), Math.min(target, repairMax), repairsDutyToday(entries)) : [];
   const cardTarget = Math.max(0, target - repairs.length);
   const deckPool = round === 'extra' && deck !== 'all' ? deckCards(cards, deck, useDecks.getState().decks, ctx) : cards;
   const chosen = opts.pick ? deckPool.filter(opts.pick) : deckPool;
@@ -532,6 +539,29 @@ export function continueIntro(): FirstKind {
   return advanceFrom({ ...s, queue });
 }
 
+/**
+ * „Kenne ich“ in der Einführung (Lernplattform 2.0 §4.8): keine Behauptung, sondern eine Prüffrage – frei tippen im Ursprungssatz
+ * (am Handy mit Buchstaben-Platzhaltern). Richtig ohne Hilfe → `commitAnswer` schreibt Stufe 3 / 10 Tage / `m:'known'`; sonst
+ * zählt die Antwort wie jede andere. Die Einführungskarte wird dafür durch die Prüffrage ersetzt.
+ */
+export function startKnownProbe(): FirstKind {
+  touch();
+  commitHeld();
+  const s = useSession.getState();
+  const item = s.queue[s.pos];
+  const card = item ? s.cards.get(item.key) : null;
+  if (!item || !card) return null;
+  const n = s.pool.length - 1;
+  const ex: ExerciseId | null = supports(card, 'cloze', s.lang, n, s.env) ? 'cloze' : supports(card, 'type', s.lang, n, s.env) ? 'type' : null;
+  if (!ex) return continueIntro();
+  const queue = [...s.queue];
+  queue[s.pos] = { ...item, phase: 'quiz' };
+  const exercise: Exercise = { ...build({ ...s, queue } as ExCtx, card, ex, true), check: 'known' };
+  prebuilt = null;
+  useSession.setState({ queue, exercise, step: s.step + 1 });
+  return firstKindOf(exercise);
+}
+
 /** Nächster Zustand ohne Seiteneffekte (Ende → `summary`). */
 function advanceState(s: SessionState): SessionState {
   const next = { ...s, ...settle(s, s.pos + 1) };
@@ -588,15 +618,19 @@ export function commitAnswer(ans: Answer): FirstKind {
     lang: s.lang,
     ctx: s.round === 'pflicht' ? 'rev' : 'xtra',
   };
-  if (e.ex === 'colloc' && e.colloc) a.colIndex = e.colloc.index;
+  if ((e.ex === 'colloc' || e.ex === 'colloc_gap') && e.colloc && e.colloc.index >= 0) a.colIndex = e.colloc.index;
+  a.dev = s.env.touch ? 't' : 'k';
   if (card.kind === 'chunk') a.q = card.word;
   if (ans.override) a.override = true;
   if (ans.hint) a.hint = ans.hint;
-  if (e.check) a.check = e.check;
+  if (e.check === 'control' || e.check === 'probe') a.check = e.check;
+  // „Kenne ich“: richtig ohne Hilfe → die Karte bekommt Stufe 3 und 10 Tage statt der gewöhnlichen Planung.
+  const knownPass = e.check === 'known' && ans.ok && !ans.hint && !ans.override && card.kind === 'vocab';
   if (e.ex === 'flip' && s.catchUp && card.stage >= 3) a.catchUp = true;
 
   // Lokal sofort weiterrechnen (optimistisch); gespeichert wird auf dem frischen Stand.
-  const nextDoc = applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
+  const knownDoc = knownPass ? knownOp({ ...card.doc }, card.path, null, a.t, s.day) : null;
+  const nextDoc = knownDoc && 'update' in knownDoc ? applyUpdate({ ...card.doc }, knownDoc.update) : applyUpdate({ ...card.doc }, cardPatch({ ...card.doc }, a));
   const updated = (card.kind === 'chunk' ? toChunkCard(card.id, nextDoc, a.t) : toTrainCard(card.id, nextDoc, true, a.t)) ?? card;
   const cards = new Map(s.cards);
   cards.set(card.key, updated);
@@ -630,7 +664,8 @@ export function commitAnswer(ans: Answer): FirstKind {
     holdAnswer({ a, seed, immediate, before: s, step: next.step, word: card.word });
     return applyAdvance(next);
   }
-  void saveCard(a, seed);
+  if (knownPass) void saveKnown(card.path, s.day, seed);
+  else void saveCard(a, seed);
   recordAnswer(a, immediate);
   return applyAdvance(next);
 }

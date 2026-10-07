@@ -25,11 +25,17 @@ export type ExerciseId =
   | 'dictation'
   | 'speed'
   | 'produce'
+  // Lernplattform 2.0 (§4.8): „Was heißt das hier?“, Partnerwort-Lücke, Satz vervollständigen, Wortfamilie, Falle finden.
+  | 'ctx_mc'
+  | 'colloc_gap'
+  | 'complete'
+  | 'wordfam'
+  | 'find_trap'
   /** Anki „Aufdecken“ (anki-regeln.md): nie automatisch gewählt, nur über `pickMode`. */
   | 'flip';
 /** Modus der alten App (Schlüssel in `modes` und `hist[].m`). */
 export type LegacyMode = 'recog' | 'cloze' | 'type' | 'colloc' | 'listen' | 'produce';
-export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce' | 'flip';
+export type InputKind = 'choice' | 'typed' | 'spot' | 'tiles' | 'produce' | 'flip' | 'sentence';
 
 /** Satz mit markierter Stelle: `sentence.slice(start, end) === gap`. */
 export type ContextSpan = { sentence: string; start: number; end: number; gap: string };
@@ -118,9 +124,15 @@ export type Exercise = {
   /** Szene und Absicht (situation, M15). */
   situation?: SituationTask;
   /** Anki (anki-regeln §1): getippte Kontrolle nach „Leicht“ bzw. Prüfabfrage nach „Gut“. */
-  check?: 'control' | 'probe';
+  check?: 'control' | 'probe' | 'known';
   /** Nur `flip`: Richtung der Karte (§8). */
   dir?: 'de-en' | 'en-de';
+  /** `complete`: Satzanfang aus dem Paket (sonst frei). */
+  start?: string | null;
+  /** `wordfam`: das Familienmitglied, aus dem das gesuchte Wort gebildet wird (Wortart, Wort). */
+  famFrom?: { pos: 'noun' | 'verb' | 'adj' | 'adv'; word: string } | null;
+  /** `find_trap`: Übungssatz der Falle und die falsch benutzte Stelle darin. */
+  trap?: { id: string; sentence: string; start: number; end: number } | null;
 };
 
 /** Baustein (tiles): Text und ob er ein Fremdbaustein ist. */
