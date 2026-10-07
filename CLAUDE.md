@@ -8,9 +8,10 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 # TEIL A – ARBEITSGRUNDLAGE
 
 ## A1. Auftrag in Kürze
-- **Was:** Neubau von null (Greenfield) einer persönlichen High-End-Englisch-App (B2 → C1) für Emrah. Sie läuft als **veröffentlichtes Claude-Artefakt**: eine einzige HTML-Datei, Datenbank und KI ausschließlich über `claude.use("db")` / `claude.use("sample")`.
+- **Was:** Neubau von null (Greenfield) einer persönlichen High-End-Englisch-App (B2 → C1) für Emrah. Sie läuft als **veröffentlichtes Claude-Artefakt** (Standard eine HTML-Datei; Mehr-Datei-Build seit 07.10.2026 erlaubt, siehe A7), Datenbank und KI ausschließlich über `claude.use("db")` / `claude.use("sample")`.
 - **Vorgänger-App:** Von ihr werden nur **die Daten und die Funktionsideen** übernommen, **kein Code**.
 - **Fokus seit 04.10.2026 (Umbau):** Die App trainiert nur noch **Wörter und Grammatik** (dazu freiwillig Sprechen mit Rollenspiel und Einwand-Training, Übersetzer, Claude). Kap. 2 Nr. 5 (kombinierte Aufgaben), Kap. 6 (Funktionsumfang) und Kap. 14 („alle Module“) des Auftrags gelten nur dafür. Maßgeblich sind `docs/umbau/gesamtkonzept.md`, `docs/umbau/uebergabe.md` und der Merkzettel `docs/umbau/stand.md`; Arbeits-Branch `claude/umbau-fokus`, Rückweg Marke `pre-fokus` (Commit `6aaf4af`).
+- **Aktueller Plan (seit 06.10.2026):** Lernplattform 2.0 (`docs/umbau/lernplattform-2.md`, fertig und live) und **Lernplattform 3.0** (`docs/umbau/lernplattform-3.md`, Releases R1–R7, Pakete P9–P84) mit den Ergänzungen `c1-programm.md`, `c1-aufgaben.md`, `erlebnis-engine.md`, `ki-tutor.md`, `motivation.md`. Freigegebene Design-Vorschau: Artefakt `4dDepfJ8H1Hwsm8BUvbCHd`. Laufender Stand immer in `docs/umbau/stand.md` (nur anhängen).
 - **Vollständiger Auftrag:** `docs/auftrag.md` (Kapitel 0–15). Vor jeder Phase die betroffenen Kapitel dort vollständig lesen, besonders Kap. 4 (Interaktions-Engine), 5 (Lernwissenschaft), 6 (Funktionsumfang), 7 (Motivation), 8 (Design-System), 9 (Daten), 10 (KI-Schicht), 12 (Tests), 13 (Phasenplan).
 - **Maßgebliche Laufzeit-Verträge:** `contract/*.d.ts` (Version 0.2.49). **Vor jedem Daten- oder KI-Code** `contract/claude.d.ts`, `contract/db.d.ts` und `contract/sample.d.ts` vollständig lesen, nichts aus dem Gedächtnis raten. Widerspricht der Auftragstext einem Vertrag, gilt der Vertrag (Kap. 3.1: „maßgeblich").
 - **Bestehende Datenstruktur:** `docs/datenstruktur.json` (Anhang B). Sie ist die Referenz für jeden Dokumentpfad und jedes Feld der alten Datenbank.
@@ -20,6 +21,7 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 - Kommunikation auf **Deutsch**, klar, ohne Fachjargon.
   - **Emrahs Vorgabe vom 02.10.2026 (gilt für jede Antwort):** Immer so erklären, dass auch Nicht-Entwickler es verstehen. Keine Fachwörter (Commit, Branch, Build, Lint, E2E, Seed …) ohne einfache Erklärung, lieber sagen, was man als Nutzer davon merkt. Den aktuellen Stand grundsätzlich erklären (was ist fertig, woran arbeite ich, was wartet auf Emrah).
   - **Bei jedem Test-Link und jeder Live-Schaltung am Ende:** (1) was genau geändert wurde, in Alltagssprache und aus Sicht von Emrah, (2) wie er es am Handy testet, Schritt für Schritt mit genauen Klicks, (3) woran er erkennt, dass es richtig funktioniert, und was er mir schicken soll, wenn nicht.
+- **Arbeitsweise seit 07.10.2026 (Emrahs Vorgabe):** Die Hauptsitzung steuert alles über Unter-Agenten (Agent-Tool, eigene Worktrees und Zweige) und öffnet **keine neuen Kontextfenster/Cloud-Sitzungen** mehr (sie sind von hier nicht sichtbar). Wenige Agenten parallel (2–3), keine Wellen von 5–6, keine Dauerschleifen/Polling. Volle Planqualität, keine Kürzung von Menge oder Themen. Inhalte (Aufgaben) immer mit Gegenlesung durch `english-teacher` vor dem Test-Link. Emrah bekommt Zwischenbilder, sobald es welche gibt.
 - Die Entscheidungsfragen wurden in Phase 0 gebündelt gestellt (höchstens fünf). Danach arbeitest du selbstständig und fragst nur noch bei echten Blockern.
 - **Nie still überspringen:** Was sich in der Cloud-Umgebung nicht installieren oder ausführen lässt, offen sagen und den nächstbesten Weg vorschlagen.
 - Keine Geheimnisse und **keine echten persönlichen Daten** im Repository. Testdaten sind erfunden (`seed/sample-data.json`).
@@ -35,7 +37,7 @@ Teil A fasst Auftrag, Arbeitsweise und Stand zusammen. Teil B enthält die Kapit
 1. Alle Tests grün (Subagent `qa-runner`). `platform-guard` und `data-guard` ohne Befund. **Keine Auslieferung, solange ein Test rot ist.**
 2. Genau **eine** Datei `dist/index.html` im Repository. `dist/` steht **nicht** in `.gitignore`.
 3. **Ein Commit je Phase** mit klarer Nachricht, z. B. „Phase 1: Kern-Erlebnis", damit jeder Stand zurückholbar ist.
-4. Entwickelt wird auf dem Arbeits-Branch der Sitzung. Nach grünen Tests wird er **in `main` zusammengeführt und `main` gepusht** (Kap. 0.4). `dist/index.html` muss auf `main` liegen.
+4. Entwickelt wird auf `claude/umbau-fokus` (seit 04.10.2026; `main` wird für den Umbau nicht benutzt). Unter-Agenten arbeiten auf eigenen Zweigen `claude/umbau-<name>`, die Hauptsitzung führt zusammen. `dist/index.html` liegt auf `claude/umbau-fokus`.
 5. **Bericht an Emrah in genau drei Sätzen:** was neu ist · was Emrah testen soll · was als Nächstes kommt.
 6. Veröffentlicht wird **in claude.ai**, nicht aus diesem Repository. Emrah gibt dort Bescheid, die Datei wird aus dem Repository geholt und zunächst als **separates Test-Artefakt** mit einer Kopie seiner Daten veröffentlicht. Beim Veröffentlichen die Fähigkeiten `db`, `sample` und `downloads` deklarieren. **Die alte App bleibt unberührt**, bis Emrah in Phase 7 ausdrücklich OK sagt. Nie über die laufende App veröffentlichen, um etwas zu zeigen. *(Stand 26.09.2026: Emrah hat den Umzug ausdrücklich vorgezogen, siehe A7.)*
 
@@ -58,9 +60,13 @@ Stand pflegen: nach jedem Arbeitsschritt hier abhaken.
   - [x] Vorarbeiten fertig, noch nicht gemergt: WP1 KI-Tor/Sprachausgabe (`1651f78`), WP3 Wörterbuch/Lautschrift (`779bdd0`)
   - [x] Trainer-Umbau nach Emrahs Rückmeldung, Wort-Antippen, Lautschrift, Aussprache, KI-Tor – produktiv (c29b3dd)
   - [ ] Pflicht/`pflichtSince` und Wendungen im Trainer kommen mit Phase 2
-- [ ] **Umbau „Fokus Wörter und Grammatik“** (Wellen W0–W6, Stand in `docs/umbau/stand.md`; Branch `claude/umbau-fokus`; Test-Link nach W2, Live nur mit „Ja live nehmen“)
-  - [x] W0 Vorbereitung (Marke, Messbasis `docs/umbau/09-messbasis.md`, A1/A4 angepasst)
-  - [ ] W1 Entkoppeln · [ ] W2 Aufräumen (T1) · [ ] W3 Heute (T2) · [ ] W4 Wörter/Atlas (T3) · [ ] W5 Grammatik/Fortschritt (T4) · [ ] W6 Politur (T5)
+- [x] **Umbau „Fokus Wörter und Grammatik“** (W0–W6): abgelöst durch Lernplattform 2.0 (Details in `docs/umbau/stand.md`)
+- [x] **Lernplattform 2.0** (P1–P8): **live** auf `JLL8…` Version `1791365099-c789` (Artefakt-Version 68)
+- [ ] **Lernplattform 3.0** (`docs/umbau/lernplattform-3.md`; Stand 07.10.2026)
+  - [x] R1 C1-Aufgaben (kwt, err) · [x] R2 Dein Tag (ocl, mcc, Plan 3.0, Tempo, Erklär 2.0, Abschlusskarte, Effekte Stufe 1) · [x] V1 Varianz beim Befestigen · [x] Mehr-Datei-Build — alles auf Test-Link `AXHkh6…` Version `1791393276-ae06` (Test 6), **noch nicht live**
+  - [ ] Design-Angleichung an die Vorschau inkl. Effekt-Engine (Branch `claude/umbau-design`) → Test-Link 7, dann live nach „Ja live nehmen“ (Emrah: Design zuerst live)
+  - [ ] R3 Dein Weg: P31–P33 zusammengeführt (Schalter `program` aus), P34–P37 + Lehrer-Korrekturen auf `claude/umbau-r3-b` in Arbeit
+  - [ ] R4 Messen · [ ] R5 Dein Lehrer · [ ] R6 Premium · [ ] R7 Fülle (nur auf Zuruf)
 - [ ] Phase 2 – Lernen: Kurs, Grammatik, Diktat, Lückenjagd, Satzbau, Sprint
 - [ ] Phase 3 – Sprechen: Rollenspiel mit Analysepanel, Sprachausgabe, Chunks mitnehmen, Business-Suite
 - [ ] Phase 4 – Input und Output: Lesen, Hören, Schreiben, Entdecken
