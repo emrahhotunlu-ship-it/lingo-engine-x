@@ -203,7 +203,8 @@
    "bad": {
     "span": "could we shift",
     "fix": [
-     "if we could shift"
+     "if we could shift",
+     "whether we could shift"
     ],
     "choices": [
      "if we could shift",
@@ -283,8 +284,8 @@
    "pat": "sa.being",
    "why": {
     "ok": {
-     "de": "Kein Fehler: Silly beschreibt Verhalten, deshalb passt is being.",
-     "en": "No mistake: silly describes behavior, so is being fits."
+     "de": "Kein Fehler: Funny beschreibt Verhalten, deshalb passt is being.",
+     "en": "No mistake: funny describes behavior, so is being fits."
     },
     "wrong": []
    },

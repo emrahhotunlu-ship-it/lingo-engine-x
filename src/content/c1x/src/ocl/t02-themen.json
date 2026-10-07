@@ -342,7 +342,12 @@
     "increasingly",
     "now",
     "constantly",
-    "repeatedly"
+    "repeatedly",
+    "also",
+    "already",
+    "still",
+    "often",
+    "frequently"
    ],
    "cls": "adv",
    "chips": [
@@ -540,7 +545,11 @@
    "accept": [
     "much",
     "even",
-    "far"
+    "far",
+    "slightly",
+    "considerably",
+    "significantly",
+    "way"
    ],
    "cls": "adv",
    "chips": [
@@ -591,7 +600,11 @@
    "accept": [
     "borrowing",
     "taking",
-    "using"
+    "using",
+    "wearing",
+    "touching",
+    "stealing",
+    "grabbing"
    ],
    "cls": "part",
    "chips": [
@@ -643,7 +656,11 @@
     "going",
     "supposed",
     "due",
-    "meant"
+    "meant",
+    "scheduled",
+    "expected",
+    "planning",
+    "set"
    ],
    "cls": "part",
    "chips": [
@@ -874,8 +891,8 @@
       "if": [
        "has"
       ],
-      "de": "has verlangt eine 3. Form, hier folgt to start.",
-      "en": "has needs a participle, but to start follows."
+      "de": "has to wäre Gegenwart, der Plan lag in der Vergangenheit (changed).",
+      "en": "has to would be present, but the plan lay in the past (changed)."
      },
      {
       "if": [
@@ -1090,7 +1107,8 @@
     "number",
     "majority",
     "proportion",
-    "share"
+    "share",
+    "percentage"
    ],
    "cls": "det",
    "chips": [

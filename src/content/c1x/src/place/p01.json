@@ -2943,7 +2943,10 @@
       "must be in",
       "should be in",
       "must be handed in",
-      "must be submitted"
+      "must be submitted",
+      "has to be in",
+      "needs to be in",
+      "is due"
      ],
      "b": [
       "by"
@@ -3175,6 +3178,14 @@
     {
      "a": [
       "He denied that"
+     ],
+     "b": [
+      "he had deleted"
+     ]
+    },
+    {
+     "a": [
+      "He denied"
      ],
      "b": [
       "he had deleted"

@@ -71,7 +71,7 @@ R2 = {
         'are': ('are braucht ein -ing oder eine 3. Form, hier folgt die Grundform open.', 'are needs an -ing or a participle, but the base form open follows.')},
     'The trip ___ to start on Friday, but the storm changed our plans.': {
         'is': ('is gehört in die Gegenwart, der Plan lag aber in der Vergangenheit.', 'is belongs to the present, but the plan lay in the past.'),
-        'has': ('has verlangt eine 3. Form, hier folgt to start.', 'has needs a participle, but to start follows.'),
+        'has': ('has to wäre Gegenwart, der Plan lag in der Vergangenheit (changed).', 'has to would be present, but the plan lay in the past (changed).'),
         'be': ('be allein bildet hier keine Vergangenheit, es braucht was.', 'be alone forms no past here, was is needed.')},
     'Neither ___ the two proposals fits our timeline, so we need a third option.': {
         'from': ('neither from gibt es nicht, es heißt neither of.', 'neither from does not exist, it is neither of.'),

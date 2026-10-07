@@ -573,8 +573,8 @@
       "if": [
        "so"
       ],
-      "de": "Much so bedeutet „sehr“ und leitet keinen Einwand ein.",
-      "en": "Much so means “very” and does not start a concession."
+      "de": "Much so gibt es nur als very much so („allerdings“), es leitet keinen Einwand ein.",
+      "en": "Much so exists only as very much so (“indeed”), it does not start a concession."
      },
      {
       "if": [
@@ -729,8 +729,8 @@
       "if": [
        "too"
       ],
-      "de": "too heißt „zu“ und passt nicht zu einer Folge mit that.",
-      "en": "too means “too” and does not fit a result with that."
+      "de": "too steht vor einem Adjektiv und verlangt danach to + Infinitiv, keinen that-Satz.",
+      "en": "too stands before an adjective and needs to + infinitive after it, not a that-clause."
      }
     ]
    },

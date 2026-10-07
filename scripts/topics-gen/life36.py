@@ -100,7 +100,7 @@ def emph():
         ('Kein Fehler: Adjektiv + as + it may seem räumt etwas ein.', 'No mistake: adjective + as + it may seem concedes a point.'))
 
     kwt(T, 'ep.concession', 'C1', L, 0.0, 'Although the offer sounds attractive, I will stay home tonight.', 'TEMPTING', '', 'is, I will stay home tonight.',
-        [(['Tempting as'], ['the offer'])], ['as', 'the', 'offer'], ['that', 'so', 'it'], [],
+        [(['Tempting as', 'Tempting though'], ['the offer'])], ['as', 'the', 'offer'], ['that', 'so', 'it'], [],
         ('Tempting as the offer is, … Das Adjektiv steht vor as, dann die normale Stellung.', 'Tempting as the offer is, … The adjective stands before as, then the normal order.'), [])
     kwt(T, 'ep.do-emph', 'C1', L, 0.0, 'I really enjoyed the concert last night.', 'DID', 'I', 'the concert last night.',
         [(['really did'], ['enjoy'])], ['really', 'enjoy'], ['enjoyed', 'do', 'was'], ['really did enjoyed'],
@@ -155,9 +155,9 @@ def ellipsis():
     err(T, 'el.so-not', 'C1', L, 0.0, 'Will it rain on the weekend? I do not hope so, because we are planning a picnic.',
         ('do not hope so', ['hope not'], ['hope not', 'do not hope not', 'hope so not']),
         ('Es heißt I hope not, nicht I do not hope so. Not ersetzt den Gedanken.', 'It is I hope not, not I do not hope so. Not replaces the thought.'))
-    err(T, 'el.so-not', 'C1', L, 0.0, 'I do not like coffee, and neither I do, so we ordered water.',
-        ('neither I do', ['neither do I'], ['neither do I', 'neither I do', 'so do I']),
-        ('Nach neither steht das Hilfsverb vor dem Subjekt: neither do I.', 'After neither the auxiliary comes before the subject: neither do I.'))
+    err(T, 'el.so-not', 'C1', L, 0.0, 'I do not like coffee, and neither my wife does, so we ordered water.',
+        ('neither my wife does', ['neither does my wife'], ['neither does my wife', 'neither my wife does', 'so does my wife']),
+        ('Nach neither steht das Hilfsverb vor dem Subjekt: neither does my wife.', 'After neither the auxiliary comes before the subject: neither does my wife.'))
     err(T, 'el.one-ones', 'C1', L, 0.0, 'My phone is old, so I bought a new on the weekend.',
         ('a new', ['a new one'], ['a new one', 'a new ones', 'the new it']),
         ('Hinter dem Adjektiv new braucht es one.', 'After the adjective new you need one.'))
