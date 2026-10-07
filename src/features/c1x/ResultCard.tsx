@@ -34,11 +34,11 @@ export function ResultParts({ score }: { score: C1Score }): ReactNode {
   return <PartBar parts={score.parts} />;
 }
 
-export function ResultAfter({ item, matched }: { item: C1Item; matched: WhyRule | null }) {
+export function ResultAfter({ item, matched, day }: { item: C1Item; matched: WhyRule | null; day: string }) {
   const { t } = useT();
   return (
     <>
-      <WhyList item={item} matched={matched} />
+      <WhyList item={item} matched={matched} day={day} />
       {item.kind === 'kwt' && (
         <p className="lx-t-meta mt-2 text-muted" data-testid="cambridge-note">
           {t('cxCambridge')}

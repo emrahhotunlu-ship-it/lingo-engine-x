@@ -1,5 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
+import { mccOrder } from '../../src/domain/c1x/mix';
+import type { Mcc as MccItem } from '../../src/domain/c1x/types';
 import { bootAt } from './fixtures';
 import { dump, DAY } from './trainerHelpers';
 import { nextItem, typeInGap } from './learnHelpers';
@@ -37,6 +39,14 @@ const entryOf = async (page: Page, cid: string): Promise<Doc> => {
   return (await logOf(page)).find((e) => e.cid === cid) as Doc;
 };
 
+// Die Anzeige mischt die Optionen fest je Aufgabe und Lerntag (`domain/c1x/mix`): Im Inhalt steht die Lösung in einem festen Kreis, angezeigt
+// liegt sie woanders. Deshalb die angezeigte Position nie aus `answer` ableiten, sondern über den Text der Option suchen.
+const shownAt = async (item: Locator, text: string): Promise<number> => {
+  const i = (await item.getByTestId('choice').locator('span[lang]').allInnerTexts()).map((x) => x.trim()).indexOf(text);
+  expect(i, `Option „${text}“ angezeigt`).toBeGreaterThanOrEqual(0);
+  return i;
+};
+
 const MCC = itemOf<Mcc>('mcc', 'mcc-0049');
 const WRONG = MCC.options.findIndex((_, i) => i !== MCC.answer);
 const OCL = itemOf<Ocl>('ocl', 'ocl-0007');
@@ -49,10 +59,13 @@ test.describe('Handy', () => {
     const item = page.getByTestId('gr-item');
     await expect(item).toHaveAttribute('data-c1x', 'mcc');
     await expect(item.getByTestId('choice')).toHaveCount(4);
+    // Angezeigt in der festen Mischung des Lerntags (nicht in der Reihenfolge des Inhalts).
+    const order = mccOrder(MCC as unknown as MccItem, DAY);
+    await expect(item.getByTestId('choice').locator('span[lang]')).toHaveText(order.map((i) => MCC.options[i] ?? ''));
     await expect(page.getByTestId('check')).toBeDisabled();
     // Die Lösung steht vor dem Prüfen nicht im Satz (die Lücke ist leer).
     await expect(item.getByTestId('gap')).toHaveAttribute('data-state', 'input');
-    await item.getByTestId('choice').nth(WRONG).click();
+    await item.getByTestId('choice').nth(await shownAt(item, MCC.options[WRONG] ?? '')).click();
     await expect(item.getByTestId('gap')).toContainText(MCC.options[WRONG] ?? '');
     await expect(page.getByTestId('check')).toBeEnabled();
     await page.getByTestId('check').click();
@@ -78,8 +91,9 @@ test.describe('Handy', () => {
     const dim = item.locator('[data-testid="choice"][data-state="dim"]');
     await expect(dim).toHaveCount(1);
     await expect(dim).toBeDisabled();
-    await expect(item.getByTestId('choice').nth(MCC.answer)).toBeEnabled();
-    await expect(item.getByTestId('choice').nth(MCC.answer)).not.toHaveAttribute('data-state', 'dim');
+    const right = item.getByTestId('choice').nth(await shownAt(item, MCC.options[MCC.answer] ?? ''));
+    await expect(right).toBeEnabled();
+    await expect(right).not.toHaveAttribute('data-state', 'dim');
     expect(errors).toEqual([]);
   });
 
@@ -120,7 +134,7 @@ test.describe('Handy', () => {
     const { errors } = await start(page, lex, { 'vocab/possibly': card });
     const item = page.getByTestId('gr-item');
     await expect(item).toHaveAttribute('data-c1x', 'mcc');
-    await item.getByTestId('choice').nth(lex.answer).click();
+    await item.getByTestId('choice').nth(await shownAt(item, lex.options[lex.answer] ?? '')).click();
     await page.getByTestId('check').click();
     await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
     await nextItem(page);
@@ -143,7 +157,8 @@ test.describe('Laptop', () => {
     const { errors } = await start(page, MCC);
     const item = page.getByTestId('gr-item');
     await expect(item.getByTestId('choice')).toHaveCount(4);
-    await page.keyboard.press(String(MCC.answer + 1));
+    // Taste 1–4 folgt der angezeigten (gemischten) Position, nicht der im Inhalt.
+    await page.keyboard.press(String((await shownAt(item, MCC.options[MCC.answer] ?? '')) + 1));
     await expect(item.getByTestId('gap')).toContainText(MCC.options[MCC.answer] ?? '');
     await page.keyboard.press('Enter');
     await expect(item.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');

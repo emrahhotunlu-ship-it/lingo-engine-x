@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { splitWords } from '../../../domain/answer/align';
 import { errRange } from '../../../domain/c1x/kinds/err';
+import { errChipOrder } from '../../../domain/c1x/mix';
 import type { Err } from '../../../domain/c1x/types';
 import { ChipRow } from '../../../engine/ChipRow';
 import { TapSentence } from '../../../engine/TapSentence';
@@ -14,7 +15,8 @@ import type { C1Ctrl, C1Ui } from '../types';
 //  · Laptop (`desk`): anklicken oder mit ←/→ und Enter wählen, Korrektur tippen, Taste N = „Kein Fehler“; Note `err_fix`.
 //  · Handy, p ≤ 0,7 (`tap`): drei Korrektur-Chips und „Doch nicht“ (Auswahl, kein freier Abruf); Note `err_tap`.
 //  · Handy, p > 0,7 (`tapfix`): Wort antippen, Korrektur höchstens 3 Wörter tippen (Produktion, freier Abruf); Note `err_tapfix`.
-// Gibt es keine Chips (Aufgaben aus dem LP2-Adapter), gilt auch am Handy die getippte Korrektur.
+// Gibt es keine Chips (Aufgaben aus dem LP2-Adapter), gilt auch am Handy die getippte Korrektur. Die Chips stehen im Inhalt mit der Lösung in einem
+// festen Kreis; angezeigt werden sie fest gemischt je Aufgabe und Lerntag (`errChipOrder`). Gemeldet wird der Text des Chips, nie seine Position.
 
 export type ErrMode = 'desk' | 'tap' | 'tapfix';
 export const FIX_MAX_WORDS = 3;
@@ -29,7 +31,12 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
   const { t } = useT();
   const words = useMemo(() => splitWords(item.text), [item.text]);
   const range = useMemo(() => errRange(item), [item]);
-  const choices = item.bad?.choices ?? null;
+  // Einmal je Aufgabe (eigener `key` im Rahmen): Neu-Zeichnen und ein Tageswechsel mitten in der Aufgabe mischen nicht neu.
+  const [choices] = useState<string[] | null>(() => {
+    const raw = item.bad?.choices;
+    const order = errChipOrder(item, ctrl.day);
+    return raw && order ? order.map((i) => raw[i] ?? '') : null;
+  });
   const mode = errMode(ctrl.inp, ctrl.p, !!choices);
   const [sel, setSel] = useState<number | null>(null);
   const [fix, setFix] = useState('');

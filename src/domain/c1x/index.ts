@@ -11,6 +11,7 @@ export { solutionsOf, wrongsOf } from './solutions';
 export { legacyV2Items, legacyV2ById } from './legacyV2';
 export { defaultCheckCtx } from './checkContext';
 export { errRange, errFixed } from './kinds/err';
+export { mixOrder, mccOrder, errChipOrder, shownOptions } from './mix';
 export { ruleMatches, whyRuleFor } from './kinds/common';
 export { toTask, c1Key, isC1Key, isC1Task, nOptionsOf, C1_KEY_PREFIX } from './runtime';
 export type { C1Task } from './runtime';

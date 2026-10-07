@@ -204,6 +204,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
     inp,
     profile,
     lang,
+    day,
     area,
     p,
     locked: fb !== null,
@@ -284,7 +285,7 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
       menu,
       tutor,
       parts: createElement(ResultParts, { score: fb.score }),
-      after: createElement(ResultAfter, { item, matched }),
+      after: createElement(ResultAfter, { item, matched, day }),
       auto: !noAuto && fb.help === 0 && !fb.override && fb.score.free,
     };
   }

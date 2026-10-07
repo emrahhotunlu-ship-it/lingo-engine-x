@@ -31,6 +31,8 @@ export type C1Ctrl = {
   inp: C1Input;
   profile: InputProfile;
   lang: Lang;
+  /** Lerntag: Startwert der festen Mischung der Auswahlarten (`domain/c1x/mix`). */
+  day: string;
   area: WordTapArea;
   /** p des Themas (Stufe der Aufgabe): bestimmt, wie viel Hilfe die Eingabeform gibt. */
   p: number;

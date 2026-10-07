@@ -1,4 +1,5 @@
 import type { WhyCat, WhyRule } from '../../domain/explain/types';
+import { shownOptions } from '../../domain/c1x/mix';
 import type { C1Item } from '../../domain/c1x/types';
 import type { MessageKey } from '../../i18n';
 import { useT } from '../../i18n';
@@ -14,10 +15,18 @@ const CAT: Record<WhyCat, MessageKey> = {
   register: 'cxCat_register',
 };
 
-export function WhyList({ item, matched }: { item: C1Item; matched: WhyRule | null }) {
+const norm = (s: string): string => s.trim().toLowerCase();
+
+export function WhyList({ item, matched, day }: { item: C1Item; matched: WhyRule | null; day: string }) {
   const { t, lang } = useT();
-  // Auswahlarten: alle falschen Optionen (Regeln mit `opt`); sonst nur die getroffene Regel (Falle bzw. falsch angetippter Satzteil).
-  const own = item.why.wrong.filter((r) => r.opt !== undefined);
+  // Auswahlarten: alle falschen Optionen (Regeln mit `opt`), in der angezeigten (gemischten) Reihenfolge der Optionen; sonst nur die getroffene
+  // Regel (Falle bzw. falsch angetippter Satzteil).
+  const shown = shownOptions(item, day)?.map(norm) ?? [];
+  const at = (r: WhyRule): number => {
+    const i = r.opt === undefined ? -1 : shown.indexOf(norm(r.opt));
+    return i < 0 ? shown.length : i;
+  };
+  const own = item.why.wrong.filter((r) => r.opt !== undefined).sort((a, b) => at(a) - at(b));
   const rows: WhyRule[] = own.length ? own : matched ? [matched] : [];
   if (!rows.length) return null;
   const text = (r: WhyRule): string => (lang === 'de' ? r.de : r.en);
