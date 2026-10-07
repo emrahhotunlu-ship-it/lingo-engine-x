@@ -8,14 +8,14 @@
 // Aufruf: node scripts/grammar/audit-patterns.mjs [--json] [thema …]
 import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROOT, allSeedTasks, readJson } from './lib.mjs';
+import { ROOT, allSeedTasks, readJson, legacyTaskKey } from './lib.mjs';
 
 const args = process.argv.slice(2);
 const only = args.filter((a) => !a.startsWith('--'));
 const PATTERNS = join(ROOT, 'src/content/grammar/patterns');
 const mapTbl = readJson('src/content/grammar/pattern-map.json');
 const norm = (s) => s.toLowerCase().replace(/[^a-z' ]+/g, ' ').replace(/\s+/g, ' ').trim();
-const key = (s) => norm(s).replace(/[^a-z]/g, '').slice(0, 80);
+const key = legacyTaskKey;
 const fill = (t) => (/_{3,}/.test(t.prompt) ? t.prompt.replace(/_{3,}/, t.answer) : `${t.prompt} ${t.answer}`);
 
 /** Konstruktionen: Erkennung im Satz/Lösung/Begründung ↔ Muster muss sie tragen (Name+Formel+Verwendung). */
@@ -25,7 +25,7 @@ const CONSTR = [
   { id: 'if only', re: /\bif only\b/i, own: /if only|wish/i },
   { id: 'would rather', re: /\bwould rather\b/i, own: /would rather/i },
   { id: 'high time', re: /\b(high|about) time\b/i, own: /high time|about time/i },
-  { id: 'passive', re: /\b(passive|passiv)\b/i, own: /passive|passiv/i },
+  { id: 'passive', re: /\b(passive|passiv)\b/i, own: /passive|passiv|\bpp\.|\bpv\./i },
 ];
 const txt = (b) => (b ? `${b.de ?? ''} ${b.en ?? ''}` : '');
 const patText = (p) => `${p.id} ${txt(p.name)} ${txt(p.form)} ${txt(p.use)} ${p.signals.join(' ')}`;
@@ -44,7 +44,7 @@ for (const topic of withFile) {
     if (!p) { cnt.noPat++; rows.push(['A', topic, t.prompt]); continue; }
     if (!e.why?.ok) { cnt.noWhy++; rows.push(['B', topic, t.prompt]); }
     const own = patText(p);
-    const evidence = `${fill(t)} ${txt(e.why?.ok)}`;
+    const evidence = `${fill(t)} ${txt(e.why?.ok)}`.replace(/(?:\b(?:no|not|kein|keine|keinen|nicht)\s+|,\s*kein\s+)(?:inversion|passive|passiv|umstellung)/gi, '');
     for (const c of CONSTR) {
       if (c.re.test(evidence) && !c.own.test(own)) {
         cnt.mismatch++; rows.push(['C', topic, `${t.prompt} → ${t.answer} [${c.id}] Muster ${p.id}`]); break;
