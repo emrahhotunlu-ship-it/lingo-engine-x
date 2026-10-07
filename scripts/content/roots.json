@@ -9,6 +9,7 @@
     "c1x-pair": { "dirs": ["src/content/c1x/src/pair"] },
     "c1x-cnet": { "dirs": ["src/content/c1x/src/cnet"] },
     "c1x-reg": { "dirs": ["src/content/c1x/src/reg"] },
-    "c1x-para": { "dirs": ["src/content/c1x/src/para"] }
+    "c1x-para": { "dirs": ["src/content/c1x/src/para"] },
+    "c1x-place": { "dirs": ["src/content/c1x/src/place"] }
   }
 }
