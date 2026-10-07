@@ -40,7 +40,7 @@ async function vocabRetryCorrect(page: Page) {
   const before = (await entriesFor(page, 'overcome')).length;
   await typeInGap(page, 'zzzz');
   await page.keyboard.press('Enter');
-  const hint = page.getByTestId('retry-hint');
+  const hint = page.locator('[data-testid="hint-line"][data-tone="near"]');
   await expect(hint).toBeVisible();
   await expect(hint).toContainText(`„${answer.slice(0, 2)}…“`);
   await expect(hint).toContainText(`(${answer.length} Buchstaben)`);
@@ -60,10 +60,10 @@ async function vocabRetryCorrect(page: Page) {
   for (let i = 0; i < 4; i++) await page.keyboard.press('Backspace');
   await page.keyboard.type(answer, { delay: 20 });
   await page.keyboard.press('Enter');
-  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+  await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
   // Hinweis „beginnt mit …" hieß: das Wort war nicht bekannt → trotz Treffer „Nochmal" (Lernwissenschaft 27.09.).
-  await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '1');
-  await expect(page.getByTestId('retry-hint')).toHaveCount(0);
+  await expect(page.getByTestId('next-in')).toHaveText('Wieder in 1 Min.');
+  await expect(page.locator('[data-testid="hint-line"][data-tone="near"]')).toHaveCount(0);
   // Erklärung und Beispiele auch nach richtigem zweitem Versuch; kein automatisches Weiter.
   await expect(page.getByTestId('examples')).toBeVisible();
   await page.waitForTimeout(1500);
@@ -88,11 +88,11 @@ test.describe('Desktop', () => {
     const before = (await entriesFor(page, 'overcome')).length;
     await typeInGap(page, 'zzzz');
     await page.keyboard.press('Enter');
-    await expect(page.getByTestId('retry-hint')).toBeVisible();
+    await expect(page.locator('[data-testid="hint-line"][data-tone="near"]')).toBeVisible();
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
-    await expect(page.getByTestId('solution')).toHaveText(answer);
-    await expect(page.getByTestId('due-in')).toHaveAttribute('data-grade', '1');
+    await expect(page.getByTestId('gap-solution')).toContainText(answer);
+    await expect(page.getByTestId('next-in')).toHaveText('Wieder in 1 Min.');
     await page.keyboard.press('Enter');
     await expect.poll(async () => (await entriesFor(page, 'overcome')).length).toBe(before + 1);
     expect((await entriesFor(page, 'overcome')).at(-1)).toMatchObject({ ok: false });
@@ -105,7 +105,7 @@ test.describe('Desktop', () => {
     await typeInGap(page, answer.slice(0, -1));
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'near');
-    await expect(page.getByTestId('retry-hint')).toHaveCount(0);
+    await expect(page.locator('[data-testid="hint-line"][data-tone="near"]')).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 

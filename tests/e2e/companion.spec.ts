@@ -111,9 +111,9 @@ test.describe('Desktop 1440', () => {
     await page.getByTestId('gap-input').click();
     await page.keyboard.type('avoid', { delay: 20 });
     await page.keyboard.press('Enter');
-    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
-    const grade = Number(await page.getByTestId('due-in').getAttribute('data-grade'));
-    expect(grade).toBeLessThanOrEqual(2);
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
+    // Öffnen des Begleiters zählt als Hilfe: höchstens „Schwer“, also kurz wieder vorgelegt (Minuten, nicht Tage).
+    await expect(page.getByTestId('next-in')).toHaveText(/^Wieder in \d+ Min\.$/);
     await openAndSend(page, 'Warum?');
     await expect(page.locator('[data-testid="chat-msg"][data-role="assistant"]').last()).toContainText('[solution-ok]');
     const second = (await chatCalls(page))[1]!;

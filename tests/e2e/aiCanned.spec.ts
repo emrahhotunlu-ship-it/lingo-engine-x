@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { legacyTaskKey } from '../../src/domain/grammar/key';
 import bank from '../../src/content/grammar-bank.json' with { type: 'json' };
 import { expect, test, type Page } from '@playwright/test';
@@ -57,6 +58,7 @@ test('„Neue Wörter von Claude": Liste ohne bekannte Wörter, ein Wort überne
 test('Wortblatt: alte Ergebnisse je Abfrageart sichtbar; Merkhilfe von Claude wird an der Karte gespeichert', async ({ page }) => {
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'vocab/deserve': { lapses: 4 } } } });
   await openVocab(page);
+  await page.getByTestId('vocab-search-open').click();
   await page.getByTestId('vocab-search').fill('deserve');
   await page.locator('[data-testid="vocab-row"][data-word="deserve"]').click();
   const sheet = page.getByTestId('word-sheet');
@@ -71,8 +73,13 @@ test('Wortblatt: alte Ergebnisse je Abfrageart sichtbar; Merkhilfe von Claude wi
 });
 
 test('„Neue Aufgaben zu {Thema}": gespeichert im Pool und in der nächsten Themenrunde zuerst', async ({ page }) => {
-  // Mit der Grammatik-Bank hat jedes Thema 15 Aufgaben: Der Knopf erscheint erst, wenn ein Thema fast durchgespielt ist.
-  const seen = (bank.tasks as Array<{ topic: string; prompt: string }>).filter((x) => x.topic === 'passive').map((x) => legacyTaskKey(x.prompt));
+  // Mit Bank und Musteraufgaben (Lernplattform 2.0) hat jedes Thema viele Aufgaben: Der Knopf erscheint erst, wenn ein Thema fast durchgespielt ist.
+  const v2 = (JSON.parse(readFileSync(new URL('../../src/content/grammar/tasks-v2.json', import.meta.url), 'utf8')) as { tasks: Array<{ topic: string; type: string; frame?: string; prompt?: string; a?: string }> }).tasks;
+  const seen = [
+    ...(bank.tasks as Array<{ topic: string; prompt: string }>).filter((x) => x.topic === 'passive').map((x) => legacyTaskKey(x.prompt)),
+    // Schlüssel der neuen Aufgabenarten: Rahmensatz (kwt), Satz (find), Satz a (meaning).
+    ...v2.filter((x) => x.topic === 'passive').map((x) => legacyTaskKey(x.type === 'kwt' ? x.frame : x.type === 'find' ? x.prompt : x.a)),
+  ];
   const { errors } = await boot(page, { migrated: true, fake: { patch: { 'grammar/passive': { seen } } } });
   await screen(page, 'today');
   await openTab(page, 'learn');
