@@ -45,7 +45,7 @@ Ein Tor, das nicht gelaufen ist, gilt als offen und wird nie als grün gemeldet.
 
 ## 5. Token-Regeln
 1. **Kein Lauf ohne Änderung.** Jeder Bericht nennt den Commit. Bei gleichem Commit gibt es keinen neuen Lauf.
-2. **Schlanke Aufträge.** Ein Agent bekommt die Auftragsdatei, die betroffenen Dateien und die Regelliste. Er bekommt weder das ganze CLAUDE.md noch den Chatverlauf.
+2. **Schlanke Aufträge.** Ein Agent bekommt Ziel, Abnahmekriterium, betroffene Dateien und die nötigen Regeln, nicht den Chatverlauf (CLAUDE.md lädt automatisch, deshalb schlank halten, siehe §9).
 3. **Fester Vorspann vorn** (Rolle, Regeln, Schema), die Aufgabe hinten. Das hilft dem Zwischenspeicher; der Effekt ist aber nicht belegt, darauf wird nichts aufgebaut.
 4. **Günstige Vorfilter (G0) vor teuren Prüfern.**
 5. **Chargen mit höchstens 40 Aufgaben**, damit eine Korrektur nur eine Charge kostet.
@@ -71,3 +71,14 @@ Ein Tor, das nicht gelaufen ist, gilt als offen und wird nie als grün gemeldet.
 3. Dieses Fenster verteilt die Arbeit, sammelt die Ergebnisse und berichtet dir, und es arbeiten höchstens zwei bis drei Helfer gleichzeitig.
 4. Was nicht geprüft werden konnte, zum Beispiel Safari auf dem iPhone, steht immer offen im Bericht.
 5. So musst du seltener nachbessern, und dein Kontingent geht nicht für doppelte Runden drauf.
+
+## 9. Ergänzungen nach Web-Recherche (07.10.2026, Emrahs Freigabe)
+Quellen: Anthropic Engineering („multi-agent research system“, „effective context engineering“), Claude-Code-Docs (costs, sub-agents, model-config), Haiku-5.5-Modellseite, Cognition, Unblocked.
+1. **Modelle sind technisch festgelegt** im Feld `model:` der Dateien in `.claude/agents/`: `qa-runner`, `platform-guard` = haiku · `data-guard`, `debugger` = sonnet · `english-teacher`, `learning-scientist`, `ux-reviewer`, `architect` = opus. Workflows setzen `model`/`effort` je Agent ausdrücklich.
+2. **Haiku gibt ab:** Jede Haiku-Ausgabe hat ein Feld `unklar[]`. Exit-Code ≠ 0, unerwartete Ausgabe oder nötige Bewertung geht ohne Deutung an Sonnet. Nach R2-Abschluss messen: Muss Sonnet in ≥ 20 % der Haiku-Schritte nacharbeiten, geht die Aufgabe zurück an Sonnet (Schwelle ist eigene Annahme).
+3. **Ultracode** ist eine Einstellung (Workflows bei jeder substanziellen Aufgabe, hoher Aufwand). Sie bleibt standardmäßig aus und wird nur für einen benannten Release-Abschluss oder eine Recherche bewusst genutzt. Mehrere Agenten kosten laut Anthropic 7–15× Tokens; Coding ist laut Anthropic ein schlechter Fit für breites Fan-out. Schreiben bleibt einsträngig, Prüfen darf parallel sein.
+4. **Skalierung:** Einfache Suche 1 Agent · Vergleich 2–3 · mehr nie ohne Begründung im Plan.
+5. **Auftrag ist vollständig:** Jeder Auftrag nennt Ziel, Abnahmekriterium und betroffene Pfade; fehlt eines, wird er nicht gestartet (schlanke Aufträge verlieren sonst Kontext).
+6. **CLAUDE.md schlank halten** (wird in jeden Agenten geladen): Entscheidungen stehen in `docs/entscheidungen.md`, Spezialwissen in Fachdokumenten.
+7. **Prompt-Cache:** Mechanismus belegt (Lesen 10 % des Preises, im Abo 1 h). Fester Vorspann vorn hilft; die Ersparnis bei uns ist nicht gemessen.
+8. **Nach jedem Release** frische Sitzung oder `/clear`; Übergabe über `docs/umbau/stand.md` (lange Sitzungen sind laut Docs ein Kostentreiber).
