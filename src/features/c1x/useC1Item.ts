@@ -284,7 +284,8 @@ export function useC1Item(props: C1ItemProps, entry: C1KindEntry, root: RefObjec
   const primary = fb ? { label: t('exNext'), onClick: next, testId: 'next' } : { label: t('exCheck'), onClick: submit, testId: 'check', disabled: !has };
   const card: ReactNode = pattern ? createElement(PatternCard, { name: lang === 'de' ? pattern.name.de : pattern.name.en, formula: lang === 'de' ? pattern.form.de : pattern.form.en, example: pattern.ex[0]?.en ?? null, signals: pattern.signals, compact: !split, area }) : null;
   const aiMark: ReactNode = item.src === 'ai' ? createElement('p', { className: 'lx-t-meta text-muted', 'data-testid': 'ai-mark' }, t('cxAiMark')) : null;
-  const aid: ReactNode = [ui.aid, aiMark, !split && learning && !fb ? card : null].some(Boolean) ? createElement('div', { className: 'flex flex-col gap-2' }, ui.aid, aiMark, !split && learning && !fb ? card : null) : null;
+  // Die Muster-Karte vor dem Prüfen entfällt am Handy: sie verdrängte die Bausteine unter den Bildschirmrand und verriet die Formel (UX-Prüfung R1).
+  const aid: ReactNode = [ui.aid, aiMark].some(Boolean) ? createElement('div', { className: 'flex flex-col gap-2' }, ui.aid, aiMark) : null;
 
   const learnLine = learning && pattern ? { topic: topicLabel, pattern: lang === 'de' ? pattern.name.de : pattern.name.en } : { topic: null, pattern: null };
   void nonEmpty;

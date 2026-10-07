@@ -75,7 +75,7 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
       maxLength={mode === 'part' ? 30 : 80}
       state={state}
       shown={ctrl.locked ? (mode === 'part' ? value : value) : null}
-      reveal={ctrl.locked && verdict === 'wrong' && mode !== 'tiles' ? { solution: mode === 'part' ? (item.keys[0]?.b[0] ?? solution) : solution, given: value.trim() ? value : null } : null}
+      reveal={ctrl.locked && verdict !== 'correct' && mode !== 'tiles' ? { solution: mode === 'part' ? (item.keys[0]?.b[0] ?? solution) : solution, given: value.trim() ? value : null } : null}
       silent
       onChange={(v, info) => {
         setValue(v);
@@ -119,6 +119,12 @@ export function useKwtUi(ctrl: C1Ctrl): C1Ui {
       <div className="flex flex-col gap-2" data-testid="kwt-tiles">
         {tilesNode}
         <WordCounter n={counterN} min={lo} max={hi} />
+        {ctrl.locked && verdict !== 'correct' && (
+          <p className="lx-t-support" data-testid="kwt-solution">
+            <span className="text-muted">{t('cxKwtSolution')} </span>
+            <span lang="en" className="font-semibold">{solution}</span>
+          </p>
+        )}
       </div>
     ) : (
       <div className="flex flex-col gap-3" data-testid="kwt-part">

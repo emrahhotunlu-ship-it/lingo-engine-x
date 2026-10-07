@@ -105,6 +105,12 @@ export function useErrUi(ctrl: C1Ctrl): C1Ui {
     ),
     answer: (
       <div className="flex flex-col gap-3">
+        {ctrl.locked && item.bad && (
+          <p className="lx-t-support" data-testid="err-correction">
+            <span className="text-muted">{t('cxKwtSolution')} </span>
+            <span lang="en" className="font-semibold">{item.bad.fix[0]}</span>
+          </p>
+        )}
         {!ctrl.locked && sel === null && (
           <p className="lx-t-support text-muted" data-testid="err-hint">
             {t('cxErrTapHint')}

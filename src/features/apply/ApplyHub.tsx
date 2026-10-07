@@ -1,3 +1,4 @@
+import { toast } from '../../ui/Toast';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, type ReactNode } from 'react';
 import { useClock } from '../../app/clock';
@@ -139,16 +140,18 @@ export function ApplyHub() {
   const ruleTiles = [withMeta(entry('training-wordform'), touch), withMeta(entry('training-register'), touch), withMeta(entry('training-phrasal'), touch), withMeta(entry('training-transition'), touch)];
   const oldTransform = entry('training-transform');
   // Ist `kwt` angeboten, führt die Kachel „Satz-Umformung“ auf die Aufgabenart `kwt` (am Handy mit Bausteinen); gibt es dort nichts zu üben, gilt die alte Übung.
-  const startKwt = (): void => {
-    const first = startGrammar({ mode: 'xtra', kind: 'kwt' });
+  const startKind = (kind: 'kwt' | 'err', fallback?: () => void): void => {
+    const first = startGrammar({ mode: 'xtra', kind });
     if (!useGrammarSession.getState().tasks.length) {
-      oldTransform?.run();
+      fallback?.();
       return;
     }
     if (first === 'typed') api.focusNow();
     else api.blur();
     go({ name: 'grammarSession', mode: 'xtra' });
   };
+  const startKwt = (): void => startKind('kwt', () => oldTransform?.run());
+  const findErr: TileData | null = kindEnabled('err') ? { id: 'hub-find-err', icon: 'search', channel: 'grammar', title: t('hxApplyFindErr'), sub: t('hxApplyFindErrSub'), meta: touch, run: () => startKind('err', () => toast(t('hxApplyFindErrNone'))) } : null;
   const transform = kindEnabled('kwt') && oldTransform ? withMeta({ ...oldTransform, run: startKwt }, touch) : withMeta(oldTransform, laptop);
   const speak: TileData = { id: 'hub-speak', icon: 'chat', channel: 'speak', title: t('apRoleplay'), sub: t('apRoleplaySub'), meta: profile === 'touch' ? t('hxApplySpeakPhone') : laptop, run: () => go({ name: 'speak' }) };
   const repair: TileData | null = moreFix > 0 ? { id: 'hub-repair-round', icon: 'refresh', channel: 'grammar', title: t('hxApplyMoreFix', { n: moreFix }), sub: t('apRepairSub', { n: moreFix }), meta: touch, run: () => go({ name: 'repairRound' }) } : null;
@@ -157,7 +160,7 @@ export function ApplyHub() {
   const render = (xs: TileData[], featured?: string) => xs.map((x) => <Tile key={x.id} icon={x.icon} channel={x.channel} title={x.title} sub={x.sub} meta={x.meta} onClick={x.run} testId={x.id} featured={x.id === featured} />);
 
   // Reihenfolge nach Gerät (§2.6): Handy zuerst kurze Textübungen, Kopfhörer-Übungen danach, Laptop-Übungen eingeklappt; Laptop: Hören und Schreiben oben.
-  const phoneFirst = list([repair, wordPartner, order, ...ruleTiles, ...(kindEnabled('kwt') ? [transform] : [])]);
+  const phoneFirst = list([repair, wordPartner, order, ...ruleTiles, ...(kindEnabled('kwt') ? [transform] : []), findErr]);
   const featured = phoneFirst[0];
   const phoneRest = phoneFirst.slice(1);
   const listenTiles = list([listenQ, loop]);
