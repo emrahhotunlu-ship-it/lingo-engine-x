@@ -20,6 +20,8 @@ type Props = {
   onFoldChange?: (open: boolean) => void;
   /** Wort-Rückmeldung: der Kopf darüber zeigt das Wort schon (Anki-Rückseite) – hier nur für Vorleseprogramme. */
   hideWord?: boolean;
+  /** 'open': nur die offenen Zeilen (das Gerüst sammelt „Mehr“ unten in EINER Fußzeile); 'folded': nur die eingeklappten Zeilen; Standard: beides. */
+  only?: 'open' | 'folded';
 };
 
 const LABEL: Record<ExplainLine['k'], MessageKey> = {
@@ -32,7 +34,7 @@ const LABEL: Record<ExplainLine['k'], MessageKey> = {
 };
 const SYMBOL: Record<ExplainLine['k'], string> = { pattern: '◇', yours: '›', why: '✓', mistake: '✕', contrast: '⇄', note: 'i' };
 
-export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false }: Props) {
+export function Explanation({ model, depth, learning = true, area = 'trainer', onFoldChange, hideWord = false, only }: Props) {
   const { t, lang } = useT();
   const v = visibleLines(model, depth, { learning });
   const en = (text: string): ReactNode => <EnglishText as="span" text={text} area={area} />;
@@ -187,11 +189,19 @@ export function Explanation({ model, depth, learning = true, area = 'trainer', o
     main = v.open.length ? <ul className="m-0 flex list-none flex-col p-0">{v.open.map(row)}</ul> : null;
   }
 
-  if (!main && !v.folded.length && !model.ai) return null;
+  if (only === 'folded') {
+    if (!v.folded.length) return null;
+    return (
+      <ul className="-mx-4 m-0 flex list-none flex-col p-0" data-testid="explanation-folded">
+        {v.folded.map(card ? cardRow : row)}
+      </ul>
+    );
+  }
+  if (!main && (only === 'open' || !v.folded.length) && !model.ai) return null;
   return (
     <div className="-mx-4 flex flex-col" data-testid="explanation" data-depth={depth} data-source={model.source}>
       {main}
-      {v.folded.length > 0 && (
+      {only !== 'open' && v.folded.length > 0 && (
         <div className="border-t border-line px-4 py-1">
           <FoldToggle label={t('exMore')} {...(onFoldChange ? { onOpenChange: onFoldChange } : {})} testId="explanation-more">
             <ul className="-mx-4 m-0 flex list-none flex-col p-0">{v.folded.map(card ? cardRow : row)}</ul>

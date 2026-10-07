@@ -537,3 +537,9 @@ html[data-lx-tab='learn']:not([data-lx-area]) {
 [data-slot='verdict'] + [data-slot='explanation'] {
   margin-top: -0.75rem;
 }
+
+/* Wort-Rückmeldung: Wortart und Register stehen direkt unter dem Kopf, als eine Gruppe (Vorschau: Wort · ▶ · Lautschrift, darunter Chips). */
+[data-slot='head'] ~ [data-slot='explanation'] > [data-testid='explanation'] > ul > li[data-line='pattern']:first-child {
+  border-top: 0;
+  padding-top: 0;
+}

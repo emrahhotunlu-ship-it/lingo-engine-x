@@ -537,7 +537,7 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
         const base = type === 'transform' ? (task.prompt.split('→').pop() ?? '').trim() : task.prompt;
         if (GAP.test(base)) {
           const full = (fill: string): string => base.replace(GAP, fill.trim());
-          comparison = { given: full(fb.given), ops: alignWords(full(fb.given), full(task.answer)) };
+          comparison = { given: full(fb.given), ops: alignWords(full(fb.given), full(task.answer)), compact: true };
         }
       }
     }
