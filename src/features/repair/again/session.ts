@@ -4,74 +4,86 @@ import { useSettings } from '../../../app/settings';
 import { unitDone } from '../../../app/unit/done';
 import type { UnitBlockNo, UnitCtx } from '../../../app/unit/types';
 import { useLive } from '../../../data/live';
-import { againChecks, againSource, repairSrcOf, unitRepairs, type AgainCheck, type AgainSource, type TaskLike } from '../../../domain/repair/unit';
+import { dueFehlersaetze } from '../../../domain/repair/fehlersaetze';
+import { repairCards, repairDiag, type RepairCard } from '../../../domain/repair/variant';
 import type { Lang } from '../../../domain/srs/types';
-import { recordGrammarError, recordRepair, saveRepairs } from '../store';
+import { unitStepArgs } from '../../../domain/unit/plan';
+import { logInfo } from '../../../platform/diagnostics';
+import { inputProfile } from '../../../platform/input';
+import type { InputProfile } from '../../../domain/grammar/tasks';
+import { local } from '../../../platform/storage';
+import { useTodayPlan } from '../../today/store';
 
-// Block 5 der Tageseinheit „Nochmal, aber besser“ (plan.md §1.5, N42; Prüfung M4c, S4): aus dem
-// Kopf neu formulieren, dann Neufassung ↔ bessere Fassung nebeneinander und je Korrektur „jetzt
-// richtig?“ (lokal, ohne KI). Reparatur-Karten entstehen automatisch – nur aus belegten
-// Korrekturen, nie aus dem ungeprüften Text oder der Neufassung. Das Ende meldet `unitDone(5)`.
+// Schritt 4 der Tageseinheit „Fehler korrigieren“ (Lernplattform 2.0 §5.7): die EINE Fehlerschlange, Satz für Satz. Die Karten
+// (Grammatikfehler und Reparatur-Sätze aus `dueFehlersaetze`, höchstens `limit`) werden beim Start eingefroren; jede Antwort wird
+// am Originaleintrag gebucht (`reviewError` bzw. `recordRepair`). Es gibt nie mehr drei Sätze in einem Feld. Das Ende meldet `unitDone(5)`.
+
+export type AgainRow = { id: string; ok: boolean; near: boolean; wrong: string; right: string; why: string | null; topic: string | null; pat: string | null };
 
 type State = {
   active: boolean;
-  phase: 'write' | 'compare';
+  status: 'running' | 'summary';
   day: string;
   lang: Lang;
   block: UnitBlockNo | null;
-  taskKind: string | null;
-  task: TaskLike | null;
-  src: AgainSource;
-  draft: string;
-  checks: AgainCheck[];
-  /** Anzahl der neu angelegten Reparatur-Karten (Anzeige). */
-  saved: number;
+  /** Eingabeprofil der Runde (einmal eingefroren, §4.1). */
+  profile: InputProfile;
+  cards: RepairCard[];
+  pos: number;
+  results: AgainRow[];
   startedAt: number;
+  endedAt: number;
 };
 
-const EMPTY_SRC: AgainSource = { before: '', better: null, betterFrom: null, fixes: [] };
-
-const initial = (): State => ({ active: false, phase: 'write', day: '', lang: 'de', block: null, taskKind: null, task: null, src: EMPTY_SRC, draft: '', checks: [], saved: 0, startedAt: 0 });
+const initial = (): State => ({ active: false, status: 'running', day: '', lang: 'de', block: null, profile: 'keys', cards: [], pos: 0, results: [], startedAt: 0, endedAt: 0 });
 
 export const useAgain = create<State>(initial);
 
-/** Block 5 starten (synchron im Klick). Ohne `ctx` aus den Daten von heute (zweites Gerät). */
-export function startAgain(ctx: Pick<UnitCtx, 'day' | 'block' | 'task'> | null): void {
+/** Alte Grenze (Plan ohne Regelversion 2): drei Sätze. */
+const OLD_LIMIT = 3;
+const DIAG_KEY = 'lx:again-diag';
+
+/** Einmal je Tag eine Zeile ins Diagnose-Protokoll: Fehlersätze n, davon ohne Bereich m, mit 2–3 Stellen k (§5.7 Nr. 8). */
+function diagOnce(day: string, cards: readonly RepairCard[]): void {
+  if (!cards.length || local.get(DIAG_KEY) === day) return;
+  const d = repairDiag(cards);
+  logInfo('repair:again', `Fehlersätze ${d.n}, davon ohne Bereich ${d.noSpan}, mit 2–3 Stellen ${d.multi}`);
+  local.set(DIAG_KEY, day);
+}
+
+/** Karten für Schritt 4 aus den Live-Daten (rein lesend). */
+export function againCards(day: string, limit: number, lang: Lang): RepairCard[] {
+  const live = useLive.getState();
+  const grammarDocs = live.collections.grammar ?? new Map<string, Readonly<Record<string, unknown>>>();
+  const repairDoc = live.docs['app/repair'] ?? null;
+  const items = dueFehlersaetze({ grammarDocs, repairDoc, nowMs: useClock.getState().now, today: day, limit, lang });
+  return repairCards({ items, grammarDocs, repairDoc });
+}
+
+/** Schritt 4 starten (synchron im Klick). Ohne `ctx` aus den Daten von heute (zweites Gerät, Wiederaufnahme). */
+export function startAgain(ctx: Pick<UnitCtx, 'day' | 'block'> | null): boolean {
   const day = ctx?.day ?? useClock.getState().today;
-  const task: TaskLike | null = ctx?.task ? { text: ctx.task.text, ...(ctx.task.better ? { better: ctx.task.better } : {}), fixes: ctx.task.fixes } : null;
-  const src = againSource({ day, task, repairDoc: useLive.getState().docs['app/repair'] ?? null, grammarDocs: useLive.getState().collections.grammar ?? new Map(), now: useClock.getState().now, lang: useSettings.getState().lang });
-  useAgain.setState({ ...initial(), draft: againStart(src), active: true, day, lang: useSettings.getState().lang, block: ctx ? ctx.block : null, taskKind: ctx?.task?.kind ?? null, task, src, startedAt: Date.now() });
+  const lang = useSettings.getState().lang;
+  const limit = unitStepArgs(useTodayPlan.getState().plan, 5).limit ?? OLD_LIMIT;
+  const cards = againCards(day, limit, lang);
+  useAgain.setState({ ...initial(), active: true, status: cards.length ? 'running' : 'summary', day, lang, block: ctx ? ctx.block : null, profile: inputProfile(), cards, startedAt: Date.now() });
+  diagOnce(day, cards);
+  return true;
 }
 
-/** Startwert des Feldes: dein Text von vorhin bzw. die alten Sätze – es wird nur die falsche Stelle geändert. */
-export const againStart = (src: AgainSource): string => (src.olds?.length ? src.olds.map((o) => o.wrong).join('\n') : src.before);
-
-export function setAgainDraft(draft: string): void {
-  useAgain.setState({ draft });
-}
-
-/** Vergleichen: Prüfung je Korrektur und die Reparatur-Karten aus belegten Korrekturen. */
-export function compareAgain(): void {
+/** Antwort auf die aktuelle Karte festhalten (die Buchung am Originaleintrag macht der Aufrufer) und weiter. */
+export function answerAgain(r: { ok: boolean; near: boolean }): void {
   const s = useAgain.getState();
-  if (s.phase !== 'write') return;
-  const checks = againChecks(s.draft, s.src.fixes);
-  // Belegt sind nur Korrekturen der KI aus Block 3 (bzw. die Reparatur-Sätze von heute, die es
-  // schon gibt – `addRepairs` legt nichts doppelt an). Ohne KI gibt es keine `fixes`.
-  // Sätze von früher (Handy-Tag): Das ist die Wiederholung der Reparatur-Box – Box +1 bei „jetzt richtig“,
-  // sonst morgen wieder (`recordRepair`); es entstehen keine neuen Karten.
-  if (s.src.olds?.length) {
-    useAgain.setState({ phase: 'compare', checks, saved: 0 });
-    checks.forEach((c, k) => {
-      const o = s.src.olds?.[k];
-      if (!o) return;
-      if (o.store === 'grammar' && o.topic && o.errorT !== undefined) void recordGrammarError(o.topic, o.errorT, c.ok, c.ok ? '' : s.draft.slice(0, 160));
-      else void recordRepair(o.id, c.ok);
-    });
-    return;
-  }
-  const add = unitRepairs({ fixes: s.src.fixes, src: repairSrcOf(s.taskKind), lang: s.lang });
-  useAgain.setState({ phase: 'compare', checks, saved: add.length });
-  if (add.length) void saveRepairs(add);
+  const c = s.cards[s.pos];
+  if (!c) return;
+  const row: AgainRow = { id: c.id, ok: r.ok, near: r.near, wrong: c.wrong, right: c.right, why: c.why ?? null, topic: c.topic ?? null, pat: c.pat };
+  useAgain.setState({ results: [...s.results, row] });
+}
+
+export function nextAgain(): void {
+  const s = useAgain.getState();
+  const pos = s.pos + 1;
+  useAgain.setState(pos >= s.cards.length ? { pos, status: 'summary', endedAt: Date.now() } : { pos });
 }
 
 export function reportAgainDone(): void {
@@ -86,17 +98,17 @@ export function leaveAgain(): void {
 
 // ------------------------------------------------------------------ Fortsetzen (§3.2)
 
-export type AgainSnap = Pick<State, 'phase' | 'day' | 'lang' | 'block' | 'taskKind' | 'task' | 'src' | 'draft' | 'checks' | 'saved'>;
+export type AgainSnap = Pick<State, 'status' | 'day' | 'lang' | 'block' | 'profile' | 'cards' | 'pos' | 'results'>;
 
 export function againSnapshot(): AgainSnap | null {
   const s = useAgain.getState();
   if (!s.active) return null;
-  const { phase, day, lang, block, taskKind, task, src, draft, checks, saved } = s;
-  return { phase, day, lang, block, taskKind, task, src, draft, checks, saved };
+  const { status, day, lang, block, profile, cards, pos, results } = s;
+  return { status, day, lang, block, profile, cards, pos, results };
 }
 
 export function restoreAgain(snap: AgainSnap): boolean {
-  if (!snap || (snap.phase !== 'write' && snap.phase !== 'compare') || !snap.src || typeof snap.draft !== 'string') return false;
+  if (!snap || (snap.status !== 'running' && snap.status !== 'summary') || !Array.isArray(snap.cards) || !Array.isArray(snap.results) || typeof snap.pos !== 'number') return false;
   useAgain.setState({ ...initial(), ...snap, active: true, startedAt: Date.now() });
   return true;
 }

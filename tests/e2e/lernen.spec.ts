@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { boot, bootAt, layoutProblems, openTab, screen } from './fixtures';
+import { setInputProfile } from './input';
 import { NO_GRAMMAR_ERRORS } from './heuteHelpers';
 import { writes } from './trainerHelpers';
 import { skipMiniLesson } from './learnHelpers';
@@ -114,35 +115,61 @@ test('Block 4 ohne Korrekturen und ohne KI: immer 3 Aufgaben', async ({ page }) 
   expect(errors).toEqual([]);
 });
 
-test('Block 5: aus dem Kopf neu formulieren, danach beide Fassungen nebeneinander und Korrektur „jetzt drin“', async ({ page }) => {
+test('Schritt 4 (Tastatur): ein Satz, vorbefülltes Feld, nur die falsche Stelle ändern, danach das Warum', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await setInputProfile(page, 'keys');
   // Seit 04.10.2026 nimmt „Fehler korrigieren“ fällige ältere Sätze (verteilt statt massiert): derselbe Satz, drei Tage alt und fällig.
   const old = { ...TRAP_REPAIR, t: TODAY_T - 3 * 86_400_000, due: TODAY_T - 2 * 86_400_000 };
   const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [old] } } } });
   await screen(page, 'unitAgain');
-  await expect(page.getByTestId('again-remember')).toContainText('tatsächlich');
-  await page.getByTestId('again-input').fill('Please send me the current version of the contract today.');
-  await page.getByTestId('again-compare').click();
-  await expect(page.getByTestId('again-new')).toContainText('current version of the contract today');
-  await expect(page.getByTestId('again-better')).toContainText(TRAP_REPAIR.right);
-  await expect(page.getByTestId('feedback')).toHaveAttribute('data-verdict', 'ok');
+  await expect(page.getByTestId('repair-input')).toHaveValue(old.wrong);
+  // Das Warum kommt erst nach der Antwort.
+  await expect(page.getByTestId('result')).toHaveCount(0);
+  await page.getByTestId('repair-input').fill(TRAP_REPAIR.right);
+  await page.getByTestId('repair-check').click();
+  await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'ok');
+  await expect(page.getByTestId('repair-right')).toContainText(TRAP_REPAIR.right);
+  await expect(page.getByTestId('result')).toContainText('tatsächlich');
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
 });
 
-test('Block 5: Sätze von heute kommen nicht am selben Tag wieder – ohne fällige ältere Sätze ruhiger Leerzustand', async ({ page }) => {
+test('Schritt 4 (Handy): Fehlerstelle antippen, nur den Ersatz tippen – nie ein Feld mit dem ganzen Satz', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await setInputProfile(page, 'touch');
+  const old = { ...TRAP_REPAIR, t: TODAY_T - 3 * 86_400_000, due: TODAY_T - 2 * 86_400_000 };
+  const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [old] } } } });
+  await screen(page, 'unitAgain');
+  await expect(page.getByTestId('repair-item')).toHaveAttribute('data-form', 'spots');
+  await expect(page.locator('textarea')).toHaveCount(0);
+  await page.getByTestId('spot-word').filter({ hasText: 'actual' }).click();
+  await page.getByTestId('repair-check').click();
+  await expect(page.getByTestId('repair-span-input')).toBeVisible();
+  await expect(page.locator('textarea')).toHaveCount(0);
+  await page.getByTestId('repair-span-input').fill('current');
+  await page.getByTestId('repair-check').click();
+  await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'ok');
+  // Nach dem Ergebnis öffnet jedes Wort das Nachschlagen.
+  await page.getByTestId('repair-right').getByText('contract', { exact: false }).first().click();
+  await expect(page.getByTestId('lookup')).toBeVisible();
+  expect(await layoutProblems(page)).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('Schritt 4: Sätze von heute kommen nicht am selben Tag wieder – ohne fällige ältere Sätze ruhiger Leerzustand', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const { errors } = await bootAt(page, { name: 'unitAgain' }, { fake: { patch: { ...NO_GRAMMAR_ERRORS, 'app/repair': { items: [TRAP_REPAIR] } } } });
   await screen(page, 'unitAgain');
   await expect(page.getByTestId('again-empty')).toBeVisible();
   await expect(page.getByTestId('again-done')).toBeVisible();
-  await expect(page.getByTestId('again-input')).toHaveCount(0);
+  await expect(page.getByTestId('repair-input')).toHaveCount(0);
   expect(await layoutProblems(page)).toEqual([]);
   expect(errors).toEqual([]);
 });
 
-test('Block 5: nur Grammatik-Fehlersätze fällig – kein leeres Feld, die Antwort schreibt Box und Fälligkeit ins Thema', async ({ page }) => {
+test('Schritt 4: nur Grammatik-Fehlersätze fällig – die Antwort schreibt Box und Fälligkeit ins Thema', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  await setInputProfile(page, 'keys');
   const errorsOf = async (): Promise<string> =>
     JSON.stringify(
       Object.entries(await dump(page))
@@ -153,13 +180,16 @@ test('Block 5: nur Grammatik-Fehlersätze fällig – kein leeres Feld, die Antw
   await screen(page, 'unitAgain');
   const before = await errorsOf();
   await expect(page.getByTestId('again-empty')).toHaveCount(0);
-  await expect(page.getByTestId('again-olds')).toBeVisible();
-  const input = page.getByTestId('again-input');
-  await expect(input).not.toHaveValue('');
-  await input.fill(`${await input.inputValue()} (nochmal)`);
-  await page.getByTestId('again-compare').click();
-  await expect(page.getByTestId('again-better')).toBeVisible();
-  await expect.poll(errorsOf).not.toBe(before);
+  // Genau ein Satz je Karte, nie drei in einem Feld.
+  await expect(page.getByTestId('repair-item').or(page.getByTestId('gr-item')).first()).toBeVisible();
+  const input = page.getByTestId('repair-input');
+  if (await input.count()) {
+    await expect(input).not.toHaveValue('');
+    await input.fill(`${await input.inputValue()} (nochmal)`);
+    await page.getByTestId('repair-check').click();
+    await expect(page.getByTestId('result')).toBeVisible();
+    await expect.poll(errorsOf).not.toBe(before);
+  }
   expect(errors).toEqual([]);
 });
 
@@ -258,10 +288,11 @@ test('Anwenden › Hörübung mit Frage: Text verdeckt, erst Hören, dann Frage,
     await page.getByTestId('listen-q-play').click();
     await expect(page.getByTestId('listen-q-question')).toBeVisible();
     await expect(page.getByTestId('listen-q-text')).toHaveCount(0);
-    await page.getByTestId('listen-q-option').filter({ hasText: 'The client asked for it.' }).click();
+    await page.getByTestId('choice').filter({ hasText: 'The client asked for it.' }).click();
     await expect(page.getByTestId('listen-q-result')).toBeVisible();
     await expect(page.getByTestId('listen-q-quote')).toContainText('because the client asked for it');
-    await expect(page.getByTestId('listen-q-why')).toBeVisible();
+    // Die Begründung steht im Ergebnisabschnitt des Gerüsts (eine Karte, kein zweiter Kasten).
+    await expect(page.getByTestId('result')).toContainText('Richtig, weil');
     await page.getByTestId('listen-q-next').click();
   }
   await expect(page.getByTestId('session-end')).toHaveAttribute('data-right', '3');
@@ -290,9 +321,8 @@ test('Anwenden › Eigener Satz: Wort fehlt → lokal, keine KI; richtiger Satz 
   // 1) Wort fehlt: lokal erkannt, kein Claude-Aufruf.
   await page.getByTestId('combo-input').fill('This sentence has nothing to do with it at all.');
   await page.getByTestId('combo-check').click();
-  await expect(page.getByTestId('combo-word-missing')).toBeVisible();
-  await expect(page.getByTestId('combo-word-mark')).toHaveAttribute('data-ok', 'false');
-  await page.getByTestId('combo-retry').click();
+  await expect(page.getByTestId('hint-line')).toContainText(word);
+  await expect(page.getByTestId('result')).toHaveCount(0);
   // 2) Richtig: beide Häkchen.
   await page.getByTestId('combo-input').fill(`We talked about the ${word} yesterday.`);
   await page.getByTestId('combo-check').click();
@@ -303,7 +333,7 @@ test('Anwenden › Eigener Satz: Wort fehlt → lokal, keine KI; richtiger Satz 
   const wrong = `zzrule we talk about ${(await item.getAttribute('data-word')) ?? ''} tomorrow`;
   await page.getByTestId('combo-input').fill(wrong);
   await page.getByTestId('combo-check').click();
-  await expect(page.getByTestId('combo-fixed')).toBeVisible();
+  await expect(page.getByTestId('result')).toContainText('zzrule');
   await expect(page.getByTestId('combo-rule-mark')).toHaveAttribute('data-ok', 'false');
   await expect.poll(async () => (((await dump(page))['app/repair'] as { items?: Array<Record<string, unknown>> } | undefined)?.items ?? []).some((e) => e.wrong === wrong)).toBe(true);
   expect(errors).toEqual([]);

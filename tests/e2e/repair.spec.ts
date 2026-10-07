@@ -32,12 +32,11 @@ for (const size of SIZES) {
     await page.getByTestId('start').click();
     await screen(page, 'trainer');
 
-    // 1. Satz: alter Satz sichtbar, bessere Fassung verborgen, Textfeld für den ganzen Satz.
+    // 1. Satz: alter Satz sichtbar, bessere Fassung verborgen, vorbefülltes Feld (Tastatur).
     const item = page.getByTestId('repair-item');
     await expect(item).toHaveAttribute('data-id', 'ra1');
     await expect(item).toHaveAttribute('data-mode', 'review');
-    await expect(item).toContainText('Damals hast du gesagt:');
-    await expect(page.getByTestId('repair-wrong')).toContainText(A.wrong);
+    await expect(page.getByTestId('repair-input')).toHaveValue(A.wrong);
     await expect(page.getByTestId('repair-right')).toHaveCount(0);
     await expect(page.getByTestId('trainer-progress')).toHaveText('1 / 3');
     expect(await layoutProblems(page)).toEqual([]);
@@ -46,9 +45,9 @@ for (const size of SIZES) {
     await expect(page.getByTestId('repair-check')).toBeDisabled();
     await page.getByTestId('repair-input').fill("We've been working on it for two years now");
     await page.getByTestId('repair-check').click();
-    await expect(page.getByTestId('repair-verdict')).toHaveAttribute('data-verdict', 'close');
+    await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'near');
     await expect(page.getByTestId('repair-right')).toContainText(A.right);
-    await expect(page.getByTestId('repair-why')).toContainText('for');
+    await expect(page.getByTestId('result')).toContainText('for');
     // Englische Wörter antippbar.
     await page.getByTestId('repair-right').locator('button.lx-word').first().click();
     await expect(page.getByTestId('lookup')).toBeVisible();
@@ -59,10 +58,10 @@ for (const size of SIZES) {
 
     // 2. Satz: der alte Fehler steckt noch drin → lokal nein → KI (repair-check@1) sagt nein.
     await expect(item).toHaveAttribute('data-id', 'rb2');
-    await page.getByTestId('repair-input').fill('It depends of the budget.');
+    await page.getByTestId('repair-input').fill('It depends of the budget');
     await page.getByTestId('repair-check').click();
-    await expect(page.getByTestId('repair-verdict')).toHaveAttribute('data-verdict', 'no');
-    await expect(page.getByTestId('repair-result')).toContainText('Der alte Fehler steckt noch im Satz.');
+    await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'wrong');
+    await expect(page.getByTestId('result')).toContainText('Der alte Fehler steckt noch im Satz.');
     await expect(page.getByTestId('repair-right')).toContainText(B.right);
     await page.getByTestId('repair-next').click();
 
@@ -108,9 +107,9 @@ test('Wiederholung ohne KI: die lokale Prüfung zählt; höchstens 3 je Runde, d
   await screen(page, 'trainer');
   for (let i = 0; i < 3; i++) {
     await expect(page.getByTestId('repair-item')).toHaveAttribute('data-id', `rm${i}`);
-    await page.getByTestId('repair-input').fill(i === 0 ? 'It depends of the budget number 1.' : `It depends on the budget number ${i + 1}`);
+    await page.getByTestId('repair-input').fill(i === 0 ? 'It depends of the budget number 1' : `It depends on the budget number ${i + 1}`);
     await page.getByTestId('repair-check').click();
-    await expect(page.getByTestId('repair-verdict')).toHaveAttribute('data-verdict', i === 0 ? 'no' : 'exact');
+    await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', i === 0 ? 'wrong' : 'ok');
     await expect(page.getByTestId('ai-phase')).toHaveCount(0);
     await page.getByTestId('repair-next').click();
   }
@@ -152,13 +151,13 @@ test('Rollenspiel: „Nochmal, aber besser“ nach dem Bericht, Satz wird Repara
   await expect(step).toBeVisible();
   await step.getByTestId('repair-step-start').click();
   await expect(step.getByTestId('repair-item')).toHaveCount(1);
-  await expect(step.getByTestId('repair-wrong')).toContainText('We must delay the start by two weeks.');
+  await expect(step.getByTestId('repair-input')).toHaveValue('We must delay the start by two weeks.');
   await expect(step.getByTestId('repair-right')).toHaveCount(0);
   // Gespeichert, bevor Emrah etwas tippt.
   await expect.poll(async () => (await repairs(page)).map((e) => [e.src, e.wrong, e.right, e.box])).toEqual([['talk', 'We must delay the start by two weeks.', 'We need to delay the start by two weeks.', 0]]);
   await step.getByTestId('repair-input').fill('We need to delay the start by two weeks.');
   await page.getByTestId('repair-check').click();
-  await expect(step.getByTestId('repair-verdict')).toHaveAttribute('data-verdict', 'exact');
+  await expect(step.getByTestId('result')).toHaveAttribute('data-verdict', 'ok');
   await expect(step.getByTestId('repair-right')).toContainText('need to delay');
   expect(await layoutProblems(page)).toEqual([]);
   await page.screenshot({ path: 'test-results/screens/reparatur-rollenspiel-390.png', fullPage: true });
@@ -184,7 +183,7 @@ test('Anwenden › Fehler korrigieren: freiwillige Runde über die fälligen Sä
   await expect(page.getByTestId('repair-item')).toHaveAttribute('data-id', 'ra1');
   await page.getByTestId('repair-input').fill(A.right);
   await page.getByTestId('repair-check').click();
-  await expect(page.getByTestId('repair-verdict')).toBeVisible();
+  await expect(page.getByTestId('result')).toBeVisible();
   await page.getByTestId('repair-next').click();
   await page.getByTestId('repair-input').fill('It depends on the budget.');
   await page.getByTestId('repair-check').click();

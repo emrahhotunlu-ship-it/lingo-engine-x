@@ -66,11 +66,14 @@ describe('Fortsetzen', () => {
     expect(useFocus.getState().results).toHaveLength(1);
   });
 
-  it('Block 5: Schritt und Entwurf', () => {
-    useAgain.setState({ active: true, phase: 'write', day: '2026-09-20', src: { before: 'b', better: null, betterFrom: null, fixes: [] }, draft: 'Mein Entwurf' });
+  it('Schritt 4: Karten, Stelle und Antworten bleiben', () => {
+    const card = { id: 'r1', store: 'repair' as const, box: 0, pat: null, src: 'say' as const, wrong: 'I have went home.', right: 'I went home.', spans: null, variant: null };
+    useAgain.setState({ active: true, status: 'running', day: '2026-09-20', cards: [card, { ...card, id: 'r2' }], pos: 1, results: [{ id: 'r1', ok: true, near: false, wrong: card.wrong, right: card.right, why: null, topic: null, pat: null }] });
     const snap = JSON.parse(JSON.stringify(againSnapshot())) as NonNullable<ReturnType<typeof againSnapshot>>;
-    useAgain.setState({ active: false, draft: '' });
+    useAgain.setState({ active: false, pos: 0, results: [], cards: [] });
     expect(restoreAgain(snap)).toBe(true);
-    expect(useAgain.getState().draft).toBe('Mein Entwurf');
+    expect(useAgain.getState().pos).toBe(1);
+    expect(useAgain.getState().cards.map((c) => c.id)).toEqual(['r1', 'r2']);
+    expect(useAgain.getState().results.map((r) => r.id)).toEqual(['r1']);
   });
 });

@@ -19,6 +19,7 @@ import { logError, logWarn } from '../../platform/diagnostics';
 import { unlockSpeech, useSpeech } from '../../platform/speech';
 import { startCheck } from '../check/session';
 import { startGrammar } from '../grammar/session';
+import { startAgain } from '../repair/again/session';
 import { recordProfileFields, usePending } from '../progress/persist';
 import { markUnitLocal } from '../today/marks';
 import { todayNow } from '../today/state';
@@ -116,7 +117,8 @@ function fallback(block: UnitBlock, kind: UnitBlock['kind'], api: FocusApi): { r
     return { route: { name: 'grammarSession', mode: 'duty' }, via: 'grammar', watch: 'gram' };
   }
   api.blur();
-  return { route: { name: 'unitStep', step: 'again', block: 5 }, via: 'own', watch: null };
+  startAgain({ day, block: 5 });
+  return { route: { name: 'unitAgain' }, via: 'own', watch: null };
 }
 
 /**

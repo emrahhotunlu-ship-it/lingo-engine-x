@@ -70,11 +70,12 @@ test('Montag: ohne Bestätigungskarte, Blöcke bis „Fertig“, Serie +1, ohne 
   // Block 5 „Fehler korrigieren“ (Anbieter `again`, Übung `unitAgain`): ohne Aufgabe des Tages die ältesten fälligen
   // Reparatur-Sätze – geräteübergreifend aus `app/repair`, ohne KI lokal verglichen.
   await screen(page, 'unitAgain');
-  await page.getByTestId('again-input').fill('Please send me the current version of the contract today.');
-  await page.getByTestId('again-compare').click();
-  await expect(page.getByTestId('again-new')).toContainText('current version of the contract today');
-  await expect(page.getByTestId('again-better')).toContainText(SAY_REPAIR.right);
-  await page.getByTestId('next').click();
+  await page.getByTestId('repair-input').fill(SAY_REPAIR.right);
+  await page.getByTestId('repair-check').click();
+  await expect(page.getByTestId('repair-right')).toContainText(SAY_REPAIR.right);
+  await page.getByTestId('repair-next').click();
+  // Rundenende von Schritt 4 (ein Satz), dann weiter zum Ende der Einheit.
+  await page.getByTestId('session-end-next').click();
   // Ende der Einheit → zurück zu Heute: Fertig-Zustand, kein Knopf, Serie +1.
   await expect(page.getByTestId('unit-end')).toBeVisible();
   await page.getByTestId('session-end-next').click();
@@ -179,8 +180,8 @@ test('Block 3 Satzbau aus Heute: Runde als Pflicht, „Weiter“ in der Zusammen
   await expect(page.getByTestId('drill')).toHaveAttribute('data-kind', 'order');
   await expect(page.getByTestId('drill')).toHaveAttribute('data-ctx', 'duty');
   for (let i = 0; i < 12; i++) {
-    await expect(page.getByTestId('drill-item').or(page.getByTestId('summary')).first()).toBeVisible();
-    if (await page.getByTestId('summary').isVisible()) break;
+    await expect(page.getByTestId('drill-item').or(page.getByTestId('session-end')).first()).toBeVisible();
+    if (await page.getByTestId('session-end').isVisible()) break;
     const item = page.getByTestId('drill-item');
     const texts = await item.getByTestId('tile-pool').getByTestId('tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-tile') ?? ''));
     const order = orderSolution(texts);
@@ -191,13 +192,13 @@ test('Block 3 Satzbau aus Heute: Runde als Pflicht, „Weiter“ in der Zusammen
       await expect(item.getByTestId('tile-line').getByTestId('tile')).toHaveCount(n + 1);
     }
     await page.getByTestId('check').click();
-    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'correct');
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'ok');
     await page.getByTestId('next').click();
     await expect(page.getByTestId('drill-item').getByTestId('verdict')).toHaveCount(0);
   }
   // Als Block der Einheit: kein „Zurück zu Grammatik“, sondern „Weiter“ – meldet Block 3 erledigt.
-  await expect(page.getByTestId('summary-back')).toHaveCount(0);
-  await page.getByTestId('summary-next').click();
+  await expect(page.getByTestId('session-end-secondary')).toHaveCount(0);
+  await page.getByTestId('session-end-next').click();
   await expect.poll(async () => (((await dump(page))['app/profile']?.act as Record<string, Doc>)[MON] ?? {})['u-task']).toBe(1);
   // Weiter geht es mit Block 5 „Fehler korrigieren“ (Zwischenkarte oder direkt).
   await page.locator('[data-screen="unitCard"], [data-screen="unitAgain"]').first().waitFor();

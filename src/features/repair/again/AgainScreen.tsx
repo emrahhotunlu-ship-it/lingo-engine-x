@@ -1,34 +1,39 @@
 import { useLayoutEffect } from 'react';
 import { useNav } from '../../../app/nav';
-import { EnglishText } from '../../../engine/EnglishText';
+import { StepBoundary } from '../../../app/shell/Boundary';
+import type { GrammarAnswer } from '../../../domain/learn/types';
 import { useHiddenInput } from '../../../engine/HiddenInput';
 import { useHotkeys } from '../../../engine/useHotkeys';
 import { useT } from '../../../i18n';
 import { Button } from '../../../ui/Button';
-import { FeedbackPanel } from '../../../ui/FeedbackPanel';
-import type { Feedback } from '../../../ui/feedback/types';
-import { Icon } from '../../../ui/Icon';
+import { SessionEnd } from '../../../ui/SessionEnd';
 import { useCompanionSee } from '../../companion/seeing';
-import { ExerciseTop, TaskLine } from '../../learn/ui';
+import { GrammarItem } from '../../grammar/GrammarItem';
+import { ExerciseTop } from '../../learn/ui';
 import { flush } from '../../progress/persist';
+import { RepairItem } from '../RepairItem';
+import { recordGrammarError, recordRepair } from '../store';
 import { ensureAgain } from './resume';
-import { againStart, compareAgain, leaveAgain, reportAgainDone, setAgainDraft, useAgain } from './session';
+import { answerAgain, leaveAgain, nextAgain, reportAgainDone, useAgain } from './session';
+import type { RepairCard } from '../../../domain/repair/variant';
 
-// Block 5 „Nochmal, aber besser“ (plan.md §1.5, N42, S4): Emrah schreibt seinen Text aus Block 3
-// aus dem Kopf neu. Danach stehen Neufassung und bessere Fassung nebeneinander, darunter je
-// Korrektur „jetzt richtig?“ mit Grund (Einheitsstil). Ohne KI: Muster bzw. Startsatz-Lösung.
+// Schritt 4 „Fehler korrigieren“ (Lernplattform 2.0 §5.7): ein Satz je Karte, in der Reihenfolge der Schlange. Ab Box 1 mit Muster
+// kommt statt des Originals eine ungesehene Aufgabe zum selben Muster (`GrammarItem`); gebucht wird immer am Originaleintrag
+// (`reviewError` bzw. `recordRepair`). Nie mehr drei Sätze in einem Feld; am Handy wird die Stelle angetippt, nie ein Ganzsatz-Feld.
+
+/** Antwort am Originaleintrag buchen: Grammatikfehler über `reviewError`, Reparatur-Sätze über `recordRepair`. */
+function book(c: RepairCard, ok: boolean, near: boolean, given: string): void {
+  if (c.store === 'grammar' && c.topic && c.errorT !== undefined) void recordGrammarError(c.topic, c.errorT, ok, ok ? '' : given.slice(0, 160), near);
+  else void recordRepair(c.id, ok, near);
+}
 
 export function AgainScreen() {
-  const { t, tn } = useT();
+  const { t } = useT();
   const api = useHiddenInput();
   const back = useNav((s) => s.back);
-  const phase = useAgain((s) => s.phase);
-  const src = useAgain((s) => s.src);
-  const draft = useAgain((s) => s.draft);
-  const checks = useAgain((s) => s.checks);
-  const saved = useAgain((s) => s.saved);
-  const block = useAgain((s) => s.block);
-  useCompanionSee({ area: 'grammar', label: t('nbLernenAgainTitle'), phase: phase === 'write' ? 'question' : 'feedback' });
+  const s = useAgain();
+  const card = s.cards[s.pos];
+  useCompanionSee({ area: 'grammar', label: t('nbLernenAgainTitle'), phase: 'question' });
 
   const leave = () => {
     api.blur();
@@ -43,120 +48,67 @@ export function AgainScreen() {
   }, []);
 
   const finish = () => {
-    if (block) reportAgainDone();
+    if (s.block) reportAgainDone();
     else leave();
   };
+  const progress = s.status === 'running' && s.cards.length ? { n: s.pos + 1, total: s.cards.length } : null;
 
-  const empty = !src.before.trim();
-  const okN = checks.filter((c) => c.ok).length;
-  const fb: Feedback | null =
-    phase === 'compare'
-      ? {
-          verdict: !checks.length ? 'unchecked' : okN === checks.length ? 'ok' : okN > 0 ? 'close' : 'wrong',
-          effect: !checks.length ? t('nbLernenAgainNoChecks') : t('nbLernenAgainChecked', { ok: okN, total: checks.length }),
-          // S4: je Korrektur – eingebaut (nur Grund) oder noch nicht (falsch → richtig, Grund).
-          fixes: checks.map((c) => ({ kind: c.fix.kind, mine: c.ok ? c.fix.right : c.fix.mine, right: c.fix.right, why: c.fix.why || t('nbLernenFocusWhyFallback') })),
-        }
-      : null;
+  const onVariant = (c: RepairCard) => (a: GrammarAnswer) => {
+    const ok = a.verdict === 'correct';
+    const near = a.verdict === 'near';
+    book(c, ok, near, a.given);
+    answerAgain({ ok: ok || near, near });
+    nextAgain();
+    return null;
+  };
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="unit-again" data-phase={phase} data-block={block ?? ''}>
-      <ExerciseTop onClose={leave} progress={null} ctx="duty" />
-      <article className="lx-glass flex flex-col gap-5 rounded-[var(--radius-card)] p-5 sm:p-7">
-        <header className="flex flex-col gap-2">
-          <p className="inline-flex items-center gap-1 text-xs font-medium text-muted">
-            <Icon name="refresh" size={14} />
-            {t('nbLernenAgainTitle')}
-          </p>
-          <TaskLine task={empty ? t('nbLernenAgainEmptyTask') : src.olds?.length ? t('nbLernenAgainOldTask') : t('nbLernenAgainTask')} purpose={t('nbLernenAgainPurpose')} />
-        </header>
-
-        {empty ? (
-          <div className="flex flex-col items-start gap-3">
-            <p className="text-sm text-muted" data-testid="again-empty">
-              {t('nbLernenAgainEmpty')}
-            </p>
-            <Button variant="primary" iconAfter="arrowRight" onClick={finish} data-testid="again-done">
-              {block ? t('nbShNext') : t('nbLernenDone')}
-            </Button>
-          </div>
-        ) : (
-          <>
-            {phase === 'write' && !src.olds?.length && (
-              <div className="flex flex-col gap-1" data-testid="again-before">
-                <p className="lx-eyebrow">{t('nbLernenAgainBeforeLead')}</p>
-                <p lang="en" className="text-base leading-relaxed">
-                  {src.before}
-                </p>
-              </div>
-            )}
-            {phase === 'write' && src.olds && src.olds.length > 0 && (
-              <div className="flex flex-col gap-1" data-testid="again-olds">
-                <p className="lx-eyebrow">{t('nbLernenAgainOldLead')}</p>
-                <ul className="flex flex-col gap-1 text-base">
-                  {src.olds.map((o) => (
-                    <li key={o.id} lang="en">
-                      {o.wrong}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {phase === 'write' && src.fixes.length > 0 && (
-              <div className="flex flex-col gap-1" data-testid="again-remember">
-                <p className="lx-eyebrow">{t('nbLernenAgainRemember')}</p>
-                <ul className="flex flex-col gap-1 text-sm text-muted">
-                  {src.fixes.map((f, i) => (
-                    <li key={i}>{f.why || t('nbLernenFocusWhyFallback')}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <textarea
-              className="lx-field min-h-32 text-base"
-              lang="en"
-              rows={5}
-              value={draft}
-              readOnly={phase !== 'write'}
-              onChange={(ev) => setAgainDraft(ev.target.value)}
-              aria-label={t('nbLernenAgainInput')}
-              placeholder={t('nbLernenAgainPlaceholder')}
-              autoCapitalize="sentences"
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck={false}
-              data-testid="again-input"
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4 sm:py-8" data-testid="unit-again" data-phase={s.status} data-block={s.block ?? ''} data-profile={s.profile}>
+      <ExerciseTop onClose={leave} progress={progress} ctx="duty" />
+      {s.status === 'running' && card ? (
+        <StepBoundary resetKey={`again-${s.pos}`} scope="unitAgain" onSkip={nextAgain}>
+          {card.variant ? (
+            <GrammarItem key={card.id} task={card.variant} ctx="duty" day={s.day} onDone={onVariant(card)} profile={s.profile} badge={t('fxRVariantBadge')} />
+          ) : (
+            <RepairItem
+              key={card.id}
+              item={{ id: card.id, wrong: card.wrong, right: card.right, ...(card.why ? { why: card.why } : {}), src: card.src, ...(card.fix ? { fix: card.fix } : {}), spans: card.spans, box: card.box, topic: card.topic ?? null, pat: card.pat }}
+              mode="review"
+              area="trainer"
+              source={null}
+              profile={s.profile}
+              onResult={({ ok, near, given }) => {
+                book(card, ok, near, given);
+                answerAgain({ ok, near });
+              }}
+              onNext={() => {
+                api.blur();
+                nextAgain();
+              }}
             />
-            {phase === 'write' && (
-              <div className="flex flex-wrap items-center gap-3">
-                <Button variant="primary" disabled={!draft.trim() || draft.trim() === againStart(src).trim()} onClick={compareAgain} data-testid="again-compare">
-                  {t('nbLernenAgainCompare')}
-                </Button>
-              </div>
-            )}
-            {phase === 'compare' && (
-              <>
-                <div className="grid gap-3 sm:grid-cols-2" data-testid="again-versions">
-                  <section className="flex flex-col gap-1 rounded-xl bg-surface px-3 py-2" data-testid="again-new">
-                    <p className="lx-eyebrow">{t('nbLernenAgainNew')}</p>
-                    <EnglishText text={draft.trim()} area="trainer" source={null} className="text-base leading-relaxed" />
-                  </section>
-                  <section className="flex flex-col gap-1 rounded-xl bg-surface px-3 py-2" data-testid="again-better" data-from={src.betterFrom ?? 'before'}>
-                    <p className="lx-eyebrow">{src.better ? (src.betterFrom === 'trap' ? t('nbLernenAgainModel') : t('rxBetter')) : t('nbLernenAgainBefore')}</p>
-                    <EnglishText text={src.better ?? src.before} area="trainer" source={null} className="text-base leading-relaxed" />
-                  </section>
-                </div>
-                {saved > 0 && (
-                  <p className="text-sm text-muted" data-testid="again-saved">
-                    {tn('nbLernenAgainSaved', saved)}
-                  </p>
-                )}
-                {fb && <FeedbackPanel fb={fb} onNext={finish} nextLabel={block ? t('nbShNext') : t('nbLernenDone')} />}
-              </>
-            )}
-          </>
-        )}
-      </article>
+          )}
+        </StepBoundary>
+      ) : !s.cards.length ? (
+        <section className="lx-card flex flex-col items-start gap-3 p-[1.125rem]" data-testid="again-empty">
+          <p className="lx-t-support text-muted">{t('fxREmpty')}</p>
+          <Button variant="primary" iconAfter="arrowRight" onClick={finish} data-testid="again-done">
+            {s.block ? t('nbShNext') : t('nbLernenDone')}
+          </Button>
+        </section>
+      ) : (
+        <div data-testid="summary">
+          <SessionEnd
+            mode="growth"
+            title={t('fxREndTitle')}
+            right={s.results.filter((r) => r.ok).length}
+            total={s.results.length}
+            ms={Math.max(1, s.endedAt - s.startedAt)}
+            items={[]}
+            mistakes={s.results.filter((r) => !r.ok).slice(0, 4).map((r) => ({ wrong: r.wrong, right: r.right, rule: r.why ?? '', when: t('gxEndTomorrow') }))}
+            next={{ label: s.block ? t('nbShNext') : t('nbLernenDone'), run: finish }}
+          />
+        </div>
+      )}
     </div>
   );
 }

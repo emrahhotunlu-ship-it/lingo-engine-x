@@ -62,12 +62,13 @@ describe('Block-Anbieter focus/grammar/task.order/again', () => {
     expect(s.tasks.filter((t) => t.kind === 'trap' && t.drill)).toHaveLength(3);
   });
 
-  it('again nimmt die bessere Fassung aus Block 3', () => {
+  it('again startet die Fehlerschlange Satz für Satz (Schritt 4, ohne Zusammenfügen)', () => {
     const r = of('again').start({ ...ctx, block: 5 });
     expect(r).toEqual({ name: 'unitAgain' });
     const s = useAgain.getState();
     expect(s.block).toBe(5);
-    expect(s.src.better).toBe('Please send me the current version.');
-    expect(s.src.fixes).toHaveLength(1);
+    expect(s.active).toBe(true);
+    expect(s.pos).toBe(0);
+    expect(Array.isArray(s.cards)).toBe(true);
   });
 });

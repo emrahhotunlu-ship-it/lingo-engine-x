@@ -153,7 +153,7 @@ for (const size of SIZES) {
         await expect(page.getByTestId('repair-right')).toHaveCount(0);
         await page.getByTestId('repair-input').fill('We have been partners for many years now.');
         await page.getByTestId('repair-check').click();
-        await expect(page.getByTestId('repair-verdict')).toHaveAttribute('data-verdict', 'ok');
+        await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'ok');
         await expect(page.getByTestId('repair-right')).toBeVisible();
         if (fixes === 0) {
           expect(await layoutProblems(page)).toEqual([]);
@@ -167,9 +167,9 @@ for (const size of SIZES) {
         const wrong = frees === 1;
         await page.getByTestId('pattern-free-input').fill(wrong ? 'zzno I work here since 2018.' : 'I have worked for Acme since 2018.');
         await page.getByTestId('pattern-free-check').click();
-        await expect(page.getByTestId('pattern-free-verdict')).toHaveAttribute('data-verdict', wrong ? 'wrong' : 'correct');
-        await expect(page.getByTestId('pattern-free-why')).not.toBeEmpty();
-        if (wrong) await expect(page.getByTestId('pattern-free-fixed')).toBeVisible();
+        await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', wrong ? 'wrong' : 'ok');
+        await expect(page.getByTestId('explanation')).not.toBeEmpty();
+        if (wrong) await expect(page.locator('[data-testid="result"] [data-slot="comparison"]')).toBeVisible();
         // Wörter der Aufgabe antippbar.
         if (frees === 0) {
           await page.getByTestId('pattern-free-task').locator('button.lx-word').first().click();
