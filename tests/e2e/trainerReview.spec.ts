@@ -101,6 +101,42 @@ test.describe('Desktop', () => {
     expect(errors).toEqual([]);
   });
 
+  test('Warum-Zeile mit echtem Grund: falsche Auswahl „heißt … (gehört zu …)“ unter der gewählten Option', async ({ page }) => {
+    const { errors } = await startWith(page, { 'vocab/deserve': forced('deserve') });
+    await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'mc_en');
+    const answer = expected('mc_en', 'deserve', null, 'vocab', 'de');
+    const labels = (await page.getByTestId('choice').locator('[lang]').allInnerTexts()).map((l) => l.trim());
+    const wrong = labels.findIndex((l) => l !== answer);
+    await page.getByTestId('choice').nth(wrong).click();
+    // Erst nach dem Prüfen: Auswahl ist nicht Richtig.
+    await expect(page.getByTestId('verdict')).toHaveCount(0);
+    await page.getByTestId('check').click();
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+    const why = page.getByTestId('choice-why');
+    await expect(why).toBeVisible();
+    await expect(why).toContainText('heißt');
+    await expect(why).toContainText('gehört zu');
+    // Die Zeile steht einmal (unter der Option), nicht noch einmal in der Erklär-Karte.
+    await expect(page.getByTestId('explanation').locator('[data-line="yours"]')).toHaveCount(0);
+    expect(errors).toEqual([]);
+  });
+
+  test('Verwechslung getippt: die Erklärung nennt die Bedeutung des anderen Worts aus deinem Wortschatz und die gesuchte', async ({ page }) => {
+    const { errors } = await startWith(page, { 'vocab/overcome': forced('overcome') });
+    await expect(page.getByTestId('exercise')).toHaveAttribute('data-ex', 'cloze');
+    await page.getByTestId('gap-input').click();
+    await page.keyboard.type('avoid', { delay: 20 });
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('hint-line')).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('verdict')).toHaveAttribute('data-verdict', 'wrong');
+    const yours = page.getByTestId('explanation').locator('[data-line="yours"]');
+    await expect(yours).toContainText('avoid');
+    await expect(yours).toContainText('vermeiden');
+    await expect(yours).toContainText('overcame');
+    expect(errors).toEqual([]);
+  });
+
   test('B4/F5/F10: nach falscher Antwort „unsicher", die Wiederholung ist als „noch einmal" markiert', async ({ page }) => {
     const { errors } = await startWith(page, { 'vocab/avoid': forced('avoid') });
     await page.getByTestId('gap-input').click();

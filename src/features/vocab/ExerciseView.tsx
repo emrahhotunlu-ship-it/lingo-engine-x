@@ -80,6 +80,8 @@ const FREE_TYPED: ReadonlySet<ExerciseId> = new Set(['cloze', 'type', 'situation
  * Die Erklär-Karte nennt die Bedeutung nie als eigene Zeile; sie steht im Satz bzw. in „Merke“.
  */
 const ANSWER_IS_DE: ReadonlySet<ExerciseId> = new Set(['mc_en', 'ctx_mc', 'listen_mc']);
+/** Arten, deren Frage die deutsche Bedeutung nach dem Prüfen noch zeigt: „Merke“ wiederholt sie nicht. */
+const MEANING_SHOWN: ReadonlySet<ExerciseId> = new Set(['mc_de', 'type', 'match', 'situation']);
 const LISTEN: ReadonlySet<ExerciseId> = new Set(['listen_mc', 'dictation']);
 /** „Erst ein Hinweis, dann die Lösung“: getippte Arten mit zweitem Versuch. Nicht Diktat, nicht Auswahl, nie im Wochen-Check (`noHelp`). */
 const RETRY_EX: ReadonlySet<ExerciseId> = new Set(['cloze_hint', 'cloze', 'type', 'situation', 'colloc', 'wordfam']);
@@ -428,6 +430,8 @@ export function ExerciseView({
     if (fb.sentence) return sentenceModel(fb, card, lang, exampleItems);
     const picked = fb.chosen ? { label: fb.chosen.label, ...(fb.chosen.fromWord ? { fromWord: fb.chosen.fromWord } : {}), ...(fb.chosen.fromMeaning ? { fromMeaning: fb.chosen.fromMeaning } : {}) } : null;
     const isAlt = fb.result.verdict !== 'correct' && isAltAnswer(card, fb.given);
+    // Verwechslung (getippt): die Bedeutung des anderen Worts aus dem Wortschatz der Runde – damit steht der echte Grund da.
+    const other = fb.result.kind === 'confusable' && fb.result.otherWord ? useSession.getState().pool.find((c) => normalize(c.lemma) === normalize(fb.result.otherWord ?? '')) : undefined;
     return explainWord({
       card,
       ex: e.ex,
@@ -438,6 +442,8 @@ export function ExerciseView({
       lang,
       solution,
       examples: exampleItems,
+      ...(MEANING_SHOWN.has(e.ex) && (e.ex !== 'match' || !e.sentence) ? { meaningShown: true } : {}),
+      ...(other ? { otherMeaning: lang === 'de' ? (other.de ?? other.def) : (other.def ?? other.de) } : {}),
       ...(isAlt ? { alt: true } : {}),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- nur bei einem neuen Ergebnis

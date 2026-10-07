@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { toTrainCard } from '../../src/domain/srs/cards';
+import { toChunkCard } from '../../src/domain/srs/chunkCards';
 import { buildExercise } from '../../src/domain/srs/exercise';
 import { contextsOf, rotatedContext, ROTATE_FROM_STAGE } from '../../src/domain/srs/rotate';
 import type { ExerciseId, TrainCard } from '../../src/domain/srs/types';
@@ -18,6 +19,17 @@ const XEX = [
 const doc = (over: Doc = {}): Doc => ({ id: 'leverage', word: 'leverage', pos: 'noun', de: 'Hebelwirkung', def: 'the power to influence a result', ex: 'We use [leverage] in every price talk.', col: [], level: 'C1', state: 'review', S: 10, D: 5, last: NOW - 10 * 86_400_000, due: NOW - 1000, reps: 0, lapses: 0, modes: {}, order: 900, src: 'ai', added: '2026-08-01', stage: 4, hist: [], intro: '2026-08-01', xEx: XEX, ...over });
 const card = (over: Doc = {}): TrainCard => toTrainCard('leverage', doc(over), true, NOW) as TrainCard;
 const pool = (c: TrainCard): TrainCard[] => [c, ...['a', 'b', 'c', 'd'].map((id) => toTrainCard(id, { ...doc(), id, word: `word${id}`, de: `Wort ${id}`, def: `meaning ${id}`, ex: `A [word${id}] matters.`, xEx: undefined }, true, NOW) as TrainCard)];
+
+describe('Kontext-Wechsel bei Wendungen (Lernplattform 2.0 §4.8)', () => {
+  it('ab Stufe 3 wechselt auch die Wendung den Satz: die Stelle der Wendung im gespeicherten Satz über locateChunk', () => {
+    const chunk = (reps: number): TrainCard =>
+      toChunkCard('c-meet-halfway', { id: 'c-meet-halfway', en: 'meet sb halfway', de: 'jdm. entgegenkommen', def: 'to compromise', kind: 'phrase', register: 'neutral', src: { upgraded: 'We are happy to meet you halfway on the timeline.' }, state: 'review', S: 10, D: 5, last: NOW - 10 * 86_400_000, due: NOW - 1000, reps, lapses: 0, stage: 4, hist: [], xEx: [{ en: 'Both sides had to meet each other halfway on price.', t: 1 }] }, NOW) as TrainCard;
+    const seq = [0, 1].map((reps) => rotatedContext(chunk(reps), 'cloze'));
+    expect(seq[0]?.sentence).toBe('We are happy to meet you halfway on the timeline.');
+    expect(seq[1]?.sentence).toBe('Both sides had to meet each other halfway on price.');
+    expect(seq[1]?.gap).toBe('meet each other halfway');
+  });
+});
 
 describe('Kontext-Wechsel', () => {
   it('Sätze: Ursprungssatz zuerst, danach nur gespeicherte Sätze, in denen das Wort (auch gebeugt) steht', () => {

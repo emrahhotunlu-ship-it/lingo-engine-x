@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { boot, layoutProblems, screen } from './fixtures';
 import { DAY, answerCurrent, dump, forcedPatch, planPatch } from './trainerHelpers';
 import { TYPE_MODE } from './trainerHelpers';
+import { lastCardMs } from './wortschatzHelpers';
 
 // Vokabeltrainer (Phase 1, MVP): jede Abfrageart einmal, Tastatur, Schreibwege, fliegende
 // Buchstaben, reduzierte Bewegung. Gegen den Produktions-Build mit eingespieltem Adapter.
@@ -22,12 +23,21 @@ test('komplette Pflichtrunde per Tastatur: jede Abfrageart, Schreibwege, danach 
   await expect(page.getByTestId('exercise-bar').getByRole('progressbar')).toHaveAttribute('aria-valuemax', '6');
 
   const seen = new Set<string>();
+  const cardMs: number[] = [];
   for (let i = 0; i < 30; i++) {
     await expect(page.locator('[data-step]')).toHaveCount(1);
     if (await page.getByTestId('summary').isVisible()) break;
     expect(await layoutProblems(page)).toEqual([]);
     seen.add(await answerCurrent(page));
+    // Kartenwechsel ohne Leerbild: Messmarke `lx:card` (Weiter → nächste Karte im Bild).
+    if (!(await page.getByTestId('summary').isVisible())) {
+      await expect.poll(() => lastCardMs(page)).not.toBeNull();
+      cardMs.push((await lastCardMs(page)) ?? 0);
+    }
   }
+  const sorted = [...cardMs].sort((a, b) => a - b);
+  expect(sorted.length).toBeGreaterThan(3);
+  expect(sorted[Math.floor(sorted.length / 2)] ?? 0).toBeLessThanOrEqual(250);
   await expect(page.getByTestId('summary')).toBeVisible();
   // Jede der sechs erzwungenen Arten kommt vor; Wiedervorlagen dürfen weitere Arten des Katalogs zeigen.
   expect([...seen]).toEqual(expect.arrayContaining(['cloze', 'cloze_hint', 'colloc', 'mc_de', 'mc_en', 'type']));

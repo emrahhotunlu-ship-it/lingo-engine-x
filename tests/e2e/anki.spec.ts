@@ -20,6 +20,20 @@ async function startReview(page: Page): Promise<void> {
 test.describe('Desktop', () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
+  test('Rückseite: die deutsche Bedeutung steht genau einmal (Vorderseite Deutsch → Englisch), Wort mit ▶ und Lautschrift', async ({ page }) => {
+    const { patch } = ankiPatch(3);
+    const { errors } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(3), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip', dir: 'de-en', grades: 4 } } } } });
+    await startReview(page);
+    const meaning = ((await page.getByTestId('flip-front').innerText()) ?? '').trim();
+    expect(meaning.length).toBeGreaterThan(2);
+    await page.getByTestId('flip-show').click();
+    await expect(page.getByTestId('flip-back')).toBeVisible();
+    await expect(page.getByTestId('flip-listen')).toBeVisible();
+    const text = await page.getByTestId('exercise').innerText();
+    expect(text.split(meaning).length - 1).toBe(1);
+    expect(errors).toEqual([]);
+  });
+
   test('40 Karten am Stück aufdecken und bewerten: lx:card < 50 ms (Median), Schreibweg je Karte', async ({ page }) => {
     const { patch, ids } = ankiPatch(40);
     const { errors, external } = await boot(page, { migrated: true, fake: { patch: { 'app/profile': planPatch(40), ...patch, 'app/decks': { v: 1, prefs: { mode: 'flip', dir: 'de-en', grades: 4 } } } } });

@@ -74,6 +74,8 @@ export type ExplainWordInput = {
   examples?: readonly ExplainExample[];
   /** Fast richtig, weil die Antwort eine Variante aus `alt` ist. */
   alt?: boolean;
+  /** Die Frage (oder die Rückseite) zeigt die deutsche Bedeutung schon: „Merke“ nennt sie nicht noch einmal (Kap. 15). */
+  meaningShown?: boolean;
 };
 
 const CHOICE_EX: ReadonlySet<ExerciseId> = new Set(['mc_en', 'mc_de', 'ctx_mc', 'listen_mc', 'match', 'colloc_gap']);
@@ -128,7 +130,7 @@ export function explainWord(i: ExplainWordInput): ExplanationModel {
   const why = chunkWhy(card, lang) ?? (lang === 'de' ? extra?.why : null) ?? null;
   const merke = formula
     ? pick({ de: `Merke: ${formula}${reg ? ` · ${pick(REGISTER[reg] as Bi, 'de')}` : ''}`, en: `Remember: ${formula}${reg ? ` · ${pick(REGISTER[reg] as Bi, 'en')}` : ''}` }, lang)
-    : meaning
+    : meaning && !i.meaningShown
       ? pick({ de: `Merke: ${card.word} = ${shortMeaning(meaning, lang)}`, en: `Remember: ${card.word} = ${shortMeaning(meaning, lang)}` }, lang)
       : card.word;
   lines.push({ k: 'why', text: why ? `${merke}. ${why}` : merke });
