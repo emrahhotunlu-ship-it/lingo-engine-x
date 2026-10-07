@@ -560,6 +560,10 @@ function LegacyGrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = n
           given: mx ? meaningText(pickedKey) : (fb.picked ?? fb.given),
           pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null,
         }}
+        pattern={pattern}
+        store={{ kind: 'grammar', topic: task.topic, q: task.prompt }}
+        onRight={menu.override}
+        onRewrite={menu.copyOnce}
       />
     );
     feedback = { verdict: rv, sub, comparison, explanation: model, depth, menu, tutor, auto: fb.help.level === 0 && !fb.override };

@@ -2,7 +2,7 @@ import { cardExamples } from './cardExamples';
 import { comboCheck } from './comboCheck';
 import { listenQ } from './listenQ';
 import { orderGen } from './orderGen';
-import { explainAnswer } from './explainAnswer';
+import { explainAnswerV2 } from './explainAnswerV2';
 import { grammarItems } from './grammarItems';
 import { grammarJudge } from './grammarJudge';
 import { mnemonic } from './mnemonic';
@@ -36,7 +36,8 @@ export const TEMPLATES: ReadonlyArray<PromptTemplate<never, unknown>> = [
   listenQ,
   comboCheck,
   // Lernplattform 2.0 P2: „Erklär mir meine Antwort“
-  explainAnswer,
+  // `explain-answer@1` (LP2 P2, `explainAnswer.ts`) bleibt als Datei erhalten, wird nicht mehr aufgerufen; die Kennung ist je Vorlage einmalig.
+  explainAnswerV2,
   // Phase 2 (docs/phase2-plan.md §7)
   grammarItems,
   grammarJudge,

@@ -303,6 +303,8 @@ export const vocabSchema = z.looseObject({
   exDe: z.record(z.string(), z.unknown()).nullish(),
   /** Neu (Phase 2, M3): Merkhilfe von Claude für hartnäckige Wörter `{text, lang, t}`, einmal erzeugt. */
   mnemo: z.looseObject({ text: str, lang: str, t: num }).nullish(),
+  /** Neu (Lernplattform 3.0 P26, nur ergänzend): Erklärungen von Claude zu falschen Antworten `[{g, y, w, ex, sig, cf, alt, pv, t, bad}]` (≤ 3), tolerant gelesen. */
+  axs: z.array(z.unknown()).nullish(),
   ...schedulingFields,
 });
 
@@ -357,6 +359,9 @@ export const grammarSchema = z.looseObject({
         /** Neu (Lernplattform 3.0 §3.4, nur ergänzend): ID der c1x-Aufgabe, die den Fehler verursacht hat, und die Punkte `[n, n]` der Antwort. */
         cid: str,
         pts: loose,
+        /** Neu (Lernplattform 3.0 P26, nur ergänzend): Erklärung von Claude zur falschen Antwort (`explain-answer@2`), höchstens 1 KB; `cf` = Kontrastmuster. */
+        ax: loose,
+        cf: str,
       }),
     )
     .nullish(),

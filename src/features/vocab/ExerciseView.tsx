@@ -736,6 +736,11 @@ export function ExerciseView({
         <TutorButton
           taskKey={`wd:${card.path}:${e.ex}:${fb.given}`}
           vars={{ topic: card.word, prompt: shownSentence ?? card.word, answer: solution, given: fb.given, pattern: meaningText ? { name: card.word, form: meaningText } : null }}
+          kind="word"
+          word={{ en: card.word, de: card.de ?? '', pos: card.pos ?? '', other: null, falseFriend: null }}
+          store={{ kind: 'vocab', path: card.path }}
+          onRight={menu.override}
+          onRewrite={menu.copyOnce}
         />
       );
     feedback = {
