@@ -47,7 +47,23 @@ export type GradeKey =
   | 'find'
   | 'kwt'
   | 'meaning'
-  | 'correct_tap';
+  | 'correct_tap'
+  // Lernplattform 3.0 (§3.4): Aufgabensystem c1x, Schlüssel `c1_<art>` (kwt/err/reg/para je Eingabeform). Startwerte (Annahme), nach 2 Wochen aus Medianzeiten nachstellen.
+  | 'c1_mcc'
+  | 'c1_ocl'
+  | 'c1_wf'
+  | 'c1_kwt'
+  | 'c1_kwt_tiles'
+  | 'c1_kwt_part'
+  | 'c1_err_tap'
+  | 'c1_err_tapfix'
+  | 'c1_err_fix'
+  | 'c1_pair'
+  | 'c1_cnet'
+  | 'c1_reg_chips'
+  | 'c1_reg'
+  | 'c1_para_pick'
+  | 'c1_para';
 
 type Row = {
   form: GradeForm;
@@ -94,6 +110,22 @@ export const GRADE_TABLE: Readonly<Record<GradeKey, Row>> = {
   kwt: { form: 'transform', good: 14_000, easy: 6000, measure: 'submit' },
   meaning: choice(10_000),
   correct_tap: typed(9000, 3500),
+  c1_mcc: choice(9000),
+  c1_ocl: typed(6000, 2500),
+  c1_wf: typed(9000, 3500),
+  c1_kwt: { form: 'transform', good: 20_000, easy: 8000, measure: 'submit' },
+  // Bausteine: 14 s + 0,6 s je Baustein, nie „Leicht“.
+  c1_kwt_tiles: { form: 'tiles', good: 14_000, easy: null, measure: 'submit' },
+  c1_kwt_part: { form: 'transform', good: 14_000, easy: 6000, measure: 'submit' },
+  c1_err_tap: choice(10_000),
+  c1_err_tapfix: typed(12_000, 5000),
+  c1_err_fix: typed(8000, 3000),
+  c1_pair: choice(14_000),
+  c1_cnet: choice(15_000),
+  c1_reg_chips: choice(12_000),
+  c1_reg: { form: 'transform', good: 25_000, easy: 10_000, measure: 'submit' },
+  c1_para_pick: choice(16_000),
+  c1_para: { form: 'transform', good: 35_000, easy: 15_000, measure: 'submit' },
   speed: { form: 'timed', good: 10_000, easy: null, measure: 'submit' },
   produce: { form: 'free', good: 0, easy: null, measure: 'submit' },
   flip: { form: 'free', good: 0, easy: null, measure: 'submit' },

@@ -1,0 +1,167 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "kwt-9001",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "passive-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "People say the company is planning to move its headquarters.",
+   "key": "SAID",
+   "before": "The company",
+   "after": "planning to move its headquarters.",
+   "keys": [
+    {
+     "a": [
+      "is said"
+     ],
+     "b": [
+      "to be"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "to",
+    "be"
+   ],
+   "extra": [
+    "was",
+    "being",
+    "that"
+   ],
+   "traps": [
+    "is said that it is"
+   ],
+   "pat": "pp.personal",
+   "why": {
+    "ok": {
+     "de": "Berichtspassiv: Subjekt + is said + to-Infinitiv; laufende Handlung: to be + -ing.",
+     "en": "Reporting passive: subject + is said + to-infinitive; ongoing action: to be + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "„It is said that …“ braucht „It“ am Satzanfang. Nach „The company“ geht nur: is said to be.",
+      "en": "\"It is said that …\" needs \"It\" at the start. After \"The company\" only \"is said to be\" works."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-9002",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I regret not checking the figures before the meeting.",
+   "key": "WISH",
+   "before": "I",
+   "after": "the figures before the meeting.",
+   "keys": [
+    {
+     "a": [
+      "wish I"
+     ],
+     "b": [
+      "had checked",
+      "'d checked"
+     ]
+    }
+   ],
+   "tiles": [
+    "I",
+    "had",
+    "checked"
+   ],
+   "extra": [
+    "would",
+    "have",
+    "did"
+   ],
+   "traps": [
+    "wish I would have checked"
+   ],
+   "pat": "mc.wish-past",
+   "why": {
+    "ok": {
+     "de": "Bedauern über die Vergangenheit: wish + Past Perfect.",
+     "en": "Regret about the past: wish + past perfect."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would",
+       "have"
+      ],
+      "de": "Deutsch „hätte … gemacht“ verleitet zu would have. Nach wish steht für die Vergangenheit had + 3. Form.",
+      "en": "German \"hätte … gemacht\" suggests would have. After wish, the past takes had + past participle."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-9003",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "c1-nominal",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "The project was delayed because the supplier did not deliver on time.",
+   "key": "FAILURE",
+   "before": "The project was delayed",
+   "after": "to deliver on time.",
+   "keys": [
+    {
+     "a": [
+      "due to",
+      "owing to",
+      "because of",
+      "on account of"
+     ],
+     "b": [
+      "the supplier's failure"
+     ]
+    }
+   ],
+   "tiles": [
+    "due to",
+    "the",
+    "supplier's"
+   ],
+   "extra": [
+    "of",
+    "because",
+    "fail"
+   ],
+   "traps": [
+    "due to the failure of the supplier"
+   ],
+   "pat": "nm.noun-form",
+   "why": {
+    "ok": {
+     "de": "Nominalstil: did not deliver → failure to deliver; der Grund steht nach due to/owing to.",
+     "en": "Nominal style: did not deliver → failure to deliver; the reason follows due to/owing to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "failure",
+       "of"
+      ],
+      "de": "Sieben Wörter: zu lang. Mit dem s-Genitiv passt es in 3–6 Wörter.",
+      "en": "Seven words: too long. The possessive 's fits into 3–6 words."
+     }
+    ]
+   }
+  }
+ ]
+}

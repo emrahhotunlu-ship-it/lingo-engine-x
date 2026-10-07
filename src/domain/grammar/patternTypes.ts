@@ -47,6 +47,7 @@ export const WhyRuleSchema = z.object({
   opt: z.string().optional(),
   tap: z.string().optional(),
   pat: z.string().optional(),
+  cat: z.enum(['calque', 'partner', 'grammar', 'meaning', 'register']).optional(),
   de: z.string().max(140),
   en: z.string().max(140),
 });

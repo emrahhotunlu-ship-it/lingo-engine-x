@@ -1,0 +1,85 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "err-9001",
+   "kind": "err",
+   "area": "gram",
+   "topic": "gerund-inf",
+   "trap": "f17",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I'm really looking forward to hear from you.",
+   "bad": {
+    "span": "hear",
+    "fix": [
+     "hearing"
+    ],
+    "choices": [
+     "hearing",
+     "heard",
+     "have heard"
+    ]
+   },
+   "pat": "gi.prep-ing",
+   "why": {
+    "ok": {
+     "de": "„to“ ist hier eine Präposition (look forward to sth); danach steht -ing.",
+     "en": "Here \"to\" is a preposition (look forward to sth), so -ing follows."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "err-9002",
+   "kind": "err",
+   "area": "gram",
+   "topic": "questions",
+   "trap": "f20",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The client asked me where do we store the backups.",
+   "bad": {
+    "span": "do we store",
+    "fix": [
+     "we store",
+     "we stored"
+    ],
+    "choices": [
+     "we store",
+     "did we store",
+     "are we storing"
+    ]
+   },
+   "pat": "qu.indirect",
+   "why": {
+    "ok": {
+     "de": "Indirekte Frage: kein do, Wortstellung wie im Aussagesatz (where we store).",
+     "en": "Indirect question: no do, statement word order (where we store)."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "err-9003",
+   "kind": "err",
+   "area": "gram",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Had we known about the outage, we would have informed our customers.",
+   "bad": null,
+   "pat": "ca.inversion",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: „Had we known …“ ist die förmliche Inversion von „If we had known …“.",
+     "en": "No mistake: \"Had we known …\" is the formal inversion of \"If we had known …\"."
+    },
+    "wrong": []
+   }
+  }
+ ]
+}

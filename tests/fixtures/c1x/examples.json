@@ -1,0 +1,1289 @@
+{
+ "v": 1,
+ "items": [
+  {
+   "id": "mcc-0001",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "prepositions",
+   "lex": [
+    "attribute sth to sth"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The delay was largely ___ to a shortage of qualified staff.",
+   "options": [
+    "blamed",
+    "caused",
+    "attributed",
+    "resulted"
+   ],
+   "answer": 2,
+   "pat": "prp.verb-prep",
+   "why": {
+    "ok": {
+     "de": "Bei Ursachen entscheidet die Präposition: attributed to · blamed on · caused by · resulted from.",
+     "en": "With causes, the preposition decides: attributed to · blamed on · caused by · resulted from."
+    },
+    "wrong": [
+     {
+      "opt": "blamed",
+      "de": "blame braucht „on“: The delay was blamed on a shortage …",
+      "en": "blame takes \"on\": The delay was blamed on a shortage …",
+      "cat": "partner"
+     },
+     {
+      "opt": "caused",
+      "de": "Im Passiv folgt „by“: was caused by, nicht „to“.",
+      "en": "The passive takes \"by\": was caused by, not \"to\".",
+      "cat": "grammar"
+     },
+     {
+      "opt": "resulted",
+      "de": "result hat kein Passiv: The delay resulted from a shortage …",
+      "en": "result has no passive: The delay resulted from a shortage …",
+      "cat": "grammar"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0002",
+   "kind": "mcc",
+   "area": "lex",
+   "lex": [
+    "give up hope"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "We lost the tender, but nobody is ready to ___ up hope just yet.",
+   "options": [
+    "take",
+    "give",
+    "let",
+    "put"
+   ],
+   "answer": 1,
+   "pat": "lx.fixed-phrases-hope",
+   "why": {
+    "ok": {
+     "de": "Teilchen „up“ allein sagt wenig; erst das Verb macht die Bedeutung. Lern die ganze Wendung: give up hope.",
+     "en": "The particle \"up\" says little on its own; the verb carries the meaning. Learn the whole phrase: give up hope."
+    },
+    "wrong": [
+     {
+      "opt": "take",
+      "de": "take up = mit etwas anfangen (take up a hobby).",
+      "en": "take up = start something (take up a hobby).",
+      "cat": "meaning"
+     },
+     {
+      "opt": "let",
+      "de": "let up = nachlassen; ohne Objekt (The rain let up).",
+      "en": "let up = become weaker; no object (The rain let up).",
+      "cat": "meaning"
+     },
+     {
+      "opt": "put",
+      "de": "put up = aufhängen, aufbauen; put up with = ertragen.",
+      "en": "put up = hang or build; put up with = tolerate.",
+      "cat": "meaning"
+     }
+    ]
+   }
+  },
+  {
+   "id": "mcc-0003",
+   "kind": "mcc",
+   "area": "gram",
+   "topic": "comparison",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Our sales figures for Q3 are ___ better than we expected.",
+   "options": [
+    "highly",
+    "strongly",
+    "heavily",
+    "considerably"
+   ],
+   "answer": 3,
+   "pat": "cmp.degree",
+   "why": {
+    "ok": {
+     "de": "Komparative werden mit much/far/considerably verstärkt, nicht mit very oder strongly.",
+     "en": "Comparatives are intensified with much/far/considerably, not very or strongly."
+    },
+    "wrong": [
+     {
+      "opt": "highly",
+      "de": "highly steht vor Grundformen (highly effective), nie vor „better“.",
+      "en": "highly goes with base adjectives (highly effective), never with \"better\".",
+      "cat": "partner"
+     },
+     {
+      "opt": "strongly",
+      "de": "„stark besser“ ist Deutsch gedacht; strongly passt zu Verben (strongly recommend).",
+      "en": "\"Strongly better\" is a German pattern; strongly goes with verbs (strongly recommend).",
+      "cat": "calque"
+     },
+     {
+      "opt": "heavily",
+      "de": "heavily passt zu Menge oder Last (heavily invested), nicht zu Vergleichen.",
+      "en": "heavily goes with amount or weight (heavily invested), not comparisons.",
+      "cat": "partner"
+     }
+    ]
+   }
+  },
+  {
+   "id": "ocl-0001",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "c1-emphasis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Hardly ___ we signed the contract when the client asked for changes.",
+   "accept": [
+    "had"
+   ],
+   "cls": "aux",
+   "chips": [
+    "did",
+    "have",
+    "were"
+   ],
+   "pat": "em.neg-inversion",
+   "why": {
+    "ok": {
+     "de": "Hardly … when: Vorzeitigkeit, also Past Perfect, und nach „Hardly“ steht das Hilfsverb vor dem Subjekt.",
+     "en": "Hardly … when shows the earlier event, so past perfect, and after \"Hardly\" the auxiliary comes before the subject."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "ocl-0002",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "comparison",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The more data we collect, ___ harder it becomes to see what really matters.",
+   "accept": [
+    "the"
+   ],
+   "cls": "art",
+   "chips": [
+    "more",
+    "so",
+    "much"
+   ],
+   "pat": "cmp.the-the",
+   "why": {
+    "ok": {
+     "de": "Je … desto: the + Komparativ in beiden Satzhälften.",
+     "en": "The more … the more: the + comparative in both halves."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "ocl-0003",
+   "kind": "ocl",
+   "area": "gram",
+   "topic": "relative",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The supplier, ___ contract expires in May, has just raised its prices.",
+   "accept": [
+    "whose"
+   ],
+   "cls": "rel",
+   "chips": [
+    "which",
+    "that",
+    "who's"
+   ],
+   "pat": "rc.whose",
+   "why": {
+    "ok": {
+     "de": "Besitz im Relativsatz: whose (dessen/deren). who's = who is.",
+     "en": "Possession in a relative clause: whose. who's = who is."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "wf-0001",
+   "kind": "wf",
+   "area": "lex",
+   "lex": [
+    "overwhelming"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The response to our new pricing model has been ___ positive.",
+   "stem": "OVERWHELM",
+   "accept": [
+    "overwhelmingly"
+   ],
+   "pos": "adv",
+   "parts": {
+    "base": "overwhelm",
+    "suf": [
+     "ing",
+     "ly"
+    ]
+   },
+   "family": [
+    "overwhelm",
+    "overwhelmed",
+    "overwhelming",
+    "overwhelmingly"
+   ],
+   "pat": "lx.adverb-before-adjective",
+   "why": {
+    "ok": {
+     "de": "Vor einem Adjektiv (positive) steht ein Adverb: overwhelm → overwhelming → overwhelmingly.",
+     "en": "An adverb comes before an adjective (positive): overwhelm → overwhelming → overwhelmingly."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "wf-0002",
+   "kind": "wf",
+   "area": "lex",
+   "lex": [
+    "unprecedented"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Due to ___ demand, we will repeat the webinar next week.",
+   "stem": "PRECEDENT",
+   "accept": [
+    "unprecedented"
+   ],
+   "pos": "adj",
+   "parts": {
+    "pre": "un",
+    "base": "precedent",
+    "suf": [
+     "ed"
+    ]
+   },
+   "family": [
+    "precede",
+    "precedent",
+    "preceding",
+    "unprecedented"
+   ],
+   "pat": "lx.negative-prefix",
+   "why": {
+    "ok": {
+     "de": "Vor dem Nomen „demand“ steht ein Adjektiv; un- + precedent + -ed = noch nie dagewesen.",
+     "en": "An adjective comes before the noun \"demand\"; un- + precedent + -ed = never seen before."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "wf-0003",
+   "kind": "wf",
+   "area": "lex",
+   "lex": [
+    "feasibility"
+   ],
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The board has asked for a study on the ___ of the new pricing model.",
+   "stem": "FEASIBLE",
+   "accept": [
+    "feasibility"
+   ],
+   "pos": "noun",
+   "parts": {
+    "base": "feasible",
+    "suf": [
+     "ity"
+    ],
+    "change": "ble → bil"
+   },
+   "family": [
+    "feasible",
+    "feasibly",
+    "feasibility",
+    "unfeasible"
+   ],
+   "pat": "lx.able-ability",
+   "why": {
+    "ok": {
+     "de": "Nach „the … of“ steht ein Nomen; aus -ible/-able wird -ibility/-ability.",
+     "en": "A noun follows \"the … of\"; -ible/-able becomes -ibility/-ability."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "kwt-0001",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "passive-plus",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "People say the company is planning to move its headquarters.",
+   "key": "SAID",
+   "before": "The company",
+   "after": "planning to move its headquarters.",
+   "keys": [
+    {
+     "a": [
+      "is said"
+     ],
+     "b": [
+      "to be"
+     ]
+    }
+   ],
+   "tiles": [
+    "is",
+    "to",
+    "be"
+   ],
+   "extra": [
+    "was",
+    "being",
+    "that"
+   ],
+   "traps": [
+    "is said that it is"
+   ],
+   "pat": "pp.personal",
+   "why": {
+    "ok": {
+     "de": "Berichtspassiv: Subjekt + is said + to-Infinitiv; laufende Handlung: to be + -ing.",
+     "en": "Reporting passive: subject + is said + to-infinitive; ongoing action: to be + -ing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "that"
+      ],
+      "de": "„It is said that …“ braucht „It“ am Satzanfang. Nach „The company“ geht nur: is said to be.",
+      "en": "\"It is said that …\" needs \"It\" at the start. After \"The company\" only \"is said to be\" works."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0002",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "mixed-cond",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "I regret not checking the figures before the meeting.",
+   "key": "WISH",
+   "before": "I",
+   "after": "the figures before the meeting.",
+   "keys": [
+    {
+     "a": [
+      "wish I"
+     ],
+     "b": [
+      "had checked",
+      "'d checked"
+     ]
+    }
+   ],
+   "tiles": [
+    "I",
+    "had",
+    "checked"
+   ],
+   "extra": [
+    "would",
+    "have",
+    "did"
+   ],
+   "traps": [
+    "wish I would have checked"
+   ],
+   "pat": "mc.wish-past",
+   "why": {
+    "ok": {
+     "de": "Bedauern über die Vergangenheit: wish + Past Perfect.",
+     "en": "Regret about the past: wish + past perfect."
+    },
+    "wrong": [
+     {
+      "if": [
+       "would",
+       "have"
+      ],
+      "de": "Deutsch „hätte … gemacht“ verleitet zu would have. Nach wish steht für die Vergangenheit had + 3. Form.",
+      "en": "German \"hätte … gemacht\" suggests would have. After wish, the past takes had + past participle."
+     }
+    ]
+   }
+  },
+  {
+   "id": "kwt-0003",
+   "kind": "kwt",
+   "area": "gram",
+   "topic": "c1-nominal",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "lead": "The project was delayed because the supplier did not deliver on time.",
+   "key": "FAILURE",
+   "before": "The project was delayed",
+   "after": "to deliver on time.",
+   "keys": [
+    {
+     "a": [
+      "due to",
+      "owing to",
+      "because of",
+      "on account of"
+     ],
+     "b": [
+      "the supplier's failure"
+     ]
+    }
+   ],
+   "tiles": [
+    "due to",
+    "the",
+    "supplier's"
+   ],
+   "extra": [
+    "of",
+    "because",
+    "fail"
+   ],
+   "traps": [
+    "due to the failure of the supplier"
+   ],
+   "pat": "nm.noun-form",
+   "why": {
+    "ok": {
+     "de": "Nominalstil: did not deliver → failure to deliver; der Grund steht nach due to/owing to.",
+     "en": "Nominal style: did not deliver → failure to deliver; the reason follows due to/owing to."
+    },
+    "wrong": [
+     {
+      "if": [
+       "failure",
+       "of"
+      ],
+      "de": "Sieben Wörter: zu lang. Mit dem s-Genitiv passt es in 3–6 Wörter.",
+      "en": "Seven words: too long. The possessive 's fits into 3–6 words."
+     }
+    ]
+   }
+  },
+  {
+   "id": "err-0001",
+   "kind": "err",
+   "area": "gram",
+   "topic": "gerund-inf",
+   "trap": "f17",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "I'm really looking forward to hear from you.",
+   "bad": {
+    "span": "hear",
+    "fix": [
+     "hearing"
+    ],
+    "choices": [
+     "hearing",
+     "heard",
+     "have heard"
+    ]
+   },
+   "pat": "gi.prep-ing",
+   "why": {
+    "ok": {
+     "de": "„to“ ist hier eine Präposition (look forward to sth); danach steht -ing.",
+     "en": "Here \"to\" is a preposition (look forward to sth), so -ing follows."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "err-0002",
+   "kind": "err",
+   "area": "gram",
+   "topic": "questions",
+   "trap": "f20",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "text": "The client asked me where do we store the backups.",
+   "bad": {
+    "span": "do we store",
+    "fix": [
+     "we store",
+     "we stored"
+    ],
+    "choices": [
+     "we store",
+     "did we store",
+     "are we storing"
+    ]
+   },
+   "pat": "qu.indirect",
+   "why": {
+    "ok": {
+     "de": "Indirekte Frage: kein do, Wortstellung wie im Aussagesatz (where we store).",
+     "en": "Indirect question: no do, statement word order (where we store)."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "err-0003",
+   "kind": "err",
+   "area": "gram",
+   "topic": "cond-alt",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "text": "Had we known about the outage, we would have informed our customers.",
+   "bad": null,
+   "pat": "ca.inversion",
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: „Had we known …“ ist die förmliche Inversion von „If we had known …“.",
+     "en": "No mistake: \"Had we known …\" is the formal inversion of \"If we had known …\"."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "pair-0001",
+   "kind": "pair",
+   "area": "gram",
+   "topic": "gerund-inf",
+   "level": "B2",
+   "dom": "life",
+   "src": "seed",
+   "means": [
+    {
+     "de": "Wir haben unterwegs angehalten, um Kaffee zu holen.",
+     "en": "We paused the trip in order to get coffee."
+    },
+    {
+     "de": "Wir holen dort keinen Kaffee mehr.",
+     "en": "We no longer get coffee there."
+    },
+    {
+     "de": "Wir holen dort weiterhin Kaffee.",
+     "en": "We still get coffee there."
+    }
+   ],
+   "transfer": {
+    "text": "Please stop ___ me reminders; I've already paid.",
+    "cue": "send",
+    "accept": [
+     "sending"
+    ]
+   },
+   "pat": "gi.meaning",
+   "sa": "On the way to the client, we stopped to get coffee.",
+   "sb": "We stopped getting coffee from that café last year.",
+   "why": {
+    "ok": {
+     "de": "stop + to = anhalten, UM etwas zu tun · stop + -ing = mit etwas aufhören.",
+     "en": "stop + to = pause in order to do sth · stop + -ing = no longer do sth."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "pair-0002",
+   "kind": "pair",
+   "area": "gram",
+   "topic": "gerund-inf",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "means": [
+    {
+     "de": "Ich habe daran gedacht und ihn dann geschickt.",
+     "en": "I didn't forget, so I sent it."
+    },
+    {
+     "de": "Ich erinnere mich, dass ich ihn geschickt habe.",
+     "en": "I have a memory of sending it."
+    },
+    {
+     "de": "Ich muss noch daran denken, ihn zu schicken.",
+     "en": "I still have to remember to send it."
+    }
+   ],
+   "transfer": {
+    "text": "Did you remember ___ the office last night?",
+    "cue": "lock",
+    "accept": [
+     "to lock"
+    ]
+   },
+   "pat": "gi.meaning",
+   "sa": "I remembered to send the contract.",
+   "sb": "I remember sending the contract.",
+   "why": {
+    "ok": {
+     "de": "remember + to = an eine Aufgabe denken (danach) · remember + -ing = sich an Erlebtes erinnern (davor).",
+     "en": "remember + to = not forget a task (it comes after) · remember + -ing = recall sth you did (it came before)."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "pair-0003",
+   "kind": "pair",
+   "area": "gram",
+   "topic": "modals-advice",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "means": [
+    {
+     "de": "Das ist verboten.",
+     "en": "It is not allowed."
+    },
+    {
+     "de": "Das ist nicht nötig.",
+     "en": "It is not necessary."
+    },
+    {
+     "de": "Das wird dringend empfohlen.",
+     "en": "It is strongly recommended."
+    }
+   ],
+   "transfer": {
+    "text": "It's optional: you ___ attend the Friday call.",
+    "cue": "not necessary",
+    "accept": [
+     "don't have to",
+     "do not have to",
+     "don't need to",
+     "do not need to",
+     "needn't"
+    ]
+   },
+   "pat": "ma.dont-have-to",
+   "sa": "You mustn't share your login details.",
+   "sb": "You don't have to share your screen.",
+   "why": {
+    "ok": {
+     "de": "mustn't = verboten · don't have to = nicht nötig. Deutsch „muss nicht“ ist don't have to.",
+     "en": "mustn't = not allowed · don't have to = not necessary. German \"muss nicht\" is don't have to."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "cnet-0001",
+   "kind": "cnet",
+   "area": "lex",
+   "lex": [
+    "deadline"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "hub": "deadline",
+   "slot": "V+N",
+   "right": [
+    {
+     "w": "meet",
+     "de": "einhalten",
+     "ex": "We worked all weekend to meet the deadline."
+    },
+    {
+     "w": "miss",
+     "de": "verpassen",
+     "ex": "If we miss the deadline, the bank will reject the application."
+    },
+    {
+     "w": "extend",
+     "de": "verlängern",
+     "ex": "The client agreed to extend the deadline by a week."
+    },
+    {
+     "w": "set",
+     "de": "festlegen",
+     "ex": "Let's set a realistic deadline for the first draft."
+    }
+   ],
+   "wrong": [
+    {
+     "w": "hold",
+     "calque": true
+    },
+    {
+     "w": "keep",
+     "calque": true
+    },
+    {
+     "w": "fulfill"
+    }
+   ],
+   "also": [
+    {
+     "w": "make",
+     "note": {
+      "de": "make the deadline = es rechtzeitig schaffen (US, locker) – auch richtig, wird aber nicht abgefragt.",
+      "en": "make the deadline = manage it in time (US, informal) – also correct, not tested here."
+     }
+    }
+   ],
+   "pat": "lx.deadline-verbs",
+   "why": {
+    "ok": {
+     "de": "Zu deadline gehören meet/miss/extend/set. „Einhalten“ ist hier meet.",
+     "en": "deadline goes with meet/miss/extend/set. German \"einhalten\" is meet here."
+    },
+    "wrong": [
+     {
+      "opt": "hold",
+      "cat": "calque",
+      "de": "„Frist einhalten“ ist nicht hold: Man sagt meet a deadline.",
+      "en": "German \"einhalten\" is not hold: you meet a deadline."
+     },
+     {
+      "opt": "keep",
+      "cat": "calque",
+      "de": "keep a deadline ist eine Lehnübersetzung; üblich ist meet.",
+      "en": "\"Keep a deadline\" is a translation from German; say meet."
+     },
+     {
+      "opt": "fulfill",
+      "cat": "partner",
+      "de": "fulfill passt zu requirements oder obligations, nicht zu deadline.",
+      "en": "fulfill goes with requirements or obligations, not deadlines."
+     }
+    ]
+   }
+  },
+  {
+   "id": "cnet-0002",
+   "kind": "cnet",
+   "area": "lex",
+   "lex": [
+    "risk"
+   ],
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "hub": "risk",
+   "slot": "V+N",
+   "right": [
+    {
+     "w": "take",
+     "de": "eingehen",
+     "ex": "We can't afford to take that risk right now."
+    },
+    {
+     "w": "run",
+     "de": "laufen (Gefahr laufen)",
+     "ex": "Companies that skip updates run the risk of a breach."
+    },
+    {
+     "w": "pose",
+     "de": "darstellen",
+     "ex": "Outdated software poses a serious risk to your data."
+    },
+    {
+     "w": "reduce",
+     "de": "verringern",
+     "ex": "Two-factor login reduces the risk of a breach."
+    }
+   ],
+   "wrong": [
+    {
+     "w": "go",
+     "calque": true
+    },
+    {
+     "w": "make"
+    },
+    {
+     "w": "do"
+    },
+    {
+     "w": "hold"
+    }
+   ],
+   "also": [
+    {
+     "w": "carry",
+     "note": {
+      "de": "carry a risk = ein Risiko mit sich bringen – auch richtig.",
+      "en": "carry a risk = involve a risk – also correct."
+     }
+    }
+   ],
+   "pat": "lx.risk-verbs",
+   "why": {
+    "ok": {
+     "de": "take/run = selbst eingehen · pose = für andere darstellen · reduce = verringern.",
+     "en": "take/run = accept a risk yourself · pose = be a risk to others · reduce = make smaller."
+    },
+    "wrong": [
+     {
+      "opt": "go",
+      "cat": "calque",
+      "de": "„ein Risiko eingehen“ ist take a risk, nicht go.",
+      "en": "German \"eingehen\" is take here, not go."
+     },
+     {
+      "opt": "make",
+      "cat": "partner",
+      "de": "make a risk gibt es nicht; ein Risiko schafft man mit create oder pose.",
+      "en": "\"Make a risk\" doesn't exist; use create or pose."
+     },
+     {
+      "opt": "do",
+      "cat": "partner",
+      "de": "do passt nicht zu risk.",
+      "en": "do does not go with risk."
+     },
+     {
+      "opt": "hold",
+      "cat": "partner",
+      "de": "hold a risk ist kein Englisch; gemeint ist meist carry oder pose.",
+      "en": "\"Hold a risk\" is not English; you probably mean carry or pose."
+     }
+    ]
+   }
+  },
+  {
+   "id": "cnet-0003",
+   "kind": "cnet",
+   "area": "lex",
+   "lex": [
+    "meeting"
+   ],
+   "trap": "f21",
+   "level": "B2",
+   "dom": "biz",
+   "src": "seed",
+   "hub": "meeting",
+   "slot": "V+N",
+   "right": [
+    {
+     "w": "hold",
+     "de": "abhalten",
+     "ex": "We hold a team meeting every Monday morning."
+    },
+    {
+     "w": "chair",
+     "de": "leiten",
+     "ex": "Who's going to chair the meeting tomorrow?"
+    },
+    {
+     "w": "schedule",
+     "de": "ansetzen",
+     "ex": "Can we schedule a meeting for Thursday afternoon?"
+    },
+    {
+     "w": "attend",
+     "de": "teilnehmen an",
+     "ex": "Twelve people attended the meeting in person."
+    }
+   ],
+   "wrong": [
+    {
+     "w": "make",
+     "calque": true
+    },
+    {
+     "w": "visit",
+     "calque": true
+    },
+    {
+     "w": "give"
+    }
+   ],
+   "pat": "lx.meeting-verbs",
+   "why": {
+    "ok": {
+     "de": "Meeting-Verben: hold/chair/schedule/attend. Deutsch „machen/besuchen“ führt in die Irre.",
+     "en": "Meeting verbs: hold/chair/schedule/attend. German \"machen/besuchen\" misleads."
+    },
+    "wrong": [
+     {
+      "opt": "make",
+      "cat": "calque",
+      "de": "„ein Meeting machen“ ist nicht make a meeting; man hält es ab: hold.",
+      "en": "German \"ein Meeting machen\" is hold a meeting, not make."
+     },
+     {
+      "opt": "visit",
+      "cat": "calque",
+      "de": "„ein Meeting besuchen“ heißt attend a meeting.",
+      "en": "German \"besuchen\" is attend here, not visit."
+     },
+     {
+      "opt": "give",
+      "cat": "partner",
+      "de": "give a meeting gibt es nicht; give passt zu presentation oder talk.",
+      "en": "\"Give a meeting\" doesn't exist; give goes with presentation or talk."
+     }
+    ]
+   }
+  },
+  {
+   "id": "reg-0001",
+   "kind": "reg",
+   "area": "gram",
+   "topic": "c1-diplomacy",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "ctx": {
+    "de": "Antwort-Mail an einen neuen Großkunden",
+    "en": "Reply to a new key account"
+   },
+   "from": "casual",
+   "to": "formal",
+   "text": "We got your email and we'll get back to you soon.",
+   "segs": [
+    {
+     "span": "got",
+     "accept": [
+      "have received",
+      "received"
+     ],
+     "choices": [
+      "have received",
+      "have gotten",
+      "have taken"
+     ],
+     "why": {
+      "de": "have gotten ist US-korrekt, aber locker; formell: have received.",
+      "en": "have gotten is correct US English but casual; formal: have received."
+     }
+    },
+    {
+     "span": "we'll get back to you soon",
+     "accept": [
+      "will respond shortly",
+      "will reply shortly",
+      "will be in touch shortly",
+      "will get back to you shortly"
+     ],
+     "choices": [
+      "will respond shortly",
+      "will get back at you soon",
+      "will come back to you soon"
+     ],
+     "why": {
+      "de": "get back AT sb = sich rächen; come back to you ist eine Lehnübersetzung von „sich melden“.",
+      "en": "get back AT sb = take revenge; come back to you is a translation of German \"sich melden\"."
+     }
+    }
+   ],
+   "answers": [
+    "We have received your email and will respond shortly.",
+    "We have received your email and will be in touch shortly.",
+    "We received your email and will respond shortly."
+   ],
+   "pat": "dip.possible",
+   "why": {
+    "ok": {
+     "de": "Formell: vollständige Formen statt Kurzformen, received statt got, shortly statt soon.",
+     "en": "Formal: full forms instead of contractions, received instead of got, shortly instead of soon."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "reg-0002",
+   "kind": "reg",
+   "area": "gram",
+   "topic": "c1-hedging",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "ctx": {
+    "de": "Verhandlung mit einem Lieferanten, den du behalten willst",
+    "en": "Negotiation with a supplier you want to keep"
+   },
+   "from": "direct",
+   "to": "diplomatic",
+   "text": "Your offer is too expensive for us.",
+   "segs": [
+    {
+     "span": "is too expensive for us",
+     "accept": [
+      "is slightly above our budget",
+      "is a little above our budget",
+      "might be a bit above our budget",
+      "seems to be slightly above our budget"
+     ],
+     "choices": [
+      "is slightly above our budget",
+      "is overpriced",
+      "is not possible for us"
+     ],
+     "why": {
+      "de": "Diplomatisch: Problem auf das eigene Budget verlagern und abschwächen (slightly, a bit, might).",
+      "en": "Diplomatic: move the problem to your own budget and soften it (slightly, a bit, might)."
+     }
+    }
+   ],
+   "answers": [
+    "Your offer is slightly above our budget.",
+    "Your offer might be a bit above our budget.",
+    "Your offer is a little above our budget."
+   ],
+   "pat": "hg.downtoner",
+   "why": {
+    "ok": {
+     "de": "Englische Geschäftssprache schwächt Kritik ab; deutsche Direktheit wirkt schroff (f25).",
+     "en": "Business English softens criticism; German directness sounds blunt (f25)."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "reg-0003",
+   "kind": "reg",
+   "area": "gram",
+   "topic": "prepositions",
+   "trap": "f15",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "ctx": {
+    "de": "Mail an die Geschäftsführung",
+    "en": "Email to senior management"
+   },
+   "from": "neutral",
+   "to": "formal",
+   "text": "We need to talk about the problems with the rollout.",
+   "segs": [
+    {
+     "span": "talk about",
+     "accept": [
+      "discuss"
+     ],
+     "choices": [
+      "discuss",
+      "discuss about",
+      "speak over"
+     ],
+     "why": {
+      "de": "discuss hat ein direktes Objekt: discuss sth, nie discuss about.",
+      "en": "discuss takes a direct object: discuss sth, never discuss about."
+     }
+    },
+    {
+     "span": "the problems with",
+     "accept": [
+      "the issues with",
+      "the issues regarding",
+      "the issues concerning",
+      "the challenges with"
+     ],
+     "choices": [
+      "the issues regarding",
+      "the problematics of",
+      "the troubles with"
+     ],
+     "why": {
+      "de": "„Problematik“ ist nicht problematics; formell: issues regarding/concerning.",
+      "en": "German \"Problematik\" is not problematics; formal: issues regarding/concerning."
+     }
+    }
+   ],
+   "answers": [
+    "We need to discuss the issues regarding the rollout.",
+    "We need to discuss the issues with the rollout.",
+    "We need to discuss the issues concerning the rollout."
+   ],
+   "pat": "prp.no-prep",
+   "why": {
+    "ok": {
+     "de": "Formell: ein Verb statt Verb + Präposition (discuss) und neutralere Nomen (issues statt problems).",
+     "en": "Formal: one verb instead of verb + preposition (discuss) and more neutral nouns (issues, not problems)."
+    },
+    "wrong": []
+   }
+  },
+  {
+   "id": "para-0001",
+   "kind": "para",
+   "area": "gram",
+   "topic": "c1-nominal",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "focus": "nominal",
+   "a": "We postponed the launch because the tests had failed.",
+   "start": "The failure of",
+   "answers": [
+    "The failure of the tests led to the postponement of the launch.",
+    "The failure of the tests resulted in the postponement of the launch.",
+    "The failure of the tests led to the launch being postponed.",
+    "The failure of the tests forced us to postpone the launch.",
+    "The failure of the tests made us postpone the launch."
+   ],
+   "options": [
+    "The failure of the tests was caused by the postponement of the launch.",
+    "The failure of the tests led to the postponement of the launch.",
+    "The failure of the tests happened despite the postponement of the launch.",
+    "The failure of the tests will lead to the postponement of the launch."
+   ],
+   "answer": 1,
+   "pat": "nm.of-object",
+   "why": {
+    "ok": {
+     "de": "Nominalstil: failed → the failure of, postponed → the postponement of; verbunden mit led to/resulted in.",
+     "en": "Nominal style: failed → the failure of, postponed → the postponement of; linked with led to/resulted in."
+    },
+    "wrong": [
+     {
+      "opt": "The failure of the tests was caused by the postponement of the launch.",
+      "cat": "meaning",
+      "de": "Ursache und Wirkung vertauscht.",
+      "en": "Cause and effect are reversed."
+     },
+     {
+      "opt": "The failure of the tests happened despite the postponement of the launch.",
+      "cat": "meaning",
+      "de": "despite = trotz: Gegensatz statt Grund.",
+      "en": "despite = contrast, not cause."
+     },
+     {
+      "opt": "The failure of the tests will lead to the postponement of the launch.",
+      "cat": "meaning",
+      "de": "will = Zukunft; das Original ist abgeschlossen.",
+      "en": "will = future; the original is finished."
+     }
+    ]
+   }
+  },
+  {
+   "id": "para-0002",
+   "kind": "para",
+   "area": "gram",
+   "topic": "c1-emphasis",
+   "level": "C1",
+   "dom": "biz",
+   "src": "seed",
+   "focus": "inversion",
+   "a": "We only noticed the gap after the audit.",
+   "start": "Only after",
+   "answers": [
+    "Only after the audit did we notice the gap."
+   ],
+   "options": [
+    "Only after the audit we noticed the gap.",
+    "Only after we noticed the gap did the audit start.",
+    "Only the audit noticed the gap afterwards.",
+    "Only after the audit did we notice the gap."
+   ],
+   "answer": 3,
+   "pat": "em.only-inversion",
+   "why": {
+    "ok": {
+     "de": "Only after/Only when + Satzteil am Anfang: danach Hilfsverb vor Subjekt (did we notice).",
+     "en": "Only after/Only when + phrase at the start: then auxiliary before subject (did we notice)."
+    },
+    "wrong": [
+     {
+      "opt": "Only after the audit we noticed the gap.",
+      "cat": "meaning",
+      "de": "Bedeutung stimmt, aber nach „Only after + Zeitangabe“ fehlt die Inversion.",
+      "en": "Meaning is right, but \"Only after + time\" needs inversion."
+     },
+     {
+      "opt": "Only after we noticed the gap did the audit start.",
+      "cat": "meaning",
+      "de": "Reihenfolge vertauscht: hier käme die Lücke vor dem Audit.",
+      "en": "Order reversed: here the gap comes before the audit."
+     },
+     {
+      "opt": "Only the audit noticed the gap afterwards.",
+      "cat": "meaning",
+      "de": "Neues Subjekt: Das Audit bemerkt etwas, nicht wir.",
+      "en": "New subject: the audit notices, not we."
+     }
+    ]
+   }
+  },
+  {
+   "id": "para-0003",
+   "kind": "para",
+   "area": "gram",
+   "topic": "prepositions",
+   "level": "B2+",
+   "dom": "biz",
+   "src": "seed",
+   "focus": "verb-pattern",
+   "a": "The client said it was our fault that the data was lost.",
+   "start": "The client blamed",
+   "answers": [
+    "The client blamed us for the loss of the data.",
+    "The client blamed us for the data loss.",
+    "The client blamed us for losing the data.",
+    "The client blamed the loss of the data on us.",
+    "The client blamed the data loss on us."
+   ],
+   "options": [
+    "The client blamed us for the loss of the data.",
+    "The client blamed itself for losing the data.",
+    "The client blamed us of losing the data.",
+    "The client blamed the lost data for us."
+   ],
+   "answer": 0,
+   "pat": "prp.verb-prep",
+   "why": {
+    "ok": {
+     "de": "blame hat zwei Muster: blame sb for sth · blame sth on sb.",
+     "en": "blame has two patterns: blame sb for sth · blame sth on sb."
+    },
+    "wrong": [
+     {
+      "opt": "The client blamed itself for losing the data.",
+      "cat": "meaning",
+      "de": "itself = der Kunde selbst: Bedeutung geändert.",
+      "en": "itself = the client: the meaning changes."
+     },
+     {
+      "opt": "The client blamed us of losing the data.",
+      "cat": "meaning",
+      "de": "blame sb FOR sth, nicht „of“ (Deutsch: beschuldigen + Genitiv).",
+      "en": "blame sb FOR sth, not \"of\"."
+     },
+     {
+      "opt": "The client blamed the lost data for us.",
+      "cat": "meaning",
+      "de": "Es heißt blame sth ON sb; „for us“ ergibt keinen Sinn.",
+      "en": "It is blame sth ON sb; \"for us\" makes no sense."
+     }
+    ]
+   }
+  }
+ ]
+}

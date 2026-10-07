@@ -13,9 +13,12 @@ export type WhyRule = {
   tap?: string;
   /** Verwechseltes Nachbarmuster (`<id>` oder `<topic>:<id>`); schaltet „Nicht verwechseln“ frei. */
   pat?: string;
+  /** Kategorie der falschen Wahl (Lernplattform 3.0 K-2, additiv): Deutsch gedacht, falscher Partner, grammatisch, andere Bedeutung, Stilebene. */
+  cat?: WhyCat;
   de: string; // höchstens 140 Zeichen
   en: string; // höchstens 140 Zeichen
 };
+export type WhyCat = 'calque' | 'partner' | 'grammar' | 'meaning' | 'register';
 export type TaskWhy = { ok: Bi; wrong: WhyRule[] };
 
 export type ExplainLine =
