@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { askJson } from '../../ai/gate';
 import { useAiAvailable } from '../../ai/scope';
 import { useClock } from '../../app/clock';
-import { useNav } from '../../app/nav';
 import { useSharedTarget } from '../../engine/shared';
 import { useLive } from '../../data/live';
 import { alignWords, splitWords } from '../../domain/answer/align';
@@ -10,7 +9,7 @@ import { maskOf } from '../../domain/answer/mask';
 import { topicById } from '../../domain/content';
 import type { ExplainDepth, ExplanationModel, ResultVerdict } from '../../domain/explain/types';
 import { topicP } from '../../domain/grammar/bkt';
-import { altFamily, checkFind, checkGrammar, checkKwt, checkMeaning, closeVariant } from '../../domain/grammar/check';
+import { checkFind, checkGrammar, checkKwt, checkMeaning, closeVariant } from '../../domain/grammar/check';
 import { grammarExplanation } from '../../domain/grammar/explain';
 import { patternOf } from '../../domain/grammar/patterns';
 import { topicState } from '../../domain/grammar/path';
@@ -78,6 +77,9 @@ type Fb = {
   override: boolean;
 };
 
+/** Musternamen heißen „Form · Zweck“: Die Aufgabenzeile nennt nur den Zweck („Bedauern über früher“), nie die Form, denn die wäre die Lösung. */
+const functionOf = (name: string): string => (name.includes(' · ') ? name.split(' · ').slice(1).join(' · ') : name);
+
 /** Uhr (eigene Funktion, damit die Zeitnahme nie als Teil des Zeichnens gilt). */
 const tick = (): number => performance.now();
 const GAP = /_{3,}/;
@@ -88,7 +90,6 @@ const nonEmpty = (s: string | null | undefined): s is string => !!s && s.trim().
 export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = null, noHelp = false, profile: profileProp, topicRound = false }: GrammarItemProps) {
   const { t, lang } = useT();
   const api = useHiddenInput();
-  const go = useNav((s) => s.go);
   const now = useClock((s) => s.now);
   const ai = useAiAvailable();
   const split = useSplitLayout();
@@ -387,7 +388,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
 
   let prompt: ReactNode;
   let answer: ReactNode = null;
-  const solved = useMemo(() => (task.prompt.includes('___') ? task.prompt.replace(GAP, solution) : null), [task.prompt, solution]);
+  const solved = task.prompt.includes('___') ? task.prompt.replace(GAP, solution) : null;
 
   if (type === 'mc') {
     const shown = fb ? (fb.verdict === 'correct' ? (fb.picked ?? '') : solution) : chosen !== null ? ((task.options ?? [])[chosen] ?? '') : '';
@@ -486,7 +487,6 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       </div>
     );
   }
-  void solved;
   if (copyOpen && fb) {
     answer = (
       <>
@@ -562,7 +562,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const purposeKey: MessageKey = findTask ? 'gxPurpose_find' : type === 'kwt' ? 'gxPurpose_kwt' : type === 'meaning' ? 'gxPurpose_meaning' : 'purposeGrammar';
   const learnLine = learning && pattern ? { topic: topicLabel, pattern: lang === 'de' ? pattern.name.de : pattern.name.en } : { topic: null, pattern: null };
   // Aufgabenzeile in der Lernphase mit Musternamen (§5.2); in gemischten Runden bleibt sie allgemein.
-  const taskText = learning && pattern && !findTask && type !== 'meaning' && type !== 'mc' ? `${t(taskKey)} ${t('gxTaskFor', { pattern: learnLine.pattern ?? '' })}` : t(taskKey);
+  const taskText = learning && pattern && !findTask && type !== 'meaning' && type !== 'mc' ? `${t(taskKey)} ${t('gxTaskFor', { pattern: functionOf(learnLine.pattern ?? '') })}` : t(taskKey);
 
   const primary = fb
     ? { label: t('exNext'), onClick: () => next(), testId: 'next' }
@@ -603,7 +603,6 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
         side={split && learning && !fb ? card : null}
       />
       {sheet && <TopicSheet topic={task.topic} onClose={() => setSheet(false)} inRound />}
-      {void go}
     </div>
   );
 }
@@ -649,4 +648,3 @@ function CopyOnceField({ solution }: { solution: string }) {
   );
 }
 
-export { altFamily };

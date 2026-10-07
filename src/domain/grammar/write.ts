@@ -76,7 +76,9 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
 
   const pats = patsPatch(cur, a, ok);
   if (pats) patch.pats = pats;
-  if (a.vt) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 2) };
+  // Ein früher bestandener Vortest bleibt bestanden (path.ts liest `vt.ok`); ein späterer Versuch überschreibt ihn nie.
+  const oldVt = cur.vt && typeof cur.vt === 'object' && !Array.isArray(cur.vt) ? (cur.vt as Doc) : null;
+  if (a.vt && oldVt?.ok !== true) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 2) };
   if (a.vt?.ok && a.vt.pats.length) {
     // Bestandener Vortest (§4.7): p = max(p, 0,6), aber nur, wenn damit alle Muster des Themas getestet sind.
     const all = patternsOf(topic)?.patterns.map((p) => p.id) ?? [];
@@ -112,6 +114,7 @@ function errorAnswer(t: GrammarAnswer['task']): string {
 function patsPatch(cur: Doc, a: GrammarAnswer, ok: boolean): Record<string, PatEntry> | null {
   const id = a.task.pat;
   if (!id) return null;
+  const rawPats = cur.pats && typeof cur.pats === 'object' && !Array.isArray(cur.pats) ? (cur.pats as Record<string, unknown>) : {};
   const out: Record<string, PatEntry> = { ...patsOf(cur) };
   if (!Object.keys(out).length && num(cur.n, 0) > 0) {
     const day = introDay(cur) ?? a.day;
@@ -120,7 +123,9 @@ function patsPatch(cur: Doc, a: GrammarAnswer, ok: boolean): Record<string, PatE
   const prev = out[id];
   const next = patPush(prev, { ok, help: a.help.level > 0 || a.firstWrong !== undefined, day: a.day, t: a.t });
   next.i ??= a.day;
-  out[id] = next;
+  // Unbekannte Felder eines Eintrags bleiben erhalten (Datenregel 2: nie strippen).
+  const rawOld = rawPats[id];
+  out[id] = rawOld && typeof rawOld === 'object' && !Array.isArray(rawOld) ? { ...(rawOld as PatEntry), ...next } : next;
   const keys = Object.keys(out);
   if (keys.length > 12) for (const k of keys.sort((x, y) => (out[x]?.last ?? 0) - (out[y]?.last ?? 0))) if (Object.keys(out).length > 12 && k !== id) delete out[k];
   if (a.vt?.ok) for (const pid of a.vt.pats) if (out[pid]) out[pid] = { ...out[pid], i: out[pid]?.i ?? a.day };

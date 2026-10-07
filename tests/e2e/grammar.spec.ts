@@ -22,7 +22,12 @@ async function solutionHidden(page: Page, type: string): Promise<void> {
   const answer = solve(await shownPrompt(page));
   expect(answer, `Lösung für „${await shownPrompt(page)}" in den Testdaten`).not.toBeNull();
   if (type === 'mc' || !answer || answer.length < 5) return;
-  const html = await page.locator('main').evaluate((el) => el.outerHTML);
+  // Die Musterkarte der Lernphase (Formel, Beispiel) darf die Form zeigen; der Aufgabentext und die Eingabe nie.
+  const html = await page.locator('main').evaluate((el) => {
+    const c = el.cloneNode(true) as HTMLElement;
+    c.querySelectorAll('[data-slot="aid"], [data-slot="status"], [data-col="side"]').forEach((x) => x.remove());
+    return c.outerHTML;
+  });
   expect(html.toLowerCase()).not.toContain(answer.toLowerCase());
   await expect(page.getByTestId('result')).toHaveCount(0);
 }
@@ -239,10 +244,11 @@ test('Pfad: 39 Themen in Lehrreihenfolge mit Zustand; Englisch: Formmuster ohne 
   const next = await page.getByTestId('hub-next-topic').getAttribute('data-topic');
   await expect(page.locator(`[data-testid="topic"][data-topic="${next}"]`)).toHaveAttribute('aria-current', 'step');
   await page.locator('[data-testid="topic"][data-topic="passive"]').click();
-  const patterns = page.getByTestId('rule-sheet').getByTestId('rule-pattern');
+  // Mit Musterdatei (passive hat eine) zeigt das Themenblatt die Formeln der Muster; ohne das Regelblatt die Formmuster.
+  const patterns = page.getByTestId('rule-sheet').locator('[data-testid="rule-pattern"], [data-testid="pattern-formula"]');
   await expect(patterns.first()).toBeVisible();
   const text = (await patterns.allInnerTexts()).join(' | ');
-  expect(text).toContain('past participle');
+  expect(text).toContain('participle');
   expect(text).not.toMatch(/3\. Form|Grundform/);
   expect(errors).toEqual([]);
 });
