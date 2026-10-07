@@ -2,7 +2,5 @@
   "owner": "P5",
   "matchMedia": [],
   "textPx": [],
-  "card": [
-    "src/features/grammar/focus/FocusItem.tsx"
-  ]
+  "card": []
 }

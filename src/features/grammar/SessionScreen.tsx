@@ -124,9 +124,9 @@ function GrammarEnd({ lang }: { lang: 'de' | 'en' }) {
   const wrongPats = new Set(s.results.filter((r) => !r.ok && r.pat).map((r) => r.pat as string));
   for (const g of growth) if (wrongPats.has(g.pat) && patternState(g.to, s.day) === 'learning') facts.push(t('gxEndWobbly', { name: name(g.pat) }));
   const mistakes = s.results
-    .filter((r) => !r.ok && r.right)
+    .filter((r): r is typeof r & { right: string } => !r.ok && !!r.right)
     .slice(0, 4)
-    .map((r) => ({ wrong: r.given.trim() || '…', right: r.right, rule: r.pat ? name(r.pat) : topicName(r.topic, lang), when: t('gxEndTomorrow') }));
+    .map((r) => ({ wrong: (r.given ?? '').trim() || '…', right: r.right, rule: r.pat ? name(r.pat) : topicName(r.topic, lang), when: t('gxEndTomorrow') }));
   // Ohne Muster (Themen ohne Musterdatei): die geübten Themen als Zeilen ohne Punkte.
   const plain = growth.length ? [] : [...new Set(s.results.map((r) => r.topic))].map((tp) => t('gxEndNoPattern', { topic: topicName(tp, lang) }));
   const right = s.results.filter((r) => r.ok).length;

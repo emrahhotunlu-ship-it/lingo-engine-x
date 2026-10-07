@@ -1,6 +1,8 @@
 import { openLearnPage, openTab } from './fixtures';
 import { readFileSync } from 'node:fs';
 import { expect, type Page } from '@playwright/test';
+import { splitWords } from '../../src/domain/answer/align';
+import { errorSpan } from '../../src/domain/grammar/span';
 
 // Hilfen für die Phase-2-Bildschirme (Kurs, Lektion, Grammatik, Übungen). Die richtigen
 // Antworten stammen aus den Testdaten und den Voreinstellungen – nie aus der Oberfläche,
@@ -98,7 +100,15 @@ export async function answerGrammar(page: Page, solve: ((shown: string) => strin
     await check.click();
   } else if (type === 'find') {
     const words = item.getByTestId('spot-word');
-    const err = known?.err ?? null;
+    // Neue Aufgabe (`tasks-v2`): Bereich und Ersatz stehen in den Daten. Eine Satzkorrektur am Handy (`correct` → `find`): Stelle und Ersatz aus dem Vergleich.
+    let err = known?.err ?? null;
+    let replacement = known?.answer ?? '';
+    if (known && known.type === undefined) {
+      err = errorSpan(known.prompt, known.answer);
+      const w = splitWords(known.prompt);
+      const r = splitWords(known.answer);
+      if (err) replacement = r.slice(err[0], Math.max(err[0], r.length - (w.length - 1 - err[1]))).join(' ');
+    }
     if (err === null && !opts.wrong) await page.getByTestId('no-error').click();
     else {
       const n = await words.count();
@@ -114,7 +124,7 @@ export async function answerGrammar(page: Page, solve: ((shown: string) => strin
           await check.click();
         }
       } else {
-        await typeInGap(page, opts.given ?? known?.answer ?? 'zzzz');
+        await typeInGap(page, opts.given ?? replacement ?? 'zzzz');
         await check.click();
       }
     }

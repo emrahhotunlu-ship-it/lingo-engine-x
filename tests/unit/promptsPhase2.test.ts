@@ -33,7 +33,7 @@ describe('Phase-2-Vorlagen: Kopfzeile, Stufe, Zwischenspeicher', () => {
     const ids = TEMPLATES.map((t) => t.id);
     for (const id of ['grammar-items', 'grammar-judge']) expect(ids).toContain(id);
     expect(grammarJudge.build(judgeVars).split('\n')[0]).toBe('[grammar-judge@1]');
-    expect(grammarItems.build(itemsVars).split('\n')[0]).toBe('[grammar-items@2]');
+    expect(grammarItems.build(itemsVars).split('\n')[0]).toBe('[grammar-items@3]');
     expect([grammarJudge.tier, grammarItems.tier]).toEqual(['quick', 'default']);
     expect(grammarJudge.cache).toEqual({ gcTime: 86_400_000 });
     expect(grammarItems.cache).toBe(false);

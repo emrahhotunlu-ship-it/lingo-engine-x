@@ -6,8 +6,10 @@ import { grammarSnapshot, restoreGrammar, startGrammar, useGrammarSession, type 
 // Fortsetzen der Grammatik-Runde (plan.md G3, §4.3 Muss 2): gleiche Aufgabe nach dem Neuladen.
 
 export const grammarResume: Resumable<GrammarSnap> = {
+  // Version 2 (Lernplattform 2.0): `intro` ist ein Objekt (Vortest, Karten), dazu Profil, Planversion und Musterstand. Ältere Stände (1) werden nicht mehr gelesen,
+  // und eine ältere App-Version liest die neuen nicht (Rückweg).
   id: 'grammarSession',
-  version: 1,
+  version: 2,
   origin: 'learn',
   snapshot: grammarSnapshot,
   subscribe: (cb) => useGrammarSession.subscribe(cb),

@@ -48,11 +48,12 @@ export type GrammarRow = {
   topic: string;
   ok: boolean;
   verdict: GrammarAnswer['verdict'];
-  pat: string | null;
-  help: boolean;
-  given: string;
-  right: string;
-  dontKnow: boolean;
+  /** Ab Lernplattform 2.0; ältere gespeicherte Runden haben diese Felder nicht. */
+  pat?: string | null;
+  help?: boolean;
+  given?: string;
+  right?: string;
+  dontKnow?: boolean;
   /** Richtig, ohne Hilfe und schnell genug (Vortest, §5.3). */
   clean?: boolean;
 };
@@ -357,7 +358,7 @@ export function commitGrammar(a0: GrammarAnswer): 'typed' | 'choice' | null {
     clean: cleanAnswer(a),
   };
   const results = repeating ? s.results : [...s.results, row];
-  const patLog = repeating || !a.task.pat ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help, t: a.t }];
+  const patLog = repeating || !a.task.pat ? s.patLog : [...s.patLog, { pat: a.task.pat, ok: row.ok, help: row.help ?? false, t: a.t }];
   const pos = s.pos + 1;
   let repeatAt = s.repeatAt;
   if (pos >= tasks.length && repeatAt === null) {
@@ -464,7 +465,7 @@ export function restoreGrammar(snap: GrammarSnap): boolean {
   const intro: IntroState | null = typeof raw === 'string' ? (snap.pos === 0 ? legacyIntro(raw) : null) : raw && typeof raw === 'object' ? raw : null;
   useGrammarSession.setState({
     ...snap,
-    results: Array.isArray(snap.results) ? snap.results.map((r) => ({ ...r, pat: r.pat ?? null, help: r.help ?? false, given: r.given ?? '', right: r.right ?? '', dontKnow: r.dontKnow ?? false })) : [],
+    results: Array.isArray(snap.results) ? snap.results : [],
     repeatAt: typeof snap.repeatAt === 'number' ? snap.repeatAt : null,
     intro,
     profile: snap.profile === 'touch' || snap.profile === 'keys' ? snap.profile : inputProfile(),

@@ -143,9 +143,9 @@ for (const size of SIZES) {
       const start = page.locator('[data-testid="focus-item"][data-state="open"]');
       await expect(repair.or(free).or(start)).toBeVisible();
       if (await start.isVisible()) {
-        await expect(page.getByTestId('focus-hint')).toBeVisible();
+        await expect(page.getByTestId('hint-line')).toBeVisible();
         await page.getByTestId('focus-dont-know').click();
-        await expect(page.getByTestId('feedback-solution')).toBeVisible();
+        await expect(page.getByTestId('sentence-diff')).toBeVisible();
         starts++;
         await page.getByTestId('next').click();
       } else if (await repair.isVisible()) {

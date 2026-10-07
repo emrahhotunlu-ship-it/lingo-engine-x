@@ -43,6 +43,8 @@ async function resultComplete(page: Page): Promise<void> {
 
 /** Eine ganze Runde spielen; Rückgabe: Typen und Urteile je Aufgabe. */
 async function playRound(page: Page, opts: { wrongAt?: number } = {}): Promise<Array<{ type: string; verdict: string; prompt: string; topic: string }>> {
+  // Eine falsche Antwort ab Platz `wrongAt`; ein Bedeutungspaar und ein fehlerfreier Satz haben keine „falsch → richtig“-Fassung (kein Fehlersatz) und zählen dafür nicht.
+  let wrongDone = false;
   await expect(page.getByTestId('grammar-session')).toBeVisible();
   const out: Array<{ type: string; verdict: string; prompt: string; topic: string }> = [];
   for (let i = 0; i < 12; i++) {
@@ -54,7 +56,9 @@ async function playRound(page: Page, opts: { wrongAt?: number } = {}): Promise<A
     const topic = (await item.getAttribute('data-topic')) ?? '';
     const prompt = await shownPrompt(page);
     await solutionHidden(page, type);
-    await answerGrammar(page, solve, { wrong: opts.wrongAt === i });
+    const wrong = opts.wrongAt !== undefined && i >= opts.wrongAt && !wrongDone && type !== 'meaning' && type !== 'find';
+    if (wrong) wrongDone = true;
+    await answerGrammar(page, solve, { wrong });
     await resultComplete(page);
     out.push({ type, topic, verdict: (await item.getByTestId('verdict').getAttribute('data-verdict')) ?? '', prompt });
     await nextItem(page);
@@ -71,10 +75,13 @@ test('freie Runde vollständig: richtig und falsch mit Vergleich, Form-Hinweis u
   const before = await dump(page);
   const rows = await playRound(page, { wrongAt: 1 });
   // N47: Die falsche Aufgabe kommt am Rundenende einmal wieder (nicht gezählt, nicht gespeichert).
-  expect(rows).toHaveLength(9);
-  expect(rows[8]?.prompt).toBe(rows[1]?.prompt);
-  expect(rows[1]?.verdict).toBe('wrong');
-  expect(rows.filter((_, i) => i !== 1).every((r) => r.verdict === 'ok'), JSON.stringify(rows)).toBe(true);
+  // Seit Lernplattform 2.0: eine ungesehene Variante desselben Musters (ohne Muster dieselbe Aufgabe), nie als Zähler der Runde.
+  // Gibt es keine ungesehene Variante, entfällt die Wiederholung (nie dieselbe Aufgabe in Plänen der neuen Regel).
+  expect([8, 9]).toContain(rows.length);
+  const wrongAt = rows.findIndex((r) => r.verdict === 'wrong');
+  expect(wrongAt).toBeGreaterThanOrEqual(1);
+  if (rows.length === 9) expect(rows[8]?.topic).toBe(rows[wrongAt]?.topic);
+  expect(rows.filter((_, i) => i !== wrongAt && i < 8).every((r) => r.verdict === 'ok'), JSON.stringify(rows)).toBe(true);
   expect(new Set(rows.map((r) => r.type)).size).toBeGreaterThanOrEqual(2);
   await expect(page.getByTestId('session-end')).toHaveAttribute('data-total', '8');
   await expect(page.getByTestId('session-end')).toHaveAttribute('data-right', '7');
@@ -164,7 +171,7 @@ test('Fehler von heute kommt am nächsten Tag in der Wiederholung', async ({ bro
   const logged = async () => (((await dump(p1))[`log/${DAY}`]?.entries as Doc[] | undefined) ?? []).filter((e) => e.k === 'g').length;
   const gBefore = await logged();
   const rows = await playRound(p1, { wrongAt: 3 });
-  const missed = rows[3]!;
+  const missed = rows.find((r) => r.verdict === 'wrong')!;
   await expect.poll(logged).toBe(gBefore + 8);
   const state: Dump = await dump(p1);
   expect(b1.errors).toEqual([]);

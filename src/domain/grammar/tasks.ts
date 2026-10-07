@@ -11,7 +11,7 @@ import { dueErrors } from './errors';
 import { isNewTopic, nextNewTopic } from './path';
 import { legacyTaskKey } from './key';
 import { familyOf, mapEntryOf, patternOf, patternsOf, v2Tasks } from './patterns';
-import type { V2Task } from './patternTypes';
+import { TaskWhySchema, type V2Task } from './patternTypes';
 import { errorSpan } from './span';
 import { asText } from '../text/str';
 import { asList, asRecord, grammarJson, rulesJson, toolkitJson } from './raw';
@@ -76,6 +76,8 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
   const entry = mapEntryOf(topic, key);
   // Muster: aus der Zuordnungstabelle, sonst (Pool, Tagesauftrag) über die Signalwörter, nur bei eindeutigem Treffer (§3.3).
   const pat = entry?.pat ?? strOrNull(it.pat) ?? patternOf({ topic, prompt, answer })?.id ?? null;
+  const own = TaskWhySchema.safeParse(it.why);
+  const why = entry?.why ?? (own.success ? own.data : null);
   return {
     key,
     topic,
@@ -90,7 +92,7 @@ export function normalizeTask(raw: unknown, src: TaskSrc, ref: string | null = n
     ref: ref ?? strOrNull(it.ref),
     errorT: null,
     ...(pat ? { pat } : {}),
-    ...(entry?.why ? { why: entry.why } : {}),
+    ...(why ? { why } : {}),
   };
 }
 
@@ -119,6 +121,7 @@ export function toPoolItem(t: GrammarTask): Doc {
   };
   if (t.ref) out.ref = t.ref;
   if (t.pat) out.pat = t.pat;
+  if (t.why) out.why = t.why;
   return out;
 }
 

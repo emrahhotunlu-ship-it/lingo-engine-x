@@ -53,29 +53,28 @@ test('Block 4 Fokus: Fallen-Korrektur → Hinweis, Versuch, Lösung mit Grund, d
   await expect(item).toHaveAttribute('data-trap', 'f01');
   await expect(page.getByTestId('focus-wrong')).toContainText(TRAP_REPAIR.wrong);
   // Erst der Hinweis, dann der Versuch.
-  await expect(page.getByTestId('focus-hint')).toBeVisible();
+  await expect(page.getByTestId('hint-line')).toBeVisible();
   expect(await layoutProblems(page)).toEqual([]);
   await page.getByTestId('focus-input').fill(TRAP_REPAIR.right);
   await page.getByTestId('focus-check').click();
   // M9: auch bei richtiger Antwort Lösung und Grund.
-  await expect(page.getByTestId('feedback')).toHaveAttribute('data-verdict', 'ok');
-  await expect(page.getByTestId('feedback-solution')).toContainText('current version');
-  await expect(page.getByTestId('feedback-fixes')).toContainText('tatsächlich');
+  await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'ok');
+  await expect(page.getByTestId('explanation')).toContainText('tatsächlich');
   await page.getByTestId('next').click();
 
   // Mini-Drill: 3 Sätze der Falle f01.
   for (let n = 1; n <= 3; n++) {
     await expect(item).toHaveAttribute('data-drill', '');
     await expect(item).toHaveAttribute('data-trap', 'f01');
-    await expect(page.getByTestId('focus-eyebrow')).toContainText(`Satz ${n} von 3`);
+    await expect(page.getByTestId('status')).toContainText(`Satz ${n} von 3`);
     if (n === 1) {
       // Falsch lassen → Lösung + Grund, Satz wird Reparatur-Karte (Startsatz-Lösung).
       await page.getByTestId('focus-check').click();
-      await expect(page.getByTestId('feedback')).toHaveAttribute('data-verdict', 'wrong');
-      await expect(page.getByTestId('feedback-solution')).toContainText('current status');
+      await expect(page.getByTestId('result')).toHaveAttribute('data-verdict', 'wrong');
+      await expect(page.getByTestId('sentence-diff')).toContainText('current status');
     } else {
       await page.getByTestId('focus-dont-know').click();
-      await expect(page.getByTestId('feedback-solution')).toBeVisible();
+      await expect(page.getByTestId('sentence-diff')).toBeVisible();
     }
     await page.getByTestId('next').click();
   }
@@ -170,9 +169,9 @@ test('Deutsch-Fallen ohne KI: Startsatz-Falle in 2 Tipps ab Üben, 3 Sätze mit 
   for (let i = 0; i < 3; i++) {
     const item = page.locator('[data-testid="focus-item"][data-state="open"]');
     await expect(item).toHaveAttribute('data-trap', 'f03');
-    await expect(page.getByTestId('focus-hint')).toBeVisible();
+    await expect(page.getByTestId('hint-line')).toBeVisible();
     await page.getByTestId('focus-dont-know').click();
-    await expect(page.getByTestId('feedback-fixes')).not.toBeEmpty();
+    await expect(page.getByTestId('explanation')).not.toBeEmpty();
     await page.getByTestId('next').click();
   }
   await expect(page.getByTestId('pattern-drill-end')).toHaveAttribute('data-total', '3');
@@ -190,7 +189,7 @@ test('Grammatik-Runde in der Lernphase: kompakte Musterkarte steht offen, kein g
   await expect(page.getByTestId('gr-item')).toBeVisible();
   await expect(page.getByTestId('gr-brief')).toHaveCount(0);
   await expect(page.getByTestId('pattern-card')).toBeVisible();
-  await expect(page.getByTestId('pattern-card')).toHaveAttribute('data-compact', '');
+  await expect(page.getByTestId('pattern-card')).toHaveAttribute('data-compact', 'true');
   expect(errors).toEqual([]);
 });
 

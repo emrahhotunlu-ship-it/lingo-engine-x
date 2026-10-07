@@ -176,7 +176,7 @@ const item = (o: object) => ({
   ...o,
 });
 
-describe('grammar-items@2 (W8)', () => {
+describe('grammar-items@3 (W8, Lernplattform 2.0)', () => {
   const v = { topic: 'passive', nameEn: 'Passive voice', ruleEn: 'be + past participle', examples: ['The report was sent.'], p: 0.5, types: ['gap', 'transform'], seenText: [], errors: [], count: 6 } as const;
   const s = grammarItems.schema(v);
   const six = (x: object) => ({ items: [item({}), item({}), item({}), item({}), item({}), x] });
@@ -197,9 +197,9 @@ describe('grammar-items@2 (W8)', () => {
     bad(s, { items: [item({}), item({}), item({ options: ['a'] })] });
   });
 
-  it('Prompt: Version 2, englische Wendungen in “…”', () => {
+  it('Prompt: Version 3, englische Wendungen in “…”', () => {
     const p = grammarItems.build(v);
-    expect(p.split('\n')[0]).toBe('[grammar-items@2]');
+    expect(p.split('\n')[0]).toBe('[grammar-items@3]');
     expect(p).toContain('put English words and phrases in “…”');
   });
 });

@@ -323,7 +323,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const model: ExplanationModel | null = useMemo(() => {
     if (!fb) return null;
     const verdict: ResultVerdict = fb.dontKnow ? 'dontKnow' : fb.override ? 'ok' : fb.verdict === 'correct' ? 'ok' : fb.verdict === 'near' ? 'near' : 'wrong';
-    return grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning, ai: aiText });
+    return tighten(grammarExplanation({ task, verdict, given: fb.given, ...(picked !== undefined ? { picked } : {}), ...(fb.tapped !== undefined ? { tapped: fb.tapped } : {}), lang, learning, ai: aiText }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fb, aiText, lang, learning, task]);
 
@@ -606,6 +606,29 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
       {void go}
     </div>
   );
+}
+
+/**
+ * Höchstens 45 sichtbare Wörter am Handy (§4.6): Der typische Fehler steht offen nur mit den beiden Sätzen; seine Ursache und – bei falscher
+ * Antwort, wo „Deine Antwort“ schon genau erklärt – der ganze Fehler rutschen in den Aufklappbereich (Zeile „Hinweis“).
+ */
+function tighten(m: ExplanationModel): ExplanationModel {
+  const hasYours = m.lines.some((l) => l.k === 'yours');
+  const w = (x: string | null | undefined): number => (x ? x.split(/\s+/).filter(Boolean).length : 0);
+  // Offene Wörter ohne den typischen Fehler: Muster, „Deine Antwort“, Warum und das eine offene Beispiel.
+  const base =
+    m.lines.reduce((n, l) => n + (l.k === 'pattern' ? w(l.name) + w(l.formula) : l.k === 'yours' ? w(l.given) + w(l.text) : l.k === 'why' ? w(l.text) : 0), 0) + w(m.examples[0]?.en);
+  const lines = m.lines.flatMap((l): ExplanationModel['lines'] => {
+    if (l.k !== 'mistake') return [l];
+    const cause = nonEmpty(l.cause) ? l.cause : '';
+    const sentences = w(l.bad) + w(l.good);
+    // Passt der Fehler mit seinen zwei Sätzen noch in die 45 Wörter, bleibt er offen (ohne Ursache); sonst steht er unter „Mehr“.
+    if (!hasYours && base + sentences <= 45) return cause ? [{ k: 'mistake', bad: l.bad, good: l.good, cause: null }, { k: 'note', text: cause }] : [l];
+    return [{ k: 'note', text: `${l.bad} → ${l.good}${cause ? ` · ${cause}` : ''}` }];
+  });
+  // Die Reihenfolge bleibt: pattern → yours → why → mistake → contrast → note (Notizen zuletzt).
+  const order = ['pattern', 'yours', 'why', 'mistake', 'contrast', 'note'];
+  return { ...m, lines: [...lines].sort((a, b) => order.indexOf(a.k) - order.indexOf(b.k)) };
 }
 
 /** „Einmal richtig schreiben“ (M5): freiwillig, zählt nicht als Antwort und ändert keine Note. */

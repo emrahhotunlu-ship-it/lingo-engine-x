@@ -6,6 +6,8 @@ import { topicById } from '../../domain/content';
 import { topicP } from '../../domain/grammar/bkt';
 import { errorsOf } from '../../domain/grammar/errors';
 import { poolIntake, type PoolIntake } from '../../domain/grammar/pool';
+import { patternsOf } from '../../domain/grammar/patterns';
+import { patsOf } from '../../domain/metrics/pattern';
 import { ruleExamples, ruleOf } from '../../domain/grammar/rules';
 import { normalizeTask, wantTypes } from '../../domain/grammar/tasks';
 import type { GrammarTask } from '../../domain/learn/types';
@@ -21,6 +23,15 @@ import { loadLearnInputs } from '../learn/inputs';
 // gehen mit (≤ 5), damit Claude genau diese Verwechslung neu übt.
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : '');
+
+/** Eingeführte Muster des Themas (Bestand: alle, solange es noch keine `pats` gibt); leer ohne Musterdatei. */
+function introducedPatterns(topic: string, doc: Readonly<Record<string, unknown>> | undefined): Array<{ id: string; name: string; form: string; signals: string[] }> {
+  const tp = patternsOf(topic);
+  if (!tp) return [];
+  const pats = patsOf(doc);
+  const started = Object.keys(pats).length > 0;
+  return tp.patterns.filter((p) => (started ? pats[p.id]?.i !== undefined : typeof doc?.n === 'number' && doc.n > 0)).map((p) => ({ id: p.id, name: p.name.en, form: p.form.en, signals: [...p.signals] }));
+}
 
 export async function generateTopicTasks(topic: string, signal: AbortSignal): Promise<GrammarTask[]> {
   const tp = topicById(topic);
@@ -39,7 +50,7 @@ export async function generateTopicTasks(topic: string, signal: AbortSignal): Pr
     .filter((e) => e.q && e.ans);
   const r = await askJson({
     template: grammarItems,
-    vars: { topic, nameEn: tp.name_en ?? tp.name, ruleEn, examples: ruleExamples(topic, 4), p, types: wantTypes(p).filter((x): x is 'mc' | 'gap' | 'transform' | 'correct' => x === 'mc' || x === 'gap' || x === 'transform' || x === 'correct'), seenText, errors, count: 6 },
+    vars: { topic, nameEn: tp.name_en ?? tp.name, ruleEn, examples: ruleExamples(topic, 4), p, types: wantTypes(p).filter((x): x is 'mc' | 'gap' | 'transform' | 'correct' => x === 'mc' || x === 'gap' || x === 'transform' || x === 'correct'), seenText, errors, count: 6, patterns: introducedPatterns(topic, doc) },
     signal,
   });
   const tasks = r.data.items.map((it) => normalizeTask(it, 'ai')).filter((t): t is GrammarTask => !!t);
