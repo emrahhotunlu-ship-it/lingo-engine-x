@@ -3,6 +3,7 @@ import { getWriter } from '../../data';
 import { validateDoc } from '../../data/validate';
 import { courseDone } from '../../domain/course/courseDone';
 import { mergeRadar, radarEvent, topicCat } from '../../domain/grammar/radar';
+import { answerRight } from '../../domain/learn/right';
 import { grammarWrite } from '../../domain/grammar/write';
 import type { NewRepair } from '../../domain/repair/repair';
 import { saveRepairs } from '../repair/store';
@@ -263,7 +264,7 @@ async function saveGrammar(a: GrammarAnswer): Promise<boolean> {
 export const learnRecorder: LearnRecorder = {
   async grammar(a) {
     const ok = await saveGrammar(a);
-    const right = !a.dontKnow && a.verdict !== 'wrong';
+    const right = answerRight(a);
     open.counts.push({ day: a.day, kind: 'g', channel: grammarChannel(a), ok: right });
     pushEntry(grammarLogEntry(a), a.day);
     if (!right && !a.dontKnow) radarQueue.push(radarEvent(topicCat(a.task.topic), 'g', a.t, { q: a.task.prompt, g: a.given, a: a.task.answer }));

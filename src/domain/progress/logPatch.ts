@@ -1,3 +1,4 @@
+import { answerRight } from '../learn/right';
 import type { DrillAnswer, GrammarAnswer } from '../learn/types';
 import type { AnswerEvent } from '../srs/types';
 import type { ChannelLogEntry } from './channelLog';
@@ -83,6 +84,13 @@ export type GrammarLogEntry = {
   lesson?: string;
   override?: true;
   dev?: 't' | 'k';
+  /** c1x (Lernplattform 3.0 §10.0 Nr. 4): Punkte, Art, Muster, Aufgaben-ID, Claude-Aufgabe, getippt. */
+  pts?: [number, number];
+  c1k?: string;
+  pat?: string;
+  cid?: string;
+  ai?: true;
+  free?: true;
 };
 
 /** Übungs-Eintrag (Diktat, Lückenjagd, Satzbau, Lektionsfrage) in der Form der alten App. */
@@ -134,7 +142,7 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
   const lesson = a.task.src === 'lesson' && a.task.ref?.startsWith('lesson/') ? a.task.ref.slice(7) : undefined;
   return {
     t: a.t,
-    ok: !a.dontKnow && a.verdict !== 'wrong',
+    ok: answerRight(a),
     lang: a.lang,
     k: 'g',
     topic: a.task.topic,
@@ -150,6 +158,11 @@ export function grammarLogEntry(a: GrammarAnswer): GrammarLogEntry {
     ...(lesson ? { lesson } : {}),
     ...(a.override ? { override: true as const } : {}),
     ...(a.dev ? { dev: a.dev } : {}),
+    ...(a.pts ? { pts: a.pts } : {}),
+    ...(a.c1k ? { c1k: a.c1k } : {}),
+    ...(a.task.c1 ? { cid: a.task.c1.id, pat: a.task.c1.pat } : {}),
+    ...(a.task.c1?.src === 'ai' ? { ai: true as const } : {}),
+    ...(a.pts && a.free ? { free: true as const } : {}),
   };
 }
 

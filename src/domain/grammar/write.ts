@@ -8,6 +8,7 @@ import { patternsOf } from './patterns';
 import { bktStep, displayP, nextDue, p0Of } from './bkt';
 import type { NewRepair } from '../repair/repair';
 import { addError, errorSentences, errorsOf, gapFill, hasOpenError, reviewError } from './errors';
+import { answerRight } from '../learn/right';
 
 // Schreibweg `grammar/<topic>` je bewerteter Antwort (phase2-plan §4.3, 1:1 wie `updateTopic`
 // der alten App, session.js:431–436). Rein; ausgeführt im Writer per `transform` auf dem
@@ -40,46 +41,52 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
   const topic = a.task.topic;
   const p0 = p0Of(topic);
   const t = a.t;
-  // Richtig erst nach Hinweis (Lernwissenschaft 27.09.): für Beherrschung, Fälligkeit und Fehler falsch.
-  const ok = !a.dontKnow && a.verdict !== 'wrong' && a.firstWrong === undefined;
-  const pNow = displayP(num(cur.p, p0), p0, typeof cur.last === 'number' && cur.last > 0 ? cur.last : null, t);
-  const step = bktStep({
-    p: pNow,
-    anchor: typeof cur.anchor === 'number' ? cur.anchor : null,
-    anchorD: typeof cur.anchorD === 'string' ? cur.anchorD : null,
-    day: a.day,
-    ok,
-    type: a.task.type,
-    nOptions: guessOptions(a.task),
-    helpLevel: a.help.level,
-  });
-  const patch: Doc = {
-    p: step.p,
-    n: num(cur.n, 0) + 1,
-    c: num(cur.c, 0) + (ok ? 1 : 0),
-    last: t,
-    due: nextDue(ok, step.p, t),
-  };
-  if (step.anchorChanged) {
-    patch.anchor = step.anchor;
-    patch.anchorD = step.anchorD;
+  // Richtig erst nach Hinweis (Lernwissenschaft 27.09.): für Beherrschung, Fälligkeit und Fehler falsch. c1x: nur die volle Punktzahl (`answerRight`).
+  const ok = answerRight(a) && a.firstWrong === undefined;
+  // Claude-Aufgaben (Lernplattform 3.0 §3.4, K-8) buchen nie BKT, nie `pats`: richtig → nur `seen`; falsch → zusätzlich ein Fehlersatz (unten).
+  const claude = a.task.c1?.src === 'ai';
+  const patch: Doc = {};
+  if (!claude) {
+    const pNow = displayP(num(cur.p, p0), p0, typeof cur.last === 'number' && cur.last > 0 ? cur.last : null, t);
+    // c1x: ein getippter Anteil ist nicht ratbar (Typ `gap`, GUESS_TYPED), sonst gilt die Ratewahrscheinlichkeit der Art (`nOpt`, z. B. `pair` = 6).
+    const c1Typed = !!a.pts && a.free === true;
+    const step = bktStep({
+      p: pNow,
+      anchor: typeof cur.anchor === 'number' ? cur.anchor : null,
+      anchorD: typeof cur.anchorD === 'string' ? cur.anchorD : null,
+      day: a.day,
+      ok,
+      type: c1Typed ? 'gap' : a.task.type,
+      nOptions: a.nOpt ?? guessOptions(a.task),
+      helpLevel: a.help.level,
+    });
+    // Zweite Sicht einer schon gesehenen Aufgabe misst Item-Gedächtnis: richtig hebt p nie.
+    const pNew = a.again && ok ? Math.min(step.p, pNow) : step.p;
+    patch.p = pNew;
+    patch.n = num(cur.n, 0) + 1;
+    patch.c = num(cur.c, 0) + (ok ? 1 : 0);
+    patch.last = t;
+    patch.due = nextDue(ok, pNew, t);
+    if (step.anchorChanged) {
+      patch.anchor = step.anchor;
+      patch.anchorD = step.anchorD;
+    }
+    const hist = arr(cur.hist).slice();
+    const lastH = hist[hist.length - 1] as Doc | undefined;
+    const entry = { d: a.day, p: round3(pNew) };
+    if (lastH && typeof lastH === 'object' && lastH.d === a.day) hist[hist.length - 1] = entry;
+    else hist.push(entry);
+    patch.hist = hist.slice(-HIST_MAX);
+    patch.recent = [...arr(cur.recent), ok ? 1 : 0].slice(-RECENT_MAX);
+    patch.seenText = [...arr(cur.seenText), a.task.prompt].slice(-SEEN_TEXT_MAX);
+    const pats = patsPatch(cur, a, ok);
+    if (pats) patch.pats = pats;
   }
-  const hist = arr(cur.hist).slice();
-  const lastH = hist[hist.length - 1] as Doc | undefined;
-  const entry = { d: a.day, p: round3(step.p) };
-  if (lastH && typeof lastH === 'object' && lastH.d === a.day) hist[hist.length - 1] = entry;
-  else hist.push(entry);
-  patch.hist = hist.slice(-HIST_MAX);
-  patch.recent = [...arr(cur.recent), ok ? 1 : 0].slice(-RECENT_MAX);
   patch.seen = [...arr(cur.seen), a.task.key].slice(-SEEN_MAX);
-  patch.seenText = [...arr(cur.seenText), a.task.prompt].slice(-SEEN_TEXT_MAX);
-
-  const pats = patsPatch(cur, a, ok);
-  if (pats) patch.pats = pats;
   // Ein früher bestandener Vortest bleibt bestanden (path.ts liest `vt.ok`); ein späterer Versuch überschreibt ihn nie.
   const oldVt = cur.vt && typeof cur.vt === 'object' && !Array.isArray(cur.vt) ? (cur.vt as Doc) : null;
-  if (a.vt && oldVt?.ok !== true) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 2) };
-  if (a.vt?.ok && a.vt.pats.length) {
+  if (!claude && a.vt && oldVt?.ok !== true) patch.vt = { d: a.day, ok: a.vt.ok, pats: a.vt.pats.slice(0, 2) };
+  if (!claude && a.vt?.ok && a.vt.pats.length) {
     // Bestandener Vortest (§4.7): p = max(p, 0,6), aber nur, wenn damit alle Muster des Themas getestet sind.
     const all = patternsOf(topic)?.patterns.map((p) => p.id) ?? [];
     if (all.length && all.every((id) => a.vt?.pats.includes(id))) patch.p = Math.max(num(patch.p, 0), 0.6);
@@ -94,7 +101,7 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
     if (next) patch.errors = next;
   } else if (!ok) {
     // Jede falsche Antwort und auch „Weiß ich nicht“ (`given` leer, die Anzeige sagt dann „Weiß ich nicht“) ergibt genau einen Fehlersatz.
-    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: errorAnswer(a.task), t, src: a.task.src, expl: a.task.expl, pat: a.task.pat ?? null });
+    const next = addError(errors, { q: a.task.prompt, given: a.dontKnow ? '' : (a.firstWrong ?? a.given), ans: errorAnswer(a.task), t, src: a.task.src, expl: a.task.expl, pat: a.task.pat ?? null, cid: a.task.c1?.id ?? null, pts: a.pts ?? null });
     if (next !== errors) patch.errors = next;
     else if (!hasOpenError(errors, a.task.prompt)) overflow = overflowRepair(a);
   }
@@ -121,7 +128,9 @@ function patsPatch(cur: Doc, a: GrammarAnswer, ok: boolean): Record<string, PatE
     for (const p of patternsOf(a.task.topic)?.patterns ?? []) out[p.id] = { n: 0, c: 0, h: 0, r: 0, k: 0, dd: [], i: day };
   }
   const prev = out[id];
-  const next = patPush(prev, { ok, help: a.help.level > 0 || a.firstWrong !== undefined, day: a.day, t: a.t });
+  // Hilfe-Bit: Tipp, zweiter Versuch, und bei c1x jedes Ergebnis ohne getippten Anteil (Auswahl, Bausteine) und jede zweite Sicht (§3.4): Fest nur über getippte Treffer.
+  const help = a.help.level > 0 || a.firstWrong !== undefined || (!!a.pts && a.free !== true) || a.again === true;
+  const next = patPush(prev, { ok, help, day: a.day, t: a.t });
   next.i ??= a.day;
   // Unbekannte Felder eines Eintrags bleiben erhalten (Datenregel 2: nie strippen).
   const rawOld = rawPats[id];

@@ -38,6 +38,10 @@ export type ErrorEntry = Doc & {
   more?: unknown;
   /** Verlauf der Wiederholungen (höchstens 6, `[t, Box vor der Antwort, 1 = richtig | 0 = falsch]`). */
   rh?: unknown;
+  /** c1x (Lernplattform 3.0 §3.4): ID der Aufgabe, die den Fehler verursacht hat; die Wiederholung kommt im selben Baustein (`domain/c1x/repeat.ts`). */
+  cid?: unknown;
+  /** c1x: erreichte und mögliche Punkte der Antwort `[n, n]`. */
+  pts?: unknown;
 };
 
 export const MORE_MAX = 3;
@@ -108,12 +112,14 @@ function explPair(v: { de: string | null; en: string | null } | null | undefined
  */
 export function addError(
   list: readonly ErrorEntry[],
-  e: { q: string; given: string; ans: string; t: number; src: string; expl?: { de: string | null; en: string | null } | null; pat?: string | null },
+  e: { q: string; given: string; ans: string; t: number; src: string; expl?: { de: string | null; en: string | null } | null; pat?: string | null; cid?: string | null; pts?: readonly [number, number] | null },
   max = ERRORS_MAX,
 ): readonly ErrorEntry[] {
   const k = legacyNorm(e.q);
   if (list.some((x) => x.done !== true && legacyNorm(x.q) === k)) return list;
   const pat = typeof e.pat === 'string' && e.pat.trim() ? e.pat.trim().slice(0, PAT_MAX) : '';
+  // c1x: die Aufgaben-ID und die Punkte der letzten falschen Antwort; eine nicht c1x-Antwort lässt vorhandene Felder stehen.
+  const c1 = e.cid ? { cid: e.cid.slice(0, 40), ...(e.pts ? { pts: [e.pts[0], e.pts[1]] as [number, number] } : {}) } : {};
   // Ein offener Eintrag je Muster (§5.7): Ein zweiter Fehler auf dasselbe Muster setzt den vorhandenen auf Box 0, morgen fällig,
   // und hängt den neuen falschen Satz an `more` an. Der Eintrag selbst und seine Felder bleiben erhalten; nur der älteste Zusatzsatz in `more` wird verdrängt, wenn es mehr als 3 werden (die Regel zählt, nicht der Satz).
   if (pat) {
@@ -125,14 +131,14 @@ export function addError(
       const more = [...(Array.isArray(cur.more) ? (cur.more as unknown[]) : []), { q: e.q.slice(0, MORE_TEXT_MAX), given: e.given.slice(0, GIVEN_MAX), ans: e.ans.slice(0, MORE_TEXT_MAX), t: e.t }].slice(-MORE_MAX);
       const out = [...list];
       // `rh`, `last` und `fsrs` bleiben stehen; der Rückfall auf Box 0 ist die Regel des Plans (§5.7), kein Eintrag in `rh`.
-      out[idx] = { ...cur, box: 0, done: false, due: addLocalDays(e.t, 1), more };
+      out[idx] = { ...cur, box: 0, done: false, due: addLocalDays(e.t, 1), more, ...c1 };
       return out;
     }
   }
   const out = capErrors(list, max - 1);
   if (out.length >= max) return list;
   const expl = explPair(e.expl);
-  return [...out, { q: e.q, given: e.given.slice(0, GIVEN_MAX), ans: e.ans, t: e.t, src: e.src, ...(pat ? { pat } : {}), ...(expl ? { expl } : {}) }];
+  return [...out, { q: e.q, given: e.given.slice(0, GIVEN_MAX), ans: e.ans, t: e.t, src: e.src, ...(pat ? { pat } : {}), ...(expl ? { expl } : {}), ...c1 }];
 }
 
 /**
@@ -313,7 +319,7 @@ function lazyHint(task: GrammarTask, fill: string): void {
 export type DueError = { topic: string; e: ErrorEntry; box: number; due: number; task: GrammarTask };
 
 /** Fällige Fehler aller Themen, älteste Fälligkeit zuerst; dieselbe Frage nur einmal. */
-export function dueErrors(grammarDocs: ReadonlyMap<string, Readonly<Doc>>, nowMs: number): DueError[] {
+export function dueErrors(grammarDocs: ReadonlyMap<string, Readonly<Doc>>, nowMs: number, c1?: (topic: string, e: ErrorEntry) => GrammarTask | null): DueError[] {
   const out: DueError[] = [];
   const seen = new Set<string>();
   for (const [topic, doc] of grammarDocs) {
@@ -323,7 +329,8 @@ export function dueErrors(grammarDocs: ReadonlyMap<string, Readonly<Doc>>, nowMs
       seen.add(k);
       const due = errorDue(e);
       if (!isDueToday(due, nowMs)) continue;
-      const task = errorTask(topic, e);
+      // c1x: ein Fehler aus einer c1x-Aufgabe kommt im selben Baustein zurück (`c1` löst die Aufgabe auf; sonst der Fehlersatz-Text).
+      const task = (typeof e.cid === 'string' ? c1?.(topic, e) : null) ?? errorTask(topic, e);
       if (task) out.push({ topic, e, box: num(e.box) ?? 0, due, task });
     }
   }

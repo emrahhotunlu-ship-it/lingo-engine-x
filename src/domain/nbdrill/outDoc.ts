@@ -17,7 +17,9 @@ export const OUT_DOC_MAX_BYTES = 200 * 1024;
 export const OUT_MAX_ITEMS = 400;
 export const OUT_FIELD_MAX_BYTES = 2048;
 
-export type OutKind = 'colloc' | 'transform' | 'wordform' | 'register' | 'phrasal' | 'transition' | 'objection' | 'hotseat' | 'buytime' | 'inbox' | 'shadow' | 'stress' | 'numbers';
+export type OutKind = 'colloc' | 'transform' | 'wordform' | 'register' | 'phrasal' | 'transition' | 'objection' | 'hotseat' | 'buytime' | 'inbox' | 'shadow' | 'stress' | 'numbers'
+  // Lernplattform 3.0 (§3.4): Verlauf der Lexik-Arten des Aufgabensystems c1x.
+  | 'mcc' | 'wf' | 'cnet';
 
 export type OutItem = {
   id: string;

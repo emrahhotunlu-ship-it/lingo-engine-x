@@ -352,6 +352,9 @@ export const grammarSchema = z.looseObject({
         fsrs: loose,
         /** Neu (Umbau): Erklärung der Aufgabe `{de, en}` für das „Warum“ beim Wiederholen (nur ergänzend). */
         expl: loose,
+        /** Neu (Lernplattform 3.0 §3.4, nur ergänzend): ID der c1x-Aufgabe, die den Fehler verursacht hat, und die Punkte `[n, n]` der Antwort. */
+        cid: str,
+        pts: loose,
       }),
     )
     .nullish(),

@@ -29,6 +29,8 @@ export const PatternSchema = z.object({
   /** Leitfrage für den Tipp und den Zweitversuch, verrät die Lösung nicht. */
   nudge: Bi,
   usNote: Bi.optional(),
+  /** Welche c1x-Aufgabenarten das Muster erlaubt (Lernplattform 3.0 §3.3, additiv); fehlt das Feld, gilt die Standardliste je Stufe (`domain/c1x/select.ts`). */
+  kinds: z.array(z.enum(['mcc', 'ocl', 'wf', 'kwt', 'err', 'pair', 'cnet', 'reg', 'para'])).optional(),
 });
 
 export const TopicPatternsSchema = z.object({

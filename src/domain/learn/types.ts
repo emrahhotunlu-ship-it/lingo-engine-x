@@ -1,3 +1,4 @@
+import type { C1Item, C1Kind } from '../c1x/types';
 import type { TaskWhy } from '../explain/types';
 import type { Grade, Lang } from '../srs/types';
 
@@ -37,6 +38,8 @@ export type GrammarTask = {
   why?: TaskWhy | null;
   /** Zusatzdaten der neuen Aufgabenarten `kwt`, `find` und `meaning` (Lernplattform 2.0 §3.4); `prompt` trägt dort den Rahmensatz, den Satz bzw. Satz a. */
   x?: TaskExtra;
+  /** Aufgabe des Aufgabensystems c1x (Lernplattform 3.0 §3.2): der Rahmen zeigt dann `<C1Item/>`; die alten Felder bleiben die Wahrheit für `seen`, Fehlersätze und Protokoll. */
+  c1?: C1Item;
 };
 
 /** `kwt`: Ausgangssatz, Schlüsselwort (Großbuchstaben), erlaubte Wortzahl in der Lücke. `find`: Wortbereich des Fehlers (`null` = fehlerfrei) und der ganze richtige Satz. `meaning`: Satz a und b, Frage. */
@@ -80,6 +83,16 @@ export type GrammarAnswer = {
   dev?: 't' | 'k';
   /** Letzte Antwort des Vortests (§5.3): trägt das Ergebnis beider Aufgaben; der Schreibweg legt daraus `vt` im Thema an. */
   vt?: { ok: boolean; pats: string[] };
+  /** c1x (Lernplattform 3.0 §3.4): Punkte `[erreicht, möglich]`. Gebucht wird `ok` nur bei voller Punktzahl; „1 von 2“ ist „Fast“. */
+  pts?: [number, number];
+  /** Art der c1x-Aufgabe. */
+  c1k?: C1Kind;
+  /** Der urteilstragende Anteil wurde getippt (freier Abruf). Auswahl und Bausteine allein nie: sie setzen das Hilfe-Bit der Muster. */
+  free?: boolean;
+  /** Zweite Sicht einer schon gesehenen Aufgabe: hebt BKT nie, setzt das Bit „ohne Hilfe“ nicht. */
+  again?: boolean;
+  /** Zahl der Wahlmöglichkeiten für die Ratekorrektur im BKT (z. B. `pair` = 6, `err` Fundort = Wortzahl); sonst aus der Aufgabenart. */
+  nOpt?: number;
 };
 
 /** Quellen: g Grammatik, s Sprint, w Schreiben, v Vokabeln (alte App); k Sprechen, b Business (Phase 3). */

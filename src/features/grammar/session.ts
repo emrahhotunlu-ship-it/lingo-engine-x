@@ -3,6 +3,7 @@ import { unitDone } from '../../app/unit/done';
 import type { UnitBlockNo } from '../../app/unit/types';
 import { useClock } from '../../app/clock';
 import { useSettings } from '../../app/settings';
+import { answerRight } from '../../domain/learn/right';
 import { useLive } from '../../data/live';
 import { topicById } from '../../domain/content';
 import { isNewTopic, introTopic, stepDownTasks } from '../../domain/grammar/path';
@@ -318,7 +319,7 @@ function finish(s: State, aborted0: boolean): void {
   });
 }
 
-const isOk = (a: GrammarAnswer): boolean => !a.dontKnow && a.verdict !== 'wrong' && a.firstWrong === undefined;
+const isOk = (a: GrammarAnswer): boolean => answerRight(a) && a.firstWrong === undefined;
 
 /** Vortest bestanden (§5.3): beide Aufgaben richtig, ohne Hilfe, jede in höchstens 20 s. */
 const VT_MS = 20_000;

@@ -12,6 +12,7 @@ Messung nach **jedem** Paket (Byte der `dist/index.html`, Differenz zum Vorgäng
 | 07.10.2026 | P10 | 4.354.238 | 0 | 4,15 | Inhaltsspeicher ohne Verbraucher (kein Einfluss auf dist) |
 | 07.10.2026 | P12 | 4.354.238 | 0 | 4,15 | c1x-Domäne noch nicht von der App importiert (Tree-Shaking) |
 | 07.10.2026 | P11 | 4.355.991 | +1.753 | 4,15 | Slot, Registry, 13 Stellen |
+| 07.10.2026 | P13 | 4.356.579 | +588 | 4,15 | Buchung (write.ts, answerRight); c1x-Domäne noch ohne Verbraucher in der App |
 
 ## Planrechnung (LP3 §9, Modell)
 
