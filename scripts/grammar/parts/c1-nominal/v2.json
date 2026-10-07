@@ -1,0 +1,826 @@
+[
+  {
+    "id": "nm-nf-k1",
+    "type": "kwt",
+    "pat": "nm.noun-form",
+    "from": "We will implement the new tool in autumn.",
+    "key": "IMPLEMENTATION",
+    "frame": "The ___ the new tool is scheduled for autumn.",
+    "answer": "implementation of",
+    "accepted": [
+      "full implementation of",
+      "initial implementation of"
+    ],
+    "words": [
+      2,
+      3
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: the implementation of the new tool. Aus dem Verb wird ein Nomen mit of.",
+        "en": "Right: the implementation of the new tool. The verb becomes a noun with of."
+      },
+      "wrong": [
+        {
+          "not": [
+            "implementation"
+          ],
+          "de": "Das Schlüsselwort implementation muss unverändert in der Lücke stehen.",
+          "en": "The key word implementation must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "implementation"
+          ],
+          "not": [
+            "of"
+          ],
+          "de": "Nach dem Nomen fehlt of: Das Objekt hängt mit of am Nomen.",
+          "en": "Of is missing: the object attaches to the noun with of."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-nf-k2",
+    "type": "kwt",
+    "pat": "nm.noun-form",
+    "from": "Please confirm that you received the contract.",
+    "key": "RECEIPT",
+    "frame": "Please confirm ___ the contract.",
+    "answer": "receipt of",
+    "accepted": [
+      "your receipt of",
+      "the receipt of"
+    ],
+    "words": [
+      2,
+      3
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: confirm receipt of the contract. Das Nomen receipt nimmt sein Objekt mit of.",
+        "en": "Right: confirm receipt of the contract. The noun receipt takes its object with of."
+      },
+      "wrong": [
+        {
+          "not": [
+            "receipt"
+          ],
+          "de": "Das Schlüsselwort receipt muss unverändert in der Lücke stehen.",
+          "en": "The key word receipt must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "receipt"
+          ],
+          "not": [
+            "of"
+          ],
+          "de": "Nach dem Nomen fehlt of: receipt of the contract.",
+          "en": "Of is missing after the noun: receipt of the contract."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-nf-f1",
+    "type": "find",
+    "pat": "nm.noun-form",
+    "prompt": "Thanks for the quick approve of our travel budget.",
+    "err": [
+      4,
+      4
+    ],
+    "answer": "approval",
+    "fixed": "Thanks for the quick approval of our travel budget.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Nach „quick“ steht ein Nomen. Richtig: the quick approval of our budget.",
+        "en": "The error: after “quick” a noun follows. Correct: the quick approval of our budget."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: approve ist die Verbform. Nach „quick“ braucht es approval.",
+          "en": "There is an error: approve is the verb form. After “quick” you need approval."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „approve“: Hier fehlt das Nomen approval.",
+          "en": "The error is at “approve”: the noun approval is missing here."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-nf-f2",
+    "type": "find",
+    "pat": "nm.noun-form",
+    "prompt": "Please send us your decide by Friday.",
+    "err": [
+      4,
+      4
+    ],
+    "answer": "decision",
+    "fixed": "Please send us your decision by Friday.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Nach „your“ steht ein Nomen. Richtig: your decision.",
+        "en": "The error: after “your” a noun follows. Correct: your decision."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: decide ist das Verb. Nach „your“ braucht es decision.",
+          "en": "There is an error: decide is the verb. After “your” you need decision."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „decide“: Hier fehlt das Nomen decision.",
+          "en": "The error is at “decide”: the noun decision is missing here."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-nf-f3",
+    "type": "find",
+    "pat": "nm.noun-form",
+    "prompt": "The migration was completed ahead of schedule.",
+    "err": null,
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: migration ist das richtige Nomen zu migrate, und der Satz stimmt.",
+        "en": "No error: migration is the right noun for migrate, and the sentence is fine."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: The migration ist ein Nomen mit Artikel, genau wie verlangt.",
+          "en": "No error: The migration is a noun with an article, exactly as required."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-nf-m1",
+    "type": "meaning",
+    "pat": "nm.noun-form",
+    "a": "We approved the budget last week.",
+    "b": "The approval of the budget is expected next week.",
+    "q": {
+      "de": "In welchem Satz steht die Freigabe noch aus?",
+      "en": "In which sentence is the approval still to come?"
+    },
+    "answer": "b",
+    "why": {
+      "ok": {
+        "de": "Richtig: b. Is expected = die Freigabe kommt erst noch. In a ist sie schon erfolgt.",
+        "en": "Right: b. Is expected = the approval is still to come. In a it has already happened."
+      },
+      "wrong": [
+        {
+          "opt": "a",
+          "de": "In a heißt approved: Die Freigabe ist schon erteilt, nichts steht mehr aus.",
+          "en": "In a, approved means the approval has been given, nothing is pending."
+        },
+        {
+          "opt": "both",
+          "de": "Nicht gleich: a nennt eine erledigte Handlung, b ein erwartetes Ereignis.",
+          "en": "Not the same: a names a completed action, b an expected event."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-oo-k1",
+    "type": "kwt",
+    "pat": "nm.of-object",
+    "from": "We reviewed the contract, and it took two days.",
+    "key": "REVIEW",
+    "frame": "The ___ the contract took two days.",
+    "answer": "review of",
+    "accepted": [
+      "full review of",
+      "detailed review of",
+      "legal review of"
+    ],
+    "words": [
+      2,
+      3
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: the review of the contract. Das Objekt hängt mit of am Nomen.",
+        "en": "Right: the review of the contract. The object attaches to the noun with of."
+      },
+      "wrong": [
+        {
+          "not": [
+            "review"
+          ],
+          "de": "Das Schlüsselwort review muss unverändert in der Lücke stehen.",
+          "en": "The key word review must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "review"
+          ],
+          "not": [
+            "of"
+          ],
+          "de": "Nach review fehlt of: Das Objekt hängt mit of am Nomen.",
+          "en": "Of is missing after review: the object attaches with of."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-oo-k2",
+    "type": "kwt",
+    "pat": "nm.of-object",
+    "from": "The board approved the budget, so we can order the licenses.",
+    "key": "APPROVAL",
+    "frame": "After ___ the budget, we can order the licenses.",
+    "answer": "the board's approval of",
+    "accepted": [
+      "board approval of"
+    ],
+    "words": [
+      3,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: the board's approval of the budget. Gremium mit 's davor, Objekt mit of danach.",
+        "en": "Right: the board's approval of the budget. The body with 's first, the object with of after."
+      },
+      "wrong": [
+        {
+          "not": [
+            "approval"
+          ],
+          "de": "Das Schlüsselwort approval muss unverändert in der Lücke stehen.",
+          "en": "The key word approval must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "approval"
+          ],
+          "not": [
+            "of"
+          ],
+          "de": "Nach approval fehlt of vor dem Objekt: approval of the budget.",
+          "en": "Of is missing before the object: approval of the budget."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-oo-f1",
+    "type": "find",
+    "pat": "nm.of-object",
+    "prompt": "We are waiting for the approval the budget.",
+    "err": [
+      5,
+      6
+    ],
+    "answer": "approval of the",
+    "fixed": "We are waiting for the approval of the budget.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Zwischen approval und dem Objekt fehlt of. Richtig: approval of the budget.",
+        "en": "The error: of is missing between approval and the object. Correct: approval of the budget."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Nach approval fehlt of vor „the budget“.",
+          "en": "There is an error: after approval, of is missing before “the budget”."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „approval the“: Hier fehlt of.",
+          "en": "The error is at “approval the”: of is missing here."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-oo-f2",
+    "type": "find",
+    "pat": "nm.of-object",
+    "prompt": "The board's approval of the budget is still missing.",
+    "err": null,
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: the board's approval of the budget ist richtig gebaut.",
+        "en": "No error: the board's approval of the budget is built correctly."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: Gremium mit 's davor und Objekt mit of danach ist richtig.",
+          "en": "No error: the body with 's first and the object with of after is correct."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-oo-f3",
+    "type": "find",
+    "pat": "nm.of-object",
+    "prompt": "The evaluation to the pilot starts on Monday.",
+    "err": [
+      2,
+      2
+    ],
+    "answer": "of",
+    "fixed": "The evaluation of the pilot starts on Monday.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Das Objekt eines Nomens hängt mit of daran, nicht mit to.",
+        "en": "The error: a noun's object attaches with of, not with to."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Nach evaluation hängt das Objekt mit of, nicht mit to.",
+          "en": "There is an error: after evaluation the object takes of, not to."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „to“: Vor „the pilot“ gehört of.",
+          "en": "The error is at “to”: of belongs before “the pilot”."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-oo-m1",
+    "type": "meaning",
+    "pat": "nm.of-object",
+    "a": "The board's decision surprised us.",
+    "b": "The decision of the board surprised us.",
+    "q": {
+      "de": "In welchem Satz hat das Gremium entschieden?",
+      "en": "In which sentence did the board make the decision?"
+    },
+    "answer": "both",
+    "why": {
+      "ok": {
+        "de": "Richtig: beide. the board's decision und the decision of the board sagen dasselbe.",
+        "en": "Right: both. the board's decision and the decision of the board say the same."
+      },
+      "wrong": [
+        {
+          "opt": "a",
+          "de": "Fast: a stimmt, aber b sagt dasselbe mit of statt 's.",
+          "en": "Close: a is right, but b says the same with of instead of 's."
+        },
+        {
+          "opt": "b",
+          "de": "Fast: b stimmt, aber a sagt dasselbe mit 's statt of.",
+          "en": "Close: b is right, but a says the same with 's instead of of."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-fo-k1",
+    "type": "kwt",
+    "pat": "nm.following",
+    "from": "After the vendor delivers the units, we will test them.",
+    "key": "FOLLOWING",
+    "frame": "___ the units, we will test them.",
+    "answer": "following the delivery of",
+    "accepted": [
+      "following delivery of",
+      "following the vendor's delivery of"
+    ],
+    "words": [
+      3,
+      5
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: Following the delivery of … Eine Wendung mit Nomen ersetzt den Nebensatz.",
+        "en": "Right: Following the delivery of … A noun phrase replaces the clause."
+      },
+      "wrong": [
+        {
+          "not": [
+            "following"
+          ],
+          "de": "Das Schlüsselwort following muss unverändert in der Lücke stehen.",
+          "en": "The key word following must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "following",
+            "delivers"
+          ],
+          "de": "Hinter following steht ein Nomen mit of, kein ganzer Satz mit Verb.",
+          "en": "After following comes a noun with of, not a whole clause with a verb."
+        },
+        {
+          "if": [
+            "following",
+            "delivery"
+          ],
+          "not": [
+            "of"
+          ],
+          "de": "Nach dem Nomen fehlt of: delivery of the units.",
+          "en": "Of is missing after the noun: delivery of the units."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-fo-k2",
+    "type": "kwt",
+    "pat": "nm.following",
+    "from": "Once we receive your payment, we will ship the order.",
+    "key": "UPON",
+    "frame": "___ of your payment, we will ship the order.",
+    "answer": "upon receipt",
+    "accepted": [
+      "upon the receipt"
+    ],
+    "words": [
+      2,
+      3
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: Upon receipt of … ist die feste Wendung für „sobald wir erhalten“.",
+        "en": "Right: Upon receipt of … is the fixed phrase for “as soon as we receive”."
+      },
+      "wrong": [
+        {
+          "not": [
+            "upon"
+          ],
+          "de": "Das Schlüsselwort upon muss unverändert in der Lücke stehen.",
+          "en": "The key word upon must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "upon",
+            "receive"
+          ],
+          "de": "Nach upon steht das Nomen receipt, nicht das Verb receive.",
+          "en": "After upon use the noun receipt, not the verb receive."
+        },
+        {
+          "if": [
+            "upon"
+          ],
+          "not": [
+            "receipt"
+          ],
+          "de": "Gefragt ist das Nomen receipt nach upon.",
+          "en": "The noun receipt is needed after upon."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-fo-f1",
+    "type": "find",
+    "pat": "nm.following",
+    "prompt": "Upon of receipt of the invoice, we will release the payment.",
+    "err": [
+      1,
+      2
+    ],
+    "answer": "receipt",
+    "fixed": "Upon receipt of the invoice, we will release the payment.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Nach upon folgt direkt das Nomen. Richtig: Upon receipt of the invoice.",
+        "en": "The error: after upon the noun follows directly. Correct: Upon receipt of the invoice."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Upon nimmt das Nomen direkt, ohne of davor.",
+          "en": "There is an error: upon takes the noun directly, with no of before it."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „of receipt“: Das erste of ist zu viel.",
+          "en": "The error is at “of receipt”: the first of is extra."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-fo-f2",
+    "type": "find",
+    "pat": "nm.following",
+    "prompt": "Following to the review, we will update the plan.",
+    "err": [
+      1,
+      2
+    ],
+    "answer": "the",
+    "fixed": "Following the review, we will update the plan.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Following nimmt sein Nomen direkt, ohne to. Richtig: Following the review.",
+        "en": "The error: following takes its noun directly, with no to. Correct: Following the review."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Following braucht kein to vor dem Nomen.",
+          "en": "There is an error: following needs no to before the noun."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „to the“: Das to ist zu viel.",
+          "en": "The error is at “to the”: the to is extra."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-fo-f3",
+    "type": "find",
+    "pat": "nm.following",
+    "prompt": "Ahead of the audit, we'll freeze all system changes.",
+    "err": null,
+    "why": {
+      "ok": {
+        "de": "Kein Fehler: Ahead of + Nomen ersetzt hier den Nebensatz „before the audit starts“.",
+        "en": "No error: Ahead of + noun replaces the clause “before the audit starts” here."
+      },
+      "wrong": [
+        {
+          "tap": "*",
+          "de": "Kein Fehler: Ahead of the audit ist eine richtige Wendung mit Nomen.",
+          "en": "No error: Ahead of the audit is a correct noun phrase."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-fo-m1",
+    "type": "meaning",
+    "pat": "nm.following",
+    "a": "Following the review, we updated the plan.",
+    "b": "Prior to the review, we updated the plan.",
+    "q": {
+      "de": "In welchem Satz wurde der Plan erst nach der Prüfung geändert?",
+      "en": "In which sentence was the plan changed only after the review?"
+    },
+    "answer": "a",
+    "why": {
+      "ok": {
+        "de": "Richtig: a. Following = danach. Prior to = davor, also vor der Prüfung.",
+        "en": "Right: a. Following = afterward. Prior to = before, so before the review."
+      },
+      "wrong": [
+        {
+          "opt": "b",
+          "de": "In b heißt Prior to „vor“: Der Plan wurde schon vor der Prüfung geändert.",
+          "en": "In b, Prior to means “before”: the plan was changed before the review."
+        },
+        {
+          "opt": "both",
+          "de": "Nicht gleich: Following zeigt danach, Prior to zeigt davor.",
+          "en": "Not the same: Following points to after, Prior to points to before."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-np-k1",
+    "type": "kwt",
+    "pat": "nm.noun-prep",
+    "from": "Sales have increased sharply since January.",
+    "key": "INCREASE",
+    "frame": "There has been a sharp ___ sales since January.",
+    "answer": "increase in",
+    "accepted": [],
+    "words": [
+      2,
+      2
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: a sharp increase in sales. In nennt den Bereich, der steigt.",
+        "en": "Right: a sharp increase in sales. In names the area that rises."
+      },
+      "wrong": [
+        {
+          "not": [
+            "increase"
+          ],
+          "de": "Das Schlüsselwort increase muss unverändert in der Lücke stehen.",
+          "en": "The key word increase must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "increase"
+          ],
+          "not": [
+            "in"
+          ],
+          "de": "Nach increase fehlt in: Der Bereich hängt mit in am Nomen.",
+          "en": "In is missing after increase: the area attaches with in."
+        },
+        {
+          "if": [
+            "increase",
+            "of"
+          ],
+          "de": "Nach increase steht in für den Bereich, of nennt eher einen Betrag.",
+          "en": "After increase, in names the area, while of rather names an amount."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-np-k2",
+    "type": "kwt",
+    "pat": "nm.noun-prep",
+    "from": "We decided to extend the contract.",
+    "key": "DECISION",
+    "frame": "We announced ___ the contract.",
+    "answer": "the decision to extend",
+    "accepted": [
+      "our decision to extend",
+      "a decision to extend"
+    ],
+    "words": [
+      4,
+      4
+    ],
+    "why": {
+      "ok": {
+        "de": "Richtig: the decision to extend. Nach decision folgt to + Grundform.",
+        "en": "Right: the decision to extend. After decision comes to + base form."
+      },
+      "wrong": [
+        {
+          "not": [
+            "decision"
+          ],
+          "de": "Das Schlüsselwort decision muss unverändert in der Lücke stehen.",
+          "en": "The key word decision must stay unchanged in the gap."
+        },
+        {
+          "if": [
+            "decision",
+            "for"
+          ],
+          "de": "Nach decision steht to + Grundform, nicht for + -ing.",
+          "en": "After decision use to + base form, not for + -ing."
+        },
+        {
+          "if": [
+            "decision"
+          ],
+          "not": [
+            "to"
+          ],
+          "de": "Nach decision steht to + Grundform: decision to extend.",
+          "en": "After decision use to + base form: decision to extend."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-np-f1",
+    "type": "find",
+    "pat": "nm.noun-prep",
+    "prompt": "There was a steep increase at prices last quarter.",
+    "err": [
+      5,
+      5
+    ],
+    "answer": "in",
+    "fixed": "There was a steep increase in prices last quarter.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Nach increase nennt in den Bereich. Richtig: increase in prices.",
+        "en": "The error: after increase, in names the area. Correct: increase in prices."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Nach increase steht in, nicht at.",
+          "en": "There is an error: after increase use in, not at."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „at“: Hier gehört in hin.",
+          "en": "The error is at “at”: in belongs here."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-np-f2",
+    "type": "find",
+    "pat": "nm.noun-prep",
+    "prompt": "Demand of our new service keeps growing.",
+    "err": [
+      1,
+      1
+    ],
+    "answer": "for",
+    "fixed": "Demand for our new service keeps growing.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Nach demand steht for. Richtig: Demand for our new service.",
+        "en": "The error: after demand comes for. Correct: Demand for our new service."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Nach demand steht for, nicht of.",
+          "en": "There is an error: after demand use for, not of."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „of“: Hier gehört for hin.",
+          "en": "The error is at “of”: for belongs here."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-np-f3",
+    "type": "find",
+    "pat": "nm.noun-prep",
+    "prompt": "The need on better documentation is obvious.",
+    "err": [
+      2,
+      2
+    ],
+    "answer": "for",
+    "fixed": "The need for better documentation is obvious.",
+    "accepted": [],
+    "why": {
+      "ok": {
+        "de": "Der Fehler: Nach need steht for. Richtig: The need for better documentation.",
+        "en": "The error: after need comes for. Correct: The need for better documentation."
+      },
+      "wrong": [
+        {
+          "tap": "none",
+          "de": "Doch, hier steckt ein Fehler: Nach need steht for, nicht on.",
+          "en": "There is an error: after need use for, not on."
+        },
+        {
+          "tap": "*",
+          "de": "Der Fehler liegt bei „on“: Hier gehört for hin.",
+          "en": "The error is at “on”: for belongs here."
+        }
+      ]
+    }
+  },
+  {
+    "id": "nm-np-m1",
+    "type": "meaning",
+    "pat": "nm.noun-prep",
+    "a": "We expect a reduction in costs.",
+    "b": "We expect a reduction of 10 percent in costs.",
+    "q": {
+      "de": "In welchem Satz steht, um wie viel die Kosten sinken?",
+      "en": "In which sentence does it say by how much the costs fall?"
+    },
+    "answer": "b",
+    "why": {
+      "ok": {
+        "de": "Richtig: b. Reduction of nennt den Betrag, in den Bereich (costs).",
+        "en": "Right: b. Reduction of names the amount, in the area (costs)."
+      },
+      "wrong": [
+        {
+          "opt": "a",
+          "de": "In a fehlt der Betrag: Es steht nur, in welchem Bereich die Kosten sinken.",
+          "en": "In a the amount is missing: it only says in which area costs fall."
+        },
+        {
+          "opt": "both",
+          "de": "Nicht gleich: a nennt nur den Bereich, b zusätzlich den Betrag.",
+          "en": "Not the same: a names only the area, b also gives the amount."
+        }
+      ]
+    }
+  }
+]

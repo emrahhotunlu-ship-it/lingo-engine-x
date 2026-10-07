@@ -1,0 +1,198 @@
+[
+{
+"pat": "pn.for",
+"en": "Our sales team still sees strong demand for the premium plan in Europe.",
+"de": "Unser Vertriebsteam sieht in Europa weiterhin starke Nachfrage nach dem Premium-Tarif.",
+"chunks": [
+"our sales team",
+"still sees",
+"strong demand",
+"for the premium plan",
+"in Europe"
+],
+"alt": [
+"In Europe, our sales team still sees strong demand for the premium plan."
+],
+"why": [
+"Demand verlangt for vor dem Gewünschten: for the premium plan bleibt als Block zusammen, der Ort kann auch vorn stehen.",
+"Demand takes for before the thing wanted: for the premium plan stays together, and the place can also come first."
+],
+"bad": "Our sales team still sees strong demand after the premium plan in Europe.",
+"trap": {
+"tile": "for the premium plan",
+"instead": "after the premium plan",
+"why": {
+"de": "Aus „Nachfrage nach“ wird Wort für Wort after. Englisch hängt das Gewünschte mit for an.",
+"en": "“Nachfrage nach” becomes after word for word. English links the thing wanted with for."
+}
+}
+},
+{
+"pat": "pn.in",
+"en": "The company saw a sharp drop in orders after the price change.",
+"de": "Nach der Preisänderung sah die Firma einen starken Rückgang bei den Bestellungen.",
+"chunks": [
+"the company",
+"saw",
+"a sharp drop",
+"in orders",
+"after the price change"
+],
+"alt": [
+"After the price change, the company saw a sharp drop in orders."
+],
+"why": [
+"Drop verlangt in vor dem Bereich, der sich ändert: in orders bleibt zusammen, der Zeitpunkt folgt oder steht vorn.",
+"Drop takes in before the area that changes: in orders stays together, and the time comes after or first."
+],
+"bad": "The company saw a sharp drop of orders after the price change.",
+"trap": {
+"tile": "in orders",
+"instead": "of orders",
+"why": {
+"de": "Der Genitiv („Rückgang der Bestellungen“) legt of nahe. Der Bereich der Veränderung braucht aber in.",
+"en": "The German genitive (“Rückgang der Bestellungen”) suggests of. The area of change needs in, though."
+}
+}
+},
+{
+"pat": "pn.of",
+"en": "Everyone in the sales department is very proud of the results this quarter.",
+"de": "Alle im Vertrieb sind in diesem Quartal sehr stolz auf die Ergebnisse.",
+"chunks": [
+"everyone",
+"in the sales department",
+"is very proud",
+"of the results",
+"this quarter"
+],
+"alt": [
+"This quarter, everyone in the sales department is very proud of the results."
+],
+"why": [
+"Proud verlangt of vor dem Grund des Stolzes: of the results bleibt als Block, die Zeitangabe kann vorn stehen.",
+"Proud takes of before the reason for the pride: of the results stays together, and the time phrase can come first."
+],
+"bad": "Everyone in the sales department is very proud on the results this quarter.",
+"trap": {
+"tile": "of the results",
+"instead": "on the results",
+"why": {
+"de": "„Stolz auf“ wird Wort für Wort übersetzt, und „auf“ wird meist zu on. Englisch sagt proud of.",
+"en": "“Stolz auf” is translated word for word, and “auf” usually becomes on. English says proud of."
+}
+}
+},
+{
+"pat": "pn.to",
+"en": "Since March, only senior staff have access to the finance folder.",
+"de": "Seit März haben nur leitende Mitarbeiter Zugang zum Finanzordner.",
+"chunks": [
+"since March",
+"only",
+"senior staff",
+"have access",
+"to the finance folder"
+],
+"alt": [
+"Only senior staff have access to the finance folder since March."
+],
+"why": [
+"Access verlangt to vor dem Ziel: to the finance folder bleibt als Block, die Zeitangabe kann vorn oder hinten stehen.",
+"Access takes to before the target: to the finance folder stays together, and the time phrase can come first or last."
+],
+"bad": "Since March, only senior staff have access for the finance folder.",
+"trap": {
+"tile": "to the finance folder",
+"instead": "for the finance folder",
+"why": {
+"de": "Kein reiner Übersetzungsfehler: Wer „Zugang für Mitarbeiter“ kennt, wählt for. Das Ziel des Zugangs braucht aber to.",
+"en": "Not a pure translation error: whoever knows “access for staff” picks for. The target of access needs to, though."
+}
+}
+},
+{
+"pat": "pn.at",
+"en": "In meetings, our new analyst is really good at explaining complex data to clients.",
+"de": "In Besprechungen erklärt unser neuer Analyst Kunden komplexe Daten wirklich gut.",
+"chunks": [
+"in meetings",
+"our new analyst",
+"is really good",
+"at explaining complex data",
+"to clients"
+],
+"alt": [
+"Our new analyst is really good at explaining complex data to clients in meetings."
+],
+"why": [
+"Good verlangt at vor der Tätigkeit: at explaining complex data bleibt zusammen, to clients folgt danach.",
+"Good takes at before the activity: at explaining complex data stays together, and to clients follows."
+],
+"bad": "In meetings, our new analyst is really good in explaining complex data to clients.",
+"trap": {
+"tile": "at explaining complex data",
+"instead": "in explaining complex data",
+"why": {
+"de": "„Gut in“ wird Wort für Wort übersetzt, deshalb steht in statt at. Englisch sagt good at + -ing.",
+"en": "“Gut in” is translated word for word, so in appears instead of at. English says good at + -ing."
+}
+}
+},
+{
+"pat": "pn.about",
+"en": "Before we sign, I have a few questions about the contract.",
+"de": "Bevor wir unterschreiben, habe ich ein paar Fragen zum Vertrag.",
+"chunks": [
+"before",
+"we sign",
+"I have",
+"a few questions",
+"about the contract"
+],
+"alt": [
+"I have a few questions about the contract before we sign."
+],
+"why": [
+"Question verlangt about vor dem Thema: about the contract bleibt als Block, der Zeitsatz kann vorn oder hinten stehen.",
+"Question takes about before the topic: about the contract stays together, and the time clause can come first or last."
+],
+"bad": "Before we sign, I have a few questions to the contract.",
+"trap": {
+"tile": "about the contract",
+"instead": "to the contract",
+"why": {
+"de": "Kein sicherer Übersetzungsfehler: „Fragen zum Vertrag“ lässt das „zu“ wörtlich zu to werden. Englisch sagt questions about.",
+"en": "Not a sure translation error: “Fragen zum Vertrag” turns “zu” into to word for word. English says questions about."
+}
+}
+},
+{
+"pat": "pn.in",
+"en": "Since the launch, our clients have been very interested in the new dashboard.",
+"de": "Seit dem Start sind unsere Kunden sehr am neuen Dashboard interessiert.",
+"chunks": [
+"since the launch",
+"our clients",
+"have been",
+"very interested",
+"in the new dashboard"
+],
+"alt": [
+"Our clients have been very interested in the new dashboard since the launch."
+],
+"why": [
+"Interested verlangt in vor der Sache: in the new dashboard bleibt als Block, die Zeitangabe kann vorn oder hinten stehen.",
+"Interested takes in before the thing: in the new dashboard stays together, and the time phrase can come first or last."
+],
+"bad": "Since the launch, our clients have been very interested at the new dashboard.",
+"trap": {
+"tile": "in the new dashboard",
+"instead": "at the new dashboard",
+"why": {
+"de": "„Interessiert an“ wird Wort für Wort übersetzt, und „an“ wird zu at. Englisch sagt interested in.",
+"en": "“Interessiert an” is translated word for word, and “an” becomes at. English says interested in."
+}
+}
+}
+]

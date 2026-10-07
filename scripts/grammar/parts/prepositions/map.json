@@ -1,0 +1,590 @@
+{
+ "It depends ___ the weather.": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: depend on. Das Verb verlangt on, was „von“ im Deutschen auch nahelegt.",
+    "en": "Right: depend on. The verb takes on, whatever German “von” suggests."
+   },
+   "wrong": [
+    {
+     "opt": "from",
+     "de": "„Abhängen von“ lockt zu from. Im Englischen heißt es aber depend on.",
+     "en": "German “abhängen von” lures you into from. English says depend on."
+    },
+    {
+     "opt": "of",
+     "de": "Of passt zu vielen Adjektiven (proud of), aber nicht zu depend.",
+     "en": "Of fits many adjectives (proud of), but not depend."
+    },
+    {
+     "opt": "at",
+     "de": "At nennt einen Ort oder Punkt. Zu depend gehört on.",
+     "en": "At names a place or a point. Depend takes on."
+    }
+   ]
+  }
+ },
+ "I'm interested ___ learning Italian.": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: interested in. Nach in folgt hier ein -ing: interested in learning.",
+    "en": "Right: interested in. Here -ing follows: interested in learning."
+   },
+   "wrong": [
+    {
+     "opt": "for",
+     "de": "„Sich interessieren für“ lockt zu for. Zu interested gehört aber in.",
+     "en": "German “sich interessieren für” lures you into for. Interested takes in."
+    },
+    {
+     "opt": "on",
+     "de": "„Interessiert an“ lockt zu on oder at. Im Englischen steht in.",
+     "en": "German “interessiert an” lures you into on or at. English uses in."
+    },
+    {
+     "opt": "about",
+     "de": "About wirkt logisch („über“), gehört aber nicht zu interested: interested in.",
+     "en": "About seems logical (“über”), but it does not go with interested: interested in."
+    }
+   ]
+  }
+ },
+ "She's very good ___ explaining things.": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: good at + -ing. At steht bei einem Können, danach folgt -ing.",
+    "en": "Right: good at + -ing. At goes with a skill, and -ing follows."
+   },
+   "wrong": [
+    {
+     "if": [
+      "with"
+     ],
+     "de": "„Good with“ meint den Umgang mit Menschen oder Dingen. Hier geht es um Können.",
+     "en": "“Good with” means handling people or things. Here it is about skill."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "Für ein Können steht at: good at explaining. „Good in“ passt hier nicht.",
+     "en": "For a skill use at: good at explaining. “Good in” does not fit here."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "„Good for“ heißt nützlich oder gesund. Für ein Können steht at.",
+     "en": "“Good for” means useful or healthy. For a skill use at."
+    },
+    {
+     "not": [
+      "at"
+     ],
+     "de": "Gesucht ist die Präposition für ein Können: good at + -ing.",
+     "en": "The preposition for a skill is needed: good at + -ing."
+    }
+   ]
+  }
+ },
+ "We have been waiting ___ their answer since Monday.": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: wait for. Zu wait gehört for, dann folgt das, worauf man wartet.",
+    "en": "Right: wait for. Wait takes for, followed by what you are waiting for."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„Warten auf“ lockt zu on. Standard ist wait for (wait on = bedienen).",
+     "en": "German “warten auf” lures you into on. Standard is wait for (wait on = serve)."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "At nennt einen Ort. Zu wait gehört hier for.",
+     "en": "At names a place. Here wait takes for."
+    },
+    {
+     "not": [
+      "for"
+     ],
+     "de": "Gesucht ist die feste Präposition zu wait: wait for.",
+     "en": "The fixed preposition for wait is needed: wait for."
+    }
+   ]
+  }
+ },
+ "We need to discuss ___ the budget before Friday.": {
+  "pat": "prp.no-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: discuss + Objekt, ohne Präposition. Das Verb enthält das „über“ schon.",
+    "en": "Right: discuss + object, no preposition. The verb already contains “about”."
+   },
+   "wrong": [
+    {
+     "opt": "about",
+     "de": "„Diskutieren über“ lockt zu about. Discuss nimmt das Objekt direkt.",
+     "en": "German “diskutieren über” lures you into about. Discuss takes its object directly."
+    },
+    {
+     "opt": "of",
+     "de": "Of passt nicht zu discuss. Das Verb braucht hier gar keine Präposition.",
+     "en": "Of does not fit discuss. The verb needs no preposition here."
+    },
+    {
+     "opt": "on",
+     "de": "Vor dem Objekt budget steht bei discuss keine Präposition, auch on nicht.",
+     "en": "Before the object budget, discuss takes no preposition, not even on."
+    }
+   ]
+  }
+ },
+ "Could you explain ___ how the pricing works?": {
+  "pat": "prp.person-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: explain to me. Bei explain bekommt die Person ein to.",
+    "en": "Right: explain to me. With explain, the person gets a to."
+   },
+   "wrong": [
+    {
+     "opt": "me",
+     "de": "„Erklär mir“ hat im Deutschen kein Wort für to. Im Englischen braucht explain to me.",
+     "en": "German “erklär mir” has no word for to. English needs explain to me."
+    },
+    {
+     "opt": "for me",
+     "de": "„For me“ hieße: an meiner Stelle erklären. Gemeint ist „mir gegenüber“, also to.",
+     "en": "“For me” would mean: explain on my behalf. Here it is “to me”."
+    },
+    {
+     "opt": "at me",
+     "de": "At me ist gegen jemanden gerichtet (anschreien). Zu explain gehört to.",
+     "en": "At me is aimed against someone (shout at). Explain takes to."
+    }
+   ]
+  }
+ },
+ "Who is responsible ___ the delay?": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: responsible for + Sache. For nennt, wofür man verantwortlich ist.",
+    "en": "Right: responsible for + thing. For names what you are responsible for."
+   },
+   "wrong": [
+    {
+     "opt": "about",
+     "de": "„Responsible about“ gibt es nicht. Die feste Verbindung ist responsible for.",
+     "en": "“Responsible about” does not exist. The fixed pair is responsible for."
+    },
+    {
+     "opt": "of",
+     "de": "Of nach responsible ist unüblich. Die feste Verbindung lautet responsible for.",
+     "en": "Of after responsible is not used. The fixed pair is responsible for."
+    },
+    {
+     "opt": "to",
+     "de": "Responsible to nennt die Person, der man berichtet. Hier steht eine Sache: for.",
+     "en": "Responsible to names the person you answer to. Here a thing follows: for."
+    }
+   ]
+  }
+ },
+ "We've been working ___ this project since March.": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: work on a project. On nennt das, woran man arbeitet.",
+    "en": "Right: work on a project. On names what you are working on."
+   },
+   "wrong": [
+    {
+     "opt": "over",
+     "de": "Over heißt „über, hinweg“. Das Projekt, woran man arbeitet, steht mit on.",
+     "en": "Over means above or across. The project you work on takes on."
+    },
+    {
+     "opt": "in",
+     "de": "„Work in“ nennt Ort oder Bereich (work in sales). Das Projekt braucht on.",
+     "en": "“Work in” names a place or field (work in sales). The project needs on."
+    },
+    {
+     "opt": "to",
+     "de": "To zeigt eine Richtung oder ein Ziel. „Arbeiten an“ wird zu work on.",
+     "en": "To shows a direction or a goal. German “arbeiten an” becomes work on."
+    }
+   ]
+  }
+ },
+ "I'm interested ___ your proposal.": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: interested in. In verbindet interested mit dem, was einen interessiert.",
+    "en": "Right: interested in. In links interested to what interests you."
+   },
+   "wrong": [
+    {
+     "opt": "at",
+     "de": "„Interessiert an“ lockt zu at. Im Englischen steht interested in.",
+     "en": "German “interessiert an” lures you into at. English uses interested in."
+    },
+    {
+     "opt": "on",
+     "de": "„Interested on“ gibt es nicht. Die feste Verbindung ist interested in.",
+     "en": "“Interested on” does not exist. The fixed pair is interested in."
+    },
+    {
+     "opt": "for",
+     "de": "„Interessiert für“ klingt vertraut, doch zu interested gehört in.",
+     "en": "It sounds familiar from German, but interested takes in."
+    }
+   ]
+  }
+ },
+ "She's married ___ a pilot.": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: married to. Die Person, mit der man verheiratet ist, folgt nach to.",
+    "en": "Right: married to. The person you are married to follows to."
+   },
+   "wrong": [
+    {
+     "opt": "with",
+     "de": "„Verheiratet mit“ lockt zu with. Im Englischen steht married to.",
+     "en": "German “verheiratet mit” lures you into with. English uses married to."
+    },
+    {
+     "opt": "by",
+     "de": "By nennt im Passiv, wer etwas tut. Die feste Verbindung ist married to.",
+     "en": "By names who does something in the passive. The fixed pair is married to."
+    },
+    {
+     "opt": "of",
+     "de": "Of passt nicht zu married. Die feste Verbindung lautet married to.",
+     "en": "Of does not fit married. The fixed pair is married to."
+    }
+   ]
+  }
+ },
+ "I'm not familiar ___ this software.": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: familiar with. With nennt die Sache, mit der man vertraut ist.",
+    "en": "Right: familiar with. With names the thing you are familiar with."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "To passt zur Sache, die jemand kennt (familiar to me). Hier ist ich der Kenner: with.",
+     "en": "To fits the thing someone knows (familiar to me). Here I am the person: with."
+    },
+    {
+     "if": [
+      "of"
+     ],
+     "de": "„Vertraut mit“ wird zu familiar with, nicht zu of.",
+     "en": "German “vertraut mit” becomes familiar with, not of."
+    },
+    {
+     "not": [
+      "with"
+     ],
+     "de": "Gesucht ist die Präposition, die zu familiar gehört: with.",
+     "en": "The preposition that goes with familiar is needed: with."
+    }
+   ]
+  }
+ },
+ "The client insisted ___ a written confirmation.": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: insist on. Nach on folgt das, worauf jemand besteht.",
+    "en": "Right: insist on. After on comes what someone insists on."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "de": "For passt zu ask for und apply for. Zu insist gehört on.",
+     "en": "For fits ask for and apply for. Insist takes on."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "At nennt einen Ort oder Punkt. Zu insist gehört on.",
+     "en": "At names a place or point. Insist takes on."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Präposition zu insist: on (förmlich upon).",
+     "en": "The fixed preposition for insist is needed: on (formal upon)."
+    }
+   ]
+  }
+ },
+ "We congratulated her ___ winning the biggest account of the year.": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: congratulate someone on. Nach on folgt hier ein -ing: on winning.",
+    "en": "Right: congratulate someone on. Here -ing follows: on winning."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "„Gratulieren zu“ lockt zu to. Im Englischen steht congratulate someone on.",
+     "en": "German “gratulieren zu” lures you into to. English uses congratulate someone on."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "For ist seltener. Die Standardform ist congratulate someone on.",
+     "en": "For is less common. The standard form is congratulate someone on."
+    },
+    {
+     "not": [
+      "on"
+     ],
+     "de": "Gesucht ist die feste Präposition zu congratulate: on.",
+     "en": "The fixed preposition for congratulate is needed: on."
+    }
+   ]
+  }
+ },
+ "I'm really proud ___ what our team has achieved this year.": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: proud of. Of nennt, worauf man stolz ist (hier ein ganzer Satz mit what).",
+    "en": "Right: proud of. Of names what you are proud of (here a whole clause with what)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„Stolz auf“ lockt zu on. Im Englischen steht proud of.",
+     "en": "German “stolz auf” lures you into on. English uses proud of."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "de": "„Proud about“ ist unüblich. Die feste Verbindung ist proud of.",
+     "en": "“Proud about” is not used. The fixed pair is proud of."
+    },
+    {
+     "not": [
+      "of"
+     ],
+     "de": "Gesucht ist die Präposition, die zu proud gehört: of.",
+     "en": "The preposition that goes with proud is needed: of."
+    }
+   ]
+  }
+ },
+ "She is allergic ___ cats.": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: allergic to. To nennt das, worauf man allergisch reagiert.",
+    "en": "Right: allergic to. To names what you react to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "against"
+     ],
+     "de": "„Allergisch gegen“ lockt zu against. Im Englischen steht allergic to.",
+     "en": "German “allergisch gegen” lures you into against. English uses allergic to."
+    },
+    {
+     "if": [
+      "on"
+     ],
+     "de": "On passt nicht zu allergic. Die feste Verbindung ist allergic to.",
+     "en": "On does not fit allergic. The fixed pair is allergic to."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Gesucht ist die Präposition, die zu allergic gehört: to.",
+     "en": "The preposition that goes with allergic is needed: to."
+    }
+   ]
+  }
+ },
+ "The economy affects our sales. → The economy has an impact ___ our sales.": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: have an impact on. On nennt das, was betroffen ist.",
+    "en": "Right: have an impact on. On names what is affected."
+   },
+   "wrong": [
+    {
+     "if": [
+      "of"
+     ],
+     "de": "Impact of nennt den Verursacher (the impact of the economy). Das Betroffene folgt mit on.",
+     "en": "Impact of names the cause (the impact of the economy). The thing affected takes on."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "To zeigt eine Richtung. Das Betroffene steht bei impact mit on.",
+     "en": "To shows a direction. The thing affected takes on after impact."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "For nennt Zweck oder Nutzen. Das Betroffene steht bei impact mit on.",
+     "en": "For names a purpose or benefit. The thing affected takes on after impact."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Verbindung: have an impact on (förmlich upon).",
+     "en": "The fixed pair is needed: have an impact on (formal upon)."
+    }
+   ]
+  }
+ },
+ "Who is in charge of marketing? → Who is responsible ___ marketing?": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: responsible for. Es ist dasselbe wie in charge of, nur mit for.",
+    "en": "Right: responsible for. It means the same as in charge of, but with for."
+   },
+   "wrong": [
+    {
+     "if": [
+      "of"
+     ],
+     "de": "Of gehört zu in charge of. Bei responsible steht for.",
+     "en": "Of belongs to in charge of. After responsible use for."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "To nennt die Person, der man berichtet. Die Sache folgt mit for.",
+     "en": "To names the person you report to. The thing follows with for."
+    },
+    {
+     "not": [
+      "for"
+     ],
+     "de": "Gesucht ist die Präposition zu responsible: for.",
+     "en": "The preposition for responsible is needed: for."
+    }
+   ]
+  }
+ },
+ "We discussed about the pricing for two hours.": {
+  "pat": "prp.no-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: We discussed the pricing. Discuss nimmt das Objekt direkt, ohne about.",
+    "en": "Right: We discussed the pricing. Discuss takes its object directly, with no about."
+   },
+   "wrong": [
+    {
+     "if": [
+      "about"
+     ],
+     "de": "Das about ist zu viel: discuss + Objekt, ohne Präposition.",
+     "en": "The about is extra: discuss + object, with no preposition."
+    },
+    {
+     "not": [
+      "discussed"
+     ],
+     "de": "Das Verb discussed bleibt, nur das about fällt weg.",
+     "en": "The verb discussed stays, only the about goes."
+    }
+   ]
+  }
+ },
+ "Our results depend from the number of leads.": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: depend on. Das Verb verlangt on, nicht from.",
+    "en": "Right: depend on. The verb takes on, not from."
+   },
+   "wrong": [
+    {
+     "if": [
+      "from"
+     ],
+     "de": "„Abhängen von“ lockt zu from. Im Englischen heißt es depend on.",
+     "en": "German “abhängen von” lures you into from. English says depend on."
+    },
+    {
+     "not": [
+      "on"
+     ],
+     "de": "Gesucht ist die feste Präposition zu depend: on.",
+     "en": "The fixed preposition for depend is needed: on."
+    }
+   ]
+  }
+ },
+ "It depends of the weather.": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: depend on. Das Verb verlangt on, nicht of.",
+    "en": "Right: depend on. The verb takes on, not of."
+   },
+   "wrong": [
+    {
+     "if": [
+      "of"
+     ],
+     "de": "Of passt zu vielen Adjektiven, aber nicht zu depend. Hier steht on.",
+     "en": "Of fits many adjectives, but not depend. Here on is needed."
+    },
+    {
+     "not": [
+      "on"
+     ],
+     "de": "Gesucht ist die feste Präposition zu depend: on.",
+     "en": "The fixed preposition for depend is needed: on."
+    }
+   ]
+  },
+  "dup": "It depends ___ the weather."
+ }
+}

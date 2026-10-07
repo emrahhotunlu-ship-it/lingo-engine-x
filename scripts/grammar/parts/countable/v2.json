@@ -1,0 +1,1039 @@
+[
+ {
+  "id": "cnt-unc-k1",
+  "type": "kwt",
+  "pat": "cnt.uncount",
+  "from": "Her manager gave her several useful suggestions for the pitch.",
+  "key": "ADVICE",
+  "frame": "Her manager gave her ___ for the pitch.",
+  "answer": "some useful advice",
+  "accepted": [
+   "a lot of useful advice",
+   "lots of useful advice",
+   "useful advice",
+   "some good advice",
+   "a lot of good advice",
+   "lots of good advice",
+   "good advice",
+   "some helpful advice",
+   "a lot of helpful advice",
+   "lots of helpful advice",
+   "helpful advice",
+   "some valuable advice",
+   "a lot of valuable advice",
+   "lots of valuable advice",
+   "valuable advice",
+   "some advice",
+   "a lot of advice",
+   "lots of advice",
+   "plenty of useful advice",
+   "some pieces of advice",
+   "several pieces of advice",
+   "a few pieces of advice"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: some useful advice. Advice ist unzählbar: kein -s, kein a.",
+    "en": "Right: some useful advice. Advice is uncountable: no -s, no a."
+   },
+   "wrong": [
+    {
+     "not": [
+      "advice"
+     ],
+     "de": "Das Schlüsselwort advice muss unverändert in der Lücke stehen.",
+     "en": "The key word advice must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "advices"
+     ],
+     "de": "„advices“ gibt es nicht: advice hat keinen Plural.",
+     "en": "“advices” does not exist: advice has no plural."
+    },
+    {
+     "if": [
+      "several",
+      "advice"
+     ],
+     "de": "„Several“ braucht einen zählbaren Plural. Mit advice steht some.",
+     "en": "“Several” needs a countable plural. With advice use some."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-unc-k2",
+  "type": "kwt",
+  "pat": "cnt.uncount",
+  "from": "We don't have many details about the new supplier yet.",
+  "key": "INFORMATION",
+  "frame": "We don't have ___ about the new supplier yet.",
+  "answer": "much information",
+  "accepted": [
+   "any information",
+   "enough information",
+   "a lot of information",
+   "that much information",
+   "very much information",
+   "a great deal of information",
+   "detailed information",
+   "sufficient information"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: much information. Information ist unzählbar, also much statt many.",
+    "en": "Right: much information. Information is uncountable, so much instead of many."
+   },
+   "wrong": [
+    {
+     "not": [
+      "information"
+     ],
+     "de": "Das Schlüsselwort information muss unverändert in der Lücke stehen.",
+     "en": "The key word information must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "informations"
+     ],
+     "de": "„informations“ gibt es nicht: information hat keinen Plural.",
+     "en": "“informations” does not exist: information has no plural."
+    },
+    {
+     "if": [
+      "many"
+     ],
+     "de": "„Many“ steht vor zählbaren Plural-Nomen. Information ist unzählbar.",
+     "en": "“Many” goes before plural countable nouns. Information is uncountable."
+    },
+    {
+     "if": [
+      "few"
+     ],
+     "de": "„A few“ steht vor zählbaren Plural-Nomen, information ist unzählbar.",
+     "en": "“A few” goes before plural countable nouns; information is uncountable."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-unc-f1",
+  "type": "find",
+  "pat": "cnt.uncount",
+  "prompt": "Our lawyer gave us some useful advices on the contract.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "advice",
+  "fixed": "Our lawyer gave us some useful advice on the contract.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: advice hat keinen Plural, also advice ohne -s.",
+    "en": "The error: advice has no plural, so advice with no -s."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das -s an advice.",
+     "en": "There is an error: the -s on advice."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „advices“: advice ist unzählbar.",
+     "en": "The error is “advices”: advice is uncountable."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-unc-f2",
+  "type": "find",
+  "pat": "cnt.uncount",
+  "prompt": "The IT team ordered new equipments for the Munich office.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "equipment",
+  "fixed": "The IT team ordered new equipment for the Munich office.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: equipment ist unzählbar und hat kein -s.",
+    "en": "The error: equipment is uncountable and takes no -s."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das -s an equipment.",
+     "en": "There is an error: the -s on equipment."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „equipments“: equipment hat keinen Plural.",
+     "en": "The error is “equipments”: equipment has no plural."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-unc-f3",
+  "type": "find",
+  "pat": "cnt.uncount",
+  "prompt": "Could you give me some feedback on the first draft?",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: feedback ist unzählbar, some feedback ist richtig.",
+    "en": "No error: feedback is uncountable, so some feedback is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: some feedback steht richtig ohne -s.",
+     "en": "No error: some feedback is correct with no -s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-unc-m1",
+  "type": "meaning",
+  "pat": "cnt.uncount",
+  "a": "We still need more information on the supplier.",
+  "b": "We still need more details on the supplier.",
+  "q": {
+   "de": "In welchem Satz steht ein zählbares Nomen im Plural?",
+   "en": "In which sentence is the noun a countable plural?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Details ist zählbar (Plural), information ist unzählbar.",
+    "en": "Right: sentence b. Details is a countable plural; information is uncountable."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a ist information unzählbar: Es hat kein Plural-s.",
+     "en": "In a, information is uncountable: it has no plural -s."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht beide: details hat ein Plural-s, information nicht.",
+     "en": "Not both: details has a plural -s, information does not."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-vrb-k1",
+  "type": "kwt",
+  "pat": "cnt.verb",
+  "from": "The cars on the highway were moving very slowly this morning.",
+  "key": "TRAFFIC",
+  "frame": "___ very slowly on the highway this morning.",
+  "answer": "Traffic was moving",
+  "accepted": [
+   "The traffic was moving",
+   "Traffic moved",
+   "The traffic moved",
+   "Traffic was going",
+   "The traffic was going"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: traffic ist unzählbar, deshalb Singular: Traffic was moving.",
+    "en": "Right: traffic is uncountable, so singular: Traffic was moving."
+   },
+   "wrong": [
+    {
+     "not": [
+      "traffic"
+     ],
+     "de": "Das Schlüsselwort traffic muss unverändert in der Lücke stehen.",
+     "en": "The key word traffic must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "were"
+     ],
+     "de": "„were“ ist Plural. Traffic ist unzählbar, deshalb was.",
+     "en": "“were” is plural. Traffic is uncountable, so was."
+    },
+    {
+     "if": [
+      "traffics"
+     ],
+     "de": "„traffics“ gibt es nicht: traffic hat keinen Plural.",
+     "en": "“traffics” does not exist: traffic has no plural."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-vrb-k2",
+  "type": "kwt",
+  "pat": "cnt.verb",
+  "from": "The machines in the lab need to be replaced.",
+  "key": "EQUIPMENT",
+  "frame": "The ___ to be replaced.",
+  "answer": "equipment in the lab needs",
+  "accepted": [
+   "lab equipment needs",
+   "laboratory equipment needs",
+   "equipment in the laboratory needs"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: equipment ist unzählbar, das Verb steht im Singular: needs.",
+    "en": "Right: equipment is uncountable, so the verb is singular: needs."
+   },
+   "wrong": [
+    {
+     "not": [
+      "equipment"
+     ],
+     "de": "Das Schlüsselwort equipment muss unverändert in der Lücke stehen.",
+     "en": "The key word equipment must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "need"
+     ],
+     "de": "Equipment ist unzählbar: Das Verb steht im Singular (needs), nicht need.",
+     "en": "Equipment is uncountable: the verb is singular (needs), not need."
+    },
+    {
+     "if": [
+      "equipments"
+     ],
+     "de": "„equipments“ gibt es nicht: equipment hat keinen Plural.",
+     "en": "“equipments” does not exist: equipment has no plural."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-vrb-f1",
+  "type": "find",
+  "pat": "cnt.verb",
+  "prompt": "The news from the Berlin office were better than we expected.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "was",
+  "fixed": "The news from the Berlin office was better than we expected.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: news ist unzählbar, deshalb was statt were.",
+    "en": "The error: news is uncountable, so was instead of were."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Verb passt nicht zu news.",
+     "en": "There is an error: the verb does not fit news."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „were“: news ist kein Plural.",
+     "en": "The error is “were”: news is not a plural."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-vrb-f2",
+  "type": "find",
+  "pat": "cnt.verb",
+  "prompt": "I'm sorry, but the information in the report are outdated.",
+  "err": [
+   8,
+   8
+  ],
+  "answer": "is",
+  "fixed": "I'm sorry, but the information in the report is outdated.",
+  "accepted": [
+   "was"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: information ist unzählbar, deshalb is statt are.",
+    "en": "The error: information is uncountable, so is instead of are."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Verb passt nicht zu information.",
+     "en": "There is an error: the verb does not fit information."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „are“: information steht im Singular.",
+     "en": "The error is “are”: information takes a singular verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-vrb-f3",
+  "type": "find",
+  "pat": "cnt.verb",
+  "prompt": "Traffic was heavy, so the delivery arrived an hour late.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: traffic ist unzählbar, deshalb was.",
+    "en": "No error: traffic is uncountable, so was."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Zu traffic passt das Verb im Singular.",
+     "en": "No error: traffic takes a singular verb."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-vrb-m1",
+  "type": "meaning",
+  "pat": "cnt.verb",
+  "a": "The latest news is good.",
+  "b": "The latest results are good.",
+  "q": {
+   "de": "In welchem Satz steht das Verb im Singular, obwohl das Nomen auf -s endet?",
+   "en": "In which sentence is the verb singular although the noun ends in -s?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. News endet auf -s, ist aber unzählbar und nimmt is.",
+    "en": "Right: sentence a. News ends in -s but is uncountable and takes is."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist results ein echter Plural, deshalb are.",
+     "en": "In b, results is a real plural, so are."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht beide: nur news ist trotz -s ein Singular.",
+     "en": "Not both: only news is singular despite its -s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-qnt-k1",
+  "type": "kwt",
+  "pat": "cnt.quant",
+  "from": "I don't know the exact number of people who will join us.",
+  "key": "MANY",
+  "frame": "I don't know ___ will join us.",
+  "answer": "how many people",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: how many people. People ist ein zählbarer Plural, also many.",
+    "en": "Right: how many people. People is a countable plural, so many."
+   },
+   "wrong": [
+    {
+     "not": [
+      "many"
+     ],
+     "de": "Das Schlüsselwort many muss unverändert in der Lücke stehen.",
+     "en": "The key word many must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "much"
+     ],
+     "de": "„How much“ fragt nach Unzählbarem. People ist zählbar: how many.",
+     "en": "“How much” asks about uncountables. People is countable: how many."
+    },
+    {
+     "if": [
+      "few"
+     ],
+     "de": "„How few“ fragt nicht nach der Anzahl, sondern nach „wie wenige“.",
+     "en": "“How few” does not ask for the number but for “how few”."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-qnt-k2",
+  "type": "kwt",
+  "pat": "cnt.quant",
+  "from": "We have hardly any time left before the deadline.",
+  "key": "LITTLE",
+  "frame": "We have ___ before the deadline.",
+  "answer": "very little time",
+  "accepted": [
+   "little time",
+   "very little time left",
+   "little time left",
+   "so little time",
+   "so little time left"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: very little time. Little heißt „kaum“ und passt zu unzählbarem time.",
+    "en": "Right: very little time. Little means “hardly any” and suits uncountable time."
+   },
+   "wrong": [
+    {
+     "not": [
+      "little"
+     ],
+     "de": "Das Schlüsselwort little muss unverändert in der Lücke stehen.",
+     "en": "The key word little must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "a",
+      "little"
+     ],
+     "de": "„A little“ klingt positiv („etwas“). Gemeint ist „kaum“: little.",
+     "en": "“A little” sounds positive (“some”). “Hardly any” is meant: little."
+    },
+    {
+     "if": [
+      "few"
+     ],
+     "de": "„Few“ steht nur vor zählbaren Nomen. Time ist hier unzählbar.",
+     "en": "“Few” goes only before countable nouns. Time is uncountable here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-qnt-f1",
+  "type": "find",
+  "pat": "cnt.quant",
+  "prompt": "We only received a few feedback from the pilot customers.",
+  "err": [
+   3,
+   5
+  ],
+  "answer": "a little feedback",
+  "fixed": "We only received a little feedback from the pilot customers.",
+  "accepted": [
+   "some feedback",
+   "a bit of feedback",
+   "very little feedback",
+   "little feedback",
+   "a few comments",
+   "a few responses",
+   "a few pieces of feedback"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: feedback ist unzählbar, deshalb a little statt a few.",
+    "en": "The error: feedback is uncountable, so a little instead of a few."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: a few passt nicht zu feedback.",
+     "en": "There is an error: a few does not fit feedback."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „a few feedback“: Feedback ist unzählbar.",
+     "en": "The error is “a few feedback”: feedback is uncountable."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-qnt-f2",
+  "type": "find",
+  "pat": "cnt.quant",
+  "prompt": "We have fewer time than we thought, so let's cut the agenda.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "less time",
+  "fixed": "We have less time than we thought, so let's cut the agenda.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: time ist unzählbar, deshalb less time statt fewer time.",
+    "en": "The error: time is uncountable, so less time instead of fewer time."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: fewer passt nicht zu time.",
+     "en": "There is an error: fewer does not fit time."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „fewer time“: fewer steht nur vor Zählbarem.",
+     "en": "The error is “fewer time”: fewer goes only before countables."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-qnt-m1",
+  "type": "meaning",
+  "pat": "cnt.quant",
+  "a": "We have little money left for marketing.",
+  "b": "We have a little money left for marketing.",
+  "q": {
+   "de": "Welcher Satz sagt, dass noch ein Rest Geld da ist?",
+   "en": "Which sentence says that some money is still left?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. A little heißt „etwas“, aber little allein heißt „kaum“.",
+    "en": "Right: sentence b. A little means “some”; little alone means “hardly any”."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a heißt little „kaum“: Es ist fast nichts mehr da.",
+     "en": "In a, little means “hardly any”: almost nothing is left."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: little ist negativ, a little eher positiv.",
+     "en": "Not the same: little is negative, a little rather positive."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-uni-k1",
+  "type": "kwt",
+  "pat": "cnt.unit",
+  "from": "Let me give you one useful suggestion before you sign.",
+  "key": "PIECE",
+  "frame": "Let me give you a useful ___ before you sign.",
+  "answer": "piece of advice",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a piece of advice zählt genau einen Rat, ohne Plural von advice.",
+    "en": "Right: a piece of advice counts exactly one item. Advice alone has no plural."
+   },
+   "wrong": [
+    {
+     "not": [
+      "piece"
+     ],
+     "de": "Das Schlüsselwort piece muss unverändert in der Lücke stehen.",
+     "en": "The key word piece must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "pieces"
+     ],
+     "de": "Nach a useful steht der Singular: piece, nicht pieces.",
+     "en": "After a useful the singular is needed: piece, not pieces."
+    },
+    {
+     "if": [
+      "advices"
+     ],
+     "de": "„advices“ gibt es nicht. Das Zählwort piece nennt die Einheit.",
+     "en": "“advices” does not exist. The unit word piece names the item."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-uni-k2",
+  "type": "kwt",
+  "pat": "cnt.unit",
+  "from": "The company sells chairs, tables and desks.",
+  "key": "PIECES",
+  "frame": "The company sells different ___.",
+  "answer": "pieces of furniture",
+  "accepted": [
+   "pieces of office furniture",
+   "pieces of modern furniture"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: pieces of furniture. Das Plural-s steht am Zählwort, nicht an furniture.",
+    "en": "Right: pieces of furniture. The plural -s goes on the unit word, not on furniture."
+   },
+   "wrong": [
+    {
+     "not": [
+      "pieces"
+     ],
+     "de": "Das Schlüsselwort pieces muss unverändert in der Lücke stehen.",
+     "en": "The key word pieces must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "piece"
+     ],
+     "de": "Nach different steht der Plural: pieces, nicht piece.",
+     "en": "After different the plural is needed: pieces, not piece."
+    },
+    {
+     "if": [
+      "furnitures"
+     ],
+     "de": "„furnitures“ gibt es nicht: Das -s gehört an pieces.",
+     "en": "“furnitures” does not exist: the -s belongs on pieces."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-uni-f1",
+  "type": "find",
+  "pat": "cnt.unit",
+  "prompt": "He gave me three piece of advice before the interview.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "pieces",
+  "fixed": "He gave me three pieces of advice before the interview.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Bei three braucht das Zählwort ein -s: pieces of advice.",
+    "en": "The error: after three the unit word needs -s: pieces of advice."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Zählwort steht im Singular.",
+     "en": "There is an error: the unit word is singular."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „piece“: Es braucht den Plural pieces.",
+     "en": "The error is “piece”: it needs the plural pieces."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-uni-f2",
+  "type": "find",
+  "pat": "cnt.unit",
+  "prompt": "I have a good news for you: the client signed the contract.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "some good news",
+  "fixed": "I have some good news for you: the client signed the contract.",
+  "accepted": [
+   "good news",
+   "a piece of good news",
+   "a good piece of news",
+   "a bit of good news"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: news ist unzählbar, also some good news oder a piece of news.",
+    "en": "The error: news is uncountable, so some good news or a piece of news."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: a passt nicht zu news.",
+     "en": "There is an error: a does not fit news."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „a good news“: news ist unzählbar.",
+     "en": "The error is “a good news”: news is uncountable."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-uni-m1",
+  "type": "meaning",
+  "pat": "cnt.unit",
+  "a": "I have some news for you.",
+  "b": "I have a piece of news for you.",
+  "q": {
+   "de": "Welcher Satz zählt ausdrücklich eine einzelne Neuigkeit?",
+   "en": "Which sentence explicitly counts a single item of news?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. A piece of zählt genau eine Neuigkeit.",
+    "en": "Right: sentence b. A piece of counts exactly one item of news."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a nennt some keine genaue Zahl: eine oder mehrere.",
+     "en": "In a, some names no exact number: one or several."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: nur a piece of nennt genau eine.",
+     "en": "Not the same: only a piece of names exactly one."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-dbl-k1",
+  "type": "kwt",
+  "pat": "cnt.double",
+  "from": "Has she worked in project management before?",
+  "key": "EXPERIENCE",
+  "frame": "Does she have any ___ project management?",
+  "answer": "experience in",
+  "accepted": [
+   "experience with",
+   "experience of",
+   "work experience in",
+   "work experience with",
+   "relevant experience in",
+   "relevant experience with",
+   "previous experience in",
+   "previous experience with",
+   "prior experience in",
+   "prior experience with",
+   "professional experience in",
+   "professional experience with"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: experience in. Meint Erfahrung, bleibt es unzählbar und ohne -s.",
+    "en": "Right: experience in. In the sense of know-how it stays uncountable, with no -s."
+   },
+   "wrong": [
+    {
+     "not": [
+      "experience"
+     ],
+     "de": "Das Schlüsselwort experience muss unverändert in der Lücke stehen.",
+     "en": "The key word experience must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "experiences"
+     ],
+     "de": "„Experiences“ meint einzelne Erlebnisse. Für Erfahrung steht experience ohne -s.",
+     "en": "“Experiences” means single events. For know-how use experience with no -s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-dbl-k2",
+  "type": "kwt",
+  "pat": "cnt.double",
+  "from": "The hall is full, so we can't fit more chairs.",
+  "key": "ROOM",
+  "frame": "There isn't ___ chairs in the hall.",
+  "answer": "enough room for more",
+  "accepted": [
+   "any room for more",
+   "much room for more",
+   "room for more",
+   "enough room for additional",
+   "any room for additional",
+   "room for additional"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: room für „Platz“ ist unzählbar: enough room for more.",
+    "en": "Right: room in the sense of space is uncountable: enough room for more."
+   },
+   "wrong": [
+    {
+     "not": [
+      "room"
+     ],
+     "de": "Das Schlüsselwort room muss unverändert in der Lücke stehen.",
+     "en": "The key word room must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "rooms"
+     ],
+     "de": "„Rooms“ sind einzelne Räume. Für „Platz“ steht room ohne -s.",
+     "en": "“Rooms” are separate rooms. For “space” use room with no -s."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-dbl-f1",
+  "type": "find",
+  "pat": "cnt.double",
+  "prompt": "I don't have a time to read the report today.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "time",
+  "fixed": "I don't have time to read the report today.",
+  "accepted": [
+   "any time",
+   "the time",
+   "enough time"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: time im Sinn von „Zeit“ ist unzählbar, also ohne a.",
+    "en": "The error: time in the sense of “Zeit” is uncountable, so no a."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor time steht hier kein a.",
+     "en": "There is an error: no a goes before time here."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „a time“: Gemeint ist die Zeit allgemein.",
+     "en": "The error is “a time”: time in general is meant."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-dbl-f2",
+  "type": "find",
+  "pat": "cnt.double",
+  "prompt": "Please make a room for the new colleague at the table.",
+  "err": [
+   2,
+   3
+  ],
+  "answer": "room",
+  "fixed": "Please make room for the new colleague at the table.",
+  "accepted": [
+   "some room"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: make room heißt „Platz machen“, ohne a.",
+    "en": "The error: make room means “make space”, with no a."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Bei make room steht kein a.",
+     "en": "There is an error: make room takes no a."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „a room“: Gemeint ist Platz, kein Raum.",
+     "en": "The error is “a room”: space is meant, not a room."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-dbl-f3",
+  "type": "find",
+  "pat": "cnt.double",
+  "prompt": "The offsite was a great experience for everyone on the team.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: an experience meint hier ein einzelnes Erlebnis.",
+    "en": "No error: an experience here means one single event."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Ein Erlebnis ist zählbar, a great experience passt.",
+     "en": "No error: an event is countable, so a great experience fits."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cnt-dbl-m1",
+  "type": "meaning",
+  "pat": "cnt.double",
+  "a": "We need more room.",
+  "b": "We need more rooms.",
+  "q": {
+   "de": "Welcher Satz meint mehr Platz?",
+   "en": "Which sentence means more space?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Room ohne -s meint Platz, rooms meint einzelne Räume.",
+    "en": "Right: sentence a. Room with no -s means space; rooms means separate rooms."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b meint rooms mehrere einzelne Räume, nicht Platz.",
+     "en": "In b, rooms means several separate rooms, not space."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: room ist Platz, rooms sind Räume.",
+     "en": "Not the same: room is space, rooms are separate rooms."
+    }
+   ]
+  }
+ }
+]

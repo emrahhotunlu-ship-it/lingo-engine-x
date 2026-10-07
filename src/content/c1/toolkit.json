@@ -4818,7 +4818,10 @@
    "prompt": "We have few options left. → We don't have ___ options left.",
    "answer": "many",
    "accepted": [
-    "a lot of"
+    "a lot of",
+    "that many",
+    "very many",
+    "too many"
    ],
    "expl": "„few“ entspricht in der Verneinung „not many“ (zählbar).",
    "expl_en": "“Few” corresponds to “not many” in the negative (countable)."
@@ -4828,7 +4831,10 @@
    "type": "transform",
    "prompt": "There isn't much furniture in the new office. → The new office has only ___ furniture.",
    "answer": "a little",
-   "accepted": [],
+   "accepted": [
+    "a bit of",
+    "very little"
+   ],
    "expl": "„furniture“ ist unzählbar, deshalb „a little“.",
    "expl_en": "“Furniture” is uncountable, so “a little”."
   },
@@ -4846,7 +4852,11 @@
    "type": "correct",
    "prompt": "The staff are very friendly, but the informations on the website are outdated.",
    "answer": "The staff are very friendly, but the information on the website is outdated.",
-   "accepted": [],
+   "accepted": [
+    "The staff is very friendly, but the information on the website is outdated.",
+    "The staff are very friendly, but the information on the website is out of date.",
+    "The staff is very friendly, but the information on the website is out of date."
+   ],
    "expl": "„information“ ist unzählbar: kein „-s“, Verb im Singular.",
    "expl_en": "“Information” is uncountable: no -s, singular verb."
   },
@@ -4951,7 +4961,9 @@
    "prompt": "The prices rose by 5%. → There was a 5% ___ in prices.",
    "answer": "increase",
    "accepted": [
-    "rise"
+    "rise",
+    "jump",
+    "hike"
    ],
    "expl": "Nach „increase“ oder „rise“ folgt „in“.",
    "expl_en": "“Increase” or “rise” is followed by “in”."
@@ -4963,7 +4975,9 @@
    "answer": "about",
    "accepted": [
     "on",
-    "of"
+    "of",
+    "over",
+    "regarding"
    ],
    "expl": "„discussion about/on“ für das Thema.",
    "expl_en": "“Discussion about/on” introduces the topic."
@@ -5206,7 +5220,14 @@
    "accepted": [
     "experienced",
     "qualified",
-    "respected"
+    "respected",
+    "trained",
+    "regarded",
+    "paid",
+    "motivated",
+    "educated",
+    "accomplished",
+    "specialized"
    ],
    "hint": "(highly + Partizip)",
    "expl": "„highly“ verbindet sich mit einem Partizip als Modifikator.",
@@ -5237,7 +5258,8 @@
    "prompt": "Our software is easy to use. → We offer ___ software.",
    "answer": "user-friendly",
    "accepted": [
-    "easy-to-use"
+    "easy-to-use",
+    "simple-to-use"
    ],
    "expl": "Zusammengesetzte Modifikatoren werden mit Bindestrich geschrieben.",
    "expl_en": "Compound modifiers are written with a hyphen."

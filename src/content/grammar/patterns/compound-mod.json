@@ -1,0 +1,413 @@
+{
+ "topic": "compound-mod",
+ "canDo": {
+  "de": "Ich kann Maße, Eigenschaften und feste Bausteine vor dem Nomen genau schreiben: two-day, ten pages long, small modern, long-term und highly skilled.",
+  "en": "I can write measures, qualities, and fixed blocks before a noun precisely: two-day, ten pages long, small modern, long-term, and highly skilled."
+ },
+ "order": [
+  "cm.measure",
+  "cm.after-verb",
+  "cm.order",
+  "cm.fixed",
+  "cm.participle"
+ ],
+ "introPlan": [
+  [
+   "cm.measure",
+   "cm.after-verb"
+  ],
+  [
+   "cm.order",
+   "cm.fixed"
+  ],
+  [
+   "cm.participle"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Steht die Maßangabe vor einem Nomen (Bindestrich, Singular) oder hinter dem Verb (kein Bindestrich, Plural)?",
+   "Mehrere Adjektive: Was beschreibt jedes? Größe und Alter kommen vor Farbe, Herkunft und Material.",
+   "Ist das zweite Wort im Baustein ein Nomen (bleibt unverändert) oder ein Partizip (-ing oder -ed)?"
+  ],
+  "en": [
+   "Does the measure come before a noun (hyphen, singular) or after the verb (no hyphen, plural)?",
+   "Several adjectives: what does each describe? Size and age come before color, origin, and material.",
+   "Is the second word of the block a noun (stays unchanged) or a participle (-ing or -ed)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "cm.measure",
+   "name": {
+    "de": "Zahl + Maßnomen · Singular",
+    "en": "number + measure noun · singular"
+   },
+   "form": {
+    "de": "a + Zahl-Nomen (Singular) + Nomen",
+    "en": "a + number-noun (singular) + noun"
+   },
+   "use": {
+    "de": "Vor einem Nomen werden Zahl und Maßnomen zu einem Adjektiv mit Bindestrich. Das Maßnomen bleibt im Singular.",
+    "en": "Before a noun, number and measure noun form one adjective with a hyphen. The measure noun stays singular."
+   },
+   "signals": [
+    "-minute",
+    "-hour",
+    "-day",
+    "-year",
+    "-page"
+   ],
+   "ex": [
+    {
+     "en": "We booked a two-day workshop for the sales team.",
+     "de": "Wir haben einen zweitägigen Workshop für das Vertriebsteam gebucht.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Please send a one-page summary before Friday.",
+     "de": "Bitte schicken Sie vor Freitag eine einseitige Zusammenfassung.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'm on a ten-minute break, then I'll call you back.",
+     "de": "Ich mache zehn Minuten Pause und rufe dich dann zurück.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We signed a three-years contract with the supplier.",
+    "good": "We signed a three-year contract with the supplier.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Das Plural-s von „three years“ wird mitgenommen. Im Modifikator bleibt das Maßnomen im Singular, wie bei „dreijährig“.",
+     "en": "Not a translation error: the plural -s of “three years” is carried over. In a modifier the measure noun stays singular, like German “dreijährig”."
+    }
+   },
+   "contrast": {
+    "with": "cm.after-verb",
+    "a": "It was a ten-minute delay.",
+    "b": "The delay was ten minutes long.",
+    "diff": {
+     "de": "Vor dem Nomen: Bindestrich und Singular. Nach dem Verb: kein Bindestrich, normaler Plural.",
+     "en": "Before the noun: hyphen and singular. After the verb: no hyphen, an ordinary plural."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We held a two-hour meeting.",
+     "q": {
+      "de": "Dauerte das Meeting insgesamt zwei Stunden?",
+      "en": "Did the meeting last two hours in total?"
+     },
+     "a": true
+    },
+    {
+     "s": "We need a ten-minute break.",
+     "q": {
+      "de": "Brauchen wir mehrere Pausen von zehn Minuten?",
+      "en": "Do we need several breaks of ten minutes?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Steht das Maßnomen direkt vor einem Nomen, und welche Form hat es dann?",
+    "en": "Does the measure noun sit directly before another noun, and what form does it take then?"
+   }
+  },
+  {
+   "id": "cm.after-verb",
+   "name": {
+    "de": "Maßangabe nach dem Verb · Plural",
+    "en": "measure after the verb · plural"
+   },
+   "form": {
+    "de": "be + Zahl + Maßnomen (Plural) + Adjektiv",
+    "en": "be + number + measure noun (plural) + adjective"
+   },
+   "use": {
+    "de": "Steht die Maßangabe hinter dem Verb, bleibt sie ein normaler Plural ohne Bindestrich: ten pages long, two years old.",
+    "en": "When the measure follows the verb, it stays an ordinary plural with no hyphen: ten pages long, two years old."
+   },
+   "signals": [
+    "pages long",
+    "years old",
+    "hours long",
+    "days long"
+   ],
+   "ex": [
+    {
+     "en": "The agenda is three pages long, so let's start.",
+     "de": "Die Tagesordnung ist drei Seiten lang, also fangen wir an.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Our contract is two years old and needs an update.",
+     "de": "Unser Vertrag ist zwei Jahre alt und braucht ein Update.",
+     "ctx": "mail"
+    },
+    {
+     "en": "The workshop was two days long, but it felt shorter.",
+     "de": "Der Workshop dauerte zwei Tage, kam mir aber kürzer vor.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The report is ten-page long.",
+    "good": "The report is ten pages long.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Die Bindestrich-Regel wird auf jede Maßangabe ausgedehnt. Nach dem Verb gilt der Plural, wie in „zehn Seiten lang“.",
+     "en": "Not a translation error: the hyphen rule is stretched to every measure. After the verb the plural applies, as in “zehn Seiten lang”."
+    }
+   },
+   "contrast": {
+    "with": "cm.measure",
+    "a": "It is a ten-page report.",
+    "b": "The report is ten pages long.",
+    "diff": {
+     "de": "Vor dem Nomen: ten-page mit Bindestrich. Hinter dem Verb: ten pages und dann das Adjektiv.",
+     "en": "Before the noun: ten-page with a hyphen. After the verb: ten pages, then the adjective."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The call was twenty minutes long.",
+     "q": {
+      "de": "Hat der Anruf zwanzig Minuten gedauert?",
+      "en": "Did the call take twenty minutes?"
+     },
+     "a": true
+    },
+    {
+     "s": "It is a two-year-old laptop.",
+     "q": {
+      "de": "Ist der Laptop zwei Jahre alt?",
+      "en": "Is the laptop two years old?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Steht die Maßangabe vor einem Nomen oder hinter dem Verb, und was ändert sich dadurch?",
+    "en": "Does the measure come before a noun or after the verb, and what changes because of that?"
+   }
+  },
+  {
+   "id": "cm.order",
+   "name": {
+    "de": "Reihenfolge der Adjektive",
+    "en": "adjective order"
+   },
+   "form": {
+    "de": "Meinung · Größe · Alter · Farbe · Herkunft · Material + Nomen",
+    "en": "opinion · size · age · color · origin · material + noun"
+   },
+   "use": {
+    "de": "Mehrere Adjektive vor einem Nomen stehen in fester Reihenfolge. Zuerst Meinung und Größe, dann Alter, Farbe, Herkunft und Material.",
+    "en": "Several adjectives before a noun follow a fixed order. Opinion and size come first, then age, color, origin, and material."
+   },
+   "signals": [
+    "small modern",
+    "big old",
+    "new black",
+    "old wooden",
+    "large white"
+   ],
+   "ex": [
+    {
+     "en": "We're moving into a small modern office near the station.",
+     "de": "Wir ziehen in ein kleines modernes Büro in Bahnhofsnähe.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Attached is a photo of the new black laptop.",
+     "de": "Anbei ein Foto des neuen schwarzen Laptops.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She bought a lovely old wooden desk at the market.",
+     "de": "Sie hat auf dem Markt einen schönen alten Holzschreibtisch gekauft.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She bought an old big wooden desk.",
+    "good": "She bought a big old wooden desk.",
+    "cause": {
+     "de": "Kein belegter Übersetzungsfehler: Im Deutschen ist die Reihenfolge freier. Das Englische kennt nur eine übliche Reihenfolge.",
+     "en": "Not a documented translation error: German is freer with the order. English has one usual order."
+    }
+   },
+   "ccq": [
+    {
+     "s": "It is a large old wooden table.",
+     "q": {
+      "de": "Ist der Tisch aus Holz?",
+      "en": "Is the table made of wood?"
+     },
+     "a": true
+    },
+    {
+     "s": "They rented a small modern office.",
+     "q": {
+      "de": "Ist das Büro groß?",
+      "en": "Is the office big?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Nennt das Wort Größe, Alter, Farbe, Herkunft oder Material, und was kommt davon zuerst?",
+    "en": "Does the word name size, age, color, origin, or material, and which of these comes first?"
+   }
+  },
+  {
+   "id": "cm.fixed",
+   "name": {
+    "de": "Feste Modifikatoren mit Bindestrich",
+    "en": "fixed hyphenated modifiers"
+   },
+   "form": {
+    "de": "Wort-Wort (kein -s, keine -ly-Form) + Nomen",
+    "en": "word-word (no -s, no -ly form) + noun"
+   },
+   "use": {
+    "de": "Viele Modifikatoren sind feste Bausteine mit Bindestrich: long-term, last-minute, user-friendly, cost-effective. Der Baustein bleibt unverändert, nur das Nomen wird Plural.",
+    "en": "Many modifiers are fixed hyphenated blocks: long-term, last-minute, user-friendly, cost-effective. The block stays unchanged, only the noun takes the plural."
+   },
+   "signals": [
+    "long-term",
+    "short-term",
+    "last-minute",
+    "user-friendly",
+    "cost-effective",
+    "state-of-the-art"
+   ],
+   "ex": [
+    {
+     "en": "We need a long-term plan, not a quick fix.",
+     "de": "Wir brauchen einen langfristigen Plan, keine schnelle Notlösung.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Sorry for the last-minute change to the agenda.",
+     "de": "Entschuldigung für die kurzfristige Änderung der Tagesordnung.",
+     "ctx": "mail"
+    },
+    {
+     "en": "This is a cost-effective way to reach more customers.",
+     "de": "Das ist ein kosteneffizienter Weg, mehr Kunden zu erreichen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We need a long-terms strategy.",
+    "good": "We need a long-term strategy.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Das Plural-s rutscht an den Baustein. Der bleibt unverändert, nur das Nomen wird Plural.",
+     "en": "Not a translation error: the plural -s slips onto the modifier. It stays unchanged, only the noun takes the plural."
+    }
+   },
+   "ccq": [
+    {
+     "s": "It's a last-minute change.",
+     "q": {
+      "de": "Kam die Änderung kurz vor Schluss?",
+      "en": "Did the change come right at the end?"
+     },
+     "a": true
+    },
+    {
+     "s": "We prefer user-friendly tools.",
+     "q": {
+      "de": "Sind die Werkzeuge schwer zu bedienen?",
+      "en": "Are the tools hard to use?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Welches Wort trägt die Endung: der Baustein oder das Nomen?",
+    "en": "Which word carries the ending: the modifier or the noun?"
+   }
+  },
+  {
+   "id": "cm.participle",
+   "name": {
+    "de": "Adverb oder Nomen + Partizip",
+    "en": "adverb or noun + participle"
+   },
+   "form": {
+    "de": "highly/well/time- + Partizip (-ed/-ing) + Nomen",
+    "en": "highly/well/time- + participle (-ed/-ing) + noun"
+   },
+   "use": {
+    "de": "Vor dem Nomen bilden highly, well oder ein Nomen mit einem Partizip einen Modifikator: highly skilled, well-known, time-consuming. Nach -ly steht kein Bindestrich.",
+    "en": "Before a noun, highly, well, or a noun plus a participle form a modifier: highly skilled, well-known, time-consuming. No hyphen after -ly."
+   },
+   "signals": [
+    "highly",
+    "well-known",
+    "time-consuming",
+    "hard-working",
+    "newly"
+   ],
+   "ex": [
+    {
+     "en": "We hired a highly qualified analyst last month.",
+     "de": "Wir haben letzten Monat einen hochqualifizierten Analysten eingestellt.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Thanks for the well-prepared slides.",
+     "de": "Danke für die gut vorbereiteten Folien.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Manual reporting is a time-consuming task.",
+     "de": "Manuelle Berichte sind eine zeitaufwendige Aufgabe.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "It is a time-consume process.",
+    "good": "It is a time-consuming process.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Beim Bauen des Modifikators fehlt die Endung. Das zweite Wort ist ein Partizip, also -ing oder -ed.",
+     "en": "Not a translation error: the ending goes missing when the modifier is built. The second word is a participle, so -ing or -ed."
+    }
+   },
+   "contrast": {
+    "with": "cm.fixed",
+    "a": "She is a well-known expert.",
+    "b": "She wrote a long-term plan.",
+    "diff": {
+     "de": "Bei well-known ist das zweite Wort ein Partizip mit Endung. Bei long-term ist es ein Nomen und bleibt unverändert.",
+     "en": "In well-known the second word is a participle with an ending. In long-term it is a noun and stays unchanged."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She is a highly respected lawyer.",
+     "q": {
+      "de": "Respektieren viele Leute sie sehr?",
+      "en": "Do many people respect her a lot?"
+     },
+     "a": true
+    },
+    {
+     "s": "It is a time-consuming task.",
+     "q": {
+      "de": "Geht die Aufgabe schnell?",
+      "en": "Is the task quick?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Ist das zweite Wort ein Partizip, und welche Endung braucht es dann?",
+    "en": "Is the second word a participle, and which ending does it need then?"
+   }
+  }
+ ]
+}

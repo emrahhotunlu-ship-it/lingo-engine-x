@@ -2100,6 +2100,215 @@
    "topic": "c1-hedging"
   },
   {
+   "pat": "nm.noun-form",
+   "en": "After the migration, the system ran much faster.",
+   "de": "Nach der Migration lief das System deutlich schneller.",
+   "chunks": [
+    "after the migration",
+    "the system",
+    "ran",
+    "much",
+    "faster"
+   ],
+   "alt": [
+    "The system ran much faster after the migration."
+   ],
+   "why": [
+    "Hinter „after“ steht hier ein Nomen: the migration, nicht das Verb migrate. Der Nebensatz „after we migrated“ wird zur Wendung.",
+    "Here “after” is followed by a noun: the migration, not the verb migrate. The clause “after we migrated” becomes a phrase."
+   ],
+   "bad": "After the migrate, the system ran much faster.",
+   "trap": {
+    "tile": "after the migration",
+    "instead": "after the migrate",
+    "why": {
+     "de": "Man kennt zuerst das Verb migrate und setzt es nach „the“ ein. Dort steht aber das Nomen mit der Endung -ion.",
+     "en": "Learners know the verb migrate first and use it after “the”. A noun with the ending -ion belongs there."
+    }
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "pat": "nm.noun-form",
+   "en": "The delivery of the units is delayed until Monday.",
+   "de": "Die Lieferung der Geräte verzögert sich bis Montag.",
+   "chunks": [
+    "the delivery",
+    "of the units",
+    "is",
+    "delayed",
+    "until Monday"
+   ],
+   "single": "Das Nomen mit seinem of-Objekt bildet das Subjekt und steht fest vor dem Prädikat; die Zeitangabe schließt den Satz.",
+   "why": [
+    "Aus „wir liefern die Geräte“ wird the delivery of the units. Das Nomen steht vorn, das Objekt hängt mit of daran, dann folgt das Prädikat.",
+    "“We deliver the units” becomes the delivery of the units. The noun comes first, the object attaches with of, then the predicate follows."
+   ],
+   "bad": "The deliver of the units is delayed until Monday.",
+   "trap": {
+    "tile": "the delivery",
+    "instead": "the deliver",
+    "why": {
+     "de": "Nach „The“ passt nur das Nomen delivery. Das Verb deliver ist die bekannte Form und rutscht deshalb oft an diese Stelle.",
+     "en": "After “The” only the noun delivery fits. The verb deliver is the familiar form and therefore often slips into this slot."
+    }
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "pat": "nm.of-object",
+   "en": "The analysis of the survey results took our team three days.",
+   "de": "Die Auswertung der Umfrageergebnisse hat unser Team drei Tage gekostet.",
+   "chunks": [
+    "the analysis",
+    "of the survey results",
+    "took",
+    "our team",
+    "three days"
+   ],
+   "single": "Subjekt, Verb, Person und Dauer folgen fest aufeinander: took braucht erst die Person (our team), dann die Dauer.",
+   "why": [
+    "Das deutsche Genitiv-Objekt hat kein eigenes Wort. Im Englischen hängt es mit of am Nomen: the analysis of the survey results.",
+    "The German genitive object has no word of its own. In English it attaches to the noun with of: the analysis of the survey results."
+   ],
+   "bad": "The analysis the survey results took our team three days.",
+   "trap": {
+    "tile": "of the survey results",
+    "instead": "the survey results",
+    "why": {
+     "de": "Im Deutschen steht der Genitiv („der Ergebnisse“) ohne Zusatzwort, deshalb wird das of leicht vergessen.",
+     "en": "German puts the genitive (“der Ergebnisse”) without an extra word, so the of is easily forgotten."
+    }
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "pat": "nm.of-object",
+   "en": "We are still waiting for the board's approval of the plan.",
+   "de": "Wir warten noch auf die Zustimmung des Vorstands zum Plan.",
+   "chunks": [
+    "we",
+    "are",
+    "still waiting",
+    "for the board's approval",
+    "of the plan"
+   ],
+   "single": "Wer zustimmt (the board's), steht vor dem Nomen, was genehmigt wird (of the plan), dahinter; waiting for hält beides zusammen.",
+   "why": [
+    "Bei einem Gremium steht der Besitzer mit 's vor dem Nomen: the board's approval. Das Objekt der Handlung hängt danach mit of an.",
+    "With a body the owner comes first with 's: the board's approval. The object of the action attaches afterward with of."
+   ],
+   "topic": "c1-nominal"
+  },
+  {
+   "pat": "nm.following",
+   "en": "Prior to the launch, we will run a final test.",
+   "de": "Vor dem Start führen wir noch einen letzten Test durch.",
+   "chunks": [
+    "prior to the launch",
+    "we",
+    "will",
+    "run",
+    "a final test"
+   ],
+   "alt": [
+    "We will run a final test prior to the launch."
+   ],
+   "why": [
+    "Prior to + Nomen ersetzt den Nebensatz „before we launch“. Das to gehört fest zu prior, danach folgt direkt das Nomen.",
+    "Prior to + noun replaces the clause “before we launch”. The to belongs to prior, and the noun follows directly."
+   ],
+   "bad": "Prior the launch, we will run a final test.",
+   "trap": {
+    "tile": "prior to the launch",
+    "instead": "prior the launch",
+    "why": {
+     "de": "Deutsch „vor dem Start“ hat nur ein Wort. Das to, das bei prior fest dazugehört, fehlt dann.",
+     "en": "German “vor dem Start” has just one word. The to that belongs with prior is then missing."
+    }
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "pat": "nm.following",
+   "en": "Upon receipt of your payment, we will ship the order.",
+   "de": "Nach Eingang Ihrer Zahlung versenden wir die Bestellung.",
+   "chunks": [
+    "upon receipt",
+    "of your payment",
+    "we",
+    "will ship",
+    "the order"
+   ],
+   "alt": [
+    "We will ship the order upon receipt of your payment."
+   ],
+   "why": [
+    "Upon receipt of … ersetzt den Nebensatz „once we receive“. Nach upon steht ein Nomen: receipt, nicht receiving of.",
+    "Upon receipt of … replaces the clause “once we receive”. After upon comes a noun: receipt, not receiving of."
+   ],
+   "bad": "Upon receiving of your payment, we will ship the order.",
+   "trap": {
+    "tile": "upon receipt",
+    "instead": "upon receiving",
+    "why": {
+     "de": "Wer „bei Erhalt“ als Tätigkeit denkt, nimmt receiving. Mit of dahinter passt aber nur das Nomen receipt.",
+     "en": "Thinking of “on receiving” as an activity leads to receiving. With of after it only the noun receipt fits."
+    }
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "pat": "nm.noun-prep",
+   "en": "We expect a sharp increase in demand next year.",
+   "de": "Wir erwarten nächstes Jahr einen deutlichen Anstieg der Nachfrage.",
+   "chunks": [
+    "we",
+    "expect",
+    "a sharp increase",
+    "in demand",
+    "next year"
+   ],
+   "alt": [
+    "Next year, we expect a sharp increase in demand."
+   ],
+   "why": [
+    "Nach increase nennt in den Bereich, der steigt: increase in demand. Das deutsche Genitiv („der Nachfrage“) wird hier nicht zu of.",
+    "After increase, in names the area that rises: increase in demand. The German genitive (“der Nachfrage”) does not become of here."
+   ],
+   "topic": "c1-nominal"
+  },
+  {
+   "pat": "nm.noun-prep",
+   "en": "The decision to move the launch was made last week.",
+   "de": "Die Entscheidung, den Start zu verschieben, fiel letzte Woche.",
+   "chunks": [
+    "the decision",
+    "to move",
+    "the launch",
+    "was made",
+    "last week"
+   ],
+   "alt": [
+    "Last week, the decision to move the launch was made.",
+    "The decision was made last week to move the launch."
+   ],
+   "why": [
+    "Nach decision folgt to + Grundform: the decision to move. Das deutsche „Entscheidung für“ passt hier nicht, und eine Entscheidung wird im US-Englisch made.",
+    "After decision comes to + base form: the decision to move. German “Entscheidung für” does not fit here, and in US English a decision is made."
+   ],
+   "bad": "The decision for moving the launch was made last week.",
+   "trap": {
+    "tile": "to move",
+    "instead": "for moving",
+    "why": {
+     "de": "Deutsch sagt „Entscheidung für …“. Dieses für + -ing wird übertragen, im Englischen folgt aber to + Grundform.",
+     "en": "German says “Entscheidung für …”. That for + -ing is carried over, but English uses to + base form."
+    }
+   },
+   "topic": "c1-nominal"
+  },
+  {
    "pat": "cp.having",
    "en": "Having compared three vendors, we chose the cheapest one.",
    "de": "Nachdem wir drei Anbieter verglichen hatten, wählten wir den günstigsten.",
@@ -2300,6 +2509,214 @@
     }
    },
    "topic": "c1-participle"
+  },
+  {
+   "pat": "cm.measure",
+   "en": "We booked a two-day workshop for the sales team.",
+   "de": "Wir haben einen zweitägigen Workshop für das Vertriebsteam gebucht.",
+   "chunks": [
+    "we",
+    "booked",
+    "a two-day",
+    "workshop",
+    "for the sales team"
+   ],
+   "alt": [
+    "For the sales team, we booked a two-day workshop."
+   ],
+   "why": [
+    "Zahl und Maßnomen werden zu einem Adjektiv: a two-day workshop. Das Maßnomen bleibt im Singular, auch nach two.",
+    "Number and measure noun become one adjective: a two-day workshop. The measure noun stays singular, even after two."
+   ],
+   "bad": "We booked a two-days workshop for the sales team.",
+   "trap": {
+    "tile": "a two-day",
+    "instead": "a two-days",
+    "why": {
+     "de": "Aus „zwei Tage“ wird gern ein Plural-s mitgenommen. Vor dem Nomen steht aber der Singular.",
+     "en": "The plural -s of “zwei Tage” is easily carried over. Before the noun the singular is used."
+    }
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "pat": "cm.measure",
+   "en": "Please send a one-page summary before Friday.",
+   "de": "Bitte schicken Sie vor Freitag eine einseitige Zusammenfassung.",
+   "chunks": [
+    "please",
+    "send",
+    "a one-page",
+    "summary",
+    "before Friday"
+   ],
+   "alt": [
+    "Before Friday, please send a one-page summary."
+   ],
+   "why": [
+    "Vor dem Nomen steht one-page mit Bindestrich und im Singular. Die Zeitangabe before Friday kann vorne oder hinten stehen.",
+    "Before the noun use one-page with a hyphen and the singular. The time phrase before Friday can come first or last."
+   ],
+   "bad": "Please send a one-pages summary before Friday.",
+   "topic": "compound-mod"
+  },
+  {
+   "pat": "cm.after-verb",
+   "en": "Unfortunately, the session was three hours long.",
+   "de": "Leider war die Sitzung drei Stunden lang.",
+   "chunks": [
+    "unfortunately",
+    "the session",
+    "was",
+    "three hours",
+    "long"
+   ],
+   "alt": [
+    "The session was three hours long, unfortunately."
+   ],
+   "why": [
+    "Hinter dem Verb steht die Maßangabe als normaler Plural ohne Bindestrich: three hours long. Nur unfortunately kann wandern.",
+    "After the verb the measure is an ordinary plural with no hyphen: three hours long. Only unfortunately can move."
+   ],
+   "bad": "Unfortunately, the session was three-hour long.",
+   "trap": {
+    "tile": "three hours",
+    "instead": "three-hour",
+    "why": {
+     "de": "Die Bindestrich-Regel für „a three-hour session“ wird oft auf jede Maßangabe ausgedehnt. Nach dem Verb gilt aber der Plural.",
+     "en": "The hyphen rule for “a three-hour session” is often stretched to every measure. After the verb the plural applies."
+    }
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "pat": "cm.order",
+   "en": "Last month, we moved into a small modern office.",
+   "de": "Letzten Monat sind wir in ein kleines modernes Büro gezogen.",
+   "chunks": [
+    "last month",
+    "we",
+    "moved into",
+    "a small modern",
+    "office"
+   ],
+   "alt": [
+    "We moved into a small modern office last month."
+   ],
+   "why": [
+    "Die Größe steht vor dem Stil: small modern. Die Zeitangabe last month kann vorne oder hinten stehen.",
+    "Size comes before style: small modern. The time phrase last month can come first or last."
+   ],
+   "bad": "Last month, we moved into a modern small office.",
+   "trap": {
+    "tile": "a small modern",
+    "instead": "a modern small",
+    "why": {
+     "de": "Im Deutschen ist die Reihenfolge freier. Im Englischen steht die Größe vor Alter und Stil.",
+     "en": "German is freer with the order. In English size comes before age and style."
+    }
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "pat": "cm.order",
+   "en": "She bought a lovely old wooden desk at the market.",
+   "de": "Sie hat auf dem Markt einen schönen alten Holzschreibtisch gekauft.",
+   "chunks": [
+    "she",
+    "bought",
+    "a lovely old wooden",
+    "desk",
+    "at the market"
+   ],
+   "alt": [
+    "At the market, she bought a lovely old wooden desk."
+   ],
+   "why": [
+    "Die Reihenfolge ist Meinung, Alter, Material: lovely old wooden. Der Ort at the market kann vorne oder hinten stehen.",
+    "The order is opinion, age, material: lovely old wooden. The place at the market can come first or last."
+   ],
+   "bad": "She bought a wooden old lovely desk at the market.",
+   "topic": "compound-mod"
+  },
+  {
+   "pat": "cm.fixed",
+   "en": "Unfortunately, we made a last-minute change to the agenda.",
+   "de": "Leider haben wir kurzfristig eine Änderung an der Tagesordnung vorgenommen.",
+   "chunks": [
+    "unfortunately",
+    "we made",
+    "a last-minute",
+    "change",
+    "to the agenda"
+   ],
+   "alt": [
+    "We made a last-minute change to the agenda, unfortunately."
+   ],
+   "why": [
+    "Last-minute ist ein fester Baustein mit Bindestrich und ohne -s. Das Plural-s trüge nur das Nomen change.",
+    "Last-minute is a fixed block with a hyphen and no -s. Only the noun change would take a plural -s."
+   ],
+   "bad": "Unfortunately, we made a last-minutes change to the agenda.",
+   "trap": {
+    "tile": "a last-minute",
+    "instead": "a last-minutes",
+    "why": {
+     "de": "Das Plural-s rutscht leicht an den Baustein. Der bleibt unverändert.",
+     "en": "The plural -s easily slips onto the block. It stays unchanged."
+    }
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "pat": "cm.participle",
+   "en": "We hired a highly qualified analyst last year.",
+   "de": "Wir haben letztes Jahr einen hochqualifizierten Analysten eingestellt.",
+   "chunks": [
+    "we hired",
+    "a highly",
+    "qualified",
+    "analyst",
+    "last year"
+   ],
+   "alt": [
+    "Last year, we hired a highly qualified analyst."
+   ],
+   "why": [
+    "Nach highly steht ein Partizip: highly qualified, ohne Bindestrich. Die Zeitangabe last year kann vorne oder hinten stehen.",
+    "After highly comes a participle: highly qualified, with no hyphen. The time phrase last year can come first or last."
+   ],
+   "bad": "We hired a highly qualify analyst last year.",
+   "trap": {
+    "tile": "qualified",
+    "instead": "qualify",
+    "why": {
+     "de": "Beim Bauen des Modifikators fällt die Endung leicht weg. Nach highly braucht es das Partizip.",
+     "en": "The ending easily drops out when the modifier is built. After highly the participle is needed."
+    }
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "pat": "cm.participle",
+   "en": "Manual reporting is a time-consuming task for our team.",
+   "de": "Manuelle Berichte sind eine zeitaufwendige Aufgabe für unser Team.",
+   "chunks": [
+    "manual reporting",
+    "is",
+    "a time-consuming",
+    "task",
+    "for our team"
+   ],
+   "alt": [
+    "For our team, manual reporting is a time-consuming task."
+   ],
+   "why": [
+    "Time-consuming besteht aus Nomen und Partizip auf -ing. Die Wortgruppe for our team kann vorne oder hinten stehen.",
+    "Time-consuming is a noun plus an -ing participle. The phrase for our team can come first or last."
+   ],
+   "bad": "Manual reporting is a time-consume task for our team.",
+   "topic": "compound-mod"
   },
   {
    "pat": "ca.unless",
@@ -2721,6 +3138,185 @@
     }
    },
    "topic": "conditionals"
+  },
+  {
+   "pat": "cnt.uncount",
+   "en": "We received some useful feedback from the pilot customers.",
+   "de": "Wir haben von den Pilotkunden nützliche Rückmeldungen erhalten.",
+   "chunks": [
+    "we",
+    "received",
+    "some",
+    "useful feedback",
+    "from the pilot customers"
+   ],
+   "alt": [
+    "From the pilot customers, we received some useful feedback."
+   ],
+   "why": [
+    "Feedback ist unzählbar: Es steht ohne -s und ohne a/an, hier mit some. Das deutsche „Rückmeldungen“ hat im Englischen keinen Plural.",
+    "Feedback is uncountable: no -s and no a/an, here with some. English has no plural for it, unlike German “Rückmeldungen”."
+   ],
+   "bad": "We received some useful feedbacks from the pilot customers.",
+   "trap": {
+    "tile": "useful feedback",
+    "instead": "useful feedbacks",
+    "why": {
+     "de": "Die deutsche Mehrzahl „Rückmeldungen“ lädt zu einem -s ein. Doch feedback ist unzählbar und bleibt in der Einzahl.",
+     "en": "The German plural “Rückmeldungen” invites an -s. But feedback is uncountable and stays singular."
+    }
+   },
+   "topic": "countable"
+  },
+  {
+   "pat": "cnt.verb",
+   "en": "Traffic was very heavy on the highway this morning.",
+   "de": "Heute Morgen war der Verkehr auf der Autobahn sehr dicht.",
+   "chunks": [
+    "traffic",
+    "was",
+    "very heavy",
+    "on the highway",
+    "this morning"
+   ],
+   "alt": [
+    "Traffic was very heavy this morning on the highway.",
+    "Traffic on the highway was very heavy this morning.",
+    "Traffic on the highway this morning was very heavy.",
+    "This morning, traffic was very heavy on the highway.",
+    "This morning, traffic on the highway was very heavy.",
+    "On the highway, traffic was very heavy this morning.",
+    "On the highway this morning, traffic was very heavy.",
+    "This morning on the highway, traffic was very heavy."
+   ],
+   "why": [
+    "Traffic ist unzählbar, deshalb steht das Verb im Singular: was, nicht were. Auch „der Verkehr“ ist im Deutschen ein Singular.",
+    "Traffic is uncountable, so the verb is singular: was, not were. In German “der Verkehr” is singular as well."
+   ],
+   "bad": "Traffic were very heavy on the highway this morning.",
+   "trap": {
+    "tile": "was",
+    "instead": "were",
+    "why": {
+     "de": "Wer an viele Fahrzeuge denkt, wählt leicht were. Traffic bleibt aber unzählbar und braucht was.",
+     "en": "Thinking of many vehicles, it is easy to pick were. Traffic stays uncountable and takes was."
+    }
+   },
+   "topic": "countable"
+  },
+  {
+   "pat": "cnt.quant",
+   "en": "Do you know how many people are coming to the offsite?",
+   "de": "Weißt du, wie viele Leute zum Offsite kommen?",
+   "chunks": [
+    "do you know",
+    "how many",
+    "people",
+    "are coming",
+    "to the offsite"
+   ],
+   "single": "Do you know bleibt vorn; how many people gehört zusammen, danach folgt are coming und am Ende to the offsite.",
+   "why": [
+    "Im eingebetteten Satz bleibt die Wortfolge des Aussagesatzes: how many people are coming. People ist zählbar, deshalb many.",
+    "In the embedded question the statement order stays: how many people are coming. People is countable, so many."
+   ],
+   "bad": "Do you know how much people are coming to the offsite?",
+   "trap": {
+    "tile": "how many",
+    "instead": "how much",
+    "why": {
+     "de": "Kein echter Übersetzungsfehler, eher ein Versprecher bei how much. Bei people als Plural steht many.",
+     "en": "Not a real translation error, more a slip with how much. With people as a plural, use many."
+    }
+   },
+   "topic": "countable"
+  },
+  {
+   "pat": "cnt.quant",
+   "en": "We have only a little time left before the deadline.",
+   "de": "Bis zur Frist bleibt uns nur noch ein wenig Zeit.",
+   "chunks": [
+    "we have",
+    "only",
+    "a little",
+    "time left",
+    "before the deadline"
+   ],
+   "alt": [
+    "Before the deadline, we have only a little time left."
+   ],
+   "why": [
+    "Time ist unzählbar, deshalb a little und nicht a few. A little heißt „etwas“, nicht „einige“.",
+    "Time is uncountable, so a little and not a few. A little means “some”, not “several”."
+   ],
+   "bad": "We have only a few time left before the deadline.",
+   "trap": {
+    "tile": "a little",
+    "instead": "a few",
+    "why": {
+     "de": "A few steht nur vor zählbaren Plural-Nomen. Vor time, das unzählbar ist, steht a little.",
+     "en": "A few goes only before plural countable nouns. Before time, which is uncountable, use a little."
+    }
+   },
+   "topic": "countable"
+  },
+  {
+   "pat": "cnt.unit",
+   "en": "Our mentor gave us two pieces of useful advice yesterday.",
+   "de": "Gestern hat unser Mentor uns zwei nützliche Ratschläge gegeben.",
+   "chunks": [
+    "our mentor",
+    "gave us",
+    "two pieces",
+    "of useful advice",
+    "yesterday"
+   ],
+   "alt": [
+    "Yesterday, our mentor gave us two pieces of useful advice."
+   ],
+   "why": [
+    "Advice hat keinen Plural. Gezählt wird mit dem Zählwort, und das -s steht an pieces: two pieces of advice.",
+    "Advice has no plural. You count with a unit word, and the -s goes on pieces: two pieces of advice."
+   ],
+   "bad": "Our mentor gave us two piece of useful advice yesterday.",
+   "trap": {
+    "tile": "two pieces",
+    "instead": "two piece",
+    "why": {
+     "de": "Das Plural-s fehlt am Zählwort. Bei two steht pieces, und advice bleibt ohne -s.",
+     "en": "The plural -s is missing on the unit word. After two use pieces, and advice stays without -s."
+    }
+   },
+   "topic": "countable"
+  },
+  {
+   "pat": "cnt.double",
+   "en": "She has twelve years of experience in enterprise sales.",
+   "de": "Sie hat zwölf Jahre Erfahrung im Großkundenvertrieb.",
+   "chunks": [
+    "she",
+    "has",
+    "twelve years",
+    "of experience",
+    "in enterprise sales"
+   ],
+   "alt": [
+    "In enterprise sales, she has twelve years of experience."
+   ],
+   "why": [
+    "Experience im Sinn von Erfahrung ist unzählbar, deshalb of experience. Experiences meint einzelne Erlebnisse.",
+    "Experience in the sense of know-how is uncountable, so of experience. Experiences means single events."
+   ],
+   "bad": "She has twelve years of experiences in enterprise sales.",
+   "trap": {
+    "tile": "of experience",
+    "instead": "of experiences",
+    "why": {
+     "de": "Im Deutschen steht „Erfahrungen“ oft im Plural. Im Englischen bleibt experience für Können in der Einzahl.",
+     "en": "German often uses the plural “Erfahrungen”. In English experience for know-how stays singular."
+    }
+   },
+   "topic": "countable"
   },
   {
    "pat": "ff.going-to",
@@ -4939,6 +5535,628 @@
     }
    },
    "topic": "past-simple-perfect"
+  },
+  {
+   "pat": "pn.for",
+   "en": "Our sales team still sees strong demand for the premium plan in Europe.",
+   "de": "Unser Vertriebsteam sieht in Europa weiterhin starke Nachfrage nach dem Premium-Tarif.",
+   "chunks": [
+    "our sales team",
+    "still sees",
+    "strong demand",
+    "for the premium plan",
+    "in Europe"
+   ],
+   "alt": [
+    "In Europe, our sales team still sees strong demand for the premium plan."
+   ],
+   "why": [
+    "Demand verlangt for vor dem Gewünschten: for the premium plan bleibt als Block zusammen, der Ort kann auch vorn stehen.",
+    "Demand takes for before the thing wanted: for the premium plan stays together, and the place can also come first."
+   ],
+   "bad": "Our sales team still sees strong demand after the premium plan in Europe.",
+   "trap": {
+    "tile": "for the premium plan",
+    "instead": "after the premium plan",
+    "why": {
+     "de": "Aus „Nachfrage nach“ wird Wort für Wort after. Englisch hängt das Gewünschte mit for an.",
+     "en": "“Nachfrage nach” becomes after word for word. English links the thing wanted with for."
+    }
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "pat": "pn.in",
+   "en": "The company saw a sharp drop in orders after the price change.",
+   "de": "Nach der Preisänderung sah die Firma einen starken Rückgang bei den Bestellungen.",
+   "chunks": [
+    "the company",
+    "saw",
+    "a sharp drop",
+    "in orders",
+    "after the price change"
+   ],
+   "alt": [
+    "After the price change, the company saw a sharp drop in orders."
+   ],
+   "why": [
+    "Drop verlangt in vor dem Bereich, der sich ändert: in orders bleibt zusammen, der Zeitpunkt folgt oder steht vorn.",
+    "Drop takes in before the area that changes: in orders stays together, and the time comes after or first."
+   ],
+   "bad": "The company saw a sharp drop of orders after the price change.",
+   "trap": {
+    "tile": "in orders",
+    "instead": "of orders",
+    "why": {
+     "de": "Der Genitiv („Rückgang der Bestellungen“) legt of nahe. Der Bereich der Veränderung braucht aber in.",
+     "en": "The German genitive (“Rückgang der Bestellungen”) suggests of. The area of change needs in, though."
+    }
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "pat": "pn.of",
+   "en": "Everyone in the sales department is very proud of the results this quarter.",
+   "de": "Alle im Vertrieb sind in diesem Quartal sehr stolz auf die Ergebnisse.",
+   "chunks": [
+    "everyone",
+    "in the sales department",
+    "is very proud",
+    "of the results",
+    "this quarter"
+   ],
+   "alt": [
+    "This quarter, everyone in the sales department is very proud of the results."
+   ],
+   "why": [
+    "Proud verlangt of vor dem Grund des Stolzes: of the results bleibt als Block, die Zeitangabe kann vorn stehen.",
+    "Proud takes of before the reason for the pride: of the results stays together, and the time phrase can come first."
+   ],
+   "bad": "Everyone in the sales department is very proud on the results this quarter.",
+   "trap": {
+    "tile": "of the results",
+    "instead": "on the results",
+    "why": {
+     "de": "„Stolz auf“ wird Wort für Wort übersetzt, und „auf“ wird meist zu on. Englisch sagt proud of.",
+     "en": "“Stolz auf” is translated word for word, and “auf” usually becomes on. English says proud of."
+    }
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "pat": "pn.to",
+   "en": "Since March, only senior staff have access to the finance folder.",
+   "de": "Seit März haben nur leitende Mitarbeiter Zugang zum Finanzordner.",
+   "chunks": [
+    "since March",
+    "only",
+    "senior staff",
+    "have access",
+    "to the finance folder"
+   ],
+   "alt": [
+    "Only senior staff have access to the finance folder since March."
+   ],
+   "why": [
+    "Access verlangt to vor dem Ziel: to the finance folder bleibt als Block, die Zeitangabe kann vorn oder hinten stehen.",
+    "Access takes to before the target: to the finance folder stays together, and the time phrase can come first or last."
+   ],
+   "bad": "Since March, only senior staff have access for the finance folder.",
+   "trap": {
+    "tile": "to the finance folder",
+    "instead": "for the finance folder",
+    "why": {
+     "de": "Kein reiner Übersetzungsfehler: Wer „Zugang für Mitarbeiter“ kennt, wählt for. Das Ziel des Zugangs braucht aber to.",
+     "en": "Not a pure translation error: whoever knows “access for staff” picks for. The target of access needs to, though."
+    }
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "pat": "pn.at",
+   "en": "In meetings, our new analyst is really good at explaining complex data to clients.",
+   "de": "In Besprechungen erklärt unser neuer Analyst Kunden komplexe Daten wirklich gut.",
+   "chunks": [
+    "in meetings",
+    "our new analyst",
+    "is really good",
+    "at explaining complex data",
+    "to clients"
+   ],
+   "alt": [
+    "Our new analyst is really good at explaining complex data to clients in meetings."
+   ],
+   "why": [
+    "Good verlangt at vor der Tätigkeit: at explaining complex data bleibt zusammen, to clients folgt danach.",
+    "Good takes at before the activity: at explaining complex data stays together, and to clients follows."
+   ],
+   "bad": "In meetings, our new analyst is really good in explaining complex data to clients.",
+   "trap": {
+    "tile": "at explaining complex data",
+    "instead": "in explaining complex data",
+    "why": {
+     "de": "„Gut in“ wird Wort für Wort übersetzt, deshalb steht in statt at. Englisch sagt good at + -ing.",
+     "en": "“Gut in” is translated word for word, so in appears instead of at. English says good at + -ing."
+    }
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "pat": "pn.about",
+   "en": "Before we sign, I have a few questions about the contract.",
+   "de": "Bevor wir unterschreiben, habe ich ein paar Fragen zum Vertrag.",
+   "chunks": [
+    "before",
+    "we sign",
+    "I have",
+    "a few questions",
+    "about the contract"
+   ],
+   "alt": [
+    "I have a few questions about the contract before we sign."
+   ],
+   "why": [
+    "Question verlangt about vor dem Thema: about the contract bleibt als Block, der Zeitsatz kann vorn oder hinten stehen.",
+    "Question takes about before the topic: about the contract stays together, and the time clause can come first or last."
+   ],
+   "bad": "Before we sign, I have a few questions to the contract.",
+   "trap": {
+    "tile": "about the contract",
+    "instead": "to the contract",
+    "why": {
+     "de": "Kein sicherer Übersetzungsfehler: „Fragen zum Vertrag“ lässt das „zu“ wörtlich zu to werden. Englisch sagt questions about.",
+     "en": "Not a sure translation error: “Fragen zum Vertrag” turns “zu” into to word for word. English says questions about."
+    }
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "pat": "pn.in",
+   "en": "Since the launch, our clients have been very interested in the new dashboard.",
+   "de": "Seit dem Start sind unsere Kunden sehr am neuen Dashboard interessiert.",
+   "chunks": [
+    "since the launch",
+    "our clients",
+    "have been",
+    "very interested",
+    "in the new dashboard"
+   ],
+   "alt": [
+    "Our clients have been very interested in the new dashboard since the launch."
+   ],
+   "why": [
+    "Interested verlangt in vor der Sache: in the new dashboard bleibt als Block, die Zeitangabe kann vorn oder hinten stehen.",
+    "Interested takes in before the thing: in the new dashboard stays together, and the time phrase can come first or last."
+   ],
+   "bad": "Since the launch, our clients have been very interested at the new dashboard.",
+   "trap": {
+    "tile": "in the new dashboard",
+    "instead": "at the new dashboard",
+    "why": {
+     "de": "„Interessiert an“ wird Wort für Wort übersetzt, und „an“ wird zu at. Englisch sagt interested in.",
+     "en": "“Interessiert an” is translated word for word, and “an” becomes at. English says interested in."
+    }
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "pat": "pt.at-on-in",
+   "en": "Our review will take place at nine on Monday morning.",
+   "de": "Unsere Besprechung findet am Montagmorgen um neun statt.",
+   "chunks": [
+    "our review",
+    "will",
+    "take place",
+    "at nine",
+    "on Monday morning"
+   ],
+   "alt": [
+    "Our review will take place on Monday morning at nine.",
+    "At nine on Monday morning, our review will take place.",
+    "On Monday morning at nine, our review will take place."
+   ],
+   "why": [
+    "Die Uhrzeit steht mit at, der Tag mit on. Die beiden Zeitangaben dürfen in der Reihenfolge wechseln.",
+    "The clock time takes at, the day takes on. The two time expressions may swap places."
+   ],
+   "bad": "Our review will take place at nine at Monday morning.",
+   "trap": {
+    "tile": "on Monday morning",
+    "instead": "at Monday morning",
+    "why": {
+     "de": "Im Deutschen heißt es „am Montagmorgen“, und „am“ klingt nach at. Vor Wochentagen steht im Englischen aber on.",
+     "en": "German says “am Montagmorgen”, and “am” sounds like at. English uses on before days of the week."
+    }
+   },
+   "topic": "prep-time"
+  },
+  {
+   "pat": "pt.at-on-in",
+   "en": "I usually answer my emails in the morning before the first call.",
+   "de": "Ich beantworte meine E-Mails meist morgens vor dem ersten Telefonat.",
+   "chunks": [
+    "I usually",
+    "answer",
+    "my emails",
+    "in the morning",
+    "before the first call"
+   ],
+   "alt": [
+    "In the morning, I usually answer my emails before the first call."
+   ],
+   "why": [
+    "Tageszeiten stehen mit in: in the morning. Die Zeitangabe darf auch am Satzanfang stehen.",
+    "Parts of the day take in: in the morning. The time expression may also open the sentence."
+   ],
+   "bad": "I usually answer my emails at the morning before the first call.",
+   "trap": {
+    "tile": "in the morning",
+    "instead": "at the morning",
+    "why": {
+     "de": "Im Deutschen heißt es „am Morgen“, und „am“ klingt nach at. Tageszeiten stehen im Englischen aber mit in.",
+     "en": "German says “am Morgen”, and “am” sounds like at. English uses in for parts of the day."
+    }
+   },
+   "topic": "prep-time"
+  },
+  {
+   "pat": "pt.for-since",
+   "en": "Our intern has been learning the tool for two weeks.",
+   "de": "Unsere Praktikantin lernt das Tool seit zwei Wochen.",
+   "chunks": [
+    "our intern",
+    "has been",
+    "learning",
+    "the tool",
+    "for two weeks"
+   ],
+   "alt": [
+    "For two weeks, our intern has been learning the tool."
+   ],
+   "why": [
+    "for nennt die Dauer: for two weeks. Dazu passt has been learning, nicht das einfache Präsens.",
+    "for names the duration: for two weeks. It goes with has been learning, not the simple present."
+   ],
+   "bad": "Our intern has been learning the tool since two weeks.",
+   "trap": {
+    "tile": "for two weeks",
+    "instead": "since two weeks",
+    "why": {
+     "de": "Deutsch sagt für beides „seit“: „seit zwei Wochen“, „seit Montag“. Englisch trennt die Dauer (for) vom Startpunkt (since).",
+     "en": "German uses “seit” for both: “seit zwei Wochen”, “seit Montag”. English separates a duration (for) from a starting point (since)."
+    }
+   },
+   "topic": "prep-time"
+  },
+  {
+   "pat": "pt.for-since",
+   "en": "We haven't received any updates from the vendor since Tuesday.",
+   "de": "Wir haben seit Dienstag keine Neuigkeiten vom Anbieter bekommen.",
+   "chunks": [
+    "we haven't",
+    "received",
+    "any updates",
+    "from the vendor",
+    "since Tuesday"
+   ],
+   "alt": [
+    "Since Tuesday, we haven't received any updates from the vendor."
+   ],
+   "why": [
+    "Mit since steht das Perfekt: haven't received. Im Deutschen steht dagegen das Präsens: „bekommen wir nichts“.",
+    "With since the perfect is used: haven't received. German uses the present instead: “bekommen wir nichts”."
+   ],
+   "bad": "We don't receive any updates from the vendor since Tuesday.",
+   "topic": "prep-time"
+  },
+  {
+   "pat": "pt.by-until",
+   "en": "Please send me the signed contract by Friday at noon.",
+   "de": "Bitte schicken Sie mir den unterschriebenen Vertrag bis Freitagmittag.",
+   "chunks": [
+    "please",
+    "send me",
+    "the signed contract",
+    "by Friday",
+    "at noon"
+   ],
+   "alt": [
+    "By Friday at noon, please send me the signed contract."
+   ],
+   "why": [
+    "by nennt die Frist: spätestens dann ist der Vertrag da. Die Uhrzeit at noon folgt direkt auf den Tag.",
+    "by names the deadline: the contract must be there by then. The time at noon follows the day directly."
+   ],
+   "bad": "Please send me the signed contract until Friday at noon.",
+   "trap": {
+    "tile": "by Friday",
+    "instead": "until Friday",
+    "why": {
+     "de": "Im Deutschen deckt „bis“ beides ab: „bis Freitag schicken“ und „bis Freitag warten“. Englisch trennt Frist (by) und Andauern (until).",
+     "en": "German “bis” covers both: “bis Freitag schicken” and “bis Freitag warten”. English separates a deadline (by) from a lasting state (until)."
+    }
+   },
+   "topic": "prep-time"
+  },
+  {
+   "pat": "pt.by-until",
+   "en": "Our office stays closed until Monday because of the renovation.",
+   "de": "Unser Büro bleibt wegen des Umbaus bis Montag geschlossen.",
+   "chunks": [
+    "our office",
+    "stays",
+    "closed",
+    "until Monday",
+    "because of the renovation"
+   ],
+   "alt": [
+    "Until Monday, our office stays closed because of the renovation.",
+    "Because of the renovation, our office stays closed until Monday."
+   ],
+   "why": [
+    "until nennt, wie lange der Zustand andauert: geschlossen bis Montag. Der Grund kann vorn oder hinten stehen.",
+    "until says how long the state lasts: closed up to Monday. The reason may come first or last."
+   ],
+   "bad": "Our office stays closed by Monday because of the renovation.",
+   "trap": {
+    "tile": "until Monday",
+    "instead": "by Monday",
+    "why": {
+     "de": "Im Deutschen deckt „bis“ beides ab: „bis Montag geschlossen“ und „bis Montag fertig“. Ein Zustand, der andauert, braucht aber until.",
+     "en": "German “bis” covers both: “bis Montag geschlossen” and “bis Montag fertig”. A state that lasts needs until."
+    }
+   },
+   "topic": "prep-time"
+  },
+  {
+   "pat": "pt.during-within",
+   "en": "Our support team usually replies to every ticket within 24 hours.",
+   "de": "Unser Support antwortet in der Regel innerhalb von 24 Stunden auf jedes Ticket.",
+   "chunks": [
+    "our support team",
+    "usually",
+    "replies",
+    "to every ticket",
+    "within 24 hours"
+   ],
+   "alt": [
+    "Within 24 hours, our support team usually replies to every ticket.",
+    "Our support team usually replies within 24 hours to every ticket."
+   ],
+   "why": [
+    "within nennt den Zeitrahmen mit Zahl: 24 hours. Die Zeitangabe darf auch vor oder hinter dem Objekt stehen.",
+    "within names the time frame with a number: 24 hours. The time expression may come before or after the object."
+   ],
+   "bad": "Our support team usually replies to every ticket during 24 hours.",
+   "trap": {
+    "tile": "within 24 hours",
+    "instead": "during 24 hours",
+    "why": {
+     "de": "Kein Übersetzungsfehler: „während“ klingt nach einer Zeitspanne, und so rutscht during vor eine Zahl. During braucht ein Ereignis.",
+     "en": "Not a translation error: “während” sounds like a stretch of time, so during slips in before a number. During needs an event."
+    }
+   },
+   "topic": "prep-time"
+  },
+  {
+   "pat": "pt.during-within",
+   "en": "Please keep your phones off during the entire presentation.",
+   "de": "Bitte lassen Sie Ihre Handys während der ganzen Präsentation aus.",
+   "chunks": [
+    "please",
+    "keep",
+    "your phones",
+    "off",
+    "during the entire presentation"
+   ],
+   "alt": [
+    "During the entire presentation, please keep your phones off."
+   ],
+   "why": [
+    "during steht vor dem Ereignis the presentation. Die Zeitangabe darf auch am Satzanfang stehen.",
+    "during goes before the event the presentation. The time expression may also open the sentence."
+   ],
+   "bad": "Please keep your phones off while the entire presentation.",
+   "trap": {
+    "tile": "during the entire presentation",
+    "instead": "while the entire presentation",
+    "why": {
+     "de": "Im Deutschen steht „während“ für Konjunktion und Präposition. Vor einem Nomen heißt es im Englischen during, nicht while.",
+     "en": "German “während” serves as conjunction and preposition. Before a noun English uses during, not while."
+    }
+   },
+   "topic": "prep-time"
+  },
+  {
+   "pat": "prp.verb-prep",
+   "en": "We usually rely on our regional partners for fast delivery.",
+   "de": "Für schnelle Lieferungen verlassen wir uns meist auf unsere regionalen Partner.",
+   "chunks": [
+    "we",
+    "usually",
+    "rely",
+    "on our regional partners",
+    "for fast delivery"
+   ],
+   "alt": [
+    "Usually we rely on our regional partners for fast delivery.",
+    "For fast delivery, we usually rely on our regional partners."
+   ],
+   "why": [
+    "Zu rely gehört on, und danach folgt direkt das, worauf man sich verlässt: rely on our regional partners.",
+    "Rely takes on, and what you depend on follows directly: rely on our regional partners."
+   ],
+   "bad": "We usually rely of our regional partners for fast delivery.",
+   "trap": {
+    "tile": "on our regional partners",
+    "instead": "of our regional partners",
+    "why": {
+     "de": "Of wirkt vertraut (proud of, because of) und drängt sich auf. Das ist ein Reflex, kein Übersetzungsfehler. Zu rely gehört on.",
+     "en": "Of feels familiar (proud of, because of) and pushes in. It is a reflex, not a translation error. Rely takes on."
+    }
+   },
+   "topic": "prepositions"
+  },
+  {
+   "pat": "prp.adj-prep",
+   "en": "Our new analyst is already familiar with the reporting tool.",
+   "de": "Unser neuer Analyst ist mit dem Reporting-Tool schon vertraut.",
+   "chunks": [
+    "our new analyst",
+    "is",
+    "already",
+    "familiar",
+    "with the reporting tool"
+   ],
+   "alt": [
+    "Our new analyst is familiar with the reporting tool already."
+   ],
+   "why": [
+    "Familiar bleibt mit with zusammen: with the reporting tool nennt die Sache, mit der man vertraut ist.",
+    "Familiar stays with with: with the reporting tool names the thing you are familiar with."
+   ],
+   "bad": "Our new analyst is already familiar of the reporting tool.",
+   "trap": {
+    "tile": "with the reporting tool",
+    "instead": "of the reporting tool",
+    "why": {
+     "de": "Of drängt sich nach Adjektiven auf (proud of, afraid of). Zu familiar gehört aber with, wie im deutschen „vertraut mit“.",
+     "en": "Of pushes in after adjectives (proud of, afraid of). But familiar takes with, as in German “vertraut mit”."
+    }
+   },
+   "topic": "prepositions"
+  },
+  {
+   "pat": "prp.adj-prep",
+   "en": "We were all proud of the team's results last quarter.",
+   "de": "Letztes Quartal waren wir alle stolz auf die Ergebnisse des Teams.",
+   "chunks": [
+    "we",
+    "were",
+    "all",
+    "proud",
+    "of the team's results",
+    "last quarter"
+   ],
+   "alt": [
+    "Last quarter, we were all proud of the team's results."
+   ],
+   "why": [
+    "Proud verlangt of: of the team’s results nennt, worauf man stolz ist, und bleibt als Block zusammen.",
+    "Proud takes of: of the team’s results names what you are proud of and stays together as a block."
+   ],
+   "bad": "We were all proud on the team's results last quarter.",
+   "trap": {
+    "tile": "of the team's results",
+    "instead": "on the team's results",
+    "why": {
+     "de": "„Stolz auf“ lockt zu on. Im Englischen gehört of zu proud.",
+     "en": "German “stolz auf” lures you into on. In English, of belongs to proud."
+    }
+   },
+   "topic": "prepositions"
+  },
+  {
+   "pat": "prp.no-prep",
+   "en": "Let's quickly discuss the new pricing model before Friday.",
+   "de": "Lass uns das neue Preismodell vor Freitag kurz besprechen.",
+   "chunks": [
+    "let's",
+    "quickly",
+    "discuss",
+    "the new pricing model",
+    "before Friday"
+   ],
+   "alt": [
+    "Let's discuss the new pricing model quickly before Friday.",
+    "Before Friday, let's quickly discuss the new pricing model.",
+    "Before Friday, let's discuss the new pricing model quickly."
+   ],
+   "why": [
+    "Discuss nimmt sein Objekt direkt und braucht kein about: discuss the new pricing model.",
+    "Discuss takes its object directly: discuss the new pricing model, with no about before it."
+   ],
+   "bad": "Let's quickly discuss about the new pricing model before Friday.",
+   "trap": {
+    "tile": "discuss",
+    "instead": "discuss about",
+    "why": {
+     "de": "„Diskutieren über“ lockt zu about. Im Englischen enthält discuss das „über“ schon.",
+     "en": "German “diskutieren über” lures you into about. In English, discuss already contains it."
+    }
+   },
+   "topic": "prepositions"
+  },
+  {
+   "pat": "prp.person-to",
+   "en": "Could you briefly explain the new process to the interns on Monday?",
+   "de": "Könntest du den Praktikanten am Montag kurz den neuen Ablauf erklären?",
+   "chunks": [
+    "could you",
+    "briefly",
+    "explain",
+    "the new process",
+    "to the interns",
+    "on Monday"
+   ],
+   "alt": [
+    "On Monday, could you briefly explain the new process to the interns?",
+    "Could you explain the new process briefly to the interns on Monday?"
+   ],
+   "why": [
+    "Erst kommt die Sache (the new process), dann to + Person (to the interns). Die Person braucht bei explain ein to.",
+    "First comes the thing (the new process), then to + person (to the interns). With explain the person needs to."
+   ],
+   "topic": "prepositions"
+  },
+  {
+   "pat": "prp.prep-ing",
+   "en": "We easily saved a week by skipping the second review round.",
+   "de": "Indem wir die zweite Prüfrunde übersprangen, sparten wir mühelos eine Woche.",
+   "chunks": [
+    "we",
+    "easily",
+    "saved a week",
+    "by skipping",
+    "the second review round"
+   ],
+   "alt": [
+    "By skipping the second review round, we easily saved a week."
+   ],
+   "why": [
+    "Nach der Präposition by steht die -ing-Form: by skipping nennt, wie man die Woche gespart hat.",
+    "After the preposition by comes the -ing form: by skipping says how the week was saved."
+   ],
+   "bad": "We easily saved a week by skip the second review round.",
+   "trap": {
+    "tile": "by skipping",
+    "instead": "by skip",
+    "why": {
+     "de": "Nach der Präposition fehlt hier das -ing. Das ist kein Übersetzungsfehler, sondern ein Formfehler.",
+     "en": "The -ing is missing after the preposition. This is not a translation error, just a form error."
+    }
+   },
+   "topic": "prepositions"
+  },
+  {
+   "pat": "prp.verb-prep",
+   "en": "The vendor firmly insisted on a signed contract before the kickoff.",
+   "de": "Der Anbieter bestand vor dem Start fest auf einem unterschriebenen Vertrag.",
+   "chunks": [
+    "the vendor",
+    "firmly",
+    "insisted",
+    "on a signed contract",
+    "before the kickoff"
+   ],
+   "alt": [
+    "The vendor insisted firmly on a signed contract before the kickoff."
+   ],
+   "why": [
+    "Insist braucht on: on a signed contract nennt, worauf der Anbieter besteht, und bleibt als Block zusammen.",
+    "Insist needs on: on a signed contract names what the vendor insists on and stays together as a block."
+   ],
+   "topic": "prepositions"
   },
   {
    "pat": "pc.duration",

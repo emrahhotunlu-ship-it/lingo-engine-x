@@ -1,0 +1,371 @@
+{
+"What was the main reason ___ the delay?": {
+"pat": "pn.for",
+"why": {
+"ok": {
+"de": "Richtig: reason for + Anlass. Der Grund der Verspätung wird mit for angeschlossen.",
+"en": "Right: reason for + event. The cause of the delay is linked with for."
+},
+"wrong": [
+{
+"opt": "of",
+"pat": "pn.of",
+"de": "„Reason of“ kopiert den Genitiv („Grund der Verspätung“). Englisch sagt reason for.",
+"en": "“Reason of” copies the German genitive. English says reason for."
+},
+{
+"opt": "to",
+"pat": "pn.to",
+"de": "„Reason to“ steht vor einem Verb (a reason to wait), nicht vor einem Nomen.",
+"en": "“Reason to” goes before a verb (a reason to wait), not before a noun."
+},
+{
+"opt": "with",
+"de": "„With“ heißt „mit“. Ein Grund hat keinen Partner. Gesucht ist for.",
+"en": "“With” means together with. A reason has no partner. Use for."
+}
+]
+}
+},
+"We expect a significant increase ___ sales this quarter.": {
+"pat": "pn.in",
+"why": {
+"ok": {
+"de": "Richtig: increase in sales. In nennt den Bereich, der sich verändert.",
+"en": "Right: increase in sales. In names the area that changes."
+},
+"wrong": [
+{
+"opt": "to",
+"pat": "pn.to",
+"de": "„Increase to“ nennt den Zielwert (to 10%), nicht den Bereich.",
+"en": "“Increase to” names the end value (to 10%), not the area."
+},
+{
+"opt": "of",
+"pat": "pn.of",
+"de": "„Increase of“ nennt den Betrag (of 5%). Der Bereich braucht in.",
+"en": "“Increase of” names the amount (of 5%). The area needs in."
+},
+{
+"opt": "at",
+"de": "„At“ passt zu einem Punkt oder Preis (at 5%), nicht zu einer Veränderung.",
+"en": "“At” fits a point or price (at 5%), not a change."
+}
+]
+}
+},
+"Anna is responsible ___ the budget.": {
+"pat": "pn.for",
+"why": {
+"ok": {
+"de": "Richtig: responsible for. Eine Zuständigkeit wird mit for angeschlossen.",
+"en": "Right: responsible for. A duty is linked with for."
+},
+"wrong": [
+{
+"opt": "of",
+"pat": "pn.of",
+"de": "„Responsible of“ gibt es nicht. Nur in charge of nimmt of.",
+"en": "“Responsible of” does not exist. Only in charge of takes of."
+},
+{
+"opt": "about",
+"pat": "pn.about",
+"de": "„About“ nennt ein Thema (worried about). Eine Pflicht braucht for.",
+"en": "“About” names a topic (worried about). A duty needs for."
+},
+{
+"opt": "on",
+"de": "„On“ passt zu depend on oder focus on, nicht zu responsible.",
+"en": "“On” fits depend on or focus on, not responsible."
+}
+]
+}
+},
+"Our customers are very interested ___ the new product line.": {
+"pat": "pn.in",
+"why": {
+"ok": {
+"de": "Richtig: interested in. Das Interesse richtet sich auf ein Gebiet oder eine Sache: in.",
+"en": "Right: interested in. Interest in a field or thing takes in."
+},
+"wrong": [
+{
+"if": [
+"at"
+],
+"de": "„Interessiert an“ wird oft zu at. Englisch sagt interested in.",
+"en": "German “interessiert an” often becomes at. English says interested in."
+},
+{
+"if": [
+"about"
+],
+"de": "„Interested about“ ist unüblich. Nach interested steht in.",
+"en": "“Interested about” is not idiomatic. After interested use in."
+},
+{
+"not": [
+"in"
+],
+"de": "Gesucht ist die Präposition, die fest zu interested gehört: in.",
+"en": "The preposition that belongs fixed to interested is needed: in."
+}
+]
+}
+},
+"There is a growing demand ___ sustainable packaging.": {
+"pat": "pn.for",
+"why": {
+"ok": {
+"de": "Richtig: demand for. Nachfrage nach etwas heißt im Englischen demand for.",
+"en": "Right: demand for. Demand for something takes for before the thing wanted."
+},
+"wrong": [
+{
+"if": [
+"after"
+],
+"de": "„Nachfrage nach“ Wort für Wort ergibt after. Englisch sagt demand for.",
+"en": "Word for word, “Nachfrage nach” gives after. English says demand for."
+},
+{
+"if": [
+"of"
+],
+"de": "„Demand of“ meint, was etwas verlangt (the demands of the job), nicht die Nachfrage.",
+"en": "“Demand of” means what something requires (the demands of the job), not market demand."
+},
+{
+"if": [
+"on"
+],
+"de": "„Demand on“ heißt Belastung (demands on staff), nicht Nachfrage.",
+"en": "“Demand on” means a burden (demands on staff), not market demand."
+},
+{
+"not": [
+"for"
+],
+"de": "Gesucht ist for: Die Nachfrage nach einem Produkt heißt demand for.",
+"en": "The answer is for: demand for a product."
+}
+]
+}
+},
+"She's very proud ___ her team's results.": {
+"pat": "pn.of",
+"why": {
+"ok": {
+"de": "Richtig: proud of. Hinter proud steht of vor dem, worauf man stolz ist.",
+"en": "Right: proud of. After proud comes of before what you are proud of."
+},
+"wrong": [
+{
+"if": [
+"on"
+],
+"de": "„Stolz auf“ wird oft zu on. Englisch sagt proud of.",
+"en": "German “stolz auf” often becomes on. English says proud of."
+},
+{
+"if": [
+"for"
+],
+"de": "„For“ nennt Grund oder Zweck. Nach proud steht of.",
+"en": "“For” names a reason or purpose. After proud use of."
+},
+{
+"if": [
+"about"
+],
+"de": "„Proud about“ ist unüblich. Es heißt proud of.",
+"en": "“Proud about” is not idiomatic. It is proud of."
+},
+{
+"not": [
+"of"
+],
+"de": "Gesucht ist of: Stolz auf etwas heißt proud of.",
+"en": "The answer is of: proud of something."
+}
+]
+}
+},
+"The prices rose by 5%. → There was a 5% ___ in prices.": {
+"pat": "pn.in",
+"why": {
+"ok": {
+"de": "Richtig: increase (oder rise) in prices. Das Nomen steht vor in.",
+"en": "Right: increase (or rise) in prices. The noun comes before in."
+},
+"wrong": [
+{
+"if": [
+"rose"
+],
+"de": "„Rose“ ist das Verb. Nach a 5% braucht der Satz ein Nomen: increase oder rise.",
+"en": "“Rose” is the verb. After a 5% the sentence needs a noun: increase or rise."
+},
+{
+"if": [
+"raise"
+],
+"de": "„Raise“ heißt meist anheben (Verb). Das Nomen für Preise ist increase oder rise.",
+"en": "“Raise” mostly means to lift (verb). The noun for prices is increase or rise."
+},
+{
+"not": [
+"increase",
+"rise",
+"jump",
+"hike"
+],
+"de": "Gesucht ist ein Nomen für den Anstieg: increase, rise, jump oder hike.",
+"en": "A noun for the upward move is needed: increase, rise, jump or hike."
+}
+]
+}
+},
+"We discussed the problem with the supplier. → We had a discussion ___ the problem with the supplier.": {
+"pat": "pn.about",
+"why": {
+"ok": {
+"de": "Richtig: discussion about (oder on). Das Thema des Gesprächs folgt nach about.",
+"en": "Right: discussion about (or on). The topic of the talk follows about."
+},
+"wrong": [
+{
+"if": [
+"for"
+],
+"de": "„For“ nennt Grund oder Zweck, nicht das Thema einer Diskussion.",
+"en": "“For” names a reason or purpose, not the topic of a discussion."
+},
+{
+"if": [
+"with"
+],
+"de": "„With“ nennt den Partner (a discussion with the supplier), nicht das Thema.",
+"en": "“With” names the partner (a discussion with the supplier), not the topic."
+},
+{
+"if": [
+"to"
+],
+"de": "„To“ passt zu answer to, nicht zu discussion. Hier folgt about oder on.",
+"en": "“To” fits answer to, not discussion. Here about or on follows."
+}
+]
+}
+},
+"She has a lot of experience on project management.": {
+"pat": "pn.in",
+"why": {
+"ok": {
+"de": "Richtig: experience in project management. Ein Fachgebiet wird mit in angeschlossen.",
+"en": "Right: experience in project management. A field is linked with in."
+},
+"wrong": [
+{
+"if": [
+"experience",
+"on"
+],
+"de": "„Auf“ wird oft zu on. Englisch nennt das Fachgebiet mit in (oder with).",
+"en": "German “auf” often becomes on. English links the field with in (or with)."
+},
+{
+"not": [
+"in",
+"with"
+],
+"de": "Fachgebiet: experience in oder experience with, nicht on.",
+"en": "For a field use experience in or experience with, not on."
+}
+]
+}
+},
+"We need to find a solution of this problem as soon as possible.": {
+"pat": "pn.to",
+"why": {
+"ok": {
+"de": "Richtig: solution to + Problem. Die Lösung gehört mit to zu ihrem Problem.",
+"en": "Right: solution to + problem. The solution is tied to its problem with to."
+},
+"wrong": [
+{
+"if": [
+"solution",
+"of"
+],
+"de": "„Solution of“ kopiert den Genitiv („Lösung des Problems“). Englisch sagt solution to.",
+"en": "“Solution of” copies the German genitive. English says solution to."
+},
+{
+"not": [
+"to",
+"for"
+],
+"de": "Gesucht ist to (oder for): solution to this problem.",
+"en": "To (or for) is needed: solution to this problem."
+}
+]
+}
+},
+"He is very good in negotiating with clients.": {
+"pat": "pn.at",
+"why": {
+"ok": {
+"de": "Richtig: good at + -ing. Das Können bei einer Tätigkeit wird mit at angeschlossen.",
+"en": "Right: good at + -ing. Skill at an activity is linked with at."
+},
+"wrong": [
+{
+"if": [
+"good",
+"in"
+],
+"de": "„Gut in“ wird Wort für Wort übersetzt. Englisch sagt good at.",
+"en": "“Gut in” is translated word for word. English says good at."
+},
+{
+"not": [
+"at"
+],
+"de": "Gesucht ist at: Können bei einer Tätigkeit heißt good at + -ing.",
+"en": "The answer is at: skill at an activity is good at + -ing."
+}
+]
+}
+},
+"We need a solution of this problem.": {
+"pat": "pn.to",
+"dup": "We need to find a solution of this problem as soon as possible.",
+"why": {
+"ok": {
+"de": "Richtig: solution to + Problem. Die Lösung gehört mit to zu ihrem Problem.",
+"en": "Right: solution to + problem. The solution is tied to its problem with to."
+},
+"wrong": [
+{
+"if": [
+"solution",
+"of"
+],
+"de": "„Solution of“ kopiert den Genitiv („Lösung des Problems“). Englisch sagt solution to.",
+"en": "“Solution of” copies the German genitive. English says solution to."
+},
+{
+"not": [
+"to",
+"for"
+],
+"de": "Gesucht ist to (oder for): solution to this problem.",
+"en": "To (or for) is needed: solution to this problem."
+}
+]
+}
+}
+}

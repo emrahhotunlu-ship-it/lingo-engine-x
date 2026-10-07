@@ -1,0 +1,186 @@
+[
+ {
+  "pat": "prp.verb-prep",
+  "en": "We usually rely on our regional partners for fast delivery.",
+  "de": "Für schnelle Lieferungen verlassen wir uns meist auf unsere regionalen Partner.",
+  "chunks": [
+   "we",
+   "usually",
+   "rely",
+   "on our regional partners",
+   "for fast delivery"
+  ],
+  "alt": [
+   "Usually we rely on our regional partners for fast delivery.",
+   "For fast delivery, we usually rely on our regional partners."
+  ],
+  "why": [
+   "Zu rely gehört on, und danach folgt direkt das, worauf man sich verlässt: rely on our regional partners.",
+   "Rely takes on, and what you depend on follows directly: rely on our regional partners."
+  ],
+  "bad": "We usually rely of our regional partners for fast delivery.",
+  "trap": {
+   "tile": "on our regional partners",
+   "instead": "of our regional partners",
+   "why": {
+    "de": "Of wirkt vertraut (proud of, because of) und drängt sich auf. Das ist ein Reflex, kein Übersetzungsfehler. Zu rely gehört on.",
+    "en": "Of feels familiar (proud of, because of) and pushes in. It is a reflex, not a translation error. Rely takes on."
+   }
+  }
+ },
+ {
+  "pat": "prp.adj-prep",
+  "en": "Our new analyst is already familiar with the reporting tool.",
+  "de": "Unser neuer Analyst ist mit dem Reporting-Tool schon vertraut.",
+  "chunks": [
+   "our new analyst",
+   "is",
+   "already",
+   "familiar",
+   "with the reporting tool"
+  ],
+  "alt": [
+   "Our new analyst is familiar with the reporting tool already."
+  ],
+  "why": [
+   "Familiar bleibt mit with zusammen: with the reporting tool nennt die Sache, mit der man vertraut ist.",
+   "Familiar stays with with: with the reporting tool names the thing you are familiar with."
+  ],
+  "bad": "Our new analyst is already familiar of the reporting tool.",
+  "trap": {
+   "tile": "with the reporting tool",
+   "instead": "of the reporting tool",
+   "why": {
+    "de": "Of drängt sich nach Adjektiven auf (proud of, afraid of). Zu familiar gehört aber with, wie im deutschen „vertraut mit“.",
+    "en": "Of pushes in after adjectives (proud of, afraid of). But familiar takes with, as in German “vertraut mit”."
+   }
+  }
+ },
+ {
+  "pat": "prp.adj-prep",
+  "en": "We were all proud of the team's results last quarter.",
+  "de": "Letztes Quartal waren wir alle stolz auf die Ergebnisse des Teams.",
+  "chunks": [
+   "we",
+   "were",
+   "all",
+   "proud",
+   "of the team's results",
+   "last quarter"
+  ],
+  "alt": [
+   "Last quarter, we were all proud of the team's results."
+  ],
+  "why": [
+   "Proud verlangt of: of the team’s results nennt, worauf man stolz ist, und bleibt als Block zusammen.",
+   "Proud takes of: of the team’s results names what you are proud of and stays together as a block."
+  ],
+  "bad": "We were all proud on the team's results last quarter.",
+  "trap": {
+   "tile": "of the team's results",
+   "instead": "on the team's results",
+   "why": {
+    "de": "„Stolz auf“ lockt zu on. Im Englischen gehört of zu proud.",
+    "en": "German “stolz auf” lures you into on. In English, of belongs to proud."
+   }
+  }
+ },
+ {
+  "pat": "prp.no-prep",
+  "en": "Let's quickly discuss the new pricing model before Friday.",
+  "de": "Lass uns das neue Preismodell vor Freitag kurz besprechen.",
+  "chunks": [
+   "let's",
+   "quickly",
+   "discuss",
+   "the new pricing model",
+   "before Friday"
+  ],
+  "alt": [
+   "Let's discuss the new pricing model quickly before Friday.",
+   "Before Friday, let's quickly discuss the new pricing model.",
+   "Before Friday, let's discuss the new pricing model quickly."
+  ],
+  "why": [
+   "Discuss nimmt sein Objekt direkt und braucht kein about: discuss the new pricing model.",
+   "Discuss takes its object directly: discuss the new pricing model, with no about before it."
+  ],
+  "bad": "Let's quickly discuss about the new pricing model before Friday.",
+  "trap": {
+   "tile": "discuss",
+   "instead": "discuss about",
+   "why": {
+    "de": "„Diskutieren über“ lockt zu about. Im Englischen enthält discuss das „über“ schon.",
+    "en": "German “diskutieren über” lures you into about. In English, discuss already contains it."
+   }
+  }
+ },
+ {
+  "pat": "prp.person-to",
+  "en": "Could you briefly explain the new process to the interns on Monday?",
+  "de": "Könntest du den Praktikanten am Montag kurz den neuen Ablauf erklären?",
+  "chunks": [
+   "could you",
+   "briefly",
+   "explain",
+   "the new process",
+   "to the interns",
+   "on Monday"
+  ],
+  "alt": [
+   "On Monday, could you briefly explain the new process to the interns?",
+   "Could you explain the new process briefly to the interns on Monday?"
+  ],
+  "why": [
+   "Erst kommt die Sache (the new process), dann to + Person (to the interns). Die Person braucht bei explain ein to.",
+   "First comes the thing (the new process), then to + person (to the interns). With explain the person needs to."
+  ]
+ },
+ {
+  "pat": "prp.prep-ing",
+  "en": "We easily saved a week by skipping the second review round.",
+  "de": "Indem wir die zweite Prüfrunde übersprangen, sparten wir mühelos eine Woche.",
+  "chunks": [
+   "we",
+   "easily",
+   "saved a week",
+   "by skipping",
+   "the second review round"
+  ],
+  "alt": [
+   "By skipping the second review round, we easily saved a week."
+  ],
+  "why": [
+   "Nach der Präposition by steht die -ing-Form: by skipping nennt, wie man die Woche gespart hat.",
+   "After the preposition by comes the -ing form: by skipping says how the week was saved."
+  ],
+  "bad": "We easily saved a week by skip the second review round.",
+  "trap": {
+   "tile": "by skipping",
+   "instead": "by skip",
+   "why": {
+    "de": "Nach der Präposition fehlt hier das -ing. Das ist kein Übersetzungsfehler, sondern ein Formfehler.",
+    "en": "The -ing is missing after the preposition. This is not a translation error, just a form error."
+   }
+  }
+ },
+ {
+  "pat": "prp.verb-prep",
+  "en": "The vendor firmly insisted on a signed contract before the kickoff.",
+  "de": "Der Anbieter bestand vor dem Start fest auf einem unterschriebenen Vertrag.",
+  "chunks": [
+   "the vendor",
+   "firmly",
+   "insisted",
+   "on a signed contract",
+   "before the kickoff"
+  ],
+  "alt": [
+   "The vendor insisted firmly on a signed contract before the kickoff."
+  ],
+  "why": [
+   "Insist braucht on: on a signed contract nennt, worauf der Anbieter besteht, und bleibt als Block zusammen.",
+   "Insist needs on: on a signed contract names what the vendor insists on and stays together as a block."
+  ]
+ }
+]

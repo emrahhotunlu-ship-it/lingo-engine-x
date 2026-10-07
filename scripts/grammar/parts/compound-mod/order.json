@@ -1,0 +1,202 @@
+[
+ {
+  "pat": "cm.measure",
+  "en": "We booked a two-day workshop for the sales team.",
+  "de": "Wir haben einen zweitägigen Workshop für das Vertriebsteam gebucht.",
+  "chunks": [
+   "we",
+   "booked",
+   "a two-day",
+   "workshop",
+   "for the sales team"
+  ],
+  "alt": [
+   "For the sales team, we booked a two-day workshop."
+  ],
+  "why": [
+   "Zahl und Maßnomen werden zu einem Adjektiv: a two-day workshop. Das Maßnomen bleibt im Singular, auch nach two.",
+   "Number and measure noun become one adjective: a two-day workshop. The measure noun stays singular, even after two."
+  ],
+  "bad": "We booked a two-days workshop for the sales team.",
+  "trap": {
+   "tile": "a two-day",
+   "instead": "a two-days",
+   "why": {
+    "de": "Aus „zwei Tage“ wird gern ein Plural-s mitgenommen. Vor dem Nomen steht aber der Singular.",
+    "en": "The plural -s of “zwei Tage” is easily carried over. Before the noun the singular is used."
+   }
+  }
+ },
+ {
+  "pat": "cm.measure",
+  "en": "Please send a one-page summary before Friday.",
+  "de": "Bitte schicken Sie vor Freitag eine einseitige Zusammenfassung.",
+  "chunks": [
+   "please",
+   "send",
+   "a one-page",
+   "summary",
+   "before Friday"
+  ],
+  "alt": [
+   "Before Friday, please send a one-page summary."
+  ],
+  "why": [
+   "Vor dem Nomen steht one-page mit Bindestrich und im Singular. Die Zeitangabe before Friday kann vorne oder hinten stehen.",
+   "Before the noun use one-page with a hyphen and the singular. The time phrase before Friday can come first or last."
+  ],
+  "bad": "Please send a one-pages summary before Friday."
+ },
+ {
+  "pat": "cm.after-verb",
+  "en": "Unfortunately, the session was three hours long.",
+  "de": "Leider war die Sitzung drei Stunden lang.",
+  "chunks": [
+   "unfortunately",
+   "the session",
+   "was",
+   "three hours",
+   "long"
+  ],
+  "alt": [
+   "The session was three hours long, unfortunately."
+  ],
+  "why": [
+   "Hinter dem Verb steht die Maßangabe als normaler Plural ohne Bindestrich: three hours long. Nur unfortunately kann wandern.",
+   "After the verb the measure is an ordinary plural with no hyphen: three hours long. Only unfortunately can move."
+  ],
+  "bad": "Unfortunately, the session was three-hour long.",
+  "trap": {
+   "tile": "three hours",
+   "instead": "three-hour",
+   "why": {
+    "de": "Die Bindestrich-Regel für „a three-hour session“ wird oft auf jede Maßangabe ausgedehnt. Nach dem Verb gilt aber der Plural.",
+    "en": "The hyphen rule for “a three-hour session” is often stretched to every measure. After the verb the plural applies."
+   }
+  }
+ },
+ {
+  "pat": "cm.order",
+  "en": "Last month, we moved into a small modern office.",
+  "de": "Letzten Monat sind wir in ein kleines modernes Büro gezogen.",
+  "chunks": [
+   "last month",
+   "we",
+   "moved into",
+   "a small modern",
+   "office"
+  ],
+  "alt": [
+   "We moved into a small modern office last month."
+  ],
+  "why": [
+   "Die Größe steht vor dem Stil: small modern. Die Zeitangabe last month kann vorne oder hinten stehen.",
+   "Size comes before style: small modern. The time phrase last month can come first or last."
+  ],
+  "bad": "Last month, we moved into a modern small office.",
+  "trap": {
+   "tile": "a small modern",
+   "instead": "a modern small",
+   "why": {
+    "de": "Im Deutschen ist die Reihenfolge freier. Im Englischen steht die Größe vor Alter und Stil.",
+    "en": "German is freer with the order. In English size comes before age and style."
+   }
+  }
+ },
+ {
+  "pat": "cm.order",
+  "en": "She bought a lovely old wooden desk at the market.",
+  "de": "Sie hat auf dem Markt einen schönen alten Holzschreibtisch gekauft.",
+  "chunks": [
+   "she",
+   "bought",
+   "a lovely old wooden",
+   "desk",
+   "at the market"
+  ],
+  "alt": [
+   "At the market, she bought a lovely old wooden desk."
+  ],
+  "why": [
+   "Die Reihenfolge ist Meinung, Alter, Material: lovely old wooden. Der Ort at the market kann vorne oder hinten stehen.",
+   "The order is opinion, age, material: lovely old wooden. The place at the market can come first or last."
+  ],
+  "bad": "She bought a wooden old lovely desk at the market."
+ },
+ {
+  "pat": "cm.fixed",
+  "en": "Unfortunately, we made a last-minute change to the agenda.",
+  "de": "Leider haben wir kurzfristig eine Änderung an der Tagesordnung vorgenommen.",
+  "chunks": [
+   "unfortunately",
+   "we made",
+   "a last-minute",
+   "change",
+   "to the agenda"
+  ],
+  "alt": [
+   "We made a last-minute change to the agenda, unfortunately."
+  ],
+  "why": [
+   "Last-minute ist ein fester Baustein mit Bindestrich und ohne -s. Das Plural-s trüge nur das Nomen change.",
+   "Last-minute is a fixed block with a hyphen and no -s. Only the noun change would take a plural -s."
+  ],
+  "bad": "Unfortunately, we made a last-minutes change to the agenda.",
+  "trap": {
+   "tile": "a last-minute",
+   "instead": "a last-minutes",
+   "why": {
+    "de": "Das Plural-s rutscht leicht an den Baustein. Der bleibt unverändert.",
+    "en": "The plural -s easily slips onto the block. It stays unchanged."
+   }
+  }
+ },
+ {
+  "pat": "cm.participle",
+  "en": "We hired a highly qualified analyst last year.",
+  "de": "Wir haben letztes Jahr einen hochqualifizierten Analysten eingestellt.",
+  "chunks": [
+   "we hired",
+   "a highly",
+   "qualified",
+   "analyst",
+   "last year"
+  ],
+  "alt": [
+   "Last year, we hired a highly qualified analyst."
+  ],
+  "why": [
+   "Nach highly steht ein Partizip: highly qualified, ohne Bindestrich. Die Zeitangabe last year kann vorne oder hinten stehen.",
+   "After highly comes a participle: highly qualified, with no hyphen. The time phrase last year can come first or last."
+  ],
+  "bad": "We hired a highly qualify analyst last year.",
+  "trap": {
+   "tile": "qualified",
+   "instead": "qualify",
+   "why": {
+    "de": "Beim Bauen des Modifikators fällt die Endung leicht weg. Nach highly braucht es das Partizip.",
+    "en": "The ending easily drops out when the modifier is built. After highly the participle is needed."
+   }
+  }
+ },
+ {
+  "pat": "cm.participle",
+  "en": "Manual reporting is a time-consuming task for our team.",
+  "de": "Manuelle Berichte sind eine zeitaufwendige Aufgabe für unser Team.",
+  "chunks": [
+   "manual reporting",
+   "is",
+   "a time-consuming",
+   "task",
+   "for our team"
+  ],
+  "alt": [
+   "For our team, manual reporting is a time-consuming task."
+  ],
+  "why": [
+   "Time-consuming besteht aus Nomen und Partizip auf -ing. Die Wortgruppe for our team kann vorne oder hinten stehen.",
+   "Time-consuming is a noun plus an -ing participle. The phrase for our team can come first or last."
+  ],
+  "bad": "Manual reporting is a time-consume task for our team."
+ }
+]

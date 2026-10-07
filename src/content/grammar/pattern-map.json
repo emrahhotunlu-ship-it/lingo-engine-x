@@ -2242,6 +2242,382 @@
    ]
   }
  },
+ "c1-nominal|theofthenewarchivewillstartinmay": {
+  "pat": "nm.noun-form",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „The“ und vor „of“ steht das Nomen implementation, nicht implement.",
+    "en": "Right: after “The” and before “of” you need the noun implementation, not implement."
+   },
+   "wrong": [
+    {
+     "if": [
+      "implement"
+     ],
+     "de": "„implement“ ist das Verb. Nach „The“ braucht es das Nomen mit der Endung -ation.",
+     "en": "“implement” is the verb. After “The” you need the noun, which ends in -ation."
+    },
+    {
+     "not": [
+      "implementation"
+     ],
+     "de": "Gefragt ist das Nomen implementation, nicht eine andere Verbform.",
+     "en": "The noun implementation is needed, not another verb form."
+    }
+   ]
+  }
+ },
+ "c1-nominal|aftertheofthebudgetwewillorderthelicenses": {
+  "pat": "nm.noun-form",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „the“ braucht es das Nomen approval (Endung -al), nicht approve.",
+    "en": "Right: after “the” you need the noun approval (ending -al), not approve."
+   },
+   "wrong": [
+    {
+     "if": [
+      "approve"
+     ],
+     "de": "„approve“ ist das Verb. Das passende Nomen heißt approval.",
+     "en": "“approve” is the verb. The matching noun is approval."
+    },
+    {
+     "if": [
+      "approved"
+     ],
+     "de": "Mit -d bleibt es eine Verbform. Nach „the“ steht das Nomen approval.",
+     "en": "With -d it is still a verb form. After “the” use the noun approval."
+    },
+    {
+     "not": [
+      "approval"
+     ],
+     "de": "Gefragt ist das Nomen approval, nicht eine Verbform.",
+     "en": "The noun approval is needed, not a verb form."
+    }
+   ]
+  }
+ },
+ "c1-nominal|weexpectasignificantinstoragecosts": {
+  "pat": "nm.noun-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: a reduction in costs. Nach „significant“ folgt ein Nomen, und in nennt den Bereich.",
+    "en": "Right: a reduction in costs. After “significant” a noun follows, and in names the area."
+   },
+   "wrong": [
+    {
+     "if": [
+      "reduce"
+     ],
+     "de": "„reduce“ ist das Verb. Nach „a significant“ braucht es das Nomen reduction.",
+     "en": "“reduce” is the verb. After “a significant” you need the noun reduction."
+    },
+    {
+     "if": [
+      "reduced"
+     ],
+     "de": "„reduced“ ist eine Verbform und kein Nomen. Nach „a significant“ passt reduction.",
+     "en": "“reduced” is a verb form, not a noun. After “a significant” reduction fits."
+    },
+    {
+     "not": [
+      "reduction"
+     ],
+     "de": "Gefragt ist das Nomen reduction, nicht eine Verbform.",
+     "en": "The noun reduction is needed, not a verb form."
+    }
+   ]
+  }
+ },
+ "c1-nominal|pleaseconfirmthedateforthescanners": {
+  "pat": "nm.noun-form",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor date steht das Nomen delivery. Das Verb deliver passt hier nicht.",
+    "en": "Right: before date the noun delivery is needed. The verb deliver does not fit here."
+   },
+   "wrong": [
+    {
+     "if": [
+      "deliver"
+     ],
+     "de": "„deliver“ ist das Verb. Vor date steht das Nomen delivery.",
+     "en": "“deliver” is the verb. Before date use the noun delivery."
+    },
+    {
+     "if": [
+      "delivered"
+     ],
+     "de": "Mit -ed ist es eine Verbform. Vor date steht das Nomen delivery.",
+     "en": "With -ed it is a verb form. Before date use the noun delivery."
+    },
+    {
+     "not": [
+      "delivery"
+     ],
+     "de": "Gefragt ist das Nomen delivery, nicht eine Verbform.",
+     "en": "The noun delivery is needed, not a verb form."
+    }
+   ]
+  }
+ },
+ "c1-nominal|thetomovetothecloudwasmadeinmarch": {
+  "pat": "nm.noun-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: the decision to move. Nach decision folgt to + Grundform. decide passt nicht.",
+    "en": "Right: the decision to move. After decision comes to + base form. decide does not fit."
+   },
+   "wrong": [
+    {
+     "if": [
+      "decide"
+     ],
+     "de": "„decide“ ist das Verb. Nach „The“ braucht es das Nomen decision.",
+     "en": "“decide” is the verb. After “The” you need the noun decision."
+    },
+    {
+     "if": [
+      "decided"
+     ],
+     "de": "„decided“ ist eine Verbform. Nach „The“ steht das Nomen decision.",
+     "en": "“decided” is a verb form. After “The” use the noun decision."
+    },
+    {
+     "not": [
+      "decision"
+     ],
+     "de": "Gefragt ist das Nomen decision, nicht eine Verbform.",
+     "en": "The noun decision is needed, not a verb form."
+    }
+   ]
+  }
+ },
+ "c1-nominal|uponofthecontractwewillsendyoutheaccessdata": {
+  "pat": "nm.following",
+  "why": {
+   "ok": {
+    "de": "Richtig: Upon receipt of … ist die feste Wendung für „nach Erhalt von“.",
+    "en": "Right: Upon receipt of … is the fixed phrase for “after receiving”."
+   },
+   "wrong": [
+    {
+     "opt": "receive",
+     "de": "„receive“ ist das Verb. Nach „Upon“ steht ein Nomen: receipt.",
+     "en": "“receive” is the verb. After “Upon” a noun follows: receipt."
+    },
+    {
+     "opt": "receiving of",
+     "de": "„of“ steht schon nach der Lücke: „receiving of of“ wäre doppelt. Passend ist receipt.",
+     "en": "“of” already follows the gap, so “receiving of” would double it. Receipt fits."
+    },
+    {
+     "opt": "received",
+     "de": "„received“ ist eine Verbform und kein Nomen. Nach „Upon“ braucht es receipt.",
+     "en": "“received” is a verb form, not a noun. After “Upon” you need receipt."
+    }
+   ]
+  }
+ },
+ "c1-nominal|theofthelegacydatatooktwoweeks": {
+  "pat": "nm.of-object",
+  "why": {
+   "ok": {
+    "de": "Richtig: the migration of the data. Das Nomen nimmt sein Objekt mit of mit.",
+    "en": "Right: the migration of the data. The noun takes its object with of."
+   },
+   "wrong": [
+    {
+     "opt": "migrate",
+     "de": "„migrate“ ist das Verb. Nach „The“ steht das Nomen migration.",
+     "en": "“migrate” is the verb. After “The” use the noun migration."
+    },
+    {
+     "opt": "migrating of",
+     "de": "„of“ steht schon nach der Lücke: „migrating of of“ wäre doppelt. Passend ist migration.",
+     "en": "“of” already follows the gap, so “migrating of” would double it. Migration fits."
+    },
+    {
+     "opt": "migrated",
+     "de": "„migrated“ ist eine Verbform. Nach „The“ braucht es das Nomen migration.",
+     "en": "“migrated” is a verb form. After “The” you need the noun migration."
+    }
+   ]
+  }
+ },
+ "c1-nominal|wewillmigratethedatainjunetheofthedataisplannedforjune": {
+  "pat": "nm.of-object",
+  "why": {
+   "ok": {
+    "de": "Richtig: Aus migrate the data wird the migration of the data, mit of vor dem Objekt.",
+    "en": "Right: migrate the data becomes the migration of the data, with of before the object."
+   },
+   "wrong": [
+    {
+     "if": [
+      "migrate"
+     ],
+     "de": "„migrate“ ist noch das Verb. Nach „The“ braucht es das Nomen migration.",
+     "en": "“migrate” is still the verb. After “The” you need the noun migration."
+    },
+    {
+     "if": [
+      "migrated"
+     ],
+     "de": "„migrated“ ist eine Verbform. Nach „The“ steht das Nomen migration.",
+     "en": "“migrated” is a verb form. After “The” use the noun migration."
+    },
+    {
+     "not": [
+      "migration"
+     ],
+     "de": "Gefragt ist das Nomen migration, nicht eine Verbform.",
+     "en": "The noun migration is needed, not a verb form."
+    }
+   ]
+  }
+ },
+ "c1-nominal|aftertheboardapprovesitwecanstartaftertheboardswecanstart": {
+  "pat": "nm.of-object",
+  "why": {
+   "ok": {
+    "de": "Richtig: the board's approval. Bei Gremien steht der Besitzer mit 's vor dem Nomen.",
+    "en": "Right: the board's approval. For a body the owner comes first, with 's."
+   },
+   "wrong": [
+    {
+     "if": [
+      "approve"
+     ],
+     "de": "„approve“ ist das Verb. Nach „board's“ steht das Nomen approval.",
+     "en": "“approve” is the verb. After “board's” use the noun approval."
+    },
+    {
+     "if": [
+      "approves"
+     ],
+     "de": "„approves“ ist eine konjugierte Verbform. Nach „board's“ braucht es approval.",
+     "en": "“approves” is a conjugated verb. After “board's” you need approval."
+    },
+    {
+     "not": [
+      "approval"
+     ],
+     "de": "Gefragt ist das Nomen approval, nicht eine Verbform.",
+     "en": "The noun approval is needed, not a verb form."
+    }
+   ]
+  }
+ },
+ "c1-nominal|weneedtodecidebyfridayweneedabyfriday": {
+  "pat": "nm.noun-form",
+  "why": {
+   "ok": {
+    "de": "Richtig: Nach „a“ steht das Nomen decision. Aus decide wird decision.",
+    "en": "Right: after “a” comes the noun decision. decide becomes decision."
+   },
+   "wrong": [
+    {
+     "if": [
+      "decide"
+     ],
+     "de": "„decide“ ist das Verb. Nach „a“ braucht es das Nomen decision.",
+     "en": "“decide” is the verb. After “a” you need the noun decision."
+    },
+    {
+     "if": [
+      "decided"
+     ],
+     "de": "„decided“ ist eine Verbform. Nach „a“ steht das Nomen decision.",
+     "en": "“decided” is a verb form. After “a” use the noun decision."
+    },
+    {
+     "not": [
+      "decision"
+     ],
+     "de": "Gefragt ist das Nomen decision, nicht eine Verbform.",
+     "en": "The noun decision is needed, not a verb form."
+    }
+   ]
+  }
+ },
+ "c1-nominal|theimplementofthenewworkflowstartsnextweek": {
+  "pat": "nm.noun-form",
+  "why": {
+   "ok": {
+    "de": "Richtig: The implementation of … Nach „The“ steht das Nomen, nicht das Verb implement.",
+    "en": "Right: The implementation of … After “The” use the noun, not the verb implement."
+   },
+   "wrong": [
+    {
+     "if": [
+      "implement"
+     ],
+     "de": "„implement“ ist noch das Verb. Nach „The“ steht das Nomen implementation.",
+     "en": "“implement” is still the verb. After “The” use the noun implementation."
+    },
+    {
+     "not": [
+      "implementation"
+     ],
+     "de": "Gefragt ist das Nomen implementation (Endung -ation).",
+     "en": "The noun implementation is needed (ending -ation)."
+    }
+   ]
+  }
+ },
+ "c1-nominal|welookforwardtotheapproveofthepilot": {
+  "pat": "nm.noun-form",
+  "why": {
+   "ok": {
+    "de": "Richtig: the approval of the pilot. Nach „the“ steht das Nomen, nicht das Verb approve.",
+    "en": "Right: the approval of the pilot. After “the” use the noun, not the verb approve."
+   },
+   "wrong": [
+    {
+     "if": [
+      "approve"
+     ],
+     "de": "„approve“ ist noch das Verb. Nach „the“ steht das Nomen approval.",
+     "en": "“approve” is still the verb. After “the” use the noun approval."
+    },
+    {
+     "not": [
+      "approval"
+     ],
+     "de": "Gefragt ist das Nomen approval (Endung -al).",
+     "en": "The noun approval is needed (ending -al)."
+    }
+   ]
+  }
+ },
+ "c1-nominal|followingtheapproveofthebudgetwewillorderthelicenses": {
+  "pat": "nm.following",
+  "why": {
+   "ok": {
+    "de": "Richtig: Following the approval of … Nach „the“ steht ein Nomen, kein Verb.",
+    "en": "Right: Following the approval of … After “the” a noun follows, not a verb."
+   },
+   "wrong": [
+    {
+     "if": [
+      "approve"
+     ],
+     "de": "„approve“ ist noch das Verb. Nach „the“ steht das Nomen approval.",
+     "en": "“approve” is still the verb. After “the” use the noun approval."
+    },
+    {
+     "not": [
+      "approval"
+     ],
+     "de": "Gefragt ist das Nomen approval (Endung -al).",
+     "en": "The noun approval is needed (ending -al)."
+    }
+   ]
+  }
+ },
  "c1-participle|thecontractourlegalteamapprovedit": {
   "pat": "cp.having",
   "why": {
@@ -2758,6 +3134,329 @@
      ],
      "de": "Ändere die Form nach Having zur 3. Form: reviewed.",
      "en": "Change the form after Having to the past participle: reviewed."
+    }
+   ]
+  }
+ },
+ "compound-mod|pleasereadthereportbeforetomorrowsmeeting": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: 10-page. Zahl plus Singular mit Bindestrich vor dem Nomen.",
+    "en": "Right: 10-page. Number plus singular with a hyphen before the noun."
+   },
+   "wrong": [
+    {
+     "opt": "10 pages",
+     "de": "„10 pages“ ist ein normaler Plural. Vor „report“ braucht es 10-page.",
+     "en": "“10 pages” is a plain plural. Before “report” you need 10-page."
+    },
+    {
+     "opt": "10-pages",
+     "de": "Mit Bindestrich bleibt das Nomen im Singular: nicht pages, sondern page.",
+     "en": "With a hyphen the noun stays singular: page, not pages."
+    },
+    {
+     "opt": "10-pages'",
+     "de": "Kein Apostroph: Der Modifikator ist kein Besitz, sondern Singular: 10-page.",
+     "en": "No apostrophe: the modifier is not possession, just singular: 10-page."
+    }
+   ]
+  }
+ },
+ "compound-mod|sheboughtacamerafortheoffice": {
+  "pat": "cm.order",
+  "why": {
+   "ok": {
+    "de": "Richtig: new (Alter), black (Farbe), Japanese (Herkunft). So lautet die Reihenfolge.",
+    "en": "Right: new (age), black (color), Japanese (origin). That is the usual order."
+   },
+   "wrong": [
+    {
+     "opt": "black Japanese new",
+     "de": "Alter kommt vor Farbe und Herkunft: new black Japanese. Hier steht new zuletzt.",
+     "en": "Age comes before color and origin: new black Japanese. Here new comes last."
+    },
+    {
+     "opt": "black new Japanese",
+     "de": "Alter steht vor der Farbe: new muss vor black stehen.",
+     "en": "Age comes before color: new must come before black."
+    },
+    {
+     "opt": "Japanese new black",
+     "de": "Die Herkunft steht direkt vor dem Nomen, nicht am Anfang: new black Japanese.",
+     "en": "Origin sits right before the noun, not first: new black Japanese."
+    }
+   ]
+  }
+ },
+ "compound-mod|thecompanysignedacontractwithitsmainsupplier": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: three-year. Das Maßnomen steht vor dem Nomen im Singular.",
+    "en": "Right: three-year. The measure noun is singular before the noun."
+   },
+   "wrong": [
+    {
+     "opt": "three-years",
+     "de": "Im Modifikator bleibt das Maßnomen im Singular: three-year, nicht three-years.",
+     "en": "In a modifier the measure noun stays singular: three-year, not three-years."
+    },
+    {
+     "opt": "three-yearly",
+     "de": "„Yearly“ heißt jährlich. Gemeint ist die Dauer: three-year.",
+     "en": "“Yearly” means once a year. The length is meant: three-year."
+    },
+    {
+     "opt": "three years",
+     "de": "„three years“ ist ein Plural. Vor „contract“ steht three-year mit Bindestrich.",
+     "en": "“three years” is a plural. Before “contract” use three-year with a hyphen."
+    }
+   ]
+  }
+ },
+ "compound-mod|itwasadecisionsowehadtoactquickly": {
+  "pat": "cm.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: last-minute ist ein fester Baustein mit Bindestrich und heißt kurzfristig.",
+    "en": "Right: last-minute is a fixed hyphenated block meaning at the very end."
+   },
+   "wrong": [
+    {
+     "opt": "last minutes",
+     "de": "Der feste Baustein hat kein -s und braucht einen Bindestrich: last-minute.",
+     "en": "The fixed block takes no -s and needs a hyphen: last-minute."
+    },
+    {
+     "opt": "last-minutes",
+     "de": "Der Baustein bleibt unverändert, nur das Nomen trägt ein -s: last-minute.",
+     "en": "The block stays unchanged; only the noun takes an -s: last-minute."
+    },
+    {
+     "opt": "lasting-minute",
+     "de": "„Lasting“ heißt dauerhaft. Der feste Ausdruck lautet last-minute.",
+     "en": "“Lasting” means long-lasting. The fixed phrase is last-minute."
+    }
+   ]
+  }
+ },
+ "compound-mod|weattendedatwoworkshopthatranfrommondaytotuesday": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: two-day. Vor dem Nomen steht das Maßnomen im Singular.",
+    "en": "Right: two-day. Before the noun the measure noun stays singular."
+   },
+   "wrong": [
+    {
+     "if": [
+      "days"
+     ],
+     "de": "Im Modifikator steht kein Plural: two-day, nicht two-days.",
+     "en": "No plural in a modifier: two-day, not two-days."
+    },
+    {
+     "not": [
+      "day"
+     ],
+     "de": "Gesucht ist das Maßnomen für die Dauer, im Singular: day.",
+     "en": "The measure noun for the length is needed, in the singular: day."
+    }
+   ]
+  }
+ },
+ "compound-mod|heisahighlyengineerwithyearsofexperience": {
+  "pat": "cm.participle",
+  "why": {
+   "ok": {
+    "de": "Richtig: highly + Partizip (skilled) bildet den Modifikator, ohne Bindestrich.",
+    "en": "Right: highly + participle (skilled) forms the modifier, with no hyphen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "skill"
+     ],
+     "de": "Hier braucht es das Partizip: skilled, nicht das Nomen skill.",
+     "en": "A participle is needed: skilled, not the noun skill."
+    },
+    {
+     "not": [
+      "skilled",
+      "experienced",
+      "qualified",
+      "respected",
+      "trained",
+      "regarded",
+      "paid",
+      "motivated",
+      "educated",
+      "accomplished",
+      "specialized"
+     ],
+     "de": "Nach highly steht ein Partizip wie skilled, experienced oder qualified.",
+     "en": "After highly comes a participle such as skilled, experienced, or qualified."
+    }
+   ]
+  }
+ },
+ "compound-mod|weneedatermplanthatcoversthenexttenyears": {
+  "pat": "cm.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: long-term = langfristig. Der Baustein bleibt unverändert, mit Bindestrich.",
+    "en": "Right: long-term = over a long period. The block stays unchanged, with a hyphen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "short"
+     ],
+     "de": "Der Plan deckt zehn Jahre ab. Das ist lang: long-term, nicht short-term.",
+     "en": "The plan covers ten years. That is long: long-term, not short-term."
+    },
+    {
+     "not": [
+      "long"
+     ],
+     "de": "Der Baustein für einen langen Zeitraum lautet long-term.",
+     "en": "The block for a long period is long-term."
+    }
+   ]
+  }
+ },
+ "compound-mod|thereporthaspagesitisareport": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: 15-page. In der Zusammensetzung bleibt das Nomen im Singular.",
+    "en": "Right: 15-page. In the compound the noun stays singular."
+   },
+   "wrong": [
+    {
+     "if": [
+      "pages"
+     ],
+     "de": "Im Modifikator kein Plural: a 15-page report, nicht 15-pages.",
+     "en": "No plural in a modifier: a 15-page report, not 15-pages."
+    },
+    {
+     "not": [
+      "page"
+     ],
+     "de": "Gesucht ist das Maßnomen aus „15 pages“ im Singular: page.",
+     "en": "The measure noun from “15 pages” is needed, singular: page."
+    }
+   ]
+  }
+ },
+ "compound-mod|oursoftwareiseasytouseweoffersoftware": {
+  "pat": "cm.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: user-friendly (oder easy-to-use) ist ein Baustein mit Bindestrich.",
+    "en": "Right: user-friendly (or easy-to-use) is a hyphenated block."
+   },
+   "wrong": [
+    {
+     "if": [
+      "user",
+      "friendly"
+     ],
+     "de": "Vor dem Nomen verbindet ein Bindestrich beide Teile: user-friendly.",
+     "en": "Before the noun a hyphen joins both parts: user-friendly."
+    },
+    {
+     "if": [
+      "easy",
+      "to",
+      "use"
+     ],
+     "de": "Vor dem Nomen verbindet ein Bindestrich alle Teile: easy-to-use.",
+     "en": "Before the noun a hyphen joins all parts: easy-to-use."
+    },
+    {
+     "not": [
+      "user-friendly",
+      "easy-to-use",
+      "simple-to-use"
+     ],
+     "de": "Gesucht ist ein Baustein für „einfach zu bedienen“: user-friendly.",
+     "en": "A block meaning “easy to operate” is needed: user-friendly."
+    }
+   ]
+  }
+ },
+ "compound-mod|shepresentedafivepagesproposaltotheboard": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: five-page proposal. Vor dem Nomen steht page im Singular.",
+    "en": "Right: five-page proposal. Before the noun, page is singular."
+   },
+   "wrong": [
+    {
+     "if": [
+      "five-pages"
+     ],
+     "de": "Der Fehler liegt bei „five-pages“: Im Modifikator ist das Maßnomen Singular.",
+     "en": "The error is “five-pages”: in a modifier the measure noun is singular."
+    },
+    {
+     "not": [
+      "five-page"
+     ],
+     "de": "Die Maßangabe vor „proposal“ braucht Bindestrich und Singular: five-page.",
+     "en": "The measure before “proposal” needs a hyphen and the singular: five-page."
+    }
+   ]
+  }
+ },
+ "compound-mod|theyrentamodernsmallofficedowntown": {
+  "pat": "cm.order",
+  "why": {
+   "ok": {
+    "de": "Richtig: small (Größe) vor modern (Stil): a small modern office.",
+    "en": "Right: small (size) before modern (style): a small modern office."
+   },
+   "wrong": [
+    {
+     "pat": "cm.order",
+     "de": "Die Größe steht vor dem Stil: erst small, dann modern.",
+     "en": "Size comes before style: small first, then modern."
+    }
+   ]
+  }
+ },
+ "compound-mod|itwasahoursmeetingthatachievednothing": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: a three-hour meeting. Zahl, Singular und Bindestrich vor dem Nomen.",
+    "en": "Right: a three-hour meeting. Number, singular, and hyphen before the noun."
+   },
+   "wrong": [
+    {
+     "if": [
+      "3",
+      "hours"
+     ],
+     "de": "„3 hours“ ist ein Plural. Vor „meeting“ steht three-hour mit Bindestrich.",
+     "en": "“3 hours” is a plural. Before “meeting” use three-hour with a hyphen."
+    },
+    {
+     "if": [
+      "three-hours"
+     ],
+     "de": "Mit Bindestrich bleibt das Maßnomen im Singular: three-hour.",
+     "en": "With a hyphen the measure noun stays singular: three-hour."
+    },
+    {
+     "pat": "cm.measure",
+     "de": "Vor dem Nomen: Zahl, Singular und Bindestrich, also a three-hour meeting.",
+     "en": "Before the noun: number, singular, and hyphen, so a three-hour meeting."
     }
    ]
   }
@@ -3827,6 +4526,407 @@
      ],
      "de": "Das have fehlt: Third Conditional = would have + 3. Form.",
      "en": "The have is missing: third conditional = would have + participle."
+    }
+   ]
+  }
+ },
+ "countable|ourmanagergavemesomeusefulafterthepresentation": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: advice ist unzählbar, also some useful advice ohne -s und ohne an.",
+    "en": "Right: advice is uncountable, so some useful advice with no -s and no an."
+   },
+   "wrong": [
+    {
+     "opt": "many advices",
+     "pat": "cnt.uncount",
+     "de": "„advices“ gibt es nicht: advice hat keinen Plural, auch nicht nach many.",
+     "en": "“advices” does not exist: advice has no plural, not even after many."
+    },
+    {
+     "opt": "an advice",
+     "de": "„an“ steht nur vor zählbaren Nomen im Singular. Advice ist unzählbar.",
+     "en": "“an” goes only with singular countable nouns. Advice is uncountable."
+    },
+    {
+     "opt": "advices",
+     "de": "Kein Plural-s: advice ist unzählbar, hier passt some advice.",
+     "en": "No plural -s: advice is uncountable; some advice fits here."
+    }
+   ]
+  }
+ },
+ "countable|howpeopleattendedthetrainingsessionyesterday": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: people ist ein zählbarer Plural, also how many.",
+    "en": "Right: people is a countable plural, so how many."
+   },
+   "wrong": [
+    {
+     "opt": "less",
+     "de": "„How less“ gibt es nicht. Für Zählbares fragt man how many.",
+     "en": "“How less” does not exist. For countable nouns you ask how many."
+    },
+    {
+     "opt": "much",
+     "pat": "cnt.quant",
+     "de": "„How much“ fragt nach Unzählbarem (how much time). People ist zählbar.",
+     "en": "“How much” asks about uncountables (how much time). People is countable."
+    },
+    {
+     "opt": "a little",
+     "de": "„How a little“ gibt es nicht, und a little passt nur zu Unzählbarem.",
+     "en": "“How a little” does not exist, and a little suits only uncountables."
+    }
+   ]
+  }
+ },
+ "countable|weonlyhaveinformationaboutthenewsupplier": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: information ist unzählbar, deshalb a little. A few braucht einen Plural.",
+    "en": "Right: information is uncountable, so a little. A few needs a plural noun."
+   },
+   "wrong": [
+    {
+     "opt": "several",
+     "de": "„Several“ braucht ein zählbares Nomen im Plural. Information hat keinen.",
+     "en": "“Several” needs a plural countable noun. Information has no plural."
+    },
+    {
+     "opt": "a few",
+     "de": "„A few“ steht vor zählbaren Plural-Nomen. Information ist unzählbar.",
+     "en": "“A few” goes before plural countable nouns. Information is uncountable."
+    },
+    {
+     "opt": "many",
+     "de": "„Many“ steht vor zählbaren Plural-Nomen. Bei information passt much oder a little.",
+     "en": "“Many” goes before plural countable nouns. With information use much or a little."
+    }
+   ]
+  }
+ },
+ "countable|couldyousendmeaboutthedeliverydates": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: some information. Das Nomen ist unzählbar, ohne a und ohne -s.",
+    "en": "Right: some information. The noun is uncountable, with no a and no -s."
+   },
+   "wrong": [
+    {
+     "opt": "a information",
+     "de": "„a“ steht nur vor zählbaren Nomen im Singular. Information ist unzählbar.",
+     "en": "“a” goes only with singular countable nouns. Information is uncountable."
+    },
+    {
+     "opt": "an information",
+     "de": "„An“ geht nur mit zählbaren Nomen, auch wenn information mit einem Vokal beginnt.",
+     "en": "“An” goes only with countable nouns, even though information starts with a vowel."
+    },
+    {
+     "opt": "some informations",
+     "pat": "cnt.uncount",
+     "de": "Kein Plural-s: Deutsch hat „Informationen“, Englisch nur information.",
+     "en": "No plural -s: German has “Informationen”, English only information."
+    }
+   ]
+  }
+ },
+ "countable|idappreciateyouronthedraftbyfriday": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: feedback ist unzählbar, also your feedback ohne -s.",
+    "en": "Right: feedback is uncountable, so your feedback with no -s."
+   },
+   "wrong": [
+    {
+     "if": [
+      "feedbacks"
+     ],
+     "de": "„feedbacks“ gibt es nicht: feedback hat keinen Plural.",
+     "en": "“feedbacks” does not exist: feedback has no plural."
+    },
+    {
+     "not": [
+      "feedback",
+      "input"
+     ],
+     "de": "Gesucht ist ein unzählbares Wort für „Rückmeldung“: feedback oder input.",
+     "en": "A word for “Rückmeldung” without a plural is needed: feedback or input."
+    }
+   ]
+  }
+ },
+ "countable|theretoomuchtrafficonthehighwaythismorningsoiwaslate": {
+  "pat": "cnt.verb",
+  "why": {
+   "ok": {
+    "de": "Richtig: traffic ist unzählbar, das Verb steht im Singular: was.",
+    "en": "Right: traffic is uncountable, so the verb is singular: was."
+   },
+   "wrong": [
+    {
+     "if": [
+      "were"
+     ],
+     "de": "„were“ ist Plural. Traffic ist unzählbar, deshalb was.",
+     "en": "“were” is plural. Traffic is uncountable, so was."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Der Satz spielt heute früh, also die Vergangenheit: was.",
+     "en": "The sentence is about this morning, so the past is needed: was."
+    },
+    {
+     "not": [
+      "was"
+     ],
+     "de": "Gesucht ist die Singularform von be in der Vergangenheit: was.",
+     "en": "The singular past form of be is needed: was."
+    }
+   ]
+  }
+ },
+ "countable|pleasemakesureyouhaveenoughforthetrip": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: luggage ist unzählbar, deshalb enough luggage ohne -s.",
+    "en": "Right: luggage is uncountable, so enough luggage with no -s."
+   },
+   "wrong": [
+    {
+     "if": [
+      "luggages"
+     ],
+     "de": "„luggages“ gibt es nicht: luggage hat keinen Plural.",
+     "en": "“luggages” does not exist: luggage has no plural."
+    },
+    {
+     "if": [
+      "baggages"
+     ],
+     "de": "„baggages“ gibt es nicht: baggage hat keinen Plural.",
+     "en": "“baggages” does not exist: baggage has no plural."
+    },
+    {
+     "not": [
+      "luggage",
+      "baggage"
+     ],
+     "de": "Gesucht ist das unzählbare Wort für „Gepäck“: luggage oder baggage.",
+     "en": "The uncountable word for “Gepäck” is needed: luggage or baggage."
+    }
+   ]
+  }
+ },
+ "countable|wehavefewoptionsleftwedonothaveoptionsleft": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: options ist zählbar, deshalb not many. Few heißt „nicht viele“.",
+    "en": "Right: options is countable, so not many. Few means “not many”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "much"
+     ],
+     "de": "„Much“ passt nur zu Unzählbarem. Options ist zählbar, also many.",
+     "en": "“Much” suits only uncountables. Options is countable, so many."
+    },
+    {
+     "if": [
+      "few"
+     ],
+     "de": "„Few“ heißt schon „kaum welche“. Mit don't have kippt der Sinn.",
+     "en": "“Few” already means “hardly any”. With don't have the meaning flips."
+    },
+    {
+     "not": [
+      "many",
+      "lot",
+      "that",
+      "very",
+      "too"
+     ],
+     "de": "Gesucht ist das Mengenwort für zählbare Plurale nach don't: many.",
+     "en": "A quantifier for countable plurals after don't is needed: many."
+    }
+   ]
+  }
+ },
+ "countable|thereisnotmuchfurnitureinthenewofficethenewofficehasonlyfurniture": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: furniture ist unzählbar, also only a little. A few braucht einen Plural.",
+    "en": "Right: furniture is uncountable, so only a little. A few needs a plural."
+   },
+   "wrong": [
+    {
+     "if": [
+      "few"
+     ],
+     "de": "„A few“ gilt nur für zählbare Plurale. Furniture ist unzählbar.",
+     "en": "“A few” suits only countable plurals. Furniture is uncountable."
+    },
+    {
+     "if": [
+      "many"
+     ],
+     "de": "„Many“ braucht ein zählbares Nomen im Plural. Furniture hat keinen Plural.",
+     "en": "“Many” needs a plural countable noun. Furniture has no plural."
+    },
+    {
+     "if": [
+      "much"
+     ],
+     "de": "Nach only passt a little, nicht much: Das steht kaum in bejahten Sätzen.",
+     "en": "After only use a little, not much: much rarely appears in positive sentences."
+    },
+    {
+     "not": [
+      "little",
+      "bit"
+     ],
+     "de": "Gesucht ist das Mengenwort für „wenig“ vor Unzählbarem: a little.",
+     "en": "A quantifier meaning “not much” before an uncountable is needed: a little."
+    }
+   ]
+  }
+ },
+ "countable|shegavemealotofusefuladvicesformyinterview": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: advice hat keinen Plural, also a lot of useful advice ohne -s.",
+    "en": "Right: advice has no plural, so a lot of useful advice."
+   },
+   "wrong": [
+    {
+     "if": [
+      "advices"
+     ],
+     "de": "Der Fehler liegt im -s: „advices“ gibt es nicht, advice bleibt in der Einzahl.",
+     "en": "The error is the -s: “advices” does not exist; advice stays singular."
+    },
+    {
+     "not": [
+      "advice"
+     ],
+     "de": "Gesucht ist die Form ohne -s: advice.",
+     "en": "The form without -s is needed: advice."
+    }
+   ]
+  }
+ },
+ "countable|thestaffareveryfriendlybuttheinformationsonthewebsiteareoutdated": {
+  "pat": "cnt.verb",
+  "why": {
+   "ok": {
+    "de": "Richtig: information ist unzählbar: kein -s, und das Verb steht im Singular (is).",
+    "en": "Right: information is uncountable: no -s, and the verb is singular (is)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "informations"
+     ],
+     "de": "„informations“ gibt es nicht: information hat keinen Plural.",
+     "en": "“informations” does not exist: information has no plural."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Zu information passt das Verb im Singular: is outdated.",
+     "en": "The verb after information is singular: is outdated."
+    }
+   ]
+  }
+ },
+ "countable|howmuchmeetingsdowehavescheduledfornextweek": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: meetings ist zählbar (Plural), also how many.",
+    "en": "Right: meetings is countable (plural), so how many."
+   },
+   "wrong": [
+    {
+     "if": [
+      "much"
+     ],
+     "de": "„Much“ gehört zu Unzählbarem. Meetings ist zählbar, also how many.",
+     "en": "“Much” goes with uncountables. Meetings is countable, so how many."
+    },
+    {
+     "not": [
+      "many"
+     ],
+     "de": "Gesucht ist das Mengenwort für zählbare Plurale: many.",
+     "en": "A quantifier for countable plurals is needed: many."
+    }
+   ]
+  }
+ },
+ "countable|shegavemesomegoodadvices": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: advice hat keinen Plural, also some good advice ohne -s.",
+    "en": "Right: advice has no plural, so some good advice."
+   },
+   "wrong": [
+    {
+     "if": [
+      "advices"
+     ],
+     "de": "„advices“ gibt es nicht: Es heißt some good advice, ohne -s.",
+     "en": "“advices” does not exist: say some good advice, with no -s."
+    },
+    {
+     "not": [
+      "advice"
+     ],
+     "de": "Gesucht ist die Form ohne -s: advice.",
+     "en": "The form without -s is needed: advice."
+    }
+   ]
+  },
+  "dup": "countable|shegavemealotofusefuladvicesformyinterview"
+ },
+ "countable|theinformationsareonourwebsite": {
+  "pat": "cnt.verb",
+  "why": {
+   "ok": {
+    "de": "Richtig: information ist unzählbar: kein -s, und das Verb steht im Singular (is).",
+    "en": "Right: information is uncountable: no -s, and the verb is singular (is)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "informations"
+     ],
+     "de": "„informations“ gibt es nicht: Das Nomen hat keinen Plural.",
+     "en": "“informations” does not exist: the noun has no plural."
+    },
+    {
+     "if": [
+      "information",
+      "are"
+     ],
+     "de": "Zu information passt das Verb im Singular: is on our website.",
+     "en": "The verb after information is singular: is on our website."
     }
    ]
   }
@@ -10431,6 +11531,1342 @@
     }
    ]
   }
+ },
+ "prep-noun|whatwasthemainreasonthedelay": {
+  "pat": "pn.for",
+  "why": {
+   "ok": {
+    "de": "Richtig: reason for + Anlass. Der Grund der Verspätung wird mit for angeschlossen.",
+    "en": "Right: reason for + event. The cause of the delay is linked with for."
+   },
+   "wrong": [
+    {
+     "opt": "of",
+     "pat": "pn.of",
+     "de": "„Reason of“ kopiert den Genitiv („Grund der Verspätung“). Englisch sagt reason for.",
+     "en": "“Reason of” copies the German genitive. English says reason for."
+    },
+    {
+     "opt": "to",
+     "pat": "pn.to",
+     "de": "„Reason to“ steht vor einem Verb (a reason to wait), nicht vor einem Nomen.",
+     "en": "“Reason to” goes before a verb (a reason to wait), not before a noun."
+    },
+    {
+     "opt": "with",
+     "de": "„With“ heißt „mit“. Ein Grund hat keinen Partner. Gesucht ist for.",
+     "en": "“With” means together with. A reason has no partner. Use for."
+    }
+   ]
+  }
+ },
+ "prep-noun|weexpectasignificantincreasesalesthisquarter": {
+  "pat": "pn.in",
+  "why": {
+   "ok": {
+    "de": "Richtig: increase in sales. In nennt den Bereich, der sich verändert.",
+    "en": "Right: increase in sales. In names the area that changes."
+   },
+   "wrong": [
+    {
+     "opt": "to",
+     "pat": "pn.to",
+     "de": "„Increase to“ nennt den Zielwert (to 10%), nicht den Bereich.",
+     "en": "“Increase to” names the end value (to 10%), not the area."
+    },
+    {
+     "opt": "of",
+     "pat": "pn.of",
+     "de": "„Increase of“ nennt den Betrag (of 5%). Der Bereich braucht in.",
+     "en": "“Increase of” names the amount (of 5%). The area needs in."
+    },
+    {
+     "opt": "at",
+     "de": "„At“ passt zu einem Punkt oder Preis (at 5%), nicht zu einer Veränderung.",
+     "en": "“At” fits a point or price (at 5%), not a change."
+    }
+   ]
+  }
+ },
+ "prep-noun|annaisresponsiblethebudget": {
+  "pat": "pn.for",
+  "why": {
+   "ok": {
+    "de": "Richtig: responsible for. Eine Zuständigkeit wird mit for angeschlossen.",
+    "en": "Right: responsible for. A duty is linked with for."
+   },
+   "wrong": [
+    {
+     "opt": "of",
+     "pat": "pn.of",
+     "de": "„Responsible of“ gibt es nicht. Nur in charge of nimmt of.",
+     "en": "“Responsible of” does not exist. Only in charge of takes of."
+    },
+    {
+     "opt": "about",
+     "pat": "pn.about",
+     "de": "„About“ nennt ein Thema (worried about). Eine Pflicht braucht for.",
+     "en": "“About” names a topic (worried about). A duty needs for."
+    },
+    {
+     "opt": "on",
+     "de": "„On“ passt zu depend on oder focus on, nicht zu responsible.",
+     "en": "“On” fits depend on or focus on, not responsible."
+    }
+   ]
+  }
+ },
+ "prep-noun|ourcustomersareveryinterestedthenewproductline": {
+  "pat": "pn.in",
+  "why": {
+   "ok": {
+    "de": "Richtig: interested in. Das Interesse richtet sich auf ein Gebiet oder eine Sache: in.",
+    "en": "Right: interested in. Interest in a field or thing takes in."
+   },
+   "wrong": [
+    {
+     "if": [
+      "at"
+     ],
+     "de": "„Interessiert an“ wird oft zu at. Englisch sagt interested in.",
+     "en": "German “interessiert an” often becomes at. English says interested in."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "de": "„Interested about“ ist unüblich. Nach interested steht in.",
+     "en": "“Interested about” is not idiomatic. After interested use in."
+    },
+    {
+     "not": [
+      "in"
+     ],
+     "de": "Gesucht ist die Präposition, die fest zu interested gehört: in.",
+     "en": "The preposition that belongs fixed to interested is needed: in."
+    }
+   ]
+  }
+ },
+ "prep-noun|thereisagrowingdemandsustainablepackaging": {
+  "pat": "pn.for",
+  "why": {
+   "ok": {
+    "de": "Richtig: demand for. Nachfrage nach etwas heißt im Englischen demand for.",
+    "en": "Right: demand for. Demand for something takes for before the thing wanted."
+   },
+   "wrong": [
+    {
+     "if": [
+      "after"
+     ],
+     "de": "„Nachfrage nach“ Wort für Wort ergibt after. Englisch sagt demand for.",
+     "en": "Word for word, “Nachfrage nach” gives after. English says demand for."
+    },
+    {
+     "if": [
+      "of"
+     ],
+     "de": "„Demand of“ meint, was etwas verlangt (the demands of the job), nicht die Nachfrage.",
+     "en": "“Demand of” means what something requires (the demands of the job), not market demand."
+    },
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„Demand on“ heißt Belastung (demands on staff), nicht Nachfrage.",
+     "en": "“Demand on” means a burden (demands on staff), not market demand."
+    },
+    {
+     "not": [
+      "for"
+     ],
+     "de": "Gesucht ist for: Die Nachfrage nach einem Produkt heißt demand for.",
+     "en": "The answer is for: demand for a product."
+    }
+   ]
+  }
+ },
+ "prep-noun|shesveryproudherteamsresults": {
+  "pat": "pn.of",
+  "why": {
+   "ok": {
+    "de": "Richtig: proud of. Hinter proud steht of vor dem, worauf man stolz ist.",
+    "en": "Right: proud of. After proud comes of before what you are proud of."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„Stolz auf“ wird oft zu on. Englisch sagt proud of.",
+     "en": "German “stolz auf” often becomes on. English says proud of."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "„For“ nennt Grund oder Zweck. Nach proud steht of.",
+     "en": "“For” names a reason or purpose. After proud use of."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "de": "„Proud about“ ist unüblich. Es heißt proud of.",
+     "en": "“Proud about” is not idiomatic. It is proud of."
+    },
+    {
+     "not": [
+      "of"
+     ],
+     "de": "Gesucht ist of: Stolz auf etwas heißt proud of.",
+     "en": "The answer is of: proud of something."
+    }
+   ]
+  }
+ },
+ "prep-noun|thepricesrosebytherewasainprices": {
+  "pat": "pn.in",
+  "why": {
+   "ok": {
+    "de": "Richtig: increase (oder rise) in prices. Das Nomen steht vor in.",
+    "en": "Right: increase (or rise) in prices. The noun comes before in."
+   },
+   "wrong": [
+    {
+     "if": [
+      "rose"
+     ],
+     "de": "„Rose“ ist das Verb. Nach a 5% braucht der Satz ein Nomen: increase oder rise.",
+     "en": "“Rose” is the verb. After a 5% the sentence needs a noun: increase or rise."
+    },
+    {
+     "if": [
+      "raise"
+     ],
+     "de": "„Raise“ heißt meist anheben (Verb). Das Nomen für Preise ist increase oder rise.",
+     "en": "“Raise” mostly means to lift (verb). The noun for prices is increase or rise."
+    },
+    {
+     "not": [
+      "increase",
+      "rise",
+      "jump",
+      "hike"
+     ],
+     "de": "Gesucht ist ein Nomen für den Anstieg: increase, rise, jump oder hike.",
+     "en": "A noun for the upward move is needed: increase, rise, jump or hike."
+    }
+   ]
+  }
+ },
+ "prep-noun|wediscussedtheproblemwiththesupplierwehadadiscussiontheproblemwiththesupplier": {
+  "pat": "pn.about",
+  "why": {
+   "ok": {
+    "de": "Richtig: discussion about (oder on). Das Thema des Gesprächs folgt nach about.",
+    "en": "Right: discussion about (or on). The topic of the talk follows about."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "de": "„For“ nennt Grund oder Zweck, nicht das Thema einer Diskussion.",
+     "en": "“For” names a reason or purpose, not the topic of a discussion."
+    },
+    {
+     "if": [
+      "with"
+     ],
+     "de": "„With“ nennt den Partner (a discussion with the supplier), nicht das Thema.",
+     "en": "“With” names the partner (a discussion with the supplier), not the topic."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "„To“ passt zu answer to, nicht zu discussion. Hier folgt about oder on.",
+     "en": "“To” fits answer to, not discussion. Here about or on follows."
+    }
+   ]
+  }
+ },
+ "prep-noun|shehasalotofexperienceonprojectmanagement": {
+  "pat": "pn.in",
+  "why": {
+   "ok": {
+    "de": "Richtig: experience in project management. Ein Fachgebiet wird mit in angeschlossen.",
+    "en": "Right: experience in project management. A field is linked with in."
+   },
+   "wrong": [
+    {
+     "if": [
+      "experience",
+      "on"
+     ],
+     "de": "„Auf“ wird oft zu on. Englisch nennt das Fachgebiet mit in (oder with).",
+     "en": "German “auf” often becomes on. English links the field with in (or with)."
+    },
+    {
+     "not": [
+      "in",
+      "with"
+     ],
+     "de": "Fachgebiet: experience in oder experience with, nicht on.",
+     "en": "For a field use experience in or experience with, not on."
+    }
+   ]
+  }
+ },
+ "prep-noun|weneedtofindasolutionofthisproblemassoonaspossible": {
+  "pat": "pn.to",
+  "why": {
+   "ok": {
+    "de": "Richtig: solution to + Problem. Die Lösung gehört mit to zu ihrem Problem.",
+    "en": "Right: solution to + problem. The solution is tied to its problem with to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "solution",
+      "of"
+     ],
+     "de": "„Solution of“ kopiert den Genitiv („Lösung des Problems“). Englisch sagt solution to.",
+     "en": "“Solution of” copies the German genitive. English says solution to."
+    },
+    {
+     "not": [
+      "to",
+      "for"
+     ],
+     "de": "Gesucht ist to (oder for): solution to this problem.",
+     "en": "To (or for) is needed: solution to this problem."
+    }
+   ]
+  }
+ },
+ "prep-noun|heisverygoodinnegotiatingwithclients": {
+  "pat": "pn.at",
+  "why": {
+   "ok": {
+    "de": "Richtig: good at + -ing. Das Können bei einer Tätigkeit wird mit at angeschlossen.",
+    "en": "Right: good at + -ing. Skill at an activity is linked with at."
+   },
+   "wrong": [
+    {
+     "if": [
+      "good",
+      "in"
+     ],
+     "de": "„Gut in“ wird Wort für Wort übersetzt. Englisch sagt good at.",
+     "en": "“Gut in” is translated word for word. English says good at."
+    },
+    {
+     "not": [
+      "at"
+     ],
+     "de": "Gesucht ist at: Können bei einer Tätigkeit heißt good at + -ing.",
+     "en": "The answer is at: skill at an activity is good at + -ing."
+    }
+   ]
+  }
+ },
+ "prep-noun|weneedasolutionofthisproblem": {
+  "pat": "pn.to",
+  "dup": "prep-noun|weneedtofindasolutionofthisproblemassoonaspossible",
+  "why": {
+   "ok": {
+    "de": "Richtig: solution to + Problem. Die Lösung gehört mit to zu ihrem Problem.",
+    "en": "Right: solution to + problem. The solution is tied to its problem with to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "solution",
+      "of"
+     ],
+     "de": "„Solution of“ kopiert den Genitiv („Lösung des Problems“). Englisch sagt solution to.",
+     "en": "“Solution of” copies the German genitive. English says solution to."
+    },
+    {
+     "not": [
+      "to",
+      "for"
+     ],
+     "de": "Gesucht ist to (oder for): solution to this problem.",
+     "en": "To (or for) is needed: solution to this problem."
+    }
+   ]
+  }
+ },
+ "prep-time|themeetingstartsonmondaymorning": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: 9:30 ist eine Uhrzeit, und vor Uhrzeiten steht at.",
+    "en": "Right: 9:30 is a clock time, and clock times take at."
+   },
+   "wrong": [
+    {
+     "opt": "on",
+     "de": "„on“ steht vor Tagen (on Monday), nicht vor der Uhrzeit 9:30.",
+     "en": "“On” goes before days (on Monday), not before the clock time 9:30."
+    },
+    {
+     "opt": "in",
+     "de": "„in“ steht vor Monaten, Jahren und Tageszeiten, nicht vor 9:30.",
+     "en": "“In” goes before months, years and parts of the day, not before 9:30."
+    },
+    {
+     "opt": "by",
+     "pat": "pt.by-until",
+     "de": "„by“ nennt eine Frist (spätestens). Hier beginnt das Meeting zu einer festen Uhrzeit.",
+     "en": "“By” names a deadline (at the latest). Here the meeting starts at a fixed time."
+    }
+   ]
+  }
+ },
+ "prep-time|ihaveworkedatthiscompany": {
+  "pat": "pt.for-since",
+  "why": {
+   "ok": {
+    "de": "Richtig: 2019 ist ein Startpunkt, und have worked passt dazu: since 2019.",
+    "en": "Right: 2019 is a starting point, and have worked fits it: since 2019."
+   },
+   "wrong": [
+    {
+     "opt": "from",
+     "de": "„from“ braucht ein „to“ (from 2019 to 2023). Zu have worked passt since.",
+     "en": "“From” needs a “to” (from 2019 to 2023). With have worked, use since."
+    },
+    {
+     "opt": "during",
+     "pat": "pt.during-within",
+     "de": "„during“ braucht ein Ereignis (during the merger), keine Jahreszahl.",
+     "en": "“During” needs an event (during the merger), not a year."
+    },
+    {
+     "opt": "for",
+     "pat": "pt.for-since",
+     "de": "„for“ nennt eine Dauer (for five years). 2019 ist ein Startpunkt.",
+     "en": "“For” names a duration (for five years). 2019 is a starting point."
+    }
+   ]
+  }
+ },
+ "prep-time|pleasesubmitthereportfridayatthelatest": {
+  "pat": "pt.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: „at the latest“ = spätestens. Das ist eine Frist, also by.",
+    "en": "Right: “at the latest” means no later than. That is a deadline, so by."
+   },
+   "wrong": [
+    {
+     "opt": "until",
+     "pat": "pt.by-until",
+     "de": "„until“ sagt, wie lange etwas andauert. Hier geht es um die Frist.",
+     "en": "“Until” says how long something lasts. Here it is about a deadline."
+    },
+    {
+     "opt": "during",
+     "pat": "pt.during-within",
+     "de": "„during“ steht vor einem Ereignis, nicht vor einem Wochentag.",
+     "en": "“During” goes before an event, not before a day of the week."
+    },
+    {
+     "opt": "within",
+     "pat": "pt.during-within",
+     "de": "„within“ nennt einen Zeitrahmen mit Zahl (within a week), keinen festen Tag.",
+     "en": "“Within” names a time frame with a number (within a week), not a fixed day."
+    }
+   ]
+  }
+ },
+ "prep-time|wewillrespondtoyourrequesthours": {
+  "pat": "pt.during-within",
+  "why": {
+   "ok": {
+    "de": "Richtig: 24 hours ist ein Zeitrahmen. Innerhalb davon antworten wir: within.",
+    "en": "Right: 24 hours is a time frame. We reply inside it: within."
+   },
+   "wrong": [
+    {
+     "opt": "during",
+     "de": "„during“ braucht ein Ereignis (during the call), keine Zahl mit Einheit.",
+     "en": "“During” needs an event (during the call), not a number with a unit."
+    },
+    {
+     "opt": "by",
+     "pat": "pt.by-until",
+     "de": "„by“ nennt einen Zeitpunkt (by noon), keinen Zeitrahmen mit Zahl.",
+     "en": "“By” names a point in time (by noon), not a time frame with a number."
+    },
+    {
+     "opt": "since",
+     "pat": "pt.for-since",
+     "de": "„since“ blickt auf einen Startpunkt in der Vergangenheit. Hier geht es nach vorn.",
+     "en": "“Since” looks back to a starting point in the past. Here it looks ahead."
+    }
+   ]
+  }
+ },
+ "prep-time|theconferencetakesplacejulysobookyourflightsearly": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: July ist ein Monat, und vor Monaten steht in.",
+    "en": "Right: July is a month, and months take in."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„on“ steht vor Tagen und Daten (on July 4), nicht vor einem Monat.",
+     "en": "“On” goes before days and dates (on July 4), not before a month."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "„at“ steht vor Uhrzeiten, nicht vor einem Monat.",
+     "en": "“At” goes before clock times, not before a month."
+    },
+    {
+     "if": [
+      "during"
+     ],
+     "de": "Nahe dran: Vor einem einzelnen Monat ist in die übliche Wahl.",
+     "en": "Close: before a single month, in is the usual choice."
+    }
+   ]
+  }
+ },
+ "prep-time|wehavebeenwaitingforthedeliverythreeweeks": {
+  "pat": "pt.for-since",
+  "why": {
+   "ok": {
+    "de": "Richtig: three weeks ist eine Dauer, und die nennt for.",
+    "en": "Right: three weeks is a duration, and for names a duration."
+   },
+   "wrong": [
+    {
+     "if": [
+      "since"
+     ],
+     "de": "„since“ braucht einen Startpunkt (since May), nicht eine Dauer.",
+     "en": "“Since” needs a starting point (since May), not a duration."
+    },
+    {
+     "if": [
+      "during"
+     ],
+     "pat": "pt.during-within",
+     "de": "„during“ steht vor einem Ereignis, nicht vor einer Zahl mit Einheit.",
+     "en": "“During” goes before an event, not before a number with a unit."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "„in three weeks“ schaut nach vorn. Mit have been waiting zählt die bisherige Dauer: for.",
+     "en": "“In three weeks” looks ahead. With have been waiting the duration so far counts: for."
+    }
+   ]
+  }
+ },
+ "prep-time|iwasonacallwithaclientthelunchbreak": {
+  "pat": "pt.during-within",
+  "why": {
+   "ok": {
+    "de": "Richtig: the lunch break ist eine Phase, in der etwas geschieht: during.",
+    "en": "Right: the lunch break is a phase in which something happens: during."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "pat": "pt.for-since",
+     "de": "„for“ nennt eine Dauer mit Zahl (for an hour), kein Ereignis.",
+     "en": "“For” names a duration with a number (for an hour), not an event."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "pat": "pt.at-on-in",
+     "de": "„at“ nennt einen Zeitpunkt (at noon), aber keine Phase.",
+     "en": "“At” names a point in time (at noon), not a phase."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "Nahe dran: Vor einem Ereignis ist during die übliche Wahl.",
+     "en": "Close: before an event, during is the usual choice."
+    }
+   ]
+  }
+ },
+ "prep-time|theprojectstartedinmarchandisstillrunningtheprojecthasbeenrunningmarch": {
+  "pat": "pt.for-since",
+  "why": {
+   "ok": {
+    "de": "Richtig: March ist der Startpunkt, und das Projekt läuft noch: since March.",
+    "en": "Right: March is the starting point, and the project is still running: since March."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "de": "„for“ braucht eine Dauer (for two months). March ist ein Startpunkt.",
+     "en": "“For” needs a duration (for two months). March is a starting point."
+    },
+    {
+     "if": [
+      "from"
+     ],
+     "de": "„from“ steht mit „to“ (from March to May), nicht beim Perfekt.",
+     "en": "“From” goes with “to” (from March to May), not with the perfect."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "pat": "pt.at-on-in",
+     "de": "„in March“ nennt nur den Monat, nicht die Zeit von März bis heute.",
+     "en": "“In March” names only the month, not the time from March until now."
+    }
+   ]
+  }
+ },
+ "prep-time|pleasefinishthedraftbeforethursdaypleasefinishthedraftthursday": {
+  "pat": "pt.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Frist heißt spätestens bis Donnerstag: by Thursday.",
+    "en": "Right: the deadline is no later than Thursday: by Thursday."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "pt.by-until",
+     "de": "„until“ hieße: bis Donnerstag daran arbeiten, nicht: bis dahin fertig sein.",
+     "en": "“Until” would mean: keep working until Thursday, not: be done by then."
+    },
+    {
+     "if": [
+      "before"
+     ],
+     "de": "Dieses Wort steht schon im Ausgangssatz. Gesucht ist die Präposition der Frist: by.",
+     "en": "That word is already in the first sentence. The task wants the deadline preposition: by."
+    }
+   ]
+  }
+ },
+ "prep-time|wehaveateammeetingatmondaymorning": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor Wochentagen steht on: on Monday morning.",
+    "en": "Right: days of the week take on: on Monday morning."
+   },
+   "wrong": [
+    {
+     "if": [
+      "at"
+     ],
+     "de": "Der Fehler bleibt: Vor Monday steht on, nicht at.",
+     "en": "The error remains: before Monday use on, not at."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "„in“ passt zu the morning allein. Mit dem Wochentag davor steht on.",
+     "en": "“In” fits the morning alone. With the weekday before it, use on."
+    }
+   ]
+  }
+ },
+ "prep-time|weusuallyhavelunchinnoon": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: noon ist ein fester Zeitpunkt, und der steht mit at.",
+    "en": "Right: noon is a fixed point in time, and it takes at."
+   },
+   "wrong": [
+    {
+     "if": [
+      "in"
+     ],
+     "de": "Der Fehler bleibt: noon ist ein Zeitpunkt und steht mit at.",
+     "en": "The error remains: noon is a point in time and takes at."
+    },
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„on“ steht vor Tagen, nicht vor noon.",
+     "en": "“On” goes before days, not before noon."
+    }
+   ]
+  }
+ },
+ "prep-time|hehasbeenworkingonthisprojectduringthreemonths": {
+  "pat": "pt.for-since",
+  "why": {
+   "ok": {
+    "de": "Richtig: three months ist eine Dauer, also for three months.",
+    "en": "Right: three months is a duration, so for three months."
+   },
+   "wrong": [
+    {
+     "if": [
+      "during"
+     ],
+     "pat": "pt.during-within",
+     "de": "Der Fehler bleibt: Vor einer Zahl mit Einheit steht kein during.",
+     "en": "The error remains: no during before a number with a unit."
+    },
+    {
+     "if": [
+      "since"
+     ],
+     "de": "„since“ braucht einen Startpunkt, three months ist eine Dauer.",
+     "en": "“Since” needs a starting point; three months is a duration."
+    },
+    {
+     "if": [
+      "within"
+     ],
+     "pat": "pt.during-within",
+     "de": "„within“ nennt eine Frist. Hier geht es um die bisherige Dauer.",
+     "en": "“Within” names a time frame. Here it is about the duration so far."
+    }
+   ]
+  }
+ },
+ "prep-time|iwillbeonvacationonaugust": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: August ist ein Monat, und vor Monaten steht in.",
+    "en": "Right: August is a month, and months take in."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "Der Fehler bleibt: Vor einem Monat steht in, nicht on.",
+     "en": "The error remains: before a month use in, not on."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "„at“ steht vor Uhrzeiten, nicht vor einem Monat.",
+     "en": "“At” goes before clock times, not before a month."
+    }
+   ]
+  }
+ },
+ "prepositions|itdependstheweather": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: depend on. Das Verb verlangt on, was „von“ im Deutschen auch nahelegt.",
+    "en": "Right: depend on. The verb takes on, whatever German “von” suggests."
+   },
+   "wrong": [
+    {
+     "opt": "from",
+     "de": "„Abhängen von“ lockt zu from. Im Englischen heißt es aber depend on.",
+     "en": "German “abhängen von” lures you into from. English says depend on."
+    },
+    {
+     "opt": "of",
+     "de": "Of passt zu vielen Adjektiven (proud of), aber nicht zu depend.",
+     "en": "Of fits many adjectives (proud of), but not depend."
+    },
+    {
+     "opt": "at",
+     "de": "At nennt einen Ort oder Punkt. Zu depend gehört on.",
+     "en": "At names a place or a point. Depend takes on."
+    }
+   ]
+  }
+ },
+ "prepositions|iaminterestedlearningitalian": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: interested in. Nach in folgt hier ein -ing: interested in learning.",
+    "en": "Right: interested in. Here -ing follows: interested in learning."
+   },
+   "wrong": [
+    {
+     "opt": "for",
+     "de": "„Sich interessieren für“ lockt zu for. Zu interested gehört aber in.",
+     "en": "German “sich interessieren für” lures you into for. Interested takes in."
+    },
+    {
+     "opt": "on",
+     "de": "„Interessiert an“ lockt zu on oder at. Im Englischen steht in.",
+     "en": "German “interessiert an” lures you into on or at. English uses in."
+    },
+    {
+     "opt": "about",
+     "de": "About wirkt logisch („über“), gehört aber nicht zu interested: interested in.",
+     "en": "About seems logical (“über”), but it does not go with interested: interested in."
+    }
+   ]
+  }
+ },
+ "prepositions|shesverygoodexplainingthings": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: good at + -ing. At steht bei einem Können, danach folgt -ing.",
+    "en": "Right: good at + -ing. At goes with a skill, and -ing follows."
+   },
+   "wrong": [
+    {
+     "if": [
+      "with"
+     ],
+     "de": "„Good with“ meint den Umgang mit Menschen oder Dingen. Hier geht es um Können.",
+     "en": "“Good with” means handling people or things. Here it is about skill."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "Für ein Können steht at: good at explaining. „Good in“ passt hier nicht.",
+     "en": "For a skill use at: good at explaining. “Good in” does not fit here."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "„Good for“ heißt nützlich oder gesund. Für ein Können steht at.",
+     "en": "“Good for” means useful or healthy. For a skill use at."
+    },
+    {
+     "not": [
+      "at"
+     ],
+     "de": "Gesucht ist die Präposition für ein Können: good at + -ing.",
+     "en": "The preposition for a skill is needed: good at + -ing."
+    }
+   ]
+  }
+ },
+ "prepositions|wehavebeenwaitingtheiranswersincemonday": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: wait for. Zu wait gehört for, dann folgt das, worauf man wartet.",
+    "en": "Right: wait for. Wait takes for, followed by what you are waiting for."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„Warten auf“ lockt zu on. Standard ist wait for (wait on = bedienen).",
+     "en": "German “warten auf” lures you into on. Standard is wait for (wait on = serve)."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "At nennt einen Ort. Zu wait gehört hier for.",
+     "en": "At names a place. Here wait takes for."
+    },
+    {
+     "not": [
+      "for"
+     ],
+     "de": "Gesucht ist die feste Präposition zu wait: wait for.",
+     "en": "The fixed preposition for wait is needed: wait for."
+    }
+   ]
+  }
+ },
+ "prepositions|weneedtodiscussthebudgetbeforefriday": {
+  "pat": "prp.no-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: discuss + Objekt, ohne Präposition. Das Verb enthält das „über“ schon.",
+    "en": "Right: discuss + object, no preposition. The verb already contains “about”."
+   },
+   "wrong": [
+    {
+     "opt": "about",
+     "de": "„Diskutieren über“ lockt zu about. Discuss nimmt das Objekt direkt.",
+     "en": "German “diskutieren über” lures you into about. Discuss takes its object directly."
+    },
+    {
+     "opt": "of",
+     "de": "Of passt nicht zu discuss. Das Verb braucht hier gar keine Präposition.",
+     "en": "Of does not fit discuss. The verb needs no preposition here."
+    },
+    {
+     "opt": "on",
+     "de": "Vor dem Objekt budget steht bei discuss keine Präposition, auch on nicht.",
+     "en": "Before the object budget, discuss takes no preposition, not even on."
+    }
+   ]
+  }
+ },
+ "prepositions|couldyouexplainhowthepricingworks": {
+  "pat": "prp.person-to",
+  "why": {
+   "ok": {
+    "de": "Richtig: explain to me. Bei explain bekommt die Person ein to.",
+    "en": "Right: explain to me. With explain, the person gets a to."
+   },
+   "wrong": [
+    {
+     "opt": "me",
+     "de": "„Erklär mir“ hat im Deutschen kein Wort für to. Im Englischen braucht explain to me.",
+     "en": "German “erklär mir” has no word for to. English needs explain to me."
+    },
+    {
+     "opt": "for me",
+     "de": "„For me“ hieße: an meiner Stelle erklären. Gemeint ist „mir gegenüber“, also to.",
+     "en": "“For me” would mean: explain on my behalf. Here it is “to me”."
+    },
+    {
+     "opt": "at me",
+     "de": "At me ist gegen jemanden gerichtet (anschreien). Zu explain gehört to.",
+     "en": "At me is aimed against someone (shout at). Explain takes to."
+    }
+   ]
+  }
+ },
+ "prepositions|whoisresponsiblethedelay": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: responsible for + Sache. For nennt, wofür man verantwortlich ist.",
+    "en": "Right: responsible for + thing. For names what you are responsible for."
+   },
+   "wrong": [
+    {
+     "opt": "about",
+     "de": "„Responsible about“ gibt es nicht. Die feste Verbindung ist responsible for.",
+     "en": "“Responsible about” does not exist. The fixed pair is responsible for."
+    },
+    {
+     "opt": "of",
+     "de": "Of nach responsible ist unüblich. Die feste Verbindung lautet responsible for.",
+     "en": "Of after responsible is not used. The fixed pair is responsible for."
+    },
+    {
+     "opt": "to",
+     "de": "Responsible to nennt die Person, der man berichtet. Hier steht eine Sache: for.",
+     "en": "Responsible to names the person you answer to. Here a thing follows: for."
+    }
+   ]
+  }
+ },
+ "prepositions|wehavebeenworkingthisprojectsincemarch": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: work on a project. On nennt das, woran man arbeitet.",
+    "en": "Right: work on a project. On names what you are working on."
+   },
+   "wrong": [
+    {
+     "opt": "over",
+     "de": "Over heißt „über, hinweg“. Das Projekt, woran man arbeitet, steht mit on.",
+     "en": "Over means above or across. The project you work on takes on."
+    },
+    {
+     "opt": "in",
+     "de": "„Work in“ nennt Ort oder Bereich (work in sales). Das Projekt braucht on.",
+     "en": "“Work in” names a place or field (work in sales). The project needs on."
+    },
+    {
+     "opt": "to",
+     "de": "To zeigt eine Richtung oder ein Ziel. „Arbeiten an“ wird zu work on.",
+     "en": "To shows a direction or a goal. German “arbeiten an” becomes work on."
+    }
+   ]
+  }
+ },
+ "prepositions|iaminterestedyourproposal": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: interested in. In verbindet interested mit dem, was einen interessiert.",
+    "en": "Right: interested in. In links interested to what interests you."
+   },
+   "wrong": [
+    {
+     "opt": "at",
+     "de": "„Interessiert an“ lockt zu at. Im Englischen steht interested in.",
+     "en": "German “interessiert an” lures you into at. English uses interested in."
+    },
+    {
+     "opt": "on",
+     "de": "„Interested on“ gibt es nicht. Die feste Verbindung ist interested in.",
+     "en": "“Interested on” does not exist. The fixed pair is interested in."
+    },
+    {
+     "opt": "for",
+     "de": "„Interessiert für“ klingt vertraut, doch zu interested gehört in.",
+     "en": "It sounds familiar from German, but interested takes in."
+    }
+   ]
+  }
+ },
+ "prepositions|shesmarriedapilot": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: married to. Die Person, mit der man verheiratet ist, folgt nach to.",
+    "en": "Right: married to. The person you are married to follows to."
+   },
+   "wrong": [
+    {
+     "opt": "with",
+     "de": "„Verheiratet mit“ lockt zu with. Im Englischen steht married to.",
+     "en": "German “verheiratet mit” lures you into with. English uses married to."
+    },
+    {
+     "opt": "by",
+     "de": "By nennt im Passiv, wer etwas tut. Die feste Verbindung ist married to.",
+     "en": "By names who does something in the passive. The fixed pair is married to."
+    },
+    {
+     "opt": "of",
+     "de": "Of passt nicht zu married. Die feste Verbindung lautet married to.",
+     "en": "Of does not fit married. The fixed pair is married to."
+    }
+   ]
+  }
+ },
+ "prepositions|iamnotfamiliarthissoftware": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: familiar with. With nennt die Sache, mit der man vertraut ist.",
+    "en": "Right: familiar with. With names the thing you are familiar with."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "To passt zur Sache, die jemand kennt (familiar to me). Hier ist ich der Kenner: with.",
+     "en": "To fits the thing someone knows (familiar to me). Here I am the person: with."
+    },
+    {
+     "if": [
+      "of"
+     ],
+     "de": "„Vertraut mit“ wird zu familiar with, nicht zu of.",
+     "en": "German “vertraut mit” becomes familiar with, not of."
+    },
+    {
+     "not": [
+      "with"
+     ],
+     "de": "Gesucht ist die Präposition, die zu familiar gehört: with.",
+     "en": "The preposition that goes with familiar is needed: with."
+    }
+   ]
+  }
+ },
+ "prepositions|theclientinsistedawrittenconfirmation": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: insist on. Nach on folgt das, worauf jemand besteht.",
+    "en": "Right: insist on. After on comes what someone insists on."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "de": "For passt zu ask for und apply for. Zu insist gehört on.",
+     "en": "For fits ask for and apply for. Insist takes on."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "At nennt einen Ort oder Punkt. Zu insist gehört on.",
+     "en": "At names a place or point. Insist takes on."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Präposition zu insist: on (förmlich upon).",
+     "en": "The fixed preposition for insist is needed: on (formal upon)."
+    }
+   ]
+  }
+ },
+ "prepositions|wecongratulatedherwinningthebiggestaccountoftheyear": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: congratulate someone on. Nach on folgt hier ein -ing: on winning.",
+    "en": "Right: congratulate someone on. Here -ing follows: on winning."
+   },
+   "wrong": [
+    {
+     "if": [
+      "to"
+     ],
+     "de": "„Gratulieren zu“ lockt zu to. Im Englischen steht congratulate someone on.",
+     "en": "German “gratulieren zu” lures you into to. English uses congratulate someone on."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "For ist seltener. Die Standardform ist congratulate someone on.",
+     "en": "For is less common. The standard form is congratulate someone on."
+    },
+    {
+     "not": [
+      "on"
+     ],
+     "de": "Gesucht ist die feste Präposition zu congratulate: on.",
+     "en": "The fixed preposition for congratulate is needed: on."
+    }
+   ]
+  }
+ },
+ "prepositions|iamreallyproudwhatourteamhasachievedthisyear": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: proud of. Of nennt, worauf man stolz ist (hier ein ganzer Satz mit what).",
+    "en": "Right: proud of. Of names what you are proud of (here a whole clause with what)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„Stolz auf“ lockt zu on. Im Englischen steht proud of.",
+     "en": "German “stolz auf” lures you into on. English uses proud of."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "de": "„Proud about“ ist unüblich. Die feste Verbindung ist proud of.",
+     "en": "“Proud about” is not used. The fixed pair is proud of."
+    },
+    {
+     "not": [
+      "of"
+     ],
+     "de": "Gesucht ist die Präposition, die zu proud gehört: of.",
+     "en": "The preposition that goes with proud is needed: of."
+    }
+   ]
+  }
+ },
+ "prepositions|sheisallergiccats": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: allergic to. To nennt das, worauf man allergisch reagiert.",
+    "en": "Right: allergic to. To names what you react to."
+   },
+   "wrong": [
+    {
+     "if": [
+      "against"
+     ],
+     "de": "„Allergisch gegen“ lockt zu against. Im Englischen steht allergic to.",
+     "en": "German “allergisch gegen” lures you into against. English uses allergic to."
+    },
+    {
+     "if": [
+      "on"
+     ],
+     "de": "On passt nicht zu allergic. Die feste Verbindung ist allergic to.",
+     "en": "On does not fit allergic. The fixed pair is allergic to."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Gesucht ist die Präposition, die zu allergic gehört: to.",
+     "en": "The preposition that goes with allergic is needed: to."
+    }
+   ]
+  }
+ },
+ "prepositions|theeconomyaffectsoursalestheeconomyhasanimpactoursales": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: have an impact on. On nennt das, was betroffen ist.",
+    "en": "Right: have an impact on. On names what is affected."
+   },
+   "wrong": [
+    {
+     "if": [
+      "of"
+     ],
+     "de": "Impact of nennt den Verursacher (the impact of the economy). Das Betroffene folgt mit on.",
+     "en": "Impact of names the cause (the impact of the economy). The thing affected takes on."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "To zeigt eine Richtung. Das Betroffene steht bei impact mit on.",
+     "en": "To shows a direction. The thing affected takes on after impact."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "For nennt Zweck oder Nutzen. Das Betroffene steht bei impact mit on.",
+     "en": "For names a purpose or benefit. The thing affected takes on after impact."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Verbindung: have an impact on (förmlich upon).",
+     "en": "The fixed pair is needed: have an impact on (formal upon)."
+    }
+   ]
+  }
+ },
+ "prepositions|whoisinchargeofmarketingwhoisresponsiblemarketing": {
+  "pat": "prp.adj-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: responsible for. Es ist dasselbe wie in charge of, nur mit for.",
+    "en": "Right: responsible for. It means the same as in charge of, but with for."
+   },
+   "wrong": [
+    {
+     "if": [
+      "of"
+     ],
+     "de": "Of gehört zu in charge of. Bei responsible steht for.",
+     "en": "Of belongs to in charge of. After responsible use for."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "To nennt die Person, der man berichtet. Die Sache folgt mit for.",
+     "en": "To names the person you report to. The thing follows with for."
+    },
+    {
+     "not": [
+      "for"
+     ],
+     "de": "Gesucht ist die Präposition zu responsible: for.",
+     "en": "The preposition for responsible is needed: for."
+    }
+   ]
+  }
+ },
+ "prepositions|wediscussedaboutthepricingfortwohours": {
+  "pat": "prp.no-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: We discussed the pricing. Discuss nimmt das Objekt direkt, ohne about.",
+    "en": "Right: We discussed the pricing. Discuss takes its object directly, with no about."
+   },
+   "wrong": [
+    {
+     "if": [
+      "about"
+     ],
+     "de": "Das about ist zu viel: discuss + Objekt, ohne Präposition.",
+     "en": "The about is extra: discuss + object, with no preposition."
+    },
+    {
+     "not": [
+      "discussed"
+     ],
+     "de": "Das Verb discussed bleibt, nur das about fällt weg.",
+     "en": "The verb discussed stays, only the about goes."
+    }
+   ]
+  }
+ },
+ "prepositions|ourresultsdependfromthenumberofleads": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: depend on. Das Verb verlangt on, nicht from.",
+    "en": "Right: depend on. The verb takes on, not from."
+   },
+   "wrong": [
+    {
+     "if": [
+      "from"
+     ],
+     "de": "„Abhängen von“ lockt zu from. Im Englischen heißt es depend on.",
+     "en": "German “abhängen von” lures you into from. English says depend on."
+    },
+    {
+     "not": [
+      "on"
+     ],
+     "de": "Gesucht ist die feste Präposition zu depend: on.",
+     "en": "The fixed preposition for depend is needed: on."
+    }
+   ]
+  }
+ },
+ "prepositions|itdependsoftheweather": {
+  "pat": "prp.verb-prep",
+  "why": {
+   "ok": {
+    "de": "Richtig: depend on. Das Verb verlangt on, nicht of.",
+    "en": "Right: depend on. The verb takes on, not of."
+   },
+   "wrong": [
+    {
+     "if": [
+      "of"
+     ],
+     "de": "Of passt zu vielen Adjektiven, aber nicht zu depend. Hier steht on.",
+     "en": "Of fits many adjectives, but not depend. Here on is needed."
+    },
+    {
+     "not": [
+      "on"
+     ],
+     "de": "Gesucht ist die feste Präposition zu depend: on.",
+     "en": "The fixed preposition for depend is needed: on."
+    }
+   ]
+  },
+  "dup": "prepositions|itdependstheweather"
  },
  "pres-perf-cont|iamtiredbecauseiallafternoon": {
   "pat": "pc.recent",

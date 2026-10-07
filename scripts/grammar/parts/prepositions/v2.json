@@ -1,0 +1,1207 @@
+[
+ {
+  "id": "prp-ver-k1",
+  "type": "kwt",
+  "pat": "prp.verb-prep",
+  "from": "The budget alone will determine our final decision.",
+  "key": "DEPEND",
+  "frame": "Our final decision will ___ the budget.",
+  "answer": "depend on",
+  "accepted": [
+   "depend upon",
+   "depend only on",
+   "depend entirely on",
+   "depend entirely upon",
+   "depend solely on",
+   "depend solely upon"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: depend on. Das Verb verlangt on, dann folgt das, wovon es abhängt.",
+    "en": "Right: depend on. The verb takes on, followed by what it depends on."
+   },
+   "wrong": [
+    {
+     "not": [
+      "depend"
+     ],
+     "de": "Das Schlüsselwort depend muss unverändert in der Lücke stehen.",
+     "en": "The key word depend must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "from"
+     ],
+     "de": "„Abhängen von“ lockt zu from. Im Englischen heißt es depend on.",
+     "en": "German “abhängen von” lures you into from. English says depend on."
+    },
+    {
+     "if": [
+      "of"
+     ],
+     "de": "Of passt zu vielen Adjektiven, aber nicht zu depend. Hier steht on.",
+     "en": "Of fits many adjectives, but not depend. Here on is needed."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Präposition zu depend: on.",
+     "en": "The fixed preposition for depend is needed: on."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ver-k2",
+  "type": "kwt",
+  "pat": "prp.verb-prep",
+  "from": "The vendor said it would not start without a signed purchase order.",
+  "key": "INSISTED",
+  "frame": "The vendor ___ a signed purchase order.",
+  "answer": "insisted on",
+  "accepted": [
+   "insisted upon",
+   "insisted on getting",
+   "insisted on having",
+   "insisted on receiving"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: insisted on. Nach on folgt das, worauf jemand besteht.",
+    "en": "Right: insisted on. After on comes what someone insists on."
+   },
+   "wrong": [
+    {
+     "not": [
+      "insisted"
+     ],
+     "de": "Das Schlüsselwort insisted muss unverändert in der Lücke stehen.",
+     "en": "The key word insisted must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "For passt zu ask for und apply for. Zu insist gehört on.",
+     "en": "For fits ask for and apply for. Insist takes on."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "At nennt einen Ort oder Punkt. Zu insist gehört on.",
+     "en": "At names a place or point. Insist takes on."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Präposition zu insist: on (förmlich upon).",
+     "en": "The fixed preposition for insist is needed: on (formal upon)."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ver-f1",
+  "type": "find",
+  "pat": "prp.verb-prep",
+  "prompt": "Our rollout depends from the vendor's schedule.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "on",
+  "fixed": "Our rollout depends on the vendor's schedule.",
+  "accepted": [
+   "upon"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „depends from“. Zu depend gehört on.",
+    "en": "The error: “depends from”. Depend takes on."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Präposition nach depends stimmt nicht.",
+     "en": "There is an error: the preposition after depends is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei from: „Abhängen von“ lockt zu from, richtig ist on.",
+     "en": "The error is from: German “abhängen von” lures you into from, but on is right."
+    },
+    {
+     "if": [
+      "from"
+     ],
+     "de": "From bleibt falsch: Zu depend gehört on.",
+     "en": "From is still wrong: depend takes on."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Präposition zu depend: on.",
+     "en": "The fixed preposition for depend is needed: on."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ver-f2",
+  "type": "find",
+  "pat": "prp.verb-prep",
+  "prompt": "Our sales team relies of the CRM data every single day.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "on",
+  "fixed": "Our sales team relies on the CRM data every single day.",
+  "accepted": [
+   "upon"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „relies of“. Zu rely gehört on.",
+    "en": "The error: “relies of”. Rely takes on."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Präposition nach relies stimmt nicht.",
+     "en": "There is an error: the preposition after relies is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei of: Zu rely gehört on.",
+     "en": "The error is of: rely takes on."
+    },
+    {
+     "if": [
+      "of"
+     ],
+     "de": "Of bleibt falsch: Zu rely gehört on.",
+     "en": "Of is still wrong: rely takes on."
+    },
+    {
+     "not": [
+      "on",
+      "upon"
+     ],
+     "de": "Gesucht ist die feste Präposition zu rely: on.",
+     "en": "The fixed preposition for rely is needed: on."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ver-f3",
+  "type": "find",
+  "pat": "prp.verb-prep",
+  "prompt": "Everything depends on whether legal signs off this week.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: depend on ist richtig, danach folgt hier ein Satz mit whether.",
+    "en": "No error: depend on is correct, and a whether clause follows here."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: depend on + whether-Satz ist richtig, auch mit dem Präsens.",
+     "en": "No error: depend on + whether clause is correct, in the present too."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ver-m1",
+  "type": "meaning",
+  "pat": "prp.verb-prep",
+  "a": "I'm looking at the quarterly figures.",
+  "b": "I'm looking for the quarterly figures.",
+  "q": {
+   "de": "In welchem Satz sind die Zahlen schon da?",
+   "en": "In which sentence do I already have the figures?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Look at = ansehen. Bei look for suchst du die Zahlen noch.",
+    "en": "Right: sentence a. Look at = view. With look for you are still searching."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "Look for heißt suchen: In b sind die Zahlen noch nicht gefunden.",
+     "en": "Look for means search: in b the figures are not found yet."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: look at = ansehen, look for = suchen.",
+     "en": "Not the same: look at = view, look for = search."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-adj-k1",
+  "type": "kwt",
+  "pat": "prp.adj-prep",
+  "from": "Do you know the new pricing tool?",
+  "key": "FAMILIAR",
+  "frame": "Are you ___ the new pricing tool?",
+  "answer": "familiar with",
+  "accepted": [
+   "already familiar with",
+   "very familiar with",
+   "at all familiar with"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: familiar with. With nennt die Sache, mit der man vertraut ist.",
+    "en": "Right: familiar with. With names the thing you are familiar with."
+   },
+   "wrong": [
+    {
+     "not": [
+      "familiar"
+     ],
+     "de": "Das Schlüsselwort familiar muss unverändert in der Lücke stehen.",
+     "en": "The key word familiar must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "To passt zur Sache, die jemand kennt (familiar to me). Hier fragt man nach der Person: with.",
+     "en": "To fits the thing someone knows (familiar to me). Here you ask about the person: with."
+    },
+    {
+     "if": [
+      "of"
+     ],
+     "de": "„Vertraut mit“ wird zu familiar with, nicht zu of.",
+     "en": "German “vertraut mit” becomes familiar with, not of."
+    },
+    {
+     "not": [
+      "with"
+     ],
+     "de": "Gesucht ist die Präposition zu familiar: with.",
+     "en": "The preposition for familiar is needed: with."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-adj-k2",
+  "type": "kwt",
+  "pat": "prp.adj-prep",
+  "from": "The investor would like to hear more about our roadmap.",
+  "key": "INTERESTED",
+  "frame": "The investor is ___ our roadmap.",
+  "answer": "interested in",
+  "accepted": [
+   "very interested in",
+   "really interested in",
+   "particularly interested in",
+   "especially interested in",
+   "genuinely interested in"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: interested in. In verbindet interested mit dem Thema.",
+    "en": "Right: interested in. In links interested to the topic."
+   },
+   "wrong": [
+    {
+     "not": [
+      "interested"
+     ],
+     "de": "Das Schlüsselwort interested muss unverändert in der Lücke stehen.",
+     "en": "The key word interested must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "„Interessiert an“ lockt zu at. Im Englischen steht interested in.",
+     "en": "German “interessiert an” lures you into at. English uses interested in."
+    },
+    {
+     "if": [
+      "for"
+     ],
+     "de": "„Sich interessieren für“ lockt zu for. Zu interested gehört in.",
+     "en": "German “sich interessieren für” lures you into for. Interested takes in."
+    },
+    {
+     "not": [
+      "in"
+     ],
+     "de": "Gesucht ist die Präposition zu interested: in.",
+     "en": "The preposition for interested is needed: in."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-adj-f1",
+  "type": "find",
+  "pat": "prp.adj-prep",
+  "prompt": "We are extremely proud on what the team delivered.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "of",
+  "fixed": "We are extremely proud of what the team delivered.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „proud on“. Zu proud gehört of.",
+    "en": "The error: “proud on”. Proud takes of."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Präposition nach proud stimmt nicht.",
+     "en": "There is an error: the preposition after proud is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei on: „Stolz auf“ lockt zu on, richtig ist of.",
+     "en": "The error is on: German “stolz auf” lures you into on, but of is right."
+    },
+    {
+     "if": [
+      "on"
+     ],
+     "de": "On bleibt falsch: Zu proud gehört of.",
+     "en": "On is still wrong: proud takes of."
+    },
+    {
+     "not": [
+      "of"
+     ],
+     "de": "Gesucht ist die Präposition zu proud: of.",
+     "en": "The preposition for proud is needed: of."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-adj-f2",
+  "type": "find",
+  "pat": "prp.adj-prep",
+  "prompt": "She is allergic against shellfish, so we booked a different caterer.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "to",
+  "fixed": "She is allergic to shellfish, so we booked a different caterer.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „allergic against“. Zu allergic gehört to.",
+    "en": "The error: “allergic against”. Allergic takes to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Präposition nach allergic stimmt nicht.",
+     "en": "There is an error: the preposition after allergic is wrong."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei against: „Allergisch gegen“ lockt zu against, richtig ist to.",
+     "en": "The error is against: German “allergisch gegen” lures you into against, but to is right."
+    },
+    {
+     "if": [
+      "against"
+     ],
+     "de": "Against bleibt falsch: Zu allergic gehört to.",
+     "en": "Against is still wrong: allergic takes to."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Gesucht ist die Präposition zu allergic: to.",
+     "en": "The preposition for allergic is needed: to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-adj-f3",
+  "type": "find",
+  "pat": "prp.adj-prep",
+  "prompt": "Our CFO is responsible for the final forecast.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: responsible for + Sache ist richtig.",
+    "en": "No error: responsible for + thing is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Für eine Sache steht responsible for.",
+     "en": "No error: for a thing, use responsible for."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-adj-m1",
+  "type": "meaning",
+  "pat": "prp.adj-prep",
+  "a": "Dana is responsible for the finance team.",
+  "b": "Dana is responsible to the finance team.",
+  "q": {
+   "de": "In welchem Satz berichtet Dana an das Finanzteam?",
+   "en": "In which sentence does Dana report to the finance team?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Responsible to heißt: Dana ist dem Team gegenüber Rechenschaft schuldig.",
+    "en": "Right: sentence b. Responsible to = answerable to someone."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a ist Dana für das Team zuständig, sie berichtet nicht an es.",
+     "en": "In a Dana is in charge of the team, she does not report to it."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: responsible for = zuständig für, responsible to = Rechenschaft schuldig.",
+     "en": "Not the same: responsible for = in charge of, responsible to = answerable to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-nop-k1",
+  "type": "kwt",
+  "pat": "prp.no-prep",
+  "from": "I wasn't at the workshop last week.",
+  "key": "ATTEND",
+  "frame": "I ___ the workshop last week.",
+  "answer": "didn't attend",
+  "accepted": [
+   "did not attend",
+   "couldn't attend",
+   "could not attend",
+   "wasn't able to attend",
+   "was not able to attend",
+   "was unable to attend"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: attend + Objekt, ohne Präposition. Das Verb enthält das „an“ schon.",
+    "en": "Right: attend + object, no preposition. The verb already contains “at”."
+   },
+   "wrong": [
+    {
+     "not": [
+      "attend"
+     ],
+     "de": "Das Schlüsselwort attend muss unverändert in der Lücke stehen.",
+     "en": "The key word attend must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "Das at ist zu viel: attend nimmt das Objekt direkt.",
+     "en": "The at is extra: attend takes its object directly."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Das to ist zu viel: attend nimmt das Objekt direkt, ohne Präposition.",
+     "en": "The to is extra: attend takes its object directly, with no preposition."
+    },
+    {
+     "not": [
+      "attend"
+     ],
+     "de": "Gesucht ist ein Verneinung plus attend: didn’t attend.",
+     "en": "A negative plus attend is needed: didn’t attend."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-nop-k2",
+  "type": "kwt",
+  "pat": "prp.no-prep",
+  "from": "He said nothing about the delay in his email.",
+  "key": "MENTION",
+  "frame": "He ___ the delay in his email.",
+  "answer": "didn't mention",
+  "accepted": [
+   "did not mention",
+   "didn't even mention",
+   "did not even mention",
+   "failed to mention"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: mention + Objekt, ohne Präposition. „About“ ist hier zu viel.",
+    "en": "Right: mention + object, no preposition. About is extra here."
+   },
+   "wrong": [
+    {
+     "not": [
+      "mention"
+     ],
+     "de": "Das Schlüsselwort mention muss unverändert in der Lücke stehen.",
+     "en": "The key word mention must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "about"
+     ],
+     "de": "Das about ist zu viel: mention nimmt das Objekt direkt.",
+     "en": "The about is extra: mention takes its object directly."
+    },
+    {
+     "not": [
+      "mention"
+     ],
+     "de": "Gesucht ist die Verneinung plus mention: didn’t mention.",
+     "en": "A negative plus mention is needed: didn’t mention."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-nop-f1",
+  "type": "find",
+  "pat": "prp.no-prep",
+  "prompt": "Please contact to the account manager before you send the quote.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "",
+  "fixed": "Please contact the account manager before you send the quote.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „contact to“. Contact nimmt das Objekt direkt, ohne to.",
+    "en": "The error: “contact to”. Contact takes its object directly, with no to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach contact steht ein Wort zu viel.",
+     "en": "There is an error: one word too many after contact."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei to: Contact braucht keine Präposition.",
+     "en": "The error is to: contact needs no preposition."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Das to bleibt falsch: Es wird ganz gestrichen, contact the account manager.",
+     "en": "The to is still wrong: it is deleted completely, contact the account manager."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Hier wird nichts ersetzt: Das to wird gestrichen, contact the account manager.",
+     "en": "Nothing is replaced here: the to is deleted, contact the account manager."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-nop-f2",
+  "type": "find",
+  "pat": "prp.no-prep",
+  "prompt": "After three rounds, we finally reached to an agreement on delivery dates.",
+  "err": [
+   6,
+   6
+  ],
+  "answer": "",
+  "fixed": "After three rounds, we finally reached an agreement on delivery dates.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „reached to“. Reach nimmt das Objekt direkt, ohne to.",
+    "en": "The error: “reached to”. Reach takes its object directly, with no to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach reached steht ein Wort zu viel.",
+     "en": "There is an error: one word too many after reached."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei to: Reach an agreement hat keine Präposition.",
+     "en": "The error is to: reach an agreement has no preposition."
+    },
+    {
+     "if": [
+      "to"
+     ],
+     "de": "Das to bleibt falsch: Es wird ganz gestrichen, reached an agreement.",
+     "en": "The to is still wrong: it is deleted completely, reached an agreement."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Hier wird nichts ersetzt: Das to wird gestrichen, reached an agreement.",
+     "en": "Nothing is replaced here: the to is deleted, reached an agreement."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-nop-f3",
+  "type": "find",
+  "pat": "prp.no-prep",
+  "prompt": "We'll discuss the rollout schedule during tomorrow's call.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: discuss + Objekt ohne Präposition ist richtig.",
+    "en": "No error: discuss + object with no preposition is correct."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Discuss nimmt das Objekt direkt.",
+     "en": "No error: discuss takes its object directly."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-nop-m1",
+  "type": "meaning",
+  "pat": "prp.no-prep",
+  "a": "Mia answers the manager's emails.",
+  "b": "Mia answers to the manager.",
+  "q": {
+   "de": "In welchem Satz ist der Manager Mias Vorgesetzter?",
+   "en": "In which sentence is the manager Mia’s boss?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Answer to heißt: dem Chef Rechenschaft schuldig. Answer + Objekt = beantworten.",
+    "en": "Right: sentence b. Answer to = be accountable to. Answer + object = reply to."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a beantwortet Mia nur die E-Mails. Von einem Vorgesetzten ist keine Rede.",
+     "en": "In a Mia just replies to the emails. No boss is mentioned."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: answer + Objekt = beantworten, answer to = Rechenschaft schuldig.",
+     "en": "Not the same: answer + object = reply, answer to = be accountable to."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-per-k1",
+  "type": "kwt",
+  "pat": "prp.person-to",
+  "from": "Could you give me an explanation of how the policy works?",
+  "key": "EXPLAIN",
+  "frame": "Could you ___ how the policy works?",
+  "answer": "explain to me",
+  "accepted": [
+   "please explain to me",
+   "briefly explain to me",
+   "quickly explain to me"
+  ],
+  "words": [
+   3,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: explain to me. Bei explain bekommt die Person ein to.",
+    "en": "Right: explain to me. With explain, the person gets a to."
+   },
+   "wrong": [
+    {
+     "not": [
+      "explain"
+     ],
+     "de": "Das Schlüsselwort explain muss unverändert in der Lücke stehen.",
+     "en": "The key word explain must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "for",
+      "me"
+     ],
+     "de": "For me hieße: an meiner Stelle erklären. Gemeint ist „mir gegenüber“: to.",
+     "en": "For me would mean: explain on my behalf. Here it is “to me”: to."
+    },
+    {
+     "if": [
+      "me"
+     ],
+     "not": [
+      "to"
+     ],
+     "de": "„Erklär mir“ hat im Deutschen kein Wort für to. Im Englischen braucht explain to me.",
+     "en": "German “erklär mir” has no word for to. English needs explain to me."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Gesucht ist explain plus to plus Person: explain to me.",
+     "en": "Explain plus to plus person is needed: explain to me."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-per-k2",
+  "type": "kwt",
+  "pat": "prp.person-to",
+  "from": "The CEO told the team that we're hiring in Q3.",
+  "key": "SAID",
+  "frame": "The CEO ___ the team that we're hiring in Q3.",
+  "answer": "said to",
+  "accepted": [
+   "also said to",
+   "just said to",
+   "already said to"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: said to + Person. Nach say kommt die Person mit to, nach tell ohne.",
+    "en": "Right: said to + person. After say the person takes to, after tell it does not."
+   },
+   "wrong": [
+    {
+     "not": [
+      "said"
+     ],
+     "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
+     "en": "The key word said must stay unchanged in the gap."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Bei say braucht die Person ein to: said to the team. Ohne to wäre es told.",
+     "en": "With say the person needs to: said to the team. Without to it would be told."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-per-f1",
+  "type": "find",
+  "pat": "prp.person-to",
+  "prompt": "Could you explain me how the approval process works?",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "to me",
+  "fixed": "Could you explain to me how the approval process works?",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „explain me“. Die Person braucht bei explain ein to.",
+    "en": "The error: “explain me”. With explain, the person needs to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Bei explain fehlt vor der Person ein Wort.",
+     "en": "There is an error: with explain a word is missing before the person."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei me: „Erklär mir“ hat kein to, im Englischen aber schon.",
+     "en": "The error is me: German “erklär mir” has no to, but English does."
+    },
+    {
+     "if": [
+      "me"
+     ],
+     "de": "Es fehlt noch to vor me: explain to me.",
+     "en": "Still missing is to before me: explain to me."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Gesucht ist to plus Person: explain to me.",
+     "en": "To plus person is needed: explain to me."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-per-f2",
+  "type": "find",
+  "pat": "prp.person-to",
+  "prompt": "He suggested me a different supplier last week.",
+  "err": [
+   2,
+   5
+  ],
+  "answer": "a different supplier to me",
+  "fixed": "He suggested a different supplier to me last week.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „suggested me a …“. Erst die Sache, dann to + Person.",
+    "en": "The error: “suggested me a …”. First the thing, then to + person."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Bei suggested steht die Person an der falschen Stelle.",
+     "en": "There is an error: with suggested the person is in the wrong place."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „me a different supplier“: erst die Sache, dann to me.",
+     "en": "The error is “me a different supplier”: the thing first, then to me."
+    },
+    {
+     "not": [
+      "to"
+     ],
+     "de": "Gesucht ist die Sache, dann to + Person: a different supplier to me.",
+     "en": "The thing, then to + person is needed: a different supplier to me."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-per-m1",
+  "type": "meaning",
+  "pat": "prp.person-to",
+  "a": "We talked to the CFO.",
+  "b": "We talked about the CFO.",
+  "q": {
+   "de": "In welchem Satz war der CFO im Gespräch dabei?",
+   "en": "In which sentence was the CFO part of the conversation?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Talk to = mit jemandem sprechen. Talk about = über jemanden sprechen.",
+    "en": "Right: sentence a. Talk to = speak with someone. Talk about = speak about someone."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b war der CFO nur das Thema, nicht der Gesprächspartner.",
+     "en": "In b the CFO was only the topic, not the person spoken to."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: talk to = mit jemandem, talk about = über jemanden.",
+     "en": "Not the same: talk to = with someone, talk about = about someone."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ing-k1",
+  "type": "kwt",
+  "pat": "prp.prep-ing",
+  "from": "I'm excited to meet you in person next week.",
+  "key": "LOOKING",
+  "frame": "I'm ___ you in person next week.",
+  "answer": "looking forward to meeting",
+  "accepted": [
+   "looking forward to seeing",
+   "really looking forward to meeting",
+   "really looking forward to seeing",
+   "so looking forward to meeting",
+   "so looking forward to seeing"
+  ],
+  "words": [
+   4,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: looking forward to meeting. Das to ist eine Präposition, danach folgt -ing.",
+    "en": "Right: looking forward to meeting. The to is a preposition, so -ing follows."
+   },
+   "wrong": [
+    {
+     "not": [
+      "looking"
+     ],
+     "de": "Das Schlüsselwort looking muss unverändert in der Lücke stehen.",
+     "en": "The key word looking must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "to",
+      "meet"
+     ],
+     "de": "Nach looking forward to steht -ing, nicht die Grundform: meeting.",
+     "en": "After looking forward to use -ing, not the base form: meeting."
+    },
+    {
+     "if": [
+      "to",
+      "see"
+     ],
+     "de": "Nach looking forward to steht -ing, nicht die Grundform: seeing.",
+     "en": "After looking forward to use -ing, not the base form: seeing."
+    },
+    {
+     "not": [
+      "forward"
+     ],
+     "de": "Gesucht ist die feste Wendung: looking forward to + -ing.",
+     "en": "The fixed phrase is needed: looking forward to + -ing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ing-k2",
+  "type": "kwt",
+  "pat": "prp.prep-ing",
+  "from": "He approved the budget but didn't read the details.",
+  "key": "WITHOUT",
+  "frame": "He approved the budget ___ the details.",
+  "answer": "without reading",
+  "accepted": [
+   "without even reading",
+   "without first reading",
+   "without really reading",
+   "without having read",
+   "without even having read"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: without + -ing. Nach der Präposition steht die -ing-Form.",
+    "en": "Right: without + -ing. After the preposition comes the -ing form."
+   },
+   "wrong": [
+    {
+     "not": [
+      "without"
+     ],
+     "de": "Das Schlüsselwort without muss unverändert in der Lücke stehen.",
+     "en": "The key word without must stay unchanged in the gap."
+    },
+    {
+     "if": [
+      "without",
+      "read"
+     ],
+     "de": "Nach without steht -ing, nicht die Grundform: without reading.",
+     "en": "After without use -ing, not the base form: without reading."
+    },
+    {
+     "if": [
+      "without",
+      "to"
+     ],
+     "de": "Nach without steht kein to + Infinitiv: without reading.",
+     "en": "After without there is no to + infinitive: without reading."
+    },
+    {
+     "not": [
+      "without"
+     ],
+     "de": "Gesucht ist without + -ing: without reading.",
+     "en": "Without + -ing is needed: without reading."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ing-f1",
+  "type": "find",
+  "pat": "prp.prep-ing",
+  "prompt": "I'm looking forward to see you at the kickoff next week.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "seeing",
+  "fixed": "I'm looking forward to seeing you at the kickoff next week.",
+  "accepted": [
+   "meeting"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „to see“. Das to ist eine Präposition, danach folgt -ing.",
+    "en": "The error: “to see”. The to is a preposition, so -ing follows."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach looking forward to steht die falsche Form.",
+     "en": "There is an error: the wrong form follows looking forward to."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei see: Nach looking forward to steht -ing.",
+     "en": "The error is see: after looking forward to comes -ing."
+    },
+    {
+     "if": [
+      "see"
+     ],
+     "de": "See bleibt falsch: Nach looking forward to steht -ing.",
+     "en": "See is still wrong: after looking forward to comes -ing."
+    },
+    {
+     "not": [
+      "seeing",
+      "meeting"
+     ],
+     "de": "Gesucht ist die -ing-Form: seeing.",
+     "en": "The -ing form is needed: seeing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ing-f2",
+  "type": "find",
+  "pat": "prp.prep-ing",
+  "prompt": "Let's send the draft instead of to wait for legal.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "waiting",
+  "fixed": "Let's send the draft instead of waiting for legal.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „of to wait“. Nach instead of steht -ing, ohne to.",
+    "en": "The error: “of to wait”. After instead of comes -ing, with no to."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Nach instead of steht die falsche Form.",
+     "en": "There is an error: the wrong form follows instead of."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „to wait“: Nach instead of steht -ing.",
+     "en": "The error is “to wait”: after instead of comes -ing."
+    },
+    {
+     "if": [
+      "wait"
+     ],
+     "de": "Wait bleibt falsch: Nach instead of steht -ing.",
+     "en": "Wait is still wrong: after instead of comes -ing."
+    },
+    {
+     "not": [
+      "waiting"
+     ],
+     "de": "Gesucht ist die -ing-Form: waiting.",
+     "en": "The -ing form is needed: waiting."
+    }
+   ]
+  }
+ },
+ {
+  "id": "prp-ing-m1",
+  "type": "meaning",
+  "pat": "prp.prep-ing",
+  "a": "He left without finishing the report.",
+  "b": "He left after finishing the report.",
+  "q": {
+   "de": "In welchem Satz ist der Bericht fertig?",
+   "en": "In which sentence is the report finished?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. After + -ing = danach. Without + -ing = ohne es zu tun.",
+    "en": "Right: sentence b. After + -ing = afterward. Without + -ing = not doing it."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a ging er, ohne den Bericht zu beenden. Er ist nicht fertig.",
+     "en": "In a he left without completing the report. It is not finished."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: without finishing = unfertig, after finishing = fertig.",
+     "en": "Not the same: without finishing = unfinished, after finishing = finished."
+    }
+   ]
+  }
+ }
+]

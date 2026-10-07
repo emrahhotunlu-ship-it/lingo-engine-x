@@ -1,0 +1,349 @@
+{
+  "topic": "c1-nominal",
+  "canDo": {
+    "de": "Ich kann Mails verdichten: mit dem richtigen Nomen (implementation, approval, receipt), of am Objekt, Wendungen wie Following und Upon und festen Präpositionen (a reduction in, a decision to).",
+    "en": "I can condense emails: with the right noun (implementation, approval, receipt), of for the object, phrases such as Following and Upon, and fixed prepositions (a reduction in, a decision to)."
+  },
+  "order": [
+    "nm.noun-form",
+    "nm.of-object",
+    "nm.following",
+    "nm.noun-prep"
+  ],
+  "introPlan": [
+    [
+      "nm.noun-form",
+      "nm.of-object"
+    ],
+    [
+      "nm.following",
+      "nm.noun-prep"
+    ]
+  ],
+  "decide": {
+    "de": [
+      "Brauchst du hier ein Nomen (nach the, a, Adjektiv) oder eine Verbform?",
+      "Hängt das Objekt mit of am Nomen, oder steht bei Gremien 's davor?",
+      "Ersetzt ein Nomen den Nebensatz (Following, Upon), oder braucht das Nomen eine feste Präposition (in, for, to)?"
+    ],
+    "en": [
+      "Do you need a noun here (after the, a, an adjective) or a verb form?",
+      "Does the object attach to the noun with of, or does 's come first for a body?",
+      "Does a noun replace the clause (Following, Upon), or does the noun need a fixed preposition (in, for, to)?"
+    ]
+  },
+  "patterns": [
+    {
+      "id": "nm.noun-form",
+      "name": {
+        "de": "Verb → Nomen · die richtige Wortform",
+        "en": "Verb → noun · the right word form"
+      },
+      "form": {
+        "de": "the / a + Nomen (-tion, -al, -ment, -ery) statt Verb",
+        "en": "the / a + noun (-tion, -al, -ment, -ery) instead of the verb"
+      },
+      "use": {
+        "de": "Im formellen Englisch wird aus dem Verb ein Nomen: implement → implementation. Nach the, a oder einem Adjektiv steht ein Nomen, nicht die Verbform.",
+        "en": "Formal English turns the verb into a noun: implement → implementation. After the, a or an adjective a noun follows, not the verb form."
+      },
+      "signals": [
+        "implementation",
+        "approval",
+        "migration",
+        "delivery",
+        "receipt"
+      ],
+      "ex": [
+        {
+          "en": "The implementation of the new CRM starts in May.",
+          "de": "Die Einführung des neuen CRM beginnt im Mai.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Thanks for the quick approval of our travel budget.",
+          "de": "Danke für die schnelle Genehmigung unseres Reisebudgets.",
+          "ctx": "mail"
+        },
+        {
+          "en": "The migration went smoothly over the weekend.",
+          "de": "Die Migration lief am Wochenende reibungslos.",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The approve of the budget took three weeks.",
+        "good": "The approval of the budget took three weeks.",
+        "cause": {
+          "de": "Kein Übersetzungsfehler: Man kennt zuerst das Verb (approve) und setzt es nach „the“ ein. Das Nomen hat eine eigene Endung (-al).",
+          "en": "Not a translation error: learners know the verb (approve) first and use it after “the”. The noun has its own ending (-al)."
+        }
+      },
+      "contrast": {
+        "with": "nm.of-object",
+        "a": "We approved the budget last week.",
+        "b": "The approval of the budget came last week.",
+        "diff": {
+          "de": "Links handelt jemand (we approved). Rechts ist die Handlung selbst eine Sache, mit the davor und of danach.",
+          "en": "On the left someone acts (we approved). On the right the action itself is a thing, with the before it and of after it."
+        }
+      },
+      "ccq": [
+        {
+          "s": "The migration of the data is planned for June.",
+          "q": {
+            "de": "Ist die Migration schon passiert?",
+            "en": "Has the migration already happened?"
+          },
+          "a": false
+        },
+        {
+          "s": "After the approval of the budget, we ordered the licenses.",
+          "q": {
+            "de": "Kam die Bestellung vor der Freigabe?",
+            "en": "Did the order come before the approval?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Welche Wortart braucht die Stelle nach „the“ und vor „of“, und welche Endung hat sie?",
+        "en": "Which part of speech does the slot after “the” and before “of” need, and which ending does it take?"
+      }
+    },
+    {
+      "id": "nm.of-object",
+      "name": {
+        "de": "Nomen + of + Objekt · Genitiv",
+        "en": "Noun + of + object · genitive"
+      },
+      "form": {
+        "de": "the + Nomen + of + Objekt (bei Gremien: the board's + Nomen)",
+        "en": "the + noun + of + object (for bodies: the board's + noun)"
+      },
+      "use": {
+        "de": "Das Objekt des Verbs hängt mit of am Nomen: approve the budget → the approval of the budget. Bei Gremien und Personen steht auch 's davor: the board's approval.",
+        "en": "The verb's object attaches to the noun with of: approve the budget → the approval of the budget. For bodies and people 's can come first: the board's approval."
+      },
+      "signals": [
+        "approval of",
+        "analysis of",
+        "review of",
+        "board's",
+        "team's"
+      ],
+      "ex": [
+        {
+          "en": "The review of the contract is due Thursday.",
+          "de": "Die Prüfung des Vertrags ist bis Donnerstag fällig.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Please send us the board's approval in writing.",
+          "de": "Bitte schicken Sie uns die Zustimmung des Vorstands schriftlich.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Did you handle the renewal of our contract?",
+          "de": "Hast du die Verlängerung unseres Vertrags erledigt?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "The renewal from our license is overdue.",
+        "good": "The renewal of our license is overdue.",
+        "cause": {
+          "de": "Das deutsche „von“ („Verlängerung von Lizenzen“) wird wörtlich zu from übersetzt. Im Englischen hängt das Objekt mit of am Nomen.",
+          "en": "German “von” (“Verlängerung von Lizenzen”) is translated word for word as from. English attaches the object to the noun with of."
+        }
+      },
+      "contrast": {
+        "with": "nm.noun-prep",
+        "a": "The approval of the budget came late.",
+        "b": "We saw an increase in costs.",
+        "diff": {
+          "de": "of nennt das Objekt der Handlung (was wird genehmigt?). in nennt den Bereich, der sich verändert (wo steigt es?).",
+          "en": "of names the object of the action (what is approved?). in names the area that changes (where does it rise?)."
+        }
+      },
+      "ccq": [
+        {
+          "s": "The review of the contract took two days.",
+          "q": {
+            "de": "Wurde der Vertrag geprüft?",
+            "en": "Was the contract reviewed?"
+          },
+          "a": true
+        },
+        {
+          "s": "The board's approval is still missing.",
+          "q": {
+            "de": "Hat der Vorstand schon zugestimmt?",
+            "en": "Has the board already approved?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Was geschieht mit dem Objekt, wenn aus dem Verb ein Nomen wird: Wo hängt es dran, und womit?",
+        "en": "What happens to the object once the verb becomes a noun: where does it attach, and with what word?"
+      }
+    },
+    {
+      "id": "nm.following",
+      "name": {
+        "de": "Following / Upon / Prior to + Nomen",
+        "en": "Following / Upon / Prior to + noun"
+      },
+      "form": {
+        "de": "Following / Upon / Prior to / Ahead of + Nomen (statt Nebensatz)",
+        "en": "Following / Upon / Prior to / Ahead of + noun (instead of a clause)"
+      },
+      "use": {
+        "de": "Statt eines Nebensatzes steht eine Wendung mit Nomen: Following the review, … / Upon receipt of … / Prior to the launch, … Das klingt förmlich und kurz.",
+        "en": "Instead of a subordinate clause a noun phrase follows: Following the review, … / Upon receipt of … / Prior to the launch, … It sounds formal and short."
+      },
+      "signals": [
+        "following",
+        "upon",
+        "prior to",
+        "ahead of",
+        "pending"
+      ],
+      "ex": [
+        {
+          "en": "Following the review, we will update the plan.",
+          "de": "Nach der Prüfung aktualisieren wir den Plan.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "Upon receipt of your payment, we will ship the order.",
+          "de": "Nach Zahlungseingang versenden wir die Bestellung.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Ahead of the call, can you send me the numbers?",
+          "de": "Kannst du mir vor dem Gespräch die Zahlen schicken?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "Prior the meeting, please send me the numbers.",
+        "good": "Prior to the meeting, please send me the numbers.",
+        "cause": {
+          "de": "Kein reiner Übersetzungsfehler: Deutsch „vor dem Treffen“ hat kein Wort für das to, das bei prior fest dazugehört.",
+          "en": "Not a pure translation error: German “vor dem Treffen” has no word for the to that belongs with prior."
+        }
+      },
+      "contrast": {
+        "with": "nm.noun-form",
+        "a": "After the board approves it, we start.",
+        "b": "Following the board's approval, we start.",
+        "diff": {
+          "de": "Links ein Nebensatz mit Verb, rechts eine Wendung mit Nomen: kürzer und förmlicher.",
+          "en": "On the left a clause with a verb, on the right a noun phrase: shorter and more formal."
+        }
+      },
+      "ccq": [
+        {
+          "s": "Following the review, we will update the plan.",
+          "q": {
+            "de": "Aktualisieren wir den Plan nach der Prüfung?",
+            "en": "Do we update the plan after the review?"
+          },
+          "a": true
+        },
+        {
+          "s": "Prior to the launch, we'll run a final test.",
+          "q": {
+            "de": "Testen wir erst nach dem Start?",
+            "en": "Do we test only after the launch?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Folgt auf die Wendung ein Nomen oder ein ganzer Satz mit Subjekt und Verb?",
+        "en": "Does a noun or a whole clause with a subject and verb follow the phrase?"
+      }
+    },
+    {
+      "id": "nm.noun-prep",
+      "name": {
+        "de": "Nomen + feste Präposition",
+        "en": "Noun + fixed preposition"
+      },
+      "form": {
+        "de": "an increase in · a reduction in · a need for · demand for · a decision to + Grundform",
+        "en": "an increase in · a reduction in · a need for · demand for · a decision to + base form"
+      },
+      "use": {
+        "de": "Nomen bringen ihre Präposition mit: in nennt den Bereich einer Veränderung, for das Gewünschte, to + Grundform folgt auf decision.",
+        "en": "Nouns bring their preposition: in names the area of a change, for the thing wanted, to + base form follows decision."
+      },
+      "signals": [
+        "increase in",
+        "reduction in",
+        "need for",
+        "demand for",
+        "decision to"
+      ],
+      "ex": [
+        {
+          "en": "There is a growing need for clearer reporting.",
+          "de": "Es gibt einen wachsenden Bedarf an klarerer Berichterstattung.",
+          "ctx": "meeting"
+        },
+        {
+          "en": "I'm happy to confirm our decision to extend the contract.",
+          "de": "Gerne bestätige ich unsere Entscheidung, den Vertrag zu verlängern.",
+          "ctx": "mail"
+        },
+        {
+          "en": "Did you see the increase in prices?",
+          "de": "Hast du den Preisanstieg gesehen?",
+          "ctx": "talk"
+        }
+      ],
+      "trap": {
+        "bad": "We announced the decision for extending the contract.",
+        "good": "We announced the decision to extend the contract.",
+        "cause": {
+          "de": "Deutsch sagt „Entscheidung für …“. Dieses für + Nomen oder -ing wird übertragen. Im Englischen folgt nach decision to + Grundform.",
+          "en": "German says “Entscheidung für …”. That for + noun or -ing is carried over. In English decision takes to + base form."
+        }
+      },
+      "contrast": {
+        "with": "nm.of-object",
+        "a": "We saw an increase in sales.",
+        "b": "The approval of the budget came late.",
+        "diff": {
+          "de": "in nennt den Bereich, der steigt oder sinkt. of nennt, was von der Handlung betroffen ist.",
+          "en": "in names the area that rises or falls. of names what the action affects."
+        }
+      },
+      "ccq": [
+        {
+          "s": "We expect a reduction in storage costs.",
+          "q": {
+            "de": "Sollen die Kosten sinken?",
+            "en": "Should the costs fall?"
+          },
+          "a": true
+        },
+        {
+          "s": "We saw a drop in demand.",
+          "q": {
+            "de": "Ist die Nachfrage gestiegen?",
+            "en": "Did demand rise?"
+          },
+          "a": false
+        }
+      ],
+      "nudge": {
+        "de": "Welches kleine Wort verbindet das Nomen mit dem, was sich verändert oder was man will?",
+        "en": "Which small word links the noun to what changes or what is wanted?"
+      }
+    }
+  ]
+}

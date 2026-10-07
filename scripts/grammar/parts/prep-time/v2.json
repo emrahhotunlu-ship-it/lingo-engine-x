@@ -1,0 +1,735 @@
+[
+ {
+  "id": "pt-ai-k1",
+  "type": "kwt",
+  "pat": "pt.at-on-in",
+  "from": "Our review is scheduled for Tuesday afternoon.",
+  "key": "ON",
+  "frame": "Our review is ___ afternoon.",
+  "answer": "on Tuesday",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor einem Wochentag steht on: on Tuesday afternoon.",
+    "en": "Right: a day of the week takes on: on Tuesday afternoon."
+   },
+   "wrong": [
+    {
+     "if": [
+      "at"
+     ],
+     "de": "„at“ steht vor Uhrzeiten. Vor einem Wochentag steht on.",
+     "en": "“At” goes before clock times. Before a day of the week use on."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "„in“ steht vor Monaten und Tageszeiten, nicht vor Tuesday.",
+     "en": "“In” goes before months and parts of the day, not before Tuesday."
+    },
+    {
+     "not": [
+      "on"
+     ],
+     "de": "Das Schlüsselwort on muss unverändert in der Lücke stehen.",
+     "en": "The key word on must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-ai-k2",
+  "type": "kwt",
+  "pat": "pt.at-on-in",
+  "from": "The new office opens at the start of June.",
+  "key": "IN",
+  "frame": "The new office opens ___ June.",
+  "answer": "in early",
+  "accepted": [
+   "early in"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor einem Monat steht in: in early June.",
+    "en": "Right: a month takes in: in early June."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„on“ steht vor Tagen und Daten. Vor einem Monat steht in.",
+     "en": "“On” goes before days and dates. Before a month use in."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "„at“ steht vor Uhrzeiten. Vor einem Monat steht in.",
+     "en": "“At” goes before clock times. Before a month use in."
+    },
+    {
+     "not": [
+      "in"
+     ],
+     "de": "Das Schlüsselwort in muss unverändert in der Lücke stehen.",
+     "en": "The key word in must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-ai-f1",
+  "type": "find",
+  "pat": "pt.at-on-in",
+  "prompt": "The training session takes place at the 14th of March.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "on",
+  "fixed": "The training session takes place on the 14th of March.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor einem Datum steht on: on the 14th of March.",
+    "en": "The error: a date takes on: on the 14th of March."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor einem Datum steht nicht at.",
+     "en": "There is an error: a date does not take at."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „at“: at steht nur vor Uhrzeiten.",
+     "en": "The error is “at”: at only goes before clock times."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-ai-f2",
+  "type": "find",
+  "pat": "pt.at-on-in",
+  "prompt": "I usually answer emails at the morning, before the first call.",
+  "err": [
+   4,
+   5
+  ],
+  "answer": "in the",
+  "fixed": "I usually answer emails in the morning, before the first call.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Die Tageszeit steht mit in: in the morning.",
+    "en": "The error: a part of the day takes in: in the morning."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor the morning steht nicht at.",
+     "en": "There is an error: before the morning there is no at."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „at the“: Tageszeiten stehen mit in.",
+     "en": "The error is “at the”: parts of the day take in."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-ai-f3",
+  "type": "find",
+  "pat": "pt.at-on-in",
+  "prompt": "The budget review is on the third Thursday of every month.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Vor einem Tag steht on, hier on the third Thursday.",
+    "en": "No error: a day takes on, here on the third Thursday."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: on the third Thursday ist ein Tag und steht richtig mit on.",
+     "en": "No error: the third Thursday is a day and correctly takes on."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-ai-m1",
+  "type": "meaning",
+  "pat": "pt.at-on-in",
+  "a": "The workshop is on June 5.",
+  "b": "The workshop is in June.",
+  "q": {
+   "de": "Welcher Satz nennt schon den genauen Tag?",
+   "en": "Which sentence already gives the exact day?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. on June 5 nennt den Tag, in June nur den Monat.",
+    "en": "Right: sentence a. on June 5 gives the day, in June only the month."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b steht nur der Monat (in June). Den Tag kennt man noch nicht.",
+     "en": "Sentence b gives only the month (in June). The day is still unknown."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: on nennt einen Tag, in einen ganzen Monat.",
+     "en": "Not the same: on names a day, in names a whole month."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-fs-k1",
+  "type": "kwt",
+  "pat": "pt.for-since",
+  "from": "I joined the team in 2021 and I'm still here.",
+  "key": "SINCE",
+  "frame": "I ___ 2021.",
+  "answer": "have worked here since",
+  "accepted": [
+   "have been here since",
+   "have been working here since",
+   "'ve worked here since",
+   "'ve been here since",
+   "'ve been working here since"
+  ],
+  "words": [
+   3,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: since 2021 nennt den Startpunkt, dazu steht das Present Perfect.",
+    "en": "Right: since 2021 names the starting point, with the present perfect."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "de": "„for“ nennt eine Dauer. 2021 ist ein Startpunkt: since 2021.",
+     "en": "“For” names a duration. 2021 is a starting point: since 2021."
+    },
+    {
+     "not": [
+      "since"
+     ],
+     "de": "Das Schlüsselwort since muss unverändert in der Lücke stehen.",
+     "en": "The key word since must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-fs-k2",
+  "type": "kwt",
+  "pat": "pt.for-since",
+  "from": "We started testing two hours ago and are still testing.",
+  "key": "FOR",
+  "frame": "We ___ two hours.",
+  "answer": "have been testing for",
+  "accepted": [
+   "'ve been testing for"
+  ],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: for two hours nennt die Dauer, dazu steht have been testing.",
+    "en": "Right: for two hours names the duration, with have been testing."
+   },
+   "wrong": [
+    {
+     "if": [
+      "since"
+     ],
+     "de": "„since“ braucht einen Startpunkt. two hours ist eine Dauer: for.",
+     "en": "“Since” needs a starting point. two hours is a duration: for."
+    },
+    {
+     "not": [
+      "for"
+     ],
+     "de": "Das Schlüsselwort for muss unverändert in der Lücke stehen.",
+     "en": "The key word for must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-fs-f1",
+  "type": "find",
+  "pat": "pt.for-since",
+  "prompt": "We have been working on this feature since six weeks.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "for",
+  "fixed": "We have been working on this feature for six weeks.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: six weeks ist eine Dauer, also for six weeks.",
+    "en": "The error: six weeks is a duration, so for six weeks."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor einer Dauer steht nicht since.",
+     "en": "There is an error: before a duration there is no since."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „since“: since braucht einen Startpunkt.",
+     "en": "The error is “since”: since needs a starting point."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-fs-f2",
+  "type": "find",
+  "pat": "pt.for-since",
+  "prompt": "Our client is a customer since 2018.",
+  "err": [
+   2,
+   2
+  ],
+  "answer": "has been",
+  "fixed": "Our client has been a customer since 2018.",
+  "accepted": [
+   "'s been"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Mit since steht das Present Perfect: has been, nicht is.",
+    "en": "The error: since takes the present perfect: has been, not is."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Zu since passt das Präsens nicht.",
+     "en": "There is an error: the simple present does not fit since."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „is“: Im Deutschen reicht „ist … seit“, im Englischen has been.",
+     "en": "The error is “is”: German manages with “ist … seit”, English needs has been."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-fs-m1",
+  "type": "meaning",
+  "pat": "pt.for-since",
+  "a": "We worked together in 2020.",
+  "b": "We've worked together since 2020.",
+  "q": {
+   "de": "Welcher Satz sagt: Wir arbeiten bis heute zusammen?",
+   "en": "Which sentence says we still work together today?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. since + Perfekt reicht von 2020 bis jetzt.",
+    "en": "Right: sentence b. since + perfect runs from 2020 until now."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a ist die Zusammenarbeit vorbei: in 2020 nennt nur das Jahr.",
+     "en": "In a the cooperation is over: in 2020 names only the year."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a ist abgeschlossen, b dauert bis jetzt an.",
+     "en": "Not the same: a is finished, b lasts until now."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-bu-k1",
+  "type": "kwt",
+  "pat": "pt.by-until",
+  "from": "Please send me the final numbers no later than Wednesday.",
+  "key": "BY",
+  "frame": "Please send me the final numbers ___.",
+  "answer": "by Wednesday",
+  "accepted": [
+   "by Wednesday at the latest"
+  ],
+  "words": [
+   2,
+   5
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Frist heißt spätestens Mittwoch: by Wednesday.",
+    "en": "Right: the deadline is no later than Wednesday: by Wednesday."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "de": "„until“ sagt, wie lange etwas andauert. Hier geht es um die Frist: by.",
+     "en": "“Until” says how long something lasts. Here it is a deadline: by."
+    },
+    {
+     "not": [
+      "by"
+     ],
+     "de": "Das Schlüsselwort by muss unverändert in der Lücke stehen.",
+     "en": "The key word by must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-bu-k2",
+  "type": "kwt",
+  "pat": "pt.by-until",
+  "from": "I won't be reachable before Monday.",
+  "key": "UNTIL",
+  "frame": "I won't be reachable ___.",
+  "answer": "until Monday",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Der Zustand dauert bis Montag an: until Monday.",
+    "en": "Right: the state lasts up to Monday: until Monday."
+   },
+   "wrong": [
+    {
+     "if": [
+      "by"
+     ],
+     "de": "„by“ nennt eine Frist, nach der etwas erledigt ist. Hier dauert der Zustand an: until.",
+     "en": "“By” names a deadline after which something is done. Here a state lasts: until."
+    },
+    {
+     "not": [
+      "until"
+     ],
+     "de": "Das Schlüsselwort until muss unverändert in der Lücke stehen.",
+     "en": "The key word until must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-bu-f1",
+  "type": "find",
+  "pat": "pt.by-until",
+  "prompt": "The vendor has to confirm the order until Friday noon.",
+  "err": [
+   7,
+   7
+  ],
+  "answer": "by",
+  "fixed": "The vendor has to confirm the order by Friday noon.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Bestätigen ist einmalig. Die Frist nennt by, nicht until.",
+    "en": "The error: confirming happens once. The deadline takes by, not until."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Bei einer Frist steht nicht until.",
+     "en": "There is an error: a deadline does not take until."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „until“: Das Deutsche „bis“ deckt by und until ab.",
+     "en": "The error is “until”: German “bis” covers both by and until."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-bu-f2",
+  "type": "find",
+  "pat": "pt.by-until",
+  "prompt": "The system will stay offline by Monday morning.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "until",
+  "fixed": "The system will stay offline until Monday morning.",
+  "accepted": [
+   "till"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Zustand dauert an, also until Monday morning.",
+    "en": "The error: the state lasts, so until Monday morning."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Zu stay offline passt by nicht.",
+     "en": "There is an error: by does not fit stay offline."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „by“: by nennt eine Frist, kein Andauern.",
+     "en": "The error is “by”: by names a deadline, not a lasting state."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-bu-f3",
+  "type": "find",
+  "pat": "pt.by-until",
+  "prompt": "We need your decision by Friday; until then, we'll hold the room.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: by Friday ist die Frist, until then das Andauern.",
+    "en": "No error: by Friday is the deadline, until then the lasting state."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Beide Präpositionen sind richtig gewählt.",
+     "en": "No error: both prepositions are chosen correctly."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-bu-m1",
+  "type": "meaning",
+  "pat": "pt.by-until",
+  "a": "I'll finish the draft by Friday.",
+  "b": "I'll work on the draft until Friday.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Entwurf spätestens am Freitag fertig ist?",
+   "en": "Which sentence says the draft is done by Friday at the latest?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. by Friday ist die Frist für das Fertigwerden.",
+    "en": "Right: sentence a. by Friday is the deadline for finishing."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b geht es um das Weiterarbeiten bis Freitag. Fertig ist nichts gesagt.",
+     "en": "In b the work goes on until Friday. Nothing says it is finished."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: a nennt eine Frist, b ein Andauern.",
+     "en": "Not the same: a names a deadline, b a lasting activity."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-dw-k1",
+  "type": "kwt",
+  "pat": "pt.during-within",
+  "from": "We'll send you a quote; you'll have it in no more than two business days.",
+  "key": "WITHIN",
+  "frame": "We'll send you a quote ___ business days.",
+  "answer": "within two",
+  "accepted": [
+   "within the next two",
+   "within 2"
+  ],
+  "words": [
+   2,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: two business days ist ein Zeitrahmen: within two business days.",
+    "en": "Right: two business days is a time frame: within two business days."
+   },
+   "wrong": [
+    {
+     "if": [
+      "during"
+     ],
+     "de": "„during“ braucht ein Ereignis, keine Zahl mit Einheit. Hier: within.",
+     "en": "“During” needs an event, not a number with a unit. Here: within."
+    },
+    {
+     "not": [
+      "within"
+     ],
+     "de": "Das Schlüsselwort within muss unverändert in der Lücke stehen.",
+     "en": "The key word within must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-dw-k2",
+  "type": "kwt",
+  "pat": "pt.during-within",
+  "from": "Please don't use your phone while the presentation is running.",
+  "key": "DURING",
+  "frame": "Please don't use your phone ___.",
+  "answer": "during the presentation",
+  "accepted": [
+   "during this presentation"
+  ],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor dem Ereignis the presentation steht during.",
+    "en": "Right: before the event the presentation use during."
+   },
+   "wrong": [
+    {
+     "if": [
+      "within"
+     ],
+     "de": "„within“ nennt einen Zeitrahmen mit Zahl. Hier folgt ein Ereignis: during.",
+     "en": "“Within” names a time frame with a number. Here an event follows: during."
+    },
+    {
+     "not": [
+      "during"
+     ],
+     "de": "Das Schlüsselwort during muss unverändert in der Lücke stehen.",
+     "en": "The key word during must stay unchanged in the gap."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-dw-f1",
+  "type": "find",
+  "pat": "pt.during-within",
+  "prompt": "Our team answered all tickets during three hours.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "within",
+  "fixed": "Our team answered all tickets within three hours.",
+  "accepted": [
+   "in"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor three hours steht within (oder in), nicht during.",
+    "en": "The error: before three hours use within (or in), not during."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Vor einer Zahl mit Einheit steht kein during.",
+     "en": "There is an error: no during before a number with a unit."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „during“: during braucht ein Ereignis.",
+     "en": "The error is “during”: during needs an event."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-dw-f2",
+  "type": "find",
+  "pat": "pt.during-within",
+  "prompt": "Please stay seated while the Q&A session.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "during",
+  "fixed": "Please stay seated during the Q&A session.",
+  "accepted": [],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Vor einem Nomen steht during. while braucht einen ganzen Satz.",
+    "en": "The error: during goes before a noun. while needs a full clause."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach while fehlt ein Satz mit Verb.",
+     "en": "There is an error: after while a clause with a verb is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „while“: Das deutsche „während“ deckt while und during ab.",
+     "en": "The error is “while”: German “während” covers both while and during."
+    }
+   ]
+  }
+ },
+ {
+  "id": "pt-dw-m1",
+  "type": "meaning",
+  "pat": "pt.during-within",
+  "a": "We will deliver the samples in two days.",
+  "b": "We will deliver the samples within two days.",
+  "q": {
+   "de": "Welcher Satz erlaubt, dass die Muster schon morgen kommen?",
+   "en": "Which sentence allows the samples to arrive as early as tomorrow?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. within two days heißt: spätestens nach zwei Tagen, auch früher.",
+    "en": "Right: sentence b. within two days means: by two days, possibly earlier."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a heißt in two days: nach zwei Tagen, nicht schon morgen.",
+     "en": "In a, in two days means: after two days, not tomorrow."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: within erlaubt früher, in two days nennt den Zeitpunkt.",
+     "en": "Not the same: within allows earlier, in two days names the moment."
+    }
+   ]
+  }
+ }
+]

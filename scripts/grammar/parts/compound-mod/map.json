@@ -1,0 +1,325 @@
+{
+ "Please read the ___ report before tomorrow's meeting.": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: 10-page. Zahl plus Singular mit Bindestrich vor dem Nomen.",
+    "en": "Right: 10-page. Number plus singular with a hyphen before the noun."
+   },
+   "wrong": [
+    {
+     "opt": "10 pages",
+     "de": "„10 pages“ ist ein normaler Plural. Vor „report“ braucht es 10-page.",
+     "en": "“10 pages” is a plain plural. Before “report” you need 10-page."
+    },
+    {
+     "opt": "10-pages",
+     "de": "Mit Bindestrich bleibt das Nomen im Singular: nicht pages, sondern page.",
+     "en": "With a hyphen the noun stays singular: page, not pages."
+    },
+    {
+     "opt": "10-pages'",
+     "de": "Kein Apostroph: Der Modifikator ist kein Besitz, sondern Singular: 10-page.",
+     "en": "No apostrophe: the modifier is not possession, just singular: 10-page."
+    }
+   ]
+  }
+ },
+ "She bought a ___ camera for the office.": {
+  "pat": "cm.order",
+  "why": {
+   "ok": {
+    "de": "Richtig: new (Alter), black (Farbe), Japanese (Herkunft). So lautet die Reihenfolge.",
+    "en": "Right: new (age), black (color), Japanese (origin). That is the usual order."
+   },
+   "wrong": [
+    {
+     "opt": "black Japanese new",
+     "de": "Alter kommt vor Farbe und Herkunft: new black Japanese. Hier steht new zuletzt.",
+     "en": "Age comes before color and origin: new black Japanese. Here new comes last."
+    },
+    {
+     "opt": "black new Japanese",
+     "de": "Alter steht vor der Farbe: new muss vor black stehen.",
+     "en": "Age comes before color: new must come before black."
+    },
+    {
+     "opt": "Japanese new black",
+     "de": "Die Herkunft steht direkt vor dem Nomen, nicht am Anfang: new black Japanese.",
+     "en": "Origin sits right before the noun, not first: new black Japanese."
+    }
+   ]
+  }
+ },
+ "The company signed a ___ contract with its main supplier.": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: three-year. Das Maßnomen steht vor dem Nomen im Singular.",
+    "en": "Right: three-year. The measure noun is singular before the noun."
+   },
+   "wrong": [
+    {
+     "opt": "three-years",
+     "de": "Im Modifikator bleibt das Maßnomen im Singular: three-year, nicht three-years.",
+     "en": "In a modifier the measure noun stays singular: three-year, not three-years."
+    },
+    {
+     "opt": "three-yearly",
+     "de": "„Yearly“ heißt jährlich. Gemeint ist die Dauer: three-year.",
+     "en": "“Yearly” means once a year. The length is meant: three-year."
+    },
+    {
+     "opt": "three years",
+     "de": "„three years“ ist ein Plural. Vor „contract“ steht three-year mit Bindestrich.",
+     "en": "“three years” is a plural. Before “contract” use three-year with a hyphen."
+    }
+   ]
+  }
+ },
+ "It was a ___ decision, so we had to act quickly.": {
+  "pat": "cm.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: last-minute ist ein fester Baustein mit Bindestrich und heißt kurzfristig.",
+    "en": "Right: last-minute is a fixed hyphenated block meaning at the very end."
+   },
+   "wrong": [
+    {
+     "opt": "last minutes",
+     "de": "Der feste Baustein hat kein -s und braucht einen Bindestrich: last-minute.",
+     "en": "The fixed block takes no -s and needs a hyphen: last-minute."
+    },
+    {
+     "opt": "last-minutes",
+     "de": "Der Baustein bleibt unverändert, nur das Nomen trägt ein -s: last-minute.",
+     "en": "The block stays unchanged; only the noun takes an -s: last-minute."
+    },
+    {
+     "opt": "lasting-minute",
+     "de": "„Lasting“ heißt dauerhaft. Der feste Ausdruck lautet last-minute.",
+     "en": "“Lasting” means long-lasting. The fixed phrase is last-minute."
+    }
+   ]
+  }
+ },
+ "We attended a two-___ workshop that ran from Monday to Tuesday.": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: two-day. Vor dem Nomen steht das Maßnomen im Singular.",
+    "en": "Right: two-day. Before the noun the measure noun stays singular."
+   },
+   "wrong": [
+    {
+     "if": [
+      "days"
+     ],
+     "de": "Im Modifikator steht kein Plural: two-day, nicht two-days.",
+     "en": "No plural in a modifier: two-day, not two-days."
+    },
+    {
+     "not": [
+      "day"
+     ],
+     "de": "Gesucht ist das Maßnomen für die Dauer, im Singular: day.",
+     "en": "The measure noun for the length is needed, in the singular: day."
+    }
+   ]
+  }
+ },
+ "He is a highly ___ engineer with 20 years of experience.": {
+  "pat": "cm.participle",
+  "why": {
+   "ok": {
+    "de": "Richtig: highly + Partizip (skilled) bildet den Modifikator, ohne Bindestrich.",
+    "en": "Right: highly + participle (skilled) forms the modifier, with no hyphen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "skill"
+     ],
+     "de": "Hier braucht es das Partizip: skilled, nicht das Nomen skill.",
+     "en": "A participle is needed: skilled, not the noun skill."
+    },
+    {
+     "not": [
+      "skilled",
+      "experienced",
+      "qualified",
+      "respected",
+      "trained",
+      "regarded",
+      "paid",
+      "motivated",
+      "educated",
+      "accomplished",
+      "specialized"
+     ],
+     "de": "Nach highly steht ein Partizip wie skilled, experienced oder qualified.",
+     "en": "After highly comes a participle such as skilled, experienced, or qualified."
+    }
+   ]
+  }
+ },
+ "We need a ___-term plan that covers the next ten years.": {
+  "pat": "cm.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: long-term = langfristig. Der Baustein bleibt unverändert, mit Bindestrich.",
+    "en": "Right: long-term = over a long period. The block stays unchanged, with a hyphen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "short"
+     ],
+     "de": "Der Plan deckt zehn Jahre ab. Das ist lang: long-term, nicht short-term.",
+     "en": "The plan covers ten years. That is long: long-term, not short-term."
+    },
+    {
+     "not": [
+      "long"
+     ],
+     "de": "Der Baustein für einen langen Zeitraum lautet long-term.",
+     "en": "The block for a long period is long-term."
+    }
+   ]
+  }
+ },
+ "The report has 15 pages. → It is a 15-___ report.": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: 15-page. In der Zusammensetzung bleibt das Nomen im Singular.",
+    "en": "Right: 15-page. In the compound the noun stays singular."
+   },
+   "wrong": [
+    {
+     "if": [
+      "pages"
+     ],
+     "de": "Im Modifikator kein Plural: a 15-page report, nicht 15-pages.",
+     "en": "No plural in a modifier: a 15-page report, not 15-pages."
+    },
+    {
+     "not": [
+      "page"
+     ],
+     "de": "Gesucht ist das Maßnomen aus „15 pages“ im Singular: page.",
+     "en": "The measure noun from “15 pages” is needed, singular: page."
+    }
+   ]
+  }
+ },
+ "Our software is easy to use. → We offer ___ software.": {
+  "pat": "cm.fixed",
+  "why": {
+   "ok": {
+    "de": "Richtig: user-friendly (oder easy-to-use) ist ein Baustein mit Bindestrich.",
+    "en": "Right: user-friendly (or easy-to-use) is a hyphenated block."
+   },
+   "wrong": [
+    {
+     "if": [
+      "user",
+      "friendly"
+     ],
+     "de": "Vor dem Nomen verbindet ein Bindestrich beide Teile: user-friendly.",
+     "en": "Before the noun a hyphen joins both parts: user-friendly."
+    },
+    {
+     "if": [
+      "easy",
+      "to",
+      "use"
+     ],
+     "de": "Vor dem Nomen verbindet ein Bindestrich alle Teile: easy-to-use.",
+     "en": "Before the noun a hyphen joins all parts: easy-to-use."
+    },
+    {
+     "not": [
+      "user-friendly",
+      "easy-to-use",
+      "simple-to-use"
+     ],
+     "de": "Gesucht ist ein Baustein für „einfach zu bedienen“: user-friendly.",
+     "en": "A block meaning “easy to operate” is needed: user-friendly."
+    }
+   ]
+  }
+ },
+ "She presented a five-pages proposal to the board.": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: five-page proposal. Vor dem Nomen steht page im Singular.",
+    "en": "Right: five-page proposal. Before the noun, page is singular."
+   },
+   "wrong": [
+    {
+     "if": [
+      "five-pages"
+     ],
+     "de": "Der Fehler liegt bei „five-pages“: Im Modifikator ist das Maßnomen Singular.",
+     "en": "The error is “five-pages”: in a modifier the measure noun is singular."
+    },
+    {
+     "not": [
+      "five-page"
+     ],
+     "de": "Die Maßangabe vor „proposal“ braucht Bindestrich und Singular: five-page.",
+     "en": "The measure before “proposal” needs a hyphen and the singular: five-page."
+    }
+   ]
+  }
+ },
+ "They rent a modern small office downtown.": {
+  "pat": "cm.order",
+  "why": {
+   "ok": {
+    "de": "Richtig: small (Größe) vor modern (Stil): a small modern office.",
+    "en": "Right: small (size) before modern (style): a small modern office."
+   },
+   "wrong": [
+    {
+     "pat": "cm.order",
+     "de": "Die Größe steht vor dem Stil: erst small, dann modern.",
+     "en": "Size comes before style: small first, then modern."
+    }
+   ]
+  }
+ },
+ "It was a 3 hours meeting that achieved nothing.": {
+  "pat": "cm.measure",
+  "why": {
+   "ok": {
+    "de": "Richtig: a three-hour meeting. Zahl, Singular und Bindestrich vor dem Nomen.",
+    "en": "Right: a three-hour meeting. Number, singular, and hyphen before the noun."
+   },
+   "wrong": [
+    {
+     "if": [
+      "3",
+      "hours"
+     ],
+     "de": "„3 hours“ ist ein Plural. Vor „meeting“ steht three-hour mit Bindestrich.",
+     "en": "“3 hours” is a plural. Before “meeting” use three-hour with a hyphen."
+    },
+    {
+     "if": [
+      "three-hours"
+     ],
+     "de": "Mit Bindestrich bleibt das Maßnomen im Singular: three-hour.",
+     "en": "With a hyphen the measure noun stays singular: three-hour."
+    },
+    {
+     "pat": "cm.measure",
+     "de": "Vor dem Nomen: Zahl, Singular und Bindestrich, also a three-hour meeting.",
+     "en": "Before the noun: number, singular, and hyphen, so a three-hour meeting."
+    }
+   ]
+  }
+ }
+}

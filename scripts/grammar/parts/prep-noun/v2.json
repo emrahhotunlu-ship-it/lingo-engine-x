@@ -1,0 +1,1171 @@
+[
+{
+"id": "pn-for-k1",
+"type": "kwt",
+"pat": "pn.for",
+"from": "The supplier problem explains why we are late.",
+"key": "REASON",
+"frame": "The supplier problem is the main ___ the delay.",
+"answer": "reason for",
+"accepted": [
+"reason behind"
+],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: reason for. Der Grund der Verspätung wird mit for angeschlossen.",
+"en": "Right: reason for. The cause of the delay is linked with for."
+},
+"wrong": [
+{
+"not": [
+"reason"
+],
+"de": "Das Schlüsselwort reason muss unverändert in der Lücke stehen.",
+"en": "The key word reason must stay unchanged in the gap."
+},
+{
+"if": [
+"reason",
+"of"
+],
+"de": "„Reason of“ kopiert den Genitiv („Grund der Verspätung“). Englisch: reason for.",
+"en": "“Reason of” copies the German genitive. English: reason for."
+},
+{
+"if": [
+"reason",
+"to"
+],
+"de": "„Reason to“ braucht danach ein Verb (a reason to wait). Vor einem Nomen: for.",
+"en": "“Reason to” needs a verb after it (a reason to wait). Before a noun: for."
+}
+]
+}
+},
+{
+"id": "pn-for-k2",
+"type": "kwt",
+"pat": "pn.for",
+"from": "Priya's job is now the vendor contracts.",
+"key": "RESPONSIBLE",
+"frame": "Priya is now ___ the vendor contracts.",
+"answer": "responsible for",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: responsible for. Eine Zuständigkeit wird mit for angeschlossen.",
+"en": "Right: responsible for. A duty is linked with for."
+},
+"wrong": [
+{
+"not": [
+"responsible"
+],
+"de": "Das Schlüsselwort responsible muss unverändert in der Lücke stehen.",
+"en": "The key word responsible must stay unchanged in the gap."
+},
+{
+"if": [
+"responsible",
+"of"
+],
+"de": "„Responsible of“ gibt es nicht. Nur in charge of nimmt of.",
+"en": "“Responsible of” does not exist. Only in charge of takes of."
+},
+{
+"if": [
+"responsible",
+"on"
+],
+"de": "„On“ passt nicht zu responsible. Eine Zuständigkeit schließt for an.",
+"en": "“On” does not fit responsible. A duty takes for."
+}
+]
+}
+},
+{
+"id": "pn-for-f1",
+"type": "find",
+"pat": "pn.for",
+"prompt": "There is little demand after refurbished laptops in this market.",
+"err": [
+4,
+4
+],
+"answer": "for",
+"fixed": "There is little demand for refurbished laptops in this market.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „demand after“. Die Nachfrage nach etwas heißt demand for.",
+"en": "The error: “demand after”. Demand for something takes for."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach demand steht for.",
+"en": "There is an error: After demand comes for."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach demand steht for.",
+"en": "The error is the preposition. After demand comes for."
+}
+]
+}
+},
+{
+"id": "pn-for-f2",
+"type": "find",
+"pat": "pn.for",
+"prompt": "The regional team is responsible of the whole product launch.",
+"err": [
+5,
+5
+],
+"answer": "for",
+"fixed": "The regional team is responsible for the whole product launch.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „responsible of“. Eine Zuständigkeit wird mit for angeschlossen.",
+"en": "The error: “responsible of”. A duty is linked with for."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach responsible steht for.",
+"en": "There is an error: After responsible comes for."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach responsible steht for.",
+"en": "The error is the preposition. After responsible comes for."
+}
+]
+}
+},
+{
+"id": "pn-for-f3",
+"type": "find",
+"pat": "pn.for",
+"prompt": "There is a real need for better training in our sales team.",
+"err": null,
+"why": {
+"ok": {
+"de": "Kein Fehler: need for + Sache ist richtig (Bedarf an etwas).",
+"en": "No error: need for + thing is correct."
+},
+"wrong": [
+{
+"tap": "*",
+"de": "Kein Fehler: Nach need steht hier for.",
+"en": "No error: need takes for here."
+}
+]
+}
+},
+{
+"id": "pn-for-m1",
+"type": "meaning",
+"pat": "pn.for",
+"a": "We have a good reason to delay the launch.",
+"b": "We have a good reason for the delay.",
+"q": {
+"de": "Welcher Satz sagt: Die Verspätung ist schon da, und es gibt dafür eine Erklärung?",
+"en": "Which sentence says the delay has already happened and has an explanation?"
+},
+"answer": "b",
+"why": {
+"ok": {
+"de": "Richtig: Satz b. Reason for nennt die Ursache einer Verspätung, die schon besteht.",
+"en": "Right: sentence b. Reason for names the cause of a delay that already exists."
+},
+"wrong": [
+{
+"opt": "a",
+"de": "In a heißt reason to + Verb: ein Grund, den Start zu verschieben, also noch nicht passiert.",
+"en": "In a, reason to + verb is a reason to postpone the launch, so it has not happened yet."
+},
+{
+"opt": "both",
+"de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+"en": "Not the same: the two sentences say different things."
+}
+]
+}
+},
+{
+"id": "pn-in-k1",
+"type": "kwt",
+"pat": "pn.in",
+"from": "Our revenue went up by twelve percent.",
+"key": "INCREASE",
+"frame": "We recorded a twelve percent ___ revenue.",
+"answer": "increase in",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: increase in revenue. In nennt den Bereich, der sich verändert.",
+"en": "Right: increase in revenue. In names the area that changes."
+},
+"wrong": [
+{
+"not": [
+"increase"
+],
+"de": "Das Schlüsselwort increase muss unverändert in der Lücke stehen.",
+"en": "The key word increase must stay unchanged in the gap."
+},
+{
+"if": [
+"increase",
+"of"
+],
+"de": "„Increase of“ nennt den Betrag (of 12%). Der Bereich, der steigt, braucht in.",
+"en": "“Increase of” names the amount (of 12%). The area that rises needs in."
+},
+{
+"if": [
+"increase",
+"at"
+],
+"de": "„At“ nennt einen Punkt (at 12%), nicht den Bereich, der sich ändert.",
+"en": "“At” names a point (at 12%), not the area that changes."
+}
+]
+}
+},
+{
+"id": "pn-in-k2",
+"type": "kwt",
+"pat": "pn.in",
+"from": "Our clients really want the new dashboard.",
+"key": "INTERESTED",
+"frame": "Our clients are very ___ the new dashboard.",
+"answer": "interested in",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: interested in. Das Interesse richtet sich mit in auf die Sache.",
+"en": "Right: interested in. Interest in a thing takes in."
+},
+"wrong": [
+{
+"not": [
+"interested"
+],
+"de": "Das Schlüsselwort interested muss unverändert in der Lücke stehen.",
+"en": "The key word interested must stay unchanged in the gap."
+},
+{
+"if": [
+"interested",
+"at"
+],
+"de": "„Interessiert an“ wird oft zu at. Englisch sagt interested in.",
+"en": "German “interessiert an” often becomes at. English says interested in."
+},
+{
+"if": [
+"interested",
+"about"
+],
+"de": "„Interested about“ ist unüblich. Nach interested steht in.",
+"en": "“Interested about” is not idiomatic. After interested use in."
+}
+]
+}
+},
+{
+"id": "pn-in-f1",
+"type": "find",
+"pat": "pn.in",
+"prompt": "We have seen a steady decrease on customer complaints since January.",
+"err": [
+6,
+6
+],
+"answer": "in",
+"fixed": "We have seen a steady decrease in customer complaints since January.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „decrease on“. Der Bereich, der sich ändert, wird mit in angeschlossen.",
+"en": "The error: “decrease on”. The area that changes is linked with in."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach decrease steht in.",
+"en": "There is an error: After decrease comes in."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach decrease steht in.",
+"en": "The error is the preposition. After decrease comes in."
+}
+]
+}
+},
+{
+"id": "pn-in-f2",
+"type": "find",
+"pat": "pn.in",
+"prompt": "She is very interested at joining our data science team.",
+"err": [
+4,
+4
+],
+"answer": "in",
+"fixed": "She is very interested in joining our data science team.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „interested at“. Das Interesse wird mit in angeschlossen.",
+"en": "The error: “interested at”. Interest is linked with in."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach interested steht in.",
+"en": "There is an error: After interested comes in."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach interested steht in.",
+"en": "The error is the preposition. After interested comes in."
+}
+]
+}
+},
+{
+"id": "pn-in-m1",
+"type": "meaning",
+"pat": "pn.in",
+"a": "The price saw an increase of 20 dollars.",
+"b": "The price saw an increase to 20 dollars.",
+"q": {
+"de": "Welcher Satz sagt: Der Preis ist um 20 Dollar gestiegen?",
+"en": "Which sentence says the price went up by 20 dollars?"
+},
+"answer": "a",
+"why": {
+"ok": {
+"de": "Richtig: Satz a. Increase of nennt den Betrag des Anstiegs, um wie viel.",
+"en": "Right: sentence a. Increase of names the amount of the rise, by how much."
+},
+"wrong": [
+{
+"opt": "b",
+"de": "In b nennt to den Endwert: Der Preis liegt jetzt bei 20 Dollar, egal wie viel es war.",
+"en": "In b, to names the end value: the price is now 20 dollars, whatever it was before."
+},
+{
+"opt": "both",
+"de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+"en": "Not the same: the two sentences say different things."
+}
+]
+}
+},
+{
+"id": "pn-of-k1",
+"type": "kwt",
+"pat": "pn.of",
+"from": "Sam is quietly happy about what the interns achieved.",
+"key": "PROUD",
+"frame": "Sam is quietly ___ what the interns achieved.",
+"answer": "proud of",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: proud of. Hinter proud steht of vor dem, worauf man stolz ist.",
+"en": "Right: proud of. After proud comes of before what you are proud of."
+},
+"wrong": [
+{
+"not": [
+"proud"
+],
+"de": "Das Schlüsselwort proud muss unverändert in der Lücke stehen.",
+"en": "The key word proud must stay unchanged in the gap."
+},
+{
+"if": [
+"proud",
+"on"
+],
+"de": "„Stolz auf“ wird oft zu on. Englisch sagt proud of.",
+"en": "German “stolz auf” often becomes on. English says proud of."
+},
+{
+"if": [
+"proud",
+"for"
+],
+"de": "„For“ nennt Grund oder Zweck. Nach proud steht of.",
+"en": "“For” names a reason or purpose. After proud use of."
+}
+]
+}
+},
+{
+"id": "pn-of-k2",
+"type": "kwt",
+"pat": "pn.of",
+"from": "Everyone on the team knows the new deadline.",
+"key": "AWARE",
+"frame": "Everyone on the team is ___ the new deadline.",
+"answer": "aware of",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: aware of. Das Wissen um etwas wird mit of angeschlossen.",
+"en": "Right: aware of. Knowing about something is linked with of."
+},
+"wrong": [
+{
+"not": [
+"aware"
+],
+"de": "Das Schlüsselwort aware muss unverändert in der Lücke stehen.",
+"en": "The key word aware must stay unchanged in the gap."
+},
+{
+"if": [
+"aware",
+"about"
+],
+"de": "„Aware about“ ist unüblich. Das Wissen um etwas schließt of an.",
+"en": "“Aware about” is not idiomatic. Knowing about something takes of."
+},
+{
+"if": [
+"aware",
+"for"
+],
+"de": "„For“ nennt Grund oder Zweck. Wissen um etwas schließt of an.",
+"en": "“For” names a reason or purpose. Awareness takes of."
+}
+]
+}
+},
+{
+"id": "pn-of-f1",
+"type": "find",
+"pat": "pn.of",
+"prompt": "We are all very proud on what the team achieved this quarter.",
+"err": [
+5,
+5
+],
+"answer": "of",
+"fixed": "We are all very proud of what the team achieved this quarter.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „proud on“. Nach proud steht of.",
+"en": "The error: “proud on”. After proud comes of."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach proud steht of.",
+"en": "There is an error: After proud comes of."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach proud steht of.",
+"en": "The error is the preposition. After proud comes of."
+}
+]
+}
+},
+{
+"id": "pn-of-f2",
+"type": "find",
+"pat": "pn.of",
+"prompt": "The new manager is not afraid from difficult decisions.",
+"err": [
+6,
+6
+],
+"answer": "of",
+"fixed": "The new manager is not afraid of difficult decisions.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „afraid from“. Angst vor etwas heißt afraid of.",
+"en": "The error: “afraid from”. Fear of something is afraid of."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach afraid steht of.",
+"en": "There is an error: After afraid comes of."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach afraid steht of.",
+"en": "The error is the preposition. After afraid comes of."
+}
+]
+}
+},
+{
+"id": "pn-of-f3",
+"type": "find",
+"pat": "pn.of",
+"prompt": "The whole department is aware of the new reporting rules.",
+"err": null,
+"why": {
+"ok": {
+"de": "Kein Fehler: aware of + Sache ist richtig.",
+"en": "No error: aware of + thing is correct."
+},
+"wrong": [
+{
+"tap": "*",
+"de": "Kein Fehler: Nach aware steht of.",
+"en": "No error: aware takes of."
+}
+]
+}
+},
+{
+"id": "pn-of-m1",
+"type": "meaning",
+"pat": "pn.of",
+"a": "I'm tired of the long meetings.",
+"b": "I'm tired from the long meetings.",
+"q": {
+"de": "Welcher Satz sagt: Die langen Meetings haben mich körperlich erschöpft?",
+"en": "Which sentence says the long meetings physically wore me out?"
+},
+"answer": "b",
+"why": {
+"ok": {
+"de": "Richtig: Satz b. Tired from nennt die Ursache der Erschöpfung.",
+"en": "Right: sentence b. Tired from names the cause of the exhaustion."
+},
+"wrong": [
+{
+"opt": "a",
+"de": "In a heißt tired of „genug von etwas haben“: Die Meetings nerven, es geht nicht um Erschöpfung.",
+"en": "In a, tired of means fed up with something: the meetings annoy, not exhaust."
+},
+{
+"opt": "both",
+"de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+"en": "Not the same: the two sentences say different things."
+}
+]
+}
+},
+{
+"id": "pn-ab-k1",
+"type": "kwt",
+"pat": "pn.about",
+"from": "The board talked at length about the budget and then agreed on the cuts.",
+"key": "DISCUSSION",
+"frame": "After a long ___ the budget, we agreed on the cuts.",
+"answer": "discussion about",
+"accepted": [
+"discussion on",
+"discussion of",
+"discussion over",
+"discussion regarding",
+"discussion concerning"
+],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: discussion about (oder on). Das Thema des Gesprächs folgt nach about.",
+"en": "Right: discussion about (or on). The topic of the talk follows about."
+},
+"wrong": [
+{
+"not": [
+"discussion"
+],
+"de": "Das Schlüsselwort discussion muss unverändert in der Lücke stehen.",
+"en": "The key word discussion must stay unchanged in the gap."
+},
+{
+"if": [
+"discussion",
+"for"
+],
+"de": "„For“ nennt Grund oder Zweck, nicht das Thema. Nach discussion steht about oder on.",
+"en": "“For” names a reason or purpose, not the topic. After discussion use about or on."
+},
+{
+"if": [
+"discussion",
+"with"
+],
+"de": "„With“ nennt den Partner (a discussion with the board), nicht das Thema.",
+"en": "“With” names the partner (a discussion with the board), not the topic."
+}
+]
+}
+},
+{
+"id": "pn-ab-k2",
+"type": "kwt",
+"pat": "pn.about",
+"from": "Layla fears that the project might slip.",
+"key": "WORRIED",
+"frame": "Layla is ___ the schedule.",
+"answer": "worried about",
+"accepted": [
+"worried over"
+],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: worried about. Die Sorge um etwas wird mit about angeschlossen.",
+"en": "Right: worried about. Worry about something is linked with about."
+},
+"wrong": [
+{
+"not": [
+"worried"
+],
+"de": "Das Schlüsselwort worried muss unverändert in der Lücke stehen.",
+"en": "The key word worried must stay unchanged in the gap."
+},
+{
+"if": [
+"worried",
+"for"
+],
+"de": "„Worried for“ gilt für Menschen in Gefahr (for her safety), nicht für einen Termin.",
+"en": "“Worried for” is for people at risk (for her safety), not for a schedule."
+},
+{
+"if": [
+"worried",
+"of"
+],
+"de": "„Worried of“ gibt es nicht. Die Sorge um etwas schließt about an.",
+"en": "“Worried of” does not exist. Worry about something takes about."
+}
+]
+}
+},
+{
+"id": "pn-ab-f1",
+"type": "find",
+"pat": "pn.about",
+"prompt": "We had a long discussion for the new pricing model yesterday.",
+"err": [
+5,
+5
+],
+"answer": "about",
+"fixed": "We had a long discussion about the new pricing model yesterday.",
+"accepted": [
+"on",
+"of",
+"over",
+"regarding"
+],
+"why": {
+"ok": {
+"de": "Der Fehler: „discussion for“. Das Thema eines Gesprächs folgt nach about oder on.",
+"en": "The error: “discussion for”. The topic of a talk follows about or on."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach discussion steht about oder on.",
+"en": "There is an error: After discussion comes about or on."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach discussion steht about oder on.",
+"en": "The error is the preposition. After discussion comes about or on."
+}
+]
+}
+},
+{
+"id": "pn-ab-f2",
+"type": "find",
+"pat": "pn.about",
+"prompt": "Everyone is excited on the new office layout.",
+"err": [
+3,
+3
+],
+"answer": "about",
+"fixed": "Everyone is excited about the new office layout.",
+"accepted": [
+"for"
+],
+"why": {
+"ok": {
+"de": "Der Fehler: „excited on“. Die Vorfreude auf etwas wird mit about angeschlossen.",
+"en": "The error: “excited on”. Excitement about something is linked with about."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach excited steht about.",
+"en": "There is an error: After excited comes about."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach excited steht about.",
+"en": "The error is the preposition. After excited comes about."
+}
+]
+}
+},
+{
+"id": "pn-ab-f3",
+"type": "find",
+"pat": "pn.about",
+"prompt": "I'd like to ask a few questions about the contract terms.",
+"err": null,
+"why": {
+"ok": {
+"de": "Kein Fehler: questions about + Thema ist richtig.",
+"en": "No error: questions about + topic is correct."
+},
+"wrong": [
+{
+"tap": "*",
+"de": "Kein Fehler: Nach questions steht about.",
+"en": "No error: questions takes about."
+}
+]
+}
+},
+{
+"id": "pn-ab-m1",
+"type": "meaning",
+"pat": "pn.about",
+"a": "The manager is concerned about the budget.",
+"b": "The manager is concerned with the budget.",
+"q": {
+"de": "Welcher Satz sagt: Die Managerin macht sich Sorgen um das Budget?",
+"en": "Which sentence says the manager is worried about the budget?"
+},
+"answer": "a",
+"why": {
+"ok": {
+"de": "Richtig: Satz a. Concerned about heißt „besorgt“, also Sorge um das Budget.",
+"en": "Right: sentence a. Concerned about means worried."
+},
+"wrong": [
+{
+"opt": "b",
+"de": "In b heißt concerned with „zuständig für“ oder „befasst mit“, ohne Sorge.",
+"en": "In b, concerned with means dealing with or covering, without worry."
+},
+{
+"opt": "both",
+"de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+"en": "Not the same: the two sentences say different things."
+}
+]
+}
+},
+{
+"id": "pn-to-k1",
+"type": "kwt",
+"pat": "pn.to",
+"from": "Thank you for replying to my question.",
+"key": "ANSWER",
+"frame": "Thank you for your ___ my question.",
+"answer": "answer to",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: answer to + Frage. Die Antwort gehört mit to zu ihrer Frage.",
+"en": "Right: answer to + question. The answer is tied to its question with to."
+},
+"wrong": [
+{
+"not": [
+"answer"
+],
+"de": "Das Schlüsselwort answer muss unverändert in der Lücke stehen.",
+"en": "The key word answer must stay unchanged in the gap."
+},
+{
+"if": [
+"answer",
+"on"
+],
+"de": "„Antwort auf“ wird oft zu on. Englisch sagt answer to.",
+"en": "German “Antwort auf” often becomes on. English says answer to."
+},
+{
+"if": [
+"answer",
+"of"
+],
+"de": "„Answer of“ klingt nach Genitiv. Englisch verbindet die Antwort mit to.",
+"en": "“Answer of” sounds like a genitive. English links the answer with to."
+}
+]
+}
+},
+{
+"id": "pn-to-k2",
+"type": "kwt",
+"pat": "pn.to",
+"from": "Only managers may open the finance folder.",
+"key": "ACCESS",
+"frame": "Only managers have ___ the finance folder.",
+"answer": "access to",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: access to + Ziel. Das Ziel des Zugangs wird mit to angeschlossen.",
+"en": "Right: access to + target. The target of the access is linked with to."
+},
+"wrong": [
+{
+"not": [
+"access"
+],
+"de": "Das Schlüsselwort access muss unverändert in der Lücke stehen.",
+"en": "The key word access must stay unchanged in the gap."
+},
+{
+"if": [
+"access",
+"for"
+],
+"de": "„Access for“ nennt, wer Zugang hat (access for guests). Das Ziel braucht to.",
+"en": "“Access for” names who has access (access for guests). The target needs to."
+},
+{
+"if": [
+"access",
+"of"
+],
+"de": "„Access of“ klingt nach Genitiv. Das Ziel des Zugangs braucht to.",
+"en": "“Access of” sounds like a genitive. The target of the access needs to."
+}
+]
+}
+},
+{
+"id": "pn-to-f1",
+"type": "find",
+"pat": "pn.to",
+"prompt": "Our new policy is a response of the recent security incident.",
+"err": [
+6,
+6
+],
+"answer": "to",
+"fixed": "Our new policy is a response to the recent security incident.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „response of“. Die Reaktion auf etwas heißt response to.",
+"en": "The error: “response of”. A reaction to something is response to."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach response steht to.",
+"en": "There is an error: After response comes to."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach response steht to.",
+"en": "The error is the preposition. After response comes to."
+}
+]
+}
+},
+{
+"id": "pn-to-f2",
+"type": "find",
+"pat": "pn.to",
+"prompt": "Not every employee has access for the shared drive.",
+"err": [
+5,
+5
+],
+"answer": "to",
+"fixed": "Not every employee has access to the shared drive.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „access for“. Das Ziel des Zugangs wird mit to angeschlossen.",
+"en": "The error: “access for”. The target of access is linked with to."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach access steht hier to.",
+"en": "There is an error: After access comes to here."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach access steht hier to.",
+"en": "The error is the preposition. After access comes to here."
+}
+]
+}
+},
+{
+"id": "pn-to-m1",
+"type": "meaning",
+"pat": "pn.to",
+"a": "The two offers are similar in price.",
+"b": "The two offers are similar to each other.",
+"q": {
+"de": "Welcher Satz sagt: Die Angebote gleichen sich beim Preis?",
+"en": "Which sentence says the offers match on price?"
+},
+"answer": "a",
+"why": {
+"ok": {
+"de": "Richtig: Satz a. Similar in nennt, worin sie sich gleichen: im Preis.",
+"en": "Right: sentence a. Similar in names the respect in which they match: price."
+},
+"wrong": [
+{
+"opt": "b",
+"de": "In b heißt similar to „ähnlich wie“ und nennt nicht, worin die Ähnlichkeit liegt.",
+"en": "In b, similar to means like something and does not say in what respect."
+},
+{
+"opt": "both",
+"de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+"en": "Not the same: the two sentences say different things."
+}
+]
+}
+},
+{
+"id": "pn-at-k1",
+"type": "kwt",
+"pat": "pn.at",
+"from": "Dana handles customer complaints very well.",
+"key": "GOOD",
+"frame": "Dana is very ___ handling customer complaints.",
+"answer": "good at",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: good at + -ing. Das Können bei einer Tätigkeit wird mit at angeschlossen.",
+"en": "Right: good at + -ing. Skill at an activity is linked with at."
+},
+"wrong": [
+{
+"not": [
+"good"
+],
+"de": "Das Schlüsselwort good muss unverändert in der Lücke stehen.",
+"en": "The key word good must stay unchanged in the gap."
+},
+{
+"if": [
+"good",
+"in"
+],
+"de": "„Gut in“ wird Wort für Wort übersetzt. Englisch sagt good at.",
+"en": "“Gut in” is translated word for word. English says good at."
+},
+{
+"if": [
+"good",
+"with"
+],
+"de": "„Good with“ meint den Umgang mit Menschen oder Dingen, nicht das Können bei einer Tätigkeit.",
+"en": "“Good with” means handling people or things, not skill at an activity."
+}
+]
+}
+},
+{
+"id": "pn-at-k2",
+"type": "kwt",
+"pat": "pn.at",
+"from": "Leo spots layout errors within seconds.",
+"key": "QUICK",
+"frame": "Leo is remarkably ___ spotting layout errors.",
+"answer": "quick at",
+"accepted": [],
+"words": [
+2,
+2
+],
+"why": {
+"ok": {
+"de": "Richtig: quick at + -ing. Das Tempo bei einer Tätigkeit wird mit at angeschlossen.",
+"en": "Right: quick at + -ing. Speed at an activity is linked with at."
+},
+"wrong": [
+{
+"not": [
+"quick"
+],
+"de": "Das Schlüsselwort quick muss unverändert in der Lücke stehen.",
+"en": "The key word quick must stay unchanged in the gap."
+},
+{
+"if": [
+"quick",
+"in"
+],
+"de": "„Quick in“ klingt falsch. Das Tempo bei einer Tätigkeit schließt at an.",
+"en": "“Quick in” sounds wrong. Speed at an activity takes at."
+},
+{
+"if": [
+"quick",
+"to"
+],
+"de": "„Quick to“ braucht die Grundform (quick to react). Hier folgt -ing: quick at.",
+"en": "“Quick to” takes the base form (quick to react). Here -ing follows: quick at."
+}
+]
+}
+},
+{
+"id": "pn-at-f1",
+"type": "find",
+"pat": "pn.at",
+"prompt": "She is very good at to negotiate with suppliers.",
+"err": [
+5,
+6
+],
+"answer": "negotiating",
+"fixed": "She is very good at negotiating with suppliers.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „at to negotiate“. Nach at steht die -ing-Form: at negotiating.",
+"en": "The error: “at to negotiate”. After at the -ing form follows: at negotiating."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach at folgt -ing, kein to.",
+"en": "There is an error: After at comes -ing, not to."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach at folgt -ing, kein to.",
+"en": "The error is the preposition. After at comes -ing, not to."
+}
+]
+}
+},
+{
+"id": "pn-at-f2",
+"type": "find",
+"pat": "pn.at",
+"prompt": "Priya is very good at analyze data.",
+"err": [
+5,
+5
+],
+"answer": "analyzing",
+"fixed": "Priya is very good at analyzing data.",
+"accepted": [],
+"why": {
+"ok": {
+"de": "Der Fehler: „at analyze“. Nach at steht die -ing-Form: at analyzing.",
+"en": "The error: “at analyze”. After at the -ing form follows: at analyzing."
+},
+"wrong": [
+{
+"tap": "none",
+"de": "Doch, hier steckt ein Fehler: Nach at folgt -ing.",
+"en": "There is an error: After at comes -ing."
+},
+{
+"tap": "*",
+"de": "Der Fehler liegt bei der Präposition. Nach at folgt -ing.",
+"en": "The error is the preposition. After at comes -ing."
+}
+]
+}
+},
+{
+"id": "pn-at-m1",
+"type": "meaning",
+"pat": "pn.at",
+"a": "Our new tool is good for finding duplicates.",
+"b": "Our new tool is good at finding duplicates.",
+"q": {
+"de": "Welcher Satz beschreibt das Können des Werkzeugs, nicht seinen Zweck?",
+"en": "Which sentence describes the tool's skill, not its purpose?"
+},
+"answer": "b",
+"why": {
+"ok": {
+"de": "Richtig: Satz b. Good at beschreibt, wie gut das Werkzeug etwas kann.",
+"en": "Right: sentence b. Good at describes how well the tool does something."
+},
+"wrong": [
+{
+"opt": "a",
+"de": "In a nennt good for den Zweck: Das Werkzeug eignet sich zum Finden von Dubletten.",
+"en": "In a, good for names the purpose: the tool suits finding duplicates."
+},
+{
+"opt": "both",
+"de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+"en": "Not the same: the two sentences say different things."
+}
+]
+}
+}
+]

@@ -1,0 +1,362 @@
+{
+ "topic": "prep-time",
+ "canDo": {
+  "de": "Ich kann Zeitangaben genau setzen: at, on und in für Zeitpunkte, for und since für Dauer und Beginn, by und until für Frist und Andauern, during und within für Phase und Zeitrahmen.",
+  "en": "I can place time expressions precisely: at, on and in for points in time, for and since for duration and starting point, by and until for a deadline and a lasting state, during and within for a phase and a time frame."
+ },
+ "order": [
+  "pt.at-on-in",
+  "pt.for-since",
+  "pt.by-until",
+  "pt.during-within"
+ ],
+ "introPlan": [
+  [
+   "pt.at-on-in",
+   "pt.for-since"
+  ],
+  [
+   "pt.by-until",
+   "pt.during-within"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Nennst du einen Zeitpunkt (at, on, in), eine Dauer (for) oder einen Beginn (since)?",
+   "Muss etwas bis dahin erledigt sein (by) oder dauert es bis dahin an (until)?",
+   "Folgt ein Ereignis (during) oder ein Zeitrahmen mit Zahl (within)?"
+  ],
+  "en": [
+   "Do you name a point in time (at, on, in), a duration (for) or a starting point (since)?",
+   "Must something be done by then (by) or does it last until then (until)?",
+   "Does an event follow (during) or a time frame with a number (within)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "pt.at-on-in",
+   "name": {
+    "de": "at · on · in · Zeitpunkt",
+    "en": "at · on · in · point in time"
+   },
+   "form": {
+    "de": "at + Uhrzeit · on + Tag · in + Monat",
+    "en": "at + clock time · on + day · in + month"
+   },
+   "use": {
+    "de": "Nennt, wann etwas stattfindet: at vor der Uhrzeit, on vor Tag und Datum, in vor Monat, Jahr und Tageszeit (in the morning).",
+    "en": "Says when something happens: at before a clock time, on before a day or date, in before a month, year or part of the day (in the morning)."
+   },
+   "signals": [
+    "at 9:30",
+    "at noon",
+    "at night",
+    "on Monday",
+    "on May 3",
+    "in July",
+    "in 2027",
+    "in the morning"
+   ],
+   "ex": [
+    {
+     "en": "The all-hands starts at 9:30 on Monday.",
+     "de": "Das Team-Meeting beginnt am Montag um 9:30.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Let's talk on Thursday morning; I'm free in the afternoon.",
+     "de": "Sprechen wir am Donnerstagmorgen; am Nachmittag bin ich frei.",
+     "ctx": "mail"
+    },
+    {
+     "en": "We launched in 2024, and I joined in June.",
+     "de": "Wir sind 2024 gestartet, und ich bin im Juni dazugekommen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The call is at Tuesday afternoon.",
+    "good": "The call is on Tuesday afternoon.",
+    "cause": {
+     "de": "Im Deutschen heißt es „am Dienstagnachmittag“, und „am“ klingt nach at. Vor Wochentagen steht im Englischen aber on.",
+     "en": "German says “am Dienstagnachmittag”, and “am” sounds like at. English uses on before days of the week."
+    }
+   },
+   "contrast": {
+    "with": "pt.during-within",
+    "a": "The call is at noon.",
+    "b": "The call is during lunch.",
+    "diff": {
+     "de": "at nennt einen Zeitpunkt. during nennt eine Phase, in der etwas geschieht.",
+     "en": "at names a point in time. during names a phase in which something happens."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The workshop is in June.",
+     "q": {
+      "de": "Steht der genaue Tag schon fest?",
+      "en": "Is the exact day already fixed?"
+     },
+     "a": false
+    },
+    {
+     "s": "We meet on Friday at four.",
+     "q": {
+      "de": "Treffen wir uns an einem Freitag um vier?",
+      "en": "Do we meet on a Friday at four?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Nennst du eine Uhrzeit, einen Tag oder einen längeren Zeitraum wie Monat oder Jahr?",
+    "en": "Do you name a clock time, a day or a longer period such as a month or year?"
+   },
+   "usNote": {
+    "de": "Am Wochenende heißt im US-Englisch on the weekend oder on weekends (britisch: at the weekend).",
+    "en": "In US English it is on the weekend or on weekends (British: at the weekend)."
+   }
+  },
+  {
+   "id": "pt.for-since",
+   "name": {
+    "de": "for · since · Dauer oder Beginn",
+    "en": "for · since · duration or start"
+   },
+   "form": {
+    "de": "for + Dauer · since + Startpunkt",
+    "en": "for + duration · since + starting point"
+   },
+   "use": {
+    "de": "for nennt, wie lange etwas dauert (for two weeks). since nennt, wann es begann (since Monday). Dazu passt das Present Perfect, nicht das Präsens.",
+    "en": "for says how long something lasts (for two weeks). since says when it began (since Monday). The present perfect fits, not the simple present."
+   },
+   "signals": [
+    "for two weeks",
+    "for years",
+    "for a while",
+    "since Monday",
+    "since 2019",
+    "since March",
+    "since then"
+   ],
+   "ex": [
+    {
+     "en": "We've been tracking this issue for two weeks.",
+     "de": "Wir verfolgen dieses Problem seit zwei Wochen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I've been in touch with the vendor since Monday.",
+     "de": "Ich stehe seit Montag mit dem Anbieter in Kontakt.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She's lived in Chicago since 2018.",
+     "de": "Sie wohnt seit 2018 in Chicago.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We've been waiting since three weeks.",
+    "good": "We've been waiting for three weeks.",
+    "cause": {
+     "de": "Deutsch sagt für beides „seit“: „seit drei Wochen“, „seit Montag“. Englisch trennt die Dauer (for) vom Startpunkt (since).",
+     "en": "German uses “seit” for both: “seit drei Wochen”, “seit Montag”. English separates a duration (for) from a starting point (since)."
+    }
+   },
+   "contrast": {
+    "with": "pt.at-on-in",
+    "a": "We've been meeting since Monday.",
+    "b": "We met on Monday.",
+    "diff": {
+     "de": "since + Perfekt reicht von Montag bis jetzt. on Monday nennt nur diesen einen Tag.",
+     "en": "since + perfect runs from Monday until now. on Monday names just that one day."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She has worked here since 2020.",
+     "q": {
+      "de": "Arbeitet sie noch hier?",
+      "en": "Does she still work here?"
+     },
+     "a": true
+    },
+    {
+     "s": "I lived in Munich for five years.",
+     "q": {
+      "de": "Wohne ich noch in München?",
+      "en": "Do I still live in Munich?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Nennst du, wie lange etwas dauert, oder wann es angefangen hat?",
+    "en": "Do you say how long something lasts, or when it started?"
+   }
+  },
+  {
+   "id": "pt.by-until",
+   "name": {
+    "de": "by · until · Frist oder Andauern",
+    "en": "by · until · deadline or lasting"
+   },
+   "form": {
+    "de": "by + Frist · until + Ende eines Zustands",
+    "en": "by + deadline · until + end of a state"
+   },
+   "use": {
+    "de": "by nennt die Frist: spätestens dann ist es erledigt (by Friday). until nennt, wie lange ein Zustand oder eine Tätigkeit andauert (until Friday).",
+    "en": "by names a deadline: it is done at the latest then (by Friday). until says how long a state or activity lasts (until Friday)."
+   },
+   "signals": [
+    "by Friday",
+    "by the end of",
+    "by then",
+    "no later than",
+    "until Monday",
+    "until then",
+    "until further notice"
+   ],
+   "ex": [
+    {
+     "en": "Please send the draft by Friday noon.",
+     "de": "Bitte schicken Sie den Entwurf bis Freitagmittag.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'm out of the office until Monday.",
+     "de": "Ich bin bis Montag nicht im Büro.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I'll be at my desk until six.",
+     "de": "Ich sitze bis sechs an meinem Platz.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Please send the report until Friday.",
+    "good": "Please send the report by Friday.",
+    "cause": {
+     "de": "Im Deutschen deckt „bis“ beides ab: „bis Freitag schicken“ und „bis Freitag warten“. Englisch trennt Frist (by) und Andauern (until).",
+     "en": "German “bis” covers both: “bis Freitag schicken” and “bis Freitag warten”. English separates a deadline (by) from a lasting state (until)."
+    }
+   },
+   "contrast": {
+    "with": "pt.for-since",
+    "a": "I'll be on leave until Friday.",
+    "b": "I'll be on leave for a week.",
+    "diff": {
+     "de": "until nennt den Endpunkt. for nennt die Länge des Zeitraums.",
+     "en": "until names the end point. for names the length of the period."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The report is due by Friday.",
+     "q": {
+      "de": "Darf der Bericht schon am Mittwoch fertig sein?",
+      "en": "May the report already be ready on Wednesday?"
+     },
+     "a": true
+    },
+    {
+     "s": "We'll keep the offer open until Friday.",
+     "q": {
+      "de": "Gilt das Angebot schon am Mittwoch nicht mehr?",
+      "en": "Is the offer already closed on Wednesday?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Soll etwas bis dahin fertig sein, oder soll es bis dahin andauern?",
+    "en": "Must something be finished by then, or does it keep going until then?"
+   }
+  },
+  {
+   "id": "pt.during-within",
+   "name": {
+    "de": "during · within · Phase oder Frist",
+    "en": "during · within · phase or time frame"
+   },
+   "form": {
+    "de": "during + Ereignis · within + Zeitrahmen",
+    "en": "during + event · within + time frame"
+   },
+   "use": {
+    "de": "during steht vor einem Ereignis oder einer Phase (during the call). within nennt einen Zeitrahmen mit Zahl: innerhalb davon, spätestens dann (within 24 hours).",
+    "en": "during goes before an event or a phase (during the call). within names a time frame with a number: inside it, at the latest (within 24 hours)."
+   },
+   "signals": [
+    "during the call",
+    "during lunch",
+    "during the meeting",
+    "within 24 hours",
+    "within a week",
+    "within the next",
+    "while the"
+   ],
+   "ex": [
+    {
+     "en": "Please mute your phone during the presentation.",
+     "de": "Bitte schalten Sie Ihr Handy während der Präsentation stumm.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We'll reply within 24 hours.",
+     "de": "Wir antworten innerhalb von 24 Stunden.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He called me twice during dinner.",
+     "de": "Er hat mich beim Abendessen zweimal angerufen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We will reply during 24 hours.",
+    "good": "We will reply within 24 hours.",
+    "cause": {
+     "de": "Kein klarer Übersetzungsfehler: „während“ klingt nach einer Zeitspanne, und so rutscht during vor eine Zahl. During braucht ein Ereignis.",
+     "en": "Not a clear translation error: “während” sounds like a stretch of time, so during slips in before a number. During needs an event."
+    }
+   },
+   "contrast": {
+    "with": "pt.by-until",
+    "a": "We'll deliver within two days.",
+    "b": "We'll deliver by Friday.",
+    "diff": {
+     "de": "within zählt ab jetzt einen Zeitrahmen. by nennt einen festen Zeitpunkt als Frist.",
+     "en": "within counts a time frame from now. by names a fixed point in time as the deadline."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We'll respond within two days.",
+     "q": {
+      "de": "Antworten wir vielleicht schon morgen?",
+      "en": "Might we already respond tomorrow?"
+     },
+     "a": true
+    },
+    {
+     "s": "The server went down during the update.",
+     "q": {
+      "de": "Ist der Server vor dem Update ausgefallen?",
+      "en": "Did the server go down before the update?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Folgt ein Ereignis, in dem etwas geschieht, oder ein Zeitrahmen mit Zahl?",
+    "en": "Does an event follow in which something happens, or a time frame with a number?"
+   }
+  }
+ ]
+}

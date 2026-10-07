@@ -1,0 +1,378 @@
+{
+  "The ___ of the new archive will start in May.": {
+    "pat": "nm.noun-form",
+    "why": {
+      "ok": {
+        "de": "Richtig: Nach „The“ und vor „of“ steht das Nomen implementation, nicht implement.",
+        "en": "Right: after “The” and before “of” you need the noun implementation, not implement."
+      },
+      "wrong": [
+        {
+          "if": [
+            "implement"
+          ],
+          "de": "„implement“ ist das Verb. Nach „The“ braucht es das Nomen mit der Endung -ation.",
+          "en": "“implement” is the verb. After “The” you need the noun, which ends in -ation."
+        },
+        {
+          "not": [
+            "implementation"
+          ],
+          "de": "Gefragt ist das Nomen implementation, nicht eine andere Verbform.",
+          "en": "The noun implementation is needed, not another verb form."
+        }
+      ]
+    }
+  },
+  "After the ___ of the budget, we will order the licenses.": {
+    "pat": "nm.noun-form",
+    "why": {
+      "ok": {
+        "de": "Richtig: Nach „the“ braucht es das Nomen approval (Endung -al), nicht approve.",
+        "en": "Right: after “the” you need the noun approval (ending -al), not approve."
+      },
+      "wrong": [
+        {
+          "if": [
+            "approve"
+          ],
+          "de": "„approve“ ist das Verb. Das passende Nomen heißt approval.",
+          "en": "“approve” is the verb. The matching noun is approval."
+        },
+        {
+          "if": [
+            "approved"
+          ],
+          "de": "Mit -d bleibt es eine Verbform. Nach „the“ steht das Nomen approval.",
+          "en": "With -d it is still a verb form. After “the” use the noun approval."
+        },
+        {
+          "not": [
+            "approval"
+          ],
+          "de": "Gefragt ist das Nomen approval, nicht eine Verbform.",
+          "en": "The noun approval is needed, not a verb form."
+        }
+      ]
+    }
+  },
+  "We expect a significant ___ in storage costs.": {
+    "pat": "nm.noun-prep",
+    "why": {
+      "ok": {
+        "de": "Richtig: a reduction in costs. Nach „significant“ folgt ein Nomen, und in nennt den Bereich.",
+        "en": "Right: a reduction in costs. After “significant” a noun follows, and in names the area."
+      },
+      "wrong": [
+        {
+          "if": [
+            "reduce"
+          ],
+          "de": "„reduce“ ist das Verb. Nach „a significant“ braucht es das Nomen reduction.",
+          "en": "“reduce” is the verb. After “a significant” you need the noun reduction."
+        },
+        {
+          "if": [
+            "reduced"
+          ],
+          "de": "„reduced“ ist eine Verbform und kein Nomen. Nach „a significant“ passt reduction.",
+          "en": "“reduced” is a verb form, not a noun. After “a significant” reduction fits."
+        },
+        {
+          "not": [
+            "reduction"
+          ],
+          "de": "Gefragt ist das Nomen reduction, nicht eine Verbform.",
+          "en": "The noun reduction is needed, not a verb form."
+        }
+      ]
+    }
+  },
+  "Please confirm the ___ date for the scanners.": {
+    "pat": "nm.noun-form",
+    "why": {
+      "ok": {
+        "de": "Richtig: Vor date steht das Nomen delivery. Das Verb deliver passt hier nicht.",
+        "en": "Right: before date the noun delivery is needed. The verb deliver does not fit here."
+      },
+      "wrong": [
+        {
+          "if": [
+            "deliver"
+          ],
+          "de": "„deliver“ ist das Verb. Vor date steht das Nomen delivery.",
+          "en": "“deliver” is the verb. Before date use the noun delivery."
+        },
+        {
+          "if": [
+            "delivered"
+          ],
+          "de": "Mit -ed ist es eine Verbform. Vor date steht das Nomen delivery.",
+          "en": "With -ed it is a verb form. Before date use the noun delivery."
+        },
+        {
+          "not": [
+            "delivery"
+          ],
+          "de": "Gefragt ist das Nomen delivery, nicht eine Verbform.",
+          "en": "The noun delivery is needed, not a verb form."
+        }
+      ]
+    }
+  },
+  "The ___ to move to the cloud was made in March.": {
+    "pat": "nm.noun-prep",
+    "why": {
+      "ok": {
+        "de": "Richtig: the decision to move. Nach decision folgt to + Grundform. decide passt nicht.",
+        "en": "Right: the decision to move. After decision comes to + base form. decide does not fit."
+      },
+      "wrong": [
+        {
+          "if": [
+            "decide"
+          ],
+          "de": "„decide“ ist das Verb. Nach „The“ braucht es das Nomen decision.",
+          "en": "“decide” is the verb. After “The” you need the noun decision."
+        },
+        {
+          "if": [
+            "decided"
+          ],
+          "de": "„decided“ ist eine Verbform. Nach „The“ steht das Nomen decision.",
+          "en": "“decided” is a verb form. After “The” use the noun decision."
+        },
+        {
+          "not": [
+            "decision"
+          ],
+          "de": "Gefragt ist das Nomen decision, nicht eine Verbform.",
+          "en": "The noun decision is needed, not a verb form."
+        }
+      ]
+    }
+  },
+  "Upon ___ of the contract, we will send you the access data.": {
+    "pat": "nm.following",
+    "why": {
+      "ok": {
+        "de": "Richtig: Upon receipt of … ist die feste Wendung für „nach Erhalt von“.",
+        "en": "Right: Upon receipt of … is the fixed phrase for “after receiving”."
+      },
+      "wrong": [
+        {
+          "opt": "receive",
+          "de": "„receive“ ist das Verb. Nach „Upon“ steht ein Nomen: receipt.",
+          "en": "“receive” is the verb. After “Upon” a noun follows: receipt."
+        },
+        {
+          "opt": "receiving of",
+          "de": "„of“ steht schon nach der Lücke: „receiving of of“ wäre doppelt. Passend ist receipt.",
+          "en": "“of” already follows the gap, so “receiving of” would double it. Receipt fits."
+        },
+        {
+          "opt": "received",
+          "de": "„received“ ist eine Verbform und kein Nomen. Nach „Upon“ braucht es receipt.",
+          "en": "“received” is a verb form, not a noun. After “Upon” you need receipt."
+        }
+      ]
+    }
+  },
+  "The ___ of the legacy data took two weeks.": {
+    "pat": "nm.of-object",
+    "why": {
+      "ok": {
+        "de": "Richtig: the migration of the data. Das Nomen nimmt sein Objekt mit of mit.",
+        "en": "Right: the migration of the data. The noun takes its object with of."
+      },
+      "wrong": [
+        {
+          "opt": "migrate",
+          "de": "„migrate“ ist das Verb. Nach „The“ steht das Nomen migration.",
+          "en": "“migrate” is the verb. After “The” use the noun migration."
+        },
+        {
+          "opt": "migrating of",
+          "de": "„of“ steht schon nach der Lücke: „migrating of of“ wäre doppelt. Passend ist migration.",
+          "en": "“of” already follows the gap, so “migrating of” would double it. Migration fits."
+        },
+        {
+          "opt": "migrated",
+          "de": "„migrated“ ist eine Verbform. Nach „The“ braucht es das Nomen migration.",
+          "en": "“migrated” is a verb form. After “The” you need the noun migration."
+        }
+      ]
+    }
+  },
+  "We will migrate the data in June. → The ___ of the data is planned for June.": {
+    "pat": "nm.of-object",
+    "why": {
+      "ok": {
+        "de": "Richtig: Aus migrate the data wird the migration of the data, mit of vor dem Objekt.",
+        "en": "Right: migrate the data becomes the migration of the data, with of before the object."
+      },
+      "wrong": [
+        {
+          "if": [
+            "migrate"
+          ],
+          "de": "„migrate“ ist noch das Verb. Nach „The“ braucht es das Nomen migration.",
+          "en": "“migrate” is still the verb. After “The” you need the noun migration."
+        },
+        {
+          "if": [
+            "migrated"
+          ],
+          "de": "„migrated“ ist eine Verbform. Nach „The“ steht das Nomen migration.",
+          "en": "“migrated” is a verb form. After “The” use the noun migration."
+        },
+        {
+          "not": [
+            "migration"
+          ],
+          "de": "Gefragt ist das Nomen migration, nicht eine Verbform.",
+          "en": "The noun migration is needed, not a verb form."
+        }
+      ]
+    }
+  },
+  "After the board approves it, we can start. → After the board's ___, we can start.": {
+    "pat": "nm.of-object",
+    "why": {
+      "ok": {
+        "de": "Richtig: the board's approval. Bei Gremien steht der Besitzer mit 's vor dem Nomen.",
+        "en": "Right: the board's approval. For a body the owner comes first, with 's."
+      },
+      "wrong": [
+        {
+          "if": [
+            "approve"
+          ],
+          "de": "„approve“ ist das Verb. Nach „board's“ steht das Nomen approval.",
+          "en": "“approve” is the verb. After “board's” use the noun approval."
+        },
+        {
+          "if": [
+            "approves"
+          ],
+          "de": "„approves“ ist eine konjugierte Verbform. Nach „board's“ braucht es approval.",
+          "en": "“approves” is a conjugated verb. After “board's” you need approval."
+        },
+        {
+          "not": [
+            "approval"
+          ],
+          "de": "Gefragt ist das Nomen approval, nicht eine Verbform.",
+          "en": "The noun approval is needed, not a verb form."
+        }
+      ]
+    }
+  },
+  "We need to decide by Friday. → We need a ___ by Friday.": {
+    "pat": "nm.noun-form",
+    "why": {
+      "ok": {
+        "de": "Richtig: Nach „a“ steht das Nomen decision. Aus decide wird decision.",
+        "en": "Right: after “a” comes the noun decision. decide becomes decision."
+      },
+      "wrong": [
+        {
+          "if": [
+            "decide"
+          ],
+          "de": "„decide“ ist das Verb. Nach „a“ braucht es das Nomen decision.",
+          "en": "“decide” is the verb. After “a” you need the noun decision."
+        },
+        {
+          "if": [
+            "decided"
+          ],
+          "de": "„decided“ ist eine Verbform. Nach „a“ steht das Nomen decision.",
+          "en": "“decided” is a verb form. After “a” use the noun decision."
+        },
+        {
+          "not": [
+            "decision"
+          ],
+          "de": "Gefragt ist das Nomen decision, nicht eine Verbform.",
+          "en": "The noun decision is needed, not a verb form."
+        }
+      ]
+    }
+  },
+  "The implement of the new workflow starts next week.": {
+    "pat": "nm.noun-form",
+    "why": {
+      "ok": {
+        "de": "Richtig: The implementation of … Nach „The“ steht das Nomen, nicht das Verb implement.",
+        "en": "Right: The implementation of … After “The” use the noun, not the verb implement."
+      },
+      "wrong": [
+        {
+          "if": [
+            "implement"
+          ],
+          "de": "„implement“ ist noch das Verb. Nach „The“ steht das Nomen implementation.",
+          "en": "“implement” is still the verb. After “The” use the noun implementation."
+        },
+        {
+          "not": [
+            "implementation"
+          ],
+          "de": "Gefragt ist das Nomen implementation (Endung -ation).",
+          "en": "The noun implementation is needed (ending -ation)."
+        }
+      ]
+    }
+  },
+  "We look forward to the approve of the pilot.": {
+    "pat": "nm.noun-form",
+    "why": {
+      "ok": {
+        "de": "Richtig: the approval of the pilot. Nach „the“ steht das Nomen, nicht das Verb approve.",
+        "en": "Right: the approval of the pilot. After “the” use the noun, not the verb approve."
+      },
+      "wrong": [
+        {
+          "if": [
+            "approve"
+          ],
+          "de": "„approve“ ist noch das Verb. Nach „the“ steht das Nomen approval.",
+          "en": "“approve” is still the verb. After “the” use the noun approval."
+        },
+        {
+          "not": [
+            "approval"
+          ],
+          "de": "Gefragt ist das Nomen approval (Endung -al).",
+          "en": "The noun approval is needed (ending -al)."
+        }
+      ]
+    }
+  },
+  "Following the approve of the budget, we will order the licenses.": {
+    "pat": "nm.following",
+    "why": {
+      "ok": {
+        "de": "Richtig: Following the approval of … Nach „the“ steht ein Nomen, kein Verb.",
+        "en": "Right: Following the approval of … After “the” a noun follows, not a verb."
+      },
+      "wrong": [
+        {
+          "if": [
+            "approve"
+          ],
+          "de": "„approve“ ist noch das Verb. Nach „the“ steht das Nomen approval.",
+          "en": "“approve” is still the verb. After “the” use the noun approval."
+        },
+        {
+          "not": [
+            "approval"
+          ],
+          "de": "Gefragt ist das Nomen approval (Endung -al).",
+          "en": "The noun approval is needed (ending -al)."
+        }
+      ]
+    }
+  }
+}

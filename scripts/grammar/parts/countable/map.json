@@ -1,0 +1,403 @@
+{
+ "Our manager gave me some useful ___ after the presentation.": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: advice ist unzählbar, also some useful advice ohne -s und ohne an.",
+    "en": "Right: advice is uncountable, so some useful advice with no -s and no an."
+   },
+   "wrong": [
+    {
+     "opt": "many advices",
+     "pat": "cnt.uncount",
+     "de": "„advices“ gibt es nicht: advice hat keinen Plural, auch nicht nach many.",
+     "en": "“advices” does not exist: advice has no plural, not even after many."
+    },
+    {
+     "opt": "an advice",
+     "de": "„an“ steht nur vor zählbaren Nomen im Singular. Advice ist unzählbar.",
+     "en": "“an” goes only with singular countable nouns. Advice is uncountable."
+    },
+    {
+     "opt": "advices",
+     "de": "Kein Plural-s: advice ist unzählbar, hier passt some advice.",
+     "en": "No plural -s: advice is uncountable; some advice fits here."
+    }
+   ]
+  }
+ },
+ "How ___ people attended the training session yesterday?": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: people ist ein zählbarer Plural, also how many.",
+    "en": "Right: people is a countable plural, so how many."
+   },
+   "wrong": [
+    {
+     "opt": "less",
+     "de": "„How less“ gibt es nicht. Für Zählbares fragt man how many.",
+     "en": "“How less” does not exist. For countable nouns you ask how many."
+    },
+    {
+     "opt": "much",
+     "pat": "cnt.quant",
+     "de": "„How much“ fragt nach Unzählbarem (how much time). People ist zählbar.",
+     "en": "“How much” asks about uncountables (how much time). People is countable."
+    },
+    {
+     "opt": "a little",
+     "de": "„How a little“ gibt es nicht, und a little passt nur zu Unzählbarem.",
+     "en": "“How a little” does not exist, and a little suits only uncountables."
+    }
+   ]
+  }
+ },
+ "We only have ___ information about the new supplier.": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: information ist unzählbar, deshalb a little. A few braucht einen Plural.",
+    "en": "Right: information is uncountable, so a little. A few needs a plural noun."
+   },
+   "wrong": [
+    {
+     "opt": "several",
+     "de": "„Several“ braucht ein zählbares Nomen im Plural. Information hat keinen.",
+     "en": "“Several” needs a plural countable noun. Information has no plural."
+    },
+    {
+     "opt": "a few",
+     "de": "„A few“ steht vor zählbaren Plural-Nomen. Information ist unzählbar.",
+     "en": "“A few” goes before plural countable nouns. Information is uncountable."
+    },
+    {
+     "opt": "many",
+     "de": "„Many“ steht vor zählbaren Plural-Nomen. Bei information passt much oder a little.",
+     "en": "“Many” goes before plural countable nouns. With information use much or a little."
+    }
+   ]
+  }
+ },
+ "Could you send me ___ about the delivery dates?": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: some information. Das Nomen ist unzählbar, ohne a und ohne -s.",
+    "en": "Right: some information. The noun is uncountable, with no a and no -s."
+   },
+   "wrong": [
+    {
+     "opt": "a information",
+     "de": "„a“ steht nur vor zählbaren Nomen im Singular. Information ist unzählbar.",
+     "en": "“a” goes only with singular countable nouns. Information is uncountable."
+    },
+    {
+     "opt": "an information",
+     "de": "„An“ geht nur mit zählbaren Nomen, auch wenn information mit einem Vokal beginnt.",
+     "en": "“An” goes only with countable nouns, even though information starts with a vowel."
+    },
+    {
+     "opt": "some informations",
+     "pat": "cnt.uncount",
+     "de": "Kein Plural-s: Deutsch hat „Informationen“, Englisch nur information.",
+     "en": "No plural -s: German has “Informationen”, English only information."
+    }
+   ]
+  }
+ },
+ "I'd appreciate your ___ on the draft by Friday.": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: feedback ist unzählbar, also your feedback ohne -s.",
+    "en": "Right: feedback is uncountable, so your feedback with no -s."
+   },
+   "wrong": [
+    {
+     "if": [
+      "feedbacks"
+     ],
+     "de": "„feedbacks“ gibt es nicht: feedback hat keinen Plural.",
+     "en": "“feedbacks” does not exist: feedback has no plural."
+    },
+    {
+     "not": [
+      "feedback",
+      "input"
+     ],
+     "de": "Gesucht ist ein unzählbares Wort für „Rückmeldung“: feedback oder input.",
+     "en": "A word for “Rückmeldung” without a plural is needed: feedback or input."
+    }
+   ]
+  }
+ },
+ "There ___ too much traffic on the highway this morning, so I was late.": {
+  "pat": "cnt.verb",
+  "why": {
+   "ok": {
+    "de": "Richtig: traffic ist unzählbar, das Verb steht im Singular: was.",
+    "en": "Right: traffic is uncountable, so the verb is singular: was."
+   },
+   "wrong": [
+    {
+     "if": [
+      "were"
+     ],
+     "de": "„were“ ist Plural. Traffic ist unzählbar, deshalb was.",
+     "en": "“were” is plural. Traffic is uncountable, so was."
+    },
+    {
+     "if": [
+      "is"
+     ],
+     "de": "Der Satz spielt heute früh, also die Vergangenheit: was.",
+     "en": "The sentence is about this morning, so the past is needed: was."
+    },
+    {
+     "not": [
+      "was"
+     ],
+     "de": "Gesucht ist die Singularform von be in der Vergangenheit: was.",
+     "en": "The singular past form of be is needed: was."
+    }
+   ]
+  }
+ },
+ "Please make sure you have enough ___ for the trip.": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: luggage ist unzählbar, deshalb enough luggage ohne -s.",
+    "en": "Right: luggage is uncountable, so enough luggage with no -s."
+   },
+   "wrong": [
+    {
+     "if": [
+      "luggages"
+     ],
+     "de": "„luggages“ gibt es nicht: luggage hat keinen Plural.",
+     "en": "“luggages” does not exist: luggage has no plural."
+    },
+    {
+     "if": [
+      "baggages"
+     ],
+     "de": "„baggages“ gibt es nicht: baggage hat keinen Plural.",
+     "en": "“baggages” does not exist: baggage has no plural."
+    },
+    {
+     "not": [
+      "luggage",
+      "baggage"
+     ],
+     "de": "Gesucht ist das unzählbare Wort für „Gepäck“: luggage oder baggage.",
+     "en": "The uncountable word for “Gepäck” is needed: luggage or baggage."
+    }
+   ]
+  }
+ },
+ "We have few options left. → We don't have ___ options left.": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: options ist zählbar, deshalb not many. Few heißt „nicht viele“.",
+    "en": "Right: options is countable, so not many. Few means “not many”."
+   },
+   "wrong": [
+    {
+     "if": [
+      "much"
+     ],
+     "de": "„Much“ passt nur zu Unzählbarem. Options ist zählbar, also many.",
+     "en": "“Much” suits only uncountables. Options is countable, so many."
+    },
+    {
+     "if": [
+      "few"
+     ],
+     "de": "„Few“ heißt schon „kaum welche“. Mit don't have kippt der Sinn.",
+     "en": "“Few” already means “hardly any”. With don't have the meaning flips."
+    },
+    {
+     "not": [
+      "many",
+      "lot",
+      "that",
+      "very",
+      "too"
+     ],
+     "de": "Gesucht ist das Mengenwort für zählbare Plurale nach don't: many.",
+     "en": "A quantifier for countable plurals after don't is needed: many."
+    }
+   ]
+  }
+ },
+ "There isn't much furniture in the new office. → The new office has only ___ furniture.": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: furniture ist unzählbar, also only a little. A few braucht einen Plural.",
+    "en": "Right: furniture is uncountable, so only a little. A few needs a plural."
+   },
+   "wrong": [
+    {
+     "if": [
+      "few"
+     ],
+     "de": "„A few“ gilt nur für zählbare Plurale. Furniture ist unzählbar.",
+     "en": "“A few” suits only countable plurals. Furniture is uncountable."
+    },
+    {
+     "if": [
+      "many"
+     ],
+     "de": "„Many“ braucht ein zählbares Nomen im Plural. Furniture hat keinen Plural.",
+     "en": "“Many” needs a plural countable noun. Furniture has no plural."
+    },
+    {
+     "if": [
+      "much"
+     ],
+     "de": "Nach only passt a little, nicht much: Das steht kaum in bejahten Sätzen.",
+     "en": "After only use a little, not much: much rarely appears in positive sentences."
+    },
+    {
+     "not": [
+      "little",
+      "bit"
+     ],
+     "de": "Gesucht ist das Mengenwort für „wenig“ vor Unzählbarem: a little.",
+     "en": "A quantifier meaning “not much” before an uncountable is needed: a little."
+    }
+   ]
+  }
+ },
+ "She gave me a lot of useful advices for my interview.": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: advice hat keinen Plural, also a lot of useful advice ohne -s.",
+    "en": "Right: advice has no plural, so a lot of useful advice."
+   },
+   "wrong": [
+    {
+     "if": [
+      "advices"
+     ],
+     "de": "Der Fehler liegt im -s: „advices“ gibt es nicht, advice bleibt in der Einzahl.",
+     "en": "The error is the -s: “advices” does not exist; advice stays singular."
+    },
+    {
+     "not": [
+      "advice"
+     ],
+     "de": "Gesucht ist die Form ohne -s: advice.",
+     "en": "The form without -s is needed: advice."
+    }
+   ]
+  }
+ },
+ "The staff are very friendly, but the informations on the website are outdated.": {
+  "pat": "cnt.verb",
+  "why": {
+   "ok": {
+    "de": "Richtig: information ist unzählbar: kein -s, und das Verb steht im Singular (is).",
+    "en": "Right: information is uncountable: no -s, and the verb is singular (is)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "informations"
+     ],
+     "de": "„informations“ gibt es nicht: information hat keinen Plural.",
+     "en": "“informations” does not exist: information has no plural."
+    },
+    {
+     "not": [
+      "is"
+     ],
+     "de": "Zu information passt das Verb im Singular: is outdated.",
+     "en": "The verb after information is singular: is outdated."
+    }
+   ]
+  }
+ },
+ "How much meetings do we have scheduled for next week?": {
+  "pat": "cnt.quant",
+  "why": {
+   "ok": {
+    "de": "Richtig: meetings ist zählbar (Plural), also how many.",
+    "en": "Right: meetings is countable (plural), so how many."
+   },
+   "wrong": [
+    {
+     "if": [
+      "much"
+     ],
+     "de": "„Much“ gehört zu Unzählbarem. Meetings ist zählbar, also how many.",
+     "en": "“Much” goes with uncountables. Meetings is countable, so how many."
+    },
+    {
+     "not": [
+      "many"
+     ],
+     "de": "Gesucht ist das Mengenwort für zählbare Plurale: many.",
+     "en": "A quantifier for countable plurals is needed: many."
+    }
+   ]
+  }
+ },
+ "She gave me some good advices.": {
+  "pat": "cnt.uncount",
+  "why": {
+   "ok": {
+    "de": "Richtig: advice hat keinen Plural, also some good advice ohne -s.",
+    "en": "Right: advice has no plural, so some good advice."
+   },
+   "wrong": [
+    {
+     "if": [
+      "advices"
+     ],
+     "de": "„advices“ gibt es nicht: Es heißt some good advice, ohne -s.",
+     "en": "“advices” does not exist: say some good advice, with no -s."
+    },
+    {
+     "not": [
+      "advice"
+     ],
+     "de": "Gesucht ist die Form ohne -s: advice.",
+     "en": "The form without -s is needed: advice."
+    }
+   ]
+  },
+  "dup": "She gave me a lot of useful advices for my interview."
+ },
+ "The informations are on our website.": {
+  "pat": "cnt.verb",
+  "why": {
+   "ok": {
+    "de": "Richtig: information ist unzählbar: kein -s, und das Verb steht im Singular (is).",
+    "en": "Right: information is uncountable: no -s, and the verb is singular (is)."
+   },
+   "wrong": [
+    {
+     "if": [
+      "informations"
+     ],
+     "de": "„informations“ gibt es nicht: Das Nomen hat keinen Plural.",
+     "en": "“informations” does not exist: the noun has no plural."
+    },
+    {
+     "if": [
+      "information",
+      "are"
+     ],
+     "de": "Zu information passt das Verb im Singular: is on our website.",
+     "en": "The verb after information is singular: is on our website."
+    }
+   ]
+  }
+ }
+}

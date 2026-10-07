@@ -1,0 +1,523 @@
+{
+ "topic": "prep-noun",
+ "canDo": {
+  "de": "Ich kann die richtige Präposition nach Nomen und Adjektiven wählen: reason for, increase in, proud of, worried about, solution to, good at.",
+  "en": "I can choose the right preposition after nouns and adjectives: reason for, increase in, proud of, worried about, solution to, good at."
+ },
+ "order": [
+  "pn.for",
+  "pn.in",
+  "pn.of",
+  "pn.about",
+  "pn.to",
+  "pn.at"
+ ],
+ "introPlan": [
+  [
+   "pn.for",
+   "pn.in"
+  ],
+  [
+   "pn.of",
+   "pn.about"
+  ],
+  [
+   "pn.to",
+   "pn.at"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Welche Präposition gehört fest zu dem Wort davor, auch wenn das Deutsche eine andere nutzt?",
+   "Beschreibst du Bereich oder Veränderung, Grund oder Bedarf, oder das Thema eines Gesprächs?",
+   "Zielt das Nomen auf etwas, oder beschreibt das Adjektiv ein Gefühl oder Können?"
+  ],
+  "en": [
+   "Which preposition belongs fixed to the word before it, even if German uses a different one?",
+   "Do you describe a field or change, a reason or need, or the topic of a conversation?",
+   "Does the noun point at something, or does the adjective describe a feeling or a skill?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "pn.for",
+   "name": {
+    "de": "for · Grund, Bedarf, Zuständigkeit",
+    "en": "for · reason, need, duty"
+   },
+   "form": {
+    "de": "Nomen/Adjektiv + for + Sache",
+    "en": "noun/adjective + for + thing"
+   },
+   "use": {
+    "de": "Grund, Nachfrage, Bedarf und Zuständigkeit schließt man mit for an: reason for, demand for, need for, responsible for.",
+    "en": "Reason, demand, need and duty take for: reason for, demand for, need for, responsible for."
+   },
+   "signals": [
+    "reason for",
+    "demand for",
+    "need for",
+    "responsible for",
+    "reputation for"
+   ],
+   "ex": [
+    {
+     "en": "We still see strong demand for the premium plan.",
+     "de": "Wir sehen weiter starke Nachfrage nach dem Premium-Tarif.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Could you send me the reasons for the price change?",
+     "de": "Könnten Sie mir die Gründe für die Preisänderung schicken?",
+     "ctx": "mail"
+    },
+    {
+     "en": "Marta is responsible for onboarding new clients.",
+     "de": "Marta ist für das Onboarding neuer Kunden zuständig.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "There is little demand after this service.",
+    "good": "There is little demand for this service.",
+    "cause": {
+     "de": "„Nachfrage nach“ wird Wort für Wort übersetzt, deshalb rutscht after in den Satz. Englisch hängt das Gewünschte mit for an.",
+     "en": "“Nachfrage nach” is translated word for word, so after slips in. English links the thing wanted with for."
+    }
+   },
+   "contrast": {
+    "with": "pn.of",
+    "a": "She is proud of the result.",
+    "b": "She is responsible for the result.",
+    "diff": {
+     "de": "Ein Gefühl über das Ergebnis nimmt of, eine Zuständigkeit für das Ergebnis nimmt for. Die Präposition gehört zum Wort davor.",
+     "en": "A feeling about the result takes of, a duty for the result takes for. The preposition belongs to the word before it."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Sam is responsible for the budget.",
+     "q": {
+      "de": "Muss Sam sich um das Budget kümmern?",
+      "en": "Does Sam have to look after the budget?"
+     },
+     "a": true
+    },
+    {
+     "s": "There is no demand for the product.",
+     "q": {
+      "de": "Wollen viele Kunden das Produkt?",
+      "en": "Do many customers want the product?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Was drückt das Wort aus: eine Ursache, ein Bedürfnis oder eine Pflicht? Welche Präposition lernst du dazu?",
+    "en": "What does the word express: a cause, a need or a duty? Which preposition do you learn with it?"
+   }
+  },
+  {
+   "id": "pn.in",
+   "name": {
+    "de": "in · Bereich und Veränderung",
+    "en": "in · field and change"
+   },
+   "form": {
+    "de": "Nomen/Adjektiv + in + Bereich",
+    "en": "noun/adjective + in + area"
+   },
+   "use": {
+    "de": "Veränderungen und Fachgebiete schließt man mit in an: increase in sales, interested in, experience in. Ein Betrag steht mit of: an increase of 5%.",
+    "en": "Changes and fields take in: increase in sales, interested in, experience in. An amount takes of: an increase of 5%."
+   },
+   "signals": [
+    "increase in",
+    "rise in",
+    "drop in",
+    "decrease in",
+    "interested in",
+    "experience in",
+    "involved in"
+   ],
+   "ex": [
+    {
+     "en": "We saw a sharp drop in orders after the price change.",
+     "de": "Nach der Preisänderung sahen wir einen starken Rückgang bei den Bestellungen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'm very interested in the open position.",
+     "de": "Ich interessiere mich sehr für die offene Stelle.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She has years of experience in logistics.",
+     "de": "Sie hat jahrelange Erfahrung in der Logistik.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We're very interested at your proposal.",
+    "good": "We're very interested in your proposal.",
+    "cause": {
+     "de": "„Interessiert an“ wird Wort für Wort übersetzt, und „an“ wird zu at. Englisch sagt interested in.",
+     "en": "“Interessiert an” is translated word for word, and “an” becomes at. English says interested in."
+    }
+   },
+   "contrast": {
+    "with": "pn.of",
+    "a": "We expect an increase in sales.",
+    "b": "We expect an increase of 5%.",
+    "diff": {
+     "de": "In nennt, was sich verändert (sales). Of nennt, um wie viel es sich verändert (5%).",
+     "en": "In names what changes (sales). Of names by how much it changes (5%)."
+    }
+   },
+   "ccq": [
+    {
+     "s": "There was a drop in complaints.",
+     "q": {
+      "de": "Gab es weniger Beschwerden?",
+      "en": "Were there fewer complaints?"
+     },
+     "a": true
+    },
+    {
+     "s": "She has experience in sales.",
+     "q": {
+      "de": "Kennt sie sich im Vertrieb aus?",
+      "en": "Does she know the sales field?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Worauf bezieht sich das Wort: auf ein Fach, ein Interesse oder eine Größe, die sich ändert?",
+    "en": "What does the word refer to: a field, an interest or a figure that changes?"
+   }
+  },
+  {
+   "id": "pn.of",
+   "name": {
+    "de": "of · Gefühl und Eigenschaft",
+    "en": "of · feeling and quality"
+   },
+   "form": {
+    "de": "Adjektiv + of + Nomen oder -ing",
+    "en": "adjective + of + noun or -ing"
+   },
+   "use": {
+    "de": "Viele Gefühle und Eigenschaften nehmen of: proud of, aware of, capable of, afraid of. Auch feste Wendungen: a lack of, in charge of.",
+    "en": "Many feelings and qualities take of: proud of, aware of, capable of, afraid of. Fixed phrases too: a lack of, in charge of."
+   },
+   "signals": [
+    "proud of",
+    "aware of",
+    "capable of",
+    "afraid of",
+    "lack of",
+    "in charge of",
+    "tired of",
+    "typical of"
+   ],
+   "ex": [
+    {
+     "en": "Everyone here is aware of the new deadline.",
+     "de": "Alle hier kennen die neue Frist.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'm proud of what our team achieved this year.",
+     "de": "Ich bin stolz auf das, was unser Team dieses Jahr erreicht hat.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He's capable of much more than he shows.",
+     "de": "Er ist zu viel mehr fähig, als er zeigt.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I'm very proud on my team.",
+    "good": "I'm very proud of my team.",
+    "cause": {
+     "de": "„Stolz auf“ wird Wort für Wort übersetzt, und „auf“ wird meist zu on. Englisch sagt proud of.",
+     "en": "“Stolz auf” is translated word for word, and “auf” usually becomes on. English says proud of."
+    }
+   },
+   "contrast": {
+    "with": "pn.for",
+    "a": "She is proud of the result.",
+    "b": "She is responsible for the result.",
+    "diff": {
+     "de": "Ein Gefühl über das Ergebnis nimmt of, eine Zuständigkeit für das Ergebnis nimmt for. Die Präposition gehört zum Wort davor.",
+     "en": "A feeling about the result takes of, a duty for the result takes for. The preposition belongs to the word before it."
+    }
+   },
+   "ccq": [
+    {
+     "s": "Anna is aware of the problem.",
+     "q": {
+      "de": "Weiß Anna, dass es ein Problem gibt?",
+      "en": "Does Anna know there is a problem?"
+     },
+     "a": true
+    },
+    {
+     "s": "He is afraid of making a mistake.",
+     "q": {
+      "de": "Hat er keine Angst vor einem Fehler?",
+      "en": "Is he unafraid of a mistake?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Beschreibt das Adjektiv ein Gefühl oder eine Eigenschaft, die du über jemanden sagst? Welche Präposition lernst du dazu?",
+    "en": "Does the adjective describe a feeling or a quality you state about someone? Which preposition do you learn with it?"
+   }
+  },
+  {
+   "id": "pn.about",
+   "name": {
+    "de": "about · Thema und Sorge",
+    "en": "about · topic and concern"
+   },
+   "form": {
+    "de": "Nomen/Adjektiv + about + Thema",
+    "en": "noun/adjective + about + topic"
+   },
+   "use": {
+    "de": "Das Thema eines Gesprächs oder Gefühls schließt man mit about an: discussion about, worried about, excited about, question about. Förmlich steht oft on: report on.",
+    "en": "The topic of a talk or feeling takes about: discussion about, worried about, excited about, question about. Formal texts often use on: report on."
+   },
+   "signals": [
+    "discussion about",
+    "worried about",
+    "excited about",
+    "concerned about",
+    "question about",
+    "report on",
+    "doubts about",
+    "complaint about"
+   ],
+   "ex": [
+    {
+     "en": "We had a long discussion about the rollout plan.",
+     "de": "Wir haben lange über den Rollout-Plan diskutiert.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'd like to ask a few questions about the contract terms.",
+     "de": "Ich möchte ein paar Fragen zu den Vertragsbedingungen stellen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Everyone is excited about the new office.",
+     "de": "Alle sind begeistert vom neuen Büro.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We're excited on the new office.",
+    "good": "We're excited about the new office.",
+    "cause": {
+     "de": "„Gespannt auf“ wird Wort für Wort übersetzt, und „auf“ wird meist zu on. Englisch sagt excited about.",
+     "en": "“Gespannt auf” is translated word for word, and “auf” usually becomes on. English says excited about."
+    }
+   },
+   "contrast": {
+    "with": "pn.of",
+    "a": "I'm worried about the risk.",
+    "b": "I'm aware of the risk.",
+    "diff": {
+     "de": "Sorge, Frage, Freude nehmen about. Wissen, Stolz, Angst nehmen of. Eine einfache Regel gibt es nicht, man lernt das Paar.",
+     "en": "Worry, a question, excitement take about. Awareness, pride, fear take of. There is no simple rule; learn the pair."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We're concerned about the delay.",
+     "q": {
+      "de": "Macht uns die Verzögerung Sorgen?",
+      "en": "Does the delay worry us?"
+     },
+     "a": true
+    },
+    {
+     "s": "She is worried about the test.",
+     "q": {
+      "de": "Hat sie keine Sorgen wegen des Tests?",
+      "en": "Does she have no worries about the test?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Geht es um das Thema eines Gesprächs oder eines Gefühls? Welche Präposition lernst du dafür?",
+    "en": "Is it the topic of a talk or of a feeling? Which preposition do you learn for it?"
+   }
+  },
+  {
+   "id": "pn.to",
+   "name": {
+    "de": "to · Ziel und Bezug",
+    "en": "to · target and link"
+   },
+   "form": {
+    "de": "Nomen/Adjektiv + to + Ziel",
+    "en": "noun/adjective + to + target"
+   },
+   "use": {
+    "de": "Nomen, die auf etwas zielen, nehmen to: a solution to, an answer to, access to, a response to, similar to. Bei Zweck oder Kunde passt auch for.",
+    "en": "Nouns that point at something take to: a solution to, an answer to, access to, a response to, similar to. A purpose or client also takes for."
+   },
+   "signals": [
+    "solution to",
+    "answer to",
+    "access to",
+    "response to",
+    "reaction to",
+    "key to",
+    "similar to",
+    "contribution to"
+   ],
+   "ex": [
+    {
+     "en": "Our team found a solution to the billing problem.",
+     "de": "Unser Team hat eine Lösung für das Abrechnungsproblem gefunden.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Thank you for your answer to my question.",
+     "de": "Danke für Ihre Antwort auf meine Frage.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Not everyone has access to the shared drive.",
+     "de": "Nicht jeder hat Zugriff auf das gemeinsame Laufwerk.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Thank you for your reply on my email.",
+    "good": "Thank you for your reply to my email.",
+    "cause": {
+     "de": "„Antwort auf“ wird Wort für Wort übersetzt, und „auf“ wird meist zu on. Englisch sagt reply to.",
+     "en": "“Antwort auf” is translated word for word, and “auf” usually becomes on. English says reply to."
+    }
+   },
+   "contrast": {
+    "with": "pn.for",
+    "a": "We found a solution to the problem.",
+    "b": "We found a solution for our clients.",
+    "diff": {
+     "de": "To nennt, was gelöst wird (das Problem). For nennt, für wen oder wozu die Lösung gedacht ist.",
+     "en": "To names what is solved (the problem). For names who or what the solution is meant for."
+    }
+   },
+   "ccq": [
+    {
+     "s": "This is the key to our success.",
+     "q": {
+      "de": "Hängt unser Erfolg stark davon ab?",
+      "en": "Does our success depend heavily on it?"
+     },
+     "a": true
+    },
+    {
+     "s": "The new tool is our answer to rising costs.",
+     "q": {
+      "de": "Verursacht das Werkzeug die steigenden Kosten?",
+      "en": "Does the tool cause the rising costs?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Führt das Nomen zu etwas hin, zum Beispiel zu einem Problem, einer Datei oder einem Ziel?",
+    "en": "Does the noun lead toward something, for example a problem, a file or a goal?"
+   }
+  },
+  {
+   "id": "pn.at",
+   "name": {
+    "de": "at · Können und Tätigkeit",
+    "en": "at · skill and activity"
+   },
+   "form": {
+    "de": "Adjektiv + at + Nomen oder -ing",
+    "en": "adjective + at + noun or -ing"
+   },
+   "use": {
+    "de": "Wie gut jemand etwas kann, schließt man mit at an: good at, bad at, quick at, hopeless at. Danach folgt ein Nomen oder die -ing-Form.",
+    "en": "How well someone does something takes at: good at, bad at, quick at, hopeless at. A noun or the -ing form follows."
+   },
+   "signals": [
+    "good at",
+    "bad at",
+    "brilliant at",
+    "quick at",
+    "terrible at",
+    "hopeless at"
+   ],
+   "ex": [
+    {
+     "en": "Our new hire is brilliant at explaining complex data.",
+     "de": "Unser neuer Mitarbeiter erklärt komplexe Daten brillant.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'm not great at spreadsheets, so I'd welcome your help.",
+     "de": "Ich bin nicht gut in Tabellen, deshalb wäre ich für Hilfe dankbar.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She's really quick at spotting errors.",
+     "de": "Sie findet Fehler wirklich schnell.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Our team is very good in handling complaints.",
+    "good": "Our team is very good at handling complaints.",
+    "cause": {
+     "de": "„Gut in“ wird Wort für Wort übersetzt, deshalb steht in statt at. Englisch sagt good at + -ing.",
+     "en": "“Gut in” is translated word for word, so in appears instead of at. English says good at + -ing."
+    }
+   },
+   "contrast": {
+    "with": "pn.in",
+    "a": "She's good at negotiating.",
+    "b": "She has experience in negotiating.",
+    "diff": {
+     "de": "Das Können einer Tätigkeit nimmt at, die Erfahrung in einem Gebiet nimmt in.",
+     "en": "Skill at an activity takes at, experience in a field takes in."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He's hopeless at planning.",
+     "q": {
+      "de": "Plant er gut?",
+      "en": "Is he good at planning?"
+     },
+     "a": false
+    },
+    {
+     "s": "She's good at negotiating.",
+     "q": {
+      "de": "Verhandelt sie gut?",
+      "en": "Does she negotiate well?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Geht es darum, wie gut jemand eine Tätigkeit beherrscht? Welche Präposition lernst du für dieses Adjektiv?",
+    "en": "Is it about how well someone performs an activity? Which preposition do you learn for this adjective?"
+   }
+  }
+ ]
+}

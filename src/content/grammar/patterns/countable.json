@@ -1,0 +1,436 @@
+{
+ "topic": "countable",
+ "canDo": {
+  "de": "Ich kann zählbare und unzählbare Nomen sicher trennen: advice und information ohne -s, das Verb im Singular, much und many richtig, ein Stück mit a piece of zählen.",
+  "en": "I can tell countable from uncountable nouns: advice and information without -s, a singular verb, much and many used correctly, and a piece of to count a single item."
+ },
+ "order": [
+  "cnt.uncount",
+  "cnt.verb",
+  "cnt.quant",
+  "cnt.unit",
+  "cnt.double"
+ ],
+ "introPlan": [
+  [
+   "cnt.uncount",
+   "cnt.verb"
+  ],
+  [
+   "cnt.quant",
+   "cnt.unit"
+  ],
+  [
+   "cnt.double"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Hat das Nomen einen Plural? Wenn nicht (advice, information, feedback), steht kein -s und kein a/an, und das Verb steht im Singular.",
+   "Folgt eine Menge: many, a few, fewer vor zählbaren Plural-Nomen oder much, a little, less vor unzählbaren?",
+   "Meinst du etwas Allgemeines (experience, room) oder einen einzelnen Fall (an experience, rooms)?"
+  ],
+  "en": [
+   "Does the noun have a plural? If not (advice, information, feedback), use no -s and no a/an, and keep the verb singular.",
+   "Does a quantity follow: many, a few, fewer before plural countables, or much, a little, less before uncountables?",
+   "Do you mean something general (experience, room) or a single case (an experience, rooms)?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "cnt.uncount",
+   "name": {
+    "de": "unzählbare Nomen · kein -s, kein a/an",
+    "en": "uncountable nouns · no -s, no a/an"
+   },
+   "form": {
+    "de": "advice, information, feedback … ohne -s und ohne a/an",
+    "en": "advice, information, feedback … no -s and no a/an"
+   },
+   "use": {
+    "de": "Manche Nomen haben keinen Plural: advice, information, feedback, furniture, luggage. Davor steht kein a/an, gezählt wird mit some, any oder a piece of.",
+    "en": "Some nouns have no plural: advice, information, feedback, furniture, luggage. No a/an goes before them; you quantify with some, any or a piece of."
+   },
+   "signals": [
+    "advice",
+    "information",
+    "feedback",
+    "furniture",
+    "luggage"
+   ],
+   "ex": [
+    {
+     "en": "We still need more information before we can decide.",
+     "de": "Wir brauchen noch mehr Informationen, bevor wir entscheiden können.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Thanks for the feedback; I've already updated the draft.",
+     "de": "Danke für das Feedback; ich habe den Entwurf schon überarbeitet.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She gave me great advice before my interview.",
+     "de": "Sie hat mir vor meinem Vorstellungsgespräch einen guten Rat gegeben.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We received several informations from the client.",
+    "good": "We received some information from the client.",
+    "cause": {
+     "de": "Das Deutsche kennt „Informationen“, „Ratschläge“ und „Möbel“ als Plural. Diese Mehrzahl wird ins Englische mitgenommen.",
+     "en": "German has plurals such as “Informationen”, “Ratschläge” and “Möbel”. Learners carry the plural over into English."
+    }
+   },
+   "contrast": {
+    "with": "cnt.unit",
+    "a": "We got useful feedback.",
+    "b": "We got a useful piece of feedback.",
+    "diff": {
+     "de": "Ohne Zählwort bleibt das Nomen unzählbar. Mit a piece of wird genau ein Stück gezählt.",
+     "en": "Without a unit word the noun stays uncountable. With a piece of you count exactly one item."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The agency gave us some great advice.",
+     "q": {
+      "de": "Kann hier „advices“ stehen?",
+      "en": "Could “advices” stand here?"
+     },
+     "a": false
+    },
+    {
+     "s": "She gave me a piece of advice.",
+     "q": {
+      "de": "Geht es um genau einen Rat?",
+      "en": "Is this about exactly one piece of advice?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Hat dieses Nomen einen Plural, und darf a oder an davor stehen?",
+    "en": "Does this noun have a plural, and can a or an stand before it?"
+   }
+  },
+  {
+   "id": "cnt.verb",
+   "name": {
+    "de": "Verb im Singular · the news is",
+    "en": "singular verb · the news is"
+   },
+   "form": {
+    "de": "unzählbares Nomen + is/was/has",
+    "en": "uncountable noun + is/was/has"
+   },
+   "use": {
+    "de": "Auch das Verb bleibt im Singular: The information is …, The traffic was … Das gilt für news: Das -s täuscht, es ist kein Plural.",
+    "en": "The verb stays singular too: The information is …, The traffic was … This includes news: its -s is misleading, it is not a plural."
+   },
+   "signals": [
+    "news",
+    "traffic",
+    "equipment",
+    "progress",
+    "research"
+   ],
+   "ex": [
+    {
+     "en": "The latest news about the merger is encouraging.",
+     "de": "Die neuesten Nachrichten zur Fusion sind ermutigend.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The information in the attachment is confidential.",
+     "de": "Die Informationen im Anhang sind vertraulich.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Traffic was terrible, so I'm running late.",
+     "de": "Der Verkehr war schrecklich, deshalb komme ich zu spät.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The news are good: the client signed the contract.",
+    "good": "The news is good: the client signed the contract.",
+    "cause": {
+     "de": "Im Deutschen ist „Nachrichten“ ein Plural („Die Nachrichten sind gut“). Das -s in news verleitet zusätzlich zu are.",
+     "en": "In German “Nachrichten” is a plural (“Die Nachrichten sind gut”). The -s in news also tempts learners to use are."
+    }
+   },
+   "contrast": {
+    "with": "cnt.quant",
+    "a": "The information is useful.",
+    "b": "The details are useful.",
+    "diff": {
+     "de": "Unzählbares nimmt is, ein zählbarer Plural nimmt are.",
+     "en": "An uncountable noun takes is; a countable plural takes are."
+    }
+   },
+   "ccq": [
+    {
+     "s": "The news is better than expected.",
+     "q": {
+      "de": "Passt hier „are“ statt „is“?",
+      "en": "Would “are” fit instead of “is”?"
+     },
+     "a": false
+    },
+    {
+     "s": "The details are in the attachment.",
+     "q": {
+      "de": "Ist „details“ zählbar?",
+      "en": "Is “details” countable?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welche Verbform passt zu einem Nomen, das keinen Plural hat?",
+    "en": "Which verb form fits a noun that has no plural?"
+   }
+  },
+  {
+   "id": "cnt.quant",
+   "name": {
+    "de": "much / many · a little / a few",
+    "en": "much / many · a little / a few"
+   },
+   "form": {
+    "de": "zählbar: many, a few, fewer · unzählbar: much, a little, less",
+    "en": "countable: many, a few, fewer · uncountable: much, a little, less"
+   },
+   "use": {
+    "de": "Das Mengenwort richtet sich nach dem Nomen: many, a few und fewer vor zählbaren Plural-Nomen, much, a little und less vor unzählbaren. Ohne a heißt es „kaum“: few, little.",
+    "en": "The quantifier follows the noun: many, a few and fewer go with plural countables, much, a little and less with uncountables. Without a, the meaning is “hardly any”: few, little."
+   },
+   "signals": [
+    "many",
+    "much",
+    "a few",
+    "a little",
+    "fewer",
+    "less",
+    "few",
+    "little"
+   ],
+   "ex": [
+    {
+     "en": "How many people are joining the call?",
+     "de": "Wie viele Leute nehmen am Call teil?",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We have fewer options than last quarter.",
+     "de": "Wir haben weniger Optionen als im letzten Quartal.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I only have a little time, but I can help.",
+     "de": "Ich habe nur wenig Zeit, aber ich kann helfen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "How much clients attended the webinar?",
+    "good": "How many clients attended the webinar?",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Deutsch trennt „viel“ und „viele“ genauso. Es ist ein Versprecher bei der Frage how much.",
+     "en": "Not a translation error: German also separates “viel” and “viele”. It is a slip with the question how much."
+    }
+   },
+   "contrast": {
+    "with": "cnt.uncount",
+    "a": "I have a few questions.",
+    "b": "I have a little feedback.",
+    "diff": {
+     "de": "a few steht vor zählbaren Plural-Nomen, a little vor unzählbaren.",
+     "en": "a few goes before plural countable nouns, a little before uncountable ones."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We have few options left.",
+     "q": {
+      "de": "Haben wir noch genug Optionen?",
+      "en": "Do we still have enough options?"
+     },
+     "a": false
+    },
+    {
+     "s": "We have a few options left.",
+     "q": {
+      "de": "Haben wir noch ein paar Optionen?",
+      "en": "Do we still have a couple of options?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Ist das Nomen danach zählbar im Plural oder unzählbar?",
+    "en": "Is the noun that follows a plural countable or uncountable?"
+   }
+  },
+  {
+   "id": "cnt.unit",
+   "name": {
+    "de": "a piece of · ein Stück zählen",
+    "en": "a piece of · counting one item"
+   },
+   "form": {
+    "de": "a piece / two pieces of + unzählbares Nomen",
+    "en": "a piece / two pieces of + uncountable noun"
+   },
+   "use": {
+    "de": "Mit einem Zählwort wird Unzählbares einzeln gezählt: a piece of advice, a piece of news. Das Plural-s steht am Zählwort: two pieces of advice.",
+    "en": "A unit word lets you count something uncountable: a piece of advice, a piece of news. The plural -s goes on the unit word: two pieces of advice."
+   },
+   "signals": [
+    "a piece of",
+    "pieces of",
+    "a bit of",
+    "a word of"
+   ],
+   "ex": [
+    {
+     "en": "Let me share one piece of news before we start.",
+     "de": "Lasst mich eine Neuigkeit mitteilen, bevor wir anfangen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I have two pieces of feedback on the draft.",
+     "de": "Ich habe zwei Anmerkungen zum Entwurf.",
+     "ctx": "mail"
+    },
+    {
+     "en": "That's a useful piece of advice, thanks.",
+     "de": "Das ist ein nützlicher Rat, danke.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She gave me two piece of advice before the pitch.",
+    "good": "She gave me two pieces of advice before the pitch.",
+    "cause": {
+     "de": "Kein Übersetzungsfehler: Das Plural-s fehlt am Zählwort. Es gehört an piece, nicht an advice.",
+     "en": "Not a translation error: the plural -s is missing on the unit word. It belongs on piece, not on advice."
+    }
+   },
+   "contrast": {
+    "with": "cnt.uncount",
+    "a": "I have some news for you.",
+    "b": "I have a piece of news for you.",
+    "diff": {
+     "de": "some news nennt keine genaue Zahl. a piece of news zählt genau eine Neuigkeit.",
+     "en": "some news names no exact number. a piece of news counts exactly one item."
+    }
+   },
+   "ccq": [
+    {
+     "s": "I have two pieces of advice for you.",
+     "q": {
+      "de": "Bekommst du zwei Ratschläge?",
+      "en": "Do you get two pieces of advice?"
+     },
+     "a": true
+    },
+    {
+     "s": "She shared a piece of news.",
+     "q": {
+      "de": "Geht es um mehrere Neuigkeiten?",
+      "en": "Is it about several items of news?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Wie zählst du etwas ohne Plural, und wohin kommt dann das -s?",
+    "en": "How do you count something with no plural, and where does the -s go?"
+   }
+  },
+  {
+   "id": "cnt.double",
+   "name": {
+    "de": "zwei Bedeutungen · experience, room",
+    "en": "two meanings · experience, room"
+   },
+   "form": {
+    "de": "ohne -s: Allgemeines · mit a/-s: einzelne Fälle",
+    "en": "no -s: general · with a/-s: single cases"
+   },
+   "use": {
+    "de": "Manche Nomen ändern mit der Zählbarkeit die Bedeutung: experience = Erfahrung, an experience = ein Erlebnis; room = Platz, a room = ein Raum; time = Zeit, times = Mal.",
+    "en": "Some nouns change meaning with countability: experience = know-how, an experience = an event; room = space, a room = a separate space; time = time, times = occasions."
+   },
+   "signals": [
+    "experience",
+    "experiences",
+    "room",
+    "rooms",
+    "time",
+    "times",
+    "business",
+    "paper"
+   ],
+   "ex": [
+    {
+     "en": "Do you have any experience with this software?",
+     "de": "Hast du Erfahrung mit dieser Software?",
+     "ctx": "meeting"
+    },
+    {
+     "en": "The offsite was a great experience for the whole team.",
+     "de": "Der Offsite war ein tolles Erlebnis für das ganze Team.",
+     "ctx": "mail"
+    },
+    {
+     "en": "Sorry, there's no room for another desk here.",
+     "de": "Entschuldigung, hier ist kein Platz für noch einen Schreibtisch.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "She has twelve years of experiences in enterprise sales.",
+    "good": "She has twelve years of experience in enterprise sales.",
+    "cause": {
+     "de": "Im Deutschen sagt man „Erfahrungen“ im Plural. Im Englischen meint experiences einzelne Erlebnisse, Können heißt experience.",
+     "en": "German uses the plural “Erfahrungen”. In English experiences means separate events; know-how is experience."
+    }
+   },
+   "contrast": {
+    "with": "cnt.uncount",
+    "a": "We need more room.",
+    "b": "We need more rooms.",
+    "diff": {
+     "de": "room ohne -s meint Platz, rooms meint mehrere einzelne Räume.",
+     "en": "room without -s means space, rooms means several separate rooms."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We need more room in the office.",
+     "q": {
+      "de": "Geht es um zusätzliche Räume?",
+      "en": "Is this about additional separate rooms?"
+     },
+     "a": false
+    },
+    {
+     "s": "She booked two rooms for the workshop.",
+     "q": {
+      "de": "Geht es um zwei einzelne Räume?",
+      "en": "Does it mean two separate rooms?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Meinst du etwas Allgemeines, oder zählst du einzelne Fälle?",
+    "en": "Do you mean something general, or are you counting single cases?"
+   }
+  }
+ ]
+}

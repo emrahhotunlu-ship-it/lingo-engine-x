@@ -1,0 +1,381 @@
+{
+ "The meeting starts ___ 9:30 on Monday morning.": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: 9:30 ist eine Uhrzeit, und vor Uhrzeiten steht at.",
+    "en": "Right: 9:30 is a clock time, and clock times take at."
+   },
+   "wrong": [
+    {
+     "opt": "on",
+     "de": "„on“ steht vor Tagen (on Monday), nicht vor der Uhrzeit 9:30.",
+     "en": "“On” goes before days (on Monday), not before the clock time 9:30."
+    },
+    {
+     "opt": "in",
+     "de": "„in“ steht vor Monaten, Jahren und Tageszeiten, nicht vor 9:30.",
+     "en": "“In” goes before months, years and parts of the day, not before 9:30."
+    },
+    {
+     "opt": "by",
+     "pat": "pt.by-until",
+     "de": "„by“ nennt eine Frist (spätestens). Hier beginnt das Meeting zu einer festen Uhrzeit.",
+     "en": "“By” names a deadline (at the latest). Here the meeting starts at a fixed time."
+    }
+   ]
+  }
+ },
+ "I have worked at this company ___ 2019.": {
+  "pat": "pt.for-since",
+  "why": {
+   "ok": {
+    "de": "Richtig: 2019 ist ein Startpunkt, und have worked passt dazu: since 2019.",
+    "en": "Right: 2019 is a starting point, and have worked fits it: since 2019."
+   },
+   "wrong": [
+    {
+     "opt": "from",
+     "de": "„from“ braucht ein „to“ (from 2019 to 2023). Zu have worked passt since.",
+     "en": "“From” needs a “to” (from 2019 to 2023). With have worked, use since."
+    },
+    {
+     "opt": "during",
+     "pat": "pt.during-within",
+     "de": "„during“ braucht ein Ereignis (during the merger), keine Jahreszahl.",
+     "en": "“During” needs an event (during the merger), not a year."
+    },
+    {
+     "opt": "for",
+     "pat": "pt.for-since",
+     "de": "„for“ nennt eine Dauer (for five years). 2019 ist ein Startpunkt.",
+     "en": "“For” names a duration (for five years). 2019 is a starting point."
+    }
+   ]
+  }
+ },
+ "Please submit the report ___ Friday at the latest.": {
+  "pat": "pt.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: „at the latest“ = spätestens. Das ist eine Frist, also by.",
+    "en": "Right: “at the latest” means no later than. That is a deadline, so by."
+   },
+   "wrong": [
+    {
+     "opt": "until",
+     "pat": "pt.by-until",
+     "de": "„until“ sagt, wie lange etwas andauert. Hier geht es um die Frist.",
+     "en": "“Until” says how long something lasts. Here it is about a deadline."
+    },
+    {
+     "opt": "during",
+     "pat": "pt.during-within",
+     "de": "„during“ steht vor einem Ereignis, nicht vor einem Wochentag.",
+     "en": "“During” goes before an event, not before a day of the week."
+    },
+    {
+     "opt": "within",
+     "pat": "pt.during-within",
+     "de": "„within“ nennt einen Zeitrahmen mit Zahl (within a week), keinen festen Tag.",
+     "en": "“Within” names a time frame with a number (within a week), not a fixed day."
+    }
+   ]
+  }
+ },
+ "We will respond to your request ___ 24 hours.": {
+  "pat": "pt.during-within",
+  "why": {
+   "ok": {
+    "de": "Richtig: 24 hours ist ein Zeitrahmen. Innerhalb davon antworten wir: within.",
+    "en": "Right: 24 hours is a time frame. We reply inside it: within."
+   },
+   "wrong": [
+    {
+     "opt": "during",
+     "de": "„during“ braucht ein Ereignis (during the call), keine Zahl mit Einheit.",
+     "en": "“During” needs an event (during the call), not a number with a unit."
+    },
+    {
+     "opt": "by",
+     "pat": "pt.by-until",
+     "de": "„by“ nennt einen Zeitpunkt (by noon), keinen Zeitrahmen mit Zahl.",
+     "en": "“By” names a point in time (by noon), not a time frame with a number."
+    },
+    {
+     "opt": "since",
+     "pat": "pt.for-since",
+     "de": "„since“ blickt auf einen Startpunkt in der Vergangenheit. Hier geht es nach vorn.",
+     "en": "“Since” looks back to a starting point in the past. Here it looks ahead."
+    }
+   ]
+  }
+ },
+ "The conference takes place ___ July, so book your flights early.": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: July ist ein Monat, und vor Monaten steht in.",
+    "en": "Right: July is a month, and months take in."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„on“ steht vor Tagen und Daten (on July 4), nicht vor einem Monat.",
+     "en": "“On” goes before days and dates (on July 4), not before a month."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "„at“ steht vor Uhrzeiten, nicht vor einem Monat.",
+     "en": "“At” goes before clock times, not before a month."
+    },
+    {
+     "if": [
+      "during"
+     ],
+     "de": "Nahe dran: Vor einem einzelnen Monat ist in die übliche Wahl.",
+     "en": "Close: before a single month, in is the usual choice."
+    }
+   ]
+  }
+ },
+ "We've been waiting for the delivery ___ three weeks.": {
+  "pat": "pt.for-since",
+  "why": {
+   "ok": {
+    "de": "Richtig: three weeks ist eine Dauer, und die nennt for.",
+    "en": "Right: three weeks is a duration, and for names a duration."
+   },
+   "wrong": [
+    {
+     "if": [
+      "since"
+     ],
+     "de": "„since“ braucht einen Startpunkt (since May), nicht eine Dauer.",
+     "en": "“Since” needs a starting point (since May), not a duration."
+    },
+    {
+     "if": [
+      "during"
+     ],
+     "pat": "pt.during-within",
+     "de": "„during“ steht vor einem Ereignis, nicht vor einer Zahl mit Einheit.",
+     "en": "“During” goes before an event, not before a number with a unit."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "„in three weeks“ schaut nach vorn. Mit have been waiting zählt die bisherige Dauer: for.",
+     "en": "“In three weeks” looks ahead. With have been waiting the duration so far counts: for."
+    }
+   ]
+  }
+ },
+ "I was on a call with a client ___ the lunch break.": {
+  "pat": "pt.during-within",
+  "why": {
+   "ok": {
+    "de": "Richtig: the lunch break ist eine Phase, in der etwas geschieht: during.",
+    "en": "Right: the lunch break is a phase in which something happens: during."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "pat": "pt.for-since",
+     "de": "„for“ nennt eine Dauer mit Zahl (for an hour), kein Ereignis.",
+     "en": "“For” names a duration with a number (for an hour), not an event."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "pat": "pt.at-on-in",
+     "de": "„at“ nennt einen Zeitpunkt (at noon), aber keine Phase.",
+     "en": "“At” names a point in time (at noon), not a phase."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "Nahe dran: Vor einem Ereignis ist during die übliche Wahl.",
+     "en": "Close: before an event, during is the usual choice."
+    }
+   ]
+  }
+ },
+ "The project started in March and is still running. → The project has been running ___ March.": {
+  "pat": "pt.for-since",
+  "why": {
+   "ok": {
+    "de": "Richtig: March ist der Startpunkt, und das Projekt läuft noch: since March.",
+    "en": "Right: March is the starting point, and the project is still running: since March."
+   },
+   "wrong": [
+    {
+     "if": [
+      "for"
+     ],
+     "de": "„for“ braucht eine Dauer (for two months). March ist ein Startpunkt.",
+     "en": "“For” needs a duration (for two months). March is a starting point."
+    },
+    {
+     "if": [
+      "from"
+     ],
+     "de": "„from“ steht mit „to“ (from March to May), nicht beim Perfekt.",
+     "en": "“From” goes with “to” (from March to May), not with the perfect."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "pat": "pt.at-on-in",
+     "de": "„in March“ nennt nur den Monat, nicht die Zeit von März bis heute.",
+     "en": "“In March” names only the month, not the time from March until now."
+    }
+   ]
+  }
+ },
+ "Please finish the draft before Thursday. → Please finish the draft ___ Thursday.": {
+  "pat": "pt.by-until",
+  "why": {
+   "ok": {
+    "de": "Richtig: Die Frist heißt spätestens bis Donnerstag: by Thursday.",
+    "en": "Right: the deadline is no later than Thursday: by Thursday."
+   },
+   "wrong": [
+    {
+     "if": [
+      "until"
+     ],
+     "pat": "pt.by-until",
+     "de": "„until“ hieße: bis Donnerstag daran arbeiten, nicht: bis dahin fertig sein.",
+     "en": "“Until” would mean: keep working until Thursday, not: be done by then."
+    },
+    {
+     "if": [
+      "before"
+     ],
+     "de": "Dieses Wort steht schon im Ausgangssatz. Gesucht ist die Präposition der Frist: by.",
+     "en": "That word is already in the first sentence. The task wants the deadline preposition: by."
+    }
+   ]
+  }
+ },
+ "We have a team meeting at Monday morning.": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: Vor Wochentagen steht on: on Monday morning.",
+    "en": "Right: days of the week take on: on Monday morning."
+   },
+   "wrong": [
+    {
+     "if": [
+      "at"
+     ],
+     "de": "Der Fehler bleibt: Vor Monday steht on, nicht at.",
+     "en": "The error remains: before Monday use on, not at."
+    },
+    {
+     "if": [
+      "in"
+     ],
+     "de": "„in“ passt zu the morning allein. Mit dem Wochentag davor steht on.",
+     "en": "“In” fits the morning alone. With the weekday before it, use on."
+    }
+   ]
+  }
+ },
+ "We usually have lunch in noon.": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: noon ist ein fester Zeitpunkt, und der steht mit at.",
+    "en": "Right: noon is a fixed point in time, and it takes at."
+   },
+   "wrong": [
+    {
+     "if": [
+      "in"
+     ],
+     "de": "Der Fehler bleibt: noon ist ein Zeitpunkt und steht mit at.",
+     "en": "The error remains: noon is a point in time and takes at."
+    },
+    {
+     "if": [
+      "on"
+     ],
+     "de": "„on“ steht vor Tagen, nicht vor noon.",
+     "en": "“On” goes before days, not before noon."
+    }
+   ]
+  }
+ },
+ "He has been working on this project during three months.": {
+  "pat": "pt.for-since",
+  "why": {
+   "ok": {
+    "de": "Richtig: three months ist eine Dauer, also for three months.",
+    "en": "Right: three months is a duration, so for three months."
+   },
+   "wrong": [
+    {
+     "if": [
+      "during"
+     ],
+     "pat": "pt.during-within",
+     "de": "Der Fehler bleibt: Vor einer Zahl mit Einheit steht kein during.",
+     "en": "The error remains: no during before a number with a unit."
+    },
+    {
+     "if": [
+      "since"
+     ],
+     "de": "„since“ braucht einen Startpunkt, three months ist eine Dauer.",
+     "en": "“Since” needs a starting point; three months is a duration."
+    },
+    {
+     "if": [
+      "within"
+     ],
+     "pat": "pt.during-within",
+     "de": "„within“ nennt eine Frist. Hier geht es um die bisherige Dauer.",
+     "en": "“Within” names a time frame. Here it is about the duration so far."
+    }
+   ]
+  }
+ },
+ "I'll be on vacation on August.": {
+  "pat": "pt.at-on-in",
+  "why": {
+   "ok": {
+    "de": "Richtig: August ist ein Monat, und vor Monaten steht in.",
+    "en": "Right: August is a month, and months take in."
+   },
+   "wrong": [
+    {
+     "if": [
+      "on"
+     ],
+     "de": "Der Fehler bleibt: Vor einem Monat steht in, nicht on.",
+     "en": "The error remains: before a month use in, not on."
+    },
+    {
+     "if": [
+      "at"
+     ],
+     "de": "„at“ steht vor Uhrzeiten, nicht vor einem Monat.",
+     "en": "“At” goes before clock times, not before a month."
+    }
+   ]
+  }
+ }
+}

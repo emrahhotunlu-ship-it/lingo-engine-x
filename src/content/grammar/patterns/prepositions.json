@@ -1,0 +1,438 @@
+{
+ "topic": "prepositions",
+ "canDo": {
+  "de": "Ich wähle die richtige Präposition nach Verb und Adjektiv, lasse sie bei discuss und attend weg, setze to vor die Person (explain to me) und nutze nach einer Präposition die -ing-Form.",
+  "en": "I choose the right preposition after verbs and adjectives, leave it out after discuss and attend, put to before the person (explain to me), and use the -ing form after a preposition."
+ },
+ "order": [
+  "prp.verb-prep",
+  "prp.adj-prep",
+  "prp.no-prep",
+  "prp.person-to",
+  "prp.prep-ing"
+ ],
+ "introPlan": [
+  [
+   "prp.verb-prep",
+   "prp.adj-prep"
+  ],
+  [
+   "prp.no-prep",
+   "prp.person-to"
+  ],
+  [
+   "prp.prep-ing"
+  ]
+ ],
+ "decide": {
+  "de": [
+   "Gehört zu diesem Verb oder Adjektiv eine feste Präposition, oder steht das Objekt direkt dahinter (discuss)?",
+   "Kommt die Person direkt nach dem Verb, oder braucht sie to (explain to me)?",
+   "Steht nach der Präposition ein Nomen oder -ing statt to + Infinitiv?"
+  ],
+  "en": [
+   "Does this verb or adjective take a fixed preposition, or does the object follow directly (discuss)?",
+   "Does the person follow the verb directly, or does she need the word to (explain to me)?",
+   "After the preposition, do you use a noun or -ing instead of to + infinitive?"
+  ]
+ },
+ "patterns": [
+  {
+   "id": "prp.verb-prep",
+   "name": {
+    "de": "Verb + feste Präposition",
+    "en": "verb + fixed preposition"
+   },
+   "form": {
+    "de": "Verb + Präposition als Paket: depend on, insist on, wait for",
+    "en": "verb + preposition as a package: depend on, insist on, wait for"
+   },
+   "use": {
+    "de": "Viele Verben brauchen eine bestimmte Präposition. Man lernt sie als Paket, denn das deutsche Wort hilft nicht verlässlich.",
+    "en": "Many verbs need one particular preposition. Learn it as a package, because the German word is not a reliable guide."
+   },
+   "signals": [
+    "depend on",
+    "insist on",
+    "wait for",
+    "work on",
+    "congratulate",
+    "rely on",
+    "apply for",
+    "look for"
+   ],
+   "ex": [
+    {
+     "en": "The launch date depends on legal's sign-off.",
+     "de": "Das Startdatum hängt von der Freigabe der Rechtsabteilung ab.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We're still waiting for your confirmation.",
+     "de": "Wir warten noch auf Ihre Bestätigung.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She insisted on paying for lunch.",
+     "de": "Sie bestand darauf, das Mittagessen zu bezahlen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "The launch date depends from legal's sign-off.",
+    "good": "The launch date depends on legal's sign-off.",
+    "cause": {
+     "de": "„Abhängen von“ legt from nahe. Im Englischen gehört on zu depend.",
+     "en": "German “abhängen von” suggests from. In English, on belongs to depend."
+    }
+   },
+   "contrast": {
+    "with": "prp.no-prep",
+    "a": "We discussed the budget.",
+    "b": "We worked on the budget.",
+    "diff": {
+     "de": "Discuss nimmt das Objekt direkt. Work braucht on, bevor das Objekt folgt.",
+     "en": "Discuss takes its object directly. Work needs on before the object."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We're waiting for the invoice.",
+     "q": {
+      "de": "Ist die Rechnung schon da?",
+      "en": "Has the invoice arrived yet?"
+     },
+     "a": false
+    },
+    {
+     "s": "She insisted on a refund.",
+     "q": {
+      "de": "Wollte sie unbedingt das Geld zurück?",
+      "en": "Did she firmly want her money back?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welche Präposition gehört zu diesem Verb, egal was das Deutsche sagt?",
+    "en": "Which preposition goes with this verb, whatever German says?"
+   }
+  },
+  {
+   "id": "prp.adj-prep",
+   "name": {
+    "de": "Adjektiv + feste Präposition",
+    "en": "adjective + fixed preposition"
+   },
+   "form": {
+    "de": "Adjektiv + Präposition: interested in, proud of, familiar with",
+    "en": "adjective + preposition: interested in, proud of, familiar with"
+   },
+   "use": {
+    "de": "Auch Adjektive haben ihre feste Präposition: interested in, good at, proud of. Eine Regel gibt es kaum, also als Paar lernen.",
+    "en": "Adjectives have their fixed preposition too: interested in, good at, proud of. There is hardly a rule, so learn the pair."
+   },
+   "signals": [
+    "interested in",
+    "good at",
+    "proud of",
+    "familiar with",
+    "allergic to",
+    "married to",
+    "responsible for",
+    "afraid of"
+   ],
+   "ex": [
+    {
+     "en": "I'm not familiar with the new CRM.",
+     "de": "Mit dem neuen CRM bin ich nicht vertraut.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "We're very interested in your proposal.",
+     "de": "Wir sind sehr an Ihrem Vorschlag interessiert.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He's really good at negotiating.",
+     "de": "Er ist richtig gut im Verhandeln.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We're extremely proud on our team's results.",
+    "good": "We're extremely proud of our team's results.",
+    "cause": {
+     "de": "„Stolz auf“ legt on nahe. Im Englischen gehört of zu proud.",
+     "en": "German “stolz auf” suggests on. In English, of belongs to proud."
+    }
+   },
+   "contrast": {
+    "with": "prp.prep-ing",
+    "a": "She is good at negotiation.",
+    "b": "She is good at negotiating.",
+    "diff": {
+     "de": "Nach at steht ein Nomen oder -ing. Beides ist richtig, nur nicht der Infinitiv mit to.",
+     "en": "After at comes a noun or -ing. Both are fine, just not to + infinitive."
+    }
+   },
+   "ccq": [
+    {
+     "s": "He's allergic to peanuts.",
+     "q": {
+      "de": "Verträgt er Erdnüsse gut?",
+      "en": "Does he tolerate peanuts well?"
+     },
+     "a": false
+    },
+    {
+     "s": "She's good at presenting.",
+     "q": {
+      "de": "Kann sie gut präsentieren?",
+      "en": "Is she skilled at presenting?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welche Präposition gehört zu diesem Adjektiv, auch wenn das Deutsche eine andere nahelegt?",
+    "en": "Which preposition goes with this adjective, even if German suggests another?"
+   }
+  },
+  {
+   "id": "prp.no-prep",
+   "name": {
+    "de": "Verb ohne Präposition",
+    "en": "verb without a preposition"
+   },
+   "form": {
+    "de": "discuss, attend, contact, reach + Objekt (ohne Präposition)",
+    "en": "discuss, attend, contact, reach + object (no preposition)"
+   },
+   "use": {
+    "de": "Manche Verben nehmen ihr Objekt direkt, obwohl das deutsche Verb eine Präposition hat: diskutieren über, teilnehmen an.",
+    "en": "Some verbs take their object directly, although the German verb has a preposition: “diskutieren über”, “teilnehmen an”."
+   },
+   "signals": [
+    "discuss",
+    "attend",
+    "contact",
+    "reach",
+    "enter",
+    "mention"
+   ],
+   "ex": [
+    {
+     "en": "Let's discuss the timeline first.",
+     "de": "Lass uns zuerst den Zeitplan besprechen.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Please contact me if you have questions.",
+     "de": "Bitte kontaktieren Sie mich bei Fragen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "I attended the webinar last week.",
+     "de": "Letzte Woche habe ich am Webinar teilgenommen.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "We discussed about the new pricing for two hours.",
+    "good": "We discussed the new pricing for two hours.",
+    "cause": {
+     "de": "„Diskutieren über“ legt about nahe. Im Englischen enthält discuss das „über“ schon.",
+     "en": "German “diskutieren über” suggests about. In English, discuss already contains it."
+    }
+   },
+   "contrast": {
+    "with": "prp.verb-prep",
+    "a": "We discussed the plan.",
+    "b": "We worked on the plan.",
+    "diff": {
+     "de": "Nach discuss folgt das Objekt direkt. Nach work braucht das Objekt ein on davor.",
+     "en": "After discuss the object follows directly. After work the object needs on before it."
+    }
+   },
+   "ccq": [
+    {
+     "s": "We attended the meeting.",
+     "q": {
+      "de": "Waren wir bei dem Treffen dabei?",
+      "en": "Were we at the meeting?"
+     },
+     "a": true
+    },
+    {
+     "s": "She didn't attend the call.",
+     "q": {
+      "de": "War sie bei dem Anruf dabei?",
+      "en": "Was she on the call?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Steht das Objekt direkt hinter dem Verb, oder braucht dieses Verb eine Präposition?",
+    "en": "Does the object follow the verb directly, or does this verb need a preposition?"
+   }
+  },
+  {
+   "id": "prp.person-to",
+   "name": {
+    "de": "explain, say, suggest + to + Person",
+    "en": "explain, say, suggest + to + person"
+   },
+   "form": {
+    "de": "explain / describe / suggest + Sache + to + Person",
+    "en": "explain / describe / suggest + thing + to + person"
+   },
+   "use": {
+    "de": "Bei explain, describe, say und suggest steht die Person nach to. Direkt hinter dem Verb steht die Sache.",
+    "en": "With explain, describe, say and suggest the person follows to. The thing comes right after the verb."
+   },
+   "signals": [
+    "explain to",
+    "describe to",
+    "say to",
+    "suggest to",
+    "announce to"
+   ],
+   "ex": [
+    {
+     "en": "Could you explain the process to the new hires?",
+     "de": "Könntest du den neuen Kollegen den Ablauf erklären?",
+     "ctx": "meeting"
+    },
+    {
+     "en": "I'll describe the changes to the whole team on Monday.",
+     "de": "Ich beschreibe dem ganzen Team am Montag die Änderungen.",
+     "ctx": "mail"
+    },
+    {
+     "en": "He suggested a short break to everyone.",
+     "de": "Er schlug allen eine kurze Pause vor.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "Could you explain me the process?",
+    "good": "Could you explain the process to me?",
+    "cause": {
+     "de": "„Erklär mir“ steht im Deutschen ohne Präposition (Dativ). Wörtlich übertragen entsteht explain me.",
+     "en": "German “erklär mir” uses a plain dative. Copied word for word, it gives explain me."
+    }
+   },
+   "contrast": {
+    "with": "prp.no-prep",
+    "a": "Could you tell me the plan?",
+    "b": "Could you explain the plan to me?",
+    "diff": {
+     "de": "Tell nimmt die Person direkt. Explain braucht to vor der Person.",
+     "en": "Tell takes the person directly. Explain needs to before the person."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She explained the contract to the client.",
+     "q": {
+      "de": "Hat der Kunde den Vertrag erklärt bekommen?",
+      "en": "Did the client get the contract explained?"
+     },
+     "a": true
+    },
+    {
+     "s": "He suggested a break to the team.",
+     "q": {
+      "de": "Hat das Team die Pause vorgeschlagen?",
+      "en": "Did the team suggest the break?"
+     },
+     "a": false
+    }
+   ],
+   "nudge": {
+    "de": "Kommt die Person direkt hinter dem Verb, oder braucht sie ein Wort davor?",
+    "en": "Does the person come right after the verb, or does she need a word before her?"
+   }
+  },
+  {
+   "id": "prp.prep-ing",
+   "name": {
+    "de": "Präposition + -ing",
+    "en": "preposition + -ing"
+   },
+   "form": {
+    "de": "Präposition + -ing: instead of going, without asking, look forward to seeing",
+    "en": "preposition + -ing: instead of going, without asking, look forward to seeing"
+   },
+   "use": {
+    "de": "Nach einer Präposition steht ein Nomen oder die -ing-Form, nicht to + Infinitiv. Das gilt auch für das to in look forward to.",
+    "en": "After a preposition comes a noun or the -ing form, not to + infinitive. This includes the to in look forward to."
+   },
+   "signals": [
+    "instead of",
+    "without",
+    "thank you for",
+    "look forward to",
+    "apologize for"
+   ],
+   "ex": [
+    {
+     "en": "We cut the cost by switching suppliers.",
+     "de": "Wir haben die Kosten gesenkt, indem wir den Lieferanten gewechselt haben.",
+     "ctx": "meeting"
+    },
+    {
+     "en": "Thank you for sending the slides so quickly.",
+     "de": "Danke, dass Sie die Folien so schnell geschickt haben.",
+     "ctx": "mail"
+    },
+    {
+     "en": "She left without saying goodbye.",
+     "de": "Sie ging, ohne sich zu verabschieden.",
+     "ctx": "talk"
+    }
+   ],
+   "trap": {
+    "bad": "I look forward to see you next week.",
+    "good": "I look forward to seeing you next week.",
+    "cause": {
+     "de": "Deutsch sagt „ich freue mich darauf, dich zu sehen“, mit Infinitiv. Hier ist to aber eine Präposition, danach folgt -ing.",
+     "en": "German says “ich freue mich darauf, dich zu sehen”, with an infinitive. Here to is a preposition, so -ing follows."
+    }
+   },
+   "contrast": {
+    "with": "prp.verb-prep",
+    "a": "We insisted on checking it.",
+    "b": "We insisted on a check.",
+    "diff": {
+     "de": "Nach on steht ein Nomen (a check) oder -ing (checking), nicht to check.",
+     "en": "After on comes a noun (a check) or -ing (checking), not to check."
+    }
+   },
+   "ccq": [
+    {
+     "s": "She left without saying goodbye.",
+     "q": {
+      "de": "Hat sie sich verabschiedet?",
+      "en": "Did she say goodbye?"
+     },
+     "a": false
+    },
+    {
+     "s": "Thanks for helping.",
+     "q": {
+      "de": "Hat jemand geholfen?",
+      "en": "Did someone help?"
+     },
+     "a": true
+    }
+   ],
+   "nudge": {
+    "de": "Welche Form des Verbs folgt auf diese Präposition?",
+    "en": "Which form of the verb follows this preposition?"
+   }
+  }
+ ]
+}

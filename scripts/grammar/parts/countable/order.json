@@ -1,0 +1,175 @@
+[
+ {
+  "pat": "cnt.uncount",
+  "en": "We received some useful feedback from the pilot customers.",
+  "de": "Wir haben von den Pilotkunden nützliche Rückmeldungen erhalten.",
+  "chunks": [
+   "we",
+   "received",
+   "some",
+   "useful feedback",
+   "from the pilot customers"
+  ],
+  "alt": [
+   "From the pilot customers, we received some useful feedback."
+  ],
+  "why": [
+   "Feedback ist unzählbar: Es steht ohne -s und ohne a/an, hier mit some. Das deutsche „Rückmeldungen“ hat im Englischen keinen Plural.",
+   "Feedback is uncountable: no -s and no a/an, here with some. English has no plural for it, unlike German “Rückmeldungen”."
+  ],
+  "bad": "We received some useful feedbacks from the pilot customers.",
+  "trap": {
+   "tile": "useful feedback",
+   "instead": "useful feedbacks",
+   "why": {
+    "de": "Die deutsche Mehrzahl „Rückmeldungen“ lädt zu einem -s ein. Doch feedback ist unzählbar und bleibt in der Einzahl.",
+    "en": "The German plural “Rückmeldungen” invites an -s. But feedback is uncountable and stays singular."
+   }
+  }
+ },
+ {
+  "pat": "cnt.verb",
+  "en": "Traffic was very heavy on the highway this morning.",
+  "de": "Heute Morgen war der Verkehr auf der Autobahn sehr dicht.",
+  "chunks": [
+   "traffic",
+   "was",
+   "very heavy",
+   "on the highway",
+   "this morning"
+  ],
+  "alt": [
+   "Traffic was very heavy this morning on the highway.",
+   "Traffic on the highway was very heavy this morning.",
+   "Traffic on the highway this morning was very heavy.",
+   "This morning, traffic was very heavy on the highway.",
+   "This morning, traffic on the highway was very heavy.",
+   "On the highway, traffic was very heavy this morning.",
+   "On the highway this morning, traffic was very heavy.",
+   "This morning on the highway, traffic was very heavy."
+  ],
+  "why": [
+   "Traffic ist unzählbar, deshalb steht das Verb im Singular: was, nicht were. Auch „der Verkehr“ ist im Deutschen ein Singular.",
+   "Traffic is uncountable, so the verb is singular: was, not were. In German “der Verkehr” is singular as well."
+  ],
+  "bad": "Traffic were very heavy on the highway this morning.",
+  "trap": {
+   "tile": "was",
+   "instead": "were",
+   "why": {
+    "de": "Wer an viele Fahrzeuge denkt, wählt leicht were. Traffic bleibt aber unzählbar und braucht was.",
+    "en": "Thinking of many vehicles, it is easy to pick were. Traffic stays uncountable and takes was."
+   }
+  }
+ },
+ {
+  "pat": "cnt.quant",
+  "en": "Do you know how many people are coming to the offsite?",
+  "de": "Weißt du, wie viele Leute zum Offsite kommen?",
+  "chunks": [
+   "do you know",
+   "how many",
+   "people",
+   "are coming",
+   "to the offsite"
+  ],
+  "single": "Do you know bleibt vorn; how many people gehört zusammen, danach folgt are coming und am Ende to the offsite.",
+  "why": [
+   "Im eingebetteten Satz bleibt die Wortfolge des Aussagesatzes: how many people are coming. People ist zählbar, deshalb many.",
+   "In the embedded question the statement order stays: how many people are coming. People is countable, so many."
+  ],
+  "bad": "Do you know how much people are coming to the offsite?",
+  "trap": {
+   "tile": "how many",
+   "instead": "how much",
+   "why": {
+    "de": "Kein echter Übersetzungsfehler, eher ein Versprecher bei how much. Bei people als Plural steht many.",
+    "en": "Not a real translation error, more a slip with how much. With people as a plural, use many."
+   }
+  }
+ },
+ {
+  "pat": "cnt.quant",
+  "en": "We have only a little time left before the deadline.",
+  "de": "Bis zur Frist bleibt uns nur noch ein wenig Zeit.",
+  "chunks": [
+   "we have",
+   "only",
+   "a little",
+   "time left",
+   "before the deadline"
+  ],
+  "alt": [
+   "Before the deadline, we have only a little time left."
+  ],
+  "why": [
+   "Time ist unzählbar, deshalb a little und nicht a few. A little heißt „etwas“, nicht „einige“.",
+   "Time is uncountable, so a little and not a few. A little means “some”, not “several”."
+  ],
+  "bad": "We have only a few time left before the deadline.",
+  "trap": {
+   "tile": "a little",
+   "instead": "a few",
+   "why": {
+    "de": "A few steht nur vor zählbaren Plural-Nomen. Vor time, das unzählbar ist, steht a little.",
+    "en": "A few goes only before plural countable nouns. Before time, which is uncountable, use a little."
+   }
+  }
+ },
+ {
+  "pat": "cnt.unit",
+  "en": "Our mentor gave us two pieces of useful advice yesterday.",
+  "de": "Gestern hat unser Mentor uns zwei nützliche Ratschläge gegeben.",
+  "chunks": [
+   "our mentor",
+   "gave us",
+   "two pieces",
+   "of useful advice",
+   "yesterday"
+  ],
+  "alt": [
+   "Yesterday, our mentor gave us two pieces of useful advice."
+  ],
+  "why": [
+   "Advice hat keinen Plural. Gezählt wird mit dem Zählwort, und das -s steht an pieces: two pieces of advice.",
+   "Advice has no plural. You count with a unit word, and the -s goes on pieces: two pieces of advice."
+  ],
+  "bad": "Our mentor gave us two piece of useful advice yesterday.",
+  "trap": {
+   "tile": "two pieces",
+   "instead": "two piece",
+   "why": {
+    "de": "Das Plural-s fehlt am Zählwort. Bei two steht pieces, und advice bleibt ohne -s.",
+    "en": "The plural -s is missing on the unit word. After two use pieces, and advice stays without -s."
+   }
+  }
+ },
+ {
+  "pat": "cnt.double",
+  "en": "She has twelve years of experience in enterprise sales.",
+  "de": "Sie hat zwölf Jahre Erfahrung im Großkundenvertrieb.",
+  "chunks": [
+   "she",
+   "has",
+   "twelve years",
+   "of experience",
+   "in enterprise sales"
+  ],
+  "alt": [
+   "In enterprise sales, she has twelve years of experience."
+  ],
+  "why": [
+   "Experience im Sinn von Erfahrung ist unzählbar, deshalb of experience. Experiences meint einzelne Erlebnisse.",
+   "Experience in the sense of know-how is uncountable, so of experience. Experiences means single events."
+  ],
+  "bad": "She has twelve years of experiences in enterprise sales.",
+  "trap": {
+   "tile": "of experience",
+   "instead": "of experiences",
+   "why": {
+    "de": "Im Deutschen steht „Erfahrungen“ oft im Plural. Im Englischen bleibt experience für Können in der Einzahl.",
+    "en": "German often uses the plural “Erfahrungen”. In English experience for know-how stays singular."
+   }
+  }
+ }
+]

@@ -1,0 +1,929 @@
+[
+ {
+  "id": "cm-mea-k1",
+  "type": "kwt",
+  "pat": "cm.measure",
+  "from": "The workshop lasts two days.",
+  "key": "DAY",
+  "frame": "She booked ___ workshop for the team.",
+  "answer": "a two-day",
+  "accepted": [
+   "a 2-day"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a two-day workshop. Zahl plus Singular mit Bindestrich vor dem Nomen.",
+    "en": "Right: a two-day workshop. Number plus singular with a hyphen before the noun."
+   },
+   "wrong": [
+    {
+     "if": [
+      "two-days"
+     ],
+     "de": "Im Modifikator steht day im Singular, auch nach two: two-day.",
+     "en": "In a modifier day stays singular, even after two: two-day."
+    },
+    {
+     "if": [
+      "two",
+      "days"
+     ],
+     "de": "Ohne Bindestrich wäre „two days“ ein Plural. Hier braucht es two-day.",
+     "en": "Without a hyphen “two days” would be a plural. Here you need two-day."
+    },
+    {
+     "pat": "cm.measure",
+     "de": "Vor dem Nomen: a, dann Zahl und Singular mit Bindestrich, also a two-day.",
+     "en": "Before the noun: a, then number and singular with a hyphen, so a two-day."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-mea-k2",
+  "type": "kwt",
+  "pat": "cm.measure",
+  "from": "The call lasts 30 minutes.",
+  "key": "MINUTE",
+  "frame": "I scheduled ___ call with the client for noon.",
+  "answer": "a 30-minute",
+  "accepted": [
+   "a thirty-minute"
+  ],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a 30-minute call. Zahl plus Singular mit Bindestrich vor dem Nomen.",
+    "en": "Right: a 30-minute call. Number plus singular with a hyphen before the noun."
+   },
+   "wrong": [
+    {
+     "if": [
+      "30-minutes"
+     ],
+     "de": "Im Modifikator steht minute im Singular: 30-minute, nicht 30-minutes.",
+     "en": "In a modifier minute stays singular: 30-minute, not 30-minutes."
+    },
+    {
+     "if": [
+      "30",
+      "minutes"
+     ],
+     "de": "Ohne Bindestrich wäre „30 minutes“ ein Plural. Hier braucht es 30-minute.",
+     "en": "Without a hyphen “30 minutes” would be a plural. Here you need 30-minute."
+    },
+    {
+     "pat": "cm.measure",
+     "de": "Vor dem Nomen: a, dann Zahl und Singular mit Bindestrich, also a 30-minute.",
+     "en": "Before the noun: a, then number and singular with a hyphen, so a 30-minute."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-mea-f1",
+  "type": "find",
+  "pat": "cm.measure",
+  "prompt": "We need a five-days extension to finish the audit.",
+  "err": [
+   3,
+   3
+  ],
+  "answer": "five-day",
+  "fixed": "We need a five-day extension to finish the audit.",
+  "accepted": [
+   "5-day"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „five-days“. Vor dem Nomen steht day im Singular: five-day.",
+    "en": "The error: “five-days”. Before the noun day stays singular: five-day."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Das Maßnomen im Modifikator steht im Singular.",
+     "en": "There is an error: the measure noun in a modifier is singular."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „five-days“: Hier gehört der Singular hin.",
+     "en": "The error is “five-days”: the singular belongs here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-mea-f2",
+  "type": "find",
+  "pat": "cm.measure",
+  "prompt": "Our team completed a six-months pilot in Chicago.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "six-month",
+  "fixed": "Our team completed a six-month pilot in Chicago.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „six-months“. Im Modifikator bleibt month im Singular: six-month.",
+    "en": "The error: “six-months”. In a modifier month stays singular: six-month."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Vor „pilot“ steht das Maßnomen im Singular.",
+     "en": "There is an error: before “pilot” the measure noun is singular."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „six-months“: Das Plural-s gehört nicht in den Modifikator.",
+     "en": "The error is “six-months”: the plural -s does not belong in a modifier."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-mea-f3",
+  "type": "find",
+  "pat": "cm.measure",
+  "prompt": "She wrote a two-page memo for the leadership team.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: two-page steht vor dem Nomen im Singular, mit Bindestrich.",
+    "en": "No error: two-page sits before the noun, singular, with a hyphen."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Vor dem Nomen ist two-page richtig, ein Plural wäre falsch.",
+     "en": "No error: before the noun two-page is right; a plural would be wrong."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-mea-m1",
+  "type": "meaning",
+  "pat": "cm.measure",
+  "a": "We printed twenty five-page reports.",
+  "b": "We printed a twenty-five-page report.",
+  "q": {
+   "de": "Welcher Satz sagt: Es wurden viele kurze Berichte gedruckt?",
+   "en": "Which sentence says many short reports were printed?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Twenty five-page reports sind 20 Berichte mit je 5 Seiten.",
+    "en": "Right: sentence a. Twenty five-page reports means 20 reports of 5 pages each."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist es ein einziger Bericht mit 25 Seiten: twenty-five-page.",
+     "en": "In b it is one single report with 25 pages: twenty-five-page."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Der Bindestrich bestimmt, welche Wörter zur Zahl gehören.",
+     "en": "Not the same: the hyphen decides which words belong to the number."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-aft-k1",
+  "type": "kwt",
+  "pat": "cm.after-verb",
+  "from": "The agenda has three pages.",
+  "key": "PAGES",
+  "frame": "The agenda ___ long.",
+  "answer": "is three pages",
+  "accepted": [],
+  "words": [
+   3,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: is three pages long. Nach dem Verb: Plural, kein Bindestrich.",
+    "en": "Right: is three pages long. After the verb: plural, no hyphen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "three-page"
+     ],
+     "de": "Nach dem Verb gilt der Plural ohne Bindestrich: three pages long.",
+     "en": "After the verb use the plural with no hyphen: three pages long."
+    },
+    {
+     "if": [
+      "three",
+      "page"
+     ],
+     "de": "Hier fehlt das Plural-s: three pages.",
+     "en": "The plural -s is missing here: three pages."
+    },
+    {
+     "pat": "cm.after-verb",
+     "de": "Hinter dem Verb steht die Maßangabe im Plural: is three pages.",
+     "en": "After the verb the measure is a plural: is three pages."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-aft-k2",
+  "type": "kwt",
+  "pat": "cm.after-verb",
+  "from": "The laptop was bought two years ago.",
+  "key": "YEARS",
+  "frame": "The laptop ___ now.",
+  "answer": "is two years old",
+  "accepted": [],
+  "words": [
+   4,
+   4
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: is two years old. Nach dem Verb: Plural, kein Bindestrich.",
+    "en": "Right: is two years old. After the verb: plural, no hyphen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "two-year-old"
+     ],
+     "de": "Nach dem Verb steht der Plural ohne Bindestrich: two years old.",
+     "en": "After the verb use the plural with no hyphen: two years old."
+    },
+    {
+     "if": [
+      "two",
+      "year"
+     ],
+     "de": "Das Plural-s fehlt: two years old.",
+     "en": "The plural -s is missing: two years old."
+    },
+    {
+     "pat": "cm.after-verb",
+     "de": "Hinter dem Verb steht die Maßangabe im Plural: is two years old.",
+     "en": "After the verb the measure is a plural: is two years old."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-aft-f1",
+  "type": "find",
+  "pat": "cm.after-verb",
+  "prompt": "The flight from Boston was five-hours long, so we worked on board.",
+  "err": [
+   5,
+   5
+  ],
+  "answer": "five hours",
+  "fixed": "The flight from Boston was five hours long, so we worked on board.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „five-hours“. Nach dem Verb steht der Plural ohne Bindestrich.",
+    "en": "The error: “five-hours”. After the verb the plural stands with no hyphen."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Hinter „was“ gibt es keinen Bindestrich.",
+     "en": "There is an error: after “was” there is no hyphen."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „five-hours“: Hier gehört „five hours“ hin.",
+     "en": "The error is “five-hours”: “five hours” belongs here."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-aft-f2",
+  "type": "find",
+  "pat": "cm.after-verb",
+  "prompt": "The contract is three year old, so it needs a review.",
+  "err": [
+   3,
+   4
+  ],
+  "answer": "three years",
+  "fixed": "The contract is three years old, so it needs a review.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „three year old“. Nach dem Verb steht der Plural: three years old.",
+    "en": "The error: “three year old”. After the verb the plural stands: three years old."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Die Maßangabe nach dem Verb braucht den Plural.",
+     "en": "There is an error: the measure after the verb needs the plural."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „year“: Es fehlt das Plural-s.",
+     "en": "The error is “year”: the plural -s is missing."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-aft-m1",
+  "type": "meaning",
+  "pat": "cm.after-verb",
+  "a": "The workshop is a two-day event.",
+  "b": "The workshop is two days long.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Workshop zwei Tage dauert?",
+   "en": "Which sentence says the workshop lasts two days?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Vor dem Nomen two-day, nach dem Verb two days long: gleiche Bedeutung.",
+    "en": "Right: both. Two-day before the noun, two days long after the verb: same meaning."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Auch b sagt das: Nach dem Verb steht der Plural, two days long.",
+     "en": "B says that too: after the verb the plural stands, two days long."
+    },
+    {
+     "opt": "b",
+     "de": "Auch a sagt das: Vor dem Nomen steht two-day mit Bindestrich.",
+     "en": "A says that too: before the noun comes two-day with a hyphen."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-ord-k1",
+  "type": "kwt",
+  "pat": "cm.order",
+  "from": "Their office is modern and small.",
+  "key": "MODERN",
+  "frame": "They work in a ___ office.",
+  "answer": "small modern",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: small modern office. Die Größe steht vor dem Stil.",
+    "en": "Right: small modern office. Size comes before style."
+   },
+   "wrong": [
+    {
+     "not": [
+      "modern"
+     ],
+     "de": "Das Schlüsselwort modern muss unverändert in der Lücke stehen.",
+     "en": "The key word modern must stay unchanged in the gap."
+    },
+    {
+     "pat": "cm.order",
+     "de": "Erst die Größe, dann Alter oder Stil: small modern.",
+     "en": "Size first, then age or style: small modern."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-ord-k2",
+  "type": "kwt",
+  "pat": "cm.order",
+  "from": "The laptop we ordered is black and new.",
+  "key": "NEW",
+  "frame": "We ordered a ___ laptop.",
+  "answer": "new black",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: new black laptop. Das Alter steht vor der Farbe.",
+    "en": "Right: new black laptop. Age comes before color."
+   },
+   "wrong": [
+    {
+     "not": [
+      "new"
+     ],
+     "de": "Das Schlüsselwort new muss unverändert in der Lücke stehen.",
+     "en": "The key word new must stay unchanged in the gap."
+    },
+    {
+     "pat": "cm.order",
+     "de": "Erst das Alter, dann die Farbe: new black.",
+     "en": "Age first, then color: new black."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-ord-f1",
+  "type": "find",
+  "pat": "cm.order",
+  "prompt": "She bought a wooden old table at a local market.",
+  "err": [
+   2,
+   4
+  ],
+  "answer": "an old wooden",
+  "fixed": "She bought an old wooden table at a local market.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Das Alter steht vor dem Material: an old wooden table.",
+    "en": "The error: age comes before material: an old wooden table."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler in der Reihenfolge der Adjektive.",
+     "en": "There is an error in the order of the adjectives."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „wooden old“: Alter vor Material.",
+     "en": "The error is “wooden old”: age before material."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-ord-f2",
+  "type": "find",
+  "pat": "cm.order",
+  "prompt": "Our client is based in a glass modern building downtown.",
+  "err": [
+   6,
+   7
+  ],
+  "answer": "modern glass",
+  "fixed": "Our client is based in a modern glass building downtown.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Der Stil steht vor dem Material: a modern glass building.",
+    "en": "The error: style comes before material: a modern glass building."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler in der Reihenfolge der Adjektive.",
+     "en": "There is an error in the order of the adjectives."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „glass modern“: Stil vor Material.",
+     "en": "The error is “glass modern”: style before material."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-ord-f3",
+  "type": "find",
+  "pat": "cm.order",
+  "prompt": "We rented a large white conference room for the workshop.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Die Reihenfolge ist Größe, Farbe, Zweck: large white conference room.",
+    "en": "No error: size, color, purpose: large white conference room."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Die Reihenfolge large, white, conference stimmt.",
+     "en": "No error: the order large, white, conference is right."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-ord-m1",
+  "type": "meaning",
+  "pat": "cm.order",
+  "a": "She drives a big old red car.",
+  "b": "She drives a red old big car.",
+  "q": {
+   "de": "Welcher Satz hat die übliche Reihenfolge der Adjektive?",
+   "en": "Which sentence uses the usual order of adjectives?"
+  },
+  "answer": "a",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz a. Die Reihenfolge ist Größe, Alter, Farbe: big old red car.",
+    "en": "Right: sentence a. Size, age, color: big old red car."
+   },
+   "wrong": [
+    {
+     "opt": "b",
+     "de": "In b ist die Reihenfolge umgedreht: Die Farbe steht vor Alter und Größe.",
+     "en": "In b the order is reversed: color stands before age and size."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur a folgt der üblichen Reihenfolge.",
+     "en": "Not the same: only a follows the usual order."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-fix-k1",
+  "type": "kwt",
+  "pat": "cm.fixed",
+  "from": "The contract is for a short term.",
+  "key": "TERM",
+  "frame": "They signed ___ contract.",
+  "answer": "a short-term",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a short-term contract. Fester Baustein mit Bindestrich, ohne -s.",
+    "en": "Right: a short-term contract. Fixed block with a hyphen, no -s."
+   },
+   "wrong": [
+    {
+     "if": [
+      "short-terms"
+     ],
+     "de": "Der Baustein bleibt unverändert, kein -s: short-term.",
+     "en": "The block stays unchanged, no -s: short-term."
+    },
+    {
+     "if": [
+      "short",
+      "term"
+     ],
+     "de": "Vor dem Nomen verbindet ein Bindestrich beide Teile: short-term.",
+     "en": "Before the noun a hyphen joins both parts: short-term."
+    },
+    {
+     "pat": "cm.fixed",
+     "de": "Vor dem Nomen steht der feste Baustein mit Bindestrich: a short-term.",
+     "en": "Before the noun comes the fixed block with a hyphen: a short-term."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-fix-k2",
+  "type": "kwt",
+  "pat": "cm.fixed",
+  "from": "The solution is effective and does not cost much.",
+  "key": "EFFECTIVE",
+  "frame": "We prefer ___ solution.",
+  "answer": "a cost-effective",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a cost-effective solution. Fester Baustein mit Bindestrich.",
+    "en": "Right: a cost-effective solution. Fixed block with a hyphen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "cost-effectively"
+     ],
+     "de": "Vor dem Nomen steht ein Adjektiv, kein Adverb: cost-effective, nicht -ly.",
+     "en": "Before the noun comes an adjective, not an adverb: cost-effective, not -ly."
+    },
+    {
+     "if": [
+      "cost",
+      "effective"
+     ],
+     "de": "Vor dem Nomen verbindet ein Bindestrich beide Teile: cost-effective.",
+     "en": "Before the noun a hyphen joins both parts: cost-effective."
+    },
+    {
+     "pat": "cm.fixed",
+     "de": "Vor dem Nomen steht der feste Baustein mit Bindestrich: a cost-effective.",
+     "en": "Before the noun comes the fixed block with a hyphen: a cost-effective."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-fix-f1",
+  "type": "find",
+  "pat": "cm.fixed",
+  "prompt": "We are planning a last-minutes change to the schedule.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "last-minute",
+  "fixed": "We are planning a last-minute change to the schedule.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „last-minutes“. Der feste Baustein bleibt unverändert: last-minute.",
+    "en": "The error: “last-minutes”. The fixed block stays unchanged: last-minute."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Der Baustein trägt kein -s.",
+     "en": "There is an error: the block takes no -s."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „last-minutes“: Das -s gehört nicht dazu.",
+     "en": "The error is “last-minutes”: the -s does not belong."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-fix-f2",
+  "type": "find",
+  "pat": "cm.fixed",
+  "prompt": "The vendor offers a state-of-the-arts platform for small teams.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "state-of-the-art",
+  "fixed": "The vendor offers a state-of-the-art platform for small teams.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „state-of-the-arts“. Der feste Baustein bleibt unverändert.",
+    "en": "The error: “state-of-the-arts”. The fixed block stays unchanged."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Der Baustein trägt kein -s.",
+     "en": "There is an error: the block takes no -s."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „state-of-the-arts“: Das -s gehört nicht dazu.",
+     "en": "The error is “state-of-the-arts”: the -s does not belong."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-fix-m1",
+  "type": "meaning",
+  "pat": "cm.fixed",
+  "a": "He is a small business owner.",
+  "b": "He is a small-business owner.",
+  "q": {
+   "de": "Welcher Satz sagt eindeutig: Er besitzt ein kleines Unternehmen?",
+   "en": "Which sentence clearly says he owns a small company?"
+  },
+  "answer": "b",
+  "why": {
+   "ok": {
+    "de": "Richtig: Satz b. Der Bindestrich verbindet small mit business: kleines Unternehmen.",
+    "en": "Right: sentence b. The hyphen joins small to business: a small company."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "In a kann small auch zum Inhaber gehören. Eindeutig ist das nicht.",
+     "en": "In a small could also describe the owner. That is not clear."
+    },
+    {
+     "opt": "both",
+     "de": "Nicht gleich: Nur der Bindestrich macht klar, was klein ist.",
+     "en": "Not the same: only the hyphen makes clear what is small."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-par-k1",
+  "type": "kwt",
+  "pat": "cm.participle",
+  "from": "Everyone knows her work very well.",
+  "key": "KNOWN",
+  "frame": "She is ___ designer.",
+  "answer": "a well-known",
+  "accepted": [
+   "a widely known"
+  ],
+  "words": [
+   2,
+   3
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a well-known designer. Adverb plus Partizip mit Bindestrich.",
+    "en": "Right: a well-known designer. Adverb plus participle with a hyphen."
+   },
+   "wrong": [
+    {
+     "if": [
+      "well-know"
+     ],
+     "de": "Das zweite Wort ist ein Partizip: known, nicht know.",
+     "en": "The second word is a participle: known, not know."
+    },
+    {
+     "if": [
+      "well",
+      "known"
+     ],
+     "de": "Vor dem Nomen verbindet ein Bindestrich beide Teile: well-known.",
+     "en": "Before the noun a hyphen joins both parts: well-known."
+    },
+    {
+     "pat": "cm.participle",
+     "de": "Vor dem Nomen steht Adverb plus Partizip: a well-known.",
+     "en": "Before the noun comes adverb plus participle: a well-known."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-par-k2",
+  "type": "kwt",
+  "pat": "cm.participle",
+  "from": "The audit takes a lot of time.",
+  "key": "CONSUMING",
+  "frame": "The audit is ___ process.",
+  "answer": "a time-consuming",
+  "accepted": [],
+  "words": [
+   2,
+   2
+  ],
+  "why": {
+   "ok": {
+    "de": "Richtig: a time-consuming process. Nomen plus Partizip auf -ing.",
+    "en": "Right: a time-consuming process. Noun plus -ing participle."
+   },
+   "wrong": [
+    {
+     "if": [
+      "time-consume"
+     ],
+     "de": "Das zweite Wort ist ein Partizip: consuming, nicht consume.",
+     "en": "The second word is a participle: consuming, not consume."
+    },
+    {
+     "if": [
+      "time-consumed"
+     ],
+     "de": "Der Prozess verbraucht Zeit, also die Form auf -ing: time-consuming.",
+     "en": "The process uses up time, so use the -ing form: time-consuming."
+    },
+    {
+     "pat": "cm.participle",
+     "de": "Vor dem Nomen steht Nomen plus Partizip: a time-consuming.",
+     "en": "Before the noun comes noun plus participle: a time-consuming."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-par-f1",
+  "type": "find",
+  "pat": "cm.participle",
+  "prompt": "We hired a highly skill analyst last year.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "skilled",
+  "fixed": "We hired a highly skilled analyst last year.",
+  "accepted": [
+   "experienced",
+   "qualified",
+   "trained"
+  ],
+  "why": {
+   "ok": {
+    "de": "Der Fehler: Nach highly steht ein Partizip: highly skilled.",
+    "en": "The error: highly is followed by a participle: highly skilled."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier steckt ein Fehler: Nach highly fehlt die Partizip-Endung.",
+     "en": "There is an error: after highly the participle ending is missing."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „skill“: Es braucht das Partizip skilled.",
+     "en": "The error is “skill”: you need the participle skilled."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-par-f2",
+  "type": "find",
+  "pat": "cm.participle",
+  "prompt": "The vendor sent a well-prepare proposal on Monday.",
+  "err": [
+   4,
+   4
+  ],
+  "answer": "well-prepared",
+  "fixed": "The vendor sent a well-prepared proposal on Monday.",
+  "why": {
+   "ok": {
+    "de": "Der Fehler: „well-prepare“. Das zweite Wort ist ein Partizip: well-prepared.",
+    "en": "The error: “well-prepare”. The second word is a participle: well-prepared."
+   },
+   "wrong": [
+    {
+     "tap": "none",
+     "de": "Doch, hier ist ein Fehler: Dem zweiten Wort fehlt die Endung -ed.",
+     "en": "There is an error: the second word is missing the ending -ed."
+    },
+    {
+     "tap": "*",
+     "de": "Der Fehler liegt bei „well-prepare“: Es braucht -ed.",
+     "en": "The error is “well-prepare”: it needs -ed."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-par-f3",
+  "type": "find",
+  "pat": "cm.participle",
+  "prompt": "Our newly appointed director starts on Monday.",
+  "err": null,
+  "why": {
+   "ok": {
+    "de": "Kein Fehler: Nach -ly steht kein Bindestrich: newly appointed.",
+    "en": "No error: no hyphen after -ly: newly appointed."
+   },
+   "wrong": [
+    {
+     "tap": "*",
+     "de": "Kein Fehler: Hier ist newly appointed ohne Bindestrich richtig.",
+     "en": "No error: here newly appointed is right without a hyphen."
+    }
+   ]
+  }
+ },
+ {
+  "id": "cm-par-m1",
+  "type": "meaning",
+  "pat": "cm.participle",
+  "a": "She took a well-paying job in Denver.",
+  "b": "She took a well-paid job in Denver.",
+  "q": {
+   "de": "Welcher Satz sagt, dass der Job viel Gehalt bringt?",
+   "en": "Which sentence says the job brings a high salary?"
+  },
+  "answer": "both",
+  "why": {
+   "ok": {
+    "de": "Richtig: beide. Well-paying und well-paid sagen hier dasselbe über den Job.",
+    "en": "Right: both. Well-paying and well-paid say the same thing about the job here."
+   },
+   "wrong": [
+    {
+     "opt": "a",
+     "de": "Auch b sagt das: well-paid ist ebenfalls ein Partizip-Modifikator.",
+     "en": "B says that too: well-paid is also a participle modifier."
+    },
+    {
+     "opt": "b",
+     "de": "Auch a sagt das: well-paying ist ein Partizip-Modifikator auf -ing.",
+     "en": "A says that too: well-paying is a participle modifier in -ing."
+    }
+   ]
+  }
+ }
+]

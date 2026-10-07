@@ -1,0 +1,222 @@
+[
+ {
+  "pat": "pt.at-on-in",
+  "en": "Our review will take place at nine on Monday morning.",
+  "de": "Unsere Besprechung findet am Montagmorgen um neun statt.",
+  "chunks": [
+   "our review",
+   "will",
+   "take place",
+   "at nine",
+   "on Monday morning"
+  ],
+  "alt": [
+   "Our review will take place on Monday morning at nine.",
+   "At nine on Monday morning, our review will take place.",
+   "On Monday morning at nine, our review will take place."
+  ],
+  "why": [
+   "Die Uhrzeit steht mit at, der Tag mit on. Die beiden Zeitangaben dürfen in der Reihenfolge wechseln.",
+   "The clock time takes at, the day takes on. The two time expressions may swap places."
+  ],
+  "bad": "Our review will take place at nine at Monday morning.",
+  "trap": {
+   "tile": "on Monday morning",
+   "instead": "at Monday morning",
+   "why": {
+    "de": "Im Deutschen heißt es „am Montagmorgen“, und „am“ klingt nach at. Vor Wochentagen steht im Englischen aber on.",
+    "en": "German says “am Montagmorgen”, and “am” sounds like at. English uses on before days of the week."
+   }
+  }
+ },
+ {
+  "pat": "pt.at-on-in",
+  "en": "I usually answer my emails in the morning before the first call.",
+  "de": "Ich beantworte meine E-Mails meist morgens vor dem ersten Telefonat.",
+  "chunks": [
+   "I usually",
+   "answer",
+   "my emails",
+   "in the morning",
+   "before the first call"
+  ],
+  "alt": [
+   "In the morning, I usually answer my emails before the first call."
+  ],
+  "why": [
+   "Tageszeiten stehen mit in: in the morning. Die Zeitangabe darf auch am Satzanfang stehen.",
+   "Parts of the day take in: in the morning. The time expression may also open the sentence."
+  ],
+  "bad": "I usually answer my emails at the morning before the first call.",
+  "trap": {
+   "tile": "in the morning",
+   "instead": "at the morning",
+   "why": {
+    "de": "Im Deutschen heißt es „am Morgen“, und „am“ klingt nach at. Tageszeiten stehen im Englischen aber mit in.",
+    "en": "German says “am Morgen”, and “am” sounds like at. English uses in for parts of the day."
+   }
+  }
+ },
+ {
+  "pat": "pt.for-since",
+  "en": "Our intern has been learning the tool for two weeks.",
+  "de": "Unsere Praktikantin lernt das Tool seit zwei Wochen.",
+  "chunks": [
+   "our intern",
+   "has been",
+   "learning",
+   "the tool",
+   "for two weeks"
+  ],
+  "alt": [
+   "For two weeks, our intern has been learning the tool."
+  ],
+  "why": [
+   "for nennt die Dauer: for two weeks. Dazu passt has been learning, nicht das einfache Präsens.",
+   "for names the duration: for two weeks. It goes with has been learning, not the simple present."
+  ],
+  "bad": "Our intern has been learning the tool since two weeks.",
+  "trap": {
+   "tile": "for two weeks",
+   "instead": "since two weeks",
+   "why": {
+    "de": "Deutsch sagt für beides „seit“: „seit zwei Wochen“, „seit Montag“. Englisch trennt die Dauer (for) vom Startpunkt (since).",
+    "en": "German uses “seit” for both: “seit zwei Wochen”, “seit Montag”. English separates a duration (for) from a starting point (since)."
+   }
+  }
+ },
+ {
+  "pat": "pt.for-since",
+  "en": "We haven't received any updates from the vendor since Tuesday.",
+  "de": "Wir haben seit Dienstag keine Neuigkeiten vom Anbieter bekommen.",
+  "chunks": [
+   "we haven't",
+   "received",
+   "any updates",
+   "from the vendor",
+   "since Tuesday"
+  ],
+  "alt": [
+   "Since Tuesday, we haven't received any updates from the vendor."
+  ],
+  "why": [
+   "Mit since steht das Perfekt: haven't received. Im Deutschen steht dagegen das Präsens: „bekommen wir nichts“.",
+   "With since the perfect is used: haven't received. German uses the present instead: “bekommen wir nichts”."
+  ],
+  "bad": "We don't receive any updates from the vendor since Tuesday."
+ },
+ {
+  "pat": "pt.by-until",
+  "en": "Please send me the signed contract by Friday at noon.",
+  "de": "Bitte schicken Sie mir den unterschriebenen Vertrag bis Freitagmittag.",
+  "chunks": [
+   "please",
+   "send me",
+   "the signed contract",
+   "by Friday",
+   "at noon"
+  ],
+  "alt": [
+   "By Friday at noon, please send me the signed contract."
+  ],
+  "why": [
+   "by nennt die Frist: spätestens dann ist der Vertrag da. Die Uhrzeit at noon folgt direkt auf den Tag.",
+   "by names the deadline: the contract must be there by then. The time at noon follows the day directly."
+  ],
+  "bad": "Please send me the signed contract until Friday at noon.",
+  "trap": {
+   "tile": "by Friday",
+   "instead": "until Friday",
+   "why": {
+    "de": "Im Deutschen deckt „bis“ beides ab: „bis Freitag schicken“ und „bis Freitag warten“. Englisch trennt Frist (by) und Andauern (until).",
+    "en": "German “bis” covers both: “bis Freitag schicken” and “bis Freitag warten”. English separates a deadline (by) from a lasting state (until)."
+   }
+  }
+ },
+ {
+  "pat": "pt.by-until",
+  "en": "Our office stays closed until Monday because of the renovation.",
+  "de": "Unser Büro bleibt wegen des Umbaus bis Montag geschlossen.",
+  "chunks": [
+   "our office",
+   "stays",
+   "closed",
+   "until Monday",
+   "because of the renovation"
+  ],
+  "alt": [
+   "Until Monday, our office stays closed because of the renovation.",
+   "Because of the renovation, our office stays closed until Monday."
+  ],
+  "why": [
+   "until nennt, wie lange der Zustand andauert: geschlossen bis Montag. Der Grund kann vorn oder hinten stehen.",
+   "until says how long the state lasts: closed up to Monday. The reason may come first or last."
+  ],
+  "bad": "Our office stays closed by Monday because of the renovation.",
+  "trap": {
+   "tile": "until Monday",
+   "instead": "by Monday",
+   "why": {
+    "de": "Im Deutschen deckt „bis“ beides ab: „bis Montag geschlossen“ und „bis Montag fertig“. Ein Zustand, der andauert, braucht aber until.",
+    "en": "German “bis” covers both: “bis Montag geschlossen” and “bis Montag fertig”. A state that lasts needs until."
+   }
+  }
+ },
+ {
+  "pat": "pt.during-within",
+  "en": "Our support team usually replies to every ticket within 24 hours.",
+  "de": "Unser Support antwortet in der Regel innerhalb von 24 Stunden auf jedes Ticket.",
+  "chunks": [
+   "our support team",
+   "usually",
+   "replies",
+   "to every ticket",
+   "within 24 hours"
+  ],
+  "alt": [
+   "Within 24 hours, our support team usually replies to every ticket.",
+   "Our support team usually replies within 24 hours to every ticket."
+  ],
+  "why": [
+   "within nennt den Zeitrahmen mit Zahl: 24 hours. Die Zeitangabe darf auch vor oder hinter dem Objekt stehen.",
+   "within names the time frame with a number: 24 hours. The time expression may come before or after the object."
+  ],
+  "bad": "Our support team usually replies to every ticket during 24 hours.",
+  "trap": {
+   "tile": "within 24 hours",
+   "instead": "during 24 hours",
+   "why": {
+    "de": "Kein Übersetzungsfehler: „während“ klingt nach einer Zeitspanne, und so rutscht during vor eine Zahl. During braucht ein Ereignis.",
+    "en": "Not a translation error: “während” sounds like a stretch of time, so during slips in before a number. During needs an event."
+   }
+  }
+ },
+ {
+  "pat": "pt.during-within",
+  "en": "Please keep your phones off during the entire presentation.",
+  "de": "Bitte lassen Sie Ihre Handys während der ganzen Präsentation aus.",
+  "chunks": [
+   "please",
+   "keep",
+   "your phones",
+   "off",
+   "during the entire presentation"
+  ],
+  "alt": [
+   "During the entire presentation, please keep your phones off."
+  ],
+  "why": [
+   "during steht vor dem Ereignis the presentation. Die Zeitangabe darf auch am Satzanfang stehen.",
+   "during goes before the event the presentation. The time expression may also open the sentence."
+  ],
+  "bad": "Please keep your phones off while the entire presentation.",
+  "trap": {
+   "tile": "during the entire presentation",
+   "instead": "while the entire presentation",
+   "why": {
+    "de": "Im Deutschen steht „während“ für Konjunktion und Präposition. Vor einem Nomen heißt es im Englischen during, nicht while.",
+    "en": "German “während” serves as conjunction and preposition. Before a noun English uses during, not while."
+   }
+  }
+ }
+]

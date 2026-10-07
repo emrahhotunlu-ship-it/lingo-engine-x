@@ -1,0 +1,203 @@
+[
+  {
+    "pat": "nm.noun-form",
+    "en": "After the migration, the system ran much faster.",
+    "de": "Nach der Migration lief das System deutlich schneller.",
+    "chunks": [
+      "after the migration",
+      "the system",
+      "ran",
+      "much",
+      "faster"
+    ],
+    "alt": [
+      "The system ran much faster after the migration."
+    ],
+    "why": [
+      "Hinter „after“ steht hier ein Nomen: the migration, nicht das Verb migrate. Der Nebensatz „after we migrated“ wird zur Wendung.",
+      "Here “after” is followed by a noun: the migration, not the verb migrate. The clause “after we migrated” becomes a phrase."
+    ],
+    "bad": "After the migrate, the system ran much faster.",
+    "trap": {
+      "tile": "after the migration",
+      "instead": "after the migrate",
+      "why": {
+        "de": "Man kennt zuerst das Verb migrate und setzt es nach „the“ ein. Dort steht aber das Nomen mit der Endung -ion.",
+        "en": "Learners know the verb migrate first and use it after “the”. A noun with the ending -ion belongs there."
+      }
+    }
+  },
+  {
+    "pat": "nm.noun-form",
+    "en": "The delivery of the units is delayed until Monday.",
+    "de": "Die Lieferung der Geräte verzögert sich bis Montag.",
+    "chunks": [
+      "the delivery",
+      "of the units",
+      "is",
+      "delayed",
+      "until Monday"
+    ],
+    "single": "Das Nomen mit seinem of-Objekt bildet das Subjekt und steht fest vor dem Prädikat; die Zeitangabe schließt den Satz.",
+    "why": [
+      "Aus „wir liefern die Geräte“ wird the delivery of the units. Das Nomen steht vorn, das Objekt hängt mit of daran, dann folgt das Prädikat.",
+      "“We deliver the units” becomes the delivery of the units. The noun comes first, the object attaches with of, then the predicate follows."
+    ],
+    "bad": "The deliver of the units is delayed until Monday.",
+    "trap": {
+      "tile": "the delivery",
+      "instead": "the deliver",
+      "why": {
+        "de": "Nach „The“ passt nur das Nomen delivery. Das Verb deliver ist die bekannte Form und rutscht deshalb oft an diese Stelle.",
+        "en": "After “The” only the noun delivery fits. The verb deliver is the familiar form and therefore often slips into this slot."
+      }
+    }
+  },
+  {
+    "pat": "nm.of-object",
+    "en": "The analysis of the survey results took our team three days.",
+    "de": "Die Auswertung der Umfrageergebnisse hat unser Team drei Tage gekostet.",
+    "chunks": [
+      "the analysis",
+      "of the survey results",
+      "took",
+      "our team",
+      "three days"
+    ],
+    "single": "Subjekt, Verb, Person und Dauer folgen fest aufeinander: took braucht erst die Person (our team), dann die Dauer.",
+    "why": [
+      "Das deutsche Genitiv-Objekt hat kein eigenes Wort. Im Englischen hängt es mit of am Nomen: the analysis of the survey results.",
+      "The German genitive object has no word of its own. In English it attaches to the noun with of: the analysis of the survey results."
+    ],
+    "bad": "The analysis the survey results took our team three days.",
+    "trap": {
+      "tile": "of the survey results",
+      "instead": "the survey results",
+      "why": {
+        "de": "Im Deutschen steht der Genitiv („der Ergebnisse“) ohne Zusatzwort, deshalb wird das of leicht vergessen.",
+        "en": "German puts the genitive (“der Ergebnisse”) without an extra word, so the of is easily forgotten."
+      }
+    }
+  },
+  {
+    "pat": "nm.of-object",
+    "en": "We are still waiting for the board's approval of the plan.",
+    "de": "Wir warten noch auf die Zustimmung des Vorstands zum Plan.",
+    "chunks": [
+      "we",
+      "are",
+      "still waiting",
+      "for the board's approval",
+      "of the plan"
+    ],
+    "single": "Wer zustimmt (the board's), steht vor dem Nomen, was genehmigt wird (of the plan), dahinter; waiting for hält beides zusammen.",
+    "why": [
+      "Bei einem Gremium steht der Besitzer mit 's vor dem Nomen: the board's approval. Das Objekt der Handlung hängt danach mit of an.",
+      "With a body the owner comes first with 's: the board's approval. The object of the action attaches afterward with of."
+    ]
+  },
+  {
+    "pat": "nm.following",
+    "en": "Prior to the launch, we will run a final test.",
+    "de": "Vor dem Start führen wir noch einen letzten Test durch.",
+    "chunks": [
+      "prior to the launch",
+      "we",
+      "will",
+      "run",
+      "a final test"
+    ],
+    "alt": [
+      "We will run a final test prior to the launch."
+    ],
+    "why": [
+      "Prior to + Nomen ersetzt den Nebensatz „before we launch“. Das to gehört fest zu prior, danach folgt direkt das Nomen.",
+      "Prior to + noun replaces the clause “before we launch”. The to belongs to prior, and the noun follows directly."
+    ],
+    "bad": "Prior the launch, we will run a final test.",
+    "trap": {
+      "tile": "prior to the launch",
+      "instead": "prior the launch",
+      "why": {
+        "de": "Deutsch „vor dem Start“ hat nur ein Wort. Das to, das bei prior fest dazugehört, fehlt dann.",
+        "en": "German “vor dem Start” has just one word. The to that belongs with prior is then missing."
+      }
+    }
+  },
+  {
+    "pat": "nm.following",
+    "en": "Upon receipt of your payment, we will ship the order.",
+    "de": "Nach Eingang Ihrer Zahlung versenden wir die Bestellung.",
+    "chunks": [
+      "upon receipt",
+      "of your payment",
+      "we",
+      "will ship",
+      "the order"
+    ],
+    "alt": [
+      "We will ship the order upon receipt of your payment."
+    ],
+    "why": [
+      "Upon receipt of … ersetzt den Nebensatz „once we receive“. Nach upon steht ein Nomen: receipt, nicht receiving of.",
+      "Upon receipt of … replaces the clause “once we receive”. After upon comes a noun: receipt, not receiving of."
+    ],
+    "bad": "Upon receiving of your payment, we will ship the order.",
+    "trap": {
+      "tile": "upon receipt",
+      "instead": "upon receiving",
+      "why": {
+        "de": "Wer „bei Erhalt“ als Tätigkeit denkt, nimmt receiving. Mit of dahinter passt aber nur das Nomen receipt.",
+        "en": "Thinking of “on receiving” as an activity leads to receiving. With of after it only the noun receipt fits."
+      }
+    }
+  },
+  {
+    "pat": "nm.noun-prep",
+    "en": "We expect a sharp increase in demand next year.",
+    "de": "Wir erwarten nächstes Jahr einen deutlichen Anstieg der Nachfrage.",
+    "chunks": [
+      "we",
+      "expect",
+      "a sharp increase",
+      "in demand",
+      "next year"
+    ],
+    "alt": [
+      "Next year, we expect a sharp increase in demand."
+    ],
+    "why": [
+      "Nach increase nennt in den Bereich, der steigt: increase in demand. Das deutsche Genitiv („der Nachfrage“) wird hier nicht zu of.",
+      "After increase, in names the area that rises: increase in demand. The German genitive (“der Nachfrage”) does not become of here."
+    ]
+  },
+  {
+    "pat": "nm.noun-prep",
+    "en": "The decision to move the launch was made last week.",
+    "de": "Die Entscheidung, den Start zu verschieben, fiel letzte Woche.",
+    "chunks": [
+      "the decision",
+      "to move",
+      "the launch",
+      "was made",
+      "last week"
+    ],
+    "alt": [
+      "Last week, the decision to move the launch was made.",
+      "The decision was made last week to move the launch."
+    ],
+    "why": [
+      "Nach decision folgt to + Grundform: the decision to move. Das deutsche „Entscheidung für“ passt hier nicht, und eine Entscheidung wird im US-Englisch made.",
+      "After decision comes to + base form: the decision to move. German “Entscheidung für” does not fit here, and in US English a decision is made."
+    ],
+    "bad": "The decision for moving the launch was made last week.",
+    "trap": {
+      "tile": "to move",
+      "instead": "for moving",
+      "why": {
+        "de": "Deutsch sagt „Entscheidung für …“. Dieses für + -ing wird übertragen, im Englischen folgt aber to + Grundform.",
+        "en": "German says “Entscheidung für …”. That for + -ing is carried over, but English uses to + base form."
+      }
+    }
+  }
+]

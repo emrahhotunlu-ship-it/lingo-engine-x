@@ -5142,6 +5142,854 @@
    "topic": "c1-hedging"
   },
   {
+   "id": "nm-nf-k1",
+   "type": "kwt",
+   "pat": "nm.noun-form",
+   "from": "We will implement the new tool in autumn.",
+   "key": "IMPLEMENTATION",
+   "frame": "The ___ the new tool is scheduled for autumn.",
+   "answer": "implementation of",
+   "accepted": [
+    "full implementation of",
+    "initial implementation of"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the implementation of the new tool. Aus dem Verb wird ein Nomen mit of.",
+     "en": "Right: the implementation of the new tool. The verb becomes a noun with of."
+    },
+    "wrong": [
+     {
+      "not": [
+       "implementation"
+      ],
+      "de": "Das Schlüsselwort implementation muss unverändert in der Lücke stehen.",
+      "en": "The key word implementation must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "implementation"
+      ],
+      "not": [
+       "of"
+      ],
+      "de": "Nach dem Nomen fehlt of: Das Objekt hängt mit of am Nomen.",
+      "en": "Of is missing: the object attaches to the noun with of."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-nf-k2",
+   "type": "kwt",
+   "pat": "nm.noun-form",
+   "from": "Please confirm that you received the contract.",
+   "key": "RECEIPT",
+   "frame": "Please confirm ___ the contract.",
+   "answer": "receipt of",
+   "accepted": [
+    "your receipt of",
+    "the receipt of"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: confirm receipt of the contract. Das Nomen receipt nimmt sein Objekt mit of.",
+     "en": "Right: confirm receipt of the contract. The noun receipt takes its object with of."
+    },
+    "wrong": [
+     {
+      "not": [
+       "receipt"
+      ],
+      "de": "Das Schlüsselwort receipt muss unverändert in der Lücke stehen.",
+      "en": "The key word receipt must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "receipt"
+      ],
+      "not": [
+       "of"
+      ],
+      "de": "Nach dem Nomen fehlt of: receipt of the contract.",
+      "en": "Of is missing after the noun: receipt of the contract."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-nf-f1",
+   "type": "find",
+   "pat": "nm.noun-form",
+   "prompt": "Thanks for the quick approve of our travel budget.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "approval",
+   "fixed": "Thanks for the quick approval of our travel budget.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach „quick“ steht ein Nomen. Richtig: the quick approval of our budget.",
+     "en": "The error: after “quick” a noun follows. Correct: the quick approval of our budget."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: approve ist die Verbform. Nach „quick“ braucht es approval.",
+      "en": "There is an error: approve is the verb form. After “quick” you need approval."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „approve“: Hier fehlt das Nomen approval.",
+      "en": "The error is at “approve”: the noun approval is missing here."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-nf-f2",
+   "type": "find",
+   "pat": "nm.noun-form",
+   "prompt": "Please send us your decide by Friday.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "decision",
+   "fixed": "Please send us your decision by Friday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach „your“ steht ein Nomen. Richtig: your decision.",
+     "en": "The error: after “your” a noun follows. Correct: your decision."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: decide ist das Verb. Nach „your“ braucht es decision.",
+      "en": "There is an error: decide is the verb. After “your” you need decision."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „decide“: Hier fehlt das Nomen decision.",
+      "en": "The error is at “decide”: the noun decision is missing here."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-nf-f3",
+   "type": "find",
+   "pat": "nm.noun-form",
+   "prompt": "The migration was completed ahead of schedule.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: migration ist das richtige Nomen zu migrate, und der Satz stimmt.",
+     "en": "No error: migration is the right noun for migrate, and the sentence is fine."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: The migration ist ein Nomen mit Artikel, genau wie verlangt.",
+      "en": "No error: The migration is a noun with an article, exactly as required."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-nf-m1",
+   "type": "meaning",
+   "pat": "nm.noun-form",
+   "a": "We approved the budget last week.",
+   "b": "The approval of the budget is expected next week.",
+   "q": {
+    "de": "In welchem Satz steht die Freigabe noch aus?",
+    "en": "In which sentence is the approval still to come?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: b. Is expected = die Freigabe kommt erst noch. In a ist sie schon erfolgt.",
+     "en": "Right: b. Is expected = the approval is still to come. In a it has already happened."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a heißt approved: Die Freigabe ist schon erteilt, nichts steht mehr aus.",
+      "en": "In a, approved means the approval has been given, nothing is pending."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt eine erledigte Handlung, b ein erwartetes Ereignis.",
+      "en": "Not the same: a names a completed action, b an expected event."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-oo-k1",
+   "type": "kwt",
+   "pat": "nm.of-object",
+   "from": "We reviewed the contract, and it took two days.",
+   "key": "REVIEW",
+   "frame": "The ___ the contract took two days.",
+   "answer": "review of",
+   "accepted": [
+    "full review of",
+    "detailed review of",
+    "legal review of"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the review of the contract. Das Objekt hängt mit of am Nomen.",
+     "en": "Right: the review of the contract. The object attaches to the noun with of."
+    },
+    "wrong": [
+     {
+      "not": [
+       "review"
+      ],
+      "de": "Das Schlüsselwort review muss unverändert in der Lücke stehen.",
+      "en": "The key word review must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "review"
+      ],
+      "not": [
+       "of"
+      ],
+      "de": "Nach review fehlt of: Das Objekt hängt mit of am Nomen.",
+      "en": "Of is missing after review: the object attaches with of."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-oo-k2",
+   "type": "kwt",
+   "pat": "nm.of-object",
+   "from": "The board approved the budget, so we can order the licenses.",
+   "key": "APPROVAL",
+   "frame": "After ___ the budget, we can order the licenses.",
+   "answer": "the board's approval of",
+   "accepted": [
+    "board approval of"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the board's approval of the budget. Gremium mit 's davor, Objekt mit of danach.",
+     "en": "Right: the board's approval of the budget. The body with 's first, the object with of after."
+    },
+    "wrong": [
+     {
+      "not": [
+       "approval"
+      ],
+      "de": "Das Schlüsselwort approval muss unverändert in der Lücke stehen.",
+      "en": "The key word approval must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "approval"
+      ],
+      "not": [
+       "of"
+      ],
+      "de": "Nach approval fehlt of vor dem Objekt: approval of the budget.",
+      "en": "Of is missing before the object: approval of the budget."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-oo-f1",
+   "type": "find",
+   "pat": "nm.of-object",
+   "prompt": "We are waiting for the approval the budget.",
+   "err": [
+    5,
+    6
+   ],
+   "answer": "approval of the",
+   "fixed": "We are waiting for the approval of the budget.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Zwischen approval und dem Objekt fehlt of. Richtig: approval of the budget.",
+     "en": "The error: of is missing between approval and the object. Correct: approval of the budget."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach approval fehlt of vor „the budget“.",
+      "en": "There is an error: after approval, of is missing before “the budget”."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „approval the“: Hier fehlt of.",
+      "en": "The error is at “approval the”: of is missing here."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-oo-f2",
+   "type": "find",
+   "pat": "nm.of-object",
+   "prompt": "The board's approval of the budget is still missing.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: the board's approval of the budget ist richtig gebaut.",
+     "en": "No error: the board's approval of the budget is built correctly."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Gremium mit 's davor und Objekt mit of danach ist richtig.",
+      "en": "No error: the body with 's first and the object with of after is correct."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-oo-f3",
+   "type": "find",
+   "pat": "nm.of-object",
+   "prompt": "The evaluation to the pilot starts on Monday.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "of",
+   "fixed": "The evaluation of the pilot starts on Monday.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Das Objekt eines Nomens hängt mit of daran, nicht mit to.",
+     "en": "The error: a noun's object attaches with of, not with to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach evaluation hängt das Objekt mit of, nicht mit to.",
+      "en": "There is an error: after evaluation the object takes of, not to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to“: Vor „the pilot“ gehört of.",
+      "en": "The error is at “to”: of belongs before “the pilot”."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-oo-m1",
+   "type": "meaning",
+   "pat": "nm.of-object",
+   "a": "The board's decision surprised us.",
+   "b": "The decision of the board surprised us.",
+   "q": {
+    "de": "In welchem Satz hat das Gremium entschieden?",
+    "en": "In which sentence did the board make the decision?"
+   },
+   "answer": "both",
+   "why": {
+    "ok": {
+     "de": "Richtig: beide. the board's decision und the decision of the board sagen dasselbe.",
+     "en": "Right: both. the board's decision and the decision of the board say the same."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Fast: a stimmt, aber b sagt dasselbe mit of statt 's.",
+      "en": "Close: a is right, but b says the same with of instead of 's."
+     },
+     {
+      "opt": "b",
+      "de": "Fast: b stimmt, aber a sagt dasselbe mit 's statt of.",
+      "en": "Close: b is right, but a says the same with 's instead of of."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-fo-k1",
+   "type": "kwt",
+   "pat": "nm.following",
+   "from": "After the vendor delivers the units, we will test them.",
+   "key": "FOLLOWING",
+   "frame": "___ the units, we will test them.",
+   "answer": "following the delivery of",
+   "accepted": [
+    "following delivery of",
+    "following the vendor's delivery of"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Following the delivery of … Eine Wendung mit Nomen ersetzt den Nebensatz.",
+     "en": "Right: Following the delivery of … A noun phrase replaces the clause."
+    },
+    "wrong": [
+     {
+      "not": [
+       "following"
+      ],
+      "de": "Das Schlüsselwort following muss unverändert in der Lücke stehen.",
+      "en": "The key word following must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "following",
+       "delivers"
+      ],
+      "de": "Hinter following steht ein Nomen mit of, kein ganzer Satz mit Verb.",
+      "en": "After following comes a noun with of, not a whole clause with a verb."
+     },
+     {
+      "if": [
+       "following",
+       "delivery"
+      ],
+      "not": [
+       "of"
+      ],
+      "de": "Nach dem Nomen fehlt of: delivery of the units.",
+      "en": "Of is missing after the noun: delivery of the units."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-fo-k2",
+   "type": "kwt",
+   "pat": "nm.following",
+   "from": "Once we receive your payment, we will ship the order.",
+   "key": "UPON",
+   "frame": "___ of your payment, we will ship the order.",
+   "answer": "upon receipt",
+   "accepted": [
+    "upon the receipt"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Upon receipt of … ist die feste Wendung für „sobald wir erhalten“.",
+     "en": "Right: Upon receipt of … is the fixed phrase for “as soon as we receive”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "upon"
+      ],
+      "de": "Das Schlüsselwort upon muss unverändert in der Lücke stehen.",
+      "en": "The key word upon must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "upon",
+       "receive"
+      ],
+      "de": "Nach upon steht das Nomen receipt, nicht das Verb receive.",
+      "en": "After upon use the noun receipt, not the verb receive."
+     },
+     {
+      "if": [
+       "upon"
+      ],
+      "not": [
+       "receipt"
+      ],
+      "de": "Gefragt ist das Nomen receipt nach upon.",
+      "en": "The noun receipt is needed after upon."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-fo-f1",
+   "type": "find",
+   "pat": "nm.following",
+   "prompt": "Upon of receipt of the invoice, we will release the payment.",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "receipt",
+   "fixed": "Upon receipt of the invoice, we will release the payment.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach upon folgt direkt das Nomen. Richtig: Upon receipt of the invoice.",
+     "en": "The error: after upon the noun follows directly. Correct: Upon receipt of the invoice."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Upon nimmt das Nomen direkt, ohne of davor.",
+      "en": "There is an error: upon takes the noun directly, with no of before it."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „of receipt“: Das erste of ist zu viel.",
+      "en": "The error is at “of receipt”: the first of is extra."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-fo-f2",
+   "type": "find",
+   "pat": "nm.following",
+   "prompt": "Following to the review, we will update the plan.",
+   "err": [
+    1,
+    2
+   ],
+   "answer": "the",
+   "fixed": "Following the review, we will update the plan.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Following nimmt sein Nomen direkt, ohne to. Richtig: Following the review.",
+     "en": "The error: following takes its noun directly, with no to. Correct: Following the review."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Following braucht kein to vor dem Nomen.",
+      "en": "There is an error: following needs no to before the noun."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to the“: Das to ist zu viel.",
+      "en": "The error is at “to the”: the to is extra."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-fo-f3",
+   "type": "find",
+   "pat": "nm.following",
+   "prompt": "Ahead of the audit, we'll freeze all system changes.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Ahead of + Nomen ersetzt hier den Nebensatz „before the audit starts“.",
+     "en": "No error: Ahead of + noun replaces the clause “before the audit starts” here."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Ahead of the audit ist eine richtige Wendung mit Nomen.",
+      "en": "No error: Ahead of the audit is a correct noun phrase."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-fo-m1",
+   "type": "meaning",
+   "pat": "nm.following",
+   "a": "Following the review, we updated the plan.",
+   "b": "Prior to the review, we updated the plan.",
+   "q": {
+    "de": "In welchem Satz wurde der Plan erst nach der Prüfung geändert?",
+    "en": "In which sentence was the plan changed only after the review?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: a. Following = danach. Prior to = davor, also vor der Prüfung.",
+     "en": "Right: a. Following = afterward. Prior to = before, so before the review."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b heißt Prior to „vor“: Der Plan wurde schon vor der Prüfung geändert.",
+      "en": "In b, Prior to means “before”: the plan was changed before the review."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Following zeigt danach, Prior to zeigt davor.",
+      "en": "Not the same: Following points to after, Prior to points to before."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-np-k1",
+   "type": "kwt",
+   "pat": "nm.noun-prep",
+   "from": "Sales have increased sharply since January.",
+   "key": "INCREASE",
+   "frame": "There has been a sharp ___ sales since January.",
+   "answer": "increase in",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a sharp increase in sales. In nennt den Bereich, der steigt.",
+     "en": "Right: a sharp increase in sales. In names the area that rises."
+    },
+    "wrong": [
+     {
+      "not": [
+       "increase"
+      ],
+      "de": "Das Schlüsselwort increase muss unverändert in der Lücke stehen.",
+      "en": "The key word increase must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "increase"
+      ],
+      "not": [
+       "in"
+      ],
+      "de": "Nach increase fehlt in: Der Bereich hängt mit in am Nomen.",
+      "en": "In is missing after increase: the area attaches with in."
+     },
+     {
+      "if": [
+       "increase",
+       "of"
+      ],
+      "de": "Nach increase steht in für den Bereich, of nennt eher einen Betrag.",
+      "en": "After increase, in names the area, while of rather names an amount."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-np-k2",
+   "type": "kwt",
+   "pat": "nm.noun-prep",
+   "from": "We decided to extend the contract.",
+   "key": "DECISION",
+   "frame": "We announced ___ the contract.",
+   "answer": "the decision to extend",
+   "accepted": [
+    "our decision to extend",
+    "a decision to extend"
+   ],
+   "words": [
+    4,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: the decision to extend. Nach decision folgt to + Grundform.",
+     "en": "Right: the decision to extend. After decision comes to + base form."
+    },
+    "wrong": [
+     {
+      "not": [
+       "decision"
+      ],
+      "de": "Das Schlüsselwort decision muss unverändert in der Lücke stehen.",
+      "en": "The key word decision must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "decision",
+       "for"
+      ],
+      "de": "Nach decision steht to + Grundform, nicht for + -ing.",
+      "en": "After decision use to + base form, not for + -ing."
+     },
+     {
+      "if": [
+       "decision"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "Nach decision steht to + Grundform: decision to extend.",
+      "en": "After decision use to + base form: decision to extend."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-np-f1",
+   "type": "find",
+   "pat": "nm.noun-prep",
+   "prompt": "There was a steep increase at prices last quarter.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "in",
+   "fixed": "There was a steep increase in prices last quarter.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach increase nennt in den Bereich. Richtig: increase in prices.",
+     "en": "The error: after increase, in names the area. Correct: increase in prices."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach increase steht in, nicht at.",
+      "en": "There is an error: after increase use in, not at."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „at“: Hier gehört in hin.",
+      "en": "The error is at “at”: in belongs here."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-np-f2",
+   "type": "find",
+   "pat": "nm.noun-prep",
+   "prompt": "Demand of our new service keeps growing.",
+   "err": [
+    1,
+    1
+   ],
+   "answer": "for",
+   "fixed": "Demand for our new service keeps growing.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach demand steht for. Richtig: Demand for our new service.",
+     "en": "The error: after demand comes for. Correct: Demand for our new service."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach demand steht for, nicht of.",
+      "en": "There is an error: after demand use for, not of."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „of“: Hier gehört for hin.",
+      "en": "The error is at “of”: for belongs here."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-np-f3",
+   "type": "find",
+   "pat": "nm.noun-prep",
+   "prompt": "The need on better documentation is obvious.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "for",
+   "fixed": "The need for better documentation is obvious.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach need steht for. Richtig: The need for better documentation.",
+     "en": "The error: after need comes for. Correct: The need for better documentation."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach need steht for, nicht on.",
+      "en": "There is an error: after need use for, not on."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „on“: Hier gehört for hin.",
+      "en": "The error is at “on”: for belongs here."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
+   "id": "nm-np-m1",
+   "type": "meaning",
+   "pat": "nm.noun-prep",
+   "a": "We expect a reduction in costs.",
+   "b": "We expect a reduction of 10 percent in costs.",
+   "q": {
+    "de": "In welchem Satz steht, um wie viel die Kosten sinken?",
+    "en": "In which sentence does it say by how much the costs fall?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: b. Reduction of nennt den Betrag, in den Bereich (costs).",
+     "en": "Right: b. Reduction of names the amount, in the area (costs)."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a fehlt der Betrag: Es steht nur, in welchem Bereich die Kosten sinken.",
+      "en": "In a the amount is missing: it only says in which area costs fall."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt nur den Bereich, b zusätzlich den Betrag.",
+      "en": "Not the same: a names only the area, b also gives the amount."
+     }
+    ]
+   },
+   "topic": "c1-nominal"
+  },
+  {
    "id": "cp-hav-k1",
    "type": "kwt",
    "pat": "cp.having",
@@ -5980,6 +6828,961 @@
     ]
    },
    "topic": "c1-participle"
+  },
+  {
+   "id": "cm-mea-k1",
+   "type": "kwt",
+   "pat": "cm.measure",
+   "from": "The workshop lasts two days.",
+   "key": "DAY",
+   "frame": "She booked ___ workshop for the team.",
+   "answer": "a two-day",
+   "accepted": [
+    "a 2-day"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a two-day workshop. Zahl plus Singular mit Bindestrich vor dem Nomen.",
+     "en": "Right: a two-day workshop. Number plus singular with a hyphen before the noun."
+    },
+    "wrong": [
+     {
+      "if": [
+       "two-days"
+      ],
+      "de": "Im Modifikator steht day im Singular, auch nach two: two-day.",
+      "en": "In a modifier day stays singular, even after two: two-day."
+     },
+     {
+      "if": [
+       "two",
+       "days"
+      ],
+      "de": "Ohne Bindestrich wäre „two days“ ein Plural. Hier braucht es two-day.",
+      "en": "Without a hyphen “two days” would be a plural. Here you need two-day."
+     },
+     {
+      "pat": "cm.measure",
+      "de": "Vor dem Nomen: a, dann Zahl und Singular mit Bindestrich, also a two-day.",
+      "en": "Before the noun: a, then number and singular with a hyphen, so a two-day."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-mea-k2",
+   "type": "kwt",
+   "pat": "cm.measure",
+   "from": "The call lasts 30 minutes.",
+   "key": "MINUTE",
+   "frame": "I scheduled ___ call with the client for noon.",
+   "answer": "a 30-minute",
+   "accepted": [
+    "a thirty-minute"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a 30-minute call. Zahl plus Singular mit Bindestrich vor dem Nomen.",
+     "en": "Right: a 30-minute call. Number plus singular with a hyphen before the noun."
+    },
+    "wrong": [
+     {
+      "if": [
+       "30-minutes"
+      ],
+      "de": "Im Modifikator steht minute im Singular: 30-minute, nicht 30-minutes.",
+      "en": "In a modifier minute stays singular: 30-minute, not 30-minutes."
+     },
+     {
+      "if": [
+       "30",
+       "minutes"
+      ],
+      "de": "Ohne Bindestrich wäre „30 minutes“ ein Plural. Hier braucht es 30-minute.",
+      "en": "Without a hyphen “30 minutes” would be a plural. Here you need 30-minute."
+     },
+     {
+      "pat": "cm.measure",
+      "de": "Vor dem Nomen: a, dann Zahl und Singular mit Bindestrich, also a 30-minute.",
+      "en": "Before the noun: a, then number and singular with a hyphen, so a 30-minute."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-mea-f1",
+   "type": "find",
+   "pat": "cm.measure",
+   "prompt": "We need a five-days extension to finish the audit.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "five-day",
+   "fixed": "We need a five-day extension to finish the audit.",
+   "accepted": [
+    "5-day"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „five-days“. Vor dem Nomen steht day im Singular: five-day.",
+     "en": "The error: “five-days”. Before the noun day stays singular: five-day."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das Maßnomen im Modifikator steht im Singular.",
+      "en": "There is an error: the measure noun in a modifier is singular."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „five-days“: Hier gehört der Singular hin.",
+      "en": "The error is “five-days”: the singular belongs here."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-mea-f2",
+   "type": "find",
+   "pat": "cm.measure",
+   "prompt": "Our team completed a six-months pilot in Chicago.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "six-month",
+   "fixed": "Our team completed a six-month pilot in Chicago.",
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „six-months“. Im Modifikator bleibt month im Singular: six-month.",
+     "en": "The error: “six-months”. In a modifier month stays singular: six-month."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Vor „pilot“ steht das Maßnomen im Singular.",
+      "en": "There is an error: before “pilot” the measure noun is singular."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „six-months“: Das Plural-s gehört nicht in den Modifikator.",
+      "en": "The error is “six-months”: the plural -s does not belong in a modifier."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-mea-f3",
+   "type": "find",
+   "pat": "cm.measure",
+   "prompt": "She wrote a two-page memo for the leadership team.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: two-page steht vor dem Nomen im Singular, mit Bindestrich.",
+     "en": "No error: two-page sits before the noun, singular, with a hyphen."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Vor dem Nomen ist two-page richtig, ein Plural wäre falsch.",
+      "en": "No error: before the noun two-page is right; a plural would be wrong."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-mea-m1",
+   "type": "meaning",
+   "pat": "cm.measure",
+   "a": "We printed twenty five-page reports.",
+   "b": "We printed a twenty-five-page report.",
+   "q": {
+    "de": "Welcher Satz sagt: Es wurden viele kurze Berichte gedruckt?",
+    "en": "Which sentence says many short reports were printed?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Twenty five-page reports sind 20 Berichte mit je 5 Seiten.",
+     "en": "Right: sentence a. Twenty five-page reports means 20 reports of 5 pages each."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist es ein einziger Bericht mit 25 Seiten: twenty-five-page.",
+      "en": "In b it is one single report with 25 pages: twenty-five-page."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Der Bindestrich bestimmt, welche Wörter zur Zahl gehören.",
+      "en": "Not the same: the hyphen decides which words belong to the number."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-aft-k1",
+   "type": "kwt",
+   "pat": "cm.after-verb",
+   "from": "The agenda has three pages.",
+   "key": "PAGES",
+   "frame": "The agenda ___ long.",
+   "answer": "is three pages",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: is three pages long. Nach dem Verb: Plural, kein Bindestrich.",
+     "en": "Right: is three pages long. After the verb: plural, no hyphen."
+    },
+    "wrong": [
+     {
+      "if": [
+       "three-page"
+      ],
+      "de": "Nach dem Verb gilt der Plural ohne Bindestrich: three pages long.",
+      "en": "After the verb use the plural with no hyphen: three pages long."
+     },
+     {
+      "if": [
+       "three",
+       "page"
+      ],
+      "de": "Hier fehlt das Plural-s: three pages.",
+      "en": "The plural -s is missing here: three pages."
+     },
+     {
+      "pat": "cm.after-verb",
+      "de": "Hinter dem Verb steht die Maßangabe im Plural: is three pages.",
+      "en": "After the verb the measure is a plural: is three pages."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-aft-k2",
+   "type": "kwt",
+   "pat": "cm.after-verb",
+   "from": "The laptop was bought two years ago.",
+   "key": "YEARS",
+   "frame": "The laptop ___ now.",
+   "answer": "is two years old",
+   "accepted": [],
+   "words": [
+    4,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: is two years old. Nach dem Verb: Plural, kein Bindestrich.",
+     "en": "Right: is two years old. After the verb: plural, no hyphen."
+    },
+    "wrong": [
+     {
+      "if": [
+       "two-year-old"
+      ],
+      "de": "Nach dem Verb steht der Plural ohne Bindestrich: two years old.",
+      "en": "After the verb use the plural with no hyphen: two years old."
+     },
+     {
+      "if": [
+       "two",
+       "year"
+      ],
+      "de": "Das Plural-s fehlt: two years old.",
+      "en": "The plural -s is missing: two years old."
+     },
+     {
+      "pat": "cm.after-verb",
+      "de": "Hinter dem Verb steht die Maßangabe im Plural: is two years old.",
+      "en": "After the verb the measure is a plural: is two years old."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-aft-f1",
+   "type": "find",
+   "pat": "cm.after-verb",
+   "prompt": "The flight from Boston was five-hours long, so we worked on board.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "five hours",
+   "fixed": "The flight from Boston was five hours long, so we worked on board.",
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „five-hours“. Nach dem Verb steht der Plural ohne Bindestrich.",
+     "en": "The error: “five-hours”. After the verb the plural stands with no hyphen."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Hinter „was“ gibt es keinen Bindestrich.",
+      "en": "There is an error: after “was” there is no hyphen."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „five-hours“: Hier gehört „five hours“ hin.",
+      "en": "The error is “five-hours”: “five hours” belongs here."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-aft-f2",
+   "type": "find",
+   "pat": "cm.after-verb",
+   "prompt": "The contract is three year old, so it needs a review.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "three years",
+   "fixed": "The contract is three years old, so it needs a review.",
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „three year old“. Nach dem Verb steht der Plural: three years old.",
+     "en": "The error: “three year old”. After the verb the plural stands: three years old."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Die Maßangabe nach dem Verb braucht den Plural.",
+      "en": "There is an error: the measure after the verb needs the plural."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „year“: Es fehlt das Plural-s.",
+      "en": "The error is “year”: the plural -s is missing."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-aft-m1",
+   "type": "meaning",
+   "pat": "cm.after-verb",
+   "a": "The workshop is a two-day event.",
+   "b": "The workshop is two days long.",
+   "q": {
+    "de": "Welcher Satz sagt, dass der Workshop zwei Tage dauert?",
+    "en": "Which sentence says the workshop lasts two days?"
+   },
+   "answer": "both",
+   "why": {
+    "ok": {
+     "de": "Richtig: beide. Vor dem Nomen two-day, nach dem Verb two days long: gleiche Bedeutung.",
+     "en": "Right: both. Two-day before the noun, two days long after the verb: same meaning."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Auch b sagt das: Nach dem Verb steht der Plural, two days long.",
+      "en": "B says that too: after the verb the plural stands, two days long."
+     },
+     {
+      "opt": "b",
+      "de": "Auch a sagt das: Vor dem Nomen steht two-day mit Bindestrich.",
+      "en": "A says that too: before the noun comes two-day with a hyphen."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-ord-k1",
+   "type": "kwt",
+   "pat": "cm.order",
+   "from": "Their office is modern and small.",
+   "key": "MODERN",
+   "frame": "They work in a ___ office.",
+   "answer": "small modern",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: small modern office. Die Größe steht vor dem Stil.",
+     "en": "Right: small modern office. Size comes before style."
+    },
+    "wrong": [
+     {
+      "not": [
+       "modern"
+      ],
+      "de": "Das Schlüsselwort modern muss unverändert in der Lücke stehen.",
+      "en": "The key word modern must stay unchanged in the gap."
+     },
+     {
+      "pat": "cm.order",
+      "de": "Erst die Größe, dann Alter oder Stil: small modern.",
+      "en": "Size first, then age or style: small modern."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-ord-k2",
+   "type": "kwt",
+   "pat": "cm.order",
+   "from": "The laptop we ordered is black and new.",
+   "key": "NEW",
+   "frame": "We ordered a ___ laptop.",
+   "answer": "new black",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: new black laptop. Das Alter steht vor der Farbe.",
+     "en": "Right: new black laptop. Age comes before color."
+    },
+    "wrong": [
+     {
+      "not": [
+       "new"
+      ],
+      "de": "Das Schlüsselwort new muss unverändert in der Lücke stehen.",
+      "en": "The key word new must stay unchanged in the gap."
+     },
+     {
+      "pat": "cm.order",
+      "de": "Erst das Alter, dann die Farbe: new black.",
+      "en": "Age first, then color: new black."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-ord-f1",
+   "type": "find",
+   "pat": "cm.order",
+   "prompt": "She bought a wooden old table at a local market.",
+   "err": [
+    2,
+    4
+   ],
+   "answer": "an old wooden",
+   "fixed": "She bought an old wooden table at a local market.",
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Das Alter steht vor dem Material: an old wooden table.",
+     "en": "The error: age comes before material: an old wooden table."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler in der Reihenfolge der Adjektive.",
+      "en": "There is an error in the order of the adjectives."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „wooden old“: Alter vor Material.",
+      "en": "The error is “wooden old”: age before material."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-ord-f2",
+   "type": "find",
+   "pat": "cm.order",
+   "prompt": "Our client is based in a glass modern building downtown.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "modern glass",
+   "fixed": "Our client is based in a modern glass building downtown.",
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Stil steht vor dem Material: a modern glass building.",
+     "en": "The error: style comes before material: a modern glass building."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler in der Reihenfolge der Adjektive.",
+      "en": "There is an error in the order of the adjectives."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „glass modern“: Stil vor Material.",
+      "en": "The error is “glass modern”: style before material."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-ord-f3",
+   "type": "find",
+   "pat": "cm.order",
+   "prompt": "We rented a large white conference room for the workshop.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Die Reihenfolge ist Größe, Farbe, Zweck: large white conference room.",
+     "en": "No error: size, color, purpose: large white conference room."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Die Reihenfolge large, white, conference stimmt.",
+      "en": "No error: the order large, white, conference is right."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-ord-m1",
+   "type": "meaning",
+   "pat": "cm.order",
+   "a": "She drives a big old red car.",
+   "b": "She drives a red old big car.",
+   "q": {
+    "de": "Welcher Satz hat die übliche Reihenfolge der Adjektive?",
+    "en": "Which sentence uses the usual order of adjectives?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Die Reihenfolge ist Größe, Alter, Farbe: big old red car.",
+     "en": "Right: sentence a. Size, age, color: big old red car."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist die Reihenfolge umgedreht: Die Farbe steht vor Alter und Größe.",
+      "en": "In b the order is reversed: color stands before age and size."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur a folgt der üblichen Reihenfolge.",
+      "en": "Not the same: only a follows the usual order."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-fix-k1",
+   "type": "kwt",
+   "pat": "cm.fixed",
+   "from": "The contract is for a short term.",
+   "key": "TERM",
+   "frame": "They signed ___ contract.",
+   "answer": "a short-term",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a short-term contract. Fester Baustein mit Bindestrich, ohne -s.",
+     "en": "Right: a short-term contract. Fixed block with a hyphen, no -s."
+    },
+    "wrong": [
+     {
+      "if": [
+       "short-terms"
+      ],
+      "de": "Der Baustein bleibt unverändert, kein -s: short-term.",
+      "en": "The block stays unchanged, no -s: short-term."
+     },
+     {
+      "if": [
+       "short",
+       "term"
+      ],
+      "de": "Vor dem Nomen verbindet ein Bindestrich beide Teile: short-term.",
+      "en": "Before the noun a hyphen joins both parts: short-term."
+     },
+     {
+      "pat": "cm.fixed",
+      "de": "Vor dem Nomen steht der feste Baustein mit Bindestrich: a short-term.",
+      "en": "Before the noun comes the fixed block with a hyphen: a short-term."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-fix-k2",
+   "type": "kwt",
+   "pat": "cm.fixed",
+   "from": "The solution is effective and does not cost much.",
+   "key": "EFFECTIVE",
+   "frame": "We prefer ___ solution.",
+   "answer": "a cost-effective",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a cost-effective solution. Fester Baustein mit Bindestrich.",
+     "en": "Right: a cost-effective solution. Fixed block with a hyphen."
+    },
+    "wrong": [
+     {
+      "if": [
+       "cost-effectively"
+      ],
+      "de": "Vor dem Nomen steht ein Adjektiv, kein Adverb: cost-effective, nicht -ly.",
+      "en": "Before the noun comes an adjective, not an adverb: cost-effective, not -ly."
+     },
+     {
+      "if": [
+       "cost",
+       "effective"
+      ],
+      "de": "Vor dem Nomen verbindet ein Bindestrich beide Teile: cost-effective.",
+      "en": "Before the noun a hyphen joins both parts: cost-effective."
+     },
+     {
+      "pat": "cm.fixed",
+      "de": "Vor dem Nomen steht der feste Baustein mit Bindestrich: a cost-effective.",
+      "en": "Before the noun comes the fixed block with a hyphen: a cost-effective."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-fix-f1",
+   "type": "find",
+   "pat": "cm.fixed",
+   "prompt": "We are planning a last-minutes change to the schedule.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "last-minute",
+   "fixed": "We are planning a last-minute change to the schedule.",
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „last-minutes“. Der feste Baustein bleibt unverändert: last-minute.",
+     "en": "The error: “last-minutes”. The fixed block stays unchanged: last-minute."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Der Baustein trägt kein -s.",
+      "en": "There is an error: the block takes no -s."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „last-minutes“: Das -s gehört nicht dazu.",
+      "en": "The error is “last-minutes”: the -s does not belong."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-fix-f2",
+   "type": "find",
+   "pat": "cm.fixed",
+   "prompt": "The vendor offers a state-of-the-arts platform for small teams.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "state-of-the-art",
+   "fixed": "The vendor offers a state-of-the-art platform for small teams.",
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „state-of-the-arts“. Der feste Baustein bleibt unverändert.",
+     "en": "The error: “state-of-the-arts”. The fixed block stays unchanged."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Der Baustein trägt kein -s.",
+      "en": "There is an error: the block takes no -s."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „state-of-the-arts“: Das -s gehört nicht dazu.",
+      "en": "The error is “state-of-the-arts”: the -s does not belong."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-fix-m1",
+   "type": "meaning",
+   "pat": "cm.fixed",
+   "a": "He is a small business owner.",
+   "b": "He is a small-business owner.",
+   "q": {
+    "de": "Welcher Satz sagt eindeutig: Er besitzt ein kleines Unternehmen?",
+    "en": "Which sentence clearly says he owns a small company?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Der Bindestrich verbindet small mit business: kleines Unternehmen.",
+     "en": "Right: sentence b. The hyphen joins small to business: a small company."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a kann small auch zum Inhaber gehören. Eindeutig ist das nicht.",
+      "en": "In a small could also describe the owner. That is not clear."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Nur der Bindestrich macht klar, was klein ist.",
+      "en": "Not the same: only the hyphen makes clear what is small."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-par-k1",
+   "type": "kwt",
+   "pat": "cm.participle",
+   "from": "Everyone knows her work very well.",
+   "key": "KNOWN",
+   "frame": "She is ___ designer.",
+   "answer": "a well-known",
+   "accepted": [
+    "a widely known"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a well-known designer. Adverb plus Partizip mit Bindestrich.",
+     "en": "Right: a well-known designer. Adverb plus participle with a hyphen."
+    },
+    "wrong": [
+     {
+      "if": [
+       "well-know"
+      ],
+      "de": "Das zweite Wort ist ein Partizip: known, nicht know.",
+      "en": "The second word is a participle: known, not know."
+     },
+     {
+      "if": [
+       "well",
+       "known"
+      ],
+      "de": "Vor dem Nomen verbindet ein Bindestrich beide Teile: well-known.",
+      "en": "Before the noun a hyphen joins both parts: well-known."
+     },
+     {
+      "pat": "cm.participle",
+      "de": "Vor dem Nomen steht Adverb plus Partizip: a well-known.",
+      "en": "Before the noun comes adverb plus participle: a well-known."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-par-k2",
+   "type": "kwt",
+   "pat": "cm.participle",
+   "from": "The audit takes a lot of time.",
+   "key": "CONSUMING",
+   "frame": "The audit is ___ process.",
+   "answer": "a time-consuming",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a time-consuming process. Nomen plus Partizip auf -ing.",
+     "en": "Right: a time-consuming process. Noun plus -ing participle."
+    },
+    "wrong": [
+     {
+      "if": [
+       "time-consume"
+      ],
+      "de": "Das zweite Wort ist ein Partizip: consuming, nicht consume.",
+      "en": "The second word is a participle: consuming, not consume."
+     },
+     {
+      "if": [
+       "time-consumed"
+      ],
+      "de": "Der Prozess verbraucht Zeit, also die Form auf -ing: time-consuming.",
+      "en": "The process uses up time, so use the -ing form: time-consuming."
+     },
+     {
+      "pat": "cm.participle",
+      "de": "Vor dem Nomen steht Nomen plus Partizip: a time-consuming.",
+      "en": "Before the noun comes noun plus participle: a time-consuming."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-par-f1",
+   "type": "find",
+   "pat": "cm.participle",
+   "prompt": "We hired a highly skill analyst last year.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "skilled",
+   "fixed": "We hired a highly skilled analyst last year.",
+   "accepted": [
+    "experienced",
+    "qualified",
+    "trained"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Nach highly steht ein Partizip: highly skilled.",
+     "en": "The error: highly is followed by a participle: highly skilled."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach highly fehlt die Partizip-Endung.",
+      "en": "There is an error: after highly the participle ending is missing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „skill“: Es braucht das Partizip skilled.",
+      "en": "The error is “skill”: you need the participle skilled."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-par-f2",
+   "type": "find",
+   "pat": "cm.participle",
+   "prompt": "The vendor sent a well-prepare proposal on Monday.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "well-prepared",
+   "fixed": "The vendor sent a well-prepared proposal on Monday.",
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „well-prepare“. Das zweite Wort ist ein Partizip: well-prepared.",
+     "en": "The error: “well-prepare”. The second word is a participle: well-prepared."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Dem zweiten Wort fehlt die Endung -ed.",
+      "en": "There is an error: the second word is missing the ending -ed."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „well-prepare“: Es braucht -ed.",
+      "en": "The error is “well-prepare”: it needs -ed."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-par-f3",
+   "type": "find",
+   "pat": "cm.participle",
+   "prompt": "Our newly appointed director starts on Monday.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Nach -ly steht kein Bindestrich: newly appointed.",
+     "en": "No error: no hyphen after -ly: newly appointed."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Hier ist newly appointed ohne Bindestrich richtig.",
+      "en": "No error: here newly appointed is right without a hyphen."
+     }
+    ]
+   },
+   "topic": "compound-mod"
+  },
+  {
+   "id": "cm-par-m1",
+   "type": "meaning",
+   "pat": "cm.participle",
+   "a": "She took a well-paying job in Denver.",
+   "b": "She took a well-paid job in Denver.",
+   "q": {
+    "de": "Welcher Satz sagt, dass der Job viel Gehalt bringt?",
+    "en": "Which sentence says the job brings a high salary?"
+   },
+   "answer": "both",
+   "why": {
+    "ok": {
+     "de": "Richtig: beide. Well-paying und well-paid sagen hier dasselbe über den Job.",
+     "en": "Right: both. Well-paying and well-paid say the same thing about the job here."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "Auch b sagt das: well-paid ist ebenfalls ein Partizip-Modifikator.",
+      "en": "B says that too: well-paid is also a participle modifier."
+     },
+     {
+      "opt": "b",
+      "de": "Auch a sagt das: well-paying ist ein Partizip-Modifikator auf -ing.",
+      "en": "A says that too: well-paying is a participle modifier in -ing."
+     }
+    ]
+   },
+   "topic": "compound-mod"
   },
   {
    "id": "ca-unl-k1",
@@ -8361,6 +10164,1071 @@
     ]
    },
    "topic": "conditionals"
+  },
+  {
+   "id": "cnt-unc-k1",
+   "type": "kwt",
+   "pat": "cnt.uncount",
+   "from": "Her manager gave her several useful suggestions for the pitch.",
+   "key": "ADVICE",
+   "frame": "Her manager gave her ___ for the pitch.",
+   "answer": "some useful advice",
+   "accepted": [
+    "a lot of useful advice",
+    "lots of useful advice",
+    "useful advice",
+    "some good advice",
+    "a lot of good advice",
+    "lots of good advice",
+    "good advice",
+    "some helpful advice",
+    "a lot of helpful advice",
+    "lots of helpful advice",
+    "helpful advice",
+    "some valuable advice",
+    "a lot of valuable advice",
+    "lots of valuable advice",
+    "valuable advice",
+    "some advice",
+    "a lot of advice",
+    "lots of advice",
+    "plenty of useful advice",
+    "some pieces of advice",
+    "several pieces of advice",
+    "a few pieces of advice"
+   ],
+   "words": [
+    2,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: some useful advice. Advice ist unzählbar: kein -s, kein a.",
+     "en": "Right: some useful advice. Advice is uncountable: no -s, no a."
+    },
+    "wrong": [
+     {
+      "not": [
+       "advice"
+      ],
+      "de": "Das Schlüsselwort advice muss unverändert in der Lücke stehen.",
+      "en": "The key word advice must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "advices"
+      ],
+      "de": "„advices“ gibt es nicht: advice hat keinen Plural.",
+      "en": "“advices” does not exist: advice has no plural."
+     },
+     {
+      "if": [
+       "several",
+       "advice"
+      ],
+      "de": "„Several“ braucht einen zählbaren Plural. Mit advice steht some.",
+      "en": "“Several” needs a countable plural. With advice use some."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-unc-k2",
+   "type": "kwt",
+   "pat": "cnt.uncount",
+   "from": "We don't have many details about the new supplier yet.",
+   "key": "INFORMATION",
+   "frame": "We don't have ___ about the new supplier yet.",
+   "answer": "much information",
+   "accepted": [
+    "any information",
+    "enough information",
+    "a lot of information",
+    "that much information",
+    "very much information",
+    "a great deal of information",
+    "detailed information",
+    "sufficient information"
+   ],
+   "words": [
+    2,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: much information. Information ist unzählbar, also much statt many.",
+     "en": "Right: much information. Information is uncountable, so much instead of many."
+    },
+    "wrong": [
+     {
+      "not": [
+       "information"
+      ],
+      "de": "Das Schlüsselwort information muss unverändert in der Lücke stehen.",
+      "en": "The key word information must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "informations"
+      ],
+      "de": "„informations“ gibt es nicht: information hat keinen Plural.",
+      "en": "“informations” does not exist: information has no plural."
+     },
+     {
+      "if": [
+       "many"
+      ],
+      "de": "„Many“ steht vor zählbaren Plural-Nomen. Information ist unzählbar.",
+      "en": "“Many” goes before plural countable nouns. Information is uncountable."
+     },
+     {
+      "if": [
+       "few"
+      ],
+      "de": "„A few“ steht vor zählbaren Plural-Nomen, information ist unzählbar.",
+      "en": "“A few” goes before plural countable nouns; information is uncountable."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-unc-f1",
+   "type": "find",
+   "pat": "cnt.uncount",
+   "prompt": "Our lawyer gave us some useful advices on the contract.",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "advice",
+   "fixed": "Our lawyer gave us some useful advice on the contract.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: advice hat keinen Plural, also advice ohne -s.",
+     "en": "The error: advice has no plural, so advice with no -s."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das -s an advice.",
+      "en": "There is an error: the -s on advice."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „advices“: advice ist unzählbar.",
+      "en": "The error is “advices”: advice is uncountable."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-unc-f2",
+   "type": "find",
+   "pat": "cnt.uncount",
+   "prompt": "The IT team ordered new equipments for the Munich office.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "equipment",
+   "fixed": "The IT team ordered new equipment for the Munich office.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: equipment ist unzählbar und hat kein -s.",
+     "en": "The error: equipment is uncountable and takes no -s."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das -s an equipment.",
+      "en": "There is an error: the -s on equipment."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „equipments“: equipment hat keinen Plural.",
+      "en": "The error is “equipments”: equipment has no plural."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-unc-f3",
+   "type": "find",
+   "pat": "cnt.uncount",
+   "prompt": "Could you give me some feedback on the first draft?",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: feedback ist unzählbar, some feedback ist richtig.",
+     "en": "No error: feedback is uncountable, so some feedback is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: some feedback steht richtig ohne -s.",
+      "en": "No error: some feedback is correct with no -s."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-unc-m1",
+   "type": "meaning",
+   "pat": "cnt.uncount",
+   "a": "We still need more information on the supplier.",
+   "b": "We still need more details on the supplier.",
+   "q": {
+    "de": "In welchem Satz steht ein zählbares Nomen im Plural?",
+    "en": "In which sentence is the noun a countable plural?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Details ist zählbar (Plural), information ist unzählbar.",
+     "en": "Right: sentence b. Details is a countable plural; information is uncountable."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a ist information unzählbar: Es hat kein Plural-s.",
+      "en": "In a, information is uncountable: it has no plural -s."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht beide: details hat ein Plural-s, information nicht.",
+      "en": "Not both: details has a plural -s, information does not."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-vrb-k1",
+   "type": "kwt",
+   "pat": "cnt.verb",
+   "from": "The cars on the highway were moving very slowly this morning.",
+   "key": "TRAFFIC",
+   "frame": "___ very slowly on the highway this morning.",
+   "answer": "Traffic was moving",
+   "accepted": [
+    "The traffic was moving",
+    "Traffic moved",
+    "The traffic moved",
+    "Traffic was going",
+    "The traffic was going"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: traffic ist unzählbar, deshalb Singular: Traffic was moving.",
+     "en": "Right: traffic is uncountable, so singular: Traffic was moving."
+    },
+    "wrong": [
+     {
+      "not": [
+       "traffic"
+      ],
+      "de": "Das Schlüsselwort traffic muss unverändert in der Lücke stehen.",
+      "en": "The key word traffic must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "were"
+      ],
+      "de": "„were“ ist Plural. Traffic ist unzählbar, deshalb was.",
+      "en": "“were” is plural. Traffic is uncountable, so was."
+     },
+     {
+      "if": [
+       "traffics"
+      ],
+      "de": "„traffics“ gibt es nicht: traffic hat keinen Plural.",
+      "en": "“traffics” does not exist: traffic has no plural."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-vrb-k2",
+   "type": "kwt",
+   "pat": "cnt.verb",
+   "from": "The machines in the lab need to be replaced.",
+   "key": "EQUIPMENT",
+   "frame": "The ___ to be replaced.",
+   "answer": "equipment in the lab needs",
+   "accepted": [
+    "lab equipment needs",
+    "laboratory equipment needs",
+    "equipment in the laboratory needs"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: equipment ist unzählbar, das Verb steht im Singular: needs.",
+     "en": "Right: equipment is uncountable, so the verb is singular: needs."
+    },
+    "wrong": [
+     {
+      "not": [
+       "equipment"
+      ],
+      "de": "Das Schlüsselwort equipment muss unverändert in der Lücke stehen.",
+      "en": "The key word equipment must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "need"
+      ],
+      "de": "Equipment ist unzählbar: Das Verb steht im Singular (needs), nicht need.",
+      "en": "Equipment is uncountable: the verb is singular (needs), not need."
+     },
+     {
+      "if": [
+       "equipments"
+      ],
+      "de": "„equipments“ gibt es nicht: equipment hat keinen Plural.",
+      "en": "“equipments” does not exist: equipment has no plural."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-vrb-f1",
+   "type": "find",
+   "pat": "cnt.verb",
+   "prompt": "The news from the Berlin office were better than we expected.",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "was",
+   "fixed": "The news from the Berlin office was better than we expected.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: news ist unzählbar, deshalb was statt were.",
+     "en": "The error: news is uncountable, so was instead of were."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das Verb passt nicht zu news.",
+      "en": "There is an error: the verb does not fit news."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „were“: news ist kein Plural.",
+      "en": "The error is “were”: news is not a plural."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-vrb-f2",
+   "type": "find",
+   "pat": "cnt.verb",
+   "prompt": "I'm sorry, but the information in the report are outdated.",
+   "err": [
+    8,
+    8
+   ],
+   "answer": "is",
+   "fixed": "I'm sorry, but the information in the report is outdated.",
+   "accepted": [
+    "was"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: information ist unzählbar, deshalb is statt are.",
+     "en": "The error: information is uncountable, so is instead of are."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das Verb passt nicht zu information.",
+      "en": "There is an error: the verb does not fit information."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „are“: information steht im Singular.",
+      "en": "The error is “are”: information takes a singular verb."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-vrb-f3",
+   "type": "find",
+   "pat": "cnt.verb",
+   "prompt": "Traffic was heavy, so the delivery arrived an hour late.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: traffic ist unzählbar, deshalb was.",
+     "en": "No error: traffic is uncountable, so was."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Zu traffic passt das Verb im Singular.",
+      "en": "No error: traffic takes a singular verb."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-vrb-m1",
+   "type": "meaning",
+   "pat": "cnt.verb",
+   "a": "The latest news is good.",
+   "b": "The latest results are good.",
+   "q": {
+    "de": "In welchem Satz steht das Verb im Singular, obwohl das Nomen auf -s endet?",
+    "en": "In which sentence is the verb singular although the noun ends in -s?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. News endet auf -s, ist aber unzählbar und nimmt is.",
+     "en": "Right: sentence a. News ends in -s but is uncountable and takes is."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b ist results ein echter Plural, deshalb are.",
+      "en": "In b, results is a real plural, so are."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht beide: nur news ist trotz -s ein Singular.",
+      "en": "Not both: only news is singular despite its -s."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-qnt-k1",
+   "type": "kwt",
+   "pat": "cnt.quant",
+   "from": "I don't know the exact number of people who will join us.",
+   "key": "MANY",
+   "frame": "I don't know ___ will join us.",
+   "answer": "how many people",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: how many people. People ist ein zählbarer Plural, also many.",
+     "en": "Right: how many people. People is a countable plural, so many."
+    },
+    "wrong": [
+     {
+      "not": [
+       "many"
+      ],
+      "de": "Das Schlüsselwort many muss unverändert in der Lücke stehen.",
+      "en": "The key word many must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "much"
+      ],
+      "de": "„How much“ fragt nach Unzählbarem. People ist zählbar: how many.",
+      "en": "“How much” asks about uncountables. People is countable: how many."
+     },
+     {
+      "if": [
+       "few"
+      ],
+      "de": "„How few“ fragt nicht nach der Anzahl, sondern nach „wie wenige“.",
+      "en": "“How few” does not ask for the number but for “how few”."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-qnt-k2",
+   "type": "kwt",
+   "pat": "cnt.quant",
+   "from": "We have hardly any time left before the deadline.",
+   "key": "LITTLE",
+   "frame": "We have ___ before the deadline.",
+   "answer": "very little time",
+   "accepted": [
+    "little time",
+    "very little time left",
+    "little time left",
+    "so little time",
+    "so little time left"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: very little time. Little heißt „kaum“ und passt zu unzählbarem time.",
+     "en": "Right: very little time. Little means “hardly any” and suits uncountable time."
+    },
+    "wrong": [
+     {
+      "not": [
+       "little"
+      ],
+      "de": "Das Schlüsselwort little muss unverändert in der Lücke stehen.",
+      "en": "The key word little must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "a",
+       "little"
+      ],
+      "de": "„A little“ klingt positiv („etwas“). Gemeint ist „kaum“: little.",
+      "en": "“A little” sounds positive (“some”). “Hardly any” is meant: little."
+     },
+     {
+      "if": [
+       "few"
+      ],
+      "de": "„Few“ steht nur vor zählbaren Nomen. Time ist hier unzählbar.",
+      "en": "“Few” goes only before countable nouns. Time is uncountable here."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-qnt-f1",
+   "type": "find",
+   "pat": "cnt.quant",
+   "prompt": "We only received a few feedback from the pilot customers.",
+   "err": [
+    3,
+    5
+   ],
+   "answer": "a little feedback",
+   "fixed": "We only received a little feedback from the pilot customers.",
+   "accepted": [
+    "some feedback",
+    "a bit of feedback",
+    "very little feedback",
+    "little feedback",
+    "a few comments",
+    "a few responses",
+    "a few pieces of feedback"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: feedback ist unzählbar, deshalb a little statt a few.",
+     "en": "The error: feedback is uncountable, so a little instead of a few."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: a few passt nicht zu feedback.",
+      "en": "There is an error: a few does not fit feedback."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „a few feedback“: Feedback ist unzählbar.",
+      "en": "The error is “a few feedback”: feedback is uncountable."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-qnt-f2",
+   "type": "find",
+   "pat": "cnt.quant",
+   "prompt": "We have fewer time than we thought, so let's cut the agenda.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "less time",
+   "fixed": "We have less time than we thought, so let's cut the agenda.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: time ist unzählbar, deshalb less time statt fewer time.",
+     "en": "The error: time is uncountable, so less time instead of fewer time."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: fewer passt nicht zu time.",
+      "en": "There is an error: fewer does not fit time."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „fewer time“: fewer steht nur vor Zählbarem.",
+      "en": "The error is “fewer time”: fewer goes only before countables."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-qnt-m1",
+   "type": "meaning",
+   "pat": "cnt.quant",
+   "a": "We have little money left for marketing.",
+   "b": "We have a little money left for marketing.",
+   "q": {
+    "de": "Welcher Satz sagt, dass noch ein Rest Geld da ist?",
+    "en": "Which sentence says that some money is still left?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. A little heißt „etwas“, aber little allein heißt „kaum“.",
+     "en": "Right: sentence b. A little means “some”; little alone means “hardly any”."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a heißt little „kaum“: Es ist fast nichts mehr da.",
+      "en": "In a, little means “hardly any”: almost nothing is left."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: little ist negativ, a little eher positiv.",
+      "en": "Not the same: little is negative, a little rather positive."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-uni-k1",
+   "type": "kwt",
+   "pat": "cnt.unit",
+   "from": "Let me give you one useful suggestion before you sign.",
+   "key": "PIECE",
+   "frame": "Let me give you a useful ___ before you sign.",
+   "answer": "piece of advice",
+   "accepted": [],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: a piece of advice zählt genau einen Rat, ohne Plural von advice.",
+     "en": "Right: a piece of advice counts exactly one item. Advice alone has no plural."
+    },
+    "wrong": [
+     {
+      "not": [
+       "piece"
+      ],
+      "de": "Das Schlüsselwort piece muss unverändert in der Lücke stehen.",
+      "en": "The key word piece must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "pieces"
+      ],
+      "de": "Nach a useful steht der Singular: piece, nicht pieces.",
+      "en": "After a useful the singular is needed: piece, not pieces."
+     },
+     {
+      "if": [
+       "advices"
+      ],
+      "de": "„advices“ gibt es nicht. Das Zählwort piece nennt die Einheit.",
+      "en": "“advices” does not exist. The unit word piece names the item."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-uni-k2",
+   "type": "kwt",
+   "pat": "cnt.unit",
+   "from": "The company sells chairs, tables and desks.",
+   "key": "PIECES",
+   "frame": "The company sells different ___.",
+   "answer": "pieces of furniture",
+   "accepted": [
+    "pieces of office furniture",
+    "pieces of modern furniture"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: pieces of furniture. Das Plural-s steht am Zählwort, nicht an furniture.",
+     "en": "Right: pieces of furniture. The plural -s goes on the unit word, not on furniture."
+    },
+    "wrong": [
+     {
+      "not": [
+       "pieces"
+      ],
+      "de": "Das Schlüsselwort pieces muss unverändert in der Lücke stehen.",
+      "en": "The key word pieces must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "piece"
+      ],
+      "de": "Nach different steht der Plural: pieces, nicht piece.",
+      "en": "After different the plural is needed: pieces, not piece."
+     },
+     {
+      "if": [
+       "furnitures"
+      ],
+      "de": "„furnitures“ gibt es nicht: Das -s gehört an pieces.",
+      "en": "“furnitures” does not exist: the -s belongs on pieces."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-uni-f1",
+   "type": "find",
+   "pat": "cnt.unit",
+   "prompt": "He gave me three piece of advice before the interview.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "pieces",
+   "fixed": "He gave me three pieces of advice before the interview.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Bei three braucht das Zählwort ein -s: pieces of advice.",
+     "en": "The error: after three the unit word needs -s: pieces of advice."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Das Zählwort steht im Singular.",
+      "en": "There is an error: the unit word is singular."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „piece“: Es braucht den Plural pieces.",
+      "en": "The error is “piece”: it needs the plural pieces."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-uni-f2",
+   "type": "find",
+   "pat": "cnt.unit",
+   "prompt": "I have a good news for you: the client signed the contract.",
+   "err": [
+    2,
+    4
+   ],
+   "answer": "some good news",
+   "fixed": "I have some good news for you: the client signed the contract.",
+   "accepted": [
+    "good news",
+    "a piece of good news",
+    "a good piece of news",
+    "a bit of good news"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: news ist unzählbar, also some good news oder a piece of news.",
+     "en": "The error: news is uncountable, so some good news or a piece of news."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: a passt nicht zu news.",
+      "en": "There is an error: a does not fit news."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „a good news“: news ist unzählbar.",
+      "en": "The error is “a good news”: news is uncountable."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-uni-m1",
+   "type": "meaning",
+   "pat": "cnt.unit",
+   "a": "I have some news for you.",
+   "b": "I have a piece of news for you.",
+   "q": {
+    "de": "Welcher Satz zählt ausdrücklich eine einzelne Neuigkeit?",
+    "en": "Which sentence explicitly counts a single item of news?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. A piece of zählt genau eine Neuigkeit.",
+     "en": "Right: sentence b. A piece of counts exactly one item of news."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a nennt some keine genaue Zahl: eine oder mehrere.",
+      "en": "In a, some names no exact number: one or several."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: nur a piece of nennt genau eine.",
+      "en": "Not the same: only a piece of names exactly one."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-dbl-k1",
+   "type": "kwt",
+   "pat": "cnt.double",
+   "from": "Has she worked in project management before?",
+   "key": "EXPERIENCE",
+   "frame": "Does she have any ___ project management?",
+   "answer": "experience in",
+   "accepted": [
+    "experience with",
+    "experience of",
+    "work experience in",
+    "work experience with",
+    "relevant experience in",
+    "relevant experience with",
+    "previous experience in",
+    "previous experience with",
+    "prior experience in",
+    "prior experience with",
+    "professional experience in",
+    "professional experience with"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: experience in. Meint Erfahrung, bleibt es unzählbar und ohne -s.",
+     "en": "Right: experience in. In the sense of know-how it stays uncountable, with no -s."
+    },
+    "wrong": [
+     {
+      "not": [
+       "experience"
+      ],
+      "de": "Das Schlüsselwort experience muss unverändert in der Lücke stehen.",
+      "en": "The key word experience must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "experiences"
+      ],
+      "de": "„Experiences“ meint einzelne Erlebnisse. Für Erfahrung steht experience ohne -s.",
+      "en": "“Experiences” means single events. For know-how use experience with no -s."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-dbl-k2",
+   "type": "kwt",
+   "pat": "cnt.double",
+   "from": "The hall is full, so we can't fit more chairs.",
+   "key": "ROOM",
+   "frame": "There isn't ___ chairs in the hall.",
+   "answer": "enough room for more",
+   "accepted": [
+    "any room for more",
+    "much room for more",
+    "room for more",
+    "enough room for additional",
+    "any room for additional",
+    "room for additional"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: room für „Platz“ ist unzählbar: enough room for more.",
+     "en": "Right: room in the sense of space is uncountable: enough room for more."
+    },
+    "wrong": [
+     {
+      "not": [
+       "room"
+      ],
+      "de": "Das Schlüsselwort room muss unverändert in der Lücke stehen.",
+      "en": "The key word room must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "rooms"
+      ],
+      "de": "„Rooms“ sind einzelne Räume. Für „Platz“ steht room ohne -s.",
+      "en": "“Rooms” are separate rooms. For “space” use room with no -s."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-dbl-f1",
+   "type": "find",
+   "pat": "cnt.double",
+   "prompt": "I don't have a time to read the report today.",
+   "err": [
+    3,
+    4
+   ],
+   "answer": "time",
+   "fixed": "I don't have time to read the report today.",
+   "accepted": [
+    "any time",
+    "the time",
+    "enough time"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: time im Sinn von „Zeit“ ist unzählbar, also ohne a.",
+     "en": "The error: time in the sense of “Zeit” is uncountable, so no a."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Vor time steht hier kein a.",
+      "en": "There is an error: no a goes before time here."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „a time“: Gemeint ist die Zeit allgemein.",
+      "en": "The error is “a time”: time in general is meant."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-dbl-f2",
+   "type": "find",
+   "pat": "cnt.double",
+   "prompt": "Please make a room for the new colleague at the table.",
+   "err": [
+    2,
+    3
+   ],
+   "answer": "room",
+   "fixed": "Please make room for the new colleague at the table.",
+   "accepted": [
+    "some room"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: make room heißt „Platz machen“, ohne a.",
+     "en": "The error: make room means “make space”, with no a."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Bei make room steht kein a.",
+      "en": "There is an error: make room takes no a."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „a room“: Gemeint ist Platz, kein Raum.",
+      "en": "The error is “a room”: space is meant, not a room."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-dbl-f3",
+   "type": "find",
+   "pat": "cnt.double",
+   "prompt": "The offsite was a great experience for everyone on the team.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: an experience meint hier ein einzelnes Erlebnis.",
+     "en": "No error: an experience here means one single event."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Ein Erlebnis ist zählbar, a great experience passt.",
+      "en": "No error: an event is countable, so a great experience fits."
+     }
+    ]
+   },
+   "topic": "countable"
+  },
+  {
+   "id": "cnt-dbl-m1",
+   "type": "meaning",
+   "pat": "cnt.double",
+   "a": "We need more room.",
+   "b": "We need more rooms.",
+   "q": {
+    "de": "Welcher Satz meint mehr Platz?",
+    "en": "Which sentence means more space?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Room ohne -s meint Platz, rooms meint einzelne Räume.",
+     "en": "Right: sentence a. Room with no -s means space; rooms means separate rooms."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b meint rooms mehrere einzelne Räume, nicht Platz.",
+      "en": "In b, rooms means several separate rooms, not space."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: room ist Platz, rooms sind Räume.",
+      "en": "Not the same: room is space, rooms are separate rooms."
+     }
+    ]
+   },
+   "topic": "countable"
   },
   {
    "id": "ff-wn-k1",
@@ -20138,6 +23006,3196 @@
     ]
    },
    "topic": "past-simple-perfect"
+  },
+  {
+   "id": "pn-for-k1",
+   "type": "kwt",
+   "pat": "pn.for",
+   "from": "The supplier problem explains why we are late.",
+   "key": "REASON",
+   "frame": "The supplier problem is the main ___ the delay.",
+   "answer": "reason for",
+   "accepted": [
+    "reason behind"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: reason for. Der Grund der Verspätung wird mit for angeschlossen.",
+     "en": "Right: reason for. The cause of the delay is linked with for."
+    },
+    "wrong": [
+     {
+      "not": [
+       "reason"
+      ],
+      "de": "Das Schlüsselwort reason muss unverändert in der Lücke stehen.",
+      "en": "The key word reason must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "reason",
+       "of"
+      ],
+      "de": "„Reason of“ kopiert den Genitiv („Grund der Verspätung“). Englisch: reason for.",
+      "en": "“Reason of” copies the German genitive. English: reason for."
+     },
+     {
+      "if": [
+       "reason",
+       "to"
+      ],
+      "de": "„Reason to“ braucht danach ein Verb (a reason to wait). Vor einem Nomen: for.",
+      "en": "“Reason to” needs a verb after it (a reason to wait). Before a noun: for."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-for-k2",
+   "type": "kwt",
+   "pat": "pn.for",
+   "from": "Priya's job is now the vendor contracts.",
+   "key": "RESPONSIBLE",
+   "frame": "Priya is now ___ the vendor contracts.",
+   "answer": "responsible for",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: responsible for. Eine Zuständigkeit wird mit for angeschlossen.",
+     "en": "Right: responsible for. A duty is linked with for."
+    },
+    "wrong": [
+     {
+      "not": [
+       "responsible"
+      ],
+      "de": "Das Schlüsselwort responsible muss unverändert in der Lücke stehen.",
+      "en": "The key word responsible must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "responsible",
+       "of"
+      ],
+      "de": "„Responsible of“ gibt es nicht. Nur in charge of nimmt of.",
+      "en": "“Responsible of” does not exist. Only in charge of takes of."
+     },
+     {
+      "if": [
+       "responsible",
+       "on"
+      ],
+      "de": "„On“ passt nicht zu responsible. Eine Zuständigkeit schließt for an.",
+      "en": "“On” does not fit responsible. A duty takes for."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-for-f1",
+   "type": "find",
+   "pat": "pn.for",
+   "prompt": "There is little demand after refurbished laptops in this market.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "for",
+   "fixed": "There is little demand for refurbished laptops in this market.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „demand after“. Die Nachfrage nach etwas heißt demand for.",
+     "en": "The error: “demand after”. Demand for something takes for."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach demand steht for.",
+      "en": "There is an error: After demand comes for."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach demand steht for.",
+      "en": "The error is the preposition. After demand comes for."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-for-f2",
+   "type": "find",
+   "pat": "pn.for",
+   "prompt": "The regional team is responsible of the whole product launch.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "for",
+   "fixed": "The regional team is responsible for the whole product launch.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „responsible of“. Eine Zuständigkeit wird mit for angeschlossen.",
+     "en": "The error: “responsible of”. A duty is linked with for."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach responsible steht for.",
+      "en": "There is an error: After responsible comes for."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach responsible steht for.",
+      "en": "The error is the preposition. After responsible comes for."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-for-f3",
+   "type": "find",
+   "pat": "pn.for",
+   "prompt": "There is a real need for better training in our sales team.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: need for + Sache ist richtig (Bedarf an etwas).",
+     "en": "No error: need for + thing is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach need steht hier for.",
+      "en": "No error: need takes for here."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-for-m1",
+   "type": "meaning",
+   "pat": "pn.for",
+   "a": "We have a good reason to delay the launch.",
+   "b": "We have a good reason for the delay.",
+   "q": {
+    "de": "Welcher Satz sagt: Die Verspätung ist schon da, und es gibt dafür eine Erklärung?",
+    "en": "Which sentence says the delay has already happened and has an explanation?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Reason for nennt die Ursache einer Verspätung, die schon besteht.",
+     "en": "Right: sentence b. Reason for names the cause of a delay that already exists."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a heißt reason to + Verb: ein Grund, den Start zu verschieben, also noch nicht passiert.",
+      "en": "In a, reason to + verb is a reason to postpone the launch, so it has not happened yet."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+      "en": "Not the same: the two sentences say different things."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-in-k1",
+   "type": "kwt",
+   "pat": "pn.in",
+   "from": "Our revenue went up by twelve percent.",
+   "key": "INCREASE",
+   "frame": "We recorded a twelve percent ___ revenue.",
+   "answer": "increase in",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: increase in revenue. In nennt den Bereich, der sich verändert.",
+     "en": "Right: increase in revenue. In names the area that changes."
+    },
+    "wrong": [
+     {
+      "not": [
+       "increase"
+      ],
+      "de": "Das Schlüsselwort increase muss unverändert in der Lücke stehen.",
+      "en": "The key word increase must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "increase",
+       "of"
+      ],
+      "de": "„Increase of“ nennt den Betrag (of 12%). Der Bereich, der steigt, braucht in.",
+      "en": "“Increase of” names the amount (of 12%). The area that rises needs in."
+     },
+     {
+      "if": [
+       "increase",
+       "at"
+      ],
+      "de": "„At“ nennt einen Punkt (at 12%), nicht den Bereich, der sich ändert.",
+      "en": "“At” names a point (at 12%), not the area that changes."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-in-k2",
+   "type": "kwt",
+   "pat": "pn.in",
+   "from": "Our clients really want the new dashboard.",
+   "key": "INTERESTED",
+   "frame": "Our clients are very ___ the new dashboard.",
+   "answer": "interested in",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: interested in. Das Interesse richtet sich mit in auf die Sache.",
+     "en": "Right: interested in. Interest in a thing takes in."
+    },
+    "wrong": [
+     {
+      "not": [
+       "interested"
+      ],
+      "de": "Das Schlüsselwort interested muss unverändert in der Lücke stehen.",
+      "en": "The key word interested must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "interested",
+       "at"
+      ],
+      "de": "„Interessiert an“ wird oft zu at. Englisch sagt interested in.",
+      "en": "German “interessiert an” often becomes at. English says interested in."
+     },
+     {
+      "if": [
+       "interested",
+       "about"
+      ],
+      "de": "„Interested about“ ist unüblich. Nach interested steht in.",
+      "en": "“Interested about” is not idiomatic. After interested use in."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-in-f1",
+   "type": "find",
+   "pat": "pn.in",
+   "prompt": "We have seen a steady decrease on customer complaints since January.",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "in",
+   "fixed": "We have seen a steady decrease in customer complaints since January.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „decrease on“. Der Bereich, der sich ändert, wird mit in angeschlossen.",
+     "en": "The error: “decrease on”. The area that changes is linked with in."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach decrease steht in.",
+      "en": "There is an error: After decrease comes in."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach decrease steht in.",
+      "en": "The error is the preposition. After decrease comes in."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-in-f2",
+   "type": "find",
+   "pat": "pn.in",
+   "prompt": "She is very interested at joining our data science team.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "in",
+   "fixed": "She is very interested in joining our data science team.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „interested at“. Das Interesse wird mit in angeschlossen.",
+     "en": "The error: “interested at”. Interest is linked with in."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach interested steht in.",
+      "en": "There is an error: After interested comes in."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach interested steht in.",
+      "en": "The error is the preposition. After interested comes in."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-in-m1",
+   "type": "meaning",
+   "pat": "pn.in",
+   "a": "The price saw an increase of 20 dollars.",
+   "b": "The price saw an increase to 20 dollars.",
+   "q": {
+    "de": "Welcher Satz sagt: Der Preis ist um 20 Dollar gestiegen?",
+    "en": "Which sentence says the price went up by 20 dollars?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Increase of nennt den Betrag des Anstiegs, um wie viel.",
+     "en": "Right: sentence a. Increase of names the amount of the rise, by how much."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b nennt to den Endwert: Der Preis liegt jetzt bei 20 Dollar, egal wie viel es war.",
+      "en": "In b, to names the end value: the price is now 20 dollars, whatever it was before."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+      "en": "Not the same: the two sentences say different things."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-of-k1",
+   "type": "kwt",
+   "pat": "pn.of",
+   "from": "Sam is quietly happy about what the interns achieved.",
+   "key": "PROUD",
+   "frame": "Sam is quietly ___ what the interns achieved.",
+   "answer": "proud of",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: proud of. Hinter proud steht of vor dem, worauf man stolz ist.",
+     "en": "Right: proud of. After proud comes of before what you are proud of."
+    },
+    "wrong": [
+     {
+      "not": [
+       "proud"
+      ],
+      "de": "Das Schlüsselwort proud muss unverändert in der Lücke stehen.",
+      "en": "The key word proud must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "proud",
+       "on"
+      ],
+      "de": "„Stolz auf“ wird oft zu on. Englisch sagt proud of.",
+      "en": "German “stolz auf” often becomes on. English says proud of."
+     },
+     {
+      "if": [
+       "proud",
+       "for"
+      ],
+      "de": "„For“ nennt Grund oder Zweck. Nach proud steht of.",
+      "en": "“For” names a reason or purpose. After proud use of."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-of-k2",
+   "type": "kwt",
+   "pat": "pn.of",
+   "from": "Everyone on the team knows the new deadline.",
+   "key": "AWARE",
+   "frame": "Everyone on the team is ___ the new deadline.",
+   "answer": "aware of",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: aware of. Das Wissen um etwas wird mit of angeschlossen.",
+     "en": "Right: aware of. Knowing about something is linked with of."
+    },
+    "wrong": [
+     {
+      "not": [
+       "aware"
+      ],
+      "de": "Das Schlüsselwort aware muss unverändert in der Lücke stehen.",
+      "en": "The key word aware must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "aware",
+       "about"
+      ],
+      "de": "„Aware about“ ist unüblich. Das Wissen um etwas schließt of an.",
+      "en": "“Aware about” is not idiomatic. Knowing about something takes of."
+     },
+     {
+      "if": [
+       "aware",
+       "for"
+      ],
+      "de": "„For“ nennt Grund oder Zweck. Wissen um etwas schließt of an.",
+      "en": "“For” names a reason or purpose. Awareness takes of."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-of-f1",
+   "type": "find",
+   "pat": "pn.of",
+   "prompt": "We are all very proud on what the team achieved this quarter.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "of",
+   "fixed": "We are all very proud of what the team achieved this quarter.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „proud on“. Nach proud steht of.",
+     "en": "The error: “proud on”. After proud comes of."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach proud steht of.",
+      "en": "There is an error: After proud comes of."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach proud steht of.",
+      "en": "The error is the preposition. After proud comes of."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-of-f2",
+   "type": "find",
+   "pat": "pn.of",
+   "prompt": "The new manager is not afraid from difficult decisions.",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "of",
+   "fixed": "The new manager is not afraid of difficult decisions.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „afraid from“. Angst vor etwas heißt afraid of.",
+     "en": "The error: “afraid from”. Fear of something is afraid of."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach afraid steht of.",
+      "en": "There is an error: After afraid comes of."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach afraid steht of.",
+      "en": "The error is the preposition. After afraid comes of."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-of-f3",
+   "type": "find",
+   "pat": "pn.of",
+   "prompt": "The whole department is aware of the new reporting rules.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: aware of + Sache ist richtig.",
+     "en": "No error: aware of + thing is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach aware steht of.",
+      "en": "No error: aware takes of."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-of-m1",
+   "type": "meaning",
+   "pat": "pn.of",
+   "a": "I'm tired of the long meetings.",
+   "b": "I'm tired from the long meetings.",
+   "q": {
+    "de": "Welcher Satz sagt: Die langen Meetings haben mich körperlich erschöpft?",
+    "en": "Which sentence says the long meetings physically wore me out?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Tired from nennt die Ursache der Erschöpfung.",
+     "en": "Right: sentence b. Tired from names the cause of the exhaustion."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a heißt tired of „genug von etwas haben“: Die Meetings nerven, es geht nicht um Erschöpfung.",
+      "en": "In a, tired of means fed up with something: the meetings annoy, not exhaust."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+      "en": "Not the same: the two sentences say different things."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-ab-k1",
+   "type": "kwt",
+   "pat": "pn.about",
+   "from": "The board talked at length about the budget and then agreed on the cuts.",
+   "key": "DISCUSSION",
+   "frame": "After a long ___ the budget, we agreed on the cuts.",
+   "answer": "discussion about",
+   "accepted": [
+    "discussion on",
+    "discussion of",
+    "discussion over",
+    "discussion regarding",
+    "discussion concerning"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: discussion about (oder on). Das Thema des Gesprächs folgt nach about.",
+     "en": "Right: discussion about (or on). The topic of the talk follows about."
+    },
+    "wrong": [
+     {
+      "not": [
+       "discussion"
+      ],
+      "de": "Das Schlüsselwort discussion muss unverändert in der Lücke stehen.",
+      "en": "The key word discussion must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "discussion",
+       "for"
+      ],
+      "de": "„For“ nennt Grund oder Zweck, nicht das Thema. Nach discussion steht about oder on.",
+      "en": "“For” names a reason or purpose, not the topic. After discussion use about or on."
+     },
+     {
+      "if": [
+       "discussion",
+       "with"
+      ],
+      "de": "„With“ nennt den Partner (a discussion with the board), nicht das Thema.",
+      "en": "“With” names the partner (a discussion with the board), not the topic."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-ab-k2",
+   "type": "kwt",
+   "pat": "pn.about",
+   "from": "Layla fears that the project might slip.",
+   "key": "WORRIED",
+   "frame": "Layla is ___ the schedule.",
+   "answer": "worried about",
+   "accepted": [
+    "worried over"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: worried about. Die Sorge um etwas wird mit about angeschlossen.",
+     "en": "Right: worried about. Worry about something is linked with about."
+    },
+    "wrong": [
+     {
+      "not": [
+       "worried"
+      ],
+      "de": "Das Schlüsselwort worried muss unverändert in der Lücke stehen.",
+      "en": "The key word worried must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "worried",
+       "for"
+      ],
+      "de": "„Worried for“ gilt für Menschen in Gefahr (for her safety), nicht für einen Termin.",
+      "en": "“Worried for” is for people at risk (for her safety), not for a schedule."
+     },
+     {
+      "if": [
+       "worried",
+       "of"
+      ],
+      "de": "„Worried of“ gibt es nicht. Die Sorge um etwas schließt about an.",
+      "en": "“Worried of” does not exist. Worry about something takes about."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-ab-f1",
+   "type": "find",
+   "pat": "pn.about",
+   "prompt": "We had a long discussion for the new pricing model yesterday.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "about",
+   "fixed": "We had a long discussion about the new pricing model yesterday.",
+   "accepted": [
+    "on",
+    "of",
+    "over",
+    "regarding"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „discussion for“. Das Thema eines Gesprächs folgt nach about oder on.",
+     "en": "The error: “discussion for”. The topic of a talk follows about or on."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach discussion steht about oder on.",
+      "en": "There is an error: After discussion comes about or on."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach discussion steht about oder on.",
+      "en": "The error is the preposition. After discussion comes about or on."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-ab-f2",
+   "type": "find",
+   "pat": "pn.about",
+   "prompt": "Everyone is excited on the new office layout.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "about",
+   "fixed": "Everyone is excited about the new office layout.",
+   "accepted": [
+    "for"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „excited on“. Die Vorfreude auf etwas wird mit about angeschlossen.",
+     "en": "The error: “excited on”. Excitement about something is linked with about."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach excited steht about.",
+      "en": "There is an error: After excited comes about."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach excited steht about.",
+      "en": "The error is the preposition. After excited comes about."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-ab-f3",
+   "type": "find",
+   "pat": "pn.about",
+   "prompt": "I'd like to ask a few questions about the contract terms.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: questions about + Thema ist richtig.",
+     "en": "No error: questions about + topic is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Nach questions steht about.",
+      "en": "No error: questions takes about."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-ab-m1",
+   "type": "meaning",
+   "pat": "pn.about",
+   "a": "The manager is concerned about the budget.",
+   "b": "The manager is concerned with the budget.",
+   "q": {
+    "de": "Welcher Satz sagt: Die Managerin macht sich Sorgen um das Budget?",
+    "en": "Which sentence says the manager is worried about the budget?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Concerned about heißt „besorgt“, also Sorge um das Budget.",
+     "en": "Right: sentence a. Concerned about means worried."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b heißt concerned with „zuständig für“ oder „befasst mit“, ohne Sorge.",
+      "en": "In b, concerned with means dealing with or covering, without worry."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+      "en": "Not the same: the two sentences say different things."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-to-k1",
+   "type": "kwt",
+   "pat": "pn.to",
+   "from": "Thank you for replying to my question.",
+   "key": "ANSWER",
+   "frame": "Thank you for your ___ my question.",
+   "answer": "answer to",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: answer to + Frage. Die Antwort gehört mit to zu ihrer Frage.",
+     "en": "Right: answer to + question. The answer is tied to its question with to."
+    },
+    "wrong": [
+     {
+      "not": [
+       "answer"
+      ],
+      "de": "Das Schlüsselwort answer muss unverändert in der Lücke stehen.",
+      "en": "The key word answer must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "answer",
+       "on"
+      ],
+      "de": "„Antwort auf“ wird oft zu on. Englisch sagt answer to.",
+      "en": "German “Antwort auf” often becomes on. English says answer to."
+     },
+     {
+      "if": [
+       "answer",
+       "of"
+      ],
+      "de": "„Answer of“ klingt nach Genitiv. Englisch verbindet die Antwort mit to.",
+      "en": "“Answer of” sounds like a genitive. English links the answer with to."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-to-k2",
+   "type": "kwt",
+   "pat": "pn.to",
+   "from": "Only managers may open the finance folder.",
+   "key": "ACCESS",
+   "frame": "Only managers have ___ the finance folder.",
+   "answer": "access to",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: access to + Ziel. Das Ziel des Zugangs wird mit to angeschlossen.",
+     "en": "Right: access to + target. The target of the access is linked with to."
+    },
+    "wrong": [
+     {
+      "not": [
+       "access"
+      ],
+      "de": "Das Schlüsselwort access muss unverändert in der Lücke stehen.",
+      "en": "The key word access must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "access",
+       "for"
+      ],
+      "de": "„Access for“ nennt, wer Zugang hat (access for guests). Das Ziel braucht to.",
+      "en": "“Access for” names who has access (access for guests). The target needs to."
+     },
+     {
+      "if": [
+       "access",
+       "of"
+      ],
+      "de": "„Access of“ klingt nach Genitiv. Das Ziel des Zugangs braucht to.",
+      "en": "“Access of” sounds like a genitive. The target of the access needs to."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-to-f1",
+   "type": "find",
+   "pat": "pn.to",
+   "prompt": "Our new policy is a response of the recent security incident.",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "to",
+   "fixed": "Our new policy is a response to the recent security incident.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „response of“. Die Reaktion auf etwas heißt response to.",
+     "en": "The error: “response of”. A reaction to something is response to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach response steht to.",
+      "en": "There is an error: After response comes to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach response steht to.",
+      "en": "The error is the preposition. After response comes to."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-to-f2",
+   "type": "find",
+   "pat": "pn.to",
+   "prompt": "Not every employee has access for the shared drive.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "to",
+   "fixed": "Not every employee has access to the shared drive.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „access for“. Das Ziel des Zugangs wird mit to angeschlossen.",
+     "en": "The error: “access for”. The target of access is linked with to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach access steht hier to.",
+      "en": "There is an error: After access comes to here."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach access steht hier to.",
+      "en": "The error is the preposition. After access comes to here."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-to-m1",
+   "type": "meaning",
+   "pat": "pn.to",
+   "a": "The two offers are similar in price.",
+   "b": "The two offers are similar to each other.",
+   "q": {
+    "de": "Welcher Satz sagt: Die Angebote gleichen sich beim Preis?",
+    "en": "Which sentence says the offers match on price?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Similar in nennt, worin sie sich gleichen: im Preis.",
+     "en": "Right: sentence a. Similar in names the respect in which they match: price."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b heißt similar to „ähnlich wie“ und nennt nicht, worin die Ähnlichkeit liegt.",
+      "en": "In b, similar to means like something and does not say in what respect."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+      "en": "Not the same: the two sentences say different things."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-at-k1",
+   "type": "kwt",
+   "pat": "pn.at",
+   "from": "Dana handles customer complaints very well.",
+   "key": "GOOD",
+   "frame": "Dana is very ___ handling customer complaints.",
+   "answer": "good at",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: good at + -ing. Das Können bei einer Tätigkeit wird mit at angeschlossen.",
+     "en": "Right: good at + -ing. Skill at an activity is linked with at."
+    },
+    "wrong": [
+     {
+      "not": [
+       "good"
+      ],
+      "de": "Das Schlüsselwort good muss unverändert in der Lücke stehen.",
+      "en": "The key word good must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "good",
+       "in"
+      ],
+      "de": "„Gut in“ wird Wort für Wort übersetzt. Englisch sagt good at.",
+      "en": "“Gut in” is translated word for word. English says good at."
+     },
+     {
+      "if": [
+       "good",
+       "with"
+      ],
+      "de": "„Good with“ meint den Umgang mit Menschen oder Dingen, nicht das Können bei einer Tätigkeit.",
+      "en": "“Good with” means handling people or things, not skill at an activity."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-at-k2",
+   "type": "kwt",
+   "pat": "pn.at",
+   "from": "Leo spots layout errors within seconds.",
+   "key": "QUICK",
+   "frame": "Leo is remarkably ___ spotting layout errors.",
+   "answer": "quick at",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: quick at + -ing. Das Tempo bei einer Tätigkeit wird mit at angeschlossen.",
+     "en": "Right: quick at + -ing. Speed at an activity is linked with at."
+    },
+    "wrong": [
+     {
+      "not": [
+       "quick"
+      ],
+      "de": "Das Schlüsselwort quick muss unverändert in der Lücke stehen.",
+      "en": "The key word quick must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "quick",
+       "in"
+      ],
+      "de": "„Quick in“ klingt falsch. Das Tempo bei einer Tätigkeit schließt at an.",
+      "en": "“Quick in” sounds wrong. Speed at an activity takes at."
+     },
+     {
+      "if": [
+       "quick",
+       "to"
+      ],
+      "de": "„Quick to“ braucht die Grundform (quick to react). Hier folgt -ing: quick at.",
+      "en": "“Quick to” takes the base form (quick to react). Here -ing follows: quick at."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-at-f1",
+   "type": "find",
+   "pat": "pn.at",
+   "prompt": "She is very good at to negotiate with suppliers.",
+   "err": [
+    5,
+    6
+   ],
+   "answer": "negotiating",
+   "fixed": "She is very good at negotiating with suppliers.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „at to negotiate“. Nach at steht die -ing-Form: at negotiating.",
+     "en": "The error: “at to negotiate”. After at the -ing form follows: at negotiating."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach at folgt -ing, kein to.",
+      "en": "There is an error: After at comes -ing, not to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach at folgt -ing, kein to.",
+      "en": "The error is the preposition. After at comes -ing, not to."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-at-f2",
+   "type": "find",
+   "pat": "pn.at",
+   "prompt": "Priya is very good at analyze data.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "analyzing",
+   "fixed": "Priya is very good at analyzing data.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „at analyze“. Nach at steht die -ing-Form: at analyzing.",
+     "en": "The error: “at analyze”. After at the -ing form follows: at analyzing."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach at folgt -ing.",
+      "en": "There is an error: After at comes -ing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei der Präposition. Nach at folgt -ing.",
+      "en": "The error is the preposition. After at comes -ing."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pn-at-m1",
+   "type": "meaning",
+   "pat": "pn.at",
+   "a": "Our new tool is good for finding duplicates.",
+   "b": "Our new tool is good at finding duplicates.",
+   "q": {
+    "de": "Welcher Satz beschreibt das Können des Werkzeugs, nicht seinen Zweck?",
+    "en": "Which sentence describes the tool's skill, not its purpose?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Good at beschreibt, wie gut das Werkzeug etwas kann.",
+     "en": "Right: sentence b. Good at describes how well the tool does something."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a nennt good for den Zweck: Das Werkzeug eignet sich zum Finden von Dubletten.",
+      "en": "In a, good for names the purpose: the tool suits finding duplicates."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: Die beiden Sätze sagen etwas anderes.",
+      "en": "Not the same: the two sentences say different things."
+     }
+    ]
+   },
+   "topic": "prep-noun"
+  },
+  {
+   "id": "pt-ai-k1",
+   "type": "kwt",
+   "pat": "pt.at-on-in",
+   "from": "Our review is scheduled for Tuesday afternoon.",
+   "key": "ON",
+   "frame": "Our review is ___ afternoon.",
+   "answer": "on Tuesday",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Vor einem Wochentag steht on: on Tuesday afternoon.",
+     "en": "Right: a day of the week takes on: on Tuesday afternoon."
+    },
+    "wrong": [
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ steht vor Uhrzeiten. Vor einem Wochentag steht on.",
+      "en": "“At” goes before clock times. Before a day of the week use on."
+     },
+     {
+      "if": [
+       "in"
+      ],
+      "de": "„in“ steht vor Monaten und Tageszeiten, nicht vor Tuesday.",
+      "en": "“In” goes before months and parts of the day, not before Tuesday."
+     },
+     {
+      "not": [
+       "on"
+      ],
+      "de": "Das Schlüsselwort on muss unverändert in der Lücke stehen.",
+      "en": "The key word on must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-ai-k2",
+   "type": "kwt",
+   "pat": "pt.at-on-in",
+   "from": "The new office opens at the start of June.",
+   "key": "IN",
+   "frame": "The new office opens ___ June.",
+   "answer": "in early",
+   "accepted": [
+    "early in"
+   ],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Vor einem Monat steht in: in early June.",
+     "en": "Right: a month takes in: in early June."
+    },
+    "wrong": [
+     {
+      "if": [
+       "on"
+      ],
+      "de": "„on“ steht vor Tagen und Daten. Vor einem Monat steht in.",
+      "en": "“On” goes before days and dates. Before a month use in."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„at“ steht vor Uhrzeiten. Vor einem Monat steht in.",
+      "en": "“At” goes before clock times. Before a month use in."
+     },
+     {
+      "not": [
+       "in"
+      ],
+      "de": "Das Schlüsselwort in muss unverändert in der Lücke stehen.",
+      "en": "The key word in must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-ai-f1",
+   "type": "find",
+   "pat": "pt.at-on-in",
+   "prompt": "The training session takes place at the 14th of March.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "on",
+   "fixed": "The training session takes place on the 14th of March.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Vor einem Datum steht on: on the 14th of March.",
+     "en": "The error: a date takes on: on the 14th of March."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Vor einem Datum steht nicht at.",
+      "en": "There is an error: a date does not take at."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „at“: at steht nur vor Uhrzeiten.",
+      "en": "The error is “at”: at only goes before clock times."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-ai-f2",
+   "type": "find",
+   "pat": "pt.at-on-in",
+   "prompt": "I usually answer emails at the morning, before the first call.",
+   "err": [
+    4,
+    5
+   ],
+   "answer": "in the",
+   "fixed": "I usually answer emails in the morning, before the first call.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Die Tageszeit steht mit in: in the morning.",
+     "en": "The error: a part of the day takes in: in the morning."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Vor the morning steht nicht at.",
+      "en": "There is an error: before the morning there is no at."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „at the“: Tageszeiten stehen mit in.",
+      "en": "The error is “at the”: parts of the day take in."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-ai-f3",
+   "type": "find",
+   "pat": "pt.at-on-in",
+   "prompt": "The budget review is on the third Thursday of every month.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: Vor einem Tag steht on, hier on the third Thursday.",
+     "en": "No error: a day takes on, here on the third Thursday."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: on the third Thursday ist ein Tag und steht richtig mit on.",
+      "en": "No error: the third Thursday is a day and correctly takes on."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-ai-m1",
+   "type": "meaning",
+   "pat": "pt.at-on-in",
+   "a": "The workshop is on June 5.",
+   "b": "The workshop is in June.",
+   "q": {
+    "de": "Welcher Satz nennt schon den genauen Tag?",
+    "en": "Which sentence already gives the exact day?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. on June 5 nennt den Tag, in June nur den Monat.",
+     "en": "Right: sentence a. on June 5 gives the day, in June only the month."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b steht nur der Monat (in June). Den Tag kennt man noch nicht.",
+      "en": "Sentence b gives only the month (in June). The day is still unknown."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: on nennt einen Tag, in einen ganzen Monat.",
+      "en": "Not the same: on names a day, in names a whole month."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-fs-k1",
+   "type": "kwt",
+   "pat": "pt.for-since",
+   "from": "I joined the team in 2021 and I'm still here.",
+   "key": "SINCE",
+   "frame": "I ___ 2021.",
+   "answer": "have worked here since",
+   "accepted": [
+    "have been here since",
+    "have been working here since",
+    "'ve worked here since",
+    "'ve been here since",
+    "'ve been working here since"
+   ],
+   "words": [
+    3,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: since 2021 nennt den Startpunkt, dazu steht das Present Perfect.",
+     "en": "Right: since 2021 names the starting point, with the present perfect."
+    },
+    "wrong": [
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„for“ nennt eine Dauer. 2021 ist ein Startpunkt: since 2021.",
+      "en": "“For” names a duration. 2021 is a starting point: since 2021."
+     },
+     {
+      "not": [
+       "since"
+      ],
+      "de": "Das Schlüsselwort since muss unverändert in der Lücke stehen.",
+      "en": "The key word since must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-fs-k2",
+   "type": "kwt",
+   "pat": "pt.for-since",
+   "from": "We started testing two hours ago and are still testing.",
+   "key": "FOR",
+   "frame": "We ___ two hours.",
+   "answer": "have been testing for",
+   "accepted": [
+    "'ve been testing for"
+   ],
+   "words": [
+    4,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: for two hours nennt die Dauer, dazu steht have been testing.",
+     "en": "Right: for two hours names the duration, with have been testing."
+    },
+    "wrong": [
+     {
+      "if": [
+       "since"
+      ],
+      "de": "„since“ braucht einen Startpunkt. two hours ist eine Dauer: for.",
+      "en": "“Since” needs a starting point. two hours is a duration: for."
+     },
+     {
+      "not": [
+       "for"
+      ],
+      "de": "Das Schlüsselwort for muss unverändert in der Lücke stehen.",
+      "en": "The key word for must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-fs-f1",
+   "type": "find",
+   "pat": "pt.for-since",
+   "prompt": "We have been working on this feature since six weeks.",
+   "err": [
+    7,
+    7
+   ],
+   "answer": "for",
+   "fixed": "We have been working on this feature for six weeks.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: six weeks ist eine Dauer, also for six weeks.",
+     "en": "The error: six weeks is a duration, so for six weeks."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Vor einer Dauer steht nicht since.",
+      "en": "There is an error: before a duration there is no since."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „since“: since braucht einen Startpunkt.",
+      "en": "The error is “since”: since needs a starting point."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-fs-f2",
+   "type": "find",
+   "pat": "pt.for-since",
+   "prompt": "Our client is a customer since 2018.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "has been",
+   "fixed": "Our client has been a customer since 2018.",
+   "accepted": [
+    "'s been"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Mit since steht das Present Perfect: has been, nicht is.",
+     "en": "The error: since takes the present perfect: has been, not is."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Zu since passt das Präsens nicht.",
+      "en": "There is an error: the simple present does not fit since."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „is“: Im Deutschen reicht „ist … seit“, im Englischen has been.",
+      "en": "The error is “is”: German manages with “ist … seit”, English needs has been."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-fs-m1",
+   "type": "meaning",
+   "pat": "pt.for-since",
+   "a": "We worked together in 2020.",
+   "b": "We've worked together since 2020.",
+   "q": {
+    "de": "Welcher Satz sagt: Wir arbeiten bis heute zusammen?",
+    "en": "Which sentence says we still work together today?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. since + Perfekt reicht von 2020 bis jetzt.",
+     "en": "Right: sentence b. since + perfect runs from 2020 until now."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a ist die Zusammenarbeit vorbei: in 2020 nennt nur das Jahr.",
+      "en": "In a the cooperation is over: in 2020 names only the year."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a ist abgeschlossen, b dauert bis jetzt an.",
+      "en": "Not the same: a is finished, b lasts until now."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-bu-k1",
+   "type": "kwt",
+   "pat": "pt.by-until",
+   "from": "Please send me the final numbers no later than Wednesday.",
+   "key": "BY",
+   "frame": "Please send me the final numbers ___.",
+   "answer": "by Wednesday",
+   "accepted": [
+    "by Wednesday at the latest"
+   ],
+   "words": [
+    2,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Die Frist heißt spätestens Mittwoch: by Wednesday.",
+     "en": "Right: the deadline is no later than Wednesday: by Wednesday."
+    },
+    "wrong": [
+     {
+      "if": [
+       "until"
+      ],
+      "de": "„until“ sagt, wie lange etwas andauert. Hier geht es um die Frist: by.",
+      "en": "“Until” says how long something lasts. Here it is a deadline: by."
+     },
+     {
+      "not": [
+       "by"
+      ],
+      "de": "Das Schlüsselwort by muss unverändert in der Lücke stehen.",
+      "en": "The key word by must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-bu-k2",
+   "type": "kwt",
+   "pat": "pt.by-until",
+   "from": "I won't be reachable before Monday.",
+   "key": "UNTIL",
+   "frame": "I won't be reachable ___.",
+   "answer": "until Monday",
+   "accepted": [],
+   "words": [
+    2,
+    2
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Der Zustand dauert bis Montag an: until Monday.",
+     "en": "Right: the state lasts up to Monday: until Monday."
+    },
+    "wrong": [
+     {
+      "if": [
+       "by"
+      ],
+      "de": "„by“ nennt eine Frist, nach der etwas erledigt ist. Hier dauert der Zustand an: until.",
+      "en": "“By” names a deadline after which something is done. Here a state lasts: until."
+     },
+     {
+      "not": [
+       "until"
+      ],
+      "de": "Das Schlüsselwort until muss unverändert in der Lücke stehen.",
+      "en": "The key word until must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-bu-f1",
+   "type": "find",
+   "pat": "pt.by-until",
+   "prompt": "The vendor has to confirm the order until Friday noon.",
+   "err": [
+    7,
+    7
+   ],
+   "answer": "by",
+   "fixed": "The vendor has to confirm the order by Friday noon.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Bestätigen ist einmalig. Die Frist nennt by, nicht until.",
+     "en": "The error: confirming happens once. The deadline takes by, not until."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Bei einer Frist steht nicht until.",
+      "en": "There is an error: a deadline does not take until."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „until“: Das Deutsche „bis“ deckt by und until ab.",
+      "en": "The error is “until”: German “bis” covers both by and until."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-bu-f2",
+   "type": "find",
+   "pat": "pt.by-until",
+   "prompt": "The system will stay offline by Monday morning.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "until",
+   "fixed": "The system will stay offline until Monday morning.",
+   "accepted": [
+    "till"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Der Zustand dauert an, also until Monday morning.",
+     "en": "The error: the state lasts, so until Monday morning."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Zu stay offline passt by nicht.",
+      "en": "There is an error: by does not fit stay offline."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „by“: by nennt eine Frist, kein Andauern.",
+      "en": "The error is “by”: by names a deadline, not a lasting state."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-bu-f3",
+   "type": "find",
+   "pat": "pt.by-until",
+   "prompt": "We need your decision by Friday; until then, we'll hold the room.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: by Friday ist die Frist, until then das Andauern.",
+     "en": "No error: by Friday is the deadline, until then the lasting state."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Beide Präpositionen sind richtig gewählt.",
+      "en": "No error: both prepositions are chosen correctly."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-bu-m1",
+   "type": "meaning",
+   "pat": "pt.by-until",
+   "a": "I'll finish the draft by Friday.",
+   "b": "I'll work on the draft until Friday.",
+   "q": {
+    "de": "Welcher Satz sagt, dass der Entwurf spätestens am Freitag fertig ist?",
+    "en": "Which sentence says the draft is done by Friday at the latest?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. by Friday ist die Frist für das Fertigwerden.",
+     "en": "Right: sentence a. by Friday is the deadline for finishing."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b geht es um das Weiterarbeiten bis Freitag. Fertig ist nichts gesagt.",
+      "en": "In b the work goes on until Friday. Nothing says it is finished."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: a nennt eine Frist, b ein Andauern.",
+      "en": "Not the same: a names a deadline, b a lasting activity."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-dw-k1",
+   "type": "kwt",
+   "pat": "pt.during-within",
+   "from": "We'll send you a quote; you'll have it in no more than two business days.",
+   "key": "WITHIN",
+   "frame": "We'll send you a quote ___ business days.",
+   "answer": "within two",
+   "accepted": [
+    "within the next two",
+    "within 2"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: two business days ist ein Zeitrahmen: within two business days.",
+     "en": "Right: two business days is a time frame: within two business days."
+    },
+    "wrong": [
+     {
+      "if": [
+       "during"
+      ],
+      "de": "„during“ braucht ein Ereignis, keine Zahl mit Einheit. Hier: within.",
+      "en": "“During” needs an event, not a number with a unit. Here: within."
+     },
+     {
+      "not": [
+       "within"
+      ],
+      "de": "Das Schlüsselwort within muss unverändert in der Lücke stehen.",
+      "en": "The key word within must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-dw-k2",
+   "type": "kwt",
+   "pat": "pt.during-within",
+   "from": "Please don't use your phone while the presentation is running.",
+   "key": "DURING",
+   "frame": "Please don't use your phone ___.",
+   "answer": "during the presentation",
+   "accepted": [
+    "during this presentation"
+   ],
+   "words": [
+    3,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: Vor dem Ereignis the presentation steht during.",
+     "en": "Right: before the event the presentation use during."
+    },
+    "wrong": [
+     {
+      "if": [
+       "within"
+      ],
+      "de": "„within“ nennt einen Zeitrahmen mit Zahl. Hier folgt ein Ereignis: during.",
+      "en": "“Within” names a time frame with a number. Here an event follows: during."
+     },
+     {
+      "not": [
+       "during"
+      ],
+      "de": "Das Schlüsselwort during muss unverändert in der Lücke stehen.",
+      "en": "The key word during must stay unchanged in the gap."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-dw-f1",
+   "type": "find",
+   "pat": "pt.during-within",
+   "prompt": "Our team answered all tickets during three hours.",
+   "err": [
+    5,
+    5
+   ],
+   "answer": "within",
+   "fixed": "Our team answered all tickets within three hours.",
+   "accepted": [
+    "in"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Vor three hours steht within (oder in), nicht during.",
+     "en": "The error: before three hours use within (or in), not during."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Vor einer Zahl mit Einheit steht kein during.",
+      "en": "There is an error: no during before a number with a unit."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „during“: during braucht ein Ereignis.",
+      "en": "The error is “during”: during needs an event."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-dw-f2",
+   "type": "find",
+   "pat": "pt.during-within",
+   "prompt": "Please stay seated while the Q&A session.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "during",
+   "fixed": "Please stay seated during the Q&A session.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: Vor einem Nomen steht during. while braucht einen ganzen Satz.",
+     "en": "The error: during goes before a noun. while needs a full clause."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier steckt ein Fehler: Nach while fehlt ein Satz mit Verb.",
+      "en": "There is an error: after while a clause with a verb is missing."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „while“: Das deutsche „während“ deckt while und during ab.",
+      "en": "The error is “while”: German “während” covers both while and during."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "pt-dw-m1",
+   "type": "meaning",
+   "pat": "pt.during-within",
+   "a": "We will deliver the samples in two days.",
+   "b": "We will deliver the samples within two days.",
+   "q": {
+    "de": "Welcher Satz erlaubt, dass die Muster schon morgen kommen?",
+    "en": "Which sentence allows the samples to arrive as early as tomorrow?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. within two days heißt: spätestens nach zwei Tagen, auch früher.",
+     "en": "Right: sentence b. within two days means: by two days, possibly earlier."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a heißt in two days: nach zwei Tagen, nicht schon morgen.",
+      "en": "In a, in two days means: after two days, not tomorrow."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: within erlaubt früher, in two days nennt den Zeitpunkt.",
+      "en": "Not the same: within allows earlier, in two days names the moment."
+     }
+    ]
+   },
+   "topic": "prep-time"
+  },
+  {
+   "id": "prp-ver-k1",
+   "type": "kwt",
+   "pat": "prp.verb-prep",
+   "from": "The budget alone will determine our final decision.",
+   "key": "DEPEND",
+   "frame": "Our final decision will ___ the budget.",
+   "answer": "depend on",
+   "accepted": [
+    "depend upon",
+    "depend only on",
+    "depend entirely on",
+    "depend entirely upon",
+    "depend solely on",
+    "depend solely upon"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: depend on. Das Verb verlangt on, dann folgt das, wovon es abhängt.",
+     "en": "Right: depend on. The verb takes on, followed by what it depends on."
+    },
+    "wrong": [
+     {
+      "not": [
+       "depend"
+      ],
+      "de": "Das Schlüsselwort depend muss unverändert in der Lücke stehen.",
+      "en": "The key word depend must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "from"
+      ],
+      "de": "„Abhängen von“ lockt zu from. Im Englischen heißt es depend on.",
+      "en": "German “abhängen von” lures you into from. English says depend on."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "Of passt zu vielen Adjektiven, aber nicht zu depend. Hier steht on.",
+      "en": "Of fits many adjectives, but not depend. Here on is needed."
+     },
+     {
+      "not": [
+       "on",
+       "upon"
+      ],
+      "de": "Gesucht ist die feste Präposition zu depend: on.",
+      "en": "The fixed preposition for depend is needed: on."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ver-k2",
+   "type": "kwt",
+   "pat": "prp.verb-prep",
+   "from": "The vendor said it would not start without a signed purchase order.",
+   "key": "INSISTED",
+   "frame": "The vendor ___ a signed purchase order.",
+   "answer": "insisted on",
+   "accepted": [
+    "insisted upon",
+    "insisted on getting",
+    "insisted on having",
+    "insisted on receiving"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: insisted on. Nach on folgt das, worauf jemand besteht.",
+     "en": "Right: insisted on. After on comes what someone insists on."
+    },
+    "wrong": [
+     {
+      "not": [
+       "insisted"
+      ],
+      "de": "Das Schlüsselwort insisted muss unverändert in der Lücke stehen.",
+      "en": "The key word insisted must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "For passt zu ask for und apply for. Zu insist gehört on.",
+      "en": "For fits ask for and apply for. Insist takes on."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "At nennt einen Ort oder Punkt. Zu insist gehört on.",
+      "en": "At names a place or point. Insist takes on."
+     },
+     {
+      "not": [
+       "on",
+       "upon"
+      ],
+      "de": "Gesucht ist die feste Präposition zu insist: on (förmlich upon).",
+      "en": "The fixed preposition for insist is needed: on (formal upon)."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ver-f1",
+   "type": "find",
+   "pat": "prp.verb-prep",
+   "prompt": "Our rollout depends from the vendor's schedule.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "on",
+   "fixed": "Our rollout depends on the vendor's schedule.",
+   "accepted": [
+    "upon"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „depends from“. Zu depend gehört on.",
+     "en": "The error: “depends from”. Depend takes on."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Die Präposition nach depends stimmt nicht.",
+      "en": "There is an error: the preposition after depends is wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei from: „Abhängen von“ lockt zu from, richtig ist on.",
+      "en": "The error is from: German “abhängen von” lures you into from, but on is right."
+     },
+     {
+      "if": [
+       "from"
+      ],
+      "de": "From bleibt falsch: Zu depend gehört on.",
+      "en": "From is still wrong: depend takes on."
+     },
+     {
+      "not": [
+       "on",
+       "upon"
+      ],
+      "de": "Gesucht ist die feste Präposition zu depend: on.",
+      "en": "The fixed preposition for depend is needed: on."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ver-f2",
+   "type": "find",
+   "pat": "prp.verb-prep",
+   "prompt": "Our sales team relies of the CRM data every single day.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "on",
+   "fixed": "Our sales team relies on the CRM data every single day.",
+   "accepted": [
+    "upon"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „relies of“. Zu rely gehört on.",
+     "en": "The error: “relies of”. Rely takes on."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Die Präposition nach relies stimmt nicht.",
+      "en": "There is an error: the preposition after relies is wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei of: Zu rely gehört on.",
+      "en": "The error is of: rely takes on."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "Of bleibt falsch: Zu rely gehört on.",
+      "en": "Of is still wrong: rely takes on."
+     },
+     {
+      "not": [
+       "on",
+       "upon"
+      ],
+      "de": "Gesucht ist die feste Präposition zu rely: on.",
+      "en": "The fixed preposition for rely is needed: on."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ver-f3",
+   "type": "find",
+   "pat": "prp.verb-prep",
+   "prompt": "Everything depends on whether legal signs off this week.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: depend on ist richtig, danach folgt hier ein Satz mit whether.",
+     "en": "No error: depend on is correct, and a whether clause follows here."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: depend on + whether-Satz ist richtig, auch mit dem Präsens.",
+      "en": "No error: depend on + whether clause is correct, in the present too."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ver-m1",
+   "type": "meaning",
+   "pat": "prp.verb-prep",
+   "a": "I'm looking at the quarterly figures.",
+   "b": "I'm looking for the quarterly figures.",
+   "q": {
+    "de": "In welchem Satz sind die Zahlen schon da?",
+    "en": "In which sentence do I already have the figures?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Look at = ansehen. Bei look for suchst du die Zahlen noch.",
+     "en": "Right: sentence a. Look at = view. With look for you are still searching."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "Look for heißt suchen: In b sind die Zahlen noch nicht gefunden.",
+      "en": "Look for means search: in b the figures are not found yet."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: look at = ansehen, look for = suchen.",
+      "en": "Not the same: look at = view, look for = search."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-adj-k1",
+   "type": "kwt",
+   "pat": "prp.adj-prep",
+   "from": "Do you know the new pricing tool?",
+   "key": "FAMILIAR",
+   "frame": "Are you ___ the new pricing tool?",
+   "answer": "familiar with",
+   "accepted": [
+    "already familiar with",
+    "very familiar with",
+    "at all familiar with"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: familiar with. With nennt die Sache, mit der man vertraut ist.",
+     "en": "Right: familiar with. With names the thing you are familiar with."
+    },
+    "wrong": [
+     {
+      "not": [
+       "familiar"
+      ],
+      "de": "Das Schlüsselwort familiar muss unverändert in der Lücke stehen.",
+      "en": "The key word familiar must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "To passt zur Sache, die jemand kennt (familiar to me). Hier fragt man nach der Person: with.",
+      "en": "To fits the thing someone knows (familiar to me). Here you ask about the person: with."
+     },
+     {
+      "if": [
+       "of"
+      ],
+      "de": "„Vertraut mit“ wird zu familiar with, nicht zu of.",
+      "en": "German “vertraut mit” becomes familiar with, not of."
+     },
+     {
+      "not": [
+       "with"
+      ],
+      "de": "Gesucht ist die Präposition zu familiar: with.",
+      "en": "The preposition for familiar is needed: with."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-adj-k2",
+   "type": "kwt",
+   "pat": "prp.adj-prep",
+   "from": "The investor would like to hear more about our roadmap.",
+   "key": "INTERESTED",
+   "frame": "The investor is ___ our roadmap.",
+   "answer": "interested in",
+   "accepted": [
+    "very interested in",
+    "really interested in",
+    "particularly interested in",
+    "especially interested in",
+    "genuinely interested in"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: interested in. In verbindet interested mit dem Thema.",
+     "en": "Right: interested in. In links interested to the topic."
+    },
+    "wrong": [
+     {
+      "not": [
+       "interested"
+      ],
+      "de": "Das Schlüsselwort interested muss unverändert in der Lücke stehen.",
+      "en": "The key word interested must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "„Interessiert an“ lockt zu at. Im Englischen steht interested in.",
+      "en": "German “interessiert an” lures you into at. English uses interested in."
+     },
+     {
+      "if": [
+       "for"
+      ],
+      "de": "„Sich interessieren für“ lockt zu for. Zu interested gehört in.",
+      "en": "German “sich interessieren für” lures you into for. Interested takes in."
+     },
+     {
+      "not": [
+       "in"
+      ],
+      "de": "Gesucht ist die Präposition zu interested: in.",
+      "en": "The preposition for interested is needed: in."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-adj-f1",
+   "type": "find",
+   "pat": "prp.adj-prep",
+   "prompt": "We are extremely proud on what the team delivered.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "of",
+   "fixed": "We are extremely proud of what the team delivered.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „proud on“. Zu proud gehört of.",
+     "en": "The error: “proud on”. Proud takes of."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Die Präposition nach proud stimmt nicht.",
+      "en": "There is an error: the preposition after proud is wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei on: „Stolz auf“ lockt zu on, richtig ist of.",
+      "en": "The error is on: German “stolz auf” lures you into on, but of is right."
+     },
+     {
+      "if": [
+       "on"
+      ],
+      "de": "On bleibt falsch: Zu proud gehört of.",
+      "en": "On is still wrong: proud takes of."
+     },
+     {
+      "not": [
+       "of"
+      ],
+      "de": "Gesucht ist die Präposition zu proud: of.",
+      "en": "The preposition for proud is needed: of."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-adj-f2",
+   "type": "find",
+   "pat": "prp.adj-prep",
+   "prompt": "She is allergic against shellfish, so we booked a different caterer.",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "to",
+   "fixed": "She is allergic to shellfish, so we booked a different caterer.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „allergic against“. Zu allergic gehört to.",
+     "en": "The error: “allergic against”. Allergic takes to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Die Präposition nach allergic stimmt nicht.",
+      "en": "There is an error: the preposition after allergic is wrong."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei against: „Allergisch gegen“ lockt zu against, richtig ist to.",
+      "en": "The error is against: German “allergisch gegen” lures you into against, but to is right."
+     },
+     {
+      "if": [
+       "against"
+      ],
+      "de": "Against bleibt falsch: Zu allergic gehört to.",
+      "en": "Against is still wrong: allergic takes to."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Gesucht ist die Präposition zu allergic: to.",
+      "en": "The preposition for allergic is needed: to."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-adj-f3",
+   "type": "find",
+   "pat": "prp.adj-prep",
+   "prompt": "Our CFO is responsible for the final forecast.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: responsible for + Sache ist richtig.",
+     "en": "No error: responsible for + thing is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Für eine Sache steht responsible for.",
+      "en": "No error: for a thing, use responsible for."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-adj-m1",
+   "type": "meaning",
+   "pat": "prp.adj-prep",
+   "a": "Dana is responsible for the finance team.",
+   "b": "Dana is responsible to the finance team.",
+   "q": {
+    "de": "In welchem Satz berichtet Dana an das Finanzteam?",
+    "en": "In which sentence does Dana report to the finance team?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Responsible to heißt: Dana ist dem Team gegenüber Rechenschaft schuldig.",
+     "en": "Right: sentence b. Responsible to = answerable to someone."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a ist Dana für das Team zuständig, sie berichtet nicht an es.",
+      "en": "In a Dana is in charge of the team, she does not report to it."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: responsible for = zuständig für, responsible to = Rechenschaft schuldig.",
+      "en": "Not the same: responsible for = in charge of, responsible to = answerable to."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-nop-k1",
+   "type": "kwt",
+   "pat": "prp.no-prep",
+   "from": "I wasn't at the workshop last week.",
+   "key": "ATTEND",
+   "frame": "I ___ the workshop last week.",
+   "answer": "didn't attend",
+   "accepted": [
+    "did not attend",
+    "couldn't attend",
+    "could not attend",
+    "wasn't able to attend",
+    "was not able to attend",
+    "was unable to attend"
+   ],
+   "words": [
+    2,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: attend + Objekt, ohne Präposition. Das Verb enthält das „an“ schon.",
+     "en": "Right: attend + object, no preposition. The verb already contains “at”."
+    },
+    "wrong": [
+     {
+      "not": [
+       "attend"
+      ],
+      "de": "Das Schlüsselwort attend muss unverändert in der Lücke stehen.",
+      "en": "The key word attend must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "at"
+      ],
+      "de": "Das at ist zu viel: attend nimmt das Objekt direkt.",
+      "en": "The at is extra: attend takes its object directly."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Das to ist zu viel: attend nimmt das Objekt direkt, ohne Präposition.",
+      "en": "The to is extra: attend takes its object directly, with no preposition."
+     },
+     {
+      "not": [
+       "attend"
+      ],
+      "de": "Gesucht ist ein Verneinung plus attend: didn’t attend.",
+      "en": "A negative plus attend is needed: didn’t attend."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-nop-k2",
+   "type": "kwt",
+   "pat": "prp.no-prep",
+   "from": "He said nothing about the delay in his email.",
+   "key": "MENTION",
+   "frame": "He ___ the delay in his email.",
+   "answer": "didn't mention",
+   "accepted": [
+    "did not mention",
+    "didn't even mention",
+    "did not even mention",
+    "failed to mention"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: mention + Objekt, ohne Präposition. „About“ ist hier zu viel.",
+     "en": "Right: mention + object, no preposition. About is extra here."
+    },
+    "wrong": [
+     {
+      "not": [
+       "mention"
+      ],
+      "de": "Das Schlüsselwort mention muss unverändert in der Lücke stehen.",
+      "en": "The key word mention must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "about"
+      ],
+      "de": "Das about ist zu viel: mention nimmt das Objekt direkt.",
+      "en": "The about is extra: mention takes its object directly."
+     },
+     {
+      "not": [
+       "mention"
+      ],
+      "de": "Gesucht ist die Verneinung plus mention: didn’t mention.",
+      "en": "A negative plus mention is needed: didn’t mention."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-nop-f1",
+   "type": "find",
+   "pat": "prp.no-prep",
+   "prompt": "Please contact to the account manager before you send the quote.",
+   "err": [
+    2,
+    2
+   ],
+   "answer": "",
+   "fixed": "Please contact the account manager before you send the quote.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „contact to“. Contact nimmt das Objekt direkt, ohne to.",
+     "en": "The error: “contact to”. Contact takes its object directly, with no to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach contact steht ein Wort zu viel.",
+      "en": "There is an error: one word too many after contact."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei to: Contact braucht keine Präposition.",
+      "en": "The error is to: contact needs no preposition."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Das to bleibt falsch: Es wird ganz gestrichen, contact the account manager.",
+      "en": "The to is still wrong: it is deleted completely, contact the account manager."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Hier wird nichts ersetzt: Das to wird gestrichen, contact the account manager.",
+      "en": "Nothing is replaced here: the to is deleted, contact the account manager."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-nop-f2",
+   "type": "find",
+   "pat": "prp.no-prep",
+   "prompt": "After three rounds, we finally reached to an agreement on delivery dates.",
+   "err": [
+    6,
+    6
+   ],
+   "answer": "",
+   "fixed": "After three rounds, we finally reached an agreement on delivery dates.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „reached to“. Reach nimmt das Objekt direkt, ohne to.",
+     "en": "The error: “reached to”. Reach takes its object directly, with no to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach reached steht ein Wort zu viel.",
+      "en": "There is an error: one word too many after reached."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei to: Reach an agreement hat keine Präposition.",
+      "en": "The error is to: reach an agreement has no preposition."
+     },
+     {
+      "if": [
+       "to"
+      ],
+      "de": "Das to bleibt falsch: Es wird ganz gestrichen, reached an agreement.",
+      "en": "The to is still wrong: it is deleted completely, reached an agreement."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Hier wird nichts ersetzt: Das to wird gestrichen, reached an agreement.",
+      "en": "Nothing is replaced here: the to is deleted, reached an agreement."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-nop-f3",
+   "type": "find",
+   "pat": "prp.no-prep",
+   "prompt": "We'll discuss the rollout schedule during tomorrow's call.",
+   "err": null,
+   "why": {
+    "ok": {
+     "de": "Kein Fehler: discuss + Objekt ohne Präposition ist richtig.",
+     "en": "No error: discuss + object with no preposition is correct."
+    },
+    "wrong": [
+     {
+      "tap": "*",
+      "de": "Kein Fehler: Discuss nimmt das Objekt direkt.",
+      "en": "No error: discuss takes its object directly."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-nop-m1",
+   "type": "meaning",
+   "pat": "prp.no-prep",
+   "a": "Mia answers the manager's emails.",
+   "b": "Mia answers to the manager.",
+   "q": {
+    "de": "In welchem Satz ist der Manager Mias Vorgesetzter?",
+    "en": "In which sentence is the manager Mia’s boss?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. Answer to heißt: dem Chef Rechenschaft schuldig. Answer + Objekt = beantworten.",
+     "en": "Right: sentence b. Answer to = be accountable to. Answer + object = reply to."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a beantwortet Mia nur die E-Mails. Von einem Vorgesetzten ist keine Rede.",
+      "en": "In a Mia just replies to the emails. No boss is mentioned."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: answer + Objekt = beantworten, answer to = Rechenschaft schuldig.",
+      "en": "Not the same: answer + object = reply, answer to = be accountable to."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-per-k1",
+   "type": "kwt",
+   "pat": "prp.person-to",
+   "from": "Could you give me an explanation of how the policy works?",
+   "key": "EXPLAIN",
+   "frame": "Could you ___ how the policy works?",
+   "answer": "explain to me",
+   "accepted": [
+    "please explain to me",
+    "briefly explain to me",
+    "quickly explain to me"
+   ],
+   "words": [
+    3,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: explain to me. Bei explain bekommt die Person ein to.",
+     "en": "Right: explain to me. With explain, the person gets a to."
+    },
+    "wrong": [
+     {
+      "not": [
+       "explain"
+      ],
+      "de": "Das Schlüsselwort explain muss unverändert in der Lücke stehen.",
+      "en": "The key word explain must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "for",
+       "me"
+      ],
+      "de": "For me hieße: an meiner Stelle erklären. Gemeint ist „mir gegenüber“: to.",
+      "en": "For me would mean: explain on my behalf. Here it is “to me”: to."
+     },
+     {
+      "if": [
+       "me"
+      ],
+      "not": [
+       "to"
+      ],
+      "de": "„Erklär mir“ hat im Deutschen kein Wort für to. Im Englischen braucht explain to me.",
+      "en": "German “erklär mir” has no word for to. English needs explain to me."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Gesucht ist explain plus to plus Person: explain to me.",
+      "en": "Explain plus to plus person is needed: explain to me."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-per-k2",
+   "type": "kwt",
+   "pat": "prp.person-to",
+   "from": "The CEO told the team that we're hiring in Q3.",
+   "key": "SAID",
+   "frame": "The CEO ___ the team that we're hiring in Q3.",
+   "answer": "said to",
+   "accepted": [
+    "also said to",
+    "just said to",
+    "already said to"
+   ],
+   "words": [
+    2,
+    3
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: said to + Person. Nach say kommt die Person mit to, nach tell ohne.",
+     "en": "Right: said to + person. After say the person takes to, after tell it does not."
+    },
+    "wrong": [
+     {
+      "not": [
+       "said"
+      ],
+      "de": "Das Schlüsselwort said muss unverändert in der Lücke stehen.",
+      "en": "The key word said must stay unchanged in the gap."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Bei say braucht die Person ein to: said to the team. Ohne to wäre es told.",
+      "en": "With say the person needs to: said to the team. Without to it would be told."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-per-f1",
+   "type": "find",
+   "pat": "prp.person-to",
+   "prompt": "Could you explain me how the approval process works?",
+   "err": [
+    3,
+    3
+   ],
+   "answer": "to me",
+   "fixed": "Could you explain to me how the approval process works?",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „explain me“. Die Person braucht bei explain ein to.",
+     "en": "The error: “explain me”. With explain, the person needs to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Bei explain fehlt vor der Person ein Wort.",
+      "en": "There is an error: with explain a word is missing before the person."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei me: „Erklär mir“ hat kein to, im Englischen aber schon.",
+      "en": "The error is me: German “erklär mir” has no to, but English does."
+     },
+     {
+      "if": [
+       "me"
+      ],
+      "de": "Es fehlt noch to vor me: explain to me.",
+      "en": "Still missing is to before me: explain to me."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Gesucht ist to plus Person: explain to me.",
+      "en": "To plus person is needed: explain to me."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-per-f2",
+   "type": "find",
+   "pat": "prp.person-to",
+   "prompt": "He suggested me a different supplier last week.",
+   "err": [
+    2,
+    5
+   ],
+   "answer": "a different supplier to me",
+   "fixed": "He suggested a different supplier to me last week.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „suggested me a …“. Erst die Sache, dann to + Person.",
+     "en": "The error: “suggested me a …”. First the thing, then to + person."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Bei suggested steht die Person an der falschen Stelle.",
+      "en": "There is an error: with suggested the person is in the wrong place."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „me a different supplier“: erst die Sache, dann to me.",
+      "en": "The error is “me a different supplier”: the thing first, then to me."
+     },
+     {
+      "not": [
+       "to"
+      ],
+      "de": "Gesucht ist die Sache, dann to + Person: a different supplier to me.",
+      "en": "The thing, then to + person is needed: a different supplier to me."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-per-m1",
+   "type": "meaning",
+   "pat": "prp.person-to",
+   "a": "We talked to the CFO.",
+   "b": "We talked about the CFO.",
+   "q": {
+    "de": "In welchem Satz war der CFO im Gespräch dabei?",
+    "en": "In which sentence was the CFO part of the conversation?"
+   },
+   "answer": "a",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz a. Talk to = mit jemandem sprechen. Talk about = über jemanden sprechen.",
+     "en": "Right: sentence a. Talk to = speak with someone. Talk about = speak about someone."
+    },
+    "wrong": [
+     {
+      "opt": "b",
+      "de": "In b war der CFO nur das Thema, nicht der Gesprächspartner.",
+      "en": "In b the CFO was only the topic, not the person spoken to."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: talk to = mit jemandem, talk about = über jemanden.",
+      "en": "Not the same: talk to = with someone, talk about = about someone."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ing-k1",
+   "type": "kwt",
+   "pat": "prp.prep-ing",
+   "from": "I'm excited to meet you in person next week.",
+   "key": "LOOKING",
+   "frame": "I'm ___ you in person next week.",
+   "answer": "looking forward to meeting",
+   "accepted": [
+    "looking forward to seeing",
+    "really looking forward to meeting",
+    "really looking forward to seeing",
+    "so looking forward to meeting",
+    "so looking forward to seeing"
+   ],
+   "words": [
+    4,
+    5
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: looking forward to meeting. Das to ist eine Präposition, danach folgt -ing.",
+     "en": "Right: looking forward to meeting. The to is a preposition, so -ing follows."
+    },
+    "wrong": [
+     {
+      "not": [
+       "looking"
+      ],
+      "de": "Das Schlüsselwort looking muss unverändert in der Lücke stehen.",
+      "en": "The key word looking must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "to",
+       "meet"
+      ],
+      "de": "Nach looking forward to steht -ing, nicht die Grundform: meeting.",
+      "en": "After looking forward to use -ing, not the base form: meeting."
+     },
+     {
+      "if": [
+       "to",
+       "see"
+      ],
+      "de": "Nach looking forward to steht -ing, nicht die Grundform: seeing.",
+      "en": "After looking forward to use -ing, not the base form: seeing."
+     },
+     {
+      "not": [
+       "forward"
+      ],
+      "de": "Gesucht ist die feste Wendung: looking forward to + -ing.",
+      "en": "The fixed phrase is needed: looking forward to + -ing."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ing-k2",
+   "type": "kwt",
+   "pat": "prp.prep-ing",
+   "from": "He approved the budget but didn't read the details.",
+   "key": "WITHOUT",
+   "frame": "He approved the budget ___ the details.",
+   "answer": "without reading",
+   "accepted": [
+    "without even reading",
+    "without first reading",
+    "without really reading",
+    "without having read",
+    "without even having read"
+   ],
+   "words": [
+    2,
+    4
+   ],
+   "why": {
+    "ok": {
+     "de": "Richtig: without + -ing. Nach der Präposition steht die -ing-Form.",
+     "en": "Right: without + -ing. After the preposition comes the -ing form."
+    },
+    "wrong": [
+     {
+      "not": [
+       "without"
+      ],
+      "de": "Das Schlüsselwort without muss unverändert in der Lücke stehen.",
+      "en": "The key word without must stay unchanged in the gap."
+     },
+     {
+      "if": [
+       "without",
+       "read"
+      ],
+      "de": "Nach without steht -ing, nicht die Grundform: without reading.",
+      "en": "After without use -ing, not the base form: without reading."
+     },
+     {
+      "if": [
+       "without",
+       "to"
+      ],
+      "de": "Nach without steht kein to + Infinitiv: without reading.",
+      "en": "After without there is no to + infinitive: without reading."
+     },
+     {
+      "not": [
+       "without"
+      ],
+      "de": "Gesucht ist without + -ing: without reading.",
+      "en": "Without + -ing is needed: without reading."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ing-f1",
+   "type": "find",
+   "pat": "prp.prep-ing",
+   "prompt": "I'm looking forward to see you at the kickoff next week.",
+   "err": [
+    4,
+    4
+   ],
+   "answer": "seeing",
+   "fixed": "I'm looking forward to seeing you at the kickoff next week.",
+   "accepted": [
+    "meeting"
+   ],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „to see“. Das to ist eine Präposition, danach folgt -ing.",
+     "en": "The error: “to see”. The to is a preposition, so -ing follows."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach looking forward to steht die falsche Form.",
+      "en": "There is an error: the wrong form follows looking forward to."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei see: Nach looking forward to steht -ing.",
+      "en": "The error is see: after looking forward to comes -ing."
+     },
+     {
+      "if": [
+       "see"
+      ],
+      "de": "See bleibt falsch: Nach looking forward to steht -ing.",
+      "en": "See is still wrong: after looking forward to comes -ing."
+     },
+     {
+      "not": [
+       "seeing",
+       "meeting"
+      ],
+      "de": "Gesucht ist die -ing-Form: seeing.",
+      "en": "The -ing form is needed: seeing."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ing-f2",
+   "type": "find",
+   "pat": "prp.prep-ing",
+   "prompt": "Let's send the draft instead of to wait for legal.",
+   "err": [
+    6,
+    7
+   ],
+   "answer": "waiting",
+   "fixed": "Let's send the draft instead of waiting for legal.",
+   "accepted": [],
+   "why": {
+    "ok": {
+     "de": "Der Fehler: „of to wait“. Nach instead of steht -ing, ohne to.",
+     "en": "The error: “of to wait”. After instead of comes -ing, with no to."
+    },
+    "wrong": [
+     {
+      "tap": "none",
+      "de": "Doch, hier ist ein Fehler: Nach instead of steht die falsche Form.",
+      "en": "There is an error: the wrong form follows instead of."
+     },
+     {
+      "tap": "*",
+      "de": "Der Fehler liegt bei „to wait“: Nach instead of steht -ing.",
+      "en": "The error is “to wait”: after instead of comes -ing."
+     },
+     {
+      "if": [
+       "wait"
+      ],
+      "de": "Wait bleibt falsch: Nach instead of steht -ing.",
+      "en": "Wait is still wrong: after instead of comes -ing."
+     },
+     {
+      "not": [
+       "waiting"
+      ],
+      "de": "Gesucht ist die -ing-Form: waiting.",
+      "en": "The -ing form is needed: waiting."
+     }
+    ]
+   },
+   "topic": "prepositions"
+  },
+  {
+   "id": "prp-ing-m1",
+   "type": "meaning",
+   "pat": "prp.prep-ing",
+   "a": "He left without finishing the report.",
+   "b": "He left after finishing the report.",
+   "q": {
+    "de": "In welchem Satz ist der Bericht fertig?",
+    "en": "In which sentence is the report finished?"
+   },
+   "answer": "b",
+   "why": {
+    "ok": {
+     "de": "Richtig: Satz b. After + -ing = danach. Without + -ing = ohne es zu tun.",
+     "en": "Right: sentence b. After + -ing = afterward. Without + -ing = not doing it."
+    },
+    "wrong": [
+     {
+      "opt": "a",
+      "de": "In a ging er, ohne den Bericht zu beenden. Er ist nicht fertig.",
+      "en": "In a he left without completing the report. It is not finished."
+     },
+     {
+      "opt": "both",
+      "de": "Nicht gleich: without finishing = unfertig, after finishing = fertig.",
+      "en": "Not the same: without finishing = unfinished, after finishing = finished."
+     }
+    ]
+   },
+   "topic": "prepositions"
   },
   {
    "id": "pc-dur-k1",
