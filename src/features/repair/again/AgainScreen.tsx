@@ -22,8 +22,8 @@ import type { RepairCard } from '../../../domain/repair/variant';
 // (`reviewError` bzw. `recordRepair`). Nie mehr drei Sätze in einem Feld; am Handy wird die Stelle angetippt, nie ein Ganzsatz-Feld.
 
 /** Antwort am Originaleintrag buchen: Grammatikfehler über `reviewError`, Reparatur-Sätze über `recordRepair`. */
-function book(c: RepairCard, ok: boolean, near: boolean, given: string): void {
-  if (c.store === 'grammar' && c.topic && c.errorT !== undefined) void recordGrammarError(c.topic, c.errorT, ok, ok ? '' : given.slice(0, 160), near);
+function book(c: RepairCard, ok: boolean, near: boolean, given: string, variant = false): void {
+  if (c.store === 'grammar' && c.topic && c.errorT !== undefined) void recordGrammarError(c.topic, c.errorT, ok, ok ? '' : given.slice(0, 160), near, variant);
   else void recordRepair(c.id, ok, near);
 }
 
@@ -56,7 +56,7 @@ export function AgainScreen() {
   const onVariant = (c: RepairCard) => (a: GrammarAnswer) => {
     const ok = a.verdict === 'correct';
     const near = a.verdict === 'near';
-    book(c, ok, near, a.given);
+    book(c, ok, near, a.given, true);
     answerAgain({ ok: ok || near, near });
     nextAgain();
     return null;

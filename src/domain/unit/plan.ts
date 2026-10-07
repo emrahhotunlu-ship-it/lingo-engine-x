@@ -6,8 +6,8 @@ import { AGAIN_OLD } from '../repair/unit';
 import type { DutyId, GrammarDay, PatState, StoredPlan, UnitMeta } from '../plan/types';
 
 /**
- * Regelversion für NEUE Pläne (Lernplattform 2.0 §2.3). Bleibt `1`, bis P5, P6 und P8 zusammengeführt sind; nur die Koordination stellt
- * auf `2` (§10.2). Bis dahin übergeben alle rv-2-Tests `rv: 2` ausdrücklich. Gespeicherte Pläne ohne `u.rv = 2` laufen nach der alten Regel zu Ende.
+ * Regelversion für NEUE Pläne (Lernplattform 2.0 §2.3). Seit dem Abschluss von Welle 2 `2` (§10.2).
+ * Gespeicherte Pläne ohne `u.rv = 2` laufen nach der alten Regel zu Ende.
  */
 export const PLAN_RV = 2 as 1 | 2;
 

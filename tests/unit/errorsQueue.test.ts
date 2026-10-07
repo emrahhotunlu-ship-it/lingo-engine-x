@@ -73,6 +73,13 @@ describe('reviewError: eine Box zurück, Verlauf', () => {
     expect(near[0]!.rh).toBeUndefined();
   });
 
+  it('falsche Variante: given des Originaleintrags bleibt; falsches Original überschreibt given', () => {
+    const v = reviewError(base(2), t0, { ok: false, given: 'fremd', grade: 1, t: t0 + 5, variant: true })!;
+    expect(v[0]).toMatchObject({ q: 'q', given: 'x', box: 1 });
+    const o = reviewError(base(2), t0, { ok: false, given: 'fremd', grade: 1, t: t0 + 5 })!;
+    expect(o[0]!.given).toBe('fremd');
+  });
+
   it('dieselbe Antwort nicht zweimal anwenden', () => {
     const a = reviewError(base(2), t0, { ok: false, given: 'z', grade: 1, t: t0 + 5 })!;
     expect(reviewError(a, t0, { ok: false, given: 'z', grade: 1, t: t0 + 5 })).toBeNull();

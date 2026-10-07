@@ -440,7 +440,10 @@ export function selectRound(i: RoundInput): GrammarTask[] {
     if (!own || used.has(own.key)) continue;
     used.add(own.key);
     const pat = typeof d.e.pat === 'string' && d.e.pat ? d.e.pat : null;
-    const variant = d.box >= 1 ? fresh({ topic: d.topic, prefer: [own.type], strict: true, pats: pat ? [pat] : null }) : null;
+    // Variante nur mit Muster und nur für ein eingeführtes Muster (wie `variantFor`); sonst der eigene Satz.
+    const known = patsOf(i.grammarDocs.get(d.topic));
+    const introduced = !Object.keys(known).length || (!!pat && !!known[pat] && (known[pat].i !== undefined || (known[pat].n ?? 0) > 0));
+    const variant = d.box >= 1 && pat && introduced ? fresh({ topic: d.topic, prefer: [own.type], strict: true, pats: [pat] }) : null;
     if (variant) {
       used.add(variant.key);
       errors.push({ ...variant, errorT: d.task.errorT });

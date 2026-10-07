@@ -50,8 +50,8 @@ describe('Fehler-Boxen 1/3/9 (D1)', () => {
     expect(dueErrors(docs, t0 + 2 * DAY)).toHaveLength(1);
   });
 
-  it('E-05: ab Box 1 kommt bevorzugt eine ungesehene Variante gleichen Themas und Typs', () => {
-    const err = { q: 'I ___ (see) her yesterday.', given: 'have seen', ans: 'saw', t: t0, box: 1, due: t0 + DAY };
+  it('E-05: ab Box 1 kommt bei einem Eintrag mit Muster eine ungesehene Variante gleichen Themas, Musters und Typs', () => {
+    const err = { q: 'I ___ (see) her yesterday.', given: 'have seen', ans: 'saw', t: t0, box: 1, due: t0 + DAY, pat: 'psp.finished-time' };
     const docs = new Map([['past-simple-perfect', { p: 0.5, n: 5, errors: [err], seen: [] }]]);
     const round = selectRound({ mode: 'errors', grammarDocs: docs, dailyOpen: [], pool: [], nowMs: t0 + 2 * DAY, size: 8, seed: 'x' });
     expect(round).toHaveLength(1);

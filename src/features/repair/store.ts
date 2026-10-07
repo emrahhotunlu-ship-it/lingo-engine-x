@@ -69,7 +69,7 @@ export async function recordRepair(id: string, ok: boolean, near = false): Promi
  * (`reviewError`, Boxen 1/3/9 wie bisher). Thema-Beherrschung (`p`, `n`, `c`) bleibt unberührt – hier wird ein Satz umgeschrieben,
  * keine Grammatikaufgabe gelöst. Ein unerwarteter Aufbau wird nie angefasst.
  */
-export async function recordGrammarError(topic: string, errorT: number, ok: boolean, given: string, near = false): Promise<boolean> {
+export async function recordGrammarError(topic: string, errorT: number, ok: boolean, given: string, near = false, variant = false): Promise<boolean> {
   const writer = getWriter();
   if (!writer) return false;
   const path = `grammar/${topic}`;
@@ -78,7 +78,7 @@ export async function recordGrammarError(topic: string, errorT: number, ok: bool
     await writer.transform(path, (cur) => {
       if (!cur || !validateDoc(path, cur).ok) return null;
       const errors = Array.isArray(cur.errors) ? (cur.errors as Parameters<typeof reviewError>[0]) : [];
-      const next = reviewError(errors, errorT, { ok, given, grade: ok ? 3 : 1, t, near });
+      const next = reviewError(errors, errorT, { ok, given, grade: ok ? 3 : 1, t, near, variant });
       return next ? { update: { errors: next } } : null;
     });
     return true;

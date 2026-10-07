@@ -140,11 +140,12 @@ export function addError(
  * Antwort schon angewendet ist (`e.last >= t`). Richtig: Box +1 (ab Box 3 erledigt), falsch: eine Box zurück (Box 0 bleibt 0).
  * Jede Antwort steht zusätzlich in `rh` (`[t, Box vor der Antwort, 1|0]`, höchstens 6).
  * „Fast richtig“ (`near`): Box unverändert, morgen wieder, Note 2 im FSRS-Schatten.
+ * `variant`: die Antwort galt einem anderen Satz desselben Musters; `given` des Eintrags bleibt dann unverändert.
  */
 export function reviewError(
   list: readonly ErrorEntry[],
   errorT: number,
-  r: { ok: boolean; given: string; grade: Grade; t: number; near?: boolean },
+  r: { ok: boolean; given: string; grade: Grade; t: number; near?: boolean; variant?: boolean },
 ): ErrorEntry[] | null {
   const idx = list.findIndex((e) => num(e.t) === errorT);
   if (idx < 0) return null;
@@ -164,7 +165,8 @@ export function reviewError(
     next.box = Math.max(0, (num(e.box) ?? 0) - 1);
     next.done = false;
     next.due = addLocalDays(r.t, 1);
-    next.given = r.given.slice(0, GIVEN_MAX);
+    // Bei einer Variante (anderer Satz desselben Musters) gehört die Antwort nicht zum Eintrag: `given` bleibt beim Originalsatz.
+    if (!r.variant) next.given = r.given.slice(0, GIVEN_MAX);
   }
   next.last = r.t;
   if (!r.near) next.rh = [...(Array.isArray(e.rh) ? (e.rh as unknown[]) : []), [r.t, num(e.box) ?? 0, r.ok ? 1 : 0]].slice(-RH_MAX);

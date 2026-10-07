@@ -73,6 +73,21 @@ describe('Pflichtrunde (Lernplattform 2.0 §3.3, §4.7)', () => {
     expect(selectRound(input({ grammarDocs: d, errorsMax: 0 })).some((t) => t.errorT !== null)).toBe(false);
   });
 
+  it('Fehler ab Box 1: Variante nur mit eingeführtem Muster, sonst der eigene Satz', () => {
+    const e = { q: 'If I would know, I would tell you.', given: 'would know', ans: 'If I knew, I would tell you.', t: now - 3 * 86_400_000, src: 'seed', box: 1, due: now - 1000 };
+    const pick = (entry: Record<string, unknown>, extra: Record<string, unknown> = {}) =>
+      selectRound(input({ grammarDocs: docs({ 'mixed-cond': begun({ errors: [entry], ...extra }) }), errorsMax: 3, gt: { intro: null, pats: [], topics: ['mixed-cond'] } })).find((t) => t.errorT === e.t)!;
+    // ohne Muster: eigener Satz
+    expect(pick(e).src).toBe('review');
+    // Muster nicht eingeführt (Thema kennt andere Muster): eigener Satz
+    const introduced = { 'mc.past-cond': { n: 5, c: 4, last: 1, r: 31, k: 5, dd: [], i: '2026-09-20' } };
+    expect(pick({ ...e, pat: 'mc.present-cond' }, { pats: introduced }).src).toBe('review');
+    // eingeführtes Muster: Variante desselben Musters, gebucht am Originaleintrag
+    const v = pick({ ...e, pat: 'mc.past-cond' }, { pats: introduced });
+    expect(v.src).not.toBe('review');
+    expect(v.pat).toBe('mc.past-cond');
+  });
+
   it('Vortest: zwei getippte Aufgaben zu den Mustern des Tages', () => {
     const step = patternsOf('mixed-cond')!.introPlan[0]!;
     const vt = selectVortest({ ...input(), topic: 'mixed-cond', pats: step });

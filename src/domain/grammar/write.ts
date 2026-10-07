@@ -90,7 +90,7 @@ function patchFor(cur: Doc, a: GrammarAnswer): { patch: Doc; overflow?: NewRepai
   if (a.task.type === 'meaning' || (a.task.type === 'find' && a.task.x?.kind === 'find' && a.task.x.err === null)) {
     // Ein Bedeutungspaar und ein fehlerfreier Satz haben keine „falsch → richtig“-Fassung: kein Fehlersatz.
   } else if (a.task.errorT !== null) {
-    const next = reviewError(errors, a.task.errorT, { ok, given: a.dontKnow ? '' : a.given, grade: a.grade, t });
+    const next = reviewError(errors, a.task.errorT, { ok, given: a.dontKnow ? '' : a.given, grade: a.grade, t, variant: a.task.src !== 'review' });
     if (next) patch.errors = next;
   } else if (!ok) {
     // Jede falsche Antwort und auch „Weiß ich nicht“ (`given` leer, die Anzeige sagt dann „Weiß ich nicht“) ergibt genau einen Fehlersatz.

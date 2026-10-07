@@ -150,7 +150,7 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
   const scaff = type === 'gap' && scaffolded(pStart) && !noHelp;
   const maskShown = gapKind && type !== 'kwt' && (scaff || tip >= 3);
   const mask = maskShown ? maskOf(solution, { firstLetter: tip >= 3 }) : null;
-  // Jede Stufe der Tipp-Leiter zählt als Hilfe: H1 (Leitfrage) und H2 (Formel) bis „Gut“, H3 (erster Buchstabe) bis „Schwer“; der Zweitversuch wie H3.
+  // Jede Stufe der Tipp-Leiter zählt als Hilfe: H1 (Leitfrage) bis „Gut“, H2 (Formel) und H3 (erster Buchstabe) bis „Schwer“; der Zweitversuch wie H2/H3.
   const help: Help = { level: tip >= 2 || retry ? 2 : tip >= 1 ? 1 : 0 };
 
   useCompanionSee({
@@ -545,9 +545,16 @@ export function GrammarItem({ task, ctx, day, onDone, area = 'trainer', badge = 
     aiCtl.current = ctl;
     setAiState('busy');
     try {
+      // Bedeutungsaufgabe: Frage und beide Sätze gehören in die Anfrage, Lösung und Wahl als Satztext (nicht „a“/„b“).
+      const m = task.x?.kind === 'meaning' ? task.x : null;
+      const meaningText = (k: string | null): string => (m ? (k === 'a' ? m.a : k === 'b' ? m.b : k === 'both' ? 'Both sentences mean the same' : (k ?? '')) : (k ?? ''));
+      const pickedKey = m && chosen !== null ? (MEANING_KEYS[chosen] ?? null) : null;
+      const vars = m
+        ? { prompt: `${m.q.en}\nA: ${m.a}\nB: ${m.b}`, answer: meaningText(solution), given: meaningText(pickedKey) }
+        : { prompt: task.prompt, answer: solution, given: fb.picked ?? fb.given };
       const r = await askJson({
         template: explainAnswer,
-        vars: { topic: task.topic, prompt: task.x?.kind === 'find' ? task.prompt : task.prompt, answer: solution, given: fb.picked ?? fb.given, pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null, uiLang: lang },
+        vars: { topic: task.topic, ...vars, pattern: pattern ? { name: lang === 'de' ? pattern.name.de : pattern.name.en, form: lang === 'de' ? pattern.form.de : pattern.form.en } : null, uiLang: lang },
         signal: ctl.signal,
       });
       setAiText({ text: lang === 'de' ? r.data.de : r.data.en });
