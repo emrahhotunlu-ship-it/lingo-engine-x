@@ -103,9 +103,10 @@ test('Abschluss: eine Zahl, Wahrheitszeile nur mit belegten Teilen, Meilenstein 
   });
   await screen(page, 'today');
   await expect(page.getByTestId('today-card')).toHaveAttribute('data-done', 'true');
-  await expect(page.getByTestId('balance')).toHaveText(/^\d+ Antworten?$/);
+  // §5.10: nie eine Antwortzahl, sondern Gefestigtes bzw. die Schritte.
+  await expect(page.getByTestId('balance')).toHaveText(/^(\+\d+ (Wörter|Muster) sicher|\d+ von \d+ Schritten)$/);
   const truth = page.getByTestId('today-truth');
-  await expect(truth).toContainText('Fehler weg: 1');
+  await expect(truth).toContainText('Fehlersätze erledigt: 1');
   await expect(truth).toContainText('überfällig −');
   await expect(truth).not.toContainText('Heute neu sicher: 0');
   await expect(page.getByTestId('start')).toHaveCount(0);

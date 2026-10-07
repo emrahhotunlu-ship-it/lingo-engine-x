@@ -1,25 +1,25 @@
 import { motion } from 'framer-motion';
-import { checkAvailable, startCheck } from '../check/session';
 import { comebackBand, comebackGap, lastReturn, RESTART_DAYS, RESTART_GAP } from '../../domain/plan/comeback';
 import { cardStats } from '../../domain/plan/dayStats';
 import { dowOf, unitPlanFor } from '../../domain/unit/planFor';
-import { toast } from '../../ui/Toast';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { armShared } from '../../engine/shared';
 import { useClock } from '../../app/clock';
 import { useNav } from '../../app/nav';
 import { useT, type MessageKey } from '../../i18n';
 import { Button } from '../../ui/Button';
-import { Eyebrow } from '../../ui/Eyebrow';
-import { HeroCard } from '../../ui/HeroCard';
-import { ChannelIcon, type Channel } from '../../ui/Card';
-import { Icon, type IconName } from '../../ui/Icon';
+import { Icon } from '../../ui/Icon';
+import { SegmentRing } from '../../ui/ProgressRing';
+import { WeekStrip } from '../progress/StandHeader';
+import { streakWeek } from '../../domain/metrics';
+import { topicName } from '../grammar/topicUi';
+import { ExtraRow } from './ExtraRow';
+import { bigGain, patternGains } from './doneCard';
 import { Skeleton } from '../../ui/Skeleton';
 import { DURATION, EASE_OUT } from '../../ui/motion';
 import { invalidIdsOf, useLive } from '../../data/live';
 import { dayKeyNoon, addDays } from '../../domain/date';
 import { dutyChannelMinutes, dutyMinutes } from '../../domain/plan/buildPlan';
-import { feasible, rankChannels } from '../../domain/plan/channels';
 import { pflichtMarked } from '../../domain/plan/pflicht';
 import type { DutyId, StoredPlan, WhyKey } from '../../domain/plan/types';
 import type { Lang } from '../../app/settings';
@@ -32,21 +32,15 @@ import { KEY_PREFIX, local } from '../../platform/storage';
 import { useDoneFacts } from './doneFacts';
 import { useHiddenInput } from '../../engine/HiddenInput';
 import { flush, usePending } from '../progress/persist';
-import { startSession } from '../vocab/session';
-import { startGrammar } from '../grammar/session';
-import { drillCards, startDrill } from '../drills/session';
 import { startDuty } from '../learn/flow';
 import { dutyLabel } from '../learn/ui';
-import { unlockSpeech, useSpeech } from '../../platform/speech';
+import { unlockSpeech } from '../../platform/speech';
 import { firstOpenDuty, useToday, type TodayView } from './state';
-import { feasibleData, healToday, retryPlan } from './store';
+import { healToday, retryPlan } from './store';
 import { TabTitle } from '../system/Chrome';
 import { unitRows, minutesLeft, type UnitRow } from '../../domain/unit/rows';
 import { isUnitPlan, unitPlanOf } from '../../domain/unit/plan';
 import type { UnitBlock } from '../../domain/unit/types';
-import { assessPlanInput } from '../../domain/assessment/planInput';
-import { dueErrors } from '../../domain/grammar/errors';
-import { dueCards } from '../../domain/srs/queue';
 import { buildTrainCards } from '../../domain/metrics';
 import { buildChunkCards } from '../../domain/srs/chunkCards';
 import { startUnit } from '../unit/run';
@@ -71,31 +65,6 @@ const item = {
   },
 };
 
-const CHANNEL_KEY: Record<string, MessageKey> = {
-  gram: 'drGram',
-  cloze: 'drCloze',
-  order: 'drOrder',
-  sprint: 'drSprint',
-  dictate: 'drDictate',
-  vocab: 'tdOfferVocab',
-};
-const CHANNEL_ICON: Record<string, IconName> = {
-  gram: 'grammar',
-  cloze: 'link',
-  order: 'grid',
-  sprint: 'bolt',
-  dictate: 'headphones',
-  vocab: 'cards',
-};
-const CHANNEL_TONE: Record<string, Channel> = {
-  gram: 'grammar',
-  cloze: 'cards',
-  order: 'grammar',
-  sprint: 'write',
-  dictate: 'listen',
-  vocab: 'cards',
-};
-
 type T = (k: MessageKey, v?: Record<string, string | number>) => string;
 
 /** Begründung einer Planzeile (Schlüssel der alten App, D14; `whyFocus` mit Kennung ab Phase 6, E10). */
@@ -111,15 +80,6 @@ export function whyText(why: readonly WhyKey[] | undefined, t: T, lang: Lang = '
     .join(' · ');
 }
 
-/** Fokus-Aktion der Einschätzung (`grammar:<topic>`, `colloc` …), nur bei passender Sprache (B6). */
-function focusAction(assess: Record<string, unknown> | null | undefined, lang: Lang): string | null {
-  if (!assess) return null;
-  if (typeof assess.lang === 'string' && assess.lang !== lang) return null;
-  const data = assess.data && typeof assess.data === 'object' ? (assess.data as Record<string, unknown>) : assess;
-  const focus = data.focus && typeof data.focus === 'object' ? (data.focus as Record<string, unknown>) : null;
-  return typeof focus?.action === 'string' ? focus.action.trim() || null : null;
-}
-
 /** Eine Zeile der Tageskarte (Einheit oder – am Übergangstag – ein Pflichtpunkt des alten Plans). */
 type CardRow = {
   id: DutyId;
@@ -127,6 +87,7 @@ type CardRow = {
   why: string;
   whyKey: string;
   min: number;
+  kind: string;
   state: UnitRow['state'];
   progress: UnitRow['progress'];
 };
@@ -157,28 +118,16 @@ function legacyRows(plan: StoredPlan, items: TodayView['duties']['items'], t: T,
       why,
       whyKey,
       min,
+      kind: d.id === 'review' ? 'review' : 'legacy',
       state,
       progress: d.progress,
     };
   });
 }
 
-function TodaySubline({ today, lang }: { today: string; lang: Lang }) {
-  // Lerntag (Wechsel um 04:00), dieselbe Datumsfunktion wie der Plan: nachts gilt noch der Vortag. Keine Serie hier (Gesamtkonzept 3.1).
-  const dateLabel = new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  }).format(dayKeyNoon(today));
-  return (
-    <div className="flex flex-col gap-0.5 text-sm text-muted">
-      <p className="flex flex-wrap items-center gap-x-2">
-        <span className="whitespace-nowrap" data-testid="today-date" data-day={today}>
-          {dateLabel}
-        </span>
-      </p>
-    </div>
-  );
+/** Lerntag (Wechsel um 04:00), dieselbe Datumsfunktion wie der Plan: nachts gilt noch der Vortag. Der Titel von Heute ist das Datum (§2.2). */
+function dateLabelOf(today: string, lang: Lang): string {
+  return new Intl.DateTimeFormat(lang === 'de' ? 'de-DE' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' }).format(dayKeyNoon(today));
 }
 
 /** Serie im Fuß der Tageskarte: nur ab 1 Tag, nach einer Pause nichts (Gesamtkonzept 3.1, „Serie 0“ nie). Die einzige Stelle auf Heute. */
@@ -214,13 +163,21 @@ function useStartUnit(view: TodayView): () => void {
   };
 }
 
-/** Die Tageskarte (offen): Ring, Kernaufgabe, Blockliste und der EINE Knopf. `fixNone`: „Fehler korrigieren“ entfällt, weil nichts fällig ist. */
-function UnitCard({ view, rows, title, minLeft, fixNone }: { view: TodayView; rows: CardRow[]; title: string; minLeft: number; fixNone: boolean }) {
-  const { t } = useT();
+/** Titel der Tageskarte: der nächste Schritt. Das Grammatikthema kommt nur aus dem eingefrorenen `u.gt` (§2.3), nie aus einer Neuberechnung. */
+function nextTitle(now: CardRow | null, intro: string | null, t: T, lang: Lang): string {
+  if (!now) return t('hxTodayNext', { what: t('nbHeuteBlock_review') });
+  if (now.kind === 'grammar' && intro) return t('hxTodayNextGrammarNew', { topic: topicName(intro, lang) });
+  return t('hxTodayNext', { what: now.name });
+}
+
+/** Die Tageskarte (offen): Ring mit einem Segment je Pflichtschritt, „Als Nächstes“, Pflichtschritte als Zustand und der EINE Knopf. `fixNone`: „Fehler korrigieren“ entfällt, weil nichts fällig ist. */
+function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: CardRow[]; minLeft: number; fixNone: boolean }) {
+  const { t, lang } = useT();
   const done = view.duties.done;
   const total = view.duties.total;
   const now = rows.find((r) => r.state === 'now') ?? null;
   const start = useStartUnit(view);
+  const title = nextTitle(now, view.plan?.u?.gt?.intro ?? null, t, lang);
   return (
     <section
       className="lx-card flex flex-col gap-3.5 p-[1.125rem]"
@@ -229,19 +186,20 @@ function UnitCard({ view, rows, title, minLeft, fixNone }: { view: TodayView; ro
       data-shape={view.plan?.u?.shape ?? 'legacy'}
       onClickCapture={(e) => armShared('lx-hero', e.currentTarget)}
     >
-      <Eyebrow
-        meta={
-          <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} aria-label={t('nbHeuteRingLabel', { done, total })} className="whitespace-nowrap">
+      <div className="flex items-center gap-3.5">
+        <SegmentRing segments={Math.max(1, total)} done={done} label={t('nbHeuteRingLabel', { done, total })}>
+          {t('hxTodayRingMin', { min: minLeft })}
+        </SegmentRing>
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <h2 id="td-unit-title" className="text-lg leading-snug font-semibold tracking-tight text-balance" data-testid="today-title">
+            {title}
+          </h2>
+          <span data-testid="today-status" data-status={view.status} data-done={done} data-total={total} className="lx-tnum text-xs text-muted">
             {t('nbHeuteRing', { done, total, min: minLeft })}
           </span>
-        }
-      >
-        {t('nbHeuteUnit')}
-      </Eyebrow>
+        </div>
+      </div>
       <div className="flex flex-col gap-4" data-testid="hero" data-duty={now?.id}>
-        <h2 id="td-unit-title" className="text-lg leading-snug font-semibold tracking-tight text-balance" data-testid="today-title">
-          {title}
-        </h2>
         <ol className="flex flex-col" aria-label={t('tdPflicht')} data-testid="duties">
           {rows.map((r) => (
             <li
@@ -289,54 +247,72 @@ function UnitCard({ view, rows, title, minLeft, fixNone }: { view: TodayView; ro
 }
 
 /**
- * Fertig-Zustand (N15, Gesamtkonzept 3.2 „Abschluss“): Häkchen, EINE zählende Zahl, eine Wahrheitszeile („Heute neu sicher: 3 ·
- * Fehler weg: 1 · überfällig −12“, nur was stimmt) und höchstens ein Meilenstein-Satz. Ein Zustand, kein Knopf, kein Konfetti.
+ * Abschlusskarte (§5.10): voller Ring mit Häkchen, EINE große Zahl tatsächlich Gefestigten (nie eine Antwortzahl), eine Wahrheitszeile
+ * („Neu sicher: wish + Past · Fehlersätze erledigt: 2“, nur echte Zustandswechsel), der Wochenstreifen mit sichtbarem Ruhetag, „Morgen“
+ * und höchstens ein Meilenstein-Satz. Ein Zustand, kein Knopf, kein Konfetti. Darunter steht die eine Zeile „Extra ›“.
  */
-function DoneCard({ view, tomorrow }: { view: TodayView; tomorrow: string }) {
-  const { t, tn } = useT();
+function DoneCard({ view, tomorrow, today }: { view: TodayView; tomorrow: string; today: string }) {
+  const { t, lang } = useT();
+  const now = useClock((s) => s.now);
   const facts = useDoneFacts(view, true);
+  const grammar = useLive((s) => s.collections.grammar);
+  const profile = useLive((s) => s.docs['app/profile']);
+  const schema = useLive((s) => s.docs['app/schema']);
+  const archive = useLive((s) => s.collections.archive);
   const blocks = view.duties.total;
+  const gains = useMemo(() => patternGains({ ps: view.plan?.u?.ps, grammarDocs: grammar ?? new Map(), today, lang }), [view.plan, grammar, today, lang]);
+  const big = bigGain({ wordsSure: facts.sure, patterns: gains.count });
+  const week = useMemo(() => {
+    try {
+      return streakWeek({ nowMs: now, profile, schema, archives: (archive ?? new Map()).values() }).week;
+    } catch (err) {
+      logWarn('today:week', err);
+      return [];
+    }
+  }, [now, profile, schema, archive]);
   const truth = [
-    facts.sure !== null ? t('nbHeuteTruthSure', { n: facts.sure }) : null,
-    facts.fixed !== null ? t('nbHeuteTruthFixed', { n: facts.fixed }) : null,
+    gains.names.length > 0 ? t('hxDoneNewSafe', { names: gains.names.join(' + ') }) : null,
+    facts.fixed !== null && facts.fixed > 0 ? t('hxDoneFixed', { n: facts.fixed }) : null,
     facts.over !== null ? t('nbHeuteTruthOver', { n: facts.over }) : null,
   ].filter((x): x is string => x !== null);
   const ms = facts.milestone;
   const msText = ms ? (ms.id.startsWith('fest') ? t('nbHeuteMsFest', { n: ms.n ?? 0 }) : ms.id === 'topic1' ? t('nbHeuteMsTopic') : ms.id === 'fix10' ? t('nbHeuteMsFix', { n: ms.n ?? 0 }) : t('nbHeuteMsOver')) : null;
   return (
-    <div data-testid="today-card" data-done="true">
-      <HeroCard
-        tone="done"
-        eyebrow={
-          <>
+    <section className="lx-card flex flex-col gap-3.5 p-[1.125rem]" data-testid="today-card" data-done="true" aria-labelledby="td-done-title">
+      <div className="flex items-center gap-3.5">
+        <SegmentRing segments={Math.max(1, blocks)} done={blocks} label={t('nbHeuteRingLabel', { done: blocks, total: blocks })}>
+          <Icon name="check" size={20} />
+        </SegmentRing>
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <p className="lx-eyebrow text-accent-text">
             <span aria-hidden="true">✓ </span>
             <span data-testid="today-status" data-status={view.status} data-done={view.duties.done} data-total={view.duties.total}>
               {t('nbHeuteDoneTitle')}
             </span>
-          </>
-        }
-        title={
-          <span className="lx-tnum" data-testid="balance">
-            {view.balance.answers > 0 ? tn('nbHeuteDoneAnswers', view.balance.answers) : t('nbHeuteDoneSteps', { blocks })}
-          </span>
-        }
-      >
-        {truth.length > 0 && (
-          <p className="lx-tnum text-sm text-muted" data-testid="today-truth">
-            {truth.join(' · ')}
           </p>
-        )}
-        {msText && (
-          <p className="text-sm font-medium" data-testid="today-milestone" data-id={ms?.id}>
-            {msText}
-          </p>
-        )}
+          <h2 id="td-done-title" className="lx-tnum text-2xl font-bold tracking-tight" data-testid="balance" data-kind={big?.kind ?? 'steps'}>
+            {big ? t(big.kind === 'words' ? 'hxDoneBigWords' : 'hxDoneBigPatterns', { n: big.n }) : t('nbHeuteDoneSteps', { blocks })}
+          </h2>
+        </div>
+      </div>
+      {truth.length > 0 && (
+        <p className="lx-tnum text-sm text-muted" data-testid="today-truth">
+          {truth.join(' · ')}
+        </p>
+      )}
+      {week.length > 0 && <WeekStrip week={week} />}
+      {msText && (
+        <p className="text-sm font-medium" data-testid="today-milestone" data-id={ms?.id}>
+          {msText}
+        </p>
+      )}
+      {tomorrow && (
         <p className="text-sm text-muted" data-testid="today-tomorrow">
           {tomorrow}
         </p>
-        <StreakFoot />
-      </HeroCard>
-    </div>
+      )}
+      <StreakFoot />
+    </section>
   );
 }
 
@@ -360,156 +336,6 @@ function RestartCard({ view, gap, overdue, minutes }: { view: TodayView; gap: nu
         {t('nbHeuteRestartStart', { min: minutes })}
       </Button>
     </section>
-  );
-}
-
-/** „Lohnt sich jetzt“ (B10): EINE Zeile mit Grund – der stärkste machbare Kanal, sonst eine freie Vokabelrunde. */
-function WorthNow({ today, lang }: { today: string; lang: Lang }) {
-  const { t } = useT();
-  const api = useHiddenInput();
-  const go = useNav((s) => s.go);
-  const now = useClock((s) => s.now);
-  const tts = useSpeech((s) => s.status === 'ready');
-  const suggestion = useMemo(() => {
-    try {
-      const live = useLive.getState();
-      const profile = live.docs['app/profile'];
-      const cards = drillCards(now);
-      const data = feasibleData(cards, lang, now);
-      const visible = buildTrainCards(live.collections.vocab ?? new Map(), now, invalidIdsOf(live.invalid, 'vocab')).filter((c) => !c.hidden);
-      const ranked = rankChannels({
-        today,
-        profile: profile ?? {},
-        focus: focusAction(live.docs['app/assess'], lang),
-        assess: assessPlanInput(live.docs['app/assess'], today),
-        dueErrors: dueErrors(live.collections.grammar ?? new Map(), now).length,
-        dueCards: dueCards(visible, now).length,
-        data,
-        env: { tts },
-      });
-      return ranked.find((r) => CHANNEL_KEY[r.id] && feasible(r.id, data, { tts })) ?? null;
-    } catch (err) {
-      logWarn('today:worth', err);
-      return null;
-    }
-  }, [today, lang, now, tts]);
-
-  const extraRound = () => {
-    unlockSpeech();
-    const first = startSession('extra', { deck: 'all', size: 10 });
-    if (first === 'typed') api.focusNow();
-    go({ name: 'trainer', round: 'extra' });
-  };
-  const startOffer = (id: string) => {
-    unlockSpeech();
-    if (id === 'vocab') return extraRound();
-    if (id === 'gram') {
-      const first = startGrammar({ mode: 'xtra' });
-      if (first === 'typed') api.focusNow();
-      go({ name: 'grammarSession', mode: 'xtra' });
-      return;
-    }
-    const kind = id as 'cloze' | 'order' | 'dictate' | 'sprint';
-    const first = startDrill(kind);
-    if (first === 'typed') api.focusNow();
-    go({ name: 'drill', kind, ctx: 'xtra' });
-  };
-  const row = suggestion
-    ? {
-        id: suggestion.id,
-        title: t(CHANNEL_KEY[suggestion.id] as MessageKey),
-        why: whyText(suggestion.why, t, lang) || t('why_whyRotation'),
-        keys: suggestion.why.map((w) => w[0]).join(','),
-        run: () => startOffer(suggestion.id),
-      }
-    : {
-        id: 'vocab',
-        title: t('tdFreeRound'),
-        why: t('tdFreeRoundSub'),
-        keys: 'free',
-        run: extraRound,
-      };
-  return (
-    <section aria-labelledby="td-extra" className="flex flex-col gap-3" data-testid="extra">
-      <p id="td-extra" className="lx-eyebrow">
-        {t('nbHeuteWorth')}
-      </p>
-      <button
-        type="button"
-        onClick={row.run}
-        data-testid="offer"
-        data-channel={row.id}
-        className="lx-glass flex min-h-16 w-full items-center gap-3 rounded-[var(--radius-card)] p-4 text-left transition-colors hover:bg-surface-strong"
-      >
-        <ChannelIcon channel={CHANNEL_TONE[row.id] ?? 'cards'}>
-          <Icon name={CHANNEL_ICON[row.id] ?? 'cards'} />
-        </ChannelIcon>
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="font-medium">{row.title}</span>
-          <span className="text-sm text-muted" data-testid="offer-why">
-            <span data-testid="reason" data-why={row.keys}>
-              {row.why}
-            </span>
-          </span>
-        </span>
-        <Icon name="arrowRight" size={18} className="flex-none text-subtle" />
-      </button>
-      <div>
-        <button
-          type="button"
-          onClick={() => go({ name: 'learn' })}
-          data-testid="more-practice"
-          className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-accent-text hover:underline"
-        >
-          {t('nbHeuteMore')}
-          <Icon name="arrowRight" size={16} />
-        </button>
-      </div>
-    </section>
-  );
-}
-
-/**
- * Sprechen als freiwilliges Extra (Emrahs Wahl 04.10.2026): seit dem Fokus auf Vokabeln und Grammatik kein Reiter und kein
- * Teil der Pflicht mehr, aber über diese ruhige Zeile erreichbar (zählt nie zum Tagesziel, Kap. 2.6).
- */
-function SpeakExtra() {
-  const { t } = useT();
-  const go = useNav((s) => s.go);
-  return (
-    <div>
-      <button type="button" onClick={() => go({ name: 'speak' })} data-testid="today-speak" className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-accent-text hover:underline">
-        <Icon name="chat" size={16} />
-        {t('nbHeuteSpeakExtra')}
-        <Icon name="arrowRight" size={16} />
-      </button>
-    </div>
-  );
-}
-
-/** S5: Ein verpasster Wochen-Check erscheint am Montag als ruhige Extra-Zeile (zählt nie zur Pflicht). */
-function MissedCheck({ today }: { today: string }) {
-  const { t } = useT();
-  const api = useHiddenInput();
-  const go = useNav((s) => s.go);
-  const profile = useLive((s) => s.docs['app/profile']);
-  if (dowOf(today) !== 1 || !checkAvailable(profile, addDays(today, -1)) || Number(obj(profile).answers ?? 0) < 40) return null;
-  const run = () => {
-    unlockSpeech();
-    const first = startCheck();
-    if (first === 'empty') {
-      toast(t('ckEmpty'));
-      return;
-    }
-    if (first === 'typed') api.focusNow();
-    go({ name: 'check' });
-  };
-  return (
-    <button type="button" onClick={run} data-testid="check-missed" className="flex min-h-11 items-center gap-2 text-left text-sm text-muted hover:text-fg">
-      <Icon name="target" size={16} className="flex-none" />
-      <span className="flex-1">{t('nbHeuteCheckMissed')}</span>
-      <Icon name="arrowRight" size={14} className="flex-none text-subtle" />
-    </button>
   );
 }
 
@@ -588,6 +414,7 @@ export function TodayScreen() {
         why: b ? blockWhy(b, t, plan.goal.review, b.kind === 'review' && b.min * 60 > up.reviewSec) : '',
         whyKey: b?.kind ?? r.kind,
         min: r.min,
+        kind: r.kind,
         state: r.state,
         progress: r.progress,
       };
@@ -630,12 +457,11 @@ export function TodayScreen() {
   // Kein Fehlersatz fällig: „Fehler korrigieren“ steht nicht im Plan (Plan der Einheit, nicht am Sonntag) – Zustand statt leerem Schritt.
   const fixNone = !!unit && unit.u.shape !== 'sun' && !unit.u.b.some(([, kind]) => kind === 'again');
   const restartDay = ret && ret.gap >= RESTART_GAP && ret.since < RESTART_DAYS ? ret.since + 1 : null;
-  const title = t('nbHeuteUnit');
 
   return (
-    <motion.div className="mx-auto flex w-full max-w-3xl flex-col gap-5 py-4 sm:py-8" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
+    <motion.div className="mx-auto flex w-full max-w-[70rem] flex-col gap-5 py-4 sm:py-8" initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.03 } } }}>
       <motion.div variants={item}>
-        <TabTitle title={t('navToday')} sub={<TodaySubline today={today} lang={lang} />} />
+        <TabTitle title={dateLabelOf(today, lang)} testId="today-date" />
       </motion.div>
 
       {ok && !done && !welcome && comeback !== 'none' && comeback !== 'restart' && (
@@ -677,14 +503,14 @@ export function TodayScreen() {
 
       {ok && !done && !welcome && view.duties.total > 0 && (
         <motion.div variants={item}>
-          <UnitCard view={view} rows={rows} title={title} minLeft={minLeft} fixNone={fixNone} />
+          <UnitCard view={view} rows={rows} minLeft={minLeft} fixNone={fixNone} />
         </motion.div>
       )}
 
       {ok && done && (
         <motion.div variants={item} className="flex flex-col gap-5">
-          <DoneCard view={view} tomorrow={tomorrow} />
-          <WorthNow today={today} lang={lang} />
+          <DoneCard view={view} tomorrow={tomorrow} today={today} />
+          <ExtraRow today={today} />
         </motion.div>
       )}
 
@@ -694,10 +520,7 @@ export function TodayScreen() {
         </p>
       )}
 
-      {ok && <SpeakExtra />}
-
-      {/* Ruhige Zeilen (plan.md §1.3 Nr. 4): Speicher- und Planfehler (P1). */}
-      {ok && <MissedCheck today={today} />}
+      {/* Während der Pflicht steht unter der Tageskarte nichts außer Speicher- und Planfehlern (§2.2 Nr. 4). */}
       {saveFailed && (
         <div className="flex flex-wrap items-center gap-3 text-sm text-danger-text" role="alert" data-testid="save-failed">
           <span>{t('tdNotSaved')}</span>

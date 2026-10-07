@@ -85,11 +85,11 @@ test('erledigt ist Zustand, kein Knopf; Extra zählt nie zur Pflicht', async ({ 
   await expect(page.getByTestId('duty')).toHaveCount(0);
   await expect(page.getByTestId('start')).toHaveCount(0);
   // Abschluss: EINE zählende Zahl; die Wahrheitszeile erscheint nur mit belegten Morgenwerten (dieser Plan hat keine).
-  await expect(page.getByTestId('balance')).toHaveText('3 Antworten');
+  await expect(page.getByTestId('balance')).toHaveText(/^(\+\d+ (Wörter|Muster) sicher|\d+ von \d+ Schritten)$/);
   await expect(page.getByTestId('today-truth')).toHaveCount(0);
-  // Nach der Pflicht: EIN Vorschlag und „Mehr üben“ (UX-Beratung Nr. 1).
-  await expect(page.getByTestId('offer')).toHaveCount(1);
-  await expect(page.getByTestId('more-practice')).toBeVisible();
+  // Nach der Pflicht genau EINE Zeile „Extra ›“ (Lernplattform 2.0 §2.2), kein eigener Vorschlag mehr.
+  await expect(page.getByTestId('today-extra')).toBeVisible();
+  await expect(page.getByTestId('offer')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 

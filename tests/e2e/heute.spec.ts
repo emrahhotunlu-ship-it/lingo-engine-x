@@ -259,3 +259,48 @@ test('Wiedereinstieg: nach 3–6 Tagen Pause ein ruhiges Band, nach 7+ ein läng
   }
   expect(errors).toEqual([]);
 });
+
+// Lernplattform 2.0 P7 (§2.2): Datum als Titel, Ring mit einem Segment je Pflichtschritt, „Als Nächstes“, nichts unter der Karte, danach „Extra ›“.
+test('P7 Heute offen: Datum als Titel, Ring mit 4 Segmenten, „Als Nächstes“, keine Zeilen unter der Karte', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await boot(page, { migrated: true, now: TUE_9, fake: { patch: { ...WEEK_W39 } } });
+  await screen(page, 'today');
+  await expect(page.getByTestId('today-date')).toHaveText('Dienstag, 22. September');
+  const ring = page.getByTestId('today-ring');
+  await expect(ring).toHaveAttribute('data-segments', '4');
+  await expect(ring).toHaveAttribute('data-filled', '0');
+  await expect(page.getByTestId('today-title')).toContainText('Als Nächstes');
+  // „Heute“ steht im Inhalt höchstens einmal (die Reiterleiste zählt nicht).
+  const heute = await page.locator('main').evaluate((m) => ((m as HTMLElement).innerText.match(/\bHeute\b/g) ?? []).length);
+  expect(heute).toBeLessThanOrEqual(1);
+  for (const id of ['today-speak', 'check-missed', 'today-extra', 'today-weekly', 'offer']) await expect(page.getByTestId(id)).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('P7 Heute fertig: eine Zeile „Extra ›“ mit Blatt, Sprechen ist erreichbar, kein Knopf in der Karte', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const { errors } = await boot(page, {
+    migrated: true,
+    now: MON_9,
+    fake: { patch: { ...profileWith(MON, vgPlan(), ['u-task', 'u-focus', 'u-again'], {}), ...reviewedLog(MON), ...NO_GRAMMAR_ERRORS } },
+  });
+  await screen(page, 'today');
+  await expect(page.getByTestId('today-card')).toHaveAttribute('data-done', 'true');
+  await expect(page.getByTestId('today-ring')).toHaveAttribute('data-filled', /^[1-9]$/);
+  await expect(page.getByTestId('today-extra')).toHaveCount(1);
+  await expect(page.getByTestId('offer')).toHaveCount(0);
+  await page.getByTestId('today-extra').click();
+  const lines = page.getByTestId('extra-line');
+  expect(await lines.count()).toBeLessThanOrEqual(3);
+  await page.locator('[data-testid="extra-line"][data-line="speak"]').click();
+  await screen(page, 'speak');
+  expect(errors).toEqual([]);
+});
+
+test('P7 Montag: genau ein Wochenhinweis auf Heute', async ({ page }) => {
+  const { errors } = await boot(page, { migrated: true, now: '2026-09-28T09:00:00+02:00', fake: { patch: { ...WEEK_W39 } } });
+  await screen(page, 'today');
+  await expect(page.getByTestId('today-weekly')).toHaveCount(0);
+  expect(await page.getByTestId('weekly-band').count()).toBeLessThanOrEqual(1);
+  expect(errors).toEqual([]);
+});

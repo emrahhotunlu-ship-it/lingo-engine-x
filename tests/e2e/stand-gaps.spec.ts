@@ -103,7 +103,7 @@ test('M10: kein Angebot auf Heute, Einstieg über Profil → Wochen-Check; Abbru
   await screen(page, 'today');
   // Neubau (plan.md B12, §1.4): Heute beherbergt nichts doppelt – nach der Pflicht nur „Lohnt sich jetzt“,
   // der Wochen-Check liegt im Profil unter Tests (Extra).
-  await expect(page.getByTestId('extra')).toBeVisible();
+  await expect(page.getByTestId('today-extra')).toBeVisible();
   await expect(page.getByTestId('check-offer')).toHaveCount(0);
   await openChecks(page);
   await page.getByTestId('check-start').click();
@@ -127,7 +127,7 @@ test('M10: ist diese Woche schon ein Check gespeichert, gibt es kein Angebot', a
   ];
   await boot(page, { migrated: true, fake: { patch: { 'app/profile': { ...planPatch(0), checks: [...seedChecks, done] } } } });
   await screen(page, 'today');
-  await expect(page.getByTestId('extra')).toBeVisible();
+  await expect(page.getByTestId('today-extra')).toBeVisible();
   await expect(page.getByTestId('check-offer')).toHaveCount(0);
   await openChecks(page);
   await expect(page.getByTestId('check-week-done')).toBeVisible();

@@ -75,15 +75,14 @@ async function checkConsistent(page: Page, done: ReadonlySet<string>): Promise<v
     await expect(page.getByTestId('start')).toHaveCount(1);
     await expect(page.getByTestId('start')).toHaveAttribute('data-duty', open[0] ?? '');
     await expect(page.getByTestId('tab-badge')).toHaveText(String(open.length));
-    await expect(page.getByTestId('extra')).toHaveCount(0);
+    await expect(page.getByTestId('today-extra')).toHaveCount(0);
   } else {
     await expect(page.getByTestId('hero')).toHaveCount(0);
     await expect(page.getByTestId('start')).toHaveCount(0);
     await expect(page.getByTestId('tab-badge')).toHaveCount(0);
-    await expect(page.getByTestId('extra')).toBeVisible();
-    // „Lohnt sich jetzt“: genau eine Zeile, mit Grund (Kap. 2.6).
-    await expect(page.getByTestId('offer')).toHaveCount(1);
-    await expect(page.getByTestId('offer-why')).not.toBeEmpty();
+    // Nach der Pflicht genau eine Zeile „Extra ›“ (Lernplattform 2.0 §2.2).
+    await expect(page.getByTestId('today-extra')).toBeVisible();
+    await expect(page.getByTestId('offer')).toHaveCount(0);
   }
 }
 

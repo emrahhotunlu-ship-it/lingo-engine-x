@@ -3,7 +3,7 @@ import { defineArea } from '../app/registry';
 import { installCompanionHotkeys } from '../features/companion/hotkeys';
 import { ClaudeDrillScreen } from '../features/companion/ClaudeDrillScreen';
 import { ProgressScreen } from '../features/progress/ProgressScreen';
-import { ChecksPage, TodayRescueRow, TodayWeeklyRow, WeeklyPage } from '../features/progress/ProfilePages';
+import { ChecksPage, TodayRescueRow, WeeklyPage } from '../features/progress/ProfilePages';
 import { ProfileHead, ProfileMoreRows, ProfileRescueRow, ProfileStandRows, ProfileTestRows } from '../features/progress/profile/ProfileSections';
 import { VtestScreen } from '../features/vtest/VtestScreen';
 import { vtestResume } from '../features/vtest/session';
@@ -59,7 +59,6 @@ export const profil = defineArea({
     { id: 'profile-more', place: 'profile', order: 40, component: ProfileMoreRows },
     { id: 'profile-rescue', place: 'profile', order: 50, component: ProfileRescueRow },
     { id: 'today-rescue', place: 'today', order: 80, component: TodayRescueRow },
-    { id: 'today-weekly', place: 'today', order: 85, component: TodayWeeklyRow },
   ],
   // Paket B (Backlog B5): „Claude merkt sich“ – sichtbar und löschbar unter „Mein Kontext“.
   settings: [{ id: 'memory', group: 'context', order: 50, component: MemorySection }],
