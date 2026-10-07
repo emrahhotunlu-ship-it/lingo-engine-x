@@ -156,7 +156,7 @@ export function LearnHub() {
           ) : (
             <div>
               <Button variant="primary" iconAfter="arrowRight" onClick={startNext} data-testid="hub-next-start" data-action="topic">
-                {next.fresh ? t('hxLearnStartNew', { topic: topicName(next.id, lang) }) : t('nbLernenNextStart')}
+                {next.fresh ? t('hxLearnStartNew') : t('nbLernenNextStart')}
               </Button>
             </div>
           )}

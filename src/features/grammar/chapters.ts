@@ -19,7 +19,10 @@ export function chapterNodes(i: { docs: ReadonlyMap<string, Doc>; nowMs: number;
       const ids = patternsOf(id)?.patterns.map((p) => p.id) ?? [];
       const entries = patsOf(doc);
       const patSafe = ids.filter((p) => patternStateNo(patternState(entries[p], i.today)) >= 2).length;
-      return { id, state: topicState(id, doc, i.nowMs), patSafe, patTotal: ids.length, due: i.dueByTopic.get(id) ?? 0 };
+      // Zustand und Zähler aus derselben Quelle: ohne ein einziges sicheres Muster gilt das Thema nicht als „Sicher“.
+      const raw = topicState(id, doc, i.nowMs);
+      const state: TopicState = isSafe(raw) && ids.length > 0 && patSafe === 0 ? 'learning' : raw;
+      return { id, state, patSafe, patTotal: ids.length, due: i.dueByTopic.get(id) ?? 0 };
     });
     return { id: c.id, name: c.name, topics, safe: topics.filter((x) => isSafe(x.state)).length, due: topics.reduce((s, x) => s + x.due, 0) };
   });

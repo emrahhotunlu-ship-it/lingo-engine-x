@@ -145,7 +145,7 @@ function StreakFoot() {
 function BlockDot({ state }: { state: CardRow['state'] }) {
   if (state === 'done')
     return (
-      <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-accent-soft text-accent-text" aria-hidden="true">
+      <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok-soft text-ok-text" aria-hidden="true">
         <Icon name="check" size={14} />
       </span>
     );
@@ -231,7 +231,7 @@ function UnitCard({ view, rows, minLeft, fixNone }: { view: TodayView; rows: Car
         </ol>
         {fixNone && (
           <p className="flex min-h-9 items-center gap-3 border-t border-line pt-2 text-xs text-muted" data-testid="fix-none">
-            <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-accent-soft text-accent-text" aria-hidden="true">
+            <span className="inline-flex size-6 flex-none items-center justify-center rounded-full bg-ok-soft text-ok-text" aria-hidden="true">
               <Icon name="check" size={14} />
             </span>
             {t('nbHeuteFixNone')}
@@ -284,7 +284,7 @@ function DoneCard({ view, tomorrow, today }: { view: TodayView; tomorrow: string
           <Icon name="check" size={20} />
         </SegmentRing>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <p className="lx-eyebrow text-accent-text">
+          <p className="lx-eyebrow text-ok-text">
             <span aria-hidden="true">✓ </span>
             <span data-testid="today-status" data-status={view.status} data-done={view.duties.done} data-total={view.duties.total}>
               {t('nbHeuteDoneTitle')}

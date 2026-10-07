@@ -34,7 +34,7 @@ export const hxEn = {
   hxLearnFixBtn: 'Correct mistake sentences · {n}',
   hxLearnBrake: 'New topic once fewer than {limit} grammar mistakes are due · now {n}',
   hxLearnAnyway: 'Start anyway: {topic}',
-  hxLearnStartNew: 'Start topic · {topic}',
+  hxLearnStartNew: 'Start topic',
   hxLearnFixLine: 'Mistake sentences · {n} due · today {today}',
   hxLearnLookup: 'Look up',
   hxLearnRules: 'Rules',
